@@ -18,19 +18,14 @@
 #
 """
 SchoolTool metaconfiguration code.
-
-$Id$
-
 """
 
 from zope.interface import implements
 from zope.component import provideAdapter, provideSubscriptionAdapter
-from zope.security.zcml import permission
 from zope.component import queryUtility, getGlobalSiteManager
-from zope.component import zcml
 from zope.app.container.btree import BTreeContainer
 
-from schooltool.securitypolicy.crowds import Crowd, AggregateCrowd
+from schooltool.securitypolicy.crowds import AggregateCrowd
 from schooltool.securitypolicy.interfaces import ICrowd
 from schooltool.securitypolicy.interfaces import ICrowdsUtility
 from schooltool.securitypolicy.interfaces import IDescriptionUtility

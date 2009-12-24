@@ -18,12 +18,9 @@
 #
 """
 Tests for SchoolTool-specific calendar views.
-
-$Id$
 """
 import unittest
 import calendar
-from pprint import pprint
 from datetime import datetime, date, timedelta, time
 from pytz import timezone, utc
 
@@ -34,7 +31,7 @@ from zope.component import provideAdapter, provideSubscriptionAdapter
 from zope.interface.verify import verifyObject
 from zope.publisher.browser import TestRequest
 from zope.testing import doctest
-from zope.app.testing import setup, ztapi
+from zope.app.testing import setup
 from zope.publisher.browser import BrowserView
 from zope.traversing.interfaces import IContainmentRoot
 from zope.session.interfaces import ISession
@@ -46,7 +43,6 @@ from schooltool.common import parse_datetime
 from schooltool.timetable import SchooldayTemplate, SchooldaySlot
 from schooltool.timetable.interfaces import ITimetableSchemaContainer
 from schooltool.timetable.model import SequentialDaysTimetableModel
-from schooltool.timetable.schema import TimetableSchema
 from schooltool.term.interfaces import ITermContainer
 from schooltool.term.tests import setUpDateManagerStub
 from schooltool.testing.util import NiceDiffsMixin
@@ -110,8 +106,7 @@ def setUp(test=None):
     sbsetup.setUpSessions()
     setUpDateManagerStub(test_today)
     app = ApplicationStub()
-    ztapi.provideAdapter(None, ISchoolToolApplication,
-                         lambda x: app)
+    provideAdapter(lambda x: app, (None,), ISchoolToolApplication)
 
 
 class EventStub(object):
@@ -128,6 +123,48 @@ class EventStub(object):
         self.resources = resources
         self.unique_id = unique_id
         self.__name__ = unique_id[::-1]
+
+
+def createEvent(dtstart, duration, title, **kw):
+    """Create a CalendarEvent.
+
+      >>> e1 = createEvent('2004-01-02 14:45:50', '5min', 'title')
+      >>> e1 == CalendarEvent(datetime(2004, 1, 2, 14, 45, 50),
+      ...                timedelta(minutes=5), 'title', unique_id=e1.unique_id)
+      True
+
+      >>> e2 = createEvent('2004-01-02 14:45', '3h', 'title')
+      >>> e2 == CalendarEvent(datetime(2004, 1, 2, 14, 45),
+      ...                timedelta(hours=3), 'title', unique_id=e2.unique_id)
+      True
+
+      >>> e3 = createEvent('2004-01-02', '2d', 'title')
+      >>> e3 == CalendarEvent(datetime(2004, 1, 2),
+      ...                timedelta(days=2), 'title', unique_id=e3.unique_id)
+      True
+
+    createEvent is very strict about the format of it arguments, and terse in
+    error reporting, but it's OK, as it is only used in unit tests.
+    """
+    from schooltool.calendar.utils import parse_datetimetz
+    if dtstart.count(':') == 0:         # YYYY-MM-DD
+        dtstart = parse_datetimetz(dtstart+' 00:00:00') # add hh:mm:ss
+    elif dtstart.count(':') == 1:       # YYYY-MM-DD HH:MM
+        dtstart = parse_datetimetz(dtstart+':00') # add seconds
+    else:                               # YYYY-MM-DD HH:MM:SS
+        dtstart = parse_datetimetz(dtstart)
+    dur = timedelta(0)
+    for part in duration.split('+'):
+        part = part.strip()
+        if part.endswith('d'):
+            dur += timedelta(days=int(part.rstrip('d')))
+        elif part.endswith('h'):
+            dur += timedelta(hours=int(part.rstrip('h')))
+        elif part.endswith('sec'):
+            dur += timedelta(seconds=int(part.rstrip('sec')))
+        else:
+            dur += timedelta(minutes=int(part.rstrip('min')))
+    return CalendarEvent(dtstart, dur, title, **kw)
 
 
 def doctest_ToCalendarTraverser():
@@ -168,7 +205,10 @@ def doctest_ToCalendarTraverser():
     We can also get the calendar as iCalendar:
 
         >>> from schooltool.app.interfaces import ISchoolToolCalendar
-        >>> ztapi.browserView(ISchoolToolCalendar, 'calendar.ics', BrowserView)
+        >>> from zope.publisher.interfaces.browser import IDefaultBrowserLayer
+        >>> provideAdapter(BrowserView,
+        ...                (ISchoolToolCalendar, IDefaultBrowserLayer),
+        ...                Interface, 'calendar.ics')
         >>> view = traverser.publishTraverse(request, 'calendar.ics')
         >>> view.context is ISchoolToolCalendar(traverser.context)
         True
@@ -191,7 +231,6 @@ def doctest_CalendarTraverser():
     CalendarTraverser allows you to traverse directly various calendar views:
 
         >>> from schooltool.app.browser.cal import CalendarTraverser
-        >>> from schooltool.app.cal import Calendar
         >>> cal = Calendar(None)
         >>> request = TestRequest()
         >>> traverser = CalendarTraverser(cal, request)
@@ -305,7 +344,6 @@ def doctest_CalendarTraverser():
 
     You can traverse into calendar events by their unique id:
 
-        >>> from schooltool.app.cal import CalendarEvent
         >>> event = CalendarEvent(datetime(2002, 2, 2, 2, 2),
         ...                       timedelta(hours=2), "Some event",
         ...                       unique_id="it's me!")
@@ -321,7 +359,6 @@ def doctest_CalendarTraverser():
 def doctest_EventForDisplay():
     """A wrapper for calendar events.
 
-        >>> from schooltool.resource.resource import Resource
         >>> person = Person("p1")
         >>> calendar = ISchoolToolCalendar(person)
         >>> event = createEvent('2004-01-02 14:45:50', '5min', 'yawn')
@@ -505,7 +542,6 @@ def doctest_EventForDisplay_editLink():
     """Test for EventForDisplay.editLink.
 
         >>> from schooltool.app.browser.cal import EventForDisplay
-        >>> from schooltool.app.cal import Calendar, CalendarEvent
         >>> event = CalendarEvent(datetime(2005, 9, 26, 21, 2),
         ...                       timedelta(hours=1), "Clickety-click",
         ...                       unique_id='xyzzy')
@@ -701,50 +737,6 @@ def doctest_CalendarDay():
     """
 
 
-def createEvent(dtstart, duration, title, **kw):
-    """Create a CalendarEvent.
-
-      >>> from schooltool.app.cal import CalendarEvent
-      >>> e1 = createEvent('2004-01-02 14:45:50', '5min', 'title')
-      >>> e1 == CalendarEvent(datetime(2004, 1, 2, 14, 45, 50),
-      ...                timedelta(minutes=5), 'title', unique_id=e1.unique_id)
-      True
-
-      >>> e2 = createEvent('2004-01-02 14:45', '3h', 'title')
-      >>> e2 == CalendarEvent(datetime(2004, 1, 2, 14, 45),
-      ...                timedelta(hours=3), 'title', unique_id=e2.unique_id)
-      True
-
-      >>> e3 = createEvent('2004-01-02', '2d', 'title')
-      >>> e3 == CalendarEvent(datetime(2004, 1, 2),
-      ...                timedelta(days=2), 'title', unique_id=e3.unique_id)
-      True
-
-    createEvent is very strict about the format of it arguments, and terse in
-    error reporting, but it's OK, as it is only used in unit tests.
-    """
-    from schooltool.app.cal import CalendarEvent
-    from schooltool.calendar.utils import parse_datetimetz
-    if dtstart.count(':') == 0:         # YYYY-MM-DD
-        dtstart = parse_datetimetz(dtstart+' 00:00:00') # add hh:mm:ss
-    elif dtstart.count(':') == 1:       # YYYY-MM-DD HH:MM
-        dtstart = parse_datetimetz(dtstart+':00') # add seconds
-    else:                               # YYYY-MM-DD HH:MM:SS
-        dtstart = parse_datetimetz(dtstart)
-    dur = timedelta(0)
-    for part in duration.split('+'):
-        part = part.strip()
-        if part.endswith('d'):
-            dur += timedelta(days=int(part.rstrip('d')))
-        elif part.endswith('h'):
-            dur += timedelta(hours=int(part.rstrip('h')))
-        elif part.endswith('sec'):
-            dur += timedelta(seconds=int(part.rstrip('sec')))
-        else:
-            dur += timedelta(minutes=int(part.rstrip('min')))
-    return CalendarEvent(dtstart, dur, title, **kw)
-
-
 def registerCalendarSubscribers():
     """Register subscription adapter for listing calendars to display."""
     provideSubscriptionAdapter(CalendarListSubscriber,
@@ -756,8 +748,10 @@ def registerCalendarHelperViews():
     """Register the real DailyCalendarRowsView for use by other views."""
     from schooltool.app.browser.cal import DailyCalendarRowsView
     from schooltool.app.interfaces import ISchoolToolCalendar
-    ztapi.browserView(ISchoolToolCalendar, 'daily_calendar_rows',
-                      DailyCalendarRowsView)
+    from zope.publisher.interfaces.browser import IDefaultBrowserLayer
+    provideAdapter(DailyCalendarRowsView,
+                   (ISchoolToolCalendar, IDefaultBrowserLayer), Interface,
+                   'daily_calendar_rows')
 
 
 def getDaysStub(start, end):
@@ -782,11 +776,10 @@ class TestCalendarViewBase(unittest.TestCase):
         registerCalendarHelperViews()
         registerCalendarSubscribers()
 
-        ztapi.provideAdapter(ISchoolToolApplication,
-                             IApplicationPreferences,
-                             getApplicationPreferences)
+        provideAdapter(getApplicationPreferences,
+                       (ISchoolToolApplication,), IApplicationPreferences)
         app = ApplicationStub()
-        ztapi.provideAdapter(None, ISchoolToolApplication, lambda x: app)
+        provideAdapter(lambda x: app, (None,), ISchoolToolApplication)
 
         setUpDateManagerStub(self.today)
 
@@ -848,12 +841,10 @@ class TestCalendarViewBase(unittest.TestCase):
     def test_dayTitle(self):
         from schooltool.app.browser.cal import CalendarViewBase
 
-        ztapi.provideAdapter(ISchoolToolApplication,
-                             IApplicationPreferences,
-                             getApplicationPreferences)
+        provideAdapter(getApplicationPreferences,
+                       (ISchoolToolApplication,), IApplicationPreferences)
 
         from zope.publisher.interfaces import IRequest
-        import zope.component
         from zope.interface import Interface
         class TestDateFormatterFullView( BrowserView ):
             """
@@ -862,10 +853,8 @@ class TestCalendarViewBase(unittest.TestCase):
             def __call__(self):
                 return unicode(self.context.strftime("%A, %B%e, %Y"))
 
-        zope.component.provideAdapter(TestDateFormatterFullView,
-                                      [date, IRequest], Interface,
-                                      name='fullDate')
-
+        provideAdapter(TestDateFormatterFullView,
+                       [date, IRequest], Interface, name='fullDate')
 
         request1 = TestRequest()
         request1.setPrincipal(PrincipalStub())
@@ -1087,13 +1076,12 @@ class TestCalendarViewBase(unittest.TestCase):
             >>> setup.placefulSetUp()
             >>> app = sbsetup.setUpSchoolToolSite()
             >>> directlyProvides(app, IContainmentRoot)
-            >>> ztapi.provideAdapter(Interface, ISchoolToolApplication,
-            ...                      lambda x: app)
+            >>> provideAdapter(lambda x: app, (None,), ISchoolToolApplication)
             >>> from schooltool.resource.interfaces import IBookingCalendar
             >>> from schooltool.resource.interfaces import IResourceContainer
             >>> from schooltool.resource.booking import ResourceBookingCalendar
-            >>> ztapi.provideAdapter(IResourceContainer, IBookingCalendar,
-            ...                      ResourceBookingCalendar)
+            >>> provideAdapter(ResourceBookingCalendar,
+            ...                (IResourceContainer,), IBookingCalendar)
             >>> setUpDateManagerStub(date(2005, 5, 13))
 
             >>> app['persons']['john'] = person = Person("john")
@@ -1130,11 +1118,7 @@ class TestCalendarViewBase(unittest.TestCase):
             >>> from schooltool.app.browser.cal import CalendarViewBase
             >>> from schooltool.app.cal import Calendar
 
-            >>> setup.placefulSetUp()
             >>> app = sbsetup.setUpSchoolToolSite()
-            >>> setup.setUpAnnotations()
-            >>> registerCalendarHelperViews()
-            >>> registerCalendarSubscribers()
             >>> sbsetup.setUpTimetabling()
             >>> setUpDateManagerStub(date(2005, 5, 13))
 
@@ -1306,7 +1290,6 @@ class TestCalendarViewBase(unittest.TestCase):
             >>> view.timezone.tzname(datetime.now())
             'UTC'
 
-            >>> from schooltool.app.cal import CalendarEvent
             >>> for i in range(0, 24):
             ...     cal1.addEvent(CalendarEvent(datetime(2002, 2, 1, i),
             ...                       timedelta(minutes=59), "day1-" + str(i)))
@@ -1591,10 +1574,7 @@ def doctest_CalendarEventView():
 
     We'll create a simple event view.
 
-        >>> from schooltool.app.cal import CalendarEvent
-        >>> from schooltool.app.cal import Calendar
         >>> from schooltool.app.browser.cal import CalendarEventView
-        >>> from schooltool.app.browser.cal import makeRecurrenceRule
         >>> cal = Calendar(Person())
         >>> event = CalendarEvent(datetime(2002, 2, 3, 12, 30),
         ...                       timedelta(minutes=59), "Event")
@@ -3271,9 +3251,8 @@ def doctest_TestCalendarEventBookingView():
 
         >>> setup.setUpAnnotations()
 
-        >>> ztapi.provideAdapter(ISchoolToolApplication,
-        ...                      IApplicationPreferences,
-        ...                      getApplicationPreferences)
+        >>> provideAdapter(getApplicationPreferences,
+        ...                (ISchoolToolApplication,), IApplicationPreferences)
         >>> view = CalendarEventBookingView(event, request)
         >>> view.getAvailableItemsContainer = stubItemsContainer
         >>> view.filter = lambda list: list
@@ -3438,7 +3417,6 @@ def doctest_getEvents_booking():
     events.
 
         >>> from schooltool.app.browser.cal import CalendarViewBase
-        >>> from schooltool.app.cal import Calendar
         >>> from schooltool.resource.resource import Resource
 
         >>> person = Person(u"frog")
@@ -3511,7 +3489,6 @@ class TestDailyCalendarView(unittest.TestCase):
         self.assertEquals(view.cursor, self.today)
 
         from zope.publisher.interfaces import IRequest
-        import zope.component
         from zope.interface import Interface
 
         class TestDateFormatterFullView( BrowserView ):
@@ -3521,8 +3498,8 @@ class TestDailyCalendarView(unittest.TestCase):
             def __call__(self):
                 return unicode(self.context.strftime("%A, %B%e, %Y"))
 
-        zope.component.provideAdapter(TestDateFormatterFullView,
-                                          [date, IRequest], Interface, name='fullDate')
+        provideAdapter(TestDateFormatterFullView,
+                       [date, IRequest], Interface, name='fullDate')
 
         view.request = TestRequest(form={'date': '2005-01-06'})
         view.update()
@@ -3833,27 +3810,33 @@ class TestDailyCalendarView(unittest.TestCase):
                           [{'duration': 60, 'time': '10:00',
                             'title': '10:00', 'cols': (None,),
                             'top': 0.0, 'height': 4.0,
-                            'active': False},
+                            'active': False,
+                            'full_title': u'Add new event starting at 10:00'},
                            {'duration': 60, 'time': '11:00',
                             'title': '11:00', 'cols': (None,),
                             'top': 4.0, 'height': 4.0,
-                            'active': False},
+                            'active': False,
+                            'full_title': u'Add new event starting at 11:00'},
                            {'duration': 60, 'time': '12:00',
                             'title': '12:00', 'cols': (None,),
                             'top': 8.0, 'height': 4.0,
-                            'active': False},
+                            'active': False,
+                            'full_title': u'Add new event starting at 12:00'},
                            {'duration': 60, 'time': '13:00',
                             'title': '13:00', 'cols': (None,),
                             'top': 12.0, 'height': 4.0,
-                            'active': False},
+                            'active': False,
+                            'full_title': u'Add new event starting at 13:00'},
                            {'duration': 60, 'time': '14:00',
                             'title': '14:00', 'cols': (None,),
                             'top': 16.0, 'height': 4.0,
-                            'active': False},
+                            'active': False,
+                            'full_title': u'Add new event starting at 14:00'},
                            {'duration': 60, 'time': '15:00',
                             'title': '15:00', 'cols': (None,),
                             'top': 20.0, 'height': 4.0,
-                            'active': False},
+                            'active': False,
+                            'full_title': u'Add new event starting at 15:00'},
                             ])
 
         ev1 = createEvent('2004-08-12 12:00', '2h', "Meeting")
@@ -3868,6 +3851,7 @@ class TestDailyCalendarView(unittest.TestCase):
                 del d['top']
                 del d['height']
                 del d['active']
+                del d['full_title']
             return l
 
         result = clearMisc(result)
@@ -3980,7 +3964,8 @@ class TestDailyCalendarView(unittest.TestCase):
                             'height': 4.0,
                             'duration': 60,
                             'time': '13:00',
-                            'active': True}])
+                            'active': True,
+                            'full_title': u'Add new event starting at 13:00'}])
 
     def test_getHours_short_periods(self):
         from schooltool.app.browser.cal import DailyCalendarView
@@ -5204,7 +5189,6 @@ def doctest_CalendarListSubscriber(self):
         >>> from schooltool.person.interfaces import IPersonPreferences
         >>> from schooltool.app.interfaces import IHaveCalendar
         >>> from schooltool.app.cal import CALENDAR_KEY
-        >>> from zope.interface import implements
         >>> from zope.annotation.interfaces import IAttributeAnnotatable
         >>> class PersonStub:
         ...     implements(IAttributeAnnotatable, IHaveCalendar)
@@ -5233,7 +5217,6 @@ def doctest_CalendarListSubscriber(self):
 
     A simple check:
 
-        >>> from schooltool.app.browser.cal import CalendarListSubscriber
         >>> import calendar as pycalendar
         >>> calendar = CalendarStub('My Calendar')
         >>> request = TestRequest()
@@ -5245,7 +5228,6 @@ def doctest_CalendarListSubscriber(self):
     If the authenticated user is looking at his own calendar, then
     a list of overlaid calendars is taken into consideration
 
-        >>> from schooltool.person.interfaces import IPerson
         >>> class PrincipalStub:
         ...     def __init__(self):
         ...         self.person = PersonStub('x', calendar=calendar)

@@ -18,20 +18,14 @@
 #
 """
 Tests for DateFormatter views.
-
-$Id$
 """
 import unittest
 import datetime
 
-from zope.interface import directlyProvides
 from zope.publisher.browser import TestRequest
 from zope.testing import doctest
-from zope.app.testing import setup, ztapi
-from zope.traversing.interfaces import IContainmentRoot
 
 from schooltool.app.browser.testing import setUp, tearDown
-from schooltool.testing import setup as sbsetup
 from schooltool.skin.dateformatter import DateFormatterFullView
 from schooltool.skin.dateformatter import DateFormatterMediumView
 from schooltool.skin.dateformatter import DateFormatterShortView

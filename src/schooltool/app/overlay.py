@@ -395,7 +395,6 @@ def choose_color(colors, used_colors):
 def unrelateCalendarOnDeletion(event):
     """When you delete an object, relationships of it's calendar should be removed
 
-        >>> from zope.app.testing import setup
         >>> from schooltool.relationship.tests import setUp, tearDown
         >>> from schooltool.testing.setup import setUpCalendaring
 

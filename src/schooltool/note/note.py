@@ -34,18 +34,18 @@ TODO: Notes are basically stupid comments, do we need real discussion items?  A
       note on a note has a fairly visible use-case (say Jane from the Cafeteria
       group notes that a new supply of super-fresh cream is due the day before
       the picnic..)
-
-$Id$
 """
 import datetime
 import random
-import persistent
-import persistent.list
-import zope.interface
 
+from persistent import Persistent
+from persistent.list import PersistentList
 from zope.annotation.interfaces import IAnnotations
+from zope.interface import implements
 
 from schooltool.note import interfaces
+from schooltool.person.interfaces import IPerson
+from schooltool.securitypolicy.crowds import Crowd
 
 
 def getNotes(context):
@@ -60,7 +60,31 @@ def getNotes(context):
         return annotations[key]
 
 
-class Notes(persistent.Persistent):
+class Note(Persistent):
+    """A Note.
+
+    Your basic simple content ojbect:
+
+    >>> note = Note(title='Potluck Theme!',
+    ...             body="We're going Mexican! Bring tequila and tacos!",
+    ...             privacy="private")
+    >>> note.title
+    'Potluck Theme!'
+    >>> note.body
+    "We're going Mexican! Bring tequila and tacos!"
+
+    """
+    implements(interfaces.INote)
+
+    def __init__(self, title=None, body=None, privacy=None, owner=None):
+        self.title = title
+        self.body = body
+        self.privacy = privacy
+        self.owner = owner
+        self.unique_id = '%d.%d' %(datetime.datetime.utcnow().microsecond,
+                                   random.randrange(10 ** 6, 10 ** 7))
+
+class Notes(Persistent):
     """A list of Note objects.
 
     Notes are just a container for Note objects
@@ -92,10 +116,10 @@ class Notes(persistent.Persistent):
     []
 
     """
-    zope.interface.implements(interfaces.INotes)
+    implements(interfaces.INotes)
 
     def __init__(self):
-        self._notes = persistent.list.PersistentList()
+        self._notes = PersistentList()
 
     def __iter__(self):
         return iter(self._notes)
@@ -112,31 +136,6 @@ class Notes(persistent.Persistent):
         del self._notes[:]
 
 
-class Note(persistent.Persistent):
-    """A Note.
-
-    Your basic simple content ojbect:
-
-    >>> note = Note(title='Potluck Theme!',
-    ...             body="We're going Mexican! Bring tequila and tacos!",
-    ...             privacy="private")
-    >>> note.title
-    'Potluck Theme!'
-    >>> note.body
-    "We're going Mexican! Bring tequila and tacos!"
-
-    """
-    zope.interface.implements(interfaces.INote)
-
-    def __init__(self, title=None, body=None, privacy=None, owner=None):
-        self.title = title
-        self.body = body
-        self.privacy = privacy
-        self.owner = owner
-        self.unique_id = '%d.%d' %(datetime.datetime.utcnow().microsecond,
-                                   random.randrange(10 ** 6, 10 ** 7))
-
-from schooltool.securitypolicy.crowds import Crowd
 class NoteCrowd(Crowd):
     def contains(self, principal):
         if self.context.privacy == 'private':

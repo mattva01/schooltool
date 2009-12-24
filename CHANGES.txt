@@ -1,6 +1,14 @@
 CHANGES
 ~~~~~~~
 
+1.2.1dev
+==================
+
+* Traceback trying to view student's contacts https://launchpad.net/bugs/475586
+* Section scheduling view now returns to section on save https://launchpad.net/bugs/485616
+* Automatic plugin inclusion
+
+
 1.2.0 (2009-11-04)
 ==================
 
@@ -8,19 +16,19 @@ New Features
 ------------
 
 * A way to enter contact information of users themselves (as opposed to
-  external contacts) https://bugs.launchpad.net/schooltool/+bug/381158
+  external contacts) https://launchpad.net/bugs/381158
 
 * Outgoing email support for interventions (sent either via specified
   SMTP server or your Gmail account).
-  https://bugs.launchpad.net/schooltool/+bug/417029,
-  https://bugs.launchpad.net/schooltool/+bug/417101,
-  https://bugs.launchpad.net/schooltool/+bug/425759
+  https://launchpad.net/bugs/417029,
+  https://launchpad.net/bugs/417101,
+  https://launchpad.net/bugs/425759
 
 SchoolTool security
 -------------------
 
 * An overview page of user permissions (access rights) in SchoolTool.
-  https://bugs.launchpad.net/schooltool/+bug/381698
+  https://launchpad.net/bugs/381698
   (Only SchoolTool core permissions listed - Gradebook, Attendance/Journal
   and Interventions are soon to follow)
 
@@ -36,7 +44,7 @@ Bug fixes
   https://bugs.launchpad.net/bugs/427321
 
 * Crufty section name display for section.
-  https://bugs.launchpad.net/schooltool/+bug/394388
+  https://launchpad.net/bugs/394388
 
 
 1.0.3 (2009-07-07)
@@ -53,39 +61,39 @@ New features
   
   - Sections now can also be added from term's "sections" view. 
   
-  - See https://bugs.launchpad.net/schooltool/+bug/389283
+  - See https://launchpad.net/bugs/389283
 
 * You can specify the relationship between a person and a contact from a
   standard set (parent, guardian, step-parent, etc). See
-  https://bugs.launchpad.net/schooltool/+bug/381412
+  https://launchpad.net/bugs/381412
 
 * Removed ability to delete calendar events that come from (section) timetables.
-  See https://bugs.launchpad.net/schooltool/+bug/271391
+  See https://launchpad.net/bugs/271391
 
 Douglas Cerna:
 
 * Added missing attributes to the course adding form and the csv import.  See
-  https://bugs.launchpad.net/schooltool/+bug/384945 and
-  https://bugs.launchpad.net/schooltool/+bug/384957
+  https://launchpad.net/bugs/384945 and
+  https://launchpad.net/bugs/384957
 
 Tweaks and fixes
 ----------------
 
 * Active year is no longer highlighted in red.  See
-  https://bugs.launchpad.net/schooltool/+bug/317651
+  https://launchpad.net/bugs/317651
 
 * Fixed contact deletion crash. See
-  https://bugs.launchpad.net/schooltool/+bug/382239
+  https://launchpad.net/bugs/382239
 
 * Section and course descriptions are displayed properly now.  See
-  https://bugs.launchpad.net/schooltool/+bug/370581
+  https://launchpad.net/bugs/370581
 
 * Fixed a typo in default ethnicity demographics field.  See
-  https://bugs.launchpad.net/schooltool/+bug/376116
+  https://launchpad.net/bugs/376116
 
 * Fixed glitches (events not displayed or displayed in wrong day) in weekly
-  calendar views. See https://bugs.launchpad.net/schooltool/+bug/285514 and
-  https://bugs.launchpad.net/schooltool/+bug/389626  Thanks go to Daniel Höger
+  calendar views. See https://launchpad.net/bugs/285514 and
+  https://launchpad.net/bugs/389626  Thanks go to Daniel Höger
   for the report and part of the fix.
 
 Unicode fixes
@@ -93,9 +101,9 @@ Unicode fixes
 
 Fixes by Douglas Cerna:
 
-* Contacts views.  See https://bugs.launchpad.net/schooltool/+bug/382251
+* Contacts views.  See https://launchpad.net/bugs/382251
 
-* Course CSV import.  See https://bugs.launchpad.net/schooltool/+bug/375792
+* Course CSV import.  See https://launchpad.net/bugs/375792
 
 
 1.0.2 (2009-06-02)
@@ -105,17 +113,17 @@ Justas Sadzevičius:
 
 * SchoolTool no longer supports groups as members of a section.  To add all
   members of a group, please use the filter in section's "edit individuals"
-  page.  See https://bugs.launchpad.net/schooltool/+bug/370629
+  page.  See https://launchpad.net/bugs/370629
 
 * Optional "Course ID", "Goverment ID" and "Credits" fields added to a Course.
-  See  https://bugs.launchpad.net/schooltool/+bug/381031
+  See  https://launchpad.net/bugs/381031
 
 Gediminas Paulauskas:
 
-* Fixed broken packages.  See https://bugs.launchpad.net/schooltool/+bug/352096
+* Fixed broken packages.  See https://launchpad.net/bugs/352096
 
 * Server properly starts after installation or upgrade.  See
-  https://bugs.launchpad.net/schooltool/+bug/334365
+  https://launchpad.net/bugs/334365
 
 
 1.0.1 (2009-05-11)
@@ -135,7 +143,7 @@ Tweaks and fixes
 
 Douglas Cerna:
 
-* Made CSV importer support blank lines.  See https://bugs.launchpad.net/schooltool/+bug/253663
+* Made CSV importer support blank lines.  See https://launchpad.net/bugs/253663
 
 Justas Sadzevičius:
 

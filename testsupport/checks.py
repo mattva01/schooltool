@@ -21,7 +21,6 @@ Checks for the unit tests.
 """
 
 import sys
-import sets
 import logging
 
 name_of_test = str
@@ -139,56 +138,11 @@ class StdoutChecks:
         pdb.post_mortem = self.old_pdb_post_mortem
 
 
-class LibxmlChecks:
-
-    def __init__(self):
-        self.last_mem = 0
-
-    def startTest(self, test):
-        import libxml2
-        mem = libxml2.debugMemory(1)
-        if mem > self.last_mem:
-            warn("libxml2 used %d bytes of memory before test %s"
-                 % (mem - self.last_mem, name_of_test(test)))
-
-        # Attempts to call libxml2.cleanupParser() in stopTest and then check
-        # that debugMemory() returns 0 were unsuccessful.  It appears that
-        # cleanupParser can only work correctly once.  Instead try to subtract
-        # this overhead once by calling libxml2.initParser() and remembering
-        # the amount of memory it takes (395 bytes here).
-        libxml2.initParser()
-        self.last_mem = libxml2.debugMemory(1)
-        if self.last_mem != libxml2.debugMemory(1):
-            warn("libxml2 acts strangely")
-
-    def stopTest(self, test):
-        import libxml2
-        # Using libxml2 after cleanupParser was called might be unsafe, even
-        # though it appears to work just fine now. See
-        # http://mail.gnome.org/archives/xml/2004-October/msg00099.html
-        # I think catching memory leaks in the code is worth the risk of
-        # calling cleanupParser in unit tests -- we do not do that in real
-        # code.
-        libxml2.cleanupParser()
-        mem = libxml2.debugMemory(1)
-        if mem > self.last_mem:
-            warn("%s leaked %d bytes of memory in libxml2 objects (total: %d)"
-                 % (test, mem - self.last_mem, mem))
-        self.last_mem = mem
-
-        # make libxml2 noisy, just in case someone used QuietLibxml2Mixin and
-        # forgot to call tearDownLibxml2
-        def on_error_callback(ctx, msg):
-            sys.stderr.write(msg)
-        libxml2.registerErrorHandler(on_error_callback, None)
-
-
 class LoggingChecks:
     """Detect unit tests that fiddle with the logging package.
 
     This class looks for the following fiddlings:
 
-      import logging
       logging.getLogger('foo').disabled = True
       logging.getLogger('foo').propagate = False
       logging.getLogger('foo').setLevel(bar)
@@ -207,8 +161,8 @@ class LoggingChecks:
         if new_snapshot != self.snapshot:
             warn("%s changed logging configuration" % name_of_test(test))
             if self.verbose:
-                old_loggers = sets.Set(self.snapshot.keys())
-                new_loggers = sets.Set(new_snapshot.keys())
+                old_loggers = set(self.snapshot.keys())
+                new_loggers = set(new_snapshot.keys())
                 for name in sorted(old_loggers | new_loggers):
                     if name not in new_loggers:
                         warn("  logger %s disappeared" % name)
@@ -221,7 +175,6 @@ class LoggingChecks:
                             warn("  logger %s was changed" % name)
 
     def makeSnapshot(self):
-        import logging
         info = {}
         for name, logger in logging.root.manager.loggerDict.items():
             if isinstance(logger, logging.PlaceHolder):
@@ -271,7 +224,6 @@ def test_hooks():
     return [
         StdoutChecks(),     # should be the first one
         TransactionChecks(),
-        LibxmlChecks(),
         LoggingChecks(),
         CleanUpChecks(),
     ]

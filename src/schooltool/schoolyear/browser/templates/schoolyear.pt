@@ -7,27 +7,35 @@
 </head>
 <body>
 
-<span metal:fill-slot="zonki" i18n:translate="">
+<span metal:fill-slot="zonki">
   <img src="zonki.png" alt="SchoolTool" i18n:attributes="alt"
     tal:attributes="src context/++resource++zonki-reading.png" />
 </span>
 
 <h1 metal:fill-slot="content-header" i18n:translate="">
-  <tal:block tal:content="view/context/title" i18n:name="schoolyear_title">School Year Title</tal:block>
-  (<tal:block tal:content="view/context/first/@@mediumDate" i18n:name="start_date"/>&mdash;
-   <tal:block tal:content="view/context/last/@@mediumDate" i18n:name="end_date"/>)
+  <tal:block tal:content="view/context/title"
+             i18n:name="schoolyear_title">School Year Title</tal:block>
+  (<tal:block tal:content="view/context/first/@@mediumDate"
+              i18n:name="start_date"/>
+  &mdash;
+  <tal:block tal:content="view/context/last/@@mediumDate"
+             i18n:name="end_date"/>)
 </h1>
 <metal:block metal:fill-slot="body"
              tal:define="canModify view/canModify">
   <form method="post" tal:attributes="action string:${context/@@absolute_url}">
-    <div class="term" tal:repeat="term view/sorted_terms"
-         i18n:translate="">
+    <div class="term" tal:repeat="term view/sorted_terms">
       <input type="checkbox"
              tal:attributes="name string:delete.${term/__name__};
                              id string:delete.${term/__name__}" />
-      <tal:block tal:content="structure term/@@link" i18n:name="term_title">Term title</tal:block>
-      (<tal:block tal:content="term/first/@@mediumDate" i18n:name="start_date"/>&mdash;
-      <tal:block tal:content="term/last/@@mediumDate" i18n:name="end_date"/>)
+      <tal:block i18n:translate="">
+        <tal:block tal:content="structure term/@@link"
+                   i18n:name="term_title">Term title</tal:block>
+        (<tal:block tal:content="term/first/@@mediumDate"
+                    i18n:name="start_date"/>
+        &mdash;
+        <tal:block tal:content="term/last/@@mediumDate" i18n:name="end_date"/>)
+      </tal:block>
     </div>
     <tal:if condition="view/sorted_terms">
       <div class="controls" tal:condition="canModify">

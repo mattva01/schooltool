@@ -14,7 +14,7 @@
       />
 
   <utility
-      name="schooltool.stap2005"
+      name="schooltool.stapp2005"
       provides="zope.app.generations.interfaces.ISchemaManager"
       component=".generations.schemaManager"
       />

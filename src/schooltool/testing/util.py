@@ -18,13 +18,9 @@
 #
 """
 Testing Utilities
-
-$Id$
 """
 __metaclass__ = type
-import sys
 import cgi
-import sets
 import difflib
 import unittest
 from lxml import sax
@@ -78,7 +74,7 @@ def pformat_set(s):
     """Pretty-print a Set."""
     items = list(s)
     items.sort()
-    return 'sets.Set(%s)' % pformat(items)
+    return 'set(%s)' % pformat(items)
 
 
 
@@ -311,8 +307,8 @@ class NiceDiffsMixin:
             if (isinstance(expected, basestring)
                 and isinstance(results, basestring)):
                 msg = "\n" + diff(expected, results)
-            elif (isinstance(expected, sets.Set)
-                and isinstance(results, sets.Set)):
+            elif (isinstance(expected, set)
+                and isinstance(results, set)):
                 msg = "\n" + diff(pformat_set(expected), pformat_set(results))
             else:
                 msg = "\n" + diff(pformat(expected), pformat(results))
@@ -372,6 +368,7 @@ def fakePath(obj, path):
     """Make absoluteURL(obj) return url.
 
         >>> from zope.traversing.browser.absoluteurl import absoluteURL
+        >>> from zope.publisher.browser import TestRequest
         >>> from zope.app.testing import setup
         >>> setup.placelessSetUp()
         >>> setup.setUpTraversal()

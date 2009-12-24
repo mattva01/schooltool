@@ -15,8 +15,7 @@
     <input tal:repeat="choice view/choices"
            class="button-ok" type="submit"
            tal:attributes="name string:NEXT.${repeat/choice/index};
-                           value python:choice[1]"
-           i18n:attributes="value" />
+                           value python:choice[1]" />
     <input type="submit" class="button-cancel" name="CANCEL" value="Cancel"
            i18n:attributes="value" />
   </div>

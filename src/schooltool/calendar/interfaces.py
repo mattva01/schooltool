@@ -17,14 +17,12 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Interface definitions for SchoolBell calendars.
+Interface definitions for SchoolTool calendars.
 
 There are two interfaces for calendars: `ICalendar` for read-only calendars,
 and `IEditCalendar` for read-write calendars.
 
 Semantically calendars are unordered sets of events.
-
-$Id$
 """
 
 from zope.interface import Interface

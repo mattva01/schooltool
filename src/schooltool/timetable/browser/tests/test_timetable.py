@@ -18,8 +18,6 @@
 #
 """
 Tests for schooltool timetabling views.
-
-$Id$
 """
 
 import unittest
@@ -33,7 +31,6 @@ from zope.interface import implements
 from zope.publisher.browser import TestRequest
 from zope.testing import doctest
 from zope.testing.doctestunit import pprint
-from zope.app.testing import ztapi
 
 from schooltool.schoolyear.interfaces import ISchoolYearContainer
 from schooltool.schoolyear.schoolyear import getSchoolYearContainer
@@ -52,8 +49,7 @@ def setUp(test=None):
     testing.setUp(test)
     sbsetup.setUpTimetabling()
     sbsetup.setUpApplicationPreferences()
-    ztapi.provideAdapter(None, ISchoolToolApplication,
-                         getSchoolToolApplication)
+    provideAdapter(getSchoolToolApplication, (None,), ISchoolToolApplication)
     provideAdapter(getTermContainer, [Interface], ITermContainer)
     provideAdapter(getSchoolYearContainer)
 
@@ -174,16 +170,13 @@ def doctest_SectionTimetableSetupView():
         >>> schemas = TimetableSchemaContainer()
 
         >>> from schooltool.timetable.interfaces import ITimetableSchemaContainer
-        >>> ztapi.provideAdapter(Interface, ITimetableSchemaContainer,
-        ...                      lambda x: schemas)
+        >>> provideAdapter(lambda x: schemas,
+        ...                (Interface,) , ITimetableSchemaContainer)
 
-        >>> ztapi.provideAdapter(IOwnTimetables, ITimetables,
-        ...                      TimetablesAdapter)
-        >>> from zope.app.container.interfaces import INameChooser
+        >>> provideAdapter(TimetablesAdapter)
         >>> from schooltool.timetable.interfaces import ITimetableDict
         >>> from schooltool.timetable import TimetableNameChooser
-        >>> ztapi.provideAdapter(ITimetableDict, INameChooser,
-        ...                      TimetableNameChooser)
+        >>> provideAdapter(TimetableNameChooser, (ITimetableDict, ))
 
         >>> from schooltool.course.section import Section as STSection
         >>> class Section(STSection):
@@ -284,16 +277,16 @@ def doctest_SectionTimetableSetupView():
         >>> request.response.getStatus()
         302
         >>> request.response.getHeader('location')
-        'http://127.0.0.1/sections/math/timetables/1'
+        'http://127.0.0.1/sections/math'
 
     An empty save request will create an empty timetable:
 
         >>> ITimetables(math).timetables['1']
         <Timetable: ...>
         >>> ITimetables(math).timetables['1']['Mon'].items()
-        [('9:00', Set([])), ('10:00', Set([]))]
+        [('9:00', set([])), ('10:00', set([]))]
         >>> ITimetables(math).timetables['1']['Tue'].items()
-        [('9:00', Set([])), ('10:00', Set([]))]
+        [('9:00', set([])), ('10:00', set([]))]
 
     Let's add some scheduled classes:
 
@@ -311,18 +304,18 @@ def doctest_SectionTimetableSetupView():
         >>> view.request.response.getStatus()
         302
         >>> view.request.response.getHeader('location')
-        'http://127.0.0.1/sections/math/timetables/1'
+        'http://127.0.0.1/sections/math'
 
     Now we have a schedule for our course:
 
         >>> ITimetables(math).timetables['1']['Mon']['9:00']
-        Set([TimetableActivity('', ...
+        set([TimetableActivity('', ...
         >>> ITimetables(math).timetables['1']['Mon']['10:00']
-        Set([])
+        set([])
         >>> ITimetables(math).timetables['1']['Tue']['9:00']
-        Set([TimetableActivity('', ...
+        set([TimetableActivity('', ...
         >>> ITimetables(math).timetables['1']['Tue']['10:00']
-        Set([])
+        set([])
 
     All the periods that were 'ON' are now checked:
 
@@ -366,7 +359,7 @@ def doctest_SectionTimetableSetupView():
     Tuesday's Activity is no longer there:
 
         >>> ITimetables(math).timetables['1']['Tue']['9:00']
-        Set([])
+        set([])
 
     """
 

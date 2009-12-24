@@ -17,8 +17,6 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """Commendation Browser Views
-
-$Id$
 """
 __docformat__ = 'reStructuredText'
 from zope import annotation
@@ -27,7 +25,7 @@ from zope.app import security
 from zope.app.form.browser.add import AddView
 from zope.publisher import browser
 from zope.traversing.browser.absoluteurl import absoluteURL
-from zope.component import queryUtility, getUtility
+from zope.component import getUtility
 
 # Import the 'commendation' message id factory
 from schooltool.commendation import interfaces, commendation

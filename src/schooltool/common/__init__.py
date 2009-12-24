@@ -138,57 +138,6 @@ def parse_datetime(s):
     return datetime.datetime(y, m, d, hh, mm, ss, ssssss)
 
 
-def dedent(text):
-    r"""Remove leading indentation from triple-quoted strings.
-
-    Example:
-
-        >>> dedent('''
-        ...     some text
-        ...     is here
-        ...        with maybe some indents
-        ...     ''')
-        ...
-        'some text\nis here\n   with maybe some indents\n'
-
-    Corner cases (mixing tabs and spaces, lines that are indented less than
-    the first line) are not handled yet.
-    """
-    lines = text.splitlines()
-    first, limit = 0, len(lines)
-    while first < limit and not lines[first]:
-        first += 1
-    if first >= limit:
-        return ''
-    firstline = lines[first]
-    indent, limit = 0, len(firstline)
-    while indent < limit and firstline[indent] in (' ', '\t'):
-        indent += 1
-    return '\n'.join([line[indent:] for line in lines[first:]])
-
-
-def to_unicode(s):
-    r"""Convert a UTF-8 string to Unicode.
-
-    Example:
-
-        >>> to_unicode('\xc4\x84\xc5\xbeuol\xc5\xb3')
-        u'\u0104\u017euol\u0173'
-
-    For convenience, to_unicode accepts None as the argument value.  This makes
-    it easier to use it with libxml2 functions such as nsProp, which return
-    None for missing attribute values.
-
-        >>> to_unicode(None) is None
-        True
-
-    """
-    if s is None:
-        return None
-    else:
-        return unicode(s, 'UTF-8')
-
-
 locale_charset = locale.getpreferredencoding()
 
 
@@ -233,98 +182,6 @@ def from_locale(s):
 
     """
     return unicode(s, locale_charset)
-
-
-class StreamWrapper:
-    r"""Unicode-friendly wrapper for writable file-like objects.
-
-    Here the terms 'encoding' and 'charset' are used interchangeably.
-
-    The main use case for StreamWrapper is wrapping sys.stdout and sys.stderr
-    so that you can forget worrying about charsets of your data.
-
-        >>> from StringIO import StringIO
-        >>> from schooltool import common
-        >>> old_locale_charset = common.locale_charset
-        >>> common.locale_charset = 'UTF-8'
-
-        >>> sw = StreamWrapper(StringIO())
-        >>> print >> sw, u"Hello, world! \u00b7\u263b\u00b7"
-        >>> sw.stm.getvalue()
-        'Hello, world! \xc2\xb7\xe2\x98\xbb\xc2\xb7\n'
-
-    By default printing Unicode strings to stdout/stderr will raise Unicode
-    errors if the stream encoding does not include some characters you are
-    printing.  StreamWrapper will replace unconvertable characters to question
-    marks, therefore you should only use it for informative messages where such
-    loss of information is acceptable.
-
-        >>> common.locale_charset = 'US-ASCII'
-        >>> sw = StreamWrapper(StringIO())
-        >>> print >> sw, u"Hello, world! \u00b7\u263b\u00b7"
-        >>> sw.stm.getvalue()
-        'Hello, world! ???\n'
-
-    StreamWrapper converts all unicode strings that are written to it to the
-    encoding defined in the wrapped stream's 'encoding' attribute, or, if that
-    is None, to the locale encoding.  Typically the stream's encoding attribute
-    is set when the stream is connected to a console device, and None when the
-    stream is connected to a file.  On Unix systems the console encoding
-    matches the locale charset, but on Win32 systems they differ.
-
-        >>> s = StringIO()
-        >>> s.encoding = 'ISO-8859-1'
-        >>> sw = StreamWrapper(s)
-        >>> print >> sw, u"Hello, world! \u00b7\u263b\u00b7"
-        >>> sw.stm.getvalue()
-        'Hello, world! \xb7?\xb7\n'
-
-    You can print other kinds of objects:
-
-        >>> sw = StreamWrapper(StringIO())
-        >>> print >> sw, 1, 2,
-        >>> print >> sw, 3
-        >>> sw.stm.getvalue()
-        '1 2 3\n'
-
-    but not 8-bit strings:
-
-        >>> sw = StreamWrapper(StringIO())
-        >>> print >> sw, "\xff"
-        Traceback (most recent call last):
-          ...
-        UnicodeDecodeError: 'ascii' codec can't decode byte 0xff in position 0: ordinal not in range(128)
-
-    In addition to 'write', StreamWrapper provides 'flush' and 'writelines'
-
-        >>> sw = StreamWrapper(StringIO())
-        >>> sw.write('xyzzy\n')
-        >>> sw.flush()
-        >>> sw.writelines(['a', 'b', 'c', 'd'])
-        >>> sw.stm.getvalue()
-        'xyzzy\nabcd'
-
-    Clean up:
-
-        >>> common.locale_charset = old_locale_charset
-
-    """
-
-    def __init__(self, stm):
-        self.stm = stm
-        self.encoding = getattr(stm, 'encoding', None)
-        if self.encoding is None:
-            self.encoding = locale_charset
-
-    def write(self, obj):
-        self.stm.write(obj.encode(self.encoding, 'replace'))
-
-    def flush(self):
-        self.stm.flush()
-
-    def writelines(self, seq):
-        for obj in seq:
-            self.write(obj)
 
 
 class UnicodeAwareException(Exception):
@@ -422,6 +279,8 @@ def collect(fn):
         return list(fn(*args, **kw))
     collector.__name__ = fn.__name__
     collector.__doc__ = fn.__doc__
+    collector.__dict__ = fn.__dict__
+    collector.__module__ = fn.__module__
     return collector
 
 

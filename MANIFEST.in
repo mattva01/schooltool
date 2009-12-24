@@ -4,7 +4,6 @@ recursive-include src *.pt
 recursive-include src *.css
 recursive-include src *.pot
 recursive-include src *.po
-recursive-include src *.mo
 recursive-include src *.txt
 recursive-include src *.png
 recursive-include src *.gif
@@ -15,7 +14,6 @@ recursive-include src *.ini
 recursive-include src *.conf
 recursive-include src *.xml
 recursive-include src *.fs
-recursive-include src *.xpdl
 recursive-include src *.ics
 recursive-include src *.xls
 include version.txt

@@ -22,6 +22,9 @@ Lyceum specific security code.
 $Id$
 
 """
+from zope.traversing.api import getParent
+
+from schooltool.basicperson.interfaces import IBasicPerson
 from schooltool.group.interfaces import IGroupContainer
 from schooltool.securitypolicy.crowds import ConfigurableCrowd
 from schooltool.app.interfaces import ISchoolToolApplication
@@ -37,7 +40,19 @@ class PersonInfoViewersCrowd(ConfigurableCrowd):
         if container is None or 'teachers' not in container:
             return False
         teachers = container['teachers']
-        groups = list(self.context.groups)
+
+        # XXX: hack to obtain basic person, because if we write an adapter
+        #      to it, all objects adaptable to IBasicPerson will get indexed.
+        #      This is to be removed as soon as basic person catalogs learn
+        #      how to index *only* basic persons.
+        person = self.context
+        while person is not None and not IBasicPerson.providedBy(person):
+            person = getParent(person)
+        if person is None:
+            groups = []
+        else:
+            groups = list(person.groups)
+
         return (ConfigurableCrowd.contains(self, principal) or
                 teachers in groups)
 

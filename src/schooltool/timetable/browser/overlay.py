@@ -18,8 +18,6 @@
 #
 """
 Calendar overlay views for SchoolTool with timetabling enabled.
-
-$Id$
 """
 from zope.component import getUtility
 from zope.proxy import sameProxiedObjects
@@ -30,7 +28,6 @@ from zope.security.proxy import removeSecurityProxy
 
 from schooltool.term.interfaces import ITerm
 from schooltool.term.interfaces import IDateManager
-from schooltool.timetable.interfaces import ITimetables
 from schooltool.timetable.interfaces import ICompositeTimetables
 from schooltool.course.interfaces import ISection
 from schooltool.person.interfaces import IPerson
@@ -42,7 +39,7 @@ from schooltool.app.browser.overlay import CalendarOverlayView
 class CalendarSTOverlayView(CalendarOverlayView):
     """View for the calendar overlay portlet.
 
-    Much like the original CalendarOverlayView in SchoolBell, this view allows
+    Much like the original CalendarOverlayView in SchoolTool, this view allows
     you to choose calendars to be displayed, but this one allows you to view
     timetables of the calendar owners as well.
 

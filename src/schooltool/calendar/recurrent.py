@@ -18,13 +18,10 @@
 #
 """
 Recurrence rules.
-
-$Id$
 """
 
 import datetime
 import calendar
-from sets import Set
 
 from zope.interface import implements
 
@@ -310,7 +307,7 @@ class WeeklyRecurrenceRule(RecurrenceRule):
         if startdate is None:
             startdate = start
         count, cur = self._scroll(event, startdate)
-        weekdays = Set(self.weekdays)
+        weekdays = set(self.weekdays)
         weekdays.add(event.dtstart.weekday())
         while True:
             if ((enddate and cur > enddate) or
@@ -333,7 +330,7 @@ class WeeklyRecurrenceRule(RecurrenceRule):
     def _iCalArgs(self, dtstart):
         """Return iCalendar parameters specific to weekly reccurence."""
         if dtstart is not None:
-            weekdays = Set(self.weekdays)
+            weekdays = set(self.weekdays)
             weekdays.add(dtstart.weekday())
             return 'BYDAY=' + ','.join([ical_weekdays[weekday]
                                         for weekday in weekdays])

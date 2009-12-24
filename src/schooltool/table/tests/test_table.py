@@ -17,13 +17,10 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """Table tests
-
-$Id$
 """
 import unittest
 
-from zope.testing import doctest, doctestunit
-from zope.testing.doctestunit import pprint
+from zope.testing import doctest
 from zope.component import provideAdapter
 
 from schooltool.app.browser.testing import setUp, tearDown

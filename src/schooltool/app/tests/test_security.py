@@ -18,25 +18,17 @@
 #
 """
 Unit tests for schooltool.app.security
-
-$Id$
 """
 
 import unittest
 
-from zope.interface import Interface, implements
 from zope.testing import doctest
-from zope.app.testing import setup, ztapi
-from zope.component import getUtility
-from zope.traversing.interfaces import TraversalError
+from zope.app.testing import setup
+from zope.component import provideUtility, getUtility
 from zope.traversing.api import traverse
 from zope.component.interfaces import ComponentLookupError
 from zope.app.security.interfaces import IAuthentication
 from zope.app.container.contained import ObjectAddedEvent
-
-from schooltool.app.interfaces import ISchoolToolApplication
-from schooltool.securitypolicy.interfaces import IAccessControlCustomisations
-from schooltool.testing import setup as sbsetup
 
 
 class TestAuthSetUpSubscriber(unittest.TestCase):
@@ -50,10 +42,10 @@ class TestAuthSetUpSubscriber(unittest.TestCase):
         # Authenticated group
         from zope.app.security.interfaces import IAuthenticatedGroup
         from zope.app.security.principalregistry import AuthenticatedGroup
-        ztapi.provideUtility(IAuthenticatedGroup,
-                             AuthenticatedGroup('zope.authenticated',
-                                                'Authenticated users',
-                                                ''))
+        provideUtility(AuthenticatedGroup('zope.authenticated',
+                                          'Authenticated users',
+                                          ''),
+                       IAuthenticatedGroup)
 
     def tearDown(self):
         setup.placefulTearDown()

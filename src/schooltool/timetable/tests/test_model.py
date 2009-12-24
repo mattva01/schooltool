@@ -18,8 +18,6 @@
 #
 """
 Unit tests for the schooltool.timetable.model module.
-
-$Id$
 """
 
 import calendar
@@ -32,8 +30,9 @@ from pytz import UTC
 from zope.interface.verify import verifyObject
 from zope.traversing.interfaces import IPhysicallyLocatable
 from zope.app.testing.placelesssetup import PlacelessSetup
-from zope.app.testing import ztapi, setup
+from zope.app.testing import setup
 from zope.testing import doctest
+from zope.component import provideAdapter
 from zope.interface import implements
 
 from schooltool.testing.util import NiceDiffsMixin
@@ -105,7 +104,7 @@ def doctest_BaseTimetableModel_createCalendar():
 
     We'll have to provide application configuration stub:
 
-        >>> ztapi.provideAdapter(None, ISchoolToolApplication, ApplicationStub())
+        >>> provideAdapter(ApplicationStub(), (None,), ISchoolToolApplication)
 
         >>> from schooltool.timetable.model import BaseTimetableModel
         >>> btm = BaseTimetableModel()
@@ -116,8 +115,8 @@ def doctest_BaseTimetableModel_createCalendar():
         >>> term = TermStub()
         >>> timetable = createSimpleTimetable()
         >>> from schooltool.timetable.interfaces import ITimetable
-        >>> ztapi.provideAdapter(ITimetable, IPhysicallyLocatable,
-        ...                      TimetablePhysicallyLocatableAdapterStub)
+        >>> provideAdapter(TimetablePhysicallyLocatableAdapterStub,
+        ...                (ITimetable,), IPhysicallyLocatable)
 
     BaseTimetableModel is a base class and needs concrete implementations for
     its abstract methods.
@@ -184,9 +183,9 @@ class TestSequentialDaysTimetableModel(PlacelessSetup,
         from schooltool.timetable.interfaces import ITimetable
         PlacelessSetup.setUp(self)
 
-        ztapi.provideAdapter(ITimetable, IPhysicallyLocatable,
-                             TimetablePhysicallyLocatableAdapterStub)
-        ztapi.provideAdapter(None, ISchoolToolApplication, ApplicationStub())
+        provideAdapter(TimetablePhysicallyLocatableAdapterStub,
+                       (ITimetable,), IPhysicallyLocatable)
+        provideAdapter(ApplicationStub(), (None,), ISchoolToolApplication)
 
     def createModel(self):
         """Create a simple sequential timetable model.
@@ -391,9 +390,9 @@ class TestSequentialDayIdBasedTimetableModel(PlacelessSetup,
         from schooltool.timetable.interfaces import ITimetable
         PlacelessSetup.setUp(self)
 
-        ztapi.provideAdapter(ITimetable, IPhysicallyLocatable,
-                             TimetablePhysicallyLocatableAdapterStub)
-        ztapi.provideAdapter(None, ISchoolToolApplication, ApplicationStub())
+        provideAdapter(TimetablePhysicallyLocatableAdapterStub,
+                       (ITimetable,), IPhysicallyLocatable)
+        provideAdapter(ApplicationStub(), (None,), ISchoolToolApplication)
 
     def createDayTemplates(self):
         from schooltool.timetable import SchooldayTemplate, SchooldaySlot
@@ -510,9 +509,9 @@ class TestWeeklyTimetableModel(PlacelessSetup,
         from zope.traversing.interfaces import IPhysicallyLocatable
         from schooltool.timetable.interfaces import ITimetable
         PlacelessSetup.setUp(self)
-        ztapi.provideAdapter(ITimetable, IPhysicallyLocatable,
-                             TimetablePhysicallyLocatableAdapterStub)
-        ztapi.provideAdapter(None, ISchoolToolApplication, ApplicationStub())
+        provideAdapter(TimetablePhysicallyLocatableAdapterStub,
+                       (ITimetable,), IPhysicallyLocatable)
+        provideAdapter(ApplicationStub(), (None,), ISchoolToolApplication)
 
     def test(self):
         from schooltool.timetable.model import WeeklyTimetableModel
@@ -739,13 +738,8 @@ def doctest_PersistentTimetableCalendarEvent():
 
 def doctest_timetableEventHandlers():
     """
-        >>> class ApplicationStub(dict):
-        ...     implements(ISchoolToolApplication, IApplicationPreferences)
-        ...     def __call__(self, context):
-        ...         return self
-
         >>> app = ApplicationStub()
-        >>> ztapi.provideAdapter(None, ISchoolToolApplication, app)
+        >>> provideAdapter(app, (None,), ISchoolToolApplication)
         >>> timetable_calendar = []
         >>> class ModelStub(object):
         ...     def createCalendar(self, term, timetable, first=None, last=None):

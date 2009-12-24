@@ -65,16 +65,12 @@ There is some trickery to make empty calendars work:
     >>> list(read_icalendar(ical_file_as_string))
     []
 
-
-$Id$
 """
 
 import pytz
 import datetime
-import calendar
 import re
 from cStringIO import StringIO
-from sets import Set
 
 from schooltool.calendar.simple import SimpleCalendarEvent
 
@@ -146,7 +142,6 @@ def convert_event_to_ical(event):
     All-day events have DTSTART as a date:
 
         >>> from schooltool.calendar.recurrent import WeeklyRecurrenceRule
-        >>> from schooltool.calendar.recurrent import DailyRecurrenceRule
         >>> event = SimpleCalendarEvent(datetime(2005, 2, 11, 0, 0, 0),
         ...                             timedelta(days=2), "iCal tests",
         ...                             recurrence=WeeklyRecurrenceRule(),
@@ -211,7 +206,7 @@ def convert_calendar_to_vfb(calendar):
         >>> print "\n".join(lines)
         BEGIN:VCALENDAR
         VERSION:2.0
-        PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
+        PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
         METHOD:PUBLISH
         BEGIN:VFREEBUSY
         FREEBUSY:20041116T100729/20041116T11072900Z
@@ -225,7 +220,7 @@ def convert_calendar_to_vfb(calendar):
         >>> print "\n".join(lines)
         BEGIN:VCALENDAR
         VERSION:2.0
-        PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
+        PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
         METHOD:PUBLISH
         BEGIN:VFREEBUSY
         END:VFREEBUSY
@@ -235,7 +230,7 @@ def convert_calendar_to_vfb(calendar):
     """
     header = ["BEGIN:VCALENDAR",
               "VERSION:2.0",
-              "PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN",
+              "PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN",
               "METHOD:PUBLISH",
               "BEGIN:VFREEBUSY"]
     events = []
@@ -264,7 +259,7 @@ def convert_calendar_to_ical(calendar):
         >>> print "\n".join(lines)
         BEGIN:VCALENDAR
         VERSION:2.0
-        PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
+        PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
         BEGIN:VEVENT
         UID:12345678-5432@example.com
         SUMMARY:iCal rendering
@@ -282,7 +277,7 @@ def convert_calendar_to_ical(calendar):
         >>> print "\n".join(lines)
         BEGIN:VCALENDAR
         VERSION:2.0
-        PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
+        PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
         BEGIN:VEVENT
         UID:...
         SUMMARY:Empty calendar
@@ -295,7 +290,7 @@ def convert_calendar_to_ical(calendar):
     """
     header = ["BEGIN:VCALENDAR",
               "VERSION:2.0",
-              "PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN"]
+              "PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN"]
     footer = ["END:VCALENDAR"]
     events = []
     for event in calendar:
@@ -1192,7 +1187,7 @@ class VEventParser(object):
         'RECUR': parse_recurrence_rule,
     }
 
-    singleton_properties = Set([
+    singleton_properties = set([
         'DTSTAMP',
         'DTSTART',
         'UID',
@@ -1214,8 +1209,8 @@ class VEventParser(object):
         'URL',
     ])
 
-    rdate_types = Set(['DATE', 'DATE-TIME', 'PERIOD'])
-    exdate_types = Set(['DATE', 'DATE-TIME'])
+    rdate_types = set(['DATE', 'DATE-TIME', 'PERIOD'])
+    exdate_types = set(['DATE', 'DATE-TIME'])
 
     def __init__(self):
         self._props = {}

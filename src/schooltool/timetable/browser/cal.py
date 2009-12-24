@@ -96,7 +96,7 @@ class TermLegendViewlet(object):
 class DailyTimetableCalendarRowsView(DailyCalendarRowsView):
     """Daily calendar rows view for SchoolTool.
 
-    This view differs from the original view in SchoolBell in that it can
+    This view differs from the original view in SchoolTool in that it can
     also show day periods instead of hour numbers.
     """
 

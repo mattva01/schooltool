@@ -5,7 +5,6 @@
 
   <include package="zope.app.zcmlfiles" />
   <include package="zope.app.authentication" file="password.zcml" />
-  <include package="zope.app.wfmc" file="meta.zcml" />
   <include package="zope.viewlet" file="meta.zcml" />
   <include package="zope.mimetype" file="meta.zcml"/>
   <include package="zc.resourcelibrary" file="meta.zcml"/>
@@ -114,6 +113,7 @@
   <include package="schooltool.skin" />
   <include package="schooltool.relationship" />
   <include package="schooltool.app" />
+  <include package="schooltool.course" />
   <include package="schooltool.person" />
   <include package="schooltool.contact" />
   <include package="schooltool.demographics" />

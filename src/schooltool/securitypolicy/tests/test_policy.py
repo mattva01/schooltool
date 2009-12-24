@@ -18,15 +18,13 @@
 #
 """
 Unit tests for schooltool.securitypolicy.policy
-
-$Id$
 """
 
 import unittest
 from zope.testing import doctest
-from zope.app.testing import ztapi
 from zope.interface import implements, directlyProvides, Interface
 from zope.component import adapts
+from zope.component import provideAdapter, provideUtility
 from zope.app.testing import setup
 from zope.traversing.interfaces import IContainmentRoot
 from schooltool.securitypolicy.crowds import Crowd
@@ -55,7 +53,7 @@ def test_SchoolToolSecurityPolicy_checkPermission():
         >>> from schooltool.securitypolicy.metaconfigure import CrowdsUtility
         >>> from schooltool.securitypolicy.interfaces import ICrowdsUtility
         >>> cru = CrowdsUtility()
-        >>> ztapi.provideUtility(ICrowdsUtility, cru)
+        >>> provideUtility(cru, ICrowdsUtility)
 
     Let's construct a security policy.
 
@@ -111,7 +109,7 @@ def test_SchoolToolSecurityPolicy_checkByAdaptation():
         >>> from schooltool.securitypolicy.metaconfigure import CrowdsUtility
         >>> from schooltool.securitypolicy.interfaces import ICrowdsUtility
         >>> cru = CrowdsUtility()
-        >>> ztapi.provideUtility(ICrowdsUtility, cru)
+        >>> provideUtility(cru, ICrowdsUtility)
 
     Let's construct a security policy.
 
@@ -128,7 +126,7 @@ def test_SchoolToolSecurityPolicy_checkByAdaptation():
         ...     adapts(IObj)
         ...     def contains(self, principal):
         ...         return contains_returns
-        >>> ztapi.provideAdapter(IObj, ICrowd, ObjCrowd, 'perm')
+        >>> provideAdapter(ObjCrowd, (IObj,), ICrowd, 'perm')
 
         >>> sp.checkByAdaptation('perm', obj)
         False

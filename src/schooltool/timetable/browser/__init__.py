@@ -18,14 +18,10 @@
 #
 """
 SchoolTool timetabling views.
-
-$Id$
 """
 import datetime
-import sets
 import re
 
-from zope.security.proxy import removeSecurityProxy
 from zope.app.container.interfaces import INameChooser
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import adapts
@@ -147,11 +143,11 @@ def fix_duplicates(names):
       ['a', 'b', 'b (3)', 'a (2)', 'b (2)', 'b (2) (2)']
 
     """
-    seen = sets.Set(names)
+    seen = set(names)
     if len(seen) == len(names):
         return names    # no duplicates
     result = []
-    used = sets.Set()
+    used = set()
     for name in names:
         if name in used:
             n = 2
@@ -277,9 +273,6 @@ def format_time_range(start, duration):
         return '%s-%s' % (start.strftime('%H:%M'), ends)
 
 
-# XXX: copied this from schooltool-0.9.rest.timetable
-# Remove this once there is a thing like that in REST
-# alga 2005-05-12
 def format_timetable_for_presentation(timetable):
     """Prepare a timetable for presentation with Page Templates.
 
@@ -356,7 +349,7 @@ class TimetableConflictMixin(object):
         section_map = {}
         for day_id, day in ttschema.items():
             for period_id in day.periods:
-                section_map[day_id, period_id] = sets.Set()
+                section_map[day_id, period_id] = set()
 
         term_tables = [removeSecurityProxy(tt)
                        for tt in findRelatedTimetables(term)]
@@ -503,10 +496,9 @@ class SectionTimetableSetupView(TimetableSetupViewBase):
                                 for course in self.context.courses])
 
         if 'CANCEL' in self.request:
-            self.request.response.redirect(
-                absoluteURL(self.context, self.request))
-        if 'SAVE' in self.request:
+            self.request.response.redirect(self.nextURL())
 
+        if 'SAVE' in self.request:
             section = removeSecurityProxy(self.context)
             timetable = ITimetables(section).lookup(self.term, self.ttschema)
             if timetable is None:
@@ -529,13 +521,12 @@ class SectionTimetableSetupView(TimetableSetupViewBase):
                             for act in list(period):
                                 day.remove(period_id, act)
 
-            # TODO: find a better place to redirect to
-            self.request.response.redirect(
-                absoluteURL(
-                    list(ITimetables(self.context).timetables.values())[0],
-                    self.request))
+            self.request.response.redirect(self.nextURL())
 
         return self.template()
+
+    def nextURL(self):
+        return absoluteURL(self.context, self.request)
 
 
 class TimetableEditView(TimetableSetupViewBase):

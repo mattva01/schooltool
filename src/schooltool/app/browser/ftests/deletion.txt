@@ -1,7 +1,7 @@
-Deleting SchoolBell objects
+Deleting SchoolTool objects
 ===========================
 
-This is, partially, a regression test.  When you delete a SchoolBell object,
+This is, partially, a regression test.  When you delete a SchoolTool object,
 all of its relationships should be broken -- otherwise other related object
 will have references to an object that does not exist (due to ZODB garbage
 collection semantics the object will exist, but it will have no __parent__

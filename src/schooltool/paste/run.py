@@ -17,11 +17,8 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-SchoolTool run script that
-
-$Id$
+SchoolTool run script.
 """
-import sys
 import optparse
 import os.path
 import paste.script.command

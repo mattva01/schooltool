@@ -17,27 +17,24 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Tests for SchoolBell calendaring views.
-
-$Id$
+Tests for SchoolTool calendaring views.
 """
 
+import sys
 import unittest
-import calendar
 from pprint import pprint
 from datetime import datetime, date, timedelta
 
+from zope.component import provideAdapter
 from zope.testing import doctest
 from zope.interface import implements
 from zope.publisher.browser import TestRequest
-from zope.app.testing import setup, ztapi
-from zope.publisher.browser import BrowserView
+from zope.app.testing import setup
 from zope.annotation.interfaces import IAttributeAnnotatable
 
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.calendar.utils import parse_date
-from schooltool.common import SchoolToolMessage as _
 from schooltool.app.cal import CalendarEvent
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.person.person import Person
@@ -62,7 +59,7 @@ def stub_cal_class(klass, extra_calendars=[]):
         def getCalendars(self):
             return [self.context] + extra_calendars
         def dateTitle(self):
-            return parse_date(view.request['date'])
+            return parse_date(self.request['date'])
     return StubbedCalendarView
 
 
@@ -451,11 +448,9 @@ def pdfSetUp(test=None):
     setup.placefulSetUp()
     sbsetup.setUpCalendaring()
     app = ApplicationStub()
-    ztapi.provideAdapter(None, ISchoolToolApplication,
-                         lambda x: app)
-    ztapi.provideAdapter(ISchoolToolApplication,
-                         IApplicationPreferences,
-                         getApplicationPreferences)
+    provideAdapter(lambda x: app, (None,), ISchoolToolApplication)
+    provideAdapter(getApplicationPreferences,
+                   (ISchoolToolApplication,), IApplicationPreferences)
 
 
 def pdfTearDown(test=None):

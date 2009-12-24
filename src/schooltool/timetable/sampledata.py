@@ -18,8 +18,6 @@
 #
 """
 Timetable sample data generation
-
-$Id$
 """
 import datetime
 from zope.interface import implements
@@ -30,7 +28,6 @@ from schooltool.timetable.interfaces import ITimetableSchemaContainer
 from schooltool.timetable.schema import TimetableSchema, TimetableSchemaDay
 from schooltool.timetable.model import SequentialDayIdBasedTimetableModel
 
-from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
 
 

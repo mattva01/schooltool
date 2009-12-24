@@ -67,7 +67,6 @@ in these modules::
   schooltool.group.sampledata
   schooltool.resource.sampledata
   schooltool.course.sampledata
-  schooltool.level.sampledata
   schooltool.timetable.sampledata
 
 

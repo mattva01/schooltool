@@ -20,15 +20,12 @@
 Security description views for SchoolTool security policy.
 """
 
-from zope.interface import implements
 from zope.publisher.browser import BrowserView
-from zope.app.container import contained, btree
 from zope.component import queryMultiAdapter
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 
 from schooltool.securitypolicy.metaconfigure import getCrowdsUtility
 from schooltool.securitypolicy.metaconfigure import getDescriptionUtility
-from schooltool.securitypolicy.interfaces import ICrowdDescription
 from schooltool.securitypolicy.crowds import getCrowdDescription
 from schooltool.common.inlinept import InlinePageTemplate
 

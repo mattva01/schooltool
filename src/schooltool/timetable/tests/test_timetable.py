@@ -21,7 +21,6 @@ Unit tests for the schooltool.timetable module.
 """
 
 import unittest
-from sets import Set
 from datetime import time, timedelta, date
 
 from persistent import Persistent
@@ -29,11 +28,11 @@ from zope.app.testing import setup
 from zope.interface.verify import verifyObject
 from zope.interface import implements, directlyProvides
 from zope.app.testing.placelesssetup import PlacelessSetup
-from zope.app.testing import ztapi
 from zope.annotation.interfaces import IAttributeAnnotatable
 from zope.location.interfaces import ILocation
 from zope.testing import doctest
 from zope.component import eventtesting
+from zope.component import provideAdapter
 
 from schooltool.group.interfaces import IGroupContainer
 from schooltool.timetable import SchooldaySlot
@@ -80,7 +79,6 @@ class TestTimetable(unittest.TestCase):
         app = {}
         app['ttschemas'] = {'stt1': "STT 1"}
 
-        from zope.component import provideAdapter
         from schooltool.app.interfaces import ISchoolToolApplication
         provideAdapter(lambda ctx: app,
                        adapts=[None],
@@ -193,13 +191,13 @@ class TestTimetable(unittest.TestCase):
 
         tt.update(tt2)
 
-        items = [(p, Set(i)) for p, i in tt["A"].items()]
-        self.assertEqual(items, [("Green", Set([english, french])),
-                                 ("Blue", Set([math, math2]))])
+        items = [(p, set(i)) for p, i in tt["A"].items()]
+        self.assertEqual(items, [("Green", set([english, french])),
+                                 ("Blue", set([math, math2]))])
 
-        items = [(p, Set(i)) for p, i in tt["B"].items()]
-        self.assertEqual(items, [("Green", Set([bio])),
-                                 ("Blue", Set([geo]))])
+        items = [(p, set(i)) for p, i in tt["B"].items()]
+        self.assertEqual(items, [("Green", set([bio])),
+                                 ("Blue", set([geo]))])
 
         tt3 = Timetable(("A", ))
         tt3["A"] = TimetableDay(('Green', 'Blue'))
@@ -369,23 +367,23 @@ class TestTimetableDay(EventTestMixin, unittest.TestCase):
         self.assertEqual(list(td["1"]), [math])
         self.assert_(list(td["1"])[0].replaced)
 
-        result = [(p, Set(i)) for p, i in td.items()]
+        result = [(p, set(i)) for p, i in td.items()]
 
-        self.assertEqual(result, [('1', Set([math])), ('2', Set([])),
-                                  ('3', Set([])), ('4', Set([]))])
+        self.assertEqual(result, [('1', set([math])), ('2', set([])),
+                                  ('3', set([])), ('4', set([]))])
         english = ActivityStub()
         eventtesting.clearEvents()
         td.add("2", english)
         e2 = self.checkOneEventReceived()
         self.assertEquals(e2.period_id, '2')
 
-        result = [(p, Set(i)) for p, i in td.items()]
-        self.assertEqual(result, [('1', Set([math])), ('2', Set([english])),
-                                  ('3', Set([])), ('4', Set([]))])
+        result = [(p, set(i)) for p, i in td.items()]
+        self.assertEqual(result, [('1', set([math])), ('2', set([english])),
+                                  ('3', set([])), ('4', set([]))])
 
 
         # test clear()
-        self.assertEqual(Set(td["2"]), Set([english]))
+        self.assertEqual(set(td["2"]), set([english]))
         self.assertRaises(ValueError, td.clear, "Mo")
         eventtesting.clearEvents()
         td.clear("2")
@@ -396,14 +394,14 @@ class TestTimetableDay(EventTestMixin, unittest.TestCase):
         self.assertEquals(e2.day_id, 'td')
         self.assertEquals(e2.period_id, '2')
         self.assertRaises(ValueError, td.clear, "foo")
-        self.assertEqual(Set(td["2"]), Set([]))
+        self.assertEqual(set(td["2"]), set([]))
 
         # test remove()
         td.add("1", english)
-        result = [(p, Set(i)) for p, i in td.items()]
-        self.assertEqual(result, [('1', Set([english, math])),
-                                  ('2', Set([])), ('3', Set([])),
-                                  ('4', Set([]))])
+        result = [(p, set(i)) for p, i in td.items()]
+        self.assertEqual(result, [('1', set([english, math])),
+                                  ('2', set([])), ('3', set([])),
+                                  ('4', set([]))])
         eventtesting.clearEvents()
         td.remove("1", math)
         e3 = self.checkOneEventReceived()
@@ -413,10 +411,10 @@ class TestTimetableDay(EventTestMixin, unittest.TestCase):
         self.assertEquals(e3.day_id, 'td')
         self.assertEquals(e3.period_id, '1')
         self.assertRaises(KeyError, td.remove, "1", math)
-        result = [(p, Set(i)) for p, i in td.items()]
-        self.assertEqual(result, [('1', Set([english])),
-                                  ('2', Set([])), ('3', Set([])),
-                                  ('4', Set([]))])
+        result = [(p, set(i)) for p, i in td.items()]
+        self.assertEqual(result, [('1', set([english])),
+                                  ('2', set([])), ('3', set([])),
+                                  ('4', set([]))])
 
 
 class TestTimetableActivity(unittest.TestCase):
@@ -602,8 +600,8 @@ class TestTimetablingPersistence(unittest.TestCase):
         res2.__name__ = 'res2'
         ta = TimetableActivity("Pickling", owner, [res1, res2])
         tb = TimetableActivity("Pickling", owner, [res2, res1])
-        tseta = Set([ta, tb])
-        tsetb = Set([ta, tb])
+        tseta = set([ta, tb])
+        tsetb = set([ta, tb])
         self.datamgr.root()['ta'] = ta
         self.datamgr.root()['tb'] = tb
         self.datamgr.root()['tseta'] = tseta
@@ -851,12 +849,10 @@ class TestTimetablesAdapter(NiceDiffsMixin, EqualsSortedMixin,
         setup.setUpAnnotations()
         setUpRelationships()
 
-        ztapi.provideAdapter(IOwnTimetables, ITimetables,
-                             TimetablesAdapter)
+        provideAdapter(TimetablesAdapter)
 
         app = {}
 
-        from zope.component import provideAdapter
         from schooltool.app.interfaces import ISchoolToolApplication
         provideAdapter(lambda ctx: app,
                        adapts=[None],

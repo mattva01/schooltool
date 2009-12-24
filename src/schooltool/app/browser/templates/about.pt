@@ -24,42 +24,38 @@ License, Version 2</a>.</p>
 <h2 i18n:translate="">For more information:</h2>
 
 <ul>
-<li i18n:translate=""><a href="http://schooltool.org">Website</a></li>
-<li i18n:translate=""><a href="https://launchpad.net/schooltool">Launchpad project page</a></li>
-<li i18n:translate=""><a href="http://lists.schooltool.org/mailman/listinfo">
-Mailing lists</a></li>
+<li><a href="http://schooltool.org" i18n:translate="">Website</a></li>
+<li><a href="https://launchpad.net/schooltool-project" i18n:translate="">Launchpad project page</a></li>
+<li><a href="https://launchpad.net/~schooltoolers" i18n:translate="">Mailing list</a></li>
 <li i18n:translate="">IRC channel: #schooltool on freenode.net</li>
 </ul>
 
 <hr />
 
-<p i18n:translate=""><strong>Founder and funder:  </strong>
+<p><strong i18n:translate="">Founder and funder:</strong>
 <a href="http://markshuttleworth.com">Mark Shuttleworth</a></p>
 
-<p i18n:translate=""><strong>Project Manager:</strong>
+<p><strong i18n:translate="">Project Manager:</strong>
 Tom Hoffman (<a href="mailto:hoffman@schooltool.org">email</a>)</p>
 
-<p i18n:translate=""><strong>Lead Developer:</strong>
-Ignas Mikalajūnas</p>
+<p><strong i18n:translate="">Lead Developer:</strong>
+Justas Sadzevičius</p>
 
-<h2 i18n:translate="">Release Managers:</h2>
-<ul>
-  <li>Brian Sutherland</li>
-  <li>Gediminas Paulauskas</li>
-</ul>
+<p><strong i18n:translate="">Release Manager:</strong>
+Gediminas Paulauskas</p>
 
 <h2 i18n:translate="">Contributors:</h2>
 <ul>
 <li>Albertas Agejevas</li>
-<li>Douglas Cerna</li>
-<li>Justas Sadzevičius</li>
 <li>Steve Alexander</li>
 <li>Paul Carduner</li>
 <li>Chris Carey</li>
+<li>Douglas Cerna</li>
 <li>Alan Elkner</li>
 <li>Martijn Faassen</li>
 <li>Marius Gedminas</li>
 <li>William Johnston</li>
+<li>Ignas Mikalajūnas</li>
 <li>Gintautas Miliauskas</li>
 <li>Eldar Omuraliev</li>
 <li>Stephan Richter</li>
@@ -67,6 +63,7 @@ Ignas Mikalajūnas</p>
 <li>Andrew Rodriguez</li>
 <li>Brian Skahan</li>
 <li>Filip Sufitchi</li>
+<li>Brian Sutherland</li>
 <li>Tom von Schwerdtner</li>
 </ul>
 </div>

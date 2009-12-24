@@ -17,13 +17,10 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Calendar overlay views for the SchoolBell application.
-
-$Id$
+Calendar overlay views for the SchoolTool application.
 """
 
 import urllib
-from sets import Set
 
 from zope.publisher.browser import BrowserView
 from zope.traversing.api import getPath
@@ -140,7 +137,7 @@ class CalendarOverlayView(ViewletBase):
             self.request.response.redirect(url)
         if 'OVERLAY_APPLY' in self.request:
             person = IPerson(self.request.principal)
-            selected = Set(self.request.get('overlay', []))
+            selected = set(self.request.get('overlay', []))
             for item in person.overlaid_calendars:
                 item.show = getPath(item.calendar.__parent__) in selected
             url = str(self.request.URL)
@@ -213,7 +210,7 @@ class CalendarSelectionView(BrowserView):
     def _updateSelection(self, user):
         """Apply calendar selection changes  for `user`."""
         for container in ['resources']:
-            selected = Set(self.request.form.get(container, []))
+            selected = set(self.request.form.get(container, []))
             for item in self.getCalendars(container):
                 if item['id'] in selected and not item['selected']:
                     ovl_info = user.overlaid_calendars.add(item['calendar'])
