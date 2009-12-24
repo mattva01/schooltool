@@ -4,9 +4,24 @@ CHANGES
 1.2.1dev
 ==================
 
+New Features
+------------
+
+* Automatic plugin inclusion
+* Many build improvements by Justas and Gediminas
+
+Bug fixes
+---------
+
 * Traceback trying to view student's contacts https://launchpad.net/bugs/475586
 * Section scheduling view now returns to section on save https://launchpad.net/bugs/485616
-* Automatic plugin inclusion
+* Removed Timetables link from section context, https://launchpad.net/bugs/485617
+
+Translations
+------------
+
+* Many i18n fixes by Douglas and Gediminas
+* Update translations
 
 
 1.2.0 (2009-11-04)
