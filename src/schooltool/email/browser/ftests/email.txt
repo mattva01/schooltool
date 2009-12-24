@@ -54,7 +54,7 @@ And since there are no queued emails yet, we see a message telling us
 so:
 
     >>> manager.printQuery('id("content-body")/p[2]')
-    <p>There are not messages queued.</p>
+    <p>There are no messages queued.</p>
 
 
 Now, let's test the action buttons. The first button 'Queue' takes us
