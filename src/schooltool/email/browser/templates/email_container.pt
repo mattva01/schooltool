@@ -51,7 +51,7 @@
         </div>
     </tal:if>
   </form>
-  <p tal:condition="not:view/table/batch" i18n:translate="">There are not messages queued.</p>
+  <p tal:condition="not:view/table/batch" i18n:translate="">There are no messages queued.</p>
 </metal:block>
 </body>
 </html>
