@@ -4154,7 +4154,7 @@ msgstr "slette-knapp"
 
 #: /src/schooltool/email/browser/templates/email_container.pt:54
 #, fuzzy
-msgid "There are not messages queued."
+msgid "There are no messages queued."
 msgstr "Det er ikke definert et tidstabell skjema."
 
 #: /src/schooltool/email/browser/templates/email_delete.pt:15

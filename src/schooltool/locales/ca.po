@@ -857,12 +857,6 @@ msgid ""
 "well as a framework for building customized applications and configurations "
 "for individual schools or states."
 msgstr ""
-"SchoolTool es software libre administrativo para las escuelas alrededor del "
-"mundo. Las metas del proyecto son crear un sistema de información "
-"estudiantil o de administración para escuelas primarias y secundarias, así "
-"como un marco de trabajo para construir aplicaciones y configuraciones "
-"personalizadas para escuelas o estados particulares.\r\n"
-"\r\n"
 "SchollTool és software lliure administratiu per a les escoles de tot el món. "
 "La finalitat del projecte és crear un sistema d'informació estudiantil o "
 "d'administració per a escoles de primaria y secundaria, aixins com un marc "
@@ -4054,7 +4048,7 @@ msgstr "Esborra"
 
 #: /src/schooltool/email/browser/templates/email_container.pt:54
 #, fuzzy
-msgid "There are not messages queued."
+msgid "There are no messages queued."
 msgstr "No hi ha res per a afegir."
 
 #: /src/schooltool/email/browser/templates/email_delete.pt:15

@@ -1474,7 +1474,7 @@ msgstr ""
 "tapahtumia jossakin kalenterissa, joka on luetteloitu kohtaan "
 "<code>Kalenterit</code>:</strong> Valitse tai poista valinta laatikosta "
 "<code>Kalenteri</code> ja paina <code>Hyväksy</code>.</li> "
-"<li><strong>Kalentereiden \r\n"
+"<li><strong>Kalentereiden "
 "lisääminen tai poistaminen <code>Kalenterit</code> luettelossa:</strong> "
 "Klikkaa <code>Lisää...</code> -painiketta.</li> <li><strong></"
 "strong>Tarkastele kalenteria iCal -formaatissa:</strong>: Valitse <code> "
@@ -4204,7 +4204,7 @@ msgid "retry-button"
 msgstr ""
 
 #: /src/schooltool/email/browser/templates/email_container.pt:54
-msgid "There are not messages queued."
+msgid "There are no messages queued."
 msgstr ""
 
 #: /src/schooltool/email/browser/templates/email_delete.pt:15

@@ -3535,9 +3535,7 @@ msgstr "Les sections doivent être dans des termes consécutifs"
 #. Default: ""
 #: /src/schooltool/course/section.py:88
 msgid "${instructors} -- ${section_title}"
-msgstr ""
-"Copy text   \t\r\n"
-"${instructors} -- ${section_title}"
+msgstr "${instructors} -- ${section_title}"
 
 #: /src/schooltool/course/security.zcml:107
 msgid ""
@@ -4323,7 +4321,7 @@ msgid "retry-button"
 msgstr "bouton réesayer"
 
 #: /src/schooltool/email/browser/templates/email_container.pt:54
-msgid "There are not messages queued."
+msgid "There are no messages queued."
 msgstr "Aucun message dans la file."
 
 #: /src/schooltool/email/browser/templates/email_delete.pt:15

@@ -4230,8 +4230,8 @@ msgid "retry-button"
 msgstr "Retry"
 
 #: /src/schooltool/email/browser/templates/email_container.pt:54
-msgid "There are not messages queued."
-msgstr ""
+msgid "There are no messages queued."
+msgstr "There are no messages queued."
 
 #: /src/schooltool/email/browser/templates/email_delete.pt:15
 msgid "Are you sure you want to delete the selected emails?"

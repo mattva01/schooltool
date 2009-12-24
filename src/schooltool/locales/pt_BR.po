@@ -4316,7 +4316,7 @@ msgid "retry-button"
 msgstr "botão-repetir"
 
 #: /src/schooltool/email/browser/templates/email_container.pt:54
-msgid "There are not messages queued."
+msgid "There are no messages queued."
 msgstr "Não há mensagens na fila de envio."
 
 #: /src/schooltool/email/browser/templates/email_delete.pt:15
@@ -5319,8 +5319,7 @@ msgid ""
 msgstr ""
 "Isso cria uma escola com 1.000 alunos e dados para 4 períodos. Se você "
 "selecionar todas as opções, poderá levar um <strong>longo</strong> tempo "
-"para terminar.\r\n"
-"Então, deixe rodando."
+"para terminar. Então, deixe rodando."
 
 #: /src/schooltool/sampledata/sampledata.pt:25
 msgid ""

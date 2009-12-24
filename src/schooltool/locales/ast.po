@@ -938,7 +938,7 @@ msgstr "Socesos pa"
 #: /src/schooltool/app/browser/templates/cal_atom.pt:42
 msgid "atom_description"
 msgstr ""
-"Esti ye un fluxu XML del sitiu en formatu Atom. L'envís ye velu\r\n"
+"Esti ye un fluxu XML del sitiu en formatu Atom. L'envís ye velu\n"
 "nun llector de noticies o sindicalu n'otru sitiu. Por favor, visite"
 
 #. Default: "Atom Enabled"
@@ -4099,7 +4099,7 @@ msgid "retry-button"
 msgstr "Botón OK"
 
 #: /src/schooltool/email/browser/templates/email_container.pt:54
-msgid "There are not messages queued."
+msgid "There are no messages queued."
 msgstr ""
 
 #: /src/schooltool/email/browser/templates/email_delete.pt:15

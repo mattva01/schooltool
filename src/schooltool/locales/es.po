@@ -4333,7 +4333,7 @@ msgid "retry-button"
 msgstr "Reintentar"
 
 #: /src/schooltool/email/browser/templates/email_container.pt:54
-msgid "There are not messages queued."
+msgid "There are no messages queued."
 msgstr "No hay mensajes en cola."
 
 #: /src/schooltool/email/browser/templates/email_delete.pt:15

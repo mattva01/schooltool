@@ -4317,7 +4317,7 @@ msgid "retry-button"
 msgstr "Opnieuw-knop"
 
 #: /src/schooltool/email/browser/templates/email_container.pt:54
-msgid "There are not messages queued."
+msgid "There are no messages queued."
 msgstr "Er staan geen berichten in de wachtrij."
 
 #: /src/schooltool/email/browser/templates/email_delete.pt:15

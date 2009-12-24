@@ -3963,7 +3963,7 @@ msgid "retry-button"
 msgstr "Punat-ok"
 
 #: /src/schooltool/email/browser/templates/email_container.pt:54
-msgid "There are not messages queued."
+msgid "There are no messages queued."
 msgstr ""
 
 #: /src/schooltool/email/browser/templates/email_delete.pt:15

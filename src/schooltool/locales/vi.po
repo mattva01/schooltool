@@ -4298,7 +4298,7 @@ msgid "retry-button"
 msgstr "Thử lại"
 
 #: /src/schooltool/email/browser/templates/email_container.pt:54
-msgid "There are not messages queued."
+msgid "There are no messages queued."
 msgstr "Không có thông báo nào trong hàng đợi"
 
 #: /src/schooltool/email/browser/templates/email_delete.pt:15
@@ -6022,7 +6022,7 @@ msgid ""
 "that day of week. If the list of periods is not up to date with the changes "
 "you made in the table above, use the Update button to refresh the form."
 msgstr ""
-"Sao chép văn bản\r\n"
+"Sao chép văn bản "
 "Thứ ba, xác định thời gian và thời gian của thời kỳ khi họ rơi vào một số "
 "ngày trong tuần. Sử dụng một trong các định dạng sau đây: <tt> HH: MM </ tt> "
 "(cũng được, đừng quên để xác định thời gian trong hộp văn bản dưới đây), "

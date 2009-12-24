@@ -4013,7 +4013,7 @@ msgstr "κουμπί-διαγραφής"
 
 #: /src/schooltool/email/browser/templates/email_container.pt:54
 #, fuzzy
-msgid "There are not messages queued."
+msgid "There are no messages queued."
 msgstr "Δεν υπάρχει τίποτα προς εισαγωγή"
 
 #: /src/schooltool/email/browser/templates/email_delete.pt:15

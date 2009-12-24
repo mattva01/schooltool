@@ -4035,7 +4035,7 @@ msgid "retry-button"
 msgstr ""
 
 #: /src/schooltool/email/browser/templates/email_container.pt:54
-msgid "There are not messages queued."
+msgid "There are no messages queued."
 msgstr ""
 
 #: /src/schooltool/email/browser/templates/email_delete.pt:15
@@ -4388,9 +4388,7 @@ msgstr "Tambah catatan"
 
 #: /src/schooltool/note/notes.pt:8
 msgid "( p )"
-msgstr ""
-"Copy text   \t\r\n"
-"( p )"
+msgstr "( p )"
 
 #: /src/schooltool/person/browser/configure.zcml:103
 msgid "Change Password"

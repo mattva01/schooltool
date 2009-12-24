@@ -1658,7 +1658,7 @@ msgstr ""
 "дню в календаре.</li> <li><strong>Просмотреть определенную неделю:</strong> "
 "Щёлкните по номеру недели в левой колонке календаря, окрашенной синим.</li> "
 "<li><strong>Создать событие:</strong> выберите <code>Новое событие</code> из "
-"меню <code>Действия</code>.</li>\r\n"
+"меню <code>Действия</code>.</li>"
 "<li><strong>Показать или спрятать события в одном из календарей, "
 "присутствующих в списке <code>Календари</code>:</strong> поставьте или "
 "снимите галочку напротив соответствующего <code>календаря</code> и нажмите "
@@ -4296,7 +4296,7 @@ msgid "retry-button"
 msgstr "Повторить"
 
 #: /src/schooltool/email/browser/templates/email_container.pt:54
-msgid "There are not messages queued."
+msgid "There are no messages queued."
 msgstr "Нет писем в очереди."
 
 #: /src/schooltool/email/browser/templates/email_delete.pt:15

@@ -3972,7 +3972,7 @@ msgstr "Tá go maith"
 
 #: /src/schooltool/email/browser/templates/email_container.pt:54
 #, fuzzy
-msgid "There are not messages queued."
+msgid "There are no messages queued."
 msgstr "Níl faic ann le cur leis"
 
 #: /src/schooltool/email/browser/templates/email_delete.pt:15

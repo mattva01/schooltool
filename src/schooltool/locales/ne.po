@@ -4062,7 +4062,7 @@ msgstr "मेटाउने-बटन"
 
 #: /src/schooltool/email/browser/templates/email_container.pt:54
 #, fuzzy
-msgid "There are not messages queued."
+msgid "There are no messages queued."
 msgstr "थप्नकोलागि यहा केहि छैन ।"
 
 #: /src/schooltool/email/browser/templates/email_delete.pt:15
