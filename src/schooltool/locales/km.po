@@ -895,7 +895,6 @@ msgid "Lead Developer:"
 msgstr "អ្នក​អភិវឌ្ឍន៍​នាំមុខ ៖"
 
 #: /src/schooltool/app/browser/templates/about.pt:44
-#, fuzzy
 msgid "Release Manager:"
 msgstr "អ្នក​គ្រប់គ្រង​ការ​ចេញ​ផ្សាយ ៖"
 
@@ -3615,9 +3614,8 @@ msgid "Schooltool Person Display Menu"
 msgstr "ម៉ឺនុយ​បង្ហាញ​មនុស្ស Schooltool"
 
 #: /src/schooltool/demographics/browser/demographics_macros.pt:4
-#, fuzzy
 msgid "Shortcut: Alt-N"
-msgstr "ផ្លូវកាត់ ៖ ជំនួស (Alt) - A"
+msgstr "ផ្លូវកាត់ ៖ ជំនួស (Alt) - N"
 
 #: /src/schooltool/demographics/browser/demographics_macros.pt:4
 msgid "N"
@@ -5343,14 +5341,12 @@ msgid "School Year"
 msgstr "ឆ្នាំ​សិក្សា"
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear.pt:21
-#, fuzzy
 msgid "${schoolyear_title} (${start_date} &mdash; ${end_date})"
-msgstr "${schoolyear_title} (${start_date}&mdash; ${end_date})"
+msgstr "${schoolyear_title} (${start_date} &mdash; ${end_date})"
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear.pt:37
-#, fuzzy
 msgid "${term_title} (${start_date} &mdash; ${end_date})"
-msgstr "${schoolyear_title} (${start_date}&mdash; ${end_date})"
+msgstr "${schoolyear_title} (${start_date} &mdash; ${end_date})"
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear.pt:49
 msgid "Add a new term"
@@ -5535,15 +5531,13 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/skin/templates/view_macros.pt:155
-#, fuzzy
 msgid "Shortcut: Alt-U"
-msgstr "ផ្លូវកាត់ ៖ ជំនួស (Alt) - A"
+msgstr "ផ្លូវកាត់ ៖ ជំនួស (Alt) - U"
 
 #. Default: "Update"
 #: /src/schooltool/skin/templates/view_macros.pt:155
-#, fuzzy
 msgid "update-button"
-msgstr "ប៊ូតុង​លុប"
+msgstr "ធ្វើ​ឲ្យ​ទាន់​សម័យ"
 
 #: /src/schooltool/skin/templates/view_macros.pt:155
 msgid "U"
@@ -5552,9 +5546,8 @@ msgstr ""
 #. Default: "Apply"
 #: /src/schooltool/skin/templates/view_macros.pt:161
 #: /src/schooltool/skin/templates/view_macros.pt:167
-#, fuzzy
 msgid "apply-button"
-msgstr "ប៊ូតុង​ចម្លង"
+msgstr "អនុវត្ត"
 
 #: /src/schooltool/skin/templates/view_macros.pt:161
 #: /src/schooltool/skin/templates/view_macros.pt:167
@@ -5569,19 +5562,16 @@ msgstr "ផ្លូវកាត់ ៖ ជំនួស (Alt) - A"
 #: /src/schooltool/skin/templates/view_macros.pt:174
 #: /src/schooltool/skin/templates/view_macros.pt:180
 #: /src/schooltool/skin/templates/view_macros.pt:187
-#, fuzzy
 msgid "add-button"
-msgstr "ប៊ូតុង​យល់ព្រម"
+msgstr "បន្ថែម"
 
 #: /src/schooltool/skin/templates/view_macros.pt:194
-#, fuzzy
 msgid "Shortcut: Alt-D"
-msgstr "ផ្លូវកាត់ ៖ ជំនួស (Alt) - A"
+msgstr "ផ្លូវកាត់ ៖ ជំនួស (Alt) - D"
 
 #: /src/schooltool/skin/templates/view_macros.pt:194
-#, fuzzy
 msgid "D"
-msgstr "លេខ​សម្គាល់"
+msgstr ""
 
 #: /src/schooltool/skin/templates/view_macros.pt:45
 msgid "Log In"
@@ -5692,13 +5682,12 @@ msgid "The date you entered is not a schoolday."
 msgstr "កាលបរិច្ឆេទ​ដែល​អ្នក​បាន​បញ្ចូល​មិន​មែន​ជា​ថ្ងៃ​សិក្សា​ទេ ។"
 
 #: /src/schooltool/term/browser/templates/emergency2.pt:12
-#, fuzzy
 msgid ""
 "You have selected ${date} as the emergency day. Now please select the "
 "replacement day. The selection below consists of non-schooldays in this term "
 "following the emergency day and several days after the term."
 msgstr ""
-"អ្នក​​បាន​​ជ្រើស ${DYNAMIC_CONTENT} ជា​ថ្ងៃ​បន្ទាន់ ។ ឥឡូវ​សូម​ជ្រើស​ថ្ងៃ​ជំនួស ។ ជម្រើស​ខាង​ក្រោម​មាន​"
+"អ្នក​​បាន​​ជ្រើស ${date} ជា​ថ្ងៃ​បន្ទាន់ ។ ឥឡូវ​សូម​ជ្រើស​ថ្ងៃ​ជំនួស ។ ជម្រើស​ខាង​ក្រោម​មាន​"
 "ថ្ងៃ​មិនមែន​ជា​ថ្ងៃ​រៀន​នៅ​ក្នុង​វគ្គសិក្សា​នេះ​ ថ្ងៃ​បន្ទាន់​ដូច​ខាងក្រោម​ និងថ្ងៃ​ជា​ច្រើន​បន្ទាប់​ពី​វគ្គ​សិក្សា​"
 "នេះ ។"
 
