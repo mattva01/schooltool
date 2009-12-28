@@ -1,7 +1,6 @@
 #!/usr/bin/make
-#
-# Makefile for SchoolTool
-#
+
+PACKAGE=schooltool
 
 BOOTSTRAP_PYTHON=python2.5
 INSTANCE_TYPE=schooltool
@@ -11,24 +10,21 @@ BUILDOUT_FLAGS=
 all: build
 
 .PHONY: build
-build: buildout
+build: bin/test
 
 .PHONY: bootstrap
 bootstrap bin/buildout:
 	$(BOOTSTRAP_PYTHON) bootstrap.py
 
-buildout: bin/buildout setup.py base.cfg buildout.cfg
+.PHONY: buildout
+buildout bin/test: bin/buildout setup.py base.cfg buildout.cfg
 	bin/buildout $(BUILDOUT_FLAGS)
-	touch buildout
+	@touch --no-create bin/test
 
 .PHONY: update
 update: bin/buildout
 	bzr up
 	$(MAKE) buildout BUILDOUT_FLAGS=-n
-
-.PHONY: testall
-testall: build
-	bin/test-all
 
 .PHONY: test
 test: build
@@ -37,6 +33,10 @@ test: build
 .PHONY: ftest
 ftest: build
 	bin/test -f
+
+.PHONY: testall
+testall: build
+	bin/test --at-level 2
 
 instance:
 	$(MAKE) buildout
@@ -50,10 +50,11 @@ run: build instance
 release: bin/buildout
 	echo -n `cat version.txt.in`_r`bzr revno` > version.txt
 	bin/buildout setup setup.py sdist
+	rm version.txt
 
 .PHONY: move-release
 move-release:
-	mv -v dist/schooltool-*.tar.gz /home/ftp/pub/schooltool/1.2/dev
+	mv -v dist/$(PACKAGE)-*.tar.gz /home/ftp/pub/schooltool/1.2/dev
 
 .PHONY: coverage
 coverage: build
@@ -68,7 +69,7 @@ coverage-reports-html coverage/reports:
 	rm -rf coverage/reports
 	mkdir coverage/reports
 	bin/coverage coverage coverage/reports
-	ln -s schooltool.html coverage/reports/index.html
+	ln -s $(PACKAGE).html coverage/reports/index.html
 
 .PHONY: ftest-coverage
 ftest-coverage: build
@@ -83,12 +84,10 @@ ftest-coverage-reports-html ftest-coverage/reports:
 	rm -rf ftest-coverage/reports
 	mkdir ftest-coverage/reports
 	bin/coverage ftest-coverage ftest-coverage/reports
-	ln -s schooltool.html ftest-coverage/reports/index.html
+	ln -s $(PACKAGE).html ftest-coverage/reports/index.html
 
 .PHONY: clean
 clean:
-	rm -f buildout
-	rm -f version.txt
 	rm -rf bin develop-eggs parts python
 	rm -rf build dist
 	rm -f .installed.cfg
@@ -104,11 +103,11 @@ realclean: clean
 
 .PHONY: extract-translations
 extract-translations: build
-	bin/i18nextract --egg schooltool \
-	                --domain schooltool \
+	bin/i18nextract --egg $(PACKAGE) \
+	                --domain $(PACKAGE) \
 	                --zcml schooltool/common/translations.zcml \
 	                --output-file src/schooltool/locales/schooltool.pot
-	bin/i18nextract --egg schooltool \
+	bin/i18nextract --egg $(PACKAGE) \
 	                --domain schooltool.commendation \
 	                --zcml schooltool/commendation/translations.zcml \
 	                --output-file src/schooltool/commendation/locales/schooltool.commendation.pot
@@ -119,7 +118,7 @@ compile-translations:
 	locales=src/schooltool/locales; \
 	for f in $${locales}/*.po; do \
 	    mkdir -p $${f%.po}/LC_MESSAGES; \
-	    msgfmt -o $${f%.po}/LC_MESSAGES/schooltool.mo $$f;\
+	    msgfmt -o $${f%.po}/LC_MESSAGES/$(PACKAGE).mo $$f;\
 	done
 	locales=src/schooltool/commendation/locales; \
 	for f in $${locales}/*.po; do \
@@ -132,13 +131,13 @@ update-translations: extract-translations
 	set -e; \
 	locales=src/schooltool/locales; \
 	for f in $${locales}/*.po; do \
-	    msgmerge -qU $$f $${locales}/schooltool.pot ;\
+	    msgmerge -qU $$f $${locales}/$(PACKAGE).pot ;\
 	done
 	locales=src/schooltool/commendation/locales; \
 	for f in $${locales}/*.po; do \
 	    msgmerge -qU $$f $${locales}/schooltool.commendation.pot ;\
 	done
-	$(MAKE) PYTHON=$(PYTHON) compile-translations
+	$(MAKE) compile-translations
 
 .PHONY: ubuntu-environment
 ubuntu-environment:

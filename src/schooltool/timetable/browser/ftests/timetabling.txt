@@ -312,7 +312,7 @@ A new section should have been created:
 We should see a timetable in the section's timetable list:
 
     >>> manager.getLink('Swimming - Frog').click()
-    >>> manager.getLink('Timetables').click()
+    >>> manager.open(manager.url + '/timetables')
 
     >>> manager.getLink('2005-fall.default')
     <Link text='2005-fall.default'
