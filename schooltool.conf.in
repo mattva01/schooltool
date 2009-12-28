@@ -29,7 +29,7 @@ site-definition schooltool-skel/etc/site.zcml
 #
 #   Specifies the port number and optionaly a network interface for
 #   the web application server to listen on. There can be one or more
-#   'listen' directives. If _ssl is used the server will accept only
+#   'web' directives. If _ssl is used the server will accept only
 #   SSL connctions on that port and a ssl_certificate configuration
 #   line is required.
 #
@@ -49,7 +49,7 @@ web 7080
 #
 #   Specifies a certificate in PEM format which contains a certificate and
 #   private key for use in SSL connections.
-#   This is required to use listen_ssl
+#   This is required to use web_ssl
 #
 
 #
