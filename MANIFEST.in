@@ -19,3 +19,7 @@ recursive-include src *.xls
 include version.txt
 include version.txt.in
 include CHANGES.txt
+include base.cfg
+include buildout.cfg
+include bootstrap.py
+include Makefile
