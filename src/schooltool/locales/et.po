@@ -2227,7 +2227,7 @@ msgstr "CSV andmed"
 #: /src/schooltool/group/browser/group-member-csvimport.pt:52
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:122
 msgid "submit-button"
-msgstr "esitamis-nupp"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/templates/person_edit.pt:10
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:58
@@ -2269,7 +2269,7 @@ msgstr "A"
 #: /src/schooltool/skin/templates/view_macros.pt:205
 #: /src/schooltool/app/browser/templates/event_add.pt:378
 msgid "cancel-button"
-msgstr "tühistamis-nupp"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/templates/person_view.pt:20
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:34
@@ -3438,7 +3438,7 @@ msgstr ""
 #: /src/schooltool/skin/templates/container_delete.pt:32
 #: /src/schooltool/skin/templates/view_macros.pt:194
 msgid "delete-button"
-msgstr "kustutamis-nupp"
+msgstr ""
 
 #: /src/schooltool/demographics/browser/search.pt:42
 msgid "There were no results."
@@ -3959,9 +3959,8 @@ msgstr ""
 #. Default: "Retry"
 #: /src/schooltool/email/browser/templates/email_container.pt:39
 #: /src/schooltool/email/browser/templates/email_container.pt:44
-#, fuzzy
 msgid "retry-button"
-msgstr "kustutamis-nupp"
+msgstr ""
 
 #: /src/schooltool/email/browser/templates/email_container.pt:54
 msgid "There are no messages queued."
@@ -5157,9 +5156,8 @@ msgstr ""
 
 #. Default: "Update"
 #: /src/schooltool/skin/templates/view_macros.pt:155
-#, fuzzy
 msgid "update-button"
-msgstr "kustutamis-nupp"
+msgstr ""
 
 #: /src/schooltool/skin/templates/view_macros.pt:155
 msgid "U"
@@ -5168,9 +5166,8 @@ msgstr ""
 #. Default: "Apply"
 #: /src/schooltool/skin/templates/view_macros.pt:161
 #: /src/schooltool/skin/templates/view_macros.pt:167
-#, fuzzy
 msgid "apply-button"
-msgstr "lisamis-nupp"
+msgstr ""
 
 #: /src/schooltool/skin/templates/view_macros.pt:161
 #: /src/schooltool/skin/templates/view_macros.pt:167
@@ -5186,7 +5183,7 @@ msgstr ""
 #: /src/schooltool/skin/templates/view_macros.pt:180
 #: /src/schooltool/skin/templates/view_macros.pt:187
 msgid "add-button"
-msgstr "lisamis-nupp"
+msgstr ""
 
 #: /src/schooltool/skin/templates/view_macros.pt:194
 msgid "Shortcut: Alt-D"
