@@ -2705,7 +2705,7 @@ msgstr ""
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:84
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:65
 msgid "ok-button"
-msgstr "Botón OK"
+msgstr "OK"
 
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:18
 #: /src/schooltool/contact/browser/templates/contact_view.pt:16

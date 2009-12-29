@@ -2034,7 +2034,7 @@ msgstr "Données CSV"
 #: /src/schooltool/group/browser/group-member-csvimport.pt:52
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:122
 msgid "submit-button"
-msgstr "bouton \"Envoyer\""
+msgstr "Appliquer"
 
 #: /src/schooltool/basicperson/browser/templates/person_edit.pt:10
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:58
@@ -2076,7 +2076,7 @@ msgstr "Un"
 #: /src/schooltool/skin/templates/view_macros.pt:205
 #: /src/schooltool/app/browser/templates/event_add.pt:378
 msgid "cancel-button"
-msgstr "bouton annuler"
+msgstr "Annuler"
 
 #: /src/schooltool/basicperson/browser/templates/person_view.pt:20
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:34
@@ -2259,7 +2259,7 @@ msgstr "Il n'y a rien à ajouter"
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:84
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:65
 msgid "ok-button"
-msgstr "Bouton OK"
+msgstr "OK"
 
 #: /src/schooltool/contact/contact.py:210
 #: /src/schooltool/course/browser/section.py:538
@@ -2697,7 +2697,7 @@ msgstr "Affichage de ${count} éléments sur ${total}"
 #: /src/schooltool/skin/templates/container_delete.pt:32
 #: /src/schooltool/skin/templates/view_macros.pt:194
 msgid "delete-button"
-msgstr "bouton \"supprimer\""
+msgstr "Supprimer"
 
 #: /src/schooltool/demographics/browser/search.pt:42
 msgid "There were no results."
@@ -3846,7 +3846,7 @@ msgstr "Raccourci clavier Alt-A"
 #: /src/schooltool/skin/templates/view_macros.pt:180
 #: /src/schooltool/skin/templates/view_macros.pt:187
 msgid "add-button"
-msgstr "bouton \"ajouter\""
+msgstr "Ajouter"
 
 #: /src/schooltool/skin/templates/view_macros.pt:45
 msgid "Log In"
@@ -5274,7 +5274,7 @@ msgstr "Gestion des contacts de {person}"
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:30
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:52
 msgid "invert-selection-button"
-msgstr "invert-selection-button"
+msgstr ""
 
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:43
 msgid "Create contact"
@@ -5503,7 +5503,7 @@ msgstr "Copié"
 #. Default: "Copy"
 #: /src/schooltool/course/browser/templates/copy_sections.pt:159
 msgid "copy-button"
-msgstr "Bouton Copier"
+msgstr "Copier"
 
 #: /src/schooltool/course/browser/templates/copy_sections.pt:29
 msgid "Copy sections from ${prev_term} of ${schoolyear} to ${term}"
@@ -5517,13 +5517,14 @@ msgstr ""
 
 #. Default: "Select All Visible"
 #: /src/schooltool/course/browser/templates/copy_sections.pt:66
+#, fuzzy
 msgid "select-all-visible-button"
-msgstr "Sélectionner tout les boutons visibles"
+msgstr "Sélectionner tout visibles"
 
 #. Default: "Select None"
 #: /src/schooltool/course/browser/templates/copy_sections.pt:70
 msgid "select-none-button"
-msgstr "Bouton de désélection"
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/copy_sections.pt:9
 #: /src/schooltool/course/browser/templates/link_section.pt:9
@@ -5605,7 +5606,7 @@ msgstr "Matières de ${schoolyear}"
 #. Default: "Link"
 #: /src/schooltool/course/browser/templates/link_section.pt:130
 msgid "link-section-button"
-msgstr "Bouton de la section des liens"
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/link_section.pt:24
 msgid "Link ${section}, ${term} with a section in ${target_term}"
@@ -5993,7 +5994,7 @@ msgstr "Nom du serveur SMTP. Laissez vide pour désactiver le courriel."
 #: /src/schooltool/email/browser/templates/email_container.pt:39
 #: /src/schooltool/email/browser/templates/email_container.pt:44
 msgid "retry-button"
-msgstr "bouton réesayer"
+msgstr "Réessayer"
 
 #: /src/schooltool/email/browser/templates/email_container.pt:54
 msgid "There are no messages queued."

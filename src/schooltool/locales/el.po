@@ -1373,7 +1373,7 @@ msgstr "κουμπή-υποβολής"
 #: /src/schooltool/skin/templates/view_macros.pt:205
 #: /src/schooltool/app/browser/templates/event_add.pt:378
 msgid "cancel-button"
-msgstr "Κουμπί ακύρωσης"
+msgstr "Ακύρωση"
 
 #: /src/schooltool/basicperson/browser/templates/person_view.pt:20
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:34
@@ -1414,7 +1414,7 @@ msgstr "Δεν υπάρχει τίποτα προς εισαγωγή"
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:84
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:65
 msgid "ok-button"
-msgstr "κουμπί OK"
+msgstr "OK"
 
 #: /src/schooltool/course/browser/configure.zcml:10
 msgid "Add a Course"
@@ -1535,7 +1535,7 @@ msgstr "Εφαρμογή"
 #: /src/schooltool/skin/templates/container_delete.pt:32
 #: /src/schooltool/skin/templates/view_macros.pt:194
 msgid "delete-button"
-msgstr "κουμπί-διαγραφής"
+msgstr "Διαγραφή"
 
 #: /src/schooltool/demographics/browser/table.pt:34
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:45
@@ -1783,7 +1783,7 @@ msgstr "Συντόμευση: Alt-A"
 #: /src/schooltool/skin/templates/view_macros.pt:180
 #: /src/schooltool/skin/templates/view_macros.pt:187
 msgid "add-button"
-msgstr "κουμπί-προσθήκης"
+msgstr "Προσθήκη"
 
 #: /src/schooltool/skin/templates/view_macros.pt:45
 msgid "Log In"

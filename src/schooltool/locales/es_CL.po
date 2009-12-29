@@ -2356,7 +2356,7 @@ msgstr "Datos CSV"
 #: /src/schooltool/group/browser/group-member-csvimport.pt:52
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:122
 msgid "submit-button"
-msgstr "botón de enviar"
+msgstr "Aplicar"
 
 #: /src/schooltool/basicperson/browser/templates/person_edit.pt:10
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:58
@@ -2398,7 +2398,7 @@ msgstr "A"
 #: /src/schooltool/skin/templates/view_macros.pt:205
 #: /src/schooltool/app/browser/templates/event_add.pt:378
 msgid "cancel-button"
-msgstr "botón de cancelar"
+msgstr "Cancelar"
 
 #: /src/schooltool/basicperson/browser/templates/person_view.pt:20
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:34
@@ -2707,7 +2707,7 @@ msgstr "No hay nada que añadir."
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:84
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:65
 msgid "ok-button"
-msgstr "Botón OK"
+msgstr "OK"
 
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:18
 #: /src/schooltool/contact/browser/templates/contact_view.pt:16
@@ -3579,7 +3579,7 @@ msgstr "Mostrando ${count} de ${total} items"
 #: /src/schooltool/skin/templates/container_delete.pt:32
 #: /src/schooltool/skin/templates/view_macros.pt:194
 msgid "delete-button"
-msgstr "botón de borrar"
+msgstr "Borrar"
 
 #: /src/schooltool/demographics/browser/search.pt:42
 msgid "There were no results."
@@ -4114,9 +4114,8 @@ msgstr ""
 #. Default: "Retry"
 #: /src/schooltool/email/browser/templates/email_container.pt:39
 #: /src/schooltool/email/browser/templates/email_container.pt:44
-#, fuzzy
 msgid "retry-button"
-msgstr "botón de borrar"
+msgstr ""
 
 #: /src/schooltool/email/browser/templates/email_container.pt:54
 #, fuzzy
@@ -5382,26 +5381,23 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/skin/templates/view_macros.pt:155
-#, fuzzy
 msgid "Shortcut: Alt-U"
-msgstr "Atajo: Alt-A"
+msgstr "Atajo: Alt-U"
 
 #. Default: "Update"
 #: /src/schooltool/skin/templates/view_macros.pt:155
-#, fuzzy
 msgid "update-button"
-msgstr "botón de borrar"
+msgstr "Actualizar"
 
 #: /src/schooltool/skin/templates/view_macros.pt:155
 msgid "U"
-msgstr ""
+msgstr "U"
 
 #. Default: "Apply"
 #: /src/schooltool/skin/templates/view_macros.pt:161
 #: /src/schooltool/skin/templates/view_macros.pt:167
-#, fuzzy
 msgid "apply-button"
-msgstr "botón de cancelar"
+msgstr "Aplicar"
 
 #: /src/schooltool/skin/templates/view_macros.pt:161
 #: /src/schooltool/skin/templates/view_macros.pt:167
@@ -5416,19 +5412,17 @@ msgstr "Atajo: Alt-A"
 #: /src/schooltool/skin/templates/view_macros.pt:174
 #: /src/schooltool/skin/templates/view_macros.pt:180
 #: /src/schooltool/skin/templates/view_macros.pt:187
-#, fuzzy
 msgid "add-button"
-msgstr "Botón OK"
+msgstr ""
 
 #: /src/schooltool/skin/templates/view_macros.pt:194
 #, fuzzy
 msgid "Shortcut: Alt-D"
-msgstr "Atajo: Alt-A"
+msgstr "Atajo: Alt-D"
 
 #: /src/schooltool/skin/templates/view_macros.pt:194
-#, fuzzy
 msgid "D"
-msgstr "ID"
+msgstr ""
 
 #: /src/schooltool/skin/templates/view_macros.pt:45
 msgid "Log In"
@@ -6191,7 +6185,7 @@ msgstr "No seleccionado"
 #. Default: "Change"
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:59
 msgid "change-button"
-msgstr "botón de cambiar"
+msgstr "Cambiar"
 
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:15
 #: /src/schooltool/app/browser/templates/event.pt:15

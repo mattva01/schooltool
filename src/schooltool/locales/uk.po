@@ -2534,7 +2534,7 @@ msgstr "CSV дані"
 #: /src/schooltool/group/browser/group-member-csvimport.pt:52
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:122
 msgid "submit-button"
-msgstr "кнопка-відправити"
+msgstr "Застосувати"
 
 #: /src/schooltool/basicperson/browser/templates/person_edit.pt:10
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:58
@@ -2576,7 +2576,7 @@ msgstr "A"
 #: /src/schooltool/skin/templates/view_macros.pt:205
 #: /src/schooltool/app/browser/templates/event_add.pt:378
 msgid "cancel-button"
-msgstr "кнопка-скасувати"
+msgstr "Скасувати"
 
 #: /src/schooltool/basicperson/browser/templates/person_view.pt:20
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:34
@@ -2855,7 +2855,7 @@ msgstr "Вилучити"
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:30
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:52
 msgid "invert-selection-button"
-msgstr "кнопка-інвертувати-обране"
+msgstr "Інвертувати обране"
 
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:43
 msgid "Create contact"
@@ -2881,7 +2881,7 @@ msgstr "Нема що додати."
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:84
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:65
 msgid "ok-button"
-msgstr "кнопка-ok"
+msgstr ""
 
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:18
 #: /src/schooltool/contact/browser/templates/contact_view.pt:16
@@ -3187,7 +3187,7 @@ msgstr "Скопійовано"
 #. Default: "Copy"
 #: /src/schooltool/course/browser/templates/copy_sections.pt:159
 msgid "copy-button"
-msgstr "конпка-копіювати"
+msgstr "Копіювати"
 
 #: /src/schooltool/course/browser/templates/copy_sections.pt:29
 msgid "Copy sections from ${prev_term} of ${schoolyear} to ${term}"
@@ -3201,12 +3201,12 @@ msgstr ""
 #. Default: "Select All Visible"
 #: /src/schooltool/course/browser/templates/copy_sections.pt:66
 msgid "select-all-visible-button"
-msgstr "кнопка-позначити-все-що-видно"
+msgstr "Позначити все що видно"
 
 #. Default: "Select None"
 #: /src/schooltool/course/browser/templates/copy_sections.pt:70
 msgid "select-none-button"
-msgstr "кнопка-зняти-позначку"
+msgstr "Зняти позначку"
 
 #: /src/schooltool/course/browser/templates/copy_sections.pt:9
 #: /src/schooltool/course/browser/templates/link_section.pt:9
@@ -3312,7 +3312,7 @@ msgstr "Пройдений розділи"
 #. Default: "Link"
 #: /src/schooltool/course/browser/templates/link_section.pt:130
 msgid "link-section-button"
-msgstr "кнопка-розділу-посилання"
+msgstr "Посилання"
 
 #: /src/schooltool/course/browser/templates/link_section.pt:24
 msgid "Link ${section}, ${term} with a section in ${target_term}"
@@ -3398,7 +3398,7 @@ msgstr "${section_title} для ${term}"
 #: /src/schooltool/course/browser/templates/section_edit.pt:75
 #: /src/schooltool/course/browser/templates/section_edit.pt:109
 msgid "unlink-section-button"
-msgstr "кнопка-розділу-вилучити-зв'язки"
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/section_edit.pt:85
 #: /src/schooltool/course/browser/templates/section_edit.pt:119
@@ -3796,7 +3796,7 @@ msgstr "Показано ${count} з ${total} елементів"
 #: /src/schooltool/skin/templates/container_delete.pt:32
 #: /src/schooltool/skin/templates/view_macros.pt:194
 msgid "delete-button"
-msgstr "кнопка-вилучити"
+msgstr "Вилучити"
 
 #: /src/schooltool/demographics/browser/search.pt:42
 msgid "There were no results."
@@ -5592,7 +5592,7 @@ msgstr "Скорочення: Alt-A"
 #: /src/schooltool/skin/templates/view_macros.pt:180
 #: /src/schooltool/skin/templates/view_macros.pt:187
 msgid "add-button"
-msgstr "кнопка-додати"
+msgstr "Додати"
 
 #: /src/schooltool/skin/templates/view_macros.pt:194
 msgid "Shortcut: Alt-D"
@@ -6327,7 +6327,7 @@ msgstr "Не вибрано"
 #. Default: "Change"
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:59
 msgid "change-button"
-msgstr "кнопка-змінити"
+msgstr "Змінити"
 
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:15
 #: /src/schooltool/app/browser/templates/event.pt:15

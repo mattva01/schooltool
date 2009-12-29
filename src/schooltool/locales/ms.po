@@ -714,7 +714,7 @@ msgstr "Fail CSV"
 #: /src/schooltool/group/browser/group-member-csvimport.pt:52
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:122
 msgid "submit-button"
-msgstr "punat-hantar"
+msgstr ""
 
 #: /src/schooltool/common/configure.zcml:100
 msgid "Add Info"

@@ -2065,7 +2065,7 @@ msgstr "CSV-tiedot"
 #: /src/schooltool/group/browser/group-member-csvimport.pt:52
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:122
 msgid "submit-button"
-msgstr "hyväksy-painike"
+msgstr "Hyväksy"
 
 #: /src/schooltool/basicperson/browser/templates/person_edit.pt:10
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:58
@@ -2733,7 +2733,7 @@ msgstr "Näyttää ${count} objektia ${total}:stä"
 #: /src/schooltool/skin/templates/container_delete.pt:32
 #: /src/schooltool/skin/templates/view_macros.pt:194
 msgid "delete-button"
-msgstr "poista-painike"
+msgstr "Poista"
 
 #: /src/schooltool/demographics/browser/search.pt:42
 msgid "There were no results."
@@ -3884,7 +3884,7 @@ msgstr "Komento: Alt-A"
 #: /src/schooltool/skin/templates/view_macros.pt:180
 #: /src/schooltool/skin/templates/view_macros.pt:187
 msgid "add-button"
-msgstr "lisää-painike"
+msgstr "Lisää"
 
 #: /src/schooltool/skin/templates/view_macros.pt:45
 msgid "Log In"
@@ -4485,7 +4485,7 @@ msgstr "Ei valittuna"
 #. Default: "Change"
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:59
 msgid "change-button"
-msgstr "muuta-nappi"
+msgstr "Muuta"
 
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:15
 #: /src/schooltool/app/browser/templates/event.pt:15

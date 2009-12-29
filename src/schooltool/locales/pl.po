@@ -1504,7 +1504,7 @@ msgstr "A"
 #: /src/schooltool/skin/templates/view_macros.pt:205
 #: /src/schooltool/app/browser/templates/event_add.pt:378
 msgid "cancel-button"
-msgstr "cancel-button"
+msgstr "Anuluj"
 
 #: /src/schooltool/basicperson/browser/templates/person_view.pt:20
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:34
@@ -1594,7 +1594,7 @@ msgstr "Brak do dodania."
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:84
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:65
 msgid "ok-button"
-msgstr "przycisk-ok"
+msgstr ""
 
 #: /src/schooltool/contact/contact.py:210
 #: /src/schooltool/course/browser/section.py:538
@@ -2069,7 +2069,7 @@ msgstr "Skrót: Alt-A"
 #: /src/schooltool/skin/templates/view_macros.pt:180
 #: /src/schooltool/skin/templates/view_macros.pt:187
 msgid "add-button"
-msgstr "przycisk-dodaj"
+msgstr "Dodaj"
 
 #: /src/schooltool/skin/templates/view_macros.pt:45
 msgid "Log In"
@@ -3281,7 +3281,7 @@ msgstr "Zarządzaj kontaktami dla ${person}"
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:30
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:52
 msgid "invert-selection-button"
-msgstr "przycisk-odwróć-zaznaczenie"
+msgstr "Odwróć zaznaczenie"
 
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:43
 msgid "Create contact"

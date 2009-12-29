@@ -2199,7 +2199,7 @@ msgstr "Non c'è niente da aggiungere"
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:84
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:65
 msgid "ok-button"
-msgstr "pulsante \"ok\""
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:538
 #: /src/schooltool/course/browser/templates/section.pt:79
@@ -4281,7 +4281,7 @@ msgstr "Non selezionato"
 #. Default: "Change"
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:59
 msgid "change-button"
-msgstr "pulsante-cambia"
+msgstr "Cambia"
 
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:15
 #: /src/schooltool/app/browser/templates/event.pt:15
@@ -5144,7 +5144,7 @@ msgstr "Gestiti i contatti di ${person}"
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:30
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:52
 msgid "invert-selection-button"
-msgstr "pulsante-inverti-selezione"
+msgstr ""
 
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:43
 msgid "Create contact"
@@ -5361,7 +5361,7 @@ msgstr "Copiato"
 #. Default: "Copy"
 #: /src/schooltool/course/browser/templates/copy_sections.pt:159
 msgid "copy-button"
-msgstr "copy-button"
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/copy_sections.pt:29
 msgid "Copy sections from ${prev_term} of ${schoolyear} to ${term}"
@@ -5375,12 +5375,12 @@ msgstr ""
 #. Default: "Select All Visible"
 #: /src/schooltool/course/browser/templates/copy_sections.pt:66
 msgid "select-all-visible-button"
-msgstr "select-all-visible-button"
+msgstr ""
 
 #. Default: "Select None"
 #: /src/schooltool/course/browser/templates/copy_sections.pt:70
 msgid "select-none-button"
-msgstr "select-none-button"
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/copy_sections.pt:9
 #: /src/schooltool/course/browser/templates/link_section.pt:9
@@ -5444,7 +5444,7 @@ msgstr "Corsi per ${schoolyear}"
 #. Default: "Link"
 #: /src/schooltool/course/browser/templates/link_section.pt:130
 msgid "link-section-button"
-msgstr "link-section-button"
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/link_section.pt:24
 msgid "Link ${section}, ${term} with a section in ${target_term}"
@@ -5496,7 +5496,7 @@ msgstr "${section_title} per ${term}"
 #: /src/schooltool/course/browser/templates/section_edit.pt:75
 #: /src/schooltool/course/browser/templates/section_edit.pt:109
 msgid "unlink-section-button"
-msgstr "unlink-section-button"
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/section_edit.pt:85
 #: /src/schooltool/course/browser/templates/section_edit.pt:119
@@ -5845,7 +5845,7 @@ msgstr "Nome host del server SMTP. Lascialo vuoto per disattivare le e-mail."
 #: /src/schooltool/email/browser/templates/email_container.pt:39
 #: /src/schooltool/email/browser/templates/email_container.pt:44
 msgid "retry-button"
-msgstr "retry-button"
+msgstr ""
 
 #: /src/schooltool/email/browser/templates/email_container.pt:54
 msgid "There are no messages queued."
@@ -6344,7 +6344,7 @@ msgstr "Scorciatoia: Alt-U"
 #. Default: "Update"
 #: /src/schooltool/skin/templates/view_macros.pt:155
 msgid "update-button"
-msgstr "update-button"
+msgstr ""
 
 #: /src/schooltool/skin/templates/view_macros.pt:155
 msgid "U"
@@ -6354,7 +6354,7 @@ msgstr "U"
 #: /src/schooltool/skin/templates/view_macros.pt:161
 #: /src/schooltool/skin/templates/view_macros.pt:167
 msgid "apply-button"
-msgstr "apply-button"
+msgstr ""
 
 #: /src/schooltool/skin/templates/view_macros.pt:194
 msgid "Shortcut: Alt-D"

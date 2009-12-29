@@ -1482,7 +1482,7 @@ msgstr "CSV Duomenys"
 #: /src/schooltool/group/browser/group-member-csvimport.pt:52
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:122
 msgid "submit-button"
-msgstr "patvirtinti-mygtukas"
+msgstr "Pritaikyti"
 
 #: /src/schooltool/basicperson/browser/templates/person_edit.pt:10
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:58
@@ -1524,7 +1524,7 @@ msgstr "A"
 #: /src/schooltool/skin/templates/view_macros.pt:205
 #: /src/schooltool/app/browser/templates/event_add.pt:378
 msgid "cancel-button"
-msgstr "atšaukti-mygtukas"
+msgstr "Atšaukti"
 
 #: /src/schooltool/basicperson/browser/templates/person_view.pt:20
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:34
@@ -1679,7 +1679,7 @@ msgstr "Nėra ko įtraukti."
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:84
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:65
 msgid "ok-button"
-msgstr "Gerai-mygtukas"
+msgstr "Gerai"
 
 #: /src/schooltool/contact/contact.py:210
 #: /src/schooltool/course/browser/section.py:538
@@ -5942,7 +5942,7 @@ msgstr "Trumpinys: Alt-U"
 #. Default: "Update"
 #: /src/schooltool/skin/templates/view_macros.pt:155
 msgid "update-button"
-msgstr "atnaujinimo-mygtukas"
+msgstr "Atnaujinti"
 
 #: /src/schooltool/skin/templates/view_macros.pt:155
 msgid "U"

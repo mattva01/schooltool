@@ -1574,7 +1574,7 @@ msgstr "Data CSV"
 #: /src/schooltool/group/browser/group-member-csvimport.pt:52
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:122
 msgid "submit-button"
-msgstr "tombol kirim"
+msgstr "Menerapkan"
 
 #: /src/schooltool/basicperson/browser/templates/person_edit.pt:10
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:58
@@ -1615,7 +1615,7 @@ msgstr "A"
 #: /src/schooltool/skin/templates/view_macros.pt:205
 #: /src/schooltool/app/browser/templates/event_add.pt:378
 msgid "cancel-button"
-msgstr "Tombol-Batal"
+msgstr "Batal"
 
 #: /src/schooltool/basicperson/browser/templates/person_view.pt:20
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:34
@@ -1781,7 +1781,7 @@ msgstr "Tidak ada apa-apa untuk ditambahkan"
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:84
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:65
 msgid "ok-button"
-msgstr "Tombol-OK"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:538
 #: /src/schooltool/course/browser/templates/section.pt:79
@@ -2181,7 +2181,7 @@ msgstr "Menunjukkan ${count} dari ${total} item-item"
 #: /src/schooltool/skin/templates/container_delete.pt:32
 #: /src/schooltool/skin/templates/view_macros.pt:194
 msgid "delete-button"
-msgstr "tombol-delete"
+msgstr "Hapus"
 
 #: /src/schooltool/demographics/browser/search.pt:42
 msgid "There were no results."
@@ -3151,7 +3151,7 @@ msgstr "Shortcut: Alt-A"
 #: /src/schooltool/skin/templates/view_macros.pt:180
 #: /src/schooltool/skin/templates/view_macros.pt:187
 msgid "add-button"
-msgstr "add-tombol"
+msgstr "Tambahkan"
 
 #: /src/schooltool/skin/templates/view_macros.pt:45
 msgid "Log In"
@@ -3719,7 +3719,7 @@ msgstr "Tidak Dipilih"
 #. Default: "Change"
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:59
 msgid "change-button"
-msgstr "change-tombol"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:15
 #: /src/schooltool/app/browser/templates/event.pt:15
@@ -4845,7 +4845,7 @@ msgstr "Kelola kontak atas ${person}"
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:30
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:52
 msgid "invert-selection-button"
-msgstr "tombol-invert-selection"
+msgstr ""
 
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:43
 msgid "Create contact"

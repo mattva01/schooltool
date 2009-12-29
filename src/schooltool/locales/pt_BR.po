@@ -1934,7 +1934,7 @@ msgstr "Um"
 #: /src/schooltool/skin/templates/view_macros.pt:205
 #: /src/schooltool/app/browser/templates/event_add.pt:378
 msgid "cancel-button"
-msgstr "Botão-cancelar"
+msgstr "Cancelar"
 
 #: /src/schooltool/basicperson/browser/templates/person_view.pt:20
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:34
@@ -4236,7 +4236,7 @@ msgstr "Não Selecionado"
 #. Default: "Change"
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:59
 msgid "change-button"
-msgstr "botão-alterar"
+msgstr "Alterar"
 
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:15
 #: /src/schooltool/app/browser/templates/event.pt:15
@@ -5227,8 +5227,9 @@ msgstr "Gerenciar contatos de ${person}"
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:71
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:30
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:52
+#, fuzzy
 msgid "invert-selection-button"
-msgstr "Botão-de-inversão-de-seleção"
+msgstr "Inversão de seleção"
 
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:43
 msgid "Create contact"
@@ -5457,7 +5458,7 @@ msgstr "Copiado"
 #. Default: "Copy"
 #: /src/schooltool/course/browser/templates/copy_sections.pt:159
 msgid "copy-button"
-msgstr "botão-copiar"
+msgstr "Copiar"
 
 #: /src/schooltool/course/browser/templates/copy_sections.pt:29
 msgid "Copy sections from ${prev_term} of ${schoolyear} to ${term}"
@@ -5469,13 +5470,14 @@ msgstr "Não há período (anterior) em ${schoolyear} para copiar seções."
 
 #. Default: "Select All Visible"
 #: /src/schooltool/course/browser/templates/copy_sections.pt:66
+#, fuzzy
 msgid "select-all-visible-button"
-msgstr "selecione todos os botões visiveis"
+msgstr "Selecione todos visiveis"
 
 #. Default: "Select None"
 #: /src/schooltool/course/browser/templates/copy_sections.pt:70
 msgid "select-none-button"
-msgstr "botão-selecionar-nenhum"
+msgstr "Selecionar nenhum"
 
 #: /src/schooltool/course/browser/templates/copy_sections.pt:9
 #: /src/schooltool/course/browser/templates/link_section.pt:9
@@ -5554,7 +5556,7 @@ msgstr "Cursos para ${schoolyear}"
 #. Default: "Link"
 #: /src/schooltool/course/browser/templates/link_section.pt:130
 msgid "link-section-button"
-msgstr "botao link de cessão"
+msgstr "Link"
 
 #: /src/schooltool/course/browser/templates/link_section.pt:24
 msgid "Link ${section}, ${term} with a section in ${target_term}"
@@ -5606,8 +5608,9 @@ msgstr "${section_title} para {$term}"
 #. Default: "Unlink"
 #: /src/schooltool/course/browser/templates/section_edit.pt:75
 #: /src/schooltool/course/browser/templates/section_edit.pt:109
+#, fuzzy
 msgid "unlink-section-button"
-msgstr "botão-desvincular-seção"
+msgstr "Desvincular"
 
 #: /src/schooltool/course/browser/templates/section_edit.pt:85
 #: /src/schooltool/course/browser/templates/section_edit.pt:119
@@ -5967,7 +5970,7 @@ msgstr "Nome do servidor SMTP. Deixe em branco para desabilitar o e-mail."
 #: /src/schooltool/email/browser/templates/email_container.pt:39
 #: /src/schooltool/email/browser/templates/email_container.pt:44
 msgid "retry-button"
-msgstr "botão-repetir"
+msgstr "Repetir"
 
 #: /src/schooltool/email/browser/templates/email_container.pt:54
 msgid "There are no messages queued."
@@ -6490,7 +6493,7 @@ msgstr "Atalho: Alt-U"
 #. Default: "Update"
 #: /src/schooltool/skin/templates/view_macros.pt:155
 msgid "update-button"
-msgstr "botão-atualizar"
+msgstr "Atualizar"
 
 #: /src/schooltool/skin/templates/view_macros.pt:155
 msgid "U"
@@ -6500,7 +6503,7 @@ msgstr "U"
 #: /src/schooltool/skin/templates/view_macros.pt:161
 #: /src/schooltool/skin/templates/view_macros.pt:167
 msgid "apply-button"
-msgstr "botão-aplicar"
+msgstr "Aplicar"
 
 #: /src/schooltool/skin/templates/view_macros.pt:194
 msgid "Shortcut: Alt-D"

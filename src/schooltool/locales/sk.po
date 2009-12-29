@@ -1684,7 +1684,7 @@ msgstr "CSV Dáta"
 #: /src/schooltool/group/browser/group-member-csvimport.pt:52
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:122
 msgid "submit-button"
-msgstr "tlačidlo pošli"
+msgstr "Použiť"
 
 #: /src/schooltool/basicperson/browser/templates/person_edit.pt:10
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:58
@@ -1726,7 +1726,7 @@ msgstr "A"
 #: /src/schooltool/skin/templates/view_macros.pt:205
 #: /src/schooltool/app/browser/templates/event_add.pt:378
 msgid "cancel-button"
-msgstr "tlačidlo Zrušiť"
+msgstr "Zrušiť"
 
 #: /src/schooltool/basicperson/browser/templates/person_view.pt:20
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:34
@@ -1909,7 +1909,7 @@ msgstr "Niet čo pridať."
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:84
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:65
 msgid "ok-button"
-msgstr "ok-button"
+msgstr ""
 
 #: /src/schooltool/contact/contact.py:210
 #: /src/schooltool/course/browser/section.py:538
@@ -2269,7 +2269,7 @@ msgstr "Uložiť a ďalšie"
 #: /src/schooltool/skin/templates/container_delete.pt:32
 #: /src/schooltool/skin/templates/view_macros.pt:194
 msgid "delete-button"
-msgstr "tlačidlo Zmazať"
+msgstr "Zmazať"
 
 #: /src/schooltool/demographics/browser/search.pt:6
 msgid ""
@@ -2829,7 +2829,7 @@ msgstr "Skratka: Alt-A"
 #: /src/schooltool/skin/templates/view_macros.pt:180
 #: /src/schooltool/skin/templates/view_macros.pt:187
 msgid "add-button"
-msgstr "tlačidlo pridaj"
+msgstr "Pridať"
 
 #: /src/schooltool/skin/templates/view_macros.pt:45
 msgid "Log In"

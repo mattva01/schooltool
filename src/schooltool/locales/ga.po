@@ -2271,7 +2271,7 @@ msgstr ""
 #: /src/schooltool/skin/templates/view_macros.pt:205
 #: /src/schooltool/app/browser/templates/event_add.pt:378
 msgid "cancel-button"
-msgstr "cnaipe-cealaigh"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/templates/person_view.pt:20
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:34
@@ -3966,9 +3966,8 @@ msgstr ""
 #. Default: "Retry"
 #: /src/schooltool/email/browser/templates/email_container.pt:39
 #: /src/schooltool/email/browser/templates/email_container.pt:44
-#, fuzzy
 msgid "retry-button"
-msgstr "Tá go maith"
+msgstr ""
 
 #: /src/schooltool/email/browser/templates/email_container.pt:54
 #, fuzzy
@@ -5178,9 +5177,8 @@ msgstr ""
 #. Default: "Apply"
 #: /src/schooltool/skin/templates/view_macros.pt:161
 #: /src/schooltool/skin/templates/view_macros.pt:167
-#, fuzzy
 msgid "apply-button"
-msgstr "cnaipe-cealaigh"
+msgstr ""
 
 #: /src/schooltool/skin/templates/view_macros.pt:161
 #: /src/schooltool/skin/templates/view_macros.pt:167
@@ -5195,9 +5193,8 @@ msgstr "Aicearra: Alt-A"
 #: /src/schooltool/skin/templates/view_macros.pt:174
 #: /src/schooltool/skin/templates/view_macros.pt:180
 #: /src/schooltool/skin/templates/view_macros.pt:187
-#, fuzzy
 msgid "add-button"
-msgstr "Tá go maith"
+msgstr ""
 
 #: /src/schooltool/skin/templates/view_macros.pt:194
 #, fuzzy

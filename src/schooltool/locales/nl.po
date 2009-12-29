@@ -4984,7 +4984,7 @@ msgstr "Bewerk contactgegevens van ${person}"
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:30
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:52
 msgid "invert-selection-button"
-msgstr "invert-selection-button"
+msgstr ""
 
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:43
 msgid "Create contact"
@@ -5212,7 +5212,7 @@ msgstr "Gekopieerd"
 #. Default: "Copy"
 #: /src/schooltool/course/browser/templates/copy_sections.pt:159
 msgid "copy-button"
-msgstr "Kopieer-knop"
+msgstr "Kopieer"
 
 #: /src/schooltool/course/browser/templates/copy_sections.pt:29
 msgid "Copy sections from ${prev_term} of ${schoolyear} to ${term}"
@@ -5226,12 +5226,12 @@ msgstr ""
 #. Default: "Select All Visible"
 #: /src/schooltool/course/browser/templates/copy_sections.pt:66
 msgid "select-all-visible-button"
-msgstr "selecteer-alles-zichtbaar-knop"
+msgstr "Selecteer alles zichtbaar"
 
 #. Default: "Select None"
 #: /src/schooltool/course/browser/templates/copy_sections.pt:70
 msgid "select-none-button"
-msgstr "selecteer-niks-knop"
+msgstr "Selecteer niks"
 
 #: /src/schooltool/course/browser/templates/copy_sections.pt:9
 #: /src/schooltool/course/browser/templates/link_section.pt:9
@@ -5317,7 +5317,7 @@ msgstr "Vakken van ${schoolyear}"
 #. Default: "Link"
 #: /src/schooltool/course/browser/templates/link_section.pt:130
 msgid "link-section-button"
-msgstr "Link-selectie-knop"
+msgstr "Link"
 
 #: /src/schooltool/course/browser/templates/link_section.pt:24
 msgid "Link ${section}, ${term} with a section in ${target_term}"
@@ -5370,7 +5370,7 @@ msgstr "${section_title} voor ${term}"
 #: /src/schooltool/course/browser/templates/section_edit.pt:75
 #: /src/schooltool/course/browser/templates/section_edit.pt:109
 msgid "unlink-section-button"
-msgstr "unlink-section-button"
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/section_edit.pt:85
 #: /src/schooltool/course/browser/templates/section_edit.pt:119
@@ -5712,7 +5712,7 @@ msgstr "Computernaam SMTP-server. Laat leeg om e-mail uit te schakelen."
 #: /src/schooltool/email/browser/templates/email_container.pt:39
 #: /src/schooltool/email/browser/templates/email_container.pt:44
 msgid "retry-button"
-msgstr "Opnieuw-knop"
+msgstr "Opnieuw"
 
 #: /src/schooltool/email/browser/templates/email_container.pt:54
 msgid "There are no messages queued."
@@ -6230,7 +6230,7 @@ msgstr "Sneltoets: Alt-U"
 #. Default: "Update"
 #: /src/schooltool/skin/templates/view_macros.pt:155
 msgid "update-button"
-msgstr "Update-knop"
+msgstr "Bijwerken"
 
 #: /src/schooltool/skin/templates/view_macros.pt:155
 msgid "U"
@@ -6240,7 +6240,7 @@ msgstr "U"
 #: /src/schooltool/skin/templates/view_macros.pt:161
 #: /src/schooltool/skin/templates/view_macros.pt:167
 msgid "apply-button"
-msgstr "Toepassen-knop"
+msgstr "Toepassen"
 
 #: /src/schooltool/skin/templates/view_macros.pt:194
 msgid "Shortcut: Alt-D"
