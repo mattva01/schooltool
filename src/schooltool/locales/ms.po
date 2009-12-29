@@ -7,27 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: Thu Dec 24 12:40:13 2009\n"
-"PO-Revision-Date: 2008-04-07 14:04+0000\n"
+"POT-Creation-Date: 2009-12-24 12:40+0000\n"
+"PO-Revision-Date: 2009-12-24 15:58+0000\n"
 "Last-Translator: jikam <jikam@napalm-flames.org>\n"
 "Language-Team: Malay <ms@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-10-12 07:02+0000\n"
+"X-Launchpad-Export-Date: 2009-12-25 04:37+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
-
-#: /src/schooltool/app/app.py:201
-msgid "Your School"
-msgstr ""
-
-#: /src/schooltool/app/browser/__init__.py:256
-#: /src/schooltool/person/help/person_container.pt:6
-#: /src/schooltool/app/browser/templates/index.pt:11
-#: /src/schooltool/person/browser/configure.zcml:26
-#: /src/schooltool/person/help/configure.zcml:8
-msgid "Persons"
-msgstr ""
 
 #: /src/schooltool/app/browser/__init__.py:261
 msgid "1 person"
@@ -42,7 +30,8 @@ msgstr "${number} orang"
 msgid "Username or password is incorrect"
 msgstr "Nama Pengguna atau kata kunci salah."
 
-#: /src/schooltool/app/browser/app.py:323 /src/schooltool/app/security.py:307
+#: /src/schooltool/app/browser/app.py:323
+#: /src/schooltool/app/security.py:307
 msgid "Leaders"
 msgstr "Ketua-ketua"
 
@@ -118,23 +107,6 @@ msgstr "November"
 msgid "December"
 msgstr "Disember"
 
-#: /src/schooltool/app/browser/cal.py:1170
-msgid "Go to next month"
-msgstr ""
-
-#: /src/schooltool/app/browser/cal.py:1171
-msgid "Go to current month"
-msgstr ""
-
-#: /src/schooltool/app/browser/cal.py:1172
-msgid "Go to previous month"
-msgstr ""
-
-#. Default: ""
-#: /src/schooltool/app/browser/cal.py:1180
-msgid "${month}, ${year}"
-msgstr ""
-
 #: /src/schooltool/app/browser/cal.py:120
 #: /src/schooltool/person/interfaces.py:180
 #: /src/schooltool/timetable/browser/schema.py:115
@@ -171,11 +143,6 @@ msgstr "Rabu"
 #: /src/schooltool/term/browser/templates/term.pt:34
 msgid "Thursday"
 msgstr "Khamis"
-
-#. Default: ""
-#: /src/schooltool/app/browser/cal.py:1202
-msgid "Week ${week_no}"
-msgstr ""
 
 #: /src/schooltool/app/browser/cal.py:121
 #: /src/schooltool/person/interfaces.py:178
@@ -215,18 +182,6 @@ msgstr "Tahun ini"
 #: /src/schooltool/app/browser/cal.py:1220
 msgid "Previous year"
 msgstr "Tahun lepas"
-
-#: /src/schooltool/app/browser/cal.py:1222
-msgid "Go to next year"
-msgstr ""
-
-#: /src/schooltool/app/browser/cal.py:1223
-msgid "Go to current year"
-msgstr ""
-
-#: /src/schooltool/app/browser/cal.py:1224
-msgid "Go to previous year"
-msgstr ""
 
 #: /src/schooltool/app/browser/cal.py:124
 #: /src/schooltool/app/browser/cal.py:1811
@@ -275,25 +230,9 @@ msgstr "Hari ini"
 msgid "The previous day"
 msgstr "Hari sebelumnya"
 
-#: /src/schooltool/app/browser/cal.py:1294
-msgid "Go to the next day"
-msgstr ""
-
-#: /src/schooltool/app/browser/cal.py:1295
-msgid "Go to today"
-msgstr ""
-
-#: /src/schooltool/app/browser/cal.py:1296
-msgid "Go to the previous day"
-msgstr ""
-
-#. Default: ""
-#: /src/schooltool/app/browser/cal.py:1448
-msgid "Add new event starting at ${title}"
-msgstr ""
-
 #: /src/schooltool/app/browser/cal.py:1737
-#: /src/schooltool/app/interfaces.py:135 /src/schooltool/app/interfaces.py:146
+#: /src/schooltool/app/interfaces.py:135
+#: /src/schooltool/app/interfaces.py:146
 #: /src/schooltool/basicperson/interfaces.py:121
 #: /src/schooltool/course/interfaces.py:37
 #: /src/schooltool/course/interfaces.py:95
@@ -301,12 +240,14 @@ msgstr ""
 #: /src/schooltool/group/interfaces.py:40
 #: /src/schooltool/note/interfaces.py:42
 #: /src/schooltool/resource/interfaces.py:40
-#: /src/schooltool/resource/types.py:60 /src/schooltool/resource/types.py:77
+#: /src/schooltool/resource/types.py:60
+#: /src/schooltool/resource/types.py:77
 #: /src/schooltool/resource/types.py:101
 #: /src/schooltool/schoolyear/browser/schoolyear.py:145
 #: /src/schooltool/schoolyear/interfaces.py:41
 #: /src/schooltool/securitypolicy/interfaces.py:108
-#: /src/schooltool/table/catalog.py:141 /src/schooltool/table/table.py:221
+#: /src/schooltool/table/catalog.py:141
+#: /src/schooltool/table/table.py:221
 #: /src/schooltool/term/browser/term.py:59
 #: /src/schooltool/term/interfaces.py:40
 #: /src/schooltool/timetable/browser/schema.py:129
@@ -414,10 +355,6 @@ msgstr "Ulang setiap"
 msgid "Range"
 msgstr "Jarak"
 
-#: /src/schooltool/app/browser/cal.py:1794
-msgid "Count"
-msgstr ""
-
 #: /src/schooltool/app/browser/cal.py:1795
 msgid "Until"
 msgstr "Hingga"
@@ -425,10 +362,6 @@ msgstr "Hingga"
 #: /src/schooltool/app/browser/cal.py:1796
 msgid "forever"
 msgstr "selama-lamanya"
-
-#: /src/schooltool/app/browser/cal.py:1799
-msgid "Number of events"
-msgstr ""
 
 #: /src/schooltool/app/browser/cal.py:1803
 #: /src/schooltool/app/browser/templates/event_add.pt:303
@@ -481,11 +414,6 @@ msgstr "kelima"
 msgid "last weekday"
 msgstr "hari bekerja terakhir"
 
-#. Default: ""
-#: /src/schooltool/app/browser/cal.py:1944
-msgid "Last ${weekday}"
-msgstr ""
-
 #: /src/schooltool/app/browser/cal.py:1967
 #: /src/schooltool/app/browser/cal.py:2276
 msgid "An error occurred."
@@ -493,14 +421,6 @@ msgstr "Kesalahan berlaku."
 
 #: /src/schooltool/app/browser/cal.py:2000
 msgid "Invalid time"
-msgstr ""
-
-#: /src/schooltool/app/browser/cal.py:2021
-msgid "End date is earlier than start date"
-msgstr ""
-
-#: /src/schooltool/app/browser/cal.py:2030
-msgid "Invalid date.  Please specify YYYY-MM-DD, one per line."
 msgstr ""
 
 #: /src/schooltool/app/browser/cal.py:2078
@@ -518,10 +438,6 @@ msgstr "Tambah acara"
 msgid "Add"
 msgstr "Tambah"
 
-#: /src/schooltool/app/browser/cal.py:2150
-msgid "Edit event"
-msgstr ""
-
 #: /src/schooltool/app/browser/cal.py:2151
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:29
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:81
@@ -531,7 +447,8 @@ msgid "Update"
 msgstr "Kemaskini"
 
 #. Default: ""
-#: /src/schooltool/app/browser/cal.py:2282 /src/schooltool/skin/form.py:76
+#: /src/schooltool/app/browser/cal.py:2282
+#: /src/schooltool/skin/form.py:76
 msgid "Updated on ${date_time}"
 msgstr "Dikemaskini pada ${date_time}"
 
@@ -559,30 +476,9 @@ msgstr "Minggu ini"
 msgid "Previous week"
 msgstr "Minggu lepas"
 
-#: /src/schooltool/app/browser/cal.py:929
-msgid "Go to next week"
-msgstr ""
-
-#: /src/schooltool/app/browser/cal.py:930
-msgid "Go to current week"
-msgstr ""
-
-#: /src/schooltool/app/browser/cal.py:931
-msgid "Go to previous week"
-msgstr ""
-
-#. Default: ""
-#: /src/schooltool/app/browser/cal.py:952
-msgid "${month}, ${year} (week ${week})"
-msgstr ""
-
 #: /src/schooltool/app/browser/configure.zcml:166
 msgid "Actions"
 msgstr "Aksi"
-
-#: /src/schooltool/app/browser/configure.zcml:319
-msgid "View Calendar"
-msgstr ""
 
 #: /src/schooltool/app/browser/configure.zcml:331
 msgid "New Event"
@@ -591,18 +487,6 @@ msgstr "Acara Baru"
 #: /src/schooltool/app/browser/configure.zcml:342
 msgid "Open in iCal"
 msgstr "bukan dalam iCal"
-
-#: /src/schooltool/app/browser/configure.zcml:354
-msgid "Import Sections"
-msgstr ""
-
-#: /src/schooltool/app/browser/configure.zcml:365
-msgid "Edit Leaders"
-msgstr ""
-
-#: /src/schooltool/app/browser/configure.zcml:376
-msgid "Change Site Preferences"
-msgstr ""
 
 #: /src/schooltool/app/browser/configure.zcml:408
 msgid "Calendar (Daily)"
@@ -633,10 +517,6 @@ msgstr "Kalendar (Bulanan, PDF)"
 msgid "Calendar (Yearly)"
 msgstr "Kalendar (Tahunan)"
 
-#: /src/schooltool/app/browser/configure.zcml:475
-msgid "Atom View"
-msgstr ""
-
 #: /src/schooltool/app/browser/configure.zcml:485
 msgid "iCalendar"
 msgstr "iCalendar"
@@ -645,21 +525,435 @@ msgstr "iCalendar"
 msgid "Free/Busy"
 msgstr "Bebas/Sibuk"
 
-#: /src/schooltool/app/browser/configure.zcml:596
-msgid "ZODB Control"
-msgstr ""
-
 #: /src/schooltool/app/browser/configure.zcml:631
 msgid "Application Control"
 msgstr "Kontrol Applikasi"
 
-#: /src/schooltool/app/browser/configure.zcml:643
-msgid "Translation Domains"
-msgstr ""
-
 #: /src/schooltool/app/browser/configure.zcml:654
 msgid "Generations"
 msgstr "Generasi-Generasi"
+
+#: /src/schooltool/app/browser/csvimport.py:296
+msgid "Row 2 is not empty"
+msgstr "Baris Kedua tidak kosong"
+
+#: /src/schooltool/app/browser/pdfcal.py:115
+msgid "all day"
+msgstr "Seharian"
+
+#: /src/schooltool/app/browser/pdfcal.py:197
+msgid "Monthly calendar for %s"
+msgstr "Kalendar Bulanan untu %s"
+
+#: /src/schooltool/app/browser/templates/cal_atom.pt:21
+msgid "Events for"
+msgstr "Acara untuk"
+
+#: /src/schooltool/app/browser/templates/calendar_macros.pt:115
+msgid "Jump To ..."
+msgstr "Lompat Ke ..."
+
+#: /src/schooltool/app/browser/templates/event_add.pt:137
+msgid "Event information"
+msgstr "Maklumat acara"
+
+#: /src/schooltool/app/browser/templates/event_add.pt:143
+msgid "Event details"
+msgstr "Perincian acara"
+
+#: /src/schooltool/app/browser/templates/event_booking.pt:22
+msgid "Starts:"
+msgstr "Bermula:"
+
+#: /src/schooltool/app/browser/templates/event_booking.pt:26
+msgid "Ends:"
+msgstr "Tamat:"
+
+#: /src/schooltool/app/browser/templates/event_booking.pt:30
+msgid "This is a recurring event!"
+msgstr "Acara ini berulang!"
+
+#: /src/schooltool/app/browser/templates/index.pt:6
+msgid "Welcome to SchoolTool"
+msgstr "Selamat datang ke SchoolTool"
+
+#: /src/schooltool/app/browser/templates/login.pt:57
+msgid "L"
+msgstr "L"
+
+#: /src/schooltool/app/configure.zcml:336
+msgid "Security (General)"
+msgstr "Sekuriti (Am)"
+
+#: /src/schooltool/app/help/admin.pt:6
+msgid "SchoolTool Administration"
+msgstr "Pentadbiran SchoolTool"
+
+#: /src/schooltool/app/help/calendaring.pt:6
+msgid "Calendaring in SchoolTool"
+msgstr "Penggunaan Calendar dalam SchoolTool"
+
+#: /src/schooltool/app/help/event_add.pt:6
+#: /src/schooltool/app/help/event_add.pt:9
+#: /src/schooltool/app/browser/configure.zcml:524
+#: /src/schooltool/app/help/configure.zcml:77
+msgid "Add Event"
+msgstr "Tambah Acara"
+
+#: /src/schooltool/app/help/org.pt:6
+msgid "SchoolTool Organization"
+msgstr "Organisasi SchoolTool"
+
+#: /src/schooltool/app/interfaces.py:153
+msgid "Front Page Calendar"
+msgstr "Kalendar Muka Depan"
+
+#: /src/schooltool/app/interfaces.py:171
+msgid "Show timetables"
+msgstr "Lihatkan jadual-jadual"
+
+#: /src/schooltool/app/main.py:604
+msgid "Reading configuration from %s"
+msgstr "Membaca Konfigurasi dari %s"
+
+#: /src/schooltool/basicperson/browser/csvimport.py:77
+#: /src/schooltool/basicperson/browser/person.py:109
+#: /src/schooltool/demographics/browser/personform.py:281
+#: /src/schooltool/person/browser/csvimport.py:71
+msgid "Names cannot begin with '+' or '@' or contain '/'"
+msgstr "Nama tidak boleh dimulai dengan '+' atau '@' atau mengandungi '/'"
+
+#: /src/schooltool/basicperson/browser/person.py:105
+msgid "This username is already in use!"
+msgstr "Nama pengguna ini sudah pun dipakai!"
+
+#: /src/schooltool/basicperson/browser/person.py:144
+msgid "Add new person"
+msgstr "Tambah pengguna baru"
+
+#: /src/schooltool/basicperson/browser/person.py:55
+#: /src/schooltool/demographics/interfaces.py:209
+msgid "Advisor"
+msgstr "Penasihat"
+
+#: /src/schooltool/basicperson/browser/person.py:65
+#: /src/schooltool/demographics/browser/personform.py:259
+#: /src/schooltool/person/browser/person.py:159
+#: /src/schooltool/person/browser/person.py:290
+#: /src/schooltool/app/browser/templates/login.pt:44
+msgid "Password"
+msgstr "Kata Kunci"
+
+#: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:11
+#: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:11
+#: /src/schooltool/schoolyear/browser/templates/schoolyear.pt:11
+#: /src/schooltool/export/templates/import.pt:11
+#: /src/schooltool/contact/browser/templates/contacts_delete.pt:11
+#: /src/schooltool/person/browser/person_edit.pt:9
+#: /src/schooltool/person/browser/person-csvimport.pt:11
+#: /src/schooltool/person/browser/person_preferences.pt:9
+#: /src/schooltool/person/browser/person_container_delete.pt:11
+#: /src/schooltool/email/browser/templates/email_delete.pt:11
+#: /src/schooltool/email/browser/templates/email_container.pt:11
+#: /src/schooltool/skin/templates/table_container.pt:11
+#: /src/schooltool/skin/templates/container.pt:11
+#: /src/schooltool/skin/templates/container_delete.pt:11
+#: /src/schooltool/skin/templates/simple_add.pt:5
+#: /src/schooltool/skin/templates/edit_form.pt:4
+#: /src/schooltool/skin/templates/simple_edit.pt:7
+#: /src/schooltool/skin/templates/generic_macros.pt:8
+#: /src/schooltool/skin/templates/error.pt:8
+#: /src/schooltool/skin/templates/notfound.pt:7
+#: /src/schooltool/app/browser/templates/cal_atom.pt:14
+#: /src/schooltool/app/help/schooltool.pt:6
+#: /src/schooltool/app/help/configure.zcml:6
+#: /src/schooltool/app/configure.zcml:330
+msgid "SchoolTool"
+msgstr "PeralatanSekolah"
+
+#: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:33
+#: /src/schooltool/resource/browser/resource-csvimport.pt:29
+#: /src/schooltool/person/browser/person-csvimport.pt:33
+#: /src/schooltool/course/browser/templates/course-csvimport.pt:31
+#: /src/schooltool/group/browser/group-csvimport.pt:29
+#: /src/schooltool/app/browser/templates/timetables-csvimport.pt:54
+msgid "Example:"
+msgstr "Umpamanya:"
+
+#: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:48
+#: /src/schooltool/resource/browser/resource-csvimport.pt:45
+#: /src/schooltool/person/browser/person-csvimport.pt:48
+#: /src/schooltool/course/browser/section-member-csvimport.pt:25
+#: /src/schooltool/course/browser/templates/course-csvimport.pt:59
+#: /src/schooltool/group/browser/group-csvimport.pt:45
+#: /src/schooltool/group/browser/group-member-csvimport.pt:25
+#: /src/schooltool/app/browser/templates/timetables-csvimport.pt:94
+msgid "Upload CSV File"
+msgstr "Muat Atas Fail CSV"
+
+#: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:50
+#: /src/schooltool/resource/browser/resource-csvimport.pt:47
+#: /src/schooltool/person/browser/person-csvimport.pt:50
+#: /src/schooltool/course/browser/section-member-csvimport.pt:27
+#: /src/schooltool/course/browser/templates/course-csvimport.pt:61
+#: /src/schooltool/group/browser/group-csvimport.pt:47
+#: /src/schooltool/group/browser/group-member-csvimport.pt:27
+#: /src/schooltool/app/browser/templates/timetables-csvimport.pt:96
+msgid "CSV File"
+msgstr "Fail CSV"
+
+#. Default: "Apply"
+#: /src/schooltool/basicperson/browser/templates/person_edit.pt:10
+#: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:75
+#: /src/schooltool/export/templates/import.pt:66
+#: /src/schooltool/resource/browser/resource-csvimport.pt:72
+#: /src/schooltool/person/browser/person-csvimport.pt:75
+#: /src/schooltool/course/browser/section-member-csvimport.pt:52
+#: /src/schooltool/course/browser/templates/course-csvimport.pt:86
+#: /src/schooltool/group/browser/group-csvimport.pt:72
+#: /src/schooltool/group/browser/group-member-csvimport.pt:52
+#: /src/schooltool/app/browser/templates/timetables-csvimport.pt:122
+msgid "submit-button"
+msgstr "punat-hantar"
+
+#: /src/schooltool/common/configure.zcml:100
+msgid "Add Info"
+msgstr "Tambah Info"
+
+#: /src/schooltool/common/configure.zcml:99
+#: /src/schooltool/course/browser/configure.zcml:25
+#: /src/schooltool/course/browser/configure.zcml:180
+#: /src/schooltool/group/browser/configure.zcml:38
+#: /src/schooltool/resource/browser/configure.zcml:84
+#: /src/schooltool/resource/browser/configure.zcml:115
+#: /src/schooltool/resource/browser/configure.zcml:151
+msgid "Edit Info"
+msgstr "Ubah Info"
+
+#. Default: "OK"
+#: /src/schooltool/contact/browser/templates/manage_contacts.pt:75
+#: /src/schooltool/course/browser/templates/edit_relationships.pt:84
+#: /src/schooltool/app/browser/templates/edit_relationships.pt:65
+msgid "ok-button"
+msgstr "Punat-ok"
+
+#: /src/schooltool/course/browser/configure.zcml:10
+msgid "Add a Course"
+msgstr "Tambah Kursus"
+
+#: /src/schooltool/course/browser/configure.zcml:180
+msgid "Edit Section Information"
+msgstr "Ubah Informasi Seksyen"
+
+#: /src/schooltool/course/browser/configure.zcml:96
+msgid "New Course"
+msgstr "Kursus baru"
+
+#: /src/schooltool/course/browser/course.py:65
+msgid "Course index"
+msgstr "Indeks Kursus"
+
+#: /src/schooltool/course/browser/csvimport.py:50
+#: /src/schooltool/group/browser/csvimport.py:45
+#: /src/schooltool/resource/browser/csvimport.py:50
+msgid "Titles may not be empty"
+msgstr "Tajuk mungkin tidak kosong"
+
+#: /src/schooltool/course/browser/section.py:556
+msgid "Available Students"
+msgstr "Kum"
+
+#: /src/schooltool/course/browser/templates/course.pt:71
+msgid "students"
+msgstr "Pelajar-pelajar"
+
+#: /src/schooltool/course/browser/templates/coursesviewlet.pt:4
+msgid "Sections Taught"
+msgstr "Seksyen diajar"
+
+#: /src/schooltool/course/browser/templates/section.pt:100
+msgid "edit individuals"
+msgstr "ubah individu-individu"
+
+#: /src/schooltool/course/browser/templates/section.pt:58
+msgid "edit info"
+msgstr "Ubah info"
+
+#: /src/schooltool/course/browser/templates/section.pt:86
+msgid "edit instructors"
+msgstr "ubah pengajar-pengajar"
+
+#: /src/schooltool/dashboard/term.pt:4
+#: /src/schooltool/course/browser/templates/copy_sections.pt:86
+#: /src/schooltool/course/browser/templates/link_section.pt:62
+#: /src/schooltool/course/browser/templates/section_container.pt:36
+#: /src/schooltool/course/browser/templates/link_to_courses.pt:1
+#: /src/schooltool/course/help/course_container.pt:7
+#: /src/schooltool/app/browser/templates/index.pt:12
+#: /src/schooltool/course/security.zcml:73
+#: /src/schooltool/course/help/configure.zcml:8
+msgid "Courses"
+msgstr "Kursus-kursus"
+
+#: /src/schooltool/demographics/browser/nameinfo_view.pt:11
+#: /src/schooltool/person/browser/person.pt:11
+#: /src/schooltool/person/browser/home.pt:11
+#: /src/schooltool/course/browser/templates/course.pt:52
+msgid "photo"
+msgstr "Gambar"
+
+#: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:15
+#: /src/schooltool/app/browser/templates/event.pt:15
+msgid "All day event"
+msgstr "acara seharian"
+
+#: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:21
+#: /src/schooltool/app/browser/templates/event.pt:20
+msgid "This is a recurring event."
+msgstr "Acara yang berulang"
+
+#: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:54
+#: /src/schooltool/app/browser/templates/event.pt:53
+msgid "Change the details of this event"
+msgstr "Tukar perincian acara tersebut"
+
+#: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:81
+#: /src/schooltool/app/browser/templates/event.pt:80
+msgid "delete event"
+msgstr "Buang acara"
+
+#: /src/schooltool/app/app.py:201
+msgid "Your School"
+msgstr ""
+
+#: /src/schooltool/app/browser/__init__.py:256
+#: /src/schooltool/person/help/person_container.pt:6
+#: /src/schooltool/app/browser/templates/index.pt:11
+#: /src/schooltool/person/browser/configure.zcml:26
+#: /src/schooltool/person/help/configure.zcml:8
+msgid "Persons"
+msgstr ""
+
+#: /src/schooltool/app/browser/cal.py:1170
+msgid "Go to next month"
+msgstr ""
+
+#: /src/schooltool/app/browser/cal.py:1171
+msgid "Go to current month"
+msgstr ""
+
+#: /src/schooltool/app/browser/cal.py:1172
+msgid "Go to previous month"
+msgstr ""
+
+#. Default: ""
+#: /src/schooltool/app/browser/cal.py:1180
+msgid "${month}, ${year}"
+msgstr ""
+
+#. Default: ""
+#: /src/schooltool/app/browser/cal.py:1202
+msgid "Week ${week_no}"
+msgstr ""
+
+#: /src/schooltool/app/browser/cal.py:1222
+msgid "Go to next year"
+msgstr ""
+
+#: /src/schooltool/app/browser/cal.py:1223
+msgid "Go to current year"
+msgstr ""
+
+#: /src/schooltool/app/browser/cal.py:1224
+msgid "Go to previous year"
+msgstr ""
+
+#: /src/schooltool/app/browser/cal.py:1294
+msgid "Go to the next day"
+msgstr ""
+
+#: /src/schooltool/app/browser/cal.py:1295
+msgid "Go to today"
+msgstr ""
+
+#: /src/schooltool/app/browser/cal.py:1296
+msgid "Go to the previous day"
+msgstr ""
+
+#. Default: ""
+#: /src/schooltool/app/browser/cal.py:1448
+msgid "Add new event starting at ${title}"
+msgstr ""
+
+#: /src/schooltool/app/browser/cal.py:1794
+msgid "Count"
+msgstr ""
+
+#: /src/schooltool/app/browser/cal.py:1799
+msgid "Number of events"
+msgstr ""
+
+#. Default: ""
+#: /src/schooltool/app/browser/cal.py:1944
+msgid "Last ${weekday}"
+msgstr ""
+
+#: /src/schooltool/app/browser/cal.py:2021
+msgid "End date is earlier than start date"
+msgstr ""
+
+#: /src/schooltool/app/browser/cal.py:2030
+msgid "Invalid date.  Please specify YYYY-MM-DD, one per line."
+msgstr ""
+
+#: /src/schooltool/app/browser/cal.py:2150
+msgid "Edit event"
+msgstr ""
+
+#: /src/schooltool/app/browser/cal.py:929
+msgid "Go to next week"
+msgstr ""
+
+#: /src/schooltool/app/browser/cal.py:930
+msgid "Go to current week"
+msgstr ""
+
+#: /src/schooltool/app/browser/cal.py:931
+msgid "Go to previous week"
+msgstr ""
+
+#. Default: ""
+#: /src/schooltool/app/browser/cal.py:952
+msgid "${month}, ${year} (week ${week})"
+msgstr ""
+
+#: /src/schooltool/app/browser/configure.zcml:319
+msgid "View Calendar"
+msgstr ""
+
+#: /src/schooltool/app/browser/configure.zcml:354
+msgid "Import Sections"
+msgstr ""
+
+#: /src/schooltool/app/browser/configure.zcml:365
+msgid "Edit Leaders"
+msgstr ""
+
+#: /src/schooltool/app/browser/configure.zcml:376
+msgid "Change Site Preferences"
+msgstr ""
+
+#: /src/schooltool/app/browser/configure.zcml:475
+msgid "Atom View"
+msgstr ""
+
+#: /src/schooltool/app/browser/configure.zcml:596
+msgid "ZODB Control"
+msgstr ""
+
+#: /src/schooltool/app/browser/configure.zcml:643
+msgid "Translation Domains"
+msgstr ""
 
 #: /src/schooltool/app/browser/configure.zcml:675
 msgid "Browser UI"
@@ -730,10 +1024,6 @@ msgstr ""
 msgid "Conversion to unicode failed in line ${line_no}"
 msgstr ""
 
-#: /src/schooltool/app/browser/csvimport.py:296
-msgid "Row 2 is not empty"
-msgstr "Baris Kedua tidak kosong"
-
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:332
 msgid ""
@@ -743,7 +1033,8 @@ msgstr ""
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:358
-msgid "Malformed line ${line_no} (it should contain a day id and a period id)"
+msgid ""
+"Malformed line ${line_no} (it should contain a day id and a period id)"
 msgstr ""
 
 #. Default: ""
@@ -798,10 +1089,6 @@ msgstr ""
 msgid "Saved changes."
 msgstr ""
 
-#: /src/schooltool/app/browser/pdfcal.py:115
-msgid "all day"
-msgstr "Seharian"
-
 #: /src/schooltool/app/browser/pdfcal.py:177
 msgid "Weekly calendar for %s"
 msgstr ""
@@ -809,10 +1096,6 @@ msgstr ""
 #: /src/schooltool/app/browser/pdfcal.py:186
 msgid "Week %d (%s - %s), %d"
 msgstr ""
-
-#: /src/schooltool/app/browser/pdfcal.py:197
-msgid "Monthly calendar for %s"
-msgstr "Kalendar Bulanan untu %s"
 
 #: /src/schooltool/app/browser/pdfcal.py:52
 msgid "Daily calendar for %s"
@@ -842,9 +1125,9 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/about.pt:16
 msgid ""
-"SchoolTool is built on a 100% open source software stack, written in <a href="
-"\"http://python.org\">Python</a> using the <a href=\"http://zope.org\">Zope "
-"3</a> framework."
+"SchoolTool is built on a 100% open source software stack, written in <a "
+"href=\"http://python.org\">Python</a> using the <a "
+"href=\"http://zope.org\">Zope 3</a> framework."
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/about.pt:20
@@ -855,10 +1138,6 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/about.pt:24
 msgid "For more information:"
-msgstr ""
-
-#: /src/schooltool/app/browser/templates/about.pt:27
-msgid "Website"
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/about.pt:28
@@ -909,13 +1188,9 @@ msgstr ""
 msgid "Edit site preferences"
 msgstr ""
 
-#: /src/schooltool/app/browser/templates/cal_atom.pt:21
-msgid "Events for"
-msgstr "Acara untuk"
-
 #. Default: ""
-#.  "This is an Atom formatted XML site feed. It is intended to be viewed\n"
-#.  "      in a Newsreader or syndicated to another site. Please visit"
+#. "This is an Atom formatted XML site feed. It is intended to be viewed\n"
+#. "      in a Newsreader or syndicated to another site. Please visit"
 #: /src/schooltool/app/browser/templates/cal_atom.pt:42
 msgid "atom_description"
 msgstr ""
@@ -938,18 +1213,13 @@ msgstr ""
 msgid "Validate my Atom feed"
 msgstr ""
 
-#: /src/schooltool/app/browser/templates/calendar_macros.pt:115
-msgid "Jump To ..."
-msgstr "Lompat Ke ..."
-
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:24
 msgid "View daily calendar"
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:24
-#, fuzzy
 msgid "Daily"
-msgstr "Hari"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:30
 msgid "View weekly calendar"
@@ -961,14 +1231,12 @@ msgid "Weekly"
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:36
-#, fuzzy
 msgid "View monthly calendar"
-msgstr "Kalendar Bulanan untu %s"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:42
-#, fuzzy
 msgid "Yearly"
-msgstr "Tahun"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:42
 msgid "View yearly calendar"
@@ -1010,14 +1278,6 @@ msgstr ""
 #: /src/schooltool/app/browser/templates/default_report_template.pt:35
 msgid "Page ${page_number}"
 msgstr ""
-
-#: /src/schooltool/app/browser/templates/event_add.pt:137
-msgid "Event information"
-msgstr "Maklumat acara"
-
-#: /src/schooltool/app/browser/templates/event_add.pt:143
-msgid "Event details"
-msgstr "Perincian acara"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:197
 msgid "Book Resources"
@@ -1088,18 +1348,6 @@ msgstr ""
 msgid "Title:"
 msgstr ""
 
-#: /src/schooltool/app/browser/templates/event_booking.pt:22
-msgid "Starts:"
-msgstr "Bermula:"
-
-#: /src/schooltool/app/browser/templates/event_booking.pt:26
-msgid "Ends:"
-msgstr "Tamat:"
-
-#: /src/schooltool/app/browser/templates/event_booking.pt:30
-msgid "This is a recurring event!"
-msgstr "Acara ini berulang!"
-
 #: /src/schooltool/app/browser/templates/event_booking.pt:38
 msgid "Booked resources"
 msgstr ""
@@ -1124,10 +1372,6 @@ msgstr ""
 msgid "Location: ${location}"
 msgstr ""
 
-#: /src/schooltool/app/browser/templates/index.pt:6
-msgid "Welcome to SchoolTool"
-msgstr "Selamat datang ke SchoolTool"
-
 #: /src/schooltool/app/browser/templates/login.pt:13
 msgid ""
 "You are not allowed to access this page. You can click on the back button in "
@@ -1147,10 +1391,6 @@ msgstr ""
 #: /src/schooltool/app/browser/templates/login.pt:35
 msgid "User Information"
 msgstr ""
-
-#: /src/schooltool/app/browser/templates/login.pt:57
-msgid "L"
-msgstr "L"
 
 #: /src/schooltool/app/browser/templates/login.pt:57
 msgid "Log in"
@@ -1232,30 +1472,30 @@ msgstr ""
 msgid ""
 "Each section description's first row contains the <strong>course id</strong> "
 "and the <strong>instructor id</strong> for the new section. Then a number of "
-"rows, each containing a <strong>day id</strong> and a <strong>period id</"
-"strong>, follows. The list of period descriptions is terminated by three "
+"rows, each containing a <strong>day id</strong> and a <strong>period "
+"id</strong>, follows. The list of period descriptions is terminated by three "
 "asterisks ('***') in the first column. After the terminator, any number of "
 "<strong>person ids</strong> may follow, the denoted persons will be added to "
 "the section as learners."
 msgstr ""
 
 #. Default: ""
-#.  "\"three-day\"\n"
-#.  "\"\",\"\",\"\"\n"
-#.  "\"philosophy\",\"lorch\"\n"
-#.  "\"Monday\",\"A\"\n"
-#.  "\"Monday\",\"B\"\n"
-#.  "\"Tuesday\",\"C\"\n"
-#.  "\"***\"\n"
-#.  "\"johnny\"\n"
-#.  "\"billy\"\n"
-#.  "\"\"\n"
-#.  "\"literature\",\"guzman\"\n"
-#.  "\"Wednesday\",\"B\"\n"
-#.  "\"Wednesday\",\"C\"\n"
-#.  "\"***\"\n"
-#.  "\"johnny\"\n"
-#.  "\"pete\""
+#. "\"three-day\"\n"
+#. "\"\",\"\",\"\"\n"
+#. "\"philosophy\",\"lorch\"\n"
+#. "\"Monday\",\"A\"\n"
+#. "\"Monday\",\"B\"\n"
+#. "\"Tuesday\",\"C\"\n"
+#. "\"***\"\n"
+#. "\"johnny\"\n"
+#. "\"billy\"\n"
+#. "\"\"\n"
+#. "\"literature\",\"guzman\"\n"
+#. "\"Wednesday\",\"B\"\n"
+#. "\"Wednesday\",\"C\"\n"
+#. "\"***\"\n"
+#. "\"johnny\"\n"
+#. "\"pete\""
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:56
 msgid ""
 "\n"
@@ -1289,24 +1529,17 @@ msgstr ""
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:83
 msgid ""
 "Note that only ids of objects are to be used in the file, not titles. If a "
-"row ends with empty cells (e.g., <em>\"philosophy\",\"lorch\",\"\",\"\"</"
-"em>), those cells will be discarded. You may separate section descriptions "
-"by more than one line. In the list of learners, only the first column "
-"containing the person ids is processed, the other columns are ignored. You "
-"can import the same data several times without any side effects."
+"row ends with empty cells (e.g., "
+"<em>\"philosophy\",\"lorch\",\"\",\"\"</em>), those cells will be discarded. "
+"You may separate section descriptions by more than one line. In the list of "
+"learners, only the first column containing the person ids is processed, the "
+"other columns are ignored. You can import the same data several times "
+"without any side effects."
 msgstr ""
-
-#: /src/schooltool/app/configure.zcml:336
-msgid "Security (General)"
-msgstr "Sekuriti (Am)"
 
 #: /src/schooltool/app/configure.zcml:351
 msgid "Booking Resources"
 msgstr ""
-
-#: /src/schooltool/app/help/admin.pt:6
-msgid "SchoolTool Administration"
-msgstr "Pentadbiran SchoolTool"
 
 #: /src/schooltool/app/help/admin.pt:8
 msgid ""
@@ -1334,17 +1567,13 @@ msgid ""
 "calendars available to you. This might be a long list.</p> <p>The "
 "\"SchoolTool site-wide calendar\" is intended to be used as the official "
 "public calendar of the school.</p> <h3>How do I...</h3> <ul> "
-"<li><strong>Select or unselect several individual calendars of one type:</"
-"strong> If you press the <code>Ctrl</code> button on your keyboard while you "
-"select calendars from a list with your mouse, you can select multiple "
-"calendars.</li> <li><strong>Select a range of calendars of one type:</"
-"strong> If you press the <code>Shift</code> key while clicking on calendars, "
-"you can select a range.</li> </ul>"
+"<li><strong>Select or unselect several individual calendars of one "
+"type:</strong> If you press the <code>Ctrl</code> button on your keyboard "
+"while you select calendars from a list with your mouse, you can select "
+"multiple calendars.</li> <li><strong>Select a range of calendars of one "
+"type:</strong> If you press the <code>Shift</code> key while clicking on "
+"calendars, you can select a range.</li> </ul>"
 msgstr ""
-
-#: /src/schooltool/app/help/calendaring.pt:6
-msgid "Calendaring in SchoolTool"
-msgstr "Penggunaan Calendar dalam SchoolTool"
 
 #: /src/schooltool/app/help/calendaring.pt:8
 msgid ""
@@ -1362,8 +1591,8 @@ msgid ""
 "immediately above the calendar table. Allows you to navigate forward or "
 "backward in time, or to return to the current time.</li> "
 "<li><strong>Calendar title:</strong> immediately above the calendar "
-"navigation bar, lists the owner of this calendar and the date for this \"page"
-"\" of the calendar.</li> <li><strong>Left sidebar:</strong> for all "
+"navigation bar, lists the owner of this calendar and the date for this "
+"\"page\" of the calendar.</li> <li><strong>Left sidebar:</strong> for all "
 "calendars, this contains a <code>Jump to...</code> section containing menus "
 "and links to allow you to quickly navigate to a specific month, year or "
 "date. <br /> If you are logged in and viewing your own calendar, you will "
@@ -1404,12 +1633,12 @@ msgid ""
 "Event Information form.</li> <li><strong>Show or hide events in one of the "
 "calendars listed under <code>Calendars</code>:</strong> check or uncheck the "
 "box under <code>Cal</code> and click <code>Apply</code>.</li> "
-"<li><strong>Adding or removing calendars to the <code>Calendars</code> list:"
-"</strong> click on the <code>More...</code> button.</li> <li><strong>access "
-"a iCal format version of the calendar:</strong>: Select <code>Open in iCal</"
-"code> from the Action menu.</li> <li><strong>Access an Atom feed version of "
-"the calendar: </strong> append <code>/atom.xml</code> to the calendar's URL."
-"</li> </ul>"
+"<li><strong>Adding or removing calendars to the <code>Calendars</code> "
+"list:</strong> click on the <code>More...</code> button.</li> "
+"<li><strong>access a iCal format version of the calendar:</strong>: Select "
+"<code>Open in iCal</code> from the Action menu.</li> <li><strong>Access an "
+"Atom feed version of the calendar: </strong> append <code>/atom.xml</code> "
+"to the calendar's URL.</li> </ul>"
 msgstr ""
 
 #: /src/schooltool/app/help/event_add.pt:12
@@ -1419,13 +1648,6 @@ msgid ""
 "and check the <code>Book Resources</code> checkbox at the bottom of the page."
 msgstr ""
 
-#: /src/schooltool/app/help/event_add.pt:6
-#: /src/schooltool/app/help/event_add.pt:9
-#: /src/schooltool/app/browser/configure.zcml:524
-#: /src/schooltool/app/help/configure.zcml:77
-msgid "Add Event"
-msgstr "Tambah Acara"
-
 #: /src/schooltool/app/help/event_edit.pt:10
 #: /src/schooltool/app/help/event_add.pt:10
 msgid "This form has a few issues:"
@@ -1433,8 +1655,8 @@ msgstr ""
 
 #: /src/schooltool/app/help/event_edit.pt:12
 msgid ""
-"If you need to edit a resource reservation, click the <code>Book resources</"
-"code> link at the bottom of the form."
+"If you need to edit a resource reservation, click the <code>Book "
+"resources</code> link at the bottom of the form."
 msgstr ""
 
 #: /src/schooltool/app/help/event_edit.pt:14
@@ -1493,30 +1715,27 @@ msgstr ""
 msgid ""
 "<h1>Monthly Calendar</h1> <p>This is the monthly view of a calendar. It "
 "might be your calendar, or it might be the calendar of another person, group "
-"or resource in your school. <a href=\"/++help++/schooltool/calendaring"
-"\">More calendaring help...</a></p> <h3>How do I...</h3> <ul> "
-"<li><strong>View an individual day or event in more detail:</strong> click "
-"on the appropriate day on the calendar.</li> <li><strong>View an individual "
-"week:</strong> Click on the appropriate week number in blue in the leftmost "
-"column of the calendar.</li> <li><strong>Create an event:</strong> select "
-"<code>New Event</code> from the <code>Actions</code> menu.</li> "
-"<li><strong>Show or hide events in one of the calendars listed under "
-"<code>Calendars</code>:</strong> check or uncheck the box under <code>Cal</"
-"code> and click <code>Apply</code>.</li> <li><strong>Adding or removing "
-"calendars to the <code>Calendars</code> list:</strong> click on the "
-"<code>More...</code> button.</li> <li><strong>Make weeks start on the "
-"correct day:</strong> the first day of the week varies in different parts of "
-"the world. If SchoolTool isn't set up correctly for you, click on your name "
-"in the red bar at the top of the page. Then click on the <code>Actions</"
-"code> menu and select <code>Change Preferences</code>. Pick the correct "
-"\"Week starts on\" day and hit <code>Apply</code>.</li> <li><strong>Access a "
-"iCal format version of the calendar:</strong>: select <code>Open in iCal</"
-"code> from the Action menu.</li> </ul>"
+"or resource in your school. <a "
+"href=\"/++help++/schooltool/calendaring\">More calendaring help...</a></p> "
+"<h3>How do I...</h3> <ul> <li><strong>View an individual day or event in "
+"more detail:</strong> click on the appropriate day on the calendar.</li> "
+"<li><strong>View an individual week:</strong> Click on the appropriate week "
+"number in blue in the leftmost column of the calendar.</li> "
+"<li><strong>Create an event:</strong> select <code>New Event</code> from the "
+"<code>Actions</code> menu.</li> <li><strong>Show or hide events in one of "
+"the calendars listed under <code>Calendars</code>:</strong> check or uncheck "
+"the box under <code>Cal</code> and click <code>Apply</code>.</li> "
+"<li><strong>Adding or removing calendars to the <code>Calendars</code> "
+"list:</strong> click on the <code>More...</code> button.</li> "
+"<li><strong>Make weeks start on the correct day:</strong> the first day of "
+"the week varies in different parts of the world. If SchoolTool isn't set up "
+"correctly for you, click on your name in the red bar at the top of the page. "
+"Then click on the <code>Actions</code> menu and select <code>Change "
+"Preferences</code>. Pick the correct \"Week starts on\" day and hit "
+"<code>Apply</code>.</li> <li><strong>Access a iCal format version of the "
+"calendar:</strong>: select <code>Open in iCal</code> from the Action "
+"menu.</li> </ul>"
 msgstr ""
-
-#: /src/schooltool/app/help/org.pt:6
-msgid "SchoolTool Organization"
-msgstr "Organisasi SchoolTool"
 
 #: /src/schooltool/app/help/org.pt:8
 msgid ""
@@ -1533,16 +1752,16 @@ msgid ""
 "the links at the left hand side of the red bar show you where you are in "
 "SchoolTool's object hierarchy. Note that this doesn't necessarily lead you "
 "back to where you came from, but is handy for taking you from more specific "
-"to more general parts of the application.</li> <li><strong>Your name</"
-"strong> (if you're logged in): clicking on your name takes you to a simple "
-"dashboard of relevant links. From this page you can also use the "
-"<code>Actions</code> menu to change preferences and other personal settings."
-"</li> <li><strong>Log in/out:</strong> this logs you in or out. It is a good "
-"idea to log out when you aren't using SchoolTool.</li> <li><strong>Help:</"
-"strong> if there is a help file for the page you're looking at, you'll see "
-"this link.</li> </ul> <li><strong>Menus</strong></li> <ul> "
-"<li><strong>Navigation:</strong> this menu gives you some basic options for "
-"accessing different parts of SchoolTool, such as the index of persons or "
+"to more general parts of the application.</li> <li><strong>Your "
+"name</strong> (if you're logged in): clicking on your name takes you to a "
+"simple dashboard of relevant links. From this page you can also use the "
+"<code>Actions</code> menu to change preferences and other personal "
+"settings.</li> <li><strong>Log in/out:</strong> this logs you in or out. It "
+"is a good idea to log out when you aren't using SchoolTool.</li> "
+"<li><strong>Help:</strong> if there is a help file for the page you're "
+"looking at, you'll see this link.</li> </ul> <li><strong>Menus</strong></li> "
+"<ul> <li><strong>Navigation:</strong> this menu gives you some basic options "
+"for accessing different parts of SchoolTool, such as the index of persons or "
 "courses. What you see here depends on your permissions in the system.</li> "
 "<li><strong>Action:</strong> this menu contains a variety of things that you "
 "can do on the current page. The entries in this menu change considerably "
@@ -1552,11 +1771,11 @@ msgid ""
 "school's site, usually the calendar for the school.</li> "
 "<li><strong>Calendar day/week/month/year views:</strong> if you are viewing "
 "a calendar, you will find icons in the upper right hand corner that will "
-"allow you to switch between calendar views.</li> <li><strong>Devmode menu:</"
-"strong> if you are a site administrator and you've enabled \"devmode\" in "
-"schooltool.conf, you will see a special menu in the upper right hand corner "
-"of the site. You should disable devmode in any production server.</li> </ul> "
-"</ul>"
+"allow you to switch between calendar views.</li> <li><strong>Devmode "
+"menu:</strong> if you are a site administrator and you've enabled "
+"\"devmode\" in schooltool.conf, you will see a special menu in the upper "
+"right hand corner of the site. You should disable devmode in any production "
+"server.</li> </ul> </ul>"
 msgstr ""
 
 #: /src/schooltool/app/help/weekly_calendar.pt:6
@@ -1576,17 +1795,17 @@ msgid ""
 "for the event you can edit it.</li> <li><strong>Create an event:</strong> "
 "select the day the event starts and create the event in the daily view.</li> "
 "<li><strong>Show or hide events in one of the calendars listed under "
-"<code>Calendars</code>:</strong> check or uncheck the box under <code>Cal</"
-"code> and click <code>Apply</code>.</li> <li><strong>Adding or removing "
-"calendars to the <code>Calendars</code> list:</strong> click on the "
+"<code>Calendars</code>:</strong> check or uncheck the box under "
+"<code>Cal</code> and click <code>Apply</code>.</li> <li><strong>Adding or "
+"removing calendars to the <code>Calendars</code> list:</strong> click on the "
 "<code>More...</code> button.</li> <li><strong>Make the calendar start on the "
 "correct day:</strong> the first day of the week varies in different parts of "
 "the world. If SchoolTool isn't set up correctly for you, click on your name "
-"in the red bar at the top of the page. Then click on the <code>Actions</"
-"code> menu and select <code>Change Preferences</code>. Pick the correct "
-"\"Week starts on\" day and hit <code>Apply</code>.</li> <li><strong>Access a "
-"iCal format version of the calendar:</strong>: select <code>Open in iCal</"
-"code> from the Action menu.</li> </ul>"
+"in the red bar at the top of the page. Then click on the "
+"<code>Actions</code> menu and select <code>Change Preferences</code>. Pick "
+"the correct \"Week starts on\" day and hit <code>Apply</code>.</li> "
+"<li><strong>Access a iCal format version of the calendar:</strong>: select "
+"<code>Open in iCal</code> from the Action menu.</li> </ul>"
 msgstr ""
 
 #: /src/schooltool/app/help/yearly_calendar.pt:6
@@ -1602,24 +1821,25 @@ msgid ""
 "calendaring help...</a></p> <h3>How do I...</h3> <ul> <li><strong>Know which "
 "days contain events: if the day has a blue background, there is at least one "
 "event that day.</strong></li> <li><strong>View an individual day in more "
-"detail:</strong> click on the day.</li> <li><strong>View an individual month:"
-"</strong> click on the name of the month.</li> <li><strong>Create an event:</"
-"strong> select the day the event starts and create the event in the daily "
-"view.</li> <li><strong>Show or hide events in one of the calendars listed "
-"under <code>Calendars</code>:</strong> check or uncheck the box under "
+"detail:</strong> click on the day.</li> <li><strong>View an individual "
+"month:</strong> click on the name of the month.</li> <li><strong>Create an "
+"event:</strong> select the day the event starts and create the event in the "
+"daily view.</li> <li><strong>Show or hide events in one of the calendars "
+"listed under <code>Calendars</code>:</strong> check or uncheck the box under "
 "<code>Cal</code> and click <code>Apply</code>.</li> <li><strong>Adding or "
 "removing calendars to the <code>Calendars</code> list:</strong> click on the "
 "<code>More...</code> button.</li> <li><strong>Make the calendar start on the "
 "correct day:</strong> the first day of the week varies in different parts of "
 "the world. If SchoolTool isn't set up correctly for you, click on your name "
-"in the red bar at the top of the page. Then click on the <code>Actions</"
-"code> menu and select <code>Change Preferences</code>. Pick the correct "
-"\"Week starts on\" day and hit <code>Apply</code>.</li> <li><strong>Access a "
-"iCal format version of the calendar:</strong>: select <code>Open in iCal</"
-"code> from the Action menu.</li> </ul>"
+"in the red bar at the top of the page. Then click on the "
+"<code>Actions</code> menu and select <code>Change Preferences</code>. Pick "
+"the correct \"Week starts on\" day and hit <code>Apply</code>.</li> "
+"<li><strong>Access a iCal format version of the calendar:</strong>: select "
+"<code>Open in iCal</code> from the Action menu.</li> </ul>"
 msgstr ""
 
-#: /src/schooltool/app/interfaces.py:137 /src/schooltool/app/interfaces.py:148
+#: /src/schooltool/app/interfaces.py:137
+#: /src/schooltool/app/interfaces.py:148
 msgid ""
 "The name for the school or organization running\n"
 "            this server.  This will be displayed on the public calendar, "
@@ -1627,19 +1847,11 @@ msgid ""
 "            bottom of all pages and in the page title."
 msgstr ""
 
-#: /src/schooltool/app/interfaces.py:153
-msgid "Front Page Calendar"
-msgstr "Kalendar Muka Depan"
-
 #: /src/schooltool/app/interfaces.py:154
 msgid ""
 "Display site-wide calendar as the front page of the\n"
 "            site."
 msgstr ""
-
-#: /src/schooltool/app/interfaces.py:171
-msgid "Show timetables"
-msgstr "Lihatkan jadual-jadual"
 
 #: /src/schooltool/app/interfaces.py:172
 msgid ""
@@ -1654,7 +1866,8 @@ msgstr ""
 msgid "Form input is not a file object"
 msgstr ""
 
-#: /src/schooltool/app/interfaces.py:44 /src/schooltool/app/interfaces.py:48
+#: /src/schooltool/app/interfaces.py:44
+#: /src/schooltool/app/interfaces.py:48
 msgid "Invalid integer data"
 msgstr ""
 
@@ -1709,7 +1922,8 @@ msgstr ""
 msgid "Cannot resolve plugin action order:\n"
 msgstr ""
 
-#: /src/schooltool/app/main.py:565 /src/schooltool/app/main.py:609
+#: /src/schooltool/app/main.py:565
+#: /src/schooltool/app/main.py:609
 #: /src/schooltool/app/main.py:612
 msgid "%s: %s"
 msgstr ""
@@ -1721,10 +1935,6 @@ msgstr ""
 #: /src/schooltool/app/main.py:578
 msgid "%s: daemon mode not supported on your operating system."
 msgstr ""
-
-#: /src/schooltool/app/main.py:604
-msgid "Reading configuration from %s"
-msgstr "Membaca Konfigurasi dari %s"
 
 #: /src/schooltool/app/main.py:707
 msgid "Startup time: %.3f sec real, %.3f sec CPU"
@@ -1788,9 +1998,8 @@ msgid "Members of the group."
 msgstr ""
 
 #: /src/schooltool/app/security.py:308
-#, fuzzy
 msgid "Assigned leaders."
-msgstr "Ketua-ketua yang ada"
+msgstr ""
 
 #. Default: ""
 #: /src/schooltool/app/security.py:352
@@ -1806,18 +2015,16 @@ msgstr ""
 #: /src/schooltool/course/security.zcml:149
 #: /src/schooltool/person/security.zcml:136
 #: /src/schooltool/group/security.zcml:94
-#, fuzzy
 msgid "Change calendar"
-msgstr "Kalendar"
+msgstr ""
 
 #: /src/schooltool/app/security.zcml:69
 msgid "Everyone can view the application calendar."
 msgstr ""
 
 #: /src/schooltool/app/security.zcml:77
-#, fuzzy
 msgid "SchoolTool application"
-msgstr "Organisasi SchoolTool"
+msgstr ""
 
 #: /src/schooltool/app/security.zcml:80
 msgid "Access"
@@ -1831,9 +2038,8 @@ msgstr ""
 #: /src/schooltool/course/security.zcml:141
 #: /src/schooltool/person/security.zcml:128
 #: /src/schooltool/group/security.zcml:86
-#, fuzzy
 msgid "View calendar"
-msgstr "iCalendar"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/configure.zcml:143
 msgid "New Text Field"
@@ -1892,13 +2098,6 @@ msgstr ""
 msgid "Duplicate username: ${username}"
 msgstr ""
 
-#: /src/schooltool/basicperson/browser/csvimport.py:77
-#: /src/schooltool/basicperson/browser/person.py:109
-#: /src/schooltool/demographics/browser/personform.py:281
-#: /src/schooltool/person/browser/csvimport.py:71
-msgid "Names cannot begin with '+' or '@' or contain '/'"
-msgstr "Nama tidak boleh dimulai dengan '+' atau '@' atau mengandungi '/'"
-
 #: /src/schooltool/basicperson/browser/demographics.py:133
 msgid "Add new Field"
 msgstr ""
@@ -1918,7 +2117,8 @@ msgstr ""
 #: /src/schooltool/person/browser/person.py:180
 #: /src/schooltool/schoolyear/browser/schoolyear.py:209
 #: /src/schooltool/schoolyear/browser/schoolyear.py:222
-#: /src/schooltool/skin/form.py:84 /src/schooltool/term/browser/term.py:175
+#: /src/schooltool/skin/form.py:84
+#: /src/schooltool/term/browser/term.py:175
 #: /src/schooltool/term/browser/term.py:246
 #: /src/schooltool/timetable/browser/event.py:87
 #: /src/schooltool/timetable/browser/templates/ttwizard_period_order2.pt:41
@@ -1936,14 +2136,6 @@ msgstr ""
 #: /src/schooltool/basicperson/browser/demographics.py:212
 msgid "Change information for ${field_title}"
 msgstr ""
-
-#: /src/schooltool/basicperson/browser/person.py:105
-msgid "This username is already in use!"
-msgstr "Nama pengguna ini sudah pun dipakai!"
-
-#: /src/schooltool/basicperson/browser/person.py:144
-msgid "Add new person"
-msgstr "Tambah pengguna baru"
 
 #: /src/schooltool/basicperson/browser/person.py:164
 msgid "Passwords do not match"
@@ -1984,11 +2176,6 @@ msgstr ""
 msgid "Group"
 msgstr ""
 
-#: /src/schooltool/basicperson/browser/person.py:55
-#: /src/schooltool/demographics/interfaces.py:209
-msgid "Advisor"
-msgstr "Penasihat"
-
 #: /src/schooltool/basicperson/browser/person.py:60
 #: /src/schooltool/basicperson/browser/person.py:61
 #: /src/schooltool/demographics/browser/personform.py:254
@@ -2003,14 +2190,6 @@ msgstr "Penasihat"
 msgid "Username"
 msgstr ""
 
-#: /src/schooltool/basicperson/browser/person.py:65
-#: /src/schooltool/demographics/browser/personform.py:259
-#: /src/schooltool/person/browser/person.py:159
-#: /src/schooltool/person/browser/person.py:290
-#: /src/schooltool/app/browser/templates/login.pt:44
-msgid "Password"
-msgstr "Kata Kunci"
-
 #: /src/schooltool/basicperson/browser/person.py:69
 msgid "Confirm"
 msgstr ""
@@ -2019,33 +2198,6 @@ msgstr ""
 #: /src/schooltool/basicperson/browser/templates/demographics-view.pt:7
 msgid "Demographics Container"
 msgstr ""
-
-#: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:11
-#: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:11
-#: /src/schooltool/schoolyear/browser/templates/schoolyear.pt:11
-#: /src/schooltool/export/templates/import.pt:11
-#: /src/schooltool/contact/browser/templates/contacts_delete.pt:11
-#: /src/schooltool/person/browser/person_edit.pt:9
-#: /src/schooltool/person/browser/person-csvimport.pt:11
-#: /src/schooltool/person/browser/person_preferences.pt:9
-#: /src/schooltool/person/browser/person_container_delete.pt:11
-#: /src/schooltool/email/browser/templates/email_delete.pt:11
-#: /src/schooltool/email/browser/templates/email_container.pt:11
-#: /src/schooltool/skin/templates/table_container.pt:11
-#: /src/schooltool/skin/templates/container.pt:11
-#: /src/schooltool/skin/templates/container_delete.pt:11
-#: /src/schooltool/skin/templates/simple_add.pt:5
-#: /src/schooltool/skin/templates/edit_form.pt:4
-#: /src/schooltool/skin/templates/simple_edit.pt:7
-#: /src/schooltool/skin/templates/generic_macros.pt:8
-#: /src/schooltool/skin/templates/error.pt:8
-#: /src/schooltool/skin/templates/notfound.pt:7
-#: /src/schooltool/app/browser/templates/cal_atom.pt:14
-#: /src/schooltool/app/help/schooltool.pt:6
-#: /src/schooltool/app/help/configure.zcml:6
-#: /src/schooltool/app/configure.zcml:330
-msgid "SchoolTool"
-msgstr "PeralatanSekolah"
 
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:26
 #: /src/schooltool/person/browser/person-csvimport.pt:26
@@ -2059,19 +2211,10 @@ msgid ""
 "name. An optional password <strong>may</strong> be included as well."
 msgstr ""
 
-#: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:33
-#: /src/schooltool/resource/browser/resource-csvimport.pt:29
-#: /src/schooltool/person/browser/person-csvimport.pt:33
-#: /src/schooltool/course/browser/templates/course-csvimport.pt:31
-#: /src/schooltool/group/browser/group-csvimport.pt:29
-#: /src/schooltool/app/browser/templates/timetables-csvimport.pt:54
-msgid "Example:"
-msgstr "Umpamanya:"
-
 #. Default: ""
-#.  "jjones, Jimmy, Jones\n"
-#.  "jbjones, Jim Bob, Jones, r2m45J\n"
-#.  "howard, Howard, Jobs"
+#. "jjones, Jimmy, Jones\n"
+#. "jbjones, Jim Bob, Jones, r2m45J\n"
+#. "howard, Howard, Jobs"
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:35
 msgid ""
 "\n"
@@ -2092,28 +2235,6 @@ msgid ""
 "Of the three, only 'jbjones' has a password ('r2m45J') and will be able to "
 "login to the system. Note that passwords must be sent in plain text."
 msgstr ""
-
-#: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:48
-#: /src/schooltool/resource/browser/resource-csvimport.pt:45
-#: /src/schooltool/person/browser/person-csvimport.pt:48
-#: /src/schooltool/course/browser/section-member-csvimport.pt:25
-#: /src/schooltool/course/browser/templates/course-csvimport.pt:59
-#: /src/schooltool/group/browser/group-csvimport.pt:45
-#: /src/schooltool/group/browser/group-member-csvimport.pt:25
-#: /src/schooltool/app/browser/templates/timetables-csvimport.pt:94
-msgid "Upload CSV File"
-msgstr "Muat Atas Fail CSV"
-
-#: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:50
-#: /src/schooltool/resource/browser/resource-csvimport.pt:47
-#: /src/schooltool/person/browser/person-csvimport.pt:50
-#: /src/schooltool/course/browser/section-member-csvimport.pt:27
-#: /src/schooltool/course/browser/templates/course-csvimport.pt:61
-#: /src/schooltool/group/browser/group-csvimport.pt:47
-#: /src/schooltool/group/browser/group-member-csvimport.pt:27
-#: /src/schooltool/app/browser/templates/timetables-csvimport.pt:96
-msgid "CSV File"
-msgstr "Fail CSV"
 
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:55
 #: /src/schooltool/resource/browser/resource-csvimport.pt:52
@@ -2213,20 +2334,6 @@ msgstr ""
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:116
 msgid "CSV Data"
 msgstr ""
-
-#. Default: "Apply"
-#: /src/schooltool/basicperson/browser/templates/person_edit.pt:10
-#: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:75
-#: /src/schooltool/export/templates/import.pt:66
-#: /src/schooltool/resource/browser/resource-csvimport.pt:72
-#: /src/schooltool/person/browser/person-csvimport.pt:75
-#: /src/schooltool/course/browser/section-member-csvimport.pt:52
-#: /src/schooltool/course/browser/templates/course-csvimport.pt:86
-#: /src/schooltool/group/browser/group-csvimport.pt:72
-#: /src/schooltool/group/browser/group-member-csvimport.pt:52
-#: /src/schooltool/app/browser/templates/timetables-csvimport.pt:122
-msgid "submit-button"
-msgstr "punat-hantar"
 
 #: /src/schooltool/basicperson/browser/templates/person_edit.pt:10
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:58
@@ -2386,9 +2493,8 @@ msgid "Create, delete demographics fields and change their order."
 msgstr ""
 
 #: /src/schooltool/basicperson/security.zcml:26
-#, fuzzy
 msgid "Edit fields"
-msgstr "Ubah Info"
+msgstr ""
 
 #: /src/schooltool/basicperson/security.zcml:34
 msgid "View user demographics"
@@ -2413,10 +2519,6 @@ msgstr ""
 #: /src/schooltool/commendation/commendation_add.pt:4
 msgid "Add Commendation"
 msgstr ""
-
-#: /src/schooltool/common/configure.zcml:100
-msgid "Add Info"
-msgstr "Tambah Info"
 
 #: /src/schooltool/common/configure.zcml:101
 msgid "Edit Calendar Overlays"
@@ -2461,16 +2563,6 @@ msgstr ""
 #: /src/schooltool/basicperson/browser/configure.zcml:199
 msgid "View"
 msgstr ""
-
-#: /src/schooltool/common/configure.zcml:99
-#: /src/schooltool/course/browser/configure.zcml:25
-#: /src/schooltool/course/browser/configure.zcml:180
-#: /src/schooltool/group/browser/configure.zcml:38
-#: /src/schooltool/resource/browser/configure.zcml:84
-#: /src/schooltool/resource/browser/configure.zcml:115
-#: /src/schooltool/resource/browser/configure.zcml:151
-msgid "Edit Info"
-msgstr "Ubah Info"
 
 #: /src/schooltool/contact/browser/configure.zcml:100
 msgid "Manage Contacts"
@@ -2568,13 +2660,6 @@ msgstr ""
 msgid "There are none to add."
 msgstr ""
 
-#. Default: "OK"
-#: /src/schooltool/contact/browser/templates/manage_contacts.pt:75
-#: /src/schooltool/course/browser/templates/edit_relationships.pt:84
-#: /src/schooltool/app/browser/templates/edit_relationships.pt:65
-msgid "ok-button"
-msgstr "Punat-ok"
-
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:18
 #: /src/schooltool/contact/browser/templates/contact_view.pt:16
 msgid "${relationship} of ${person}"
@@ -2603,7 +2688,8 @@ msgstr ""
 
 #: /src/schooltool/contact/contact.py:210
 #: /src/schooltool/course/browser/section.py:538
-#: /src/schooltool/course/section.py:283 /src/schooltool/course/section.py:293
+#: /src/schooltool/course/section.py:283
+#: /src/schooltool/course/section.py:293
 #: /src/schooltool/course/browser/templates/section.pt:79
 #: /src/schooltool/course/browser/templates/copy_sections.pt:93
 #: /src/schooltool/course/browser/templates/link_section.pt:69
@@ -2733,27 +2819,17 @@ msgid "Modify an external contact"
 msgstr ""
 
 #: /src/schooltool/contact/security.zcml:70
-#, fuzzy
 msgid "View user's contact information"
-msgstr "Maklumat acara"
+msgstr ""
 
 #: /src/schooltool/contact/security.zcml:78
-#, fuzzy
 msgid "Modify user's contact information"
-msgstr "Ubah Informasi Seksyen"
-
-#: /src/schooltool/course/browser/configure.zcml:10
-msgid "Add a Course"
-msgstr "Tambah Kursus"
+msgstr ""
 
 #: /src/schooltool/course/browser/configure.zcml:160
 #: /src/schooltool/course/browser/configure.zcml:170
 msgid "New Section"
 msgstr ""
-
-#: /src/schooltool/course/browser/configure.zcml:180
-msgid "Edit Section Information"
-msgstr "Ubah Informasi Seksyen"
 
 #: /src/schooltool/course/browser/configure.zcml:25
 msgid "Edit Course Information"
@@ -2762,14 +2838,6 @@ msgstr ""
 #: /src/schooltool/course/browser/configure.zcml:276
 msgid "Copy from prev. term"
 msgstr ""
-
-#: /src/schooltool/course/browser/configure.zcml:96
-msgid "New Course"
-msgstr "Kursus baru"
-
-#: /src/schooltool/course/browser/course.py:65
-msgid "Course index"
-msgstr "Indeks Kursus"
 
 #: /src/schooltool/course/browser/csvimport.py:131
 #: /src/schooltool/group/browser/csvimport.py:76
@@ -2781,12 +2849,6 @@ msgstr ""
 #: /src/schooltool/group/browser/csvimport.py:84
 msgid "\"${username}\" is not a valid username."
 msgstr ""
-
-#: /src/schooltool/course/browser/csvimport.py:50
-#: /src/schooltool/group/browser/csvimport.py:45
-#: /src/schooltool/resource/browser/csvimport.py:50
-msgid "Titles may not be empty"
-msgstr "Tajuk mungkin tidak kosong"
 
 #. Default: ""
 #: /src/schooltool/course/browser/csvimport.py:81
@@ -2852,10 +2914,6 @@ msgstr ""
 msgid "Current Students"
 msgstr ""
 
-#: /src/schooltool/course/browser/section.py:556
-msgid "Available Students"
-msgstr "Kum"
-
 #: /src/schooltool/course/browser/templates/copy_sections.pt:106
 msgid "Copied"
 msgstr ""
@@ -2920,10 +2978,10 @@ msgid ""
 msgstr ""
 
 #. Default: ""
-#.  "Ancient History, Pre-history through 1000 A.D.\n"
-#.  "US History,,us-history\n"
-#.  "World History, 1000 A.D. through the 20th century, history-world\n"
-#.  "Spanish,,,spanish-gov,5"
+#. "Ancient History, Pre-history through 1000 A.D.\n"
+#. "US History,,us-history\n"
+#. "World History, 1000 A.D. through the 20th century, history-world\n"
+#. "Spanish,,,spanish-gov,5"
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:33
 msgid ""
 "\n"
@@ -2951,10 +3009,6 @@ msgstr ""
 msgid "Upload schooltool courses as CSV"
 msgstr ""
 
-#: /src/schooltool/course/browser/templates/course.pt:71
-msgid "students"
-msgstr "Pelajar-pelajar"
-
 #: /src/schooltool/course/browser/templates/course.pt:9
 msgid "${course} course for ${schoolyear}"
 msgstr ""
@@ -2962,10 +3016,6 @@ msgstr ""
 #: /src/schooltool/course/browser/templates/course_container.pt:12
 msgid "Courses for ${schoolyear}"
 msgstr ""
-
-#: /src/schooltool/course/browser/templates/coursesviewlet.pt:4
-msgid "Sections Taught"
-msgstr "Seksyen diajar"
 
 #. Default: "Link"
 #: /src/schooltool/course/browser/templates/link_section.pt:130
@@ -2979,10 +3029,6 @@ msgstr ""
 #: /src/schooltool/course/browser/templates/link_section.pt:36
 msgid "There is no valid term in ${schoolyear} to pick a section from."
 msgstr ""
-
-#: /src/schooltool/course/browser/templates/section.pt:100
-msgid "edit individuals"
-msgstr "ubah individu-individu"
 
 #: /src/schooltool/course/browser/templates/section.pt:100
 msgid "Change the students in this section individually"
@@ -3004,20 +3050,12 @@ msgid "Next: ${course} -- ${section_title} for ${term}"
 msgstr ""
 
 #: /src/schooltool/course/browser/templates/section.pt:58
-msgid "edit info"
-msgstr "Ubah info"
-
-#: /src/schooltool/course/browser/templates/section.pt:58
 msgid "Change the name or description of this section."
 msgstr ""
 
 #: /src/schooltool/course/browser/templates/section.pt:86
 msgid "Change the instructors for this section."
 msgstr ""
-
-#: /src/schooltool/course/browser/templates/section.pt:86
-msgid "edit instructors"
-msgstr "ubah pengajar-pengajar"
 
 #: /src/schooltool/course/browser/templates/section_container.pt:39
 msgid "Section"
@@ -3074,20 +3112,20 @@ msgstr ""
 
 #: /src/schooltool/course/help/course_container.pt:10
 msgid ""
-"<h1>Courses</h1> <p>Use this page to organize courses listed in the system.</"
-"p> <h3>How do I...</h3> <ul> <li><strong>Look for for a course:</strong> Use "
-"the search box to the left of the <code>Find Now</code> button to look "
-"through the entire list of courses for the search criterion. The "
-"<code>Clear</code> button empties the search box of current entries.</li> "
-"<li><strong>Show a list of the different sections of a course:</strong> "
-"click on the name of the course.</li> <li><strong>Show the lists of students "
-"in a particular class:</strong> Click on the <code>teacher -- course</code> "
-"link. The number of students is also listed next to the teacher and the "
-"course.</li> <li><strong>Navigate through the courses:</strong> Separate "
-"<q>batches</q> of the Course list can be accessed through the <code>Next 10</"
-"code> (and <code>Previous</code>) and links in the blue bar. A <code>Show "
-"All</code> button is also there to show all of the courses on a single page."
-"</li> </ul>"
+"<h1>Courses</h1> <p>Use this page to organize courses listed in the "
+"system.</p> <h3>How do I...</h3> <ul> <li><strong>Look for for a "
+"course:</strong> Use the search box to the left of the <code>Find Now</code> "
+"button to look through the entire list of courses for the search criterion. "
+"The <code>Clear</code> button empties the search box of current "
+"entries.</li> <li><strong>Show a list of the different sections of a "
+"course:</strong> click on the name of the course.</li> <li><strong>Show the "
+"lists of students in a particular class:</strong> Click on the <code>teacher "
+"-- course</code> link. The number of students is also listed next to the "
+"teacher and the course.</li> <li><strong>Navigate through the "
+"courses:</strong> Separate <q>batches</q> of the Course list can be accessed "
+"through the <code>Next 10</code> (and <code>Previous</code>) and links in "
+"the blue bar. A <code>Show All</code> button is also there to show all of "
+"the courses on a single page.</li> </ul>"
 msgstr ""
 
 #: /src/schooltool/course/interfaces.py:102
@@ -3157,9 +3195,8 @@ msgid "Instructors of a person in any of his sections."
 msgstr ""
 
 #: /src/schooltool/course/section.py:317
-#, fuzzy
 msgid "Learners"
-msgstr "Ketua-ketua"
+msgstr ""
 
 #: /src/schooltool/course/section.py:318
 msgid "Students of the section."
@@ -3258,22 +3295,11 @@ msgstr ""
 msgid "Sections"
 msgstr ""
 
-#: /src/schooltool/dashboard/term.pt:16 /src/schooltool/term/security.zcml:19
+#: /src/schooltool/dashboard/term.pt:16
+#: /src/schooltool/term/security.zcml:19
 #: /src/schooltool/term/help/configure.zcml:18
 msgid "Terms"
 msgstr ""
-
-#: /src/schooltool/dashboard/term.pt:4
-#: /src/schooltool/course/browser/templates/copy_sections.pt:86
-#: /src/schooltool/course/browser/templates/link_section.pt:62
-#: /src/schooltool/course/browser/templates/section_container.pt:36
-#: /src/schooltool/course/browser/templates/link_to_courses.pt:1
-#: /src/schooltool/course/help/course_container.pt:7
-#: /src/schooltool/app/browser/templates/index.pt:12
-#: /src/schooltool/course/security.zcml:73
-#: /src/schooltool/course/help/configure.zcml:8
-msgid "Courses"
-msgstr "Kursus-kursus"
 
 #: /src/schooltool/demographics/browser/configure.zcml:156
 msgid "Schooltool Person Menu"
@@ -3330,13 +3356,6 @@ msgstr ""
 #: /src/schooltool/demographics/browser/demographics_macros.pt:4
 msgid "N"
 msgstr ""
-
-#: /src/schooltool/demographics/browser/nameinfo_view.pt:11
-#: /src/schooltool/person/browser/person.pt:11
-#: /src/schooltool/person/browser/home.pt:11
-#: /src/schooltool/course/browser/templates/course.pt:52
-msgid "photo"
-msgstr "Gambar"
 
 #. Default: ""
 #: /src/schooltool/demographics/browser/personform.py:149
@@ -3629,7 +3648,8 @@ msgid "Cell phone"
 msgstr ""
 
 #: /src/schooltool/demographics/interfaces.py:288
-#: /src/schooltool/resource/interfaces.py:55 /src/schooltool/note/notes.pt:2
+#: /src/schooltool/resource/interfaces.py:55
+#: /src/schooltool/note/notes.pt:2
 #: /src/schooltool/note/configure.zcml:94
 msgid "Notes"
 msgstr ""
@@ -3759,9 +3779,8 @@ msgid "Username used for optional SMTP authentication."
 msgstr ""
 
 #: /src/schooltool/email/browser/email.py:113
-#, fuzzy
 msgid "Current Password"
-msgstr "Tahun ini"
+msgstr ""
 
 #: /src/schooltool/email/browser/email.py:114
 msgid "Current password to authenticate to the SMTP server."
@@ -3769,9 +3788,8 @@ msgstr ""
 
 #: /src/schooltool/email/browser/email.py:118
 #: /src/schooltool/email/interfaces.py:104
-#, fuzzy
 msgid "New Password"
-msgstr "Kata Kunci"
+msgstr ""
 
 #: /src/schooltool/email/browser/email.py:119
 #: /src/schooltool/email/interfaces.py:105
@@ -3801,9 +3819,8 @@ msgid "Change Email Settings"
 msgstr ""
 
 #: /src/schooltool/email/browser/email.py:194
-#, fuzzy
 msgid "Unset"
-msgstr "Hingga"
+msgstr ""
 
 #: /src/schooltool/email/browser/email.py:207
 #: /src/schooltool/email/browser/email.py:340
@@ -3833,9 +3850,8 @@ msgstr ""
 #: /src/schooltool/email/browser/email.py:217
 #: /src/schooltool/email/browser/email.py:357
 #: /src/schooltool/email/interfaces.py:70
-#, fuzzy
 msgid "Created on"
-msgstr "Bulan ini"
+msgstr ""
 
 #: /src/schooltool/email/browser/email.py:218
 #: /src/schooltool/email/interfaces.py:71
@@ -3893,7 +3909,8 @@ msgstr ""
 msgid "Retry"
 msgstr ""
 
-#: /src/schooltool/email/browser/email.py:284 /src/schooltool/note/notes.pt:17
+#: /src/schooltool/email/browser/email.py:284
+#: /src/schooltool/note/notes.pt:17
 #: /src/schooltool/timetable/browser/templates/timetable_list.pt:28
 msgid "Delete"
 msgstr ""
@@ -3916,9 +3933,8 @@ msgid "Send Email"
 msgstr ""
 
 #: /src/schooltool/email/browser/email.py:488
-#, fuzzy
 msgid "Send"
-msgstr "Ahad"
+msgstr ""
 
 #. Default: ""
 #: /src/schooltool/email/browser/email.py:78
@@ -3958,9 +3974,8 @@ msgstr ""
 #. Default: "Retry"
 #: /src/schooltool/email/browser/templates/email_container.pt:39
 #: /src/schooltool/email/browser/templates/email_container.pt:44
-#, fuzzy
 msgid "retry-button"
-msgstr "Punat-ok"
+msgstr ""
 
 #: /src/schooltool/email/browser/templates/email_container.pt:54
 msgid "There are no messages queued."
@@ -3979,9 +3994,8 @@ msgid "Recipient address"
 msgstr ""
 
 #: /src/schooltool/email/interfaces.py:58
-#, fuzzy
 msgid "Status"
-msgstr "Bermula:"
+msgstr ""
 
 #: /src/schooltool/email/interfaces.py:59
 msgid "Code for the status of the message"
@@ -4004,9 +4018,8 @@ msgid "Parameter value"
 msgstr ""
 
 #: /src/schooltool/email/interfaces.py:74
-#, fuzzy
 msgid "Sent on"
-msgstr "Bulan ini"
+msgstr ""
 
 #: /src/schooltool/email/interfaces.py:75
 msgid "Date and time when the message was sent"
@@ -4122,15 +4135,15 @@ msgstr ""
 
 #: /src/schooltool/group/browser/group-csvimport.pt:24
 msgid ""
-"CSV data <strong>must</strong> include a group title and <strong>may</"
-"strong> include an optional group description. Any extra information will be "
-"discarded."
+"CSV data <strong>must</strong> include a group title and "
+"<strong>may</strong> include an optional group description. Any extra "
+"information will be discarded."
 msgstr ""
 
 #. Default: ""
-#.  "LUG, Linux Users Group\n"
-#.  "Chess Club\n"
-#.  "Sports Club, After-school sports club, <em>text after a second comma</em>"
+#. "LUG, Linux Users Group\n"
+#. "Chess Club\n"
+#. "Sports Club, After-school sports club, <em>text after a second comma</em>"
 #: /src/schooltool/group/browser/group-csvimport.pt:31
 msgid ""
 "\n"
@@ -4218,21 +4231,22 @@ msgstr ""
 
 #: /src/schooltool/group/help/group_container.pt:8
 msgid ""
-"<h1>Groups</h1> <p>Use this page to keep track of <b>groups</b> of Persons.</"
-"p> <p><b>Groups</b> that have been added are not part of the essential "
-"groups (<b>Teachers</b>, <b>Students</b>, <b>Site Managers</b>, <b>School "
-"Administrators</b>, or <b>Clerks</b>). They can be selected by the checkbox "
-"next to them and removed by pressing the <b>Delete</b> button at the bottom "
-"of the page.</p> <h3>How do I...</h3> <ul> <li><b>Look for for a group:</b> "
-"Use the search box to the left of the <code>Find Now</code> button to look "
-"through the entire list of groups for the search criterion. The <code>Clear</"
-"code> button empties the search box of current entries.</li> <li><b>View the "
-"persons in a certain group:</b> Click on the name of the group.</li> "
-"<li><b>Sort the list:</b> Click on the <code>Title</code> header to change "
-"the order of groups from descending to ascending order, and vice versa.</li> "
-"<li><strong>Browse for a group:</strong> Use the <code>Next 10</code> (and "
-"<code>Previous</code>) and links in the blue bar.</li> <li><strong>Show all "
-"groups:</strong> Click <code>Show All</code> in the blue bar.</li> </ul>"
+"<h1>Groups</h1> <p>Use this page to keep track of <b>groups</b> of "
+"Persons.</p> <p><b>Groups</b> that have been added are not part of the "
+"essential groups (<b>Teachers</b>, <b>Students</b>, <b>Site Managers</b>, "
+"<b>School Administrators</b>, or <b>Clerks</b>). They can be selected by the "
+"checkbox next to them and removed by pressing the <b>Delete</b> button at "
+"the bottom of the page.</p> <h3>How do I...</h3> <ul> <li><b>Look for for a "
+"group:</b> Use the search box to the left of the <code>Find Now</code> "
+"button to look through the entire list of groups for the search criterion. "
+"The <code>Clear</code> button empties the search box of current "
+"entries.</li> <li><b>View the persons in a certain group:</b> Click on the "
+"name of the group.</li> <li><b>Sort the list:</b> Click on the "
+"<code>Title</code> header to change the order of groups from descending to "
+"ascending order, and vice versa.</li> <li><strong>Browse for a "
+"group:</strong> Use the <code>Next 10</code> (and <code>Previous</code>) and "
+"links in the blue bar.</li> <li><strong>Show all groups:</strong> Click "
+"<code>Show All</code> in the blue bar.</li> </ul>"
 msgstr ""
 
 #: /src/schooltool/group/interfaces.py:41
@@ -4288,7 +4302,8 @@ msgstr ""
 msgid "Body of the note."
 msgstr ""
 
-#: /src/schooltool/note/interfaces.py:50 /src/schooltool/note/note_add.pt:24
+#: /src/schooltool/note/interfaces.py:50
+#: /src/schooltool/note/note_add.pt:24
 msgid "Privacy"
 msgstr ""
 
@@ -4345,9 +4360,9 @@ msgid ""
 msgstr ""
 
 #. Default: ""
-#.  "jjones, Jimmy Jones\n"
-#.  "jbjones, Jim Bob Jones, r2m45J\n"
-#.  "howard, Howard"
+#. "jjones, Jimmy Jones\n"
+#. "jbjones, Jim Bob Jones, r2m45J\n"
+#. "howard, Howard"
 #: /src/schooltool/person/browser/person-csvimport.pt:35
 msgid ""
 "\n"
@@ -4537,9 +4552,8 @@ msgid "Everyone can view info of persons"
 msgstr ""
 
 #: /src/schooltool/person/security.zcml:107
-#, fuzzy
 msgid "Change password"
-msgstr "Kata Kunci"
+msgstr ""
 
 #: /src/schooltool/person/security.zcml:114
 msgid "View preferences"
@@ -4568,9 +4582,8 @@ msgid "User"
 msgstr ""
 
 #: /src/schooltool/person/security.zcml:172
-#, fuzzy
 msgid "Calendar is public"
-msgstr "Kalendar (Harian)"
+msgstr ""
 
 #: /src/schooltool/person/security.zcml:172
 msgid "Everybody, if the calendar is made public in user preferences."
@@ -4648,15 +4661,15 @@ msgstr ""
 
 #: /src/schooltool/resource/browser/resource-csvimport.pt:24
 msgid ""
-"CSV data <strong>must</strong> include a resource title and <strong>may</"
-"strong> include an optional resource description. Any extra information will "
-"be discarded."
+"CSV data <strong>must</strong> include a resource title and "
+"<strong>may</strong> include an optional resource description. Any extra "
+"information will be discarded."
 msgstr ""
 
 #. Default: ""
-#.  "PRJ302, Overhead Projector #302\n"
-#.  "Main Auditorium,,location\n"
-#.  "LC-805, Laptop Computer #805"
+#. "PRJ302, Overhead Projector #302\n"
+#. "Main Auditorium,,location\n"
+#. "LC-805, Laptop Computer #805"
 #: /src/schooltool/resource/browser/resource-csvimport.pt:31
 msgid ""
 "\n"
@@ -4822,9 +4835,8 @@ msgid "Everyone can view resource calendars."
 msgstr ""
 
 #: /src/schooltool/resource/security.zcml:50
-#, fuzzy
 msgid "Reservations"
-msgstr "Generasi-Generasi"
+msgstr ""
 
 #: /src/schooltool/resource/security.zcml:50
 msgid ""
@@ -4934,14 +4946,12 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/schoolyear/browser/schoolyear.py:148
-#, fuzzy
 msgid "First day"
-msgstr "Jumaat"
+msgstr ""
 
 #: /src/schooltool/schoolyear/browser/schoolyear.py:151
-#, fuzzy
 msgid "Last day"
-msgstr "hari bekerja terakhir"
+msgstr ""
 
 #: /src/schooltool/schoolyear/browser/schoolyear.py:170
 msgid "Add new school year"
@@ -4994,9 +5004,8 @@ msgid "View Access Rights"
 msgstr ""
 
 #: /src/schooltool/securitypolicy/browser/control.py:105
-#, fuzzy
 msgid "School administration"
-msgstr "Pentadbiran SchoolTool"
+msgstr ""
 
 #: /src/schooltool/securitypolicy/browser/control.py:96
 msgid "Enabled"
@@ -5077,8 +5086,8 @@ msgstr ""
 #: /src/schooltool/skin/templates/error.pt:15
 msgid ""
 "An internal server error has occurred. This most likely means that you have "
-"found a bug in SchoolTool. Please report it on <a href=\"http://issues."
-"schooltool.org\">the issue tracker</a>."
+"found a bug in SchoolTool. Please report it on <a "
+"href=\"http://issues.schooltool.org\">the issue tracker</a>."
 msgstr ""
 
 #: /src/schooltool/skin/templates/error.pt:19
@@ -5146,9 +5155,8 @@ msgstr ""
 
 #. Default: "Update"
 #: /src/schooltool/skin/templates/view_macros.pt:155
-#, fuzzy
 msgid "update-button"
-msgstr "punat-hantar"
+msgstr ""
 
 #: /src/schooltool/skin/templates/view_macros.pt:155
 msgid "U"
@@ -5157,9 +5165,8 @@ msgstr ""
 #. Default: "Apply"
 #: /src/schooltool/skin/templates/view_macros.pt:161
 #: /src/schooltool/skin/templates/view_macros.pt:167
-#, fuzzy
 msgid "apply-button"
-msgstr "Punat-ok"
+msgstr ""
 
 #: /src/schooltool/skin/templates/view_macros.pt:161
 #: /src/schooltool/skin/templates/view_macros.pt:167
@@ -5174,9 +5181,8 @@ msgstr ""
 #: /src/schooltool/skin/templates/view_macros.pt:174
 #: /src/schooltool/skin/templates/view_macros.pt:180
 #: /src/schooltool/skin/templates/view_macros.pt:187
-#, fuzzy
 msgid "add-button"
-msgstr "Punat-ok"
+msgstr ""
 
 #: /src/schooltool/skin/templates/view_macros.pt:194
 msgid "Shortcut: Alt-D"
@@ -5359,7 +5365,8 @@ msgid "You have not selected any items."
 msgstr ""
 
 #: /src/schooltool/term/browser/templates/term_add.pt:34
-msgid "Please specify which days are school days, and which days are holidays."
+msgid ""
+"Please specify which days are school days, and which days are holidays."
 msgstr ""
 
 #: /src/schooltool/term/browser/templates/term_add.pt:41
@@ -5464,12 +5471,12 @@ msgid ""
 "school, but you cannot express a relationship between terms.</p> <h3>How do "
 "I...</h3> <ul> <li><strong>Add a term:</strong> Select <code>New Term</code> "
 "from the <code>Actions</code> menu.</li> <li><strong>Edit a term:</strong> "
-"Click on the term. Then select <code>Edit</code> from the <code>Actions</"
-"code> menu.</li> <li><strong>Delete a term:</strong> Check the box next to "
-"the name of the term and click <code>Delete</code>. Only delete terms if you "
-"have made a mistake while creating them but you have not used them yet. You "
-"should <strong>not</strong> delete terms simply because they are over, or "
-"you will lose important data.</li> </ul>"
+"Click on the term. Then select <code>Edit</code> from the "
+"<code>Actions</code> menu.</li> <li><strong>Delete a term:</strong> Check "
+"the box next to the name of the term and click <code>Delete</code>. Only "
+"delete terms if you have made a mistake while creating them but you have not "
+"used them yet. You should <strong>not</strong> delete terms simply because "
+"they are over, or you will lose important data.</li> </ul>"
 msgstr ""
 
 #: /src/schooltool/term/term.py:306
@@ -5531,9 +5538,8 @@ msgid "School Timetables"
 msgstr ""
 
 #: /src/schooltool/timetable/browser/schema.py:269
-#, fuzzy
 msgid "Duration in minutes"
-msgstr "Jenis Tempoh"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/schema.py:316
 msgid "Please select a value"
@@ -5575,8 +5581,8 @@ msgstr ""
 msgid ""
 "Third, define the time and duration of periods when they fall on certain "
 "days of week. Use one of the the following format: <tt>HH:MM</tt> (also, "
-"don't forget to specify the duration in the text box below) or <tt>HH:MM-HH:"
-"MM</tt> (when you want to specify both endpoints explicitly, e.g., 9:30-"
+"don't forget to specify the duration in the text box below) or <tt>HH:MM-"
+"HH:MM</tt> (when you want to specify both endpoints explicitly, e.g., 9:30-"
 "10:15). It is not necessary to define all periods for all days of week, "
 "omissions will just cause that period to be skipped if it happens to fall on "
 "that day of week. If the list of periods is not up to date with the changes "
@@ -5685,8 +5691,8 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/calendar_overlay.pt:66
 msgid ""
-"<a href=\"#\" onclick=\"$('#more_overlays').toggle();return false;\">More..."
-"</a>"
+"<a href=\"#\" onclick=\"$('#more_overlays').toggle();return "
+"false;\">More...</a>"
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/calendar_overlay.pt:95
@@ -5887,25 +5893,10 @@ msgstr ""
 msgid "change-button"
 msgstr ""
 
-#: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:15
-#: /src/schooltool/app/browser/templates/event.pt:15
-msgid "All day event"
-msgstr "acara seharian"
-
-#: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:21
-#: /src/schooltool/app/browser/templates/event.pt:20
-msgid "This is a recurring event."
-msgstr "Acara yang berulang"
-
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:54
 #: /src/schooltool/app/browser/templates/event.pt:53
 msgid "edit event"
 msgstr ""
-
-#: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:54
-#: /src/schooltool/app/browser/templates/event.pt:53
-msgid "Change the details of this event"
-msgstr "Tukar perincian acara tersebut"
 
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:65
 #: /src/schooltool/app/browser/templates/event.pt:64
@@ -5916,11 +5907,6 @@ msgstr ""
 #: /src/schooltool/app/browser/templates/event.pt:72
 msgid "edit resources"
 msgstr ""
-
-#: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:81
-#: /src/schooltool/app/browser/templates/event.pt:80
-msgid "delete event"
-msgstr "Buang acara"
 
 #: /src/schooltool/timetable/browser/templates/timetable_list.pt:4
 #: /src/schooltool/timetable/browser/templates/timetable_list.pt:11
@@ -6008,8 +5994,8 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:454
 msgid ""
-"Enter start and end times for each slot on each day, one slot (HH:MM - HH:"
-"MM) per line."
+"Enter start and end times for each slot on each day, one slot (HH:MM - "
+"HH:MM) per line."
 msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:530
@@ -6092,14 +6078,12 @@ msgid "Please indicate the homeroom period(s) for each day:"
 msgstr ""
 
 #: /src/schooltool/timetable/security.zcml:16
-#, fuzzy
 msgid "School timetables"
-msgstr "Lihatkan jadual-jadual"
+msgstr ""
 
 #: /src/schooltool/timetable/security.zcml:46
-#, fuzzy
 msgid "Assign timetables"
-msgstr "Lihatkan jadual-jadual"
+msgstr ""
 
 #: /src/schooltool/timetable/security.zcml:54
 msgid "Change schedule"
