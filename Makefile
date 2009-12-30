@@ -54,7 +54,7 @@ release: bin/buildout
 
 .PHONY: move-release
 move-release:
-	mv -v dist/$(PACKAGE)-*.tar.gz /home/ftp/pub/schooltool/1.2/dev
+	mv -v dist/$(PACKAGE)-*.tar.gz /home/ftp/pub/schooltool/1.4/dev
 
 .PHONY: coverage
 coverage: build
