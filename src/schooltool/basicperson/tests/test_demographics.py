@@ -92,7 +92,7 @@ def doctest_getPersonDemographics():
         >>> app = ISchoolToolApplication(None)
         >>> john = BasicPerson("johansen", "John", "Johansen")
         >>> IDemographics(john)
-        <schooltool.basicperson.demographics.PersonDemographicsData object at ...>
+        <...basicperson.demographics.PersonDemographicsData object at ...>: {}
 
     The demographics object is being stored in the demographics object
     container and if we try to access it again we will get the same

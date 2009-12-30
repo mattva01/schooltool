@@ -64,7 +64,7 @@ from zope.component import getAdapters
 from zope.interface import directlyProvidedBy
 from zope.app.intid import IntIds
 from zope.app.intid.interfaces import IIntIds
-from zope.app.component.interfaces import ISite
+from zope.location.interfaces import ISite
 from zope.app.component.site import LocalSiteManager
 from zope.server.http.wsgihttpserver import WSGIHTTPServer
 from zope.server.http.commonaccesslogger import CommonAccessLogger
@@ -141,14 +141,8 @@ def die(message, exitcode=1):
     sys.exit(exitcode)
 
 
-class SchoolToolPublisherApplication(WSGIPublisherApplication):
-
-    def __init__(self, db, factory=HTTPPublicationRequestFactory):
-        self.requestFactory = factory(db)
-
-
 schooltool_server = ServerType(WSGIHTTPServer,
-                               SchoolToolPublisherApplication,
+                               WSGIPublisherApplication,
                                CommonAccessLogger,
                                8080, True)
 

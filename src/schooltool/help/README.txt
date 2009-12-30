@@ -102,7 +102,7 @@ view:
 Also, if the help namespace is looked up on the person, we should get the same
 result, since the 'index.html' view is the default view:
 
-  >>> from zope.component.interfaces import IDefaultViewName
+  >>> from zope.publisher.interfaces import IDefaultViewName
   >>> zope.component.provideAdapter(
   ...     'index.html', (IPerson, TestRequest), IDefaultViewName)
 

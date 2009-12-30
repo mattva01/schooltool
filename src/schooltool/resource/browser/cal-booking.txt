@@ -84,7 +84,10 @@ and set up a calendar for Frog:
     ... END:VCALENDAR
     ... """, handle_errors=False)
     HTTP/1.1 200 Ok
+    Cache-Control: no-cache="Set-Cookie,Set-Cookie2"
     Content-Length: 0
+    Expires: ...
+    Pragma: no-cache
     Set-Cookie: ...
     <BLANKLINE>
 
@@ -372,7 +375,6 @@ Let's do some event clashing, first we set up some overlapping events:
     ... """, handle_errors=False)
     HTTP/1.1 200 Ok
     Content-Length: 0
-    Set-Cookie: ...
     <BLANKLINE>
 
 Now let's allow frog access all resources:
@@ -434,7 +436,6 @@ The boss decides to take a mud bath, so he creates an event.
     ... """, handle_errors=False)
     HTTP/1.1 200 Ok
     Content-Length: 0
-    Set-Cookie: ...
     <BLANKLINE>
 
 Stork should have access to the resources:

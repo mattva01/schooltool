@@ -110,7 +110,8 @@ def doctest_browser_NoteAddView():
         >>> request = TestRequest(form={'field.title': u'Red Stapler',
         ...                             'field.body': u"He won't give it back",
         ...                             'field.privacy': u"public",
-        ...                             'UPDATE_SUBMIT': 'Add'})
+        ...                             'UPDATE_SUBMIT': 'Add'},
+        ...                       environ={'HTTP_HOST': 'localhost'})
         >>> request.setPrincipal(owner)
         >>> view = NoteAddView(owner, request)
         >>> view.update()

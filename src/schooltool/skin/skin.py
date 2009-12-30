@@ -24,7 +24,7 @@ from zope.component import getAdapter, getMultiAdapter, subscribers
 from zope.interface import Interface, implements
 from zope.schema import Object
 from zope.i18n.interfaces import IUserPreferredLanguages
-from zope.publisher.interfaces.browser import ILayer, IDefaultBrowserLayer
+from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.viewlet.interfaces import IViewletManager
 from zope.viewlet.manager import ViewletManagerBase
@@ -233,12 +233,12 @@ class NavigationViewletEditCrowd(Crowd):
         return crowd.contains(principal)
 
 
-class ISchoolToolLayer(ILayer, IFormLayer, IBrowserRequest):
+class ISchoolToolLayer(IDefaultBrowserLayer, IFormLayer):
     """SchoolTool layer."""
 
 
-class ISchoolToolSkin(ISchoolToolLayer, IDefaultBrowserLayer):
-    """The SchoolTool skin"""
+class ISchoolToolSkin(ISchoolToolLayer):
+    """The same SchoolTool layer. BBB naming."""
 
 
 class LanguageSelectorViewlet(BrowserView):

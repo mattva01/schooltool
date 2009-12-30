@@ -57,7 +57,7 @@ SchoolTool authentication utility
 SchoolTool is a possible site:
 
     >>> from zope.interface.verify import verifyObject
-    >>> from zope.app.component.interfaces import IPossibleSite, ISite
+    >>> from zope.location.interfaces import ISite, IPossibleSite
 
     >>> from schooltool.app.app import SchoolToolApplication
     >>> app = SchoolToolApplication()
