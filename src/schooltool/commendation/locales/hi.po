@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2009-12-01 17:28+0000\n"
+"POT-Creation-Date: 2009-05-19 16:33+0000\n"
 "PO-Revision-Date: 2009-12-24 16:10+0000\n"
 "Last-Translator: nipunreddevil <nipunreddevil@gmail.com>\n"
 "Language-Team: Hindi <hi@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "X-Launchpad-Export-Date: 2009-12-25 04:38+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
-#: /src/schooltool/commendation/browser.py:68
+#: /src/schooltool/commendation/browser.py:70
 #: /src/schooltool/commendation/commendation.py:72
 msgid "<unknown>"
 msgstr "<अज्ञात>"

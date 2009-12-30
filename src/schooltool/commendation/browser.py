@@ -19,6 +19,7 @@
 """Commendation Browser Views
 """
 __docformat__ = 'reStructuredText'
+
 from zope import annotation
 from zope.app import container
 from zope.app import security
@@ -31,6 +32,7 @@ from zope.component import getUtility
 from schooltool.commendation import interfaces, commendation
 from schooltool.commendation.interfaces import _
 from schooltool.app import app
+
 
 # This is a simple view class that provides the information of a commendation
 # in a user-readable format.
