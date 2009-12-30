@@ -24,7 +24,7 @@ import urllib
 
 from persistent import Persistent
 from zope.component import getUtility, queryUtility
-from zope.app.component import getNextUtility
+from zope.component import getNextUtility
 from zope.app.container.contained import Contained
 from zope.location.interfaces import ILocation
 from zope.app.security.interfaces import IAuthentication, ILoginPassword
@@ -37,7 +37,7 @@ from zope.security.checker import ProxyFactory
 from zope.publisher.browser import FileUpload
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.location.interfaces import ISite
-from zope.app.component.site import LocalSiteManager
+from zope.site import LocalSiteManager
 from zope.traversing.browser.absoluteurl import absoluteURL
 from zope.traversing.api import traverse
 from schooltool.app.app import getSchoolToolApplication

@@ -37,8 +37,8 @@ from zope.interface import implements, implementsOnly
 from zope.annotation.interfaces import IAttributeAnnotatable, IAnnotations
 from zope.app.applicationcontrol.interfaces import IApplicationControl
 from zope.app.applicationcontrol.applicationcontrol import applicationController
-from zope.app.component.hooks import getSite
-from zope.app.component.site import SiteManagerContainer
+from zope.site.hooks import getSite
+from zope.site import SiteManagerContainer
 from zope.app.container import sample
 from zope.app.container.contained import NameChooser
 from zope.app.container.interfaces import INameChooser

@@ -92,7 +92,7 @@ Let's provide the location of auth:
     >>> plugin = PersonContainerAuthenticationPlugin()
     >>> provideUtility(plugin, ISchoolToolAuthenticationPlugin)
 
-    >>> from zope.app.component.hooks import setSite
+    >>> from zope.site.hooks import setSite
     >>> setSite(app)
 
 Now, we get our local authentication service:

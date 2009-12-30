@@ -25,7 +25,7 @@ import unittest
 import transaction
 from zope.interface import implements, Interface
 from zope.component import provideAdapter, provideUtility
-from zope.app.component.hooks import setSite
+from zope.site.hooks import setSite
 from zope.app.testing.functional import FunctionalTestSetup
 from zope.app.testing import setup, ztapi
 from zope.app.form.interfaces import IInputWidget
