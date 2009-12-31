@@ -37,7 +37,6 @@ def doctest_getNotes():
 
     We need to set up Zope 3 annotations
 
-        >>> from zope.app.testing import setup
         >>> setup.placelessSetUp()
         >>> setup.setUpAnnotations()
 
@@ -75,7 +74,7 @@ def doctest_browser_NoteAddView():
         >>> class FakeURL:
         ...     def __init__(self, context, request): pass
         ...     def __call__(self):
-        ...         return "http://localhost/frogpond/persons/milton"
+        ...         return "http://127.0.0.1/frogpond/persons/milton"
         >>> from schooltool.note.interfaces import IHaveNotes, INotes
         >>> from zope.traversing.browser.interfaces import IAbsoluteURL
         >>> provideAdapter(FakeURL,
@@ -110,8 +109,7 @@ def doctest_browser_NoteAddView():
         >>> request = TestRequest(form={'field.title': u'Red Stapler',
         ...                             'field.body': u"He won't give it back",
         ...                             'field.privacy': u"public",
-        ...                             'UPDATE_SUBMIT': 'Add'},
-        ...                       environ={'HTTP_HOST': 'localhost'})
+        ...                             'UPDATE_SUBMIT': 'Add'})
         >>> request.setPrincipal(owner)
         >>> view = NoteAddView(owner, request)
         >>> view.update()
