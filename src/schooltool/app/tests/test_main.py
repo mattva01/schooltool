@@ -117,7 +117,6 @@ def doctest_load_options():
     redirect stderr to stdout, because otherwise doctests will not see the
     output.
 
-        >>> import sys
         >>> old_stderr = sys.stderr
         >>> sys.stderr = sys.stdout
 
@@ -139,9 +138,6 @@ def doctest_load_options():
 
         >>> o.config.web in ([('', 48080)],          # Unix
         ...                  [('localhost', 48080)]) # Windows
-        True
-        >>> o.config.rest in ([('', 47001)],          # Unix
-        ...                  [('localhost', 47001)])  # Windows
         True
         >>> o.config.listen
         [('...', 123), ('10.20.30.40', 9999)]
@@ -341,7 +337,6 @@ def doctest_setLanguage():
 def doctest_setup():
     """Tests for setup()
 
-        >>> from zope.testing import cleanup
         >>> cleanup.setUp()
 
     setup() does everything except enter the main application loop:
@@ -361,7 +356,6 @@ def doctest_setup():
         ...         return DB(MappingStorage())
         >>> class ConfigStub:
         ...     web = []
-        ...     rest = []
         ...     listen = []
         ...     thread_pool_size = 1
         ...     database = DatabaseConfigStub()
@@ -464,7 +458,6 @@ def doctest_before_afterRun():
         ...         return DB(MappingStorage())
         >>> class ConfigStub:
         ...     web = []
-        ...     rest = []
         ...     listen = []
         ...     thread_pool_size = 1
         ...     database = DatabaseConfigStub()
@@ -539,7 +532,7 @@ def doctest_bootstrapSchoolTool():
 
     It is also a site
 
-        >>> from zope.app.component.interfaces import ISite
+        >>> from zope.location.interfaces import ISite
         >>> ISite.providedBy(app)
         True
 

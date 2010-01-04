@@ -21,7 +21,7 @@
   <include package="zope.contentprovider" />
   <include package="zope.viewlet" />
   <include package="zope.formlib" />
-  <include package="zope.app.keyreference" />
+  <include package="zope.keyreference" />
   <include package="zope.app.intid" />
   <include package="zope.app.catalog" />
   <include package="zope.app.file" />
@@ -31,6 +31,8 @@
   <include package="z3c.form" />
   <include package="z3c.formui" />
   <include package="z3c.macro"/>
+
+  <include package="zope.location" />
 
   <!-- set up an adapter from zope.i18n locale to a zope.ucol collator -->
 
@@ -57,18 +59,8 @@
   <!-- set up custom security policy -->
   <include package="schooltool.securitypolicy"/>
 
-  <!-- Load optionstorage -->
-
-  <include package="z3c.optionstorage" file="meta.zcml" />
-  <include package="z3c.optionstorage" />
-
-  <!-- Load key references -->
-
-  <include package="zope.app.keyreference" />
-
   <!-- Support Online Help -->
 
-  <include package="zope.app.renderer" file="meta.zcml" />
   <include package="zope.app.renderer" />
   <include package="zope.app.onlinehelp" file="meta.zcml" />
   <include package="zope.app.onlinehelp" />
@@ -80,7 +72,6 @@
       zcml:condition="have devmode">
     <include package="zope.app.apidoc" file="meta.zcml" />
     <include package="zope.app.preference" file="meta.zcml" />
-    <include package="zope.app.renderer" file="meta.zcml" />
     <include package="zope.app.apidoc" />
     <include package="zope.app.preference" />
     <include package="zope.app.renderer" />

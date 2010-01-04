@@ -4,9 +4,6 @@ Timetabling in SchoolTool
 This functional doctest demonstrates and tests SchoolTool's timetable
 browser views.
 
-We do most of the fixture setup through ReSTive views for now.  A lot of the
-code has been copied from rest/composite-timetables.txt.
-
 Overview
 --------
 
@@ -115,11 +112,7 @@ Add section timetables:
     >>> manager.getLink('Courses').click()
     >>> manager.getLink('Birding').click()
     >>> manager.getLink('Birding1').click()
-    >>> manager.getLink('Timetables').click()
-    >>> manager.getLink('Add Timetable').click()
-    >>> manager.getControl('Add').click()
-
-    >>> manager.getLink('2005-fall.schema1').click()
+    >>> manager.getLink('Schedule').click()
     >>> manager.getControl('C').click()
     >>> manager.getControl('Save').click()
 
@@ -127,11 +120,7 @@ Add section timetables:
     >>> manager.getLink('Courses').click()
     >>> manager.getLink('Birding').click()
     >>> manager.getLink('Birding2').click()
-    >>> manager.getLink('Timetables').click()
-    >>> manager.getLink('Add Timetable').click()
-    >>> manager.getControl('Add').click()
-
-    >>> manager.getLink('2005-fall.schema1').click()
+    >>> manager.getLink('Schedule').click()
     >>> manager.getControl('D').click()
     >>> manager.getControl('Save').click()
 

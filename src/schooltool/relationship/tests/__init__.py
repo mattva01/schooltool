@@ -31,6 +31,8 @@ SomeContained).
 
 from zope.app.testing import setup
 from zope.interface import implements
+from zope.location.pickling import LocationCopyHook
+from zope.component import provideAdapter
 from zope.annotation.interfaces import IAttributeAnnotatable
 from zope.app.container.contained import Contained
 
@@ -87,4 +89,6 @@ def setUpRelationships():
     from schooltool.relationship.interfaces import IRelationshipLinks
     from schooltool.relationship.annotatable import getRelationshipLinks
     provideAdapter(getRelationshipLinks, (IAnnotatable,), IRelationshipLinks)
+    provideAdapter(LocationCopyHook)
+
 

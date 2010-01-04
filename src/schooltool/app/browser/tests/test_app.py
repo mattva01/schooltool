@@ -199,7 +199,7 @@ def doctest_LoginView():
 
         >>> request = TestRequest(form={'username': 'frog',
         ...                             'password': 'pond',
-        ...                             'nexturl': 'http://host/path',
+        ...                             'nexturl': 'http://127.0.0.1/path',
         ...                             'LOGIN': 'Log in'})
         >>> request.setPrincipal(StubPrincipal())
         >>> view = View(app, request)
@@ -209,7 +209,19 @@ def doctest_LoginView():
         302
         >>> url = absoluteURL(app, request)
         >>> request.response.getHeader('Location')
-        'http://host/path'
+        'http://127.0.0.1/path'
+
+    But we cannot specify a different server.
+        >>> request = TestRequest(form={'username': 'frog',
+        ...                             'password': 'pond',
+        ...                             'nexturl': 'http://FAKE/path',
+        ...                             'LOGIN': 'Log in'})
+        >>> request.setPrincipal(StubPrincipal())
+        >>> view = View(app, request)
+        >>> content = view()
+        Traceback (most recent call last):
+        ...
+        ValueError: Untrusted redirect to host '...' not allowed.
 
     """
 

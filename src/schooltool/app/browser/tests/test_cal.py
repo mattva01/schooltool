@@ -125,6 +125,48 @@ class EventStub(object):
         self.__name__ = unique_id[::-1]
 
 
+def createEvent(dtstart, duration, title, **kw):
+    """Create a CalendarEvent.
+
+      >>> e1 = createEvent('2004-01-02 14:45:50', '5min', 'title')
+      >>> e1 == CalendarEvent(datetime(2004, 1, 2, 14, 45, 50),
+      ...                timedelta(minutes=5), 'title', unique_id=e1.unique_id)
+      True
+
+      >>> e2 = createEvent('2004-01-02 14:45', '3h', 'title')
+      >>> e2 == CalendarEvent(datetime(2004, 1, 2, 14, 45),
+      ...                timedelta(hours=3), 'title', unique_id=e2.unique_id)
+      True
+
+      >>> e3 = createEvent('2004-01-02', '2d', 'title')
+      >>> e3 == CalendarEvent(datetime(2004, 1, 2),
+      ...                timedelta(days=2), 'title', unique_id=e3.unique_id)
+      True
+
+    createEvent is very strict about the format of it arguments, and terse in
+    error reporting, but it's OK, as it is only used in unit tests.
+    """
+    from schooltool.calendar.utils import parse_datetimetz
+    if dtstart.count(':') == 0:         # YYYY-MM-DD
+        dtstart = parse_datetimetz(dtstart+' 00:00:00') # add hh:mm:ss
+    elif dtstart.count(':') == 1:       # YYYY-MM-DD HH:MM
+        dtstart = parse_datetimetz(dtstart+':00') # add seconds
+    else:                               # YYYY-MM-DD HH:MM:SS
+        dtstart = parse_datetimetz(dtstart)
+    dur = timedelta(0)
+    for part in duration.split('+'):
+        part = part.strip()
+        if part.endswith('d'):
+            dur += timedelta(days=int(part.rstrip('d')))
+        elif part.endswith('h'):
+            dur += timedelta(hours=int(part.rstrip('h')))
+        elif part.endswith('sec'):
+            dur += timedelta(seconds=int(part.rstrip('sec')))
+        else:
+            dur += timedelta(minutes=int(part.rstrip('min')))
+    return CalendarEvent(dtstart, dur, title, **kw)
+
+
 def doctest_ToCalendarTraverser():
     """Tests for CalendarOwnerTraverser.
 
@@ -695,50 +737,6 @@ def doctest_CalendarDay():
     """
 
 
-def createEvent(dtstart, duration, title, **kw):
-    """Create a CalendarEvent.
-
-      >>> from schooltool.app.cal import CalendarEvent
-      >>> e1 = createEvent('2004-01-02 14:45:50', '5min', 'title')
-      >>> e1 == CalendarEvent(datetime(2004, 1, 2, 14, 45, 50),
-      ...                timedelta(minutes=5), 'title', unique_id=e1.unique_id)
-      True
-
-      >>> e2 = createEvent('2004-01-02 14:45', '3h', 'title')
-      >>> e2 == CalendarEvent(datetime(2004, 1, 2, 14, 45),
-      ...                timedelta(hours=3), 'title', unique_id=e2.unique_id)
-      True
-
-      >>> e3 = createEvent('2004-01-02', '2d', 'title')
-      >>> e3 == CalendarEvent(datetime(2004, 1, 2),
-      ...                timedelta(days=2), 'title', unique_id=e3.unique_id)
-      True
-
-    createEvent is very strict about the format of it arguments, and terse in
-    error reporting, but it's OK, as it is only used in unit tests.
-    """
-    from schooltool.app.cal import CalendarEvent
-    from schooltool.calendar.utils import parse_datetimetz
-    if dtstart.count(':') == 0:         # YYYY-MM-DD
-        dtstart = parse_datetimetz(dtstart+' 00:00:00') # add hh:mm:ss
-    elif dtstart.count(':') == 1:       # YYYY-MM-DD HH:MM
-        dtstart = parse_datetimetz(dtstart+':00') # add seconds
-    else:                               # YYYY-MM-DD HH:MM:SS
-        dtstart = parse_datetimetz(dtstart)
-    dur = timedelta(0)
-    for part in duration.split('+'):
-        part = part.strip()
-        if part.endswith('d'):
-            dur += timedelta(days=int(part.rstrip('d')))
-        elif part.endswith('h'):
-            dur += timedelta(hours=int(part.rstrip('h')))
-        elif part.endswith('sec'):
-            dur += timedelta(seconds=int(part.rstrip('sec')))
-        else:
-            dur += timedelta(minutes=int(part.rstrip('min')))
-    return CalendarEvent(dtstart, dur, title, **kw)
-
-
 def registerCalendarSubscribers():
     """Register subscription adapter for listing calendars to display."""
     provideSubscriptionAdapter(CalendarListSubscriber,
@@ -847,7 +845,6 @@ class TestCalendarViewBase(unittest.TestCase):
                        (ISchoolToolApplication,), IApplicationPreferences)
 
         from zope.publisher.interfaces import IRequest
-        import zope.component
         from zope.interface import Interface
         class TestDateFormatterFullView( BrowserView ):
             """
@@ -856,10 +853,8 @@ class TestCalendarViewBase(unittest.TestCase):
             def __call__(self):
                 return unicode(self.context.strftime("%A, %B%e, %Y"))
 
-        zope.component.provideAdapter(TestDateFormatterFullView,
-                                      [date, IRequest], Interface,
-                                      name='fullDate')
-
+        provideAdapter(TestDateFormatterFullView,
+                       [date, IRequest], Interface, name='fullDate')
 
         request1 = TestRequest()
         request1.setPrincipal(PrincipalStub())
@@ -1123,11 +1118,7 @@ class TestCalendarViewBase(unittest.TestCase):
             >>> from schooltool.app.browser.cal import CalendarViewBase
             >>> from schooltool.app.cal import Calendar
 
-            >>> setup.placefulSetUp()
             >>> app = sbsetup.setUpSchoolToolSite()
-            >>> setup.setUpAnnotations()
-            >>> registerCalendarHelperViews()
-            >>> registerCalendarSubscribers()
             >>> sbsetup.setUpTimetabling()
             >>> setUpDateManagerStub(date(2005, 5, 13))
 
@@ -1947,7 +1938,7 @@ def doctest_CalendarEventAddView_add_validation():
         >>> view.update()
         u'An error occurred.'
         >>> view.errors
-        WidgetInputError: ('title', u'Title', )
+        WidgetInputError: ('title', u'Title', RequiredMissing())
         >>> view.error is None
         True
 
@@ -1997,7 +1988,7 @@ def doctest_CalendarEventAddView_add_validation():
         >>> view.update()
         u'An error occurred.'
         >>> view.errors
-        WidgetInputError: ('title', u'Title', )
+        WidgetInputError: ('title', u'Title', RequiredMissing())
         ConversionError: (u'Invalid time', None)
         >>> view.error is None
         True
@@ -2014,7 +2005,7 @@ def doctest_CalendarEventAddView_add_validation():
         >>> view.update()
         u'An error occurred.'
         >>> view.errors
-        WidgetInputError: ('title', u'Title', )
+        WidgetInputError: ('title', u'Title', RequiredMissing())
         ConversionError: (u'Invalid time', None)
         >>> view.error is None
         True
@@ -2411,7 +2402,7 @@ def doctest_CalendarEventAddView_cross_validation():
         >>> view.update()
         u'An error occurred.'
         >>> view.errors
-        WidgetInputError: ('interval', u'Repeat every', )
+        WidgetInputError: ('interval', u'Repeat every', RequiredMissing())
         >>> view.error is None
         True
 
@@ -2432,7 +2423,8 @@ def doctest_CalendarEventAddView_cross_validation():
         >>> view.update()
         u'An error occurred.'
         >>> view.errors
-        WidgetInputError: ('until', u'Repeat until', End date is earlier than start date)
+        WidgetInputError: ('until', u'Repeat until',
+            ConstraintNotSatisfied(u'End date is earlier than start date'))
         >>> view.error is None
         True
 
@@ -2762,8 +2754,8 @@ def doctest_CalendarEventEditView_updateForm():
         >>> view.update()
         u'An error occurred.'
         >>> print view.errors
-        WidgetInputError: ('start_date', u'Date', )
-        WidgetInputError: ('start_time', u'Time', )
+        WidgetInputError: ('start_date', u'Date', RequiredMissing())
+        WidgetInputError: ('start_time', u'Time', RequiredMissing())
         >>> print view.error
         None
 
@@ -3498,7 +3490,6 @@ class TestDailyCalendarView(unittest.TestCase):
         self.assertEquals(view.cursor, self.today)
 
         from zope.publisher.interfaces import IRequest
-        import zope.component
         from zope.interface import Interface
 
         class TestDateFormatterFullView( BrowserView ):
@@ -3508,8 +3499,8 @@ class TestDailyCalendarView(unittest.TestCase):
             def __call__(self):
                 return unicode(self.context.strftime("%A, %B%e, %Y"))
 
-        zope.component.provideAdapter(TestDateFormatterFullView,
-                                          [date, IRequest], Interface, name='fullDate')
+        provideAdapter(TestDateFormatterFullView,
+                       [date, IRequest], Interface, name='fullDate')
 
         view.request = TestRequest(form={'date': '2005-01-06'})
         view.update()

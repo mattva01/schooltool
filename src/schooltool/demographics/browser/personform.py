@@ -26,7 +26,6 @@ from zope.app.publisher.browser.menu import getMenu, BrowserMenu
 from zope.schema.interfaces import ITitledTokenizedTerm
 from zope.publisher.browser import BrowserView
 from zope.component import getUtility
-from zope.exceptions.interfaces import UserError
 from zope.traversing.browser.absoluteurl import absoluteURL
 
 from schooltool.group.interfaces import IGroupContainer
@@ -277,7 +276,7 @@ class PersonAddView(BasicForm):
         try:
             from zope.app.container.interfaces import INameChooser
             INameChooser(self.context).checkName(data['username'], None)
-        except UserError:
+        except ValueError:
             self.status = _("Names cannot begin with '+' or '@' or contain '/'")
             return None
 

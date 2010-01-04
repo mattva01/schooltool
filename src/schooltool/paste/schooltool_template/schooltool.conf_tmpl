@@ -28,7 +28,7 @@ site-definition ${abspath}/school.zcml
 #
 #   Specifies a certificate in PEM format which contains a certificate and
 #   private key for use in SSL connections.
-#   This is required to use listen_ssl
+#   This is required to use web_ssl
 #
 
 #

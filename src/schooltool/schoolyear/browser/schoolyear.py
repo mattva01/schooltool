@@ -21,7 +21,7 @@ Views for school years and school year container implementation
 """
 from zope.viewlet.viewlet import ViewletBase
 from zope.publisher.interfaces.browser import IBrowserRequest
-from zope.component import adapts
+from zope.component import adapts, getMultiAdapter
 from zope.security import checkPermission
 from zope.schema import Date, TextLine
 from zope.interface.exceptions import Invalid
@@ -64,8 +64,12 @@ class SchoolYearContainerAbsoluteURLAdapter(AbsoluteURL):
     adapts(ISchoolYearContainer, IBrowserRequest)
     implements(IAbsoluteURL)
 
-    def _getContextName(self, context):
-        return 'schoolyears'
+    def __str__(self):
+        app = ISchoolToolApplication(None)
+        url = str(getMultiAdapter((app, self.request), name='absolute_url'))
+        return url + '/schoolyears'
+
+    __call__ = __str__
 
 
 class SchoolYearAbsoluteURLAdapter(AbsoluteURL):

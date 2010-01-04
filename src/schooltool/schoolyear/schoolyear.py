@@ -23,7 +23,6 @@ import rwproperty
 
 from zope.proxy import sameProxiedObjects
 from zope.event import notify
-from zope.exceptions.interfaces import UserError
 from zope.component import queryUtility
 from zope.component import adapter
 from zope.component import adapts
@@ -191,9 +190,9 @@ class SchoolYear(BTreeContainer):
     def __setitem__(self, key, term):
         self.validateForOverlap(term)
         if term.first < self.first:
-            raise UserError("Term can't start before the school year starts!")
+            raise ValueError("Term can't start before the school year starts!")
         if term.last > self.last:
-            raise UserError("Term can't end after the school year ends!")
+            raise ValueError("Term can't end after the school year ends!")
         BTreeContainer.__setitem__(self, key, term)
 
 

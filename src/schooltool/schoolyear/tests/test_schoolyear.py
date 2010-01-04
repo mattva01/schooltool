@@ -323,12 +323,12 @@ def doctest_SchoolYear_terms_must_be_fully_contained():
         >>> sy['fall'] = Term("Fall", date(2006, 8, 31), date(2007, 1, 12))
         Traceback (most recent call last):
         ...
-        UserError: Term can't end after the school year ends!
+        ValueError: Term can't end after the school year ends!
 
         >>> sy['fall'] = Term("Fall", date(2006, 9, 1), date(2007, 7, 16))
         Traceback (most recent call last):
         ...
-        UserError: Term can't end after the school year ends!
+        ValueError: Term can't end after the school year ends!
 
     You can't work around these limmitations by modifying the term
     after it was added:

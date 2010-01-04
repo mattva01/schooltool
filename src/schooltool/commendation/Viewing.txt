@@ -47,12 +47,12 @@ list that is stored as an annotation on the SchoolToolApplication.
 Here is how it works:
 
   >>> from schooltool.app import app
-  >>> from zope.app.component import site
+  >>> from zope.site import LocalSiteManager
   >>> st = app.SchoolToolApplication()
-  >>> st.setSiteManager(site.LocalSiteManager(st))
+  >>> st.setSiteManager(LocalSiteManager(st))
 
-  >>> from zope.app.component import hooks
-  >>> hooks.setSite(st)
+  >>> from zope.site.hooks import setSite
+  >>> setSite(st)
 
   >>> from schooltool.commendation import commendation
   >>> comm = commendation.Commendation(u'good job', u'very good job!', u'group')

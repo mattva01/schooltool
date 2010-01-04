@@ -2,7 +2,7 @@
 Tests for generation scripts.
 """
 from zope.interface import implements
-from zope.app.keyreference.interfaces import IKeyReference
+from zope.keyreference.interfaces import IKeyReference
 from zope.app.testing.setup import setUpAnnotations
 from zope.app.publication.zopepublication import ZopePublication
 from zope.app.folder.folder import rootFolder

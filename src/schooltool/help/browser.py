@@ -34,6 +34,9 @@ from zope.publisher.interfaces.browser import IBrowserView
 from zope.app.onlinehelp.browser.tree import OnlineHelpTopicTreeView
 from zope.component import getMultiAdapter
 from zope.traversing.api import getName, getParent
+from zope.traversing.api import joinPath
+from zope.i18n import translate
+
 
 def sortById(x,y):
     return cmp(x.id, y.id)
@@ -89,6 +92,20 @@ class SchoolToolOnlineHelpTopicTreeView(OnlineHelpTopicTreeView):
         res.append('<ul>')
 
         return '\n'.join(res)
+
+    # This is a workaround for a bug in zope.app.onlinehelp
+    # See https://bugs.launchpad.net/schooltool/+bug/372606
+    def renderLink(self, topic):
+        """Render a href element."""
+        title = translate(topic.title, context=self.request,
+                default=topic.title)
+        if topic.parentPath:
+            url = joinPath(topic.parentPath, topic.id)
+        else:
+            url = topic.id
+        return '<a href="%s/++help++/%s">%s</a>\n' % ( 
+            self.request.getApplicationURL(), url, title)
+
 
 class ContextHelpView(BrowserView):
 

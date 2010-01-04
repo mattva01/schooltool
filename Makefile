@@ -1,63 +1,60 @@
 #!/usr/bin/make
-#
-# Makefile for SchoolTool
-#
+
+PACKAGE=schooltool
 
 BOOTSTRAP_PYTHON=python2.5
 INSTANCE_TYPE=schooltool
+BUILDOUT_FLAGS=
 
 .PHONY: all
 all: build
 
 .PHONY: build
-build:
-	test -f bin/buildout || $(MAKE) BOOTSTRAP_PYTHON=$(BOOTSTRAP_PYTHON) bootstrap
-	test -f bin/test || $(MAKE) buildout
-	test -d instance || $(MAKE) build-schooltool-instance
+build: bin/test
 
 .PHONY: bootstrap
-bootstrap:
+bootstrap bin/buildout:
 	$(BOOTSTRAP_PYTHON) bootstrap.py
 
 .PHONY: buildout
-buildout:
-	bin/buildout
+buildout bin/test: bin/buildout setup.py base.cfg buildout.cfg
+	bin/buildout $(BUILDOUT_FLAGS)
+	@touch --no-create bin/test
 
 .PHONY: update
-update: build
+update: bin/buildout
 	bzr up
-	bin/buildout -n
+	$(MAKE) buildout BUILDOUT_FLAGS=-n
 
 .PHONY: test
 test: build
 	bin/test -u
 
-.PHONY: testall
-testall: build
-	bin/test
-
 .PHONY: ftest
 ftest: build
 	bin/test -f
 
-.PHONY: build-schooltool-instance
-build-schooltool-instance:
+.PHONY: testall
+testall: build
+	bin/test --at-level 2
+
+instance:
+	$(MAKE) buildout
 	bin/make-schooltool-instance instance instance_type=$(INSTANCE_TYPE)
 
 .PHONY: run
-run: build
+run: build instance
 	bin/start-schooltool-instance instance
 
 .PHONY: release
-release:
-	echo -n `sed -e 's/\n//' version.txt.in` > version.txt
-	echo -n "_r" >> version.txt
-	bzr revno >> version.txt
+release: bin/buildout
+	echo -n `cat version.txt.in`_r`bzr revno` > version.txt
 	bin/buildout setup setup.py sdist
+	rm version.txt
 
 .PHONY: move-release
 move-release:
-	 mv dist/schooltool-*.tar.gz /home/ftp/pub/schooltool/releases/nightly
+	mv -v dist/$(PACKAGE)-*.tar.gz /home/ftp/pub/schooltool/1.4/dev
 
 .PHONY: coverage
 coverage: build
@@ -72,7 +69,7 @@ coverage-reports-html coverage/reports:
 	rm -rf coverage/reports
 	mkdir coverage/reports
 	bin/coverage coverage coverage/reports
-	ln -s schooltool.html coverage/reports/index.html
+	ln -s $(PACKAGE).html coverage/reports/index.html
 
 .PHONY: ftest-coverage
 ftest-coverage: build
@@ -87,7 +84,7 @@ ftest-coverage-reports-html ftest-coverage/reports:
 	rm -rf ftest-coverage/reports
 	mkdir ftest-coverage/reports
 	bin/coverage ftest-coverage ftest-coverage/reports
-	ln -s schooltool.html ftest-coverage/reports/index.html
+	ln -s $(PACKAGE).html ftest-coverage/reports/index.html
 
 .PHONY: clean
 clean:
@@ -99,13 +96,18 @@ clean:
 	find . -name '*.mo' -exec rm -f {} +
 	find . -name 'LC_MESSAGES' -exec rmdir -p --ignore-fail-on-non-empty {} +
 
+.PHONY: realclean
+realclean: clean
+	rm -rf eggs
+	rm -rf instance
+
 .PHONY: extract-translations
 extract-translations: build
-	bin/i18nextract --egg schooltool \
-	                --domain schooltool \
+	bin/i18nextract --egg $(PACKAGE) \
+	                --domain $(PACKAGE) \
 	                --zcml schooltool/common/translations.zcml \
 	                --output-file src/schooltool/locales/schooltool.pot
-	bin/i18nextract --egg schooltool \
+	bin/i18nextract --egg $(PACKAGE) \
 	                --domain schooltool.commendation \
 	                --zcml schooltool/commendation/translations.zcml \
 	                --output-file src/schooltool/commendation/locales/schooltool.commendation.pot
@@ -116,7 +118,7 @@ compile-translations:
 	locales=src/schooltool/locales; \
 	for f in $${locales}/*.po; do \
 	    mkdir -p $${f%.po}/LC_MESSAGES; \
-	    msgfmt -o $${f%.po}/LC_MESSAGES/schooltool.mo $$f;\
+	    msgfmt -o $${f%.po}/LC_MESSAGES/$(PACKAGE).mo $$f;\
 	done
 	locales=src/schooltool/commendation/locales; \
 	for f in $${locales}/*.po; do \
@@ -129,13 +131,13 @@ update-translations: extract-translations
 	set -e; \
 	locales=src/schooltool/locales; \
 	for f in $${locales}/*.po; do \
-	    msgmerge -qU $$f $${locales}/schooltool.pot ;\
+	    msgmerge -qU $$f $${locales}/$(PACKAGE).pot ;\
 	done
 	locales=src/schooltool/commendation/locales; \
 	for f in $${locales}/*.po; do \
 	    msgmerge -qU $$f $${locales}/schooltool.commendation.pot ;\
 	done
-	$(MAKE) PYTHON=$(PYTHON) compile-translations
+	$(MAKE) compile-translations
 
 .PHONY: ubuntu-environment
 ubuntu-environment:

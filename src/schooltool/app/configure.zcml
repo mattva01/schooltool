@@ -55,6 +55,8 @@
       provides=".interfaces.ISchoolToolApplication"
       factory=".app.getSchoolToolApplication" />
 
+  <adapter factory=".cal.expandedEventLocation" />
+
   <!-- Utilities -->
 
   <class class=".security.SchoolToolAuthenticationUtility">
@@ -366,8 +368,6 @@
   <!-- XXX: move the code to schooltool.app too -->
   <utility
       factory="schooltool.term.term.DateManagerUtility" />
-
-  <!-- Temporary refugees from rest configure.zcml -->
 
   <view
       for="zope.interface.Interface"
