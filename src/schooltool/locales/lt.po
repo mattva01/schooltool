@@ -5035,7 +5035,7 @@ msgstr "${schoolyear_title} (${start_date} &mdash; ${end_date})"
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear.pt:37
 msgid "${term_title} (${start_date} &mdash; ${end_date})"
-msgstr "${schoolyear_title} (${start_date} &mdash; ${end_date})"
+msgstr "${term_title} (${start_date} &mdash; ${end_date})"
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear.pt:49
 msgid "Add a new term"
