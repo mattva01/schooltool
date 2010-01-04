@@ -17,7 +17,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: SchoolTool development\n"
-"POT-Creation-Date: 2009-05-19 16:33+0000\n"
+"POT-Creation-Date: Mon Jan  4 15:41:27 2010\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Schooltool Development Team <schooltool-dev@schooltool.org>\n"
@@ -35,6 +35,11 @@ msgstr ""
 msgid "commendations"
 msgstr ""
 
+#: /src/schooltool/commendation/configure.zcml:82
+#: /src/schooltool/commendation/configure.zcml:92
+msgid "View Commendations"
+msgstr ""
+
 #: /src/schooltool/commendation/configure.zcml:100
 #: /src/schooltool/commendation/configure.zcml:110
 msgid "Add Commendation"
@@ -42,11 +47,6 @@ msgstr ""
 
 #: /src/schooltool/commendation/configure.zcml:128
 msgid "All Commendations"
-msgstr ""
-
-#: /src/schooltool/commendation/configure.zcml:82
-#: /src/schooltool/commendation/configure.zcml:92
-msgid "View Commendations"
 msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:48
@@ -74,11 +74,11 @@ msgid "The scope of the commendation."
 msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:60
-msgid "group"
+msgid "community"
 msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:60
-msgid "community"
+msgid "group"
 msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:60
@@ -86,11 +86,11 @@ msgid "school-wide"
 msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:61
-msgid "national"
+msgid "global"
 msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:61
-msgid "global"
+msgid "national"
 msgstr ""
 
 #: /src/schooltool/commendation/interfaces.py:61
