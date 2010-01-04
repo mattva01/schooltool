@@ -121,7 +121,7 @@ def doctest_LoginView():
 
         >>> from schooltool.app.browser.app import LoginView
         >>> request = TestRequest()
-        >>> from zope.app.authentication.interfaces import IPrincipal
+        >>> from zope.security.interfaces import IPrincipal
         >>> from zope.interface import implements
         >>> class StubPrincipal(object):
         ...     implements(IPrincipal)
