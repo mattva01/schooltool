@@ -8,19 +8,19 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-12-24 12:40+0000\n"
-"PO-Revision-Date: 2009-12-24 15:48+0000\n"
-"Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
+"PO-Revision-Date: 2010-01-03 16:24+0000\n"
+"Last-Translator: Patrick Eigensatz <patrick.eigensatz@gmail.com>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-12-25 04:36+0000\n"
+"X-Launchpad-Export-Date: 2010-01-04 04:34+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "X-Rosetta-Version: 0.1\n"
 
 #: /src/schooltool/app/app.py:201
 msgid "Your School"
-msgstr ""
+msgstr "Name der Schule"
 
 #: /src/schooltool/app/browser/__init__.py:256
 #: /src/schooltool/person/help/person_container.pt:6
@@ -41,7 +41,7 @@ msgstr "${number} Personen"
 
 #: /src/schooltool/app/browser/app.py:227
 msgid "Username or password is incorrect"
-msgstr ""
+msgstr "Der Benutzername oder das Passwort ist falsch."
 
 #: /src/schooltool/app/browser/app.py:323
 #: /src/schooltool/app/security.py:307
@@ -4924,7 +4924,7 @@ msgstr "Angegebene Passworte stimmen nicht überein"
 #. Default: ""
 #: /src/schooltool/app/browser/cal.py:1448
 msgid "Add new event starting at ${title}"
-msgstr ""
+msgstr "Fügen Sie ein neues Ereignis mir der Startzeit ${title} hinzu"
 
 #: /src/schooltool/app/browser/csvimport.py:467
 msgid "The first row of the CSV file must contain the timetable schema id."
@@ -4972,7 +4972,7 @@ msgstr "Chef-Entwickler:"
 
 #: /src/schooltool/app/browser/templates/about.pt:44
 msgid "Release Manager:"
-msgstr ""
+msgstr "Freigabemanager:"
 
 #: /src/schooltool/app/browser/templates/about.pt:47
 msgid "Contributors:"
@@ -5110,7 +5110,7 @@ msgstr "Mitglieder der Gruppe"
 
 #: /src/schooltool/app/security.py:308
 msgid "Assigned leaders."
-msgstr ""
+msgstr "Zugeordnete Leiter"
 
 #. Default: ""
 #: /src/schooltool/app/security.py:352
@@ -5120,7 +5120,7 @@ msgstr "\"$group\" group."
 #. Default: ""
 #: /src/schooltool/app/security.py:367
 msgid "\"$group\" group and the super user."
-msgstr ""
+msgstr "\"$group\" Gruppe und Hauptbenutzer."
 
 #: /src/schooltool/app/security.zcml:103
 #: /src/schooltool/course/security.zcml:149
@@ -5230,7 +5230,7 @@ msgstr "Bestätigen"
 #: /src/schooltool/basicperson/browser/templates/demographics-view.pt:4
 #: /src/schooltool/basicperson/browser/templates/demographics-view.pt:7
 msgid "Demographics Container"
-msgstr ""
+msgstr "Demografikencontainer"
 
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:29
 msgid ""
@@ -5406,7 +5406,7 @@ msgstr "Kontakt Information für ${person}"
 
 #: /src/schooltool/contact/contact.py:211
 msgid "Instructors of student(s) related to this contact."
-msgstr ""
+msgstr "Lehrer der Schüler verwand mit diesem Kontakt-."
 
 #: /src/schooltool/contact/contact.py:78
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:59
@@ -5809,7 +5809,7 @@ msgstr "Schüler"
 
 #: /src/schooltool/course/section.py:318
 msgid "Students of the section."
-msgstr ""
+msgstr "Schüler dieser Sektion."
 
 #: /src/schooltool/course/section.py:396
 msgid "Cannot link sections in same term"
@@ -5864,7 +5864,7 @@ msgstr "prüfen"
 
 #: /src/schooltool/email/browser/configure.zcml:54
 msgid "Outgoing Email"
-msgstr ""
+msgstr "Ausgehende E-Mail"
 
 #: /src/schooltool/email/browser/configure.zcml:76
 msgid "Settings"
@@ -5877,7 +5877,7 @@ msgstr "Absenden-Test"
 #: /src/schooltool/email/browser/email.py:101
 #: /src/schooltool/email/interfaces.py:92
 msgid "Port"
-msgstr ""
+msgstr "Port"
 
 #: /src/schooltool/email/browser/email.py:102
 #: /src/schooltool/email/interfaces.py:93
@@ -5919,7 +5919,7 @@ msgstr "Verifikation für das neue Passwort."
 #: /src/schooltool/email/browser/email.py:128
 #: /src/schooltool/email/interfaces.py:109
 msgid "TLS"
-msgstr ""
+msgstr "TLS"
 
 #: /src/schooltool/email/browser/email.py:129
 #: /src/schooltool/email/interfaces.py:110
@@ -5932,7 +5932,7 @@ msgstr "E-Mail Einstellungen ändern"
 
 #: /src/schooltool/email/browser/email.py:194
 msgid "Unset"
-msgstr ""
+msgstr "Nicht gesetzt"
 
 #: /src/schooltool/email/browser/email.py:207
 #: /src/schooltool/email/browser/email.py:340
@@ -5952,7 +5952,7 @@ msgstr "Die Senderadresse"
 #: /src/schooltool/email/browser/email.py:460
 #: /src/schooltool/email/interfaces.py:43
 msgid "To"
-msgstr ""
+msgstr "An"
 
 #: /src/schooltool/email/browser/email.py:213
 #: /src/schooltool/email/browser/email.py:461
@@ -5963,7 +5963,7 @@ msgstr "Kommaseparierte Empfängeradressen"
 #: /src/schooltool/email/browser/email.py:357
 #: /src/schooltool/email/interfaces.py:70
 msgid "Created on"
-msgstr ""
+msgstr "Erstellt am"
 
 #: /src/schooltool/email/browser/email.py:218
 #: /src/schooltool/email/interfaces.py:71
@@ -6000,7 +6000,7 @@ msgstr "Status von der Nachricht"
 #: /src/schooltool/email/browser/email.py:237
 #: /src/schooltool/email/browser/email.py:363
 msgid "Last time tried"
-msgstr ""
+msgstr "Das letzte Mal versucht"
 
 #: /src/schooltool/email/browser/email.py:238
 msgid "Date and time when the message was last tried"
@@ -6012,11 +6012,11 @@ msgstr "E-Mail Ansicht"
 
 #: /src/schooltool/email/browser/email.py:273
 msgid "Retry"
-msgstr ""
+msgstr "Erneut versuchen"
 
 #: /src/schooltool/email/browser/email.py:383
 msgid "Email Queue"
-msgstr ""
+msgstr "E-Mail Warteschlange"
 
 #. Default: ""
 #: /src/schooltool/email/browser/email.py:441

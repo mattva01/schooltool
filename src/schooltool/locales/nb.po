@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-12-24 12:40+0000\n"
-"PO-Revision-Date: 2009-12-24 15:59+0000\n"
-"Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
+"PO-Revision-Date: 2009-12-30 12:21+0000\n"
+"Last-Translator: nanker <Unknown>\n"
 "Language-Team: Norwegian Bokmål <nb@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-12-25 04:37+0000\n"
+"X-Launchpad-Export-Date: 2009-12-31 04:55+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -1502,20 +1502,6 @@ msgstr "Legg inn CVS data"
 msgid "CSV Data"
 msgstr "CVS data"
 
-#. Default: "Apply"
-#: /src/schooltool/basicperson/browser/templates/person_edit.pt:10
-#: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:75
-#: /src/schooltool/export/templates/import.pt:66
-#: /src/schooltool/resource/browser/resource-csvimport.pt:72
-#: /src/schooltool/person/browser/person-csvimport.pt:75
-#: /src/schooltool/course/browser/section-member-csvimport.pt:52
-#: /src/schooltool/course/browser/templates/course-csvimport.pt:86
-#: /src/schooltool/group/browser/group-csvimport.pt:72
-#: /src/schooltool/group/browser/group-member-csvimport.pt:52
-#: /src/schooltool/app/browser/templates/timetables-csvimport.pt:122
-msgid "submit-button"
-msgstr ""
-
 #: /src/schooltool/basicperson/browser/templates/person_edit.pt:10
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:58
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:59
@@ -1530,33 +1516,6 @@ msgstr ""
 #: /src/schooltool/app/browser/templates/event_booking.pt:57
 msgid "A"
 msgstr "A"
-
-#. Default: "Cancel"
-#: /src/schooltool/basicperson/browser/templates/person_edit.pt:13
-#: /src/schooltool/term/browser/templates/term-container-delete.pt:31
-#: /src/schooltool/term/browser/templates/emergency2.pt:42
-#: /src/schooltool/term/browser/templates/emergency_select.pt:41
-#: /src/schooltool/schoolyear/browser/templates/term-delete.pt:29
-#: /src/schooltool/resource/browser/container_delete.pt:29
-#: /src/schooltool/contact/browser/templates/contacts_delete.pt:36
-#: /src/schooltool/timetable/browser/templates/simpletts.pt:62
-#: /src/schooltool/timetable/browser/templates/timetable-edit.pt:70
-#: /src/schooltool/timetable/browser/templates/timetable-container-delete.pt:29
-#: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:83
-#: /src/schooltool/timetable/browser/templates/specialday_select.pt:41
-#: /src/schooltool/timetable/browser/templates/specialday_change.pt:64
-#: /src/schooltool/timetable/browser/templates/schooltt-delete.pt:31
-#: /src/schooltool/person/browser/person_container_delete.pt:37
-#: /src/schooltool/sampledata/sampledata.pt:82
-#: /src/schooltool/setupdata/setupdata.pt:25
-#: /src/schooltool/course/browser/templates/link_section.pt:133
-#: /src/schooltool/email/browser/templates/email_delete.pt:34
-#: /src/schooltool/skin/templates/container_delete.pt:34
-#: /src/schooltool/skin/templates/view_macros.pt:200
-#: /src/schooltool/skin/templates/view_macros.pt:205
-#: /src/schooltool/app/browser/templates/event_add.pt:378
-msgid "cancel-button"
-msgstr "Avbryt"
 
 #: /src/schooltool/basicperson/browser/templates/person_view.pt:20
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:34
@@ -2025,30 +1984,6 @@ msgstr "Bekreft og Neste"
 #: /src/schooltool/skin/templates/container.pt:28
 msgid "Showing ${count} of ${total} items"
 msgstr "Viser ${count} av ${total}"
-
-#. Default: "Delete"
-#: /src/schooltool/demographics/browser/search.pt:35
-#: /src/schooltool/demographics/browser/table.pt:28
-#: /src/schooltool/term/browser/templates/term-container-delete.pt:29
-#: /src/schooltool/schoolyear/browser/templates/term-delete.pt:27
-#: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:34
-#: /src/schooltool/schoolyear/browser/templates/schoolyear.pt:42
-#: /src/schooltool/resource/browser/container_delete.pt:27
-#: /src/schooltool/contact/browser/templates/contacts_delete.pt:34
-#: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:29
-#: /src/schooltool/timetable/browser/templates/timetable-container-delete.pt:27
-#: /src/schooltool/timetable/browser/templates/schooltt-delete.pt:29
-#: /src/schooltool/person/browser/person_container_delete.pt:35
-#: /src/schooltool/course/browser/templates/course_container.pt:40
-#: /src/schooltool/course/browser/templates/section_container.pt:93
-#: /src/schooltool/email/browser/templates/email_delete.pt:31
-#: /src/schooltool/email/browser/templates/email_container.pt:48
-#: /src/schooltool/skin/templates/table_container.pt:33
-#: /src/schooltool/skin/templates/container.pt:42
-#: /src/schooltool/skin/templates/container_delete.pt:32
-#: /src/schooltool/skin/templates/view_macros.pt:194
-msgid "delete-button"
-msgstr "Slett"
 
 #: /src/schooltool/demographics/browser/table.pt:34
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:45
@@ -2880,13 +2815,6 @@ msgstr "SchoolTool Onlinehjelp"
 msgid "Shortcut: Alt-A"
 msgstr "Snarvei Alt-A"
 
-#. Default: "Add"
-#: /src/schooltool/skin/templates/view_macros.pt:174
-#: /src/schooltool/skin/templates/view_macros.pt:180
-#: /src/schooltool/skin/templates/view_macros.pt:187
-msgid "add-button"
-msgstr "Legg til"
-
 #: /src/schooltool/skin/templates/view_macros.pt:45
 msgid "Log In"
 msgstr "Logg inn"
@@ -3648,7 +3576,7 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:24
 msgid "Daily"
-msgstr ""
+msgstr "Daglig"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:30
 msgid "View weekly calendar"
@@ -3660,7 +3588,7 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:42
 msgid "Yearly"
-msgstr ""
+msgstr "Årlig"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:42
 msgid "View yearly calendar"
@@ -4329,13 +4257,54 @@ msgstr ""
 "jbjones, Jim Bob, Jones, r2m45J\n"
 "howard, Howard, Jobs\n"
 
+#. Default: "Apply"
+#: /src/schooltool/basicperson/browser/templates/person_edit.pt:10
+#: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:75
+#: /src/schooltool/export/templates/import.pt:66
+#: /src/schooltool/resource/browser/resource-csvimport.pt:72
+#: /src/schooltool/person/browser/person-csvimport.pt:75
+#: /src/schooltool/course/browser/section-member-csvimport.pt:52
+#: /src/schooltool/course/browser/templates/course-csvimport.pt:86
+#: /src/schooltool/group/browser/group-csvimport.pt:72
+#: /src/schooltool/group/browser/group-member-csvimport.pt:52
+#: /src/schooltool/app/browser/templates/timetables-csvimport.pt:122
+msgid "submit-button"
+msgstr "Legg til"
+
+#. Default: "Cancel"
+#: /src/schooltool/basicperson/browser/templates/person_edit.pt:13
+#: /src/schooltool/term/browser/templates/term-container-delete.pt:31
+#: /src/schooltool/term/browser/templates/emergency2.pt:42
+#: /src/schooltool/term/browser/templates/emergency_select.pt:41
+#: /src/schooltool/schoolyear/browser/templates/term-delete.pt:29
+#: /src/schooltool/resource/browser/container_delete.pt:29
+#: /src/schooltool/contact/browser/templates/contacts_delete.pt:36
+#: /src/schooltool/timetable/browser/templates/simpletts.pt:62
+#: /src/schooltool/timetable/browser/templates/timetable-edit.pt:70
+#: /src/schooltool/timetable/browser/templates/timetable-container-delete.pt:29
+#: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:83
+#: /src/schooltool/timetable/browser/templates/specialday_select.pt:41
+#: /src/schooltool/timetable/browser/templates/specialday_change.pt:64
+#: /src/schooltool/timetable/browser/templates/schooltt-delete.pt:31
+#: /src/schooltool/person/browser/person_container_delete.pt:37
+#: /src/schooltool/sampledata/sampledata.pt:82
+#: /src/schooltool/setupdata/setupdata.pt:25
+#: /src/schooltool/course/browser/templates/link_section.pt:133
+#: /src/schooltool/email/browser/templates/email_delete.pt:34
+#: /src/schooltool/skin/templates/container_delete.pt:34
+#: /src/schooltool/skin/templates/view_macros.pt:200
+#: /src/schooltool/skin/templates/view_macros.pt:205
+#: /src/schooltool/app/browser/templates/event_add.pt:378
+msgid "cancel-button"
+msgstr "Avbryt"
+
 #: /src/schooltool/basicperson/interfaces.py:122
 msgid "The title of this Field Description"
 msgstr "Tittelen til denne Feltbeskrivelsen"
 
 #: /src/schooltool/basicperson/interfaces.py:126
 msgid "Unique ID of this Field Description"
-msgstr ""
+msgstr "Unik ID for denne felt beskrivelsen"
 
 #: /src/schooltool/basicperson/interfaces.py:129
 msgid "Required"
@@ -4401,7 +4370,7 @@ msgstr ""
 #: /src/schooltool/contact/browser/configure.zcml:111
 #: /src/schooltool/contact/browser/configure.zcml:123
 msgid "Other Contacts"
-msgstr ""
+msgstr "Andre kontakter"
 
 #: /src/schooltool/contact/browser/configure.zcml:49
 msgid "New Contact"
@@ -4483,11 +4452,11 @@ msgstr ""
 
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:41
 msgid "Phones"
-msgstr ""
+msgstr "Telefoner"
 
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:50
 msgid "Spoken Languages"
-msgstr ""
+msgstr "Talte språk"
 
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:73
 msgid "(View Details)"
@@ -4528,7 +4497,7 @@ msgstr ""
 
 #: /src/schooltool/contact/interfaces.py:104
 msgid "Parent"
-msgstr ""
+msgstr "Forelder"
 
 #: /src/schooltool/contact/interfaces.py:105
 msgid "Step-parent"
@@ -4544,7 +4513,7 @@ msgstr ""
 
 #: /src/schooltool/contact/interfaces.py:108
 msgid "Sibling"
-msgstr ""
+msgstr "Søsken"
 
 #: /src/schooltool/contact/interfaces.py:53
 msgid "Address line 1"
@@ -4874,7 +4843,7 @@ msgstr ""
 
 #: /src/schooltool/course/interfaces.py:60
 msgid "Credits"
-msgstr ""
+msgstr "Bidragsytere"
 
 #: /src/schooltool/course/interfaces.py:62
 msgid "Amount of credits for this course."
@@ -5021,6 +4990,30 @@ msgstr "Ugyldig lærer. Mulige grunner: slettet, eller omdøpt"
 msgid "Invalid group. Possible causes: deleted or renamed."
 msgstr "Ugyldig gruppe: Mulige grunner: slettet, eller omdøpt"
 
+#. Default: "Delete"
+#: /src/schooltool/demographics/browser/search.pt:35
+#: /src/schooltool/demographics/browser/table.pt:28
+#: /src/schooltool/term/browser/templates/term-container-delete.pt:29
+#: /src/schooltool/schoolyear/browser/templates/term-delete.pt:27
+#: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:34
+#: /src/schooltool/schoolyear/browser/templates/schoolyear.pt:42
+#: /src/schooltool/resource/browser/container_delete.pt:27
+#: /src/schooltool/contact/browser/templates/contacts_delete.pt:34
+#: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:29
+#: /src/schooltool/timetable/browser/templates/timetable-container-delete.pt:27
+#: /src/schooltool/timetable/browser/templates/schooltt-delete.pt:29
+#: /src/schooltool/person/browser/person_container_delete.pt:35
+#: /src/schooltool/course/browser/templates/course_container.pt:40
+#: /src/schooltool/course/browser/templates/section_container.pt:93
+#: /src/schooltool/email/browser/templates/email_delete.pt:31
+#: /src/schooltool/email/browser/templates/email_container.pt:48
+#: /src/schooltool/skin/templates/table_container.pt:33
+#: /src/schooltool/skin/templates/container.pt:42
+#: /src/schooltool/skin/templates/container_delete.pt:32
+#: /src/schooltool/skin/templates/view_macros.pt:194
+msgid "delete-button"
+msgstr "Slett"
+
 #: /src/schooltool/demographics/browser/search.pt:42
 msgid "There were no results."
 msgstr "Ingen funnet."
@@ -5131,7 +5124,7 @@ msgstr ""
 
 #: /src/schooltool/email/browser/configure.zcml:76
 msgid "Settings"
-msgstr ""
+msgstr "Innstillinger"
 
 #: /src/schooltool/email/browser/configure.zcml:87
 msgid "Send Test"
@@ -5140,7 +5133,7 @@ msgstr ""
 #: /src/schooltool/email/browser/email.py:101
 #: /src/schooltool/email/interfaces.py:92
 msgid "Port"
-msgstr ""
+msgstr "Port"
 
 #: /src/schooltool/email/browser/email.py:102
 #: /src/schooltool/email/interfaces.py:93
@@ -5154,7 +5147,7 @@ msgstr ""
 
 #: /src/schooltool/email/browser/email.py:113
 msgid "Current Password"
-msgstr ""
+msgstr "Nåværende passord"
 
 #: /src/schooltool/email/browser/email.py:114
 msgid "Current password to authenticate to the SMTP server."
@@ -5163,7 +5156,7 @@ msgstr ""
 #: /src/schooltool/email/browser/email.py:118
 #: /src/schooltool/email/interfaces.py:104
 msgid "New Password"
-msgstr ""
+msgstr "Nytt passord"
 
 #: /src/schooltool/email/browser/email.py:119
 #: /src/schooltool/email/interfaces.py:105
@@ -5172,7 +5165,7 @@ msgstr ""
 
 #: /src/schooltool/email/browser/email.py:123
 msgid "Confirm New Password"
-msgstr ""
+msgstr "Bekreft nytt passord"
 
 #: /src/schooltool/email/browser/email.py:124
 msgid "Verification for the new password."
@@ -5181,7 +5174,7 @@ msgstr ""
 #: /src/schooltool/email/browser/email.py:128
 #: /src/schooltool/email/interfaces.py:109
 msgid "TLS"
-msgstr ""
+msgstr "TLS"
 
 #: /src/schooltool/email/browser/email.py:129
 #: /src/schooltool/email/interfaces.py:110
@@ -5194,14 +5187,14 @@ msgstr ""
 
 #: /src/schooltool/email/browser/email.py:194
 msgid "Unset"
-msgstr ""
+msgstr "Slå av"
 
 #: /src/schooltool/email/browser/email.py:207
 #: /src/schooltool/email/browser/email.py:340
 #: /src/schooltool/email/browser/email.py:456
 #: /src/schooltool/email/interfaces.py:39
 msgid "From"
-msgstr ""
+msgstr "Fra"
 
 #: /src/schooltool/email/browser/email.py:208
 #: /src/schooltool/email/browser/email.py:457
@@ -5214,7 +5207,7 @@ msgstr ""
 #: /src/schooltool/email/browser/email.py:460
 #: /src/schooltool/email/interfaces.py:43
 msgid "To"
-msgstr ""
+msgstr "Til"
 
 #: /src/schooltool/email/browser/email.py:213
 #: /src/schooltool/email/browser/email.py:461
@@ -5237,7 +5230,7 @@ msgstr ""
 #: /src/schooltool/email/browser/email.py:464
 #: /src/schooltool/email/interfaces.py:53
 msgid "Subject"
-msgstr ""
+msgstr "Emne"
 
 #: /src/schooltool/email/browser/email.py:223
 #: /src/schooltool/email/browser/email.py:465
@@ -5274,7 +5267,7 @@ msgstr ""
 
 #: /src/schooltool/email/browser/email.py:273
 msgid "Retry"
-msgstr ""
+msgstr "Forsøk på nytt"
 
 #: /src/schooltool/email/browser/email.py:383
 msgid "Email Queue"
@@ -5287,15 +5280,15 @@ msgstr ""
 
 #: /src/schooltool/email/browser/email.py:443
 msgid "Queue"
-msgstr ""
+msgstr "Kø"
 
 #: /src/schooltool/email/browser/email.py:485
 msgid "Send Email"
-msgstr ""
+msgstr "Send e-post"
 
 #: /src/schooltool/email/browser/email.py:488
 msgid "Send"
-msgstr ""
+msgstr "Send"
 
 #. Default: ""
 #: /src/schooltool/email/browser/email.py:78
@@ -5307,7 +5300,7 @@ msgstr ""
 #: /src/schooltool/email/browser/email.py:403
 #: /src/schooltool/securitypolicy/browser/control.py:96
 msgid "Disabled"
-msgstr ""
+msgstr "Slått av"
 
 #: /src/schooltool/email/browser/email.py:91
 #: /src/schooltool/email/browser/email.py:202
@@ -5325,7 +5318,7 @@ msgstr ""
 #: /src/schooltool/email/browser/email.py:96
 #: /src/schooltool/email/interfaces.py:87
 msgid "Hostname"
-msgstr ""
+msgstr "Vertsnavn"
 
 #: /src/schooltool/email/browser/email.py:97
 #: /src/schooltool/email/interfaces.py:88
@@ -5353,6 +5346,10 @@ msgstr ""
 #: /src/schooltool/email/interfaces.py:45
 msgid "Recipient address"
 msgstr ""
+
+#: /src/schooltool/email/interfaces.py:58
+msgid "Status"
+msgstr "Status"
 
 #: /src/schooltool/email/interfaces.py:59
 msgid "Code for the status of the message"
@@ -5417,7 +5414,7 @@ msgstr ""
 
 #: /src/schooltool/export/templates/import.pt:25
 msgid "Import Data"
-msgstr ""
+msgstr "Importer data"
 
 #: /src/schooltool/export/templates/import.pt:31
 msgid ""
@@ -5597,7 +5594,7 @@ msgstr ""
 
 #: /src/schooltool/person/browser/home_tab_viewlet.pt:3
 msgid "Home"
-msgstr ""
+msgstr "Hjem"
 
 #: /src/schooltool/person/browser/person.py:173
 msgid "No new password was supplied so original password is unchanged"
@@ -5635,7 +5632,7 @@ msgstr ""
 
 #: /src/schooltool/person/security.zcml:107
 msgid "Change password"
-msgstr ""
+msgstr "Endre passord"
 
 #: /src/schooltool/person/security.zcml:114
 msgid "View preferences"
@@ -5654,6 +5651,11 @@ msgstr ""
 msgid "The user himself."
 msgstr ""
 
+#: /src/schooltool/person/security.zcml:152
+#: /src/schooltool/contact/security.zcml:86
+msgid "User"
+msgstr "Bruker"
+
 #: /src/schooltool/person/security.zcml:172
 msgid "Calendar is public"
 msgstr ""
@@ -5664,7 +5666,7 @@ msgstr ""
 
 #: /src/schooltool/person/security.zcml:77
 msgid "Users"
-msgstr ""
+msgstr "Brukere"
 
 #: /src/schooltool/person/security.zcml:79
 #: /src/schooltool/contact/security.zcml:29
@@ -5724,7 +5726,7 @@ msgstr ""
 
 #: /src/schooltool/resource/security.zcml:50
 msgid "Reservations"
-msgstr ""
+msgstr "Reservasjoner"
 
 #: /src/schooltool/resource/security.zcml:50
 msgid ""
@@ -5869,7 +5871,7 @@ msgstr ""
 
 #: /src/schooltool/securitypolicy/browser/control.py:96
 msgid "Enabled"
-msgstr ""
+msgstr "Slått på"
 
 #: /src/schooltool/securitypolicy/browser/templates/access_setting_snippet.pt:4
 msgid "Access setting: ${setting} (${status})"
@@ -5877,11 +5879,15 @@ msgstr ""
 
 #: /src/schooltool/securitypolicy/browser/templates/security_descriptions.pt:4
 msgid "Access Rights"
-msgstr ""
+msgstr "Tilgangsrettigheter"
+
+#: /src/schooltool/securitypolicy/browser/templates/security_descriptions.pt:57
+msgid "Legend"
+msgstr "Forklaring"
 
 #: /src/schooltool/securitypolicy/crowds.py:124
 msgid "Everybody"
-msgstr ""
+msgstr "Alle"
 
 #: /src/schooltool/securitypolicy/crowds.py:125
 msgid "Everybody, including users that are not logged in."
@@ -5970,7 +5976,7 @@ msgstr ""
 
 #: /src/schooltool/skin/templates/view_macros.pt:155
 msgid "U"
-msgstr ""
+msgstr "U"
 
 #. Default: "Apply"
 #: /src/schooltool/skin/templates/view_macros.pt:161
@@ -5978,13 +5984,20 @@ msgstr ""
 msgid "apply-button"
 msgstr ""
 
+#. Default: "Add"
+#: /src/schooltool/skin/templates/view_macros.pt:174
+#: /src/schooltool/skin/templates/view_macros.pt:180
+#: /src/schooltool/skin/templates/view_macros.pt:187
+msgid "add-button"
+msgstr "Legg til"
+
 #: /src/schooltool/skin/templates/view_macros.pt:194
 msgid "Shortcut: Alt-D"
 msgstr ""
 
 #: /src/schooltool/skin/templates/view_macros.pt:194
 msgid "D"
-msgstr ""
+msgstr "D"
 
 #: /src/schooltool/skin/templates/view_macros.pt:53
 msgid "Logged in as:"
@@ -5996,7 +6009,7 @@ msgstr ""
 
 #: /src/schooltool/skin/widgets.py:109
 msgid "Width"
-msgstr ""
+msgstr "Bredde"
 
 #: /src/schooltool/skin/widgets.py:110
 msgid "Editor frame width"
@@ -6004,7 +6017,7 @@ msgstr ""
 
 #: /src/schooltool/skin/widgets.py:113
 msgid "Height"
-msgstr ""
+msgstr "Høyde"
 
 #: /src/schooltool/skin/widgets.py:114
 msgid "Editor frame height"

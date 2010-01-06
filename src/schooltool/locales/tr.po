@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-12-24 12:40+0000\n"
-"PO-Revision-Date: 2009-12-24 16:18+0000\n"
+"PO-Revision-Date: 2009-12-29 17:07+0000\n"
 "Last-Translator: Mustafa Yılmaz <apshalasha@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-12-25 04:38+0000\n"
+"X-Launchpad-Export-Date: 2009-12-31 04:55+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -1485,20 +1485,6 @@ msgstr "CSV Verisi Gir"
 msgid "CSV Data"
 msgstr "CSV Verisi"
 
-#. Default: "Apply"
-#: /src/schooltool/basicperson/browser/templates/person_edit.pt:10
-#: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:75
-#: /src/schooltool/export/templates/import.pt:66
-#: /src/schooltool/resource/browser/resource-csvimport.pt:72
-#: /src/schooltool/person/browser/person-csvimport.pt:75
-#: /src/schooltool/course/browser/section-member-csvimport.pt:52
-#: /src/schooltool/course/browser/templates/course-csvimport.pt:86
-#: /src/schooltool/group/browser/group-csvimport.pt:72
-#: /src/schooltool/group/browser/group-member-csvimport.pt:52
-#: /src/schooltool/app/browser/templates/timetables-csvimport.pt:122
-msgid "submit-button"
-msgstr "Uygula"
-
 #: /src/schooltool/basicperson/browser/templates/person_edit.pt:10
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:58
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:59
@@ -1513,33 +1499,6 @@ msgstr "Uygula"
 #: /src/schooltool/app/browser/templates/event_booking.pt:57
 msgid "A"
 msgstr "A"
-
-#. Default: "Cancel"
-#: /src/schooltool/basicperson/browser/templates/person_edit.pt:13
-#: /src/schooltool/term/browser/templates/term-container-delete.pt:31
-#: /src/schooltool/term/browser/templates/emergency2.pt:42
-#: /src/schooltool/term/browser/templates/emergency_select.pt:41
-#: /src/schooltool/schoolyear/browser/templates/term-delete.pt:29
-#: /src/schooltool/resource/browser/container_delete.pt:29
-#: /src/schooltool/contact/browser/templates/contacts_delete.pt:36
-#: /src/schooltool/timetable/browser/templates/simpletts.pt:62
-#: /src/schooltool/timetable/browser/templates/timetable-edit.pt:70
-#: /src/schooltool/timetable/browser/templates/timetable-container-delete.pt:29
-#: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:83
-#: /src/schooltool/timetable/browser/templates/specialday_select.pt:41
-#: /src/schooltool/timetable/browser/templates/specialday_change.pt:64
-#: /src/schooltool/timetable/browser/templates/schooltt-delete.pt:31
-#: /src/schooltool/person/browser/person_container_delete.pt:37
-#: /src/schooltool/sampledata/sampledata.pt:82
-#: /src/schooltool/setupdata/setupdata.pt:25
-#: /src/schooltool/course/browser/templates/link_section.pt:133
-#: /src/schooltool/email/browser/templates/email_delete.pt:34
-#: /src/schooltool/skin/templates/container_delete.pt:34
-#: /src/schooltool/skin/templates/view_macros.pt:200
-#: /src/schooltool/skin/templates/view_macros.pt:205
-#: /src/schooltool/app/browser/templates/event_add.pt:378
-msgid "cancel-button"
-msgstr "Vazgeç"
 
 #: /src/schooltool/basicperson/browser/templates/person_view.pt:20
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:34
@@ -1608,13 +1567,6 @@ msgstr "Sil"
 #: /src/schooltool/app/browser/templates/event_booking.pt:63
 msgid "There are none to add."
 msgstr "Eklenecek bir şey yok"
-
-#. Default: "OK"
-#: /src/schooltool/contact/browser/templates/manage_contacts.pt:75
-#: /src/schooltool/course/browser/templates/edit_relationships.pt:84
-#: /src/schooltool/app/browser/templates/edit_relationships.pt:65
-msgid "ok-button"
-msgstr ""
 
 #: /src/schooltool/contact/contact.py:210
 #: /src/schooltool/course/browser/section.py:538
@@ -1757,30 +1709,6 @@ msgstr "Dersler"
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:31
 msgid "Apply"
 msgstr "Uygula"
-
-#. Default: "Delete"
-#: /src/schooltool/demographics/browser/search.pt:35
-#: /src/schooltool/demographics/browser/table.pt:28
-#: /src/schooltool/term/browser/templates/term-container-delete.pt:29
-#: /src/schooltool/schoolyear/browser/templates/term-delete.pt:27
-#: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:34
-#: /src/schooltool/schoolyear/browser/templates/schoolyear.pt:42
-#: /src/schooltool/resource/browser/container_delete.pt:27
-#: /src/schooltool/contact/browser/templates/contacts_delete.pt:34
-#: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:29
-#: /src/schooltool/timetable/browser/templates/timetable-container-delete.pt:27
-#: /src/schooltool/timetable/browser/templates/schooltt-delete.pt:29
-#: /src/schooltool/person/browser/person_container_delete.pt:35
-#: /src/schooltool/course/browser/templates/course_container.pt:40
-#: /src/schooltool/course/browser/templates/section_container.pt:93
-#: /src/schooltool/email/browser/templates/email_delete.pt:31
-#: /src/schooltool/email/browser/templates/email_container.pt:48
-#: /src/schooltool/skin/templates/table_container.pt:33
-#: /src/schooltool/skin/templates/container.pt:42
-#: /src/schooltool/skin/templates/container_delete.pt:32
-#: /src/schooltool/skin/templates/view_macros.pt:194
-msgid "delete-button"
-msgstr "Sil"
 
 #: /src/schooltool/demographics/browser/table.pt:34
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:45
@@ -2088,13 +2016,6 @@ msgstr "başa dön"
 #: /src/schooltool/app/browser/templates/event_add.pt:375
 msgid "Shortcut: Alt-A"
 msgstr "Kısayol: Alt-A"
-
-#. Default: "Add"
-#: /src/schooltool/skin/templates/view_macros.pt:174
-#: /src/schooltool/skin/templates/view_macros.pt:180
-#: /src/schooltool/skin/templates/view_macros.pt:187
-msgid "add-button"
-msgstr "Ekle"
 
 #: /src/schooltool/skin/templates/view_macros.pt:45
 msgid "Log In"
@@ -2595,7 +2516,7 @@ msgstr "Launchpad proje sayfası"
 
 #: /src/schooltool/app/browser/templates/about.pt:29
 msgid "Mailing list"
-msgstr ""
+msgstr "E-posta listesi"
 
 #: /src/schooltool/app/browser/templates/about.pt:30
 msgid "IRC channel: #schooltool on freenode.net"
@@ -3080,7 +3001,7 @@ msgstr ""
 
 #: /src/schooltool/app/membership.py:262
 msgid "Members of the group."
-msgstr ""
+msgstr "Grup üyeleri."
 
 #: /src/schooltool/app/security.py:308
 msgid "Assigned leaders."
@@ -3105,11 +3026,11 @@ msgstr ""
 
 #: /src/schooltool/app/security.zcml:77
 msgid "SchoolTool application"
-msgstr ""
+msgstr "SchoolTool uygulaması"
 
 #: /src/schooltool/app/security.zcml:80
 msgid "Access"
-msgstr ""
+msgstr "Erişim"
 
 #: /src/schooltool/app/security.zcml:87
 msgid "Manage school settings and configuration"
@@ -3124,7 +3045,7 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/configure.zcml:143
 msgid "New Text Field"
-msgstr ""
+msgstr "Yeni metin alanı"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:150
 msgid "New Date Field"
@@ -3136,11 +3057,11 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/configure.zcml:33
 msgid "Export"
-msgstr ""
+msgstr "Dışarı aktar"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:42
 msgid "Advisors"
-msgstr ""
+msgstr "Danışmanlar"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:51
 msgid "Advisees"
@@ -3148,18 +3069,18 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/csvimport.py:53
 msgid "first name may not be empty"
-msgstr ""
+msgstr "Ad boş bırakılmamalıdır"
 
 #: /src/schooltool/basicperson/browser/csvimport.py:57
 msgid "last name may not be empty"
-msgstr ""
+msgstr "Soyad boş bırakılmamalıdır"
 
 #: /src/schooltool/basicperson/browser/csvimport.py:77
 #: /src/schooltool/basicperson/browser/person.py:109
 #: /src/schooltool/demographics/browser/personform.py:281
 #: /src/schooltool/person/browser/csvimport.py:71
 msgid "Names cannot begin with '+' or '@' or contain '/'"
-msgstr ""
+msgstr "İsimler '+' veya '@' ile başlayamaz ve '/' içeremez"
 
 #: /src/schooltool/basicperson/browser/demographics.py:133
 msgid "Add new Field"
@@ -3172,11 +3093,11 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/person.py:144
 msgid "Add new person"
-msgstr ""
+msgstr "Yeni kişi ekle"
 
 #: /src/schooltool/basicperson/browser/person.py:164
 msgid "Passwords do not match"
-msgstr ""
+msgstr "Parolalar eşleşmiyor"
 
 #. Default: ""
 #: /src/schooltool/basicperson/browser/person.py:229
@@ -3211,7 +3132,7 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/person.py:50
 msgid "Group"
-msgstr ""
+msgstr "Grup"
 
 #: /src/schooltool/basicperson/browser/person.py:55
 #: /src/schooltool/demographics/interfaces.py:209
@@ -3230,7 +3151,7 @@ msgstr ""
 #: /src/schooltool/person/interfaces.py:60
 #: /src/schooltool/app/browser/templates/login.pt:38
 msgid "Username"
-msgstr ""
+msgstr "Kullanıcı adı"
 
 #: /src/schooltool/basicperson/browser/person.py:65
 #: /src/schooltool/demographics/browser/personform.py:259
@@ -3242,7 +3163,7 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/person.py:69
 msgid "Confirm"
-msgstr ""
+msgstr "Onayla"
 
 #: /src/schooltool/basicperson/browser/templates/demographics-view.pt:4
 #: /src/schooltool/basicperson/browser/templates/demographics-view.pt:7
@@ -3267,6 +3188,47 @@ msgid ""
 "howard, Howard, Jobs\n"
 msgstr ""
 
+#. Default: "Apply"
+#: /src/schooltool/basicperson/browser/templates/person_edit.pt:10
+#: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:75
+#: /src/schooltool/export/templates/import.pt:66
+#: /src/schooltool/resource/browser/resource-csvimport.pt:72
+#: /src/schooltool/person/browser/person-csvimport.pt:75
+#: /src/schooltool/course/browser/section-member-csvimport.pt:52
+#: /src/schooltool/course/browser/templates/course-csvimport.pt:86
+#: /src/schooltool/group/browser/group-csvimport.pt:72
+#: /src/schooltool/group/browser/group-member-csvimport.pt:52
+#: /src/schooltool/app/browser/templates/timetables-csvimport.pt:122
+msgid "submit-button"
+msgstr "Uygula"
+
+#. Default: "Cancel"
+#: /src/schooltool/basicperson/browser/templates/person_edit.pt:13
+#: /src/schooltool/term/browser/templates/term-container-delete.pt:31
+#: /src/schooltool/term/browser/templates/emergency2.pt:42
+#: /src/schooltool/term/browser/templates/emergency_select.pt:41
+#: /src/schooltool/schoolyear/browser/templates/term-delete.pt:29
+#: /src/schooltool/resource/browser/container_delete.pt:29
+#: /src/schooltool/contact/browser/templates/contacts_delete.pt:36
+#: /src/schooltool/timetable/browser/templates/simpletts.pt:62
+#: /src/schooltool/timetable/browser/templates/timetable-edit.pt:70
+#: /src/schooltool/timetable/browser/templates/timetable-container-delete.pt:29
+#: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:83
+#: /src/schooltool/timetable/browser/templates/specialday_select.pt:41
+#: /src/schooltool/timetable/browser/templates/specialday_change.pt:64
+#: /src/schooltool/timetable/browser/templates/schooltt-delete.pt:31
+#: /src/schooltool/person/browser/person_container_delete.pt:37
+#: /src/schooltool/sampledata/sampledata.pt:82
+#: /src/schooltool/setupdata/setupdata.pt:25
+#: /src/schooltool/course/browser/templates/link_section.pt:133
+#: /src/schooltool/email/browser/templates/email_delete.pt:34
+#: /src/schooltool/skin/templates/container_delete.pt:34
+#: /src/schooltool/skin/templates/view_macros.pt:200
+#: /src/schooltool/skin/templates/view_macros.pt:205
+#: /src/schooltool/app/browser/templates/event_add.pt:378
+msgid "cancel-button"
+msgstr "Vazgeç"
+
 #: /src/schooltool/basicperson/browser/templates/person_view.pt:4
 #: /src/schooltool/person/browser/person.pt:4
 #: /src/schooltool/person/browser/home.pt:4
@@ -3288,7 +3250,7 @@ msgstr ""
 
 #: /src/schooltool/basicperson/interfaces.py:129
 msgid "Required"
-msgstr ""
+msgstr "Zorunlu"
 
 #: /src/schooltool/basicperson/interfaces.py:130
 msgid "Whether this Field is required or not"
@@ -3322,7 +3284,7 @@ msgstr ""
 #: /src/schooltool/demographics/interfaces.py:60
 #: /src/schooltool/contact/browser/templates/filter.pt:12
 msgid "Last name"
-msgstr ""
+msgstr "Soyadı"
 
 #: /src/schooltool/basicperson/interfaces.py:58
 #: /src/schooltool/contact/interfaces.py:48
@@ -3338,22 +3300,22 @@ msgstr ""
 #: /src/schooltool/basicperson/interfaces.py:68
 #: /src/schooltool/demographics/interfaces.py:123
 msgid "Gender"
-msgstr ""
+msgstr "Cinsiyet"
 
 #: /src/schooltool/basicperson/interfaces.py:69
 #: /src/schooltool/demographics/interfaces.py:124
 msgid "male"
-msgstr ""
+msgstr "erkek"
 
 #: /src/schooltool/basicperson/interfaces.py:69
 #: /src/schooltool/demographics/interfaces.py:124
 msgid "female"
-msgstr ""
+msgstr "bayan"
 
 #: /src/schooltool/basicperson/interfaces.py:74
 #: /src/schooltool/demographics/interfaces.py:129
 msgid "Birth date"
-msgstr ""
+msgstr "Doğum tarihi"
 
 #: /src/schooltool/basicperson/interfaces.py:75
 msgid "(yyyy-mm-dd)"
@@ -3362,12 +3324,12 @@ msgstr ""
 #: /src/schooltool/basicperson/person.py:83
 #: /src/schooltool/contact/browser/contact.py:297
 msgid "First Name"
-msgstr ""
+msgstr "Ad"
 
 #: /src/schooltool/basicperson/person.py:90
 #: /src/schooltool/contact/browser/contact.py:304
 msgid "Last Name"
-msgstr ""
+msgstr "Soyad"
 
 #: /src/schooltool/basicperson/security.zcml:17
 msgid "Create, delete demographics fields and change their order."
@@ -3495,6 +3457,13 @@ msgstr ""
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:58
 msgid "Assign"
 msgstr ""
+
+#. Default: "OK"
+#: /src/schooltool/contact/browser/templates/manage_contacts.pt:75
+#: /src/schooltool/course/browser/templates/edit_relationships.pt:84
+#: /src/schooltool/app/browser/templates/edit_relationships.pt:65
+msgid "ok-button"
+msgstr "OK"
 
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:18
 #: /src/schooltool/contact/browser/templates/contact_view.pt:16
@@ -4191,6 +4160,30 @@ msgstr ""
 #: /src/schooltool/skin/templates/container.pt:28
 msgid "Showing ${count} of ${total} items"
 msgstr ""
+
+#. Default: "Delete"
+#: /src/schooltool/demographics/browser/search.pt:35
+#: /src/schooltool/demographics/browser/table.pt:28
+#: /src/schooltool/term/browser/templates/term-container-delete.pt:29
+#: /src/schooltool/schoolyear/browser/templates/term-delete.pt:27
+#: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:34
+#: /src/schooltool/schoolyear/browser/templates/schoolyear.pt:42
+#: /src/schooltool/resource/browser/container_delete.pt:27
+#: /src/schooltool/contact/browser/templates/contacts_delete.pt:34
+#: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:29
+#: /src/schooltool/timetable/browser/templates/timetable-container-delete.pt:27
+#: /src/schooltool/timetable/browser/templates/schooltt-delete.pt:29
+#: /src/schooltool/person/browser/person_container_delete.pt:35
+#: /src/schooltool/course/browser/templates/course_container.pt:40
+#: /src/schooltool/course/browser/templates/section_container.pt:93
+#: /src/schooltool/email/browser/templates/email_delete.pt:31
+#: /src/schooltool/email/browser/templates/email_container.pt:48
+#: /src/schooltool/skin/templates/table_container.pt:33
+#: /src/schooltool/skin/templates/container.pt:42
+#: /src/schooltool/skin/templates/container_delete.pt:32
+#: /src/schooltool/skin/templates/view_macros.pt:194
+msgid "delete-button"
+msgstr "Sil"
 
 #: /src/schooltool/demographics/browser/search.pt:42
 msgid "There were no results."
@@ -5605,6 +5598,13 @@ msgstr ""
 #: /src/schooltool/skin/templates/view_macros.pt:155
 msgid "U"
 msgstr ""
+
+#. Default: "Add"
+#: /src/schooltool/skin/templates/view_macros.pt:174
+#: /src/schooltool/skin/templates/view_macros.pt:180
+#: /src/schooltool/skin/templates/view_macros.pt:187
+msgid "add-button"
+msgstr "Ekle"
 
 #: /src/schooltool/skin/templates/view_macros.pt:194
 msgid "Shortcut: Alt-D"
