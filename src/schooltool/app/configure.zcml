@@ -55,6 +55,8 @@
       provides=".interfaces.ISchoolToolApplication"
       factory=".app.getSchoolToolApplication" />
 
+  <adapter factory=".cal.expandedEventLocation" />
+
   <!-- Utilities -->
 
   <class class=".security.SchoolToolAuthenticationUtility">

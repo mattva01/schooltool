@@ -24,7 +24,6 @@ from zope.app.form.browser.interfaces import ITerms
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import adapts
 from zope.component import getUtility
-from zope.exceptions.interfaces import UserError
 from z3c.form import form, field, button, validator
 from zope.interface import implements
 from zope.schema import Password, TextLine, Choice
@@ -105,7 +104,7 @@ class UsernameValidator(SimpleFieldValidator):
             raise UsernameValidationError(_("This username is already in use!"))
         try:
             INameChooser(self.context).checkName(username, None)
-        except UserError:
+        except ValueError:
             raise UsernameValidationError(_("Names cannot begin with '+' or '@' or contain '/'"))
 
 validator.WidgetValidatorDiscriminators(UsernameValidator,

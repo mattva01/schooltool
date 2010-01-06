@@ -45,12 +45,12 @@ arbitrary containers, such as a regular folder:
   ...     u'You have done a good job with the latest assignment.',
   ...     u'school-wide')
 
-  >>> from zope.app.folder import folder
+  >>> from zope.site.folder import Folder
   >>> from zope.app.container import constraints
-  >>> constraints.checkObject(folder.Folder(), u'goodjob', goodjob)
+  >>> constraints.checkObject(Folder(), u'goodjob', goodjob)
   Traceback (most recent call last):
   ...
-  InvalidContainerType: (<zope.app.folder.folder.Folder ...>,
+  InvalidContainerType: (<zope.site.folder.Folder ...>,
                          (<InterfaceClass ...ICommendations>,))
 
 The ``ICommendations`` interface also needs an implementation, since the

@@ -22,7 +22,6 @@ SchoolTool traverser metadirectives.
 $Id$
 
 """
-from zope.app.component.back35 import LayerField
 from zope.security.zcml import Permission
 from zope.schema import TextLine
 from zope.interface import Interface
@@ -41,7 +40,7 @@ class ITraverserPluginDirective(Interface):
         required=True
         )
 
-    layer = LayerField(
+    layer = GlobalObject(
         title=u"The layer the plugin is declared for",
         required=False
         )

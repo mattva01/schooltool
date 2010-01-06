@@ -23,15 +23,17 @@ import base64
 
 from persistent.dict import PersistentDict
 from persistent import Persistent
-from zope.interface import implements
+from zope.interface import implements, implementer
 from zope.schema import getFieldNames
-from zope.component import adapts
+from zope.component import adapts, adapter
 from zope.annotation.interfaces import IAttributeAnnotatable, IAnnotations
 from zope.app.container.contained import Contained
+from zope.location.interfaces import ILocation
 
 from schooltool.calendar.icalendar import read_icalendar
 from schooltool.calendar.interfaces import ICalendar
 from schooltool.calendar.interfaces import ICalendarEvent
+from schooltool.calendar.interfaces import IExpandedCalendarEvent
 from schooltool.calendar.mixins import CalendarMixin
 from schooltool.calendar.simple import SimpleCalendarEvent
 from schooltool.app.interfaces import ISchoolToolCalendarEvent
@@ -275,3 +277,10 @@ def clearCalendarOnDeletion(event):
     """
     if IHaveCalendar.providedBy(event.object):
         ISchoolToolCalendar(event.object).clear()
+
+
+@adapter(IExpandedCalendarEvent)
+@implementer(ILocation)
+def expandedEventLocation(event):
+    original = event.__dict__['original']
+    return ILocation(original)

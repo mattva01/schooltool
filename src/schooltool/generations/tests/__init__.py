@@ -2,17 +2,17 @@
 Tests for generation scripts.
 """
 from zope.interface import implements
-from zope.app.keyreference.interfaces import IKeyReference
+from zope.keyreference.interfaces import IKeyReference
 from zope.app.testing.setup import setUpAnnotations
 from zope.app.publication.zopepublication import ZopePublication
-from zope.app.folder.folder import rootFolder
+from zope.site.folder import rootFolder
 from zope.app.testing import setup
 
 
 class ContextStub(object):
     """Stub for the context argument passed to evolve scripts.
 
-        >>> from zope.app.zopeappgenerations import getRootFolder
+        >>> from zope.app.generations.utility import getRootFolder
         >>> context = ContextStub()
         >>> getRootFolder(context) is context.root_folder
         True

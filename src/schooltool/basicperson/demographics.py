@@ -68,6 +68,11 @@ class PersonDemographicsData(PersistentDict):
         demographics_fields = IDemographicsFields(app)
         return key in demographics_fields
 
+    def __repr__(self):
+        return '%s: %s' % (
+            object.__repr__(self),
+            super(PersonDemographicsData, self).__repr__())
+
     def __setitem__(self, key, v):
         if not self.isValidKey(key):
             raise InvalidKeyError(key)

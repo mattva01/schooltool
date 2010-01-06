@@ -38,7 +38,6 @@ from collections import defaultdict
 
 import ZConfig
 import transaction
-import zope.app.component.hooks
 import zope.configuration.config
 import zope.configuration.xmlconfig
 from ZODB.ActivityMonitor import ActivityMonitor
@@ -53,19 +52,18 @@ from zope.i18n.interfaces import IUserPreferredLanguages
 from zope.app.wsgi import WSGIPublisherApplication
 from zope.app.server.main import run
 from zope.app.appsetup import DatabaseOpened, ProcessStarting
-from zope.app.publication.httpfactory import HTTPPublicationRequestFactory
 from zope.app.publication.zopepublication import ZopePublication
 from zope.traversing.interfaces import IContainmentRoot
 from zope.app.container.contained import ObjectAddedEvent
 from zope.app.dependable.interfaces import IDependable
-from zope.app.component.hooks import setSite
+from zope.site.hooks import setSite, setHooks
 from zope.component import getUtility
 from zope.component import getAdapters
 from zope.interface import directlyProvidedBy
 from zope.app.intid import IntIds
 from zope.app.intid.interfaces import IIntIds
-from zope.app.component.interfaces import ISite
-from zope.app.component.site import LocalSiteManager
+from zope.location.interfaces import ISite
+from zope.site import LocalSiteManager
 from zope.server.http.wsgihttpserver import WSGIHTTPServer
 from zope.server.http.commonaccesslogger import CommonAccessLogger
 from zope.app.server.wsgi import ServerType
@@ -141,14 +139,8 @@ def die(message, exitcode=1):
     sys.exit(exitcode)
 
 
-class SchoolToolPublisherApplication(WSGIPublisherApplication):
-
-    def __init__(self, db, factory=HTTPPublicationRequestFactory):
-        self.requestFactory = factory(db)
-
-
 schooltool_server = ServerType(WSGIHTTPServer,
-                               SchoolToolPublisherApplication,
+                               WSGIPublisherApplication,
                                CommonAccessLogger,
                                8080, True)
 
@@ -231,7 +223,6 @@ class StreamWrapper(object):
     The main use case for StreamWrapper is wrapping sys.stdout and sys.stderr
     so that you can forget worrying about charsets of your data.
 
-        >>> from StringIO import StringIO
         >>> import schooltool.app.main
         >>> old_locale_charset = schooltool.app.main.locale_charset
         >>> schooltool.app.main.locale_charset = 'UTF-8'
@@ -531,7 +522,7 @@ class StandaloneServer(object):
     def configure(self, options):
         """Configure Zope 3 components."""
         # Hook up custom component architecture calls
-        zope.app.component.hooks.setHooks()
+        setHooks()
         context = zope.configuration.config.ConfigurationMachine()
 
         for config, handler in plugin_configurations:

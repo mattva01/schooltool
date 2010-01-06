@@ -103,7 +103,10 @@ def doctest_Email(self):
         >>> myemail.status_code
 
         >>> myemail.status_parameters
-        <persistent.dict.PersistentDict object at ...>
+        {}
+
+        >>> type(myemail.status_parameters)
+        <class 'persistent.mapping.PersistentMapping'>
 
         >>> myemail.time_created
         datetime.datetime(..., tzinfo=<UTC>)

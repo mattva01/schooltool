@@ -120,7 +120,7 @@ def doctest_ObjectEventAdapterSubscriberDispatcher():
         >>> event = ObjectEvent("<a string>")
         >>> ObjectEventAdapterSubscriberDispatcher(event)()
         >>> results
-        ['<Did stuff on <a string> (event <zope.app.event.objectevent.ObjectEvent object at ...>)>']
+        ['<Did stuff on <a string> (event <zope.component.interfaces.ObjectEvent object at ...>)>']
 
     If there are 2 adapters with the same name, the more specific one
     will get picked though:
