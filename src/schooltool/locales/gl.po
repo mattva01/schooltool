@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-12-24 12:40+0000\n"
-"PO-Revision-Date: 2009-12-24 15:54+0000\n"
+"PO-Revision-Date: 2009-12-29 18:18+0000\n"
 "Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
 "Language-Team: Galician <gl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-12-25 04:36+0000\n"
+"X-Launchpad-Export-Date: 2009-12-31 04:54+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -1301,20 +1301,6 @@ msgstr "Datos CSV de entrada"
 msgid "CSV Data"
 msgstr "Datos CSV"
 
-#. Default: "Apply"
-#: /src/schooltool/basicperson/browser/templates/person_edit.pt:10
-#: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:75
-#: /src/schooltool/export/templates/import.pt:66
-#: /src/schooltool/resource/browser/resource-csvimport.pt:72
-#: /src/schooltool/person/browser/person-csvimport.pt:75
-#: /src/schooltool/course/browser/section-member-csvimport.pt:52
-#: /src/schooltool/course/browser/templates/course-csvimport.pt:86
-#: /src/schooltool/group/browser/group-csvimport.pt:72
-#: /src/schooltool/group/browser/group-member-csvimport.pt:52
-#: /src/schooltool/app/browser/templates/timetables-csvimport.pt:122
-msgid "submit-button"
-msgstr "Aplicar"
-
 #: /src/schooltool/basicperson/browser/templates/person_edit.pt:10
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:58
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:59
@@ -1329,33 +1315,6 @@ msgstr "Aplicar"
 #: /src/schooltool/app/browser/templates/event_booking.pt:57
 msgid "A"
 msgstr "A"
-
-#. Default: "Cancel"
-#: /src/schooltool/basicperson/browser/templates/person_edit.pt:13
-#: /src/schooltool/term/browser/templates/term-container-delete.pt:31
-#: /src/schooltool/term/browser/templates/emergency2.pt:42
-#: /src/schooltool/term/browser/templates/emergency_select.pt:41
-#: /src/schooltool/schoolyear/browser/templates/term-delete.pt:29
-#: /src/schooltool/resource/browser/container_delete.pt:29
-#: /src/schooltool/contact/browser/templates/contacts_delete.pt:36
-#: /src/schooltool/timetable/browser/templates/simpletts.pt:62
-#: /src/schooltool/timetable/browser/templates/timetable-edit.pt:70
-#: /src/schooltool/timetable/browser/templates/timetable-container-delete.pt:29
-#: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:83
-#: /src/schooltool/timetable/browser/templates/specialday_select.pt:41
-#: /src/schooltool/timetable/browser/templates/specialday_change.pt:64
-#: /src/schooltool/timetable/browser/templates/schooltt-delete.pt:31
-#: /src/schooltool/person/browser/person_container_delete.pt:37
-#: /src/schooltool/sampledata/sampledata.pt:82
-#: /src/schooltool/setupdata/setupdata.pt:25
-#: /src/schooltool/course/browser/templates/link_section.pt:133
-#: /src/schooltool/email/browser/templates/email_delete.pt:34
-#: /src/schooltool/skin/templates/container_delete.pt:34
-#: /src/schooltool/skin/templates/view_macros.pt:200
-#: /src/schooltool/skin/templates/view_macros.pt:205
-#: /src/schooltool/app/browser/templates/event_add.pt:378
-msgid "cancel-button"
-msgstr "Cancelar"
 
 #: /src/schooltool/basicperson/browser/templates/person_view.pt:20
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:34
@@ -2610,6 +2569,47 @@ msgid ""
 "Of the three, only 'jbjones' has a password ('r2m45J') and will be able to "
 "login to the system. Note that passwords must be sent in plain text."
 msgstr ""
+
+#. Default: "Apply"
+#: /src/schooltool/basicperson/browser/templates/person_edit.pt:10
+#: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:75
+#: /src/schooltool/export/templates/import.pt:66
+#: /src/schooltool/resource/browser/resource-csvimport.pt:72
+#: /src/schooltool/person/browser/person-csvimport.pt:75
+#: /src/schooltool/course/browser/section-member-csvimport.pt:52
+#: /src/schooltool/course/browser/templates/course-csvimport.pt:86
+#: /src/schooltool/group/browser/group-csvimport.pt:72
+#: /src/schooltool/group/browser/group-member-csvimport.pt:52
+#: /src/schooltool/app/browser/templates/timetables-csvimport.pt:122
+msgid "submit-button"
+msgstr "Aplicar"
+
+#. Default: "Cancel"
+#: /src/schooltool/basicperson/browser/templates/person_edit.pt:13
+#: /src/schooltool/term/browser/templates/term-container-delete.pt:31
+#: /src/schooltool/term/browser/templates/emergency2.pt:42
+#: /src/schooltool/term/browser/templates/emergency_select.pt:41
+#: /src/schooltool/schoolyear/browser/templates/term-delete.pt:29
+#: /src/schooltool/resource/browser/container_delete.pt:29
+#: /src/schooltool/contact/browser/templates/contacts_delete.pt:36
+#: /src/schooltool/timetable/browser/templates/simpletts.pt:62
+#: /src/schooltool/timetable/browser/templates/timetable-edit.pt:70
+#: /src/schooltool/timetable/browser/templates/timetable-container-delete.pt:29
+#: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:83
+#: /src/schooltool/timetable/browser/templates/specialday_select.pt:41
+#: /src/schooltool/timetable/browser/templates/specialday_change.pt:64
+#: /src/schooltool/timetable/browser/templates/schooltt-delete.pt:31
+#: /src/schooltool/person/browser/person_container_delete.pt:37
+#: /src/schooltool/sampledata/sampledata.pt:82
+#: /src/schooltool/setupdata/setupdata.pt:25
+#: /src/schooltool/course/browser/templates/link_section.pt:133
+#: /src/schooltool/email/browser/templates/email_delete.pt:34
+#: /src/schooltool/skin/templates/container_delete.pt:34
+#: /src/schooltool/skin/templates/view_macros.pt:200
+#: /src/schooltool/skin/templates/view_macros.pt:205
+#: /src/schooltool/app/browser/templates/event_add.pt:378
+msgid "cancel-button"
+msgstr "Cancelar"
 
 #: /src/schooltool/basicperson/browser/templates/person_view.pt:4
 #: /src/schooltool/person/browser/person.pt:4
