@@ -40,6 +40,11 @@ class Description(Contained):
     title = u''
     description = u''
 
+    def __repr__(self):
+        return '<%s.%s (%r)>' % (self.__class__.__module__,
+                              self.__class__.__name__,
+                              self.title)
+
 
 class DescriptionGroup(Description):
     implements(IDescriptionGroup)

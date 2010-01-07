@@ -69,7 +69,7 @@ def doctest_registerCrowdAdapter():
         ...     'crowd A': 'Factory A',
         ...     'crowd B': 'Factory B',
         ...     }
-        
+
         >>> provideUtility(cru, provides=ICrowdsUtility)
 
         >>> class IMyObject(Interface):
