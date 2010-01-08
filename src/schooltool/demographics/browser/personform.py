@@ -22,7 +22,7 @@ from zope.formlib import form
 from zope.schema import TextLine, Password, getFields
 from zope.app.pagetemplate import ViewPageTemplateFile
 from zope.app.form.browser.interfaces import ITerms
-from zope.app.publisher.browser.menu import getMenu, BrowserMenu
+from zope.browsermenu.menu import getMenu, BrowserMenu
 from zope.schema.interfaces import ITitledTokenizedTerm
 from zope.publisher.browser import BrowserView
 from zope.component import getUtility
