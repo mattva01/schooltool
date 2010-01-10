@@ -48,7 +48,7 @@ def doctest_GroupContainer():
 
     Let's make sure it acts like a proper container should act
 
-        >>> from zope.app.container.tests.test_btree import TestBTreeContainer
+        >>> from zope.container.tests.test_btree import TestBTreeContainer
         >>> class Test(TestBTreeContainer):
         ...    def makeTestObject(self):
         ...        return GroupContainer()

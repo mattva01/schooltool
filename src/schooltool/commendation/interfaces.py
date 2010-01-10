@@ -28,7 +28,7 @@ __docformat__ = 'reStructuredText'
 import zope.interface
 import zope.schema
 import zope.i18nmessageid
-from zope.app import container
+from zope import container
 
 # Since Zope 3 is an application server and does not know the users locale
 # until a request is issued, we can only mark all strings that are supposed to
@@ -78,7 +78,7 @@ class ICommendation(zope.interface.Interface):
 # component management. It basically implements the Python mapping
 # API. However, its methods have to do a little bit more work, so that it
 # integrates nicely into the Zope 3 framework.
-class ICommendations(zope.app.container.interfaces.IContainer):
+class ICommendations(container.interfaces.IContainer):
     '''An object containing several commendations.'''
     container.constraints.contains(ICommendation)
 

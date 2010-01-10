@@ -37,8 +37,8 @@ from zope.interface import implements, implementsOnly
 from zope.annotation.interfaces import IAttributeAnnotatable, IAnnotations
 from zope.app.applicationcontrol.interfaces import IApplicationControl
 from zope.app.applicationcontrol.applicationcontrol import applicationController
-from zope.app.component.hooks import getSite
-from zope.app.component.site import SiteManagerContainer
+from zope.site.hooks import getSite
+from zope.site import SiteManagerContainer
 from zope.app.container import sample
 from zope.app.container.contained import NameChooser
 from zope.app.container.interfaces import INameChooser
@@ -151,7 +151,7 @@ class SimpleNameChooser(NameChooser):
         >>> chooser.chooseName('@notallowed', obj)
         Traceback (most recent call last):
           ...
-        UserError: Names cannot begin with '+' or '@' or contain '/'
+        ValueError: Names cannot begin with '+' or '@' or contain '/'
 
     If the name generated from the title gets shortened too much, we
     generate a name from the name of the context container instead:

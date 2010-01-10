@@ -117,7 +117,7 @@
       template="templates/copy_sections.pt"
       permission="schooltool.view"
       menu="zmi_views"
-      title="View"
+      title="Copy Sections"
       />
 
   <page
@@ -127,7 +127,7 @@
       template="templates/link_section.pt"
       permission="schooltool.view"
       menu="zmi_views"
-      title="View"
+      title="View Next"
       />
 
   <page
@@ -137,7 +137,7 @@
       template="templates/link_section.pt"
       permission="schooltool.view"
       menu="zmi_views"
-      title="View"
+      title="View Previous"
       />
 
   <page

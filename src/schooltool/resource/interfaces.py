@@ -26,6 +26,7 @@ import zope.interface
 import zope.schema
 
 import zope.app.container.constraints
+import zope.app.container.interfaces
 from zope.app import container
 
 from schooltool.calendar.interfaces import ICalendarEvent

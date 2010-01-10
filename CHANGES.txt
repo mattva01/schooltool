@@ -1,20 +1,27 @@
 CHANGES
 ~~~~~~~
 
-1.2.1dev
+1.3.0 (2010-01-06)
 ==================
 
-New Features
-------------
+* Port to zope versions available in karmic https://launchpad.net/bugs/498803
+* Update translations
 
-* Automatic plugin inclusion
+
+1.2.1 (2009-12-29)
+==================
+
+* Automatic plugin inclusion using z3c.autoinclude
 * Many build improvements by Justas and Gediminas
+* Code cleanup
 
 Bug fixes
 ---------
 
-* Traceback trying to view student's contacts https://launchpad.net/bugs/475586
-* Section scheduling view now returns to section on save https://launchpad.net/bugs/485616
+* Traceback trying to view student's contacts
+  https://launchpad.net/bugs/475586
+* Section scheduling view now returns to section on save
+  https://launchpad.net/bugs/485616
 * Removed Timetables link from section context, https://launchpad.net/bugs/485617
 
 Translations

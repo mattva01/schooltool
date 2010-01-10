@@ -28,10 +28,10 @@ from zope.component import queryUtility, provideUtility
 from zope.component import provideAdapter
 from zope.interface import implements
 from zope.app import intid
-from zope.app.folder import Folder
+from zope.site.folder import Folder
 from zope.app.catalog.interfaces import ICatalog
 from zope.app.container import btree
-from zope.app.component.hooks import getSite, setSite
+from zope.site.hooks import getSite, setSite
 
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.generations.tests import ContextStub

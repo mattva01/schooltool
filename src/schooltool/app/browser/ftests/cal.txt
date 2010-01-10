@@ -329,7 +329,10 @@ road, let's create a recurring event.
     ... END:VCALENDAR
     ... """, handle_errors=False)
     HTTP/1.1 200 Ok
+    Cache-Control: no-cache="Set-Cookie,Set-Cookie2"
     Content-Length: 0
+    Expires: ...
+    Pragma: no-cache
     Set-Cookie: ...
     <BLANKLINE>
 
@@ -420,7 +423,6 @@ Let's add a calendar through iCalendar PUT view (so we would know the event id):
     ... """, handle_errors=False)
     HTTP/1.1 200 Ok
     Content-Length: 0
-    Set-Cookie: ...
     <BLANKLINE>
 
 Let Frog modify this event:
@@ -537,7 +539,6 @@ We can try and put an updated calendar:
     ... """, handle_errors=False)
     HTTP/1.1 200 Ok
     Content-Length: 0
-    Set-Cookie: ...
     <BLANKLINE>
 
 This should have cleared the calendar.
