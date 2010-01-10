@@ -382,7 +382,7 @@ class TestVEvent(unittest.TestCase):
         self.assertRaises(ICalParseError, parser.parse)
 
     def test_timezones(self):
-        from schooltool.calendar.icalendar import VEventParser, ICalParseError
+        from schooltool.calendar.icalendar import VEventParser
 
         parser = VEventParser()
         parser.add('dtstart', '20010203T040000', params={'TZID': 'Vilnius'})
@@ -504,76 +504,6 @@ class TestVEvent(unittest.TestCase):
                    {'VALUE': 'PERIOD'})
         self.assertRaises(ICalParseError, vevent._extractListOfDates, 'RDATE',
                                           vevent.rdate_types, True)
-
-
-class TestRowParser(unittest.TestCase):
-
-    def test_iterRow(self):
-        from schooltool.calendar.icalendar import RowParser
-        file = StringIO("key1\n"
-                        " :value1\n"
-                        " \n"
-                        "key2\n"
-                        " ;VALUE=foo\n"
-                        " :value2\n"
-                        "key3;VALUE=bar:value3\n")
-        self.assertEqual(list(RowParser.iterRow(file)),
-                         [('KEY1', 'value1', {}),
-                          ('KEY2', 'value2', {'VALUE': 'FOO'}),
-                          ('KEY3', 'value3', {'VALUE': 'BAR'})])
-
-        file = StringIO("key1:value1\n"
-                        "key2;VALUE=foo:value2\n"
-                        "key3;VALUE=bar:value3\n")
-        self.assertEqual(list(RowParser.iterRow(file)),
-                         [('KEY1', 'value1', {}),
-                          ('KEY2', 'value2', {'VALUE': 'FOO'}),
-                          ('KEY3', 'value3', {'VALUE': 'BAR'})])
-
-        file = StringIO("key1:value:with:colons:in:it\n")
-        self.assertEqual(list(RowParser.iterRow(file)),
-                         [('KEY1', 'value:with:colons:in:it', {})])
-
-        file = StringIO("ke\r\n y1\n\t:value\r\n  1 \r\n .")
-        self.assertEqual(list(RowParser.iterRow(file)),
-                         [('KEY1', 'value 1 .', {})])
-
-        file = StringIO("key;param=\xe2\x98\xbb:\r\n"
-                        " value \xe2\x98\xbb\r\n")
-        self.assertEqual(list(RowParser.iterRow(file)),
-                         [("KEY", u"value \u263B", {'PARAM': u'\u263B'})])
-
-    def test_parseRow(self):
-        from schooltool.calendar.icalendar import RowParser
-        parseRow = RowParser._parseRow
-        self.assertEqual(parseRow("key:"), ("KEY", "", {}))
-        self.assertEqual(parseRow("key:value"), ("KEY", "value", {}))
-        self.assertEqual(parseRow("key:va:lu:e"), ("KEY", "va:lu:e", {}))
-        self.assertRaises(ICalParseError, parseRow, "key but no value")
-        self.assertRaises(ICalParseError, parseRow, ":value but no key")
-        self.assertRaises(ICalParseError, parseRow, "bad name:")
-
-        self.assertEqual(parseRow("key;param=:value"),
-                         ("KEY", "value", {'PARAM': ''}))
-        self.assertEqual(parseRow("key;param=pvalue:value"),
-                         ("KEY", "value", {'PARAM': 'PVALUE'}))
-        self.assertEqual(parseRow('key;param=pvalue;param2=value2:value'),
-                         ("KEY", "value", {'PARAM': 'PVALUE',
-                                           'PARAM2': 'VALUE2'}))
-        self.assertEqual(parseRow('key;param="pvalue":value'),
-                         ("KEY", "value", {'PARAM': 'pvalue'}))
-        self.assertEqual(parseRow('key;param=pvalue;param2="value2":value'),
-                         ("KEY", "value", {'PARAM': 'PVALUE',
-                                           'PARAM2': 'value2'}))
-        self.assertRaises(ICalParseError, parseRow, "k;:no param")
-        self.assertRaises(ICalParseError, parseRow, "k;a?=b:bad param")
-        self.assertRaises(ICalParseError, parseRow, "k;a=\":bad param")
-        self.assertRaises(ICalParseError, parseRow, "k;a=\"\177:bad param")
-        self.assertRaises(ICalParseError, parseRow, "k;a=\001:bad char")
-        self.assertEqual(parseRow("key;param=a,b,c:value"),
-                         ("KEY", "value", {'PARAM': ['A', 'B', 'C']}))
-        self.assertEqual(parseRow('key;param=a,"b,c",d:value'),
-                         ("KEY", "value", {'PARAM': ['A', 'b,c', 'D']}))
 
 
 class TestReadIcalendar(unittest.TestCase):
@@ -1000,7 +930,7 @@ class TestReadIcalendar(unittest.TestCase):
         """
 
     def test_read_icalendar_with_timezones(self):
-        from schooltool.calendar.icalendar import read_icalendar, ICalParseError
+        from schooltool.calendar.icalendar import read_icalendar
         from pytz import utc
 
         file = StringIO(self.ical_with_timezones)
@@ -1017,7 +947,7 @@ class TestReadIcalendar(unittest.TestCase):
         self.assertEqual(event.dtstart, datetime(2006, 3, 9, 19, 0, tzinfo=utc))
 
     def test_read_icalendar(self):
-        from schooltool.calendar.icalendar import read_icalendar, ICalParseError
+        from schooltool.calendar.icalendar import read_icalendar
         from pytz import utc
         file = StringIO(self.example_ical)
         result = list(read_icalendar(file))
@@ -1543,7 +1473,6 @@ def test_suite():
     suite.addTest(doctest.DocTestSuite('schooltool.calendar.icalendar',
                         optionflags=doctest.ELLIPSIS | doctest.REPORT_UDIFF |
                                     doctest.NORMALIZE_WHITESPACE))
-    suite.addTest(unittest.makeSuite(TestRowParser))
     suite.addTest(unittest.makeSuite(TestParseDateTime))
     suite.addTest(unittest.makeSuite(TestPeriod))
     suite.addTest(unittest.makeSuite(TestVEvent))
