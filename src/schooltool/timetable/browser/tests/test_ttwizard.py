@@ -21,11 +21,11 @@ Tests for SchoolTool timetable schema wizard.
 """
 
 import unittest
+import doctest
 import datetime
 from pprint import pprint
 
 from zope.location.location import locate
-from zope.testing import doctest
 from zope.publisher.browser import TestRequest
 from zope.component import provideAdapter
 from zope.interface import Interface

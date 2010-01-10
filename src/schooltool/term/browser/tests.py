@@ -20,11 +20,11 @@
 Tests for schooltool term views.
 """
 import unittest
+import doctest
 from datetime import date
 
 from zope.interface import directlyProvides
 from zope.publisher.browser import TestRequest
-from zope.testing import doctest
 
 from schooltool.term.term import Term
 from schooltool.term.ftesting import term_functional_layer

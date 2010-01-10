@@ -20,10 +20,10 @@
 Unit tests for common widgets.
 """
 import unittest
+import doctest
 
 import zope.component
 import zope.interface
-from zope.testing import doctest
 from zope.interface.verify import verifyObject
 from zope.publisher.browser import TestRequest
 

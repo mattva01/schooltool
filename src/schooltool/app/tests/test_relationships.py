@@ -21,8 +21,8 @@ Unit tests for schooltool.app.relationships
 """
 
 import unittest
+import doctest
 
-from zope.testing import doctest
 from zope.interface import implements
 from zope.component import provideAdapter
 

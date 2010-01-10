@@ -18,17 +18,15 @@
 #
 """
 Unit tests for schooltool.calendar.recurrent.
-
-$Id$
 """
 
 import time
-import unittest
-from datetime import datetime, date, timedelta
-
 import pytz
+from datetime import datetime, date, timedelta
+import unittest
+import doctest
+
 from zope.interface.verify import verifyObject
-from zope.testing import doctest
 
 
 class RecurrenceRuleTestBase:

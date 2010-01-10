@@ -18,13 +18,11 @@
 #
 """
 Unit tests for course and section subscriber validation.
-
-$Id$
 """
 
 import unittest
+import doctest
 from datetime import date, timedelta
-from zope.testing import doctest
 
 from schooltool.schoolyear.testing import (setUp, tearDown,
                                            provideStubUtility,
@@ -189,7 +187,6 @@ def doctest_Section_linking_schoolyears():
 def doctest_copySection():
     r"""Test for copySection.
 
-        >>> from schooltool.course.section import Section
         >>> from schooltool.course.course import Course
         >>> from schooltool.person.person import Person
 

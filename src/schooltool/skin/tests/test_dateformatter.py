@@ -20,10 +20,10 @@
 Tests for DateFormatter views.
 """
 import unittest
+import doctest
 import datetime
 
 from zope.publisher.browser import TestRequest
-from zope.testing import doctest
 
 from schooltool.app.browser.testing import setUp, tearDown
 from schooltool.skin.dateformatter import DateFormatterFullView

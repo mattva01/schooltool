@@ -19,8 +19,8 @@
 """Catalog tests
 """
 import unittest
+import doctest
 
-from zope.testing import doctest
 from zope.testing.doctestunit import pprint
 
 from zope.app.intid.interfaces import IIntIds

@@ -20,9 +20,10 @@
 Tests for school years
 """
 import unittest
+import doctest
 from datetime import date
+
 from zope.interface.verify import verifyObject
-from zope.testing import doctest
 
 from schooltool.term.term import Term
 from schooltool.schoolyear.schoolyear import SchoolYear

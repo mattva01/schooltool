@@ -20,7 +20,7 @@
 Unit tests for course and section implementations.
 """
 import unittest
-from zope.testing import doctest
+import doctest
 from zope.interface.verify import verifyObject
 
 from schooltool.relationship.tests import setUp, tearDown

@@ -12,12 +12,10 @@
 #
 ##############################################################################
 """Tests for the Preferences System
-
-$Id$
 """
 import unittest
+import doctest
 
-from zope.testing import doctest
 from zope.component import testing
 
 

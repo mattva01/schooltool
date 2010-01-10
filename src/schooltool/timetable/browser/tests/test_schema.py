@@ -20,6 +20,7 @@
 Tests for schooltool timetable schema views.
 """
 import unittest
+import doctest
 from pprint import pprint
 
 from zope.component import provideAdapter, provideHandler, provideUtility
@@ -31,7 +32,6 @@ from zope.i18n import translate
 from zope.publisher.browser import TestRequest
 from zope.traversing.interfaces import ITraversable
 from zope.traversing.interfaces import IContainmentRoot
-from zope.testing import doctest
 from zope.app.testing import setup
 from zope.traversing import namespace
 

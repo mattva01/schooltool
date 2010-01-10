@@ -18,17 +18,16 @@
 #
 """
 Unit tests for schooltool.resource.sampledata
-
-$Id$
 """
 
 import unittest
+import doctest
 
 from zope.interface.verify import verifyObject
-from zope.testing import doctest
 from zope.app.testing import setup
 
 from schooltool.testing import setup as stsetup
+
 
 def setUp(test):
     setup.placefulSetUp()

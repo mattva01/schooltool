@@ -21,8 +21,8 @@ Tests for schooltool views.
 """
 
 import unittest
+import doctest
 
-from zope.testing import doctest
 from zope.interface import classImplements
 from zope.component import provideAdapter
 from zope.annotation.interfaces import IAttributeAnnotatable

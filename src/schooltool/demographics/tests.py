@@ -21,9 +21,9 @@ Unit tests for schooltool.demographics.sampledata
 """
 
 import unittest
+import doctest
 
 from zope.interface.verify import verifyObject
-from zope.testing import doctest
 
 from schooltool.group.interfaces import IGroupContainer
 from schooltool.app.interfaces import ISchoolToolApplication

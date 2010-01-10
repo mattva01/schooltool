@@ -21,7 +21,7 @@ Unit tests for email functionality.
 
 """
 import unittest
-from zope.testing import doctest
+import doctest
 
 from schooltool.schoolyear.testing import setUp, tearDown
 from schooltool.email.ftesting import email_functional_layer

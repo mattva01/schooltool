@@ -17,21 +17,20 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """Unit tests for schooltool.term.sampledata
-
-$Id$
 """
 import unittest
+import doctest
 
 from zope.component import provideAdapter
 from zope.interface import Interface
 from zope.interface.verify import verifyObject
-from zope.testing import doctest
 from zope.app.testing import setup
 
 from schooltool.schoolyear.schoolyear import getSchoolYearContainer
 from schooltool.term.term import getTermContainer
 from schooltool.term.interfaces import ITermContainer
 from schooltool.testing import setup as stsetup
+
 
 def setUp(test):
     setup.placefulSetUp()

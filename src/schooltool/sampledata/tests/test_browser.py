@@ -19,12 +19,10 @@
 """
 Unit tests for schooltool.sampledata.generator
 """
-
-
 import unittest
+import doctest
 from pprint import pprint
 
-from zope.testing import doctest
 from zope.app.testing import setup
 from zope.publisher.browser import TestRequest
 from zope.component import provideUtility

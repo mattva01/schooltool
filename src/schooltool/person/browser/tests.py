@@ -20,10 +20,10 @@
 Tests for Person views.
 """
 import unittest
+import doctest
 
 from zope.interface import directlyProvides
 from zope.publisher.browser import TestRequest
-from zope.testing import doctest
 from zope.app.testing import setup
 from zope.traversing.interfaces import IContainmentRoot
 from zope.component import provideAdapter
@@ -31,6 +31,7 @@ from zope.component import provideAdapter
 from schooltool.group.interfaces import IGroupContainer
 from schooltool.app.browser.testing import setUp, tearDown
 from schooltool.testing import setup as sbsetup
+
 
 def doctest_PersonContainerView():
     r"""Test for PersonContainerView

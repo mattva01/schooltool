@@ -18,14 +18,12 @@
 #
 """
 Unit tests for schooltool.app.
-
-$Id$
 """
 import unittest
+import doctest
 
 from zope.component import provideAdapter
 from zope.interface.verify import verifyObject
-from zope.testing import doctest
 from zope.app.testing import setup, placelesssetup
 
 from schooltool.testing import setup as sbsetup

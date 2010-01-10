@@ -18,13 +18,11 @@
 #
 """
 Tests for schooltool.app.browser.containers.
-
-$Id$
 """
 import unittest
+import doctest
 
 from zope.app.testing import setup
-from zope.testing import doctest
 from zope.interface import directlyProvides
 from zope.publisher.browser import TestRequest
 

@@ -18,12 +18,10 @@
 #
 """
 Tests for pdf testing helpers.
-
-$Id$
 """
 
 import unittest
-from zope.testing import doctest
+import doctest
 
 from reportlab.lib.styles import ParagraphStyle
 from reportlab.lib import units

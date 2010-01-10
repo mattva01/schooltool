@@ -20,12 +20,11 @@
 Unit tests for schooltool.person.person.
 """
 import unittest
+import doctest
 
 from zope.interface.verify import verifyObject
-from zope.testing import doctest
 from zope.app.testing import setup
 
-from schooltool.person.person import Person
 from schooltool.person.person import PersonPasswordWriter
 from schooltool.person.interfaces import IPasswordWriter
 
@@ -197,12 +196,14 @@ def doctest_PersonPreferences():
 class TestPersonPasswordWriter(unittest.TestCase):
 
     def testSetPassword(self):
+        from schooltool.person.person import Person
         person =  Person("Frog")
         passwordWriter = PersonPasswordWriter(person)
         passwordWriter.setPassword("gorf")
         self.assert_(person.checkPassword("gorf"))
 
     def testConformance(self):
+        from schooltool.person.person import Person
         person =  Person("Frog")
         passwordWriter = PersonPasswordWriter(person)
         self.assert_(verifyObject(IPasswordWriter, passwordWriter))
