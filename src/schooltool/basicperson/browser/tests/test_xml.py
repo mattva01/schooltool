@@ -18,11 +18,9 @@
 #
 """
 Unit tests for person xml views.
-
-$Id$
 """
 import unittest
-from zope.testing import doctest
+import doctest
 
 from zope.app.testing import setup
 from zope.component import provideAdapter

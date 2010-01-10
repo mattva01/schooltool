@@ -21,11 +21,11 @@
 Unit tests for course and section views.
 """
 import unittest
+import doctest
 
 from zope.i18n import translate
 from zope.interface import directlyProvides
 from zope.publisher.browser import TestRequest
-from zope.testing import doctest
 from zope.app.container.browser.adding import Adding
 from zope.traversing.interfaces import IContainmentRoot
 from zope.component import provideAdapter

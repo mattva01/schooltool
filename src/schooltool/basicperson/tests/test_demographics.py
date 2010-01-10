@@ -20,7 +20,7 @@
 Tests for person demographics
 """
 import unittest
-from zope.testing import doctest
+import doctest
 
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.basicperson.person import BasicPerson

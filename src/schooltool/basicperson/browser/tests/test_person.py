@@ -18,15 +18,13 @@
 #
 """
 Unit tests for basic person views.
-
-$Id$
 """
 import unittest
+import doctest
 
 from zope.interface import implements
 from zope.component import provideAdapter
 from zope.app.testing import setup
-from zope.testing import doctest
 
 
 def doctest_PersonAddFormAdapter():

@@ -20,9 +20,9 @@
 Unit tests for schooltool.generations.evolve30
 """
 import unittest
+import doctest
 
 from zope.app.testing import setup
-from zope.testing import doctest
 from zope.interface import implements
 from zope.app.container import btree
 from zope.app.container.contained import Contained

@@ -20,9 +20,9 @@
 Unit tests for schooltool.generations.evolve27
 """
 import unittest
+import doctest
 
 from zope.app.testing import setup
-from zope.testing import doctest
 from zope.interface import implements
 
 from schooltool.generations.tests import ContextStub

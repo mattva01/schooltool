@@ -20,11 +20,12 @@
 __docformat__ = 'reStructuredText'
 
 import unittest
-from pprint import pprint
+import doctest
 
-from zope.testing import doctest, doctestunit
+from zope.testing.doctestunit import pprint
 
 from schooltool.app.browser.testing import setUp, tearDown
+
 
 def test_breadcrumbs():
     """
@@ -170,7 +171,6 @@ def test_suite():
                    | doctest.REPORT_ONLY_FIRST_FAILURE)
     suite = unittest.TestSuite()
     suite.addTest(doctest.DocTestSuite(setUp=setUp, tearDown=tearDown,
-                                       globs={'pprint': doctestunit.pprint},
                                        optionflags=optionflags))
     return suite
 

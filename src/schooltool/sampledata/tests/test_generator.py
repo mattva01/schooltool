@@ -21,8 +21,8 @@ Unit tests for schooltool.sampledata.generator
 """
 
 import unittest
+import doctest
 
-from zope.testing import doctest
 from zope.interface import implements
 from zope.app.testing import setup
 from zope.component import provideUtility

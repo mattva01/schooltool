@@ -18,13 +18,12 @@
 #
 """
 Unit tests for the schooltool.timetable.source module.
-
-$Id$
 """
 import unittest
+import doctest
 
 from zope.app.testing import setup
-from zope.testing import doctest
+
 from schooltool.timetable.tests.test_timetable import ContentStub, Parent
 from schooltool.timetable.interfaces import IOwnTimetables
 

@@ -17,11 +17,11 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Unit tests for schooltool.generations.evolve32
+Unit tests for schooltool.generations.evolve33
 """
 import unittest
+import doctest
 
-from zope.testing import doctest
 from zope.app.testing import setup
 
 from zope.component import queryUtility, provideUtility

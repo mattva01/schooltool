@@ -18,16 +18,14 @@
 #
 """
 Unit tests for basic person vocabularies.
-
-$Id$
 """
 import unittest
+import doctest
 
 from schooltool.group.interfaces import IGroupContainer
 from zope.app.testing import setup
 from zope.component import provideAdapter
 from zope.interface import implements
-from zope.testing import doctest
 
 
 def doctest_GroupSource():

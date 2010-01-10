@@ -22,6 +22,7 @@ Unit tests for the schooltool.timetable.model module.
 
 import calendar
 import unittest
+import doctest
 import itertools
 from datetime import date, time, timedelta, datetime
 from pprint import pformat
@@ -31,7 +32,6 @@ from zope.interface.verify import verifyObject
 from zope.traversing.interfaces import IPhysicallyLocatable
 from zope.app.testing.placelesssetup import PlacelessSetup
 from zope.app.testing import setup
-from zope.testing import doctest
 from zope.component import provideAdapter
 from zope.interface import implements
 

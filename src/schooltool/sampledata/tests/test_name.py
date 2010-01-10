@@ -18,12 +18,10 @@
 #
 """
 Unit tests for schooltool.sampledata.name
-
-$Id$
 """
 
 import unittest
-from zope.testing import doctest
+import doctest
 
 
 def doctest_NameGenerator():

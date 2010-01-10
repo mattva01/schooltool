@@ -22,11 +22,11 @@ Tests for SchoolTool calendaring views.
 
 import sys
 import unittest
+import doctest
 from pprint import pprint
 from datetime import datetime, date, timedelta
 
 from zope.component import provideAdapter
-from zope.testing import doctest
 from zope.interface import implements
 from zope.publisher.browser import TestRequest
 from zope.app.testing import setup

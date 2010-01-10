@@ -19,8 +19,8 @@
 """Batch tests
 """
 import unittest
+import doctest
 
-from zope.testing import doctest
 from zope.publisher.browser import TestRequest
 
 

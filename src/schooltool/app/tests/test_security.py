@@ -21,8 +21,8 @@ Unit tests for schooltool.app.security
 """
 
 import unittest
+import doctest
 
-from zope.testing import doctest
 from zope.app.testing import setup
 from zope.component import provideUtility, getUtility
 from zope.traversing.api import traverse

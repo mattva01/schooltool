@@ -18,12 +18,9 @@
 #
 """
 Unit tests for schooltool.calendar.generate_vcal_dict
-
-$Id$
 """
 import unittest
-
-from zope.testing import doctest
+import doctest
 
 
 def doctest_extract_tzlocation():

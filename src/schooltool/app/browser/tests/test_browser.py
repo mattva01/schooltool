@@ -20,9 +20,9 @@
 Tests for schooltool views.
 """
 import unittest
+import doctest
 
 from zope.interface import implements
-from zope.testing import doctest
 from zope.component import provideAdapter
 from zope.interface.verify import verifyObject
 from zope.location.interfaces import ILocation

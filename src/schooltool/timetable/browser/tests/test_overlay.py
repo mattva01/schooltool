@@ -18,13 +18,11 @@
 #
 """
 Tests for schooltool views.
-
-$Id$
 """
 
 import unittest
+import doctest
 
-from zope.testing import doctest
 from zope.publisher.browser import TestRequest
 from zope.app.pagetemplate.simpleviewclass import SimpleViewClass
 from zope.component import adapts

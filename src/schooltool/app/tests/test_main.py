@@ -23,8 +23,8 @@ Unit tests for schooltool.app.main.
 import os
 import sys
 import unittest
+import doctest
 
-from zope.testing import doctest
 from zope.component import getUtility
 from zope.testing import cleanup
 from zope.traversing.interfaces import IContainmentRoot

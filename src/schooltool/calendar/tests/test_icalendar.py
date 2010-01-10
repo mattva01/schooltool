@@ -18,11 +18,10 @@
 #
 """
 Unit tests for schooltool.calendar.icalendar
-
-$Id$
 """
 
 import unittest
+import doctest
 import difflib
 import time
 import os
@@ -31,7 +30,6 @@ from textwrap import dedent
 from datetime import date, timedelta, datetime
 from StringIO import StringIO
 
-from zope.testing import doctest
 from zope.testing.doctestunit import pprint
 
 

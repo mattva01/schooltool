@@ -20,9 +20,8 @@
 Tests for SchoolTool XLS export views.
 """
 import unittest
+import doctest
 from datetime import date
-
-from zope.testing import doctest
 
 from schooltool.basicperson.interfaces import IDemographics
 from schooltool.basicperson.person import BasicPerson

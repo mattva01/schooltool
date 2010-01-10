@@ -19,17 +19,18 @@
 """
 Unit tests for schooltool.securitypolicy.metaconfigure
 """
-
 import unittest
-from zope.testing import doctest
+import doctest
+
 from zope.interface import implements, Interface
 from zope.interface.verify import verifyObject
 from zope.app.testing import setup
 from zope.component import getAdapter, provideUtility
+from zope.component import queryUtility
+
 from schooltool.securitypolicy import metaconfigure as mc
 from schooltool.securitypolicy.metaconfigure import CrowdsUtility
 from schooltool.securitypolicy.interfaces import ICrowdsUtility
-from zope.component import queryUtility
 
 
 def doctest_CrowdsUtility():

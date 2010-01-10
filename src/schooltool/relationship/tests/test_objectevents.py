@@ -18,13 +18,10 @@
 #
 """
 Unit tests for schooltool.relationship.objectevents
-
-$Id$
 """
-
 import unittest
+import doctest
 
-from zope.testing import doctest
 from schooltool.relationship.tests import URIStub
 
 

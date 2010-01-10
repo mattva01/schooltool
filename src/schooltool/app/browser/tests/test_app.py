@@ -20,9 +20,9 @@
 Tests for schooltool views.
 """
 import unittest
+import doctest
 
 from zope.publisher.browser import TestRequest
-from zope.testing import doctest
 from zope.app.pagetemplate.simpleviewclass import SimpleViewClass
 from zope.app.testing import setup
 from zope.traversing.browser.absoluteurl import absoluteURL
