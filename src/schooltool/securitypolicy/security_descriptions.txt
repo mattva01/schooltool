@@ -1,0 +1,46 @@
+Describing SchoolTool Access Rights
+===================================
+
+SchoolTool employs a custom crowd security policy, that calculates
+access rights when accessing a particular object.  This gives
+developers the freedom of having different access rights for objects
+of the same type.
+
+Various security scenarios have been implemented, for example:
+- calendar access rights that are decided by the object the calendar
+belongs to (resource calendars, section calendars, etc.).
+- additional access rights on a section if a person is an instructor
+of that section.
+- application setting that allows person information to be viewed by
+everybody.
+
+As access rights are determined in python when accessing an object, it
+is difficult to fully automate building of access right
+descriptions. Actually, it is even difficult to automate description
+of the SchoolTool object model.
+
+
+Describing Object Model
+-----------------------
+
+When developers write the code, they think of objects in terms of
+"what it is" and "what it does".  However, we want to present users
+with "what you see" and "what you can do with it".
+
+For example, from developers point of view, you need *schooltool.edit*
+permission on a *Timetable* object adapted from a Section to modify a
+section's timetable.  From the users perspective, you actually need
+access rights to *change the schedule* of *a section*.
+
+
+Describing Crowds
+-----------------
+
+
+
+Specific Cases
+--------------
+
+
+
+

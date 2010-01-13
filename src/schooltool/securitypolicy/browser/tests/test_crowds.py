@@ -29,9 +29,8 @@ from schooltool.schoolyear.testing import (setUp, tearDown,
                                            provideStubUtility,
                                            provideStubAdapter)
 from schooltool.securitypolicy.ftesting import securitypolicy_functional_layer
-
 from schooltool.securitypolicy.metaconfigure import getCrowdsUtility
-from schooltool.securitypolicy.browser.testing import (
+from schooltool.securitypolicy.testing import (
     discriminator_sort_key,
     collectActionsByDiscriminator,
     printActionDescriptions,
