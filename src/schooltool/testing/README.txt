@@ -227,3 +227,84 @@ StoryXML helpers also work on single platypus flowables.
     <Paragraph>Some text</Paragraph>
     </story>
 
+
+ZCML execution wrapper
+----------------------
+
+This is a simple tool for convenient execution of ZCML in your tests.
+
+    >>> from schooltool.testing.setup import ZCMLWrapper
+
+    >>> zcml = ZCMLWrapper()
+
+Let's include a ZCML file that defines a new directive.
+
+    >>> zcml.include('schooltool.testing.tests',
+    ...              file='echodirective.zcml')
+
+The new directive is under a namespace, so we cannot access it directly.
+
+    >>> zcml.string('<echo message="Boo" />')
+    Traceback (most recent call last):
+    ...
+    ZopeXMLConfigurationError: File "<string>", line 2.0
+        ConfigurationError: ('Unknown directive', None, u'echo')
+
+Note that line number is a bit off in string execution, this happens
+because the string is wrapped in <configure>...</configure>.
+
+So, lets set the default namespace and execute again
+
+    >>> zcml.setNamespaces({'': 'http://schooltool.org/testing/tests'})
+
+    >>> zcml.string('<echo message="Boo" />')
+    Executing echo: Boo
+
+You can use prefixed namespaces like this:
+
+    >>> zcml.setNamespaces({
+    ...     '': 'http://schooltool.org/testing/tests',
+    ...     'test': 'http://schooltool.org/testing/tests'})
+
+    >>> zcml.string('<test:echo message="Boo"/>')
+    Executing echo: Boo
+
+And you can even postpone ZCML action execution, if it's convenient
+for your tests.
+
+    >>> zcml.auto_execute = False
+
+    >>> zcml.string('<echo message="First" echo_on_add="True"/>')
+    Adding ZCML action: ('echo', u'First')
+
+    >>> zcml.string('<echo message="Second" echo_on_add="True"/>')
+    Adding ZCML action: ('echo', u'Second')
+
+    >>> zcml.execute()
+    Executing echo: First
+    Executing echo: Second
+
+Finally, each instance of the wrapper has it's own ConfigurationMachine.
+
+    >>> zcml.context
+    <zope.configuration.config.ConfigurationMachine ...>
+
+    >>> other = ZCMLWrapper()
+    >>> other.setNamespaces({'': 'http://schooltool.org/testing/tests'})
+    >>> other.string('<echo message="Boo" />')
+    Traceback (most recent call last):
+    ...
+    ZopeXMLConfigurationError: File "<string>", line 2.0
+        ConfigurationError: ('Unknown directive', ..., u'echo')
+
+Let's include the directive again, but this time also show that we can also
+pass module instead of it's dotted name.
+
+    >>> import schooltool.testing.tests as the_tests
+    >>> other.include(the_tests, file='echodirective.zcml')
+
+    >>> other.string('<echo message="Boo" />')
+    Executing echo: Boo
+
+    >>> other.context is not zcml.context
+    True

@@ -102,3 +102,60 @@ def setUpApplicationPreferences():
     provideAdapter(getApplicationPreferences,
                    (ISchoolToolApplication,), IApplicationPreferences)
 
+
+# --------------------------------------------------------------------------
+_import_chickens = {}, {}, ("*",) # dead chickens needed by __import__
+from zope.configuration import xmlconfig
+
+class ZCMLWrapper(object):
+    """Wrapper for more convenient zcml execution."""
+    auto_execute = True
+    context = None
+    namespaces = None
+
+    def __init__(self, context=None):
+        self.context = context
+        self.namespaces = {}
+
+    def setNamespaces(self, namespaces={}):
+        """Set active namespaces.
+
+           namespaces = {
+               '': "http://namespaces.zope.org/zope",
+               'meta': "http://namespaces.zope.org/meta"
+               }
+
+        Will wrap ZCML passed to string() with:
+
+            <configure
+                xmlns="http://namespaces.zope.org/zope"
+                xmlns:meta="http://namespaces.zope.org/meta">
+            ...
+            </configure>
+
+        """
+        self.namespaces = namespaces.copy()
+
+    def string(self, string, name="<string>"):
+        namespaces = ''
+        if self.namespaces:
+            namespaces = ' ' + ' '.join(
+                ['xmlns%s="%s"' % (short and ':' + short, long)
+                 for short, long in sorted(self.namespaces.items())])
+
+        string = '<configure%s>\n' % namespaces + string + '\n</configure>'
+
+        self.context = xmlconfig.string(
+            string, context=self.context, name=name,
+            execute=self.auto_execute)
+
+    def include(self, package=None, file='configure.zcml'):
+        if isinstance(package, str):
+            package = __import__(package, *_import_chickens)
+        self.context = xmlconfig.file(
+            file, package=package, context=self.context,
+            execute=self.auto_execute)
+
+    def execute(self):
+        if self.context is not None:
+            self.context.execute_actions()
