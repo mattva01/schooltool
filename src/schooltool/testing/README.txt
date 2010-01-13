@@ -308,3 +308,4 @@ pass module instead of it's dotted name.
 
     >>> other.context is not zcml.context
     True
+
