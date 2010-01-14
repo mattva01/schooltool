@@ -147,7 +147,7 @@ ubuntu-environment:
 	 echo "I am running as $(shell whoami)"; \
 	 exit 3; \
 	} else { \
-	 apt-get install bzr build-essential python-all python-all-dev libc6-dev libicu-dev; \
-	 apt-get build-dep python-imaging; \
+	 apt-get install bzr build-essential python-all-dev libc6-dev libicu-dev libxslt1-dev; \
+	 apt-get install libfreetype6-dev libjpeg62-dev; \
 	 echo "Installation Complete: Next... Run 'make'."; \
 	} fi
