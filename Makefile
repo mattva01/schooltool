@@ -2,6 +2,7 @@
 
 PACKAGE=schooltool
 
+DIST=/home/ftp/pub/schooltool/1.4
 BOOTSTRAP_PYTHON=python2.5
 INSTANCE_TYPE=schooltool
 BUILDOUT_FLAGS=
@@ -22,7 +23,7 @@ buildout bin/test: bin/buildout setup.py base.cfg buildout.cfg
 	@touch --no-create bin/test
 
 .PHONY: update
-update: bin/buildout
+update:
 	bzr up
 	$(MAKE) buildout BUILDOUT_FLAGS=-n
 
@@ -54,7 +55,7 @@ release: bin/buildout
 
 .PHONY: move-release
 move-release:
-	mv -v dist/$(PACKAGE)-*.tar.gz /home/ftp/pub/schooltool/1.4/dev
+	mv -v dist/$(PACKAGE)-*.tar.gz $(DIST)/dev
 
 .PHONY: coverage
 coverage: build
