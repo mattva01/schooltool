@@ -27,8 +27,8 @@ from zope.component import getUtility, queryUtility
 from zope.component import getNextUtility
 from zope.container.contained import Contained
 from zope.location.interfaces import ILocation
-from zope.app.security.interfaces import IAuthentication, ILoginPassword
-from zope.app.security.interfaces import IAuthenticatedGroup, IEveryoneGroup
+from zope.authentication.interfaces import IAuthentication, ILoginPassword
+from zope.authentication.interfaces import IAuthenticatedGroup, IEveryoneGroup
 from zope.session.interfaces import ISession
 from zope.interface import implements
 from schooltool.group.interfaces import IGroupContainer

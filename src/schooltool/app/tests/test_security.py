@@ -27,7 +27,7 @@ from zope.app.testing import setup
 from zope.component import provideUtility, getUtility
 from zope.traversing.api import traverse
 from zope.component.interfaces import ComponentLookupError
-from zope.app.security.interfaces import IAuthentication
+from zope.authentication.interfaces import IAuthentication
 from zope.lifecycleevent import ObjectAddedEvent
 
 
@@ -40,8 +40,8 @@ class TestAuthSetUpSubscriber(unittest.TestCase):
         self.root['frogpond'] = self.app
 
         # Authenticated group
-        from zope.app.security.interfaces import IAuthenticatedGroup
-        from zope.app.security.principalregistry import AuthenticatedGroup
+        from zope.authentication.interfaces import IAuthenticatedGroup
+        from zope.principalregistry.principalregistry import AuthenticatedGroup
         provideUtility(AuthenticatedGroup('zope.authenticated',
                                           'Authenticated users',
                                           ''),

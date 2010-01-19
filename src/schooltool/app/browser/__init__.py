@@ -29,8 +29,8 @@ from zope.component import adapts
 from zope.publisher.browser import BrowserView
 from zope.size.interfaces import ISized
 from zope.traversing.interfaces import IPathAdapter, ITraversable
-from zope.app.security.interfaces import IPrincipal
-from zope.app.security.interfaces import IUnauthenticatedPrincipal
+from zope.security.interfaces import IPrincipal
+from zope.authentication.interfaces import IUnauthenticatedPrincipal
 from zope.app.dependable.interfaces import IDependable
 from zope.tales.interfaces import ITALESFunctionNamespace
 from zope.security.proxy import removeSecurityProxy

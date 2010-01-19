@@ -27,7 +27,7 @@ from zope.container.interfaces import IReadContainer
 from zope.interface import implements
 from zope.interface import Interface, Attribute
 from zope.location.interfaces import ILocation, IContained
-from zope.app.security.interfaces import IAuthentication, ILogout
+from zope.authentication.interfaces import IAuthentication, ILogout
 
 from schooltool.common import SchoolToolMessage as _
 from schooltool.calendar.interfaces import IEditCalendar, ICalendarEvent

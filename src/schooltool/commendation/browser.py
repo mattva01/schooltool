@@ -21,8 +21,8 @@
 __docformat__ = 'reStructuredText'
 
 from zope.annotation.interfaces import IAnnotations
-from zope.app.security.interfaces import PrincipalLookupError
-from zope.app.security.interfaces import IAuthentication
+from zope.authentication.interfaces import PrincipalLookupError
+from zope.authentication.interfaces import IAuthentication
 from zope.container.interfaces import INameChooser
 from zope.app.form.browser.add import AddView
 from zope.publisher import browser

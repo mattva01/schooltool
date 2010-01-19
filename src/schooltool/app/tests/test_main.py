@@ -538,7 +538,7 @@ def doctest_bootstrapSchoolTool():
 
     It has a local authentication utility
 
-        >>> from zope.app.security.interfaces import IAuthentication
+        >>> from zope.authentication.interfaces import IAuthentication
         >>> getUtility(IAuthentication, context=app)
         <schooltool.app.security.SchoolToolAuthenticationUtility object at ...>
 
