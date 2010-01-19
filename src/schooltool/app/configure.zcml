@@ -394,10 +394,10 @@
       />
 
   <adapter
-      for="zope.container.interfaces.IReadContainer
+      for="zope.container.interfaces.ISimpleReadContainer
            zope.publisher.interfaces.http.IHTTPRequest"
       provides="schooltool.traverser.interfaces.ITraverserPlugin"
-      factory="zope.app.http.traversal.ContainerTraverser"
+      factory="schooltool.traverser.traverser.ContainerTraverserPlugin"
       permission="zope.Public"
       />
 

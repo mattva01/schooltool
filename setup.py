@@ -124,7 +124,6 @@ Javascript will be usable, although perhaps not very nice or convenient.""",
                       'zope.app.file',
                       'zope.app.form',
                       'zope.app.generations',
-                      'zope.app.http',
                       'zope.app.intid', # BBB
                       'zope.app.onlinehelp',
                       'zope.app.pagetemplate',

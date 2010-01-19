@@ -190,15 +190,6 @@
       factory=".report.DefaultPageTemplate"
       />
 
-  <!-- Pluggable Traverser Plugins -->
-
-  <zope:adapter
-      for="zope.container.interfaces.IReadContainer
-           zope.publisher.interfaces.browser.IBrowserRequest"
-      provides="schooltool.traverser.interfaces.ITraverserPlugin"
-      factory="schooltool.traverser.traverser.ContainerTraverserPlugin"
-      />
-
   <!-- Application Traverser -->
 
   <zope:view
