@@ -6,14 +6,7 @@
 ./python
 ./.installed.cfg
 ./instance
-./schoolbell.conf
 ./schooltool.conf
-./schooltool-skel/log/*.log
-./schooltool-skel/var/Data.fs*
-./schooltool-skel/var/*.pid
-./schooltool-skel/var/*.log
-./schooltool-skel/etc/plugins/*.zcml
-./src/schooltool/batching/tests/sample
 ./src/schooltool.egg-info
 **/LC_MESSAGES/*.mo
 ./src/schooltool/generations/tests/Data27.fs.*

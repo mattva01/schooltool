@@ -17,7 +17,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: SchoolTool development\n"
-"POT-Creation-Date: Mon Dec 14 17:54:41 2009\n"
+"POT-Creation-Date: 2009-12-24 12:40+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Schooltool Development Team <schooltool-dev@schooltool.org>\n"
@@ -643,7 +643,7 @@ msgid "Calendar (Monthly, PDF)"
 msgstr ""
 
 #: /src/schooltool/app/browser/configure.zcml:465
-#: /src/schooltool/timetable/browser/configure.zcml:207
+#: /src/schooltool/timetable/browser/configure.zcml:198
 msgid "Calendar (Yearly)"
 msgstr ""
 
@@ -933,11 +933,11 @@ msgid "atom_more_info"
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/cal_atom.pt:56
-msgid "Validate my Atom feed"
+msgid "[Valid Atom]"
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/cal_atom.pt:56
-msgid "[Valid Atom]"
+msgid "Validate my Atom feed"
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:115
@@ -1538,19 +1538,19 @@ msgid ""
 "Perhaps another %s instance is using it?"
 msgstr ""
 
-#: /src/schooltool/app/main.py:816
+#: /src/schooltool/app/main.py:814
 msgid ""
 "Warning: could not find the reportlab library.\n"
 "PDF support disabled."
 msgstr ""
 
-#: /src/schooltool/app/main.py:821
+#: /src/schooltool/app/main.py:819
 msgid ""
 "Warning: font directory '%s' does not exist.\n"
 "PDF support disabled."
 msgstr ""
 
-#: /src/schooltool/app/main.py:829
+#: /src/schooltool/app/main.py:827
 msgid ""
 "Warning: font '%s' does not exist.\n"
 "PDF support disabled."
@@ -2234,11 +2234,11 @@ msgstr ""
 #: /src/schooltool/schoolyear/security.zcml:31
 #: /src/schooltool/schoolyear/browser/configure.zcml:101
 #: /src/schooltool/timetable/security.zcml:32
-#: /src/schooltool/timetable/browser/configure.zcml:61
-#: /src/schooltool/timetable/browser/configure.zcml:71
-#: /src/schooltool/timetable/browser/configure.zcml:102
+#: /src/schooltool/timetable/browser/configure.zcml:52
+#: /src/schooltool/timetable/browser/configure.zcml:62
+#: /src/schooltool/timetable/browser/configure.zcml:93
+#: /src/schooltool/timetable/browser/configure.zcml:111
 #: /src/schooltool/timetable/browser/configure.zcml:120
-#: /src/schooltool/timetable/browser/configure.zcml:129
 #: /src/schooltool/basicperson/browser/configure.zcml:6
 #: /src/schooltool/basicperson/browser/configure.zcml:185
 #: /src/schooltool/basicperson/browser/configure.zcml:192
@@ -2672,7 +2672,7 @@ msgstr ""
 #: /src/schooltool/course/browser/templates/copy_sections.pt:96
 #: /src/schooltool/course/browser/templates/link_section.pt:72
 #: /src/schooltool/course/browser/templates/section_container.pt:45
-#: /src/schooltool/timetable/browser/configure.zcml:49
+#: /src/schooltool/timetable/browser/configure.zcml:40
 msgid "Schedule"
 msgstr ""
 
@@ -3700,7 +3700,7 @@ msgid "retry-button"
 msgstr ""
 
 #: /src/schooltool/email/browser/templates/email_container.pt:54
-msgid "There are not messages queued."
+msgid "There are no messages queued."
 msgstr ""
 
 #: /src/schooltool/email/browser/templates/email_delete.pt:15
@@ -5110,32 +5110,31 @@ msgstr ""
 msgid "Unbound timetable."
 msgstr ""
 
-#: /src/schooltool/timetable/browser/__init__.py:693
+#: /src/schooltool/timetable/browser/__init__.py:691
 msgid "Invalid date. Please use YYYY-MM-DD format."
 msgstr ""
 
-#: /src/schooltool/timetable/browser/__init__.py:697
+#: /src/schooltool/timetable/browser/__init__.py:695
 msgid "The date does not belong to any term."
 msgstr ""
 
-#: /src/schooltool/timetable/browser/__init__.py:706
+#: /src/schooltool/timetable/browser/__init__.py:704
 msgid "Some values were invalid.  They are highlighted in red."
 msgstr ""
 
-#: /src/schooltool/timetable/browser/configure.zcml:111
+#: /src/schooltool/timetable/browser/configure.zcml:102
 msgid "Change Timetable for One Day"
 msgstr ""
 
-#: /src/schooltool/timetable/browser/configure.zcml:146
+#: /src/schooltool/timetable/browser/configure.zcml:137
 msgid "New Timetable"
 msgstr ""
 
-#: /src/schooltool/timetable/browser/configure.zcml:39
+#: /src/schooltool/timetable/browser/configure.zcml:30
 msgid "Add Timetable"
 msgstr ""
 
 #: /src/schooltool/timetable/browser/event.py:42
-#: /src/schooltool/timetable/browser/configure.zcml:23
 msgid "Timetables"
 msgstr ""
 

@@ -17,7 +17,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: SchoolTool development\n"
-"POT-Creation-Date: Tue Dec  1 17:28:41 2009\n"
+"POT-Creation-Date: 2009-05-19 16:33+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Schooltool Development Team <schooltool-dev@schooltool.org>\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: i18nextract.py\n"
 
-#: /src/schooltool/commendation/browser.py:68
+#: /src/schooltool/commendation/browser.py:70
 #: /src/schooltool/commendation/commendation.py:72
 msgid "<unknown>"
 msgstr ""

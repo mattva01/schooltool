@@ -43,9 +43,6 @@ def find_ftesting_zcml():
         filename = os.path.join(dir, 'etc', 'ftesting.zcml')
         if os.path.exists(filename):
             return filename # We are testing in an instance
-        filename = os.path.join(dir, 'schooltool-skel', 'etc', 'ftesting.zcml')
-        if os.path.exists(filename):
-            return filename
         dir = os.path.dirname(dir)
         if dir == os.path.dirname(dir): # we're looping at the filesystem root
             raise RuntimeError("I can't find ftesting.zcml!")
