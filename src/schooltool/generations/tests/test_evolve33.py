@@ -29,7 +29,7 @@ from zope.component import provideAdapter
 from zope.interface import implements
 from zope.intid import IntIds
 from zope.intid.interfaces import IIntIds
-from zope.app.folder import Folder
+from zope.site.folder import Folder
 from zope.catalog.interfaces import ICatalog
 from zope.app.container import btree
 from zope.site.hooks import getSite, setSite
