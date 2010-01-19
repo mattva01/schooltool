@@ -23,8 +23,22 @@ Test suites for *.txt doctests.
 import unittest
 from zope.testing import doctest
 from zope.app.testing import setup
+from zope.interface import implements, Interface
 
 from schooltool.testing.setup import ZCMLWrapper
+from schooltool.securitypolicy.crowds import Crowd
+
+
+class IClassroom(Interface):
+    pass
+
+
+class Classroom(object):
+    implements(IClassroom)
+
+
+class ClassroomStudentsCrowd(Crowd):
+    pass
 
 
 def setUpSecurityDirectives(test=None):
@@ -33,6 +47,12 @@ def setUpSecurityDirectives(test=None):
     zcml.include('zope.app.zcmlfiles')
     zcml.include('schooltool.securitypolicy', file='meta.zcml')
     zcml.include('schooltool.securitypolicy')
+    zcml.setUp(
+        namespaces={
+            "": "http://namespaces.zope.org/zope",
+            "security": "http://schooltool.org/securitypolicy"
+            },
+        i18n_domain='schooltool')
     test.globs['zcml'] = zcml
 
 

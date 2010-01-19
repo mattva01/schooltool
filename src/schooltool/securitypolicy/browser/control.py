@@ -27,6 +27,7 @@ from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from schooltool.securitypolicy.metaconfigure import getCrowdsUtility
 from schooltool.securitypolicy.metaconfigure import getDescriptionUtility
 from schooltool.securitypolicy.crowds import getCrowdDescription
+from schooltool.securitypolicy.crowds import collectCrowdDescriptions
 from schooltool.common.inlinept import InlinePageTemplate
 
 from schooltool.common import SchoolToolMessage as _
@@ -133,8 +134,7 @@ class SecurityDescriptions(BrowserView):
             'snippets': collection.snippets(),
             }
 
-    def getCrowdSnippets(self, crowd, action, group):
-        description = getCrowdDescription(crowd, action, group)
+    def getDescriptionSnippets(self, description):
         if description is None:
             return []
         collection = queryMultiAdapter(
@@ -145,17 +145,12 @@ class SecurityDescriptions(BrowserView):
             return collection.snippets()
         return []
 
-    def getCrowds(self, group, action):
-        crowds = getCrowdsUtility()
-        crowd_descriptions = {}
-
-        crowd_names = crowds.getCrowdNames(action.permission,
-                                           action.interface)
-        for name in crowd_names:
-            factory = crowds.getFactory(name)
-            crowd = factory(None)
-            crowd_descriptions[name] = self.getCrowdSnippets(crowd, action, group)
-        return crowd_descriptions
+    def getCrowdSnippets(self, action):
+        descriptions = collectCrowdDescriptions(action)
+        snippets = []
+        for description in descriptions:
+            snippets.append(self.getDescriptionSnippets(description))
+        return snippets
 
     def getActions(self, group):
         descriptions = getDescriptionUtility()
@@ -163,11 +158,10 @@ class SecurityDescriptions(BrowserView):
         actions = sorted(action_dict.values(),
                          key=lambda a: '%d %s' % (a.order, a.__name__))
         for action in actions:
-            crowds = [i[1]
-                      for i in sorted(self.getCrowds(group, action).items())]
+            snippets = self.getCrowdSnippets(action)
             yield {
                 'action': action,
-                'crowds': crowds,
+                'crowds': snippets,
                 }
 
     def getGroups(self):

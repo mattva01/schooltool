@@ -125,7 +125,7 @@ class IDescribeAction(Interface):
 
     order = schema.Int(
         title=u"Order",
-        description=u"Order in which this action is displayed in the group.",
+        description=u"Order in which this action should be displayed.",
         required=False)
 
     interface = fields.GlobalObject(
@@ -211,16 +211,17 @@ class ISwitchDescription(Interface):
     group = DescGroupId(
         title=u"Group",
         description=u"""
-        Optional identifier of the group.  When specified, the crowd will be
-        switched within the group only.
+        Optional identifier of the group.  When specified,
+        the description will be switched within this group only.
         """,
         required=False)
 
     action = DescActionId(
         title=u"Action",
         description=u"""
-        Optional identifier of the action of the group.  When specified, the crowd
-        will be switched for the action of the group only.
+        Optional identifier of the action of the group.
+        When specified, the description will be switched for
+        this action of the group only.
         """,
         required=False)
 

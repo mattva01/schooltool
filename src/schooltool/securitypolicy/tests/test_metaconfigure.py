@@ -27,35 +27,8 @@ from zope.interface.verify import verifyObject
 from zope.app.testing import setup
 from zope.component import getAdapter, provideUtility
 from schooltool.securitypolicy import metaconfigure as mc
-from schooltool.securitypolicy.metaconfigure import CrowdsUtility
+from schooltool.securitypolicy.crowds import CrowdsUtility
 from schooltool.securitypolicy.interfaces import ICrowdsUtility
-from zope.component import queryUtility
-
-
-def doctest_CrowdsUtility():
-    """Doctest for CrowdsUtility.
-
-        >>> cru = CrowdsUtility()
-        >>> verifyObject(ICrowdsUtility, cru)
-        True
-    """
-
-
-def doctest_getCrowdsUtility():
-    """Doctest for getCrowdsUtility.
-
-        >>> from schooltool.securitypolicy.metaconfigure import getCrowdsUtility
-        >>> queryUtility(ICrowdsUtility) is None
-        True
-
-        >>> cru = getCrowdsUtility()
-        >>> print cru
-        <schooltool.securitypolicy.metaconfigure.CrowdsUtility object ...>
-
-        >>> queryUtility(ICrowdsUtility) is cru
-        True
-
-    """
 
 
 def doctest_registerCrowdAdapter():

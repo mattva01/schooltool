@@ -1,0 +1,26 @@
+Overview of access rights
+-------------------------
+
+A manager logs in
+
+    >>> manager = Browser('manager', 'schooltool')
+
+And goes to the access rights overview page.
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('View Access Rights').click()
+
+    >>> print manager.contents
+    <BLANKLINE>
+    ...
+    <div class="info-block">
+      <a name="group_schooltool.app">
+        <h1>SchoolTool application</h1>
+      </a>
+      ...
+      <h3>Access</h3>
+        ...Everybody, including users that are not logged in...
+      <h3>Manage school settings and configuration</h3>
+        ... School administration <a href="#legend_administration">[1]</a> ...
+    ...
+

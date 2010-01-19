@@ -50,7 +50,7 @@ class ParticipationStub(object):
 def test_SchoolToolSecurityPolicy_checkPermission():
     """Tests for SchoolToolSecurityPolicy.
 
-        >>> from schooltool.securitypolicy.metaconfigure import CrowdsUtility
+        >>> from schooltool.securitypolicy.crowds import CrowdsUtility
         >>> from schooltool.securitypolicy.interfaces import ICrowdsUtility
         >>> cru = CrowdsUtility()
         >>> provideUtility(cru, ICrowdsUtility)
@@ -106,7 +106,7 @@ def test_SchoolToolSecurityPolicy_checkPermission():
 def test_SchoolToolSecurityPolicy_checkByAdaptation():
     """Tests for SchoolToolSecurityPolicy.checkByAdaptation.
 
-        >>> from schooltool.securitypolicy.metaconfigure import CrowdsUtility
+        >>> from schooltool.securitypolicy.crowds import CrowdsUtility
         >>> from schooltool.securitypolicy.interfaces import ICrowdsUtility
         >>> cru = CrowdsUtility()
         >>> provideUtility(cru, ICrowdsUtility)

@@ -27,13 +27,13 @@ from zope.app.container.btree import BTreeContainer
 
 from schooltool.securitypolicy.crowds import AggregateCrowd
 from schooltool.securitypolicy.interfaces import ICrowd
-from schooltool.securitypolicy.interfaces import ICrowdsUtility
-from schooltool.securitypolicy.interfaces import IDescriptionUtility
 from schooltool.securitypolicy.interfaces import ICrowdToDescribe
 from schooltool.securitypolicy.interfaces import ICrowdDescription
 from schooltool.securitypolicy.interfaces import IAccessControlSetting
 from schooltool.securitypolicy.interfaces import IAccessControlCustomisations
 from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.securitypolicy.crowds import getCrowdsUtility
+from schooltool.securitypolicy.crowds import getDescriptionUtility
 from schooltool.securitypolicy.crowds import DescriptionGroup
 from schooltool.securitypolicy.crowds import GroupAction
 from schooltool.securitypolicy.crowds import CrowdDescription
@@ -44,58 +44,6 @@ ZCML_REGISTER_DESCRIPTION_GROUPS       = 10100
 ZCML_REGISTER_DESCRIPTION_ACTIONS      = 10200
 ZCML_REGISTER_CROWD_DESCRIPTIONS       = 10300
 ZCML_REGISTER_DESCRIPTION_SWITCHING    = 10400
-
-
-class CrowdNotRegistered(Exception):
-    pass
-
-
-class CrowdsUtility(object):
-    implements(ICrowdsUtility)
-
-    def __init__(self):
-        self.factories = {}
-        self.crowds = {}
-
-    def getCrowdNames(self, permission, interface):
-        return self.crowds.get((permission, interface), [])
-
-    def getFactory(self, crowd_name):
-        if crowd_name not in self.factories:
-            raise CrowdNotRegistered(crowd_name)
-        return self.factories[crowd_name]
-
-    def getFactories(self, permission, interface):
-        names = self.getCrowdNames(permission, interface)
-        return [self.getFactory(name) for name in names]
-
-
-def getCrowdsUtility():
-    """Helper - returns crowds utility and registers new one if missing."""
-    utility = queryUtility(ICrowdsUtility)
-    if not utility:
-        utility = CrowdsUtility()
-        getGlobalSiteManager().registerUtility(utility, ICrowdsUtility)
-    return utility
-
-
-class DescriptionUtility(object):
-    implements(IDescriptionUtility)
-
-    def __init__(self):
-        self.groups = BTreeContainer()
-        self.actions_by_group = BTreeContainer()
-
-
-def getDescriptionUtility():
-    """Helper - returns crowd description utility and registers
-    a new one if missing.
-    """
-    utility = queryUtility(IDescriptionUtility)
-    if not utility:
-        utility = DescriptionUtility()
-        getGlobalSiteManager().registerUtility(utility, IDescriptionUtility)
-    return utility
 
 
 class AggregateUtilityCrowd(AggregateCrowd):
@@ -413,5 +361,4 @@ def switch_description(_context,
                     args=(_context, group, action,
                           crowd_getter, replacement_crowd_getter),
                     order=ZCML_REGISTER_DESCRIPTION_SWITCHING)
-
 

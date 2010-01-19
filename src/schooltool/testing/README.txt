@@ -255,14 +255,14 @@ because the string is wrapped in <configure>...</configure>.
 
 So, lets set the default namespace and execute again
 
-    >>> zcml.setNamespaces({'': 'http://schooltool.org/testing/tests'})
+    >>> zcml.setUp(namespaces={'': 'http://schooltool.org/testing/tests'})
 
     >>> zcml.string('<echo message="Boo" />')
     Executing echo: Boo
 
 You can use prefixed namespaces like this:
 
-    >>> zcml.setNamespaces({
+    >>> zcml.setUp(namespaces={
     ...     '': 'http://schooltool.org/testing/tests',
     ...     'test': 'http://schooltool.org/testing/tests'})
 
@@ -290,7 +290,7 @@ Finally, each instance of the wrapper has it's own ConfigurationMachine.
     <zope.configuration.config.ConfigurationMachine ...>
 
     >>> other = ZCMLWrapper()
-    >>> other.setNamespaces({'': 'http://schooltool.org/testing/tests'})
+    >>> other.setUp(namespaces={'': 'http://schooltool.org/testing/tests'})
     >>> other.string('<echo message="Boo" />')
     Traceback (most recent call last):
     ...

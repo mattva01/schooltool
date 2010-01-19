@@ -112,38 +112,44 @@ class ZCMLWrapper(object):
     auto_execute = True
     context = None
     namespaces = None
+    i18n_domain = ''
 
     def __init__(self, context=None):
         self.context = context
         self.namespaces = {}
 
-    def setNamespaces(self, namespaces={}):
-        """Set active namespaces.
+    def setUp(self, namespaces={}, i18n_domain=""):
+        """Set active namespaces and translation domain.
 
            namespaces = {
                '': "http://namespaces.zope.org/zope",
                'meta': "http://namespaces.zope.org/meta"
                }
+           i18ndomain = 'foo'
 
         Will wrap ZCML passed to string() with:
 
             <configure
                 xmlns="http://namespaces.zope.org/zope"
-                xmlns:meta="http://namespaces.zope.org/meta">
+                xmlns:meta="http://namespaces.zope.org/meta"
+                i18ndomain="foo">
             ...
             </configure>
 
         """
         self.namespaces = namespaces.copy()
+        self.i18n_domain = i18n_domain
 
     def string(self, string, name="<string>"):
-        namespaces = ''
+        config = ''
         if self.namespaces:
-            namespaces = ' ' + ' '.join(
+            config = ' ' + ' '.join(
                 ['xmlns%s="%s"' % (short and ':' + short, long)
                  for short, long in sorted(self.namespaces.items())])
+        if self.i18n_domain:
+            config += ' i18n_domain="%s"' % self.i18n_domain
 
-        string = '<configure%s>\n' % namespaces + string + '\n</configure>'
+        string = '<configure%s>\n' % config + string + '\n</configure>'
 
         self.context = xmlconfig.string(
             string, context=self.context, name=name,

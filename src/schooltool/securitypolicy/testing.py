@@ -20,6 +20,8 @@
 SchoolTool security policy testing helpers.
 """
 
+import zope.schema
+
 from schooltool.securitypolicy.metaconfigure import getDescriptionUtility
 
 
@@ -75,3 +77,13 @@ def printDiscriminators(discriminators):
             print last_module
             print '-' * len(last_module)
         print '%s, %s' % (ifc, perm)
+
+
+def printDirectiveDescription(interface):
+    for name, field in zope.schema.getFieldsInOrder(interface):
+        title = '%s %s' % (name,
+                           field.required and '(required)' or '(optional)')
+        spacing = ' ' * (len(title) + 2)
+        desc = ('\n' + spacing).join(
+            [ln.strip() for ln in field.description.strip().splitlines()])
+        print title + (desc and ': ' or '') + desc
