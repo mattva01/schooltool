@@ -24,8 +24,8 @@ import unittest
 from zope.app.testing import setup
 from zope.testing import doctest
 from zope.interface import implements
-from zope.app.container import btree
-from zope.app.container.contained import Contained
+from zope.container.contained import Contained
+from zope.container.btree import BTreeContainer
 from zope.component import provideHandler
 
 from schooltool.relationship.tests import setUpRelationships
@@ -40,7 +40,7 @@ from schooltool.app.membership import URIMember, URIGroup, URIMembership
 from schooltool.course.interfaces import ICourse
 
 
-class AppStub(btree.BTreeContainer):
+class AppStub(BTreeContainer):
     implements(ISchoolToolApplication)
 
 
@@ -73,18 +73,18 @@ def doctest_evolve30():
         >>> context = ContextStub()
         >>> context.root_folder['app'] = app = AppStub()
 
-        >>> persons = app['persons'] = btree.BTreeContainer()
+        >>> persons = app['persons'] = BTreeContainer()
         >>> persons['will'] = BasicPerson("will", "William", "Straus")
         >>> persons['vlad'] = BasicPerson("vlad", "Vladimir", "Rubov")
         >>> persons['john'] = BasicPerson("john", "Johny", "John")
         >>> persons['pete'] = BasicPerson("pete", "Petey", "Pete")
         >>> persons['bill'] = BasicPerson("bill", "Billy", "Bill")
 
-        >>> groups = app['groups'] = btree.BTreeContainer()
+        >>> groups = app['groups'] = BTreeContainer()
         >>> groups['guests'] = Group('Guests')
         >>> groups['students'] = Group('Students')
 
-        >>> sections = app['sections'] = btree.BTreeContainer()
+        >>> sections = app['sections'] = BTreeContainer()
         >>> sections['section_1'] = Group('Section ONE')
         >>> sections['section_2'] = Group('Section TWO')
 
@@ -124,7 +124,7 @@ def doctest_evolve30():
 
     We will also update course ids, so let's set up some.
 
-        >>> courses = app['courses'] = btree.BTreeContainer()
+        >>> courses = app['courses'] = BTreeContainer()
         >>> courses['c1'] = CourseStub()
         >>> courses['c2'] = CourseStub()
         >>> courses['c3'] = CourseStub()

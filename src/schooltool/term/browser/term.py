@@ -28,7 +28,7 @@ from zope.interface import implements
 from zope.interface import Interface
 from zope.schema import TextLine, Date
 from zope.schema import ValidationError
-from zope.app.container.interfaces import INameChooser
+from zope.container.interfaces import INameChooser
 from zope.publisher.browser import BrowserView
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.traversing.browser.absoluteurl import absoluteURL

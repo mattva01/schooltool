@@ -25,10 +25,10 @@ from persistent import Persistent
 from zope.component import adapter
 from zope.interface import implementer
 from zope.interface import implements
-from zope.app.container.contained import Contained
-from zope.app.container.btree import BTreeContainer
 from zope.catalog.interfaces import ICatalog
 from zope.intid.interfaces import IIntIds
+from zope.container.contained import Contained
+from zope.container.btree import BTreeContainer
 from zope.component import getUtility
 
 from zc.catalog.catalogindex import ValueIndex

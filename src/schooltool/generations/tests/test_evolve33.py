@@ -31,7 +31,7 @@ from zope.intid import IntIds
 from zope.intid.interfaces import IIntIds
 from zope.site.folder import Folder
 from zope.catalog.interfaces import ICatalog
-from zope.app.container import btree
+from zope.container.btree import BTreeContainer
 from zope.site.hooks import getSite, setSite
 
 from schooltool.app.interfaces import ISchoolToolApplication
@@ -48,7 +48,7 @@ class AppStub(Folder):
 
     def __init__(self):
         super(AppStub, self).__init__()
-        self['persons'] = btree.BTreeContainer()
+        self['persons'] = BTreeContainer()
         self['persons']['john'] = BasicPerson("john", "Johny", "John")
         self['persons']['pete'] = BasicPerson("pete", "Petey", "Pete")
 

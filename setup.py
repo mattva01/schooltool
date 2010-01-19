@@ -119,7 +119,6 @@ Javascript will be usable, although perhaps not very nice or convenient.""",
                       'zope.app.appsetup',
                       'zope.app.basicskin',
                       'zope.app.catalog', # BBB
-                      'zope.app.container',
                       'zope.app.dependable',
                       'zope.app.exception',
                       'zope.app.file',

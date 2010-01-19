@@ -613,7 +613,7 @@ def doctest_restoreManagerUser():
     registered):
 
         >>> import transaction
-        >>> from zope.app.container.contained import ObjectAddedEvent
+        >>> from zope.lifecycleevent import ObjectAddedEvent
         >>> from schooltool.app.interfaces import ApplicationInitializationEvent
         >>> from zope.event import notify
         >>> from zope.app.publication.zopepublication import ZopePublication

@@ -25,15 +25,15 @@ import unittest
 from zope.i18n import translate
 from zope.interface import directlyProvides
 from zope.publisher.browser import TestRequest
+from zope.publisher.browser import BrowserView
 from zope.testing import doctest
-from zope.app.container.browser.adding import Adding
 from zope.traversing.interfaces import IContainmentRoot
 from zope.component import provideAdapter
 
 from schooltool.app.browser.testing import setUp, tearDown
 from schooltool.testing import setup
 
-class AddingStub(Adding):
+class AddingStub(BrowserView):
     pass
 
 def doctest_CourseContainerView():

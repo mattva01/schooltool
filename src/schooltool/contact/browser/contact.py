@@ -30,7 +30,7 @@ from zope.traversing.browser.interfaces import IAbsoluteURL
 from zope.traversing.browser import absoluteURL
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.publisher.browser import BrowserView
-from zope.app.container.interfaces import INameChooser
+from zope.container.interfaces import INameChooser
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.catalog.interfaces import ICatalog
 from zope.intid.interfaces import IIntIds

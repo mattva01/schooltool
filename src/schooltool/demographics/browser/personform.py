@@ -274,7 +274,7 @@ class PersonAddView(BasicForm):
             return None
 
         try:
-            from zope.app.container.interfaces import INameChooser
+            from zope.container.interfaces import INameChooser
             INameChooser(self.context).checkName(data['username'], None)
         except ValueError:
             self.status = _("Names cannot begin with '+' or '@' or contain '/'")

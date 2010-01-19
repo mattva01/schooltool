@@ -86,7 +86,7 @@ def doctest_utilityOverride():
     Let's create a utility::
 
       >>> from persistent import Persistent
-      >>> from zope.app.container.contained import Contained
+      >>> from zope.container.contained import Contained
       >>> from zope.interface import Interface, implements
       >>> class IMyUtility(Interface):
       ...     pass

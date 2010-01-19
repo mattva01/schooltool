@@ -54,7 +54,7 @@ from zope.app.server.main import run
 from zope.app.appsetup import DatabaseOpened, ProcessStarting
 from zope.app.publication.zopepublication import ZopePublication
 from zope.traversing.interfaces import IContainmentRoot
-from zope.app.container.contained import ObjectAddedEvent
+from zope.lifecycleevent import ObjectAddedEvent
 from zope.app.dependable.interfaces import IDependable
 from zope.site.hooks import setSite, setHooks
 from zope.component import getUtility

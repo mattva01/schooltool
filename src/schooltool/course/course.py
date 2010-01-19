@@ -18,23 +18,23 @@
 #
 """
 Course implementation
-
-$Id$
 """
+
 from persistent import Persistent
-import zope.interface
 
 from zope.interface import implementer
+from zope.interface import implements
 from zope.component import adapts
 from zope.component import adapter
 from zope.component import getUtility
 from zope.annotation.interfaces import IAttributeAnnotatable
 from zope.intid import addIntIdSubscriber
 from zope.intid.interfaces import IIntIds
-from zope.app.container.contained import ObjectAddedEvent
-from zope.app.container.interfaces import IObjectRemovedEvent
-from zope.app.container.interfaces import IObjectAddedEvent
-from zope.app.container import btree, contained
+from zope.lifecycleevent import ObjectAddedEvent
+from zope.lifecycleevent.interfaces import IObjectRemovedEvent
+from zope.lifecycleevent.interfaces import IObjectAddedEvent
+from zope.container.contained import Contained
+from zope.container.btree import BTreeContainer
 
 from schooltool.term.interfaces import ITerm
 from schooltool.schoolyear.subscriber import ObjectEventAdapterSubscriber
@@ -50,17 +50,17 @@ from schooltool.course.interfaces import ICourseContainer
 from schooltool.course import interfaces
 
 
-class CourseContainerContainer(btree.BTreeContainer):
+class CourseContainerContainer(BTreeContainer):
     """Container of Courses."""
 
-    zope.interface.implements(interfaces.ICourseContainerContainer,
+    implements(interfaces.ICourseContainerContainer,
                               IAttributeAnnotatable)
 
 
-class CourseContainer(btree.BTreeContainer):
+class CourseContainer(BTreeContainer):
     """Container of Courses."""
 
-    zope.interface.implements(interfaces.ICourseContainer,
+    implements(interfaces.ICourseContainer,
                               IAttributeAnnotatable)
 
 
@@ -113,10 +113,9 @@ def getSchoolYearForCourse(course):
     return ISchoolYear(course.__parent__)
 
 
-class Course(Persistent, contained.Contained, Asset):
+class Course(Persistent, Contained, Asset):
 
-    zope.interface.implements(interfaces.ICourseContained,
-                              IAttributeAnnotatable)
+    implements(interfaces.ICourseContained, IAttributeAnnotatable)
 
     sections = RelationshipProperty(relationships.URICourseSections,
                                     relationships.URICourse,

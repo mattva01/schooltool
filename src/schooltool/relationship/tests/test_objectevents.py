@@ -54,7 +54,7 @@ def doctest_delete_breaks_relationships():
 
     We put those objects to a Zope 3 container.
 
-        >>> from zope.app.container.btree import BTreeContainer
+        >>> from zope.container.btree import BTreeContainer
         >>> container = BTreeContainer()
         >>> container['apple'] = apple
         >>> container['orange'] = orange
@@ -103,7 +103,7 @@ def doctest_copy_breaks_relationships():
 
     We put those objects to a Zope 3 container.
 
-        >>> from zope.app.container.btree import BTreeContainer
+        >>> from zope.container.btree import BTreeContainer
         >>> container = BTreeContainer()
         >>> container['apple'] = apple
         >>> container['orange'] = orange
@@ -167,7 +167,7 @@ def doctest_copy_does_not_break_inside_relationships():
 
     We put one of the objects to a Zope 3 container.
 
-        >>> from zope.app.container.btree import BTreeContainer
+        >>> from zope.container.btree import BTreeContainer
         >>> container = BTreeContainer()
         >>> container['orange'] = orange
 

@@ -29,12 +29,12 @@ from zope.interface import implements, implementer
 from zope.annotation.interfaces import IAnnotations
 from zope.security.proxy import removeSecurityProxy
 from zope.intid.interfaces import IIntIds
-from zope.app.container.interfaces import IContained
-from zope.app.container.interfaces import IObjectAddedEvent
-from zope.app.container.interfaces import IObjectRemovedEvent
 from zope.app.dependable.interfaces import IDependable
-from zope.app.container.contained import ObjectAddedEvent, ObjectRemovedEvent
+from zope.container.interfaces import IContained
+from zope.lifecycleevent.interfaces import IObjectAddedEvent
+from zope.lifecycleevent.interfaces import IObjectRemovedEvent
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
+from zope.lifecycleevent import ObjectAddedEvent, ObjectRemovedEvent
 from zope.lifecycleevent import ObjectModifiedEvent
 from zope.event import notify
 

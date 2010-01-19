@@ -85,7 +85,7 @@ from persistent import Persistent
 from zope.proxy import getProxiedObject
 from zope.interface import Interface, implements
 from zope.schema import Object, TextLine, Bool
-from zope.app.container.interfaces import IObjectRemovedEvent
+from zope.lifecycleevent.interfaces import IObjectRemovedEvent
 
 from schooltool.relationship import URIObject
 from schooltool.relationship.interfaces import IRelationshipLinks
@@ -409,7 +409,7 @@ def unrelateCalendarOnDeletion(event):
 
     We will need some object that implements IHaveCalendar for that:
 
-        >>> from zope.app.container.btree import BTreeContainer
+        >>> from zope.container.btree import BTreeContainer
         >>> container = BTreeContainer()
         >>> from schooltool.person.person import Person
         >>> container = BTreeContainer()

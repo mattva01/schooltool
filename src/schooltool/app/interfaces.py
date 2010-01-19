@@ -18,16 +18,15 @@
 #
 """
 SchoolTool application interfaces
-
-$Id$
 """
 
-import zope.interface
 import zope.schema
 
 from zope.component.interfaces import ObjectEvent, IObjectEvent
-from zope.app import container
-from zope.location.interfaces import ILocation
+from zope.container.interfaces import IReadContainer
+from zope.interface import implements
+from zope.interface import Interface, Attribute
+from zope.location.interfaces import ILocation, IContained
 from zope.app.security.interfaces import IAuthentication, ILogout
 
 from schooltool.common import SchoolToolMessage as _
@@ -59,7 +58,7 @@ class IApplicationInitializationEvent(IObjectEvent):
     """
 
 class ApplicationInitializationEvent(ObjectEvent):
-    zope.interface.implements(IApplicationInitializationEvent)
+    implements(IApplicationInitializationEvent)
 
 
 class IApplicationStartUpEvent(IObjectEvent):
@@ -69,7 +68,7 @@ class IApplicationStartUpEvent(IObjectEvent):
     """
 
 class ApplicationStartUpEvent(ObjectEvent):
-    zope.interface.implements(IApplicationStartUpEvent)
+    implements(IApplicationStartUpEvent)
 
 
 class ICatalogSetUpEvent(IObjectEvent):
@@ -79,7 +78,7 @@ class ICatalogSetUpEvent(IObjectEvent):
     """
 
 class CatalogSetUpEvent(ObjectEvent):
-    zope.interface.implements(ICatalogSetUpEvent)
+    implements(ICatalogSetUpEvent)
 
 
 class ISchoolToolCalendar(IEditCalendar, ILocation):
@@ -93,7 +92,7 @@ class ISchoolToolCalendar(IEditCalendar, ILocation):
         description=u"Title of the calendar.")
 
 
-class IHaveCalendar(zope.interface.Interface):
+class IHaveCalendar(Interface):
     """Marker interface for components that can have calendars.
 
     Components providing this interface are adaptable to
@@ -101,14 +100,13 @@ class IHaveCalendar(zope.interface.Interface):
     """
 
 
-class ISchoolToolCalendarEvent(ICalendarEvent,
-                               container.interfaces.IContained):
+class ISchoolToolCalendarEvent(ICalendarEvent, IContained):
     """An event that is contained in a SchoolTool calendar."""
 
-    resources = zope.interface.Attribute(
+    resources = Attribute(
         """Resources that are booked by this event""")
 
-    owner = zope.interface.Attribute(
+    owner = Attribute(
         """Object which this event belongs to.""")
 
     def bookResource(resource):
@@ -118,7 +116,7 @@ class ISchoolToolCalendarEvent(ICalendarEvent,
         """Book a resource."""
 
 
-class ISchoolToolApplication(container.interfaces.IReadContainer):
+class ISchoolToolApplication(IReadContainer):
     """The main SchoolTool application object.
 
     The application is a read-only container with the following items:
@@ -157,14 +155,14 @@ class IApplicationPreferences(ICalendarDisplayPreferences):
         default=True)
 
 
-class IWriteCalendar(zope.interface.Interface):
+class IWriteCalendar(Interface):
 
     def write(data, charset='UTF-8'):
         """Update the calendar data
         """
 
 
-class IShowTimetables(zope.interface.Interface):
+class IShowTimetables(Interface):
     """Adapter to flag whether to show timetables in the calendar overlay."""
 
     showTimetables = zope.schema.Bool(
@@ -188,7 +186,7 @@ class ISchoolToolAuthentication(IAuthentication, ILogout):
         """Forget the username and password stored in a session"""
 
 
-class ICalendarParentCrowd(zope.interface.Interface):
+class ICalendarParentCrowd(Interface):
     """A crowd object that is used on a calendar's parent.
 
     This is just a marker interface.
@@ -198,13 +196,13 @@ class ICalendarParentCrowd(zope.interface.Interface):
         """Return True if principal is in the crowd."""
 
 
-class IAsset(zope.interface.Interface):
+class IAsset(Interface):
     """An asset of a leader."""
 
-    leaders = zope.interface.Attribute("Leaders of this asset")
+    leaders = Attribute("Leaders of this asset")
 
 
-class ICookieLanguageSelector(zope.interface.Interface):
+class ICookieLanguageSelector(Interface):
 
     def getLanguageList():
         """Return the list of available languages."""
@@ -216,19 +214,19 @@ class ICookieLanguageSelector(zope.interface.Interface):
         """Set the selected language into a cookie."""
 
 
-class ISchoolToolInitializationUtility(zope.interface.Interface):
+class ISchoolToolInitializationUtility(Interface):
 
     def initializeApplication(app):
         """Perform school specific initialization. """
 
 
-class IPluginAction(zope.interface.Interface):
+class IPluginAction(Interface):
 
-    after = zope.interface.Attribute(
+    after = Attribute(
         """A list of action adapter names.
         This action must be executed after them.""")
 
-    before = zope.interface.Attribute(
+    before = Attribute(
         """A list of action adapter names.
         This action must be executed before them.""")
 

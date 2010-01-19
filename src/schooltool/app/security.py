@@ -25,7 +25,7 @@ import urllib
 from persistent import Persistent
 from zope.component import getUtility, queryUtility
 from zope.component import getNextUtility
-from zope.app.container.contained import Contained
+from zope.container.contained import Contained
 from zope.location.interfaces import ILocation
 from zope.app.security.interfaces import IAuthentication, ILoginPassword
 from zope.app.security.interfaces import IAuthenticatedGroup, IEveryoneGroup

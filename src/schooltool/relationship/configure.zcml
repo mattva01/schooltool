@@ -22,7 +22,7 @@
       />
 
   <subscriber
-      for="zope.app.container.interfaces.IObjectRemovedEvent"
+      for="zope.lifecycleevent.interfaces.IObjectRemovedEvent"
       handler="schooltool.relationship.objectevents.unrelateOnDeletion"
       />
 

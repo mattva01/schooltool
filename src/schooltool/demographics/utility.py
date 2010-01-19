@@ -18,11 +18,11 @@
 #
 
 from persistent import Persistent
-from zope.app.container.contained import Contained
 from zope.catalog.interfaces import ICatalog
 from zope.catalog.catalog import Catalog
 from zope.catalog.text import TextIndex
 from zope.catalog.field import FieldIndex
+from zope.container.contained import Contained
 from zope.interface import implements
 from zope.component import adapts
 from zope.interface import directlyProvides

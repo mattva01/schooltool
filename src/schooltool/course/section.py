@@ -18,17 +18,16 @@
 #
 """
 Section implementation
-
-$Id$
 """
 from persistent import Persistent
 import rwproperty
-import zope.interface
 
 from zope.event import notify
 from zope.annotation.interfaces import IAttributeAnnotatable
-from zope.app.container.interfaces import IObjectRemovedEvent, INameChooser
-from zope.app.container import btree, contained
+from zope.lifecycleevent.interfaces import IObjectRemovedEvent
+from zope.container.interfaces import INameChooser
+from zope.container.btree import BTreeContainer
+from zope.container.contained import Contained
 from zope.component import adapts
 from zope.interface import implements
 from zope.proxy import sameProxiedObjects
@@ -68,9 +67,9 @@ class SectionBeforeLinkingEvent(object):
         self.second = second
 
 
-class Section(Persistent, contained.Contained):
+class Section(Persistent, Contained):
 
-    zope.interface.implements(interfaces.ISectionContained,
+    implements(interfaces.ISectionContained,
                               IAttributeAnnotatable)
 
     _location = None
@@ -258,17 +257,16 @@ def getCourseContainerForSection(section):
     return ICourseContainer(ISchoolYear(section))
 
 
-class SectionContainerContainer(btree.BTreeContainer):
+class SectionContainerContainer(BTreeContainer):
     """Container of Section containers."""
 
-    zope.interface.implements(interfaces.ISectionContainerContainer)
+    implements(interfaces.ISectionContainerContainer)
 
 
-class SectionContainer(btree.BTreeContainer):
+class SectionContainer(BTreeContainer):
     """Container of Sections."""
 
-    zope.interface.implements(interfaces.ISectionContainer,
-                              IAttributeAnnotatable)
+    implements(interfaces.ISectionContainer, IAttributeAnnotatable)
 
 
 class SectionInit(InitBase):

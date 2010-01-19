@@ -28,7 +28,7 @@ from zope.component import provideUtility, getUtility
 from zope.traversing.api import traverse
 from zope.component.interfaces import ComponentLookupError
 from zope.app.security.interfaces import IAuthentication
-from zope.app.container.contained import ObjectAddedEvent
+from zope.lifecycleevent import ObjectAddedEvent
 
 
 class TestAuthSetUpSubscriber(unittest.TestCase):

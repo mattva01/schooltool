@@ -22,8 +22,8 @@ Group interfaces
 
 from zope.interface import Interface, Attribute
 from zope.schema import TextLine, Text
-from zope.app.container.interfaces import IContainer, IContained
-from zope.app.container.constraints import contains, containers
+from zope.container.interfaces import IContainer, IContained
+from zope.container.constraints import contains, containers
 
 from schooltool.common import SchoolToolMessage as _
 

@@ -118,7 +118,7 @@
   <!-- Event Subscribers -->
 
   <subscriber
-      for="schooltool.app.interfaces.ISchoolToolApplication zope.app.container.interfaces.IObjectAddedEvent"
+      for="schooltool.app.interfaces.ISchoolToolApplication zope.lifecycleevent.interfaces.IObjectAddedEvent"
       handler=".security.authSetUpSubscriber"
       />
 
@@ -153,12 +153,12 @@
       />
 
   <subscriber
-      for="zope.app.container.interfaces.IObjectRemovedEvent"
+      for="zope.lifecycleevent.interfaces.IObjectRemovedEvent"
       handler=".overlay.unrelateCalendarOnDeletion"
       />
 
   <subscriber
-      for="zope.app.container.interfaces.IObjectRemovedEvent"
+      for="zope.lifecycleevent.interfaces.IObjectRemovedEvent"
       handler=".cal.clearCalendarOnDeletion" />
 
   <subscriber
@@ -394,7 +394,7 @@
       />
 
   <adapter
-      for="zope.app.container.interfaces.IReadContainer
+      for="zope.container.interfaces.IReadContainer
            zope.publisher.interfaces.http.IHTTPRequest"
       provides="schooltool.traverser.interfaces.ITraverserPlugin"
       factory="zope.app.http.traversal.ContainerTraverser"

@@ -32,8 +32,8 @@ from zope.publisher.browser import BrowserView
 from zope.component import adapts
 from zope.component import getUtility
 from zope.component import getMultiAdapter
-from zope.app.container.contained import NameChooser
-from zope.app.container.interfaces import INameChooser
+from zope.container.contained import NameChooser
+from zope.container.interfaces import INameChooser
 from zope.event import notify
 from zope.schema import Choice
 from zc.table import table

@@ -25,7 +25,7 @@ from zope.interface import implementer, classImplements
 from zope.component import adapter
 from zope.component import getUtility, queryUtility
 from zope.i18n.interfaces.locales import ICollator
-from zope.app.container.contained import Contained
+from zope.container.contained import Contained
 from zope.catalog.interfaces import ICatalogIndex
 from zope.catalog.interfaces import ICatalog
 from zope.intid.interfaces import IIntIds

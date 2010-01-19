@@ -23,9 +23,9 @@
   <!-- Security -->
 
   <class class=".commendation.Commendations">
-    <allow interface="zope.app.container.interfaces.IReadContainer" />
+    <allow interface="zope.container.interfaces.IReadContainer" />
     <require permission="schooltool.edit"
-             interface="zope.app.container.interfaces.IWriteContainer" />
+             interface="zope.container.interfaces.IWriteContainer" />
   </class>
 
   <class class=".commendation.Commendation">

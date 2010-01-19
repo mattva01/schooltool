@@ -67,8 +67,8 @@ def catalogSetUp(test):
     from zope.component import provideHandler
     from zope.intid import addIntIdSubscriber, removeIntIdSubscriber
     from zope.location.interfaces import ILocation
-    from zope.app.container.interfaces import IObjectAddedEvent
-    from zope.app.container.interfaces import IObjectRemovedEvent
+    from zope.lifecycleevent.interfaces import IObjectAddedEvent
+    from zope.lifecycleevent.interfaces import IObjectRemovedEvent
     provideHandler(addIntIdSubscriber,
                    [ILocation, IObjectAddedEvent])
     provideHandler(removeIntIdSubscriber,

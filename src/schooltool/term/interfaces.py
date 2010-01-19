@@ -21,12 +21,12 @@
 $Id$
 """
 __docformat__ = 'reStructuredText'
-import zope.interface
-import zope.schema
 
-from zope.app.container import constraints
-from zope.app.container.interfaces import IContainer, IContained
-from zope.location.interfaces import ILocation
+import zope.schema
+from zope.container.constraints import contains, containers
+from zope.container.interfaces import IContainer
+from zope.location.interfaces import ILocation, IContained
+from zope.interface import Interface, Attribute
 
 from schooltool.common import SchoolToolMessage as _
 from schooltool.common import IDateRange
@@ -34,7 +34,7 @@ from schooltool.common import IDateRange
 
 class ITerm(IDateRange, IContained):
     """A term is a set of school days inside a given date range."""
-    constraints.containers('.ITermContainer')
+    containers('.ITermContainer')
 
     title = zope.schema.TextLine(
         title=_("Title"))
@@ -46,7 +46,7 @@ class ITerm(IDateRange, IContained):
         """
 
 
-class ITermWrite(zope.interface.Interface):
+class ITermWrite(Interface):
     """A term is a set of school days inside a given date range.
 
     This interface defines an term that can be modified.
@@ -99,10 +99,10 @@ class ITermContainer(IContainer, ILocation):
 
     It stores term calendars for registered term IDs.
     """
-    constraints.contains(ITerm)
+    contains(ITerm)
 
 
-class IDateManager(zope.interface.Interface):
+class IDateManager(Interface):
     """A class that handles dates and time.
 
     It soes so taking the preferred timezone into account.
@@ -113,7 +113,7 @@ class IDateManager(zope.interface.Interface):
         description=u"""The current day.""",
         required=True)
 
-    current_term = zope.interface.Attribute("The active term.")
+    current_term = Attribute("The active term.")
 
 
 class TermDateNotInSchoolYear(Exception):

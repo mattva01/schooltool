@@ -46,7 +46,7 @@ arbitrary containers, such as a regular folder:
   ...     u'school-wide')
 
   >>> from zope.site.folder import Folder
-  >>> from zope.app.container import constraints
+  >>> from zope.container import constraints
   >>> constraints.checkObject(Folder(), u'goodjob', goodjob)
   Traceback (most recent call last):
   ...
@@ -81,7 +81,7 @@ component. In the next section I will show you how to connect the
 commendations to other components.
 
 .. [#constraints] For the implementation of constraints, which contains
-   several docstring-based doctests, see ``zope.app.container.constraints``.
+   several docstring-based doctests, see ``zope.container.constraints``.
 
 
 Associating Commendations with SchoolTool Components

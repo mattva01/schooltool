@@ -22,7 +22,7 @@ SchoolTool timetabling views.
 import datetime
 import re
 
-from zope.app.container.interfaces import INameChooser
+from zope.container.interfaces import INameChooser
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import adapts
 from zope.interface import implements
