@@ -24,7 +24,6 @@
   <include package="zope.intid" />
   <include package="zope.catalog" />
   <include package="zope.mimetype" />
-  <include package="zope.file" />
   <include package="zope.html" />
   <include package="z3c.form" />
   <include package="z3c.formui" />
