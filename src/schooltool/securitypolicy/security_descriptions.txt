@@ -152,7 +152,45 @@ Alltogether this allows us to present access rights in human-readable format:
 Describing Crowds
 -----------------
 
-The main crowd description directive has a lot of knobs at the first glance:
+By default, crowd descriptions are looked up from the crowd itself,
+title and description attributes.
+
+    >>> zcml.string('<permission id="schooltool.edit" title="Edit" />')
+
+    >>> zcml.string('''
+    ...     <security:describe_action
+    ...         group="classroom"
+    ...         name="modify"
+    ...         interface="schooltool.securitypolicy.tests.test_txt.IClassroom"
+    ...         permission="schooltool.edit"
+    ...         title="Modify"
+    ...         description="Modify contents of a classroom"
+    ...     />''')
+
+    >>> zcml.string('''
+    ...     <security:crowd
+    ...         name="classroom_instructors"
+    ...         factory="schooltool.securitypolicy.tests.test_txt.ClassroomInstructorsCrowd"
+    ...     />''')
+
+    >>> zcml.string('''
+    ...   <security:allow
+    ...       crowds="classroom_instructors"
+    ...       interface="schooltool.securitypolicy.tests.test_txt.IClassroom"
+    ...       permission="schooltool.edit" />
+    ... ''')
+
+    >>> printGroupActions(group)
+    Classroom
+    ---------
+    Modify:
+    - Instructors assigned to the classroom.
+    View:
+    - Everybody, including users that are not logged in.
+
+However, registering through ZCML will give you more control.  The
+main crowd description directive has a lot of knobs at the first
+glance:
 
     >>> printDirectiveDescription(metadirectives.IDescribeCrowd)
     group (optional): Optional identifier of the group.
@@ -167,12 +205,12 @@ The main crowd description directive has a lot of knobs at the first glance:
     description (optional): A quick way to specify the description from ZCML.
                             It will be assigned to the "factory" instance dict.
 
-Usually you use only few of them at a time.  The directive breaks down
-to several parts.
+Usually you need to use only few of them at a time.  The directive
+breaks down to several parts.
 
 First, specifying the crowd to describe.  Passing the crowd name is
 the default way to go, but in some scenarios it may be unavailable -
-you can pass the crowd factory instead then.  More on those later.
+you can pass the crowd factory instead then.
 
     >>> printDirectiveDescription(metadirectives.IDescribeCrowd)
     <BLANKLINE>
@@ -233,24 +271,14 @@ Here's the result:
     >>> printGroupActions(group)
     Classroom
     ---------
+    Modify:
+    - Instructors assigned to the classroom.
     View:
     - Students of the classroom
     - Everybody, including users that are not logged in.
 
 To demonstrate more complex crowd descriptions we'll need another action and a
 crowd that is assigned for both actions.
-
-    >>> zcml.string('<permission id="schooltool.edit" title="Edit" />')
-
-    >>> zcml.string('''
-    ...     <security:describe_action
-    ...         group="classroom"
-    ...         name="modify"
-    ...         interface="schooltool.securitypolicy.tests.test_txt.IClassroom"
-    ...         permission="schooltool.edit"
-    ...         title="Modify"
-    ...         description="Modify contents of a classroom"
-    ...     />''')
 
     >>> zcml.string('''
     ...   <security:allow
@@ -270,6 +298,7 @@ crowd that is assigned for both actions.
     Classroom
     ---------
     Modify:
+    - Instructors assigned to the classroom.
     - The super user - owner of this SchoolTool application.
     View:
     - Students of the classroom
@@ -285,22 +314,23 @@ Now we'll modify the super user's description for a single action.
     ...         crowd="superuser"
     ...         title="Super user"
     ...         description="The super user (acting on behalf of
-    ...                      classroom owner)"
+    ...                      assigned instructor)"
     ...     />''')
 
     >>> printGroupActions(group)
     Classroom
     ---------
     Modify:
-    - The super user (acting on behalf of classroom owner)
+    - Instructors assigned to the classroom.
+    - The super user (acting on behalf of assigned instructor)
     View:
     - Students of the classroom
     - Everybody, including users that are not logged in.
     - The super user - owner of this SchoolTool application.
 
 
-Specific Cases
---------------
+Overriding crowd descriptions
+-----------------------------
 
 Some crowds have very elaborate logic and they use aditional
 adaptation to deduce the real crowd that is then used to grant access.
@@ -316,6 +346,47 @@ user's perspective they just add aditional actions for groups of
 objects.  We leave it up to developers to knit the actual crowds used
 to the actions presented to users.
 
+Say, we have some calendar viewer crowd.
+
+    >>> zcml.string('''
+    ...     <security:crowd
+    ...         name="calendar_viewers"
+    ...         factory="schooltool.securitypolicy.tests.test_txt.SomeCalendarCrowd"
+    ...     />''')
+
+    >>> zcml.string('''
+    ...   <security:allow
+    ...       crowds="calendar_viewers"
+    ...       interface="schooltool.securitypolicy.tests.test_txt.ICalendar"
+    ...       permission="schooltool.view" />
+    ... ''')
+
+And we registered classroom calendar viewing action.
+
+    >>> zcml.string('''
+    ...     <security:describe_action
+    ...         group="classroom"
+    ...         name="view_calendar"
+    ...         interface="schooltool.securitypolicy.tests.test_txt.ICalendar"
+    ...         permission="schooltool.view"
+    ...         title="View Calendar"
+    ...         description="View the calendar of a classroom"
+    ...     />''')
+
+
+Say we also customized SomeCalendarCrowd to use ClassroomCalendarCrowd
+(only) when dealing with calendars of the classroom.  The following
+result is not desirable:
+
+    >>> printGroupActions(group)
+    Classroom
+    ---------
+    ...
+    View Calendar:
+    - SomeCalendarCrowd
+
+We need to tell the collector to use description of the other crowd.
+The directive for description switching is quite simple:
 
     >>> printDirectiveDescription(metadirectives.ISwitchDescription)
     group (optional): Optional identifier of the group.  When specified,
@@ -328,6 +399,33 @@ to the actions presented to users.
     use_crowd (optional): Identifier of the crowd to use for description.
     use_crowd_factory (optional): Alternative way to specify the description crowd
 
+When collecting crowd descriptions for the "group/action",
+SchoolTool will use description of "use_crowd" instead of "crowd".
 
+    >>> zcml.string('''
+    ...   <security:switch_description
+    ...       group="classroom"
+    ...       action="view_calendar"
+    ...       crowd="calendar_viewers"
+    ...       use_crowd_factory="schooltool.securitypolicy.tests.test_txt.ClassroomCalendarCrowd" />
+    ... ''')
 
+Much better now:
+
+    >>> printGroupActions(group)
+    Classroom
+    ---------
+    Modify:
+    - Instructors assigned to the classroom.
+    - The super user (acting on behalf of assigned instructor)
+    View:
+    - Students of the classroom
+    - Everybody, including users that are not logged in.
+    - The super user - owner of this SchoolTool application.
+    View Calendar:
+    - Classroom students and their parents.
+
+Note that we specified the crowd factory (use_crowd_factory) - this is
+because the crowd was never assigned the "name" via ZCML.  This is
+often the case with ParentCrowd's.
 

@@ -29,16 +29,31 @@ from schooltool.testing.setup import ZCMLWrapper
 from schooltool.securitypolicy.crowds import Crowd
 
 
+class ICalendar(Interface):
+    pass
+
+
 class IClassroom(Interface):
     pass
 
 
-class Classroom(object):
-    implements(IClassroom)
-
-
 class ClassroomStudentsCrowd(Crowd):
     pass
+
+
+class ClassroomInstructorsCrowd(Crowd):
+    title = u'Assigned instructors'
+    description = u'Instructors assigned to the classroom.'
+
+
+class SomeCalendarCrowd(Crowd):
+    title = u'SomeCalendarCrowd'
+    description = u'SomeCalendarCrowd'
+
+
+class ClassroomCalendarCrowd(Crowd):
+    title = u'Classroom calendar viewers'
+    description = u'Classroom students and their parents.'
 
 
 def setUpSecurityDirectives(test=None):
