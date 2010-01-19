@@ -102,7 +102,10 @@ class ResourceBookingCalendar(ImmutableCalendar, Location):
     def expand(self, start, end):
         app = ISchoolToolApplication(None)
         terms = ITermContainer(app, {})
-        school_timetables = ITimetableSchemaContainer(app, {})
+        school_timetables = ITimetableSchemaContainer(app, None)
+
+        if school_timetables is None or school_timetables.default_id is None:
+            return []
 
         events = []
         for term in terms.values():
