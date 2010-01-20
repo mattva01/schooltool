@@ -277,8 +277,7 @@ Here's the result:
     - Students of the classroom
     - Everybody, including users that are not logged in.
 
-To demonstrate more complex crowd descriptions we'll need another action and a
-crowd that is assigned for both actions.
+And when you have a crowd that is assigned to several actions or groups:
 
     >>> zcml.string('''
     ...   <security:allow
@@ -305,7 +304,8 @@ crowd that is assigned for both actions.
     - Everybody, including users that are not logged in.
     - The super user - owner of this SchoolTool application.
 
-Now we'll modify the super user's description for a single action.
+You can modify the crowd's description for a single action (or the
+whole group).
 
     >>> zcml.string('''
     ...     <security:describe_crowd
@@ -344,7 +344,7 @@ ICalendarParentCrowd to obtain the crowd to use.
 Usualy such objects are generic extensions of functionality, and from
 user's perspective they just add aditional actions for groups of
 objects.  We leave it up to developers to knit the actual crowds used
-to the actions presented to users.
+with the actions presented to users.
 
 Say, we have some calendar viewer crowd.
 
@@ -373,7 +373,6 @@ And we registered classroom calendar viewing action.
     ...         description="View the calendar of a classroom"
     ...     />''')
 
-
 Say we also customized SomeCalendarCrowd to use ClassroomCalendarCrowd
 (only) when dealing with calendars of the classroom.  The following
 result is not desirable:
@@ -385,7 +384,7 @@ result is not desirable:
     View Calendar:
     - SomeCalendarCrowd
 
-We need to tell the collector to use description of the other crowd.
+We need to tell the collector to use description of ClassroomCalendarCrowd.
 The directive for description switching is quite simple:
 
     >>> printDirectiveDescription(metadirectives.ISwitchDescription)
@@ -426,6 +425,6 @@ Much better now:
     - Classroom students and their parents.
 
 Note that we specified the crowd factory (use_crowd_factory) - this is
-because the crowd was never assigned the "name" via ZCML.  This is
-often the case with ParentCrowd's.
+because the crowd was never assigned the "name" via ZCML "crowd"
+directive.  This is often the case with ParentCrowd's.
 
