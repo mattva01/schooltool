@@ -42,8 +42,8 @@ from zope.security.management import checkPermission
 from zope.viewlet.viewlet import ViewletBase
 from zope.component import queryAdapter
 from zope.component import adapts
-from zope.app.catalog.interfaces import ICatalog
-from zope.app.intid.interfaces import IIntIds
+from zope.catalog.interfaces import ICatalog
+from zope.intid.interfaces import IIntIds
 from zope.traversing.browser.absoluteurl import absoluteURL
 
 from schooltool.group.interfaces import IGroupContainer
@@ -360,7 +360,7 @@ class PersonAddView(AddView):
         return AddView.update(self)
 
     def nextURL(self):
-        """See zope.app.container.interfaces.IAdding"""
+        """See zope.browser.interfaces.IAdding"""
         return absoluteURL(self.context, self.request)
 
 

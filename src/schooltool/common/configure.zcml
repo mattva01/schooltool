@@ -17,16 +17,13 @@
 
   <include package="zope.session" />
   <include package="zope.app.server" />
-  <include package="zope.app.http" />
   <include package="zope.contentprovider" />
   <include package="zope.viewlet" />
   <include package="zope.formlib" />
   <include package="zope.keyreference" />
-  <include package="zope.app.intid" />
-  <include package="zope.app.catalog" />
-  <include package="zope.app.file" />
+  <include package="zope.intid" />
+  <include package="zope.catalog" />
   <include package="zope.mimetype" />
-  <include package="zope.file" />
   <include package="zope.html" />
   <include package="z3c.form" />
   <include package="z3c.formui" />
@@ -62,6 +59,7 @@
   <!-- Support Online Help -->
 
   <include package="zope.app.renderer" />
+  <include package="zope.app.file" />
   <include package="zope.app.onlinehelp" file="meta.zcml" />
   <include package="zope.app.onlinehelp" />
 

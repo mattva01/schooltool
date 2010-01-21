@@ -21,7 +21,7 @@ group views.
 
 $Id$
 """
-from zope.app.intid.interfaces import IIntIds
+from zope.intid.interfaces import IIntIds
 from zope.traversing.browser.interfaces import IAbsoluteURL
 from zope.interface import implements
 from zope.publisher.interfaces.browser import IBrowserRequest

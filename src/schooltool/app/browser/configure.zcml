@@ -190,15 +190,6 @@
       factory=".report.DefaultPageTemplate"
       />
 
-  <!-- Pluggable Traverser Plugins -->
-
-  <zope:adapter
-      for="zope.app.container.interfaces.IReadContainer
-           zope.publisher.interfaces.browser.IBrowserRequest"
-      provides="schooltool.traverser.interfaces.ITraverserPlugin"
-      factory="schooltool.traverser.traverser.ContainerTraverserPlugin"
-      />
-
   <!-- Application Traverser -->
 
   <zope:view
@@ -387,7 +378,7 @@
 
     <page
       name="delete.html"
-      for="zope.app.container.interfaces.IContainer"
+      for="zope.container.interfaces.IContainer"
       class="schooltool.skin.containers.ContainerDeleteView"
       template="templates/container_delete.pt"
       permission="schooltool.edit"

@@ -28,8 +28,8 @@ from zope.schema import Dict, Date, Timedelta
 from zope.schema import Iterable
 from zope.schema.interfaces import IField
 from zope.annotation.interfaces import IAnnotatable
-from zope.app.container.constraints import contains, containers
-from zope.app.container.interfaces import IContainer, IContained
+from zope.container.constraints import contains, containers
+from zope.container.interfaces import IContainer, IContained
 from zope.location.interfaces import ILocation
 
 from schooltool.term.interfaces import ITerm

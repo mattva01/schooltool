@@ -22,7 +22,7 @@ csv importing.
 $Id$
 """
 from zope.component import getUtility
-from zope.app.container.interfaces import INameChooser
+from zope.container.interfaces import INameChooser
 
 from schooltool.app.browser.csvimport import BaseCSVImporter, BaseCSVImportView
 from schooltool.person.interfaces import IPersonFactory

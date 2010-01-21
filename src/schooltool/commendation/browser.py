@@ -20,9 +20,10 @@
 """
 __docformat__ = 'reStructuredText'
 
-from zope import annotation
-from zope.app import container
-from zope.app import security
+from zope.annotation.interfaces import IAnnotations
+from zope.authentication.interfaces import PrincipalLookupError
+from zope.authentication.interfaces import IAuthentication
+from zope.container.interfaces import INameChooser
 from zope.app.form.browser.add import AddView
 from zope.publisher import browser
 from zope.traversing.browser.absoluteurl import absoluteURL
@@ -57,7 +58,7 @@ class CommendationDetails(object):
     def grantor(self):
         # Here we try to look up the title for a principal, whose id we saved.
         # The first step is to look up the closest authentication utility.
-        auth = getUtility(security.interfaces.IAuthentication)
+        auth = getUtility(IAuthentication)
 
         # We then try to find the principal. When, during initialization of
         # the commendation, no principal was found, we stored the string
@@ -66,7 +67,7 @@ class CommendationDetails(object):
         # return '<unknwon>' as the title of the grantor.
         try:
             principal = auth.getPrincipal(self.context.grantor)
-        except security.interfaces.PrincipalLookupError:
+        except PrincipalLookupError:
             return _('<unknown>')
         return principal.title
 
@@ -118,7 +119,7 @@ class CommendationAddView(AddView):
         # with the application. For those scenarios Zope 3 provides a
         # component that will choose the name for you. It is simply an adapter
         # from the container to ``INameChooser`` and is used as shown below.
-        chooser = container.interfaces.INameChooser(self.context)
+        chooser = INameChooser(self.context)
         self.context[chooser.chooseName('', comm)] = comm
         return comm
 
@@ -132,7 +133,7 @@ class CommendationAddView(AddView):
         return super(CommendationAddView, self).update()
 
     def nextURL(self):
-        """See zope.app.container.interfaces.IAdding"""
+        """See zope.browser.interfaces.IAdding"""
         return absoluteURL(self.context.__parent__, self.request)
 
 
@@ -165,7 +166,7 @@ class CommendationsOverview(browser.BrowserView):
 
         # Get the SchoolTool application instance and access its annotations.
         stapp = app.getSchoolToolApplication()
-        annotations = annotation.interfaces.IAnnotations(stapp)
+        annotations = IAnnotations(stapp)
         # A list comprehension that iterates through all the commendations and
         # applies the filter one-by-one.
         result = [

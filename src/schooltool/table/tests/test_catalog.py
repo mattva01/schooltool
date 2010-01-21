@@ -23,7 +23,7 @@ import doctest
 
 from zope.testing.doctestunit import pprint
 
-from zope.app.intid.interfaces import IIntIds
+from zope.intid.interfaces import IIntIds
 from zope.component import provideUtility
 from zope.component import provideAdapter
 
@@ -35,7 +35,7 @@ def doctest_IndexedFilterWidget():
 
     First we need a container with a catalog associated with it:
 
-        >>> from zope.app.catalog.interfaces import ICatalog
+        >>> from zope.catalog.interfaces import ICatalog
         >>> from zope.interface import implements
         >>> class IndexStub(object):
         ...     def __init__(self):
@@ -220,7 +220,7 @@ def doctest_IndexedTableFormatter_columns():
 def doctest_IndexedTableFormatter_items():
     """Tests for IndexedTableFormatter.items.
 
-        >>> from zope.app.catalog.interfaces import ICatalog
+        >>> from zope.catalog.interfaces import ICatalog
         >>> from zope.interface import implements
         >>> from zc.catalog.interfaces import IExtentCatalog
         >>> from schooltool.table.catalog import IndexedTableFormatter
@@ -303,7 +303,7 @@ def doctest_IndexedTableFormatter_items():
 def doctest_IndexedTableFormatter_indexItems():
     """Tests for IndexedTableFormatter.indexItems.
 
-        >>> from zope.app.catalog.interfaces import ICatalog
+        >>> from zope.catalog.interfaces import ICatalog
         >>> class ContainerStub(object):
         ...     def __conform__(self, iface):
         ...         if iface == ICatalog:

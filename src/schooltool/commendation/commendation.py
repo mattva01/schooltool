@@ -17,21 +17,22 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """Commendation Implementation
-
-$Id$
 """
 __docformat__ = 'reStructuredText'
+
 import datetime
 import persistent
-import zope.interface
-import zope.security
+from zope.interface import implements
+from zope.container.contained import Contained
+from zope.container.btree import BTreeContainer
 from zope.schema import fieldproperty
-from zope import annotation
-from zope.app.container import btree, contained
+from zope.annotation.interfaces import IAnnotations
+from zope.security.management import queryInteraction
 
 from schooltool.app import app
-from schooltool.commendation import interfaces
+from schooltool.commendation.interfaces import ICommendation
 from schooltool.commendation.interfaces import ICommendations
+from schooltool.commendation.interfaces import ICommendationContained
 from schooltool.commendation.interfaces import _
 
 # Annotations are identified using annotation keys that must be truly
@@ -40,32 +41,32 @@ from schooltool.commendation.interfaces import _
 CommendationsKey = 'schooltool.commendation.Commendations'
 CommendationsCacheKey = 'schooltool.commendation.Cache'
 
-class Commendation(persistent.Persistent, contained.Contained):
+class Commendation(persistent.Persistent, Contained):
     """A simple commendation implementation."""
 
-    zope.interface.implements(interfaces.ICommendation,
-                              interfaces.ICommendationContained)
+    implements(ICommendation,
+                              ICommendationContained)
 
     # We are using ``FieldProperty`` properties to implement the data
     # fields. ``FieldProperty`` isntances ensure that no invalid values are
     # assigned to the attribute.
-    title = fieldproperty.FieldProperty(interfaces.ICommendation['title'])
+    title = fieldproperty.FieldProperty(ICommendation['title'])
 
     description = fieldproperty.FieldProperty(
-        interfaces.ICommendation['description'])
+        ICommendation['description'])
 
-    scope = fieldproperty.FieldProperty(interfaces.ICommendation['scope'])
+    scope = fieldproperty.FieldProperty(ICommendation['scope'])
 
-    date = fieldproperty.FieldProperty(interfaces.ICommendation['date'])
+    date = fieldproperty.FieldProperty(ICommendation['date'])
 
-    grantor = fieldproperty.FieldProperty(interfaces.ICommendation['grantor'])
+    grantor = fieldproperty.FieldProperty(ICommendation['grantor'])
 
     def __init__(self, title, description, scope):
         self.date = datetime.date.today()
         # Extract the current principal's id. If no interaction is found, then
         # we also do not have a user. Thus we simply store a special string
         # stating that the user was not found.
-        interaction = zope.security.management.queryInteraction()
+        interaction = queryInteraction()
         if interaction and interaction.participations:
             self.grantor = interaction.participations[0].principal.id
         else:
@@ -81,9 +82,9 @@ class Commendation(persistent.Persistent, contained.Contained):
                                  self.title, self.grantor)
 
 
-class Commendations(btree.BTreeContainer):
+class Commendations(BTreeContainer):
     '''A simple implementation of ``ICommendations``.'''
-    zope.interface.implements(interfaces.ICommendations)
+    implements(ICommendations)
 
     title = _("commendations")
 
@@ -93,7 +94,7 @@ class Commendations(btree.BTreeContainer):
 
 def getCommendations(context):
     """Adapt an ``IHaveCommendations`` object to ``ICommendations``."""
-    annotations = annotation.interfaces.IAnnotations(context)
+    annotations = IAnnotations(context)
     try:
         return annotations[CommendationsKey]
     except KeyError:
@@ -112,7 +113,7 @@ def cacheCommendation(commendation, event):
     # annotations. Then add the commendation to the list of all cached
     # commendations.
     stapp = app.getSchoolToolApplication()
-    annotations = annotation.interfaces.IAnnotations(stapp)
+    annotations = IAnnotations(stapp)
     if CommendationsCacheKey not in annotations:
         annotations[CommendationsCacheKey] = persistent.list.PersistentList()
     annotations[CommendationsCacheKey].append(commendation)

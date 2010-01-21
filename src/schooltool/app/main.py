@@ -54,14 +54,14 @@ from zope.app.server.main import run
 from zope.app.appsetup import DatabaseOpened, ProcessStarting
 from zope.app.publication.zopepublication import ZopePublication
 from zope.traversing.interfaces import IContainmentRoot
-from zope.app.container.contained import ObjectAddedEvent
+from zope.lifecycleevent import ObjectAddedEvent
 from zope.app.dependable.interfaces import IDependable
 from zope.site.hooks import setSite, setHooks
 from zope.component import getUtility
 from zope.component import getAdapters
 from zope.interface import directlyProvidedBy
-from zope.app.intid import IntIds
-from zope.app.intid.interfaces import IIntIds
+from zope.intid import IntIds
+from zope.intid.interfaces import IIntIds
 from zope.location.interfaces import ISite
 from zope.site import LocalSiteManager
 from zope.server.http.wsgihttpserver import WSGIHTTPServer

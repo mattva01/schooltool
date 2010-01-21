@@ -19,8 +19,10 @@
 """Skin package for SchoolTool.
 """
 
-from skin import ISchoolToolLayer, ISchoolToolSkin
-from skin import INavigationManager, IActionMenuManager
-from skin import ICSSManager, IJavaScriptManager, IHeaderManager
-from skin import OrderedViewletManager, NavigationViewlet
-from skin import TopLevelContainerNavigationViewlet
+from schooltool.skin.skin import (
+    ISchoolToolLayer, ISchoolToolSkin,
+    INavigationManager, IActionMenuManager,
+    ICSSManager, IJavaScriptManager, IHeaderManager,
+    OrderedViewletManager, NavigationViewlet,
+    TopLevelContainerNavigationViewlet,
+)

@@ -1,3 +1,3 @@
-from utility import UtilitySetUp, MultiUtilitySetUp, UtilitySpecification
+from schooltool.utility.utility import UtilitySetUp, MultiUtilitySetUp, UtilitySpecification
 
 

@@ -887,7 +887,7 @@ def doctest_TimetableDependentDeleteView():
         >>> setup.setUpAnnotations()
         >>> from schooltool.timetable.schema import clearTimetablesOnDeletion
         >>> from schooltool.timetable.interfaces import ITimetableSchema
-        >>> from zope.app.container.interfaces import IObjectRemovedEvent
+        >>> from zope.lifecycleevent.interfaces import IObjectRemovedEvent
         >>> provideHandler(clearTimetablesOnDeletion,
         ...                (ITimetableSchema, IObjectRemovedEvent))
 

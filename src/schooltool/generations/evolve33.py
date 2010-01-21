@@ -25,7 +25,7 @@ from zope.app.generations.utility import findObjectsProviding
 from zope.app.publication.zopepublication import ZopePublication
 from zope.site.hooks import getSite, setSite
 from zope.component import getUtility
-from zope.app.catalog.interfaces import ICatalog
+from zope.catalog.interfaces import ICatalog
 
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import CatalogSetUpEvent

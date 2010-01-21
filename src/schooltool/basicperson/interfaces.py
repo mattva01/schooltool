@@ -19,8 +19,8 @@
 """
 SchoolTool basic person interfaces.
 """
-from zope.app.container.interfaces import IContainer
-from zope.app.container.interfaces import IOrderedContainer
+from zope.container.interfaces import IContainer
+from zope.container.interfaces import IOrderedContainer
 from zope.schema import Date, Choice, TextLine, Bool
 from zope.configuration.fields import PythonIdentifier
 from zope.interface import Interface, Attribute

@@ -21,9 +21,9 @@ Email interfaces
 
 """
 
-from zope.app.container.constraints import contains, containers
-from zope.app.container.interfaces import IContained
-from zope.app.container.interfaces import IReadContainer, IWriteContainer
+from zope.container.constraints import contains, containers
+from zope.location.interfaces import IContained
+from zope.container.interfaces import IReadContainer, IWriteContainer
 from zope.interface import Interface
 from zope.location.interfaces import ILocation
 from zope.schema import Bool, Datetime, Dict

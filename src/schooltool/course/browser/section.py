@@ -26,14 +26,14 @@ from zope.interface import implements, Invalid
 from zope.i18n import translate
 from zope.security.proxy import removeSecurityProxy
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
-from zope.app.intid.interfaces import IIntIds
+from zope.intid.interfaces import IIntIds
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.publisher.browser import BrowserView
 from zope.component import adapts
 from zope.component import getUtility
 from zope.component import getMultiAdapter
-from zope.app.container.contained import NameChooser
-from zope.app.container.interfaces import INameChooser
+from zope.container.contained import NameChooser
+from zope.container.interfaces import INameChooser
 from zope.event import notify
 from zope.schema import Choice
 from zc.table import table

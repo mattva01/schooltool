@@ -28,7 +28,7 @@ others) that update relationships on these changes.
 """
 
 from zope.container.contained import getProxiedObject
-from zope.app.container.interfaces import IObjectRemovedEvent
+from zope.lifecycleevent.interfaces import IObjectRemovedEvent
 from zope.lifecycleevent.interfaces import IObjectCopiedEvent
 
 from schooltool.relationship.interfaces import IRelationshipLinks

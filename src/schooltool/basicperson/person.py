@@ -21,8 +21,8 @@ Lyceum person specific code.
 """
 from zope.interface import implements
 from zope.component import adapts
-from zope.app.catalog.interfaces import ICatalog
-from zope.app.catalog.catalog import Catalog
+from zope.catalog.interfaces import ICatalog
+from zope.catalog.catalog import Catalog
 from zope.component import getUtility
 
 from zc.catalog.catalogindex import ValueIndex

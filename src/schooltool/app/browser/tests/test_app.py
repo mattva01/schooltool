@@ -140,7 +140,7 @@ def doctest_LoginView():
     If we have authentication utility:
 
         >>> from schooltool.app.security import SchoolToolAuthenticationUtility
-        >>> from zope.app.security.interfaces import IAuthentication
+        >>> from zope.authentication.interfaces import IAuthentication
         >>> auth = SchoolToolAuthenticationUtility()
         >>> provideUtility(auth, IAuthentication)
 
@@ -245,7 +245,7 @@ def doctest_LogoutView():
     Also, we have an authentication utility:
 
         >>> from schooltool.app.security import SchoolToolAuthenticationUtility
-        >>> from zope.app.security.interfaces import IAuthentication
+        >>> from zope.authentication.interfaces import IAuthentication
         >>> auth = SchoolToolAuthenticationUtility()
         >>> provideUtility(auth, IAuthentication)
         >>> auth.__parent__ = app

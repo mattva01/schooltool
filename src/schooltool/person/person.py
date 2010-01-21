@@ -27,11 +27,11 @@ from persistent import Persistent
 
 from zope.interface import implements
 from zope.annotation.interfaces import IAttributeAnnotatable
-from zope.app.container import btree
-from zope.app.container.contained import Contained
+from zope.container import btree
+from zope.container.contained import Contained
 from zope.component import adapts
-from zope.app.catalog.interfaces import ICatalog
-from zope.app.catalog.catalog import Catalog
+from zope.catalog.interfaces import ICatalog
+from zope.catalog.catalog import Catalog
 from zope.component import getUtility
 
 from zc.catalog.catalogindex import ValueIndex

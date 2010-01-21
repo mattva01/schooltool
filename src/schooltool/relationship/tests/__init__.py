@@ -34,7 +34,7 @@ from zope.interface import implements
 from zope.location.pickling import LocationCopyHook
 from zope.component import provideAdapter
 from zope.annotation.interfaces import IAttributeAnnotatable
-from zope.app.container.contained import Contained
+from zope.container.contained import Contained
 
 
 class SomeObject(object):

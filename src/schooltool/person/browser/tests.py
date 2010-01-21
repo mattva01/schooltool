@@ -476,7 +476,7 @@ def doctest_PersonFilterWidget():
     For this test we will need a catalog with an index for person
     titles:
 
-        >>> from zope.app.catalog.interfaces import ICatalog
+        >>> from zope.catalog.interfaces import ICatalog
         >>> class IndexStub(object):
         ...     def __init__(self):
         ...         self.documents_to_values = {}
@@ -588,7 +588,7 @@ def doctest_PersonFilterWidget():
         [{'id': 2}]
 
         >>> from zope.component import provideUtility
-        >>> from zope.app.intid.interfaces import IIntIds
+        >>> from zope.intid.interfaces import IIntIds
         >>> class IntIdsStub(object):
         ...     def queryId(self, obj):
         ...         return obj.id

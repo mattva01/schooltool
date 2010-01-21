@@ -24,7 +24,7 @@ import doctest
 
 from zope.app.testing import setup
 from zope.interface import implements
-from zope.app.container import btree
+from zope.container import btree
 from zope.component import provideHandler
 
 from schooltool.relationship.tests import setUpRelationships

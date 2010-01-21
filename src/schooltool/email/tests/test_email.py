@@ -39,7 +39,7 @@ def doctest_EmailContainer(self):
 
     It should only be able to contain emails:
 
-        >>> from zope.app.container.constraints import checkObject
+        >>> from zope.container.constraints import checkObject
         >>> from schooltool.email.mail import Email
         >>> from schooltool.course.section import Section
         >>> myemail = Email('sender@example.com', ['user@example.com',],
@@ -76,7 +76,7 @@ def doctest_Email(self):
 
     Emails should only be contained in EmailContainers:
 
-        >>> from zope.app.container.constraints import checkObject
+        >>> from zope.container.constraints import checkObject
         >>> from schooltool.email.mail import EmailContainer
         >>> real_container = EmailContainer()
         >>> fake_container = {}

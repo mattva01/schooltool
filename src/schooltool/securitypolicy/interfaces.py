@@ -27,7 +27,7 @@ from zope.interface import Interface
 from zope import schema
 from zope.interface import Attribute
 from zope.configuration.fields import PythonIdentifier
-from zope.app.container.interfaces import IContained
+from zope.location.interfaces import IContained
 
 from schooltool.common import SchoolToolMessage as _
 

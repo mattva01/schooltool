@@ -29,7 +29,7 @@ from zope.component import provideAdapter
 from zope.interface import Interface
 from zope.interface import implements
 from zope.interface.verify import verifyObject
-from zope.app.container.contained import Contained
+from zope.container.contained import Contained
 from zope.location.interfaces import ILocation
 from zope.app.testing.setup import placefulSetUp, placefulTearDown
 from zope.app.testing.setup import placelessSetUp, placelessTearDown
