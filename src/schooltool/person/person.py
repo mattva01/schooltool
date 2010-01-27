@@ -22,7 +22,7 @@ Person implementation and support objects
 $Id$
 """
 
-import sha
+import hashlib
 from persistent import Persistent
 
 from zope.interface import implements
@@ -130,7 +130,7 @@ def hash_password(password):
     """
     if password is None:
         return None
-    return sha.sha(password.encode('UTF-8')).digest()
+    return hashlib.sha1(password.encode('UTF-8')).digest()
 
 
 def personAppCalendarOverlaySubscriber(person, event):
