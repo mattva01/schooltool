@@ -113,7 +113,7 @@ We can see the action registered in the utility.
     View
     View contents of a classroom
 
-Now, all crowds registered for IClassroom with permission zope.View
+Now, all crowds registered for IClassroom with permission schooltool.view
 can be collected for this action.
 
     >>> from schooltool.securitypolicy import crowds
