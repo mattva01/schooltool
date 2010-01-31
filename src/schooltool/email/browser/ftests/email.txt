@@ -595,3 +595,24 @@ And the Delete button in the Queue view:
     </div>
     >>> manager.printQuery('//form/table[@class="data"]/tbody/tr/td[1]/input')
     <input type="checkbox" name="delete.Email-3" id="delete.Email-3" />
+
+Now, let's handle empty values in the Send Test form:
+
+    >>> manager.getLink('Send Test').click()
+    >>> manager.getControl('Send').click()
+    >>> manager.printQuery('//div[@class="status"]')
+    <div class="status">
+      <div class="summary">There were some errors.</div>
+      <ul class="errors"><li>
+          From:
+          <div class="error">Required input is missing.</div>
+        </li>
+        <li>
+          To:
+          <div class="error">Required input is missing.</div>
+        </li>
+        <li>
+          Body:
+          <div class="error">Required input is missing.</div>
+        </li>
+      </ul></div>    
