@@ -822,5 +822,8 @@ class StandaloneServer(object):
         pdf.setUpMSTTCoreFonts(fontdir)
 
 
-if __name__ == '__main__':
+def main():
     StandaloneServer().main()
+
+if __name__ == '__main__':
+    main()
