@@ -65,6 +65,11 @@ class StubEmailUtility(EmailUtility):
                         'addresses': 'foo@example.com, bar@example.com'})
             return False
 
+        # If fakes a unexpected data error
+        if "bad data" in email.body:
+            self.queue(email, 70, {'info': server_info})
+            return False
+
         # It fakes a bad username for login
         if self.container.username == 'wronguser':
             self.queue(email, 40, {'info': server_info,

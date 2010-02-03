@@ -56,6 +56,7 @@ status_messages = {
     50: _('The server (${info}) rejected the From address: ${from_address}'),
     60: _('The server (${info}) rejected the following recipient addresses: '
           '${addresses}'),
+    70: _('The server (${info}) replied with an unexpected error code'),
     }
 
 
@@ -197,9 +198,14 @@ class EmailUtility(object):
                                    'addresses': ', '.join(addresses)})
             connection.quit()
             return False
-        # XXX: SMTPDataError is not caught yet.
-        #      For one, invalid recipient list may cause it (code 555)
-
+        except (smtplib.SMTPHeloError,), e:
+            self.queue(email, 30, {'info': server_info})
+            connection.quit()
+            return False
+        except (smtplib.SMTPDataError,), e:
+            self.queue(email, 70, {'info': server_info})
+            connection.quit()
+            return False
         if result:
             addresses = [address for address in email.to_addresses
                          if address in result.keys()]
