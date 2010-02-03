@@ -86,6 +86,13 @@ It also shows a field to set up the hostname of the SMTP server:
     >>> manager.getControl('Hostname').value = 'localhost'
     >>> manager.getControl('Apply').click()
 
+We see a confirmation message:
+
+    >>> manager.printQuery('id("message")')
+    <div id="message">
+      <div class="summary">Data successfully updated.</div>
+    </div>
+
 Note that just setting up the hostname for the SMTP server enables the
 service:
 
@@ -481,8 +488,8 @@ The password confirmation:
     >>> manager.getControl('New Password', index=1).value = 'secret'
     >>> manager.getControl('Confirm New Password').value = 'public'
     >>> manager.getControl('Apply').click()
-    >>> manager.printQuery('//div[@class="status"]')
-    <div class="status">
+    >>> manager.printQuery('id("message")')
+    <div id="message">
       <div class="summary">There were some errors.</div>
       <ul class="errors"><li>
           <div class="error">New passwords don't match</div>
@@ -643,8 +650,8 @@ Now, let's handle empty values in the Send Test form:
 
     >>> manager.getLink('Send Test').click()
     >>> manager.getControl('Send').click()
-    >>> manager.printQuery('//div[@class="status"]')
-    <div class="status">
+    >>> manager.printQuery('id("message")')
+    <div id="message">
       <div class="summary">There were some errors.</div>
       <ul class="errors"><li>
           From:
@@ -658,4 +665,4 @@ Now, let's handle empty values in the Send Test form:
           Body:
           <div class="error">Required input is missing.</div>
         </li>
-      </ul></div>    
+      </ul></div>
