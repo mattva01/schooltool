@@ -1,4 +1,4 @@
-# Estonian translation for schooltool
+# Bengali translation for schooltool
 # Copyright (c) 2009 Rosetta Contributors and Canonical Ltd 2009
 # This file is distributed under the same license as the schooltool package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2009.
@@ -8,98 +8,98 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-05-19 16:33+0000\n"
-"PO-Revision-Date: 2009-10-12 11:51+0000\n"
-"Last-Translator: lyyser <logard.1961@gmail.com>\n"
-"Language-Team: Estonian <et@li.org>\n"
+"PO-Revision-Date: 2010-01-20 05:55+0000\n"
+"Last-Translator: maitraya <maitraya.bhattacharyya@gmail.com>\n"
+"Language-Team: Bengali <bn@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-01-07 04:47+0000\n"
+"X-Launchpad-Export-Date: 2010-01-21 04:32+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: /src/schooltool/commendation/browser.py:70
 #: /src/schooltool/commendation/commendation.py:72
 msgid "<unknown>"
-msgstr "<unknown>"
+msgstr "<অজ্ঞাত>"
 
 #: /src/schooltool/commendation/commendation.py:88
 msgid "commendations"
-msgstr "kiitused"
+msgstr "অনুমোদনসমূহ"
 
 #: /src/schooltool/commendation/configure.zcml:100
 #: /src/schooltool/commendation/configure.zcml:110
 msgid "Add Commendation"
-msgstr "Liisa kiitus"
+msgstr "অনুমোদন যোগ করুন"
 
 #: /src/schooltool/commendation/configure.zcml:128
 msgid "All Commendations"
-msgstr "Kõik kiitused"
+msgstr "সব অনুমোদনসমূহ"
 
 #: /src/schooltool/commendation/configure.zcml:82
 #: /src/schooltool/commendation/configure.zcml:92
 msgid "View Commendations"
-msgstr "Vaata kiitust"
+msgstr "অনুমোদনসমূহ দেখুন"
 
 #: /src/schooltool/commendation/interfaces.py:48
 msgid "Title"
-msgstr "Pealkiri"
+msgstr "শিরোনাম"
 
 #: /src/schooltool/commendation/interfaces.py:49
 msgid "Title of the commendation."
-msgstr "Kiituse nimetus"
+msgstr "অনুমোদনের শিরোনাম"
 
 #: /src/schooltool/commendation/interfaces.py:53
 msgid "Description"
-msgstr "Kirjeldus"
+msgstr "বর্ণনা"
 
 #: /src/schooltool/commendation/interfaces.py:54
 msgid "A detailed description of the commendation."
-msgstr "Kiituse täpne kirjeldus"
+msgstr "অনুমোদনের বিস্তারিত বর্ণনা"
 
 #: /src/schooltool/commendation/interfaces.py:58
 msgid "Scope"
-msgstr "Ulatus"
+msgstr "ব্যপ্তি"
 
 #: /src/schooltool/commendation/interfaces.py:59
 msgid "The scope of the commendation."
-msgstr "Kiituse ulatus"
+msgstr "অনুমোদনের ব্যfপ্তি"
 
 #: /src/schooltool/commendation/interfaces.py:60
 msgid "group"
-msgstr "grupp"
+msgstr "দল"
 
 #: /src/schooltool/commendation/interfaces.py:60
 msgid "community"
-msgstr "kogukond"
+msgstr "সম্প্রদায়"
 
 #: /src/schooltool/commendation/interfaces.py:60
 msgid "school-wide"
-msgstr "ülekooliline"
+msgstr "স্কুলব্যাপী"
 
 #: /src/schooltool/commendation/interfaces.py:61
 msgid "national"
-msgstr "rahvus"
+msgstr "জাতীয়"
 
 #: /src/schooltool/commendation/interfaces.py:61
 msgid "global"
-msgstr "globaalne"
+msgstr "বৈশ্বিক"
 
 #: /src/schooltool/commendation/interfaces.py:61
 msgid "state"
-msgstr "maakond"
+msgstr "রাজ্য"
 
 #: /src/schooltool/commendation/interfaces.py:65
 msgid "Date"
-msgstr "Kuupäev"
+msgstr "তারিখ"
 
 #: /src/schooltool/commendation/interfaces.py:66
 msgid "The date the commendation was issued."
-msgstr "Kiituse esitamis kuupäev"
+msgstr "অনুমোদন দেয়ার তারিখ"
 
 #: /src/schooltool/commendation/interfaces.py:71
 msgid "Grantor"
-msgstr "Toetaja"
+msgstr "দাতা"
 
 #: /src/schooltool/commendation/interfaces.py:72
 msgid "The grantor of the commendation."
-msgstr "Kiituse esitaja."
+msgstr "অনুমোদন দাতা"

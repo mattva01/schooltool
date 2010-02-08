@@ -8,18 +8,14 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-12-24 12:40+0000\n"
-"PO-Revision-Date: 2008-07-07 15:12+0000\n"
-"Last-Translator: వీవెన్ (Veeven) <Unknown>\n"
+"PO-Revision-Date: 2009-10-12 11:44+0000\n"
+"Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
 "Language-Team: Telugu <te@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-10-12 07:03+0000\n"
+"X-Launchpad-Export-Date: 2010-01-07 04:45+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
-
-#: /src/schooltool/app/app.py:201
-msgid "Your School"
-msgstr ""
 
 #: /src/schooltool/app/browser/__init__.py:256
 #: /src/schooltool/person/help/person_container.pt:6
@@ -33,26 +29,10 @@ msgstr "వ్యక్తులు"
 msgid "1 person"
 msgstr "1 వ్యక్తి"
 
-#. Default: ""
-#: /src/schooltool/app/browser/__init__.py:263
-msgid "${number} persons"
-msgstr ""
-
-#: /src/schooltool/app/browser/app.py:227
-msgid "Username or password is incorrect"
-msgstr ""
-
-#: /src/schooltool/app/browser/app.py:323 /src/schooltool/app/security.py:307
+#: /src/schooltool/app/browser/app.py:323
+#: /src/schooltool/app/security.py:307
 msgid "Leaders"
 msgstr "నాయకులు"
-
-#: /src/schooltool/app/browser/app.py:324
-msgid "Current leaders"
-msgstr ""
-
-#: /src/schooltool/app/browser/app.py:325
-msgid "Available leaders"
-msgstr ""
 
 #: /src/schooltool/app/browser/app.py:348
 msgid "school"
@@ -118,23 +98,6 @@ msgstr "నవంబర్"
 msgid "December"
 msgstr "డిసెంబర్"
 
-#: /src/schooltool/app/browser/cal.py:1170
-msgid "Go to next month"
-msgstr ""
-
-#: /src/schooltool/app/browser/cal.py:1171
-msgid "Go to current month"
-msgstr ""
-
-#: /src/schooltool/app/browser/cal.py:1172
-msgid "Go to previous month"
-msgstr ""
-
-#. Default: ""
-#: /src/schooltool/app/browser/cal.py:1180
-msgid "${month}, ${year}"
-msgstr ""
-
 #: /src/schooltool/app/browser/cal.py:120
 #: /src/schooltool/person/interfaces.py:180
 #: /src/schooltool/timetable/browser/schema.py:115
@@ -171,11 +134,6 @@ msgstr "బుధవారం"
 #: /src/schooltool/term/browser/templates/term.pt:34
 msgid "Thursday"
 msgstr "గురువారం"
-
-#. Default: ""
-#: /src/schooltool/app/browser/cal.py:1202
-msgid "Week ${week_no}"
-msgstr ""
 
 #: /src/schooltool/app/browser/cal.py:121
 #: /src/schooltool/person/interfaces.py:178
@@ -216,18 +174,6 @@ msgstr "ప్రస్తుత సంవత్సరం"
 msgid "Previous year"
 msgstr "గత సంవత్సరం"
 
-#: /src/schooltool/app/browser/cal.py:1222
-msgid "Go to next year"
-msgstr ""
-
-#: /src/schooltool/app/browser/cal.py:1223
-msgid "Go to current year"
-msgstr ""
-
-#: /src/schooltool/app/browser/cal.py:1224
-msgid "Go to previous year"
-msgstr ""
-
 #: /src/schooltool/app/browser/cal.py:124
 #: /src/schooltool/app/browser/cal.py:1811
 msgid "Mon"
@@ -267,33 +213,13 @@ msgstr "ఆది"
 msgid "The next day"
 msgstr "తర్వాతి రోజు"
 
-#: /src/schooltool/app/browser/cal.py:1291
-msgid "Today"
-msgstr ""
-
 #: /src/schooltool/app/browser/cal.py:1292
 msgid "The previous day"
 msgstr "క్రితం రోజు"
 
-#: /src/schooltool/app/browser/cal.py:1294
-msgid "Go to the next day"
-msgstr ""
-
-#: /src/schooltool/app/browser/cal.py:1295
-msgid "Go to today"
-msgstr ""
-
-#: /src/schooltool/app/browser/cal.py:1296
-msgid "Go to the previous day"
-msgstr ""
-
-#. Default: ""
-#: /src/schooltool/app/browser/cal.py:1448
-msgid "Add new event starting at ${title}"
-msgstr ""
-
 #: /src/schooltool/app/browser/cal.py:1737
-#: /src/schooltool/app/interfaces.py:135 /src/schooltool/app/interfaces.py:146
+#: /src/schooltool/app/interfaces.py:135
+#: /src/schooltool/app/interfaces.py:146
 #: /src/schooltool/basicperson/interfaces.py:121
 #: /src/schooltool/course/interfaces.py:37
 #: /src/schooltool/course/interfaces.py:95
@@ -301,12 +227,14 @@ msgstr ""
 #: /src/schooltool/group/interfaces.py:40
 #: /src/schooltool/note/interfaces.py:42
 #: /src/schooltool/resource/interfaces.py:40
-#: /src/schooltool/resource/types.py:60 /src/schooltool/resource/types.py:77
+#: /src/schooltool/resource/types.py:60
+#: /src/schooltool/resource/types.py:77
 #: /src/schooltool/resource/types.py:101
 #: /src/schooltool/schoolyear/browser/schoolyear.py:145
 #: /src/schooltool/schoolyear/interfaces.py:41
 #: /src/schooltool/securitypolicy/interfaces.py:108
-#: /src/schooltool/table/catalog.py:141 /src/schooltool/table/table.py:221
+#: /src/schooltool/table/catalog.py:141
+#: /src/schooltool/table/table.py:221
 #: /src/schooltool/term/browser/term.py:59
 #: /src/schooltool/term/interfaces.py:40
 #: /src/schooltool/timetable/browser/schema.py:129
@@ -335,18 +263,10 @@ msgstr "తేదీ"
 msgid "Time"
 msgstr "సమయం"
 
-#: /src/schooltool/app/browser/cal.py:1747
-msgid "Start time in 24h format"
-msgstr ""
-
 #: /src/schooltool/app/browser/cal.py:1751
 #: /src/schooltool/timetable/browser/schema.py:269
 msgid "Duration"
 msgstr "నిడివి"
-
-#: /src/schooltool/app/browser/cal.py:1756
-msgid "Duration Type"
-msgstr ""
 
 #: /src/schooltool/app/browser/cal.py:1759
 #: /src/schooltool/app/browser/templates/event_add.pt:168
@@ -384,10 +304,6 @@ msgstr "వివరణ"
 msgid "Recurring"
 msgstr "పునరావృత"
 
-#: /src/schooltool/app/browser/cal.py:1777
-msgid "Recurs every"
-msgstr ""
-
 #: /src/schooltool/app/browser/cal.py:1780
 msgid "Day"
 msgstr "రోజు"
@@ -406,34 +322,9 @@ msgstr "నెల"
 msgid "Year"
 msgstr "సంవత్సరం"
 
-#: /src/schooltool/app/browser/cal.py:1786
-msgid "Repeat every"
-msgstr ""
-
-#: /src/schooltool/app/browser/cal.py:1791
-msgid "Range"
-msgstr ""
-
-#: /src/schooltool/app/browser/cal.py:1794
-msgid "Count"
-msgstr ""
-
-#: /src/schooltool/app/browser/cal.py:1795
-msgid "Until"
-msgstr ""
-
 #: /src/schooltool/app/browser/cal.py:1796
 msgid "forever"
 msgstr "ఎప్పటికీ"
-
-#: /src/schooltool/app/browser/cal.py:1799
-msgid "Number of events"
-msgstr ""
-
-#: /src/schooltool/app/browser/cal.py:1803
-#: /src/schooltool/app/browser/templates/event_add.pt:303
-msgid "Repeat until"
-msgstr ""
 
 #: /src/schooltool/app/browser/cal.py:1807
 msgid "Weekdays"
@@ -448,10 +339,6 @@ msgstr "పనిదినం"
 #: /src/schooltool/app/browser/templates/event_add.pt:256
 msgid "Monthly"
 msgstr "ప్రతీ నెలా"
-
-#: /src/schooltool/app/browser/cal.py:1828
-msgid "Exception dates"
-msgstr ""
 
 #: /src/schooltool/app/browser/cal.py:1914
 msgid "same weekday"
@@ -481,6 +368,784 @@ msgstr "5వ"
 msgid "last weekday"
 msgstr "వారంలో చివరి పనిదినం"
 
+#: /src/schooltool/app/browser/cal.py:2079
+#: /src/schooltool/basicperson/browser/person.py:157
+#: /src/schooltool/contact/browser/contact.py:90
+#: /src/schooltool/course/browser/section.py:327
+#: /src/schooltool/schoolyear/browser/schoolyear.py:180
+#: /src/schooltool/timetable/browser/templates/timetable-add.pt:25
+#: /src/schooltool/course/browser/templates/edit_relationships.pt:67
+#: /src/schooltool/app/browser/templates/edit_relationships.pt:48
+msgid "Add"
+msgstr "చేర్చు"
+
+#: /src/schooltool/app/browser/cal.py:2718
+#: /src/schooltool/app/browser/templates/calendar_tab_viewlet.pt:3
+#: /src/schooltool/app/browser/configure.zcml:606
+#: /src/schooltool/app/browser/configure.zcml:693
+#: /src/schooltool/app/configure.zcml:344
+msgid "Calendar"
+msgstr "క్యాలెండర్"
+
+#: /src/schooltool/app/browser/cal.py:925
+msgid "Next week"
+msgstr "తర్వాతి వారం"
+
+#: /src/schooltool/app/browser/cal.py:926
+msgid "Current week"
+msgstr "ప్రస్తుత వారం"
+
+#: /src/schooltool/app/browser/cal.py:927
+msgid "Previous week"
+msgstr "క్రితం వారం"
+
+#: /src/schooltool/app/browser/configure.zcml:166
+msgid "Actions"
+msgstr "చర్యలు"
+
+#: /src/schooltool/app/browser/configure.zcml:711
+msgid "Templates"
+msgstr "మూసలు"
+
+#: /src/schooltool/app/browser/overlay.py:205
+msgid "Saved changes."
+msgstr "మార్పులు భద్రపరిచాం."
+
+#: /src/schooltool/app/browser/pdfcal.py:115
+msgid "all day"
+msgstr "రోజంతా"
+
+#: /src/schooltool/app/browser/templates/calendar_macros.pt:30
+#: /src/schooltool/app/browser/templates/event_add.pt:235
+msgid "Weekly"
+msgstr "ప్రతీ వారం"
+
+#: /src/schooltool/app/browser/templates/calendar_overlay.pt:33
+msgid "More..."
+msgstr "ఇంకా..."
+
+#: /src/schooltool/app/browser/templates/event_add.pt:137
+msgid "Event information"
+msgstr "ఘటన సమాచారం"
+
+#: /src/schooltool/app/browser/templates/event_add.pt:143
+msgid "Event details"
+msgstr "ఘటన వివరాలు"
+
+#: /src/schooltool/app/browser/templates/event_add.pt:224
+msgid "day"
+msgstr "రోజు"
+
+#: /src/schooltool/app/browser/templates/event_add.pt:225
+msgid "week"
+msgstr "వారం"
+
+#: /src/schooltool/app/browser/templates/event_add.pt:226
+msgid "month"
+msgstr "నెల"
+
+#: /src/schooltool/app/browser/templates/event_add.pt:227
+msgid "year"
+msgstr "సంవత్సరం"
+
+#: /src/schooltool/app/browser/templates/event_add.pt:271
+#: /src/schooltool/app/browser/templates/event_add.pt:278
+msgid "${weekday} of every month"
+msgstr "ప్రతీ నెలా ${weekday}"
+
+#: /src/schooltool/app/browser/templates/event_booking.pt:18
+msgid "Title:"
+msgstr "శీర్షిక:"
+
+#: /src/schooltool/app/browser/templates/login.pt:3
+#: /src/schooltool/app/browser/templates/menu_view.pt:3
+#: /src/schooltool/app/browser/configure.zcml:681
+msgid "Login"
+msgstr "ప్రవేశించు"
+
+#: /src/schooltool/app/browser/templates/login.pt:35
+msgid "User Information"
+msgstr "వాడకరి సమాచారం"
+
+#: /src/schooltool/app/browser/templates/login.pt:57
+msgid "Log in"
+msgstr "ప్రవేశించు"
+
+#: /src/schooltool/app/browser/templates/recevent_delete.pt:45
+msgid "All"
+msgstr "అన్నీ"
+
+#: /src/schooltool/app/help/configure.zcml:13
+msgid "Administration"
+msgstr "నిర్వహణ"
+
+#: /src/schooltool/app/help/configure.zcml:21
+msgid "Organization"
+msgstr "సంస్థ"
+
+#: /src/schooltool/app/main.py:565
+#: /src/schooltool/app/main.py:609
+#: /src/schooltool/app/main.py:612
+msgid "%s: %s"
+msgstr "%s: %s"
+
+#: /src/schooltool/app/membership.py:261
+#: /src/schooltool/group/browser/group.pt:16
+msgid "Members"
+msgstr "సభ్యులు"
+
+#: /src/schooltool/basicperson/browser/person.py:105
+msgid "This username is already in use!"
+msgstr "ఈ వాడుకరి పేరు ఇప్పటికే వాడుకలో ఉంది!"
+
+#: /src/schooltool/basicperson/browser/person.py:60
+#: /src/schooltool/basicperson/browser/person.py:61
+#: /src/schooltool/demographics/browser/personform.py:254
+#: /src/schooltool/demographics/browser/personform.py:255
+#: /src/schooltool/demographics/browser/table.py:67
+#: /src/schooltool/email/browser/email.py:108
+#: /src/schooltool/email/interfaces.py:99
+#: /src/schooltool/person/browser/person.py:286
+#: /src/schooltool/person/browser/person.py:287
+#: /src/schooltool/person/interfaces.py:60
+#: /src/schooltool/app/browser/templates/login.pt:38
+msgid "Username"
+msgstr "వాడుకరి పేరు"
+
+#: /src/schooltool/basicperson/browser/person.py:65
+#: /src/schooltool/demographics/browser/personform.py:259
+#: /src/schooltool/person/browser/person.py:159
+#: /src/schooltool/person/browser/person.py:290
+#: /src/schooltool/app/browser/templates/login.pt:44
+msgid "Password"
+msgstr "సంకేతపదం"
+
+#: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:33
+#: /src/schooltool/resource/browser/resource-csvimport.pt:29
+#: /src/schooltool/person/browser/person-csvimport.pt:33
+#: /src/schooltool/course/browser/templates/course-csvimport.pt:31
+#: /src/schooltool/group/browser/group-csvimport.pt:29
+#: /src/schooltool/app/browser/templates/timetables-csvimport.pt:54
+msgid "Example:"
+msgstr "ఉదాహరణ:"
+
+#: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:57
+#: /src/schooltool/resource/browser/resource-csvimport.pt:54
+#: /src/schooltool/person/browser/person-csvimport.pt:57
+#: /src/schooltool/course/browser/section-member-csvimport.pt:34
+#: /src/schooltool/course/browser/templates/course-csvimport.pt:68
+#: /src/schooltool/group/browser/group-csvimport.pt:54
+#: /src/schooltool/group/browser/group-member-csvimport.pt:34
+#: /src/schooltool/app/browser/templates/timetables-csvimport.pt:103
+msgid "Unicode (UTF-8)"
+msgstr "యూనీకోడ్ (UTF-8)"
+
+#: /src/schooltool/basicperson/browser/templates/person_view.pt:20
+#: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:34
+#: /src/schooltool/person/browser/person.pt:34
+#: /src/schooltool/person/browser/home.pt:34
+#: /src/schooltool/course/browser/templates/course.pt:23
+#: /src/schooltool/app/browser/templates/event.pt:33
+msgid "Details"
+msgstr "వివరాలు"
+
+#: /src/schooltool/basicperson/browser/templates/person_view.pt:4
+#: /src/schooltool/person/browser/person.pt:4
+#: /src/schooltool/person/browser/home.pt:4
+msgid "Person info: ${title}"
+msgstr "వ్యక్తి సమాచారం: ${title}"
+
+#: /src/schooltool/basicperson/interfaces.py:43
+#: /src/schooltool/contact/interfaces.py:42
+#: /src/schooltool/demographics/interfaces.py:50
+#: /src/schooltool/contact/browser/templates/filter.pt:5
+msgid "First name"
+msgstr "మొదటి పేరు"
+
+#: /src/schooltool/basicperson/interfaces.py:53
+#: /src/schooltool/contact/interfaces.py:46
+#: /src/schooltool/demographics/interfaces.py:60
+#: /src/schooltool/contact/browser/templates/filter.pt:12
+msgid "Last name"
+msgstr "ఇంటి పేరు"
+
+#: /src/schooltool/basicperson/interfaces.py:68
+#: /src/schooltool/demographics/interfaces.py:123
+msgid "Gender"
+msgstr "లింగము"
+
+#: /src/schooltool/basicperson/interfaces.py:74
+#: /src/schooltool/demographics/interfaces.py:129
+msgid "Birth date"
+msgstr "పుట్టిన రోజు"
+
+#: /src/schooltool/basicperson/interfaces.py:75
+msgid "(yyyy-mm-dd)"
+msgstr "(yyyy-mm-dd)"
+
+#: /src/schooltool/basicperson/person.py:83
+#: /src/schooltool/contact/browser/contact.py:297
+msgid "First Name"
+msgstr "మొదటి పేరు"
+
+#: /src/schooltool/basicperson/person.py:90
+#: /src/schooltool/contact/browser/contact.py:304
+msgid "Last Name"
+msgstr "ఇంటిపేరు"
+
+#: /src/schooltool/contact/browser/templates/manage_contacts.pt:27
+#: /src/schooltool/course/browser/templates/edit_relationships.pt:45
+#: /src/schooltool/app/browser/templates/edit_relationships.pt:26
+msgid "Remove"
+msgstr "తొలగించు"
+
+#. Default: "OK"
+#: /src/schooltool/contact/browser/templates/manage_contacts.pt:75
+#: /src/schooltool/course/browser/templates/edit_relationships.pt:84
+#: /src/schooltool/app/browser/templates/edit_relationships.pt:65
+msgid "ok-button"
+msgstr "సరే"
+
+#: /src/schooltool/contact/interfaces.py:57
+#: /src/schooltool/demographics/interfaces.py:258
+msgid "City"
+msgstr "నగరం"
+
+#: /src/schooltool/contact/interfaces.py:59
+#: /src/schooltool/demographics/interfaces.py:263
+msgid "State"
+msgstr "రాష్ట్రం"
+
+#: /src/schooltool/contact/interfaces.py:68
+#: /src/schooltool/contact/browser/templates/view_contacts.pt:36
+msgid "Email"
+msgstr "ఈమెయిల్"
+
+#: /src/schooltool/course/browser/section.py:554
+#: /src/schooltool/course/browser/templates/section.pt:96
+#: /src/schooltool/course/browser/templates/course_container.pt:57
+#: /src/schooltool/course/browser/templates/copy_sections.pt:145
+#: /src/schooltool/course/browser/templates/link_section.pt:114
+#: /src/schooltool/course/browser/templates/section_container.pt:87
+msgid "Students"
+msgstr "విద్యార్థులు"
+
+#: /src/schooltool/course/browser/templates/course.pt:71
+msgid "students"
+msgstr "విద్యార్ధులు"
+
+#: /src/schooltool/course/browser/templates/section_container.pt:39
+msgid "Section"
+msgstr "విభాగం"
+
+#: /src/schooltool/course/interfaces.py:102
+msgid "Description of the section."
+msgstr "విభాగపు వివరణ."
+
+#: /src/schooltool/course/interfaces.py:97
+msgid "Title for the section."
+msgstr "విభాగానికి శీర్షిక."
+
+#. Default: ""
+#: /src/schooltool/course/section.py:88
+msgid "${instructors} -- ${section_title}"
+msgstr "${instructors} -- ${section_title}"
+
+#: /src/schooltool/dashboard/configure.zcml:41
+msgid "My Sections"
+msgstr "నా విభాగాలు"
+
+#: /src/schooltool/dashboard/dashboard.pt:62
+#: /src/schooltool/dashboard/dashboard.pt:66
+msgid "Dashboard"
+msgstr "డాష్‌బోర్ద్"
+
+#: /src/schooltool/dashboard/interfaces.py:45
+msgid "Category Title."
+msgstr "వర్గపు శీర్షిక"
+
+#: /src/schooltool/dashboard/interfaces.py:49
+#: /src/schooltool/dashboard/interfaces.py:50
+msgid "Weight"
+msgstr "భారం"
+
+#: /src/schooltool/dashboard/school.pt:22
+#: /src/schooltool/course/browser/templates/section.pt:69
+#: /src/schooltool/app/browser/templates/calendar_selection.pt:42
+#: /src/schooltool/app/browser/templates/index.pt:14
+#: /src/schooltool/resource/browser/configure.zcml:169
+msgid "Resources"
+msgstr "వనరులు"
+
+#: /src/schooltool/dashboard/term.pt:10
+#: /src/schooltool/course/browser/templates/course.pt:33
+#: /src/schooltool/course/security.zcml:107
+#: /src/schooltool/course/browser/configure.zcml:265
+msgid "Sections"
+msgstr "విభాగాలు"
+
+#: /src/schooltool/demographics/browser/nameinfo_view.pt:11
+#: /src/schooltool/person/browser/person.pt:11
+#: /src/schooltool/person/browser/home.pt:11
+#: /src/schooltool/course/browser/templates/course.pt:52
+msgid "photo"
+msgstr "ఫొటో"
+
+#: /src/schooltool/demographics/browser/personform.py:218
+msgid "Contact information"
+msgstr "సంప్రదింపు సమాచారం"
+
+#: /src/schooltool/demographics/browser/table.py:73
+#: /src/schooltool/demographics/interfaces.py:76
+#: /src/schooltool/person/browser/person.py:282
+#: /src/schooltool/person/browser/person.py:371
+#: /src/schooltool/person/interfaces.py:51
+msgid "Full name"
+msgstr "పూర్తి పేరు"
+
+#: /src/schooltool/demographics/interfaces.py:100
+msgid "White"
+msgstr "తెలుపు"
+
+#: /src/schooltool/demographics/interfaces.py:104
+msgid "English"
+msgstr "ఆంగ్లం"
+
+#: /src/schooltool/demographics/interfaces.py:105
+msgid "Spanish"
+msgstr "స్పానిష్"
+
+#: /src/schooltool/demographics/interfaces.py:106
+msgid "Chinese"
+msgstr "చైనీస్"
+
+#: /src/schooltool/demographics/interfaces.py:107
+msgid "German"
+msgstr "జెర్మన్"
+
+#: /src/schooltool/demographics/interfaces.py:110
+msgid "Italian"
+msgstr "ఇటాలియన్"
+
+#: /src/schooltool/demographics/interfaces.py:111
+msgid "Korean"
+msgstr "కొరియన్"
+
+#: /src/schooltool/demographics/interfaces.py:112
+msgid "Russian"
+msgstr "రష్యన్"
+
+#: /src/schooltool/demographics/interfaces.py:113
+msgid "Polish"
+msgstr "పోలిష్"
+
+#: /src/schooltool/demographics/interfaces.py:114
+msgid "Arabic"
+msgstr "అరబిక్"
+
+#: /src/schooltool/demographics/interfaces.py:140
+msgid "Primary language"
+msgstr "ప్రధాన భాష"
+
+#: /src/schooltool/demographics/interfaces.py:215
+msgid "Team"
+msgstr "జట్టు"
+
+#: /src/schooltool/demographics/interfaces.py:221
+msgid "Health information"
+msgstr "ఆరోగ్య సమాచారం"
+
+#: /src/schooltool/demographics/interfaces.py:228
+msgid "guardian"
+msgstr "సంరక్షకుడు"
+
+#: /src/schooltool/demographics/interfaces.py:232
+msgid "other"
+msgstr "ఇతర"
+
+#: /src/schooltool/demographics/interfaces.py:242
+#: /src/schooltool/demographics/utility.py:88
+msgid "Name"
+msgstr "పేరు"
+
+#: /src/schooltool/demographics/interfaces.py:253
+msgid "Street"
+msgstr "వీధి"
+
+#: /src/schooltool/demographics/interfaces.py:288
+#: /src/schooltool/resource/interfaces.py:55
+#: /src/schooltool/note/notes.pt:2
+#: /src/schooltool/note/configure.zcml:94
+msgid "Notes"
+msgstr "గమనికలు"
+
+#: /src/schooltool/demographics/interfaces.py:298
+msgid "Text"
+msgstr "పాఠ్యం"
+
+#: /src/schooltool/demographics/interfaces.py:81
+#: /src/schooltool/person/browser/person.py:298
+#: /src/schooltool/person/interfaces.py:55
+msgid "Photo"
+msgstr "ఫొటో"
+
+#: /src/schooltool/demographics/overrides.zcml:22
+msgid "Search"
+msgstr "అన్వేషణ"
+
+#: /src/schooltool/devmode/devmode.pt:17
+#: /src/schooltool/app/browser/configure.zcml:687
+#: /src/schooltool/app/browser/configure.zcml:774
+msgid "Errors"
+msgstr "పొరపాట్లు"
+
+#: /src/schooltool/email/browser/email.py:284
+#: /src/schooltool/note/notes.pt:17
+#: /src/schooltool/timetable/browser/templates/timetable_list.pt:28
+msgid "Delete"
+msgstr "తొలగించు"
+
+#: /src/schooltool/group/browser/link_to_groups.pt:1
+#: /src/schooltool/group/browser/groupsviewlet.pt:4
+#: /src/schooltool/group/help/group_container.pt:6
+#: /src/schooltool/app/browser/templates/index.pt:13
+#: /src/schooltool/group/security.zcml:53
+#: /src/schooltool/group/help/configure.zcml:8
+#: /src/schooltool/group/browser/configure.zcml:63
+msgid "Groups"
+msgstr "గుంపులు"
+
+#: /src/schooltool/help/helplink.pt:2
+msgid "Help"
+msgstr "సహాయం"
+
+#: /src/schooltool/note/interfaces.py:50
+#: /src/schooltool/note/note_add.pt:24
+msgid "Privacy"
+msgstr "అంతరంగికత"
+
+#: /src/schooltool/note/note_add.pt:13
+msgid "Note"
+msgstr "గమనిక"
+
+#: /src/schooltool/note/note_add.pt:31
+msgid "Public"
+msgstr "బహిరంగం"
+
+#: /src/schooltool/person/browser/configure.zcml:169
+#: /src/schooltool/basicperson/browser/configure.zcml:92
+#: /src/schooltool/demographics/overrides.zcml:7
+msgid "New Person"
+msgstr "కొత్త వ్యక్తి"
+
+#: /src/schooltool/person/browser/person.pt:15
+#: /src/schooltool/person/browser/home.pt:15
+msgid "Username:"
+msgstr "వాడుకరి పేరు:"
+
+#: /src/schooltool/person/browser/person.py:386
+msgid "New password"
+msgstr "కొత్త సంకేతపదం"
+
+#: /src/schooltool/person/browser/person_container_delete.pt:23
+msgid "Sorry, you may not delete your own user account."
+msgstr "క్షమించండి, మీ వాడుకరి ఖాతాని మీరే తొలగించుకోలేరు."
+
+#: /src/schooltool/person/browser/person_filter.pt:5
+msgid "All groups"
+msgstr "అన్ని గుంపులూ"
+
+#: /src/schooltool/person/interfaces.py:157
+msgid "Time Zone"
+msgstr "కాలమండలం"
+
+#: /src/schooltool/person/interfaces.py:164
+msgid "HH:MM"
+msgstr "HH:MM"
+
+#: /src/schooltool/person/interfaces.py:165
+msgid "HH:MM am/pm"
+msgstr "HH:MM am/pm"
+
+#: /src/schooltool/relationship/configure.zcml:38
+msgid "Relationships"
+msgstr "బాంధవ్యాలు"
+
+#: /src/schooltool/resource/browser/configure.zcml:197
+msgid "New Location"
+msgstr "కొత్త ప్రదేశం"
+
+#: /src/schooltool/resource/interfaces.py:100
+#: /src/schooltool/resource/types.py:113
+msgid "Manufacturer"
+msgstr "తయరీదారు"
+
+#: /src/schooltool/resource/interfaces.py:115
+#: /src/schooltool/resource/types.py:131
+msgid "Purchase Date"
+msgstr "కొన్న తేదీ"
+
+#: /src/schooltool/resource/interfaces.py:86
+#: /src/schooltool/resource/types.py:83
+msgid "Capacity"
+msgstr "సామర్థ్యం"
+
+#: /src/schooltool/resource/interfaces.py:87
+msgid "Capacity of the room"
+msgstr "గది యొక్క సామర్థ్యం"
+
+#: /src/schooltool/resource/resource.py:55
+#: /src/schooltool/resource/types.py:55
+msgid "Resource"
+msgstr "వనరు"
+
+#: /src/schooltool/resource/types.py:107
+msgid "Type"
+msgstr "రకం"
+
+#: /src/schooltool/sampledata/sampledata.pt:42
+msgid "Plugins"
+msgstr "ప్లగిన్లు"
+
+#: /src/schooltool/skin/form.py:64
+msgid "No changes"
+msgstr "మార్పులు లేవు"
+
+#: /src/schooltool/skin/templates/error.pt:19
+msgid "Exception"
+msgstr "మినహాయింపు"
+
+#: /src/schooltool/skin/templates/notfound.pt:3
+#: /src/schooltool/skin/templates/notfound.pt:11
+msgid "Not Found"
+msgstr "దొరకలేదు"
+
+#. Default: "Add"
+#: /src/schooltool/skin/templates/view_macros.pt:174
+#: /src/schooltool/skin/templates/view_macros.pt:180
+#: /src/schooltool/skin/templates/view_macros.pt:187
+msgid "add-button"
+msgstr "చేర్చు"
+
+#: /src/schooltool/skin/templates/view_macros.pt:45
+msgid "Log In"
+msgstr "ప్రవేశించు"
+
+#: /src/schooltool/skin/templates/view_macros.pt:71
+msgid "Log Out"
+msgstr "నిష్క్రమించు"
+
+#: /src/schooltool/table/templates/batch.pt:29
+#: /src/schooltool/table/templates/batch.pt:35
+msgid "Next &raquo;"
+msgstr "తరువాతి &raquo;"
+
+#: /src/schooltool/table/templates/batch.pt:5
+#: /src/schooltool/table/templates/batch.pt:7
+msgid "&laquo; Previous"
+msgstr "&laquo; గత"
+
+#: /src/schooltool/term/browser/templates/emergency2.pt:3
+#: /src/schooltool/term/browser/templates/emergency_select.pt:3
+#: /src/schooltool/term/browser/templates/emergency_select.pt:6
+msgid "Emergency day"
+msgstr "అత్యవసర దినం"
+
+#: /src/schooltool/term/browser/templates/term_add.pt:43
+#: /src/schooltool/term/browser/templates/term.pt:14
+msgid "Holiday"
+msgstr "సెలవు"
+
+#: /src/schooltool/term/browser/templates/term_add.pt:75
+#: /src/schooltool/term/browser/templates/term.pt:26
+msgid "${month} ${year}"
+msgstr "${month} ${year}"
+
+#: /src/schooltool/term/browser/templates/term_add.pt:90
+#: /src/schooltool/term/browser/templates/term.pt:41
+msgid "Week ${week_number}"
+msgstr "వారం ${week_number}"
+
+#: /src/schooltool/term/browser/term.py:154
+#: /src/schooltool/timetable/browser/templates/ttwizard_period_order2.pt:39
+#: /src/schooltool/timetable/browser/templates/ttwizard_homeroom.pt:41
+#: /src/schooltool/timetable/browser/templates/ttwizard_period_order1.pt:30
+#: /src/schooltool/timetable/browser/templates/ttwizard_slottimes.pt:32
+#: /src/schooltool/timetable/browser/templates/ttwizard.pt:20
+#: /src/schooltool/timetable/browser/templates/ttwizard_form.pt:20
+#: /src/schooltool/course/browser/templates/section_edit.pt:97
+msgid "Next"
+msgstr "తదుపరి"
+
+#: /src/schooltool/term/browser/term.py:237
+msgid "Save changes"
+msgstr "మార్పులు భద్రపరచు"
+
+#: /src/schooltool/term/browser/term.py:61
+msgid "Start date"
+msgstr "ప్రారంభ తేదీ"
+
+#: /src/schooltool/term/browser/term.py:63
+msgid "End date"
+msgstr "ముగింపు తేదీ"
+
+#: /src/schooltool/timetable/browser/templates/timetable-edit.pt:68
+#: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:81
+#: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:107
+msgid "Save"
+msgstr "భద్రపరచు"
+
+#. Default: "Change"
+#: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:59
+msgid "change-button"
+msgstr "మార్చు"
+
+#: /src/schooltool/timetable/browser/ttwizard.py:262
+msgid "Days of the week"
+msgstr "వారంలోని రోజులు"
+
+#: /src/schooltool/timetable/browser/ttwizard.py:323
+msgid "Same time each day"
+msgstr "ప్రతీ రోజూ అదే సమయానికి"
+
+#: /src/schooltool/timetable/browser/ttwizard.py:324
+msgid "Different times"
+msgstr "వేర్వేరు సమయాల్లో"
+
+#: /src/schooltool/timetable/browser/ttwizard.py:736
+msgid "Yes"
+msgstr "అవును"
+
+#: /src/schooltool/timetable/browser/ttwizard.py:737
+msgid "No"
+msgstr "కాదు"
+
+#. Default: "Confirm"
+#: /src/schooltool/widget/password.py:39
+msgid "confirm password"
+msgstr "సంకేతపదం నిర్ధారించండి"
+
+#: /src/schooltool/widget/password.py:56
+msgid "Supplied passwords are not identical"
+msgstr "ఇచ్చిన సంకేతపదాలు ఒకేలా లేవు"
+
+#: /src/schooltool/app/app.py:201
+msgid "Your School"
+msgstr ""
+
+#. Default: ""
+#: /src/schooltool/app/browser/__init__.py:263
+msgid "${number} persons"
+msgstr ""
+
+#: /src/schooltool/app/browser/app.py:227
+msgid "Username or password is incorrect"
+msgstr ""
+
+#: /src/schooltool/app/browser/app.py:324
+msgid "Current leaders"
+msgstr ""
+
+#: /src/schooltool/app/browser/app.py:325
+msgid "Available leaders"
+msgstr ""
+
+#: /src/schooltool/app/browser/cal.py:1170
+msgid "Go to next month"
+msgstr ""
+
+#: /src/schooltool/app/browser/cal.py:1171
+msgid "Go to current month"
+msgstr ""
+
+#: /src/schooltool/app/browser/cal.py:1172
+msgid "Go to previous month"
+msgstr ""
+
+#. Default: ""
+#: /src/schooltool/app/browser/cal.py:1180
+msgid "${month}, ${year}"
+msgstr ""
+
+#. Default: ""
+#: /src/schooltool/app/browser/cal.py:1202
+msgid "Week ${week_no}"
+msgstr ""
+
+#: /src/schooltool/app/browser/cal.py:1222
+msgid "Go to next year"
+msgstr ""
+
+#: /src/schooltool/app/browser/cal.py:1223
+msgid "Go to current year"
+msgstr ""
+
+#: /src/schooltool/app/browser/cal.py:1224
+msgid "Go to previous year"
+msgstr ""
+
+#: /src/schooltool/app/browser/cal.py:1291
+msgid "Today"
+msgstr ""
+
+#: /src/schooltool/app/browser/cal.py:1294
+msgid "Go to the next day"
+msgstr ""
+
+#: /src/schooltool/app/browser/cal.py:1295
+msgid "Go to today"
+msgstr ""
+
+#: /src/schooltool/app/browser/cal.py:1296
+msgid "Go to the previous day"
+msgstr ""
+
+#. Default: ""
+#: /src/schooltool/app/browser/cal.py:1448
+msgid "Add new event starting at ${title}"
+msgstr ""
+
+#: /src/schooltool/app/browser/cal.py:1747
+msgid "Start time in 24h format"
+msgstr ""
+
+#: /src/schooltool/app/browser/cal.py:1756
+msgid "Duration Type"
+msgstr ""
+
+#: /src/schooltool/app/browser/cal.py:1777
+msgid "Recurs every"
+msgstr ""
+
+#: /src/schooltool/app/browser/cal.py:1786
+msgid "Repeat every"
+msgstr ""
+
+#: /src/schooltool/app/browser/cal.py:1791
+msgid "Range"
+msgstr ""
+
+#: /src/schooltool/app/browser/cal.py:1794
+msgid "Count"
+msgstr ""
+
+#: /src/schooltool/app/browser/cal.py:1795
+msgid "Until"
+msgstr ""
+
+#: /src/schooltool/app/browser/cal.py:1799
+msgid "Number of events"
+msgstr ""
+
+#: /src/schooltool/app/browser/cal.py:1803
+#: /src/schooltool/app/browser/templates/event_add.pt:303
+msgid "Repeat until"
+msgstr ""
+
+#: /src/schooltool/app/browser/cal.py:1828
+msgid "Exception dates"
+msgstr ""
+
 #. Default: ""
 #: /src/schooltool/app/browser/cal.py:1944
 msgid "Last ${weekday}"
@@ -507,17 +1172,6 @@ msgstr ""
 msgid "Add event"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:2079
-#: /src/schooltool/basicperson/browser/person.py:157
-#: /src/schooltool/contact/browser/contact.py:90
-#: /src/schooltool/course/browser/section.py:327
-#: /src/schooltool/schoolyear/browser/schoolyear.py:180
-#: /src/schooltool/timetable/browser/templates/timetable-add.pt:25
-#: /src/schooltool/course/browser/templates/edit_relationships.pt:67
-#: /src/schooltool/app/browser/templates/edit_relationships.pt:48
-msgid "Add"
-msgstr "చేర్చు"
-
 #: /src/schooltool/app/browser/cal.py:2150
 msgid "Edit event"
 msgstr ""
@@ -531,33 +1185,14 @@ msgid "Update"
 msgstr ""
 
 #. Default: ""
-#: /src/schooltool/app/browser/cal.py:2282 /src/schooltool/skin/form.py:76
+#: /src/schooltool/app/browser/cal.py:2282
+#: /src/schooltool/skin/form.py:76
 msgid "Updated on ${date_time}"
 msgstr ""
-
-#: /src/schooltool/app/browser/cal.py:2718
-#: /src/schooltool/app/browser/templates/calendar_tab_viewlet.pt:3
-#: /src/schooltool/app/browser/configure.zcml:606
-#: /src/schooltool/app/browser/configure.zcml:693
-#: /src/schooltool/app/configure.zcml:344
-msgid "Calendar"
-msgstr "క్యాలెండర్"
 
 #: /src/schooltool/app/browser/cal.py:486
 msgid "Unnamed Event"
 msgstr ""
-
-#: /src/schooltool/app/browser/cal.py:925
-msgid "Next week"
-msgstr "తర్వాతి వారం"
-
-#: /src/schooltool/app/browser/cal.py:926
-msgid "Current week"
-msgstr "ప్రస్తుత వారం"
-
-#: /src/schooltool/app/browser/cal.py:927
-msgid "Previous week"
-msgstr "క్రితం వారం"
 
 #: /src/schooltool/app/browser/cal.py:929
 msgid "Go to next week"
@@ -575,10 +1210,6 @@ msgstr ""
 #: /src/schooltool/app/browser/cal.py:952
 msgid "${month}, ${year} (week ${week})"
 msgstr ""
-
-#: /src/schooltool/app/browser/configure.zcml:166
-msgid "Actions"
-msgstr "చర్యలు"
 
 #: /src/schooltool/app/browser/configure.zcml:319
 msgid "View Calendar"
@@ -673,10 +1304,6 @@ msgstr ""
 msgid "Calendar Widget"
 msgstr ""
 
-#: /src/schooltool/app/browser/configure.zcml:711
-msgid "Templates"
-msgstr "మూసలు"
-
 #: /src/schooltool/app/browser/configure.zcml:790
 msgid "Configure"
 msgstr ""
@@ -743,7 +1370,8 @@ msgstr ""
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:358
-msgid "Malformed line ${line_no} (it should contain a day id and a period id)"
+msgid ""
+"Malformed line ${line_no} (it should contain a day id and a period id)"
 msgstr ""
 
 #. Default: ""
@@ -794,14 +1422,6 @@ msgstr ""
 msgid "Invalid records: ${args}."
 msgstr ""
 
-#: /src/schooltool/app/browser/overlay.py:205
-msgid "Saved changes."
-msgstr "మార్పులు భద్రపరిచాం."
-
-#: /src/schooltool/app/browser/pdfcal.py:115
-msgid "all day"
-msgstr "రోజంతా"
-
 #: /src/schooltool/app/browser/pdfcal.py:177
 msgid "Weekly calendar for %s"
 msgstr ""
@@ -842,9 +1462,9 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/about.pt:16
 msgid ""
-"SchoolTool is built on a 100% open source software stack, written in <a href="
-"\"http://python.org\">Python</a> using the <a href=\"http://zope.org\">Zope "
-"3</a> framework."
+"SchoolTool is built on a 100% open source software stack, written in <a "
+"href=\"http://python.org\">Python</a> using the <a "
+"href=\"http://zope.org\">Zope 3</a> framework."
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/about.pt:20
@@ -856,11 +1476,6 @@ msgstr ""
 #: /src/schooltool/app/browser/templates/about.pt:24
 msgid "For more information:"
 msgstr ""
-
-#: /src/schooltool/app/browser/templates/about.pt:27
-#, fuzzy
-msgid "Website"
-msgstr "తెలుపు"
 
 #: /src/schooltool/app/browser/templates/about.pt:28
 msgid "Launchpad project page"
@@ -915,8 +1530,8 @@ msgid "Events for"
 msgstr ""
 
 #. Default: ""
-#.  "This is an Atom formatted XML site feed. It is intended to be viewed\n"
-#.  "      in a Newsreader or syndicated to another site. Please visit"
+#. "This is an Atom formatted XML site feed. It is intended to be viewed\n"
+#. "      in a Newsreader or syndicated to another site. Please visit"
 #: /src/schooltool/app/browser/templates/cal_atom.pt:42
 msgid "atom_description"
 msgstr ""
@@ -948,27 +1563,20 @@ msgid "View daily calendar"
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:24
-#, fuzzy
 msgid "Daily"
-msgstr "రోజు"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:30
 msgid "View weekly calendar"
 msgstr ""
-
-#: /src/schooltool/app/browser/templates/calendar_macros.pt:30
-#: /src/schooltool/app/browser/templates/event_add.pt:235
-msgid "Weekly"
-msgstr "ప్రతీ వారం"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:36
 msgid "View monthly calendar"
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:42
-#, fuzzy
 msgid "Yearly"
-msgstr "సంవత్సరం"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:42
 msgid "View yearly calendar"
@@ -978,10 +1586,6 @@ msgstr ""
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:91
 msgid "Calendar for ${title} - ${calendar_title}"
 msgstr ""
-
-#: /src/schooltool/app/browser/templates/calendar_overlay.pt:33
-msgid "More..."
-msgstr "ఇంకా..."
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:15
 msgid "Select additional calendars to display"
@@ -1011,14 +1615,6 @@ msgstr ""
 msgid "Page ${page_number}"
 msgstr ""
 
-#: /src/schooltool/app/browser/templates/event_add.pt:137
-msgid "Event information"
-msgstr "ఘటన సమాచారం"
-
-#: /src/schooltool/app/browser/templates/event_add.pt:143
-msgid "Event details"
-msgstr "ఘటన వివరాలు"
-
 #: /src/schooltool/app/browser/templates/event_add.pt:197
 msgid "Book Resources"
 msgstr ""
@@ -1026,22 +1622,6 @@ msgstr ""
 #: /src/schooltool/app/browser/templates/event_add.pt:207
 msgid "Update form"
 msgstr ""
-
-#: /src/schooltool/app/browser/templates/event_add.pt:224
-msgid "day"
-msgstr "రోజు"
-
-#: /src/schooltool/app/browser/templates/event_add.pt:225
-msgid "week"
-msgstr "వారం"
-
-#: /src/schooltool/app/browser/templates/event_add.pt:226
-msgid "month"
-msgstr "నెల"
-
-#: /src/schooltool/app/browser/templates/event_add.pt:227
-msgid "year"
-msgstr "సంవత్సరం"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:236
 msgid "This section only applies when weekly recurrence is selected."
@@ -1054,11 +1634,6 @@ msgstr ""
 #: /src/schooltool/app/browser/templates/event_add.pt:264
 msgid "Day ${monthday} of every month"
 msgstr ""
-
-#: /src/schooltool/app/browser/templates/event_add.pt:271
-#: /src/schooltool/app/browser/templates/event_add.pt:278
-msgid "${weekday} of every month"
-msgstr "ప్రతీ నెలా ${weekday}"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:288
 msgid "Repeat"
@@ -1083,10 +1658,6 @@ msgstr ""
 #: /src/schooltool/app/browser/templates/event_booking.pt:12
 msgid "Resource Booking for ${title}"
 msgstr ""
-
-#: /src/schooltool/app/browser/templates/event_booking.pt:18
-msgid "Title:"
-msgstr "శీర్షిక:"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:22
 msgid "Starts:"
@@ -1138,23 +1709,9 @@ msgstr ""
 msgid "Please log in"
 msgstr ""
 
-#: /src/schooltool/app/browser/templates/login.pt:3
-#: /src/schooltool/app/browser/templates/menu_view.pt:3
-#: /src/schooltool/app/browser/configure.zcml:681
-msgid "Login"
-msgstr "ప్రవేశించు"
-
-#: /src/schooltool/app/browser/templates/login.pt:35
-msgid "User Information"
-msgstr "వాడకరి సమాచారం"
-
 #: /src/schooltool/app/browser/templates/login.pt:57
 msgid "L"
 msgstr ""
-
-#: /src/schooltool/app/browser/templates/login.pt:57
-msgid "Log in"
-msgstr "ప్రవేశించు"
 
 #: /src/schooltool/app/browser/templates/login.pt:8
 msgid "Your session has expired."
@@ -1186,10 +1743,6 @@ msgstr ""
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:43
 msgid "Future"
 msgstr ""
-
-#: /src/schooltool/app/browser/templates/recevent_delete.pt:45
-msgid "All"
-msgstr "అన్నీ"
 
 #: /src/schooltool/app/browser/templates/simple_event_delete.pt:18
 msgid "Are you sure you want to delete this event?"
@@ -1232,30 +1785,30 @@ msgstr ""
 msgid ""
 "Each section description's first row contains the <strong>course id</strong> "
 "and the <strong>instructor id</strong> for the new section. Then a number of "
-"rows, each containing a <strong>day id</strong> and a <strong>period id</"
-"strong>, follows. The list of period descriptions is terminated by three "
+"rows, each containing a <strong>day id</strong> and a <strong>period "
+"id</strong>, follows. The list of period descriptions is terminated by three "
 "asterisks ('***') in the first column. After the terminator, any number of "
 "<strong>person ids</strong> may follow, the denoted persons will be added to "
 "the section as learners."
 msgstr ""
 
 #. Default: ""
-#.  "\"three-day\"\n"
-#.  "\"\",\"\",\"\"\n"
-#.  "\"philosophy\",\"lorch\"\n"
-#.  "\"Monday\",\"A\"\n"
-#.  "\"Monday\",\"B\"\n"
-#.  "\"Tuesday\",\"C\"\n"
-#.  "\"***\"\n"
-#.  "\"johnny\"\n"
-#.  "\"billy\"\n"
-#.  "\"\"\n"
-#.  "\"literature\",\"guzman\"\n"
-#.  "\"Wednesday\",\"B\"\n"
-#.  "\"Wednesday\",\"C\"\n"
-#.  "\"***\"\n"
-#.  "\"johnny\"\n"
-#.  "\"pete\""
+#. "\"three-day\"\n"
+#. "\"\",\"\",\"\"\n"
+#. "\"philosophy\",\"lorch\"\n"
+#. "\"Monday\",\"A\"\n"
+#. "\"Monday\",\"B\"\n"
+#. "\"Tuesday\",\"C\"\n"
+#. "\"***\"\n"
+#. "\"johnny\"\n"
+#. "\"billy\"\n"
+#. "\"\"\n"
+#. "\"literature\",\"guzman\"\n"
+#. "\"Wednesday\",\"B\"\n"
+#. "\"Wednesday\",\"C\"\n"
+#. "\"***\"\n"
+#. "\"johnny\"\n"
+#. "\"pete\""
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:56
 msgid ""
 "\n"
@@ -1289,11 +1842,12 @@ msgstr ""
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:83
 msgid ""
 "Note that only ids of objects are to be used in the file, not titles. If a "
-"row ends with empty cells (e.g., <em>\"philosophy\",\"lorch\",\"\",\"\"</"
-"em>), those cells will be discarded. You may separate section descriptions "
-"by more than one line. In the list of learners, only the first column "
-"containing the person ids is processed, the other columns are ignored. You "
-"can import the same data several times without any side effects."
+"row ends with empty cells (e.g., "
+"<em>\"philosophy\",\"lorch\",\"\",\"\"</em>), those cells will be discarded. "
+"You may separate section descriptions by more than one line. In the list of "
+"learners, only the first column containing the person ids is processed, the "
+"other columns are ignored. You can import the same data several times "
+"without any side effects."
 msgstr ""
 
 #: /src/schooltool/app/configure.zcml:336
@@ -1334,12 +1888,12 @@ msgid ""
 "calendars available to you. This might be a long list.</p> <p>The "
 "\"SchoolTool site-wide calendar\" is intended to be used as the official "
 "public calendar of the school.</p> <h3>How do I...</h3> <ul> "
-"<li><strong>Select or unselect several individual calendars of one type:</"
-"strong> If you press the <code>Ctrl</code> button on your keyboard while you "
-"select calendars from a list with your mouse, you can select multiple "
-"calendars.</li> <li><strong>Select a range of calendars of one type:</"
-"strong> If you press the <code>Shift</code> key while clicking on calendars, "
-"you can select a range.</li> </ul>"
+"<li><strong>Select or unselect several individual calendars of one "
+"type:</strong> If you press the <code>Ctrl</code> button on your keyboard "
+"while you select calendars from a list with your mouse, you can select "
+"multiple calendars.</li> <li><strong>Select a range of calendars of one "
+"type:</strong> If you press the <code>Shift</code> key while clicking on "
+"calendars, you can select a range.</li> </ul>"
 msgstr ""
 
 #: /src/schooltool/app/help/calendaring.pt:6
@@ -1362,8 +1916,8 @@ msgid ""
 "immediately above the calendar table. Allows you to navigate forward or "
 "backward in time, or to return to the current time.</li> "
 "<li><strong>Calendar title:</strong> immediately above the calendar "
-"navigation bar, lists the owner of this calendar and the date for this \"page"
-"\" of the calendar.</li> <li><strong>Left sidebar:</strong> for all "
+"navigation bar, lists the owner of this calendar and the date for this "
+"\"page\" of the calendar.</li> <li><strong>Left sidebar:</strong> for all "
 "calendars, this contains a <code>Jump to...</code> section containing menus "
 "and links to allow you to quickly navigate to a specific month, year or "
 "date. <br /> If you are logged in and viewing your own calendar, you will "
@@ -1373,14 +1927,6 @@ msgid ""
 "<li><strong>Day/week/month/year buttons:</strong> These buttons allow you to "
 "switch between daily, weekly, monthly and annual views.</li> </ul>"
 msgstr ""
-
-#: /src/schooltool/app/help/configure.zcml:13
-msgid "Administration"
-msgstr "నిర్వహణ"
-
-#: /src/schooltool/app/help/configure.zcml:21
-msgid "Organization"
-msgstr "సంస్థ"
 
 #: /src/schooltool/app/help/configure.zcml:29
 msgid "Calendaring"
@@ -1404,12 +1950,12 @@ msgid ""
 "Event Information form.</li> <li><strong>Show or hide events in one of the "
 "calendars listed under <code>Calendars</code>:</strong> check or uncheck the "
 "box under <code>Cal</code> and click <code>Apply</code>.</li> "
-"<li><strong>Adding or removing calendars to the <code>Calendars</code> list:"
-"</strong> click on the <code>More...</code> button.</li> <li><strong>access "
-"a iCal format version of the calendar:</strong>: Select <code>Open in iCal</"
-"code> from the Action menu.</li> <li><strong>Access an Atom feed version of "
-"the calendar: </strong> append <code>/atom.xml</code> to the calendar's URL."
-"</li> </ul>"
+"<li><strong>Adding or removing calendars to the <code>Calendars</code> "
+"list:</strong> click on the <code>More...</code> button.</li> "
+"<li><strong>access a iCal format version of the calendar:</strong>: Select "
+"<code>Open in iCal</code> from the Action menu.</li> <li><strong>Access an "
+"Atom feed version of the calendar: </strong> append <code>/atom.xml</code> "
+"to the calendar's URL.</li> </ul>"
 msgstr ""
 
 #: /src/schooltool/app/help/event_add.pt:12
@@ -1433,8 +1979,8 @@ msgstr ""
 
 #: /src/schooltool/app/help/event_edit.pt:12
 msgid ""
-"If you need to edit a resource reservation, click the <code>Book resources</"
-"code> link at the bottom of the form."
+"If you need to edit a resource reservation, click the <code>Book "
+"resources</code> link at the bottom of the form."
 msgstr ""
 
 #: /src/schooltool/app/help/event_edit.pt:14
@@ -1493,25 +2039,26 @@ msgstr ""
 msgid ""
 "<h1>Monthly Calendar</h1> <p>This is the monthly view of a calendar. It "
 "might be your calendar, or it might be the calendar of another person, group "
-"or resource in your school. <a href=\"/++help++/schooltool/calendaring"
-"\">More calendaring help...</a></p> <h3>How do I...</h3> <ul> "
-"<li><strong>View an individual day or event in more detail:</strong> click "
-"on the appropriate day on the calendar.</li> <li><strong>View an individual "
-"week:</strong> Click on the appropriate week number in blue in the leftmost "
-"column of the calendar.</li> <li><strong>Create an event:</strong> select "
-"<code>New Event</code> from the <code>Actions</code> menu.</li> "
-"<li><strong>Show or hide events in one of the calendars listed under "
-"<code>Calendars</code>:</strong> check or uncheck the box under <code>Cal</"
-"code> and click <code>Apply</code>.</li> <li><strong>Adding or removing "
-"calendars to the <code>Calendars</code> list:</strong> click on the "
-"<code>More...</code> button.</li> <li><strong>Make weeks start on the "
-"correct day:</strong> the first day of the week varies in different parts of "
-"the world. If SchoolTool isn't set up correctly for you, click on your name "
-"in the red bar at the top of the page. Then click on the <code>Actions</"
-"code> menu and select <code>Change Preferences</code>. Pick the correct "
-"\"Week starts on\" day and hit <code>Apply</code>.</li> <li><strong>Access a "
-"iCal format version of the calendar:</strong>: select <code>Open in iCal</"
-"code> from the Action menu.</li> </ul>"
+"or resource in your school. <a "
+"href=\"/++help++/schooltool/calendaring\">More calendaring help...</a></p> "
+"<h3>How do I...</h3> <ul> <li><strong>View an individual day or event in "
+"more detail:</strong> click on the appropriate day on the calendar.</li> "
+"<li><strong>View an individual week:</strong> Click on the appropriate week "
+"number in blue in the leftmost column of the calendar.</li> "
+"<li><strong>Create an event:</strong> select <code>New Event</code> from the "
+"<code>Actions</code> menu.</li> <li><strong>Show or hide events in one of "
+"the calendars listed under <code>Calendars</code>:</strong> check or uncheck "
+"the box under <code>Cal</code> and click <code>Apply</code>.</li> "
+"<li><strong>Adding or removing calendars to the <code>Calendars</code> "
+"list:</strong> click on the <code>More...</code> button.</li> "
+"<li><strong>Make weeks start on the correct day:</strong> the first day of "
+"the week varies in different parts of the world. If SchoolTool isn't set up "
+"correctly for you, click on your name in the red bar at the top of the page. "
+"Then click on the <code>Actions</code> menu and select <code>Change "
+"Preferences</code>. Pick the correct \"Week starts on\" day and hit "
+"<code>Apply</code>.</li> <li><strong>Access a iCal format version of the "
+"calendar:</strong>: select <code>Open in iCal</code> from the Action "
+"menu.</li> </ul>"
 msgstr ""
 
 #: /src/schooltool/app/help/org.pt:6
@@ -1533,16 +2080,16 @@ msgid ""
 "the links at the left hand side of the red bar show you where you are in "
 "SchoolTool's object hierarchy. Note that this doesn't necessarily lead you "
 "back to where you came from, but is handy for taking you from more specific "
-"to more general parts of the application.</li> <li><strong>Your name</"
-"strong> (if you're logged in): clicking on your name takes you to a simple "
-"dashboard of relevant links. From this page you can also use the "
-"<code>Actions</code> menu to change preferences and other personal settings."
-"</li> <li><strong>Log in/out:</strong> this logs you in or out. It is a good "
-"idea to log out when you aren't using SchoolTool.</li> <li><strong>Help:</"
-"strong> if there is a help file for the page you're looking at, you'll see "
-"this link.</li> </ul> <li><strong>Menus</strong></li> <ul> "
-"<li><strong>Navigation:</strong> this menu gives you some basic options for "
-"accessing different parts of SchoolTool, such as the index of persons or "
+"to more general parts of the application.</li> <li><strong>Your "
+"name</strong> (if you're logged in): clicking on your name takes you to a "
+"simple dashboard of relevant links. From this page you can also use the "
+"<code>Actions</code> menu to change preferences and other personal "
+"settings.</li> <li><strong>Log in/out:</strong> this logs you in or out. It "
+"is a good idea to log out when you aren't using SchoolTool.</li> "
+"<li><strong>Help:</strong> if there is a help file for the page you're "
+"looking at, you'll see this link.</li> </ul> <li><strong>Menus</strong></li> "
+"<ul> <li><strong>Navigation:</strong> this menu gives you some basic options "
+"for accessing different parts of SchoolTool, such as the index of persons or "
 "courses. What you see here depends on your permissions in the system.</li> "
 "<li><strong>Action:</strong> this menu contains a variety of things that you "
 "can do on the current page. The entries in this menu change considerably "
@@ -1552,11 +2099,11 @@ msgid ""
 "school's site, usually the calendar for the school.</li> "
 "<li><strong>Calendar day/week/month/year views:</strong> if you are viewing "
 "a calendar, you will find icons in the upper right hand corner that will "
-"allow you to switch between calendar views.</li> <li><strong>Devmode menu:</"
-"strong> if you are a site administrator and you've enabled \"devmode\" in "
-"schooltool.conf, you will see a special menu in the upper right hand corner "
-"of the site. You should disable devmode in any production server.</li> </ul> "
-"</ul>"
+"allow you to switch between calendar views.</li> <li><strong>Devmode "
+"menu:</strong> if you are a site administrator and you've enabled "
+"\"devmode\" in schooltool.conf, you will see a special menu in the upper "
+"right hand corner of the site. You should disable devmode in any production "
+"server.</li> </ul> </ul>"
 msgstr ""
 
 #: /src/schooltool/app/help/weekly_calendar.pt:6
@@ -1576,17 +2123,17 @@ msgid ""
 "for the event you can edit it.</li> <li><strong>Create an event:</strong> "
 "select the day the event starts and create the event in the daily view.</li> "
 "<li><strong>Show or hide events in one of the calendars listed under "
-"<code>Calendars</code>:</strong> check or uncheck the box under <code>Cal</"
-"code> and click <code>Apply</code>.</li> <li><strong>Adding or removing "
-"calendars to the <code>Calendars</code> list:</strong> click on the "
+"<code>Calendars</code>:</strong> check or uncheck the box under "
+"<code>Cal</code> and click <code>Apply</code>.</li> <li><strong>Adding or "
+"removing calendars to the <code>Calendars</code> list:</strong> click on the "
 "<code>More...</code> button.</li> <li><strong>Make the calendar start on the "
 "correct day:</strong> the first day of the week varies in different parts of "
 "the world. If SchoolTool isn't set up correctly for you, click on your name "
-"in the red bar at the top of the page. Then click on the <code>Actions</"
-"code> menu and select <code>Change Preferences</code>. Pick the correct "
-"\"Week starts on\" day and hit <code>Apply</code>.</li> <li><strong>Access a "
-"iCal format version of the calendar:</strong>: select <code>Open in iCal</"
-"code> from the Action menu.</li> </ul>"
+"in the red bar at the top of the page. Then click on the "
+"<code>Actions</code> menu and select <code>Change Preferences</code>. Pick "
+"the correct \"Week starts on\" day and hit <code>Apply</code>.</li> "
+"<li><strong>Access a iCal format version of the calendar:</strong>: select "
+"<code>Open in iCal</code> from the Action menu.</li> </ul>"
 msgstr ""
 
 #: /src/schooltool/app/help/yearly_calendar.pt:6
@@ -1602,24 +2149,25 @@ msgid ""
 "calendaring help...</a></p> <h3>How do I...</h3> <ul> <li><strong>Know which "
 "days contain events: if the day has a blue background, there is at least one "
 "event that day.</strong></li> <li><strong>View an individual day in more "
-"detail:</strong> click on the day.</li> <li><strong>View an individual month:"
-"</strong> click on the name of the month.</li> <li><strong>Create an event:</"
-"strong> select the day the event starts and create the event in the daily "
-"view.</li> <li><strong>Show or hide events in one of the calendars listed "
-"under <code>Calendars</code>:</strong> check or uncheck the box under "
+"detail:</strong> click on the day.</li> <li><strong>View an individual "
+"month:</strong> click on the name of the month.</li> <li><strong>Create an "
+"event:</strong> select the day the event starts and create the event in the "
+"daily view.</li> <li><strong>Show or hide events in one of the calendars "
+"listed under <code>Calendars</code>:</strong> check or uncheck the box under "
 "<code>Cal</code> and click <code>Apply</code>.</li> <li><strong>Adding or "
 "removing calendars to the <code>Calendars</code> list:</strong> click on the "
 "<code>More...</code> button.</li> <li><strong>Make the calendar start on the "
 "correct day:</strong> the first day of the week varies in different parts of "
 "the world. If SchoolTool isn't set up correctly for you, click on your name "
-"in the red bar at the top of the page. Then click on the <code>Actions</"
-"code> menu and select <code>Change Preferences</code>. Pick the correct "
-"\"Week starts on\" day and hit <code>Apply</code>.</li> <li><strong>Access a "
-"iCal format version of the calendar:</strong>: select <code>Open in iCal</"
-"code> from the Action menu.</li> </ul>"
+"in the red bar at the top of the page. Then click on the "
+"<code>Actions</code> menu and select <code>Change Preferences</code>. Pick "
+"the correct \"Week starts on\" day and hit <code>Apply</code>.</li> "
+"<li><strong>Access a iCal format version of the calendar:</strong>: select "
+"<code>Open in iCal</code> from the Action menu.</li> </ul>"
 msgstr ""
 
-#: /src/schooltool/app/interfaces.py:137 /src/schooltool/app/interfaces.py:148
+#: /src/schooltool/app/interfaces.py:137
+#: /src/schooltool/app/interfaces.py:148
 msgid ""
 "The name for the school or organization running\n"
 "            this server.  This will be displayed on the public calendar, "
@@ -1654,7 +2202,8 @@ msgstr ""
 msgid "Form input is not a file object"
 msgstr ""
 
-#: /src/schooltool/app/interfaces.py:44 /src/schooltool/app/interfaces.py:48
+#: /src/schooltool/app/interfaces.py:44
+#: /src/schooltool/app/interfaces.py:48
 msgid "Invalid integer data"
 msgstr ""
 
@@ -1708,11 +2257,6 @@ msgstr ""
 #: /src/schooltool/app/main.py:415
 msgid "Cannot resolve plugin action order:\n"
 msgstr ""
-
-#: /src/schooltool/app/main.py:565 /src/schooltool/app/main.py:609
-#: /src/schooltool/app/main.py:612
-msgid "%s: %s"
-msgstr "%s: %s"
 
 #: /src/schooltool/app/main.py:566
 msgid "Run %s -h for help."
@@ -1778,11 +2322,6 @@ msgid ""
 "  --manage               only do management tasks, don't run the server\n"
 msgstr ""
 
-#: /src/schooltool/app/membership.py:261
-#: /src/schooltool/group/browser/group.pt:16
-msgid "Members"
-msgstr "సభ్యులు"
-
 #: /src/schooltool/app/membership.py:262
 msgid "Members of the group."
 msgstr ""
@@ -1805,9 +2344,8 @@ msgstr ""
 #: /src/schooltool/course/security.zcml:149
 #: /src/schooltool/person/security.zcml:136
 #: /src/schooltool/group/security.zcml:94
-#, fuzzy
 msgid "Change calendar"
-msgstr "క్యాలెండర్"
+msgstr ""
 
 #: /src/schooltool/app/security.zcml:69
 msgid "Everyone can view the application calendar."
@@ -1829,9 +2367,8 @@ msgstr ""
 #: /src/schooltool/course/security.zcml:141
 #: /src/schooltool/person/security.zcml:128
 #: /src/schooltool/group/security.zcml:86
-#, fuzzy
 msgid "View calendar"
-msgstr "క్యాలెండర్"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/configure.zcml:143
 msgid "New Text Field"
@@ -1916,7 +2453,8 @@ msgstr ""
 #: /src/schooltool/person/browser/person.py:180
 #: /src/schooltool/schoolyear/browser/schoolyear.py:209
 #: /src/schooltool/schoolyear/browser/schoolyear.py:222
-#: /src/schooltool/skin/form.py:84 /src/schooltool/term/browser/term.py:175
+#: /src/schooltool/skin/form.py:84
+#: /src/schooltool/term/browser/term.py:175
 #: /src/schooltool/term/browser/term.py:246
 #: /src/schooltool/timetable/browser/event.py:87
 #: /src/schooltool/timetable/browser/templates/ttwizard_period_order2.pt:41
@@ -1934,10 +2472,6 @@ msgstr ""
 #: /src/schooltool/basicperson/browser/demographics.py:212
 msgid "Change information for ${field_title}"
 msgstr ""
-
-#: /src/schooltool/basicperson/browser/person.py:105
-msgid "This username is already in use!"
-msgstr "ఈ వాడుకరి పేరు ఇప్పటికే వాడుకలో ఉంది!"
 
 #: /src/schooltool/basicperson/browser/person.py:144
 msgid "Add new person"
@@ -1987,28 +2521,6 @@ msgstr ""
 msgid "Advisor"
 msgstr ""
 
-#: /src/schooltool/basicperson/browser/person.py:60
-#: /src/schooltool/basicperson/browser/person.py:61
-#: /src/schooltool/demographics/browser/personform.py:254
-#: /src/schooltool/demographics/browser/personform.py:255
-#: /src/schooltool/demographics/browser/table.py:67
-#: /src/schooltool/email/browser/email.py:108
-#: /src/schooltool/email/interfaces.py:99
-#: /src/schooltool/person/browser/person.py:286
-#: /src/schooltool/person/browser/person.py:287
-#: /src/schooltool/person/interfaces.py:60
-#: /src/schooltool/app/browser/templates/login.pt:38
-msgid "Username"
-msgstr "వాడుకరి పేరు"
-
-#: /src/schooltool/basicperson/browser/person.py:65
-#: /src/schooltool/demographics/browser/personform.py:259
-#: /src/schooltool/person/browser/person.py:159
-#: /src/schooltool/person/browser/person.py:290
-#: /src/schooltool/app/browser/templates/login.pt:44
-msgid "Password"
-msgstr "సంకేతపదం"
-
 #: /src/schooltool/basicperson/browser/person.py:69
 msgid "Confirm"
 msgstr ""
@@ -2057,19 +2569,10 @@ msgid ""
 "name. An optional password <strong>may</strong> be included as well."
 msgstr ""
 
-#: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:33
-#: /src/schooltool/resource/browser/resource-csvimport.pt:29
-#: /src/schooltool/person/browser/person-csvimport.pt:33
-#: /src/schooltool/course/browser/templates/course-csvimport.pt:31
-#: /src/schooltool/group/browser/group-csvimport.pt:29
-#: /src/schooltool/app/browser/templates/timetables-csvimport.pt:54
-msgid "Example:"
-msgstr "ఉదాహరణ:"
-
 #. Default: ""
-#.  "jjones, Jimmy, Jones\n"
-#.  "jbjones, Jim Bob, Jones, r2m45J\n"
-#.  "howard, Howard, Jobs"
+#. "jjones, Jimmy, Jones\n"
+#. "jbjones, Jim Bob, Jones, r2m45J\n"
+#. "howard, Howard, Jobs"
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:35
 msgid ""
 "\n"
@@ -2123,17 +2626,6 @@ msgstr ""
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:101
 msgid "Charset:"
 msgstr ""
-
-#: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:57
-#: /src/schooltool/resource/browser/resource-csvimport.pt:54
-#: /src/schooltool/person/browser/person-csvimport.pt:57
-#: /src/schooltool/course/browser/section-member-csvimport.pt:34
-#: /src/schooltool/course/browser/templates/course-csvimport.pt:68
-#: /src/schooltool/group/browser/group-csvimport.pt:54
-#: /src/schooltool/group/browser/group-member-csvimport.pt:34
-#: /src/schooltool/app/browser/templates/timetables-csvimport.pt:103
-msgid "Unicode (UTF-8)"
-msgstr "యూనీకోడ్ (UTF-8)"
 
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:58
 #: /src/schooltool/resource/browser/resource-csvimport.pt:55
@@ -2268,21 +2760,6 @@ msgstr ""
 msgid "cancel-button"
 msgstr ""
 
-#: /src/schooltool/basicperson/browser/templates/person_view.pt:20
-#: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:34
-#: /src/schooltool/person/browser/person.pt:34
-#: /src/schooltool/person/browser/home.pt:34
-#: /src/schooltool/course/browser/templates/course.pt:23
-#: /src/schooltool/app/browser/templates/event.pt:33
-msgid "Details"
-msgstr "వివరాలు"
-
-#: /src/schooltool/basicperson/browser/templates/person_view.pt:4
-#: /src/schooltool/person/browser/person.pt:4
-#: /src/schooltool/person/browser/home.pt:4
-msgid "Person info: ${title}"
-msgstr "వ్యక్తి సమాచారం: ${title}"
-
 #: /src/schooltool/basicperson/interfaces.py:122
 msgid "The title of this Field Description"
 msgstr ""
@@ -2314,25 +2791,11 @@ msgstr ""
 msgid "Prefix"
 msgstr ""
 
-#: /src/schooltool/basicperson/interfaces.py:43
-#: /src/schooltool/contact/interfaces.py:42
-#: /src/schooltool/demographics/interfaces.py:50
-#: /src/schooltool/contact/browser/templates/filter.pt:5
-msgid "First name"
-msgstr "మొదటి పేరు"
-
 #: /src/schooltool/basicperson/interfaces.py:48
 #: /src/schooltool/contact/interfaces.py:44
 #: /src/schooltool/demographics/interfaces.py:55
 msgid "Middle name"
 msgstr ""
-
-#: /src/schooltool/basicperson/interfaces.py:53
-#: /src/schooltool/contact/interfaces.py:46
-#: /src/schooltool/demographics/interfaces.py:60
-#: /src/schooltool/contact/browser/templates/filter.pt:12
-msgid "Last name"
-msgstr "ఇంటి పేరు"
 
 #: /src/schooltool/basicperson/interfaces.py:58
 #: /src/schooltool/contact/interfaces.py:48
@@ -2345,11 +2808,6 @@ msgstr ""
 msgid "Preferred name"
 msgstr ""
 
-#: /src/schooltool/basicperson/interfaces.py:68
-#: /src/schooltool/demographics/interfaces.py:123
-msgid "Gender"
-msgstr "లింగము"
-
 #: /src/schooltool/basicperson/interfaces.py:69
 #: /src/schooltool/demographics/interfaces.py:124
 msgid "male"
@@ -2359,25 +2817,6 @@ msgstr ""
 #: /src/schooltool/demographics/interfaces.py:124
 msgid "female"
 msgstr ""
-
-#: /src/schooltool/basicperson/interfaces.py:74
-#: /src/schooltool/demographics/interfaces.py:129
-msgid "Birth date"
-msgstr "పుట్టిన రోజు"
-
-#: /src/schooltool/basicperson/interfaces.py:75
-msgid "(yyyy-mm-dd)"
-msgstr "(yyyy-mm-dd)"
-
-#: /src/schooltool/basicperson/person.py:83
-#: /src/schooltool/contact/browser/contact.py:297
-msgid "First Name"
-msgstr "మొదటి పేరు"
-
-#: /src/schooltool/basicperson/person.py:90
-#: /src/schooltool/contact/browser/contact.py:304
-msgid "Last Name"
-msgstr "ఇంటిపేరు"
 
 #: /src/schooltool/basicperson/security.zcml:17
 msgid "Create, delete demographics fields and change their order."
@@ -2529,12 +2968,6 @@ msgstr ""
 msgid "R"
 msgstr ""
 
-#: /src/schooltool/contact/browser/templates/manage_contacts.pt:27
-#: /src/schooltool/course/browser/templates/edit_relationships.pt:45
-#: /src/schooltool/app/browser/templates/edit_relationships.pt:26
-msgid "Remove"
-msgstr "తొలగించు"
-
 #. Default: "Invert Selection"
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:31
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:62
@@ -2565,13 +2998,6 @@ msgstr ""
 msgid "There are none to add."
 msgstr ""
 
-#. Default: "OK"
-#: /src/schooltool/contact/browser/templates/manage_contacts.pt:75
-#: /src/schooltool/course/browser/templates/edit_relationships.pt:84
-#: /src/schooltool/app/browser/templates/edit_relationships.pt:65
-msgid "ok-button"
-msgstr "సరే"
-
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:18
 #: /src/schooltool/contact/browser/templates/contact_view.pt:16
 msgid "${relationship} of ${person}"
@@ -2583,27 +3009,25 @@ msgid "Contact of ${person}"
 msgstr ""
 
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:41
-#, fuzzy
 msgid "Phones"
-msgstr "వ్యక్తులు"
+msgstr ""
 
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:50
 msgid "Spoken Languages"
 msgstr ""
 
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:73
-#, fuzzy
 msgid "(View Details)"
-msgstr "వివరాలు"
+msgstr ""
 
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:8
-#, fuzzy
 msgid "Contact information for ${person}"
-msgstr "సంప్రదింపు సమాచారం"
+msgstr ""
 
 #: /src/schooltool/contact/contact.py:210
 #: /src/schooltool/course/browser/section.py:538
-#: /src/schooltool/course/section.py:283 /src/schooltool/course/section.py:293
+#: /src/schooltool/course/section.py:283
+#: /src/schooltool/course/section.py:293
 #: /src/schooltool/course/browser/templates/section.pt:79
 #: /src/schooltool/course/browser/templates/copy_sections.pt:93
 #: /src/schooltool/course/browser/templates/link_section.pt:69
@@ -2668,16 +3092,6 @@ msgstr ""
 msgid "Address line 2"
 msgstr ""
 
-#: /src/schooltool/contact/interfaces.py:57
-#: /src/schooltool/demographics/interfaces.py:258
-msgid "City"
-msgstr "నగరం"
-
-#: /src/schooltool/contact/interfaces.py:59
-#: /src/schooltool/demographics/interfaces.py:263
-msgid "State"
-msgstr "రాష్ట్రం"
-
 #: /src/schooltool/contact/interfaces.py:61
 msgid "Country"
 msgstr ""
@@ -2686,11 +3100,6 @@ msgstr ""
 #: /src/schooltool/demographics/interfaces.py:268
 msgid "Postal code"
 msgstr ""
-
-#: /src/schooltool/contact/interfaces.py:68
-#: /src/schooltool/contact/browser/templates/view_contacts.pt:36
-msgid "Email"
-msgstr "ఈమెయిల్"
 
 #: /src/schooltool/contact/interfaces.py:73
 #: /src/schooltool/demographics/interfaces.py:273
@@ -2733,14 +3142,12 @@ msgid "Modify an external contact"
 msgstr ""
 
 #: /src/schooltool/contact/security.zcml:70
-#, fuzzy
 msgid "View user's contact information"
-msgstr "సంప్రదింపు సమాచారం"
+msgstr ""
 
 #: /src/schooltool/contact/security.zcml:78
-#, fuzzy
 msgid "Modify user's contact information"
-msgstr "సంప్రదింపు సమాచారం"
+msgstr ""
 
 #: /src/schooltool/course/browser/configure.zcml:10
 msgid "Add a Course"
@@ -2839,15 +3246,6 @@ msgstr ""
 msgid "Available Instructors"
 msgstr ""
 
-#: /src/schooltool/course/browser/section.py:554
-#: /src/schooltool/course/browser/templates/section.pt:96
-#: /src/schooltool/course/browser/templates/course_container.pt:57
-#: /src/schooltool/course/browser/templates/copy_sections.pt:145
-#: /src/schooltool/course/browser/templates/link_section.pt:114
-#: /src/schooltool/course/browser/templates/section_container.pt:87
-msgid "Students"
-msgstr "విద్యార్థులు"
-
 #: /src/schooltool/course/browser/section.py:555
 msgid "Current Students"
 msgstr ""
@@ -2920,10 +3318,10 @@ msgid ""
 msgstr ""
 
 #. Default: ""
-#.  "Ancient History, Pre-history through 1000 A.D.\n"
-#.  "US History,,us-history\n"
-#.  "World History, 1000 A.D. through the 20th century, history-world\n"
-#.  "Spanish,,,spanish-gov,5"
+#. "Ancient History, Pre-history through 1000 A.D.\n"
+#. "US History,,us-history\n"
+#. "World History, 1000 A.D. through the 20th century, history-world\n"
+#. "Spanish,,,spanish-gov,5"
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:33
 msgid ""
 "\n"
@@ -2950,10 +3348,6 @@ msgstr ""
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:4
 msgid "Upload schooltool courses as CSV"
 msgstr ""
-
-#: /src/schooltool/course/browser/templates/course.pt:71
-msgid "students"
-msgstr "విద్యార్ధులు"
 
 #: /src/schooltool/course/browser/templates/course.pt:9
 msgid "${course} course for ${schoolyear}"
@@ -3019,10 +3413,6 @@ msgstr ""
 msgid "edit instructors"
 msgstr ""
 
-#: /src/schooltool/course/browser/templates/section_container.pt:39
-msgid "Section"
-msgstr "విభాగం"
-
 #: /src/schooltool/course/browser/templates/section_container.pt:9
 #: /src/schooltool/course/browser/templates/section_container.pt:20
 msgid "Section list for ${term} of ${schoolyear}"
@@ -3074,25 +3464,21 @@ msgstr ""
 
 #: /src/schooltool/course/help/course_container.pt:10
 msgid ""
-"<h1>Courses</h1> <p>Use this page to organize courses listed in the system.</"
-"p> <h3>How do I...</h3> <ul> <li><strong>Look for for a course:</strong> Use "
-"the search box to the left of the <code>Find Now</code> button to look "
-"through the entire list of courses for the search criterion. The "
-"<code>Clear</code> button empties the search box of current entries.</li> "
-"<li><strong>Show a list of the different sections of a course:</strong> "
-"click on the name of the course.</li> <li><strong>Show the lists of students "
-"in a particular class:</strong> Click on the <code>teacher -- course</code> "
-"link. The number of students is also listed next to the teacher and the "
-"course.</li> <li><strong>Navigate through the courses:</strong> Separate "
-"<q>batches</q> of the Course list can be accessed through the <code>Next 10</"
-"code> (and <code>Previous</code>) and links in the blue bar. A <code>Show "
-"All</code> button is also there to show all of the courses on a single page."
-"</li> </ul>"
+"<h1>Courses</h1> <p>Use this page to organize courses listed in the "
+"system.</p> <h3>How do I...</h3> <ul> <li><strong>Look for for a "
+"course:</strong> Use the search box to the left of the <code>Find Now</code> "
+"button to look through the entire list of courses for the search criterion. "
+"The <code>Clear</code> button empties the search box of current "
+"entries.</li> <li><strong>Show a list of the different sections of a "
+"course:</strong> click on the name of the course.</li> <li><strong>Show the "
+"lists of students in a particular class:</strong> Click on the <code>teacher "
+"-- course</code> link. The number of students is also listed next to the "
+"teacher and the course.</li> <li><strong>Navigate through the "
+"courses:</strong> Separate <q>batches</q> of the Course list can be accessed "
+"through the <code>Next 10</code> (and <code>Previous</code>) and links in "
+"the blue bar. A <code>Show All</code> button is also there to show all of "
+"the courses on a single page.</li> </ul>"
 msgstr ""
-
-#: /src/schooltool/course/interfaces.py:102
-msgid "Description of the section."
-msgstr "విభాగపు వివరణ."
 
 #: /src/schooltool/course/interfaces.py:38
 msgid "Title of the course."
@@ -3136,10 +3522,6 @@ msgid ""
 "            names, courses, and meeting time."
 msgstr ""
 
-#: /src/schooltool/course/interfaces.py:97
-msgid "Title for the section."
-msgstr "విభాగానికి శీర్షిక."
-
 #: /src/schooltool/course/section.py:125
 msgid "Cannot assign section as previous to itself"
 msgstr ""
@@ -3149,23 +3531,20 @@ msgid "Cannot assign section as next to itself"
 msgstr ""
 
 #: /src/schooltool/course/section.py:284
-#, fuzzy
 msgid "Instructors of the section."
-msgstr "విభాగపు వివరణ."
+msgstr ""
 
 #: /src/schooltool/course/section.py:294
 msgid "Instructors of a person in any of his sections."
 msgstr ""
 
 #: /src/schooltool/course/section.py:317
-#, fuzzy
 msgid "Learners"
-msgstr "నాయకులు"
+msgstr ""
 
 #: /src/schooltool/course/section.py:318
-#, fuzzy
 msgid "Students of the section."
-msgstr "విభాగానికి శీర్షిక."
+msgstr ""
 
 #: /src/schooltool/course/section.py:396
 msgid "Cannot link sections in same term"
@@ -3178,11 +3557,6 @@ msgstr ""
 #: /src/schooltool/course/section.py:405
 msgid "Sections must be in consecutive terms"
 msgstr ""
-
-#. Default: ""
-#: /src/schooltool/course/section.py:88
-msgid "${instructors} -- ${section_title}"
-msgstr "${instructors} -- ${section_title}"
 
 #: /src/schooltool/course/security.zcml:107
 msgid ""
@@ -3215,53 +3589,20 @@ msgstr ""
 #: /src/schooltool/term/security.zcml:28
 #: /src/schooltool/schoolyear/security.zcml:16
 #: /src/schooltool/timetable/security.zcml:25
-#, fuzzy
 msgid "Create/Delete"
-msgstr "తొలగించు"
-
-#: /src/schooltool/dashboard/configure.zcml:41
-msgid "My Sections"
-msgstr "నా విభాగాలు"
-
-#: /src/schooltool/dashboard/dashboard.pt:62
-#: /src/schooltool/dashboard/dashboard.pt:66
-msgid "Dashboard"
-msgstr "డాష్‌బోర్ద్"
-
-#: /src/schooltool/dashboard/interfaces.py:45
-msgid "Category Title."
-msgstr "వర్గపు శీర్షిక"
-
-#: /src/schooltool/dashboard/interfaces.py:49
-#: /src/schooltool/dashboard/interfaces.py:50
-msgid "Weight"
-msgstr "భారం"
+msgstr ""
 
 #: /src/schooltool/dashboard/school.pt:10
 msgid "Activity Categories"
 msgstr ""
-
-#: /src/schooltool/dashboard/school.pt:22
-#: /src/schooltool/course/browser/templates/section.pt:69
-#: /src/schooltool/app/browser/templates/calendar_selection.pt:42
-#: /src/schooltool/app/browser/templates/index.pt:14
-#: /src/schooltool/resource/browser/configure.zcml:169
-msgid "Resources"
-msgstr "వనరులు"
 
 #: /src/schooltool/dashboard/school.pt:4
 #: /src/schooltool/app/browser/templates/index.pt:15
 msgid "Levels"
 msgstr ""
 
-#: /src/schooltool/dashboard/term.pt:10
-#: /src/schooltool/course/browser/templates/course.pt:33
-#: /src/schooltool/course/security.zcml:107
-#: /src/schooltool/course/browser/configure.zcml:265
-msgid "Sections"
-msgstr "విభాగాలు"
-
-#: /src/schooltool/dashboard/term.pt:16 /src/schooltool/term/security.zcml:19
+#: /src/schooltool/dashboard/term.pt:16
+#: /src/schooltool/term/security.zcml:19
 #: /src/schooltool/term/help/configure.zcml:18
 msgid "Terms"
 msgstr ""
@@ -3334,13 +3675,6 @@ msgstr ""
 msgid "N"
 msgstr ""
 
-#: /src/schooltool/demographics/browser/nameinfo_view.pt:11
-#: /src/schooltool/person/browser/person.pt:11
-#: /src/schooltool/person/browser/home.pt:11
-#: /src/schooltool/course/browser/templates/course.pt:52
-msgid "photo"
-msgstr "ఫొటో"
-
 #. Default: ""
 #: /src/schooltool/demographics/browser/personform.py:149
 msgid "Change name information for ${fullname}"
@@ -3374,10 +3708,6 @@ msgstr ""
 #: /src/schooltool/demographics/browser/personform.py:210
 msgid "Change contact information for ${fullname}"
 msgstr ""
-
-#: /src/schooltool/demographics/browser/personform.py:218
-msgid "Contact information"
-msgstr "సంప్రదింపు సమాచారం"
 
 #: /src/schooltool/demographics/browser/personform.py:274
 #: /src/schooltool/person/browser/person.py:324
@@ -3490,14 +3820,6 @@ msgstr ""
 msgid "Display"
 msgstr ""
 
-#: /src/schooltool/demographics/browser/table.py:73
-#: /src/schooltool/demographics/interfaces.py:76
-#: /src/schooltool/person/browser/person.py:282
-#: /src/schooltool/person/browser/person.py:371
-#: /src/schooltool/person/interfaces.py:51
-msgid "Full name"
-msgstr "పూర్తి పేరు"
-
 #: /src/schooltool/demographics/browser/table.py:78
 msgid "Birth"
 msgstr ""
@@ -3510,26 +3832,6 @@ msgstr ""
 msgid "Modified"
 msgstr ""
 
-#: /src/schooltool/demographics/interfaces.py:100
-msgid "White"
-msgstr "తెలుపు"
-
-#: /src/schooltool/demographics/interfaces.py:104
-msgid "English"
-msgstr "ఆంగ్లం"
-
-#: /src/schooltool/demographics/interfaces.py:105
-msgid "Spanish"
-msgstr "స్పానిష్"
-
-#: /src/schooltool/demographics/interfaces.py:106
-msgid "Chinese"
-msgstr "చైనీస్"
-
-#: /src/schooltool/demographics/interfaces.py:107
-msgid "German"
-msgstr "జెర్మన్"
-
 #: /src/schooltool/demographics/interfaces.py:108
 msgid "Tagalog"
 msgstr ""
@@ -3538,33 +3840,9 @@ msgstr ""
 msgid "Vietnamese"
 msgstr ""
 
-#: /src/schooltool/demographics/interfaces.py:110
-msgid "Italian"
-msgstr "ఇటాలియన్"
-
-#: /src/schooltool/demographics/interfaces.py:111
-msgid "Korean"
-msgstr "కొరియన్"
-
-#: /src/schooltool/demographics/interfaces.py:112
-msgid "Russian"
-msgstr "రష్యన్"
-
-#: /src/schooltool/demographics/interfaces.py:113
-msgid "Polish"
-msgstr "పోలిష్"
-
-#: /src/schooltool/demographics/interfaces.py:114
-msgid "Arabic"
-msgstr "అరబిక్"
-
 #: /src/schooltool/demographics/interfaces.py:134
 msgid "Ethnicity"
 msgstr ""
-
-#: /src/schooltool/demographics/interfaces.py:140
-msgid "Primary language"
-msgstr "ప్రధాన భాష"
 
 #: /src/schooltool/demographics/interfaces.py:146
 msgid "Special education"
@@ -3582,21 +3860,9 @@ msgstr ""
 msgid "Projected graduation year"
 msgstr ""
 
-#: /src/schooltool/demographics/interfaces.py:215
-msgid "Team"
-msgstr "జట్టు"
-
-#: /src/schooltool/demographics/interfaces.py:221
-msgid "Health information"
-msgstr "ఆరోగ్య సమాచారం"
-
 #: /src/schooltool/demographics/interfaces.py:227
 msgid "parent"
 msgstr ""
-
-#: /src/schooltool/demographics/interfaces.py:228
-msgid "guardian"
-msgstr "సంరక్షకుడు"
 
 #: /src/schooltool/demographics/interfaces.py:229
 msgid "grandparent"
@@ -3610,36 +3876,13 @@ msgstr ""
 msgid "friend of family"
 msgstr ""
 
-#: /src/schooltool/demographics/interfaces.py:232
-msgid "other"
-msgstr "ఇతర"
-
-#: /src/schooltool/demographics/interfaces.py:242
-#: /src/schooltool/demographics/utility.py:88
-msgid "Name"
-msgstr "పేరు"
-
 #: /src/schooltool/demographics/interfaces.py:247
 msgid "Relationship to student"
 msgstr ""
 
-#: /src/schooltool/demographics/interfaces.py:253
-msgid "Street"
-msgstr "వీధి"
-
 #: /src/schooltool/demographics/interfaces.py:283
 msgid "Cell phone"
 msgstr ""
-
-#: /src/schooltool/demographics/interfaces.py:288
-#: /src/schooltool/resource/interfaces.py:55 /src/schooltool/note/notes.pt:2
-#: /src/schooltool/note/configure.zcml:94
-msgid "Notes"
-msgstr "గమనికలు"
-
-#: /src/schooltool/demographics/interfaces.py:298
-msgid "Text"
-msgstr "పాఠ్యం"
 
 #: /src/schooltool/demographics/interfaces.py:299
 msgid "Full text search in name"
@@ -3665,12 +3908,6 @@ msgstr ""
 msgid "Name by which the student prefers to be called"
 msgstr ""
 
-#: /src/schooltool/demographics/interfaces.py:81
-#: /src/schooltool/person/browser/person.py:298
-#: /src/schooltool/person/interfaces.py:55
-msgid "Photo"
-msgstr "ఫొటో"
-
 #: /src/schooltool/demographics/interfaces.py:83
 #: /src/schooltool/person/browser/person.py:300
 #: /src/schooltool/person/interfaces.py:57
@@ -3693,10 +3930,6 @@ msgstr ""
 msgid "Native Hawaiian or Other Pacific Islander"
 msgstr ""
 
-#: /src/schooltool/demographics/overrides.zcml:22
-msgid "Search"
-msgstr "అన్వేషణ"
-
 #: /src/schooltool/demographics/utility.py:96
 msgid "Surname"
 msgstr ""
@@ -3708,12 +3941,6 @@ msgstr ""
 #: /src/schooltool/devmode/devmode.pt:11
 msgid "Developer Tools"
 msgstr ""
-
-#: /src/schooltool/devmode/devmode.pt:17
-#: /src/schooltool/app/browser/configure.zcml:687
-#: /src/schooltool/app/browser/configure.zcml:774
-msgid "Errors"
-msgstr "పొరపాట్లు"
 
 #: /src/schooltool/devmode/devmode.pt:18
 msgid "Introspector"
@@ -3739,9 +3966,8 @@ msgid "Outgoing Email"
 msgstr ""
 
 #: /src/schooltool/email/browser/configure.zcml:76
-#, fuzzy
 msgid "Settings"
-msgstr "విభాగాలు"
+msgstr ""
 
 #: /src/schooltool/email/browser/configure.zcml:87
 msgid "Send Test"
@@ -3749,9 +3975,8 @@ msgstr ""
 
 #: /src/schooltool/email/browser/email.py:101
 #: /src/schooltool/email/interfaces.py:92
-#, fuzzy
 msgid "Port"
-msgstr "ఫొటో"
+msgstr ""
 
 #: /src/schooltool/email/browser/email.py:102
 #: /src/schooltool/email/interfaces.py:93
@@ -3764,9 +3989,8 @@ msgid "Username used for optional SMTP authentication."
 msgstr ""
 
 #: /src/schooltool/email/browser/email.py:113
-#, fuzzy
 msgid "Current Password"
-msgstr "ప్రస్తుత సంవత్సరం"
+msgstr ""
 
 #: /src/schooltool/email/browser/email.py:114
 msgid "Current password to authenticate to the SMTP server."
@@ -3774,9 +3998,8 @@ msgstr ""
 
 #: /src/schooltool/email/browser/email.py:118
 #: /src/schooltool/email/interfaces.py:104
-#, fuzzy
 msgid "New Password"
-msgstr "కొత్త సంకేతపదం"
+msgstr ""
 
 #: /src/schooltool/email/browser/email.py:119
 #: /src/schooltool/email/interfaces.py:105
@@ -3784,9 +4007,8 @@ msgid "The password to authenticate to the SMTP server."
 msgstr ""
 
 #: /src/schooltool/email/browser/email.py:123
-#, fuzzy
 msgid "Confirm New Password"
-msgstr "సంకేతపదం నిర్ధారించండి"
+msgstr ""
 
 #: /src/schooltool/email/browser/email.py:124
 msgid "Verification for the new password."
@@ -3838,9 +4060,8 @@ msgstr ""
 #: /src/schooltool/email/browser/email.py:217
 #: /src/schooltool/email/browser/email.py:357
 #: /src/schooltool/email/interfaces.py:70
-#, fuzzy
 msgid "Created on"
-msgstr "ఈ నెల"
+msgstr ""
 
 #: /src/schooltool/email/browser/email.py:218
 #: /src/schooltool/email/interfaces.py:71
@@ -3870,18 +4091,16 @@ msgstr ""
 #: /src/schooltool/email/browser/email.py:228
 #: /src/schooltool/email/browser/email.py:470
 #: /src/schooltool/email/interfaces.py:50
-#, fuzzy
 msgid "Body of the message"
-msgstr "వారంలోని రోజులు"
+msgstr ""
 
 #: /src/schooltool/email/browser/email.py:232
 msgid "Email Status"
 msgstr ""
 
 #: /src/schooltool/email/browser/email.py:233
-#, fuzzy
 msgid "Status of the message"
-msgstr "వారంలోని రోజులు"
+msgstr ""
 
 #: /src/schooltool/email/browser/email.py:237
 #: /src/schooltool/email/browser/email.py:363
@@ -3893,23 +4112,16 @@ msgid "Date and time when the message was last tried"
 msgstr ""
 
 #: /src/schooltool/email/browser/email.py:263
-#, fuzzy
 msgid "Email View"
-msgstr "ఈమెయిల్"
+msgstr ""
 
 #: /src/schooltool/email/browser/email.py:273
 msgid "Retry"
 msgstr ""
 
-#: /src/schooltool/email/browser/email.py:284 /src/schooltool/note/notes.pt:17
-#: /src/schooltool/timetable/browser/templates/timetable_list.pt:28
-msgid "Delete"
-msgstr "తొలగించు"
-
 #: /src/schooltool/email/browser/email.py:383
-#, fuzzy
 msgid "Email Queue"
-msgstr "ఈమెయిల్"
+msgstr ""
 
 #. Default: ""
 #: /src/schooltool/email/browser/email.py:441
@@ -3921,14 +4133,12 @@ msgid "Queue"
 msgstr ""
 
 #: /src/schooltool/email/browser/email.py:485
-#, fuzzy
 msgid "Send Email"
-msgstr "ఈమెయిల్"
+msgstr ""
 
 #: /src/schooltool/email/browser/email.py:488
-#, fuzzy
 msgid "Send"
-msgstr "ఆదివారం"
+msgstr ""
 
 #. Default: ""
 #: /src/schooltool/email/browser/email.py:78
@@ -3957,9 +4167,8 @@ msgstr ""
 
 #: /src/schooltool/email/browser/email.py:96
 #: /src/schooltool/email/interfaces.py:87
-#, fuzzy
 msgid "Hostname"
-msgstr "ఇంటి పేరు"
+msgstr ""
 
 #: /src/schooltool/email/browser/email.py:97
 #: /src/schooltool/email/interfaces.py:88
@@ -3969,9 +4178,8 @@ msgstr ""
 #. Default: "Retry"
 #: /src/schooltool/email/browser/templates/email_container.pt:39
 #: /src/schooltool/email/browser/templates/email_container.pt:44
-#, fuzzy
 msgid "retry-button"
-msgstr "సరే"
+msgstr ""
 
 #: /src/schooltool/email/browser/templates/email_container.pt:54
 msgid "There are no messages queued."
@@ -3988,11 +4196,6 @@ msgstr ""
 #: /src/schooltool/email/interfaces.py:45
 msgid "Recipient address"
 msgstr ""
-
-#: /src/schooltool/email/interfaces.py:58
-#, fuzzy
-msgid "Status"
-msgstr "రాష్ట్రం"
 
 #: /src/schooltool/email/interfaces.py:59
 msgid "Code for the status of the message"
@@ -4015,9 +4218,8 @@ msgid "Parameter value"
 msgstr ""
 
 #: /src/schooltool/email/interfaces.py:74
-#, fuzzy
 msgid "Sent on"
-msgstr "విభాగం"
+msgstr ""
 
 #: /src/schooltool/email/interfaces.py:75
 msgid "Date and time when the message was sent"
@@ -4133,15 +4335,15 @@ msgstr ""
 
 #: /src/schooltool/group/browser/group-csvimport.pt:24
 msgid ""
-"CSV data <strong>must</strong> include a group title and <strong>may</"
-"strong> include an optional group description. Any extra information will be "
-"discarded."
+"CSV data <strong>must</strong> include a group title and "
+"<strong>may</strong> include an optional group description. Any extra "
+"information will be discarded."
 msgstr ""
 
 #. Default: ""
-#.  "LUG, Linux Users Group\n"
-#.  "Chess Club\n"
-#.  "Sports Club, After-school sports club, <em>text after a second comma</em>"
+#. "LUG, Linux Users Group\n"
+#. "Chess Club\n"
+#. "Sports Club, After-school sports club, <em>text after a second comma</em>"
 #: /src/schooltool/group/browser/group-csvimport.pt:31
 msgid ""
 "\n"
@@ -4217,33 +4419,24 @@ msgstr ""
 msgid "Manage this person's memberships"
 msgstr ""
 
-#: /src/schooltool/group/browser/link_to_groups.pt:1
-#: /src/schooltool/group/browser/groupsviewlet.pt:4
-#: /src/schooltool/group/help/group_container.pt:6
-#: /src/schooltool/app/browser/templates/index.pt:13
-#: /src/schooltool/group/security.zcml:53
-#: /src/schooltool/group/help/configure.zcml:8
-#: /src/schooltool/group/browser/configure.zcml:63
-msgid "Groups"
-msgstr "గుంపులు"
-
 #: /src/schooltool/group/help/group_container.pt:8
 msgid ""
-"<h1>Groups</h1> <p>Use this page to keep track of <b>groups</b> of Persons.</"
-"p> <p><b>Groups</b> that have been added are not part of the essential "
-"groups (<b>Teachers</b>, <b>Students</b>, <b>Site Managers</b>, <b>School "
-"Administrators</b>, or <b>Clerks</b>). They can be selected by the checkbox "
-"next to them and removed by pressing the <b>Delete</b> button at the bottom "
-"of the page.</p> <h3>How do I...</h3> <ul> <li><b>Look for for a group:</b> "
-"Use the search box to the left of the <code>Find Now</code> button to look "
-"through the entire list of groups for the search criterion. The <code>Clear</"
-"code> button empties the search box of current entries.</li> <li><b>View the "
-"persons in a certain group:</b> Click on the name of the group.</li> "
-"<li><b>Sort the list:</b> Click on the <code>Title</code> header to change "
-"the order of groups from descending to ascending order, and vice versa.</li> "
-"<li><strong>Browse for a group:</strong> Use the <code>Next 10</code> (and "
-"<code>Previous</code>) and links in the blue bar.</li> <li><strong>Show all "
-"groups:</strong> Click <code>Show All</code> in the blue bar.</li> </ul>"
+"<h1>Groups</h1> <p>Use this page to keep track of <b>groups</b> of "
+"Persons.</p> <p><b>Groups</b> that have been added are not part of the "
+"essential groups (<b>Teachers</b>, <b>Students</b>, <b>Site Managers</b>, "
+"<b>School Administrators</b>, or <b>Clerks</b>). They can be selected by the "
+"checkbox next to them and removed by pressing the <b>Delete</b> button at "
+"the bottom of the page.</p> <h3>How do I...</h3> <ul> <li><b>Look for for a "
+"group:</b> Use the search box to the left of the <code>Find Now</code> "
+"button to look through the entire list of groups for the search criterion. "
+"The <code>Clear</code> button empties the search box of current "
+"entries.</li> <li><b>View the persons in a certain group:</b> Click on the "
+"name of the group.</li> <li><b>Sort the list:</b> Click on the "
+"<code>Title</code> header to change the order of groups from descending to "
+"ascending order, and vice versa.</li> <li><strong>Browse for a "
+"group:</strong> Use the <code>Next 10</code> (and <code>Previous</code>) and "
+"links in the blue bar.</li> <li><strong>Show all groups:</strong> Click "
+"<code>Show All</code> in the blue bar.</li> </ul>"
 msgstr ""
 
 #: /src/schooltool/group/interfaces.py:41
@@ -4279,10 +4472,6 @@ msgstr ""
 msgid "Contextual Help"
 msgstr ""
 
-#: /src/schooltool/help/helplink.pt:2
-msgid "Help"
-msgstr "సహాయం"
-
 #: /src/schooltool/note/configure.zcml:100
 msgid "Notes (Rest)"
 msgstr ""
@@ -4299,14 +4488,6 @@ msgstr ""
 msgid "Body of the note."
 msgstr ""
 
-#: /src/schooltool/note/interfaces.py:50 /src/schooltool/note/note_add.pt:24
-msgid "Privacy"
-msgstr "అంతరంగికత"
-
-#: /src/schooltool/note/note_add.pt:13
-msgid "Note"
-msgstr "గమనిక"
-
 #: /src/schooltool/note/note_add.pt:24
 msgid "Who can view the note"
 msgstr ""
@@ -4314,10 +4495,6 @@ msgstr ""
 #: /src/schooltool/note/note_add.pt:30
 msgid "Private"
 msgstr ""
-
-#: /src/schooltool/note/note_add.pt:31
-msgid "Public"
-msgstr "బహిరంగం"
 
 #: /src/schooltool/note/note_add.pt:4
 msgid "Add note"
@@ -4330,12 +4507,6 @@ msgstr ""
 #: /src/schooltool/person/browser/configure.zcml:103
 msgid "Change Password"
 msgstr ""
-
-#: /src/schooltool/person/browser/configure.zcml:169
-#: /src/schooltool/basicperson/browser/configure.zcml:92
-#: /src/schooltool/demographics/overrides.zcml:7
-msgid "New Person"
-msgstr "కొత్త వ్యక్తి"
 
 #: /src/schooltool/person/browser/configure.zcml:91
 msgid "Edit Preferences"
@@ -4356,9 +4527,9 @@ msgid ""
 msgstr ""
 
 #. Default: ""
-#.  "jjones, Jimmy Jones\n"
-#.  "jbjones, Jim Bob Jones, r2m45J\n"
-#.  "howard, Howard"
+#. "jjones, Jimmy Jones\n"
+#. "jbjones, Jim Bob Jones, r2m45J\n"
+#. "howard, Howard"
 #: /src/schooltool/person/browser/person-csvimport.pt:35
 msgid ""
 "\n"
@@ -4366,11 +4537,6 @@ msgid ""
 "jbjones, Jim Bob Jones, r2m45J\n"
 "howard, Howard\n"
 msgstr ""
-
-#: /src/schooltool/person/browser/person.pt:15
-#: /src/schooltool/person/browser/home.pt:15
-msgid "Username:"
-msgstr "వాడుకరి పేరు:"
 
 #: /src/schooltool/person/browser/person.pt:18
 #: /src/schooltool/person/browser/home.pt:18
@@ -4425,10 +4591,6 @@ msgstr ""
 msgid "Check this to clear the photo"
 msgstr ""
 
-#: /src/schooltool/person/browser/person.py:386
-msgid "New password"
-msgstr "కొత్త సంకేతపదం"
-
 #: /src/schooltool/person/browser/person.py:419
 msgid "Passwords do not match."
 msgstr ""
@@ -4441,10 +4603,6 @@ msgstr ""
 msgid "Person index"
 msgstr ""
 
-#: /src/schooltool/person/browser/person_container_delete.pt:23
-msgid "Sorry, you may not delete your own user account."
-msgstr "క్షమించండి, మీ వాడుకరి ఖాతాని మీరే తొలగించుకోలేరు."
-
 #: /src/schooltool/person/browser/person_edit.pt:20
 msgid "Change info for ${user}"
 msgstr ""
@@ -4452,10 +4610,6 @@ msgstr ""
 #: /src/schooltool/person/browser/person_edit.pt:4
 msgid "Edit person"
 msgstr ""
-
-#: /src/schooltool/person/browser/person_filter.pt:5
-msgid "All groups"
-msgstr "అన్ని గుంపులూ"
 
 #: /src/schooltool/person/browser/person_preferences.pt:20
 msgid "Change preferences for ${user}"
@@ -4484,10 +4638,6 @@ msgid ""
 "students:</strong> Click <code>Show All</code> in the blue bar.</li> </ul>"
 msgstr ""
 
-#: /src/schooltool/person/interfaces.py:157
-msgid "Time Zone"
-msgstr "కాలమండలం"
-
 #: /src/schooltool/person/interfaces.py:158
 msgid "Time Zone used to display your calendar"
 msgstr ""
@@ -4496,14 +4646,6 @@ msgstr ""
 #: /src/schooltool/person/interfaces.py:163
 msgid "Time Format"
 msgstr ""
-
-#: /src/schooltool/person/interfaces.py:164
-msgid "HH:MM"
-msgstr "HH:MM"
-
-#: /src/schooltool/person/interfaces.py:165
-msgid "HH:MM am/pm"
-msgstr "HH:MM am/pm"
 
 #: /src/schooltool/person/interfaces.py:168
 #: /src/schooltool/person/interfaces.py:169
@@ -4548,9 +4690,8 @@ msgid "Everyone can view info of persons"
 msgstr ""
 
 #: /src/schooltool/person/security.zcml:107
-#, fuzzy
 msgid "Change password"
-msgstr "కొత్త సంకేతపదం"
+msgstr ""
 
 #: /src/schooltool/person/security.zcml:114
 msgid "View preferences"
@@ -4573,16 +4714,9 @@ msgstr ""
 msgid "The user himself."
 msgstr ""
 
-#: /src/schooltool/person/security.zcml:152
-#: /src/schooltool/contact/security.zcml:86
-#, fuzzy
-msgid "User"
-msgstr "వాడుకరి పేరు"
-
 #: /src/schooltool/person/security.zcml:172
-#, fuzzy
 msgid "Calendar is public"
-msgstr "క్యాలెండర్"
+msgstr ""
 
 #: /src/schooltool/person/security.zcml:172
 msgid "Everybody, if the calendar is made public in user preferences."
@@ -4597,20 +4731,14 @@ msgid "Everyone can view the list of persons"
 msgstr ""
 
 #: /src/schooltool/person/security.zcml:77
-#, fuzzy
 msgid "Users"
-msgstr "వాడుకరి పేరు"
+msgstr ""
 
 #: /src/schooltool/person/security.zcml:79
 #: /src/schooltool/contact/security.zcml:29
 #: /src/schooltool/timetable/security.zcml:18
-#, fuzzy
 msgid "List/Search"
-msgstr "అన్వేషణ"
-
-#: /src/schooltool/relationship/configure.zcml:38
-msgid "Relationships"
-msgstr "బాంధవ్యాలు"
+msgstr ""
 
 #: /src/schooltool/resource/browser/configure.zcml:115
 msgid "Edit Location Information"
@@ -4627,10 +4755,6 @@ msgstr ""
 #: /src/schooltool/resource/browser/configure.zcml:190
 msgid "New Resource"
 msgstr ""
-
-#: /src/schooltool/resource/browser/configure.zcml:197
-msgid "New Location"
-msgstr "కొత్త ప్రదేశం"
 
 #: /src/schooltool/resource/browser/configure.zcml:204
 msgid "New Equipment"
@@ -4662,15 +4786,15 @@ msgstr ""
 
 #: /src/schooltool/resource/browser/resource-csvimport.pt:24
 msgid ""
-"CSV data <strong>must</strong> include a resource title and <strong>may</"
-"strong> include an optional resource description. Any extra information will "
-"be discarded."
+"CSV data <strong>must</strong> include a resource title and "
+"<strong>may</strong> include an optional resource description. Any extra "
+"information will be discarded."
 msgstr ""
 
 #. Default: ""
-#.  "PRJ302, Overhead Projector #302\n"
-#.  "Main Auditorium,,location\n"
-#.  "LC-805, Laptop Computer #805"
+#. "PRJ302, Overhead Projector #302\n"
+#. "Main Auditorium,,location\n"
+#. "LC-805, Laptop Computer #805"
 #: /src/schooltool/resource/browser/resource-csvimport.pt:31
 msgid ""
 "\n"
@@ -4719,11 +4843,6 @@ msgstr ""
 msgid "Resource Help"
 msgstr ""
 
-#: /src/schooltool/resource/interfaces.py:100
-#: /src/schooltool/resource/types.py:113
-msgid "Manufacturer"
-msgstr "తయరీదారు"
-
 #: /src/schooltool/resource/interfaces.py:101
 msgid "Manufacturer of Equipment"
 msgstr ""
@@ -4745,11 +4864,6 @@ msgstr ""
 #: /src/schooltool/resource/interfaces.py:111
 msgid "Serial Number of Equipment"
 msgstr ""
-
-#: /src/schooltool/resource/interfaces.py:115
-#: /src/schooltool/resource/types.py:131
-msgid "Purchase Date"
-msgstr "కొన్న తేదీ"
 
 #: /src/schooltool/resource/interfaces.py:116
 msgid "Purchase Date of Equipment"
@@ -4805,15 +4919,6 @@ msgstr ""
 msgid "Type of location (i.e. computer lab, class room, etc.)"
 msgstr ""
 
-#: /src/schooltool/resource/interfaces.py:86
-#: /src/schooltool/resource/types.py:83
-msgid "Capacity"
-msgstr "సామర్థ్యం"
-
-#: /src/schooltool/resource/interfaces.py:87
-msgid "Capacity of the room"
-msgstr "గది యొక్క సామర్థ్యం"
-
 #: /src/schooltool/resource/interfaces.py:95
 msgid "Equipment Type"
 msgstr ""
@@ -4821,11 +4926,6 @@ msgstr ""
 #: /src/schooltool/resource/interfaces.py:96
 msgid "Type of equipment (i.e. camcorder, computer, etc.)"
 msgstr ""
-
-#: /src/schooltool/resource/resource.py:55
-#: /src/schooltool/resource/types.py:55
-msgid "Resource"
-msgstr "వనరు"
 
 #: /src/schooltool/resource/security.zcml:12
 msgid "Everyone can view resource information."
@@ -4836,9 +4936,8 @@ msgid "Everyone can view resource calendars."
 msgstr ""
 
 #: /src/schooltool/resource/security.zcml:50
-#, fuzzy
 msgid "Reservations"
-msgstr "బాంధవ్యాలు"
+msgstr ""
 
 #: /src/schooltool/resource/security.zcml:50
 msgid ""
@@ -4852,18 +4951,16 @@ msgid "List/Search resources"
 msgstr ""
 
 #: /src/schooltool/resource/security.zcml:64
-#, fuzzy
 msgid "Add/Remove resources"
-msgstr "వనరులు"
+msgstr ""
 
 #: /src/schooltool/resource/security.zcml:7
 msgid "Everyone can view resource lists."
 msgstr ""
 
 #: /src/schooltool/resource/security.zcml:71
-#, fuzzy
 msgid "View a resource"
-msgstr "వనరు"
+msgstr ""
 
 #: /src/schooltool/resource/security.zcml:78
 msgid "Modify a resource"
@@ -4876,10 +4973,6 @@ msgstr ""
 #: /src/schooltool/resource/security.zcml:93
 msgid "Schedule reservation via calendar"
 msgstr ""
-
-#: /src/schooltool/resource/types.py:107
-msgid "Type"
-msgstr "రకం"
 
 #: /src/schooltool/resource/types.py:93
 msgid "Equipment"
@@ -4907,10 +5000,6 @@ msgstr ""
 #: /src/schooltool/sampledata/sampledata.pt:9
 msgid "Sample Data Generation"
 msgstr ""
-
-#: /src/schooltool/sampledata/sampledata.pt:42
-msgid "Plugins"
-msgstr "ప్లగిన్లు"
 
 #: /src/schooltool/sampledata/sampledata.pt:71
 msgid "View Dependencies"
@@ -4950,14 +5039,12 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/schoolyear/browser/schoolyear.py:148
-#, fuzzy
 msgid "First day"
-msgstr "మొదటి పేరు"
+msgstr ""
 
 #: /src/schooltool/schoolyear/browser/schoolyear.py:151
-#, fuzzy
 msgid "Last day"
-msgstr "ఇంటి పేరు"
+msgstr ""
 
 #: /src/schooltool/schoolyear/browser/schoolyear.py:170
 msgid "Add new school year"
@@ -5010,9 +5097,8 @@ msgid "View Access Rights"
 msgstr ""
 
 #: /src/schooltool/securitypolicy/browser/control.py:105
-#, fuzzy
 msgid "School administration"
-msgstr "నిర్వహణ"
+msgstr ""
 
 #: /src/schooltool/securitypolicy/browser/control.py:96
 msgid "Enabled"
@@ -5086,20 +5172,12 @@ msgstr ""
 msgid "top"
 msgstr ""
 
-#: /src/schooltool/skin/form.py:64
-msgid "No changes"
-msgstr "మార్పులు లేవు"
-
 #: /src/schooltool/skin/templates/error.pt:15
 msgid ""
 "An internal server error has occurred. This most likely means that you have "
-"found a bug in SchoolTool. Please report it on <a href=\"http://issues."
-"schooltool.org\">the issue tracker</a>."
+"found a bug in SchoolTool. Please report it on <a "
+"href=\"http://issues.schooltool.org\">the issue tracker</a>."
 msgstr ""
-
-#: /src/schooltool/skin/templates/error.pt:19
-msgid "Exception"
-msgstr "మినహాయింపు"
 
 #: /src/schooltool/skin/templates/error.pt:20
 msgid "Traceback"
@@ -5130,11 +5208,6 @@ msgstr ""
 msgid "You might be trying to access a non-existing page"
 msgstr ""
 
-#: /src/schooltool/skin/templates/notfound.pt:3
-#: /src/schooltool/skin/templates/notfound.pt:11
-msgid "Not Found"
-msgstr "దొరకలేదు"
-
 #: /src/schooltool/skin/templates/onlinehelp_macros.pt:55
 msgid "SchoolTool Onlinehelp"
 msgstr ""
@@ -5162,9 +5235,8 @@ msgstr ""
 
 #. Default: "Update"
 #: /src/schooltool/skin/templates/view_macros.pt:155
-#, fuzzy
 msgid "update-button"
-msgstr "మార్చు"
+msgstr ""
 
 #: /src/schooltool/skin/templates/view_macros.pt:155
 msgid "U"
@@ -5173,9 +5245,8 @@ msgstr ""
 #. Default: "Apply"
 #: /src/schooltool/skin/templates/view_macros.pt:161
 #: /src/schooltool/skin/templates/view_macros.pt:167
-#, fuzzy
 msgid "apply-button"
-msgstr "సరే"
+msgstr ""
 
 #: /src/schooltool/skin/templates/view_macros.pt:161
 #: /src/schooltool/skin/templates/view_macros.pt:167
@@ -5186,14 +5257,6 @@ msgstr "సరే"
 msgid "Shortcut: Alt-A"
 msgstr ""
 
-#. Default: "Add"
-#: /src/schooltool/skin/templates/view_macros.pt:174
-#: /src/schooltool/skin/templates/view_macros.pt:180
-#: /src/schooltool/skin/templates/view_macros.pt:187
-#, fuzzy
-msgid "add-button"
-msgstr "సరే"
-
 #: /src/schooltool/skin/templates/view_macros.pt:194
 msgid "Shortcut: Alt-D"
 msgstr ""
@@ -5202,17 +5265,9 @@ msgstr ""
 msgid "D"
 msgstr ""
 
-#: /src/schooltool/skin/templates/view_macros.pt:45
-msgid "Log In"
-msgstr "ప్రవేశించు"
-
 #: /src/schooltool/skin/templates/view_macros.pt:53
 msgid "Logged in as:"
 msgstr ""
-
-#: /src/schooltool/skin/templates/view_macros.pt:71
-msgid "Log Out"
-msgstr "నిష్క్రమించు"
 
 #: /src/schooltool/skin/templates/view_macros.pt:82
 msgid "free administration software for"
@@ -5270,16 +5325,6 @@ msgstr ""
 msgid "Show All"
 msgstr ""
 
-#: /src/schooltool/table/templates/batch.pt:29
-#: /src/schooltool/table/templates/batch.pt:35
-msgid "Next &raquo;"
-msgstr "తరువాతి &raquo;"
-
-#: /src/schooltool/table/templates/batch.pt:5
-#: /src/schooltool/table/templates/batch.pt:7
-msgid "&laquo; Previous"
-msgstr "&laquo; గత"
-
 #: /src/schooltool/term/browser/configure.zcml:31
 msgid "Cancel School in Emergency"
 msgstr ""
@@ -5320,12 +5365,6 @@ msgstr ""
 #: /src/schooltool/term/browser/templates/emergency2.pt:27
 msgid "Please enter the replacement date below."
 msgstr ""
-
-#: /src/schooltool/term/browser/templates/emergency2.pt:3
-#: /src/schooltool/term/browser/templates/emergency_select.pt:3
-#: /src/schooltool/term/browser/templates/emergency_select.pt:6
-msgid "Emergency day"
-msgstr "అత్యవసర దినం"
 
 #: /src/schooltool/term/browser/templates/emergency2.pt:32
 msgid "Replacement"
@@ -5375,7 +5414,8 @@ msgid "You have not selected any items."
 msgstr ""
 
 #: /src/schooltool/term/browser/templates/term_add.pt:34
-msgid "Please specify which days are school days, and which days are holidays."
+msgid ""
+"Please specify which days are school days, and which days are holidays."
 msgstr ""
 
 #: /src/schooltool/term/browser/templates/term_add.pt:41
@@ -5388,11 +5428,6 @@ msgstr ""
 msgid "Schoolday"
 msgstr ""
 
-#: /src/schooltool/term/browser/templates/term_add.pt:43
-#: /src/schooltool/term/browser/templates/term.pt:14
-msgid "Holiday"
-msgstr "సెలవు"
-
 #: /src/schooltool/term/browser/templates/term_add.pt:53
 msgid "Toggle the following days of week:"
 msgstr ""
@@ -5400,16 +5435,6 @@ msgstr ""
 #: /src/schooltool/term/browser/templates/term_add.pt:70
 msgid "Click on a day to toggle its state."
 msgstr ""
-
-#: /src/schooltool/term/browser/templates/term_add.pt:75
-#: /src/schooltool/term/browser/templates/term.pt:26
-msgid "${month} ${year}"
-msgstr "${month} ${year}"
-
-#: /src/schooltool/term/browser/templates/term_add.pt:90
-#: /src/schooltool/term/browser/templates/term.pt:41
-msgid "Week ${week_number}"
-msgstr "వారం ${week_number}"
 
 #: /src/schooltool/term/browser/term.py:122
 msgid "Add new term"
@@ -5420,24 +5445,9 @@ msgstr ""
 msgid "Refresh"
 msgstr ""
 
-#: /src/schooltool/term/browser/term.py:154
-#: /src/schooltool/timetable/browser/templates/ttwizard_period_order2.pt:39
-#: /src/schooltool/timetable/browser/templates/ttwizard_homeroom.pt:41
-#: /src/schooltool/timetable/browser/templates/ttwizard_period_order1.pt:30
-#: /src/schooltool/timetable/browser/templates/ttwizard_slottimes.pt:32
-#: /src/schooltool/timetable/browser/templates/ttwizard.pt:20
-#: /src/schooltool/timetable/browser/templates/ttwizard_form.pt:20
-#: /src/schooltool/course/browser/templates/section_edit.pt:97
-msgid "Next"
-msgstr "తదుపరి"
-
 #: /src/schooltool/term/browser/term.py:163
 msgid "Add term"
 msgstr ""
-
-#: /src/schooltool/term/browser/term.py:237
-msgid "Save changes"
-msgstr "మార్పులు భద్రపరచు"
 
 #. Default: ""
 #: /src/schooltool/term/browser/term.py:253
@@ -5448,14 +5458,6 @@ msgstr ""
 #: /src/schooltool/term/browser/term.py:291
 msgid "Term must begin before it ends."
 msgstr ""
-
-#: /src/schooltool/term/browser/term.py:61
-msgid "Start date"
-msgstr "ప్రారంభ తేదీ"
-
-#: /src/schooltool/term/browser/term.py:63
-msgid "End date"
-msgstr "ముగింపు తేదీ"
 
 #: /src/schooltool/term/help/configure.zcml:8
 msgid "Add a term"
@@ -5480,12 +5482,12 @@ msgid ""
 "school, but you cannot express a relationship between terms.</p> <h3>How do "
 "I...</h3> <ul> <li><strong>Add a term:</strong> Select <code>New Term</code> "
 "from the <code>Actions</code> menu.</li> <li><strong>Edit a term:</strong> "
-"Click on the term. Then select <code>Edit</code> from the <code>Actions</"
-"code> menu.</li> <li><strong>Delete a term:</strong> Check the box next to "
-"the name of the term and click <code>Delete</code>. Only delete terms if you "
-"have made a mistake while creating them but you have not used them yet. You "
-"should <strong>not</strong> delete terms simply because they are over, or "
-"you will lose important data.</li> </ul>"
+"Click on the term. Then select <code>Edit</code> from the "
+"<code>Actions</code> menu.</li> <li><strong>Delete a term:</strong> Check "
+"the box next to the name of the term and click <code>Delete</code>. Only "
+"delete terms if you have made a mistake while creating them but you have not "
+"used them yet. You should <strong>not</strong> delete terms simply because "
+"they are over, or you will lose important data.</li> </ul>"
 msgstr ""
 
 #: /src/schooltool/term/term.py:306
@@ -5590,8 +5592,8 @@ msgstr ""
 msgid ""
 "Third, define the time and duration of periods when they fall on certain "
 "days of week. Use one of the the following format: <tt>HH:MM</tt> (also, "
-"don't forget to specify the duration in the text box below) or <tt>HH:MM-HH:"
-"MM</tt> (when you want to specify both endpoints explicitly, e.g., 9:30-"
+"don't forget to specify the duration in the text box below) or <tt>HH:MM-"
+"HH:MM</tt> (when you want to specify both endpoints explicitly, e.g., 9:30-"
 "10:15). It is not necessary to define all periods for all days of week, "
 "omissions will just cause that period to be skipped if it happens to fall on "
 "that day of week. If the list of periods is not up to date with the changes "
@@ -5700,8 +5702,8 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/calendar_overlay.pt:66
 msgid ""
-"<a href=\"#\" onclick=\"$('#more_overlays').toggle();return false;\">More..."
-"</a>"
+"<a href=\"#\" onclick=\"$('#more_overlays').toggle();return "
+"false;\">More...</a>"
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/calendar_overlay.pt:95
@@ -5882,12 +5884,6 @@ msgstr ""
 msgid "Scheduling for ${section}"
 msgstr ""
 
-#: /src/schooltool/timetable/browser/templates/timetable-edit.pt:68
-#: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:81
-#: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:107
-msgid "Save"
-msgstr "భద్రపరచు"
-
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:40
 msgid "Default Timetable Schema:"
 msgstr ""
@@ -5896,11 +5892,6 @@ msgstr ""
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:53
 msgid "Not Selected"
 msgstr ""
-
-#. Default: "Change"
-#: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:59
-msgid "change-button"
-msgstr "మార్చు"
 
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:15
 #: /src/schooltool/app/browser/templates/event.pt:15
@@ -5958,10 +5949,6 @@ msgid ""
 "Does your school's timetable cycle use days of the week, or a rotating cycle?"
 msgstr ""
 
-#: /src/schooltool/timetable/browser/ttwizard.py:262
-msgid "Days of the week"
-msgstr "వారంలోని రోజులు"
-
 #: /src/schooltool/timetable/browser/ttwizard.py:263
 msgid "Rotating cycle"
 msgstr ""
@@ -5983,14 +5970,6 @@ msgid ""
 "Do classes begin and end at the same time each day in your school's "
 "timetable?"
 msgstr ""
-
-#: /src/schooltool/timetable/browser/ttwizard.py:323
-msgid "Same time each day"
-msgstr "ప్రతీ రోజూ అదే సమయానికి"
-
-#: /src/schooltool/timetable/browser/ttwizard.py:324
-msgid "Different times"
-msgstr "వేర్వేరు సమయాల్లో"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:343
 msgid ""
@@ -6023,8 +6002,8 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:454
 msgid ""
-"Enter start and end times for each slot on each day, one slot (HH:MM - HH:"
-"MM) per line."
+"Enter start and end times for each slot on each day, one slot (HH:MM - "
+"HH:MM) per line."
 msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:530
@@ -6094,14 +6073,6 @@ msgid ""
 "equivalent?"
 msgstr ""
 
-#: /src/schooltool/timetable/browser/ttwizard.py:736
-msgid "Yes"
-msgstr "అవును"
-
-#: /src/schooltool/timetable/browser/ttwizard.py:737
-msgid "No"
-msgstr "కాదు"
-
 #: /src/schooltool/timetable/browser/ttwizard.py:752
 msgid "Please indicate the homeroom period(s) for each day:"
 msgstr ""
@@ -6117,12 +6088,3 @@ msgstr ""
 #: /src/schooltool/timetable/security.zcml:54
 msgid "Change schedule"
 msgstr ""
-
-#. Default: "Confirm"
-#: /src/schooltool/widget/password.py:39
-msgid "confirm password"
-msgstr "సంకేతపదం నిర్ధారించండి"
-
-#: /src/schooltool/widget/password.py:56
-msgid "Supplied passwords are not identical"
-msgstr "ఇచ్చిన సంకేతపదాలు ఒకేలా లేవు"

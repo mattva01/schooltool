@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-12-24 12:40+0000\n"
-"PO-Revision-Date: 2009-12-29 18:47+0000\n"
-"Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
+"PO-Revision-Date: 2010-01-20 14:18+0000\n"
+"Last-Translator: Kuvaly [LCT] <kuvaly@seznam.cz>\n"
 "Language-Team: Czech <debian-l10n-czech@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-12-31 04:53+0000\n"
+"X-Launchpad-Export-Date: 2010-01-21 04:32+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -3481,7 +3481,7 @@ msgstr "Jít na předchozí den"
 #. Default: ""
 #: /src/schooltool/app/browser/cal.py:1448
 msgid "Add new event starting at ${title}"
-msgstr ""
+msgstr "Přidat novou událost začínající v  ${title}"
 
 #: /src/schooltool/app/browser/cal.py:929
 msgid "Go to next week"
@@ -3509,7 +3509,7 @@ msgstr "iCalendar"
 
 #: /src/schooltool/app/browser/configure.zcml:643
 msgid "Translation Domains"
-msgstr ""
+msgstr "Domény překladů"
 
 #: /src/schooltool/app/browser/configure.zcml:654
 msgid "Generations"
@@ -3594,7 +3594,7 @@ msgstr "Stránky projektu na Launchpadu"
 
 #: /src/schooltool/app/browser/templates/about.pt:29
 msgid "Mailing list"
-msgstr ""
+msgstr "Poštovní konference"
 
 #: /src/schooltool/app/browser/templates/about.pt:30
 msgid "IRC channel: #schooltool on freenode.net"
@@ -3903,6 +3903,11 @@ msgid ""
 "<p>This branch of the help tree contains items relevant to administrators "
 "configuring SchoolTool, but not end users.</p>"
 msgstr ""
+"<h1>Administrace SchoolTool</h1> <p>Školy mají komplexní struktury, "
+"zahrnující organizaci lidí, pedagogiky, času a materiálních zdrojů. Bohužel "
+"to znamená, že aplikace, která usiluje o model těchto procesů, jako je "
+"SchoolTool, je také složitá, a nutně se musí projevit na procesu vytváření "
+"jednotlivých škol v SchoolTool."
 
 #: /src/schooltool/app/help/calendar_selection.pt:6
 #: /src/schooltool/app/help/configure.zcml:97
@@ -3929,7 +3934,7 @@ msgstr ""
 
 #: /src/schooltool/app/help/calendaring.pt:6
 msgid "Calendaring in SchoolTool"
-msgstr ""
+msgstr "Správa kalendářů ve SchoolTool"
 
 #: /src/schooltool/app/help/calendaring.pt:8
 msgid ""
@@ -3961,7 +3966,7 @@ msgstr ""
 
 #: /src/schooltool/app/help/configure.zcml:29
 msgid "Calendaring"
-msgstr ""
+msgstr "Správa kalendářů"
 
 #: /src/schooltool/app/help/daily_calendar.pt:8
 msgid ""
@@ -3998,7 +4003,7 @@ msgstr ""
 #: /src/schooltool/app/help/event_edit.pt:10
 #: /src/schooltool/app/help/event_add.pt:10
 msgid "This form has a few issues:"
-msgstr ""
+msgstr "Tento formulář má několik otázek:"
 
 #: /src/schooltool/app/help/event_edit.pt:12
 msgid ""
@@ -4229,7 +4234,7 @@ msgstr "Členové skupiny."
 
 #: /src/schooltool/app/security.py:308
 msgid "Assigned leaders."
-msgstr ""
+msgstr "Přidělení vedoucí."
 
 #. Default: ""
 #: /src/schooltool/app/security.py:352
@@ -6225,11 +6230,11 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:736
 msgid "Yes"
-msgstr ""
+msgstr "Ano"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:737
 msgid "No"
-msgstr ""
+msgstr "Ne"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:752
 msgid "Please indicate the homeroom period(s) for each day:"
@@ -6237,7 +6242,7 @@ msgstr ""
 
 #: /src/schooltool/timetable/security.zcml:16
 msgid "School timetables"
-msgstr ""
+msgstr "Školní rozvrhy"
 
 #: /src/schooltool/timetable/security.zcml:46
 msgid "Assign timetables"

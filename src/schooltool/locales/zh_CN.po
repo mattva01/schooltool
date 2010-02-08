@@ -9,13 +9,13 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-12-24 12:40+0000\n"
-"PO-Revision-Date: 2009-12-29 17:00+0000\n"
-"Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
+"PO-Revision-Date: 2010-01-10 14:00+0000\n"
+"Last-Translator: GrayWaLL <Unknown>\n"
 "Language-Team: Chinese (China) <i18n-zh@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-12-31 04:56+0000\n"
+"X-Launchpad-Export-Date: 2010-01-11 04:53+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: /src/schooltool/app/browser/__init__.py:256
@@ -1020,6 +1020,10 @@ msgid ""
 "            owner is shown in the calendar views.\n"
 "            "
 msgstr ""
+"\n"
+"            控制日历所有者的时间表是否显示在\n"
+"            日历视图中的选项。\n"
+"            "
 
 #: /src/schooltool/app/interfaces.py:43
 msgid "Form input is not a file object"
@@ -3057,7 +3061,7 @@ msgstr "开发人员领队："
 
 #: /src/schooltool/app/browser/templates/about.pt:44
 msgid "Release Manager:"
-msgstr ""
+msgstr "发行管理器"
 
 #: /src/schooltool/app/browser/templates/about.pt:47
 msgid "Contributors:"
@@ -3085,7 +3089,7 @@ msgstr "查看每日日程"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:24
 msgid "Daily"
-msgstr ""
+msgstr "每天"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:30
 msgid "View weekly calendar"
@@ -3097,7 +3101,7 @@ msgstr "查看每月日程"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:42
 msgid "Yearly"
-msgstr ""
+msgstr "每年"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:42
 msgid "View yearly calendar"
@@ -3559,6 +3563,17 @@ msgid ""
 "                         is '-')\n"
 "  --manage               only do management tasks, don't run the server\n"
 msgstr ""
+"\n"
+"用法： %s [选项]\n"
+"可用选项：\n"
+"  -c, --config xxx       用 xxx 配置文件代替默认配置文件\n"
+"  -h, --help             显示帮助\n"
+"  -d, --daemon           后台启动\n"
+"  -r, --restore-manager password\n"
+"                         用指定密码恢复管理员账户\n"
+"                         (从标准输入中读取密码如果参数 'password'\n"
+"                         是 '-')\n"
+"  --manage               只进行管理任务，不运行服务\n"
 
 #: /src/schooltool/app/membership.py:261
 #: /src/schooltool/group/browser/group.pt:16
@@ -3576,12 +3591,12 @@ msgstr ""
 #. Default: ""
 #: /src/schooltool/app/security.py:352
 msgid "\"$group\" group."
-msgstr ""
+msgstr "\"$group\" 组。"
 
 #. Default: ""
 #: /src/schooltool/app/security.py:367
 msgid "\"$group\" group and the super user."
-msgstr ""
+msgstr "\"$group\" 组和超级用户。"
 
 #: /src/schooltool/app/security.zcml:103
 #: /src/schooltool/course/security.zcml:149
@@ -3596,7 +3611,7 @@ msgstr "每个人都可以看到这个应用的日历。"
 
 #: /src/schooltool/app/security.zcml:77
 msgid "SchoolTool application"
-msgstr ""
+msgstr "SchoolTool 应用"
 
 #: /src/schooltool/app/security.zcml:80
 msgid "Access"
@@ -3604,7 +3619,7 @@ msgstr ""
 
 #: /src/schooltool/app/security.zcml:87
 msgid "Manage school settings and configuration"
-msgstr ""
+msgstr "管理学校设定与配置"
 
 #: /src/schooltool/app/security.zcml:95
 #: /src/schooltool/course/security.zcml:141
@@ -3699,13 +3714,13 @@ msgstr "确认"
 #: /src/schooltool/basicperson/browser/templates/demographics-view.pt:4
 #: /src/schooltool/basicperson/browser/templates/demographics-view.pt:7
 msgid "Demographics Container"
-msgstr ""
+msgstr "统计数据"
 
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:29
 msgid ""
 "CSV data <strong>must</strong> contain a user name a first name and a last "
 "name. An optional password <strong>may</strong> be included as well."
-msgstr ""
+msgstr "CSV 数据 <strong>必须</strong> 包含用户名、以及名和姓。密码<strong>可选</strong> 。"
 
 #. Default: ""
 #. "jjones, Jimmy, Jones\n"
@@ -3718,6 +3733,10 @@ msgid ""
 "jbjones, Jim Bob, Jones, r2m45J\n"
 "howard, Howard, Jobs\n"
 msgstr ""
+"\n"
+"jjones, Jimmy, Jones\n"
+"jbjones, Jim Bob, Jones, r2m45J\n"
+"howard, Howard, Jobs\n"
 
 #: /src/schooltool/basicperson/browser/templates/person_view.pt:4
 #: /src/schooltool/person/browser/person.pt:4
@@ -3779,23 +3798,23 @@ msgstr ""
 
 #: /src/schooltool/basicperson/security.zcml:26
 msgid "Edit fields"
-msgstr ""
+msgstr "编辑区域"
 
 #: /src/schooltool/basicperson/security.zcml:34
 msgid "View user demographics"
-msgstr ""
+msgstr "查看用户统计"
 
 #: /src/schooltool/basicperson/security.zcml:34
 msgid "View user's demographics information"
-msgstr ""
+msgstr "查看用户统计信息"
 
 #: /src/schooltool/basicperson/security.zcml:43
 msgid "Modify user's demographics information."
-msgstr ""
+msgstr "修改用户统计信息"
 
 #: /src/schooltool/basicperson/security.zcml:43
 msgid "Modify user demographics"
-msgstr ""
+msgstr "修改用户统计"
 
 #: /src/schooltool/common/configure.zcml:101
 msgid "Edit Calendar Overlays"
@@ -3822,7 +3841,7 @@ msgstr "为 ${person} 添加新的联系人"
 #. Default: ""
 #: /src/schooltool/contact/browser/contact.py:220
 msgid "Change contact information for ${first_name} ${last_name}"
-msgstr ""
+msgstr "改变 ${first_name} ${last_name} 的联系信息"
 
 #: /src/schooltool/contact/browser/contact.py:245
 msgid "Contact index"
@@ -4006,27 +4025,27 @@ msgstr ""
 
 #: /src/schooltool/contact/security.zcml:36
 msgid "Manage user's contacts"
-msgstr ""
+msgstr "管理用户联系人"
 
 #: /src/schooltool/contact/security.zcml:46
 msgid "Create/Delete an external contact"
-msgstr ""
+msgstr "创建或删除一个外部联系人"
 
 #: /src/schooltool/contact/security.zcml:54
 msgid "View an external contact"
-msgstr ""
+msgstr "查看一个外部联系人"
 
 #: /src/schooltool/contact/security.zcml:62
 msgid "Modify an external contact"
-msgstr ""
+msgstr "修改一个外部联系人"
 
 #: /src/schooltool/contact/security.zcml:70
 msgid "View user's contact information"
-msgstr ""
+msgstr "查看用户联系人信息"
 
 #: /src/schooltool/contact/security.zcml:78
 msgid "Modify user's contact information"
-msgstr ""
+msgstr "修改用户联系人信息"
 
 #: /src/schooltool/course/browser/configure.zcml:160
 #: /src/schooltool/course/browser/configure.zcml:170
@@ -4063,7 +4082,7 @@ msgstr "“${course_title}” 课程”${invalid_credits}“ 学分值必须是�
 #: /src/schooltool/course/browser/csvimport.py:96
 msgid ""
 "Course \"${course_title}\" id \"${invalid_id}\" is invalid. ${error_message}"
-msgstr ""
+msgstr "课程 \"${course_title}\" id \"${invalid_id}\" 不可用。 ${error_message}"
 
 #: /src/schooltool/course/browser/section-member-csvimport.pt:21
 #: /src/schooltool/course/browser/configure.zcml:194
@@ -4139,6 +4158,9 @@ msgid ""
 "optional course id, <strong>may</strong> include an optional government id "
 "and <strong>may</strong> include an optional credits value."
 msgstr ""
+"CSV 数据 <strong>必须</strong> 包含课程名，<strong>可以</strong> 包含课程描述， "
+"<strong>可以</strong> 包含课程id， <strong>可以</strong> 包含政府 id 以及 "
+"<strong>可以</strong> 包含信用等级。"
 
 #. Default: ""
 #. "Ancient History, Pre-history through 1000 A.D.\n"
@@ -6151,7 +6173,7 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:40
 msgid "Default Timetable Schema:"
-msgstr ""
+msgstr "默认时间表模式"
 
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:46
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:53
@@ -6173,6 +6195,8 @@ msgid ""
 "create a <a href=\"simpleadd.html\">simple weekly timetable schema</a>, or "
 "use a more complex <a href=\"complexadd.html\">advanced adding form</a>."
 msgstr ""
+"此向导提供一系列问题。您可以选择寻创建一个<a href=\"simpleadd.html\">简易的周时间表模式</a>，或使用一个更复杂的<a "
+"href=\"complexadd.html\">高级添加表单</a>。"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:343
 msgid ""
@@ -6216,7 +6240,7 @@ msgstr ""
 
 #: /src/schooltool/timetable/security.zcml:54
 msgid "Change schedule"
-msgstr ""
+msgstr "改变计划"
 
 #. Default: "Confirm"
 #: /src/schooltool/widget/password.py:39

@@ -14,7 +14,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-12-31 04:55+0000\n"
+"X-Launchpad-Export-Date: 2010-01-07 04:44+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -2731,7 +2731,7 @@ msgstr ""
 #: /src/schooltool/group/browser/group-member-csvimport.pt:52
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:122
 msgid "submit-button"
-msgstr ""
+msgstr "submit-button"
 
 #. Default: "Cancel"
 #: /src/schooltool/basicperson/browser/templates/person_edit.pt:13
@@ -2758,7 +2758,7 @@ msgstr ""
 #: /src/schooltool/skin/templates/view_macros.pt:205
 #: /src/schooltool/app/browser/templates/event_add.pt:378
 msgid "cancel-button"
-msgstr ""
+msgstr "cancel-button"
 
 #: /src/schooltool/basicperson/browser/templates/person_view.pt:4
 #: /src/schooltool/person/browser/person.pt:4
