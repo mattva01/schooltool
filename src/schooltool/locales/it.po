@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: Giancarlo Gaifas <lallo@artiemestieri.tn.it>\n"
 "POT-Creation-Date: 2009-12-24 12:40+0000\n"
-"PO-Revision-Date: 2009-12-29 17:12+0000\n"
-"Last-Translator: Michele Falappi <nittalope@gmail.com>\n"
+"PO-Revision-Date: 2010-02-04 16:38+0000\n"
+"Last-Translator: Emma <eelle62@tiscali.it>\n"
 "Language-Team: Italian <it@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-12-31 04:54+0000\n"
+"X-Launchpad-Export-Date: 2010-02-05 04:59+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -206,44 +206,9 @@ msgstr "Anno attuale"
 msgid "Previous year"
 msgstr "Anno precedente"
 
-#: /src/schooltool/app/browser/cal.py:124
-#: /src/schooltool/app/browser/cal.py:1811
-msgid "Mon"
-msgstr "Lunedì"
-
-#: /src/schooltool/app/browser/cal.py:124
-#: /src/schooltool/app/browser/cal.py:1812
-msgid "Tue"
-msgstr "Martedi"
-
-#: /src/schooltool/app/browser/cal.py:124
-#: /src/schooltool/app/browser/cal.py:1813
-msgid "Wed"
-msgstr "Mercoledi"
-
-#: /src/schooltool/app/browser/cal.py:124
-#: /src/schooltool/app/browser/cal.py:1814
-msgid "Thu"
-msgstr "Giovedi"
-
-#: /src/schooltool/app/browser/cal.py:125
-#: /src/schooltool/app/browser/cal.py:1815
-msgid "Fri"
-msgstr "Venerdi"
-
-#: /src/schooltool/app/browser/cal.py:125
-#: /src/schooltool/app/browser/cal.py:1816
-msgid "Sat"
-msgstr "Sabato"
-
-#: /src/schooltool/app/browser/cal.py:125
-#: /src/schooltool/app/browser/cal.py:1817
-msgid "Sun"
-msgstr "Domenica"
-
 #: /src/schooltool/app/browser/cal.py:1290
 msgid "The next day"
-msgstr "Il giorno successivo"
+msgstr "giorno successivo"
 
 #: /src/schooltool/app/browser/cal.py:1291
 msgid "Today"
@@ -352,91 +317,6 @@ msgstr "Ricorrente"
 msgid "Recurs every"
 msgstr "Ricorre ogni"
 
-#: /src/schooltool/app/browser/cal.py:1780
-msgid "Day"
-msgstr "Giorno"
-
-#: /src/schooltool/app/browser/cal.py:1781
-msgid "Week"
-msgstr "Settimana"
-
-#: /src/schooltool/app/browser/cal.py:1782
-#: /src/schooltool/app/browser/templates/calendar_macros.pt:119
-msgid "Month"
-msgstr "Mese"
-
-#: /src/schooltool/app/browser/cal.py:1783
-#: /src/schooltool/app/browser/templates/calendar_macros.pt:132
-msgid "Year"
-msgstr "Anno"
-
-#: /src/schooltool/app/browser/cal.py:1786
-msgid "Repeat every"
-msgstr "Ripeti ogni"
-
-#: /src/schooltool/app/browser/cal.py:1791
-msgid "Range"
-msgstr "Intervallo"
-
-#: /src/schooltool/app/browser/cal.py:1794
-msgid "Count"
-msgstr "Conteggio"
-
-#: /src/schooltool/app/browser/cal.py:1795
-msgid "Until"
-msgstr "Fino a"
-
-#: /src/schooltool/app/browser/cal.py:1796
-msgid "forever"
-msgstr "per sempre"
-
-#: /src/schooltool/app/browser/cal.py:1799
-msgid "Number of events"
-msgstr "Numero di eventi"
-
-#: /src/schooltool/app/browser/cal.py:1803
-#: /src/schooltool/app/browser/templates/event_add.pt:303
-msgid "Repeat until"
-msgstr "Ripeti fino a"
-
-#: /src/schooltool/app/browser/cal.py:1807
-msgid "Weekdays"
-msgstr "Giorni della settimana"
-
-#: /src/schooltool/app/browser/cal.py:1810
-msgid "Weekday"
-msgstr "Giorno della settimana"
-
-#: /src/schooltool/app/browser/cal.py:1820
-#: /src/schooltool/app/browser/templates/calendar_macros.pt:36
-#: /src/schooltool/app/browser/templates/event_add.pt:256
-msgid "Monthly"
-msgstr "Mensilmente"
-
-#: /src/schooltool/app/browser/cal.py:1828
-msgid "Exception dates"
-msgstr "Date con eccezioni"
-
-#: /src/schooltool/app/browser/cal.py:1914
-msgid "same weekday"
-msgstr "stesso giorno della settimana"
-
-#: /src/schooltool/app/browser/cal.py:1919
-msgid "1st"
-msgstr "1°"
-
-#: /src/schooltool/app/browser/cal.py:1919
-msgid "4th"
-msgstr "4°"
-
-#: /src/schooltool/app/browser/cal.py:1919
-msgid "3rd"
-msgstr "3°"
-
-#: /src/schooltool/app/browser/cal.py:1919
-msgid "2nd"
-msgstr "2°"
-
 #: /src/schooltool/app/browser/cal.py:1920
 msgid "5th"
 msgstr "5°"
@@ -524,88 +404,6 @@ msgstr "settimana corrente"
 msgid "Previous week"
 msgstr "settimana precedente"
 
-#. Default: ""
-#: /src/schooltool/app/browser/cal.py:952
-msgid "${month}, ${year} (week ${week})"
-msgstr "${month}, ${year} (Settimana ${week})"
-
-#: /src/schooltool/app/browser/configure.zcml:166
-msgid "Actions"
-msgstr "Azioni"
-
-#: /src/schooltool/app/browser/configure.zcml:319
-msgid "View Calendar"
-msgstr "Mostra Calendario"
-
-#: /src/schooltool/app/browser/configure.zcml:331
-msgid "New Event"
-msgstr "Nuovo evento"
-
-#: /src/schooltool/app/browser/configure.zcml:342
-msgid "Open in iCal"
-msgstr "Apri con iCal"
-
-#: /src/schooltool/app/browser/configure.zcml:354
-msgid "Import Sections"
-msgstr "Importa le classi"
-
-#: /src/schooltool/app/browser/configure.zcml:365
-msgid "Edit Leaders"
-msgstr "Modifica"
-
-#: /src/schooltool/app/browser/configure.zcml:376
-msgid "Change Site Preferences"
-msgstr "Modifica le preferenze del sito"
-
-#: /src/schooltool/app/browser/configure.zcml:408
-msgid "Calendar (Daily)"
-msgstr "Calendario (giornaliero)"
-
-#: /src/schooltool/app/browser/configure.zcml:418
-msgid "Calendar (Daily, PDF)"
-msgstr "Calendario (giornaliero, PDF)"
-
-#: /src/schooltool/app/browser/configure.zcml:427
-msgid "Calendar (Weekly)"
-msgstr "Calendario (settimanale)"
-
-#: /src/schooltool/app/browser/configure.zcml:437
-msgid "Calendar (Weekly, PDF)"
-msgstr "Calendario (settimanale, PDF)"
-
-#: /src/schooltool/app/browser/configure.zcml:446
-msgid "Calendar (Monthly)"
-msgstr "Calendario (mensile)"
-
-#: /src/schooltool/app/browser/configure.zcml:456
-msgid "Calendar (Monthly, PDF)"
-msgstr "Calendario (mensile, PDF)"
-
-#: /src/schooltool/app/browser/configure.zcml:465
-#: /src/schooltool/timetable/browser/configure.zcml:198
-msgid "Calendar (Yearly)"
-msgstr "Calendario (annuale)"
-
-#: /src/schooltool/app/browser/configure.zcml:475
-msgid "Atom View"
-msgstr "Vista atom"
-
-#: /src/schooltool/app/browser/configure.zcml:485
-msgid "iCalendar"
-msgstr "iCalendar"
-
-#: /src/schooltool/app/browser/configure.zcml:495
-msgid "Free/Busy"
-msgstr "Libero/Occupato"
-
-#: /src/schooltool/app/browser/configure.zcml:596
-msgid "ZODB Control"
-msgstr "Controllo ZODB"
-
-#: /src/schooltool/app/browser/configure.zcml:631
-msgid "Application Control"
-msgstr "Controllo applicazione"
-
 #: /src/schooltool/app/browser/configure.zcml:643
 msgid "Translation Domains"
 msgstr "Domini delle traduzioni"
@@ -649,98 +447,6 @@ msgid "Could not convert data to Unicode (incorrect charset?)."
 msgstr ""
 "Non è possibile convertire i dati ad unicode (insieme dei caratteri "
 "sbagliato?)."
-
-#: /src/schooltool/app/browser/csvimport.py:124
-msgid "CSV file imported successfully."
-msgstr "Il file CSV è stato importato correttamente."
-
-#: /src/schooltool/app/browser/csvimport.py:126
-msgid "Failed to import CSV file"
-msgstr "Impossibile importare il file CSV"
-
-#: /src/schooltool/app/browser/csvimport.py:136
-msgid "CSV text imported successfully."
-msgstr "Il testo CSV è stato importato correttamente."
-
-#: /src/schooltool/app/browser/csvimport.py:138
-msgid "Failed to import CSV text"
-msgstr "Impossibile importare il testo CSV"
-
-#: /src/schooltool/app/browser/csvimport.py:160
-msgid "No charset specified"
-msgstr "Nessun set di caratteri specificato"
-
-#: /src/schooltool/app/browser/csvimport.py:165
-msgid "Unknown charset"
-msgstr "set di caratteri sconosciuto"
-
-#. Default: ""
-#: /src/schooltool/app/browser/csvimport.py:209
-msgid "Error in CSV data, line ${line_no}"
-msgstr "Errore nei dati CSV alla riga ${line_no}"
-
-#. Default: ""
-#: /src/schooltool/app/browser/csvimport.py:213
-#: /src/schooltool/app/browser/csvimport.py:514
-msgid "Conversion to unicode failed in line ${line_no}"
-msgstr "Errore di conversione ad unicode alla riga ${line_no}"
-
-#: /src/schooltool/app/browser/csvimport.py:296
-msgid "Row 2 is not empty"
-msgstr "La seconda riga non è vuota"
-
-#. Default: ""
-#: /src/schooltool/app/browser/csvimport.py:332
-msgid ""
-"Wrong section header on line ${line_no} (it should contain a course id and "
-"an instructor id)"
-msgstr ""
-"Intestazione di sezione errata nella linea ${line_no} (dovrebbe contenere "
-"l'identificativo del corso e l'identificativo dell'istruttore)"
-
-#. Default: ""
-#: /src/schooltool/app/browser/csvimport.py:358
-msgid ""
-"Malformed line ${line_no} (it should contain a day id and a period id)"
-msgstr ""
-"Linea malformata ${line_no} (dovrebbe contenere l'identificativo del giorno "
-"e l'identificativo del periodo)"
-
-#. Default: ""
-#: /src/schooltool/app/browser/csvimport.py:381
-msgid "Incomplete section description on line ${line}"
-msgstr "Descrizione incompleta della classe alla riga ${line}"
-
-#. Default: ""
-#: /src/schooltool/app/browser/csvimport.py:386
-msgid "No students in section (line ${line})"
-msgstr "Nessuno studente nella sezione (line ${line})"
-
-#. Default: ""
-#: /src/schooltool/app/browser/csvimport.py:478
-msgid "The timetable schema ${schema} does not exist."
-msgstr "Lo schema orario ${schema} non esiste"
-
-#. Default: ""
-#: /src/schooltool/app/browser/csvimport.py:509
-msgid "Error in timetable CSV data, line ${line_no}"
-msgstr "Errore nei dati dell'orario CSV alla riga ${line_no}"
-
-#: /src/schooltool/app/browser/csvimport.py:549
-msgid "Day ids not defined in selected schema: ${args}."
-msgstr "Id dei giorni non definito nello schema selezionato: ${args}."
-
-#: /src/schooltool/app/browser/csvimport.py:550
-msgid "Periods not defined in selected days: ${args}."
-msgstr "Periodi non definiti nei giorni selezionati: ${args}"
-
-#: /src/schooltool/app/browser/csvimport.py:551
-msgid "Persons not found: ${args}."
-msgstr "Persone non trovate: ${args}"
-
-#: /src/schooltool/app/browser/csvimport.py:552
-msgid "Courses not found: ${args}."
-msgstr "Materie non trovate: ${args}"
 
 #: /src/schooltool/app/browser/csvimport.py:553
 msgid "Sections not found: ${args}."
@@ -4563,6 +4269,41 @@ msgstr "Vai all'anno attuale"
 msgid "Go to previous year"
 msgstr "Vai all'anno precedente"
 
+#: /src/schooltool/app/browser/cal.py:124
+#: /src/schooltool/app/browser/cal.py:1811
+msgid "Mon"
+msgstr "Lunedì"
+
+#: /src/schooltool/app/browser/cal.py:124
+#: /src/schooltool/app/browser/cal.py:1812
+msgid "Tue"
+msgstr "Martedi"
+
+#: /src/schooltool/app/browser/cal.py:124
+#: /src/schooltool/app/browser/cal.py:1813
+msgid "Wed"
+msgstr "Mercoledi"
+
+#: /src/schooltool/app/browser/cal.py:124
+#: /src/schooltool/app/browser/cal.py:1814
+msgid "Thu"
+msgstr "Giovedi"
+
+#: /src/schooltool/app/browser/cal.py:125
+#: /src/schooltool/app/browser/cal.py:1815
+msgid "Fri"
+msgstr "Venerdi"
+
+#: /src/schooltool/app/browser/cal.py:125
+#: /src/schooltool/app/browser/cal.py:1816
+msgid "Sat"
+msgstr "Sabato"
+
+#: /src/schooltool/app/browser/cal.py:125
+#: /src/schooltool/app/browser/cal.py:1817
+msgid "Sun"
+msgstr "Domenica"
+
 #: /src/schooltool/app/browser/cal.py:1294
 msgid "Go to the next day"
 msgstr "Vai al prossimo giorno"
@@ -4580,6 +4321,91 @@ msgstr "Vai al giorno precedente"
 msgid "Add new event starting at ${title}"
 msgstr "Aggiungi un nuovo evento che inizi a ${title}"
 
+#: /src/schooltool/app/browser/cal.py:1780
+msgid "Day"
+msgstr "Giorno"
+
+#: /src/schooltool/app/browser/cal.py:1781
+msgid "Week"
+msgstr "Settimana"
+
+#: /src/schooltool/app/browser/cal.py:1782
+#: /src/schooltool/app/browser/templates/calendar_macros.pt:119
+msgid "Month"
+msgstr "Mese"
+
+#: /src/schooltool/app/browser/cal.py:1783
+#: /src/schooltool/app/browser/templates/calendar_macros.pt:132
+msgid "Year"
+msgstr "Anno"
+
+#: /src/schooltool/app/browser/cal.py:1786
+msgid "Repeat every"
+msgstr "Ripeti ogni"
+
+#: /src/schooltool/app/browser/cal.py:1791
+msgid "Range"
+msgstr "Intervallo"
+
+#: /src/schooltool/app/browser/cal.py:1794
+msgid "Count"
+msgstr "Conteggio"
+
+#: /src/schooltool/app/browser/cal.py:1795
+msgid "Until"
+msgstr "Fino a"
+
+#: /src/schooltool/app/browser/cal.py:1796
+msgid "forever"
+msgstr "per sempre"
+
+#: /src/schooltool/app/browser/cal.py:1799
+msgid "Number of events"
+msgstr "Numero di eventi"
+
+#: /src/schooltool/app/browser/cal.py:1803
+#: /src/schooltool/app/browser/templates/event_add.pt:303
+msgid "Repeat until"
+msgstr "Ripeti fino a"
+
+#: /src/schooltool/app/browser/cal.py:1807
+msgid "Weekdays"
+msgstr "Giorni della settimana"
+
+#: /src/schooltool/app/browser/cal.py:1810
+msgid "Weekday"
+msgstr "Giorno della settimana"
+
+#: /src/schooltool/app/browser/cal.py:1820
+#: /src/schooltool/app/browser/templates/calendar_macros.pt:36
+#: /src/schooltool/app/browser/templates/event_add.pt:256
+msgid "Monthly"
+msgstr "Mensilmente"
+
+#: /src/schooltool/app/browser/cal.py:1828
+msgid "Exception dates"
+msgstr "Date con eccezioni"
+
+#: /src/schooltool/app/browser/cal.py:1914
+msgid "same weekday"
+msgstr "stesso giorno della settimana"
+
+#: /src/schooltool/app/browser/cal.py:1919
+msgid "1st"
+msgstr "1°"
+
+#: /src/schooltool/app/browser/cal.py:1919
+msgid "4th"
+msgstr "4°"
+
+#: /src/schooltool/app/browser/cal.py:1919
+msgid "3rd"
+msgstr "3°"
+
+#: /src/schooltool/app/browser/cal.py:1919
+msgid "2nd"
+msgstr "2°"
+
 #: /src/schooltool/app/browser/cal.py:929
 msgid "Go to next week"
 msgstr "Vai alla settimana successiva"
@@ -4592,11 +4418,185 @@ msgstr "Vai alla settimana corrente"
 msgid "Go to previous week"
 msgstr "Vai alla settimana precedente"
 
+#. Default: ""
+#: /src/schooltool/app/browser/cal.py:952
+msgid "${month}, ${year} (week ${week})"
+msgstr "${month}, ${year} (Settimana ${week})"
+
+#: /src/schooltool/app/browser/configure.zcml:166
+msgid "Actions"
+msgstr "Azioni"
+
+#: /src/schooltool/app/browser/configure.zcml:319
+msgid "View Calendar"
+msgstr "Mostra Calendario"
+
+#: /src/schooltool/app/browser/configure.zcml:331
+msgid "New Event"
+msgstr "Nuovo evento"
+
+#: /src/schooltool/app/browser/configure.zcml:342
+msgid "Open in iCal"
+msgstr "Apri con iCal"
+
+#: /src/schooltool/app/browser/configure.zcml:354
+msgid "Import Sections"
+msgstr "Importa le classi"
+
+#: /src/schooltool/app/browser/configure.zcml:365
+msgid "Edit Leaders"
+msgstr "Modifica"
+
+#: /src/schooltool/app/browser/configure.zcml:376
+msgid "Change Site Preferences"
+msgstr "Modifica le preferenze del sito"
+
+#: /src/schooltool/app/browser/configure.zcml:408
+msgid "Calendar (Daily)"
+msgstr "Calendario (giornaliero)"
+
+#: /src/schooltool/app/browser/configure.zcml:418
+msgid "Calendar (Daily, PDF)"
+msgstr "Calendario (giornaliero, PDF)"
+
+#: /src/schooltool/app/browser/configure.zcml:427
+msgid "Calendar (Weekly)"
+msgstr "Calendario (settimanale)"
+
+#: /src/schooltool/app/browser/configure.zcml:437
+msgid "Calendar (Weekly, PDF)"
+msgstr "Calendario (settimanale, PDF)"
+
+#: /src/schooltool/app/browser/configure.zcml:446
+msgid "Calendar (Monthly)"
+msgstr "Calendario (mensile)"
+
+#: /src/schooltool/app/browser/configure.zcml:456
+msgid "Calendar (Monthly, PDF)"
+msgstr "Calendario (mensile, PDF)"
+
+#: /src/schooltool/app/browser/configure.zcml:465
+#: /src/schooltool/timetable/browser/configure.zcml:198
+msgid "Calendar (Yearly)"
+msgstr "Calendario (annuale)"
+
+#: /src/schooltool/app/browser/configure.zcml:475
+msgid "Atom View"
+msgstr "Vista atom"
+
+#: /src/schooltool/app/browser/configure.zcml:485
+msgid "iCalendar"
+msgstr "iCalendar"
+
+#: /src/schooltool/app/browser/configure.zcml:495
+msgid "Free/Busy"
+msgstr "Libero/Occupato"
+
+#: /src/schooltool/app/browser/configure.zcml:596
+msgid "ZODB Control"
+msgstr "Controllo ZODB"
+
+#: /src/schooltool/app/browser/configure.zcml:631
+msgid "Application Control"
+msgstr "Controllo applicazione"
+
+#: /src/schooltool/app/browser/csvimport.py:124
+msgid "CSV file imported successfully."
+msgstr "Il file CSV è stato importato correttamente."
+
+#: /src/schooltool/app/browser/csvimport.py:126
+msgid "Failed to import CSV file"
+msgstr "Impossibile importare il file CSV"
+
+#: /src/schooltool/app/browser/csvimport.py:136
+msgid "CSV text imported successfully."
+msgstr "Il testo CSV è stato importato correttamente."
+
+#: /src/schooltool/app/browser/csvimport.py:138
+msgid "Failed to import CSV text"
+msgstr "Impossibile importare il testo CSV"
+
+#: /src/schooltool/app/browser/csvimport.py:160
+msgid "No charset specified"
+msgstr "Nessun set di caratteri specificato"
+
+#: /src/schooltool/app/browser/csvimport.py:165
+msgid "Unknown charset"
+msgstr "set di caratteri sconosciuto"
+
+#. Default: ""
+#: /src/schooltool/app/browser/csvimport.py:209
+msgid "Error in CSV data, line ${line_no}"
+msgstr "Errore nei dati CSV alla riga ${line_no}"
+
+#. Default: ""
+#: /src/schooltool/app/browser/csvimport.py:213
+#: /src/schooltool/app/browser/csvimport.py:514
+msgid "Conversion to unicode failed in line ${line_no}"
+msgstr "Errore di conversione ad unicode alla riga ${line_no}"
+
+#: /src/schooltool/app/browser/csvimport.py:296
+msgid "Row 2 is not empty"
+msgstr "La seconda riga non è vuota"
+
+#. Default: ""
+#: /src/schooltool/app/browser/csvimport.py:332
+msgid ""
+"Wrong section header on line ${line_no} (it should contain a course id and "
+"an instructor id)"
+msgstr ""
+"Intestazione di sezione errata nella linea ${line_no} (dovrebbe contenere "
+"l'identificativo del corso e l'identificativo dell'istruttore)"
+
+#. Default: ""
+#: /src/schooltool/app/browser/csvimport.py:358
+msgid ""
+"Malformed line ${line_no} (it should contain a day id and a period id)"
+msgstr ""
+"Linea malformata ${line_no} (dovrebbe contenere l'identificativo del giorno "
+"e l'identificativo del periodo)"
+
+#. Default: ""
+#: /src/schooltool/app/browser/csvimport.py:381
+msgid "Incomplete section description on line ${line}"
+msgstr "Descrizione incompleta della classe alla riga ${line}"
+
+#. Default: ""
+#: /src/schooltool/app/browser/csvimport.py:386
+msgid "No students in section (line ${line})"
+msgstr "Nessuno studente nella sezione (line ${line})"
+
 #: /src/schooltool/app/browser/csvimport.py:467
 msgid "The first row of the CSV file must contain the timetable schema id."
 msgstr ""
 "La prima riga del file CSV deve contenere l'identificatore dello schema di "
 "orario."
+
+#. Default: ""
+#: /src/schooltool/app/browser/csvimport.py:478
+msgid "The timetable schema ${schema} does not exist."
+msgstr "Lo schema orario ${schema} non esiste"
+
+#. Default: ""
+#: /src/schooltool/app/browser/csvimport.py:509
+msgid "Error in timetable CSV data, line ${line_no}"
+msgstr "Errore nei dati dell'orario CSV alla riga ${line_no}"
+
+#: /src/schooltool/app/browser/csvimport.py:549
+msgid "Day ids not defined in selected schema: ${args}."
+msgstr "Id dei giorni non definito nello schema selezionato: ${args}."
+
+#: /src/schooltool/app/browser/csvimport.py:550
+msgid "Periods not defined in selected days: ${args}."
+msgstr "Periodi non definiti nei giorni selezionati: ${args}"
+
+#: /src/schooltool/app/browser/csvimport.py:551
+msgid "Persons not found: ${args}."
+msgstr "Persone non trovate: ${args}"
+
+#: /src/schooltool/app/browser/csvimport.py:552
+msgid "Courses not found: ${args}."
+msgstr "Materie non trovate: ${args}"
 
 #: /src/schooltool/app/browser/templates/about.pt:10
 msgid ""
@@ -5097,7 +5097,7 @@ msgstr "Lista dei valori"
 
 #: /src/schooltool/basicperson/security.zcml:17
 msgid "Create, delete demographics fields and change their order."
-msgstr ""
+msgstr "Creare, cancellare campi demografici e cambiare il loro ordine"
 
 #: /src/schooltool/basicperson/security.zcml:26
 msgid "Edit fields"

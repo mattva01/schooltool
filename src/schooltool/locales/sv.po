@@ -19,13 +19,13 @@ msgstr ""
 "Project-Id-Version: SchoolTool Version 0.11.3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-12-24 12:40+0000\n"
-"PO-Revision-Date: 2009-12-30 12:39+0000\n"
-"Last-Translator: nanker <Unknown>\n"
+"PO-Revision-Date: 2010-01-29 09:25+0000\n"
+"Last-Translator: Simon Österberg <simon.osterberg@gmail.com>\n"
 "Language-Team: Swedish <schooltool-dev@schooltool.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-12-31 04:55+0000\n"
+"X-Launchpad-Export-Date: 2010-01-30 04:36+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "Generated-By: setup.py\n"
 
@@ -4368,7 +4368,7 @@ msgstr "Gå till föregående dag"
 #. Default: ""
 #: /src/schooltool/app/browser/cal.py:1448
 msgid "Add new event starting at ${title}"
-msgstr ""
+msgstr "Lägg till en ny händelse som börjar ${title}"
 
 #: /src/schooltool/app/browser/cal.py:929
 msgid "Go to next week"
@@ -4464,7 +4464,7 @@ msgstr "Om SchoolTool"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:24
 msgid "View daily calendar"
-msgstr ""
+msgstr "Visa dagliga kalendern"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:24
 msgid "Daily"
@@ -4484,7 +4484,7 @@ msgstr "Årligen"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:42
 msgid "View yearly calendar"
-msgstr ""
+msgstr "Visa årliga kalendern"
 
 #: /src/schooltool/app/browser/templates/default_report_template.pt:35
 msgid "Page ${page_number}"
@@ -4502,7 +4502,7 @@ msgstr "Hantera"
 
 #: /src/schooltool/app/browser/templates/portlet_tomorrow_events.pt:5
 msgid "Tomorrow's Events"
-msgstr ""
+msgstr "Morgondagens händelser"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:30
 msgid ""
@@ -4517,6 +4517,8 @@ msgid ""
 "The second row should be empty. After that, several section descriptions may "
 "follow. They are separated by an extra carriage return (i.e., a blank line)."
 msgstr ""
+"Andra raden ska vara tom. Efter det kan flera sektioner av beskrivningar "
+"följa. De separeras av en extra vagnretur (t ex en tom rad)."
 
 #. Default: ""
 #. "\"three-day\"\n"
@@ -4735,19 +4737,19 @@ msgstr ""
 #: /src/schooltool/person/security.zcml:136
 #: /src/schooltool/group/security.zcml:94
 msgid "Change calendar"
-msgstr ""
+msgstr "Ändra kalender"
 
 #: /src/schooltool/app/security.zcml:77
 msgid "SchoolTool application"
-msgstr ""
+msgstr "SchoolTool applikation"
 
 #: /src/schooltool/app/security.zcml:80
 msgid "Access"
-msgstr ""
+msgstr "Åtkomst"
 
 #: /src/schooltool/app/security.zcml:87
 msgid "Manage school settings and configuration"
-msgstr ""
+msgstr "Hantera skolans inställningar och konfiguration"
 
 #: /src/schooltool/app/security.zcml:95
 #: /src/schooltool/course/security.zcml:141
@@ -4774,7 +4776,7 @@ msgstr "Exportera"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:42
 msgid "Advisors"
-msgstr ""
+msgstr "Rådgivare"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:51
 msgid "Advisees"
@@ -4841,6 +4843,9 @@ msgid ""
 "CSV data <strong>must</strong> contain a user name a first name and a last "
 "name. An optional password <strong>may</strong> be included as well."
 msgstr ""
+"Det <strong>måste</strong> finnas ett användarnamn, ett förnamn och ett "
+"efternamn i CSV-data. Valfritt <strong>kan</strong> ett lösenord också "
+"läggas till."
 
 #. Default: ""
 #. "jjones, Jimmy, Jones\n"
@@ -4933,11 +4938,11 @@ msgstr ""
 
 #: /src/schooltool/basicperson/security.zcml:34
 msgid "View user's demographics information"
-msgstr ""
+msgstr "Visa användarens demografiska information"
 
 #: /src/schooltool/basicperson/security.zcml:43
 msgid "Modify user's demographics information."
-msgstr ""
+msgstr "Ändra användarens demografiska information"
 
 #: /src/schooltool/basicperson/security.zcml:43
 msgid "Modify user demographics"
@@ -5073,7 +5078,7 @@ msgstr ""
 
 #: /src/schooltool/contact/interfaces.py:102
 msgid "Contact's relationship with the person"
-msgstr ""
+msgstr "Kontaktens förhållande till personen"
 
 #: /src/schooltool/contact/interfaces.py:104
 msgid "Parent"
@@ -5123,7 +5128,7 @@ msgstr ""
 
 #: /src/schooltool/contact/security.zcml:36
 msgid "Manage user's contacts"
-msgstr ""
+msgstr "Hantera användarens kontakter"
 
 #: /src/schooltool/contact/security.zcml:46
 msgid "Create/Delete an external contact"
@@ -5135,15 +5140,15 @@ msgstr "Visa en extern kontakt"
 
 #: /src/schooltool/contact/security.zcml:62
 msgid "Modify an external contact"
-msgstr ""
+msgstr "Modifera en extern kontakt"
 
 #: /src/schooltool/contact/security.zcml:70
 msgid "View user's contact information"
-msgstr ""
+msgstr "Visa användarens kontaktinformation"
 
 #: /src/schooltool/contact/security.zcml:78
 msgid "Modify user's contact information"
-msgstr ""
+msgstr "Modifiera användarens kontaktinformation"
 
 #: /src/schooltool/course/browser/configure.zcml:160
 #: /src/schooltool/course/browser/configure.zcml:170
@@ -5190,11 +5195,11 @@ msgstr ""
 
 #: /src/schooltool/course/browser/section-member-csvimport.pt:4
 msgid "Upload SchoolTool section members as CSV"
-msgstr ""
+msgstr "Ladda upp SchoolTool sektions medlemmar som CVS"
 
 #: /src/schooltool/course/browser/section.py:188
 msgid "No section selected."
-msgstr ""
+msgstr "Ingen sektion vald"
 
 #: /src/schooltool/course/browser/section.py:372
 msgid "Starts in term"
@@ -5288,7 +5293,7 @@ msgstr ""
 
 #: /src/schooltool/course/browser/templates/course.pt:9
 msgid "${course} course for ${schoolyear}"
-msgstr ""
+msgstr "${course} kurs för ${schoolyear}"
 
 #: /src/schooltool/course/browser/templates/course_container.pt:12
 msgid "Courses for ${schoolyear}"

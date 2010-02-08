@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-12-24 12:40+0000\n"
-"PO-Revision-Date: 2009-12-30 13:56+0000\n"
+"PO-Revision-Date: 2010-01-08 22:59+0000\n"
 "Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-12-31 04:54+0000\n"
+"X-Launchpad-Export-Date: 2010-01-09 07:44+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -569,10 +569,6 @@ msgstr "Kalendorius (Mėnesinis, PDF)"
 #: /src/schooltool/timetable/browser/configure.zcml:198
 msgid "Calendar (Yearly)"
 msgstr "Kalendorius (Metinis)"
-
-#: /src/schooltool/app/browser/configure.zcml:475
-msgid "Atom View"
-msgstr ""
 
 #: /src/schooltool/app/browser/configure.zcml:485
 msgid "iCalendar"
@@ -1447,7 +1443,7 @@ msgstr "A"
 #: /src/schooltool/skin/templates/view_macros.pt:205
 #: /src/schooltool/app/browser/templates/event_add.pt:378
 msgid "cancel-button"
-msgstr "Atšaukti"
+msgstr "atšaukti-mygtukas"
 
 #: /src/schooltool/basicperson/browser/templates/person_view.pt:20
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:34
@@ -1595,7 +1591,7 @@ msgstr "Šalinti"
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:84
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:65
 msgid "ok-button"
-msgstr "Gerai"
+msgstr "Gerai-mygtukas"
 
 #: /src/schooltool/contact/contact.py:210
 #: /src/schooltool/course/browser/section.py:538
@@ -3265,6 +3261,10 @@ msgstr "Rodyti kalendorių"
 #: /src/schooltool/app/browser/configure.zcml:354
 msgid "Import Sections"
 msgstr "Įkelti kursus"
+
+#: /src/schooltool/app/browser/configure.zcml:475
+msgid "Atom View"
+msgstr "Smulkiau"
 
 #: /src/schooltool/app/browser/configure.zcml:596
 msgid "ZODB Control"

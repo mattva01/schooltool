@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-12-24 12:40+0000\n"
-"PO-Revision-Date: 2010-01-03 16:24+0000\n"
-"Last-Translator: Patrick Eigensatz <patrick.eigensatz@gmail.com>\n"
+"PO-Revision-Date: 2010-01-31 18:22+0000\n"
+"Last-Translator: Maximilian Heyne <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-01-04 04:34+0000\n"
+"X-Launchpad-Export-Date: 2010-02-01 04:42+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -22,47 +22,9 @@ msgstr ""
 msgid "Your School"
 msgstr "Name der Schule"
 
-#: /src/schooltool/app/browser/__init__.py:256
-#: /src/schooltool/person/help/person_container.pt:6
-#: /src/schooltool/app/browser/templates/index.pt:11
-#: /src/schooltool/person/browser/configure.zcml:26
-#: /src/schooltool/person/help/configure.zcml:8
-msgid "Persons"
-msgstr "Personen"
-
-#: /src/schooltool/app/browser/__init__.py:261
-msgid "1 person"
-msgstr "Eine Person"
-
-#. Default: ""
-#: /src/schooltool/app/browser/__init__.py:263
-msgid "${number} persons"
-msgstr "${number} Personen"
-
 #: /src/schooltool/app/browser/app.py:227
 msgid "Username or password is incorrect"
 msgstr "Der Benutzername oder das Passwort ist falsch."
-
-#: /src/schooltool/app/browser/app.py:323
-#: /src/schooltool/app/security.py:307
-msgid "Leaders"
-msgstr "Leiter"
-
-#: /src/schooltool/app/browser/app.py:324
-msgid "Current leaders"
-msgstr "Derzeitige Leiter"
-
-#: /src/schooltool/app/browser/app.py:325
-msgid "Available leaders"
-msgstr "Verfügbare Leiter"
-
-#: /src/schooltool/app/browser/app.py:348
-msgid "school"
-msgstr "Schule"
-
-#: /src/schooltool/app/browser/cal.py:114
-msgid "March"
-msgstr "März"
 
 #: /src/schooltool/app/browser/cal.py:114
 msgid "January"
@@ -2751,7 +2713,7 @@ msgstr "Nähere Informationen zum Namen"
 #: /src/schooltool/demographics/browser/configure.zcml:173
 #: /src/schooltool/demographics/browser/configure.zcml:234
 msgid "demographics"
-msgstr "Demografisches"
+msgstr "Demografie"
 
 #: /src/schooltool/demographics/browser/configure.zcml:179
 #: /src/schooltool/demographics/browser/configure.zcml:240
@@ -2810,13 +2772,7 @@ msgstr "Namen ändern"
 #. Default: ""
 #: /src/schooltool/demographics/browser/personform.py:173
 msgid "Change demographics for ${fullname}"
-msgstr "Demogrfische Daten ändern von {fullname}"
-
-#: /src/schooltool/demographics/browser/personform.py:181
-#: /src/schooltool/basicperson/security.zcml:13
-#: /src/schooltool/basicperson/browser/configure.zcml:113
-msgid "Demographics"
-msgstr "Demografie"
+msgstr "Demografische Daten ändern von {fullname}"
 
 #. Default: ""
 #: /src/schooltool/demographics/browser/personform.py:189
@@ -4921,6 +4877,44 @@ msgstr "Passwort bestätigen"
 msgid "Supplied passwords are not identical"
 msgstr "Angegebene Passworte stimmen nicht überein"
 
+#: /src/schooltool/app/browser/__init__.py:256
+#: /src/schooltool/person/help/person_container.pt:6
+#: /src/schooltool/app/browser/templates/index.pt:11
+#: /src/schooltool/person/browser/configure.zcml:26
+#: /src/schooltool/person/help/configure.zcml:8
+msgid "Persons"
+msgstr "Personen"
+
+#: /src/schooltool/app/browser/__init__.py:261
+msgid "1 person"
+msgstr "Eine Person"
+
+#. Default: ""
+#: /src/schooltool/app/browser/__init__.py:263
+msgid "${number} persons"
+msgstr "${number} Personen"
+
+#: /src/schooltool/app/browser/app.py:323
+#: /src/schooltool/app/security.py:307
+msgid "Leaders"
+msgstr "Leiter"
+
+#: /src/schooltool/app/browser/app.py:324
+msgid "Current leaders"
+msgstr "Derzeitige Leiter"
+
+#: /src/schooltool/app/browser/app.py:325
+msgid "Available leaders"
+msgstr "Verfügbare Leiter"
+
+#: /src/schooltool/app/browser/app.py:348
+msgid "school"
+msgstr "Schule"
+
+#: /src/schooltool/app/browser/cal.py:114
+msgid "March"
+msgstr "März"
+
 #. Default: ""
 #: /src/schooltool/app/browser/cal.py:1448
 msgid "Add new event starting at ${title}"
@@ -5279,7 +5273,7 @@ msgstr "Liste von Werten"
 
 #: /src/schooltool/basicperson/security.zcml:17
 msgid "Create, delete demographics fields and change their order."
-msgstr ""
+msgstr "Demografie-Felder erstellen, löschen und sortieren"
 
 #: /src/schooltool/basicperson/security.zcml:26
 msgid "Edit fields"
@@ -5287,19 +5281,19 @@ msgstr "Felder bearbeiten"
 
 #: /src/schooltool/basicperson/security.zcml:34
 msgid "View user demographics"
-msgstr ""
+msgstr "Benutzer-Demografie anzeigen"
 
 #: /src/schooltool/basicperson/security.zcml:34
 msgid "View user's demographics information"
-msgstr ""
+msgstr "Benutzer-Demografie-Informationen anzeigen"
 
 #: /src/schooltool/basicperson/security.zcml:43
 msgid "Modify user's demographics information."
-msgstr ""
+msgstr "Benutzer-Demografie-Informationen ändern"
 
 #: /src/schooltool/basicperson/security.zcml:43
 msgid "Modify user demographics"
-msgstr ""
+msgstr "Benutzer-Demografie ändern"
 
 #: /src/schooltool/contact/browser/configure.zcml:100
 msgid "Manage Contacts"
@@ -5801,7 +5795,7 @@ msgstr ""
 
 #: /src/schooltool/course/section.py:294
 msgid "Instructors of a person in any of his sections."
-msgstr ""
+msgstr "Ausbilder einer Person in einem Unterricht."
 
 #: /src/schooltool/course/section.py:317
 msgid "Learners"
@@ -5857,6 +5851,12 @@ msgstr "Erstelle/Lösche"
 #: /src/schooltool/demographics/browser/demographics_macros.pt:4
 msgid "Shortcut: Alt-N"
 msgstr "Tastenkürzel: Alt-N"
+
+#: /src/schooltool/demographics/browser/personform.py:181
+#: /src/schooltool/basicperson/security.zcml:13
+#: /src/schooltool/basicperson/browser/configure.zcml:113
+msgid "Demographics"
+msgstr "Demografie"
 
 #: /src/schooltool/devmode/configure.zcml:27
 msgid "Introspect"
@@ -5939,7 +5939,7 @@ msgstr "Nicht gesetzt"
 #: /src/schooltool/email/browser/email.py:456
 #: /src/schooltool/email/interfaces.py:39
 msgid "From"
-msgstr ""
+msgstr "Absender"
 
 #: /src/schooltool/email/browser/email.py:208
 #: /src/schooltool/email/browser/email.py:457
@@ -5975,7 +5975,7 @@ msgstr "Datum und Zeit, als die Nachricht erstellt wurde"
 #: /src/schooltool/email/browser/email.py:464
 #: /src/schooltool/email/interfaces.py:53
 msgid "Subject"
-msgstr ""
+msgstr "Betreff"
 
 #: /src/schooltool/email/browser/email.py:223
 #: /src/schooltool/email/browser/email.py:465
@@ -6025,15 +6025,15 @@ msgstr ""
 
 #: /src/schooltool/email/browser/email.py:443
 msgid "Queue"
-msgstr ""
+msgstr "Warteschlange"
 
 #: /src/schooltool/email/browser/email.py:485
 msgid "Send Email"
-msgstr ""
+msgstr "Email senden"
 
 #: /src/schooltool/email/browser/email.py:488
 msgid "Send"
-msgstr ""
+msgstr "Abschicken"
 
 #. Default: ""
 #: /src/schooltool/email/browser/email.py:78
@@ -6045,14 +6045,14 @@ msgstr ""
 #: /src/schooltool/email/browser/email.py:403
 #: /src/schooltool/securitypolicy/browser/control.py:96
 msgid "Disabled"
-msgstr ""
+msgstr "Deaktiviert"
 
 #: /src/schooltool/email/browser/email.py:91
 #: /src/schooltool/email/browser/email.py:202
 #: /src/schooltool/email/browser/email.py:451
 #: /src/schooltool/email/browser/templates/email_container.pt:20
 msgid "Server Status"
-msgstr ""
+msgstr "Serverstatus"
 
 #: /src/schooltool/email/browser/email.py:92
 #: /src/schooltool/email/browser/email.py:203
@@ -6063,22 +6063,22 @@ msgstr "Aktueller Status vom E-Mail Dienst des SchoolTools"
 #: /src/schooltool/email/browser/email.py:96
 #: /src/schooltool/email/interfaces.py:87
 msgid "Hostname"
-msgstr ""
+msgstr "Hostname"
 
 #: /src/schooltool/email/browser/email.py:97
 #: /src/schooltool/email/interfaces.py:88
 msgid "SMTP server hostname. Leave empty to disable email."
-msgstr ""
+msgstr "SMTP Server-Name. Freilassen um E-Mail zu deaktivieren."
 
 #. Default: "Retry"
 #: /src/schooltool/email/browser/templates/email_container.pt:39
 #: /src/schooltool/email/browser/templates/email_container.pt:44
 msgid "retry-button"
-msgstr ""
+msgstr "Wiederholenbutton"
 
 #: /src/schooltool/email/browser/templates/email_container.pt:54
 msgid "There are no messages queued."
-msgstr ""
+msgstr "Es sind keine Nachrichten aufgelistet."
 
 #: /src/schooltool/email/browser/templates/email_delete.pt:15
 msgid "Are you sure you want to delete the selected emails?"
@@ -6091,6 +6091,10 @@ msgstr "Empfängeradressen"
 #: /src/schooltool/email/interfaces.py:45
 msgid "Recipient address"
 msgstr "Empfängeradresse"
+
+#: /src/schooltool/email/interfaces.py:58
+msgid "Status"
+msgstr "Status"
 
 #: /src/schooltool/email/interfaces.py:59
 msgid "Code for the status of the message"
@@ -6248,24 +6252,29 @@ msgstr ""
 
 #: /src/schooltool/person/security.zcml:107
 msgid "Change password"
-msgstr ""
+msgstr "Passwort ändern"
 
 #: /src/schooltool/person/security.zcml:114
 msgid "View preferences"
-msgstr ""
+msgstr "Einstellungen anzeigen"
 
 #: /src/schooltool/person/security.zcml:121
 msgid "Change preferences"
-msgstr ""
+msgstr "Einstellungen ändern"
 
 #: /src/schooltool/person/security.zcml:144
 msgid "Manage visible calendars"
-msgstr ""
+msgstr "Sichtbare Kalender verwalten"
 
 #: /src/schooltool/person/security.zcml:152
 #: /src/schooltool/contact/security.zcml:86
 msgid "The user himself."
 msgstr ""
+
+#: /src/schooltool/person/security.zcml:152
+#: /src/schooltool/contact/security.zcml:86
+msgid "User"
+msgstr "Benutzer"
 
 #: /src/schooltool/person/security.zcml:172
 msgid "Calendar is public"
@@ -6277,7 +6286,7 @@ msgstr ""
 
 #: /src/schooltool/person/security.zcml:77
 msgid "Users"
-msgstr ""
+msgstr "Benutzer"
 
 #: /src/schooltool/person/security.zcml:79
 #: /src/schooltool/contact/security.zcml:29
@@ -6437,7 +6446,7 @@ msgstr "Schuladministration"
 
 #: /src/schooltool/securitypolicy/browser/control.py:96
 msgid "Enabled"
-msgstr ""
+msgstr "Aktiviert"
 
 #: /src/schooltool/securitypolicy/browser/templates/access_setting_snippet.pt:4
 msgid "Access setting: ${setting} (${status})"
@@ -6445,15 +6454,15 @@ msgstr "Zugriffseinstellungen: ${setting} (${status})"
 
 #: /src/schooltool/securitypolicy/browser/templates/security_descriptions.pt:4
 msgid "Access Rights"
-msgstr ""
+msgstr "Zugriffsrechte"
 
 #: /src/schooltool/securitypolicy/crowds.py:124
 msgid "Everybody"
-msgstr ""
+msgstr "Alle"
 
 #: /src/schooltool/securitypolicy/crowds.py:125
 msgid "Everybody, including users that are not logged in."
-msgstr ""
+msgstr "Alle, nicht angemeldete Nutzer eingeschlassen."
 
 #: /src/schooltool/securitypolicy/crowds.py:158
 msgid "Authenticated user"
@@ -6465,7 +6474,7 @@ msgstr ""
 
 #: /src/schooltool/securitypolicy/crowds.py:167
 msgid "Anybody"
-msgstr ""
+msgstr "Jeder"
 
 #: /src/schooltool/securitypolicy/crowds.py:168
 msgid "Users who did not log in"
@@ -6625,7 +6634,7 @@ msgstr "Stundenpläne"
 
 #: /src/schooltool/timetable/browser/schema.py:269
 msgid "Duration in minutes"
-msgstr ""
+msgstr "Dauer in Minuten"
 
 #: /src/schooltool/timetable/browser/templates/calendar_overlay.pt:66
 msgid ""
@@ -6673,7 +6682,7 @@ msgstr "Für Schuljahresabschnitt:"
 
 #: /src/schooltool/timetable/security.zcml:16
 msgid "School timetables"
-msgstr ""
+msgstr "Stundenpläne"
 
 #: /src/schooltool/timetable/security.zcml:46
 msgid "Assign timetables"

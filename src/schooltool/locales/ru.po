@@ -8,199 +8,24 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-12-24 12:40+0000\n"
-"PO-Revision-Date: 2009-12-30 07:55+0000\n"
-"Last-Translator: Anton Golubkov <Unknown>\n"
+"PO-Revision-Date: 2010-01-24 10:36+0000\n"
+"Last-Translator: Nkolay Parukhin <parukhin@gmail.com>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-12-31 04:55+0000\n"
+"X-Launchpad-Export-Date: 2010-01-25 04:45+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "X-Rosetta-Version: 0.1\n"
-
-#: /src/schooltool/app/browser/__init__.py:256
-#: /src/schooltool/person/help/person_container.pt:6
-#: /src/schooltool/app/browser/templates/index.pt:11
-#: /src/schooltool/person/browser/configure.zcml:26
-#: /src/schooltool/person/help/configure.zcml:8
-msgid "Persons"
-msgstr "Люди"
-
-#: /src/schooltool/app/browser/__init__.py:261
-msgid "1 person"
-msgstr "1 человек"
-
-#. Default: ""
-#: /src/schooltool/app/browser/__init__.py:263
-msgid "${number} persons"
-msgstr "${number} человек(-а)"
-
-#: /src/schooltool/app/browser/app.py:227
-msgid "Username or password is incorrect"
-msgstr "Неверное имя пользователя или пароль"
 
 #: /src/schooltool/app/browser/app.py:323
 #: /src/schooltool/app/security.py:307
 msgid "Leaders"
-msgstr "Руководитель"
+msgstr "Руководители"
 
 #: /src/schooltool/app/browser/app.py:324
 msgid "Current leaders"
-msgstr "Текущий руководитель"
-
-#: /src/schooltool/app/browser/app.py:325
-msgid "Available leaders"
-msgstr "Имеющиеся руководители"
-
-#: /src/schooltool/app/browser/app.py:348
-msgid "school"
-msgstr "школа"
-
-#: /src/schooltool/app/browser/cal.py:114
-msgid "March"
-msgstr "Март"
-
-#: /src/schooltool/app/browser/cal.py:114
-msgid "January"
-msgstr "Январь"
-
-#: /src/schooltool/app/browser/cal.py:114
-msgid "February"
-msgstr "Февраль"
-
-#: /src/schooltool/app/browser/cal.py:115
-msgid "June"
-msgstr "Июнь"
-
-#: /src/schooltool/app/browser/cal.py:115
-msgid "May"
-msgstr "Май"
-
-#: /src/schooltool/app/browser/cal.py:115
-msgid "April"
-msgstr "Апрель"
-
-#: /src/schooltool/app/browser/cal.py:116
-msgid "August"
-msgstr "Август"
-
-#: /src/schooltool/app/browser/cal.py:116
-msgid "September"
-msgstr "Сентябрь"
-
-#: /src/schooltool/app/browser/cal.py:116
-msgid "July"
-msgstr "Июль"
-
-#: /src/schooltool/app/browser/cal.py:1166
-msgid "Next month"
-msgstr "Следующий месяц"
-
-#: /src/schooltool/app/browser/cal.py:1167
-msgid "Current month"
-msgstr "Текущий месяц"
-
-#: /src/schooltool/app/browser/cal.py:1168
-msgid "Previous month"
-msgstr "Прошедший месяц"
-
-#: /src/schooltool/app/browser/cal.py:117
-msgid "October"
-msgstr "Октябрь"
-
-#: /src/schooltool/app/browser/cal.py:117
-msgid "November"
-msgstr "Ноябрь"
-
-#: /src/schooltool/app/browser/cal.py:117
-msgid "December"
-msgstr "Декабрь"
-
-#. Default: ""
-#: /src/schooltool/app/browser/cal.py:1180
-msgid "${month}, ${year}"
-msgstr "${month}, ${year}"
-
-#: /src/schooltool/app/browser/cal.py:120
-#: /src/schooltool/person/interfaces.py:180
-#: /src/schooltool/timetable/browser/schema.py:115
-#: /src/schooltool/timetable/browser/schema.py:284
-#: /src/schooltool/term/browser/templates/term_add.pt:54
-#: /src/schooltool/term/browser/templates/term_add.pt:80
-#: /src/schooltool/term/browser/templates/term.pt:31
-msgid "Monday"
-msgstr "Понедельник"
-
-#: /src/schooltool/app/browser/cal.py:120
-#: /src/schooltool/timetable/browser/schema.py:116
-#: /src/schooltool/timetable/browser/schema.py:285
-#: /src/schooltool/term/browser/templates/term_add.pt:56
-#: /src/schooltool/term/browser/templates/term_add.pt:81
-#: /src/schooltool/term/browser/templates/term.pt:32
-msgid "Tuesday"
-msgstr "Вторник"
-
-#: /src/schooltool/app/browser/cal.py:120
-#: /src/schooltool/timetable/browser/schema.py:117
-#: /src/schooltool/timetable/browser/schema.py:286
-#: /src/schooltool/term/browser/templates/term_add.pt:58
-#: /src/schooltool/term/browser/templates/term_add.pt:82
-#: /src/schooltool/term/browser/templates/term.pt:33
-msgid "Wednesday"
-msgstr "Среда"
-
-#: /src/schooltool/app/browser/cal.py:120
-#: /src/schooltool/timetable/browser/schema.py:118
-#: /src/schooltool/timetable/browser/schema.py:287
-#: /src/schooltool/term/browser/templates/term_add.pt:60
-#: /src/schooltool/term/browser/templates/term_add.pt:83
-#: /src/schooltool/term/browser/templates/term.pt:34
-msgid "Thursday"
-msgstr "Четверг"
-
-#. Default: ""
-#: /src/schooltool/app/browser/cal.py:1202
-msgid "Week ${week_no}"
-msgstr "${week_no}-я неделя"
-
-#: /src/schooltool/app/browser/cal.py:121
-#: /src/schooltool/person/interfaces.py:178
-#: /src/schooltool/timetable/browser/schema.py:289
-#: /src/schooltool/term/browser/templates/term_add.pt:64
-#: /src/schooltool/term/browser/templates/term_add.pt:85
-#: /src/schooltool/term/browser/templates/term.pt:36
-msgid "Saturday"
-msgstr "Суббота"
-
-#: /src/schooltool/app/browser/cal.py:121
-#: /src/schooltool/person/interfaces.py:179
-#: /src/schooltool/timetable/browser/schema.py:290
-#: /src/schooltool/term/browser/templates/term_add.pt:66
-#: /src/schooltool/term/browser/templates/term_add.pt:86
-#: /src/schooltool/term/browser/templates/term.pt:37
-msgid "Sunday"
-msgstr "Воскресенье"
-
-#: /src/schooltool/app/browser/cal.py:121
-#: /src/schooltool/timetable/browser/schema.py:119
-#: /src/schooltool/timetable/browser/schema.py:288
-#: /src/schooltool/term/browser/templates/term_add.pt:62
-#: /src/schooltool/term/browser/templates/term_add.pt:84
-#: /src/schooltool/term/browser/templates/term.pt:35
-msgid "Friday"
-msgstr "Пятница"
-
-#: /src/schooltool/app/browser/cal.py:1218
-msgid "Next year"
-msgstr "Следующий год"
-
-#: /src/schooltool/app/browser/cal.py:1219
-msgid "Current year"
-msgstr "Текущий год"
-
-#: /src/schooltool/app/browser/cal.py:1220
-msgid "Previous year"
-msgstr "Предыдущий год"
+msgstr "Текущие руководители"
 
 #: /src/schooltool/app/browser/cal.py:124
 #: /src/schooltool/app/browser/cal.py:1811
@@ -3899,7 +3724,7 @@ msgstr "Введте по крайней мере один день недели
 
 #: /src/schooltool/timetable/browser/ttwizard.py:304
 msgid "Please make sure the day names are unique."
-msgstr ""
+msgstr "Убедитесь, что названия дней являются уникальными."
 
 #: /src/schooltool/timetable/browser/ttwizard.py:320
 msgid ""
@@ -3929,16 +3754,20 @@ msgstr "Дней в цикле"
 msgid ""
 "Enter start and end times for each slot, one slot (HH:MM - HH:MM) per line."
 msgstr ""
+"Введите время начала и окончания для каждого промежутка, один промежуток "
+"(ЧЧ:ММ - ЧЧ:ММ) в строке."
 
 #: /src/schooltool/timetable/browser/ttwizard.py:430
 msgid "Please enter at least one time slot."
-msgstr ""
+msgstr "Пожалуйста, введите хотябы один промежуток времени."
 
 #: /src/schooltool/timetable/browser/ttwizard.py:454
 msgid ""
 "Enter start and end times for each slot on each day, one slot (HH:MM - "
 "HH:MM) per line."
 msgstr ""
+"Введите время начала и окончания для каждого промежутка на каждый день, один "
+"промежуток (ЧЧ:ММ - ЧЧ:ММ) в строке."
 
 #: /src/schooltool/timetable/browser/ttwizard.py:530
 msgid "Do periods have names or are they simply designated by time?"
@@ -3969,7 +3798,7 @@ msgstr "Различны"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:629
 msgid "Please put the periods in order:"
-msgstr ""
+msgstr "Пожалуйста, поместите периоды в порядке:"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:645
 #: /src/schooltool/timetable/browser/ttwizard.py:699
@@ -3984,7 +3813,7 @@ msgstr "Эти периоды были отмечены больше одног�
 
 #: /src/schooltool/timetable/browser/ttwizard.py:676
 msgid "Please put the periods in order for each day:"
-msgstr ""
+msgstr "Пожалуйста, поместите периоды в порядке для каждого дня:"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:733
 msgid ""
@@ -4017,6 +3846,95 @@ msgstr "Введённые пароли не совпадают"
 msgid "Your School"
 msgstr "Ваша школа"
 
+#: /src/schooltool/app/browser/__init__.py:256
+#: /src/schooltool/person/help/person_container.pt:6
+#: /src/schooltool/app/browser/templates/index.pt:11
+#: /src/schooltool/person/browser/configure.zcml:26
+#: /src/schooltool/person/help/configure.zcml:8
+msgid "Persons"
+msgstr "Люди"
+
+#: /src/schooltool/app/browser/__init__.py:261
+msgid "1 person"
+msgstr "1 человек"
+
+#. Default: ""
+#: /src/schooltool/app/browser/__init__.py:263
+msgid "${number} persons"
+msgstr "${number} человек(-а)"
+
+#: /src/schooltool/app/browser/app.py:227
+msgid "Username or password is incorrect"
+msgstr "Неверное имя пользователя или пароль"
+
+#: /src/schooltool/app/browser/app.py:325
+msgid "Available leaders"
+msgstr "Имеющиеся руководители"
+
+#: /src/schooltool/app/browser/app.py:348
+msgid "school"
+msgstr "школа"
+
+#: /src/schooltool/app/browser/cal.py:114
+msgid "March"
+msgstr "Март"
+
+#: /src/schooltool/app/browser/cal.py:114
+msgid "January"
+msgstr "Январь"
+
+#: /src/schooltool/app/browser/cal.py:114
+msgid "February"
+msgstr "Февраль"
+
+#: /src/schooltool/app/browser/cal.py:115
+msgid "June"
+msgstr "Июнь"
+
+#: /src/schooltool/app/browser/cal.py:115
+msgid "May"
+msgstr "Май"
+
+#: /src/schooltool/app/browser/cal.py:115
+msgid "April"
+msgstr "Апрель"
+
+#: /src/schooltool/app/browser/cal.py:116
+msgid "August"
+msgstr "Август"
+
+#: /src/schooltool/app/browser/cal.py:116
+msgid "September"
+msgstr "Сентябрь"
+
+#: /src/schooltool/app/browser/cal.py:116
+msgid "July"
+msgstr "Июль"
+
+#: /src/schooltool/app/browser/cal.py:1166
+msgid "Next month"
+msgstr "Следующий месяц"
+
+#: /src/schooltool/app/browser/cal.py:1167
+msgid "Current month"
+msgstr "Текущий месяц"
+
+#: /src/schooltool/app/browser/cal.py:1168
+msgid "Previous month"
+msgstr "Прошедший месяц"
+
+#: /src/schooltool/app/browser/cal.py:117
+msgid "October"
+msgstr "Октябрь"
+
+#: /src/schooltool/app/browser/cal.py:117
+msgid "November"
+msgstr "Ноябрь"
+
+#: /src/schooltool/app/browser/cal.py:117
+msgid "December"
+msgstr "Декабрь"
+
 #: /src/schooltool/app/browser/cal.py:1170
 msgid "Go to next month"
 msgstr "Перейти к следующему месяцу"
@@ -4028,6 +3946,92 @@ msgstr "Перейти к текущему месяцу"
 #: /src/schooltool/app/browser/cal.py:1172
 msgid "Go to previous month"
 msgstr "Перейти к предыдущему месяцу"
+
+#. Default: ""
+#: /src/schooltool/app/browser/cal.py:1180
+msgid "${month}, ${year}"
+msgstr "${month}, ${year}"
+
+#: /src/schooltool/app/browser/cal.py:120
+#: /src/schooltool/person/interfaces.py:180
+#: /src/schooltool/timetable/browser/schema.py:115
+#: /src/schooltool/timetable/browser/schema.py:284
+#: /src/schooltool/term/browser/templates/term_add.pt:54
+#: /src/schooltool/term/browser/templates/term_add.pt:80
+#: /src/schooltool/term/browser/templates/term.pt:31
+msgid "Monday"
+msgstr "Понедельник"
+
+#: /src/schooltool/app/browser/cal.py:120
+#: /src/schooltool/timetable/browser/schema.py:116
+#: /src/schooltool/timetable/browser/schema.py:285
+#: /src/schooltool/term/browser/templates/term_add.pt:56
+#: /src/schooltool/term/browser/templates/term_add.pt:81
+#: /src/schooltool/term/browser/templates/term.pt:32
+msgid "Tuesday"
+msgstr "Вторник"
+
+#: /src/schooltool/app/browser/cal.py:120
+#: /src/schooltool/timetable/browser/schema.py:117
+#: /src/schooltool/timetable/browser/schema.py:286
+#: /src/schooltool/term/browser/templates/term_add.pt:58
+#: /src/schooltool/term/browser/templates/term_add.pt:82
+#: /src/schooltool/term/browser/templates/term.pt:33
+msgid "Wednesday"
+msgstr "Среда"
+
+#: /src/schooltool/app/browser/cal.py:120
+#: /src/schooltool/timetable/browser/schema.py:118
+#: /src/schooltool/timetable/browser/schema.py:287
+#: /src/schooltool/term/browser/templates/term_add.pt:60
+#: /src/schooltool/term/browser/templates/term_add.pt:83
+#: /src/schooltool/term/browser/templates/term.pt:34
+msgid "Thursday"
+msgstr "Четверг"
+
+#. Default: ""
+#: /src/schooltool/app/browser/cal.py:1202
+msgid "Week ${week_no}"
+msgstr "${week_no}-я неделя"
+
+#: /src/schooltool/app/browser/cal.py:121
+#: /src/schooltool/person/interfaces.py:178
+#: /src/schooltool/timetable/browser/schema.py:289
+#: /src/schooltool/term/browser/templates/term_add.pt:64
+#: /src/schooltool/term/browser/templates/term_add.pt:85
+#: /src/schooltool/term/browser/templates/term.pt:36
+msgid "Saturday"
+msgstr "Суббота"
+
+#: /src/schooltool/app/browser/cal.py:121
+#: /src/schooltool/person/interfaces.py:179
+#: /src/schooltool/timetable/browser/schema.py:290
+#: /src/schooltool/term/browser/templates/term_add.pt:66
+#: /src/schooltool/term/browser/templates/term_add.pt:86
+#: /src/schooltool/term/browser/templates/term.pt:37
+msgid "Sunday"
+msgstr "Воскресенье"
+
+#: /src/schooltool/app/browser/cal.py:121
+#: /src/schooltool/timetable/browser/schema.py:119
+#: /src/schooltool/timetable/browser/schema.py:288
+#: /src/schooltool/term/browser/templates/term_add.pt:62
+#: /src/schooltool/term/browser/templates/term_add.pt:84
+#: /src/schooltool/term/browser/templates/term.pt:35
+msgid "Friday"
+msgstr "Пятница"
+
+#: /src/schooltool/app/browser/cal.py:1218
+msgid "Next year"
+msgstr "Следующий год"
+
+#: /src/schooltool/app/browser/cal.py:1219
+msgid "Current year"
+msgstr "Текущий год"
+
+#: /src/schooltool/app/browser/cal.py:1220
+msgid "Previous year"
+msgstr "Предыдущий год"
 
 #: /src/schooltool/app/browser/cal.py:1222
 msgid "Go to next year"
@@ -6561,7 +6565,7 @@ msgstr "Различное время"
 #: /src/schooltool/timetable/browser/ttwizard.py:426
 #: /src/schooltool/timetable/browser/ttwizard.py:483
 msgid "Not a valid time slot: $slot."
-msgstr ""
+msgstr "Не правильный промежуток времени: $slot."
 
 #: /src/schooltool/timetable/browser/ttwizard.py:533
 msgid "Have names"
@@ -6578,7 +6582,7 @@ msgstr "Одна и та же"
 #. Default: ""
 #: /src/schooltool/timetable/browser/ttwizard.py:712
 msgid "$period on day $day"
-msgstr ""
+msgstr "$period на день $day"
 
 #: /src/schooltool/timetable/security.zcml:16
 msgid "School timetables"

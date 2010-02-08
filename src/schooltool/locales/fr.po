@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-12-24 12:40+0000\n"
-"PO-Revision-Date: 2009-12-29 18:19+0000\n"
-"Last-Translator: thomas Viaud <tomviaud@hotmail.fr>\n"
+"PO-Revision-Date: 2010-01-09 18:03+0000\n"
+"Last-Translator: James Dupin <james.dupin@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-12-31 04:54+0000\n"
+"X-Launchpad-Export-Date: 2010-01-10 07:14+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -5487,7 +5487,7 @@ msgstr ""
 #. Default: "Select All Visible"
 #: /src/schooltool/course/browser/templates/copy_sections.pt:66
 msgid "select-all-visible-button"
-msgstr "Sélectionner tout les boutons visibles"
+msgstr ""
 
 #. Default: "Select None"
 #: /src/schooltool/course/browser/templates/copy_sections.pt:70
@@ -5574,7 +5574,7 @@ msgstr "Matières de ${schoolyear}"
 #. Default: "Link"
 #: /src/schooltool/course/browser/templates/link_section.pt:130
 msgid "link-section-button"
-msgstr ""
+msgstr "Mettre un lien"
 
 #: /src/schooltool/course/browser/templates/link_section.pt:24
 msgid "Link ${section}, ${term} with a section in ${target_term}"
@@ -5628,7 +5628,7 @@ msgstr "${section_title} pour ${term}"
 #: /src/schooltool/course/browser/templates/section_edit.pt:75
 #: /src/schooltool/course/browser/templates/section_edit.pt:109
 msgid "unlink-section-button"
-msgstr ""
+msgstr "Enlever le lien"
 
 #: /src/schooltool/course/browser/templates/section_edit.pt:85
 #: /src/schooltool/course/browser/templates/section_edit.pt:119
@@ -5928,12 +5928,12 @@ msgstr "Réessayer"
 
 #: /src/schooltool/email/browser/email.py:383
 msgid "Email Queue"
-msgstr ""
+msgstr "Queue de la messagerie"
 
 #. Default: ""
 #: /src/schooltool/email/browser/email.py:441
 msgid "Queue (${count} failed)"
-msgstr ""
+msgstr "Queue (${count} échec)"
 
 #: /src/schooltool/email/browser/email.py:443
 msgid "Queue"
@@ -5951,7 +5951,7 @@ msgstr "Envoyer"
 #: /src/schooltool/email/browser/email.py:78
 #: /src/schooltool/email/browser/email.py:399
 msgid "Enabled on ${info}"
-msgstr ""
+msgstr "Actif sur ${info}"
 
 #: /src/schooltool/email/browser/email.py:82
 #: /src/schooltool/email/browser/email.py:403
@@ -6358,7 +6358,7 @@ msgstr "${Année scolaire_title} (${début_date} &mdash; ${fin_date})"
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear.pt:37
 msgid "${term_title} (${start_date} &mdash; ${end_date})"
-msgstr ""
+msgstr "${term_title} (${start_date} &mdash; ${end_date})"
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:39
 msgid "Activate next school year"
