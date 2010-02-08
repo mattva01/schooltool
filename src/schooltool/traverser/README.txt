@@ -93,11 +93,11 @@ really dislike the Zope 3 traversal namespace notation ``++namespace++`` and
 you can control the names in the container, then the pluggable traverser will
 also provide a viable solution. Let's say we have a container
 
-    >>> from zope.app.container.interfaces import IContainer
+    >>> from zope.container.interfaces import IContainer
     >>> class IMyContainer(IContainer):
     ...     pass
 
-    >>> from zope.app.container.btree import BTreeContainer
+    >>> from zope.container.btree import BTreeContainer
     >>> class MyContainer(BTreeContainer):
     ...     implements(IMyContainer)
     ...     foo = True

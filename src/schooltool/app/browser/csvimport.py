@@ -22,7 +22,7 @@ SchoolTool application views.
 import csv
 
 from zope.security.proxy import removeSecurityProxy
-from zope.app.container.interfaces import INameChooser
+from zope.container.interfaces import INameChooser
 from zope.publisher.browser import BrowserView
 
 from schooltool.schoolyear.interfaces import ISchoolYear

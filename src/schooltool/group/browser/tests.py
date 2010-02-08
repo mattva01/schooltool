@@ -19,15 +19,13 @@
 #
 """
 Tests for group views.
-
-$Id$
 """
 
 import unittest
+import doctest
 
 from zope.interface import directlyProvides
 from zope.publisher.browser import TestRequest
-from zope.testing import doctest
 from zope.traversing.interfaces import IContainmentRoot
 from zope.component import provideAdapter
 

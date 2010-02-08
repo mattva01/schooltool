@@ -19,20 +19,20 @@
 """
 Unit tests for schooltool.setupdata.generator
 """
-
 import unittest
+import doctest
 from pprint import pprint
 
 from zope.interface import implements
-from zope.testing import doctest
 from zope.app.testing import setup
 from zope.publisher.browser import TestRequest
 from zope.component import provideUtility
+
 from schooltool.testing.setup import setUpSchoolToolSite
 from schooltool.testing.setup import setUpApplicationPreferences
 from schooltool.setupdata.tests.test_generator import DummyPlugin
 from schooltool.setupdata.interfaces import ISetupDataPlugin
-import schooltool.app.browser.testing
+
 
 def setUp(test):
     setup.placefulSetUp()
@@ -103,6 +103,7 @@ def doctest_SetupDataView__call__():
 
     We'll need a massive browser views setup here.
 
+        >>> import schooltool.app.browser.testing
         >>> schooltool.app.browser.testing.setUp()
         >>> setUpApplicationPreferences()
 

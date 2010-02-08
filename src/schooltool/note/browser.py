@@ -78,5 +78,5 @@ class NoteAddView(AddView):
         return AddView.update(self)
 
     def nextURL(self):
-        """See zope.app.container.interfaces.IAdding"""
+        """See zope.browser.interfaces.IAdding"""
         return absoluteURL(self.context, self.request)

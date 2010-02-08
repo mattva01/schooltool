@@ -1,7 +1,7 @@
 # Sample SchoolTool HTTP server configuration file
 
 # identify the component configuration used to define the site:
-site-definition schooltool-skel/etc/site.zcml
+site-definition instance/school.zcml
 
 #
 # path /path/to/add
@@ -77,7 +77,7 @@ web 7080
 #
 # Default: no pidfile
 #
-pid-file schooltool-skel/var/schooltool.pid
+pid-file instance/var/schooltool.pid
 
 #
 # error-log-file
@@ -96,7 +96,7 @@ pid-file schooltool-skel/var/schooltool.pid
 #    error-log-file /var/log/schooltool/error.log
 #    error-log-file STDERR
 #
-error-log-file schooltool-skel/var/schooltool.log
+error-log-file instance/var/schooltool.log
 error-log-file STDERR
 
 #
@@ -116,7 +116,7 @@ error-log-file STDERR
 #    web-access-log-file /var/log/schooltool/access.log
 #    web-access-log-file STDOUT
 #
-web-access-log-file schooltool-skel/log/web-access.log
+web-access-log-file instance/log/web-access.log
 
 #
 # attendance-log-file
@@ -135,7 +135,7 @@ web-access-log-file schooltool-skel/log/web-access.log
 #    attendance-log-file /var/log/schooltool/attendance.log
 #    attendance-log-file STDOUT
 #
-attendance-log-file schooltool-skel/log/attendance.log
+attendance-log-file instance/log/attendance.log
 
 #
 # lang
@@ -180,7 +180,7 @@ attendance-log-file schooltool-skel/log/attendance.log
   #   quota size		default: no quota
   # </filestorage>
   <filestorage>
-    path schooltool-skel/var/Data.fs
+    path instance/var/Data.fs
   </filestorage>
 
   # <mappingstorage>		in-memory MappingStorage

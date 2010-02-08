@@ -19,6 +19,7 @@
 """Unit tests for schooltool.schoolyear.subscriber
 """
 import unittest
+import doctest
 
 from zope.component.interfaces import ObjectEvent
 from zope.component.interfaces import IObjectEvent
@@ -26,7 +27,6 @@ from zope.component import provideAdapter
 from zope.component import adapts
 from zope.interface import implements
 from zope.interface import Interface
-from zope.testing import doctest
 from zope.app.testing import setup
 
 from schooltool.schoolyear.interfaces import ISubscriber

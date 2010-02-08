@@ -30,7 +30,7 @@ from zope.interface import Interface
 from zope.traversing.browser.absoluteurl import AbsoluteURL
 from zope.traversing.browser.interfaces import IAbsoluteURL
 from zope.traversing.browser import absoluteURL
-from zope.app.container.interfaces import INameChooser
+from zope.container.interfaces import INameChooser
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 
 from z3c.form import form, field, button

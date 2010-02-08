@@ -11,11 +11,11 @@
       />
 
   <class class=".course.CourseContainerContainer">
-    <allow interface="zope.app.container.interfaces.ISimpleReadContainer" />
+    <allow interface="zope.container.interfaces.ISimpleReadContainer" />
     <require permission="schooltool.view"
              attributes="keys values items __iter__ __len__ has_key" />
     <require permission="schooltool.edit"
-             interface="zope.app.container.interfaces.IWriteContainer" />
+             interface="zope.container.interfaces.IWriteContainer" />
   </class>
 
   <interface
@@ -24,11 +24,11 @@
       />
 
   <class class=".course.CourseContainer">
-    <allow interface="zope.app.container.interfaces.ISimpleReadContainer" />
+    <allow interface="zope.container.interfaces.ISimpleReadContainer" />
     <require permission="schooltool.view"
              attributes="keys values items __iter__ __len__ has_key" />
     <require permission="schooltool.edit"
-             interface="zope.app.container.interfaces.IWriteContainer" />
+             interface="zope.container.interfaces.IWriteContainer" />
   </class>
 
   <interface
@@ -52,7 +52,7 @@
   <adapter
       for=".interfaces.ICourseContainer"
       factory="schooltool.app.app.SimpleNameChooser"
-      provides="zope.app.container.interfaces.INameChooser" />
+      provides="zope.container.interfaces.INameChooser" />
 
 
   <!-- Section Content Components -->
@@ -63,11 +63,11 @@
       />
 
   <class class=".section.SectionContainerContainer">
-    <allow interface="zope.app.container.interfaces.ISimpleReadContainer" />
+    <allow interface="zope.container.interfaces.ISimpleReadContainer" />
     <require permission="schooltool.view"
              attributes="keys values items __iter__ __len__ has_key" />
     <require permission="schooltool.edit"
-             interface="zope.app.container.interfaces.IWriteContainer" />
+             interface="zope.container.interfaces.IWriteContainer" />
   </class>
 
   <interface
@@ -76,11 +76,11 @@
       />
 
   <class class=".section.SectionContainer">
-    <allow interface="zope.app.container.interfaces.ISimpleReadContainer" />
+    <allow interface="zope.container.interfaces.ISimpleReadContainer" />
     <require permission="schooltool.view"
              attributes="keys values items __iter__ __len__ has_key" />
     <require permission="schooltool.edit"
-             interface="zope.app.container.interfaces.IWriteContainer" />
+             interface="zope.container.interfaces.IWriteContainer" />
   </class>
 
   <interface
@@ -111,7 +111,7 @@
   <adapter
       for=".interfaces.ISectionContainer"
       factory="schooltool.course.browser.section.SectionNameChooser"
-      provides="zope.app.container.interfaces.INameChooser" />
+      provides="zope.container.interfaces.INameChooser" />
 
   <!-- Relationships -->
 

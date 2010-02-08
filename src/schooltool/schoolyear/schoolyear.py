@@ -28,7 +28,7 @@ from zope.component import adapter
 from zope.component import adapts
 from zope.interface import implementer
 from zope.interface import implements
-from zope.app.container.btree import BTreeContainer
+from zope.container.btree import BTreeContainer
 
 from schooltool.common import DateRange
 from schooltool.common import IDateRange

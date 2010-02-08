@@ -18,12 +18,10 @@
 #
 """
 Tests for registered security descriptions.
-
-$Id$
 """
 
 import unittest
-from zope.testing import doctest
+import doctest
 
 from schooltool.schoolyear.testing import (setUp, tearDown,
                                            provideStubUtility,

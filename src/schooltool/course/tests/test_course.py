@@ -20,7 +20,7 @@
 Unit tests for course and section implementations.
 """
 import unittest
-from zope.testing import doctest
+import doctest
 from zope.interface.verify import verifyObject
 
 from schooltool.relationship.tests import setUp, tearDown
@@ -39,7 +39,7 @@ def doctest_CourseContainer():
 
         >>> from schooltool.course.course import Course
         >>> from schooltool.course.section import Section
-        >>> from zope.app.container.constraints import checkObject
+        >>> from zope.container.constraints import checkObject
         >>> checkObject(courses, 'name', Course())
 
         >>> checkObject(courses, 'name', Section())

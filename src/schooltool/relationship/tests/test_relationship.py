@@ -21,8 +21,8 @@ Unit tests for schooltool.relationship
 """
 
 import unittest
+import doctest
 
-from zope.testing import doctest
 from schooltool.relationship.tests import URIStub
 
 

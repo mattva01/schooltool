@@ -27,7 +27,7 @@ from zope.interface import implements, implementer
 from zope.schema import getFieldNames
 from zope.component import adapts, adapter
 from zope.annotation.interfaces import IAttributeAnnotatable, IAnnotations
-from zope.app.container.contained import Contained
+from zope.container.contained import Contained
 from zope.location.interfaces import ILocation
 
 from schooltool.calendar.icalendar import read_icalendar
@@ -255,7 +255,7 @@ def clearCalendarOnDeletion(event):
 
     We will need some object that implements IHaveCalendar for that:
 
-        >>> from zope.app.container.btree import BTreeContainer
+        >>> from zope.container.btree import BTreeContainer
         >>> container = BTreeContainer()
         >>> from schooltool.person.person import Person
         >>> container = BTreeContainer()

@@ -21,6 +21,7 @@ Unit tests for the schooltool.timetable module.
 """
 
 import unittest
+import doctest
 from datetime import time, timedelta, date
 
 from persistent import Persistent
@@ -30,7 +31,6 @@ from zope.interface import implements, directlyProvides
 from zope.app.testing.placelesssetup import PlacelessSetup
 from zope.annotation.interfaces import IAttributeAnnotatable
 from zope.location.interfaces import ILocation
-from zope.testing import doctest
 from zope.component import eventtesting
 from zope.component import provideAdapter
 

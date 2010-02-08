@@ -26,7 +26,7 @@ import cgi
 
 from zope.interface import implements
 from zope.publisher.browser import BrowserView
-from zope.app.exception.interfaces import ISystemErrorView
+from zope.browser.interfaces import ISystemErrorView
 
 
 class ErrorView(BrowserView):

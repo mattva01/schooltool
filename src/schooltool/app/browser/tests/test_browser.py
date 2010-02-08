@@ -20,9 +20,9 @@
 Tests for schooltool views.
 """
 import unittest
+import doctest
 
 from zope.interface import implements
-from zope.testing import doctest
 from zope.component import provideAdapter
 from zope.interface.verify import verifyObject
 from zope.location.interfaces import ILocation
@@ -126,7 +126,7 @@ def doctest_SchoolToolAPI_authenticated():
     'context/schooltool:authenticated' checks whether context is an
     authenticated principal
 
-        >>> from zope.app.security.principalregistry \
+        >>> from zope.principalregistry.principalregistry \
         ...     import Principal, UnauthenticatedPrincipal
         >>> root = Principal('root', 'Admin', 'Supreme user', 'root', 'secret')
         >>> anonymous = UnauthenticatedPrincipal('anonymous', 'Anonymous',

@@ -23,8 +23,8 @@ Unit tests for schooltool.app.main.
 import os
 import sys
 import unittest
+import doctest
 
-from zope.testing import doctest
 from zope.component import getUtility
 from zope.testing import cleanup
 from zope.traversing.interfaces import IContainmentRoot
@@ -538,7 +538,7 @@ def doctest_bootstrapSchoolTool():
 
     It has a local authentication utility
 
-        >>> from zope.app.security.interfaces import IAuthentication
+        >>> from zope.authentication.interfaces import IAuthentication
         >>> getUtility(IAuthentication, context=app)
         <schooltool.app.security.SchoolToolAuthenticationUtility object at ...>
 
@@ -613,7 +613,7 @@ def doctest_restoreManagerUser():
     registered):
 
         >>> import transaction
-        >>> from zope.app.container.contained import ObjectAddedEvent
+        >>> from zope.lifecycleevent import ObjectAddedEvent
         >>> from schooltool.app.interfaces import ApplicationInitializationEvent
         >>> from zope.event import notify
         >>> from zope.app.publication.zopepublication import ZopePublication

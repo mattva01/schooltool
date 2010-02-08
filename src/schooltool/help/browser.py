@@ -27,9 +27,9 @@ __docformat__ = 'reStructuredText'
 import zope.interface
 from zope import contentprovider
 from zope.app import onlinehelp
-from zope.app.publisher import browser
 from zope.app.pagetemplate import ViewPageTemplateFile
 from zope.publisher.browser import BrowserView
+from zope.publisher.defaultview import queryDefaultViewName
 from zope.publisher.interfaces.browser import IBrowserView
 from zope.app.onlinehelp.browser.tree import OnlineHelpTopicTreeView
 from zope.component import getMultiAdapter
@@ -131,7 +131,7 @@ class ContextHelpView(BrowserView):
             name = getName(help_context)
             help_context = getParent(help_context)
         else:
-            name = browser.queryDefaultViewName(help_context, self.request)
+            name = queryDefaultViewName(help_context, self.request)
             if name is None:
                 return self.topic
 

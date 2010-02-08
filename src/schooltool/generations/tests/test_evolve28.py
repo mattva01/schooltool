@@ -20,10 +20,10 @@
 Unit tests for schooltool.generations.evolve28
 """
 import unittest
+import doctest
 import os.path
 import transaction
 
-from zope.testing import doctest
 from zope.app.publication.zopepublication import ZopePublication
 from zope.app.testing import setup
 from ZODB.FileStorage.FileStorage import FileStorage

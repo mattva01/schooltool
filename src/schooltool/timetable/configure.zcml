@@ -38,7 +38,7 @@
   <adapter
       for=".interfaces.ITimetableSchemaContainer"
       factory="schooltool.app.app.SimpleNameChooser"
-      provides="zope.app.container.interfaces.INameChooser" />
+      provides="zope.container.interfaces.INameChooser" />
 
   <adapter
       factory=".TimetablesAdapter"
@@ -91,9 +91,9 @@
 
   <class class=".TimetableDict">
     <require permission="schooltool.edit"
-             interface="zope.app.container.interfaces.IWriteContainer" />
+             interface="zope.container.interfaces.IWriteContainer" />
     <require permission="schooltool.view"
-             interface="zope.app.container.interfaces.IReadContainer" />
+             interface="zope.container.interfaces.IReadContainer" />
   </class>
 
   <adapter
@@ -105,7 +105,7 @@
   <adapter
       for=".interfaces.ITimetableDict"
       factory=".TimetableNameChooser"
-      provides="zope.app.container.interfaces.INameChooser" />
+      provides="zope.container.interfaces.INameChooser" />
 
   <interface
       interface=".interfaces.ITimetableSchemaContainer"
@@ -114,10 +114,10 @@
 
   <class class=".schema.TimetableSchemaContainer">
     <require permission="schooltool.edit"
-             interface="zope.app.container.interfaces.IWriteContainer"
+             interface="zope.container.interfaces.IWriteContainer"
              set_attributes="default_id" />
     <require permission="zope.View"
-             interface="zope.app.container.interfaces.IReadContainer"
+             interface="zope.container.interfaces.IReadContainer"
              attributes="getDefault default_id" />
   </class>
 
@@ -128,10 +128,10 @@
 
   <class class=".schema.TimetableSchemaContainerContainer">
     <require permission="schooltool.edit"
-             interface="zope.app.container.interfaces.IWriteContainer"
+             interface="zope.container.interfaces.IWriteContainer"
              set_attributes="default_id" />
     <require permission="zope.View"
-             interface="zope.app.container.interfaces.IReadContainer"
+             interface="zope.container.interfaces.IReadContainer"
              attributes="getDefault default_id" />
   </class>
 
@@ -209,7 +209,7 @@
 
   <subscriber
       for=".interfaces.ITimetableSchema
-           zope.app.container.interfaces.IObjectRemovedEvent"
+           zope.lifecycleevent.interfaces.IObjectRemovedEvent"
       handler=".schema.clearTimetablesOnDeletion" />
 
   <subscriber

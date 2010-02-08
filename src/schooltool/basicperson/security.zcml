@@ -3,10 +3,19 @@
            xmlns:zope="http://namespaces.zope.org/zope"
            i18n_domain="schooltool">
 
+  <crowd
+      name="person_advisors"
+      factory="schooltool.basicperson.security.PersonAdvisorsCrowd" />
+
   <allow
      interface="schooltool.basicperson.interfaces.IFieldDescription"
      crowds="administration"
      permission="schooltool.edit" />
+
+  <allow
+     interface="schooltool.person.interfaces.IPerson"
+     crowds="person_advisors"
+     permission="schooltool.view" />
 
   <!-- Security descriptions -->
 

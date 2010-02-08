@@ -20,12 +20,12 @@
 Unit tests for schooltool.generations.evolve32
 """
 import unittest
+import doctest
 
 from pprint import pprint
 from zope.app.testing import setup
-from zope.testing import doctest
 from zope.interface import implements
-from zope.app.container import btree
+from zope.container import btree
 
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.generations.tests import ContextStub

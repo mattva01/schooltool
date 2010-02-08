@@ -24,8 +24,8 @@ from zope.security.proxy import removeSecurityProxy
 from zope.component import getMultiAdapter
 from zope.component import getUtility
 from zope.publisher.browser import BrowserView
-from zope.app.catalog.interfaces import ICatalog
-from zope.app.intid.interfaces import IIntIds
+from zope.catalog.interfaces import ICatalog
+from zope.intid.interfaces import IIntIds
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.traversing.browser.absoluteurl import absoluteURL
 

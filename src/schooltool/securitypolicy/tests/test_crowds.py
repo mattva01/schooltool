@@ -18,12 +18,10 @@
 #
 """
 Unit tests for schooltool.securitypolicy.crowds
-
-$Id$
 """
-
 import unittest
-from zope.testing import doctest
+import doctest
+
 from zope.app.testing import setup
 
 from schooltool.securitypolicy.interfaces import IAccessControlCustomisations

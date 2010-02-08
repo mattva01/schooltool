@@ -20,6 +20,7 @@
 Unit tests for schooltool.app.browser.csvimport
 """
 import unittest
+import doctest
 import datetime
 from StringIO import StringIO
 from textwrap import dedent
@@ -27,7 +28,6 @@ from textwrap import dedent
 from zope.component import provideAdapter
 from zope.i18n import translate
 from zope.publisher.browser import TestRequest
-from zope.testing import doctest
 
 from schooltool.schoolyear.interfaces import ISchoolYear
 from schooltool.app.interfaces import ISchoolToolApplication

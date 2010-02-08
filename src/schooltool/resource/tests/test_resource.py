@@ -18,15 +18,14 @@
 #
 """
 Unit tests for resources
-
-$Id$
 """
 import unittest
+import doctest
 
 from zope.interface.verify import verifyObject
-from zope.testing import doctest
 
 from schooltool.testing.util import run_unit_tests
+
 
 def doctest_ResourceContainer():
     """Tests for ResourceContainer

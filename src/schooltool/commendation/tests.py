@@ -18,15 +18,14 @@
 #
 """
 Commendation-related Tests
-
-$Id$
 """
 __docformat__='restructuredtext'
 
 import unittest
+import doctest
 
-from zope.testing import doctest
 from zope.app.testing import setup
+
 
 def setUp(test):
     setup.placefulSetUp()

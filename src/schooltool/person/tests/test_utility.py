@@ -18,12 +18,10 @@
 #
 """
 Unit tests for schooltool.person.utility.
-
-$Id$
 """
 import unittest
+import doctest
 
-from zope.testing import doctest
 
 def doctest_PersonFactoryUtility():
     """Tests for PersonFactoryUtility.

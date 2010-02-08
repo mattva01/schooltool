@@ -12,13 +12,13 @@
 
   <class class=".person.PersonContainer">
     <allow
-        interface="zope.app.container.interfaces.ISimpleReadContainer" />
+        interface="zope.container.interfaces.ISimpleReadContainer" />
     <require
         permission="schooltool.view"
         attributes="keys values items __iter__ __len__" />
     <require
         permission="schooltool.edit"
-        interface="zope.app.container.interfaces.IWriteContainer" />
+        interface="zope.container.interfaces.IWriteContainer" />
   </class>
 
   <interface
@@ -70,7 +70,7 @@
       />
 
   <subscriber
-      for="schooltool.person.interfaces.IPerson zope.app.container.interfaces.IObjectAddedEvent"
+      for="schooltool.person.interfaces.IPerson zope.lifecycleevent.interfaces.IObjectAddedEvent"
       handler=".person.personAppCalendarOverlaySubscriber"
       />
 
@@ -99,7 +99,7 @@
   <adapter
       for=".interfaces.IPersonContainer"
       factory=".person.getPersonContainerCatalog"
-      provides="zope.app.catalog.interfaces.ICatalog" />
+      provides="zope.catalog.interfaces.ICatalog" />
 
   <configure
       xmlns:zcml="http://namespaces.zope.org/zcml"

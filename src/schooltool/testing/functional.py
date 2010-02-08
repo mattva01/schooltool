@@ -22,10 +22,10 @@ Functional Testing Utilities
 
 import os
 import unittest
+import doctest
 
 from zope.testbrowser.testing import Browser
 from zope.testing.server import startServer
-from zope.testing import doctest
 from zope.app.testing.functional import HTTPCaller
 from zope.app.testing.functional import ZCMLLayer as _ZCMLLayer
 from zope.app.testing.functional import FunctionalDocFileSuite
