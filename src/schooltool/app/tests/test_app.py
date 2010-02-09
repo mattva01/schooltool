@@ -117,7 +117,7 @@ def doctest_getSchoolToolApplication():
 
     If current site is a SchoolToolApplication, we get it:
 
-      >>> from zope.site.hooks import setSite
+      >>> from zope.component.hooks import setSite
       >>> setSite(app)
 
       >>> getSchoolToolApplication() is app

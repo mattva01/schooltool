@@ -532,7 +532,7 @@ def doctest_bootstrapSchoolTool():
 
     It is also a site
 
-        >>> from zope.location.interfaces import ISite
+        >>> from zope.component.interfaces import ISite
         >>> ISite.providedBy(app)
         True
 
