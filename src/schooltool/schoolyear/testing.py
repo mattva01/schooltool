@@ -20,7 +20,7 @@
 School year testing related code
 """
 from zope.app.testing.functional import FunctionalTestSetup
-from zope.site.hooks import getSite, setSite
+from zope.component.hooks import getSite, setSite
 
 
 def provideStubAdapter(factory, adapts=None, provides=None, name=u''):

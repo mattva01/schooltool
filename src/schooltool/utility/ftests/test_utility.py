@@ -2,7 +2,7 @@ import unittest
 
 from zope.testing import doctest
 from zope.app.testing import setup
-from zope.site.hooks import getSite
+from zope.component.hooks import getSite
 
 
 def doctest_utilityRegistration():
@@ -98,7 +98,7 @@ def doctest_utilityOverride():
       >>> from schooltool.app.interfaces import CatalogSetUpEvent
       >>> from schooltool.utility import UtilitySetUp
       >>> setup = UtilitySetUp(MyUtility1, IMyUtility)
-      >>> from zope.site.hooks import getSite
+      >>> from zope.component.hooks import getSite
       >>> site = getSite()
       >>> event = CatalogSetUpEvent(site)
       >>> setup(event)

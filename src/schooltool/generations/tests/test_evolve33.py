@@ -32,7 +32,7 @@ from zope.intid.interfaces import IIntIds
 from zope.site.folder import Folder
 from zope.catalog.interfaces import ICatalog
 from zope.container.btree import BTreeContainer
-from zope.site.hooks import getSite, setSite
+from zope.component.hooks import getSite, setSite
 
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.generations.tests import ContextStub

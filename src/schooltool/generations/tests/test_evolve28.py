@@ -57,7 +57,7 @@ def doctest_evolve28():
        >>> db = DB(storage, database_name="")
        >>> context = ContextStub(db)
        >>> app = context.connection.root()[ZopePublication.root_name]
-       >>> from zope.site.hooks import setSite
+       >>> from zope.component.hooks import setSite
        >>> setSite(app)
 
        >>> evolve27(context)
