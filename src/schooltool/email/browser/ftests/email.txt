@@ -587,7 +587,7 @@ And let's raise an unexpected data error:
     </label>
     >>> manager.printQuery('id("form-widgets-status-row")/'
     ...                    'div[@class="widget"]/span')
-    <span id="form-widgets-status" class="..." style="color: red;">The server (localhost:25) replied with an unexpected error code</span>
+    <span id="form-widgets-status" class="..." style="color: red;">The server (localhost:25) replied that the message data was malformed</span>
     >>> manager.getControl('Cancel').click()
 
 Let's Retry one of our previous emails:

@@ -56,7 +56,7 @@ status_messages = {
     50: _('The server (${info}) rejected the From address: ${from_address}'),
     60: _('The server (${info}) rejected the following recipient addresses: '
           '${addresses}'),
-    70: _('The server (${info}) replied with an unexpected error code'),
+    70: _('The server (${info}) replied that the message data was malformed'),
     }
 
 
