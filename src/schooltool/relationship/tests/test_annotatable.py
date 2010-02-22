@@ -21,8 +21,8 @@ Unit tests for schooltool.relationship.annotatable
 """
 
 import unittest
+import doctest
 
-from zope.testing import doctest
 from zope.app.testing import setup
 from zope.interface import implements
 from zope.annotation.interfaces import IAttributeAnnotatable

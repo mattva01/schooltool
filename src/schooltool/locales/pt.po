@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-12-24 12:40+0000\n"
-"PO-Revision-Date: 2009-12-24 16:01+0000\n"
-"Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
+"PO-Revision-Date: 2010-01-19 16:51+0000\n"
+"Last-Translator: Diogo Lavareda <diogolavareda9@hotmail.com>\n"
 "Language-Team: Portuguese <pt@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-12-25 04:37+0000\n"
+"X-Launchpad-Export-Date: 2010-01-20 04:34+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -4315,7 +4315,7 @@ msgstr "Página do projecto no Launchpad"
 
 #: /src/schooltool/app/browser/templates/about.pt:29
 msgid "Mailing list"
-msgstr ""
+msgstr "Lista de distribuição"
 
 #: /src/schooltool/app/browser/templates/about.pt:30
 msgid "IRC channel: #schooltool on freenode.net"
@@ -4649,14 +4649,14 @@ msgstr "\"$group\" grupo."
 #. Default: ""
 #: /src/schooltool/app/security.py:367
 msgid "\"$group\" group and the super user."
-msgstr ""
+msgstr "\"$group\" grupo e o super utilizador."
 
 #: /src/schooltool/app/security.zcml:103
 #: /src/schooltool/course/security.zcml:149
 #: /src/schooltool/person/security.zcml:136
 #: /src/schooltool/group/security.zcml:94
 msgid "Change calendar"
-msgstr ""
+msgstr "Alterar calendário"
 
 #: /src/schooltool/app/security.zcml:77
 msgid "SchoolTool application"
@@ -4668,7 +4668,7 @@ msgstr "Acesso"
 
 #: /src/schooltool/app/security.zcml:87
 msgid "Manage school settings and configuration"
-msgstr ""
+msgstr "Gerir definições e configurações da escola"
 
 #: /src/schooltool/app/security.zcml:95
 #: /src/schooltool/course/security.zcml:141
@@ -4781,14 +4781,18 @@ msgid ""
 "jbjones, Jim Bob, Jones, r2m45J\n"
 "howard, Howard, Jobs\n"
 msgstr ""
+"\n"
+"jjones, Jimmy, Jones\n"
+"jbjones, Jim Bob, Jones, r2m45J\n"
+"howard, Howard, Jobs\n"
 
 #: /src/schooltool/basicperson/interfaces.py:122
 msgid "The title of this Field Description"
-msgstr ""
+msgstr "O título desta Descrição do Campo"
 
 #: /src/schooltool/basicperson/interfaces.py:126
 msgid "Unique ID of this Field Description"
-msgstr ""
+msgstr "ID único desta Descrição do Campo"
 
 #: /src/schooltool/basicperson/interfaces.py:129
 msgid "Required"
@@ -4804,7 +4808,7 @@ msgstr "Lista de valores"
 
 #: /src/schooltool/basicperson/security.zcml:17
 msgid "Create, delete demographics fields and change their order."
-msgstr ""
+msgstr "Criar, apagar campos demograficos e mudar a sua ordem."
 
 #: /src/schooltool/basicperson/security.zcml:26
 msgid "Edit fields"
@@ -4812,19 +4816,19 @@ msgstr "Editar campos"
 
 #: /src/schooltool/basicperson/security.zcml:34
 msgid "View user demographics"
-msgstr ""
+msgstr "Ver demografia do utilizador"
 
 #: /src/schooltool/basicperson/security.zcml:34
 msgid "View user's demographics information"
-msgstr ""
+msgstr "Ver informação demografica do utilizador"
 
 #: /src/schooltool/basicperson/security.zcml:43
 msgid "Modify user's demographics information."
-msgstr ""
+msgstr "Alterar informação demográfica do utilizador."
 
 #: /src/schooltool/basicperson/security.zcml:43
 msgid "Modify user demographics"
-msgstr ""
+msgstr "Alterar demografia do utilizador"
 
 #: /src/schooltool/contact/browser/configure.zcml:100
 msgid "Manage Contacts"
@@ -4920,7 +4924,7 @@ msgstr "Informação de contacto de ${person}"
 
 #: /src/schooltool/contact/contact.py:211
 msgid "Instructors of student(s) related to this contact."
-msgstr ""
+msgstr "Instrutores de aluno(s) relacionados com este contacto."
 
 #: /src/schooltool/contact/contact.py:78
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:59
@@ -4942,6 +4946,17 @@ msgid ""
 "    or the school as a whole.\n"
 "    "
 msgstr ""
+"\n"
+"    Todos os utilizadores do SchoolTool têm informações de contacto, que "
+"incluí endereço de casa,\n"
+"    número de telefone, endereço de email, etc.\n"
+"\n"
+"    \"Contactos externos\" podem ser criados - pessoas que não são "
+"utilizadores do SchoolTool,\n"
+"    mas que possam necessitar de receber notificações e informação sobre o "
+"estudante\n"
+"    ou da escola como um todo.\n"
+"    "
 
 #: /src/schooltool/contact/interfaces.py:102
 msgid "Contact's relationship with the person"
@@ -4992,6 +5007,8 @@ msgid ""
 "Assign / remove contacts of a user,                   define user's "
 "relationship with a contact."
 msgstr ""
+"Atribuir / remover contactos de um utilizador, definir relacionamento do "
+"utilizador com um contacto."
 
 #: /src/schooltool/contact/security.zcml:36
 msgid "Manage user's contacts"
@@ -5011,7 +5028,7 @@ msgstr "Modificar um contacto externo"
 
 #: /src/schooltool/contact/security.zcml:70
 msgid "View user's contact information"
-msgstr ""
+msgstr "Ver informações de contacto do utilizador"
 
 #: /src/schooltool/contact/security.zcml:78
 msgid "Modify user's contact information"
@@ -5047,12 +5064,16 @@ msgid ""
 "Course \"${course_title}\" credits \"${invalid_credits}\" value must be an "
 "integer."
 msgstr ""
+"Curso \"${course_title}\" créditos \"${invalid_credits}\" o valor deve de "
+"ser um inteiro."
 
 #. Default: ""
 #: /src/schooltool/course/browser/csvimport.py:96
 msgid ""
 "Course \"${course_title}\" id \"${invalid_id}\" is invalid. ${error_message}"
 msgstr ""
+"Id \"${invalid_id}\" do curso \"${course_title}\"  é inválido. "
+"${error_message}"
 
 #: /src/schooltool/course/browser/section-member-csvimport.pt:21
 #: /src/schooltool/course/browser/configure.zcml:194
@@ -5213,7 +5234,7 @@ msgstr ""
 #: /src/schooltool/course/browser/templates/section_edit.pt:72
 #: /src/schooltool/course/browser/templates/section_edit.pt:106
 msgid "${section_title} for ${term}"
-msgstr ""
+msgstr "${section_title} para o ${term}"
 
 #. Default: "Unlink"
 #: /src/schooltool/course/browser/templates/section_edit.pt:75
@@ -5427,7 +5448,7 @@ msgstr ""
 
 #: /src/schooltool/email/browser/email.py:113
 msgid "Current Password"
-msgstr ""
+msgstr "Senha actual"
 
 #: /src/schooltool/email/browser/email.py:114
 msgid "Current password to authenticate to the SMTP server."
@@ -5547,7 +5568,7 @@ msgstr ""
 
 #: /src/schooltool/email/browser/email.py:273
 msgid "Retry"
-msgstr ""
+msgstr "Tentar Novamente"
 
 #: /src/schooltool/email/browser/email.py:383
 msgid "Email Queue"

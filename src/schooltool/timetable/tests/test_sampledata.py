@@ -18,14 +18,12 @@
 #
 """
 Unit tests for schooltool.timetable.sampledata
-
-$Id$
 """
 
 import unittest
+import doctest
 
 from zope.interface.verify import verifyObject
-from zope.testing import doctest
 from zope.app.testing import setup
 
 from schooltool.testing import setup as stsetup

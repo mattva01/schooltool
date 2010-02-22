@@ -31,7 +31,7 @@ from zope.viewlet.manager import ViewletManagerBase
 from zope.viewlet.metadirectives import IViewletDirective
 from zope.configuration.fields import MessageID
 from zope.publisher.browser import BrowserView
-from zope.app.publisher.browser.menu import getMenu
+from zope.browsermenu.menu import getMenu
 from zope.traversing.browser.absoluteurl import absoluteURL
 
 from z3c.form.interfaces import IFormLayer

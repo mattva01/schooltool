@@ -22,10 +22,10 @@ School year implementation
 from zope.interface import Interface
 from zope.schema import Date, TextLine
 from zope.location.interfaces import ILocation
-from zope.app.container.interfaces import IWriteContainer
-from zope.app.container.interfaces import IReadContainer
-from zope.app.container.interfaces import IContainer
-from zope.app.container import constraints
+from zope.container.interfaces import IWriteContainer
+from zope.container.interfaces import IReadContainer
+from zope.container.interfaces import IContainer
+from zope.container import constraints
 
 from schooltool.term.interfaces import ITermContainer
 from schooltool.common import SchoolToolMessage as _

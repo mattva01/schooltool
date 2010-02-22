@@ -20,6 +20,7 @@
 Tests for SchoolTool-specific calendar views.
 """
 import unittest
+import doctest
 import calendar
 from datetime import datetime, date, timedelta, time
 from pytz import timezone, utc
@@ -30,7 +31,6 @@ from zope.interface import directlyProvides, implements
 from zope.component import provideAdapter, provideSubscriptionAdapter
 from zope.interface.verify import verifyObject
 from zope.publisher.browser import TestRequest
-from zope.testing import doctest
 from zope.app.testing import setup
 from zope.publisher.browser import BrowserView
 from zope.traversing.interfaces import IContainmentRoot

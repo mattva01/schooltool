@@ -24,10 +24,12 @@ $Id$
 """
 from zope.traversing.api import getParent
 
-from schooltool.basicperson.interfaces import IBasicPerson
-from schooltool.group.interfaces import IGroupContainer
-from schooltool.securitypolicy.crowds import ConfigurableCrowd
 from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.basicperson.interfaces import IBasicPerson
+from schooltool.common import SchoolToolMessage as _
+from schooltool.group.interfaces import IGroupContainer
+from schooltool.person.interfaces import IPerson
+from schooltool.securitypolicy.crowds import Crowd, ConfigurableCrowd
 
 
 class PersonInfoViewersCrowd(ConfigurableCrowd):
@@ -55,4 +57,18 @@ class PersonInfoViewersCrowd(ConfigurableCrowd):
 
         return (ConfigurableCrowd.contains(self, principal) or
                 teachers in groups)
+
+
+class PersonAdvisorsCrowd(Crowd):
+    """Crowd of advisors of a person."""
+
+    title = _(u'Advisors')
+    description = _(u'Advisors of a person.')
+
+    def contains(self, principal):
+        user = IPerson(principal, None)
+        person = self.context
+        if not IBasicPerson.providedBy(person):
+            return False
+        return user in person.advisors
 

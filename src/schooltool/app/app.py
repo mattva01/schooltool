@@ -37,11 +37,11 @@ from zope.interface import implements, implementsOnly
 from zope.annotation.interfaces import IAttributeAnnotatable, IAnnotations
 from zope.app.applicationcontrol.interfaces import IApplicationControl
 from zope.app.applicationcontrol.applicationcontrol import applicationController
-from zope.site.hooks import getSite
+from zope.component.hooks import getSite
 from zope.site import SiteManagerContainer
-from zope.app.container import sample
-from zope.app.container.contained import NameChooser
-from zope.app.container.interfaces import INameChooser
+from zope.container import sample
+from zope.container.contained import NameChooser
+from zope.container.interfaces import INameChooser
 from zope.traversing.interfaces import IContainmentRoot
 
 from schooltool.app.overlay import ICalendarOverlayInfo

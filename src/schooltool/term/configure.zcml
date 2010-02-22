@@ -10,7 +10,7 @@
   <adapter
       for=".interfaces.ITermContainer"
       factory="schooltool.app.app.SimpleNameChooser"
-      provides="zope.app.container.interfaces.INameChooser" />
+      provides="zope.container.interfaces.INameChooser" />
 
   <interface
       interface=".interfaces.ITermContainer"
@@ -49,7 +49,7 @@
 
   <subscriber
       for=".interfaces.ITerm
-           zope.app.container.interfaces.IObjectRemovedEvent"
+           zope.lifecycleevent.interfaces.IObjectRemovedEvent"
       handler="schooltool.timetable.schema.clearTimetablesOnDeletion" />
 
   <!-- sample data -->

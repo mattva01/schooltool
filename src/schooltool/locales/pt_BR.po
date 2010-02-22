@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-12-24 12:40+0000\n"
-"PO-Revision-Date: 2009-12-24 16:02+0000\n"
+"PO-Revision-Date: 2010-01-09 00:13+0000\n"
 "Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
 "Language-Team: Portuguese (Brazil) <pt_BR@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-12-25 04:38+0000\n"
+"X-Launchpad-Export-Date: 2010-01-09 07:45+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -1908,33 +1908,6 @@ msgstr "Enviar"
 #: /src/schooltool/app/browser/templates/event_booking.pt:57
 msgid "A"
 msgstr "Um"
-
-#. Default: "Cancel"
-#: /src/schooltool/basicperson/browser/templates/person_edit.pt:13
-#: /src/schooltool/term/browser/templates/term-container-delete.pt:31
-#: /src/schooltool/term/browser/templates/emergency2.pt:42
-#: /src/schooltool/term/browser/templates/emergency_select.pt:41
-#: /src/schooltool/schoolyear/browser/templates/term-delete.pt:29
-#: /src/schooltool/resource/browser/container_delete.pt:29
-#: /src/schooltool/contact/browser/templates/contacts_delete.pt:36
-#: /src/schooltool/timetable/browser/templates/simpletts.pt:62
-#: /src/schooltool/timetable/browser/templates/timetable-edit.pt:70
-#: /src/schooltool/timetable/browser/templates/timetable-container-delete.pt:29
-#: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:83
-#: /src/schooltool/timetable/browser/templates/specialday_select.pt:41
-#: /src/schooltool/timetable/browser/templates/specialday_change.pt:64
-#: /src/schooltool/timetable/browser/templates/schooltt-delete.pt:31
-#: /src/schooltool/person/browser/person_container_delete.pt:37
-#: /src/schooltool/sampledata/sampledata.pt:82
-#: /src/schooltool/setupdata/setupdata.pt:25
-#: /src/schooltool/course/browser/templates/link_section.pt:133
-#: /src/schooltool/email/browser/templates/email_delete.pt:34
-#: /src/schooltool/skin/templates/container_delete.pt:34
-#: /src/schooltool/skin/templates/view_macros.pt:200
-#: /src/schooltool/skin/templates/view_macros.pt:205
-#: /src/schooltool/app/browser/templates/event_add.pt:378
-msgid "cancel-button"
-msgstr "Cancelar"
 
 #: /src/schooltool/basicperson/browser/templates/person_view.pt:20
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:34
@@ -4233,11 +4206,6 @@ msgstr "Esquema de Tabela de horário padrão"
 msgid "Not Selected"
 msgstr "Não Selecionado"
 
-#. Default: "Change"
-#: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:59
-msgid "change-button"
-msgstr "Alterar"
-
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:15
 #: /src/schooltool/app/browser/templates/event.pt:15
 msgid "All day event"
@@ -5121,6 +5089,33 @@ msgstr ""
 "jgsilva, José Geraldo, Silva, r2m45J\n"
 "horacio, Horácio,  Siqueira\n"
 
+#. Default: "Cancel"
+#: /src/schooltool/basicperson/browser/templates/person_edit.pt:13
+#: /src/schooltool/term/browser/templates/term-container-delete.pt:31
+#: /src/schooltool/term/browser/templates/emergency2.pt:42
+#: /src/schooltool/term/browser/templates/emergency_select.pt:41
+#: /src/schooltool/schoolyear/browser/templates/term-delete.pt:29
+#: /src/schooltool/resource/browser/container_delete.pt:29
+#: /src/schooltool/contact/browser/templates/contacts_delete.pt:36
+#: /src/schooltool/timetable/browser/templates/simpletts.pt:62
+#: /src/schooltool/timetable/browser/templates/timetable-edit.pt:70
+#: /src/schooltool/timetable/browser/templates/timetable-container-delete.pt:29
+#: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:83
+#: /src/schooltool/timetable/browser/templates/specialday_select.pt:41
+#: /src/schooltool/timetable/browser/templates/specialday_change.pt:64
+#: /src/schooltool/timetable/browser/templates/schooltt-delete.pt:31
+#: /src/schooltool/person/browser/person_container_delete.pt:37
+#: /src/schooltool/sampledata/sampledata.pt:82
+#: /src/schooltool/setupdata/setupdata.pt:25
+#: /src/schooltool/course/browser/templates/link_section.pt:133
+#: /src/schooltool/email/browser/templates/email_delete.pt:34
+#: /src/schooltool/skin/templates/container_delete.pt:34
+#: /src/schooltool/skin/templates/view_macros.pt:200
+#: /src/schooltool/skin/templates/view_macros.pt:205
+#: /src/schooltool/app/browser/templates/event_add.pt:378
+msgid "cancel-button"
+msgstr "Cancelar"
+
 #: /src/schooltool/basicperson/interfaces.py:122
 msgid "The title of this Field Description"
 msgstr "O título deste Campo de Descrição"
@@ -5227,7 +5222,6 @@ msgstr "Gerenciar contatos de ${person}"
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:71
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:30
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:52
-#, fuzzy
 msgid "invert-selection-button"
 msgstr "Inversão de seleção"
 
@@ -5470,9 +5464,8 @@ msgstr "Não há período (anterior) em ${schoolyear} para copiar seções."
 
 #. Default: "Select All Visible"
 #: /src/schooltool/course/browser/templates/copy_sections.pt:66
-#, fuzzy
 msgid "select-all-visible-button"
-msgstr "Selecione todos visiveis"
+msgstr "selecione todos os botões visiveis"
 
 #. Default: "Select None"
 #: /src/schooltool/course/browser/templates/copy_sections.pt:70
@@ -5608,7 +5601,6 @@ msgstr "${section_title} para {$term}"
 #. Default: "Unlink"
 #: /src/schooltool/course/browser/templates/section_edit.pt:75
 #: /src/schooltool/course/browser/templates/section_edit.pt:109
-#, fuzzy
 msgid "unlink-section-button"
 msgstr "Desvincular"
 
@@ -6664,6 +6656,11 @@ msgstr "Não há esquemas de calendário definido."
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:26
 msgid "For term:"
 msgstr "Para o período:"
+
+#. Default: "Change"
+#: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:59
+msgid "change-button"
+msgstr "Alterar"
 
 #: /src/schooltool/timetable/security.zcml:16
 msgid "School timetables"

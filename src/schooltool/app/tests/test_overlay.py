@@ -17,13 +17,11 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Unit tests for schooltool.overlay.
-
-$Id$
+Unit tests for schooltool.app.overlay.
 """
 
 import unittest
-from zope.testing import doctest
+import doctest
 
 
 def test_suite():

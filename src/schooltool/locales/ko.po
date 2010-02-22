@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-12-24 12:40+0000\n"
-"PO-Revision-Date: 2009-12-24 16:10+0000\n"
-"Last-Translator: import05 <trigem7220@gmail.com>\n"
+"PO-Revision-Date: 2010-02-07 02:35+0000\n"
+"Last-Translator: atto <Unknown>\n"
 "Language-Team: Korean <ko@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-12-25 04:37+0000\n"
+"X-Launchpad-Export-Date: 2010-02-08 04:43+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: /src/schooltool/app/browser/__init__.py:261
@@ -273,15 +273,15 @@ msgstr ""
 
 #: /src/schooltool/app/browser/cal.py:1170
 msgid "Go to next month"
-msgstr ""
+msgstr "다음 달로 가기"
 
 #: /src/schooltool/app/browser/cal.py:1171
 msgid "Go to current month"
-msgstr ""
+msgstr "이번 달로 가기"
 
 #: /src/schooltool/app/browser/cal.py:1172
 msgid "Go to previous month"
-msgstr ""
+msgstr "이전 달로 가기"
 
 #. Default: ""
 #: /src/schooltool/app/browser/cal.py:1180
@@ -332,7 +332,7 @@ msgstr "오늘로 이동"
 
 #: /src/schooltool/app/browser/cal.py:1296
 msgid "Go to the previous day"
-msgstr ""
+msgstr "이전 날로 가기"
 
 #. Default: ""
 #: /src/schooltool/app/browser/cal.py:1448
@@ -786,11 +786,11 @@ msgstr ""
 
 #: /src/schooltool/app/browser/csvimport.py:551
 msgid "Persons not found: ${args}."
-msgstr ""
+msgstr "사람을 찾을 수 없습니다: ${args}."
 
 #: /src/schooltool/app/browser/csvimport.py:552
 msgid "Courses not found: ${args}."
-msgstr ""
+msgstr "과목을 찾을 수 없습니다: ${args}."
 
 #: /src/schooltool/app/browser/csvimport.py:553
 msgid "Sections not found: ${args}."
@@ -810,7 +810,7 @@ msgstr "하루 종일"
 
 #: /src/schooltool/app/browser/pdfcal.py:177
 msgid "Weekly calendar for %s"
-msgstr ""
+msgstr "%s 주간 일정"
 
 #: /src/schooltool/app/browser/pdfcal.py:186
 msgid "Week %d (%s - %s), %d"
@@ -818,7 +818,7 @@ msgstr ""
 
 #: /src/schooltool/app/browser/pdfcal.py:197
 msgid "Monthly calendar for %s"
-msgstr ""
+msgstr "%s 월간 일정"
 
 #: /src/schooltool/app/browser/pdfcal.py:52
 msgid "Daily calendar for %s"
@@ -835,7 +835,7 @@ msgstr ""
 
 #: /src/schooltool/app/browser/report.py:57
 msgid "PDF support is disabled.  It can be enabled by your administrator."
-msgstr ""
+msgstr "PDF 지원이 해제되어있습니다. 관리자가 활성화 할 수 있습니다."
 
 #: /src/schooltool/app/browser/templates/about.pt:10
 msgid ""
@@ -852,16 +852,21 @@ msgid ""
 "href=\"http://python.org\">Python</a> using the <a "
 "href=\"http://zope.org\">Zope 3</a> framework."
 msgstr ""
+"SchoolTool은 100% 오픈소스 기반의 프로그램입니다. <a "
+"href=\"http://python.org\">Python</a>으로 쓰여졌으며, <a "
+"href=\"http://zope.org\">Zope 3</a>를 사용합니다."
 
 #: /src/schooltool/app/browser/templates/about.pt:20
 msgid ""
 "SchoolTool is licensed under the <a href=\"http://www.gnu.org/licenses/gpl-"
 "2.0.html\">GNU General Public License, Version 2</a>."
 msgstr ""
+"SchoolTool의 라이센스는  <a href=\"http://www.gnu.org/licenses/gpl-2.0.html\">GNU "
+"General Public License, Version 2</a> 입니다."
 
 #: /src/schooltool/app/browser/templates/about.pt:24
 msgid "For more information:"
-msgstr ""
+msgstr "더 많은 정보:"
 
 #: /src/schooltool/app/browser/templates/about.pt:28
 msgid "Launchpad project page"

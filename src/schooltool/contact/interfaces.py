@@ -22,9 +22,9 @@ Contact interfaces
 """
 import zope.schema
 from zope.annotation.interfaces import IAttributeAnnotatable
-from zope.app.container.constraints import contains
-from zope.app.container.constraints import containers
-from zope.app.container.interfaces import IContained
+from zope.container.constraints import contains
+from zope.container.constraints import containers
+from zope.location.interfaces import IContained
 from zope.interface import Attribute
 from zope.interface import Interface
 from zope.schema import TextLine

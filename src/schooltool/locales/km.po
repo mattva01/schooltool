@@ -5,13 +5,13 @@ msgstr ""
 "Project-Id-Version: src_schooltool_locales_schooltool\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-12-24 12:40+0000\n"
-"PO-Revision-Date: 2009-12-26 16:29+0000\n"
-"Last-Translator: chhorran <Unknown>\n"
+"PO-Revision-Date: 2010-01-08 22:43+0000\n"
+"Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
 "Language-Team: Khmer <support@khmeros.info>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-12-27 04:30+0000\n"
+"X-Launchpad-Export-Date: 2010-01-09 07:44+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "Generated-By: i18nextract.py\n"
 
@@ -41,6 +41,7 @@ msgid "Username or password is incorrect"
 msgstr "ឈ្មោះអ្នកប្រើប្រាស់ ឬ ពាក្យសំងាត់ មិនត្រឹមត្រូវ"
 
 #: /src/schooltool/app/browser/app.py:323
+#: /src/schooltool/app/security.py:307
 msgid "Leaders"
 msgstr "អ្នកដឹកនាំ"
 
@@ -305,6 +306,9 @@ msgstr "បន្ថែម ព្រឹត្តិការថ្មី ផ្�
 #: /src/schooltool/resource/types.py:101
 #: /src/schooltool/schoolyear/browser/schoolyear.py:145
 #: /src/schooltool/schoolyear/interfaces.py:41
+#: /src/schooltool/securitypolicy/interfaces.py:108
+#: /src/schooltool/table/catalog.py:141
+#: /src/schooltool/table/table.py:221
 #: /src/schooltool/term/browser/term.py:59
 #: /src/schooltool/term/interfaces.py:40
 #: /src/schooltool/timetable/browser/schema.py:129
@@ -373,6 +377,7 @@ msgstr "ទីតាំង"
 #: /src/schooltool/course/interfaces.py:100
 #: /src/schooltool/group/interfaces.py:44
 #: /src/schooltool/resource/interfaces.py:50
+#: /src/schooltool/securitypolicy/interfaces.py:112
 #: /src/schooltool/timetable/browser/event.py:56
 msgid "Description"
 msgstr "ការ​ពិពណ៌នា"
@@ -507,7 +512,7 @@ msgstr "បន្ថែម​ព្រឹត្តិការណ៍"
 
 #: /src/schooltool/app/browser/cal.py:2079
 #: /src/schooltool/basicperson/browser/person.py:157
-#: /src/schooltool/contact/browser/contact.py:85
+#: /src/schooltool/contact/browser/contact.py:90
 #: /src/schooltool/course/browser/section.py:327
 #: /src/schooltool/schoolyear/browser/schoolyear.py:180
 #: /src/schooltool/timetable/browser/templates/timetable-add.pt:25
@@ -536,9 +541,9 @@ msgstr "ធ្វើ​ឲ្យ​ទាន់​សម័យ​នៅ ${date_t
 
 #: /src/schooltool/app/browser/cal.py:2718
 #: /src/schooltool/app/browser/templates/calendar_tab_viewlet.pt:3
-#: /src/schooltool/app/browser/configure.zcml:596
-#: /src/schooltool/app/browser/configure.zcml:683
-#: /src/schooltool/app/configure.zcml:340
+#: /src/schooltool/app/browser/configure.zcml:606
+#: /src/schooltool/app/browser/configure.zcml:693
+#: /src/schooltool/app/configure.zcml:344
 msgid "Calendar"
 msgstr "ប្រតិទិន"
 
@@ -579,108 +584,108 @@ msgstr "${month}, ${year} (week ${week})"
 msgid "Actions"
 msgstr "អំពើ"
 
-#: /src/schooltool/app/browser/configure.zcml:309
+#: /src/schooltool/app/browser/configure.zcml:319
 msgid "View Calendar"
 msgstr "មើល​ប្រតិទិន"
 
-#: /src/schooltool/app/browser/configure.zcml:321
+#: /src/schooltool/app/browser/configure.zcml:331
 msgid "New Event"
 msgstr "ព្រឹត្តិការណ៍​ថ្មី"
 
-#: /src/schooltool/app/browser/configure.zcml:332
+#: /src/schooltool/app/browser/configure.zcml:342
 msgid "Open in iCal"
 msgstr "បើក​ក្នុង iCal"
 
-#: /src/schooltool/app/browser/configure.zcml:344
+#: /src/schooltool/app/browser/configure.zcml:354
 msgid "Import Sections"
 msgstr "នាំចូល​ផ្នែក"
 
-#: /src/schooltool/app/browser/configure.zcml:355
+#: /src/schooltool/app/browser/configure.zcml:365
 msgid "Edit Leaders"
 msgstr "កែសម្រួល​អ្នក​ដឹកនាំ"
 
-#: /src/schooltool/app/browser/configure.zcml:366
+#: /src/schooltool/app/browser/configure.zcml:376
 msgid "Change Site Preferences"
 msgstr "ផ្លាស់ប្ដូរ​ចំណូល​ចិត្ត​តំបន់​បណ្ដាញ"
 
-#: /src/schooltool/app/browser/configure.zcml:398
+#: /src/schooltool/app/browser/configure.zcml:408
 msgid "Calendar (Daily)"
 msgstr "ប្រតិទិន (ប្រចាំ​ថ្ងៃ)"
 
-#: /src/schooltool/app/browser/configure.zcml:408
+#: /src/schooltool/app/browser/configure.zcml:418
 msgid "Calendar (Daily, PDF)"
 msgstr "ប្រតិទិន្ន (ប្រចាំ​ថ្ងៃ, PDF)"
 
-#: /src/schooltool/app/browser/configure.zcml:417
+#: /src/schooltool/app/browser/configure.zcml:427
 msgid "Calendar (Weekly)"
 msgstr "ប្រតិទិន (ប្រចាំ​សប្ដាហ៍)"
 
-#: /src/schooltool/app/browser/configure.zcml:427
+#: /src/schooltool/app/browser/configure.zcml:437
 msgid "Calendar (Weekly, PDF)"
 msgstr "ប្រតិទិន (ប្រចាំ​សប្ដាហ៍, PDF)"
 
-#: /src/schooltool/app/browser/configure.zcml:436
+#: /src/schooltool/app/browser/configure.zcml:446
 msgid "Calendar (Monthly)"
 msgstr "ប្រតិទិន (ប្រចាំ​ខែ)"
 
-#: /src/schooltool/app/browser/configure.zcml:446
+#: /src/schooltool/app/browser/configure.zcml:456
 msgid "Calendar (Monthly, PDF)"
 msgstr "ប្រតិទិន (ប្រចាំ​ខែ, PDF)"
 
-#: /src/schooltool/app/browser/configure.zcml:455
-#: /src/schooltool/timetable/browser/configure.zcml:207
+#: /src/schooltool/app/browser/configure.zcml:465
+#: /src/schooltool/timetable/browser/configure.zcml:198
 msgid "Calendar (Yearly)"
 msgstr "ប្រតិទិន (ប្រចាំ​ឆ្នាំ)"
 
-#: /src/schooltool/app/browser/configure.zcml:465
+#: /src/schooltool/app/browser/configure.zcml:475
 msgid "Atom View"
 msgstr "ទិដ្ឋភាព Atom"
 
-#: /src/schooltool/app/browser/configure.zcml:475
+#: /src/schooltool/app/browser/configure.zcml:485
 msgid "iCalendar"
 msgstr "iCalendar"
 
-#: /src/schooltool/app/browser/configure.zcml:485
+#: /src/schooltool/app/browser/configure.zcml:495
 msgid "Free/Busy"
 msgstr "ទំនេរ/រវល់"
 
-#: /src/schooltool/app/browser/configure.zcml:586
+#: /src/schooltool/app/browser/configure.zcml:596
 msgid "ZODB Control"
 msgstr "វត្ថុ​បញ្ជា ZODB"
 
-#: /src/schooltool/app/browser/configure.zcml:621
+#: /src/schooltool/app/browser/configure.zcml:631
 msgid "Application Control"
 msgstr "វត្ថុ​បញ្ជា​កម្មវិធី"
 
-#: /src/schooltool/app/browser/configure.zcml:633
+#: /src/schooltool/app/browser/configure.zcml:643
 msgid "Translation Domains"
 msgstr "ដែន​ការ​បកប្រែ"
 
-#: /src/schooltool/app/browser/configure.zcml:644
+#: /src/schooltool/app/browser/configure.zcml:654
 msgid "Generations"
 msgstr "ការ​បង្កើត"
 
-#: /src/schooltool/app/browser/configure.zcml:665
+#: /src/schooltool/app/browser/configure.zcml:675
 msgid "Browser UI"
 msgstr "ចំណុច​ប្រទាក់​អ្នក​ប្រើ​ការ​រុករក"
 
-#: /src/schooltool/app/browser/configure.zcml:689
+#: /src/schooltool/app/browser/configure.zcml:699
 msgid "Application"
 msgstr "កម្មវិធី"
 
-#: /src/schooltool/app/browser/configure.zcml:695
+#: /src/schooltool/app/browser/configure.zcml:705
 msgid "Calendar Widget"
 msgstr "ធាតុ​ក្រាហ្វិក​ប្រតិទិន"
 
-#: /src/schooltool/app/browser/configure.zcml:701
+#: /src/schooltool/app/browser/configure.zcml:711
 msgid "Templates"
 msgstr "ពុម្ព"
 
-#: /src/schooltool/app/browser/configure.zcml:780
+#: /src/schooltool/app/browser/configure.zcml:790
 msgid "Configure"
 msgstr "កំណត់​រចនា​សម្ព័ន្ធ"
 
-#: /src/schooltool/app/browser/configure.zcml:787
+#: /src/schooltool/app/browser/configure.zcml:797
 msgid "Error List"
 msgstr "បញ្ជី​កំហុស"
 
@@ -833,7 +838,7 @@ msgstr "កើតឡើង​ញឹកញាប់"
 msgid "from the calendar of ${calendar_owner}"
 msgstr "ពី​ប្រតិទិន​របស់ ${calendar_owner}"
 
-#: /src/schooltool/app/browser/report.py:51
+#: /src/schooltool/app/browser/report.py:57
 msgid "PDF support is disabled.  It can be enabled by your administrator."
 msgstr ""
 "ការ​គាំទ្រ PDF ត្រូវ​បាន​បិទ ។  "
@@ -879,7 +884,7 @@ msgstr "សម្រាប់​ព័ត៌មាន​បន្ថែម ៖"
 
 #: /src/schooltool/app/browser/templates/about.pt:27
 msgid "Website"
-msgstr "តំបន់​បណ្ដាញ"
+msgstr "វ៉ែបសៃថ៍"
 
 #: /src/schooltool/app/browser/templates/about.pt:28
 msgid "Launchpad project page"
@@ -1025,7 +1030,7 @@ msgstr "ជ្រើស​ប្រតិទិន​ដើម្បី​បង
 msgid "There are no resources with calendars accessible to you."
 msgstr "គ្មាន​ធនធាន​ដែល​មាន​ប្រតិទិន​សម្រាប់​អ្នក​ចូល​ដំណើរ​ការ ។"
 
-#: /src/schooltool/skin/templates/rml_macros.pt:52
+#: /src/schooltool/app/browser/templates/default_report_template.pt:35
 msgid "Page ${page_number}"
 msgstr "ទំព័រ ${page_number}"
 
@@ -1163,7 +1168,7 @@ msgstr "សូម​ចូល"
 
 #: /src/schooltool/app/browser/templates/login.pt:3
 #: /src/schooltool/app/browser/templates/menu_view.pt:3
-#: /src/schooltool/app/browser/configure.zcml:671
+#: /src/schooltool/app/browser/configure.zcml:681
 msgid "Login"
 msgstr "ចូល"
 
@@ -1184,7 +1189,8 @@ msgid "Your session has expired."
 msgstr "សម័យ​របស់​អ្នក​បាន​ផុត​កំណត់ ។"
 
 #: /src/schooltool/app/browser/templates/manage_menu.pt:3
-#: /src/schooltool/app/browser/configure.zcml:609
+#: /src/schooltool/app/browser/configure.zcml:619
+#: /src/schooltool/basicperson/security.zcml:17
 msgid "Manage"
 msgstr "គ្រប់គ្រង"
 
@@ -1371,11 +1377,11 @@ msgstr ""
 "ជួរឈរ​ផ្សេង​ទៀត​ត្រូវ​បាន​មិនអើពើ ។ "
 "អ្នក​អាច​នាំចូល​ទិន្នន័យ​ដូចគ្នា​ច្រើន​ដង​ដោយ​គ្មាន​ផល​ប៉ះពាល់នោះ​ទេ ។"
 
-#: /src/schooltool/app/configure.zcml:332
+#: /src/schooltool/app/configure.zcml:336
 msgid "Security (General)"
 msgstr "សុវត្ថិភាព (ទូទៅ)"
 
-#: /src/schooltool/app/configure.zcml:347
+#: /src/schooltool/app/configure.zcml:351
 msgid "Booking Resources"
 msgstr "ធនធាន​សៀវភៅ"
 
@@ -1507,15 +1513,15 @@ msgstr ""
 
 #: /src/schooltool/app/help/configure.zcml:13
 msgid "Administration"
-msgstr "ការ​គ្រប់គ្រង"
+msgstr "ការអភិបាល"
 
 #: /src/schooltool/app/help/configure.zcml:21
 msgid "Organization"
-msgstr "ការ​រៀបចំ"
+msgstr "ការចាត់ចែង"
 
 #: /src/schooltool/app/help/configure.zcml:29
 msgid "Calendaring"
-msgstr "ប្រតិទិន"
+msgstr "ប្រក្រតីទិន"
 
 #: /src/schooltool/app/help/daily_calendar.pt:6
 #: /src/schooltool/app/help/configure.zcml:37
@@ -1577,7 +1583,7 @@ msgstr ""
 
 #: /src/schooltool/app/help/event_add.pt:6
 #: /src/schooltool/app/help/event_add.pt:9
-#: /src/schooltool/app/browser/configure.zcml:514
+#: /src/schooltool/app/browser/configure.zcml:524
 #: /src/schooltool/app/help/configure.zcml:77
 msgid "Add Event"
 msgstr "បន្ថែម​ព្រឹត្តិការណ៍"
@@ -1659,7 +1665,7 @@ msgstr ""
 
 #: /src/schooltool/app/help/event_edit.pt:6
 #: /src/schooltool/app/help/event_edit.pt:9
-#: /src/schooltool/app/browser/configure.zcml:533
+#: /src/schooltool/app/browser/configure.zcml:543
 #: /src/schooltool/app/help/configure.zcml:87
 msgid "Edit Event"
 msgstr "កែ​សម្រួល​ព្រឹត្តិការណ៍"
@@ -1997,7 +2003,7 @@ msgstr "ទិន្នន័យ​ចំណុច​មិន​ត្រឹម
 msgid "Invalid datetime data"
 msgstr "ទិន្នន័យ​ពេល​វេលា​កាល​បរិច្ឆេទ​មិន​ត្រឹមត្រូវ"
 
-#: /src/schooltool/app/main.py:110
+#: /src/schooltool/app/main.py:111
 msgid ""
 "\n"
 "No storage defined in the configuration file.\n"
@@ -2012,7 +2018,7 @@ msgstr ""
 "សូម​កែសម្រួល​វា​ឥឡូវ ហើយ\n"
 "មិន​ផ្ដល់​មតិយោបល់​របស់​ភាគ​នៃ​ឧបករណ៍​ផ្ទុក ZODB ។\n"
 
-#: /src/schooltool/app/main.py:118
+#: /src/schooltool/app/main.py:119
 msgid ""
 "\n"
 "This is not a SchoolTool 0.11 database file, aborting.\n"
@@ -2020,7 +2026,7 @@ msgstr ""
 "\n"
 "នេះ​មិនមែន​ជា​ឯកសារ​មូលដ្ឋាន​ទិន្នន័យ SchoolTool 0.11 ទេ បោះបង់ ។\n"
 
-#: /src/schooltool/app/main.py:123
+#: /src/schooltool/app/main.py:124
 msgid ""
 "\n"
 "This is not a SchoolTool 0.10 database file, aborting.\n"
@@ -2032,7 +2038,7 @@ msgstr ""
 "\n"
 "សូម​រត់​ស្គ្រីប​ធ្វើ​ឲ្យ​​មូលដ្ឋាន​ទិន្នន័យ​ប្រសើរ​ឡើង​ ។\n"
 
-#: /src/schooltool/app/main.py:367
+#: /src/schooltool/app/main.py:368
 msgid "Going to background, daemon pid %d"
 msgstr "ទៅកាន់​ផ្ទៃ​ខាង​ក្រោយ ដេមិន %d"
 
@@ -2040,31 +2046,31 @@ msgstr "ទៅកាន់​ផ្ទៃ​ខាង​ក្រោយ ដេ�
 msgid "Cannot resolve plugin action order:\n"
 msgstr "មិនអាច​ដោះស្រាយ​លំដាប់​សកម្មភាព​កម្មវិធី​ជំនួយ​បានទេ ៖\n"
 
-#: /src/schooltool/app/main.py:452
-#: /src/schooltool/app/main.py:496
-#: /src/schooltool/app/main.py:499
+#: /src/schooltool/app/main.py:565
+#: /src/schooltool/app/main.py:609
+#: /src/schooltool/app/main.py:612
 msgid "%s: %s"
 msgstr "%s ៖ %s"
 
-#: /src/schooltool/app/main.py:453
+#: /src/schooltool/app/main.py:566
 msgid "Run %s -h for help."
 msgstr "រត់ %s -h សម្រាប់​ជំនួយ ។"
 
-#: /src/schooltool/app/main.py:465
+#: /src/schooltool/app/main.py:578
 msgid "%s: daemon mode not supported on your operating system."
 msgstr ""
 "%s ៖ មិនគាំទ្រ​របៀប​ដេមិន​នៅ​លើ​ប្រព័ន្ធ​ប្រតិបត្តិការ​របស់​អ្នក​ទេ ។"
 
-#: /src/schooltool/app/main.py:491
+#: /src/schooltool/app/main.py:604
 msgid "Reading configuration from %s"
 msgstr "កំពុង​អាន​ការ​កំណត់​រចនាសម្ព័ន្ធ​ពី %s"
 
-#: /src/schooltool/app/main.py:594
+#: /src/schooltool/app/main.py:707
 msgid "Startup time: %.3f sec real, %.3f sec CPU"
 msgstr "ពេល​វេលា​ចាប់ផ្ដើម ៖ %.3f វិនាទី ពិត​ប្រាកដ %.3f វិនាទី CPU"
 
 #. Default: ""
-#: /src/schooltool/app/main.py:628
+#: /src/schooltool/app/main.py:741
 msgid ""
 "Could not initialize the database:\n"
 "%s"
@@ -2072,7 +2078,7 @@ msgstr ""
 "មិន​អាច​ចាប់ផ្ដើម​មូលដ្ឋាន​ទិន្នន័យ ៖\n"
 "%s"
 
-#: /src/schooltool/app/main.py:631
+#: /src/schooltool/app/main.py:744
 msgid ""
 "\n"
 "Perhaps another %s instance is using it?"
@@ -2080,7 +2086,7 @@ msgstr ""
 "\n"
 "ប្រហែល​ជា​ធាតុ %s ផ្សេង​ទៀត​កំពុង​ប្រើ​វា ?"
 
-#: /src/schooltool/app/main.py:701
+#: /src/schooltool/app/main.py:814
 msgid ""
 "Warning: could not find the reportlab library.\n"
 "PDF support disabled."
@@ -2088,7 +2094,7 @@ msgstr ""
 "ការ​ព្រមាន ៖ មិនអាច​រក​បណ្ណាល័យ reportlab បានទេ ។ \n"
 "ការ​គាំទ្រ PDF បាន​បិទ ។"
 
-#: /src/schooltool/app/main.py:706
+#: /src/schooltool/app/main.py:819
 msgid ""
 "Warning: font directory '%s' does not exist.\n"
 "PDF support disabled."
@@ -2096,7 +2102,7 @@ msgstr ""
 "ព្រមាន ៖ ថត​ពុម្ព​អក្សរ '%s' មិន​មាន​ទេ ។\n"
 "ការ​គាំទ្រ PDF មិន​បាន​អនុញ្ញាត ។"
 
-#: /src/schooltool/app/main.py:714
+#: /src/schooltool/app/main.py:827
 msgid ""
 "Warning: font '%s' does not exist.\n"
 "PDF support disabled."
@@ -2104,7 +2110,7 @@ msgstr ""
 "ព្រមាន ៖ ពុម្ព​អក្សរ '%s' មិនមាន ។\n"
 "ការ​គាំទ្រ PDF មិន​បាន​អនុញ្ញាត ។"
 
-#: /src/schooltool/app/main.py:96
+#: /src/schooltool/app/main.py:97
 msgid ""
 "\n"
 "Usage: %s [options]\n"
@@ -2135,6 +2141,7 @@ msgstr ""
 "                         ជា '-')\n"
 "  --manage               ធ្វើ​តែ​កិច្ចការ​គ្រប់គ្រង កុំ​រត់​ម៉ាស៊ីនបម្រើ\n"
 
+#: /src/schooltool/app/membership.py:261
 #: /src/schooltool/group/browser/group.pt:16
 msgid "Members"
 msgstr "សមាជិក"
@@ -2164,7 +2171,7 @@ msgstr "\"$group\" ក្រម និង​ អ្នកប្រើប្រ�
 msgid "Change calendar"
 msgstr "ផ្លាស់ប្តូរ ប្រក្រតីទិន"
 
-#: /src/schooltool/app/security.zcml:66
+#: /src/schooltool/app/security.zcml:69
 msgid "Everyone can view the application calendar."
 msgstr "អ្នក​ទាំងអស់​អាច​មើល​ប្រតិទិន​កម្មវិធី ។"
 
@@ -2259,11 +2266,14 @@ msgstr "បន្ថែម​វាល​ថ្មី"
 #: /src/schooltool/basicperson/browser/demographics.py:200
 #: /src/schooltool/basicperson/browser/person.py:201
 #: /src/schooltool/basicperson/browser/person.py:217
-#: /src/schooltool/contact/browser/contact.py:113
-#: /src/schooltool/contact/browser/contact.py:188
+#: /src/schooltool/contact/browser/contact.py:118
+#: /src/schooltool/contact/browser/contact.py:193
 #: /src/schooltool/course/browser/section.py:337
 #: /src/schooltool/demographics/browser/personform.py:108
 #: /src/schooltool/demographics/browser/personform.py:302
+#: /src/schooltool/email/browser/email.py:173
+#: /src/schooltool/email/browser/email.py:289
+#: /src/schooltool/email/browser/email.py:502
 #: /src/schooltool/person/browser/person.py:180
 #: /src/schooltool/schoolyear/browser/schoolyear.py:209
 #: /src/schooltool/schoolyear/browser/schoolyear.py:222
@@ -2344,6 +2354,8 @@ msgstr "ទី​ប្រឹក្សា"
 #: /src/schooltool/demographics/browser/personform.py:254
 #: /src/schooltool/demographics/browser/personform.py:255
 #: /src/schooltool/demographics/browser/table.py:67
+#: /src/schooltool/email/browser/email.py:108
+#: /src/schooltool/email/interfaces.py:99
 #: /src/schooltool/person/browser/person.py:286
 #: /src/schooltool/person/browser/person.py:287
 #: /src/schooltool/person/interfaces.py:60
@@ -2377,6 +2389,8 @@ msgstr ""
 #: /src/schooltool/person/browser/person-csvimport.pt:11
 #: /src/schooltool/person/browser/person_preferences.pt:9
 #: /src/schooltool/person/browser/person_container_delete.pt:11
+#: /src/schooltool/email/browser/templates/email_delete.pt:11
+#: /src/schooltool/email/browser/templates/email_container.pt:11
 #: /src/schooltool/skin/templates/table_container.pt:11
 #: /src/schooltool/skin/templates/container.pt:11
 #: /src/schooltool/skin/templates/container_delete.pt:11
@@ -2389,7 +2403,7 @@ msgstr ""
 #: /src/schooltool/app/browser/templates/cal_atom.pt:14
 #: /src/schooltool/app/help/schooltool.pt:6
 #: /src/schooltool/app/help/configure.zcml:6
-#: /src/schooltool/app/configure.zcml:326
+#: /src/schooltool/app/configure.zcml:330
 msgid "SchoolTool"
 msgstr "SchoolTool"
 
@@ -2607,7 +2621,7 @@ msgstr "A"
 #: /src/schooltool/term/browser/templates/emergency_select.pt:41
 #: /src/schooltool/schoolyear/browser/templates/term-delete.pt:29
 #: /src/schooltool/resource/browser/container_delete.pt:29
-#: /src/schooltool/contact/browser/templates/contacts_delete.pt:34
+#: /src/schooltool/contact/browser/templates/contacts_delete.pt:36
 #: /src/schooltool/timetable/browser/templates/simpletts.pt:62
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:70
 #: /src/schooltool/timetable/browser/templates/timetable-container-delete.pt:29
@@ -2619,6 +2633,7 @@ msgstr "A"
 #: /src/schooltool/sampledata/sampledata.pt:82
 #: /src/schooltool/setupdata/setupdata.pt:25
 #: /src/schooltool/course/browser/templates/link_section.pt:133
+#: /src/schooltool/email/browser/templates/email_delete.pt:34
 #: /src/schooltool/skin/templates/container_delete.pt:34
 #: /src/schooltool/skin/templates/view_macros.pt:200
 #: /src/schooltool/skin/templates/view_macros.pt:205
@@ -2667,33 +2682,33 @@ msgid "List of values"
 msgstr "បញ្ជី​តម្លៃ"
 
 #: /src/schooltool/basicperson/interfaces.py:38
-#: /src/schooltool/contact/interfaces.py:38
+#: /src/schooltool/contact/interfaces.py:40
 #: /src/schooltool/demographics/interfaces.py:44
 msgid "Prefix"
 msgstr "បុព្វបទ"
 
 #: /src/schooltool/basicperson/interfaces.py:43
-#: /src/schooltool/contact/interfaces.py:39
+#: /src/schooltool/contact/interfaces.py:42
 #: /src/schooltool/demographics/interfaces.py:50
 #: /src/schooltool/contact/browser/templates/filter.pt:5
 msgid "First name"
 msgstr "នាម​ខ្លួន"
 
 #: /src/schooltool/basicperson/interfaces.py:48
-#: /src/schooltool/contact/interfaces.py:40
+#: /src/schooltool/contact/interfaces.py:44
 #: /src/schooltool/demographics/interfaces.py:55
 msgid "Middle name"
 msgstr "ឈ្មោះ​កណ្ដាល"
 
 #: /src/schooltool/basicperson/interfaces.py:53
-#: /src/schooltool/contact/interfaces.py:41
+#: /src/schooltool/contact/interfaces.py:46
 #: /src/schooltool/demographics/interfaces.py:60
 #: /src/schooltool/contact/browser/templates/filter.pt:12
 msgid "Last name"
 msgstr "នាម​ត្រកូល"
 
 #: /src/schooltool/basicperson/interfaces.py:58
-#: /src/schooltool/contact/interfaces.py:42
+#: /src/schooltool/contact/interfaces.py:48
 #: /src/schooltool/demographics/interfaces.py:65
 msgid "Suffix"
 msgstr "បច្ច័យ"
@@ -2728,12 +2743,12 @@ msgid "(yyyy-mm-dd)"
 msgstr "(yyyy-mm-dd)"
 
 #: /src/schooltool/basicperson/person.py:83
-#: /src/schooltool/contact/browser/contact.py:265
+#: /src/schooltool/contact/browser/contact.py:297
 msgid "First Name"
 msgstr "នាម​ខ្លួន"
 
 #: /src/schooltool/basicperson/person.py:90
-#: /src/schooltool/contact/browser/contact.py:270
+#: /src/schooltool/contact/browser/contact.py:304
 msgid "Last Name"
 msgstr "នាម​ត្រកូល"
 
@@ -2778,18 +2793,10 @@ msgid "Edit Calendar Overlays"
 msgstr "កែសម្រួលប្រតិទិនដែល​ត្រួត​លើ​គ្នា"
 
 #: /src/schooltool/common/configure.zcml:98
-#: /src/schooltool/app/browser/configure.zcml:223
-#: /src/schooltool/app/browser/configure.zcml:504
-#: /src/schooltool/person/browser/configure.zcml:157
-#: /src/schooltool/person/browser/configure.zcml:187
-#: /src/schooltool/contact/browser/configure.zcml:6
-#: /src/schooltool/contact/browser/configure.zcml:58
-#: /src/schooltool/demographics/browser/configure.zcml:13
-#: /src/schooltool/group/browser/configure.zcml:16
-#: /src/schooltool/group/browser/configure.zcml:85
-#: /src/schooltool/resource/browser/configure.zcml:62
-#: /src/schooltool/term/browser/configure.zcml:14
-#: /src/schooltool/schoolyear/browser/configure.zcml:101
+#: /src/schooltool/app/browser/configure.zcml:233
+#: /src/schooltool/app/browser/configure.zcml:514
+#: /src/schooltool/course/security.zcml:93
+#: /src/schooltool/course/security.zcml:127
 #: /src/schooltool/course/browser/configure.zcml:58
 #: /src/schooltool/course/browser/configure.zcml:69
 #: /src/schooltool/course/browser/configure.zcml:103
@@ -2797,11 +2804,27 @@ msgstr "កែសម្រួលប្រតិទិនដែល​ត្រួ
 #: /src/schooltool/course/browser/configure.zcml:123
 #: /src/schooltool/course/browser/configure.zcml:133
 #: /src/schooltool/course/browser/configure.zcml:143
-#: /src/schooltool/timetable/browser/configure.zcml:61
-#: /src/schooltool/timetable/browser/configure.zcml:71
-#: /src/schooltool/timetable/browser/configure.zcml:102
+#: /src/schooltool/person/security.zcml:93
+#: /src/schooltool/person/browser/configure.zcml:157
+#: /src/schooltool/person/browser/configure.zcml:187
+#: /src/schooltool/contact/browser/configure.zcml:6
+#: /src/schooltool/contact/browser/configure.zcml:31
+#: /src/schooltool/contact/browser/configure.zcml:88
+#: /src/schooltool/demographics/browser/configure.zcml:13
+#: /src/schooltool/group/security.zcml:72
+#: /src/schooltool/group/browser/configure.zcml:16
+#: /src/schooltool/group/browser/configure.zcml:85
+#: /src/schooltool/resource/browser/configure.zcml:62
+#: /src/schooltool/term/security.zcml:35
+#: /src/schooltool/term/browser/configure.zcml:14
+#: /src/schooltool/schoolyear/security.zcml:31
+#: /src/schooltool/schoolyear/browser/configure.zcml:101
+#: /src/schooltool/timetable/security.zcml:32
+#: /src/schooltool/timetable/browser/configure.zcml:52
+#: /src/schooltool/timetable/browser/configure.zcml:62
+#: /src/schooltool/timetable/browser/configure.zcml:93
+#: /src/schooltool/timetable/browser/configure.zcml:111
 #: /src/schooltool/timetable/browser/configure.zcml:120
-#: /src/schooltool/timetable/browser/configure.zcml:129
 #: /src/schooltool/basicperson/browser/configure.zcml:6
 #: /src/schooltool/basicperson/browser/configure.zcml:185
 #: /src/schooltool/basicperson/browser/configure.zcml:192
@@ -2810,12 +2833,12 @@ msgid "View"
 msgstr "មើល"
 
 #: /src/schooltool/common/configure.zcml:99
+#: /src/schooltool/course/browser/configure.zcml:25
+#: /src/schooltool/course/browser/configure.zcml:180
 #: /src/schooltool/group/browser/configure.zcml:38
 #: /src/schooltool/resource/browser/configure.zcml:84
 #: /src/schooltool/resource/browser/configure.zcml:115
 #: /src/schooltool/resource/browser/configure.zcml:151
-#: /src/schooltool/course/browser/configure.zcml:25
-#: /src/schooltool/course/browser/configure.zcml:180
 msgid "Edit Info"
 msgstr "កែ​សម្រួល​ព័ត៌មាន"
 
@@ -2828,12 +2851,12 @@ msgstr "គ្រប់គ្រង​ទំនាក់ទំនង"
 msgid "Other Contacts"
 msgstr "ទំនាក់ទំនង​ផ្សេង​ទៀត"
 
-#: /src/schooltool/contact/browser/configure.zcml:31
+#: /src/schooltool/contact/browser/configure.zcml:49
 msgid "New Contact"
 msgstr "ទំនាក់ទំនង​ថ្មី"
 
 #. Default: ""
-#: /src/schooltool/contact/browser/contact.py:155
+#: /src/schooltool/contact/browser/contact.py:160
 msgid "Add new contact for ${person}"
 msgstr "បន្ថែម​ទំនាក់ទំនង​ថ្មី​សម្រាប់ ${person}"
 
@@ -2842,33 +2865,34 @@ msgstr "បន្ថែម​ទំនាក់ទំនង​ថ្មី​ស
 msgid "Change contact information for ${first_name} ${last_name}"
 msgstr "ផ្លាស់ប្ដូរ​ព័ត៌មាន​ទំនាក់ទំនង​សម្រាប់ ${first_name} ${last_name}"
 
-#: /src/schooltool/contact/browser/contact.py:239
+#: /src/schooltool/contact/browser/contact.py:245
 msgid "Contact index"
 msgstr "លិបិក្រម​ទំនាក់ទំនង"
 
-#: /src/schooltool/contact/browser/contact.py:276
+#: /src/schooltool/contact/browser/contact.py:308
+#: /src/schooltool/contact/browser/templates/view_contacts.pt:31
 msgid "Address"
 msgstr "អាសយដ្ឋាន"
 
-#: /src/schooltool/contact/browser/contact.py:72
+#: /src/schooltool/contact/browser/contact.py:77
 msgid "Add new contact"
 msgstr "បន្ថែម​ទមនាក់ទំនង​ថ្មី"
 
-#: /src/schooltool/contact/browser/relationship.py:62
-#: /src/schooltool/contact/interfaces.py:75
+#: /src/schooltool/contact/browser/relationship.py:75
+#: /src/schooltool/contact/interfaces.py:101
 msgid "Relationship"
 msgstr "ទំនាក់ទំនង"
 
-#: /src/schooltool/contact/browser/relationship.py:73
+#: /src/schooltool/contact/browser/relationship.py:86
 msgid "Assigned Contacts"
 msgstr "ផ្ដល់​ទំនាក់ទំនង"
 
-#: /src/schooltool/contact/browser/relationship.py:74
+#: /src/schooltool/contact/browser/relationship.py:87
 msgid "Assign existing contact"
 msgstr "ផ្ដល់​ទំនាក់ទំនង​ដែល​មាន"
 
 #. Default: ""
-#: /src/schooltool/contact/browser/relationship.py:78
+#: /src/schooltool/contact/browser/relationship.py:91
 msgid "Manage contacts of ${person}"
 msgstr "គ្រប់គ្រង​ទំនាក់ទំនង​របស់ ${person}"
 
@@ -2921,10 +2945,12 @@ msgstr "គ្មាន​អ្វី​ត្រូវ​បន្ថែម​
 msgid "ok-button"
 msgstr "ប៊ូតុង​យល់ព្រម"
 
+#: /src/schooltool/contact/browser/templates/view_contacts.pt:18
 #: /src/schooltool/contact/browser/templates/contact_view.pt:16
 msgid "${relationship} of ${person}"
 msgstr "${relationship} នៃ ${person}"
 
+#: /src/schooltool/contact/browser/templates/view_contacts.pt:22
 #: /src/schooltool/contact/browser/templates/contact_view.pt:20
 msgid "Contact of ${person}"
 msgstr "ទំនាក់ទំនង​របស់ ${person}"
@@ -2945,7 +2971,10 @@ msgstr "(មើល​លម្អិត)"
 msgid "Contact information for ${person}"
 msgstr "ព័ត៌មាន​ទំនាក់ទំនង​សម្រាប់ ${person}"
 
+#: /src/schooltool/contact/contact.py:210
 #: /src/schooltool/course/browser/section.py:538
+#: /src/schooltool/course/section.py:283
+#: /src/schooltool/course/section.py:293
 #: /src/schooltool/course/browser/templates/section.pt:79
 #: /src/schooltool/course/browser/templates/copy_sections.pt:93
 #: /src/schooltool/course/browser/templates/link_section.pt:69
@@ -2957,8 +2986,10 @@ msgstr "គ្រូ"
 msgid "Instructors of student(s) related to this contact."
 msgstr ""
 
-#: /src/schooltool/contact/browser/configure.zcml:46
-#: /src/schooltool/contact/browser/configure.zcml:68
+#: /src/schooltool/contact/contact.py:78
+#: /src/schooltool/contact/browser/templates/view_contacts.pt:59
+#: /src/schooltool/contact/browser/configure.zcml:64
+#: /src/schooltool/contact/browser/configure.zcml:76
 msgid "Contacts"
 msgstr "ទំនាក់ទំនង"
 
@@ -2976,76 +3007,77 @@ msgid ""
 "    "
 msgstr ""
 
-#: /src/schooltool/contact/interfaces.py:76
+#: /src/schooltool/contact/interfaces.py:102
 msgid "Contact's relationship with the person"
 msgstr "ភាព​ទំនាក់ទំនង​របស់​ទំនាក់ទំនង​ជា​មួយ​មនុស្ស"
 
-#: /src/schooltool/contact/interfaces.py:78
+#: /src/schooltool/contact/interfaces.py:104
 msgid "Parent"
 msgstr "ឪពុក​ម្ដាយ"
 
-#: /src/schooltool/contact/interfaces.py:79
+#: /src/schooltool/contact/interfaces.py:105
 msgid "Step-parent"
 msgstr "ឪពុក​ម្ដាយ​ចុង"
 
-#: /src/schooltool/contact/interfaces.py:80
+#: /src/schooltool/contact/interfaces.py:106
 msgid "Foster parent"
 msgstr "ឪពុក​ម្ដាយ​ធម៌"
 
-#: /src/schooltool/contact/interfaces.py:81
+#: /src/schooltool/contact/interfaces.py:107
 msgid "Guardian"
 msgstr "អ្នក​ថែរក្សា"
 
-#: /src/schooltool/contact/interfaces.py:82
+#: /src/schooltool/contact/interfaces.py:108
 msgid "Sibling"
 msgstr "បង​ប្អូន"
 
-#: /src/schooltool/contact/interfaces.py:44
+#: /src/schooltool/contact/interfaces.py:53
 msgid "Address line 1"
 msgstr "អាសយដ្ឋាន​ទី ១"
 
-#: /src/schooltool/contact/interfaces.py:46
+#: /src/schooltool/contact/interfaces.py:55
 msgid "Address line 2"
 msgstr "អាសយដ្ឋាន​ទី ២"
 
-#: /src/schooltool/contact/interfaces.py:48
+#: /src/schooltool/contact/interfaces.py:57
 #: /src/schooltool/demographics/interfaces.py:258
 msgid "City"
 msgstr "ទីក្រុង"
 
-#: /src/schooltool/contact/interfaces.py:50
+#: /src/schooltool/contact/interfaces.py:59
 #: /src/schooltool/demographics/interfaces.py:263
 msgid "State"
 msgstr "រដ្ឋ"
 
-#: /src/schooltool/contact/interfaces.py:52
+#: /src/schooltool/contact/interfaces.py:61
 msgid "Country"
 msgstr "ប្រទេស"
 
-#: /src/schooltool/contact/interfaces.py:54
+#: /src/schooltool/contact/interfaces.py:63
 #: /src/schooltool/demographics/interfaces.py:268
 msgid "Postal code"
 msgstr "លេខកូដ​ប្រៃសនីយ៍"
 
-#: /src/schooltool/contact/interfaces.py:56
+#: /src/schooltool/contact/interfaces.py:68
+#: /src/schooltool/contact/browser/templates/view_contacts.pt:36
 msgid "Email"
 msgstr "អ៊ីមែល"
 
-#: /src/schooltool/contact/interfaces.py:58
+#: /src/schooltool/contact/interfaces.py:73
 #: /src/schooltool/demographics/interfaces.py:273
 msgid "Home phone"
 msgstr "ទូរស័ព្ទ​នៅ​ផ្ទះ"
 
-#: /src/schooltool/contact/interfaces.py:60
+#: /src/schooltool/contact/interfaces.py:75
 #: /src/schooltool/demographics/interfaces.py:278
 msgid "Work phone"
 msgstr "ទូរស័ព្ទ​កន្លែង​ធ្វើការ"
 
-#: /src/schooltool/contact/interfaces.py:62
+#: /src/schooltool/contact/interfaces.py:77
 msgid "Mobile phone"
 msgstr "ទូរស័ព្ទ​ចល័ត"
 
-#: /src/schooltool/contact/interfaces.py:64
+#: /src/schooltool/contact/interfaces.py:82
 msgid "Language"
 msgstr "ភាសា"
 
@@ -3237,7 +3269,7 @@ msgstr "ផ្នែក​ក្នុង ${term}"
 #: /src/schooltool/course/browser/templates/copy_sections.pt:96
 #: /src/schooltool/course/browser/templates/link_section.pt:72
 #: /src/schooltool/course/browser/templates/section_container.pt:45
-#: /src/schooltool/timetable/browser/configure.zcml:49
+#: /src/schooltool/timetable/browser/configure.zcml:40
 msgid "Schedule"
 msgstr "កាល​វិភាគ"
 
@@ -3549,15 +3581,15 @@ msgstr "អ្នករៀន"
 msgid "Students of the section."
 msgstr "និស្សិត ក្នុងផ្នែក។"
 
-#: /src/schooltool/course/section.py:395
+#: /src/schooltool/course/section.py:396
 msgid "Cannot link sections in same term"
 msgstr "មិន​អាច​តភ្ជាប់​ផ្នែក​នៅ​ក្នុង​វគ្គ​ដូច​គ្នា"
 
-#: /src/schooltool/course/section.py:400
+#: /src/schooltool/course/section.py:401
 msgid "Cannot link sections in different school years"
 msgstr "មិន​អាច​តភ្ជាប់​ផ្នែក​នៅ​ក្នុង​ឆ្នាំ​សិក្សា​ផ្សេង​គ្នា"
 
-#: /src/schooltool/course/section.py:404
+#: /src/schooltool/course/section.py:405
 msgid "Sections must be in consecutive terms"
 msgstr "ភាគត្រូវតែ​នៅ​ក្នុង​វគ្គសិក្សា​បន្ត​បន្ទាប់"
 
@@ -3572,7 +3604,7 @@ msgid ""
 "during a term."
 msgstr ""
 
-#: /src/schooltool/course/security.zcml:55
+#: /src/schooltool/course/security.zcml:42
 msgid "Everyone can view section information and calendars"
 msgstr "អ្នក​ទាំងអស់​អាច​មើល​ព័ត៌មាន​ផ្នែក និង​ប្រតិទិន"
 
@@ -3637,11 +3669,13 @@ msgstr "កម្រិត"
 
 #: /src/schooltool/dashboard/term.pt:10
 #: /src/schooltool/course/browser/templates/course.pt:33
+#: /src/schooltool/course/security.zcml:107
 #: /src/schooltool/course/browser/configure.zcml:265
 msgid "Sections"
 msgstr "ផ្នែក"
 
 #: /src/schooltool/dashboard/term.pt:16
+#: /src/schooltool/term/security.zcml:19
 #: /src/schooltool/term/help/configure.zcml:18
 msgid "Terms"
 msgstr "វគ្គសិក្សា"
@@ -3653,6 +3687,7 @@ msgstr "វគ្គសិក្សា"
 #: /src/schooltool/course/browser/templates/link_to_courses.pt:1
 #: /src/schooltool/course/help/course_container.pt:7
 #: /src/schooltool/app/browser/templates/index.pt:12
+#: /src/schooltool/course/security.zcml:73
 #: /src/schooltool/course/help/configure.zcml:8
 msgid "Courses"
 msgstr "វគ្គ​សិក្សា"
@@ -3735,6 +3770,7 @@ msgid "Change demographics for ${fullname}"
 msgstr "ផ្លាស់ប្ដូរ​ប្រជាសាស្ត្រ​សម្រាប់ ${fullname}"
 
 #: /src/schooltool/demographics/browser/personform.py:181
+#: /src/schooltool/basicperson/security.zcml:13
 #: /src/schooltool/basicperson/browser/configure.zcml:113
 msgid "Demographics"
 msgstr "ប្រជាសាស្ត្រ"
@@ -3789,6 +3825,7 @@ msgstr "អនុវត្ត និង​បន្ទាប់"
 #: /src/schooltool/demographics/browser/table.pt:23
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:29
 #: /src/schooltool/course/browser/templates/course_container.pt:28
+#: /src/schooltool/email/browser/templates/email_container.pt:33
 #: /src/schooltool/skin/templates/table_container.pt:28
 #: /src/schooltool/skin/templates/container.pt:28
 msgid "Showing ${count} of ${total} items"
@@ -3802,13 +3839,15 @@ msgstr "ការ​បង្ហាញ ${count} នៃ​ធាតុ ${total}"
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:34
 #: /src/schooltool/schoolyear/browser/templates/schoolyear.pt:42
 #: /src/schooltool/resource/browser/container_delete.pt:27
-#: /src/schooltool/contact/browser/templates/contacts_delete.pt:32
+#: /src/schooltool/contact/browser/templates/contacts_delete.pt:34
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:29
 #: /src/schooltool/timetable/browser/templates/timetable-container-delete.pt:27
 #: /src/schooltool/timetable/browser/templates/schooltt-delete.pt:29
 #: /src/schooltool/person/browser/person_container_delete.pt:35
 #: /src/schooltool/course/browser/templates/course_container.pt:40
 #: /src/schooltool/course/browser/templates/section_container.pt:93
+#: /src/schooltool/email/browser/templates/email_delete.pt:31
+#: /src/schooltool/email/browser/templates/email_container.pt:48
 #: /src/schooltool/skin/templates/table_container.pt:33
 #: /src/schooltool/skin/templates/container.pt:42
 #: /src/schooltool/skin/templates/container_delete.pt:32
@@ -3850,6 +3889,7 @@ msgstr "គ្មាន ។"
 #: /src/schooltool/demographics/browser/table.py:196
 #: /src/schooltool/person/browser/configure.zcml:177
 #: /src/schooltool/contact/browser/configure.zcml:22
+#: /src/schooltool/contact/browser/configure.zcml:40
 #: /src/schooltool/demographics/browser/configure.zcml:22
 #: /src/schooltool/term/browser/configure.zcml:23
 #: /src/schooltool/schoolyear/browser/configure.zcml:94
@@ -4089,8 +4129,8 @@ msgid "Developer Tools"
 msgstr "ឧបករណ៍​របស់​អ្នក​ភិវឌ្ឍន៍"
 
 #: /src/schooltool/devmode/devmode.pt:17
-#: /src/schooltool/app/browser/configure.zcml:677
-#: /src/schooltool/app/browser/configure.zcml:764
+#: /src/schooltool/app/browser/configure.zcml:687
+#: /src/schooltool/app/browser/configure.zcml:774
 msgid "Errors"
 msgstr "កំហុស"
 
@@ -4233,6 +4273,9 @@ msgstr "ប្រធានបទ"
 msgid "Subject of the message"
 msgstr "ប្រធានបទ នៃសារ"
 
+#: /src/schooltool/email/browser/email.py:227
+#: /src/schooltool/email/browser/email.py:469
+#: /src/schooltool/email/interfaces.py:49
 #: /src/schooltool/note/interfaces.py:46
 msgid "Body"
 msgstr "តួ"
@@ -4268,6 +4311,7 @@ msgstr "ការបង្ហាញអ៊ីមែវល៍"
 msgid "Retry"
 msgstr "ព្យាយាម​ឡើង​វិញ"
 
+#: /src/schooltool/email/browser/email.py:284
 #: /src/schooltool/note/notes.pt:17
 #: /src/schooltool/timetable/browser/templates/timetable_list.pt:28
 msgid "Delete"
@@ -4613,6 +4657,7 @@ msgstr "គ្រប់គ្រង​សមាជិក​ភាព​របស
 #: /src/schooltool/group/browser/groupsviewlet.pt:4
 #: /src/schooltool/group/help/group_container.pt:6
 #: /src/schooltool/app/browser/templates/index.pt:13
+#: /src/schooltool/group/security.zcml:53
 #: /src/schooltool/group/help/configure.zcml:8
 #: /src/schooltool/group/browser/configure.zcml:63
 msgid "Groups"
@@ -4657,6 +4702,7 @@ msgstr ""
 "នៅ​ក្នុង​របារ​ពណ៌​ខៀវ ។</li> </ul>"
 
 #: /src/schooltool/group/interfaces.py:41
+#: /src/schooltool/securitypolicy/interfaces.py:109
 msgid "Title of the group."
 msgstr "ចំណង​ជើង​ក្រុម ។"
 
@@ -5373,6 +5419,7 @@ msgid "New School Year"
 msgstr "ឆ្នាំ​សិក្សា​ថ្មី"
 
 #: /src/schooltool/schoolyear/browser/schoolyear.py:107
+#: /src/schooltool/schoolyear/security.zcml:7
 #: /src/schooltool/schoolyear/browser/configure.zcml:26
 msgid "School Years"
 msgstr "ឆ្នាំ​សិក្សា"
@@ -5429,7 +5476,7 @@ msgstr "${schoolyear_title} (${start_date} &mdash; ${end_date})"
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear.pt:37
 msgid "${term_title} (${start_date} &mdash; ${end_date})"
-msgstr "${schoolyear_title} (${start_date} &mdash; ${end_date})"
+msgstr "${term_title} (${start_date} &mdash; ${end_date})"
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear.pt:49
 msgid "Add a new term"
@@ -5465,8 +5512,8 @@ msgstr "បានអនុញ្ញាត"
 
 #: /src/schooltool/securitypolicy/browser/templates/access_control.pt:4
 #: /src/schooltool/securitypolicy/browser/templates/access_control.pt:12
-#: /src/schooltool/securitypolicy/browser/configure.zcml:6
 #: /src/schooltool/securitypolicy/browser/configure.zcml:17
+#: /src/schooltool/securitypolicy/browser/configure.zcml:28
 msgid "Access Control"
 msgstr "ចូល​ដំណើរការ​វត្ថុ​បញ្ជា"
 
@@ -5829,6 +5876,7 @@ msgstr "តើ​អ្នក​ប្រាកដ​ជា​ចង់​លុ
 #: /src/schooltool/timetable/browser/templates/timetable-container-delete.pt:16
 #: /src/schooltool/timetable/browser/templates/schooltt-delete.pt:16
 #: /src/schooltool/person/browser/person_container_delete.pt:21
+#: /src/schooltool/email/browser/templates/email_delete.pt:21
 #: /src/schooltool/skin/templates/container_delete.pt:21
 msgid "You have not selected any items."
 msgstr "អ្នក​មិន​បាន​ជ្រើស​ធាតុ​ណា​មួយ​ទេ ។"
@@ -5990,20 +6038,19 @@ msgstr "កាល​បរិច្ឆេទ​មិន​មែន​ជា​
 msgid "Some values were invalid.  They are highlighted in red."
 msgstr "តម្លៃ​ខ្លះ​មិន​ត្រឹមត្រូវ ។  ពួក​វា​ត្រូវ​បាន​បន្លិច​ជា​ពណ៌​ក្រហម ។"
 
-#: /src/schooltool/timetable/browser/configure.zcml:111
+#: /src/schooltool/timetable/browser/configure.zcml:102
 msgid "Change Timetable for One Day"
 msgstr "ផ្លាស់ប្ដូរ​កាល​វិភាគ​សម្រាប់​មួយ​ថ្ងៃ"
 
-#: /src/schooltool/timetable/browser/configure.zcml:146
+#: /src/schooltool/timetable/browser/configure.zcml:137
 msgid "New Timetable"
 msgstr "កាល​វិភាគ​ថ្មី"
 
-#: /src/schooltool/timetable/browser/configure.zcml:39
+#: /src/schooltool/timetable/browser/configure.zcml:30
 msgid "Add Timetable"
 msgstr "បន្ថែម​កាល​វិភាគ"
 
 #: /src/schooltool/timetable/browser/event.py:42
-#: /src/schooltool/timetable/browser/configure.zcml:23
 msgid "Timetables"
 msgstr "កាល​វិភាគ"
 
@@ -6334,6 +6381,13 @@ msgid "New end"
 msgstr "បញ្ចប់​ថ្មី"
 
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:62
+#: /src/schooltool/course/security.zcml:100
+#: /src/schooltool/course/security.zcml:134
+#: /src/schooltool/person/security.zcml:100
+#: /src/schooltool/group/security.zcml:79
+#: /src/schooltool/term/security.zcml:42
+#: /src/schooltool/schoolyear/security.zcml:38
+#: /src/schooltool/timetable/security.zcml:39
 msgid "Modify"
 msgstr "កែប្រែ"
 

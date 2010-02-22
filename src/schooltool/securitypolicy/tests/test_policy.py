@@ -19,14 +19,15 @@
 """
 Unit tests for schooltool.securitypolicy.policy
 """
-
 import unittest
-from zope.testing import doctest
+import doctest
+
 from zope.interface import implements, directlyProvides, Interface
 from zope.component import adapts
 from zope.component import provideAdapter, provideUtility
 from zope.app.testing import setup
 from zope.traversing.interfaces import IContainmentRoot
+
 from schooltool.securitypolicy.crowds import Crowd
 from schooltool.securitypolicy.interfaces import ICrowd
 

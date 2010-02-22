@@ -30,9 +30,9 @@ import socket
 
 from persistent import Persistent
 from persistent.dict import PersistentDict
-from zope.app.container.btree import BTreeContainer
-from zope.app.container.contained import Contained
-from zope.app.container.interfaces import INameChooser
+from zope.container.btree import BTreeContainer
+from zope.container.contained import Contained
+from zope.container.interfaces import INameChooser
 from zope.component import adapter
 from zope.interface import implements, implementer
 

@@ -29,7 +29,7 @@ import rwproperty
 from BTrees.OOBTree import OOBTree
 from persistent import Persistent
 from persistent.list import PersistentList
-from zope.app.container.contained import Contained
+from zope.container.contained import Contained
 from zope.interface import implements
 import zope.event
 

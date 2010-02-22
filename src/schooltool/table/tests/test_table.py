@@ -19,8 +19,8 @@
 """Table tests
 """
 import unittest
+import doctest
 
-from zope.testing import doctest
 from zope.component import provideAdapter
 
 from schooltool.app.browser.testing import setUp, tearDown

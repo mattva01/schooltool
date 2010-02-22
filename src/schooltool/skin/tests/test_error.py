@@ -18,15 +18,13 @@
 #
 """
 Tests for schooltool error views.
-
-$Id$
 """
 
 import unittest
+import doctest
 
-from zope.testing import doctest
 from zope.publisher.browser import TestRequest
-from zope.app.exception.interfaces import ISystemErrorView
+from zope.browser.interfaces import ISystemErrorView
 
 
 def doctest_ErrorView():

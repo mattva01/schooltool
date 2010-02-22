@@ -22,8 +22,8 @@ Person interfaces
 import calendar
 import pytz
 
-from zope.app.container.interfaces import IContained, IContainer
-from zope.app.container.constraints import containers, contains
+from zope.container.interfaces import IContained, IContainer
+from zope.container.constraints import containers, contains
 from zope.annotation.interfaces import IAnnotatable, IAttributeAnnotatable
 from zope.interface import Interface, Attribute
 from zope.schema import Bool, Bytes, Choice, TextLine

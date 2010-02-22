@@ -32,8 +32,8 @@ from zope.interface import implements
 from zope.interface import implementer
 from zope.component import adapts
 from zope.component import adapter
-from zope.app.container.btree import BTreeContainer
-from zope.app.container.ordered import OrderedContainer
+from zope.container.btree import BTreeContainer
+from zope.container.ordered import OrderedContainer
 from zope.schema.vocabulary import SimpleVocabulary
 from zope.schema.vocabulary import SimpleTerm
 

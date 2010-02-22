@@ -31,8 +31,8 @@ from zope.component import adapts
 from zope.component import adapter
 from zope.interface import implements
 from zope.interface import implementer
-from zope.app.container.interfaces import IObjectRemovedEvent
-from zope.app.container import contained, btree
+from zope.lifecycleevent.interfaces import IObjectRemovedEvent
+from zope.container import contained, btree
 
 from schooltool.schoolyear.subscriber import EventAdapterSubscriber
 from schooltool.schoolyear.subscriber import ObjectEventAdapterSubscriber

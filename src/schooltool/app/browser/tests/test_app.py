@@ -20,9 +20,9 @@
 Tests for schooltool views.
 """
 import unittest
+import doctest
 
 from zope.publisher.browser import TestRequest
-from zope.testing import doctest
 from zope.app.pagetemplate.simpleviewclass import SimpleViewClass
 from zope.app.testing import setup
 from zope.traversing.browser.absoluteurl import absoluteURL
@@ -121,7 +121,7 @@ def doctest_LoginView():
 
         >>> from schooltool.app.browser.app import LoginView
         >>> request = TestRequest()
-        >>> from zope.app.authentication.interfaces import IPrincipal
+        >>> from zope.security.interfaces import IPrincipal
         >>> from zope.interface import implements
         >>> class StubPrincipal(object):
         ...     implements(IPrincipal)
@@ -140,7 +140,7 @@ def doctest_LoginView():
     If we have authentication utility:
 
         >>> from schooltool.app.security import SchoolToolAuthenticationUtility
-        >>> from zope.app.security.interfaces import IAuthentication
+        >>> from zope.authentication.interfaces import IAuthentication
         >>> auth = SchoolToolAuthenticationUtility()
         >>> provideUtility(auth, IAuthentication)
 
@@ -245,7 +245,7 @@ def doctest_LogoutView():
     Also, we have an authentication utility:
 
         >>> from schooltool.app.security import SchoolToolAuthenticationUtility
-        >>> from zope.app.security.interfaces import IAuthentication
+        >>> from zope.authentication.interfaces import IAuthentication
         >>> auth = SchoolToolAuthenticationUtility()
         >>> provideUtility(auth, IAuthentication)
         >>> auth.__parent__ = app

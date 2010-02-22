@@ -25,10 +25,10 @@ import urllib
 from persistent import Persistent
 from zope.component import getUtility, queryUtility
 from zope.component import getNextUtility
-from zope.app.container.contained import Contained
+from zope.container.contained import Contained
 from zope.location.interfaces import ILocation
-from zope.app.security.interfaces import IAuthentication, ILoginPassword
-from zope.app.security.interfaces import IAuthenticatedGroup, IEveryoneGroup
+from zope.authentication.interfaces import IAuthentication, ILoginPassword
+from zope.authentication.interfaces import IAuthenticatedGroup, IEveryoneGroup
 from zope.session.interfaces import ISession
 from zope.interface import implements
 from schooltool.group.interfaces import IGroupContainer
@@ -36,7 +36,7 @@ from zope.security.interfaces import IGroupAwarePrincipal
 from zope.security.checker import ProxyFactory
 from zope.publisher.browser import FileUpload
 from zope.publisher.interfaces.browser import IBrowserRequest
-from zope.location.interfaces import ISite
+from zope.component.interfaces import ISite
 from zope.site import LocalSiteManager
 from zope.traversing.browser.absoluteurl import absoluteURL
 from zope.traversing.api import traverse

@@ -7,152 +7,40 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-12-24 12:40+0000\n"
-"PO-Revision-Date: 2009-12-24 15:50+0000\n"
-"Last-Translator: Sergio Cuellar Valdes <herrsergio@gmail.com>\n"
+"PO-Revision-Date: 2010-01-17 19:38+0000\n"
+"Last-Translator: FAMM <Unknown>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-12-25 04:38+0000\n"
+"X-Launchpad-Export-Date: 2010-01-18 04:42+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
-
-#: /src/schooltool/app/app.py:201
-msgid "Your School"
-msgstr "Tu Escuela"
-
-#: /src/schooltool/app/browser/__init__.py:256
-#: /src/schooltool/person/help/person_container.pt:6
-#: /src/schooltool/app/browser/templates/index.pt:11
-#: /src/schooltool/person/browser/configure.zcml:26
-#: /src/schooltool/person/help/configure.zcml:8
-msgid "Persons"
-msgstr "Personas"
-
-#: /src/schooltool/app/browser/__init__.py:261
-msgid "1 person"
-msgstr "1 persona"
 
 #. Default: ""
 #: /src/schooltool/app/browser/__init__.py:263
 msgid "${number} persons"
-msgstr "${number} personas"
+msgstr "${number} de personas"
 
 #: /src/schooltool/app/browser/app.py:227
 msgid "Username or password is incorrect"
-msgstr "Nombre de usuario o contraseña incorrectos"
+msgstr "Nombre de usuario o contraseña incorrecto"
 
 #: /src/schooltool/app/browser/app.py:323
 #: /src/schooltool/app/security.py:307
 msgid "Leaders"
-msgstr "Equipo Directivo"
+msgstr "Líderes"
 
 #: /src/schooltool/app/browser/app.py:324
 msgid "Current leaders"
-msgstr "Equipo Directivo actual"
+msgstr "Líderes actuales"
 
 #: /src/schooltool/app/browser/app.py:325
 msgid "Available leaders"
-msgstr "Equipo Directivo disponible"
-
-#: /src/schooltool/app/browser/app.py:348
-msgid "school"
-msgstr "escuela"
-
-#: /src/schooltool/app/browser/cal.py:114
-msgid "March"
-msgstr "Marzo"
-
-#: /src/schooltool/app/browser/cal.py:114
-msgid "January"
-msgstr "Enero"
-
-#: /src/schooltool/app/browser/cal.py:114
-msgid "February"
-msgstr "Febrero"
-
-#: /src/schooltool/app/browser/cal.py:115
-msgid "June"
-msgstr "Junio"
-
-#: /src/schooltool/app/browser/cal.py:115
-msgid "May"
-msgstr "Mayo"
-
-#: /src/schooltool/app/browser/cal.py:115
-msgid "April"
-msgstr "Abril"
-
-#: /src/schooltool/app/browser/cal.py:116
-msgid "August"
-msgstr "Agosto"
-
-#: /src/schooltool/app/browser/cal.py:116
-msgid "September"
-msgstr "Septiembre"
-
-#: /src/schooltool/app/browser/cal.py:116
-msgid "July"
-msgstr "Julio"
+msgstr "Líderes disponibles"
 
 #: /src/schooltool/app/browser/cal.py:1166
 msgid "Next month"
-msgstr "Mes siguiente"
-
-#: /src/schooltool/app/browser/cal.py:1167
-msgid "Current month"
-msgstr "Mes actual"
-
-#: /src/schooltool/app/browser/cal.py:1168
-msgid "Previous month"
-msgstr "Mes anterior"
-
-#: /src/schooltool/app/browser/cal.py:117
-msgid "October"
-msgstr "Octubre"
-
-#: /src/schooltool/app/browser/cal.py:117
-msgid "November"
-msgstr "Noviembre"
-
-#: /src/schooltool/app/browser/cal.py:117
-msgid "December"
-msgstr "Diciembre"
-
-#: /src/schooltool/app/browser/cal.py:1170
-msgid "Go to next month"
-msgstr "Ir a Mes siguiente"
-
-#: /src/schooltool/app/browser/cal.py:1171
-msgid "Go to current month"
-msgstr "Ir a Mes actual"
-
-#: /src/schooltool/app/browser/cal.py:1172
-msgid "Go to previous month"
-msgstr "Ir a Mes anterior"
-
-#. Default: ""
-#: /src/schooltool/app/browser/cal.py:1180
-msgid "${month}, ${year}"
-msgstr "${month}, ${year}"
-
-#: /src/schooltool/app/browser/cal.py:120
-#: /src/schooltool/person/interfaces.py:180
-#: /src/schooltool/timetable/browser/schema.py:115
-#: /src/schooltool/timetable/browser/schema.py:284
-#: /src/schooltool/term/browser/templates/term_add.pt:54
-#: /src/schooltool/term/browser/templates/term_add.pt:80
-#: /src/schooltool/term/browser/templates/term.pt:31
-msgid "Monday"
-msgstr "Lunes"
-
-#: /src/schooltool/app/browser/cal.py:120
-#: /src/schooltool/timetable/browser/schema.py:116
-#: /src/schooltool/timetable/browser/schema.py:285
-#: /src/schooltool/term/browser/templates/term_add.pt:56
-#: /src/schooltool/term/browser/templates/term_add.pt:81
-#: /src/schooltool/term/browser/templates/term.pt:32
-msgid "Tuesday"
-msgstr "Martes"
+msgstr "Próximo mes"
 
 #: /src/schooltool/app/browser/cal.py:120
 #: /src/schooltool/timetable/browser/schema.py:117
@@ -5392,6 +5280,118 @@ msgstr "Confirme la contraseña"
 msgid "Supplied passwords are not identical"
 msgstr "Las contraseñas proporcionadas no son idénticas."
 
+#: /src/schooltool/app/app.py:201
+msgid "Your School"
+msgstr "Tu Escuela"
+
+#: /src/schooltool/app/browser/__init__.py:256
+#: /src/schooltool/person/help/person_container.pt:6
+#: /src/schooltool/app/browser/templates/index.pt:11
+#: /src/schooltool/person/browser/configure.zcml:26
+#: /src/schooltool/person/help/configure.zcml:8
+msgid "Persons"
+msgstr "Personas"
+
+#: /src/schooltool/app/browser/__init__.py:261
+msgid "1 person"
+msgstr "1 persona"
+
+#: /src/schooltool/app/browser/app.py:348
+msgid "school"
+msgstr "escuela"
+
+#: /src/schooltool/app/browser/cal.py:114
+msgid "March"
+msgstr "Marzo"
+
+#: /src/schooltool/app/browser/cal.py:114
+msgid "January"
+msgstr "Enero"
+
+#: /src/schooltool/app/browser/cal.py:114
+msgid "February"
+msgstr "Febrero"
+
+#: /src/schooltool/app/browser/cal.py:115
+msgid "June"
+msgstr "Junio"
+
+#: /src/schooltool/app/browser/cal.py:115
+msgid "May"
+msgstr "Mayo"
+
+#: /src/schooltool/app/browser/cal.py:115
+msgid "April"
+msgstr "Abril"
+
+#: /src/schooltool/app/browser/cal.py:116
+msgid "August"
+msgstr "Agosto"
+
+#: /src/schooltool/app/browser/cal.py:116
+msgid "September"
+msgstr "Septiembre"
+
+#: /src/schooltool/app/browser/cal.py:116
+msgid "July"
+msgstr "Julio"
+
+#: /src/schooltool/app/browser/cal.py:1167
+msgid "Current month"
+msgstr "Mes actual"
+
+#: /src/schooltool/app/browser/cal.py:1168
+msgid "Previous month"
+msgstr "Mes anterior"
+
+#: /src/schooltool/app/browser/cal.py:117
+msgid "October"
+msgstr "Octubre"
+
+#: /src/schooltool/app/browser/cal.py:117
+msgid "November"
+msgstr "Noviembre"
+
+#: /src/schooltool/app/browser/cal.py:117
+msgid "December"
+msgstr "Diciembre"
+
+#: /src/schooltool/app/browser/cal.py:1170
+msgid "Go to next month"
+msgstr "Ir a Mes siguiente"
+
+#: /src/schooltool/app/browser/cal.py:1171
+msgid "Go to current month"
+msgstr "Ir a Mes actual"
+
+#: /src/schooltool/app/browser/cal.py:1172
+msgid "Go to previous month"
+msgstr "Ir a Mes anterior"
+
+#. Default: ""
+#: /src/schooltool/app/browser/cal.py:1180
+msgid "${month}, ${year}"
+msgstr "${month}, ${year}"
+
+#: /src/schooltool/app/browser/cal.py:120
+#: /src/schooltool/person/interfaces.py:180
+#: /src/schooltool/timetable/browser/schema.py:115
+#: /src/schooltool/timetable/browser/schema.py:284
+#: /src/schooltool/term/browser/templates/term_add.pt:54
+#: /src/schooltool/term/browser/templates/term_add.pt:80
+#: /src/schooltool/term/browser/templates/term.pt:31
+msgid "Monday"
+msgstr "Lunes"
+
+#: /src/schooltool/app/browser/cal.py:120
+#: /src/schooltool/timetable/browser/schema.py:116
+#: /src/schooltool/timetable/browser/schema.py:285
+#: /src/schooltool/term/browser/templates/term_add.pt:56
+#: /src/schooltool/term/browser/templates/term_add.pt:81
+#: /src/schooltool/term/browser/templates/term.pt:32
+msgid "Tuesday"
+msgstr "Martes"
+
 #. Default: ""
 #: /src/schooltool/app/browser/cal.py:1448
 msgid "Add new event starting at ${title}"
@@ -6057,7 +6057,7 @@ msgstr "Nombre de usuario para autenticación SMTP opcional."
 
 #: /src/schooltool/email/browser/email.py:113
 msgid "Current Password"
-msgstr "Contraseña Actual"
+msgstr "Contraseña actual"
 
 #: /src/schooltool/email/browser/email.py:114
 msgid "Current password to authenticate to the SMTP server."

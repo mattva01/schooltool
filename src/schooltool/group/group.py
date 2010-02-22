@@ -22,15 +22,15 @@ Group objects
 __docformat__ = 'restructuredtext'
 from persistent import Persistent
 
-from zope.app.container.interfaces import IObjectRemovedEvent
 from zope.annotation.interfaces import IAttributeAnnotatable
-from zope.app.container import btree
-from zope.app.container.contained import Contained
-from zope.app.container.contained import ObjectAddedEvent
-from zope.app.container.interfaces import IObjectAddedEvent
+from zope.container.contained import Contained
+from zope.container.btree import BTreeContainer
+from zope.lifecycleevent.interfaces import IObjectAddedEvent
+from zope.lifecycleevent.interfaces import IObjectRemovedEvent
+from zope.lifecycleevent import ObjectAddedEvent
 from zope.app.dependable.interfaces import IDependable
-from zope.app.intid import addIntIdSubscriber
-from zope.app.intid.interfaces import IIntIds
+from zope.intid import addIntIdSubscriber
+from zope.intid.interfaces import IIntIds
 from zope.component import adapter
 from zope.component import adapts
 from zope.component import getAdapter
@@ -59,14 +59,14 @@ from schooltool.securitypolicy.metaconfigure import getCrowdsUtility
 from schooltool.securitypolicy.interfaces import ICrowd
 
 
-class GroupContainerContainer(btree.BTreeContainer):
+class GroupContainerContainer(BTreeContainer):
     """Container of group containers."""
 
     implements(interfaces.IGroupContainerContainer,
                IAttributeAnnotatable)
 
 
-class GroupContainer(btree.BTreeContainer):
+class GroupContainer(BTreeContainer):
     """Container of groups."""
 
     implements(interfaces.IGroupContainer, IAttributeAnnotatable)

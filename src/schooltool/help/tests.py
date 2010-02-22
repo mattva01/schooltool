@@ -18,15 +18,13 @@
 #
 """
 Level-related Tests
-
-$Id$
 """
 
 __docformat__ = 'restructuredtext'
 
 import unittest
+import doctest
 
-from zope.testing import doctest
 from zope.app.testing.placelesssetup import setUp, tearDown
 
 # Some imports to make tests work

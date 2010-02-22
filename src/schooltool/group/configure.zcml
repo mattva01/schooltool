@@ -11,11 +11,11 @@
       />
 
   <class class=".group.GroupContainerContainer">
-    <allow interface="zope.app.container.interfaces.ISimpleReadContainer" />
+    <allow interface="zope.container.interfaces.ISimpleReadContainer" />
     <require permission="schooltool.view"
              attributes="keys values items __iter__ __len__" />
     <require permission="schooltool.edit"
-             interface="zope.app.container.interfaces.IWriteContainer" />
+             interface="zope.container.interfaces.IWriteContainer" />
   </class>
 
   <interface
@@ -24,11 +24,11 @@
       />
 
   <class class=".group.GroupContainer">
-    <allow interface="zope.app.container.interfaces.ISimpleReadContainer" />
+    <allow interface="zope.container.interfaces.ISimpleReadContainer" />
     <require permission="schooltool.view"
              attributes="keys values items __iter__ __len__" />
     <require permission="schooltool.edit"
-             interface="zope.app.container.interfaces.IWriteContainer" />
+             interface="zope.container.interfaces.IWriteContainer" />
   </class>
 
   <interface
@@ -49,7 +49,7 @@
   <adapter
       for=".interfaces.IGroupContainer"
       factory="schooltool.app.app.SimpleNameChooser"
-      provides="zope.app.container.interfaces.INameChooser" />
+      provides="zope.container.interfaces.INameChooser" />
 
   <!-- Application hook -->
   <adapter

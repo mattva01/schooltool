@@ -21,10 +21,10 @@ Unit tests for schooltool.app.cal.
 """
 
 import unittest
+import doctest
 from textwrap import dedent
 from datetime import datetime, timedelta
 
-from zope.testing import doctest
 from zope.interface import implements
 from zope.interface.verify import verifyObject
 from zope.annotation.interfaces import IAttributeAnnotatable
@@ -32,6 +32,7 @@ from zope.app.testing import setup
 
 from schooltool.app.interfaces import IHaveCalendar
 from schooltool.testing import setup as sbsetup
+
 
 class ResourceStub(object):
     """Stub resource.

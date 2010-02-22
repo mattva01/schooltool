@@ -20,9 +20,9 @@
 Unit tests for basic person.
 """
 import unittest
+import doctest
 
 from zope.app.testing import setup
-from zope.testing import doctest
 
 
 def doctest_BasicPerson():

@@ -30,10 +30,10 @@ from zope.component import getUtility
 from zope.interface import implementer
 from zope.interface import implements
 from zope.annotation.interfaces import IAttributeAnnotatable
-from zope.app.intid.interfaces import IIntIds
-from zope.app.container.interfaces import IObjectAddedEvent
-from zope.app.container.btree import BTreeContainer
-from zope.app.container.contained import Contained
+from zope.intid.interfaces import IIntIds
+from zope.lifecycleevent.interfaces import IObjectAddedEvent
+from zope.container.btree import BTreeContainer
+from zope.container.contained import Contained
 from zope.traversing.api import getParent, getName
 from zope.location.pickling import CopyPersistent
 

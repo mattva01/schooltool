@@ -20,8 +20,7 @@
 Unit tests for schooltool.generations.evolve1
 """
 import unittest
-
-from zope.testing import doctest
+import doctest
 
 
 def doctest_evolve1():

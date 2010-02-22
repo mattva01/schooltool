@@ -18,14 +18,12 @@
 #
 """
 Unit tests for schooltool.app.
-
-$Id$
 """
 import unittest
+import doctest
 
 from zope.component import provideAdapter
 from zope.interface.verify import verifyObject
-from zope.testing import doctest
 from zope.app.testing import setup, placelesssetup
 
 from schooltool.testing import setup as sbsetup
@@ -119,7 +117,7 @@ def doctest_getSchoolToolApplication():
 
     If current site is a SchoolToolApplication, we get it:
 
-      >>> from zope.site.hooks import setSite
+      >>> from zope.component.hooks import setSite
       >>> setSite(app)
 
       >>> getSchoolToolApplication() is app

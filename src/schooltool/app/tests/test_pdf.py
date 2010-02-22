@@ -23,11 +23,9 @@ Tests for SchoolTool PDF support.
 import os
 import sys
 import unittest
-
-from zope.testing import doctest
+import doctest
 
 from schooltool.app.pdf import setUpMSTTCoreFonts
-
 
 
 def doctest_setUpMSTTCoreFonts():

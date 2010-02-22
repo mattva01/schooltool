@@ -22,13 +22,13 @@ SchoolTool resource object
 $Id$
 """
 __docformat__ = 'restructuredtext'
-from persistent import Persistent
 
+from persistent import Persistent
 from zope.component import adapts
 from zope.interface import implements
 from zope.annotation.interfaces import IAttributeAnnotatable
-from zope.app.container import btree
-from zope.app.container.contained import Contained
+from zope.container.contained import Contained
+from zope.container.btree import BTreeContainer
 
 from schooltool.app.app import Asset
 from schooltool.app.app import InitBase
@@ -41,7 +41,7 @@ from schooltool.securitypolicy.crowds import AuthenticatedCrowd
 from schooltool.common import SchoolToolMessage as _
 
 
-class ResourceContainer(btree.BTreeContainer):
+class ResourceContainer(BTreeContainer):
     """Container of resources."""
 
     implements(interfaces.IResourceContainer, IAttributeAnnotatable)

@@ -25,7 +25,7 @@ import unittest
 import transaction
 from zope.interface import implements, Interface
 from zope.component import provideAdapter, provideUtility
-from zope.site.hooks import setSite
+from zope.component.hooks import setSite
 from zope.app.testing.functional import FunctionalTestSetup
 from zope.app.testing import setup, ztapi
 from zope.app.form.interfaces import IInputWidget
@@ -49,8 +49,8 @@ from zope.traversing.interfaces import IPathAdapter
 from zope.app.pagetemplate.simpleviewclass import SimpleViewClass
 from zope.app.basicskin.standardmacros import StandardMacros
 from zope.app.form.browser.macros import FormMacros
-from zope.app.publisher.browser.menu import MenuAccessView
-from zope.app.publisher.interfaces.browser import IBrowserMenu
+from zope.browsermenu.menu import MenuAccessView
+from zope.browsermenu.interfaces import IBrowserMenu
 from zope.publisher.interfaces.browser import IBrowserView
 
 from schooltool.relationship.tests import setUpRelationships

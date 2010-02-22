@@ -21,15 +21,15 @@ Timetabling Schema views.
 
 $Id$
 """
+
 from zope.i18n import translate
 from zope.component import getMultiAdapter
-from zope.component import getUtility
 from zope.component import adapts, getUtility, queryUtility
 from zope.interface import Interface, implements
 from zope.schema import TextLine, Int
 from zope.schema.interfaces import RequiredMissing
-from zope.app.intid.interfaces import IIntIds
-from zope.app.container.interfaces import INameChooser
+from zope.intid.interfaces import IIntIds
+from zope.container.interfaces import INameChooser
 from zope.app.form.interfaces import IWidgetInputError
 from zope.app.form.interfaces import IInputWidget
 from zope.app.form.interfaces import WidgetInputError

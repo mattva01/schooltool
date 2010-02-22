@@ -18,23 +18,19 @@
 #
 """
 Resource-related interfaces
-
-$Id$
 """
 
-import zope.interface
 import zope.schema
-
-import zope.app.container.constraints
-import zope.app.container.interfaces
-from zope.app import container
+from zope.container.interfaces import IContainer, IContained
+from zope.container.constraints import contains, containers
+from zope.interface import Interface, Attribute
 
 from schooltool.calendar.interfaces import ICalendarEvent
 from schooltool.calendar.interfaces import ICalendar
 from schooltool.common import SchoolToolMessage as _
 
 
-class IBaseResource(zope.interface.Interface):
+class IBaseResource(Interface):
     """Resource."""
 
     title = zope.schema.TextLine(
@@ -58,16 +54,16 @@ class IBaseResource(zope.interface.Interface):
         description=_("Notes for the resource."))
 
 
-class IResourceContainer(container.interfaces.IContainer):
+class IResourceContainer(IContainer):
     """Container of resources."""
 
-    container.constraints.contains(IBaseResource)
+    contains(IBaseResource)
 
 
-class IBaseResourceContained(IBaseResource, container.interfaces.IContained):
+class IBaseResourceContained(IBaseResource, IContained):
     """Resource contained in an IResourceContainer."""
 
-    container.constraints.containers(IResourceContainer)
+    containers(IResourceContainer)
 
 
 class IResource(IBaseResource):
@@ -118,7 +114,7 @@ class IEquipment(IBaseResource):
         required=False)
 
 
-class IResourceTypeInformation(zope.interface.Interface):
+class IResourceTypeInformation(Interface):
 
     id = zope.schema.TextLine(
         title=_("Id of the resource type."),
@@ -131,7 +127,7 @@ class IResourceTypeInformation(zope.interface.Interface):
         resource type selection widgets."""))
 
 
-class IResourceFactoryUtility(zope.interface.Interface):
+class IResourceFactoryUtility(Interface):
 
     title = zope.schema.TextLine(
         title=_("The title of a resource type."),
@@ -146,7 +142,7 @@ class IResourceTypeSource(zope.schema.interfaces.IIterableSource):
     """Marker interface for a source of resource types."""
 
 
-class IResourceSubTypes(zope.interface.Interface):
+class IResourceSubTypes(Interface):
     """Contains a list of sub types for a given type."""
 
     def types():
@@ -155,7 +151,7 @@ class IResourceSubTypes(zope.interface.Interface):
 
 class IBookingCalendar(ICalendar):
 
-    title = zope.interface.Attribute("")
+    title = Attribute("")
 
 
 class IBookingCalendarEvent(ICalendarEvent):

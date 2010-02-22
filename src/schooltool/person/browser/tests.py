@@ -20,10 +20,10 @@
 Tests for Person views.
 """
 import unittest
+import doctest
 
 from zope.interface import directlyProvides
 from zope.publisher.browser import TestRequest
-from zope.testing import doctest
 from zope.app.testing import setup
 from zope.traversing.interfaces import IContainmentRoot
 from zope.component import provideAdapter
@@ -31,6 +31,7 @@ from zope.component import provideAdapter
 from schooltool.group.interfaces import IGroupContainer
 from schooltool.app.browser.testing import setUp, tearDown
 from schooltool.testing import setup as sbsetup
+
 
 def doctest_PersonContainerView():
     r"""Test for PersonContainerView
@@ -475,7 +476,7 @@ def doctest_PersonFilterWidget():
     For this test we will need a catalog with an index for person
     titles:
 
-        >>> from zope.app.catalog.interfaces import ICatalog
+        >>> from zope.catalog.interfaces import ICatalog
         >>> class IndexStub(object):
         ...     def __init__(self):
         ...         self.documents_to_values = {}
@@ -587,7 +588,7 @@ def doctest_PersonFilterWidget():
         [{'id': 2}]
 
         >>> from zope.component import provideUtility
-        >>> from zope.app.intid.interfaces import IIntIds
+        >>> from zope.intid.interfaces import IIntIds
         >>> class IntIdsStub(object):
         ...     def queryId(self, obj):
         ...         return obj.id

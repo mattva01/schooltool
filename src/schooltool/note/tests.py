@@ -20,11 +20,11 @@
 Unit tests for schooltool.note
 """
 import unittest
+import doctest
 
 from zope.interface import implements
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.publisher.browser import TestRequest
-from zope.testing import doctest
 from zope.component import provideAdapter
 
 from zope.app.testing import setup
@@ -42,7 +42,6 @@ def doctest_getNotes():
 
     We need to have an annotatable object
 
-        >>> from zope.interface import implements
         >>> from zope.annotation.interfaces import IAttributeAnnotatable
         >>> class SomeAnnotatable(object):
         ...     implements(IAttributeAnnotatable)

@@ -31,8 +31,8 @@ SchoolTool authentication utility
 
     Global auth utility:
 
-    >>> from zope.app.security.principalregistry import principalRegistry
-    >>> from zope.app.security.interfaces import IAuthentication
+    >>> from zope.principalregistry.principalregistry import principalRegistry
+    >>> from zope.authentication.interfaces import IAuthentication
     >>> from zope.component import provideUtility
     >>> provideUtility(principalRegistry, IAuthentication)
 
@@ -57,7 +57,7 @@ SchoolTool authentication utility
 SchoolTool is a possible site:
 
     >>> from zope.interface.verify import verifyObject
-    >>> from zope.location.interfaces import ISite, IPossibleSite
+    >>> from zope.component.interfaces import ISite, IPossibleSite
 
     >>> from schooltool.app.app import SchoolToolApplication
     >>> app = SchoolToolApplication()
@@ -92,7 +92,7 @@ Let's provide the location of auth:
     >>> plugin = PersonContainerAuthenticationPlugin()
     >>> provideUtility(plugin, ISchoolToolAuthenticationPlugin)
 
-    >>> from zope.site.hooks import setSite
+    >>> from zope.component.hooks import setSite
     >>> setSite(app)
 
 Now, we get our local authentication service:
@@ -109,7 +109,7 @@ getPrincipal
 The utility knows about the users of the application:
 
     >>> from schooltool.person.person import Person, PersonContainer
-    >>> from zope.app.security.interfaces import IPrincipal
+    >>> from zope.security.interfaces import IPrincipal
     >>> app['persons'] = PersonContainer()
     >>> person = Person(username=u"frog", title="Frog")
     >>> app['persons']['frog'] = person
@@ -163,10 +163,10 @@ to.  This list is used by the security policy:
 If the global principals like IEveryoneGroup, IAuthenticatedGroup are
 defined, they are added to the list of groups of a principal, too:
 
-    >>> from zope.app.security.interfaces import IAuthenticatedGroup
-    >>> from zope.app.security.interfaces import IEveryoneGroup
-    >>> from zope.app.security.principalregistry import AuthenticatedGroup
-    >>> from zope.app.security.principalregistry import EverybodyGroup
+    >>> from zope.authentication.interfaces import IAuthenticatedGroup
+    >>> from zope.authentication.interfaces import IEveryoneGroup
+    >>> from zope.principalregistry.principalregistry import AuthenticatedGroup
+    >>> from zope.principalregistry.principalregistry import EverybodyGroup
 
     >>> authenticated = AuthenticatedGroup('zope.authenticated', '', '')
     >>> provideUtility(authenticated, IAuthenticatedGroup)
@@ -232,7 +232,7 @@ Also, if cookie based authentication fails, we support HTTP basic
 authentication (by trying to adapt the request to ILoginPassword):
 
     >>> from zope.interface import Interface, directlyProvides, implements
-    >>> from zope.app.security.interfaces import ILoginPassword
+    >>> from zope.authentication.interfaces import ILoginPassword
 
     >>> class Adapter:
     ...     implements(ILoginPassword)

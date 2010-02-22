@@ -20,10 +20,10 @@
 Unit tests for schooltool.generations.evolve28
 """
 import unittest
+import doctest
 import os.path
 import transaction
 
-from zope.testing import doctest
 from zope.app.publication.zopepublication import ZopePublication
 from zope.app.testing import setup
 from ZODB.FileStorage.FileStorage import FileStorage
@@ -57,7 +57,7 @@ def doctest_evolve28():
        >>> db = DB(storage, database_name="")
        >>> context = ContextStub(db)
        >>> app = context.connection.root()[ZopePublication.root_name]
-       >>> from zope.site.hooks import setSite
+       >>> from zope.component.hooks import setSite
        >>> setSite(app)
 
        >>> evolve27(context)

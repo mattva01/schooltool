@@ -17,18 +17,17 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """Commandation Interfaces
-
-$Id$
 """
 # Setting this attribute on the module declares that all doc strings in this
 # module are written in restructured text, the default Python documentation
 # format.
 __docformat__ = 'reStructuredText'
 
-import zope.interface
 import zope.schema
-import zope.i18nmessageid
-from zope import container
+from zope.i18nmessageid import MessageFactory
+from zope.container.interfaces import IContainer, IContained
+from zope.container.constraints import contains, containers
+from zope.interface import Interface
 
 # Since Zope 3 is an application server and does not know the users locale
 # until a request is issued, we can only mark all strings that are supposed to
@@ -38,10 +37,10 @@ from zope import container
 # In order for the string extraction tools to find the translatable strings,
 # they have to be wrapped by ``_()``, namely a callable called ``_``
 # (underscore).
-_ = zope.i18nmessageid.MessageFactory("schooltool.commendation")
+_ = MessageFactory("schooltool.commendation")
 
 
-class ICommendation(zope.interface.Interface):
+class ICommendation(Interface):
     """A commendation (usually for a person or a group)."""
 
     title = zope.schema.TextLine(
@@ -78,16 +77,16 @@ class ICommendation(zope.interface.Interface):
 # component management. It basically implements the Python mapping
 # API. However, its methods have to do a little bit more work, so that it
 # integrates nicely into the Zope 3 framework.
-class ICommendations(container.interfaces.IContainer):
+class ICommendations(IContainer):
     '''An object containing several commendations.'''
-    container.constraints.contains(ICommendation)
+    contains(ICommendation)
 
 # ``IContained`` says that this object can be contained by another. Basically,
 # it requires an object to provide a ``__parent__`` and ``__name__`` attribute.
-class ICommendationContained(container.interfaces.IContained):
+class ICommendationContained(IContained):
     '''A commendation that can only be contained by ``ICommendations``.'''
-    container.constraints.containers(ICommendations)
+    containers(ICommendations)
 
 
-class IHaveCommendations(zope.interface.Interface):
+class IHaveCommendations(Interface):
     '''Objects having commendations associated with them.'''

@@ -17,21 +17,22 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Unit tests for schooltool.generations.evolve32
+Unit tests for schooltool.generations.evolve33
 """
 import unittest
+import doctest
 
-from zope.testing import doctest
 from zope.app.testing import setup
 
 from zope.component import queryUtility, provideUtility
 from zope.component import provideAdapter
 from zope.interface import implements
-from zope.app import intid
-from zope.app.folder import Folder
-from zope.app.catalog.interfaces import ICatalog
-from zope.app.container import btree
-from zope.site.hooks import getSite, setSite
+from zope.intid import IntIds
+from zope.intid.interfaces import IIntIds
+from zope.site.folder import Folder
+from zope.catalog.interfaces import ICatalog
+from zope.container.btree import BTreeContainer
+from zope.component.hooks import getSite, setSite
 
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.generations.tests import ContextStub
@@ -47,7 +48,7 @@ class AppStub(Folder):
 
     def __init__(self):
         super(AppStub, self).__init__()
-        self['persons'] = btree.BTreeContainer()
+        self['persons'] = BTreeContainer()
         self['persons']['john'] = BasicPerson("john", "Johny", "John")
         self['persons']['pete'] = BasicPerson("pete", "Petey", "Pete")
 
@@ -63,7 +64,7 @@ def doctest_evolve33():
 
     We'll need int ids.
 
-        >>> provideUtility(intid.IntIds(), intid.interfaces.IIntIds)
+        >>> provideUtility(IntIds(), IIntIds)
 
     Also an adapter to obtain the contact, and adapter to create form keys.
 

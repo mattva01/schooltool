@@ -18,19 +18,18 @@
 #
 """
 Course and Section related interfaces
-
-$Id$
 """
-import zope.interface
+
 import zope.schema
-from zope.app import container
-from zope.interface import Interface
+from zope.container.interfaces import IContainer, IContained
+from zope.container.constraints import contains, containers
+from zope.interface import Interface, Attribute
 
 from schooltool.group.interfaces import IBaseGroup as IGroup
 from schooltool.common import SchoolToolMessage as _
 
 
-class ICourse(zope.interface.Interface):
+class ICourse(Interface):
     """Courses are similar to groups, membership is restricted to Sections."""
 
     title = zope.schema.TextLine(
@@ -42,7 +41,7 @@ class ICourse(zope.interface.Interface):
         required=False,
         description=_("Description of the course."))
 
-    sections = zope.interface.Attribute(
+    sections = Attribute(
         """The Sections that implement this course material,
            see schooltool.relationship.interfaces.IRelationshipProperty.""")
 
@@ -63,22 +62,22 @@ class ICourse(zope.interface.Interface):
 
 
 
-class ICourseContainer(container.interfaces.IContainer):
+class ICourseContainer(IContainer):
     """Container of Courses."""
 
-    container.constraints.contains(ICourse)
+    contains(ICourse)
 
 
-class ICourseContainerContainer(container.interfaces.IContainer):
+class ICourseContainerContainer(IContainer):
     """Container of Courses."""
 
-    container.constraints.contains(ICourseContainer)
+    contains(ICourseContainer)
 
 
-class ICourseContained(ICourse, container.interfaces.IContained):
+class ICourseContained(ICourse, IContained):
     """Courses contained in an ICourseContainer."""
 
-    container.constraints.containers(ICourseContainer)
+    containers(ICourseContainer)
 
 
 class ISection(IGroup):
@@ -101,44 +100,44 @@ class ISection(IGroup):
         required=False,
         description=_("Description of the section."))
 
-    instructors = zope.interface.Attribute(
+    instructors = Attribute(
         """A list of Person objects in the role of instructor""")
 
-    members = zope.interface.Attribute(
+    members = Attribute(
         """Students listed in the role of member""")
 
-    courses = zope.interface.Attribute(
+    courses = Attribute(
         """A list of courses this section is a member of.""")
 
-    size = zope.interface.Attribute(
+    size = Attribute(
         """The number of member students in the section.""")
 
-    previous = zope.interface.Attribute(
+    previous = Attribute(
         """The previous section.""")
 
-    next = zope.interface.Attribute(
+    next = Attribute(
         """The next section.""")
 
-    linked_sections = zope.interface.Attribute(
+    linked_sections = Attribute(
         """Chain of sections linked by previous/next with this one.""")
 
 
-class ISectionContainer(container.interfaces.IContainer):
+class ISectionContainer(IContainer):
     """A container for Sections."""
 
-    container.constraints.contains(ISection)
+    contains(ISection)
 
 
-class ISectionContainerContainer(container.interfaces.IContainer):
+class ISectionContainerContainer(IContainer):
     """A container for Section containers."""
 
-    container.constraints.contains(ISectionContainer)
+    contains(ISectionContainer)
 
 
-class ISectionContained(ISection, container.interfaces.IContained):
+class ISectionContained(ISection, IContained):
     """Sections in a SectionContainer."""
 
-    container.constraints.containers(ISectionContainer)
+    containers(ISectionContainer)
 
 
 class ILearner(Interface):
