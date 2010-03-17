@@ -92,39 +92,45 @@ class IDescribeGroup(Interface):
 
     name = DescGroupId(
         title=u"Name",
-        description=u"Identifier of the user-level access group")
+        description=u"Unique identifier of the group.")
 
     title = fields.MessageID(
         title=u"Title",
+        description=u"Group title displayed to the user.",
         required=False)
 
     description = fields.MessageID(
         title=u"Description",
+        description=u"Group description displayed to the user.",
         required=False)
 
     klass = fields.GlobalObject(
-        title=u"Implementation of the group description",
+        title=u"Class",
+        description=u"""
+        Group definition class that builds it's own title/description.
+        This is an alternative to title/description defined in ZCML.
+        """,
         required=False)
 
 
 class IDescribeAction(Interface):
 
     group = DescGroupId(
-        title=u"Name",
-        description=u"Identifier of the user-level access group")
+        title=u"Group name",
+        description=u"Identifier of the group this action belongs to.")
 
     name = DescActionId(
         title=u"Name",
-        description=u"Identifier of the action")
+        description=u"Unique identifier of the action within the group.")
 
     order = schema.Int(
         title=u"Order",
+        description=u"Order in which this action should be displayed.",
         required=False)
 
     interface = fields.GlobalObject(
         title=u"Interface",
-        required=True,
-        description=u"An interface of the object")
+        required=True)
 
     permission = Permission(
         title=u"Permission",
@@ -139,7 +145,11 @@ class IDescribeAction(Interface):
         required=False)
 
     klass = fields.GlobalObject(
-        title=u"Implementation of the action description",
+        title=u"Class",
+        description=u"""
+        Action definition class that builds it's own title/description.
+        This is an alternative to title/description defined in ZCML.
+        """,
         required=False)
 
 
@@ -147,87 +157,92 @@ class IDescribeCrowd(Interface):
 
     group = DescGroupId(
         title=u"Group",
-        description=u"Optional identifier of the user-level access group",
+        description=u"""
+        Optional identifier of the group.  When specified, this description applies
+        to the group only.
+        """,
         required=False)
 
     action = DescActionId(
         title=u"Action",
-        description=u"Optional identifier of the action",
+        description=u"""
+        Optional identifier of the action of the group.  If specified, this description
+        applies to the action only.
+        """,
         required=False)
 
     crowd = CrowdId(
         title=u"Crowd",
-        description=u"Identifier of the crowd",
+        description=u"Identifier of the crowd.",
         required=False)
 
     crowd_factory = fields.GlobalObject(
         title=u"Crowd factory",
-        description=u"Alternative way to specify the crowd",
+        description=u"Alternative way to specify the crowd.",
         required=False)
 
     factory = fields.GlobalObject(
         title=u"Description class",
+        description=u"Optional class that to build the title/description.",
         required=False)
 
     title = fields.MessageID(
         title=u"Title",
+        description=u"""
+        A quick way to specify the title from ZCML.
+        It will be assigned to the "factory" instance dict.
+        """,
         required=False)
 
     description = fields.MessageID(
         title=u"Description",
+        description=u"""
+        A quick way to specify the description from ZCML.
+        It will be assigned to the "factory" instance dict.
+        """,
         required=False)
 
 
-class IParentCrowd(Interface):
-
-    provides = fields.GlobalObject(
-        title=u"Parent crowd interface",
-        required=True)
-
-    for_ = fields.GlobalObject(
-        title=u"Object parent's interface",
-        required=True)
-
-    permission = Permission(
-        title=u"Permission",
-        required=True)
-
-    factory = fields.GlobalObject(
-        title=u"Factory",
-        description=u"The factory for the crowd",
-        required=True)
-
-
 class ISwitchDescription(Interface):
+    """Directive to use a replacement crowd when looking up descriptions of
+    a crowd.  May be used to use the replacement for a specific group or action.
+    """
 
     group = DescGroupId(
         title=u"Group",
-        description=u"Optional identifier of the user-level access group",
+        description=u"""
+        Optional identifier of the group.  When specified,
+        the description will be switched within this group only.
+        """,
         required=False)
 
     action = DescActionId(
         title=u"Action",
-        description=u"Optional identifier of the action",
+        description=u"""
+        Optional identifier of the action of the group.
+        When specified, the description will be switched for
+        this action of the group only.
+        """,
         required=False)
 
     crowd = CrowdId(
         title=u"Crowd to replace",
-        description=u"Identifier of the crowd to replace",
+        description=u"Identifier of the crowd to replace.",
         required=False)
 
     crowd_factory = fields.GlobalObject(
         title=u"Crowd to replace factory",
-        description=u"Alternative way to specify the crowd",
+        description=u"Alternative way to specify the crowd to replace.",
         required=False)
 
     use_crowd = CrowdId(
         title=u"Crowd",
-        description=u"Identifier of the crowd to use for description",
+        description=u"Identifier of the crowd to use for description.",
         required=False)
 
     use_crowd_factory = fields.GlobalObject(
         title=u"Crowd factory",
-        description=u"Alternative way to specify the other crowd",
+        description=u"Alternative way to specify the description crowd",
         required=False)
 
 

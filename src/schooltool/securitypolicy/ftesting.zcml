@@ -12,6 +12,8 @@
   <include package="schooltool.timetable" />
   <include package="schooltool.demographics" />
 
+  <include package="schooltool.securitypolicy.browser" />
+
   <interface
       interface="schooltool.securitypolicy.ftesting.ISecurityFtestingSkin"
       type="zope.publisher.interfaces.browser.IBrowserSkinType"

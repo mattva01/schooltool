@@ -102,3 +102,66 @@ def setUpApplicationPreferences():
     provideAdapter(getApplicationPreferences,
                    (ISchoolToolApplication,), IApplicationPreferences)
 
+
+# --------------------------------------------------------------------------
+_import_chickens = {}, {}, ("*",) # dead chickens needed by __import__
+from zope.configuration import xmlconfig
+
+class ZCMLWrapper(object):
+    """Wrapper for more convenient zcml execution."""
+    auto_execute = True
+    context = None
+    namespaces = None
+    i18n_domain = ''
+
+    def __init__(self, context=None):
+        self.context = context
+        self.namespaces = {}
+
+    def setUp(self, namespaces={}, i18n_domain=""):
+        """Set active namespaces and translation domain.
+
+           namespaces = {
+               '': "http://namespaces.zope.org/zope",
+               'meta': "http://namespaces.zope.org/meta"
+               }
+           i18ndomain = 'foo'
+
+        Will wrap ZCML passed to string() with:
+
+            <configure
+                xmlns="http://namespaces.zope.org/zope"
+                xmlns:meta="http://namespaces.zope.org/meta"
+                i18ndomain="foo">
+            ...
+            </configure>
+
+        """
+        self.namespaces = namespaces.copy()
+        self.i18n_domain = i18n_domain
+
+    def string(self, string, name="<string>"):
+        config = ''
+        if self.namespaces:
+            config = ' ' + ' '.join(
+                ['xmlns%s="%s"' % (short and ':' + short, long)
+                 for short, long in sorted(self.namespaces.items())])
+        if self.i18n_domain:
+            config += ' i18n_domain="%s"' % self.i18n_domain
+
+        string = '<configure%s>\n' % config + string + '\n</configure>'
+
+        self.context = xmlconfig.string(
+            string, context=self.context, name=name,
+            execute=self.auto_execute)
+
+    def include(self, package=None, file='configure.zcml'):
+        if isinstance(package, str):
+            package = __import__(package, *_import_chickens)
+        self.context = xmlconfig.file(
+            file, package=package, context=self.context,
+            execute=self.auto_execute)
+
+    def execute(self):
+        if self.context is not None:
+            self.context.execute_actions()

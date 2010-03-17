@@ -27,45 +27,51 @@ from schooltool.schoolyear.testing import (setUp, tearDown,
                                            provideStubUtility,
                                            provideStubAdapter)
 from schooltool.securitypolicy.ftesting import securitypolicy_functional_layer
-
 from schooltool.securitypolicy.metaconfigure import getCrowdsUtility
-from schooltool.securitypolicy.metaconfigure import getDescriptionUtility
-
-
-def collectActionsByDiscriminator():
-    util = getDescriptionUtility()
-    collected = {}
-    for group in util.actions_by_group.values():
-        for action in group.values():
-            discriminator = (action.permission, action.interface)
-            if discriminator not in collected:
-                collected[discriminator] = []
-            collected[discriminator].append(action)
-    for actions in collected.values():
-        actions[:] = sorted(actions,
-                            key=lambda a: a.__name__ + a.__parent__.__name__)
-    return collected
+from schooltool.securitypolicy.testing import (
+    discriminator_sort_key,
+    collectActionsByDiscriminator,
+    printActionDescriptions,
+    printDiscriminators)
 
 
 def doctest_described_interfaces():
     r"""This is a crude attempt to list interfaces that are described in the
     security overview pages.
 
+    First, collect interface/permission pairs with registered descriptions.
+
         >>> actions = collectActionsByDiscriminator()
+
+        >>> sort_key = lambda i: discriminator_sort_key(i[0])
+        >>> for discriminator, described in sorted(actions.items(),
+        ...                                        key=sort_key):
+        ...     print '%s: %s' % (
+        ...         discriminator, [action.title for action in described])
+        ('schooltool.edit', <...ISchoolToolApplication>):
+            [u'Activate current school year',
+             u'Create/Delete an external contact',
+        ...
+             u'Modify']
+        ('schooltool.view', <...ISchoolToolApplication>):
+            [u'List', u'Access', u'View']
+        ('schooltool.edit', <...ISchoolToolCalendar>):
+            [u'Change calendar',
+        ...
+
+    Now, get the known crowds.
+
         >>> crowds = getCrowdsUtility().crowds.keys()
+
+    And build sets of described and not described permission/interface pairs.
 
         >>> described = set(actions) & set(crowds)
         >>> missing = set(crowds) - set(actions)
 
-        >>> def make_key(disc):
-        ...     if disc[1] is None:
-        ...         return ('', 'None', disc[0])
-        ...     return (str(disc[1].__module__), str(disc[1].__name__), disc[0])
-
-    Interfaces/permission pair represents things the user can do in SchoolTool.
+    An interface/permission pair represents things the user can do in SchoolTool.
 
     Each interface/permission pair has a list of object/action pairs.
-    The "object" is a rough approximation on SchoolTool object model, from
+    The "object" is a rough approximation on SchoolTool object model from
     the user's perspective.  The "action" is an approximation of things user
     can do on the "object" if he has the required permission.
 
@@ -77,35 +83,23 @@ def doctest_described_interfaces():
     interface (say, "Demographics"/"stuff" in schooltool.app.interfaces),
     this usually means one of the following:
 
-    - The "object" has an functional extension on the described interface.
+    - The "object" has a functional extension on the described interface.
 
     - The "object" did not define it's own permissions and in reality inherits
       them from the parent.
 
     - There is a bug in zcml that registers the description.
 
-        >>> last_module = ''
-        >>> util = getDescriptionUtility()
-        >>> for disc in sorted(described, key=make_key):
-        ...     mod, ifc, perm = make_key(disc)
-        ...     if mod != last_module:
-        ...         last_module = mod
-        ...         print '-' * len(last_module)
-        ...         print last_module
-        ...         print '-' * len(last_module)
-        ...
-        ...     print '- %s, %s' % (ifc, perm)
-        ...     listed = [
-        ...         str('%s / %s' % (util.groups[a.__parent__.__name__].title,
-        ...                          a.title))
-        ...         for a in actions[disc]]
-        ...     for act in listed:
-        ...         print '-  %s' % act
-        ...     print '-'
-        -------------------------
+        >>> described_actions = dict([
+        ...     (discriminator, actions[discriminator])
+        ...     for discriminator in described])
+
+        >>> printActionDescriptions(described_actions)
+        =========================
         schooltool.app.interfaces
-        -------------------------
+        =========================
         - ISchoolToolApplication, schooltool.edit
+        - ---------------------------------------
         -  School Years / Activate current school year
         -  Contacts / Create/Delete an external contact
         -  School Years / Create/Delete
@@ -115,11 +109,13 @@ def doctest_described_interfaces():
         -  School Years / Modify
         -
         - ISchoolToolApplication, schooltool.view
+        - ---------------------------------------
         -  School Years / List
         -  SchoolTool application / Access
         -  School Years / View
         -
         - ISchoolToolCalendar, schooltool.edit
+        - ------------------------------------
         -  SchoolTool application / Change calendar
         -  Sections / Change calendar
         -  Groups / Change calendar
@@ -127,157 +123,184 @@ def doctest_described_interfaces():
         -  Reservations / Schedule reservation via calendar
         -
         - ISchoolToolCalendar, schooltool.view
+        - ------------------------------------
         -  SchoolTool application / View calendar
         -  Sections / View calendar
         -  Groups / View calendar
         -  Users / View calendar
         -  Reservations / View reservation calendar
         -
-        ---------------------------------
+        =================================
         schooltool.basicperson.interfaces
-        ---------------------------------
+        =================================
         - IFieldDescription, schooltool.edit
+        - ----------------------------------
         -  Demographics / Edit fields
         -
-        ------------------------------
+        ==============================
         schooltool.contact.basicperson
-        ------------------------------
+        ==============================
         - IBoundContact, schooltool.view
+        - ------------------------------
         -  Contacts / View user's contact information
         -
-        -----------------------------
+        =============================
         schooltool.contact.interfaces
-        -----------------------------
+        =============================
         - IContact, schooltool.view
+        - -------------------------
         -  Contacts / View an external contact
         -
         - IContactContainer, schooltool.view
+        - ----------------------------------
         -  Contacts / List/Search
         -
-        ----------------------------
+        ============================
         schooltool.course.interfaces
-        ----------------------------
+        ============================
         - ICourse, schooltool.edit
+        - ------------------------
         -  Courses / Modify
         -
         - ICourse, schooltool.view
+        - ------------------------
         -  Courses / View
         -
         - ICourseContainer, schooltool.edit
+        - ---------------------------------
         -  Courses / Create/Delete
         -
         - ICourseContainer, schooltool.view
+        - ---------------------------------
         -  Courses / List
         -
         - ISection, schooltool.edit
+        - -------------------------
         -  Sections / Change schedule
         -  Sections / Assign timetables
         -  Sections / Modify
         -
         - ISection, schooltool.view
+        - -------------------------
         -  Sections / View
         -
         - ISectionContainer, schooltool.edit
+        - ----------------------------------
         -  Sections / Create/Delete
         -
         - ISectionContainer, schooltool.view
+        - ----------------------------------
         -  Sections / List
         -
-        ---------------------------
+        ===========================
         schooltool.group.interfaces
-        ---------------------------
+        ===========================
         - IGroup, schooltool.edit
+        - -----------------------
         -  Groups / Modify
         -
         - IGroup, schooltool.view
+        - -----------------------
         -  Groups / View
         -
         - IGroupContainer, schooltool.edit
+        - --------------------------------
         -  Groups / Create/Delete
         -
         - IGroupContainer, schooltool.view
+        - --------------------------------
         -  Groups / List
         -
-        ----------------------------
+        ============================
         schooltool.person.interfaces
-        ----------------------------
+        ============================
         - IPasswordWriter, schooltool.edit
+        - --------------------------------
         -  Users / Change password
         -
         - IPerson, schooltool.edit
+        - ------------------------
         -  Demographics / Modify user demographics
         -  Contacts / Manage user's contacts
         -  Contacts / Modify user's contact information
         -  Users / Modify
         -
         - IPerson, schooltool.editCalendarOverlays
+        - ----------------------------------------
         -  Users / Manage visible calendars
         -
         - IPerson, schooltool.view
+        - ------------------------
         -  Demographics / View user demographics
         -  Users / View
         -
         - IPersonContainer, schooltool.edit
+        - ---------------------------------
         -  Users / Create/Delete
         -
         - IPersonContainer, schooltool.view
+        - ---------------------------------
         -  Users / List/Search
         -
         - IPersonPreferences, schooltool.edit
+        - -----------------------------------
         -  Users / Change preferences
         -
         - IPersonPreferences, schooltool.view
+        - -----------------------------------
         -  Users / View preferences
         -
-        ------------------------------
+        ==============================
         schooltool.resource.interfaces
-        ------------------------------
+        ==============================
         - IBaseResource, schooltool.edit
+        - ------------------------------
         -  Reservations / Modify a resource
         -
         - IBaseResource, schooltool.view
+        - ------------------------------
         -  Reservations / View a resource
         -
         - IResourceContainer, schooltool.edit
+        - -----------------------------------
         -  Reservations / Add/Remove resources
         -
         - IResourceContainer, schooltool.view
+        - -----------------------------------
         -  Reservations / List/Search resources
         -
-        --------------------------
+        ==========================
         schooltool.term.interfaces
-        --------------------------
+        ==========================
         - ITermContainer, schooltool.edit
+        - -------------------------------
         -  Terms / Create/Delete
         -  Terms / Modify
         -
         - ITermContainer, schooltool.view
+        - -------------------------------
         -  Terms / List
         -  Terms / View
         -
-        -------------------------------
+        ===============================
         schooltool.timetable.interfaces
-        -------------------------------
+        ===============================
         - ITimetableSchemaContainer, schooltool.edit
+        - ------------------------------------------
         -  School timetables / Create/Delete
         -  School timetables / Modify
         -
         - ITimetableSchemaContainer, schooltool.view
+        - ------------------------------------------
         -  School timetables / List/Search
         -  School timetables / View
         -
 
+
     Some of the interface/permission pairs are intentionally (or by mistake!)
     not presented to the user.
 
-        >>> for disc in sorted(missing, key=make_key):
-        ...     mod, ifc, perm = make_key(disc)
-        ...     if mod != last_module:
-        ...         last_module = mod
-        ...         print '-' * len(last_module)
-        ...         print last_module
-        ...         print '-' * len(last_module)
-        ...     print '%s, %s' % (ifc, perm)
+        >>> printDiscriminators(missing)
         None, zope.ManageApplication
         None, zope.ManageServices
         None, zope.View

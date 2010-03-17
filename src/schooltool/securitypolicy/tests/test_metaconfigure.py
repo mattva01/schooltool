@@ -29,7 +29,7 @@ from zope.component import getAdapter, provideUtility
 from zope.component import queryUtility
 
 from schooltool.securitypolicy import metaconfigure as mc
-from schooltool.securitypolicy.metaconfigure import CrowdsUtility
+from schooltool.securitypolicy.crowds import CrowdsUtility
 from schooltool.securitypolicy.interfaces import ICrowdsUtility
 
 
@@ -39,6 +39,7 @@ def doctest_CrowdsUtility():
         >>> cru = CrowdsUtility()
         >>> verifyObject(ICrowdsUtility, cru)
         True
+
     """
 
 
@@ -51,7 +52,7 @@ def doctest_getCrowdsUtility():
 
         >>> cru = getCrowdsUtility()
         >>> print cru
-        <schooltool.securitypolicy.metaconfigure.CrowdsUtility object ...>
+        <schooltool.securitypolicy.crowds.CrowdsUtility object ...>
 
         >>> queryUtility(ICrowdsUtility) is cru
         True
@@ -70,7 +71,7 @@ def doctest_registerCrowdAdapter():
         ...     'crowd A': 'Factory A',
         ...     'crowd B': 'Factory B',
         ...     }
-        
+
         >>> provideUtility(cru, provides=ICrowdsUtility)
 
         >>> class IMyObject(Interface):
