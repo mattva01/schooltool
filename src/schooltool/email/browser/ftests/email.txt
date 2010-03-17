@@ -86,6 +86,13 @@ It also shows a field to set up the hostname of the SMTP server:
     >>> manager.getControl('Hostname').value = 'localhost'
     >>> manager.getControl('Apply').click()
 
+We see a confirmation message:
+
+    >>> manager.printQuery('id("message")')
+    <div id="message">
+      <div class="summary">Data successfully updated.</div>
+    </div>
+
 Note that just setting up the hostname for the SMTP server enables the
 service:
 
@@ -481,8 +488,8 @@ The password confirmation:
     >>> manager.getControl('New Password', index=1).value = 'secret'
     >>> manager.getControl('Confirm New Password').value = 'public'
     >>> manager.getControl('Apply').click()
-    >>> manager.printQuery('//div[@class="status"]')
-    <div class="status">
+    >>> manager.printQuery('id("message")')
+    <div id="message">
       <div class="summary">There were some errors.</div>
       <ul class="errors"><li>
           <div class="error">New passwords don't match</div>
@@ -543,9 +550,49 @@ Let's fix our login username:
     >>> manager.getControl('Username').value = 'rightuser'
     >>> manager.getControl('Apply').click()
 
-And Retry our lastest email:
+And let's raise an unexpected data error:
 
-    >>> manager.getLink('Queue (5 failed)').click()
+    >>> manager.getLink('Send Test').click()
+    >>> manager.getControl('From').value = 'anotheraddress@example.com'
+    >>> manager.getControl('To').value = 'agoodaddress@example.com'
+    >>> manager.getControl('Subject').value = "This is bad"
+    >>> manager.getControl('Body').value = 'This is bad data on the message'
+    >>> manager.getControl('Send').click()
+
+    >>> manager.printQuery('//form/table[@class="data"]/tbody/tr[1]/td')
+    <td>
+      <input type="checkbox" name="delete.Email-6" id="delete.Email-6" /></td>
+    <td>
+      <a href="http://localhost/email/Email-6">anotheraddress@example.com</a>
+    </td>
+    <td>
+      agoodaddress@example.com
+    </td>
+    <td>
+      This is bad
+    </td>
+    <td>
+      ...
+    </td>
+    <td>
+      ...
+    </td>
+
+    >>> manager.getLink('anotheraddress@example.com').click()
+
+    >>> # EMAIL STATUS
+    >>> manager.printQuery('id("form-widgets-status-row")//label')
+    <label for="form-widgets-status">
+      <span>Email Status</span>
+    </label>
+    >>> manager.printQuery('id("form-widgets-status-row")/'
+    ...                    'div[@class="widget"]/span')
+    <span id="form-widgets-status" class="..." style="color: red;">The server (localhost:25) replied that the message data was malformed</span>
+    >>> manager.getControl('Cancel').click()
+
+Let's Retry one of our previous emails:
+
+    >>> manager.getLink('Queue (6 failed)').click()
     >>> manager.getControl(name='delete.Email-5').value = True
     >>> manager.getControl('Retry').click()
 
@@ -554,9 +601,10 @@ queue:
 
     >>> manager.printQuery('id("content-nav-group")/div[@class="content-nav"][1]')
     <div class="content-nav">
-      <a href="http://localhost/email/index.html">Queue (4 failed)</a>
+      <a href="http://localhost/email/index.html">Queue (5 failed)</a>
     </div>
     >>> manager.printQuery('//form/table[@class="data"]/tbody/tr/td[1]/input')
+    <input type="checkbox" name="delete.Email-6" id="delete.Email-6" />
     <input type="checkbox" name="delete.Email-4" id="delete.Email-4" />
     <input type="checkbox" name="delete.Email-3" id="delete.Email-3" />
     <input type="checkbox" name="delete.Email-2" id="delete.Email-2" />
@@ -569,9 +617,10 @@ Finally, let's test the Delete button in the Email View:
 
     >>> manager.printQuery('id("content-nav-group")/div[@class="content-nav"][1]')
     <div class="content-nav">
-      <a href="http://localhost/email/index.html">Queue (3 failed)</a>
+      <a href="http://localhost/email/index.html">Queue (4 failed)</a>
     </div>
     >>> manager.printQuery('//form/table[@class="data"]/tbody/tr/td[1]/input')
+    <input type="checkbox" name="delete.Email-6" id="delete.Email-6" />
     <input type="checkbox" name="delete.Email-4" id="delete.Email-4" />
     <input type="checkbox" name="delete.Email-3" id="delete.Email-3" />
     <input type="checkbox" name="delete.Email" id="delete.Email" />
@@ -591,7 +640,29 @@ And the Delete button in the Queue view:
 
     >>> manager.printQuery('id("content-nav-group")/div[@class="content-nav"][1]')
     <div class="content-nav">
-      <a href="http://localhost/email/index.html">Queue (1 failed)</a>
+      <a href="http://localhost/email/index.html">Queue (2 failed)</a>
     </div>
     >>> manager.printQuery('//form/table[@class="data"]/tbody/tr/td[1]/input')
+    <input type="checkbox" name="delete.Email-6" id="delete.Email-6" />
     <input type="checkbox" name="delete.Email-3" id="delete.Email-3" />
+
+Now, let's handle empty values in the Send Test form:
+
+    >>> manager.getLink('Send Test').click()
+    >>> manager.getControl('Send').click()
+    >>> manager.printQuery('id("message")')
+    <div id="message">
+      <div class="summary">There were some errors.</div>
+      <ul class="errors"><li>
+          From:
+          <div class="error">Required input is missing.</div>
+        </li>
+        <li>
+          To:
+          <div class="error">Required input is missing.</div>
+        </li>
+        <li>
+          Body:
+          <div class="error">Required input is missing.</div>
+        </li>
+      </ul></div>

@@ -23,10 +23,68 @@ import unittest
 import doctest
 
 from zope.app.testing import setup
+from zope.interface import implements
+from zope.interface.verify import verifyObject
+from zope.component import queryUtility
 
 from schooltool.securitypolicy.interfaces import IAccessControlCustomisations
 from schooltool.app.interfaces import ISchoolToolApplication
-from zope.interface import implements
+from schooltool.securitypolicy.crowds import CrowdsUtility, DescriptionUtility
+from schooltool.securitypolicy.interfaces import ICrowdsUtility
+from schooltool.securitypolicy.interfaces import IDescriptionUtility
+
+
+def doctest_CrowdsUtility():
+    """Doctest for CrowdsUtility.
+
+        >>> cru = CrowdsUtility()
+        >>> verifyObject(ICrowdsUtility, cru)
+        True
+    """
+
+
+def doctest_getCrowdsUtility():
+    """Doctest for getCrowdsUtility.
+
+        >>> from schooltool.securitypolicy.crowds import getCrowdsUtility
+        >>> queryUtility(ICrowdsUtility) is None
+        True
+
+        >>> cru = getCrowdsUtility()
+        >>> print cru
+        <schooltool.securitypolicy.crowds.CrowdsUtility object ...>
+
+        >>> queryUtility(ICrowdsUtility) is cru
+        True
+
+    """
+
+
+def doctest_DescriptionUtility():
+    """Doctest for DescriptionUtility.
+
+        >>> du = DescriptionUtility()
+        >>> verifyObject(IDescriptionUtility, du)
+        True
+
+    """
+
+
+def doctest_getDescriptionUtility():
+    """Doctest for getDescriptionUtility.
+
+        >>> from schooltool.securitypolicy.crowds import getDescriptionUtility
+        >>> queryUtility(IDescriptionUtility) is None
+        True
+
+        >>> du = getDescriptionUtility()
+        >>> print du
+        <schooltool.securitypolicy.crowds.DescriptionUtility object ...>
+
+        >>> queryUtility(IDescriptionUtility) is du
+        True
+
+    """
 
 
 def doctest_AggregateCrowd():

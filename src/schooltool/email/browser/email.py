@@ -487,7 +487,10 @@ class SendEmailView(form.Form):
 
     @button.buttonAndHandler(_('Send'))
     def handle_send_action(self, action):
-        data, some = self.extractData()
+        data, errors = self.extractData()
+        if errors:
+            self.status = _('There were some errors.')
+            return
         from_address = data['from_address']
         to_addresses = [address.strip()
                         for address in data['to_addresses'].split(',')]

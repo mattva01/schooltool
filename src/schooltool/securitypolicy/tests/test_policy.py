@@ -51,7 +51,7 @@ class ParticipationStub(object):
 def test_SchoolToolSecurityPolicy_checkPermission():
     """Tests for SchoolToolSecurityPolicy.
 
-        >>> from schooltool.securitypolicy.metaconfigure import CrowdsUtility
+        >>> from schooltool.securitypolicy.crowds import CrowdsUtility
         >>> from schooltool.securitypolicy.interfaces import ICrowdsUtility
         >>> cru = CrowdsUtility()
         >>> provideUtility(cru, ICrowdsUtility)
@@ -107,7 +107,7 @@ def test_SchoolToolSecurityPolicy_checkPermission():
 def test_SchoolToolSecurityPolicy_checkByAdaptation():
     """Tests for SchoolToolSecurityPolicy.checkByAdaptation.
 
-        >>> from schooltool.securitypolicy.metaconfigure import CrowdsUtility
+        >>> from schooltool.securitypolicy.crowds import CrowdsUtility
         >>> from schooltool.securitypolicy.interfaces import ICrowdsUtility
         >>> cru = CrowdsUtility()
         >>> provideUtility(cru, ICrowdsUtility)
@@ -209,6 +209,4 @@ def test_suite():
     return unittest.TestSuite([
             doctest.DocTestSuite(optionflags=doctest.ELLIPSIS,
                                  setUp=setUp, tearDown=tearDown),
-            doctest.DocFileSuite('../README.txt',
-                                 optionflags=doctest.ELLIPSIS)
            ])
