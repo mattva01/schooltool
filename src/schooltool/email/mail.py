@@ -79,6 +79,7 @@ class EmailContainer(BTreeContainer):
 
     implements(IEmailContainer)
 
+    enabled = None
     hostname = None
     port = None
     username = None
@@ -140,7 +141,7 @@ class EmailUtility(object):
 
     def enabled(self):
         container = self.getEmailContainer()
-        return bool(container.hostname)
+        return container.enabled
 
     def send(self, email):
         self.container = self.getEmailContainer()
