@@ -165,4 +165,25 @@
            zope.publisher.interfaces.browser.IBrowserRequest"
       factory=".contact.ContactFilterWidget" />
 
+  <navigationViewlet
+      name="contact-send-email"
+      for="schooltool.contact.interfaces.IContact"
+      manager="schooltool.skin.IActionMenuManager"
+      template="templates/sendEmailActionViewlet.pt"
+      class=".contact.SendEmailActionViewlet"
+      permission="schooltool.view"
+      title="Send Email"
+      order="70"
+      />
+
+  <page
+      name="sendEmail.html"
+      for="schooltool.contact.interfaces.IContact"
+      class=".contact.SendEmailView"
+      permission="schooltool.view"
+      />
+
+  <zope:adapter
+      factory=".contact.SendEmailFormAdapter" />
+
 </configure>
