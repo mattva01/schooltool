@@ -150,20 +150,6 @@ available for the teacher:
     ...
     LinkNotFoundError
 
-If the teacher doesn't have an email he won't see the 'Send Email'
-button either:
-
-    >>> another_teacher = Browser('david', 'david')
-    >>> another_teacher.getLink('Home').click()
-    >>> another_teacher.getLink('Welsh, David Hoffman, Tom -- Math Section').click()
-    >>> another_teacher.getLink('Ariana').click()
-    >>> another_teacher.getLink('Contacts').click()
-    >>> another_teacher.getLink('(View Details)').click()
-    >>> another_teacher.getLink('Send Email')
-    Traceback (most recent call last):
-    ...
-    LinkNotFoundError
-
 The teacher access the 'Send Email' form:
 
     >>> teacher.getLink('Home').click()
@@ -197,3 +183,25 @@ Check the form details:
     >>> teacher.getControl('Body').value = 'I would like to talk to you'
     >>> teacher.getControl('Send').click()
     Email from tom@example.com sent to marcela@example.com
+
+If the teacher doesn't have an email he still can see the 'Send Email'
+button:
+
+    >>> another_teacher = Browser('david', 'david')
+    >>> another_teacher.getLink('Home').click()
+    >>> another_teacher.getLink('Welsh, David Hoffman, Tom -- Math Section').click()
+    >>> another_teacher.getLink('Ariana').click()
+    >>> another_teacher.getLink('Contacts').click()
+    >>> another_teacher.getLink('(View Details)').click()
+    >>> another_teacher.getLink('Send Email')
+    <Link text='Send Email' url='http://localhost/contacts/Contact/sendEmail.html'>
+
+But when he clicks the button, he will see a message asking him to
+update his contact info:
+
+    >>> another_teacher.getLink('Send Email').click()
+    >>> another_teacher.printQuery('id("message")')
+    <div id="message">
+      You don't have an email address set. Ask your administrator to
+      set your email address in your contact information.
+    </div>

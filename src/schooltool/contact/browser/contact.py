@@ -371,17 +371,10 @@ class ContactBackToContainerViewlet(object):
         return absoluteURL(container, self.request)
 
 
-class CheckEmailSending(object):
-
-    def canSend(self):
-        user = IPerson(self.request.principal)
-        return mail_enabled() and IContact(user).email and self.context.email
-
-
-class SendEmailActionViewlet(CheckEmailSending):
+class SendEmailActionViewlet(object):
     @property
     def link(self):
-        if self.canSend():
+        if mail_enabled() and self.context.email:
             return absoluteURL(self.context, self.request) + '/sendEmail.html'
         return ''
 
@@ -408,7 +401,7 @@ class SendEmailFormAdapter(object):
         self.context = context
 
 
-class SendEmailView(form.Form, CheckEmailSending):
+class SendEmailView(form.Form):
 
     template = ViewPageTemplateFile('templates/email_form.pt')
     label = _('Send Email')
@@ -437,11 +430,17 @@ class SendEmailView(form.Form, CheckEmailSending):
         super(SendEmailView, self).updateActions()
         self.actions['send'].addClass('button-ok')
         self.actions['cancel'].addClass('button-cancel')
-        if not self.canSend():
+        if not mail_enabled() or not self.context.email:
             self.actions['send'].mode = 'display'
 
     def update(self):
+        user = IPerson(self.request.principal)
         super(SendEmailView, self).update()
+        if not IContact(user).email:
+            url = absoluteURL(self.context, self.request) + \
+                  '/noTeacherEmail.html'
+            self.request.response.redirect(url)
+            return
         self.updateDisplayWidgets()
 
     def updateDisplayWidgets(self):
@@ -471,3 +470,8 @@ class SendEmailView(form.Form, CheckEmailSending):
         first_name = self.context.first_name or ''
         last_name = self.context.last_name or ''
         return "%s %s" % (first_name, last_name)
+
+
+class NoTeacherEmailView(BrowserView):
+
+    __call__ = ViewPageTemplateFile('templates/noteacheremail.pt')
