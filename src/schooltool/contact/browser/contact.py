@@ -374,7 +374,9 @@ class ContactBackToContainerViewlet(object):
 class CheckEmailSending(object):
 
     def canSend(self):
-        user = IPerson(self.request.principal)
+        user = IPerson(self.request.principal, None)
+        if user is None:
+            return False
         return mail_enabled() and IContact(user).email and self.context.email
 
 
@@ -386,16 +388,11 @@ class SendEmailActionViewlet(CheckEmailSending):
         return ''
 
 
-# XXX: schooltool.email should provide this functionality
-
 class ISendEmailForm(Interface):
 
     from_address = TextLine(title=_(u'From'), required=False)
-
     to_addresses = TextLine(title=_(u'To'), required=False)
-
     subject = TextLine(title=_(u'Subject'))
-
     body = Text(title=_(u'Body'))
 
 
@@ -454,7 +451,9 @@ class SendEmailView(form.Form, CheckEmailSending):
 
     @property
     def from_address(self):
-        user = IPerson(self.request.principal)
+        user = IPerson(self.request.principal, None)
+        if user is None:
+            return u''
         return IContact(user).email
 
     @property
@@ -463,7 +462,9 @@ class SendEmailView(form.Form, CheckEmailSending):
 
     @property
     def sender(self):
-        user = IPerson(self.request.principal)
+        user = IPerson(self.request.principal, None)
+        if user is None:
+            return u''
         return "%s %s" % (user.first_name, user.last_name)
 
     @property
