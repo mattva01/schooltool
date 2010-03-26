@@ -20,11 +20,11 @@
 """
 Contact browser views.
 """
-from zope.interface import implements
+from zope.interface import implements, Interface
 from zope.component import getMultiAdapter
 from zope.component import adapts
 from zope.component import getUtility
-from zope.schema import getFieldNamesInOrder
+from zope.schema import getFieldNamesInOrder, TextLine, Text
 from zope.security.proxy import removeSecurityProxy
 from zope.traversing.browser.interfaces import IAbsoluteURL
 from zope.traversing.browser import absoluteURL
@@ -53,6 +53,10 @@ from schooltool.contact.interfaces import IUniqueFormKey
 from schooltool.contact.contact import ContactPersonInfo
 from schooltool.contact.interfaces import IContact
 from schooltool.contact.contact import Contact
+from schooltool.person.interfaces import IPerson
+from schooltool.email.interfaces import IEmailUtility
+from schooltool.email.browser.email import mail_enabled
+from schooltool.email.mail import Email
 
 from schooltool.common import SchoolToolMessage as _
 
@@ -366,3 +370,104 @@ class ContactBackToContainerViewlet(object):
         container = IContactContainer(ISchoolToolApplication(None))
         return absoluteURL(container, self.request)
 
+
+class CheckEmailSending(object):
+
+    def canSend(self):
+        user = IPerson(self.request.principal)
+        return mail_enabled() and IContact(user).email and self.context.email
+
+
+class SendEmailActionViewlet(CheckEmailSending):
+    @property
+    def link(self):
+        if self.canSend():
+            return absoluteURL(self.context, self.request) + '/sendEmail.html'
+        return ''
+
+
+# XXX: schooltool.email should provide this functionality
+
+class ISendEmailForm(Interface):
+
+    from_address = TextLine(title=_(u'From'), required=False)
+
+    to_addresses = TextLine(title=_(u'To'), required=False)
+
+    subject = TextLine(title=_(u'Subject'))
+
+    body = Text(title=_(u'Body'))
+
+
+class SendEmailFormAdapter(object):
+
+    implements(ISendEmailForm)
+    adapts(IContact)
+
+    def __init__(self, context):
+        self.context = context
+
+
+class SendEmailView(form.Form, CheckEmailSending):
+
+    template = ViewPageTemplateFile('templates/email_form.pt')
+    label = _('Send Email')
+    fields = field.Fields(ISendEmailForm)
+
+    @button.buttonAndHandler(_('Send'))
+    def handle_send_action(self, action):
+        data, errors = self.extractData()
+        if errors:
+            self.status = _('There were some errors.')
+            return
+        body = data['body']
+        subject = data['subject']
+        email = Email(self.from_address, self.to_addresses, body, subject)
+        utility = getUtility(IEmailUtility)
+        success = utility.send(email)
+        url = absoluteURL(self.context, self.request)
+        self.request.response.redirect(url)
+
+    @button.buttonAndHandler(_('Cancel'))
+    def handle_cancel_action(self, action):
+        url = absoluteURL(self.context, self.request)
+        self.request.response.redirect(url)
+
+    def updateActions(self):
+        super(SendEmailView, self).updateActions()
+        self.actions['send'].addClass('button-ok')
+        self.actions['cancel'].addClass('button-cancel')
+        if not self.canSend():
+            self.actions['send'].mode = 'display'
+
+    def update(self):
+        super(SendEmailView, self).update()
+        self.updateDisplayWidgets()
+
+    def updateDisplayWidgets(self):
+        self.widgets['from_address'].mode = 'display'
+        self.widgets['to_addresses'].mode = 'display'
+        self.widgets['from_address'].value = "%s <%s>" % (self.sender,
+                                                          self.from_address)
+        self.widgets['to_addresses'].value = "%s <%s>" % (self.recipient,
+                                                          ''.join(self.to_addresses))
+
+    @property
+    def from_address(self):
+        user = IPerson(self.request.principal)
+        return IContact(user).email
+
+    @property
+    def to_addresses(self):
+        return [self.context.email]
+
+    @property
+    def sender(self):
+        user = IPerson(self.request.principal)
+        return "%s %s" % (user.first_name, user.last_name)
+
+    @property
+    def recipient(self):
+        first_name = self.context.first_name or ''
+        last_name = self.context.last_name or ''
+        return "%s %s" % (first_name, last_name)
