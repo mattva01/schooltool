@@ -99,8 +99,14 @@ Email' link:
     ...
     LinkNotFoundError
 
-That is because the email service is disabled. Let's enable the
-service:
+That is because the email service is disabled. Even if the user
+accesses the view directly, he will see the 'Send' button disabled:
+
+    >>> teacher.open('http://localhost/contacts/Contact/sendEmail.html')
+    >>> teacher.printQuery('id("form-buttons-send")')
+    <input type="submit" id="form-buttons-send" name="form.buttons.send" class="submit-widget button-field" value="Send" disabled="disabled" />
+
+Let's enable the service:
 
     >>> manager.getLink('Manage').click()
     >>> manager.getLink('Outgoing Email').click()

@@ -423,9 +423,10 @@ class SendEmailView(form.Form):
 
     def updateActions(self):
         super(SendEmailView, self).updateActions()
-        self.actions['send'].addClass('button-ok')
         self.actions['cancel'].addClass('button-cancel')
-        if not mail_enabled() or not self.context.email:
+        if mail_enabled() and self.context.email:
+            self.actions['send'].addClass('button-ok')
+        else:
             self.actions['send'].mode = 'display'
 
     def update(self):
