@@ -56,7 +56,6 @@ so:
     >>> manager.printQuery('id("content-body")/p[2]')
     <p>There are no messages queued.</p>
 
-
 Now, let's test the action buttons. The first button 'Queue' takes us
 to the main index view for the service. If there are emails queued in
 the container, we'll be able to manage them here:
@@ -81,7 +80,23 @@ service:
     ...                    'div[@class="widget"]/span')
     <span id="form-widgets-server_status" class="..." style="color: red;">Disabled</span>
 
-It also shows a field to set up the hostname of the SMTP server:
+It shows a checkbox to activate the service:
+
+    >>> manager.getControl(name='form.widgets.enabled:list').value = True
+    >>> manager.getControl('Apply').click()
+
+If the service is activated, a hostname for the SMTP server is
+required:
+
+    >>> manager.printQuery('id("message")')
+    <div id="message">
+      <div class="summary">There were some errors.</div>
+      <ul class="errors"><li>
+          <div class="error">Hostname is required for enabling the service</div>
+        </li>
+      </ul></div>
+
+Set a hostname:
 
     >>> manager.getControl('Hostname').value = 'localhost'
     >>> manager.getControl('Apply').click()
@@ -93,8 +108,7 @@ We see a confirmation message:
       <div class="summary">Data successfully updated.</div>
     </div>
 
-Note that just setting up the hostname for the SMTP server enables the
-service:
+Now the service is enabled:
 
     >>> manager.getLink('Queue').click()
     >>> manager.printQuery('id("content-body")/p[1]')
@@ -117,13 +131,20 @@ Note that port 25 is used by default, even if we leave the field empty:
 
 Now, let's check the 'Send Test' button. The 'Send Email' form allows
 us to send test emails to check that our current settings work. But
-first let's disable the service again. We do this leaving our
-'hostname' field empty:
+first let's disable the service again. If we uncheck the Enable
+checkbox, we can leave the hostname empty:
 
     >>> manager.getLink('Settings').click()
+    >>> manager.getControl(name='form.widgets.enabled:list').value = False
     >>> manager.getControl('Hostname').value = ''
     >>> manager.getControl('Port').value = ''
     >>> manager.getControl('Apply').click()
+
+    >>> manager.printQuery('id("message")')
+    <div id="message">
+      <div class="summary">Data successfully updated.</div>
+    </div>
+
     >>> manager.getLink('Queue').click()
     >>> manager.printQuery('id("content-body")/p[1]')
     <p>
@@ -273,10 +294,16 @@ The Email View shows us three buttons. Note the disabled Retry button:
 Let's go enable the service, but using a wrong port:
 
     >>> manager.getLink('Settings').click()
+    >>> manager.getControl(name='form.widgets.enabled:list').value = True
     >>> manager.getControl('Hostname').value = 'localhost'
     >>> manager.getControl('Port').value = '255'
     >>> manager.getControl('Apply').click()
     >>> manager.getLink('Queue (1 failed)').click()
+    >>> manager.printQuery('id("content-body")/p[1]')
+    <p>
+      <b>Server Status</b>:
+      <span style="color:green">Enabled on localhost:255</span>
+    </p>
 
 Note that the Retry button is now active:
 
@@ -309,7 +336,7 @@ The email is still in the queue:
       ...
     </td>
 
-But it status has changed:
+But its status has changed:
 
     >>> manager.getLink('disabled@example.com').click()
 
