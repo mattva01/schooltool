@@ -110,6 +110,8 @@ class EmailUtility(object):
 
     implements(IEmailUtility)
 
+    smpt_factory = smtplib.SMTP
+
     def getEmailContainer(self):
         app = ISchoolToolApplication(None)
         return IEmailContainer(app)
@@ -151,7 +153,7 @@ class EmailUtility(object):
         server_info = '%s:%d' % (self.container.hostname,
                                  self.container.port or 25)
         try:
-            connection = smtplib.SMTP()
+            connection = self.smtp_factory()
             if self.container.port:
                 port = str(self.container.port)
             else:
