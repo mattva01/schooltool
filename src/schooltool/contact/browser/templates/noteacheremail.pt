@@ -1,0 +1,11 @@
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+  <body>
+    <metal:nothing metal:fill-slot="content-header" />
+    <metal:block metal:fill-slot="body">
+      <div id="message" i18n:translate="">
+        You don't have an email address set. Ask your administrator to
+        set your email address in your contact information.
+      </div>
+    </metal:block>
+  </body>
+</html>

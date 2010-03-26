@@ -183,6 +183,13 @@
       permission="schooltool.view"
       />
 
+  <page
+      name="noTeacherEmail.html"
+      for="schooltool.contact.interfaces.IContact"
+      class=".contact.NoTeacherEmailView"
+      permission="schooltool.view"
+      />
+
   <zope:adapter
       factory=".contact.SendEmailFormAdapter" />
 
