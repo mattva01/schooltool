@@ -64,7 +64,7 @@ def doctest_evolve34():
         >>> container3.hostname = 'localhost'
 
     Check the 'enabled' attributes:
-    
+
         >>> getattr(container1, 'enabled', None) is None
         True
         >>> getattr(container2, 'enabled', None) is None

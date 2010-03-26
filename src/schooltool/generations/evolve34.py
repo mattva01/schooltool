@@ -26,7 +26,6 @@ from zope.app.publication.zopepublication import ZopePublication
 
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.email.interfaces import IEmailContainer
-from schooltool.email.mail import EMAIL_KEY
 
 
 def evolve(context):
@@ -34,8 +33,8 @@ def evolve(context):
 
     apps = findObjectsProviding(root, ISchoolToolApplication)
     for app in apps:
-        if EMAIL_KEY not in app:
+        container = IEmailContainer(app, None)
+        if container is None:
             continue
-        container = IEmailContainer(app)
         if getattr(container, 'enabled', None) is None:
             container.enabled = bool(container.hostname)
