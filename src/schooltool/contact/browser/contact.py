@@ -55,7 +55,6 @@ from schooltool.contact.interfaces import IContact
 from schooltool.contact.contact import Contact
 from schooltool.person.interfaces import IPerson
 from schooltool.email.interfaces import IEmailUtility
-from schooltool.email.browser.email import mail_enabled
 from schooltool.email.mail import Email
 
 from schooltool.common import SchoolToolMessage as _
@@ -374,7 +373,8 @@ class ContactBackToContainerViewlet(object):
 class SendEmailActionViewlet(object):
     @property
     def link(self):
-        if mail_enabled() and self.context.email:
+        utility = getUtility(IEmailUtility)
+        if utility.enabled() and self.context.email:
             return absoluteURL(self.context, self.request) + '/sendEmail.html'
         return ''
 
@@ -424,7 +424,8 @@ class SendEmailView(form.Form):
     def updateActions(self):
         super(SendEmailView, self).updateActions()
         self.actions['cancel'].addClass('button-cancel')
-        if mail_enabled() and self.context.email:
+        utility = getUtility(IEmailUtility)
+        if utility.enabled() and self.context.email:
             self.actions['send'].addClass('button-ok')
         else:
             self.actions['send'].mode = 'display'
