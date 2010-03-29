@@ -17,4 +17,8 @@
 
   <browser:defaultSkin name="BasicPerson" />
 
+  <utility
+      factory="schooltool.email.browser.ftests.StubEmailUtility"
+      />
+
 </configure>
