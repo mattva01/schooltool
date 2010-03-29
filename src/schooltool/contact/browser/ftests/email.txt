@@ -1,6 +1,10 @@
 Email to Contacts
 =================
 
+    >>> from zope.component import getUtility
+    >>> from schooltool.email.interfaces import IEmailUtility
+    >>> mailer = getUtility(IEmailUtility)
+
 Log in as manager:
 
     >>> manager = Browser('manager', 'schooltool')
@@ -188,7 +192,13 @@ Check the form details:
     >>> teacher.getControl('Subject').value = 'Hello Marcela'
     >>> teacher.getControl('Body').value = 'I would like to talk to you'
     >>> teacher.getControl('Send').click()
-    Email from tom@example.com sent to marcela@example.com
+
+    >>> mailer.sent.print_messages(last=1)
+    From: tom@example.com
+    To: marcela@example.com
+    ===========================
+    I would like to talk to you
+    ---------------------------
 
 If the teacher doesn't have an email he still can see the 'Send Email'
 button:

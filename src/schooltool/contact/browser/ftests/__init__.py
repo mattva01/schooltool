@@ -66,11 +66,3 @@ def addPerson(name, username=None, password=None, groups=None, browser=None):
     browser.getControl('Password').value = password
     browser.getControl('Confirm').value = password
     browser.getControl('Add').click()
-
-
-class StubEmailUtility(EmailUtility):
-
-    def send(self, email):
-        print "Email from %s sent to %s" % (email.from_address,
-                                            ''.join(email.to_addresses))
-        return True
