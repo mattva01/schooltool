@@ -380,7 +380,7 @@ Let's fix the server settings.
 And try sending another email:
 
     >>> manager.getLink('Send Test').click()
-    >>> manager.getControl('From').value = 'user@@example.com'
+    >>> manager.getControl('From').value = 'user@reject.com'
     >>> manager.getControl('To').value = 'otheruser@example.com'
     >>> manager.getControl('Subject').value = 'Get better'
     >>> manager.getControl('Body').value = 'I hope your flu is gone'
@@ -392,7 +392,7 @@ This time we get an error in the From address:
     <td>
       <input type="checkbox" name="delete.Email-2" id="delete.Email-2" /></td>
     <td>
-      <a href="http://localhost/email/Email-2">user@@example.com</a>
+      <a href="http://localhost/email/Email-2">user@reject.com</a>
     </td>
     <td>
       otheruser@example.com
@@ -407,7 +407,7 @@ This time we get an error in the From address:
       ...
     </td>
 
-    >>> manager.getLink('user@@example.com').click()
+    >>> manager.getLink('user@reject.com').click()
     >>> # EMAIL STATUS
     >>> manager.printQuery('id("form-widgets-status-row")//label')
     <label for="form-widgets-status">
@@ -415,14 +415,14 @@ This time we get an error in the From address:
     </label>
     >>> manager.printQuery('id("form-widgets-status-row")/'
     ...                    'div[@class="widget"]/span')
-    <span id="form-widgets-status" class="..." style="color: red;">The server (localhost:25) rejected the From address: user@@example.com</span>
+    <span id="form-widgets-status" class="..." style="color: red;">The server (localhost:25) rejected the From address: user@reject.com</span>
     >>> manager.getControl('Cancel').click()
 
 Let's get an error in our To addresses:
 
     >>> manager.getLink('Send Test').click()
     >>> manager.getControl('From').value = 'otheruser@example.com'
-    >>> manager.getControl('To').value = 'user@@@example.com'
+    >>> manager.getControl('To').value = 'user-2@reject.com'
     >>> manager.getControl('Subject').value = 'Thanks'
     >>> manager.getControl('Body').value = 'I am better now'
     >>> manager.getControl('Send').click()
@@ -434,7 +434,7 @@ Let's get an error in our To addresses:
       <a href="http://localhost/email/Email-3">otheruser@example.com</a>
     </td>
     <td>
-      user@@@example.com
+      user-2@reject.com
     </td>
     <td>
       Thanks
@@ -454,7 +454,7 @@ Let's get an error in our To addresses:
     </label>
     >>> manager.printQuery('id("form-widgets-status-row")/'
     ...                    'div[@class="widget"]/span')
-    <span id="form-widgets-status" class="..." style="color: red;">The server (localhost:25) rejected the following recipient addresses: user@@@example.com</span>
+    <span id="form-widgets-status" class="..." style="color: red;">The server (localhost:25) rejected the following recipient addresses: user-2@reject.com</span>
     >>> manager.getControl('Cancel').click()
 
 If we set multiple recipients and some of them are wrong, the email is
@@ -463,7 +463,7 @@ invalid ones:
 
     >>> manager.getLink('Send Test').click()
     >>> manager.getControl('From').value = 'validuser@example.com'
-    >>> manager.getControl('To').value = 'othervaliduser@example.com, foo@@example.com, bar@@example.com'
+    >>> manager.getControl('To').value = 'othervaliduser@example.com, foo@reject.com, bar@reject.com'
     >>> manager.getControl('Subject').value = 'SchoolTool 1.0'
     >>> manager.getControl('Body').value = 'Our new version is out'
     >>> manager.getControl('Send').click()
@@ -475,7 +475,7 @@ invalid ones:
       <a href="http://localhost/email/Email-4">validuser@example.com</a>
     </td>
     <td>
-      foo@@example.com, bar@@example.com
+      foo@reject.com, bar@reject.com
     </td>
     <td>
       SchoolTool 1.0
@@ -496,7 +496,7 @@ invalid ones:
     </label>
     >>> manager.printQuery('id("form-widgets-to_addresses-row")/'
     ...                    'div[@class="widget"]/span')
-    <span id="form-widgets-to_addresses" class="...">foo@@example.com, bar@@example.com</span>
+    <span id="form-widgets-to_addresses" class="...">foo@reject.com, bar@reject.com</span>
 
     >>> # EMAIL STATUS
     >>> manager.printQuery('id("form-widgets-status-row")//label')
@@ -505,7 +505,7 @@ invalid ones:
     </label>
     >>> manager.printQuery('id("form-widgets-status-row")/'
     ...                    'div[@class="widget"]/span')
-    <span id="form-widgets-status" class="..." style="color: red;">The server (localhost:25) rejected the following recipient addresses: foo@@example.com, bar@@example.com</span>
+    <span id="form-widgets-status" class="..." style="color: red;">The server (localhost:25) rejected the following recipient addresses: foo@reject.com, bar@reject.com</span>
     >>> manager.getControl('Cancel').click()
 
 Now, let's go to our Settings and test the password functionality:
@@ -664,7 +664,7 @@ queue:
 
 Finally, let's test the Delete button in the Email View:
 
-    >>> manager.getLink('user@@example.com').click()
+    >>> manager.getLink('user@reject.com').click()
     >>> manager.getControl('Delete').click()
 
     >>> manager.printQuery('id("content-nav-group")/div[@class="content-nav"][1]')

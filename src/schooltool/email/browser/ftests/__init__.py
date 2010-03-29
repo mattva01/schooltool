@@ -28,12 +28,7 @@ from schooltool.email.mail import EmailUtility
 
 class StubConnection(object):
 
-    reject_addresses = [
-        'user@@example.com',
-        'user@@@example.com',
-        'foo@@example.com',
-        'bar@@example.com',
-        ]
+    reject_mail_to = 'reject.com'
 
     host = None
     port = None
@@ -64,11 +59,12 @@ class StubConnection(object):
         pass
 
     def sendmail(self, from_address, to_addresses, message):
-        if from_address in self.reject_addresses:
+        if self.reject_mail_to in from_address:
             raise smtplib.SMTPSenderRefused(
                 -1, 'Failed successfuly', from_address)
-        rejected_recipients = dict([(addr, 'Fail') for addr in to_addresses
-                                    if addr in self.reject_addresses])
+        rejected_recipients = dict([
+            (addr, 'Fail') for addr in to_addresses
+            if self.reject_mail_to in addr])
         if rejected_recipients:
             if len(rejected_recipients) == to_addresses:
                 raise smtplib.SMTPRecipientsRefused(rejected_recipients)
