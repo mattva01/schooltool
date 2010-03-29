@@ -79,31 +79,32 @@ class StubConnection(object):
 
 
 class SentMessages(list):
+    """This is basically a list of email messages with a helper to
+    ease writing of functional tests.
+    """
 
-    def _print_email(self, email):
-        s_from = 'From: %s' % email.from_address
-        s_to = 'To: %s' % ', '.join(email.to_addresses)
-        maxlen = max(
-            [len(s) for s in [s_from, s_to] + email.body.split('\n')])
-        print '\n'.join([
-            s_from,
-            s_to,
-            '=' * maxlen,
-            '%s' % email.body,
-            '-' * maxlen,
-            '',
-            ])
+    def print_mail(self, emails=None):
+        """Pass an email or list of emails to print.
+        Alternatively don't pass anything to print them all.
+        """
+        if emails is None:
+            emails = self
+        elif not hasattr(emails, '__iter__'):
+            emails = [emails]
 
-    def print_message(self, index):
-        email = self[index]
-        self._print_email(email)
-
-    def print_messages(self, last=None):
-        """Specify amount of last messages to print, None for all."""
-        if last is None:
-            last = len(self)
-        for email in self[len(self)-last:]:
-            self._print_email(email)
+        for email in emails:
+            headers = [
+                'From: %s' % email.from_address,
+                'To: %s' % ', '.join(email.to_addresses),
+                'Subject: %s' % email.subject]
+            maxlen = max(
+                [len(s) for s in headers + email.body.split('\n')])
+            print '\n'.join(
+                headers + [
+                    '=' * maxlen,
+                    '%s' % email.body,
+                    '-' * maxlen,
+                ])
 
 
 class StubEmailUtility(EmailUtility):

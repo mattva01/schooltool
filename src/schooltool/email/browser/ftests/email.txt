@@ -643,12 +643,10 @@ Let's Retry one of our previous emails:
 The email was successfully sent and should have been removed from the
 queue:
 
-    >>> len(mailer.sent)
-    1
-
-    >>> mailer.sent.print_messages()
+    >>> mailer.sent.print_mail()
     From: goodsender@example.com
     To: goodrecipient@example.com
+    Subject: It's me
     =============================
     How are you doing?
     -----------------------------

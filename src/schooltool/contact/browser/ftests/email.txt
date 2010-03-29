@@ -193,9 +193,10 @@ Check the form details:
     >>> teacher.getControl('Body').value = 'I would like to talk to you'
     >>> teacher.getControl('Send').click()
 
-    >>> mailer.sent.print_messages(last=1)
+    >>> mailer.sent.print_mail(mailer.sent[-1:])
     From: tom@example.com
     To: marcela@example.com
+    Subject: Hello Marcela
     ===========================
     I would like to talk to you
     ---------------------------
