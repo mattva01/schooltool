@@ -2,6 +2,10 @@
 SchoolTool Email Service
 ========================
 
+    >>> from zope.component import getUtility
+    >>> from schooltool.email.interfaces import IEmailUtility
+    >>> mailer = getUtility(IEmailUtility)
+
 A manager logs in:
 
     >>> manager = Browser('manager', 'schooltool')
@@ -16,7 +20,20 @@ The url for the container:
     >>> manager.url
     'http://localhost/email'
 
-This section shows three action buttons:
+Let's get ahead of ourselves and set up a helper to control settings
+of the email server.
+
+    >>> controller = Browser('manager', 'schooltool')
+    >>> def setServer(hostname, port, enabled=True):
+    ...     controller.getLink('Manage').click()
+    ...     controller.getLink('Outgoing Email').click()
+    ...     controller.getLink('Settings').click()
+    ...     controller.getControl(name='form.widgets.enabled:list').value = enabled
+    ...     controller.getControl('Hostname').value = hostname
+    ...     controller.getControl('Port').value = port
+    ...     controller.getControl('Apply').click()
+
+So, back to manager.  Outgoing email section shows three action buttons:
 
     >>> manager.printQuery('id("content-nav-group")/div[@class="content-nav"]')
     <div class="content-nav">
@@ -56,7 +73,6 @@ so:
     >>> manager.printQuery('id("content-body")/p[2]')
     <p>There are no messages queued.</p>
 
-
 Now, let's test the action buttons. The first button 'Queue' takes us
 to the main index view for the service. If there are emails queued in
 the container, we'll be able to manage them here:
@@ -81,7 +97,23 @@ service:
     ...                    'div[@class="widget"]/span')
     <span id="form-widgets-server_status" class="..." style="color: red;">Disabled</span>
 
-It also shows a field to set up the hostname of the SMTP server:
+It shows a checkbox to activate the service:
+
+    >>> manager.getControl(name='form.widgets.enabled:list').value = True
+    >>> manager.getControl('Apply').click()
+
+If the service is activated, a hostname for the SMTP server is
+required:
+
+    >>> manager.printQuery('id("message")')
+    <div id="message">
+      <div class="summary">There were some errors.</div>
+      <ul class="errors"><li>
+          <div class="error">Hostname is required for enabling the service</div>
+        </li>
+      </ul></div>
+
+Set a hostname:
 
     >>> manager.getControl('Hostname').value = 'localhost'
     >>> manager.getControl('Apply').click()
@@ -93,8 +125,7 @@ We see a confirmation message:
       <div class="summary">Data successfully updated.</div>
     </div>
 
-Note that just setting up the hostname for the SMTP server enables the
-service:
+Now the service is enabled:
 
     >>> manager.getLink('Queue').click()
     >>> manager.printQuery('id("content-body")/p[1]')
@@ -117,13 +148,20 @@ Note that port 25 is used by default, even if we leave the field empty:
 
 Now, let's check the 'Send Test' button. The 'Send Email' form allows
 us to send test emails to check that our current settings work. But
-first let's disable the service again. We do this leaving our
-'hostname' field empty:
+first let's disable the service again. If we uncheck the Enable
+checkbox, we can leave the hostname empty:
 
     >>> manager.getLink('Settings').click()
+    >>> manager.getControl(name='form.widgets.enabled:list').value = False
     >>> manager.getControl('Hostname').value = ''
     >>> manager.getControl('Port').value = ''
     >>> manager.getControl('Apply').click()
+
+    >>> manager.printQuery('id("message")')
+    <div id="message">
+      <div class="summary">Data successfully updated.</div>
+    </div>
+
     >>> manager.getLink('Queue').click()
     >>> manager.printQuery('id("content-body")/p[1]')
     <p>
@@ -272,11 +310,14 @@ The Email View shows us three buttons. Note the disabled Retry button:
 
 Let's go enable the service, but using a wrong port:
 
-    >>> manager.getLink('Settings').click()
-    >>> manager.getControl('Hostname').value = 'localhost'
-    >>> manager.getControl('Port').value = '255'
-    >>> manager.getControl('Apply').click()
-    >>> manager.getLink('Queue (1 failed)').click()
+    >>> setServer('localhost', '255', enabled=True)
+
+    >>> manager.getLink('Queue').click()
+    >>> manager.printQuery('id("content-body")/p[1]')
+    <p>
+      <b>Server Status</b>:
+      <span style="color:green">Enabled on localhost:255</span>
+    </p>
 
 Note that the Retry button is now active:
 
@@ -309,7 +350,7 @@ The email is still in the queue:
       ...
     </td>
 
-But it status has changed:
+But its status has changed:
 
     >>> manager.getLink('disabled@example.com').click()
 
@@ -332,17 +373,14 @@ But it status has changed:
     <span id="form-widgets-status" class="..." style="color: red;">Couldn't connect to the SMTP server (localhost:255)</span>
     >>> manager.getControl('Cancel').click()
 
-Let's fix our settings:
+Let's fix the server settings.
 
-    >>> manager.getLink('Settings').click()
-    >>> manager.getControl('Port').value = '25'
-    >>> manager.getControl('Apply').click()
-    >>> manager.getLink('Queue (1 failed)').click()
+    >>> setServer('localhost', '25')
 
 And try sending another email:
 
     >>> manager.getLink('Send Test').click()
-    >>> manager.getControl('From').value = 'user@@example.com'
+    >>> manager.getControl('From').value = 'user@reject.com'
     >>> manager.getControl('To').value = 'otheruser@example.com'
     >>> manager.getControl('Subject').value = 'Get better'
     >>> manager.getControl('Body').value = 'I hope your flu is gone'
@@ -354,7 +392,7 @@ This time we get an error in the From address:
     <td>
       <input type="checkbox" name="delete.Email-2" id="delete.Email-2" /></td>
     <td>
-      <a href="http://localhost/email/Email-2">user@@example.com</a>
+      <a href="http://localhost/email/Email-2">user@reject.com</a>
     </td>
     <td>
       otheruser@example.com
@@ -369,7 +407,7 @@ This time we get an error in the From address:
       ...
     </td>
 
-    >>> manager.getLink('user@@example.com').click()
+    >>> manager.getLink('user@reject.com').click()
     >>> # EMAIL STATUS
     >>> manager.printQuery('id("form-widgets-status-row")//label')
     <label for="form-widgets-status">
@@ -377,14 +415,14 @@ This time we get an error in the From address:
     </label>
     >>> manager.printQuery('id("form-widgets-status-row")/'
     ...                    'div[@class="widget"]/span')
-    <span id="form-widgets-status" class="..." style="color: red;">The server (localhost:25) rejected the From address: user@@example.com</span>
+    <span id="form-widgets-status" class="..." style="color: red;">The server (localhost:25) rejected the From address: user@reject.com</span>
     >>> manager.getControl('Cancel').click()
 
 Let's get an error in our To addresses:
 
     >>> manager.getLink('Send Test').click()
     >>> manager.getControl('From').value = 'otheruser@example.com'
-    >>> manager.getControl('To').value = 'user@@@example.com'
+    >>> manager.getControl('To').value = 'user-2@reject.com'
     >>> manager.getControl('Subject').value = 'Thanks'
     >>> manager.getControl('Body').value = 'I am better now'
     >>> manager.getControl('Send').click()
@@ -396,7 +434,7 @@ Let's get an error in our To addresses:
       <a href="http://localhost/email/Email-3">otheruser@example.com</a>
     </td>
     <td>
-      user@@@example.com
+      user-2@reject.com
     </td>
     <td>
       Thanks
@@ -416,7 +454,7 @@ Let's get an error in our To addresses:
     </label>
     >>> manager.printQuery('id("form-widgets-status-row")/'
     ...                    'div[@class="widget"]/span')
-    <span id="form-widgets-status" class="..." style="color: red;">The server (localhost:25) rejected the following recipient addresses: user@@@example.com</span>
+    <span id="form-widgets-status" class="..." style="color: red;">The server (localhost:25) rejected the following recipient addresses: user-2@reject.com</span>
     >>> manager.getControl('Cancel').click()
 
 If we set multiple recipients and some of them are wrong, the email is
@@ -425,7 +463,7 @@ invalid ones:
 
     >>> manager.getLink('Send Test').click()
     >>> manager.getControl('From').value = 'validuser@example.com'
-    >>> manager.getControl('To').value = 'othervaliduser@example.com, foo@example.com, bar@example.com'
+    >>> manager.getControl('To').value = 'othervaliduser@example.com, foo@reject.com, bar@reject.com'
     >>> manager.getControl('Subject').value = 'SchoolTool 1.0'
     >>> manager.getControl('Body').value = 'Our new version is out'
     >>> manager.getControl('Send').click()
@@ -437,7 +475,7 @@ invalid ones:
       <a href="http://localhost/email/Email-4">validuser@example.com</a>
     </td>
     <td>
-      foo@example.com, bar@example.com
+      foo@reject.com, bar@reject.com
     </td>
     <td>
       SchoolTool 1.0
@@ -458,7 +496,7 @@ invalid ones:
     </label>
     >>> manager.printQuery('id("form-widgets-to_addresses-row")/'
     ...                    'div[@class="widget"]/span')
-    <span id="form-widgets-to_addresses" class="...">foo@example.com, bar@example.com</span>
+    <span id="form-widgets-to_addresses" class="...">foo@reject.com, bar@reject.com</span>
 
     >>> # EMAIL STATUS
     >>> manager.printQuery('id("form-widgets-status-row")//label')
@@ -467,7 +505,7 @@ invalid ones:
     </label>
     >>> manager.printQuery('id("form-widgets-status-row")/'
     ...                    'div[@class="widget"]/span')
-    <span id="form-widgets-status" class="..." style="color: red;">The server (localhost:25) rejected the following recipient addresses: foo@example.com, bar@example.com</span>
+    <span id="form-widgets-status" class="..." style="color: red;">The server (localhost:25) rejected the following recipient addresses: foo@reject.com, bar@reject.com</span>
     >>> manager.getControl('Cancel').click()
 
 Now, let's go to our Settings and test the password functionality:
@@ -494,7 +532,7 @@ The password confirmation:
       <ul class="errors"><li>
           <div class="error">New passwords don't match</div>
         </li>
-      </ul></div>    
+      </ul></div>
 
 Now, let's set a wrong username and a password:
 
@@ -502,6 +540,7 @@ Now, let's set a wrong username and a password:
     >>> manager.getControl('New Password', index=0).value = 'secret'
     >>> manager.getControl('Confirm New Password').value = 'secret'
     >>> manager.getControl('Apply').click()
+    >>> setServer('fail_login', '25')
 
 If we try to send email using these bogus login information, we get an
 error:
@@ -541,7 +580,7 @@ error:
     </label>
     >>> manager.printQuery('id("form-widgets-status-row")/'
     ...                    'div[@class="widget"]/span')
-    <span id="form-widgets-status" class="..." style="color: red;">Couldn't login as (wronguser) to SMTP server (localhost:25)</span>
+    <span id="form-widgets-status" class="..." style="color: red;">Couldn't login as (wronguser) to SMTP server (fail_login:25)</span>
     >>> manager.getControl('Cancel').click()
 
 Let's fix our login username:
@@ -549,6 +588,7 @@ Let's fix our login username:
     >>> manager.getLink('Settings').click()
     >>> manager.getControl('Username').value = 'rightuser'
     >>> manager.getControl('Apply').click()
+    >>> setServer('reject_malformed', '25')
 
 And let's raise an unexpected data error:
 
@@ -587,17 +627,29 @@ And let's raise an unexpected data error:
     </label>
     >>> manager.printQuery('id("form-widgets-status-row")/'
     ...                    'div[@class="widget"]/span')
-    <span id="form-widgets-status" class="..." style="color: red;">The server (localhost:25) replied that the message data was malformed</span>
+    <span id="form-widgets-status" class="..." style="color: red;">The server (reject_malformed:25) replied that the message data was malformed</span>
     >>> manager.getControl('Cancel').click()
 
 Let's Retry one of our previous emails:
 
+    >>> len(mailer.sent)
+    0
+
+    >>> setServer('localhost', '25')
     >>> manager.getLink('Queue (6 failed)').click()
     >>> manager.getControl(name='delete.Email-5').value = True
     >>> manager.getControl('Retry').click()
 
 The email was successfully sent and should have been removed from the
 queue:
+
+    >>> mailer.sent.print_mail()
+    =============================
+    From: goodsender@example.com
+    To: goodrecipient@example.com
+    Subject: It's me
+    -----------------------------
+    How are you doing?
 
     >>> manager.printQuery('id("content-nav-group")/div[@class="content-nav"][1]')
     <div class="content-nav">
@@ -612,7 +664,7 @@ queue:
 
 Finally, let's test the Delete button in the Email View:
 
-    >>> manager.getLink('user@@example.com').click()
+    >>> manager.getLink('user@reject.com').click()
     >>> manager.getControl('Delete').click()
 
     >>> manager.printQuery('id("content-nav-group")/div[@class="content-nav"][1]')

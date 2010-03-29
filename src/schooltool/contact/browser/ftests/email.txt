@@ -1,0 +1,224 @@
+Email to Contacts
+=================
+
+    >>> from zope.component import getUtility
+    >>> from schooltool.email.interfaces import IEmailUtility
+    >>> mailer = getUtility(IEmailUtility)
+
+Log in as manager:
+
+    >>> manager = Browser('manager', 'schooltool')
+
+Add a school year to get default groups:
+
+    >>> from schooltool.app.browser.ftests import setup
+    >>> setup.addSchoolYear('2010', '2009-09-01', '2010-07-15')
+
+Add some persons:
+
+    >>> from schooltool.basicperson.browser.ftests.setup import addPerson
+    >>> addPerson('Tom', 'Hoffman', 'tom', 'tom', ['teachers'])
+    >>> addPerson('David', 'Welsh', 'david', 'david', ['teachers'])
+    >>> addPerson('Ariana', 'Cerna', 'ariana', 'ariana', ['students'])
+    >>> addPerson('Mario', 'Tejada', 'mario', 'mario', ['students'])
+
+Add a term, a course and a section:
+
+    >>> setup.addTerm('Term', '2009-09-01', '2010-07-15', '2010')
+    >>> setup.addCourse('Math', '2010')
+    >>> setup.addSection('Math', '2010', 'Term', 'Math Section',
+    ...                  ['Tom', 'David'], ['Ariana', 'Mario'])
+
+Add email for Tom:
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('Persons').click()
+    >>> manager.getLink('Tom').click()
+    >>> manager.getLink('Contacts').click()
+    >>> manager.getLink('Edit').click()
+    >>> manager.getControl('Email').value = 'tom@example.com'
+    >>> manager.getControl('Apply').click()
+    >>> manager.printQuery('//div[@class="status"]')
+    <div class="status">
+      <div class="summary">Data successfully updated.</div>
+    </div>
+
+Add a contact with email for Ariana:
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('Persons').click()
+    >>> manager.getLink('Ariana').click()
+    >>> manager.getLink('Contacts').click()
+    >>> manager.getLink('Manage Contacts').click()
+    >>> manager.getLink('Create new contact').click()
+    >>> manager.getControl('First name').value = 'Marcela'
+    >>> manager.getControl('Last name').value = 'Ortiz'
+    >>> manager.getControl('Email').value = 'marcela@example.com'
+    >>> manager.getControl('Relationship').value = ['parent']
+    >>> manager.getControl('Add').click()
+
+Add a contact with no email for Mario:
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('Persons').click()
+    >>> manager.getLink('Mario').click()
+    >>> manager.getLink('Contacts').click()
+    >>> manager.getLink('Manage Contacts').click()
+    >>> manager.getLink('Create new contact').click()
+    >>> manager.getControl('First name').value = 'Karina'
+    >>> manager.getControl('Last name').value = 'Cerna'
+    >>> manager.getControl('Relationship').value = ['parent']
+    >>> manager.getControl('Add').click()
+
+XXX: Hack to allow teacher to access student's contact.
+XXX: The teacher should be allowed to access student/contact page
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('Access Control').click()
+    >>> manager.getControl('Everyone can view info of persons').click()
+    >>> manager.getControl('Apply').click()
+
+A teacher will be able to send a student contact an email only if:
+
+1. The teacher has an email address
+2. The student contact has an email address
+3. The email service is enabled
+
+Log in as a teacher and access a student contact who has an
+email. Even though both have emails, the teacher cannot see the 'Send
+Email' link:
+
+    >>> teacher = Browser('tom', 'tom')
+    >>> teacher.getLink('Home').click()
+    >>> teacher.getLink('Welsh, David Hoffman, Tom -- Math Section').click()
+    >>> teacher.getLink('Ariana').click()
+    >>> teacher.getLink('Contacts').click()
+    >>> teacher.getLink('(View Details)').click()
+    >>> teacher.printQuery('//label[@for="form-widgets-email"]/span/text()')
+    Email
+    >>> teacher.printQuery('id("form-widgets-email")/text()')
+    marcela@example.com
+    >>> teacher.getLink('Send Email')
+    Traceback (most recent call last):
+    ...
+    LinkNotFoundError
+
+That is because the email service is disabled. Even if the user
+accesses the view directly, he will see the 'Send' button disabled:
+
+    >>> teacher.open('http://localhost/contacts/Contact/sendEmail.html')
+    >>> teacher.printQuery('id("form-buttons-send")')
+    <input type="submit" id="form-buttons-send" name="form.buttons.send" class="submit-widget button-field" value="Send" disabled="disabled" />
+
+Let's enable the service:
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('Outgoing Email').click()
+    >>> manager.getLink('Settings').click()
+    >>> manager.printQuery('//label[@for="form-widgets-server_status"]/span/text()')
+    Server Status
+    >>> manager.printQuery('id("form-widgets-server_status")/text()')
+    Disabled
+    >>> manager.getControl('Enable').click()
+    >>> manager.getControl('Hostname').value = 'localhost'
+    >>> manager.getControl('Apply').click()
+    >>> manager.printQuery('id("message")')
+    <div id="message">
+      <div class="summary">Data successfully updated.</div>
+    </div>
+    >>> manager.printQuery('//label[@for="form-widgets-server_status"]/span/text()')
+    Server Status
+    >>> manager.printQuery('id("form-widgets-server_status")/text()')
+    Enabled on localhost:25
+
+Now, the teacher can see the 'Send Email' button:
+
+    >>> teacher.getLink('Home').click()
+    >>> teacher.getLink('Welsh, David Hoffman, Tom -- Math Section').click()
+    >>> teacher.getLink('Ariana').click()
+    >>> teacher.getLink('Contacts').click()
+    >>> teacher.getLink('(View Details)').click()
+    >>> teacher.url
+    'http://localhost/contacts/Contact'
+    >>> teacher.printQuery('//label[@for="form-widgets-email"]/span/text()')
+    Email
+    >>> teacher.printQuery('id("form-widgets-email")/text()')
+    marcela@example.com
+    >>> teacher.getLink('Send Email')
+    <Link text='Send Email' url='http://localhost/contacts/Contact/sendEmail.html'>
+
+If the student contact doesn't have an email, the button won't be
+available for the teacher:
+
+    >>> teacher.getLink('Home').click()
+    >>> teacher.getLink('Welsh, David Hoffman, Tom -- Math Section').click()
+    >>> teacher.getLink('Mario').click()
+    >>> teacher.getLink('Contacts').click()
+    >>> teacher.getLink('(View Details)').click()
+    >>> teacher.getLink('Send Email')
+    Traceback (most recent call last):
+    ...
+    LinkNotFoundError
+
+The teacher access the 'Send Email' form:
+
+    >>> teacher.getLink('Home').click()
+    >>> teacher.getLink('Welsh, David Hoffman, Tom -- Math Section').click()
+    >>> teacher.getLink('Ariana').click()
+    >>> teacher.getLink('Contacts').click()
+    >>> teacher.getLink('(View Details)').click()
+    >>> teacher.getLink('Send Email').click()
+
+The Cancel button takes us back to the contact view:
+
+    >>> teacher.getControl('Cancel').click()
+    >>> teacher.url
+    'http://localhost/contacts/Contact'
+
+Check the form details:
+
+    >>> teacher.getLink('Send Email').click()
+    >>> teacher.printQuery('//form//h3/text()')
+    Send Email
+    >>> teacher.printQuery('//label/span[1]/text()')
+    From
+    To
+    Subject
+    Body
+    >>> teacher.printQuery('id("form-widgets-from_address")/text()')
+    Tom Hoffman <tom@example.com>
+    >>> teacher.printQuery('id("form-widgets-to_addresses")/text()')
+    Marcela Ortiz <marcela@example.com>
+    >>> teacher.getControl('Subject').value = 'Hello Marcela'
+    >>> teacher.getControl('Body').value = 'I would like to talk to you'
+    >>> teacher.getControl('Send').click()
+
+    >>> mailer.sent.print_mail(mailer.sent[-1:])
+    ===========================
+    From: tom@example.com
+    To: marcela@example.com
+    Subject: Hello Marcela
+    ---------------------------
+    I would like to talk to you
+
+If the teacher doesn't have an email he still can see the 'Send Email'
+button:
+
+    >>> another_teacher = Browser('david', 'david')
+    >>> another_teacher.getLink('Home').click()
+    >>> another_teacher.getLink('Welsh, David Hoffman, Tom -- Math Section').click()
+    >>> another_teacher.getLink('Ariana').click()
+    >>> another_teacher.getLink('Contacts').click()
+    >>> another_teacher.getLink('(View Details)').click()
+    >>> another_teacher.getLink('Send Email')
+    <Link text='Send Email' url='http://localhost/contacts/Contact/sendEmail.html'>
+
+But when he clicks the button, he will see a message asking him to
+update his contact info:
+
+    >>> another_teacher.getLink('Send Email').click()
+    >>> another_teacher.printQuery('id("message")')
+    <div id="message">
+      You don't have an email address set. Ask your administrator to
+      set your email address in your contact information.
+    </div>
