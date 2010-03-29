@@ -96,11 +96,11 @@ class SentMessages(list):
             maxlen = max(
                 [len(s) for s in headers + email.body.split('\n')])
             print '\n'.join(
-                headers + [
-                    '=' * maxlen,
-                    '%s' % email.body,
-                    '-' * maxlen,
-                ])
+                ['=' * maxlen] +
+                headers +
+                ['-' * maxlen,
+                 '%s' % email.body]
+                )
 
 
 class StubEmailUtility(EmailUtility):
