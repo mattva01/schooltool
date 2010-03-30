@@ -64,15 +64,15 @@
   <tal:block condition="batch">
     <div class="controls">
       <input onclick="selectAll(true)"
-             type="button" class="button-ok"
+             type="button" class="button-neutral"
              value="Select All Visible"
              i18n:attributes="value select-all-visible-button"/>
       <input onclick="selectAll(false)"
-             type="button" class="button-ok"
+             type="button" class="button-neutral"
              value="Select None"
              i18n:attributes="value select-none-button"/>
       <input onclick="invertSelection('copy')"
-             type="button" class="button-ok"
+             type="button" class="button-neutral"
              value="Invert Selection"
              i18n:attributes="value invert-selection-button"/>
     </div>
@@ -156,7 +156,7 @@
       tal:condition="request/batch_size|nothing"/>
 
     <div class="controls">
-      <input type="submit" class="button-cancel" name="COPY" value="Copy"
+      <input type="submit" class="button-ok" name="COPY" value="Copy"
              i18n:attributes="value copy-button" />
     </div>
   </form>
