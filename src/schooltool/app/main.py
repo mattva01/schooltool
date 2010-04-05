@@ -56,13 +56,13 @@ from zope.app.publication.zopepublication import ZopePublication
 from zope.traversing.interfaces import IContainmentRoot
 from zope.lifecycleevent import ObjectAddedEvent
 from zope.app.dependable.interfaces import IDependable
-from zope.site.hooks import setSite, setHooks
+from zope.component.hooks import setSite, setHooks
 from zope.component import getUtility
 from zope.component import getAdapters
 from zope.interface import directlyProvidedBy
 from zope.intid import IntIds
 from zope.intid.interfaces import IIntIds
-from zope.location.interfaces import ISite
+from zope.component.interfaces import ISite
 from zope.site import LocalSiteManager
 from zope.server.http.wsgihttpserver import WSGIHTTPServer
 from zope.server.http.commonaccesslogger import CommonAccessLogger

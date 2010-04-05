@@ -56,6 +56,7 @@ status_messages = {
     50: _('The server (${info}) rejected the From address: ${from_address}'),
     60: _('The server (${info}) rejected the following recipient addresses: '
           '${addresses}'),
+    70: _('The server (${info}) replied that the message data was malformed'),
     }
 
 
@@ -78,6 +79,7 @@ class EmailContainer(BTreeContainer):
 
     implements(IEmailContainer)
 
+    enabled = None
     hostname = None
     port = None
     username = None
@@ -107,6 +109,8 @@ def getEmailContainer(app):
 class EmailUtility(object):
 
     implements(IEmailUtility)
+
+    smpt_factory = smtplib.SMTP
 
     def getEmailContainer(self):
         app = ISchoolToolApplication(None)
@@ -139,7 +143,7 @@ class EmailUtility(object):
 
     def enabled(self):
         container = self.getEmailContainer()
-        return bool(container.hostname)
+        return container.enabled
 
     def send(self, email):
         self.container = self.getEmailContainer()
@@ -149,7 +153,7 @@ class EmailUtility(object):
         server_info = '%s:%d' % (self.container.hostname,
                                  self.container.port or 25)
         try:
-            connection = smtplib.SMTP()
+            connection = self.smtp_factory()
             if self.container.port:
                 port = str(self.container.port)
             else:
@@ -197,9 +201,14 @@ class EmailUtility(object):
                                    'addresses': ', '.join(addresses)})
             connection.quit()
             return False
-        # XXX: SMTPDataError is not caught yet.
-        #      For one, invalid recipient list may cause it (code 555)
-
+        except (smtplib.SMTPHeloError,), e:
+            self.queue(email, 30, {'info': server_info})
+            connection.quit()
+            return False
+        except (smtplib.SMTPDataError,), e:
+            self.queue(email, 70, {'info': server_info})
+            connection.quit()
+            return False
         if result:
             addresses = [address for address in email.to_addresses
                          if address in result.keys()]

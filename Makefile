@@ -132,11 +132,11 @@ update-translations: extract-translations
 	set -e; \
 	locales=src/schooltool/locales; \
 	for f in $${locales}/*.po; do \
-	    msgmerge -qU $$f $${locales}/$(PACKAGE).pot ;\
+	    msgmerge -qUF $$f $${locales}/$(PACKAGE).pot ;\
 	done
 	locales=src/schooltool/commendation/locales; \
 	for f in $${locales}/*.po; do \
-	    msgmerge -qU $$f $${locales}/schooltool.commendation.pot ;\
+	    msgmerge -qUF $$f $${locales}/schooltool.commendation.pot ;\
 	done
 	$(MAKE) compile-translations
 

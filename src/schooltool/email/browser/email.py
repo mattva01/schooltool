@@ -38,7 +38,8 @@ from zope.traversing.browser import absoluteURL
 from zope.traversing.browser.interfaces import IAbsoluteURL
 from zope.viewlet.viewlet import ViewletBase
 
-from z3c.form import form, field, button
+from z3c.form import form, field, button, widget
+from z3c.form.browser.checkbox import SingleCheckBoxWidget
 from zc.table.column import GetterColumn
 from zc.table.interfaces import ISortableColumn
 
@@ -85,16 +86,26 @@ def set_server_status_message(form, container):
 
 # Email Settings
 
+def EnabledCheckBoxWidget(field, request):
+    return widget.FieldWidget(field, SingleCheckBoxWidget(request))
+
+
 class IEmailSettingsEditForm(Interface):
 
     server_status = TextLine(
         title=_('Server Status'),
         description=_('Current status of the SchoolTool email service'),
         required=False)
-    
+
+    enabled = Bool(
+        title=_('Enable'),
+        description=_('Mark to enable the service.'),
+        default=False,
+        required=False)
+
     hostname = TextLine(
         title=_('Hostname'),
-        description=_('SMTP server hostname. Leave empty to disable email.'),
+        description=_('SMTP server hostname. Required if the service is enabled.'),
         required=False)
 
     port = Int(
@@ -133,7 +144,12 @@ class IEmailSettingsEditForm(Interface):
     @invariant
     def checkPasswordConfirmation(obj):
         if obj.password != obj.password_confirmation:
-            raise Invalid("New passwords don't match")
+            raise Invalid(_("New passwords don't match"))
+
+    @invariant
+    def checkHostname(obj):
+        if obj.enabled and not obj.hostname:
+            raise Invalid(_("Hostname is required for enabling the service"))
 
 
 class EmailSettingsEditFormAdapter(object):
@@ -169,6 +185,7 @@ class EmailSettingsEditView(form.EditForm):
     template = ViewPageTemplateFile('templates/email_form.pt')
     label = _('Change Email Settings')
     fields = field.Fields(IEmailSettingsEditForm)
+    fields['enabled'].widgetFactory = EnabledCheckBoxWidget
 
     @button.buttonAndHandler(_('Cancel'))
     def handle_cancel_action(self, action):
@@ -487,7 +504,10 @@ class SendEmailView(form.Form):
 
     @button.buttonAndHandler(_('Send'))
     def handle_send_action(self, action):
-        data, some = self.extractData()
+        data, errors = self.extractData()
+        if errors:
+            self.status = _('There were some errors.')
+            return
         from_address = data['from_address']
         to_addresses = [address.strip()
                         for address in data['to_addresses'].split(',')]

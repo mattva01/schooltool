@@ -177,12 +177,12 @@ For example, the title and description must be unicode strings:
   >>> goodjob.title = 'Well done!'
   Traceback (most recent call last):
   ...
-  WrongType: ('Well done!', <type 'unicode'>)
+  WrongType: ('Well done!', <type 'unicode'>...
 
   >>> goodjob.description = 'Job well done!'
   Traceback (most recent call last):
   ...
-  WrongType: ('Job well done!', <type 'unicode'>)
+  WrongType: ('Job well done!', <type 'unicode'>...
 
 Further, since the grantor and date are marked as read-only, you cannot assign
 new values to them:

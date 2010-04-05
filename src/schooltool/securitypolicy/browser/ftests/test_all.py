@@ -1,6 +1,6 @@
 #
 # SchoolTool - common information systems platform for school administration
-# Copyright (c) 2008 Shuttleworth Foundation
+# Copyright (c) 2010 Shuttleworth Foundation
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,30 +17,16 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-School year testing related code
+Functional tests for schooltool.securitypolicy
 """
-from zope.app.testing.functional import FunctionalTestSetup
-from zope.component.hooks import getSite, setSite
+import unittest
+
+from schooltool.testing.functional import collect_ftests
+from schooltool.course.ftesting import course_functional_layer
+
+def test_suite():
+    return collect_ftests(layer=course_functional_layer)
 
 
-def provideStubAdapter(factory, adapts=None, provides=None, name=u''):
-    sm = getSite().getSiteManager()
-    sm.registerAdapter(factory, required=adapts, provided=provides, name=name)
-
-
-def provideStubUtility(component, provides=None, name=u''):
-    sm = getSite().getSiteManager()
-    sm.registerUtility(component, provided=provides, name=name)
-
-
-def setUp(test):
-    fts = FunctionalTestSetup()
-    fts.setUp()
-    app = fts.getRootFolder()
-    setSite(app)
-
-
-def tearDown(test):
-    setSite(None)
-    fts = FunctionalTestSetup()
-    fts.tearDown()
+if __name__ == '__main__':
+    unittest.main(defaultTest='test_suite')

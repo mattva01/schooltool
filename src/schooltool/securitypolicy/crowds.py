@@ -22,16 +22,76 @@ SchoolTool security policy crowds.
 
 from zope.interface import implements
 from zope.security.proxy import removeSecurityProxy
-from zope.component import queryAdapter, queryMultiAdapter
-from zope.container.contained import Contained
+from zope.component import queryAdapter, queryMultiAdapter, queryUtility
+from zope.component import getGlobalSiteManager
+from zope.app.container.contained import Contained
+from zope.app.container.btree import BTreeContainer
 
-from schooltool.securitypolicy.interfaces import ICrowd
-from schooltool.securitypolicy.interfaces import IAccessControlCustomisations
-from schooltool.securitypolicy.interfaces import ICrowdToDescribe
+
 from schooltool.securitypolicy.interfaces import (
-    IDescription, IDescriptionGroup, IGroupAction, ICrowdDescription)
+    ICrowdsUtility,
+    IDescriptionUtility,
+    ICrowd,
+    IAccessControlCustomisations,
+    ICrowdToDescribe,
+    IDescription,
+    IDescriptionGroup,
+    IGroupAction,
+    ICrowdDescription)
 
 from schooltool.common import SchoolToolMessage as _
+
+
+class CrowdNotRegistered(Exception):
+    pass
+
+
+class CrowdsUtility(object):
+    implements(ICrowdsUtility)
+
+    def __init__(self):
+        self.factories = {}
+        self.crowds = {}
+
+    def getCrowdNames(self, permission, interface):
+        return self.crowds.get((permission, interface), [])
+
+    def getFactory(self, crowd_name):
+        if crowd_name not in self.factories:
+            raise CrowdNotRegistered(crowd_name)
+        return self.factories[crowd_name]
+
+    def getFactories(self, permission, interface):
+        names = self.getCrowdNames(permission, interface)
+        return [self.getFactory(name) for name in names]
+
+
+def getCrowdsUtility():
+    """Helper - returns crowds utility and registers new one if missing."""
+    utility = queryUtility(ICrowdsUtility)
+    if not utility:
+        utility = CrowdsUtility()
+        getGlobalSiteManager().registerUtility(utility, ICrowdsUtility)
+    return utility
+
+
+class DescriptionUtility(object):
+    implements(IDescriptionUtility)
+
+    def __init__(self):
+        self.groups = BTreeContainer()
+        self.actions_by_group = BTreeContainer()
+
+
+def getDescriptionUtility():
+    """Helper - returns crowd description utility and registers
+    a new one if missing.
+    """
+    utility = queryUtility(IDescriptionUtility)
+    if not utility:
+        utility = DescriptionUtility()
+        getGlobalSiteManager().registerUtility(utility, IDescriptionUtility)
+    return utility
 
 
 class Description(Contained):
@@ -39,6 +99,11 @@ class Description(Contained):
 
     title = u''
     description = u''
+
+    def __repr__(self):
+        return '<%s.%s (%r)>' % (self.__class__.__module__,
+                              self.__class__.__name__,
+                              self.title)
 
 
 class DescriptionGroup(Description):
@@ -50,6 +115,16 @@ class GroupAction(Description):
 
     interface = None
     permission = None
+
+    @property
+    def group(self):
+        if self.__parent__ is None:
+            return None
+        group_name = self.__parent__.__name__
+        util = getDescriptionUtility()
+        if group_name not in util.groups:
+            return None
+        return util.groups[group_name]
 
 
 class Crowd(object):
@@ -257,21 +332,6 @@ class DefaultCrowdDescription(Description):
             self.description = self.crowd.description
 
 
-def getCrowdDescription(crowd, action, group):
-    crowd_to_describe = queryMultiAdapter(
-        (crowd, action, group),
-        ICrowdToDescribe,
-        default=None)
-    if crowd_to_describe is None:
-        return None
-    description = queryMultiAdapter(
-        (crowd_to_describe, action, group),
-        ICrowdDescription,
-        default=None)
-
-    return description
-
-
 class AggregateCrowdDescription(CrowdDescription):
 
     @property
@@ -290,6 +350,41 @@ class AggregateCrowdDescription(CrowdDescription):
         return filter(None, descriptions)
 
 
+def getCrowdDescription(crowd, action, group):
+    crowd_to_describe = queryMultiAdapter(
+        (crowd, action, group),
+        ICrowdToDescribe,
+        default=None)
+    if crowd_to_describe is None:
+        return None
+    description = queryMultiAdapter(
+        (crowd_to_describe, action, group),
+        ICrowdDescription,
+        default=None)
+
+    return description
+
+
 def defaultCrowdToDescribe(crowd, action, group):
     return crowd
+
+
+def collectCrowdDescriptions(action):
+    crowds = getCrowdsUtility()
+    # Mimic schooltool.securitypolicy.SchoolToolSecurityPolicy behaviour
+    crowd_names = crowds.getCrowdNames(action.permission,
+                                       None)
+    if not crowd_names:
+        crowd_names = crowds.getCrowdNames(action.permission,
+                                           action.interface)
+
+    descriptions = getDescriptionUtility()
+    group = action.group
+
+    descriptions = []
+    for name in sorted(crowd_names):
+        factory = crowds.getFactory(name)
+        crowd = factory(None)
+        descriptions.append(getCrowdDescription(crowd, action, group))
+    return descriptions
 

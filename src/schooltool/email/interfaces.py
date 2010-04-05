@@ -83,9 +83,14 @@ class IWriteEmailContainer(IWriteContainer):
 class IReadEmailContainer(IReadContainer, ILocation):
     """Read interface for the IEmailContainer"""
 
+    enabled = Bool(
+        title=_('Enable'),
+        description=_('Mark to enable the service.'),
+        default=False)
+
     hostname = TextLine(
         title=_('Hostname'),
-        description=_('SMTP server hostname. Leave empty to disable email.'),
+        description=_('SMTP server hostname. Required if the service is enabled.'),
         required=False)
 
     port = Int(
