@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-12-24 12:40+0000\n"
-"PO-Revision-Date: 2010-01-08 16:22+0000\n"
-"Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
+"PO-Revision-Date: 2010-03-14 06:36+0000\n"
+"Last-Translator: milboy <Unknown>\n"
 "Language-Team: Slovak <sk@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-01-09 07:45+0000\n"
+"X-Launchpad-Export-Date: 2010-03-15 04:44+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: /src/schooltool/app/browser/__init__.py:256
@@ -3521,7 +3521,7 @@ msgstr "Choď na predchádzajúci deň"
 #. Default: ""
 #: /src/schooltool/app/browser/cal.py:1448
 msgid "Add new event starting at ${title}"
-msgstr ""
+msgstr "Pridať novú udalosť začínajúcu na ${title}"
 
 #: /src/schooltool/app/browser/cal.py:929
 msgid "Go to next week"
@@ -3576,13 +3576,17 @@ msgstr ""
 msgid "For more information:"
 msgstr "Pre viac informácií:"
 
+#: /src/schooltool/app/browser/templates/about.pt:27
+msgid "Website"
+msgstr "Internetová stránka"
+
 #: /src/schooltool/app/browser/templates/about.pt:28
 msgid "Launchpad project page"
 msgstr "Stránky Launchpad projektu"
 
 #: /src/schooltool/app/browser/templates/about.pt:29
 msgid "Mailing list"
-msgstr ""
+msgstr "Konferencia"
 
 #: /src/schooltool/app/browser/templates/about.pt:30
 msgid "IRC channel: #schooltool on freenode.net"
@@ -3614,11 +3618,11 @@ msgstr "O SchoolTool"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:24
 msgid "View daily calendar"
-msgstr ""
+msgstr "Zobraziť denný kalendár"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:24
 msgid "Daily"
-msgstr ""
+msgstr "Denne"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:30
 msgid "View weekly calendar"
@@ -3626,19 +3630,19 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:36
 msgid "View monthly calendar"
-msgstr ""
+msgstr "Zobraziť mesačný kalendár"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:42
 msgid "Yearly"
-msgstr ""
+msgstr "Ročný"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:42
 msgid "View yearly calendar"
-msgstr ""
+msgstr "Zobraziť ročný kalendár"
 
 #: /src/schooltool/app/browser/templates/default_report_template.pt:35
 msgid "Page ${page_number}"
-msgstr ""
+msgstr "Stránka ${page_number}"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:348
 msgid "Booked Resources"
@@ -3660,7 +3664,7 @@ msgstr "Spravovať"
 
 #: /src/schooltool/app/browser/templates/portlet_tomorrow_events.pt:5
 msgid "Tomorrow's Events"
-msgstr ""
+msgstr "Zajtrajšie akcie"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:30
 msgid ""
@@ -3959,7 +3963,7 @@ msgstr ""
 
 #: /src/schooltool/app/membership.py:262
 msgid "Members of the group."
-msgstr ""
+msgstr "Členovia skupiny."
 
 #: /src/schooltool/app/security.py:308
 msgid "Assigned leaders."
@@ -3968,58 +3972,58 @@ msgstr ""
 #. Default: ""
 #: /src/schooltool/app/security.py:352
 msgid "\"$group\" group."
-msgstr ""
+msgstr "\"$skupina\" skupina."
 
 #. Default: ""
 #: /src/schooltool/app/security.py:367
 msgid "\"$group\" group and the super user."
-msgstr ""
+msgstr "\"$skupina\" skupina a super používateľ"
 
 #: /src/schooltool/app/security.zcml:103
 #: /src/schooltool/course/security.zcml:149
 #: /src/schooltool/person/security.zcml:136
 #: /src/schooltool/group/security.zcml:94
 msgid "Change calendar"
-msgstr ""
+msgstr "Zmeniť kalendár"
 
 #: /src/schooltool/app/security.zcml:77
 msgid "SchoolTool application"
-msgstr ""
+msgstr "SchoolTool aplikácie"
 
 #: /src/schooltool/app/security.zcml:80
 msgid "Access"
-msgstr ""
+msgstr "Prístup"
 
 #: /src/schooltool/app/security.zcml:87
 msgid "Manage school settings and configuration"
-msgstr ""
+msgstr "Správa školy nastavenia a konfigurácia"
 
 #: /src/schooltool/app/security.zcml:95
 #: /src/schooltool/course/security.zcml:141
 #: /src/schooltool/person/security.zcml:128
 #: /src/schooltool/group/security.zcml:86
 msgid "View calendar"
-msgstr ""
+msgstr "Zobraziť kalendár"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:143
 msgid "New Text Field"
-msgstr ""
+msgstr "Nové textové pole"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:150
 msgid "New Date Field"
-msgstr ""
+msgstr "Nové pole pre dátum"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:157
 msgid "New Selection List Field"
-msgstr ""
+msgstr "Výber nového zoznamu polí"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:33
 msgid "Export"
-msgstr ""
+msgstr "Exportovať"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:42
 msgid "Advisors"
-msgstr ""
+msgstr "Poradcovia"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:51
 msgid "Advisees"
@@ -4027,37 +4031,37 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/csvimport.py:53
 msgid "first name may not be empty"
-msgstr ""
+msgstr "meno nesmie byť prázdne"
 
 #: /src/schooltool/basicperson/browser/csvimport.py:57
 msgid "last name may not be empty"
-msgstr ""
+msgstr "priezvisko nesmie byť prázdne"
 
 #: /src/schooltool/basicperson/browser/demographics.py:133
 msgid "Add new Field"
-msgstr ""
+msgstr "Pridať nové pole"
 
 #. Default: ""
 #: /src/schooltool/basicperson/browser/demographics.py:212
 msgid "Change information for ${field_title}"
-msgstr ""
+msgstr "Zmeniť informácie pre ${field_title}"
 
 #: /src/schooltool/basicperson/browser/person.py:164
 msgid "Passwords do not match"
-msgstr ""
+msgstr "Heslá sa nezhodujú"
 
 #: /src/schooltool/basicperson/browser/person.py:299
 msgid "Current Advisors"
-msgstr ""
+msgstr "Aktuálny poradcovia"
 
 #: /src/schooltool/basicperson/browser/person.py:300
 msgid "Add Advisors"
-msgstr ""
+msgstr "Pridať poradcov"
 
 #. Default: ""
 #: /src/schooltool/basicperson/browser/person.py:304
 msgid "Advisors of ${person}"
-msgstr ""
+msgstr "Poradcovia ${person}"
 
 #: /src/schooltool/basicperson/browser/person.py:323
 msgid "Current Advisees"
@@ -4075,11 +4079,11 @@ msgstr ""
 #: /src/schooltool/basicperson/browser/person.py:55
 #: /src/schooltool/demographics/interfaces.py:209
 msgid "Advisor"
-msgstr ""
+msgstr "Poradca"
 
 #: /src/schooltool/basicperson/browser/person.py:69
 msgid "Confirm"
-msgstr ""
+msgstr "Potvrdiť"
 
 #: /src/schooltool/basicperson/browser/templates/demographics-view.pt:4
 #: /src/schooltool/basicperson/browser/templates/demographics-view.pt:7
@@ -4160,7 +4164,7 @@ msgstr "Zrušiť"
 
 #: /src/schooltool/basicperson/interfaces.py:122
 msgid "The title of this Field Description"
-msgstr ""
+msgstr "Názov tohto popisu polí"
 
 #: /src/schooltool/basicperson/interfaces.py:126
 msgid "Unique ID of this Field Description"
@@ -4168,7 +4172,7 @@ msgstr ""
 
 #: /src/schooltool/basicperson/interfaces.py:129
 msgid "Required"
-msgstr ""
+msgstr "Požadované"
 
 #: /src/schooltool/basicperson/interfaces.py:130
 msgid "Whether this Field is required or not"
@@ -4176,7 +4180,7 @@ msgstr ""
 
 #: /src/schooltool/basicperson/interfaces.py:137
 msgid "List of values"
-msgstr ""
+msgstr "Zoznam hodnôt"
 
 #: /src/schooltool/basicperson/security.zcml:17
 msgid "Create, delete demographics fields and change their order."
@@ -4184,7 +4188,7 @@ msgstr ""
 
 #: /src/schooltool/basicperson/security.zcml:26
 msgid "Edit fields"
-msgstr ""
+msgstr "Upraviť polia"
 
 #: /src/schooltool/basicperson/security.zcml:34
 msgid "View user demographics"
@@ -4204,57 +4208,57 @@ msgstr ""
 
 #: /src/schooltool/contact/browser/configure.zcml:100
 msgid "Manage Contacts"
-msgstr ""
+msgstr "Spravovať kontakty"
 
 #: /src/schooltool/contact/browser/configure.zcml:111
 #: /src/schooltool/contact/browser/configure.zcml:123
 msgid "Other Contacts"
-msgstr ""
+msgstr "Iné kontakty"
 
 #: /src/schooltool/contact/browser/configure.zcml:49
 msgid "New Contact"
-msgstr ""
+msgstr "Nový kontakt"
 
 #. Default: ""
 #: /src/schooltool/contact/browser/contact.py:160
 msgid "Add new contact for ${person}"
-msgstr ""
+msgstr "Pridať nový kontakt pre ${person}"
 
 #. Default: ""
 #: /src/schooltool/contact/browser/contact.py:220
 msgid "Change contact information for ${first_name} ${last_name}"
-msgstr ""
+msgstr "Zmeniť kontaktné informácie pre ${first_name} ${last_name}"
 
 #: /src/schooltool/contact/browser/contact.py:245
 msgid "Contact index"
-msgstr ""
+msgstr "Zoznam kontaktov"
 
 #: /src/schooltool/contact/browser/contact.py:308
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:31
 msgid "Address"
-msgstr ""
+msgstr "Adresa"
 
 #: /src/schooltool/contact/browser/contact.py:77
 msgid "Add new contact"
-msgstr ""
+msgstr "Pridať nový kontakt"
 
 #: /src/schooltool/contact/browser/relationship.py:75
 #: /src/schooltool/contact/interfaces.py:101
 msgid "Relationship"
-msgstr ""
+msgstr "Vzťah"
 
 #: /src/schooltool/contact/browser/relationship.py:86
 msgid "Assigned Contacts"
-msgstr ""
+msgstr "Pridelené kontakty"
 
 #: /src/schooltool/contact/browser/relationship.py:87
 msgid "Assign existing contact"
-msgstr ""
+msgstr "Prideliť existujúci kontakt"
 
 #. Default: ""
 #: /src/schooltool/contact/browser/relationship.py:91
 msgid "Manage contacts of ${person}"
-msgstr ""
+msgstr "Spravovať kontakty ${person}"
 
 #. Default: "Invert Selection"
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:31
@@ -4269,15 +4273,15 @@ msgstr ""
 
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:43
 msgid "Create contact"
-msgstr ""
+msgstr "Vytvoriť kontakt"
 
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:45
 msgid "Create new contact"
-msgstr ""
+msgstr "Vytvoriť nový kontakt"
 
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:58
 msgid "Assign"
-msgstr ""
+msgstr "Priradiť"
 
 #. Default: "OK"
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:75
@@ -4294,23 +4298,23 @@ msgstr ""
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:22
 #: /src/schooltool/contact/browser/templates/contact_view.pt:20
 msgid "Contact of ${person}"
-msgstr ""
+msgstr "Kontakt ${person}"
 
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:41
 msgid "Phones"
-msgstr ""
+msgstr "Telefón"
 
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:50
 msgid "Spoken Languages"
-msgstr ""
+msgstr "Znalosť jazykov"
 
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:73
 msgid "(View Details)"
-msgstr ""
+msgstr "(Pozrieť detaily)"
 
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:8
 msgid "Contact information for ${person}"
-msgstr ""
+msgstr "Kontaktné informácie pre ${person}"
 
 #: /src/schooltool/contact/contact.py:211
 msgid "Instructors of student(s) related to this contact."
@@ -4321,7 +4325,7 @@ msgstr ""
 #: /src/schooltool/contact/browser/configure.zcml:64
 #: /src/schooltool/contact/browser/configure.zcml:76
 msgid "Contacts"
-msgstr ""
+msgstr "Kontakty"
 
 #: /src/schooltool/contact/contact.py:80
 msgid ""
@@ -4343,7 +4347,7 @@ msgstr ""
 
 #: /src/schooltool/contact/interfaces.py:104
 msgid "Parent"
-msgstr ""
+msgstr "Rodič"
 
 #: /src/schooltool/contact/interfaces.py:105
 msgid "Step-parent"
@@ -4351,15 +4355,15 @@ msgstr ""
 
 #: /src/schooltool/contact/interfaces.py:106
 msgid "Foster parent"
-msgstr ""
+msgstr "Pestún"
 
 #: /src/schooltool/contact/interfaces.py:107
 msgid "Guardian"
-msgstr ""
+msgstr "Poručník"
 
 #: /src/schooltool/contact/interfaces.py:108
 msgid "Sibling"
-msgstr ""
+msgstr "Súrodenec"
 
 #: /src/schooltool/contact/interfaces.py:53
 msgid "Address line 1"
@@ -4371,15 +4375,15 @@ msgstr ""
 
 #: /src/schooltool/contact/interfaces.py:61
 msgid "Country"
-msgstr ""
+msgstr "Krajina"
 
 #: /src/schooltool/contact/interfaces.py:77
 msgid "Mobile phone"
-msgstr ""
+msgstr "Mobilný telefón"
 
 #: /src/schooltool/contact/interfaces.py:82
 msgid "Language"
-msgstr ""
+msgstr "Jazyk"
 
 #: /src/schooltool/contact/security.zcml:36
 msgid ""
@@ -4389,36 +4393,36 @@ msgstr ""
 
 #: /src/schooltool/contact/security.zcml:36
 msgid "Manage user's contacts"
-msgstr ""
+msgstr "Správa užívateľských kontaktov"
 
 #: /src/schooltool/contact/security.zcml:46
 msgid "Create/Delete an external contact"
-msgstr ""
+msgstr "Vytvoriť/Zmazať externý kontakt"
 
 #: /src/schooltool/contact/security.zcml:54
 msgid "View an external contact"
-msgstr ""
+msgstr "Zobraziť externý kontakt"
 
 #: /src/schooltool/contact/security.zcml:62
 msgid "Modify an external contact"
-msgstr ""
+msgstr "Upraviť externý kontakt"
 
 #: /src/schooltool/contact/security.zcml:70
 msgid "View user's contact information"
-msgstr ""
+msgstr "Zobraziť kontaktné informácie o užívateľovi"
 
 #: /src/schooltool/contact/security.zcml:78
 msgid "Modify user's contact information"
-msgstr ""
+msgstr "Upraviť kontaktné informácie o užívateľovi"
 
 #: /src/schooltool/course/browser/configure.zcml:160
 #: /src/schooltool/course/browser/configure.zcml:170
 msgid "New Section"
-msgstr ""
+msgstr "Nový oddiel"
 
 #: /src/schooltool/course/browser/configure.zcml:25
 msgid "Edit Course Information"
-msgstr ""
+msgstr "Upraviť Informácie o školení"
 
 #: /src/schooltool/course/browser/configure.zcml:276
 msgid "Copy from prev. term"
@@ -4427,13 +4431,13 @@ msgstr ""
 #: /src/schooltool/course/browser/csvimport.py:131
 #: /src/schooltool/group/browser/csvimport.py:76
 msgid "User names must not be empty."
-msgstr ""
+msgstr "Meno používateľa nesmie byť prázdne."
 
 #. Default: ""
 #: /src/schooltool/course/browser/csvimport.py:139
 #: /src/schooltool/group/browser/csvimport.py:84
 msgid "\"${username}\" is not a valid username."
-msgstr ""
+msgstr "\"${username}\" nie je platným menom používateľa."
 
 #. Default: ""
 #: /src/schooltool/course/browser/csvimport.py:81
@@ -4459,15 +4463,15 @@ msgstr ""
 
 #: /src/schooltool/course/browser/section.py:188
 msgid "No section selected."
-msgstr ""
+msgstr "Nie je vybraný žiadny oddiel."
 
 #: /src/schooltool/course/browser/section.py:372
 msgid "Starts in term"
-msgstr ""
+msgstr "Začína v termíne"
 
 #: /src/schooltool/course/browser/section.py:373
 msgid "Ends in term"
-msgstr ""
+msgstr "Končí v termíne"
 
 #. Default: ""
 #: /src/schooltool/course/browser/section.py:410
@@ -4476,16 +4480,16 @@ msgstr ""
 
 #: /src/schooltool/course/browser/section.py:434
 msgid "Course"
-msgstr ""
+msgstr "Kurz"
 
 #: /src/schooltool/course/browser/templates/copy_sections.pt:106
 msgid "Copied"
-msgstr ""
+msgstr "Skopírované"
 
 #. Default: "Copy"
 #: /src/schooltool/course/browser/templates/copy_sections.pt:159
 msgid "copy-button"
-msgstr ""
+msgstr "Tlačidlo pre kopírovanie"
 
 #: /src/schooltool/course/browser/templates/copy_sections.pt:29
 msgid "Copy sections from ${prev_term} of ${schoolyear} to ${term}"
@@ -4536,6 +4540,11 @@ msgid ""
 "World History, 1000 A.D. through the 20th century, history-world\n"
 "Spanish,,,spanish-gov,5\n"
 msgstr ""
+"\n"
+"Dejiny staroveku, História až po rok 1000 nášho letopočtu\n"
+"US Dejiny,, us-história\n"
+"Svetové dejiny, 1000 nl až 20. storočie, dejiny-sveta\n"
+"Španielčina,,, španielčina-gov, 5\n"
 
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:39
 msgid ""
@@ -4553,15 +4562,15 @@ msgstr ""
 
 #: /src/schooltool/course/browser/templates/course.pt:9
 msgid "${course} course for ${schoolyear}"
-msgstr ""
+msgstr "${course} kurz pre ${schoolyear}"
 
 #: /src/schooltool/course/browser/templates/course_container.pt:12
 msgid "Courses for ${schoolyear}"
-msgstr ""
+msgstr "Kurzy pre ${schoolyear}"
 
 #: /src/schooltool/course/browser/templates/coursesviewlet.pt:4
 msgid "Sections Taught"
-msgstr ""
+msgstr "Sekcia vyučovania"
 
 #. Default: "Link"
 #: /src/schooltool/course/browser/templates/link_section.pt:130
@@ -4585,11 +4594,11 @@ msgstr ""
 
 #: /src/schooltool/course/browser/templates/section.pt:36
 msgid "Previous: ${course} -- ${section_title} for ${term}"
-msgstr ""
+msgstr "Predchádzajúce: ${course} -- ${section_title} pre ${term}"
 
 #: /src/schooltool/course/browser/templates/section.pt:47
 msgid "Next: ${course} -- ${section_title} for ${term}"
-msgstr ""
+msgstr "Ďaľšie: ${course} -- ${section_title} pre ${term}"
 
 #: /src/schooltool/course/browser/templates/section_container.pt:9
 #: /src/schooltool/course/browser/templates/section_container.pt:20
@@ -4602,7 +4611,7 @@ msgstr ""
 
 #: /src/schooltool/course/browser/templates/section_edit.pt:63
 msgid "Previous"
-msgstr ""
+msgstr "Predchádzajúci"
 
 #: /src/schooltool/course/browser/templates/section_edit.pt:64
 msgid "Section in the previous term."
@@ -4611,7 +4620,7 @@ msgstr ""
 #: /src/schooltool/course/browser/templates/section_edit.pt:72
 #: /src/schooltool/course/browser/templates/section_edit.pt:106
 msgid "${section_title} for ${term}"
-msgstr ""
+msgstr "${section_title} pre ${term}"
 
 #. Default: "Unlink"
 #: /src/schooltool/course/browser/templates/section_edit.pt:75
@@ -4631,7 +4640,7 @@ msgstr ""
 
 #: /src/schooltool/course/browser/templates/section_edit.pt:98
 msgid "Section in the next term."
-msgstr ""
+msgstr "Oddiel v budúcom období."
 
 #: /src/schooltool/course/help/course_container.pt:10
 msgid ""
@@ -4653,7 +4662,7 @@ msgstr ""
 
 #: /src/schooltool/course/interfaces.py:50
 msgid "Course ID"
-msgstr ""
+msgstr "ID Kurzu"
 
 #: /src/schooltool/course/interfaces.py:52
 msgid "Localy used course identifier."
@@ -4661,7 +4670,7 @@ msgstr ""
 
 #: /src/schooltool/course/interfaces.py:55
 msgid "Government ID"
-msgstr ""
+msgstr "ID Nariadenia"
 
 #: /src/schooltool/course/interfaces.py:57
 msgid "Course identifier used by the government."
@@ -4669,7 +4678,7 @@ msgstr ""
 
 #: /src/schooltool/course/interfaces.py:60
 msgid "Credits"
-msgstr ""
+msgstr "Autori"
 
 #: /src/schooltool/course/interfaces.py:62
 msgid "Amount of credits for this course."
