@@ -8,70 +8,15 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-12-24 12:40+0000\n"
-"PO-Revision-Date: 2010-02-07 19:46+0000\n"
-"Last-Translator: morii <piotr.bliszczyk@gmail.com>\n"
+"PO-Revision-Date: 2010-03-12 10:22+0000\n"
+"Last-Translator: Seweryn <Unknown>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-02-08 04:43+0000\n"
+"X-Launchpad-Export-Date: 2010-03-13 04:45+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "X-Rosetta-Version: 0.1\n"
-
-#: /src/schooltool/app/browser/__init__.py:256
-#: /src/schooltool/person/help/person_container.pt:6
-#: /src/schooltool/app/browser/templates/index.pt:11
-#: /src/schooltool/person/browser/configure.zcml:26
-#: /src/schooltool/person/help/configure.zcml:8
-msgid "Persons"
-msgstr "Osoby"
-
-#: /src/schooltool/app/browser/__init__.py:261
-msgid "1 person"
-msgstr "1 osoba"
-
-#. Default: ""
-#: /src/schooltool/app/browser/__init__.py:263
-msgid "${number} persons"
-msgstr "${number} osób"
-
-#: /src/schooltool/app/browser/app.py:227
-msgid "Username or password is incorrect"
-msgstr "Nieprawidłowa nazwa użytkownika lub hasło"
-
-#: /src/schooltool/app/browser/app.py:323
-#: /src/schooltool/app/security.py:307
-msgid "Leaders"
-msgstr "Liderzy"
-
-#: /src/schooltool/app/browser/app.py:324
-msgid "Current leaders"
-msgstr "Obecni liderzy"
-
-#: /src/schooltool/app/browser/app.py:325
-msgid "Available leaders"
-msgstr "Dostępni liderzy"
-
-#: /src/schooltool/app/browser/app.py:348
-msgid "school"
-msgstr "szkoła"
-
-#: /src/schooltool/app/browser/cal.py:1166
-msgid "Next month"
-msgstr "Następny miesiąc"
-
-#: /src/schooltool/app/browser/cal.py:1167
-msgid "Current month"
-msgstr "Bieżący miesiąc"
-
-#: /src/schooltool/app/browser/cal.py:1168
-msgid "Previous month"
-msgstr "Poprzedni miesiąc"
-
-#. Default: ""
-#: /src/schooltool/app/browser/cal.py:1180
-msgid "${month}, ${year}"
-msgstr "${month}, ${year}"
 
 #: /src/schooltool/app/browser/cal.py:120
 #: /src/schooltool/person/interfaces.py:180
@@ -81,7 +26,7 @@ msgstr "${month}, ${year}"
 #: /src/schooltool/term/browser/templates/term_add.pt:80
 #: /src/schooltool/term/browser/templates/term.pt:31
 msgid "Monday"
-msgstr "poniedziałek"
+msgstr "Poniedziałek"
 
 #: /src/schooltool/app/browser/cal.py:120
 #: /src/schooltool/timetable/browser/schema.py:116
@@ -90,7 +35,7 @@ msgstr "poniedziałek"
 #: /src/schooltool/term/browser/templates/term_add.pt:81
 #: /src/schooltool/term/browser/templates/term.pt:32
 msgid "Tuesday"
-msgstr "wtorek"
+msgstr "Wtorek"
 
 #: /src/schooltool/app/browser/cal.py:120
 #: /src/schooltool/timetable/browser/schema.py:117
@@ -99,7 +44,7 @@ msgstr "wtorek"
 #: /src/schooltool/term/browser/templates/term_add.pt:82
 #: /src/schooltool/term/browser/templates/term.pt:33
 msgid "Wednesday"
-msgstr "środa"
+msgstr "Środa"
 
 #: /src/schooltool/app/browser/cal.py:120
 #: /src/schooltool/timetable/browser/schema.py:118
@@ -108,12 +53,7 @@ msgstr "środa"
 #: /src/schooltool/term/browser/templates/term_add.pt:83
 #: /src/schooltool/term/browser/templates/term.pt:34
 msgid "Thursday"
-msgstr "czwartek"
-
-#. Default: ""
-#: /src/schooltool/app/browser/cal.py:1202
-msgid "Week ${week_no}"
-msgstr "Tydzień ${week_no}"
+msgstr "Czwartek"
 
 #: /src/schooltool/app/browser/cal.py:121
 #: /src/schooltool/person/interfaces.py:178
@@ -122,7 +62,7 @@ msgstr "Tydzień ${week_no}"
 #: /src/schooltool/term/browser/templates/term_add.pt:85
 #: /src/schooltool/term/browser/templates/term.pt:36
 msgid "Saturday"
-msgstr "sobota"
+msgstr "Sobota"
 
 #: /src/schooltool/app/browser/cal.py:121
 #: /src/schooltool/person/interfaces.py:179
@@ -131,7 +71,7 @@ msgstr "sobota"
 #: /src/schooltool/term/browser/templates/term_add.pt:86
 #: /src/schooltool/term/browser/templates/term.pt:37
 msgid "Sunday"
-msgstr "niedziela"
+msgstr "Niedziela"
 
 #: /src/schooltool/app/browser/cal.py:121
 #: /src/schooltool/timetable/browser/schema.py:119
@@ -140,19 +80,7 @@ msgstr "niedziela"
 #: /src/schooltool/term/browser/templates/term_add.pt:84
 #: /src/schooltool/term/browser/templates/term.pt:35
 msgid "Friday"
-msgstr "piątek"
-
-#: /src/schooltool/app/browser/cal.py:1218
-msgid "Next year"
-msgstr "Następny rok"
-
-#: /src/schooltool/app/browser/cal.py:1219
-msgid "Current year"
-msgstr "Obecny rok"
-
-#: /src/schooltool/app/browser/cal.py:1220
-msgid "Previous year"
-msgstr "Poprzedni rok"
+msgstr "Piątek"
 
 #: /src/schooltool/app/browser/cal.py:124
 #: /src/schooltool/app/browser/cal.py:1811
@@ -2158,6 +2086,44 @@ msgstr ""
 msgid "Your School"
 msgstr "Twoja szkoła"
 
+#: /src/schooltool/app/browser/__init__.py:256
+#: /src/schooltool/person/help/person_container.pt:6
+#: /src/schooltool/app/browser/templates/index.pt:11
+#: /src/schooltool/person/browser/configure.zcml:26
+#: /src/schooltool/person/help/configure.zcml:8
+msgid "Persons"
+msgstr "Osoby"
+
+#: /src/schooltool/app/browser/__init__.py:261
+msgid "1 person"
+msgstr "1 osoba"
+
+#. Default: ""
+#: /src/schooltool/app/browser/__init__.py:263
+msgid "${number} persons"
+msgstr "${number} osób"
+
+#: /src/schooltool/app/browser/app.py:227
+msgid "Username or password is incorrect"
+msgstr "Nieprawidłowa nazwa użytkownika lub hasło"
+
+#: /src/schooltool/app/browser/app.py:323
+#: /src/schooltool/app/security.py:307
+msgid "Leaders"
+msgstr "Liderzy"
+
+#: /src/schooltool/app/browser/app.py:324
+msgid "Current leaders"
+msgstr "Obecni liderzy"
+
+#: /src/schooltool/app/browser/app.py:325
+msgid "Available leaders"
+msgstr "Dostępni liderzy"
+
+#: /src/schooltool/app/browser/app.py:348
+msgid "school"
+msgstr "szkoła"
+
 #: /src/schooltool/app/browser/cal.py:114
 msgid "March"
 msgstr "Marzec"
@@ -2194,6 +2160,18 @@ msgstr "Wrzesień"
 msgid "July"
 msgstr "Lipiec"
 
+#: /src/schooltool/app/browser/cal.py:1166
+msgid "Next month"
+msgstr "Następny miesiąc"
+
+#: /src/schooltool/app/browser/cal.py:1167
+msgid "Current month"
+msgstr "Bieżący miesiąc"
+
+#: /src/schooltool/app/browser/cal.py:1168
+msgid "Previous month"
+msgstr "Poprzedni miesiąc"
+
 #: /src/schooltool/app/browser/cal.py:117
 msgid "October"
 msgstr "Październik"
@@ -2217,6 +2195,28 @@ msgstr "Przejdź do bieżącego miesiąca"
 #: /src/schooltool/app/browser/cal.py:1172
 msgid "Go to previous month"
 msgstr "Przejdź do poprzedniego miesiąca"
+
+#. Default: ""
+#: /src/schooltool/app/browser/cal.py:1180
+msgid "${month}, ${year}"
+msgstr "${month}, ${year}"
+
+#. Default: ""
+#: /src/schooltool/app/browser/cal.py:1202
+msgid "Week ${week_no}"
+msgstr "Tydzień ${week_no}"
+
+#: /src/schooltool/app/browser/cal.py:1218
+msgid "Next year"
+msgstr "Następny rok"
+
+#: /src/schooltool/app/browser/cal.py:1219
+msgid "Current year"
+msgstr "Obecny rok"
+
+#: /src/schooltool/app/browser/cal.py:1220
+msgid "Previous year"
+msgstr "Poprzedni rok"
 
 #: /src/schooltool/app/browser/cal.py:1222
 msgid "Go to next year"
@@ -2383,7 +2383,7 @@ msgstr "Zarządzaj"
 
 #: /src/schooltool/app/browser/templates/portlet_tomorrow_events.pt:5
 msgid "Tomorrow's Events"
-msgstr "Pojutrzejsze wydarzenia"
+msgstr "Jutrzejsze wydarzenia"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:30
 msgid ""
@@ -2824,7 +2824,7 @@ msgstr "Nie można rozwiązać celu działania wtyczki:\n"
 
 #: /src/schooltool/app/main.py:578
 msgid "%s: daemon mode not supported on your operating system."
-msgstr ""
+msgstr "%s: tryb demona nie jest obsługiwany przez twój system operacyjny."
 
 #: /src/schooltool/app/main.py:819
 msgid ""
@@ -2880,7 +2880,7 @@ msgstr "Grupa \"$group\"."
 #. Default: ""
 #: /src/schooltool/app/security.py:367
 msgid "\"$group\" group and the super user."
-msgstr ""
+msgstr "grupa \"$group\" i administrator."
 
 #: /src/schooltool/app/security.zcml:103
 #: /src/schooltool/course/security.zcml:149
@@ -3094,7 +3094,7 @@ msgstr ""
 
 #: /src/schooltool/basicperson/interfaces.py:137
 msgid "List of values"
-msgstr ""
+msgstr "Lista wartości"
 
 #: /src/schooltool/basicperson/interfaces.py:38
 #: /src/schooltool/contact/interfaces.py:40
@@ -5034,7 +5034,7 @@ msgstr ""
 #: /src/schooltool/resource/interfaces.py:115
 #: /src/schooltool/resource/types.py:131
 msgid "Purchase Date"
-msgstr ""
+msgstr "Data zakupu"
 
 #: /src/schooltool/resource/interfaces.py:116
 msgid "Purchase Date of Equipment"
@@ -5192,7 +5192,7 @@ msgstr ""
 
 #: /src/schooltool/sampledata/sampledata.pt:42
 msgid "Plugins"
-msgstr ""
+msgstr "Wtyczki"
 
 #: /src/schooltool/sampledata/sampledata.pt:71
 msgid "View Dependencies"
@@ -5201,7 +5201,7 @@ msgstr "Pokaż zależności"
 #: /src/schooltool/sampledata/sampledata.pt:80
 #: /src/schooltool/setupdata/setupdata.pt:23
 msgid "Generate"
-msgstr ""
+msgstr "Wygeneruj"
 
 #: /src/schooltool/schoolyear/browser/configure.zcml:87
 msgid "New School Year"
@@ -5227,7 +5227,7 @@ msgstr "Pierwszy dzień"
 
 #: /src/schooltool/schoolyear/browser/schoolyear.py:151
 msgid "Last day"
-msgstr ""
+msgstr "Ostatni dzień"
 
 #: /src/schooltool/schoolyear/browser/schoolyear.py:170
 msgid "Add new school year"
@@ -5236,7 +5236,7 @@ msgstr "Dodaj nowy rok szkolny"
 #. Default: ""
 #: /src/schooltool/schoolyear/browser/schoolyear.py:234
 msgid "Change information for ${schoolyear_title}"
-msgstr ""
+msgstr "Zmień informacje dla ${schoolyear_title}"
 
 #: /src/schooltool/schoolyear/browser/schoolyear.py:249
 #: /src/schooltool/schoolyear/browser/schoolyear.py:276
@@ -5285,14 +5285,14 @@ msgstr "Administracja szkoły"
 
 #: /src/schooltool/securitypolicy/browser/control.py:96
 msgid "Enabled"
-msgstr ""
+msgstr "Włączone"
 
 #: /src/schooltool/securitypolicy/browser/templates/access_control.pt:4
 #: /src/schooltool/securitypolicy/browser/templates/access_control.pt:12
 #: /src/schooltool/securitypolicy/browser/configure.zcml:17
 #: /src/schooltool/securitypolicy/browser/configure.zcml:28
 msgid "Access Control"
-msgstr ""
+msgstr "Kontrola dostępu"
 
 #: /src/schooltool/securitypolicy/browser/templates/access_setting_snippet.pt:4
 msgid "Access setting: ${setting} (${status})"
@@ -5300,11 +5300,15 @@ msgstr ""
 
 #: /src/schooltool/securitypolicy/browser/templates/security_descriptions.pt:4
 msgid "Access Rights"
-msgstr ""
+msgstr "Prawa dostępu"
+
+#: /src/schooltool/securitypolicy/browser/templates/security_descriptions.pt:57
+msgid "Legend"
+msgstr "Legenda"
 
 #: /src/schooltool/securitypolicy/crowds.py:124
 msgid "Everybody"
-msgstr ""
+msgstr "Wszyscy"
 
 #: /src/schooltool/securitypolicy/crowds.py:125
 msgid "Everybody, including users that are not logged in."
@@ -5320,7 +5324,7 @@ msgstr "Wszyscy zalogowani użytkownicy."
 
 #: /src/schooltool/securitypolicy/crowds.py:167
 msgid "Anybody"
-msgstr ""
+msgstr "Ktokolwiek"
 
 #: /src/schooltool/securitypolicy/crowds.py:168
 msgid "Users who did not log in"
@@ -5349,11 +5353,11 @@ msgstr ""
 
 #: /src/schooltool/skin/breadcrumbs.py:76
 msgid "top"
-msgstr ""
+msgstr "góra"
 
 #: /src/schooltool/skin/form.py:64
 msgid "No changes"
-msgstr ""
+msgstr "Brak zmian"
 
 #: /src/schooltool/skin/templates/error.pt:15
 msgid ""
@@ -5366,7 +5370,7 @@ msgstr ""
 
 #: /src/schooltool/skin/templates/error.pt:19
 msgid "Exception"
-msgstr ""
+msgstr "Wyjątek"
 
 #: /src/schooltool/skin/templates/error.pt:20
 msgid "Traceback"
@@ -5375,7 +5379,7 @@ msgstr ""
 #: /src/schooltool/skin/templates/error.pt:3
 #: /src/schooltool/skin/templates/error.pt:12
 msgid "Server Error"
-msgstr ""
+msgstr "Błąd serwera"
 
 #: /src/schooltool/skin/templates/generic_macros.pt:12
 msgid "Server Running SchoolTool"
@@ -5400,7 +5404,7 @@ msgstr "Możesz próbować dostać się do nieistniejącej strony"
 #: /src/schooltool/skin/templates/notfound.pt:3
 #: /src/schooltool/skin/templates/notfound.pt:11
 msgid "Not Found"
-msgstr ""
+msgstr "Nie znaleziono"
 
 #: /src/schooltool/skin/templates/onlinehelp_macros.pt:55
 msgid "SchoolTool Onlinehelp"
@@ -5408,7 +5412,7 @@ msgstr ""
 
 #: /src/schooltool/skin/templates/view_macros.pt:114
 msgid "Report a bug on Launchpad."
-msgstr ""
+msgstr "Zawiadom o błędzie w Launchpadzie."
 
 #: /src/schooltool/skin/templates/view_macros.pt:127
 msgid ""
@@ -5467,7 +5471,7 @@ msgstr ""
 
 #: /src/schooltool/skin/widgets.py:109
 msgid "Width"
-msgstr ""
+msgstr "Szerokość"
 
 #: /src/schooltool/skin/widgets.py:110
 msgid "Editor frame width"
@@ -5475,7 +5479,7 @@ msgstr ""
 
 #: /src/schooltool/skin/widgets.py:113
 msgid "Height"
-msgstr ""
+msgstr "Wysokość"
 
 #: /src/schooltool/skin/widgets.py:114
 msgid "Editor frame height"
@@ -5499,7 +5503,7 @@ msgstr ""
 
 #: /src/schooltool/skin/widgets.py:129
 msgid "Configuration"
-msgstr ""
+msgstr "Konfiguracja"
 
 #: /src/schooltool/skin/widgets.py:130
 msgid "FCK editor configuration."
@@ -5773,7 +5777,7 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/event.py:53
 msgid "Modify event information"
-msgstr ""
+msgstr "Modyfikuj informację o wydarzeniu"
 
 #: /src/schooltool/timetable/browser/schema.py:175
 msgid "Please use HH:MM format for period start and end times"
@@ -5918,7 +5922,7 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/calendar_overlay.pt:95
 msgid "Manage..."
-msgstr ""
+msgstr "Zarządzaj..."
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:101
 msgid ""
