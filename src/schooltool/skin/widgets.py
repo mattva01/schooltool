@@ -27,6 +27,7 @@ from zope.component import adapts, adapter
 from zope.interface import implements, implementsOnly, implementer
 from zope.interface import Interface
 from zope.html.field import IHtmlFragmentField
+import zope.html.widget
 
 import zc.resourcelibrary
 from zc.datetimewidget.datetimewidget import DateWidget
@@ -135,10 +136,16 @@ class FckeditorWidget(Widget, HTMLFragmentWidget):
     """FCK editor widget implementation."""
     implementsOnly(IFckeditorWidget)
 
+    fckversion = zope.html.widget.FckeditorWidget.fckVersion
+
     config = None
     value = u''
 
     _adapterValueAttributes = Widget._adapterValueAttributes + ('config', )
+
+    @property
+    def editor_var_name(self):
+        return str(hash(self.name)).replace('-', 'u')
 
     @property
     def script(self):
@@ -148,21 +155,19 @@ class FckeditorWidget(Widget, HTMLFragmentWidget):
         return '''
             <script type="text/javascript" language="JavaScript">
                 var %(variable)s = new FCKeditor(
-                    "%(id)s",
-                     %(width)d,
-                     %(height)d,
-                     "%(toolbar)s");
-                %(variable)s.BasePath = "/@@/fckeditor/";
+                    "%(id)s", %(width)d, %(height)d, "%(toolbar)s");
+                %(variable)s.BasePath = "/@@/fckeditor/%(fckversion)s/fckeditor/";
                 %(variable)s.Config["CustomConfigurationsPath"] = "%(configPath)s";
                 %(variable)s.ReplaceTextarea();
             </script>
             ''' % {
             'id': self.id,
-            'variable': 'oFCKeditor_%s' % str(hash(self.name)).replace('-', 'u'),
+            'variable': 'oFCKeditor_%s' % self.editor_var_name,
             'width': config.width,
             'height': config.height,
             'toolbar': config.toolbar,
             'configPath': config.path,
+            'fckversion': self.fckversion,
             }
 
 
