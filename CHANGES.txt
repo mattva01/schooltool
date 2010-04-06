@@ -9,6 +9,8 @@ CHANGES
 * Flag to disable mail server (https://bugs.launchpad.net/schooltool/+bug/513026)
 * Added action to send emails to student contacts
   (https://bugs.launchpad.net/schooltool/+bug/496255)
+* Fixed broken FCK Editor in some views
+  (https://bugs.launchpad.net/schooltool/+bug/556478)
 
 
 1.3.0 (2010-01-06)
