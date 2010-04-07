@@ -1,17 +1,18 @@
--------
+=======
 CHANGES
--------
+=======
 
-1.3.1 (UNRELEASED)
+1.3.1 (2010-04-07)
 ------------------
 
 - Reduce dependency on ``zope.app.*`` packages
 - Allow advisors to view person info (https://launchpad.net/bugs/513064)
-- Flag to disable mail server (https://bugs.launchpad.net/schooltool/+bug/513026)
-- Added action to send emails to student contacts
-  (https://bugs.launchpad.net/schooltool/+bug/496255)
-- Fixed broken FCK Editor in some views
-  (https://bugs.launchpad.net/schooltool/+bug/556478)
+- Flag to disable mail server (https://bugs.launchpad.net/bugs/513026)
+- Added action to send emails to student contacts (https://bugs.launchpad.net/bugs/496255)
+- Formatted email form notifications (https://bugs.launchpad.net/bugs/497492)
+- Fixed broken FCK Editor in some views (https://bugs.launchpad.net/bugs/556478)
+- Added a "neutral" submit button style (https://bugs.launchpad.net/bugs/424510)
+- Added security descriptions tutorial
 - Update translations
 
 
