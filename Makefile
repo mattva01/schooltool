@@ -48,7 +48,7 @@ run: build instance
 	bin/start-schooltool-instance instance
 
 .PHONY: release
-release: bin/buildout
+release: bin/buildout compile-translations
 	echo -n `cat version.txt.in`_r`bzr revno` > version.txt
 	bin/buildout setup setup.py sdist
 	rm version.txt
