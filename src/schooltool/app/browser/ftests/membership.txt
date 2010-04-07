@@ -102,6 +102,12 @@ Let's add a few members.
 
     >>> manager.getControl('Add').click()
 
+    >>> # quick css check for the neutral buttons
+    >>> manager.printQuery('//input[@value="Invert Selection" or @value="OK"]/@class')
+    button-neutral
+    button-neutral
+    button-neutral
+
     >>> body = manager.contents
     >>> 'name="remove_item.person001"' in body
     True
