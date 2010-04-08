@@ -334,6 +334,17 @@ Log in as Ariana:
     >>> ariana = Browser('ariana', 'pwd')
     >>> ariana.getLink('Home').click()
 
+Manager can see the administrative links:
+
+    >>> manager.open(ariana.url)
+    >>> manager.printQuery('//a[@class="modify"]/text()')
+    edit name
+    edit groups
+
+But Ariana can't:
+
+    >>> ariana.printQuery('//a[@class="modify"]/text()')
+
 Check Ariana's person info blocks:
 
     >>> ariana.printQuery('//div[@class="person-info"]/'
@@ -379,3 +390,30 @@ Ariana's groups:
     + 2009
       |- Programmers
       |- Students
+
+Ariana visits one of her sections and she can't see the administrative
+links there:
+
+    >>> ariana.getLink('Pop -- Pop101').click()
+    >>> ariana.printQuery('//a[@class="modify"]/text()')
+
+But the Manager can:
+
+    >>> manager.open(ariana.url)
+    >>> manager.printQuery('//a[@class="modify"]/text()')
+    edit info
+    edit instructors
+    edit individuals
+
+Ariana visits one of her groups and again, she can't see the
+administrative links:
+
+    >>> ariana.goBack()
+    >>> ariana.getLink('Music fans').click()
+    >>> ariana.printQuery('//a[@class="modify"]/text()')
+
+But again, the Manager can:
+
+    >>> manager.open(ariana.url)
+    >>> manager.printQuery('//a[@class="modify"]/text()')
+    edit members

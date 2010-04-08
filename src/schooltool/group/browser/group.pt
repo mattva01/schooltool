@@ -21,7 +21,8 @@
          title="Change the people who are members of this group."
          tal:attributes="href string:${context/@@absolute_url}/@@members_persons.html"
          i18n:attributes="title"
-         i18n:translate="">
+         i18n:translate=""
+         tal:condition="view/canModify">
          edit members
       </a>
     </div>

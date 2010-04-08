@@ -45,6 +45,7 @@ from zope.component import adapts
 from zope.catalog.interfaces import ICatalog
 from zope.intid.interfaces import IIntIds
 from zope.traversing.browser.absoluteurl import absoluteURL
+from zope.security.checker import canAccess
 
 from schooltool.group.interfaces import IGroupContainer
 from schooltool.common import SchoolToolMessage as _
@@ -460,6 +461,10 @@ class PersonView(BrowserView):
 
 class HomeView(PersonView):
     """A Person's homepage."""
+
+    @property
+    def canModify(self):
+        return canAccess(self.context.__parent__, '__delitem__')
 
 
 class IPreferencesMenuViewlet(Interface):

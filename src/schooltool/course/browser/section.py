@@ -42,6 +42,7 @@ from zope.traversing.browser.absoluteurl import absoluteURL
 from z3c.form import form, subform, field, datamanager, button
 from z3c.form.action import ActionErrorOccurred
 from z3c.form.interfaces import ActionExecutionError
+from zope.security.checker import canAccess
 
 from schooltool.common import SchoolToolMessage as _
 from schooltool.person.interfaces import IPerson
@@ -231,6 +232,10 @@ class SectionView(BrowserView):
                                for person in self.context.members],
                         batch_size=0)
         return formatter.render()
+
+    @property
+    def canModify(self):
+        return canAccess(self.context.__parent__, '__delitem__')
 
 
 class SectionNameChooser(NameChooser):

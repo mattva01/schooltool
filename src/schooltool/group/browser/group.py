@@ -115,6 +115,10 @@ class GroupView(BrowserView):
         return [member for member in self.context.members
                 if canAccess(member, 'title')]
 
+    @property
+    def canModify(self):
+        return canAccess(self.context.__parent__, '__delitem__')
+
 
 class MemberViewPersons(RelationshipViewBase):
     """View class for adding / removing members to / from a group."""
@@ -167,3 +171,7 @@ class GroupsViewlet(ViewletBase):
                                         cmp=self.collator.cmp,
                                         key=lambda x:x.title)}
             self.schoolyears.append(sy_info)
+
+    @property
+    def canModify(self):
+        return canAccess(self.context.__parent__, '__delitem__')

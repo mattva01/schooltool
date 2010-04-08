@@ -28,7 +28,8 @@
        title="Change this person's name, picture, or password"
        tal:attributes="href string:${context/@@absolute_url}/@@edit.html"
        i18n:attributes="title"
-       i18n:translate="">
+       i18n:translate=""
+       tal:condition="view/canModify">
        edit name
     </a>
 
