@@ -127,9 +127,9 @@ Let's remove the section that we added to the spring term now:
 
 add some persons:
 
-    >>> from schooltool.app.browser.ftests.setup import addPerson
-    >>> addPerson('Ariana Cerna', 'ariana')
-    >>> addPerson('Mario Tejada', 'mario')
+    >>> from schooltool.basicperson.browser.ftests.setup import addPerson
+    >>> addPerson('Ariana', 'Cerna', 'ariana')
+    >>> addPerson('Mario', 'Tejada', 'mario')
 
 add an instructor
 
