@@ -12,13 +12,15 @@ CHANGES
 
 - Reduce dependency on ``zope.app.*`` packages
 - Allow advisors to view person info (https://launchpad.net/bugs/513064)
-- Flag to disable mail server (https://bugs.launchpad.net/bugs/513026)
-- Added action to send emails to student contacts (https://bugs.launchpad.net/bugs/496255)
-- Formatted email form notifications (https://bugs.launchpad.net/bugs/497492)
-- Fixed broken FCK Editor in some views (https://bugs.launchpad.net/bugs/556478)
-- Added a "neutral" submit button style (https://bugs.launchpad.net/bugs/424510)
+- Flag to disable mail server (https://launchpad.net/bugs/513026)
+- Added action to send emails to student contacts (https://launchpad.net/bugs/496255)
+- Formatted email form notifications (https://launchpad.net/bugs/497492)
+- Fixed broken FCK Editor in some views (https://launchpad.net/bugs/556478)
+- Added a "neutral" submit button style (https://launchpad.net/bugs/424510)
 - Added security descriptions tutorial
 - Update translations
+
+More info at https://launchpad.net/schooltool/+release/1.3.1
 
 
 1.3.0 (2010-01-06)
@@ -26,6 +28,8 @@ CHANGES
 
 - Port to zope versions available in karmic https://launchpad.net/bugs/498803
 - Update translations
+
+More info at https://launchpad.net/schooltool/+release/1.3.0
 
 
 1.2.1 (2009-12-29)
@@ -49,6 +53,8 @@ Translations
 
 - Many i18n fixes by Douglas and Gediminas
 - Update translations
+
+More info at https://launchpad.net/schooltool/+release/1.2.1
 
 
 1.2.0 (2009-11-04)
@@ -83,10 +89,12 @@ Bug fixes
 - Much better SchoolTool translatability coverage.
 
 - Failed to create sections that span multiple terms.
-  https://bugs.launchpad.net/bugs/427321
+  https://launchpad.net/bugs/427321
 
 - Crufty section name display for section.
   https://launchpad.net/bugs/394388
+
+More info at https://launchpad.net/schooltool/+release/1.2.0
 
 
 1.0.3 (2009-07-07)
