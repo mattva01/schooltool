@@ -1,0 +1,381 @@
+PersonInfo viewlets
+===================
+
+Log in as manager:
+
+    >>> manager = Browser('manager', 'schooltool')
+
+Import helpers:
+
+    >>> from schooltool.app.browser.ftests.setup import addSchoolYear
+    >>> from schooltool.app.browser.ftests.setup import addTerm
+    >>> from schooltool.app.browser.ftests.setup import addCourse
+    >>> from schooltool.app.browser.ftests.setup import addSection
+    >>> from schooltool.app.browser.ftests.setup import logInManager
+    >>> from schooltool.basicperson.browser.ftests.setup import addPerson
+    >>> from mechanize import LinkNotFoundError
+
+Helper for adding groups:
+
+    >>> def addGroup(title, schoolyear, members=[]):
+    ...     browser = logInManager()
+    ...     browser.getLink('Manage').click()
+    ...     browser.getLink('School Years').click()
+    ...     browser.getLink(schoolyear).click()
+    ...     browser.getLink('Groups').click()
+    ...     # check if group exists
+    ...     try:
+    ...         browser.getLink(title)
+    ...     except (LinkNotFoundError,):
+    ...         browser.getLink('New Group').click()
+    ...         browser.getControl('Title').value = title
+    ...         browser.getControl('Add').click()
+    ...     if members:
+    ...         browser.getLink(title).click()
+    ...         browser.getLink('edit members').click()
+    ...         for member in members:
+    ...             browser.getControl(member).click()
+    ...         browser.getControl('Add').click()
+
+Helpers for printing sections and groups trees:
+
+    >>> from schooltool.testing.analyze import etree, to_string
+    >>> def queryXML(xpath, response):
+    ...     doc = etree.XML(response)
+    ...     result = [to_string(node) for node in doc.xpath(xpath)]
+    ...     return result
+
+    >>> def print_sections_tree(response):
+    ...     tree = response[0]
+    ...     result = []
+    ...     result.append(queryXML('//h5/text()', tree)[0])
+    ...     for year in queryXML('//div[@class="tree_list"]/ul/li', tree):
+    ...         result.append('+ %s' % (queryXML('/li/a/text()', year)[0]))
+    ...         for term in queryXML('/li/ul/li', year):
+    ...             result.append('  |+ %s' % (queryXML('/li/a/text()', term)[0]))
+    ...             for section in queryXML('//a[@class="leaf_url"]/text()', term):
+    ...                 result.append('     |- %s' % (section,))
+    ...     print "\n".join(result)
+
+    >>> def print_groups_tree(response):
+    ...     tree = response[0]
+    ...     result = []
+    ...     result.append(queryXML('//h5/text()', tree)[0])
+    ...     for year in queryXML('//div[@class="tree_list"]/ul/li', tree):
+    ...         result.append('+ %s' % (queryXML('/li/a/text()', year)[0]))
+    ...         for group in queryXML('//a[@class="leaf_url"]/text()', year):
+    ...             result.append('  |- %s' % (group,))
+    ...     print "\n".join(result)
+
+Add people:
+
+    >>> addPerson('Ariana', 'Cerna', 'ariana', 'pwd')
+    >>> addPerson('Mario', 'Tejada', 'mario', 'pwd')
+    >>> addPerson('Tom', 'Hoffman', 'tom', 'pwd')
+    >>> addPerson('Jeffrey', 'Elkner', 'jelkner', 'pwd')
+
+Set up three school years:
+
+    >>> addSchoolYear('2009', '2009-01-01', '2009-12-31')
+    >>> addSchoolYear('2010', '2010-01-01', '2010-12-31')
+    >>> addSchoolYear('2011', '2011-01-01', '2011-12-31')
+
+Set up terms, courses and sections for 2009:
+
+    >>> addTerm('Initial', '2009-01-01', '2009-06-30', '2009')
+    >>> addTerm('Final', '2009-07-01', '2009-12-31', '2009')
+    >>> addCourse('Math', '2009')
+    >>> addCourse('Art', '2009')
+    >>> addCourse('Programming', '2009')
+    >>> addSection('Math', '2009', 'Initial', 'First',
+    ...            ['Tom'], ['Jeffrey', 'Ariana', 'Mario'])
+    >>> addSection('Math', '2009', 'Final', 'Second',
+    ...            ['Tom'], ['Jeffrey', 'Ariana', 'Mario'])
+    >>> addSection('Art', '2009', 'Final', 'First',
+    ...            ['Tom'], ['Jeffrey', 'Ariana'])
+    >>> addSection('Programming', '2009', 'Initial', 'Z',
+    ...            ['Jeffrey'], ['Ariana', 'Mario'])
+    >>> addSection('Programming', '2009', 'Final', 'A',
+    ...            ['Jeffrey'], ['Mario'])
+    >>> addGroup('Teachers', '2009', ['Tom', 'Jeffrey'])
+    >>> addGroup('Students', '2009', ['Jeffrey', 'Ariana'])
+    >>> addGroup('Programmers', '2009', ['Jeffrey', 'Ariana'])
+
+Set up terms, courses and sections for 2010:
+
+    >>> addTerm('Q1', '2010-01-01', '2010-03-31', '2010')
+    >>> addTerm('Q2', '2010-04-01', '2010-06-30', '2010')
+    >>> addTerm('Quarter 3', '2010-07-01', '2010-09-30', '2010')
+    >>> addTerm('Quarter4', '2010-10-01', '2010-12-31', '2010')
+    >>> addCourse('Soccer', '2010')
+    >>> addCourse('Baseball', '2010')
+    >>> addSection('Baseball', '2010', 'Quarter4', 'SoccerQ4',
+    ...            ['Tom'], ['Mario'])
+    >>> addSection('Baseball', '2010', 'Quarter 3', 'Baseball Q3',
+    ...            ['Tom'], ['Ariana', 'Mario'])
+    >>> addSection('Soccer', '2010', 'Q1', 'Q1 Soccer',
+    ...            ['Tom'], ['Ariana', 'Mario'])
+    >>> addSection('Soccer', '2010', 'Q2', 'Soccer Quater 2',
+    ...            ['Tom'], ['Ariana', 'Mario'])
+    >>> addGroup('Teachers', '2010', ['Tom'])
+    >>> addGroup('Players', '2010', ['Ariana'])
+
+Set up terms, courses and sections for 2011:
+
+    >>> addTerm('Year', '2011-01-01', '2011-12-31', '2011')
+    >>> addCourse('Pop', '2011')
+    >>> addCourse('Classic', '2011')
+    >>> addSection('Pop', '2011', 'Year', 'Pop101',
+    ...            ['Jeffrey'], ['Ariana', 'Mario'])
+    >>> addSection('Classic', '2011', 'Year', 'This is classic music',
+    ...            ['Jeffrey'], ['Mario'])
+    >>> addGroup('Teachers', '2011', ['Jeffrey'])
+    >>> addGroup('Music fans', '2011', ['Jeffrey', 'Ariana'])
+
+Check Tom's person info blocks:
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('Persons').click()
+    >>> manager.getLink('Tom').click()
+
+    >>> manager.printQuery('//div[@class="person-info"]/'
+    ...                    'div[contains(@class, "info-block")]/h5/text()')
+    Details
+    Sections Taught
+    Groups
+
+Sections taught by Tom:
+
+    >>> info_block = manager.queryHTML('//div[@class="person-info"]/'
+    ...                                'div[contains(@class, "info-block")][2]')
+    >>> print_sections_tree(info_block)
+    Sections Taught
+    + 2010
+      |+ Q1
+         |- Soccer -- Q1 Soccer
+      |+ Q2
+         |- Soccer -- Soccer Quater 2
+      |+ Quarter 3
+         |- Baseball -- Baseball Q3
+      |+ Quarter4
+         |- Baseball -- SoccerQ4
+    + 2009
+      |+ Initial
+         |- Math -- First
+      |+ Final
+         |- Art -- First
+         |- Math -- Second
+
+Tom's groups:
+
+    >>> info_block = manager.queryHTML('//div[@class="person-info"]/'
+    ...                               'div[contains(@class, "info-block")][3]')
+    >>> print_groups_tree(info_block)
+    Groups
+    + 2010
+      |- Teachers
+    + 2009
+      |- Teachers
+
+Check Jeffrey's person info blocks:
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('Persons').click()
+    >>> manager.getLink('Jeffrey').click()
+
+    >>> manager.printQuery('//div[@class="person-info"]/'
+    ...                    'div[contains(@class, "info-block")]/h5/text()')
+    Details
+    Sections Taught
+    Sections
+    Groups
+
+Sections taught by Jeffrey:
+
+    >>> info_block = manager.queryHTML('//div[@class="person-info"]/'
+    ...                                'div[contains(@class, "info-block")][2]')
+    >>> print_sections_tree(info_block)
+    Sections Taught
+    + 2011
+      |+ Year
+         |- Classic -- This is classic music
+         |- Pop -- Pop101
+    + 2009
+      |+ Initial
+         |- Programming -- Z
+      |+ Final
+         |- Programming -- A
+
+Sections attended by Jeffrey:
+
+    >>> info_block = manager.queryHTML('//div[@class="person-info"]/'
+    ...                                'div[contains(@class, "info-block")][3]')
+    >>> print_sections_tree(info_block)
+    Sections
+    + 2009
+      |+ Initial
+         |- Math -- First
+      |+ Final
+         |- Art -- First
+         |- Math -- Second
+
+Jeffrey's groups:
+
+    >>> info_block = manager.queryHTML('//div[@class="person-info"]/'
+    ...                               'div[contains(@class, "info-block")][4]')
+    >>> print_groups_tree(info_block)
+    Groups
+    + 2011
+      |- Music fans
+      |- Teachers
+    + 2009
+      |- Programmers
+      |- Students
+      |- Teachers
+
+Check Ariana's person info blocks:
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('Persons').click()
+    >>> manager.getLink('Ariana').click()
+
+    >>> manager.printQuery('//div[@class="person-info"]/'
+    ...                    'div[contains(@class, "info-block")]/h5/text()')
+    Details
+    Sections
+    Groups
+
+Sections attended by Ariana:
+
+    >>> info_block = manager.queryHTML('//div[@class="person-info"]/'
+    ...                                'div[contains(@class, "info-block")][2]')
+    >>> print_sections_tree(info_block)
+    Sections
+    + 2011
+      |+ Year
+         |- Pop -- Pop101
+    + 2010
+      |+ Q1
+         |- Soccer -- Q1 Soccer
+      |+ Q2
+         |- Soccer -- Soccer Quater 2
+      |+ Quarter 3
+         |- Baseball -- Baseball Q3
+    + 2009
+      |+ Initial
+         |- Math -- First
+         |- Programming -- Z
+      |+ Final
+         |- Art -- First
+         |- Math -- Second
+
+Ariana's groups:
+
+    >>> info_block = manager.queryHTML('//div[@class="person-info"]/'
+    ...                               'div[contains(@class, "info-block")][3]')
+    >>> print_groups_tree(info_block)
+    Groups
+    + 2011
+      |- Music fans
+    + 2010
+      |- Players
+    + 2009
+      |- Programmers
+      |- Students
+
+Check Mario's person info blocks:
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('Persons').click()
+    >>> manager.getLink('Mario').click()
+
+    >>> manager.printQuery('//div[@class="person-info"]/'
+    ...                    'div[contains(@class, "info-block")]/h5/text()')
+    Details
+    Sections
+    Groups
+
+Sections attended by Mario:
+
+    >>> info_block = manager.queryHTML('//div[@class="person-info"]/'
+    ...                                'div[contains(@class, "info-block")][2]')
+    >>> print_sections_tree(info_block)
+    Sections
+    + 2011
+      |+ Year
+         |- Classic -- This is classic music
+         |- Pop -- Pop101
+    + 2010
+      |+ Q1
+         |- Soccer -- Q1 Soccer
+      |+ Q2
+         |- Soccer -- Soccer Quater 2
+      |+ Quarter 3
+         |- Baseball -- Baseball Q3
+      |+ Quarter4
+         |- Baseball -- SoccerQ4
+    + 2009
+      |+ Initial
+         |- Math -- First
+         |- Programming -- Z
+      |+ Final
+         |- Math -- Second
+         |- Programming -- A
+
+Mario's groups:
+
+    >>> info_block = manager.queryHTML('//div[@class="person-info"]/'
+    ...                               'div[contains(@class, "info-block")][3]')
+    >>> print_groups_tree(info_block)
+    Groups
+
+Log in as Ariana:
+
+    >>> ariana = Browser('ariana', 'pwd')
+    >>> ariana.getLink('Home').click()
+
+Check Ariana's person info blocks:
+
+    >>> ariana.printQuery('//div[@class="person-info"]/'
+    ...                   'div[contains(@class, "info-block")]/h5/text()')
+    Details
+    Sections
+    Groups
+
+Sections attended by Ariana:
+
+    >>> info_block = ariana.queryHTML('//div[@class="person-info"]/'
+    ...                               'div[contains(@class, "info-block")][2]')
+    >>> print_sections_tree(info_block)
+    Sections
+    + 2011
+      |+ Year
+         |- Pop -- Pop101
+    + 2010
+      |+ Q1
+         |- Soccer -- Q1 Soccer
+      |+ Q2
+         |- Soccer -- Soccer Quater 2
+      |+ Quarter 3
+         |- Baseball -- Baseball Q3
+    + 2009
+      |+ Initial
+         |- Math -- First
+         |- Programming -- Z
+      |+ Final
+         |- Art -- First
+         |- Math -- Second
+
+Ariana's groups:
+
+    >>> info_block = ariana.queryHTML('//div[@class="person-info"]/'
+    ...                               'div[contains(@class, "info-block")][3]')
+    >>> print_groups_tree(info_block)
+    Groups
+    + 2011
+      |- Music fans
+    + 2010
+      |- Players
+    + 2009
+      |- Programmers
+      |- Students

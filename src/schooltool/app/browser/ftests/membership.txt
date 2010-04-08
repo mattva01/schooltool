@@ -20,21 +20,21 @@ A bunch of persons:
     >>> manager.getLink('Import Persons').click()
 
     >>> manager.getControl('CSV Data').value = '''\
-    ... person001, Q. Bert
-    ... person002, W. Bert
-    ... person003, E. Bert
-    ... person004, R. Bert
-    ... person005, T. Bert
-    ... person006, Y. Bert
-    ... person007, U. Bert
-    ... person008, I. Bert
-    ... person009, O. Bert
-    ... person010, P. Bert
-    ... person011, A. Bert
-    ... person012, S. Bert
-    ... person013, D. Bert
-    ... person014, F. Bert
-    ... person015, G. Bert
+    ... person001, Q. Bert, Q. Bert
+    ... person002, W. Bert, W. Bert
+    ... person003, E. Bert, E. Bert
+    ... person004, R. Bert, R. Bert
+    ... person005, T. Bert, T. Bert
+    ... person006, Y. Bert, Y. Bert
+    ... person007, U. Bert, U. Bert
+    ... person008, I. Bert, I. Bert
+    ... person009, O. Bert, O. Bert
+    ... person010, P. Bert, P. Bert
+    ... person011, A. Bert, A. Bert
+    ... person012, S. Bert, S. Bert
+    ... person013, D. Bert, D. Bert
+    ... person014, F. Bert, F. Bert
+    ... person015, G. Bert, G. Bert
     ... '''
     >>> manager.getControl('Submit').click()
 

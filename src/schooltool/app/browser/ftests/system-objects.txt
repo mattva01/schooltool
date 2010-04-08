@@ -26,8 +26,8 @@ the default system objects:
     >>> manager_browser.getControl('Title').value = 'A Group'
     >>> manager_browser.getControl('Add').click()
 
-    >>> from schooltool.app.browser.ftests.setup import addPerson
-    >>> addPerson('Stephan Richter', 'srichter', 'foobar')
+    >>> from schooltool.basicperson.browser.ftests.setup import addPerson
+    >>> addPerson('Stephan', 'Richter', 'srichter', 'foobar')
 
 Test
 ----
@@ -36,17 +36,22 @@ The list of persons should have a disabled checkbox next to the manager user
 
     >>> manager_browser.open('http://localhost/persons')
 
-    >>> for td in analyze.queryHTML('//table[@class="data"]//tr/td', manager_browser.contents):
-    ...     print td
+    >>> manager_browser.printQuery('//table[@class="data"]//tr/td')
     <td>
-          <input type="checkbox" name="delete.manager" id="delete.manager" disabled="disabled" /></td>
+      <input type="checkbox" name="delete.manager" id="delete.manager" disabled="disabled" /></td>
     <td>
-          <a href="http://localhost/persons/manager">SchoolTool Manager</a>
+      <a href="http://localhost/persons/manager">SchoolTool</a>
     </td>
     <td>
-          <input type="checkbox" name="delete.srichter" id="delete.srichter" /></td>
+      <a href="http://localhost/persons/manager">Administrator</a>
+    </td>
     <td>
-          <a href="http://localhost/persons/srichter">Stephan Richter</a>
+      <input type="checkbox" name="delete.srichter" id="delete.srichter" /></td>
+    <td>
+      <a href="http://localhost/persons/srichter">Stephan</a>
+    </td>
+    <td>
+      <a href="http://localhost/persons/srichter">Richter</a>
     </td>
 
 The list of groups should have a disabled checkbox next to the default groups

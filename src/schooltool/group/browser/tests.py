@@ -673,6 +673,28 @@ def doctest_GroupMemberCSVImportView():
 def doctest_GroupsViewlet():
     r"""Test for GroupsViewlet
 
+    Adapters:
+
+        >>> from zope.ucol.localeadapter import LocaleCollator
+        >>> from zope.component import provideAdapter, provideUtility
+        >>> from zope.i18n.interfaces.locales import ICollator
+        >>> from zope.i18n.interfaces.locales import ILocale
+        >>> from schooltool.course.section import PersonInstructorAdapter
+        >>> from schooltool.course.section import PersonLearnerAdapter
+        >>> from schooltool.group.interfaces import IGroupContainer
+        >>> from schooltool.schoolyear.interfaces import ISchoolYear
+        >>> provideAdapter(LocaleCollator, [ILocale], ICollator)
+        >>> provideAdapter(PersonInstructorAdapter)
+        >>> provideAdapter(PersonLearnerAdapter)
+        >>> class DummySchoolYear(object):
+        ...     title = '2010'
+        ...     first = 'date'
+        >>> year2010 = DummySchoolYear()
+        >>> def DummySchoolYearSectionAdapter(section):
+        ...     return year2010
+        >>> provideAdapter(DummySchoolYearSectionAdapter, [IGroupContainer],
+        ...                ISchoolYear)
+
     Let's create a viewlet for a person's groups:
 
         >>> from schooltool.group.browser.group import GroupsViewlet
@@ -685,14 +707,19 @@ def doctest_GroupsViewlet():
     We want to display the generic groups a person is part of that aren't
     sections so we have a filter in the view:
 
-        >>> from schooltool.group.group import Group
-        >>> tenth_grade = Group(title="Tenth Grade")
+        >>> from schooltool.group.group import Group, GroupContainer
+        >>> groups = GroupContainer()
+        >>> groups['tenth'] = tenth_grade = Group(title="Tenth Grade")
         >>> tenth_grade.members.add(student)
-        >>> team = Group(title="Sports Team")
+        >>> groups['team'] = team = Group(title="Sports Team")
         >>> team.members.add(student)
-        >>> student_view = GroupsViewlet(student, TestRequest())
-        >>> [group.title for group in student_view.memberOf()]
-        ['Tenth Grade', 'Sports Team']
+        >>> student_view = GroupsViewlet(student, TestRequest(), None, None)
+        >>> student_view.update()
+        >>> for schoolyear_data in student_view.schoolyears:
+        ...     for group in schoolyear_data['groups']:
+        ...         print group.title
+        Sports Team
+        Tenth Grade
 
     """
 

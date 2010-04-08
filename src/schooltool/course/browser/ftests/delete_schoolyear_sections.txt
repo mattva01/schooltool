@@ -36,8 +36,8 @@ A course
 
 And two sections
 
-    >>> setup.addSection("History", "2005-2006", "Term 1", instructors=["Manager"])
-    >>> setup.addSection("History", "2005-2006", "Term 2", instructors=["Manager"])
+    >>> setup.addSection("History", "2005-2006", "Term 1", instructors=["SchoolTool"])
+    >>> setup.addSection("History", "2005-2006", "Term 2", instructors=["SchoolTool"])
 
 Now let's delete one term:
 
@@ -49,16 +49,24 @@ Now let's delete one term:
 The section should not be in the section list of the manager user anymore:
 
     >>> manager.getLink('Home').click()
-    >>> for block in analyze.queryHTML("//div[@class='info-block']", manager.contents): print block
+    >>> for block in analyze.queryHTML("//div[contains(@class, 'info-block') and not(contains(@class, 'person-groups'))]", manager.contents): print block
     <div class="info-block">
        <h5>Details</h5>
     </div>
-    <div class="info-block">
+    <div class="info-block clearfix">
       <h5>Sections Taught</h5>
-      <ul><li>
-            <a href="http://localhost/schoolyears/2005-2006/term-2/sections/1">SchoolTool Manager -- History (1)</a>
-      </li>
-    </ul></div>
+      <div class="tree_list">
+        <ul><li>
+          <a href="http://localhost/schoolyears/2005-2006" title="2005-2006">2005-2006</a>
+          <ul><li>
+            <a href="http://localhost/schoolyears/2005-2006/term-2" title="Term 2">Term 2</a>
+            <ul><li>
+              <a class="leaf_url" href="http://localhost/schoolyears/2005-2006/term-2/sections/1" title="History -- History (1)">History -- History (1)</a>
+            </li>
+            </ul></li>
+          </ul></li>
+        </ul></div>
+    </div>
 
 if we delete the school year
 

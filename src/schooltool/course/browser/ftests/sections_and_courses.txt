@@ -146,14 +146,14 @@ relevant information
           <a href="http://localhost/schoolyears/2005-2006">2005-2006</a>
     </h1>
 
-    >>> manager.getControl('SchoolTool Manager').click()
+    >>> manager.getControl('SchoolTool').click()
     >>> manager.getControl('Add').click()
     >>> manager.getControl('OK').click()
 
 and a student
 
     >>> manager.getLink('edit individuals').click()
-    >>> manager.getControl('SchoolTool Manager').click()
+    >>> manager.getControl('SchoolTool').click()
     >>> manager.getControl('Add').click()
     >>> manager.getControl('OK').click()
 

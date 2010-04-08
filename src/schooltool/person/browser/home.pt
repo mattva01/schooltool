@@ -1,5 +1,71 @@
 <metal:block use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
 
+  <metal:block metal:fill-slot="extrahead">
+    <style type="text/css">
+      .clearfix:after {
+      content: ".";
+      display: block;
+      clear: both;
+      visibility: hidden;
+      line-height: 0;
+      height: 0;
+      }
+      
+      .clearfix {
+      display: inline-block;
+      }
+      
+      html[xmlns] .clearfix {
+      display: block;
+      }
+      
+      * html .clearfix {
+      height: 1%;
+      }
+
+      .tree_list li a.clicked,
+      .tree_list li a.clicked:hover,
+      .tree_list li span.clicked {
+        background: 0;
+        border: 0;
+        color: black;
+        padding:0px 3px 0px 3px;
+      }
+
+      .tree_list li a.leaf_url {
+        color: #304d6b;
+        text-decoration: underline;
+      }
+    </style>
+    <script type="text/javascript"
+            tal:attributes="src context/++resource++jstree/jquery.tree.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function () {
+        $('.tree_list').tree({
+          ui: {
+            theme_name: 'classic'
+          },
+          types: {
+            'default': {
+              clickable: false,
+              renameable: false,
+              deletable: false,
+              creatable: false,
+              draggable: false,
+            }
+          }          
+        });
+        $('a.leaf_url').click(function() {
+          document.location.href = $(this).attr("href");
+        });
+        $('.tree_list a[class!=leaf_url]').trigger('dblclick');
+        $('.tree_list > ul > li > a').trigger('dblclick');
+        $('.tree_list > ul > li:first-child > a').trigger('dblclick');
+        $('.info-block li ul').css('border', '0');
+      });
+    </script>
+  </metal:block>
+
   <metal:block fill-slot="title">
     <title i18n:translate="">Person info: <span tal:replace="context/title"
         i18n:name="title"/></title>
