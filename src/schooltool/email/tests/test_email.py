@@ -23,15 +23,20 @@ Unit tests for email functionality.
 import unittest
 import doctest
 
-from schooltool.schoolyear.testing import setUp, tearDown
-from schooltool.email.ftesting import email_functional_layer
+from zope.interface import implements
+from zope.interface.verify import verifyObject
+from zope.component import provideAdapter
+from zope.container.contained import NameChooser
+from zope.app.testing import setup
+
+from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.email.interfaces import IEmailContainer
 
 
 def doctest_EmailContainer(self):
     """Tests for toplevel container for Emails.
 
         >>> from zope.interface.verify import verifyObject
-        >>> from schooltool.email.interfaces import IEmailContainer
         >>> from schooltool.email.mail import EmailContainer
         >>> container = EmailContainer()
         >>> verifyObject(IEmailContainer, container)
@@ -59,6 +64,7 @@ def doctest_EmailContainer(self):
         >>> container.tls
 
     """
+
 
 def doctest_Email(self):
     """Tests for Emails.
@@ -116,12 +122,137 @@ def doctest_Email(self):
     """
 
 
+def doctest_EmailUtility():
+    """Tests for EmailUtility.
+
+        >>> class EmailContainerStub(dict):
+        ...     implements(IEmailContainer)
+        ...     enabled = False
+        >>> email_container = EmailContainerStub()
+
+        >>> provideAdapter(lambda app: app.emails,
+        ...                adapts=(ISchoolToolApplication, ),
+        ...                provides=IEmailContainer)
+
+        >>> from schooltool.app.interfaces import IApplicationPreferences
+
+        >>> class AppStub(object):
+        ...     implements(ISchoolToolApplication, IApplicationPreferences)
+        ...     def __init__(self):
+        ...         self.emails = EmailContainerStub()
+        ...         self.timezone = 'UTC'
+        >>> app = AppStub()
+        >>> provideAdapter(lambda ignored: app,
+        ...                adapts=(None, ), provides=ISchoolToolApplication)
+
+
+    EmailUtility is basically a wrapper around python's smtp library.
+
+        >>> from schooltool.email.interfaces import IEmailUtility
+        >>> from schooltool.email.mail import EmailUtility
+
+        >>> util = EmailUtility()
+        >>> verifyObject(IEmailUtility, util)
+        True
+
+    It's enabled when smtp_factory is specified and email container is
+    enabled.
+
+        >>> print util.smtp_factory
+        None
+
+        >>> util.smtp_factory = 'python SMTP lib'
+        >>> app.emails.enabled = False
+
+        >>> util.enabled()
+        False
+
+        >>> app.emails.enabled = True
+        >>> util.enabled()
+        True
+
+        >>> util.smtp_factory = None
+        >>> util.enabled()
+        False
+
+    When the utility is disabled, emails are put to the email container instead
+    of being sent.
+
+        >>> from schooltool.email.mail import Email
+
+        >>> mail = Email('from@test',
+        ...              ['to1@test', 'to2@test'], 'World', subject='Hello')
+
+        >>> util.send(mail)
+        False
+
+        >>> app.emails
+        {u'Email': <schooltool.email.mail.Email object at ...>}
+
+        >>> print util.emailAsString(app.emails['Email'])
+        Content-Type: text/plain; charset="utf-8"
+        MIME-Version: 1.0
+        Content-Transfer-Encoding: 7bit
+        From: from@test
+        To: to1@test, to2@test
+        Subject: Hello
+        Date: ...
+        <BLANKLINE>
+        World
+
+    Putting into the email container is done via util.queue.
+
+        >>> util.queue(mail, status_code=15, status_parameters={'foo': 1})
+        >>> sorted(app.emails)
+        [u'Email', u'Email-2']
+
+    Bad mail get's status code assigned, sometimes with paramteres.
+
+        >>> bad_mail = app.emails[u'Email-2']
+        >>> bad_mail.status_code
+        15
+
+        >>> bad_mail.status_parameters
+        {'foo': 1}
+
+    Care is taken so that passed status parameters are persistent.
+
+        >>> type(bad_mail.status_parameters)
+        <class 'persistent.mapping.PersistentMapping'>
+
+    And here is the real-life implementation of the email utility.
+
+        >>> from schooltool.email.mail import SMTPEmailUtility
+        >>> util = SMTPEmailUtility()
+
+        >>> verifyObject(IEmailUtility, util)
+        True
+
+        >>> util.smtp_factory
+        <class smtplib.SMTP at ...>
+
+        >>> app.emails.enabled = True
+
+        >>> util.enabled()
+        True
+
+    """
+
+
+def setUp(test=None):
+    setup.placefulSetUp()
+    provideAdapter(NameChooser, adapts=(IEmailContainer, ))
+
+
+def tearDown(test=None):
+    setup.placefulTearDown()
+
+
 def test_suite():
     optionflags = (doctest.NORMALIZE_WHITESPACE | doctest.ELLIPSIS |
                    doctest.REPORT_ONLY_FIRST_FAILURE)
     suite = doctest.DocTestSuite(optionflags=optionflags,
                                  setUp=setUp, tearDown=tearDown)
-    suite.layer = email_functional_layer
     return suite
 
 

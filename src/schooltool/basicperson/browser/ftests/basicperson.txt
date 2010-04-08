@@ -141,6 +141,11 @@ Now let's create another teacher, Bob.
     >>> manager.getLink('edit groups').click()
     >>> manager.getControl('Teachers').click()
     >>> manager.getControl('Add').click()
+    >>> # quick css check for the neutral buttons
+    >>> manager.printQuery('//input[@value="Invert Selection" or @value="OK"]/@class')
+    button-neutral
+    button-neutral
+    button-neutral
 
 Now, when we create a student, we will have two persons available to
 choose as an advisor.  We will choose John.
