@@ -973,6 +973,7 @@ class WeeklyCalendarView(CalendarViewBase):
 
     def cloneEvent(self, event):
         """Returns a copy of an event so that it can be inserted into a list."""
+        return event
         new_event = EventForDisplay(CalendarEvent(event.dtstart,
                                     event.duration,
                                     event.title),
