@@ -28,18 +28,6 @@ update:
 	bzr up
 	$(MAKE) buildout BUILDOUT_FLAGS=-n
 
-.PHONY: test
-test: build
-	bin/test -u
-
-.PHONY: ftest
-ftest: build
-	bin/test -f
-
-.PHONY: testall
-testall: build
-	bin/test --at-level 2
-
 instance:
 	$(MAKE) buildout
 	bin/make-schooltool-instance instance instance_type=$(INSTANCE_TYPE)
@@ -47,46 +35,6 @@ instance:
 .PHONY: run
 run: build instance
 	bin/start-schooltool-instance instance
-
-.PHONY: release
-release: bin/buildout compile-translations
-	echo -n `cat version.txt.in`_r`bzr revno` > version.txt
-	bin/buildout setup setup.py sdist
-	rm version.txt
-
-.PHONY: move-release
-move-release:
-	mv -v dist/$(PACKAGE)-*.tar.gz $(DIST)/dev
-
-.PHONY: coverage
-coverage: build
-	test -d parts/test/coverage && ! test -d coverage && mv parts/test/coverage . || true
-	rm -rf coverage
-	bin/test --at-level 2 -u --coverage=coverage
-	mv parts/test/coverage .
-
-.PHONY: coverage-reports-html
-coverage-reports-html coverage/reports:
-	test -d parts/test/coverage && ! test -d coverage && mv parts/test/coverage . || true
-	rm -rf coverage/reports
-	mkdir coverage/reports
-	bin/coverage coverage coverage/reports
-	ln -s $(PACKAGE).html coverage/reports/index.html
-
-.PHONY: ftest-coverage
-ftest-coverage: build
-	test -d parts/test/ftest-coverage && ! test -d ftest-coverage && mv parts/test/ftest-coverage . || true
-	rm -rf ftest-coverage
-	bin/test --at-level 2 -f --coverage=ftest-coverage
-	mv parts/test/ftest-coverage .
-
-.PHONY: ftest-coverage-reports-html
-ftest-coverage-reports-html ftest-coverage/reports:
-	test -d parts/test/ftest-coverage && ! test -d ftest-coverage && mv parts/test/ftest-coverage . || true
-	rm -rf ftest-coverage/reports
-	mkdir ftest-coverage/reports
-	bin/coverage ftest-coverage ftest-coverage/reports
-	ln -s $(PACKAGE).html ftest-coverage/reports/index.html
 
 .PHONY: clean
 clean:
@@ -102,6 +50,54 @@ clean:
 realclean: clean
 	rm -rf eggs
 	rm -rf instance
+
+# Tests
+
+.PHONY: test
+test: build
+	bin/test -u
+
+.PHONY: ftest
+ftest: build
+	bin/test -f
+
+.PHONY: testall
+testall: build
+	bin/test --at-level 2
+
+# Coverage
+
+.PHONY: coverage
+coverage: build
+	test -d parts/test/coverage && ! test -d coverage && mv parts/test/coverage . || true
+	rm -rf coverage
+	bin/test --at-level 2 -u --coverage=coverage
+	mv parts/test/coverage .
+
+.PHONY: coverage-reports-html
+coverage-reports-html coverage/reports: build
+	test -d parts/test/coverage && ! test -d coverage && mv parts/test/coverage . || true
+	rm -rf coverage/reports
+	mkdir coverage/reports
+	bin/coverage coverage coverage/reports
+	ln -s $(PACKAGE).html coverage/reports/index.html
+
+.PHONY: ftest-coverage
+ftest-coverage: build
+	test -d parts/test/ftest-coverage && ! test -d ftest-coverage && mv parts/test/ftest-coverage . || true
+	rm -rf ftest-coverage
+	bin/test --at-level 2 -f --coverage=ftest-coverage
+	mv parts/test/ftest-coverage .
+
+.PHONY: ftest-coverage-reports-html
+ftest-coverage-reports-html ftest-coverage/reports: build
+	test -d parts/test/ftest-coverage && ! test -d ftest-coverage && mv parts/test/ftest-coverage . || true
+	rm -rf ftest-coverage/reports
+	mkdir ftest-coverage/reports
+	bin/coverage ftest-coverage ftest-coverage/reports
+	ln -s $(PACKAGE).html ftest-coverage/reports/index.html
+
+# Translations
 
 .PHONY: extract-translations
 extract-translations: build
@@ -140,6 +136,18 @@ update-translations: extract-translations
 	    msgmerge -qUF $$f $${locales}/schooltool.commendation.pot ;\
 	done
 	$(MAKE) compile-translations
+
+# Release
+
+.PHONY: release
+release: bin/buildout compile-translations
+	echo -n `cat version.txt.in`_r`bzr revno` > version.txt
+	bin/buildout setup setup.py sdist
+	rm version.txt
+
+.PHONY: move-release
+move-release:
+	mv -v dist/$(PACKAGE)-*.tar.gz $(DIST)/dev
 
 .PHONY: ubuntu-environment
 ubuntu-environment:
