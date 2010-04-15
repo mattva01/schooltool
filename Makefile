@@ -36,6 +36,10 @@ instance:
 run: build instance
 	bin/start-schooltool-instance instance
 
+.PHONY: tags
+tags: build
+	bin/tags
+
 .PHONY: clean
 clean:
 	rm -rf bin develop-eggs parts python
