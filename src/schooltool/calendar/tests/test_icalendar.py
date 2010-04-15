@@ -25,12 +25,10 @@ import doctest
 import difflib
 import time
 import os
-from pprint import pformat
+from pprint import pformat, pprint
 from textwrap import dedent
 from datetime import date, timedelta, datetime
 from StringIO import StringIO
-
-from zope.testing.doctestunit import pprint
 
 
 def diff(old, new, oldlabel="expected output", newlabel="actual output"):
