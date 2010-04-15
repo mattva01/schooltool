@@ -3,7 +3,8 @@
 PACKAGE=schooltool
 
 DIST=/home/ftp/pub/schooltool/1.4
-BOOTSTRAP_PYTHON=python2.5
+BOOTSTRAP_PYTHON=python
+
 INSTANCE_TYPE=schooltool
 BUILDOUT_FLAGS=
 
@@ -14,11 +15,11 @@ all: build
 build: bin/test
 
 .PHONY: bootstrap
-bootstrap bin/buildout:
+bootstrap bin/buildout python:
 	$(BOOTSTRAP_PYTHON) bootstrap.py
 
 .PHONY: buildout
-buildout bin/test: bin/buildout setup.py base.cfg buildout.cfg
+buildout bin/test: python bin/buildout buildout.cfg base.cfg setup.py
 	bin/buildout $(BUILDOUT_FLAGS)
 	@touch --no-create bin/test
 
