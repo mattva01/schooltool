@@ -24,11 +24,15 @@ from zope.component import adapter
 from zope.container import btree
 from zope.container.contained import Contained
 
+from zc.catalog import extentcatalog
+from zc.catalog import catalogindex
+
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import ICatalogStartUp
 from schooltool.app.interfaces import ICatalogs
 from schooltool.app.interfaces import IVersionedCatalog
 from schooltool.app.app import ActionBase
+from schooltool.table.catalog import FilterImplementing
 
 
 APP_CATALOGS_KEY = 'schooltool.app.catalog:Catalogs'
@@ -129,4 +133,21 @@ class CatalogFactory(CatalogStartupBase):
         if key not in catalogs:
             catalog = self.createCatalog()
             catalogs[key] = VersionedCatalog(catalog, version)
+            # XXX: if setIndexes throw, delete the catalog and rethrow
             self.setIndexes(catalog)
+
+
+class CatalogImplementing(CatalogFactory):
+    """Factory of catalogs containing objects implementing the given interface."""
+
+    interface = None # override in child classes
+
+    def createCatalog(self):
+        return extentcatalog.Catalog(
+            extentcatalog.FilterExtent(
+                FilterImplementing(self.interface)))
+
+    def getVersion(self):
+        return u'interface:%s, version:%s' % (
+            u'%s.%s' % (self.interface.__module__, self.interface.__name__),
+            super(CatalogImplementing, self).getVersion())

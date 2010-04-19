@@ -23,7 +23,7 @@ import unittest
 import doctest
 
 from zope.app.testing import setup
-from zope.interface import implements
+from zope.interface import implements, Interface
 from zope.interface.verify import verifyObject
 from zope.component import provideAdapter
 from zope.component.hooks import getSite, setSite
@@ -353,6 +353,133 @@ def doctest_CatalogFactory_versioning():
 
         >>> Factory1.get() is catalog_stable
         True
+
+    """
+
+
+def doctest_CatalogImplementing():
+    """Tests for CatalogImplementing.  This is a factory of catalogs that
+    contain only objects implementing given interface.
+
+    Say we have two objects implementing very similar interfaces.
+
+        >>> from zope.schema import TextLine
+
+        >>> class TitledObject(object):
+        ...    def __init__(self, title):
+        ...        self.title = title
+        ...    def __repr__(self):
+        ...        return '<%s (%r)>' % (self.__class__.__name__, self.title)
+
+        >>> class IFoo(Interface):
+        ...     title = TextLine(title=u"Title")
+        >>> class Foo(TitledObject):
+        ...     implements(IFoo)
+
+        >>> class IBar(Interface):
+        ...     title = TextLine(title=u"Title")
+        >>> class Bar(TitledObject):
+        ...     implements(IBar)
+
+        >>> app = provideApplicationStub()
+        >>> app['objects'] = {
+        ...     1: Foo('one'),
+        ...     2: Bar('two'),
+        ...     3: Foo('three'),
+        ...     }
+
+    Let's create a catalog that indexes titles of IFoo.
+
+        >>> from zope.container.contained import Contained
+        >>> from schooltool.app.catalog import CatalogImplementing
+
+        >>> class TitleIndex(Contained):
+        ...     def __init__(self):
+        ...         self.data = []
+        ...     def index_doc(self, id, value):
+        ...         self.data.append((id, value))
+
+        >>> class CatalogTitles(CatalogImplementing):
+        ...    version = 1
+        ...    interface = IFoo
+        ...    def setIndexes(self, catalog):
+        ...        catalog['title'] = TitleIndex()
+
+        >>> factory = CatalogTitles(app)
+        >>> factory()
+
+        >>> catalog = CatalogTitles.get()
+        >>> print catalog.__parent__
+        <VersionedCatalog v. u'interface:schooltool.app.tests.test_catalog.IFoo,
+                               version:1'>:
+        <zc.catalog.extentcatalog.Catalog object at ...>
+
+    This catalog only indexes objects implementing IFoo.
+
+        >>> def index_app(catalog):
+        ...     for docid, doc in app['objects'].items():
+        ...         catalog.index_doc(docid, doc)
+        ...     print sorted(catalog['title'].data)
+
+        >>> index_app(CatalogTitles.get())
+        [(1, <Foo ('one')>), (3, <Foo ('three')>)]
+
+    Catalog indexes are untouched after app restart.
+
+        >>> factory = CatalogTitles(app)
+        >>> factory()
+
+        >>> CatalogTitles.get() is catalog
+        True
+
+        >>> print sorted(CatalogTitles.get()['title'].data)
+        [(1, <Foo ('one')>), (3, <Foo ('three')>)]
+
+    If we change the version, catalog will be re-created, as expected.
+
+        >>> class CatalogTitles(CatalogImplementing):
+        ...    version = 2
+        ...    interface = IFoo
+        ...    def setIndexes(self, catalog):
+        ...        catalog['title'] = TitleIndex()
+
+        >>> factory = CatalogTitles(app)
+        >>> factory()
+
+        >>> catalog2 = CatalogTitles.get()
+        >>> catalog2 is catalog
+        False
+
+    We trust other machinery to reindex the catalog.
+
+        >>> print sorted(CatalogTitles.get()['title'].data)
+        []
+
+    If we change the interface, catalog also gets re-created.
+
+        >>> index_app(CatalogTitles.get())
+        [(1, <Foo ('one')>), (3, <Foo ('three')>)]
+
+        >>> class CatalogTitles(CatalogImplementing):
+        ...    version = 2
+        ...    interface = IBar
+        ...    def setIndexes(self, catalog):
+        ...        catalog['title'] = TitleIndex()
+
+        >>> factory = CatalogTitles(app)
+        >>> factory()
+
+        >>> CatalogTitles.get() is catalog2
+        False
+
+        >>> index_app(CatalogTitles.get())
+        [(2, <Bar ('two')>)]
+
+        >>> catalog3 = CatalogTitles.get()
+        >>> print catalog3.__parent__
+        <VersionedCatalog v. u'interface:schooltool.app.tests.test_catalog.IBar,
+                               version:2'>:
+        <zc.catalog.extentcatalog.Catalog object at ...>
 
     """
 
