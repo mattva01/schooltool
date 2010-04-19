@@ -151,3 +151,19 @@ class CatalogImplementing(CatalogFactory):
         return u'interface:%s, version:%s' % (
             u'%s.%s' % (self.interface.__module__, self.interface.__name__),
             super(CatalogImplementing, self).getVersion())
+
+
+class AttributeCatalog(CatalogImplementing):
+    """Catalog indexing specified attributes of objects implementing
+    the given interface."""
+
+    attributes = ()
+
+    def getVersion(self):
+        return u'attributes:%s, %s' % (
+            tuple(sorted(self.attributes)),
+            super(AttributeCatalog, self).getVersion())
+
+    def setIndexes(self, catalog):
+        for name in self.attributes:
+            catalog[name] = catalogindex.ValueIndex(name)

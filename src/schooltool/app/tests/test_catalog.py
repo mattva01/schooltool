@@ -410,8 +410,9 @@ def doctest_CatalogImplementing():
 
         >>> catalog = CatalogTitles.get()
         >>> print catalog.__parent__
-        <VersionedCatalog v. u'interface:schooltool.app.tests.test_catalog.IFoo,
-                               version:1'>:
+        <VersionedCatalog v.
+            u'interface:schooltool.app.tests.test_catalog.IFoo,
+              version:1'>:
         <zc.catalog.extentcatalog.Catalog object at ...>
 
     This catalog only indexes objects implementing IFoo.
@@ -477,9 +478,97 @@ def doctest_CatalogImplementing():
 
         >>> catalog3 = CatalogTitles.get()
         >>> print catalog3.__parent__
-        <VersionedCatalog v. u'interface:schooltool.app.tests.test_catalog.IBar,
-                               version:2'>:
+        <VersionedCatalog v.
+            u'interface:schooltool.app.tests.test_catalog.IBar,
+              version:2'>:
         <zc.catalog.extentcatalog.Catalog object at ...>
+
+    """
+
+
+def doctest_AttributeCatalog():
+    """Tests for AttributeCatalog.  This is a factory of catalogs that
+    index attributes of objects implementing given interface.
+
+    Say we have an object we want to catalog.
+
+        >>> from zope.schema import TextLine
+
+        >>> class ITriplet(Interface):
+        ...     a = TextLine(title=u"Title")
+        ...     b = TextLine(title=u"Title")
+        ...     c = TextLine(title=u"Title")
+        >>> class Triplet(object):
+        ...     implements(ITriplet)
+        ...     def __init__(self, a, b, c):
+        ...         self.a, self.b, self.c = a, b, c
+        ...     def __repr__(self):
+        ...         return '<%s (%s:%s:%s)>' % (
+        ...             self.__class__.__name__,
+        ...             self.a, self.b, self.c)
+
+        >>> class Foo(object):
+        ...     implements(Interface)
+        ...     a = b = c = 0
+
+        >>> app = provideApplicationStub()
+        >>> app['objects'] = {
+        ...     0: Foo(),
+        ...     1: Triplet('one', 'eins', 'I'),
+        ...     2: Triplet('two', 'zwei', 'II'),
+        ...     3: Triplet('three', 'drei', 'III'),
+        ...     }
+
+    Let's create a catalog that indexes few attributes of the triplet.
+
+        >>> from schooltool.app.catalog import AttributeCatalog
+
+        >>> class CatalogTriplets(AttributeCatalog):
+        ...    version = 1
+        ...    interface = ITriplet
+        ...    attributes = ('a', 'c')
+
+        >>> factory = CatalogTriplets(app)
+        >>> factory()
+
+    And index some objects.
+
+        >>> def index_app(catalog):
+        ...     for docid, doc in app['objects'].items():
+        ...         catalog.index_doc(docid, doc)
+        ...     for name, index in catalog.items():
+        ...         print 'catalog[%r]: %s' % (
+        ...             name,
+        ...             sorted(index.documents_to_values.items()))
+
+        >>> index_app(CatalogTriplets.get())
+        catalog[u'a']: [(1, 'one'), (2, 'two'), (3, 'three')]
+        catalog[u'c']: [(1, 'I'), (2, 'II'), (3, 'III')]
+
+    We can see that version of the catalog also includes the list of attributes,
+    so the catalog will be recreated when attributes, interface or version changes.
+
+        >>> catalog = CatalogTriplets.get()
+        >>> print catalog.__parent__
+        <VersionedCatalog v.
+            u"attributes:('a', 'c'),
+              interface:schooltool.app.tests.test_catalog.ITriplet,
+              version:1">:
+        <zc.catalog.extentcatalog.Catalog object at ...>
+
+        >>> class CatalogTriplets(AttributeCatalog):
+        ...    version = 1
+        ...    interface = ITriplet
+        ...    attributes = ('b')
+
+        >>> factory = CatalogTriplets(app)
+        >>> factory()
+
+        >>> CatalogTriplets.get() is catalog
+        False
+
+        >>> index_app(CatalogTriplets.get())
+        catalog[u'b']: [(1, 'eins'), (2, 'zwei'), (3, 'drei')]
 
     """
 
