@@ -71,6 +71,7 @@ from zope.app.server.wsgi import ServerType
 from schooltool.app.interfaces import ApplicationStartUpEvent
 from schooltool.app.interfaces import ApplicationInitializationEvent
 from schooltool.app.interfaces import IPluginInit, IPluginStartUp
+from schooltool.app.interfaces import ICatalogStartUp
 from schooltool.app.interfaces import ISchoolToolInitializationUtility
 from schooltool.app.app import SchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolApplication
@@ -78,6 +79,7 @@ from schooltool.app import pdf
 from schooltool.person.interfaces import IPersonFactory
 from schooltool.app.interfaces import ICookieLanguageSelector
 from schooltool.app.interfaces import CatalogSetUpEvent
+from schooltool.app.interfaces import CatalogStartUpEvent
 from schooltool.utility.utility import setUpUtilities
 from schooltool.utility.utility import UtilitySpecification
 
@@ -474,6 +476,12 @@ def executePluginActions(actions):
             print >> sys.stderr, "Failed to execute %s: %s" % (action, exception)
 
 
+def startSchoolToolCatalogs(event):
+    adapters = getAdapters((event.object, ), ICatalogStartUp)
+    sorter = PluginActionSorter(adapters)
+    executePluginActions(sorter())
+
+
 def initializeSchoolToolPlugins(event):
     adapters = getAdapters((event.object, ), IPluginInit)
     sorter = PluginActionSorter(adapters)
@@ -649,6 +657,7 @@ class StandaloneServer(object):
             # before initializing plugins themselves or else all the
             # initial groups, persons, resources will not get indexed
             notify(CatalogSetUpEvent(app))
+            notify(CatalogStartUpEvent(app))
 
             # initialize plugins themselves
             notify(ApplicationInitializationEvent(app))
@@ -759,7 +768,10 @@ class StandaloneServer(object):
         connection = db.open()
         root = connection.root()
         app = root[ZopePublication.root_name]
+        setSite(app)
+        notify(CatalogStartUpEvent(app))
         notify(ApplicationStartUpEvent(app))
+        setSite(None)
         transaction.commit()
         connection.close()
 

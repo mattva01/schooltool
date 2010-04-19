@@ -1,0 +1,132 @@
+#
+# SchoolTool - common information systems platform for school administration
+# Copyright (c) 2010 Shuttleworth Foundation
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+"""
+SchoolTool catalogs.
+"""
+from zope.interface import implementer, implements, implementsOnly
+from zope.component import adapter
+from zope.container import btree
+from zope.container.contained import Contained
+
+from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.app.interfaces import ICatalogStartUp
+from schooltool.app.interfaces import ICatalogs
+from schooltool.app.interfaces import IVersionedCatalog
+from schooltool.app.app import ActionBase
+
+
+APP_CATALOGS_KEY = 'schooltool.app.catalog:Catalogs'
+
+
+class CatalogStartupBase(ActionBase):
+    implementsOnly(ICatalogStartUp)
+
+
+class Catalogs(btree.BTreeContainer):
+    implements(ICatalogs)
+
+
+@adapter(ISchoolToolApplication)
+@implementer(ICatalogs)
+def getAppCatalogs(app):
+    if APP_CATALOGS_KEY not in app:
+        app[APP_CATALOGS_KEY] = Catalogs()
+    return app[APP_CATALOGS_KEY]
+
+
+class VersionedCatalog(Contained):
+    implements(IVersionedCatalog)
+
+    expired = False
+    version = 0
+    catalog = None
+
+    def __init__(self, catalog, version):
+        self.catalog = catalog
+        self.catalog.__parent__ = self
+        self.catalog.__name__ = 'catalog'
+        self.version = version
+
+    def __repr__(self):
+        return '<%s v. %r>: %s' % (
+            self.__class__.__name__, self.version, self.catalog)
+
+
+class PrepareCatalogContainer(CatalogStartupBase):
+
+    def __call__(self):
+        catalogs = ICatalogs(self.app)
+        for entry in catalogs.values():
+            entry.expired = True
+
+
+class ExpiredCatalogCleanup(CatalogStartupBase):
+
+    def __call__(self):
+        catalogs = ICatalogs(self.app)
+        for key in list(catalogs):
+            if catalogs[key].expired:
+                del catalogs[key]
+
+
+class CatalogFactory(CatalogStartupBase):
+
+    after = ('prepare-catalog-container', )
+    before = ('expired-catalog-cleanup', )
+
+    version = u''
+
+    @classmethod
+    def key(cls):
+        return u'catalog:%s.%s' % (cls.__module__, cls.__name__)
+
+    @classmethod
+    def get(cls):
+        app = ISchoolToolApplication(None)
+        catalogs = ICatalogs(app)
+        entry = catalogs.get(cls.key())
+        if entry is None:
+            return None
+        return entry.catalog
+
+    def getVersion(self):
+        return unicode(self.version)
+
+    def createCatalog(self):
+        raise NotImplementedError()
+
+    def setIndexes(self, catalog):
+        raise NotImplementedError()
+
+    def __call__(self):
+        app = ISchoolToolApplication(None)
+        catalogs = ICatalogs(app)
+        key = self.key()
+        version = self.getVersion()
+
+        if key in catalogs:
+            if catalogs[key].version == version:
+                catalogs[key].expired = False
+            else:
+                del catalogs[key]
+
+        if key not in catalogs:
+            catalog = self.createCatalog()
+            catalogs[key] = VersionedCatalog(catalog, version)
+            self.setIndexes(catalog)
