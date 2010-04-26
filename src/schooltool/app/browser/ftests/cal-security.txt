@@ -20,11 +20,12 @@ Some basic setup:
 
 Let's create a person so that we can fool around with his calendar:
 
-    >>> setup.addPerson('Frog', 'frog', 'pwd')
+    >>> from schooltool.basicperson.browser.ftests.setup import addPerson
+    >>> addPerson('Frog', 'Frog', 'frog', 'pwd')
 
 Let's create more persons so that we can test access control.
 
-    >>> setup.addPerson('Toad', 'toad', 'doat')
+    >>> addPerson('Toad', 'Toad', 'toad', 'doat')
 
 
 Adding new events

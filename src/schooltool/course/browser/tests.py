@@ -885,6 +885,35 @@ def doctest_SectionLearnerView():
 def doctest_CoursesViewlet():
     r"""Test for CoursesViewlet
 
+    Adapters:
+
+        >>> from zope.ucol.localeadapter import LocaleCollator
+        >>> from zope.component import provideAdapter, provideUtility
+        >>> from zope.i18n.interfaces.locales import ICollator
+        >>> from zope.i18n.interfaces.locales import ILocale
+        >>> from schooltool.course.section import PersonInstructorAdapter
+        >>> from schooltool.course.section import PersonLearnerAdapter
+        >>> from schooltool.course.interfaces import ISection
+        >>> from schooltool.term.interfaces import ITerm
+        >>> from schooltool.schoolyear.interfaces import ISchoolYear
+        >>> provideAdapter(LocaleCollator, [ILocale], ICollator)
+        >>> provideAdapter(PersonInstructorAdapter)
+        >>> provideAdapter(PersonLearnerAdapter)
+        >>> class DummySchoolYear(object):
+        ...     title = '2010'
+        ...     first = 'date'
+        >>> class DummyTerm(object):
+        ...     title = 'Semester'
+        ...     first = 'date'
+        >>> year2010 = DummySchoolYear()
+        >>> semester = DummyTerm()
+        >>> def DummySchoolYearSectionAdapter(section):
+        ...     return year2010
+        >>> def DummyTermSectionAdapter(section):
+        ...     return semester
+        >>> provideAdapter(DummySchoolYearSectionAdapter, [ISection], ISchoolYear)
+        >>> provideAdapter(DummyTermSectionAdapter, [ISection], ITerm)
+
     Let's create a viewlet for a person's courses:
 
         >>> from schooltool.course.browser.course import CoursesViewlet
@@ -896,10 +925,11 @@ def doctest_CoursesViewlet():
         >>> sections = SectionContainer()
 
         >>> persons['teacher'] = teacher = Person("Teacher")
-        >>> teacher_view = CoursesViewlet(teacher, TestRequest())
+        >>> teacher_view = CoursesViewlet(teacher, TestRequest(), None, None)
 
     Not a teacher yet:
 
+        >>> teacher_view.update()
         >>> teacher_view.isTeacher()
         False
 
@@ -912,6 +942,7 @@ def doctest_CoursesViewlet():
 
     Now we're teaching:
 
+        >>> teacher_view.update()
         >>> teacher_view.isTeacher()
         True
         >>> teacher_view.isLearner()
@@ -921,16 +952,20 @@ def doctest_CoursesViewlet():
     list of all the courses we're teaching.
 
         >>> section2.instructors.add(teacher)
-        >>> teacher_view = CoursesViewlet(teacher, TestRequest())
-        >>> [item['section'].title for item in teacher_view.instructorOf()]
-        ['History', 'Algebra']
-        >>> [item['title'] for item in teacher_view.instructorOf()]
-        ['History', 'Algebra']
+        >>> teacher_view = CoursesViewlet(teacher, TestRequest(), None, None)
+        >>> teacher_view.update()
+        >>> for schoolyear_data in teacher_view.instructorOf:
+        ...     for term in schoolyear_data['terms']:
+        ...         for section in term['sections']:
+        ...             print section['obj'].title
+        Algebra
+        History
 
     Let's create a student
 
         >>> persons['student'] = student = Person("Student")
-        >>> student_view = CoursesViewlet(student, TestRequest())
+        >>> student_view = CoursesViewlet(student, TestRequest(), None, None)
+        >>> student_view.update()
 
         >>> student_view.isTeacher()
         False
@@ -940,6 +975,7 @@ def doctest_CoursesViewlet():
     Membership in a Section implies being a learner:
 
         >>> section2.members.add(student)
+        >>> student_view.update()
         >>> student_view.isTeacher()
         False
 
@@ -952,28 +988,15 @@ def doctest_CoursesViewlet():
     Our student is taking several classes
 
         >>> section3.members.add(student)
-        >>> student_view = CoursesViewlet(student, TestRequest())
+        >>> student_view = CoursesViewlet(student, TestRequest(), None, None)
+        >>> student_view.update()
 
-        >>> [item['section'].title for item in student_view.learnerOf()]
-        ['Algebra', 'English']
-
-    Students can also participate in sections as part of a group, say all 10th
-    grade students must take gym:
-
-        >>> from schooltool.group.group import Group
-        >>> tenth_grade = Group(title="Tenth Grade")
-        >>> tenth_grade.members.add(student)
-        >>> section4.members.add(tenth_grade)
-
-        >>> student_view = CoursesViewlet(student, TestRequest())
-        >>> [section['section'].title for section in student_view.learnerOf()]
-        ['Algebra', 'English', 'Gym']
-
-    One thing that might confuse is that learnerOf may be similar to but not
-    the same as view.context.groups
-
-        >>> [group.title for group in student_view.context.groups]
-        ['Algebra', 'English', 'Tenth Grade']
+        >>> for schoolyear_data in student_view.learnerOf:
+        ...     for term in schoolyear_data['terms']:
+        ...         for section in term['sections']:
+        ...             print section['obj'].title
+        Algebra
+        English
 
     """
 

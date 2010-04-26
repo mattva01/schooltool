@@ -72,10 +72,12 @@ Add a contact with no email for Mario:
 
 XXX: Hack to allow teacher to access student's contact.
 XXX: The teacher should be allowed to access student/contact page
+XXX: The teacher should be allowed to access student groups
 
     >>> manager.getLink('Manage').click()
     >>> manager.getLink('Access Control').click()
     >>> manager.getControl('Everyone can view info of persons').click()
+    >>> manager.getControl('Everyone can view group information.').click()
     >>> manager.getControl('Apply').click()
 
 A teacher will be able to send a student contact an email only if:
@@ -90,7 +92,7 @@ Email' link:
 
     >>> teacher = Browser('tom', 'tom')
     >>> teacher.getLink('Home').click()
-    >>> teacher.getLink('Welsh, David Hoffman, Tom -- Math Section').click()
+    >>> teacher.getLink('Math -- Math Section').click()
     >>> teacher.getLink('Ariana').click()
     >>> teacher.getLink('Contacts').click()
     >>> teacher.getLink('(View Details)').click()
@@ -134,7 +136,7 @@ Let's enable the service:
 Now, the teacher can see the 'Send Email' button:
 
     >>> teacher.getLink('Home').click()
-    >>> teacher.getLink('Welsh, David Hoffman, Tom -- Math Section').click()
+    >>> teacher.getLink('Math -- Math Section').click()
     >>> teacher.getLink('Ariana').click()
     >>> teacher.getLink('Contacts').click()
     >>> teacher.getLink('(View Details)').click()
@@ -151,7 +153,7 @@ If the student contact doesn't have an email, the button won't be
 available for the teacher:
 
     >>> teacher.getLink('Home').click()
-    >>> teacher.getLink('Welsh, David Hoffman, Tom -- Math Section').click()
+    >>> teacher.getLink('Math -- Math Section').click()
     >>> teacher.getLink('Mario').click()
     >>> teacher.getLink('Contacts').click()
     >>> teacher.getLink('(View Details)').click()
@@ -163,7 +165,7 @@ available for the teacher:
 The teacher access the 'Send Email' form:
 
     >>> teacher.getLink('Home').click()
-    >>> teacher.getLink('Welsh, David Hoffman, Tom -- Math Section').click()
+    >>> teacher.getLink('Math -- Math Section').click()
     >>> teacher.getLink('Ariana').click()
     >>> teacher.getLink('Contacts').click()
     >>> teacher.getLink('(View Details)').click()
@@ -206,7 +208,7 @@ button:
 
     >>> another_teacher = Browser('david', 'david')
     >>> another_teacher.getLink('Home').click()
-    >>> another_teacher.getLink('Welsh, David Hoffman, Tom -- Math Section').click()
+    >>> another_teacher.getLink('Math -- Math Section').click()
     >>> another_teacher.getLink('Ariana').click()
     >>> another_teacher.getLink('Contacts').click()
     >>> another_teacher.getLink('(View Details)').click()

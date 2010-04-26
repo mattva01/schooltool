@@ -16,7 +16,8 @@ We go to the front page
 
 Set up a basic school:
 
-    >>> from schooltool.app.browser.ftests.setup import addPerson, setUpBasicSchool
+    >>> from schooltool.app.browser.ftests.setup import setUpBasicSchool
+    >>> from schooltool.basicperson.browser.ftests.setup import addPerson
     >>> setUpBasicSchool()
 
 We add a group
@@ -35,7 +36,7 @@ We add a group
 
 We add a person
 
-    >>> addPerson('person1', 'person', groups=['group1'])
+    >>> addPerson('person1', 'person1', 'person', groups=['group1'])
 
 We look at the groups of the person we added
 

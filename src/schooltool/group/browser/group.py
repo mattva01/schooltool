@@ -30,6 +30,8 @@ from zope.component import adapts
 from zope.component import getUtility
 from zope.component import getMultiAdapter
 from zope.security.checker import canAccess
+from zope.i18n.interfaces.locales import ICollator
+from zope.viewlet.viewlet import ViewletBase
 
 from zc.table import table
 
@@ -40,6 +42,7 @@ from schooltool.app.browser.app import BaseAddView, BaseEditView
 from schooltool.person.interfaces import IPerson
 from schooltool.course.interfaces import ISection
 from schooltool.table.interfaces import ITableFormatter
+from schooltool.schoolyear.interfaces import ISchoolYear
 
 from schooltool.group.interfaces import IGroupMember
 from schooltool.group.interfaces import IGroupContainer, IGroupContained
@@ -112,6 +115,10 @@ class GroupView(BrowserView):
         return [member for member in self.context.members
                 if canAccess(member, 'title')]
 
+    @property
+    def canModify(self):
+        return canAccess(self.context.__parent__, '__delitem__')
+
 
 class MemberViewPersons(RelationshipViewBase):
     """View class for adding / removing members to / from a group."""
@@ -145,10 +152,26 @@ class GroupEditView(BaseEditView):
     __used_for__ = IGroupContained
 
 
-class GroupsViewlet(BrowserView):
+class GroupsViewlet(ViewletBase):
     """A viewlet showing the groups a person is in."""
 
-    def memberOf(self):
-        """Seperate out generic groups from sections."""
-        return [group for group in self.context.groups if
-                not ISection.providedBy(group)]
+    def update(self):
+        self.collator = ICollator(self.request.locale)
+        schoolyears_data = {}
+        for group in [g for g in self.context.groups
+                      if not ISection.providedBy(g)]:
+            sy = ISchoolYear(group.__parent__)
+            if sy not in schoolyears_data:
+                schoolyears_data[sy] = []
+            schoolyears_data[sy].append(group)
+        self.schoolyears = []
+        for sy in sorted(schoolyears_data, key=lambda x:x.first, reverse=True):
+            sy_info = {'obj': sy,
+                       'groups': sorted(schoolyears_data[sy],
+                                        cmp=self.collator.cmp,
+                                        key=lambda x:x.title)}
+            self.schoolyears.append(sy_info)
+
+    @property
+    def canModify(self):
+        return canAccess(self.context.__parent__, '__delitem__')

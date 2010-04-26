@@ -18,32 +18,52 @@
     </tr>
     <tal:loop repeat="period view/getCurrentWeekNonTimetableEvents">
       <tr tal:condition="period">
-        <div tal:repeat="block period">
-          <td valign="top">
-            <div tal:repeat="event block">
-              <tal:if condition="event">
-                <a tal:attributes="
-                                   style string:background: ${event/color1};;
-                                                border-color: ${event/color2};
-                                   title event/title;
-                                   href event/linkAllowed">
-                  <span tal:content="event/shortTitle"/>
-                  <tal:if condition="not:event/allday">
-                    (<span tal:content="
+        <td valign="top" tal:repeat="block period">
+          <div tal:repeat="event block">
+            <div tal:condition="event"
+                 tal:attributes="style string:background: ${event/color1};;
+                                 border-color: ${event/color2};;">
+              <a tal:attributes="title event/title;
+                                 href event/linkAllowed">
+                <span tal:content="event/shortTitle"/>
+                <tal:if condition="not:event/allday">
+                  (<span tal:content="
                                python: event.dtstart.astimezone(
-                                           view.timezone).strftime(view.time_fmt)"
-                           /> - <span tal:content="
+                                       view.timezone).strftime(view.time_fmt)"
+                  /> - <span tal:content="
                                python:event.dtend.astimezone(
-                                           view.timezone).strftime(view.time_fmt)"/>)
-                  </tal:if>
-                  <tal:if condition="event/allday">
-                    (<span i18n:translate="">All day</span>)
-                  </tal:if>
-                </a>
-              </tal:if>
-            </div>                       
-          </td>
-        </div>
+                               view.timezone).strftime(view.time_fmt)"/>)
+                </tal:if>
+                <tal:if condition="event/allday">
+                  (<span i18n:translate="">All day</span>)
+                </tal:if>
+              </a>
+              <tal:block define="resources event/getBookedResources;
+                                 booker event/getBooker"
+                         tal:condition="resources">
+                <div class="booked-resources"
+                     i18n:domain="schooltool"
+                     tal:condition="resources">
+                  <h6 class="booked-resource-header"
+                      tal:attributes="style string:background: ${event/color2};;">
+                  <a tal:attributes="href event/bookingLink" style="font-weight: bold; color: #000;">Booked resources</a></h6>
+                  <tal:block tal:repeat="resource resources">
+                    <a tal:attributes="href resource/@@absolute_url"
+                       tal:content="resource/title">(A Pond)</a>
+                  </tal:block>
+                </div>
+                <div class="booked-resources"
+                     tal:condition="booker">
+                  <h6 class="booked-resource-header"
+                      tal:attributes="style string:background: ${event/color2};;">
+                  <a tal:attributes="href event/bookingLink" style="font-weight: bold; color: #000;">Booked by</a></h6>
+                  <a tal:attributes="href booker/@@absolute_url"
+                     tal:content="booker/title">(A Dude)</a>
+                </div>
+              </tal:block>
+            </div>
+          </div>                       
+        </td>
       </tr>
     </tal:loop>
   </table>

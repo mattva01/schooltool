@@ -1,45 +1,59 @@
-<div class="info-block" tal:define="sections view/instructorOf"
+<div class="info-block clearfix" tal:define="schoolyears view/instructorOf"
      tal:condition="view/isTeacher"
      i18n:domain="schooltool">
   <h5 i18n:translate="">Sections Taught</h5>
-  <ul tal:condition="sections">
-    <tal:loop repeat="item sections">
-      <li>
-        <tal:if condition="item/section/can_access:title"
-                tal:define="section item/section">
-          <a title=""
-             tal:attributes="href section/@@absolute_url;
-                             title section/description|section/title"
-             tal:content="section/label"></a>
-        </tal:if>
-        <tal:if condition="not:item/section/can_access:title">
-          <span tal:replace="item/title" />
-        </tal:if>
+  <div class="tree_list" tal:condition="schoolyears">
+    <ul>
+      <li tal:repeat="schoolyear schoolyears">
+        <a tal:attributes="href schoolyear/obj/@@absolute_url;
+                           title schoolyear/obj/title"
+           tal:content="schoolyear/obj/title"></a>
+        <ul>
+          <li tal:repeat="term schoolyear/terms">
+            <a tal:attributes="href term/obj/@@absolute_url;
+                               title term/obj/title"
+               tal:content="term/obj/title"></a>
+            <ul>
+              <li tal:repeat="section_data term/sections">
+                <a tal:attributes="href section_data/obj/@@absolute_url;
+                                   title section_data/title"
+                   class="leaf_url"
+                   tal:content="section_data/title"></a>
+              </li>
+            </ul>
+          </li>
+        </ul>
       </li>
-    </tal:loop>
-  </ul>
+    </ul>
+  </div>
 </div>
 
-<div class="info-block" tal:define="sections view/learnerOf"
-                        tal:condition="view/isLearner">
-  <h5 i18n:translate="">Courses</h5>
-    <ul tal:condition="sections">
-      <tal:loop repeat="group sections">
-        <li>
-          <a title=""
-             tal:attributes="href group/section/@@absolute_url;
-                             title group/section/description|group/section/title"
-             tal:content="group/section/label"
-             i18n:translate=""></a>
-          <span class="hint" tal:condition="group/group">
-            <span i18n:translate="">
-              via group
-            </span>
-            <a href=""
-               tal:attributes="href group/group/@@absolute_url"
-               tal:content="group/group/title" />
-          </span>
-        </li>
-      </tal:loop>
+<div class="info-block clearfix" tal:define="schoolyears view/learnerOf"
+     tal:condition="view/isLearner"
+     i18n:domain="schooltool">
+  <h5 i18n:translate="">Sections</h5>
+  <div class="tree_list" tal:condition="schoolyears">
+    <ul>
+      <li tal:repeat="schoolyear schoolyears">
+        <a tal:attributes="href schoolyear/obj/@@absolute_url;
+                           title schoolyear/obj/title"
+           tal:content="schoolyear/obj/title"></a>
+        <ul>
+          <li tal:repeat="term schoolyear/terms">
+            <a tal:attributes="href term/obj/@@absolute_url;
+                               title term/obj/title"
+               tal:content="term/obj/title"></a>
+            <ul>
+              <li tal:repeat="section_data term/sections">
+                <a tal:attributes="href section_data/obj/@@absolute_url;
+                                   title section_data/title"
+                   class="leaf_url"
+                   tal:content="section_data/title"></a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
     </ul>
+  </div>
 </div>

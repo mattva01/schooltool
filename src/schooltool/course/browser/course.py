@@ -30,6 +30,8 @@ from zope.publisher.browser import BrowserView
 from zope.security.proxy import removeSecurityProxy
 from zope.traversing.browser.interfaces import IAbsoluteURL
 from zope.traversing.browser.absoluteurl import absoluteURL
+from zope.i18n.interfaces.locales import ICollator
+from zope.viewlet.viewlet import ViewletBase
 
 from schooltool.term.interfaces import ITerm
 from schooltool.schoolyear.interfaces import ISchoolYear
@@ -38,6 +40,7 @@ from schooltool.course.interfaces import ICourse, ICourseContainer, ISection
 from schooltool.app.relationships import URIInstruction, URISection
 from schooltool.app.membership import URIGroup, URIMembership
 from schooltool.relationship import getRelatedObjects
+from schooltool.course.interfaces import ILearner, IInstructor
 
 from schooltool.common import SchoolToolMessage as _
 
@@ -123,46 +126,68 @@ class CourseAddView(AddView):
             return AddView.update(self)
 
 
-class CoursesViewlet(BrowserView):
+class CoursesViewlet(ViewletBase):
     """A viewlet showing the courses a person is in."""
+
+    def __init__(self, *args, **kw):
+        super(CoursesViewlet, self).__init__(*args, **kw)
+        self.collator = ICollator(self.request.locale)
+
+    def update(self):
+        self.instructorOf = self.sectionsAsTeacher()
+        self.learnerOf = self.sectionsAsLearner()
 
     def isTeacher(self):
         """Find out if the person is an instructor for any sections."""
-        return len(self.instructorOf()) > 0
+        return bool(self.instructorOf)
 
     def isLearner(self):
         """Find out if the person is a member of any sections."""
-        return len(self.learnerOf()) > 0
+        return bool(self.learnerOf)
 
-    def instructorOf(self):
+    def sectionsAsTeacher(self):
         """Get the sections the person instructs."""
-        sections = getRelatedObjects(self.context, URISection,
-                                     rel_type=URIInstruction)
-        results = []
-        for section in sections:
-            results.append({'title': removeSecurityProxy(section).title,
-                            'section': section})
-        results.sort(key=lambda s: s['section'].__name__)
-        return results
+        return self.sectionsAs(IInstructor)
 
-    def memberOf(self):
-        """Seperate out generic groups from sections."""
-        sections =  [group for group in self.context.groups
-                     if not ISection.providedBy(group)]
-        sections.sort(key=lambda s: s.__name__)
-        return sections
-
-    def learnerOf(self):
+    def sectionsAsLearner(self):
         """Get the sections the person is a member of."""
-        results = []
+        return self.sectionsAs(ILearner)
 
-        for item in self.context.groups:
-            if ISection.providedBy(item):
-                results.append({'section': item, 'group': None})
-            else:
-                group_sections = getRelatedObjects(item, URIGroup,
-                                                   rel_type=URIMembership)
-                for section in group_sections:
-                    results.append({'section': section, 'group': item})
-        results.sort(key=lambda s: s['section'].__name__)
-        return results
+    def sectionsAs(self, role_interface):
+        schoolyears_data = {}
+        for section in role_interface(self.context).sections():
+            sy = ISchoolYear(section)
+            if sy not in schoolyears_data:
+                schoolyears_data[sy] = {}
+            term = ITerm(section)
+            if term not in schoolyears_data[sy]:
+                schoolyears_data[sy][term] = []
+            schoolyears_data[sy][term].append(section)
+        result = []
+        for sy in sorted(schoolyears_data, key=lambda x:x.first, reverse=True):
+            sy_info = {'obj': sy, 'terms': []}
+            for term in sorted(schoolyears_data[sy], key=lambda x:x.first):
+                sortingKey = lambda section:{'course':
+                                             ', '.join([course.title
+                                                        for course in
+                                                        section.courses]),
+                                             'section_title': section.title}
+                term_info = {'obj': term, 'sections': []}
+                for section in sorted(schoolyears_data[sy][term],
+                                      cmp=self.sortByCourseAndSection,
+                                      key=sortingKey):
+                    section_info = {'obj': section,
+                                    'title': '%s -- %s' % \
+                                    (', '.join(course.title
+                                               for course in section.courses),
+                                     section.title)}
+                    term_info['sections'].append(section_info)
+                sy_info['terms'].append(term_info)
+            result.append(sy_info)
+        return result
+
+    def sortByCourseAndSection(self, this, other):
+        if this['course'] is other['course']:
+            return self.collator.cmp(this['section_title'],
+                                     other['section_title'])
+        return self.collator.cmp(this['course'], other['course'])
