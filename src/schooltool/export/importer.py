@@ -440,6 +440,13 @@ class PersonImporter(ImporterBase):
                 data['gender'] = None
             data['password'] = sh.cell_value(rowx=row, colx=9)
 
+            # XXX: this has to be fixed
+            # XXX: SchoolTool should handle UTF-8
+            try:
+                data['__name__'].encode('ascii')
+            except UnicodeEncodeError:
+                self.error(0, row+1, "Username cannot contain non-ascii characters: %s" % data['__name__'])
+
             person = self.createPerson(data)
 
             demographics = IDemographics(person)

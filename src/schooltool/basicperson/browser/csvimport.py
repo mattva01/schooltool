@@ -77,6 +77,15 @@ class BasicPersonCSVImporter(BaseCSVImporter):
             self.errors.fields.append(error_msg)
             return
 
+        # XXX: this has to be fixed
+        # XXX: SchoolTool should handle UTF-8
+        try:
+            username.encode('ascii')
+        except UnicodeEncodeError:
+            error_msg = _("Usernames cannot contain non-ascii characters")
+            self.errors.fields.append(error_msg)
+            return
+
         obj = self.personFactory(data[0], data[1], data[2])
 
         if password:
