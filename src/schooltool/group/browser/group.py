@@ -157,13 +157,18 @@ class GroupsViewlet(ViewletBase):
 
     def update(self):
         self.collator = ICollator(self.request.locale)
+        groups = [
+            group for group in self.context.groups
+            if (canAccess(group, 'title') and
+                not ISection.providedBy(group))]
+
         schoolyears_data = {}
-        for group in [g for g in self.context.groups
-                      if not ISection.providedBy(g)]:
+        for group in groups:
             sy = ISchoolYear(group.__parent__)
             if sy not in schoolyears_data:
                 schoolyears_data[sy] = []
             schoolyears_data[sy].append(group)
+
         self.schoolyears = []
         for sy in sorted(schoolyears_data, key=lambda x:x.first, reverse=True):
             sy_info = {'obj': sy,
