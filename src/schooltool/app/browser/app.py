@@ -45,7 +45,6 @@ from zope.traversing.browser.absoluteurl import absoluteURL
 from schooltool.calendar.icalendar import convert_calendar_to_ical
 from schooltool.common import SchoolToolMessage as _
 from schooltool.app.browser.interfaces import IManageMenuViewletManager
-from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolAuthenticationPlugin
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
@@ -63,7 +62,7 @@ class ApplicationView(BrowserView):
     """A view for the main application."""
 
     def update(self):
-        prefs = IApplicationPreferences(getSchoolToolApplication())
+        prefs = IApplicationPreferences(ISchoolToolApplication(None))
         if prefs.frontPageCalendar:
             url = absoluteURL(ISchoolToolCalendar(self.context),
                               self.request)
@@ -275,7 +274,7 @@ class ApplicationPreferencesView(BrowserView):
     def __init__(self, context, request):
         BrowserView.__init__(self, context, request)
 
-        app = getSchoolToolApplication()
+        app = ISchoolToolApplication(None)
         prefs = self.schema(app)
         initial = {}
         for field in self.schema:
@@ -292,7 +291,7 @@ class ApplicationPreferencesView(BrowserView):
             except WidgetsError:
                 return # Errors will be displayed next to widgets
 
-            app = getSchoolToolApplication()
+            app = ISchoolToolApplication(None)
             prefs = self.schema(app)
             for field in self.schema:
                 if field in data: # skip non-fields

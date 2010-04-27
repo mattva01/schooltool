@@ -77,7 +77,6 @@ from schooltool.app.browser.interfaces import ICalendarProvider
 from schooltool.app.browser.interfaces import IEventForDisplay
 from schooltool.app.browser.interfaces import IHaveEventLegend
 from schooltool.app.interfaces import ISchoolToolCalendarEvent
-from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.app.interfaces import IHaveCalendar
 from schooltool.table.batch import IterableBatch
@@ -934,7 +933,7 @@ class WeeklyCalendarView(CalendarViewBase):
     timetable_template = ViewPageTemplateFile("templates/cal_weekly_timetable.pt")
 
     def __call__(self):
-        app = getSchoolToolApplication()
+        app = ISchoolToolApplication(None)
         # XXX ttshemas were removed from app in evolve28.
         #     timetable_template can be killed now (maybe?).
         #     All related code should go to land of no return.
@@ -2477,7 +2476,7 @@ class CalendarEventBookingView(CalendarEventView):
 
         elif "BOOK" in self.request: # and not self.update_status:
             self.update_status = ''
-            sb = getSchoolToolApplication()
+            sb = ISchoolToolApplication(None)
             for res_id, resource in sb["resources"].items():
                 if 'add_item.%s' % res_id in self.request:
                     booked = self.hasBooked(resource)
@@ -2488,7 +2487,7 @@ class CalendarEventBookingView(CalendarEventView):
 
         elif "UNBOOK" in self.request:
             self.update_status = ''
-            sb = getSchoolToolApplication()
+            sb = ISchoolToolApplication(None)
             for res_id, resource in sb["resources"].items():
                 if 'remove_item.%s' % res_id in self.request:
                     booked = self.hasBooked(resource)
@@ -2502,7 +2501,7 @@ class CalendarEventBookingView(CalendarEventView):
     @property
     def availableResources(self):
         """Gives us a list of all bookable resources."""
-        sb = getSchoolToolApplication()
+        sb = ISchoolToolApplication(None)
         calendar_owner = removeSecurityProxy(self.context.__parent__.__parent__)
         def isBookable(resource):
             if resource is calendar_owner:

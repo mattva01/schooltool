@@ -40,7 +40,8 @@ from zope.component.interfaces import ISite
 from zope.site import LocalSiteManager
 from zope.traversing.browser.absoluteurl import absoluteURL
 from zope.traversing.api import traverse
-from schooltool.app.app import getSchoolToolApplication
+
+from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolAuthentication
 from schooltool.app.interfaces import IAsset
 from schooltool.person.interfaces import IPerson
@@ -95,13 +96,13 @@ class PersonContainerAuthenticationPlugin(object):
                 return self.getPrincipal('sb.person.' + login)
 
     def _checkPlainTextPassword(self, username, password):
-        app = getSchoolToolApplication()
+        app = ISchoolToolApplication(None)
         if username in app['persons']:
             person = app['persons'][username]
             return person.checkPassword(password)
 
     def _checkHashedPassword(self, username, password):
-        app = getSchoolToolApplication()
+        app = ISchoolToolApplication(None)
         if username in app['persons']:
             person = app['persons'][username]
             return (person._hashed_password is not None
@@ -139,7 +140,7 @@ class PersonContainerAuthenticationPlugin(object):
 
     def unauthorized(self, id, request):
         """Signal an authorization failure."""
-        app = getSchoolToolApplication()
+        app = ISchoolToolApplication(None)
         app_url = absoluteURL(app, request)
         query_string = request.getHeader('QUERY_STRING')
         post_form_id = self.storePOSTData(request)
@@ -162,7 +163,7 @@ class PersonContainerAuthenticationPlugin(object):
 
         Returns principals for groups and persons.
         """
-        app = getSchoolToolApplication()
+        app = ISchoolToolApplication(None)
         if id.startswith(self.person_prefix):
             username = id[len(self.person_prefix):]
             if username in app['persons']:
@@ -331,7 +332,7 @@ class GroupCrowdDescription(Description):
         prefix = PersonContainerAuthenticationPlugin.group_prefix
         if not group_principal_id.startswith(prefix):
             return None
-        groups = IGroupContainer(getSchoolToolApplication(), None)
+        groups = IGroupContainer(ISchoolToolApplication(None), None)
         if groups is None:
             return None
         group_id = group_principal_id[len(prefix):]

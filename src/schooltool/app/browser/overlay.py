@@ -31,8 +31,8 @@ from zope.security.checker import canAccess
 from zope.viewlet.viewlet import ViewletBase
 
 from schooltool.common import SchoolToolMessage as _
-from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolCalendar
+from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IShowTimetables
 from schooltool.person.interfaces import IPerson
 
@@ -159,7 +159,7 @@ class CalendarSelectionView(BrowserView):
         user = removeSecurityProxy(IPerson(self.request.principal, None))
         if user is None:
             return []
-        app = getSchoolToolApplication()
+        app = ISchoolToolApplication(None)
 
         result = []
         for obj in app[container].values():
@@ -179,7 +179,7 @@ class CalendarSelectionView(BrowserView):
         """
         user = IPerson(self.request.principal, None)
         if user:
-            app = getSchoolToolApplication()
+            app = ISchoolToolApplication(None)
             calendar = ISchoolToolCalendar(app)
             if canAccess(calendar, '__iter__'):
                 return {'title': app.title,

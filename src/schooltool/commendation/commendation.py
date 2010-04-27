@@ -30,6 +30,7 @@ from zope.annotation.interfaces import IAnnotations
 from zope.security.management import queryInteraction
 
 from schooltool.app import app
+from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.commendation.interfaces import ICommendation
 from schooltool.commendation.interfaces import ICommendations
 from schooltool.commendation.interfaces import ICommendationContained
@@ -112,7 +113,7 @@ def cacheCommendation(commendation, event):
     # Whereever we are, get the SchoolTool application and access its
     # annotations. Then add the commendation to the list of all cached
     # commendations.
-    stapp = app.getSchoolToolApplication()
+    stapp = ISchoolToolApplication(None)
     annotations = IAnnotations(stapp)
     if CommendationsCacheKey not in annotations:
         annotations[CommendationsCacheKey] = persistent.list.PersistentList()
