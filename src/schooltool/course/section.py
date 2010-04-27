@@ -83,7 +83,7 @@ class Section(Persistent, Contained):
 
     @property
     def label(self):
-        instructors = " ".join([i.title for i in self.instructors])
+        instructors = "; ".join([i.title for i in self.instructors])
         msg = _('${instructors} -- ${section_title}',
                 mapping={'instructors': instructors, 'section_title': self.title})
         return msg

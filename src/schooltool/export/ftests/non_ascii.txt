@@ -1,0 +1,21 @@
+Test for non-ascii usernames
+----------------------------
+
+Let's import a subset of the sample data with a cell containing some
+usernames with non-ascii characters:
+
+    >>> browser = Browser('manager', 'schooltool')
+    >>> browser.getLink('Manage').click()
+    >>> browser.getLink('XLS Import').click()
+    >>> import pkg_resources
+    >>> browser.getControl('XLS File').add_file(
+    ...     pkg_resources.resource_stream('schooltool.export.ftests', 'test_non_ascii_data.xls'),
+    ...     'application/excel',
+    ...     'sample_data.xls')
+    >>> browser.getControl('Submit').click()
+
+We should get an error:
+
+    >>> browser.printQuery('//div[@class="error"]')
+    <div class="error">Persons A3 Username cannot contain non-ascii characters: student00...</div>
+    <div class="error">Persons A13 Username cannot contain non-ascii characters: student01...</div>

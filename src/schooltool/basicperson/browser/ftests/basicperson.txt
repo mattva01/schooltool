@@ -208,6 +208,22 @@ using this kind of person:
     <BLANKLINE>
     <BLANKLINE>
     </textarea>
+    >>> # XXX: this has to be fixed
+    >>> # XXX: SchoolTool should handle UTF-8
+    >>> csvtext = "steve, Steve, Smith, secret\npete, Pete, Marley\nconcepción, Concepción, Doña\n\n\n"
+    >>> manager.getControl(name='csvtext').value = csvtext
+    >>> manager.getControl(name='charset').value = ['UTF-8']
+    >>> manager.getControl(name='UPDATE_SUBMIT').click()
+    >>> analyze.printQuery("//div[@class='error']", manager.contents)
+    <div class="error">Failed to import CSV text</div>
+    <div class="error">Usernames cannot contain non-ascii characters</div>
+    >>> analyze.printQuery("id('csvtext')", manager.contents)
+    <textarea name="csvtext" id="csvtext" cols="50" rows="10">steve, Steve, Smith, secret
+    pete, Pete, Marley
+    concepci...n, Concepci...n, Do...a
+    <BLANKLINE>
+    <BLANKLINE>
+    </textarea>
     >>> csvtext = "steve, Steve, Smith, secret\npete, Pete, Marley\nchowa, Chowa, Doña\n\n\n"
     >>> manager.getControl(name='csvtext').value = csvtext
     >>> manager.getControl(name='charset').value = ['UTF-8']
@@ -283,3 +299,25 @@ We can fill the New Person form with Unicode text:
     ...                    manager.contents)
     <a href="http://localhost/persons/pedro/contact">Contacts</a>
 
+But we cannot assign non-ascii usernames:
+
+    >>> # XXX: this has to be fixed
+    >>> # XXX: SchoolTool should handle UTF-8
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('Persons').click()
+    >>> manager.getLink('New Person').click()
+    >>> manager.getControl('First name').value = "Concepción"
+    >>> manager.getControl('Last name').value = "Contreras"
+    >>> manager.getControl('Gender').value = ['female']
+    >>> manager.getControl('Username').value = "concepción"
+    >>> manager.getControl('Password').value = "pwd"
+    >>> manager.getControl('Confirm').value = "pwd"
+    >>> manager.getControl('Add').click()
+    >>> manager.printQuery('//div[@class="status"]')
+    <div class="status">
+      <div class="summary">There were some errors.</div>
+        <ul class="errors"><li>
+            Username:
+            <div class="error">Usernames cannot contain non-ascii characters</div>
+          </li>
+        </ul></div>

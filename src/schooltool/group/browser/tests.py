@@ -548,7 +548,7 @@ def doctest_GroupMemberCSVImporter():
         >>> stevens = persons['stevens'] = Person('stevens', 'Bob Stevens')
         >>> [group.title for group in stevens.groups]
         []
-    
+
     Create a group and an importer
 
         >>> from schooltool.group.browser.csvimport import GroupMemberCSVImporter
@@ -704,15 +704,24 @@ def doctest_GroupsViewlet():
         >>> persons = school['persons']
         >>> persons['student'] = student = Person("Student")
 
+    We need to allow access to group's titles.
+
+        >>> from zope.security.checker import defineChecker, Checker
+        >>> from schooltool.group.group import Group, GroupContainer
+
+        >>> defineChecker(Group,
+        ...               Checker({'title': 'zope.Public'},
+        ...                       {'title': 'zope.Public'}))
+
     We want to display the generic groups a person is part of that aren't
     sections so we have a filter in the view:
 
-        >>> from schooltool.group.group import Group, GroupContainer
         >>> groups = GroupContainer()
         >>> groups['tenth'] = tenth_grade = Group(title="Tenth Grade")
         >>> tenth_grade.members.add(student)
         >>> groups['team'] = team = Group(title="Sports Team")
         >>> team.members.add(student)
+
         >>> student_view = GroupsViewlet(student, TestRequest(), None, None)
         >>> student_view.update()
         >>> for schoolyear_data in student_view.schoolyears:
