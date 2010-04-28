@@ -106,6 +106,12 @@ class UsernameValidator(SimpleFieldValidator):
             INameChooser(self.context).checkName(username, None)
         except ValueError:
             raise UsernameValidationError(_("Names cannot begin with '+' or '@' or contain '/'"))
+        # XXX: this has to be fixed
+        # XXX: SchoolTool should handle UTF-8
+        try:
+            username.encode('ascii')
+        except UnicodeEncodeError:
+            raise UsernameValidationError(_("Usernames cannot contain non-ascii characters"))
 
 validator.WidgetValidatorDiscriminators(UsernameValidator,
                                         field=IPersonAddForm['username'])

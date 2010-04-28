@@ -19,8 +19,9 @@ Setup
 
 We will need a user and a resource:
 
-    >>> from schooltool.app.browser.ftests.setup import addPerson, addResource
-    >>> addPerson('Stephan Richter', 'srichter', 'foobar')
+    >>> from schooltool.app.browser.ftests.setup import addResource
+    >>> from schooltool.basicperson.browser.ftests.setup import addPerson
+    >>> addPerson('Stephan', 'Richter', 'srichter', 'foobar')
     >>> addResource('Pig')
 
 Let's log in as the new user:

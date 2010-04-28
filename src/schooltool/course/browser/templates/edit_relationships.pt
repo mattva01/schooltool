@@ -47,7 +47,7 @@
 		     title="Shortcut: Alt-R" accesskey="R"
 		     i18n:attributes="value; accesskey" />
 	      <input onclick="invertSelection('remove_item')"
-                     type="button" class="button-ok"
+                     type="button" class="button-neutral"
 		     value="Invert Selection"
                      i18n:attributes="value invert-selection-button"
                      tal:condition="batch" />
@@ -69,7 +69,7 @@
 		     title="Shortcut: Alt-A" accesskey="A"
 		     i18n:attributes="value; accesskey" />
 	      <input onclick="invertSelection('add_item')"
-                     type="button" class="button-ok"
+                     type="button" class="button-neutral"
 		     value="Invert Selection"
                      i18n:attributes="value invert-selection-button"
                      tal:condition="batch" />
@@ -81,7 +81,7 @@
 	</fieldset>
 
 	<div class="controls">
-          <input type="submit" class="button-ok" name="CANCEL" value="OK"
+          <input type="submit" class="button-neutral" name="CANCEL" value="OK"
                  i18n:attributes="value ok-button" />
 	</div>
       </form>

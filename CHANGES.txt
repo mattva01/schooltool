@@ -1,91 +1,115 @@
+=======
 CHANGES
-~~~~~~~
+=======
 
-1.3.1 (UNRELEASED)
-==================
+1.3.2 (unreleased)
+------------------
 
-* Reduce dependency on ``zope.app.*`` packages
-* Allow advisors to view person info (https://launchpad.net/bugs/513064)
-* Flag to disable mail server (https://bugs.launchpad.net/schooltool/+bug/513026)
-* Added action to send emails to student contacts
-  (https://bugs.launchpad.net/schooltool/+bug/496255)
+- Added course names to section links in the person view, sorting Sections and Groups links by school year (https://bugs.launchpad.net/bugs/545793)
+- Made edit links on person, section and group views available only to managers (https://bugs.launchpad.net/bugs/361436)
+- Displayed resources of calendar events on weekly view (https://bugs.launchpad.net/schooltool/+bug/540099)
+- Changed old Zonki in pdf footers (https://bugs.launchpad.net/bugs/561558)
+- Used semicolon to separate instructors in section's label (https://bugs.launchpad.net/bugs/558911)
+- Prevented the user to enter non-ascii usernames
+
+
+1.3.1 (2010-04-07)
+------------------
+
+- Reduce dependency on ``zope.app.*`` packages
+- Allow advisors to view person info (https://launchpad.net/bugs/513064)
+- Flag to disable mail server (https://launchpad.net/bugs/513026)
+- Added action to send emails to student contacts (https://launchpad.net/bugs/496255)
+- Formatted email form notifications (https://launchpad.net/bugs/497492)
+- Fixed broken FCK Editor in some views (https://launchpad.net/bugs/556478)
+- Added a "neutral" submit button style (https://launchpad.net/bugs/424510)
+- Added security descriptions tutorial
+- Update translations
+
+More info at https://launchpad.net/schooltool/+release/1.3.1
 
 
 1.3.0 (2010-01-06)
-==================
+------------------
 
-* Port to zope versions available in karmic https://launchpad.net/bugs/498803
-* Update translations
+- Port to zope versions available in karmic https://launchpad.net/bugs/498803
+- Update translations
+
+More info at https://launchpad.net/schooltool/+release/1.3.0
 
 
 1.2.1 (2009-12-29)
-==================
+------------------
 
-* Automatic plugin inclusion using z3c.autoinclude
-* Many build improvements by Justas and Gediminas
-* Code cleanup
+- Automatic plugin inclusion using z3c.autoinclude
+- Many build improvements by Justas and Gediminas
+- Code cleanup
 
 Bug fixes
----------
++++++++++
 
-* Traceback trying to view student's contacts
+- Traceback trying to view student's contacts
   https://launchpad.net/bugs/475586
-* Section scheduling view now returns to section on save
+- Section scheduling view now returns to section on save
   https://launchpad.net/bugs/485616
-* Removed Timetables link from section context, https://launchpad.net/bugs/485617
+- Removed Timetables link from section context, https://launchpad.net/bugs/485617
 
 Translations
-------------
+++++++++++++
 
-* Many i18n fixes by Douglas and Gediminas
-* Update translations
+- Many i18n fixes by Douglas and Gediminas
+- Update translations
+
+More info at https://launchpad.net/schooltool/+release/1.2.1
 
 
 1.2.0 (2009-11-04)
-==================
+------------------
 
 New Features
-------------
+++++++++++++
 
-* A way to enter contact information of users themselves (as opposed to
+- A way to enter contact information of users themselves (as opposed to
   external contacts) https://launchpad.net/bugs/381158
 
-* Outgoing email support for interventions (sent either via specified
+- Outgoing email support for interventions (sent either via specified
   SMTP server or your Gmail account).
   https://launchpad.net/bugs/417029,
   https://launchpad.net/bugs/417101,
   https://launchpad.net/bugs/425759
 
 SchoolTool security
--------------------
++++++++++++++++++++
 
-* An overview page of user permissions (access rights) in SchoolTool.
+- An overview page of user permissions (access rights) in SchoolTool.
   https://launchpad.net/bugs/381698
   (Only SchoolTool core permissions listed - Gradebook, Attendance/Journal
   and Interventions are soon to follow)
 
-* Refined some of the rougher access permission corners, tightened
+- Refined some of the rougher access permission corners, tightened
   permissions where needed.
 
 Bug fixes
----------
++++++++++
 
-* Much better SchoolTool translatability coverage.
+- Much better SchoolTool translatability coverage.
 
-* Failed to create sections that span multiple terms.
-  https://bugs.launchpad.net/bugs/427321
+- Failed to create sections that span multiple terms.
+  https://launchpad.net/bugs/427321
 
-* Crufty section name display for section.
+- Crufty section name display for section.
   https://launchpad.net/bugs/394388
+
+More info at https://launchpad.net/schooltool/+release/1.2.0
 
 
 1.0.3 (2009-07-07)
-==================
+------------------
 
 New features 
-------------
+++++++++++++
 
-* New section adding view.  
+- New section adding view.  
 
   - Multiple-term (linked) sections can now be created.
   
@@ -95,74 +119,74 @@ New features
   
   - See https://launchpad.net/bugs/389283
 
-* You can specify the relationship between a person and a contact from a
+- You can specify the relationship between a person and a contact from a
   standard set (parent, guardian, step-parent, etc). See
   https://launchpad.net/bugs/381412
 
-* Removed ability to delete calendar events that come from (section) timetables.
+- Removed ability to delete calendar events that come from (section) timetables.
   See https://launchpad.net/bugs/271391
 
 Douglas Cerna:
 
-* Added missing attributes to the course adding form and the csv import.  See
+- Added missing attributes to the course adding form and the csv import.  See
   https://launchpad.net/bugs/384945 and
   https://launchpad.net/bugs/384957
 
 Tweaks and fixes
-----------------
+++++++++++++++++
 
-* Active year is no longer highlighted in red.  See
+- Active year is no longer highlighted in red.  See
   https://launchpad.net/bugs/317651
 
-* Fixed contact deletion crash. See
+- Fixed contact deletion crash. See
   https://launchpad.net/bugs/382239
 
-* Section and course descriptions are displayed properly now.  See
+- Section and course descriptions are displayed properly now.  See
   https://launchpad.net/bugs/370581
 
-* Fixed a typo in default ethnicity demographics field.  See
+- Fixed a typo in default ethnicity demographics field.  See
   https://launchpad.net/bugs/376116
 
-* Fixed glitches (events not displayed or displayed in wrong day) in weekly
+- Fixed glitches (events not displayed or displayed in wrong day) in weekly
   calendar views. See https://launchpad.net/bugs/285514 and
   https://launchpad.net/bugs/389626  Thanks go to Daniel Höger
   for the report and part of the fix.
 
 Unicode fixes
--------------
++++++++++++++
 
-Fixes by Douglas Cerna:
+Douglas Cerna:
 
-* Contacts views.  See https://launchpad.net/bugs/382251
+- Contacts views.  See https://launchpad.net/bugs/382251
 
-* Course CSV import.  See https://launchpad.net/bugs/375792
+- Course CSV import.  See https://launchpad.net/bugs/375792
 
 
 1.0.2 (2009-06-02)
-==================
+------------------
 
 Justas Sadzevičius:
 
-* SchoolTool no longer supports groups as members of a section.  To add all
+- SchoolTool no longer supports groups as members of a section.  To add all
   members of a group, please use the filter in section's "edit individuals"
   page.  See https://launchpad.net/bugs/370629
 
-* Optional "Course ID", "Goverment ID" and "Credits" fields added to a Course.
+- Optional "Course ID", "Goverment ID" and "Credits" fields added to a Course.
   See  https://launchpad.net/bugs/381031
 
 Gediminas Paulauskas:
 
-* Fixed broken packages.  See https://launchpad.net/bugs/352096
+- Fixed broken packages.  See https://launchpad.net/bugs/352096
 
-* Server properly starts after installation or upgrade.  See
+- Server properly starts after installation or upgrade.  See
   https://launchpad.net/bugs/334365
 
 
 1.0.1 (2009-05-11)
-==================
+------------------
 
 Major
------
++++++
 
 Translations are back in SchoolTool.
 
@@ -171,123 +195,120 @@ in the SchoolTool book:
 http://book.schooltool.org/htmlhelp/translations.html#selecting-schooltool-s-language
 
 Tweaks and fixes
-----------------
+++++++++++++++++
 
 Douglas Cerna:
 
-* Made CSV importer support blank lines.  See https://launchpad.net/bugs/253663
+- Made CSV importer support blank lines.  See https://launchpad.net/bugs/253663
 
 Justas Sadzevičius:
 
-* Added section linking to the edit section view.
+- Added section linking to the edit section view.
 
 
 1.0.0 (2009-04-30)
-==================
+------------------
 
 Person and Demographics
------------------------
++++++++++++++++++++++++
 
-Author: Ignas Mikalajūnas <ignas@pov.lt>
+Filip Sufitchi <fsufitch@charon>:
 
-* Added custom demographics field storage and fields themselves.
+- Initial implementation of demographics field management views.
 
-Author: Filip Sufitchi <fsufitch@charon>
+Ignas Mikalajūnas <ignas@pov.lt>:
 
-* Initial implementation of demographics field management views.
-
-Author: Ignas Mikalajūnas <ignas@pov.lt>
-
-* Added contacts to schooltool with list/add/edit/display views.
-* Added contact managemenet view and made it possbile to add+assign contact
+- Added custom demographics field storage and fields themselves.
+- Added contacts to schooltool with list/add/edit/display views.
+- Added contact managemenet view and made it possbile to add+assign contact
   in one go.
 
-Author: Alan Elkner <aelkner@gmail.com>
+Alan Elkner <aelkner@gmail.com>:
 
-* added group to person add form
-* added advisor to person add form
-* added advisor and advisee functionality to BasicPerson
-* basicperson has new fields and some old ones were removed
+- added group to person add form
+- added advisor to person add form
+- added advisor and advisee functionality to BasicPerson
+- basicperson has new fields and some old ones were removed
 
 PDF Reporting improvements
---------------------------
+++++++++++++++++++++++++++
 
-Author: Justas Sadzevicius <justas@pov.lt>
+Justas Sadzevičius <justas@pov.lt>:
 
-* Rewrite calendar PDF views to use RML.
-* Added headers and footers to PDF views.
+- Rewrite calendar PDF views to use RML.
+- Added headers and footers to PDF views.
 
-XLS import export
------------------
+XLS import/export
++++++++++++++++++
 
-Author: Tom Hoffman <tom.hoffman@gmail.com>
+Tom Hoffman <tom.hoffman@gmail.com>:
 
-* Creaded empty annotated XLS import template.
-* Updated texts in XLS import view
+- Creaded empty annotated XLS import template.
+- Updated texts in XLS import view
 
-Author: Ignas Mikalajūnas <ignas@pov.lt>
+Ignas Mikalajūnas <ignas@pov.lt>:
 
-* Added ability to import user passwords.
+- Added ability to import user passwords.
 
-* Importer now will not complain about missing spreadsheets in the XLS
+- Importer now will not complain about missing spreadsheets in the XLS
   file being imported.
 
-* Added Export to XLS functionality.
+- Added Export to XLS functionality.
 
-* Split terms into 2 school years in sample data.
+- Split terms into 2 school years in sample data.
 
-* Fixed a crash in export when no resources are assigned to a timetable
+- Fixed a crash in export when no resources are assigned to a timetable
   event.
 
-* Separated section import/export into separate spreadsheets.
+- Separated section import/export into separate spreadsheets.
 
-* Made most if not all the objects in xls import reimportable.
+- Made most if not all the objects in xls import reimportable.
 
-* Added demographics information to the sample data file.
+- Added demographics information to the sample data file.
 
-* Changed "Excel import" action to "XLS import".
+- Changed "Excel import" action to "XLS import".
 
 Tweaks and fixes
-----------------
+++++++++++++++++
 
-Author: Tom Hoffman <tom.hoffman@gmail.com>
+Tom Hoffman <tom.hoffman@gmail.com>:
 
-* Updated section import csv file documentation.
+- Updated section import csv file documentation.
 
-Author: Alan Elkner <aelkner@gmail.com>
+Alan Elkner <aelkner@gmail.com>:
 
-* Removed unused identifier field from add forms.
+- Removed unused identifier field from add forms.
 
-Author: Filip Sufitchi <fsufitch@charon>
+Filip Sufitchi:
 
-* Made Delete buttons look consistently (Red) all over the system.
+- Made Delete buttons look consistently (Red) all over the system.
 
-Author: Chris Carey <cpcarey@cpcarey-laptop>
+Chris Carey:
 
-* Unify color color scheme in schooltool.gradebook and schooltool.lyceum.journal
+- Unify color color scheme in schooltool.gradebook and schooltool.lyceum.journal
   ajax status indicators.
 
-* Added School Timetable id display to the School Timetable view page
+- Added School Timetable id display to the School Timetable view page
 
-Author: Ignas Mikalajūnas <ignas@pov.lt>
+Ignas Mikalajūnas <ignas@pov.lt>:
 
-* Added headers to some Section views.
-* Do not allow people without schooltool.edit permission on SchoolYears delete
+- Added headers to some Section views.
+- Do not allow people without schooltool.edit permission on SchoolYears delete
   terms.
-* Made field descriptions in most of the forms visible.
-* Switched to ISO dates everyehere.
-* Added date picker to all the forms in schooltool.
-* Started using ISO date format (yyyy-mm-dd) in the short date formatter.
+- Made field descriptions in most of the forms visible.
+- Switched to ISO dates everyehere.
+- Added date picker to all the forms in schooltool.
+- Started using ISO date format (yyyy-mm-dd) in the short date formatter.
 
-* Removed resource booking link from the section view.
+- Removed resource booking link from the section view.
 
-Author: Justas Sadzevicius <justas@pov.lt>
+Justas Sadzevičius <justas@pov.lt>:
 
-* Added simple section cross-term copying and linking interface.
+- Added simple section cross-term copying and linking interface.
 
-* Fixed a small bug in weekly calendar title - week date range was
+- Fixed a small bug in weekly calendar title - week date range was
   one day too long.
 
-Author: Douglas Cerna
+Douglas Cerna:
 
-* Group and section member CSV import views.
+- Group and section member CSV import views.

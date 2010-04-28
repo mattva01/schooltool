@@ -14,12 +14,12 @@ The SchoolTool version is displayed on the page:
 
 Let's create a person so that we can fool around with his calendar:
 
-    >>> from schooltool.app.browser.ftests.setup import addPerson
-    >>> addPerson('Frog', 'frog', 'pwd')
+    >>> from schooltool.basicperson.browser.ftests.setup import addPerson
+    >>> addPerson('Frog', 'Frog', 'frog', 'pwd')
 
 Let's create a second person so that we can test access control.
 
-    >>> addPerson('Toad', 'toad', 'doat')
+    >>> addPerson('Toad', 'Toad', 'toad', 'doat')
 
 Now we log in as the frog:
 
@@ -207,7 +207,7 @@ Now Frog is in the Instructors div
           <h3>Instructors</h3>
           <ul>
             <li>
-              <a href="http://localhost/persons/frog">Frog</a>
+              <a href="http://localhost/persons/frog">Frog, Frog</a>
             </li>
           </ul>
     ...

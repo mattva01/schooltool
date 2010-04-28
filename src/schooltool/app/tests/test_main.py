@@ -563,31 +563,6 @@ def doctest_bootstrapSchoolTool():
         >>> 'user1' in root[ZopePublication.root_name]['persons']
         True
 
-    However it fails if the application root is not a SchoolTool application
-
-        >>> root[ZopePublication.root_name] = 'the object is strange'
-        >>> transaction.commit()
-        >>> connection.close()
-
-        >>> server.bootstrapSchoolTool(db)
-        Traceback (most recent call last):
-          ...
-        IncompatibleDatabase: incompatible database
-
-    It also checks for the presence of an old data.
-
-        >>> connection = db.open()
-        >>> root = connection.root()
-        >>> del root[ZopePublication.root_name]
-        >>> root['schooltool'] = object()
-        >>> transaction.commit()
-        >>> connection.close()
-
-        >>> server.bootstrapSchoolTool(db)
-        Traceback (most recent call last):
-          ...
-        OldDatabase: old database
-
     Clean up
 
         >>> transaction.abort()

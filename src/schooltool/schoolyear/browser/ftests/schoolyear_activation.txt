@@ -41,6 +41,13 @@ see a tab pointing to it:
     >>> listTabs(manager.contents)
     <a class="active_schoolyear" href="http://localhost/schoolyears/2005-2006">2005-2006</a>
 
+Quick CSS check:
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('School Years').click()
+    >>> manager.printQuery('//input[@name="ACTIVATE_NEXT_SCHOOLYEAR"]/@class')
+    button-ok
+
 Let's add one more school year:
 
     >>> manager.getLink('Manage').click()

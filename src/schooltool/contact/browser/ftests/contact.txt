@@ -122,6 +122,11 @@ And attach existing contact entries to a person as well:
     >>> browser.getLink('Home').click()
     >>> browser.getLink('Contacts').click()
     >>> browser.getLink('Manage Contacts').click()
+    >>> # quick css check for the neutral buttons
+    >>> browser.printQuery('//input[@value="Invert Selection" or @value="OK"]/@class')
+    button-neutral
+    button-neutral
+    button-neutral
     >>> browser.getControl('John').click()
     >>> browser.getControl('Assign').click()
 

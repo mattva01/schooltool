@@ -10,9 +10,9 @@ Set up the basic school:
 
 Let's create a coupe of persons who will be students and teachers:
 
-    >>> from schooltool.app.browser.ftests.setup import addPerson
-    >>> addPerson('Frog', 'frog', 'pwd')
-    >>> addPerson('Toad', 'toad', 'doat')
+    >>> from schooltool.basicperson.browser.ftests.setup import addPerson
+    >>> addPerson('Frog', 'Frog', 'frog', 'pwd')
+    >>> addPerson('Toad', 'Toad', 'toad', 'doat')
 
 Also, let's create a group:
 
@@ -78,7 +78,7 @@ Let's make the frog a teacher:
           <h3>Instructors</h3>
           <ul>
             <li>
-              <a href="http://localhost/persons/frog">Frog</a>
+              <a href="http://localhost/persons/frog">Frog, Frog</a>
             </li>
           </ul>
     ...
@@ -106,5 +106,5 @@ Now frog can see the demographics of toad alright:
     >>> print frog.contents
     <BLANKLINE>
     ...
-        <title>Person info: Toad</title>
+        <title>Person info: Toad, Toad</title>
     ...

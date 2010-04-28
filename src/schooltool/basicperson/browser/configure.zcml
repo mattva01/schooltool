@@ -215,4 +215,14 @@
   <zope:adapter
       factory=".demographics.CustomEnumDataConverter" />
 
+  <resourceDirectory
+      name="jstree"
+      directory="resources/jstree"
+      layer=".skin.IBasicPersonLayer" />
+
+  <resource
+      name="jquery.js"
+      file="resources/jstree/jquery.min.js"
+      layer=".skin.IBasicPersonLayer" />
+
 </configure>

@@ -73,7 +73,6 @@ from schooltool.app.interfaces import ApplicationInitializationEvent
 from schooltool.app.interfaces import IPluginInit, IPluginStartUp
 from schooltool.app.interfaces import ISchoolToolInitializationUtility
 from schooltool.app.app import SchoolToolApplication
-from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app import pdf
 from schooltool.person.interfaces import IPersonFactory
 from schooltool.app.interfaces import ICookieLanguageSelector
@@ -112,31 +111,6 @@ No storage defined in the configuration file.
 If you're using the default configuration file, please edit it now and
 uncomment one of the ZODB storage sections.
 """).strip()
-
-
-st_incompatible_db_error_msg = _("""
-This is not a SchoolTool 0.11 database file, aborting.
-""").strip()
-
-
-st_old_db_error_msg = _("""
-This is not a SchoolTool 0.10 database file, aborting.
-
-Please run the standalone database upgrade script.
-""").strip()
-
-
-class OldDatabase(Exception):
-    pass
-
-
-class IncompatibleDatabase(Exception):
-    pass
-
-
-def die(message, exitcode=1):
-    print >> sys.stderr, message
-    sys.exit(exitcode)
 
 
 schooltool_server = ServerType(WSGIHTTPServer,
@@ -512,8 +486,6 @@ class StandaloneServer(object):
 
     usage_message = st_usage_message
     no_storage_error_msg = st_no_storage_error_msg
-    incompatible_db_error_msg = st_incompatible_db_error_msg
-    old_db_error_msg = st_old_db_error_msg
 
     system_name = "SchoolTool"
 
@@ -610,10 +582,6 @@ class StandaloneServer(object):
         """Bootstrap SchoolTool database."""
         connection = db.open()
         root = connection.root()
-        if root.get('schooltool'):
-            transaction.abort()
-            connection.close()
-            raise OldDatabase('old database')
         app_obj = root.get(ZopePublication.root_name)
         if app_obj is None:
             app = SchoolToolApplication()
@@ -660,10 +628,6 @@ class StandaloneServer(object):
             setSite(None)
 
             self.restoreManagerUser(app, MANAGER_PASSWORD)
-        elif not ISchoolToolApplication.providedBy(app_obj):
-            transaction.abort()
-            connection.close()
-            raise IncompatibleDatabase('incompatible database')
         transaction.commit()
         connection.close()
 
@@ -736,15 +700,7 @@ class StandaloneServer(object):
                                        " is using it?" % self.system_name)
             sys.exit(1)
 
-        try:
-            self.bootstrapSchoolTool(db, options.config.school_type)
-        except IncompatibleDatabase:
-            print >> sys.stderr, self.incompatible_db_error_msg
-            sys.exit(1)
-        except OldDatabase:
-            print >> sys.stderr, self.old_db_error_msg
-            sys.exit(1)
-
+        self.bootstrapSchoolTool(db, options.config.school_type)
         notify(DatabaseOpened(db))
 
         if options.restore_manager:

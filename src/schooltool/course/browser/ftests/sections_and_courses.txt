@@ -125,6 +125,12 @@ Let's remove the section that we added to the spring term now:
     >>> manager.getControl('Delete').click()
     >>> manager.getControl('Confirm').click()
 
+add some persons:
+
+    >>> from schooltool.basicperson.browser.ftests.setup import addPerson
+    >>> addPerson('Ariana', 'Cerna', 'ariana')
+    >>> addPerson('Mario', 'Tejada', 'mario')
+
 add an instructor
 
     >>> manager.getLink('2005-2006').click()
@@ -146,15 +152,25 @@ relevant information
           <a href="http://localhost/schoolyears/2005-2006">2005-2006</a>
     </h1>
 
-    >>> manager.getControl('SchoolTool Manager').click()
+    >>> manager.getControl('SchoolTool').click()
     >>> manager.getControl('Add').click()
+    >>> # quick css check for the neutral buttons
+    >>> manager.printQuery('//input[@value="Invert Selection" or @value="OK"]/@class')
+    button-neutral
+    button-neutral
+    button-neutral
     >>> manager.getControl('OK').click()
 
 and a student
 
     >>> manager.getLink('edit individuals').click()
-    >>> manager.getControl('SchoolTool Manager').click()
+    >>> manager.getControl('SchoolTool').click()
     >>> manager.getControl('Add').click()
+    >>> # quick css check for the neutral buttons
+    >>> manager.printQuery('//input[@value="Invert Selection" or @value="OK"]/@class')
+    button-neutral
+    button-neutral
+    button-neutral
     >>> manager.getControl('OK').click()
 
 We can also add sections that span multiple terms.  As there are two

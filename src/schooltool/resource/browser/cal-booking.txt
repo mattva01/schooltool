@@ -7,7 +7,6 @@ events that book them.
 Set up
 ------
 
-    >>> from zope.testbrowser.testing import Browser
     >>> manager = Browser()
     >>> manager.addHeader('Authorization', 'Basic manager:schooltool')
     >>> manager.handleErrors = False
@@ -55,12 +54,7 @@ Let's click on it:
 
 We log in as the frog
 
-    >>> frog = Browser()
-    >>> frog.open('http://localhost/')
-    >>> frog.getLink('Log In').click()
-    >>> frog.getControl('Username').value = 'frog'
-    >>> frog.getControl('Password').value = 'pwd'
-    >>> frog.getControl('Log in').click()
+    >>> frog = Browser('frog', 'pwd')
 
 and set up a calendar for Frog:
 
@@ -592,3 +586,20 @@ We shouldn't have any extra items after the search query:
 
     >>> '<input type="checkbox" name="add_item.mud" id="add_item.mud" />' not in manager.contents
     True
+
+Let's check the booked resources in the weekly view of the calendar
+for frog:
+
+    >>> frog.open('http://localhost:8000/persons/frog/calendar/2005-w05')
+    >>> frog.printQuery('id("calendar-view-week")/tr[3]/td[5]/div/div/a')
+    <a href="..."
+       title="Test event2">
+      <span>Test event2</span>
+      (<span>10:00</span> - <span>11:00</span>)
+    </a>
+    >>> frog.printQuery('id("calendar-view-week")/tr[3]/td[5]//'
+    ...                 'div[@class="booked-resources"]//a/text()')
+    Booked resources
+    fish
+    Booked by
+    Frog

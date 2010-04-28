@@ -103,14 +103,14 @@ class EmailInit(InitBase):
 @implementer(IEmailContainer)
 @adapter(ISchoolToolApplication)
 def getEmailContainer(app):
-    return app[EMAIL_KEY]
+    return app.get(EMAIL_KEY)
 
 
 class EmailUtility(object):
 
     implements(IEmailUtility)
 
-    smpt_factory = smtplib.SMTP
+    smtp_factory = None
 
     def getEmailContainer(self):
         app = ISchoolToolApplication(None)
@@ -142,6 +142,8 @@ class EmailUtility(object):
             self.container[name] = email
 
     def enabled(self):
+        if self.smtp_factory is None:
+            return False
         container = self.getEmailContainer()
         return container.enabled
 
@@ -219,3 +221,8 @@ class EmailUtility(object):
             return False
         connection.quit()
         return True
+
+
+class SMTPEmailUtility(EmailUtility):
+
+    smtp_factory = smtplib.SMTP

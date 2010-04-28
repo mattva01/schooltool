@@ -28,7 +28,7 @@
       name="schooltool.email" />
 
   <utility
-      factory="schooltool.email.mail.EmailUtility"
+      factory="schooltool.email.mail.SMTPEmailUtility"
       />
 
   <include package="schooltool.email.browser" />

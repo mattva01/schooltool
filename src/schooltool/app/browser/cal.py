@@ -1006,7 +1006,7 @@ class WeeklyCalendarView(CalendarViewBase):
                        (event.dtstart.hour, event.dtstart.minute) ==
                         start_times[index] and
                         event.dtstart.day == day.date.day):
-                        block.append(self.cloneEvent(event))
+                        block.append(event)
 
                 if block == []:
                     block = [None]
@@ -1080,7 +1080,7 @@ class WeeklyCalendarView(CalendarViewBase):
                            event.dtstart > start_times[index])) or
                            event.dtstart == start_times[index]) and
                            not event.allday):
-                        block.append(self.cloneEvent(event))
+                        block.append(event)
                 if block == []:
                     block = [None]
 
