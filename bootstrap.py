@@ -64,7 +64,7 @@ def make_virtual_python():
     mkdir(lib_dir)
     stdlib_dir = join(prefix, 'lib', py_version)
     for fn in os.listdir(stdlib_dir):
-        if fn != 'site-packages':
+        if fn not in ('site-packages', 'dist-packages'):
             symlink(join(stdlib_dir, fn), join(lib_dir, fn))
 
     mkdir(join(lib_dir, 'site-packages'))

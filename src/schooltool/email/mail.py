@@ -103,7 +103,7 @@ class EmailInit(InitBase):
 @implementer(IEmailContainer)
 @adapter(ISchoolToolApplication)
 def getEmailContainer(app):
-    return app[EMAIL_KEY]
+    return app.get(EMAIL_KEY)
 
 
 class EmailUtility(object):

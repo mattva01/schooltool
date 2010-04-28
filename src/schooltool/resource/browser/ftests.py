@@ -21,11 +21,11 @@ Functional tests for schooltool.resource.
 """
 import unittest
 
-from schooltool.app.testing import app_functional_layer
 from schooltool.testing.functional import collect_ftests
+from schooltool.resource.ftesting import resource_functional_layer
 
 def test_suite():
-    return collect_ftests(layer=app_functional_layer)
+    return collect_ftests(layer=resource_functional_layer)
 
 if __name__ == '__main__':
     unittest.main(defaultTest='test_suite')

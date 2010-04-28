@@ -3,7 +3,8 @@
 PACKAGE=schooltool
 
 DIST=/home/ftp/pub/schooltool/1.4
-BOOTSTRAP_PYTHON=python2.5
+BOOTSTRAP_PYTHON=python
+
 INSTANCE_TYPE=schooltool
 BUILDOUT_FLAGS=
 
@@ -14,11 +15,11 @@ all: build
 build: bin/test
 
 .PHONY: bootstrap
-bootstrap bin/buildout:
+bootstrap bin/buildout python:
 	$(BOOTSTRAP_PYTHON) bootstrap.py
 
 .PHONY: buildout
-buildout bin/test: bin/buildout setup.py base.cfg buildout.cfg
+buildout bin/test: python bin/buildout buildout.cfg base.cfg setup.py
 	bin/buildout $(BUILDOUT_FLAGS)
 	@touch --no-create bin/test
 
@@ -26,18 +27,6 @@ buildout bin/test: bin/buildout setup.py base.cfg buildout.cfg
 update:
 	bzr up
 	$(MAKE) buildout BUILDOUT_FLAGS=-n
-
-.PHONY: test
-test: build
-	bin/test -u
-
-.PHONY: ftest
-ftest: build
-	bin/test -f
-
-.PHONY: testall
-testall: build
-	bin/test --at-level 2
 
 instance:
 	$(MAKE) buildout
@@ -47,45 +36,9 @@ instance:
 run: build instance
 	bin/start-schooltool-instance instance
 
-.PHONY: release
-release: bin/buildout
-	echo -n `cat version.txt.in`_r`bzr revno` > version.txt
-	bin/buildout setup setup.py sdist
-	rm version.txt
-
-.PHONY: move-release
-move-release:
-	mv -v dist/$(PACKAGE)-*.tar.gz $(DIST)/dev
-
-.PHONY: coverage
-coverage: build
-	test -d parts/test/coverage && ! test -d coverage && mv parts/test/coverage . || true
-	rm -rf coverage
-	bin/test --at-level 2 -u --coverage=coverage
-	mv parts/test/coverage .
-
-.PHONY: coverage-reports-html
-coverage-reports-html coverage/reports:
-	test -d parts/test/coverage && ! test -d coverage && mv parts/test/coverage . || true
-	rm -rf coverage/reports
-	mkdir coverage/reports
-	bin/coverage coverage coverage/reports
-	ln -s $(PACKAGE).html coverage/reports/index.html
-
-.PHONY: ftest-coverage
-ftest-coverage: build
-	test -d parts/test/ftest-coverage && ! test -d ftest-coverage && mv parts/test/ftest-coverage . || true
-	rm -rf ftest-coverage
-	bin/test --at-level 2 -f --coverage=ftest-coverage
-	mv parts/test/ftest-coverage .
-
-.PHONY: ftest-coverage-reports-html
-ftest-coverage-reports-html ftest-coverage/reports:
-	test -d parts/test/ftest-coverage && ! test -d ftest-coverage && mv parts/test/ftest-coverage . || true
-	rm -rf ftest-coverage/reports
-	mkdir ftest-coverage/reports
-	bin/coverage ftest-coverage ftest-coverage/reports
-	ln -s $(PACKAGE).html ftest-coverage/reports/index.html
+.PHONY: tags
+tags: build
+	bin/tags
 
 .PHONY: clean
 clean:
@@ -101,6 +54,54 @@ clean:
 realclean: clean
 	rm -rf eggs
 	rm -rf instance
+
+# Tests
+
+.PHONY: test
+test: build
+	bin/test -u
+
+.PHONY: ftest
+ftest: build
+	bin/test -f
+
+.PHONY: testall
+testall: build
+	bin/test --at-level 2
+
+# Coverage
+
+.PHONY: coverage
+coverage: build
+	test -d parts/test/coverage && ! test -d coverage && mv parts/test/coverage . || true
+	rm -rf coverage
+	bin/test --at-level 2 -u --coverage=coverage
+	mv parts/test/coverage .
+
+.PHONY: coverage-reports-html
+coverage-reports-html coverage/reports: build
+	test -d parts/test/coverage && ! test -d coverage && mv parts/test/coverage . || true
+	rm -rf coverage/reports
+	mkdir coverage/reports
+	bin/coverage coverage coverage/reports
+	ln -s $(PACKAGE).html coverage/reports/index.html
+
+.PHONY: ftest-coverage
+ftest-coverage: build
+	test -d parts/test/ftest-coverage && ! test -d ftest-coverage && mv parts/test/ftest-coverage . || true
+	rm -rf ftest-coverage
+	bin/test --at-level 2 -f --coverage=ftest-coverage
+	mv parts/test/ftest-coverage .
+
+.PHONY: ftest-coverage-reports-html
+ftest-coverage-reports-html ftest-coverage/reports: build
+	test -d parts/test/ftest-coverage && ! test -d ftest-coverage && mv parts/test/ftest-coverage . || true
+	rm -rf ftest-coverage/reports
+	mkdir ftest-coverage/reports
+	bin/coverage ftest-coverage ftest-coverage/reports
+	ln -s $(PACKAGE).html ftest-coverage/reports/index.html
+
+# Translations
 
 .PHONY: extract-translations
 extract-translations: build
@@ -140,14 +141,20 @@ update-translations: extract-translations
 	done
 	$(MAKE) compile-translations
 
+# Release
+
+.PHONY: release
+release: bin/buildout compile-translations
+	echo -n `cat version.txt.in`_r`bzr revno` > version.txt
+	bin/buildout setup setup.py sdist
+	rm version.txt
+
+.PHONY: move-release
+move-release:
+	mv -v dist/$(PACKAGE)-*.tar.gz $(DIST)/dev
+
+# Helpers
+
 .PHONY: ubuntu-environment
 ubuntu-environment:
-	@if [ `whoami` != "root" ]; then { \
-	 echo "You must be root to create an environment."; \
-	 echo "I am running as $(shell whoami)"; \
-	 exit 3; \
-	} else { \
-	 apt-get install bzr build-essential python-all-dev libc6-dev libicu-dev libxslt1-dev; \
-	 apt-get install libfreetype6-dev libjpeg62-dev; \
-	 echo "Installation Complete: Next... Run 'make'."; \
-	} fi
+	sudo apt-get install bzr build-essential python-all-dev libc6-dev libicu-dev libxslt1-dev libfreetype6-dev libjpeg62-dev

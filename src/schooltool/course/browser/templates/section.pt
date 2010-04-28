@@ -59,7 +59,8 @@
        title="Change the name or description of this section."
        tal:attributes="href string:${context/@@absolute_url}/edit.html"
        i18n:attributes="title"
-       i18n:translate="">
+       i18n:translate=""
+       tal:condition="view/canModify">
        edit info
     </a>
 
@@ -87,7 +88,8 @@
          title="Change the instructors for this section."
          tal:attributes="href string:${context/@@absolute_url}/instructors.html"
          i18n:attributes="title"
-         i18n:translate="">
+         i18n:translate=""
+         tal:condition="view/canModify">
          edit instructors
       </a>
     </div>
@@ -101,7 +103,8 @@
          title="Change the students in this section individually"
          tal:attributes="href string:${context/@@absolute_url}/learners.html"
          i18n:attributes="title"
-         i18n:translate="">
+         i18n:translate=""
+         tal:condition="view/canModify">
          edit individuals
       </a>
     </div>

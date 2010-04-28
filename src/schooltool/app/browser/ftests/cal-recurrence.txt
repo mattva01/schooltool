@@ -1,11 +1,7 @@
 Regression test for broken weekly recurrence in far-off-UTC timezones
 =====================================================================
 
-    >>> from zope.testbrowser.testing import Browser
-    >>> manager = Browser()
-    >>> manager.handleErrors = False
-    >>> manager.addHeader('Authorization', 'Basic manager:schooltool')
-    >>> manager.open('http://localhost/')
+    >>> manager = Browser('manager', 'schooltool')
 
 Let's go to the app preferences view:
 
@@ -21,7 +17,7 @@ Let go to the calendar, a particular day in fact:
 
     >>> manager.getLink("Calendar").click()
     >>> manager.open(manager.url + '/2006-01-01')
-    >>> "Calendar for SchoolTool Manager - Sunday, January 1, 2006" \
+    >>> "Calendar for Administrator, SchoolTool - Sunday, January 1, 2006" \
     ... in manager.contents
     True
 
@@ -64,7 +60,7 @@ We see Sunday and Wednesday checked and Sunday disabled:
 Let's look at the next Wednesday:
 
     >>> manager.open("http://localhost/persons/manager/calendar/2006-01-04")
-    >>> "Calendar for SchoolTool Manager - Wednesday, January 4, 2006" \
+    >>> "Calendar for Administrator, SchoolTool - Wednesday, January 4, 2006" \
     ...                                             in manager.contents
     True
     >>> "Foo bar" in manager.contents
@@ -73,7 +69,7 @@ Let's look at the next Wednesday:
 And the following Sunday:
 
     >>> manager.open("http://localhost/persons/manager/calendar/2006-01-08")
-    >>> "Calendar for SchoolTool Manager - Sunday, January 8, 2006" \
+    >>> "Calendar for Administrator, SchoolTool - Sunday, January 8, 2006" \
     ...                                             in manager.contents
     True
     >>> "Foo bar" in manager.contents

@@ -196,7 +196,7 @@
 
   <page
       name="home.html"
-      for="*"
+      for="..interfaces.IPerson"
       class=".person.HomeView"
       template="home.pt"
       permission="schooltool.view"

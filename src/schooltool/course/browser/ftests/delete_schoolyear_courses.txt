@@ -35,7 +35,7 @@ And makes himself a leader of that course
     >>> manager.getLink('Courses').click()
     >>> manager.getLink('History').click()
     >>> manager.getLink('Edit Leaders').click()
-    >>> manager.getControl('SchoolTool Manager').click()
+    >>> manager.getControl('SchoolTool').click()
     >>> manager.getControl('Add').click()
 
 XXX How do we check the leadership?

@@ -11,9 +11,10 @@ Setup
 
 Let's create a teacher:
 
-    >>> from schooltool.app.browser.ftests.setup import addPerson, setUpBasicSchool
+    >>> from schooltool.app.browser.ftests.setup import setUpBasicSchool
     >>> setUpBasicSchool()
-    >>> addPerson('Teacher', 'teacher', 'pwd')
+    >>> from schooltool.basicperson.browser.ftests.setup import addPerson
+    >>> addPerson('Teacher', 'Teacher', 'teacher', 'pwd')
     >>> teacher = Browser('teacher', 'pwd')
 
 Now lets create a resource that can be booked:
@@ -101,7 +102,7 @@ After editing the events teacher is returned to the overlaid calendar.
     >>> print teacher.contents
     <BLANKLINE>
     ...
-    <title> Calendar for Teacher ... </title>
+    <title> Calendar for Teacher, Teacher ... </title>
     ...
 
     >>> teacher.getLink('Mugging').click()
@@ -109,7 +110,7 @@ After editing the events teacher is returned to the overlaid calendar.
     >>> print teacher.contents
     <BLANKLINE>
     ...
-    <title> Calendar for Teacher ... </title>
+    <title> Calendar for Teacher, Teacher ... </title>
     ...
 
     >>> teacher.getLink('Teaching').click()
@@ -117,7 +118,7 @@ After editing the events teacher is returned to the overlaid calendar.
     >>> print teacher.contents
     <BLANKLINE>
     ...
-    <title> Calendar for Teacher ... </title>
+    <title> Calendar for Teacher, Teacher ... </title>
     ...
 
     >>> teacher.getLink('Teaching').click()
@@ -125,7 +126,7 @@ After editing the events teacher is returned to the overlaid calendar.
     >>> print teacher.contents
     <BLANKLINE>
     ...
-    <title> Calendar for Teacher ... </title>
+    <title> Calendar for Teacher, Teacher ... </title>
     ...
 
 If the teacher edits the Mugging event from Mug's calendar, he is
@@ -163,7 +164,7 @@ Same goes for the event deletion.
     >>> print teacher.contents
     <BLANKLINE>
     ...
-    <title> Calendar for Teacher ... </title>
+    <title> Calendar for Teacher, Teacher ... </title>
     ...
 
     >>> teacher.getLink(url='calendar/delete', index=0).click()
@@ -177,7 +178,7 @@ Same goes for the event deletion.
     >>> print teacher.contents
     <BLANKLINE>
     ...
-    <title> Calendar for Teacher ... </title>
+    <title> Calendar for Teacher, Teacher ... </title>
     ...
 
     >>> teacher.getLink(url='calendar/delete', index=0).click()
@@ -185,7 +186,7 @@ Same goes for the event deletion.
     >>> print teacher.contents
     <BLANKLINE>
     ...
-    <title> Calendar for Teacher ... </title>
+    <title> Calendar for Teacher, Teacher ... </title>
     ...
 
     >>> teacher.getLink(url='calendar/delete', index=0).click()
@@ -199,7 +200,7 @@ Same goes for the event deletion.
     >>> print teacher.contents
     <BLANKLINE>
     ...
-    <title> Calendar for Teacher ... </title>
+    <title> Calendar for Teacher, Teacher ... </title>
     ...
 
     >>> teacher.getLink(url='calendar/delete', index=0).click()
@@ -207,7 +208,7 @@ Same goes for the event deletion.
     >>> print teacher.contents
     <BLANKLINE>
     ...
-    <title> Calendar for Teacher ... </title>
+    <title> Calendar for Teacher, Teacher ... </title>
     ...
 
 Event deletion in Mug's calendar returns to the Mug's calendar.

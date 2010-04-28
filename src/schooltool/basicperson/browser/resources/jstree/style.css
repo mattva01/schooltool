@@ -1,0 +1,34 @@
+.clearfix:after {
+      content: ".";
+      display: block;
+      clear: both;
+      visibility: hidden;
+      line-height: 0;
+      height: 0;
+      }
+      
+.clearfix {
+      display: inline-block;
+      }
+      
+html[xmlns] .clearfix {
+      display: block;
+      }
+      
+* html .clearfix {
+      height: 1%;
+      }
+
+.tree_list li a.clicked,
+.tree_list li a.clicked:hover,
+.tree_list li span.clicked {
+        background: 0;
+        border: 0;
+        color: black;
+        padding:0px 3px 0px 3px;
+      }
+
+.tree_list li a.leaf_url {
+        color: #304d6b;
+        text-decoration: underline;
+      }

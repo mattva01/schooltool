@@ -212,7 +212,7 @@ def doctest_Section():
 
         >>> section.instructors.add(Person('teacher2', 'Mrs. Smith'))
         >>> translate(section.label)
-        u'Mr. Jones Mrs. Smith -- section 1'
+        u'Mr. Jones; Mrs. Smith -- section 1'
 
     The course should be listed in courses:
 

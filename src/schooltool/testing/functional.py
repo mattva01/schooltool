@@ -101,10 +101,10 @@ class TestBrowser(Browser):
         self.handleErrors = False
         self.open(url)
 
-    def serve(self, url=None):
+    def serve(self, url=None, port=8000):
         if url is None:
             url = self.url
-        startServer(HTTPCaller(), url, self.username, self.password)
+        startServer(HTTPCaller(), url, self.username, self.password, port=port)
 
     def queryHTML(self, query):
         return queryHTML(query, self.contents)
