@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-01-04 15:41+0000\n"
-"PO-Revision-Date: 2010-03-27 09:07+0000\n"
+"PO-Revision-Date: 2010-04-13 07:25+0000\n"
 "Last-Translator: Francois Thunus <Unknown>\n"
 "Language-Team: English (Canada) <en_CA@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-03-28 03:44+0000\n"
+"X-Launchpad-Export-Date: 2010-04-14 03:46+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: /src/schooltool/app/browser/__init__.py:256
@@ -842,17 +842,19 @@ msgstr "Events for"
 #. "      in a Newsreader or syndicated to another site. Please visit"
 #: /src/schooltool/app/browser/templates/cal_atom.pt:42
 msgid "atom_description"
-msgstr "atom_description"
+msgstr ""
+"This is an Atom formatted XML site feed. It is intended to be viewed\n"
+"in a Newsreader or syndicated to another site. Please visit"
 
 #. Default: "Atom Enabled"
 #: /src/schooltool/app/browser/templates/cal_atom.pt:46
 msgid "atom_enabled"
-msgstr "atom_enabled"
+msgstr "Atom Enabled"
 
 #. Default: "for more info."
 #: /src/schooltool/app/browser/templates/cal_atom.pt:49
 msgid "atom_more_info"
-msgstr "atom_more_info"
+msgstr "for more info."
 
 #: /src/schooltool/app/browser/templates/cal_atom.pt:56
 msgid "Validate my Atom feed"
@@ -2588,7 +2590,7 @@ msgstr ""
 #: /src/schooltool/person/browser/person-csvimport.pt:75
 #: /src/schooltool/resource/browser/resource-csvimport.pt:72
 msgid "submit-button"
-msgstr "Apply"
+msgstr "Submit"
 
 #: /src/schooltool/app/main.py:406
 msgid "Cannot resolve plugin action order:\n"
@@ -5104,44 +5106,44 @@ msgstr "YYYY-MM-DD"
 
 #: /src/schooltool/person/interfaces.py:172
 msgid "Day Month, Year"
-msgstr ""
+msgstr "Day Month, Year"
 
 #: /src/schooltool/person/interfaces.py:176
 msgid "Week starts on:"
-msgstr ""
+msgstr "Week starts on:"
 
 #: /src/schooltool/person/interfaces.py:177
 msgid "Start display of weeks on Sunday or Monday"
-msgstr ""
+msgstr "Start display of weeks on Sunday or Monday"
 
 #: /src/schooltool/person/interfaces.py:191
 msgid "Show periods"
-msgstr ""
+msgstr "Show periods"
 
 #: /src/schooltool/person/interfaces.py:192
 msgid "Show period names in daily view"
-msgstr ""
+msgstr "Show period names in daily view"
 
 #: /src/schooltool/person/interfaces.py:195
 #: /src/schooltool/person/interfaces.py:196
 msgid "Make calendar public"
-msgstr ""
+msgstr "Make calendar public"
 
 #: /src/schooltool/person/security.zcml:5
 msgid "Everyone can view the list of persons"
-msgstr ""
+msgstr "Everyone can view the list of persons"
 
 #: /src/schooltool/person/security.zcml:10
 msgid "Everyone can view info of persons"
-msgstr ""
+msgstr "Everyone can view info of persons"
 
 #: /src/schooltool/person/security.zcml:15
 msgid "Persons can set their own preferences"
-msgstr ""
+msgstr "Persons can set their own preferences"
 
 #: /src/schooltool/person/security.zcml:20
 msgid "Persons can change their own passwords"
-msgstr ""
+msgstr "Persons can change their own passwords"
 
 #: /src/schooltool/person/security.zcml:77
 msgid "Users"
@@ -5161,7 +5163,7 @@ msgstr "Change preferences"
 
 #: /src/schooltool/person/security.zcml:144
 msgid "Manage visible calendars"
-msgstr ""
+msgstr "Manage visible calendars"
 
 #: /src/schooltool/person/security.zcml:172
 msgid "Calendar is public"
@@ -5169,56 +5171,56 @@ msgstr "Calendar is public"
 
 #: /src/schooltool/person/security.zcml:172
 msgid "Everybody, if the calendar is made public in user preferences."
-msgstr ""
+msgstr "Everybody, if the calendar is made public in user preferences."
 
 #: /src/schooltool/relationship/configure.zcml:38
 msgid "Relationships"
-msgstr ""
+msgstr "Relationships"
 
 #: /src/schooltool/resource/browser/configure.zcml:71
 msgid "Add a Resource"
-msgstr ""
+msgstr "Add a Resource"
 
 #: /src/schooltool/resource/browser/configure.zcml:84
 msgid "Edit Resource Information"
-msgstr ""
+msgstr "Edit Resource Information"
 
 #: /src/schooltool/resource/browser/configure.zcml:99
 msgid "Add a Location"
-msgstr ""
+msgstr "Add a Location"
 
 #: /src/schooltool/resource/browser/configure.zcml:115
 msgid "Edit Location Information"
-msgstr ""
+msgstr "Edit Location Information"
 
 #: /src/schooltool/resource/browser/configure.zcml:133
 msgid "Add an Equipment"
-msgstr ""
+msgstr "Add an Equipment"
 
 #: /src/schooltool/resource/browser/configure.zcml:151
 msgid "Edit Equipment Information"
-msgstr ""
+msgstr "Edit Equipment Information"
 
 #: /src/schooltool/resource/browser/configure.zcml:190
 msgid "New Resource"
-msgstr ""
+msgstr "New Resource"
 
 #: /src/schooltool/resource/browser/configure.zcml:197
 msgid "New Location"
-msgstr ""
+msgstr "New Location"
 
 #: /src/schooltool/resource/browser/configure.zcml:204
 msgid "New Equipment"
-msgstr ""
+msgstr "New Equipment"
 
 #: /src/schooltool/resource/browser/configure.zcml:232
 #: /src/schooltool/resource/browser/resource-csvimport.pt:21
 msgid "Import Resources"
-msgstr ""
+msgstr "Import Resources"
 
 #: /src/schooltool/resource/browser/resource-csvimport.pt:4
 msgid "Upload schooltool resources as CSV"
-msgstr ""
+msgstr "Upload schooltool resources as CSV"
 
 #: /src/schooltool/resource/browser/resource-csvimport.pt:24
 msgid ""
@@ -5226,6 +5228,9 @@ msgid ""
 "<strong>may</strong> include an optional resource description. Any extra "
 "information will be discarded."
 msgstr ""
+"CSV data <strong>must</strong> include a resource title and "
+"<strong>may</strong> include an optional resource description. Any extra "
+"information will be discarded."
 
 #. Default: ""
 #. "PRJ302, Overhead Projector #302\n"
@@ -5238,6 +5243,10 @@ msgid ""
 "Main Auditorium,,location\n"
 "LC-805, Laptop Computer #805\n"
 msgstr ""
+"\n"
+"PRJ302, Overhead Projector #302\n"
+"Main Auditorium,,location\n"
+"LC-805, Laptop Computer #805\n"
 
 #: /src/schooltool/resource/browser/resource-csvimport.pt:36
 msgid ""
@@ -5247,110 +5256,117 @@ msgid ""
 "\"Main Auditorium\" resource will have no description, but will be a "
 "location."
 msgstr ""
+"The above example will create 3 resources titled 'PRJ302', 'Main Auditorium' "
+"and 'LC-805'. The first and last resource will have the descriptions "
+"'Overhead Projector #302' and 'Laptop Computer #805' respectively. The "
+"\"Main Auditorium\" resource will have no description, but will be a "
+"location."
 
 #: /src/schooltool/resource/browser/resource.py:56
 msgid "Resource index"
-msgstr ""
+msgstr "Resource index"
 
 #: /src/schooltool/resource/help/resource_help.pt:6
 msgid "Resource Help"
-msgstr ""
+msgstr "Resource Help"
 
 #: /src/schooltool/resource/interfaces.py:42
 msgid "Title of the resource."
-msgstr ""
+msgstr "Title of the resource."
 
 #: /src/schooltool/resource/interfaces.py:45
 msgid "Resource Type"
-msgstr ""
+msgstr "Resource Type"
 
 #: /src/schooltool/resource/interfaces.py:46
 msgid "Type of resource"
-msgstr ""
+msgstr "Type of resource"
 
 #: /src/schooltool/resource/interfaces.py:53
 msgid "Description of the resource."
-msgstr ""
+msgstr "Description of the resource."
 
 #: /src/schooltool/resource/interfaces.py:58
 msgid "Notes for the resource."
-msgstr ""
+msgstr "Notes for the resource."
 
 #: /src/schooltool/resource/interfaces.py:81
 msgid "Location Type"
-msgstr ""
+msgstr "Location Type"
 
 #: /src/schooltool/resource/interfaces.py:82
 msgid "Type of location (i.e. computer lab, class room, etc.)"
-msgstr ""
+msgstr "Type of location (i.e. computer lab, class room, etc.)"
 
 #: /src/schooltool/resource/interfaces.py:87
 #: /src/schooltool/resource/types.py:83
 msgid "Capacity"
-msgstr ""
+msgstr "Capacity"
 
 #: /src/schooltool/resource/interfaces.py:88
 msgid "Capacity of the room"
-msgstr ""
+msgstr "Capacity of the room"
 
 #: /src/schooltool/resource/interfaces.py:96
 msgid "Equipment Type"
-msgstr ""
+msgstr "Equipment Type"
 
 #: /src/schooltool/resource/interfaces.py:97
 msgid "Type of equipment (i.e. camcorder, computer, etc.)"
-msgstr ""
+msgstr "Type of equipment (i.e. camcorder, computer, etc.)"
 
 #: /src/schooltool/resource/interfaces.py:101
 #: /src/schooltool/resource/types.py:113
 msgid "Manufacturer"
-msgstr ""
+msgstr "Manufacturer"
 
 #: /src/schooltool/resource/interfaces.py:102
 msgid "Manufacturer of Equipment"
-msgstr ""
+msgstr "Manufacturer of Equipment"
 
 #: /src/schooltool/resource/interfaces.py:106
 #: /src/schooltool/resource/types.py:119
 msgid "Model"
-msgstr ""
+msgstr "Model"
 
 #: /src/schooltool/resource/interfaces.py:107
 msgid "Model of Equipment"
-msgstr ""
+msgstr "Model of Equipment"
 
 #: /src/schooltool/resource/interfaces.py:111
 #: /src/schooltool/resource/types.py:125
 msgid "Serial Number"
-msgstr ""
+msgstr "Serial Number"
 
 #: /src/schooltool/resource/interfaces.py:112
 msgid "Serial Number of Equipment"
-msgstr ""
+msgstr "Serial Number of Equipment"
 
 #: /src/schooltool/resource/interfaces.py:116
 #: /src/schooltool/resource/types.py:131
 msgid "Purchase Date"
-msgstr ""
+msgstr "Purchase Date"
 
 #: /src/schooltool/resource/interfaces.py:117
 msgid "Purchase Date of Equipment"
-msgstr ""
+msgstr "Purchase Date of Equipment"
 
 #: /src/schooltool/resource/interfaces.py:124
 msgid "Id of the resource type."
-msgstr ""
+msgstr "Id of the resource type."
 
 #: /src/schooltool/resource/interfaces.py:125
 msgid ""
 "Used for lookup of named utilities that have resource\n"
 "        type specific information."
 msgstr ""
+"Used for lookup of named utilities that have resource\n"
+"        type specific information."
 
 #: /src/schooltool/resource/interfaces.py:129
 #: /src/schooltool/resource/interfaces.py:137
 msgid "The title of a resource type."
-msgstr ""
+msgstr "The title of a resource type."
 
 #: /src/schooltool/resource/interfaces.py:130
 #: /src/schooltool/resource/interfaces.py:138
@@ -5358,27 +5374,29 @@ msgid ""
 "A string that will be displayed to users in tables or\n"
 "        resource type selection widgets."
 msgstr ""
+"A string that will be displayed to users in tables or\n"
+"        resource type selection widgets."
 
 #: /src/schooltool/resource/resource.py:55
 #: /src/schooltool/resource/types.py:55
 msgid "Resource"
-msgstr ""
+msgstr "Resource"
 
 #: /src/schooltool/resource/security.zcml:7
 msgid "Everyone can view resource lists."
-msgstr ""
+msgstr "Everyone can view resource lists."
 
 #: /src/schooltool/resource/security.zcml:12
 msgid "Everyone can view resource information."
-msgstr ""
+msgstr "Everyone can view resource information."
 
 #: /src/schooltool/resource/security.zcml:17
 msgid "Everyone can view resource calendars."
-msgstr ""
+msgstr "Everyone can view resource calendars."
 
 #: /src/schooltool/resource/security.zcml:50
 msgid "Reservations"
-msgstr ""
+msgstr "Reservations"
 
 #: /src/schooltool/resource/security.zcml:50
 msgid ""
@@ -5386,14 +5404,16 @@ msgid ""
 "SchoolTool's calendar can function as a reservation                    and "
 "tracking system for resources."
 msgstr ""
+"Resources are locations or objects within a school.  SchoolTool's calendar "
+"can function as a reservation and tracking system for resources."
 
 #: /src/schooltool/resource/security.zcml:57
 msgid "List/Search resources"
-msgstr ""
+msgstr "List/Search resources"
 
 #: /src/schooltool/resource/security.zcml:64
 msgid "Add/Remove resources"
-msgstr ""
+msgstr "Add/Remove resources"
 
 #: /src/schooltool/resource/security.zcml:71
 msgid "View a resource"
@@ -5405,71 +5425,79 @@ msgstr "Modify a resource"
 
 #: /src/schooltool/resource/security.zcml:85
 msgid "View reservation calendar"
-msgstr ""
+msgstr "View reservation calendar"
 
 #: /src/schooltool/resource/security.zcml:93
 msgid "Schedule reservation via calendar"
-msgstr ""
+msgstr "Schedule reservation via calendar"
 
 #: /src/schooltool/resource/types.py:93
 msgid "Equipment"
-msgstr ""
+msgstr "Equipment"
 
 #: /src/schooltool/resource/types.py:107
 msgid "Type"
-msgstr ""
+msgstr "Type"
 
 #: /src/schooltool/sampledata/sampledata.pt:3
 #: /src/schooltool/sampledata/sampledata.pt:9
 msgid "Sample Data Generation"
-msgstr ""
+msgstr "Sample Data Generation"
 
 #: /src/schooltool/sampledata/sampledata.pt:14
 msgid ""
 "Warning: proceeding will populate the database with randomly generated data. "
 "Do not do this if you have any valuable data in your SchoolTool instance."
 msgstr ""
+"Warning: proceeding will populate the database with randomly generated data. "
+"Do not do this if you have any valuable data in your SchoolTool instance."
 
 #: /src/schooltool/sampledata/sampledata.pt:20
 msgid ""
 "This creates a school of 1,000 students and data for 4 terms. If you select "
 "all options, it can take a <strong>long</strong> time. Just let it run."
 msgstr ""
+"This creates a school of 1,000 students and data for 4 terms. If you select "
+"all options, it can take a <strong>long</strong> time. Just let it run."
 
 #: /src/schooltool/sampledata/sampledata.pt:25
 msgid ""
 "Setting a random seed allows you to to reproduce the same set of sample data "
 "by generating it again with the same value of the random seed."
 msgstr ""
+"Setting a random seed allows you to to reproduce the same set of sample data "
+"by generating it again with the same value of the random seed."
 
 #: /src/schooltool/sampledata/sampledata.pt:42
 msgid "Plugins"
-msgstr ""
+msgstr "Plugins"
 
 #: /src/schooltool/sampledata/sampledata.pt:71
 msgid "View Dependencies"
-msgstr ""
+msgstr "View Dependencies"
 
 #: /src/schooltool/sampledata/sampledata.pt:80
 #: /src/schooltool/setupdata/setupdata.pt:23
 msgid "Generate"
-msgstr ""
+msgstr "Generate"
 
 #: /src/schooltool/schoolyear/browser/configure.zcml:26
 #: /src/schooltool/schoolyear/browser/schoolyear.py:111
 #: /src/schooltool/schoolyear/security.zcml:7
 msgid "School Years"
-msgstr ""
+msgstr "School Years"
 
 #: /src/schooltool/schoolyear/browser/configure.zcml:87
 msgid "New School Year"
-msgstr ""
+msgstr "New School Year"
 
 #: /src/schooltool/schoolyear/browser/schoolyear.py:133
 msgid ""
 "You can not delete the active school year. Unless you are deleting all the "
 "school years."
 msgstr ""
+"You can not delete the active school year. Unless you are deleting all the "
+"school years."
 
 #: /src/schooltool/schoolyear/browser/schoolyear.py:152
 msgid "First day"
@@ -5481,65 +5509,65 @@ msgstr "Last day"
 
 #: /src/schooltool/schoolyear/browser/schoolyear.py:174
 msgid "Add new school year"
-msgstr ""
+msgstr "Add new school year"
 
 #. Default: ""
 #: /src/schooltool/schoolyear/browser/schoolyear.py:238
 msgid "Change information for ${schoolyear_title}"
-msgstr ""
+msgstr "Change information for ${schoolyear_title}"
 
 #: /src/schooltool/schoolyear/browser/schoolyear.py:253
 #: /src/schooltool/schoolyear/browser/schoolyear.py:280
 msgid "School year must begin before it ends."
-msgstr ""
+msgstr "School year must begin before it ends."
 
 #: /src/schooltool/schoolyear/browser/schoolyear.py:324
 msgid "School Year"
-msgstr ""
+msgstr "School Year"
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear.pt:21
 msgid "${schoolyear_title} (${start_date} &mdash; ${end_date})"
-msgstr ""
+msgstr "${schoolyear_title} (${start_date} &mdash; ${end_date})"
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear.pt:37
 msgid "${term_title} (${start_date} &mdash; ${end_date})"
-msgstr ""
+msgstr "${term_title} (${start_date} &mdash; ${end_date})"
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear.pt:49
 msgid "Add a new term"
-msgstr ""
+msgstr "Add a new term"
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:39
 msgid "Activate next school year"
-msgstr ""
+msgstr "Activate next school year"
 
 #: /src/schooltool/schoolyear/browser/templates/term-delete.pt:10
 #: /src/schooltool/term/browser/templates/term-container-delete.pt:10
 msgid "Are you sure you want to delete the selected terms?"
-msgstr ""
+msgstr "Are you sure you want to delete the selected terms?"
 
 #: /src/schooltool/schoolyear/interfaces.py:44
 msgid "The first day of the period of time covered."
-msgstr ""
+msgstr "The first day of the period of time covered."
 
 #: /src/schooltool/schoolyear/interfaces.py:47
 msgid "The last day of the period covered."
-msgstr ""
+msgstr "The last day of the period covered."
 
 #: /src/schooltool/schoolyear/security.zcml:23
 msgid "Activate current school year"
-msgstr ""
+msgstr "Activate current school year"
 
 #: /src/schooltool/securitypolicy/browser/configure.zcml:7
 msgid "View Access Rights"
-msgstr ""
+msgstr "View Access Rights"
 
 #: /src/schooltool/securitypolicy/browser/configure.zcml:17
 #: /src/schooltool/securitypolicy/browser/configure.zcml:28
 #: /src/schooltool/securitypolicy/browser/templates/access_control.pt:4
 #: /src/schooltool/securitypolicy/browser/templates/access_control.pt:12
 msgid "Access Control"
-msgstr ""
+msgstr "Access Control"
 
 #: /src/schooltool/securitypolicy/browser/control.py:96
 msgid "Enabled"
@@ -5547,56 +5575,56 @@ msgstr "Enabled"
 
 #: /src/schooltool/securitypolicy/browser/control.py:105
 msgid "School administration"
-msgstr ""
+msgstr "School administration"
 
 #: /src/schooltool/securitypolicy/browser/templates/access_setting_snippet.pt:4
 msgid "Access setting: ${setting} (${status})"
-msgstr ""
+msgstr "Access setting: ${setting} (${status})"
 
 #: /src/schooltool/securitypolicy/browser/templates/security_descriptions.pt:4
 msgid "Access Rights"
-msgstr ""
+msgstr "Access Rights"
 
 #: /src/schooltool/securitypolicy/browser/templates/security_descriptions.pt:57
 msgid "Legend"
-msgstr ""
+msgstr "Legend"
 
 #: /src/schooltool/securitypolicy/crowds.py:124
 msgid "Everybody"
-msgstr ""
+msgstr "Everybody"
 
 #: /src/schooltool/securitypolicy/crowds.py:125
 msgid "Everybody, including users that are not logged in."
-msgstr ""
+msgstr "Everybody, including users that are not logged in."
 
 #: /src/schooltool/securitypolicy/crowds.py:158
 msgid "Authenticated user"
-msgstr ""
+msgstr "Authenticated user"
 
 #: /src/schooltool/securitypolicy/crowds.py:159
 msgid "All logged in users."
-msgstr ""
+msgstr "All logged in users."
 
 #: /src/schooltool/securitypolicy/crowds.py:167
 msgid "Anybody"
-msgstr ""
+msgstr "Anybody"
 
 #: /src/schooltool/securitypolicy/crowds.py:168
 msgid "Users who did not log in"
-msgstr ""
+msgstr "Users who did not log in"
 
 #: /src/schooltool/securitypolicy/crowds.py:175
 msgid "Super user"
-msgstr ""
+msgstr "Super user"
 
 #: /src/schooltool/securitypolicy/crowds.py:176
 msgid "The super user - owner of this SchoolTool application."
-msgstr ""
+msgstr "The super user - owner of this SchoolTool application."
 
 #: /src/schooltool/setupdata/setupdata.pt:3
 #: /src/schooltool/setupdata/setupdata.pt:9
 msgid "Initial School Setup Scripts"
-msgstr ""
+msgstr "Initial School Setup Scripts"
 
 #: /src/schooltool/setupdata/setupdata.pt:14
 msgid ""
@@ -5605,19 +5633,23 @@ msgid ""
 "have any valuable data in this SchoolTool instance or don't already "
 "understand what this is for."
 msgstr ""
+"Warning: proceeding will populate the database with data generated from "
+"scripts installed on the filesystem of this server. Do not do this if you "
+"have any valuable data in this SchoolTool instance or don't already "
+"understand what this is for."
 
 #: /src/schooltool/skin/breadcrumbs.py:76
 msgid "top"
-msgstr ""
+msgstr "top"
 
 #: /src/schooltool/skin/form.py:64
 msgid "No changes"
-msgstr ""
+msgstr "No changes"
 
 #: /src/schooltool/skin/templates/error.pt:3
 #: /src/schooltool/skin/templates/error.pt:12
 msgid "Server Error"
-msgstr ""
+msgstr "Server Error"
 
 #: /src/schooltool/skin/templates/error.pt:15
 msgid ""
@@ -5625,69 +5657,74 @@ msgid ""
 "found a bug in SchoolTool. Please report it on <a "
 "href=\"http://issues.schooltool.org\">the issue tracker</a>."
 msgstr ""
+"An internal server error has occurred. This most likely means that you have "
+"found a bug in SchoolTool. Please report it on <a "
+"href=\"http://issues.schooltool.org\">the issue tracker</a>."
 
 #: /src/schooltool/skin/templates/error.pt:19
 msgid "Exception"
-msgstr ""
+msgstr "Exception"
 
 #: /src/schooltool/skin/templates/error.pt:20
 msgid "Traceback"
-msgstr ""
+msgstr "Traceback"
 
 #: /src/schooltool/skin/templates/generic_macros.pt:12
 msgid "Server Running SchoolTool"
-msgstr ""
+msgstr "Server Running SchoolTool"
 
 #: /src/schooltool/skin/templates/notfound.pt:3
 #: /src/schooltool/skin/templates/notfound.pt:11
 msgid "Not Found"
-msgstr ""
+msgstr "Not Found"
 
 #: /src/schooltool/skin/templates/notfound.pt:14
 msgid "The page that you are trying to access is not available"
-msgstr ""
+msgstr "The page that you are trying to access is not available"
 
 #: /src/schooltool/skin/templates/notfound.pt:18
 msgid "Please note the following:"
-msgstr ""
+msgstr "Please note the following:"
 
 #: /src/schooltool/skin/templates/notfound.pt:21
 msgid "You might have misspelled the url"
-msgstr ""
+msgstr "You might have misspelled the url"
 
 #: /src/schooltool/skin/templates/notfound.pt:22
 msgid "You might be trying to access a non-existing page"
-msgstr ""
+msgstr "You might be trying to access a non-existing page"
 
 #: /src/schooltool/skin/templates/onlinehelp_macros.pt:55
 msgid "SchoolTool Onlinehelp"
-msgstr ""
+msgstr "SchoolTool Onlinehelp"
 
 #: /src/schooltool/skin/templates/view_macros.pt:45
 msgid "Log In"
-msgstr ""
+msgstr "Log In"
 
 #: /src/schooltool/skin/templates/view_macros.pt:53
 msgid "Logged in as:"
-msgstr ""
+msgstr "Logged in as:"
 
 #: /src/schooltool/skin/templates/view_macros.pt:71
 msgid "Log Out"
-msgstr ""
+msgstr "Log Out"
 
 #: /src/schooltool/skin/templates/view_macros.pt:82
 msgid "free administration software for"
-msgstr ""
+msgstr "free administration software for"
 
 #: /src/schooltool/skin/templates/view_macros.pt:114
 msgid "Report a bug on Launchpad."
-msgstr ""
+msgstr "Report a bug on Launchpad."
 
 #: /src/schooltool/skin/templates/view_macros.pt:127
 msgid ""
 "&copy; The <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth "
 "Foundation</a> 2003 - <span>2009</span>: Supporting Social Innovation."
 msgstr ""
+"&copy; The <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth "
+"Foundation</a> 2003 - <span>2009</span>: Supporting Social Innovation."
 
 #: /src/schooltool/skin/templates/view_macros.pt:132
 msgid ""
@@ -5695,10 +5732,13 @@ msgid ""
 "of The <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth "
 "Foundation</a>."
 msgstr ""
+"<a href=\"http://www.schooltool.org\">SchoolTool</a>&trade; is a Trademark "
+"of The <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth "
+"Foundation</a>."
 
 #: /src/schooltool/skin/templates/view_macros.pt:155
 msgid "Shortcut: Alt-U"
-msgstr ""
+msgstr "Shortcut: Alt-U"
 
 #: /src/schooltool/skin/templates/view_macros.pt:155
 msgid "U"
@@ -5725,105 +5765,105 @@ msgstr "Shortcut: Alt-D"
 
 #: /src/schooltool/skin/widgets.py:86
 msgid "The datetime string did not match the pattern yyyy-mm-dd"
-msgstr ""
+msgstr "The datetime string did not match the pattern yyyy-mm-dd"
 
 #: /src/schooltool/skin/widgets.py:109
 msgid "Width"
-msgstr ""
+msgstr "Width"
 
 #: /src/schooltool/skin/widgets.py:110
 msgid "Editor frame width"
-msgstr ""
+msgstr "Editor frame width"
 
 #: /src/schooltool/skin/widgets.py:113
 msgid "Height"
-msgstr ""
+msgstr "Height"
 
 #: /src/schooltool/skin/widgets.py:114
 msgid "Editor frame height"
-msgstr ""
+msgstr "Editor frame height"
 
 #: /src/schooltool/skin/widgets.py:117
 msgid "Toolbar configuration"
-msgstr ""
+msgstr "Toolbar configuration"
 
 #: /src/schooltool/skin/widgets.py:118
 msgid "The name of the toolbar configuration to use."
-msgstr ""
+msgstr "The name of the toolbar configuration to use."
 
 #: /src/schooltool/skin/widgets.py:121
 msgid "Configuration path"
-msgstr ""
+msgstr "Configuration path"
 
 #: /src/schooltool/skin/widgets.py:122
 msgid "Path to the FCKconfiguration javascript file."
-msgstr ""
+msgstr "Path to the FCKconfiguration javascript file."
 
 #: /src/schooltool/skin/widgets.py:129
 msgid "Configuration"
-msgstr ""
+msgstr "Configuration"
 
 #: /src/schooltool/skin/widgets.py:130
 msgid "FCK editor configuration."
-msgstr ""
+msgstr "FCK editor configuration."
 
 #: /src/schooltool/table/templates/batch.pt:5
 #: /src/schooltool/table/templates/batch.pt:7
 msgid "&laquo; Previous"
-msgstr ""
+msgstr "&laquo; Previous"
 
 #: /src/schooltool/table/templates/batch.pt:16
 msgid "Show Less"
-msgstr ""
+msgstr "Show Less"
 
 #: /src/schooltool/table/templates/batch.pt:21
 msgid "Show All"
-msgstr ""
+msgstr "Show All"
 
 #: /src/schooltool/table/templates/batch.pt:29
 #: /src/schooltool/table/templates/batch.pt:35
 msgid "Next &raquo;"
-msgstr ""
+msgstr "Next &raquo;"
 
 #: /src/schooltool/term/browser/configure.zcml:31
 msgid "Cancel School in Emergency"
-msgstr ""
+msgstr "Cancel School in Emergency"
 
 #: /src/schooltool/term/browser/emergency.py:88
 msgid "The date you entered is invalid.  Please use the YYYY-MM-DD format."
-msgstr ""
+msgstr "The date you entered is invalid.  Please use the YYYY-MM-DD format."
 
 #: /src/schooltool/term/browser/emergency.py:92
 msgid "The date you entered does not belong to this term."
-msgstr ""
+msgstr "The date you entered does not belong to this term."
 
 #: /src/schooltool/term/browser/emergency.py:96
 msgid "The date you entered is not a schoolday."
-msgstr ""
+msgstr "The date you entered is not a schoolday."
 
 #: /src/schooltool/term/browser/emergency.py:104
 msgid "The replacement date you entered is invalid."
-msgstr ""
+msgstr "The replacement date you entered is invalid."
 
 #. Default: ""
 #: /src/schooltool/term/browser/emergency.py:127
 msgid "School cancelled due to emergency. Replacement day $replacement."
-msgstr ""
+msgstr "School cancelled due to emergency. Replacement day $replacement."
 
 #. Default: ""
 #: /src/schooltool/term/browser/emergency.py:137
 msgid "Replacement day for emergency day $emergency."
-msgstr ""
+msgstr "Replacement day for emergency day $emergency."
 
 #: /src/schooltool/term/browser/templates/emergency2.pt:3
 #: /src/schooltool/term/browser/templates/emergency_select.pt:3
 #: /src/schooltool/term/browser/templates/emergency_select.pt:6
 msgid "Emergency day"
-msgstr ""
+msgstr "Emergency day"
 
 #: /src/schooltool/term/browser/templates/emergency2.pt:6
 msgid "Choose a replacement for the emergency day."
-msgstr ""
+msgstr "Choose a replacement for the emergency day."
 
 #: /src/schooltool/term/browser/templates/emergency2.pt:12
 msgid ""
@@ -5831,115 +5871,121 @@ msgid ""
 "replacement day. The selection below consists of non-schooldays in this term "
 "following the emergency day and several days after the term."
 msgstr ""
+"You have selected ${date} as the emergency day. Now please select the "
+"replacement day. The selection below consists of non-schooldays in this term "
+"following the emergency day and several days after the term."
 
 #: /src/schooltool/term/browser/templates/emergency2.pt:27
 msgid "Please enter the replacement date below."
-msgstr ""
+msgstr "Please enter the replacement date below."
 
 #: /src/schooltool/term/browser/templates/emergency2.pt:32
 msgid "Replacement"
-msgstr ""
+msgstr "Replacement"
 
 #: /src/schooltool/term/browser/templates/emergency2.pt:40
 #: /src/schooltool/term/browser/templates/emergency_select.pt:39
 #: /src/schooltool/timetable/browser/templates/specialday_select.pt:39
 msgid "Proceed"
-msgstr ""
+msgstr "Proceed"
 
 #: /src/schooltool/term/browser/templates/emergency_select.pt:11
 msgid ""
 "This form allows you to mark a date as an emergency non-schoolday and add a "
 "replacement day to the term."
 msgstr ""
+"This form allows you to mark a date as an emergency non-schoolday and add a "
+"replacement day to the term."
 
 #: /src/schooltool/term/browser/templates/emergency_select.pt:23
 msgid "Please enter the emergency date below."
-msgstr ""
+msgstr "Please enter the emergency date below."
 
 #: /src/schooltool/term/browser/templates/term.pt:12
 #: /src/schooltool/term/browser/templates/term_add.pt:41
 msgid "Legend:"
-msgstr ""
+msgstr "Legend:"
 
 #: /src/schooltool/term/browser/templates/term.pt:13
 #: /src/schooltool/term/browser/templates/term_add.pt:42
 msgid "Schoolday"
-msgstr ""
+msgstr "Schoolday"
 
 #: /src/schooltool/term/browser/templates/term.pt:14
 #: /src/schooltool/term/browser/templates/term_add.pt:43
 msgid "Holiday"
-msgstr ""
+msgstr "Holiday"
 
 #: /src/schooltool/term/browser/templates/term.pt:26
 #: /src/schooltool/term/browser/templates/term_add.pt:75
 msgid "${month} ${year}"
-msgstr ""
+msgstr "${month} ${year}"
 
 #: /src/schooltool/term/browser/templates/term.pt:41
 #: /src/schooltool/term/browser/templates/term_add.pt:90
 msgid "Week ${week_number}"
-msgstr ""
+msgstr "Week ${week_number}"
 
 #: /src/schooltool/term/browser/templates/term_add.pt:34
 msgid ""
 "Please specify which days are school days, and which days are holidays."
 msgstr ""
+"Please specify which days are school days, and which days are holidays."
 
 #: /src/schooltool/term/browser/templates/term_add.pt:53
 msgid "Toggle the following days of week:"
-msgstr ""
+msgstr "Toggle the following days of week:"
 
 #: /src/schooltool/term/browser/templates/term_add.pt:70
 msgid "Click on a day to toggle its state."
-msgstr ""
+msgstr "Click on a day to toggle its state."
 
 #: /src/schooltool/term/browser/term.py:61
 msgid "Start date"
-msgstr ""
+msgstr "Start date"
 
 #: /src/schooltool/term/browser/term.py:63
 msgid "End date"
-msgstr ""
+msgstr "End date"
 
 #: /src/schooltool/term/browser/term.py:122
 msgid "Add new term"
-msgstr ""
+msgstr "Add new term"
 
 #: /src/schooltool/term/browser/term.py:145
 #: /src/schooltool/term/browser/term.py:222
 msgid "Refresh"
-msgstr ""
+msgstr "Refresh"
 
 #: /src/schooltool/term/browser/term.py:163
 msgid "Add term"
-msgstr ""
+msgstr "Add term"
 
 #: /src/schooltool/term/browser/term.py:237
 msgid "Save changes"
-msgstr ""
+msgstr "Save changes"
 
 #. Default: ""
 #: /src/schooltool/term/browser/term.py:253
 msgid "Change information for ${term_title}"
-msgstr ""
+msgstr "Change information for ${term_title}"
 
 #: /src/schooltool/term/browser/term.py:268
 #: /src/schooltool/term/browser/term.py:291
 msgid "Term must begin before it ends."
-msgstr ""
+msgstr "Term must begin before it ends."
 
 #: /src/schooltool/term/help/configure.zcml:8
 msgid "Add a term"
-msgstr ""
+msgstr "Add a term"
 
 #: /src/schooltool/term/help/term_add.pt:6
 msgid "Term Search Help"
-msgstr ""
+msgstr "Term Search Help"
 
 #: /src/schooltool/term/help/term_container.pt:6
 msgid "Terms in SchoolTool"
-msgstr ""
+msgstr "Terms in SchoolTool"
 
 #: /src/schooltool/term/help/term_container.pt:8
 msgid ""
@@ -5959,86 +6005,101 @@ msgid ""
 "used them yet. You should <strong>not</strong> delete terms simply because "
 "they are over, or you will lose important data.</li> </ul>"
 msgstr ""
+"<h1>Terms in SchoolTool</h1> <p>SchoolTool supports definition of basic "
+"academic terms, that is, a period of time which defines when sections begin "
+"and end, and when they are evaluated. The current implementation does not "
+"support a hierarchy of terms, for example, a year, which contains two "
+"semesters, which contain two marking periods. You can create several terms, "
+"which may overlap, for example, both semesters and trimesters in the same "
+"school, but you cannot express a relationship between terms.</p> <h3>How do "
+"I...</h3> <ul> <li><strong>Add a term:</strong> Select <code>New Term</code> "
+"from the <code>Actions</code> menu.</li> <li><strong>Edit a term:</strong> "
+"Click on the term. Then select <code>Edit</code> from the "
+"<code>Actions</code> menu.</li> <li><strong>Delete a term:</strong> Check "
+"the box next to the name of the term and click <code>Delete</code>. Only "
+"delete terms if you have made a mistake while creating them but you have not "
+"used them yet. You should <strong>not</strong> delete terms simply because "
+"they are over, or you will lose important data.</li> </ul>"
 
 #: /src/schooltool/term/term.py:306
 msgid "Term date is not in the school year."
-msgstr ""
+msgstr "Term date is not in the school year."
 
 #: /src/schooltool/term/tests/__init__.py:77
 msgid "Set the date for the school"
-msgstr ""
+msgstr "Set the date for the school"
 
 #: /src/schooltool/timetable/__init__.py:192
 msgid "Unbound timetable."
-msgstr ""
+msgstr "Unbound timetable."
 
 #: /src/schooltool/timetable/browser/__init__.py:691
 msgid "Invalid date. Please use YYYY-MM-DD format."
-msgstr ""
+msgstr "Invalid date. Please use YYYY-MM-DD format."
 
 #: /src/schooltool/timetable/browser/__init__.py:695
 msgid "The date does not belong to any term."
-msgstr ""
+msgstr "The date does not belong to any term."
 
 #: /src/schooltool/timetable/browser/__init__.py:704
 msgid "Some values were invalid.  They are highlighted in red."
-msgstr ""
+msgstr "Some values were invalid.  They are highlighted in red."
 
 #: /src/schooltool/timetable/browser/configure.zcml:30
 msgid "Add Timetable"
-msgstr ""
+msgstr "Add Timetable"
 
 #: /src/schooltool/timetable/browser/configure.zcml:102
 msgid "Change Timetable for One Day"
-msgstr ""
+msgstr "Change Timetable for One Day"
 
 #: /src/schooltool/timetable/browser/configure.zcml:137
 msgid "New Timetable"
-msgstr ""
+msgstr "New Timetable"
 
 #: /src/schooltool/timetable/browser/event.py:42
 msgid "Timetables"
-msgstr ""
+msgstr "Timetables"
 
 #: /src/schooltool/timetable/browser/event.py:53
 msgid "Modify event information"
-msgstr ""
+msgstr "Modify event information"
 
 #. Default: ""
 #: /src/schooltool/timetable/browser/schema.py:94
 msgid "Timetable schema ${schema}"
-msgstr ""
+msgstr "Timetable schema ${schema}"
 
 #: /src/schooltool/timetable/browser/schema.py:175
 msgid "Please use HH:MM format for period start and end times"
-msgstr ""
+msgstr "Please use HH:MM format for period start and end times"
 
 #: /src/schooltool/timetable/browser/schema.py:215
 msgid "You must specify at least one period."
-msgstr ""
+msgstr "You must specify at least one period."
 
 #: /src/schooltool/timetable/browser/schema.py:269
 msgid "Duration in minutes"
-msgstr ""
+msgstr "Duration in minutes"
 
 #: /src/schooltool/timetable/browser/schema.py:316
 msgid "Please select a value"
-msgstr ""
+msgstr "Please select a value"
 
 #. Default: ""
 #: /src/schooltool/timetable/browser/schema.py:343
 #: /src/schooltool/timetable/browser/schema.py:350
 msgid "Day ${number}"
-msgstr ""
+msgstr "Day ${number}"
 
 #: /src/schooltool/timetable/browser/schema.py:373
 msgid "Period 1"
-msgstr ""
+msgstr "Period 1"
 
 #. Default: ""
 #: /src/schooltool/timetable/browser/schema.py:383
 msgid "Period ${number}"
-msgstr ""
+msgstr "Period ${number}"
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:3
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:6
@@ -6059,52 +6120,57 @@ msgstr ""
 #: /src/schooltool/timetable/browser/templates/ttwizard_slottimes.pt:3
 #: /src/schooltool/timetable/browser/templates/ttwizard_slottimes.pt:6
 msgid "New timetable schema"
-msgstr ""
+msgstr "New timetable schema"
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:17
 msgid "Please choose a name for the timetable schema you want to create."
-msgstr ""
+msgstr "Please choose a name for the timetable schema you want to create."
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:36
 msgid "First, please define the days and periods of the timetable."
-msgstr ""
+msgstr "First, please define the days and periods of the timetable."
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:51
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:155
 msgid "Copy periods from previous day"
-msgstr ""
+msgstr "Copy periods from previous day"
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:58
 msgid "Remove this day"
-msgstr ""
+msgstr "Remove this day"
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:58
 msgid "X"
-msgstr ""
+msgstr "X"
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:84
 msgid "Add day"
-msgstr ""
+msgstr "Add day"
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:87
 msgid "Add period"
-msgstr ""
+msgstr "Add period"
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:94
 msgid "Second, select the way timetable days are aligned with calendar days."
 msgstr ""
+"Second, select the way timetable days are aligned with calendar days."
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:114
 msgid ""
 "Timetable day always coincides with the day of week (i.e. on Mondays the "
 "first timetable day is used, on Tuesdays the second, and so on)."
 msgstr ""
+"Timetable day always coincides with the day of week (i.e. on Mondays the "
+"first timetable day is used, on Tuesdays the second, and so on)."
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:129
 msgid ""
 "Timetable days are used sequentially, jumping over days that are not school "
 "days."
 msgstr ""
+"Timetable days are used sequentially, jumping over days that are not school "
+"days."
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:136
 msgid ""
@@ -6117,113 +6183,132 @@ msgid ""
 "that day of week. If the list of periods is not up to date with the changes "
 "you made in the table above, use the Update button to refresh the form."
 msgstr ""
+"Third, define the time and duration of periods when they fall on certain "
+"days of week. Use one of the the following format: <tt>HH:MM</tt> (also, "
+"don't forget to specify the duration in the text box below) or <tt>HH:MM-"
+"HH:MM</tt> (when you want to specify both endpoints explicitly, e.g., 9:30-"
+"10:15). It is not necessary to define all periods for all days of week, "
+"omissions will just cause that period to be skipped if it happens to fall on "
+"that day of week. If the list of periods is not up to date with the changes "
+"you made in the table above, use the Update button to refresh the form."
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:175
 msgid ""
 "Certain period specifications were incorrect, and therefore were discarded."
 msgstr ""
+"Certain period specifications were incorrect, and therefore were discarded."
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:191
 msgid ""
 "Finally, make sure the information in this form is correct, because the only "
 "way to correct it will be to remove this timetable schema and recreate it."
 msgstr ""
+"Finally, make sure the information in this form is correct, because the only "
+"way to correct it will be to remove this timetable schema and recreate it."
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:197
 msgid "Create timetable schema"
-msgstr ""
+msgstr "Create timetable schema"
 
 #: /src/schooltool/timetable/browser/templates/calendar_overlay.pt:66
 msgid ""
 "<a href=\"#\" onclick=\"$('#more_overlays').toggle();return "
 "false;\">More...</a>"
 msgstr ""
+"<a href=\"#\" onclick=\"$('#more_overlays').toggle();return "
+"false;\">More...</a>"
 
 #: /src/schooltool/timetable/browser/templates/calendar_overlay.pt:95
 msgid "Manage..."
-msgstr ""
+msgstr "Manage..."
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:4
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:10
 msgid "Scheduling for ${person}"
-msgstr ""
+msgstr "Scheduling for ${person}"
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:15
 #: /src/schooltool/timetable/browser/templates/timetable-add.pt:8
 msgid "There are no terms or timetable schemas defined."
-msgstr ""
+msgstr "There are no terms or timetable schemas defined."
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:22
 msgid "Timetable"
-msgstr ""
+msgstr "Timetable"
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:24
 msgid "Term"
-msgstr ""
+msgstr "Term"
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:34
 msgid "Schema"
-msgstr ""
+msgstr "Schema"
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:43
 msgid "Choose"
-msgstr ""
+msgstr "Choose"
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:54
 msgid ""
 "This form lets you set up the timetable of a person by adding and removing "
 "the person to and from sections that have classes in their timetables."
 msgstr ""
+"This form lets you set up the timetable of a person by adding and removing "
+"the person to and from sections that have classes in their timetables."
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:73
 msgid "as part of"
-msgstr ""
+msgstr "as part of"
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:82
 msgid "none"
-msgstr ""
+msgstr "none"
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:93
 msgid "Scheduling conflict."
-msgstr ""
+msgstr "Scheduling conflict."
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:101
 msgid ""
 "Note: if a section appears in more than one slot, all of them have to be set "
 "to <em>none</em> to remove it."
 msgstr ""
+"Note: if a section appears in more than one slot, all of them have to be set "
+"to <em>none</em> to remove it."
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:107
 #: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:81
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:68
 msgid "Save"
-msgstr ""
+msgstr "Save"
 
 #: /src/schooltool/timetable/browser/templates/schooltt-delete.pt:10
 msgid "Are you sure you want to delete the selected school timetables?"
-msgstr ""
+msgstr "Are you sure you want to delete the selected school timetables?"
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:4
 #: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:11
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:4
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:12
 msgid "Scheduling for ${section}"
-msgstr ""
+msgstr "Scheduling for ${section}"
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:17
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:19
 msgid "There are no timetable schemas defined."
-msgstr ""
+msgstr "There are no timetable schemas defined."
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:24
 msgid "Choose school timetable to use"
-msgstr ""
+msgstr "Choose school timetable to use"
 
 #: /src/schooltool/timetable/browser/templates/simpletts.pt:11
 msgid ""
 "This is a simple way to create a weekly timetable schema. Just fill in a "
 "sufficient number of lines for your periods."
 msgstr ""
+"This is a simple way to create a weekly timetable schema. Just fill in a "
+"sufficient number of lines for your periods."
 
 #: /src/schooltool/timetable/browser/templates/simpletts.pt:16
 msgid ""
@@ -6231,29 +6316,32 @@ msgid ""
 "schema creation wizard</a>, or a <a href=\"complexadd.html\">complex "
 "timetable schema set up form</a>."
 msgstr ""
+"If you need more flexibility, you can use the <a href=\"add.html\">timetable "
+"schema creation wizard</a>, or a <a href=\"complexadd.html\">complex "
+"timetable schema set up form</a>."
 
 #: /src/schooltool/timetable/browser/templates/simpletts.pt:36
 msgid "Period title (optional)"
-msgstr ""
+msgstr "Period title (optional)"
 
 #: /src/schooltool/timetable/browser/templates/simpletts.pt:37
 msgid "Period start time"
-msgstr ""
+msgstr "Period start time"
 
 #: /src/schooltool/timetable/browser/templates/simpletts.pt:38
 msgid "Period end time"
-msgstr ""
+msgstr "Period end time"
 
 #: /src/schooltool/timetable/browser/templates/simpletts.pt:60
 msgid "Create"
-msgstr ""
+msgstr "Create"
 
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:3
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:6
 #: /src/schooltool/timetable/browser/templates/specialday_select.pt:3
 #: /src/schooltool/timetable/browser/templates/specialday_select.pt:6
 msgid "Choose a special day"
-msgstr ""
+msgstr "Choose a special day"
 
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:13
 msgid ""
@@ -6261,65 +6349,70 @@ msgid ""
 "below. In order to remove a period from the day, just delete the period's "
 "start and end times."
 msgstr ""
+"You can adjust the start and end times of periods for ${date} in the form "
+"below. In order to remove a period from the day, just delete the period's "
+"start and end times."
 
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:28
 msgid "Period title"
-msgstr ""
+msgstr "Period title"
 
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:29
 msgid "Original start"
-msgstr ""
+msgstr "Original start"
 
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:30
 msgid "Original end"
-msgstr ""
+msgstr "Original end"
 
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:31
 msgid "New start"
-msgstr ""
+msgstr "New start"
 
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:32
 msgid "New end"
-msgstr ""
+msgstr "New end"
 
 #: /src/schooltool/timetable/browser/templates/specialday_select.pt:11
 msgid ""
 "This form allows you to change the start and end times for periods on a "
 "certain date, or to cancel some periods altogether."
 msgstr ""
+"This form allows you to change the start and end times for periods on a "
+"certain date, or to cancel some periods altogether."
 
 #: /src/schooltool/timetable/browser/templates/specialday_select.pt:23
 msgid "Please enter the date when the periods need to be changed below."
-msgstr ""
+msgstr "Please enter the date when the periods need to be changed below."
 
 #: /src/schooltool/timetable/browser/templates/timetable-add.pt:13
 msgid "Create a New Timetable"
-msgstr ""
+msgstr "Create a New Timetable"
 
 #: /src/schooltool/timetable/browser/templates/timetable-add.pt:15
 msgid "Select school timetable to use"
-msgstr ""
+msgstr "Select school timetable to use"
 
 #: /src/schooltool/timetable/browser/templates/timetable-container-delete.pt:10
 msgid "Are you sure you want to delete the selected timetables?"
-msgstr ""
+msgstr "Are you sure you want to delete the selected timetables?"
 
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:26
 msgid "For term:"
-msgstr ""
+msgstr "For term:"
 
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:29
 msgid "Using timetable:"
-msgstr ""
+msgstr "Using timetable:"
 
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:40
 msgid "Default Timetable Schema:"
-msgstr ""
+msgstr "Default Timetable Schema:"
 
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:46
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:53
 msgid "Not Selected"
-msgstr ""
+msgstr "Not Selected"
 
 #. Default: "Change"
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:59
@@ -6329,11 +6422,11 @@ msgstr "Change"
 #: /src/schooltool/timetable/browser/templates/timetable_list.pt:4
 #: /src/schooltool/timetable/browser/templates/timetable_list.pt:11
 msgid "Timetables for ${object}"
-msgstr ""
+msgstr "Timetables for ${object}"
 
 #: /src/schooltool/timetable/browser/templates/timetableschema.pt:33
 msgid "Homeroom"
-msgstr ""
+msgstr "Homeroom"
 
 #: /src/schooltool/timetable/browser/templates/ttwizard.pt:9
 msgid ""
@@ -6341,159 +6434,172 @@ msgid ""
 "create a <a href=\"simpleadd.html\">simple weekly timetable schema</a>, or "
 "use a more complex <a href=\"complexadd.html\">advanced adding form</a>."
 msgstr ""
+"This wizard presents you with a series of questions. You may alternatively "
+"create a <a href=\"simpleadd.html\">simple weekly timetable schema</a>, or "
+"use a more complex <a href=\"complexadd.html\">advanced adding form</a>."
 
 #: /src/schooltool/timetable/browser/ttwizard.py:259
 msgid ""
 "Does your school's timetable cycle use days of the week, or a rotating cycle?"
 msgstr ""
+"Does your school's timetable cycle use days of the week, or a rotating cycle?"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:262
 msgid "Days of the week"
-msgstr ""
+msgstr "Days of the week"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:263
 msgid "Rotating cycle"
-msgstr ""
+msgstr "Rotating cycle"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:286
 msgid "Enter names of days in cycle, one per line."
-msgstr ""
+msgstr "Enter names of days in cycle, one per line."
 
 #: /src/schooltool/timetable/browser/ttwizard.py:298
 msgid "Please enter at least one day name."
-msgstr ""
+msgstr "Please enter at least one day name."
 
 #: /src/schooltool/timetable/browser/ttwizard.py:304
 msgid "Please make sure the day names are unique."
-msgstr ""
+msgstr "Please make sure the day names are unique."
 
 #: /src/schooltool/timetable/browser/ttwizard.py:320
 msgid ""
 "Do classes begin and end at the same time each day in your school's "
 "timetable?"
 msgstr ""
+"Do classes begin and end at the same time each day in your school's "
+"timetable?"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:323
 msgid "Same time each day"
-msgstr ""
+msgstr "Same time each day"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:324
 msgid "Different times"
-msgstr ""
+msgstr "Different times"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:343
 msgid ""
 "Do start and end times vary based on the day of the week (Monday - Friday) "
 "or the day in the cycle?"
 msgstr ""
+"Do start and end times vary based on the day of the week (Monday - Friday) "
+"or the day in the cycle?"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:346
 msgid "Day of week"
-msgstr ""
+msgstr "Day of week"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:347
 msgid "Day in cycle"
-msgstr ""
+msgstr "Day in cycle"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:412
 msgid ""
 "Enter start and end times for each slot, one slot (HH:MM - HH:MM) per line."
 msgstr ""
+"Enter start and end times for each slot, one slot (HH:MM - HH:MM) per line."
 
 #. Default: ""
 #: /src/schooltool/timetable/browser/ttwizard.py:426
 #: /src/schooltool/timetable/browser/ttwizard.py:483
 msgid "Not a valid time slot: $slot."
-msgstr ""
+msgstr "Not a valid time slot: $slot."
 
 #: /src/schooltool/timetable/browser/ttwizard.py:430
 msgid "Please enter at least one time slot."
-msgstr ""
+msgstr "Please enter at least one time slot."
 
 #: /src/schooltool/timetable/browser/ttwizard.py:454
 msgid ""
 "Enter start and end times for each slot on each day, one slot (HH:MM - "
 "HH:MM) per line."
 msgstr ""
+"Enter start and end times for each slot on each day, one slot (HH:MM - "
+"HH:MM) per line."
 
 #: /src/schooltool/timetable/browser/ttwizard.py:530
 msgid "Do periods have names or are they simply designated by time?"
-msgstr ""
+msgstr "Do periods have names or are they simply designated by time?"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:533
 msgid "Have names"
-msgstr ""
+msgstr "Have names"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:534
 msgid "Designated by time"
-msgstr ""
+msgstr "Designated by time"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:570
 msgid "Enter names of periods, one per line."
-msgstr ""
+msgstr "Enter names of periods, one per line."
 
 #. Default: ""
 #: /src/schooltool/timetable/browser/ttwizard.py:583
 msgid "Please enter at least $number periods."
-msgstr ""
+msgstr "Please enter at least $number periods."
 
 #: /src/schooltool/timetable/browser/ttwizard.py:589
 msgid "Please make sure the period names are unique."
-msgstr ""
+msgstr "Please make sure the period names are unique."
 
 #: /src/schooltool/timetable/browser/ttwizard.py:611
 msgid "Is the sequence of periods each day the same or different?"
-msgstr ""
+msgstr "Is the sequence of periods each day the same or different?"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:613
 msgid "Same"
-msgstr ""
+msgstr "Same"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:614
 msgid "Different"
-msgstr ""
+msgstr "Different"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:629
 msgid "Please put the periods in order:"
-msgstr ""
+msgstr "Please put the periods in order:"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:645
 #: /src/schooltool/timetable/browser/ttwizard.py:699
 msgid "Please provide all periods."
-msgstr ""
+msgstr "Please provide all periods."
 
 #. Default: ""
 #: /src/schooltool/timetable/browser/ttwizard.py:658
 #: /src/schooltool/timetable/browser/ttwizard.py:716
 msgid "The following periods were selected more than once: $periods"
-msgstr ""
+msgstr "The following periods were selected more than once: $periods"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:676
 msgid "Please put the periods in order for each day:"
-msgstr ""
+msgstr "Please put the periods in order for each day:"
 
 #. Default: ""
 #: /src/schooltool/timetable/browser/ttwizard.py:712
 msgid "$period on day $day"
-msgstr ""
+msgstr "$period on day $day"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:733
 msgid ""
 "Do you check student attendance for the day in a homeroom period or "
 "equivalent?"
 msgstr ""
+"Do you check student attendance for the day in a homeroom period or "
+"equivalent?"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:736
 msgid "Yes"
-msgstr ""
+msgstr "Yes"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:737
 msgid "No"
-msgstr ""
+msgstr "No"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:752
 msgid "Please indicate the homeroom period(s) for each day:"
-msgstr ""
+msgstr "Please indicate the homeroom period(s) for each day:"
 
 #: /src/schooltool/timetable/security.zcml:16
 msgid "School timetables"
@@ -6505,13 +6611,13 @@ msgstr "Assign timetables"
 
 #: /src/schooltool/timetable/security.zcml:54
 msgid "Change schedule"
-msgstr ""
+msgstr "Change schedule"
 
 #. Default: "Confirm"
 #: /src/schooltool/widget/password.py:39
 msgid "confirm password"
-msgstr ""
+msgstr "confirm password"
 
 #: /src/schooltool/widget/password.py:56
 msgid "Supplied passwords are not identical"
-msgstr ""
+msgstr "Supplied passwords are not identical"

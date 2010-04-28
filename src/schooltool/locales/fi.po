@@ -7,22 +7,22 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2009-12-24 12:40+0000\n"
-"PO-Revision-Date: 2010-02-08 20:17+0000\n"
-"Last-Translator: Jussi Aalto <Unknown>\n"
+"POT-Creation-Date: 2010-01-04 15:41+0000\n"
+"PO-Revision-Date: 2010-04-10 19:03+0000\n"
+"Last-Translator: Jiri Grönroos <Unknown>\n"
 "Language-Team: Finnish <fi@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-02-09 05:07+0000\n"
+"X-Launchpad-Export-Date: 2010-04-11 04:08+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "X-Rosetta-Version: 0.1\n"
 
 #: /src/schooltool/app/browser/__init__.py:256
-#: /src/schooltool/person/help/person_container.pt:6
 #: /src/schooltool/app/browser/templates/index.pt:11
 #: /src/schooltool/person/browser/configure.zcml:26
 #: /src/schooltool/person/help/configure.zcml:8
+#: /src/schooltool/person/help/person_container.pt:6
 msgid "Persons"
 msgstr "Henkilöt"
 
@@ -57,16 +57,20 @@ msgid "school"
 msgstr "koulu"
 
 #: /src/schooltool/app/browser/cal.py:114
-msgid "March"
-msgstr "Maaliskuu"
+msgid "February"
+msgstr "Helmikuu"
 
 #: /src/schooltool/app/browser/cal.py:114
 msgid "January"
 msgstr "Tammikuu"
 
 #: /src/schooltool/app/browser/cal.py:114
-msgid "February"
-msgstr "Helmikuu"
+msgid "March"
+msgstr "Maaliskuu"
+
+#: /src/schooltool/app/browser/cal.py:115
+msgid "April"
+msgstr "Huhtikuu"
 
 #: /src/schooltool/app/browser/cal.py:115
 msgid "June"
@@ -76,122 +80,84 @@ msgstr "Kesäkuu"
 msgid "May"
 msgstr "Toukokuu"
 
-#: /src/schooltool/app/browser/cal.py:115
-msgid "April"
-msgstr "Huhtikuu"
-
 #: /src/schooltool/app/browser/cal.py:116
 msgid "August"
 msgstr "Elokuu"
 
 #: /src/schooltool/app/browser/cal.py:116
-msgid "September"
-msgstr "Syyskuu"
-
-#: /src/schooltool/app/browser/cal.py:116
 msgid "July"
 msgstr "Heinäkuu"
 
-#: /src/schooltool/app/browser/cal.py:1166
-msgid "Next month"
-msgstr "Seuraava kuukausi"
-
-#: /src/schooltool/app/browser/cal.py:1167
-msgid "Current month"
-msgstr "Nykyinen kuukausi"
-
-#: /src/schooltool/app/browser/cal.py:1168
-msgid "Previous month"
-msgstr "Edellinen kuukausi"
+#: /src/schooltool/app/browser/cal.py:116
+msgid "September"
+msgstr "Syyskuu"
 
 #: /src/schooltool/app/browser/cal.py:117
-msgid "October"
-msgstr "Lokakuu"
+msgid "December"
+msgstr "Joulukuu"
 
 #: /src/schooltool/app/browser/cal.py:117
 msgid "November"
 msgstr "Marraskuu"
 
 #: /src/schooltool/app/browser/cal.py:117
-msgid "December"
-msgstr "Joulukuu"
-
-#. Default: ""
-#: /src/schooltool/app/browser/cal.py:1180
-msgid "${month}, ${year}"
-msgstr "${month}, ${year}"
+msgid "October"
+msgstr "Lokakuu"
 
 #: /src/schooltool/app/browser/cal.py:120
 #: /src/schooltool/person/interfaces.py:180
-#: /src/schooltool/timetable/browser/schema.py:115
-#: /src/schooltool/timetable/browser/schema.py:284
+#: /src/schooltool/term/browser/templates/term.pt:31
 #: /src/schooltool/term/browser/templates/term_add.pt:54
 #: /src/schooltool/term/browser/templates/term_add.pt:80
-#: /src/schooltool/term/browser/templates/term.pt:31
+#: /src/schooltool/timetable/browser/schema.py:115
+#: /src/schooltool/timetable/browser/schema.py:284
 msgid "Monday"
 msgstr "Maanantai"
 
 #: /src/schooltool/app/browser/cal.py:120
-#: /src/schooltool/timetable/browser/schema.py:116
-#: /src/schooltool/timetable/browser/schema.py:285
+#: /src/schooltool/term/browser/templates/term.pt:32
 #: /src/schooltool/term/browser/templates/term_add.pt:56
 #: /src/schooltool/term/browser/templates/term_add.pt:81
-#: /src/schooltool/term/browser/templates/term.pt:32
+#: /src/schooltool/timetable/browser/schema.py:116
+#: /src/schooltool/timetable/browser/schema.py:285
 msgid "Tuesday"
 msgstr "Tiistai"
 
 #: /src/schooltool/app/browser/cal.py:120
-#: /src/schooltool/timetable/browser/schema.py:118
-#: /src/schooltool/timetable/browser/schema.py:287
+#: /src/schooltool/term/browser/templates/term.pt:34
 #: /src/schooltool/term/browser/templates/term_add.pt:60
 #: /src/schooltool/term/browser/templates/term_add.pt:83
-#: /src/schooltool/term/browser/templates/term.pt:34
+#: /src/schooltool/timetable/browser/schema.py:118
+#: /src/schooltool/timetable/browser/schema.py:287
 msgid "Thursday"
 msgstr "Torstai"
 
-#. Default: ""
-#: /src/schooltool/app/browser/cal.py:1202
-msgid "Week ${week_no}"
-msgstr "Viikko ${week_no}"
-
 #: /src/schooltool/app/browser/cal.py:121
 #: /src/schooltool/person/interfaces.py:178
-#: /src/schooltool/timetable/browser/schema.py:289
+#: /src/schooltool/term/browser/templates/term.pt:36
 #: /src/schooltool/term/browser/templates/term_add.pt:64
 #: /src/schooltool/term/browser/templates/term_add.pt:85
-#: /src/schooltool/term/browser/templates/term.pt:36
+#: /src/schooltool/timetable/browser/schema.py:289
 msgid "Saturday"
 msgstr "Lauantai"
 
 #: /src/schooltool/app/browser/cal.py:121
 #: /src/schooltool/person/interfaces.py:179
-#: /src/schooltool/timetable/browser/schema.py:290
+#: /src/schooltool/term/browser/templates/term.pt:37
 #: /src/schooltool/term/browser/templates/term_add.pt:66
 #: /src/schooltool/term/browser/templates/term_add.pt:86
-#: /src/schooltool/term/browser/templates/term.pt:37
+#: /src/schooltool/timetable/browser/schema.py:290
 msgid "Sunday"
 msgstr "Sunnuntai"
 
 #: /src/schooltool/app/browser/cal.py:121
-#: /src/schooltool/timetable/browser/schema.py:119
-#: /src/schooltool/timetable/browser/schema.py:288
+#: /src/schooltool/term/browser/templates/term.pt:35
 #: /src/schooltool/term/browser/templates/term_add.pt:62
 #: /src/schooltool/term/browser/templates/term_add.pt:84
-#: /src/schooltool/term/browser/templates/term.pt:35
+#: /src/schooltool/timetable/browser/schema.py:119
+#: /src/schooltool/timetable/browser/schema.py:288
 msgid "Friday"
 msgstr "Perjantai"
-
-#: /src/schooltool/app/browser/cal.py:1218
-msgid "Next year"
-msgstr "Seuraava vuosi"
-
-#: /src/schooltool/app/browser/cal.py:1219
-msgid "Current year"
-msgstr "Kuluva vuosi"
-
-#: /src/schooltool/app/browser/cal.py:1220
-msgid "Previous year"
-msgstr "Edellinen vuosi"
 
 #: /src/schooltool/app/browser/cal.py:124
 #: /src/schooltool/app/browser/cal.py:1811
@@ -228,6 +194,49 @@ msgstr "La"
 msgid "Sun"
 msgstr "Su"
 
+#: /src/schooltool/app/browser/cal.py:486
+msgid "Unnamed Event"
+msgstr "Nimeämätön tapahtuma"
+
+#. Default: ""
+#: /src/schooltool/app/browser/cal.py:952
+msgid "${month}, ${year} (week ${week})"
+msgstr "${month}, ${year} (viikko ${week})"
+
+#: /src/schooltool/app/browser/cal.py:1166
+msgid "Next month"
+msgstr "Seuraava kuukausi"
+
+#: /src/schooltool/app/browser/cal.py:1167
+msgid "Current month"
+msgstr "Nykyinen kuukausi"
+
+#: /src/schooltool/app/browser/cal.py:1168
+msgid "Previous month"
+msgstr "Edellinen kuukausi"
+
+#. Default: ""
+#: /src/schooltool/app/browser/cal.py:1180
+msgid "${month}, ${year}"
+msgstr "${month}, ${year}"
+
+#. Default: ""
+#: /src/schooltool/app/browser/cal.py:1202
+msgid "Week ${week_no}"
+msgstr "Viikko ${week_no}"
+
+#: /src/schooltool/app/browser/cal.py:1218
+msgid "Next year"
+msgstr "Seuraava vuosi"
+
+#: /src/schooltool/app/browser/cal.py:1219
+msgid "Current year"
+msgstr "Kuluva vuosi"
+
+#: /src/schooltool/app/browser/cal.py:1220
+msgid "Previous year"
+msgstr "Edellinen vuosi"
+
 #: /src/schooltool/app/browser/cal.py:1290
 msgid "The next day"
 msgstr "Seuraava päivä"
@@ -249,11 +258,11 @@ msgstr "Edellinen päivä"
 #: /src/schooltool/dashboard/interfaces.py:44
 #: /src/schooltool/group/interfaces.py:40
 #: /src/schooltool/note/interfaces.py:42
-#: /src/schooltool/resource/interfaces.py:40
+#: /src/schooltool/resource/interfaces.py:41
 #: /src/schooltool/resource/types.py:60
 #: /src/schooltool/resource/types.py:77
 #: /src/schooltool/resource/types.py:101
-#: /src/schooltool/schoolyear/browser/schoolyear.py:145
+#: /src/schooltool/schoolyear/browser/schoolyear.py:149
 #: /src/schooltool/schoolyear/interfaces.py:41
 #: /src/schooltool/securitypolicy/interfaces.py:108
 #: /src/schooltool/table/catalog.py:141
@@ -296,9 +305,9 @@ msgid "Days"
 msgstr "Päiviä"
 
 #: /src/schooltool/app/browser/cal.py:1764
+#: /src/schooltool/app/browser/templates/event.pt:48
 #: /src/schooltool/resource/types.py:69
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:49
-#: /src/schooltool/app/browser/templates/event.pt:48
 msgid "Location"
 msgstr "Sijainti"
 
@@ -306,7 +315,7 @@ msgstr "Sijainti"
 #: /src/schooltool/course/interfaces.py:41
 #: /src/schooltool/course/interfaces.py:100
 #: /src/schooltool/group/interfaces.py:44
-#: /src/schooltool/resource/interfaces.py:50
+#: /src/schooltool/resource/interfaces.py:51
 #: /src/schooltool/securitypolicy/interfaces.py:112
 #: /src/schooltool/timetable/browser/event.py:56
 msgid "Description"
@@ -366,16 +375,16 @@ msgid "1st"
 msgstr "1."
 
 #: /src/schooltool/app/browser/cal.py:1919
-msgid "4th"
-msgstr "4."
+msgid "2nd"
+msgstr "2."
 
 #: /src/schooltool/app/browser/cal.py:1919
 msgid "3rd"
 msgstr "3."
 
 #: /src/schooltool/app/browser/cal.py:1919
-msgid "2nd"
-msgstr "2."
+msgid "4th"
+msgstr "4."
 
 #: /src/schooltool/app/browser/cal.py:1920
 msgid "5th"
@@ -400,13 +409,13 @@ msgid "Add event"
 msgstr "Lisää tapahtuma"
 
 #: /src/schooltool/app/browser/cal.py:2079
-#: /src/schooltool/basicperson/browser/person.py:157
+#: /src/schooltool/app/browser/templates/edit_relationships.pt:48
+#: /src/schooltool/basicperson/browser/person.py:156
 #: /src/schooltool/contact/browser/contact.py:90
 #: /src/schooltool/course/browser/section.py:327
-#: /src/schooltool/schoolyear/browser/schoolyear.py:180
-#: /src/schooltool/timetable/browser/templates/timetable-add.pt:25
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:67
-#: /src/schooltool/app/browser/templates/edit_relationships.pt:48
+#: /src/schooltool/schoolyear/browser/schoolyear.py:184
+#: /src/schooltool/timetable/browser/templates/timetable-add.pt:25
 msgid "Add"
 msgstr "Lisää"
 
@@ -429,25 +438,52 @@ msgid "Updated on ${date_time}"
 msgstr "Päivitetty ${date_time}"
 
 #: /src/schooltool/app/browser/cal.py:2718
-#: /src/schooltool/app/browser/templates/calendar_tab_viewlet.pt:3
 #: /src/schooltool/app/browser/configure.zcml:606
 #: /src/schooltool/app/browser/configure.zcml:693
-#: /src/schooltool/app/configure.zcml:344
+#: /src/schooltool/app/browser/templates/calendar_tab_viewlet.pt:3
+#: /src/schooltool/app/configure.zcml:346
 msgid "Calendar"
 msgstr "Kalenteri"
-
-#: /src/schooltool/app/browser/cal.py:486
-msgid "Unnamed Event"
-msgstr "Nimeämätön tapahtuma"
-
-#. Default: ""
-#: /src/schooltool/app/browser/cal.py:952
-msgid "${month}, ${year} (week ${week})"
-msgstr "${month}, ${year} (viikko ${week})"
 
 #: /src/schooltool/app/browser/configure.zcml:166
 msgid "Actions"
 msgstr "Toiminnot"
+
+#: /src/schooltool/app/browser/configure.zcml:233
+#: /src/schooltool/app/browser/configure.zcml:514
+#: /src/schooltool/basicperson/browser/configure.zcml:6
+#: /src/schooltool/basicperson/browser/configure.zcml:185
+#: /src/schooltool/basicperson/browser/configure.zcml:192
+#: /src/schooltool/basicperson/browser/configure.zcml:199
+#: /src/schooltool/common/configure.zcml:89
+#: /src/schooltool/contact/browser/configure.zcml:6
+#: /src/schooltool/contact/browser/configure.zcml:31
+#: /src/schooltool/contact/browser/configure.zcml:88
+#: /src/schooltool/course/browser/configure.zcml:58
+#: /src/schooltool/course/browser/configure.zcml:69
+#: /src/schooltool/course/browser/configure.zcml:103
+#: /src/schooltool/course/browser/configure.zcml:143
+#: /src/schooltool/course/security.zcml:93
+#: /src/schooltool/course/security.zcml:127
+#: /src/schooltool/demographics/browser/configure.zcml:13
+#: /src/schooltool/group/browser/configure.zcml:16
+#: /src/schooltool/group/browser/configure.zcml:85
+#: /src/schooltool/group/security.zcml:72
+#: /src/schooltool/person/browser/configure.zcml:157
+#: /src/schooltool/person/browser/configure.zcml:187
+#: /src/schooltool/person/security.zcml:93
+#: /src/schooltool/resource/browser/configure.zcml:62
+#: /src/schooltool/schoolyear/browser/configure.zcml:101
+#: /src/schooltool/schoolyear/security.zcml:31
+#: /src/schooltool/term/browser/configure.zcml:14
+#: /src/schooltool/term/security.zcml:35
+#: /src/schooltool/timetable/browser/configure.zcml:52
+#: /src/schooltool/timetable/browser/configure.zcml:93
+#: /src/schooltool/timetable/browser/configure.zcml:111
+#: /src/schooltool/timetable/browser/configure.zcml:120
+#: /src/schooltool/timetable/security.zcml:32
+msgid "View"
+msgstr "Näytä"
 
 #: /src/schooltool/app/browser/configure.zcml:331
 msgid "New Event"
@@ -502,6 +538,20 @@ msgstr "iCalender"
 msgid "Free/Busy"
 msgstr "Vapaa/Varattu"
 
+#: /src/schooltool/app/browser/configure.zcml:524
+#: /src/schooltool/app/help/configure.zcml:77
+#: /src/schooltool/app/help/event_add.pt:6
+#: /src/schooltool/app/help/event_add.pt:9
+msgid "Add Event"
+msgstr "Lisää tapahtuma"
+
+#: /src/schooltool/app/browser/configure.zcml:543
+#: /src/schooltool/app/help/configure.zcml:87
+#: /src/schooltool/app/help/event_edit.pt:6
+#: /src/schooltool/app/help/event_edit.pt:9
+msgid "Edit Event"
+msgstr "Muokkaa tapahtumaa"
+
 #: /src/schooltool/app/browser/configure.zcml:631
 msgid "Application Control"
 msgstr "Ohjelmistohallinta"
@@ -517,6 +567,18 @@ msgstr "Sukupolvet"
 #: /src/schooltool/app/browser/configure.zcml:675
 msgid "Browser UI"
 msgstr "Selaimen käyttöliittymä"
+
+#: /src/schooltool/app/browser/configure.zcml:681
+#: /src/schooltool/app/browser/templates/login.pt:3
+#: /src/schooltool/app/browser/templates/menu_view.pt:3
+msgid "Login"
+msgstr "Sisäänkirjautuminen"
+
+#: /src/schooltool/app/browser/configure.zcml:687
+#: /src/schooltool/app/browser/configure.zcml:774
+#: /src/schooltool/devmode/devmode.pt:17
+msgid "Errors"
+msgstr "Virheet"
 
 #: /src/schooltool/app/browser/configure.zcml:699
 msgid "Application"
@@ -617,14 +679,6 @@ msgstr "Virheelliset tallenteet: ${args}"
 msgid "Saved changes."
 msgstr "Muutokset tallennettu."
 
-#: /src/schooltool/app/browser/pdfcal.py:115
-msgid "all day"
-msgstr "koko päivä"
-
-#: /src/schooltool/app/browser/pdfcal.py:197
-msgid "Monthly calendar for %s"
-msgstr "%s:n kuukausikalenteri"
-
 #: /src/schooltool/app/browser/pdfcal.py:52
 msgid "Daily calendar for %s"
 msgstr "%s:n päiväkalenteri"
@@ -638,11 +692,23 @@ msgstr "toistuva"
 msgid "from the calendar of ${calendar_owner}"
 msgstr "Käyttäjän ${calendar_owner} kalenterista"
 
+#: /src/schooltool/app/browser/pdfcal.py:115
+msgid "all day"
+msgstr "koko päivä"
+
+#: /src/schooltool/app/browser/pdfcal.py:197
+msgid "Monthly calendar for %s"
+msgstr "%s:n kuukausikalenteri"
+
 #: /src/schooltool/app/browser/report.py:57
 msgid "PDF support is disabled.  It can be enabled by your administrator."
 msgstr ""
 "PDF-tuki poissa käytöstä. Järjestelmänvalvoja voi ottaa sen takaisin "
 "käyttöön."
+
+#: /src/schooltool/app/browser/templates/application_preferences.pt:4
+msgid "Edit site preferences"
+msgstr "Muokkaa sivuston asetuksia"
 
 #: /src/schooltool/app/browser/templates/application_preferences.pt:13
 msgid "Change site preferences"
@@ -652,9 +718,37 @@ msgstr "Muuta sivuston asetuksia"
 msgid "General preferences"
 msgstr "Yleiset asetukset"
 
-#: /src/schooltool/app/browser/templates/application_preferences.pt:4
-msgid "Edit site preferences"
-msgstr "Muokkaa sivuston asetuksia"
+#: /src/schooltool/app/browser/templates/application_preferences.pt:34
+#: /src/schooltool/person/browser/person_preferences.pt:28
+msgid "Calendar Preferences"
+msgstr "Kalenteriasetukset"
+
+#: /src/schooltool/app/browser/templates/cal_atom.pt:14
+#: /src/schooltool/app/configure.zcml:332
+#: /src/schooltool/app/help/configure.zcml:6
+#: /src/schooltool/app/help/schooltool.pt:6
+#: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:11
+#: /src/schooltool/contact/browser/templates/contacts_delete.pt:11
+#: /src/schooltool/email/browser/templates/email_container.pt:11
+#: /src/schooltool/email/browser/templates/email_delete.pt:11
+#: /src/schooltool/export/templates/import.pt:11
+#: /src/schooltool/person/browser/person-csvimport.pt:11
+#: /src/schooltool/person/browser/person_container_delete.pt:11
+#: /src/schooltool/person/browser/person_edit.pt:9
+#: /src/schooltool/person/browser/person_preferences.pt:9
+#: /src/schooltool/schoolyear/browser/templates/schoolyear.pt:11
+#: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:11
+#: /src/schooltool/skin/templates/container.pt:11
+#: /src/schooltool/skin/templates/container_delete.pt:11
+#: /src/schooltool/skin/templates/edit_form.pt:4
+#: /src/schooltool/skin/templates/error.pt:8
+#: /src/schooltool/skin/templates/generic_macros.pt:8
+#: /src/schooltool/skin/templates/notfound.pt:7
+#: /src/schooltool/skin/templates/simple_add.pt:5
+#: /src/schooltool/skin/templates/simple_edit.pt:7
+#: /src/schooltool/skin/templates/table_container.pt:11
+msgid "SchoolTool"
+msgstr "SchoolTool"
 
 #: /src/schooltool/app/browser/templates/cal_atom.pt:21
 msgid "Events for"
@@ -673,16 +767,12 @@ msgid "atom_more_info"
 msgstr "atom_lisätiedot"
 
 #: /src/schooltool/app/browser/templates/cal_atom.pt:56
-msgid "[Valid Atom]"
-msgstr "[Atom vahvistettu]"
-
-#: /src/schooltool/app/browser/templates/cal_atom.pt:56
 msgid "Validate my Atom feed"
 msgstr "Vahvista Atom-syöte"
 
-#: /src/schooltool/app/browser/templates/calendar_macros.pt:115
-msgid "Jump To ..."
-msgstr "Hyppää ..."
+#: /src/schooltool/app/browser/templates/cal_atom.pt:56
+msgid "[Valid Atom]"
+msgstr "[Atom vahvistettu]"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:30
 #: /src/schooltool/app/browser/templates/event_add.pt:235
@@ -693,6 +783,34 @@ msgstr "Viikoittainen"
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:91
 msgid "Calendar for ${title} - ${calendar_title}"
 msgstr "${title}:n kalenteri - ${calendar_title}"
+
+#: /src/schooltool/app/browser/templates/calendar_macros.pt:115
+msgid "Jump To ..."
+msgstr "Hyppää ..."
+
+#: /src/schooltool/app/browser/templates/calendar_overlay.pt:4
+#: /src/schooltool/timetable/browser/templates/calendar_overlay.pt:4
+msgid "Calendars"
+msgstr "Kalenterit"
+
+#: /src/schooltool/app/browser/templates/calendar_overlay.pt:13
+#: /src/schooltool/timetable/browser/templates/calendar_overlay.pt:27
+msgid "My Calendar"
+msgstr "Oma kalenteri"
+
+#: /src/schooltool/app/browser/templates/calendar_overlay.pt:31
+#: /src/schooltool/demographics/browser/personform.py:92
+#: /src/schooltool/demographics/browser/personform.py:270
+#: /src/schooltool/person/browser/person.py:170
+#: /src/schooltool/skin/form.py:55
+#: /src/schooltool/timetable/browser/event.py:82
+#: /src/schooltool/timetable/browser/templates/calendar_overlay.pt:93
+msgid "Apply"
+msgstr "Hyväksy"
+
+#: /src/schooltool/app/browser/templates/calendar_selection.pt:4
+msgid "Select calendars to display"
+msgstr "Valitse näytettävät kalenterit"
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:15
 msgid "Select additional calendars to display"
@@ -707,13 +825,122 @@ msgstr ""
 msgid "site-wide calendar"
 msgstr "sivustonlaajuinen kalenteri"
 
-#: /src/schooltool/app/browser/templates/calendar_selection.pt:4
-msgid "Select calendars to display"
-msgstr "Valitse näytettävät kalenterit"
+#: /src/schooltool/app/browser/templates/calendar_selection.pt:42
+#: /src/schooltool/app/browser/templates/index.pt:14
+#: /src/schooltool/course/browser/templates/section.pt:69
+#: /src/schooltool/dashboard/school.pt:22
+#: /src/schooltool/resource/browser/configure.zcml:169
+msgid "Resources"
+msgstr "Resurssit"
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:43
 msgid "There are no resources with calendars accessible to you."
 msgstr "Ei löydetty resursseja, joiden kalentereita pääsisit tarkastelemaan."
+
+#: /src/schooltool/app/browser/templates/edit_relationships.pt:26
+#: /src/schooltool/contact/browser/templates/manage_contacts.pt:27
+#: /src/schooltool/course/browser/templates/edit_relationships.pt:45
+msgid "R"
+msgstr "R"
+
+#: /src/schooltool/app/browser/templates/edit_relationships.pt:26
+#: /src/schooltool/contact/browser/templates/manage_contacts.pt:27
+#: /src/schooltool/course/browser/templates/edit_relationships.pt:45
+msgid "Remove"
+msgstr "Poista"
+
+#: /src/schooltool/app/browser/templates/edit_relationships.pt:37
+#: /src/schooltool/contact/browser/templates/manage_contacts.pt:38
+#: /src/schooltool/course/browser/templates/copy_sections.pt:62
+#: /src/schooltool/course/browser/templates/course_container.pt:20
+#: /src/schooltool/course/browser/templates/edit_relationships.pt:56
+#: /src/schooltool/course/browser/templates/link_section.pt:49
+#: /src/schooltool/course/browser/templates/section_container.pt:29
+#: /src/schooltool/demographics/browser/table.pt:34
+#: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:45
+#: /src/schooltool/skin/templates/container.pt:53
+#: /src/schooltool/skin/templates/table_container.pt:39
+#: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:15
+msgid "There are none."
+msgstr "Ei yhtään."
+
+#: /src/schooltool/app/browser/templates/edit_relationships.pt:48
+#: /src/schooltool/app/browser/templates/event_booking.pt:42
+#: /src/schooltool/app/browser/templates/event_booking.pt:57
+#: /src/schooltool/basicperson/browser/templates/person_edit.pt:10
+#: /src/schooltool/contact/browser/templates/manage_contacts.pt:58
+#: /src/schooltool/course/browser/templates/edit_relationships.pt:67
+#: /src/schooltool/skin/templates/view_macros.pt:161
+#: /src/schooltool/skin/templates/view_macros.pt:167
+#: /src/schooltool/skin/templates/view_macros.pt:174
+#: /src/schooltool/skin/templates/view_macros.pt:180
+#: /src/schooltool/skin/templates/view_macros.pt:187
+#: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:59
+msgid "A"
+msgstr "A"
+
+#. Default: "OK"
+#: /src/schooltool/app/browser/templates/edit_relationships.pt:65
+#: /src/schooltool/contact/browser/templates/manage_contacts.pt:75
+#: /src/schooltool/course/browser/templates/edit_relationships.pt:84
+msgid "ok-button"
+msgstr "Hyväksy"
+
+#: /src/schooltool/app/browser/templates/event.pt:15
+#: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:15
+msgid "All day event"
+msgstr "Kokopäiväinen tapahtuma"
+
+#: /src/schooltool/app/browser/templates/event.pt:20
+#: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:21
+msgid "This is a recurring event."
+msgstr "Tämä on toistuva tapahtuma."
+
+#: /src/schooltool/app/browser/templates/event.pt:33
+#: /src/schooltool/basicperson/browser/templates/person_view.pt:20
+#: /src/schooltool/course/browser/templates/course.pt:23
+#: /src/schooltool/person/browser/home.pt:34
+#: /src/schooltool/person/browser/person.pt:34
+#: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:34
+msgid "Details"
+msgstr "Yksityiskohdat"
+
+#: /src/schooltool/app/browser/templates/event.pt:37
+#: /src/schooltool/schoolyear/browser/schoolyear.py:120
+#: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:38
+msgid "Starts"
+msgstr "Alkaa"
+
+#: /src/schooltool/app/browser/templates/event.pt:42
+#: /src/schooltool/schoolyear/browser/schoolyear.py:122
+#: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:43
+msgid "Ends"
+msgstr "Päättyy"
+
+#: /src/schooltool/app/browser/templates/event.pt:53
+#: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:54
+msgid "Change the details of this event"
+msgstr "Muuta tapahtuman yksityiskohtia"
+
+#: /src/schooltool/app/browser/templates/event.pt:53
+#: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:54
+msgid "edit event"
+msgstr "muokkaa tapahtumaa"
+
+#: /src/schooltool/app/browser/templates/event.pt:64
+#: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:65
+msgid "Scheduled resources"
+msgstr "Aikataulutetut resurssit"
+
+#: /src/schooltool/app/browser/templates/event.pt:72
+#: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:73
+msgid "edit resources"
+msgstr "muokkaa resursseja"
+
+#: /src/schooltool/app/browser/templates/event.pt:80
+#: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:81
+msgid "delete event"
+msgstr "poista tapahtuma"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:137
 msgid "Event information"
@@ -772,6 +999,12 @@ msgstr "Toista"
 msgid "times"
 msgstr "kertaa"
 
+#: /src/schooltool/app/browser/templates/event_add.pt:306
+#: /src/schooltool/term/browser/templates/emergency_select.pt:31
+#: /src/schooltool/timetable/browser/templates/specialday_select.pt:31
+msgid "[popup calendar]"
+msgstr "[ponnahduskalenteri]"
+
 #: /src/schooltool/app/browser/templates/event_add.pt:324
 msgid "Repeat forever"
 msgstr "Toista rajattomasti"
@@ -779,6 +1012,46 @@ msgstr "Toista rajattomasti"
 #: /src/schooltool/app/browser/templates/event_add.pt:369
 msgid "Book resources"
 msgstr "Varaa resurssit"
+
+#: /src/schooltool/app/browser/templates/event_add.pt:375
+#: /src/schooltool/skin/templates/view_macros.pt:161
+#: /src/schooltool/skin/templates/view_macros.pt:167
+#: /src/schooltool/skin/templates/view_macros.pt:174
+#: /src/schooltool/skin/templates/view_macros.pt:180
+#: /src/schooltool/skin/templates/view_macros.pt:187
+msgid "Shortcut: Alt-A"
+msgstr "Komento: Alt-A"
+
+#. Default: "Cancel"
+#: /src/schooltool/app/browser/templates/event_add.pt:378
+#: /src/schooltool/basicperson/browser/templates/person_edit.pt:13
+#: /src/schooltool/contact/browser/templates/contacts_delete.pt:36
+#: /src/schooltool/course/browser/templates/link_section.pt:133
+#: /src/schooltool/email/browser/templates/email_delete.pt:34
+#: /src/schooltool/person/browser/person_container_delete.pt:37
+#: /src/schooltool/resource/browser/container_delete.pt:29
+#: /src/schooltool/sampledata/sampledata.pt:82
+#: /src/schooltool/schoolyear/browser/templates/term-delete.pt:29
+#: /src/schooltool/setupdata/setupdata.pt:25
+#: /src/schooltool/skin/templates/container_delete.pt:34
+#: /src/schooltool/skin/templates/view_macros.pt:200
+#: /src/schooltool/skin/templates/view_macros.pt:205
+#: /src/schooltool/term/browser/templates/emergency2.pt:42
+#: /src/schooltool/term/browser/templates/emergency_select.pt:41
+#: /src/schooltool/term/browser/templates/term-container-delete.pt:31
+#: /src/schooltool/timetable/browser/templates/schooltt-delete.pt:31
+#: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:83
+#: /src/schooltool/timetable/browser/templates/simpletts.pt:62
+#: /src/schooltool/timetable/browser/templates/specialday_change.pt:64
+#: /src/schooltool/timetable/browser/templates/specialday_select.pt:41
+#: /src/schooltool/timetable/browser/templates/timetable-container-delete.pt:29
+#: /src/schooltool/timetable/browser/templates/timetable-edit.pt:70
+msgid "cancel-button"
+msgstr "Peruuta"
+
+#: /src/schooltool/app/browser/templates/event_booking.pt:4
+msgid "Resource Booking"
+msgstr "Resurssien varaaminen"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:12
 msgid "Resource Booking for ${title}"
@@ -804,10 +1077,6 @@ msgstr "Tämä on toistuva tapahtuma!"
 msgid "Booked resources"
 msgstr "Varatut resurssit"
 
-#: /src/schooltool/app/browser/templates/event_booking.pt:4
-msgid "Resource Booking"
-msgstr "Resurssien varaaminen"
-
 #: /src/schooltool/app/browser/templates/event_booking.pt:42
 msgid "UnBook"
 msgstr "Poista varaus"
@@ -828,6 +1097,37 @@ msgstr "Sijainti: ${location}"
 msgid "Welcome to SchoolTool"
 msgstr "Tervetuloa SchoolTooliin"
 
+#: /src/schooltool/app/browser/templates/index.pt:12
+#: /src/schooltool/course/browser/templates/copy_sections.pt:86
+#: /src/schooltool/course/browser/templates/link_section.pt:62
+#: /src/schooltool/course/browser/templates/link_to_courses.pt:1
+#: /src/schooltool/course/browser/templates/section_container.pt:36
+#: /src/schooltool/course/help/configure.zcml:8
+#: /src/schooltool/course/help/course_container.pt:7
+#: /src/schooltool/course/security.zcml:73
+#: /src/schooltool/dashboard/term.pt:4
+msgid "Courses"
+msgstr "Kurssit"
+
+#: /src/schooltool/app/browser/templates/index.pt:13
+#: /src/schooltool/group/browser/configure.zcml:63
+#: /src/schooltool/group/browser/groupsviewlet.pt:4
+#: /src/schooltool/group/browser/link_to_groups.pt:1
+#: /src/schooltool/group/help/configure.zcml:8
+#: /src/schooltool/group/help/group_container.pt:6
+#: /src/schooltool/group/security.zcml:53
+msgid "Groups"
+msgstr "Ryhmät"
+
+#: /src/schooltool/app/browser/templates/index.pt:15
+#: /src/schooltool/dashboard/school.pt:4
+msgid "Levels"
+msgstr "Tasot"
+
+#: /src/schooltool/app/browser/templates/login.pt:8
+msgid "Your session has expired."
+msgstr "Istuntosi on vanhentunut."
+
 #: /src/schooltool/app/browser/templates/login.pt:13
 msgid ""
 "You are not allowed to access this page. You can click on the back button in "
@@ -841,15 +1141,31 @@ msgstr ""
 msgid "Please log in"
 msgstr "Kirjaudu sisään"
 
-#: /src/schooltool/app/browser/templates/login.pt:3
-#: /src/schooltool/app/browser/templates/menu_view.pt:3
-#: /src/schooltool/app/browser/configure.zcml:681
-msgid "Login"
-msgstr "Sisäänkirjautuminen"
-
 #: /src/schooltool/app/browser/templates/login.pt:35
 msgid "User Information"
 msgstr "Tietoja käyttäjästä"
+
+#: /src/schooltool/app/browser/templates/login.pt:38
+#: /src/schooltool/basicperson/browser/person.py:59
+#: /src/schooltool/basicperson/browser/person.py:60
+#: /src/schooltool/demographics/browser/personform.py:253
+#: /src/schooltool/demographics/browser/personform.py:254
+#: /src/schooltool/demographics/browser/table.py:67
+#: /src/schooltool/email/browser/email.py:108
+#: /src/schooltool/email/interfaces.py:99
+#: /src/schooltool/person/browser/person.py:286
+#: /src/schooltool/person/browser/person.py:287
+#: /src/schooltool/person/interfaces.py:60
+msgid "Username"
+msgstr "Käyttäjätunnus"
+
+#: /src/schooltool/app/browser/templates/login.pt:44
+#: /src/schooltool/basicperson/browser/person.py:64
+#: /src/schooltool/demographics/browser/personform.py:258
+#: /src/schooltool/person/browser/person.py:159
+#: /src/schooltool/person/browser/person.py:290
+msgid "Password"
+msgstr "Salasana"
 
 #: /src/schooltool/app/browser/templates/login.pt:57
 msgid "L"
@@ -859,18 +1175,14 @@ msgstr "L"
 msgid "Log in"
 msgstr "Kirjaudu sisään"
 
-#: /src/schooltool/app/browser/templates/login.pt:8
-msgid "Your session has expired."
-msgstr "Istuntosi on vanhentunut."
-
-#: /src/schooltool/app/browser/templates/recevent_delete.pt:19
-msgid "You are trying to delete a repeating event."
-msgstr "Yrität poistaa toistuvaa tapahtumaa."
-
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:4
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:14
 msgid "Deleting a repeating event (${event_title})"
 msgstr "Poistetaan toistuva tapahtuma (${event_title})"
+
+#: /src/schooltool/app/browser/templates/recevent_delete.pt:19
+msgid "You are trying to delete a repeating event."
+msgstr "Yrität poistaa toistuvaa tapahtumaa."
 
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:41
 msgid "Current"
@@ -884,14 +1196,48 @@ msgstr "Tulevaisuus"
 msgid "All"
 msgstr "Kaikki"
 
-#: /src/schooltool/app/browser/templates/simple_event_delete.pt:18
-msgid "Are you sure you want to delete this event?"
-msgstr "Haluatko varmasti poistaa tämän tapahtuman?"
+#: /src/schooltool/app/browser/templates/recevent_delete.pt:47
+#: /src/schooltool/basicperson/browser/demographics.py:153
+#: /src/schooltool/basicperson/browser/demographics.py:200
+#: /src/schooltool/basicperson/browser/person.py:200
+#: /src/schooltool/basicperson/browser/person.py:216
+#: /src/schooltool/contact/browser/contact.py:118
+#: /src/schooltool/contact/browser/contact.py:193
+#: /src/schooltool/course/browser/section.py:337
+#: /src/schooltool/demographics/browser/personform.py:107
+#: /src/schooltool/demographics/browser/personform.py:301
+#: /src/schooltool/email/browser/email.py:173
+#: /src/schooltool/email/browser/email.py:289
+#: /src/schooltool/email/browser/email.py:502
+#: /src/schooltool/person/browser/person.py:180
+#: /src/schooltool/schoolyear/browser/schoolyear.py:213
+#: /src/schooltool/schoolyear/browser/schoolyear.py:226
+#: /src/schooltool/skin/form.py:84
+#: /src/schooltool/term/browser/term.py:175
+#: /src/schooltool/term/browser/term.py:246
+#: /src/schooltool/timetable/browser/event.py:87
+#: /src/schooltool/timetable/browser/templates/ttwizard.pt:22
+#: /src/schooltool/timetable/browser/templates/ttwizard_choice.pt:19
+#: /src/schooltool/timetable/browser/templates/ttwizard_form.pt:22
+#: /src/schooltool/timetable/browser/templates/ttwizard_homeroom.pt:43
+#: /src/schooltool/timetable/browser/templates/ttwizard_period_order1.pt:32
+#: /src/schooltool/timetable/browser/templates/ttwizard_period_order2.pt:41
+#: /src/schooltool/timetable/browser/templates/ttwizard_slottimes.pt:34
+msgid "Cancel"
+msgstr "Peruuta"
 
 #: /src/schooltool/app/browser/templates/simple_event_delete.pt:4
 #: /src/schooltool/app/browser/templates/simple_event_delete.pt:13
 msgid "Deleting an event (${event_title})"
 msgstr "Poistetaan tapahtuma (${event_title})"
+
+#: /src/schooltool/app/browser/templates/simple_event_delete.pt:18
+msgid "Are you sure you want to delete this event?"
+msgstr "Haluatko varmasti poistaa tämän tapahtuman?"
+
+#: /src/schooltool/app/browser/templates/timetables-csvimport.pt:4
+msgid "Upload SchoolTool timetable as CSV"
+msgstr "Vie SchoolTool-aikataulu CSV-muodossa"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:20
 msgid "Import Timetable"
@@ -906,9 +1252,14 @@ msgstr ""
 "muodossa (Comma-Separated Values) toiseen sovellukseen tai koneeseen. "
 "Taulukon rakenne kuvataan alla."
 
-#: /src/schooltool/app/browser/templates/timetables-csvimport.pt:4
-msgid "Upload SchoolTool timetable as CSV"
-msgstr "Vie SchoolTool-aikataulu CSV-muodossa"
+#: /src/schooltool/app/browser/templates/timetables-csvimport.pt:54
+#: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:33
+#: /src/schooltool/course/browser/templates/course-csvimport.pt:31
+#: /src/schooltool/group/browser/group-csvimport.pt:29
+#: /src/schooltool/person/browser/person-csvimport.pt:33
+#: /src/schooltool/resource/browser/resource-csvimport.pt:29
+msgid "Example:"
+msgstr "Esimerkki:"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:83
 msgid ""
@@ -928,11 +1279,99 @@ msgstr ""
 "käsitellään, muut palkit ohitetaan. Voit tuoda saman tiedon monta kertaa "
 "ilman ongelmia."
 
-#: /src/schooltool/app/configure.zcml:336
+#: /src/schooltool/app/browser/templates/timetables-csvimport.pt:94
+#: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:48
+#: /src/schooltool/course/browser/section-member-csvimport.pt:25
+#: /src/schooltool/course/browser/templates/course-csvimport.pt:59
+#: /src/schooltool/group/browser/group-csvimport.pt:45
+#: /src/schooltool/group/browser/group-member-csvimport.pt:25
+#: /src/schooltool/person/browser/person-csvimport.pt:48
+#: /src/schooltool/resource/browser/resource-csvimport.pt:45
+msgid "Upload CSV File"
+msgstr "Vie CSV-tiedosto"
+
+#: /src/schooltool/app/browser/templates/timetables-csvimport.pt:101
+#: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:55
+#: /src/schooltool/course/browser/section-member-csvimport.pt:32
+#: /src/schooltool/course/browser/templates/course-csvimport.pt:66
+#: /src/schooltool/group/browser/group-csvimport.pt:52
+#: /src/schooltool/group/browser/group-member-csvimport.pt:32
+#: /src/schooltool/person/browser/person-csvimport.pt:55
+#: /src/schooltool/resource/browser/resource-csvimport.pt:52
+msgid "Charset:"
+msgstr "Merkistö:"
+
+#: /src/schooltool/app/browser/templates/timetables-csvimport.pt:103
+#: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:57
+#: /src/schooltool/course/browser/section-member-csvimport.pt:34
+#: /src/schooltool/course/browser/templates/course-csvimport.pt:68
+#: /src/schooltool/group/browser/group-csvimport.pt:54
+#: /src/schooltool/group/browser/group-member-csvimport.pt:34
+#: /src/schooltool/person/browser/person-csvimport.pt:57
+#: /src/schooltool/resource/browser/resource-csvimport.pt:54
+msgid "Unicode (UTF-8)"
+msgstr "Unicode (UTF‐8)"
+
+#: /src/schooltool/app/browser/templates/timetables-csvimport.pt:104
+#: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:58
+#: /src/schooltool/course/browser/section-member-csvimport.pt:35
+#: /src/schooltool/course/browser/templates/course-csvimport.pt:69
+#: /src/schooltool/group/browser/group-csvimport.pt:55
+#: /src/schooltool/group/browser/group-member-csvimport.pt:35
+#: /src/schooltool/person/browser/person-csvimport.pt:58
+#: /src/schooltool/resource/browser/resource-csvimport.pt:55
+msgid "Western (ISO-8859-1)"
+msgstr "Western (ISO-8859-1)"
+
+#: /src/schooltool/app/browser/templates/timetables-csvimport.pt:105
+#: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:59
+#: /src/schooltool/course/browser/section-member-csvimport.pt:36
+#: /src/schooltool/course/browser/templates/course-csvimport.pt:70
+#: /src/schooltool/group/browser/group-csvimport.pt:56
+#: /src/schooltool/group/browser/group-member-csvimport.pt:36
+#: /src/schooltool/person/browser/person-csvimport.pt:59
+#: /src/schooltool/resource/browser/resource-csvimport.pt:56
+msgid "Western (ISO-8859-15)"
+msgstr "Western (ISO-8859-15)"
+
+#: /src/schooltool/app/browser/templates/timetables-csvimport.pt:106
+#: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:60
+#: /src/schooltool/course/browser/section-member-csvimport.pt:37
+#: /src/schooltool/course/browser/templates/course-csvimport.pt:71
+#: /src/schooltool/group/browser/group-csvimport.pt:57
+#: /src/schooltool/group/browser/group-member-csvimport.pt:37
+#: /src/schooltool/person/browser/person-csvimport.pt:60
+#: /src/schooltool/resource/browser/resource-csvimport.pt:57
+msgid "Western (Windows-1252)"
+msgstr "Western (Windows-1252)"
+
+#: /src/schooltool/app/browser/templates/timetables-csvimport.pt:107
+#: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:61
+#: /src/schooltool/course/browser/section-member-csvimport.pt:38
+#: /src/schooltool/course/browser/templates/course-csvimport.pt:72
+#: /src/schooltool/group/browser/group-csvimport.pt:58
+#: /src/schooltool/group/browser/group-member-csvimport.pt:38
+#: /src/schooltool/person/browser/person-csvimport.pt:61
+#: /src/schooltool/resource/browser/resource-csvimport.pt:58
+msgid "Other (please specify)"
+msgstr "Muu (määrittele)"
+
+#: /src/schooltool/app/browser/templates/timetables-csvimport.pt:111
+#: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:65
+#: /src/schooltool/course/browser/section-member-csvimport.pt:42
+#: /src/schooltool/course/browser/templates/course-csvimport.pt:76
+#: /src/schooltool/group/browser/group-csvimport.pt:62
+#: /src/schooltool/group/browser/group-member-csvimport.pt:42
+#: /src/schooltool/person/browser/person-csvimport.pt:65
+#: /src/schooltool/resource/browser/resource-csvimport.pt:62
+msgid "Other charset: ${other_charset}"
+msgstr "Muu merkistö: ${other_charset}"
+
+#: /src/schooltool/app/configure.zcml:338
 msgid "Security (General)"
 msgstr "Turvallisuus (Yleinen)"
 
-#: /src/schooltool/app/configure.zcml:351
+#: /src/schooltool/app/configure.zcml:353
 msgid "Booking Resources"
 msgstr "Varataan resursseja"
 
@@ -1042,10 +1481,30 @@ msgstr "Organisaatio"
 msgid "Calendaring"
 msgstr "Kalenterointi"
 
-#: /src/schooltool/app/help/daily_calendar.pt:6
 #: /src/schooltool/app/help/configure.zcml:37
+#: /src/schooltool/app/help/daily_calendar.pt:6
 msgid "Daily Calendar"
 msgstr "Päivittäinen kalenteri"
+
+#: /src/schooltool/app/help/configure.zcml:47
+#: /src/schooltool/app/help/weekly_calendar.pt:6
+msgid "Weekly Calendar"
+msgstr "Viikottainen kalenteri"
+
+#: /src/schooltool/app/help/configure.zcml:57
+#: /src/schooltool/app/help/monthly_calendar.pt:6
+msgid "Monthly Calendar"
+msgstr "Kuukausittainen kalenteri"
+
+#: /src/schooltool/app/help/configure.zcml:67
+#: /src/schooltool/app/help/yearly_calendar.pt:6
+msgid "Yearly Calendar"
+msgstr "Vuosittainen kalenteri"
+
+#: /src/schooltool/app/help/event_add.pt:10
+#: /src/schooltool/app/help/event_edit.pt:10
+msgid "This form has a few issues:"
+msgstr "Tässä kaavakkeessa on muutama ongelma:"
 
 #: /src/schooltool/app/help/event_add.pt:12
 msgid ""
@@ -1058,20 +1517,8 @@ msgstr ""
 "tarvittavalle ajankohdalle ja valittava <code>Varaa resurssit</code> sivun "
 "alalaidasta."
 
-#: /src/schooltool/app/help/event_add.pt:6
-#: /src/schooltool/app/help/event_add.pt:9
-#: /src/schooltool/app/browser/configure.zcml:524
-#: /src/schooltool/app/help/configure.zcml:77
-msgid "Add Event"
-msgstr "Lisää tapahtuma"
-
-#: /src/schooltool/app/help/event_edit.pt:10
-#: /src/schooltool/app/help/event_add.pt:10
-msgid "This form has a few issues:"
-msgstr "Tässä kaavakkeessa on muutama ongelma:"
-
-#: /src/schooltool/app/help/event_edit.pt:14
 #: /src/schooltool/app/help/event_add.pt:16
+#: /src/schooltool/app/help/event_edit.pt:14
 msgid ""
 "The form ignores your preferences for time and date format. You must enter "
 "the event's start time in 24-hour or \"military\" time, and the date is "
@@ -1081,8 +1528,8 @@ msgstr ""
 "syöttää tapahtuman alkuaika 24-tuntisena ja päiväys tulee ilmoittaa vuosi-"
 "kuukausi-päivä muodossa."
 
-#: /src/schooltool/app/help/event_edit.pt:27
 #: /src/schooltool/app/help/event_add.pt:29
+#: /src/schooltool/app/help/event_edit.pt:27
 msgid ""
 "An \"all day\" event does not show up as a 24 hour event. It indicates that "
 "the day as a whole has some significance, like a birthday or holiday."
@@ -1091,8 +1538,8 @@ msgstr ""
 "että päivällä on yleisesti jokin tietty merkitys, kuten syntymäpäivä tai "
 "lomapäivä."
 
-#: /src/schooltool/app/help/event_edit.pt:30
 #: /src/schooltool/app/help/event_add.pt:32
+#: /src/schooltool/app/help/event_edit.pt:30
 msgid ""
 "\"Exception dates\" are specific dates a repeating event skips, such as "
 "holidays."
@@ -1100,31 +1547,33 @@ msgstr ""
 "\"Poikkeuspäivämäärät\" ovat erityisiä päivämääriä, kuten lomapäivät, jotka "
 "hyppäävät toistuvien tapahtumien yli."
 
-#: /src/schooltool/app/help/event_edit.pt:6
-#: /src/schooltool/app/help/event_edit.pt:9
-#: /src/schooltool/app/browser/configure.zcml:543
-#: /src/schooltool/app/help/configure.zcml:87
-msgid "Edit Event"
-msgstr "Muokkaa tapahtumaa"
-
-#: /src/schooltool/app/help/monthly_calendar.pt:6
-#: /src/schooltool/app/help/configure.zcml:57
-msgid "Monthly Calendar"
-msgstr "Kuukausittainen kalenteri"
-
 #: /src/schooltool/app/help/org.pt:6
 msgid "SchoolTool Organization"
 msgstr "SchoolToolin organisaatio"
 
-#: /src/schooltool/app/help/weekly_calendar.pt:6
-#: /src/schooltool/app/help/configure.zcml:47
-msgid "Weekly Calendar"
-msgstr "Viikottainen kalenteri"
+#: /src/schooltool/app/interfaces.py:43
+msgid "Form input is not a file object"
+msgstr "Kaavakesyöttö ei ole tiedosto."
 
-#: /src/schooltool/app/help/yearly_calendar.pt:6
-#: /src/schooltool/app/help/configure.zcml:67
-msgid "Yearly Calendar"
-msgstr "Vuosittainen kalenteri"
+#: /src/schooltool/app/interfaces.py:45
+msgid "Invalid text data"
+msgstr "Virheellinen tekstitieto"
+
+#: /src/schooltool/app/interfaces.py:46
+msgid "Invalid textual data"
+msgstr "Viallinen tekstitietue"
+
+#: /src/schooltool/app/interfaces.py:47
+msgid "Invalid unicode data"
+msgstr "Virheellinen unicode-tieto"
+
+#: /src/schooltool/app/interfaces.py:49
+msgid "Invalid floating point data"
+msgstr "Virheellinen desimaalitieto"
+
+#: /src/schooltool/app/interfaces.py:50
+msgid "Invalid datetime data"
+msgstr "Virheellinen aikatieto"
 
 #: /src/schooltool/app/interfaces.py:153
 msgid "Front Page Calendar"
@@ -1151,128 +1600,7 @@ msgstr ""
 "            omistajan nimeä kalenterinäkymässä.\n"
 "            "
 
-#: /src/schooltool/app/interfaces.py:43
-msgid "Form input is not a file object"
-msgstr "Kaavakesyöttö ei ole tiedosto."
-
-#: /src/schooltool/app/interfaces.py:45
-msgid "Invalid text data"
-msgstr "Virheellinen tekstitieto"
-
-#: /src/schooltool/app/interfaces.py:46
-msgid "Invalid textual data"
-msgstr "Viallinen tekstitietue"
-
-#: /src/schooltool/app/interfaces.py:47
-msgid "Invalid unicode data"
-msgstr "Virheellinen unicode-tieto"
-
-#: /src/schooltool/app/interfaces.py:49
-msgid "Invalid floating point data"
-msgstr "Virheellinen desimaalitieto"
-
-#: /src/schooltool/app/interfaces.py:50
-msgid "Invalid datetime data"
-msgstr "Virheellinen aikatieto"
-
-#: /src/schooltool/app/main.py:111
-msgid ""
-"\n"
-"No storage defined in the configuration file.\n"
-"\n"
-"If you're using the default configuration file, please edit it now and\n"
-"uncomment one of the ZODB storage sections.\n"
-msgstr ""
-"\n"
-"Säilytys ei ole määritelty asetustiedostossa.\n"
-"\n"
-"Jos käytät oletusasetustiedostoa, muokkaa sitä\n"
-"ja poista kommentti yhdestä ZODB-säilytysosiosta.\n"
-
-#: /src/schooltool/app/main.py:119
-msgid ""
-"\n"
-"This is not a SchoolTool 0.11 database file, aborting.\n"
-msgstr ""
-"\n"
-"Tämä ei ole SchoolTool 0.11 -tietokantatiedosto. Poistutaan.\n"
-
-#: /src/schooltool/app/main.py:124
-msgid ""
-"\n"
-"This is not a SchoolTool 0.10 database file, aborting.\n"
-"\n"
-"Please run the standalone database upgrade script.\n"
-msgstr ""
-"\n"
-"Tämä ei ole SchoolTool 0.10 -tietokantatiedosto. Poistutaan.\n"
-"\n"
-"Suorita muusta ohjelmistosta riippumaton tietokannan päivitys.\n"
-
-#: /src/schooltool/app/main.py:368
-msgid "Going to background, daemon pid %d"
-msgstr "Siirtyy taustaan, daemon pid %d"
-
-#: /src/schooltool/app/main.py:565
-#: /src/schooltool/app/main.py:609
-#: /src/schooltool/app/main.py:612
-msgid "%s: %s"
-msgstr "%s: %s"
-
-#: /src/schooltool/app/main.py:566
-msgid "Run %s -h for help."
-msgstr "Suorita %s -h ohjetiedoston käynnistämiseksi."
-
-#: /src/schooltool/app/main.py:578
-msgid "%s: daemon mode not supported on your operating system."
-msgstr "%s: käyttöjärjestelmäsi ei tue daemon-tilaa"
-
-#: /src/schooltool/app/main.py:707
-msgid "Startup time: %.3f sec real, %.3f sec CPU"
-msgstr "Aloitusaika: %.3f sek oikeaa, %.3f sec CPU"
-
-#. Default: ""
-#: /src/schooltool/app/main.py:741
-msgid ""
-"Could not initialize the database:\n"
-"%s"
-msgstr ""
-"Tietokannan käynnistys epäonnistui:\n"
-"%s"
-
-#: /src/schooltool/app/main.py:744
-msgid ""
-"\n"
-"Perhaps another %s instance is using it?"
-msgstr ""
-"\n"
-"Kenties toinen %s ohjelma käyttää sitä?"
-
-#: /src/schooltool/app/main.py:814
-msgid ""
-"Warning: could not find the reportlab library.\n"
-"PDF support disabled."
-msgstr ""
-"Varoitus: reportlab-kirjastoa ei löytynyt.\n"
-"PDF-tuki poissa käytöstä."
-
-#: /src/schooltool/app/main.py:819
-msgid ""
-"Warning: font directory '%s' does not exist.\n"
-"PDF support disabled."
-msgstr ""
-"Varoitus: fonttihakemisto '%s' ei ole olemassa.\n"
-"PDF-tuki poissa käytöstä."
-
-#: /src/schooltool/app/main.py:827
-msgid ""
-"Warning: font '%s' does not exist.\n"
-"PDF support disabled."
-msgstr ""
-"Varoitus: fonttia '%s' ei ole olemassa.\n"
-"PDF-tuki poissa käytöstä."
-
-#: /src/schooltool/app/main.py:97
+#: /src/schooltool/app/main.py:95
 msgid ""
 "\n"
 "Usage: %s [options]\n"
@@ -1301,284 +1629,176 @@ msgstr ""
 "  --hallintokäytössä pystyy tekemään vain hallintotöitä, älä käynnistä "
 "palvelinta\n"
 
+#: /src/schooltool/app/main.py:109
+msgid ""
+"\n"
+"No storage defined in the configuration file.\n"
+"\n"
+"If you're using the default configuration file, please edit it now and\n"
+"uncomment one of the ZODB storage sections.\n"
+msgstr ""
+"\n"
+"Säilytys ei ole määritelty asetustiedostossa.\n"
+"\n"
+"Jos käytät oletusasetustiedostoa, muokkaa sitä\n"
+"ja poista kommentti yhdestä ZODB-säilytysosiosta.\n"
+
+#: /src/schooltool/app/main.py:117
+msgid ""
+"\n"
+"This is not a SchoolTool 0.11 database file, aborting.\n"
+msgstr ""
+"\n"
+"Tämä ei ole SchoolTool 0.11 -tietokantatiedosto. Poistutaan.\n"
+
+#: /src/schooltool/app/main.py:122
+msgid ""
+"\n"
+"This is not a SchoolTool 0.10 database file, aborting.\n"
+"\n"
+"Please run the standalone database upgrade script.\n"
+msgstr ""
+"\n"
+"Tämä ei ole SchoolTool 0.10 -tietokantatiedosto. Poistutaan.\n"
+"\n"
+"Suorita muusta ohjelmistosta riippumaton tietokannan päivitys.\n"
+
+#: /src/schooltool/app/main.py:359
+msgid "Going to background, daemon pid %d"
+msgstr "Siirtyy taustaan, daemon pid %d"
+
+#: /src/schooltool/app/main.py:556
+#: /src/schooltool/app/main.py:600
+#: /src/schooltool/app/main.py:603
+msgid "%s: %s"
+msgstr "%s: %s"
+
+#: /src/schooltool/app/main.py:557
+msgid "Run %s -h for help."
+msgstr "Suorita %s -h ohjetiedoston käynnistämiseksi."
+
+#: /src/schooltool/app/main.py:569
+msgid "%s: daemon mode not supported on your operating system."
+msgstr "%s: käyttöjärjestelmäsi ei tue daemon-tilaa"
+
+#: /src/schooltool/app/main.py:698
+msgid "Startup time: %.3f sec real, %.3f sec CPU"
+msgstr "Aloitusaika: %.3f sek oikeaa, %.3f sec CPU"
+
+#. Default: ""
+#: /src/schooltool/app/main.py:732
+msgid ""
+"Could not initialize the database:\n"
+"%s"
+msgstr ""
+"Tietokannan käynnistys epäonnistui:\n"
+"%s"
+
+#: /src/schooltool/app/main.py:735
+msgid ""
+"\n"
+"Perhaps another %s instance is using it?"
+msgstr ""
+"\n"
+"Kenties toinen %s ohjelma käyttää sitä?"
+
+#: /src/schooltool/app/main.py:805
+msgid ""
+"Warning: could not find the reportlab library.\n"
+"PDF support disabled."
+msgstr ""
+"Varoitus: reportlab-kirjastoa ei löytynyt.\n"
+"PDF-tuki poissa käytöstä."
+
+#: /src/schooltool/app/main.py:810
+msgid ""
+"Warning: font directory '%s' does not exist.\n"
+"PDF support disabled."
+msgstr ""
+"Varoitus: fonttihakemisto '%s' ei ole olemassa.\n"
+"PDF-tuki poissa käytöstä."
+
+#: /src/schooltool/app/main.py:818
+msgid ""
+"Warning: font '%s' does not exist.\n"
+"PDF support disabled."
+msgstr ""
+"Varoitus: fonttia '%s' ei ole olemassa.\n"
+"PDF-tuki poissa käytöstä."
+
 #: /src/schooltool/app/membership.py:261
 #: /src/schooltool/group/browser/group.pt:16
 msgid "Members"
 msgstr "Jäsenet"
 
+#: /src/schooltool/basicperson/browser/configure.zcml:15
+#: /src/schooltool/basicperson/browser/configure.zcml:164
+#: /src/schooltool/basicperson/browser/configure.zcml:171
+#: /src/schooltool/basicperson/browser/configure.zcml:178
+#: /src/schooltool/contact/browser/configure.zcml:22
+#: /src/schooltool/contact/browser/configure.zcml:40
+#: /src/schooltool/demographics/browser/configure.zcml:22
+#: /src/schooltool/demographics/browser/table.py:100
+#: /src/schooltool/demographics/browser/table.py:196
+#: /src/schooltool/person/browser/configure.zcml:177
+#: /src/schooltool/schoolyear/browser/configure.zcml:94
+#: /src/schooltool/term/browser/configure.zcml:23
+msgid "Edit"
+msgstr "Muokkaa"
+
 #: /src/schooltool/basicperson/browser/configure.zcml:24
 msgid "Export Persons as XML"
 msgstr "Vie henkilöitä XML-muodossa"
 
-#: /src/schooltool/basicperson/browser/csvimport.py:45
-#: /src/schooltool/course/browser/csvimport.py:46
-#: /src/schooltool/course/browser/csvimport.py:127
+#: /src/schooltool/basicperson/browser/configure.zcml:92
+#: /src/schooltool/demographics/overrides.zcml:7
+#: /src/schooltool/person/browser/configure.zcml:169
+msgid "New Person"
+msgstr "Uusi henkilö"
+
+#: /src/schooltool/basicperson/browser/configure.zcml:113
+#: /src/schooltool/basicperson/security.zcml:13
+#: /src/schooltool/demographics/browser/personform.py:180
+msgid "Demographics"
+msgstr "Henkilötiedot"
+
+#: /src/schooltool/basicperson/browser/csvimport.py:44
+#: /src/schooltool/course/browser/csvimport.py:45
+#: /src/schooltool/course/browser/csvimport.py:126
 #: /src/schooltool/group/browser/csvimport.py:41
 #: /src/schooltool/group/browser/csvimport.py:72
-#: /src/schooltool/person/browser/csvimport.py:44
+#: /src/schooltool/person/browser/csvimport.py:43
 #: /src/schooltool/resource/browser/csvimport.py:46
 msgid "Insufficient data provided."
 msgstr "Tietoa ei annettu tarpeeksi."
 
-#: /src/schooltool/basicperson/browser/csvimport.py:49
-#: /src/schooltool/person/browser/csvimport.py:48
+#: /src/schooltool/basicperson/browser/csvimport.py:48
+#: /src/schooltool/person/browser/csvimport.py:47
 msgid "username may not be empty"
 msgstr "käyttäjätunnus ei saa olla tyhjä"
 
-#: /src/schooltool/basicperson/browser/csvimport.py:77
-#: /src/schooltool/basicperson/browser/person.py:109
-#: /src/schooltool/demographics/browser/personform.py:281
-#: /src/schooltool/person/browser/csvimport.py:71
+#: /src/schooltool/basicperson/browser/csvimport.py:76
+#: /src/schooltool/basicperson/browser/person.py:108
+#: /src/schooltool/demographics/browser/personform.py:280
+#: /src/schooltool/person/browser/csvimport.py:70
 msgid "Names cannot begin with '+' or '@' or contain '/'"
 msgstr "Nimet eivät voi alkaa merkillä '+' tai '@' tai sisältää merkkiä '/'"
 
-#: /src/schooltool/basicperson/browser/demographics.py:153
-#: /src/schooltool/basicperson/browser/demographics.py:200
-#: /src/schooltool/basicperson/browser/person.py:201
-#: /src/schooltool/basicperson/browser/person.py:217
-#: /src/schooltool/contact/browser/contact.py:118
-#: /src/schooltool/contact/browser/contact.py:193
-#: /src/schooltool/course/browser/section.py:337
-#: /src/schooltool/demographics/browser/personform.py:108
-#: /src/schooltool/demographics/browser/personform.py:302
-#: /src/schooltool/email/browser/email.py:173
-#: /src/schooltool/email/browser/email.py:289
-#: /src/schooltool/email/browser/email.py:502
-#: /src/schooltool/person/browser/person.py:180
-#: /src/schooltool/schoolyear/browser/schoolyear.py:209
-#: /src/schooltool/schoolyear/browser/schoolyear.py:222
-#: /src/schooltool/skin/form.py:84
-#: /src/schooltool/term/browser/term.py:175
-#: /src/schooltool/term/browser/term.py:246
-#: /src/schooltool/timetable/browser/event.py:87
-#: /src/schooltool/timetable/browser/templates/ttwizard_period_order2.pt:41
-#: /src/schooltool/timetable/browser/templates/ttwizard_homeroom.pt:43
-#: /src/schooltool/timetable/browser/templates/ttwizard_period_order1.pt:32
-#: /src/schooltool/timetable/browser/templates/ttwizard_slottimes.pt:34
-#: /src/schooltool/timetable/browser/templates/ttwizard.pt:22
-#: /src/schooltool/timetable/browser/templates/ttwizard_choice.pt:19
-#: /src/schooltool/timetable/browser/templates/ttwizard_form.pt:22
-#: /src/schooltool/app/browser/templates/recevent_delete.pt:47
-msgid "Cancel"
-msgstr "Peruuta"
-
-#: /src/schooltool/basicperson/browser/person.py:55
+#: /src/schooltool/basicperson/browser/person.py:54
 #: /src/schooltool/demographics/interfaces.py:209
 msgid "Advisor"
 msgstr "Neuvonantaja"
-
-#: /src/schooltool/basicperson/browser/person.py:60
-#: /src/schooltool/basicperson/browser/person.py:61
-#: /src/schooltool/demographics/browser/personform.py:254
-#: /src/schooltool/demographics/browser/personform.py:255
-#: /src/schooltool/demographics/browser/table.py:67
-#: /src/schooltool/email/browser/email.py:108
-#: /src/schooltool/email/interfaces.py:99
-#: /src/schooltool/person/browser/person.py:286
-#: /src/schooltool/person/browser/person.py:287
-#: /src/schooltool/person/interfaces.py:60
-#: /src/schooltool/app/browser/templates/login.pt:38
-msgid "Username"
-msgstr "Käyttäjätunnus"
-
-#: /src/schooltool/basicperson/browser/person.py:65
-#: /src/schooltool/demographics/browser/personform.py:259
-#: /src/schooltool/person/browser/person.py:159
-#: /src/schooltool/person/browser/person.py:290
-#: /src/schooltool/app/browser/templates/login.pt:44
-msgid "Password"
-msgstr "Salasana"
-
-#: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:11
-#: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:11
-#: /src/schooltool/schoolyear/browser/templates/schoolyear.pt:11
-#: /src/schooltool/export/templates/import.pt:11
-#: /src/schooltool/contact/browser/templates/contacts_delete.pt:11
-#: /src/schooltool/person/browser/person_edit.pt:9
-#: /src/schooltool/person/browser/person-csvimport.pt:11
-#: /src/schooltool/person/browser/person_preferences.pt:9
-#: /src/schooltool/person/browser/person_container_delete.pt:11
-#: /src/schooltool/email/browser/templates/email_delete.pt:11
-#: /src/schooltool/email/browser/templates/email_container.pt:11
-#: /src/schooltool/skin/templates/table_container.pt:11
-#: /src/schooltool/skin/templates/container.pt:11
-#: /src/schooltool/skin/templates/container_delete.pt:11
-#: /src/schooltool/skin/templates/simple_add.pt:5
-#: /src/schooltool/skin/templates/edit_form.pt:4
-#: /src/schooltool/skin/templates/simple_edit.pt:7
-#: /src/schooltool/skin/templates/generic_macros.pt:8
-#: /src/schooltool/skin/templates/error.pt:8
-#: /src/schooltool/skin/templates/notfound.pt:7
-#: /src/schooltool/app/browser/templates/cal_atom.pt:14
-#: /src/schooltool/app/help/schooltool.pt:6
-#: /src/schooltool/app/help/configure.zcml:6
-#: /src/schooltool/app/configure.zcml:330
-msgid "SchoolTool"
-msgstr "SchoolTool"
-
-#: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:33
-#: /src/schooltool/resource/browser/resource-csvimport.pt:29
-#: /src/schooltool/person/browser/person-csvimport.pt:33
-#: /src/schooltool/course/browser/templates/course-csvimport.pt:31
-#: /src/schooltool/group/browser/group-csvimport.pt:29
-#: /src/schooltool/app/browser/templates/timetables-csvimport.pt:54
-msgid "Example:"
-msgstr "Esimerkki:"
 
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:4
 #: /src/schooltool/person/browser/person-csvimport.pt:4
 msgid "Upload SchoolTool persons as CSV"
 msgstr "Vie SchoolToolin henkilöt CSV-muodossa"
 
-#: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:48
-#: /src/schooltool/resource/browser/resource-csvimport.pt:45
-#: /src/schooltool/person/browser/person-csvimport.pt:48
-#: /src/schooltool/course/browser/section-member-csvimport.pt:25
-#: /src/schooltool/course/browser/templates/course-csvimport.pt:59
-#: /src/schooltool/group/browser/group-csvimport.pt:45
-#: /src/schooltool/group/browser/group-member-csvimport.pt:25
-#: /src/schooltool/app/browser/templates/timetables-csvimport.pt:94
-msgid "Upload CSV File"
-msgstr "Vie CSV-tiedosto"
-
-#: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:55
-#: /src/schooltool/resource/browser/resource-csvimport.pt:52
-#: /src/schooltool/person/browser/person-csvimport.pt:55
-#: /src/schooltool/course/browser/section-member-csvimport.pt:32
-#: /src/schooltool/course/browser/templates/course-csvimport.pt:66
-#: /src/schooltool/group/browser/group-csvimport.pt:52
-#: /src/schooltool/group/browser/group-member-csvimport.pt:32
-#: /src/schooltool/app/browser/templates/timetables-csvimport.pt:101
-msgid "Charset:"
-msgstr "Merkistö:"
-
-#: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:57
-#: /src/schooltool/resource/browser/resource-csvimport.pt:54
-#: /src/schooltool/person/browser/person-csvimport.pt:57
-#: /src/schooltool/course/browser/section-member-csvimport.pt:34
-#: /src/schooltool/course/browser/templates/course-csvimport.pt:68
-#: /src/schooltool/group/browser/group-csvimport.pt:54
-#: /src/schooltool/group/browser/group-member-csvimport.pt:34
-#: /src/schooltool/app/browser/templates/timetables-csvimport.pt:103
-msgid "Unicode (UTF-8)"
-msgstr "Unicode (UTF‐8)"
-
-#: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:58
-#: /src/schooltool/resource/browser/resource-csvimport.pt:55
-#: /src/schooltool/person/browser/person-csvimport.pt:58
-#: /src/schooltool/course/browser/section-member-csvimport.pt:35
-#: /src/schooltool/course/browser/templates/course-csvimport.pt:69
-#: /src/schooltool/group/browser/group-csvimport.pt:55
-#: /src/schooltool/group/browser/group-member-csvimport.pt:35
-#: /src/schooltool/app/browser/templates/timetables-csvimport.pt:104
-msgid "Western (ISO-8859-1)"
-msgstr "Western (ISO-8859-1)"
-
-#: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:59
-#: /src/schooltool/resource/browser/resource-csvimport.pt:56
-#: /src/schooltool/person/browser/person-csvimport.pt:59
-#: /src/schooltool/course/browser/section-member-csvimport.pt:36
-#: /src/schooltool/course/browser/templates/course-csvimport.pt:70
-#: /src/schooltool/group/browser/group-csvimport.pt:56
-#: /src/schooltool/group/browser/group-member-csvimport.pt:36
-#: /src/schooltool/app/browser/templates/timetables-csvimport.pt:105
-msgid "Western (ISO-8859-15)"
-msgstr "Western (ISO-8859-15)"
-
-#: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:60
-#: /src/schooltool/resource/browser/resource-csvimport.pt:57
-#: /src/schooltool/person/browser/person-csvimport.pt:60
-#: /src/schooltool/course/browser/section-member-csvimport.pt:37
-#: /src/schooltool/course/browser/templates/course-csvimport.pt:71
-#: /src/schooltool/group/browser/group-csvimport.pt:57
-#: /src/schooltool/group/browser/group-member-csvimport.pt:37
-#: /src/schooltool/app/browser/templates/timetables-csvimport.pt:106
-msgid "Western (Windows-1252)"
-msgstr "Western (Windows-1252)"
-
-#: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:61
-#: /src/schooltool/resource/browser/resource-csvimport.pt:58
-#: /src/schooltool/person/browser/person-csvimport.pt:61
-#: /src/schooltool/course/browser/section-member-csvimport.pt:38
-#: /src/schooltool/course/browser/templates/course-csvimport.pt:72
-#: /src/schooltool/group/browser/group-csvimport.pt:58
-#: /src/schooltool/group/browser/group-member-csvimport.pt:38
-#: /src/schooltool/app/browser/templates/timetables-csvimport.pt:107
-msgid "Other (please specify)"
-msgstr "Muu (määrittele)"
-
-#: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:65
-#: /src/schooltool/resource/browser/resource-csvimport.pt:62
-#: /src/schooltool/person/browser/person-csvimport.pt:65
-#: /src/schooltool/course/browser/section-member-csvimport.pt:42
-#: /src/schooltool/course/browser/templates/course-csvimport.pt:76
-#: /src/schooltool/group/browser/group-csvimport.pt:62
-#: /src/schooltool/group/browser/group-member-csvimport.pt:42
-#: /src/schooltool/app/browser/templates/timetables-csvimport.pt:111
-msgid "Other charset: ${other_charset}"
-msgstr "Muu merkistö: ${other_charset}"
-
-#: /src/schooltool/basicperson/browser/templates/person_edit.pt:10
-#: /src/schooltool/contact/browser/templates/manage_contacts.pt:58
-#: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:59
-#: /src/schooltool/course/browser/templates/edit_relationships.pt:67
-#: /src/schooltool/skin/templates/view_macros.pt:161
-#: /src/schooltool/skin/templates/view_macros.pt:167
-#: /src/schooltool/skin/templates/view_macros.pt:174
-#: /src/schooltool/skin/templates/view_macros.pt:180
-#: /src/schooltool/skin/templates/view_macros.pt:187
-#: /src/schooltool/app/browser/templates/edit_relationships.pt:48
-#: /src/schooltool/app/browser/templates/event_booking.pt:42
-#: /src/schooltool/app/browser/templates/event_booking.pt:57
-msgid "A"
-msgstr "A"
-
-#. Default: "Cancel"
-#: /src/schooltool/basicperson/browser/templates/person_edit.pt:13
-#: /src/schooltool/term/browser/templates/term-container-delete.pt:31
-#: /src/schooltool/term/browser/templates/emergency2.pt:42
-#: /src/schooltool/term/browser/templates/emergency_select.pt:41
-#: /src/schooltool/schoolyear/browser/templates/term-delete.pt:29
-#: /src/schooltool/resource/browser/container_delete.pt:29
-#: /src/schooltool/contact/browser/templates/contacts_delete.pt:36
-#: /src/schooltool/timetable/browser/templates/simpletts.pt:62
-#: /src/schooltool/timetable/browser/templates/timetable-edit.pt:70
-#: /src/schooltool/timetable/browser/templates/timetable-container-delete.pt:29
-#: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:83
-#: /src/schooltool/timetable/browser/templates/specialday_select.pt:41
-#: /src/schooltool/timetable/browser/templates/specialday_change.pt:64
-#: /src/schooltool/timetable/browser/templates/schooltt-delete.pt:31
-#: /src/schooltool/person/browser/person_container_delete.pt:37
-#: /src/schooltool/sampledata/sampledata.pt:82
-#: /src/schooltool/setupdata/setupdata.pt:25
-#: /src/schooltool/course/browser/templates/link_section.pt:133
-#: /src/schooltool/email/browser/templates/email_delete.pt:34
-#: /src/schooltool/skin/templates/container_delete.pt:34
-#: /src/schooltool/skin/templates/view_macros.pt:200
-#: /src/schooltool/skin/templates/view_macros.pt:205
-#: /src/schooltool/app/browser/templates/event_add.pt:378
-msgid "cancel-button"
-msgstr "Peruuta"
-
-#: /src/schooltool/basicperson/browser/templates/person_view.pt:20
-#: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:34
-#: /src/schooltool/person/browser/person.pt:34
-#: /src/schooltool/person/browser/home.pt:34
-#: /src/schooltool/course/browser/templates/course.pt:23
-#: /src/schooltool/app/browser/templates/event.pt:33
-msgid "Details"
-msgstr "Yksityiskohdat"
-
 #: /src/schooltool/basicperson/browser/templates/person_view.pt:4
-#: /src/schooltool/person/browser/person.pt:4
 #: /src/schooltool/person/browser/home.pt:4
+#: /src/schooltool/person/browser/person.pt:4
 msgid "Person info: ${title}"
 msgstr "Henkilötiedot: ${title}"
-
-#: /src/schooltool/basicperson/interfaces.py:125
-#: /src/schooltool/demographics/interfaces.py:194
-msgid "ID"
-msgstr "Tunnus"
 
 #: /src/schooltool/basicperson/interfaces.py:38
 #: /src/schooltool/contact/interfaces.py:40
@@ -1587,9 +1807,9 @@ msgid "Prefix"
 msgstr "Etuliite"
 
 #: /src/schooltool/basicperson/interfaces.py:43
+#: /src/schooltool/contact/browser/templates/filter.pt:5
 #: /src/schooltool/contact/interfaces.py:42
 #: /src/schooltool/demographics/interfaces.py:50
-#: /src/schooltool/contact/browser/templates/filter.pt:5
 msgid "First name"
 msgstr "Etunimi:"
 
@@ -1600,9 +1820,9 @@ msgid "Middle name"
 msgstr "Keskinimi"
 
 #: /src/schooltool/basicperson/interfaces.py:53
+#: /src/schooltool/contact/browser/templates/filter.pt:12
 #: /src/schooltool/contact/interfaces.py:46
 #: /src/schooltool/demographics/interfaces.py:60
-#: /src/schooltool/contact/browser/templates/filter.pt:12
 msgid "Last name"
 msgstr "Sukunimi:"
 
@@ -1624,13 +1844,13 @@ msgstr "Sukupuoli"
 
 #: /src/schooltool/basicperson/interfaces.py:69
 #: /src/schooltool/demographics/interfaces.py:124
-msgid "male"
-msgstr "mies"
+msgid "female"
+msgstr "nainen"
 
 #: /src/schooltool/basicperson/interfaces.py:69
 #: /src/schooltool/demographics/interfaces.py:124
-msgid "female"
-msgstr "nainen"
+msgid "male"
+msgstr "mies"
 
 #: /src/schooltool/basicperson/interfaces.py:74
 #: /src/schooltool/demographics/interfaces.py:129
@@ -1640,6 +1860,11 @@ msgstr "Syntymäaika"
 #: /src/schooltool/basicperson/interfaces.py:75
 msgid "(yyyy-mm-dd)"
 msgstr "(vvvv-kk-pp)"
+
+#: /src/schooltool/basicperson/interfaces.py:125
+#: /src/schooltool/demographics/interfaces.py:194
+msgid "ID"
+msgstr "Tunnus"
 
 #: /src/schooltool/basicperson/person.py:83
 #: /src/schooltool/contact/browser/contact.py:297
@@ -1655,51 +1880,7 @@ msgstr "Sukunimi"
 msgid "Commendation"
 msgstr "Kunniamaininta"
 
-#: /src/schooltool/common/configure.zcml:101
-msgid "Edit Calendar Overlays"
-msgstr "Muokkaa kalenterinäkymää"
-
-#: /src/schooltool/common/configure.zcml:98
-#: /src/schooltool/app/browser/configure.zcml:233
-#: /src/schooltool/app/browser/configure.zcml:514
-#: /src/schooltool/course/security.zcml:93
-#: /src/schooltool/course/security.zcml:127
-#: /src/schooltool/course/browser/configure.zcml:58
-#: /src/schooltool/course/browser/configure.zcml:69
-#: /src/schooltool/course/browser/configure.zcml:103
-#: /src/schooltool/course/browser/configure.zcml:113
-#: /src/schooltool/course/browser/configure.zcml:123
-#: /src/schooltool/course/browser/configure.zcml:133
-#: /src/schooltool/course/browser/configure.zcml:143
-#: /src/schooltool/person/security.zcml:93
-#: /src/schooltool/person/browser/configure.zcml:157
-#: /src/schooltool/person/browser/configure.zcml:187
-#: /src/schooltool/contact/browser/configure.zcml:6
-#: /src/schooltool/contact/browser/configure.zcml:31
-#: /src/schooltool/contact/browser/configure.zcml:88
-#: /src/schooltool/demographics/browser/configure.zcml:13
-#: /src/schooltool/group/security.zcml:72
-#: /src/schooltool/group/browser/configure.zcml:16
-#: /src/schooltool/group/browser/configure.zcml:85
-#: /src/schooltool/resource/browser/configure.zcml:62
-#: /src/schooltool/term/security.zcml:35
-#: /src/schooltool/term/browser/configure.zcml:14
-#: /src/schooltool/schoolyear/security.zcml:31
-#: /src/schooltool/schoolyear/browser/configure.zcml:101
-#: /src/schooltool/timetable/security.zcml:32
-#: /src/schooltool/timetable/browser/configure.zcml:52
-#: /src/schooltool/timetable/browser/configure.zcml:62
-#: /src/schooltool/timetable/browser/configure.zcml:93
-#: /src/schooltool/timetable/browser/configure.zcml:111
-#: /src/schooltool/timetable/browser/configure.zcml:120
-#: /src/schooltool/basicperson/browser/configure.zcml:6
-#: /src/schooltool/basicperson/browser/configure.zcml:185
-#: /src/schooltool/basicperson/browser/configure.zcml:192
-#: /src/schooltool/basicperson/browser/configure.zcml:199
-msgid "View"
-msgstr "Näytä"
-
-#: /src/schooltool/common/configure.zcml:99
+#: /src/schooltool/common/configure.zcml:90
 #: /src/schooltool/course/browser/configure.zcml:25
 #: /src/schooltool/course/browser/configure.zcml:180
 #: /src/schooltool/group/browser/configure.zcml:38
@@ -1709,33 +1890,61 @@ msgstr "Näytä"
 msgid "Edit Info"
 msgstr "Muuta tietoa"
 
-#: /src/schooltool/contact/browser/templates/manage_contacts.pt:27
-#: /src/schooltool/course/browser/templates/edit_relationships.pt:45
-#: /src/schooltool/app/browser/templates/edit_relationships.pt:26
-msgid "R"
-msgstr "R"
+#: /src/schooltool/common/configure.zcml:92
+msgid "Edit Calendar Overlays"
+msgstr "Muokkaa kalenterinäkymää"
 
-#: /src/schooltool/contact/browser/templates/manage_contacts.pt:27
-#: /src/schooltool/course/browser/templates/edit_relationships.pt:45
-#: /src/schooltool/app/browser/templates/edit_relationships.pt:26
-msgid "Remove"
-msgstr "Poista"
+#: /src/schooltool/contact/browser/templates/contacts_delete.pt:15
+#: /src/schooltool/person/browser/person_container_delete.pt:15
+#: /src/schooltool/resource/browser/container_delete.pt:10
+#: /src/schooltool/skin/templates/container_delete.pt:15
+msgid "Are you sure you want to delete selected items?"
+msgstr "Haluatko varmasti poistaa valitut kohteet?"
 
-#. Default: "OK"
-#: /src/schooltool/contact/browser/templates/manage_contacts.pt:75
-#: /src/schooltool/course/browser/templates/edit_relationships.pt:84
-#: /src/schooltool/app/browser/templates/edit_relationships.pt:65
-msgid "ok-button"
-msgstr "Hyväksy"
+#: /src/schooltool/contact/browser/templates/contacts_delete.pt:21
+#: /src/schooltool/email/browser/templates/email_delete.pt:21
+#: /src/schooltool/person/browser/person_container_delete.pt:21
+#: /src/schooltool/resource/browser/container_delete.pt:16
+#: /src/schooltool/schoolyear/browser/templates/term-delete.pt:16
+#: /src/schooltool/skin/templates/container_delete.pt:21
+#: /src/schooltool/term/browser/templates/term-container-delete.pt:16
+#: /src/schooltool/timetable/browser/templates/schooltt-delete.pt:16
+#: /src/schooltool/timetable/browser/templates/timetable-container-delete.pt:16
+msgid "You have not selected any items."
+msgstr "Et ole valinnut yhtään kohdetta."
+
+#: /src/schooltool/contact/browser/templates/filter.pt:21
+#: /src/schooltool/person/browser/person_filter.pt:11
+#: /src/schooltool/resource/browser/resource_filter.pt:37
+#: /src/schooltool/skin/templates/filter.pt:4
+#: /src/schooltool/skin/templates/view_macros.pt:147
+#: /src/schooltool/table/templates/filter.pt:4
+msgid "Find Now"
+msgstr "Hae nyt"
+
+#: /src/schooltool/contact/browser/templates/filter.pt:24
+#: /src/schooltool/person/browser/person_filter.pt:13
+#: /src/schooltool/resource/browser/resource_filter.pt:39
+#: /src/schooltool/sampledata/sampledata.pt:74
+#: /src/schooltool/skin/templates/filter.pt:6
+#: /src/schooltool/skin/templates/view_macros.pt:149
+#: /src/schooltool/table/templates/filter.pt:6
+msgid "Clear"
+msgstr "Tyhjennä"
+
+#: /src/schooltool/contact/browser/templates/view_contacts.pt:36
+#: /src/schooltool/contact/interfaces.py:68
+msgid "Email"
+msgstr "Sähköposti"
 
 #: /src/schooltool/contact/contact.py:210
 #: /src/schooltool/course/browser/section.py:538
-#: /src/schooltool/course/section.py:283
-#: /src/schooltool/course/section.py:293
-#: /src/schooltool/course/browser/templates/section.pt:79
 #: /src/schooltool/course/browser/templates/copy_sections.pt:93
 #: /src/schooltool/course/browser/templates/link_section.pt:69
+#: /src/schooltool/course/browser/templates/section.pt:79
 #: /src/schooltool/course/browser/templates/section_container.pt:42
+#: /src/schooltool/course/section.py:283
+#: /src/schooltool/course/section.py:293
 msgid "Instructors"
 msgstr "Opettajat"
 
@@ -1754,11 +1963,6 @@ msgstr "Kunta"
 msgid "Postal code"
 msgstr "Postinumero"
 
-#: /src/schooltool/contact/interfaces.py:68
-#: /src/schooltool/contact/browser/templates/view_contacts.pt:36
-msgid "Email"
-msgstr "Sähköposti"
-
 #: /src/schooltool/contact/interfaces.py:73
 #: /src/schooltool/demographics/interfaces.py:273
 msgid "Home phone"
@@ -1769,19 +1973,26 @@ msgstr "Kotipuhelin"
 msgid "Work phone"
 msgstr "Työpuhelin"
 
+#: /src/schooltool/course/browser/configure.zcml:96
+msgid "New Course"
+msgstr "Uusi kurssi"
+
 #: /src/schooltool/course/browser/configure.zcml:180
 msgid "Edit Section Information"
 msgstr "Muokkaa osion tietoja"
 
-#: /src/schooltool/course/browser/configure.zcml:96
-msgid "New Course"
-msgstr "Uusi kurssi"
+#: /src/schooltool/course/browser/configure.zcml:265
+#: /src/schooltool/course/browser/templates/course.pt:33
+#: /src/schooltool/course/security.zcml:107
+#: /src/schooltool/dashboard/term.pt:10
+msgid "Sections"
+msgstr "Osiot"
 
 #: /src/schooltool/course/browser/course.py:65
 msgid "Course index"
 msgstr "Kurssi-indeksi"
 
-#: /src/schooltool/course/browser/csvimport.py:50
+#: /src/schooltool/course/browser/csvimport.py:49
 #: /src/schooltool/group/browser/csvimport.py:45
 #: /src/schooltool/resource/browser/csvimport.py:50
 msgid "Titles may not be empty"
@@ -1812,25 +2023,45 @@ msgstr "Nykyinen koko"
 msgid "Upload schooltool courses as CSV"
 msgstr "Vie SchoolTool-kurssit CSV-muodossa"
 
+#: /src/schooltool/course/browser/templates/course.pt:52
+#: /src/schooltool/demographics/browser/nameinfo_view.pt:11
+#: /src/schooltool/person/browser/home.pt:11
+#: /src/schooltool/person/browser/person.pt:11
+msgid "photo"
+msgstr "valokuva"
+
 #: /src/schooltool/course/browser/templates/course.pt:71
 msgid "students"
 msgstr "opiskelijaa"
+
+#: /src/schooltool/course/browser/templates/course_container.pt:28
+#: /src/schooltool/demographics/browser/search.pt:30
+#: /src/schooltool/demographics/browser/table.pt:23
+#: /src/schooltool/email/browser/templates/email_container.pt:33
+#: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:29
+#: /src/schooltool/skin/templates/container.pt:28
+#: /src/schooltool/skin/templates/table_container.pt:28
+msgid "Showing ${count} of ${total} items"
+msgstr "Näytetään ${count}, yhteensä ${total}"
+
+#: /src/schooltool/course/browser/templates/course_edit.pt:22
+#: /src/schooltool/course/browser/templates/section_edit.pt:23
+#: /src/schooltool/skin/templates/simple_add.pt:28
+#: /src/schooltool/skin/templates/simple_edit.pt:29
+msgid "There are ${num_errors} input errors."
+msgstr "%{num_errors} syötevirhettä"
 
 #: /src/schooltool/course/browser/templates/coursesviewlet.pt:4
 msgid "Sections Taught"
 msgstr "Opetetut osiot"
 
-#: /src/schooltool/course/browser/templates/section.pt:100
-msgid "edit individuals"
-msgstr "muokkaa yksilöitä"
+#: /src/schooltool/course/browser/templates/section.pt:58
+msgid "Change the name or description of this section."
+msgstr "Muuta osion nimeä tai kuvausta."
 
 #: /src/schooltool/course/browser/templates/section.pt:58
 msgid "edit info"
 msgstr "muokkaa tietoa"
-
-#: /src/schooltool/course/browser/templates/section.pt:58
-msgid "Change the name or description of this section."
-msgstr "Muuta osion nimeä tai kuvausta."
 
 #: /src/schooltool/course/browser/templates/section.pt:86
 msgid "Change the instructors for this section."
@@ -1840,20 +2071,24 @@ msgstr "Muuta tämän osion opettajaa"
 msgid "edit instructors"
 msgstr "muokkaa opettajia"
 
+#: /src/schooltool/course/browser/templates/section.pt:100
+msgid "edit individuals"
+msgstr "muokkaa yksilöitä"
+
 #: /src/schooltool/course/browser/templates/section_container.pt:39
 msgid "Section"
 msgstr "Osio"
 
-#: /src/schooltool/course/browser/templates/section_edit.pt:23
-#: /src/schooltool/course/browser/templates/course_edit.pt:22
-#: /src/schooltool/skin/templates/simple_add.pt:28
-#: /src/schooltool/skin/templates/simple_edit.pt:29
-msgid "There are ${num_errors} input errors."
-msgstr "%{num_errors} syötevirhettä"
-
-#: /src/schooltool/course/interfaces.py:102
-msgid "Description of the section."
-msgstr "Osion kuvaus."
+#: /src/schooltool/course/browser/templates/section_edit.pt:97
+#: /src/schooltool/term/browser/term.py:154
+#: /src/schooltool/timetable/browser/templates/ttwizard.pt:20
+#: /src/schooltool/timetable/browser/templates/ttwizard_form.pt:20
+#: /src/schooltool/timetable/browser/templates/ttwizard_homeroom.pt:41
+#: /src/schooltool/timetable/browser/templates/ttwizard_period_order1.pt:30
+#: /src/schooltool/timetable/browser/templates/ttwizard_period_order2.pt:39
+#: /src/schooltool/timetable/browser/templates/ttwizard_slottimes.pt:32
+msgid "Next"
+msgstr "Seuraava"
 
 #: /src/schooltool/course/interfaces.py:38
 msgid "Title of the course."
@@ -1879,10 +2114,25 @@ msgstr ""
 msgid "Title for the section."
 msgstr "Osion nimi."
 
+#: /src/schooltool/course/interfaces.py:102
+msgid "Description of the section."
+msgstr "Osion kuvaus."
+
 #. Default: ""
 #: /src/schooltool/course/section.py:88
 msgid "${instructors} -- ${section_title}"
 msgstr "${instructors} -- ${section_title}"
+
+#: /src/schooltool/course/security.zcml:100
+#: /src/schooltool/course/security.zcml:134
+#: /src/schooltool/group/security.zcml:79
+#: /src/schooltool/person/security.zcml:100
+#: /src/schooltool/schoolyear/security.zcml:38
+#: /src/schooltool/term/security.zcml:42
+#: /src/schooltool/timetable/browser/templates/specialday_change.pt:62
+#: /src/schooltool/timetable/security.zcml:39
+msgid "Modify"
+msgstr "Muokkaa"
 
 #: /src/schooltool/dashboard/dashboard.pt:62
 #: /src/schooltool/dashboard/dashboard.pt:66
@@ -1902,43 +2152,11 @@ msgstr "Paino"
 msgid "Activity Categories"
 msgstr "Aktiviteettikategoriat"
 
-#: /src/schooltool/dashboard/school.pt:22
-#: /src/schooltool/course/browser/templates/section.pt:69
-#: /src/schooltool/app/browser/templates/calendar_selection.pt:42
-#: /src/schooltool/app/browser/templates/index.pt:14
-#: /src/schooltool/resource/browser/configure.zcml:169
-msgid "Resources"
-msgstr "Resurssit"
-
-#: /src/schooltool/dashboard/school.pt:4
-#: /src/schooltool/app/browser/templates/index.pt:15
-msgid "Levels"
-msgstr "Tasot"
-
-#: /src/schooltool/dashboard/term.pt:10
-#: /src/schooltool/course/browser/templates/course.pt:33
-#: /src/schooltool/course/security.zcml:107
-#: /src/schooltool/course/browser/configure.zcml:265
-msgid "Sections"
-msgstr "Osiot"
-
 #: /src/schooltool/dashboard/term.pt:16
-#: /src/schooltool/term/security.zcml:19
 #: /src/schooltool/term/help/configure.zcml:18
+#: /src/schooltool/term/security.zcml:19
 msgid "Terms"
 msgstr "Lukukaudet"
-
-#: /src/schooltool/dashboard/term.pt:4
-#: /src/schooltool/course/browser/templates/copy_sections.pt:86
-#: /src/schooltool/course/browser/templates/link_section.pt:62
-#: /src/schooltool/course/browser/templates/section_container.pt:36
-#: /src/schooltool/course/browser/templates/link_to_courses.pt:1
-#: /src/schooltool/course/help/course_container.pt:7
-#: /src/schooltool/app/browser/templates/index.pt:12
-#: /src/schooltool/course/security.zcml:73
-#: /src/schooltool/course/help/configure.zcml:8
-msgid "Courses"
-msgstr "Kurssit"
 
 #: /src/schooltool/demographics/browser/configure.zcml:156
 msgid "Schooltool Person Menu"
@@ -1978,118 +2196,55 @@ msgstr "hätätila3"
 msgid "N"
 msgstr "N"
 
-#: /src/schooltool/demographics/browser/nameinfo_view.pt:11
-#: /src/schooltool/person/browser/person.pt:11
-#: /src/schooltool/person/browser/home.pt:11
-#: /src/schooltool/course/browser/templates/course.pt:52
-msgid "photo"
-msgstr "valokuva"
+#: /src/schooltool/demographics/browser/demographics_macros.pt:4
+#: /src/schooltool/demographics/browser/personform.py:96
+msgid "Apply and Next"
+msgstr "Hyväksy ja seuraava"
+
+#: /src/schooltool/demographics/browser/display_form.pt:3
+#: /src/schooltool/demographics/browser/nameinfo_view.pt:3
+#: /src/schooltool/demographics/browser/schooldata_view.pt:3
+#: /src/schooltool/demographics/browser/table.py:101
+#: /src/schooltool/demographics/browser/table.py:205
+msgid "Display"
+msgstr "Näyttö"
 
 #. Default: ""
-#: /src/schooltool/demographics/browser/personform.py:149
+#: /src/schooltool/demographics/browser/personform.py:148
 msgid "Change name information for ${fullname}"
 msgstr "Muuta nimen ${fullname} tietoja"
 
-#: /src/schooltool/demographics/browser/personform.py:165
+#: /src/schooltool/demographics/browser/personform.py:164
 msgid "Change name"
 msgstr "Muuta nimi"
 
 #. Default: ""
-#: /src/schooltool/demographics/browser/personform.py:173
+#: /src/schooltool/demographics/browser/personform.py:172
 msgid "Change demographics for ${fullname}"
 msgstr "Muokkaa henkilötietoja henkilölle: ${fullname}"
 
-#: /src/schooltool/demographics/browser/personform.py:181
-#: /src/schooltool/basicperson/security.zcml:13
-#: /src/schooltool/basicperson/browser/configure.zcml:113
-msgid "Demographics"
-msgstr "Henkilötiedot"
-
-#: /src/schooltool/demographics/browser/personform.py:199
+#: /src/schooltool/demographics/browser/personform.py:198
 msgid "School data"
 msgstr "Koulutiedot"
 
-#: /src/schooltool/demographics/browser/personform.py:274
+#: /src/schooltool/demographics/browser/personform.py:273
 #: /src/schooltool/person/browser/person.py:324
 msgid "This username is already used!"
 msgstr "Tämä käyttäjätunnus on jo käytössä."
 
-#: /src/schooltool/demographics/browser/personform.py:334
+#: /src/schooltool/demographics/browser/personform.py:333
 msgid "Invalid teacher. Possible causes: deleted or renamed."
 msgstr ""
 "Virheellinen opettaja. Mahdollisia syitä: uudelleen nimetty tai poistettu."
 
-#: /src/schooltool/demographics/browser/personform.py:366
+#: /src/schooltool/demographics/browser/personform.py:365
 msgid "Invalid group. Possible causes: deleted or renamed."
 msgstr ""
 "Virheellinen ryhmä. Mahdollisia syitä: uudelleen nimetty tai poistettu."
 
-#: /src/schooltool/demographics/browser/personform.py:93
-#: /src/schooltool/demographics/browser/personform.py:271
-#: /src/schooltool/person/browser/person.py:170
-#: /src/schooltool/skin/form.py:55
-#: /src/schooltool/timetable/browser/event.py:82
-#: /src/schooltool/timetable/browser/templates/calendar_overlay.pt:93
-#: /src/schooltool/app/browser/templates/calendar_overlay.pt:31
-msgid "Apply"
-msgstr "Hyväksy"
-
-#: /src/schooltool/demographics/browser/personform.py:97
-#: /src/schooltool/demographics/browser/demographics_macros.pt:4
-msgid "Apply and Next"
-msgstr "Hyväksy ja seuraava"
-
-#: /src/schooltool/demographics/browser/search.pt:30
-#: /src/schooltool/demographics/browser/table.pt:23
-#: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:29
-#: /src/schooltool/course/browser/templates/course_container.pt:28
-#: /src/schooltool/email/browser/templates/email_container.pt:33
-#: /src/schooltool/skin/templates/table_container.pt:28
-#: /src/schooltool/skin/templates/container.pt:28
-msgid "Showing ${count} of ${total} items"
-msgstr "Näytetään ${count}, yhteensä ${total}"
-
 #: /src/schooltool/demographics/browser/search.pt:42
 msgid "There were no results."
 msgstr "Ei vastaavuuksia."
-
-#: /src/schooltool/demographics/browser/table.pt:34
-#: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:45
-#: /src/schooltool/contact/browser/templates/manage_contacts.pt:38
-#: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:15
-#: /src/schooltool/course/browser/templates/course_container.pt:20
-#: /src/schooltool/course/browser/templates/copy_sections.pt:62
-#: /src/schooltool/course/browser/templates/link_section.pt:49
-#: /src/schooltool/course/browser/templates/section_container.pt:29
-#: /src/schooltool/course/browser/templates/edit_relationships.pt:56
-#: /src/schooltool/skin/templates/table_container.pt:39
-#: /src/schooltool/skin/templates/container.pt:53
-#: /src/schooltool/app/browser/templates/edit_relationships.pt:37
-msgid "There are none."
-msgstr "Ei yhtään."
-
-#: /src/schooltool/demographics/browser/table.py:100
-#: /src/schooltool/demographics/browser/table.py:196
-#: /src/schooltool/person/browser/configure.zcml:177
-#: /src/schooltool/contact/browser/configure.zcml:22
-#: /src/schooltool/contact/browser/configure.zcml:40
-#: /src/schooltool/demographics/browser/configure.zcml:22
-#: /src/schooltool/term/browser/configure.zcml:23
-#: /src/schooltool/schoolyear/browser/configure.zcml:94
-#: /src/schooltool/basicperson/browser/configure.zcml:15
-#: /src/schooltool/basicperson/browser/configure.zcml:164
-#: /src/schooltool/basicperson/browser/configure.zcml:171
-#: /src/schooltool/basicperson/browser/configure.zcml:178
-msgid "Edit"
-msgstr "Muokkaa"
-
-#: /src/schooltool/demographics/browser/table.py:101
-#: /src/schooltool/demographics/browser/table.py:205
-#: /src/schooltool/demographics/browser/display_form.pt:3
-#: /src/schooltool/demographics/browser/nameinfo_view.pt:3
-#: /src/schooltool/demographics/browser/schooldata_view.pt:3
-msgid "Display"
-msgstr "Näyttö"
 
 #: /src/schooltool/demographics/browser/table.py:73
 #: /src/schooltool/demographics/interfaces.py:76
@@ -2110,6 +2265,38 @@ msgstr "Ilmoittautuminen"
 #: /src/schooltool/demographics/browser/table.py:90
 msgid "Modified"
 msgstr "Muokattu"
+
+#: /src/schooltool/demographics/interfaces.py:45
+msgid "Prefix such as Mr., Mrs."
+msgstr "Etuliite kuten herra tai rouva"
+
+#: /src/schooltool/demographics/interfaces.py:71
+msgid "Name by which the student prefers to be called"
+msgstr "Nimi, jolla opiskelija haluaa tulla kutsutuksi"
+
+#: /src/schooltool/demographics/interfaces.py:81
+#: /src/schooltool/person/browser/person.py:298
+#: /src/schooltool/person/interfaces.py:55
+msgid "Photo"
+msgstr "Valokuva"
+
+#: /src/schooltool/demographics/interfaces.py:83
+#: /src/schooltool/person/browser/person.py:300
+#: /src/schooltool/person/interfaces.py:57
+msgid "Photo (in JPEG format)"
+msgstr "Valokuva (JPEG-muodossa)"
+
+#: /src/schooltool/demographics/interfaces.py:96
+msgid "American Indian or Alaska Native"
+msgstr "Amerikan intiaani tai Alaskan alkuperäisasukas"
+
+#: /src/schooltool/demographics/interfaces.py:97
+msgid "Asian"
+msgstr "Aasialainen"
+
+#: /src/schooltool/demographics/interfaces.py:98
+msgid "Black or African American"
+msgstr "Musta"
 
 #: /src/schooltool/demographics/interfaces.py:100
 msgid "White"
@@ -2213,9 +2400,9 @@ msgid "Cell phone"
 msgstr "Matkapuhelin"
 
 #: /src/schooltool/demographics/interfaces.py:288
-#: /src/schooltool/resource/interfaces.py:55
-#: /src/schooltool/note/notes.pt:2
 #: /src/schooltool/note/configure.zcml:94
+#: /src/schooltool/note/notes.pt:2
+#: /src/schooltool/resource/interfaces.py:56
 msgid "Notes"
 msgstr "Muistiinpanot"
 
@@ -2231,38 +2418,6 @@ msgstr "Nimen kokotekstihaku"
 msgid "Student ID"
 msgstr "Opiskelijanumero"
 
-#: /src/schooltool/demographics/interfaces.py:45
-msgid "Prefix such as Mr., Mrs."
-msgstr "Etuliite kuten herra tai rouva"
-
-#: /src/schooltool/demographics/interfaces.py:71
-msgid "Name by which the student prefers to be called"
-msgstr "Nimi, jolla opiskelija haluaa tulla kutsutuksi"
-
-#: /src/schooltool/demographics/interfaces.py:81
-#: /src/schooltool/person/browser/person.py:298
-#: /src/schooltool/person/interfaces.py:55
-msgid "Photo"
-msgstr "Valokuva"
-
-#: /src/schooltool/demographics/interfaces.py:83
-#: /src/schooltool/person/browser/person.py:300
-#: /src/schooltool/person/interfaces.py:57
-msgid "Photo (in JPEG format)"
-msgstr "Valokuva (JPEG-muodossa)"
-
-#: /src/schooltool/demographics/interfaces.py:96
-msgid "American Indian or Alaska Native"
-msgstr "Amerikan intiaani tai Alaskan alkuperäisasukas"
-
-#: /src/schooltool/demographics/interfaces.py:97
-msgid "Asian"
-msgstr "Aasialainen"
-
-#: /src/schooltool/demographics/interfaces.py:98
-msgid "Black or African American"
-msgstr "Musta"
-
 #: /src/schooltool/demographics/overrides.zcml:22
 msgid "Search"
 msgstr "Haku"
@@ -2271,37 +2426,32 @@ msgstr "Haku"
 msgid "Surname"
 msgstr "Sukunimi"
 
+#: /src/schooltool/devmode/configure.zcml:38
+#: /src/schooltool/devmode/devmode.pt:19
+msgid "API Docs"
+msgstr "API-dokumentit"
+
+#: /src/schooltool/devmode/configure.zcml:50
+#: /src/schooltool/devmode/devmode.pt:20
+msgid "Sample data"
+msgstr "Näytetieto"
+
+#: /src/schooltool/devmode/configure.zcml:62
+#: /src/schooltool/devmode/devmode.pt:21
+msgid "Setup data"
+msgstr "Asennustiedot"
+
 #: /src/schooltool/devmode/devmode.pt:11
 msgid "Developer Tools"
 msgstr "Kehitystyökalut"
-
-#: /src/schooltool/devmode/devmode.pt:17
-#: /src/schooltool/app/browser/configure.zcml:687
-#: /src/schooltool/app/browser/configure.zcml:774
-msgid "Errors"
-msgstr "Virheet"
 
 #: /src/schooltool/devmode/devmode.pt:18
 msgid "Introspector"
 msgstr "Itsehavainnoija"
 
-#: /src/schooltool/devmode/devmode.pt:19
-#: /src/schooltool/devmode/configure.zcml:38
-msgid "API Docs"
-msgstr "API-dokumentit"
-
-#: /src/schooltool/devmode/devmode.pt:20
-#: /src/schooltool/devmode/configure.zcml:50
-msgid "Sample data"
-msgstr "Näytetieto"
-
-#: /src/schooltool/devmode/devmode.pt:21
-#: /src/schooltool/devmode/configure.zcml:62
-msgid "Setup data"
-msgstr "Asennustiedot"
-
 #: /src/schooltool/email/browser/email.py:284
 #: /src/schooltool/note/notes.pt:17
+#: /src/schooltool/timetable/browser/configure.zcml:62
 #: /src/schooltool/timetable/browser/templates/timetable_list.pt:28
 msgid "Delete"
 msgstr "Poista"
@@ -2322,8 +2472,8 @@ msgstr "Uusi ryhmä"
 msgid "Add/Remove Members"
 msgstr "Lisää/Poista jäsen"
 
-#: /src/schooltool/group/browser/group-csvimport.pt:21
 #: /src/schooltool/group/browser/configure.zcml:104
+#: /src/schooltool/group/browser/group-csvimport.pt:21
 msgid "Import Groups"
 msgstr "Tuo ryhmät"
 
@@ -2332,25 +2482,12 @@ msgid "Upload SchoolTool groups as CSV"
 msgstr "Vie SchoolTool-ryhmät CSV-muodossa"
 
 #: /src/schooltool/group/browser/group.pt:20
-msgid "edit members"
-msgstr "muokkaa jäseniä"
-
-#: /src/schooltool/group/browser/group.pt:20
 msgid "Change the people who are members of this group."
 msgstr "Muuta tämän ryhmän jäseniä"
 
-#. Default: ""
-#: /src/schooltool/group/browser/group.py:123
-msgid "Members of ${group}"
-msgstr "Ryhmän ${group} jäsenet"
-
-#: /src/schooltool/group/browser/group.py:124
-msgid "Current Members"
-msgstr "Tämänhetkiset jäsenet"
-
-#: /src/schooltool/group/browser/group.py:125
-msgid "Add Members"
-msgstr "Lisää jäseniä"
+#: /src/schooltool/group/browser/group.pt:20
+msgid "edit members"
+msgstr "muokkaa jäseniä"
 
 #: /src/schooltool/group/browser/group.py:70
 msgid "Group index"
@@ -2369,23 +2506,26 @@ msgstr "Tämänhetkiset ryhmät"
 msgid "Available Groups"
 msgstr "Vapaat ryhmät"
 
-#: /src/schooltool/group/browser/groupsviewlet.pt:15
-msgid "edit groups"
-msgstr "muokkaa ryhmiä"
+#. Default: ""
+#: /src/schooltool/group/browser/group.py:123
+msgid "Members of ${group}"
+msgstr "Ryhmän ${group} jäsenet"
+
+#: /src/schooltool/group/browser/group.py:124
+msgid "Current Members"
+msgstr "Tämänhetkiset jäsenet"
+
+#: /src/schooltool/group/browser/group.py:125
+msgid "Add Members"
+msgstr "Lisää jäseniä"
 
 #: /src/schooltool/group/browser/groupsviewlet.pt:15
 msgid "Manage this person's memberships"
 msgstr "Hallinnoi tämän henkilön jäsenyyksiä"
 
-#: /src/schooltool/group/browser/link_to_groups.pt:1
-#: /src/schooltool/group/browser/groupsviewlet.pt:4
-#: /src/schooltool/group/help/group_container.pt:6
-#: /src/schooltool/app/browser/templates/index.pt:13
-#: /src/schooltool/group/security.zcml:53
-#: /src/schooltool/group/help/configure.zcml:8
-#: /src/schooltool/group/browser/configure.zcml:63
-msgid "Groups"
-msgstr "Ryhmät"
+#: /src/schooltool/group/browser/groupsviewlet.pt:15
+msgid "edit groups"
+msgstr "muokkaa ryhmiä"
 
 #: /src/schooltool/group/help/group_container.pt:8
 msgid ""
@@ -2433,6 +2573,10 @@ msgstr "Ryhmän nimike"
 msgid "Description of the group."
 msgstr "Ryhmän kuvaus"
 
+#: /src/schooltool/group/security.zcml:5
+msgid "Everyone can view group lists."
+msgstr "Kaikki voivat katsoa ryhmäluetteloita."
+
 #: /src/schooltool/group/security.zcml:10
 msgid "Everyone can view group information."
 msgstr "Kaikki voivat tarkastella ryhmän tietoja."
@@ -2445,10 +2589,6 @@ msgstr "Kaikki voivat katsoa ryhmän kalentereita."
 msgid "Group members can edit group calendars."
 msgstr "Ryhmän jäsenet voivat muokata ryhmän kalentereita."
 
-#: /src/schooltool/group/security.zcml:5
-msgid "Everyone can view group lists."
-msgstr "Kaikki voivat katsoa ryhmäluetteloita."
-
 #: /src/schooltool/help/configure.zcml:47
 msgid "Contextual Help"
 msgstr "Asiayhteysohjeet"
@@ -2457,13 +2597,13 @@ msgstr "Asiayhteysohjeet"
 msgid "Help"
 msgstr "Ohje"
 
-#: /src/schooltool/note/configure.zcml:100
-msgid "Notes (Rest)"
-msgstr "Muistiinpanot (Muut)"
-
 #: /src/schooltool/note/configure.zcml:68
 msgid "New Note"
 msgstr "Uusi muistiinpano"
+
+#: /src/schooltool/note/configure.zcml:100
+msgid "Notes (Rest)"
+msgstr "Muistiinpanot (Muut)"
 
 #: /src/schooltool/note/interfaces.py:43
 msgid "Title of the note."
@@ -2473,6 +2613,10 @@ msgstr "Muistiinpanon nimike."
 #: /src/schooltool/note/note_add.pt:24
 msgid "Privacy"
 msgstr "Yksityisyys"
+
+#: /src/schooltool/note/note_add.pt:4
+msgid "Add note"
+msgstr "Lisää muistiinpano"
 
 #: /src/schooltool/note/note_add.pt:13
 msgid "Note"
@@ -2486,23 +2630,28 @@ msgstr "Kuka voi nähdä muistiinpanon"
 msgid "Private"
 msgstr "Yksityinen"
 
-#: /src/schooltool/note/note_add.pt:4
-msgid "Add note"
-msgstr "Lisää muistiinpano"
-
 #: /src/schooltool/note/notes.pt:8
 msgid "( p )"
 msgstr "( p )"
 
-#: /src/schooltool/person/browser/configure.zcml:169
-#: /src/schooltool/basicperson/browser/configure.zcml:92
-#: /src/schooltool/demographics/overrides.zcml:7
-msgid "New Person"
-msgstr "Uusi henkilö"
-
-#: /src/schooltool/person/browser/csvimport.py:52
+#: /src/schooltool/person/browser/csvimport.py:51
 msgid "fullname may not be empty"
 msgstr "kokonimi ei saa olla tyhjä"
+
+#: /src/schooltool/person/browser/home.pt:15
+#: /src/schooltool/person/browser/person.pt:15
+msgid "Username:"
+msgstr "Käyttäjänimi:"
+
+#: /src/schooltool/person/browser/home.pt:18
+#: /src/schooltool/person/browser/person.pt:18
+msgid "Change this person's name, picture, or password"
+msgstr "Muuta henkilön nimeä, kuvaa tai salasanaa"
+
+#: /src/schooltool/person/browser/home.pt:18
+#: /src/schooltool/person/browser/person.pt:18
+msgid "edit name"
+msgstr "muokkaa nimeä"
 
 #: /src/schooltool/person/browser/person-csvimport.pt:29
 msgid ""
@@ -2511,21 +2660,6 @@ msgid ""
 msgstr ""
 "CSV-tiedon <strong>täytyy</strong> sisältää käyttäjänimi ja koko nimi. "
 "Vaihtoehtoisen salasanan <strong>voi</strong> myös lisätä."
-
-#: /src/schooltool/person/browser/person.pt:15
-#: /src/schooltool/person/browser/home.pt:15
-msgid "Username:"
-msgstr "Käyttäjänimi:"
-
-#: /src/schooltool/person/browser/person.pt:18
-#: /src/schooltool/person/browser/home.pt:18
-msgid "edit name"
-msgstr "muokkaa nimeä"
-
-#: /src/schooltool/person/browser/person.pt:18
-#: /src/schooltool/person/browser/home.pt:18
-msgid "Change this person's name, picture, or password"
-msgstr "Muuta henkilön nimeä, kuvaa tai salasanaa"
 
 #: /src/schooltool/person/browser/person.py:168
 msgid "Edit password"
@@ -2586,11 +2720,6 @@ msgstr "Muokkaa henkilöä"
 msgid "All groups"
 msgstr "Kaikki ryhmät"
 
-#: /src/schooltool/person/browser/person_preferences.pt:28
-#: /src/schooltool/app/browser/templates/application_preferences.pt:34
-msgid "Calendar Preferences"
-msgstr "Kalenteriasetukset"
-
 #: /src/schooltool/person/browser/person_preferences.pt:4
 msgid "Edit person preferences"
 msgstr "Muokkaa henkilön asetuksia"
@@ -2649,6 +2778,10 @@ msgstr "Näytä jaksot"
 msgid "Show period names in daily view"
 msgstr "Näytä jaksojen nimet päivänäkymässä"
 
+#: /src/schooltool/person/security.zcml:5
+msgid "Everyone can view the list of persons"
+msgstr "Kaikki voivat tarkastella henkilöluetteloa"
+
 #: /src/schooltool/person/security.zcml:10
 msgid "Everyone can view info of persons"
 msgstr "Kaikki voivat tarkastella henkilöiden tietoja"
@@ -2661,13 +2794,13 @@ msgstr "Henkilöt voivat itse asettaa asetuksensa"
 msgid "Persons can change their own passwords"
 msgstr "Henkilöt voivat muokata omia salasanojaan"
 
-#: /src/schooltool/person/security.zcml:5
-msgid "Everyone can view the list of persons"
-msgstr "Kaikki voivat tarkastella henkilöluetteloa"
-
 #: /src/schooltool/relationship/configure.zcml:38
 msgid "Relationships"
 msgstr "Suhteet"
+
+#: /src/schooltool/resource/browser/configure.zcml:84
+msgid "Edit Resource Information"
+msgstr "Muokkaa resurssin tietoa"
 
 #: /src/schooltool/resource/browser/configure.zcml:115
 msgid "Edit Location Information"
@@ -2693,21 +2826,14 @@ msgstr "Uusi sijainti"
 msgid "New Equipment"
 msgstr "Uusi varuste"
 
-#: /src/schooltool/resource/browser/configure.zcml:84
-msgid "Edit Resource Information"
-msgstr "Muokkaa resurssin tietoa"
-
-#: /src/schooltool/resource/browser/container_delete.pt:10
-#: /src/schooltool/contact/browser/templates/contacts_delete.pt:15
-#: /src/schooltool/person/browser/person_container_delete.pt:15
-#: /src/schooltool/skin/templates/container_delete.pt:15
-msgid "Are you sure you want to delete selected items?"
-msgstr "Haluatko varmasti poistaa valitut kohteet?"
-
-#: /src/schooltool/resource/browser/resource-csvimport.pt:21
 #: /src/schooltool/resource/browser/configure.zcml:232
+#: /src/schooltool/resource/browser/resource-csvimport.pt:21
 msgid "Import Resources"
 msgstr "Tuo resursseja"
+
+#: /src/schooltool/resource/browser/resource-csvimport.pt:4
+msgid "Upload schooltool resources as CSV"
+msgstr "Vie SchoolTool-resurssit CSV-muodossa"
 
 #: /src/schooltool/resource/browser/resource-csvimport.pt:24
 msgid ""
@@ -2719,78 +2845,100 @@ msgstr ""
 "<strong>voi</strong> sisältää vaihtoehtoisen resurssin kuvauksen. Kaikki muu "
 "tieto hylätään."
 
-#: /src/schooltool/resource/browser/resource-csvimport.pt:4
-msgid "Upload schooltool resources as CSV"
-msgstr "Vie SchoolTool-resurssit CSV-muodossa"
-
 #: /src/schooltool/resource/browser/resource.py:56
 msgid "Resource index"
 msgstr "Resurssien indeksi"
-
-#: /src/schooltool/resource/browser/resource_filter.pt:37
-#: /src/schooltool/contact/browser/templates/filter.pt:21
-#: /src/schooltool/person/browser/person_filter.pt:11
-#: /src/schooltool/skin/templates/view_macros.pt:147
-#: /src/schooltool/skin/templates/filter.pt:4
-#: /src/schooltool/table/templates/filter.pt:4
-msgid "Find Now"
-msgstr "Hae nyt"
-
-#: /src/schooltool/resource/browser/resource_filter.pt:39
-#: /src/schooltool/contact/browser/templates/filter.pt:24
-#: /src/schooltool/person/browser/person_filter.pt:13
-#: /src/schooltool/sampledata/sampledata.pt:74
-#: /src/schooltool/skin/templates/view_macros.pt:149
-#: /src/schooltool/skin/templates/filter.pt:6
-#: /src/schooltool/table/templates/filter.pt:6
-msgid "Clear"
-msgstr "Tyhjennä"
 
 #: /src/schooltool/resource/help/resource_help.pt:6
 msgid "Resource Help"
 msgstr "Resurssien ohjeet"
 
-#: /src/schooltool/resource/interfaces.py:100
+#: /src/schooltool/resource/interfaces.py:42
+msgid "Title of the resource."
+msgstr "Resurssin nimike."
+
+#: /src/schooltool/resource/interfaces.py:45
+msgid "Resource Type"
+msgstr "Resurssin tyyppi"
+
+#: /src/schooltool/resource/interfaces.py:46
+msgid "Type of resource"
+msgstr "Resurssin tyyppi"
+
+#: /src/schooltool/resource/interfaces.py:53
+msgid "Description of the resource."
+msgstr "Resurssin kuvaus."
+
+#: /src/schooltool/resource/interfaces.py:58
+msgid "Notes for the resource."
+msgstr "Muistiinpanot resurssille"
+
+#: /src/schooltool/resource/interfaces.py:81
+msgid "Location Type"
+msgstr "Sijainnin tyyppi"
+
+#: /src/schooltool/resource/interfaces.py:82
+msgid "Type of location (i.e. computer lab, class room, etc.)"
+msgstr "Sijainnin tyyppi (esim. tietokoneluokka, luokkahuone jne.)"
+
+#: /src/schooltool/resource/interfaces.py:87
+#: /src/schooltool/resource/types.py:83
+msgid "Capacity"
+msgstr "Paikkojen lukumäärä"
+
+#: /src/schooltool/resource/interfaces.py:88
+msgid "Capacity of the room"
+msgstr "Huoneen paikkojen määrä"
+
+#: /src/schooltool/resource/interfaces.py:96
+msgid "Equipment Type"
+msgstr "Varusteen tyyppi"
+
+#: /src/schooltool/resource/interfaces.py:97
+msgid "Type of equipment (i.e. camcorder, computer, etc.)"
+msgstr "Varusteen tyyppi (esim. kamera, tietokone, jne.)"
+
+#: /src/schooltool/resource/interfaces.py:101
 #: /src/schooltool/resource/types.py:113
 msgid "Manufacturer"
 msgstr "Valmistaja"
 
-#: /src/schooltool/resource/interfaces.py:101
+#: /src/schooltool/resource/interfaces.py:102
 msgid "Manufacturer of Equipment"
 msgstr "Varusteen valmistaja"
 
-#: /src/schooltool/resource/interfaces.py:105
+#: /src/schooltool/resource/interfaces.py:106
 #: /src/schooltool/resource/types.py:119
 msgid "Model"
 msgstr "Malli"
 
-#: /src/schooltool/resource/interfaces.py:106
+#: /src/schooltool/resource/interfaces.py:107
 msgid "Model of Equipment"
 msgstr "Varusteen malli"
 
-#: /src/schooltool/resource/interfaces.py:110
+#: /src/schooltool/resource/interfaces.py:111
 #: /src/schooltool/resource/types.py:125
 msgid "Serial Number"
 msgstr "Sarjanumero"
 
-#: /src/schooltool/resource/interfaces.py:111
+#: /src/schooltool/resource/interfaces.py:112
 msgid "Serial Number of Equipment"
 msgstr "Varusteen sarjanumero"
 
-#: /src/schooltool/resource/interfaces.py:115
+#: /src/schooltool/resource/interfaces.py:116
 #: /src/schooltool/resource/types.py:131
 msgid "Purchase Date"
 msgstr "Ostopäivämäärä"
 
-#: /src/schooltool/resource/interfaces.py:116
+#: /src/schooltool/resource/interfaces.py:117
 msgid "Purchase Date of Equipment"
 msgstr "Varusteen ostopäivämäärä"
 
-#: /src/schooltool/resource/interfaces.py:123
+#: /src/schooltool/resource/interfaces.py:124
 msgid "Id of the resource type."
 msgstr "Resurssityypin tunnus"
 
-#: /src/schooltool/resource/interfaces.py:124
+#: /src/schooltool/resource/interfaces.py:125
 msgid ""
 "Used for lookup of named utilities that have resource\n"
 "        type specific information."
@@ -2798,55 +2946,14 @@ msgstr ""
 "Käytetään tarkistamaan nimettyjä tarvikkeita, joilla\n"
 "        tyyppikohtaista tietoa."
 
-#: /src/schooltool/resource/interfaces.py:41
-msgid "Title of the resource."
-msgstr "Resurssin nimike."
-
-#: /src/schooltool/resource/interfaces.py:44
-msgid "Resource Type"
-msgstr "Resurssin tyyppi"
-
-#: /src/schooltool/resource/interfaces.py:45
-msgid "Type of resource"
-msgstr "Resurssin tyyppi"
-
-#: /src/schooltool/resource/interfaces.py:52
-msgid "Description of the resource."
-msgstr "Resurssin kuvaus."
-
-#: /src/schooltool/resource/interfaces.py:57
-msgid "Notes for the resource."
-msgstr "Muistiinpanot resurssille"
-
-#: /src/schooltool/resource/interfaces.py:80
-msgid "Location Type"
-msgstr "Sijainnin tyyppi"
-
-#: /src/schooltool/resource/interfaces.py:81
-msgid "Type of location (i.e. computer lab, class room, etc.)"
-msgstr "Sijainnin tyyppi (esim. tietokoneluokka, luokkahuone jne.)"
-
-#: /src/schooltool/resource/interfaces.py:86
-#: /src/schooltool/resource/types.py:83
-msgid "Capacity"
-msgstr "Paikkojen lukumäärä"
-
-#: /src/schooltool/resource/interfaces.py:87
-msgid "Capacity of the room"
-msgstr "Huoneen paikkojen määrä"
-
-#: /src/schooltool/resource/interfaces.py:95
-msgid "Equipment Type"
-msgstr "Varusteen tyyppi"
-
-#: /src/schooltool/resource/interfaces.py:96
-msgid "Type of equipment (i.e. camcorder, computer, etc.)"
-msgstr "Varusteen tyyppi (esim. kamera, tietokone, jne.)"
-
 #: /src/schooltool/resource/resource.py:55
 #: /src/schooltool/resource/types.py:55
 msgid "Resource"
 msgstr "Resurssi"
+
+#: /src/schooltool/resource/security.zcml:7
+msgid "Everyone can view resource lists."
+msgstr "Kaikki voivat tarkastella resurssiluetteloa."
 
 #: /src/schooltool/resource/security.zcml:12
 msgid "Everyone can view resource information."
@@ -2856,17 +2963,18 @@ msgstr "Kaikki voivat tarkastella resurssin tietoa"
 msgid "Everyone can view resource calendars."
 msgstr "Kaikki voivat tarkastella resurssien kalentereita."
 
-#: /src/schooltool/resource/security.zcml:7
-msgid "Everyone can view resource lists."
-msgstr "Kaikki voivat tarkastella resurssiluetteloa."
+#: /src/schooltool/resource/types.py:93
+msgid "Equipment"
+msgstr "Varuste"
 
 #: /src/schooltool/resource/types.py:107
 msgid "Type"
 msgstr "Tyyppi"
 
-#: /src/schooltool/resource/types.py:93
-msgid "Equipment"
-msgstr "Varuste"
+#: /src/schooltool/sampledata/sampledata.pt:3
+#: /src/schooltool/sampledata/sampledata.pt:9
+msgid "Sample Data Generation"
+msgstr "Satunnaistiedon teko"
 
 #: /src/schooltool/sampledata/sampledata.pt:14
 msgid ""
@@ -2885,11 +2993,6 @@ msgstr ""
 "Satunnaistiedon asettaminen mahdollistaa saman satunnaistiedon uudelleen "
 "koostamisen asettamalla sama satunnaistiedon arvo uudelleen."
 
-#: /src/schooltool/sampledata/sampledata.pt:3
-#: /src/schooltool/sampledata/sampledata.pt:9
-msgid "Sample Data Generation"
-msgstr "Satunnaistiedon teko"
-
 #: /src/schooltool/sampledata/sampledata.pt:42
 msgid "Plugins"
 msgstr "Liitännäiset"
@@ -2903,24 +3006,22 @@ msgstr "Tarkastele riippuvaisuuksia"
 msgid "Generate"
 msgstr "Luo"
 
-#: /src/schooltool/schoolyear/browser/schoolyear.py:116
-#: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:38
-#: /src/schooltool/app/browser/templates/event.pt:37
-msgid "Starts"
-msgstr "Alkaa"
+#: /src/schooltool/schoolyear/browser/templates/term-delete.pt:10
+#: /src/schooltool/term/browser/templates/term-container-delete.pt:10
+msgid "Are you sure you want to delete the selected terms?"
+msgstr "Haluatko varmasti poistaa valitut lukukaudet?"
 
-#: /src/schooltool/schoolyear/browser/schoolyear.py:118
-#: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:43
-#: /src/schooltool/app/browser/templates/event.pt:42
-msgid "Ends"
-msgstr "Päättyy"
-
-#: /src/schooltool/securitypolicy/browser/templates/access_control.pt:4
-#: /src/schooltool/securitypolicy/browser/templates/access_control.pt:12
 #: /src/schooltool/securitypolicy/browser/configure.zcml:17
 #: /src/schooltool/securitypolicy/browser/configure.zcml:28
+#: /src/schooltool/securitypolicy/browser/templates/access_control.pt:4
+#: /src/schooltool/securitypolicy/browser/templates/access_control.pt:12
 msgid "Access Control"
 msgstr "Kirjautumishallinnointi"
+
+#: /src/schooltool/setupdata/setupdata.pt:3
+#: /src/schooltool/setupdata/setupdata.pt:9
+msgid "Initial School Setup Scripts"
+msgstr "Koulun asetuksen alkukomennot"
 
 #: /src/schooltool/setupdata/setupdata.pt:14
 msgid ""
@@ -2933,11 +3034,6 @@ msgstr ""
 "tiedolla. Älä suorita toimenpidettä, jos sinulla on mitään arvokasta tietoa "
 "SchoolTool-järjestelmässä tai ellet ymmärrä mitä varten tämä on."
 
-#: /src/schooltool/setupdata/setupdata.pt:3
-#: /src/schooltool/setupdata/setupdata.pt:9
-msgid "Initial School Setup Scripts"
-msgstr "Koulun asetuksen alkukomennot"
-
 #: /src/schooltool/skin/breadcrumbs.py:76
 msgid "top"
 msgstr "ylin"
@@ -2945,6 +3041,11 @@ msgstr "ylin"
 #: /src/schooltool/skin/form.py:64
 msgid "No changes"
 msgstr "Ei muutoksia"
+
+#: /src/schooltool/skin/templates/error.pt:3
+#: /src/schooltool/skin/templates/error.pt:12
+msgid "Server Error"
+msgstr "Palvelinvirhe"
 
 #: /src/schooltool/skin/templates/error.pt:15
 msgid ""
@@ -2964,14 +3065,14 @@ msgstr "Poikkeus"
 msgid "Traceback"
 msgstr "Jäljitä"
 
-#: /src/schooltool/skin/templates/error.pt:3
-#: /src/schooltool/skin/templates/error.pt:12
-msgid "Server Error"
-msgstr "Palvelinvirhe"
-
 #: /src/schooltool/skin/templates/generic_macros.pt:12
 msgid "Server Running SchoolTool"
 msgstr "Palvelin ajaa SchoolToolia"
+
+#: /src/schooltool/skin/templates/notfound.pt:3
+#: /src/schooltool/skin/templates/notfound.pt:11
+msgid "Not Found"
+msgstr "Ei löytynyt"
 
 #: /src/schooltool/skin/templates/notfound.pt:14
 msgid "The page that you are trying to access is not available"
@@ -2985,23 +3086,9 @@ msgstr "Huom:"
 msgid "You might have misspelled the url"
 msgstr "Tarkista osoitteen oikeinkirjoitus"
 
-#: /src/schooltool/skin/templates/notfound.pt:3
-#: /src/schooltool/skin/templates/notfound.pt:11
-msgid "Not Found"
-msgstr "Ei löytynyt"
-
 #: /src/schooltool/skin/templates/onlinehelp_macros.pt:55
 msgid "SchoolTool Onlinehelp"
 msgstr "SchoolToolin online-tuki"
-
-#: /src/schooltool/skin/templates/view_macros.pt:161
-#: /src/schooltool/skin/templates/view_macros.pt:167
-#: /src/schooltool/skin/templates/view_macros.pt:174
-#: /src/schooltool/skin/templates/view_macros.pt:180
-#: /src/schooltool/skin/templates/view_macros.pt:187
-#: /src/schooltool/app/browser/templates/event_add.pt:375
-msgid "Shortcut: Alt-A"
-msgstr "Komento: Alt-A"
 
 #: /src/schooltool/skin/templates/view_macros.pt:45
 msgid "Log In"
@@ -3020,6 +3107,14 @@ msgstr "Seuraava &raquo;"
 msgid "Cancel School in Emergency"
 msgstr "Peruuta koulu hätätilassa"
 
+#: /src/schooltool/term/browser/emergency.py:92
+msgid "The date you entered does not belong to this term."
+msgstr "Antamasi päivä ei kuulu tähän lukukauteen."
+
+#: /src/schooltool/term/browser/emergency.py:96
+msgid "The date you entered is not a schoolday."
+msgstr "Antamasi päivä ei ole koulupäivä."
+
 #: /src/schooltool/term/browser/emergency.py:104
 msgid "The replacement date you entered is invalid."
 msgstr "Korvauspäivämäärä on virheellinen."
@@ -3034,23 +3129,19 @@ msgstr "Koulu peruttu hätätapauksesta johtuen. Korvauspäivä: $replacement."
 msgid "Replacement day for emergency day $emergency."
 msgstr "Korvauspäivä hätätilannepäivälle $emergency."
 
-#: /src/schooltool/term/browser/emergency.py:92
-msgid "The date you entered does not belong to this term."
-msgstr "Antamasi päivä ei kuulu tähän lukukauteen."
-
-#: /src/schooltool/term/browser/emergency.py:96
-msgid "The date you entered is not a schoolday."
-msgstr "Antamasi päivä ei ole koulupäivä."
-
-#: /src/schooltool/term/browser/templates/emergency2.pt:27
-msgid "Please enter the replacement date below."
-msgstr "Syötä korvauspäivä alle."
-
 #: /src/schooltool/term/browser/templates/emergency2.pt:3
 #: /src/schooltool/term/browser/templates/emergency_select.pt:3
 #: /src/schooltool/term/browser/templates/emergency_select.pt:6
 msgid "Emergency day"
 msgstr "Hätätilapäivä"
+
+#: /src/schooltool/term/browser/templates/emergency2.pt:6
+msgid "Choose a replacement for the emergency day."
+msgstr "Valitse korvauspäivä hätätilapäivälle."
+
+#: /src/schooltool/term/browser/templates/emergency2.pt:27
+msgid "Please enter the replacement date below."
+msgstr "Syötä korvauspäivä alle."
 
 #: /src/schooltool/term/browser/templates/emergency2.pt:32
 msgid "Replacement"
@@ -3062,85 +3153,47 @@ msgstr "Korvaus"
 msgid "Proceed"
 msgstr "Jatka"
 
-#: /src/schooltool/term/browser/templates/emergency2.pt:6
-msgid "Choose a replacement for the emergency day."
-msgstr "Valitse korvauspäivä hätätilapäivälle."
-
 #: /src/schooltool/term/browser/templates/emergency_select.pt:23
 msgid "Please enter the emergency date below."
 msgstr "Syötä hätätilapäivä alle."
 
-#: /src/schooltool/term/browser/templates/emergency_select.pt:31
-#: /src/schooltool/timetable/browser/templates/specialday_select.pt:31
-#: /src/schooltool/app/browser/templates/event_add.pt:306
-msgid "[popup calendar]"
-msgstr "[ponnahduskalenteri]"
+#: /src/schooltool/term/browser/templates/term.pt:13
+#: /src/schooltool/term/browser/templates/term_add.pt:42
+msgid "Schoolday"
+msgstr "Koulupäivä"
 
-#: /src/schooltool/term/browser/templates/term-container-delete.pt:10
-#: /src/schooltool/schoolyear/browser/templates/term-delete.pt:10
-msgid "Are you sure you want to delete the selected terms?"
-msgstr "Haluatko varmasti poistaa valitut lukukaudet?"
+#: /src/schooltool/term/browser/templates/term.pt:14
+#: /src/schooltool/term/browser/templates/term_add.pt:43
+msgid "Holiday"
+msgstr "Vapaapäivä"
 
-#: /src/schooltool/term/browser/templates/term-container-delete.pt:16
-#: /src/schooltool/schoolyear/browser/templates/term-delete.pt:16
-#: /src/schooltool/resource/browser/container_delete.pt:16
-#: /src/schooltool/contact/browser/templates/contacts_delete.pt:21
-#: /src/schooltool/timetable/browser/templates/timetable-container-delete.pt:16
-#: /src/schooltool/timetable/browser/templates/schooltt-delete.pt:16
-#: /src/schooltool/person/browser/person_container_delete.pt:21
-#: /src/schooltool/email/browser/templates/email_delete.pt:21
-#: /src/schooltool/skin/templates/container_delete.pt:21
-msgid "You have not selected any items."
-msgstr "Et ole valinnut yhtään kohdetta."
+#: /src/schooltool/term/browser/templates/term.pt:26
+#: /src/schooltool/term/browser/templates/term_add.pt:75
+msgid "${month} ${year}"
+msgstr "${month} ${year}"
+
+#: /src/schooltool/term/browser/templates/term.pt:41
+#: /src/schooltool/term/browser/templates/term_add.pt:90
+msgid "Week ${week_number}"
+msgstr "Viikko ${week_number}"
 
 #: /src/schooltool/term/browser/templates/term_add.pt:34
 msgid ""
 "Please specify which days are school days, and which days are holidays."
 msgstr "Määrittele mitkä päivät ovat koulupäiviä ja mitkä ovat vapaapäiviä."
 
-#: /src/schooltool/term/browser/templates/term_add.pt:42
-#: /src/schooltool/term/browser/templates/term.pt:13
-msgid "Schoolday"
-msgstr "Koulupäivä"
-
-#: /src/schooltool/term/browser/templates/term_add.pt:43
-#: /src/schooltool/term/browser/templates/term.pt:14
-msgid "Holiday"
-msgstr "Vapaapäivä"
-
-#: /src/schooltool/term/browser/templates/term_add.pt:75
-#: /src/schooltool/term/browser/templates/term.pt:26
-msgid "${month} ${year}"
-msgstr "${month} ${year}"
-
-#: /src/schooltool/term/browser/templates/term_add.pt:90
-#: /src/schooltool/term/browser/templates/term.pt:41
-msgid "Week ${week_number}"
-msgstr "Viikko ${week_number}"
+#: /src/schooltool/term/browser/term.py:63
+msgid "End date"
+msgstr "Lopetuspäivä"
 
 #: /src/schooltool/term/browser/term.py:145
 #: /src/schooltool/term/browser/term.py:222
 msgid "Refresh"
 msgstr "Päivitä"
 
-#: /src/schooltool/term/browser/term.py:154
-#: /src/schooltool/timetable/browser/templates/ttwizard_period_order2.pt:39
-#: /src/schooltool/timetable/browser/templates/ttwizard_homeroom.pt:41
-#: /src/schooltool/timetable/browser/templates/ttwizard_period_order1.pt:30
-#: /src/schooltool/timetable/browser/templates/ttwizard_slottimes.pt:32
-#: /src/schooltool/timetable/browser/templates/ttwizard.pt:20
-#: /src/schooltool/timetable/browser/templates/ttwizard_form.pt:20
-#: /src/schooltool/course/browser/templates/section_edit.pt:97
-msgid "Next"
-msgstr "Seuraava"
-
 #: /src/schooltool/term/browser/term.py:237
 msgid "Save changes"
 msgstr "Tallenna muutokset"
-
-#: /src/schooltool/term/browser/term.py:63
-msgid "End date"
-msgstr "Lopetuspäivä"
 
 #: /src/schooltool/term/help/term_add.pt:6
 msgid "Term Search Help"
@@ -3158,6 +3211,10 @@ msgstr "Virheellinen päivämäärä. Käytä VVVV-KK-PP -muotoa."
 msgid "The date does not belong to any term."
 msgstr "Päivämäärä ei kuulu mihinkään lukukauteen."
 
+#: /src/schooltool/timetable/browser/configure.zcml:30
+msgid "Add Timetable"
+msgstr "Lisää aikataulu"
+
 #: /src/schooltool/timetable/browser/configure.zcml:102
 msgid "Change Timetable for One Day"
 msgstr "Muuta aikatauluja yhdelle päivälle"
@@ -3165,10 +3222,6 @@ msgstr "Muuta aikatauluja yhdelle päivälle"
 #: /src/schooltool/timetable/browser/configure.zcml:137
 msgid "New Timetable"
 msgstr "Uusi aikataulu"
-
-#: /src/schooltool/timetable/browser/configure.zcml:30
-msgid "Add Timetable"
-msgstr "Lisää aikataulu"
 
 #: /src/schooltool/timetable/browser/event.py:53
 msgid "Modify event information"
@@ -3200,6 +3253,61 @@ msgstr "Oppitunti 1"
 #: /src/schooltool/timetable/browser/schema.py:383
 msgid "Period ${number}"
 msgstr "Oppitunti ${number}"
+
+#: /src/schooltool/timetable/browser/templates/advancedtts.pt:3
+#: /src/schooltool/timetable/browser/templates/advancedtts.pt:6
+#: /src/schooltool/timetable/browser/templates/simpletts.pt:3
+#: /src/schooltool/timetable/browser/templates/simpletts.pt:6
+#: /src/schooltool/timetable/browser/templates/ttwizard.pt:3
+#: /src/schooltool/timetable/browser/templates/ttwizard.pt:6
+#: /src/schooltool/timetable/browser/templates/ttwizard_choice.pt:3
+#: /src/schooltool/timetable/browser/templates/ttwizard_choice.pt:6
+#: /src/schooltool/timetable/browser/templates/ttwizard_form.pt:3
+#: /src/schooltool/timetable/browser/templates/ttwizard_form.pt:6
+#: /src/schooltool/timetable/browser/templates/ttwizard_homeroom.pt:3
+#: /src/schooltool/timetable/browser/templates/ttwizard_homeroom.pt:6
+#: /src/schooltool/timetable/browser/templates/ttwizard_period_order1.pt:3
+#: /src/schooltool/timetable/browser/templates/ttwizard_period_order1.pt:6
+#: /src/schooltool/timetable/browser/templates/ttwizard_period_order2.pt:3
+#: /src/schooltool/timetable/browser/templates/ttwizard_period_order2.pt:6
+#: /src/schooltool/timetable/browser/templates/ttwizard_slottimes.pt:3
+#: /src/schooltool/timetable/browser/templates/ttwizard_slottimes.pt:6
+msgid "New timetable schema"
+msgstr "Uusi aikataulukaavio"
+
+#: /src/schooltool/timetable/browser/templates/advancedtts.pt:17
+msgid "Please choose a name for the timetable schema you want to create."
+msgstr "Valitse nimi luomallesi aikataulukaaviolle."
+
+#: /src/schooltool/timetable/browser/templates/advancedtts.pt:36
+msgid "First, please define the days and periods of the timetable."
+msgstr "Aluksi määritä päivät ja oppitunnit aikataululle."
+
+#: /src/schooltool/timetable/browser/templates/advancedtts.pt:51
+#: /src/schooltool/timetable/browser/templates/advancedtts.pt:155
+msgid "C"
+msgstr "C"
+
+#: /src/schooltool/timetable/browser/templates/advancedtts.pt:58
+msgid "Remove this day"
+msgstr "Poista tämä päivä"
+
+#: /src/schooltool/timetable/browser/templates/advancedtts.pt:58
+msgid "X"
+msgstr "X"
+
+#: /src/schooltool/timetable/browser/templates/advancedtts.pt:84
+msgid "Add day"
+msgstr "Lisää päivä"
+
+#: /src/schooltool/timetable/browser/templates/advancedtts.pt:87
+msgid "Add period"
+msgstr "Lisää oppitunti"
+
+#: /src/schooltool/timetable/browser/templates/advancedtts.pt:94
+msgid "Second, select the way timetable days are aligned with calendar days."
+msgstr ""
+"Sitten, valitse tapa, jonka mukaan aikataulu asetetaan kalenteripäiville."
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:114
 msgid ""
@@ -3235,10 +3343,6 @@ msgstr ""
 "aiheuttavat sen tunnin ohittamisen. Jos oppituntiluettelo ei ole "
 "aikataulussa taulukkoon tekemiesi muutosten kanssa, käytä Päivitä-painiketta."
 
-#: /src/schooltool/timetable/browser/templates/advancedtts.pt:17
-msgid "Please choose a name for the timetable schema you want to create."
-msgstr "Valitse nimi luomallesi aikataulukaaviolle."
-
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:175
 msgid ""
 "Certain period specifications were incorrect, and therefore were discarded."
@@ -3256,57 +3360,6 @@ msgstr ""
 msgid "Create timetable schema"
 msgstr "Luo aikataulukaavio"
 
-#: /src/schooltool/timetable/browser/templates/advancedtts.pt:3
-#: /src/schooltool/timetable/browser/templates/advancedtts.pt:6
-#: /src/schooltool/timetable/browser/templates/simpletts.pt:3
-#: /src/schooltool/timetable/browser/templates/simpletts.pt:6
-#: /src/schooltool/timetable/browser/templates/ttwizard_period_order2.pt:3
-#: /src/schooltool/timetable/browser/templates/ttwizard_period_order2.pt:6
-#: /src/schooltool/timetable/browser/templates/ttwizard_homeroom.pt:3
-#: /src/schooltool/timetable/browser/templates/ttwizard_homeroom.pt:6
-#: /src/schooltool/timetable/browser/templates/ttwizard_period_order1.pt:3
-#: /src/schooltool/timetable/browser/templates/ttwizard_period_order1.pt:6
-#: /src/schooltool/timetable/browser/templates/ttwizard_slottimes.pt:3
-#: /src/schooltool/timetable/browser/templates/ttwizard_slottimes.pt:6
-#: /src/schooltool/timetable/browser/templates/ttwizard.pt:3
-#: /src/schooltool/timetable/browser/templates/ttwizard.pt:6
-#: /src/schooltool/timetable/browser/templates/ttwizard_choice.pt:3
-#: /src/schooltool/timetable/browser/templates/ttwizard_choice.pt:6
-#: /src/schooltool/timetable/browser/templates/ttwizard_form.pt:3
-#: /src/schooltool/timetable/browser/templates/ttwizard_form.pt:6
-msgid "New timetable schema"
-msgstr "Uusi aikataulukaavio"
-
-#: /src/schooltool/timetable/browser/templates/advancedtts.pt:36
-msgid "First, please define the days and periods of the timetable."
-msgstr "Aluksi määritä päivät ja oppitunnit aikataululle."
-
-#: /src/schooltool/timetable/browser/templates/advancedtts.pt:51
-#: /src/schooltool/timetable/browser/templates/advancedtts.pt:155
-msgid "C"
-msgstr "C"
-
-#: /src/schooltool/timetable/browser/templates/advancedtts.pt:58
-msgid "X"
-msgstr "X"
-
-#: /src/schooltool/timetable/browser/templates/advancedtts.pt:58
-msgid "Remove this day"
-msgstr "Poista tämä päivä"
-
-#: /src/schooltool/timetable/browser/templates/advancedtts.pt:84
-msgid "Add day"
-msgstr "Lisää päivä"
-
-#: /src/schooltool/timetable/browser/templates/advancedtts.pt:87
-msgid "Add period"
-msgstr "Lisää oppitunti"
-
-#: /src/schooltool/timetable/browser/templates/advancedtts.pt:94
-msgid "Second, select the way timetable days are aligned with calendar days."
-msgstr ""
-"Sitten, valitse tapa, jonka mukaan aikataulu asetetaan kalenteripäiville."
-
 #: /src/schooltool/timetable/browser/templates/calendar_overlay.pt:14
 msgid "Cal"
 msgstr "Kal"
@@ -3316,30 +3369,17 @@ msgid "Personal calendar"
 msgstr "Henkilökohtainen kalenteri"
 
 #: /src/schooltool/timetable/browser/templates/calendar_overlay.pt:17
-msgid "Timetable calendar"
-msgstr "Aikataulukalenteri"
-
-#: /src/schooltool/timetable/browser/templates/calendar_overlay.pt:17
 msgid "TT"
 msgstr "TT"
 
-#: /src/schooltool/timetable/browser/templates/calendar_overlay.pt:27
-#: /src/schooltool/app/browser/templates/calendar_overlay.pt:13
-msgid "My Calendar"
-msgstr "Oma kalenteri"
+#: /src/schooltool/timetable/browser/templates/calendar_overlay.pt:17
+msgid "Timetable calendar"
+msgstr "Aikataulukalenteri"
 
-#: /src/schooltool/timetable/browser/templates/calendar_overlay.pt:4
-#: /src/schooltool/app/browser/templates/calendar_overlay.pt:4
-msgid "Calendars"
-msgstr "Kalenterit"
-
-#: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:101
-msgid ""
-"Note: if a section appears in more than one slot, all of them have to be set "
-"to <em>none</em> to remove it."
-msgstr ""
-"Huom: jos osio näkyy useammassa kuin yhdessä aikavälissä, kaikki pitää "
-"asettaa <em>ei ollenkaan</em> -tilaan, jotta se voidaan poistaa."
+#: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:4
+#: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:10
+msgid "Scheduling for ${person}"
+msgstr "Aikataulut henkilölle ${person}"
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:22
 msgid "Timetable"
@@ -3352,11 +3392,6 @@ msgstr "Lukukausi"
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:34
 msgid "Schema"
 msgstr "Kaavio"
-
-#: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:4
-#: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:10
-msgid "Scheduling for ${person}"
-msgstr "Aikataulut henkilölle ${person}"
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:43
 msgid "Choose"
@@ -3381,6 +3416,27 @@ msgstr "ei ollenkaan"
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:93
 msgid "Scheduling conflict."
 msgstr "Aikataulutusristiriita"
+
+#: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:101
+msgid ""
+"Note: if a section appears in more than one slot, all of them have to be set "
+"to <em>none</em> to remove it."
+msgstr ""
+"Huom: jos osio näkyy useammassa kuin yhdessä aikavälissä, kaikki pitää "
+"asettaa <em>ei ollenkaan</em> -tilaan, jotta se voidaan poistaa."
+
+#: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:107
+#: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:81
+#: /src/schooltool/timetable/browser/templates/timetable-edit.pt:68
+msgid "Save"
+msgstr "Tallenna"
+
+#: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:4
+#: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:11
+#: /src/schooltool/timetable/browser/templates/timetable-edit.pt:4
+#: /src/schooltool/timetable/browser/templates/timetable-edit.pt:12
+msgid "Scheduling for ${section}"
+msgstr "Aikataulutus osiolle ${section}"
 
 #: /src/schooltool/timetable/browser/templates/simpletts.pt:11
 msgid ""
@@ -3416,6 +3472,13 @@ msgstr "Oppitunnin loppumisaika"
 msgid "Create"
 msgstr "Luo"
 
+#: /src/schooltool/timetable/browser/templates/specialday_change.pt:3
+#: /src/schooltool/timetable/browser/templates/specialday_change.pt:6
+#: /src/schooltool/timetable/browser/templates/specialday_select.pt:3
+#: /src/schooltool/timetable/browser/templates/specialday_select.pt:6
+msgid "Choose a special day"
+msgstr "Valitse erityinen päivä"
+
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:28
 msgid "Period title"
 msgstr "Oppitunnin nimi"
@@ -3436,17 +3499,6 @@ msgstr "Uusi alkamisaika"
 msgid "New end"
 msgstr "Uusi lopetusaika"
 
-#: /src/schooltool/timetable/browser/templates/specialday_change.pt:62
-#: /src/schooltool/course/security.zcml:100
-#: /src/schooltool/course/security.zcml:134
-#: /src/schooltool/person/security.zcml:100
-#: /src/schooltool/group/security.zcml:79
-#: /src/schooltool/term/security.zcml:42
-#: /src/schooltool/schoolyear/security.zcml:38
-#: /src/schooltool/timetable/security.zcml:39
-msgid "Modify"
-msgstr "Muokkaa"
-
 #: /src/schooltool/timetable/browser/templates/specialday_select.pt:11
 msgid ""
 "This form allows you to change the start and end times for periods on a "
@@ -3459,13 +3511,6 @@ msgstr ""
 msgid "Please enter the date when the periods need to be changed below."
 msgstr "Syötä muutettavan oppitunnin päivämäärä alle."
 
-#: /src/schooltool/timetable/browser/templates/specialday_select.pt:3
-#: /src/schooltool/timetable/browser/templates/specialday_select.pt:6
-#: /src/schooltool/timetable/browser/templates/specialday_change.pt:3
-#: /src/schooltool/timetable/browser/templates/specialday_change.pt:6
-msgid "Choose a special day"
-msgstr "Valitse erityinen päivä"
-
 #: /src/schooltool/timetable/browser/templates/timetable-add.pt:13
 msgid "Create a New Timetable"
 msgstr "Luo uusi aikataulu"
@@ -3473,19 +3518,6 @@ msgstr "Luo uusi aikataulu"
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:29
 msgid "Using timetable:"
 msgstr "Käyttää aikataulua:"
-
-#: /src/schooltool/timetable/browser/templates/timetable-edit.pt:4
-#: /src/schooltool/timetable/browser/templates/timetable-edit.pt:12
-#: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:4
-#: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:11
-msgid "Scheduling for ${section}"
-msgstr "Aikataulutus osiolle ${section}"
-
-#: /src/schooltool/timetable/browser/templates/timetable-edit.pt:68
-#: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:81
-#: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:107
-msgid "Save"
-msgstr "Tallenna"
 
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:40
 msgid "Default Timetable Schema:"
@@ -3495,41 +3527,6 @@ msgstr "Oletus aikataulukaavio"
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:53
 msgid "Not Selected"
 msgstr "Ei valittuna"
-
-#: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:15
-#: /src/schooltool/app/browser/templates/event.pt:15
-msgid "All day event"
-msgstr "Kokopäiväinen tapahtuma"
-
-#: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:21
-#: /src/schooltool/app/browser/templates/event.pt:20
-msgid "This is a recurring event."
-msgstr "Tämä on toistuva tapahtuma."
-
-#: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:54
-#: /src/schooltool/app/browser/templates/event.pt:53
-msgid "edit event"
-msgstr "muokkaa tapahtumaa"
-
-#: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:54
-#: /src/schooltool/app/browser/templates/event.pt:53
-msgid "Change the details of this event"
-msgstr "Muuta tapahtuman yksityiskohtia"
-
-#: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:65
-#: /src/schooltool/app/browser/templates/event.pt:64
-msgid "Scheduled resources"
-msgstr "Aikataulutetut resurssit"
-
-#: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:73
-#: /src/schooltool/app/browser/templates/event.pt:72
-msgid "edit resources"
-msgstr "muokkaa resursseja"
-
-#: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:81
-#: /src/schooltool/app/browser/templates/event.pt:80
-msgid "delete event"
-msgstr "poista tapahtuma"
 
 #: /src/schooltool/timetable/browser/templates/timetableschema.pt:33
 msgid "Homeroom"
@@ -3698,6 +3695,39 @@ msgstr "Vahvista salasana"
 msgid "Your School"
 msgstr "sinun koulusi"
 
+#: /src/schooltool/app/browser/cal.py:120
+#: /src/schooltool/term/browser/templates/term.pt:33
+#: /src/schooltool/term/browser/templates/term_add.pt:58
+#: /src/schooltool/term/browser/templates/term_add.pt:82
+#: /src/schooltool/timetable/browser/schema.py:117
+#: /src/schooltool/timetable/browser/schema.py:286
+msgid "Wednesday"
+msgstr "Keskiviikko"
+
+#: /src/schooltool/app/browser/cal.py:925
+msgid "Next week"
+msgstr "Ensi viikko"
+
+#: /src/schooltool/app/browser/cal.py:926
+msgid "Current week"
+msgstr "Nykyinen viikko"
+
+#: /src/schooltool/app/browser/cal.py:927
+msgid "Previous week"
+msgstr "Viime viikko"
+
+#: /src/schooltool/app/browser/cal.py:929
+msgid "Go to next week"
+msgstr "Näytä seuraavan viikon ohjelma"
+
+#: /src/schooltool/app/browser/cal.py:930
+msgid "Go to current week"
+msgstr "Näytä kuluvan viikon ohjelma"
+
+#: /src/schooltool/app/browser/cal.py:931
+msgid "Go to previous week"
+msgstr "Näytä edellisen viikon ohjelma"
+
 #: /src/schooltool/app/browser/cal.py:1170
 msgid "Go to next month"
 msgstr "Seuraava kuukausi"
@@ -3709,15 +3739,6 @@ msgstr "Mene nykyiseen kuukauteen"
 #: /src/schooltool/app/browser/cal.py:1172
 msgid "Go to previous month"
 msgstr "Mene edelliseen kuukauteen"
-
-#: /src/schooltool/app/browser/cal.py:120
-#: /src/schooltool/timetable/browser/schema.py:117
-#: /src/schooltool/timetable/browser/schema.py:286
-#: /src/schooltool/term/browser/templates/term_add.pt:58
-#: /src/schooltool/term/browser/templates/term_add.pt:82
-#: /src/schooltool/term/browser/templates/term.pt:33
-msgid "Wednesday"
-msgstr "Keskiviikko"
 
 #: /src/schooltool/app/browser/cal.py:1222
 msgid "Go to next year"
@@ -3809,30 +3830,6 @@ msgstr ""
 "Päivämäärä ei kelpaa. Olkaa hyvä ja käyttäkää muotoa VVVV-KK-PP, yksi per "
 "rivi"
 
-#: /src/schooltool/app/browser/cal.py:925
-msgid "Next week"
-msgstr "Ensi viikko"
-
-#: /src/schooltool/app/browser/cal.py:926
-msgid "Current week"
-msgstr "Nykyinen viikko"
-
-#: /src/schooltool/app/browser/cal.py:927
-msgid "Previous week"
-msgstr "Viime viikko"
-
-#: /src/schooltool/app/browser/cal.py:929
-msgid "Go to next week"
-msgstr "Näytä seuraavan viikon ohjelma"
-
-#: /src/schooltool/app/browser/cal.py:930
-msgid "Go to current week"
-msgstr "Näytä kuluvan viikon ohjelma"
-
-#: /src/schooltool/app/browser/cal.py:931
-msgid "Go to previous week"
-msgstr "Näytä edellisen viikon ohjelma"
-
 #: /src/schooltool/app/browser/configure.zcml:319
 msgid "View Calendar"
 msgstr "Näytä kalenteri"
@@ -3848,6 +3845,12 @@ msgstr "Kalenteri (Viikkottainen)"
 #: /src/schooltool/app/browser/configure.zcml:596
 msgid "ZODB Control"
 msgstr "ZOBD-hallinta"
+
+#: /src/schooltool/app/browser/configure.zcml:619
+#: /src/schooltool/app/browser/templates/manage_menu.pt:3
+#: /src/schooltool/basicperson/security.zcml:17
+msgid "Manage"
+msgstr "Hallitse"
 
 #: /src/schooltool/app/browser/csvimport.py:115
 msgid "Could not convert data to Unicode (incorrect charset?)."
@@ -3895,6 +3898,10 @@ msgstr "%s:n viikkokalenteri"
 msgid "Week %d (%s - %s), %d"
 msgstr "Viikko %d (%s - %s), %d"
 
+#: /src/schooltool/app/browser/templates/about.pt:5
+msgid "About SchoolTool"
+msgstr "Tietoa SchoolToolista"
+
 #: /src/schooltool/app/browser/templates/about.pt:10
 msgid ""
 "SchoolTool is free administrative software for schools around the world. The "
@@ -3910,6 +3917,9 @@ msgid ""
 "href=\"http://python.org\">Python</a> using the <a "
 "href=\"http://zope.org\">Zope 3</a> framework."
 msgstr ""
+"SchoolTool perustuu täysin avoimeen lähdekoodiin. Ohjelma on kirjoitettu <a "
+"href=\"http://python.org\">Python</a>-kielellä, ja se hyödyntää <a "
+"href=\"http://zope.org\">Zope 3</a> -sovelluskehitysalustaa."
 
 #: /src/schooltool/app/browser/templates/about.pt:20
 msgid ""
@@ -3957,22 +3967,18 @@ msgstr "Julkaisujohtaja:"
 msgid "Contributors:"
 msgstr "Osallistuneet:"
 
-#: /src/schooltool/app/browser/templates/about.pt:5
-msgid "About SchoolTool"
-msgstr "Tietoa SchoolToolista"
-
 #. Default: "Atom Enabled"
 #: /src/schooltool/app/browser/templates/cal_atom.pt:46
 msgid "atom_enabled"
 msgstr "atom_mahdollistettu"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:24
-msgid "View daily calendar"
-msgstr "Näytä päiväohjelma"
-
-#: /src/schooltool/app/browser/templates/calendar_macros.pt:24
 msgid "Daily"
 msgstr "Päivittäinen"
+
+#: /src/schooltool/app/browser/templates/calendar_macros.pt:24
+msgid "View daily calendar"
+msgstr "Näytä päiväohjelma"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:30
 msgid "View weekly calendar"
@@ -3983,12 +3989,12 @@ msgid "View monthly calendar"
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:42
-msgid "Yearly"
-msgstr "Vuosittain"
-
-#: /src/schooltool/app/browser/templates/calendar_macros.pt:42
 msgid "View yearly calendar"
 msgstr "Näytä vuosittainen ohjelma"
+
+#: /src/schooltool/app/browser/templates/calendar_macros.pt:42
+msgid "Yearly"
+msgstr "Vuosittain"
 
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:33
 msgid "More..."
@@ -4002,15 +4008,27 @@ msgstr "Julkinen kalenteri"
 msgid "Page ${page_number}"
 msgstr "Sivu ${page_number}"
 
+#. Default: "Invert Selection"
+#: /src/schooltool/app/browser/templates/edit_relationships.pt:30
+#: /src/schooltool/app/browser/templates/edit_relationships.pt:52
+#: /src/schooltool/contact/browser/templates/manage_contacts.pt:31
+#: /src/schooltool/contact/browser/templates/manage_contacts.pt:62
+#: /src/schooltool/course/browser/templates/copy_sections.pt:74
+#: /src/schooltool/course/browser/templates/edit_relationships.pt:49
+#: /src/schooltool/course/browser/templates/edit_relationships.pt:71
+msgid "invert-selection-button"
+msgstr "Käänteinen valinta"
+
+#: /src/schooltool/app/browser/templates/edit_relationships.pt:58
+#: /src/schooltool/app/browser/templates/event_booking.pt:63
+#: /src/schooltool/contact/browser/templates/manage_contacts.pt:68
+#: /src/schooltool/course/browser/templates/edit_relationships.pt:77
+msgid "There are none to add."
+msgstr "Ei ole mitään lisättävää."
+
 #: /src/schooltool/app/browser/templates/event_add.pt:348
 msgid "Booked Resources"
 msgstr "Varatut resurssit"
-
-#: /src/schooltool/app/browser/templates/manage_menu.pt:3
-#: /src/schooltool/app/browser/configure.zcml:619
-#: /src/schooltool/basicperson/security.zcml:17
-msgid "Manage"
-msgstr "Hallitse"
 
 #: /src/schooltool/app/browser/templates/portlet_tomorrow_events.pt:5
 msgid "Tomorrow's Events"
@@ -4119,6 +4137,53 @@ msgstr ""
 "'pekka' opiskelijoina ja sen aikataulu sisältää kolme aktiviteettiä, joista "
 "kaksi on maanantaina. Kirjallisuudenosio etenee vastaavaan tapaan."
 
+#: /src/schooltool/app/browser/templates/timetables-csvimport.pt:96
+#: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:50
+#: /src/schooltool/course/browser/section-member-csvimport.pt:27
+#: /src/schooltool/course/browser/templates/course-csvimport.pt:61
+#: /src/schooltool/group/browser/group-csvimport.pt:47
+#: /src/schooltool/group/browser/group-member-csvimport.pt:27
+#: /src/schooltool/person/browser/person-csvimport.pt:50
+#: /src/schooltool/resource/browser/resource-csvimport.pt:47
+msgid "CSV File"
+msgstr "CSV-tiedosto"
+
+#: /src/schooltool/app/browser/templates/timetables-csvimport.pt:115
+#: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:69
+#: /src/schooltool/course/browser/section-member-csvimport.pt:46
+#: /src/schooltool/course/browser/templates/course-csvimport.pt:80
+#: /src/schooltool/group/browser/group-csvimport.pt:66
+#: /src/schooltool/group/browser/group-member-csvimport.pt:46
+#: /src/schooltool/person/browser/person-csvimport.pt:69
+#: /src/schooltool/resource/browser/resource-csvimport.pt:66
+msgid "Input CSV Data"
+msgstr "Syötä CSV-tiedot"
+
+#: /src/schooltool/app/browser/templates/timetables-csvimport.pt:116
+#: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:70
+#: /src/schooltool/course/browser/section-member-csvimport.pt:47
+#: /src/schooltool/course/browser/templates/course-csvimport.pt:81
+#: /src/schooltool/group/browser/group-csvimport.pt:67
+#: /src/schooltool/group/browser/group-member-csvimport.pt:47
+#: /src/schooltool/person/browser/person-csvimport.pt:70
+#: /src/schooltool/resource/browser/resource-csvimport.pt:67
+msgid "CSV Data"
+msgstr "CSV-tiedot"
+
+#. Default: "Submit"
+#: /src/schooltool/app/browser/templates/timetables-csvimport.pt:122
+#: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:75
+#: /src/schooltool/basicperson/browser/templates/person_edit.pt:10
+#: /src/schooltool/course/browser/section-member-csvimport.pt:52
+#: /src/schooltool/course/browser/templates/course-csvimport.pt:86
+#: /src/schooltool/export/templates/import.pt:66
+#: /src/schooltool/group/browser/group-csvimport.pt:72
+#: /src/schooltool/group/browser/group-member-csvimport.pt:52
+#: /src/schooltool/person/browser/person-csvimport.pt:75
+#: /src/schooltool/resource/browser/resource-csvimport.pt:72
+msgid "submit-button"
+msgstr "Hyväksy"
+
 #: /src/schooltool/app/help/admin.pt:6
 msgid "SchoolTool Administration"
 msgstr "ScoolToolin ylläpito"
@@ -4182,16 +4247,8 @@ msgstr ""
 "-syötteenä: </strong> Lisää <code>/atom.xml</code> kalenterin verkko-"
 "osoitteen loppuun.</li> </ul>"
 
-#: /src/schooltool/app/help/event_edit.pt:12
-msgid ""
-"If you need to edit a resource reservation, click the <code>Book "
-"resources</code> link at the bottom of the form."
-msgstr ""
-"Jos sinun täytyy muokata resurssin varausta, klikkaa <code>Varaa "
-"resurssit</code> linkki kaavakkeen pohjalla."
-
-#: /src/schooltool/app/help/event_edit.pt:17
 #: /src/schooltool/app/help/event_add.pt:19
+#: /src/schooltool/app/help/event_edit.pt:17
 msgid ""
 "The <code>Location</code> field allows you to enter a description of the "
 "location of the event, but this is not connected to the reservation system. "
@@ -4203,8 +4260,8 @@ msgstr ""
 "hallitakseen luokkien varauksia, sinun täytyy valita <code>Varaa "
 "resurssit</code> valintaruutu sivun pohjalla."
 
-#: /src/schooltool/app/help/event_edit.pt:22
 #: /src/schooltool/app/help/event_add.pt:24
+#: /src/schooltool/app/help/event_edit.pt:22
 msgid ""
 "If your event repeats in some pattern, check the <code>Recurring</code> box "
 "and fill out the new fields that appear. In certain circumstances (like if "
@@ -4216,6 +4273,14 @@ msgstr ""
 "(esimerkiksi jos haluat vaihtaa viikottaisen tapahtuman päivää) sinun täytyy "
 "klikata  <code>Päivitä kaavake</code> -painiketta päivittääksesi Toistuva -"
 "kaavakkeen kohdat."
+
+#: /src/schooltool/app/help/event_edit.pt:12
+msgid ""
+"If you need to edit a resource reservation, click the <code>Book "
+"resources</code> link at the bottom of the form."
+msgstr ""
+"Jos sinun täytyy muokata resurssin varausta, klikkaa <code>Varaa "
+"resurssit</code> linkki kaavakkeen pohjalla."
 
 #: /src/schooltool/app/help/monthly_calendar.pt:8
 msgid ""
@@ -4432,6 +4497,11 @@ msgstr ""
 "formaatissa:</strong> Valitse <code> Avaa iCal -muodossa</code> Toiminnot -"
 "valikosta.</li></ul>"
 
+#: /src/schooltool/app/interfaces.py:44
+#: /src/schooltool/app/interfaces.py:48
+msgid "Invalid integer data"
+msgstr "Virheellinen numerotieto"
+
 #: /src/schooltool/app/interfaces.py:137
 #: /src/schooltool/app/interfaces.py:148
 msgid ""
@@ -4448,16 +4518,11 @@ msgstr ""
 msgid "Show timetables"
 msgstr "Näytä aikataulut"
 
-#: /src/schooltool/app/interfaces.py:44
-#: /src/schooltool/app/interfaces.py:48
-msgid "Invalid integer data"
-msgstr "Virheellinen numerotieto"
-
-#: /src/schooltool/app/main.py:415
+#: /src/schooltool/app/main.py:406
 msgid "Cannot resolve plugin action order:\n"
 msgstr ""
 
-#: /src/schooltool/app/main.py:604
+#: /src/schooltool/app/main.py:595
 msgid "Reading configuration from %s"
 msgstr "Lukee asetuksia kohteesta %s"
 
@@ -4479,13 +4544,6 @@ msgstr "\"$group\"-ryhmä."
 msgid "\"$group\" group and the super user."
 msgstr "\"$group\"-ryhmä ja pääkäyttäjä."
 
-#: /src/schooltool/app/security.zcml:103
-#: /src/schooltool/course/security.zcml:149
-#: /src/schooltool/person/security.zcml:136
-#: /src/schooltool/group/security.zcml:94
-msgid "Change calendar"
-msgstr "Muuta ohjelmaa"
-
 #: /src/schooltool/app/security.zcml:69
 msgid "Everyone can view the application calendar."
 msgstr "Kaikki voivat katsoa ohjelmistokalenteria"
@@ -4504,22 +4562,17 @@ msgstr "Koulukohtaisten asetusten hallinta"
 
 #: /src/schooltool/app/security.zcml:95
 #: /src/schooltool/course/security.zcml:141
-#: /src/schooltool/person/security.zcml:128
 #: /src/schooltool/group/security.zcml:86
+#: /src/schooltool/person/security.zcml:128
 msgid "View calendar"
 msgstr "Kalenterin katselu"
 
-#: /src/schooltool/basicperson/browser/configure.zcml:143
-msgid "New Text Field"
-msgstr "Uusi tekstikenttä"
-
-#: /src/schooltool/basicperson/browser/configure.zcml:150
-msgid "New Date Field"
-msgstr "Uusi Aika Kenttä"
-
-#: /src/schooltool/basicperson/browser/configure.zcml:157
-msgid "New Selection List Field"
-msgstr ""
+#: /src/schooltool/app/security.zcml:103
+#: /src/schooltool/course/security.zcml:149
+#: /src/schooltool/group/security.zcml:94
+#: /src/schooltool/person/security.zcml:136
+msgid "Change calendar"
+msgstr "Muuta ohjelmaa"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:33
 msgid "Export"
@@ -4533,17 +4586,29 @@ msgstr ""
 msgid "Advisees"
 msgstr ""
 
-#: /src/schooltool/basicperson/browser/csvimport.py:53
+#: /src/schooltool/basicperson/browser/configure.zcml:143
+msgid "New Text Field"
+msgstr "Uusi tekstikenttä"
+
+#: /src/schooltool/basicperson/browser/configure.zcml:150
+msgid "New Date Field"
+msgstr "Uusi Aika Kenttä"
+
+#: /src/schooltool/basicperson/browser/configure.zcml:157
+msgid "New Selection List Field"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/csvimport.py:52
 msgid "first name may not be empty"
 msgstr "etunimi ei saa olla tyhjä"
 
-#: /src/schooltool/basicperson/browser/csvimport.py:57
+#: /src/schooltool/basicperson/browser/csvimport.py:56
 msgid "last name may not be empty"
 msgstr "sukunimi ei saa olla tyhjä"
 
 #. Default: ""
-#: /src/schooltool/basicperson/browser/csvimport.py:69
-#: /src/schooltool/person/browser/csvimport.py:63
+#: /src/schooltool/basicperson/browser/csvimport.py:68
+#: /src/schooltool/person/browser/csvimport.py:62
 msgid "Duplicate username: ${username}"
 msgstr "Kaksois käyttäjänimi: ${käyttäjänimi}"
 
@@ -4556,56 +4621,56 @@ msgstr "Lisää uusi kenttä"
 msgid "Change information for ${field_title}"
 msgstr "Muuta kentän ${field_title} tietoja"
 
-#: /src/schooltool/basicperson/browser/person.py:105
+#: /src/schooltool/basicperson/browser/person.py:49
+msgid "Group"
+msgstr "Ryhmä"
+
+#: /src/schooltool/basicperson/browser/person.py:68
+msgid "Confirm"
+msgstr "Vahvista"
+
+#: /src/schooltool/basicperson/browser/person.py:104
 msgid "This username is already in use!"
 msgstr "Tämä käyttäjätunnus on jo käytössä."
 
-#: /src/schooltool/basicperson/browser/person.py:144
+#: /src/schooltool/basicperson/browser/person.py:143
 msgid "Add new person"
 msgstr "Lisää uusi henkilö"
 
-#: /src/schooltool/basicperson/browser/person.py:164
+#: /src/schooltool/basicperson/browser/person.py:163
 msgid "Passwords do not match"
 msgstr "Salasanat eivät täsmää"
 
 #. Default: ""
-#: /src/schooltool/basicperson/browser/person.py:229
+#: /src/schooltool/basicperson/browser/person.py:228
 msgid "Change information for ${fullname}"
 msgstr "Muuta tietoa ${fullname}"
 
-#: /src/schooltool/basicperson/browser/person.py:299
+#: /src/schooltool/basicperson/browser/person.py:298
 msgid "Current Advisors"
 msgstr "Nykyinen neuvonantaja"
 
-#: /src/schooltool/basicperson/browser/person.py:300
+#: /src/schooltool/basicperson/browser/person.py:299
 msgid "Add Advisors"
 msgstr "Lisää Uusi Neuvonantaja"
 
 #. Default: ""
-#: /src/schooltool/basicperson/browser/person.py:304
+#: /src/schooltool/basicperson/browser/person.py:303
 msgid "Advisors of ${person}"
 msgstr ""
 
-#: /src/schooltool/basicperson/browser/person.py:323
+#: /src/schooltool/basicperson/browser/person.py:322
 msgid "Current Advisees"
 msgstr "Nykyiset Neuvot"
 
-#: /src/schooltool/basicperson/browser/person.py:324
+#: /src/schooltool/basicperson/browser/person.py:323
 msgid "Add Advisees"
 msgstr "Lisää Neuvoja"
 
 #. Default: ""
-#: /src/schooltool/basicperson/browser/person.py:328
+#: /src/schooltool/basicperson/browser/person.py:327
 msgid "Advisees of ${person}"
 msgstr "${person} antamat neuvot"
-
-#: /src/schooltool/basicperson/browser/person.py:50
-msgid "Group"
-msgstr "Ryhmä"
-
-#: /src/schooltool/basicperson/browser/person.py:69
-msgid "Confirm"
-msgstr "Vahvista"
 
 #: /src/schooltool/basicperson/browser/templates/demographics-view.pt:4
 #: /src/schooltool/basicperson/browser/templates/demographics-view.pt:7
@@ -4613,8 +4678,8 @@ msgid "Demographics Container"
 msgstr ""
 
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:26
-#: /src/schooltool/person/browser/person-csvimport.pt:26
 #: /src/schooltool/person/browser/configure.zcml:80
+#: /src/schooltool/person/browser/person-csvimport.pt:26
 msgid "Import Persons"
 msgstr "Tuo henkilöitä"
 
@@ -4654,53 +4719,6 @@ msgstr ""
 "on salasana (r2m45j) ja on ainoa joka voi kirjautua järjestelmään. Huomaa, "
 "että salasanojen tulee olla tekstinä ja numeroina. (ei erikoismerkkejä)"
 
-#: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:50
-#: /src/schooltool/resource/browser/resource-csvimport.pt:47
-#: /src/schooltool/person/browser/person-csvimport.pt:50
-#: /src/schooltool/course/browser/section-member-csvimport.pt:27
-#: /src/schooltool/course/browser/templates/course-csvimport.pt:61
-#: /src/schooltool/group/browser/group-csvimport.pt:47
-#: /src/schooltool/group/browser/group-member-csvimport.pt:27
-#: /src/schooltool/app/browser/templates/timetables-csvimport.pt:96
-msgid "CSV File"
-msgstr "CSV-tiedosto"
-
-#: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:69
-#: /src/schooltool/resource/browser/resource-csvimport.pt:66
-#: /src/schooltool/person/browser/person-csvimport.pt:69
-#: /src/schooltool/course/browser/section-member-csvimport.pt:46
-#: /src/schooltool/course/browser/templates/course-csvimport.pt:80
-#: /src/schooltool/group/browser/group-csvimport.pt:66
-#: /src/schooltool/group/browser/group-member-csvimport.pt:46
-#: /src/schooltool/app/browser/templates/timetables-csvimport.pt:115
-msgid "Input CSV Data"
-msgstr "Syötä CSV-tiedot"
-
-#: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:70
-#: /src/schooltool/resource/browser/resource-csvimport.pt:67
-#: /src/schooltool/person/browser/person-csvimport.pt:70
-#: /src/schooltool/course/browser/section-member-csvimport.pt:47
-#: /src/schooltool/course/browser/templates/course-csvimport.pt:81
-#: /src/schooltool/group/browser/group-csvimport.pt:67
-#: /src/schooltool/group/browser/group-member-csvimport.pt:47
-#: /src/schooltool/app/browser/templates/timetables-csvimport.pt:116
-msgid "CSV Data"
-msgstr "CSV-tiedot"
-
-#. Default: "Apply"
-#: /src/schooltool/basicperson/browser/templates/person_edit.pt:10
-#: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:75
-#: /src/schooltool/export/templates/import.pt:66
-#: /src/schooltool/resource/browser/resource-csvimport.pt:72
-#: /src/schooltool/person/browser/person-csvimport.pt:75
-#: /src/schooltool/course/browser/section-member-csvimport.pt:52
-#: /src/schooltool/course/browser/templates/course-csvimport.pt:86
-#: /src/schooltool/group/browser/group-csvimport.pt:72
-#: /src/schooltool/group/browser/group-member-csvimport.pt:52
-#: /src/schooltool/app/browser/templates/timetables-csvimport.pt:122
-msgid "submit-button"
-msgstr "Hyväksy"
-
 #: /src/schooltool/basicperson/interfaces.py:122
 msgid "The title of this Field Description"
 msgstr ""
@@ -4738,20 +4756,31 @@ msgid "View user's demographics information"
 msgstr ""
 
 #: /src/schooltool/basicperson/security.zcml:43
-msgid "Modify user's demographics information."
+msgid "Modify user demographics"
 msgstr ""
 
 #: /src/schooltool/basicperson/security.zcml:43
-msgid "Modify user demographics"
+msgid "Modify user's demographics information."
 msgstr ""
 
 #: /src/schooltool/commendation/commendation_add.pt:4
 msgid "Add Commendation"
 msgstr "Lisää kunniamaininta"
 
-#: /src/schooltool/common/configure.zcml:100
+#: /src/schooltool/common/configure.zcml:91
 msgid "Add Info"
 msgstr "Lisää tieto"
+
+#: /src/schooltool/contact/browser/configure.zcml:49
+msgid "New Contact"
+msgstr "Uusi yhteystieto"
+
+#: /src/schooltool/contact/browser/configure.zcml:64
+#: /src/schooltool/contact/browser/configure.zcml:76
+#: /src/schooltool/contact/browser/templates/view_contacts.pt:59
+#: /src/schooltool/contact/contact.py:78
+msgid "Contacts"
+msgstr "Yhteystiedot"
 
 #: /src/schooltool/contact/browser/configure.zcml:100
 msgid "Manage Contacts"
@@ -4762,9 +4791,9 @@ msgstr "Yhteystietojen hallinta"
 msgid "Other Contacts"
 msgstr "Muut yhteystiedot"
 
-#: /src/schooltool/contact/browser/configure.zcml:49
-msgid "New Contact"
-msgstr "Uusi yhteystieto"
+#: /src/schooltool/contact/browser/contact.py:77
+msgid "Add new contact"
+msgstr "Lisää uusi yhteystieto"
 
 #. Default: ""
 #: /src/schooltool/contact/browser/contact.py:160
@@ -4785,10 +4814,6 @@ msgstr ""
 msgid "Address"
 msgstr "Osoite"
 
-#: /src/schooltool/contact/browser/contact.py:77
-msgid "Add new contact"
-msgstr "Lisää uusi yhteystieto"
-
 #: /src/schooltool/contact/browser/relationship.py:75
 #: /src/schooltool/contact/interfaces.py:101
 msgid "Relationship"
@@ -4807,16 +4832,39 @@ msgstr ""
 msgid "Manage contacts of ${person}"
 msgstr ""
 
-#. Default: "Invert Selection"
-#: /src/schooltool/contact/browser/templates/manage_contacts.pt:31
-#: /src/schooltool/contact/browser/templates/manage_contacts.pt:62
-#: /src/schooltool/course/browser/templates/copy_sections.pt:74
-#: /src/schooltool/course/browser/templates/edit_relationships.pt:49
-#: /src/schooltool/course/browser/templates/edit_relationships.pt:71
-#: /src/schooltool/app/browser/templates/edit_relationships.pt:30
-#: /src/schooltool/app/browser/templates/edit_relationships.pt:52
-msgid "invert-selection-button"
-msgstr "Käänteinen valinta"
+#: /src/schooltool/contact/browser/templates/contact_view.pt:16
+#: /src/schooltool/contact/browser/templates/view_contacts.pt:18
+msgid "${relationship} of ${person}"
+msgstr "Henkilön ${person} ${relationship}"
+
+#: /src/schooltool/contact/browser/templates/contact_view.pt:20
+#: /src/schooltool/contact/browser/templates/view_contacts.pt:22
+msgid "Contact of ${person}"
+msgstr ""
+
+#. Default: "Confirm"
+#: /src/schooltool/contact/browser/templates/contacts_delete.pt:34
+#: /src/schooltool/course/browser/templates/course_container.pt:40
+#: /src/schooltool/course/browser/templates/section_container.pt:93
+#: /src/schooltool/demographics/browser/search.pt:35
+#: /src/schooltool/demographics/browser/table.pt:28
+#: /src/schooltool/email/browser/templates/email_container.pt:48
+#: /src/schooltool/email/browser/templates/email_delete.pt:31
+#: /src/schooltool/person/browser/person_container_delete.pt:35
+#: /src/schooltool/resource/browser/container_delete.pt:27
+#: /src/schooltool/schoolyear/browser/templates/schoolyear.pt:42
+#: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:34
+#: /src/schooltool/schoolyear/browser/templates/term-delete.pt:27
+#: /src/schooltool/skin/templates/container.pt:42
+#: /src/schooltool/skin/templates/container_delete.pt:32
+#: /src/schooltool/skin/templates/table_container.pt:33
+#: /src/schooltool/skin/templates/view_macros.pt:194
+#: /src/schooltool/term/browser/templates/term-container-delete.pt:29
+#: /src/schooltool/timetable/browser/templates/schooltt-delete.pt:29
+#: /src/schooltool/timetable/browser/templates/timetable-container-delete.pt:27
+#: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:29
+msgid "delete-button"
+msgstr "Poista"
 
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:43
 msgid "Create contact"
@@ -4830,22 +4878,9 @@ msgstr ""
 msgid "Assign"
 msgstr ""
 
-#: /src/schooltool/contact/browser/templates/manage_contacts.pt:68
-#: /src/schooltool/course/browser/templates/edit_relationships.pt:77
-#: /src/schooltool/app/browser/templates/edit_relationships.pt:58
-#: /src/schooltool/app/browser/templates/event_booking.pt:63
-msgid "There are none to add."
-msgstr "Ei ole mitään lisättävää."
-
-#: /src/schooltool/contact/browser/templates/view_contacts.pt:18
-#: /src/schooltool/contact/browser/templates/contact_view.pt:16
-msgid "${relationship} of ${person}"
-msgstr "Henkilön ${person} ${relationship}"
-
-#: /src/schooltool/contact/browser/templates/view_contacts.pt:22
-#: /src/schooltool/contact/browser/templates/contact_view.pt:20
-msgid "Contact of ${person}"
-msgstr ""
+#: /src/schooltool/contact/browser/templates/view_contacts.pt:8
+msgid "Contact information for ${person}"
+msgstr "Henkilön ${person} yhteystiedot"
 
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:41
 msgid "Phones"
@@ -4858,21 +4893,6 @@ msgstr "Kielitaito"
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:73
 msgid "(View Details)"
 msgstr ""
-
-#: /src/schooltool/contact/browser/templates/view_contacts.pt:8
-msgid "Contact information for ${person}"
-msgstr "Henkilön ${person} yhteystiedot"
-
-#: /src/schooltool/contact/contact.py:211
-msgid "Instructors of student(s) related to this contact."
-msgstr ""
-
-#: /src/schooltool/contact/contact.py:78
-#: /src/schooltool/contact/browser/templates/view_contacts.pt:59
-#: /src/schooltool/contact/browser/configure.zcml:64
-#: /src/schooltool/contact/browser/configure.zcml:76
-msgid "Contacts"
-msgstr "Yhteystiedot"
 
 #: /src/schooltool/contact/contact.py:80
 msgid ""
@@ -4887,6 +4907,30 @@ msgid ""
 "    or the school as a whole.\n"
 "    "
 msgstr ""
+
+#: /src/schooltool/contact/contact.py:211
+msgid "Instructors of student(s) related to this contact."
+msgstr ""
+
+#: /src/schooltool/contact/interfaces.py:53
+msgid "Address line 1"
+msgstr "Osoiterivi 1"
+
+#: /src/schooltool/contact/interfaces.py:55
+msgid "Address line 2"
+msgstr "Osoiterivi 2"
+
+#: /src/schooltool/contact/interfaces.py:61
+msgid "Country"
+msgstr "Maa"
+
+#: /src/schooltool/contact/interfaces.py:77
+msgid "Mobile phone"
+msgstr "Matkapuhelin"
+
+#: /src/schooltool/contact/interfaces.py:82
+msgid "Language"
+msgstr "Kieli"
 
 #: /src/schooltool/contact/interfaces.py:102
 msgid "Contact's relationship with the person"
@@ -4912,25 +4956,11 @@ msgstr "Huoltaja"
 msgid "Sibling"
 msgstr "sisarus"
 
-#: /src/schooltool/contact/interfaces.py:53
-msgid "Address line 1"
-msgstr "Osoiterivi 1"
-
-#: /src/schooltool/contact/interfaces.py:55
-msgid "Address line 2"
-msgstr "Osoiterivi 2"
-
-#: /src/schooltool/contact/interfaces.py:61
-msgid "Country"
-msgstr "Maa"
-
-#: /src/schooltool/contact/interfaces.py:77
-msgid "Mobile phone"
-msgstr "Matkapuhelin"
-
-#: /src/schooltool/contact/interfaces.py:82
-msgid "Language"
-msgstr "Kieli"
+#: /src/schooltool/contact/security.zcml:29
+#: /src/schooltool/person/security.zcml:79
+#: /src/schooltool/timetable/security.zcml:18
+msgid "List/Search"
+msgstr ""
 
 #: /src/schooltool/contact/security.zcml:36
 msgid ""
@@ -4962,36 +4992,57 @@ msgstr "Käyttäjän yhteystietojen katselu"
 msgid "Modify user's contact information"
 msgstr "Käyttäjän yhteystietojen muuttaminen"
 
+#: /src/schooltool/contact/security.zcml:86
+#: /src/schooltool/person/security.zcml:152
+msgid "The user himself."
+msgstr "Käyttäjä itse."
+
+#: /src/schooltool/contact/security.zcml:86
+#: /src/schooltool/person/security.zcml:152
+msgid "User"
+msgstr "Käyttäjä"
+
 #: /src/schooltool/course/browser/configure.zcml:10
 msgid "Add a Course"
 msgstr "Lisää kurssi"
+
+#: /src/schooltool/course/browser/configure.zcml:25
+msgid "Edit Course Information"
+msgstr "Muuta kurssin tietoja"
+
+#: /src/schooltool/course/browser/configure.zcml:85
+#: /src/schooltool/course/browser/templates/course-csvimport.pt:21
+msgid "Import Courses"
+msgstr "Tuo kursseja"
+
+#: /src/schooltool/course/browser/configure.zcml:113
+msgid "Copy Sections"
+msgstr ""
+
+#: /src/schooltool/course/browser/configure.zcml:123
+msgid "View Next"
+msgstr "Näytä seuraava"
+
+#: /src/schooltool/course/browser/configure.zcml:133
+msgid "View Previous"
+msgstr "Näytä edellinen"
 
 #: /src/schooltool/course/browser/configure.zcml:160
 #: /src/schooltool/course/browser/configure.zcml:170
 msgid "New Section"
 msgstr "Uusi osio"
 
-#: /src/schooltool/course/browser/configure.zcml:25
-msgid "Edit Course Information"
-msgstr "Muuta kurssin tietoja"
+#: /src/schooltool/course/browser/configure.zcml:194
+#: /src/schooltool/course/browser/section-member-csvimport.pt:21
+msgid "Import Section Members"
+msgstr ""
 
 #: /src/schooltool/course/browser/configure.zcml:276
 msgid "Copy from prev. term"
 msgstr "Kopioi ed. lukukaudelta"
 
-#: /src/schooltool/course/browser/csvimport.py:131
-#: /src/schooltool/group/browser/csvimport.py:76
-msgid "User names must not be empty."
-msgstr ""
-
 #. Default: ""
-#: /src/schooltool/course/browser/csvimport.py:139
-#: /src/schooltool/group/browser/csvimport.py:84
-msgid "\"${username}\" is not a valid username."
-msgstr "\"${username}\" ei ole käypä käyttäjänimi."
-
-#. Default: ""
-#: /src/schooltool/course/browser/csvimport.py:81
+#: /src/schooltool/course/browser/csvimport.py:80
 msgid ""
 "Course \"${course_title}\" credits \"${invalid_credits}\" value must be an "
 "integer."
@@ -5000,17 +5051,23 @@ msgstr ""
 "olla kokonaisluku."
 
 #. Default: ""
-#: /src/schooltool/course/browser/csvimport.py:96
+#: /src/schooltool/course/browser/csvimport.py:95
 msgid ""
 "Course \"${course_title}\" id \"${invalid_id}\" is invalid. ${error_message}"
 msgstr ""
 "Kurssin \"${course_title}\" tunnus \"${invalid_id}\" on virheellinen. "
 "${error_message}"
 
-#: /src/schooltool/course/browser/section-member-csvimport.pt:21
-#: /src/schooltool/course/browser/configure.zcml:194
-msgid "Import Section Members"
+#: /src/schooltool/course/browser/csvimport.py:130
+#: /src/schooltool/group/browser/csvimport.py:76
+msgid "User names must not be empty."
 msgstr ""
+
+#. Default: ""
+#: /src/schooltool/course/browser/csvimport.py:138
+#: /src/schooltool/group/browser/csvimport.py:84
+msgid "\"${username}\" is not a valid username."
+msgstr "\"${username}\" ei ole käypä käyttäjänimi."
 
 #: /src/schooltool/course/browser/section-member-csvimport.pt:4
 msgid "Upload SchoolTool section members as CSV"
@@ -5038,10 +5095,10 @@ msgid "Course"
 msgstr "Kurssi"
 
 #: /src/schooltool/course/browser/section.py:554
-#: /src/schooltool/course/browser/templates/section.pt:96
-#: /src/schooltool/course/browser/templates/course_container.pt:57
 #: /src/schooltool/course/browser/templates/copy_sections.pt:145
+#: /src/schooltool/course/browser/templates/course_container.pt:57
 #: /src/schooltool/course/browser/templates/link_section.pt:114
+#: /src/schooltool/course/browser/templates/section.pt:96
 #: /src/schooltool/course/browser/templates/section_container.pt:87
 msgid "Students"
 msgstr "Opiskelijat"
@@ -5054,14 +5111,10 @@ msgstr "Tämänhetkiset opiskelijat"
 msgid "Available Students"
 msgstr "Vapaat oppilaat"
 
-#: /src/schooltool/course/browser/templates/copy_sections.pt:106
-msgid "Copied"
+#: /src/schooltool/course/browser/templates/copy_sections.pt:9
+#: /src/schooltool/course/browser/templates/link_section.pt:9
+msgid "Copy sections to ${term} of ${schoolyear}"
 msgstr ""
-
-#. Default: "Copy"
-#: /src/schooltool/course/browser/templates/copy_sections.pt:159
-msgid "copy-button"
-msgstr "Kopioi"
 
 #: /src/schooltool/course/browser/templates/copy_sections.pt:29
 msgid "Copy sections from ${prev_term} of ${schoolyear} to ${term}"
@@ -5081,20 +5134,19 @@ msgstr ""
 msgid "select-none-button"
 msgstr "Poista valinnat"
 
-#: /src/schooltool/course/browser/templates/copy_sections.pt:9
-#: /src/schooltool/course/browser/templates/link_section.pt:9
-msgid "Copy sections to ${term} of ${schoolyear}"
-msgstr ""
-
 #: /src/schooltool/course/browser/templates/copy_sections.pt:91
 #: /src/schooltool/course/browser/templates/link_section.pt:67
 msgid "Section in ${term}"
 msgstr ""
 
-#: /src/schooltool/course/browser/templates/course-csvimport.pt:21
-#: /src/schooltool/course/browser/configure.zcml:85
-msgid "Import Courses"
-msgstr "Tuo kursseja"
+#: /src/schooltool/course/browser/templates/copy_sections.pt:106
+msgid "Copied"
+msgstr ""
+
+#. Default: "Copy"
+#: /src/schooltool/course/browser/templates/copy_sections.pt:159
+msgid "copy-button"
+msgstr "Kopioi"
 
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:24
 msgid ""
@@ -5140,10 +5192,14 @@ msgstr "Kurssi ${course} lukuvuodelle ${schoolyear}"
 msgid "Courses for ${schoolyear}"
 msgstr "Lukuvuoden ${schoolyear} kurssit"
 
-#. Default: "Link"
-#: /src/schooltool/course/browser/templates/link_section.pt:130
-msgid "link-section-button"
-msgstr "Linkitä osio"
+#: /src/schooltool/course/browser/templates/edit_relationships.pt:12
+#: /src/schooltool/course/browser/templates/edit_relationships.pt:24
+#: /src/schooltool/course/browser/templates/section.pt:11
+#: /src/schooltool/course/browser/templates/section.pt:25
+msgid "Section of ${course} -- ${section_title} for ${term} of ${schoolyear}"
+msgstr ""
+"Kurssin ${course} osio -- ${section_title} lukukaudelle ${term} lukuvuonna "
+"${schoolyear}"
 
 #: /src/schooltool/course/browser/templates/link_section.pt:24
 msgid "Link ${section}, ${term} with a section in ${target_term}"
@@ -5153,18 +5209,10 @@ msgstr ""
 msgid "There is no valid term in ${schoolyear} to pick a section from."
 msgstr ""
 
-#: /src/schooltool/course/browser/templates/section.pt:100
-msgid "Change the students in this section individually"
-msgstr "Muuta tämän osion opiskelijoita yksitellen"
-
-#: /src/schooltool/course/browser/templates/section.pt:11
-#: /src/schooltool/course/browser/templates/section.pt:25
-#: /src/schooltool/course/browser/templates/edit_relationships.pt:12
-#: /src/schooltool/course/browser/templates/edit_relationships.pt:24
-msgid "Section of ${course} -- ${section_title} for ${term} of ${schoolyear}"
-msgstr ""
-"Kurssin ${course} osio -- ${section_title} lukukaudelle ${term} lukuvuonna "
-"${schoolyear}"
+#. Default: "Link"
+#: /src/schooltool/course/browser/templates/link_section.pt:130
+msgid "link-section-button"
+msgstr "Linkitä osio"
 
 #: /src/schooltool/course/browser/templates/section.pt:36
 msgid "Previous: ${course} -- ${section_title} for ${term}"
@@ -5173,6 +5221,10 @@ msgstr "Edellinen: ${course} -- osio ${section_title} lukukaudelle ${term}"
 #: /src/schooltool/course/browser/templates/section.pt:47
 msgid "Next: ${course} -- ${section_title} for ${term}"
 msgstr "Seuraava: ${course} -- osio ${section_title} lukukaudelle ${term}"
+
+#: /src/schooltool/course/browser/templates/section.pt:100
+msgid "Change the students in this section individually"
+msgstr "Muuta tämän osion opiskelijoita yksitellen"
 
 #: /src/schooltool/course/browser/templates/section_container.pt:9
 #: /src/schooltool/course/browser/templates/section_container.pt:20
@@ -5308,12 +5360,6 @@ msgstr "Eri lukuvuosien osioita ei voi linkittää"
 msgid "Sections must be in consecutive terms"
 msgstr "Osioiden tulee olla toisiaan seuraavilla lukukausilla"
 
-#: /src/schooltool/course/security.zcml:107
-msgid ""
-"A section is a set of one or more learners                    who meet "
-"during a term."
-msgstr ""
-
 #: /src/schooltool/course/security.zcml:42
 msgid "Everyone can view section information and calendars"
 msgstr "Kaikki voivat katsoa osion tietoja ja kalentereita"
@@ -5327,24 +5373,36 @@ msgstr ""
 #: /src/schooltool/course/security.zcml:79
 #: /src/schooltool/course/security.zcml:113
 #: /src/schooltool/group/security.zcml:58
-#: /src/schooltool/term/security.zcml:21
 #: /src/schooltool/schoolyear/security.zcml:9
+#: /src/schooltool/term/security.zcml:21
 msgid "List"
 msgstr ""
 
 #: /src/schooltool/course/security.zcml:86
 #: /src/schooltool/course/security.zcml:120
-#: /src/schooltool/person/security.zcml:86
 #: /src/schooltool/group/security.zcml:65
-#: /src/schooltool/term/security.zcml:28
+#: /src/schooltool/person/security.zcml:86
 #: /src/schooltool/schoolyear/security.zcml:16
+#: /src/schooltool/term/security.zcml:28
 #: /src/schooltool/timetable/security.zcml:25
 msgid "Create/Delete"
 msgstr "Lisäys/poisto"
 
+#: /src/schooltool/course/security.zcml:107
+msgid ""
+"A section is a set of one or more learners                    who meet "
+"during a term."
+msgstr ""
+
 #: /src/schooltool/dashboard/configure.zcml:41
 msgid "My Sections"
 msgstr "Omat osiot"
+
+#: /src/schooltool/dashboard/school.pt:16
+#: /src/schooltool/timetable/browser/schema.py:236
+#: /src/schooltool/timetable/browser/templates/link_to_school_timetables.pt:1
+msgid "School Timetables"
+msgstr "Koulun aikataulut"
 
 #: /src/schooltool/demographics/browser/configure.zcml:185
 #: /src/schooltool/demographics/browser/configure.zcml:246
@@ -5362,45 +5420,21 @@ msgstr "Schooltoolin henkilöiden näyttövalikko"
 
 #: /src/schooltool/demographics/browser/demographics_macros.pt:4
 msgid "Shortcut: Alt-N"
-msgstr ""
+msgstr "Pikanäppäin: Alt-N"
 
 #. Default: ""
-#: /src/schooltool/demographics/browser/personform.py:189
+#: /src/schooltool/demographics/browser/personform.py:188
 msgid "Change school data for ${fullname}"
 msgstr "Vaihda koulutietoja henkilölle: ${fullname}"
 
 #. Default: ""
-#: /src/schooltool/demographics/browser/personform.py:210
+#: /src/schooltool/demographics/browser/personform.py:209
 msgid "Change contact information for ${fullname}"
 msgstr "Muokkaa yhteystietoja henkilölle ${fullname}"
 
-#: /src/schooltool/demographics/browser/personform.py:218
+#: /src/schooltool/demographics/browser/personform.py:217
 msgid "Contact information"
 msgstr "Yhteystiedot"
-
-#. Default: "Delete"
-#: /src/schooltool/demographics/browser/search.pt:35
-#: /src/schooltool/demographics/browser/table.pt:28
-#: /src/schooltool/term/browser/templates/term-container-delete.pt:29
-#: /src/schooltool/schoolyear/browser/templates/term-delete.pt:27
-#: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:34
-#: /src/schooltool/schoolyear/browser/templates/schoolyear.pt:42
-#: /src/schooltool/resource/browser/container_delete.pt:27
-#: /src/schooltool/contact/browser/templates/contacts_delete.pt:34
-#: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:29
-#: /src/schooltool/timetable/browser/templates/timetable-container-delete.pt:27
-#: /src/schooltool/timetable/browser/templates/schooltt-delete.pt:29
-#: /src/schooltool/person/browser/person_container_delete.pt:35
-#: /src/schooltool/course/browser/templates/course_container.pt:40
-#: /src/schooltool/course/browser/templates/section_container.pt:93
-#: /src/schooltool/email/browser/templates/email_delete.pt:31
-#: /src/schooltool/email/browser/templates/email_container.pt:48
-#: /src/schooltool/skin/templates/table_container.pt:33
-#: /src/schooltool/skin/templates/container.pt:42
-#: /src/schooltool/skin/templates/container_delete.pt:32
-#: /src/schooltool/skin/templates/view_macros.pt:194
-msgid "delete-button"
-msgstr "Poista"
 
 #: /src/schooltool/demographics/browser/search.pt:6
 msgid ""
@@ -5411,6 +5445,10 @@ msgstr ""
 "Voit hakea henkilöitä tässä. Huomaa, että tekstikentissä voit käyttää "
 "merkkejä kuten \" * \" haun tehostamiseksi. Esimerkiksi, hakeaksesi kaikkia "
 "henkilöitä nimellä \"Matti\" , käytä <em>*matti*</em>."
+
+#: /src/schooltool/demographics/interfaces.py:99
+msgid "Native Hawaiian or Other Pacific Islander"
+msgstr "Alkuperäinen hawailainen tai muu tyynenmeren saaren alkuasukas"
 
 #: /src/schooltool/demographics/interfaces.py:140
 msgid "Primary language"
@@ -5440,10 +5478,6 @@ msgstr "Vanhemman nimi"
 msgid "Full text search in parent names"
 msgstr "Vanhemman nimi kokotekstihaussa"
 
-#: /src/schooltool/demographics/interfaces.py:99
-msgid "Native Hawaiian or Other Pacific Islander"
-msgstr "Alkuperäinen hawailainen tai muu tyynenmeren saaren alkuasukas"
-
 #: /src/schooltool/devmode/configure.zcml:27
 msgid "Introspect"
 msgstr ""
@@ -5459,6 +5493,42 @@ msgstr "Asetukset"
 #: /src/schooltool/email/browser/configure.zcml:87
 msgid "Send Test"
 msgstr ""
+
+#. Default: ""
+#: /src/schooltool/email/browser/email.py:78
+#: /src/schooltool/email/browser/email.py:399
+msgid "Enabled on ${info}"
+msgstr ""
+
+#: /src/schooltool/email/browser/email.py:82
+#: /src/schooltool/email/browser/email.py:403
+#: /src/schooltool/securitypolicy/browser/control.py:96
+msgid "Disabled"
+msgstr "Ei käytössä"
+
+#: /src/schooltool/email/browser/email.py:91
+#: /src/schooltool/email/browser/email.py:202
+#: /src/schooltool/email/browser/email.py:451
+#: /src/schooltool/email/browser/templates/email_container.pt:20
+msgid "Server Status"
+msgstr "Palvelimen tila"
+
+#: /src/schooltool/email/browser/email.py:92
+#: /src/schooltool/email/browser/email.py:203
+#: /src/schooltool/email/browser/email.py:452
+msgid "Current status of the SchoolTool email service"
+msgstr "SchoolTool-sähköpostipalvelun nykyinen tila"
+
+#: /src/schooltool/email/browser/email.py:96
+#: /src/schooltool/email/interfaces.py:87
+msgid "Hostname"
+msgstr ""
+
+#: /src/schooltool/email/browser/email.py:97
+#: /src/schooltool/email/interfaces.py:88
+msgid "SMTP server hostname. Leave empty to disable email."
+msgstr ""
+"SMTP-palvelimen nimi. Jätä tyhjäksi, jos et halua ottaa sähköpostia käyttöön."
 
 #: /src/schooltool/email/browser/email.py:101
 #: /src/schooltool/email/interfaces.py:92
@@ -5583,7 +5653,7 @@ msgstr "Viestin runko"
 
 #: /src/schooltool/email/browser/email.py:232
 msgid "Email Status"
-msgstr ""
+msgstr "Sähköpostin tila"
 
 #: /src/schooltool/email/browser/email.py:233
 msgid "Status of the message"
@@ -5592,7 +5662,7 @@ msgstr "Viestin tila"
 #: /src/schooltool/email/browser/email.py:237
 #: /src/schooltool/email/browser/email.py:363
 msgid "Last time tried"
-msgstr ""
+msgstr "Viimeisin yritys"
 
 #: /src/schooltool/email/browser/email.py:238
 msgid "Date and time when the message was last tried"
@@ -5627,41 +5697,6 @@ msgstr "Lähetä sähköpostiviesti"
 msgid "Send"
 msgstr "Lähetä"
 
-#. Default: ""
-#: /src/schooltool/email/browser/email.py:78
-#: /src/schooltool/email/browser/email.py:399
-msgid "Enabled on ${info}"
-msgstr ""
-
-#: /src/schooltool/email/browser/email.py:82
-#: /src/schooltool/email/browser/email.py:403
-#: /src/schooltool/securitypolicy/browser/control.py:96
-msgid "Disabled"
-msgstr "Ei käytössä"
-
-#: /src/schooltool/email/browser/email.py:91
-#: /src/schooltool/email/browser/email.py:202
-#: /src/schooltool/email/browser/email.py:451
-#: /src/schooltool/email/browser/templates/email_container.pt:20
-msgid "Server Status"
-msgstr "Palvelimen tila"
-
-#: /src/schooltool/email/browser/email.py:92
-#: /src/schooltool/email/browser/email.py:203
-#: /src/schooltool/email/browser/email.py:452
-msgid "Current status of the SchoolTool email service"
-msgstr "SchoolTool-sähköpostipalvelun nykyinen tila"
-
-#: /src/schooltool/email/browser/email.py:96
-#: /src/schooltool/email/interfaces.py:87
-msgid "Hostname"
-msgstr ""
-
-#: /src/schooltool/email/browser/email.py:97
-#: /src/schooltool/email/interfaces.py:88
-msgid "SMTP server hostname. Leave empty to disable email."
-msgstr ""
-
 #. Default: "Retry"
 #: /src/schooltool/email/browser/templates/email_container.pt:39
 #: /src/schooltool/email/browser/templates/email_container.pt:44
@@ -5686,7 +5721,7 @@ msgstr "Vastaanottajan osoite"
 
 #: /src/schooltool/email/interfaces.py:58
 msgid "Status"
-msgstr ""
+msgstr "Tila"
 
 #: /src/schooltool/email/interfaces.py:59
 msgid "Code for the status of the message"
@@ -5731,6 +5766,8 @@ msgstr ""
 #: /src/schooltool/email/mail.py:55
 msgid "Couldn't login as ($username) to SMTP server (${info})"
 msgstr ""
+"SMTP-palvelimelle (${info}) kirjautuminen tunnuksella ($username) ei "
+"onnistunut"
 
 #: /src/schooltool/email/mail.py:56
 msgid "The server (${info}) rejected the From address: ${from_address}"
@@ -5741,13 +5778,17 @@ msgid ""
 "The server (${info}) rejected the following recipient addresses: ${addresses}"
 msgstr ""
 
+#: /src/schooltool/export/configure.zcml:6
+msgid "XLS Import"
+msgstr "XLS-tuonti"
+
 #: /src/schooltool/export/configure.zcml:21
 msgid "XLS Export"
 msgstr "XLS-vienti"
 
-#: /src/schooltool/export/configure.zcml:6
-msgid "XLS Import"
-msgstr "XLS-tuonti"
+#: /src/schooltool/export/templates/import.pt:4
+msgid "Upload SchoolTool as XLS"
+msgstr "Lähetä SchoolTool XLS-tiedostona (Excel, OpenOffice)"
 
 #: /src/schooltool/export/templates/import.pt:25
 msgid "Import Data"
@@ -5775,10 +5816,6 @@ msgid ""
 "year, for example, that already exists in the system, the import will fail "
 "with an error. Simply remove the duplicate data from the spreadsheet and run "
 "the import again. We're working on making this process even smoother."
-msgstr ""
-
-#: /src/schooltool/export/templates/import.pt:4
-msgid "Upload SchoolTool as XLS"
 msgstr ""
 
 #: /src/schooltool/export/templates/import.pt:50
@@ -5848,12 +5885,12 @@ msgstr ""
 "ole kuvausta ja ylimääräinen \"toisen pilkun jälkeinen teksti\" tullaan "
 "hylkäämään."
 
-#: /src/schooltool/group/browser/group-member-csvimport.pt:21
-msgid "Import Group Members"
-msgstr ""
-
 #: /src/schooltool/group/browser/group-member-csvimport.pt:4
 msgid "Upload SchoolTool group members as CSV"
+msgstr ""
+
+#: /src/schooltool/group/browser/group-member-csvimport.pt:21
+msgid "Import Group Members"
 msgstr ""
 
 #: /src/schooltool/group/security.zcml:53
@@ -5868,13 +5905,13 @@ msgstr "Muistiinpanon runko."
 msgid "Public"
 msgstr "Julkinen"
 
-#: /src/schooltool/person/browser/configure.zcml:103
-msgid "Change Password"
-msgstr "Vaihda salasana"
-
 #: /src/schooltool/person/browser/configure.zcml:91
 msgid "Edit Preferences"
 msgstr "Muuta asetuksia"
+
+#: /src/schooltool/person/browser/configure.zcml:103
+msgid "Change Password"
+msgstr "Vaihda salasana"
 
 #: /src/schooltool/person/browser/home_tab_viewlet.pt:3
 msgid "Home"
@@ -5946,6 +5983,10 @@ msgstr ""
 msgid "Make calendar public"
 msgstr "Tee kalenterista julkinen"
 
+#: /src/schooltool/person/security.zcml:77
+msgid "Users"
+msgstr "Käyttäjät"
+
 #: /src/schooltool/person/security.zcml:107
 msgid "Change password"
 msgstr "Salasanan vaihto"
@@ -5962,16 +6003,6 @@ msgstr "Asetuksien muuttaminen"
 msgid "Manage visible calendars"
 msgstr ""
 
-#: /src/schooltool/person/security.zcml:152
-#: /src/schooltool/contact/security.zcml:86
-msgid "The user himself."
-msgstr "Käyttäjä itse."
-
-#: /src/schooltool/person/security.zcml:152
-#: /src/schooltool/contact/security.zcml:86
-msgid "User"
-msgstr "Käyttäjä"
-
 #: /src/schooltool/person/security.zcml:172
 msgid "Calendar is public"
 msgstr "Kalenteri on julkinen"
@@ -5980,16 +6011,6 @@ msgstr "Kalenteri on julkinen"
 msgid "Everybody, if the calendar is made public in user preferences."
 msgstr ""
 "Kaikki, jos kalenteri on määritelty julkiseksi käyttäjän asetuksissa."
-
-#: /src/schooltool/person/security.zcml:77
-msgid "Users"
-msgstr "Käyttäjät"
-
-#: /src/schooltool/person/security.zcml:79
-#: /src/schooltool/contact/security.zcml:29
-#: /src/schooltool/timetable/security.zcml:18
-msgid "List/Search"
-msgstr ""
 
 #: /src/schooltool/resource/browser/configure.zcml:71
 msgid "Add a Resource"
@@ -6028,13 +6049,13 @@ msgstr ""
 "viimeinen kuvauksen \"kannettava tietokone #805\". \"Pääauditorio\"-"
 "resurssille ei tule kuvausta, vaan siitä tehdään sijainti."
 
-#: /src/schooltool/resource/interfaces.py:128
-#: /src/schooltool/resource/interfaces.py:136
+#: /src/schooltool/resource/interfaces.py:129
+#: /src/schooltool/resource/interfaces.py:137
 msgid "The title of a resource type."
 msgstr "Resurssityypin nimi"
 
-#: /src/schooltool/resource/interfaces.py:129
-#: /src/schooltool/resource/interfaces.py:137
+#: /src/schooltool/resource/interfaces.py:130
+#: /src/schooltool/resource/interfaces.py:138
 msgid ""
 "A string that will be displayed to users in tables or\n"
 "        resource type selection widgets."
@@ -6085,45 +6106,45 @@ msgid ""
 "all options, it can take a <strong>long</strong> time. Just let it run."
 msgstr ""
 
+#: /src/schooltool/schoolyear/browser/configure.zcml:26
+#: /src/schooltool/schoolyear/browser/schoolyear.py:111
+#: /src/schooltool/schoolyear/security.zcml:7
+msgid "School Years"
+msgstr "Lukuvuodet"
+
 #: /src/schooltool/schoolyear/browser/configure.zcml:87
 msgid "New School Year"
 msgstr "Uusi lukuvuosi"
 
-#: /src/schooltool/schoolyear/browser/schoolyear.py:107
-#: /src/schooltool/schoolyear/security.zcml:7
-#: /src/schooltool/schoolyear/browser/configure.zcml:26
-msgid "School Years"
-msgstr "Lukuvuodet"
-
-#: /src/schooltool/schoolyear/browser/schoolyear.py:129
+#: /src/schooltool/schoolyear/browser/schoolyear.py:133
 msgid ""
 "You can not delete the active school year. Unless you are deleting all the "
 "school years."
 msgstr ""
 
-#: /src/schooltool/schoolyear/browser/schoolyear.py:148
+#: /src/schooltool/schoolyear/browser/schoolyear.py:152
 msgid "First day"
 msgstr "Ensimmäinen päivä"
 
-#: /src/schooltool/schoolyear/browser/schoolyear.py:151
+#: /src/schooltool/schoolyear/browser/schoolyear.py:155
 msgid "Last day"
 msgstr "Viimeinen päivä"
 
-#: /src/schooltool/schoolyear/browser/schoolyear.py:170
+#: /src/schooltool/schoolyear/browser/schoolyear.py:174
 msgid "Add new school year"
 msgstr "Lisää uusi lukuvuosi"
 
 #. Default: ""
-#: /src/schooltool/schoolyear/browser/schoolyear.py:234
+#: /src/schooltool/schoolyear/browser/schoolyear.py:238
 msgid "Change information for ${schoolyear_title}"
 msgstr "Muuta lukuvuoden ${schoolyear_title} tietoja"
 
-#: /src/schooltool/schoolyear/browser/schoolyear.py:249
-#: /src/schooltool/schoolyear/browser/schoolyear.py:276
+#: /src/schooltool/schoolyear/browser/schoolyear.py:253
+#: /src/schooltool/schoolyear/browser/schoolyear.py:280
 msgid "School year must begin before it ends."
 msgstr "Lukuvuoden pitää alkaa ennen sen loppumista."
 
-#: /src/schooltool/schoolyear/browser/schoolyear.py:320
+#: /src/schooltool/schoolyear/browser/schoolyear.py:324
 msgid "School Year"
 msgstr "Lukuvuosi"
 
@@ -6159,13 +6180,13 @@ msgstr "Nykyisen lukuvuoden aktivointi"
 msgid "View Access Rights"
 msgstr "Näytä käyttöoikeudet"
 
-#: /src/schooltool/securitypolicy/browser/control.py:105
-msgid "School administration"
-msgstr "Hallintohenkilöstö"
-
 #: /src/schooltool/securitypolicy/browser/control.py:96
 msgid "Enabled"
 msgstr "Käytössä"
+
+#: /src/schooltool/securitypolicy/browser/control.py:105
+msgid "School administration"
+msgstr "Hallintohenkilöstö"
 
 #: /src/schooltool/securitypolicy/browser/templates/access_setting_snippet.pt:4
 msgid "Access setting: ${setting} (${status})"
@@ -6215,6 +6236,14 @@ msgstr "Pääkäyttäjä - tämän SchoolTool-sovelluksen hallinnoija."
 msgid "You might be trying to access a non-existing page"
 msgstr "Sivua ei välttämättä ole olemassa"
 
+#: /src/schooltool/skin/templates/view_macros.pt:53
+msgid "Logged in as:"
+msgstr ""
+
+#: /src/schooltool/skin/templates/view_macros.pt:82
+msgid "free administration software for"
+msgstr ""
+
 #: /src/schooltool/skin/templates/view_macros.pt:114
 msgid "Report a bug on Launchpad."
 msgstr "Tee vikailmoitus Launchpad-palvelussa."
@@ -6237,16 +6266,16 @@ msgstr ""
 
 #: /src/schooltool/skin/templates/view_macros.pt:155
 msgid "Shortcut: Alt-U"
+msgstr "Pikanäppäin: Alt-U"
+
+#: /src/schooltool/skin/templates/view_macros.pt:155
+msgid "U"
 msgstr ""
 
 #. Default: "Update"
 #: /src/schooltool/skin/templates/view_macros.pt:155
 msgid "update-button"
 msgstr "Päivitä"
-
-#: /src/schooltool/skin/templates/view_macros.pt:155
-msgid "U"
-msgstr ""
 
 #. Default: "Apply"
 #: /src/schooltool/skin/templates/view_macros.pt:161
@@ -6262,19 +6291,15 @@ msgid "add-button"
 msgstr "Lisää"
 
 #: /src/schooltool/skin/templates/view_macros.pt:194
-msgid "Shortcut: Alt-D"
-msgstr ""
-
-#: /src/schooltool/skin/templates/view_macros.pt:194
 msgid "D"
 msgstr ""
 
-#: /src/schooltool/skin/templates/view_macros.pt:53
-msgid "Logged in as:"
-msgstr ""
+#: /src/schooltool/skin/templates/view_macros.pt:194
+msgid "Shortcut: Alt-D"
+msgstr "Pikanäppäin: Alt-D"
 
-#: /src/schooltool/skin/templates/view_macros.pt:82
-msgid "free administration software for"
+#: /src/schooltool/skin/widgets.py:86
+msgid "The datetime string did not match the pattern yyyy-mm-dd"
 msgstr ""
 
 #: /src/schooltool/skin/widgets.py:109
@@ -6317,9 +6342,10 @@ msgstr ""
 msgid "FCK editor configuration."
 msgstr ""
 
-#: /src/schooltool/skin/widgets.py:86
-msgid "The datetime string did not match the pattern yyyy-mm-dd"
-msgstr ""
+#: /src/schooltool/table/templates/batch.pt:5
+#: /src/schooltool/table/templates/batch.pt:7
+msgid "&laquo; Previous"
+msgstr "&laquo; Edellinen"
 
 #: /src/schooltool/table/templates/batch.pt:16
 msgid "Show Less"
@@ -6328,11 +6354,6 @@ msgstr "Näytä vähemmän"
 #: /src/schooltool/table/templates/batch.pt:21
 msgid "Show All"
 msgstr "Näytä kaikki"
-
-#: /src/schooltool/table/templates/batch.pt:5
-#: /src/schooltool/table/templates/batch.pt:7
-msgid "&laquo; Previous"
-msgstr "&laquo; Edellinen"
 
 #: /src/schooltool/term/browser/emergency.py:88
 msgid "The date you entered is invalid.  Please use the YYYY-MM-DD format."
@@ -6353,8 +6374,8 @@ msgstr ""
 "Tämä kaavake mahdollistaa päivän merkitsemisen hätätilavapaaksi ja lisäämään "
 "korvauspäivän myöhemmin lukukaudella."
 
-#: /src/schooltool/term/browser/templates/term_add.pt:41
 #: /src/schooltool/term/browser/templates/term.pt:12
+#: /src/schooltool/term/browser/templates/term_add.pt:41
 msgid "Legend:"
 msgstr "Selite:"
 
@@ -6365,6 +6386,10 @@ msgstr "Valitse seuraavat viikonpäivät:"
 #: /src/schooltool/term/browser/templates/term_add.pt:70
 msgid "Click on a day to toggle its state."
 msgstr "Napsauta päivää vaihtaaksesi sen tilaa."
+
+#: /src/schooltool/term/browser/term.py:61
+msgid "Start date"
+msgstr "Aloituspäivä"
 
 #: /src/schooltool/term/browser/term.py:122
 msgid "Add new term"
@@ -6383,10 +6408,6 @@ msgstr "Muuta lukukauden ${term_title} tietoja"
 #: /src/schooltool/term/browser/term.py:291
 msgid "Term must begin before it ends."
 msgstr "Lukukauden pitää alkaa ennen sen loppumista."
-
-#: /src/schooltool/term/browser/term.py:61
-msgid "Start date"
-msgstr "Aloituspäivä"
 
 #: /src/schooltool/term/help/configure.zcml:8
 msgid "Add a term"
@@ -6447,20 +6468,14 @@ msgstr "Jotkin arvot olivat virheellisiä. Ne on merkitty punaisella."
 msgid "Timetables"
 msgstr "Aikataulut"
 
-#: /src/schooltool/timetable/browser/schema.py:236
-#: /src/schooltool/dashboard/school.pt:16
-#: /src/schooltool/timetable/browser/templates/link_to_school_timetables.pt:1
-msgid "School Timetables"
-msgstr "Koulun aikataulut"
-
-#: /src/schooltool/timetable/browser/schema.py:269
-msgid "Duration in minutes"
-msgstr "Kesto minuutteina"
-
 #. Default: ""
 #: /src/schooltool/timetable/browser/schema.py:94
 msgid "Timetable schema ${schema}"
 msgstr "Aikataulukaavio ${schema}"
+
+#: /src/schooltool/timetable/browser/schema.py:269
+msgid "Duration in minutes"
+msgstr "Kesto minuutteina"
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:51
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:155
@@ -6479,9 +6494,19 @@ msgstr ""
 msgid "Manage..."
 msgstr "Hallinta..."
 
+#: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:15
+#: /src/schooltool/timetable/browser/templates/timetable-add.pt:8
+msgid "There are no terms or timetable schemas defined."
+msgstr "Yhtäkään lukukautta tai aikataulukaaviota ei ole määritelty."
+
 #: /src/schooltool/timetable/browser/templates/schooltt-delete.pt:10
 msgid "Are you sure you want to delete the selected school timetables?"
 msgstr "Haluatko varmasti poistaa valitut kouluaikataulut?"
+
+#: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:17
+#: /src/schooltool/timetable/browser/templates/timetable-edit.pt:19
+msgid "There are no timetable schemas defined."
+msgstr "Yhtään aikataulukaaviota ei ole määritelty."
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:24
 msgid "Choose school timetable to use"
@@ -6498,19 +6523,9 @@ msgstr ""
 msgid "Select school timetable to use"
 msgstr "Valitse käytettävä kouluaikataulu"
 
-#: /src/schooltool/timetable/browser/templates/timetable-add.pt:8
-#: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:15
-msgid "There are no terms or timetable schemas defined."
-msgstr "Yhtäkään lukukautta tai aikataulukaaviota ei ole määritelty."
-
 #: /src/schooltool/timetable/browser/templates/timetable-container-delete.pt:10
 msgid "Are you sure you want to delete the selected timetables?"
 msgstr "Haluatko varmasti poistaa valitut aikataulut?"
-
-#: /src/schooltool/timetable/browser/templates/timetable-edit.pt:19
-#: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:17
-msgid "There are no timetable schemas defined."
-msgstr "Yhtään aikataulukaaviota ei ole määritelty."
 
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:26
 msgid "For term:"

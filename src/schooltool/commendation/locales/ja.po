@@ -7,15 +7,19 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2009-05-19 16:33+0000\n"
-"PO-Revision-Date: 2009-10-12 11:51+0000\n"
-"Last-Translator: Nazo <lovesyao@gmail.com>\n"
+"POT-Creation-Date: 2010-01-04 15:41+0000\n"
+"PO-Revision-Date: 2010-04-06 01:54+0000\n"
+"Last-Translator: Bundo <bundo@bundo.biz>\n"
 "Language-Team: Japanese <ja@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-01-07 04:47+0000\n"
+"X-Launchpad-Export-Date: 2010-04-07 03:43+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
+
+#: /src/schooltool/commendation/interfaces.py:72
+msgid "The grantor of the commendation."
+msgstr "賞状の授与者"
 
 #: /src/schooltool/commendation/browser.py:70
 #: /src/schooltool/commendation/commendation.py:72
@@ -26,6 +30,11 @@ msgstr "<不明>"
 msgid "commendations"
 msgstr "賞状"
 
+#: /src/schooltool/commendation/configure.zcml:82
+#: /src/schooltool/commendation/configure.zcml:92
+msgid "View Commendations"
+msgstr "賞状を表示"
+
 #: /src/schooltool/commendation/configure.zcml:100
 #: /src/schooltool/commendation/configure.zcml:110
 msgid "Add Commendation"
@@ -34,11 +43,6 @@ msgstr "賞状を追加"
 #: /src/schooltool/commendation/configure.zcml:128
 msgid "All Commendations"
 msgstr "全ての賞状"
-
-#: /src/schooltool/commendation/configure.zcml:82
-#: /src/schooltool/commendation/configure.zcml:92
-msgid "View Commendations"
-msgstr "賞状を表示"
 
 #: /src/schooltool/commendation/interfaces.py:48
 msgid "Title"
@@ -65,24 +69,24 @@ msgid "The scope of the commendation."
 msgstr "賞状の範囲"
 
 #: /src/schooltool/commendation/interfaces.py:60
-msgid "group"
-msgstr "グループ"
-
-#: /src/schooltool/commendation/interfaces.py:60
 msgid "community"
 msgstr "コミュニティ"
+
+#: /src/schooltool/commendation/interfaces.py:60
+msgid "group"
+msgstr "グループ"
 
 #: /src/schooltool/commendation/interfaces.py:60
 msgid "school-wide"
 msgstr "学校全体"
 
 #: /src/schooltool/commendation/interfaces.py:61
-msgid "national"
-msgstr "国家"
-
-#: /src/schooltool/commendation/interfaces.py:61
 msgid "global"
 msgstr "全体"
+
+#: /src/schooltool/commendation/interfaces.py:61
+msgid "national"
+msgstr "国家"
 
 #: /src/schooltool/commendation/interfaces.py:61
 msgid "state"
@@ -99,7 +103,3 @@ msgstr "賞状が発行された日付"
 #: /src/schooltool/commendation/interfaces.py:71
 msgid "Grantor"
 msgstr "授与者"
-
-#: /src/schooltool/commendation/interfaces.py:72
-msgid "The grantor of the commendation."
-msgstr "賞状の授与者"

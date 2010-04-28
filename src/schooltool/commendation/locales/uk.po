@@ -7,19 +7,24 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2009-05-19 16:33+0000\n"
-"PO-Revision-Date: 2010-02-09 06:24+0000\n"
+"POT-Creation-Date: 2010-01-04 15:41+0000\n"
+"PO-Revision-Date: 2010-04-05 18:34+0000\n"
 "Last-Translator: Serhey Kusyumoff (Сергій Кусюмов) <sergemine@gmail.com>\n"
 "Language-Team: Ukrainian <uk@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-02-10 04:40+0000\n"
+"X-Launchpad-Export-Date: 2010-04-06 03:57+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: /src/schooltool/commendation/commendation.py:88
 msgid "commendations"
 msgstr "подяки"
+
+#: /src/schooltool/commendation/configure.zcml:82
+#: /src/schooltool/commendation/configure.zcml:92
+msgid "View Commendations"
+msgstr "Перегляд подяк"
 
 #: /src/schooltool/commendation/configure.zcml:100
 #: /src/schooltool/commendation/configure.zcml:110
@@ -29,11 +34,6 @@ msgstr "Додати подяку"
 #: /src/schooltool/commendation/configure.zcml:128
 msgid "All Commendations"
 msgstr "Всі подяки"
-
-#: /src/schooltool/commendation/configure.zcml:82
-#: /src/schooltool/commendation/configure.zcml:92
-msgid "View Commendations"
-msgstr "Перегляд подяк"
 
 #: /src/schooltool/commendation/interfaces.py:49
 msgid "Title of the commendation."
@@ -48,24 +48,24 @@ msgid "The scope of the commendation."
 msgstr "Сфера застосування рекомендації."
 
 #: /src/schooltool/commendation/interfaces.py:60
-msgid "group"
-msgstr "група"
-
-#: /src/schooltool/commendation/interfaces.py:60
 msgid "community"
 msgstr "спільнота"
+
+#: /src/schooltool/commendation/interfaces.py:60
+msgid "group"
+msgstr "група"
 
 #: /src/schooltool/commendation/interfaces.py:60
 msgid "school-wide"
 msgstr "для всієї школи"
 
 #: /src/schooltool/commendation/interfaces.py:61
-msgid "national"
-msgstr "національна"
-
-#: /src/schooltool/commendation/interfaces.py:61
 msgid "global"
 msgstr "глобальна"
+
+#: /src/schooltool/commendation/interfaces.py:61
+msgid "national"
+msgstr "національна"
 
 #: /src/schooltool/commendation/interfaces.py:61
 msgid "state"

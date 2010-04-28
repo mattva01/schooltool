@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-01-04 15:41+0000\n"
-"PO-Revision-Date: 2010-04-04 07:13+0000\n"
+"PO-Revision-Date: 2010-04-13 08:05+0000\n"
 "Last-Translator: missthom <thom43th.dhtl@gmail.com>\n"
 "Language-Team: Vietnamese <vi@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-04-05 03:50+0000\n"
+"X-Launchpad-Export-Date: 2010-04-14 03:46+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: /src/schooltool/app/app.py:201
@@ -1117,7 +1117,7 @@ msgstr "Gỡ bỏ"
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:49
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:71
 msgid "invert-selection-button"
-msgstr "Nút đặt trước, lựa chọn"
+msgstr "Chọn tất"
 
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:37
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:38
@@ -1155,13 +1155,6 @@ msgstr "A"
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:77
 msgid "There are none to add."
 msgstr "Chưa có gì được thêm vào"
-
-#. Default: "OK"
-#: /src/schooltool/app/browser/templates/edit_relationships.pt:65
-#: /src/schooltool/contact/browser/templates/manage_contacts.pt:75
-#: /src/schooltool/course/browser/templates/edit_relationships.pt:84
-msgid "ok-button"
-msgstr "Đồng ý"
 
 #: /src/schooltool/app/browser/templates/event.pt:15
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:15
@@ -1303,33 +1296,6 @@ msgstr "Đăng ký tài nguyên"
 msgid "Shortcut: Alt-A"
 msgstr "Phím tắt: Alt-A"
 
-#. Default: "Cancel"
-#: /src/schooltool/app/browser/templates/event_add.pt:378
-#: /src/schooltool/basicperson/browser/templates/person_edit.pt:13
-#: /src/schooltool/contact/browser/templates/contacts_delete.pt:36
-#: /src/schooltool/course/browser/templates/link_section.pt:133
-#: /src/schooltool/email/browser/templates/email_delete.pt:34
-#: /src/schooltool/person/browser/person_container_delete.pt:37
-#: /src/schooltool/resource/browser/container_delete.pt:29
-#: /src/schooltool/sampledata/sampledata.pt:82
-#: /src/schooltool/schoolyear/browser/templates/term-delete.pt:29
-#: /src/schooltool/setupdata/setupdata.pt:25
-#: /src/schooltool/skin/templates/container_delete.pt:34
-#: /src/schooltool/skin/templates/view_macros.pt:200
-#: /src/schooltool/skin/templates/view_macros.pt:205
-#: /src/schooltool/term/browser/templates/emergency2.pt:42
-#: /src/schooltool/term/browser/templates/emergency_select.pt:41
-#: /src/schooltool/term/browser/templates/term-container-delete.pt:31
-#: /src/schooltool/timetable/browser/templates/schooltt-delete.pt:31
-#: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:83
-#: /src/schooltool/timetable/browser/templates/simpletts.pt:62
-#: /src/schooltool/timetable/browser/templates/specialday_change.pt:64
-#: /src/schooltool/timetable/browser/templates/specialday_select.pt:41
-#: /src/schooltool/timetable/browser/templates/timetable-container-delete.pt:29
-#: /src/schooltool/timetable/browser/templates/timetable-edit.pt:70
-msgid "cancel-button"
-msgstr "Huỷ bỏ"
-
 #: /src/schooltool/app/browser/templates/event_booking.pt:4
 msgid "Resource Booking"
 msgstr "Đang đăng ký tài nguyên"
@@ -1408,15 +1374,6 @@ msgstr "Cấp độ"
 #: /src/schooltool/app/browser/templates/login.pt:8
 msgid "Your session has expired."
 msgstr "Phiên làm việc của bạn đã hết hạn"
-
-#: /src/schooltool/app/browser/templates/login.pt:13
-msgid ""
-"You are not allowed to access this page. You can click on the back button in "
-"your browser to go back, or ask a more privileged user to log in."
-msgstr ""
-"Bạn không được phép truy cập vào trang này. Bạn có thể nhấn vào nút \"Quay "
-"lại\" để quay lại trình duyệt của bạn, hoặc yêu cầu được cấp nhiều quyền hơn "
-"khi đăng nhập."
 
 #: /src/schooltool/app/browser/templates/login.pt:23
 msgid "Please log in"
@@ -1778,20 +1735,6 @@ msgstr "Nhập vào dữ liệu CSV"
 msgid "CSV Data"
 msgstr "Dữ liệu CSV"
 
-#. Default: "Submit"
-#: /src/schooltool/app/browser/templates/timetables-csvimport.pt:122
-#: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:75
-#: /src/schooltool/basicperson/browser/templates/person_edit.pt:10
-#: /src/schooltool/course/browser/section-member-csvimport.pt:52
-#: /src/schooltool/course/browser/templates/course-csvimport.pt:86
-#: /src/schooltool/export/templates/import.pt:66
-#: /src/schooltool/group/browser/group-csvimport.pt:72
-#: /src/schooltool/group/browser/group-member-csvimport.pt:52
-#: /src/schooltool/person/browser/person-csvimport.pt:75
-#: /src/schooltool/resource/browser/resource-csvimport.pt:72
-msgid "submit-button"
-msgstr "Đệ trình"
-
 #: /src/schooltool/app/configure.zcml:338
 msgid "Security (General)"
 msgstr "Bảo mật (chung)"
@@ -1823,99 +1766,9 @@ msgstr ""
 "có liên quan đến các quản trị viên cấu hình SchoolTool, nhưng không phải "
 "người dùng cuối. </ p>"
 
-#: /src/schooltool/app/help/calendar_selection.pt:6
-#: /src/schooltool/app/help/configure.zcml:97
-msgid "Calendar Selection"
-msgstr "Lựa chọn lịch"
-
-#: /src/schooltool/app/help/calendar_selection.pt:8
-msgid ""
-"<h1>Calendar Selection</h1> <p>You can add color-coded events from multiple "
-"calendars to your personal calendar view. You can add events from course "
-"sections you attend, groups, other people, or even resources like classrooms "
-"or projectors.</p> <p>Some calendars are private or limited to certain "
-"groups.</p> <p>On the calendar selection form you are given lists of all the "
-"calendars available to you. This might be a long list.</p> <p>The "
-"\"SchoolTool site-wide calendar\" is intended to be used as the official "
-"public calendar of the school.</p> <h3>How do I...</h3> <ul> "
-"<li><strong>Select or unselect several individual calendars of one "
-"type:</strong> If you press the <code>Ctrl</code> button on your keyboard "
-"while you select calendars from a list with your mouse, you can select "
-"multiple calendars.</li> <li><strong>Select a range of calendars of one "
-"type:</strong> If you press the <code>Shift</code> key while clicking on "
-"calendars, you can select a range.</li> </ul>"
-msgstr ""
-"<h1>Lựa chọn Lịch </ h1> <p> Bạn có thể thêm các sự kiện mã màu sắc từ nhiều "
-"lịch biểu để xem lịch cá nhân của bạn. Bạn có thể thêm sự kiện từ các lớp "
-"học bạn tham gia khóa học, các nhóm, từ những người khác, hoặc thậm chí các "
-"tài nguyên giống như lớp học hoặc máy chiếu. </ P> <p> Một số các lịch biểu "
-"được giới hạn cho các cá nhân hoặc một số nhóm. </ P> <p> Các biểu mẫu lịch "
-"bạn đã chọn sẽ được đưa vào danh sách các lịch biểu có sẵn của bạn. Điều này "
-"có thể là một danh sách dài. </ P> <p> Những \"trang lịch chủ SchoolTool \" "
-"là để được sử dụng như là lịch chính công khai của trường. </ P> <h3> Làm "
-"thế nào để tôi . .. < / h3> <ul> <li> <strong> Chọn hoặc bỏ chọn một số loại "
-"lịch cá nhân: </ strong> Nếu bạn bấm phím<code> Ctrl </ code>trên bàn phím "
-"kết hợp với chuột, bạn có thể chọn nhiều lịch. </ li> <li> <strong> Chọn một "
-"loạt các lịch biểu của một kiểu: </ strong> Nếu bạn bấm phím<code> Shift </ "
-"code> sau đó nhấp vào lịch biểu, bạn có thể chọn một phạm vi các lịch biểu "
-"</ li> </ ul>"
-
 #: /src/schooltool/app/help/calendaring.pt:6
 msgid "Calendaring in SchoolTool"
 msgstr "Lịch trong Schooltool"
-
-#: /src/schooltool/app/help/calendaring.pt:8
-msgid ""
-"<h1>Calendaring in SchoolTool</h1> <p>SchoolTool includes a full-featured "
-"calendaring system, similar to Apple iCal or Google Calendar, but capable of "
-"representing complex school timetables, including rotating schedules. "
-"SchoolTool is also useful for simple resource scheduling, allowing you to "
-"manage room assignments, and booking shared resources like computers or "
-"projectors. Each person, group, course section or resource has its own "
-"calendar. You may integrate multiple calendars into your personal calendar "
-"views.</p> <h3>Parts of the standard calendar views</h3> <ul> "
-"<li><strong>Calendar table:</strong> fills the main (lower-right) part of "
-"the page. This represents the calendar for one day, week, month or year, "
-"depending on the view..</li> <li><strong>Calendar navigation bar:</strong> "
-"immediately above the calendar table. Allows you to navigate forward or "
-"backward in time, or to return to the current time.</li> "
-"<li><strong>Calendar title:</strong> immediately above the calendar "
-"navigation bar, lists the owner of this calendar and the date for this "
-"\"page\" of the calendar.</li> <li><strong>Left sidebar:</strong> for all "
-"calendars, this contains a <code>Jump to...</code> section containing menus "
-"and links to allow you to quickly navigate to a specific month, year or "
-"date. <br /> If you are logged in and viewing your own calendar, you will "
-"also see a <code>Calendars</code> section at the top of the sidebar which "
-"allows you to \"overlay\" events from other calendars in this view. You may "
-"see calendars for classes you teach or attend listed here already.</li> "
-"<li><strong>Day/week/month/year buttons:</strong> These buttons allow you to "
-"switch between daily, weekly, monthly and annual views.</li> </ul>"
-msgstr ""
-"<h1>Lịch trong Schooltool</h1><p> Schooltool chứa tất cả các đặc trưng của "
-"hệ thống lịch. Giống như iCal và Google Calendar, nhưng khả năng thể hiện "
-"của lịch trong Schooltool phức tạp hơn, bao gồm cả lịch trình luân phiên. "
-"Schooltool cũng rất hữu ích cho các tài nguyên lịch đơn giản, cho phép bạn "
-"quản lý việc gán các tài nguyên lịch, và đăng ký chia sẻ tài nguyên như máy "
-"tính, máy chiếu. Một người, nhóm, khóa học hoặc tài nguyên riêng của lịch. "
-"Bạn có thể tích hợp nhiều lịch vào việc hiển thị lịch cá nhân của mình. "
-"</p><h3> Phần hiển thị các lịch chuẩn </ h3> <ul> <li> <strong> Lịch bảng: "
-"</ strong> Phần chính cần điền vào (thấp hơn bên phải) của trang. Điều này "
-"thể hiện lịch biểu cho một ngày, một  tuần, một tháng hoặc năm, tùy thuộc "
-"vào cách hiển thị.. </ li> <li> <strong> Thanh điều hướng Lịch: </ strong> "
-"ngay phía trên bảng lịch. Cho phép bạn điều hướng chuyển tiếp hoặc quay trở "
-"lại trong thời gian, hoặc để trở lại thời điểm hiện tại. </ Li> <li>  "
-"<strong> Tiêu đề lịch: </ strong> ngay lập tức chuyển hướng lịch ở trên các "
-"thanh điều hướng, các danh sách chủ nhân của lịch này và các cho ngày này "
-"\"trang\" của lịch. </ li> <li> <strong>Thanh điều hướng trái: </ strong> "
-"cho tất cả các lịch biểu, việc này bao hàm cả việc <code> Nhảy tới ...</ "
-"code> lớp có chứa các trình đơn và liên kết một cách nhanh chóng cho phép "
-"bạn điều hướng đến một hàng tháng, hàng năm cụ thể hoặc ngày. <br /> Nếu bạn "
-"đang đăng nhập và xem lịch của riêng bạn, bạn cũng sẽ thấy một <code> Lịch "
-"</ code> phần ở phía trên cùng của bên cho phép bạn \"che phủ\" từ các sự "
-"kiện khác trong lịch này xem. Bạn có thể xem lịch biểu cho các bạn lớp dạy "
-"hoặc tham dự đã được liệt kê ở đây. </ Li> <li> <strong> ngày / tuần / tháng "
-"/ năm: </ strong> Các nút cho phép bạn chuyển đổi giữa hàng ngày, hàng tuần, "
-"hàng tháng và hàng năm xem. </ li> </ ul>"
 
 #: /src/schooltool/app/help/configure.zcml:13
 msgid "Administration"
@@ -1948,44 +1801,6 @@ msgstr "Lịch tháng"
 #: /src/schooltool/app/help/yearly_calendar.pt:6
 msgid "Yearly Calendar"
 msgstr "Lịch năm"
-
-#: /src/schooltool/app/help/daily_calendar.pt:8
-msgid ""
-"<h1>Daily Calendar</h1> <p>This is the daily view of a calendar. It might be "
-"your calendar, or it might be the calendar of another person, group or "
-"resource in your school. <a href=\"/++help++/schooltool/calendaring\">More "
-"calendaring help...</a></p> <h3>How do I...</h3> <ul> <li><strong>Create an "
-"event:</strong> click in the calendar table at the start time for the event. "
-"Or select <code>New Event</code> from the <code>Actions</code> menu.</li> "
-"<li><strong>Book a resource:</strong> create an event starting at the time "
-"you want to reserve the resource. Select <code>Book Resource</code> in the "
-"Event Information form.</li> <li><strong>Show or hide events in one of the "
-"calendars listed under <code>Calendars</code>:</strong> check or uncheck the "
-"box under <code>Cal</code> and click <code>Apply</code>.</li> "
-"<li><strong>Adding or removing calendars to the <code>Calendars</code> "
-"list:</strong> click on the <code>More...</code> button.</li> "
-"<li><strong>access a iCal format version of the calendar:</strong>: Select "
-"<code>Open in iCal</code> from the Action menu.</li> <li><strong>Access an "
-"Atom feed version of the calendar: </strong> append <code>/atom.xml</code> "
-"to the calendar's URL.</li> </ul>"
-msgstr ""
-"<h1>Lịch ngày </h1><p>Kiểu lịch này  hiển thị lịch theo ngày. Nó có thể là "
-"lịch của bạn hoặc có thể là của một người khác, nhóm hoặc tài nguyên trong "
-"trường của bạnl. <a href=\"/++help++/schooltool/calendaring\">Thêm các trợ "
-"giúp về lịch...</a></p> <h3>Làm thế nào tôi..</h3> <ul> <li><strong>Tạo một "
-"sự kiện:</strong> Nhấn vào bảng lịch  tại thời gian bắt đầu của sự kiện. "
-"Hoặc lựa chọn <code>New Event</code> Từ  danh sách các "
-"<code>Actions</code>.</li> <li><strong>Đăng ký tài nguyên:</strong> Tạo một "
-"sự kiện bắt đầu tại thời gian mà bạn muốn đặt tài nguyên. Lựa chọn "
-"<code>Đăng ký tài nguyên</code> trong biểu mẫu thông tin sự kiện.</li> "
-"<li><strong>Hiển thị hoặc ẩn các sự kiện trong một danh sách các lịch "
-"biểu<code>Calendars</code>:</strong> Tích hoặc không tích vào hộp box "
-"<code>Cal</code> và nhấn<code>Apply</code>.</li> <li><strong>Thêm vào hoặc "
-"gỡ bỏ các sự kiện <code>Calendars</code> dánh sách:</strong> nhấn vào nút "
-"<code>More...</code>.</li> <li><strong> Truy cập vào một định dạng iCal của "
-"lịch:</strong>: Select <code>mở trong iCal</code> từ menu Hành động.</li> "
-"<li><strong>Truy cập vào các mô tả về phiên bản của lịch: </strong> Giáo dục "
-"học<code>/atom.xml</code> đến các  calendar's URL.</li> </ul>"
 
 #: /src/schooltool/app/help/event_add.pt:10
 #: /src/schooltool/app/help/event_edit.pt:10
@@ -2028,20 +1843,6 @@ msgstr ""
 "cần kiểm tra lại thông tin trong hộp chọn <code>Book Resources</code> ở phía "
 "dưới của Form"
 
-#: /src/schooltool/app/help/event_add.pt:24
-#: /src/schooltool/app/help/event_edit.pt:22
-msgid ""
-"If your event repeats in some pattern, check the <code>Recurring</code> box "
-"and fill out the new fields that appear. In certain circumstances (like if "
-"you change the original day of a weekly recurring event) you may need to "
-"click the <code>Update form</code> button to update the recurrence fields."
-msgstr ""
-"Nếu bạn muốn lặp lại một sự kiện trong một số mẫu, hãy kiểm tra hộp "
-"<code>Recurring</code> và điền vào các trường mới khi chúng xuất hiện. Trong "
-"một số trường hợp (ví như bạn thay đổi này ban đầu trong các tuần, của sự "
-"kiện theo định kỳ), bạn có thể cần phải bấm vào nút <code>Update form</code "
-"để cập nhật các trường mà bạn thay đổi."
-
 #: /src/schooltool/app/help/event_add.pt:29
 #: /src/schooltool/app/help/event_edit.pt:27
 msgid ""
@@ -2067,55 +1868,6 @@ msgid ""
 msgstr ""
 "Nếu bạn cần sửa việc đăng ký một tài nguyên, hãy nhấn vào nút <code>Đăng ký "
 "tài nguyên</code> để link đến form ở dưới"
-
-#: /src/schooltool/app/help/monthly_calendar.pt:8
-msgid ""
-"<h1>Monthly Calendar</h1> <p>This is the monthly view of a calendar. It "
-"might be your calendar, or it might be the calendar of another person, group "
-"or resource in your school. <a "
-"href=\"/++help++/schooltool/calendaring\">More calendaring help...</a></p> "
-"<h3>How do I...</h3> <ul> <li><strong>View an individual day or event in "
-"more detail:</strong> click on the appropriate day on the calendar.</li> "
-"<li><strong>View an individual week:</strong> Click on the appropriate week "
-"number in blue in the leftmost column of the calendar.</li> "
-"<li><strong>Create an event:</strong> select <code>New Event</code> from the "
-"<code>Actions</code> menu.</li> <li><strong>Show or hide events in one of "
-"the calendars listed under <code>Calendars</code>:</strong> check or uncheck "
-"the box under <code>Cal</code> and click <code>Apply</code>.</li> "
-"<li><strong>Adding or removing calendars to the <code>Calendars</code> "
-"list:</strong> click on the <code>More...</code> button.</li> "
-"<li><strong>Make weeks start on the correct day:</strong> the first day of "
-"the week varies in different parts of the world. If SchoolTool isn't set up "
-"correctly for you, click on your name in the red bar at the top of the page. "
-"Then click on the <code>Actions</code> menu and select <code>Change "
-"Preferences</code>. Pick the correct \"Week starts on\" day and hit "
-"<code>Apply</code>.</li> <li><strong>Access a iCal format version of the "
-"calendar:</strong>: select <code>Open in iCal</code> from the Action "
-"menu.</li> </ul>"
-msgstr ""
-"<h1>Lịch tháng</h1> <p>Đó là việc hiển thị một tháng trên lịch biểu. Nó có "
-"thể là lịch biểu của bạn, hoặc có thể là lịch biểu của một người khác, của "
-"một nhóm hay tài nguyên của môt trường học. <a href=\"/++Trợ "
-"giúp++/schooltool/Lịch biểu\">Thêm các trợ giúp về lịch ...</a></p> <h3>Tôi "
-"nên làm thến nào...</h3> <ul> <li><strong> hiển thị các sự kiện trong một "
-"ngày hoặc thêm các mô tả chi tiết:</strong> nhấn vào các ngày hiển thị trên "
-"lịch.</li> <li><strong>Hiển thị một tuần riêng biệt:</strong> Nhấn vào chữ "
-"tháng trên lịch biểu Số cột màu xanh ở bên trái của lịch.</li> "
-"<li><strong>Tạo mới một sự kiện:</strong> Lựa chọn <code>Sự kiện mới</code> "
-"từ Menu <code>Các Hoạt động</code>.</li> <li><strong>Hiển thị hoặc ẩn các sự "
-"kiện trong một hoặc danh sách các lịch biểu ở dưới <code>Lịch "
-"biểu</code>:</strong> Tích hoặc bỏ dấu tích ở hộp bên dưới<code>Cal</code> "
-"và nhấn nút <code>Áp dụng</code>.</li> <li><strong> Thêm vào hoặc bỏ đi các "
-"lịch biểu của trong Danh sách các <code>Calendars</code>:</strong> Nhấn vào "
-"nút  <code>Thêm nữa...</code>.</li> <li><strong>Hãy bắt đầu mỗi tuần vào "
-"đúng ngày:</strong> Ngày đầu tiên của tuần khác nhau nằm trong các phần khác "
-"nhau của thế giới. Nếu SchoolTool thiết lập đúng cho bạn, Hãy nhấn vào tên "
-"của bạn có màu đỏ ở phía trên của trang. Và sau đó nhấn vào hộp "
-"chọn<code>Các Hành động</code> và chọn lựa<code>Change Preferences</code>. "
-"Nhấn đúng vào nút  \"Week starts on\" và chọn ngày <code>Áp "
-"dụng</code>.</li> <li><strong>Truy cập vào định dạng  iCal của "
-"lịch:</strong>: Chọn lựa <code>Mở bằng iCal</code> Từ menu Áp dụng.</li> "
-"</ul>"
 
 #: /src/schooltool/app/help/org.pt:6
 msgid "SchoolTool Organization"
@@ -2196,103 +1948,6 @@ msgstr ""
 "có thể \"devmode\" trong  schooltool.conf, Bạn sẽ nhìn thấy một menu đặc "
 "biệt trong góc bên phải của site. Bạn có thể disable \"devmode\" trong một "
 "số  máy phục vụ sản xuất.</li> </ul> </ul>"
-
-#: /src/schooltool/app/help/weekly_calendar.pt:8
-msgid ""
-"<h1>Weekly Calendar</h1> <p>This is the weekly view of a calendar. It might "
-"be your calendar, or it might be the calendar of another person, group or "
-"resource in your school. <a href=\"/++help++/schooltool/calendaring\">More "
-"calendaring help...</a></p> <h3>How do I...</h3> <ul> <li><strong>View an "
-"individual day in more detail:</strong> click on the appropriate day in the "
-"blue row of the calendar table.</li> <li><strong>View details about an event "
-"or edit it:</strong> click on the event. If you have the correct permissions "
-"for the event you can edit it.</li> <li><strong>Create an event:</strong> "
-"select the day the event starts and create the event in the daily view.</li> "
-"<li><strong>Show or hide events in one of the calendars listed under "
-"<code>Calendars</code>:</strong> check or uncheck the box under "
-"<code>Cal</code> and click <code>Apply</code>.</li> <li><strong>Adding or "
-"removing calendars to the <code>Calendars</code> list:</strong> click on the "
-"<code>More...</code> button.</li> <li><strong>Make the calendar start on the "
-"correct day:</strong> the first day of the week varies in different parts of "
-"the world. If SchoolTool isn't set up correctly for you, click on your name "
-"in the red bar at the top of the page. Then click on the "
-"<code>Actions</code> menu and select <code>Change Preferences</code>. Pick "
-"the correct \"Week starts on\" day and hit <code>Apply</code>.</li> "
-"<li><strong>Access a iCal format version of the calendar:</strong>: select "
-"<code>Open in iCal</code> from the Action menu.</li> </ul>"
-msgstr ""
-"<h1> Lịch Tuần </h1> <p>Đây là chế độ hiểu thị lịch biểu theo tuần.  Nó có "
-"thể là lịch của bạn, hoặc nó có thể là lịch của một người khác, nhóm hoặc "
-"các nguồn tài nguyên trong trường của bạn. <a href=\"/++ Hỗ trợ "
-"++/schooltool/Lịch Biểu\"> Trợ giúp thêm về lịch biểu ...</a></p> <h3> Tôi "
-"phải làm thế nào ...</h3> <ul> <li><strong> Xem chi tiết một hồ sơ cá nhân "
-":</strong> bấm vào các ngày thích hợp trong các hàng màu xanh của bảng "
-"lịch.</li> <li><strong> Xem chi tiết các sự kiện hoặc Hiệu đính nó:</strong> "
-"Nhấn vào các sự kiện. Nếu bạn được cấp phát các quyền đó thì bạn có thể hiệu "
-"đính các sự kiện này.</li> <li><strong> Tạo một sự kiện: </strong> Lựa chọn "
-"ngày để bắt đầu một sự kiện và tạo một sự kiện hiển thị theo ngày. </li> "
-"<li><strong> Hiển thị hoặc ẩn các sự kiện trong một danh sách các lịch biểu "
-"ở dưới <code> Lịch Biểu </code>:</strong> Tích hoặc không tích vào hộp chọn "
-"bên dưới <code>Cal</code> Và tích vào nút  <code>Áp dụng </code>.</li> "
-"<li><strong> Thêm hoặc gỡ bỏ Các lịch biểu trong danh sách các <code>Lịch "
-"Biểu </code></strong>  Nhấn vào nút <code> Thêm nữa...</code> .</li> "
-"<li><strong>Tạo một lịch biểu bắt đầu đúng ngày:</strong>Ngày đầu tiên  của "
-"các tuần khác nhau là khác nhau giữa các vùng miền trên thế giới.  Nếu "
-"SchoolTool không thiết lập đúng cho bạn hãy Nhấn vào tên của bạn trên thanh "
-"màu đỏ phía trên  của trang. Sau đó nhấn vào menu <code>Các hoạt động "
-"</code> và bắt đầu  <code>Thay đổi tham chiếu</code>. Nhấn vào  Chọn đúng "
-"\"Tuần lễ bắt đầu vào\" ngày và nhấn nút <code> Áp dụng </code>.</li> "
-"<li><strong>Truy cập vào  một định dạng iCal của lịch biểu:</strong>: Lựa "
-"chọn <code> Mở trong iCal</code> Từ menu Các hoạt động.</li> </ul>"
-
-#: /src/schooltool/app/help/yearly_calendar.pt:8
-msgid ""
-"<h1>Yearly Calendar</h1> <p>This is the year view of a calendar. It might be "
-"your calendar, or it might be the calendar of another person, group or "
-"resource in your school. <a href=\"/++help++/schooltool/calendaring\">More "
-"calendaring help...</a></p> <h3>How do I...</h3> <ul> <li><strong>Know which "
-"days contain events: if the day has a blue background, there is at least one "
-"event that day.</strong></li> <li><strong>View an individual day in more "
-"detail:</strong> click on the day.</li> <li><strong>View an individual "
-"month:</strong> click on the name of the month.</li> <li><strong>Create an "
-"event:</strong> select the day the event starts and create the event in the "
-"daily view.</li> <li><strong>Show or hide events in one of the calendars "
-"listed under <code>Calendars</code>:</strong> check or uncheck the box under "
-"<code>Cal</code> and click <code>Apply</code>.</li> <li><strong>Adding or "
-"removing calendars to the <code>Calendars</code> list:</strong> click on the "
-"<code>More...</code> button.</li> <li><strong>Make the calendar start on the "
-"correct day:</strong> the first day of the week varies in different parts of "
-"the world. If SchoolTool isn't set up correctly for you, click on your name "
-"in the red bar at the top of the page. Then click on the "
-"<code>Actions</code> menu and select <code>Change Preferences</code>. Pick "
-"the correct \"Week starts on\" day and hit <code>Apply</code>.</li> "
-"<li><strong>Access a iCal format version of the calendar:</strong>: select "
-"<code>Open in iCal</code> from the Action menu.</li> </ul>"
-msgstr ""
-"<h1> Lịch năm </h1> <p> Đây là cách hiển thị lịch biểu theo năm.  Nó có thể "
-"là lịch của bạn, hoặc nó có thể là lịch của một người khác, nhóm hoặc các "
-"nguồn tài nguyên trong trường của bạn. <a href=\"/++ Trợ giúp "
-"++/schooltool/Lịch biểu\"> Thêm các trợ giúp về lịch biểu ...</a></p> <h3> "
-"Tôi phải làm thế nào ...</h3> <ul> <li><strong> Biết về các ngày có sự kiện: "
-"Nếu một ngày mà có nền màu xanh lục, thì sẽ có ít nhất một sự kiện trong "
-"ngày đó.</strong></li> <li><strong> Hiển thị các mô tả chi tiết hơn trong "
-"một ngày: </strong> Nhấn vào một ngày.</li> <li><strong>Hiển thị theo "
-"tháng:</strong> Nhấn vào tên tháng lựa chọn.</li> <li><strong> Tạo một sự "
-"kiện:</strong> Lựa chọn ngày cho sự kiện bắt đầu  và chọn chế độ hiển thị "
-"ngày cho sự kiện.</li> <li><strong>Hiển thị hoặc ẩn các sự kiện trong một "
-"danh sách các lịch biểu ở dưới <code>Lịch biểu </code>:</strong> Tích hoặc "
-"không tích vào hộp bên dưới <code>Cal</code> và nhấn và nút <code>Áp dụng "
-"</code>.</li> <li><strong>Thêm hoặc bỏ các lịch biểu trong hệ thống danh "
-"sách các <code>Lịch biểu</code> </strong> Nhấn vào nút  <code>Thêm "
-"nữa...</code>.</li> <li><strong>Tạo lịch biểu bắt đầu đúng ngày:</strong> "
-"Ngày đầu tiên trong các tuần khác nhau là khác nhau trên các vùng miền trên "
-"thế giới. Nếu SchoolTool không thiết lập đúng cho bạn, hãy nhấn vào tên của "
-"bạn trên thanh màu đỏ phía trên của trang. Và nhấn vào menu <code> Các hoạt "
-"động </code> và lựa chọn <code>Thay đổi các tham chiếu</code>. Nhấn vào  "
-"Chọn đúng \"Tuần lễ bắt đầu vào\" ngày và nhấn nút <code> Áp dụng "
-"</code>.</li> <li><strong>Truy cập vào  một định dạng iCal của lịch "
-"biểu:</strong>: Lựa chọn <code> Mở trong iCal</code> Từ menu Các hoạt "
-"động.</li> </ul>"
 
 #: /src/schooltool/app/interfaces.py:43
 msgid "Form input is not a file object"
@@ -2826,30 +2481,6 @@ msgstr "Bạn có muốn xóa các hạng mục đó không?"
 msgid "You have not selected any items."
 msgstr "Bạn không có lựa chọn nào."
 
-#. Default: "Confirm"
-#: /src/schooltool/contact/browser/templates/contacts_delete.pt:34
-#: /src/schooltool/course/browser/templates/course_container.pt:40
-#: /src/schooltool/course/browser/templates/section_container.pt:93
-#: /src/schooltool/demographics/browser/search.pt:35
-#: /src/schooltool/demographics/browser/table.pt:28
-#: /src/schooltool/email/browser/templates/email_container.pt:48
-#: /src/schooltool/email/browser/templates/email_delete.pt:31
-#: /src/schooltool/person/browser/person_container_delete.pt:35
-#: /src/schooltool/resource/browser/container_delete.pt:27
-#: /src/schooltool/schoolyear/browser/templates/schoolyear.pt:42
-#: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:34
-#: /src/schooltool/schoolyear/browser/templates/term-delete.pt:27
-#: /src/schooltool/skin/templates/container.pt:42
-#: /src/schooltool/skin/templates/container_delete.pt:32
-#: /src/schooltool/skin/templates/table_container.pt:33
-#: /src/schooltool/skin/templates/view_macros.pt:194
-#: /src/schooltool/term/browser/templates/term-container-delete.pt:29
-#: /src/schooltool/timetable/browser/templates/schooltt-delete.pt:29
-#: /src/schooltool/timetable/browser/templates/timetable-container-delete.pt:27
-#: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:29
-msgid "delete-button"
-msgstr "Xoá"
-
 #: /src/schooltool/contact/browser/templates/filter.pt:21
 #: /src/schooltool/person/browser/person_filter.pt:11
 #: /src/schooltool/resource/browser/resource_filter.pt:37
@@ -2911,11 +2542,6 @@ msgstr "Quốc gia"
 #: /src/schooltool/demographics/interfaces.py:268
 msgid "Postal code"
 msgstr "Mã bưu điện"
-
-#: /src/schooltool/contact/interfaces.py:73
-#: /src/schooltool/demographics/interfaces.py:273
-msgid "Home phone"
-msgstr "Điện thoại gia đình"
 
 #: /src/schooltool/contact/interfaces.py:75
 #: /src/schooltool/demographics/interfaces.py:278
@@ -3705,44 +3331,6 @@ msgstr "Quản lý quan hệ thành viên của người này"
 msgid "edit groups"
 msgstr "Hiệu chỉnh nhóm"
 
-#: /src/schooltool/group/help/group_container.pt:8
-msgid ""
-"<h1>Groups</h1> <p>Use this page to keep track of <b>groups</b> of "
-"Persons.</p> <p><b>Groups</b> that have been added are not part of the "
-"essential groups (<b>Teachers</b>, <b>Students</b>, <b>Site Managers</b>, "
-"<b>School Administrators</b>, or <b>Clerks</b>). They can be selected by the "
-"checkbox next to them and removed by pressing the <b>Delete</b> button at "
-"the bottom of the page.</p> <h3>How do I...</h3> <ul> <li><b>Look for for a "
-"group:</b> Use the search box to the left of the <code>Find Now</code> "
-"button to look through the entire list of groups for the search criterion. "
-"The <code>Clear</code> button empties the search box of current "
-"entries.</li> <li><b>View the persons in a certain group:</b> Click on the "
-"name of the group.</li> <li><b>Sort the list:</b> Click on the "
-"<code>Title</code> header to change the order of groups from descending to "
-"ascending order, and vice versa.</li> <li><strong>Browse for a "
-"group:</strong> Use the <code>Next 10</code> (and <code>Previous</code>) and "
-"links in the blue bar.</li> <li><strong>Show all groups:</strong> Click "
-"<code>Show All</code> in the blue bar.</li> </ul>"
-msgstr ""
-"<h1> Nhóm </ h1> <p> sử dụng trang này để theo dõi <b> các nhóm </ b> của "
-"nhiều Người. </ p> <p> <b> Nhóm </ b> đã được thêm vào không phải là một "
-"phần thiết yếu của các nhóm (<b> Giáo viên </ b>, <b> Học sinh </ b>, <b> "
-"trang web Quản lý </ b>, <b> Quản trị viên của Trường </ b>, hay <b> nhân "
-"viên < / b>). Họ có thể được lựa chọn của hộp kiểm bên cạnh chúng và gỡ bỏ "
-"bằng cách nhấn <b> Xóa </ b> nút ở dưới cùng của trang web. </ P> <h3> Làm "
-"thế nào để I. .. </ h3> <ul > <li> <b> Hãy tìm cho một nhóm: </ b> sử dụng "
-"hộp tìm kiếm ở phía bên trái của  nút <code> Tìm kiếm </ code> để xem xét "
-"thông qua toàn bộ danh sách các nhóm cho các tiêu chí tìm kiếm. Các nút "
-"<code> Xóa </ code> làm rỗng hộp tìm kiếm hiện tại. </ Li> <li> <b> Xem "
-"những người trong một nhóm: </ b> Click chuột vào tên của nhóm. </ li> <li> "
-"<b> Sắp xếp danh sách: </ b> Nhấn vào <code> Tiêu đề </ code> tiêu đề để "
-"thay đổi thứ tự của các nhóm từ Descending ascending vào trật tự, và ngược "
-"lại. </ li> <li > <strong> Trình duyệt cho một nhóm: </ strong> Sử dụng các "
-"<code> Tiếp theo 10 </ code> (và <code> trước </ code>) và các liên kết màu "
-"xanh trong quầy bar. </ li> <li> < strong> Hiển thị tất cả các nhóm: </ "
-"strong> Click vào <code> Hiển thị tất cả </ code> màu xanh trong quầy bar. "
-"</ li> </ ul>"
-
 #: /src/schooltool/group/interfaces.py:41
 #: /src/schooltool/securitypolicy/interfaces.py:109
 msgid "Title of the group."
@@ -4213,15 +3801,6 @@ msgstr ""
 msgid "The title of a resource type."
 msgstr "Tiêu đề của các kiểu tài nguyên"
 
-#: /src/schooltool/resource/interfaces.py:130
-#: /src/schooltool/resource/interfaces.py:138
-msgid ""
-"A string that will be displayed to users in tables or\n"
-"        resource type selection widgets."
-msgstr ""
-"Một xâu sẽ được hiển thị cho những người sử dụng trong các bảng hoặc các "
-"kiểu tài nguyên  lựa chọn các tiện ích"
-
 #: /src/schooltool/resource/resource.py:55
 #: /src/schooltool/resource/types.py:55
 msgid "Resource"
@@ -4445,7 +4024,7 @@ msgstr "Báo cáo một lỗi trên Launchpad"
 #: /src/schooltool/skin/templates/view_macros.pt:180
 #: /src/schooltool/skin/templates/view_macros.pt:187
 msgid "add-button"
-msgstr "Nút thêm vào"
+msgstr "Thêm"
 
 #: /src/schooltool/table/templates/batch.pt:5
 #: /src/schooltool/table/templates/batch.pt:7
@@ -5032,19 +4611,10 @@ msgstr "Sơ đồ thời khóa biểu mặc định"
 msgid "Not Selected"
 msgstr "Không chọn"
 
-#. Default: "Change"
-#: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:59
-msgid "change-button"
-msgstr "Thay đổi"
-
 #: /src/schooltool/timetable/browser/templates/timetable_list.pt:4
 #: /src/schooltool/timetable/browser/templates/timetable_list.pt:11
 msgid "Timetables for ${object}"
 msgstr "Thời khóa biểu cho ${object}"
-
-#: /src/schooltool/timetable/browser/templates/timetableschema.pt:33
-msgid "Homeroom"
-msgstr "Phòng Chủ"
 
 #: /src/schooltool/timetable/browser/templates/ttwizard.pt:9
 msgid ""
@@ -5203,14 +4773,6 @@ msgstr "Xin nhập các khoảng theo thứ tự của mỗi ngày"
 msgid "$period on day $day"
 msgstr "$period trong ngày  $day"
 
-#: /src/schooltool/timetable/browser/ttwizard.py:733
-msgid ""
-"Do you check student attendance for the day in a homeroom period or "
-"equivalent?"
-msgstr ""
-"Bạn hãy kiểm tra học sinh tham dự trong các ngày trong một khoảng thời gian "
-"hoặc tương đương ?"
-
 #: /src/schooltool/timetable/browser/ttwizard.py:736
 msgid "Yes"
 msgstr "Có"
@@ -5218,10 +4780,6 @@ msgstr "Có"
 #: /src/schooltool/timetable/browser/ttwizard.py:737
 msgid "No"
 msgstr "Không"
-
-#: /src/schooltool/timetable/browser/ttwizard.py:752
-msgid "Please indicate the homeroom period(s) for each day:"
-msgstr "Xin vui lòng cho biết khoảng thời gian chủ động cho mỗi ngày"
 
 #. Default: "Confirm"
 #: /src/schooltool/widget/password.py:39
@@ -5293,6 +4851,49 @@ msgstr "Năm"
 msgid "Page ${page_number}"
 msgstr "Trang ${page_number}"
 
+#. Default: "OK"
+#: /src/schooltool/app/browser/templates/edit_relationships.pt:65
+#: /src/schooltool/contact/browser/templates/manage_contacts.pt:75
+#: /src/schooltool/course/browser/templates/edit_relationships.pt:84
+msgid "ok-button"
+msgstr "Đồng ý"
+
+#. Default: "Cancel"
+#: /src/schooltool/app/browser/templates/event_add.pt:378
+#: /src/schooltool/basicperson/browser/templates/person_edit.pt:13
+#: /src/schooltool/contact/browser/templates/contacts_delete.pt:36
+#: /src/schooltool/course/browser/templates/link_section.pt:133
+#: /src/schooltool/email/browser/templates/email_delete.pt:34
+#: /src/schooltool/person/browser/person_container_delete.pt:37
+#: /src/schooltool/resource/browser/container_delete.pt:29
+#: /src/schooltool/sampledata/sampledata.pt:82
+#: /src/schooltool/schoolyear/browser/templates/term-delete.pt:29
+#: /src/schooltool/setupdata/setupdata.pt:25
+#: /src/schooltool/skin/templates/container_delete.pt:34
+#: /src/schooltool/skin/templates/view_macros.pt:200
+#: /src/schooltool/skin/templates/view_macros.pt:205
+#: /src/schooltool/term/browser/templates/emergency2.pt:42
+#: /src/schooltool/term/browser/templates/emergency_select.pt:41
+#: /src/schooltool/term/browser/templates/term-container-delete.pt:31
+#: /src/schooltool/timetable/browser/templates/schooltt-delete.pt:31
+#: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:83
+#: /src/schooltool/timetable/browser/templates/simpletts.pt:62
+#: /src/schooltool/timetable/browser/templates/specialday_change.pt:64
+#: /src/schooltool/timetable/browser/templates/specialday_select.pt:41
+#: /src/schooltool/timetable/browser/templates/timetable-container-delete.pt:29
+#: /src/schooltool/timetable/browser/templates/timetable-edit.pt:70
+msgid "cancel-button"
+msgstr "Huỷ bỏ"
+
+#: /src/schooltool/app/browser/templates/login.pt:13
+msgid ""
+"You are not allowed to access this page. You can click on the back button in "
+"your browser to go back, or ask a more privileged user to log in."
+msgstr ""
+"Bạn không được phép truy cập vào trang này. Bạn có thể nhấn vào nút \"Quay "
+"lại\" để quay lại trình duyệt của bạn, hoặc yêu cầu được cấp nhiều quyền hơn "
+"khi đăng nhập."
+
 #: /src/schooltool/app/browser/templates/portlet_tomorrow_events.pt:5
 msgid "Tomorrow's Events"
 msgstr "Sự kiện của ngày mai"
@@ -5307,6 +4908,308 @@ msgstr "Sự kiện của ngày mai"
 #: /src/schooltool/resource/browser/resource-csvimport.pt:55
 msgid "Western (ISO-8859-1)"
 msgstr "Western (ISO-8859-1)"
+
+#. Default: "Submit"
+#: /src/schooltool/app/browser/templates/timetables-csvimport.pt:122
+#: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:75
+#: /src/schooltool/basicperson/browser/templates/person_edit.pt:10
+#: /src/schooltool/course/browser/section-member-csvimport.pt:52
+#: /src/schooltool/course/browser/templates/course-csvimport.pt:86
+#: /src/schooltool/export/templates/import.pt:66
+#: /src/schooltool/group/browser/group-csvimport.pt:72
+#: /src/schooltool/group/browser/group-member-csvimport.pt:52
+#: /src/schooltool/person/browser/person-csvimport.pt:75
+#: /src/schooltool/resource/browser/resource-csvimport.pt:72
+msgid "submit-button"
+msgstr "Đệ trình"
+
+#: /src/schooltool/app/help/calendar_selection.pt:6
+#: /src/schooltool/app/help/configure.zcml:97
+msgid "Calendar Selection"
+msgstr "Lựa chọn lịch"
+
+#: /src/schooltool/app/help/calendar_selection.pt:8
+msgid ""
+"<h1>Calendar Selection</h1> <p>You can add color-coded events from multiple "
+"calendars to your personal calendar view. You can add events from course "
+"sections you attend, groups, other people, or even resources like classrooms "
+"or projectors.</p> <p>Some calendars are private or limited to certain "
+"groups.</p> <p>On the calendar selection form you are given lists of all the "
+"calendars available to you. This might be a long list.</p> <p>The "
+"\"SchoolTool site-wide calendar\" is intended to be used as the official "
+"public calendar of the school.</p> <h3>How do I...</h3> <ul> "
+"<li><strong>Select or unselect several individual calendars of one "
+"type:</strong> If you press the <code>Ctrl</code> button on your keyboard "
+"while you select calendars from a list with your mouse, you can select "
+"multiple calendars.</li> <li><strong>Select a range of calendars of one "
+"type:</strong> If you press the <code>Shift</code> key while clicking on "
+"calendars, you can select a range.</li> </ul>"
+msgstr ""
+"<h1>Lựa chọn Lịch </ h1> <p> Bạn có thể thêm các sự kiện mã màu sắc từ nhiều "
+"lịch biểu để xem lịch cá nhân của bạn. Bạn có thể thêm sự kiện từ các lớp "
+"học bạn tham gia khóa học, các nhóm, từ những người khác, hoặc thậm chí các "
+"tài nguyên giống như lớp học hoặc máy chiếu. </ P> <p> Một số các lịch biểu "
+"được giới hạn cho các cá nhân hoặc một số nhóm. </ P> <p> Các biểu mẫu lịch "
+"bạn đã chọn sẽ được đưa vào danh sách các lịch biểu có sẵn của bạn. Điều này "
+"có thể là một danh sách dài. </ P> <p> Những \"trang lịch chủ SchoolTool \" "
+"là để được sử dụng như là lịch chính công khai của trường. </ P> <h3> Làm "
+"thế nào để tôi . .. < / h3> <ul> <li> <strong> Chọn hoặc bỏ chọn một số loại "
+"lịch cá nhân: </ strong> Nếu bạn bấm phím<code> Ctrl </ code>trên bàn phím "
+"kết hợp với chuột, bạn có thể chọn nhiều lịch. </ li> <li> <strong> Chọn một "
+"loạt các lịch biểu của một kiểu: </ strong> Nếu bạn bấm phím<code> Shift </ "
+"code> sau đó nhấp vào lịch biểu, bạn có thể chọn một phạm vi các lịch biểu "
+"</ li> </ ul>"
+
+#: /src/schooltool/app/help/calendaring.pt:8
+msgid ""
+"<h1>Calendaring in SchoolTool</h1> <p>SchoolTool includes a full-featured "
+"calendaring system, similar to Apple iCal or Google Calendar, but capable of "
+"representing complex school timetables, including rotating schedules. "
+"SchoolTool is also useful for simple resource scheduling, allowing you to "
+"manage room assignments, and booking shared resources like computers or "
+"projectors. Each person, group, course section or resource has its own "
+"calendar. You may integrate multiple calendars into your personal calendar "
+"views.</p> <h3>Parts of the standard calendar views</h3> <ul> "
+"<li><strong>Calendar table:</strong> fills the main (lower-right) part of "
+"the page. This represents the calendar for one day, week, month or year, "
+"depending on the view..</li> <li><strong>Calendar navigation bar:</strong> "
+"immediately above the calendar table. Allows you to navigate forward or "
+"backward in time, or to return to the current time.</li> "
+"<li><strong>Calendar title:</strong> immediately above the calendar "
+"navigation bar, lists the owner of this calendar and the date for this "
+"\"page\" of the calendar.</li> <li><strong>Left sidebar:</strong> for all "
+"calendars, this contains a <code>Jump to...</code> section containing menus "
+"and links to allow you to quickly navigate to a specific month, year or "
+"date. <br /> If you are logged in and viewing your own calendar, you will "
+"also see a <code>Calendars</code> section at the top of the sidebar which "
+"allows you to \"overlay\" events from other calendars in this view. You may "
+"see calendars for classes you teach or attend listed here already.</li> "
+"<li><strong>Day/week/month/year buttons:</strong> These buttons allow you to "
+"switch between daily, weekly, monthly and annual views.</li> </ul>"
+msgstr ""
+"<h1>Lịch trong Schooltool</h1><p> Schooltool chứa tất cả các đặc trưng của "
+"hệ thống lịch. Giống như iCal và Google Calendar, nhưng khả năng thể hiện "
+"của lịch trong Schooltool phức tạp hơn, bao gồm cả lịch trình luân phiên. "
+"Schooltool cũng rất hữu ích cho các tài nguyên lịch đơn giản, cho phép bạn "
+"quản lý việc gán các tài nguyên lịch, và đăng ký chia sẻ tài nguyên như máy "
+"tính, máy chiếu. Một người, nhóm, khóa học hoặc tài nguyên riêng của lịch. "
+"Bạn có thể tích hợp nhiều lịch vào việc hiển thị lịch cá nhân của mình. "
+"</p><h3> Phần hiển thị các lịch chuẩn </ h3> <ul> <li> <strong> Lịch bảng: "
+"</ strong> Phần chính cần điền vào (thấp hơn bên phải) của trang. Điều này "
+"thể hiện lịch biểu cho một ngày, một  tuần, một tháng hoặc năm, tùy thuộc "
+"vào cách hiển thị.. </ li> <li> <strong> Thanh điều hướng Lịch: </ strong> "
+"ngay phía trên bảng lịch. Cho phép bạn điều hướng chuyển tiếp hoặc quay trở "
+"lại trong thời gian, hoặc để trở lại thời điểm hiện tại. </ Li> <li>  "
+"<strong> Tiêu đề lịch: </ strong> ngay lập tức chuyển hướng lịch ở trên các "
+"thanh điều hướng, các danh sách chủ nhân của lịch này và các cho ngày này "
+"\"trang\" của lịch. </ li> <li> <strong>Thanh điều hướng trái: </ strong> "
+"cho tất cả các lịch biểu, việc này bao hàm cả việc <code> Nhảy tới ...</ "
+"code> lớp có chứa các trình đơn và liên kết một cách nhanh chóng cho phép "
+"bạn điều hướng đến một hàng tháng, hàng năm cụ thể hoặc ngày. <br /> Nếu bạn "
+"đang đăng nhập và xem lịch của riêng bạn, bạn cũng sẽ thấy một <code> Lịch "
+"</ code> phần ở phía trên cùng của bên cho phép bạn \"che phủ\" từ các sự "
+"kiện khác trong lịch này xem. Bạn có thể xem lịch biểu cho các bạn lớp dạy "
+"hoặc tham dự đã được liệt kê ở đây. </ Li> <li> <strong> ngày / tuần / tháng "
+"/ năm: </ strong> Các nút cho phép bạn chuyển đổi giữa hàng ngày, hàng tuần, "
+"hàng tháng và hàng năm xem. </ li> </ ul>"
+
+#: /src/schooltool/app/help/daily_calendar.pt:8
+msgid ""
+"<h1>Daily Calendar</h1> <p>This is the daily view of a calendar. It might be "
+"your calendar, or it might be the calendar of another person, group or "
+"resource in your school. <a href=\"/++help++/schooltool/calendaring\">More "
+"calendaring help...</a></p> <h3>How do I...</h3> <ul> <li><strong>Create an "
+"event:</strong> click in the calendar table at the start time for the event. "
+"Or select <code>New Event</code> from the <code>Actions</code> menu.</li> "
+"<li><strong>Book a resource:</strong> create an event starting at the time "
+"you want to reserve the resource. Select <code>Book Resource</code> in the "
+"Event Information form.</li> <li><strong>Show or hide events in one of the "
+"calendars listed under <code>Calendars</code>:</strong> check or uncheck the "
+"box under <code>Cal</code> and click <code>Apply</code>.</li> "
+"<li><strong>Adding or removing calendars to the <code>Calendars</code> "
+"list:</strong> click on the <code>More...</code> button.</li> "
+"<li><strong>access a iCal format version of the calendar:</strong>: Select "
+"<code>Open in iCal</code> from the Action menu.</li> <li><strong>Access an "
+"Atom feed version of the calendar: </strong> append <code>/atom.xml</code> "
+"to the calendar's URL.</li> </ul>"
+msgstr ""
+"<h1>Lịch ngày </h1><p>Kiểu lịch này  hiển thị lịch theo ngày. Nó có thể là "
+"lịch của bạn hoặc có thể là của một người khác, nhóm hoặc tài nguyên trong "
+"trường của bạnl. <a href=\"/++help++/schooltool/calendaring\">Thêm các trợ "
+"giúp về lịch...</a></p> <h3>Làm thế nào tôi..</h3> <ul> <li><strong>Tạo một "
+"sự kiện:</strong> Nhấn vào bảng lịch  tại thời gian bắt đầu của sự kiện. "
+"Hoặc lựa chọn <code>New Event</code> Từ  danh sách các "
+"<code>Actions</code>.</li> <li><strong>Đăng ký tài nguyên:</strong> Tạo một "
+"sự kiện bắt đầu tại thời gian mà bạn muốn đặt tài nguyên. Lựa chọn "
+"<code>Đăng ký tài nguyên</code> trong biểu mẫu thông tin sự kiện.</li> "
+"<li><strong>Hiển thị hoặc ẩn các sự kiện trong một danh sách các lịch "
+"biểu<code>Calendars</code>:</strong> Tích hoặc không tích vào hộp box "
+"<code>Cal</code> và nhấn<code>Apply</code>.</li> <li><strong>Thêm vào hoặc "
+"gỡ bỏ các sự kiện <code>Calendars</code> dánh sách:</strong> nhấn vào nút "
+"<code>More...</code>.</li> <li><strong> Truy cập vào một định dạng iCal của "
+"lịch:</strong>: Select <code>mở trong iCal</code> từ menu Hành động.</li> "
+"<li><strong>Truy cập vào các mô tả về phiên bản của lịch: </strong> Giáo dục "
+"học<code>/atom.xml</code> đến các  calendar's URL.</li> </ul>"
+
+#: /src/schooltool/app/help/event_add.pt:24
+#: /src/schooltool/app/help/event_edit.pt:22
+msgid ""
+"If your event repeats in some pattern, check the <code>Recurring</code> box "
+"and fill out the new fields that appear. In certain circumstances (like if "
+"you change the original day of a weekly recurring event) you may need to "
+"click the <code>Update form</code> button to update the recurrence fields."
+msgstr ""
+"Nếu bạn muốn lặp lại một sự kiện trong một số mẫu, hãy kiểm tra hộp "
+"<code>Recurring</code> và điền vào các trường mới khi chúng xuất hiện. Trong "
+"một số trường hợp (ví như bạn thay đổi này ban đầu trong các tuần, của sự "
+"kiện theo định kỳ), bạn có thể cần phải bấm vào nút <code>Update form</code "
+"để cập nhật các trường mà bạn thay đổi."
+
+#: /src/schooltool/app/help/monthly_calendar.pt:8
+msgid ""
+"<h1>Monthly Calendar</h1> <p>This is the monthly view of a calendar. It "
+"might be your calendar, or it might be the calendar of another person, group "
+"or resource in your school. <a "
+"href=\"/++help++/schooltool/calendaring\">More calendaring help...</a></p> "
+"<h3>How do I...</h3> <ul> <li><strong>View an individual day or event in "
+"more detail:</strong> click on the appropriate day on the calendar.</li> "
+"<li><strong>View an individual week:</strong> Click on the appropriate week "
+"number in blue in the leftmost column of the calendar.</li> "
+"<li><strong>Create an event:</strong> select <code>New Event</code> from the "
+"<code>Actions</code> menu.</li> <li><strong>Show or hide events in one of "
+"the calendars listed under <code>Calendars</code>:</strong> check or uncheck "
+"the box under <code>Cal</code> and click <code>Apply</code>.</li> "
+"<li><strong>Adding or removing calendars to the <code>Calendars</code> "
+"list:</strong> click on the <code>More...</code> button.</li> "
+"<li><strong>Make weeks start on the correct day:</strong> the first day of "
+"the week varies in different parts of the world. If SchoolTool isn't set up "
+"correctly for you, click on your name in the red bar at the top of the page. "
+"Then click on the <code>Actions</code> menu and select <code>Change "
+"Preferences</code>. Pick the correct \"Week starts on\" day and hit "
+"<code>Apply</code>.</li> <li><strong>Access a iCal format version of the "
+"calendar:</strong>: select <code>Open in iCal</code> from the Action "
+"menu.</li> </ul>"
+msgstr ""
+"<h1>Lịch tháng</h1> <p>Đó là việc hiển thị một tháng trên lịch biểu. Nó có "
+"thể là lịch biểu của bạn, hoặc có thể là lịch biểu của một người khác, của "
+"một nhóm hay tài nguyên của môt trường học. <a href=\"/++Trợ "
+"giúp++/schooltool/Lịch biểu\">Thêm các trợ giúp về lịch ...</a></p> <h3>Tôi "
+"nên làm thến nào...</h3> <ul> <li><strong> hiển thị các sự kiện trong một "
+"ngày hoặc thêm các mô tả chi tiết:</strong> nhấn vào các ngày hiển thị trên "
+"lịch.</li> <li><strong>Hiển thị một tuần riêng biệt:</strong> Nhấn vào chữ "
+"tháng trên lịch biểu Số cột màu xanh ở bên trái của lịch.</li> "
+"<li><strong>Tạo mới một sự kiện:</strong> Lựa chọn <code>Sự kiện mới</code> "
+"từ Menu <code>Các Hoạt động</code>.</li> <li><strong>Hiển thị hoặc ẩn các sự "
+"kiện trong một hoặc danh sách các lịch biểu ở dưới <code>Lịch "
+"biểu</code>:</strong> Tích hoặc bỏ dấu tích ở hộp bên dưới<code>Cal</code> "
+"và nhấn nút <code>Áp dụng</code>.</li> <li><strong> Thêm vào hoặc bỏ đi các "
+"lịch biểu của trong Danh sách các <code>Calendars</code>:</strong> Nhấn vào "
+"nút  <code>Thêm nữa...</code>.</li> <li><strong>Hãy bắt đầu mỗi tuần vào "
+"đúng ngày:</strong> Ngày đầu tiên của tuần khác nhau nằm trong các phần khác "
+"nhau của thế giới. Nếu SchoolTool thiết lập đúng cho bạn, Hãy nhấn vào tên "
+"của bạn có màu đỏ ở phía trên của trang. Và sau đó nhấn vào hộp "
+"chọn<code>Các Hành động</code> và chọn lựa<code>Change Preferences</code>. "
+"Nhấn đúng vào nút  \"Week starts on\" và chọn ngày <code>Áp "
+"dụng</code>.</li> <li><strong>Truy cập vào định dạng  iCal của "
+"lịch:</strong>: Chọn lựa <code>Mở bằng iCal</code> Từ menu Áp dụng.</li> "
+"</ul>"
+
+#: /src/schooltool/app/help/weekly_calendar.pt:8
+msgid ""
+"<h1>Weekly Calendar</h1> <p>This is the weekly view of a calendar. It might "
+"be your calendar, or it might be the calendar of another person, group or "
+"resource in your school. <a href=\"/++help++/schooltool/calendaring\">More "
+"calendaring help...</a></p> <h3>How do I...</h3> <ul> <li><strong>View an "
+"individual day in more detail:</strong> click on the appropriate day in the "
+"blue row of the calendar table.</li> <li><strong>View details about an event "
+"or edit it:</strong> click on the event. If you have the correct permissions "
+"for the event you can edit it.</li> <li><strong>Create an event:</strong> "
+"select the day the event starts and create the event in the daily view.</li> "
+"<li><strong>Show or hide events in one of the calendars listed under "
+"<code>Calendars</code>:</strong> check or uncheck the box under "
+"<code>Cal</code> and click <code>Apply</code>.</li> <li><strong>Adding or "
+"removing calendars to the <code>Calendars</code> list:</strong> click on the "
+"<code>More...</code> button.</li> <li><strong>Make the calendar start on the "
+"correct day:</strong> the first day of the week varies in different parts of "
+"the world. If SchoolTool isn't set up correctly for you, click on your name "
+"in the red bar at the top of the page. Then click on the "
+"<code>Actions</code> menu and select <code>Change Preferences</code>. Pick "
+"the correct \"Week starts on\" day and hit <code>Apply</code>.</li> "
+"<li><strong>Access a iCal format version of the calendar:</strong>: select "
+"<code>Open in iCal</code> from the Action menu.</li> </ul>"
+msgstr ""
+"<h1> Lịch Tuần </h1> <p>Đây là chế độ hiểu thị lịch biểu theo tuần.  Nó có "
+"thể là lịch của bạn, hoặc nó có thể là lịch của một người khác, nhóm hoặc "
+"các nguồn tài nguyên trong trường của bạn. <a href=\"/++ Hỗ trợ "
+"++/schooltool/Lịch Biểu\"> Trợ giúp thêm về lịch biểu ...</a></p> <h3> Tôi "
+"phải làm thế nào ...</h3> <ul> <li><strong> Xem chi tiết một hồ sơ cá nhân "
+":</strong> bấm vào các ngày thích hợp trong các hàng màu xanh của bảng "
+"lịch.</li> <li><strong> Xem chi tiết các sự kiện hoặc Hiệu đính nó:</strong> "
+"Nhấn vào các sự kiện. Nếu bạn được cấp phát các quyền đó thì bạn có thể hiệu "
+"đính các sự kiện này.</li> <li><strong> Tạo một sự kiện: </strong> Lựa chọn "
+"ngày để bắt đầu một sự kiện và tạo một sự kiện hiển thị theo ngày. </li> "
+"<li><strong> Hiển thị hoặc ẩn các sự kiện trong một danh sách các lịch biểu "
+"ở dưới <code> Lịch Biểu </code>:</strong> Tích hoặc không tích vào hộp chọn "
+"bên dưới <code>Cal</code> Và tích vào nút  <code>Áp dụng </code>.</li> "
+"<li><strong> Thêm hoặc gỡ bỏ Các lịch biểu trong danh sách các <code>Lịch "
+"Biểu </code></strong>  Nhấn vào nút <code> Thêm nữa...</code> .</li> "
+"<li><strong>Tạo một lịch biểu bắt đầu đúng ngày:</strong>Ngày đầu tiên  của "
+"các tuần khác nhau là khác nhau giữa các vùng miền trên thế giới.  Nếu "
+"SchoolTool không thiết lập đúng cho bạn hãy Nhấn vào tên của bạn trên thanh "
+"màu đỏ phía trên  của trang. Sau đó nhấn vào menu <code>Các hoạt động "
+"</code> và bắt đầu  <code>Thay đổi tham chiếu</code>. Nhấn vào  Chọn đúng "
+"\"Tuần lễ bắt đầu vào\" ngày và nhấn nút <code> Áp dụng </code>.</li> "
+"<li><strong>Truy cập vào  một định dạng iCal của lịch biểu:</strong>: Lựa "
+"chọn <code> Mở trong iCal</code> Từ menu Các hoạt động.</li> </ul>"
+
+#: /src/schooltool/app/help/yearly_calendar.pt:8
+msgid ""
+"<h1>Yearly Calendar</h1> <p>This is the year view of a calendar. It might be "
+"your calendar, or it might be the calendar of another person, group or "
+"resource in your school. <a href=\"/++help++/schooltool/calendaring\">More "
+"calendaring help...</a></p> <h3>How do I...</h3> <ul> <li><strong>Know which "
+"days contain events: if the day has a blue background, there is at least one "
+"event that day.</strong></li> <li><strong>View an individual day in more "
+"detail:</strong> click on the day.</li> <li><strong>View an individual "
+"month:</strong> click on the name of the month.</li> <li><strong>Create an "
+"event:</strong> select the day the event starts and create the event in the "
+"daily view.</li> <li><strong>Show or hide events in one of the calendars "
+"listed under <code>Calendars</code>:</strong> check or uncheck the box under "
+"<code>Cal</code> and click <code>Apply</code>.</li> <li><strong>Adding or "
+"removing calendars to the <code>Calendars</code> list:</strong> click on the "
+"<code>More...</code> button.</li> <li><strong>Make the calendar start on the "
+"correct day:</strong> the first day of the week varies in different parts of "
+"the world. If SchoolTool isn't set up correctly for you, click on your name "
+"in the red bar at the top of the page. Then click on the "
+"<code>Actions</code> menu and select <code>Change Preferences</code>. Pick "
+"the correct \"Week starts on\" day and hit <code>Apply</code>.</li> "
+"<li><strong>Access a iCal format version of the calendar:</strong>: select "
+"<code>Open in iCal</code> from the Action menu.</li> </ul>"
+msgstr ""
+"<h1> Lịch năm </h1> <p> Đây là cách hiển thị lịch biểu theo năm.  Nó có thể "
+"là lịch của bạn, hoặc nó có thể là lịch của một người khác, nhóm hoặc các "
+"nguồn tài nguyên trong trường của bạn. <a href=\"/++ Trợ giúp "
+"++/schooltool/Lịch biểu\"> Thêm các trợ giúp về lịch biểu ...</a></p> <h3> "
+"Tôi phải làm thế nào ...</h3> <ul> <li><strong> Biết về các ngày có sự kiện: "
+"Nếu một ngày mà có nền màu xanh lục, thì sẽ có ít nhất một sự kiện trong "
+"ngày đó.</strong></li> <li><strong> Hiển thị các mô tả chi tiết hơn trong "
+"một ngày: </strong> Nhấn vào một ngày.</li> <li><strong>Hiển thị theo "
+"tháng:</strong> Nhấn vào tên tháng lựa chọn.</li> <li><strong> Tạo một sự "
+"kiện:</strong> Lựa chọn ngày cho sự kiện bắt đầu  và chọn chế độ hiển thị "
+"ngày cho sự kiện.</li> <li><strong>Hiển thị hoặc ẩn các sự kiện trong một "
+"danh sách các lịch biểu ở dưới <code>Lịch biểu </code>:</strong> Tích hoặc "
+"không tích vào hộp bên dưới <code>Cal</code> và nhấn và nút <code>Áp dụng "
+"</code>.</li> <li><strong>Thêm hoặc bỏ các lịch biểu trong hệ thống danh "
+"sách các <code>Lịch biểu</code> </strong> Nhấn vào nút  <code>Thêm "
+"nữa...</code>.</li> <li><strong>Tạo lịch biểu bắt đầu đúng ngày:</strong> "
+"Ngày đầu tiên trong các tuần khác nhau là khác nhau trên các vùng miền trên "
+"thế giới. Nếu SchoolTool không thiết lập đúng cho bạn, hãy nhấn vào tên của "
+"bạn trên thanh màu đỏ phía trên của trang. Và nhấn vào menu <code> Các hoạt "
+"động </code> và lựa chọn <code>Thay đổi các tham chiếu</code>. Nhấn vào  "
+"Chọn đúng \"Tuần lễ bắt đầu vào\" ngày và nhấn nút <code> Áp dụng "
+"</code>.</li> <li><strong>Truy cập vào  một định dạng iCal của lịch "
+"biểu:</strong>: Lựa chọn <code> Mở trong iCal</code> Từ menu Các hoạt "
+"động.</li> </ul>"
 
 #: /src/schooltool/app/main.py:406
 msgid "Cannot resolve plugin action order:\n"
@@ -5478,6 +5381,30 @@ msgstr "${relationship} của ${person}"
 msgid "Contact of ${person}"
 msgstr "Địa chỉ của ${person}"
 
+#. Default: "Confirm"
+#: /src/schooltool/contact/browser/templates/contacts_delete.pt:34
+#: /src/schooltool/course/browser/templates/course_container.pt:40
+#: /src/schooltool/course/browser/templates/section_container.pt:93
+#: /src/schooltool/demographics/browser/search.pt:35
+#: /src/schooltool/demographics/browser/table.pt:28
+#: /src/schooltool/email/browser/templates/email_container.pt:48
+#: /src/schooltool/email/browser/templates/email_delete.pt:31
+#: /src/schooltool/person/browser/person_container_delete.pt:35
+#: /src/schooltool/resource/browser/container_delete.pt:27
+#: /src/schooltool/schoolyear/browser/templates/schoolyear.pt:42
+#: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:34
+#: /src/schooltool/schoolyear/browser/templates/term-delete.pt:27
+#: /src/schooltool/skin/templates/container.pt:42
+#: /src/schooltool/skin/templates/container_delete.pt:32
+#: /src/schooltool/skin/templates/table_container.pt:33
+#: /src/schooltool/skin/templates/view_macros.pt:194
+#: /src/schooltool/term/browser/templates/term-container-delete.pt:29
+#: /src/schooltool/timetable/browser/templates/schooltt-delete.pt:29
+#: /src/schooltool/timetable/browser/templates/timetable-container-delete.pt:27
+#: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:29
+msgid "delete-button"
+msgstr "Xoá"
+
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:43
 msgid "Create contact"
 msgstr "Tạo địa chỉ"
@@ -5532,6 +5459,11 @@ msgstr ""
 #: /src/schooltool/contact/contact.py:211
 msgid "Instructors of student(s) related to this contact."
 msgstr "Các giáo viên của Học sinh có liên quan tới địa chỉ này"
+
+#: /src/schooltool/contact/interfaces.py:73
+#: /src/schooltool/demographics/interfaces.py:273
+msgid "Home phone"
+msgstr "Điện thoại gia đình"
 
 #: /src/schooltool/contact/interfaces.py:102
 msgid "Contact's relationship with the person"
@@ -6294,6 +6226,44 @@ msgstr "Upload các nhóm trong Schooltool dưới dạng file CSV"
 msgid "Import Group Members"
 msgstr "Nhập vào các thành viên của nhóm"
 
+#: /src/schooltool/group/help/group_container.pt:8
+msgid ""
+"<h1>Groups</h1> <p>Use this page to keep track of <b>groups</b> of "
+"Persons.</p> <p><b>Groups</b> that have been added are not part of the "
+"essential groups (<b>Teachers</b>, <b>Students</b>, <b>Site Managers</b>, "
+"<b>School Administrators</b>, or <b>Clerks</b>). They can be selected by the "
+"checkbox next to them and removed by pressing the <b>Delete</b> button at "
+"the bottom of the page.</p> <h3>How do I...</h3> <ul> <li><b>Look for for a "
+"group:</b> Use the search box to the left of the <code>Find Now</code> "
+"button to look through the entire list of groups for the search criterion. "
+"The <code>Clear</code> button empties the search box of current "
+"entries.</li> <li><b>View the persons in a certain group:</b> Click on the "
+"name of the group.</li> <li><b>Sort the list:</b> Click on the "
+"<code>Title</code> header to change the order of groups from descending to "
+"ascending order, and vice versa.</li> <li><strong>Browse for a "
+"group:</strong> Use the <code>Next 10</code> (and <code>Previous</code>) and "
+"links in the blue bar.</li> <li><strong>Show all groups:</strong> Click "
+"<code>Show All</code> in the blue bar.</li> </ul>"
+msgstr ""
+"<h1> Nhóm </ h1> <p> sử dụng trang này để theo dõi <b> các nhóm </ b> của "
+"nhiều Người. </ p> <p> <b> Nhóm </ b> đã được thêm vào không phải là một "
+"phần thiết yếu của các nhóm (<b> Giáo viên </ b>, <b> Học sinh </ b>, <b> "
+"trang web Quản lý </ b>, <b> Quản trị viên của Trường </ b>, hay <b> nhân "
+"viên < / b>). Họ có thể được lựa chọn của hộp kiểm bên cạnh chúng và gỡ bỏ "
+"bằng cách nhấn <b> Xóa </ b> nút ở dưới cùng của trang web. </ P> <h3> Làm "
+"thế nào để I. .. </ h3> <ul > <li> <b> Hãy tìm cho một nhóm: </ b> sử dụng "
+"hộp tìm kiếm ở phía bên trái của  nút <code> Tìm kiếm </ code> để xem xét "
+"thông qua toàn bộ danh sách các nhóm cho các tiêu chí tìm kiếm. Các nút "
+"<code> Xóa </ code> làm rỗng hộp tìm kiếm hiện tại. </ Li> <li> <b> Xem "
+"những người trong một nhóm: </ b> Click chuột vào tên của nhóm. </ li> <li> "
+"<b> Sắp xếp danh sách: </ b> Nhấn vào <code> Tiêu đề </ code> tiêu đề để "
+"thay đổi thứ tự của các nhóm từ Descending ascending vào trật tự, và ngược "
+"lại. </ li> <li > <strong> Trình duyệt cho một nhóm: </ strong> Sử dụng các "
+"<code> Tiếp theo 10 </ code> (và <code> trước </ code>) và các liên kết màu "
+"xanh trong quầy bar. </ li> <li> < strong> Hiển thị tất cả các nhóm: </ "
+"strong> Click vào <code> Hiển thị tất cả </ code> màu xanh trong quầy bar. "
+"</ li> </ ul>"
+
 #: /src/schooltool/group/security.zcml:53
 msgid "Groups are essentially sets of users."
 msgstr "Các nhóm đã được gán thành viên"
@@ -6304,7 +6274,7 @@ msgstr "( p )"
 
 #: /src/schooltool/person/browser/home_tab_viewlet.pt:3
 msgid "Home"
-msgstr "Nhà"
+msgstr "Trang chủ"
 
 #. Default: ""
 #. "jjones, Jimmy Jones\n"
@@ -6363,6 +6333,15 @@ msgstr ""
 "PRJ302, Là mã số của máy chiếu số #302\n"
 "Main Auditorium,,Vị trí:\n"
 "LC-805, Laptop Computer #805\n"
+
+#: /src/schooltool/resource/interfaces.py:130
+#: /src/schooltool/resource/interfaces.py:138
+msgid ""
+"A string that will be displayed to users in tables or\n"
+"        resource type selection widgets."
+msgstr ""
+"Một xâu sẽ được hiển thị cho những người sử dụng trong các bảng hoặc các "
+"kiểu tài nguyên  lựa chọn các tiện ích"
 
 #: /src/schooltool/resource/security.zcml:50
 msgid "Reservations"
@@ -6633,6 +6612,27 @@ msgid ""
 msgstr ""
 "<a href=\"#\" onclick=\"$('#more_overlays').toggle();return false;\">Thêm "
 "nữa...</a>"
+
+#. Default: "Change"
+#: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:59
+msgid "change-button"
+msgstr "Thay đổi"
+
+#: /src/schooltool/timetable/browser/templates/timetableschema.pt:33
+msgid "Homeroom"
+msgstr "Phòng Chủ"
+
+#: /src/schooltool/timetable/browser/ttwizard.py:733
+msgid ""
+"Do you check student attendance for the day in a homeroom period or "
+"equivalent?"
+msgstr ""
+"Bạn hãy kiểm tra học sinh tham dự trong các ngày trong một khoảng thời gian "
+"hoặc tương đương ?"
+
+#: /src/schooltool/timetable/browser/ttwizard.py:752
+msgid "Please indicate the homeroom period(s) for each day:"
+msgstr "Xin vui lòng cho biết khoảng thời gian chủ động cho mỗi ngày"
 
 #: /src/schooltool/timetable/security.zcml:16
 msgid "School timetables"

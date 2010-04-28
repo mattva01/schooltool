@@ -9,14 +9,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-05-19 16:33+0000\n"
+"POT-Creation-Date: 2010-01-04 15:41+0000\n"
 "PO-Revision-Date: 2008-09-07 10:03+0000\n"
 "Last-Translator: Aron Xu <Unknown>\n"
 "Language-Team: Simplified Chinese <zh_CN@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-01-07 04:47+0000\n"
+"X-Launchpad-Export-Date: 2010-04-06 03:57+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: /src/schooltool/commendation/browser.py:70
@@ -28,6 +28,11 @@ msgstr "<未知>"
 msgid "commendations"
 msgstr "奖励"
 
+#: /src/schooltool/commendation/configure.zcml:82
+#: /src/schooltool/commendation/configure.zcml:92
+msgid "View Commendations"
+msgstr "查看奖励"
+
 #: /src/schooltool/commendation/configure.zcml:100
 #: /src/schooltool/commendation/configure.zcml:110
 msgid "Add Commendation"
@@ -36,11 +41,6 @@ msgstr "添加奖励"
 #: /src/schooltool/commendation/configure.zcml:128
 msgid "All Commendations"
 msgstr "所有奖励"
-
-#: /src/schooltool/commendation/configure.zcml:82
-#: /src/schooltool/commendation/configure.zcml:92
-msgid "View Commendations"
-msgstr "查看奖励"
 
 #: /src/schooltool/commendation/interfaces.py:48
 msgid "Title"
@@ -67,24 +67,24 @@ msgid "The scope of the commendation."
 msgstr "奖励范围。"
 
 #: /src/schooltool/commendation/interfaces.py:60
-msgid "group"
-msgstr "组"
-
-#: /src/schooltool/commendation/interfaces.py:60
 msgid "community"
 msgstr "社区"
+
+#: /src/schooltool/commendation/interfaces.py:60
+msgid "group"
+msgstr "组"
 
 #: /src/schooltool/commendation/interfaces.py:60
 msgid "school-wide"
 msgstr "全校范围"
 
 #: /src/schooltool/commendation/interfaces.py:61
-msgid "national"
-msgstr "国家"
-
-#: /src/schooltool/commendation/interfaces.py:61
 msgid "global"
 msgstr "全局"
+
+#: /src/schooltool/commendation/interfaces.py:61
+msgid "national"
+msgstr "国家"
 
 #: /src/schooltool/commendation/interfaces.py:61
 msgid "state"
