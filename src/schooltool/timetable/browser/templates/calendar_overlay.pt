@@ -63,7 +63,7 @@
                >&nbsp;</a></td>
       </tr>
     </table>
-    <h4 i18n:translate=""><a href="#" onclick="$('#more_overlays').toggle();return false;">More...</a></h4>
+    <h4><a href="#" onclick="$('#more_overlays').toggle();return false;" i18n:translate="">More...</a></h4>
     <div id="more_overlays" style="display:none">
       <table class="overlays" tal:repeat="group items/more_groups">
         <tr><td colspan="3">

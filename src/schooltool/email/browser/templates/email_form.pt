@@ -3,7 +3,7 @@
     <metal:nothing metal:fill-slot="content-header" />
     <metal:block metal:fill-slot="body">
       <div id="message" tal:condition="view/status">
-        <div class="summary" i18n:translate="" tal:content="view/status">
+        <div class="summary" tal:content="view/status">
           Form status summary
         </div>
         <ul class="errors" tal:condition="view/widgets/errors">
@@ -53,8 +53,7 @@
                       <metal:widget-row define-macro="widget-row">
                         <div class="label">
                           <label tal:attributes="for widget/id">
-                            <span i18n:translate=""
-                                  tal:content="widget/label">label</span>
+                            <span tal:content="widget/label">label</span>
                             <span class="required"
                                   tal:condition="widget/required">*</span>
                           </label>
