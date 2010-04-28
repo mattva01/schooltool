@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2009-05-19 16:33+0000\n"
-"PO-Revision-Date: 2010-01-20 05:55+0000\n"
+"POT-Creation-Date: 2010-01-04 15:41+0000\n"
+"PO-Revision-Date: 2010-02-08 20:18+0000\n"
 "Last-Translator: maitraya <maitraya.bhattacharyya@gmail.com>\n"
 "Language-Team: Bengali <bn@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-01-21 04:32+0000\n"
+"X-Launchpad-Export-Date: 2010-04-06 03:56+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: /src/schooltool/commendation/browser.py:70
@@ -26,6 +26,11 @@ msgstr "<অজ্ঞাত>"
 msgid "commendations"
 msgstr "অনুমোদনসমূহ"
 
+#: /src/schooltool/commendation/configure.zcml:82
+#: /src/schooltool/commendation/configure.zcml:92
+msgid "View Commendations"
+msgstr "অনুমোদনসমূহ দেখুন"
+
 #: /src/schooltool/commendation/configure.zcml:100
 #: /src/schooltool/commendation/configure.zcml:110
 msgid "Add Commendation"
@@ -34,11 +39,6 @@ msgstr "অনুমোদন যোগ করুন"
 #: /src/schooltool/commendation/configure.zcml:128
 msgid "All Commendations"
 msgstr "সব অনুমোদনসমূহ"
-
-#: /src/schooltool/commendation/configure.zcml:82
-#: /src/schooltool/commendation/configure.zcml:92
-msgid "View Commendations"
-msgstr "অনুমোদনসমূহ দেখুন"
 
 #: /src/schooltool/commendation/interfaces.py:48
 msgid "Title"
@@ -65,24 +65,24 @@ msgid "The scope of the commendation."
 msgstr "অনুমোদনের ব্যfপ্তি"
 
 #: /src/schooltool/commendation/interfaces.py:60
-msgid "group"
-msgstr "দল"
-
-#: /src/schooltool/commendation/interfaces.py:60
 msgid "community"
 msgstr "সম্প্রদায়"
+
+#: /src/schooltool/commendation/interfaces.py:60
+msgid "group"
+msgstr "দল"
 
 #: /src/schooltool/commendation/interfaces.py:60
 msgid "school-wide"
 msgstr "স্কুলব্যাপী"
 
 #: /src/schooltool/commendation/interfaces.py:61
-msgid "national"
-msgstr "জাতীয়"
-
-#: /src/schooltool/commendation/interfaces.py:61
 msgid "global"
 msgstr "বৈশ্বিক"
+
+#: /src/schooltool/commendation/interfaces.py:61
+msgid "national"
+msgstr "জাতীয়"
 
 #: /src/schooltool/commendation/interfaces.py:61
 msgid "state"

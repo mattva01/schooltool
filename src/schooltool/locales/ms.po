@@ -8,42 +8,26 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-01-04 15:41+0000\n"
-"PO-Revision-Date: 2010-04-05 03:44+0000\n"
+"PO-Revision-Date: 2010-04-25 11:19+0000\n"
 "Last-Translator: zarxcky <Unknown>\n"
 "Language-Team: Malay <ms@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-04-05 03:50+0000\n"
+"X-Launchpad-Export-Date: 2010-04-26 03:38+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: /src/schooltool/app/browser/app.py:324
 msgid "Current leaders"
-msgstr "Ketua-ketua semasa."
+msgstr "Ketua-ketua terkini"
 
 #: /src/schooltool/app/browser/cal.py:486
 msgid "Unnamed Event"
-msgstr "Acara belum dinamai"
-
-#: /src/schooltool/app/browser/cal.py:1166
-msgid "Next month"
-msgstr "Bulan seterusnya"
-
-#: /src/schooltool/app/browser/cal.py:1168
-msgid "Previous month"
-msgstr "Bulan sebelumnya"
-
-#: /src/schooltool/app/browser/cal.py:1218
-msgid "Next year"
-msgstr "Tahun depan"
-
-#: /src/schooltool/app/browser/cal.py:1220
-msgid "Previous year"
-msgstr "Tahun sebelumnya"
+msgstr "Acara belum dinamakan"
 
 #: /src/schooltool/app/browser/cal.py:1747
 msgid "Start time in 24h format"
-msgstr "Mulakan masa didalam format 24jam"
+msgstr "Mulakan masa dalam format 24 jam"
 
 #: /src/schooltool/app/browser/cal.py:1751
 #: /src/schooltool/timetable/browser/schema.py:269
@@ -52,32 +36,28 @@ msgstr "Jangka masa"
 
 #: /src/schooltool/app/browser/cal.py:1777
 msgid "Recurs every"
-msgstr "Ulang setiap"
-
-#: /src/schooltool/app/browser/cal.py:1786
-msgid "Repeat every"
-msgstr "Ulang setiap"
+msgstr "Berulang setiap"
 
 #: /src/schooltool/app/browser/cal.py:1803
 #: /src/schooltool/app/browser/templates/event_add.pt:303
 msgid "Repeat until"
-msgstr "Ulang hingga"
+msgstr "Ulang sehingga"
 
 #: /src/schooltool/app/browser/cal.py:1807
 msgid "Weekdays"
-msgstr "Hari hari kerja"
+msgstr "Hari bekerja"
 
 #: /src/schooltool/app/browser/cal.py:1914
 msgid "same weekday"
-msgstr "Hari bekerja sama"
+msgstr "Hari bekerja yang sama"
 
 #: /src/schooltool/app/browser/cal.py:2000
 msgid "Invalid time"
-msgstr ""
+msgstr "Waktu tidak sah"
 
 #: /src/schooltool/app/browser/configure.zcml:342
 msgid "Open in iCal"
-msgstr "bukan dalam iCal"
+msgstr "buka dengan iCal"
 
 #: /src/schooltool/app/browser/configure.zcml:427
 msgid "Calendar (Weekly)"
@@ -85,11 +65,11 @@ msgstr "Kalendar (Mingguan)"
 
 #: /src/schooltool/app/browser/configure.zcml:631
 msgid "Application Control"
-msgstr "Kontrol Applikasi"
+msgstr "Kawalan Aplikasi"
 
 #: /src/schooltool/app/browser/pdfcal.py:197
 msgid "Monthly calendar for %s"
-msgstr "Kalendar Bulanan untu %s"
+msgstr "Kalendar bulanan untuk %s"
 
 #: /src/schooltool/app/browser/templates/cal_atom.pt:14
 #: /src/schooltool/app/configure.zcml:332
@@ -123,22 +103,22 @@ msgstr "SchoolTool"
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:75
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:84
 msgid "ok-button"
-msgstr "Punat-ok"
+msgstr "butang-ok"
 
 #: /src/schooltool/app/browser/templates/event.pt:20
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:21
 msgid "This is a recurring event."
-msgstr "Acara yang berulang"
+msgstr "Ini adalah aktiviti berulang"
 
 #: /src/schooltool/app/browser/templates/event.pt:53
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:54
 msgid "Change the details of this event"
-msgstr "Tukar perincian acara tersebut"
+msgstr "Tukar butiran aktiviti ini"
 
 #: /src/schooltool/app/browser/templates/event.pt:80
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:81
 msgid "delete event"
-msgstr "Buang acara"
+msgstr "Padam aktiviti"
 
 #: /src/schooltool/app/browser/templates/login.pt:44
 #: /src/schooltool/basicperson/browser/person.py:64
@@ -146,7 +126,7 @@ msgstr "Buang acara"
 #: /src/schooltool/person/browser/person.py:159
 #: /src/schooltool/person/browser/person.py:290
 msgid "Password"
-msgstr "Kata Kunci"
+msgstr "Kata Laluan"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:54
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:33
@@ -166,33 +146,29 @@ msgstr "Contoh:"
 #: /src/schooltool/person/browser/person-csvimport.pt:48
 #: /src/schooltool/resource/browser/resource-csvimport.pt:45
 msgid "Upload CSV File"
-msgstr "Muat Atas Fail CSV"
+msgstr "Muatnaik Fail CSV"
 
 #: /src/schooltool/app/configure.zcml:338
 msgid "Security (General)"
 msgstr "Keselamatan (Am)"
 
-#: /src/schooltool/app/interfaces.py:153
-msgid "Front Page Calendar"
-msgstr "Kalendar Muka Depan"
-
 #: /src/schooltool/app/interfaces.py:171
 msgid "Show timetables"
-msgstr "Lihatkan jadual-jadual"
+msgstr "Paparkan jadual-jadual"
 
 #: /src/schooltool/basicperson/browser/person.py:104
 msgid "This username is already in use!"
-msgstr "Nama pengguna ini sudah pun dipakai!"
+msgstr "Nama pengguna ini sudah digunakan"
 
 #: /src/schooltool/course/browser/csvimport.py:49
 #: /src/schooltool/group/browser/csvimport.py:45
 #: /src/schooltool/resource/browser/csvimport.py:50
 msgid "Titles may not be empty"
-msgstr "Tajuk mungkin tidak kosong"
+msgstr "Tajuk tidak boleh kosong"
 
 #: /src/schooltool/course/browser/section.py:556
 msgid "Available Students"
-msgstr "Kum"
+msgstr "Pelajar Kedapatan"
 
 #: /src/schooltool/course/browser/templates/coursesviewlet.pt:4
 msgid "Sections Taught"
@@ -200,7 +176,7 @@ msgstr "Seksyen diajar"
 
 #: /src/schooltool/course/browser/templates/section.pt:86
 msgid "edit instructors"
-msgstr "ubah pengajar-pengajar"
+msgstr "ubah tenaga pengajar"
 
 #: /src/schooltool/app/app.py:201
 msgid "Your School"
@@ -225,7 +201,7 @@ msgstr "${number} orang"
 
 #: /src/schooltool/app/browser/app.py:227
 msgid "Username or password is incorrect"
-msgstr "Nama Pengguna atau kata kunci salah."
+msgstr "Nama pengguna atau kata laluan salah"
 
 #: /src/schooltool/app/browser/app.py:323
 #: /src/schooltool/app/security.py:307
@@ -234,7 +210,7 @@ msgstr "Ketua-ketua"
 
 #: /src/schooltool/app/browser/app.py:325
 msgid "Available leaders"
-msgstr "Ketua-ketua yang ada"
+msgstr "Ketua-ketua yang kedapatan"
 
 #: /src/schooltool/app/browser/app.py:348
 msgid "school"
@@ -409,20 +385,28 @@ msgstr "Pergi ke minggu sekarang"
 
 #: /src/schooltool/app/browser/cal.py:931
 msgid "Go to previous week"
-msgstr "Pergi ke minggu sebelumnya"
+msgstr "Pergi ke minggu lepas"
 
 #. Default: ""
 #: /src/schooltool/app/browser/cal.py:952
 msgid "${month}, ${year} (week ${week})"
-msgstr ""
+msgstr "${month}, ${year} (week ${week})"
+
+#: /src/schooltool/app/browser/cal.py:1166
+msgid "Next month"
+msgstr "Bulan depan"
 
 #: /src/schooltool/app/browser/cal.py:1167
 msgid "Current month"
 msgstr "Bulan ini"
 
+#: /src/schooltool/app/browser/cal.py:1168
+msgid "Previous month"
+msgstr "Bulan lepas"
+
 #: /src/schooltool/app/browser/cal.py:1170
 msgid "Go to next month"
-msgstr "Pergi ke bulan seterusnya"
+msgstr "Pergi ke bulan depan"
 
 #: /src/schooltool/app/browser/cal.py:1171
 msgid "Go to current month"
@@ -430,7 +414,7 @@ msgstr "Pergi ke bulan sekarang"
 
 #: /src/schooltool/app/browser/cal.py:1172
 msgid "Go to previous month"
-msgstr "Pergi ke bulan sebelum ini"
+msgstr "Pergi ke bulan lepas"
 
 #. Default: ""
 #: /src/schooltool/app/browser/cal.py:1180
@@ -442,13 +426,21 @@ msgstr "${month}, ${year}"
 msgid "Week ${week_no}"
 msgstr "Minggu ${week_no}"
 
+#: /src/schooltool/app/browser/cal.py:1218
+msgid "Next year"
+msgstr "Tahun depan"
+
 #: /src/schooltool/app/browser/cal.py:1219
 msgid "Current year"
 msgstr "Tahun ini"
 
+#: /src/schooltool/app/browser/cal.py:1220
+msgid "Previous year"
+msgstr "Tahun lepas"
+
 #: /src/schooltool/app/browser/cal.py:1222
 msgid "Go to next year"
-msgstr ""
+msgstr "Pergi ke tahun depan"
 
 #: /src/schooltool/app/browser/cal.py:1223
 msgid "Go to current year"
@@ -456,7 +448,7 @@ msgstr "Pergi ke tahun ini"
 
 #: /src/schooltool/app/browser/cal.py:1224
 msgid "Go to previous year"
-msgstr "Pergi ke tahun sebelumnya"
+msgstr "Pergi ke tahun lepas"
 
 #: /src/schooltool/app/browser/cal.py:1290
 msgid "The next day"
@@ -480,12 +472,12 @@ msgstr "Pergi ke hari ini"
 
 #: /src/schooltool/app/browser/cal.py:1296
 msgid "Go to the previous day"
-msgstr ""
+msgstr "Pergi ke hari sebelumnya"
 
 #. Default: ""
 #: /src/schooltool/app/browser/cal.py:1448
 msgid "Add new event starting at ${title}"
-msgstr ""
+msgstr "Tambah aktiviti baru bermula dari ${title}"
 
 #: /src/schooltool/app/browser/cal.py:1737
 #: /src/schooltool/app/interfaces.py:135
@@ -557,7 +549,7 @@ msgstr "Hari"
 #: /src/schooltool/resource/types.py:69
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:49
 msgid "Location"
-msgstr "Tempat"
+msgstr "Lokasi"
 
 #: /src/schooltool/app/browser/cal.py:1768
 #: /src/schooltool/course/interfaces.py:41
@@ -567,7 +559,7 @@ msgstr "Tempat"
 #: /src/schooltool/securitypolicy/interfaces.py:112
 #: /src/schooltool/timetable/browser/event.py:56
 msgid "Description"
-msgstr "Huraian"
+msgstr "Keterangan"
 
 #: /src/schooltool/app/browser/cal.py:1773
 msgid "Recurring"
@@ -591,17 +583,21 @@ msgstr "Bulan"
 msgid "Year"
 msgstr "Tahun"
 
+#: /src/schooltool/app/browser/cal.py:1786
+msgid "Repeat every"
+msgstr "Ulang setiap"
+
 #: /src/schooltool/app/browser/cal.py:1791
 msgid "Range"
 msgstr "Jarak"
 
 #: /src/schooltool/app/browser/cal.py:1794
 msgid "Count"
-msgstr ""
+msgstr "Bilangan"
 
 #: /src/schooltool/app/browser/cal.py:1795
 msgid "Until"
-msgstr "Hingga"
+msgstr "Sehingga"
 
 #: /src/schooltool/app/browser/cal.py:1796
 msgid "forever"
@@ -609,11 +605,11 @@ msgstr "selama-lamanya"
 
 #: /src/schooltool/app/browser/cal.py:1799
 msgid "Number of events"
-msgstr ""
+msgstr "Bilangan aktiviti"
 
 #: /src/schooltool/app/browser/cal.py:1810
 msgid "Weekday"
-msgstr "Hari Kerja"
+msgstr "Hari bekerja"
 
 #: /src/schooltool/app/browser/cal.py:1820
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:36
@@ -652,12 +648,12 @@ msgstr "hari bekerja terakhir"
 #. Default: ""
 #: /src/schooltool/app/browser/cal.py:1944
 msgid "Last ${weekday}"
-msgstr ""
+msgstr "Akhir ${weekday}"
 
 #: /src/schooltool/app/browser/cal.py:1967
 #: /src/schooltool/app/browser/cal.py:2276
 msgid "An error occurred."
-msgstr "Kesalahan berlaku."
+msgstr "Ralat telah berlaku."
 
 #: /src/schooltool/app/browser/cal.py:2021
 msgid "End date is earlier than start date"
@@ -665,11 +661,12 @@ msgstr "Tarikh tamat lebih awal daripada tarikh mula"
 
 #: /src/schooltool/app/browser/cal.py:2030
 msgid "Invalid date.  Please specify YYYY-MM-DD, one per line."
-msgstr "Tarikh tidak sah. Sila menentukan TTTT-BB-HH, satu per baris."
+msgstr ""
+"Tarikh tidak sah. Sila perincikan YYYY-MM-DD, satu untuk setiap baris."
 
 #: /src/schooltool/app/browser/cal.py:2078
 msgid "Add event"
-msgstr "Tambah acara"
+msgstr "Tambah aktiviti"
 
 #: /src/schooltool/app/browser/cal.py:2079
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:48
@@ -684,7 +681,7 @@ msgstr "Tambah"
 
 #: /src/schooltool/app/browser/cal.py:2150
 msgid "Edit event"
-msgstr ""
+msgstr "Ubah aktiviti"
 
 #: /src/schooltool/app/browser/cal.py:2151
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:29
@@ -710,7 +707,7 @@ msgstr "Kalendar"
 
 #: /src/schooltool/app/browser/configure.zcml:166
 msgid "Actions"
-msgstr "Aksi"
+msgstr "Tindakan"
 
 #: /src/schooltool/app/browser/configure.zcml:233
 #: /src/schooltool/app/browser/configure.zcml:514
@@ -746,15 +743,15 @@ msgstr "Aksi"
 #: /src/schooltool/timetable/browser/configure.zcml:120
 #: /src/schooltool/timetable/security.zcml:32
 msgid "View"
-msgstr ""
+msgstr "Papar"
 
 #: /src/schooltool/app/browser/configure.zcml:319
 msgid "View Calendar"
-msgstr "Paparkan Kalendar"
+msgstr "Papar Kalendar"
 
 #: /src/schooltool/app/browser/configure.zcml:331
 msgid "New Event"
-msgstr "Acara Baru"
+msgstr "Aktiviti Baru"
 
 #: /src/schooltool/app/browser/configure.zcml:354
 msgid "Import Sections"
@@ -762,7 +759,7 @@ msgstr "Seksyen Import"
 
 #: /src/schooltool/app/browser/configure.zcml:365
 msgid "Edit Leaders"
-msgstr "Edit Ketua"
+msgstr "Ubah ketua"
 
 #: /src/schooltool/app/browser/configure.zcml:376
 msgid "Change Site Preferences"
@@ -810,18 +807,18 @@ msgstr "Bebas/Sibuk"
 #: /src/schooltool/app/help/event_add.pt:6
 #: /src/schooltool/app/help/event_add.pt:9
 msgid "Add Event"
-msgstr "Tambah Acara"
+msgstr "Tambah Aktiviti"
 
 #: /src/schooltool/app/browser/configure.zcml:543
 #: /src/schooltool/app/help/configure.zcml:87
 #: /src/schooltool/app/help/event_edit.pt:6
 #: /src/schooltool/app/help/event_edit.pt:9
 msgid "Edit Event"
-msgstr ""
+msgstr "Ubah Aktiviti"
 
 #: /src/schooltool/app/browser/configure.zcml:596
 msgid "ZODB Control"
-msgstr "Pengawalan ZODB"
+msgstr "Kawalan ZODB"
 
 #: /src/schooltool/app/browser/configure.zcml:619
 #: /src/schooltool/app/browser/templates/manage_menu.pt:3
@@ -831,15 +828,15 @@ msgstr "Mengurus"
 
 #: /src/schooltool/app/browser/configure.zcml:643
 msgid "Translation Domains"
-msgstr ""
+msgstr "Terjemahan domain"
 
 #: /src/schooltool/app/browser/configure.zcml:654
 msgid "Generations"
-msgstr "Generasi-Generasi"
+msgstr "Generasi"
 
 #: /src/schooltool/app/browser/configure.zcml:675
 msgid "Browser UI"
-msgstr ""
+msgstr "Pelayar UI"
 
 #: /src/schooltool/app/browser/configure.zcml:681
 #: /src/schooltool/app/browser/templates/login.pt:3
@@ -871,7 +868,7 @@ msgstr "Tetapan"
 
 #: /src/schooltool/app/browser/configure.zcml:797
 msgid "Error List"
-msgstr ""
+msgstr "Senarai Ralat"
 
 #: /src/schooltool/app/browser/csvimport.py:108
 #: /src/schooltool/app/browser/csvimport.py:290
@@ -881,7 +878,7 @@ msgstr "Tiada data diberikan"
 
 #: /src/schooltool/app/browser/csvimport.py:115
 msgid "Could not convert data to Unicode (incorrect charset?)."
-msgstr ""
+msgstr "Tidak dapat mengubah data kepada Unicode (aksara tidak sah?)"
 
 #: /src/schooltool/app/browser/csvimport.py:124
 msgid "CSV file imported successfully."
@@ -901,11 +898,11 @@ msgstr "Teks CSV gagal diimport."
 
 #: /src/schooltool/app/browser/csvimport.py:160
 msgid "No charset specified"
-msgstr ""
+msgstr "Tiada aksara diperincikan"
 
 #: /src/schooltool/app/browser/csvimport.py:165
 msgid "Unknown charset"
-msgstr ""
+msgstr "aksara tidak diketahui"
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:209
@@ -928,44 +925,47 @@ msgid ""
 "Wrong section header on line ${line_no} (it should contain a course id and "
 "an instructor id)"
 msgstr ""
+"Kesalahan kepala seksyen dalam baris ${line_no} (Ia harus mengandungi id "
+"kursus dan id pengajar)"
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:358
 msgid ""
 "Malformed line ${line_no} (it should contain a day id and a period id)"
 msgstr ""
+"Baris tidak sempurna ${line_no} (Ia harus mengandungi id hari dan id tempoh)"
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:381
 msgid "Incomplete section description on line ${line}"
-msgstr ""
+msgstr "Penerangan seksyen yang tidak lengkap dalam baris ${line}"
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:386
 msgid "No students in section (line ${line})"
-msgstr ""
+msgstr "Tiada pelajar dalam seksyen (baris ${line})"
 
 #: /src/schooltool/app/browser/csvimport.py:467
 msgid "The first row of the CSV file must contain the timetable schema id."
-msgstr ""
+msgstr "Baris pertama dalam CSV fail mesti mengandungi id skema jadual"
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:478
 msgid "The timetable schema ${schema} does not exist."
-msgstr ""
+msgstr "Jadual skema ${schema} tidak wujud"
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:509
 msgid "Error in timetable CSV data, line ${line_no}"
-msgstr ""
+msgstr "Kesilapan dalam jadual data CSV, baris ${line_no}"
 
 #: /src/schooltool/app/browser/csvimport.py:549
 msgid "Day ids not defined in selected schema: ${args}."
-msgstr ""
+msgstr "Id hari tidak didefinasikan di dalam skema yang dipilih: ${args}."
 
 #: /src/schooltool/app/browser/csvimport.py:550
 msgid "Periods not defined in selected days: ${args}."
-msgstr ""
+msgstr "Waktu tidak didefinasikan dalam hari yang dipilih: $ {args}."
 
 #: /src/schooltool/app/browser/csvimport.py:551
 msgid "Persons not found: ${args}."
@@ -977,7 +977,7 @@ msgstr "Kursus tidak dijumpai: $ {args}."
 
 #: /src/schooltool/app/browser/csvimport.py:553
 msgid "Sections not found: ${args}."
-msgstr ""
+msgstr "Seksyen tidak dijumpai: $ {args}."
 
 #: /src/schooltool/app/browser/csvimport.py:554
 msgid "Invalid records: ${args}."
@@ -985,20 +985,20 @@ msgstr "Rekod tidak sah: ${args}."
 
 #: /src/schooltool/app/browser/overlay.py:205
 msgid "Saved changes."
-msgstr ""
+msgstr "Simpan pengubahan"
 
 #: /src/schooltool/app/browser/pdfcal.py:52
 msgid "Daily calendar for %s"
-msgstr ""
+msgstr "Kalendar harian untuk %s"
 
 #: /src/schooltool/app/browser/pdfcal.py:95
 msgid "recurrent"
-msgstr ""
+msgstr "Berulang-ulang"
 
 #. Default: ""
 #: /src/schooltool/app/browser/pdfcal.py:99
 msgid "from the calendar of ${calendar_owner}"
-msgstr ""
+msgstr "dari kalendar ${calendar_owner}"
 
 #: /src/schooltool/app/browser/pdfcal.py:115
 msgid "all day"
@@ -1006,19 +1006,20 @@ msgstr "Seharian"
 
 #: /src/schooltool/app/browser/pdfcal.py:177
 msgid "Weekly calendar for %s"
-msgstr ""
+msgstr "Kalendar mingguan untuk %s"
 
 #: /src/schooltool/app/browser/pdfcal.py:186
 msgid "Week %d (%s - %s), %d"
-msgstr ""
+msgstr "Minggu %d (%s - %s), %d"
 
 #: /src/schooltool/app/browser/report.py:57
 msgid "PDF support is disabled.  It can be enabled by your administrator."
 msgstr ""
+"Sokongan PDF dinyahaktifkan. Ia boleh diaktifkan semula oleh pentadbir anda."
 
 #: /src/schooltool/app/browser/templates/about.pt:5
 msgid "About SchoolTool"
-msgstr ""
+msgstr "Tentang SchoolTool"
 
 #: /src/schooltool/app/browser/templates/about.pt:10
 msgid ""
@@ -1028,6 +1029,11 @@ msgid ""
 "well as a framework for building customized applications and configurations "
 "for individual schools or states."
 msgstr ""
+"SchoolTool adalah aplikasi pengurusan untuk sekolah percuma seluruh dunia. "
+"Matlamat projek ini adalah untuk membina penyelesaian mudah untuk sistem "
+"informasi pelajar atau sistem pengurusan informasi untuk sekolah rendah dan "
+"menengah, sekaligus sebagai pelantar rangka kerja untuk membina aplikasi dan "
+"konfigurasi boleh- ubahsuai untuk sekolah kerajaan atau swasta."
 
 #: /src/schooltool/app/browser/templates/about.pt:16
 msgid ""
@@ -1035,19 +1041,21 @@ msgid ""
 "href=\"http://python.org\">Python</a> using the <a "
 "href=\"http://zope.org\">Zope 3</a> framework."
 msgstr ""
-"SchoolTool dibina diatas pelantar perisian terbuka, ditulis di dalam  <a "
-"href=\"http://python.org\">Python</a> Menggunakan <a "
-"href=\"http://zope.org\">Zope 3</a> rangka kerja."
+"SchoolTool dibina diatas pelantar perisian terbuka, ditulis di dalam <a "
+"href=\"http://python.org\">Python</a> Menggunakan rangka kerja <a "
+"href=\"http://zope.org\">Zope 3</a>."
 
 #: /src/schooltool/app/browser/templates/about.pt:20
 msgid ""
 "SchoolTool is licensed under the <a href=\"http://www.gnu.org/licenses/gpl-"
 "2.0.html\">GNU General Public License, Version 2</a>."
 msgstr ""
+"SchoolTool dilesenkan di bawah <a href=\"http://www.gnu.org/licenses/gpl-"
+"2.0.html\">GNU General Public License, Version 2</a>."
 
 #: /src/schooltool/app/browser/templates/about.pt:24
 msgid "For more information:"
-msgstr ""
+msgstr "Untuk penerangan lebih lanjut"
 
 #: /src/schooltool/app/browser/templates/about.pt:27
 msgid "Website"
@@ -1055,31 +1063,31 @@ msgstr "Laman web"
 
 #: /src/schooltool/app/browser/templates/about.pt:28
 msgid "Launchpad project page"
-msgstr ""
+msgstr "laman projek Launchpad"
 
 #: /src/schooltool/app/browser/templates/about.pt:29
 msgid "Mailing list"
-msgstr "Senarai mel"
+msgstr "Senarai e-mel"
 
 #: /src/schooltool/app/browser/templates/about.pt:30
 msgid "IRC channel: #schooltool on freenode.net"
-msgstr ""
+msgstr "saluran IRC: #schooltool di freenode.net"
 
 #: /src/schooltool/app/browser/templates/about.pt:35
 msgid "Founder and funder:"
-msgstr ""
+msgstr "Pengasas dan pembiaya dana"
 
 #: /src/schooltool/app/browser/templates/about.pt:38
 msgid "Project Manager:"
-msgstr ""
+msgstr "Pengurus Projek"
 
 #: /src/schooltool/app/browser/templates/about.pt:41
 msgid "Lead Developer:"
-msgstr ""
+msgstr "Ketua Pembinaan:"
 
 #: /src/schooltool/app/browser/templates/about.pt:44
 msgid "Release Manager:"
-msgstr ""
+msgstr "Pengurus Pengeluaran:"
 
 #: /src/schooltool/app/browser/templates/about.pt:47
 msgid "Contributors:"
@@ -1087,49 +1095,49 @@ msgstr "Penyumbang:"
 
 #: /src/schooltool/app/browser/templates/application_preferences.pt:4
 msgid "Edit site preferences"
-msgstr ""
+msgstr "Ubah keutamaan tapak laman"
 
 #: /src/schooltool/app/browser/templates/application_preferences.pt:13
 msgid "Change site preferences"
-msgstr ""
+msgstr "Tukar keutamaan tapak laman"
 
 #: /src/schooltool/app/browser/templates/application_preferences.pt:19
 msgid "General preferences"
-msgstr ""
+msgstr "Keutamaan Umum"
 
 #: /src/schooltool/app/browser/templates/application_preferences.pt:34
 #: /src/schooltool/person/browser/person_preferences.pt:28
 msgid "Calendar Preferences"
-msgstr ""
+msgstr "Keutamaan Kalendar"
 
 #: /src/schooltool/app/browser/templates/cal_atom.pt:21
 msgid "Events for"
-msgstr "Acara untuk"
+msgstr "Aktiviti untuk"
 
 #. Default: ""
 #. "This is an Atom formatted XML site feed. It is intended to be viewed\n"
 #. "      in a Newsreader or syndicated to another site. Please visit"
 #: /src/schooltool/app/browser/templates/cal_atom.pt:42
 msgid "atom_description"
-msgstr ""
+msgstr "keterangan_atom"
 
 #. Default: "Atom Enabled"
 #: /src/schooltool/app/browser/templates/cal_atom.pt:46
 msgid "atom_enabled"
-msgstr ""
+msgstr "aktifkan_atom"
 
 #. Default: "for more info."
 #: /src/schooltool/app/browser/templates/cal_atom.pt:49
 msgid "atom_more_info"
-msgstr ""
+msgstr "lebih_maklumat_atom"
 
 #: /src/schooltool/app/browser/templates/cal_atom.pt:56
 msgid "Validate my Atom feed"
-msgstr ""
+msgstr "Sahkan feed Atom saya"
 
 #: /src/schooltool/app/browser/templates/cal_atom.pt:56
 msgid "[Valid Atom]"
-msgstr ""
+msgstr "[Atom Sahih]"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:24
 msgid "Daily"
@@ -1137,11 +1145,11 @@ msgstr "Harian"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:24
 msgid "View daily calendar"
-msgstr ""
+msgstr "Papar kalendar harian"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:30
 msgid "View weekly calendar"
-msgstr ""
+msgstr "Papar kalendar mingguan"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:30
 #: /src/schooltool/app/browser/templates/event_add.pt:235
@@ -1150,11 +1158,11 @@ msgstr "Mingguan"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:36
 msgid "View monthly calendar"
-msgstr ""
+msgstr "Papar kalendar bulanan"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:42
 msgid "View yearly calendar"
-msgstr ""
+msgstr "Papar kalendar tahunan"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:42
 msgid "Yearly"
@@ -1163,11 +1171,11 @@ msgstr "Tahunan"
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:55
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:91
 msgid "Calendar for ${title} - ${calendar_title}"
-msgstr ""
+msgstr "Kalendar untuk ${title} - ${calendar_title}"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:115
 msgid "Jump To ..."
-msgstr "Lompat Ke ..."
+msgstr "Pergi Ke ..."
 
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:4
 #: /src/schooltool/timetable/browser/templates/calendar_overlay.pt:4
@@ -1177,7 +1185,7 @@ msgstr "Kalendar"
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:13
 #: /src/schooltool/timetable/browser/templates/calendar_overlay.pt:27
 msgid "My Calendar"
-msgstr ""
+msgstr "Kalendar Saya"
 
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:31
 #: /src/schooltool/demographics/browser/personform.py:92
@@ -1187,7 +1195,7 @@ msgstr ""
 #: /src/schooltool/timetable/browser/event.py:82
 #: /src/schooltool/timetable/browser/templates/calendar_overlay.pt:93
 msgid "Apply"
-msgstr ""
+msgstr "Bertindak"
 
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:33
 msgid "More..."
@@ -1195,23 +1203,23 @@ msgstr "Lagi..."
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:4
 msgid "Select calendars to display"
-msgstr ""
+msgstr "Pilih kalendar untuk dipaparkan"
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:15
 msgid "Select additional calendars to display"
-msgstr ""
+msgstr "Pilih kalendar tambahan untuk dipaparkan"
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:27
 msgid "Hold down Ctrl or Shift to select multiple calendars."
-msgstr ""
+msgstr "Tekan kekunci Ctrl atau Shift untuk memilih pelbagai kalendar"
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:32
 msgid "Public Calendar"
-msgstr ""
+msgstr "Kalendar Awam"
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:37
 msgid "site-wide calendar"
-msgstr ""
+msgstr "kalendar keseluruhan laman"
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:42
 #: /src/schooltool/app/browser/templates/index.pt:14
@@ -1219,15 +1227,15 @@ msgstr ""
 #: /src/schooltool/dashboard/school.pt:22
 #: /src/schooltool/resource/browser/configure.zcml:169
 msgid "Resources"
-msgstr ""
+msgstr "Sumber"
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:43
 msgid "There are no resources with calendars accessible to you."
-msgstr ""
+msgstr "Tiada sumber berkaitan kalendar boleh diakses oleh anda"
 
 #: /src/schooltool/app/browser/templates/default_report_template.pt:35
 msgid "Page ${page_number}"
-msgstr ""
+msgstr "laman ${page_number}"
 
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:26
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:27
@@ -1239,7 +1247,7 @@ msgstr "R"
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:27
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:45
 msgid "Remove"
-msgstr ""
+msgstr "Buang"
 
 #. Default: "Invert Selection"
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:30
@@ -1250,7 +1258,7 @@ msgstr ""
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:49
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:71
 msgid "invert-selection-button"
-msgstr ""
+msgstr "butang-pemilihan-songsang"
 
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:37
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:38
@@ -1265,7 +1273,7 @@ msgstr ""
 #: /src/schooltool/skin/templates/table_container.pt:39
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:15
 msgid "There are none."
-msgstr ""
+msgstr "Tiada apa-apa"
 
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:48
 #: /src/schooltool/app/browser/templates/event_booking.pt:42
@@ -1287,12 +1295,12 @@ msgstr "A"
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:68
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:77
 msgid "There are none to add."
-msgstr ""
+msgstr "Tiada apa untuk ditambah"
 
 #: /src/schooltool/app/browser/templates/event.pt:15
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:15
 msgid "All day event"
-msgstr "acara seharian"
+msgstr "Aktiviti seharian"
 
 #: /src/schooltool/app/browser/templates/event.pt:33
 #: /src/schooltool/basicperson/browser/templates/person_view.pt:20
@@ -1301,7 +1309,7 @@ msgstr "acara seharian"
 #: /src/schooltool/person/browser/person.pt:34
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:34
 msgid "Details"
-msgstr ""
+msgstr "Butiran"
 
 #: /src/schooltool/app/browser/templates/event.pt:37
 #: /src/schooltool/schoolyear/browser/schoolyear.py:120
@@ -1318,33 +1326,33 @@ msgstr "Tamat"
 #: /src/schooltool/app/browser/templates/event.pt:53
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:54
 msgid "edit event"
-msgstr ""
+msgstr "Ubah aktiviti"
 
 #: /src/schooltool/app/browser/templates/event.pt:64
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:65
 msgid "Scheduled resources"
-msgstr ""
+msgstr "Sumber terjadual"
 
 #: /src/schooltool/app/browser/templates/event.pt:72
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:73
 msgid "edit resources"
-msgstr ""
+msgstr "ubah sumber"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:137
 msgid "Event information"
-msgstr "Maklumat acara"
+msgstr "Maklumat Aktiviti"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:143
 msgid "Event details"
-msgstr "Perincian acara"
+msgstr "Butiran aktiviti"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:197
 msgid "Book Resources"
-msgstr ""
+msgstr "Tempah Sumber"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:207
 msgid "Update form"
-msgstr ""
+msgstr "Kemaskini borang"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:224
 msgid "day"
@@ -1365,19 +1373,20 @@ msgstr "tahun"
 #: /src/schooltool/app/browser/templates/event_add.pt:236
 msgid "This section only applies when weekly recurrence is selected."
 msgstr ""
+"Seksyen ini hanya boleh digunakan apabila perulangan mingguan dipilih"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:257
 msgid "This section only applies when the monthly recurrence is selected."
-msgstr ""
+msgstr "Seksyen ini hanya boleh digunakan apabila perulangan bulanan dipilih"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:264
 msgid "Day ${monthday} of every month"
-msgstr ""
+msgstr "Hari ${monthday} setiap bulan"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:271
 #: /src/schooltool/app/browser/templates/event_add.pt:278
 msgid "${weekday} of every month"
-msgstr ""
+msgstr "${weekday} setiap bulan"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:288
 msgid "Repeat"
@@ -1391,19 +1400,19 @@ msgstr "Masa"
 #: /src/schooltool/term/browser/templates/emergency_select.pt:31
 #: /src/schooltool/timetable/browser/templates/specialday_select.pt:31
 msgid "[popup calendar]"
-msgstr ""
+msgstr "kalendar popup"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:324
 msgid "Repeat forever"
-msgstr ""
+msgstr "Ulang selamanya"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:348
 msgid "Booked Resources"
-msgstr ""
+msgstr "Sumber-sumber yang telah ditempah"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:369
 msgid "Book resources"
-msgstr ""
+msgstr "Tempah sumber-sumber"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:375
 #: /src/schooltool/skin/templates/view_macros.pt:161
@@ -1412,7 +1421,7 @@ msgstr ""
 #: /src/schooltool/skin/templates/view_macros.pt:180
 #: /src/schooltool/skin/templates/view_macros.pt:187
 msgid "Shortcut: Alt-A"
-msgstr ""
+msgstr "Jalan pintas: Alt-A"
 
 #. Default: "Cancel"
 #: /src/schooltool/app/browser/templates/event_add.pt:378
@@ -1439,15 +1448,15 @@ msgstr ""
 #: /src/schooltool/timetable/browser/templates/timetable-container-delete.pt:29
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:70
 msgid "cancel-button"
-msgstr ""
+msgstr "butang-batal"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:4
 msgid "Resource Booking"
-msgstr ""
+msgstr "Sumber Tempahan"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:12
 msgid "Resource Booking for ${title}"
-msgstr ""
+msgstr "Sumber Tempahan untuk ${title}"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:18
 msgid "Title:"
@@ -1463,23 +1472,23 @@ msgstr "Tamat:"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:30
 msgid "This is a recurring event!"
-msgstr "Acara ini berulang!"
+msgstr "Aktiviti ini berulang!"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:38
 msgid "Booked resources"
-msgstr ""
+msgstr "sumber-sumber yang telah ditempah"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:42
 msgid "UnBook"
-msgstr ""
+msgstr "Batal tempahan"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:51
 msgid "Available resources"
-msgstr ""
+msgstr "Sumber-sumber yang tersedia"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:57
 msgid "Book"
-msgstr ""
+msgstr "Tempah"
 
 #: /src/schooltool/app/browser/templates/event_info_viewlet.pt:12
 msgid "Location: ${location}"
@@ -1514,21 +1523,24 @@ msgstr "Kumpulan-kumpulan"
 #: /src/schooltool/app/browser/templates/index.pt:15
 #: /src/schooltool/dashboard/school.pt:4
 msgid "Levels"
-msgstr ""
+msgstr "Aras"
 
 #: /src/schooltool/app/browser/templates/login.pt:8
 msgid "Your session has expired."
-msgstr ""
+msgstr "Sesi anda telah luput masanya."
 
 #: /src/schooltool/app/browser/templates/login.pt:13
 msgid ""
 "You are not allowed to access this page. You can click on the back button in "
 "your browser to go back, or ask a more privileged user to log in."
 msgstr ""
+"Anda tidak dibenarkan melihat muka laman ini. Anda boleh klik butang ke "
+"belakang di dalam pelayar web anda untuk kembali ke muka laman sebelumnya, "
+"atau meminta pengguna yang dibenarkan untuk log masuk."
 
 #: /src/schooltool/app/browser/templates/login.pt:23
 msgid "Please log in"
-msgstr ""
+msgstr "Sila log masuk"
 
 #: /src/schooltool/app/browser/templates/login.pt:35
 msgid "User Information"
@@ -1558,16 +1570,16 @@ msgstr "Log masuk"
 
 #: /src/schooltool/app/browser/templates/portlet_tomorrow_events.pt:5
 msgid "Tomorrow's Events"
-msgstr ""
+msgstr "Aktiviti Hari Esok"
 
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:4
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:14
 msgid "Deleting a repeating event (${event_title})"
-msgstr ""
+msgstr "Membuang aktiviti yang berulang (${event_title})"
 
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:19
 msgid "You are trying to delete a repeating event."
-msgstr ""
+msgstr "Anda sedang mencuba untuk memadam aktiviti yang berulang"
 
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:41
 msgid "Current"
@@ -1614,25 +1626,27 @@ msgstr "Batal"
 #: /src/schooltool/app/browser/templates/simple_event_delete.pt:4
 #: /src/schooltool/app/browser/templates/simple_event_delete.pt:13
 msgid "Deleting an event (${event_title})"
-msgstr ""
+msgstr "Memadam aktiviti (${event_title})"
 
 #: /src/schooltool/app/browser/templates/simple_event_delete.pt:18
 msgid "Are you sure you want to delete this event?"
-msgstr ""
+msgstr "Adakah anda pasti untuk memadam aktiviti ini?"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:4
 msgid "Upload SchoolTool timetable as CSV"
-msgstr ""
+msgstr "Muat naik jadual SchoolTool sebagai CSV"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:20
 msgid "Import Timetable"
-msgstr ""
+msgstr "Import jadual"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:24
 msgid ""
 "You can create the CSV file in a spreadsheet and export it in CSV (Comma-"
 "Separated Values) format. The structure of the table is described below."
 msgstr ""
+"Anda boleh membuat fail CSV di dalam lembaran kerja dan export fail itu di "
+"dalam format CSV. Struktur jadual adalah seperti yang diterangkan dibawah."
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:30
 msgid ""
@@ -1641,12 +1655,19 @@ msgid ""
 "timetable schema can be found by going to its view page under School "
 "Timetables for the school year."
 msgstr ""
+"baris pertama dalam fail mesti mengandungi id <strong>timetable "
+"schemal</strong> dimana ia akan digunakan untuk jadual-jadual baru. Id skema "
+"jadual boleh didapati degnan pergi ke papar muka laman dibawah Jadual-jadual "
+"Sekolah untuk tahun sekolah."
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:37
 msgid ""
 "The second row should be empty. After that, several section descriptions may "
 "follow. They are separated by an extra carriage return (i.e., a blank line)."
 msgstr ""
+"Baris kedua sepatutnya kosong. Selepas itu, beberapa seksyen penerangan-"
+"penerangan boleh dilletakkan. Ia dipisahkan dengan \"carriage return\" "
+"tambahan (iaitu baris kosong)."
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:43
 msgid ""
@@ -1658,6 +1679,14 @@ msgid ""
 "<strong>person ids</strong> may follow, the denoted persons will be added to "
 "the section as learners."
 msgstr ""
+"Setiap baris pertama seksyen penerangan mengandungi <strong>course "
+"id</strong> dan <strong>instructor id</strong> untuk seksyen baru. Kemudian "
+"beberapa baris nombor, setiap satu mengandungi <strong>day id</strong> dan "
+"diikuti dengan <strong>period id</strong> selepas itu. Senarai penerangan "
+"tempoh akan dimatikan dengan tiga asterisks ('***') dalam kolum pertama. "
+"Selepas proses pematian, ia akan diikuti oleh setiap nombor <strong>person "
+"ids</strong>, orang-orang yang terpilih akan ditambah ke dalam seksyen "
+"sebagai pelajar-pelajar."
 
 #. Default: ""
 #. "\"three-day\"\n"
@@ -1696,6 +1725,23 @@ msgid ""
 "\"johnny\"\n"
 "\"pete\"\n"
 msgstr ""
+"\n"
+"\"three-day\"\n"
+"\"\",\"\",\"\"\n"
+"\"philosophy\",\"lorch\"\n"
+"\"Monday\",\"A\"\n"
+"\"Monday\",\"B\"\n"
+"\"Tuesday\",\"C\"\n"
+"\"***\"\n"
+"\"johnny\"\n"
+"\"billy\"\n"
+"\"\"\n"
+"\"literature\",\"guzman\"\n"
+"\"Wednesday\",\"B\"\n"
+"\"Wednesday\",\"C\"\n"
+"\"***\"\n"
+"\"johnny\"\n"
+"\"pete\"\n"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:74
 msgid ""
@@ -1705,6 +1751,11 @@ msgid ""
 "learners, and its timetable will contain three timetable activities, two on "
 "Monday. The literature section will be processed in a similar fashion."
 msgstr ""
+"Contoh diatas akan membina dua seksyen, satu adalah untuk syarahan falsafah "
+"dan selebihnya adalah untuk syarahan sastera. Seksyen syarahan falsafah akan "
+"mempunyai orang dengan id-id \"johnny\" dan \"billy\" sebagai pelajar-"
+"pelajar, dan jadual mereka mengandungi tiga jadual aktiviti, dua pada hari "
+"Isnin. Seksyen sastera akan diproses dengan cara yang sama juga."
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:83
 msgid ""
@@ -1716,6 +1767,13 @@ msgid ""
 "other columns are ignored. You can import the same data several times "
 "without any side effects."
 msgstr ""
+"Ingat bahawa id objek-objek akan digunakan didalam fail, bukan tajuk-tajuk, "
+"Sekiranya baris berakhir dengan sel kosong (Contoh, "
+"<em>\"philosophy\",\"lorch\",\"\",\"\"</em>), sel-sel itu akan dibuang. Anda "
+"boleh memisahkan penerangan-penerangan seksyen dengan menggunakan lebih dari "
+"satu baris. Di dalam senarai pelajar-pelajar, hanya kolum pertama "
+"mengandungi id orang akan diproses, kolum yang lain akan diabaikan. Anda "
+"boleh import data yang sama berulangkali tanpa sebarang kesan sampingan."
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:96
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:50
@@ -1759,7 +1817,7 @@ msgstr "Unicode (UTF-8)"
 #: /src/schooltool/person/browser/person-csvimport.pt:58
 #: /src/schooltool/resource/browser/resource-csvimport.pt:55
 msgid "Western (ISO-8859-1)"
-msgstr ""
+msgstr "Western (ISO-8859-1)"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:105
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:59
@@ -1792,7 +1850,7 @@ msgstr "Western (Windows-1252)"
 #: /src/schooltool/person/browser/person-csvimport.pt:61
 #: /src/schooltool/resource/browser/resource-csvimport.pt:58
 msgid "Other (please specify)"
-msgstr ""
+msgstr "lain-lain (sila perincikan)"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:111
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:65
@@ -1803,7 +1861,7 @@ msgstr ""
 #: /src/schooltool/person/browser/person-csvimport.pt:65
 #: /src/schooltool/resource/browser/resource-csvimport.pt:62
 msgid "Other charset: ${other_charset}"
-msgstr ""
+msgstr "Aksara lain: ${other_charset}"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:115
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:69
@@ -1814,7 +1872,7 @@ msgstr ""
 #: /src/schooltool/person/browser/person-csvimport.pt:69
 #: /src/schooltool/resource/browser/resource-csvimport.pt:66
 msgid "Input CSV Data"
-msgstr ""
+msgstr "Masukkan Data CSV"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:116
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:70
@@ -1825,7 +1883,7 @@ msgstr ""
 #: /src/schooltool/person/browser/person-csvimport.pt:70
 #: /src/schooltool/resource/browser/resource-csvimport.pt:67
 msgid "CSV Data"
-msgstr ""
+msgstr "Data CSV"
 
 #. Default: "Submit"
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:122
@@ -1839,11 +1897,11 @@ msgstr ""
 #: /src/schooltool/person/browser/person-csvimport.pt:75
 #: /src/schooltool/resource/browser/resource-csvimport.pt:72
 msgid "submit-button"
-msgstr ""
+msgstr "butang-hantar"
 
 #: /src/schooltool/app/configure.zcml:353
 msgid "Booking Resources"
-msgstr ""
+msgstr "Sumber-sumber Tempahan"
 
 #: /src/schooltool/app/help/admin.pt:6
 msgid "SchoolTool Administration"
@@ -1859,11 +1917,19 @@ msgid ""
 "<p>This branch of the help tree contains items relevant to administrators "
 "configuring SchoolTool, but not end users.</p>"
 msgstr ""
+"<h1>Pentadbiran SchoolTool</h1> <p>Sekolah mempunyai struktur yang kompleks, "
+"mencakupi organisasi manusia, kaedah pengajaran, masa dan sumber-sumber "
+"fizikal. Malangnya, ini bermakna bahawa aplikasi yang cuba untuk meniru "
+"proses-proses ini, seperti SchoolTool, juga adalah kompleks, dan proses "
+"untuk menyediakan satu-satu sekolah didalam SchoolTool memerlukan "
+"penglibatan seseorang pentadbir. Cabang dari pohon pertolongan ini "
+"mengandungi butiran-butiran yang relevan kepada pentadbir untuk "
+"mengkonfigurasi SchoolTool, tetapi bukan untuk pengguna."
 
 #: /src/schooltool/app/help/calendar_selection.pt:6
 #: /src/schooltool/app/help/configure.zcml:97
 msgid "Calendar Selection"
-msgstr ""
+msgstr "Pemilihan Kalendar"
 
 #: /src/schooltool/app/help/calendar_selection.pt:8
 msgid ""
@@ -1882,6 +1948,23 @@ msgid ""
 "type:</strong> If you press the <code>Shift</code> key while clicking on "
 "calendars, you can select a range.</li> </ul>"
 msgstr ""
+"<h1>Pemilihan Kalendar</h1> <p>Anda boleh menambah acara dengan kod warna "
+"dari pelbagai kalendar ke paparan kalendar peribadi anda. Anda boleh "
+"menambah acara dari seksyen-seksyen kursus yang anda hadiri, kumpulan, orang "
+"lain malahan sumber seperti kelas-kelas atau projektor-projektor.</p> "
+"<p>Sesetengan kalendar adalah hakmilik persendirian atau terbatas kepada "
+"sesetengah kumpulan.</p> <Pada borang pemilihan kalendar, anda akan diberi "
+"senarai semua kalendar-kalendar yang tersedia untuk anda. Senarai itu "
+"mungkin panjang</p> <pKalendar seluruh laman SchoolTool dicadang untuk "
+"digunakan sebagai kalendar awam rasmi untuk sekolah.</p> <h3>Bagaimana "
+"saya...</h3> <ul> <li><strong>Memilih atau tidak memilih beberapa kalendar "
+"individu dari satu jenis:</strong> Jikalau anda menekan butang "
+"<code>Ctrl</code> diatas papan kekunci anda semasa anda memilih kalendar-"
+"kalendar dari senarai menggunakan tetikus anda, anda boleh memilih pelbagai "
+"kalendar-kalendar sekaligus.</li> <li><strong>Memilih beberapa kalendar dari "
+"satu jenis:</strong> Jikalau anda menekan butang <code>Shift</code> semasa "
+"mengklik kalendar-kalendar, anda boleh memilih satu deretan kalendar "
+"sekaligus.</li> </ul>"
 
 #: /src/schooltool/app/help/calendaring.pt:6
 msgid "Calendaring in SchoolTool"
@@ -1945,7 +2028,7 @@ msgstr ""
 
 #: /src/schooltool/app/help/configure.zcml:13
 msgid "Administration"
-msgstr ""
+msgstr "Pentadbiran"
 
 #: /src/schooltool/app/help/configure.zcml:21
 msgid "Organization"
@@ -1953,7 +2036,7 @@ msgstr "Organisasi"
 
 #: /src/schooltool/app/help/configure.zcml:29
 msgid "Calendaring"
-msgstr ""
+msgstr "Penggunaan kalendar"
 
 #: /src/schooltool/app/help/configure.zcml:37
 #: /src/schooltool/app/help/daily_calendar.pt:6
@@ -2018,7 +2101,7 @@ msgstr ""
 #: /src/schooltool/app/help/event_add.pt:10
 #: /src/schooltool/app/help/event_edit.pt:10
 msgid "This form has a few issues:"
-msgstr ""
+msgstr "Borang ini mempunyai beberapa isu:"
 
 #: /src/schooltool/app/help/event_add.pt:12
 msgid ""
@@ -2038,6 +2121,10 @@ msgid ""
 "the event's start time in 24-hour or \"military\" time, and the date is "
 "displayed in year-month-day format."
 msgstr ""
+"Borang ini telah mengabaikan pilihan anda untuk format masa dan tarikh. Anda "
+"mesti meletakkan masa acara bermula untuk acara berkenaan di dalam format 24-"
+"jam atau masa yang digunakan tentera, dan tarikah mesti dipaparkan di dalam "
+"format tahun-bulan-hari."
 
 #: /src/schooltool/app/help/event_add.pt:19
 #: /src/schooltool/app/help/event_edit.pt:17
@@ -2061,6 +2148,11 @@ msgid ""
 "you change the original day of a weekly recurring event) you may need to "
 "click the <code>Update form</code> button to update the recurrence fields."
 msgstr ""
+"Sekiranya acara anda berulang di dalam bentuk berpola, tandakan kotak "
+"<code>Berulang</code>  dan isikan ruang baru yang akan muncul. DI dalam "
+"sesetengah keadaan (contoh jika anda menukar hari asal dari acara mingguan "
+"yang berulang) anda perlu klik butang <code>Kemaskini borang</code> untuk "
+"mengemaskini ruang perulangan."
 
 #: /src/schooltool/app/help/event_add.pt:29
 #: /src/schooltool/app/help/event_edit.pt:27
@@ -2068,6 +2160,9 @@ msgid ""
 "An \"all day\" event does not show up as a 24 hour event. It indicates that "
 "the day as a whole has some significance, like a birthday or holiday."
 msgstr ""
+"acara seharian tidak muncul dalam bentuk 24 jam. Ini menandakan bahawa acara "
+"itu secara keseluruhannya mempunyai beberapa kepentingan, sepeti hari lahir "
+"atau cuti."
 
 #: /src/schooltool/app/help/event_add.pt:32
 #: /src/schooltool/app/help/event_edit.pt:30
@@ -2083,6 +2178,8 @@ msgid ""
 "If you need to edit a resource reservation, click the <code>Book "
 "resources</code> link at the bottom of the form."
 msgstr ""
+"Jika anda perlu untuk menyunting penempahan sumber, klik pada pautan "
+"<code>Tempah sumber</code> yang terletak di bahagian bawah borang."
 
 #: /src/schooltool/app/help/monthly_calendar.pt:8
 msgid ""
@@ -2126,14 +2223,13 @@ msgstr ""
 "<code>Kalendar-kalendar</code>:</strong> klik ke butang "
 "<code>Lagi...</code>.</li> <li><strong>Memastikan minggu bermula pada hari "
 "yang betul:</strong> hari pertama dalam seminggu adalah berlainan untuk "
-"setiap bahagian dalam muka bumi ini. Jika nilai minggu dalam SchoolTool "
-"tidak betul pada pandangan anda, klik pada nama anda yang terletak di dalam "
-"panel merah di bahagian atas laman. Kemudian klik pada menu "
-"<code>Tindakan</code> dan pilih <code>Tukar Keutamaan</code>. Pilih hari "
-"untuk \"Minggu bermula pada\" yang betul dan tekan butang "
-"<code>Bertindak</code>.</li> <li><strong>Akses kalendar dalam format "
-"iCal:</strong>:Pilih <code>Buka dalam iCal</code> dari senarai "
-"Tindakan.</li> </ul>"
+"setiap negara dalam muka bumi ini. Jika SchoolTool tidak ditetapkan secara "
+"betul pada pandangan anda, klik pada nama anda yang terletak di dalam panel "
+"merah di bahagian atas laman. Kemudian klik pada menu <code>Tindakan</code> "
+"dan pilih <code>Tukar Keutamaan</code>. Pilih hari untuk \"Minggu bermula "
+"pada\" yang betul dan tekan butang <code>Bertindak</code>.</li> "
+"<li><strong>Akses kalendar dalam format iCal:</strong>:Pilih <code>Buka "
+"dalam iCal</code> dari menu Tindakan.</li> </ul>"
 
 #: /src/schooltool/app/help/org.pt:6
 msgid "SchoolTool Organization"
@@ -2144,6 +2240,8 @@ msgid ""
 "<h1>SchoolTool Organization</h1> <p>This branch of the help tree contains "
 "items explaining the basic organization of SchoolTool.</p>"
 msgstr ""
+"<h1>Organisasi SchoolTool</h1> <p>Rungkaian dari pohon bantuan ini "
+"mengandungi informasi yang menerangkan asas organisasi SchoolTool.</p>"
 
 #: /src/schooltool/app/help/schooltool.pt:8
 msgid ""
@@ -2179,6 +2277,44 @@ msgid ""
 "right hand corner of the site. You should disable devmode in any production "
 "server.</li> </ul> </ul>"
 msgstr ""
+"<h1>SchoolTool</h1> <p>SchoolTool adalah sistem pentadbiran percuma untuk "
+"sekolah-sekolah di seluruh dunia, dibiayai oleh The Shuttleworth "
+"Foundation.</p> <h2>Himpunan Perkataan Asas untuk Kepenggunaan Laman Web "
+"dalam SchoolTool</h2> <ul> <li><strong>Panel merah bahagian atas "
+"</strong></li> <ul> <li><strong>Navigasi:</strong> pautan di kiri panel "
+"merah menunjukkan dimana anda berada di dalam direktori objek SchoolTool. "
+"Harap maklum yang ini tidak semestinya akan membawa anda kembali ke bahagian "
+"sebelumnya, tetapi berguna untuk anda pergi dari seksyen yang terperinci ke "
+"seksyen yang umum di dalam aplikasi.</li> <li><strong>Nama Anda</strong> "
+"(sekiranya anda log masuk): klik pada nama anda sendiri akan membawa anda ke "
+"dashboard ringkas yang mempunya pautan-pautan yang relevan. Dari laman muka "
+"ini, anda boleh menggunakan menu <code>Tindakan</code> untuk mengubah "
+"keutamaan dan lain-lain penetapan peribadi.</li> <li><strong>Log "
+"masuk/keluar:</strong> Ini adalah untuk anda log masuk atau keluar. Adalah "
+"satu idea yang baik untuk anda log keluar tatkala tidak menggunakan "
+"SchoolTool.</li> <li><strong>Bantuan:</strong>Anda akan nampak pautan ini "
+"sekiranya terdapat fail bantuan untuk laman muka yang anda cari.</li> </ul> "
+"<li><strong>Menu</strong></li> <ul> <li><strong>Navigasi:</strong>Menu ini "
+"memberikan anda beberapa pilihan asas untuk mengakses bahagian-bahagian ang "
+"lain di dalam SchoolTool, contoh seperti indeks orang-orang atau kursus-"
+"kursus. Apa yang anda lihat di sini bergantung kepada tahap kebenaran yang "
+"diberikan oleh sistem kepada anda.</li> <li><strong>Tindakan:</strong>Menu "
+"ini mengandungi pelbagai perkara yang anda boleh buat di laman muka yang "
+"sedang diakses dikala itu. Kandungan dalam menu ini akan sentiasa berubah "
+"berdasarkan laman muka apa yang sedang dilihat dan tahap kebenaran apa yang "
+"diizinkan untuk anda.</li> </ul> <li><strong>Diatas panel "
+"merah</strong></li> <ul> <li><strong>Logo & Nama Sekolah:</strong>klik pada "
+"panel ini akan membawa anda ke bahagian atas tapak laman sekolah, selalunya "
+"kalendar sekolah.</li> <li><strong>Paparan kalendar "
+"hari/minggu/bulan/tahun:</strong> Sekiranya anda melihat kalendar, anda akan "
+"dapat melihat ikon-ikon di bahagian atas sebelah kanan yang akan membolehkan "
+"anda untuk bertukar-tukar paparan kalendar.</li> <li><strong>Menu Mode "
+"Pembangun Aplikasi:</strong> Sekiranya anda adalah pentadbir untuk tapak "
+"laman sekolah dan anda telah mengaktifkan mod Pembangun Aplikasi di dalam "
+"schooltool.conf, anda akan dapat melihat menu istimewa di bahagian atas "
+"sebelah kanan laman. Anda sepatutnya menyahaktifkan mod Pembangun Aplikasi "
+"di dalam mana-mana pelayan yang sudah digunakan secara produktif.</li> </ul> "
+"</ul>"
 
 #: /src/schooltool/app/help/weekly_calendar.pt:8
 msgid ""
@@ -2204,6 +2340,32 @@ msgid ""
 "<li><strong>Access a iCal format version of the calendar:</strong>: select "
 "<code>Open in iCal</code> from the Action menu.</li> </ul>"
 msgstr ""
+"<h1>Kalendar Mingguan</h1> <p>Ini adalah kalendar paparan mingguan. Ia "
+"mungkin kalendar anda sendiri, atau ia mungkin kalendar orang lain, kumpulan "
+"atau sumber-sumber di dalam sekolah anda. <a "
+"href=\"/++help++/schooltool/calendaring\">Lagi bantuan dalam kepenggunaan "
+"kalendar...</a></p> <h3>Bagaimana saya...</h3> <ul> <li><strong>Papar hari-"
+"hari tertentu dengan lebih terperinci:</strong> Klik pada jadual kalendar "
+"hari yang bersesuaian dalam baris berwarna biru.</li> <li><strong>Papar "
+"maklumat terperinci untuk satu-satu acara atau menyuntingnya:</strong> Klik "
+"pada acara. Jika anda mempunyai tahap kebenaran sistem yang bersesuaian "
+"untuk acara tersebut, anda boleh menyuntingnya.</li> <li><strong>Cipta "
+"acara:</strong> pilih hari bermulanya acara dan cipta acara di dalam paparan "
+"harian.</li> <li><strong>Papar atau sembunyikan acara di dalam satu dari "
+"kalendar-kalendar yang disenaraikan di bawah senarai <code>Kalendar-"
+"kalendar</code>:</strong> Tanda atau tidak tandakan kotak dibawah "
+"<code>Kal</code> dan klik <code>Bertindak</code>.</li> <li><strong>Tambah "
+"atau buang kalendar-kalendar di dalam senarai <code>Kalendar-"
+"kalendar</code>:</strong> klik ke butang <code>Lagi...</code>.</li> "
+"<li><strong>Memastikan kalendar bermula pada hari yang betul:</strong> hari "
+"pertama dalam seminggu adalah berlainan untuk setiap negara-negara di muka "
+"bumi ini. Jika SchoolTool tidak ditetapkan secara betul pada pandangan anda, "
+"klik pada nama anda yang terletak di dalam panel merah di bahagian atas "
+"laman. Kemudian klik pada menu <code>Tindakan</code> dan pilih <code>Tukar "
+"Keutamaan</code>. Pilih hari untuk \"Minggu bermula pada\" yang betul dan "
+"tekan butang <code>Bertindak</code>.</li> <li><strong>Akses kalendar dalam "
+"format iCal:</strong>:Pilih <code>Buka dalam iCal</code> dari menu "
+"Tindakan.</li> </ul>"
 
 #: /src/schooltool/app/help/yearly_calendar.pt:8
 msgid ""
@@ -2229,35 +2391,61 @@ msgid ""
 "<li><strong>Access a iCal format version of the calendar:</strong>: select "
 "<code>Open in iCal</code> from the Action menu.</li> </ul>"
 msgstr ""
+"<h1>Kalendar Tahunan</h1> <p>Ini adalah kalendar paparan tahunan. Ia mungkin "
+"kalendar anda sendiri, atau ia mungkin kalendar orang lain, kumpulan atau "
+"sumber-sumber di dalam sekolah anda. <a "
+"href=\"/++help++/schooltool/calendaring\">Lagi bantuan dalam kepenggunaan "
+"kalendar...</a></p> <h3>Bagaimana saya...</h3> <ul> <li><strong>Mengetahui "
+"hari apa yang mengandungi acara: Sekiranya ruang hari mempunya warna biru di "
+"belakang teks. sekurang-kuranya ada satu acara untuk hari "
+"tersebut.</strong></li> <li><strong>Papar hari-hari tertentu secara "
+"terperinci:</strong> klik pada hari.</li> <li><strong>Papar bulan-bulan "
+"tertentu:</strong> klik pada nama bulan.</li> <li><strong>Cipta "
+"acara:</strong> pilih hari bermulanya acara dan cipta acara itu di dalam "
+"paparan harian.</li> <li><strong>Papar atau sembunyikan acara di dalam satu "
+"dari kalendar-kalendar yang disenaraikan di bawah senarai <code>Kalendar-"
+"kalendar</code>:</strong> Tanda atau tidak tandakan kotak dibawah "
+"<code>Kal</code> dan klik <code>Bertindak</code>.</li> <li><strong>Tambah "
+"atau buang kalendar-kalendar di dalam senarai <code>Kalendar-"
+"kalendar</code>:</strong> klik ke butang <code>Lagi...</code>.</li> "
+"<li><strong>Memastikan kalendar bermula pada hari yang betul:</strong> hari "
+"pertama dalam seminggu adalah berlainan untuk setiap negara-negara di muka "
+"bumi ini. Jika SchoolTool tidak ditetapkan secara betul pada pandangan anda, "
+"klik pada nama anda yang terletak di dalam panel merah di bahagian atas "
+"laman. Kemudian klik pada menu <code>Tindakan</code> dan pilih <code>Tukar "
+"Keutamaan</code>. Pilih hari untuk \"Minggu bermula pada\" yang betul dan "
+"tekan butang <code>Bertindak</code>.</li> <li><strong>Akses kalendar dalam "
+"format iCal:</strong>:Pilih <code>Buka dalam iCal</code> dari menu "
+"Tindakan.</li> </ul>"
 
 #: /src/schooltool/app/interfaces.py:43
 msgid "Form input is not a file object"
-msgstr ""
+msgstr "Borang kemasukan bukan fail objek"
 
 #: /src/schooltool/app/interfaces.py:44
 #: /src/schooltool/app/interfaces.py:48
 msgid "Invalid integer data"
-msgstr ""
+msgstr "data integer tidak sah"
 
 #: /src/schooltool/app/interfaces.py:45
 msgid "Invalid text data"
-msgstr ""
+msgstr "teks data tidak sah"
 
 #: /src/schooltool/app/interfaces.py:46
 msgid "Invalid textual data"
-msgstr ""
+msgstr "data teks tidak sah"
 
 #: /src/schooltool/app/interfaces.py:47
 msgid "Invalid unicode data"
-msgstr ""
+msgstr "data aksara tidak sah"
 
 #: /src/schooltool/app/interfaces.py:49
 msgid "Invalid floating point data"
-msgstr ""
+msgstr "data perpuluhan tidak sah"
 
 #: /src/schooltool/app/interfaces.py:50
 msgid "Invalid datetime data"
-msgstr ""
+msgstr "data tarikhmasa tidak sah"
 
 #: /src/schooltool/app/interfaces.py:137
 #: /src/schooltool/app/interfaces.py:148
@@ -2267,12 +2455,23 @@ msgid ""
 "the\n"
 "            bottom of all pages and in the page title."
 msgstr ""
+"Nama sekolah atau organisasi yang menjalankan \n"
+"                        pelayan ini. Ini akan dipaparkan di kalendar awam,  "
+"\n"
+"                        di bahagian bawah semua laman muka dan di dalam "
+"tajuk laman muka."
+
+#: /src/schooltool/app/interfaces.py:153
+msgid "Front Page Calendar"
+msgstr "Kalendar Muka Depan"
 
 #: /src/schooltool/app/interfaces.py:154
 msgid ""
 "Display site-wide calendar as the front page of the\n"
 "            site."
 msgstr ""
+"Memaparkan kalendar seluruh tapak laman sebagai muka hadapan\n"
+"                        tapak laman."
 
 #: /src/schooltool/app/interfaces.py:172
 msgid ""
@@ -2282,6 +2481,10 @@ msgid ""
 "            owner is shown in the calendar views.\n"
 "            "
 msgstr ""
+"\n"
+"            Satu pilihan yang mengawal samada tuan punya jadual kalendar\n"
+"                       dipaparkan di dalam paparan-paparan kalendar.\n"
+"            "
 
 #: /src/schooltool/app/main.py:95
 msgid ""
@@ -2299,6 +2502,19 @@ msgid ""
 "                         is '-')\n"
 "  --manage               only do management tasks, don't run the server\n"
 msgstr ""
+"\n"
+"Pengunaan: %s [pilihan-pilihan]\n"
+"Pilihan-pilihan:\n"
+"   -c, --config xxx guna fail konfigurasi ini selain yang asal\n"
+"   -h, --help   paparkan mesej bantuan ini\n"
+"   -d, --daemon pergi menjadi proses belakang selepas dimulakan\n"
+"   -r, --restore-manager kata laluan\n"
+"                                                 mengembalikan pengguna "
+"pengurus dengan kata laluan yang diberi\n"
+"                                                 (baca kata laluan dari "
+"input biasa jika 'kata laluan' \n"
+"                                                 adalah '-')\n"
+"   --manage hanya membuat tugasan pengurusan, jangan jalankan pelayan.\n"
 
 #: /src/schooltool/app/main.py:109
 msgid ""
@@ -2308,12 +2524,19 @@ msgid ""
 "If you're using the default configuration file, please edit it now and\n"
 "uncomment one of the ZODB storage sections.\n"
 msgstr ""
+"\n"
+"TIada penyimpanan didefinasikan di dalam fail konfigurasi.\n"
+"\n"
+"Jika anda menggunakan fail konfigurasi asal, tolong sunting ia sekarang dan\n"
+"buang komen satu dari seksyen penyimpanan ZODB.\n"
 
 #: /src/schooltool/app/main.py:117
 msgid ""
 "\n"
 "This is not a SchoolTool 0.11 database file, aborting.\n"
 msgstr ""
+"\n"
+"Ini bukan fail pangkalan data SchoolTool 0.11, dibatalkan.\n"
 
 #: /src/schooltool/app/main.py:122
 msgid ""
@@ -2322,14 +2545,18 @@ msgid ""
 "\n"
 "Please run the standalone database upgrade script.\n"
 msgstr ""
+"\n"
+"Ini bukan fail pangkalan data SchoolTool 0.10, dibatalkan.\n"
+"\n"
+"Sila jalankan skrip tingkat upaya pangkalan data sahaja.\n"
 
 #: /src/schooltool/app/main.py:359
 msgid "Going to background, daemon pid %d"
-msgstr ""
+msgstr "Pergi ke proses latarbelakang, daemon pid %d"
 
 #: /src/schooltool/app/main.py:406
 msgid "Cannot resolve plugin action order:\n"
-msgstr ""
+msgstr "Tidak dapat menyelesaikan susunan plugin tindakan:\n"
 
 #: /src/schooltool/app/main.py:556
 #: /src/schooltool/app/main.py:600
@@ -2339,11 +2566,11 @@ msgstr "%s: %s"
 
 #: /src/schooltool/app/main.py:557
 msgid "Run %s -h for help."
-msgstr ""
+msgstr "Taip %s -h untuk bantuan"
 
 #: /src/schooltool/app/main.py:569
 msgid "%s: daemon mode not supported on your operating system."
-msgstr ""
+msgstr "%s: mod daemon tidak disokong oleh sistem operasi anda."
 
 #: /src/schooltool/app/main.py:595
 msgid "Reading configuration from %s"
@@ -2351,7 +2578,7 @@ msgstr "Membaca Konfigurasi dari %s"
 
 #: /src/schooltool/app/main.py:698
 msgid "Startup time: %.3f sec real, %.3f sec CPU"
-msgstr ""
+msgstr "Masa bermula: %.3f sec real, %.3f sec CPU"
 
 #. Default: ""
 #: /src/schooltool/app/main.py:732
@@ -2360,32 +2587,39 @@ msgid ""
 "%s"
 msgstr ""
 "Tidak dapat memulakan pangkalan data:\n"
-"%s\n"
-"    Asal: \"\""
+"%s"
 
 #: /src/schooltool/app/main.py:735
 msgid ""
 "\n"
 "Perhaps another %s instance is using it?"
 msgstr ""
+"\n"
+"Mungkin ada %s proses lain menggunakannya?"
 
 #: /src/schooltool/app/main.py:805
 msgid ""
 "Warning: could not find the reportlab library.\n"
 "PDF support disabled."
 msgstr ""
+"Amaran: tidak dapat mencari library reportlab.\n"
+"sokongan PDF dinyahaktifkan."
 
 #: /src/schooltool/app/main.py:810
 msgid ""
 "Warning: font directory '%s' does not exist.\n"
 "PDF support disabled."
 msgstr ""
+"Amaran: direktori fon '%s' tidak wujud.\n"
+"Sokongan PDF dinyahaktifkan."
 
 #: /src/schooltool/app/main.py:818
 msgid ""
 "Warning: font '%s' does not exist.\n"
 "PDF support disabled."
 msgstr ""
+"Amaran: jenis tulisan \"%s\" tidak wujud.\n"
+"Sokongan PDF dinyahaktifkan."
 
 #: /src/schooltool/app/membership.py:261
 #: /src/schooltool/group/browser/group.pt:16
@@ -2394,21 +2628,21 @@ msgstr "Ahli-ahli"
 
 #: /src/schooltool/app/membership.py:262
 msgid "Members of the group."
-msgstr ""
+msgstr "Ahli-ahli kumpulan"
 
 #: /src/schooltool/app/security.py:308
 msgid "Assigned leaders."
-msgstr ""
+msgstr "Ketua-ketua yang ditugaskan"
 
 #. Default: ""
 #: /src/schooltool/app/security.py:352
 msgid "\"$group\" group."
-msgstr ""
+msgstr "\"$group\" kumpulan."
 
 #. Default: ""
 #: /src/schooltool/app/security.py:367
 msgid "\"$group\" group and the super user."
-msgstr ""
+msgstr "\"$group\" kumpulan dan pengguna peringkat tertinggi."
 
 #: /src/schooltool/app/security.zcml:69
 msgid "Everyone can view the application calendar."
@@ -2416,29 +2650,29 @@ msgstr "Semua orang boleh melihat kalendar aplikasi."
 
 #: /src/schooltool/app/security.zcml:77
 msgid "SchoolTool application"
-msgstr ""
+msgstr "Aplikasi SchoolTool"
 
 #: /src/schooltool/app/security.zcml:80
 msgid "Access"
-msgstr ""
+msgstr "Akses"
 
 #: /src/schooltool/app/security.zcml:87
 msgid "Manage school settings and configuration"
-msgstr ""
+msgstr "Mengurus penetapan dan konfigurasi sekolah"
 
 #: /src/schooltool/app/security.zcml:95
 #: /src/schooltool/course/security.zcml:141
 #: /src/schooltool/group/security.zcml:86
 #: /src/schooltool/person/security.zcml:128
 msgid "View calendar"
-msgstr ""
+msgstr "Lihat kalendar"
 
 #: /src/schooltool/app/security.zcml:103
 #: /src/schooltool/course/security.zcml:149
 #: /src/schooltool/group/security.zcml:94
 #: /src/schooltool/person/security.zcml:136
 msgid "Change calendar"
-msgstr ""
+msgstr "Tukar kalendar"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:15
 #: /src/schooltool/basicperson/browser/configure.zcml:164
@@ -2453,47 +2687,47 @@ msgstr ""
 #: /src/schooltool/schoolyear/browser/configure.zcml:94
 #: /src/schooltool/term/browser/configure.zcml:23
 msgid "Edit"
-msgstr ""
+msgstr "Ubah"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:24
 msgid "Export Persons as XML"
-msgstr ""
+msgstr "Eksport Pengguna sebagai XML"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:33
 msgid "Export"
-msgstr ""
+msgstr "Eksport"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:42
 msgid "Advisors"
-msgstr ""
+msgstr "Penasihat-penasihat"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:51
 msgid "Advisees"
-msgstr ""
+msgstr "Orang yang dinasihat"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:92
 #: /src/schooltool/demographics/overrides.zcml:7
 #: /src/schooltool/person/browser/configure.zcml:169
 msgid "New Person"
-msgstr "Orang Baru"
+msgstr "Pengguna baru"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:113
 #: /src/schooltool/basicperson/security.zcml:13
 #: /src/schooltool/demographics/browser/personform.py:180
 msgid "Demographics"
-msgstr ""
+msgstr "Demografi"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:143
 msgid "New Text Field"
-msgstr ""
+msgstr "Ruang Teks Baru"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:150
 msgid "New Date Field"
-msgstr ""
+msgstr "Ruang Tarikh Baru"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:157
 msgid "New Selection List Field"
-msgstr ""
+msgstr "Ruang Senarai Pemilihan Baru"
 
 #: /src/schooltool/basicperson/browser/csvimport.py:44
 #: /src/schooltool/course/browser/csvimport.py:45
@@ -2503,26 +2737,26 @@ msgstr ""
 #: /src/schooltool/person/browser/csvimport.py:43
 #: /src/schooltool/resource/browser/csvimport.py:46
 msgid "Insufficient data provided."
-msgstr ""
+msgstr "Maklumat yang dibekalkan tidak mencukupi."
 
 #: /src/schooltool/basicperson/browser/csvimport.py:48
 #: /src/schooltool/person/browser/csvimport.py:47
 msgid "username may not be empty"
-msgstr ""
+msgstr "nama pengguna tidak boleh kosong"
 
 #: /src/schooltool/basicperson/browser/csvimport.py:52
 msgid "first name may not be empty"
-msgstr ""
+msgstr "nama pertama tidak boleh kosong"
 
 #: /src/schooltool/basicperson/browser/csvimport.py:56
 msgid "last name may not be empty"
-msgstr ""
+msgstr "nama keluarga tidak boleh kosong"
 
 #. Default: ""
 #: /src/schooltool/basicperson/browser/csvimport.py:68
 #: /src/schooltool/person/browser/csvimport.py:62
 msgid "Duplicate username: ${username}"
-msgstr ""
+msgstr "Nama pengguna berganda: ${username}"
 
 #: /src/schooltool/basicperson/browser/csvimport.py:76
 #: /src/schooltool/basicperson/browser/person.py:108
@@ -2533,12 +2767,12 @@ msgstr "Nama tidak boleh dimulai dengan '+' atau '@' atau mengandungi '/'"
 
 #: /src/schooltool/basicperson/browser/demographics.py:133
 msgid "Add new Field"
-msgstr ""
+msgstr "Tambah Ruang baru"
 
 #. Default: ""
 #: /src/schooltool/basicperson/browser/demographics.py:212
 msgid "Change information for ${field_title}"
-msgstr ""
+msgstr "Tukar maklumat untuk ${field_title"
 
 #: /src/schooltool/basicperson/browser/person.py:49
 msgid "Group"
@@ -2559,29 +2793,29 @@ msgstr "Tambah pengguna baru"
 
 #: /src/schooltool/basicperson/browser/person.py:163
 msgid "Passwords do not match"
-msgstr ""
+msgstr "Kata laluan tidak sepadan"
 
 #. Default: ""
 #: /src/schooltool/basicperson/browser/person.py:228
 msgid "Change information for ${fullname}"
-msgstr ""
+msgstr "Tukar maklumat untuk ${fullname}"
 
 #: /src/schooltool/basicperson/browser/person.py:298
 msgid "Current Advisors"
-msgstr ""
+msgstr "Penasihat Terkini"
 
 #: /src/schooltool/basicperson/browser/person.py:299
 msgid "Add Advisors"
-msgstr ""
+msgstr "Tambah Penasihat"
 
 #. Default: ""
 #: /src/schooltool/basicperson/browser/person.py:303
 msgid "Advisors of ${person}"
-msgstr ""
+msgstr "Penasihat ${person}"
 
 #: /src/schooltool/basicperson/browser/person.py:322
 msgid "Current Advisees"
-msgstr ""
+msgstr "Orang dinasihat yang terkini"
 
 #: /src/schooltool/basicperson/browser/person.py:323
 msgid "Add Advisees"
@@ -2590,29 +2824,32 @@ msgstr "Tambah orang yang dinasihat"
 #. Default: ""
 #: /src/schooltool/basicperson/browser/person.py:327
 msgid "Advisees of ${person}"
-msgstr ""
+msgstr "Orang yang dinasihat ${person}"
 
 #: /src/schooltool/basicperson/browser/templates/demographics-view.pt:4
 #: /src/schooltool/basicperson/browser/templates/demographics-view.pt:7
 msgid "Demographics Container"
-msgstr ""
+msgstr "Ruang Demografi"
 
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:4
 #: /src/schooltool/person/browser/person-csvimport.pt:4
 msgid "Upload SchoolTool persons as CSV"
-msgstr ""
+msgstr "Muat naik pengguna SchoolTool sebagai CSV"
 
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:26
 #: /src/schooltool/person/browser/configure.zcml:80
 #: /src/schooltool/person/browser/person-csvimport.pt:26
 msgid "Import Persons"
-msgstr ""
+msgstr "Import Pengguna"
 
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:29
 msgid ""
 "CSV data <strong>must</strong> contain a user name a first name and a last "
 "name. An optional password <strong>may</strong> be included as well."
 msgstr ""
+"data CSV <strong>mesti</strong> mengandungi nama pertama dan nama keluarga "
+"pengguna. Pilihan kata laluan <strong>mungkin boleh</strong> dimasukkan "
+"sekali."
 
 #. Default: ""
 #. "jjones, Jimmy, Jones\n"
@@ -2625,6 +2862,10 @@ msgid ""
 "jbjones, Jim Bob, Jones, r2m45J\n"
 "howard, Howard, Jobs\n"
 msgstr ""
+"\n"
+"jjones, Jimmy, Jones\n"
+"jbjones, Jim Bob, Jones, r2m45J\n"
+"howard, Howard, Jobs\n"
 
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:40
 #: /src/schooltool/person/browser/person-csvimport.pt:40
@@ -2633,18 +2874,21 @@ msgid ""
 "Of the three, only 'jbjones' has a password ('r2m45J') and will be able to "
 "login to the system. Note that passwords must be sent in plain text."
 msgstr ""
+"Contoh di atas akan mencipta tiga pengguna, 'jjones', 'jbjones' dan "
+"'howard'. Dalam ketiga-tiga orang itu, hanya 'jbjones' mempunyai kata laluan "
+"('r2m45J') dan dia boleh log masuk ke dalam sistem."
 
 #: /src/schooltool/basicperson/browser/templates/person_view.pt:4
 #: /src/schooltool/person/browser/home.pt:4
 #: /src/schooltool/person/browser/person.pt:4
 msgid "Person info: ${title}"
-msgstr ""
+msgstr "Info Pengguna: ${title}"
 
 #: /src/schooltool/basicperson/interfaces.py:38
 #: /src/schooltool/contact/interfaces.py:40
 #: /src/schooltool/demographics/interfaces.py:44
 msgid "Prefix"
-msgstr ""
+msgstr "Awalan"
 
 #: /src/schooltool/basicperson/interfaces.py:43
 #: /src/schooltool/contact/browser/templates/filter.pt:5
@@ -2657,7 +2901,7 @@ msgstr "Nama pertama"
 #: /src/schooltool/contact/interfaces.py:44
 #: /src/schooltool/demographics/interfaces.py:55
 msgid "Middle name"
-msgstr ""
+msgstr "Nama tengah"
 
 #: /src/schooltool/basicperson/interfaces.py:53
 #: /src/schooltool/contact/browser/templates/filter.pt:12
@@ -2670,12 +2914,12 @@ msgstr "Nama keluarga"
 #: /src/schooltool/contact/interfaces.py:48
 #: /src/schooltool/demographics/interfaces.py:65
 msgid "Suffix"
-msgstr ""
+msgstr "Akhiran"
 
 #: /src/schooltool/basicperson/interfaces.py:63
 #: /src/schooltool/demographics/interfaces.py:70
 msgid "Preferred name"
-msgstr ""
+msgstr "Nama pilihan"
 
 #: /src/schooltool/basicperson/interfaces.py:68
 #: /src/schooltool/demographics/interfaces.py:123
@@ -2699,11 +2943,11 @@ msgstr "Tarikh lahir"
 
 #: /src/schooltool/basicperson/interfaces.py:75
 msgid "(yyyy-mm-dd)"
-msgstr ""
+msgstr "(yyyy-mm-dd)"
 
 #: /src/schooltool/basicperson/interfaces.py:122
 msgid "The title of this Field Description"
-msgstr ""
+msgstr "Tajuk Ruang Penerangan ini"
 
 #: /src/schooltool/basicperson/interfaces.py:125
 #: /src/schooltool/demographics/interfaces.py:194
@@ -2712,7 +2956,7 @@ msgstr "ID"
 
 #: /src/schooltool/basicperson/interfaces.py:126
 msgid "Unique ID of this Field Description"
-msgstr ""
+msgstr "ID Unik Ryang Penerangan"
 
 #: /src/schooltool/basicperson/interfaces.py:129
 msgid "Required"
@@ -2720,11 +2964,11 @@ msgstr "Diperlukan"
 
 #: /src/schooltool/basicperson/interfaces.py:130
 msgid "Whether this Field is required or not"
-msgstr ""
+msgstr "Samada Ruang ini diperlukan atau tidak"
 
 #: /src/schooltool/basicperson/interfaces.py:137
 msgid "List of values"
-msgstr ""
+msgstr "Senarai nilai"
 
 #: /src/schooltool/basicperson/person.py:83
 #: /src/schooltool/contact/browser/contact.py:297
@@ -2738,35 +2982,35 @@ msgstr "Nama Keluarga"
 
 #: /src/schooltool/basicperson/security.zcml:17
 msgid "Create, delete demographics fields and change their order."
-msgstr ""
+msgstr "Cipta, padam ruang demografi dan tukar aturannya"
 
 #: /src/schooltool/basicperson/security.zcml:26
 msgid "Edit fields"
-msgstr ""
+msgstr "Ubah ruang"
 
 #: /src/schooltool/basicperson/security.zcml:34
 msgid "View user demographics"
-msgstr ""
+msgstr "Papar demografi pengguna"
 
 #: /src/schooltool/basicperson/security.zcml:34
 msgid "View user's demographics information"
-msgstr ""
+msgstr "Papar maklumat demografi pengguna"
 
 #: /src/schooltool/basicperson/security.zcml:43
 msgid "Modify user demographics"
-msgstr ""
+msgstr "Meminda demografi pengguna"
 
 #: /src/schooltool/basicperson/security.zcml:43
 msgid "Modify user's demographics information."
-msgstr ""
+msgstr "Meminda maklumat demografi pengguna"
 
 #: /src/schooltool/commendation/commendation_add.pt:4
 msgid "Add Commendation"
-msgstr ""
+msgstr "Tambah Kepujian"
 
 #: /src/schooltool/commendation/commendation_add.pt:13
 msgid "Commendation"
-msgstr ""
+msgstr "Kepujian"
 
 #: /src/schooltool/common/configure.zcml:90
 #: /src/schooltool/course/browser/configure.zcml:25
@@ -2784,11 +3028,11 @@ msgstr "Tambah Info"
 
 #: /src/schooltool/common/configure.zcml:92
 msgid "Edit Calendar Overlays"
-msgstr ""
+msgstr "Ubah Susunan Kalendar"
 
 #: /src/schooltool/contact/browser/configure.zcml:49
 msgid "New Contact"
-msgstr ""
+msgstr "Kenalan Baru"
 
 #: /src/schooltool/contact/browser/configure.zcml:64
 #: /src/schooltool/contact/browser/configure.zcml:76
@@ -2799,7 +3043,7 @@ msgstr "Kenalan"
 
 #: /src/schooltool/contact/browser/configure.zcml:100
 msgid "Manage Contacts"
-msgstr ""
+msgstr "Urus Kenalan"
 
 #: /src/schooltool/contact/browser/configure.zcml:111
 #: /src/schooltool/contact/browser/configure.zcml:123
@@ -2808,21 +3052,21 @@ msgstr "Kenalan Lain"
 
 #: /src/schooltool/contact/browser/contact.py:77
 msgid "Add new contact"
-msgstr ""
+msgstr "Tambah kenalan baru"
 
 #. Default: ""
 #: /src/schooltool/contact/browser/contact.py:160
 msgid "Add new contact for ${person}"
-msgstr ""
+msgstr "Tambah kenalan baru untuk ${person}"
 
 #. Default: ""
 #: /src/schooltool/contact/browser/contact.py:220
 msgid "Change contact information for ${first_name} ${last_name}"
-msgstr ""
+msgstr "Tukar maklumat kenalan untuk ${first_name} ${last_name}"
 
 #: /src/schooltool/contact/browser/contact.py:245
 msgid "Contact index"
-msgstr ""
+msgstr "Indeks Kenalan"
 
 #: /src/schooltool/contact/browser/contact.py:308
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:31
@@ -2836,33 +3080,33 @@ msgstr "Hubungan"
 
 #: /src/schooltool/contact/browser/relationship.py:86
 msgid "Assigned Contacts"
-msgstr ""
+msgstr "Kenalan Ditugaskan"
 
 #: /src/schooltool/contact/browser/relationship.py:87
 msgid "Assign existing contact"
-msgstr ""
+msgstr "Menetapkan kenalan sedia ada"
 
 #. Default: ""
 #: /src/schooltool/contact/browser/relationship.py:91
 msgid "Manage contacts of ${person}"
-msgstr ""
+msgstr "Menguruskan kenalan ${person}"
 
 #: /src/schooltool/contact/browser/templates/contact_view.pt:16
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:18
 msgid "${relationship} of ${person}"
-msgstr ""
+msgstr "${relationship} of ${person}"
 
 #: /src/schooltool/contact/browser/templates/contact_view.pt:20
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:22
 msgid "Contact of ${person}"
-msgstr ""
+msgstr "Kenalan ${person}"
 
 #: /src/schooltool/contact/browser/templates/contacts_delete.pt:15
 #: /src/schooltool/person/browser/person_container_delete.pt:15
 #: /src/schooltool/resource/browser/container_delete.pt:10
 #: /src/schooltool/skin/templates/container_delete.pt:15
 msgid "Are you sure you want to delete selected items?"
-msgstr ""
+msgstr "Adakah anda pasti untuk memadam butiran yang dipilih?"
 
 #: /src/schooltool/contact/browser/templates/contacts_delete.pt:21
 #: /src/schooltool/email/browser/templates/email_delete.pt:21
@@ -2874,7 +3118,7 @@ msgstr ""
 #: /src/schooltool/timetable/browser/templates/schooltt-delete.pt:16
 #: /src/schooltool/timetable/browser/templates/timetable-container-delete.pt:16
 msgid "You have not selected any items."
-msgstr ""
+msgstr "Anda tidak memilih sebarang butiran."
 
 #. Default: "Confirm"
 #: /src/schooltool/contact/browser/templates/contacts_delete.pt:34
@@ -2898,7 +3142,7 @@ msgstr ""
 #: /src/schooltool/timetable/browser/templates/timetable-container-delete.pt:27
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:29
 msgid "delete-button"
-msgstr ""
+msgstr "butang-padam"
 
 #: /src/schooltool/contact/browser/templates/filter.pt:21
 #: /src/schooltool/person/browser/person_filter.pt:11
@@ -2907,7 +3151,7 @@ msgstr ""
 #: /src/schooltool/skin/templates/view_macros.pt:147
 #: /src/schooltool/table/templates/filter.pt:4
 msgid "Find Now"
-msgstr ""
+msgstr "Cari Sekarang"
 
 #: /src/schooltool/contact/browser/templates/filter.pt:24
 #: /src/schooltool/person/browser/person_filter.pt:13
@@ -2917,23 +3161,23 @@ msgstr ""
 #: /src/schooltool/skin/templates/view_macros.pt:149
 #: /src/schooltool/table/templates/filter.pt:6
 msgid "Clear"
-msgstr ""
+msgstr "Kosongkan"
 
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:43
 msgid "Create contact"
-msgstr ""
+msgstr "Cipta kenalan"
 
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:45
 msgid "Create new contact"
-msgstr ""
+msgstr "Cipta kenalan baru"
 
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:58
 msgid "Assign"
-msgstr ""
+msgstr "Menetapkan"
 
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:8
 msgid "Contact information for ${person}"
-msgstr ""
+msgstr "Maklumat kenalan untuk ${person}"
 
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:36
 #: /src/schooltool/contact/interfaces.py:68
@@ -2942,15 +3186,15 @@ msgstr "E-mel"
 
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:41
 msgid "Phones"
-msgstr ""
+msgstr "Telefon"
 
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:50
 msgid "Spoken Languages"
-msgstr ""
+msgstr "Bahasa Lisan"
 
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:73
 msgid "(View Details)"
-msgstr ""
+msgstr "(Lihat Butiran)"
 
 #: /src/schooltool/contact/contact.py:80
 msgid ""
@@ -2965,6 +3209,17 @@ msgid ""
 "    or the school as a whole.\n"
 "    "
 msgstr ""
+"\n"
+"    Semua pengguna SchoolTool mempunyai maklumat kenalan, yang mengandungi "
+"butiran alamat rumah\n"
+"    nombor telefon, alamat e-mel, dan lain-lain lagi.\n"
+"\n"
+"    \"kenalan Luaran\" boleh dicipta - orang-orang yang bukan pengguna "
+"SchoolTool.\n"
+"    tetapi mungkin perlu untuk menerima notis pemberitahuan dan maklumat "
+"tentang pelajar\n"
+"    atau sekolah secara keseluruhannya.\n"
+"    "
 
 #: /src/schooltool/contact/contact.py:210
 #: /src/schooltool/course/browser/section.py:538
@@ -2975,19 +3230,19 @@ msgstr ""
 #: /src/schooltool/course/section.py:283
 #: /src/schooltool/course/section.py:293
 msgid "Instructors"
-msgstr ""
+msgstr "Tenaga Pelatih"
 
 #: /src/schooltool/contact/contact.py:211
 msgid "Instructors of student(s) related to this contact."
-msgstr ""
+msgstr "Tenaga pelatih pelajar yang berkaitan dengan kenalan ini."
 
 #: /src/schooltool/contact/interfaces.py:53
 msgid "Address line 1"
-msgstr ""
+msgstr "Alamat baris 1"
 
 #: /src/schooltool/contact/interfaces.py:55
 msgid "Address line 2"
-msgstr ""
+msgstr "Alamat baris 2"
 
 #: /src/schooltool/contact/interfaces.py:57
 #: /src/schooltool/demographics/interfaces.py:258
@@ -3011,16 +3266,16 @@ msgstr "Poskod"
 #: /src/schooltool/contact/interfaces.py:73
 #: /src/schooltool/demographics/interfaces.py:273
 msgid "Home phone"
-msgstr ""
+msgstr "Telefon rumah"
 
 #: /src/schooltool/contact/interfaces.py:75
 #: /src/schooltool/demographics/interfaces.py:278
 msgid "Work phone"
-msgstr ""
+msgstr "Telefon tempat kerja"
 
 #: /src/schooltool/contact/interfaces.py:77
 msgid "Mobile phone"
-msgstr "Telefon bimbit"
+msgstr "Telefon Mudah Alih"
 
 #: /src/schooltool/contact/interfaces.py:82
 msgid "Language"
@@ -3028,15 +3283,15 @@ msgstr "Bahasa"
 
 #: /src/schooltool/contact/interfaces.py:102
 msgid "Contact's relationship with the person"
-msgstr ""
+msgstr "Hubungan kenalan dengan pengguna"
 
 #: /src/schooltool/contact/interfaces.py:104
 msgid "Parent"
-msgstr ""
+msgstr "Ibu bapa"
 
 #: /src/schooltool/contact/interfaces.py:105
 msgid "Step-parent"
-msgstr ""
+msgstr "Ibu bapa tiri"
 
 #: /src/schooltool/contact/interfaces.py:106
 msgid "Foster parent"
@@ -3044,7 +3299,7 @@ msgstr "Ibu bapa angkat"
 
 #: /src/schooltool/contact/interfaces.py:107
 msgid "Guardian"
-msgstr ""
+msgstr "Penjaga"
 
 #: /src/schooltool/contact/interfaces.py:108
 msgid "Sibling"
@@ -3054,29 +3309,30 @@ msgstr "Saudara kandung"
 #: /src/schooltool/person/security.zcml:79
 #: /src/schooltool/timetable/security.zcml:18
 msgid "List/Search"
-msgstr ""
+msgstr "Senaraian/Cari"
 
 #: /src/schooltool/contact/security.zcml:36
 msgid ""
 "Assign / remove contacts of a user,                   define user's "
 "relationship with a contact."
 msgstr ""
+"Tetapkan / buang kenalan pengguna, tetapkan hubungan pengguna dengan kenalan."
 
 #: /src/schooltool/contact/security.zcml:36
 msgid "Manage user's contacts"
-msgstr ""
+msgstr "Urus kenalan pengguna"
 
 #: /src/schooltool/contact/security.zcml:46
 msgid "Create/Delete an external contact"
-msgstr ""
+msgstr "Cipta/Buang kenalan luar"
 
 #: /src/schooltool/contact/security.zcml:54
 msgid "View an external contact"
-msgstr ""
+msgstr "Lihat kenalan luar"
 
 #: /src/schooltool/contact/security.zcml:62
 msgid "Modify an external contact"
-msgstr ""
+msgstr "Ubahsuai kenalan luar"
 
 #: /src/schooltool/contact/security.zcml:70
 msgid "View user's contact information"
@@ -3084,12 +3340,12 @@ msgstr "Lihat maklumat kenalan"
 
 #: /src/schooltool/contact/security.zcml:78
 msgid "Modify user's contact information"
-msgstr ""
+msgstr "Ubahsuai maklumat kenalan"
 
 #: /src/schooltool/contact/security.zcml:86
 #: /src/schooltool/person/security.zcml:152
 msgid "The user himself."
-msgstr ""
+msgstr "Pengguna itu sendiri."
 
 #: /src/schooltool/contact/security.zcml:86
 #: /src/schooltool/person/security.zcml:152
@@ -3102,12 +3358,12 @@ msgstr "Tambah Kursus"
 
 #: /src/schooltool/course/browser/configure.zcml:25
 msgid "Edit Course Information"
-msgstr ""
+msgstr "Ubah Maklumat Kursus"
 
 #: /src/schooltool/course/browser/configure.zcml:85
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:21
 msgid "Import Courses"
-msgstr ""
+msgstr "Import Kursus"
 
 #: /src/schooltool/course/browser/configure.zcml:96
 msgid "New Course"
@@ -3115,7 +3371,7 @@ msgstr "Kursus baru"
 
 #: /src/schooltool/course/browser/configure.zcml:113
 msgid "Copy Sections"
-msgstr ""
+msgstr "Bahagian Salinan"
 
 #: /src/schooltool/course/browser/configure.zcml:123
 msgid "View Next"
@@ -3137,7 +3393,7 @@ msgstr "Ubah Informasi Seksyen"
 #: /src/schooltool/course/browser/configure.zcml:194
 #: /src/schooltool/course/browser/section-member-csvimport.pt:21
 msgid "Import Section Members"
-msgstr ""
+msgstr "Import Ahli Seksyen"
 
 #: /src/schooltool/course/browser/configure.zcml:265
 #: /src/schooltool/course/browser/templates/course.pt:33
@@ -3148,7 +3404,7 @@ msgstr "Seksyen"
 
 #: /src/schooltool/course/browser/configure.zcml:276
 msgid "Copy from prev. term"
-msgstr ""
+msgstr "Salin dari istilah sebelumnya"
 
 #: /src/schooltool/course/browser/course.py:65
 msgid "Course index"
@@ -3160,31 +3416,34 @@ msgid ""
 "Course \"${course_title}\" credits \"${invalid_credits}\" value must be an "
 "integer."
 msgstr ""
+"Kursus \"${course_title}\" credit \"${invalid_credits}\" nilai mesti di "
+"dalam integer."
 
 #. Default: ""
 #: /src/schooltool/course/browser/csvimport.py:95
 msgid ""
 "Course \"${course_title}\" id \"${invalid_id}\" is invalid. ${error_message}"
 msgstr ""
+"Kursus \"${course_title}\" id \"${invalid_id}\" tidak sah. ${error_message}"
 
 #: /src/schooltool/course/browser/csvimport.py:130
 #: /src/schooltool/group/browser/csvimport.py:76
 msgid "User names must not be empty."
-msgstr ""
+msgstr "Nama pengguna tidak boleh kosong."
 
 #. Default: ""
 #: /src/schooltool/course/browser/csvimport.py:138
 #: /src/schooltool/group/browser/csvimport.py:84
 msgid "\"${username}\" is not a valid username."
-msgstr ""
+msgstr "\"${username}\" nama pengguna tidak sah."
 
 #: /src/schooltool/course/browser/section-member-csvimport.pt:4
 msgid "Upload SchoolTool section members as CSV"
-msgstr ""
+msgstr "Muatnaik ahli seksyen SchoolTool dalam format CSV"
 
 #: /src/schooltool/course/browser/section.py:188
 msgid "No section selected."
-msgstr ""
+msgstr "Tiada seksyen dipilih"
 
 #: /src/schooltool/course/browser/section.py:372
 msgid "Starts in term"
@@ -3192,24 +3451,25 @@ msgstr "Mula penggal"
 
 #: /src/schooltool/course/browser/section.py:373
 msgid "Ends in term"
-msgstr ""
+msgstr "Akhir penggal"
 
 #. Default: ""
 #: /src/schooltool/course/browser/section.py:410
 msgid "Starting term ($starts_in) is later than ending term ($ends_in)"
 msgstr ""
+"Penggal bermula ($starts_in) lebih lambat dari penggal berakhir ($ends_in)"
 
 #: /src/schooltool/course/browser/section.py:434
 msgid "Course"
-msgstr ""
+msgstr "Kursus"
 
 #: /src/schooltool/course/browser/section.py:539
 msgid "Current Instructors"
-msgstr ""
+msgstr "Tenaga Pengajar Terkini"
 
 #: /src/schooltool/course/browser/section.py:540
 msgid "Available Instructors"
-msgstr ""
+msgstr "Tenaga Pengajar Tersedia"
 
 #: /src/schooltool/course/browser/section.py:554
 #: /src/schooltool/course/browser/templates/copy_sections.pt:145
@@ -3218,39 +3478,40 @@ msgstr ""
 #: /src/schooltool/course/browser/templates/section.pt:96
 #: /src/schooltool/course/browser/templates/section_container.pt:87
 msgid "Students"
-msgstr ""
+msgstr "Pelajar"
 
 #: /src/schooltool/course/browser/section.py:555
 msgid "Current Students"
-msgstr ""
+msgstr "Pelajar Terkini"
 
 #: /src/schooltool/course/browser/templates/copy_sections.pt:9
 #: /src/schooltool/course/browser/templates/link_section.pt:9
 msgid "Copy sections to ${term} of ${schoolyear}"
-msgstr ""
+msgstr "Salin seksyen ke ${term} ${schoolyear}"
 
 #: /src/schooltool/course/browser/templates/copy_sections.pt:29
 msgid "Copy sections from ${prev_term} of ${schoolyear} to ${term}"
-msgstr ""
+msgstr "Salin seksyen dari ${prev_term} ${schoolyear} ke ${term}"
 
 #: /src/schooltool/course/browser/templates/copy_sections.pt:38
 msgid "There is no (previous) term in ${schoolyear} to copy sections from."
 msgstr ""
+"Tiada penggal (lepas) untuk disalin seksyen sebelumnya dalam ${schoolyear}."
 
 #. Default: "Select All Visible"
 #: /src/schooltool/course/browser/templates/copy_sections.pt:66
 msgid "select-all-visible-button"
-msgstr ""
+msgstr "butang-pilih-semua"
 
 #. Default: "Select None"
 #: /src/schooltool/course/browser/templates/copy_sections.pt:70
 msgid "select-none-button"
-msgstr ""
+msgstr "butang-tiada-pilih"
 
 #: /src/schooltool/course/browser/templates/copy_sections.pt:91
 #: /src/schooltool/course/browser/templates/link_section.pt:67
 msgid "Section in ${term}"
-msgstr ""
+msgstr "Seksyen dalam ${term}"
 
 #: /src/schooltool/course/browser/templates/copy_sections.pt:96
 #: /src/schooltool/course/browser/templates/link_section.pt:72
@@ -3267,16 +3528,16 @@ msgstr "Saiz terkini"
 
 #: /src/schooltool/course/browser/templates/copy_sections.pt:106
 msgid "Copied"
-msgstr ""
+msgstr "Disalin"
 
 #. Default: "Copy"
 #: /src/schooltool/course/browser/templates/copy_sections.pt:159
 msgid "copy-button"
-msgstr ""
+msgstr "butang-salin"
 
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:4
 msgid "Upload schooltool courses as CSV"
-msgstr ""
+msgstr "Muatnaik kursus-kursus schooltool dalam format CSV"
 
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:24
 msgid ""
@@ -3285,6 +3546,11 @@ msgid ""
 "optional course id, <strong>may</strong> include an optional government id "
 "and <strong>may</strong> include an optional credits value."
 msgstr ""
+"Data CSV <strong>mesti</strong> mempunyai tajuk "
+"kursus,<strong>boleh</strong> dimasukkan juga penerangan kursus sebagai "
+"pilihan, <strong>boleh</strong> jugak dimasukkan id kursus sebagai pilihan, "
+"<strong>boleh</strong> juga dimasukkan id kerajaan sebagai pilihan dan "
+"<strong>boleh</strong> juga dimasukkan nilai kredit sebagai pilihan."
 
 #. Default: ""
 #. "Ancient History, Pre-history through 1000 A.D.\n"
@@ -3318,10 +3584,22 @@ msgid ""
 "database, existing courses will be updated. Course Ids take precedence when "
 "determining which course should be updated."
 msgstr ""
+"Contoh di atas akan mencipta 4 kursus-kursus yang bertajuk 'Ancient "
+"History', 'US History', 'World History' dan 'Spanish'. Kursus yang pertama "
+"dan ketiga akan mempunyai penerangan 'Pre-history through 1000 A.D.' dan "
+"'1000 A.D. through the 20th century' setiap satunya. Kursus yang kedua dan "
+"keempat tidak akan mempunyai sebarang penerangan. Kursus kedua, ketiga dan "
+"keempat akan mempunyai id kursus yang telah ditetapkan ke us-history dan "
+"history-world. Kursus keempat akan mempunyai id kerajaan yang telah "
+"ditetapkan kepada spanish-gov dan nilai kreditnya ditetapkan kepada 5. "
+"Sekiranya anda memuatnaik fail CSV dengan tajuk atau id kursus yang sudah "
+"pun berada di dalam pengkalan data, kursus yang telah sedia wujud itu akan "
+"dikemaskini. Id kursus akan diutamakan oleh sistem semasa mempertimbangkan "
+"kursus yang mana harus dikemaskinikan."
 
 #: /src/schooltool/course/browser/templates/course.pt:9
 msgid "${course} course for ${schoolyear}"
-msgstr ""
+msgstr "${course} kursus untuk ${schoolyear}"
 
 #: /src/schooltool/course/browser/templates/course.pt:52
 #: /src/schooltool/demographics/browser/nameinfo_view.pt:11
@@ -3336,7 +3614,7 @@ msgstr "Pelajar-pelajar"
 
 #: /src/schooltool/course/browser/templates/course_container.pt:12
 msgid "Courses for ${schoolyear}"
-msgstr ""
+msgstr "Kursus-kursus untuk ${schoolyear}"
 
 #: /src/schooltool/course/browser/templates/course_container.pt:28
 #: /src/schooltool/demographics/browser/search.pt:30
@@ -3346,46 +3624,47 @@ msgstr ""
 #: /src/schooltool/skin/templates/container.pt:28
 #: /src/schooltool/skin/templates/table_container.pt:28
 msgid "Showing ${count} of ${total} items"
-msgstr ""
+msgstr "Memaparkan ${count} dari ${total} butiran"
 
 #: /src/schooltool/course/browser/templates/course_edit.pt:22
 #: /src/schooltool/course/browser/templates/section_edit.pt:23
 #: /src/schooltool/skin/templates/simple_add.pt:28
 #: /src/schooltool/skin/templates/simple_edit.pt:29
 msgid "There are ${num_errors} input errors."
-msgstr ""
+msgstr "Ada ${num_errors} kesalahan input."
 
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:12
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:24
 #: /src/schooltool/course/browser/templates/section.pt:11
 #: /src/schooltool/course/browser/templates/section.pt:25
 msgid "Section of ${course} -- ${section_title} for ${term} of ${schoolyear}"
-msgstr ""
+msgstr "Seksyen ${course} -- ${section_title} untuk ${term} ${schoolyear}"
 
 #: /src/schooltool/course/browser/templates/link_section.pt:24
 msgid "Link ${section}, ${term} with a section in ${target_term}"
-msgstr ""
+msgstr "Pautan ${section}, ${term} dengan seksyen di dalam ${target_term}"
 
 #: /src/schooltool/course/browser/templates/link_section.pt:36
 msgid "There is no valid term in ${schoolyear} to pick a section from."
 msgstr ""
+"Tiada penggal yang sah untuk dipiliih seksyennya di dalam ${schoolyear}"
 
 #. Default: "Link"
 #: /src/schooltool/course/browser/templates/link_section.pt:130
 msgid "link-section-button"
-msgstr ""
+msgstr "butang-seksyen-pautan"
 
 #: /src/schooltool/course/browser/templates/section.pt:36
 msgid "Previous: ${course} -- ${section_title} for ${term}"
-msgstr ""
+msgstr "Sebelumnya: ${course} -- ${section_title} untuk ${term}"
 
 #: /src/schooltool/course/browser/templates/section.pt:47
 msgid "Next: ${course} -- ${section_title} for ${term}"
-msgstr ""
+msgstr "Berikutnya: ${course} -- ${section_title} untuk ${term}"
 
 #: /src/schooltool/course/browser/templates/section.pt:58
 msgid "Change the name or description of this section."
-msgstr ""
+msgstr "Tukar nama atau keterangan seksyen ini"
 
 #: /src/schooltool/course/browser/templates/section.pt:58
 msgid "edit info"
@@ -3393,11 +3672,11 @@ msgstr "Ubah info"
 
 #: /src/schooltool/course/browser/templates/section.pt:86
 msgid "Change the instructors for this section."
-msgstr ""
+msgstr "Tukar tenaga pengajar untuk seksyen ini."
 
 #: /src/schooltool/course/browser/templates/section.pt:100
 msgid "Change the students in this section individually"
-msgstr ""
+msgstr "Tukar pelajar di dalam seksyen ini secara individu"
 
 #: /src/schooltool/course/browser/templates/section.pt:100
 msgid "edit individuals"
@@ -3406,7 +3685,7 @@ msgstr "ubah individu-individu"
 #: /src/schooltool/course/browser/templates/section_container.pt:9
 #: /src/schooltool/course/browser/templates/section_container.pt:20
 msgid "Section list for ${term} of ${schoolyear}"
-msgstr ""
+msgstr "Senarai seksyen untuk ${term} ${schoolyear}"
 
 #: /src/schooltool/course/browser/templates/section_container.pt:39
 msgid "Section"
@@ -3414,7 +3693,7 @@ msgstr "Seksyen"
 
 #: /src/schooltool/course/browser/templates/section_edit.pt:60
 msgid "Linked sections"
-msgstr ""
+msgstr "Seksyen Terpaut"
 
 #: /src/schooltool/course/browser/templates/section_edit.pt:63
 msgid "Previous"
@@ -3422,28 +3701,28 @@ msgstr "Sebelumnya"
 
 #: /src/schooltool/course/browser/templates/section_edit.pt:64
 msgid "Section in the previous term."
-msgstr ""
+msgstr "Seksyen dalam penggal sebelumnya"
 
 #: /src/schooltool/course/browser/templates/section_edit.pt:72
 #: /src/schooltool/course/browser/templates/section_edit.pt:106
 msgid "${section_title} for ${term}"
-msgstr ""
+msgstr "${section_title} untuk ${term}"
 
 #. Default: "Unlink"
 #: /src/schooltool/course/browser/templates/section_edit.pt:75
 #: /src/schooltool/course/browser/templates/section_edit.pt:109
 msgid "unlink-section-button"
-msgstr ""
+msgstr "butang-hapus-seksyen"
 
 #: /src/schooltool/course/browser/templates/section_edit.pt:85
 #: /src/schooltool/course/browser/templates/section_edit.pt:119
 msgid "Pick a section from ${term}"
-msgstr ""
+msgstr "Pilih seksyen dari ${term}"
 
 #: /src/schooltool/course/browser/templates/section_edit.pt:90
 #: /src/schooltool/course/browser/templates/section_edit.pt:124
 msgid "Not linked."
-msgstr ""
+msgstr "Tidak terpaut."
 
 #: /src/schooltool/course/browser/templates/section_edit.pt:97
 #: /src/schooltool/term/browser/term.py:154
@@ -3458,7 +3737,7 @@ msgstr "Seterusnya"
 
 #: /src/schooltool/course/browser/templates/section_edit.pt:98
 msgid "Section in the next term."
-msgstr ""
+msgstr "Seksyen di dalam penggal berikutnya"
 
 #: /src/schooltool/course/help/course_container.pt:10
 msgid ""
@@ -3477,6 +3756,21 @@ msgid ""
 "the blue bar. A <code>Show All</code> button is also there to show all of "
 "the courses on a single page.</li> </ul>"
 msgstr ""
+"<h1>Courses</h1> <p>Gunakan laman muka ini untuk mengmaskini kursus-kursus "
+"yang tersenarai di dalam sistem.</p> <h3>Bagaimana saya...</h3> <ul> "
+"<li><strong>Mencari kursus:</strong> Gunakan kotak carian di sebelah kiri "
+"butang<code>Cari Sekarang</code>untuk mencari carian yang menepati kriteria "
+"dalam kesemua senarai kursus. Butang <code>Kosongkan</code> akan "
+"mengosongkan sebarang carian yang ada di dalam kotak "
+"carian.</li><strong>Paparkan senarai seksyen-seksyen yang lain untuk "
+"kursus:</strong> klik pada nama kursus.</li><li><strong>Paparkan senarai "
+"pelajar-pelajar dalam kelas-kelas tertentu:</strong> Klik pada pautan "
+"<code>guru -- kursus</code>. Senarai pelajar disenaraikan sebelah guru dan "
+"kursus.</li> <li><strong>Navigasi keseluruhan kursus:</strong> Senarai "
+"<q>kumpulan</q> kursus yang berasingan boleh diakses melalui <code>10 "
+"Berikutnya</code> (dan <code>Sebelumnya</code>) dan pautan di dalam panel "
+"biru. Butang <code>Tunjuk Semua</code> juga terdapat untuk memaparkan "
+"kesemua kursus-kursus di dalam satu laman muka."
 
 #: /src/schooltool/course/interfaces.py:38
 msgid "Title of the course."
@@ -3484,23 +3778,23 @@ msgstr "Tajuk kursus."
 
 #: /src/schooltool/course/interfaces.py:43
 msgid "Description of the course."
-msgstr ""
+msgstr "Keterangan kursus."
 
 #: /src/schooltool/course/interfaces.py:50
 msgid "Course ID"
-msgstr ""
+msgstr "ID Kursus"
 
 #: /src/schooltool/course/interfaces.py:52
 msgid "Localy used course identifier."
-msgstr ""
+msgstr "ID kursus setempat"
 
 #: /src/schooltool/course/interfaces.py:55
 msgid "Government ID"
-msgstr ""
+msgstr "ID Kerajaan"
 
 #: /src/schooltool/course/interfaces.py:57
 msgid "Course identifier used by the government."
-msgstr ""
+msgstr "ID kursus yang digunakan kerajaan"
 
 #: /src/schooltool/course/interfaces.py:60
 msgid "Credits"
@@ -3508,7 +3802,7 @@ msgstr "Kredit"
 
 #: /src/schooltool/course/interfaces.py:62
 msgid "Amount of credits for this course."
-msgstr ""
+msgstr "Jumlah kredit untuk kursus ini."
 
 #: /src/schooltool/course/interfaces.py:88
 msgid "Label"
@@ -3519,14 +3813,16 @@ msgid ""
 "An identifier for a section, made up of instructor\n"
 "            names, courses, and meeting time."
 msgstr ""
+"ID seksyen, diwakili oleh tenaga pengajar\n"
+"            nama, kursus dan masa mesyuarat."
 
 #: /src/schooltool/course/interfaces.py:97
 msgid "Title for the section."
-msgstr ""
+msgstr "Tajuk Seksyen"
 
 #: /src/schooltool/course/interfaces.py:102
 msgid "Description of the section."
-msgstr ""
+msgstr "Keterangan seksyen"
 
 #. Default: ""
 #: /src/schooltool/course/section.py:88
@@ -3536,22 +3832,24 @@ msgstr "${instructors} -- ${section_title}"
 #: /src/schooltool/course/section.py:125
 msgid "Cannot assign section as previous to itself"
 msgstr ""
+"Tidak boleh menugaskan seksyen seperti sebelumnya kepada diri sendiri."
 
 #: /src/schooltool/course/section.py:152
 msgid "Cannot assign section as next to itself"
 msgstr ""
+"Tidak boleh menugaskan seksyen sebagai berikutnya kepada diri sendiri"
 
 #: /src/schooltool/course/section.py:284
 msgid "Instructors of the section."
-msgstr ""
+msgstr "Tenaga-tenaga Pengajar untuk seksyen."
 
 #: /src/schooltool/course/section.py:294
 msgid "Instructors of a person in any of his sections."
-msgstr ""
+msgstr "Tenaga-tenaga Pengajar untuk pelajar dalam seksyennya."
 
 #: /src/schooltool/course/section.py:317
 msgid "Learners"
-msgstr ""
+msgstr "Pelajar"
 
 #: /src/schooltool/course/section.py:318
 msgid "Students of the section."
@@ -3563,7 +3861,7 @@ msgstr "Tidak boleh menghubung seksyen yang sama penggal"
 
 #: /src/schooltool/course/section.py:401
 msgid "Cannot link sections in different school years"
-msgstr ""
+msgstr "Tidak boleh menghubung seksyen di dalam tahun sekolah yang berbeza"
 
 #: /src/schooltool/course/section.py:405
 msgid "Sections must be in consecutive terms"
@@ -3571,13 +3869,15 @@ msgstr "Seksyen mesti di dalam penggal berturut-turut"
 
 #: /src/schooltool/course/security.zcml:42
 msgid "Everyone can view section information and calendars"
-msgstr ""
+msgstr "Semua boleh melihat keterangan seksyen dan kalendar-kalendar"
 
 #: /src/schooltool/course/security.zcml:73
 msgid ""
 "A course in SchoolTool describes a set curriculum                    taught "
 "in a section."
 msgstr ""
+"Kursus dalam SchoolTool adalah satu kumpulan kurikulum yang diajar dalam "
+"satu seksyen."
 
 #: /src/schooltool/course/security.zcml:79
 #: /src/schooltool/course/security.zcml:113
@@ -3595,7 +3895,7 @@ msgstr "Senarai"
 #: /src/schooltool/term/security.zcml:28
 #: /src/schooltool/timetable/security.zcml:25
 msgid "Create/Delete"
-msgstr ""
+msgstr "Cipta/Padam"
 
 #: /src/schooltool/course/security.zcml:100
 #: /src/schooltool/course/security.zcml:134
@@ -3613,6 +3913,8 @@ msgid ""
 "A section is a set of one or more learners                    who meet "
 "during a term."
 msgstr ""
+"Seksyen adalah satu kumpulan atau lebih pelajar-pelajar yang bertemu semasa "
+"penggal persekolahan."
 
 #: /src/schooltool/dashboard/configure.zcml:41
 msgid "My Sections"
@@ -3621,16 +3923,16 @@ msgstr "Seksyen Saya"
 #: /src/schooltool/dashboard/dashboard.pt:62
 #: /src/schooltool/dashboard/dashboard.pt:66
 msgid "Dashboard"
-msgstr ""
+msgstr "Dashboard"
 
 #: /src/schooltool/dashboard/interfaces.py:45
 msgid "Category Title."
-msgstr ""
+msgstr "Kategori Tajuk."
 
 #: /src/schooltool/dashboard/interfaces.py:49
 #: /src/schooltool/dashboard/interfaces.py:50
 msgid "Weight"
-msgstr ""
+msgstr "Berat"
 
 #: /src/schooltool/dashboard/school.pt:10
 msgid "Activity Categories"
@@ -3640,7 +3942,7 @@ msgstr "Kategori Aktiviti"
 #: /src/schooltool/timetable/browser/schema.py:236
 #: /src/schooltool/timetable/browser/templates/link_to_school_timetables.pt:1
 msgid "School Timetables"
-msgstr ""
+msgstr "Jadual Sekolah"
 
 #: /src/schooltool/dashboard/term.pt:16
 #: /src/schooltool/term/help/configure.zcml:18
@@ -3650,51 +3952,51 @@ msgstr "Penggal"
 
 #: /src/schooltool/demographics/browser/configure.zcml:156
 msgid "Schooltool Person Menu"
-msgstr ""
+msgstr "Menu Pengguna SchoolTool"
 
 #: /src/schooltool/demographics/browser/configure.zcml:167
 #: /src/schooltool/demographics/browser/configure.zcml:228
 msgid "name info"
-msgstr ""
+msgstr "info nama"
 
 #: /src/schooltool/demographics/browser/configure.zcml:173
 #: /src/schooltool/demographics/browser/configure.zcml:234
 msgid "demographics"
-msgstr ""
+msgstr "demografi"
 
 #: /src/schooltool/demographics/browser/configure.zcml:179
 #: /src/schooltool/demographics/browser/configure.zcml:240
 msgid "schooldata"
-msgstr ""
+msgstr "datasekolah"
 
 #: /src/schooltool/demographics/browser/configure.zcml:185
 #: /src/schooltool/demographics/browser/configure.zcml:246
 msgid "parent1"
-msgstr ""
+msgstr "Ibubapa1"
 
 #: /src/schooltool/demographics/browser/configure.zcml:191
 #: /src/schooltool/demographics/browser/configure.zcml:252
 msgid "parent2"
-msgstr ""
+msgstr "Ibubapa2"
 
 #: /src/schooltool/demographics/browser/configure.zcml:197
 #: /src/schooltool/demographics/browser/configure.zcml:258
 msgid "emergency1"
-msgstr ""
+msgstr "kecemasan1"
 
 #: /src/schooltool/demographics/browser/configure.zcml:203
 #: /src/schooltool/demographics/browser/configure.zcml:264
 msgid "emergency2"
-msgstr ""
+msgstr "kecemasan2"
 
 #: /src/schooltool/demographics/browser/configure.zcml:209
 #: /src/schooltool/demographics/browser/configure.zcml:270
 msgid "emergency3"
-msgstr ""
+msgstr "kecemasan3"
 
 #: /src/schooltool/demographics/browser/configure.zcml:217
 msgid "Schooltool Person Display Menu"
-msgstr ""
+msgstr "Menu Paparan Pengguna SchoolTool"
 
 #: /src/schooltool/demographics/browser/demographics_macros.pt:4
 msgid "N"
@@ -3702,12 +4004,12 @@ msgstr "N"
 
 #: /src/schooltool/demographics/browser/demographics_macros.pt:4
 msgid "Shortcut: Alt-N"
-msgstr ""
+msgstr "Jalan Pintas: Alt-N"
 
 #: /src/schooltool/demographics/browser/demographics_macros.pt:4
 #: /src/schooltool/demographics/browser/personform.py:96
 msgid "Apply and Next"
-msgstr ""
+msgstr "Tetapkan dan Seterusnya"
 
 #: /src/schooltool/demographics/browser/display_form.pt:3
 #: /src/schooltool/demographics/browser/nameinfo_view.pt:3
@@ -3720,47 +4022,50 @@ msgstr "Paparan"
 #. Default: ""
 #: /src/schooltool/demographics/browser/personform.py:148
 msgid "Change name information for ${fullname}"
-msgstr ""
+msgstr "Tukar maklumat nama untuk ${fullname}"
 
 #: /src/schooltool/demographics/browser/personform.py:164
 msgid "Change name"
-msgstr ""
+msgstr "Tukar nama"
 
 #. Default: ""
 #: /src/schooltool/demographics/browser/personform.py:172
 msgid "Change demographics for ${fullname}"
-msgstr ""
+msgstr "Tukar demografi untuk ${fullname}"
 
 #. Default: ""
 #: /src/schooltool/demographics/browser/personform.py:188
 msgid "Change school data for ${fullname}"
-msgstr ""
+msgstr "Tukar data sekolah untuk ${fullname}"
 
 #: /src/schooltool/demographics/browser/personform.py:198
 msgid "School data"
-msgstr ""
+msgstr "Data sekolah"
 
 #. Default: ""
 #: /src/schooltool/demographics/browser/personform.py:209
 msgid "Change contact information for ${fullname}"
-msgstr ""
+msgstr "Tukar maklumat kenalan untuk ${fullname}"
 
 #: /src/schooltool/demographics/browser/personform.py:217
 msgid "Contact information"
-msgstr ""
+msgstr "Maklumat kenalan"
 
 #: /src/schooltool/demographics/browser/personform.py:273
 #: /src/schooltool/person/browser/person.py:324
 msgid "This username is already used!"
-msgstr ""
+msgstr "Nama pengguna ini telah digunakan!"
 
 #: /src/schooltool/demographics/browser/personform.py:333
 msgid "Invalid teacher. Possible causes: deleted or renamed."
 msgstr ""
+"Guru tidak sah. Sebab-sebab yang mungkin: telah dipadam atau dinamakan "
+"semula."
 
 #: /src/schooltool/demographics/browser/personform.py:365
 msgid "Invalid group. Possible causes: deleted or renamed."
 msgstr ""
+"Kumpulan tidak sah. Sebab-sebab yang mungkin: dipadam atau dinamakan semula"
 
 #: /src/schooltool/demographics/browser/search.pt:6
 msgid ""
@@ -3768,10 +4073,13 @@ msgid ""
 "characters such as *. For example, to search for everyone with John in their "
 "name, use <em>*john*</em>."
 msgstr ""
+"Cari pengguna disini. Ambil perhatian bahawa di ruangan tekspenuh anda boleh "
+"menggunakan karakter wildcard contoh seperti *. Contohnya, untuk mencari "
+"semua pengguna yang menggunakan nama John, taipkan <em>*john*</em>."
 
 #: /src/schooltool/demographics/browser/search.pt:42
 msgid "There were no results."
-msgstr ""
+msgstr "Tiada keputusan"
 
 #: /src/schooltool/demographics/browser/table.py:73
 #: /src/schooltool/demographics/interfaces.py:76
@@ -3787,7 +4095,7 @@ msgstr "Tarikh Lahir"
 
 #: /src/schooltool/demographics/browser/table.py:84
 msgid "Enrollment"
-msgstr ""
+msgstr "Pendaftaran"
 
 #: /src/schooltool/demographics/browser/table.py:90
 msgid "Modified"
@@ -3795,11 +4103,11 @@ msgstr "Diubahsuai"
 
 #: /src/schooltool/demographics/interfaces.py:45
 msgid "Prefix such as Mr., Mrs."
-msgstr ""
+msgstr "Awalan seperti Tuan, Puan."
 
 #: /src/schooltool/demographics/interfaces.py:71
 msgid "Name by which the student prefers to be called"
-msgstr ""
+msgstr "Nama yang pelajar suka dipanggil"
 
 #: /src/schooltool/demographics/interfaces.py:81
 #: /src/schooltool/person/browser/person.py:298
@@ -3811,23 +4119,23 @@ msgstr "Gambar"
 #: /src/schooltool/person/browser/person.py:300
 #: /src/schooltool/person/interfaces.py:57
 msgid "Photo (in JPEG format)"
-msgstr ""
+msgstr "Gambar (dalam format JPEG)"
 
 #: /src/schooltool/demographics/interfaces.py:96
 msgid "American Indian or Alaska Native"
-msgstr ""
+msgstr "Orang Asli Amerika atau Orang Asli Alaska"
 
 #: /src/schooltool/demographics/interfaces.py:97
 msgid "Asian"
-msgstr ""
+msgstr "Orang Asia"
 
 #: /src/schooltool/demographics/interfaces.py:98
 msgid "Black or African American"
-msgstr "Orang Afrika"
+msgstr "Orang Afrika atau Orang Afrika Amerika"
 
 #: /src/schooltool/demographics/interfaces.py:99
 msgid "Native Hawaiian or Other Pacific Islander"
-msgstr ""
+msgstr "Orang Asli Hawai atau Kepulauan Pasifik yang lain"
 
 #: /src/schooltool/demographics/interfaces.py:100
 msgid "White"
@@ -3879,454 +4187,454 @@ msgstr "Arab"
 
 #: /src/schooltool/demographics/interfaces.py:134
 msgid "Ethnicity"
-msgstr ""
+msgstr "Etnik"
 
 #: /src/schooltool/demographics/interfaces.py:140
 msgid "Primary language"
-msgstr ""
+msgstr "Bahasa utama"
 
 #: /src/schooltool/demographics/interfaces.py:146
 msgid "Special education"
-msgstr ""
+msgstr "Pembelajaran istimewa"
 
 #: /src/schooltool/demographics/interfaces.py:151
 msgid "Previous school"
-msgstr ""
+msgstr "Sekolah dahulu"
 
 #: /src/schooltool/demographics/interfaces.py:199
 msgid "Enrollment date"
-msgstr ""
+msgstr "Tarikh Pendaftaran"
 
 #: /src/schooltool/demographics/interfaces.py:204
 msgid "Projected graduation year"
-msgstr ""
+msgstr "Unjuran tahun tamat belajar"
 
 #: /src/schooltool/demographics/interfaces.py:215
 msgid "Team"
-msgstr ""
+msgstr "Pasukan"
 
 #: /src/schooltool/demographics/interfaces.py:221
 msgid "Health information"
-msgstr ""
+msgstr "Maklumat Kesihatan"
 
 #: /src/schooltool/demographics/interfaces.py:227
 msgid "parent"
-msgstr ""
+msgstr "ibu bapa"
 
 #: /src/schooltool/demographics/interfaces.py:228
 msgid "guardian"
-msgstr ""
+msgstr "penjaga"
 
 #: /src/schooltool/demographics/interfaces.py:229
 msgid "grandparent"
-msgstr ""
+msgstr "atuk nenek"
 
 #: /src/schooltool/demographics/interfaces.py:230
 msgid "step-parent"
-msgstr ""
+msgstr "ibu bapa tiri"
 
 #: /src/schooltool/demographics/interfaces.py:231
 msgid "friend of family"
-msgstr ""
+msgstr "rakan keluarga"
 
 #: /src/schooltool/demographics/interfaces.py:232
 msgid "other"
-msgstr ""
+msgstr "lain"
 
 #: /src/schooltool/demographics/interfaces.py:242
 #: /src/schooltool/demographics/utility.py:88
 msgid "Name"
-msgstr ""
+msgstr "Nama"
 
 #: /src/schooltool/demographics/interfaces.py:247
 msgid "Relationship to student"
-msgstr ""
+msgstr "Hubungan dengan pelajar"
 
 #: /src/schooltool/demographics/interfaces.py:253
 msgid "Street"
-msgstr ""
+msgstr "Jalan"
 
 #: /src/schooltool/demographics/interfaces.py:283
 msgid "Cell phone"
-msgstr ""
+msgstr "telefon bimbit"
 
 #: /src/schooltool/demographics/interfaces.py:288
 #: /src/schooltool/note/configure.zcml:94
 #: /src/schooltool/note/notes.pt:2
 #: /src/schooltool/resource/interfaces.py:56
 msgid "Notes"
-msgstr ""
+msgstr "Nota"
 
 #: /src/schooltool/demographics/interfaces.py:298
 msgid "Text"
-msgstr ""
+msgstr "Teks"
 
 #: /src/schooltool/demographics/interfaces.py:299
 msgid "Full text search in name"
-msgstr ""
+msgstr "carian dengan nama penuh"
 
 #: /src/schooltool/demographics/interfaces.py:304
 msgid "Name of parent"
-msgstr ""
+msgstr "Nama ibu bapa"
 
 #: /src/schooltool/demographics/interfaces.py:305
 msgid "Full text search in parent names"
-msgstr ""
+msgstr "Carian dengan nama ibu bapa"
 
 #: /src/schooltool/demographics/interfaces.py:310
 msgid "Student ID"
-msgstr ""
+msgstr "ID Pelajar"
 
 #: /src/schooltool/demographics/overrides.zcml:22
 msgid "Search"
-msgstr ""
+msgstr "Cari"
 
 #: /src/schooltool/demographics/utility.py:96
 msgid "Surname"
-msgstr ""
+msgstr "Nama keluarga"
 
 #: /src/schooltool/devmode/configure.zcml:27
 msgid "Introspect"
-msgstr ""
+msgstr "Penilaian Kendiri"
 
 #: /src/schooltool/devmode/configure.zcml:38
 #: /src/schooltool/devmode/devmode.pt:19
 msgid "API Docs"
-msgstr ""
+msgstr "Dokumen API"
 
 #: /src/schooltool/devmode/configure.zcml:50
 #: /src/schooltool/devmode/devmode.pt:20
 msgid "Sample data"
-msgstr ""
+msgstr "data contoh"
 
 #: /src/schooltool/devmode/configure.zcml:62
 #: /src/schooltool/devmode/devmode.pt:21
 msgid "Setup data"
-msgstr ""
+msgstr "Tetapkan data"
 
 #: /src/schooltool/devmode/devmode.pt:11
 msgid "Developer Tools"
-msgstr ""
+msgstr "Alatan Pembangun Perisian"
 
 #: /src/schooltool/devmode/devmode.pt:18
 msgid "Introspector"
-msgstr ""
+msgstr "Penilai Kendiri"
 
 #: /src/schooltool/email/browser/configure.zcml:54
 msgid "Outgoing Email"
-msgstr ""
+msgstr "Email Keluar"
 
 #: /src/schooltool/email/browser/configure.zcml:76
 msgid "Settings"
-msgstr ""
+msgstr "Tetapan"
 
 #: /src/schooltool/email/browser/configure.zcml:87
 msgid "Send Test"
-msgstr ""
+msgstr "Hantar Ujian"
 
 #. Default: ""
 #: /src/schooltool/email/browser/email.py:78
 #: /src/schooltool/email/browser/email.py:399
 msgid "Enabled on ${info}"
-msgstr ""
+msgstr "Diaktifkan atas ${info}"
 
 #: /src/schooltool/email/browser/email.py:82
 #: /src/schooltool/email/browser/email.py:403
 #: /src/schooltool/securitypolicy/browser/control.py:96
 msgid "Disabled"
-msgstr ""
+msgstr "Dinyahaktifkan"
 
 #: /src/schooltool/email/browser/email.py:91
 #: /src/schooltool/email/browser/email.py:202
 #: /src/schooltool/email/browser/email.py:451
 #: /src/schooltool/email/browser/templates/email_container.pt:20
 msgid "Server Status"
-msgstr ""
+msgstr "Status Pelayan"
 
 #: /src/schooltool/email/browser/email.py:92
 #: /src/schooltool/email/browser/email.py:203
 #: /src/schooltool/email/browser/email.py:452
 msgid "Current status of the SchoolTool email service"
-msgstr ""
+msgstr "Status terkini servis e-mel SchoolTool"
 
 #: /src/schooltool/email/browser/email.py:96
 #: /src/schooltool/email/interfaces.py:87
 msgid "Hostname"
-msgstr ""
+msgstr "Nama Host"
 
 #: /src/schooltool/email/browser/email.py:97
 #: /src/schooltool/email/interfaces.py:88
 msgid "SMTP server hostname. Leave empty to disable email."
-msgstr ""
+msgstr "Nama host pelayan SMTP. Biarkan kosong untuk menyahaktifkan e-mel."
 
 #: /src/schooltool/email/browser/email.py:101
 #: /src/schooltool/email/interfaces.py:92
 msgid "Port"
-msgstr ""
+msgstr "Port"
 
 #: /src/schooltool/email/browser/email.py:102
 #: /src/schooltool/email/interfaces.py:93
 msgid "Port of the SMTP service. Using 25 by default."
-msgstr ""
+msgstr "Port servis SMTP. Guna 25 sebagai tetapan asal."
 
 #: /src/schooltool/email/browser/email.py:109
 #: /src/schooltool/email/interfaces.py:100
 msgid "Username used for optional SMTP authentication."
-msgstr ""
+msgstr "Nama pengguna yang digunakan untuk pilihan pengesahan SMTP"
 
 #: /src/schooltool/email/browser/email.py:113
 msgid "Current Password"
-msgstr ""
+msgstr "Kata Laluan Terkini"
 
 #: /src/schooltool/email/browser/email.py:114
 msgid "Current password to authenticate to the SMTP server."
-msgstr ""
+msgstr "kata laluan terkini untuk pengesahan ke pelayan SMTP"
 
 #: /src/schooltool/email/browser/email.py:118
 #: /src/schooltool/email/interfaces.py:104
 msgid "New Password"
-msgstr ""
+msgstr "Kata laluan Baru"
 
 #: /src/schooltool/email/browser/email.py:119
 #: /src/schooltool/email/interfaces.py:105
 msgid "The password to authenticate to the SMTP server."
-msgstr ""
+msgstr "Kata laluan untuk pengesahan ke pelayan SMTP"
 
 #: /src/schooltool/email/browser/email.py:123
 msgid "Confirm New Password"
-msgstr ""
+msgstr "Sahkan kata laluan baru"
 
 #: /src/schooltool/email/browser/email.py:124
 msgid "Verification for the new password."
-msgstr ""
+msgstr "Pengesahan kata laluan baru."
 
 #: /src/schooltool/email/browser/email.py:128
 #: /src/schooltool/email/interfaces.py:109
 msgid "TLS"
-msgstr ""
+msgstr "TLS"
 
 #: /src/schooltool/email/browser/email.py:129
 #: /src/schooltool/email/interfaces.py:110
 msgid "Use TLS connection?"
-msgstr ""
+msgstr "Gunakan sambungan TLS?"
 
 #: /src/schooltool/email/browser/email.py:170
 msgid "Change Email Settings"
-msgstr ""
+msgstr "Tukar Tetapan E-mel"
 
 #: /src/schooltool/email/browser/email.py:194
 msgid "Unset"
-msgstr ""
+msgstr "Nyahtetap"
 
 #: /src/schooltool/email/browser/email.py:207
 #: /src/schooltool/email/browser/email.py:340
 #: /src/schooltool/email/browser/email.py:456
 #: /src/schooltool/email/interfaces.py:39
 msgid "From"
-msgstr ""
+msgstr "Daripada"
 
 #: /src/schooltool/email/browser/email.py:208
 #: /src/schooltool/email/browser/email.py:457
 #: /src/schooltool/email/interfaces.py:40
 msgid "The sender address"
-msgstr ""
+msgstr "Alamat penghantar"
 
 #: /src/schooltool/email/browser/email.py:212
 #: /src/schooltool/email/browser/email.py:345
 #: /src/schooltool/email/browser/email.py:460
 #: /src/schooltool/email/interfaces.py:43
 msgid "To"
-msgstr ""
+msgstr "Kepada"
 
 #: /src/schooltool/email/browser/email.py:213
 #: /src/schooltool/email/browser/email.py:461
 msgid "Recipient addresses comma separated"
-msgstr ""
+msgstr "alamat-alamat penerima dipisahkan dengan koma"
 
 #: /src/schooltool/email/browser/email.py:217
 #: /src/schooltool/email/browser/email.py:357
 #: /src/schooltool/email/interfaces.py:70
 msgid "Created on"
-msgstr ""
+msgstr "Dicipta pada"
 
 #: /src/schooltool/email/browser/email.py:218
 #: /src/schooltool/email/interfaces.py:71
 msgid "Date and time when the message was created"
-msgstr ""
+msgstr "Tarikh dan masa bila mesej telah dibuat"
 
 #: /src/schooltool/email/browser/email.py:222
 #: /src/schooltool/email/browser/email.py:351
 #: /src/schooltool/email/browser/email.py:464
 #: /src/schooltool/email/interfaces.py:53
 msgid "Subject"
-msgstr ""
+msgstr "Subjek"
 
 #: /src/schooltool/email/browser/email.py:223
 #: /src/schooltool/email/browser/email.py:465
 #: /src/schooltool/email/interfaces.py:54
 msgid "Subject of the message"
-msgstr ""
+msgstr "subjek mesej"
 
 #: /src/schooltool/email/browser/email.py:227
 #: /src/schooltool/email/browser/email.py:469
 #: /src/schooltool/email/interfaces.py:49
 #: /src/schooltool/note/interfaces.py:46
 msgid "Body"
-msgstr ""
+msgstr "Isi"
 
 #: /src/schooltool/email/browser/email.py:228
 #: /src/schooltool/email/browser/email.py:470
 #: /src/schooltool/email/interfaces.py:50
 msgid "Body of the message"
-msgstr ""
+msgstr "Isi mesej"
 
 #: /src/schooltool/email/browser/email.py:232
 msgid "Email Status"
-msgstr ""
+msgstr "Status E-mel"
 
 #: /src/schooltool/email/browser/email.py:233
 msgid "Status of the message"
-msgstr ""
+msgstr "Status mesej"
 
 #: /src/schooltool/email/browser/email.py:237
 #: /src/schooltool/email/browser/email.py:363
 msgid "Last time tried"
-msgstr ""
+msgstr "Kali terakhir dicuba"
 
 #: /src/schooltool/email/browser/email.py:238
 msgid "Date and time when the message was last tried"
-msgstr ""
+msgstr "Tarkh dan masa bila mesej terakhir dicuba"
 
 #: /src/schooltool/email/browser/email.py:263
 msgid "Email View"
-msgstr ""
+msgstr "Lihat E-mel"
 
 #: /src/schooltool/email/browser/email.py:273
 msgid "Retry"
-msgstr ""
+msgstr "Cuba semula"
 
 #: /src/schooltool/email/browser/email.py:284
 #: /src/schooltool/note/notes.pt:17
 #: /src/schooltool/timetable/browser/configure.zcml:62
 #: /src/schooltool/timetable/browser/templates/timetable_list.pt:28
 msgid "Delete"
-msgstr ""
+msgstr "Padam"
 
 #: /src/schooltool/email/browser/email.py:383
 msgid "Email Queue"
-msgstr ""
+msgstr "Giliran E-mel"
 
 #. Default: ""
 #: /src/schooltool/email/browser/email.py:441
 msgid "Queue (${count} failed)"
-msgstr ""
+msgstr "Giliran (${count} gagal)"
 
 #: /src/schooltool/email/browser/email.py:443
 msgid "Queue"
-msgstr ""
+msgstr "Giliran"
 
 #: /src/schooltool/email/browser/email.py:485
 msgid "Send Email"
-msgstr ""
+msgstr "Hantar E-mel"
 
 #: /src/schooltool/email/browser/email.py:488
 msgid "Send"
-msgstr ""
+msgstr "Hantar"
 
 #. Default: "Retry"
 #: /src/schooltool/email/browser/templates/email_container.pt:39
 #: /src/schooltool/email/browser/templates/email_container.pt:44
 msgid "retry-button"
-msgstr ""
+msgstr "butang-cubasemula"
 
 #: /src/schooltool/email/browser/templates/email_container.pt:54
 msgid "There are no messages queued."
-msgstr ""
+msgstr "Tiada mesej dalam giliran."
 
 #: /src/schooltool/email/browser/templates/email_delete.pt:15
 msgid "Are you sure you want to delete the selected emails?"
-msgstr ""
+msgstr "Adakah anda pasti untuk memadakan e-mel yang telah dipilih?"
 
 #: /src/schooltool/email/interfaces.py:44
 msgid "Recipient addresses"
-msgstr ""
+msgstr "Alamat-alamat penerima"
 
 #: /src/schooltool/email/interfaces.py:45
 msgid "Recipient address"
-msgstr ""
+msgstr "Alamat penerima"
 
 #: /src/schooltool/email/interfaces.py:58
 msgid "Status"
-msgstr ""
+msgstr "Status"
 
 #: /src/schooltool/email/interfaces.py:59
 msgid "Code for the status of the message"
-msgstr ""
+msgstr "Kod untuk status mesej"
 
 #: /src/schooltool/email/interfaces.py:63
 msgid "Status Parameters"
-msgstr ""
+msgstr "Status Parameter"
 
 #: /src/schooltool/email/interfaces.py:64
 msgid "Parameters for the status of the message"
-msgstr ""
+msgstr "Parameter untuk status mesej"
 
 #: /src/schooltool/email/interfaces.py:65
 msgid "Parameter key"
-msgstr ""
+msgstr "Kunci parameter"
 
 #: /src/schooltool/email/interfaces.py:66
 msgid "Parameter value"
-msgstr ""
+msgstr "Nilai parameter"
 
 #: /src/schooltool/email/interfaces.py:74
 msgid "Sent on"
-msgstr ""
+msgstr "Dihantar pada"
 
 #: /src/schooltool/email/interfaces.py:75
 msgid "Date and time when the message was sent"
-msgstr ""
+msgstr "Tarikh dan masa bila mesej telah dihantar"
 
 #: /src/schooltool/email/mail.py:52
 msgid "The SchoolTool mail service is disabled"
-msgstr ""
+msgstr "servis e-mel SchoolTool telah dinyahaktifkan"
 
 #: /src/schooltool/email/mail.py:53
 msgid "Couldn't connect to the SMTP server (${info})"
-msgstr ""
+msgstr "Tidak dapat berhubung dengan pelayan SMTP (${info})"
 
 #: /src/schooltool/email/mail.py:54
 msgid "Error sending HELO to the SMTP server (${info})"
-msgstr ""
+msgstr "Kesilapan menghantar HELO ke pelayan SMTP (${info})"
 
 #: /src/schooltool/email/mail.py:55
 msgid "Couldn't login as ($username) to SMTP server (${info})"
-msgstr ""
+msgstr "Gagal log masuk sebagai ($username) ke pelayan SMTP (${info})"
 
 #: /src/schooltool/email/mail.py:56
 msgid "The server (${info}) rejected the From address: ${from_address}"
-msgstr ""
+msgstr "Pelayan (${info}) menolak alamat Daripada: ${from_address}"
 
 #: /src/schooltool/email/mail.py:57
 msgid ""
 "The server (${info}) rejected the following recipient addresses: ${addresses}"
-msgstr ""
+msgstr "Pelayan menolak alamat-alamat penerima: ${addresses}"
 
 #: /src/schooltool/export/configure.zcml:6
 msgid "XLS Import"
-msgstr ""
+msgstr "Import XLS"
 
 #: /src/schooltool/export/configure.zcml:21
 msgid "XLS Export"
-msgstr ""
+msgstr "Eksport XLS"
 
 #: /src/schooltool/export/templates/import.pt:4
 msgid "Upload SchoolTool as XLS"
-msgstr ""
+msgstr "Muatnaik SchoolTool dalam format XLS"
 
 #: /src/schooltool/export/templates/import.pt:25
 msgid "Import Data"
-msgstr ""
+msgstr "Import Data"
 
 #: /src/schooltool/export/templates/import.pt:31
 msgid ""
@@ -4334,12 +4642,17 @@ msgid ""
 "also import data from a spreadsheet using this template: ${link-to-empty-"
 "data-file}."
 msgstr ""
+"Selain daripada memasukkan data melalui pelayar web, anda juga boleh "
+"mengimport data dari spreadsheet menggunakan contoh ini: ${link-to-empty-"
+"data-file}"
 
 #: /src/schooltool/export/templates/import.pt:34
 msgid ""
 "Data included in the spreadsheet will be added to data in the system; "
 "importing will not cause data to be removed."
 msgstr ""
+"Data yang terkandung di dalam spreadsheet akan di tambah ke dalam sistem "
+"data; mengimport data tidak akan menyebabkan data dibuang."
 
 #: /src/schooltool/export/templates/import.pt:38
 msgid ""
@@ -4349,55 +4662,65 @@ msgid ""
 "with an error. Simply remove the duplicate data from the spreadsheet and run "
 "the import again. We're working on making this process even smoother."
 msgstr ""
+"Ambil perhatian bahawa sistem import tidak boleh mengendalikan dengan baik "
+"duplikasi data di luar lembaran kerja pengguna. Ini bermakna, jika anda cuba "
+"untuk mengimport tahunan sekolah, contohnya, yang sudah pun wujud di dalam "
+"sistem, usaha import itu akan berakhir dengan kegagalan. Hanya buang data "
+"yang terduplikasi dari lembaran kerja dan cuba import kembali. Kami sedang "
+"berusaha untuk membuatkan proses ini berjalan lebih lancar."
 
 #: /src/schooltool/export/templates/import.pt:50
 msgid ""
 "For people interested in testing and exploring SchoolTool, we provide a set "
 "of sample data: ${link-to-sample-data-file}."
 msgstr ""
+"Untuk sesiapa yang berminat menguji dan meneroka SchoolTool, kami "
+"menyediakan satu set data contoh: ${link-to-sample-data-file}."
 
 #: /src/schooltool/export/templates/import.pt:53
 msgid ""
 "If you are importing your own data, we highly recommend downloading the "
 "sample spreadsheet as a reference."
 msgstr ""
+"Jika anda mengimport data anda sendiri, kami amat menggalakkan anda untuk "
+"memuat turun lembaran kerja contoh sebagai rujukan."
 
 #: /src/schooltool/export/templates/import.pt:59
 msgid "Upload XLS File"
-msgstr ""
+msgstr "Muat naik Fail XLS"
 
 #: /src/schooltool/export/templates/import.pt:61
 msgid "XLS File"
-msgstr ""
+msgstr "Fail XLS"
 
 #: /src/schooltool/group/browser/configure.zcml:25
 msgid "Add a Group"
-msgstr ""
+msgstr "Tambah Kumpulan"
 
 #: /src/schooltool/group/browser/configure.zcml:38
 msgid "Edit Group Information"
-msgstr ""
+msgstr "Ubah Maklumat Kumpulan"
 
 #: /src/schooltool/group/browser/configure.zcml:78
 msgid "New Group"
-msgstr ""
+msgstr "Kumpulan Baru"
 
 #: /src/schooltool/group/browser/configure.zcml:95
 msgid "Add/Remove Members"
-msgstr ""
+msgstr "Tambah/Buang Ahli"
 
 #: /src/schooltool/group/browser/configure.zcml:104
 #: /src/schooltool/group/browser/group-csvimport.pt:21
 msgid "Import Groups"
-msgstr ""
+msgstr "Import Kumpulan"
 
 #: /src/schooltool/group/browser/configure.zcml:114
 msgid "Import Groups Members"
-msgstr ""
+msgstr "Import Ahli Kumpulan"
 
 #: /src/schooltool/group/browser/group-csvimport.pt:4
 msgid "Upload SchoolTool groups as CSV"
-msgstr ""
+msgstr "Muat naik kumpulan SchoolTool dalam format CSV"
 
 #: /src/schooltool/group/browser/group-csvimport.pt:24
 msgid ""
@@ -4405,6 +4728,9 @@ msgid ""
 "<strong>may</strong> include an optional group description. Any extra "
 "information will be discarded."
 msgstr ""
+"Data CSV <strong>mesti</strong> mengandungi tajuk kumpulan dan "
+"<strong>boleh</strong> memasukkan keterangan kumpulan sebagai pilihan. "
+"Sebarang maklumat tambahan akan dibuang."
 
 #. Default: ""
 #. "LUG, Linux Users Group\n"
@@ -4417,6 +4743,10 @@ msgid ""
 "Chess Club\n"
 "Sports Club, After-school sports club, <em>text after a second comma</em>\n"
 msgstr ""
+"\n"
+"LUG, Linux Users Group\n"
+"Chess Club\n"
+"Sports Club, After-school sports club, <em>text after a second comma</em>\n"
 
 #: /src/schooltool/group/browser/group-csvimport.pt:36
 msgid ""
@@ -4426,60 +4756,66 @@ msgid ""
 "group will have no description, and the extra \"text after a second comma\" "
 "text on the third group will be ignored."
 msgstr ""
+"Contoh di atas akan mencipta 3 kumpulan yang bertajuk 'LUG', 'Chess Club' "
+"dan Sports Club'. Kumpulan yang pertama dan terakhir akan mempunyai "
+"keterangan 'Linux User Group' dan 'After-school sports club' untuk setiap "
+"satu kumpulan yang disebut sebelum ini. Kumpulan 'Chess Group' tidak "
+"mempunyai sebarang keterangan, dan tambahan \"teks selepas koma kedua\" akan "
+"diabaikan."
 
 #: /src/schooltool/group/browser/group-member-csvimport.pt:4
 msgid "Upload SchoolTool group members as CSV"
-msgstr ""
+msgstr "Muat naik ahli kumpulan SchoolTool dalam format CSV"
 
 #: /src/schooltool/group/browser/group-member-csvimport.pt:21
 msgid "Import Group Members"
-msgstr ""
+msgstr "Import Ahli Kumpulan"
 
 #: /src/schooltool/group/browser/group.pt:20
 msgid "Change the people who are members of this group."
-msgstr ""
+msgstr "Tukar ahli-ahli kumpulan ini."
 
 #: /src/schooltool/group/browser/group.pt:20
 msgid "edit members"
-msgstr ""
+msgstr "ubah ahli"
 
 #: /src/schooltool/group/browser/group.py:70
 msgid "Group index"
-msgstr ""
+msgstr "Indeks kumpulan"
 
 #. Default: ""
 #: /src/schooltool/group/browser/group.py:80
 msgid "Groups of ${person}"
-msgstr ""
+msgstr "Kumpulan ${person}"
 
 #: /src/schooltool/group/browser/group.py:81
 msgid "Current Groups"
-msgstr ""
+msgstr "Kumpulan Terkini"
 
 #: /src/schooltool/group/browser/group.py:82
 msgid "Available Groups"
-msgstr ""
+msgstr "Kumpulan Tersedia"
 
 #. Default: ""
 #: /src/schooltool/group/browser/group.py:123
 msgid "Members of ${group}"
-msgstr ""
+msgstr "Ahli ${group}"
 
 #: /src/schooltool/group/browser/group.py:124
 msgid "Current Members"
-msgstr ""
+msgstr "Ahli Terkini"
 
 #: /src/schooltool/group/browser/group.py:125
 msgid "Add Members"
-msgstr ""
+msgstr "Tambah Ahli"
 
 #: /src/schooltool/group/browser/groupsviewlet.pt:15
 msgid "Manage this person's memberships"
-msgstr ""
+msgstr "Urus keahlian pengguna ini"
 
 #: /src/schooltool/group/browser/groupsviewlet.pt:15
 msgid "edit groups"
-msgstr ""
+msgstr "ubah kumpulan"
 
 #: /src/schooltool/group/help/group_container.pt:8
 msgid ""
@@ -4500,125 +4836,146 @@ msgid ""
 "links in the blue bar.</li> <li><strong>Show all groups:</strong> Click "
 "<code>Show All</code> in the blue bar.</li> </ul>"
 msgstr ""
+"<h1>Kumpulan</h1> <p>Gunakan laman muka ini untuk memantau Pengguna.</p> "
+"<p><b>Kumpulan</b> yang telah ditambah ke dalam sistem tidak termasuk dalam "
+"kumpulan-kumpulan utama (<b>Guru</b>, <b>Pelajar</b>, <b>Pengurus Laman "
+"Web</b>, <b>Pentadbir Sekolah</b>, atau <b>Kerani</b>). Kumpulan-kumpulan "
+"ini boleh dipilih dengan menandakan kotak di sebelahnya dan dibuang dengan "
+"menekan butang <b>Padam</b> di bahagian bawah laman muka.</p> <h3>Bagaimana "
+"saya...</h3> <ul> <li><b>Mencari satu-satu kumpulan:</b> Gunakan kotak "
+"carian di sebelah butang <code>Cari Sekarang</code> untuk meneroka "
+"keseluruhan senarai kumpulan-kumpulan yang memenuhi kriteria pencarian. "
+"Butang <code>Kosongkan</code> akan mengosongkan kotak carian yang "
+"mengandungi carian terkini.</li> <li><b>Melihat pengguna di dalam sesetengan "
+"kumpulan:</b> Klik pada nama kumpulan tersebut.</li> <li><b>Mengasingkan "
+"senarai:</b> Klik pada kepala <code>Tajuk</code> untuk menukar turutan "
+"kumpulan daripada turutan menurun kepada turutan menaik, dan "
+"sebaliknya.</li> <li><strong>Melihat-lihat satu-satu kumpulan:</strong> "
+"Gunakan <code>10 Berikutnya</code> (dan <code>Sebelumnya</code>) dan juga "
+"pautan di dalam panel berwarna biru.</li> <li><strong>Paparkan semua "
+"kumpulan:</strong> Klik <code>Papar semua</code> di dalam panel berwarna "
+"biru.</li> </ul>"
 
 #: /src/schooltool/group/interfaces.py:41
 #: /src/schooltool/securitypolicy/interfaces.py:109
 msgid "Title of the group."
-msgstr ""
+msgstr "Nama kumpulan"
 
 #: /src/schooltool/group/interfaces.py:46
 msgid "Description of the group."
-msgstr ""
+msgstr "Keterangan kumpulan"
 
 #: /src/schooltool/group/security.zcml:5
 msgid "Everyone can view group lists."
-msgstr ""
+msgstr "Semua orang boleh melihat senarai kumpulan."
 
 #: /src/schooltool/group/security.zcml:10
 msgid "Everyone can view group information."
-msgstr ""
+msgstr "Semua orang boleh melihat maklumat kumpulan"
 
 #: /src/schooltool/group/security.zcml:15
 msgid "Everyone can view group calendars."
-msgstr ""
+msgstr "Semua orang boleh melihat kalendar-kalendar kumpulan."
 
 #: /src/schooltool/group/security.zcml:20
 msgid "Group members can edit group calendars."
-msgstr ""
+msgstr "Ahli-ahli kumpulan boleh mengubah kalendar-kalendar kumpulan."
 
 #: /src/schooltool/group/security.zcml:53
 msgid "Groups are essentially sets of users."
-msgstr ""
+msgstr "Kumpulan adalah satu set pengguna."
 
 #: /src/schooltool/help/configure.zcml:47
 msgid "Contextual Help"
-msgstr ""
+msgstr "Bantuan berdasarkan Hubungan Kata"
 
 #: /src/schooltool/help/helplink.pt:2
 msgid "Help"
-msgstr ""
+msgstr "Bantuan"
 
 #: /src/schooltool/note/configure.zcml:68
 msgid "New Note"
-msgstr ""
+msgstr "Nota Baru"
 
 #: /src/schooltool/note/configure.zcml:100
 msgid "Notes (Rest)"
-msgstr ""
+msgstr "Nota (Selebihnya)"
 
 #: /src/schooltool/note/interfaces.py:43
 msgid "Title of the note."
-msgstr ""
+msgstr "Tajuk nota."
 
 #: /src/schooltool/note/interfaces.py:47
 msgid "Body of the note."
-msgstr ""
+msgstr "Isi kandungan nota"
 
 #: /src/schooltool/note/interfaces.py:50
 #: /src/schooltool/note/note_add.pt:24
 msgid "Privacy"
-msgstr ""
+msgstr "Privasi"
 
 #: /src/schooltool/note/note_add.pt:4
 msgid "Add note"
-msgstr ""
+msgstr "Tambah nota"
 
 #: /src/schooltool/note/note_add.pt:13
 msgid "Note"
-msgstr ""
+msgstr "Nota"
 
 #: /src/schooltool/note/note_add.pt:24
 msgid "Who can view the note"
-msgstr ""
+msgstr "Siapa boleh melihat nota"
 
 #: /src/schooltool/note/note_add.pt:30
 msgid "Private"
-msgstr ""
+msgstr "Peribadi"
 
 #: /src/schooltool/note/note_add.pt:31
 msgid "Public"
-msgstr ""
+msgstr "Awam"
 
 #: /src/schooltool/note/notes.pt:8
 msgid "( p )"
-msgstr ""
+msgstr "( p )"
 
 #: /src/schooltool/person/browser/configure.zcml:91
 msgid "Edit Preferences"
-msgstr ""
+msgstr "Ubah Keutamaan"
 
 #: /src/schooltool/person/browser/configure.zcml:103
 msgid "Change Password"
-msgstr ""
+msgstr "Tukar Kata Laluan"
 
 #: /src/schooltool/person/browser/csvimport.py:51
 msgid "fullname may not be empty"
-msgstr ""
+msgstr "nama penuh tidak boleh dikosongkan"
 
 #: /src/schooltool/person/browser/home.pt:15
 #: /src/schooltool/person/browser/person.pt:15
 msgid "Username:"
-msgstr ""
+msgstr "Nama pengguna:"
 
 #: /src/schooltool/person/browser/home.pt:18
 #: /src/schooltool/person/browser/person.pt:18
 msgid "Change this person's name, picture, or password"
-msgstr ""
+msgstr "Tukar nama, gambar atau kata laluan pengguna ini"
 
 #: /src/schooltool/person/browser/home.pt:18
 #: /src/schooltool/person/browser/person.pt:18
 msgid "edit name"
-msgstr ""
+msgstr "Ubah nama"
 
 #: /src/schooltool/person/browser/home_tab_viewlet.pt:3
 msgid "Home"
-msgstr ""
+msgstr "Rumah"
 
 #: /src/schooltool/person/browser/person-csvimport.pt:29
 msgid ""
 "CSV data <strong>must</strong> contain a user name and a full name. An "
 "optional password <strong>may</strong> be included as well."
 msgstr ""
+"Data CSV <strong>mesti</strong> mengandungi nama pengguna dan nama penuh. "
+"Kata laluan <strong>boleh</strong> dimasukkan juga sebagai pilhan."
 
 #. Default: ""
 #. "jjones, Jimmy Jones\n"
@@ -4631,89 +4988,93 @@ msgid ""
 "jbjones, Jim Bob Jones, r2m45J\n"
 "howard, Howard\n"
 msgstr ""
+"\n"
+"jjones, Jimmy Jones\n"
+"jbjones, Jim Bob Jones, r2m45J\n"
+"howard, Howard\n"
 
 #: /src/schooltool/person/browser/person.py:168
 msgid "Edit password"
-msgstr ""
+msgstr "Ubah kata laluan"
 
 #: /src/schooltool/person/browser/person.py:173
 msgid "No new password was supplied so original password is unchanged"
-msgstr ""
+msgstr "Tiada kata laluan baru diberi maka kata laluan asal tidak berubah"
 
 #: /src/schooltool/person/browser/person.py:178
 msgid "Changed password"
-msgstr ""
+msgstr "Kata laluan bertukar"
 
 #: /src/schooltool/person/browser/person.py:283
 #: /src/schooltool/person/browser/person.py:372
 #: /src/schooltool/person/interfaces.py:52
 msgid "Name that should be displayed"
-msgstr ""
+msgstr "Nama yang harus dipaparkan"
 
 #: /src/schooltool/person/browser/person.py:294
 #: /src/schooltool/person/browser/person.py:390
 msgid "Verify password"
-msgstr ""
+msgstr "Pengesahan kata laluan"
 
 #: /src/schooltool/person/browser/person.py:321
 msgid "Passwords do not match!"
-msgstr ""
+msgstr "Kata laluan tidak sepadan!"
 
 #: /src/schooltool/person/browser/person.py:375
 msgid "New photo"
-msgstr ""
+msgstr "Gambar baru"
 
 #: /src/schooltool/person/browser/person.py:377
 msgid "A small picture (about 48x48 pixels in JPEG format)"
-msgstr ""
+msgstr "Gambar kecil (lebih kurang 48x48 piksel di dalam format JPEG)"
 
 #: /src/schooltool/person/browser/person.py:381
 msgid "Clear photo"
-msgstr ""
+msgstr "Kosongkan gambar"
 
 #: /src/schooltool/person/browser/person.py:383
 msgid "Check this to clear the photo"
-msgstr ""
+msgstr "Tandakan ini untuk mengosongkan gambar"
 
 #: /src/schooltool/person/browser/person.py:386
 msgid "New password"
-msgstr ""
+msgstr "Kata Laluan Baru"
 
 #: /src/schooltool/person/browser/person.py:419
 msgid "Passwords do not match."
-msgstr ""
+msgstr "Kata laluan tidak sepadan."
 
 #: /src/schooltool/person/browser/person.py:423
 msgid "Password was successfully changed!"
-msgstr ""
+msgstr "Kata laluan berjaya ditukar!"
 
 #: /src/schooltool/person/browser/person.py:446
 msgid "Person index"
-msgstr ""
+msgstr "Indeks pengguna"
 
 #: /src/schooltool/person/browser/person_container_delete.pt:23
 msgid "Sorry, you may not delete your own user account."
-msgstr ""
+msgstr "Maaf, anda tidak boleh memadam akaun anda sendiri."
 
 #: /src/schooltool/person/browser/person_edit.pt:4
 msgid "Edit person"
-msgstr ""
+msgstr "Ubah pengguna"
 
 #: /src/schooltool/person/browser/person_edit.pt:20
 msgid "Change info for ${user}"
-msgstr ""
+msgstr "Tukar info untuk ${user}"
 
 #: /src/schooltool/person/browser/person_filter.pt:5
 msgid "All groups"
-msgstr ""
+msgstr "Semua kumpulan"
 
 #: /src/schooltool/person/browser/person_preferences.pt:4
 msgid "Edit person preferences"
-msgstr ""
+msgstr "Ubah keutamaan pengguna"
 
 #: /src/schooltool/person/browser/person_preferences.pt:20
 msgid "Change preferences for ${user}"
-msgstr ""
+msgstr "Tukar keutamaan untuk ${user}"
 
 #: /src/schooltool/person/help/person_container.pt:8
 msgid ""
@@ -4728,158 +5089,173 @@ msgid ""
 "<code>Previous</code>) and links in the blue bar.</li> <li><strong>Show all "
 "students:</strong> Click <code>Show All</code> in the blue bar.</li> </ul>"
 msgstr ""
+"<h1>Pengguna</h1> <p>Gunakan laman muka ini untuk melihat-lihat dan mencari "
+"pengguna secara individu.</p> <h3>Bagaimana saya...</h3> <ul> "
+"<li><strong>Mengasingkan senarai:</strong>Klik pada <code>Nama "
+"Pertama</code> or <code>Nama Keluarga</code> untuk tujuan pengasingan.</li> "
+"<li><strong>Mencari satu-satu pengguna:</strong> Gunakan ruang carian di "
+"sebelah atas laman untuk melihat semua pengguna di dalam sistem. Jika anda "
+"mahu mengasingkan senarai berdasarkan kumpulan, pilih kumpulan di dalam "
+"senarai drop-down.</li> <li><strong>Melihat maklumat terperinci "
+"pengguna:</strong> Klik pada nama.</li> <li><strong>Melihat-lihat satu-satu "
+"pengguna:</strong> Gunakan <code>10 Seterusnya</code> (dan "
+"<code>Sebelumnya</code>) dan pautan di dalam panel biru.</li> "
+"<li><strong>Paparkan semua pelajar:</strong> Klik <code>Papar semua</code> "
+"di dalam panel biru.</li> </ul>"
 
 #: /src/schooltool/person/interfaces.py:157
 msgid "Time Zone"
-msgstr ""
+msgstr "Zon Masa"
 
 #: /src/schooltool/person/interfaces.py:158
 msgid "Time Zone used to display your calendar"
-msgstr ""
+msgstr "Zon Masa digunakan untuk memaparkan kalendar anda"
 
 #: /src/schooltool/person/interfaces.py:162
 #: /src/schooltool/person/interfaces.py:163
 msgid "Time Format"
-msgstr ""
+msgstr "Format Masa"
 
 #: /src/schooltool/person/interfaces.py:164
 msgid "HH:MM"
-msgstr ""
+msgstr "HH:MM"
 
 #: /src/schooltool/person/interfaces.py:165
 msgid "HH:MM am/pm"
-msgstr ""
+msgstr "HH:MM am/pm"
 
 #: /src/schooltool/person/interfaces.py:168
 #: /src/schooltool/person/interfaces.py:169
 msgid "Date Format"
-msgstr ""
+msgstr "Format Tarikh"
 
 #: /src/schooltool/person/interfaces.py:170
 msgid "MM/DD/YY"
-msgstr ""
+msgstr "MM/DD/YY"
 
 #: /src/schooltool/person/interfaces.py:171
 msgid "YYYY-MM-DD"
-msgstr ""
+msgstr "YYYY-MM-DD"
 
 #: /src/schooltool/person/interfaces.py:172
 msgid "Day Month, Year"
-msgstr ""
+msgstr "Hari Bulan, Tahun"
 
 #: /src/schooltool/person/interfaces.py:176
 msgid "Week starts on:"
-msgstr ""
+msgstr "Minggu bermula pada:"
 
 #: /src/schooltool/person/interfaces.py:177
 msgid "Start display of weeks on Sunday or Monday"
-msgstr ""
+msgstr "Mula paparkan minggu pada Ahad atau Isnin"
 
 #: /src/schooltool/person/interfaces.py:191
 msgid "Show periods"
-msgstr ""
+msgstr "Tunjuk tempoh"
 
 #: /src/schooltool/person/interfaces.py:192
 msgid "Show period names in daily view"
-msgstr ""
+msgstr "Tunjuk tempoh nama dalam paparan harian"
 
 #: /src/schooltool/person/interfaces.py:195
 #: /src/schooltool/person/interfaces.py:196
 msgid "Make calendar public"
-msgstr ""
+msgstr "Jadikan kalendar umum untuk semua"
 
 #: /src/schooltool/person/security.zcml:5
 msgid "Everyone can view the list of persons"
-msgstr ""
+msgstr "Semua orang boleh melihat senarai pengguna"
 
 #: /src/schooltool/person/security.zcml:10
 msgid "Everyone can view info of persons"
-msgstr ""
+msgstr "Semua orang boleh melihat info pengguna"
 
 #: /src/schooltool/person/security.zcml:15
 msgid "Persons can set their own preferences"
-msgstr ""
+msgstr "Pengguna boleh menetapkan keutamaan mereka sendiri"
 
 #: /src/schooltool/person/security.zcml:20
 msgid "Persons can change their own passwords"
-msgstr ""
+msgstr "Pengguna boleh menukar kata laluan mereka sendiri"
 
 #: /src/schooltool/person/security.zcml:77
 msgid "Users"
-msgstr ""
+msgstr "Para Pengguna"
 
 #: /src/schooltool/person/security.zcml:107
 msgid "Change password"
-msgstr ""
+msgstr "Tukar kata laluan"
 
 #: /src/schooltool/person/security.zcml:114
 msgid "View preferences"
-msgstr ""
+msgstr "Papar keutamaan"
 
 #: /src/schooltool/person/security.zcml:121
 msgid "Change preferences"
-msgstr ""
+msgstr "Tukar keutamaan"
 
 #: /src/schooltool/person/security.zcml:144
 msgid "Manage visible calendars"
-msgstr ""
+msgstr "Mengurus kalendar-kalendar yang kelihatan"
 
 #: /src/schooltool/person/security.zcml:172
 msgid "Calendar is public"
-msgstr ""
+msgstr "Kalendar adalah umum"
 
 #: /src/schooltool/person/security.zcml:172
 msgid "Everybody, if the calendar is made public in user preferences."
 msgstr ""
+"Semua pengguna, jika kalendar ditetapkan kepada umum di dalam panel "
+"ketetapan pengguna."
 
 #: /src/schooltool/relationship/configure.zcml:38
 msgid "Relationships"
-msgstr ""
+msgstr "Hubungan"
 
 #: /src/schooltool/resource/browser/configure.zcml:71
 msgid "Add a Resource"
-msgstr ""
+msgstr "Tambah Sumber"
 
 #: /src/schooltool/resource/browser/configure.zcml:84
 msgid "Edit Resource Information"
-msgstr ""
+msgstr "Ubah Maklumat Sumber"
 
 #: /src/schooltool/resource/browser/configure.zcml:99
 msgid "Add a Location"
-msgstr ""
+msgstr "Tambah Lokasi"
 
 #: /src/schooltool/resource/browser/configure.zcml:115
 msgid "Edit Location Information"
-msgstr ""
+msgstr "Ubah Maklumat Lokasi"
 
 #: /src/schooltool/resource/browser/configure.zcml:133
 msgid "Add an Equipment"
-msgstr ""
+msgstr "Tambah Perkakasan"
 
 #: /src/schooltool/resource/browser/configure.zcml:151
 msgid "Edit Equipment Information"
-msgstr ""
+msgstr "Ubah Maklumat Perkakasan"
 
 #: /src/schooltool/resource/browser/configure.zcml:190
 msgid "New Resource"
-msgstr ""
+msgstr "Sumber Baru"
 
 #: /src/schooltool/resource/browser/configure.zcml:197
 msgid "New Location"
-msgstr ""
+msgstr "Lokasi Baru"
 
 #: /src/schooltool/resource/browser/configure.zcml:204
 msgid "New Equipment"
-msgstr ""
+msgstr "Perkakasan Baru"
 
 #: /src/schooltool/resource/browser/configure.zcml:232
 #: /src/schooltool/resource/browser/resource-csvimport.pt:21
 msgid "Import Resources"
-msgstr ""
+msgstr "Import Sumber-sumber"
 
 #: /src/schooltool/resource/browser/resource-csvimport.pt:4
 msgid "Upload schooltool resources as CSV"
-msgstr ""
+msgstr "Muatnaik sumber-sumber schooltool dalam format CSV"
 
 #: /src/schooltool/resource/browser/resource-csvimport.pt:24
 msgid ""
@@ -4887,6 +5263,9 @@ msgid ""
 "<strong>may</strong> include an optional resource description. Any extra "
 "information will be discarded."
 msgstr ""
+"Data CSV <strong>mesti</strong> mengandungi tajuk/nama sumber dan "
+"<strong>boleh</strong> dimasukkan keterangan sumber sebagai pilihan. "
+"Sebarang maklumat tambahan akan diabaikan."
 
 #. Default: ""
 #. "PRJ302, Overhead Projector #302\n"
@@ -4899,6 +5278,12 @@ msgid ""
 "Main Auditorium,,location\n"
 "LC-805, Laptop Computer #805\n"
 msgstr ""
+"\n"
+"PRJ302, Overhead Projector #302\n"
+"Main Auditorium,,location\n"
+"LC-805, Laptop Computer #805\n"
+"Default: \"\" \"PRJ302, Overhead Projector #302\\n\" \"Main "
+"Auditorium,,location\\n\" \"LC-805, Laptop Computer #805\"\n"
 
 #: /src/schooltool/resource/browser/resource-csvimport.pt:36
 msgid ""
@@ -4908,110 +5293,117 @@ msgid ""
 "\"Main Auditorium\" resource will have no description, but will be a "
 "location."
 msgstr ""
+"Contoh di atas akan mencipta 3 sumber yang bernama/bertajuk 'PRJ302', 'Main "
+"Auditorium' and 'LC-805'. Sumber yang pertama dan ketiga akan mempunyai "
+"keterangan 'Overhead Projector #302' dan 'Laptop Computer #805' untuk setiap "
+"satu. Sumber \"Main Auditorium\" tidak mempunyai sebarang keterangan, tetapi "
+"lokasi tempat."
 
 #: /src/schooltool/resource/browser/resource.py:56
 msgid "Resource index"
-msgstr ""
+msgstr "Indeks Sumber"
 
 #: /src/schooltool/resource/help/resource_help.pt:6
 msgid "Resource Help"
-msgstr ""
+msgstr "Sumber Bantuan"
 
 #: /src/schooltool/resource/interfaces.py:42
 msgid "Title of the resource."
-msgstr ""
+msgstr "Nama sumber."
 
 #: /src/schooltool/resource/interfaces.py:45
 msgid "Resource Type"
-msgstr ""
+msgstr "Jenis Sumber"
 
 #: /src/schooltool/resource/interfaces.py:46
 msgid "Type of resource"
-msgstr ""
+msgstr "Jenis Sumber"
 
 #: /src/schooltool/resource/interfaces.py:53
 msgid "Description of the resource."
-msgstr ""
+msgstr "Keterangan sumber"
 
 #: /src/schooltool/resource/interfaces.py:58
 msgid "Notes for the resource."
-msgstr ""
+msgstr "Nota sumber."
 
 #: /src/schooltool/resource/interfaces.py:81
 msgid "Location Type"
-msgstr ""
+msgstr "Jenis Lokasi"
 
 #: /src/schooltool/resource/interfaces.py:82
 msgid "Type of location (i.e. computer lab, class room, etc.)"
-msgstr ""
+msgstr "Jenis lokasi (cth: makmal komputer, bilik darjah, dll.)"
 
 #: /src/schooltool/resource/interfaces.py:87
 #: /src/schooltool/resource/types.py:83
 msgid "Capacity"
-msgstr ""
+msgstr "Kapasiti"
 
 #: /src/schooltool/resource/interfaces.py:88
 msgid "Capacity of the room"
-msgstr ""
+msgstr "Kapasiti bilik"
 
 #: /src/schooltool/resource/interfaces.py:96
 msgid "Equipment Type"
-msgstr ""
+msgstr "Jenis Perkakasan"
 
 #: /src/schooltool/resource/interfaces.py:97
 msgid "Type of equipment (i.e. camcorder, computer, etc.)"
-msgstr ""
+msgstr "Jenis Perkakasan (cth: kamkorder, komputer, dll.)"
 
 #: /src/schooltool/resource/interfaces.py:101
 #: /src/schooltool/resource/types.py:113
 msgid "Manufacturer"
-msgstr ""
+msgstr "Pengilang"
 
 #: /src/schooltool/resource/interfaces.py:102
 msgid "Manufacturer of Equipment"
-msgstr ""
+msgstr "Pengilang Perkakasan"
 
 #: /src/schooltool/resource/interfaces.py:106
 #: /src/schooltool/resource/types.py:119
 msgid "Model"
-msgstr ""
+msgstr "Model"
 
 #: /src/schooltool/resource/interfaces.py:107
 msgid "Model of Equipment"
-msgstr ""
+msgstr "Model Perkakasan"
 
 #: /src/schooltool/resource/interfaces.py:111
 #: /src/schooltool/resource/types.py:125
 msgid "Serial Number"
-msgstr ""
+msgstr "Nombor Siri"
 
 #: /src/schooltool/resource/interfaces.py:112
 msgid "Serial Number of Equipment"
-msgstr ""
+msgstr "Nombor Siri Perkakasan"
 
 #: /src/schooltool/resource/interfaces.py:116
 #: /src/schooltool/resource/types.py:131
 msgid "Purchase Date"
-msgstr ""
+msgstr "Tarikh Beli"
 
 #: /src/schooltool/resource/interfaces.py:117
 msgid "Purchase Date of Equipment"
-msgstr ""
+msgstr "Tarikh Beli Perkakasan"
 
 #: /src/schooltool/resource/interfaces.py:124
 msgid "Id of the resource type."
-msgstr ""
+msgstr "Id jenis-jenis sumber."
 
 #: /src/schooltool/resource/interfaces.py:125
 msgid ""
 "Used for lookup of named utilities that have resource\n"
 "        type specific information."
 msgstr ""
+"Digunakan untuk mencari utiliti yang mempunyai sumber\n"
+"        jenis maklumat terperinci."
 
 #: /src/schooltool/resource/interfaces.py:129
 #: /src/schooltool/resource/interfaces.py:137
 msgid "The title of a resource type."
-msgstr ""
+msgstr "Nama jenis sumber."
 
 #: /src/schooltool/resource/interfaces.py:130
 #: /src/schooltool/resource/interfaces.py:138
@@ -5019,27 +5411,29 @@ msgid ""
 "A string that will be displayed to users in tables or\n"
 "        resource type selection widgets."
 msgstr ""
+"Ayat yang akan dipaparkan kepada pengguna di dalam jadual atau\n"
+"         jenis sumber dalam widget pemilihan."
 
 #: /src/schooltool/resource/resource.py:55
 #: /src/schooltool/resource/types.py:55
 msgid "Resource"
-msgstr ""
+msgstr "Sumber"
 
 #: /src/schooltool/resource/security.zcml:7
 msgid "Everyone can view resource lists."
-msgstr ""
+msgstr "Semua pengguna boleh melihat senarai-senarai sumber."
 
 #: /src/schooltool/resource/security.zcml:12
 msgid "Everyone can view resource information."
-msgstr ""
+msgstr "Semua pengguna boleh melihat maklumat sumber."
 
 #: /src/schooltool/resource/security.zcml:17
 msgid "Everyone can view resource calendars."
-msgstr ""
+msgstr "Semua pengguna boleh melihat kalendar-kalendar sumber."
 
 #: /src/schooltool/resource/security.zcml:50
 msgid "Reservations"
-msgstr ""
+msgstr "Tempahan"
 
 #: /src/schooltool/resource/security.zcml:50
 msgid ""
@@ -5047,217 +5441,231 @@ msgid ""
 "SchoolTool's calendar can function as a reservation                    and "
 "tracking system for resources."
 msgstr ""
+"Sumber-Sumber bermaksud lokasi-lokasi atau objek-objek di dalam sesebuah "
+"sekolah. Kalendar SchoolTool boleh berfungsi sebagai sistem pemantauan dan "
+"penempahan untuk sumber-sumber."
 
 #: /src/schooltool/resource/security.zcml:57
 msgid "List/Search resources"
-msgstr ""
+msgstr "Senarai/Carik sumber-sumber"
 
 #: /src/schooltool/resource/security.zcml:64
 msgid "Add/Remove resources"
-msgstr ""
+msgstr "Tambah/Buang sumber-sumber"
 
 #: /src/schooltool/resource/security.zcml:71
 msgid "View a resource"
-msgstr ""
+msgstr "Lihat sumber"
 
 #: /src/schooltool/resource/security.zcml:78
 msgid "Modify a resource"
-msgstr ""
+msgstr "Ubahsuai sumber"
 
 #: /src/schooltool/resource/security.zcml:85
 msgid "View reservation calendar"
-msgstr ""
+msgstr "Lihat kalendar tempahan"
 
 #: /src/schooltool/resource/security.zcml:93
 msgid "Schedule reservation via calendar"
-msgstr ""
+msgstr "Penjadualan tempahan melalui kalendar"
 
 #: /src/schooltool/resource/types.py:93
 msgid "Equipment"
-msgstr ""
+msgstr "Perkakasan"
 
 #: /src/schooltool/resource/types.py:107
 msgid "Type"
-msgstr ""
+msgstr "Jenis"
 
 #: /src/schooltool/sampledata/sampledata.pt:3
 #: /src/schooltool/sampledata/sampledata.pt:9
 msgid "Sample Data Generation"
-msgstr ""
+msgstr "Penjanaan Data Contoh"
 
 #: /src/schooltool/sampledata/sampledata.pt:14
 msgid ""
 "Warning: proceeding will populate the database with randomly generated data. "
 "Do not do this if you have any valuable data in your SchoolTool instance."
 msgstr ""
+"Amaran: tindakan seterusnya akan memenuhi pengkalan data dengan data yang "
+"dijana secara rawak. Dilarang melakukan tindakan ini jika anda mempunyai "
+"sebarang data berharga di dalam SchoolTool anda."
 
 #: /src/schooltool/sampledata/sampledata.pt:20
 msgid ""
 "This creates a school of 1,000 students and data for 4 terms. If you select "
 "all options, it can take a <strong>long</strong> time. Just let it run."
 msgstr ""
+"Ini akan mencipta sebuah sekolah yang mempunyai 1,000 orang pelajar dan data "
+"untuk 4 penggal. Jika anda memilih semua pilihan yang ada, ini akan "
+"mengambil masa yang <strong>lama</strong>. Biarkan ia terus berjalan."
 
 #: /src/schooltool/sampledata/sampledata.pt:25
 msgid ""
 "Setting a random seed allows you to to reproduce the same set of sample data "
 "by generating it again with the same value of the random seed."
 msgstr ""
+"Penetapan benih secara rawak akan membolehkan anda untuk menghasilkan satu "
+"set data contoh yang sama dengan menjana semula dengan nilai benih secara "
+"rawak yang sama."
 
 #: /src/schooltool/sampledata/sampledata.pt:42
 msgid "Plugins"
-msgstr ""
+msgstr "Plugin"
 
 #: /src/schooltool/sampledata/sampledata.pt:71
 msgid "View Dependencies"
-msgstr ""
+msgstr "Lihat Kebergantungan"
 
 #: /src/schooltool/sampledata/sampledata.pt:80
 #: /src/schooltool/setupdata/setupdata.pt:23
 msgid "Generate"
-msgstr ""
+msgstr "Jana"
 
 #: /src/schooltool/schoolyear/browser/configure.zcml:26
 #: /src/schooltool/schoolyear/browser/schoolyear.py:111
 #: /src/schooltool/schoolyear/security.zcml:7
 msgid "School Years"
-msgstr ""
+msgstr "Tahun Sekolah"
 
 #: /src/schooltool/schoolyear/browser/configure.zcml:87
 msgid "New School Year"
-msgstr ""
+msgstr "Tahun Sekolah Baru"
 
 #: /src/schooltool/schoolyear/browser/schoolyear.py:133
 msgid ""
 "You can not delete the active school year. Unless you are deleting all the "
 "school years."
 msgstr ""
+"Anda tidak boleh memadan tahunan sekolah yang sedang aktif. Melainkan anda "
+"mahu memadam kesemua tahunan sekolah."
 
 #: /src/schooltool/schoolyear/browser/schoolyear.py:152
 msgid "First day"
-msgstr ""
+msgstr "Hari Pertama"
 
 #: /src/schooltool/schoolyear/browser/schoolyear.py:155
 msgid "Last day"
-msgstr ""
+msgstr "Hari Terakhir"
 
 #: /src/schooltool/schoolyear/browser/schoolyear.py:174
 msgid "Add new school year"
-msgstr ""
+msgstr "Tambah tahun sekolah baru"
 
 #. Default: ""
 #: /src/schooltool/schoolyear/browser/schoolyear.py:238
 msgid "Change information for ${schoolyear_title}"
-msgstr ""
+msgstr "Tukar maklumat untuk ${schoolyear_title}"
 
 #: /src/schooltool/schoolyear/browser/schoolyear.py:253
 #: /src/schooltool/schoolyear/browser/schoolyear.py:280
 msgid "School year must begin before it ends."
-msgstr ""
+msgstr "Tahun sekolah mesti bermula sebelum ia berakhir."
 
 #: /src/schooltool/schoolyear/browser/schoolyear.py:324
 msgid "School Year"
-msgstr ""
+msgstr "Tahun Sekolah"
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear.pt:21
 msgid "${schoolyear_title} (${start_date} &mdash; ${end_date})"
-msgstr ""
+msgstr "${schoolyear_title} (${start_date} &mdash; ${end_date})"
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear.pt:37
 msgid "${term_title} (${start_date} &mdash; ${end_date})"
-msgstr ""
+msgstr "${term_title} (${start_date} &mdash; ${end_date})"
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear.pt:49
 msgid "Add a new term"
-msgstr ""
+msgstr "Tambah penggal baru"
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:39
 msgid "Activate next school year"
-msgstr ""
+msgstr "Mengaktifkan tahun sekolah ang akan datang"
 
 #: /src/schooltool/schoolyear/browser/templates/term-delete.pt:10
 #: /src/schooltool/term/browser/templates/term-container-delete.pt:10
 msgid "Are you sure you want to delete the selected terms?"
-msgstr ""
+msgstr "Adakah anda pasti untuk memadam penggal yang dipilih?"
 
 #: /src/schooltool/schoolyear/interfaces.py:44
 msgid "The first day of the period of time covered."
-msgstr ""
+msgstr "Tempoh masa hari pertama telah diuruskan."
 
 #: /src/schooltool/schoolyear/interfaces.py:47
 msgid "The last day of the period covered."
-msgstr ""
+msgstr "Tempoh hari terakhir telah diuruskan"
 
 #: /src/schooltool/schoolyear/security.zcml:23
 msgid "Activate current school year"
-msgstr ""
+msgstr "Aktifkan tahunan sekolah terkini"
 
 #: /src/schooltool/securitypolicy/browser/configure.zcml:7
 msgid "View Access Rights"
-msgstr ""
+msgstr "Lihat Hak Akses"
 
 #: /src/schooltool/securitypolicy/browser/configure.zcml:17
 #: /src/schooltool/securitypolicy/browser/configure.zcml:28
 #: /src/schooltool/securitypolicy/browser/templates/access_control.pt:4
 #: /src/schooltool/securitypolicy/browser/templates/access_control.pt:12
 msgid "Access Control"
-msgstr ""
+msgstr "Kawalan Akses"
 
 #: /src/schooltool/securitypolicy/browser/control.py:96
 msgid "Enabled"
-msgstr ""
+msgstr "Diaktifkan"
 
 #: /src/schooltool/securitypolicy/browser/control.py:105
 msgid "School administration"
-msgstr ""
+msgstr "Pentadbiran sekolah"
 
 #: /src/schooltool/securitypolicy/browser/templates/access_setting_snippet.pt:4
 msgid "Access setting: ${setting} (${status})"
-msgstr ""
+msgstr "Penetapan Akses: ${setting} (${status})"
 
 #: /src/schooltool/securitypolicy/browser/templates/security_descriptions.pt:4
 msgid "Access Rights"
-msgstr ""
+msgstr "Hak Akses"
 
 #: /src/schooltool/securitypolicy/browser/templates/security_descriptions.pt:57
 msgid "Legend"
-msgstr ""
+msgstr "Petunjuk"
 
 #: /src/schooltool/securitypolicy/crowds.py:124
 msgid "Everybody"
-msgstr ""
+msgstr "Semua orang"
 
 #: /src/schooltool/securitypolicy/crowds.py:125
 msgid "Everybody, including users that are not logged in."
-msgstr ""
+msgstr "Semua orang, termasuk pengguna yang tidak log masuk."
 
 #: /src/schooltool/securitypolicy/crowds.py:158
 msgid "Authenticated user"
-msgstr ""
+msgstr "Pengguna yang DIsahkan"
 
 #: /src/schooltool/securitypolicy/crowds.py:159
 msgid "All logged in users."
-msgstr ""
+msgstr "Semua pengguna yang sudah log masuk."
 
 #: /src/schooltool/securitypolicy/crowds.py:167
 msgid "Anybody"
-msgstr ""
+msgstr "Sesiapa"
 
 #: /src/schooltool/securitypolicy/crowds.py:168
 msgid "Users who did not log in"
-msgstr ""
+msgstr "Pengguna yang tidak log masuk"
 
 #: /src/schooltool/securitypolicy/crowds.py:175
 msgid "Super user"
-msgstr ""
+msgstr "Pentadbir"
 
 #: /src/schooltool/securitypolicy/crowds.py:176
 msgid "The super user - owner of this SchoolTool application."
-msgstr ""
+msgstr "Pentadbir - tuan punya aplikasi SchoolTool ini."
 
 #: /src/schooltool/setupdata/setupdata.pt:3
 #: /src/schooltool/setupdata/setupdata.pt:9
 msgid "Initial School Setup Scripts"
-msgstr ""
+msgstr "Skrip Penetapan Awalan Sekolah"
 
 #: /src/schooltool/setupdata/setupdata.pt:14
 msgid ""
@@ -5266,19 +5674,24 @@ msgid ""
 "have any valuable data in this SchoolTool instance or don't already "
 "understand what this is for."
 msgstr ""
+"Amaran: penerusan proses ini akan memenuhkan pengkalan data dengan data yang "
+"telah dijana dari skrip yang telah dipasang kedalam sistem fail pelayan. "
+"Jangan diteruskan proses ini jika anda mempunyai sebarang data yang bernilai "
+"di dalam aplikasi Schooltool atau jika anda tidak memahami apakah tujuan "
+"fungsi ini sebenarnya."
 
 #: /src/schooltool/skin/breadcrumbs.py:76
 msgid "top"
-msgstr ""
+msgstr "atas"
 
 #: /src/schooltool/skin/form.py:64
 msgid "No changes"
-msgstr ""
+msgstr "Tiada perubahan"
 
 #: /src/schooltool/skin/templates/error.pt:3
 #: /src/schooltool/skin/templates/error.pt:12
 msgid "Server Error"
-msgstr ""
+msgstr "Ralat Pelayan"
 
 #: /src/schooltool/skin/templates/error.pt:15
 msgid ""
@@ -5286,69 +5699,74 @@ msgid ""
 "found a bug in SchoolTool. Please report it on <a "
 "href=\"http://issues.schooltool.org\">the issue tracker</a>."
 msgstr ""
+"Ralat dalaman pelayan telah berlaku. Ini mungkin disebabkan anda telah "
+"menjumpai bug di dalam SchoolTool. Sila laporkan kepada <a "
+"href=\"http://issues.schooltool.org\">the issue tracker</a>."
 
 #: /src/schooltool/skin/templates/error.pt:19
 msgid "Exception"
-msgstr ""
+msgstr "Pengecualian"
 
 #: /src/schooltool/skin/templates/error.pt:20
 msgid "Traceback"
-msgstr ""
+msgstr "Kesan Kembali"
 
 #: /src/schooltool/skin/templates/generic_macros.pt:12
 msgid "Server Running SchoolTool"
-msgstr ""
+msgstr "Pelayan yang menjalankan SchoolTool"
 
 #: /src/schooltool/skin/templates/notfound.pt:3
 #: /src/schooltool/skin/templates/notfound.pt:11
 msgid "Not Found"
-msgstr ""
+msgstr "Tidak Ditemui"
 
 #: /src/schooltool/skin/templates/notfound.pt:14
 msgid "The page that you are trying to access is not available"
-msgstr ""
+msgstr "Laman muka yang anda cuba akses tidak kedapatan"
 
 #: /src/schooltool/skin/templates/notfound.pt:18
 msgid "Please note the following:"
-msgstr ""
+msgstr "Sila ambil perhatian perkara berikut:"
 
 #: /src/schooltool/skin/templates/notfound.pt:21
 msgid "You might have misspelled the url"
-msgstr ""
+msgstr "Anda mungkin mengalami kesalahan ejaan url"
 
 #: /src/schooltool/skin/templates/notfound.pt:22
 msgid "You might be trying to access a non-existing page"
-msgstr ""
+msgstr "Anda cuba mengakses laman muka yang tidak wujud"
 
 #: /src/schooltool/skin/templates/onlinehelp_macros.pt:55
 msgid "SchoolTool Onlinehelp"
-msgstr ""
+msgstr "Bantuan Atas Talian SchoolTool"
 
 #: /src/schooltool/skin/templates/view_macros.pt:45
 msgid "Log In"
-msgstr ""
+msgstr "Log masuk"
 
 #: /src/schooltool/skin/templates/view_macros.pt:53
 msgid "Logged in as:"
-msgstr ""
+msgstr "Log masuk sebagai:"
 
 #: /src/schooltool/skin/templates/view_macros.pt:71
 msgid "Log Out"
-msgstr ""
+msgstr "Log Keluar"
 
 #: /src/schooltool/skin/templates/view_macros.pt:82
 msgid "free administration software for"
-msgstr ""
+msgstr "perisian pentadbiran percuma untuk"
 
 #: /src/schooltool/skin/templates/view_macros.pt:114
 msgid "Report a bug on Launchpad."
-msgstr ""
+msgstr "Laporkan bug ke Launchpad."
 
 #: /src/schooltool/skin/templates/view_macros.pt:127
 msgid ""
 "&copy; The <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth "
 "Foundation</a> 2003 - <span>2009</span>: Supporting Social Innovation."
 msgstr ""
+"&copy; The <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth "
+"Foundation</a> 2003 - <span>2009</span>: Supporting Social Innovation."
 
 #: /src/schooltool/skin/templates/view_macros.pt:132
 msgid ""
@@ -5356,142 +5774,145 @@ msgid ""
 "of The <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth "
 "Foundation</a>."
 msgstr ""
+"<a href=\"http://www.schooltool.org\">SchoolTool</a>&trade; is a Trademark "
+"of The <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth "
+"Foundation</a>."
 
 #: /src/schooltool/skin/templates/view_macros.pt:155
 msgid "Shortcut: Alt-U"
-msgstr ""
+msgstr "Jalan Pintas: Alt-U"
 
 #: /src/schooltool/skin/templates/view_macros.pt:155
 msgid "U"
-msgstr ""
+msgstr "U"
 
 #. Default: "Update"
 #: /src/schooltool/skin/templates/view_macros.pt:155
 msgid "update-button"
-msgstr ""
+msgstr "butang-kemaskini"
 
 #. Default: "Apply"
 #: /src/schooltool/skin/templates/view_macros.pt:161
 #: /src/schooltool/skin/templates/view_macros.pt:167
 msgid "apply-button"
-msgstr ""
+msgstr "butang-tindakan"
 
 #. Default: "Add"
 #: /src/schooltool/skin/templates/view_macros.pt:174
 #: /src/schooltool/skin/templates/view_macros.pt:180
 #: /src/schooltool/skin/templates/view_macros.pt:187
 msgid "add-button"
-msgstr ""
+msgstr "butang-tambah"
 
 #: /src/schooltool/skin/templates/view_macros.pt:194
 msgid "D"
-msgstr ""
+msgstr "D"
 
 #: /src/schooltool/skin/templates/view_macros.pt:194
 msgid "Shortcut: Alt-D"
-msgstr ""
+msgstr "Jalan Pintas: Alt-D"
 
 #: /src/schooltool/skin/widgets.py:86
 msgid "The datetime string did not match the pattern yyyy-mm-dd"
-msgstr ""
+msgstr "Tarikh & masa  tidak sepadan dengan contoh yyyy-mm-dd"
 
 #: /src/schooltool/skin/widgets.py:109
 msgid "Width"
-msgstr ""
+msgstr "keluasan"
 
 #: /src/schooltool/skin/widgets.py:110
 msgid "Editor frame width"
-msgstr ""
+msgstr "Editor keluasan tetingkap"
 
 #: /src/schooltool/skin/widgets.py:113
 msgid "Height"
-msgstr ""
+msgstr "Ketinggian"
 
 #: /src/schooltool/skin/widgets.py:114
 msgid "Editor frame height"
-msgstr ""
+msgstr "Editor ketinggian tetingkap"
 
 #: /src/schooltool/skin/widgets.py:117
 msgid "Toolbar configuration"
-msgstr ""
+msgstr "konfigurasi panel alatan"
 
 #: /src/schooltool/skin/widgets.py:118
 msgid "The name of the toolbar configuration to use."
-msgstr ""
+msgstr "Nama panel alatan yang hendak digunakan."
 
 #: /src/schooltool/skin/widgets.py:121
 msgid "Configuration path"
-msgstr ""
+msgstr "Arah jalan Konfigurasi"
 
 #: /src/schooltool/skin/widgets.py:122
 msgid "Path to the FCKconfiguration javascript file."
-msgstr ""
+msgstr "Arah jalan ke fail FCKkonfigurasi javascript."
 
 #: /src/schooltool/skin/widgets.py:129
 msgid "Configuration"
-msgstr ""
+msgstr "Konfigurasi"
 
 #: /src/schooltool/skin/widgets.py:130
 msgid "FCK editor configuration."
-msgstr ""
+msgstr "Editor konfigurasi FCK"
 
 #: /src/schooltool/table/templates/batch.pt:5
 #: /src/schooltool/table/templates/batch.pt:7
 msgid "&laquo; Previous"
-msgstr ""
+msgstr "&laquo; Sebelumnya"
 
 #: /src/schooltool/table/templates/batch.pt:16
 msgid "Show Less"
-msgstr ""
+msgstr "Papar Sedikit"
 
 #: /src/schooltool/table/templates/batch.pt:21
 msgid "Show All"
-msgstr ""
+msgstr "Papar Semua"
 
 #: /src/schooltool/table/templates/batch.pt:29
 #: /src/schooltool/table/templates/batch.pt:35
 msgid "Next &raquo;"
-msgstr ""
+msgstr "Seterusnya &raquo;"
 
 #: /src/schooltool/term/browser/configure.zcml:31
 msgid "Cancel School in Emergency"
-msgstr ""
+msgstr "Batal Sekolah Semasa Kecemasan"
 
 #: /src/schooltool/term/browser/emergency.py:88
 msgid "The date you entered is invalid.  Please use the YYYY-MM-DD format."
-msgstr ""
+msgstr "Tarikh yang anda masukkan tidak sah. Sila gunakan format YYYY-MM-DD."
 
 #: /src/schooltool/term/browser/emergency.py:92
 msgid "The date you entered does not belong to this term."
-msgstr ""
+msgstr "Tarikh yang anda masukkan tidak terdapat dalam penggal ini."
 
 #: /src/schooltool/term/browser/emergency.py:96
 msgid "The date you entered is not a schoolday."
-msgstr ""
+msgstr "Tarikh yang anda masukkan bukan hari sekolah."
 
 #: /src/schooltool/term/browser/emergency.py:104
 msgid "The replacement date you entered is invalid."
-msgstr ""
+msgstr "Tarikh gantian yang anda masukkan tidak sah."
 
 #. Default: ""
 #: /src/schooltool/term/browser/emergency.py:127
 msgid "School cancelled due to emergency. Replacement day $replacement."
-msgstr ""
+msgstr "Sekolah dibatalkan kerana kecemasan. Penggantian hari $replacement."
 
 #. Default: ""
 #: /src/schooltool/term/browser/emergency.py:137
 msgid "Replacement day for emergency day $emergency."
-msgstr ""
+msgstr "Hari ganti untuk hari berlaku kecemasan $emergency."
 
 #: /src/schooltool/term/browser/templates/emergency2.pt:3
 #: /src/schooltool/term/browser/templates/emergency_select.pt:3
 #: /src/schooltool/term/browser/templates/emergency_select.pt:6
 msgid "Emergency day"
-msgstr ""
+msgstr "Hari kecemasan"
 
 #: /src/schooltool/term/browser/templates/emergency2.pt:6
 msgid "Choose a replacement for the emergency day."
-msgstr ""
+msgstr "Pilih hari untuk hari kecemasan."
 
 #: /src/schooltool/term/browser/templates/emergency2.pt:12
 msgid ""
@@ -5499,115 +5920,120 @@ msgid ""
 "replacement day. The selection below consists of non-schooldays in this term "
 "following the emergency day and several days after the term."
 msgstr ""
+"Anda telah memilih ${date} sebagai hari kecemasan. Sekarang sila pilih hari "
+"penggantian. Pilihan di bawah mengandungi hari bukan-sekolah dalam penggal "
+"ini berikutan hari kecemasan dan beberapa hari selepas penggal."
 
 #: /src/schooltool/term/browser/templates/emergency2.pt:27
 msgid "Please enter the replacement date below."
-msgstr ""
+msgstr "Sila masukkan hari penggantian di bawah."
 
 #: /src/schooltool/term/browser/templates/emergency2.pt:32
 msgid "Replacement"
-msgstr ""
+msgstr "Penggantian"
 
 #: /src/schooltool/term/browser/templates/emergency2.pt:40
 #: /src/schooltool/term/browser/templates/emergency_select.pt:39
 #: /src/schooltool/timetable/browser/templates/specialday_select.pt:39
 msgid "Proceed"
-msgstr ""
+msgstr "Teruskan"
 
 #: /src/schooltool/term/browser/templates/emergency_select.pt:11
 msgid ""
 "This form allows you to mark a date as an emergency non-schoolday and add a "
 "replacement day to the term."
 msgstr ""
+"Borang ini membolehkan anda untuk menanda tarikh hari bukan-sekolah sebagai "
+"kecemasan dan tambah hari penggantian untuk penggal."
 
 #: /src/schooltool/term/browser/templates/emergency_select.pt:23
 msgid "Please enter the emergency date below."
-msgstr ""
+msgstr "Sila masukkan tarikh kecemasan di bawah."
 
 #: /src/schooltool/term/browser/templates/term.pt:12
 #: /src/schooltool/term/browser/templates/term_add.pt:41
 msgid "Legend:"
-msgstr ""
+msgstr "Petunjuk:"
 
 #: /src/schooltool/term/browser/templates/term.pt:13
 #: /src/schooltool/term/browser/templates/term_add.pt:42
 msgid "Schoolday"
-msgstr ""
+msgstr "Hari sekolah"
 
 #: /src/schooltool/term/browser/templates/term.pt:14
 #: /src/schooltool/term/browser/templates/term_add.pt:43
 msgid "Holiday"
-msgstr ""
+msgstr "Hari cuti"
 
 #: /src/schooltool/term/browser/templates/term.pt:26
 #: /src/schooltool/term/browser/templates/term_add.pt:75
 msgid "${month} ${year}"
-msgstr ""
+msgstr "${month} ${year}"
 
 #: /src/schooltool/term/browser/templates/term.pt:41
 #: /src/schooltool/term/browser/templates/term_add.pt:90
 msgid "Week ${week_number}"
-msgstr ""
+msgstr "Minggu ${week_number}"
 
 #: /src/schooltool/term/browser/templates/term_add.pt:34
 msgid ""
 "Please specify which days are school days, and which days are holidays."
-msgstr ""
+msgstr "Sila perincikan man hari untuk sekolah, dan mana hari untuk cuti."
 
 #: /src/schooltool/term/browser/templates/term_add.pt:53
 msgid "Toggle the following days of week:"
-msgstr ""
+msgstr "Beralih ke hari berikutnya dalam minggu:"
 
 #: /src/schooltool/term/browser/templates/term_add.pt:70
 msgid "Click on a day to toggle its state."
-msgstr ""
+msgstr "Klik pada hari untuk mengubah is kandungannya."
 
 #: /src/schooltool/term/browser/term.py:61
 msgid "Start date"
-msgstr ""
+msgstr "Tarikh mula"
 
 #: /src/schooltool/term/browser/term.py:63
 msgid "End date"
-msgstr ""
+msgstr "Tarikh akhir"
 
 #: /src/schooltool/term/browser/term.py:122
 msgid "Add new term"
-msgstr ""
+msgstr "Tambah penggal baru"
 
 #: /src/schooltool/term/browser/term.py:145
 #: /src/schooltool/term/browser/term.py:222
 msgid "Refresh"
-msgstr ""
+msgstr "Muat semula"
 
 #: /src/schooltool/term/browser/term.py:163
 msgid "Add term"
-msgstr ""
+msgstr "Tambah penggal"
 
 #: /src/schooltool/term/browser/term.py:237
 msgid "Save changes"
-msgstr ""
+msgstr "Simpan perubahan"
 
 #. Default: ""
 #: /src/schooltool/term/browser/term.py:253
 msgid "Change information for ${term_title}"
-msgstr ""
+msgstr "Tukar maklumat untuk ${term_title}"
 
 #: /src/schooltool/term/browser/term.py:268
 #: /src/schooltool/term/browser/term.py:291
 msgid "Term must begin before it ends."
-msgstr ""
+msgstr "Penggal mesti bermula sebelum ia berakhir."
 
 #: /src/schooltool/term/help/configure.zcml:8
 msgid "Add a term"
-msgstr ""
+msgstr "Tambah penggal"
 
 #: /src/schooltool/term/help/term_add.pt:6
 msgid "Term Search Help"
-msgstr ""
+msgstr "Bantuan Carian berdasarkan Penggal"
 
 #: /src/schooltool/term/help/term_container.pt:6
 msgid "Terms in SchoolTool"
-msgstr ""
+msgstr "Penggal dalam SchoolTool"
 
 #: /src/schooltool/term/help/term_container.pt:8
 msgid ""
@@ -5627,86 +6053,105 @@ msgid ""
 "used them yet. You should <strong>not</strong> delete terms simply because "
 "they are over, or you will lose important data.</li> </ul>"
 msgstr ""
+"<h1>Sistem Penggal di dalam SchoolTool</h1> <p>SchoolTool menyokong definisi "
+"asas penggal akademik. Iaitu, satu tempoh masa yang ditakrifkan apabila "
+"sesuatu seksyen bermula dan berakhir, dan bila ia dinilaikan, implementasi "
+"sekarang tidak menyokong penggal dalam konsep hierarki, contoh seperti, "
+"dalam setahun, yang mengandungi 2 semester, juga mengandungi 2 tempoh masa "
+"yang ditanda. Anda boleh mencipta beberapa penggal, yang mungkin akan "
+"bertindih, contohnya, kedua-dua semester dan ketiga-tiga semester di dalam "
+"sekolah yang sama, tetapi anda tidak boleh mengaitkan hubungan di antara "
+"semua penggal-penggal yang disebut di atas. </p> <h3>Bagaimana saya...</h3> "
+"<ul> <li><strong>Menambah penggal baru:</strong> Pilih <code>Penggal "
+"Baru</code> dari menu <code>Tindakan</code>.</li> <li><strong>Ubah "
+"Penggal:</strong> Klik ke atas penggal. Kemudian pilih <code>Ubah</code> "
+"dari menu <code>Tindakan</code>.</li> <li><strong>Padam Penggal:</strong> "
+"Tandakan kotak yang terletak bersebelahan nama penggal dan kemudian klik "
+"<code>Padam</code>. Hanya padam penggal jika anda telah membuat kesilapan "
+"ketika menciptanya dan ia tidak digunakan lagi. Anda juga "
+"<strong>tidak</strong> harus memadam penggal hanya semata-mata disebabkan ia "
+"sudah terlebih, atau anda akan kehilangan data-data penting."
 
 #: /src/schooltool/term/term.py:306
 msgid "Term date is not in the school year."
-msgstr ""
+msgstr "Tarikh penggal tidak berada di dalam tahunan sekolah."
 
 #: /src/schooltool/term/tests/__init__.py:77
 msgid "Set the date for the school"
-msgstr ""
+msgstr "Tetapkan tarikh untuk persekolahan"
 
 #: /src/schooltool/timetable/__init__.py:192
 msgid "Unbound timetable."
-msgstr ""
+msgstr "Jadual Tidak Terbatas."
 
 #: /src/schooltool/timetable/browser/__init__.py:691
 msgid "Invalid date. Please use YYYY-MM-DD format."
-msgstr ""
+msgstr "Tarikh tidak sah. Sila gunakan format YYYY-MM-DD."
 
 #: /src/schooltool/timetable/browser/__init__.py:695
 msgid "The date does not belong to any term."
-msgstr ""
+msgstr "Tarikh tidak terdapat pada mana-mana penggal."
 
 #: /src/schooltool/timetable/browser/__init__.py:704
 msgid "Some values were invalid.  They are highlighted in red."
 msgstr ""
+"Sesetengah nilai adalah tidak sah. Ia di tandakan dengan warna merah."
 
 #: /src/schooltool/timetable/browser/configure.zcml:30
 msgid "Add Timetable"
-msgstr ""
+msgstr "Tambah Jadual"
 
 #: /src/schooltool/timetable/browser/configure.zcml:102
 msgid "Change Timetable for One Day"
-msgstr ""
+msgstr "Tukar Jadual untuk Satu Hari"
 
 #: /src/schooltool/timetable/browser/configure.zcml:137
 msgid "New Timetable"
-msgstr ""
+msgstr "Jadual Baru"
 
 #: /src/schooltool/timetable/browser/event.py:42
 msgid "Timetables"
-msgstr ""
+msgstr "Jadual"
 
 #: /src/schooltool/timetable/browser/event.py:53
 msgid "Modify event information"
-msgstr ""
+msgstr "Ubahsuai maklumat acara"
 
 #. Default: ""
 #: /src/schooltool/timetable/browser/schema.py:94
 msgid "Timetable schema ${schema}"
-msgstr ""
+msgstr "Skema jadual  ${schema}"
 
 #: /src/schooltool/timetable/browser/schema.py:175
 msgid "Please use HH:MM format for period start and end times"
-msgstr ""
+msgstr "Sila gunakan format HH:MM untuk tempoh masa bermula dan berakhir"
 
 #: /src/schooltool/timetable/browser/schema.py:215
 msgid "You must specify at least one period."
-msgstr ""
+msgstr "Anda mesti memperincikan sekurang-kurangnya satu tempoh."
 
 #: /src/schooltool/timetable/browser/schema.py:269
 msgid "Duration in minutes"
-msgstr ""
+msgstr "Tempoh masa dalam minit"
 
 #: /src/schooltool/timetable/browser/schema.py:316
 msgid "Please select a value"
-msgstr ""
+msgstr "Sila pilih nilai"
 
 #. Default: ""
 #: /src/schooltool/timetable/browser/schema.py:343
 #: /src/schooltool/timetable/browser/schema.py:350
 msgid "Day ${number}"
-msgstr ""
+msgstr "Hari ${number}"
 
 #: /src/schooltool/timetable/browser/schema.py:373
 msgid "Period 1"
-msgstr ""
+msgstr "Tempoh 1"
 
 #. Default: ""
 #: /src/schooltool/timetable/browser/schema.py:383
 msgid "Period ${number}"
-msgstr ""
+msgstr "Tempoh ${number}"
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:3
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:6
@@ -5727,57 +6172,64 @@ msgstr ""
 #: /src/schooltool/timetable/browser/templates/ttwizard_slottimes.pt:3
 #: /src/schooltool/timetable/browser/templates/ttwizard_slottimes.pt:6
 msgid "New timetable schema"
-msgstr ""
+msgstr "Skema jadual baru"
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:17
 msgid "Please choose a name for the timetable schema you want to create."
-msgstr ""
+msgstr "Sila pilih satu nama untuk skema jadual yang anda hendak cipta."
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:36
 msgid "First, please define the days and periods of the timetable."
-msgstr ""
+msgstr "Pertama, sila nyatakan hari dan tempoh jadual."
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:51
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:155
 msgid "C"
-msgstr ""
+msgstr "C"
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:51
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:155
 msgid "Copy periods from previous day"
-msgstr ""
+msgstr "Salin tempoh dari hari sebelumnya"
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:58
 msgid "Remove this day"
-msgstr ""
+msgstr "Padam hari ini"
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:58
 msgid "X"
-msgstr ""
+msgstr "X"
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:84
 msgid "Add day"
-msgstr ""
+msgstr "Tambah hari"
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:87
 msgid "Add period"
-msgstr ""
+msgstr "Tambah tempoh"
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:94
 msgid "Second, select the way timetable days are aligned with calendar days."
 msgstr ""
+"Kedua, pilih bagaimana jadual untuk hari diselaraskan dengan kalendar untuk "
+"hari."
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:114
 msgid ""
 "Timetable day always coincides with the day of week (i.e. on Mondays the "
 "first timetable day is used, on Tuesdays the second, and so on)."
 msgstr ""
+"Jadual untuk hari selalunya selaras dengan hari dalam seminggu (cth: Pada "
+"hari Isnin jadual untuk hari pertama digunakan, pada hari Selasa, jadual "
+"untuk hari kedua digunakan, dan seterusnya)."
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:129
 msgid ""
 "Timetable days are used sequentially, jumping over days that are not school "
 "days."
 msgstr ""
+"Jadual untuk hari digunakan berturutan, melangkau hari yang bukan hari "
+"bersekolah."
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:136
 msgid ""
@@ -5790,129 +6242,152 @@ msgid ""
 "that day of week. If the list of periods is not up to date with the changes "
 "you made in the table above, use the Update button to refresh the form."
 msgstr ""
+"Ketiga, nyatakan masa dan tempoh masa bila ia akan jatuh pada hari-hari "
+"tertentu dalam mingguan. Gunakan satu dari format-format berikutnya:  "
+"<tt>HH:MM</tt> (juga, jangan lupa untuk perincikan tempoh masa di dalam "
+"kotak teks di bawah)  atau <tt>HH:MM-HH:MM</tt> (bila anda mahu perincikan "
+"kedua-dua titik terakhir dengan tepat, cth: 9:30-10:15).  Adalah tidak perlu "
+"untuk nyatakan kesemua tempoh masa untuk semua hari dalam seminggu, Kealpaan "
+"melakukan perkara sedemikian hanya akan menyebabkan tempoh masa akan "
+"dilangkaui sekiranya ia jatuh pada hari dalam minggu itu. Sekiranya senarai "
+"tempoh masa tidak dikemaskinikan dengan pengubahan yang anda lakukan di "
+"dalam jadual di atas, gunakan butang Kemaskini untuk mengemaskinikan borang "
+"tersebut."
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:175
 msgid ""
 "Certain period specifications were incorrect, and therefore were discarded."
-msgstr ""
+msgstr "Sesetengah spesifikasi tempoh adalah salah, maka ia telah dibuang."
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:191
 msgid ""
 "Finally, make sure the information in this form is correct, because the only "
 "way to correct it will be to remove this timetable schema and recreate it."
 msgstr ""
+"Terakhir, pastikan yang maklumat di dalam borang ini adalah benar, kerana "
+"satu-satunya jalan untuk  membetulkannya adalah dengan membuang skema jadual "
+"dan menciptanya kembali."
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:197
 msgid "Create timetable schema"
-msgstr ""
+msgstr "Cipta skema jadual"
 
 #: /src/schooltool/timetable/browser/templates/calendar_overlay.pt:14
 msgid "Cal"
-msgstr ""
+msgstr "Cal"
 
 #: /src/schooltool/timetable/browser/templates/calendar_overlay.pt:14
 msgid "Personal calendar"
-msgstr ""
+msgstr "Kalendar Peribadi"
 
 #: /src/schooltool/timetable/browser/templates/calendar_overlay.pt:17
 msgid "TT"
-msgstr ""
+msgstr "TT"
 
 #: /src/schooltool/timetable/browser/templates/calendar_overlay.pt:17
 msgid "Timetable calendar"
-msgstr ""
+msgstr "Kalendar jadual"
 
 #: /src/schooltool/timetable/browser/templates/calendar_overlay.pt:66
 msgid ""
 "<a href=\"#\" onclick=\"$('#more_overlays').toggle();return "
 "false;\">More...</a>"
 msgstr ""
+"<a href=\"#\" onclick=\"$('#more_overlays').toggle();return "
+"false;\">Lagi...</a>"
 
 #: /src/schooltool/timetable/browser/templates/calendar_overlay.pt:95
 msgid "Manage..."
-msgstr ""
+msgstr "Urus.."
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:4
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:10
 msgid "Scheduling for ${person}"
-msgstr ""
+msgstr "Penjadualan untuk ${person}"
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:15
 #: /src/schooltool/timetable/browser/templates/timetable-add.pt:8
 msgid "There are no terms or timetable schemas defined."
-msgstr ""
+msgstr "Tiada penggal atau skema jadual didefinasikan."
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:22
 msgid "Timetable"
-msgstr ""
+msgstr "Jadual"
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:24
 msgid "Term"
-msgstr ""
+msgstr "Penggal"
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:34
 msgid "Schema"
-msgstr ""
+msgstr "Skema"
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:43
 msgid "Choose"
-msgstr ""
+msgstr "Pilih"
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:54
 msgid ""
 "This form lets you set up the timetable of a person by adding and removing "
 "the person to and from sections that have classes in their timetables."
 msgstr ""
+"Borang ini membolehkan anda untuk menyediakan jadual sesorang dengan "
+"menambah atau membuang seseorang itu dari dan ke seksyen yang mempunyai "
+"kelas-kelas di dalam jadual."
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:73
 msgid "as part of"
-msgstr ""
+msgstr "sebahagian dari"
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:82
 msgid "none"
-msgstr ""
+msgstr "tiada"
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:93
 msgid "Scheduling conflict."
-msgstr ""
+msgstr "Konflik Penjadualan."
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:101
 msgid ""
 "Note: if a section appears in more than one slot, all of them have to be set "
 "to <em>none</em> to remove it."
 msgstr ""
+"Nota: Sekiranya satu-satu seksyen muncul di dalam lebih dari satu slot, "
+"kesemuanya harus di tetapkan kepada <em>tiada</em> untuk membuangnya."
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:107
 #: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:81
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:68
 msgid "Save"
-msgstr ""
+msgstr "Simpan"
 
 #: /src/schooltool/timetable/browser/templates/schooltt-delete.pt:10
 msgid "Are you sure you want to delete the selected school timetables?"
-msgstr ""
+msgstr "Adakah anda pasti untuk memadam jadual sekolah yang dipilih?"
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:4
 #: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:11
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:4
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:12
 msgid "Scheduling for ${section}"
-msgstr ""
+msgstr "Penjadualan untuk ${section}"
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:17
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:19
 msgid "There are no timetable schemas defined."
-msgstr ""
+msgstr "Tiada skema jadual didefinasikan."
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:24
 msgid "Choose school timetable to use"
-msgstr ""
+msgstr "Pilih jadual sekolah yang hendak digunakan"
 
 #: /src/schooltool/timetable/browser/templates/simpletts.pt:11
 msgid ""
 "This is a simple way to create a weekly timetable schema. Just fill in a "
 "sufficient number of lines for your periods."
 msgstr ""
+"Ini adalah jalan mudah untuk mencipta skema jadual. Hanya isikan dengan "
+"beberapa baris nombor tempoh masa yang anda ingin tetapkan."
 
 #: /src/schooltool/timetable/browser/templates/simpletts.pt:16
 msgid ""
@@ -5920,29 +6395,32 @@ msgid ""
 "schema creation wizard</a>, or a <a href=\"complexadd.html\">complex "
 "timetable schema set up form</a>."
 msgstr ""
+"Jika anda memerlukan lebih ruang pengubahsuaian, anda boleh gunakan  <a "
+"href=\"add.html\">timetable schema creation wizard</a>, or a <a "
+"href=\"complexadd.html\">complex timetable schema set up form</a>."
 
 #: /src/schooltool/timetable/browser/templates/simpletts.pt:36
 msgid "Period title (optional)"
-msgstr ""
+msgstr "Nama Tempoh Masa (pilihan)"
 
 #: /src/schooltool/timetable/browser/templates/simpletts.pt:37
 msgid "Period start time"
-msgstr ""
+msgstr "Tempoh masa bermula"
 
 #: /src/schooltool/timetable/browser/templates/simpletts.pt:38
 msgid "Period end time"
-msgstr ""
+msgstr "Tempoh masa berakhir"
 
 #: /src/schooltool/timetable/browser/templates/simpletts.pt:60
 msgid "Create"
-msgstr ""
+msgstr "Cipta"
 
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:3
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:6
 #: /src/schooltool/timetable/browser/templates/specialday_select.pt:3
 #: /src/schooltool/timetable/browser/templates/specialday_select.pt:6
 msgid "Choose a special day"
-msgstr ""
+msgstr "Pilih hari khas"
 
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:13
 msgid ""
@@ -5950,79 +6428,85 @@ msgid ""
 "below. In order to remove a period from the day, just delete the period's "
 "start and end times."
 msgstr ""
+"Anda boleh mengubah tempoh masa bermula dan berakhir untuk ${date} di dalam "
+"borang di bawah. Untuk membuang tempoh dari hari, hanya buang tempoh masa "
+"bermula dan berakhir."
 
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:28
 msgid "Period title"
-msgstr ""
+msgstr "Nama Tempoh"
 
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:29
 msgid "Original start"
-msgstr ""
+msgstr "Permulaan asal"
 
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:30
 msgid "Original end"
-msgstr ""
+msgstr "Pengakhiran asal"
 
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:31
 msgid "New start"
-msgstr ""
+msgstr "Permulaan baru"
 
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:32
 msgid "New end"
-msgstr ""
+msgstr "Pengakhiran baru"
 
 #: /src/schooltool/timetable/browser/templates/specialday_select.pt:11
 msgid ""
 "This form allows you to change the start and end times for periods on a "
 "certain date, or to cancel some periods altogether."
 msgstr ""
+"Borang ini membolehkan anda untuk menukar permulaan tempoh bermula dan "
+"berakhir untuk tarikh-tarikh tertentu, atau untuk membatalkan sesetengah "
+"tempoh secara keseluruhan."
 
 #: /src/schooltool/timetable/browser/templates/specialday_select.pt:23
 msgid "Please enter the date when the periods need to be changed below."
-msgstr ""
+msgstr "Sila masukkan tarikh dimana tempoh perlu untuk ditukar di bawah:"
 
 #: /src/schooltool/timetable/browser/templates/timetable-add.pt:13
 msgid "Create a New Timetable"
-msgstr ""
+msgstr "Cipta Jadual Baru"
 
 #: /src/schooltool/timetable/browser/templates/timetable-add.pt:15
 msgid "Select school timetable to use"
-msgstr ""
+msgstr "Pilih jadual sekolah yang mana hendak diguna"
 
 #: /src/schooltool/timetable/browser/templates/timetable-container-delete.pt:10
 msgid "Are you sure you want to delete the selected timetables?"
-msgstr ""
+msgstr "Adakah anda pasti untuk memadam jadual yang dipilih?"
 
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:26
 msgid "For term:"
-msgstr ""
+msgstr "Untuk penggal:"
 
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:29
 msgid "Using timetable:"
-msgstr ""
+msgstr "Menggunakan jadual:"
 
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:40
 msgid "Default Timetable Schema:"
-msgstr ""
+msgstr "Skema Jadual Asal:"
 
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:46
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:53
 msgid "Not Selected"
-msgstr ""
+msgstr "Tidak Dipilih"
 
 #. Default: "Change"
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:59
 msgid "change-button"
-msgstr ""
+msgstr "butang-penukaran"
 
 #: /src/schooltool/timetable/browser/templates/timetable_list.pt:4
 #: /src/schooltool/timetable/browser/templates/timetable_list.pt:11
 msgid "Timetables for ${object}"
-msgstr ""
+msgstr "Jadual untuk ${object}"
 
 #: /src/schooltool/timetable/browser/templates/timetableschema.pt:33
 msgid "Homeroom"
-msgstr ""
+msgstr "Kelas Induk"
 
 #: /src/schooltool/timetable/browser/templates/ttwizard.pt:9
 msgid ""
@@ -6030,92 +6514,106 @@ msgid ""
 "create a <a href=\"simpleadd.html\">simple weekly timetable schema</a>, or "
 "use a more complex <a href=\"complexadd.html\">advanced adding form</a>."
 msgstr ""
+"Pembantu tetapan ini memaparkan kepada anda dengan beberapa siri soal jawab. "
+"Atau anda boleh mencipta <a href=\"simpleadd.html\">simple weekly timetable "
+"schema</a>, atau guna yang lebih kompleks <a "
+"href=\"complexadd.html\">advanced adding form</a>."
 
 #: /src/schooltool/timetable/browser/ttwizard.py:259
 msgid ""
 "Does your school's timetable cycle use days of the week, or a rotating cycle?"
 msgstr ""
+"Adakah pusingan jadual sekolah anda menggunakan hari-hari dalam seminggu, "
+"atau pusingan yang berulang?"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:262
 msgid "Days of the week"
-msgstr ""
+msgstr "Hari-hari dalam seminggu"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:263
 msgid "Rotating cycle"
-msgstr ""
+msgstr "Pusingan berulang"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:286
 msgid "Enter names of days in cycle, one per line."
-msgstr ""
+msgstr "Masukkan nama hari yang di dalam pusingan, satu untuk setiap baris."
 
 #: /src/schooltool/timetable/browser/ttwizard.py:298
 msgid "Please enter at least one day name."
-msgstr ""
+msgstr "Sila masukkan sekurang-kurangnya satu nama hari."
 
 #: /src/schooltool/timetable/browser/ttwizard.py:304
 msgid "Please make sure the day names are unique."
-msgstr ""
+msgstr "Sila pastikan nama hari adalah unik."
 
 #: /src/schooltool/timetable/browser/ttwizard.py:320
 msgid ""
 "Do classes begin and end at the same time each day in your school's "
 "timetable?"
 msgstr ""
+"Adakah kelas bermula dan berakhir pada waktu yang sama setiap hari di dalam "
+"jadual sekolah anda?"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:323
 msgid "Same time each day"
-msgstr ""
+msgstr "Masa yang sama setiap hari"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:324
 msgid "Different times"
-msgstr ""
+msgstr "Masa berlainan"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:343
 msgid ""
 "Do start and end times vary based on the day of the week (Monday - Friday) "
 "or the day in the cycle?"
 msgstr ""
+"Adakah masa bermula dan berakhir pelbagai berdasarkan hari dalam seminggu "
+"(Isnin-Jumaat) atau hari yang di dalam pusingan?"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:346
 msgid "Day of week"
-msgstr ""
+msgstr "Hari mingguan"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:347
 msgid "Day in cycle"
-msgstr ""
+msgstr "Hari dalam pusingan"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:412
 msgid ""
 "Enter start and end times for each slot, one slot (HH:MM - HH:MM) per line."
 msgstr ""
+"Masukkan mula dan akhir masa untuk setiap slot, satu slot (HH:MM - HH:MM) "
+"untuk satu baris."
 
 #. Default: ""
 #: /src/schooltool/timetable/browser/ttwizard.py:426
 #: /src/schooltool/timetable/browser/ttwizard.py:483
 msgid "Not a valid time slot: $slot."
-msgstr ""
+msgstr "Bukan slot masa yang sah: $slot."
 
 #: /src/schooltool/timetable/browser/ttwizard.py:430
 msgid "Please enter at least one time slot."
-msgstr ""
+msgstr "Sila masukkan sekurang-kurangnya satu slot masa."
 
 #: /src/schooltool/timetable/browser/ttwizard.py:454
 msgid ""
 "Enter start and end times for each slot on each day, one slot (HH:MM - "
 "HH:MM) per line."
 msgstr ""
+"Masukkan mula dan akhir masa untuk setiap slot pada setiap hari, satu slot "
+"(HH:MM - HH:MM) satu baris."
 
 #: /src/schooltool/timetable/browser/ttwizard.py:530
 msgid "Do periods have names or are they simply designated by time?"
-msgstr ""
+msgstr "Adakah tempoh mempunyai nama atau ia hanya berdasarkan masa?"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:533
 msgid "Have names"
-msgstr ""
+msgstr "Ada nama"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:534
 msgid "Designated by time"
-msgstr ""
+msgstr "Berdasarkan masa"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:570
 msgid "Enter names of periods, one per line."
@@ -6124,83 +6622,85 @@ msgstr ""
 #. Default: ""
 #: /src/schooltool/timetable/browser/ttwizard.py:583
 msgid "Please enter at least $number periods."
-msgstr ""
+msgstr "Sila masukkan sekurang-kurangnya $number waktu."
 
 #: /src/schooltool/timetable/browser/ttwizard.py:589
 msgid "Please make sure the period names are unique."
-msgstr ""
+msgstr "Sila pastikan nama tempoh adalah unik."
 
 #: /src/schooltool/timetable/browser/ttwizard.py:611
 msgid "Is the sequence of periods each day the same or different?"
-msgstr ""
+msgstr "Adakah turutan tempoh setiap hari adalah sama atau berlainan?"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:613
 msgid "Same"
-msgstr ""
+msgstr "Sama"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:614
 msgid "Different"
-msgstr ""
+msgstr "Lain"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:629
 msgid "Please put the periods in order:"
-msgstr ""
+msgstr "SIla masukkan waktu dalam turutan:"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:645
 #: /src/schooltool/timetable/browser/ttwizard.py:699
 msgid "Please provide all periods."
-msgstr ""
+msgstr "Sila kemukakan semua waktu."
 
 #. Default: ""
 #: /src/schooltool/timetable/browser/ttwizard.py:658
 #: /src/schooltool/timetable/browser/ttwizard.py:716
 msgid "The following periods were selected more than once: $periods"
-msgstr ""
+msgstr "Waktu seterusnya dipilih lebih dari sekali: $periods"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:676
 msgid "Please put the periods in order for each day:"
-msgstr ""
+msgstr "Sila masukkan waktu dalam turutan untuk setiap hari:"
 
 #. Default: ""
 #: /src/schooltool/timetable/browser/ttwizard.py:712
 msgid "$period on day $day"
-msgstr ""
+msgstr "$period untuk hari $day"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:733
 msgid ""
 "Do you check student attendance for the day in a homeroom period or "
 "equivalent?"
 msgstr ""
+"Adakah anda memeriksa kedatangan pelajar untuk hari di dalam waktu kelas "
+"induk atau yang seumpama dengannya?"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:736
 msgid "Yes"
-msgstr ""
+msgstr "Ya"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:737
 msgid "No"
-msgstr ""
+msgstr "Tidak"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:752
 msgid "Please indicate the homeroom period(s) for each day:"
-msgstr ""
+msgstr "Sila nyatakan waktu kelas induk untuk setiap hari:"
 
 #: /src/schooltool/timetable/security.zcml:16
 msgid "School timetables"
-msgstr ""
+msgstr "Jadual sekolah"
 
 #: /src/schooltool/timetable/security.zcml:46
 msgid "Assign timetables"
-msgstr ""
+msgstr "Tetapkan jadual"
 
 #: /src/schooltool/timetable/security.zcml:54
 msgid "Change schedule"
-msgstr ""
+msgstr "Tukar jadual"
 
 #. Default: "Confirm"
 #: /src/schooltool/widget/password.py:39
 msgid "confirm password"
-msgstr ""
+msgstr "sahkan kata laluan"
 
 #: /src/schooltool/widget/password.py:56
 msgid "Supplied passwords are not identical"
-msgstr ""
+msgstr "Kata laluan yang diberi tidak sepadan"
