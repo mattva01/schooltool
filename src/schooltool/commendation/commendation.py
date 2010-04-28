@@ -44,8 +44,7 @@ CommendationsCacheKey = 'schooltool.commendation.Cache'
 class Commendation(persistent.Persistent, Contained):
     """A simple commendation implementation."""
 
-    implements(ICommendation,
-                              ICommendationContained)
+    implements(ICommendation, ICommendationContained)
 
     # We are using ``FieldProperty`` properties to implement the data
     # fields. ``FieldProperty`` isntances ensure that no invalid values are

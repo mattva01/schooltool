@@ -16,8 +16,8 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 msgid ""
 msgstr ""
-"Project-Id-Version: SchoolTool development\n"
-"POT-Creation-Date: Mon Jan  4 15:41:27 2010\n"
+"Project-Id-Version: schooltool.commendation\n"
+"POT-Creation-Date: 2010-04-29 01:54+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Schooltool Development Team <schooltool-dev@schooltool.org>\n"
