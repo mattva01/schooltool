@@ -894,17 +894,19 @@ msgstr "Events for"
 #. "      in a Newsreader or syndicated to another site. Please visit"
 #: /src/schooltool/app/browser/templates/cal_atom.pt:42
 msgid "atom_description"
-msgstr "atom_description"
+msgstr ""
+"This is an Atom formatted XML site feed. It is intended to be viewed\n"
+"in a Newsreader or syndicated to another site. Please visit"
 
 #. Default: "Atom Enabled"
 #: /src/schooltool/app/browser/templates/cal_atom.pt:46
 msgid "atom_enabled"
-msgstr "atom_enabled"
+msgstr "Atom Enabled"
 
 #. Default: "for more info."
 #: /src/schooltool/app/browser/templates/cal_atom.pt:49
 msgid "atom_more_info"
-msgstr "atom_more_info"
+msgstr "for more info."
 
 #: /src/schooltool/app/browser/templates/cal_atom.pt:56
 msgid "Validate my Atom feed"
@@ -4618,9 +4620,9 @@ msgid "Please indicate the homeroom period(s) for each day:"
 msgstr "Please indicate the homeroom period(s) for each day:"
 
 #. Default: "Confirm"
-#: /src/schooltool/widget/password.py:39
+#: src/schooltool/widget/password.py:39
 msgid "confirm password"
-msgstr "confirm password"
+msgstr "Confirm"
 
 #: /src/schooltool/widget/password.py:56
 msgid "Supplied passwords are not identical"
@@ -4937,7 +4939,7 @@ msgstr ""
 #: /src/schooltool/person/browser/person-csvimport.pt:75
 #: /src/schooltool/resource/browser/resource-csvimport.pt:72
 msgid "submit-button"
-msgstr "Apply"
+msgstr "Submit"
 
 #: /src/schooltool/app/help/org.pt:6
 msgid "SchoolTool Organization"

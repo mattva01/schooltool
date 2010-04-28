@@ -670,7 +670,7 @@ msgstr "Altri..."
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:4
 msgid "Select calendars to display"
-msgstr "Seleziona i  calendari da mostrare"
+msgstr "Seleziona i calendari da mostrare"
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:15
 msgid "Select additional calendars to display"
@@ -4722,7 +4722,7 @@ msgstr ""
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:75
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:84
 msgid "ok-button"
-msgstr "pulsante \"ok\""
+msgstr "OK"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:348
 msgid "Booked Resources"
@@ -5477,7 +5477,7 @@ msgstr ""
 #. Default: "Select All Visible"
 #: /src/schooltool/course/browser/templates/copy_sections.pt:66
 msgid "select-all-visible-button"
-msgstr "pulsante-seleziona-tutti-i-visibili"
+msgstr "Seleziona tutti i visibili"
 
 #. Default: "Select None"
 #: /src/schooltool/course/browser/templates/copy_sections.pt:70
@@ -5496,7 +5496,7 @@ msgstr "Copiato"
 #. Default: "Copy"
 #: /src/schooltool/course/browser/templates/copy_sections.pt:159
 msgid "copy-button"
-msgstr "pulsante-copia"
+msgstr "Copia"
 
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:24
 msgid ""
