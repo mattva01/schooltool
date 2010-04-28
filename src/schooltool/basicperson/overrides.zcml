@@ -10,9 +10,12 @@
       name="person_info_viewers"
       factory=".security.PersonInfoViewersCrowd" />
 
+  <adapter factory=".person.PersonCatalog"
+           name="schooltool.person.person.PersonCatalog" />
+
   <adapter
       for="schooltool.person.interfaces.IPersonContainer"
-      factory=".person.getPersonContainerCatalog"
+      factory=".person.getPersonCatalog"
       provides="zope.catalog.interfaces.ICatalog" />
 
   <configure

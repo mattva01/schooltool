@@ -82,10 +82,9 @@
       factory=".basicperson.PersonRemovedSubsciber"
       name="notify_person_contact_removed" />
 
-  <subscriber
-     for="schooltool.app.interfaces.ICatalogSetUpEvent"
-     handler=".contact.catalogSetUpSubscriber"
-     />
+  <adapter
+      factory=".contact.ContactCatalog"
+      name="schooltool.contact.contact.ContactCatalog" />
 
   <adapter
       for=".interfaces.IContactContainer"

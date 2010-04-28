@@ -64,11 +64,6 @@
      provides="schooltool.app.interfaces.ICalendarParentCrowd"
      name="schooltool.view" />
 
-  <subscriber
-     for="schooltool.app.interfaces.ICatalogSetUpEvent"
-     handler=".person.catalogSetUpSubscriber"
-     />
-
   <utility
      factory=".vocabularies.groupVocabularyFactory"
      provides="zope.schema.interfaces.IVocabularyFactory"

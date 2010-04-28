@@ -20,9 +20,11 @@
 SchoolTool catalogs.
 """
 from zope.interface import implementer, implements, implementsOnly
-from zope.component import adapter
+from zope.intid.interfaces import IIntIds, IIntIdAddedEvent, IIntIdRemovedEvent
+from zope.component import adapter, queryUtility, getUtility
 from zope.container import btree
 from zope.container.contained import Contained
+from zope.lifecycleevent import IObjectModifiedEvent
 
 from zc.catalog import extentcatalog
 from zc.catalog import catalogindex
@@ -101,7 +103,7 @@ class CatalogFactory(CatalogStartupBase):
         return u'catalog:%s.%s' % (cls.__module__, cls.__name__)
 
     @classmethod
-    def get(cls):
+    def get(cls, ignored=None):
         app = ISchoolToolApplication(None)
         catalogs = ICatalogs(app)
         entry = catalogs.get(cls.key())
@@ -167,3 +169,48 @@ class AttributeCatalog(CatalogImplementing):
     def setIndexes(self, catalog):
         for name in self.attributes:
             catalog[name] = catalogindex.ValueIndex(name)
+
+
+@adapter(IIntIdAddedEvent)
+def indexDocSubscriber(event):
+    app = ISchoolToolApplication(None, None)
+    if app is None:
+        return
+    obj = event.object
+    util = getUtility(IIntIds, context=app)
+    obj_id = util.getId(obj)
+    catalogs = ICatalogs(app)
+    for entry in catalogs.values():
+        entry.catalog.index_doc(obj_id, obj)
+
+
+@adapter(IObjectModifiedEvent)
+def reindexDocSubscriber(event):
+    app = ISchoolToolApplication(None, None)
+    if app is None:
+        return
+    obj = event.object
+    util = queryUtility(IIntIds, context=app)
+    if util is None:
+        return
+    obj_id = util.queryId(obj)
+    if obj_id is None:
+        return
+    catalogs = ICatalogs(app)
+    for entry in catalogs.values():
+        entry.catalog.index_doc(obj_id, obj)
+
+
+@adapter(IIntIdRemovedEvent)
+def unindexDocSubscriber(event):
+    app = ISchoolToolApplication(None, None)
+    if app is None:
+        return
+    obj = event.object
+    util = getUtility(IIntIds, context=app)
+    obj_id = util.queryId(obj)
+    if obj_id is None:
+        return
+    catalogs = ICatalogs(app)
+    for entry in catalogs.values():
+        entry.catalog.unindex_doc(obj_id)

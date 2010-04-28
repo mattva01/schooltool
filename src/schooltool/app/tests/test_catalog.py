@@ -46,7 +46,7 @@ class CatalogStub(dict):
         self.name = name
 
     def __repr__(self):
-        return '<CatalogStub %r>' % self.name
+        return '<%s %r>' % (self.__class__.__name__, self.name)
 
 
 def provideApplicationStub():
@@ -569,6 +569,127 @@ def doctest_AttributeCatalog():
 
         >>> index_app(CatalogTriplets.get())
         catalog[u'b']: [(1, 'eins'), (2, 'zwei'), (3, 'drei')]
+
+    """
+
+
+def doctest_catalog_subscribers():
+    """Tests for catalog subscribers.
+
+    Let's provide our subscribers.
+
+        >>> from zope.component import provideHandler
+        >>> from schooltool.app.catalog import indexDocSubscriber
+        >>> from schooltool.app.catalog import reindexDocSubscriber
+        >>> from schooltool.app.catalog import unindexDocSubscriber
+
+        >>> provideHandler(indexDocSubscriber)
+        >>> provideHandler(reindexDocSubscriber)
+        >>> provideHandler(unindexDocSubscriber)
+
+    And set up the event firing helpers.
+
+        >>> from zope.component import provideUtility, queryUtility
+        >>> from zope.event import notify
+        >>> from zope.intid.interfaces import (
+        ...     IIntIds, IntIdAddedEvent, IntIdRemovedEvent)
+        >>> from zope.lifecycleevent import (
+        ...     ObjectAddedEvent, ObjectRemovedEvent, ObjectModifiedEvent)
+
+        >>> def addAndNotify(obj, obj_id):
+        ...     util = queryUtility(IIntIds)
+        ...     if util is None:
+        ...         print "No IIntIds utility, so don't fire IntIdAddedEvent"
+        ...         return
+        ...     util[obj] = obj_id
+        ...     print 'firing IntIdAddedEvent'
+        ...     notify(IntIdAddedEvent(obj, ObjectAddedEvent(obj)))
+
+        >>> def notifyModified(obj):
+        ...     print 'firing ObjectModifiedEvent'
+        ...     notify(ObjectModifiedEvent(obj))
+
+        >>> def notifyAndRemove(obj):
+        ...     util = queryUtility(IIntIds)
+        ...     if util is None:
+        ...         print "No IIntIds utility, so don't fire IntIdRemovedEvent"
+        ...         return
+        ...     print 'firing IntIdRemovedEvent'
+        ...     notify(IntIdRemovedEvent(obj, ObjectAddedEvent(obj)))
+        ...     del util[obj]
+
+    When database is being set up, we may have no SchoolToolApplication and
+    no IntIds utility.
+
+        >>> class TestObj(object):
+        ...     __parent__ = __name__ = None
+        ...     def __init__(self, name):
+        ...         self.name = name
+        ...     def __repr__(self):
+        ...         return '<%s %r>' % (self.__class__.__name__, self.name)
+
+        >>> test_one = TestObj('missing_one')
+        >>> addAndNotify(test_one, 1)
+        No IIntIds utility, so don't fire IntIdAddedEvent
+
+        >>> notifyModified(test_one)
+        firing ObjectModifiedEvent
+
+        >>> notifyAndRemove(test_one)
+        No IIntIds utility, so don't fire IntIdRemovedEvent
+
+    Having IntIds utility is not enough as catalogs live within the application
+    itself.  Subscribers handle this case also.
+
+        >>> class IntIdsStub(dict):
+        ...     def getId(self, obj):
+        ...         return self[obj]
+        ...     def queryId(self, obj):
+        ...         return self.get(obj)
+
+        >>> provideUtility(IntIdsStub(), IIntIds)
+
+        >>> test_two = TestObj('two')
+        >>> addAndNotify(test_two, 2)
+        firing IntIdAddedEvent
+
+        >>> notifyModified(test_two)
+        firing ObjectModifiedEvent
+
+        >>> notifyAndRemove(test_two)
+        firing IntIdRemovedEvent
+
+    Let's provide an application and set up a catalog.
+
+        >>> from schooltool.app.catalog import VersionedCatalog
+
+        >>> class PrintingCatalogStub(CatalogStub):
+        ...      def index_doc(self, doc_id, doc):
+        ...          print 'CatalogStub(%r) indexed doc %s (%s)' % (
+        ...              self.name, doc_id, doc)
+        ...      def unindex_doc(self, doc_id):
+        ...          print 'CatalogStub(%r) unindexed doc %s' % (
+        ...              self.name, doc_id)
+
+        >>> app = provideApplicationStub()
+        >>> catalogs = ICatalogs(app)
+        >>> catalogs['demo'] = VersionedCatalog(PrintingCatalogStub('demo'), 'v1')
+
+    We can now see objects being indexed.
+
+        >>> test_three = TestObj('three')
+        >>> addAndNotify(test_three, 3)
+        firing IntIdAddedEvent
+        CatalogStub('demo') indexed doc 3 (<TestObj 'three'>)
+
+        >>> test_three.name='three and a half'
+        >>> notifyModified(test_three)
+        firing ObjectModifiedEvent
+        CatalogStub('demo') indexed doc 3 (<TestObj 'three and a half'>)
+
+        >>> notifyAndRemove(test_three)
+        firing IntIdRemovedEvent
+        CatalogStub('demo') unindexed doc 3
 
     """
 

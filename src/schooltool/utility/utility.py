@@ -61,7 +61,8 @@ def setUpUtilities(site, specs):
            if spec.override:
                # override existing utility
                name = local_utility.__name__
-               manager.unregisterUtility(local_utility, spec.iface, name)
+               manager.unregisterUtility(
+                   local_utility, spec.iface, spec.utility_name)
                del default[name]
            else:
                # do not register this utility; we already got it

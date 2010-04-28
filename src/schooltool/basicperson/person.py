@@ -21,11 +21,6 @@ Lyceum person specific code.
 """
 from zope.interface import implements
 from zope.component import adapts
-from zope.catalog.interfaces import ICatalog
-from zope.catalog.catalog import Catalog
-from zope.component import getUtility
-
-from zc.catalog.catalogindex import ValueIndex
 
 from schooltool.person.person import Person
 from schooltool.person.interfaces import IPersonFactory
@@ -37,10 +32,8 @@ from schooltool.table.table import url_cell_formatter
 from schooltool.relationship import RelationshipProperty
 from schooltool.basicperson.advisor import URIAdvisor, URIAdvising, URIStudent
 from schooltool.basicperson.interfaces import IBasicPerson
+from schooltool.app.catalog import AttributeCatalog
 from schooltool.common import SchoolToolMessage as _
-
-
-PERSON_CATALOG_KEY = 'schooltool.basicperson'
 
 
 class BasicPerson(Person):
@@ -119,16 +112,11 @@ class BasicPersonCalendarCrowd(PersonCalendarCrowd):
                 PersonInstructorsCrowd(self.context).contains(principal))
 
 
-def catalogSetUp(catalog):
-    catalog['__name__'] = ValueIndex('__name__', IBasicPerson)
-    catalog['title'] = ValueIndex('title', IBasicPerson)
-    catalog['first_name'] = ValueIndex('first_name', IBasicPerson)
-    catalog['last_name'] = ValueIndex('last_name', IBasicPerson)
+class PersonCatalog(AttributeCatalog):
+
+    version = '1 - replaced catalog utility'
+    interface = IBasicPerson
+    attributes = ('__name__', 'title', 'first_name', 'last_name')
 
 
-catalogSetUpSubscriber = UtilitySetUp(
-    Catalog, ICatalog, PERSON_CATALOG_KEY, setUp=catalogSetUp)
-
-
-def getPersonContainerCatalog(container):
-    return getUtility(ICatalog, PERSON_CATALOG_KEY)
+getPersonCatalog = PersonCatalog.get
