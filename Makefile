@@ -145,9 +145,9 @@ update-translations: extract-translations
 
 .PHONY: release
 release: bin/buildout compile-translations
-	echo -n `cat version.txt.in`_r`bzr revno` > version.txt
+	grep -qv 'dev' version.txt.in || echo -n `cat version.txt.in`_r`bzr revno` > version.txt
 	bin/buildout setup setup.py sdist
-	rm version.txt
+	rm -f version.txt
 
 .PHONY: move-release
 move-release:
@@ -158,3 +158,4 @@ move-release:
 .PHONY: ubuntu-environment
 ubuntu-environment:
 	sudo apt-get install bzr build-essential python-all-dev libc6-dev libicu-dev libxslt1-dev libfreetype6-dev libjpeg62-dev
+
