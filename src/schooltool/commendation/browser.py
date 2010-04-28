@@ -29,7 +29,6 @@ from zope.publisher import browser
 from zope.traversing.browser.absoluteurl import absoluteURL
 from zope.component import getUtility
 
-# Import the 'commendation' message id factory
 from schooltool.commendation import interfaces, commendation
 from schooltool.commendation.interfaces import _
 from schooltool.app import app

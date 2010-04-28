@@ -16,7 +16,8 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-"""Commandation Interfaces
+"""
+Commendation Interfaces
 """
 # Setting this attribute on the module declares that all doc strings in this
 # module are written in restructured text, the default Python documentation
