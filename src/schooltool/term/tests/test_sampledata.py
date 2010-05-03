@@ -27,6 +27,7 @@ from zope.interface.verify import verifyObject
 from zope.app.testing import setup
 
 from schooltool.schoolyear.schoolyear import getSchoolYearContainer
+from schooltool.schoolyear.interfaces import ISchoolYearContainer
 from schooltool.term.term import getTermContainer
 from schooltool.term.interfaces import ITermContainer
 from schooltool.testing import setup as stsetup
@@ -51,10 +52,15 @@ def doctest_SampleTerms():
         >>> verifyObject(ISampleDataPlugin, plugin)
         True
 
-    This plugin generates two terms:
+    This plugin generates a school year:
 
         >>> app = stsetup.setUpSchoolToolSite()
         >>> plugin.generate(app, 42)
+        >>> list(ISchoolYearContainer(app))
+        [u'2005-2006']
+
+    The school year contains three terms:
+
         >>> len(ITermContainer(app))
         3
 
@@ -68,21 +74,21 @@ def doctest_SampleTerms():
         >>> spring = ITermContainer(app)['2006-spring']
         >>> schooldays = [day for day in spring if spring.isSchoolday(day)]
         >>> len(schooldays)
-        156
+        90
 
         >>> fall6 = ITermContainer(app)['2006-fall']
         >>> schooldays = [day for day in fall6 if fall6.isSchoolday(day)]
         >>> len(schooldays)
-        81
+        90
 
     They span these dates:
 
         >>> print fall.first, fall.last
         2005-08-22 2005-12-23
         >>> print spring.first, spring.last
-        2006-01-26 2006-08-31
+        2006-01-26 2006-05-31
         >>> print fall6.first, fall6.last
-        2006-09-01 2006-12-22
+        2006-08-21 2006-12-22
 
     """
 
