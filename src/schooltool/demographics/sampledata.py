@@ -77,21 +77,12 @@ class SampleStudents(object):
         prefixgen = ChoiceGenerator(str(seed), ['Mr', 'Mrs', 'Miss', ''])
         gendergen = ChoiceGenerator(str(seed), ['male', 'female'])
 
-        # some of the tests (e.g., for groups) are set up on the assumption that
-        # we won't populate the student group as we create students.  This
-        # is annoying, since we end up with an empty student group.  I'm not
-        # sure how to get around this except with a try/except here.
-        try:
-            students = app['groups']['students']
-            stud_group = True
-        except KeyError:
-            stud_group = False
+        students = IGroupContainer(app)['students']
         for count in range(self.power):
             person = self.personFactory(namegen, prefixgen, gendergen, count)
             # Without removeSecurityProxy we can't add members a
             # group.
-            if stud_group:
-                removeSecurityProxy(students.members).add(person)
+            removeSecurityProxy(students.members).add(person)
             app['persons'][person.__name__] = person
 
 
