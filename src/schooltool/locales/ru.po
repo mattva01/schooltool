@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-01-04 15:41+0000\n"
-"PO-Revision-Date: 2010-04-05 18:46+0000\n"
-"Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
+"POT-Creation-Date: 2010-04-29 02:21+0300\n"
+"PO-Revision-Date: 2010-05-12 11:53+0000\n"
+"Last-Translator: Monkolino <Unknown>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-04-06 03:54+0000\n"
+"X-Launchpad-Export-Date: 2010-05-13 04:28+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -96,15 +96,15 @@ msgid "The previous day"
 msgstr "Предыдущий день"
 
 #: /src/schooltool/app/browser/cal.py:1737
-#: /src/schooltool/app/interfaces.py:135
-#: /src/schooltool/app/interfaces.py:146
+#: /src/schooltool/app/interfaces.py:133
+#: /src/schooltool/app/interfaces.py:144
 #: /src/schooltool/basicperson/interfaces.py:121
-#: /src/schooltool/course/interfaces.py:37
-#: /src/schooltool/course/interfaces.py:95
+#: /src/schooltool/course/interfaces.py:36
+#: /src/schooltool/course/interfaces.py:94
 #: /src/schooltool/dashboard/interfaces.py:44
 #: /src/schooltool/group/interfaces.py:40
 #: /src/schooltool/note/interfaces.py:42
-#: /src/schooltool/resource/interfaces.py:41
+#: /src/schooltool/resource/interfaces.py:37
 #: /src/schooltool/resource/types.py:60
 #: /src/schooltool/resource/types.py:77
 #: /src/schooltool/resource/types.py:101
@@ -123,7 +123,7 @@ msgstr "Заголовок"
 
 #: /src/schooltool/app/browser/cal.py:1740
 #: /src/schooltool/app/browser/templates/cal_monthly.pt:38
-#: /src/schooltool/app/browser/templates/cal_weekly.pt:40
+#: /src/schooltool/app/browser/templates/cal_weekly.pt:38
 #: /src/schooltool/app/browser/templates/cal_weekly_timetable.pt:37
 #: /src/schooltool/app/browser/templates/cal_weekly_timetable.pt:67
 #: /src/schooltool/app/browser/templates/cal_weekly_timetable.pt:97
@@ -177,10 +177,10 @@ msgid "Location"
 msgstr "Месторасположение"
 
 #: /src/schooltool/app/browser/cal.py:1768
-#: /src/schooltool/course/interfaces.py:41
-#: /src/schooltool/course/interfaces.py:100
+#: /src/schooltool/course/interfaces.py:40
+#: /src/schooltool/course/interfaces.py:99
 #: /src/schooltool/group/interfaces.py:44
-#: /src/schooltool/resource/interfaces.py:51
+#: /src/schooltool/resource/interfaces.py:47
 #: /src/schooltool/securitypolicy/interfaces.py:112
 #: /src/schooltool/timetable/browser/event.py:56
 msgid "Description"
@@ -313,9 +313,9 @@ msgstr "Добавить событие"
 
 #: /src/schooltool/app/browser/cal.py:2079
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:48
-#: /src/schooltool/basicperson/browser/person.py:156
-#: /src/schooltool/contact/browser/contact.py:90
-#: /src/schooltool/course/browser/section.py:327
+#: /src/schooltool/basicperson/browser/person.py:162
+#: /src/schooltool/contact/browser/contact.py:92
+#: /src/schooltool/course/browser/section.py:332
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:67
 #: /src/schooltool/schoolyear/browser/schoolyear.py:184
 #: /src/schooltool/timetable/browser/templates/timetable-add.pt:25
@@ -341,8 +341,8 @@ msgid "Updated on ${date_time}"
 msgstr "Обновлено ${date_time}"
 
 #: /src/schooltool/app/browser/cal.py:2718
-#: /src/schooltool/app/browser/configure.zcml:606
-#: /src/schooltool/app/browser/configure.zcml:693
+#: /src/schooltool/app/browser/configure.zcml:597
+#: /src/schooltool/app/browser/configure.zcml:684
 #: /src/schooltool/app/browser/templates/calendar_tab_viewlet.pt:3
 #: /src/schooltool/app/configure.zcml:346
 msgid "Calendar"
@@ -352,13 +352,13 @@ msgstr "Календарь"
 msgid "Actions"
 msgstr "Действия"
 
-#: /src/schooltool/app/browser/configure.zcml:233
-#: /src/schooltool/app/browser/configure.zcml:514
+#: /src/schooltool/app/browser/configure.zcml:224
+#: /src/schooltool/app/browser/configure.zcml:505
 #: /src/schooltool/basicperson/browser/configure.zcml:6
 #: /src/schooltool/basicperson/browser/configure.zcml:185
 #: /src/schooltool/basicperson/browser/configure.zcml:192
 #: /src/schooltool/basicperson/browser/configure.zcml:199
-#: /src/schooltool/common/configure.zcml:89
+#: /src/schooltool/common/configure.zcml:87
 #: /src/schooltool/contact/browser/configure.zcml:6
 #: /src/schooltool/contact/browser/configure.zcml:31
 #: /src/schooltool/contact/browser/configure.zcml:88
@@ -388,140 +388,140 @@ msgstr "Действия"
 msgid "View"
 msgstr "Просмотр"
 
-#: /src/schooltool/app/browser/configure.zcml:319
+#: /src/schooltool/app/browser/configure.zcml:310
 msgid "View Calendar"
 msgstr "Посмотреть Календарь"
 
-#: /src/schooltool/app/browser/configure.zcml:331
+#: /src/schooltool/app/browser/configure.zcml:322
 msgid "New Event"
 msgstr "Новое Событие"
 
-#: /src/schooltool/app/browser/configure.zcml:342
+#: /src/schooltool/app/browser/configure.zcml:333
 msgid "Open in iCal"
 msgstr "Открыть в iCal"
 
-#: /src/schooltool/app/browser/configure.zcml:354
+#: /src/schooltool/app/browser/configure.zcml:345
 msgid "Import Sections"
 msgstr "Импортировать разделы"
 
-#: /src/schooltool/app/browser/configure.zcml:365
+#: /src/schooltool/app/browser/configure.zcml:356
 msgid "Edit Leaders"
 msgstr "Изменить руководителей"
 
-#: /src/schooltool/app/browser/configure.zcml:376
+#: /src/schooltool/app/browser/configure.zcml:367
 msgid "Change Site Preferences"
 msgstr "Изменить настройки сайта"
 
-#: /src/schooltool/app/browser/configure.zcml:408
+#: /src/schooltool/app/browser/configure.zcml:399
 msgid "Calendar (Daily)"
 msgstr "Календарь (на день)"
 
-#: /src/schooltool/app/browser/configure.zcml:418
+#: /src/schooltool/app/browser/configure.zcml:409
 msgid "Calendar (Daily, PDF)"
 msgstr "Календарь (на день, PDF)"
 
-#: /src/schooltool/app/browser/configure.zcml:427
+#: /src/schooltool/app/browser/configure.zcml:418
 msgid "Calendar (Weekly)"
 msgstr "Календарь (на неделю)"
 
-#: /src/schooltool/app/browser/configure.zcml:437
+#: /src/schooltool/app/browser/configure.zcml:428
 msgid "Calendar (Weekly, PDF)"
 msgstr "Календарь (на неделю, PDF)"
 
-#: /src/schooltool/app/browser/configure.zcml:446
+#: /src/schooltool/app/browser/configure.zcml:437
 msgid "Calendar (Monthly)"
 msgstr "Календарь (на месяц)"
 
-#: /src/schooltool/app/browser/configure.zcml:456
+#: /src/schooltool/app/browser/configure.zcml:447
 msgid "Calendar (Monthly, PDF)"
 msgstr "Календарь (на месяц, PDF)"
 
-#: /src/schooltool/app/browser/configure.zcml:465
+#: /src/schooltool/app/browser/configure.zcml:456
 #: /src/schooltool/timetable/browser/configure.zcml:198
 msgid "Calendar (Yearly)"
 msgstr "Календарь (на год)"
 
-#: /src/schooltool/app/browser/configure.zcml:475
+#: /src/schooltool/app/browser/configure.zcml:466
 msgid "Atom View"
 msgstr "Показать как поток Atom"
 
-#: /src/schooltool/app/browser/configure.zcml:485
+#: /src/schooltool/app/browser/configure.zcml:476
 msgid "iCalendar"
 msgstr "iCalendar"
 
-#: /src/schooltool/app/browser/configure.zcml:495
+#: /src/schooltool/app/browser/configure.zcml:486
 msgid "Free/Busy"
 msgstr "Свободен/занят"
 
-#: /src/schooltool/app/browser/configure.zcml:524
+#: /src/schooltool/app/browser/configure.zcml:515
 #: /src/schooltool/app/help/configure.zcml:77
 #: /src/schooltool/app/help/event_add.pt:6
 #: /src/schooltool/app/help/event_add.pt:9
 msgid "Add Event"
 msgstr "Добавить событие"
 
-#: /src/schooltool/app/browser/configure.zcml:543
+#: /src/schooltool/app/browser/configure.zcml:534
 #: /src/schooltool/app/help/configure.zcml:87
 #: /src/schooltool/app/help/event_edit.pt:6
 #: /src/schooltool/app/help/event_edit.pt:9
 msgid "Edit Event"
 msgstr "Изменить событие"
 
-#: /src/schooltool/app/browser/configure.zcml:596
+#: /src/schooltool/app/browser/configure.zcml:587
 msgid "ZODB Control"
 msgstr "Управление ZODB"
 
-#: /src/schooltool/app/browser/configure.zcml:631
+#: /src/schooltool/app/browser/configure.zcml:622
 msgid "Application Control"
 msgstr "Управление приложением"
 
-#: /src/schooltool/app/browser/configure.zcml:643
+#: /src/schooltool/app/browser/configure.zcml:634
 msgid "Translation Domains"
 msgstr "Перевод доменов"
 
-#: /src/schooltool/app/browser/configure.zcml:654
+#: /src/schooltool/app/browser/configure.zcml:645
 msgid "Generations"
 msgstr "Поколения"
 
-#: /src/schooltool/app/browser/configure.zcml:675
+#: /src/schooltool/app/browser/configure.zcml:666
 msgid "Browser UI"
 msgstr "UI браузера"
 
-#: /src/schooltool/app/browser/configure.zcml:681
+#: /src/schooltool/app/browser/configure.zcml:672
 #: /src/schooltool/app/browser/templates/login.pt:3
 #: /src/schooltool/app/browser/templates/menu_view.pt:3
 msgid "Login"
 msgstr "Логин"
 
-#: /src/schooltool/app/browser/configure.zcml:687
-#: /src/schooltool/app/browser/configure.zcml:774
+#: /src/schooltool/app/browser/configure.zcml:678
+#: /src/schooltool/app/browser/configure.zcml:765
 #: /src/schooltool/devmode/devmode.pt:17
 msgid "Errors"
 msgstr "Ошибки"
 
-#: /src/schooltool/app/browser/configure.zcml:699
+#: /src/schooltool/app/browser/configure.zcml:690
 msgid "Application"
 msgstr "Приложение"
 
-#: /src/schooltool/app/browser/configure.zcml:705
+#: /src/schooltool/app/browser/configure.zcml:696
 msgid "Calendar Widget"
 msgstr "Виджет календаря"
 
-#: /src/schooltool/app/browser/configure.zcml:711
+#: /src/schooltool/app/browser/configure.zcml:702
 msgid "Templates"
 msgstr "Шаблоны"
 
-#: /src/schooltool/app/browser/configure.zcml:790
+#: /src/schooltool/app/browser/configure.zcml:781
 msgid "Configure"
 msgstr "Конфигурировать"
 
-#: /src/schooltool/app/browser/configure.zcml:797
+#: /src/schooltool/app/browser/configure.zcml:788
 msgid "Error List"
 msgstr "Список ошибок"
 
 #: /src/schooltool/app/browser/csvimport.py:108
 #: /src/schooltool/app/browser/csvimport.py:290
-#: /src/schooltool/export/importer.py:697
+#: /src/schooltool/export/importer.py:704
 msgid "No data provided"
 msgstr "Данные не предоставлены"
 
@@ -754,7 +754,7 @@ msgstr "Мой календарь"
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:31
 #: /src/schooltool/demographics/browser/personform.py:92
 #: /src/schooltool/demographics/browser/personform.py:270
-#: /src/schooltool/person/browser/person.py:170
+#: /src/schooltool/person/browser/person.py:171
 #: /src/schooltool/skin/form.py:55
 #: /src/schooltool/timetable/browser/event.py:82
 #: /src/schooltool/timetable/browser/templates/calendar_overlay.pt:93
@@ -762,6 +762,7 @@ msgid "Apply"
 msgstr "Применить"
 
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:33
+#: /src/schooltool/timetable/browser/templates/calendar_overlay.pt:66
 msgid "More..."
 msgstr "Больше..."
 
@@ -787,7 +788,7 @@ msgstr "Календарь сайта"
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:42
 #: /src/schooltool/app/browser/templates/index.pt:14
-#: /src/schooltool/course/browser/templates/section.pt:69
+#: /src/schooltool/course/browser/templates/section.pt:70
 #: /src/schooltool/dashboard/school.pt:22
 #: /src/schooltool/resource/browser/configure.zcml:169
 msgid "Resources"
@@ -827,7 +828,6 @@ msgstr "нет"
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:48
 #: /src/schooltool/app/browser/templates/event_booking.pt:42
 #: /src/schooltool/app/browser/templates/event_booking.pt:57
-#: /src/schooltool/basicperson/browser/templates/person_edit.pt:10
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:58
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:67
 #: /src/schooltool/skin/templates/view_macros.pt:161
@@ -864,9 +864,9 @@ msgid "This is a recurring event."
 msgstr "Это повторяющееся событие."
 
 #: /src/schooltool/app/browser/templates/event.pt:33
-#: /src/schooltool/basicperson/browser/templates/person_view.pt:20
+#: /src/schooltool/basicperson/browser/templates/person_view.pt:29
 #: /src/schooltool/course/browser/templates/course.pt:23
-#: /src/schooltool/person/browser/home.pt:34
+#: /src/schooltool/person/browser/home.pt:44
 #: /src/schooltool/person/browser/person.pt:34
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:34
 msgid "Details"
@@ -1052,7 +1052,7 @@ msgstr "Курсы"
 
 #: /src/schooltool/app/browser/templates/index.pt:13
 #: /src/schooltool/group/browser/configure.zcml:63
-#: /src/schooltool/group/browser/groupsviewlet.pt:4
+#: /src/schooltool/group/browser/groupsviewlet.pt:3
 #: /src/schooltool/group/browser/link_to_groups.pt:1
 #: /src/schooltool/group/help/configure.zcml:8
 #: /src/schooltool/group/help/group_container.pt:6
@@ -1092,10 +1092,10 @@ msgstr "Информация о пользователе"
 #: /src/schooltool/demographics/browser/personform.py:253
 #: /src/schooltool/demographics/browser/personform.py:254
 #: /src/schooltool/demographics/browser/table.py:67
-#: /src/schooltool/email/browser/email.py:108
-#: /src/schooltool/email/interfaces.py:99
-#: /src/schooltool/person/browser/person.py:286
+#: /src/schooltool/email/browser/email.py:119
+#: /src/schooltool/email/interfaces.py:104
 #: /src/schooltool/person/browser/person.py:287
+#: /src/schooltool/person/browser/person.py:288
 #: /src/schooltool/person/interfaces.py:60
 msgid "Username"
 msgstr "Имя пользователя"
@@ -1103,8 +1103,8 @@ msgstr "Имя пользователя"
 #: /src/schooltool/app/browser/templates/login.pt:44
 #: /src/schooltool/basicperson/browser/person.py:64
 #: /src/schooltool/demographics/browser/personform.py:258
-#: /src/schooltool/person/browser/person.py:159
-#: /src/schooltool/person/browser/person.py:290
+#: /src/schooltool/person/browser/person.py:160
+#: /src/schooltool/person/browser/person.py:291
 msgid "Password"
 msgstr "Пароль"
 
@@ -1140,17 +1140,18 @@ msgstr "Все"
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:47
 #: /src/schooltool/basicperson/browser/demographics.py:153
 #: /src/schooltool/basicperson/browser/demographics.py:200
-#: /src/schooltool/basicperson/browser/person.py:200
-#: /src/schooltool/basicperson/browser/person.py:216
-#: /src/schooltool/contact/browser/contact.py:118
-#: /src/schooltool/contact/browser/contact.py:193
-#: /src/schooltool/course/browser/section.py:337
+#: /src/schooltool/basicperson/browser/person.py:206
+#: /src/schooltool/basicperson/browser/person.py:222
+#: /src/schooltool/contact/browser/contact.py:120
+#: /src/schooltool/contact/browser/contact.py:195
+#: /src/schooltool/contact/browser/contact.py:419
+#: /src/schooltool/course/browser/section.py:342
 #: /src/schooltool/demographics/browser/personform.py:107
 #: /src/schooltool/demographics/browser/personform.py:301
-#: /src/schooltool/email/browser/email.py:173
-#: /src/schooltool/email/browser/email.py:289
-#: /src/schooltool/email/browser/email.py:502
-#: /src/schooltool/person/browser/person.py:180
+#: /src/schooltool/email/browser/email.py:190
+#: /src/schooltool/email/browser/email.py:306
+#: /src/schooltool/email/browser/email.py:522
+#: /src/schooltool/person/browser/person.py:181
 #: /src/schooltool/schoolyear/browser/schoolyear.py:213
 #: /src/schooltool/schoolyear/browser/schoolyear.py:226
 #: /src/schooltool/skin/form.py:84
@@ -1375,7 +1376,6 @@ msgstr "CSV данные"
 #. Default: "Submit"
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:122
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:75
-#: /src/schooltool/basicperson/browser/templates/person_edit.pt:10
 #: /src/schooltool/course/browser/section-member-csvimport.pt:52
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:86
 #: /src/schooltool/export/templates/import.pt:66
@@ -1656,37 +1656,37 @@ msgstr ""
 "формате iCal:</strong> выберите <code>Открыть в iCal</code> из меню "
 "<code>Действия</code>.</li></ul>"
 
-#: /src/schooltool/app/interfaces.py:43
+#: /src/schooltool/app/interfaces.py:42
 msgid "Form input is not a file object"
 msgstr "Данные формы должны быть файловым объектом"
 
-#: /src/schooltool/app/interfaces.py:44
-#: /src/schooltool/app/interfaces.py:48
+#: /src/schooltool/app/interfaces.py:43
+#: /src/schooltool/app/interfaces.py:47
 msgid "Invalid integer data"
 msgstr "Недопустимые данные для целого"
 
-#: /src/schooltool/app/interfaces.py:45
+#: /src/schooltool/app/interfaces.py:44
 msgid "Invalid text data"
 msgstr "Недопустимые текстовые данные"
 
-#: /src/schooltool/app/interfaces.py:46
+#: /src/schooltool/app/interfaces.py:45
 msgid "Invalid textual data"
 msgstr "Недопустимые байт-данные"
 
-#: /src/schooltool/app/interfaces.py:47
+#: /src/schooltool/app/interfaces.py:46
 msgid "Invalid unicode data"
 msgstr "Недопустимые юникод данные"
 
-#: /src/schooltool/app/interfaces.py:49
+#: /src/schooltool/app/interfaces.py:48
 msgid "Invalid floating point data"
 msgstr "Недопустимые данные для вещественного числа"
 
-#: /src/schooltool/app/interfaces.py:50
+#: /src/schooltool/app/interfaces.py:49
 msgid "Invalid datetime data"
 msgstr "Недопустимые данные для даты и времени"
 
-#: /src/schooltool/app/interfaces.py:137
-#: /src/schooltool/app/interfaces.py:148
+#: /src/schooltool/app/interfaces.py:135
+#: /src/schooltool/app/interfaces.py:146
 msgid ""
 "The name for the school or organization running\n"
 "            this server.  This will be displayed on the public calendar, "
@@ -1697,11 +1697,11 @@ msgstr ""
 "            этот сервер. Оно будет отображаться на общем календаре,\n"
 "            внизу каждой страницы и в заголовке страницы."
 
-#: /src/schooltool/app/interfaces.py:153
+#: /src/schooltool/app/interfaces.py:151
 msgid "Front Page Calendar"
 msgstr "Календарь для заглавной страницы"
 
-#: /src/schooltool/app/interfaces.py:154
+#: /src/schooltool/app/interfaces.py:152
 msgid ""
 "Display site-wide calendar as the front page of the\n"
 "            site."
@@ -1709,11 +1709,11 @@ msgstr ""
 "Отображать календарь сайта на титульной странице\n"
 "            сайта."
 
-#: /src/schooltool/app/interfaces.py:171
+#: /src/schooltool/app/interfaces.py:169
 msgid "Show timetables"
 msgstr "Показать расписания"
 
-#: /src/schooltool/app/interfaces.py:172
+#: /src/schooltool/app/interfaces.py:170
 msgid ""
 "\n"
 "            An option that controls whether the timetable of this "
@@ -1727,7 +1727,7 @@ msgstr ""
 "            в обзоре календарей.\n"
 "            "
 
-#: /src/schooltool/app/main.py:95
+#: /src/schooltool/app/main.py:94
 msgid ""
 "\n"
 "Usage: %s [options]\n"
@@ -1754,7 +1754,7 @@ msgstr ""
 "(читает пароль из стандартного ввода если 'password' равен '-')\n"
 "  --manage выполнить только задачи управления, не запускать сервер\n"
 
-#: /src/schooltool/app/main.py:109
+#: /src/schooltool/app/main.py:108
 msgid ""
 "\n"
 "No storage defined in the configuration file.\n"
@@ -1768,54 +1768,34 @@ msgstr ""
 "Если вы используете стандартный файл конфигурации, исправьте его и\n"
 "раскомментируйте один из разделов хранилища ZODB.\n"
 
-#: /src/schooltool/app/main.py:117
-msgid ""
-"\n"
-"This is not a SchoolTool 0.11 database file, aborting.\n"
-msgstr ""
-"\n"
-"Файл не является базой данных SchoolTool 0.11, отмена.\n"
-
-#: /src/schooltool/app/main.py:122
-msgid ""
-"\n"
-"This is not a SchoolTool 0.10 database file, aborting.\n"
-"\n"
-"Please run the standalone database upgrade script.\n"
-msgstr ""
-"\n"
-"Этот файл не является файлом базы данных SchoolTool 0.10. Отмена операции.\n"
-"\n"
-"Пожалуйста, запустите отдельный скрипт обновления базы данных.\n"
-
-#: /src/schooltool/app/main.py:359
+#: /src/schooltool/app/main.py:333
 msgid "Going to background, daemon pid %d"
 msgstr "Переход в фоновый режим, pid демона %d"
 
-#: /src/schooltool/app/main.py:556
-#: /src/schooltool/app/main.py:600
-#: /src/schooltool/app/main.py:603
+#: /src/schooltool/app/main.py:528
+#: /src/schooltool/app/main.py:572
+#: /src/schooltool/app/main.py:575
 msgid "%s: %s"
 msgstr "%s: %s"
 
-#: /src/schooltool/app/main.py:557
+#: /src/schooltool/app/main.py:529
 msgid "Run %s -h for help."
 msgstr "Запустите %s -h для справки."
 
-#: /src/schooltool/app/main.py:569
+#: /src/schooltool/app/main.py:541
 msgid "%s: daemon mode not supported on your operating system."
 msgstr "%s: фоновый режим не поддерживается на вашей операционной системе."
 
-#: /src/schooltool/app/main.py:595
+#: /src/schooltool/app/main.py:567
 msgid "Reading configuration from %s"
 msgstr "Чтение конфигурации из %s"
 
-#: /src/schooltool/app/main.py:698
+#: /src/schooltool/app/main.py:662
 msgid "Startup time: %.3f sec real, %.3f sec CPU"
 msgstr "Время запуска: %.3f с реальное, %.3f с ЦПУ"
 
 #. Default: ""
-#: /src/schooltool/app/main.py:732
+#: /src/schooltool/app/main.py:696
 msgid ""
 "Could not initialize the database:\n"
 "%s"
@@ -1823,7 +1803,7 @@ msgstr ""
 "Невозможно инициализировать базу данных:\n"
 "%s"
 
-#: /src/schooltool/app/main.py:735
+#: /src/schooltool/app/main.py:699
 msgid ""
 "\n"
 "Perhaps another %s instance is using it?"
@@ -1831,7 +1811,7 @@ msgstr ""
 "\n"
 "Возможно, её использует другой экземпляр %s?"
 
-#: /src/schooltool/app/main.py:805
+#: /src/schooltool/app/main.py:761
 msgid ""
 "Warning: could not find the reportlab library.\n"
 "PDF support disabled."
@@ -1839,7 +1819,7 @@ msgstr ""
 "Внимание: невозможно найти библиотеку reportlab.\n"
 "Поддержка PDF отключена."
 
-#: /src/schooltool/app/main.py:810
+#: /src/schooltool/app/main.py:766
 msgid ""
 "Warning: font directory '%s' does not exist.\n"
 "PDF support disabled."
@@ -1847,7 +1827,7 @@ msgstr ""
 "Внимание: каталог шрифтов '%s' не существует.\n"
 "Поддержка PDF отключена."
 
-#: /src/schooltool/app/main.py:818
+#: /src/schooltool/app/main.py:774
 msgid ""
 "Warning: font '%s' does not exist.\n"
 "PDF support disabled."
@@ -1925,12 +1905,12 @@ msgstr "Консультант"
 msgid "This username is already in use!"
 msgstr "Это имя пользователя уже используется!"
 
-#: /src/schooltool/basicperson/browser/person.py:143
+#: /src/schooltool/basicperson/browser/person.py:149
 msgid "Add new person"
 msgstr "Добавить личность"
 
 #. Default: ""
-#: /src/schooltool/basicperson/browser/person.py:228
+#: /src/schooltool/basicperson/browser/person.py:234
 msgid "Change information for ${fullname}"
 msgstr "Изменить информацию о ${fullname}"
 
@@ -2012,12 +1992,12 @@ msgid "ID"
 msgstr "ID"
 
 #: /src/schooltool/basicperson/person.py:83
-#: /src/schooltool/contact/browser/contact.py:297
+#: /src/schooltool/contact/browser/contact.py:299
 msgid "First Name"
 msgstr "Имя"
 
 #: /src/schooltool/basicperson/person.py:90
-#: /src/schooltool/contact/browser/contact.py:304
+#: /src/schooltool/contact/browser/contact.py:306
 msgid "Last Name"
 msgstr "Фамилия"
 
@@ -2029,7 +2009,7 @@ msgstr "Добавить рекомендацию"
 msgid "Commendation"
 msgstr "Рекомендация"
 
-#: /src/schooltool/common/configure.zcml:90
+#: /src/schooltool/common/configure.zcml:88
 #: /src/schooltool/course/browser/configure.zcml:25
 #: /src/schooltool/course/browser/configure.zcml:180
 #: /src/schooltool/group/browser/configure.zcml:38
@@ -2039,13 +2019,21 @@ msgstr "Рекомендация"
 msgid "Edit Info"
 msgstr "Изменить информацию"
 
-#: /src/schooltool/common/configure.zcml:91
+#: /src/schooltool/common/configure.zcml:89
 msgid "Add Info"
 msgstr "Добавить информацию"
 
-#: /src/schooltool/common/configure.zcml:92
+#: /src/schooltool/common/configure.zcml:90
 msgid "Edit Calendar Overlays"
 msgstr "Изменить перекрытия календарей"
+
+#: /src/schooltool/contact/browser/contact.py:387
+#: /src/schooltool/email/browser/email.py:244
+#: /src/schooltool/email/browser/email.py:486
+#: /src/schooltool/email/interfaces.py:49
+#: /src/schooltool/note/interfaces.py:46
+msgid "Body"
+msgstr "Текст"
 
 #: /src/schooltool/contact/browser/templates/contacts_delete.pt:15
 #: /src/schooltool/person/browser/person_container_delete.pt:15
@@ -2091,13 +2079,13 @@ msgid "Email"
 msgstr "Электронная почта"
 
 #: /src/schooltool/contact/contact.py:210
-#: /src/schooltool/course/browser/section.py:538
+#: /src/schooltool/course/browser/section.py:543
 #: /src/schooltool/course/browser/templates/copy_sections.pt:93
 #: /src/schooltool/course/browser/templates/link_section.pt:69
-#: /src/schooltool/course/browser/templates/section.pt:79
+#: /src/schooltool/course/browser/templates/section.pt:80
 #: /src/schooltool/course/browser/templates/section_container.pt:42
-#: /src/schooltool/course/section.py:283
-#: /src/schooltool/course/section.py:293
+#: /src/schooltool/course/section.py:281
+#: /src/schooltool/course/section.py:291
 msgid "Instructors"
 msgstr "Инструкторы"
 
@@ -2145,12 +2133,13 @@ msgstr "Редактировать информацию о секции"
 
 #: /src/schooltool/course/browser/configure.zcml:265
 #: /src/schooltool/course/browser/templates/course.pt:33
+#: /src/schooltool/course/browser/templates/coursesviewlet.pt:34
 #: /src/schooltool/course/security.zcml:107
 #: /src/schooltool/dashboard/term.pt:10
 msgid "Sections"
 msgstr "Секции"
 
-#: /src/schooltool/course/browser/course.py:65
+#: /src/schooltool/course/browser/course.py:68
 msgid "Course index"
 msgstr "Указатель предметов"
 
@@ -2160,28 +2149,28 @@ msgstr "Указатель предметов"
 msgid "Titles may not be empty"
 msgstr "Необходимо указать заголовок"
 
-#: /src/schooltool/course/browser/section.py:539
+#: /src/schooltool/course/browser/section.py:544
 msgid "Current Instructors"
 msgstr "Нынешние преподаватели"
 
-#: /src/schooltool/course/browser/section.py:540
+#: /src/schooltool/course/browser/section.py:545
 msgid "Available Instructors"
 msgstr "Свободные преподаватели"
 
-#: /src/schooltool/course/browser/section.py:554
+#: /src/schooltool/course/browser/section.py:559
 #: /src/schooltool/course/browser/templates/copy_sections.pt:145
 #: /src/schooltool/course/browser/templates/course_container.pt:57
 #: /src/schooltool/course/browser/templates/link_section.pt:114
-#: /src/schooltool/course/browser/templates/section.pt:96
+#: /src/schooltool/course/browser/templates/section.pt:98
 #: /src/schooltool/course/browser/templates/section_container.pt:87
 msgid "Students"
 msgstr "Студенты"
 
-#: /src/schooltool/course/browser/section.py:555
+#: /src/schooltool/course/browser/section.py:560
 msgid "Current Students"
 msgstr "Нынешние студенты"
 
-#: /src/schooltool/course/browser/section.py:556
+#: /src/schooltool/course/browser/section.py:561
 msgid "Available Students"
 msgstr "Свободные студенты"
 
@@ -2204,7 +2193,7 @@ msgstr "Загрузить предметы SchoolTool в формате CSV"
 
 #: /src/schooltool/course/browser/templates/course.pt:52
 #: /src/schooltool/demographics/browser/nameinfo_view.pt:11
-#: /src/schooltool/person/browser/home.pt:11
+#: /src/schooltool/person/browser/home.pt:20
 #: /src/schooltool/person/browser/person.pt:11
 msgid "photo"
 msgstr "фото"
@@ -2242,11 +2231,11 @@ msgstr "Сменить название или описание данного �
 msgid "edit info"
 msgstr "править информацию"
 
-#: /src/schooltool/course/browser/templates/section.pt:86
+#: /src/schooltool/course/browser/templates/section.pt:87
 msgid "Change the instructors for this section."
 msgstr "Сменить преподавателей этого раздела."
 
-#: /src/schooltool/course/browser/templates/section.pt:86
+#: /src/schooltool/course/browser/templates/section.pt:87
 msgid "edit instructors"
 msgstr "изменить преподавателей"
 
@@ -2297,28 +2286,28 @@ msgstr ""
 "на синей панели. Кнопка <code>Показать всё</code> используется для "
 "отображения всех курсов на одной странице.</li> </ul>"
 
-#: /src/schooltool/course/interfaces.py:38
+#: /src/schooltool/course/interfaces.py:37
 msgid "Title of the course."
 msgstr "Название предмета."
 
-#: /src/schooltool/course/interfaces.py:43
+#: /src/schooltool/course/interfaces.py:42
 msgid "Description of the course."
 msgstr "Описание предмета."
 
-#: /src/schooltool/course/interfaces.py:88
+#: /src/schooltool/course/interfaces.py:87
 msgid "Label"
 msgstr "Метка"
 
-#: /src/schooltool/course/interfaces.py:97
+#: /src/schooltool/course/interfaces.py:96
 msgid "Title for the section."
 msgstr "Название раздела."
 
-#: /src/schooltool/course/interfaces.py:102
+#: /src/schooltool/course/interfaces.py:101
 msgid "Description of the section."
 msgstr "Описание раздела."
 
 #. Default: ""
-#: /src/schooltool/course/section.py:88
+#: /src/schooltool/course/section.py:87
 msgid "${instructors} -- ${section_title}"
 msgstr "${instructors} -- ${section_title}"
 
@@ -2419,7 +2408,7 @@ msgid "Contact information"
 msgstr "Контактная информация"
 
 #: /src/schooltool/demographics/browser/personform.py:273
-#: /src/schooltool/person/browser/person.py:324
+#: /src/schooltool/person/browser/person.py:325
 msgid "This username is already used!"
 msgstr "Это имя пользователя уже используется!"
 
@@ -2447,8 +2436,8 @@ msgstr "Нет результатов."
 
 #: /src/schooltool/demographics/browser/table.py:73
 #: /src/schooltool/demographics/interfaces.py:76
-#: /src/schooltool/person/browser/person.py:282
-#: /src/schooltool/person/browser/person.py:371
+#: /src/schooltool/person/browser/person.py:283
+#: /src/schooltool/person/browser/person.py:372
 #: /src/schooltool/person/interfaces.py:51
 msgid "Full name"
 msgstr "Полное имя"
@@ -2474,13 +2463,13 @@ msgid "Name by which the student prefers to be called"
 msgstr "Имя, предпочитаемое учащимся"
 
 #: /src/schooltool/demographics/interfaces.py:81
-#: /src/schooltool/person/browser/person.py:298
+#: /src/schooltool/person/browser/person.py:299
 #: /src/schooltool/person/interfaces.py:55
 msgid "Photo"
 msgstr "Фотография"
 
 #: /src/schooltool/demographics/interfaces.py:83
-#: /src/schooltool/person/browser/person.py:300
+#: /src/schooltool/person/browser/person.py:301
 #: /src/schooltool/person/interfaces.py:57
 msgid "Photo (in JPEG format)"
 msgstr "Фотография (в формате JPEG)"
@@ -2581,21 +2570,9 @@ msgstr "Команда"
 msgid "Health information"
 msgstr "Состояние здоровья"
 
-#: /src/schooltool/demographics/interfaces.py:227
-msgid "parent"
-msgstr "родитель"
-
 #: /src/schooltool/demographics/interfaces.py:228
 msgid "guardian"
 msgstr "опекун"
-
-#: /src/schooltool/demographics/interfaces.py:229
-msgid "grandparent"
-msgstr "дедушка/бабушка"
-
-#: /src/schooltool/demographics/interfaces.py:230
-msgid "step-parent"
-msgstr "отчим/мачеха"
 
 #: /src/schooltool/demographics/interfaces.py:231
 msgid "friend of family"
@@ -2625,7 +2602,7 @@ msgstr "Мобильный  телефон"
 #: /src/schooltool/demographics/interfaces.py:288
 #: /src/schooltool/note/configure.zcml:94
 #: /src/schooltool/note/notes.pt:2
-#: /src/schooltool/resource/interfaces.py:56
+#: /src/schooltool/resource/interfaces.py:52
 msgid "Notes"
 msgstr "Заметки"
 
@@ -2636,14 +2613,6 @@ msgstr "Текст"
 #: /src/schooltool/demographics/interfaces.py:299
 msgid "Full text search in name"
 msgstr "Полнотекстовый поиск по имени"
-
-#: /src/schooltool/demographics/interfaces.py:304
-msgid "Name of parent"
-msgstr "Имя родителя"
-
-#: /src/schooltool/demographics/interfaces.py:305
-msgid "Full text search in parent names"
-msgstr "Полнотекстовый поиск по именам родителей"
 
 #: /src/schooltool/demographics/interfaces.py:310
 msgid "Student ID"
@@ -2676,14 +2645,7 @@ msgstr "Установочные данные"
 msgid "Developer Tools"
 msgstr "Средства разработчика"
 
-#: /src/schooltool/email/browser/email.py:227
-#: /src/schooltool/email/browser/email.py:469
-#: /src/schooltool/email/interfaces.py:49
-#: /src/schooltool/note/interfaces.py:46
-msgid "Body"
-msgstr "Текст"
-
-#: /src/schooltool/email/browser/email.py:284
+#: /src/schooltool/email/browser/email.py:301
 #: /src/schooltool/note/notes.pt:17
 #: /src/schooltool/timetable/browser/configure.zcml:62
 #: /src/schooltool/timetable/browser/templates/timetable_list.pt:28
@@ -2721,10 +2683,7 @@ msgstr ""
 "<strong>могут</strong> включать дополнительное описание группы. Прочая "
 "информация отбрасывается."
 
-#. Default: ""
-#. "LUG, Linux Users Group\n"
-#. "Chess Club\n"
-#. "Sports Club, After-school sports club, <em>text after a second comma</em>"
+#. Default: "LUG, Linux Users Group Chess Club Sports Club, After-school sports club, <em>text after a second comma</em>"
 #: /src/schooltool/group/browser/group-csvimport.pt:31
 msgid ""
 "\n"
@@ -2756,37 +2715,37 @@ msgstr ""
 msgid "Change the people who are members of this group."
 msgstr "Измените людей, которые являются участниками этой группы"
 
-#: /src/schooltool/group/browser/group.py:70
+#: /src/schooltool/group/browser/group.py:73
 msgid "Group index"
 msgstr "Указатель групп"
 
 #. Default: ""
-#: /src/schooltool/group/browser/group.py:80
+#: /src/schooltool/group/browser/group.py:83
 msgid "Groups of ${person}"
 msgstr "Группы ${person}"
 
-#: /src/schooltool/group/browser/group.py:81
+#: /src/schooltool/group/browser/group.py:84
 msgid "Current Groups"
 msgstr "Нынешние группы"
 
-#: /src/schooltool/group/browser/group.py:82
+#: /src/schooltool/group/browser/group.py:85
 msgid "Available Groups"
 msgstr "Свободные группы"
 
 #. Default: ""
-#: /src/schooltool/group/browser/group.py:123
+#: /src/schooltool/group/browser/group.py:130
 msgid "Members of ${group}"
 msgstr "Участники группы ${group}"
 
-#: /src/schooltool/group/browser/group.py:124
+#: /src/schooltool/group/browser/group.py:131
 msgid "Current Members"
 msgstr "Участники"
 
-#: /src/schooltool/group/browser/group.py:125
+#: /src/schooltool/group/browser/group.py:132
 msgid "Add Members"
 msgstr "Добавить участников"
 
-#: /src/schooltool/group/browser/groupsviewlet.pt:15
+#: /src/schooltool/group/browser/groupsviewlet.pt:22
 msgid "edit groups"
 msgstr "редактировать группы"
 
@@ -2905,17 +2864,17 @@ msgstr ""
 msgid "fullname may not be empty"
 msgstr "необходимо указать полное имя"
 
-#: /src/schooltool/person/browser/home.pt:15
+#: /src/schooltool/person/browser/home.pt:24
 #: /src/schooltool/person/browser/person.pt:15
 msgid "Username:"
 msgstr "Имя пользователя:"
 
-#: /src/schooltool/person/browser/home.pt:18
+#: /src/schooltool/person/browser/home.pt:27
 #: /src/schooltool/person/browser/person.pt:18
 msgid "Change this person's name, picture, or password"
 msgstr "Сменить имя этого человека, фотографию или пароль"
 
-#: /src/schooltool/person/browser/home.pt:18
+#: /src/schooltool/person/browser/home.pt:27
 #: /src/schooltool/person/browser/person.pt:18
 msgid "edit name"
 msgstr "редактировать имя"
@@ -2928,10 +2887,7 @@ msgstr ""
 "CSV-данные <strong>должны</strong> содержать имя пользователя и полное имя. "
 "Также <strong>может</strong> быть указан пароль."
 
-#. Default: ""
-#. "jjones, Jimmy Jones\n"
-#. "jbjones, Jim Bob Jones, r2m45J\n"
-#. "howard, Howard"
+#. Default: "jjones, Jimmy Jones jbjones, Jim Bob Jones, r2m45J howard, Howard"
 #: /src/schooltool/person/browser/person-csvimport.pt:35
 msgid ""
 "\n"
@@ -2940,58 +2896,58 @@ msgid ""
 "howard, Howard\n"
 msgstr ""
 
-#: /src/schooltool/person/browser/person.py:168
+#: /src/schooltool/person/browser/person.py:169
 msgid "Edit password"
 msgstr "Редактировать пароль"
 
-#: /src/schooltool/person/browser/person.py:178
+#: /src/schooltool/person/browser/person.py:179
 msgid "Changed password"
 msgstr "Изменённый пароль"
 
-#: /src/schooltool/person/browser/person.py:283
-#: /src/schooltool/person/browser/person.py:372
+#: /src/schooltool/person/browser/person.py:284
+#: /src/schooltool/person/browser/person.py:373
 #: /src/schooltool/person/interfaces.py:52
 msgid "Name that should be displayed"
 msgstr "Имя, которое будет отображаться"
 
-#: /src/schooltool/person/browser/person.py:294
-#: /src/schooltool/person/browser/person.py:390
+#: /src/schooltool/person/browser/person.py:295
+#: /src/schooltool/person/browser/person.py:391
 msgid "Verify password"
 msgstr "Проверка пароля"
 
-#: /src/schooltool/person/browser/person.py:321
+#: /src/schooltool/person/browser/person.py:322
 msgid "Passwords do not match!"
 msgstr "Пароль не верный!"
 
-#: /src/schooltool/person/browser/person.py:375
+#: /src/schooltool/person/browser/person.py:376
 msgid "New photo"
 msgstr "Новая фотография"
 
-#: /src/schooltool/person/browser/person.py:377
+#: /src/schooltool/person/browser/person.py:378
 msgid "A small picture (about 48x48 pixels in JPEG format)"
 msgstr "Маленькая картинка (ок. 48x48 пикселей в формате JPEG)"
 
-#: /src/schooltool/person/browser/person.py:381
+#: /src/schooltool/person/browser/person.py:382
 msgid "Clear photo"
 msgstr "Удалить фотографию"
 
-#: /src/schooltool/person/browser/person.py:383
+#: /src/schooltool/person/browser/person.py:384
 msgid "Check this to clear the photo"
 msgstr "Отметьте, чтобы удалить фото"
 
-#: /src/schooltool/person/browser/person.py:386
+#: /src/schooltool/person/browser/person.py:387
 msgid "New password"
 msgstr "Новый пароль"
 
-#: /src/schooltool/person/browser/person.py:419
+#: /src/schooltool/person/browser/person.py:420
 msgid "Passwords do not match."
 msgstr "Пароль не верный."
 
-#: /src/schooltool/person/browser/person.py:423
+#: /src/schooltool/person/browser/person.py:424
 msgid "Password was successfully changed!"
 msgstr "Пароль успешно изменён!"
 
-#: /src/schooltool/person/browser/person.py:446
+#: /src/schooltool/person/browser/person.py:447
 msgid "Person index"
 msgstr "Список пользователей"
 
@@ -3124,54 +3080,54 @@ msgstr "Новое оборудование"
 msgid "Resource Help"
 msgstr "Справка / О модуле"
 
-#: /src/schooltool/resource/interfaces.py:45
+#: /src/schooltool/resource/interfaces.py:41
 msgid "Resource Type"
 msgstr "Тип ресурса"
 
-#: /src/schooltool/resource/interfaces.py:82
+#: /src/schooltool/resource/interfaces.py:78
 msgid "Type of location (i.e. computer lab, class room, etc.)"
 msgstr ""
 "Тип месторасположения (например компьютерная лаборатория, класс, и т. д.)"
 
-#: /src/schooltool/resource/interfaces.py:87
+#: /src/schooltool/resource/interfaces.py:83
 #: /src/schooltool/resource/types.py:83
 msgid "Capacity"
 msgstr "Вместимость"
 
-#: /src/schooltool/resource/interfaces.py:88
+#: /src/schooltool/resource/interfaces.py:84
 msgid "Capacity of the room"
 msgstr "Вместимость помещения"
 
-#: /src/schooltool/resource/interfaces.py:97
+#: /src/schooltool/resource/interfaces.py:93
 msgid "Type of equipment (i.e. camcorder, computer, etc.)"
 msgstr "Тип оборудования (например, видеокамера, компьютер и т. д.)"
 
-#: /src/schooltool/resource/interfaces.py:101
+#: /src/schooltool/resource/interfaces.py:97
 #: /src/schooltool/resource/types.py:113
 msgid "Manufacturer"
 msgstr "Производитель"
 
-#: /src/schooltool/resource/interfaces.py:102
+#: /src/schooltool/resource/interfaces.py:98
 msgid "Manufacturer of Equipment"
 msgstr "Производитель оборудования"
 
-#: /src/schooltool/resource/interfaces.py:106
+#: /src/schooltool/resource/interfaces.py:102
 #: /src/schooltool/resource/types.py:119
 msgid "Model"
 msgstr "Модель"
 
-#: /src/schooltool/resource/interfaces.py:107
+#: /src/schooltool/resource/interfaces.py:103
 msgid "Model of Equipment"
 msgstr "Модель оборудования"
 
-#: /src/schooltool/resource/interfaces.py:125
+#: /src/schooltool/resource/interfaces.py:121
 msgid ""
 "Used for lookup of named utilities that have resource\n"
 "        type specific information."
 msgstr ""
 
-#: /src/schooltool/resource/interfaces.py:130
-#: /src/schooltool/resource/interfaces.py:138
+#: /src/schooltool/resource/interfaces.py:126
+#: /src/schooltool/resource/interfaces.py:134
 msgid ""
 "A string that will be displayed to users in tables or\n"
 "        resource type selection widgets."
@@ -3250,6 +3206,9 @@ msgid ""
 "found a bug in SchoolTool. Please report it on <a "
 "href=\"http://issues.schooltool.org\">the issue tracker</a>."
 msgstr ""
+"Внутренняя ошибка сервера. Возможно, это означает, что вы обнаружили баг в "
+"SchoolTool. Пожалуйста, сообщите об этом на странице <a "
+"href=\"http://issues.schooltool.org\">the issue tracker</a>."
 
 #: /src/schooltool/skin/templates/error.pt:20
 msgid "Traceback"
@@ -3376,7 +3335,7 @@ msgstr ""
 
 #: /src/schooltool/term/browser/templates/term_add.pt:53
 msgid "Toggle the following days of week:"
-msgstr ""
+msgstr "Переключение в следующие дни недели:"
 
 #: /src/schooltool/term/browser/term.py:61
 msgid "Start date"
@@ -3433,7 +3392,7 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/__init__.py:695
 msgid "The date does not belong to any term."
-msgstr ""
+msgstr "Дата не принадлежит какому-либо периоду."
 
 #: /src/schooltool/timetable/browser/__init__.py:704
 msgid "Some values were invalid.  They are highlighted in red."
@@ -3839,6 +3798,24 @@ msgstr "подтвердите пароль"
 msgid "Supplied passwords are not identical"
 msgstr "Введённые пароли не совпадают"
 
+#~ msgid ""
+#~ "\n"
+#~ "This is not a SchoolTool 0.11 database file, aborting.\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Файл не является базой данных SchoolTool 0.11, отмена.\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "This is not a SchoolTool 0.10 database file, aborting.\n"
+#~ "\n"
+#~ "Please run the standalone database upgrade script.\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Этот файл не является файлом базы данных SchoolTool 0.10. Отмена операции.\n"
+#~ "\n"
+#~ "Пожалуйста, запустите отдельный скрипт обновления базы данных.\n"
+
 #: /src/schooltool/app/app.py:201
 msgid "Your School"
 msgstr "ru_LC_MESSAGES_schooltool.mo"
@@ -4075,9 +4052,9 @@ msgstr "Добавить новое мероприятие, начинающее
 msgid "forever"
 msgstr "постоянно"
 
-#: /src/schooltool/app/browser/configure.zcml:619
+#: /src/schooltool/app/browser/configure.zcml:610
 #: /src/schooltool/app/browser/templates/manage_menu.pt:3
-#: /src/schooltool/basicperson/security.zcml:17
+#: /src/schooltool/basicperson/security.zcml:26
 msgid "Manage"
 msgstr "Управление"
 
@@ -4165,9 +4142,7 @@ msgstr "Релиз-менеджер:"
 msgid "Contributors:"
 msgstr "Авторы:"
 
-#. Default: ""
-#. "This is an Atom formatted XML site feed. It is intended to be viewed\n"
-#. "      in a Newsreader or syndicated to another site. Please visit"
+#. Default: "This is an Atom formatted XML site feed. It is intended to be viewed in a Newsreader or syndicated to another site. Please visit"
 #: /src/schooltool/app/browser/templates/cal_atom.pt:42
 msgid "atom_description"
 msgstr "atom_description"
@@ -4222,7 +4197,6 @@ msgstr "Заказанные ресурсы"
 
 #. Default: "Cancel"
 #: /src/schooltool/app/browser/templates/event_add.pt:378
-#: /src/schooltool/basicperson/browser/templates/person_edit.pt:13
 #: /src/schooltool/contact/browser/templates/contacts_delete.pt:36
 #: /src/schooltool/course/browser/templates/link_section.pt:133
 #: /src/schooltool/email/browser/templates/email_delete.pt:34
@@ -4272,23 +4246,7 @@ msgstr ""
 "разделов. Все они отделяются друг от друга дополнительным символом возврата "
 "каретки (т.е. пустой строкой)."
 
-#. Default: ""
-#. "\"three-day\"\n"
-#. "\"\",\"\",\"\"\n"
-#. "\"philosophy\",\"lorch\"\n"
-#. "\"Monday\",\"A\"\n"
-#. "\"Monday\",\"B\"\n"
-#. "\"Tuesday\",\"C\"\n"
-#. "\"***\"\n"
-#. "\"johnny\"\n"
-#. "\"billy\"\n"
-#. "\"\"\n"
-#. "\"literature\",\"guzman\"\n"
-#. "\"Wednesday\",\"B\"\n"
-#. "\"Wednesday\",\"C\"\n"
-#. "\"***\"\n"
-#. "\"johnny\"\n"
-#. "\"pete\""
+#. Default: "\"three-day\" \"\",\"\",\"\" \"philosophy\",\"lorch\" \"Monday\",\"A\" \"Monday\",\"B\" \"Tuesday\",\"C\" \"***\" \"johnny\" \"billy\" \"\" \"literature\",\"guzman\" \"Wednesday\",\"B\" \"Wednesday\",\"C\" \"***\" \"johnny\" \"pete\""
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:56
 msgid ""
 "\n"
@@ -4546,7 +4504,7 @@ msgstr ""
 "формате iCal:</strong>: Выберите <code>Открыть в iCal</code> из меню "
 "<code>Действия</code>. </li> </ul>"
 
-#: /src/schooltool/app/main.py:406
+#: /src/schooltool/app/main.py:380
 msgid "Cannot resolve plugin action order:\n"
 msgstr "Не возможно определить порядок действий плагина:\n"
 
@@ -4604,6 +4562,7 @@ msgid "Export"
 msgstr "Экспорт"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:42
+#: /src/schooltool/basicperson/security.py:65
 msgid "Advisors"
 msgstr "Консультанты"
 
@@ -4612,7 +4571,7 @@ msgid "Advisees"
 msgstr "Обучаемые"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:113
-#: /src/schooltool/basicperson/security.zcml:13
+#: /src/schooltool/basicperson/security.zcml:22
 #: /src/schooltool/demographics/browser/personform.py:180
 msgid "Demographics"
 msgstr "Демография"
@@ -4637,6 +4596,11 @@ msgstr "имя не может быть пустым"
 msgid "last name may not be empty"
 msgstr "фамилия не может быть пустой"
 
+#: /src/schooltool/basicperson/browser/csvimport.py:85
+#: /src/schooltool/basicperson/browser/person.py:114
+msgid "Usernames cannot contain non-ascii characters"
+msgstr "Имена не должны содержать не ascii символы"
+
 #: /src/schooltool/basicperson/browser/demographics.py:133
 msgid "Add new Field"
 msgstr "Добавить новое поле"
@@ -4650,33 +4614,33 @@ msgstr "Изменить информацию для ${field_title}"
 msgid "Confirm"
 msgstr "Подтвердить"
 
-#: /src/schooltool/basicperson/browser/person.py:163
+#: /src/schooltool/basicperson/browser/person.py:169
 msgid "Passwords do not match"
 msgstr "Пароли не совпадают"
 
-#: /src/schooltool/basicperson/browser/person.py:298
+#: /src/schooltool/basicperson/browser/person.py:304
 msgid "Current Advisors"
 msgstr "Текущие консультанты"
 
-#: /src/schooltool/basicperson/browser/person.py:299
+#: /src/schooltool/basicperson/browser/person.py:305
 msgid "Add Advisors"
 msgstr "Добавить консультантов"
 
 #. Default: ""
-#: /src/schooltool/basicperson/browser/person.py:303
+#: /src/schooltool/basicperson/browser/person.py:309
 msgid "Advisors of ${person}"
 msgstr "Консультанты для ${person}"
 
-#: /src/schooltool/basicperson/browser/person.py:322
+#: /src/schooltool/basicperson/browser/person.py:328
 msgid "Current Advisees"
 msgstr "Текущие обучаемые"
 
-#: /src/schooltool/basicperson/browser/person.py:323
+#: /src/schooltool/basicperson/browser/person.py:329
 msgid "Add Advisees"
 msgstr "Добавить обучаемых"
 
 #. Default: ""
-#: /src/schooltool/basicperson/browser/person.py:327
+#: /src/schooltool/basicperson/browser/person.py:333
 msgid "Advisees of ${person}"
 msgstr "Обучаемый ${person}"
 
@@ -4704,10 +4668,7 @@ msgstr ""
 "Данные CSV <strong>обязаны</strong> содержать имя пользователя, имя и "
 "фамилию. Так же <strong>может</strong> присутствовать необязательный пароль."
 
-#. Default: ""
-#. "jjones, Jimmy, Jones\n"
-#. "jbjones, Jim Bob, Jones, r2m45J\n"
-#. "howard, Howard, Jobs"
+#. Default: "jjones, Jimmy, Jones jbjones, Jim Bob, Jones, r2m45J howard, Howard, Jobs"
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:35
 msgid ""
 "\n"
@@ -4720,8 +4681,8 @@ msgstr ""
 "jbjones, Jim Bob, Jones, r2m45J\n"
 "howard, Howard, Jobs\n"
 
-#: /src/schooltool/basicperson/browser/templates/person_view.pt:4
-#: /src/schooltool/person/browser/home.pt:4
+#: /src/schooltool/basicperson/browser/templates/person_view.pt:13
+#: /src/schooltool/person/browser/home.pt:13
 #: /src/schooltool/person/browser/person.pt:4
 msgid "Person info: ${title}"
 msgstr "Информация о человеке: ${title}"
@@ -4746,27 +4707,31 @@ msgstr "Если это поле не требуется или"
 msgid "List of values"
 msgstr "Список значений"
 
-#: /src/schooltool/basicperson/security.zcml:17
+#: /src/schooltool/basicperson/security.py:66
+msgid "Advisors of a person."
+msgstr "Консультанты личности."
+
+#: /src/schooltool/basicperson/security.zcml:26
 msgid "Create, delete demographics fields and change their order."
 msgstr "Создать, удалить поля демографии и изменить из порядок."
 
-#: /src/schooltool/basicperson/security.zcml:26
+#: /src/schooltool/basicperson/security.zcml:35
 msgid "Edit fields"
 msgstr "Править поля"
 
-#: /src/schooltool/basicperson/security.zcml:34
+#: /src/schooltool/basicperson/security.zcml:43
 msgid "View user demographics"
 msgstr "Показать демографию пользователей"
 
-#: /src/schooltool/basicperson/security.zcml:34
+#: /src/schooltool/basicperson/security.zcml:43
 msgid "View user's demographics information"
 msgstr "Показать демографическую информацию пользователя"
 
-#: /src/schooltool/basicperson/security.zcml:43
+#: /src/schooltool/basicperson/security.zcml:52
 msgid "Modify user demographics"
 msgstr "Править демографию пользователя"
 
-#: /src/schooltool/basicperson/security.zcml:43
+#: /src/schooltool/basicperson/security.zcml:52
 msgid "Modify user's demographics information."
 msgstr "Править демографическую информацию пользователя."
 
@@ -4790,28 +4755,68 @@ msgstr "Управление контактами"
 msgid "Other Contacts"
 msgstr "Прочие контакты"
 
-#: /src/schooltool/contact/browser/contact.py:77
+#: /src/schooltool/contact/browser/configure.zcml:168
+#: /src/schooltool/contact/browser/contact.py:402
+#: /src/schooltool/email/browser/email.py:502
+msgid "Send Email"
+msgstr "Отправить Email"
+
+#: /src/schooltool/contact/browser/contact.py:79
 msgid "Add new contact"
 msgstr "Добавить новый контакт"
 
 #. Default: ""
-#: /src/schooltool/contact/browser/contact.py:160
+#: /src/schooltool/contact/browser/contact.py:162
 msgid "Add new contact for ${person}"
 msgstr "Добавить новые контакты для ${person}"
 
 #. Default: ""
-#: /src/schooltool/contact/browser/contact.py:220
+#: /src/schooltool/contact/browser/contact.py:222
 msgid "Change contact information for ${first_name} ${last_name}"
 msgstr "Изменить данные контакта для ${first_name} ${last_name}"
 
-#: /src/schooltool/contact/browser/contact.py:245
+#: /src/schooltool/contact/browser/contact.py:247
 msgid "Contact index"
 msgstr "Индекс контакта"
 
-#: /src/schooltool/contact/browser/contact.py:308
+#: /src/schooltool/contact/browser/contact.py:310
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:31
 msgid "Address"
 msgstr "Адрес"
+
+#: /src/schooltool/contact/browser/contact.py:384
+#: /src/schooltool/email/browser/email.py:224
+#: /src/schooltool/email/browser/email.py:357
+#: /src/schooltool/email/browser/email.py:473
+#: /src/schooltool/email/interfaces.py:39
+msgid "From"
+msgstr "От"
+
+#: /src/schooltool/contact/browser/contact.py:385
+#: /src/schooltool/email/browser/email.py:229
+#: /src/schooltool/email/browser/email.py:362
+#: /src/schooltool/email/browser/email.py:477
+#: /src/schooltool/email/interfaces.py:43
+msgid "To"
+msgstr "Кому"
+
+#: /src/schooltool/contact/browser/contact.py:386
+#: /src/schooltool/email/browser/email.py:239
+#: /src/schooltool/email/browser/email.py:368
+#: /src/schooltool/email/browser/email.py:481
+#: /src/schooltool/email/interfaces.py:53
+msgid "Subject"
+msgstr "Тема"
+
+#: /src/schooltool/contact/browser/contact.py:405
+#: /src/schooltool/email/browser/email.py:505
+msgid "Send"
+msgstr "Отправить"
+
+#: /src/schooltool/contact/browser/contact.py:409
+#: /src/schooltool/email/browser/email.py:509
+msgid "There were some errors."
+msgstr "Содержит некоторые ошибки."
 
 #: /src/schooltool/contact/browser/relationship.py:75
 #: /src/schooltool/contact/interfaces.py:101
@@ -4841,7 +4846,7 @@ msgstr "${relationship} о ${person}"
 msgid "Contact of ${person}"
 msgstr "Контакты для ${person}"
 
-#. Default: "Confirm"
+#. Default: "Delete"
 #: /src/schooltool/contact/browser/templates/contacts_delete.pt:34
 #: /src/schooltool/course/browser/templates/course_container.pt:40
 #: /src/schooltool/course/browser/templates/section_container.pt:93
@@ -4876,6 +4881,14 @@ msgstr "Создать новый контакт"
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:58
 msgid "Assign"
 msgstr "Подписать"
+
+#: /src/schooltool/contact/browser/templates/noteacheremail.pt:5
+msgid ""
+"You don't have an email address set. Ask your administrator to set your "
+"email address in your contact information."
+msgstr ""
+"У вас не установлен адрес электронной почты. Попросите вашего администратора "
+"добавить электронный адрес в контактную информацию."
 
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:8
 msgid "Contact information for ${person}"
@@ -4947,11 +4960,11 @@ msgstr "Связь контакта с человеком"
 
 #: /src/schooltool/contact/interfaces.py:104
 msgid "Parent"
-msgstr "Предок"
+msgstr "Родитель"
 
 #: /src/schooltool/contact/interfaces.py:105
 msgid "Step-parent"
-msgstr "Приёмный родитель"
+msgstr "Отчим/мачеха"
 
 #: /src/schooltool/contact/interfaces.py:106
 msgid "Foster parent"
@@ -4963,7 +4976,7 @@ msgstr "Опекун"
 
 #: /src/schooltool/contact/interfaces.py:108
 msgid "Sibling"
-msgstr "Равнозначный"
+msgstr "Брат/сестра"
 
 #: /src/schooltool/contact/security.zcml:29
 #: /src/schooltool/person/security.zcml:79
@@ -5019,15 +5032,15 @@ msgstr "Править иформацию о курсе"
 
 #: /src/schooltool/course/browser/configure.zcml:113
 msgid "Copy Sections"
-msgstr ""
+msgstr "Копировать разделы"
 
 #: /src/schooltool/course/browser/configure.zcml:123
 msgid "View Next"
-msgstr ""
+msgstr "Вперёд"
 
 #: /src/schooltool/course/browser/configure.zcml:133
 msgid "View Previous"
-msgstr ""
+msgstr "Назад"
 
 #: /src/schooltool/course/browser/configure.zcml:160
 #: /src/schooltool/course/browser/configure.zcml:170
@@ -5075,25 +5088,25 @@ msgstr "\"${username}\" не является разрешённым имене�
 msgid "Upload SchoolTool section members as CSV"
 msgstr "Загрузить членов группы в SchoolTool в формате CSV"
 
-#: /src/schooltool/course/browser/section.py:188
+#: /src/schooltool/course/browser/section.py:189
 msgid "No section selected."
 msgstr "Не выбрана группа."
 
-#: /src/schooltool/course/browser/section.py:372
+#: /src/schooltool/course/browser/section.py:377
 msgid "Starts in term"
 msgstr "Начинается в семестре"
 
-#: /src/schooltool/course/browser/section.py:373
+#: /src/schooltool/course/browser/section.py:378
 msgid "Ends in term"
 msgstr "Оканчивается в семестре"
 
 #. Default: ""
-#: /src/schooltool/course/browser/section.py:410
+#: /src/schooltool/course/browser/section.py:415
 msgid "Starting term ($starts_in) is later than ending term ($ends_in)"
 msgstr ""
 "Начальный семестр ($starts_in) позже чем семестр окончания ($ends_in)"
 
-#: /src/schooltool/course/browser/section.py:434
+#: /src/schooltool/course/browser/section.py:439
 msgid "Course"
 msgstr "Курс"
 
@@ -5149,11 +5162,7 @@ msgstr ""
 "<strong>могут</strong> включать произвольный id учреждения и "
 "<strong>могут</strong> включать произвольные значения зачетов."
 
-#. Default: ""
-#. "Ancient History, Pre-history through 1000 A.D.\n"
-#. "US History,,us-history\n"
-#. "World History, 1000 A.D. through the 20th century, history-world\n"
-#. "Spanish,,,spanish-gov,5"
+#. Default: "Ancient History, Pre-history through 1000 A.D. US History,,us-history World History, 1000 A.D. through the 20th century, history-world Spanish,,,spanish-gov,5"
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:33
 msgid ""
 "\n"
@@ -5226,11 +5235,11 @@ msgstr "Предыдущий: ${course} -- ${section_title} для ${term}"
 msgid "Next: ${course} -- ${section_title} for ${term}"
 msgstr "Следующий: ${course} -- ${section_title} для ${term}"
 
-#: /src/schooltool/course/browser/templates/section.pt:100
+#: /src/schooltool/course/browser/templates/section.pt:102
 msgid "Change the students in this section individually"
 msgstr "Сменить учащихся в этой секции по одному"
 
-#: /src/schooltool/course/browser/templates/section.pt:100
+#: /src/schooltool/course/browser/templates/section.pt:102
 msgid "edit individuals"
 msgstr "править отдельных лиц"
 
@@ -5276,31 +5285,31 @@ msgstr "Не связан"
 msgid "Section in the next term."
 msgstr "Группа в следующем семестре."
 
-#: /src/schooltool/course/interfaces.py:50
+#: /src/schooltool/course/interfaces.py:49
 msgid "Course ID"
 msgstr "ID курса"
 
-#: /src/schooltool/course/interfaces.py:52
+#: /src/schooltool/course/interfaces.py:51
 msgid "Localy used course identifier."
 msgstr "Идентификатор курса, используемый локально"
 
-#: /src/schooltool/course/interfaces.py:55
+#: /src/schooltool/course/interfaces.py:54
 msgid "Government ID"
 msgstr "Правительственный идентификатор"
 
-#: /src/schooltool/course/interfaces.py:57
+#: /src/schooltool/course/interfaces.py:56
 msgid "Course identifier used by the government."
 msgstr "Идентификатор курса, используемый правительством"
 
-#: /src/schooltool/course/interfaces.py:60
+#: /src/schooltool/course/interfaces.py:59
 msgid "Credits"
 msgstr "Разработчики"
 
-#: /src/schooltool/course/interfaces.py:62
+#: /src/schooltool/course/interfaces.py:61
 msgid "Amount of credits for this course."
 msgstr "Величина кредита для этого курса."
 
-#: /src/schooltool/course/interfaces.py:90
+#: /src/schooltool/course/interfaces.py:89
 msgid ""
 "An identifier for a section, made up of instructor\n"
 "            names, courses, and meeting time."
@@ -5308,39 +5317,39 @@ msgstr ""
 "Идентификатор секции, составленный из фамилий\n"
 "            преподавателей, предметов и времени занятий."
 
-#: /src/schooltool/course/section.py:125
+#: /src/schooltool/course/section.py:124
 msgid "Cannot assign section as previous to itself"
 msgstr "Невозможно сделать секцию предыдущей самой себе"
 
-#: /src/schooltool/course/section.py:152
+#: /src/schooltool/course/section.py:151
 msgid "Cannot assign section as next to itself"
 msgstr "Невозможно сделать секцию следующей самой себе"
 
-#: /src/schooltool/course/section.py:284
+#: /src/schooltool/course/section.py:282
 msgid "Instructors of the section."
 msgstr "Преподаватели секции."
 
-#: /src/schooltool/course/section.py:294
+#: /src/schooltool/course/section.py:292
 msgid "Instructors of a person in any of his sections."
 msgstr "Преподаватели человека во любом его разделе"
 
-#: /src/schooltool/course/section.py:317
+#: /src/schooltool/course/section.py:315
 msgid "Learners"
 msgstr "Учащиеся"
 
-#: /src/schooltool/course/section.py:318
+#: /src/schooltool/course/section.py:316
 msgid "Students of the section."
 msgstr "Студенты секции"
 
-#: /src/schooltool/course/section.py:396
+#: /src/schooltool/course/section.py:394
 msgid "Cannot link sections in same term"
 msgstr "Невозможно связать секции в том же семестре"
 
-#: /src/schooltool/course/section.py:401
+#: /src/schooltool/course/section.py:399
 msgid "Cannot link sections in different school years"
 msgstr "Невозможно связать секции в разных учебных годах"
 
-#: /src/schooltool/course/section.py:405
+#: /src/schooltool/course/section.py:403
 msgid "Sections must be in consecutive terms"
 msgstr "Секции должны находиться в последовательных семестрах"
 
@@ -5431,6 +5440,26 @@ msgstr "Быстрая клавиша: Alt-N"
 msgid "Change demographics for ${fullname}"
 msgstr "Изменить демографию для ${fullname}"
 
+#: /src/schooltool/demographics/interfaces.py:227
+msgid "parent"
+msgstr "родитель"
+
+#: /src/schooltool/demographics/interfaces.py:229
+msgid "grandparent"
+msgstr "дедушка/бабушка"
+
+#: /src/schooltool/demographics/interfaces.py:230
+msgid "step-parent"
+msgstr "отчим/мачеха"
+
+#: /src/schooltool/demographics/interfaces.py:304
+msgid "Name of parent"
+msgstr "Имя родителя"
+
+#: /src/schooltool/demographics/interfaces.py:305
+msgid "Full text search in parent names"
+msgstr "Полнотекстовый поиск по именам родителей"
+
 #: /src/schooltool/devmode/configure.zcml:27
 msgid "Introspect"
 msgstr "Вникать"
@@ -5452,200 +5481,189 @@ msgid "Send Test"
 msgstr "Отправить тест"
 
 #. Default: ""
-#: /src/schooltool/email/browser/email.py:78
-#: /src/schooltool/email/browser/email.py:399
+#: /src/schooltool/email/browser/email.py:79
+#: /src/schooltool/email/browser/email.py:416
 msgid "Enabled on ${info}"
 msgstr "Активировано в ${info}"
 
-#: /src/schooltool/email/browser/email.py:82
-#: /src/schooltool/email/browser/email.py:403
-#: /src/schooltool/securitypolicy/browser/control.py:96
+#: /src/schooltool/email/browser/email.py:83
+#: /src/schooltool/email/browser/email.py:420
+#: /src/schooltool/securitypolicy/browser/control.py:97
 msgid "Disabled"
 msgstr "Отключено"
 
-#: /src/schooltool/email/browser/email.py:91
-#: /src/schooltool/email/browser/email.py:202
-#: /src/schooltool/email/browser/email.py:451
+#: /src/schooltool/email/browser/email.py:96
+#: /src/schooltool/email/browser/email.py:219
+#: /src/schooltool/email/browser/email.py:468
 #: /src/schooltool/email/browser/templates/email_container.pt:20
 msgid "Server Status"
 msgstr "Состояние сервера"
 
-#: /src/schooltool/email/browser/email.py:92
-#: /src/schooltool/email/browser/email.py:203
-#: /src/schooltool/email/browser/email.py:452
+#: /src/schooltool/email/browser/email.py:97
+#: /src/schooltool/email/browser/email.py:220
+#: /src/schooltool/email/browser/email.py:469
 msgid "Current status of the SchoolTool email service"
 msgstr "Текущее состояние e-mail сервера SchoolTool"
 
-#: /src/schooltool/email/browser/email.py:96
+#: /src/schooltool/email/browser/email.py:101
 #: /src/schooltool/email/interfaces.py:87
+msgid "Enable"
+msgstr "Активировать"
+
+#: /src/schooltool/email/browser/email.py:102
+#: /src/schooltool/email/interfaces.py:88
+msgid "Mark to enable the service."
+msgstr "Отметить для включения службы."
+
+#: /src/schooltool/email/browser/email.py:107
+#: /src/schooltool/email/interfaces.py:92
 msgid "Hostname"
 msgstr "Имя узла"
 
-#: /src/schooltool/email/browser/email.py:97
-#: /src/schooltool/email/interfaces.py:88
-msgid "SMTP server hostname. Leave empty to disable email."
-msgstr "Имя SMTP сервера. Оставьте пустым, чтобы отключить e-mail."
+#: /src/schooltool/email/browser/email.py:108
+#: /src/schooltool/email/interfaces.py:93
+msgid "SMTP server hostname. Required if the service is enabled."
+msgstr "Адрес SMTP сервера. Необходимо для работы сервиса."
 
-#: /src/schooltool/email/browser/email.py:101
-#: /src/schooltool/email/interfaces.py:92
+#: /src/schooltool/email/browser/email.py:112
+#: /src/schooltool/email/interfaces.py:97
 msgid "Port"
 msgstr "Порт"
 
-#: /src/schooltool/email/browser/email.py:102
-#: /src/schooltool/email/interfaces.py:93
+#: /src/schooltool/email/browser/email.py:113
+#: /src/schooltool/email/interfaces.py:98
 msgid "Port of the SMTP service. Using 25 by default."
 msgstr "Порт SMTP сервиса. По умолчанию используется 25."
 
-#: /src/schooltool/email/browser/email.py:109
-#: /src/schooltool/email/interfaces.py:100
+#: /src/schooltool/email/browser/email.py:120
+#: /src/schooltool/email/interfaces.py:105
 msgid "Username used for optional SMTP authentication."
 msgstr ""
 "Имя пользователя, используемое для необязательной SMTP аутентификации."
 
-#: /src/schooltool/email/browser/email.py:113
+#: /src/schooltool/email/browser/email.py:124
 msgid "Current Password"
 msgstr "Текущий пароль"
 
-#: /src/schooltool/email/browser/email.py:114
+#: /src/schooltool/email/browser/email.py:125
 msgid "Current password to authenticate to the SMTP server."
 msgstr "Текущий пароль для аутентификации на SMTP сервере."
 
-#: /src/schooltool/email/browser/email.py:118
-#: /src/schooltool/email/interfaces.py:104
+#: /src/schooltool/email/browser/email.py:129
+#: /src/schooltool/email/interfaces.py:109
 msgid "New Password"
 msgstr "Новый пароль"
 
-#: /src/schooltool/email/browser/email.py:119
-#: /src/schooltool/email/interfaces.py:105
+#: /src/schooltool/email/browser/email.py:130
+#: /src/schooltool/email/interfaces.py:110
 msgid "The password to authenticate to the SMTP server."
 msgstr "Пароль для аутентификации на SMTP сервере"
 
-#: /src/schooltool/email/browser/email.py:123
+#: /src/schooltool/email/browser/email.py:134
 msgid "Confirm New Password"
 msgstr "Подтвердите новый пароль"
 
-#: /src/schooltool/email/browser/email.py:124
+#: /src/schooltool/email/browser/email.py:135
 msgid "Verification for the new password."
 msgstr "Проверка для нового пароля"
 
-#: /src/schooltool/email/browser/email.py:128
-#: /src/schooltool/email/interfaces.py:109
+#: /src/schooltool/email/browser/email.py:139
+#: /src/schooltool/email/interfaces.py:114
 msgid "TLS"
 msgstr "TLS"
 
-#: /src/schooltool/email/browser/email.py:129
-#: /src/schooltool/email/interfaces.py:110
+#: /src/schooltool/email/browser/email.py:140
+#: /src/schooltool/email/interfaces.py:115
 msgid "Use TLS connection?"
 msgstr "Использовать TLS соединение?"
 
-#: /src/schooltool/email/browser/email.py:170
+#: /src/schooltool/email/browser/email.py:147
+msgid "New passwords don't match"
+msgstr "Новые пароли не совпадают"
+
+#: /src/schooltool/email/browser/email.py:152
+msgid "Hostname is required for enabling the service"
+msgstr "Имя хоста необходимо для включения службы"
+
+#: /src/schooltool/email/browser/email.py:186
 msgid "Change Email Settings"
 msgstr "Изменить настройки Email"
 
-#: /src/schooltool/email/browser/email.py:194
+#: /src/schooltool/email/browser/email.py:211
 msgid "Unset"
 msgstr "Снять установку"
 
-#: /src/schooltool/email/browser/email.py:207
-#: /src/schooltool/email/browser/email.py:340
-#: /src/schooltool/email/browser/email.py:456
-#: /src/schooltool/email/interfaces.py:39
-msgid "From"
-msgstr "От"
-
-#: /src/schooltool/email/browser/email.py:208
-#: /src/schooltool/email/browser/email.py:457
+#: /src/schooltool/email/browser/email.py:225
+#: /src/schooltool/email/browser/email.py:474
 #: /src/schooltool/email/interfaces.py:40
 msgid "The sender address"
 msgstr "Адрес отправителя"
 
-#: /src/schooltool/email/browser/email.py:212
-#: /src/schooltool/email/browser/email.py:345
-#: /src/schooltool/email/browser/email.py:460
-#: /src/schooltool/email/interfaces.py:43
-msgid "To"
-msgstr "Кому"
-
-#: /src/schooltool/email/browser/email.py:213
-#: /src/schooltool/email/browser/email.py:461
+#: /src/schooltool/email/browser/email.py:230
+#: /src/schooltool/email/browser/email.py:478
 msgid "Recipient addresses comma separated"
 msgstr "Адреса получателей, разделённые запятыми"
 
-#: /src/schooltool/email/browser/email.py:217
-#: /src/schooltool/email/browser/email.py:357
+#: /src/schooltool/email/browser/email.py:234
+#: /src/schooltool/email/browser/email.py:374
 #: /src/schooltool/email/interfaces.py:70
 msgid "Created on"
 msgstr "Создано"
 
-#: /src/schooltool/email/browser/email.py:218
+#: /src/schooltool/email/browser/email.py:235
 #: /src/schooltool/email/interfaces.py:71
 msgid "Date and time when the message was created"
 msgstr "Дата и время создания письма"
 
-#: /src/schooltool/email/browser/email.py:222
-#: /src/schooltool/email/browser/email.py:351
-#: /src/schooltool/email/browser/email.py:464
-#: /src/schooltool/email/interfaces.py:53
-msgid "Subject"
-msgstr "Тема"
-
-#: /src/schooltool/email/browser/email.py:223
-#: /src/schooltool/email/browser/email.py:465
+#: /src/schooltool/email/browser/email.py:240
+#: /src/schooltool/email/browser/email.py:482
 #: /src/schooltool/email/interfaces.py:54
 msgid "Subject of the message"
 msgstr "Тема письма"
 
-#: /src/schooltool/email/browser/email.py:228
-#: /src/schooltool/email/browser/email.py:470
+#: /src/schooltool/email/browser/email.py:245
+#: /src/schooltool/email/browser/email.py:487
 #: /src/schooltool/email/interfaces.py:50
 msgid "Body of the message"
 msgstr "Содержимое письма"
 
-#: /src/schooltool/email/browser/email.py:232
+#: /src/schooltool/email/browser/email.py:249
 msgid "Email Status"
 msgstr "Статус Email"
 
-#: /src/schooltool/email/browser/email.py:233
+#: /src/schooltool/email/browser/email.py:250
 msgid "Status of the message"
 msgstr "Статус письма"
 
-#: /src/schooltool/email/browser/email.py:237
-#: /src/schooltool/email/browser/email.py:363
+#: /src/schooltool/email/browser/email.py:254
+#: /src/schooltool/email/browser/email.py:380
 msgid "Last time tried"
 msgstr "Время последней попытки"
 
-#: /src/schooltool/email/browser/email.py:238
+#: /src/schooltool/email/browser/email.py:255
 msgid "Date and time when the message was last tried"
 msgstr "Дата и время последней попытки письма"
 
-#: /src/schooltool/email/browser/email.py:263
+#: /src/schooltool/email/browser/email.py:280
 msgid "Email View"
 msgstr "Просмотр Email"
 
-#: /src/schooltool/email/browser/email.py:273
+#: /src/schooltool/email/browser/email.py:290
 msgid "Retry"
 msgstr "Повтор"
 
-#: /src/schooltool/email/browser/email.py:383
+#: /src/schooltool/email/browser/email.py:400
 msgid "Email Queue"
 msgstr "Очередь Email"
 
 #. Default: ""
-#: /src/schooltool/email/browser/email.py:441
+#: /src/schooltool/email/browser/email.py:458
 msgid "Queue (${count} failed)"
 msgstr "Очередь (${count} неуд.)"
 
-#: /src/schooltool/email/browser/email.py:443
+#: /src/schooltool/email/browser/email.py:460
 msgid "Queue"
 msgstr "Очередь"
-
-#: /src/schooltool/email/browser/email.py:485
-msgid "Send Email"
-msgstr "Отправить Email"
-
-#: /src/schooltool/email/browser/email.py:488
-msgid "Send"
-msgstr "Отправить"
 
 #. Default: "Retry"
 #: /src/schooltool/email/browser/templates/email_container.pt:39
@@ -5726,6 +5744,10 @@ msgstr "Сервер (${info}) отклонил адрес \"От\" : ${from_add
 msgid ""
 "The server (${info}) rejected the following recipient addresses: ${addresses}"
 msgstr "Сервер (${info}) отклонил следующие адреса доставки: ${addresses}"
+
+#: /src/schooltool/email/mail.py:59
+msgid "The server (${info}) replied that the message data was malformed"
+msgstr ""
 
 #: /src/schooltool/export/configure.zcml:6
 msgid "XLS Import"
@@ -5819,7 +5841,7 @@ msgstr "Импортировать членов группы"
 msgid "edit members"
 msgstr "Редактировать участников"
 
-#: /src/schooltool/group/browser/groupsviewlet.pt:15
+#: /src/schooltool/group/browser/groupsviewlet.pt:22
 msgid "Manage this person's memberships"
 msgstr "Настроить членство этого контакта"
 
@@ -5843,7 +5865,7 @@ msgstr "Изменить пароль"
 msgid "Home"
 msgstr "Домой"
 
-#: /src/schooltool/person/browser/person.py:173
+#: /src/schooltool/person/browser/person.py:174
 msgid "No new password was supplied so original password is unchanged"
 msgstr "Новый пароль не был принят. Старый пароль не изменен"
 
@@ -5935,10 +5957,7 @@ msgstr ""
 "<strong>могут</strong> дополнительно включать описание ресурса. Любая "
 "дополнительная информация отбрасывается."
 
-#. Default: ""
-#. "PRJ302, Overhead Projector #302\n"
-#. "Main Auditorium,,location\n"
-#. "LC-805, Laptop Computer #805"
+#. Default: "PRJ302, Overhead Projector #302 Main Auditorium,,location LC-805, Laptop Computer #805"
 #: /src/schooltool/resource/browser/resource-csvimport.pt:31
 msgid ""
 "\n"
@@ -5968,54 +5987,54 @@ msgstr ""
 msgid "Resource index"
 msgstr "Указатель ресурсов"
 
-#: /src/schooltool/resource/interfaces.py:42
+#: /src/schooltool/resource/interfaces.py:38
 msgid "Title of the resource."
 msgstr "Название ресурса."
 
-#: /src/schooltool/resource/interfaces.py:46
+#: /src/schooltool/resource/interfaces.py:42
 msgid "Type of resource"
 msgstr "Тип ресурса"
 
-#: /src/schooltool/resource/interfaces.py:53
+#: /src/schooltool/resource/interfaces.py:49
 msgid "Description of the resource."
 msgstr "Описание ресурса."
 
-#: /src/schooltool/resource/interfaces.py:58
+#: /src/schooltool/resource/interfaces.py:54
 msgid "Notes for the resource."
 msgstr "Примечение ресурса"
 
-#: /src/schooltool/resource/interfaces.py:81
+#: /src/schooltool/resource/interfaces.py:77
 msgid "Location Type"
 msgstr "Тип месторасположения"
 
-#: /src/schooltool/resource/interfaces.py:96
+#: /src/schooltool/resource/interfaces.py:92
 msgid "Equipment Type"
 msgstr "Тип оборудования"
 
-#: /src/schooltool/resource/interfaces.py:111
+#: /src/schooltool/resource/interfaces.py:107
 #: /src/schooltool/resource/types.py:125
 msgid "Serial Number"
 msgstr "Серийный номер"
 
-#: /src/schooltool/resource/interfaces.py:112
+#: /src/schooltool/resource/interfaces.py:108
 msgid "Serial Number of Equipment"
 msgstr "Серийный номер оборудования"
 
-#: /src/schooltool/resource/interfaces.py:116
+#: /src/schooltool/resource/interfaces.py:112
 #: /src/schooltool/resource/types.py:131
 msgid "Purchase Date"
 msgstr "Дата приобретения"
 
-#: /src/schooltool/resource/interfaces.py:117
+#: /src/schooltool/resource/interfaces.py:113
 msgid "Purchase Date of Equipment"
 msgstr "Дата покупки оборудования"
 
-#: /src/schooltool/resource/interfaces.py:124
+#: /src/schooltool/resource/interfaces.py:120
 msgid "Id of the resource type."
 msgstr "Идентификатор типа ресурса."
 
-#: /src/schooltool/resource/interfaces.py:129
-#: /src/schooltool/resource/interfaces.py:137
+#: /src/schooltool/resource/interfaces.py:125
+#: /src/schooltool/resource/interfaces.py:133
 msgid "The title of a resource type."
 msgstr "Название типа ресурса."
 
@@ -6159,11 +6178,11 @@ msgstr "Вы уверены, что хотите удалить выбранны
 
 #: /src/schooltool/schoolyear/interfaces.py:44
 msgid "The first day of the period of time covered."
-msgstr ""
+msgstr "В первый день период охватывает."
 
 #: /src/schooltool/schoolyear/interfaces.py:47
 msgid "The last day of the period covered."
-msgstr ""
+msgstr "В последний день период охватывает."
 
 #: /src/schooltool/schoolyear/security.zcml:23
 msgid "Activate current school year"
@@ -6173,11 +6192,11 @@ msgstr "Сделать активным текущий учебный год"
 msgid "View Access Rights"
 msgstr "Показать права доступа"
 
-#: /src/schooltool/securitypolicy/browser/control.py:96
+#: /src/schooltool/securitypolicy/browser/control.py:97
 msgid "Enabled"
 msgstr "Включено"
 
-#: /src/schooltool/securitypolicy/browser/control.py:105
+#: /src/schooltool/securitypolicy/browser/control.py:106
 msgid "School administration"
 msgstr "Администрация школы"
 
@@ -6193,35 +6212,35 @@ msgstr "Права доступа"
 msgid "Legend"
 msgstr "Обозначения"
 
-#: /src/schooltool/securitypolicy/crowds.py:124
+#: /src/schooltool/securitypolicy/crowds.py:199
 msgid "Everybody"
 msgstr "Все"
 
-#: /src/schooltool/securitypolicy/crowds.py:125
+#: /src/schooltool/securitypolicy/crowds.py:200
 msgid "Everybody, including users that are not logged in."
 msgstr "Все, включая пользователей, которые не вошли в систему."
 
-#: /src/schooltool/securitypolicy/crowds.py:158
+#: /src/schooltool/securitypolicy/crowds.py:233
 msgid "Authenticated user"
 msgstr "Авторизированный пользователь"
 
-#: /src/schooltool/securitypolicy/crowds.py:159
+#: /src/schooltool/securitypolicy/crowds.py:234
 msgid "All logged in users."
 msgstr "Все пользователи, вошедшие в систему."
 
-#: /src/schooltool/securitypolicy/crowds.py:167
+#: /src/schooltool/securitypolicy/crowds.py:242
 msgid "Anybody"
 msgstr "Кто угодно"
 
-#: /src/schooltool/securitypolicy/crowds.py:168
+#: /src/schooltool/securitypolicy/crowds.py:243
 msgid "Users who did not log in"
 msgstr "Пользователи, не вошедшие в систему"
 
-#: /src/schooltool/securitypolicy/crowds.py:175
+#: /src/schooltool/securitypolicy/crowds.py:250
 msgid "Super user"
 msgstr "Адмиистратор системы"
 
-#: /src/schooltool/securitypolicy/crowds.py:176
+#: /src/schooltool/securitypolicy/crowds.py:251
 msgid "The super user - owner of this SchoolTool application."
 msgstr "Администратор системы владеет всеми правами в SchoolTool"
 
@@ -6296,47 +6315,47 @@ msgstr ""
 msgid "Shortcut: Alt-D"
 msgstr "Быстрая клавиша: Alt-D"
 
-#: /src/schooltool/skin/widgets.py:86
+#: /src/schooltool/skin/widgets.py:87
 msgid "The datetime string did not match the pattern yyyy-mm-dd"
 msgstr "Введенное значение даты не соответствует шаблону ГГГГ-ММ-ДД"
 
-#: /src/schooltool/skin/widgets.py:109
+#: /src/schooltool/skin/widgets.py:110
 msgid "Width"
 msgstr "Ширина"
 
-#: /src/schooltool/skin/widgets.py:110
+#: /src/schooltool/skin/widgets.py:111
 msgid "Editor frame width"
 msgstr "Ширина рамки редактора"
 
-#: /src/schooltool/skin/widgets.py:113
+#: /src/schooltool/skin/widgets.py:114
 msgid "Height"
 msgstr "Высота"
 
-#: /src/schooltool/skin/widgets.py:114
+#: /src/schooltool/skin/widgets.py:115
 msgid "Editor frame height"
 msgstr "Высота рамки редактора"
 
-#: /src/schooltool/skin/widgets.py:117
+#: /src/schooltool/skin/widgets.py:118
 msgid "Toolbar configuration"
 msgstr "Настройка панели инструментов"
 
-#: /src/schooltool/skin/widgets.py:118
+#: /src/schooltool/skin/widgets.py:119
 msgid "The name of the toolbar configuration to use."
 msgstr "Название используемой конфигурации панели инструментов."
 
-#: /src/schooltool/skin/widgets.py:121
-msgid "Configuration path"
-msgstr ""
-
 #: /src/schooltool/skin/widgets.py:122
+msgid "Configuration path"
+msgstr "Путь настроек"
+
+#: /src/schooltool/skin/widgets.py:123
 msgid "Path to the FCKconfiguration javascript file."
 msgstr "Путь к javascript-файлу FCKconfiguration."
 
-#: /src/schooltool/skin/widgets.py:129
+#: /src/schooltool/skin/widgets.py:130
 msgid "Configuration"
 msgstr "Настройки"
 
-#: /src/schooltool/skin/widgets.py:130
+#: /src/schooltool/skin/widgets.py:131
 msgid "FCK editor configuration."
 msgstr "Настройки редактора FCK."
 
@@ -6473,14 +6492,6 @@ msgstr "Новая схема расписания"
 msgid "Create timetable schema"
 msgstr "Создать схему расписания"
 
-#: /src/schooltool/timetable/browser/templates/calendar_overlay.pt:66
-msgid ""
-"<a href=\"#\" onclick=\"$('#more_overlays').toggle();return "
-"false;\">More...</a>"
-msgstr ""
-"<a href=\"#\" onclick=\"$('#more_overlays').toggle();return "
-"false;\">Подробнее...</a>"
-
 #: /src/schooltool/timetable/browser/templates/calendar_overlay.pt:95
 msgid "Manage..."
 msgstr "Управление..."
@@ -6488,7 +6499,7 @@ msgstr "Управление..."
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:4
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:10
 msgid "Scheduling for ${person}"
-msgstr ""
+msgstr "Составление расписания для ${person}"
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:4
 #: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:11
@@ -6604,3 +6615,13 @@ msgstr "Назначить расписания"
 #: /src/schooltool/timetable/security.zcml:54
 msgid "Change schedule"
 msgstr "Изменить задачу"
+
+#~ msgid "SMTP server hostname. Leave empty to disable email."
+#~ msgstr "Имя SMTP сервера. Оставьте пустым, чтобы отключить e-mail."
+
+#~ msgid ""
+#~ "<a href=\"#\" onclick=\"$('#more_overlays').toggle();return "
+#~ "false;\">More...</a>"
+#~ msgstr ""
+#~ "<a href=\"#\" onclick=\"$('#more_overlays').toggle();return "
+#~ "false;\">Подробнее...</a>"

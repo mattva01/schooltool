@@ -18,14 +18,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SchoolTool Version 0.11.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-04 15:41+0000\n"
-"PO-Revision-Date: 2010-04-05 19:06+0000\n"
-"Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
+"POT-Creation-Date: 2010-04-29 02:21+0300\n"
+"PO-Revision-Date: 2010-05-12 13:03+0000\n"
+"Last-Translator: Carl-Uno Olsson <Unknown>\n"
 "Language-Team: Swedish <schooltool-dev@schooltool.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-04-06 03:55+0000\n"
+"X-Launchpad-Export-Date: 2010-05-13 04:29+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "Generated-By: setup.py\n"
 
@@ -282,15 +282,15 @@ msgid "The previous day"
 msgstr "Föregående dag"
 
 #: /src/schooltool/app/browser/cal.py:1737
-#: /src/schooltool/app/interfaces.py:135
-#: /src/schooltool/app/interfaces.py:146
+#: /src/schooltool/app/interfaces.py:133
+#: /src/schooltool/app/interfaces.py:144
 #: /src/schooltool/basicperson/interfaces.py:121
-#: /src/schooltool/course/interfaces.py:37
-#: /src/schooltool/course/interfaces.py:95
+#: /src/schooltool/course/interfaces.py:36
+#: /src/schooltool/course/interfaces.py:94
 #: /src/schooltool/dashboard/interfaces.py:44
 #: /src/schooltool/group/interfaces.py:40
 #: /src/schooltool/note/interfaces.py:42
-#: /src/schooltool/resource/interfaces.py:41
+#: /src/schooltool/resource/interfaces.py:37
 #: /src/schooltool/resource/types.py:60
 #: /src/schooltool/resource/types.py:77
 #: /src/schooltool/resource/types.py:101
@@ -309,7 +309,7 @@ msgstr "Rubrik"
 
 #: /src/schooltool/app/browser/cal.py:1740
 #: /src/schooltool/app/browser/templates/cal_monthly.pt:38
-#: /src/schooltool/app/browser/templates/cal_weekly.pt:40
+#: /src/schooltool/app/browser/templates/cal_weekly.pt:38
 #: /src/schooltool/app/browser/templates/cal_weekly_timetable.pt:37
 #: /src/schooltool/app/browser/templates/cal_weekly_timetable.pt:67
 #: /src/schooltool/app/browser/templates/cal_weekly_timetable.pt:97
@@ -363,10 +363,10 @@ msgid "Location"
 msgstr "Plats"
 
 #: /src/schooltool/app/browser/cal.py:1768
-#: /src/schooltool/course/interfaces.py:41
-#: /src/schooltool/course/interfaces.py:100
+#: /src/schooltool/course/interfaces.py:40
+#: /src/schooltool/course/interfaces.py:99
 #: /src/schooltool/group/interfaces.py:44
-#: /src/schooltool/resource/interfaces.py:51
+#: /src/schooltool/resource/interfaces.py:47
 #: /src/schooltool/securitypolicy/interfaces.py:112
 #: /src/schooltool/timetable/browser/event.py:56
 msgid "Description"
@@ -501,9 +501,9 @@ msgstr "Lägg till händelse"
 
 #: /src/schooltool/app/browser/cal.py:2079
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:48
-#: /src/schooltool/basicperson/browser/person.py:156
-#: /src/schooltool/contact/browser/contact.py:90
-#: /src/schooltool/course/browser/section.py:327
+#: /src/schooltool/basicperson/browser/person.py:162
+#: /src/schooltool/contact/browser/contact.py:92
+#: /src/schooltool/course/browser/section.py:332
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:67
 #: /src/schooltool/schoolyear/browser/schoolyear.py:184
 #: /src/schooltool/timetable/browser/templates/timetable-add.pt:25
@@ -529,8 +529,8 @@ msgid "Updated on ${date_time}"
 msgstr "Uppdaterad den ${date_time}"
 
 #: /src/schooltool/app/browser/cal.py:2718
-#: /src/schooltool/app/browser/configure.zcml:606
-#: /src/schooltool/app/browser/configure.zcml:693
+#: /src/schooltool/app/browser/configure.zcml:597
+#: /src/schooltool/app/browser/configure.zcml:684
 #: /src/schooltool/app/browser/templates/calendar_tab_viewlet.pt:3
 #: /src/schooltool/app/configure.zcml:346
 msgid "Calendar"
@@ -540,13 +540,13 @@ msgstr "Kalender"
 msgid "Actions"
 msgstr "Åtgärder"
 
-#: /src/schooltool/app/browser/configure.zcml:233
-#: /src/schooltool/app/browser/configure.zcml:514
+#: /src/schooltool/app/browser/configure.zcml:224
+#: /src/schooltool/app/browser/configure.zcml:505
 #: /src/schooltool/basicperson/browser/configure.zcml:6
 #: /src/schooltool/basicperson/browser/configure.zcml:185
 #: /src/schooltool/basicperson/browser/configure.zcml:192
 #: /src/schooltool/basicperson/browser/configure.zcml:199
-#: /src/schooltool/common/configure.zcml:89
+#: /src/schooltool/common/configure.zcml:87
 #: /src/schooltool/contact/browser/configure.zcml:6
 #: /src/schooltool/contact/browser/configure.zcml:31
 #: /src/schooltool/contact/browser/configure.zcml:88
@@ -576,140 +576,140 @@ msgstr "Åtgärder"
 msgid "View"
 msgstr "Visa"
 
-#: /src/schooltool/app/browser/configure.zcml:319
+#: /src/schooltool/app/browser/configure.zcml:310
 msgid "View Calendar"
 msgstr "Visa kalender"
 
-#: /src/schooltool/app/browser/configure.zcml:331
+#: /src/schooltool/app/browser/configure.zcml:322
 msgid "New Event"
 msgstr "Ny händelse"
 
-#: /src/schooltool/app/browser/configure.zcml:342
+#: /src/schooltool/app/browser/configure.zcml:333
 msgid "Open in iCal"
 msgstr "Öppna i iCal"
 
-#: /src/schooltool/app/browser/configure.zcml:354
+#: /src/schooltool/app/browser/configure.zcml:345
 msgid "Import Sections"
 msgstr "Importera sektioner"
 
-#: /src/schooltool/app/browser/configure.zcml:365
+#: /src/schooltool/app/browser/configure.zcml:356
 msgid "Edit Leaders"
 msgstr "Redigera ledare"
 
-#: /src/schooltool/app/browser/configure.zcml:376
+#: /src/schooltool/app/browser/configure.zcml:367
 msgid "Change Site Preferences"
 msgstr "Ändra inställningar"
 
-#: /src/schooltool/app/browser/configure.zcml:408
+#: /src/schooltool/app/browser/configure.zcml:399
 msgid "Calendar (Daily)"
 msgstr "Kalender (Daglig)"
 
-#: /src/schooltool/app/browser/configure.zcml:418
+#: /src/schooltool/app/browser/configure.zcml:409
 msgid "Calendar (Daily, PDF)"
 msgstr "Kalender (Daglig, PDF)"
 
-#: /src/schooltool/app/browser/configure.zcml:427
+#: /src/schooltool/app/browser/configure.zcml:418
 msgid "Calendar (Weekly)"
 msgstr "Kalender (Veckovis)"
 
-#: /src/schooltool/app/browser/configure.zcml:437
+#: /src/schooltool/app/browser/configure.zcml:428
 msgid "Calendar (Weekly, PDF)"
 msgstr "Kalender (Veckovis, PDF)"
 
-#: /src/schooltool/app/browser/configure.zcml:446
+#: /src/schooltool/app/browser/configure.zcml:437
 msgid "Calendar (Monthly)"
 msgstr "Kalender (Månadsvis)"
 
-#: /src/schooltool/app/browser/configure.zcml:456
+#: /src/schooltool/app/browser/configure.zcml:447
 msgid "Calendar (Monthly, PDF)"
 msgstr "Kalender (Månadsvis, PDF)"
 
-#: /src/schooltool/app/browser/configure.zcml:465
+#: /src/schooltool/app/browser/configure.zcml:456
 #: /src/schooltool/timetable/browser/configure.zcml:198
 msgid "Calendar (Yearly)"
 msgstr "Kalender (Årsvis)"
 
-#: /src/schooltool/app/browser/configure.zcml:475
+#: /src/schooltool/app/browser/configure.zcml:466
 msgid "Atom View"
 msgstr "Kalender (Årsvis, PDF)"
 
-#: /src/schooltool/app/browser/configure.zcml:485
+#: /src/schooltool/app/browser/configure.zcml:476
 msgid "iCalendar"
 msgstr "iCalendar"
 
-#: /src/schooltool/app/browser/configure.zcml:495
+#: /src/schooltool/app/browser/configure.zcml:486
 msgid "Free/Busy"
 msgstr "Ledig/Upptagen"
 
-#: /src/schooltool/app/browser/configure.zcml:524
+#: /src/schooltool/app/browser/configure.zcml:515
 #: /src/schooltool/app/help/configure.zcml:77
 #: /src/schooltool/app/help/event_add.pt:6
 #: /src/schooltool/app/help/event_add.pt:9
 msgid "Add Event"
 msgstr "Lägg till händelse"
 
-#: /src/schooltool/app/browser/configure.zcml:543
+#: /src/schooltool/app/browser/configure.zcml:534
 #: /src/schooltool/app/help/configure.zcml:87
 #: /src/schooltool/app/help/event_edit.pt:6
 #: /src/schooltool/app/help/event_edit.pt:9
 msgid "Edit Event"
 msgstr "Redigera händelse"
 
-#: /src/schooltool/app/browser/configure.zcml:596
+#: /src/schooltool/app/browser/configure.zcml:587
 msgid "ZODB Control"
 msgstr "ZODB kontroll"
 
-#: /src/schooltool/app/browser/configure.zcml:631
+#: /src/schooltool/app/browser/configure.zcml:622
 msgid "Application Control"
 msgstr "Applikationskontroll"
 
-#: /src/schooltool/app/browser/configure.zcml:643
+#: /src/schooltool/app/browser/configure.zcml:634
 msgid "Translation Domains"
 msgstr "Översättningsdomäner"
 
-#: /src/schooltool/app/browser/configure.zcml:654
+#: /src/schooltool/app/browser/configure.zcml:645
 msgid "Generations"
 msgstr "Generationer"
 
-#: /src/schooltool/app/browser/configure.zcml:675
+#: /src/schooltool/app/browser/configure.zcml:666
 msgid "Browser UI"
 msgstr "Webbläsare"
 
-#: /src/schooltool/app/browser/configure.zcml:681
+#: /src/schooltool/app/browser/configure.zcml:672
 #: /src/schooltool/app/browser/templates/login.pt:3
 #: /src/schooltool/app/browser/templates/menu_view.pt:3
 msgid "Login"
 msgstr "Logga in"
 
-#: /src/schooltool/app/browser/configure.zcml:687
-#: /src/schooltool/app/browser/configure.zcml:774
+#: /src/schooltool/app/browser/configure.zcml:678
+#: /src/schooltool/app/browser/configure.zcml:765
 #: /src/schooltool/devmode/devmode.pt:17
 msgid "Errors"
 msgstr "Fel"
 
-#: /src/schooltool/app/browser/configure.zcml:699
+#: /src/schooltool/app/browser/configure.zcml:690
 msgid "Application"
 msgstr "Program"
 
-#: /src/schooltool/app/browser/configure.zcml:705
+#: /src/schooltool/app/browser/configure.zcml:696
 msgid "Calendar Widget"
 msgstr "Kalender widget"
 
-#: /src/schooltool/app/browser/configure.zcml:711
+#: /src/schooltool/app/browser/configure.zcml:702
 msgid "Templates"
 msgstr "Mallar"
 
-#: /src/schooltool/app/browser/configure.zcml:790
+#: /src/schooltool/app/browser/configure.zcml:781
 msgid "Configure"
 msgstr "Konfigurera"
 
-#: /src/schooltool/app/browser/configure.zcml:797
+#: /src/schooltool/app/browser/configure.zcml:788
 msgid "Error List"
 msgstr "Fel lista"
 
 #: /src/schooltool/app/browser/csvimport.py:108
 #: /src/schooltool/app/browser/csvimport.py:290
-#: /src/schooltool/export/importer.py:697
+#: /src/schooltool/export/importer.py:704
 msgid "No data provided"
 msgstr "Ingen data angiven"
 
@@ -904,9 +904,7 @@ msgstr "SchoolTool"
 msgid "Events for"
 msgstr "Händelser för"
 
-#. Default: ""
-#. "This is an Atom formatted XML site feed. It is intended to be viewed\n"
-#. "      in a Newsreader or syndicated to another site. Please visit"
+#. Default: "This is an Atom formatted XML site feed. It is intended to be viewed in a Newsreader or syndicated to another site. Please visit"
 #: /src/schooltool/app/browser/templates/cal_atom.pt:42
 msgid "atom_description"
 msgstr "atom_beskrivning"
@@ -956,7 +954,7 @@ msgstr "Min kalender"
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:31
 #: /src/schooltool/demographics/browser/personform.py:92
 #: /src/schooltool/demographics/browser/personform.py:270
-#: /src/schooltool/person/browser/person.py:170
+#: /src/schooltool/person/browser/person.py:171
 #: /src/schooltool/skin/form.py:55
 #: /src/schooltool/timetable/browser/event.py:82
 #: /src/schooltool/timetable/browser/templates/calendar_overlay.pt:93
@@ -964,6 +962,7 @@ msgid "Apply"
 msgstr "Verkställ"
 
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:33
+#: /src/schooltool/timetable/browser/templates/calendar_overlay.pt:66
 msgid "More..."
 msgstr "Mer..."
 
@@ -989,7 +988,7 @@ msgstr "global kalender"
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:42
 #: /src/schooltool/app/browser/templates/index.pt:14
-#: /src/schooltool/course/browser/templates/section.pt:69
+#: /src/schooltool/course/browser/templates/section.pt:70
 #: /src/schooltool/dashboard/school.pt:22
 #: /src/schooltool/resource/browser/configure.zcml:169
 msgid "Resources"
@@ -1029,7 +1028,6 @@ msgstr "Det finns inga."
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:48
 #: /src/schooltool/app/browser/templates/event_booking.pt:42
 #: /src/schooltool/app/browser/templates/event_booking.pt:57
-#: /src/schooltool/basicperson/browser/templates/person_edit.pt:10
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:58
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:67
 #: /src/schooltool/skin/templates/view_macros.pt:161
@@ -1066,9 +1064,9 @@ msgid "This is a recurring event."
 msgstr "Detta är en återkommande händelse"
 
 #: /src/schooltool/app/browser/templates/event.pt:33
-#: /src/schooltool/basicperson/browser/templates/person_view.pt:20
+#: /src/schooltool/basicperson/browser/templates/person_view.pt:29
 #: /src/schooltool/course/browser/templates/course.pt:23
-#: /src/schooltool/person/browser/home.pt:34
+#: /src/schooltool/person/browser/home.pt:44
 #: /src/schooltool/person/browser/person.pt:34
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:34
 msgid "Details"
@@ -1253,7 +1251,7 @@ msgstr "Kurser"
 
 #: /src/schooltool/app/browser/templates/index.pt:13
 #: /src/schooltool/group/browser/configure.zcml:63
-#: /src/schooltool/group/browser/groupsviewlet.pt:4
+#: /src/schooltool/group/browser/groupsviewlet.pt:3
 #: /src/schooltool/group/browser/link_to_groups.pt:1
 #: /src/schooltool/group/help/configure.zcml:8
 #: /src/schooltool/group/help/group_container.pt:6
@@ -1293,10 +1291,10 @@ msgstr "Användar information"
 #: /src/schooltool/demographics/browser/personform.py:253
 #: /src/schooltool/demographics/browser/personform.py:254
 #: /src/schooltool/demographics/browser/table.py:67
-#: /src/schooltool/email/browser/email.py:108
-#: /src/schooltool/email/interfaces.py:99
-#: /src/schooltool/person/browser/person.py:286
+#: /src/schooltool/email/browser/email.py:119
+#: /src/schooltool/email/interfaces.py:104
 #: /src/schooltool/person/browser/person.py:287
+#: /src/schooltool/person/browser/person.py:288
 #: /src/schooltool/person/interfaces.py:60
 msgid "Username"
 msgstr "Amvändarnamn"
@@ -1304,8 +1302,8 @@ msgstr "Amvändarnamn"
 #: /src/schooltool/app/browser/templates/login.pt:44
 #: /src/schooltool/basicperson/browser/person.py:64
 #: /src/schooltool/demographics/browser/personform.py:258
-#: /src/schooltool/person/browser/person.py:159
-#: /src/schooltool/person/browser/person.py:290
+#: /src/schooltool/person/browser/person.py:160
+#: /src/schooltool/person/browser/person.py:291
 msgid "Password"
 msgstr "Lösenord"
 
@@ -1341,17 +1339,18 @@ msgstr "Alla"
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:47
 #: /src/schooltool/basicperson/browser/demographics.py:153
 #: /src/schooltool/basicperson/browser/demographics.py:200
-#: /src/schooltool/basicperson/browser/person.py:200
-#: /src/schooltool/basicperson/browser/person.py:216
-#: /src/schooltool/contact/browser/contact.py:118
-#: /src/schooltool/contact/browser/contact.py:193
-#: /src/schooltool/course/browser/section.py:337
+#: /src/schooltool/basicperson/browser/person.py:206
+#: /src/schooltool/basicperson/browser/person.py:222
+#: /src/schooltool/contact/browser/contact.py:120
+#: /src/schooltool/contact/browser/contact.py:195
+#: /src/schooltool/contact/browser/contact.py:419
+#: /src/schooltool/course/browser/section.py:342
 #: /src/schooltool/demographics/browser/personform.py:107
 #: /src/schooltool/demographics/browser/personform.py:301
-#: /src/schooltool/email/browser/email.py:173
-#: /src/schooltool/email/browser/email.py:289
-#: /src/schooltool/email/browser/email.py:502
-#: /src/schooltool/person/browser/person.py:180
+#: /src/schooltool/email/browser/email.py:190
+#: /src/schooltool/email/browser/email.py:306
+#: /src/schooltool/email/browser/email.py:522
+#: /src/schooltool/person/browser/person.py:181
 #: /src/schooltool/schoolyear/browser/schoolyear.py:213
 #: /src/schooltool/schoolyear/browser/schoolyear.py:226
 #: /src/schooltool/skin/form.py:84
@@ -1821,37 +1820,37 @@ msgstr ""
 "<h1>SchoolTools struktur</h1> <p>Denna gren av hjälpträdet innehåller texter "
 "som förklarar SchoolTools grundläggande struktur.</p>"
 
-#: /src/schooltool/app/interfaces.py:43
+#: /src/schooltool/app/interfaces.py:42
 msgid "Form input is not a file object"
 msgstr "Formulärets indata är inte ett filobjekt"
 
-#: /src/schooltool/app/interfaces.py:44
-#: /src/schooltool/app/interfaces.py:48
+#: /src/schooltool/app/interfaces.py:43
+#: /src/schooltool/app/interfaces.py:47
 msgid "Invalid integer data"
 msgstr "Felaktigt heltalsdata"
 
-#: /src/schooltool/app/interfaces.py:45
+#: /src/schooltool/app/interfaces.py:44
 msgid "Invalid text data"
 msgstr "Felaktigt textdata"
 
-#: /src/schooltool/app/interfaces.py:46
+#: /src/schooltool/app/interfaces.py:45
 msgid "Invalid textual data"
 msgstr "Felaktigt textdata"
 
-#: /src/schooltool/app/interfaces.py:47
+#: /src/schooltool/app/interfaces.py:46
 msgid "Invalid unicode data"
 msgstr "Felaktigt unicode data"
 
-#: /src/schooltool/app/interfaces.py:49
+#: /src/schooltool/app/interfaces.py:48
 msgid "Invalid floating point data"
 msgstr "Felaktigt flyttalsdata"
 
-#: /src/schooltool/app/interfaces.py:50
+#: /src/schooltool/app/interfaces.py:49
 msgid "Invalid datetime data"
 msgstr "Felaktigt datum/tid data"
 
-#: /src/schooltool/app/interfaces.py:137
-#: /src/schooltool/app/interfaces.py:148
+#: /src/schooltool/app/interfaces.py:135
+#: /src/schooltool/app/interfaces.py:146
 msgid ""
 "The name for the school or organization running\n"
 "            this server.  This will be displayed on the public calendar, "
@@ -1863,11 +1862,11 @@ msgstr ""
 "kalendern, i\n"
 "            sidfoten och i sidans titel."
 
-#: /src/schooltool/app/interfaces.py:153
+#: /src/schooltool/app/interfaces.py:151
 msgid "Front Page Calendar"
 msgstr "Kalender på första sidan"
 
-#: /src/schooltool/app/interfaces.py:154
+#: /src/schooltool/app/interfaces.py:152
 msgid ""
 "Display site-wide calendar as the front page of the\n"
 "            site."
@@ -1875,11 +1874,11 @@ msgstr ""
 "Visa kalender för hela webbplatsen som första sida för\n"
 "            webbplatsen."
 
-#: /src/schooltool/app/interfaces.py:171
+#: /src/schooltool/app/interfaces.py:169
 msgid "Show timetables"
 msgstr "Visa scheman"
 
-#: /src/schooltool/app/interfaces.py:172
+#: /src/schooltool/app/interfaces.py:170
 msgid ""
 "\n"
 "            An option that controls whether the timetable of this "
@@ -1892,7 +1891,7 @@ msgstr ""
 "            schema visas i kalenderns visningsläge.\n"
 "            "
 
-#: /src/schooltool/app/main.py:95
+#: /src/schooltool/app/main.py:94
 msgid ""
 "\n"
 "Usage: %s [options]\n"
@@ -1922,7 +1921,7 @@ msgstr ""
 "                         är '-')\n"
 "  --manage utför endast adminstrativa uppgifter, starta inte servern\n"
 
-#: /src/schooltool/app/main.py:109
+#: /src/schooltool/app/main.py:108
 msgid ""
 "\n"
 "No storage defined in the configuration file.\n"
@@ -1936,54 +1935,34 @@ msgstr ""
 "Om du använder standard konfigurationen var god redigera nu\n"
 "avkommentera ZODB storage sektionerna.\n"
 
-#: /src/schooltool/app/main.py:117
-msgid ""
-"\n"
-"This is not a SchoolTool 0.11 database file, aborting.\n"
-msgstr ""
-"\n"
-"Detta är inte en  SchoolTool 0.11 databas fil, avslutar.\n"
-
-#: /src/schooltool/app/main.py:122
-msgid ""
-"\n"
-"This is not a SchoolTool 0.10 database file, aborting.\n"
-"\n"
-"Please run the standalone database upgrade script.\n"
-msgstr ""
-"\n"
-"Detta är inte en SchoolTool 0.10 databasfil, avbryter.\n"
-"\n"
-"Var god och kör det fristående databasuppgraderingsscriptet.\n"
-
-#: /src/schooltool/app/main.py:359
+#: /src/schooltool/app/main.py:333
 msgid "Going to background, daemon pid %d"
 msgstr "Går till bakgrunden, daemon pid %d"
 
-#: /src/schooltool/app/main.py:556
-#: /src/schooltool/app/main.py:600
-#: /src/schooltool/app/main.py:603
+#: /src/schooltool/app/main.py:528
+#: /src/schooltool/app/main.py:572
+#: /src/schooltool/app/main.py:575
 msgid "%s: %s"
 msgstr "%s: %s"
 
-#: /src/schooltool/app/main.py:557
+#: /src/schooltool/app/main.py:529
 msgid "Run %s -h for help."
 msgstr "Kör %s -h för hjälp."
 
-#: /src/schooltool/app/main.py:569
+#: /src/schooltool/app/main.py:541
 msgid "%s: daemon mode not supported on your operating system."
 msgstr "%s: daemon läge stöds inte av ditt operativ system."
 
-#: /src/schooltool/app/main.py:595
+#: /src/schooltool/app/main.py:567
 msgid "Reading configuration from %s"
 msgstr "Läser konfiguration från %s"
 
-#: /src/schooltool/app/main.py:698
+#: /src/schooltool/app/main.py:662
 msgid "Startup time: %.3f sec real, %.3f sec CPU"
 msgstr "Starttid: %.3f sec real, %.3f sec CPU"
 
 #. Default: ""
-#: /src/schooltool/app/main.py:732
+#: /src/schooltool/app/main.py:696
 msgid ""
 "Could not initialize the database:\n"
 "%s"
@@ -1991,7 +1970,7 @@ msgstr ""
 "Kunde inte initialisera databasen:\n"
 "%s"
 
-#: /src/schooltool/app/main.py:735
+#: /src/schooltool/app/main.py:699
 msgid ""
 "\n"
 "Perhaps another %s instance is using it?"
@@ -1999,7 +1978,7 @@ msgstr ""
 "\n"
 "Kanske använder en annan %s instans den?"
 
-#: /src/schooltool/app/main.py:805
+#: /src/schooltool/app/main.py:761
 msgid ""
 "Warning: could not find the reportlab library.\n"
 "PDF support disabled."
@@ -2007,7 +1986,7 @@ msgstr ""
 "Varning: Kunde inte hitta reportlab-biblioteket.\n"
 "PDF-stöd avstängt."
 
-#: /src/schooltool/app/main.py:810
+#: /src/schooltool/app/main.py:766
 msgid ""
 "Warning: font directory '%s' does not exist.\n"
 "PDF support disabled."
@@ -2015,7 +1994,7 @@ msgstr ""
 "Varning: teckensnittskatalogen '%s' existerar inte.\n"
 "PDF-stöd avstängt."
 
-#: /src/schooltool/app/main.py:818
+#: /src/schooltool/app/main.py:774
 msgid ""
 "Warning: font '%s' does not exist.\n"
 "PDF support disabled."
@@ -2058,7 +2037,7 @@ msgid "New Person"
 msgstr "Ny person"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:113
-#: /src/schooltool/basicperson/security.zcml:13
+#: /src/schooltool/basicperson/security.zcml:22
 #: /src/schooltool/demographics/browser/personform.py:180
 msgid "Demographics"
 msgstr "Demografiska data"
@@ -2104,12 +2083,12 @@ msgstr "Rådgivare"
 msgid "This username is already in use!"
 msgstr "Användarnamnet är upptaget!"
 
-#: /src/schooltool/basicperson/browser/person.py:143
+#: /src/schooltool/basicperson/browser/person.py:149
 msgid "Add new person"
 msgstr "Lägg till ny person"
 
 #. Default: ""
-#: /src/schooltool/basicperson/browser/person.py:228
+#: /src/schooltool/basicperson/browser/person.py:234
 msgid "Change information for ${fullname}"
 msgstr "Ändra uppgifter om ${fullname}"
 
@@ -2136,8 +2115,8 @@ msgstr ""
 "('r2m45J') och kommer att kunna logga in i systemet. Notera att lösenord "
 "endast kan skickas som vanlig text."
 
-#: /src/schooltool/basicperson/browser/templates/person_view.pt:4
-#: /src/schooltool/person/browser/home.pt:4
+#: /src/schooltool/basicperson/browser/templates/person_view.pt:13
+#: /src/schooltool/person/browser/home.pt:13
 #: /src/schooltool/person/browser/person.pt:4
 msgid "Person info: ${title}"
 msgstr "Personinfo: ${title}"
@@ -2209,12 +2188,12 @@ msgid "ID"
 msgstr "ID"
 
 #: /src/schooltool/basicperson/person.py:83
-#: /src/schooltool/contact/browser/contact.py:297
+#: /src/schooltool/contact/browser/contact.py:299
 msgid "First Name"
 msgstr "Förnamn"
 
 #: /src/schooltool/basicperson/person.py:90
-#: /src/schooltool/contact/browser/contact.py:304
+#: /src/schooltool/contact/browser/contact.py:306
 msgid "Last Name"
 msgstr "Efternamn"
 
@@ -2226,7 +2205,7 @@ msgstr "lägg till lovord"
 msgid "Commendation"
 msgstr "lovord"
 
-#: /src/schooltool/common/configure.zcml:90
+#: /src/schooltool/common/configure.zcml:88
 #: /src/schooltool/course/browser/configure.zcml:25
 #: /src/schooltool/course/browser/configure.zcml:180
 #: /src/schooltool/group/browser/configure.zcml:38
@@ -2236,13 +2215,21 @@ msgstr "lovord"
 msgid "Edit Info"
 msgstr "Redigera information"
 
-#: /src/schooltool/common/configure.zcml:91
+#: /src/schooltool/common/configure.zcml:89
 msgid "Add Info"
 msgstr "Lägg till information"
 
-#: /src/schooltool/common/configure.zcml:92
+#: /src/schooltool/common/configure.zcml:90
 msgid "Edit Calendar Overlays"
 msgstr "Redigera kalenderöverlagringar"
+
+#: /src/schooltool/contact/browser/contact.py:387
+#: /src/schooltool/email/browser/email.py:244
+#: /src/schooltool/email/browser/email.py:486
+#: /src/schooltool/email/interfaces.py:49
+#: /src/schooltool/note/interfaces.py:46
+msgid "Body"
+msgstr "Brödtext"
 
 #: /src/schooltool/contact/browser/templates/contacts_delete.pt:15
 #: /src/schooltool/person/browser/person_container_delete.pt:15
@@ -2288,13 +2275,13 @@ msgid "Email"
 msgstr "E-postadress"
 
 #: /src/schooltool/contact/contact.py:210
-#: /src/schooltool/course/browser/section.py:538
+#: /src/schooltool/course/browser/section.py:543
 #: /src/schooltool/course/browser/templates/copy_sections.pt:93
 #: /src/schooltool/course/browser/templates/link_section.pt:69
-#: /src/schooltool/course/browser/templates/section.pt:79
+#: /src/schooltool/course/browser/templates/section.pt:80
 #: /src/schooltool/course/browser/templates/section_container.pt:42
-#: /src/schooltool/course/section.py:283
-#: /src/schooltool/course/section.py:293
+#: /src/schooltool/course/section.py:281
+#: /src/schooltool/course/section.py:291
 msgid "Instructors"
 msgstr "Lärare"
 
@@ -2342,12 +2329,13 @@ msgstr "Redigera sektionsinformation"
 
 #: /src/schooltool/course/browser/configure.zcml:265
 #: /src/schooltool/course/browser/templates/course.pt:33
+#: /src/schooltool/course/browser/templates/coursesviewlet.pt:34
 #: /src/schooltool/course/security.zcml:107
 #: /src/schooltool/dashboard/term.pt:10
 msgid "Sections"
 msgstr "Sektioner"
 
-#: /src/schooltool/course/browser/course.py:65
+#: /src/schooltool/course/browser/course.py:68
 msgid "Course index"
 msgstr "Kursindex"
 
@@ -2357,28 +2345,28 @@ msgstr "Kursindex"
 msgid "Titles may not be empty"
 msgstr "Rubriker får inte vara tomma"
 
-#: /src/schooltool/course/browser/section.py:539
+#: /src/schooltool/course/browser/section.py:544
 msgid "Current Instructors"
 msgstr "Nuvarande lärare"
 
-#: /src/schooltool/course/browser/section.py:540
+#: /src/schooltool/course/browser/section.py:545
 msgid "Available Instructors"
 msgstr "Tillgängliga lärare"
 
-#: /src/schooltool/course/browser/section.py:554
+#: /src/schooltool/course/browser/section.py:559
 #: /src/schooltool/course/browser/templates/copy_sections.pt:145
 #: /src/schooltool/course/browser/templates/course_container.pt:57
 #: /src/schooltool/course/browser/templates/link_section.pt:114
-#: /src/schooltool/course/browser/templates/section.pt:96
+#: /src/schooltool/course/browser/templates/section.pt:98
 #: /src/schooltool/course/browser/templates/section_container.pt:87
 msgid "Students"
 msgstr "Elever"
 
-#: /src/schooltool/course/browser/section.py:555
+#: /src/schooltool/course/browser/section.py:560
 msgid "Current Students"
 msgstr "Nuvarande elever"
 
-#: /src/schooltool/course/browser/section.py:556
+#: /src/schooltool/course/browser/section.py:561
 msgid "Available Students"
 msgstr "Tillgängliga elever"
 
@@ -2401,7 +2389,7 @@ msgstr "Ladda upp Skolverktygets kurser som CSV"
 
 #: /src/schooltool/course/browser/templates/course.pt:52
 #: /src/schooltool/demographics/browser/nameinfo_view.pt:11
-#: /src/schooltool/person/browser/home.pt:11
+#: /src/schooltool/person/browser/home.pt:20
 #: /src/schooltool/person/browser/person.pt:11
 msgid "photo"
 msgstr "foto"
@@ -2439,19 +2427,19 @@ msgstr "Ändra namn eller beskrivning på denna sektionen"
 msgid "edit info"
 msgstr "Redigera information"
 
-#: /src/schooltool/course/browser/templates/section.pt:86
+#: /src/schooltool/course/browser/templates/section.pt:87
 msgid "Change the instructors for this section."
 msgstr "Ändra lärarna för denna sektion."
 
-#: /src/schooltool/course/browser/templates/section.pt:86
+#: /src/schooltool/course/browser/templates/section.pt:87
 msgid "edit instructors"
 msgstr "redigera instruktörer"
 
-#: /src/schooltool/course/browser/templates/section.pt:100
+#: /src/schooltool/course/browser/templates/section.pt:102
 msgid "Change the students in this section individually"
 msgstr "Ändra eleverna i denna sektion individuellt"
 
-#: /src/schooltool/course/browser/templates/section.pt:100
+#: /src/schooltool/course/browser/templates/section.pt:102
 msgid "edit individuals"
 msgstr "Ändra personer"
 
@@ -2470,19 +2458,19 @@ msgstr "Sektion"
 msgid "Next"
 msgstr "Nästa"
 
-#: /src/schooltool/course/interfaces.py:38
+#: /src/schooltool/course/interfaces.py:37
 msgid "Title of the course."
 msgstr "Kursnamn."
 
-#: /src/schooltool/course/interfaces.py:43
+#: /src/schooltool/course/interfaces.py:42
 msgid "Description of the course."
 msgstr "Kursbeskrivning."
 
-#: /src/schooltool/course/interfaces.py:88
+#: /src/schooltool/course/interfaces.py:87
 msgid "Label"
 msgstr "Etikett"
 
-#: /src/schooltool/course/interfaces.py:90
+#: /src/schooltool/course/interfaces.py:89
 msgid ""
 "An identifier for a section, made up of instructor\n"
 "            names, courses, and meeting time."
@@ -2490,16 +2478,16 @@ msgstr ""
 "En identifiering för sektionen, består av lärar\n"
 "            namn, kurser och mötestid."
 
-#: /src/schooltool/course/interfaces.py:97
+#: /src/schooltool/course/interfaces.py:96
 msgid "Title for the section."
 msgstr "Titel för sektionen"
 
-#: /src/schooltool/course/interfaces.py:102
+#: /src/schooltool/course/interfaces.py:101
 msgid "Description of the section."
 msgstr "Sektionsbeskrivning."
 
 #. Default: ""
-#: /src/schooltool/course/section.py:88
+#: /src/schooltool/course/section.py:87
 msgid "${instructors} -- ${section_title}"
 msgstr "${instructors} -- ${section_title}"
 
@@ -2650,7 +2638,7 @@ msgid "Contact information"
 msgstr "Adressinformation"
 
 #: /src/schooltool/demographics/browser/personform.py:273
-#: /src/schooltool/person/browser/person.py:324
+#: /src/schooltool/person/browser/person.py:325
 msgid "This username is already used!"
 msgstr "Detta användarnamn används redan !"
 
@@ -2678,8 +2666,8 @@ msgstr "Det fanns inga resultat."
 
 #: /src/schooltool/demographics/browser/table.py:73
 #: /src/schooltool/demographics/interfaces.py:76
-#: /src/schooltool/person/browser/person.py:282
-#: /src/schooltool/person/browser/person.py:371
+#: /src/schooltool/person/browser/person.py:283
+#: /src/schooltool/person/browser/person.py:372
 #: /src/schooltool/person/interfaces.py:51
 msgid "Full name"
 msgstr "Fullständigt namn"
@@ -2705,13 +2693,13 @@ msgid "Name by which the student prefers to be called"
 msgstr "Namn som eleven föredrar"
 
 #: /src/schooltool/demographics/interfaces.py:81
-#: /src/schooltool/person/browser/person.py:298
+#: /src/schooltool/person/browser/person.py:299
 #: /src/schooltool/person/interfaces.py:55
 msgid "Photo"
 msgstr "Foto"
 
 #: /src/schooltool/demographics/interfaces.py:83
-#: /src/schooltool/person/browser/person.py:300
+#: /src/schooltool/person/browser/person.py:301
 #: /src/schooltool/person/interfaces.py:57
 msgid "Photo (in JPEG format)"
 msgstr "Foto (i JPEG format)"
@@ -2852,7 +2840,7 @@ msgstr "Telefon mobil"
 #: /src/schooltool/demographics/interfaces.py:288
 #: /src/schooltool/note/configure.zcml:94
 #: /src/schooltool/note/notes.pt:2
-#: /src/schooltool/resource/interfaces.py:56
+#: /src/schooltool/resource/interfaces.py:52
 msgid "Notes"
 msgstr "Anteckningar"
 
@@ -2903,14 +2891,7 @@ msgstr "Installationsdata"
 msgid "Developer Tools"
 msgstr "Utvecklarverktyg"
 
-#: /src/schooltool/email/browser/email.py:227
-#: /src/schooltool/email/browser/email.py:469
-#: /src/schooltool/email/interfaces.py:49
-#: /src/schooltool/note/interfaces.py:46
-msgid "Body"
-msgstr "Brödtext"
-
-#: /src/schooltool/email/browser/email.py:284
+#: /src/schooltool/email/browser/email.py:301
 #: /src/schooltool/note/notes.pt:17
 #: /src/schooltool/timetable/browser/configure.zcml:62
 #: /src/schooltool/timetable/browser/templates/timetable_list.pt:28
@@ -2952,10 +2933,7 @@ msgstr ""
 "<strong>får</strong> innehålla en gruppbeskrivning. Annan extra information "
 "kommer att förkastas."
 
-#. Default: ""
-#. "LUG, Linux Users Group\n"
-#. "Chess Club\n"
-#. "Sports Club, After-school sports club, <em>text after a second comma</em>"
+#. Default: "LUG, Linux Users Group Chess Club Sports Club, After-school sports club, <em>text after a second comma</em>"
 #: /src/schooltool/group/browser/group-csvimport.pt:31
 msgid ""
 "\n"
@@ -2989,41 +2967,41 @@ msgstr "Ändra personer som är medlemmar av denna grupp."
 msgid "edit members"
 msgstr "Redigera medlemmar"
 
-#: /src/schooltool/group/browser/group.py:70
+#: /src/schooltool/group/browser/group.py:73
 msgid "Group index"
 msgstr "Översikt grupper"
 
 #. Default: ""
-#: /src/schooltool/group/browser/group.py:80
+#: /src/schooltool/group/browser/group.py:83
 msgid "Groups of ${person}"
 msgstr "Grupper för ${person}"
 
-#: /src/schooltool/group/browser/group.py:81
+#: /src/schooltool/group/browser/group.py:84
 msgid "Current Groups"
 msgstr "Nuvarande grupper"
 
-#: /src/schooltool/group/browser/group.py:82
+#: /src/schooltool/group/browser/group.py:85
 msgid "Available Groups"
 msgstr "Tillgängliga grupper"
 
 #. Default: ""
-#: /src/schooltool/group/browser/group.py:123
+#: /src/schooltool/group/browser/group.py:130
 msgid "Members of ${group}"
 msgstr "Medlemmar i ${group}"
 
-#: /src/schooltool/group/browser/group.py:124
+#: /src/schooltool/group/browser/group.py:131
 msgid "Current Members"
 msgstr "Befintliga medlemmar"
 
-#: /src/schooltool/group/browser/group.py:125
+#: /src/schooltool/group/browser/group.py:132
 msgid "Add Members"
 msgstr "Lägg till medlemmar"
 
-#: /src/schooltool/group/browser/groupsviewlet.pt:15
+#: /src/schooltool/group/browser/groupsviewlet.pt:22
 msgid "Manage this person's memberships"
 msgstr "Ändra denna persons medlemsskap"
 
-#: /src/schooltool/group/browser/groupsviewlet.pt:15
+#: /src/schooltool/group/browser/groupsviewlet.pt:22
 msgid "edit groups"
 msgstr "ändra grupper"
 
@@ -3144,17 +3122,17 @@ msgstr "( p )"
 msgid "fullname may not be empty"
 msgstr "det fullständiga namnet får inte vara tomt"
 
-#: /src/schooltool/person/browser/home.pt:15
+#: /src/schooltool/person/browser/home.pt:24
 #: /src/schooltool/person/browser/person.pt:15
 msgid "Username:"
 msgstr "Användarnamn:"
 
-#: /src/schooltool/person/browser/home.pt:18
+#: /src/schooltool/person/browser/home.pt:27
 #: /src/schooltool/person/browser/person.pt:18
 msgid "Change this person's name, picture, or password"
 msgstr "Ändra denna persons namn, bild eller lösenord"
 
-#: /src/schooltool/person/browser/home.pt:18
+#: /src/schooltool/person/browser/home.pt:27
 #: /src/schooltool/person/browser/person.pt:18
 msgid "edit name"
 msgstr "ändra namnet"
@@ -3167,10 +3145,7 @@ msgstr ""
 "CSV data <strong>måste</strong> innehålla ett användarnamn och ett fullt "
 "namn. Ett lösenord <strong>får</strong> också inkluderas."
 
-#. Default: ""
-#. "jjones, Jimmy Jones\n"
-#. "jbjones, Jim Bob Jones, r2m45J\n"
-#. "howard, Howard"
+#. Default: "jjones, Jimmy Jones jbjones, Jim Bob Jones, r2m45J howard, Howard"
 #: /src/schooltool/person/browser/person-csvimport.pt:35
 msgid ""
 "\n"
@@ -3183,62 +3158,62 @@ msgstr ""
 "jajonasson, Jim-Anders Jonasson, r2m45J\n"
 "hugo, Hugo\n"
 
-#: /src/schooltool/person/browser/person.py:168
+#: /src/schooltool/person/browser/person.py:169
 msgid "Edit password"
 msgstr "Ändra lösenord"
 
-#: /src/schooltool/person/browser/person.py:173
+#: /src/schooltool/person/browser/person.py:174
 msgid "No new password was supplied so original password is unchanged"
 msgstr "Inget nytt lösenord angivet, det gamla lösenordet kvarstår"
 
-#: /src/schooltool/person/browser/person.py:178
+#: /src/schooltool/person/browser/person.py:179
 msgid "Changed password"
 msgstr "Ändra lösenord"
 
-#: /src/schooltool/person/browser/person.py:283
-#: /src/schooltool/person/browser/person.py:372
+#: /src/schooltool/person/browser/person.py:284
+#: /src/schooltool/person/browser/person.py:373
 #: /src/schooltool/person/interfaces.py:52
 msgid "Name that should be displayed"
 msgstr "Namn som kommer att visas"
 
-#: /src/schooltool/person/browser/person.py:294
-#: /src/schooltool/person/browser/person.py:390
+#: /src/schooltool/person/browser/person.py:295
+#: /src/schooltool/person/browser/person.py:391
 msgid "Verify password"
 msgstr "Verifiera lösenordet"
 
-#: /src/schooltool/person/browser/person.py:321
+#: /src/schooltool/person/browser/person.py:322
 msgid "Passwords do not match!"
 msgstr "Lösenorden överenstämmer inte med varandra !"
 
-#: /src/schooltool/person/browser/person.py:375
+#: /src/schooltool/person/browser/person.py:376
 msgid "New photo"
 msgstr "Nytt foto"
 
-#: /src/schooltool/person/browser/person.py:377
+#: /src/schooltool/person/browser/person.py:378
 msgid "A small picture (about 48x48 pixels in JPEG format)"
 msgstr "En liten bild (ca 48x48 pixlar i JPEG format)"
 
-#: /src/schooltool/person/browser/person.py:381
+#: /src/schooltool/person/browser/person.py:382
 msgid "Clear photo"
 msgstr "Ta bort foto"
 
-#: /src/schooltool/person/browser/person.py:383
+#: /src/schooltool/person/browser/person.py:384
 msgid "Check this to clear the photo"
 msgstr "Kontrollera detta för att ta bort fotot"
 
-#: /src/schooltool/person/browser/person.py:386
+#: /src/schooltool/person/browser/person.py:387
 msgid "New password"
 msgstr "Nytt lösenord"
 
-#: /src/schooltool/person/browser/person.py:419
+#: /src/schooltool/person/browser/person.py:420
 msgid "Passwords do not match."
 msgstr "Lösenorden överenstämmer inte med varandra"
 
-#: /src/schooltool/person/browser/person.py:423
+#: /src/schooltool/person/browser/person.py:424
 msgid "Password was successfully changed!"
 msgstr "Lösenordet har ändrats"
 
-#: /src/schooltool/person/browser/person.py:446
+#: /src/schooltool/person/browser/person.py:447
 msgid "Person index"
 msgstr "Person Index"
 
@@ -3404,92 +3379,92 @@ msgstr "Översikt resurser"
 msgid "Resource Help"
 msgstr "Resurshjälp"
 
-#: /src/schooltool/resource/interfaces.py:42
+#: /src/schooltool/resource/interfaces.py:38
 msgid "Title of the resource."
 msgstr "Resursens rubrik."
 
-#: /src/schooltool/resource/interfaces.py:45
+#: /src/schooltool/resource/interfaces.py:41
 msgid "Resource Type"
 msgstr "Resurstyp"
 
-#: /src/schooltool/resource/interfaces.py:46
+#: /src/schooltool/resource/interfaces.py:42
 msgid "Type of resource"
 msgstr "Typ av resurs"
 
-#: /src/schooltool/resource/interfaces.py:53
+#: /src/schooltool/resource/interfaces.py:49
 msgid "Description of the resource."
 msgstr "Beskrivning av resursen."
 
-#: /src/schooltool/resource/interfaces.py:58
+#: /src/schooltool/resource/interfaces.py:54
 msgid "Notes for the resource."
 msgstr "Anteckningar om resursen."
 
-#: /src/schooltool/resource/interfaces.py:81
+#: /src/schooltool/resource/interfaces.py:77
 msgid "Location Type"
 msgstr "Platstyp"
 
-#: /src/schooltool/resource/interfaces.py:82
+#: /src/schooltool/resource/interfaces.py:78
 msgid "Type of location (i.e. computer lab, class room, etc.)"
 msgstr "Typ av plats (t.ex. datorsal, klassrum m.m.)"
 
-#: /src/schooltool/resource/interfaces.py:87
+#: /src/schooltool/resource/interfaces.py:83
 #: /src/schooltool/resource/types.py:83
 msgid "Capacity"
 msgstr "Kapacitet"
 
-#: /src/schooltool/resource/interfaces.py:88
+#: /src/schooltool/resource/interfaces.py:84
 msgid "Capacity of the room"
 msgstr "Rummets kapacitet"
 
-#: /src/schooltool/resource/interfaces.py:96
+#: /src/schooltool/resource/interfaces.py:92
 msgid "Equipment Type"
 msgstr "Utrustningstyp"
 
-#: /src/schooltool/resource/interfaces.py:97
+#: /src/schooltool/resource/interfaces.py:93
 msgid "Type of equipment (i.e. camcorder, computer, etc.)"
 msgstr "Typ av utrustning (t.ex. videokamera, dator, etc.)"
 
-#: /src/schooltool/resource/interfaces.py:101
+#: /src/schooltool/resource/interfaces.py:97
 #: /src/schooltool/resource/types.py:113
 msgid "Manufacturer"
 msgstr "Tillverkare"
 
-#: /src/schooltool/resource/interfaces.py:102
+#: /src/schooltool/resource/interfaces.py:98
 msgid "Manufacturer of Equipment"
 msgstr "Tillverkare av utrustning"
 
-#: /src/schooltool/resource/interfaces.py:106
+#: /src/schooltool/resource/interfaces.py:102
 #: /src/schooltool/resource/types.py:119
 msgid "Model"
 msgstr "Modell"
 
-#: /src/schooltool/resource/interfaces.py:107
+#: /src/schooltool/resource/interfaces.py:103
 msgid "Model of Equipment"
 msgstr "Utrustningens modell"
 
-#: /src/schooltool/resource/interfaces.py:111
+#: /src/schooltool/resource/interfaces.py:107
 #: /src/schooltool/resource/types.py:125
 msgid "Serial Number"
 msgstr "Serienummer"
 
-#: /src/schooltool/resource/interfaces.py:112
+#: /src/schooltool/resource/interfaces.py:108
 msgid "Serial Number of Equipment"
 msgstr "Utrustningens serienummer"
 
-#: /src/schooltool/resource/interfaces.py:116
+#: /src/schooltool/resource/interfaces.py:112
 #: /src/schooltool/resource/types.py:131
 msgid "Purchase Date"
 msgstr "Inköpsdatum"
 
-#: /src/schooltool/resource/interfaces.py:117
+#: /src/schooltool/resource/interfaces.py:113
 msgid "Purchase Date of Equipment"
 msgstr "Utrustningens inköpsdatum"
 
-#: /src/schooltool/resource/interfaces.py:124
+#: /src/schooltool/resource/interfaces.py:120
 msgid "Id of the resource type."
 msgstr "Id för resurstypen."
 
-#: /src/schooltool/resource/interfaces.py:125
+#: /src/schooltool/resource/interfaces.py:121
 msgid ""
 "Used for lookup of named utilities that have resource\n"
 "        type specific information."
@@ -3497,8 +3472,8 @@ msgstr ""
 "Används för att slå upp namngivna resurser med\n"
 "        resurstypsspecifika uppgifter."
 
-#: /src/schooltool/resource/interfaces.py:129
-#: /src/schooltool/resource/interfaces.py:137
+#: /src/schooltool/resource/interfaces.py:125
+#: /src/schooltool/resource/interfaces.py:133
 msgid "The title of a resource type."
 msgstr "Titel för resurstyp"
 
@@ -4318,6 +4293,24 @@ msgstr "Var god specifiera närvarakontroll för alla dagar:"
 msgid "confirm password"
 msgstr "bekräfta lösenord"
 
+#~ msgid ""
+#~ "\n"
+#~ "This is not a SchoolTool 0.10 database file, aborting.\n"
+#~ "\n"
+#~ "Please run the standalone database upgrade script.\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Detta är inte en SchoolTool 0.10 databasfil, avbryter.\n"
+#~ "\n"
+#~ "Var god och kör det fristående databasuppgraderingsscriptet.\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "This is not a SchoolTool 0.11 database file, aborting.\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Detta är inte en  SchoolTool 0.11 databas fil, avslutar.\n"
+
 #: /src/schooltool/app/app.py:201
 msgid "Your School"
 msgstr "Din skola"
@@ -4375,9 +4368,9 @@ msgstr "Gå till föregående dag"
 msgid "Add new event starting at ${title}"
 msgstr "Lägg till en ny händelse som börjar ${title}"
 
-#: /src/schooltool/app/browser/configure.zcml:619
+#: /src/schooltool/app/browser/configure.zcml:610
 #: /src/schooltool/app/browser/templates/manage_menu.pt:3
-#: /src/schooltool/basicperson/security.zcml:17
+#: /src/schooltool/basicperson/security.zcml:26
 msgid "Manage"
 msgstr "Hantera"
 
@@ -4455,7 +4448,7 @@ msgstr "Utvecklingsledare:"
 
 #: /src/schooltool/app/browser/templates/about.pt:44
 msgid "Release Manager:"
-msgstr ""
+msgstr "Versionshanterare:"
 
 #: /src/schooltool/app/browser/templates/about.pt:47
 msgid "Contributors:"
@@ -4506,7 +4499,6 @@ msgstr "Bokade resurser"
 
 #. Default: "Cancel"
 #: /src/schooltool/app/browser/templates/event_add.pt:378
-#: /src/schooltool/basicperson/browser/templates/person_edit.pt:13
 #: /src/schooltool/contact/browser/templates/contacts_delete.pt:36
 #: /src/schooltool/course/browser/templates/link_section.pt:133
 #: /src/schooltool/email/browser/templates/email_delete.pt:34
@@ -4551,23 +4543,7 @@ msgstr ""
 "Andra raden ska vara tom. Efter det kan flera sektioner av beskrivningar "
 "följa. De separeras av en extra vagnretur (t ex en tom rad)."
 
-#. Default: ""
-#. "\"three-day\"\n"
-#. "\"\",\"\",\"\"\n"
-#. "\"philosophy\",\"lorch\"\n"
-#. "\"Monday\",\"A\"\n"
-#. "\"Monday\",\"B\"\n"
-#. "\"Tuesday\",\"C\"\n"
-#. "\"***\"\n"
-#. "\"johnny\"\n"
-#. "\"billy\"\n"
-#. "\"\"\n"
-#. "\"literature\",\"guzman\"\n"
-#. "\"Wednesday\",\"B\"\n"
-#. "\"Wednesday\",\"C\"\n"
-#. "\"***\"\n"
-#. "\"johnny\"\n"
-#. "\"pete\""
+#. Default: "\"three-day\" \"\",\"\",\"\" \"philosophy\",\"lorch\" \"Monday\",\"A\" \"Monday\",\"B\" \"Tuesday\",\"C\" \"***\" \"johnny\" \"billy\" \"\" \"literature\",\"guzman\" \"Wednesday\",\"B\" \"Wednesday\",\"C\" \"***\" \"johnny\" \"pete\""
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:56
 msgid ""
 "\n"
@@ -4592,7 +4568,6 @@ msgstr ""
 #. Default: "Submit"
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:122
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:75
-#: /src/schooltool/basicperson/browser/templates/person_edit.pt:10
 #: /src/schooltool/course/browser/section-member-csvimport.pt:52
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:86
 #: /src/schooltool/export/templates/import.pt:66
@@ -4755,7 +4730,7 @@ msgid ""
 "<code>Open in iCal</code> from the Action menu.</li> </ul>"
 msgstr ""
 
-#: /src/schooltool/app/main.py:406
+#: /src/schooltool/app/main.py:380
 msgid "Cannot resolve plugin action order:\n"
 msgstr ""
 
@@ -4808,6 +4783,7 @@ msgid "Export"
 msgstr "Exportera"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:42
+#: /src/schooltool/basicperson/security.py:65
 msgid "Advisors"
 msgstr "Rådgivare"
 
@@ -4835,6 +4811,11 @@ msgstr "förnamn kan inte vara tomt"
 msgid "last name may not be empty"
 msgstr "efternamn kan inte vara tomt"
 
+#: /src/schooltool/basicperson/browser/csvimport.py:85
+#: /src/schooltool/basicperson/browser/person.py:114
+msgid "Usernames cannot contain non-ascii characters"
+msgstr ""
+
 #: /src/schooltool/basicperson/browser/demographics.py:133
 msgid "Add new Field"
 msgstr "Lägg till nytt fält"
@@ -4848,33 +4829,33 @@ msgstr "Ändra informationen för ${field_title}"
 msgid "Confirm"
 msgstr "Bekräfta"
 
-#: /src/schooltool/basicperson/browser/person.py:163
+#: /src/schooltool/basicperson/browser/person.py:169
 msgid "Passwords do not match"
 msgstr "Lösenorden stämmer inte överens"
 
-#: /src/schooltool/basicperson/browser/person.py:298
+#: /src/schooltool/basicperson/browser/person.py:304
 msgid "Current Advisors"
 msgstr "Nuvarande rådgivare"
 
-#: /src/schooltool/basicperson/browser/person.py:299
+#: /src/schooltool/basicperson/browser/person.py:305
 msgid "Add Advisors"
 msgstr "Lägg till rådgivare"
 
 #. Default: ""
-#: /src/schooltool/basicperson/browser/person.py:303
+#: /src/schooltool/basicperson/browser/person.py:309
 msgid "Advisors of ${person}"
 msgstr "Rådgivare för ${person}"
 
-#: /src/schooltool/basicperson/browser/person.py:322
+#: /src/schooltool/basicperson/browser/person.py:328
 msgid "Current Advisees"
 msgstr ""
 
-#: /src/schooltool/basicperson/browser/person.py:323
+#: /src/schooltool/basicperson/browser/person.py:329
 msgid "Add Advisees"
 msgstr ""
 
 #. Default: ""
-#: /src/schooltool/basicperson/browser/person.py:327
+#: /src/schooltool/basicperson/browser/person.py:333
 msgid "Advisees of ${person}"
 msgstr ""
 
@@ -4892,10 +4873,7 @@ msgstr ""
 "efternamn i CSV-data. Valfritt <strong>kan</strong> ett lösenord också "
 "läggas till."
 
-#. Default: ""
-#. "jjones, Jimmy, Jones\n"
-#. "jbjones, Jim Bob, Jones, r2m45J\n"
-#. "howard, Howard, Jobs"
+#. Default: "jjones, Jimmy, Jones jbjones, Jim Bob, Jones, r2m45J howard, Howard, Jobs"
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:35
 msgid ""
 "\n"
@@ -4928,27 +4906,31 @@ msgstr ""
 msgid "List of values"
 msgstr "Lista av värden"
 
-#: /src/schooltool/basicperson/security.zcml:17
-msgid "Create, delete demographics fields and change their order."
+#: /src/schooltool/basicperson/security.py:66
+msgid "Advisors of a person."
 msgstr ""
 
 #: /src/schooltool/basicperson/security.zcml:26
+msgid "Create, delete demographics fields and change their order."
+msgstr ""
+
+#: /src/schooltool/basicperson/security.zcml:35
 msgid "Edit fields"
 msgstr "Redigera fält"
 
-#: /src/schooltool/basicperson/security.zcml:34
+#: /src/schooltool/basicperson/security.zcml:43
 msgid "View user demographics"
 msgstr ""
 
-#: /src/schooltool/basicperson/security.zcml:34
+#: /src/schooltool/basicperson/security.zcml:43
 msgid "View user's demographics information"
 msgstr "Visa användarens demografiska information"
 
-#: /src/schooltool/basicperson/security.zcml:43
+#: /src/schooltool/basicperson/security.zcml:52
 msgid "Modify user demographics"
 msgstr ""
 
-#: /src/schooltool/basicperson/security.zcml:43
+#: /src/schooltool/basicperson/security.zcml:52
 msgid "Modify user's demographics information."
 msgstr "Ändra användarens demografiska information"
 
@@ -4972,28 +4954,68 @@ msgstr "Hantera kontakter"
 msgid "Other Contacts"
 msgstr "Andra kontakter"
 
-#: /src/schooltool/contact/browser/contact.py:77
+#: /src/schooltool/contact/browser/configure.zcml:168
+#: /src/schooltool/contact/browser/contact.py:402
+#: /src/schooltool/email/browser/email.py:502
+msgid "Send Email"
+msgstr "Skicka e-post"
+
+#: /src/schooltool/contact/browser/contact.py:79
 msgid "Add new contact"
 msgstr "Lägg till ny kontakt"
 
 #. Default: ""
-#: /src/schooltool/contact/browser/contact.py:160
+#: /src/schooltool/contact/browser/contact.py:162
 msgid "Add new contact for ${person}"
 msgstr "Lägg till ny kontakt för ${person}"
 
 #. Default: ""
-#: /src/schooltool/contact/browser/contact.py:220
+#: /src/schooltool/contact/browser/contact.py:222
 msgid "Change contact information for ${first_name} ${last_name}"
 msgstr "Ändra kontakt information för ${first_name} ${last_name}"
 
-#: /src/schooltool/contact/browser/contact.py:245
+#: /src/schooltool/contact/browser/contact.py:247
 msgid "Contact index"
 msgstr "Kontaktindex"
 
-#: /src/schooltool/contact/browser/contact.py:308
+#: /src/schooltool/contact/browser/contact.py:310
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:31
 msgid "Address"
 msgstr "Adress"
+
+#: /src/schooltool/contact/browser/contact.py:384
+#: /src/schooltool/email/browser/email.py:224
+#: /src/schooltool/email/browser/email.py:357
+#: /src/schooltool/email/browser/email.py:473
+#: /src/schooltool/email/interfaces.py:39
+msgid "From"
+msgstr "Från"
+
+#: /src/schooltool/contact/browser/contact.py:385
+#: /src/schooltool/email/browser/email.py:229
+#: /src/schooltool/email/browser/email.py:362
+#: /src/schooltool/email/browser/email.py:477
+#: /src/schooltool/email/interfaces.py:43
+msgid "To"
+msgstr "Till"
+
+#: /src/schooltool/contact/browser/contact.py:386
+#: /src/schooltool/email/browser/email.py:239
+#: /src/schooltool/email/browser/email.py:368
+#: /src/schooltool/email/browser/email.py:481
+#: /src/schooltool/email/interfaces.py:53
+msgid "Subject"
+msgstr ""
+
+#: /src/schooltool/contact/browser/contact.py:405
+#: /src/schooltool/email/browser/email.py:505
+msgid "Send"
+msgstr "Skicka"
+
+#: /src/schooltool/contact/browser/contact.py:409
+#: /src/schooltool/email/browser/email.py:509
+msgid "There were some errors."
+msgstr ""
 
 #: /src/schooltool/contact/browser/relationship.py:75
 #: /src/schooltool/contact/interfaces.py:101
@@ -5023,7 +5045,7 @@ msgstr ""
 msgid "Contact of ${person}"
 msgstr ""
 
-#. Default: "Confirm"
+#. Default: "Delete"
 #: /src/schooltool/contact/browser/templates/contacts_delete.pt:34
 #: /src/schooltool/course/browser/templates/course_container.pt:40
 #: /src/schooltool/course/browser/templates/section_container.pt:93
@@ -5058,6 +5080,12 @@ msgstr "Skapa ny kontakt"
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:58
 msgid "Assign"
 msgstr "Tilldela"
+
+#: /src/schooltool/contact/browser/templates/noteacheremail.pt:5
+msgid ""
+"You don't have an email address set. Ask your administrator to set your "
+"email address in your contact information."
+msgstr ""
 
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:8
 msgid "Contact information for ${person}"
@@ -5242,24 +5270,24 @@ msgstr "\"${username}\" är inte ett gilltigt användarnamn."
 msgid "Upload SchoolTool section members as CSV"
 msgstr "Ladda upp SchoolTool sektions medlemmar som CVS"
 
-#: /src/schooltool/course/browser/section.py:188
+#: /src/schooltool/course/browser/section.py:189
 msgid "No section selected."
 msgstr "Ingen sektion vald"
 
-#: /src/schooltool/course/browser/section.py:372
+#: /src/schooltool/course/browser/section.py:377
 msgid "Starts in term"
 msgstr ""
 
-#: /src/schooltool/course/browser/section.py:373
+#: /src/schooltool/course/browser/section.py:378
 msgid "Ends in term"
 msgstr ""
 
 #. Default: ""
-#: /src/schooltool/course/browser/section.py:410
+#: /src/schooltool/course/browser/section.py:415
 msgid "Starting term ($starts_in) is later than ending term ($ends_in)"
 msgstr ""
 
-#: /src/schooltool/course/browser/section.py:434
+#: /src/schooltool/course/browser/section.py:439
 msgid "Course"
 msgstr "Kurs"
 
@@ -5308,11 +5336,7 @@ msgid ""
 "and <strong>may</strong> include an optional credits value."
 msgstr ""
 
-#. Default: ""
-#. "Ancient History, Pre-history through 1000 A.D.\n"
-#. "US History,,us-history\n"
-#. "World History, 1000 A.D. through the 20th century, history-world\n"
-#. "Spanish,,,spanish-gov,5"
+#. Default: "Ancient History, Pre-history through 1000 A.D. US History,,us-history World History, 1000 A.D. through the 20th century, history-world Spanish,,,spanish-gov,5"
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:33
 msgid ""
 "\n"
@@ -5432,63 +5456,63 @@ msgid ""
 "the courses on a single page.</li> </ul>"
 msgstr ""
 
-#: /src/schooltool/course/interfaces.py:50
+#: /src/schooltool/course/interfaces.py:49
 msgid "Course ID"
 msgstr "Kurs ID"
 
-#: /src/schooltool/course/interfaces.py:52
+#: /src/schooltool/course/interfaces.py:51
 msgid "Localy used course identifier."
 msgstr ""
 
-#: /src/schooltool/course/interfaces.py:55
+#: /src/schooltool/course/interfaces.py:54
 msgid "Government ID"
 msgstr ""
 
-#: /src/schooltool/course/interfaces.py:57
+#: /src/schooltool/course/interfaces.py:56
 msgid "Course identifier used by the government."
 msgstr ""
 
-#: /src/schooltool/course/interfaces.py:60
+#: /src/schooltool/course/interfaces.py:59
 msgid "Credits"
 msgstr "Tack till"
 
-#: /src/schooltool/course/interfaces.py:62
+#: /src/schooltool/course/interfaces.py:61
 msgid "Amount of credits for this course."
 msgstr ""
 
-#: /src/schooltool/course/section.py:125
+#: /src/schooltool/course/section.py:124
 msgid "Cannot assign section as previous to itself"
 msgstr ""
 
-#: /src/schooltool/course/section.py:152
+#: /src/schooltool/course/section.py:151
 msgid "Cannot assign section as next to itself"
 msgstr ""
 
-#: /src/schooltool/course/section.py:284
+#: /src/schooltool/course/section.py:282
 msgid "Instructors of the section."
 msgstr ""
 
-#: /src/schooltool/course/section.py:294
+#: /src/schooltool/course/section.py:292
 msgid "Instructors of a person in any of his sections."
 msgstr ""
 
-#: /src/schooltool/course/section.py:317
+#: /src/schooltool/course/section.py:315
 msgid "Learners"
 msgstr ""
 
-#: /src/schooltool/course/section.py:318
+#: /src/schooltool/course/section.py:316
 msgid "Students of the section."
 msgstr ""
 
-#: /src/schooltool/course/section.py:396
+#: /src/schooltool/course/section.py:394
 msgid "Cannot link sections in same term"
 msgstr ""
 
-#: /src/schooltool/course/section.py:401
+#: /src/schooltool/course/section.py:399
 msgid "Cannot link sections in different school years"
 msgstr ""
 
-#: /src/schooltool/course/section.py:405
+#: /src/schooltool/course/section.py:403
 msgid "Sections must be in consecutive terms"
 msgstr ""
 
@@ -5551,199 +5575,188 @@ msgid "Send Test"
 msgstr ""
 
 #. Default: ""
-#: /src/schooltool/email/browser/email.py:78
-#: /src/schooltool/email/browser/email.py:399
+#: /src/schooltool/email/browser/email.py:79
+#: /src/schooltool/email/browser/email.py:416
 msgid "Enabled on ${info}"
 msgstr ""
 
-#: /src/schooltool/email/browser/email.py:82
-#: /src/schooltool/email/browser/email.py:403
-#: /src/schooltool/securitypolicy/browser/control.py:96
+#: /src/schooltool/email/browser/email.py:83
+#: /src/schooltool/email/browser/email.py:420
+#: /src/schooltool/securitypolicy/browser/control.py:97
 msgid "Disabled"
 msgstr "Inaktiverad"
 
-#: /src/schooltool/email/browser/email.py:91
-#: /src/schooltool/email/browser/email.py:202
-#: /src/schooltool/email/browser/email.py:451
+#: /src/schooltool/email/browser/email.py:96
+#: /src/schooltool/email/browser/email.py:219
+#: /src/schooltool/email/browser/email.py:468
 #: /src/schooltool/email/browser/templates/email_container.pt:20
 msgid "Server Status"
 msgstr "Server Status"
 
-#: /src/schooltool/email/browser/email.py:92
-#: /src/schooltool/email/browser/email.py:203
-#: /src/schooltool/email/browser/email.py:452
+#: /src/schooltool/email/browser/email.py:97
+#: /src/schooltool/email/browser/email.py:220
+#: /src/schooltool/email/browser/email.py:469
 msgid "Current status of the SchoolTool email service"
 msgstr ""
 
-#: /src/schooltool/email/browser/email.py:96
+#: /src/schooltool/email/browser/email.py:101
 #: /src/schooltool/email/interfaces.py:87
+msgid "Enable"
+msgstr ""
+
+#: /src/schooltool/email/browser/email.py:102
+#: /src/schooltool/email/interfaces.py:88
+msgid "Mark to enable the service."
+msgstr ""
+
+#: /src/schooltool/email/browser/email.py:107
+#: /src/schooltool/email/interfaces.py:92
 msgid "Hostname"
 msgstr "Värdnamn"
 
-#: /src/schooltool/email/browser/email.py:97
-#: /src/schooltool/email/interfaces.py:88
-msgid "SMTP server hostname. Leave empty to disable email."
+#: /src/schooltool/email/browser/email.py:108
+#: /src/schooltool/email/interfaces.py:93
+msgid "SMTP server hostname. Required if the service is enabled."
 msgstr ""
 
-#: /src/schooltool/email/browser/email.py:101
-#: /src/schooltool/email/interfaces.py:92
+#: /src/schooltool/email/browser/email.py:112
+#: /src/schooltool/email/interfaces.py:97
 msgid "Port"
 msgstr "Port"
 
-#: /src/schooltool/email/browser/email.py:102
-#: /src/schooltool/email/interfaces.py:93
+#: /src/schooltool/email/browser/email.py:113
+#: /src/schooltool/email/interfaces.py:98
 msgid "Port of the SMTP service. Using 25 by default."
 msgstr ""
 
-#: /src/schooltool/email/browser/email.py:109
-#: /src/schooltool/email/interfaces.py:100
+#: /src/schooltool/email/browser/email.py:120
+#: /src/schooltool/email/interfaces.py:105
 msgid "Username used for optional SMTP authentication."
 msgstr "Användarnamn vid SMTP autentisering"
 
-#: /src/schooltool/email/browser/email.py:113
+#: /src/schooltool/email/browser/email.py:124
 msgid "Current Password"
 msgstr "Nuvarande lösenord"
 
-#: /src/schooltool/email/browser/email.py:114
+#: /src/schooltool/email/browser/email.py:125
 msgid "Current password to authenticate to the SMTP server."
 msgstr ""
 
-#: /src/schooltool/email/browser/email.py:118
-#: /src/schooltool/email/interfaces.py:104
+#: /src/schooltool/email/browser/email.py:129
+#: /src/schooltool/email/interfaces.py:109
 msgid "New Password"
 msgstr "Nytt lösenord"
 
-#: /src/schooltool/email/browser/email.py:119
-#: /src/schooltool/email/interfaces.py:105
+#: /src/schooltool/email/browser/email.py:130
+#: /src/schooltool/email/interfaces.py:110
 msgid "The password to authenticate to the SMTP server."
 msgstr ""
 
-#: /src/schooltool/email/browser/email.py:123
+#: /src/schooltool/email/browser/email.py:134
 msgid "Confirm New Password"
 msgstr "Bekräfta nytt lösenord"
 
-#: /src/schooltool/email/browser/email.py:124
+#: /src/schooltool/email/browser/email.py:135
 msgid "Verification for the new password."
 msgstr ""
 
-#: /src/schooltool/email/browser/email.py:128
-#: /src/schooltool/email/interfaces.py:109
+#: /src/schooltool/email/browser/email.py:139
+#: /src/schooltool/email/interfaces.py:114
 msgid "TLS"
 msgstr "TLS"
 
-#: /src/schooltool/email/browser/email.py:129
-#: /src/schooltool/email/interfaces.py:110
+#: /src/schooltool/email/browser/email.py:140
+#: /src/schooltool/email/interfaces.py:115
 msgid "Use TLS connection?"
 msgstr ""
 
-#: /src/schooltool/email/browser/email.py:170
+#: /src/schooltool/email/browser/email.py:147
+msgid "New passwords don't match"
+msgstr ""
+
+#: /src/schooltool/email/browser/email.py:152
+msgid "Hostname is required for enabling the service"
+msgstr ""
+
+#: /src/schooltool/email/browser/email.py:186
 msgid "Change Email Settings"
 msgstr ""
 
-#: /src/schooltool/email/browser/email.py:194
+#: /src/schooltool/email/browser/email.py:211
 msgid "Unset"
 msgstr ""
 
-#: /src/schooltool/email/browser/email.py:207
-#: /src/schooltool/email/browser/email.py:340
-#: /src/schooltool/email/browser/email.py:456
-#: /src/schooltool/email/interfaces.py:39
-msgid "From"
-msgstr "Från"
-
-#: /src/schooltool/email/browser/email.py:208
-#: /src/schooltool/email/browser/email.py:457
+#: /src/schooltool/email/browser/email.py:225
+#: /src/schooltool/email/browser/email.py:474
 #: /src/schooltool/email/interfaces.py:40
 msgid "The sender address"
 msgstr ""
 
-#: /src/schooltool/email/browser/email.py:212
-#: /src/schooltool/email/browser/email.py:345
-#: /src/schooltool/email/browser/email.py:460
-#: /src/schooltool/email/interfaces.py:43
-msgid "To"
-msgstr "Till"
-
-#: /src/schooltool/email/browser/email.py:213
-#: /src/schooltool/email/browser/email.py:461
+#: /src/schooltool/email/browser/email.py:230
+#: /src/schooltool/email/browser/email.py:478
 msgid "Recipient addresses comma separated"
 msgstr ""
 
-#: /src/schooltool/email/browser/email.py:217
-#: /src/schooltool/email/browser/email.py:357
+#: /src/schooltool/email/browser/email.py:234
+#: /src/schooltool/email/browser/email.py:374
 #: /src/schooltool/email/interfaces.py:70
 msgid "Created on"
 msgstr ""
 
-#: /src/schooltool/email/browser/email.py:218
+#: /src/schooltool/email/browser/email.py:235
 #: /src/schooltool/email/interfaces.py:71
 msgid "Date and time when the message was created"
 msgstr ""
 
-#: /src/schooltool/email/browser/email.py:222
-#: /src/schooltool/email/browser/email.py:351
-#: /src/schooltool/email/browser/email.py:464
-#: /src/schooltool/email/interfaces.py:53
-msgid "Subject"
-msgstr ""
-
-#: /src/schooltool/email/browser/email.py:223
-#: /src/schooltool/email/browser/email.py:465
+#: /src/schooltool/email/browser/email.py:240
+#: /src/schooltool/email/browser/email.py:482
 #: /src/schooltool/email/interfaces.py:54
 msgid "Subject of the message"
 msgstr ""
 
-#: /src/schooltool/email/browser/email.py:228
-#: /src/schooltool/email/browser/email.py:470
+#: /src/schooltool/email/browser/email.py:245
+#: /src/schooltool/email/browser/email.py:487
 #: /src/schooltool/email/interfaces.py:50
 msgid "Body of the message"
 msgstr ""
 
-#: /src/schooltool/email/browser/email.py:232
+#: /src/schooltool/email/browser/email.py:249
 msgid "Email Status"
 msgstr ""
 
-#: /src/schooltool/email/browser/email.py:233
+#: /src/schooltool/email/browser/email.py:250
 msgid "Status of the message"
 msgstr ""
 
-#: /src/schooltool/email/browser/email.py:237
-#: /src/schooltool/email/browser/email.py:363
+#: /src/schooltool/email/browser/email.py:254
+#: /src/schooltool/email/browser/email.py:380
 msgid "Last time tried"
 msgstr ""
 
-#: /src/schooltool/email/browser/email.py:238
+#: /src/schooltool/email/browser/email.py:255
 msgid "Date and time when the message was last tried"
 msgstr ""
 
-#: /src/schooltool/email/browser/email.py:263
+#: /src/schooltool/email/browser/email.py:280
 msgid "Email View"
 msgstr ""
 
-#: /src/schooltool/email/browser/email.py:273
+#: /src/schooltool/email/browser/email.py:290
 msgid "Retry"
 msgstr "Försök igen"
 
-#: /src/schooltool/email/browser/email.py:383
+#: /src/schooltool/email/browser/email.py:400
 msgid "Email Queue"
 msgstr ""
 
 #. Default: ""
-#: /src/schooltool/email/browser/email.py:441
+#: /src/schooltool/email/browser/email.py:458
 msgid "Queue (${count} failed)"
 msgstr ""
 
-#: /src/schooltool/email/browser/email.py:443
+#: /src/schooltool/email/browser/email.py:460
 msgid "Queue"
 msgstr "Kö"
-
-#: /src/schooltool/email/browser/email.py:485
-msgid "Send Email"
-msgstr "Skicka e-post"
-
-#: /src/schooltool/email/browser/email.py:488
-msgid "Send"
-msgstr "Skicka"
 
 #. Default: "Retry"
 #: /src/schooltool/email/browser/templates/email_container.pt:39
@@ -5822,6 +5835,10 @@ msgstr ""
 #: /src/schooltool/email/mail.py:57
 msgid ""
 "The server (${info}) rejected the following recipient addresses: ${addresses}"
+msgstr ""
+
+#: /src/schooltool/email/mail.py:59
+msgid "The server (${info}) replied that the message data was malformed"
 msgstr ""
 
 #: /src/schooltool/export/configure.zcml:6
@@ -5956,10 +5973,7 @@ msgstr ""
 msgid "Everybody, if the calendar is made public in user preferences."
 msgstr ""
 
-#. Default: ""
-#. "PRJ302, Overhead Projector #302\n"
-#. "Main Auditorium,,location\n"
-#. "LC-805, Laptop Computer #805"
+#. Default: "PRJ302, Overhead Projector #302 Main Auditorium,,location LC-805, Laptop Computer #805"
 #: /src/schooltool/resource/browser/resource-csvimport.pt:31
 msgid ""
 "\n"
@@ -5977,8 +5991,8 @@ msgid ""
 "location."
 msgstr ""
 
-#: /src/schooltool/resource/interfaces.py:130
-#: /src/schooltool/resource/interfaces.py:138
+#: /src/schooltool/resource/interfaces.py:126
+#: /src/schooltool/resource/interfaces.py:134
 msgid ""
 "A string that will be displayed to users in tables or\n"
 "        resource type selection widgets."
@@ -6101,11 +6115,11 @@ msgstr ""
 msgid "View Access Rights"
 msgstr ""
 
-#: /src/schooltool/securitypolicy/browser/control.py:96
+#: /src/schooltool/securitypolicy/browser/control.py:97
 msgid "Enabled"
 msgstr "Aktiverad"
 
-#: /src/schooltool/securitypolicy/browser/control.py:105
+#: /src/schooltool/securitypolicy/browser/control.py:106
 msgid "School administration"
 msgstr ""
 
@@ -6121,35 +6135,35 @@ msgstr "Åtkomsträttigheter"
 msgid "Legend"
 msgstr "Teckenförklaring"
 
-#: /src/schooltool/securitypolicy/crowds.py:124
+#: /src/schooltool/securitypolicy/crowds.py:199
 msgid "Everybody"
 msgstr "Alla"
 
-#: /src/schooltool/securitypolicy/crowds.py:125
+#: /src/schooltool/securitypolicy/crowds.py:200
 msgid "Everybody, including users that are not logged in."
 msgstr "Samtliga, inklusive användare som inte är inloggade."
 
-#: /src/schooltool/securitypolicy/crowds.py:158
+#: /src/schooltool/securitypolicy/crowds.py:233
 msgid "Authenticated user"
 msgstr ""
 
-#: /src/schooltool/securitypolicy/crowds.py:159
+#: /src/schooltool/securitypolicy/crowds.py:234
 msgid "All logged in users."
 msgstr "Alla inloggade användare."
 
-#: /src/schooltool/securitypolicy/crowds.py:167
+#: /src/schooltool/securitypolicy/crowds.py:242
 msgid "Anybody"
 msgstr ""
 
-#: /src/schooltool/securitypolicy/crowds.py:168
+#: /src/schooltool/securitypolicy/crowds.py:243
 msgid "Users who did not log in"
 msgstr "Användare som inte loggade in"
 
-#: /src/schooltool/securitypolicy/crowds.py:175
+#: /src/schooltool/securitypolicy/crowds.py:250
 msgid "Super user"
 msgstr ""
 
-#: /src/schooltool/securitypolicy/crowds.py:176
+#: /src/schooltool/securitypolicy/crowds.py:251
 msgid "The super user - owner of this SchoolTool application."
 msgstr ""
 
@@ -6199,47 +6213,47 @@ msgstr "D"
 msgid "Shortcut: Alt-D"
 msgstr "Genväg: Alt-D"
 
-#: /src/schooltool/skin/widgets.py:86
+#: /src/schooltool/skin/widgets.py:87
 msgid "The datetime string did not match the pattern yyyy-mm-dd"
 msgstr ""
 
-#: /src/schooltool/skin/widgets.py:109
+#: /src/schooltool/skin/widgets.py:110
 msgid "Width"
 msgstr "Bredd"
 
-#: /src/schooltool/skin/widgets.py:110
+#: /src/schooltool/skin/widgets.py:111
 msgid "Editor frame width"
 msgstr ""
 
-#: /src/schooltool/skin/widgets.py:113
+#: /src/schooltool/skin/widgets.py:114
 msgid "Height"
 msgstr "Höjd"
 
-#: /src/schooltool/skin/widgets.py:114
+#: /src/schooltool/skin/widgets.py:115
 msgid "Editor frame height"
 msgstr ""
 
-#: /src/schooltool/skin/widgets.py:117
+#: /src/schooltool/skin/widgets.py:118
 msgid "Toolbar configuration"
 msgstr ""
 
-#: /src/schooltool/skin/widgets.py:118
+#: /src/schooltool/skin/widgets.py:119
 msgid "The name of the toolbar configuration to use."
 msgstr ""
 
-#: /src/schooltool/skin/widgets.py:121
+#: /src/schooltool/skin/widgets.py:122
 msgid "Configuration path"
 msgstr ""
 
-#: /src/schooltool/skin/widgets.py:122
+#: /src/schooltool/skin/widgets.py:123
 msgid "Path to the FCKconfiguration javascript file."
 msgstr ""
 
-#: /src/schooltool/skin/widgets.py:129
+#: /src/schooltool/skin/widgets.py:130
 msgid "Configuration"
 msgstr "Inställning"
 
-#: /src/schooltool/skin/widgets.py:130
+#: /src/schooltool/skin/widgets.py:131
 msgid "FCK editor configuration."
 msgstr ""
 
@@ -6330,14 +6344,6 @@ msgid ""
 "you made in the table above, use the Update button to refresh the form."
 msgstr ""
 
-#: /src/schooltool/timetable/browser/templates/calendar_overlay.pt:66
-msgid ""
-"<a href=\"#\" onclick=\"$('#more_overlays').toggle();return "
-"false;\">More...</a>"
-msgstr ""
-"<a href=\"#\" onclick=\"$('#more_overlays').toggle();return "
-"false;\">Mer...</a>"
-
 #: /src/schooltool/timetable/browser/templates/calendar_overlay.pt:95
 msgid "Manage..."
 msgstr "Hantera..."
@@ -6394,3 +6400,10 @@ msgstr "Ändra schema"
 #: /src/schooltool/widget/password.py:56
 msgid "Supplied passwords are not identical"
 msgstr "Lösenorden stämmer inte överens"
+
+#~ msgid ""
+#~ "<a href=\"#\" onclick=\"$('#more_overlays').toggle();return "
+#~ "false;\">More...</a>"
+#~ msgstr ""
+#~ "<a href=\"#\" onclick=\"$('#more_overlays').toggle();return "
+#~ "false;\">Mer...</a>"
