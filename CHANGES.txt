@@ -5,7 +5,12 @@ CHANGES
 1.4.0 (unreleased)
 ------------------
 
-This is a stable release for Lucid.
+This is a final release for Lucid.
+
+- Fix Timetable Schemas page for non-manager users (https://launchpad.net/bugs/545780)
+- Fix timetable display when first day of the week is empty (https://launchpad.net/bugs/545763)
+- Fix timetable plugin for sampledata (https://launchpad.net/bugs/306107)
+- Update translations
 
 
 1.3.2 (2010-04-29)
