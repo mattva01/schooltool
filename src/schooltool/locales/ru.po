@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-04-29 02:21+0300\n"
-"PO-Revision-Date: 2010-04-29 01:59+0000\n"
-"Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
+"PO-Revision-Date: 2010-05-12 11:53+0000\n"
+"Last-Translator: Monkolino <Unknown>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-04-30 03:46+0000\n"
+"X-Launchpad-Export-Date: 2010-05-13 04:28+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -2570,21 +2570,9 @@ msgstr "Команда"
 msgid "Health information"
 msgstr "Состояние здоровья"
 
-#: /src/schooltool/demographics/interfaces.py:227
-msgid "parent"
-msgstr "родитель"
-
 #: /src/schooltool/demographics/interfaces.py:228
 msgid "guardian"
 msgstr "опекун"
-
-#: /src/schooltool/demographics/interfaces.py:229
-msgid "grandparent"
-msgstr "дедушка/бабушка"
-
-#: /src/schooltool/demographics/interfaces.py:230
-msgid "step-parent"
-msgstr "отчим/мачеха"
 
 #: /src/schooltool/demographics/interfaces.py:231
 msgid "friend of family"
@@ -2625,14 +2613,6 @@ msgstr "Текст"
 #: /src/schooltool/demographics/interfaces.py:299
 msgid "Full text search in name"
 msgstr "Полнотекстовый поиск по имени"
-
-#: /src/schooltool/demographics/interfaces.py:304
-msgid "Name of parent"
-msgstr "Имя родителя"
-
-#: /src/schooltool/demographics/interfaces.py:305
-msgid "Full text search in parent names"
-msgstr "Полнотекстовый поиск по именам родителей"
 
 #: /src/schooltool/demographics/interfaces.py:310
 msgid "Student ID"
@@ -3226,6 +3206,9 @@ msgid ""
 "found a bug in SchoolTool. Please report it on <a "
 "href=\"http://issues.schooltool.org\">the issue tracker</a>."
 msgstr ""
+"Внутренняя ошибка сервера. Возможно, это означает, что вы обнаружили баг в "
+"SchoolTool. Пожалуйста, сообщите об этом на странице <a "
+"href=\"http://issues.schooltool.org\">the issue tracker</a>."
 
 #: /src/schooltool/skin/templates/error.pt:20
 msgid "Traceback"
@@ -3352,7 +3335,7 @@ msgstr ""
 
 #: /src/schooltool/term/browser/templates/term_add.pt:53
 msgid "Toggle the following days of week:"
-msgstr ""
+msgstr "Переключение в следующие дни недели:"
 
 #: /src/schooltool/term/browser/term.py:61
 msgid "Start date"
@@ -3409,7 +3392,7 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/__init__.py:695
 msgid "The date does not belong to any term."
-msgstr ""
+msgstr "Дата не принадлежит какому-либо периоду."
 
 #: /src/schooltool/timetable/browser/__init__.py:704
 msgid "Some values were invalid.  They are highlighted in red."
@@ -4616,7 +4599,7 @@ msgstr "фамилия не может быть пустой"
 #: /src/schooltool/basicperson/browser/csvimport.py:85
 #: /src/schooltool/basicperson/browser/person.py:114
 msgid "Usernames cannot contain non-ascii characters"
-msgstr ""
+msgstr "Имена не должны содержать не ascii символы"
 
 #: /src/schooltool/basicperson/browser/demographics.py:133
 msgid "Add new Field"
@@ -4726,7 +4709,7 @@ msgstr "Список значений"
 
 #: /src/schooltool/basicperson/security.py:66
 msgid "Advisors of a person."
-msgstr ""
+msgstr "Консультанты личности."
 
 #: /src/schooltool/basicperson/security.zcml:26
 msgid "Create, delete demographics fields and change their order."
@@ -4833,7 +4816,7 @@ msgstr "Отправить"
 #: /src/schooltool/contact/browser/contact.py:409
 #: /src/schooltool/email/browser/email.py:509
 msgid "There were some errors."
-msgstr ""
+msgstr "Содержит некоторые ошибки."
 
 #: /src/schooltool/contact/browser/relationship.py:75
 #: /src/schooltool/contact/interfaces.py:101
@@ -4904,6 +4887,8 @@ msgid ""
 "You don't have an email address set. Ask your administrator to set your "
 "email address in your contact information."
 msgstr ""
+"У вас не установлен адрес электронной почты. Попросите вашего администратора "
+"добавить электронный адрес в контактную информацию."
 
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:8
 msgid "Contact information for ${person}"
@@ -4975,11 +4960,11 @@ msgstr "Связь контакта с человеком"
 
 #: /src/schooltool/contact/interfaces.py:104
 msgid "Parent"
-msgstr "Предок"
+msgstr "Родитель"
 
 #: /src/schooltool/contact/interfaces.py:105
 msgid "Step-parent"
-msgstr "Приёмный родитель"
+msgstr "Отчим/мачеха"
 
 #: /src/schooltool/contact/interfaces.py:106
 msgid "Foster parent"
@@ -4991,7 +4976,7 @@ msgstr "Опекун"
 
 #: /src/schooltool/contact/interfaces.py:108
 msgid "Sibling"
-msgstr "Равнозначный"
+msgstr "Брат/сестра"
 
 #: /src/schooltool/contact/security.zcml:29
 #: /src/schooltool/person/security.zcml:79
@@ -5047,15 +5032,15 @@ msgstr "Править иформацию о курсе"
 
 #: /src/schooltool/course/browser/configure.zcml:113
 msgid "Copy Sections"
-msgstr ""
+msgstr "Копировать разделы"
 
 #: /src/schooltool/course/browser/configure.zcml:123
 msgid "View Next"
-msgstr ""
+msgstr "Вперёд"
 
 #: /src/schooltool/course/browser/configure.zcml:133
 msgid "View Previous"
-msgstr ""
+msgstr "Назад"
 
 #: /src/schooltool/course/browser/configure.zcml:160
 #: /src/schooltool/course/browser/configure.zcml:170
@@ -5455,6 +5440,26 @@ msgstr "Быстрая клавиша: Alt-N"
 msgid "Change demographics for ${fullname}"
 msgstr "Изменить демографию для ${fullname}"
 
+#: /src/schooltool/demographics/interfaces.py:227
+msgid "parent"
+msgstr "родитель"
+
+#: /src/schooltool/demographics/interfaces.py:229
+msgid "grandparent"
+msgstr "дедушка/бабушка"
+
+#: /src/schooltool/demographics/interfaces.py:230
+msgid "step-parent"
+msgstr "отчим/мачеха"
+
+#: /src/schooltool/demographics/interfaces.py:304
+msgid "Name of parent"
+msgstr "Имя родителя"
+
+#: /src/schooltool/demographics/interfaces.py:305
+msgid "Full text search in parent names"
+msgstr "Полнотекстовый поиск по именам родителей"
+
 #: /src/schooltool/devmode/configure.zcml:27
 msgid "Introspect"
 msgstr "Вникать"
@@ -5503,12 +5508,12 @@ msgstr "Текущее состояние e-mail сервера SchoolTool"
 #: /src/schooltool/email/browser/email.py:101
 #: /src/schooltool/email/interfaces.py:87
 msgid "Enable"
-msgstr ""
+msgstr "Активировать"
 
 #: /src/schooltool/email/browser/email.py:102
 #: /src/schooltool/email/interfaces.py:88
 msgid "Mark to enable the service."
-msgstr ""
+msgstr "Отметить для включения службы."
 
 #: /src/schooltool/email/browser/email.py:107
 #: /src/schooltool/email/interfaces.py:92
@@ -5518,7 +5523,7 @@ msgstr "Имя узла"
 #: /src/schooltool/email/browser/email.py:108
 #: /src/schooltool/email/interfaces.py:93
 msgid "SMTP server hostname. Required if the service is enabled."
-msgstr ""
+msgstr "Адрес SMTP сервера. Необходимо для работы сервиса."
 
 #: /src/schooltool/email/browser/email.py:112
 #: /src/schooltool/email/interfaces.py:97
@@ -5574,11 +5579,11 @@ msgstr "Использовать TLS соединение?"
 
 #: /src/schooltool/email/browser/email.py:147
 msgid "New passwords don't match"
-msgstr ""
+msgstr "Новые пароли не совпадают"
 
 #: /src/schooltool/email/browser/email.py:152
 msgid "Hostname is required for enabling the service"
-msgstr ""
+msgstr "Имя хоста необходимо для включения службы"
 
 #: /src/schooltool/email/browser/email.py:186
 msgid "Change Email Settings"
@@ -6173,11 +6178,11 @@ msgstr "Вы уверены, что хотите удалить выбранны
 
 #: /src/schooltool/schoolyear/interfaces.py:44
 msgid "The first day of the period of time covered."
-msgstr ""
+msgstr "В первый день период охватывает."
 
 #: /src/schooltool/schoolyear/interfaces.py:47
 msgid "The last day of the period covered."
-msgstr ""
+msgstr "В последний день период охватывает."
 
 #: /src/schooltool/schoolyear/security.zcml:23
 msgid "Activate current school year"
@@ -6340,7 +6345,7 @@ msgstr "Название используемой конфигурации па�
 
 #: /src/schooltool/skin/widgets.py:122
 msgid "Configuration path"
-msgstr ""
+msgstr "Путь настроек"
 
 #: /src/schooltool/skin/widgets.py:123
 msgid "Path to the FCKconfiguration javascript file."
@@ -6494,7 +6499,7 @@ msgstr "Управление..."
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:4
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:10
 msgid "Scheduling for ${person}"
-msgstr ""
+msgstr "Составление расписания для ${person}"
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:4
 #: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:11

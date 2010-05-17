@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-04-29 02:21+0300\n"
-"PO-Revision-Date: 2010-04-29 02:02+0000\n"
-"Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
+"PO-Revision-Date: 2010-05-12 21:58+0000\n"
+"Last-Translator: Piotr Czaban <Unknown>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-04-30 03:46+0000\n"
+"X-Launchpad-Export-Date: 2010-05-13 04:28+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -81,16 +81,6 @@ msgstr "Niedziela"
 #: /src/schooltool/timetable/browser/schema.py:288
 msgid "Friday"
 msgstr "Piątek"
-
-#: /src/schooltool/app/browser/cal.py:124
-#: /src/schooltool/app/browser/cal.py:1811
-msgid "Mon"
-msgstr "pon"
-
-#: /src/schooltool/app/browser/cal.py:124
-#: /src/schooltool/app/browser/cal.py:1812
-msgid "Tue"
-msgstr "wt"
 
 #: /src/schooltool/app/browser/cal.py:124
 #: /src/schooltool/app/browser/cal.py:1813
@@ -2167,6 +2157,16 @@ msgstr "Listopad"
 msgid "October"
 msgstr "Październik"
 
+#: /src/schooltool/app/browser/cal.py:124
+#: /src/schooltool/app/browser/cal.py:1811
+msgid "Mon"
+msgstr "pon"
+
+#: /src/schooltool/app/browser/cal.py:124
+#: /src/schooltool/app/browser/cal.py:1812
+msgid "Tue"
+msgstr "wt"
+
 #: /src/schooltool/app/browser/cal.py:929
 msgid "Go to next week"
 msgstr "Przejdź do następnego tygodnia"
@@ -3183,7 +3183,7 @@ msgstr "Lista wartości"
 
 #: /src/schooltool/basicperson/security.py:66
 msgid "Advisors of a person."
-msgstr ""
+msgstr "Doradcy osoby."
 
 #: /src/schooltool/basicperson/security.zcml:26
 msgid "Create, delete demographics fields and change their order."
@@ -3259,7 +3259,7 @@ msgstr "Inne kontakty"
 #: /src/schooltool/contact/browser/contact.py:402
 #: /src/schooltool/email/browser/email.py:502
 msgid "Send Email"
-msgstr ""
+msgstr "Wyślij e-mail"
 
 #: /src/schooltool/contact/browser/contact.py:79
 msgid "Add new contact"
@@ -3277,7 +3277,7 @@ msgstr "Zmień informacje kontaktu dla ${first_name} ${last_name}"
 
 #: /src/schooltool/contact/browser/contact.py:247
 msgid "Contact index"
-msgstr ""
+msgstr "Indeks kontaktów"
 
 #: /src/schooltool/contact/browser/contact.py:310
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:31
@@ -3290,7 +3290,7 @@ msgstr "Adres"
 #: /src/schooltool/email/browser/email.py:473
 #: /src/schooltool/email/interfaces.py:39
 msgid "From"
-msgstr ""
+msgstr "Od"
 
 #: /src/schooltool/contact/browser/contact.py:385
 #: /src/schooltool/email/browser/email.py:229
@@ -3298,7 +3298,7 @@ msgstr ""
 #: /src/schooltool/email/browser/email.py:477
 #: /src/schooltool/email/interfaces.py:43
 msgid "To"
-msgstr ""
+msgstr "Do"
 
 #: /src/schooltool/contact/browser/contact.py:386
 #: /src/schooltool/email/browser/email.py:239
@@ -3306,7 +3306,7 @@ msgstr ""
 #: /src/schooltool/email/browser/email.py:481
 #: /src/schooltool/email/interfaces.py:53
 msgid "Subject"
-msgstr ""
+msgstr "Temat"
 
 #: /src/schooltool/contact/browser/contact.py:387
 #: /src/schooltool/email/browser/email.py:244
@@ -3314,17 +3314,17 @@ msgstr ""
 #: /src/schooltool/email/interfaces.py:49
 #: /src/schooltool/note/interfaces.py:46
 msgid "Body"
-msgstr ""
+msgstr "Treść"
 
 #: /src/schooltool/contact/browser/contact.py:405
 #: /src/schooltool/email/browser/email.py:505
 msgid "Send"
-msgstr ""
+msgstr "Wyślij"
 
 #: /src/schooltool/contact/browser/contact.py:409
 #: /src/schooltool/email/browser/email.py:509
 msgid "There were some errors."
-msgstr ""
+msgstr "Wystąpiły błędy"
 
 #: /src/schooltool/contact/browser/relationship.py:75
 #: /src/schooltool/contact/interfaces.py:101

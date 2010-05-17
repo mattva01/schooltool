@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-04-29 02:21+0300\n"
-"PO-Revision-Date: 2010-04-29 08:57+0000\n"
-"Last-Translator: Izumi <Unknown>\n"
+"PO-Revision-Date: 2010-05-12 10:43+0000\n"
+"Last-Translator: Justas Sadzevičius <Unknown>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-04-30 03:46+0000\n"
+"X-Launchpad-Export-Date: 2010-05-13 04:28+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -3251,7 +3251,7 @@ msgstr "Nustatyti"
 
 #: /src/schooltool/app/browser/csvimport.py:124
 msgid "CSV file imported successfully."
-msgstr "CSV bylos duomenys sėkmingai įkelti."
+msgstr "CSV failo duomenys sėkmingai įkelti."
 
 #: /src/schooltool/app/browser/csvimport.py:126
 msgid "Failed to import CSV file"
@@ -3486,7 +3486,7 @@ msgstr "Prašom prisijungti"
 
 #: /src/schooltool/app/browser/templates/login.pt:35
 msgid "User Information"
-msgstr "Vartotojo informacija"
+msgstr "Naudotojo duomenys"
 
 #: /src/schooltool/app/browser/templates/login.pt:38
 #: /src/schooltool/basicperson/browser/person.py:59
@@ -3555,7 +3555,7 @@ msgstr ""
 #: /src/schooltool/person/browser/person-csvimport.pt:48
 #: /src/schooltool/resource/browser/resource-csvimport.pt:45
 msgid "Upload CSV File"
-msgstr "Įkelti CSV Bylą"
+msgstr "Įkelti CSV failą"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:96
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:50
@@ -3699,7 +3699,7 @@ msgstr ""
 #: /src/schooltool/app/help/event_add.pt:10
 #: /src/schooltool/app/help/event_edit.pt:10
 msgid "This form has a few issues:"
-msgstr ""
+msgstr "Šioje formoje yra kelios klaidos:"
 
 #: /src/schooltool/app/help/event_add.pt:12
 msgid ""
@@ -3707,6 +3707,9 @@ msgid ""
 "SchoolTool at your school, you should create an event for the necessary time "
 "and check the <code>Book Resources</code> checkbox at the bottom of the page."
 msgstr ""
+"Jei norite rezervuoti resursą, pvz. kambarį arba projektorių, mokykloje "
+"apskaitomą naudojant SchoolTool, turite sukurti įvykį reikalingu laiku ir "
+"pažymėti <code>Rezervuoti resursus</code> varnelę puslapio apačioje."
 
 #: /src/schooltool/app/help/event_add.pt:16
 #: /src/schooltool/app/help/event_edit.pt:14
@@ -3740,6 +3743,8 @@ msgid ""
 "An \"all day\" event does not show up as a 24 hour event. It indicates that "
 "the day as a whole has some significance, like a birthday or holiday."
 msgstr ""
+"\"Visos dienos\" renginys nėra 24 valandų renginys. Tai reiškia, kad visa "
+"diena yra ypatinga, pvz. gimtadienis arba šventė."
 
 #: /src/schooltool/app/help/event_add.pt:32
 #: /src/schooltool/app/help/event_edit.pt:30
@@ -3753,6 +3758,8 @@ msgid ""
 "If you need to edit a resource reservation, click the <code>Book "
 "resources</code> link at the bottom of the form."
 msgstr ""
+"Jei norite pakeisti resurso rezervaciją, paspauskite <code>Rezervuoti "
+"resursus</code> nuorodą puslapio apačioje."
 
 #: /src/schooltool/app/help/monthly_calendar.pt:8
 msgid ""
@@ -3911,7 +3918,7 @@ msgstr "Grupės nariai."
 
 #: /src/schooltool/app/security.py:308
 msgid "Assigned leaders."
-msgstr ""
+msgstr "Paskirti vadovai."
 
 #. Default: ""
 #: /src/schooltool/app/security.py:352
@@ -3921,30 +3928,30 @@ msgstr "\"$group\" grupė."
 #. Default: ""
 #: /src/schooltool/app/security.py:367
 msgid "\"$group\" group and the super user."
-msgstr ""
+msgstr "\"$group\" grupė ir sistemos administratorius."
 
 #: /src/schooltool/app/security.zcml:69
 msgid "Everyone can view the application calendar."
-msgstr ""
+msgstr "Visi gali matyti programos kalendorių."
 
 #: /src/schooltool/app/security.zcml:77
 msgid "SchoolTool application"
-msgstr ""
+msgstr "SchoolTool programa"
 
 #: /src/schooltool/app/security.zcml:80
 msgid "Access"
-msgstr ""
+msgstr "Prieiga"
 
 #: /src/schooltool/app/security.zcml:87
 msgid "Manage school settings and configuration"
-msgstr ""
+msgstr "Tvarkyti mokyklos nustatymus"
 
 #: /src/schooltool/app/security.zcml:95
 #: /src/schooltool/course/security.zcml:141
 #: /src/schooltool/group/security.zcml:86
 #: /src/schooltool/person/security.zcml:128
 msgid "View calendar"
-msgstr ""
+msgstr "Matyti kalendorių"
 
 #: /src/schooltool/app/security.zcml:103
 #: /src/schooltool/course/security.zcml:149
@@ -3955,7 +3962,7 @@ msgstr "Pakeisti kalendorių"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:33
 msgid "Export"
-msgstr ""
+msgstr "Eksportuoti"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:42
 #: /src/schooltool/basicperson/security.py:65
@@ -3976,7 +3983,7 @@ msgstr "Naujas asmuo"
 #: /src/schooltool/basicperson/security.zcml:22
 #: /src/schooltool/demographics/browser/personform.py:180
 msgid "Demographics"
-msgstr ""
+msgstr "Demografija"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:143
 msgid "New Text Field"
@@ -3997,11 +4004,11 @@ msgstr "neįvestas naudotojo vardas"
 
 #: /src/schooltool/basicperson/browser/csvimport.py:52
 msgid "first name may not be empty"
-msgstr ""
+msgstr "vardas turi būti įvestas"
 
 #: /src/schooltool/basicperson/browser/csvimport.py:56
 msgid "last name may not be empty"
-msgstr ""
+msgstr "pavardė turi būti įvesta"
 
 #. Default: ""
 #: /src/schooltool/basicperson/browser/csvimport.py:68
@@ -4012,7 +4019,7 @@ msgstr "Toks naudotojo vardas jau yra: ${username}"
 #: /src/schooltool/basicperson/browser/csvimport.py:85
 #: /src/schooltool/basicperson/browser/person.py:114
 msgid "Usernames cannot contain non-ascii characters"
-msgstr ""
+msgstr "Naudotojo varde negali būti ne-ascii raidžių"
 
 #: /src/schooltool/basicperson/browser/demographics.py:133
 msgid "Add new Field"
@@ -4464,7 +4471,7 @@ msgstr ""
 
 #: /src/schooltool/course/browser/configure.zcml:133
 msgid "View Previous"
-msgstr ""
+msgstr "Žiūrėti praeitą"
 
 #: /src/schooltool/course/browser/configure.zcml:160
 #: /src/schooltool/course/browser/configure.zcml:170
