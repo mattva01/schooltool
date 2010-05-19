@@ -1,35 +1,10 @@
 <?xml version="1.0"?>
 <configure
     xmlns="http://namespaces.zope.org/zope"
-    xmlns:security="http://schooltool.org/securitypolicy"
     i18n_domain="schooltool">
 
-  <class
-      class="schooltool.relationship.relationship.BoundRelationshipProperty">
-    <allow attributes="__iter__ __contains__ relationships" />
-  </class>
-
-  <class
-      class="schooltool.relationship.relationship.RelationshipInfo">
-    <allow attributes="source target extra_info" />
-  </class>
-
-  <adapter
-      for="zope.annotation.interfaces.IAnnotatable"
-      provides="schooltool.relationship.interfaces.IRelationshipLinks"
-      factory="schooltool.relationship.annotatable.getRelationshipLinks"
-      trusted="true"
-      />
-
-  <subscriber
-      for="zope.lifecycleevent.interfaces.IObjectRemovedEvent"
-      handler="schooltool.relationship.objectevents.unrelateOnDeletion"
-      />
-
-  <subscriber
-      for="zope.lifecycleevent.interfaces.IObjectCopiedEvent"
-      handler="schooltool.relationship.objectevents.unrelateOnCopy"
-      />
+  <include file="relationship.zcml" />
+  <include file="security.zcml" />
 
   <configure
       xmlns="http://namespaces.zope.org/apidoc"
@@ -42,14 +17,5 @@
         parent="schoolbell"
         />
   </configure>
-
-  <security:allow
-      interface="schooltool.relationship.interfaces.IRelationshipLink"
-      crowds="administration owner"
-      permission="schooltool.view" />
-  <security:allow
-      interface="schooltool.relationship.interfaces.IRelationshipLink"
-      crowds="administration owner"
-      permission="schooltool.edit" />
 
 </configure>
