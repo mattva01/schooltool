@@ -190,6 +190,112 @@ def doctest_VivifyLevelContainerContainer():
     """
 
 
+def doctest_LevelSource():
+    """Tests for LevelSource.
+
+    Vocabulary of levels for contexts that can be adapted to ISchoolYear.
+
+        >>> from zope.schema.interfaces import IIterableSource
+        >>> from schooltool.level.level import Level
+        >>> from schooltool.level.level import LevelSource
+
+        >>> class ContextStub(object):
+        ...     implements(Interface)
+
+        >>> context = ContextStub()
+        >>> source = LevelSource(context)
+        >>> verifyObject(IIterableSource, source)
+        True
+
+    When the context cannot be adapted to ISchoolYear, the vocabulary is empty.
+
+        >>> source.levels
+        {}
+
+        >>> len(source)
+        0
+
+        >>> list(source)
+        []
+
+        >>> def expand_term(term):
+        ...     return (term.token, term.value, term.title)
+
+        >>> level = Level(u'Basic')
+        >>> level.__name__ = 'basic'
+        >>> expand_term(source.getTerm(level))
+        ('basic-', <schooltool.level.level.Level ...>, u'Basic')
+
+        >>> source.getTermByToken('basic-')
+        Traceback (most recent call last):
+        ...
+        LookupError: basic-
+
+        >>> level in source
+        False
+
+    Let's provide the needed adapters.
+
+        >>> from datetime import date
+        >>> from schooltool.schoolyear.interfaces import ISchoolYear
+        >>> from schooltool.schoolyear.schoolyear import SchoolYear
+
+        >>> schoolyear = SchoolYear(
+        ...     "2005", date(2005, 9, 1), date(2005, 12, 30))
+
+        >>> provideAdapter(
+        ...     lambda ignored: schoolyear,
+        ...     adapts=(ContextStub, ),
+        ...     provides=ISchoolYear)
+
+        >>> from schooltool.level.interfaces import ILevelContainer
+        >>> from schooltool.level.level import LevelContainer
+
+        >>> levels = LevelContainer()
+        >>> levels['basic'] = Level(u'Basic')
+        >>> levels['advanced'] = Level(u'Advanced')
+
+        >>> provideAdapter(
+        ...     lambda ignored: levels,
+        ...     adapts=(ISchoolYear, ),
+        ...     provides=ILevelContainer)
+
+    Now we can use the vocabulary.
+
+        >>> source = LevelSource(context)
+        >>> verifyObject(IIterableSource, source)
+        True
+
+        >>> source.levels
+        <schooltool.level.level.LevelContainer ...>
+
+        >>> len(source)
+        2
+
+        >>> [expand_term(term) for term in source]
+        [('basic-', <schooltool.level.level.Level ...>, u'Basic'),
+         ('advanced-', <schooltool.level.level.Level ...>, u'Advanced')]
+
+        >>> expand_term(source.getTerm(levels['basic']))
+        ('basic-', <schooltool.level.level.Level ...>, u'Basic')
+
+        >>> levels['basic'] in source
+        True
+
+        >>> expand_term(source.getTermByToken('basic-'))
+        ('basic-', <schooltool.level.level.Level ...>, u'Basic')
+
+    Note that levels from other schoolyears and so on are not considered
+    part of the vocabulary.
+
+        >>> other_level = Level(levels['basic'].title)
+        >>> other_level.__name__ = 'basic'
+        >>> other_level in source
+        False
+
+    """
+
+
 def setUp(test):
     setup.placefulSetUp()
     setUpRelationships()

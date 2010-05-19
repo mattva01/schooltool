@@ -27,6 +27,7 @@ import zope.schema
 from zope.schema.vocabulary import SimpleTerm
 from zope.interface import implements, implementer
 from zope.component import adapts, adapter
+from zope.component import getUtility
 from zope.container.btree import BTreeContainer
 from zope.container.ordered import OrderedContainer
 from zope.container.contained import Contained
@@ -35,7 +36,7 @@ from zope.intid import addIntIdSubscriber
 from zope.intid.interfaces import IIntIds
 from zope.lifecycleevent.interfaces import IObjectRemovedEvent
 from zope.lifecycleevent import ObjectAddedEvent
-from zope.component import getUtility
+from zope.proxy import sameProxiedObjects
 
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.app import InitBase, StartUpBase
@@ -181,7 +182,7 @@ class LevelSource(object):
         return len(self.levels)
 
     def __contains__(self, level):
-        return level.__name__ in self.levels
+        return sameProxiedObjects(level, self.levels.get(level.__name__))
 
     def __iter__(self):
         for level in self.levels.values():
