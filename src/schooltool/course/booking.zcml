@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/zope">
+
+  <utility
+      provides="schooltool.relationship.interfaces.IRelationshipSchema"
+      component=".booking.SectionBooking"
+      name="http://schooltool.org/ns/sectionbooking" />
+
+  <utility
+      provides="schooltool.relationship.uri.IURIObject"
+      component=".booking.URISectionBooking"
+      name="http://schooltool.org/ns/sectionbooking/sectionbooking" />
+
+  <utility
+      provides="schooltool.relationship.uri.IURIObject"
+      component=".booking.URIResource"
+      name="http://schooltool.org/ns/sectionbooking/resource" />
+
+  <utility
+      provides="schooltool.relationship.uri.IURIObject"
+      component=".booking.URISection"
+      name="http://schooltool.org/ns/sectionbooking/section" />
+
+</configure>
