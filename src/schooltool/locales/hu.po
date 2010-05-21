@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-04-29 02:21+0300\n"
-"PO-Revision-Date: 2010-04-05 18:49+0000\n"
-"Last-Translator: Krasznecz Zoltán <Unknown>\n"
+"PO-Revision-Date: 2010-05-16 18:35+0000\n"
+"Last-Translator: Krasznecz Zoltán <zoltan.krasznecz@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-04-29 03:45+0000\n"
+"X-Launchpad-Export-Date: 2010-05-18 05:00+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: /src/schooltool/app/browser/__init__.py:256
@@ -1398,7 +1398,7 @@ msgstr "Hibalista"
 #: /src/schooltool/app/browser/csvimport.py:290
 #: /src/schooltool/export/importer.py:704
 msgid "No data provided"
-msgstr ""
+msgstr "Nincs adat biztosítva"
 
 #: /src/schooltool/app/browser/csvimport.py:115
 msgid "Could not convert data to Unicode (incorrect charset?)."

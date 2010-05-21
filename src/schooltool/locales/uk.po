@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-04-29 02:21+0300\n"
-"PO-Revision-Date: 2010-05-04 16:37+0000\n"
+"PO-Revision-Date: 2010-05-17 14:29+0000\n"
 "Last-Translator: Kenji <kenji@3g.ua>\n"
 "Language-Team: Ukrainian <uk@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-05-05 03:42+0000\n"
+"X-Launchpad-Export-Date: 2010-05-18 05:02+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -2679,7 +2679,7 @@ msgstr "Імена не можуть починатись з '+' чи '@ або 
 #: /src/schooltool/basicperson/browser/csvimport.py:85
 #: /src/schooltool/basicperson/browser/person.py:114
 msgid "Usernames cannot contain non-ascii characters"
-msgstr ""
+msgstr "Імена користувачів повинні містити тільки ASCII символи"
 
 #: /src/schooltool/basicperson/browser/demographics.py:133
 msgid "Add new Field"
@@ -2898,7 +2898,7 @@ msgstr "Прізвище"
 
 #: /src/schooltool/basicperson/security.py:66
 msgid "Advisors of a person."
-msgstr ""
+msgstr "Персональний консультант."
 
 #: /src/schooltool/basicperson/security.zcml:26
 msgid "Create, delete demographics fields and change their order."
@@ -3040,7 +3040,7 @@ msgstr "Надіслати"
 #: /src/schooltool/contact/browser/contact.py:409
 #: /src/schooltool/email/browser/email.py:509
 msgid "There were some errors."
-msgstr ""
+msgstr "Є деякі помилки"
 
 #: /src/schooltool/contact/browser/relationship.py:75
 #: /src/schooltool/contact/interfaces.py:101
@@ -3149,6 +3149,8 @@ msgid ""
 "You don't have an email address set. Ask your administrator to set your "
 "email address in your contact information."
 msgstr ""
+"У вас не вказано адресу електронної пошти. Попросіть вашого адміністратора "
+"встановити вашу електронну адресу в контактній інформації."
 
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:8
 msgid "Contact information for ${person}"
@@ -4342,7 +4344,7 @@ msgstr "Увімкнути"
 #: /src/schooltool/email/browser/email.py:102
 #: /src/schooltool/email/interfaces.py:88
 msgid "Mark to enable the service."
-msgstr ""
+msgstr "Позначити для включення служби."
 
 #: /src/schooltool/email/browser/email.py:107
 #: /src/schooltool/email/interfaces.py:92
@@ -4352,7 +4354,7 @@ msgstr "Назва вузла"
 #: /src/schooltool/email/browser/email.py:108
 #: /src/schooltool/email/interfaces.py:93
 msgid "SMTP server hostname. Required if the service is enabled."
-msgstr ""
+msgstr "адреса SMTP сервера. Потрібно, якщо сервіс дозволений."
 
 #: /src/schooltool/email/browser/email.py:112
 #: /src/schooltool/email/interfaces.py:97
@@ -4408,11 +4410,11 @@ msgstr "Використовувати TLS з'єднання?"
 
 #: /src/schooltool/email/browser/email.py:147
 msgid "New passwords don't match"
-msgstr ""
+msgstr "Нові паролі неспівпадають"
 
 #: /src/schooltool/email/browser/email.py:152
 msgid "Hostname is required for enabling the service"
-msgstr ""
+msgstr "Необхідна адреса вузла для вкалючення сервісу"
 
 #: /src/schooltool/email/browser/email.py:186
 msgid "Change Email Settings"
@@ -4583,6 +4585,7 @@ msgstr "Сервер (${info})  відхилив наступні адреси �
 #: /src/schooltool/email/mail.py:59
 msgid "The server (${info}) replied that the message data was malformed"
 msgstr ""
+"Сервер  (${info}) відповів, що дані у повідомленні вказано неправильно"
 
 #: /src/schooltool/export/configure.zcml:6
 msgid "XLS Import"

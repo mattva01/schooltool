@@ -5,13 +5,13 @@ msgstr ""
 "Project-Id-Version: src_schooltool_locales_schooltool\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-04-29 02:21+0300\n"
-"PO-Revision-Date: 2010-01-08 22:43+0000\n"
-"Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
+"PO-Revision-Date: 2010-05-17 01:22+0000\n"
+"Last-Translator: Khoem Sokhem <khoemsokhem@khmeros.info>\n"
 "Language-Team: Khmer <support@khmeros.info>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-04-29 03:45+0000\n"
+"X-Launchpad-Export-Date: 2010-05-18 05:00+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "Generated-By: i18nextract.py\n"
 
@@ -2977,7 +2977,7 @@ msgstr ""
 
 #: /src/schooltool/basicperson/security.zcml:43
 msgid "View user's demographics information"
-msgstr ""
+msgstr "មើល​ព័ត៌មាន​ប្រជាសាស្ត្រ​របស់​អ្នក​ប្រើ"
 
 #: /src/schooltool/basicperson/security.zcml:52
 msgid "Modify user demographics"

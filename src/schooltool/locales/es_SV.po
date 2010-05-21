@@ -7,13 +7,13 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-04-29 02:21+0300\n"
-"PO-Revision-Date: 2010-05-03 18:54+0000\n"
-"Last-Translator: Justas Sadzevičius <Unknown>\n"
-"Language-Team: Spanish\n"
+"PO-Revision-Date: 2010-05-13 14:18+0000\n"
+"Last-Translator: Douglas Cerna <douglascerna@yahoo.com>\n"
+"Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-05-04 03:37+0000\n"
+"X-Launchpad-Export-Date: 2010-05-18 05:02+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: /src/schooltool/app/app.py:201
@@ -2700,7 +2700,7 @@ msgstr "Los nombres no pueden comenzar con '+' or '@' ni contener '/'"
 #: /src/schooltool/basicperson/browser/csvimport.py:85
 #: /src/schooltool/basicperson/browser/person.py:114
 msgid "Usernames cannot contain non-ascii characters"
-msgstr ""
+msgstr "Nombre del usuario no pueder contener carácteres non-ascii"
 
 #: /src/schooltool/basicperson/browser/demographics.py:133
 msgid "Add new Field"
@@ -2920,7 +2920,7 @@ msgstr "Apellido"
 
 #: /src/schooltool/basicperson/security.py:66
 msgid "Advisors of a person."
-msgstr ""
+msgstr "Consejeros de una persona."
 
 #: /src/schooltool/basicperson/security.zcml:26
 msgid "Create, delete demographics fields and change their order."
@@ -3061,7 +3061,7 @@ msgstr "Enviar"
 #: /src/schooltool/contact/browser/contact.py:409
 #: /src/schooltool/email/browser/email.py:509
 msgid "There were some errors."
-msgstr ""
+msgstr "Hubo algunos errores."
 
 #: /src/schooltool/contact/browser/relationship.py:75
 #: /src/schooltool/contact/interfaces.py:101
@@ -3170,6 +3170,8 @@ msgid ""
 "You don't have an email address set. Ask your administrator to set your "
 "email address in your contact information."
 msgstr ""
+"Usted no tiene una dirección de correo electrónico registrada. Pida a su "
+"administrador que le especifique una en su información de contacto."
 
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:8
 msgid "Contact information for ${person}"
@@ -4367,12 +4369,12 @@ msgstr "Estado actual del servicio de correo"
 #: /src/schooltool/email/browser/email.py:101
 #: /src/schooltool/email/interfaces.py:87
 msgid "Enable"
-msgstr ""
+msgstr "Activar"
 
 #: /src/schooltool/email/browser/email.py:102
 #: /src/schooltool/email/interfaces.py:88
 msgid "Mark to enable the service."
-msgstr ""
+msgstr "Marcar para habilitar el servicio"
 
 #: /src/schooltool/email/browser/email.py:107
 #: /src/schooltool/email/interfaces.py:92
@@ -4383,6 +4385,7 @@ msgstr "Nombre de host"
 #: /src/schooltool/email/interfaces.py:93
 msgid "SMTP server hostname. Required if the service is enabled."
 msgstr ""
+"Nombre de host del servidor SMTP. Requerido si el servicio es habilitado"
 
 #: /src/schooltool/email/browser/email.py:112
 #: /src/schooltool/email/interfaces.py:97
@@ -4437,11 +4440,11 @@ msgstr "¿Usar conexión TLS?"
 
 #: /src/schooltool/email/browser/email.py:147
 msgid "New passwords don't match"
-msgstr ""
+msgstr "Las nuevas contraseñas no corresponden"
 
 #: /src/schooltool/email/browser/email.py:152
 msgid "Hostname is required for enabling the service"
-msgstr ""
+msgstr "El nombre de host es requerido para habilitar el servicio"
 
 #: /src/schooltool/email/browser/email.py:186
 msgid "Change Email Settings"
@@ -4614,7 +4617,7 @@ msgstr ""
 
 #: /src/schooltool/email/mail.py:59
 msgid "The server (${info}) replied that the message data was malformed"
-msgstr ""
+msgstr "El servidor (${info}) respondió que el mensaje estaba mal formado"
 
 #: /src/schooltool/export/configure.zcml:6
 msgid "XLS Import"
