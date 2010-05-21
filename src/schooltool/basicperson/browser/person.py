@@ -65,7 +65,7 @@ class IPersonAddForm(IBasicPerson):
         required=False)
 
     confirm = Password(
-        title=_("Confirm"),
+        title=_("Confirm password"),
         required=False)
 
 
