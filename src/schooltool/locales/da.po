@@ -3767,10 +3767,9 @@ msgstr "Ja"
 msgid "No"
 msgstr "Nej"
 
-#. Default: "Confirm"
 #: /src/schooltool/widget/password.py:39
-msgid "confirm password"
-msgstr "bekræft adgangskode"
+msgid "Confirm password"
+msgstr "Bekræft adgangskode"
 
 #: /src/schooltool/widget/password.py:56
 msgid "Supplied passwords are not identical"

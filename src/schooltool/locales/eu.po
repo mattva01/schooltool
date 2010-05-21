@@ -6105,9 +6105,8 @@ msgstr "Ordutegiak esleitu"
 msgid "Change schedule"
 msgstr "Agenda aldatu"
 
-#. Default: "Confirm"
 #: /src/schooltool/widget/password.py:39
-msgid "confirm password"
+msgid "Confirm password"
 msgstr "Berrezarri pasahitza"
 
 #: /src/schooltool/widget/password.py:56

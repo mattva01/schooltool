@@ -6658,10 +6658,9 @@ msgstr "Assegna orari"
 msgid "Change schedule"
 msgstr "Cambia piano"
 
-#. Default: "Confirm"
 #: /src/schooltool/widget/password.py:39
-msgid "confirm password"
-msgstr "conferma la password"
+msgid "Confirm password"
+msgstr "Conferma la password"
 
 #: /src/schooltool/widget/password.py:56
 msgid "Supplied passwords are not identical"

@@ -1977,10 +1977,9 @@ msgstr "Ναι"
 msgid "No"
 msgstr "Όχι"
 
-#. Default: "Confirm"
 #: /src/schooltool/widget/password.py:39
-msgid "confirm password"
-msgstr "επιβεβαίωση κωδικού πρόσβασης"
+msgid "Confirm password"
+msgstr "Επιβεβαίωση κωδικού πρόσβασης"
 
 #: /src/schooltool/widget/password.py:56
 msgid "Supplied passwords are not identical"

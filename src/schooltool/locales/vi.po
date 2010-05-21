@@ -4748,9 +4748,8 @@ msgstr "Có"
 msgid "No"
 msgstr "Không"
 
-#. Default: "Confirm"
 #: /src/schooltool/widget/password.py:39
-msgid "confirm password"
+msgid "Confirm password"
 msgstr "Xác nhận mật khẩu"
 
 #: /src/schooltool/widget/password.py:56

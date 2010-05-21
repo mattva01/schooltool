@@ -6570,10 +6570,9 @@ msgstr "Призначені розклади"
 msgid "Change schedule"
 msgstr "Змінити розклад"
 
-#. Default: "Confirm"
 #: /src/schooltool/widget/password.py:39
-msgid "confirm password"
-msgstr "підтвердіть пароль"
+msgid "Confirm password"
+msgstr "Підтвердіть пароль"
 
 #: /src/schooltool/widget/password.py:56
 msgid "Supplied passwords are not identical"

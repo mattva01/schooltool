@@ -2069,10 +2069,9 @@ msgstr "Cal"
 msgid "Personal calendar"
 msgstr "Личен календар"
 
-#. Default: "Confirm"
 #: /src/schooltool/widget/password.py:39
-msgid "confirm password"
-msgstr "потвърждение на паролата"
+msgid "Confirm password"
+msgstr "Потвърждение на паролата"
 
 #: /src/schooltool/widget/password.py:56
 msgid "Supplied passwords are not identical"

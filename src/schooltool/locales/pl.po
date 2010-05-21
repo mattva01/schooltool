@@ -6270,10 +6270,9 @@ msgstr "Przydzielone plany zajęć"
 msgid "Change schedule"
 msgstr "Zmień harmonogram"
 
-#. Default: "Confirm"
 #: /src/schooltool/widget/password.py:39
-msgid "confirm password"
-msgstr "potwierdź hasło"
+msgid "Confirm password"
+msgstr "Potwierdź hasło"
 
 #: /src/schooltool/widget/password.py:56
 msgid "Supplied passwords are not identical"

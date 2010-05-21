@@ -3789,10 +3789,9 @@ msgstr "Нет"
 msgid "Please indicate the homeroom period(s) for each day:"
 msgstr ""
 
-#. Default: "Confirm"
 #: /src/schooltool/widget/password.py:39
-msgid "confirm password"
-msgstr "подтвердите пароль"
+msgid "Confirm password"
+msgstr "Подтвердите пароль"
 
 #: /src/schooltool/widget/password.py:56
 msgid "Supplied passwords are not identical"

@@ -6259,9 +6259,8 @@ msgstr ""
 msgid "Change schedule"
 msgstr "改变计划"
 
-#. Default: "Confirm"
 #: /src/schooltool/widget/password.py:39
-msgid "confirm password"
+msgid "Confirm password"
 msgstr "确认密码"
 
 #: /src/schooltool/widget/password.py:56

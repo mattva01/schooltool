@@ -6226,9 +6226,8 @@ msgstr ""
 msgid "Change schedule"
 msgstr ""
 
-#. Default: "Confirm"
 #: /src/schooltool/widget/password.py:39
-msgid "confirm password"
+msgid "Confirm password"
 msgstr ""
 
 #: /src/schooltool/widget/password.py:56

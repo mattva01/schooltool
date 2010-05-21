@@ -6694,9 +6694,8 @@ msgstr ""
 msgid "Change schedule"
 msgstr "ផ្លាស់ប្តូរ ការចែកពេល"
 
-#. Default: "Confirm"
 #: /src/schooltool/widget/password.py:39
-msgid "confirm password"
+msgid "Confirm password"
 msgstr "សូម​អះអាង​ពាក្យ​សម្ងាត់"
 
 #: /src/schooltool/widget/password.py:56

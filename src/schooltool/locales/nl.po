@@ -4000,10 +4000,9 @@ msgstr "Nee"
 msgid "Please indicate the homeroom period(s) for each day:"
 msgstr "Geef de \"thuisklas\"-periodes/lesuren aan voor elke dag:"
 
-#. Default: "Confirm"
 #: /src/schooltool/widget/password.py:39
-msgid "confirm password"
-msgstr "Bevestigen"
+msgid "Confirm password"
+msgstr "Bevestig wachtwoord"
 
 #: /src/schooltool/widget/password.py:56
 msgid "Supplied passwords are not identical"

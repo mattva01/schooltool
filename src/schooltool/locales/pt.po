@@ -3901,10 +3901,9 @@ msgstr "Não"
 msgid "Please indicate the homeroom period(s) for each day:"
 msgstr "Por favor indique o período de aulas para cada dia:"
 
-#. Default: "Confirm"
 #: /src/schooltool/widget/password.py:39
-msgid "confirm password"
-msgstr "confirme a palavra chave"
+msgid "Confirm password"
+msgstr "Confirme a palavra chave"
 
 #: /src/schooltool/widget/password.py:56
 msgid "Supplied passwords are not identical"

@@ -1687,10 +1687,9 @@ msgstr "Da"
 msgid "No"
 msgstr "Nu"
 
-#. Default: "Confirm"
 #: /src/schooltool/widget/password.py:39
-msgid "confirm password"
-msgstr "confirmați parola"
+msgid "Confirm password"
+msgstr "Confirmați parola"
 
 #: /src/schooltool/widget/password.py:56
 msgid "Supplied passwords are not identical"

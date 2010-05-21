@@ -1546,6 +1546,11 @@ msgstr "Grupė"
 msgid "Advisor"
 msgstr "Auklėtojas"
 
+#: /src/schooltool/basicperson/browser/person.py:68
+#: /src/schooltool/widget/password.py:39
+msgid "Confirm password"
+msgstr "Patvirtinkite slaptažodį"
+
 #: /src/schooltool/basicperson/browser/person.py:149
 msgid "Add new person"
 msgstr "Sukurti naują asmenį"
@@ -1673,29 +1678,17 @@ msgstr "Tikrai norite pašalinti pažymėtus elementus?"
 msgid "You have not selected any items."
 msgstr "Nepažymėtas joks elementas"
 
-#. Default: "Delete"
 #: /src/schooltool/contact/browser/templates/contacts_delete.pt:34
-#: /src/schooltool/course/browser/templates/course_container.pt:40
-#: /src/schooltool/course/browser/templates/section_container.pt:93
-#: /src/schooltool/demographics/browser/search.pt:35
-#: /src/schooltool/demographics/browser/table.pt:28
-#: /src/schooltool/email/browser/templates/email_container.pt:48
 #: /src/schooltool/email/browser/templates/email_delete.pt:31
 #: /src/schooltool/person/browser/person_container_delete.pt:35
 #: /src/schooltool/resource/browser/container_delete.pt:27
-#: /src/schooltool/schoolyear/browser/templates/schoolyear.pt:42
-#: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:34
 #: /src/schooltool/schoolyear/browser/templates/term-delete.pt:27
-#: /src/schooltool/skin/templates/container.pt:42
 #: /src/schooltool/skin/templates/container_delete.pt:32
-#: /src/schooltool/skin/templates/table_container.pt:33
-#: /src/schooltool/skin/templates/view_macros.pt:194
 #: /src/schooltool/term/browser/templates/term-container-delete.pt:29
 #: /src/schooltool/timetable/browser/templates/schooltt-delete.pt:29
 #: /src/schooltool/timetable/browser/templates/timetable-container-delete.pt:27
-#: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:29
-msgid "delete-button"
-msgstr "Šalinti"
+msgid "Confirm"
+msgstr "Patvirtinti"
 
 #: /src/schooltool/contact/browser/templates/filter.pt:21
 #: /src/schooltool/person/browser/person_filter.pt:11
@@ -4017,10 +4010,6 @@ msgstr "Pridėti naują lauką"
 msgid "Change information for ${field_title}"
 msgstr "Pakeisti ${field_title} informaciją"
 
-#: /src/schooltool/basicperson/browser/person.py:68
-msgid "Confirm"
-msgstr "Patvirtinti"
-
 #: /src/schooltool/basicperson/browser/person.py:104
 msgid "This username is already in use!"
 msgstr "Šis naudotojo vardas jau užimtas!"
@@ -4617,6 +4606,21 @@ msgstr ""
 #: /src/schooltool/skin/templates/table_container.pt:28
 msgid "Showing ${count} of ${total} items"
 msgstr ""
+
+#: /src/schooltool/course/browser/templates/course_container.pt:40
+#: /src/schooltool/course/browser/templates/section_container.pt:93
+#: /src/schooltool/demographics/browser/search.pt:35
+#: /src/schooltool/demographics/browser/table.pt:28
+#: /src/schooltool/email/browser/templates/email_container.pt:48
+#: /src/schooltool/schoolyear/browser/templates/schoolyear.pt:42
+#: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:34
+#: /src/schooltool/skin/templates/container.pt:42
+#: /src/schooltool/skin/templates/table_container.pt:33
+#: /src/schooltool/skin/templates/view_macros.pt:194
+#: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:29
+#. Default: "Delete"
+msgid "delete-button"
+msgstr "Šalinti"
 
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:12
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:24
@@ -6214,11 +6218,6 @@ msgstr ""
 #: /src/schooltool/timetable/security.zcml:54
 msgid "Change schedule"
 msgstr ""
-
-#. Default: "Confirm"
-#: /src/schooltool/widget/password.py:39
-msgid "confirm password"
-msgstr "patvirtinkite slaptažodį"
 
 #: /src/schooltool/widget/password.py:56
 msgid "Supplied passwords are not identical"
