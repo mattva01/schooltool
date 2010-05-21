@@ -6630,10 +6630,9 @@ msgstr "Assign timetables"
 msgid "Change schedule"
 msgstr "Change schedule"
 
-#. Default: "Confirm"
 #: /src/schooltool/widget/password.py:39
-msgid "confirm password"
-msgstr "Confirm"
+msgid "Confirm password"
+msgstr "Confirm password"
 
 #~ msgid ""
 #~ "<a href=\"#\" onclick=\"$('#more_overlays').toggle();return "

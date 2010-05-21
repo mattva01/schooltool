@@ -36,8 +36,7 @@ class PasswordConfirmationWidget(PasswordWidget):
                 size=self.displayWidth,
                 extra=self.extra)
 
-        confirm_label = translate(_("confirm password", default="Confirm"),
-                                  context=self.request)
+        confirm_label = translate(_("Confirm password"), context=self.request)
         return u"""<div><div>%s</div>
                      <br />
                      <div class="label">

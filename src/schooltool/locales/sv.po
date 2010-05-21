@@ -4288,10 +4288,9 @@ msgstr "Nej"
 msgid "Please indicate the homeroom period(s) for each day:"
 msgstr "Var god specifiera närvarakontroll för alla dagar:"
 
-#. Default: "Confirm"
 #: /src/schooltool/widget/password.py:39
-msgid "confirm password"
-msgstr "bekräfta lösenord"
+msgid "Confirm password"
+msgstr "Bekräfta lösenord"
 
 #~ msgid ""
 #~ "\n"

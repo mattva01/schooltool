@@ -1591,10 +1591,9 @@ msgstr "Da"
 msgid "No"
 msgstr "Ne"
 
-#. Default: "Confirm"
 #: /src/schooltool/widget/password.py:39
-msgid "confirm password"
-msgstr "Потврди"
+msgid "Confirm password"
+msgstr ""
 
 #: /src/schooltool/app/app.py:201
 msgid "Your School"
@@ -2632,7 +2631,7 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/person.py:68
 msgid "Confirm"
-msgstr ""
+msgstr "Потврди"
 
 #: /src/schooltool/basicperson/browser/person.py:104
 msgid "This username is already in use!"

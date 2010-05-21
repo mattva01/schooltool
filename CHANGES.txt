@@ -10,6 +10,7 @@ This is a final release for Lucid.
 - Fix Timetable Schemas page for non-manager users (https://launchpad.net/bugs/545780)
 - Fix timetable display when first day of the week is empty (https://launchpad.net/bugs/545763)
 - Fix timetable plugin for sampledata (https://launchpad.net/bugs/306107)
+- Translate "Confirm" button in delete forms correctly.
 - Update translations
 
 

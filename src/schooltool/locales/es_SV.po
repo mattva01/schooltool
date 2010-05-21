@@ -6675,9 +6675,8 @@ msgstr "Asignar horarios"
 msgid "Change schedule"
 msgstr "Cambiar agenda"
 
-#. Default: "Confirm"
 #: /src/schooltool/widget/password.py:39
-msgid "confirm password"
+msgid "Confirm password"
 msgstr "Confirme la contraseña"
 
 #: /src/schooltool/widget/password.py:56

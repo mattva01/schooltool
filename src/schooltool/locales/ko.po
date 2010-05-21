@@ -6103,9 +6103,8 @@ msgstr "할당 시간표"
 msgid "Change schedule"
 msgstr "일정 변경"
 
-#. Default: "Confirm"
 #: /src/schooltool/widget/password.py:39
-msgid "confirm password"
+msgid "Confirm password"
 msgstr "비밀번호 확인"
 
 #: /src/schooltool/widget/password.py:56

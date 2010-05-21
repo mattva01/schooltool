@@ -1252,10 +1252,9 @@ msgstr "Clár Ama"
 msgid "Timetable calendar"
 msgstr "Féilire an amchláir"
 
-#. Default: "Confirm"
 #: /src/schooltool/widget/password.py:39
-msgid "confirm password"
-msgstr "deimhnigh an focal faire"
+msgid "Confirm password"
+msgstr "Deimhnigh an focal faire"
 
 #: /src/schooltool/widget/password.py:56
 msgid "Supplied passwords are not identical"

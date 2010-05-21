@@ -3015,9 +3015,8 @@ msgstr "Nie"
 msgid "Please indicate the homeroom period(s) for each day:"
 msgstr "Označte triednicke hodiny:"
 
-#. Default: "Confirm"
 #: /src/schooltool/widget/password.py:39
-msgid "confirm password"
+msgid "Confirm password"
 msgstr "Potvrdenie hesla"
 
 #: /src/schooltool/widget/password.py:56

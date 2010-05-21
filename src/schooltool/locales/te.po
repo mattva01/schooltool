@@ -1023,9 +1023,8 @@ msgstr "అవును"
 msgid "No"
 msgstr "కాదు"
 
-#. Default: "Confirm"
 #: /src/schooltool/widget/password.py:39
-msgid "confirm password"
+msgid "Confirm password"
 msgstr "సంకేతపదం నిర్ధారించండి"
 
 #: /src/schooltool/widget/password.py:56

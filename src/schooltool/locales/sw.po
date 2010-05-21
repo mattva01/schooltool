@@ -1416,10 +1416,9 @@ msgstr "Ndiyo"
 msgid "No"
 msgstr "Hapana"
 
-#. Default: "Confirm"
 #: /src/schooltool/widget/password.py:39
-msgid "confirm password"
-msgstr "thibitisha nywila"
+msgid "Confirm password"
+msgstr "Thibitisha nywila"
 
 #: /src/schooltool/widget/password.py:56
 msgid "Supplied passwords are not identical"

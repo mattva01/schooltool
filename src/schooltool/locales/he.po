@@ -1328,9 +1328,8 @@ msgstr "TT"
 msgid "Timetable calendar"
 msgstr "לוח זמנים"
 
-#. Default: "Confirm"
 #: /src/schooltool/widget/password.py:39
-msgid "confirm password"
+msgid "Confirm password"
 msgstr "אשר סיסמא"
 
 #: /src/schooltool/widget/password.py:56

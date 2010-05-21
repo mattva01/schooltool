@@ -6684,10 +6684,9 @@ msgstr "Tetapkan jadual"
 msgid "Change schedule"
 msgstr "Tukar jadual"
 
-#. Default: "Confirm"
 #: /src/schooltool/widget/password.py:39
-msgid "confirm password"
-msgstr "sahkan kata laluan"
+msgid "Confirm password"
+msgstr "Sahkan kata laluan"
 
 #: /src/schooltool/widget/password.py:56
 msgid "Supplied passwords are not identical"

@@ -3396,10 +3396,9 @@ msgstr "Uspořádejte prosím období do správného pořadí pro každý den:"
 msgid "$period on day $day"
 msgstr "$period dne $day"
 
-#. Default: "Confirm"
 #: /src/schooltool/widget/password.py:39
-msgid "confirm password"
-msgstr "potvrdit heslo"
+msgid "Confirm password"
+msgstr "Potvrdit heslo"
 
 #: /src/schooltool/widget/password.py:56
 msgid "Supplied passwords are not identical"
