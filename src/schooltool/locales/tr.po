@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-04-29 02:21+0300\n"
-"PO-Revision-Date: 2010-04-29 00:54+0000\n"
+"PO-Revision-Date: 2010-05-17 14:29+0000\n"
 "Last-Translator: Angel Spy <melissadilara@yahoo.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-04-30 03:47+0000\n"
+"X-Launchpad-Export-Date: 2010-05-18 05:02+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -656,7 +656,7 @@ msgstr "Çeviri Yerleri"
 
 #: /src/schooltool/app/browser/configure.zcml:645
 msgid "Generations"
-msgstr "Gerçekleşen işlemler"
+msgstr "Nesiller"
 
 #: /src/schooltool/app/browser/configure.zcml:666
 msgid "Browser UI"
@@ -984,7 +984,7 @@ msgstr "R"
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:27
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:45
 msgid "Remove"
-msgstr "Sil"
+msgstr "Kaldır"
 
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:37
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:38
@@ -2077,7 +2077,7 @@ msgstr "Bitiş tarihi"
 #: /src/schooltool/term/browser/term.py:145
 #: /src/schooltool/term/browser/term.py:222
 msgid "Refresh"
-msgstr "Tazele"
+msgstr "Yenile"
 
 #: /src/schooltool/term/browser/term.py:163
 msgid "Add term"
@@ -3565,7 +3565,7 @@ msgstr "Soyad"
 
 #: /src/schooltool/basicperson/security.py:66
 msgid "Advisors of a person."
-msgstr ""
+msgstr "Kişinin danışmanı."
 
 #: /src/schooltool/basicperson/security.zcml:26
 msgid "Create, delete demographics fields and change their order."
@@ -3706,7 +3706,7 @@ msgstr "Gönder"
 #: /src/schooltool/contact/browser/contact.py:409
 #: /src/schooltool/email/browser/email.py:509
 msgid "There were some errors."
-msgstr ""
+msgstr "Bazı hatalar oluştu."
 
 #: /src/schooltool/contact/browser/relationship.py:75
 #: /src/schooltool/contact/interfaces.py:101
@@ -4825,7 +4825,7 @@ msgstr "Ayarlar"
 
 #: /src/schooltool/email/browser/configure.zcml:87
 msgid "Send Test"
-msgstr ""
+msgstr "Testi Gönder"
 
 #. Default: ""
 #: /src/schooltool/email/browser/email.py:79
@@ -4855,12 +4855,12 @@ msgstr "SchoolTool email servisinin şu anki durumu"
 #: /src/schooltool/email/browser/email.py:101
 #: /src/schooltool/email/interfaces.py:87
 msgid "Enable"
-msgstr ""
+msgstr "Etkin"
 
 #: /src/schooltool/email/browser/email.py:102
 #: /src/schooltool/email/interfaces.py:88
 msgid "Mark to enable the service."
-msgstr ""
+msgstr "Servisi etkinleştirmek için işaretleyin."
 
 #: /src/schooltool/email/browser/email.py:107
 #: /src/schooltool/email/interfaces.py:92
@@ -4925,7 +4925,7 @@ msgstr "TLS bağlantısını kullan"
 
 #: /src/schooltool/email/browser/email.py:147
 msgid "New passwords don't match"
-msgstr ""
+msgstr "Yeni parolalar eşleşmiyor"
 
 #: /src/schooltool/email/browser/email.py:152
 msgid "Hostname is required for enabling the service"
@@ -5015,7 +5015,7 @@ msgstr "Kuyruk"
 #: /src/schooltool/email/browser/templates/email_container.pt:39
 #: /src/schooltool/email/browser/templates/email_container.pt:44
 msgid "retry-button"
-msgstr ""
+msgstr "tekrar dene-butonu"
 
 #: /src/schooltool/email/browser/templates/email_container.pt:54
 msgid "There are no messages queued."
@@ -5309,7 +5309,7 @@ msgstr "Genel"
 
 #: /src/schooltool/note/notes.pt:8
 msgid "( p )"
-msgstr ""
+msgstr "( p )"
 
 #: /src/schooltool/person/browser/configure.zcml:91
 msgid "Edit Preferences"
