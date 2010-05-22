@@ -125,7 +125,7 @@
             use-macro="view/@@schooltool_macros/generic/serverinfo" />
           <br />
           <span i18n:translate="">
-            &copy; The <a href="http://www.shuttleworthfoundation.org">Shuttleworth Foundation</a> 2003 - <span>2009</span>:
+            &copy; The <a href="http://www.shuttleworthfoundation.org">Shuttleworth Foundation</a> 2003 - <span>2010</span>:
             Supporting Social Innovation.
           </span>
         <br />
