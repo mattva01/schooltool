@@ -27,6 +27,8 @@
              attributes="keys values items __iter__ __len__" />
     <require permission="schooltool.edit"
              interface="zope.container.interfaces.IWriteContainer" />
+    <require permission="schooltool.edit"
+             interface="zope.container.interfaces.IOrdered" />
   </class>
 
   <interface

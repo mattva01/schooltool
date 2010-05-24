@@ -4,5 +4,7 @@
            i18n_domain="schooltool">
 
   <include file="level.zcml" />
+  <include file="browser.zcml" />
+  <include file="security.zcml" />
 
 </configure>
