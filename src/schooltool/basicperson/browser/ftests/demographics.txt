@@ -19,7 +19,7 @@ Create a person with some demographics fields filled in:
     >>> manager.getControl('Birth date').value = '1980-01-01'
     >>> manager.getControl('Username').value = "john"
     >>> manager.getControl('Password').value = "pwd"
-    >>> manager.getControl('Confirm').value = "pwd"
+    >>> manager.getControl('Confirm password').value = "pwd"
 
     >>> manager.getControl('ID').value = "001122"
     >>> manager.getControl('Ethnicity').displayValue = ['Black or African American']
@@ -135,7 +135,7 @@ be different:
     Advisor
     Username *
     Password
-    Confirm
+    Confirm password
     ID
     Language
     Ethnicity
@@ -180,7 +180,7 @@ value in the select box, and have the field required:
     Advisor
     Username *
     Password
-    Confirm
+    Confirm password
     ID
     Language
     Ethnicity *

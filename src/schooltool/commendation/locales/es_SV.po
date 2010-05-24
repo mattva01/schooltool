@@ -1,4 +1,4 @@
-# Portuguese translation for schooltool
+# Spanish translation for schooltool
 # Copyright (c) 2007 Rosetta Contributors and Canonical Ltd 2007
 # This file is distributed under the same license as the schooltool package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2007.
@@ -8,37 +8,37 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-04-29 01:54+0300\n"
-"PO-Revision-Date: 2009-10-12 11:51+0000\n"
-"Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
-"Language-Team: Portuguese <pt@li.org>\n"
+"PO-Revision-Date: 2010-05-13 14:36+0000\n"
+"Last-Translator: Javier Sanchez <fco.javier.sanchez@gmail.com>\n"
+"Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-04-29 03:49+0000\n"
+"X-Launchpad-Export-Date: 2010-05-18 05:02+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: /src/schooltool/commendation/browser.py:70
 #: /src/schooltool/commendation/commendation.py:72
 msgid "<unknown>"
-msgstr "<desconhecido>"
+msgstr "<desconocido>"
 
 #: /src/schooltool/commendation/commendation.py:88
 msgid "commendations"
-msgstr "louvores"
+msgstr "menciones"
 
 #: /src/schooltool/commendation/configure.zcml:82
 #: /src/schooltool/commendation/configure.zcml:92
 msgid "View Commendations"
-msgstr "Ver Louvores"
+msgstr "Ver Menciones"
 
 #: /src/schooltool/commendation/configure.zcml:100
 #: /src/schooltool/commendation/configure.zcml:110
 msgid "Add Commendation"
-msgstr "Adicionar Louvor"
+msgstr "Añadir una mención"
 
 #: /src/schooltool/commendation/configure.zcml:128
 msgid "All Commendations"
-msgstr "Todos os Louvores"
+msgstr "Todas las Menciones"
 
 #: /src/schooltool/commendation/interfaces.py:48
 msgid "Title"
@@ -46,27 +46,27 @@ msgstr "Título"
 
 #: /src/schooltool/commendation/interfaces.py:49
 msgid "Title of the commendation."
-msgstr "Título do louvor"
+msgstr "Título de la mención"
 
 #: /src/schooltool/commendation/interfaces.py:53
 msgid "Description"
-msgstr "Descrição"
+msgstr "Descripción"
 
 #: /src/schooltool/commendation/interfaces.py:54
 msgid "A detailed description of the commendation."
-msgstr "Uma descrição detalhada do louvor."
+msgstr "Una descripción detallada de la mención"
 
 #: /src/schooltool/commendation/interfaces.py:58
 msgid "Scope"
-msgstr "Âmbito"
+msgstr "Alcance"
 
 #: /src/schooltool/commendation/interfaces.py:59
 msgid "The scope of the commendation."
-msgstr "O âmbito do louvor."
+msgstr "El alcance de la mención."
 
 #: /src/schooltool/commendation/interfaces.py:60
 msgid "community"
-msgstr "comunidade"
+msgstr "comunidad"
 
 #: /src/schooltool/commendation/interfaces.py:60
 msgid "group"
@@ -74,7 +74,7 @@ msgstr "grupo"
 
 #: /src/schooltool/commendation/interfaces.py:60
 msgid "school-wide"
-msgstr "institucional"
+msgstr "En toda la escuela"
 
 #: /src/schooltool/commendation/interfaces.py:61
 msgid "global"
@@ -90,16 +90,16 @@ msgstr "estado"
 
 #: /src/schooltool/commendation/interfaces.py:65
 msgid "Date"
-msgstr "Data"
+msgstr "Fecha"
 
 #: /src/schooltool/commendation/interfaces.py:66
 msgid "The date the commendation was issued."
-msgstr "A data em que o louvor foi atribuído."
+msgstr "La fecha de adjudicación de la mención."
 
 #: /src/schooltool/commendation/interfaces.py:71
 msgid "Grantor"
-msgstr "Atribuído por"
+msgstr "Concedida por"
 
 #: /src/schooltool/commendation/interfaces.py:72
 msgid "The grantor of the commendation."
-msgstr "Quem atribuí o louvor"
+msgstr "El que concede la mención."
