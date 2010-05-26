@@ -1,4 +1,20 @@
 <html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+  <metal:block fill-slot="extrahead">
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $('#select-all').click(function () {
+        $('input[type=checkbox]:enabled').each(function () {
+          this.checked = true;
+        });
+      });
+      $('#select-none').click(function () {
+        $('input[type=checkbox]:enabled').each(function () {
+          this.checked = false;
+        });
+      });
+    });
+  </script>
+  </metal:block>
   <body>
     <metal:nothing metal:fill-slot="content-header" />
     <metal:block metal:fill-slot="body">
@@ -35,8 +51,8 @@
               </tr>
               <tr id="group-header-row">
                 <th></th>
-                <th style="width: 6em;">Group</th>
-                <th style="width: 10em;">Import members</th>
+                <th style="width: 6em;" i18n:translate="">Group</th>
+                <th style="width: 10em;" i18n:translate="">Import members</th>
               </tr>
               <tr class="group-row" tal:repeat="group active/groups">
                 <td class="dr" tal:content="group/title">
@@ -60,6 +76,14 @@
                 </td>
               </tr>
             </table>
+            <div class="controls center">
+              <input id="select-all" type="button" class="button-neutral"
+                     value="Select All"
+                     i18n:attributes="value select-all-button" />
+              <input id="select-none" type="button" class="button-neutral"
+                     value="Select None"
+                     i18n:attributes="value select-none-button" />
+            </div>
           </fieldset>
         </metal:block>
       </div>
