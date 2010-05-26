@@ -2,18 +2,25 @@
   <metal:block fill-slot="extrahead">
   <script type="text/javascript">
     $(document).ready(function() {
-      $('#select-all').click(function () {
-        $('input[type=checkbox]:enabled').each(function () {
-          this.checked = true;
-        });
+      $('input[type=checkbox].select-all-groups').click(function() {
+        var status = this.checked;
+          $('input[type=checkbox][name=groups]:enabled').each(function () {
+            this.checked = status;
+          });        
       });
-      $('#select-none').click(function () {
-        $('input[type=checkbox]:enabled').each(function () {
-          this.checked = false;
-        });
+      $('input[type=checkbox].select-all-members').click(function() {
+        var status = this.checked;
+          $('input[type=checkbox][name=members]:enabled').each(function () {
+            this.checked = status;
+          });        
       });
     });
   </script>
+  <style type="text/css">
+    tr.borderbottom td {
+      border-bottom: 1px solid #bab5ab;
+    }
+  </style>
   </metal:block>
   <body>
     <metal:nothing metal:fill-slot="content-header" />
@@ -54,6 +61,17 @@
                 <th style="width: 6em;" i18n:translate="">Group</th>
                 <th style="width: 10em;" i18n:translate="">Copy members</th>
               </tr>
+              <tr class="borderbottom">
+                <td class="dr">
+                  <strong>Select All</strong>
+                </td>
+                <td class="center">
+                  <input type="checkbox" class="select-all-groups" />
+                </td>
+                <td class="center">
+                  <input type="checkbox" class="select-all-members" />
+                </td>
+              </tr>
               <tr class="group-row" tal:repeat="group active/groups">
                 <td class="dr" tal:content="group/title">
                   Clerks
@@ -76,14 +94,6 @@
                 </td>
               </tr>
             </table>
-            <div class="controls center">
-              <input id="select-all" type="button" class="button-neutral"
-                     value="Select All"
-                     i18n:attributes="value select-all-button" />
-              <input id="select-none" type="button" class="button-neutral"
-                     value="Select None"
-                     i18n:attributes="value select-none-button" />
-            </div>
           </fieldset>
         </metal:block>
       </div>
