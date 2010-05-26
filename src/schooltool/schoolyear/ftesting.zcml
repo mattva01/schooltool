@@ -9,7 +9,17 @@
   <include package="schooltool.schoolyear" />
   <include package="schooltool.term" />
   <include package="schooltool.term" file="time_machine.zcml" />
+  <include package="schooltool.basicperson" />
 
-  <browser:defaultSkin name="SchoolTool" />
+  <interface
+      interface="schooltool.basicperson.ftesting.IBasicPersonFtestingSkin"
+      type="zope.publisher.interfaces.browser.IBrowserSkinType"
+      name="BasicPerson"
+      />
+
+  <!-- Provide local overrides of standard configurations-->
+  <includeOverrides package="schooltool.basicperson" file="overrides.zcml" />
+
+  <browser:defaultSkin name="BasicPerson" />
 
 </configure>

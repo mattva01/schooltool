@@ -59,6 +59,15 @@ from schooltool.securitypolicy.metaconfigure import getCrowdsUtility
 from schooltool.securitypolicy.interfaces import ICrowd
 
 
+defaultGroups =  {"manager"       : ("Site Managers", "Manager Group."),
+                  "students"      : ("Students", "Students."),
+                  "teachers"      : ("Teachers", "Teachers."),
+                  "clerks"        : ("Clerks", "Clerks."),
+                  "administrators": ("School Administrators",
+                                     "School Administrators."),
+                  }
+
+
 class GroupContainerContainer(BTreeContainer):
     """Container of group containers."""
 
@@ -129,39 +138,32 @@ class InitGroupsForNewSchoolYear(ObjectEventAdapterSubscriber):
 
     adapts(IObjectAddedEvent, ISchoolYear)
 
-    def initializeGroupContainer(self, groups):
+    def initializeGroupContainer(self):
         groups = IGroupContainer(self.object)
-        default_groups =  [
-            ("manager",        "Site Managers",         "Manager Group."),
-            ("students",       "Students",              "Students."),
-            ("teachers",       "Teachers",              "Teachers."),
-            ("clerks",         "Clerks",                "Clerks."),
-            ("administrators", "School Administrators", "School Administrators."),
-            ]
-        for id, title, description in default_groups:
+        for id, info in defaultGroups.items():
+            title = info[0]
+            description = info[1]
             group = groups[id] = Group(title, description)
             IDependable(group).addDependent('')
 
-    def copyMembers(self, group, new_group):
-        for member in group.members:
-            new_group.members.add(member)
-
-    def copyAllGroups(self, source, destination):
-        for id, group in source.items():
-            new_group = destination[group.__name__] = Group(group.title, group.description)
-            if id in ["managers", "teachers", "clerks", "administrators"]:
-                self.copyMembers(group, new_group)
+    def importDefaultGroups(self, activeSchoolyear):
+        oldGroups = IGroupContainer(activeSchoolyear)
+        newGroups = IGroupContainer(self.object)
+        for groupId in defaultGroups:
+            if groupId in oldGroups:
+                oldGroup = oldGroups[groupId]
+                newGroup = Group(oldGroup.title, oldGroup.description)
+                newGroups[groupId] = newGroup
+                IDependable(newGroup).addDependent('')
 
     def __call__(self):
         app = ISchoolToolApplication(None)
         syc = ISchoolYearContainer(app)
-        active_schoolyear = syc.getActiveSchoolYear()
-
-        if active_schoolyear:
-            self.copyAllGroups(IGroupContainer(active_schoolyear),
-                               IGroupContainer(self.object))
+        activeSchoolyear = syc.getActiveSchoolYear()
+        if activeSchoolyear is not None:
+            self.importDefaultGroups(activeSchoolyear)
         else:
-            self.initializeGroupContainer(IGroupContainer(self.object))
+            self.initializeGroupContainer()
 
 
 class GroupInit(InitBase):
