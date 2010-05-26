@@ -24,7 +24,7 @@
                      tal:condition="active">
           <fieldset>
             <legend i18n:translate="">
-              Import data from active school year:
+              Copy data from active school year:
               <span tal:replace="active/title"
                     i18n:name="active_schoolyear" />
             </legend>
@@ -52,7 +52,7 @@
               <tr id="group-header-row">
                 <th></th>
                 <th style="width: 6em;" i18n:translate="">Group</th>
-                <th style="width: 10em;" i18n:translate="">Import members</th>
+                <th style="width: 10em;" i18n:translate="">Copy members</th>
               </tr>
               <tr class="group-row" tal:repeat="group active/groups">
                 <td class="dr" tal:content="group/title">

@@ -1,5 +1,5 @@
-Import data from previous school year
-=====================================
+Copy data from previous school year
+===================================
 
 Log in as manager:
 
@@ -267,14 +267,14 @@ And no timetables schemas:
     </div>
 
 Now, we're going to create a new schoolyear, but this time, we're
-going to import existing data from the active school year. In this
-case the active school year is 2009.
+going to copy existing data from the active school year. In this case
+the active school year is 2009.
 
     >>> manager.getLink('Manage').click()
     >>> manager.getLink('School Years').click()
     >>> manager.getLink('New School Year').click()
     >>> manager.printQuery('//div[@class="viewspace"]/fieldset/legend/text()')
-    Import data from active school year:
+    Copy data from active school year:
     2009
 
 Let's fill out the basic school year fields:
@@ -283,15 +283,15 @@ Let's fill out the basic school year fields:
     >>> manager.getControl('First day').value = '2011-01-01'
     >>> manager.getControl('Last day').value = '2011-12-31'
 
-To import data from the active school year, we have to use the
-checkboxes in the "Import data from active school year" fieldset.
+To copy data from the active school year, we have to use the
+checkboxes in the "Copy data from active school year" fieldset.
 
-In this case we can import all the courses of the active school year:
+In this case we can copy all the courses of the active school year:
 
     >>> manager.printQuery('id("all-courses-row")/td[1]/text()')
     All Courses
 
-We can also import all the timetable schemas:
+We can also copy all the timetable schemas:
 
     >>> manager.printQuery('id("all-timetables-row")/td[1]/text()')
     All Timetable Schemas
@@ -310,10 +310,10 @@ And all the groups in the active school year are listed too:
 XXX: add more ftests
 - Delete all the courses in the active year and verify the All Courses checkbox
 - Delete all the timetables in the active year and verify the All Timetables checkbox
-- Verify that empty groups don't show the Import members checkbox
-- Mark the Chess club and import their members and check tom and arian are the members of the new group
-- Mark only the import members checkbox in the Soccer players and verify that mario and german are not members of the new group
+- Verify that empty groups don't show the Copy members checkbox
+- Mark the Chess club and copy their members and check tom and arian are the members of the new group
+- Mark only the copy members checkbox in the Soccer players and verify that mario and german are not members of the new group
 - Change the title of a group and verify it changes in the sorting position
-- Mark the All Courses checkbox and verify all the courses are imported
-- Mark the All Timetables checkbox and verify all the timetables are imported
+- Mark the All Courses checkbox and verify all the courses are copied
+- Mark the All Timetables checkbox and verify all the timetables are copied
 - Verify the form remembers the marked checkboxes on form errors
