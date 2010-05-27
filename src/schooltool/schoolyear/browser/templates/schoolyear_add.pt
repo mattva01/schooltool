@@ -17,7 +17,7 @@
     });
   </script>
   <style type="text/css">
-    tr.borderbottom td {
+    tr.select-all-row td {
       border-bottom: 1px solid #bab5ab;
     }
   </style>
@@ -61,7 +61,7 @@
                 <th style="width: 6em;" i18n:translate="">Group</th>
                 <th style="width: 10em;" i18n:translate="">Copy members</th>
               </tr>
-              <tr class="borderbottom">
+              <tr class="select-all-row">
                 <td class="dr">
                   <strong>Select All</strong>
                 </td>
