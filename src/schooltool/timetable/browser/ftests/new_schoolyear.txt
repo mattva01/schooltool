@@ -77,7 +77,7 @@ The schema is there now:
       </day>
     </timetable>
 
-Let's add one more school year:
+Let's add one more school year and import all the timetable schemas:
 
     >>> manager.open('http://localhost/')
     >>> manager.getLink('Manage').click()
@@ -86,6 +86,7 @@ Let's add one more school year:
     >>> manager.getControl('Title').value = '2006-2007'
     >>> manager.getControl('First day').value = '2006-09-01'
     >>> manager.getControl('Last day').value = '2007-07-15'
+    >>> manager.getControl(name='importAllTimetables').value = True
     >>> manager.getControl('Add').click()
 
 Now this school year should have our school timetable copied:

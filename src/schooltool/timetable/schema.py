@@ -252,20 +252,3 @@ def locationCopy(loc):
     unpickler = cPickle.Unpickler(tmp)
     unpickler.persistent_load = persistent.load
     return unpickler.load()
-
-
-class InitSchoolTimetablesForNewSchoolYear(ObjectEventAdapterSubscriber):
-    adapts(IObjectAddedEvent, ISchoolYear)
-
-    def __call__(self):
-        app = ISchoolToolApplication(None)
-        syc = ISchoolYearContainer(app)
-        active_schoolyear = syc.getActiveSchoolYear()
-
-        if active_schoolyear is not None:
-            new_container = ITimetableSchemaContainer(self.object)
-            old_container = ITimetableSchemaContainer(active_schoolyear)
-            for schooltt in old_container.values():
-                new_schooltt = locationCopy(schooltt)
-                new_schooltt.__parent__ = None
-                new_container[new_schooltt.__name__] = new_schooltt

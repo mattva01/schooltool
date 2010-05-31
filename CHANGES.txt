@@ -5,7 +5,7 @@ CHANGES
 1.4.1 (unreleased)
 ------------------
 
-None yet.
+- Copy data from previous school year (https://launchpad.net/bugs/541673)
 
 
 1.4.0 (2010-05-21)

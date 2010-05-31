@@ -164,9 +164,6 @@
   <adapter
       factory=".section.getCourseContainerForSectionContainer" />
   <adapter
-      name="courses"
-      factory=".course.InitCoursesForNewSchoolYear" />
-  <adapter
       name="remove_sections_when_term_is_deleted"
       factory=".section.RemoveSectionsWhenTermIsDeleted" />
   <adapter
