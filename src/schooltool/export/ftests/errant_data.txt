@@ -1,0 +1,23 @@
+Tests for errant import data
+----------------------------
+
+This file has examples of bad data for the School Years sheet:
+
+    >>> browser = Browser('manager', 'schooltool')
+    >>> browser.getLink('Manage').click()
+    >>> browser.getLink('XLS Import').click()
+    >>> import pkg_resources
+    >>> browser.getControl('XLS File').add_file(
+    ...     pkg_resources.resource_stream('schooltool.export.ftests', 'errant_years.xls'),
+    ...     'application/excel',
+    ...     'sample_data.xls')
+    >>> browser.getControl('Submit').click()
+    >>> browser.printQuery("//div[@class='error']")
+    <div class="error">School Years C2 has no date in it</div>
+    <div class="error">School Years D2 has no date in it</div>
+    <div class="error">School Years D3 end date cannot be before start date</div>
+    <div class="error">School Years C5 start date overlaps another year</div>
+    <div class="error">School Years D6 end date overlaps another year</div>
+    <div class="error">School Years A7 not unicode or ascii string</div>
+    <div class="error">School Years B7 not unicode or ascii string</div>
+

@@ -62,8 +62,16 @@ from schooltool.common import DateRange
 from schooltool.common import SchoolToolMessage as _
 
 
+ERROR_NOT_UNICODE_OR_ASCII = _('not unicode or ascii string')
+ERROR_NO_DATE = _('has no date in it')
+ERROR_END_BEFORE_START = _('end date cannot be before start date')
+ERROR_START_OVERLAP = _('start date overlaps another year')
+ERROR_END_OVERLAP = _('end date overlaps another year')
+
+
 no_date = object()
 no_data = object()
+
 
 class ImporterBase(object):
 
@@ -85,6 +93,17 @@ class ImporterBase(object):
                                            row,
                                            message))
 
+    def getTextFromCell(self, sheet, row, col, default=no_data):
+        value = sheet.cell_value(rowx=row, colx=col)
+        if isinstance(value, str):
+            try:
+                value = unicode(value)
+            except UnicodeError:
+                self.error(col, row + 1, ERROR_NOT_UNICODE_OR_ASCII)
+        elif not isinstance(value, unicode):
+            self.error(col, row + 1, ERROR_NOT_UNICODE_OR_ASCII)
+        return value
+
     def getDateFromCell(self, sheet, row, col, default=no_date):
         try:
             dt = xlrd.xldate_as_tuple(sheet.cell_value(rowx=row, colx=col), self.wb.datemode)
@@ -92,7 +111,7 @@ class ImporterBase(object):
             if default is not no_date:
                 return default
             else:
-                self.error(col, row + 1, "has no date in it!")
+                self.error(col, row + 1, ERROR_NO_DATE)
                 return datetime.datetime.utcnow().date()
         return datetime.datetime(*dt).date()
 
@@ -132,16 +151,30 @@ class SchoolYearImporter(ImporterBase):
             sy.__name__ = SimpleNameChooser(syc).chooseName('', sy)
         syc[sy.__name__] = sy
 
+    def testOverlap(self, date):
+        for sy in ISchoolYearContainer(self.context).values():
+            if date >= sy.first and date <= sy.last:
+                return True
+        return False
+
     def process(self):
         sh = self.sheet
         for row in range(1, sh.nrows):
+            num_errors = len(self.errors)
             data = {}
-            data['title'] = sh.cell_value(rowx=row, colx=0)
-            data['__name__'] = sh.cell_value(rowx=row, colx=1)
+            data['title'] = self.getTextFromCell(sh, row, 0)
+            data['__name__'] = self.getTextFromCell(sh, row, 1)
             data['first'] = self.getDateFromCell(sh, row, 2)
             data['last'] = self.getDateFromCell(sh, row, 3)
-            sy = self.createSchoolYear(data)
-            self.addSchoolYear(sy, data)
+            if data['last'] < data['first']:
+                self.error(3, row + 1, ERROR_END_BEFORE_START)
+            elif self.testOverlap(data['first']):
+                self.error(2, row + 1, ERROR_START_OVERLAP)
+            elif self.testOverlap(data['last']):
+                self.error(3, row + 1, ERROR_END_OVERLAP)
+            if num_errors == len(self.errors):
+                sy = self.createSchoolYear(data)
+                self.addSchoolYear(sy, data)
 
 
 class TermImporter(ImporterBase):
@@ -731,3 +764,7 @@ class MegaImporter(BrowserView):
 
         if self.errors:
             sp.rollback()
+
+    def displayErrors(self):
+        return self.errors[:10]
+
