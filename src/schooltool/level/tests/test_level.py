@@ -318,6 +318,13 @@ def unregisterStubAdapter(factory, adapts=None, provides=None, name=u''):
 
 def setUpIntegration(test):
     setup.placefulSetUp()
+    # Workaround: _clear actually sets the Zope's vocabulary registry and
+    #             is called on zope.app.schema.vocabularies import (during
+    #             zcml parsing, for example).  When running multiple tests
+    #             this ingenious idea fails, so we call it manually.
+    from zope.app.schema import vocabulary
+    vocabulary._clear()
+
     zcml = ZCMLWrapper()
     zcml.setUp(
         namespaces={"": "http://namespaces.zope.org/zope"},
