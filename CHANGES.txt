@@ -5,7 +5,7 @@ CHANGES
 1.4.1 (unreleased)
 ------------------
 
-None yet.
+- Introduce minimalistic learning levels
 
 
 1.4.0 (2010-05-21)
