@@ -24,13 +24,12 @@ import doctest
 
 from zope.app.testing import setup
 
-from zope.component import queryUtility, provideUtility
+from zope.component import provideUtility
 from zope.component import provideAdapter
 from zope.interface import implements
 from zope.intid import IntIds
 from zope.intid.interfaces import IIntIds
 from zope.site.folder import Folder
-from zope.catalog.interfaces import ICatalog
 from zope.container.btree import BTreeContainer
 from zope.component.hooks import getSite, setSite
 
@@ -88,28 +87,6 @@ def doctest_evolve33():
 
         >>> print getSite()
         None
-
-    Contact catalog was registered for ISchoolToolApplication sites.
-
-        >>> catalog = queryUtility(ICatalog, 'schooltool.contact')
-        >>> print catalog
-        None
-
-        >>> setSite(app)
-
-        >>> catalog = queryUtility(ICatalog, 'schooltool.contact')
-        >>> catalog
-        <zc.catalog.extentcatalog.Catalog object ...>
-
-    Catalog indexes were set up properly.
-
-        >>> sorted(i.__name__ for i in catalog.values())
-        [u'first_name', u'form_keys', u'last_name']
-
-    And contacts of existing persons got indexed.
-
-        >>> sorted(catalog['first_name'].documents_to_values.values())
-        ['Johny', 'Petey']
 
     """
 

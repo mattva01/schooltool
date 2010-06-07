@@ -91,14 +91,12 @@
       provides=".interfaces.IPerson"
       for="schooltool.person.interfaces.IPersonPreferences" />
 
-  <subscriber
-      for="schooltool.app.interfaces.ICatalogSetUpEvent"
-      handler=".person.catalogSetUpSubscriber"
-      />
+  <adapter factory=".person.PersonCatalog"
+           name="schooltool.person.person.PersonCatalog" />
 
   <adapter
-      for=".interfaces.IPersonContainer"
-      factory=".person.getPersonContainerCatalog"
+      for="schooltool.person.interfaces.IPersonContainer"
+      factory=".person.getPersonCatalog"
       provides="zope.catalog.interfaces.ICatalog" />
 
   <configure

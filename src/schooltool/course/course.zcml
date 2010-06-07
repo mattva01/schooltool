@@ -1,0 +1,156 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/zope">
+
+  <!-- Course Content Components -->
+
+  <interface
+      interface=".interfaces.ICourseContainerContainer"
+      type="zope.app.content.interfaces.IContentType"
+      />
+
+  <class class=".course.CourseContainerContainer">
+    <allow interface="zope.container.interfaces.ISimpleReadContainer" />
+    <require permission="schooltool.view"
+             attributes="keys values items __iter__ __len__ has_key" />
+    <require permission="schooltool.edit"
+             interface="zope.container.interfaces.IWriteContainer" />
+  </class>
+
+  <interface
+      interface=".interfaces.ICourseContainer"
+      type="zope.app.content.interfaces.IContentType"
+      />
+
+  <class class=".course.CourseContainer">
+    <allow interface="zope.container.interfaces.ISimpleReadContainer" />
+    <require permission="schooltool.view"
+             attributes="keys values items __iter__ __len__ has_key" />
+    <require permission="schooltool.edit"
+             interface="zope.container.interfaces.IWriteContainer" />
+  </class>
+
+  <interface
+      interface=".interfaces.ICourse"
+      type="zope.app.content.interfaces.IContentType"
+      />
+
+  <class class=".course.Course">
+    <require permission="schooltool.view"
+             attributes="title description sections leaders
+                         course_id government_id credits __cmp__" />
+    <require permission="schooltool.edit"
+             set_schema=".interfaces.ICourse" />
+  </class>
+
+  <adapter
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      factory=".course.CourseInit"
+      name="schooltool.course" />
+
+  <adapter
+      for=".interfaces.ICourseContainer"
+      factory="schooltool.app.app.SimpleNameChooser"
+      provides="zope.container.interfaces.INameChooser" />
+
+  <!-- Section Content Components -->
+
+  <interface
+      interface=".interfaces.ISectionContainerContainer"
+      type="zope.app.content.interfaces.IContentType"
+      />
+
+  <class class=".section.SectionContainerContainer">
+    <allow interface="zope.container.interfaces.ISimpleReadContainer" />
+    <require permission="schooltool.view"
+             attributes="keys values items __iter__ __len__ has_key" />
+    <require permission="schooltool.edit"
+             interface="zope.container.interfaces.IWriteContainer" />
+  </class>
+
+  <interface
+      interface=".interfaces.ISectionContainer"
+      type="zope.app.content.interfaces.IContentType"
+      />
+
+  <class class=".section.SectionContainer">
+    <allow interface="zope.container.interfaces.ISimpleReadContainer" />
+    <require permission="schooltool.view"
+             attributes="keys values items __iter__ __len__ has_key" />
+    <require permission="schooltool.edit"
+             interface="zope.container.interfaces.IWriteContainer" />
+  </class>
+
+  <interface
+      interface=".interfaces.ISection"
+      type="zope.app.content.interfaces.IContentType"
+      />
+
+  <class class=".section.Section">
+    <implements interface="schooltool.timetable.interfaces.IOwnTimetables" />
+    <implements interface="schooltool.timetable.interfaces.IBookResources" />
+    <implements interface="schooltool.app.interfaces.IHaveCalendar" />
+
+    <require permission="schooltool.view"
+             interface=".interfaces.ISection" />
+    <require permission="schooltool.view"
+             interface="schooltool.timetable.interfaces.IBookResources" />
+    <require permission="schooltool.view"
+             attributes="__cmp__" />
+    <require permission="schooltool.edit"
+             set_schema=".interfaces.ISection" />
+  </class>
+
+  <adapter
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      factory=".section.SectionInit"
+      name="schooltool.section" />
+
+  <adapter
+      for=".interfaces.ISectionContainer"
+      factory="schooltool.course.browser.section.SectionNameChooser"
+      provides="zope.container.interfaces.INameChooser" />
+
+  <!-- Content adapters -->
+
+  <adapter
+      factory=".course.getCourseContainer" />
+  <adapter
+      factory=".course.getCourseContainerForApp" />
+  <adapter
+      factory=".course.getCourseContainerForTerm" />
+  <adapter
+      factory=".course.getCourseContainerForCourse" />
+  <adapter
+      factory=".course.getSchoolYearForCourse" />
+  <adapter
+      factory=".course.getSchoolYearForCourseContainer" />
+  <adapter
+      factory=".section.getSectionContainer" />
+  <adapter
+      factory=".section.getSchoolYearForSection" />
+  <adapter
+      factory=".section.getSchoolYearForSectionContainer" />
+  <adapter
+      factory=".section.getTermForSection" />
+  <adapter
+      factory=".section.getTermForSectionContainer" />
+  <adapter
+      factory=".section.getCourseContainerForSection" />
+  <adapter
+      factory=".section.getCourseContainerForSectionContainer" />
+
+  <!-- Data consistency -->
+
+  <adapter
+      name="remove_sections_when_term_is_deleted"
+      factory=".section.RemoveSectionsWhenTermIsDeleted" />
+  <adapter
+      name="remove_courses_when_year_is_deleted"
+      factory=".course.RemoveCoursesWhenSchoolYearIsDeleted" />
+  <adapter
+      name="unlink_section_when_deleted"
+      factory=".section.UnlinkSectionWhenDeleted" />
+  <adapter factory=".section.SectionLinkContinuinityValidationSubscriber"
+           name="validate_term_continuinity"/>
+
+</configure>

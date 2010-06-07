@@ -65,10 +65,13 @@ class TestAuthSetUpSubscriber(unittest.TestCase):
 
 
 def test_suite():
+    optionflags = (doctest.ELLIPSIS |
+                   doctest.NORMALIZE_WHITESPACE |
+                   doctest.REPORT_NDIFF)
     return unittest.TestSuite([
         unittest.makeSuite(TestAuthSetUpSubscriber),
-        doctest.DocTestSuite(optionflags=doctest.ELLIPSIS),
-        doctest.DocFileSuite('../security.txt', optionflags=doctest.ELLIPSIS),
+        doctest.DocTestSuite(optionflags=optionflags),
+        doctest.DocFileSuite('../security.txt', optionflags=optionflags),
         ])
 
 

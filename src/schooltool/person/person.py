@@ -30,16 +30,13 @@ from zope.annotation.interfaces import IAttributeAnnotatable
 from zope.container import btree
 from zope.container.contained import Contained
 from zope.component import adapts
-from zope.catalog.interfaces import ICatalog
-from zope.catalog.catalog import Catalog
 from zope.component import getUtility
 
-from zc.catalog.catalogindex import ValueIndex
-
-from schooltool.app.app import getSchoolToolApplication
+from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.app.membership import URIMembership, URIMember, URIGroup
 from schooltool.app.overlay import OverlaidCalendarsProperty
+from schooltool.app.catalog import AttributeCatalog
 from schooltool.person import interfaces
 from schooltool.relationship import RelationshipProperty
 from schooltool.securitypolicy.crowds import Crowd
@@ -50,8 +47,6 @@ from schooltool.person.interfaces import IPersonPreferences
 from schooltool.person.interfaces import IPasswordWriter
 from schooltool.securitypolicy.crowds import OwnerCrowd, AggregateCrowd
 from schooltool.utility.utility import UtilitySetUp
-
-PERSON_CATALOG_KEY = 'schooltool.person'
 
 
 class PersonContainer(btree.BTreeContainer):
@@ -136,16 +131,15 @@ def hash_password(password):
 def personAppCalendarOverlaySubscriber(person, event):
     """Add application calendar to overlays of all new persons.
     """
-    try:
-        app = getSchoolToolApplication()
-        person.overlaid_calendars.add(ISchoolToolCalendar(app))
-    except ValueError:
+    app = ISchoolToolApplication(None, None)
+    if app is None:
         # If we get this we are probably in the initial new-site setup
         # or creating a new manager during startup.  This should be
         # safe to ignore since it will happen very infrequently
         # (perhaps only once) and the manager can easily add the site
         # calendar to his/her overlay in the overlay selection view.
-        pass
+        return
+    person.overlaid_calendars.add(ISchoolToolCalendar(app))
 
 
 from schooltool.app.app import InitBase
@@ -208,14 +202,10 @@ class PasswordWriterCrowd(ConfigurableCrowd):
                 OwnerCrowd(self.context.person).contains(principal))
 
 
-def catalogSetUp(catalog):
-    catalog['__name__'] = ValueIndex('__name__', IPerson)
-    catalog['title'] = ValueIndex('title', IPerson)
+class PersonCatalog(AttributeCatalog):
 
+    version = '1 - replaced catalog utility'
+    interface = IPerson
+    attributes = ('__name__', 'title')
 
-catalogSetUpSubscriber = UtilitySetUp(
-    Catalog, ICatalog, PERSON_CATALOG_KEY, setUp=catalogSetUp)
-
-
-def getPersonContainerCatalog(container):
-    return getUtility(ICatalog, PERSON_CATALOG_KEY)
+getPersonCatalog = PersonCatalog.get

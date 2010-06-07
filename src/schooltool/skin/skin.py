@@ -43,8 +43,6 @@ from schooltool.securitypolicy.interfaces import ICrowd
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.skin.interfaces import IBreadcrumbInfo
 
-from schooltool.app.app import getSchoolToolApplication
-
 
 class IJavaScriptManager(IViewletManager):
     """Provides a viewlet hook for the javascript link entries."""
@@ -141,7 +139,7 @@ class NavigationViewlet(object):
         return ISchoolToolApplication(None)
 
     def appURL(self):
-        return absoluteURL(getSchoolToolApplication(), self.request)
+        return absoluteURL(ISchoolToolApplication(None), self.request)
 
 
 class TopLevelContainerNavigationViewlet(NavigationViewlet):

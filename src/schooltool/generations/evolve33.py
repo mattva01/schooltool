@@ -25,13 +25,10 @@ from zope.app.generations.utility import findObjectsProviding
 from zope.app.publication.zopepublication import ZopePublication
 from zope.component.hooks import getSite, setSite
 from zope.component import getUtility
-from zope.catalog.interfaces import ICatalog
 
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import CatalogSetUpEvent
 from schooltool.contact.interfaces import IContact
-from schooltool.contact.contact import catalogSetUpSubscriber
-from schooltool.contact.contact import CONTACT_CATALOG_KEY
 from schooltool.person.interfaces import IPerson
 
 
@@ -46,10 +43,6 @@ def evolve(context):
         persons = findObjectsProviding(app, IPerson)
         for person in persons:
             contact = IContact(person, None)
-        # regsiter contact catalogs
-        catalogSetUpSubscriber(CatalogSetUpEvent(app))
-        util = getUtility(ICatalog, CONTACT_CATALOG_KEY)
-        util.updateIndexes()
 
     setSite(old_site)
 

@@ -66,9 +66,12 @@ SchoolTool is a possible site:
     >>> verifyObject(ISite, app)
     Traceback (most recent call last):
     ...
-    DoesNotImplement: ...
-    ...
+    DoesNotImplement: An object does not implement interface
+                      <InterfaceClass zope.component.interfaces.ISite>
 
+    >>> from zope.component import provideAdapter
+    >>> from schooltool.app.app import getSchoolToolApplication
+    >>> provideAdapter(getSchoolToolApplication)
 
 The SchoolToolAuthenticationUtility is an IAuthentication utility that
 lives in that site:

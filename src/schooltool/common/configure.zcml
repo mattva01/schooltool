@@ -114,6 +114,7 @@
   <include package="schooltool.export" />
   <include package="schooltool.table" />
   <include package="schooltool.email" />
+  <include package="schooltool.level" />
 
   <adapter
       for="zope.interface.Interface

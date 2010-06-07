@@ -1,0 +1,5 @@
+<form method="post" action=".">
+  <div metal:use-macro="macro:form-label" />
+  <div metal:use-macro="macro:widget-rows" />
+  <div metal:use-macro="macro:form-buttons" />
+</form>

@@ -6,6 +6,7 @@ CHANGES
 ------------------
 
 - Copy data from previous school year (https://launchpad.net/bugs/541673)
+- Introduce minimalistic learning levels
 
 
 1.4.0 (2010-05-21)

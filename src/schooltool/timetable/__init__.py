@@ -135,7 +135,6 @@ from zope.component import adapts, subscribers
 from zope.interface import implementer
 from zope.interface import implements
 from zope.interface import directlyProvides
-
 from zope.annotation.interfaces import IAnnotations
 from zope.location.interfaces import ILocation
 from zope.traversing.api import getPath
@@ -143,10 +142,9 @@ from zope.container.interfaces import INameChooser
 from zope.container.contained import NameChooser
 from zope.app.generations.utility import findObjectsProviding
 
-from schooltool.calendar.simple import ImmutableCalendar
-
+from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolCalendar
-
+from schooltool.calendar.simple import ImmutableCalendar
 from schooltool.timetable.interfaces import ITimetableCalendarEvent
 from schooltool.timetable.interfaces import ITimetable, ITimetableWrite
 from schooltool.timetable.interfaces import ITimetableDay, ITimetableDayWrite
@@ -164,7 +162,6 @@ from schooltool.timetable.interfaces import ITimetableSource
 from schooltool.timetable.interfaces import ITimetableSchema
 from schooltool.timetable.interfaces import Unchanged
 from schooltool.term.interfaces import ITerm
-from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.app import InitBase
 
 from schooltool.common import SchoolToolMessage as _
@@ -673,7 +670,7 @@ class CompositeTimetables(object):
 
 
 def getAllTimetables():
-    app = getSchoolToolApplication(None)
+    app = ISchoolToolApplication(None)
     all_timetables = []
     for ttowner in findObjectsProviding(app, IOwnTimetables):
         timetables = queryAdapter(ttowner, ITimetables, default=None)

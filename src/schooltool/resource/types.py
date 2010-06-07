@@ -29,8 +29,8 @@ from zope.interface import implements
 from zc.table.column import GetterColumn
 from zc.table.interfaces import ISortableColumn
 
+from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.common import SchoolToolMessage as _
-from schooltool.app.app import getSchoolToolApplication
 from schooltool.resource.interfaces import (IResource, IResourceFactoryUtility,
                                             ILocation, IEquipment,
                                             IResourceTypeInformation,
@@ -45,7 +45,7 @@ class ResourceFactoryUtility(object):
         self.interface = IResource
 
     def types(self):
-        app = getSchoolToolApplication()
+        app = ISchoolToolApplication(None)
         types = set()
         for resource in app['resources'].values():
             if self.interface.providedBy(resource):

@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<configure
+    xmlns="http://schooltool.org/securitypolicy"
+    xmlns:zope="http://namespaces.zope.org/zope"
+    i18n_domain="schooltool">
+
+  <allow
+      interface="schooltool.relationship.interfaces.IRelationshipLink"
+      crowds="administration owner"
+      permission="schooltool.view" />
+  <allow
+      interface="schooltool.relationship.interfaces.IRelationshipLink"
+      crowds="administration owner"
+      permission="schooltool.edit" />
+
+</configure>

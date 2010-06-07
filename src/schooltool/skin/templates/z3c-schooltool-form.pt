@@ -10,7 +10,7 @@
   <metal:subform define-macro="subform">
     <div class="viewspace" metal:define-slot="viewspace">
       <metal:label define-slot="label">
-        <h3 metal:define-macro="label"
+        <h3 metal:define-macro="form-label"
             tal:condition="view/label|nothing"
             tal:content="view/label">
           Form Label
@@ -26,7 +26,7 @@
       <metal:header define-slot="header">
         <div class="status"
              tal:condition="view/status"
-             metal:define-macro="header">
+             metal:define-macro="form-header">
           <div class="summary"
                i18n:translate=""
                tal:content="view/status">
@@ -34,7 +34,7 @@
           </div>
           <ul class="errors"
               tal:condition="view/widgets/errors"
-              metal:define-macro="errors">
+              metal:define-macro="form-errors">
             <li tal:repeat="error view/widgets/errors">
               <tal:block condition="error/widget">
                 <span tal:replace="error/widget/label" />:
@@ -103,7 +103,7 @@
       </metal:above-buttons>
     </div>
     <metal:buttons define-slot="buttons">
-      <div metal:define-macro="buttons">
+      <div metal:define-macro="form-buttons">
         <div class="buttons controls"
              metal:define-slot="bottom-buttons">
           <tal:block condition="view/actions|nothing">
