@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/zope">
+
+  <adapter factory=".catalog.getAppCatalogs" />
+
+  <subscriber
+      for="schooltool.app.interfaces.ICatalogStartUpEvent"
+      handler=".main.startSchoolToolCatalogs" />
+
+  <adapter
+      factory=".catalog.PrepareCatalogContainer"
+      name="prepare-catalog-container" />
+
+  <adapter
+      factory=".catalog.ExpiredCatalogCleanup"
+      name="expired-catalog-cleanup" />
+
+  <subscriber handler=".catalog.indexDocSubscriber" />
+  <subscriber handler=".catalog.reindexDocSubscriber" />
+  <subscriber handler=".catalog.unindexDocSubscriber" />
+
+</configure>

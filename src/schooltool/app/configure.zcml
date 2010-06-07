@@ -169,6 +169,9 @@
       for="schooltool.app.interfaces.IApplicationStartUpEvent"
       handler=".main.startSchoolToolPlugins" />
 
+  <!-- Catalog support -->
+  <include file="catalog.zcml" />
+
   <!-- Timetables for content components -->
   <class class="schooltool.app.app.SchoolToolApplication">
     <implements interface="schooltool.timetable.interfaces.IHaveTimetables" />
@@ -185,7 +188,6 @@
   <class class="schooltool.resource.resource.BaseResource">
     <implements interface="schooltool.timetable.interfaces.IHaveTimetables" />
   </class>
-  
 
   <!-- Core and Domain content objects -->
 

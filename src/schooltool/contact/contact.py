@@ -25,18 +25,14 @@ from persistent import Persistent
 from zope.component import adapter
 from zope.interface import implementer
 from zope.interface import implements
-from zope.catalog.interfaces import ICatalog
 from zope.intid.interfaces import IIntIds
 from zope.container.contained import Contained
 from zope.container.btree import BTreeContainer
 from zope.component import getUtility
 
-from zc.catalog.catalogindex import ValueIndex
-from zc.catalog.extentcatalog import Catalog
-from zc.catalog.extentcatalog import FilterExtent
-
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.app import InitBase, StartUpBase
+from schooltool.app.catalog import AttributeCatalog
 from schooltool.utility.utility import UtilitySetUp
 from schooltool.contact.interfaces import IContactPersonInfo
 from schooltool.contact.interfaces import IContactable
@@ -49,15 +45,12 @@ from schooltool.relationship.relationship import RelationshipProperty
 from schooltool.relationship.relationship import RelationshipSchema
 from schooltool.securitypolicy import crowds
 from schooltool.table.catalog import ConvertingIndex
-from schooltool.table.catalog import FilterImplementing
 from schooltool.table.table import simple_form_key
 from schooltool.person.interfaces import IPerson
 from schooltool.course.section import PersonInstructorsCrowd
 
 from schooltool.common import SchoolToolMessage as _
 
-
-CONTACT_CATALOG_KEY = 'schooltool.contact'
 
 URIContactRelationship = URIObject('http://schooltool.org/ns/contact',
                                    'Contact relationship',
@@ -186,22 +179,17 @@ def getContactFormKey(contact):
     return 'contacts.%s%x' % (simple_form_key(contact), doc_id)
 
 
-def catalogFactory():
-    return Catalog(FilterExtent(FilterImplementing(IContact)))
+class ContactCatalog(AttributeCatalog):
+    version = '1 - replaced catalog utility'
+    interface = IContact
+    attributes = ('first_name', 'last_name')
+
+    def setIndexes(self, catalog):
+        super(ContactCatalog, self).setIndexes(catalog)
+        catalog['form_keys'] = ConvertingIndex(converter=IUniqueFormKey)
 
 
-def catalogSetUp(catalog):
-    catalog['form_keys'] = ConvertingIndex(converter=IUniqueFormKey)
-    catalog['first_name'] = ValueIndex('first_name')
-    catalog['last_name'] = ValueIndex('last_name')
-
-
-catalogSetUpSubscriber = UtilitySetUp(
-    catalogFactory, ICatalog, CONTACT_CATALOG_KEY, setUp=catalogSetUp)
-
-
-def getContactCatalog(container):
-    return getUtility(ICatalog, CONTACT_CATALOG_KEY)
+getContactCatalog = ContactCatalog.get
 
 
 class ContactPersonInstructorsCrowd(PersonInstructorsCrowd):
@@ -218,4 +206,3 @@ class ContactPersonInstructorsCrowd(PersonInstructorsCrowd):
                 if user in section.instructors:
                     return True
         return False
-

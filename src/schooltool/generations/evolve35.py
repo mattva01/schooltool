@@ -1,6 +1,6 @@
 #
 # SchoolTool - common information systems platform for school administration
-# Copyright (c) 2009 Shuttleworth Foundation
+# Copyright (c) 2010 Shuttleworth Foundation
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,19 +17,25 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Upgrade SchoolTool to generation 33.
+Upgrade SchoolTool to generation 35.
 
-Evolution script to create contact information for existing persons.
+Evolution script to unregister old catalog utilities.
 """
 from zope.app.generations.utility import findObjectsProviding
 from zope.app.publication.zopepublication import ZopePublication
+from zope.component import queryUtility
 from zope.component.hooks import getSite, setSite
-from zope.component import getUtility
+from zope.traversing.api import traverse
 
 from schooltool.app.interfaces import ISchoolToolApplication
-from schooltool.app.interfaces import CatalogSetUpEvent
-from schooltool.contact.interfaces import IContact
-from schooltool.person.interfaces import IPerson
+from zope.catalog.interfaces import ICatalog
+
+
+CATALOG_KEYS = [
+    'schooltool.basicperson',
+    'schooltool.contact',
+    'schooltool.person',
+    ]
 
 
 def evolve(context):
@@ -39,10 +45,15 @@ def evolve(context):
     apps = findObjectsProviding(root, ISchoolToolApplication)
     for app in apps:
         setSite(app)
-        # vivify person contact information
-        persons = findObjectsProviding(app, IPerson)
-        for person in persons:
-            contact = IContact(person, None)
+        sm = app.getSiteManager()
+        default = traverse(app, '++etc++site/default')
+
+        for key in CATALOG_KEYS:
+            util = queryUtility(ICatalog, name=key, default=None)
+            if util is None:
+                continue
+            name = util.__name__
+            sm.unregisterUtility(util, ICatalog, key)
+            del default[name]
 
     setSite(old_site)
-

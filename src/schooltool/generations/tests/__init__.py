@@ -48,6 +48,7 @@ class StupidKeyReference(object):
 
 
 def catalogSetUp(test):
+    """This code is deprecated, to be used only by old evolution tests."""
     setup.placefulSetUp()
     setup.setUpTraversal()
     setUpAnnotations()
@@ -91,5 +92,6 @@ def catalogSetUp(test):
                    [IIntIdRemovedEvent])
 
 def catalogTearDown(test):
+    """This code is deprecated, to be used only by old evolution tests."""
     setup.placefulTearDown()
     _d.clear()

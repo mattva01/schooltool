@@ -32,7 +32,6 @@ from zope.security.proxy import removeSecurityProxy
 from zope.traversing.browser.absoluteurl import absoluteURL
 
 from schooltool.app.interfaces import ISchoolToolApplication
-from schooltool.app.app import getSchoolToolApplication
 from schooltool.calendar.utils import parse_date, parse_time
 from schooltool.course.interfaces import ISection
 from schooltool.term.interfaces import ITerm
@@ -369,7 +368,7 @@ class TimetableConflictMixin(object):
 
         If there are no timetable schemas, None is returned.
         """
-        app = getSchoolToolApplication()
+        app = ISchoolToolApplication(None)
         ttschemas = ITimetableSchemaContainer(app, None)
         if ttschemas is None:
             return None
