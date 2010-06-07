@@ -1,0 +1,45 @@
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title" i18n:translate="">Teaching Levels</title>
+</head>
+<body>
+<h1 metal:fill-slot="content-header" i18n:translate="">Teaching Levels</h1>
+
+<metal:block metal:fill-slot="body">
+
+  <p i18n:translate="">Levels (student learning years) taught in
+    <tal:block i18n:name="schoolyear" tal:replace="structure view/school_year/@@title" /></p>
+
+  <tal:block condition="view/levels">
+    <form method="post" action=".">
+      <input type="hidden" name="form-submitted" value="yes" />
+      <div tal:repeat="item view/levels">
+        <select onchange="this.form.submit()"
+                tal:attributes="name string:pos.${item/form_key}">
+          <tal:block repeat="number item/positions">
+            <option tal:attributes="value number/value;
+                                    selected number/selected"
+          	  tal:content="number/value" />
+          </tal:block>
+        </select>
+
+        <input type="checkbox" name="delete:list"
+               tal:attributes="value item/form_key" />
+
+        <a tal:content="item/level/title"
+           tal:attributes="href string:${item/level/@@absolute_url}/edit.html">Level</a>
+
+      </div>
+      <tal:block metal:use-macro="view/@@standard_macros/apply-button" />
+      <tal:block metal:use-macro="view/@@standard_macros/delete-button" />
+
+    </form>
+  </tal:block>
+
+  <div class='info-block'>
+    <tal:block content="structure view/addform" />
+  </div>
+
+</metal:block>
+</body>
+</html>

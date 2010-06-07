@@ -50,6 +50,7 @@ def doctest_described_interfaces():
         ...         discriminator, [action.title for action in described])
         ('schooltool.edit', <...ISchoolToolApplication>):
             [u'Activate current school year',
+             ...
              u'Create/Delete an external contact',
         ...
              u'Modify']
@@ -101,11 +102,13 @@ def doctest_described_interfaces():
         - ISchoolToolApplication, schooltool.edit
         - ---------------------------------------
         -  School Years / Activate current school year
+        -  Levels / Add/Remove
         -  Contacts / Create/Delete an external contact
         -  School Years / Create/Delete
         -  Demographics / Manage
         -  SchoolTool application / Manage school settings and configuration
         -  Contacts / Modify an external contact
+        -  Levels / Modify/Rename
         -  School Years / Modify
         -
         - ISchoolToolApplication, schooltool.view
