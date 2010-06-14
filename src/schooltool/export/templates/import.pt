@@ -17,14 +17,14 @@
       <div class="info" tal:condition="view/success">
         <p tal:repeat="msg view/success" tal:content="msg" />
       </div>
-      <div class="error" tal:condition="view/errors"
-           tal:repeat="err view/displayErrors" tal:content="err" />
-
       <form method="POST" enctype="multipart/form-data" class="standalone"
         tal:attributes="action request/URL">
         <h3 i18n:translate="">
           Import Data
         </h3>
+      <p class="error" tal:condition="view/errors"
+         tal:repeat="err view/displayErrors" tal:content="err" />
+
         <p i18n:translate="">
           In addition to entering data through SchoolTool's web interface, you
           can also import data from a spreadsheet using this template:

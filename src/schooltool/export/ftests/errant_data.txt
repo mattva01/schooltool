@@ -12,14 +12,14 @@ This file has examples of bad data for the School Years sheet:
     ...     'application/excel',
     ...     'sample_data.xls')
     >>> browser.getControl('Submit').click()
-    >>> browser.printQuery("//div[@class='error']")
-    <div class="error">School Years C2 has no date in it</div>
-    <div class="error">School Years D2 has no date in it</div>
-    <div class="error">School Years D3 end date cannot be before start date</div>
-    <div class="error">School Years C5 start date overlaps another year</div>
-    <div class="error">School Years D6 end date overlaps another year</div>
-    <div class="error">School Years A7 not unicode or ascii string</div>
-    <div class="error">School Years B7 not unicode or ascii string</div>
+    >>> browser.printQuery("//p[@class='error']")
+    <p class="error">School Years C2 has no date in it</p>
+    <p class="error">School Years D2 has no date in it</p>
+    <p class="error">School Years D3 end date cannot be before start date</p>
+    <p class="error">School Years C5 start date overlaps another year</p>
+    <p class="error">School Years D6 end date overlaps another year</p>
+    <p class="error">School Years A7 not unicode or ascii string</p>
+    <p class="error">School Years B7 not unicode or ascii string</p>
 
 This file has examples of bad data for the Terms sheet:
 
@@ -31,19 +31,19 @@ This file has examples of bad data for the Terms sheet:
     ...     'application/excel',
     ...     'sample_data.xls')
     >>> browser.getControl('Submit').click()
-    >>> browser.printQuery("//div[@class='error']")
-    <div class="error">Terms B2 missing required text</div>
-    <div class="error">Terms C2 missing required text</div>
-    <div class="error">Terms D2 has no date in it</div>
-    <div class="error">Terms E2 has no date in it</div>
-    <div class="error">Terms A3 not unicode or ascii string</div>
-    <div class="error">Terms A4 invalid school year</div>
-    <div class="error">Terms E5 end date cannot be before start date</div>
-    <div class="error">Terms D6 start date before start of school year</div>
-    <div class="error">Terms E7 end date after end of school year</div>
-    <div class="error">Terms D10 start date overlaps another term</div>
-    <div class="error">Terms E11 end date overlaps another term</div>
-    <div class="error">Terms A15 has no date in it</div>
-    <div class="error">Terms B16 has no date in it</div>
-    <div class="error">Terms E17 end date cannot be before start date</div>
+    >>> browser.printQuery("//p[@class='error']")
+    <p class="error">Terms B2 missing required text</p>
+    <p class="error">Terms C2 missing required text</p>
+    <p class="error">Terms D2 has no date in it</p>
+    <p class="error">Terms E2 has no date in it</p>
+    <p class="error">Terms A3 not unicode or ascii string</p>
+    <p class="error">Terms A4 invalid school year</p>
+    <p class="error">Terms E5 end date cannot be before start date</p>
+    <p class="error">Terms D6 start date before start of school year</p>
+    <p class="error">Terms E7 end date after end of school year</p>
+    <p class="error">Terms D10 start date overlaps another term</p>
+    <p class="error">Terms E11 end date overlaps another term</p>
+    <p class="error">Terms A15 has no date in it</p>
+    <p class="error">Terms B16 has no date in it</p>
+    <p class="error">Terms E17 end date cannot be before start date</p>
 
