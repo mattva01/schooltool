@@ -21,3 +21,29 @@ This file has examples of bad data for the School Years sheet:
     <div class="error">School Years A7 not unicode or ascii string</div>
     <div class="error">School Years B7 not unicode or ascii string</div>
 
+This file has examples of bad data for the Terms sheet:
+
+    >>> browser.getLink('Manage').click()
+    >>> browser.getLink('XLS Import').click()
+    >>> import pkg_resources
+    >>> browser.getControl('XLS File').add_file(
+    ...     pkg_resources.resource_stream('schooltool.export.ftests', 'errant_terms.xls'),
+    ...     'application/excel',
+    ...     'sample_data.xls')
+    >>> browser.getControl('Submit').click()
+    >>> browser.printQuery("//div[@class='error']")
+    <div class="error">Terms B2 missing required text</div>
+    <div class="error">Terms C2 missing required text</div>
+    <div class="error">Terms D2 has no date in it</div>
+    <div class="error">Terms E2 has no date in it</div>
+    <div class="error">Terms A3 not unicode or ascii string</div>
+    <div class="error">Terms A4 invalid school year</div>
+    <div class="error">Terms E5 end date cannot be before start date</div>
+    <div class="error">Terms D6 start date before start of school year</div>
+    <div class="error">Terms E7 end date after end of school year</div>
+    <div class="error">Terms D10 start date overlaps another term</div>
+    <div class="error">Terms E11 end date overlaps another term</div>
+    <div class="error">Terms A15 has no date in it</div>
+    <div class="error">Terms B16 has no date in it</div>
+    <div class="error">Terms E17 end date cannot be before start date</div>
+

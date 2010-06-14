@@ -63,10 +63,16 @@ from schooltool.common import SchoolToolMessage as _
 
 
 ERROR_NOT_UNICODE_OR_ASCII = _('not unicode or ascii string')
+ERROR_MISSING_REQUIRED_TEXT = _('missing required text')
 ERROR_NO_DATE = _('has no date in it')
 ERROR_END_BEFORE_START = _('end date cannot be before start date')
 ERROR_START_OVERLAP = _('start date overlaps another year')
 ERROR_END_OVERLAP = _('end date overlaps another year')
+ERROR_INVALID_SCHOOL_YEAR = _('invalid school year')
+ERROR_START_BEFORE_YEAR_START = _('start date before start of school year')
+ERROR_END_AFTER_YEAR_END = _('end date after end of school year')
+ERROR_START_OVERLAP_TERM = _('start date overlaps another term')
+ERROR_END_OVERLAP_TERM = _('end date overlaps another term')
 
 
 no_date = object()
@@ -93,15 +99,24 @@ class ImporterBase(object):
                                            row,
                                            message))
 
-    def getTextFromCell(self, sheet, row, col, default=no_data):
+    def getTextFromCell(self, sheet, row, col, default=u''):
         value = sheet.cell_value(rowx=row, colx=col)
         if isinstance(value, str):
             try:
                 value = unicode(value)
             except UnicodeError:
                 self.error(col, row + 1, ERROR_NOT_UNICODE_OR_ASCII)
+                return default
         elif not isinstance(value, unicode):
             self.error(col, row + 1, ERROR_NOT_UNICODE_OR_ASCII)
+            return default
+        return value
+
+    def getRequiredTextFromCell(self, sheet, row, col):
+        num_errors = len(self.errors)
+        value = self.getTextFromCell(sheet, row, col)
+        if num_errors == len(self.errors) and not value:
+            self.error(col, row + 1, ERROR_MISSING_REQUIRED_TEXT)
         return value
 
     def getDateFromCell(self, sheet, row, col, default=no_date):
@@ -112,7 +127,7 @@ class ImporterBase(object):
                 return default
             else:
                 self.error(col, row + 1, ERROR_NO_DATE)
-                return datetime.datetime.utcnow().date()
+                return None
         return datetime.datetime(*dt).date()
 
     @property
@@ -162,8 +177,8 @@ class SchoolYearImporter(ImporterBase):
         for row in range(1, sh.nrows):
             num_errors = len(self.errors)
             data = {}
-            data['title'] = self.getTextFromCell(sh, row, 0)
-            data['__name__'] = self.getTextFromCell(sh, row, 1)
+            data['__name__'] = self.getRequiredTextFromCell(sh, row, 0)
+            data['title'] = self.getRequiredTextFromCell(sh, row, 1)
             data['first'] = self.getDateFromCell(sh, row, 2)
             data['last'] = self.getDateFromCell(sh, row, 3)
             if data['last'] < data['first']:
@@ -204,30 +219,73 @@ class TermImporter(ImporterBase):
             term.__name__ = SimpleNameChooser(sy).chooseName('', term)
         sy[term.__name__] = term
 
+    def testBeforeYearStart(self, sy, date):
+        return date < ISchoolYearContainer(self.context)[sy].first
+
+    def testAfterYearEnd(self, sy, date):
+        return date > ISchoolYearContainer(self.context)[sy].last
+
+    def testOverlap(self, sy, name, date):
+        for trm in ISchoolYearContainer(self.context)[sy].values():
+            if trm.__name__ == name:
+                continue
+            if date >= trm.first and date <= trm.last:
+                return True
+        return False
+
     def process(self):
         sh = self.sheet
 
         for row in range(1, sh.nrows):
             if sh.cell_value(rowx=row, colx=0) == '':
                 break
+            num_errors = len(self.errors)
             data = {}
-            data['school_year'] = sh.cell_value(rowx=row, colx=0)
-            data['__name__'] = sh.cell_value(rowx=row, colx=1)
-            data['title'] = sh.cell_value(rowx=row, colx=2)
+            data['school_year'] = self.getRequiredTextFromCell(sh, row, 0)
+            data['__name__'] = self.getRequiredTextFromCell(sh, row, 1)
+            data['title'] = self.getRequiredTextFromCell(sh, row, 2)
             data['first'] = self.getDateFromCell(sh, row, 3)
             data['last'] = self.getDateFromCell(sh, row, 4)
 
-            term = self.createTerm(data)
-            self.addTerm(term, data)
+            if not data['school_year']:
+                continue
+            elif data['school_year'] not in ISchoolYearContainer(self.context):
+                self.error(0, row + 1, ERROR_INVALID_SCHOOL_YEAR)
+                continue
+
+            if not data['first'] or not data['last']:
+                continue
+            elif data['last'] < data['first']:
+                self.error(4, row + 1, ERROR_END_BEFORE_START)
+            elif self.testBeforeYearStart(data['school_year'], data['first']):
+                self.error(3, row + 1, ERROR_START_BEFORE_YEAR_START)
+            elif self.testAfterYearEnd(data['school_year'], data['last']):
+                self.error(4, row + 1, ERROR_END_AFTER_YEAR_END)
+            elif self.testOverlap(data['school_year'], data['__name__'],
+                                  data['first']):
+                self.error(3, row + 1, ERROR_START_OVERLAP_TERM)
+            elif self.testOverlap(data['school_year'], data['__name__'],
+                                  data['last']):
+                self.error(4, row + 1, ERROR_END_OVERLAP_TERM)
+
+            if num_errors == len(self.errors):
+                term = self.createTerm(data)
+                self.addTerm(term, data)
 
         row += 1
         if self.getCellValue(sh, row, 0, '') == 'Holidays':
-            row += 1
             for row in range(row + 1, sh.nrows):
                 if sh.cell_value(rowx=row, colx=0) == '':
                     break
-                holiday_region = DateRange(self.getDateFromCell(sh, row, 0),
-                                           self.getDateFromCell(sh, row, 1))
+                start = self.getDateFromCell(sh, row, 0)
+                end = self.getDateFromCell(sh, row, 1)
+                if not start or not end:
+                    continue
+                elif end < start:
+                    self.error(4, row + 1, ERROR_END_BEFORE_START)
+                    continue
+
+                holiday_region = DateRange(start, end)
                 for day in holiday_region:
                     for sy in ISchoolYearContainer(self.context).values():
                         for term in sy.values():
@@ -766,5 +824,5 @@ class MegaImporter(BrowserView):
             sp.rollback()
 
     def displayErrors(self):
-        return self.errors[:10]
+        return self.errors[:15]
 
