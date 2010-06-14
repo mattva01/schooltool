@@ -166,8 +166,10 @@ class SchoolYearImporter(ImporterBase):
             sy.__name__ = SimpleNameChooser(syc).chooseName('', sy)
         syc[sy.__name__] = sy
 
-    def testOverlap(self, date):
+    def testOverlap(self, name, date):
         for sy in ISchoolYearContainer(self.context).values():
+            if name == sy.__name__:
+                continue
             if date >= sy.first and date <= sy.last:
                 return True
         return False
@@ -183,9 +185,9 @@ class SchoolYearImporter(ImporterBase):
             data['last'] = self.getDateFromCell(sh, row, 3)
             if data['last'] < data['first']:
                 self.error(3, row + 1, ERROR_END_BEFORE_START)
-            elif self.testOverlap(data['first']):
+            elif self.testOverlap(data['__name__'], data['first']):
                 self.error(2, row + 1, ERROR_START_OVERLAP)
-            elif self.testOverlap(data['last']):
+            elif self.testOverlap(data['__name__'], data['last']):
                 self.error(3, row + 1, ERROR_END_OVERLAP)
             if num_errors == len(self.errors):
                 sy = self.createSchoolYear(data)
