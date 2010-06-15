@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-04-29 02:21+0300\n"
-"PO-Revision-Date: 2010-04-29 00:44+0000\n"
+"POT-Creation-Date: 2010-05-21 16:53+0300\n"
+"PO-Revision-Date: 2010-05-23 04:08+0000\n"
 "Last-Translator: missthom <thom43th.dhtl@gmail.com>\n"
 "Language-Team: Vietnamese <vi@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-04-30 03:47+0000\n"
+"X-Launchpad-Export-Date: 2010-05-24 03:42+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: /src/schooltool/app/app.py:201
@@ -2217,10 +2217,6 @@ msgstr "Nhóm"
 msgid "Advisor"
 msgstr "Người tư vấn"
 
-#: /src/schooltool/basicperson/browser/person.py:68
-msgid "Confirm"
-msgstr "Xác nhận"
-
 #: /src/schooltool/basicperson/browser/person.py:104
 msgid "This username is already in use!"
 msgstr "Tên người sử dụng đã sử dụng"
@@ -2453,6 +2449,18 @@ msgstr "Bạn có muốn xóa các hạng mục đó không?"
 #: /src/schooltool/timetable/browser/templates/timetable-container-delete.pt:16
 msgid "You have not selected any items."
 msgstr "Bạn không có lựa chọn nào."
+
+#: /src/schooltool/contact/browser/templates/contacts_delete.pt:34
+#: /src/schooltool/email/browser/templates/email_delete.pt:31
+#: /src/schooltool/person/browser/person_container_delete.pt:35
+#: /src/schooltool/resource/browser/container_delete.pt:27
+#: /src/schooltool/schoolyear/browser/templates/term-delete.pt:27
+#: /src/schooltool/skin/templates/container_delete.pt:32
+#: /src/schooltool/term/browser/templates/term-container-delete.pt:29
+#: /src/schooltool/timetable/browser/templates/schooltt-delete.pt:29
+#: /src/schooltool/timetable/browser/templates/timetable-container-delete.pt:27
+msgid "Confirm"
+msgstr "Xác nhận"
 
 #: /src/schooltool/contact/browser/templates/filter.pt:21
 #: /src/schooltool/person/browser/person_filter.pt:11
@@ -4748,11 +4756,7 @@ msgstr "Có"
 msgid "No"
 msgstr "Không"
 
-#: /src/schooltool/widget/password.py:39
-msgid "Confirm password"
-msgstr "Xác nhận mật khẩu"
-
-#: /src/schooltool/widget/password.py:56
+#: /src/schooltool/widget/password.py:55
 msgid "Supplied passwords are not identical"
 msgstr "Mật khẩu cung cấp không trùng"
 
@@ -5253,7 +5257,12 @@ msgstr "Trường Danh sách lựa chọn mới"
 #: /src/schooltool/basicperson/browser/csvimport.py:85
 #: /src/schooltool/basicperson/browser/person.py:114
 msgid "Usernames cannot contain non-ascii characters"
-msgstr ""
+msgstr "Tên không bao gồm các ký tự không có trong bảng mã ascci"
+
+#: /src/schooltool/basicperson/browser/person.py:68
+#: /src/schooltool/widget/password.py:39
+msgid "Confirm password"
+msgstr "Xác nhận mật khẩu"
 
 #: /src/schooltool/basicperson/browser/templates/demographics-view.pt:4
 #: /src/schooltool/basicperson/browser/templates/demographics-view.pt:7
@@ -5279,7 +5288,7 @@ msgstr "ID riêng của Trường Mô tả"
 
 #: /src/schooltool/basicperson/security.py:66
 msgid "Advisors of a person."
-msgstr ""
+msgstr "Các cố vấn của thành viên"
 
 #: /src/schooltool/basicperson/security.zcml:26
 msgid "Create, delete demographics fields and change their order."
@@ -5378,7 +5387,7 @@ msgstr "Gửi"
 #: /src/schooltool/contact/browser/contact.py:409
 #: /src/schooltool/email/browser/email.py:509
 msgid "There were some errors."
-msgstr ""
+msgstr "Có một số lỗi."
 
 #: /src/schooltool/contact/browser/relationship.py:75
 #: /src/schooltool/contact/interfaces.py:101
@@ -5408,30 +5417,6 @@ msgstr "${relationship} của ${person}"
 msgid "Contact of ${person}"
 msgstr "Địa chỉ của ${person}"
 
-#. Default: "Delete"
-#: /src/schooltool/contact/browser/templates/contacts_delete.pt:34
-#: /src/schooltool/course/browser/templates/course_container.pt:40
-#: /src/schooltool/course/browser/templates/section_container.pt:93
-#: /src/schooltool/demographics/browser/search.pt:35
-#: /src/schooltool/demographics/browser/table.pt:28
-#: /src/schooltool/email/browser/templates/email_container.pt:48
-#: /src/schooltool/email/browser/templates/email_delete.pt:31
-#: /src/schooltool/person/browser/person_container_delete.pt:35
-#: /src/schooltool/resource/browser/container_delete.pt:27
-#: /src/schooltool/schoolyear/browser/templates/schoolyear.pt:42
-#: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:34
-#: /src/schooltool/schoolyear/browser/templates/term-delete.pt:27
-#: /src/schooltool/skin/templates/container.pt:42
-#: /src/schooltool/skin/templates/container_delete.pt:32
-#: /src/schooltool/skin/templates/table_container.pt:33
-#: /src/schooltool/skin/templates/view_macros.pt:194
-#: /src/schooltool/term/browser/templates/term-container-delete.pt:29
-#: /src/schooltool/timetable/browser/templates/schooltt-delete.pt:29
-#: /src/schooltool/timetable/browser/templates/timetable-container-delete.pt:27
-#: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:29
-msgid "delete-button"
-msgstr "Xoá"
-
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:43
 msgid "Create contact"
 msgstr "Tạo địa chỉ"
@@ -5449,6 +5434,8 @@ msgid ""
 "You don't have an email address set. Ask your administrator to set your "
 "email address in your contact information."
 msgstr ""
+"Nếu bạn không có địa chỉ email. Hãy hỏi người quản trị để thiết lập email "
+"trong thông tin danh bạ của bạn"
 
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:8
 msgid "Contact information for ${person}"
@@ -5726,6 +5713,21 @@ msgstr ""
 "sở dữ liệu, các khoá họctồn tại sẽ đưọc cập nhật. ID của khoá học sẽ được "
 "đứng trước khi phát hiện ra khoá học đó vừa được cập nhật."
 
+#. Default: "Delete"
+#: /src/schooltool/course/browser/templates/course_container.pt:40
+#: /src/schooltool/course/browser/templates/section_container.pt:93
+#: /src/schooltool/demographics/browser/search.pt:35
+#: /src/schooltool/demographics/browser/table.pt:28
+#: /src/schooltool/email/browser/templates/email_container.pt:48
+#: /src/schooltool/schoolyear/browser/templates/schoolyear.pt:42
+#: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:34
+#: /src/schooltool/skin/templates/container.pt:42
+#: /src/schooltool/skin/templates/table_container.pt:33
+#: /src/schooltool/skin/templates/view_macros.pt:194
+#: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:29
+msgid "delete-button"
+msgstr "Xoá"
+
 #: /src/schooltool/course/browser/templates/link_section.pt:24
 msgid "Link ${section}, ${term} with a section in ${target_term}"
 msgstr ""
@@ -5930,7 +5932,7 @@ msgstr "Trạng thái hiện tại của Dịch vụ Schooltool Email"
 #: /src/schooltool/email/browser/email.py:101
 #: /src/schooltool/email/interfaces.py:87
 msgid "Enable"
-msgstr ""
+msgstr "Bật"
 
 #: /src/schooltool/email/browser/email.py:102
 #: /src/schooltool/email/interfaces.py:88
@@ -5945,7 +5947,7 @@ msgstr "Tên máy"
 #: /src/schooltool/email/browser/email.py:108
 #: /src/schooltool/email/interfaces.py:93
 msgid "SMTP server hostname. Required if the service is enabled."
-msgstr ""
+msgstr "Tên máy chủ SMTP. Yêu thiết nếu dịch vụ đã được kích hoạt"
 
 #: /src/schooltool/email/browser/email.py:112
 #: /src/schooltool/email/interfaces.py:97
@@ -6000,11 +6002,11 @@ msgstr "Sử dụng kết nói TLS"
 
 #: /src/schooltool/email/browser/email.py:147
 msgid "New passwords don't match"
-msgstr ""
+msgstr "Mật khẩu mới không trùng khớp"
 
 #: /src/schooltool/email/browser/email.py:152
 msgid "Hostname is required for enabling the service"
-msgstr ""
+msgstr "Tên máy chủ cần thiết để kích hoạt dịch vụ"
 
 #: /src/schooltool/email/browser/email.py:186
 msgid "Change Email Settings"
@@ -6167,7 +6169,7 @@ msgstr "Máy chủ ${from_address} không chấp nhận địa chỉ mail: ${add
 
 #: /src/schooltool/email/mail.py:59
 msgid "The server (${info}) replied that the message data was malformed"
-msgstr ""
+msgstr "Máy chủ (${info})  trả lời rằng thông báo đã được mã hóa"
 
 #: /src/schooltool/export/configure.zcml:6
 msgid "XLS Import"
@@ -6236,6 +6238,10 @@ msgid ""
 "Chess Club\n"
 "Sports Club, After-school sports club, <em>text after a second comma</em>\n"
 msgstr ""
+"\n"
+"LUG, Linux Users Group\n"
+"Chess Club\n"
+"Sports Club, After-school sports club\n"
 
 #: /src/schooltool/group/browser/group-member-csvimport.pt:4
 msgid "Upload SchoolTool group members as CSV"
@@ -6303,6 +6309,10 @@ msgid ""
 "jbjones, Jim Bob Jones, r2m45J\n"
 "howard, Howard\n"
 msgstr ""
+"\n"
+"jones, Jimmy Jones\n"
+"jbjones, Jim Bob Jones, r2m45J\n"
+"howard, Howard\n"
 
 #: /src/schooltool/person/security.zcml:77
 msgid "Users"
@@ -6625,7 +6635,7 @@ msgstr "Thay đổi"
 
 #: /src/schooltool/timetable/browser/templates/timetableschema.pt:33
 msgid "Homeroom"
-msgstr "Phòng Chủ"
+msgstr "Phòng máy chủ"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:733
 msgid ""
@@ -6660,3 +6670,6 @@ msgstr "Thay đổi kế hoạch"
 #~ msgstr ""
 #~ "<a href=\"#\" onclick=\"$('#more_overlays').toggle();return false;\">Thêm "
 #~ "nữa...</a>"
+
+#~ msgid "confirm password"
+#~ msgstr "Xác nhận mật khẩu"

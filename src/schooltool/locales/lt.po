@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-04-29 02:21+0300\n"
-"PO-Revision-Date: 2010-05-17 14:34+0000\n"
+"POT-Creation-Date: 2010-05-21 16:53+0300\n"
+"PO-Revision-Date: 2010-05-21 15:22+0000\n"
 "Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-05-18 05:00+0000\n"
+"X-Launchpad-Export-Date: 2010-05-22 03:50+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -1546,11 +1546,6 @@ msgstr "Grupė"
 msgid "Advisor"
 msgstr "Auklėtojas"
 
-#: /src/schooltool/basicperson/browser/person.py:68
-#: /src/schooltool/widget/password.py:39
-msgid "Confirm password"
-msgstr "Patvirtinkite slaptažodį"
-
 #: /src/schooltool/basicperson/browser/person.py:149
 msgid "Add new person"
 msgstr "Sukurti naują asmenį"
@@ -1678,18 +1673,6 @@ msgstr "Tikrai norite pašalinti pažymėtus elementus?"
 msgid "You have not selected any items."
 msgstr "Nepažymėtas joks elementas"
 
-#: /src/schooltool/contact/browser/templates/contacts_delete.pt:34
-#: /src/schooltool/email/browser/templates/email_delete.pt:31
-#: /src/schooltool/person/browser/person_container_delete.pt:35
-#: /src/schooltool/resource/browser/container_delete.pt:27
-#: /src/schooltool/schoolyear/browser/templates/term-delete.pt:27
-#: /src/schooltool/skin/templates/container_delete.pt:32
-#: /src/schooltool/term/browser/templates/term-container-delete.pt:29
-#: /src/schooltool/timetable/browser/templates/schooltt-delete.pt:29
-#: /src/schooltool/timetable/browser/templates/timetable-container-delete.pt:27
-msgid "Confirm"
-msgstr "Patvirtinti"
-
 #: /src/schooltool/contact/browser/templates/filter.pt:21
 #: /src/schooltool/person/browser/person_filter.pt:11
 #: /src/schooltool/resource/browser/resource_filter.pt:37
@@ -1800,6 +1783,21 @@ msgstr "nuotrauka"
 #: /src/schooltool/course/browser/templates/course.pt:71
 msgid "students"
 msgstr "mokiniai"
+
+#. Default: "Delete"
+#: /src/schooltool/course/browser/templates/course_container.pt:40
+#: /src/schooltool/course/browser/templates/section_container.pt:93
+#: /src/schooltool/demographics/browser/search.pt:35
+#: /src/schooltool/demographics/browser/table.pt:28
+#: /src/schooltool/email/browser/templates/email_container.pt:48
+#: /src/schooltool/schoolyear/browser/templates/schoolyear.pt:42
+#: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:34
+#: /src/schooltool/skin/templates/container.pt:42
+#: /src/schooltool/skin/templates/table_container.pt:33
+#: /src/schooltool/skin/templates/view_macros.pt:194
+#: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:29
+msgid "delete-button"
+msgstr "Šalinti"
 
 #: /src/schooltool/course/browser/templates/course_edit.pt:22
 #: /src/schooltool/course/browser/templates/section_edit.pt:23
@@ -4010,6 +4008,11 @@ msgstr "Pridėti naują lauką"
 msgid "Change information for ${field_title}"
 msgstr "Pakeisti ${field_title} informaciją"
 
+#: /src/schooltool/basicperson/browser/person.py:68
+#: /src/schooltool/widget/password.py:39
+msgid "Confirm password"
+msgstr "Patvirtinkite slaptažodį"
+
 #: /src/schooltool/basicperson/browser/person.py:104
 msgid "This username is already in use!"
 msgstr "Šis naudotojo vardas jau užimtas!"
@@ -4261,6 +4264,18 @@ msgstr "${person} ${relationship}"
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:22
 msgid "Contact of ${person}"
 msgstr "${person} kontaktas"
+
+#: /src/schooltool/contact/browser/templates/contacts_delete.pt:34
+#: /src/schooltool/email/browser/templates/email_delete.pt:31
+#: /src/schooltool/person/browser/person_container_delete.pt:35
+#: /src/schooltool/resource/browser/container_delete.pt:27
+#: /src/schooltool/schoolyear/browser/templates/term-delete.pt:27
+#: /src/schooltool/skin/templates/container_delete.pt:32
+#: /src/schooltool/term/browser/templates/term-container-delete.pt:29
+#: /src/schooltool/timetable/browser/templates/schooltt-delete.pt:29
+#: /src/schooltool/timetable/browser/templates/timetable-container-delete.pt:27
+msgid "Confirm"
+msgstr "Patvirtinti"
 
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:43
 msgid "Create contact"
@@ -4606,21 +4621,6 @@ msgstr ""
 #: /src/schooltool/skin/templates/table_container.pt:28
 msgid "Showing ${count} of ${total} items"
 msgstr ""
-
-#: /src/schooltool/course/browser/templates/course_container.pt:40
-#: /src/schooltool/course/browser/templates/section_container.pt:93
-#: /src/schooltool/demographics/browser/search.pt:35
-#: /src/schooltool/demographics/browser/table.pt:28
-#: /src/schooltool/email/browser/templates/email_container.pt:48
-#: /src/schooltool/schoolyear/browser/templates/schoolyear.pt:42
-#: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:34
-#: /src/schooltool/skin/templates/container.pt:42
-#: /src/schooltool/skin/templates/table_container.pt:33
-#: /src/schooltool/skin/templates/view_macros.pt:194
-#: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:29
-#. Default: "Delete"
-msgid "delete-button"
-msgstr "Šalinti"
 
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:12
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:24
@@ -6219,7 +6219,7 @@ msgstr ""
 msgid "Change schedule"
 msgstr ""
 
-#: /src/schooltool/widget/password.py:56
+#: /src/schooltool/widget/password.py:55
 msgid "Supplied passwords are not identical"
 msgstr "Pateikti slaptažodžiai nėra identiški"
 

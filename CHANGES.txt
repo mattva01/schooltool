@@ -2,6 +2,9 @@
 CHANGES
 =======
 
+- Update translations (ca, es, es_SV, sk, te, vi, zh_CN)
+
+
 1.3.2 (unreleased)
 ------------------
 
