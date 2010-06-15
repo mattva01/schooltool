@@ -175,7 +175,7 @@ Javascript will be usable, although perhaps not very nice or convenient.""",
                              'zope.exceptions',
                              'zope.principalregistry',
                              'zope.testbrowser']},
-    dependency_links=['http://ftp.schooltool.org/schooltool/1.4/'],
+    dependency_links=['http://ftp.schooltool.org/schooltool/trunk/'],
     include_package_data=True,
     zip_safe=False,
     entry_points = """
