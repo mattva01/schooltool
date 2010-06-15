@@ -49,7 +49,7 @@ The couses are there now:
       <input type="checkbox" name="delete.history-5" /><a href="http://localhost/schoolyears/2005-2006/courses/history-5">History 5</a>
     </div>
 
-Let's add one more school year:
+Let's add one more school year and import all the existing courses:
 
     >>> manager.open('http://localhost/')
     >>> manager.getLink('Manage').click()
@@ -58,6 +58,7 @@ Let's add one more school year:
     >>> manager.getControl('Title').value = '2006-2007'
     >>> manager.getControl('First day').value = '2006-09-01'
     >>> manager.getControl('Last day').value = '2007-07-15'
+    >>> manager.getControl(name='importAllCourses').value = True
     >>> manager.getControl('Add').click()
 
 Now this school year should have all the same courses copied:

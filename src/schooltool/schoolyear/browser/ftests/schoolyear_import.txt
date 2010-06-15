@@ -1,0 +1,525 @@
+Copy data from previous school year
+===================================
+
+Log in as manager:
+
+    >>> manager = Browser('manager', 'schooltool')
+
+Create some people for testing group membership:
+
+    >>> from schooltool.basicperson.browser.ftests import setup
+    >>> setup.addPerson('Tom', 'Hoffman', 'tom')
+    >>> setup.addPerson('Jeffrey', 'Elkner', 'jelkner')
+    >>> setup.addPerson('Ariana', 'Cerna', 'ariana')
+    >>> setup.addPerson('Mario', 'Tejada', 'mario')
+    >>> setup.addPerson('German', 'Tejada', 'german')
+    >>> setup.addPerson('Liliana', 'Vividor', 'liliana')
+
+Create the first school year:
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('School Years').click()
+    >>> manager.getLink('New School Year').click()
+    >>> manager.getControl('Title').value = '2009'
+    >>> manager.getControl('First day').value = '2009-01-01'
+    >>> manager.getControl('Last day').value = '2009-12-31'
+    >>> manager.getControl('Add').click()
+
+After creating the first school year, we get five default groups:
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('School Years').click()
+    >>> manager.getLink('2009').click()
+    >>> manager.getLink('Groups').click()
+    >>> manager.printQuery('id("content-header")')
+    <div id="content-header">
+      <h1>Group index</h1>
+    </div>
+    >>> manager.printQuery('//table[@class="data"]/tbody/tr/td[2]/a/text()')
+    Clerks
+    School Administrators
+    Site Managers
+    Students
+    Teachers
+
+And they don't have any members:
+
+    >>> manager.getLink('School Administrators').click()
+    >>> manager.printQuery('id("content-header")')
+    <div id="content-header">
+      <h1>School Administrators</h1>
+    </div>
+    >>> manager.printQuery('//table[@class="data"]/tbody')
+    <tbody></tbody>
+
+Let's add two more groups:
+
+    >>> manager.getLink('2009').click()
+    >>> manager.getLink('Groups').click()
+    >>> manager.getLink('New Group').click()
+    >>> manager.getControl('Title').value = 'Soccer Players'
+    >>> manager.getControl('Add').click()
+    >>> manager.getLink('New Group').click()
+    >>> manager.getControl('Title').value = 'Chess Club'
+    >>> manager.getControl('Add').click()
+    >>> manager.printQuery('//table[@class="data"]/tbody/tr/td[2]/a/text()')
+    Chess Club
+    Clerks
+    School Administrators
+    Site Managers
+    Soccer Players
+    Students
+    Teachers
+
+And some members to them:
+
+    >>> manager.getLink('2009').click()
+    >>> manager.getLink('Groups').click()
+    >>> manager.getLink('Chess Club').click()
+    >>> manager.getLink('edit members').click()
+    >>> manager.getControl(name='add_item.tom').value = True
+    >>> manager.getControl(name='add_item.ariana').value = True
+    >>> manager.getControl('Add').click()
+    >>> manager.getControl('OK').click()
+
+    >>> manager.getLink('2009').click()
+    >>> manager.getLink('Groups').click()
+    >>> manager.getLink('School Administrators').click()
+    >>> manager.getLink('edit members').click()
+    >>> manager.getControl(name='add_item.jelkner').value = True
+    >>> manager.getControl('Add').click()
+    >>> manager.getControl('OK').click()
+
+    >>> manager.getLink('2009').click()
+    >>> manager.getLink('Groups').click()
+    >>> manager.getLink('Students').click()
+    >>> manager.getLink('edit members').click()
+    >>> manager.getControl(name='add_item.ariana').value = True
+    >>> manager.getControl(name='add_item.mario').value = True
+    >>> manager.getControl(name='add_item.german').value = True
+    >>> manager.getControl('Add').click()
+    >>> manager.getControl('OK').click()
+
+    >>> manager.getLink('2009').click()
+    >>> manager.getLink('Groups').click()
+    >>> manager.getLink('Soccer Players').click()
+    >>> manager.getLink('edit members').click()
+    >>> manager.getControl(name='add_item.mario').value = True
+    >>> manager.getControl(name='add_item.german').value = True
+    >>> manager.getControl('Add').click()
+    >>> manager.getControl('OK').click()
+
+We don't get any courses created in the new school year either:
+
+    >>> manager.getLink('2009').click()
+    >>> manager.getLink('Courses').click()
+    >>> manager.printQuery('id("content-header")')
+    <div id="content-header">
+      <h1>
+        Courses for
+        <a href="http://localhost/schoolyears/2009">2009</a>
+      </h1>
+    </div>
+    >>> manager.printQuery('id("content-body")')
+    <div id="content-body">
+      <p>There are none.</p>
+    </div>
+
+Let's add some courses:
+
+    >>> from schooltool.app.browser.ftests import setup
+    >>> setup.addCourse('Math', '2009')
+    >>> setup.addCourse('Chemistry', '2009')
+    >>> setup.addCourse('Programming', '2009')
+    >>> manager.getLink('2009').click()
+    >>> manager.getLink('Courses').click()
+    >>> manager.printQuery('id("content-header")')
+    <div id="content-header">
+      <h1>
+        Courses for
+        <a href="http://localhost/schoolyears/2009">2009</a>
+      </h1>
+    </div>
+    >>> manager.printQuery('//div[@class="course"]/a/text()')
+    Chemistry
+    Math
+    Programming
+
+We don't get timetable schemas either:
+
+    >>> manager.getLink('2009').click()
+    >>> manager.getLink('School Timetables').click()
+    >>> manager.printQuery('id("content-header")')
+    <div id="content-header">
+      <h1>School Timetables</h1>
+    </div>
+    >>> manager.printQuery('id("content-body")')
+    <div id="content-body">
+      <p>There are none.</p>
+    </div>
+
+Let's add a couple of timetable schemas:
+
+    >>> manager.getLink('New Timetable').click()
+    >>> manager.getControl('Title').value = 'default'
+    >>> manager.getControl('Next').click()
+    >>> manager.getControl('Days of the week').click()
+    >>> manager.getControl('Same time each day').click()
+    >>> manager.getControl(name='field.times').value = """9:30-10:25\n10:30-11:25\n11:35-12:20\n12:45-13:30\n13:35-14:20\n14:30-15:15"""
+    >>> manager.getControl('Next').click()
+    >>> manager.getControl('Designated by time').click()
+    >>> manager.getControl('No').click()
+
+    >>> manager.getLink('New Timetable').click()
+    >>> manager.getLink('advanced adding form').click()
+    >>> manager.getControl('Title').value = 'other_schema'
+    >>> manager.getControl('Add day').click()
+    >>> manager.getControl('Add period').click()
+    >>> manager.getControl(name='day1.period1').value = 'A'
+    >>> manager.getControl(name='day1.period2').value = 'B'
+    >>> manager.getControl(name='day2.period1').value = 'C'
+    >>> manager.getControl(name='day2.period2').value = 'D'
+    >>> manager.getControl('Timetable day always coincides with the day of week'
+    ...                    ' (i.e. on Mondays the first timetable day is used, on'
+    ...                    ' Tuesdays the second, and so on).').click()
+    >>> manager.getControl(name='time1.day0').value = '9:00'
+    >>> manager.getControl(name='time2.day0').value = '10:00'
+    >>> manager.getControl(name='time1.day1').value = '9:00'
+    >>> manager.getControl(name='time2.day1').value = '10:00'
+    >>> manager.getControl(name='time1.day2').value = '9:00'
+    >>> manager.getControl(name='time2.day2').value = '10:00'
+    >>> manager.getControl(name='time1.day3').value = '8:00'
+    >>> manager.getControl(name='time2.day3').value = '11:00'
+    >>> manager.getControl(name='time1.day4').value = '8:00'
+    >>> manager.getControl(name='time2.day4').value = '11:00'
+    >>> manager.getControl('Duration').value = '60'
+    >>> manager.getControl('Create timetable schema').click()
+    >>> manager.getLink('2009').click()
+    >>> manager.getLink('School Timetables').click()
+    >>> manager.printQuery('id("content-body")/form/div/a/text()')
+    default
+    other_schema
+
+If we add a second school year:
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('School Years').click()
+    >>> manager.getLink('New School Year').click()
+    >>> manager.getControl('Title').value = '2010'
+    >>> manager.getControl('First day').value = '2010-01-01'
+    >>> manager.getControl('Last day').value = '2010-12-31'
+    >>> manager.getControl('Add').click()
+
+We get the five default groups again:
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('School Years').click()
+    >>> manager.getLink('2010').click()
+    >>> manager.getLink('Groups').click()
+    >>> manager.printQuery('id("content-header")')
+    <div id="content-header">
+      <h1>Group index</h1>
+    </div>
+    >>> manager.printQuery('//table[@class="data"]/tbody/tr/td[2]/a/text()')
+    Clerks
+    School Administrators
+    Site Managers
+    Students
+    Teachers
+
+Again, the groups have no members:
+
+    >>> manager.getLink('School Administrators').click()
+    >>> manager.printQuery('id("content-header")')
+    <div id="content-header">
+      <h1>School Administrators</h1>
+    </div>
+    >>> manager.printQuery('//table[@class="data"]/tbody')
+    <tbody></tbody>
+
+Again, no courses either:
+
+    >>> manager.getLink('2010').click()
+    >>> manager.getLink('Courses').click()
+    >>> manager.printQuery('id("content-header")')
+    <div id="content-header">
+      <h1>
+        Courses for
+        <a href="http://localhost/schoolyears/2010">2010</a>
+      </h1>
+    </div>
+    >>> manager.printQuery('id("content-body")')
+    <div id="content-body">
+      <p>There are none.</p>
+    </div>
+
+And no timetables schemas:
+
+    >>> manager.getLink('2010').click()
+    >>> manager.getLink('School Timetables').click()
+    >>> manager.printQuery('id("content-header")')
+    <div id="content-header">
+      <h1>School Timetables</h1>
+    </div>
+    >>> manager.printQuery('id("content-body")')
+    <div id="content-body">
+      <p>There are none.</p>
+    </div>
+
+Now, we're going to create a new schoolyear, but this time, we're
+going to copy existing data from the active school year.
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('School Years').click()
+    >>> manager.getLink('New School Year').click()
+
+In this case the active school year is 2009.
+
+    >>> manager.printQuery('//div[@class="viewspace"]/fieldset/legend/text()')
+    Copy data from active school year:
+    2009
+
+To copy data from the active school year, we have to use the
+checkboxes in the "Copy data from active school year" fieldset.
+
+If the active school year has courses, we get the option to copy them
+all:
+
+    >>> manager.printQuery('id("all-courses-row")/td[1]/text()')
+    All Courses
+
+If the active school year has timetable schemas, we also get the
+option to copy them:
+
+    >>> manager.printQuery('id("all-timetables-row")/td[1]/text()')
+    All Timetable Schemas
+
+All the groups in the active school year are listed too:
+
+    >>> manager.printQuery('//tr[@class="group-row"]/td[1]/text()')
+    Chess Club
+    Clerks
+    School Administrators
+    Site Managers
+    Soccer Players
+    Students
+    Teachers
+
+Let's go back to delete all the courses in the active school year:
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('School Years').click()
+    >>> manager.getLink('2009').click()
+    >>> manager.getLink('Courses').click()
+    >>> manager.getControl(name='delete.chemistry').value = True
+    >>> manager.getControl(name='delete.math').value = True
+    >>> manager.getControl(name='delete.programming').value = True
+    >>> manager.getControl('Delete').click()
+    >>> manager.getControl('Confirm').click()
+
+And let's change some of the groups in the active school year:
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('School Years').click()
+    >>> manager.getLink('2009').click()
+    >>> manager.getLink('Groups').click()
+    >>> manager.getLink('Soccer Players').click()
+    >>> manager.getLink('Edit Info').click()
+    >>> manager.getControl('Title').value = 'Football players'
+    >>> manager.getControl('Apply').click()
+
+Let's go back to our New School Year form:
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('School Years').click()
+    >>> manager.getLink('New School Year').click()
+
+Since there are no courses anymore in the active school year, the
+checkbox to import All Courses is not available anymore:
+
+    >>> manager.queryHTML('id("all-courses-row")')
+    []
+
+The checkbox to import All Timetable Schemas is still there:
+
+    >>> manager.printQuery('id("all-timetables-row")/td[1]/text()')
+    All Timetable Schemas
+
+And the groups have changed:
+
+    >>> manager.printQuery('//tr[@class="group-row"]/td[1]/text()')
+    Chess Club
+    Clerks
+    Football players
+    School Administrators
+    Site Managers
+    Students
+    Teachers
+
+Each group has a checkbox to be selected for copying. Note how the
+default groups are always checked and disabled, so they are always
+copied from year to year:
+
+    >>> manager.printQuery('//tr[@class="group-row"]/td[2]/'
+    ...                    'input[@type="checkbox"]')
+    <input type="checkbox" name="groups" value="chess-club" />
+    <input type="checkbox" name="defaultGroups" checked="checked" disabled="disabled" value="clerks" />
+    <input type="checkbox" name="groups" value="soccer-players" />
+    <input type="checkbox" name="defaultGroups" checked="checked" disabled="disabled" value="administrators" />
+    <input type="checkbox" name="defaultGroups" checked="checked" disabled="disabled" value="manager" />
+    <input type="checkbox" name="defaultGroups" checked="checked" disabled="disabled" value="students" />
+    <input type="checkbox" name="defaultGroups" checked="checked" disabled="disabled" value="teachers" />
+
+And another checkbox to copy their members into the new group. Note
+that only groups with members in them can be marked:
+
+    >>> manager.printQuery('//tr[@class="group-row"]/td[3]/'
+    ...                    'input[@type="checkbox"]')
+    <input type="checkbox" name="members" value="chess-club" />
+    <input type="checkbox" name="members" value="soccer-players" />
+    <input type="checkbox" name="members" value="administrators" />
+    <input type="checkbox" name="members" value="students" />
+
+Let's copy All the Timetable Schemas, the Chess Club group and its
+members, as well as the School Administrators and Students members. If
+we mark only the Copy members checkbox for a group without marking the
+Group checkbox, the group won't be copied at all. We're going to test
+this marking only the Copy members checkbox for the Football players
+group:
+
+    >>> manager.getControl(name='importAllTimetables').value = True
+    >>> manager.getControl(name='groups').value = ['chess-club']
+    >>> manager.getControl(name='members').value = ['chess-club',
+    ...                                             'administrators',
+    ...                                             'students',
+    ...                                             'soccer-players']
+
+Let's add the school year:
+
+    >>> manager.getControl('Title').value = '2011'
+    >>> manager.getControl('Add').click()
+
+We get back to the form:
+
+    >>> manager.url
+    'http://localhost/schoolyears/@@add.html'
+
+because we didn't specify a start day and an end day for the new year:
+
+    >>> manager.printQuery('//ul[@class="errors"]/li/text()')
+    First day:
+    Last day:
+
+The checkboxes selected remain checked:
+
+    >>> manager.printQuery('//input[@type="checkbox"][@checked="checked"]')
+    <input type="checkbox" value="true" name="importAllTimetables" checked="checked" />
+    <input type="checkbox" name="groups" checked="checked" value="chess-club" />
+    <input type="checkbox" name="members" checked="checked" value="chess-club" />
+    <input type="checkbox" name="defaultGroups" checked="checked" disabled="disabled" value="clerks" />
+    <input type="checkbox" name="members" checked="checked" value="soccer-players" />
+    <input type="checkbox" name="defaultGroups" checked="checked" disabled="disabled" value="administrators" />
+    <input type="checkbox" name="members" checked="checked" value="administrators" />
+    <input type="checkbox" name="defaultGroups" checked="checked" disabled="disabled" value="manager" />
+    <input type="checkbox" name="defaultGroups" checked="checked" disabled="disabled" value="students" />
+    <input type="checkbox" name="members" checked="checked" value="students" />
+    <input type="checkbox" name="defaultGroups" checked="checked" disabled="disabled" value="teachers" />
+
+Let's fix the errors and finally add the school year:
+
+    >>> manager.getControl('First day').value = '2011-01-01'
+    >>> manager.getControl('Last day').value = '2011-12-31'
+    >>> manager.getControl('Add').click()
+
+Let's check the copying:
+
+    >>> manager.url
+    'http://localhost/schoolyears/2011'
+
+We have no courses:
+
+    >>> manager.getLink('Courses').click()
+    >>> manager.printQuery('id("content-header")')
+    <div id="content-header">
+      <h1>
+        Courses for
+        <a href="http://localhost/schoolyears/2011">2011</a>
+      </h1>
+    </div>
+    >>> manager.printQuery('id("content-body")')
+    <div id="content-body">
+      <p>There are none.</p>
+    </div>
+
+We have the correct groups. Note that the Football players group
+wasn't copied even though we marked its Copy members checkbox:
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('School Years').click()
+    >>> manager.getLink('2011').click()
+    >>> manager.getLink('Groups').click()
+    >>> manager.printQuery('id("content-header")')
+    <div id="content-header">
+      <h1>Group index</h1>
+    </div>
+    >>> manager.printQuery('//table[@class="data"]/tbody/tr/td[2]/a/text()')
+    Chess Club
+    Clerks
+    School Administrators
+    Site Managers
+    Students
+    Teachers
+
+Let's check the memberships were correctly copied:
+
+    >>> manager.getLink('Chess Club').click()
+    >>> manager.printQuery('id("content-header")')
+    <div id="content-header">
+      <h1>Chess Club</h1>
+    </div>
+    >>> manager.printQuery('//table[@class="data"]/tbody/tr/td[1]/a/text()')
+    Ariana
+    Tom
+
+    >>> manager.goBack()
+    >>> manager.getLink('School Administrators').click()
+    >>> manager.printQuery('id("content-header")')
+    <div id="content-header">
+      <h1>School Administrators</h1>
+    </div>
+    >>> manager.printQuery('//table[@class="data"]/tbody/tr/td[1]/a/text()')
+    Jeffrey
+
+Now let's check the timetables:
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('School Years').click()
+    >>> manager.getLink('2011').click()
+    >>> manager.getLink('School Timetables').click()
+    >>> manager.printQuery('id("content-body")/form/div/a/text()')
+    default
+    other_schema
+
+If we change the active school year:
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('School Years').click()
+    >>> manager.getControl('Activate next school year').click()
+
+The New School Year form should reflect the change:
+
+    >>> manager.getLink('New School Year').click()
+    >>> manager.printQuery('//div[@class="viewspace"]/fieldset/legend/text()')
+    Copy data from active school year:
+    2010
+
+    >>> manager.queryHTML('id("all-courses-row")')
+    []
+    >>> manager.queryHTML('id("all-timetables-row")')
+    []
+    >>> manager.printQuery('//tr[@class="group-row"]/td[1]/text()')
+    Clerks
+    School Administrators
+    Site Managers
+    Students
+    Teachers

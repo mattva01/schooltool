@@ -36,7 +36,7 @@ class SampleTimetableSchema(object):
     implements(ISampleDataPlugin)
 
     name = 'ttschema'
-    dependencies = ()
+    dependencies = ('terms',)
 
     def generate(self, app, seed=None):
         day_ids = ['Day %d' % i for i in range(1, 7)]

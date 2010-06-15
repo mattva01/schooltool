@@ -149,7 +149,8 @@ attendance-log-file instance/log/attendance.log
 #   lang auto
 #
 # Examples:
-#   lang en_UK
+#   lang en-gb
+#   lang es-sv
 #   lang fr
 
 #

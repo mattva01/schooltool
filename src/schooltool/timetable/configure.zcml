@@ -228,8 +228,5 @@
       factory=".schema.getSchoolYearForTimetableSchemaContainer" />
   <adapter
       factory=".schema.getSchoolYearForTTschema" />
-  <adapter
-      name="school_timetables"
-      factory=".schema.InitSchoolTimetablesForNewSchoolYear" />
 
 </configure>

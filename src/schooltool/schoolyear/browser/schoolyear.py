@@ -32,6 +32,8 @@ from zope.traversing.browser.interfaces import IAbsoluteURL
 from zope.traversing.browser import absoluteURL
 from zope.container.interfaces import INameChooser
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
+from zope.proxy import sameProxiedObjects
+from zope.i18n.interfaces.locales import ICollator
 
 from z3c.form import form, field, button
 from z3c.form.util import getSpecification
@@ -57,6 +59,12 @@ from schooltool.skin.containers import ContainerDeleteView
 from schooltool.skin.containers import TableContainerView
 from schooltool.common import DateRange
 from schooltool.common import SchoolToolMessage as _
+from schooltool.course.interfaces import ICourseContainer
+from schooltool.course.course import Course
+from schooltool.timetable.interfaces import ITimetableSchemaContainer
+from schooltool.group.interfaces import IGroupContainer
+from schooltool.group.group import Group, defaultGroups
+from schooltool.timetable.schema import locationCopy
 
 
 class SchoolYearContainerAbsoluteURLAdapter(AbsoluteURL):
@@ -169,7 +177,123 @@ class SchoolYearAddFormAdapter(object):
         return getattr(self.context, name)
 
 
-class SchoolYearAddView(form.AddForm):
+class ImportSchoolYearData(object):
+
+    def hasCourses(self, schoolyear):
+        courses = ICourseContainer(schoolyear)
+        return bool(courses)
+
+    def hasTimetableSchemas(self, schoolyear):
+        timetables = ITimetableSchemaContainer(schoolyear)
+        return bool(timetables)
+
+    def activeSchoolyearInfo(self):
+        result = {}
+        request = self.request
+        collator = ICollator(request.locale)
+        activeSchoolyear = self.context.getActiveSchoolYear()
+        if activeSchoolyear is not None:
+            result['title'] = activeSchoolyear.title
+            result['hasCourses'] = self.hasCourses(activeSchoolyear)
+            result['hasTimetables'] = self.hasTimetableSchemas(activeSchoolyear)
+            result['groups'] = []
+            groups = IGroupContainer(activeSchoolyear)
+            for groupId, group in sorted(groups.items(),
+                                         cmp=collator.cmp,
+                                         key=lambda (groupId,group):group.title):
+                info = {}
+                info['id'] = groupId
+                info['title'] = group.title
+                info['isDefault'] = groupId in defaultGroups
+                info['hasMembers'] = bool(list(group.members))
+                info['sent'] = groupId in self.customGroupsToImport
+                info['membersSent'] = groupId in self.groupsWithMembersToImport
+                result['groups'].append(info)
+        return result
+
+    def importAllCourses(self):
+        if not self.shouldImportAllCourses():
+            return
+        oldCourses = ICourseContainer(self.activeSchoolyear)
+        newCourses = ICourseContainer(self.newSchoolyear)
+        for id, course in oldCourses.items():
+            newCourses[course.__name__] = Course(course.title, course.description)
+
+    def importAllTimetables(self):
+        if not self.shouldImportAllTimetables():
+            return
+        oldTimetables = ITimetableSchemaContainer(self.activeSchoolyear)
+        newTimetables = ITimetableSchemaContainer(self.newSchoolyear)
+        for schooltt in oldTimetables.values():
+            newSchooltt = locationCopy(schooltt)
+            newSchooltt.__parent__ = None
+            newTimetables[newSchooltt.__name__] = newSchooltt
+
+    def importGroupMembers(self, sourceGroup, targetGroup):
+        for member in sourceGroup.members:
+            targetGroup.members.add(member)
+
+    def importGroup(self, groupId, shouldImportMembers=False):
+        oldGroups = IGroupContainer(self.activeSchoolyear)
+        newGroups = IGroupContainer(self.newSchoolyear)
+        if groupId in oldGroups:
+            oldGroup = oldGroups[groupId]
+            newGroup = newGroups[groupId] = Group(oldGroup.title,
+                                                   oldGroup.description)
+            if shouldImportMembers:
+                self.importGroupMembers(oldGroup, newGroup)
+
+    def importCustomGroups(self):
+        for groupId in self.customGroupsToImport:
+            shouldImportMembers = groupId in self.groupsWithMembersToImport
+            self.importGroup(groupId, shouldImportMembers)
+
+    def importDefaultGroupsMembers(self):
+        oldGroups = IGroupContainer(self.activeSchoolyear)
+        newGroups = IGroupContainer(self.newSchoolyear)
+        for groupId in defaultGroups:
+            if groupId in oldGroups and groupId in self.groupsWithMembersToImport:
+                oldGroup = oldGroups[groupId]
+                newGroup = newGroups[groupId]
+                self.importGroupMembers(oldGroup, newGroup)
+
+    def shouldImportData(self):
+        return self.activeSchoolyear is not None and \
+               not sameProxiedObjects(self.activeSchoolyear, self.newSchoolyear)
+
+    def shouldImportAllCourses(self):
+        return 'importAllCourses' in self.request and \
+               self.hasCourses(self.activeSchoolyear)
+
+    def shouldImportAllTimetables(self):
+        return 'importAllTimetables' in self.request and \
+               self.hasTimetableSchemas(self.activeSchoolyear)
+
+    @property
+    def customGroupsToImport(self):
+        result = self.request.get('groups', [])
+        if not isinstance(result, list):
+            result = [result]
+        return result
+
+    @property
+    def groupsWithMembersToImport(self):
+        result = self.request.get('members', [])
+        if not isinstance(result, list):
+            result = [result]
+        return result
+
+    def importData(self, newSchoolyear):
+        self.newSchoolyear = newSchoolyear
+        self.activeSchoolyear = self.context.getActiveSchoolYear()
+        if self.shouldImportData():
+            self.importAllCourses()
+            self.importAllTimetables()
+            self.importCustomGroups()
+            self.importDefaultGroupsMembers()
+
+
+class SchoolYearAddView(form.AddForm, ImportSchoolYearData):
     """School Year add form for school years."""
     label = _("Add new school year")
     template = ViewPageTemplateFile('templates/schoolyear_add.pt')
@@ -208,6 +332,7 @@ class SchoolYearAddView(form.AddForm):
         chooser = INameChooser(self.context)
         name = chooser.chooseName(schoolyear.title, schoolyear)
         self.context[name] = schoolyear
+        self.importData(schoolyear)
         return schoolyear
 
     @button.buttonAndHandler(_("Cancel"))
@@ -219,7 +344,7 @@ class SchoolYearAddView(form.AddForm):
 class SchoolYearEditView(form.EditForm):
     """Edit form for basic person."""
     form.extends(form.EditForm)
-    template = ViewPageTemplateFile('templates/schoolyear_add.pt')
+    template = ViewPageTemplateFile('templates/schoolyear_edit.pt')
 
     fields = field.Fields(ISchoolYearAddForm)
 

@@ -287,7 +287,8 @@ def format_timetable_for_presentation(timetable):
 
     First, let us create a timetable:
 
-      >>> timetable = Timetable(['day 1', 'day 2', 'day 3'])
+      >>> timetable = Timetable(['day 0', 'day 1', 'day 2', 'day 3'])
+      >>> timetable['day 0'] = TimetableDay()
       >>> timetable['day 1'] = TimetableDay(['A', 'B'])
       >>> timetable['day 2'] = TimetableDay(['C', 'D', 'E'])
       >>> timetable['day 3'] = TimetableDay(['F'])
@@ -304,14 +305,15 @@ def format_timetable_for_presentation(timetable):
       ...    for cell in row:
       ...        print '%(period)1s: %(activity)-11s |' % cell,
       ...    print
-      A: Something   | C: Else        | F: A3          |
-      B: A1 / A2     | D:             |  :             |
-       :             | E:             |  :             |
+       :             | A: Something   | C: Else        | F: A3          |
+       :             | B: A1 / A2     | D:             |  :             |
+       :             |  :             | E:             |  :             |
 
 
     """
     rows = []
     for ncol, (id, day) in enumerate(timetable.items()):
+        nrow = 0
         for nrow, (period, actiter) in enumerate(day.items()):
             activities = []
             for a in actiter:

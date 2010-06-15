@@ -51,13 +51,19 @@ def doctest_SampleStudents():
         1000
 
         >>> app = ISchoolToolApplication(None)
+        >>> from schooltool.term.sampledata import SampleTerms
+        >>> SampleTerms().generate(app)
+        >>> students = IGroupContainer(app)['students']
+
         >>> len(app['persons']) # Manager is there already
         1
+        >>> len(students.members)
+        0
 
         >>> plugin.generate(app, 42)
 
-        >>> len(app['persons'])
-        1001
+        >>> len(students.members)
+        1000
 
         >>> for i in range(5):
         ...     print app['persons']['student%03d' % i].title

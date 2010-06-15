@@ -136,24 +136,6 @@ class CourseInit(InitBase):
         self.app['schooltool.course.course'] = CourseContainerContainer()
 
 
-class InitCoursesForNewSchoolYear(ObjectEventAdapterSubscriber):
-    adapts(IObjectAddedEvent, ISchoolYear)
-
-    def copyAllCourses(self, source, destination):
-        for id, course in source.items():
-            new_course = destination[course.__name__] = Course(course.title,
-                                                               course.description)
-
-    def __call__(self):
-        app = ISchoolToolApplication(None)
-        syc = ISchoolYearContainer(app)
-        active_schoolyear = syc.getActiveSchoolYear()
-
-        if active_schoolyear is not None:
-            self.copyAllCourses(ICourseContainer(active_schoolyear),
-                                ICourseContainer(self.object))
-
-
 class RemoveCoursesWhenSchoolYearIsDeleted(ObjectEventAdapterSubscriber):
     adapts(IObjectRemovedEvent, ISchoolYear)
 
