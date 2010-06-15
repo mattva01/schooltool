@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-04-29 02:21+0300\n"
-"PO-Revision-Date: 2010-04-29 08:55+0000\n"
-"Last-Translator: Francois Thunus <Unknown>\n"
+"POT-Creation-Date: 2010-05-21 16:53+0300\n"
+"PO-Revision-Date: 2010-05-21 15:32+0000\n"
+"Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
 "Language-Team: English (Canada) <en_CA@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-04-30 03:47+0000\n"
+"X-Launchpad-Export-Date: 2010-05-22 03:52+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: /src/schooltool/app/browser/__init__.py:256
@@ -2744,8 +2744,9 @@ msgid "Advisor"
 msgstr "Advisor"
 
 #: /src/schooltool/basicperson/browser/person.py:68
-msgid "Confirm"
-msgstr "Confirm"
+#: /src/schooltool/widget/password.py:39
+msgid "Confirm password"
+msgstr "Confirm password"
 
 #: /src/schooltool/basicperson/browser/person.py:104
 msgid "This username is already in use!"
@@ -3132,29 +3133,17 @@ msgstr "Are you sure you want to delete selected items?"
 msgid "You have not selected any items."
 msgstr "You have not selected any items."
 
-#. Default: "Delete"
 #: /src/schooltool/contact/browser/templates/contacts_delete.pt:34
-#: /src/schooltool/course/browser/templates/course_container.pt:40
-#: /src/schooltool/course/browser/templates/section_container.pt:93
-#: /src/schooltool/demographics/browser/search.pt:35
-#: /src/schooltool/demographics/browser/table.pt:28
-#: /src/schooltool/email/browser/templates/email_container.pt:48
 #: /src/schooltool/email/browser/templates/email_delete.pt:31
 #: /src/schooltool/person/browser/person_container_delete.pt:35
 #: /src/schooltool/resource/browser/container_delete.pt:27
-#: /src/schooltool/schoolyear/browser/templates/schoolyear.pt:42
-#: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:34
 #: /src/schooltool/schoolyear/browser/templates/term-delete.pt:27
-#: /src/schooltool/skin/templates/container.pt:42
 #: /src/schooltool/skin/templates/container_delete.pt:32
-#: /src/schooltool/skin/templates/table_container.pt:33
-#: /src/schooltool/skin/templates/view_macros.pt:194
 #: /src/schooltool/term/browser/templates/term-container-delete.pt:29
 #: /src/schooltool/timetable/browser/templates/schooltt-delete.pt:29
 #: /src/schooltool/timetable/browser/templates/timetable-container-delete.pt:27
-#: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:29
-msgid "delete-button"
-msgstr "Delete"
+msgid "Confirm"
+msgstr "Confirm"
 
 #: /src/schooltool/contact/browser/templates/filter.pt:21
 #: /src/schooltool/person/browser/person_filter.pt:11
@@ -3646,6 +3635,21 @@ msgstr "Courses for ${schoolyear}"
 #: /src/schooltool/skin/templates/table_container.pt:28
 msgid "Showing ${count} of ${total} items"
 msgstr "Showing ${count} of ${total} items"
+
+#. Default: "Delete"
+#: /src/schooltool/course/browser/templates/course_container.pt:40
+#: /src/schooltool/course/browser/templates/section_container.pt:93
+#: /src/schooltool/demographics/browser/search.pt:35
+#: /src/schooltool/demographics/browser/table.pt:28
+#: /src/schooltool/email/browser/templates/email_container.pt:48
+#: /src/schooltool/schoolyear/browser/templates/schoolyear.pt:42
+#: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:34
+#: /src/schooltool/skin/templates/container.pt:42
+#: /src/schooltool/skin/templates/table_container.pt:33
+#: /src/schooltool/skin/templates/view_macros.pt:194
+#: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:29
+msgid "delete-button"
+msgstr "Delete"
 
 #: /src/schooltool/course/browser/templates/course_edit.pt:22
 #: /src/schooltool/course/browser/templates/section_edit.pt:23
@@ -6621,11 +6625,7 @@ msgstr "Assign timetables"
 msgid "Change schedule"
 msgstr "Change schedule"
 
-#: /src/schooltool/widget/password.py:39
-msgid "Confirm password"
-msgstr "Confirm password"
-
-#: /src/schooltool/widget/password.py:56
+#: /src/schooltool/widget/password.py:55
 msgid "Supplied passwords are not identical"
 msgstr "Supplied passwords are not identical"
 

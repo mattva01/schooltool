@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-04-29 02:21+0300\n"
-"PO-Revision-Date: 2010-05-17 15:04+0000\n"
+"POT-Creation-Date: 2010-05-21 16:53+0300\n"
+"PO-Revision-Date: 2010-06-11 02:39+0000\n"
 "Last-Translator: Douglas Cerna <douglascerna@yahoo.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-05-18 05:02+0000\n"
+"X-Launchpad-Export-Date: 2010-06-12 03:39+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #. Default: ""
@@ -1097,11 +1097,6 @@ msgstr "Cambiar detalles de este evento"
 msgid "edit event"
 msgstr "editar evento"
 
-#: /src/schooltool/app/browser/templates/event.pt:64
-#: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:65
-msgid "Scheduled resources"
-msgstr "Recursos programados"
-
 #: /src/schooltool/app/browser/templates/event.pt:72
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:73
 msgid "edit resources"
@@ -1756,60 +1751,6 @@ msgstr ""
 #: /src/schooltool/app/help/calendaring.pt:6
 msgid "Calendaring in SchoolTool"
 msgstr "Calendarios en SchoolTool"
-
-#: /src/schooltool/app/help/calendaring.pt:8
-msgid ""
-"<h1>Calendaring in SchoolTool</h1> <p>SchoolTool includes a full-featured "
-"calendaring system, similar to Apple iCal or Google Calendar, but capable of "
-"representing complex school timetables, including rotating schedules. "
-"SchoolTool is also useful for simple resource scheduling, allowing you to "
-"manage room assignments, and booking shared resources like computers or "
-"projectors. Each person, group, course section or resource has its own "
-"calendar. You may integrate multiple calendars into your personal calendar "
-"views.</p> <h3>Parts of the standard calendar views</h3> <ul> "
-"<li><strong>Calendar table:</strong> fills the main (lower-right) part of "
-"the page. This represents the calendar for one day, week, month or year, "
-"depending on the view..</li> <li><strong>Calendar navigation bar:</strong> "
-"immediately above the calendar table. Allows you to navigate forward or "
-"backward in time, or to return to the current time.</li> "
-"<li><strong>Calendar title:</strong> immediately above the calendar "
-"navigation bar, lists the owner of this calendar and the date for this "
-"\"page\" of the calendar.</li> <li><strong>Left sidebar:</strong> for all "
-"calendars, this contains a <code>Jump to...</code> section containing menus "
-"and links to allow you to quickly navigate to a specific month, year or "
-"date. <br /> If you are logged in and viewing your own calendar, you will "
-"also see a <code>Calendars</code> section at the top of the sidebar which "
-"allows you to \"overlay\" events from other calendars in this view. You may "
-"see calendars for classes you teach or attend listed here already.</li> "
-"<li><strong>Day/week/month/year buttons:</strong> These buttons allow you to "
-"switch between daily, weekly, monthly and annual views.</li> </ul>"
-msgstr ""
-"<h1>Agendando en SchoolTool</h1> <p>SchoolTool incluye un sistema completo "
-"de agendado, similar a Apple iCal o Google Calendar, pero capaz de "
-"representar complejos horarios escolares, incluyendo calendarios rotativos. "
-"SchoolTool también es útil para agendado simple de recursos, permitiéndole "
-"administrar asignaciones de aulas, y registrar recursos compartidos como "
-"computadores y proyectores. Cada persona, grupo, sección de curso o recurso "
-"tiene su propio calendario. Puede integrar múltiples calendarios en su vista "
-"personal de calendario.</p> <h3>Partes de las vistas de calendario "
-"estándar</h3> <ul> <li><strong>Tabla del calendario:</strong> Llena la parte "
-"principal (abajo a la derecha)  de la página. Esto representa al calendario "
-"de un día, semana, mes o año, dependendo de la vista..</li> "
-"<li><strong>Barra de navegación del calendario:</strong> immediatamente "
-"arriba de la tabla de calendario. Le permite navegar hacia adelante o hacia "
-"atrás en el tiempo, o regresar al tiempo actual.</li> <li><strong>Título del "
-"calendario:</strong> immediatamente arriba de la barra de navegación del "
-"calendario, lista el dueño de este calendario y la fecha de esta \"página\" "
-"del calendario.</li> <li><strong>Barra lateral izquierda:</strong> Para "
-"todos los calendarios, esta contiene una sección <code>Ir a...</code> que "
-"contiene menus y enlaces que para permitirle rápidamente navegar  un mes, "
-"año o fecha específica. <br /> Si usted está registrado y viendo su propio "
-"calendario, también verá una sección  <code>Calendarios</code> arriba de la "
-"barra lateral, lo que le permite \"sobreponer\" eventos desde otros "
-"calendarios en esta vista. Usted podrá ver calendarios de clases que usted "
-"enseñe o asista, listados ya aquí.</li> <li><strong>Botones "
-"día/semana/mes/año:</strong> Estos botones le permiten cambiar entre vistas "
-"diarias, semanales, mensuales y anuales.</li> </ul>"
 
 #: /src/schooltool/app/help/configure.zcml:13
 msgid "Administration"
@@ -2486,11 +2427,6 @@ msgstr "Grupo"
 msgid "Advisor"
 msgstr "Asesor"
 
-#: /src/schooltool/basicperson/browser/person.py:68
-#: /src/schooltool/widget/password.py:39
-msgid "Confirm password"
-msgstr "Confirme la contraseña"
-
 #: /src/schooltool/basicperson/browser/person.py:104
 msgid "This username is already in use!"
 msgstr "¡Este nombre de usuario ya está en uso!"
@@ -2907,7 +2843,7 @@ msgstr "Estudiantes Disponibles"
 #: /src/schooltool/course/browser/templates/section_container.pt:45
 #: /src/schooltool/timetable/browser/configure.zcml:40
 msgid "Schedule"
-msgstr "Agenda"
+msgstr "Horario"
 
 #: /src/schooltool/course/browser/templates/copy_sections.pt:99
 #: /src/schooltool/course/browser/templates/link_section.pt:75
@@ -2948,6 +2884,7 @@ msgstr "Cursos para ${schoolyear}"
 msgid "Showing ${count} of ${total} items"
 msgstr "Mostrando ${count} de ${total} items"
 
+#. Default: "Delete"
 #: /src/schooltool/course/browser/templates/course_container.pt:40
 #: /src/schooltool/course/browser/templates/section_container.pt:93
 #: /src/schooltool/demographics/browser/search.pt:35
@@ -2959,7 +2896,6 @@ msgstr "Mostrando ${count} de ${total} items"
 #: /src/schooltool/skin/templates/table_container.pt:33
 #: /src/schooltool/skin/templates/view_macros.pt:194
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:29
-#. Default: "Delete"
 msgid "delete-button"
 msgstr "Eliminar"
 
@@ -5414,9 +5350,68 @@ msgstr "Anual"
 msgid "Page ${page_number}"
 msgstr "Página ${page_number}"
 
+#: /src/schooltool/app/browser/templates/event.pt:64
+#: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:65
+msgid "Scheduled resources"
+msgstr "Recursos programados"
+
 #: /src/schooltool/app/browser/templates/portlet_tomorrow_events.pt:5
 msgid "Tomorrow's Events"
 msgstr "Eventos de Mañana"
+
+#: /src/schooltool/app/help/calendaring.pt:8
+msgid ""
+"<h1>Calendaring in SchoolTool</h1> <p>SchoolTool includes a full-featured "
+"calendaring system, similar to Apple iCal or Google Calendar, but capable of "
+"representing complex school timetables, including rotating schedules. "
+"SchoolTool is also useful for simple resource scheduling, allowing you to "
+"manage room assignments, and booking shared resources like computers or "
+"projectors. Each person, group, course section or resource has its own "
+"calendar. You may integrate multiple calendars into your personal calendar "
+"views.</p> <h3>Parts of the standard calendar views</h3> <ul> "
+"<li><strong>Calendar table:</strong> fills the main (lower-right) part of "
+"the page. This represents the calendar for one day, week, month or year, "
+"depending on the view..</li> <li><strong>Calendar navigation bar:</strong> "
+"immediately above the calendar table. Allows you to navigate forward or "
+"backward in time, or to return to the current time.</li> "
+"<li><strong>Calendar title:</strong> immediately above the calendar "
+"navigation bar, lists the owner of this calendar and the date for this "
+"\"page\" of the calendar.</li> <li><strong>Left sidebar:</strong> for all "
+"calendars, this contains a <code>Jump to...</code> section containing menus "
+"and links to allow you to quickly navigate to a specific month, year or "
+"date. <br /> If you are logged in and viewing your own calendar, you will "
+"also see a <code>Calendars</code> section at the top of the sidebar which "
+"allows you to \"overlay\" events from other calendars in this view. You may "
+"see calendars for classes you teach or attend listed here already.</li> "
+"<li><strong>Day/week/month/year buttons:</strong> These buttons allow you to "
+"switch between daily, weekly, monthly and annual views.</li> </ul>"
+msgstr ""
+"<h1>Agendando en SchoolTool</h1> <p>SchoolTool incluye un sistema completo "
+"de agendado, similar a Apple iCal o Google Calendar, pero capaz de "
+"representar complejos horarios escolares, incluyendo calendarios rotativos. "
+"SchoolTool también es útil para agendado simple de recursos, permitiéndole "
+"administrar asignaciones de aulas, y registrar recursos compartidos como "
+"computadores y proyectores. Cada persona, grupo, sección de curso o recurso "
+"tiene su propio calendario. Puede integrar múltiples calendarios en su vista "
+"personal de calendario.</p> <h3>Partes de las vistas de calendario "
+"estándar</h3> <ul> <li><strong>Tabla del calendario:</strong> Llena la parte "
+"principal (abajo a la derecha)  de la página. Esto representa al calendario "
+"de un día, semana, mes o año, dependendo de la vista..</li> "
+"<li><strong>Barra de navegación del calendario:</strong> immediatamente "
+"arriba de la tabla de calendario. Le permite navegar hacia adelante o hacia "
+"atrás en el tiempo, o regresar al tiempo actual.</li> <li><strong>Título del "
+"calendario:</strong> immediatamente arriba de la barra de navegación del "
+"calendario, lista el dueño de este calendario y la fecha de esta \"página\" "
+"del calendario.</li> <li><strong>Barra lateral izquierda:</strong> Para "
+"todos los calendarios, esta contiene una sección <code>Ir a...</code> que "
+"contiene menus y enlaces que para permitirle rápidamente navegar  un mes, "
+"año o fecha específica. <br /> Si usted está registrado y viendo su propio "
+"calendario, también verá una sección  <code>Calendarios</code> arriba de la "
+"barra lateral, lo que le permite \"sobreponer\" eventos desde otros "
+"calendarios en esta vista. Usted podrá ver calendarios de clases que usted "
+"enseñe o asista, listados ya aquí.</li> <li><strong>Botones "
+"día/semana/mes/año:</strong> Estos botones le permiten cambiar entre vistas "
+"diarias, semanales, mensuales y anuales.</li> </ul>"
 
 #: /src/schooltool/app/main.py:380
 msgid "Cannot resolve plugin action order:\n"
@@ -5474,6 +5469,11 @@ msgstr "Nuevo Campo de Lista de Selección"
 #: /src/schooltool/basicperson/browser/person.py:114
 msgid "Usernames cannot contain non-ascii characters"
 msgstr "Nombre del usuario no pueder contener carácteres non-ascii"
+
+#: /src/schooltool/basicperson/browser/person.py:68
+#: /src/schooltool/widget/password.py:39
+msgid "Confirm password"
+msgstr "Confirme la contraseña"
 
 #: /src/schooltool/basicperson/browser/templates/demographics-view.pt:4
 #: /src/schooltool/basicperson/browser/templates/demographics-view.pt:7
@@ -6494,7 +6494,7 @@ msgstr "Ver una reserva de calendario"
 
 #: /src/schooltool/resource/security.zcml:93
 msgid "Schedule reservation via calendar"
-msgstr "Reservar agenda via calendario"
+msgstr "Programar reserva vía calendario"
 
 #: /src/schooltool/schoolyear/browser/schoolyear.py:152
 msgid "First day"
@@ -6702,11 +6702,14 @@ msgstr "Asignar horarios"
 
 #: /src/schooltool/timetable/security.zcml:54
 msgid "Change schedule"
-msgstr "Cambiar agenda"
+msgstr "Cambiar horario"
 
-#: /src/schooltool/widget/password.py:56
+#: /src/schooltool/widget/password.py:55
 msgid "Supplied passwords are not identical"
 msgstr "Las contraseñas proporcionadas no son idénticas."
 
 #~ msgid "SMTP server hostname. Leave empty to disable email."
 #~ msgstr "Nombre de host SMTP. Deje en blanco para desactivar."
+
+#~ msgid "confirm password"
+#~ msgstr "Confirme la contraseña"
