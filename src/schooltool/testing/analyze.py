@@ -41,5 +41,6 @@ def queryHTML(xpath, response):
 def printQuery(xpath, response):
     """Helper function to print xpath query results on an html response"""
     for result in queryHTML(xpath, response):
-        print result
+        if result.strip():
+            print result
 
