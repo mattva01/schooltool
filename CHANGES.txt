@@ -5,7 +5,8 @@ CHANGES
 1.4.1 (unreleased)
 ------------------
 
-None yet.
+- XLS Importer catches errors before trying to create objects.
+- TestBrowser now strips out blank lines from printQuery
 
 
 1.4.0 (2010-05-21)

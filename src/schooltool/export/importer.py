@@ -73,6 +73,12 @@ ERROR_START_BEFORE_YEAR_START = _('start date before start of school year')
 ERROR_END_AFTER_YEAR_END = _('end date after end of school year')
 ERROR_START_OVERLAP_TERM = _('start date overlaps another term')
 ERROR_END_OVERLAP_TERM = _('end date overlaps another term')
+ERROR_HAS_NO_DAYS = _("%s has no days in A%s")
+ERROR_HAS_NO_DAY_TEMPLATES = _("%s has no day templates in A%s")
+ERROR_TIME_RANGE = _("is not a valid time range")
+ERROR_TIMETABLE_MODEL = _("is not a valid timetable model")
+ERROR_DUPLICATE_DAY_ID = _("is the same day id as another in this timetable")
+ERROR_UNKNOWN_DAY_ID = _("is not defined in the 'Day Templates' section")
 
 
 no_date = object()
@@ -315,35 +321,21 @@ class SchoolTimetableImporter(ImporterBase):
     def setUpSchemaDays(self, timetable, days):
         for day in days:
             day_id = day['id']
-            period_ids = [period
-                          for period in day['periods']]
-            if len(set(period_ids)) != len(period_ids):
-                self.errors.append("Duplicate periods in schema: %s" % period_ids)
-
-            homeroom_periods = [period
-                                for period in day['homeroom_periods']]
-
-            timetable[day_id] = TimetableSchemaDay(period_ids, homeroom_periods)
+            timetable[day_id] = TimetableSchemaDay(day['periods'], 
+                                                   day['homeroom_periods'])
 
     def createSchoolTimetable(self, data):
+        title = data['title']
+        factory = queryUtility(ITimetableModelFactory, data['model'])
         day_ids = [day['id'] for day in data['days']]
 
-        factory_id = data['model']
-        title = data['title']
-
-        factory = queryUtility(ITimetableModelFactory, factory_id)
-        if factory is None:
-            self.errors.append("Incorrect timetable model factory")
-
-        templates = data['templates']
         template_dict = {}
 
-        for template in templates:
-            day = SchooldayTemplate()
-
+        for template in data['templates']:
             used = template['id']
 
             # parse SchoolDayPeriods
+            day = SchooldayTemplate()
             for tstart, duration in template['periods']:
                 slot = SchooldaySlot(tstart, duration)
                 day.add(slot)
@@ -361,9 +353,6 @@ class SchoolTimetableImporter(ImporterBase):
         model = factory(day_ids, template_dict)
 
         # create and set up the timetable
-        if len(set(day_ids)) != len(day_ids):
-            self.errors.append("Duplicate days in schema")
-
         timetable = TimetableSchema(day_ids, title=title, model=model)
         self.setUpSchemaDays(timetable, data['days'])
         timetable.__name__ = data['__name__']
@@ -380,12 +369,24 @@ class SchoolTimetableImporter(ImporterBase):
             sc[school_timetable.__name__] = school_timetable
 
     def import_school_timetable(self, sh, row):
+        num_errors = len(self.errors)
         data = {}
-        data['title'] = sh.cell_value(rowx=row, colx=1)
-        data['__name__'] = sh.cell_value(rowx=row+1, colx=1)
-        data['school_year'] = sh.cell_value(rowx=row+2, colx=1)
-        data['model'] = sh.cell_value(rowx=row+3, colx=1)
+        data['title'] = self.getRequiredTextFromCell(sh, row, 1)
+        data['__name__'] = self.getRequiredTextFromCell(sh, row+1, 1)
+        data['school_year'] = self.getRequiredTextFromCell(sh, row+2, 1)
+        data['model'] = self.getRequiredTextFromCell(sh, row+3, 1)
+        if num_errors < len(self.errors):
+            return
 
+        num_errors = len(self.errors)
+        if data['school_year'] not in ISchoolYearContainer(self.context):
+            self.error(1, row + 2, ERROR_INVALID_SCHOOL_YEAR)
+        if queryUtility(ITimetableModelFactory, data['model']) is None:
+            self.error(1, row + 3, ERROR_TIMETABLE_MODEL)
+        if num_errors < len(self.errors):
+            return
+
+        num_errors = len(self.errors)
         row += 5
         if self.getCellValue(sh, row, 0, '') == 'Day Templates':
             data['templates'] = []
@@ -393,15 +394,26 @@ class SchoolTimetableImporter(ImporterBase):
             for row in range(row, sh.nrows):
                 if sh.cell_value(rowx=row, colx=0) == '':
                     break
-                day_id = sh.cell_value(rowx=row, colx=0)
+                day_id = self.getRequiredTextFromCell(sh, row, 0)
+                if day_id in [day['id'] for day in data['templates']]:
+                    self.error(0, row + 1, ERROR_DUPLICATE_DAY_ID)
                 periods = []
                 for col in range(1, sh.ncols):
-                    if sh.cell_value(rowx=row, colx=col) == '':
+                    cell = sh.cell_value(rowx=row, colx=col)
+                    if cell == '':
                         break
-                    periods.append(parse_time_range(sh.cell_value(rowx=row, colx=col)))
+                    try:
+                        time_range = parse_time_range(cell)
+                    except:
+                        self.error(col, row + 1, ERROR_TIME_RANGE)
+                        continue
+                    periods.append(time_range)
                 data['templates'].append({'id': day_id, 'periods': periods})
         else:
-            self.errors.append("%s has no day templates in A%s" % (data['title'], row + 1))
+            self.errors.append(ERROR_HAS_NO_DAY_TEMPLATES % (data['title'],
+                row + 1))
+        if num_errors < len(self.errors):
+            return
 
         row += 1
         if self.getCellValue(sh, row, 0, '') == 'Days':
@@ -415,34 +427,45 @@ class SchoolTimetableImporter(ImporterBase):
             for row in range(row, sh.nrows):
                 if sh.cell_value(rowx=row, colx=0) == '':
                     break
-                day_id = sh.cell_value(rowx=row, colx=0)
+                day_id = self.getRequiredTextFromCell(sh, row, 0)
+                if day_id in [day['id'] for day in data['days']]:
+                    self.error(0, row + 1, ERROR_DUPLICATE_DAY_ID)
+                if day_id not in [day['id'] for day in data['templates']]:
+                    self.error(0, row + 1, ERROR_UNKNOWN_DAY_ID)
                 periods = []
                 for col in range(1, homeroom_start):
-                    if sh.cell_value(rowx=row, colx=col) == '':
+                    cell = sh.cell_value(rowx=row, colx=col)
+                    if cell == '':
                         break
-                    periods.append(sh.cell_value(rowx=row, colx=col))
+                    if cell in periods:
+                        self.error(col, row + 1, ERROR_DUPLICATE_PERIOD)
+                    else:
+                        periods.append(cell)
                 homeroom_periods = []
                 for col in range(homeroom_start, sh.ncols):
-                    if sh.cell_value(rowx=row, colx=col) == '':
+                    cell = sh.cell_value(rowx=row, colx=col)
+                    if cell == '':
                         break
-                    homeroom_periods.append(sh.cell_value(rowx=row, colx=col))
+                    if cell in homeroom_periods:
+                        self.error(col, row + 1, 
+                            ERROR_DUPLICATE_HOMEROOM_PERIOD)
+                    else:
+                        homeroom_periods.append(cell)
                 data['days'].append({'id': day_id,
                                      'periods': periods,
                                      'homeroom_periods': homeroom_periods})
         else:
-            self.errors.append("%s has no days in A%s" % (data['title'], row + 1))
+            self.errors.append(ERROR_HAS_NO_DAYS % (data['title'], row + 1))
 
         if not self.errors:
             school_timetable = self.createSchoolTimetable(data)
             self.addSchoolTimetable(school_timetable, data)
 
-        return row
-
     def process(self):
         sh = self.sheet
         for row in range(0, sh.nrows):
             if sh.cell_value(rowx=row, colx=0) == 'School Timetable':
-                row = self.import_school_timetable(sh, row)
+                self.import_school_timetable(sh, row)
 
 
 class ResourceImporter(ImporterBase):
@@ -826,5 +849,5 @@ class MegaImporter(BrowserView):
             sp.rollback()
 
     def displayErrors(self):
-        return self.errors[:15]
+        return self.errors[:20]
 
