@@ -81,6 +81,7 @@ ERROR_DUPLICATE_DAY_ID = _("is the same day id as another in this timetable")
 ERROR_UNKNOWN_DAY_ID = _("is not defined in the 'Day Templates' section")
 ERROR_RESOURCE_TYPE = _("must be either 'Location' or 'Resource'")
 
+
 no_date = object()
 no_data = object()
 
@@ -549,18 +550,18 @@ class PersonImporter(ImporterBase):
             if sh.cell_value(rowx=row, colx=0) == '':
                 break
             data = {}
-            data['__name__'] = sh.cell_value(rowx=row, colx=0)
-            data['prefix'] = sh.cell_value(rowx=row, colx=1)
-            data['first_name'] = sh.cell_value(rowx=row, colx=2)
-            data['middle_name'] = sh.cell_value(rowx=row, colx=3)
-            data['last_name'] = sh.cell_value(rowx=row, colx=4)
-            data['suffix'] = sh.cell_value(rowx=row, colx=5)
-            data['preferred_name'] = sh.cell_value(rowx=row, colx=6)
-            data['birth_date'] = self.getDateFromCell(sh, row, 7, default=None)
-            data['gender'] = sh.cell_value(rowx=row, colx=8)
+            data['__name__'] = self.getRequiredTextFromCell(sh, row, 0)
+            data['prefix'] = self.getTextFromCell(sh, row, 1)
+            data['first_name'] = self.getRequiredTextFromCell(sh, row, 2)
+            data['middle_name'] = self.getTextFromCell(sh, row, 3)
+            data['last_name'] = self.getRequiredTextFromCell(sh, row, 4)
+            data['suffix'] = self.getTextFromCell(sh, row, 5)
+            data['preferred_name'] = self.getTextFromCell(sh, row, 6)
+            data['birth_date'] = self.getTextFromCell(sh, row, 7, default=None)
+            data['gender'] = self.getTextFromCell(sh, row, 8)
             if data['gender'] == '':
                 data['gender'] = None
-            data['password'] = sh.cell_value(rowx=row, colx=9)
+            data['password'] = self.getTextFromCell(sh, row, 9)
 
             # XXX: this has to be fixed
             # XXX: SchoolTool should handle UTF-8

@@ -90,3 +90,17 @@ This file has examples of bad data for the Resouces sheet:
     <p class="error">Resources C2 missing required text</p>
     <p class="error">Resources B3 must be either 'Location' or 'Resource'</p>
 
+This file has examples of bad data for the Persons sheet:
+
+    >>> browser.getLink('Manage').click()
+    >>> browser.getLink('XLS Import').click()
+    >>> import pkg_resources
+    >>> browser.getControl('XLS File').add_file(
+    ...     pkg_resources.resource_stream('schooltool.export.ftests', 'errant_persons.xls'),
+    ...     'application/excel',
+    ...     'sample_data.xls')
+    >>> browser.getControl('Submit').click()
+    >>> browser.printQuery("//p[@class='error']")
+    <p class="error">Persons C2 missing required text</p>
+    <p class="error">Persons E2 missing required text</p>
+
