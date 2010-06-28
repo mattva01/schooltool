@@ -616,11 +616,18 @@ class CourseImporter(ImporterBase):
         for row in range(1, sh.nrows):
             if sh.cell_value(rowx=row, colx=0) == '':
                 break
+            num_errors = len(self.errors)
             data = {}
-            data['school_year'] = sh.cell_value(rowx=row, colx=0)
-            data['__name__'] = sh.cell_value(rowx=row, colx=1)
-            data['title'] = sh.cell_value(rowx=row, colx=2)
-            data['description'] = sh.cell_value(rowx=row, colx=3)
+            data['school_year'] = self.getRequiredTextFromCell(sh, row, 0)
+            data['__name__'] = self.getRequiredTextFromCell(sh, row, 1)
+            data['title'] = self.getRequiredTextFromCell(sh, row, 2)
+            data['description'] = self.getTextFromCell(sh, row, 3)
+            if num_errors < len(self.errors):
+                continue
+            if data['school_year'] not in ISchoolYearContainer(self.context):
+                self.error(0, row + 1, ERROR_INVALID_SCHOOL_YEAR)
+            if num_errors < len(self.errors):
+                continue
             course = self.createCourse(data)
             self.addCourse(course, data)
 

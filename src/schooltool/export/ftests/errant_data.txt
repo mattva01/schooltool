@@ -118,3 +118,22 @@ This file has examples of bad data for the Persons sheet:
     <p class="error">Persons C3 not unicode or ascii string</p>
     <p class="error">Persons E3 not unicode or ascii string</p>
 
+This file has examples of bad data for the Courses sheet:
+
+    >>> browser.getLink('Manage').click()
+    >>> browser.getLink('XLS Import').click()
+    >>> import pkg_resources
+    >>> browser.getControl('XLS File').add_file(
+    ...     pkg_resources.resource_stream('schooltool.export.ftests', 'errant_courses.xls'),
+    ...     'application/excel',
+    ...     'sample_data.xls')
+    >>> browser.getControl('Submit').click()
+    >>> browser.printQuery("//p[@class='error']")
+    <p class="error">Courses B2 missing required text</p>
+    <p class="error">Courses C2 missing required text</p>
+    <p class="error">Courses A3 not unicode or ascii string</p>
+    <p class="error">Courses B3 not unicode or ascii string</p>
+    <p class="error">Courses C3 not unicode or ascii string</p>
+    <p class="error">Courses D3 not unicode or ascii string</p>
+    <p class="error">Courses A4 invalid school year</p>
+
