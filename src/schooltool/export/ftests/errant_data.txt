@@ -75,3 +75,18 @@ This file has examples of bad data for the School Timetables sheet:
     <p class="error">School Timetables A40 is not defined in the 'Day Templates' section</p>
     <p class="error">School Timetables A42 is the same day id as another in this timetable</p>
 
+This file has examples of bad data for the Resouces sheet:
+
+    >>> browser.getLink('Manage').click()
+    >>> browser.getLink('XLS Import').click()
+    >>> import pkg_resources
+    >>> browser.getControl('XLS File').add_file(
+    ...     pkg_resources.resource_stream('schooltool.export.ftests', 'errant_resources.xls'),
+    ...     'application/excel',
+    ...     'sample_data.xls')
+    >>> browser.getControl('Submit').click()
+    >>> browser.printQuery("//p[@class='error']")
+    <p class="error">Resources B2 missing required text</p>
+    <p class="error">Resources C2 missing required text</p>
+    <p class="error">Resources B3 must be either 'Location' or 'Resource'</p>
+

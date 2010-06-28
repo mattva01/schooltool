@@ -79,7 +79,7 @@ ERROR_TIME_RANGE = _("is not a valid time range")
 ERROR_TIMETABLE_MODEL = _("is not a valid timetable model")
 ERROR_DUPLICATE_DAY_ID = _("is the same day id as another in this timetable")
 ERROR_UNKNOWN_DAY_ID = _("is not defined in the 'Day Templates' section")
-
+ERROR_RESOURCE_TYPE = _("must be either 'Location' or 'Resource'")
 
 no_date = object()
 no_data = object()
@@ -495,10 +495,16 @@ class ResourceImporter(ImporterBase):
         for row in range(1, sh.nrows):
             if sh.cell_value(rowx=row, colx=0) == '':
                 break
+            num_errors = len(self.errors)
             data = {}
-            data['__name__'] = sh.cell_value(rowx=row, colx=0)
-            data['type'] = sh.cell_value(rowx=row, colx=1)
-            data['title'] = sh.cell_value(rowx=row, colx=2)
+            data['__name__'] = self.getRequiredTextFromCell(sh, row, 0)
+            data['type'] = self.getRequiredTextFromCell(sh, row, 1)
+            data['title'] = self.getRequiredTextFromCell(sh, row, 2)
+            if num_errors < len(self.errors):
+                continue
+            if data['type'] not in ['Location', 'Resource']:
+                self.error(1, row + 1, ERROR_RESOURCE_TYPE)
+                continue
             resource = self.createResource(data)
             self.addResource(resource, data)
 
