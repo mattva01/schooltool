@@ -577,7 +577,7 @@ class PersonImporter(ImporterBase):
                 if isinstance(field, DateFieldDescription):
                     value = self.getDateFromCell(sh, row, n + 10, default=None)
                 else:
-                    value = sh.cell_value(rowx=row, colx=n + 10)
+                    value = self.getTextFromCell(sh, row, n + 10)
                 if value == '':
                     value = None
                 demographics[field.name] = value

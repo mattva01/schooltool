@@ -101,6 +101,20 @@ This file has examples of bad data for the Persons sheet:
     ...     'sample_data.xls')
     >>> browser.getControl('Submit').click()
     >>> browser.printQuery("//p[@class='error']")
+    <p class="error">Persons B2 not unicode or ascii string</p>
     <p class="error">Persons C2 missing required text</p>
+    <p class="error">Persons D2 not unicode or ascii string</p>
     <p class="error">Persons E2 missing required text</p>
+    <p class="error">Persons F2 not unicode or ascii string</p>
+    <p class="error">Persons G2 not unicode or ascii string</p>
+    <p class="error">Persons H2 not unicode or ascii string</p>
+    <p class="error">Persons I2 not unicode or ascii string</p>
+    <p class="error">Persons J2 not unicode or ascii string</p>
+    <p class="error">Persons K2 not unicode or ascii string</p>
+    <p class="error">Persons L2 not unicode or ascii string</p>
+    <p class="error">Persons M2 not unicode or ascii string</p>
+    <p class="error">Persons N2 not unicode or ascii string</p>
+    <p class="error">Persons O2 not unicode or ascii string</p>
+    <p class="error">Persons C3 not unicode or ascii string</p>
+    <p class="error">Persons E3 not unicode or ascii string</p>
 
