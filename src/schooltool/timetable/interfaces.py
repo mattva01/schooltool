@@ -415,6 +415,12 @@ class ITimetable(ILocation):
 
     title = TextLine(title=u"Title", required=True)
 
+    first = Date(
+        title=u"Apply timetable from")
+
+    last = Date(
+        title=u"Apply timetable until")
+
     model = Object(
         title=u"A timetable model this timetable should be used with.",
         schema=ITimetableModel)

@@ -43,6 +43,7 @@ from persistent import Persistent
 from persistent.dict import PersistentDict
 from zope.interface import implements, classProvides
 from zope.traversing.api import getPath
+from zope.proxy import sameProxiedObjects
 
 from schooltool.app.cal import CalendarEvent
 from schooltool.calendar.simple import ImmutableCalendar
@@ -122,9 +123,9 @@ class BaseTimetableModel(Persistent):
         events = []
         day_id_gen = self._dayGenerator()
         if first is None:
-            first = term.first
+            first = timetable.first
         if last is None:
-            last = term.last
+            last = timetable.last
         for date in term:
             if not first <= date <= last:
                 # must call getDayId to keep track of days
@@ -410,7 +411,8 @@ def removeEventsFromCalendar(event):
             if (cal_event.activity == event.activity and
                 cal_event.period_id == event.period_id and
                 cal_event.day_id == event.day_id and
-                cal_event.activity.timetable is event.activity.timetable):
+                sameProxiedObjects(cal_event.activity.timetable,
+                                   event.activity.timetable)):
                 section_calendar.removeEvent(cal_event)
 
 
@@ -418,7 +420,8 @@ def handleTimetableRemovedEvent(event):
     section_calendar = ISchoolToolCalendar(event.object)
     for cal_event in list(section_calendar):
         if ITimetableCalendarEvent.providedBy(cal_event):
-            if (cal_event.activity.timetable is event.old_timetable):
+            if sameProxiedObjects(cal_event.activity.timetable,
+                                  event.old_timetable):
                 section_calendar.removeEvent(cal_event)
 
 

@@ -830,10 +830,6 @@ class TestTimetableDict(EventTestMixin, unittest.TestCase):
         td['1'] = TimetableStub(term1, schooltt1)
         td['1'] = TimetableStub(term1, schooltt1)
         td['1'] = TimetableStub(term2, schooltt1)
-
-        self.assertRaises(DuplicateTimetableError, td.__setitem__, '2',
-                          TimetableStub(term2, schooltt1))
-
         td['2'] = TimetableStub(term1, schooltt1)
         td['3'] = TimetableStub(term1, schooltt2)
 

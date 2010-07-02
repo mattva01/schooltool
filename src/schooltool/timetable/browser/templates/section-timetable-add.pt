@@ -1,0 +1,65 @@
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title" i18n:translate="">
+      Scheduling for <span i18n:name="section"
+                           tal:define="section context/__parent__"
+                           tal:replace="section/label" />
+  </title>
+</head>
+<body>
+
+<h1 metal:fill-slot="content-header" i18n:translate="">
+  Scheduling for <span i18n:name="section"
+                       tal:define="section context/__parent__"
+                       tal:replace="section/label" />
+</h1>
+
+<metal:block metal:fill-slot="body">
+
+  <div tal:define="term view/term">
+    <div i18n:translate="">For term:
+      <strong i18n:name="term_title" tal:content="term/title" />
+      (from
+        <tal:block i18n:name="starts" tal:content="term/first/@@mediumDate"/>
+       to
+        <tal:block i18n:name="ends" tal:content="term/last/@@mediumDate"/>)
+    </div>
+
+  </div>
+
+
+  <div class="status" tal:condition="view/status">
+    <ul class="errors"
+        tal:condition="view/widgets/errors"
+        metal:define-macro="form-errors">
+      <li tal:repeat="error view/widgets/errors">
+        <tal:block condition="error/widget">
+          <span tal:replace="error/widget/label" />:
+        </tal:block>
+        <span tal:replace="structure error/render">Error Type</span>
+      </li>
+    </ul>
+  </div>
+
+<form action="." method="post" enctype="multipart/form-data"
+      metal:define-macro="form"
+      tal:attributes="method view/method;
+                      enctype view/enctype;
+                      acceptCharset view/acceptCharset;
+                      accept view/accept;
+                      action view/action;
+                      name view/name;
+                      id view/id">
+
+  <div metal:use-macro="macro:widget-rows">
+  </div>
+
+  <div metal:use-macro="macro:form-buttons">
+  </div>
+
+</form>
+
+
+</metal:block>
+</body>
+</html>

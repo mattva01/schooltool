@@ -252,7 +252,8 @@ def setUpTimetabling(username):
 
     manager.open('http://localhost/schoolyears/2005-2006/2005-fall/sections/1')
     manager.getLink('Schedule').click()
-
+    manager.getLink('Add Timetable').click()
+    manager.getControl('Add').click()
     manager.getControl(name="Monday.09:30-10:25").value = True
     manager.getControl(name="Wednesday.11:35-12:20").value = True
     manager.getControl('Save').click()
