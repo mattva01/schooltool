@@ -40,6 +40,7 @@ from zope.proxy import sameProxiedObjects
 
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.app import InitBase, StartUpBase
+from schooltool.app.utils import TitledContainerItemSource
 from schooltool.schoolyear.interfaces import ISchoolYearContainer, ISchoolYear
 from schooltool.schoolyear.subscriber import ObjectEventAdapterSubscriber
 from schooltool.relationship import URIObject, RelationshipSchema
@@ -164,42 +165,16 @@ class RemoveLevelsWhenSchoolYearIsDeleted(ObjectEventAdapterSubscriber):
         del top_level_container[level_container.__name__]
 
 
-class LevelSource(object):
+class LevelSource(TitledContainerItemSource):
     """Source of levels for contexts adaptable to ISchoolYear"""
     implements(zope.schema.interfaces.IIterableSource)
 
-    def __init__(self, context):
-        self.context = context
-
     @property
-    def levels(self):
+    def container(self):
         schoolyear = ISchoolYear(self.context, None)
         if schoolyear is None:
             return {}
         return interfaces.ILevelContainer(schoolyear)
-
-    def __len__(self):
-        return len(self.levels)
-
-    def __contains__(self, level):
-        return sameProxiedObjects(level, self.levels.get(level.__name__))
-
-    def __iter__(self):
-        for level in self.levels.values():
-            yield self.getTerm(level)
-
-    def getTermByToken(self, token):
-        terms = [self.getTerm(level) for level in self.levels.values()]
-        by_token = dict([(term.token, term) for term in terms])
-        if token not in by_token:
-            raise LookupError(token)
-        return by_token[token]
-
-    def getTerm(self, level):
-        return SimpleTerm(
-            level,
-            token=simple_form_key(level),
-            title=level.title)
 
 
 def levelSourceVocabularyFactory():
