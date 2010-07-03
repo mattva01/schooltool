@@ -88,6 +88,7 @@ ERROR_INVALID_SCHEMA_ID = _('is not a valid schema in the given school year')
 ERROR_INVALID_DAY_ID = _('is not a valid day id for the given schema')
 ERROR_INVALID_PERIOD_ID = _('is not a valid period id for the given day')
 ERROR_INVALID_RESOURCE_ID = _('is not a valid resource id')
+ERROR_UNICODE_CONVERSION = _("Username cannot contain non-ascii characters: %s")
 
 
 no_date = object()
@@ -108,10 +109,10 @@ class ImporterBase(object):
                 return default
             raise
 
-    def error(self, col, row, message):
+    def error(self, row, col, message):
         self.errors.append("%s %s%s %s" % (self.sheet_name,
                                            chr(col + ord('A')),
-                                           row,
+                                           row + 1,
                                            message))
 
     def getTextFromCell(self, sheet, row, col, default=u''):
@@ -123,10 +124,10 @@ class ImporterBase(object):
             try:
                 value = unicode(value)
             except UnicodeError:
-                self.error(col, row + 1, ERROR_NOT_UNICODE_OR_ASCII)
+                self.error(row, col, ERROR_NOT_UNICODE_OR_ASCII)
                 return default
         elif not isinstance(value, unicode):
-            self.error(col, row + 1, ERROR_NOT_UNICODE_OR_ASCII)
+            self.error(row, col, ERROR_NOT_UNICODE_OR_ASCII)
             return default
         return value
 
@@ -134,7 +135,7 @@ class ImporterBase(object):
         num_errors = len(self.errors)
         value = self.getTextFromCell(sheet, row, col)
         if num_errors == len(self.errors) and not value:
-            self.error(col, row + 1, ERROR_MISSING_REQUIRED_TEXT)
+            self.error(row, col, ERROR_MISSING_REQUIRED_TEXT)
         return value
 
     def getDateFromCell(self, sheet, row, col, default=no_date):
@@ -144,7 +145,7 @@ class ImporterBase(object):
             if default is not no_date:
                 return default
             else:
-                self.error(col, row + 1, ERROR_NO_DATE)
+                self.error(row, col, ERROR_NO_DATE)
                 return None
         return datetime.datetime(*dt).date()
 
@@ -202,11 +203,11 @@ class SchoolYearImporter(ImporterBase):
             data['first'] = self.getDateFromCell(sh, row, 2)
             data['last'] = self.getDateFromCell(sh, row, 3)
             if data['last'] < data['first']:
-                self.error(3, row + 1, ERROR_END_BEFORE_START)
+                self.error(row, 3, ERROR_END_BEFORE_START)
             elif self.testOverlap(data['__name__'], data['first']):
-                self.error(2, row + 1, ERROR_START_OVERLAP)
+                self.error(row, 2, ERROR_START_OVERLAP)
             elif self.testOverlap(data['__name__'], data['last']):
-                self.error(3, row + 1, ERROR_END_OVERLAP)
+                self.error(row, 3, ERROR_END_OVERLAP)
             if num_errors == len(self.errors):
                 sy = self.createSchoolYear(data)
                 self.addSchoolYear(sy, data)
@@ -270,23 +271,23 @@ class TermImporter(ImporterBase):
             if not data['school_year']:
                 continue
             elif data['school_year'] not in ISchoolYearContainer(self.context):
-                self.error(0, row + 1, ERROR_INVALID_SCHOOL_YEAR)
+                self.error(row, 0, ERROR_INVALID_SCHOOL_YEAR)
                 continue
 
             if not data['first'] or not data['last']:
                 continue
             elif data['last'] < data['first']:
-                self.error(4, row + 1, ERROR_END_BEFORE_START)
+                self.error(row, 4, ERROR_END_BEFORE_START)
             elif self.testBeforeYearStart(data['school_year'], data['first']):
-                self.error(3, row + 1, ERROR_START_BEFORE_YEAR_START)
+                self.error(row, 3, ERROR_START_BEFORE_YEAR_START)
             elif self.testAfterYearEnd(data['school_year'], data['last']):
-                self.error(4, row + 1, ERROR_END_AFTER_YEAR_END)
+                self.error(row, 4, ERROR_END_AFTER_YEAR_END)
             elif self.testOverlap(data['school_year'], data['__name__'],
                                   data['first']):
-                self.error(3, row + 1, ERROR_START_OVERLAP_TERM)
+                self.error(row, 3, ERROR_START_OVERLAP_TERM)
             elif self.testOverlap(data['school_year'], data['__name__'],
                                   data['last']):
-                self.error(4, row + 1, ERROR_END_OVERLAP_TERM)
+                self.error(row, 4, ERROR_END_OVERLAP_TERM)
 
             if num_errors == len(self.errors):
                 term = self.createTerm(data)
@@ -302,7 +303,7 @@ class TermImporter(ImporterBase):
                 if not start or not end:
                     continue
                 elif end < start:
-                    self.error(4, row + 1, ERROR_END_BEFORE_START)
+                    self.error(row, 4, ERROR_END_BEFORE_START)
                     continue
 
                 holiday_region = DateRange(start, end)
@@ -392,9 +393,9 @@ class SchoolTimetableImporter(ImporterBase):
 
         num_errors = len(self.errors)
         if data['school_year'] not in ISchoolYearContainer(self.context):
-            self.error(1, row + 2, ERROR_INVALID_SCHOOL_YEAR)
+            self.error(row + 1, 1, ERROR_INVALID_SCHOOL_YEAR)
         if queryUtility(ITimetableModelFactory, data['model']) is None:
-            self.error(1, row + 3, ERROR_TIMETABLE_MODEL)
+            self.error(row + 2, 1, ERROR_TIMETABLE_MODEL)
         if num_errors < len(self.errors):
             return
 
@@ -408,7 +409,7 @@ class SchoolTimetableImporter(ImporterBase):
                     break
                 day_id = self.getRequiredTextFromCell(sh, row, 0)
                 if day_id in [day['id'] for day in data['templates']]:
-                    self.error(0, row + 1, ERROR_DUPLICATE_DAY_ID)
+                    self.error(row, 0, ERROR_DUPLICATE_DAY_ID)
                 periods = []
                 for col in range(1, sh.ncols):
                     cell = sh.cell_value(rowx=row, colx=col)
@@ -417,7 +418,7 @@ class SchoolTimetableImporter(ImporterBase):
                     try:
                         time_range = parse_time_range(cell)
                     except:
-                        self.error(col, row + 1, ERROR_TIME_RANGE)
+                        self.error(row, col, ERROR_TIME_RANGE)
                         continue
                     periods.append(time_range)
                 data['templates'].append({'id': day_id, 'periods': periods})
@@ -441,16 +442,16 @@ class SchoolTimetableImporter(ImporterBase):
                     break
                 day_id = self.getRequiredTextFromCell(sh, row, 0)
                 if day_id in [day['id'] for day in data['days']]:
-                    self.error(0, row + 1, ERROR_DUPLICATE_DAY_ID)
+                    self.error(row, 0, ERROR_DUPLICATE_DAY_ID)
                 if day_id not in [day['id'] for day in data['templates']]:
-                    self.error(0, row + 1, ERROR_UNKNOWN_DAY_ID)
+                    self.error(row, 0, ERROR_UNKNOWN_DAY_ID)
                 periods = []
                 for col in range(1, homeroom_start):
                     cell = sh.cell_value(rowx=row, colx=col)
                     if cell == '':
                         break
                     if cell in periods:
-                        self.error(col, row + 1, ERROR_DUPLICATE_PERIOD)
+                        self.error(row, col, ERROR_DUPLICATE_PERIOD)
                     else:
                         periods.append(cell)
                 homeroom_periods = []
@@ -459,8 +460,7 @@ class SchoolTimetableImporter(ImporterBase):
                     if cell == '':
                         break
                     if cell in homeroom_periods:
-                        self.error(col, row + 1, 
-                            ERROR_DUPLICATE_HOMEROOM_PERIOD)
+                        self.error(row, col, ERROR_DUPLICATE_HOMEROOM_PERIOD)
                     else:
                         homeroom_periods.append(cell)
                 data['days'].append({'id': day_id,
@@ -515,7 +515,7 @@ class ResourceImporter(ImporterBase):
             if num_errors < len(self.errors):
                 continue
             if data['type'] not in ['Location', 'Resource']:
-                self.error(1, row + 1, ERROR_RESOURCE_TYPE)
+                self.error(row, 1, ERROR_RESOURCE_TYPE)
                 continue
             resource = self.createResource(data)
             self.addResource(resource, data)
@@ -579,7 +579,7 @@ class PersonImporter(ImporterBase):
             try:
                 data['__name__'].encode('ascii')
             except UnicodeEncodeError:
-                self.error(0, row+1, "Username cannot contain non-ascii characters: %s" % data['__name__'])
+                self.error(row, 0, ERROR_UNICODE_CONVERSION % data['__name__'])
 
             person = self.createPerson(data)
 
@@ -636,7 +636,7 @@ class CourseImporter(ImporterBase):
             if num_errors < len(self.errors):
                 continue
             if data['school_year'] not in ISchoolYearContainer(self.context):
-                self.error(0, row + 1, ERROR_INVALID_SCHOOL_YEAR)
+                self.error(row, 0, ERROR_INVALID_SCHOOL_YEAR)
             if num_errors < len(self.errors):
                 continue
             course = self.createCourse(data)
@@ -668,7 +668,7 @@ class SectionImporter(ImporterBase):
         schemas = ITimetableSchemaContainer(ISchoolYear(section))
         schema_id = self.getRequiredTextFromCell(sh, row, 1)
         if schema_id not in schemas:
-            self.error(0, row+1, ERROR_INVALID_SCHEMA_ID)
+            self.error(row, 0, ERROR_INVALID_SCHEMA_ID)
             return
         schema = schemas[schema_id]
         timetable = schema.createTimetable(ITerm(section))
@@ -691,11 +691,11 @@ class SectionImporter(ImporterBase):
                 continue
 
             if day_id not in schema.day_ids:
-                self.error(0, row+1, ERROR_INVALID_DAY_ID)
+                self.error(row, 0, ERROR_INVALID_DAY_ID)
             elif period_id not in schema[day_id].periods:
-                self.error(1, row+1, ERROR_INVALID_PERIOD_ID)
+                self.error(row, 1, ERROR_INVALID_PERIOD_ID)
             if resource_id and resource_id not in rc:
-                self.error(2, row+1, ERROR_INVALID_RESOURCE_ID)
+                self.error(row, 2, ERROR_INVALID_RESOURCE_ID)
             if num_errors < len(self.errors):
                 continue
 
@@ -739,7 +739,7 @@ class SectionImporter(ImporterBase):
                 if num_errors < len(self.errors):
                     continue
                 if course_id not in courses:
-                    self.error(0, row+1, ERROR_INVALID_COURSE_ID)
+                    self.error(row, 0, ERROR_INVALID_COURSE_ID)
                     continue
                 course = courses[course_id]
 
@@ -762,7 +762,7 @@ class SectionImporter(ImporterBase):
                 if num_errors < len(self.errors):
                     continue
                 if username not in persons:
-                    self.error(0, row+1, ERROR_INVALID_PERSON_ID)
+                    self.error(row, 0, ERROR_INVALID_PERSON_ID)
                     continue
                 member = persons[username]
 
@@ -781,7 +781,7 @@ class SectionImporter(ImporterBase):
                 if num_errors < len(self.errors):
                     continue
                 if username not in persons:
-                    self.error(0, row+1, ERROR_INVALID_PERSON_ID)
+                    self.error(row, 0, ERROR_INVALID_PERSON_ID)
                     continue
                 instructor = persons[username]
 
@@ -805,12 +805,12 @@ class SectionImporter(ImporterBase):
                 continue
 
             if year_id not in schoolyears:
-                self.error(1, 1, ERROR_INVALID_SCHOOL_YEAR)
+                self.error(0, 1, ERROR_INVALID_SCHOOL_YEAR)
                 continue
             year = schoolyears[year_id]
 
             if term_id not in year:
-                self.error(3, 1, ERROR_INVALID_TERM_ID)
+                self.error(0, 3, ERROR_INVALID_TERM_ID)
                 continue
             term = year[term_id]
 
