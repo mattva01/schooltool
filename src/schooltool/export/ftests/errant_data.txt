@@ -165,3 +165,25 @@ This file has examples of bad data for the Sections sheet:
     <p class="error">Sections_5 C23 is not a valid resource id</p>
     <p class="error">Sections_5 B24 is not a valid period id for the given day</p>
 
+This file has examples of bad data for the Groups sheet:
+
+    >>> browser.getLink('Manage').click()
+    >>> browser.getLink('XLS Import').click()
+    >>> import pkg_resources
+    >>> browser.getControl('XLS File').add_file(
+    ...     pkg_resources.resource_stream('schooltool.export.ftests', 'errant_groups.xls'),
+    ...     'application/excel',
+    ...     'sample_data.xls')
+    >>> browser.getControl('Submit').click()
+    >>> browser.printQuery("//p[@class='error']")
+    <p class="error">Groups B1 missing required text</p>
+    <p class="error">Groups B2 missing required text</p>
+    <p class="error">Groups B3 missing required text</p>
+    <p class="error">Groups B6 not unicode or ascii string</p>
+    <p class="error">Groups B7 not unicode or ascii string</p>
+    <p class="error">Groups B8 not unicode or ascii string</p>
+    <p class="error">Groups B9 not unicode or ascii string</p>
+    <p class="error">Groups A11 invalid school year</p>
+    <p class="error">Groups A22 not unicode or ascii string</p>
+    <p class="error">Groups A23 is not a valid username</p>
+

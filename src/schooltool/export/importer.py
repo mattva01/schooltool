@@ -854,11 +854,18 @@ class GroupImporter(ImporterBase):
             gc[group.__name__] = group
 
     def import_group(self, sh, row):
+        num_errors = len(self.errors)
         data = {}
-        data['title'] = sh.cell_value(rowx=row, colx=1)
-        data['__name__'] = sh.cell_value(rowx=row+1, colx=1)
-        data['school_year'] = sh.cell_value(rowx=row+2, colx=1)
-        data['description'] = sh.cell_value(rowx=row+3, colx=1)
+        data['title'] = self.getRequiredTextFromCell(sh, row, 1)
+        data['__name__'] = self.getRequiredTextFromCell(sh, row+1, 1)
+        data['school_year'] = self.getRequiredTextFromCell(sh, row+2, 1)
+        data['description'] = self.getTextFromCell(sh, row+3, 1)
+        if num_errors < len(self.errors):
+            return
+        if data['school_year'] not in ISchoolYearContainer(self.context):
+            self.error(row, 0, ERROR_INVALID_SCHOOL_YEAR)
+            return
+
         group = self.createGroup(data)
         self.addGroup(group, data)
 
@@ -869,17 +876,22 @@ class GroupImporter(ImporterBase):
             for row in range(row, sh.nrows):
                 if sh.cell_value(rowx=row, colx=0) == '':
                     break
-                username = sh.cell_value(rowx=row, colx=0)
+                num_errors = len(self.errors)
+                username = self.getRequiredTextFromCell(sh, row, 0)
+                if num_errors < len(self.errors):
+                    continue
+                if username not in pc:
+                    self.error(row, 0, ERROR_INVALID_PERSON_ID)
+                    continue
                 member = pc[username]
                 if member not in group.members:
                     group.members.add(removeSecurityProxy(member))
-        return row
 
     def process(self):
         sh = self.sheet
         for row in range(0, sh.nrows):
             if sh.cell_value(rowx=row, colx=0) == 'Group Title':
-                row = self.import_group(sh, row)
+                self.import_group(sh, row)
 
 
 class MegaImporter(BrowserView):
