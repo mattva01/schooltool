@@ -31,6 +31,7 @@ from zope.publisher.browser import BrowserView
 from schooltool.basicperson.interfaces import IDemographicsFields
 from schooltool.basicperson.interfaces import IDemographics
 from schooltool.basicperson.demographics import DateFieldDescription
+from schooltool.basicperson.person import BasicPerson
 from schooltool.resource.resource import Resource
 from schooltool.resource.resource import Location
 from schooltool.group.group import Group
@@ -62,6 +63,7 @@ from schooltool.common import DateRange
 from schooltool.common import SchoolToolMessage as _
 
 
+ERROR_NOT_INT =  _('is not a valid integer')
 ERROR_NOT_UNICODE_OR_ASCII = _('not unicode or ascii string')
 ERROR_MISSING_REQUIRED_TEXT = _('missing required text')
 ERROR_NO_DATE = _('has no date in it')
@@ -89,6 +91,7 @@ ERROR_INVALID_DAY_ID = _('is not a valid day id for the given schema')
 ERROR_INVALID_PERIOD_ID = _('is not a valid period id for the given day')
 ERROR_INVALID_RESOURCE_ID = _('is not a valid resource id')
 ERROR_UNICODE_CONVERSION = _("Username cannot contain non-ascii characters: %s")
+ERROR_WEEKLY_DAY_ID = _('is not a valid weekday number (0-6)')
 
 
 no_date = object()
@@ -115,26 +118,59 @@ class ImporterBase(object):
                                            row + 1,
                                            message))
 
-    def getTextFromCell(self, sheet, row, col, default=u''):
+    def getCellAndFound(self, sheet, row, col, default=u''):
         try:
-            value = sheet.cell_value(rowx=row, colx=col)
+            return sheet.cell_value(rowx=row, colx=col), True
         except:
-            return ''
-        if isinstance(value, str):
-            try:
-                value = unicode(value)
-            except UnicodeError:
+            return default, False
+
+    def getIntFoundValid(self, sheet, row, col, default=0):
+        value, found = self.getCellAndFound(sheet, row, col, default)
+        valid = True
+        if found:
+            if isinstance(value, float):
+                if int(value) != value:
+                    self.error(row, col, ERROR_NOT_INT)
+                    valid = False
+                else:
+                    value = int(value)
+            elif not isinstance(value, int):
+                self.error(row, col, ERROR_NOT_INT)
+                valid = False
+        return value, found, valid
+
+    def getIntFromCell(self, sheet, row, col, default=0):
+        value, found, valid = self.getIntFoundValid(sheet, row, col, default)
+        return value
+
+    def getRequiredIntFromCell(self, sheet, row, col):
+        value, found, valid = self.getIntFoundValid(sheet, row, col)
+        if not found:
+            self.error(row, col, ERROR_NOT_INT)
+        return value
+
+    def getTextFoundValid(self, sheet, row, col, default=u''):
+        value, found = self.getCellAndFound(sheet, row, col, default)
+        valid = True
+        if found:
+            if isinstance(value, str):
+                try:
+                    value = unicode(value)
+                except UnicodeError:
+                    self.error(row, col, ERROR_NOT_UNICODE_OR_ASCII)
+                    valid = False
+            elif not isinstance(value, unicode):
                 self.error(row, col, ERROR_NOT_UNICODE_OR_ASCII)
-                return default
-        elif not isinstance(value, unicode):
-            self.error(row, col, ERROR_NOT_UNICODE_OR_ASCII)
-            return default
+                valid = False
+        return value, found, valid
+
+    def getTextFromCell(self, sheet, row, col, default=u''):
+        value, found, valid = self.getTextFoundValid(sheet, row, col, default)
         return value
 
     def getRequiredTextFromCell(self, sheet, row, col):
-        num_errors = len(self.errors)
-        value = self.getTextFromCell(sheet, row, col)
-        if num_errors == len(self.errors) and not value:
+        value, found, valid = self.getTextFoundValid(sheet, row, col)
+        if valid and not value:
             self.error(row, col, ERROR_MISSING_REQUIRED_TEXT)
         return value
 
@@ -260,6 +296,7 @@ class TermImporter(ImporterBase):
         for row in range(1, sh.nrows):
             if sh.cell_value(rowx=row, colx=0) == '':
                 break
+
             num_errors = len(self.errors)
             data = {}
             data['school_year'] = self.getRequiredTextFromCell(sh, row, 0)
@@ -267,16 +304,14 @@ class TermImporter(ImporterBase):
             data['title'] = self.getRequiredTextFromCell(sh, row, 2)
             data['first'] = self.getDateFromCell(sh, row, 3)
             data['last'] = self.getDateFromCell(sh, row, 4)
-
-            if not data['school_year']:
+            if num_errors < len(self.errors):
                 continue
-            elif data['school_year'] not in ISchoolYearContainer(self.context):
+
+            if data['school_year'] not in ISchoolYearContainer(self.context):
                 self.error(row, 0, ERROR_INVALID_SCHOOL_YEAR)
                 continue
 
-            if not data['first'] or not data['last']:
-                continue
-            elif data['last'] < data['first']:
+            if data['last'] < data['first']:
                 self.error(row, 4, ERROR_END_BEFORE_START)
             elif self.testBeforeYearStart(data['school_year'], data['first']):
                 self.error(row, 3, ERROR_START_BEFORE_YEAR_START)
@@ -381,6 +416,15 @@ class SchoolTimetableImporter(ImporterBase):
         if school_timetable.__name__ not in sc:
             sc[school_timetable.__name__] = school_timetable
 
+    def getWeeklyDayId(self, sh, row, col):
+        if sh.cell_value(rowx=row, colx=col) == 'default':
+            day_id = 'default'
+        else:
+            day_id, found, valid = self.getIntFoundValid(sh, row, col)
+            if valid and day_id not in range(7):
+                self.error(row, 0, ERROR_WEEKLY_DAY_ID)
+        return day_id
+
     def import_school_timetable(self, sh, row):
         num_errors = len(self.errors)
         data = {}
@@ -407,9 +451,15 @@ class SchoolTimetableImporter(ImporterBase):
             for row in range(row, sh.nrows):
                 if sh.cell_value(rowx=row, colx=0) == '':
                     break
-                day_id = self.getRequiredTextFromCell(sh, row, 0)
+
+                if data['model'] == 'WeeklyTimetableModel':
+                    day_id = self.getWeeklyDayId(sh, row, 0)
+                else:
+                    day_id = self.getRequiredTextFromCell(sh, row, 0)
+
                 if day_id in [day['id'] for day in data['templates']]:
                     self.error(row, 0, ERROR_DUPLICATE_DAY_ID)
+
                 periods = []
                 for col in range(1, sh.ncols):
                     cell = sh.cell_value(rowx=row, colx=col)
@@ -440,11 +490,17 @@ class SchoolTimetableImporter(ImporterBase):
             for row in range(row, sh.nrows):
                 if sh.cell_value(rowx=row, colx=0) == '':
                     break
-                day_id = self.getRequiredTextFromCell(sh, row, 0)
+
+                if data['model'] == 'WeeklyTimetableModel':
+                    day_id = self.getWeeklyDayId(sh, row, 0)
+                else:
+                    day_id = self.getRequiredTextFromCell(sh, row, 0)
+
                 if day_id in [day['id'] for day in data['days']]:
                     self.error(row, 0, ERROR_DUPLICATE_DAY_ID)
                 if day_id not in [day['id'] for day in data['templates']]:
                     self.error(row, 0, ERROR_UNKNOWN_DAY_ID)
+
                 periods = []
                 for col in range(1, homeroom_start):
                     cell = sh.cell_value(rowx=row, colx=col)
@@ -538,7 +594,6 @@ class PersonImporter(ImporterBase):
             person.setPassword(data['password'])
 
     def createPerson(self, data):
-        from schooltool.basicperson.person import BasicPerson
         person = BasicPerson(data['__name__'],
                              data['first_name'],
                              data['last_name'])
@@ -560,6 +615,8 @@ class PersonImporter(ImporterBase):
         for row in range(1, sh.nrows):
             if sh.cell_value(rowx=row, colx=0) == '':
                 break
+
+            num_errors = len(self.errors)
             data = {}
             data['__name__'] = self.getRequiredTextFromCell(sh, row, 0)
             data['prefix'] = self.getTextFromCell(sh, row, 1)
@@ -581,7 +638,10 @@ class PersonImporter(ImporterBase):
             except UnicodeEncodeError:
                 self.error(row, 0, ERROR_UNICODE_CONVERSION % data['__name__'])
 
-            person = self.createPerson(data)
+            if num_errors == len(self.errors):
+                person = self.createPerson(data)
+            else:
+                person = BasicPerson('name', 'first_name', 'last_name')
 
             demographics = IDemographics(person)
             for n, field in enumerate(fields.values()):
@@ -593,7 +653,8 @@ class PersonImporter(ImporterBase):
                     value = None
                 demographics[field.name] = value
 
-            self.addPerson(person, data)
+            if num_errors == len(self.errors):
+                self.addPerson(person, data)
 
 
 class CourseImporter(ImporterBase):

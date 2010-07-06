@@ -74,6 +74,9 @@ This file has examples of bad data for the School Timetables sheet:
     <p class="error">School Timetables A29 is the same day id as another in this timetable</p>
     <p class="error">School Timetables A40 is not defined in the 'Day Templates' section</p>
     <p class="error">School Timetables A42 is the same day id as another in this timetable</p>
+    <p class="error">School Timetables A50 is not a valid integer</p>
+    <p class="error">School Timetables A51 is not a valid integer</p>
+    <p class="error">School Timetables A52 is not a valid weekday number (0-6)</p>
 
 This file has examples of bad data for the Resouces sheet:
 
