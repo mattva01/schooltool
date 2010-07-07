@@ -7,6 +7,7 @@ CHANGES
 
 - XLS Importer catches errors before trying to create objects.
 - TestBrowser now strips out blank lines from printQuery
+- TimeTable object now has consecutive_periods_as_one flag for use by journal
 
 
 1.4.0 (2010-05-21)
