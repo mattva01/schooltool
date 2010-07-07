@@ -485,6 +485,10 @@ class SectionTimetableSetupView(TimetableSetupViewBase):
 
         return list(days(ttschema))
 
+    @property
+    def consecutive_label(self):
+        return _('Show consecutive periods as one period in journal')
+
     def __call__(self):
         self.has_timetables = bool(self.ttschemas)
         if not self.has_timetables:
@@ -496,16 +500,24 @@ class SectionTimetableSetupView(TimetableSetupViewBase):
         #XXX dumb, this doesn't space course names
         course_title = ''.join([course.title
                                 for course in self.context.courses])
+        section = removeSecurityProxy(self.context)
+        timetable = ITimetables(section).lookup(self.term, self.ttschema)
+        if timetable is None:
+            self.consecutive_value = False
+        else:
+            self.consecutive_value = timetable.consecutive_periods_as_one
 
         if 'CANCEL' in self.request:
             self.request.response.redirect(self.nextURL())
 
         if 'SAVE' in self.request:
-            section = removeSecurityProxy(self.context)
-            timetable = ITimetables(section).lookup(self.term, self.ttschema)
             if timetable is None:
                 timetable = self.ttschema.createTimetable(self.term)
                 self.addTimetable(timetable)
+            if self.request.get('consecutive') == 'on':
+                timetable.consecutive_periods_as_one = True
+            else:
+                timetable.consecutive_periods_as_one = False
 
             for day_id, day in timetable.items():
                 for period_id, period in list(day.items()):

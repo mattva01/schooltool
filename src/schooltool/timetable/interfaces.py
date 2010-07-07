@@ -25,7 +25,7 @@ import datetime
 from zope.interface import Interface, Attribute, implements
 from zope.schema import Field, Object, Int, TextLine, List, Tuple
 from zope.schema import Dict, Date, Timedelta
-from zope.schema import Iterable
+from zope.schema import Iterable, Bool
 from zope.schema.interfaces import IField
 from zope.annotation.interfaces import IAnnotatable
 from zope.container.constraints import contains, containers
@@ -420,6 +420,10 @@ class ITimetable(ILocation):
         schema=ITimetableModel)
 
     timezone = TextLine(title=u"The name of a timezone of this timetable")
+
+    consecutive_periods_as_one = Bool(
+        title=u"Consecutive periods appear as one column in the journal",
+        required=False)
 
     term = Object(
         title=u"The term this timetable is for.",

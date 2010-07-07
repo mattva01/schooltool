@@ -183,6 +183,7 @@ class Timetable(Persistent):
     __parent__ = None
 
     timezone = 'UTC'
+    consecutive_periods_as_one = False
 
     @property
     def title(self):

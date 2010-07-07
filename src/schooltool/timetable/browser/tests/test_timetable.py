@@ -361,6 +361,37 @@ def doctest_SectionTimetableSetupView():
         >>> ITimetables(math).timetables['1']['Tue']['9:00']
         set([])
 
+    Until now we have never checked the checkbox that corresponds to the
+    consecutive_periods_as_one attribute of the timetable, used in the
+    journal to compact consecutive periods into one column.
+
+        >>> ITimetables(math).timetables['1'].consecutive_periods_as_one
+        False
+
+    We'll set that option in the form and see that it is reflected in
+    the timetable.
+
+        >>> request = TestRequest(form={'ttschema': 'default',
+        ...                             'term': '2005-fall',
+        ...                             'consecutive':'on',
+        ...                             'SAVE': 'Save'})
+        >>> view = SectionTimetableSetupView(context, request)
+        >>> result = view()
+
+        >>> ITimetables(math).timetables['1'].consecutive_periods_as_one
+        True
+
+    Not checking the checkbox will set the value back to False.
+
+        >>> request = TestRequest(form={'ttschema': 'default',
+        ...                             'term': '2005-fall',
+        ...                             'SAVE': 'Save'})
+        >>> view = SectionTimetableSetupView(context, request)
+        >>> result = view()
+
+        >>> ITimetables(math).timetables['1'].consecutive_periods_as_one
+        False
+
     """
 
 
