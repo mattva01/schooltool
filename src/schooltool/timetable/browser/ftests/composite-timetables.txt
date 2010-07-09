@@ -113,6 +113,8 @@ Add section timetables:
     >>> manager.getLink('Birding').click()
     >>> manager.getLink('Birding1').click()
     >>> manager.getLink('Schedule').click()
+    >>> manager.getLink('Add Timetable').click()
+    >>> manager.getControl('Add').click()
     >>> manager.getControl('C').click()
     >>> manager.getControl('Save').click()
 
@@ -121,6 +123,8 @@ Add section timetables:
     >>> manager.getLink('Birding').click()
     >>> manager.getLink('Birding2').click()
     >>> manager.getLink('Schedule').click()
+    >>> manager.getLink('Add Timetable').click()
+    >>> manager.getControl('Add').click()
     >>> manager.getControl('D').click()
     >>> manager.getControl('Save').click()
 

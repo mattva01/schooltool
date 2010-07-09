@@ -1,0 +1,112 @@
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title" i18n:translate="">
+      Scheduling for <span i18n:name="section"
+                           tal:replace="view/owner/label" />
+  </title>
+</head>
+<body>
+
+<div metal:fill-slot="content-header" i18n:translate="">
+
+<h1>
+  Time table schedule of
+    <tal:loop tal:repeat="course view/owner/courses" i18n:name="course">
+      <a tal:replace="structure course/@@title" />
+    </tal:loop>
+    <a i18n:name="section"
+       tal:attributes="href view/owner/@@absolute_url"
+       tal:content="view/owner/label" />,
+
+</h1>
+
+<p i18n:translate="">
+  For more information, see
+  <a tal:attributes="href view/term/@@absolute_url">school days</a> and
+  <a tal:attributes="href string:${view/school_year/@@absolute_url}/school_timetables">available timetables</a>
+  in
+    <tal:block i18n:name="term" tal:replace="structure view/term/@@title"/> of
+    <tal:block i18n:name="schoolyear" tal:replace="structure view/school_year/@@title" />
+</p>
+
+</div>
+
+<metal:block metal:fill-slot="body">
+
+
+<p tal:condition="not:view/hasTimetables"
+   i18n:translate="">There are no timetables assigned.</p>
+
+<tal:if tal:condition="view/hasTimetables">
+
+  <tal:block repeat="timetable view/timetables">
+  <div>
+
+    <h2 i18n:translate="">
+      Timetable "<tal:block i18n:name="title" content="timetable/timetable/schooltt/title"/>"
+      <a tal:attributes="href timetable/timetable/@@absolute_url">(edit periods)</a>
+    </h2>
+    <table class="timetable">
+      <tr>
+        <tal:block repeat="day timetable/days">
+          <th class="day" tal:content="day/title">Day N</th>
+        </tal:block>
+      </tr>
+      <tal:block condition="not:timetable/has_activities">
+        <tr>
+          <td tal:attributes="colspan python:len(timetable['days'])">
+            <p i18n:translate="">No periods selected.</p>
+          </td>
+        </tr>
+      </tal:block>
+      <tal:block condition="timetable/has_activities">
+        <tr>
+          <tal:block repeat="day timetable/days">
+            <td >
+              <tal:block tal:repeat="period day/periods">
+                <ul>
+                  <li>
+                    <p tal:condition="period/activities">
+                      <tal:block content="period/title" />:
+                      <tal:block content="period/activities"/>
+                    </p>
+                  </li>
+                </ul>
+              </tal:block>
+            </td>
+          </tal:block>
+        </tr>
+      </tal:block>
+      <tr>
+        <td tal:attributes="colspan python:len(timetable['days'])">
+
+          <p i18n:translate="">
+            Scheduled from
+              <tal:block i18n:name="from" content="timetable/timetable/first/@@mediumDate" />
+            until
+              <tal:block i18n:name="until" content="timetable/timetable/last/@@mediumDate" />
+          </p>
+        </td>
+      </tr>
+    </table>
+
+    <div>
+    <form method="post"
+          tal:attributes="action string:${context/@@absolute_url}/confirm-delete.html">
+      <input type="hidden" name="timetable" tal:attributes="value timetable/timetable/__name__" />
+      <div class="controls">
+        <input type="submit" class="button-cancel" name="DELETE" value="Remove"
+               i18n:attributes="value" />
+      </div>
+    </form>
+
+    </div>
+    <br>
+  </div>
+  </tal:block>
+
+</tal:if>
+
+</metal:block>
+</body>
+</html>

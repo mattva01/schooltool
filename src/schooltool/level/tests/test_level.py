@@ -209,7 +209,7 @@ def doctest_LevelSource():
 
     When the context cannot be adapted to ISchoolYear, the vocabulary is empty.
 
-        >>> source.levels
+        >>> source.container
         {}
 
         >>> len(source)
@@ -266,7 +266,7 @@ def doctest_LevelSource():
         >>> verifyObject(IIterableSource, source)
         True
 
-        >>> source.levels
+        >>> source.container
         <schooltool.level.level.LevelContainer ...>
 
         >>> len(source)

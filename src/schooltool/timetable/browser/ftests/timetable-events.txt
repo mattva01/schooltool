@@ -128,6 +128,8 @@ we need more courses and sections
     >>> manager.getControl('Add').click()
 
     >>> manager.getLink('Schedule').click()
+    >>> manager.getLink('Add Timetable').click()
+    >>> manager.getControl('Add').click()
     >>> manager.getControl(name="Monday.13:35-14:20").value = True
     >>> manager.getControl(name="Tuesday.09:30-10:25").value = True
     >>> manager.getControl(name="Wednesday.09:30-10:25").value = True
@@ -141,6 +143,8 @@ we need more courses and sections
     >>> manager.getControl('Add').click()
 
     >>> manager.getLink('Schedule').click()
+    >>> manager.getLink('Add Timetable').click()
+    >>> manager.getControl('Add').click()
     >>> manager.getControl(name="Monday.11:35-12:20").value = True
     >>> manager.getControl(name="Wednesday.12:45-13:30").value = True
     >>> manager.getControl(name="Thursday.10:30-11:25").value = True
@@ -154,6 +158,8 @@ we need more courses and sections
     >>> manager.getControl('Add').click()
 
     >>> manager.getLink('Schedule').click()
+    >>> manager.getLink('Add Timetable').click()
+    >>> manager.getControl('Add').click()
     >>> manager.getControl(name="Tuesday.14:30-15:15").value = True
     >>> manager.getControl(name="Wednesday.14:30-15:15").value = True
     >>> manager.getControl(name="Thursday.11:35-12:20").value = True
