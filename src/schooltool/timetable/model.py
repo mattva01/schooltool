@@ -123,9 +123,9 @@ class BaseTimetableModel(Persistent):
         events = []
         day_id_gen = self._dayGenerator()
         if first is None:
-            first = timetable.first
+            first = timetable.first or term.first
         if last is None:
-            last = timetable.last
+            last = timetable.last or term.last
         for date in term:
             if not first <= date <= last:
                 # must call getDayId to keep track of days
