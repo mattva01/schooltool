@@ -16,6 +16,6 @@ usernames with non-ascii characters:
 
 We should get an error:
 
-    >>> browser.printQuery('//div[@class="error"]')
-    <div class="error">Persons A3 Username cannot contain non-ascii characters: student00...</div>
-    <div class="error">Persons A13 Username cannot contain non-ascii characters: student01...</div>
+    >>> browser.printQuery('//p[@class="error"]')
+    <p class="error">Persons A3 Username cannot contain non-ascii characters: student00...</p>
+    <p class="error">Persons A13 Username cannot contain non-ascii characters: student01...</p>
