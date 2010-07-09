@@ -78,6 +78,11 @@
   </table>
 
   <div class="controls">
+    <input type="checkbox" id="consecutive" name="consecutive"
+           tal:attributes="checked view/consecutive_value " />
+    <span tal:content="view/consecutive_label" />
+  </div>
+  <div class="controls">
     <input class="button-ok" type="submit" name="SAVE" value="Save"
            i18n:attributes="value" />
     <input type="submit" class="button-cancel" name="CANCEL" value="Cancel"

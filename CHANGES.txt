@@ -10,6 +10,7 @@ CHANGES
 - Allow applying timetable for a part of the term only (https://launchpad.net/bugs/532428)
 - XLS Importer catches errors before trying to create objects.
 - TestBrowser now strips out blank lines from printQuery
+- TimeTable object now has consecutive_periods_as_one flag for use by journal
 
 
 1.4.1 (2010-06-15)
