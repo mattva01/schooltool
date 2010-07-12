@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: Giancarlo Gaifas <lallo@artiemestieri.tn.it>\n"
 "POT-Creation-Date: 2010-05-21 16:53+0300\n"
-"PO-Revision-Date: 2010-06-15 14:43+0000\n"
-"Last-Translator: ugonegnome <ugonegnome@gmail.com>\n"
+"PO-Revision-Date: 2010-07-06 21:47+0000\n"
+"Last-Translator: Giuseppe Terrasi <giuseppeterrasi.liste@gmail.com>\n"
 "Language-Team: Italian <it@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-06-16 03:41+0000\n"
+"X-Launchpad-Export-Date: 2010-07-08 03:45+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -5004,7 +5004,7 @@ msgstr "il cognome non può essere vuoto"
 #: /src/schooltool/basicperson/browser/csvimport.py:85
 #: /src/schooltool/basicperson/browser/person.py:114
 msgid "Usernames cannot contain non-ascii characters"
-msgstr ""
+msgstr "I nomi utente non possono contenere caratteri non-ascii"
 
 #: /src/schooltool/basicperson/browser/demographics.py:133
 msgid "Add new Field"
@@ -5269,6 +5269,8 @@ msgid ""
 "You don't have an email address set. Ask your administrator to set your "
 "email address in your contact information."
 msgstr ""
+"Non hai impostato un indirizzo email. Chiedi al tuo amministratore come "
+"impostare l'indirizzo email nelle tue informazioni di contatto."
 
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:8
 msgid "Contact information for ${person}"
@@ -5840,12 +5842,12 @@ msgstr "Stato attuale del servizio di e-mail di SchoolTool"
 #: /src/schooltool/email/browser/email.py:101
 #: /src/schooltool/email/interfaces.py:87
 msgid "Enable"
-msgstr ""
+msgstr "Abilita"
 
 #: /src/schooltool/email/browser/email.py:102
 #: /src/schooltool/email/interfaces.py:88
 msgid "Mark to enable the service."
-msgstr ""
+msgstr "Spunta per abilitare il servizio"
 
 #: /src/schooltool/email/browser/email.py:107
 #: /src/schooltool/email/interfaces.py:92
@@ -5855,7 +5857,7 @@ msgstr "Nome host"
 #: /src/schooltool/email/browser/email.py:108
 #: /src/schooltool/email/interfaces.py:93
 msgid "SMTP server hostname. Required if the service is enabled."
-msgstr ""
+msgstr "MTP server hostname. Richiesto se il servizio è abilitato"
 
 #: /src/schooltool/email/browser/email.py:112
 #: /src/schooltool/email/interfaces.py:97
@@ -5910,11 +5912,11 @@ msgstr "Utilizzare connessione TLS?"
 
 #: /src/schooltool/email/browser/email.py:147
 msgid "New passwords don't match"
-msgstr ""
+msgstr "Nuova password non trovata"
 
 #: /src/schooltool/email/browser/email.py:152
 msgid "Hostname is required for enabling the service"
-msgstr ""
+msgstr "L'hostname è richiesto per abilitare il servizio"
 
 #: /src/schooltool/email/browser/email.py:186
 msgid "Change Email Settings"
@@ -6000,7 +6002,7 @@ msgstr "Coda"
 #: /src/schooltool/email/browser/templates/email_container.pt:39
 #: /src/schooltool/email/browser/templates/email_container.pt:44
 msgid "retry-button"
-msgstr ""
+msgstr "Riprova"
 
 #: /src/schooltool/email/browser/templates/email_container.pt:54
 msgid "There are no messages queued."
@@ -6131,6 +6133,9 @@ msgid ""
 "For people interested in testing and exploring SchoolTool, we provide a set "
 "of sample data: ${link-to-sample-data-file}."
 msgstr ""
+"Per le persone interessare alle prove e all'esplorazione di SchoolTool, "
+"abbiamo provveduto ad impostare dei dati di esempio: ${link-to-sample-data-"
+"file}."
 
 #: /src/schooltool/export/templates/import.pt:53
 msgid ""
@@ -6502,7 +6507,13 @@ msgstr "U"
 #. Default: "Update"
 #: /src/schooltool/skin/templates/view_macros.pt:155
 msgid "update-button"
-msgstr ""
+msgstr "Aggiorna"
+
+#. Default: "Apply"
+#: /src/schooltool/skin/templates/view_macros.pt:161
+#: /src/schooltool/skin/templates/view_macros.pt:167
+msgid "apply-button"
+msgstr "Conferma"
 
 #: /src/schooltool/skin/templates/view_macros.pt:194
 msgid "D"

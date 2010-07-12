@@ -19,13 +19,13 @@ msgstr ""
 "Project-Id-Version: SchoolTool Version 0.11.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-05-21 16:53+0300\n"
-"PO-Revision-Date: 2010-06-15 12:32+0000\n"
-"Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
+"PO-Revision-Date: 2010-06-17 13:26+0000\n"
+"Last-Translator: Alan Ward <Unknown>\n"
 "Language-Team: Schooltool Development Team <schooltool-dev@schooltool.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-06-16 03:39+0000\n"
+"X-Launchpad-Export-Date: 2010-06-18 03:30+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "Generated-By: setup.py\n"
 
@@ -2692,7 +2692,7 @@ msgstr "Anar al dia anterior"
 #. Default: ""
 #: /src/schooltool/app/browser/cal.py:1448
 msgid "Add new event starting at ${title}"
-msgstr ""
+msgstr "Afegir nou esdeveniment començant a partir de ${title}"
 
 #: /src/schooltool/app/browser/configure.zcml:610
 #: /src/schooltool/app/browser/templates/manage_menu.pt:3
@@ -2702,7 +2702,7 @@ msgstr "Gestiona"
 
 #: /src/schooltool/app/browser/configure.zcml:666
 msgid "Browser UI"
-msgstr ""
+msgstr "URL navegador"
 
 #: /src/schooltool/app/browser/configure.zcml:781
 msgid "Configure"
@@ -2715,6 +2715,8 @@ msgstr "Llistat de Errors"
 #: /src/schooltool/app/browser/csvimport.py:467
 msgid "The first row of the CSV file must contain the timetable schema id."
 msgstr ""
+"La primera fila del fitxer CSV hauria de contenir la id del schema de "
+"l'horari."
 
 #: /src/schooltool/app/browser/templates/about.pt:5
 msgid "About SchoolTool"
@@ -2906,7 +2908,7 @@ msgstr ""
 #: /src/schooltool/app/browser/templates/event.pt:20
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:21
 msgid "This is a recurring event."
-msgstr ""
+msgstr "Aquest esdeveniment és recorrent."
 
 #: /src/schooltool/app/browser/templates/event.pt:37
 #: /src/schooltool/schoolyear/browser/schoolyear.py:120
@@ -2964,10 +2966,12 @@ msgstr "Actualitza des de"
 #: /src/schooltool/app/browser/templates/event_add.pt:236
 msgid "This section only applies when weekly recurrence is selected."
 msgstr ""
+"Aquesta secció tan sols és vàlida si s'ha seleccionat recorrència setmanal."
 
 #: /src/schooltool/app/browser/templates/event_add.pt:257
 msgid "This section only applies when the monthly recurrence is selected."
 msgstr ""
+"Aquesta secció tan sols és vàlida si s'ha seleccionat recorrència mensual."
 
 #: /src/schooltool/app/browser/templates/event_add.pt:264
 msgid "Day ${monthday} of every month"
@@ -2976,7 +2980,7 @@ msgstr "Dia ${monthday} de tot el mesos"
 #: /src/schooltool/app/browser/templates/event_add.pt:271
 #: /src/schooltool/app/browser/templates/event_add.pt:278
 msgid "${weekday} of every month"
-msgstr ""
+msgstr "dia ${weekday} de cada mes"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:288
 msgid "Repeat"
@@ -2984,7 +2988,7 @@ msgstr "Repeteix"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:291
 msgid "times"
-msgstr ""
+msgstr "vegades"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:306
 #: /src/schooltool/term/browser/templates/emergency_select.pt:31
@@ -2998,11 +3002,11 @@ msgstr "Repeteix per sempre"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:348
 msgid "Booked Resources"
-msgstr ""
+msgstr "Recursos reservats"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:369
 msgid "Book resources"
-msgstr ""
+msgstr "Reservar recursos"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:375
 #: /src/schooltool/skin/templates/view_macros.pt:161
@@ -3011,15 +3015,15 @@ msgstr ""
 #: /src/schooltool/skin/templates/view_macros.pt:180
 #: /src/schooltool/skin/templates/view_macros.pt:187
 msgid "Shortcut: Alt-A"
-msgstr ""
+msgstr "Combinació de tecles: Alt-A"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:4
 msgid "Resource Booking"
-msgstr ""
+msgstr "Reserva de recursos"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:12
 msgid "Resource Booking for ${title}"
-msgstr ""
+msgstr "Reserva de recursos per ${title}"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:22
 msgid "Starts:"
@@ -3031,15 +3035,15 @@ msgstr "Finalitza:"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:30
 msgid "This is a recurring event!"
-msgstr ""
+msgstr "Aquest esdeveniment és recorrent!"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:38
 msgid "Booked resources"
-msgstr ""
+msgstr "Recursos reservats"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:42
 msgid "UnBook"
-msgstr ""
+msgstr "Esborrar reservació"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:51
 msgid "Available resources"
@@ -3089,7 +3093,7 @@ msgstr "Events de demà"
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:4
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:14
 msgid "Deleting a repeating event (${event_title})"
-msgstr ""
+msgstr "Esborrant esdeveniment recorrent (${event_title})"
 
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:19
 msgid "You are trying to delete a repeating event."
@@ -3125,6 +3129,9 @@ msgid ""
 "The second row should be empty. After that, several section descriptions may "
 "follow. They are separated by an extra carriage return (i.e., a blank line)."
 msgstr ""
+"La segona fila hauria de ser buida. Després, es poden fer seguir diverses "
+"descripcions de secció. Cal intercalar un enter (línia buida) entre cada "
+"secció."
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:43
 msgid ""
@@ -3167,6 +3174,11 @@ msgid ""
 "learners, and its timetable will contain three timetable activities, two on "
 "Monday. The literature section will be processed in a similar fashion."
 msgstr ""
+"L'exemple de dalt crearà dues noves seccions, una per lectures de filosofia "
+"i una altra per lectures literàries. La secció per lectures de filosofia "
+"tindrà gent amb les ids 'johny' i 'billy' com aprenents, i la seva taula de "
+"temps contindrà tres activitats, dues d'elles dilluns. La secció de lectures "
+"literàries serà processada de forma similar."
 
 #: /src/schooltool/app/configure.zcml:338
 msgid "Security (General)"
@@ -3174,7 +3186,7 @@ msgstr "Seguretat (General)"
 
 #: /src/schooltool/app/configure.zcml:353
 msgid "Booking Resources"
-msgstr ""
+msgstr "Reservant recursos"
 
 #: /src/schooltool/app/help/admin.pt:6
 msgid "SchoolTool Administration"
@@ -3216,7 +3228,7 @@ msgstr ""
 
 #: /src/schooltool/app/help/calendaring.pt:6
 msgid "Calendaring in SchoolTool"
-msgstr ""
+msgstr "Crear calendaris amb SchoolTool"
 
 #: /src/schooltool/app/help/calendaring.pt:8
 msgid ""
@@ -3256,7 +3268,7 @@ msgstr "Organització"
 
 #: /src/schooltool/app/help/configure.zcml:29
 msgid "Calendaring"
-msgstr ""
+msgstr "Crear calendaris"
 
 #: /src/schooltool/app/help/configure.zcml:37
 #: /src/schooltool/app/help/daily_calendar.pt:6
@@ -3266,17 +3278,17 @@ msgstr "Calendari diari"
 #: /src/schooltool/app/help/configure.zcml:47
 #: /src/schooltool/app/help/weekly_calendar.pt:6
 msgid "Weekly Calendar"
-msgstr ""
+msgstr "Calendari setmanal"
 
 #: /src/schooltool/app/help/configure.zcml:57
 #: /src/schooltool/app/help/monthly_calendar.pt:6
 msgid "Monthly Calendar"
-msgstr ""
+msgstr "Calendari mensual"
 
 #: /src/schooltool/app/help/configure.zcml:67
 #: /src/schooltool/app/help/yearly_calendar.pt:6
 msgid "Yearly Calendar"
-msgstr ""
+msgstr "Calendari anual"
 
 #: /src/schooltool/app/help/daily_calendar.pt:8
 msgid ""
@@ -3310,6 +3322,10 @@ msgid ""
 "SchoolTool at your school, you should create an event for the necessary time "
 "and check the <code>Book Resources</code> checkbox at the bottom of the page."
 msgstr ""
+"Si necessites reservar un recurs com una aula o un projector del que "
+"Schooltool fa el seguiment, hauries de crear un esdeveniment per la durada "
+"necessària i clicar sobre el quadrat <code>Reservar recursos</code> a baix "
+"de la pàgina."
 
 #: /src/schooltool/app/help/event_add.pt:16
 #: /src/schooltool/app/help/event_edit.pt:14
@@ -3356,6 +3372,8 @@ msgid ""
 "If you need to edit a resource reservation, click the <code>Book "
 "resources</code> link at the bottom of the form."
 msgstr ""
+"Si necessites modificar la reserva d'un recurs, clica sobre l'enllaç "
+"<code>Reservar recursos</code> a baix del formulari."
 
 #: /src/schooltool/app/help/monthly_calendar.pt:8
 msgid ""
@@ -3385,13 +3403,15 @@ msgstr ""
 
 #: /src/schooltool/app/help/org.pt:6
 msgid "SchoolTool Organization"
-msgstr ""
+msgstr "Organització de SchoolTool"
 
 #: /src/schooltool/app/help/org.pt:8
 msgid ""
 "<h1>SchoolTool Organization</h1> <p>This branch of the help tree contains "
 "items explaining the basic organization of SchoolTool.</p>"
 msgstr ""
+"<h1>Organització de SchoolTool</h1> <p>Aquesta branca de l'ajuda conté "
+"explicacions sobre l'organització bàsica de SchoolTool.</p>"
 
 #: /src/schooltool/app/help/schooltool.pt:8
 msgid ""
@@ -3480,7 +3500,7 @@ msgstr ""
 
 #: /src/schooltool/app/interfaces.py:169
 msgid "Show timetables"
-msgstr ""
+msgstr "Mostrar horaris"
 
 #: /src/schooltool/app/interfaces.py:170
 msgid ""
@@ -3510,12 +3530,12 @@ msgstr ""
 
 #: /src/schooltool/app/main.py:380
 msgid "Cannot resolve plugin action order:\n"
-msgstr ""
+msgstr "No puc resoldre l'ordre d'activació dels plugin:\n"
 
 #: /src/schooltool/app/membership.py:261
 #: /src/schooltool/group/browser/group.pt:16
 msgid "Members"
-msgstr ""
+msgstr "Membres"
 
 #: /src/schooltool/app/membership.py:262
 msgid "Members of the group."

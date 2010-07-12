@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-05-21 16:53+0300\n"
-"PO-Revision-Date: 2010-06-15 13:40+0000\n"
-"Last-Translator: Angel Spy <melissadilara@yahoo.com>\n"
+"PO-Revision-Date: 2010-06-24 23:17+0000\n"
+"Last-Translator: eraydin <aydin@eraydin.net>\n"
 "Language-Team: Turkish <tr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-06-16 03:44+0000\n"
+"X-Launchpad-Export-Date: 2010-06-26 03:50+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -3192,6 +3192,10 @@ msgid ""
 "the\n"
 "            bottom of all pages and in the page title."
 msgstr ""
+"Okulun veya kuruluşun adı\n"
+"           sunucusunda, genel takvimde, \n"
+"           tüm sayfaların alt kısmında ve sayfa başlıklarında "
+"görüntülenecektir."
 
 #: /src/schooltool/app/interfaces.py:152
 msgid ""
@@ -3339,7 +3343,7 @@ msgstr "Yeni Kişi"
 #: /src/schooltool/basicperson/security.zcml:22
 #: /src/schooltool/demographics/browser/personform.py:180
 msgid "Demographics"
-msgstr ""
+msgstr "Demografik Bilgi"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:143
 msgid "New Text Field"
@@ -3372,6 +3376,8 @@ msgstr "İsimler '+' veya '@' ile başlayamaz ve '/' içeremez"
 #: /src/schooltool/basicperson/browser/person.py:114
 msgid "Usernames cannot contain non-ascii characters"
 msgstr ""
+"Kullanıcı isimleri ASCII olmayan (ç,Ç, ö,Ö, ı,İ, ü,Ü..vs) karakterler "
+"içeremez."
 
 #: /src/schooltool/basicperson/browser/demographics.py:133
 msgid "Add new Field"
@@ -3795,6 +3801,8 @@ msgid ""
 "You don't have an email address set. Ask your administrator to set your "
 "email address in your contact information."
 msgstr ""
+"Henüz e-posta adresiniz bulunamadı.E-posta bilgilerinizi güncellemek için "
+"yöneticinize başvurun."
 
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:8
 msgid "Contact information for ${person}"
@@ -4186,7 +4194,7 @@ msgstr "${schoolyear}"
 #: /src/schooltool/skin/templates/container.pt:28
 #: /src/schooltool/skin/templates/table_container.pt:28
 msgid "Showing ${count} of ${total} items"
-msgstr ""
+msgstr "${count} / ${total} nesne gösteriliyor"
 
 #. Default: "Delete"
 #: /src/schooltool/course/browser/templates/course_container.pt:40
@@ -4540,7 +4548,7 @@ msgstr "İsim değiştir"
 #. Default: ""
 #: /src/schooltool/demographics/browser/personform.py:172
 msgid "Change demographics for ${fullname}"
-msgstr ""
+msgstr "${fullname} için nüfus bilgilerini değiştir"
 
 #. Default: ""
 #: /src/schooltool/demographics/browser/personform.py:188
@@ -4658,7 +4666,7 @@ msgstr "Almanca"
 
 #: /src/schooltool/demographics/interfaces.py:108
 msgid "Tagalog"
-msgstr ""
+msgstr "Filipinli"
 
 #: /src/schooltool/demographics/interfaces.py:109
 msgid "Vietnamese"
@@ -4874,7 +4882,7 @@ msgstr "Sunucu İsmi"
 #: /src/schooltool/email/browser/email.py:108
 #: /src/schooltool/email/interfaces.py:93
 msgid "SMTP server hostname. Required if the service is enabled."
-msgstr ""
+msgstr "SMTP sunucu adının bu servis için aktif olması gerekiyor"
 
 #: /src/schooltool/email/browser/email.py:112
 #: /src/schooltool/email/interfaces.py:97
@@ -4933,7 +4941,7 @@ msgstr "Yeni parolalar eşleşmiyor"
 
 #: /src/schooltool/email/browser/email.py:152
 msgid "Hostname is required for enabling the service"
-msgstr ""
+msgstr "Bu servisi aktifleştirebilmek için sunucu adını girmelisiz."
 
 #: /src/schooltool/email/browser/email.py:186
 msgid "Change Email Settings"
@@ -4952,7 +4960,7 @@ msgstr "Gönderici adresi"
 #: /src/schooltool/email/browser/email.py:230
 #: /src/schooltool/email/browser/email.py:478
 msgid "Recipient addresses comma separated"
-msgstr ""
+msgstr "Alıcı adresleri virgülle ayrılmış"
 
 #: /src/schooltool/email/browser/email.py:234
 #: /src/schooltool/email/browser/email.py:374
@@ -5009,7 +5017,7 @@ msgstr "E-posta Kuyruğu"
 #. Default: ""
 #: /src/schooltool/email/browser/email.py:458
 msgid "Queue (${count} failed)"
-msgstr ""
+msgstr "Kuyrukta (${count} hata)"
 
 #: /src/schooltool/email/browser/email.py:460
 msgid "Queue"
@@ -5063,7 +5071,7 @@ msgstr "Parametre değeri"
 
 #: /src/schooltool/email/interfaces.py:74
 msgid "Sent on"
-msgstr ""
+msgstr "Gönderilen"
 
 #: /src/schooltool/email/interfaces.py:75
 msgid "Date and time when the message was sent"
@@ -5079,7 +5087,7 @@ msgstr "SMTP (${info}) sunucusuna bağlanılamadı"
 
 #: /src/schooltool/email/mail.py:54
 msgid "Error sending HELO to the SMTP server (${info})"
-msgstr ""
+msgstr "SMTP sunucusuna HELO mesajı gönderilirken hata oluştu (${info})"
 
 #: /src/schooltool/email/mail.py:55
 msgid "Couldn't login as ($username) to SMTP server (${info})"
@@ -5088,6 +5096,8 @@ msgstr "($username) olarak SMTP (${info}) sunucusunda oturum açılamadı"
 #: /src/schooltool/email/mail.py:56
 msgid "The server (${info}) rejected the From address: ${from_address}"
 msgstr ""
+"${from_address} adresinden gelen mesaj, sunucu (${info}) tarafından "
+"reddedildi."
 
 #: /src/schooltool/email/mail.py:57
 msgid ""
@@ -5096,7 +5106,7 @@ msgstr ""
 
 #: /src/schooltool/email/mail.py:59
 msgid "The server (${info}) replied that the message data was malformed"
-msgstr ""
+msgstr "Sunucu (${info}) hata mesajını döndürdü."
 
 #: /src/schooltool/export/configure.zcml:6
 msgid "XLS Import"
@@ -5250,6 +5260,25 @@ msgid ""
 "links in the blue bar.</li> <li><strong>Show all groups:</strong> Click "
 "<code>Show All</code> in the blue bar.</li> </ul>"
 msgstr ""
+"<h1>Gruplar</h1> <p><b>Gruplar</b>ınızın takibi için bu sayfayı "
+"kullanabilirsiniz.</p>\r\n"
+"<p>Hesabınıza eklenmiş bulunan bazı <b>gruplar</b> (<b>Öğretmenler</b>, "
+"<b>Öğrenciler</b>, <b>Site Yöneticileri</b>, <b>Okul Yönetimi</b>, veya "
+"<b>Yazarlar</b> gibi), özel grupların bir parçası değildir. Gruba ait olan "
+"onay kutucuğunu işaretledikten sonra, sayfanın al kısmında bulunan "
+"<b>Sil</b> butonu aracılığıyla istediğiniz grubu silebilirsiniz. "
+"</p><h3>Nasıl yapabilirim...</h3> <ul> <li><b>Grup arama:</b> Arama "
+"kutucuğuna istediğiniz metni girdikten sonra <code>Şimdi Bul</code> butonuna "
+"tıklayınız.Arama ile ilgili kriterleriniz için, arama kutucuğunun sol "
+"tarafındaki butonları kullanınız. <code>Temizle</code> butonu ile arama "
+"kutucuğundaki metni silebilirsiniz.</li> <li><b>Belirlenen gruptaki kişilere "
+"görüntüleme:</b> Grup ismine tıklayınız.</li> <li><b>Listeyi sırala:</b> "
+"Liste sıralamasını azalan veya artalan olarak değiştirmek için, listenin üst "
+"kısmındaki <code>Başlık</code> metnine tıklayınız.</li> <li><strong>Gruplara "
+"göz at:</strong> Mavi kutucuktaki  <code>Sonraki 10</code> (ve "
+"<code>Önceki</code>) bağlantılarını kullanınız.</li> <li><strong>Tüm "
+"grupları görüntüleme:</strong> Mavi kutucuktaki <code>Tümünü Göster</code> "
+"yazısına tıklayınız.</li> </ul>"
 
 #: /src/schooltool/group/security.zcml:5
 msgid "Everyone can view group lists."
@@ -5285,7 +5314,7 @@ msgstr "Yeni Not"
 
 #: /src/schooltool/note/configure.zcml:100
 msgid "Notes (Rest)"
-msgstr ""
+msgstr "Notlar (Dayanak)"
 
 #: /src/schooltool/note/interfaces.py:43
 msgid "Title of the note."
@@ -5415,7 +5444,7 @@ msgstr "Gün Ay,  Yıl"
 
 #: /src/schooltool/person/interfaces.py:176
 msgid "Week starts on:"
-msgstr ""
+msgstr "Hafta başlangıcı:"
 
 #: /src/schooltool/person/interfaces.py:177
 msgid "Start display of weeks on Sunday or Monday"
@@ -5469,6 +5498,8 @@ msgstr "Takvim genele açık"
 #: /src/schooltool/person/security.zcml:172
 msgid "Everybody, if the calendar is made public in user preferences."
 msgstr ""
+"Eğer kullanıcı tercihlerinden Takvim özelliği Genel olarak ayarlıysa Herkes "
+"görüntüleyebilir."
 
 #: /src/schooltool/resource/browser/configure.zcml:71
 msgid "Add a Resource"
@@ -5712,7 +5743,7 @@ msgstr "Tür"
 #: /src/schooltool/sampledata/sampledata.pt:3
 #: /src/schooltool/sampledata/sampledata.pt:9
 msgid "Sample Data Generation"
-msgstr ""
+msgstr "Örnek Veri Oluşumu"
 
 #: /src/schooltool/sampledata/sampledata.pt:14
 msgid ""
@@ -5806,11 +5837,11 @@ msgstr "Seçilen dönemleri silmek istediğinzden emin misiniz?"
 
 #: /src/schooltool/schoolyear/interfaces.py:44
 msgid "The first day of the period of time covered."
-msgstr ""
+msgstr "Belirlenen zaman periyodunun ilk günü"
 
 #: /src/schooltool/schoolyear/interfaces.py:47
 msgid "The last day of the period covered."
-msgstr ""
+msgstr "Belirlenen zaman periyodunun son günü"
 
 #: /src/schooltool/schoolyear/security.zcml:23
 msgid "Activate current school year"
@@ -5818,7 +5849,7 @@ msgstr "Şimdiki okul yılını etkinleştir"
 
 #: /src/schooltool/securitypolicy/browser/configure.zcml:7
 msgid "View Access Rights"
-msgstr ""
+msgstr "Erişim İzinlerini Görüntüle"
 
 #: /src/schooltool/securitypolicy/browser/configure.zcml:17
 #: /src/schooltool/securitypolicy/browser/configure.zcml:28
@@ -5837,11 +5868,15 @@ msgstr "Okul yönetimi"
 
 #: /src/schooltool/securitypolicy/browser/templates/access_setting_snippet.pt:4
 msgid "Access setting: ${setting} (${status})"
-msgstr ""
+msgstr "Erişim ayarları: ${setting} (${status})"
 
 #: /src/schooltool/securitypolicy/browser/templates/security_descriptions.pt:4
 msgid "Access Rights"
 msgstr "Erişim Hakları"
+
+#: /src/schooltool/securitypolicy/browser/templates/security_descriptions.pt:57
+msgid "Legend"
+msgstr "Açıklamalar"
 
 #: /src/schooltool/securitypolicy/crowds.py:199
 msgid "Everybody"
@@ -5857,7 +5892,7 @@ msgstr "Onaylanmış kullanıcı"
 
 #: /src/schooltool/securitypolicy/crowds.py:234
 msgid "All logged in users."
-msgstr ""
+msgstr "Giriş yapan tüm kullanıcılar."
 
 #: /src/schooltool/securitypolicy/crowds.py:242
 msgid "Anybody"
@@ -5910,11 +5945,11 @@ msgstr "İstisna"
 
 #: /src/schooltool/skin/templates/error.pt:20
 msgid "Traceback"
-msgstr ""
+msgstr "Araçtır"
 
 #: /src/schooltool/skin/templates/generic_macros.pt:12
 msgid "Server Running SchoolTool"
-msgstr ""
+msgstr "SchoolTool Sunucusu Çalışıyor"
 
 #: /src/schooltool/skin/templates/notfound.pt:3
 #: /src/schooltool/skin/templates/notfound.pt:11
@@ -5927,11 +5962,11 @@ msgstr "Erişmeyi denediğiniz sayfa kullanılabilir değil"
 
 #: /src/schooltool/skin/templates/notfound.pt:18
 msgid "Please note the following:"
-msgstr ""
+msgstr "Lütfen bunlara dikkat edin:"
 
 #: /src/schooltool/skin/templates/notfound.pt:21
 msgid "You might have misspelled the url"
-msgstr ""
+msgstr "URL'de yazım hatası yapmış olabilirsiniz."
 
 #: /src/schooltool/skin/templates/notfound.pt:22
 msgid "You might be trying to access a non-existing page"
@@ -5958,6 +5993,8 @@ msgid ""
 "&copy; The <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth "
 "Foundation</a> 2003 - <span>2009</span>: Supporting Social Innovation."
 msgstr ""
+"&copy; <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth "
+"Vakfı</a> 2003 - <span>2009</span>: Sosyal İnovasyon Desteği"
 
 #: /src/schooltool/skin/templates/view_macros.pt:132
 msgid ""
@@ -5965,6 +6002,9 @@ msgid ""
 "of The <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth "
 "Foundation</a>."
 msgstr ""
+"<a href=\"http://www.schooltool.org\">SchoolTool</a>&trade; <a "
+"href=\"http://www.shuttleworthfoundation.org\">Shuttleworth Vakfı</a>'nın "
+"ticari markasıdır."
 
 #: /src/schooltool/skin/templates/view_macros.pt:155
 msgid "Shortcut: Alt-U"
@@ -6018,7 +6058,7 @@ msgstr "Yükseklik"
 
 #: /src/schooltool/skin/widgets.py:115
 msgid "Editor frame height"
-msgstr ""
+msgstr "Editör çerçeve yüksekliği"
 
 #: /src/schooltool/skin/widgets.py:118
 msgid "Toolbar configuration"
@@ -6034,7 +6074,7 @@ msgstr "Yapılandırma yollu"
 
 #: /src/schooltool/skin/widgets.py:123
 msgid "Path to the FCKconfiguration javascript file."
-msgstr ""
+msgstr "FCKconfiguration javascript dosyasının konumu"
 
 #: /src/schooltool/skin/widgets.py:130
 msgid "Configuration"
@@ -6047,7 +6087,7 @@ msgstr "FCK düzenleyici yapılandırması"
 #: /src/schooltool/table/templates/batch.pt:5
 #: /src/schooltool/table/templates/batch.pt:7
 msgid "&laquo; Previous"
-msgstr ""
+msgstr "& laquo; Önceki"
 
 #: /src/schooltool/table/templates/batch.pt:16
 msgid "Show Less"
@@ -6060,7 +6100,7 @@ msgstr "Tümünü Göster"
 #: /src/schooltool/table/templates/batch.pt:29
 #: /src/schooltool/table/templates/batch.pt:35
 msgid "Next &raquo;"
-msgstr ""
+msgstr "Sonraki &raquo;"
 
 #: /src/schooltool/term/browser/configure.zcml:31
 msgid "Cancel School in Emergency"
@@ -6091,7 +6131,7 @@ msgstr "Acil durum yüzünden okul ertelendi.Değiştirme günü $değiştirme"
 #. Default: ""
 #: /src/schooltool/term/browser/emergency.py:137
 msgid "Replacement day for emergency day $emergency."
-msgstr ""
+msgstr "Bakım için yedekleme günü $emergency."
 
 #: /src/schooltool/term/browser/templates/emergency2.pt:3
 #: /src/schooltool/term/browser/templates/emergency_select.pt:3
@@ -6208,7 +6248,7 @@ msgstr "Tarihi okul için ayarla"
 
 #: /src/schooltool/timetable/__init__.py:192
 msgid "Unbound timetable."
-msgstr ""
+msgstr "Serbest zaman çizelgesi"
 
 #: /src/schooltool/timetable/browser/__init__.py:704
 msgid "Some values were invalid.  They are highlighted in red."
@@ -6325,6 +6365,10 @@ msgid ""
 "schema creation wizard</a>, or a <a href=\"complexadd.html\">complex "
 "timetable schema set up form</a>."
 msgstr ""
+"Eğer daha fazla esnekliğe ihtiyacınız varsa, <a href=\"add.html\">zaman "
+"çizelgesi şema sihirbazı</a>nı kullanabilirsiniz, veya <a "
+"href=\"complexadd.html\">kompleks zaman çizelgesi şeması</a> "
+"tasarlayaabilirsiniz."
 
 #: /src/schooltool/timetable/browser/templates/simpletts.pt:36
 msgid "Period title (optional)"
@@ -6393,7 +6437,7 @@ msgstr "Dönem için:"
 
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:29
 msgid "Using timetable:"
-msgstr ""
+msgstr "Kullanılan zaman çizelgesi :"
 
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:40
 msgid "Default Timetable Schema:"
@@ -6416,7 +6460,7 @@ msgstr "${object} için Zaman tabloları"
 
 #: /src/schooltool/timetable/browser/templates/timetableschema.pt:33
 msgid "Homeroom"
-msgstr ""
+msgstr "Ana derslik"
 
 #: /src/schooltool/timetable/browser/templates/ttwizard.pt:9
 msgid ""
@@ -6495,7 +6539,7 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:530
 msgid "Do periods have names or are they simply designated by time?"
-msgstr ""
+msgstr "Dönemlerin adları var mı veya zaman basitçe belirlenmiş mi?"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:533
 msgid "Have names"
@@ -6512,7 +6556,7 @@ msgstr "Her sırada bir tane olmak üzere, süreç isimlerini giriniz."
 #. Default: ""
 #: /src/schooltool/timetable/browser/ttwizard.py:583
 msgid "Please enter at least $number periods."
-msgstr ""
+msgstr "Lütfen en az $number dönem girin."
 
 #: /src/schooltool/timetable/browser/ttwizard.py:589
 msgid "Please make sure the period names are unique."
@@ -6532,12 +6576,12 @@ msgstr "Farklı"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:629
 msgid "Please put the periods in order:"
-msgstr ""
+msgstr "Lütfen dönem sırasını ayarlayın."
 
 #: /src/schooltool/timetable/browser/ttwizard.py:645
 #: /src/schooltool/timetable/browser/ttwizard.py:699
 msgid "Please provide all periods."
-msgstr ""
+msgstr "Lütfen bütün dönemleri giriniz."
 
 #. Default: ""
 #: /src/schooltool/timetable/browser/ttwizard.py:658

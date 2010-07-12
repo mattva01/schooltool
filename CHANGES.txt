@@ -2,11 +2,16 @@
 CHANGES
 =======
 
-1.4.1 (unreleased)
+- Update translations (ca, en_AU, eu, ne, pl, tr)
+
+
+1.4.1 (2010-06-15)
 ------------------
 
 - Copy data from previous school year (https://launchpad.net/bugs/541673)
 - Update translations (ca, es, es_SV, sk, te, vi, zh_CN)
+
+More info at https://launchpad.net/schooltool/+release/1.4.1
 
 
 1.4.0 (2010-05-21)
