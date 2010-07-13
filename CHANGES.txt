@@ -2,17 +2,21 @@
 CHANGES
 =======
 
-1.5.0 (unreleased)
+1.5.0 (2010-07-13)
 ------------------
 
-- Introduce minimalistic learning levels
+This is the first release in development series leading to 1.6
+
+- Introduce minimalistic learning levels.
+- Introduce versioned catalogs.
 - Speed up editing of section learners and instructors (https://launchpad.net/bugs/599258)
 - Allow applying timetable for a part of the term only (https://launchpad.net/bugs/532428)
-- XLS Importer catches errors before trying to create objects.
-- TestBrowser now strips out blank lines from printQuery
+- XLS Importer catches errors before trying to create objects. (https://launchpad.net/bugs/306339)
 - TimeTable object now has consecutive_periods_as_one flag for use by journal
-- Removed Zonki from PDF default page template
+- Removed SchoolTool logo from PDF footers (https://launchpad.net/bugs/561558)
 - Update translations (ca, en_AU, eu, ne, pl, tr)
+
+More info at https://launchpad.net/schooltool/+release/1.5.0
 
 
 1.4.1 (2010-06-15)
