@@ -7,23 +7,25 @@
 </head>
 <body>
 
-<div metal:fill-slot="content-header" i18n:translate="">
+<div metal:fill-slot="content-header">
 
-<h1>
+<h1 i18n:translate="">
   Time table schedule of
-    <tal:loop tal:repeat="course view/owner/courses" i18n:name="course">
+    <tal:loop tal:repeat="course view/owner/courses" i18n:name="courses">
       <a tal:replace="structure course/@@title" />
     </tal:loop>
     <a i18n:name="section"
        tal:attributes="href view/owner/@@absolute_url"
-       tal:content="view/owner/label" />,
+       tal:content="view/owner/label" />.
 
 </h1>
 
 <p i18n:translate="">
   For more information, see
-  <a tal:attributes="href view/term/@@absolute_url">school days</a> and
-  <a tal:attributes="href string:${view/school_year/@@absolute_url}/school_timetables">available timetables</a>
+  <a tal:attributes="href view/term/@@absolute_url"
+     i18n:name="school_days" i18n:translate="">school days</a> and
+  <a tal:attributes="href string:${view/school_year/@@absolute_url}/school_timetables"
+     i18n:name="available_timetables" i18n:translate="">available timetables</a>
   in
     <tal:block i18n:name="term" tal:replace="structure view/term/@@title"/> of
     <tal:block i18n:name="schoolyear" tal:replace="structure view/school_year/@@title" />
@@ -42,9 +44,9 @@
   <tal:block repeat="timetable view/timetables">
   <div>
 
-    <h2 i18n:translate="">
-      Timetable "<tal:block i18n:name="title" content="timetable/timetable/schooltt/title"/>"
-      <a tal:attributes="href timetable/timetable/@@absolute_url">(edit periods)</a>
+    <h2>
+      <tal:block i18n:translate="">Timetable "<tal:block i18n:name="title" content="timetable/timetable/schooltt/title"/>"</tal:block>
+      <a tal:attributes="href timetable/timetable/@@absolute_url" i18n:translate="">(edit periods)</a>
     </h2>
     <table class="timetable">
       <tr>

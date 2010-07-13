@@ -434,7 +434,6 @@ class CalendarDay(object):
             events = []
         self.date = date
         self.events = events
-        day_of_week = day_of_week_names[date.weekday()]
 
     def __cmp__(self, other):
         return cmp(self.date, other.date)
@@ -2471,7 +2470,6 @@ class CalendarEventBookingView(CalendarEventView):
                                                 IFilterWidget)
 
         if 'CANCEL' in self.request:
-            url = absoluteURL(self.context, self.request)
             self.request.response.redirect(self.nextURL())
 
         elif "BOOK" in self.request: # and not self.update_status:

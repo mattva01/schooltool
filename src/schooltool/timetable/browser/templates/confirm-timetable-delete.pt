@@ -11,8 +11,8 @@
     tal:attributes="src context/++resource++zonki-question.png" />
 </span>
 
-<div metal:fill-slot="content-header" i18n:translate="">
-  <h1>Are you sure you want to unschedule this timetable?</h1>
+<div metal:fill-slot="content-header">
+  <h1 i18n:translate="">Are you sure you want to unschedule this timetable?</h1>
 </div>
 
 
