@@ -11,7 +11,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-05-22 03:50+0000\n"
+"X-Launchpad-Export-Date: 2010-06-16 03:41+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "Generated-By: i18nextract.py\n"
 
@@ -1041,7 +1041,7 @@ msgstr "ព្រឹត្តិការណ៍​សម្រាប់"
 #. Default: "This is an Atom formatted XML site feed. It is intended to be viewed in a Newsreader or syndicated to another site. Please visit"
 #: /src/schooltool/app/browser/templates/cal_atom.pt:42
 msgid "atom_description"
-msgstr ""
+msgstr "atom_description"
 
 #. Default: "Atom Enabled"
 #: /src/schooltool/app/browser/templates/cal_atom.pt:46

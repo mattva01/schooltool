@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-05-21 16:53+0300\n"
-"PO-Revision-Date: 2010-05-21 15:30+0000\n"
-"Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
+"PO-Revision-Date: 2010-06-22 15:34+0000\n"
+"Last-Translator: Abel Camacho <didaktika@santurtzieus.com>\n"
 "Language-Team: Basque <eu@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-05-22 03:48+0000\n"
+"X-Launchpad-Export-Date: 2010-06-23 03:44+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -27,44 +27,8 @@ msgid "February"
 msgstr "Otsaila"
 
 #: /src/schooltool/app/browser/cal.py:114
-msgid "January"
-msgstr "Urtarrila"
-
-#: /src/schooltool/app/browser/cal.py:114
 msgid "March"
-msgstr "Martia"
-
-#: /src/schooltool/app/browser/cal.py:115
-msgid "April"
-msgstr "Apirila"
-
-#: /src/schooltool/app/browser/cal.py:115
-msgid "June"
-msgstr "Ekaina"
-
-#: /src/schooltool/app/browser/cal.py:115
-msgid "May"
-msgstr "Maiatza"
-
-#: /src/schooltool/app/browser/cal.py:116
-msgid "August"
-msgstr "Abuztua"
-
-#: /src/schooltool/app/browser/cal.py:116
-msgid "July"
-msgstr "Uztaila"
-
-#: /src/schooltool/app/browser/cal.py:116
-msgid "September"
-msgstr "Iraila"
-
-#: /src/schooltool/app/browser/cal.py:117
-msgid "December"
-msgstr "Abendua"
-
-#: /src/schooltool/app/browser/cal.py:117
-msgid "November"
-msgstr "Azaroa"
+msgstr "Martxoa"
 
 #: /src/schooltool/app/browser/cal.py:117
 msgid "October"
@@ -658,6 +622,42 @@ msgstr "Egungo zuzendaritza taldea"
 msgid "Available leaders"
 msgstr ""
 
+#: /src/schooltool/app/browser/cal.py:114
+msgid "January"
+msgstr "Urtarrila"
+
+#: /src/schooltool/app/browser/cal.py:115
+msgid "April"
+msgstr "Apirila"
+
+#: /src/schooltool/app/browser/cal.py:115
+msgid "June"
+msgstr "Ekaina"
+
+#: /src/schooltool/app/browser/cal.py:115
+msgid "May"
+msgstr "Maiatza"
+
+#: /src/schooltool/app/browser/cal.py:116
+msgid "August"
+msgstr "Abuztua"
+
+#: /src/schooltool/app/browser/cal.py:116
+msgid "July"
+msgstr "Uztaila"
+
+#: /src/schooltool/app/browser/cal.py:116
+msgid "September"
+msgstr "Iraila"
+
+#: /src/schooltool/app/browser/cal.py:117
+msgid "December"
+msgstr "Abendua"
+
+#: /src/schooltool/app/browser/cal.py:117
+msgid "November"
+msgstr "Azaroa"
+
 #: /src/schooltool/app/browser/cal.py:486
 msgid "Unnamed Event"
 msgstr "Izengabeko gertaera"
@@ -864,7 +864,7 @@ msgstr "Azken eguneraketa: ${date_time}"
 #: /src/schooltool/timetable/browser/configure.zcml:120
 #: /src/schooltool/timetable/security.zcml:32
 msgid "View"
-msgstr ""
+msgstr "Ikusi"
 
 #: /src/schooltool/app/browser/configure.zcml:333
 msgid "Open in iCal"
@@ -916,7 +916,7 @@ msgstr "Atom ikuspegia"
 #: /src/schooltool/app/help/event_add.pt:6
 #: /src/schooltool/app/help/event_add.pt:9
 msgid "Add Event"
-msgstr ""
+msgstr "Ekitaldia gehitu"
 
 #: /src/schooltool/app/browser/configure.zcml:587
 msgid "ZODB Control"
@@ -1121,7 +1121,7 @@ msgstr "Webgunea"
 
 #: /src/schooltool/app/browser/templates/about.pt:28
 msgid "Launchpad project page"
-msgstr ""
+msgstr "Launchpad proiektuaren orria"
 
 #: /src/schooltool/app/browser/templates/about.pt:29
 msgid "Mailing list"
@@ -1231,7 +1231,7 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:115
 msgid "Jump To ..."
-msgstr ""
+msgstr "Joan..."
 
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:4
 #: /src/schooltool/timetable/browser/templates/calendar_overlay.pt:4
@@ -1251,7 +1251,7 @@ msgstr "Nire egutegia"
 #: /src/schooltool/timetable/browser/event.py:82
 #: /src/schooltool/timetable/browser/templates/calendar_overlay.pt:93
 msgid "Apply"
-msgstr ""
+msgstr "Aplikatu"
 
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:33
 #: /src/schooltool/timetable/browser/templates/calendar_overlay.pt:66
@@ -1272,7 +1272,7 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:32
 msgid "Public Calendar"
-msgstr ""
+msgstr "Egutegi publikoa"
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:37
 msgid "site-wide calendar"
@@ -1528,7 +1528,7 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:18
 msgid "Title:"
-msgstr ""
+msgstr "Izenburua:"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:22
 msgid "Starts:"
@@ -1556,7 +1556,7 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:57
 msgid "Book"
-msgstr ""
+msgstr "Liburua"
 
 #: /src/schooltool/app/browser/templates/event_info_viewlet.pt:12
 msgid "Location: ${location}"
@@ -1565,7 +1565,7 @@ msgstr ""
 #: /src/schooltool/app/browser/templates/index.pt:15
 #: /src/schooltool/dashboard/school.pt:4
 msgid "Levels"
-msgstr ""
+msgstr "Mailak"
 
 #: /src/schooltool/app/browser/templates/login.pt:8
 msgid "Your session has expired."
@@ -1669,7 +1669,7 @@ msgstr ""
 #: /src/schooltool/timetable/browser/templates/ttwizard_period_order2.pt:41
 #: /src/schooltool/timetable/browser/templates/ttwizard_slottimes.pt:34
 msgid "Cancel"
-msgstr ""
+msgstr "Utzi"
 
 #: /src/schooltool/app/browser/templates/simple_event_delete.pt:4
 #: /src/schooltool/app/browser/templates/simple_event_delete.pt:13
@@ -1920,11 +1920,11 @@ msgstr ""
 
 #: /src/schooltool/app/help/configure.zcml:13
 msgid "Administration"
-msgstr ""
+msgstr "Kudeaketa"
 
 #: /src/schooltool/app/help/configure.zcml:21
 msgid "Organization"
-msgstr ""
+msgstr "Erakundea"
 
 #: /src/schooltool/app/help/configure.zcml:29
 msgid "Calendaring"

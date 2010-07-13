@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-05-21 16:53+0300\n"
-"PO-Revision-Date: 2010-05-23 04:08+0000\n"
+"PO-Revision-Date: 2010-06-15 13:53+0000\n"
 "Last-Translator: missthom <thom43th.dhtl@gmail.com>\n"
 "Language-Team: Vietnamese <vi@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-05-24 03:42+0000\n"
+"X-Launchpad-Export-Date: 2010-06-16 03:44+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: /src/schooltool/app/app.py:201
@@ -4591,6 +4591,10 @@ msgstr "Không chọn"
 msgid "Timetables for ${object}"
 msgstr "Thời khóa biểu cho ${object}"
 
+#: /src/schooltool/timetable/browser/templates/timetableschema.pt:33
+msgid "Homeroom"
+msgstr "Phòng máy chủ"
+
 #: /src/schooltool/timetable/browser/templates/ttwizard.pt:9
 msgid ""
 "This wizard presents you with a series of questions. You may alternatively "
@@ -6632,10 +6636,6 @@ msgstr ""
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:59
 msgid "change-button"
 msgstr "Thay đổi"
-
-#: /src/schooltool/timetable/browser/templates/timetableschema.pt:33
-msgid "Homeroom"
-msgstr "Phòng máy chủ"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:733
 msgid ""

@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-05-21 16:53+0300\n"
-"PO-Revision-Date: 2010-06-02 20:19+0000\n"
+"PO-Revision-Date: 2010-06-24 21:16+0000\n"
 "Last-Translator: Peter Mráz <Unknown>\n"
 "Language-Team: Slovak <sk@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-06-03 03:30+0000\n"
+"X-Launchpad-Export-Date: 2010-06-25 03:43+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: /src/schooltool/app/browser/app.py:227
@@ -448,6 +448,10 @@ msgstr "Akcie"
 #: /src/schooltool/timetable/security.zcml:32
 msgid "View"
 msgstr "Zobraziť"
+
+#: /src/schooltool/app/browser/configure.zcml:310
+msgid "View Calendar"
+msgstr "Zobraziť kalendár"
 
 #: /src/schooltool/app/browser/configure.zcml:322
 msgid "New Event"
@@ -1197,6 +1201,20 @@ msgstr ""
 msgid "Example:"
 msgstr "Príklad:"
 
+#: /src/schooltool/app/browser/templates/timetables-csvimport.pt:74
+msgid ""
+"The above example will create two new sections, one for the philosophy "
+"lecture and the other for the literature lecture. The section for the "
+"philosophy lecture will have persons with ids 'johnny' and 'billy' as "
+"learners, and its timetable will contain three timetable activities, two on "
+"Monday. The literature section will be processed in a similar fashion."
+msgstr ""
+"Predchádzajúci príklad vytvorí dve nové skupiny, jednu pre vyučovanie "
+"filozofie a druhú pre vyučovanie literatúry. Skupina pre lekcie filozofie "
+"bude mať ako učiteľov osoby so skratkou 'ďuro' a 'fero', a jej rozvrh bude "
+"obsahovať tri hodiny, z čoho dve v pondelok. Podobne bude upravené aj "
+"vyučovanie literatúry."
+
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:83
 msgid ""
 "Note that only ids of objects are to be used in the file, not titles. If a "
@@ -1451,6 +1469,19 @@ msgstr "Zobrazí všeobecný kalendár na titulnej strane webu."
 #: /src/schooltool/app/interfaces.py:169
 msgid "Show timetables"
 msgstr "Zobraziť rozvrhy"
+
+#: /src/schooltool/app/interfaces.py:170
+msgid ""
+"\n"
+"            An option that controls whether the timetable of this "
+"calendar's\n"
+"            owner is shown in the calendar views.\n"
+"            "
+msgstr ""
+"\n"
+"            Voľba určujúca, či bude rozvrh vlastníka tohto kalendára\n"
+"            zobrazený medzi zobrazeniami kalendára.\n"
+"            "
 
 #: /src/schooltool/app/main.py:528
 #: /src/schooltool/app/main.py:572
@@ -2062,6 +2093,10 @@ msgstr "Celotextové vyhľadávanie v mene"
 msgid "Delete"
 msgstr "Odstrániť"
 
+#: /src/schooltool/group/browser/configure.zcml:25
+msgid "Add a Group"
+msgstr "Pridať kategóriu"
+
 #: /src/schooltool/group/browser/configure.zcml:38
 msgid "Edit Group Information"
 msgstr "Uprav informácie o kategórii"
@@ -2090,6 +2125,14 @@ msgstr "upraviť členov"
 #: /src/schooltool/group/browser/group.py:73
 msgid "Group index"
 msgstr "Zoznam kategórií"
+
+#: /src/schooltool/group/browser/group.py:84
+msgid "Current Groups"
+msgstr "Súčasné kategórie"
+
+#: /src/schooltool/group/browser/group.py:85
+msgid "Available Groups"
+msgstr "Dostupné kategórie"
 
 #: /src/schooltool/group/browser/groupsviewlet.pt:22
 msgid "edit groups"
@@ -2619,6 +2662,26 @@ msgstr ""
 "Dni rozvrhu na seba nadväzujú, preskakujú sa len dni, v ktorých neprebieha "
 "vyučovanie."
 
+#: /src/schooltool/timetable/browser/templates/advancedtts.pt:136
+msgid ""
+"Third, define the time and duration of periods when they fall on certain "
+"days of week. Use one of the the following format: <tt>HH:MM</tt> (also, "
+"don't forget to specify the duration in the text box below) or <tt>HH:MM-"
+"HH:MM</tt> (when you want to specify both endpoints explicitly, e.g., 9:30-"
+"10:15). It is not necessary to define all periods for all days of week, "
+"omissions will just cause that period to be skipped if it happens to fall on "
+"that day of week. If the list of periods is not up to date with the changes "
+"you made in the table above, use the Update button to refresh the form."
+msgstr ""
+"V treťom kroku definujte čas a trvanie hodín, ktoré pripadajú na daný deň v "
+"týždni. Použite jeden z nasledujúcich formátov: <tt>HH:MM</tt> (taktiež "
+"nezabudnite špecifikovať trvanie v textovom poli nižšie) alebo <tt>HH:MM-"
+"HH:MM</tt> (ak chcete špecifikovať súčasne oba koncové body, napr. 9:30-"
+"10:15). Nie je potrebné definovať všetky hodiny pre všetky dni týždňa, pri "
+"ručnom zadávaní sa môžeme len pomýliť napríklad vynechaním niektorej hodiny "
+"v danom dni. Ak zoznam hodín nie je v súlade s vykonanými zmenami, obnovte "
+"formulár použitím tlačidla Obnoviť."
+
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:175
 msgid ""
 "Certain period specifications were incorrect, and therefore were discarded."
@@ -2783,6 +2846,18 @@ msgstr "Nový začiatok"
 msgid "New end"
 msgstr "Nový koniec"
 
+#: /src/schooltool/timetable/browser/templates/specialday_select.pt:11
+msgid ""
+"This form allows you to change the start and end times for periods on a "
+"certain date, or to cancel some periods altogether."
+msgstr ""
+"Tento formulár vám umožňuje zmeniť začiatok a koniec hodín v určitom dni, "
+"alebo niektoré hodiny zrušiť."
+
+#: /src/schooltool/timetable/browser/templates/specialday_select.pt:23
+msgid "Please enter the date when the periods need to be changed below."
+msgstr "Zadajte dátum, v ktorom chcete zmeniť hodiny."
+
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:29
 msgid "Using timetable:"
 msgstr "Použitý rozvrh:"
@@ -2894,6 +2969,15 @@ msgstr "Rozlišované podľa času"
 #: /src/schooltool/timetable/browser/ttwizard.py:570
 msgid "Enter names of periods, one per line."
 msgstr "Zadajte označenia vyučovacích hodínm na každý riadok jedno."
+
+#. Default: ""
+#: /src/schooltool/timetable/browser/ttwizard.py:583
+msgid "Please enter at least $number periods."
+msgstr "Zadajte aspoň $number hodiny"
+
+#: /src/schooltool/timetable/browser/ttwizard.py:589
+msgid "Please make sure the period names are unique."
+msgstr "Uistite sa, či sú označenia hodín unikátne."
 
 #: /src/schooltool/timetable/browser/ttwizard.py:611
 msgid "Is the sequence of periods each day the same or different?"
@@ -3136,10 +3220,6 @@ msgstr "Pridať novú udalosť začínajúcu na ${title}"
 msgid "same weekday"
 msgstr "rovnako víkendy"
 
-#: /src/schooltool/app/browser/configure.zcml:310
-msgid "View Calendar"
-msgstr "Zobraziť kalendár"
-
 #: /src/schooltool/app/browser/configure.zcml:345
 msgid "Import Sections"
 msgstr "Importuj sekcie"
@@ -3257,7 +3337,7 @@ msgstr "Prispievatelia:"
 #. Default: "Atom Enabled"
 #: /src/schooltool/app/browser/templates/cal_atom.pt:46
 msgid "atom_enabled"
-msgstr ""
+msgstr "atom_enabled"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:24
 msgid "Daily"
@@ -3306,7 +3386,7 @@ msgstr "Stránka ${page_number}"
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:49
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:71
 msgid "invert-selection-button"
-msgstr ""
+msgstr "Obrátiť výber"
 
 #. Default: "OK"
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:65
@@ -3430,20 +3510,6 @@ msgid ""
 "\"johnny\"\n"
 "\"pete\"\n"
 msgstr ""
-
-#: /src/schooltool/app/browser/templates/timetables-csvimport.pt:74
-msgid ""
-"The above example will create two new sections, one for the philosophy "
-"lecture and the other for the literature lecture. The section for the "
-"philosophy lecture will have persons with ids 'johnny' and 'billy' as "
-"learners, and its timetable will contain three timetable activities, two on "
-"Monday. The literature section will be processed in a similar fashion."
-msgstr ""
-"Predchádzajúci príklad vytvorí dve nové skupiny, jednu pre vyučovanie "
-"filozofie a druhú pre vyučovanie literatúry. Skupina pre lekcie filozofie "
-"bude mať ako učiteľov osoby so skratkou 'ďuro' a 'fero', a jej rozvrh bude "
-"obsahovať tri hodiny, z čoho dve v pondelok. Podobne bude upravené aj "
-"vyučovanie literatúry."
 
 #. Default: "Submit"
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:122
@@ -3710,19 +3776,6 @@ msgstr ""
 #: /src/schooltool/app/interfaces.py:49
 msgid "Invalid datetime data"
 msgstr "Neplatné datetime dáta"
-
-#: /src/schooltool/app/interfaces.py:170
-msgid ""
-"\n"
-"            An option that controls whether the timetable of this "
-"calendar's\n"
-"            owner is shown in the calendar views.\n"
-"            "
-msgstr ""
-"\n"
-"            Voľba určujúca, či bude rozvrh vlastníka tohto kalendára\n"
-"            zobrazený medzi zobrazeniami kalendára.\n"
-"            "
 
 #: /src/schooltool/app/main.py:94
 msgid ""
@@ -5324,10 +5377,6 @@ msgstr "Nahrajte súbor XLS"
 msgid "XLS File"
 msgstr "XLS súbor"
 
-#: /src/schooltool/group/browser/configure.zcml:25
-msgid "Add a Group"
-msgstr "Pridať kategóriu"
-
 #: /src/schooltool/group/browser/configure.zcml:114
 msgid "Import Groups Members"
 msgstr "Importovať členov kategórie"
@@ -5376,14 +5425,6 @@ msgstr ""
 #: /src/schooltool/group/browser/group.py:83
 msgid "Groups of ${person}"
 msgstr ""
-
-#: /src/schooltool/group/browser/group.py:84
-msgid "Current Groups"
-msgstr "Súčasné kategórie"
-
-#: /src/schooltool/group/browser/group.py:85
-msgid "Available Groups"
-msgstr "Dostupné kategórie"
 
 #. Default: ""
 #: /src/schooltool/group/browser/group.py:130
@@ -6190,26 +6231,6 @@ msgstr ""
 msgid "Duration in minutes"
 msgstr "Trvanie v minútach"
 
-#: /src/schooltool/timetable/browser/templates/advancedtts.pt:136
-msgid ""
-"Third, define the time and duration of periods when they fall on certain "
-"days of week. Use one of the the following format: <tt>HH:MM</tt> (also, "
-"don't forget to specify the duration in the text box below) or <tt>HH:MM-"
-"HH:MM</tt> (when you want to specify both endpoints explicitly, e.g., 9:30-"
-"10:15). It is not necessary to define all periods for all days of week, "
-"omissions will just cause that period to be skipped if it happens to fall on "
-"that day of week. If the list of periods is not up to date with the changes "
-"you made in the table above, use the Update button to refresh the form."
-msgstr ""
-"V treťom kroku definujte čas a trvanie hodín, ktoré pripadajú na daný deň v "
-"týždni. Použite jeden z nasledujúcich formátov: <tt>HH:MM</tt> (taktiež "
-"nezabudnite špecifikovať trvanie v textovom poli nižšie) alebo <tt>HH:MM-"
-"HH:MM</tt> (ak chcete špecifikovať súčasne oba koncové body, napr. 9:30-"
-"10:15). Nie je potrebné definovať všetky hodiny pre všetky dni týždňa, pri "
-"ručnom zadávaní sa môžeme len pomýliť napríklad vynechaním niektorej hodiny "
-"v danom dni. Ak zoznam hodín nie je v súlade s vykonanými zmenami, obnovte "
-"formulár použitím tlačidla Obnoviť."
-
 #: /src/schooltool/timetable/browser/templates/calendar_overlay.pt:95
 msgid "Manage..."
 msgstr ""
@@ -6236,18 +6257,6 @@ msgstr ""
 "V nasledujúcom formulári môžete upraviť začiatok a koniec hodín pre dátum "
 "${date}. Ak chcete v danom dni hodinu odstrániť, stačí zmazať začiatok a "
 "koniec hodiny."
-
-#: /src/schooltool/timetable/browser/templates/specialday_select.pt:11
-msgid ""
-"This form allows you to change the start and end times for periods on a "
-"certain date, or to cancel some periods altogether."
-msgstr ""
-"Tento formulár vám umožňuje zmeniť začiatok a koniec hodín v určitom dni, "
-"alebo niektoré hodiny zrušiť."
-
-#: /src/schooltool/timetable/browser/templates/specialday_select.pt:23
-msgid "Please enter the date when the periods need to be changed below."
-msgstr "Zadajte dátum, v ktorom chcete zmeniť hodiny."
 
 #: /src/schooltool/timetable/browser/templates/timetable-add.pt:13
 msgid "Create a New Timetable"
@@ -6289,15 +6298,6 @@ msgstr ""
 "aj <a href=\"simpleadd.html\">jednoduchú týždenný harmonogram zvonenia</a>, "
 "alebo komplexnejší <a href=\"complexadd.html\">formulár s pridanými "
 "možnosťami</a>."
-
-#. Default: ""
-#: /src/schooltool/timetable/browser/ttwizard.py:583
-msgid "Please enter at least $number periods."
-msgstr "Zadajte aspoň $number hodiny"
-
-#: /src/schooltool/timetable/browser/ttwizard.py:589
-msgid "Please make sure the period names are unique."
-msgstr "Uistite sa, či sú označenia hodín unikátne."
 
 #. Default: ""
 #: /src/schooltool/timetable/browser/ttwizard.py:712

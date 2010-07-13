@@ -12,6 +12,7 @@ CHANGES
 - TestBrowser now strips out blank lines from printQuery
 - TimeTable object now has consecutive_periods_as_one flag for use by journal
 - Removed Zonki from PDF default page template
+- Update translations (ca, en_AU, eu, ne, pl, tr)
 
 
 1.4.1 (2010-06-15)
@@ -19,6 +20,8 @@ CHANGES
 
 - Copy data from previous school year (https://launchpad.net/bugs/541673)
 - Update translations (ca, es, es_SV, sk, te, vi, zh_CN)
+
+More info at https://launchpad.net/schooltool/+release/1.4.1
 
 
 1.4.0 (2010-05-21)

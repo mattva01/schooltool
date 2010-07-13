@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-05-21 16:53+0300\n"
-"PO-Revision-Date: 2010-05-21 15:34+0000\n"
-"Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
+"PO-Revision-Date: 2010-07-07 21:17+0000\n"
+"Last-Translator: Kenny Meyer <knny.myer@gmail.com>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-05-22 03:49+0000\n"
+"X-Launchpad-Export-Date: 2010-07-08 03:45+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -5252,7 +5252,7 @@ msgstr "Liste von Werten"
 
 #: /src/schooltool/basicperson/security.py:66
 msgid "Advisors of a person."
-msgstr ""
+msgstr "Berater einer Person"
 
 #: /src/schooltool/basicperson/security.zcml:26
 msgid "Create, delete demographics fields and change their order."
@@ -5359,7 +5359,7 @@ msgstr "Abschicken"
 #: /src/schooltool/contact/browser/contact.py:409
 #: /src/schooltool/email/browser/email.py:509
 msgid "There were some errors."
-msgstr ""
+msgstr "Es sind Fehler aufgetreten."
 
 #: /src/schooltool/contact/browser/relationship.py:75
 #: /src/schooltool/contact/interfaces.py:101
@@ -5418,6 +5418,8 @@ msgid ""
 "You don't have an email address set. Ask your administrator to set your "
 "email address in your contact information."
 msgstr ""
+"Sie haben noch keine E-Mail Adresse gesetzt. Bitten Sie Ihren Administrator "
+"eine E-Mail Adresse in der Kontaktinformation zu setzen."
 
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:8
 msgid "Contact information for ${person}"
@@ -5952,12 +5954,12 @@ msgstr "Aktueller Status vom E-Mail Dienst des SchoolTools"
 #: /src/schooltool/email/browser/email.py:101
 #: /src/schooltool/email/interfaces.py:87
 msgid "Enable"
-msgstr ""
+msgstr "Aktivieren"
 
 #: /src/schooltool/email/browser/email.py:102
 #: /src/schooltool/email/interfaces.py:88
 msgid "Mark to enable the service."
-msgstr ""
+msgstr "Markieren um diesen Dienst zu aktivieren"
 
 #: /src/schooltool/email/browser/email.py:107
 #: /src/schooltool/email/interfaces.py:92
@@ -5967,7 +5969,7 @@ msgstr "Hostname"
 #: /src/schooltool/email/browser/email.py:108
 #: /src/schooltool/email/interfaces.py:93
 msgid "SMTP server hostname. Required if the service is enabled."
-msgstr ""
+msgstr "SMTP Server Hostname. Benötigt wenn der Dienst aktiviert ist."
 
 #: /src/schooltool/email/browser/email.py:112
 #: /src/schooltool/email/interfaces.py:97
@@ -6023,11 +6025,11 @@ msgstr "TLS Verbindung nutzen?"
 
 #: /src/schooltool/email/browser/email.py:147
 msgid "New passwords don't match"
-msgstr ""
+msgstr "Die neuen Passwörter stimmen nicht überein."
 
 #: /src/schooltool/email/browser/email.py:152
 msgid "Hostname is required for enabling the service"
-msgstr ""
+msgstr "Hostname ist erforderlich um den Dienst zu aktivieren"
 
 #: /src/schooltool/email/browser/email.py:186
 msgid "Change Email Settings"
