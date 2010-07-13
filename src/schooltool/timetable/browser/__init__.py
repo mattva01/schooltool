@@ -37,6 +37,7 @@ from zope.security.proxy import removeSecurityProxy
 from zope.traversing.browser.absoluteurl import absoluteURL
 
 from z3c.form import form, field, button, widget, validator
+from z3c.form.browser.checkbox import SingleCheckBoxFieldWidget
 from z3c.form.util import getSpecification
 
 from schooltool.app.interfaces import ISchoolToolApplication
@@ -56,7 +57,6 @@ from schooltool.timetable.interfaces import ITimetables, ITimetableDict
 from schooltool.timetable import TimetableOverlapError, TimetableOverflowError
 from schooltool.timetable import validateAgainstTerm
 from schooltool.timetable import validateAgainstOthers
-from schooltool.timetable.interfaces import ITimetableSchemaContainer
 from schooltool.traverser.interfaces import ITraverserPlugin
 from schooltool.schoolyear.interfaces import ISchoolYear
 
@@ -571,6 +571,7 @@ class TimetableEditView(form.EditForm, TimetableConflictMixin):
     fields = field.Fields(ITimetable).select(
         'first', 'last',
         'consecutive_periods_as_one')
+    fields['consecutive_periods_as_one'].widgetFactory = SingleCheckBoxFieldWidget
 
     def getDays(self):
         """Return the current selection.

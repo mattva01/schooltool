@@ -428,7 +428,7 @@ class ITimetable(ILocation):
     timezone = TextLine(title=u"The name of a timezone of this timetable")
 
     consecutive_periods_as_one = Bool(
-        title=u"Consecutive periods appear as one column in the journal",
+        title=u"Treat consecutive periods as a single meeting",
         required=False)
 
     term = Object(
