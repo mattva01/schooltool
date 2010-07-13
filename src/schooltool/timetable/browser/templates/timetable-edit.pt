@@ -115,6 +115,13 @@
             </div>
           </tal:block>
 
+        <span i18n:translate="">Treat consecutive selected periods as a single meeting:</span>
+
+          <tal:block define="widget python:view.widgets['consecutive_periods_as_one']">
+            <div metal:use-macro="template/macros/render-widget">
+            </div>
+          </tal:block>
+
       </td>
     </tr>
   </table>

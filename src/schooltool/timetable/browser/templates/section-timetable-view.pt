@@ -86,6 +86,9 @@
             until
               <tal:block i18n:name="until" content="timetable/timetable/last/@@mediumDate" />
           </p>
+          <p i18n:translate="" tal:condition="timetable/timetable/consecutive_periods_as_one">
+            Consecutive periods are treated as a single meeting.
+          </p>
         </td>
       </tr>
     </table>

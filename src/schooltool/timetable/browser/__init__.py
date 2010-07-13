@@ -568,7 +568,9 @@ class SectionTimetableSetupView(TimetableSetupViewBase):
 
 class TimetableEditView(form.EditForm, TimetableConflictMixin):
     template = ViewPageTemplateFile('templates/timetable-edit.pt')
-    fields = field.Fields(ITimetable).select('first', 'last')
+    fields = field.Fields(ITimetable).select(
+        'first', 'last',
+        'consecutive_periods_as_one')
 
     def getDays(self):
         """Return the current selection.
