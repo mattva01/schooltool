@@ -38,8 +38,8 @@ from zope.traversing.browser import absoluteURL
 from zope.traversing.browser.interfaces import IAbsoluteURL
 from zope.viewlet.viewlet import ViewletBase
 
-from z3c.form import form, field, button, widget
-from z3c.form.browser.checkbox import SingleCheckBoxWidget
+from z3c.form import form, field, button
+from z3c.form.browser.checkbox import SingleCheckBoxFieldWidget
 from zc.table.column import GetterColumn
 from zc.table.interfaces import ISortableColumn
 
@@ -85,10 +85,6 @@ def set_server_status_message(form, container):
 
 
 # Email Settings
-
-def EnabledCheckBoxWidget(field, request):
-    return widget.FieldWidget(field, SingleCheckBoxWidget(request))
-
 
 class IEmailSettingsEditForm(Interface):
 
@@ -185,7 +181,7 @@ class EmailSettingsEditView(form.EditForm):
     template = ViewPageTemplateFile('templates/email_form.pt')
     label = _('Change Email Settings')
     fields = field.Fields(IEmailSettingsEditForm)
-    fields['enabled'].widgetFactory = EnabledCheckBoxWidget
+    fields['enabled'].widgetFactory = SingleCheckBoxFieldWidget
 
     @button.buttonAndHandler(_('Cancel'))
     def handle_cancel_action(self, action):

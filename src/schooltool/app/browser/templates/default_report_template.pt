@@ -16,12 +16,14 @@
     <lineMode width="1" cap="round"/>
     <lines tal:content="view/footer/rule" />
 
-    <image tal:attributes="
-        file string:${context/schooltool:app/@@absolute_url}/@@/schooltool-report-logo.png;
-        x view/footer/logo/x;
-        y view/footer/logo/y;
-        height view/footer/logo/height"
-        preserveAspectRatio="True" />
+    <place tal:attributes="x view/footer/center_place/x;
+                           y view/footer/center_place/y;
+                           width view/footer/center_place/width;
+                           height view/footer/center_place/height">
+      <para i18n:translate="" textColor="darkgray" fontName="Helvetica-Bold">
+        Created with SchoolTool
+      </para>
+    </place>
 
     <setFont name="Times_New_Roman" tal:attributes="
         size view/footer/font_height"/>

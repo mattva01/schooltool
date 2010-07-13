@@ -22,6 +22,10 @@ SchoolTool application views.
 """
 
 import zope.schema
+from zope.proxy import sameProxiedObjects
+from zope.interface import implements
+
+from schooltool.table.table import simple_form_key
 
 
 def vocabulary(choices):
@@ -64,3 +68,41 @@ def vocabulary_titled(items):
                     token=unicode(item.__name__).encode('punycode'),
                     title=item.title)
          for item in items])
+
+
+class TitledContainerItemSource(object):
+    """Source of titled items in a container."""
+    implements(zope.schema.interfaces.IIterableSource)
+
+    def __init__(self, context):
+        self.context = context
+
+    @property
+    def container(self):
+        raise NotImplementedError("Don't know how to get the container from context")
+
+    def __len__(self):
+        return len(self.container)
+
+    def __contains__(self, item):
+        return sameProxiedObjects(item, self.container.get(item.__name__))
+
+    def __iter__(self):
+        for item in self.container.values():
+            yield self.getTerm(item)
+
+    def getTermByToken(self, token):
+        terms = [self.getTerm(item) for item in self.container.values()]
+        by_token = dict([(term.token, term) for term in terms])
+        if token not in by_token:
+            raise LookupError(token)
+        return by_token[token]
+
+    def getTerm(self, item):
+        return zope.schema.vocabulary.SimpleTerm(
+            item,
+            token=simple_form_key(item),
+            title=self.getTitle(item))
+
+    def getTitle(self, item):
+        return item.title

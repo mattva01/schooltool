@@ -314,13 +314,13 @@ We should see a timetable in the section's timetable list:
     >>> manager.getLink('Swimming - Frog').click()
     >>> manager.open(manager.url + '/timetables')
 
-    >>> manager.getLink('2005-fall.default')
-    <Link text='2005-fall.default'
+    >>> manager.getLink('edit periods')
+    <Link text='(edit periods)'
           url='.../sections/1/timetables/1'>
 
 We can have a look at the timetable too, and see a few timetable activities:
 
-    >>> manager.getLink('2005-fall.default').click()
+    >>> manager.getLink('edit periods').click()
 
     >>> print analyze.queryHTML('//table/tr[2]', manager.contents)[0]
     <tr><td>
@@ -423,9 +423,9 @@ this section based on the new schema.
     >>> manager.getControl('No').click()
 
     >>> manager.open('http://localhost/schoolyears/2005/2005-fall/sections/1/timetables/addTimetable.html')
-    >>> manager.getControl(name='ttschema').value = ['singleperiod']
+    >>> manager.getControl(name='form.widgets.schooltt:list').value = ['singleperiod-']
     >>> manager.getControl('Add').click()
-    >>> manager.getLink('2005-fall.singleperiod').click()
+    >>> manager.getControl('Save').click()
 
 The activities should show up in the calendar of the users that are in
 this section too:

@@ -23,7 +23,9 @@ SchoolTool application interfaces
 import zope.schema
 
 from zope.component.interfaces import ObjectEvent, IObjectEvent
+from zope.container.interfaces import IContainer, IContained
 from zope.container.interfaces import IReadContainer
+from zope.container.constraints import contains
 from zope.interface import implements
 from zope.interface import Interface, Attribute
 from zope.location.interfaces import ILocation, IContained
@@ -72,13 +74,24 @@ class ApplicationStartUpEvent(ObjectEvent):
 
 
 class ICatalogSetUpEvent(IObjectEvent):
-    """The SchoolTool catalogs are being initialized.
+    """Old style notification that the SchoolTool catalogs are being initialized.
 
-    Subscribers should set up their catalogs.
+    Subject to deprecation.  Subscribers should no longer use this to set up their
+    catalogs.
     """
 
 class CatalogSetUpEvent(ObjectEvent):
     implements(ICatalogSetUpEvent)
+
+
+class ICatalogStartUpEvent(IObjectEvent):
+    """The SchoolTool catalogs has started up.
+
+    A hook for catalog initialization.
+    """
+
+class CatalogStartUpEvent(ObjectEvent):
+    implements(ICatalogStartUpEvent)
 
 
 class ISchoolToolCalendar(IEditCalendar, ILocation):
@@ -234,6 +247,10 @@ class IPluginAction(Interface):
         """Perform plugin specific set up."""
 
 
+class ICatalogStartUp(IPluginAction):
+    """Set up SchoolTool catalogs."""
+
+
 class IPluginInit(IPluginAction):
     """Perform plugin initialization when setting up the SchoolTool
     application."""
@@ -245,3 +262,24 @@ class IPluginStartUp(IPluginAction):
 
 class ISchoolToolAuthenticationPlugin(ISchoolToolAuthentication):
     """A plugin for local schooltool authentication utility. """
+
+
+class IVersionedCatalog(IContained):
+    """Versioned catalog entry."""
+
+    version = zope.schema.TextLine(
+        title=u"Version",
+        description=u"Current version of the catalog.")
+
+    expired = zope.schema.Bool(
+        title=u"Expired",
+        description=u"Expired catalogs should be removed.")
+
+    catalog = Attribute("""The catalog object.""")
+
+
+class ICatalogs(IContainer):
+    """Container of versioned catalogs."""
+
+    contains(IVersionedCatalog)
+

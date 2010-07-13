@@ -23,25 +23,53 @@
 
   <div tal:define="term view/getTerm;
 		   ttschemas view/ttschemas/values">
-    <div i18n:translate="">For term:</div>
-    <strong tal:content="term/title" />
+    <div i18n:translate="">For term:
+      <strong i18n:name="term_title" tal:content="term/title" />
+      (from
+        <tal:block i18n:name="starts" tal:content="term/first/@@mediumDate"/>
+       to
+        <tal:block i18n:name="ends" tal:content="term/last/@@mediumDate"/>)
+    </div>
 
-    <div i18n:translate="">Using timetable:</div>
-
-    <strong tal:repeat="ttschema ttschemas/sortby:title"
+    <div i18n:translate="">Using timetable:
+    <strong i18n:name="schema_titles"
+            tal:repeat="ttschema ttschemas/sortby:title"
             tal:content="ttschema/title" />
+    </div>
   </div>
 
-<form tal:attributes="action request/URL" class="plain" method="post">
+
+  <div class="status" tal:condition="view/status">
+    <ul class="errors"
+        tal:condition="view/widgets/errors"
+        metal:define-macro="form-errors">
+      <li tal:repeat="error view/widgets/errors">
+        <tal:block condition="error/widget">
+          <span tal:replace="error/widget/label" />:
+        </tal:block>
+        <span tal:replace="structure error/render">Error Type</span>
+      </li>
+    </ul>
+  </div>
+
+<form action="." method="post" enctype="multipart/form-data"
+      metal:define-macro="form"
+      tal:attributes="method view/method;
+                      enctype view/enctype;
+                      acceptCharset view/acceptCharset;
+                      accept view/accept;
+                      action view/action;
+                      name view/name;
+                      id view/id">
 
   <table class="timetable">
     <tr>
-      <tal:block repeat="day view/days">
+      <tal:block repeat="day view/getDays">
         <th class="day" tal:content="day/title">Day N</th>
       </tal:block>
     </tr>
     <tr>
-      <tal:block repeat="day view/days">
+      <tal:block repeat="day view/getDays">
         <td >
           <ul>
             <tal:block tal:repeat="period day/periods">
@@ -62,16 +90,46 @@
         </td>
       </tal:block>
     </tr>
+    <tr>
+      <td tal:attributes="colspan python:len(view.getDays())">
+
+
+        <span i18n:translate="">Apply from:</span>
+
+          <tal:block define="widget python:view.widgets['first']">
+            <metal:block define-macro="render-widget">
+            <div class="row" tal:attributes="id string:${widget/id}-row">
+              <div class="widget" tal:content="structure widget/render">
+              </div>
+              <div class="error" tal:condition="widget/error">
+                <span tal:replace="structure widget/error/render">error</span>
+              </div>
+            </div>
+            </metal:block>
+          </tal:block>
+
+        <span i18n:translate="">Apply until:</span>
+
+          <tal:block define="widget python:view.widgets['last']">
+            <div metal:use-macro="template/macros/render-widget">
+            </div>
+          </tal:block>
+
+          <tal:block define="widget python:view.widgets['consecutive_periods_as_one']">
+            <div metal:use-macro="template/macros/render-widget">
+            </div>
+          </tal:block>
+
+      </td>
+    </tr>
   </table>
 
-  <div class="controls">
-    <input class="button-ok" type="submit" name="SAVE" value="Save"
-           i18n:attributes="value" />
-    <input type="submit" class="button-cancel" name="CANCEL" value="Cancel"
-           i18n:attributes="value cancel-button" />
+  <div metal:use-macro="macro:form-buttons">
   </div>
 
+
 </form>
+
 </tal:if>
 
 </metal:block>

@@ -32,8 +32,8 @@ from zope.traversing.browser.absoluteurl import absoluteURL
 
 from schooltool.schoolyear.interfaces import ISchoolYear
 from schooltool.common import SchoolToolMessage as _
-from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.cal import CalendarEvent
+from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.calendar.utils import parse_date
 from schooltool.term.interfaces import ITerm
@@ -122,7 +122,7 @@ class EmergencyDayView(BrowserView):
                 exceptionDayIds[self.replacement] = removeSecurityProxy(day_id)
 
             # Post calendar events to schoolwide calendar
-            calendar = ISchoolToolCalendar(getSchoolToolApplication())
+            calendar = ISchoolToolCalendar(ISchoolToolApplication(None))
             dtstart = datetime.datetime.combine(self.date, datetime.time())
             msg = _('School cancelled due to emergency.'
                     ' Replacement day $replacement.',

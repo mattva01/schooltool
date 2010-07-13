@@ -27,7 +27,6 @@ from zope.publisher.browser import BrowserView
 
 from schooltool.schoolyear.interfaces import ISchoolYear
 from schooltool.common import SchoolToolMessage as _
-from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.app import SimpleNameChooser
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.course.interfaces import ICourseContainer
@@ -260,7 +259,7 @@ class TimetableCSVImporter(object):
     def __init__(self, container, charset=None):
         # XXX It appears that our security declarations are inadequate,
         #     because things break without this removeSecurityProxy.
-        self.app = getSchoolToolApplication()
+        self.app = ISchoolToolApplication(None)
         self.sections = removeSecurityProxy(container)
         self.persons = self.app['persons']
         self.errors = TimetableImportErrorCollection()

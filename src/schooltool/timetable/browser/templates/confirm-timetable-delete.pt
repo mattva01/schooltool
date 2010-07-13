@@ -1,0 +1,89 @@
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title">
+    Delete items
+  </title>
+</head>
+<body>
+
+<span metal:fill-slot="zonki">
+  <img src="zonki.png" alt="SchoolTool" i18n:attributes="alt"
+    tal:attributes="src context/++resource++zonki-question.png" />
+</span>
+
+<div metal:fill-slot="content-header">
+  <h1 i18n:translate="">Are you sure you want to unschedule this timetable?</h1>
+</div>
+
+
+<metal:block metal:fill-slot="body">
+
+  <form method="post"
+        tal:define="timetable view/timetable"
+        tal:attributes="action string:${context/@@absolute_url}/confirm-delete.html">
+
+  <tal:block condition="view/timetable">
+    <h2 i18n:translate="">
+      Timetable "<tal:block i18n:name="title" content="timetable/timetable/schooltt/title"/>"
+    </h2>
+    <table class="timetable">
+      <tr>
+        <tal:block repeat="day timetable/days">
+          <th class="day" tal:content="day/title">Day N</th>
+        </tal:block>
+      </tr>
+      <tal:block condition="not:timetable/has_activities">
+        <tr>
+          <td tal:attributes="colspan python:len(timetable['days'])">
+            <p i18n:translate="">No periods selected.</p>
+          </td>
+        </tr>
+      </tal:block>
+      <tal:block condition="timetable/has_activities">
+        <tr>
+          <tal:block repeat="day timetable/days">
+            <td >
+              <tal:block tal:repeat="period day/periods">
+                <ul>
+                  <li>
+                    <p tal:condition="period/activities">
+                      <tal:block content="period/title" />:
+                      <tal:block content="period/activities"/>
+                    </p>
+                  </li>
+                </ul>
+              </tal:block>
+            </td>
+          </tal:block>
+        </tr>
+      </tal:block>
+      <tr>
+        <td tal:attributes="colspan python:len(timetable['days'])">
+
+          <p i18n:translate="">
+            Scheduled from
+              <tal:block i18n:name="from" content="timetable/timetable/first/@@mediumDate" />
+            until
+              <tal:block i18n:name="until" content="timetable/timetable/last/@@mediumDate" />
+          </p>
+        </td>
+      </tr>
+    </table>
+
+  </tal:block>
+
+    <div class="controls">
+      <tal:block condition="view/timetable">
+        <input type="submit" class="button-cancel" name="CONFIRM" value="Confirm"
+               i18n:attributes="value"/>
+        <input type="hidden" name="timetable"
+               tal:attributes="value timetable/timetable/__name__" />
+      </tal:block>
+      <input type="submit" class="button-cancel" name="CANCEL" value="Cancel"
+             i18n:attributes="value" />
+    </div>
+  </form>
+
+
+</metal:block>
+</body></html>

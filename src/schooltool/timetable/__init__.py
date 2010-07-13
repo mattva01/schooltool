@@ -125,6 +125,7 @@ You can create an empty timetable by calling the createTimetable method of a
 schema.  See ITimetableSchema, ITimetableSchemaDay.
 """
 
+import rwproperty
 import zope.event
 from persistent import Persistent
 from persistent.dict import PersistentDict
@@ -135,18 +136,19 @@ from zope.component import adapts, subscribers
 from zope.interface import implementer
 from zope.interface import implements
 from zope.interface import directlyProvides
-
 from zope.annotation.interfaces import IAnnotations
 from zope.location.interfaces import ILocation
+from zope.lifecycleevent.interfaces import IObjectAddedEvent
+from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 from zope.traversing.api import getPath
 from zope.container.interfaces import INameChooser
 from zope.container.contained import NameChooser
 from zope.app.generations.utility import findObjectsProviding
 
-from schooltool.calendar.simple import ImmutableCalendar
-
+from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolCalendar
-
+from schooltool.calendar.simple import ImmutableCalendar
+from schooltool.common import IDateRange, DateRange
 from schooltool.timetable.interfaces import ITimetableCalendarEvent
 from schooltool.timetable.interfaces import ITimetable, ITimetableWrite
 from schooltool.timetable.interfaces import ITimetableDay, ITimetableDayWrite
@@ -164,8 +166,9 @@ from schooltool.timetable.interfaces import ITimetableSource
 from schooltool.timetable.interfaces import ITimetableSchema
 from schooltool.timetable.interfaces import Unchanged
 from schooltool.term.interfaces import ITerm
-from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.app import InitBase
+from schooltool.schoolyear.subscriber import ObjectEventAdapterSubscriber
+
 
 from schooltool.common import SchoolToolMessage as _
 
@@ -175,6 +178,7 @@ from schooltool.common import SchoolToolMessage as _
 # Timetabling
 #
 
+
 class Timetable(Persistent):
 
     implements(ITimetable, ITimetableWrite)
@@ -182,7 +186,11 @@ class Timetable(Persistent):
     __name__ = None
     __parent__ = None
 
+    _first = None
+    _last = None
+
     timezone = 'UTC'
+    consecutive_periods_as_one = False
 
     @property
     def title(self):
@@ -202,6 +210,32 @@ class Timetable(Persistent):
         self.day_ids = day_ids
         self.days = PersistentDict()
         self.model = None
+
+    @rwproperty.getproperty
+    def first(self):
+        if self._first is None:
+            term = getattr(self, 'term', None)
+            if term is None:
+                return None
+            return term.first
+        return self._first
+
+    @rwproperty.setproperty
+    def first(self, value):
+        self._first = value
+
+    @rwproperty.getproperty
+    def last(self):
+        if self._last is None:
+            term = getattr(self, 'term', None)
+            if term is None:
+                return None
+            return term.last
+        return self._last
+
+    @rwproperty.setproperty
+    def last(self, value):
+        self._last = value
 
     def keys(self):
         return list(self.day_ids)
@@ -239,6 +273,8 @@ class Timetable(Persistent):
             raise ValueError("Timetables have different schemas")
         for day, period, activity in other.activities():
             self[day].add(period, activity, send_events=False)
+        self.first = other.first
+        self.last = other.last
 
     def cloneEmpty(self):
         other = Timetable(self.day_ids)
@@ -544,16 +580,6 @@ class TimetableDict(PersistentDict):
 
     def __setitem__(self, key, value):
         assert ITimetable.providedBy(value)
-
-        for k, v in self.items():
-            if (sameProxiedObjects(v.term, value.term) and
-                sameProxiedObjects(v.schooltt, value.schooltt) and
-                k != key):
-                raise DuplicateTimetableError("There already is a timetable "
-                                              "for term %s and section %s, but "
-                                              "it's key is %s!" % (v.term.__name__,
-                                                                   v.schooltt.__name__,
-                                                                   k))
         old_value = self.get(key)
         if old_value is not None:
             old_value.__parent__ = None
@@ -673,7 +699,7 @@ class CompositeTimetables(object):
 
 
 def getAllTimetables():
-    app = getSchoolToolApplication(None)
+    app = ISchoolToolApplication(None)
     all_timetables = []
     for ttowner in findObjectsProviding(app, IOwnTimetables):
         timetables = queryAdapter(ttowner, ITimetables, default=None)
@@ -727,3 +753,98 @@ def getTermForTimetableDict(ttdict):
 @implementer(ITerm)
 def getTermForTimetable(timetable):
     return ITerm(timetable.__parent__)
+
+
+class TimetableOverlapError(Exception):
+
+    def __init__(self, schema, first, last, overlapping):
+        self.schema = schema
+        self.first = first
+        self.last = last
+        self.overlapping = overlapping
+
+    def _formatTitle(self, timetable):
+        if (timetable.first is not None or
+            timetable.last is not None):
+            return "%s (%s-%s)" % (
+                timetable.title, timetable.first, timetable.last)
+        else:
+            return timetable.title
+
+    def __repr__(self):
+        return "Timetable %s overlaps other(s) (%s)" % (
+            '%s (%s-%s)' % (self.schema.title, self.first, self.last),
+            ", ".join(sorted(self._formatTitle(timetable)
+                             for timetable in self.overlapping)))
+
+    __str__ = __repr__
+
+
+class TimetableOverflowError(Exception):
+    def __init__(self, schema, first, last, term):
+        self.schema = schema
+        self.first = first
+        self.last = last
+        self.term = term
+
+    def __repr__(self):
+        return "Timetable %s (%s - %s) does not fit in term %s (%s - %s)" % (
+            self.schema.title, self.first, self.last,
+            self.term.title, self.term.first, self.term.last)
+
+    __str__ = __repr__
+
+
+
+class TimetableModifiedSubscriber(ObjectEventAdapterSubscriber):
+    adapts(IObjectModifiedEvent, ITimetable)
+
+    def __call__(self):
+        if ITimetableDict.providedBy(self.object.__parent__):
+            validateTimetable(self.object)
+
+
+class TimetableAddedSubscriber(ObjectEventAdapterSubscriber):
+    adapts(IObjectAddedEvent, ITimetable)
+
+    def __call__(self):
+        if ITimetableDict.providedBy(self.object.__parent__):
+            validateTimetable(self.object)
+
+
+def validateAgainstTerm(schema, first, last, term):
+    term_daterange = IDateRange(term)
+    if ((first is not None and first not in term_daterange) or
+        (last is not None and last not in term_daterange)):
+        raise TimetableOverflowError(
+            schema, first, last, term)
+
+
+def validateAgainstOthers(schema, first, last, timetables):
+    if first is None or last is None:
+        return
+
+    daterange = DateRange(first, last)
+    overlapping_timetables = []
+    for other_tt in timetables:
+        if (other_tt.schooltt is None or
+            not sameProxiedObjects(other_tt.schooltt, schema)):
+            continue
+        if (other_tt.first is None or other_tt.last is None):
+            continue
+        if daterange.overlaps(DateRange(other_tt.first, other_tt.last)):
+            overlapping_timetables.append(other_tt)
+    if overlapping_timetables:
+        raise TimetableOverlapError(
+            schema, first, last, overlapping_timetables)
+
+
+def validateTimetable(timetable):
+    validateAgainstTerm(
+        timetable.schooltt, timetable.first, timetable.last,
+        timetable.term)
+    validateAgainstOthers(
+        timetable.schooltt, timetable.first, timetable.last,
+        [tt for tt in timetable.__parent__.values()
+         if tt.__name__ != timetable.__name__])
+

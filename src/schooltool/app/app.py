@@ -1,6 +1,6 @@
 #
 # SchoolTool - common information systems platform for school administration
-# Copyright (c) 2005 Shuttleworth Foundation
+# Copyright (c) 2005-2010 Shuttleworth Foundation
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,9 +18,6 @@
 #
 """
 SchoolTool application
-
-$Id$
-
 """
 import calendar
 
@@ -28,11 +25,9 @@ from persistent import Persistent
 from persistent.dict import PersistentDict
 
 from zope.location.location import LocationProxy
-from zope.component import adapter
-from zope.component import adapts
+from zope.component import adapter, adapts
 from zope.i18n import translate
-from zope.interface import implementer
-from zope.interface import implements, implementsOnly
+from zope.interface import implementer, implements, implementsOnly
 
 from zope.annotation.interfaces import IAttributeAnnotatable, IAnnotations
 from zope.app.applicationcontrol.interfaces import IApplicationControl
@@ -86,6 +81,8 @@ class SchoolToolApplication(Persistent, sample.SampleContainer,
     title = property(_title)
 
 
+@adapter(None)
+@implementer(ISchoolToolApplication)
 def getSchoolToolApplication(ignore=None):
     """Return the nearest ISchoolToolApplication.
 
@@ -99,8 +96,7 @@ def getSchoolToolApplication(ignore=None):
     candidate = getSite()
     if ISchoolToolApplication.providedBy(candidate):
         return candidate
-    else:
-        raise ValueError("can't get a SchoolToolApplication")
+    return None
 
 
 class SimpleNameChooser(NameChooser):

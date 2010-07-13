@@ -32,6 +32,7 @@ from zope.component import getUtility
 from schooltool.commendation import interfaces, commendation
 from schooltool.commendation.interfaces import _
 from schooltool.app import app
+from schooltool.app.interfaces import ISchoolToolApplication
 
 
 # This is a simple view class that provides the information of a commendation
@@ -164,7 +165,7 @@ class CommendationsOverview(browser.BrowserView):
             self.request.get('search_scope', 'group')]
 
         # Get the SchoolTool application instance and access its annotations.
-        stapp = app.getSchoolToolApplication()
+        stapp = ISchoolToolApplication(None)
         annotations = IAnnotations(stapp)
         # A list comprehension that iterates through all the commendations and
         # applies the filter one-by-one.

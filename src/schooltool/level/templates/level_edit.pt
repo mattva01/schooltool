@@ -1,0 +1,9 @@
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+  <body>
+    <metal:nothing metal:fill-slot="content-header" />
+    <metal:block metal:fill-slot="body">
+      <div metal:use-macro="macro:form">
+      </div>
+    </metal:block>
+  </body>
+</html>

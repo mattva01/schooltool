@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<configure xmlns="http://schooltool.org/securitypolicy"
+           xmlns:zope="http://namespaces.zope.org/zope">
+
+  <!-- Security descriptions -->
+
+  <describe_group name="schooltool.level"
+      title="Levels"
+      description="The teaching levels (student learning years)."
+  />
+
+  <describe_action
+     group="schooltool.level" name="add_remove" title="Add/Remove"
+     order="10"
+     interface="schooltool.app.interfaces.ISchoolToolApplication"
+     permission="schooltool.edit"
+  />
+
+  <describe_action
+     group="schooltool.level" name="modify" title="Modify/Rename"
+     order="20"
+     interface="schooltool.app.interfaces.ISchoolToolApplication"
+     permission="schooltool.edit"
+  />
+
+</configure>

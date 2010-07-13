@@ -25,7 +25,7 @@ import datetime
 from zope.interface import Interface, Attribute, implements
 from zope.schema import Field, Object, Int, TextLine, List, Tuple
 from zope.schema import Dict, Date, Timedelta
-from zope.schema import Iterable
+from zope.schema import Iterable, Bool
 from zope.schema.interfaces import IField
 from zope.annotation.interfaces import IAnnotatable
 from zope.container.constraints import contains, containers
@@ -415,11 +415,21 @@ class ITimetable(ILocation):
 
     title = TextLine(title=u"Title", required=True)
 
+    first = Date(
+        title=u"Apply timetable from")
+
+    last = Date(
+        title=u"Apply timetable until")
+
     model = Object(
         title=u"A timetable model this timetable should be used with.",
         schema=ITimetableModel)
 
     timezone = TextLine(title=u"The name of a timezone of this timetable")
+
+    consecutive_periods_as_one = Bool(
+        title=u"Treat consecutive periods as a single meeting",
+        required=False)
 
     term = Object(
         title=u"The term this timetable is for.",

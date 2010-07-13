@@ -107,13 +107,11 @@ def doctest_getSchoolToolApplication():
       >>> from zope.site import LocalSiteManager
       >>> app.setSiteManager(LocalSiteManager(app))
 
-    If site is not a SchoolToolApplication, we get an error
+    If site is not a SchoolToolApplication, we get None
 
       >>> from schooltool.app.app import getSchoolToolApplication
-      >>> getSchoolToolApplication()
-      Traceback (most recent call last):
-      ...
-      ValueError: can't get a SchoolToolApplication
+      >>> print getSchoolToolApplication()
+      None
 
     If current site is a SchoolToolApplication, we get it:
 

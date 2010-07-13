@@ -60,7 +60,6 @@ from schooltool.course.interfaces import ISection, ISectionContainer
 from schooltool.course.section import Section
 from schooltool.course.section import copySection
 from schooltool.app.browser.app import RelationshipViewBase
-from schooltool.timetable.browser import TimetableConflictMixin
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.table.interfaces import ITableFormatter
 
@@ -501,23 +500,7 @@ class SectionEditView(BaseEditView):
         return BaseEditView.update(self)
 
 
-class ConflictDisplayMixin(TimetableConflictMixin):
-    """A mixin for use in views that display event conflicts."""
-
-    def update(self):
-        """Set self.busy_periods."""
-        ttschema = self.getSchema()
-        term = self.getTerm()
-        if ttschema and term:
-            section_map = self.sectionMap(term, ttschema)
-            self.busy_periods = [(key, sections)
-                                 for key, sections in section_map.items()
-                                 if self.context in sections]
-        else:
-            self.busy_periods = []
-
-
-class RelationshipEditConfView(RelationshipViewBase, ConflictDisplayMixin):
+class RelationshipEditConfView(RelationshipViewBase):
     """A relationship editing view that displays conflicts."""
 
     __call__ = ViewPageTemplateFile('templates/edit_relationships.pt')
@@ -530,12 +513,8 @@ class RelationshipEditConfView(RelationshipViewBase, ConflictDisplayMixin):
     def school_year(self):
         return ISchoolYear(self.context)
 
-    def update(self):
-        RelationshipViewBase.update(self)
-        ConflictDisplayMixin.update(self)
 
-
-class SectionInstructorView(RelationshipEditConfView, ConflictDisplayMixin):
+class SectionInstructorView(RelationshipEditConfView):
     """View for adding instructors to a Section."""
 
     __used_for__ = ISection
