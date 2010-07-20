@@ -81,6 +81,8 @@ ERROR_TIME_RANGE = _("is not a valid time range")
 ERROR_TIMETABLE_MODEL = _("is not a valid timetable model")
 ERROR_DUPLICATE_DAY_ID = _("is the same day id as another in this timetable")
 ERROR_UNKNOWN_DAY_ID = _("is not defined in the 'Day Templates' section")
+ERROR_DUPLICATE_PERIOD = _("is the same period id as another in this day")
+ERROR_DUPLICATE_HOMEROOM_PERIOD = _("is the same homeroom period id as another in this day")
 ERROR_RESOURCE_TYPE = _("must be either 'Location' or 'Resource'")
 ERROR_INVALID_TERM_ID = _('is not a valid term in the given school year')
 ERROR_INVALID_COURSE_ID = _('is not a valid course in the given school year')
@@ -625,7 +627,7 @@ class PersonImporter(ImporterBase):
             data['last_name'] = self.getRequiredTextFromCell(sh, row, 4)
             data['suffix'] = self.getTextFromCell(sh, row, 5)
             data['preferred_name'] = self.getTextFromCell(sh, row, 6)
-            data['birth_date'] = self.getTextFromCell(sh, row, 7, default=None)
+            data['birth_date'] = self.getDateFromCell(sh, row, 7, default=None)
             data['gender'] = self.getTextFromCell(sh, row, 8)
             if data['gender'] == '':
                 data['gender'] = None
