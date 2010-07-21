@@ -424,7 +424,7 @@ class SchoolTimetableImporter(ImporterBase):
         else:
             day_id, found, valid = self.getIntFoundValid(sh, row, col)
             if valid and day_id not in range(7):
-                self.error(row, 0, ERROR_WEEKLY_DAY_ID)
+                self.error(row, col, ERROR_WEEKLY_DAY_ID)
         return day_id
 
     def import_school_timetable(self, sh, row):
@@ -439,9 +439,9 @@ class SchoolTimetableImporter(ImporterBase):
 
         num_errors = len(self.errors)
         if data['school_year'] not in ISchoolYearContainer(self.context):
-            self.error(row + 1, 1, ERROR_INVALID_SCHOOL_YEAR)
+            self.error(row + 2, 1, ERROR_INVALID_SCHOOL_YEAR)
         if queryUtility(ITimetableModelFactory, data['model']) is None:
-            self.error(row + 2, 1, ERROR_TIMETABLE_MODEL)
+            self.error(row + 3, 1, ERROR_TIMETABLE_MODEL)
         if num_errors < len(self.errors):
             return
 
@@ -1002,5 +1002,5 @@ class MegaImporter(BrowserView):
             sp.rollback()
 
     def displayErrors(self):
-        return self.errors[:20]
+        return self.errors[:25]
 
