@@ -66,8 +66,8 @@ This file has examples of bad data for the School Timetables sheet:
     <p class="error">School Timetables B7 not unicode or ascii string</p>
     <p class="error">School Timetables B8 not unicode or ascii string</p>
     <p class="error">School Timetables B9 not unicode or ascii string</p>
-    <p class="error">School Timetables B12 invalid school year</p>
-    <p class="error">School Timetables B13 is not a valid timetable model</p>
+    <p class="error">School Timetables B13 invalid school year</p>
+    <p class="error">School Timetables B14 is not a valid timetable model</p>
     <p class="error">Schema has no day templates in A21</p>
     <p class="error">School Timetables A27 not unicode or ascii string</p>
     <p class="error">School Timetables B27 is not a valid time range</p>
