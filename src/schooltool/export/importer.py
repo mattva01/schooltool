@@ -808,11 +808,11 @@ class SectionImporter(ImporterBase):
 
                 if course not in section.courses:
                     section.courses.add(removeSecurityProxy(course))
+            row += 1
         else:
             self.errors.append(ERROR_HAS_NO_COURSES % (data['title'], row + 1))
             return
 
-        row += 1
         persons = self.context['persons']
         if sh.cell_value(rowx=row, colx=0) == 'Students':
             row += 1
@@ -831,8 +831,8 @@ class SectionImporter(ImporterBase):
 
                 if member not in section.members:
                     section.members.add(removeSecurityProxy(member))
+            row += 1
 
-        row += 1
         if sh.cell_value(rowx=row, colx=0) == 'Instructors':
             row += 1
             for row in range(row, sh.nrows):
@@ -850,8 +850,8 @@ class SectionImporter(ImporterBase):
 
                 if instructor not in section.instructors:
                     section.instructors.add(removeSecurityProxy(instructor))
+            row += 1
 
-        row += 1
         if sh.cell_value(rowx=row, colx=0) == 'School Timetable':
             self.import_timetables(sh, row, section)
 
