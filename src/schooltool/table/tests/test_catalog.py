@@ -21,7 +21,7 @@
 import unittest
 import doctest
 
-from zope.testing.doctestunit import pprint
+from pprint import pprint
 
 from zope.intid.interfaces import IIntIds
 from zope.component import provideUtility

@@ -386,7 +386,7 @@ def doctest_ViewPrefences():
         >>> request = TestRequest()
         >>> prefs = ViewPreferences(request)
         >>> prefs.timezone.tzname(datetime.utcnow())
-        'MMT'
+        'MSD'
         >>> prefs.timeformat
         '%I:%M %p'
         >>> prefs.dateformat

@@ -23,6 +23,7 @@ Tests for schooltool timetabling views.
 import unittest
 import datetime
 import doctest
+from pprint import pprint
 
 from zope.component import adapter
 from zope.component import provideAdapter
@@ -30,7 +31,6 @@ from zope.interface import Interface
 from zope.interface import implementer
 from zope.interface import implements
 from zope.publisher.browser import TestRequest
-from zope.testing.doctestunit import pprint
 
 from schooltool.schoolyear.interfaces import ISchoolYearContainer
 from schooltool.schoolyear.schoolyear import getSchoolYearContainer

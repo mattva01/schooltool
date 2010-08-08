@@ -161,7 +161,7 @@ def doctest_format_persons():
         >>> app = ISchoolToolApplication(None)
         >>> setUpSchool(app)
         >>> exporter = MegaExporter(app, None)
-        >>> from zope.testing.doctestunit import pprint
+        >>> from pprint import pprint
         >>> for row in exporter.format_persons(): pprint(row)
         [Header('User Name'),
          Header('Prefix'),

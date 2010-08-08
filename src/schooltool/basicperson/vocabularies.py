@@ -29,8 +29,8 @@ from schooltool.group.interfaces import IGroup
 
 from schooltool.basicperson.browser.person import PersonTerm
 from schooltool.basicperson.browser.person import GroupTerm
-from schooltool.basicperson.interfaces import IGroupSource
-from schooltool.basicperson.interfaces import IBasicPersonSource
+from schooltool.basicperson.interfaces import IGroupVocabulary
+from schooltool.basicperson.interfaces import IBasicPersonVocabulary
 
 
 class Term(object):
@@ -44,8 +44,8 @@ class Term(object):
         self.value = value
 
 
-class GroupSource(object):
-    implements(IGroupSource)
+class GroupVocabulary(object):
+    implements(IGroupVocabulary)
 
     def __init__(self, context):
         self.context = context
@@ -79,11 +79,11 @@ class GroupSource(object):
 
 
 def groupVocabularyFactory():
-    return GroupSource
+    return GroupVocabulary
 
 
-class AdvisorSource(object):
-    implements(IBasicPersonSource)
+class AdvisorVocabulary(object):
+    implements(IBasicPersonVocabulary)
 
     def __init__(self, context):
         self.context = context
@@ -114,4 +114,4 @@ class AdvisorSource(object):
 
 
 def advisorVocabularyFactory():
-    return AdvisorSource
+    return AdvisorVocabulary

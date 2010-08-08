@@ -72,8 +72,8 @@
       provides="zope.container.interfaces.INameChooser" />
 
   <utility
-     factory=".level.levelSourceVocabularyFactory"
+     factory=".level.levelVocabularyFactory"
      provides="zope.schema.interfaces.IVocabularyFactory"
-     name="schooltool.level.level.levelsource" />
+     name="schooltool.level.level.levelvocabulary" />
 
 </configure>
