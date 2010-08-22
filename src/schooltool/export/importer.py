@@ -60,10 +60,13 @@ from schooltool.course.interfaces import ISectionContainer
 from schooltool.course.interfaces import ICourseContainer
 from schooltool.course.course import Course
 from schooltool.common import DateRange
+
+from schooltool.common import format_message
 from schooltool.common import SchoolToolMessage as _
 
 
-ERROR_NOT_INT =  _('is not a valid integer')
+ERROR_FMT = _('${sheet_name} ${column}${row} ${message}')
+ERROR_NOT_INT = _('is not a valid integer')
 ERROR_NOT_UNICODE_OR_ASCII = _('not unicode or ascii string')
 ERROR_MISSING_REQUIRED_TEXT = _('missing required text')
 ERROR_NO_DATE = _('has no date in it')
@@ -75,8 +78,8 @@ ERROR_START_BEFORE_YEAR_START = _('start date before start of school year')
 ERROR_END_AFTER_YEAR_END = _('end date after end of school year')
 ERROR_START_OVERLAP_TERM = _('start date overlaps another term')
 ERROR_END_OVERLAP_TERM = _('end date overlaps another term')
-ERROR_HAS_NO_DAYS = _("%s has no days in A%s")
-ERROR_HAS_NO_DAY_TEMPLATES = _("%s has no day templates in A%s")
+ERROR_HAS_NO_DAYS = _("${title} has no days in A${row}")
+ERROR_HAS_NO_DAY_TEMPLATES = _("${title} has no day templates in A${row}")
 ERROR_TIME_RANGE = _("is not a valid time range")
 ERROR_TIMETABLE_MODEL = _("is not a valid timetable model")
 ERROR_DUPLICATE_DAY_ID = _("is the same day id as another in this timetable")
@@ -86,13 +89,14 @@ ERROR_DUPLICATE_HOMEROOM_PERIOD = _("is the same homeroom period id as another i
 ERROR_RESOURCE_TYPE = _("must be either 'Location' or 'Resource'")
 ERROR_INVALID_TERM_ID = _('is not a valid term in the given school year')
 ERROR_INVALID_COURSE_ID = _('is not a valid course in the given school year')
-ERROR_HAS_NO_COURSES = _('%s has no courses in A%s')
+ERROR_HAS_NO_COURSES = _('${title} has no courses in A${row}')
 ERROR_INVALID_PERSON_ID = _('is not a valid username')
 ERROR_INVALID_SCHEMA_ID = _('is not a valid schema in the given school year')
 ERROR_INVALID_DAY_ID = _('is not a valid day id for the given schema')
 ERROR_INVALID_PERIOD_ID = _('is not a valid period id for the given day')
 ERROR_INVALID_RESOURCE_ID = _('is not a valid resource id')
-ERROR_UNICODE_CONVERSION = _("Username cannot contain non-ascii characters: %s")
+ERROR_UNICODE_CONVERSION = _(
+    "Username cannot contain non-ascii characters: ${string}")
 ERROR_WEEKLY_DAY_ID = _('is not a valid weekday number (0-6)')
 
 
@@ -115,10 +119,14 @@ class ImporterBase(object):
             raise
 
     def error(self, row, col, message):
-        self.errors.append("%s %s%s %s" % (self.sheet_name,
-                                           chr(col + ord('A')),
-                                           row + 1,
-                                           message))
+        full_message = format_message(
+            ERROR_FMT,
+            {'sheet_name': self.sheet_name,
+             'column': chr(col + ord('A')),
+             'row': row + 1,
+             'message': message}
+            )
+        self.errors.append(full_message)
 
     def getCellAndFound(self, sheet, row, col, default=u''):
         try:
@@ -475,8 +483,10 @@ class SchoolTimetableImporter(ImporterBase):
                     periods.append(time_range)
                 data['templates'].append({'id': day_id, 'periods': periods})
         else:
-            self.errors.append(ERROR_HAS_NO_DAY_TEMPLATES % (data['title'],
-                row + 1))
+            self.errors.append(format_message(
+                ERROR_HAS_NO_DAY_TEMPLATES,
+                mapping={'title': data['title'], 'row': row + 1}
+                ))
         if num_errors < len(self.errors):
             return
 
@@ -525,7 +535,10 @@ class SchoolTimetableImporter(ImporterBase):
                                      'periods': periods,
                                      'homeroom_periods': homeroom_periods})
         else:
-            self.errors.append(ERROR_HAS_NO_DAYS % (data['title'], row + 1))
+            self.errors.append(format_message(
+                ERROR_HAS_NO_DAYS,
+                mapping={'title': data['title'], 'row': row + 1}
+                ))
 
         if not self.errors:
             school_timetable = self.createSchoolTimetable(data)
@@ -638,7 +651,12 @@ class PersonImporter(ImporterBase):
             try:
                 data['__name__'].encode('ascii')
             except UnicodeEncodeError:
-                self.error(row, 0, ERROR_UNICODE_CONVERSION % data['__name__'])
+                self.error(
+                    row, 0,
+                    format_message(
+                        ERROR_UNICODE_CONVERSION,
+                        mapping={'string': data['__name__']})
+                    )
 
             if num_errors == len(self.errors):
                 person = self.createPerson(data)
@@ -810,7 +828,10 @@ class SectionImporter(ImporterBase):
                     section.courses.add(removeSecurityProxy(course))
             row += 1
         else:
-            self.errors.append(ERROR_HAS_NO_COURSES % (data['title'], row + 1))
+            self.errors.append(format_message(
+                ERROR_HAS_NO_COURSES,
+                mapping={'title': data['title'], 'row': row + 1}
+                ))
             return
 
         persons = self.context['persons']
