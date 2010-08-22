@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-04-29 01:54+0300\n"
+"POT-Creation-Date: 2010-08-22 18:49+0300\n"
 "PO-Revision-Date: 2010-04-29 01:34+0000\n"
 "Last-Translator: Angel Spy <melissadilara@yahoo.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -17,9 +17,48 @@ msgstr ""
 "X-Launchpad-Export-Date: 2010-06-16 03:45+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
+#: /src/schooltool/commendation/browser.py:71
+#: /src/schooltool/commendation/commendation.py:73
+msgid "<unknown>"
+msgstr "<bilinmeyen>"
+
+#: /src/schooltool/commendation/commendation.py:89
+msgid "commendations"
+msgstr "Tavsiyeler"
+
+#: /src/schooltool/commendation/configure.zcml:82
+#: /src/schooltool/commendation/configure.zcml:92
+msgid "View Commendations"
+msgstr "Tavsiyelere gözat"
+
+#: /src/schooltool/commendation/configure.zcml:100
+#: /src/schooltool/commendation/configure.zcml:110
+msgid "Add Commendation"
+msgstr "Tavsiye ekle"
+
+#: /src/schooltool/commendation/configure.zcml:128
+msgid "All Commendations"
+msgstr "Tüm tavsiyeler"
+
+#: /src/schooltool/commendation/interfaces.py:48
+msgid "Title"
+msgstr "Başlık"
+
+#: /src/schooltool/commendation/interfaces.py:49
+msgid "Title of the commendation."
+msgstr "Tavsiye başlığı"
+
 #: /src/schooltool/commendation/interfaces.py:53
 msgid "Description"
 msgstr "Açıklama"
+
+#: /src/schooltool/commendation/interfaces.py:54
+msgid "A detailed description of the commendation."
+msgstr "Tavsiyenin detaylı bir betimlemesi"
+
+#: /src/schooltool/commendation/interfaces.py:58
+msgid "Scope"
+msgstr "Kapsam"
 
 #: /src/schooltool/commendation/interfaces.py:59
 msgid "The scope of the commendation."
@@ -64,42 +103,3 @@ msgstr "Belirteç"
 #: /src/schooltool/commendation/interfaces.py:72
 msgid "The grantor of the commendation."
 msgstr "Genel tavsiye"
-
-#: /src/schooltool/commendation/browser.py:70
-#: /src/schooltool/commendation/commendation.py:72
-msgid "<unknown>"
-msgstr "<bilinmeyen>"
-
-#: /src/schooltool/commendation/commendation.py:88
-msgid "commendations"
-msgstr "Tavsiyeler"
-
-#: /src/schooltool/commendation/configure.zcml:82
-#: /src/schooltool/commendation/configure.zcml:92
-msgid "View Commendations"
-msgstr "Tavsiyelere gözat"
-
-#: /src/schooltool/commendation/configure.zcml:100
-#: /src/schooltool/commendation/configure.zcml:110
-msgid "Add Commendation"
-msgstr "Tavsiye ekle"
-
-#: /src/schooltool/commendation/configure.zcml:128
-msgid "All Commendations"
-msgstr "Tüm tavsiyeler"
-
-#: /src/schooltool/commendation/interfaces.py:48
-msgid "Title"
-msgstr "Başlık"
-
-#: /src/schooltool/commendation/interfaces.py:49
-msgid "Title of the commendation."
-msgstr "Tavsiye başlığı"
-
-#: /src/schooltool/commendation/interfaces.py:54
-msgid "A detailed description of the commendation."
-msgstr "Tavsiyenin detaylı bir betimlemesi"
-
-#: /src/schooltool/commendation/interfaces.py:58
-msgid "Scope"
-msgstr "Kapsam"

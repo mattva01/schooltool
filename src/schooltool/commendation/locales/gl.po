@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-04-29 01:54+0300\n"
+"POT-Creation-Date: 2010-08-22 18:49+0300\n"
 "PO-Revision-Date: 2010-04-29 01:09+0000\n"
 "Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
 "Language-Team: Galician <gl@li.org>\n"
@@ -17,10 +17,14 @@ msgstr ""
 "X-Launchpad-Export-Date: 2010-06-16 03:45+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
-#: /src/schooltool/commendation/browser.py:70
-#: /src/schooltool/commendation/commendation.py:72
+#: /src/schooltool/commendation/browser.py:71
+#: /src/schooltool/commendation/commendation.py:73
 msgid "<unknown>"
 msgstr "<descoñecido>"
+
+#: /src/schooltool/commendation/commendation.py:89
+msgid "commendations"
+msgstr "recomendacións"
 
 #: /src/schooltool/commendation/configure.zcml:82
 #: /src/schooltool/commendation/configure.zcml:92
@@ -56,6 +60,10 @@ msgstr "Unha descrición detallada da recomendación."
 msgid "Scope"
 msgstr "Ámbito"
 
+#: /src/schooltool/commendation/interfaces.py:59
+msgid "The scope of the commendation."
+msgstr "O ámbito da recomendación."
+
 #: /src/schooltool/commendation/interfaces.py:60
 msgid "community"
 msgstr "comunidade"
@@ -63,6 +71,10 @@ msgstr "comunidade"
 #: /src/schooltool/commendation/interfaces.py:60
 msgid "group"
 msgstr "grupo"
+
+#: /src/schooltool/commendation/interfaces.py:60
+msgid "school-wide"
+msgstr "Relativo a escola"
 
 #: /src/schooltool/commendation/interfaces.py:61
 msgid "global"
@@ -79,18 +91,6 @@ msgstr "estado"
 #: /src/schooltool/commendation/interfaces.py:65
 msgid "Date"
 msgstr "Data"
-
-#: /src/schooltool/commendation/commendation.py:88
-msgid "commendations"
-msgstr "recomendacións"
-
-#: /src/schooltool/commendation/interfaces.py:59
-msgid "The scope of the commendation."
-msgstr "O ámbito da recomendación."
-
-#: /src/schooltool/commendation/interfaces.py:60
-msgid "school-wide"
-msgstr "Relativo a escola"
 
 #: /src/schooltool/commendation/interfaces.py:66
 msgid "The date the commendation was issued."
