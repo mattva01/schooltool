@@ -23,6 +23,7 @@ import xlrd
 import transaction
 import datetime
 
+from zope.i18n import translate
 from zope.container.interfaces import INameChooser
 from zope.component import queryUtility
 from zope.security.proxy import removeSecurityProxy
@@ -119,6 +120,10 @@ class ImporterBase(object):
             raise
 
     def error(self, row, col, message):
+        # XXX: Hack, zope.i18n 3.6.2 cannot translate Message's in mapping.
+        #      Newer versions of zope.i18n can.
+        message = translate(message, context=self.context)
+
         full_message = format_message(
             ERROR_FMT,
             {'sheet_name': self.sheet_name,
