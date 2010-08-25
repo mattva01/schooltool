@@ -159,7 +159,6 @@
       file="resources/editor_config.js"
       layer="schooltool.skin.ISchoolToolLayer" />
 
-
   <resource name="zonki-regular.png" file="resources/zonki-regular.png"
 	    layer="schooltool.skin.ISchoolToolLayer" />
   <resource name="zonki-reading.png" file="resources/zonki-reading.png"
@@ -347,7 +346,7 @@
         />
   </zope:class>
 
-  <zope:class class=".widgets.FckeditorWidget">
+  <zope:class class=".widgets.FckeditorZ3CFormWidget">
     <require
         permission="zope.Public"
         interface=".widgets.IFckeditorWidget"
@@ -360,6 +359,22 @@
         interface=".widgets.IFCKConfig"
         />
   </zope:class>
+
+  <zope:view
+      type="schooltool.skin.ISchoolToolLayer"
+      for="zope.html.field.IHtmlFragmentField"
+      provides="zope.app.form.interfaces.IInputWidget"
+      factory=".widgets.FckeditorFormlibWidget"
+      permission="zope.Public"
+      />
+
+  <zope:view
+      type="schooltool.skin.ISchoolToolLayer"
+      for="zope.html.field.IXhtmlFragmentField"
+      provides="zope.app.form.interfaces.IInputWidget"
+      factory=".widgets.FckeditorFormlibWidget"
+      permission="zope.Public"
+      />
 
   <zope:adapter
       factory=".widgets.FckeditorFieldWidget"
@@ -395,5 +410,6 @@
       factory=".widgets.Fckeditor_editform_config"
       name="config"
       />
+
 
 </configure>
