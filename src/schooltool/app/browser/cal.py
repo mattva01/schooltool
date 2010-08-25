@@ -1860,13 +1860,6 @@ class CalendarEventViewMixin(object):
             # getInputValue might raise an exception on invalid input
             errors.append(e)
 
-    def setUpEditorWidget(self, editor):
-        editor.editorWidth = 430
-        editor.editorHeight = 300
-        editor.toolbarConfiguration = "schooltool"
-        url = absoluteURL(ISchoolToolApplication(None), self.request)
-        editor.configurationPath = (url + '/@@/editor_config.js')
-
     def weekdayChecked(self, weekday):
         """Return True if the given weekday should be checked.
 
@@ -2093,7 +2086,6 @@ class CalendarEventAddView(CalendarEventViewMixin, AddView):
             today = getUtility(IDateManager).today.strftime("%Y-%m-%d")
             request.form["field.start_date"] = today
         super(AddView, self).__init__(context, request)
-        self.setUpEditorWidget(self.description_widget)
 
     def create(self, **kwargs):
         """Create an event."""
@@ -2152,7 +2144,6 @@ class CalendarEventEditView(CalendarEventViewMixin, EditView):
         prefs = ViewPreferences(request)
         self.timezone = prefs.timezone
         EditView.__init__(self, context, request)
-        self.setUpEditorWidget(self.description_widget)
 
     def keyword_arguments(self):
         """Wraps fieldNames under another name.

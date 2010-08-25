@@ -1,4 +1,8 @@
-FCKConfig.BasePath = '/@@/fckeditor/editor/';
+
+// Base path screws up editor for sites using mod rewrite, like
+// http://example.com/something/schoooltool/...
+// See https://bugs.edge.launchpad.net/schooltool/+bug/258951
+//FCKConfig.BasePath = '/@@/fckeditor/editor/';
 
 FCKConfig.EditorAreaCSS = FCKConfig.BasePath + 'css/fck_editorarea.css' ;
 FCKConfig.CustomConfigurationsPath = "/@@/zope_fckconfig.js";
