@@ -307,8 +307,8 @@ def doctest_described_interfaces():
         None, zope.ManageApplication
         None, zope.ManageServices
         None, zope.View
-        None, zope.app.dublincore.change
-        None, zope.app.dublincore.view
+        None, zope.dublincore.change
+        None, zope.dublincore.view
         -------------------------
         schooltool.app.interfaces
         -------------------------
