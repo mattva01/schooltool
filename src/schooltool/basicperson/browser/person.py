@@ -47,12 +47,12 @@ class IPersonAddForm(IBasicPerson):
 
     group = Choice(
         title=_(u"Group"),
-        source="schooltool.basicperson.group_source",
+        source="schooltool.basicperson.group_vocabulary",
         required=False)
 
     advisor = Choice(
         title=_(u"Advisor"),
-        source="schooltool.basicperson.advisor_source",
+        source="schooltool.basicperson.advisor_vocabulary",
         required=False)
 
     username = TextLine(

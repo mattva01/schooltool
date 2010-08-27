@@ -173,7 +173,7 @@ If we go to the 'Send Test' form, we see a disabled 'Send' button:
 
     >>> manager.getLink('Send Test').click()
     >>> manager.printQuery('id("form-buttons-send")')
-    <input type="submit" id="form-buttons-send" name="form.buttons.send" class="submit-widget button-field" value="Send" disabled="disabled" />
+    <input id="form-buttons-send" name="form.buttons.send" class="submit-widget button-field" value="Send" disabled="disabled" type="submit" />
 
 Let's force the sending of an email:
 
@@ -303,9 +303,9 @@ which shows us the email data and its status:
 The Email View shows us three buttons. Note the disabled Retry button:
 
     >>> manager.printQuery('//div[@class="buttons controls"]/input')
-    <input type="submit" id="form-buttons-retry" name="form.buttons.retry" class="submit-widget button-field" value="Retry" disabled="disabled" />
-    <input type="submit" id="form-buttons-delete" name="form.buttons.delete" class="submit-widget button-field button-cancel" value="Delete" />
-    <input type="submit" id="form-buttons-cancel" name="form.buttons.cancel" class="submit-widget button-field button-cancel" value="Cancel" />
+    <input id="form-buttons-retry" name="form.buttons.retry" class="submit-widget button-field" value="Retry" disabled="disabled" type="submit" />
+    <input id="form-buttons-delete" name="form.buttons.delete" class="submit-widget button-field button-cancel" value="Delete" type="submit" />
+    <input id="form-buttons-cancel" name="form.buttons.cancel" class="submit-widget button-field button-cancel" value="Cancel" type="submit" />
     >>> manager.getControl('Cancel').click()
 
 Let's go enable the service, but using a wrong port:

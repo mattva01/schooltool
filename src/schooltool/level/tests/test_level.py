@@ -190,32 +190,32 @@ def doctest_VivifyLevelContainerContainer():
     """
 
 
-def doctest_LevelSource():
-    """Tests for LevelSource.
+def doctest_LevelVocabulary():
+    """Tests for LevelVocabulary.
 
     Vocabulary of levels for contexts that can be adapted to ISchoolYear.
 
-        >>> from zope.schema.interfaces import IIterableSource
+        >>> from zope.schema.interfaces import IVocabularyTokenized
         >>> from schooltool.level.level import Level
-        >>> from schooltool.level.level import LevelSource
+        >>> from schooltool.level.level import LevelVocabulary
 
         >>> class ContextStub(object):
         ...     implements(Interface)
 
         >>> context = ContextStub()
-        >>> source = LevelSource(context)
-        >>> verifyObject(IIterableSource, source)
+        >>> vocabulary = LevelVocabulary(context)
+        >>> verifyObject(IVocabularyTokenized, vocabulary)
         True
 
     When the context cannot be adapted to ISchoolYear, the vocabulary is empty.
 
-        >>> source.container
+        >>> vocabulary.container
         {}
 
-        >>> len(source)
+        >>> len(vocabulary)
         0
 
-        >>> list(source)
+        >>> list(vocabulary)
         []
 
         >>> def expand_term(term):
@@ -223,15 +223,15 @@ def doctest_LevelSource():
 
         >>> level = Level(u'Basic')
         >>> level.__name__ = 'basic'
-        >>> expand_term(source.getTerm(level))
+        >>> expand_term(vocabulary.getTerm(level))
         ('basic-', <schooltool.level.level.Level ...>, u'Basic')
 
-        >>> source.getTermByToken('basic-')
+        >>> vocabulary.getTermByToken('basic-')
         Traceback (most recent call last):
         ...
         LookupError: basic-
 
-        >>> level in source
+        >>> level in vocabulary
         False
 
     Let's provide the needed adapters.
@@ -262,27 +262,27 @@ def doctest_LevelSource():
 
     Now we can use the vocabulary.
 
-        >>> source = LevelSource(context)
-        >>> verifyObject(IIterableSource, source)
+        >>> vocabulary = LevelVocabulary(context)
+        >>> verifyObject(IVocabularyTokenized, vocabulary)
         True
 
-        >>> source.container
+        >>> vocabulary.container
         <schooltool.level.level.LevelContainer ...>
 
-        >>> len(source)
+        >>> len(vocabulary)
         2
 
-        >>> [expand_term(term) for term in source]
+        >>> [expand_term(term) for term in vocabulary]
         [('basic-', <schooltool.level.level.Level ...>, u'Basic'),
          ('advanced-', <schooltool.level.level.Level ...>, u'Advanced')]
 
-        >>> expand_term(source.getTerm(levels['basic']))
+        >>> expand_term(vocabulary.getTerm(levels['basic']))
         ('basic-', <schooltool.level.level.Level ...>, u'Basic')
 
-        >>> levels['basic'] in source
+        >>> levels['basic'] in vocabulary
         True
 
-        >>> expand_term(source.getTermByToken('basic-'))
+        >>> expand_term(vocabulary.getTermByToken('basic-'))
         ('basic-', <schooltool.level.level.Level ...>, u'Basic')
 
     Note that levels from other schoolyears and so on are not considered
@@ -290,7 +290,7 @@ def doctest_LevelSource():
 
         >>> other_level = Level(levels['basic'].title)
         >>> other_level.__name__ = 'basic'
-        >>> other_level in source
+        >>> other_level in vocabulary
         False
 
     """

@@ -352,7 +352,7 @@ def parse_timetz(s, tz=utc):
         >>> eastern = timezone('US/Eastern')
         >>> teastern = parse_timetz('11:22', tz=eastern)
         >>> teastern.tzname()
-        'EST'
+        'US/Eastern'
 
         >>> parse_timetz('11:66')
         Traceback (most recent call last):

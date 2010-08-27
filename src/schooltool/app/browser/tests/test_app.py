@@ -425,7 +425,7 @@ def doctest_RelationshipViewBase():
     necessary actions, like add items to the collections and most
     importantly to set up available and selected item tables:
 
-        >>> from zope.testing.doctestunit import pprint
+        >>> from pprint import pprint
         >>> def FakeTableSetUp(**kwargs):
         ...     print "Setting up table:"
         ...     pprint(kwargs)

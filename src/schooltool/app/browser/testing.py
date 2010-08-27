@@ -152,8 +152,8 @@ def setUp(test=None):
 
     # form macros
     ztapi.browserView(None, 'form_macros', FormMacros)
-    import zope.app.form.browser
-    base = zope.app.form.browser.__path__[0]
+    import zope.formlib
+    base = zope.formlib.__path__[0]
     ztapi.browserView(None, 'widget_macros',
                       SimpleViewClass(os.path.join(base, 'widget_macros.pt')))
 
@@ -191,7 +191,7 @@ def setUp(test=None):
         breadcrumbs.GenericBreadcrumbInfo)
 
     # `provider` TALES namespaces
-    from zope.app.pagetemplate import metaconfigure
+    from zope.browserpage import metaconfigure
     from zope.contentprovider import tales
     metaconfigure.registerType('provider', tales.TALESProviderExpression)
 

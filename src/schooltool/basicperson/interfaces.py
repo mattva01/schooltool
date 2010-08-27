@@ -26,7 +26,7 @@ from zope.configuration.fields import PythonIdentifier
 from zope.interface import Interface, Attribute
 
 from zope.schema import List
-from zope.schema.interfaces import IIterableSource
+from zope.schema.interfaces import IVocabularyTokenized
 
 from schooltool.common import SchoolToolMessage as _
 
@@ -81,13 +81,13 @@ class IBasicPerson(Interface):
     advisees = Attribute("""Advisees of the person""")
 
 
-class IBasicPersonSource(IIterableSource):
-    """Marker interface for sources that list basic persons."""
+class IBasicPersonVocabulary(IVocabularyTokenized):
+    """Marker interface for vocabularies that list basic persons."""
 
 
 # XXX should be in skin or common, or more properly - core
-class IGroupSource(IIterableSource):
-    """Marker interface for sources that list schooltool groups."""
+class IGroupVocabulary(IVocabularyTokenized):
+    """Marker interface for vocabularies that list schooltool groups."""
 
 
 class IAdvisor(Interface):

@@ -20,8 +20,7 @@
 Test suites for *.txt doctests.
 """
 
-import unittest
-from zope.testing import doctest
+import unittest, doctest
 from zope.app.testing import setup
 from zope.interface import implements, Interface
 

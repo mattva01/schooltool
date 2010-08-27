@@ -59,14 +59,14 @@
 
   <!-- list of persons -->
   <zope:adapter
-      for="schooltool.basicperson.interfaces.IBasicPersonSource
+      for="schooltool.basicperson.interfaces.IBasicPersonVocabulary
            zope.publisher.interfaces.browser.IBrowserRequest"
       factory=".person.PersonTerms"
       />
 
   <!-- list of groups -->
   <zope:adapter
-      for="schooltool.basicperson.interfaces.IGroupSource
+      for="schooltool.basicperson.interfaces.IGroupVocabulary
            zope.publisher.interfaces.browser.IBrowserRequest"
       factory=".person.GroupTerms"
       />

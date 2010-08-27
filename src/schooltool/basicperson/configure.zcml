@@ -67,12 +67,12 @@
   <utility
      factory=".vocabularies.groupVocabularyFactory"
      provides="zope.schema.interfaces.IVocabularyFactory"
-     name="schooltool.basicperson.group_source" />
+     name="schooltool.basicperson.group_vocabulary" />
 
   <utility
      factory=".vocabularies.advisorVocabularyFactory"
      provides="zope.schema.interfaces.IVocabularyFactory"
-     name="schooltool.basicperson.advisor_source" />
+     name="schooltool.basicperson.advisor_vocabulary" />
 
   <include package="schooltool.basicperson.browser" />
 
