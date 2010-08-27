@@ -120,10 +120,6 @@ class ImporterBase(object):
             raise
 
     def error(self, row, col, message):
-        # XXX: Hack, zope.i18n 3.6.2 cannot translate Message's in mapping.
-        #      Newer versions of zope.i18n can.
-        message = translate(message, context=self.request)
-
         full_message = format_message(
             ERROR_FMT,
             {'sheet_name': self.sheet_name,
