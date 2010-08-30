@@ -5,7 +5,8 @@ CHANGES
 1.5.1 (unreleased)
 ------------------
 
-None yet.
+- Tweaked WYSIWYG CK editor (https://launchpad.net/bugs/485446)
+- Added error checking on demographics edit form (https://launchpad.net/bugs/610870)
 
 
 1.5.0 (2010-07-13)
