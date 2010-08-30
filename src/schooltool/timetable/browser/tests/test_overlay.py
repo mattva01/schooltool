@@ -24,7 +24,7 @@ import unittest
 import doctest
 
 from zope.publisher.browser import TestRequest
-from zope.app.pagetemplate.simpleviewclass import SimpleViewClass
+from zope.browserpage.simpleviewclass import SimpleViewClass
 from zope.component import adapts
 from zope.interface import implements
 

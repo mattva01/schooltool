@@ -23,7 +23,7 @@ import unittest
 import doctest
 
 from zope.publisher.browser import TestRequest
-from zope.app.pagetemplate.simpleviewclass import SimpleViewClass
+from zope.browserpage.simpleviewclass import SimpleViewClass
 from zope.app.testing import setup
 from zope.traversing.browser.absoluteurl import absoluteURL
 from zope.component import provideAdapter, provideUtility

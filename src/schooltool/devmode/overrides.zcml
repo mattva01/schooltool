@@ -4,7 +4,7 @@
 
   <subscriber
       handler=".skin.schoolToolTraverseSubscriber"
-      for="zope.app.publication.interfaces.IBeforeTraverseEvent"
+      for="zope.traversing.interfaces.IBeforeTraverseEvent"
       />
 
   <!-- apidoc overriding -->

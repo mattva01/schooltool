@@ -20,7 +20,7 @@
 Term error views.
 """
 from zope.component import adapts
-from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
+from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 
 from z3c.form.error import ErrorViewSnippet
 

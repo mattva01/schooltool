@@ -21,7 +21,7 @@ Basic person import export views.
 
 $Id$
 """
-from zope.app.pagetemplate import ViewPageTemplateFile
+from zope.browserpage import ViewPageTemplateFile
 from zope.component import getAdapters
 from zope.interface import implements
 from zope.publisher.browser import BrowserView

@@ -23,7 +23,7 @@ $Id$
 """
 import urllib
 
-from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
+from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import queryMultiAdapter
 from zope.publisher.browser import BrowserView
 from zope.security.checker import canAccess

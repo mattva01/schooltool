@@ -23,7 +23,7 @@ $Id$
 """
 
 from zc.table import table
-from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
+from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import getUtilitiesFor
 from zope.component import queryAdapter
 from zope.component import queryMultiAdapter

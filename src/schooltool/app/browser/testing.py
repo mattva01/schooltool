@@ -46,7 +46,7 @@ from zope.app.form.browser.exception import WidgetInputErrorView
 from zope.traversing.interfaces import ITraversable
 from zope.traversing.namespace import view, resource
 from zope.traversing.interfaces import IPathAdapter
-from zope.app.pagetemplate.simpleviewclass import SimpleViewClass
+from zope.browserpage.simpleviewclass import SimpleViewClass
 from zope.app.basicskin.standardmacros import StandardMacros
 from zope.app.form.browser.macros import FormMacros
 from zope.browsermenu.menu import MenuAccessView

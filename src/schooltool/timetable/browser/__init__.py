@@ -25,7 +25,7 @@ import re
 import zope.event
 import zope.schema
 from zope.container.interfaces import INameChooser
-from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
+from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import adapts
 from zope.component import getMultiAdapter
 from zope.interface.exceptions import Invalid

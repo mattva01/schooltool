@@ -55,7 +55,7 @@ from zope.traversing.browser.absoluteurl import absoluteURL
 from zope.traversing.api import getParent
 from zope.filerepresentation.interfaces import IWriteFile, IReadFile
 from zope.session.interfaces import ISession
-from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
+from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.html.field import HtmlFragment
 from zope.component import queryAdapter
 from zope.viewlet.interfaces import IViewletManager

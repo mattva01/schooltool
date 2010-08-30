@@ -22,7 +22,7 @@ Batching for schooltool.
 $Id$
 """
 from zope.interface import implements
-from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
+from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 
 from schooltool.table.interfaces import IBatch
 

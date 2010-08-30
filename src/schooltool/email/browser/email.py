@@ -22,7 +22,7 @@ Email browser views.
 """
 import pytz
 import urllib
-from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
+from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import adapts
 from zope.component import getMultiAdapter
 from zope.component import getUtility

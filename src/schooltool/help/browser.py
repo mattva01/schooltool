@@ -27,7 +27,7 @@ __docformat__ = 'reStructuredText'
 import zope.interface
 from zope import contentprovider
 from zope.app import onlinehelp
-from zope.app.pagetemplate import ViewPageTemplateFile
+from zope.browserpage import ViewPageTemplateFile
 from zope.publisher.browser import BrowserView
 from zope.publisher.defaultview import queryDefaultViewName
 from zope.publisher.interfaces.browser import IBrowserView

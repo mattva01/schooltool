@@ -27,7 +27,7 @@ import urllib
 from zope.schema import getFieldsInOrder
 from zope.security.proxy import removeSecurityProxy
 from zope.publisher.browser import BrowserView
-from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
+from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.traversing.browser.absoluteurl import absoluteURL
 
 from z3c.form import field

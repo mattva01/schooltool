@@ -21,7 +21,7 @@ Basic person browser views.
 """
 from zope.container.interfaces import INameChooser
 from zope.app.form.browser.interfaces import ITerms
-from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
+from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import adapts
 from zope.component import getUtility
 from z3c.form import form, field, button, validator

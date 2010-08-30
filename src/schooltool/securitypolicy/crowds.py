@@ -24,8 +24,8 @@ from zope.interface import implements
 from zope.security.proxy import removeSecurityProxy
 from zope.component import queryAdapter, queryMultiAdapter, queryUtility
 from zope.component import getGlobalSiteManager
-from zope.app.container.contained import Contained
-from zope.app.container.btree import BTreeContainer
+from zope.container.contained import Contained
+from zope.container.btree import BTreeContainer
 
 
 from schooltool.securitypolicy.interfaces import (

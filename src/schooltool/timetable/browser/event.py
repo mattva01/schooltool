@@ -22,7 +22,7 @@ Views for timetable event.
 $Id$
 """
 
-from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
+from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.formlib import form
 from zope.html.field import HtmlFragment
 from zope.traversing.browser.absoluteurl import absoluteURL

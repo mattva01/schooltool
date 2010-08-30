@@ -27,7 +27,7 @@ from zope.traversing.api import getName
 from zope.traversing.browser.interfaces import IAbsoluteURL
 from zope.traversing.browser.absoluteurl import absoluteURL
 from zope.container.interfaces import INameChooser
-from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
+from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 
 from z3c.form.browser.textarea import TextAreaWidget
 from z3c.form.interfaces import ITextAreaWidget
