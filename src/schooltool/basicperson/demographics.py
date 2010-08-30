@@ -163,6 +163,8 @@ class FieldDescription(Persistent, Location):
         return field.Fields(form_field)
 
 
+# XXX: IMHO all IDNA conversions should be replaced by punycode.
+#      64 max length limitation simply breaks things too often.
 class IDNAVocabulary(SimpleVocabulary):
 
     def createTerm(cls, *args):

@@ -3,6 +3,13 @@
            xmlns:zope="http://namespaces.zope.org/zope"
            i18n_domain="schooltool">
 
+  <zope:class class=".demographics.CustomEnumTextWidget">
+    <require
+        permission="zope.Public"
+        interface=".demographics.IEnumTextWidget"
+        />
+  </zope:class>
+
   <page
       name="index.html"
       for="schooltool.basicperson.interfaces.IBasicPerson"

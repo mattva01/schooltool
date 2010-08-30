@@ -30,8 +30,9 @@ from zope.container.interfaces import INameChooser
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 
 from z3c.form.browser.textarea import TextAreaWidget
+from z3c.form.interfaces import ITextAreaWidget
 from z3c.form import form, field, button
-from z3c.form.converter import BaseDataConverter
+from z3c.form.converter import BaseDataConverter, FormatterValidationError
 from z3c.form.widget import FieldWidget
 
 from schooltool.app.interfaces import ISchoolToolApplication
@@ -41,10 +42,12 @@ from schooltool.basicperson.demographics import EnumFieldDescription
 from schooltool.basicperson.interfaces import IEnumFieldDescription
 from schooltool.basicperson.interfaces import IDemographicsFields
 from schooltool.basicperson.interfaces import IFieldDescription
+
+from schooltool.common import format_message
 from schooltool.common import SchoolToolMessage as _
 
 
-class IEnumTextWidget(Interface):
+class IEnumTextWidget(ITextAreaWidget):
     """Marker interface for custom enum widget."""
 
 
@@ -70,10 +73,25 @@ class CustomEnumDataConverter(BaseDataConverter):
 
     def toFieldValue(self, value):
         """See interfaces.IDataConverter"""
-        # XXX check for duplicates
         if value == u'':
             return self.field.missing_value
-        return value.splitlines()
+        lines = filter(None, [s.strip() for s in unicode(value).splitlines()])
+        if not lines:
+            return self.field.missing_value
+        field_value = []
+        for line in lines:
+            if line in field_value:
+                raise FormatterValidationError(
+                    format_message(_('Duplicate entry "${value}"'),
+                                   mapping={'value': line}),
+                    line)
+            if len(line) >= 64:
+                raise FormatterValidationError(
+                    format_message(_('Value too long "${value}"'),
+                                   mapping={'value': line}),
+                    line)
+            field_value.append(line)
+        return field_value
 
 
 class DemographicsFieldsAbsoluteURLAdapter(BrowserView):
