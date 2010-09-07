@@ -207,6 +207,7 @@ class ReportPDFView(PDFView):
     rightMargin = 0.25 * units.inch
     topMargin = 0.25 * units.inch
     bottomMargin = 0.25 * units.inch
+    rotation = 0
     pageSize = pagesizes.A4
     title = u""
 

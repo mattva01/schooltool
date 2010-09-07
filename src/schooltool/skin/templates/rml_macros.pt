@@ -15,6 +15,7 @@
       rightMargin view/rightMargin;
       topMargin view/topMargin;
       bottomMargin view/bottomMargin;
+      rotation view/rotation;
       title view/title"
       author="SchoolTool">
 
