@@ -20,7 +20,10 @@
 Widgets.
 """
 import zope.schema
+import zope.app.form
+from zope.component import getMultiAdapter
 from zope.traversing.browser.absoluteurl import absoluteURL
+from zope.interface import Attribute
 from zope.schema.interfaces import IField, IDate
 from zope.schema.fieldproperty import FieldProperty
 from zope.component import adapts, adapter
@@ -32,8 +35,8 @@ import zope.html.widget
 import zc.resourcelibrary
 from zc.datetimewidget.datetimewidget import DateWidget
 
+import z3c.form
 import z3c.form.interfaces
-from z3c import form
 from z3c.form.widget import Widget, FieldWidget, ComputedWidgetAttribute
 from z3c.form.converter import BaseDataConverter
 from z3c.form.converter import FormatterValidationError
@@ -84,8 +87,121 @@ class CustomDateDataConverter(BaseDataConverter):
         try:
             return parse_date(value)
         except ValueError, err:
-            raise FormatterValidationError(_("The datetime string did not match the pattern yyyy-mm-dd"),
-                                           value)
+            raise FormatterValidationError(
+                _("The datetime string did not match the pattern yyyy-mm-dd"),
+                value)
+
+
+class IFCKConfig(Interface):
+
+    width = zope.schema.Int(
+        title=_(u"Width"),
+        description=_(u"Editor frame width"))
+
+    height = zope.schema.Int(
+        title=_(u"Height"),
+        description=_(u"Editor frame height"))
+
+    toolbar = zope.schema.TextLine(
+        title=_(u"Toolbar configuration"),
+        description=_(u"The name of the toolbar configuration to use."))
+
+    path = zope.schema.TextLine(
+        title=_(u"Relative configuration path"),
+        description=_(u"Path to the FCKconfiguration javascript file."))
+
+
+class FCKConfig(object):
+    """Configuration of the FCK editor widget."""
+    implements(IFCKConfig)
+
+    toolbar = u"schooltool"
+    path = u"/@@/editor_config.js"
+
+    def __init__(self, width=430, height=300):
+        self.width = width
+        self.height = height
+
+    def __repr__(self):
+        return '<%s.%s (%d x %d, %r toolbar, %r)>' % (
+            self.__class__.__module__,
+            self.__class__.__name__,
+            self.width, self.height,
+            self.toolbar, self.path)
+
+
+class IFckeditorWidget(z3c.form.interfaces.IWidget):
+
+    config = zope.schema.Object(
+        title=_(u"Configuration"),
+        description=_(u"FCK editor configuration."),
+        schema=IFCKConfig)
+
+
+class FckeditorWidgetBase(object):
+    fckversion = zope.html.widget.FckeditorWidget.fckVersion
+
+    config = None # IFCKConfig
+
+    @property
+    def editor_var_name(self):
+        return 'oFCKeditor_%s' % str(hash(self.name)).replace('-', 'u')
+
+    @property
+    def element_id(self):
+        return self.id
+
+    @property
+    def script(self):
+        zc.resourcelibrary.need("fckeditor")
+        config = self.config
+
+        app_url = absoluteURL(ISchoolToolApplication(None), self.request)
+        fck_config_path = '%s%s' % (
+            app_url, config.path)
+        fck_editor_path = '%s/@@/fckeditor/%s/fckeditor/' % (
+            app_url, self.fckversion)
+
+        # XXX: using some values that may be not JS safe
+        return '''
+            <script type="text/javascript" language="JavaScript">
+                var %(variable)s = new FCKeditor(
+                    "%(id)s", %(width)d, %(height)d, "%(toolbar)s");
+                %(variable)s.BasePath = "%(fckBasePath)s";
+                %(variable)s.Config["CustomConfigurationsPath"] = "%(customConfigPath)s";
+                %(variable)s.ReplaceTextarea();
+            </script>
+            ''' % {
+            'id': self.element_id,
+            'variable': self.editor_var_name,
+            'width': config.width,
+            'height': config.height,
+            'toolbar': config.toolbar,
+            'customConfigPath': fck_config_path,
+            'fckBasePath': fck_editor_path,
+            }
+
+
+class FckeditorFormlibWidget(zope.app.form.browser.TextAreaWidget,
+                             FckeditorWidgetBase):
+
+    def __init__(self, *args, **kw):
+        zope.app.form.browser.TextAreaWidget.__init__(self, *args, **kw)
+        self.config = FCKConfig()
+
+    @property
+    def editor_var_name(self):
+        return 'oFCKeditor_%s' % self.name.split('.', 1)[-1]
+
+    @property
+    def element_id(self):
+        return self.name
+
+    def __call__(self):
+        zc.resourcelibrary.need("fckeditor")
+        textarea = zope.app.form.browser.TextAreaWidget.__call__(self)
+        script = self.script
+        return '%s\n%s' % (textarea, script)
 
 
 class IHTMLFragmentWidget(zope.interface.Interface):
@@ -104,109 +220,31 @@ class HTMLFragmentWidget(object):
     id = FieldProperty(IHTMLFragmentWidget['id'])
 
 
-class IFCKConfig(Interface):
-
-    width = zope.schema.Int(
-        title=_(u"Width"),
-        description=_(u"Editor frame width"))
-
-    height = zope.schema.Int(
-        title=_(u"Height"),
-        description=_(u"Editor frame height"))
-
-    toolbar = zope.schema.TextLine(
-        title=_(u"Toolbar configuration"),
-        description=_(u"The name of the toolbar configuration to use."))
-
-    path = zope.schema.TextLine(
-        title=_(u"Configuration path"),
-        description=_(u"Path to the FCKconfiguration javascript file."))
-
-
-
-class IFckeditorWidget(form.interfaces.IWidget):
-
-    config = zope.schema.Object(
-        title=_(u"Configuration"),
-        description=_(u"FCK editor configuration."),
-        schema=IFCKConfig)
-
-
-class FckeditorWidget(Widget, HTMLFragmentWidget):
-    """FCK editor widget implementation."""
+class FckeditorZ3CFormWidget(z3c.form.widget.Widget,
+                      HTMLFragmentWidget,
+                      FckeditorWidgetBase):
+    """FCK editor z3c.form widget implementation."""
     implementsOnly(IFckeditorWidget)
-
-    fckversion = zope.html.widget.FckeditorWidget.fckVersion
 
     config = None
     value = u''
 
     _adapterValueAttributes = Widget._adapterValueAttributes + ('config', )
 
-    @property
-    def editor_var_name(self):
-        return str(hash(self.name)).replace('-', 'u')
 
-    @property
-    def script(self):
-        zc.resourcelibrary.need("fckeditor")
-        config = IFCKConfig(self.config)
-        # XXX: using some values that may be not JS safe
-        return '''
-            <script type="text/javascript" language="JavaScript">
-                var %(variable)s = new FCKeditor(
-                    "%(id)s", %(width)d, %(height)d, "%(toolbar)s");
-                %(variable)s.BasePath = "/@@/fckeditor/%(fckversion)s/fckeditor/";
-                %(variable)s.Config["CustomConfigurationsPath"] = "%(configPath)s";
-                %(variable)s.ReplaceTextarea();
-            </script>
-            ''' % {
-            'id': self.id,
-            'variable': 'oFCKeditor_%s' % self.editor_var_name,
-            'width': config.width,
-            'height': config.height,
-            'toolbar': config.toolbar,
-            'configPath': config.path,
-            'fckversion': self.fckversion,
-            }
-
-
-@adapter(IField, form.interfaces.IFormLayer)
-@implementer(form.interfaces.IFieldWidget)
+@adapter(IField, z3c.form.interfaces.IFormLayer)
+@implementer(z3c.form.interfaces.IFieldWidget)
 def FckeditorFieldWidget(field, request):
     """Editor widget bound to a field."""
-    return FieldWidget(field, FckeditorWidget(request))
+    return FieldWidget(field, FckeditorZ3CFormWidget(request))
 
 
-class FCKConfig(object):
-    """Configuration of the FCK editor widget."""
-    implements(IFCKConfig)
-
-    width = 430
-    height = 300
-    toolbar = u"schooltool"
-    path = u""
-
-    def __init__(self, adapter):
-        # adapter is expected to have following attributes:
-        # context, request, view, field, widget
-        self.adapter = adapter
-        url = absoluteURL(ISchoolToolApplication(None),
-                          self.adapter.request)
-        self.path = (url + '/@@/editor_config.js')
-
-
-# The default configuration for FckeditorWidget
+# The default configuration for FckeditorZ3CFormWidget
 Fckeditor_config = ComputedWidgetAttribute(
-    FCKConfig,
+    lambda a: FCKConfig(),
     request=ISchoolToolLayer,
     widget=IFckeditorWidget,
     )
-
-
-class EditFormFCKConfig(FCKConfig):
-    width = 306
-    height = 200
 
 
 # XXX: EditFormFCKConfig will now be applied to all add and edit forms.
@@ -215,19 +253,20 @@ class EditFormFCKConfig(FCKConfig):
 #      standard interfaces (for example ISchooltoolAddForm) that we could
 #      hook the config on.
 Fckeditor_addform_config = ComputedWidgetAttribute(
-    EditFormFCKConfig,
+    lambda a: FCKConfig(306, 200),
     context=None,
     request=ISchoolToolLayer,
-    view=form.interfaces.IAddForm,
+    view=z3c.form.interfaces.IAddForm,
     field=IHtmlFragmentField,
     widget=IFckeditorWidget,
     )
 
 Fckeditor_editform_config = ComputedWidgetAttribute(
-    EditFormFCKConfig,
+    lambda a: FCKConfig(306, 200),
     context=None,
     request=ISchoolToolLayer,
-    view=form.interfaces.IEditForm,
+    view=z3c.form.interfaces.IEditForm,
     field=IHtmlFragmentField,
     widget=IFckeditorWidget,
     )
+

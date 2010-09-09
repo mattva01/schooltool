@@ -127,7 +127,7 @@ from zope.app.form.utility import getWidgetsData
 from zope.app.form.interfaces import IInputWidget
 from zope.app.form.interfaces import WidgetsError
 from zope.publisher.browser import BrowserView
-from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
+from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.container.interfaces import INameChooser
 from zope.session.interfaces import ISession
 from zope.traversing.browser.absoluteurl import absoluteURL

@@ -22,7 +22,7 @@ __docformat__ = 'reStructuredText'
 import unittest
 import doctest
 
-from zope.testing.doctestunit import pprint
+from pprint import pprint
 
 from schooltool.app.browser.testing import setUp, tearDown
 
@@ -167,8 +167,9 @@ def test_breadcrumbs():
 
 
 def test_suite():
-    optionflags = (doctest.ELLIPSIS | doctest.REPORT_NDIFF
-                   | doctest.REPORT_ONLY_FIRST_FAILURE)
+    optionflags = (doctest.NORMALIZE_WHITESPACE |
+                   doctest.ELLIPSIS | doctest.REPORT_NDIFF |
+                   doctest.REPORT_ONLY_FIRST_FAILURE)
     suite = unittest.TestSuite()
     suite.addTest(doctest.DocTestSuite(setUp=setUp, tearDown=tearDown,
                                        optionflags=optionflags))

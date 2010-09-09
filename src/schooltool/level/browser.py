@@ -21,7 +21,7 @@
 Schooltool teaching level views.
 """
 
-from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
+from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.container.interfaces import INameChooser
 from zope.component import adapts, getUtility, getMultiAdapter
 from zope.interface import implements

@@ -25,7 +25,7 @@ import re
 import zope.event
 import zope.schema
 from zope.container.interfaces import INameChooser
-from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
+from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import adapts
 from zope.component import getMultiAdapter
 from zope.interface.exceptions import Invalid
@@ -41,7 +41,7 @@ from z3c.form.browser.checkbox import SingleCheckBoxFieldWidget
 from z3c.form.util import getSpecification
 
 from schooltool.app.interfaces import ISchoolToolApplication
-from schooltool.app.utils import TitledContainerItemSource
+from schooltool.app.utils import TitledContainerItemVocabulary
 from schooltool.calendar.utils import parse_date, parse_time
 from schooltool.course.interfaces import ISection
 from schooltool.common import DateRange
@@ -667,7 +667,7 @@ class TimetableEditView(form.EditForm, TimetableConflictMixin):
         return bool(self.ttschemas)
 
 
-class TimetableSchemaSource(TitledContainerItemSource):
+class TimetableSchemaVocabulary(TitledContainerItemVocabulary):
 
     @property
     def container(self):
@@ -675,8 +675,8 @@ class TimetableSchemaSource(TitledContainerItemSource):
         return ITimetableSchemaContainer(term, {})
 
 
-def timetableSchemaSourceVocabularyFactory():
-    return TimetableSchemaSource
+def timetableSchemaVocabularyFactory():
+    return TimetableSchemaVocabulary
 
 
 class ITimetableAddForm(Interface):
@@ -684,7 +684,7 @@ class ITimetableAddForm(Interface):
 
     schooltt = zope.schema.Choice(
         title=_("School timetable"),
-        source="schooltool.timetable.browser.timetable_schema_source",
+        source="schooltool.timetable.browser.timetable_schema_vocabulary",
         required=True,
     )
 

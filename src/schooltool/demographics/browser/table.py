@@ -26,7 +26,7 @@ from zc.table.interfaces import ISortableColumn
 from zc.table import column
 from zc.table import table
 from zc.table.column import GetterColumn
-from zope.app.pagetemplate import ViewPageTemplateFile
+from zope.browserpage import ViewPageTemplateFile
 from zope.i18n import translate
 from hurry.query.interfaces import IQuery
 from hurry.query import query

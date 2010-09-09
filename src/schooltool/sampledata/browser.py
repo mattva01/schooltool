@@ -22,7 +22,7 @@ Views for the sample data generation
 $Id$
 """
 from zope.publisher.browser import BrowserView
-from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
+from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import queryMultiAdapter, getUtilitiesFor
 from zope.traversing.browser.absoluteurl import absoluteURL
 

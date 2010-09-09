@@ -25,7 +25,7 @@ from collections import defaultdict
 from zope.interface import implements, Invalid
 from zope.i18n import translate
 from zope.security.proxy import removeSecurityProxy
-from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
+from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.intid.interfaces import IIntIds
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.publisher.browser import BrowserView

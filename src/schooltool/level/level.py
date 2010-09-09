@@ -40,7 +40,7 @@ from zope.proxy import sameProxiedObjects
 
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.app import InitBase, StartUpBase
-from schooltool.app.utils import TitledContainerItemSource
+from schooltool.app.utils import TitledContainerItemVocabulary
 from schooltool.schoolyear.interfaces import ISchoolYearContainer, ISchoolYear
 from schooltool.schoolyear.subscriber import ObjectEventAdapterSubscriber
 from schooltool.relationship import URIObject, RelationshipSchema
@@ -165,9 +165,9 @@ class RemoveLevelsWhenSchoolYearIsDeleted(ObjectEventAdapterSubscriber):
         del top_level_container[level_container.__name__]
 
 
-class LevelSource(TitledContainerItemSource):
-    """Source of levels for contexts adaptable to ISchoolYear"""
-    implements(zope.schema.interfaces.IIterableSource)
+class LevelVocabulary(TitledContainerItemVocabulary):
+    """Vocabulary of levels for contexts adaptable to ISchoolYear"""
+    implements(zope.schema.interfaces.IIterableVocabulary)
 
     @property
     def container(self):
@@ -177,5 +177,5 @@ class LevelSource(TitledContainerItemSource):
         return interfaces.ILevelContainer(schoolyear)
 
 
-def levelSourceVocabularyFactory():
-    return LevelSource
+def levelVocabularyFactory():
+    return LevelVocabulary

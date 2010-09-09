@@ -29,7 +29,7 @@ from reportlab.lib import units
 from reportlab.lib import pagesizes
 from zope.publisher.browser import BrowserView
 from zope.i18n import translate
-from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
+from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from z3c.rml import rml2pdf
 
 from schooltool.common import SchoolToolMessage as _
@@ -207,6 +207,7 @@ class ReportPDFView(PDFView):
     rightMargin = 0.25 * units.inch
     topMargin = 0.25 * units.inch
     bottomMargin = 0.25 * units.inch
+    rotation = 0
     pageSize = pagesizes.A4
     title = u""
 

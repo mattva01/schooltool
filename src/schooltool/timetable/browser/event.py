@@ -22,7 +22,7 @@ Views for timetable event.
 $Id$
 """
 
-from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
+from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.formlib import form
 from zope.html.field import HtmlFragment
 from zope.traversing.browser.absoluteurl import absoluteURL
@@ -57,18 +57,10 @@ class TimetableEventEditView(CalendarEventView, form.Form):
                                            required=False))
     template = ViewPageTemplateFile("templates/timetable_event_edit.pt")
 
-    def setUpEditorWidget(self, editor):
-        editor.editorWidth = 430
-        editor.editorHeight = 300
-        editor.toolbarConfiguration = "schooltool"
-        url = absoluteURL(ISchoolToolApplication(None), self.request)
-        editor.configurationPath = (url + '/@@/editor_config.js')
-
     def setUpWidgets(self, ignore_request=False):
         self.widgets = form.setUpEditWidgets(
             self.form_fields, self.prefix, self.context, self.request,
             ignore_request=ignore_request)
-        self.setUpEditorWidget(self.widgets["description"])
 
     def __init__(self, context, request):
         form.Form.__init__(self, context, request)

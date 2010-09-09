@@ -23,7 +23,7 @@ SchoolTool calendar views.
 import datetime
 
 from zope.component import subscribers
-from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
+from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.i18n import translate
 from schooltool.app.browser import ViewPreferences, same
 from schooltool.app.browser.interfaces import ICalendarProvider

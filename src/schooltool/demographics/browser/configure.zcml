@@ -126,7 +126,7 @@
 
   <!-- to get simple drop down lists in widgets -->
   <zope:adapter
-      for="zope.schema.interfaces.IIterableSource
+      for="schooltool.demographics.interfaces.IDemographicsSource
            zope.publisher.interfaces.browser.IBrowserRequest"
       factory=".personform.Terms"
       />

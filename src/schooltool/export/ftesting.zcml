@@ -21,4 +21,8 @@
 
   <browser:defaultSkin name="ImportExport" />
 
+  <utility
+      component="zope.i18n.testmessagecatalog.TestMessageFallbackDomain"
+      />
+
 </configure>

@@ -34,7 +34,7 @@ Suppose we have a sequence of dicts that have a 'title' key.
 
 We can sort the list by title with TALES:
 
-    >>> from zope.app.pagetemplate.engine import Engine
+    >>> from zope.pagetemplate.engine import Engine
     >>> from zope.tales.tales import Context
     >>> context = Context(Engine, {'a_list': a_list})
 

@@ -23,6 +23,7 @@ import xlrd
 import transaction
 import datetime
 
+from zope.i18n import translate
 from zope.container.interfaces import INameChooser
 from zope.component import queryUtility
 from zope.security.proxy import removeSecurityProxy

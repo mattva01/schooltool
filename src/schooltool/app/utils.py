@@ -70,9 +70,9 @@ def vocabulary_titled(items):
          for item in items])
 
 
-class TitledContainerItemSource(object):
-    """Source of titled items in a container."""
-    implements(zope.schema.interfaces.IIterableSource)
+class TitledContainerItemVocabulary(object):
+    """Vocabulary of titled items in a container."""
+    implements(zope.schema.interfaces.IVocabularyTokenized)
 
     def __init__(self, context):
         self.context = context

@@ -28,10 +28,10 @@ from zope.component import provideAdapter
 from zope.interface import implements
 
 
-def doctest_GroupSource():
-    """Tests for GroupSource
+def doctest_GroupVocabulary():
+    """Tests for GroupVocabulary
 
-    If the context of a source is not a person, all groups from the
+    If the context of a vocabulary is not a person, all groups from the
     group container are returned:
 
         >>> from schooltool.group.interfaces import IGroup
@@ -54,9 +54,9 @@ def doctest_GroupSource():
         ...                adapts=[ISchoolToolApplication],
         ...                provides=IGroupContainer)
 
-        >>> from schooltool.basicperson.vocabularies import GroupSource
-        >>> source = GroupSource(None)
-        >>> [group.token for group in source]
+        >>> from schooltool.basicperson.vocabularies import GroupVocabulary
+        >>> vocabulary = GroupVocabulary(None)
+        >>> [group.token for group in vocabulary]
         ['a', 'b', 'some-group']
 
     If the context of the vocabulary is a person - list all the groups
@@ -74,17 +74,17 @@ def doctest_GroupSource():
         ...         self.groups.extend(map(SectionStub, ['s1', 's2']))
 
         >>> person = PersonStub()
-        >>> source = GroupSource(person)
-        >>> [group.token for group in source]
+        >>> vocabulary = GroupVocabulary(person)
+        >>> [group.token for group in vocabulary]
         ['a', 'b']
 
     """
 
 
-def doctest_AdvisorSource():
-    """Tests for AdvisorSource
+def doctest_AdvisorVocabulary():
+    """Tests for AdvisorVocabulary
 
-    If the context of a source is not a person, all groups from the
+    If the context of a vocabulary is not a person, all groups from the
     group container are returned:
 
         >>> from schooltool.app.interfaces import ISchoolToolApplication
@@ -108,9 +108,9 @@ def doctest_AdvisorSource():
         ...                adapts=[ISchoolToolApplication],
         ...                provides=IGroupContainer)
 
-        >>> from schooltool.basicperson.vocabularies import AdvisorSource
-        >>> source = AdvisorSource(None)
-        >>> [person.value.__name__ for person in source]
+        >>> from schooltool.basicperson.vocabularies import AdvisorVocabulary
+        >>> vocabulary = AdvisorVocabulary(None)
+        >>> [person.value.__name__ for person in vocabulary]
         ['john', 'sarrah']
 
     """

@@ -21,7 +21,7 @@ Basic person browser views.
 """
 from zope.container.interfaces import INameChooser
 from zope.app.form.browser.interfaces import ITerms
-from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
+from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import adapts
 from zope.component import getUtility
 from z3c.form import form, field, button, validator
@@ -47,12 +47,12 @@ class IPersonAddForm(IBasicPerson):
 
     group = Choice(
         title=_(u"Group"),
-        source="schooltool.basicperson.group_source",
+        source="schooltool.basicperson.group_vocabulary",
         required=False)
 
     advisor = Choice(
         title=_(u"Advisor"),
-        source="schooltool.basicperson.advisor_source",
+        source="schooltool.basicperson.advisor_vocabulary",
         required=False)
 
     username = TextLine(

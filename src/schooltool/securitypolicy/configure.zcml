@@ -69,10 +69,10 @@
       permission="zope.ManageServices" />
   <security:allow
       crowds="administration"
-      permission="zope.app.dublincore.change" />
+      permission="zope.dublincore.change" />
   <security:allow
       crowds="everybody"
-      permission="zope.app.dublincore.view" />
+      permission="zope.dublincore.view" />
 
   <security:describe_crowd
       crowd_factory=".crowds.Crowd"

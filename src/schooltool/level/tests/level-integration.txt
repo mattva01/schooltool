@@ -130,12 +130,12 @@ Helpers
 -------
 
   If you need a dropdown of levels in a form, there is a special
-level source.
+level vocabulary.
 
     >>> from zope.schema import Choice
     >>> levels_field = Choice(
     ...    title=u"Levels",
-    ...    source='schooltool.level.level.levelsource')
+    ...    source='schooltool.level.level.levelvocabulary')
 
   It works with contexts adaptable to ISchoolYear.
 
@@ -148,6 +148,6 @@ level source.
     2-: Second-years 2005
 
     >>> from zope.interface.verify import verifyObject
-    >>> from zope.schema.interfaces import IIterableSource
-    >>> verifyObject(IIterableSource, levels.vocabulary)
+    >>> from zope.schema.interfaces import IVocabularyTokenized
+    >>> verifyObject(IVocabularyTokenized, levels.vocabulary)
     True

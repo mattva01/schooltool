@@ -23,7 +23,7 @@ import unittest
 import doctest
 
 from zope.publisher.browser import TestRequest
-from zope.app.pagetemplate.simpleviewclass import SimpleViewClass
+from zope.browserpage.simpleviewclass import SimpleViewClass
 from zope.app.testing import setup
 from zope.traversing.browser.absoluteurl import absoluteURL
 from zope.component import provideAdapter, provideUtility
@@ -425,7 +425,7 @@ def doctest_RelationshipViewBase():
     necessary actions, like add items to the collections and most
     importantly to set up available and selected item tables:
 
-        >>> from zope.testing.doctestunit import pprint
+        >>> from pprint import pprint
         >>> def FakeTableSetUp(**kwargs):
         ...     print "Setting up table:"
         ...     pprint(kwargs)

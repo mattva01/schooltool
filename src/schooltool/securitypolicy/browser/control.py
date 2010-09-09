@@ -22,7 +22,7 @@ Security description views for SchoolTool security policy.
 
 from zope.publisher.browser import BrowserView
 from zope.component import queryMultiAdapter
-from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
+from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 
 from schooltool.securitypolicy.metaconfigure import getCrowdsUtility
 from schooltool.securitypolicy.metaconfigure import getDescriptionUtility

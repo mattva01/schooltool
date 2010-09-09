@@ -41,7 +41,7 @@ def setUpAppAbsoluteURL():
     from zope.traversing.browser.interfaces import IAbsoluteURL
     from zope.publisher.interfaces.http import IHTTPRequest
     class App(object):
-        pass
+        zope.interface.implements(ISchoolToolApplication)
     zope.component.provideAdapter(
         lambda ignored: App(),
         adapts=(None, ), provides=ISchoolToolApplication)
@@ -51,10 +51,7 @@ def setUpAppAbsoluteURL():
 
 
 class FormRequest(TestRequest):
-    zope.interface.implements(
-        form.interfaces.IFormLayer,
-        skin.skin.ISchoolToolLayer,
-        )
+    zope.interface.implements(skin.skin.ISchoolToolLayer)
 
 
 def doctest_HTMLFragmentWidget():
@@ -67,8 +64,8 @@ def doctest_HTMLFragmentWidget():
     """
 
 
-def doctest_FckeditorWidget_FCKConfig():
-    """Tests for FckeditorWidget and FCKConfig.
+def doctest_FckeditorZ3CFormWidget_FCKConfig():
+    """Tests for FckeditorZ3CFormWidget and FCKConfig.
 
         >>> setUpAppAbsoluteURL()
 
@@ -86,7 +83,7 @@ def doctest_FckeditorWidget_FCKConfig():
         ...     (schema_field, request), form.interfaces.IFieldWidget)
 
         >>> print widget
-        <FckeditorWidget 'html'>
+        <FckeditorZ3CFormWidget 'html'>
 
         >>> verifyObject(skin.widgets.IFckeditorWidget, widget)
         True
@@ -100,7 +97,7 @@ def doctest_FckeditorWidget_FCKConfig():
         >>> widget.script
         Traceback (most recent call last):
         ...
-        TypeError: ('Could not adapt', None, <...IFCKConfig>)
+        AttributeError: ...
 
     Config will be set during widget update, as a computed widget value.
 
@@ -113,7 +110,8 @@ def doctest_FckeditorWidget_FCKConfig():
         ...     form.interfaces.IValue, name='config')
 
         >>> print value
-        <ComputedValue <schooltool.skin.widgets.FCKConfig object at ...>>
+        <ComputedValue <schooltool.skin.widgets.FCKConfig
+          (430 x 300, u'schooltool' toolbar, u'/@@/editor_config.js')>>
 
         >>> verifyObject(skin.widgets.IFCKConfig, value.get())
         True
@@ -121,7 +119,8 @@ def doctest_FckeditorWidget_FCKConfig():
         >>> widget.update()
 
         >>> print widget.config
-        <schooltool.skin.widgets.FCKConfig object at ...>
+        <schooltool.skin.widgets.FCKConfig
+          (430 x 300, u'schooltool' toolbar, u'/@@/editor_config.js')>
 
     Now we can render the javascript.
 
@@ -129,7 +128,7 @@ def doctest_FckeditorWidget_FCKConfig():
         <script type="text/javascript" language="JavaScript">
             var oFCKeditor... = new FCKeditor(
                 "html", 430, 300, "schooltool");
-            oFCKeditor...BasePath = "/@@/fckeditor/2.6.4.1/fckeditor/";
+            oFCKeditor...BasePath = "http://127.0.0.1/@@/fckeditor/2.6.4.1/fckeditor/";
             oFCKeditor...Config["CustomConfigurationsPath"] =
                 "http://127.0.0.1/@@/editor_config.js";
             oFCKeditor....ReplaceTextarea();
@@ -162,7 +161,8 @@ def doctest_FckeditorWidget_FCKConfig():
         >>> widget.form = form.form.AddForm(None, request)
         >>> widget.update()
         >>> print widget.config
-        <schooltool.skin.widgets.EditFormFCKConfig object at ...>
+        <schooltool.skin.widgets.FCKConfig
+          (306 x 200, u'schooltool' toolbar, u'/@@/editor_config.js')>
 
         >>> verifyObject(skin.widgets.IFCKConfig, widget.config)
         True
@@ -170,13 +170,14 @@ def doctest_FckeditorWidget_FCKConfig():
         >>> widget.form = form.form.EditForm(None, request)
         >>> widget.update()
         >>> print widget.config
-        <schooltool.skin.widgets.EditFormFCKConfig object at ...>
+        <schooltool.skin.widgets.FCKConfig
+          (306 x 200, u'schooltool' toolbar, u'/@@/editor_config.js')>
 
     """
 
 
-def doctest_FckeditorWidget_compatibility():
-    r"""Tests for FckeditorWidget compatibility with zope.html.
+def doctest_FckeditorZ3CWidget_compatibility():
+    r"""Tests for FckeditorZ3CFormWidget compatibility with zope.html.
 
         >>> setUpAppAbsoluteURL()
 
@@ -206,12 +207,7 @@ def doctest_FckeditorWidget_compatibility():
         >>> widget.update()
         >>> print widget.script
         <script type="text/javascript" language="JavaScript">
-            var oFCKeditor... = new FCKeditor(
-                "html", 430, 300, "schooltool");
-            oFCKeditor...BasePath = "/@@/fckeditor/2.6.4.1/fckeditor/";
-            oFCKeditor...Config["CustomConfigurationsPath"] =
-                "http://127.0.0.1/@@/editor_config.js";
-            oFCKeditor....ReplaceTextarea();
+        ...
         </script>
 
     Let's now look at a fully rendered zope.html widget.
@@ -219,17 +215,22 @@ def doctest_FckeditorWidget_compatibility():
         >>> from zope.html.widget import FckeditorWidget
         >>> editor = FckeditorWidget(schema_field, request)
 
-    Most of our code that uses zope.html modifies the widget in the view
-    before rendering.
+        >>> print editor()
+        <textarea cols="60" id="field.html" name="field.html" rows="15" ></textarea>
+        <script type="text/javascript" language="JavaScript">
+        var oFCKeditor_html = new FCKeditor(
+                "field.html", 600, 400, "zope");
+            oFCKeditor_html.BasePath = "/@@/fckeditor/2.6.4.1/fckeditor/";
+            oFCKeditor_html.Config["CustomConfigurationsPath"] = "/@@/zope_fckconfig.js";
+            oFCKeditor_html.ReplaceTextarea();
+        </script>
 
-        >>> from schooltool.app.interfaces import ISchoolToolApplication
-        >>> from zope.traversing.browser.absoluteurl import absoluteURL
+    We can also modify the configuration of the zope.html widget.
 
         >>> editor.editorWidth = 430
         >>> editor.editorHeight = 300
         >>> editor.toolbarConfiguration = "schooltool"
-        >>> url = absoluteURL(ISchoolToolApplication(None), request)
-        >>> editor.configurationPath = (url + '/@@/editor_config.js')
+        >>> editor.configurationPath = '/@@/editor_config.js'
 
         >>> print editor()
         <textarea cols="60" id="field.html" name="field.html" rows="15" ></textarea>
@@ -237,12 +238,16 @@ def doctest_FckeditorWidget_compatibility():
         var oFCKeditor_html = new FCKeditor(
                 "field.html", 430, 300, "schooltool");
             oFCKeditor_html.BasePath = "/@@/fckeditor/2.6.4.1/fckeditor/";
-            oFCKeditor_html.Config["CustomConfigurationsPath"] = "http://127.0.0.1/@@/editor_config.js";
+            oFCKeditor_html.Config["CustomConfigurationsPath"] = "/@@/editor_config.js";
             oFCKeditor_html.ReplaceTextarea();
         </script>
 
-    Apart from different mechanisms to generate oFCKeditor variable name,
-    zope.html and our widget produce very similar results:
+    You can notice zope.html widget uses relative paths for configuration;
+    this brakes the widget if admins start fiddling with Apache's mod-rewrite
+    (to put schooltool in http://example.com/schooltool for example).
+
+    Our widget also uses a different mechanisma to generate oFCKeditor
+    variable name.
 
         >>> import difflib
         >>> def print_diff(old, new):
@@ -252,7 +257,7 @@ def doctest_FckeditorWidget_compatibility():
 
         >>> widget_text = widget.script
         >>> widget_text = widget_text.replace(
-        ...     'oFCKeditor_%s' % widget.editor_var_name,
+        ...     widget.editor_var_name,
         ...     'oFCKeditor_html').strip()
 
         >>> print_diff(editor(), widget_text)
@@ -262,8 +267,12 @@ def doctest_FckeditorWidget_compatibility():
         - "field.html", 430, 300, "schooltool");
         ?  ------
         + "html", 430, 300, "schooltool");
-        oFCKeditor_html.BasePath = "/@@/fckeditor/2.6.4.1/fckeditor/";
-        oFCKeditor_html.Config["CustomConfigurationsPath"] = "http://127.0.0.1/@@/editor_config.js";
+        - oFCKeditor_html.BasePath = "/@@/fckeditor/2.6.4.1/fckeditor/";
+        + oFCKeditor_html.BasePath = "http://127.0.0.1/@@/fckeditor/2.6.4.1/fckeditor/";
+        ?                             ++++++++++++++++
+        - oFCKeditor_html.Config["CustomConfigurationsPath"] = "/@@/editor_config.js";
+        + oFCKeditor_html.Config["CustomConfigurationsPath"] = "http://127.0.0.1/@@/editor_config.js";
+        ?                                                       ++++++++++++++++
         oFCKeditor_html.ReplaceTextarea();
         </script>
 

@@ -83,10 +83,13 @@ class INameInfo(Interface):
         description=_("""Photo (in JPEG format)"""),
         )
 
+class IDemographicsSource(IIterableSource):
+    """Basically, a marker interface."""
+
 class SourceList(list):
     """A simple list-based source for Choice fields.
     """
-    implements(IIterableSource)
+    implements(IDemographicsSource)
 
     ## def __init__(self, values=[]):
     ##     for v in values:
@@ -153,11 +156,11 @@ class IDemographics(Interface):
         )
 
 
-class ITeachersSource(IIterableSource):
+class ITeachersSource(IDemographicsSource):
     """A source of names of teachers.
     """
 
-class IGroupsSource(IIterableSource):
+class IGroupsSource(IDemographicsSource):
     """A source of names of groups.
     """
 

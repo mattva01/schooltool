@@ -1,4 +1,9 @@
-FCKConfig.BasePath = '/@@/fckeditor/editor/';
+
+// Base path screws up editor for sites using mod rewrite, like
+// http://example.com/something/schoooltool/...
+// See https://bugs.edge.launchpad.net/schooltool/+bug/258951
+//FCKConfig.BasePath = '/@@/fckeditor/editor/';
+
 FCKConfig.EditorAreaCSS = FCKConfig.BasePath + 'css/fck_editorarea.css' ;
 FCKConfig.CustomConfigurationsPath = "/@@/zope_fckconfig.js";
 
@@ -25,5 +30,14 @@ FCKConfig.ShowBorders   = true ;
 FCKConfig.contextURL = window.top.top.contextURL;
 
 FCKConfig.LinkBrowser = false ;
+FCKConfig.LinkUpload = false ;
+FCKConfig.LinkDlgHideAdvanced = true;
+FCKConfig.LinkDlgHideTarget = true ;
 
 FCKConfig.ImageBrowser = false ;
+
+FCKConfig.ForcePasteAsPlainText = true ;
+// Once we update to CK editor 3.x, figure out a good combination of these
+// and maybe re-enable paste from Word
+//FCKConfig.pasteFromWordRemoveFontStyles
+//FCKConfig.pasteFromWordRemoveStyles

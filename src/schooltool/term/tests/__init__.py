@@ -22,7 +22,7 @@ import datetime
 from persistent import Persistent
 
 from zope.location.location import LocationProxy
-from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
+from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.interface import implementer
 from zope.interface import implements
 from zope.component import adapter

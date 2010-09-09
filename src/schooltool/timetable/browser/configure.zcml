@@ -150,9 +150,9 @@
       />
 
   <zope:utility
-     factory=".timetableSchemaSourceVocabularyFactory"
+     factory=".timetableSchemaVocabularyFactory"
      provides="zope.schema.interfaces.IVocabularyFactory"
-     name="schooltool.timetable.browser.timetable_schema_source" />
+     name="schooltool.timetable.browser.timetable_schema_vocabulary" />
 
   <!-- ttwizard -->
   <page

@@ -30,7 +30,7 @@ from zope.schema import TextLine, Date
 from zope.schema import ValidationError
 from zope.container.interfaces import INameChooser
 from zope.publisher.browser import BrowserView
-from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
+from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.traversing.browser.absoluteurl import absoluteURL
 
 from z3c.form.util import getSpecification

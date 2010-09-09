@@ -20,7 +20,7 @@
 Inline page templates
 """
 
-from zope.app.pagetemplate.engine import TrustedAppPT
+from zope.pagetemplate.engine import TrustedAppPT
 from zope.pagetemplate.pagetemplate import PageTemplate
 
 

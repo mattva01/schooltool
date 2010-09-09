@@ -25,7 +25,7 @@ import urllib
 from zope.interface import implements
 from zope.interface import directlyProvides
 from zope.i18n.interfaces.locales import ICollator
-from zope.app.pagetemplate import ViewPageTemplateFile
+from zope.browserpage import ViewPageTemplateFile
 from zope.component import queryMultiAdapter
 from zope.security.proxy import removeSecurityProxy
 from zope.app.dependable.interfaces import IDependable

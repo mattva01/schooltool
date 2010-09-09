@@ -38,7 +38,7 @@ from zope.component import getMultiAdapter
 from zope.component import getUtility
 from zope.component import adapter
 from zope.authentication.interfaces import IAuthentication
-from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
+from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.publisher.browser import BrowserPage
 from zope.traversing.browser.absoluteurl import absoluteURL
 

@@ -37,7 +37,7 @@ from zope.viewlet.interfaces import IViewletManager
 from zope.formlib import form
 from zope.component import getUtility
 from zope.interface import implements
-from zope.app.pagetemplate import ViewPageTemplateFile
+from zope.browserpage import ViewPageTemplateFile
 from zope.security.management import checkPermission
 from zope.viewlet.viewlet import ViewletBase
 from zope.component import queryAdapter

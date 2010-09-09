@@ -4,7 +4,7 @@ from zope import event
 from zope.formlib import form
 from zope.lifecycleevent import ObjectModifiedEvent
 from zope.interface.common import idatetime
-from zope.app.pagetemplate import ViewPageTemplateFile
+from zope.browserpage import ViewPageTemplateFile
 from zope.traversing.browser.absoluteurl import absoluteURL
 
 from schooltool.common import SchoolToolMessage as _
