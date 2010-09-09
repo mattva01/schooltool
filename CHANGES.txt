@@ -2,7 +2,7 @@
 CHANGES
 =======
 
-1.5.1 (unreleased)
+1.5.1 (2010-09-09)
 ------------------
 
 - Tweaked WYSIWYG CK editor (https://launchpad.net/bugs/485446)
