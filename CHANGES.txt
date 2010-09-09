@@ -6,6 +6,10 @@ CHANGES
 ------------------
 
 - Tweaked WYSIWYG CK editor (https://launchpad.net/bugs/485446)
+- Make CK editor work with servers under mod-rewrite (https://launchpad.net/bugs/258951)
+- Update to work with latest ZTK (1.0a3)
+- Renamed some classes and interfaces from Source to Vocabulary.
+  This change is not backwards compatible, plugins may need updating.
 - Added error checking on demographics edit form (https://launchpad.net/bugs/610870)
 - Update translations.
 
