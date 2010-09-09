@@ -7,13 +7,13 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-08-22 18:49+0300\n"
-"PO-Revision-Date: 2010-06-15 14:30+0000\n"
+"PO-Revision-Date: 2010-08-24 19:17+0000\n"
 "Last-Translator: Douglas Cerna <douglascerna@yahoo.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-06-16 03:43+0000\n"
+"X-Launchpad-Export-Date: 2010-08-25 03:47+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: /src/schooltool/app/app.py:197
@@ -35,7 +35,7 @@ msgstr "1 persona"
 #. Default: ""
 #: /src/schooltool/app/browser/__init__.py:263
 msgid "${number} persons"
-msgstr "${number} de personas"
+msgstr "${number} persona(s)"
 
 #: /src/schooltool/app/browser/app.py:226
 msgid "Username or password is incorrect"
@@ -1157,9 +1157,8 @@ msgid "There are no resources with calendars accessible to you."
 msgstr "No hay recursos con calendarios a los que pueda acceder."
 
 #: /src/schooltool/app/browser/templates/default_report_template.pt:23
-#, fuzzy
 msgid "Created with SchoolTool"
-msgstr "Calendarios en SchoolTool"
+msgstr "Creado con SchoolTool"
 
 #: /src/schooltool/app/browser/templates/default_report_template.pt:37
 msgid "Page ${page_number}"
@@ -4631,144 +4630,133 @@ msgstr "Exportar XLS"
 
 #: /src/schooltool/export/importer.py:68
 msgid "${sheet_name} ${column}${row} ${message}"
-msgstr ""
+msgstr "${sheet_name} ${column}${row} ${message}"
 
 #: /src/schooltool/export/importer.py:69
-#, fuzzy
 msgid "is not a valid integer"
-msgstr "Dato entero no válido"
+msgstr "no es un número válido"
 
 #: /src/schooltool/export/importer.py:70
 msgid "not unicode or ascii string"
-msgstr ""
+msgstr "no es un texto de tipo unicode o ascii"
 
 #: /src/schooltool/export/importer.py:71
 msgid "missing required text"
-msgstr ""
+msgstr "falta texto requerido"
 
 #: /src/schooltool/export/importer.py:72
 msgid "has no date in it"
-msgstr ""
+msgstr "no tiene fecha"
 
 #: /src/schooltool/export/importer.py:73
-#, fuzzy
 msgid "end date cannot be before start date"
-msgstr "La fecha de fin antecede a la fecha de inicio"
+msgstr "día final no puede ser antes que el día inicial"
 
 #: /src/schooltool/export/importer.py:74
 msgid "start date overlaps another year"
-msgstr ""
+msgstr "día de inicio sobrepone otro año"
 
 #: /src/schooltool/export/importer.py:75
 msgid "end date overlaps another year"
-msgstr ""
+msgstr "día final sobrepone otro año"
 
 #: /src/schooltool/export/importer.py:76
-#, fuzzy
 msgid "invalid school year"
-msgstr "Añadir nuevo año escolar"
+msgstr "año de escuela invalido"
 
 #: /src/schooltool/export/importer.py:77
-#, fuzzy
 msgid "start date before start of school year"
-msgstr "Fijar la fecha para la escuela"
+msgstr "día inicial es anterior al comienzo del año escolar"
 
 #: /src/schooltool/export/importer.py:78
-#, fuzzy
 msgid "end date after end of school year"
-msgstr "La fecha del período no están en el año escolar."
+msgstr "día final es despues del final del año escolar"
 
 #: /src/schooltool/export/importer.py:79
 msgid "start date overlaps another term"
-msgstr ""
+msgstr "día inicial sobrepone otro termino"
 
 #: /src/schooltool/export/importer.py:80
 msgid "end date overlaps another term"
-msgstr ""
+msgstr "día final sobrepone otro termino"
 
 #: /src/schooltool/export/importer.py:81
 msgid "${title} has no days in A${row}"
-msgstr ""
+msgstr "${title} no tiene días en in A${row}"
 
 #: /src/schooltool/export/importer.py:82
+#, fuzzy
 msgid "${title} has no day templates in A${row}"
-msgstr ""
+msgstr "${title} no tiene días en in A${row}"
 
 #: /src/schooltool/export/importer.py:83
-#, fuzzy
 msgid "is not a valid time range"
-msgstr "\"${username}\" no es un nombre de usuario válido"
+msgstr "no es un rango de tiempo valido"
 
 #: /src/schooltool/export/importer.py:84
-#, fuzzy
 msgid "is not a valid timetable model"
-msgstr "Intervalo de horas no válido: $slot."
+msgstr "no es un modelo de tabla de tiempo valido"
 
 #: /src/schooltool/export/importer.py:85
 msgid "is the same day id as another in this timetable"
-msgstr ""
+msgstr "es el mismo id de día que otro en esta tabla de tiempo"
 
 #: /src/schooltool/export/importer.py:86
 msgid "is not defined in the 'Day Templates' section"
-msgstr ""
+msgstr "no está definido en la sección 'plantillas de día'"
 
 #: /src/schooltool/export/importer.py:87
 msgid "is the same period id as another in this day"
-msgstr ""
+msgstr "es el mismo identificador de período que otro en este día"
 
 #: /src/schooltool/export/importer.py:88
-#, fuzzy
 msgid "is the same homeroom period id as another in this day"
-msgstr "Por favor, indique los periodos de control para cada día."
+msgstr "es el mismo identificador de período de control que otro en este día"
 
 #: /src/schooltool/export/importer.py:89
 msgid "must be either 'Location' or 'Resource'"
-msgstr ""
+msgstr "debe ser 'Lugar' o 'Recurso'"
 
 #: /src/schooltool/export/importer.py:90
-#, fuzzy
 msgid "is not a valid term in the given school year"
-msgstr "La fecha del período no están en el año escolar."
+msgstr "no es un termino válido en el año escolar dado"
 
 #: /src/schooltool/export/importer.py:91
-#, fuzzy
 msgid "is not a valid course in the given school year"
-msgstr "No se pueden vincular secciones en años escolares diferentes"
+msgstr "no es un curso valido en el año escolar dado"
 
 #: /src/schooltool/export/importer.py:92
+#, fuzzy
 msgid "${title} has no courses in A${row}"
-msgstr ""
+msgstr "${title} no tiene días en in A${row}"
 
 #: /src/schooltool/export/importer.py:93
-#, fuzzy
 msgid "is not a valid username"
-msgstr "\"${username}\" no es un nombre de usuario válido"
+msgstr "no es un nombre de usuario válido"
 
 #: /src/schooltool/export/importer.py:94
-#, fuzzy
 msgid "is not a valid schema in the given school year"
-msgstr "La fecha del período no están en el año escolar."
+msgstr "no es un esquema válido en el año escolar dado"
 
 #: /src/schooltool/export/importer.py:95
 msgid "is not a valid day id for the given schema"
-msgstr ""
+msgstr "no es un id de día válido para el esquema dado"
 
 #: /src/schooltool/export/importer.py:96
 msgid "is not a valid period id for the given day"
-msgstr ""
+msgstr "no es un id de período valido para el dia dado"
 
 #: /src/schooltool/export/importer.py:97
 msgid "is not a valid resource id"
-msgstr ""
+msgstr "no es un id de recursos válido"
 
 #: /src/schooltool/export/importer.py:98
-#, fuzzy
 msgid "Username cannot contain non-ascii characters: ${string}"
-msgstr "Nombre del usuario no pueder contener carácteres non-ascii"
+msgstr "El nombre de usuario debe contener sólo caracteres ascii: ${string}"
 
 #: /src/schooltool/export/importer.py:100
 msgid "is not a valid weekday number (0-6)"
-msgstr ""
+msgstr "no es un número de la semana valido (0-6)"
 
 #: /src/schooltool/export/templates/import.pt:4
 msgid "Upload SchoolTool as XLS"
@@ -5030,41 +5018,38 @@ msgid "Help"
 msgstr "Ayuda"
 
 #: /src/schooltool/level/browser.py:47
-#, fuzzy
 msgid "Add a level"
-msgstr "Añadir evento"
+msgstr "Agregar un nivel"
 
 #: /src/schooltool/level/interfaces.py:37
-#, fuzzy
 msgid "Title of the level."
-msgstr "Nombre de la nota."
+msgstr "Título del nivel"
 
 #: /src/schooltool/level/security.zcml:7
 msgid "The teaching levels (student learning years)."
-msgstr ""
+msgstr "Los niveles de enseñanza (años de aprendizaje del estudiante)."
 
 #: /src/schooltool/level/security.zcml:12
-#, fuzzy
 msgid "Add/Remove"
-msgstr "Remover"
+msgstr "Añadir/Quitar"
 
 #: /src/schooltool/level/security.zcml:19
-#, fuzzy
 msgid "Modify/Rename"
-msgstr "Modificar"
+msgstr "Modificar/Renombrar"
 
 #: /src/schooltool/level/templates/levels.pt:3
 #: /src/schooltool/level/templates/levels.pt:6
 msgid "Teaching Levels"
-msgstr ""
+msgstr "Niveles de Enseñanza"
 
 #: /src/schooltool/level/templates/levels.pt:11
 msgid "Levels (student learning years) taught in ${schoolyear}"
 msgstr ""
+"Niveles (años de aprendizaje del estudiante) enseñados en ${schoolyear}"
 
 #: /src/schooltool/level/templates/link_to_levels.pt:1
 msgid "Teaching levels"
-msgstr ""
+msgstr "Niveles de enseñanza"
 
 #: /src/schooltool/note/configure.zcml:68
 msgid "New Note"
@@ -5743,22 +5728,19 @@ msgstr "Añadir un nuevo período"
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_add.pt:35
 msgid "Copy data from active school year: ${active_schoolyear}"
-msgstr ""
+msgstr "Copiar información del año escolar activo: ${active_schoolyear}"
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_add.pt:40
-#, fuzzy
 msgid "All Courses"
-msgstr "Cursos"
+msgstr "Todos los Cursos"
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_add.pt:50
-#, fuzzy
 msgid "All Timetable Schemas"
-msgstr "Esquema de Horario Por Defecto:"
+msgstr "Todas los esquemas de las tablas de tiempo"
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_add.pt:62
-#, fuzzy
 msgid "Copy members"
-msgstr "Editar los miembros"
+msgstr "Copiar miembros"
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:39
 msgid "Activate next school year"
@@ -5942,13 +5924,12 @@ msgid "Report a bug on Launchpad."
 msgstr "Informar de un error en Launchpad."
 
 #: /src/schooltool/skin/templates/view_macros.pt:127
-#, fuzzy
 msgid ""
 "&copy; The <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth "
 "Foundation</a> 2003 - <span>2010</span>: Supporting Social Innovation."
 msgstr ""
-"&copy; La <a href=\"http://www.shuttleworthfoundation.org\">Fundación "
-"Shuttleworth</a> 2003 - <span>2009</span>: Apoyando la Innovación Social."
+"&copy; <a href=\"http://www.shuttleworthfoundation.org\">Fundación "
+"Shuttleworth</a> 2003 - <span>2010</span>: Soportando inovación social."
 
 #: /src/schooltool/skin/templates/view_macros.pt:132
 msgid ""
@@ -6270,7 +6251,7 @@ msgstr "Sin horario."
 
 #: /src/schooltool/timetable/browser/__init__.py:513
 msgid "Show consecutive periods as one period in journal"
-msgstr ""
+msgstr "Mostrar períodos consecutivos como un solo período en el diario"
 
 #: /src/schooltool/timetable/browser/__init__.py:614
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:107
@@ -6279,34 +6260,28 @@ msgid "Save"
 msgstr "Guardar"
 
 #: /src/schooltool/timetable/browser/__init__.py:686
-#, fuzzy
 msgid "School timetable"
-msgstr "Horarios de clases"
+msgstr "Tabla de tiempo de la escuela"
 
 #: /src/schooltool/timetable/browser/__init__.py:691
-#, fuzzy
 msgid "Apply from"
-msgstr "Aplicar"
+msgstr "Forma para aplicar"
 
 #: /src/schooltool/timetable/browser/__init__.py:693
-#, fuzzy
 msgid "Apply until"
-msgstr "Aplicar y Siguiente"
+msgstr "Aplicar hasta"
 
 #: /src/schooltool/timetable/browser/__init__.py:794
-#, fuzzy
 msgid "Timetable conflicts with another:"
-msgstr "Nombre de la nota."
+msgstr "Tabla de tiempo tiene conflictos con otra:"
 
 #: /src/schooltool/timetable/browser/__init__.py:802
-#, fuzzy
 msgid "Timetable does not fit in term"
-msgstr "La fecha no pertenece a ningún período."
+msgstr "Tabla de tiempo no encaja en termino"
 
 #: /src/schooltool/timetable/browser/__init__.py:805
-#, fuzzy
 msgid "Timetable must begin before it ends."
-msgstr "El período debe iniciar antes que finalice."
+msgstr "Tabla de tiempo debe empezar antes de cuando termina."
 
 #: /src/schooltool/timetable/browser/__init__.py:910
 msgid "Invalid date. Please use YYYY-MM-DD format."
@@ -6512,26 +6487,23 @@ msgid "Manage..."
 msgstr "Administrar..."
 
 #: /src/schooltool/timetable/browser/templates/confirm-timetable-delete.pt:15
-#, fuzzy
 msgid "Are you sure you want to unschedule this timetable?"
-msgstr "¿Está seguro que quiere eliminar los horarios seleccionados?"
+msgstr "Estas seguro de que deseas desprogramar esta tabla de tiempo?"
 
 #: /src/schooltool/timetable/browser/templates/confirm-timetable-delete.pt:27
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:48
-#, fuzzy
 msgid "Timetable \"${title}\""
-msgstr "Horario para ${object}"
+msgstr "Tabla de tiempo \"${title}\""
 
 #: /src/schooltool/timetable/browser/templates/confirm-timetable-delete.pt:38
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:60
-#, fuzzy
 msgid "No periods selected."
-msgstr "Ninguna sección seleccionada."
+msgstr "No hay períodos seleccionados."
 
 #: /src/schooltool/timetable/browser/templates/confirm-timetable-delete.pt:67
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:89
 msgid "Scheduled from ${from} until ${until}"
-msgstr ""
+msgstr "Programado de ${from} hasta ${until}"
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:4
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:10
@@ -6603,9 +6575,8 @@ msgstr "Horario para ${section}"
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-add.pt:25
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:31
-#, fuzzy
 msgid "For term: ${term_title} (from ${starts} to ${ends})"
-msgstr "${term_title} (${start_date} &mdash; ${end_date})"
+msgstr "Para el termino: ${term_title} (from ${starts} to ${ends})"
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:17
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:19
@@ -6617,40 +6588,36 @@ msgid "Choose school timetable to use"
 msgstr "Elija el horario de escuela a usar"
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:17
-#, fuzzy
 msgid "Time table schedule of ${courses} ${section}."
-msgstr "Horario para ${object}"
+msgstr "Horario de tabla de tiempo de ${courses} ${section}."
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:25
-#, fuzzy
 msgid "school days"
-msgstr "Día escolar"
+msgstr "días de escuela"
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:27
-#, fuzzy
 msgid "available timetables"
-msgstr "Líderes disponibles"
+msgstr "tablas de tiempo disponibles"
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:31
-#, fuzzy
 msgid ""
 "For more information, see ${school_days} and ${available_timetables} in "
 "${term} of ${schoolyear}"
-msgstr "Sección de ${course} -- ${section_title} para ${term} de ${schoolyear}"
+msgstr ""
+"Para mas información, vea ${school_days} y ${available_timetables} en "
+"${term} del ${schoolyear}"
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:39
-#, fuzzy
 msgid "There are no timetables assigned."
-msgstr "No se han definido esquemas de horario."
+msgstr "No hay tablas de tiempo asignadas."
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:49
-#, fuzzy
 msgid "(edit periods)"
-msgstr "Añadir periodo"
+msgstr "(editar períodos)"
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:91
 msgid "Consecutive periods are treated as a single meeting."
-msgstr ""
+msgstr "Períodos consecutivos son tratados como una sola junta."
 
 #: /src/schooltool/timetable/browser/templates/simpletts.pt:11
 msgid ""
@@ -6751,19 +6718,16 @@ msgid "Are you sure you want to delete the selected timetables?"
 msgstr "¿Está seguro que quiere eliminar los horarios seleccionados?"
 
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:35
-#, fuzzy
 msgid "Using timetable: ${schema_titles}"
-msgstr "Usando horario:"
+msgstr "Usando tabla de tiempo: ${schema_titles}"
 
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:97
-#, fuzzy
 msgid "Apply from:"
-msgstr "Aplicar"
+msgstr "Aplicar de:"
 
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:111
-#, fuzzy
 msgid "Apply until:"
-msgstr "Aplicar y Siguiente"
+msgstr "Aplicar hasta:"
 
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:40
 msgid "Default Timetable Schema:"
@@ -6978,37 +6942,3 @@ msgstr "Cambiar horario"
 #: /src/schooltool/widget/password.py:55
 msgid "Supplied passwords are not identical"
 msgstr "Las contraseñas proporcionadas no son idénticas."
-
-#~ msgid "confirm password"
-#~ msgstr "Confirme la contraseña"
-
-#~ msgid "SMTP server hostname. Leave empty to disable email."
-#~ msgstr "Nombre de host SMTP. Deje en blanco para desactivar."
-
-#~ msgid ""
-#~ "<a href=\"#\" onclick=\"$('#more_overlays').toggle();return false;"
-#~ "\">More...</a>"
-#~ msgstr ""
-#~ "<a href=\"#\" onclick=\"$('#more_overlays').toggle();return false;"
-#~ "\">Más...</a>"
-
-#~ msgid ""
-#~ "\n"
-#~ "This is not a SchoolTool 0.11 database file, aborting.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Este no es un archivo de base de datos de SchoolTool 0.11, abortando.\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "This is not a SchoolTool 0.10 database file, aborting.\n"
-#~ "\n"
-#~ "Please run the standalone database upgrade script.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Este no es una base de datos de SchoolBell 1.0, abortando.\n"
-#~ "\n"
-#~ "Por favor ejecute el script de actualización de la base de datos.\n"
-
-#~ msgid "For term:"
-#~ msgstr "Para el período:"

@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-08-22 18:49+0300\n"
-"PO-Revision-Date: 2010-06-15 12:26+0000\n"
-"Last-Translator: Konki <pavel.konkol@seznam.cz>\n"
+"PO-Revision-Date: 2010-08-25 15:50+0000\n"
+"Last-Translator: Michal Chlup <Unknown>\n"
 "Language-Team: Czech <debian-l10n-czech@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-06-16 03:39+0000\n"
+"X-Launchpad-Export-Date: 2010-08-26 03:49+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -1149,9 +1149,8 @@ msgid "There are no resources with calendars accessible to you."
 msgstr "Nejsou vám dostupné žádné prostředky s kalendáři."
 
 #: /src/schooltool/app/browser/templates/default_report_template.pt:23
-#, fuzzy
 msgid "Created with SchoolTool"
-msgstr "Správa kalendářů ve SchoolTool"
+msgstr "Vytvořeno se SchoolTool"
 
 #: /src/schooltool/app/browser/templates/default_report_template.pt:37
 msgid "Page ${page_number}"
@@ -2259,7 +2258,7 @@ msgstr "Přecházím na pozadí, daemon pid %d"
 
 #: /src/schooltool/app/main.py:382
 msgid "Cannot resolve plugin action order:\n"
-msgstr ""
+msgstr "Nelze vyřešit pořadí fungování pluginů:\n"
 
 #: /src/schooltool/app/main.py:536 /src/schooltool/app/main.py:580
 #: /src/schooltool/app/main.py:583
@@ -2352,7 +2351,7 @@ msgstr "Kdokoliv může vidět kalendář aplikace."
 
 #: /src/schooltool/app/security.zcml:77
 msgid "SchoolTool application"
-msgstr ""
+msgstr "Aplikace SchoolTool"
 
 #: /src/schooltool/app/security.zcml:80
 msgid "Access"
@@ -2360,7 +2359,7 @@ msgstr "Databáze"
 
 #: /src/schooltool/app/security.zcml:87
 msgid "Manage school settings and configuration"
-msgstr ""
+msgstr "Spravovat nastavení a konfiguraci školy"
 
 #: /src/schooltool/app/security.zcml:95
 #: /src/schooltool/course/security.zcml:141
@@ -2374,7 +2373,7 @@ msgstr "Zobrazit kalendář"
 #: /src/schooltool/group/security.zcml:94
 #: /src/schooltool/person/security.zcml:136
 msgid "Change calendar"
-msgstr ""
+msgstr "Změnit kalendář"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:15
 #: /src/schooltool/basicperson/browser/configure.zcml:164
@@ -2403,7 +2402,7 @@ msgstr "Exportovat"
 #: /src/schooltool/basicperson/browser/configure.zcml:42
 #: /src/schooltool/basicperson/security.py:65
 msgid "Advisors"
-msgstr ""
+msgstr "Poradci"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:51
 msgid "Advisees"
@@ -2423,11 +2422,11 @@ msgstr "Demografie"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:143
 msgid "New Text Field"
-msgstr ""
+msgstr "Nové textové pole"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:150
 msgid "New Date Field"
-msgstr ""
+msgstr "Nové pole data"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:157
 msgid "New Selection List Field"
@@ -2450,11 +2449,11 @@ msgstr "uživatelské jméno nemůže být prázdné"
 
 #: /src/schooltool/basicperson/browser/csvimport.py:52
 msgid "first name may not be empty"
-msgstr ""
+msgstr "Pole Jméno nemůže býr prázdné"
 
 #: /src/schooltool/basicperson/browser/csvimport.py:56
 msgid "last name may not be empty"
-msgstr ""
+msgstr "Pole Příjmení nesmí být prázdné"
 
 #. Default: ""
 #: /src/schooltool/basicperson/browser/csvimport.py:68
@@ -2472,11 +2471,11 @@ msgstr "Jména nemohou začínat znaky '+' nebo '@' nebo obsahovat '/'"
 #: /src/schooltool/basicperson/browser/csvimport.py:85
 #: /src/schooltool/basicperson/browser/person.py:114
 msgid "Usernames cannot contain non-ascii characters"
-msgstr ""
+msgstr "Příjmení nesmí obsahovat jiné než ASCI znaky"
 
 #: /src/schooltool/basicperson/browser/demographics.py:133
 msgid "Add new Field"
-msgstr ""
+msgstr "Přidat nové pole"
 
 #. Default: ""
 #: /src/schooltool/basicperson/browser/demographics.py:212
@@ -2517,11 +2516,11 @@ msgstr "Změnit informace pro ${fullname}"
 
 #: /src/schooltool/basicperson/browser/person.py:304
 msgid "Current Advisors"
-msgstr ""
+msgstr "Současní poradci"
 
 #: /src/schooltool/basicperson/browser/person.py:305
 msgid "Add Advisors"
-msgstr ""
+msgstr "Přidat poradce"
 
 #. Default: ""
 #: /src/schooltool/basicperson/browser/person.py:309
@@ -2571,6 +2570,10 @@ msgid ""
 "jbjones, Jim Bob, Jones, r2m45J\n"
 "howard, Howard, Jobs\n"
 msgstr ""
+"\n"
+"jjones, Jimmy, Jones\n"
+"jbjones, Jim Bob, Jones, r2m45j\n"
+"howard, Howard, Jobs\n"
 
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:40
 #: /src/schooltool/person/browser/person-csvimport.pt:40
@@ -2673,7 +2676,7 @@ msgstr ""
 
 #: /src/schooltool/basicperson/interfaces.py:137
 msgid "List of values"
-msgstr ""
+msgstr "Seznam hodnot"
 
 #: /src/schooltool/basicperson/person.py:76
 #: /src/schooltool/contact/browser/contact.py:299
@@ -2687,15 +2690,15 @@ msgstr "Příjmení"
 
 #: /src/schooltool/basicperson/security.py:66
 msgid "Advisors of a person."
-msgstr ""
+msgstr "Poradce osoby."
 
 #: /src/schooltool/basicperson/security.zcml:26
 msgid "Create, delete demographics fields and change their order."
-msgstr ""
+msgstr "Vytvářejte, mažte a měnte pořadí demografických polí"
 
 #: /src/schooltool/basicperson/security.zcml:35
 msgid "Edit fields"
-msgstr ""
+msgstr "Upravit pole"
 
 #: /src/schooltool/basicperson/security.zcml:43
 msgid "View user demographics"
@@ -2777,7 +2780,7 @@ msgstr ""
 #. Default: ""
 #: /src/schooltool/contact/browser/contact.py:222
 msgid "Change contact information for ${first_name} ${last_name}"
-msgstr ""
+msgstr "Změnit kontaktní informace pro ${first_name} ${last_name}"
 
 #: /src/schooltool/contact/browser/contact.py:247
 msgid "Contact index"
@@ -2828,7 +2831,7 @@ msgstr ""
 #: /src/schooltool/contact/browser/contact.py:409
 #: /src/schooltool/email/browser/email.py:507
 msgid "There were some errors."
-msgstr ""
+msgstr "Vyskytly se problémy."
 
 #: /src/schooltool/contact/browser/relationship.py:75
 #: /src/schooltool/contact/interfaces.py:101
@@ -2837,11 +2840,11 @@ msgstr ""
 
 #: /src/schooltool/contact/browser/relationship.py:86
 msgid "Assigned Contacts"
-msgstr ""
+msgstr "Přiřadit kontakt"
 
 #: /src/schooltool/contact/browser/relationship.py:87
 msgid "Assign existing contact"
-msgstr ""
+msgstr "Přiřadit existující kontakt"
 
 #. Default: ""
 #: /src/schooltool/contact/browser/relationship.py:91
@@ -2911,11 +2914,11 @@ msgstr "Vyčistit"
 
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:43
 msgid "Create contact"
-msgstr ""
+msgstr "Vytvořit kontakt"
 
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:45
 msgid "Create new contact"
-msgstr ""
+msgstr "Vytvořit nový kontakt"
 
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:58
 msgid "Assign"
@@ -2926,10 +2929,12 @@ msgid ""
 "You don't have an email address set. Ask your administrator to set your "
 "email address in your contact information."
 msgstr ""
+"Nemáte nastavenou emailovou adresu. Požádejte vašeho administrátora o "
+"nastavení emailové adresy ve vašich kontaktních informacích."
 
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:8
 msgid "Contact information for ${person}"
-msgstr ""
+msgstr "Kontaktní informace od ${person}"
 
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:36
 #: /src/schooltool/contact/interfaces.py:68
@@ -2946,7 +2951,7 @@ msgstr ""
 
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:73
 msgid "(View Details)"
-msgstr ""
+msgstr "(Zobrazit detaily)"
 
 #: /src/schooltool/contact/contact.py:73
 msgid ""
@@ -2978,11 +2983,11 @@ msgstr ""
 
 #: /src/schooltool/contact/interfaces.py:53
 msgid "Address line 1"
-msgstr ""
+msgstr "Adresní řádek 1"
 
 #: /src/schooltool/contact/interfaces.py:55
 msgid "Address line 2"
-msgstr ""
+msgstr "Adresní řádek 2"
 
 #: /src/schooltool/contact/interfaces.py:57
 #: /src/schooltool/demographics/interfaces.py:258
@@ -3059,7 +3064,7 @@ msgstr ""
 
 #: /src/schooltool/contact/security.zcml:36
 msgid "Manage user's contacts"
-msgstr ""
+msgstr "Spravovat uživatelovy kontakty"
 
 #: /src/schooltool/contact/security.zcml:46
 msgid "Create/Delete an external contact"
@@ -3075,11 +3080,11 @@ msgstr ""
 
 #: /src/schooltool/contact/security.zcml:70
 msgid "View user's contact information"
-msgstr ""
+msgstr "Zobrazit uživatelovy kontaktní informace"
 
 #: /src/schooltool/contact/security.zcml:78
 msgid "Modify user's contact information"
-msgstr ""
+msgstr "Upravit uživatelovy kontaktní informace"
 
 #: /src/schooltool/contact/security.zcml:86
 #: /src/schooltool/person/security.zcml:152
@@ -3111,20 +3116,20 @@ msgstr "Nový kurz"
 
 #: /src/schooltool/course/browser/configure.zcml:113
 msgid "Copy Sections"
-msgstr ""
+msgstr "Zkopírovat sekci"
 
 #: /src/schooltool/course/browser/configure.zcml:123
 msgid "View Next"
-msgstr ""
+msgstr "Zobrazit následující"
 
 #: /src/schooltool/course/browser/configure.zcml:133
 msgid "View Previous"
-msgstr ""
+msgstr "Zobrazit předchozí"
 
 #: /src/schooltool/course/browser/configure.zcml:160
 #: /src/schooltool/course/browser/configure.zcml:170
 msgid "New Section"
-msgstr ""
+msgstr "Nová sekce"
 
 #: /src/schooltool/course/browser/configure.zcml:180
 msgid "Edit Section Information"
@@ -3173,7 +3178,7 @@ msgstr ""
 #: /src/schooltool/course/browser/csvimport.py:130
 #: /src/schooltool/group/browser/csvimport.py:76
 msgid "User names must not be empty."
-msgstr ""
+msgstr "Uživatelská jména nesmí být prázdná"
 
 #. Default: ""
 #: /src/schooltool/course/browser/csvimport.py:138
@@ -3187,15 +3192,15 @@ msgstr ""
 
 #: /src/schooltool/course/browser/section.py:188
 msgid "No section selected."
-msgstr ""
+msgstr "Není vybrána žádná sekce"
 
 #: /src/schooltool/course/browser/section.py:376
 msgid "Starts in term"
-msgstr ""
+msgstr "Začíná v termíně"
 
 #: /src/schooltool/course/browser/section.py:377
 msgid "Ends in term"
-msgstr ""
+msgstr "Končí v termíně"
 
 #. Default: ""
 #: /src/schooltool/course/browser/section.py:414
@@ -4333,9 +4338,8 @@ msgid "${sheet_name} ${column}${row} ${message}"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:69
-#, fuzzy
 msgid "is not a valid integer"
-msgstr "Neplatná celočíselná data"
+msgstr ""
 
 #: /src/schooltool/export/importer.py:70
 msgid "not unicode or ascii string"
@@ -4350,9 +4354,8 @@ msgid "has no date in it"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:73
-#, fuzzy
 msgid "end date cannot be before start date"
-msgstr "Koncové datum je dřívější než počáteční"
+msgstr ""
 
 #: /src/schooltool/export/importer.py:74
 msgid "start date overlaps another year"
@@ -4371,9 +4374,8 @@ msgid "start date before start of school year"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:78
-#, fuzzy
 msgid "end date after end of school year"
-msgstr "Zadané datum není školním dnem."
+msgstr ""
 
 #: /src/schooltool/export/importer.py:79
 msgid "start date overlaps another term"
@@ -4396,9 +4398,8 @@ msgid "is not a valid time range"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:84
-#, fuzzy
 msgid "is not a valid timetable model"
-msgstr "Neplatný čas: $slot."
+msgstr ""
 
 #: /src/schooltool/export/importer.py:85
 msgid "is the same day id as another in this timetable"
@@ -4453,8 +4454,9 @@ msgid "is not a valid resource id"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:98
+#, fuzzy
 msgid "Username cannot contain non-ascii characters: ${string}"
-msgstr ""
+msgstr "Příjmení nesmí obsahovat jiné než ASCI znaky"
 
 #: /src/schooltool/export/importer.py:100
 msgid "is not a valid weekday number (0-6)"
@@ -4687,9 +4689,8 @@ msgid "Help"
 msgstr "Nápověda"
 
 #: /src/schooltool/level/browser.py:47
-#, fuzzy
 msgid "Add a level"
-msgstr "Přidat událost"
+msgstr ""
 
 #: /src/schooltool/level/interfaces.py:37
 #, fuzzy
@@ -4701,14 +4702,12 @@ msgid "The teaching levels (student learning years)."
 msgstr ""
 
 #: /src/schooltool/level/security.zcml:12
-#, fuzzy
 msgid "Add/Remove"
-msgstr "Odstranit"
+msgstr ""
 
 #: /src/schooltool/level/security.zcml:19
-#, fuzzy
 msgid "Modify/Rename"
-msgstr "Upravit"
+msgstr ""
 
 #: /src/schooltool/level/templates/levels.pt:3
 #: /src/schooltool/level/templates/levels.pt:6
@@ -5362,19 +5361,16 @@ msgid "Copy data from active school year: ${active_schoolyear}"
 msgstr ""
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_add.pt:40
-#, fuzzy
 msgid "All Courses"
-msgstr "Kurzy"
+msgstr ""
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_add.pt:50
-#, fuzzy
 msgid "All Timetable Schemas"
-msgstr "Standardní schema rozvrhu"
+msgstr ""
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_add.pt:62
-#, fuzzy
 msgid "Copy members"
-msgstr "upravit členy"
+msgstr ""
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:39
 msgid "Activate next school year"
@@ -5862,29 +5858,24 @@ msgid "Save"
 msgstr "Uložit"
 
 #: /src/schooltool/timetable/browser/__init__.py:686
-#, fuzzy
 msgid "School timetable"
-msgstr "Školní rozvrhy"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/__init__.py:691
-#, fuzzy
 msgid "Apply from"
-msgstr "Použít"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/__init__.py:693
-#, fuzzy
 msgid "Apply until"
-msgstr "Potvrdit a přejít na další"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/__init__.py:794
-#, fuzzy
 msgid "Timetable conflicts with another:"
-msgstr "Název poznámky."
+msgstr ""
 
 #: /src/schooltool/timetable/browser/__init__.py:802
-#, fuzzy
 msgid "Timetable does not fit in term"
-msgstr "Toto datum nepatří žádnému pravidlu."
+msgstr ""
 
 #: /src/schooltool/timetable/browser/__init__.py:805
 msgid "Timetable must begin before it ends."
@@ -6093,21 +6084,18 @@ msgid "Manage..."
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/confirm-timetable-delete.pt:15
-#, fuzzy
 msgid "Are you sure you want to unschedule this timetable?"
-msgstr "Opravdu chcete smazat tuto událost?"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/confirm-timetable-delete.pt:27
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:48
-#, fuzzy
 msgid "Timetable \"${title}\""
-msgstr "Rozvrh pro ${object}"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/confirm-timetable-delete.pt:38
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:60
-#, fuzzy
 msgid "No periods selected."
-msgstr "Nevybráno"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/confirm-timetable-delete.pt:67
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:89
@@ -6197,19 +6185,16 @@ msgid "Choose school timetable to use"
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:17
-#, fuzzy
 msgid "Time table schedule of ${courses} ${section}."
-msgstr "Rozvrh pro ${object}"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:25
-#, fuzzy
 msgid "school days"
-msgstr "Školní den"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:27
-#, fuzzy
 msgid "available timetables"
-msgstr "Dostupní vedoucí"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:31
 msgid ""
@@ -6218,14 +6203,12 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:39
-#, fuzzy
 msgid "There are no timetables assigned."
-msgstr "Nejsou zde definována žádná pravidla nebo rozvrhy."
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:49
-#, fuzzy
 msgid "(edit periods)"
-msgstr "Přidat období"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:91
 msgid "Consecutive periods are treated as a single meeting."
@@ -6324,19 +6307,16 @@ msgid "Are you sure you want to delete the selected timetables?"
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:35
-#, fuzzy
 msgid "Using timetable: ${schema_titles}"
-msgstr "Používám rozvrh:"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:97
-#, fuzzy
 msgid "Apply from:"
-msgstr "Použít"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:111
-#, fuzzy
 msgid "Apply until:"
-msgstr "Potvrdit a přejít na další"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:40
 msgid "Default Timetable Schema:"
@@ -6540,39 +6520,3 @@ msgstr ""
 #: /src/schooltool/widget/password.py:55
 msgid "Supplied passwords are not identical"
 msgstr "Poskytnutá hesla nejsou identická"
-
-#~ msgid "confirm password"
-#~ msgstr "potvrdit heslo"
-
-#~ msgid ""
-#~ "\n"
-#~ "This is not a SchoolTool 0.11 database file, aborting.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Toto není databázový soubor SchoolTool 0.11, přerušuji.\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "This is not a SchoolTool 0.10 database file, aborting.\n"
-#~ "\n"
-#~ "Please run the standalone database upgrade script.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Toto není databázový soubor SchoolToolu verze 0.10, přerušuji.\n"
-#~ "\n"
-#~ "Spusťte samostatný skript pro převod databáze.\n"
-
-#~ msgid "Calendar for %s"
-#~ msgstr "Kalendář uživatele %s"
-
-#~ msgid "Booked resources: %s"
-#~ msgstr "Rezervované zdroje: %s"
-
-#~ msgid "Location: %s"
-#~ msgstr "Umístění: %s"
-
-#~ msgid "Identifier (optional)"
-#~ msgstr "Identifikátor (volitelný)"
-
-#~ msgid "Add a Section"
-#~ msgstr "Přidat sekci"

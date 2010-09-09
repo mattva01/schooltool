@@ -10,13 +10,13 @@ msgstr ""
 "Project-Id-Version: el-1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-08-22 18:49+0300\n"
-"PO-Revision-Date: 2010-05-21 15:32+0000\n"
+"PO-Revision-Date: 2010-08-22 20:04+0000\n"
 "Last-Translator: Yannis Kaskamanidis <ttnfy17@yahoo.gr>\n"
 "Language-Team: Greek <team@gnome.gr>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-06-16 03:40+0000\n"
+"X-Launchpad-Export-Date: 2010-08-23 03:48+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: /src/schooltool/app/app.py:197
@@ -229,16 +229,16 @@ msgstr ""
 
 #: /src/schooltool/app/browser/cal.py:928
 msgid "Go to current week"
-msgstr ""
+msgstr "Πήγαινε στην τρέχουσα εβδομάδα"
 
 #: /src/schooltool/app/browser/cal.py:929
 msgid "Go to previous week"
-msgstr ""
+msgstr "Πήγαινε στην προηγούμενη εβδομάδα"
 
 #. Default: ""
 #: /src/schooltool/app/browser/cal.py:950
 msgid "${month}, ${year} (week ${week})"
-msgstr "${μήνας}, ${έτος} (εβδομάδα ${εβδομάδα})"
+msgstr "${month}, ${year} (Εβδομάδα ${week})"
 
 #: /src/schooltool/app/browser/cal.py:1164
 msgid "Next month"
@@ -258,21 +258,21 @@ msgstr "Πήγαινε στον επόμενο μήνα"
 
 #: /src/schooltool/app/browser/cal.py:1169
 msgid "Go to current month"
-msgstr ""
+msgstr "Πήγαινε στον τρέχων μήνα"
 
 #: /src/schooltool/app/browser/cal.py:1170
 msgid "Go to previous month"
-msgstr ""
+msgstr "Πήγαινε στον προηγούμενο μήνα"
 
 #. Default: ""
 #: /src/schooltool/app/browser/cal.py:1178
 msgid "${month}, ${year}"
-msgstr "${μήνας}, ${έτος}"
+msgstr "${month}, ${year}"
 
 #. Default: ""
 #: /src/schooltool/app/browser/cal.py:1200
 msgid "Week ${week_no}"
-msgstr "Εβδομάδα ${week_no}"
+msgstr "Week ${week_no}"
 
 #: /src/schooltool/app/browser/cal.py:1216
 msgid "Next year"
@@ -292,11 +292,11 @@ msgstr ""
 
 #: /src/schooltool/app/browser/cal.py:1221
 msgid "Go to current year"
-msgstr ""
+msgstr "Πήγαινε στον τρέχων χρόνο"
 
 #: /src/schooltool/app/browser/cal.py:1222
 msgid "Go to previous year"
-msgstr ""
+msgstr "Πήγαινε στον προηγούμενο χρόνο"
 
 #: /src/schooltool/app/browser/cal.py:1288
 msgid "The next day"
@@ -312,20 +312,20 @@ msgstr "Η πρωηγούμενη ημέρα"
 
 #: /src/schooltool/app/browser/cal.py:1292
 msgid "Go to the next day"
-msgstr ""
+msgstr "Πήγαινε στην επόμενη ημέρα"
 
 #: /src/schooltool/app/browser/cal.py:1293
 msgid "Go to today"
-msgstr ""
+msgstr "Πήγαινε στο σήμερα"
 
 #: /src/schooltool/app/browser/cal.py:1294
 msgid "Go to the previous day"
-msgstr ""
+msgstr "Πήγαινε στην προηγούμενη μέρα"
 
 #. Default: ""
 #: /src/schooltool/app/browser/cal.py:1446
 msgid "Add new event starting at ${title}"
-msgstr ""
+msgstr "Προσθήκη νέου συμβάντος που αρχίζει στις ${title}"
 
 #: /src/schooltool/app/browser/cal.py:1735
 #: /src/schooltool/app/interfaces.py:146 /src/schooltool/app/interfaces.py:157
@@ -359,7 +359,7 @@ msgstr "Τίτλος"
 #: /src/schooltool/app/browser/templates/cal_weekly_timetable.pt:97
 #: /src/schooltool/app/browser/templates/cal_weekly_timetable.pt:127
 msgid "All day"
-msgstr "Όλη μέρα"
+msgstr "Ολοήμερο"
 
 #: /src/schooltool/app/browser/cal.py:1741
 #: /src/schooltool/term/browser/templates/emergency_select.pt:28
@@ -538,6 +538,8 @@ msgstr "Η τελική ημερομηνία είναι προγενέστερη
 #: /src/schooltool/app/browser/cal.py:2028
 msgid "Invalid date.  Please specify YYYY-MM-DD, one per line."
 msgstr ""
+"Μη έγκυρη ημερομηνία. Παρακαλώ, καθορίστε τη μορφή YYYY-MM-DD, μια σε κάθε "
+"γραμμή."
 
 #: /src/schooltool/app/browser/cal.py:2076
 msgid "Add event"
@@ -618,7 +620,7 @@ msgstr "Ενέργειες"
 #: /src/schooltool/timetable/browser/configure.zcml:111
 #: /src/schooltool/timetable/security.zcml:32
 msgid "View"
-msgstr ""
+msgstr "Προβολή"
 
 #: /src/schooltool/app/browser/configure.zcml:310
 msgid "View Calendar"
@@ -675,7 +677,7 @@ msgstr "Ημερολόγιο (Ετήσιο)"
 
 #: /src/schooltool/app/browser/configure.zcml:466
 msgid "Atom View"
-msgstr ""
+msgstr "Εμφάνιση Ατόμου"
 
 #: /src/schooltool/app/browser/configure.zcml:476
 msgid "iCalendar"
@@ -719,7 +721,7 @@ msgstr "Μετάφραση τομέων"
 
 #: /src/schooltool/app/browser/configure.zcml:645
 msgid "Generations"
-msgstr ""
+msgstr "Γενεές"
 
 #: /src/schooltool/app/browser/configure.zcml:666
 msgid "Browser UI"
@@ -751,11 +753,11 @@ msgstr "Πρότυπα"
 
 #: /src/schooltool/app/browser/configure.zcml:781
 msgid "Configure"
-msgstr ""
+msgstr "Παραμετροποίηση"
 
 #: /src/schooltool/app/browser/configure.zcml:788
 msgid "Error List"
-msgstr ""
+msgstr "Λίστα σφαλμάτων"
 
 #: /src/schooltool/app/browser/csvimport.py:107
 #: /src/schooltool/app/browser/csvimport.py:289
@@ -834,36 +836,38 @@ msgstr "Δεν υπάρχουν μαθητές στο τμήμα (line ${line})"
 #: /src/schooltool/app/browser/csvimport.py:466
 msgid "The first row of the CSV file must contain the timetable schema id."
 msgstr ""
+"Η πρώτη σειρά από το αρχείο CSV πρέπει να περιέχει το σχήμα του "
+"χρονοδιαγράμματος id."
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:477
 msgid "The timetable schema ${schema} does not exist."
-msgstr ""
+msgstr "Το σχήμα του χρονοδιαγράμματος ${schema} δεν υπάρχει."
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:508
 msgid "Error in timetable CSV data, line ${line_no}"
-msgstr ""
+msgstr "Σφάλμα δεδομένων χρονοδιαγράμματος CSV, γραμμή ${line_no}"
 
 #: /src/schooltool/app/browser/csvimport.py:548
 msgid "Day ids not defined in selected schema: ${args}."
-msgstr ""
+msgstr "Αδιευκρίνηστη ταυτότητα ημερών στο επιλεγμένο σχήμα: ${args}."
 
 #: /src/schooltool/app/browser/csvimport.py:549
 msgid "Periods not defined in selected days: ${args}."
-msgstr ""
+msgstr "Αδιευκρίνηστη περίοδος στς επιλεγμένες ημέρες: ${args}."
 
 #: /src/schooltool/app/browser/csvimport.py:550
 msgid "Persons not found: ${args}."
-msgstr ""
+msgstr "Τα άτομα δεν υπάρχουν: ${args}."
 
 #: /src/schooltool/app/browser/csvimport.py:551
 msgid "Courses not found: ${args}."
-msgstr "Δεν βρέθηκαν μαθήματα: ${args}."
+msgstr "Τα μαθήματα δεν υπάρχουν: ${args}."
 
 #: /src/schooltool/app/browser/csvimport.py:552
 msgid "Sections not found: ${args}."
-msgstr "Δεν βρέθηκαν ενότητες: ${args}."
+msgstr "Οι ενότητες δεν υπάρχουν: ${args}."
 
 #: /src/schooltool/app/browser/csvimport.py:553
 msgid "Invalid records: ${args}."
@@ -879,7 +883,7 @@ msgstr "Ημερήσιο Ημερολόγιο για %s"
 
 #: /src/schooltool/app/browser/pdfcal.py:95
 msgid "recurrent"
-msgstr ""
+msgstr "Επανερχόμενο"
 
 #. Default: ""
 #: /src/schooltool/app/browser/pdfcal.py:99
@@ -920,6 +924,12 @@ msgid ""
 "well as a framework for building customized applications and configurations "
 "for individual schools or states."
 msgstr ""
+"Το SchoolTool είναι ένα δωρεάν λογισμικό διαχειρισής σχολείων σε ολόκληρο "
+"τον κόσμο. Οι στόχοι του έργου αυτού είναι να δημιουργήσει μια απλή "
+"ετοιμοπαράδοτή βάση δεδομένων των μαθητων ή την διαχείριση συστήματος "
+"πληροφοριών για την πρωτοβάθμια και δευτεροβάθμια εκπαίδευση, καθώς επίσης "
+"και ένα πλαίσιο για τη δημιουργία εξατομικευμένων αιτήσεων και συνθέσεων για "
+"μεμονωμένα σχολεία ή πολιτείες."
 
 #: /src/schooltool/app/browser/templates/about.pt:16
 msgid ""
@@ -927,12 +937,17 @@ msgid ""
 "\"http://python.org\">Python</a> using the <a href=\"http://zope.org\">Zope "
 "3</a> framework."
 msgstr ""
+"SchoolTool είναι χτισμένο με 100% λογισμικό ανοικτού κώδικα και γραμμένο σε "
+"<a href=\"http://python.org\">Python</a> χρησιμοποιώντας το <a href=\"http://"
+"zope.org\">Zope 3</a> framework."
 
 #: /src/schooltool/app/browser/templates/about.pt:20
 msgid ""
 "SchoolTool is licensed under the <a href=\"http://www.gnu.org/licenses/gpl-"
 "2.0.html\">GNU General Public License, Version 2</a>."
 msgstr ""
+"SchoolTool είναι υπό την άδεια <a href=\"http://www.gnu.org/licenses/gpl-2.0."
+"html\">GNU General Public License, Version 2</a>."
 
 #: /src/schooltool/app/browser/templates/about.pt:24
 msgid "For more information:"
@@ -940,15 +955,15 @@ msgstr "Για περισσότερες πληροφορίες"
 
 #: /src/schooltool/app/browser/templates/about.pt:27
 msgid "Website"
-msgstr "Ιστότοπος"
+msgstr "Ιστοσελίδα"
 
 #: /src/schooltool/app/browser/templates/about.pt:28
 msgid "Launchpad project page"
-msgstr ""
+msgstr "Σελίδα έργου Launchpad"
 
 #: /src/schooltool/app/browser/templates/about.pt:29
 msgid "Mailing list"
-msgstr "Ταχυδρομικές λίστες"
+msgstr "Ταχυδρομική λiστα"
 
 #: /src/schooltool/app/browser/templates/about.pt:30
 msgid "IRC channel: #schooltool on freenode.net"
@@ -964,15 +979,15 @@ msgstr "Διαχειριστής έργου:"
 
 #: /src/schooltool/app/browser/templates/about.pt:41
 msgid "Lead Developer:"
-msgstr ""
+msgstr "Επικεφαλής προγραμματισμού:"
 
 #: /src/schooltool/app/browser/templates/about.pt:44
 msgid "Release Manager:"
-msgstr ""
+msgstr "Επικεφαλής έκδόσεων:"
 
 #: /src/schooltool/app/browser/templates/about.pt:47
 msgid "Contributors:"
-msgstr ""
+msgstr "Συντελεστές:"
 
 #: /src/schooltool/app/browser/templates/application_preferences.pt:4
 msgid "Edit site preferences"
@@ -1040,19 +1055,19 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/cal_atom.pt:56
 msgid "Validate my Atom feed"
-msgstr ""
+msgstr "Κατοχύρωση τροφοδοσίας αντικειμένου"
 
 #: /src/schooltool/app/browser/templates/cal_atom.pt:56
 msgid "[Valid Atom]"
-msgstr ""
+msgstr "[Έγκυρο αντικείμενο]"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:24
 msgid "Daily"
-msgstr ""
+msgstr "Ημερησίως"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:24
 msgid "View daily calendar"
-msgstr ""
+msgstr "Προβολή ημερήσιου ημερολόγιου"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:30
 msgid "View weekly calendar"
@@ -1073,7 +1088,7 @@ msgstr "Προβολή ετήσιου ημερολογίου"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:42
 msgid "Yearly"
-msgstr ""
+msgstr "Ετησίως"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:55
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:91
@@ -1082,7 +1097,7 @@ msgstr "Ημερολόγιο για ${title} - ${calendar_title}"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:115
 msgid "Jump To ..."
-msgstr ""
+msgstr "Μεταφορά σε ..."
 
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:4
 #: /src/schooltool/timetable/browser/templates/calendar_overlay.pt:4
@@ -1129,7 +1144,7 @@ msgstr "Δημόσιο Ημερολόγιο"
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:37
 msgid "site-wide calendar"
-msgstr ""
+msgstr "Πλαϊνό ημερολόγιο"
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:42
 #: /src/schooltool/app/browser/templates/index.pt:14
@@ -1144,13 +1159,12 @@ msgid "There are no resources with calendars accessible to you."
 msgstr "Δεν υπάρχουν πόροι με ημερολόγια διαθέσιμα σε σας."
 
 #: /src/schooltool/app/browser/templates/default_report_template.pt:23
-#, fuzzy
 msgid "Created with SchoolTool"
-msgstr "Χρονοδιάγραμμα στο SchoolTool"
+msgstr "Δημιουργήθηκε από το SchoolTool"
 
 #: /src/schooltool/app/browser/templates/default_report_template.pt:37
 msgid "Page ${page_number}"
-msgstr ""
+msgstr "Σελίδα ${page_number}"
 
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:26
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:27
@@ -1203,7 +1217,7 @@ msgstr "Δεν υπάρχουν."
 #: /src/schooltool/skin/templates/view_macros.pt:187
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:60
 msgid "A"
-msgstr ""
+msgstr "Α"
 
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:58
 #: /src/schooltool/app/browser/templates/event_booking.pt:63
@@ -4297,9 +4311,8 @@ msgid "has no date in it"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:73
-#, fuzzy
 msgid "end date cannot be before start date"
-msgstr "Η τελική ημερομηνία είναι προγενέστερη της αρχικής"
+msgstr ""
 
 #: /src/schooltool/export/importer.py:74
 msgid "start date overlaps another year"
@@ -4620,23 +4633,20 @@ msgid "Help"
 msgstr ""
 
 #: /src/schooltool/level/browser.py:47
-#, fuzzy
 msgid "Add a level"
-msgstr "Προσθήκη γεγονότος"
+msgstr ""
 
 #: /src/schooltool/level/interfaces.py:37
-#, fuzzy
 msgid "Title of the level."
-msgstr "Τίτλος σημείωσης"
+msgstr ""
 
 #: /src/schooltool/level/security.zcml:7
 msgid "The teaching levels (student learning years)."
 msgstr ""
 
 #: /src/schooltool/level/security.zcml:12
-#, fuzzy
 msgid "Add/Remove"
-msgstr "Αφαίρεση"
+msgstr ""
 
 #: /src/schooltool/level/security.zcml:19
 msgid "Modify/Rename"
@@ -5285,19 +5295,16 @@ msgid "Copy data from active school year: ${active_schoolyear}"
 msgstr ""
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_add.pt:40
-#, fuzzy
 msgid "All Courses"
-msgstr "Μαθήματα"
+msgstr ""
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_add.pt:50
-#, fuzzy
 msgid "All Timetable Schemas"
-msgstr "Ημερολόγιο"
+msgstr ""
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_add.pt:62
-#, fuzzy
 msgid "Copy members"
-msgstr "Νοέμβριος"
+msgstr ""
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:39
 msgid "Activate next school year"
@@ -5783,24 +5790,20 @@ msgid "Save"
 msgstr "Αποθήκευση"
 
 #: /src/schooltool/timetable/browser/__init__.py:686
-#, fuzzy
 msgid "School timetable"
-msgstr "Σχολικά ωρολόγια προγράμματα"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/__init__.py:691
-#, fuzzy
 msgid "Apply from"
-msgstr "Εφαρμογή"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/__init__.py:693
-#, fuzzy
 msgid "Apply until"
-msgstr "Εφαρμογή"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/__init__.py:794
-#, fuzzy
 msgid "Timetable conflicts with another:"
-msgstr "Τίτλος σημείωσης"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/__init__.py:802
 msgid "Timetable does not fit in term"
@@ -5997,15 +6000,13 @@ msgid "Manage..."
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/confirm-timetable-delete.pt:15
-#, fuzzy
 msgid "Are you sure you want to unschedule this timetable?"
-msgstr "Είστε σίγουρος ότι θέλετε να διαγράψετε αυτό το γεγονός;"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/confirm-timetable-delete.pt:27
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:48
-#, fuzzy
 msgid "Timetable \"${title}\""
-msgstr "Ημερολόγιο"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/confirm-timetable-delete.pt:38
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:60
@@ -6100,14 +6101,12 @@ msgid "Time table schedule of ${courses} ${section}."
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:25
-#, fuzzy
 msgid "school days"
-msgstr "σχολείο"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:27
-#, fuzzy
 msgid "available timetables"
-msgstr "Διαθέσιμοι διαχειριστές"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:31
 msgid ""
@@ -6116,14 +6115,12 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:39
-#, fuzzy
 msgid "There are no timetables assigned."
-msgstr "Δεν υπάρχει τίποτα προς εισαγωγή"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:49
-#, fuzzy
 msgid "(edit periods)"
-msgstr "επεξεργασία ομάδων"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:91
 msgid "Consecutive periods are treated as a single meeting."
@@ -6219,9 +6216,8 @@ msgid "Using timetable: ${schema_titles}"
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:97
-#, fuzzy
 msgid "Apply from:"
-msgstr "Εφαρμογή"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:111
 msgid "Apply until:"
@@ -6427,6 +6423,3 @@ msgstr ""
 #: /src/schooltool/widget/password.py:55
 msgid "Supplied passwords are not identical"
 msgstr "Οι παρεχόμενοι κωδικοί πρόσβασης δεν είναι όμοιοι"
-
-#~ msgid "confirm password"
-#~ msgstr "επιβεβαίωση κωδικού πρόσβασης"

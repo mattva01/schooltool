@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-08-22 18:49+0300\n"
-"PO-Revision-Date: 2010-06-15 13:53+0000\n"
+"PO-Revision-Date: 2010-08-22 20:33+0000\n"
 "Last-Translator: missthom <thom43th.dhtl@gmail.com>\n"
 "Language-Team: Vietnamese <vi@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-06-16 03:44+0000\n"
+"X-Launchpad-Export-Date: 2010-08-23 03:50+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: /src/schooltool/app/app.py:197
@@ -1151,9 +1151,8 @@ msgid "There are no resources with calendars accessible to you."
 msgstr "Không có tài nguyên nào trong phần lịch để bạn truy cập."
 
 #: /src/schooltool/app/browser/templates/default_report_template.pt:23
-#, fuzzy
 msgid "Created with SchoolTool"
-msgstr "Lịch trong Schooltool"
+msgstr "Tạo với SchoolTool"
 
 #: /src/schooltool/app/browser/templates/default_report_template.pt:37
 msgid "Page ${page_number}"
@@ -4346,7 +4345,7 @@ msgstr "Bật"
 #: /src/schooltool/email/browser/email.py:100
 #: /src/schooltool/email/interfaces.py:88
 msgid "Mark to enable the service."
-msgstr ""
+msgstr "Đánh dấu để bật dịch vụ"
 
 #: /src/schooltool/email/browser/email.py:105
 #: /src/schooltool/email/interfaces.py:92
@@ -4599,132 +4598,124 @@ msgid "${sheet_name} ${column}${row} ${message}"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:69
-#, fuzzy
 msgid "is not a valid integer"
-msgstr "Dữ liệu nguyên không hợp lệ"
+msgstr "không là số nguyên hợp lệ"
 
 #: /src/schooltool/export/importer.py:70
 msgid "not unicode or ascii string"
-msgstr ""
+msgstr "không phải xâu unicode hay ascii"
 
 #: /src/schooltool/export/importer.py:71
 msgid "missing required text"
-msgstr ""
+msgstr "thiếu thông tin yêu cầu"
 
 #: /src/schooltool/export/importer.py:72
 msgid "has no date in it"
-msgstr ""
+msgstr "không có ngày"
 
 #: /src/schooltool/export/importer.py:73
-#, fuzzy
 msgid "end date cannot be before start date"
-msgstr "Ngày kết thúc phải sau ngày bắt đầu"
+msgstr "ngày kết thúc phải sau ngày bắt đầu"
 
 #: /src/schooltool/export/importer.py:74
 msgid "start date overlaps another year"
-msgstr ""
+msgstr "ngày bắt đầu trùng với năm khác"
 
 #: /src/schooltool/export/importer.py:75
 msgid "end date overlaps another year"
-msgstr ""
+msgstr "ngày kết thúc trùng với năm khác"
 
 #: /src/schooltool/export/importer.py:76
-#, fuzzy
 msgid "invalid school year"
-msgstr "Thêm một năm học mới"
+msgstr "năm học không hợp lệ"
 
 #: /src/schooltool/export/importer.py:77
-#, fuzzy
 msgid "start date before start of school year"
-msgstr "Thiết lập thời gian cho trường học"
+msgstr "ngày bắt đầu sớm hơn ngày khai giảng"
 
 #: /src/schooltool/export/importer.py:78
-#, fuzzy
 msgid "end date after end of school year"
-msgstr "Ngày học kỳ không có trong năm học"
+msgstr "ngày kết thúc sau ngày bế giảng"
 
 #: /src/schooltool/export/importer.py:79
 msgid "start date overlaps another term"
-msgstr ""
+msgstr "ngày bắt đầu trùng với kỳ khác"
 
 #: /src/schooltool/export/importer.py:80
 msgid "end date overlaps another term"
-msgstr ""
+msgstr "ngày kết thúc trùng với kỳ khác"
 
 #: /src/schooltool/export/importer.py:81
+#, fuzzy
 msgid "${title} has no days in A${row}"
-msgstr ""
+msgstr "không có ngày"
 
 #: /src/schooltool/export/importer.py:82
+#, fuzzy
 msgid "${title} has no day templates in A${row}"
-msgstr ""
+msgstr "không có ngày"
 
 #: /src/schooltool/export/importer.py:83
-#, fuzzy
 msgid "is not a valid time range"
-msgstr "'\"${username}\" không phải là một tên hợp lệ"
+msgstr "không là khoảng thời gian hợp lệ"
 
 #: /src/schooltool/export/importer.py:84
-#, fuzzy
 msgid "is not a valid timetable model"
-msgstr "Một $slot. không hợp lệ"
+msgstr "không là bảng thời khóa biểu hợp lệ"
 
 #: /src/schooltool/export/importer.py:85
 msgid "is the same day id as another in this timetable"
-msgstr ""
+msgstr "trùng mã ngày trong thời khóa biểu"
 
 #: /src/schooltool/export/importer.py:86
 msgid "is not defined in the 'Day Templates' section"
-msgstr ""
+msgstr "không được định nghĩa trong phần"
 
 #: /src/schooltool/export/importer.py:87
+#, fuzzy
 msgid "is the same period id as another in this day"
-msgstr ""
+msgstr "trùng mã ngày trong thời khóa biểu"
 
 #: /src/schooltool/export/importer.py:88
 #, fuzzy
 msgid "is the same homeroom period id as another in this day"
-msgstr "Xin vui lòng cho biết khoảng thời gian chủ động cho mỗi ngày"
+msgstr "trùng mã ngày trong thời khóa biểu"
 
 #: /src/schooltool/export/importer.py:89
 msgid "must be either 'Location' or 'Resource'"
-msgstr ""
+msgstr "phải là 'Địa điểm' hoặc 'Tài nguyên'"
 
 #: /src/schooltool/export/importer.py:90
-#, fuzzy
 msgid "is not a valid term in the given school year"
-msgstr "Ngày học kỳ không có trong năm học"
+msgstr "không là kỳ hợp lệ trong năm học"
 
 #: /src/schooltool/export/importer.py:91
-#, fuzzy
 msgid "is not a valid course in the given school year"
-msgstr "Không thể liên kết các lớp học trong các năm học khác nhau ở trường"
+msgstr "không là khóa học hợp lệ trong năm học"
 
 #: /src/schooltool/export/importer.py:92
 msgid "${title} has no courses in A${row}"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:93
-#, fuzzy
 msgid "is not a valid username"
-msgstr "'\"${username}\" không phải là một tên hợp lệ"
+msgstr "không là tên người sử dụng hợp lệ"
 
 #: /src/schooltool/export/importer.py:94
-#, fuzzy
 msgid "is not a valid schema in the given school year"
-msgstr "Ngày học kỳ không có trong năm học"
+msgstr "không là lược đồ hợp lệ trong năm học"
 
 #: /src/schooltool/export/importer.py:95
 msgid "is not a valid day id for the given schema"
-msgstr ""
+msgstr "không là ngày hợp lệ trong lược đồ"
 
 #: /src/schooltool/export/importer.py:96
 msgid "is not a valid period id for the given day"
-msgstr ""
+msgstr "không là mã chu kỳ hợp lệ của ngày"
 
 #: /src/schooltool/export/importer.py:97
 msgid "is not a valid resource id"
-msgstr ""
+msgstr "không đúng mã tài nguyên"
 
 #: /src/schooltool/export/importer.py:98
 #, fuzzy
@@ -4733,7 +4724,7 @@ msgstr "Tên không bao gồm các ký tự không có trong bảng mã ascci"
 
 #: /src/schooltool/export/importer.py:100
 msgid "is not a valid weekday number (0-6)"
-msgstr ""
+msgstr "không là thứ trong tuần hợp lệ"
 
 #: /src/schooltool/export/templates/import.pt:4
 msgid "Upload SchoolTool as XLS"
@@ -4993,41 +4984,37 @@ msgid "Help"
 msgstr "Trợ giúp"
 
 #: /src/schooltool/level/browser.py:47
-#, fuzzy
 msgid "Add a level"
-msgstr "Thêm sự kiện"
+msgstr "Thêm một mức"
 
 #: /src/schooltool/level/interfaces.py:37
-#, fuzzy
 msgid "Title of the level."
-msgstr "Tiêu đề và ghi chú"
+msgstr "Tiêu đề của mức"
 
 #: /src/schooltool/level/security.zcml:7
 msgid "The teaching levels (student learning years)."
-msgstr ""
+msgstr "Mức dạy (năm học của học sinh)"
 
 #: /src/schooltool/level/security.zcml:12
-#, fuzzy
 msgid "Add/Remove"
-msgstr "Gỡ bỏ"
+msgstr "Thêm/Gỡ bỏ"
 
 #: /src/schooltool/level/security.zcml:19
-#, fuzzy
 msgid "Modify/Rename"
-msgstr "Sửa đổi"
+msgstr "Sửa/Đổi tên"
 
 #: /src/schooltool/level/templates/levels.pt:3
 #: /src/schooltool/level/templates/levels.pt:6
 msgid "Teaching Levels"
-msgstr ""
+msgstr "Các mức độ dạy"
 
 #: /src/schooltool/level/templates/levels.pt:11
 msgid "Levels (student learning years) taught in ${schoolyear}"
-msgstr ""
+msgstr "Mức độ (năm học của học sinh) đã dạy trong năm ${schoolyear}"
 
 #: /src/schooltool/level/templates/link_to_levels.pt:1
 msgid "Teaching levels"
-msgstr ""
+msgstr "Các mức độ dạy"
 
 #: /src/schooltool/note/configure.zcml:68
 msgid "New Note"
@@ -5702,22 +5689,19 @@ msgstr "Thêm một kỳ học mới"
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_add.pt:35
 msgid "Copy data from active school year: ${active_schoolyear}"
-msgstr ""
+msgstr "Sao dữ liệu từ năm học đang hoạt động: ${active_schoolyear}"
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_add.pt:40
-#, fuzzy
 msgid "All Courses"
-msgstr "Khóa học"
+msgstr "Tất cả khóa học"
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_add.pt:50
-#, fuzzy
 msgid "All Timetable Schemas"
-msgstr "Sơ đồ thời khóa biểu mặc định"
+msgstr "Tất cả lược đồ thời khỏa biểu"
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_add.pt:62
-#, fuzzy
 msgid "Copy members"
-msgstr "Hiệu chỉnh thành viên"
+msgstr "Sao thành viên"
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:39
 msgid "Activate next school year"
@@ -5901,13 +5885,12 @@ msgid "Report a bug on Launchpad."
 msgstr "Báo cáo một lỗi trên Launchpad"
 
 #: /src/schooltool/skin/templates/view_macros.pt:127
-#, fuzzy
 msgid ""
 "&copy; The <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth "
 "Foundation</a> 2003 - <span>2010</span>: Supporting Social Innovation."
 msgstr ""
 "&copy; The <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth "
-"Foundation</a> 2003 - <span>2009</span>: Supporting Social Innovation."
+"Foundation</a> 2003 - <span>2010</span>: Supporting Social Innovation."
 
 #: /src/schooltool/skin/templates/view_macros.pt:132
 msgid ""
@@ -6225,7 +6208,7 @@ msgstr "Thời khóa biểu không giới hạn"
 
 #: /src/schooltool/timetable/browser/__init__.py:513
 msgid "Show consecutive periods as one period in journal"
-msgstr ""
+msgstr "Thể hiện các chu kỳ liên tục như một chu kỳ trong nhật ký"
 
 #: /src/schooltool/timetable/browser/__init__.py:614
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:107
@@ -6234,34 +6217,28 @@ msgid "Save"
 msgstr "Lưu"
 
 #: /src/schooltool/timetable/browser/__init__.py:686
-#, fuzzy
 msgid "School timetable"
-msgstr "Thời khoá biểu của trường"
+msgstr "Thời khóa biểu nhà trường"
 
 #: /src/schooltool/timetable/browser/__init__.py:691
-#, fuzzy
 msgid "Apply from"
-msgstr "Áp dụng"
+msgstr "Áp dụng từ"
 
 #: /src/schooltool/timetable/browser/__init__.py:693
-#, fuzzy
 msgid "Apply until"
-msgstr "Áp dụng và Chuyển tiếp"
+msgstr "Áp dụng đến"
 
 #: /src/schooltool/timetable/browser/__init__.py:794
-#, fuzzy
 msgid "Timetable conflicts with another:"
-msgstr "Tiêu đề và ghi chú"
+msgstr "Thời khóa biểu xung đột với thời khóa biểu khác"
 
 #: /src/schooltool/timetable/browser/__init__.py:802
-#, fuzzy
 msgid "Timetable does not fit in term"
-msgstr "Ngày không thuộc vào học kỳ nào"
+msgstr "Thời khóa biểu không khớp với học kỳ"
 
 #: /src/schooltool/timetable/browser/__init__.py:805
-#, fuzzy
 msgid "Timetable must begin before it ends."
-msgstr "Học kỳ phải bắt đầu trước khi kết thúc"
+msgstr "Thời khóa biểu phải bắt đầu trước khi kết thúc"
 
 #: /src/schooltool/timetable/browser/__init__.py:910
 msgid "Invalid date. Please use YYYY-MM-DD format."
@@ -6472,26 +6449,23 @@ msgid "Manage..."
 msgstr "Quản lý ..."
 
 #: /src/schooltool/timetable/browser/templates/confirm-timetable-delete.pt:15
-#, fuzzy
 msgid "Are you sure you want to unschedule this timetable?"
-msgstr "Bạn có chắc sẽ xóa các thời khóa biểu đã lựa chọn không?"
+msgstr "Bạn có chắc chắn muốn hủy thời khóa biểu này?"
 
 #: /src/schooltool/timetable/browser/templates/confirm-timetable-delete.pt:27
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:48
-#, fuzzy
 msgid "Timetable \"${title}\""
-msgstr "Thời khóa biểu cho ${object}"
+msgstr "Thời khóa biểu \"${title}\""
 
 #: /src/schooltool/timetable/browser/templates/confirm-timetable-delete.pt:38
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:60
-#, fuzzy
 msgid "No periods selected."
-msgstr "Không có lớp học nào được chọn"
+msgstr "Chưa chọn chu kỳ nào."
 
 #: /src/schooltool/timetable/browser/templates/confirm-timetable-delete.pt:67
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:89
 msgid "Scheduled from ${from} until ${until}"
-msgstr ""
+msgstr "Đã lập lịch từ  ${from} đến ${until}"
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:4
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:10
@@ -6565,9 +6539,8 @@ msgstr "Lịch biểu cho ${section}"
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-add.pt:25
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:31
-#, fuzzy
 msgid "For term: ${term_title} (from ${starts} to ${ends})"
-msgstr "${term_title} (${start_date} &mdash; ${end_date})"
+msgstr "Cho kỳ: ${term_title} (từ ${starts} đến ${ends})"
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:17
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:19
@@ -6579,42 +6552,36 @@ msgid "Choose school timetable to use"
 msgstr "Chọn thời khóa biểu để sử dụng"
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:17
-#, fuzzy
 msgid "Time table schedule of ${courses} ${section}."
-msgstr "Thời khóa biểu cho ${object}"
+msgstr "Thời khóa biểu của ${courses} ${section}."
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:25
-#, fuzzy
 msgid "school days"
-msgstr "Ngày học"
+msgstr "các ngày học"
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:27
-#, fuzzy
 msgid "available timetables"
-msgstr "Lãnh đạo sẵn sàng"
+msgstr "các thời khóa biểu có sẵn"
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:31
-#, fuzzy
 msgid ""
 "For more information, see ${school_days} and ${available_timetables} in "
 "${term} of ${schoolyear}"
 msgstr ""
-"Lớp học của khóa học ${course} -- ${section_title} Cho ${term} của năm học "
-"${schoolyear}"
+"Để biết thêm thông tin, xem ${school_days} và ${available_timetables} trong "
+"${term} của ${schoolyear}"
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:39
-#, fuzzy
 msgid "There are no timetables assigned."
-msgstr "Không có sơ đồ thời khóa biểu được định nghĩa"
+msgstr "Chưa có thời khóa biểu nào được gán."
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:49
-#, fuzzy
 msgid "(edit periods)"
-msgstr "Thêm khoảng"
+msgstr "(sửa chu kỳ)"
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:91
 msgid "Consecutive periods are treated as a single meeting."
-msgstr ""
+msgstr "Các chu kỳ liền nhau được gộp thành một cuộc họp."
 
 #: /src/schooltool/timetable/browser/templates/simpletts.pt:11
 msgid ""
@@ -6714,19 +6681,16 @@ msgid "Are you sure you want to delete the selected timetables?"
 msgstr "Bạn có chắc sẽ xóa các thời khóa biểu đã lựa chọn không?"
 
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:35
-#, fuzzy
 msgid "Using timetable: ${schema_titles}"
-msgstr "Sử dụng thời khóa biểu"
+msgstr "Sử dụng thời khóa biểu: ${schema_titles}"
 
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:97
-#, fuzzy
 msgid "Apply from:"
-msgstr "Áp dụng"
+msgstr "Áp dụng từ:"
 
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:111
-#, fuzzy
 msgid "Apply until:"
-msgstr "Áp dụng và Chuyển tiếp"
+msgstr "Áp dụng đến:"
 
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:40
 msgid "Default Timetable Schema:"
@@ -6942,37 +6906,3 @@ msgstr "Thay đổi kế hoạch"
 #: /src/schooltool/widget/password.py:55
 msgid "Supplied passwords are not identical"
 msgstr "Mật khẩu cung cấp không trùng"
-
-#~ msgid "confirm password"
-#~ msgstr "Xác nhận mật khẩu"
-
-#~ msgid ""
-#~ "<a href=\"#\" onclick=\"$('#more_overlays').toggle();return false;"
-#~ "\">More...</a>"
-#~ msgstr ""
-#~ "<a href=\"#\" onclick=\"$('#more_overlays').toggle();return false;\">Thêm "
-#~ "nữa...</a>"
-
-#~ msgid "SMTP server hostname. Leave empty to disable email."
-#~ msgstr "Tên máy chủ SMTP."
-
-#~ msgid ""
-#~ "\n"
-#~ "This is not a SchoolTool 0.10 database file, aborting.\n"
-#~ "\n"
-#~ "Please run the standalone database upgrade script.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Đây không phải là file cơ sở dữ liệu của Schooltool 0.11, Hủy bỏ <br>\t "
-#~ "\t\n"
-#~ "Vui lòng chạy tập lệnh độc lập để nâng cấp cơ sở dữ liệu.<br>\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "This is not a SchoolTool 0.11 database file, aborting.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Đây không phải là file cơ sở dữ liệu của Schooltool 0.11, Bỏ qua <br>\n"
-
-#~ msgid "For term:"
-#~ msgstr "Cho học kỳ:"

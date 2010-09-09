@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-08-22 18:49+0300\n"
-"PO-Revision-Date: 2010-06-24 23:17+0000\n"
+"PO-Revision-Date: 2010-08-22 20:33+0000\n"
 "Last-Translator: eraydin <aydin@eraydin.net>\n"
 "Language-Team: Turkish <tr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-06-26 03:50+0000\n"
+"X-Launchpad-Export-Date: 2010-08-23 03:50+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -1151,9 +1151,8 @@ msgid "There are no resources with calendars accessible to you."
 msgstr "Takvimi olan ve sizin erişebileceğiniz kaynak yok."
 
 #: /src/schooltool/app/browser/templates/default_report_template.pt:23
-#, fuzzy
 msgid "Created with SchoolTool"
-msgstr "SchoolTool'da takvim yaratma"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/default_report_template.pt:37
 msgid "Page ${page_number}"
@@ -3951,7 +3950,7 @@ msgstr "ebeveyn 1"
 #: /src/schooltool/demographics/browser/configure.zcml:191
 #: /src/schooltool/demographics/browser/configure.zcml:252
 msgid "parent2"
-msgstr ""
+msgstr "ebeveyn2"
 
 #: /src/schooltool/demographics/browser/configure.zcml:197
 #: /src/schooltool/demographics/browser/configure.zcml:258
@@ -4591,9 +4590,8 @@ msgid "${sheet_name} ${column}${row} ${message}"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:69
-#, fuzzy
 msgid "is not a valid integer"
-msgstr "Tam bilgi girişi ysnlış"
+msgstr "geçerli bir tamsayı değil"
 
 #: /src/schooltool/export/importer.py:70
 msgid "not unicode or ascii string"
@@ -4601,16 +4599,15 @@ msgstr ""
 
 #: /src/schooltool/export/importer.py:71
 msgid "missing required text"
-msgstr ""
+msgstr "gerekli metin eksik"
 
 #: /src/schooltool/export/importer.py:72
 msgid "has no date in it"
-msgstr ""
+msgstr "tarih bilgisi içermiyor"
 
 #: /src/schooltool/export/importer.py:73
-#, fuzzy
 msgid "end date cannot be before start date"
-msgstr "Bitiş tarihi başlangıç tarihinden önce"
+msgstr "bitiş tarihi başlangıç tarihinden önce olamaz"
 
 #: /src/schooltool/export/importer.py:74
 msgid "start date overlaps another year"
@@ -4621,19 +4618,16 @@ msgid "end date overlaps another year"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:76
-#, fuzzy
 msgid "invalid school year"
-msgstr "Yeni okul yılı ekle"
+msgstr ""
 
 #: /src/schooltool/export/importer.py:77
-#, fuzzy
 msgid "start date before start of school year"
-msgstr "Tarihi okul için ayarla"
+msgstr ""
 
 #: /src/schooltool/export/importer.py:78
-#, fuzzy
 msgid "end date after end of school year"
-msgstr "Dönem tarihi okul yılı içerisnde değil."
+msgstr ""
 
 #: /src/schooltool/export/importer.py:79
 msgid "start date overlaps another term"
@@ -4644,22 +4638,22 @@ msgid "end date overlaps another term"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:81
+#, fuzzy
 msgid "${title} has no days in A${row}"
-msgstr ""
+msgstr "tarih bilgisi içermiyor"
 
 #: /src/schooltool/export/importer.py:82
+#, fuzzy
 msgid "${title} has no day templates in A${row}"
-msgstr ""
+msgstr "tarih bilgisi içermiyor"
 
 #: /src/schooltool/export/importer.py:83
-#, fuzzy
 msgid "is not a valid time range"
-msgstr "\"${kullanıcı ismi}\" geçerli bir kullanıcı ismi değildir."
+msgstr ""
 
 #: /src/schooltool/export/importer.py:84
-#, fuzzy
 msgid "is not a valid timetable model"
-msgstr "Geçerli bir zaman dilimi değil: $dilim"
+msgstr ""
 
 #: /src/schooltool/export/importer.py:85
 msgid "is the same day id as another in this timetable"
@@ -4682,28 +4676,24 @@ msgid "must be either 'Location' or 'Resource'"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:90
-#, fuzzy
 msgid "is not a valid term in the given school year"
-msgstr "Dönem tarihi okul yılı içerisnde değil."
+msgstr ""
 
 #: /src/schooltool/export/importer.py:91
-#, fuzzy
 msgid "is not a valid course in the given school year"
-msgstr "Farklı okul yıllarındaki dönemlere bağlanılmaz"
+msgstr ""
 
 #: /src/schooltool/export/importer.py:92
 msgid "${title} has no courses in A${row}"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:93
-#, fuzzy
 msgid "is not a valid username"
-msgstr "\"${kullanıcı ismi}\" geçerli bir kullanıcı ismi değildir."
+msgstr ""
 
 #: /src/schooltool/export/importer.py:94
-#, fuzzy
 msgid "is not a valid schema in the given school year"
-msgstr "Dönem tarihi okul yılı içerisnde değil."
+msgstr ""
 
 #: /src/schooltool/export/importer.py:95
 msgid "is not a valid day id for the given schema"
@@ -4928,23 +4918,22 @@ msgid ""
 "groups:</strong> Click <code>Show All</code> in the blue bar.</li> </ul>"
 msgstr ""
 "<h1>Gruplar</h1> <p><b>Gruplar</b>ınızın takibi için bu sayfayı "
-"kullanabilirsiniz.</p>\r\n"
-"<p>Hesabınıza eklenmiş bulunan bazı <b>gruplar</b> (<b>Öğretmenler</b>, "
-"<b>Öğrenciler</b>, <b>Site Yöneticileri</b>, <b>Okul Yönetimi</b>, veya "
-"<b>Yazarlar</b> gibi), özel grupların bir parçası değildir. Gruba ait olan "
-"onay kutucuğunu işaretledikten sonra, sayfanın al kısmında bulunan <b>Sil</"
-"b> butonu aracılığıyla istediğiniz grubu silebilirsiniz. </p><h3>Nasıl "
-"yapabilirim...</h3> <ul> <li><b>Grup arama:</b> Arama kutucuğuna istediğiniz "
-"metni girdikten sonra <code>Şimdi Bul</code> butonuna tıklayınız.Arama ile "
-"ilgili kriterleriniz için, arama kutucuğunun sol tarafındaki butonları "
-"kullanınız. <code>Temizle</code> butonu ile arama kutucuğundaki metni "
-"silebilirsiniz.</li> <li><b>Belirlenen gruptaki kişilere görüntüleme:</b> "
-"Grup ismine tıklayınız.</li> <li><b>Listeyi sırala:</b> Liste sıralamasını "
-"azalan veya artalan olarak değiştirmek için, listenin üst kısmındaki "
-"<code>Başlık</code> metnine tıklayınız.</li> <li><strong>Gruplara göz at:</"
-"strong> Mavi kutucuktaki  <code>Sonraki 10</code> (ve <code>Önceki</code>) "
-"bağlantılarını kullanınız.</li> <li><strong>Tüm grupları görüntüleme:</"
-"strong> Mavi kutucuktaki <code>Tümünü Göster</code> yazısına tıklayınız.</"
+"kullanabilirsiniz.</p><p>Hesabınıza eklenmiş bulunan bazı <b>gruplar</b> "
+"(<b>Öğretmenler</b>, <b>Öğrenciler</b>, <b>Site Yöneticileri</b>, <b>Okul "
+"Yönetimi</b>, veya <b>Yazarlar</b> gibi), özel grupların bir parçası "
+"değildir. Gruba ait olan onay kutucuğunu işaretledikten sonra, sayfanın al "
+"kısmında bulunan <b>Sil</b> butonu aracılığıyla istediğiniz grubu "
+"silebilirsiniz. </p><h3>Nasıl yapabilirim...</h3> <ul> <li><b>Grup arama:</"
+"b> Arama kutucuğuna istediğiniz metni girdikten sonra <code>Şimdi Bul</code> "
+"butonuna tıklayınız.Arama ile ilgili kriterleriniz için, arama kutucuğunun "
+"sol tarafındaki butonları kullanınız. <code>Temizle</code> butonu ile arama "
+"kutucuğundaki metni silebilirsiniz.</li> <li><b>Belirlenen gruptaki kişilere "
+"görüntüleme:</b> Grup ismine tıklayınız.</li> <li><b>Listeyi sırala:</b> "
+"Liste sıralamasını azalan veya artalan olarak değiştirmek için, listenin üst "
+"kısmındaki <code>Başlık</code> metnine tıklayınız.</li> <li><strong>Gruplara "
+"göz at:</strong> Mavi kutucuktaki  <code>Sonraki 10</code> (ve <code>Önceki</"
+"code>) bağlantılarını kullanınız.</li> <li><strong>Tüm grupları görüntüleme:"
+"</strong> Mavi kutucuktaki <code>Tümünü Göster</code> yazısına tıklayınız.</"
 "li> </ul>"
 
 #: /src/schooltool/group/interfaces.py:41
@@ -4985,9 +4974,8 @@ msgid "Help"
 msgstr "Yardım"
 
 #: /src/schooltool/level/browser.py:47
-#, fuzzy
 msgid "Add a level"
-msgstr "Etkinlik ekle"
+msgstr "Seviye ekle"
 
 #: /src/schooltool/level/interfaces.py:37
 #, fuzzy
@@ -4999,14 +4987,12 @@ msgid "The teaching levels (student learning years)."
 msgstr ""
 
 #: /src/schooltool/level/security.zcml:12
-#, fuzzy
 msgid "Add/Remove"
-msgstr "Kaldır"
+msgstr ""
 
 #: /src/schooltool/level/security.zcml:19
-#, fuzzy
 msgid "Modify/Rename"
-msgstr "Değiştir"
+msgstr ""
 
 #: /src/schooltool/level/templates/levels.pt:3
 #: /src/schooltool/level/templates/levels.pt:6
@@ -5680,19 +5666,16 @@ msgid "Copy data from active school year: ${active_schoolyear}"
 msgstr ""
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_add.pt:40
-#, fuzzy
 msgid "All Courses"
-msgstr "Dersler"
+msgstr ""
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_add.pt:50
-#, fuzzy
 msgid "All Timetable Schemas"
-msgstr "Varsayılan Zaman Çizelgesi Şeması:"
+msgstr ""
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_add.pt:62
-#, fuzzy
 msgid "Copy members"
-msgstr "üyeleri düzenle"
+msgstr "Üyeleri kopyala"
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:39
 msgid "Activate next school year"
@@ -5869,13 +5852,10 @@ msgid "Report a bug on Launchpad."
 msgstr "Launchpad üzerinden bir hata bildir"
 
 #: /src/schooltool/skin/templates/view_macros.pt:127
-#, fuzzy
 msgid ""
 "&copy; The <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth "
 "Foundation</a> 2003 - <span>2010</span>: Supporting Social Innovation."
 msgstr ""
-"&copy; <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth Vakfı</"
-"a> 2003 - <span>2009</span>: Sosyal İnovasyon Desteği"
 
 #: /src/schooltool/skin/templates/view_macros.pt:132
 msgid ""
@@ -6203,34 +6183,28 @@ msgid "Save"
 msgstr "Kaydet"
 
 #: /src/schooltool/timetable/browser/__init__.py:686
-#, fuzzy
 msgid "School timetable"
-msgstr "Okul çizelgeleri"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/__init__.py:691
-#, fuzzy
 msgid "Apply from"
-msgstr "Uygula"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/__init__.py:693
-#, fuzzy
 msgid "Apply until"
-msgstr "Uygula ve Sonraki"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/__init__.py:794
-#, fuzzy
 msgid "Timetable conflicts with another:"
-msgstr "Not başlığı"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/__init__.py:802
-#, fuzzy
 msgid "Timetable does not fit in term"
-msgstr "Tarih hiçbir döneme ait değil."
+msgstr ""
 
 #: /src/schooltool/timetable/browser/__init__.py:805
-#, fuzzy
 msgid "Timetable must begin before it ends."
-msgstr "Dönem bitmeden önce başlamalıdır"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/__init__.py:910
 msgid "Invalid date. Please use YYYY-MM-DD format."
@@ -6437,21 +6411,18 @@ msgid "Manage..."
 msgstr "Yönet..."
 
 #: /src/schooltool/timetable/browser/templates/confirm-timetable-delete.pt:15
-#, fuzzy
 msgid "Are you sure you want to unschedule this timetable?"
-msgstr "Seçilen zaman çizelgelerini silmek istediğinize emin misiniz?"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/confirm-timetable-delete.pt:27
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:48
-#, fuzzy
 msgid "Timetable \"${title}\""
-msgstr "${object} için Zaman tabloları"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/confirm-timetable-delete.pt:38
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:60
-#, fuzzy
 msgid "No periods selected."
-msgstr "Hiçbir bölüm seçilmedi."
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/confirm-timetable-delete.pt:67
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:89
@@ -6540,19 +6511,16 @@ msgid "Choose school timetable to use"
 msgstr "Kullanmak için okul zaman çizelgesi seçin"
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:17
-#, fuzzy
 msgid "Time table schedule of ${courses} ${section}."
-msgstr "${object} için Zaman tabloları"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:25
-#, fuzzy
 msgid "school days"
-msgstr "Okul günü"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:27
-#, fuzzy
 msgid "available timetables"
-msgstr "Uygun liderler"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:31
 msgid ""
@@ -6561,14 +6529,12 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:39
-#, fuzzy
 msgid "There are no timetables assigned."
-msgstr "Tanımlı zaman çizelgesi şemaları yok"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:49
-#, fuzzy
 msgid "(edit periods)"
-msgstr "Periyot ekle"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:91
 msgid "Consecutive periods are treated as a single meeting."
@@ -6670,19 +6636,16 @@ msgid "Are you sure you want to delete the selected timetables?"
 msgstr "Seçilen zaman çizelgelerini silmek istediğinize emin misiniz?"
 
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:35
-#, fuzzy
 msgid "Using timetable: ${schema_titles}"
-msgstr "Kullanılan zaman çizelgesi :"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:97
-#, fuzzy
 msgid "Apply from:"
-msgstr "Uygula"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:111
-#, fuzzy
 msgid "Apply until:"
-msgstr "Uygula ve Sonraki"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:40
 msgid "Default Timetable Schema:"
@@ -6888,34 +6851,3 @@ msgstr "Planı değiştir"
 #: /src/schooltool/widget/password.py:55
 msgid "Supplied passwords are not identical"
 msgstr "Girilen şifreler aynı değil"
-
-#~ msgid ""
-#~ "<a href=\"#\" onclick=\"$('#more_overlays').toggle();return false;"
-#~ "\">More...</a>"
-#~ msgstr ""
-#~ "<a href=\"#\" onclick=\"$('#more_overlays').toggle();return false;\">Daha "
-#~ "fazla...</a>"
-
-#~ msgid "SMTP server hostname. Leave empty to disable email."
-#~ msgstr "SMTP sunucu ismi. Emaili hizmet dışı bırakmak için boş bırakın"
-
-#~ msgid "For term:"
-#~ msgstr "Dönem için:"
-
-#~ msgid ""
-#~ "\n"
-#~ "This is not a SchoolTool 0.11 database file, aborting.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Bu SchoolTool 0.11 database dosyası değil, ayrıldı.\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "This is not a SchoolTool 0.10 database file, aborting.\n"
-#~ "\n"
-#~ "Please run the standalone database upgrade script.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Bu bir SchoolTool 0.10 veritabanı dosyası değildir, durduruluyor.\n"
-#~ "\n"
-#~ "Lütfen; tekil, varitabanı güncelleme scripti çalıştırınız.\n"

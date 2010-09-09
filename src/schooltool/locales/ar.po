@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-08-22 18:49+0300\n"
-"PO-Revision-Date: 2010-06-15 15:26+0000\n"
-"Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
+"PO-Revision-Date: 2010-08-29 09:38+0000\n"
+"Last-Translator: reda farhat <Unknown>\n"
 "Language-Team: Arabic <ar@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-06-16 03:38+0000\n"
+"X-Launchpad-Export-Date: 2010-08-30 03:49+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: /src/schooltool/app/app.py:197
@@ -27,7 +27,7 @@ msgstr "مدرستك"
 #: /src/schooltool/person/help/configure.zcml:8
 #: /src/schooltool/person/help/person_container.pt:6
 msgid "Persons"
-msgstr "الاشخاص"
+msgstr "أشخاص"
 
 #: /src/schooltool/app/browser/__init__.py:261
 msgid "1 person"
@@ -40,7 +40,7 @@ msgstr "${number} اشخاص"
 
 #: /src/schooltool/app/browser/app.py:226
 msgid "Username or password is incorrect"
-msgstr "اسم المستخدم أو كلمة المرور خاطئة"
+msgstr "اسم المستخدم أو كلمة المرور غير صحيحة"
 
 #: /src/schooltool/app/browser/app.py:322 /src/schooltool/app/security.py:308
 msgid "Leaders"
@@ -56,7 +56,7 @@ msgstr "القادة المتوفرين"
 
 #: /src/schooltool/app/browser/app.py:347
 msgid "school"
-msgstr "المدرسة"
+msgstr "مدرسة"
 
 #: /src/schooltool/app/browser/cal.py:113
 msgid "February"
@@ -64,35 +64,35 @@ msgstr "فبراير"
 
 #: /src/schooltool/app/browser/cal.py:113
 msgid "January"
-msgstr "يناير"
+msgstr "يناير/كانون الثاني"
 
 #: /src/schooltool/app/browser/cal.py:113
 msgid "March"
-msgstr "مارس"
+msgstr "مارس/آذار"
 
 #: /src/schooltool/app/browser/cal.py:114
 msgid "April"
-msgstr "أبريل"
+msgstr "أبريل/نيسان"
 
 #: /src/schooltool/app/browser/cal.py:114
 msgid "June"
-msgstr "يونيو"
+msgstr "يونيو/حزيران"
 
 #: /src/schooltool/app/browser/cal.py:114
 msgid "May"
-msgstr "مايو"
+msgstr "مايو/أيار"
 
 #: /src/schooltool/app/browser/cal.py:115
 msgid "August"
-msgstr "أغسطس"
+msgstr "اغسطس/آب"
 
 #: /src/schooltool/app/browser/cal.py:115
 msgid "July"
-msgstr "يوليو"
+msgstr "يوليو/تموز"
 
 #: /src/schooltool/app/browser/cal.py:115
 msgid "September"
-msgstr "سبتمبر"
+msgstr "شتننبر/أيلول"
 
 #: /src/schooltool/app/browser/cal.py:116
 msgid "December"
@@ -173,37 +173,37 @@ msgstr "الأحد"
 #: /src/schooltool/app/browser/cal.py:123
 #: /src/schooltool/app/browser/cal.py:1809
 msgid "Mon"
-msgstr "اثن"
+msgstr "اثنين"
 
 #: /src/schooltool/app/browser/cal.py:123
 #: /src/schooltool/app/browser/cal.py:1812
 msgid "Thu"
-msgstr "الخميس"
+msgstr "خميس"
 
 #: /src/schooltool/app/browser/cal.py:123
 #: /src/schooltool/app/browser/cal.py:1810
 msgid "Tue"
-msgstr "الثلاثاء"
+msgstr "ثلاث"
 
 #: /src/schooltool/app/browser/cal.py:123
 #: /src/schooltool/app/browser/cal.py:1811
 msgid "Wed"
-msgstr "الأربعاء"
+msgstr "اربعاء"
 
 #: /src/schooltool/app/browser/cal.py:124
 #: /src/schooltool/app/browser/cal.py:1813
 msgid "Fri"
-msgstr "الجمعة"
+msgstr "جمعة"
 
 #: /src/schooltool/app/browser/cal.py:124
 #: /src/schooltool/app/browser/cal.py:1814
 msgid "Sat"
-msgstr "السبت"
+msgstr "سبت"
 
 #: /src/schooltool/app/browser/cal.py:124
 #: /src/schooltool/app/browser/cal.py:1815
 msgid "Sun"
-msgstr "الأحد"
+msgstr "أحد"
 
 #: /src/schooltool/app/browser/cal.py:484
 msgid "Unnamed Event"
@@ -215,7 +215,7 @@ msgstr "الاسبوع القادم"
 
 #: /src/schooltool/app/browser/cal.py:924
 msgid "Current week"
-msgstr "هذا الاسبوع"
+msgstr "الأسبوع الحالي"
 
 #: /src/schooltool/app/browser/cal.py:925
 msgid "Previous week"
@@ -236,23 +236,23 @@ msgstr "إذهب إلى الأسبوع السّابق"
 #. Default: ""
 #: /src/schooltool/app/browser/cal.py:950
 msgid "${month}, ${year} (week ${week})"
-msgstr "${month}, ${year} (week ${week})"
+msgstr "${شهر}, ${سنة} (أسبوع ${أسبوع})"
 
 #: /src/schooltool/app/browser/cal.py:1164
 msgid "Next month"
-msgstr "الشهر التالي"
+msgstr "الشهر القادم"
 
 #: /src/schooltool/app/browser/cal.py:1165
 msgid "Current month"
-msgstr "هذا الشهر"
+msgstr "الشهر الحالي"
 
 #: /src/schooltool/app/browser/cal.py:1166
 msgid "Previous month"
-msgstr "الشهر السابق"
+msgstr "الشهر الماضي"
 
 #: /src/schooltool/app/browser/cal.py:1168
 msgid "Go to next month"
-msgstr "اذهب الى الشهر التالي"
+msgstr "اذهب الى الشهر القادم"
 
 #: /src/schooltool/app/browser/cal.py:1169
 msgid "Go to current month"
@@ -265,7 +265,7 @@ msgstr "اذهب الى الشهر السابق"
 #. Default: ""
 #: /src/schooltool/app/browser/cal.py:1178
 msgid "${month}, ${year}"
-msgstr "${month}, ${year}"
+msgstr "${شهر}, ${سنة}"
 
 #. Default: ""
 #: /src/schooltool/app/browser/cal.py:1200
@@ -286,7 +286,7 @@ msgstr "السنة الماضية"
 
 #: /src/schooltool/app/browser/cal.py:1220
 msgid "Go to next year"
-msgstr "اذهب الى السنة المقبلة"
+msgstr "اذهب الى السنة القادمة"
 
 #: /src/schooltool/app/browser/cal.py:1221
 msgid "Go to current year"
@@ -294,7 +294,7 @@ msgstr "اذهب الى السنة الحالية"
 
 #: /src/schooltool/app/browser/cal.py:1222
 msgid "Go to previous year"
-msgstr "اذهب الى السنة الفائتة"
+msgstr "اذهب الى السنة السابقة"
 
 #: /src/schooltool/app/browser/cal.py:1288
 msgid "The next day"
@@ -306,7 +306,7 @@ msgstr "اليوم"
 
 #: /src/schooltool/app/browser/cal.py:1290
 msgid "The previous day"
-msgstr "اليوم الفائت"
+msgstr "اليوم السابق"
 
 #: /src/schooltool/app/browser/cal.py:1292
 msgid "Go to the next day"
@@ -357,26 +357,26 @@ msgstr "العنوان"
 #: /src/schooltool/app/browser/templates/cal_weekly_timetable.pt:97
 #: /src/schooltool/app/browser/templates/cal_weekly_timetable.pt:127
 msgid "All day"
-msgstr "طوال النهار"
+msgstr "كل اليوم"
 
 #: /src/schooltool/app/browser/cal.py:1741
 #: /src/schooltool/term/browser/templates/emergency_select.pt:28
 #: /src/schooltool/timetable/browser/templates/specialday_select.pt:28
 msgid "Date"
-msgstr "التاريخ"
+msgstr "تاريخ"
 
 #: /src/schooltool/app/browser/cal.py:1744
 msgid "Time"
-msgstr "الوقت"
+msgstr "وقت"
 
 #: /src/schooltool/app/browser/cal.py:1745
 msgid "Start time in 24h format"
-msgstr "إبدأ الوقت في على نمط 24 ساعة"
+msgstr "إبدأ الوقت على نمط 24 ساعة"
 
 #: /src/schooltool/app/browser/cal.py:1749
 #: /src/schooltool/timetable/browser/schema.py:269
 msgid "Duration"
-msgstr "المدة"
+msgstr "مدة"
 
 #: /src/schooltool/app/browser/cal.py:1754
 msgid "Duration Type"
@@ -467,7 +467,7 @@ msgstr "عدد الأحداث"
 #: /src/schooltool/app/browser/cal.py:1801
 #: /src/schooltool/app/browser/templates/event_add.pt:303
 msgid "Repeat until"
-msgstr "إعد إلى أن"
+msgstr "إعد حتى"
 
 #: /src/schooltool/app/browser/cal.py:1805
 msgid "Weekdays"
@@ -523,11 +523,11 @@ msgstr "اخر ${weekday}"
 #: /src/schooltool/app/browser/cal.py:1965
 #: /src/schooltool/app/browser/cal.py:2274
 msgid "An error occurred."
-msgstr "حدث خلل"
+msgstr "حدث خطأ."
 
 #: /src/schooltool/app/browser/cal.py:1998
 msgid "Invalid time"
-msgstr "وقت خاطئ"
+msgstr "وقت غير صحيح"
 
 #: /src/schooltool/app/browser/cal.py:2019
 msgid "End date is earlier than start date"
@@ -535,7 +535,9 @@ msgstr "تاريخ النهاية قبل تاريخ البداية"
 
 #: /src/schooltool/app/browser/cal.py:2028
 msgid "Invalid date.  Please specify YYYY-MM-DD, one per line."
-msgstr "تاريخ خاطئ. رجاء إدخال YYYY-MM-DD. تاريخ واحد في السطر"
+msgstr ""
+"طريقة ادخال حاطئة للتاريخ يرجى ادخال على الصورة التالية  السنة اربع ارقام-"
+"الشهر رقمان -اليوم رقمان. في سطر واحد"
 
 #: /src/schooltool/app/browser/cal.py:2076
 msgid "Add event"
@@ -577,11 +579,11 @@ msgstr "تم تحديثه في ${date_time}"
 #: /src/schooltool/app/browser/templates/calendar_tab_viewlet.pt:3
 #: /src/schooltool/app/configure.zcml:348
 msgid "Calendar"
-msgstr "رزنامة"
+msgstr "التقويم"
 
 #: /src/schooltool/app/browser/configure.zcml:166
 msgid "Actions"
-msgstr "إجراءات"
+msgstr "الإجراءات"
 
 #: /src/schooltool/app/browser/configure.zcml:224
 #: /src/schooltool/app/browser/configure.zcml:505
@@ -616,11 +618,11 @@ msgstr "إجراءات"
 #: /src/schooltool/timetable/browser/configure.zcml:111
 #: /src/schooltool/timetable/security.zcml:32
 msgid "View"
-msgstr "عرض"
+msgstr "مشاهدة"
 
 #: /src/schooltool/app/browser/configure.zcml:310
 msgid "View Calendar"
-msgstr "أنظر إلى الرزنامة"
+msgstr "عرض التقويم"
 
 #: /src/schooltool/app/browser/configure.zcml:322
 msgid "New Event"
@@ -636,7 +638,7 @@ msgstr "استورد الاقسام"
 
 #: /src/schooltool/app/browser/configure.zcml:356
 msgid "Edit Leaders"
-msgstr "تعديل رؤساء المجموعات"
+msgstr "تعديل القادة"
 
 #: /src/schooltool/app/browser/configure.zcml:367
 msgid "Change Site Preferences"
@@ -648,11 +650,11 @@ msgstr "رزنامة (يومية)"
 
 #: /src/schooltool/app/browser/configure.zcml:409
 msgid "Calendar (Daily, PDF)"
-msgstr "Calendier (Journalier, PDF)"
+msgstr "التقويم  (يومي, صيغة PDF)"
 
 #: /src/schooltool/app/browser/configure.zcml:418
 msgid "Calendar (Weekly)"
-msgstr "رزنامة (أسبوعية)"
+msgstr "تقويم (أسبوعي)"
 
 #: /src/schooltool/app/browser/configure.zcml:428
 msgid "Calendar (Weekly, PDF)"
@@ -660,7 +662,7 @@ msgstr "تقويم (اسبوعي، PDF)"
 
 #: /src/schooltool/app/browser/configure.zcml:437
 msgid "Calendar (Monthly)"
-msgstr "رزنامة (شهرية)"
+msgstr "تقويم (شهري)"
 
 #: /src/schooltool/app/browser/configure.zcml:447
 msgid "Calendar (Monthly, PDF)"
@@ -669,7 +671,7 @@ msgstr "تقويم (شهريPDF)"
 #: /src/schooltool/app/browser/configure.zcml:456
 #: /src/schooltool/timetable/browser/configure.zcml:219
 msgid "Calendar (Yearly)"
-msgstr "رزنامة (سنوية)"
+msgstr "تقويم  (سنوي)"
 
 #: /src/schooltool/app/browser/configure.zcml:466
 msgid "Atom View"
@@ -677,7 +679,7 @@ msgstr "عرض الذرة"
 
 #: /src/schooltool/app/browser/configure.zcml:476
 msgid "iCalendar"
-msgstr "iCalendar"
+msgstr "تقويم انترنت"
 
 #: /src/schooltool/app/browser/configure.zcml:486
 msgid "Free/Busy"
@@ -699,13 +701,13 @@ msgstr "تحرير الحدث"
 
 #: /src/schooltool/app/browser/configure.zcml:587
 msgid "ZODB Control"
-msgstr "تحكم ZODB"
+msgstr ""
 
 #: /src/schooltool/app/browser/configure.zcml:610
 #: /src/schooltool/app/browser/templates/manage_menu.pt:3
 #: /src/schooltool/basicperson/security.zcml:26
 msgid "Manage"
-msgstr "إدارة"
+msgstr "أدر"
 
 #: /src/schooltool/app/browser/configure.zcml:622
 msgid "Application Control"
@@ -727,7 +729,7 @@ msgstr "متصفح"
 #: /src/schooltool/app/browser/templates/login.pt:3
 #: /src/schooltool/app/browser/templates/menu_view.pt:3
 msgid "Login"
-msgstr "دخول"
+msgstr ""
 
 #: /src/schooltool/app/browser/configure.zcml:678
 #: /src/schooltool/app/browser/configure.zcml:765
@@ -745,11 +747,11 @@ msgstr "أداة التقويم"
 
 #: /src/schooltool/app/browser/configure.zcml:702
 msgid "Templates"
-msgstr "قوالب"
+msgstr "نماذج"
 
 #: /src/schooltool/app/browser/configure.zcml:781
 msgid "Configure"
-msgstr "إضبط"
+msgstr "تكوين"
 
 #: /src/schooltool/app/browser/configure.zcml:788
 msgid "Error List"
@@ -763,7 +765,7 @@ msgstr "لم يتم المد بالمعلومات"
 
 #: /src/schooltool/app/browser/csvimport.py:114
 msgid "Could not convert data to Unicode (incorrect charset?)."
-msgstr "غير قادر على تحويل البيانات إلى Unicode (ترميز محارف غير صحيح؟)"
+msgstr "غير قادر على تحويل البيانات إلى Unicode (ترميز حروف غير صحيح؟)"
 
 #: /src/schooltool/app/browser/csvimport.py:123
 msgid "CSV file imported successfully."
@@ -783,11 +785,11 @@ msgstr "أخفق في إستيراد نص CSV"
 
 #: /src/schooltool/app/browser/csvimport.py:159
 msgid "No charset specified"
-msgstr "لم يتم تحديد ترميز المحارف"
+msgstr "لم يتم تحديد ترميزالحروف"
 
 #: /src/schooltool/app/browser/csvimport.py:164
 msgid "Unknown charset"
-msgstr "ترميز محارف غير معروف"
+msgstr "ترميز حروف غير معروف"
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:208
@@ -835,12 +837,12 @@ msgstr "السطر الأول من ملف CSV يجب أن يحوي معرّف ت
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:477
 msgid "The timetable schema ${schema} does not exist."
-msgstr "تخطيط جدول المواعيد ${schema} غير موجود"
+msgstr "مخطط جدول الحصص ${schema} غير موجود"
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:508
 msgid "Error in timetable CSV data, line ${line_no}"
-msgstr "خطأ في جدول مواعيد بيانات CSV، السطر ${line_no}"
+msgstr "خطأ في بيانات جدول الحصص CSV، السطر ${line_no}"
 
 #: /src/schooltool/app/browser/csvimport.py:548
 msgid "Day ids not defined in selected schema: ${args}."
@@ -848,19 +850,19 @@ msgstr "أرقام الايام غير محددة فى المخطط المختا
 
 #: /src/schooltool/app/browser/csvimport.py:549
 msgid "Periods not defined in selected days: ${args}."
-msgstr "لم يتم تحديد الحصص في الأبام المحددة :${args}."
+msgstr "لم يتم تحديد المدد في الأبام المحددة :${args}."
 
 #: /src/schooltool/app/browser/csvimport.py:550
 msgid "Persons not found: ${args}."
-msgstr "لم يتم العثور على الشخص: ${args}."
+msgstr "الشخص غر موجود: ${args}."
 
 #: /src/schooltool/app/browser/csvimport.py:551
 msgid "Courses not found: ${args}."
-msgstr "لم يتم إيجاد الدورات: ${args}."
+msgstr "لم يتم إيجادالمواد: ${args}."
 
 #: /src/schooltool/app/browser/csvimport.py:552
 msgid "Sections not found: ${args}."
-msgstr "لم يتم العثور على القسم: ${args}."
+msgstr "القسم غير موجود: ${args}."
 
 #: /src/schooltool/app/browser/csvimport.py:553
 msgid "Invalid records: ${args}."
@@ -881,7 +883,7 @@ msgstr "متكرر"
 #. Default: ""
 #: /src/schooltool/app/browser/pdfcal.py:99
 msgid "from the calendar of ${calendar_owner}"
-msgstr "من تقويم ${calendar_owner}"
+msgstr "من التقويم ${calendar_owner}"
 
 #: /src/schooltool/app/browser/pdfcal.py:115
 msgid "all day"
@@ -964,11 +966,11 @@ msgstr "المنشأ والممول:"
 
 #: /src/schooltool/app/browser/templates/about.pt:38
 msgid "Project Manager:"
-msgstr "مدير المشروع:"
+msgstr "مدير مشروع:"
 
 #: /src/schooltool/app/browser/templates/about.pt:41
 msgid "Lead Developer:"
-msgstr "رئيس المبرمجين:"
+msgstr "رئيس المطورين"
 
 #: /src/schooltool/app/browser/templates/about.pt:44
 msgid "Release Manager:"
@@ -976,7 +978,7 @@ msgstr "مدير الاصدارات"
 
 #: /src/schooltool/app/browser/templates/about.pt:47
 msgid "Contributors:"
-msgstr "المساهمون:"
+msgstr "المتبرعون"
 
 #: /src/schooltool/app/browser/templates/application_preferences.pt:4
 msgid "Edit site preferences"
@@ -993,7 +995,7 @@ msgstr "تفضيلات عامّة"
 #: /src/schooltool/app/browser/templates/application_preferences.pt:34
 #: /src/schooltool/person/browser/person_preferences.pt:28
 msgid "Calendar Preferences"
-msgstr "تفضيلات الاجندة"
+msgstr "تفضيلات التقويم"
 
 #: /src/schooltool/app/browser/templates/cal_atom.pt:14
 #: /src/schooltool/app/configure.zcml:334
@@ -1030,12 +1032,12 @@ msgstr "مناسبات"
 #. Default: "This is an Atom formatted XML site feed. It is intended to be viewed in a Newsreader or syndicated to another site. Please visit"
 #: /src/schooltool/app/browser/templates/cal_atom.pt:42
 msgid "atom_description"
-msgstr ""
+msgstr "وصف الذرة"
 
 #. Default: "Atom Enabled"
 #: /src/schooltool/app/browser/templates/cal_atom.pt:46
 msgid "atom_enabled"
-msgstr ""
+msgstr "تمكين الذرة"
 
 #. Default: "for more info."
 #: /src/schooltool/app/browser/templates/cal_atom.pt:49
@@ -1132,7 +1134,7 @@ msgstr "تقويم عام"
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:37
 msgid "site-wide calendar"
-msgstr ""
+msgstr "تقويم شامل للموقع"
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:42
 #: /src/schooltool/app/browser/templates/index.pt:14
@@ -1144,12 +1146,11 @@ msgstr "موارِد"
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:43
 msgid "There are no resources with calendars accessible to you."
-msgstr ""
+msgstr "لا توجد موارد مع التقاويم يمكنك الوصول إليها"
 
 #: /src/schooltool/app/browser/templates/default_report_template.pt:23
-#, fuzzy
 msgid "Created with SchoolTool"
-msgstr "التقويم في أداة المدرسة"
+msgstr "تم إنشاؤها باستخدام SchoolTool"
 
 #: /src/schooltool/app/browser/templates/default_report_template.pt:37
 msgid "Page ${page_number}"
@@ -1166,7 +1167,7 @@ msgstr ""
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:45
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:103
 msgid "Remove"
-msgstr "إزالة"
+msgstr "حذف"
 
 #. Default: "Invert Selection"
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:30
@@ -1177,7 +1178,7 @@ msgstr "إزالة"
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:49
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:71
 msgid "invert-selection-button"
-msgstr "زر-عكس-التحديد"
+msgstr "زر-عكس-الأختيار"
 
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:37
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:38
@@ -1192,7 +1193,7 @@ msgstr "زر-عكس-التحديد"
 #: /src/schooltool/skin/templates/table_container.pt:39
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:15
 msgid "There are none."
-msgstr "لا يوجد شيء."
+msgstr "لا يوجداحد"
 
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:48
 #: /src/schooltool/app/browser/templates/event_booking.pt:42
@@ -1213,7 +1214,7 @@ msgstr "أ"
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:68
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:77
 msgid "There are none to add."
-msgstr "لا يوجد شيء للإضافة."
+msgstr "لا يوجد احد للإضافة."
 
 #. Default: "OK"
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:65
@@ -1343,7 +1344,7 @@ msgstr "[تقويم نافذة منبثقة]"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:324
 msgid "Repeat forever"
-msgstr "إعادة دوماً"
+msgstr "إعادة دائما"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:348
 msgid "Booked Resources"
@@ -1433,7 +1434,7 @@ msgstr "موقع: ${location}"
 
 #: /src/schooltool/app/browser/templates/index.pt:6
 msgid "Welcome to SchoolTool"
-msgstr "أهلاً إلى أداة المدرسة"
+msgstr "أهلاً إلى سكول تول"
 
 #: /src/schooltool/app/browser/templates/index.pt:12
 #: /src/schooltool/course/browser/templates/copy_sections.pt:86
@@ -1460,7 +1461,7 @@ msgstr "مجموعات"
 #: /src/schooltool/dashboard/school.pt:4 /src/schooltool/level/browser.zcml:7
 #: /src/schooltool/level/security.zcml:7
 msgid "Levels"
-msgstr "مراحل"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/login.pt:8
 msgid "Your session has expired."
@@ -1471,7 +1472,7 @@ msgid ""
 "You are not allowed to access this page. You can click on the back button in "
 "your browser to go back, or ask a more privileged user to log in."
 msgstr ""
-"غير مسموح لك بالوصول إلى هذه الصفحة. يمكنك ضغط زر خلف في متصفحك، أو يمكنك "
+"غير مسموح لك بالوصول إلى هذه الصفحة. يمكنك ضغط زر رجوع في متصفحك، أو يمكنك "
 "طلب صلاحيات أكبر للوصول"
 
 #: /src/schooltool/app/browser/templates/login.pt:23
@@ -1569,7 +1570,7 @@ msgstr "الكل"
 #: /src/schooltool/timetable/browser/templates/ttwizard_period_order2.pt:41
 #: /src/schooltool/timetable/browser/templates/ttwizard_slottimes.pt:34
 msgid "Cancel"
-msgstr "الغِ"
+msgstr "إلغاء"
 
 #: /src/schooltool/app/browser/templates/simple_event_delete.pt:4
 #: /src/schooltool/app/browser/templates/simple_event_delete.pt:13
@@ -1586,13 +1587,15 @@ msgstr "رفع جدول أعمال أداة المدرسة كـ CSV"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:20
 msgid "Import Timetable"
-msgstr "استيراد جدول مواعيد"
+msgstr "استيراد جدول الحصص"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:24
 msgid ""
 "You can create the CSV file in a spreadsheet and export it in CSV (Comma-"
 "Separated Values) format. The structure of the table is described below."
 msgstr ""
+"يمكنك إنشاء ملف CSV في جدول وتصديره في كشف CSV (قيم مفصولة بفواصل) . تم وصف "
+"بنية الجدول أدناه."
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:30
 msgid ""
@@ -1631,7 +1634,7 @@ msgstr ""
 #: /src/schooltool/person/browser/person-csvimport.pt:33
 #: /src/schooltool/resource/browser/resource-csvimport.pt:29
 msgid "Example:"
-msgstr "مثال:"
+msgstr "نموذج"
 
 #. Default: "\"three-day\" \"\",\"\",\"\" \"philosophy\",\"lorch\" \"Monday\",\"A\" \"Monday\",\"B\" \"Tuesday\",\"C\" \"***\" \"johnny\" \"billy\" \"\" \"literature\",\"guzman\" \"Wednesday\",\"B\" \"Wednesday\",\"C\" \"***\" \"johnny\" \"pete\""
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:56
@@ -1818,7 +1821,7 @@ msgstr "حجز موارد"
 
 #: /src/schooltool/app/help/admin.pt:6
 msgid "SchoolTool Administration"
-msgstr "إدارة أداة المدرسة"
+msgstr "إدارة سكول تول"
 
 #: /src/schooltool/app/help/admin.pt:8
 msgid ""
@@ -4291,9 +4294,8 @@ msgid "has no date in it"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:73
-#, fuzzy
 msgid "end date cannot be before start date"
-msgstr "تاريخ النهاية قبل تاريخ البداية"
+msgstr ""
 
 #: /src/schooltool/export/importer.py:74
 msgid "start date overlaps another year"
@@ -4304,19 +4306,16 @@ msgid "end date overlaps another year"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:76
-#, fuzzy
 msgid "invalid school year"
-msgstr "تفعيل السنة الدراسية التالية"
+msgstr ""
 
 #: /src/schooltool/export/importer.py:77
-#, fuzzy
 msgid "start date before start of school year"
-msgstr "تعيين التاريخ للمدرسة"
+msgstr ""
 
 #: /src/schooltool/export/importer.py:78
-#, fuzzy
 msgid "end date after end of school year"
-msgstr "تاريخ الفصل ليس في السنة الدراسية"
+msgstr ""
 
 #: /src/schooltool/export/importer.py:79
 msgid "start date overlaps another term"
@@ -4335,9 +4334,8 @@ msgid "${title} has no day templates in A${row}"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:83
-#, fuzzy
 msgid "is not a valid time range"
-msgstr "\"${username}\" ليس اسم مستخدم صحيح."
+msgstr ""
 
 #: /src/schooltool/export/importer.py:84
 msgid "is not a valid timetable model"
@@ -4364,28 +4362,24 @@ msgid "must be either 'Location' or 'Resource'"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:90
-#, fuzzy
 msgid "is not a valid term in the given school year"
-msgstr "تاريخ الفصل ليس في السنة الدراسية"
+msgstr ""
 
 #: /src/schooltool/export/importer.py:91
-#, fuzzy
 msgid "is not a valid course in the given school year"
-msgstr "لا يمكن ربط أقسام في سنوات دراسية مختلفة"
+msgstr ""
 
 #: /src/schooltool/export/importer.py:92
 msgid "${title} has no courses in A${row}"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:93
-#, fuzzy
 msgid "is not a valid username"
-msgstr "\"${username}\" ليس اسم مستخدم صحيح."
+msgstr ""
 
 #: /src/schooltool/export/importer.py:94
-#, fuzzy
 msgid "is not a valid schema in the given school year"
-msgstr "تاريخ الفصل ليس في السنة الدراسية"
+msgstr ""
 
 #: /src/schooltool/export/importer.py:95
 msgid "is not a valid day id for the given schema"
@@ -4624,28 +4618,24 @@ msgid "Help"
 msgstr "مساعدة"
 
 #: /src/schooltool/level/browser.py:47
-#, fuzzy
 msgid "Add a level"
-msgstr "أضف حدث"
+msgstr ""
 
 #: /src/schooltool/level/interfaces.py:37
-#, fuzzy
 msgid "Title of the level."
-msgstr "عنوان الملاحظة"
+msgstr ""
 
 #: /src/schooltool/level/security.zcml:7
 msgid "The teaching levels (student learning years)."
 msgstr ""
 
 #: /src/schooltool/level/security.zcml:12
-#, fuzzy
 msgid "Add/Remove"
-msgstr "إزالة"
+msgstr ""
 
 #: /src/schooltool/level/security.zcml:19
-#, fuzzy
 msgid "Modify/Rename"
-msgstr "تعديل"
+msgstr ""
 
 #: /src/schooltool/level/templates/levels.pt:3
 #: /src/schooltool/level/templates/levels.pt:6
@@ -5299,19 +5289,16 @@ msgid "Copy data from active school year: ${active_schoolyear}"
 msgstr ""
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_add.pt:40
-#, fuzzy
 msgid "All Courses"
-msgstr "مقررات"
+msgstr ""
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_add.pt:50
-#, fuzzy
 msgid "All Timetable Schemas"
-msgstr "التخطيط الافتراضي لجدول المواعيد:"
+msgstr ""
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_add.pt:62
-#, fuzzy
 msgid "Copy members"
-msgstr "تعديل الأعضاء"
+msgstr ""
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:39
 msgid "Activate next school year"
@@ -5793,34 +5780,28 @@ msgid "Save"
 msgstr "حفظ"
 
 #: /src/schooltool/timetable/browser/__init__.py:686
-#, fuzzy
 msgid "School timetable"
-msgstr "جداول مواعيد المدرسة"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/__init__.py:691
-#, fuzzy
 msgid "Apply from"
-msgstr "طبّق"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/__init__.py:693
-#, fuzzy
 msgid "Apply until"
-msgstr "تطبيق وانتقال للتالي"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/__init__.py:794
-#, fuzzy
 msgid "Timetable conflicts with another:"
-msgstr "عنوان الملاحظة"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/__init__.py:802
-#, fuzzy
 msgid "Timetable does not fit in term"
-msgstr "التاريخ لا ينتمي إلى أي فصل"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/__init__.py:805
-#, fuzzy
 msgid "Timetable must begin before it ends."
-msgstr "يجب أن يبدأ الفصل قبل أن ينتهي."
+msgstr ""
 
 #: /src/schooltool/timetable/browser/__init__.py:910
 msgid "Invalid date. Please use YYYY-MM-DD format."
@@ -6009,21 +5990,18 @@ msgid "Manage..."
 msgstr "إدارة..."
 
 #: /src/schooltool/timetable/browser/templates/confirm-timetable-delete.pt:15
-#, fuzzy
 msgid "Are you sure you want to unschedule this timetable?"
-msgstr "هل أنت متأكد أنك تريد حذف جداول المواعيد المحددة؟"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/confirm-timetable-delete.pt:27
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:48
-#, fuzzy
 msgid "Timetable \"${title}\""
-msgstr "جدول مواعيد لـ ${object}"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/confirm-timetable-delete.pt:38
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:60
-#, fuzzy
 msgid "No periods selected."
-msgstr "لا يوجد قسم محدد."
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/confirm-timetable-delete.pt:67
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:89
@@ -6109,36 +6087,30 @@ msgid "Choose school timetable to use"
 msgstr "اختر جدول مواعيد مدرسة للاستخدام"
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:17
-#, fuzzy
 msgid "Time table schedule of ${courses} ${section}."
-msgstr "جدول مواعيد لـ ${object}"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:25
-#, fuzzy
 msgid "school days"
-msgstr "بيانات مدرسية"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:27
-#, fuzzy
 msgid "available timetables"
-msgstr "القادة المتوفرين"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:31
-#, fuzzy
 msgid ""
 "For more information, see ${school_days} and ${available_timetables} in "
 "${term} of ${schoolyear}"
-msgstr "قسم الـ ${course} -- ${section_title} لـ ${term} من ${schoolyear}"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:39
-#, fuzzy
 msgid "There are no timetables assigned."
-msgstr "لا يوجد تخطيطات جداول مواعيد معرفة."
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:49
-#, fuzzy
 msgid "(edit periods)"
-msgstr "إضافة حصة"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:91
 msgid "Consecutive periods are treated as a single meeting."
@@ -6230,19 +6202,16 @@ msgid "Are you sure you want to delete the selected timetables?"
 msgstr "هل أنت متأكد أنك تريد حذف جداول المواعيد المحددة؟"
 
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:35
-#, fuzzy
 msgid "Using timetable: ${schema_titles}"
-msgstr "استخدام جدول مواعيد:"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:97
-#, fuzzy
 msgid "Apply from:"
-msgstr "طبّق"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:111
-#, fuzzy
 msgid "Apply until:"
-msgstr "تطبيق وانتقال للتالي"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:40
 msgid "Default Timetable Schema:"
@@ -6433,7 +6402,7 @@ msgstr ""
 
 #: /src/schooltool/timetable/security.zcml:46
 msgid "Assign timetables"
-msgstr ""
+msgstr "تعيين جداول زمنية"
 
 #: /src/schooltool/timetable/security.zcml:54
 msgid "Change schedule"
@@ -6442,9 +6411,3 @@ msgstr "تغير الجدول"
 #: /src/schooltool/widget/password.py:55
 msgid "Supplied passwords are not identical"
 msgstr "كلمات السر ليست متطابقة"
-
-#~ msgid "confirm password"
-#~ msgstr "أكد كلمة السر"
-
-#~ msgid "For term:"
-#~ msgstr "للفصل:"
