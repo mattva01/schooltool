@@ -17,7 +17,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
-"POT-Creation-Date: 2010-08-22 18:49+0300\n"
+"POT-Creation-Date: 2010-09-09 19:02+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Schooltool Development Team <schooltool-dev@schooltool.org>\n"
@@ -2193,11 +2193,19 @@ msgstr ""
 msgid "Usernames cannot contain non-ascii characters"
 msgstr ""
 
-#: /src/schooltool/basicperson/browser/demographics.py:133
+#: /src/schooltool/basicperson/browser/demographics.py:85
+msgid "Duplicate entry \"${value}\""
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/demographics.py:90
+msgid "Value too long \"${value}\""
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/demographics.py:151
 msgid "Add new Field"
 msgstr ""
 
-#: /src/schooltool/basicperson/browser/demographics.py:212
+#: /src/schooltool/basicperson/browser/demographics.py:230
 #. Default: ""
 msgid "Change information for ${field_title}"
 msgstr ""
@@ -5151,47 +5159,47 @@ msgstr ""
 msgid "Shortcut: Alt-D"
 msgstr ""
 
-#: /src/schooltool/skin/widgets.py:87
+#: /src/schooltool/skin/widgets.py:91
 msgid "The datetime string did not match the pattern yyyy-mm-dd"
 msgstr ""
 
-#: /src/schooltool/skin/widgets.py:110
+#: /src/schooltool/skin/widgets.py:98
 msgid "Width"
 msgstr ""
 
-#: /src/schooltool/skin/widgets.py:111
+#: /src/schooltool/skin/widgets.py:99
 msgid "Editor frame width"
 msgstr ""
 
-#: /src/schooltool/skin/widgets.py:114
+#: /src/schooltool/skin/widgets.py:102
 msgid "Height"
 msgstr ""
 
-#: /src/schooltool/skin/widgets.py:115
+#: /src/schooltool/skin/widgets.py:103
 msgid "Editor frame height"
 msgstr ""
 
-#: /src/schooltool/skin/widgets.py:118
+#: /src/schooltool/skin/widgets.py:106
 msgid "Toolbar configuration"
 msgstr ""
 
-#: /src/schooltool/skin/widgets.py:119
+#: /src/schooltool/skin/widgets.py:107
 msgid "The name of the toolbar configuration to use."
 msgstr ""
 
-#: /src/schooltool/skin/widgets.py:122
-msgid "Configuration path"
+#: /src/schooltool/skin/widgets.py:110
+msgid "Relative configuration path"
 msgstr ""
 
-#: /src/schooltool/skin/widgets.py:123
+#: /src/schooltool/skin/widgets.py:111
 msgid "Path to the FCKconfiguration javascript file."
 msgstr ""
 
-#: /src/schooltool/skin/widgets.py:130
+#: /src/schooltool/skin/widgets.py:136
 msgid "Configuration"
 msgstr ""
 
-#: /src/schooltool/skin/widgets.py:131
+#: /src/schooltool/skin/widgets.py:137
 msgid "FCK editor configuration."
 msgstr ""
 
