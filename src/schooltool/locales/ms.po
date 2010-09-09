@@ -5947,13 +5947,12 @@ msgid "Report a bug on Launchpad."
 msgstr "Laporkan bug ke Launchpad."
 
 #: /src/schooltool/skin/templates/view_macros.pt:127
-#, fuzzy
 msgid ""
 "&copy; The <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth "
 "Foundation</a> 2003 - <span>2010</span>: Supporting Social Innovation."
 msgstr ""
 "&copy; The <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth "
-"Foundation</a> 2003 - <span>2009</span>: Supporting Social Innovation."
+"Foundation</a> 2003 - <span>2010</span>: Supporting Social Innovation."
 
 #: /src/schooltool/skin/templates/view_macros.pt:132
 msgid ""
@@ -6984,34 +6983,3 @@ msgstr "Tukar jadual"
 #: /src/schooltool/widget/password.py:55
 msgid "Supplied passwords are not identical"
 msgstr "Kata laluan yang diberi tidak sepadan"
-
-#~ msgid ""
-#~ "\n"
-#~ "This is not a SchoolTool 0.11 database file, aborting.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Ini bukan fail pangkalan data SchoolTool 0.11, dibatalkan.\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "This is not a SchoolTool 0.10 database file, aborting.\n"
-#~ "\n"
-#~ "Please run the standalone database upgrade script.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Ini bukan fail pangkalan data SchoolTool 0.10, dibatalkan.\n"
-#~ "\n"
-#~ "Sila jalankan skrip tingkat upaya pangkalan data sahaja.\n"
-
-#~ msgid ""
-#~ "<a href=\"#\" onclick=\"$('#more_overlays').toggle();return false;"
-#~ "\">More...</a>"
-#~ msgstr ""
-#~ "<a href=\"#\" onclick=\"$('#more_overlays').toggle();return false;"
-#~ "\">Lagi...</a>"
-
-#~ msgid "SMTP server hostname. Leave empty to disable email."
-#~ msgstr "Nama host pelayan SMTP. Biarkan kosong untuk menyahaktifkan e-mel."
-
-#~ msgid "For term:"
-#~ msgstr "Untuk penggal:"

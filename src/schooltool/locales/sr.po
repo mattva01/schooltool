@@ -8,18 +8,18 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-08-22 18:49+0300\n"
-"PO-Revision-Date: 2010-06-15 13:06+0000\n"
+"PO-Revision-Date: 2010-08-22 20:29+0000\n"
 "Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
 "Language-Team: Serbian <sr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-06-16 03:43+0000\n"
+"X-Launchpad-Export-Date: 2010-08-23 03:49+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: /src/schooltool/app/app.py:197
 msgid "Your School"
-msgstr ""
+msgstr "Tvoja Škola"
 
 #: /src/schooltool/app/browser/__init__.py:256
 #: /src/schooltool/app/browser/templates/index.pt:11
@@ -231,7 +231,7 @@ msgstr ""
 
 #: /src/schooltool/app/browser/cal.py:929
 msgid "Go to previous week"
-msgstr ""
+msgstr "idi na proslu nedelju"
 
 #. Default: ""
 #: /src/schooltool/app/browser/cal.py:950
@@ -252,7 +252,7 @@ msgstr "Претходни месец"
 
 #: /src/schooltool/app/browser/cal.py:1168
 msgid "Go to next month"
-msgstr ""
+msgstr "idi na sledeći mesec"
 
 #: /src/schooltool/app/browser/cal.py:1169
 msgid "Go to current month"
@@ -260,7 +260,7 @@ msgstr ""
 
 #: /src/schooltool/app/browser/cal.py:1170
 msgid "Go to previous month"
-msgstr ""
+msgstr "idi na prošli mesec"
 
 #. Default: ""
 #: /src/schooltool/app/browser/cal.py:1178
@@ -290,11 +290,11 @@ msgstr ""
 
 #: /src/schooltool/app/browser/cal.py:1221
 msgid "Go to current year"
-msgstr ""
+msgstr "idi na tekuću godinu"
 
 #: /src/schooltool/app/browser/cal.py:1222
 msgid "Go to previous year"
-msgstr ""
+msgstr "idi na prošlu godinu"
 
 #: /src/schooltool/app/browser/cal.py:1288
 msgid "The next day"
@@ -310,15 +310,15 @@ msgstr "Претходни дан"
 
 #: /src/schooltool/app/browser/cal.py:1292
 msgid "Go to the next day"
-msgstr ""
+msgstr "idi na sledeći dan"
 
 #: /src/schooltool/app/browser/cal.py:1293
 msgid "Go to today"
-msgstr ""
+msgstr "idi na danas"
 
 #: /src/schooltool/app/browser/cal.py:1294
 msgid "Go to the previous day"
-msgstr ""
+msgstr "idi na juče"
 
 #. Default: ""
 #: /src/schooltool/app/browser/cal.py:1446
@@ -428,7 +428,7 @@ msgstr "дан"
 
 #: /src/schooltool/app/browser/cal.py:1779
 msgid "Week"
-msgstr ""
+msgstr "Nedelja"
 
 #: /src/schooltool/app/browser/cal.py:1780
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:119
@@ -688,7 +688,7 @@ msgstr "Slobodno/Zauzeto"
 #: /src/schooltool/app/help/event_add.pt:6
 #: /src/schooltool/app/help/event_add.pt:9
 msgid "Add Event"
-msgstr ""
+msgstr "dodaj događaj"
 
 #: /src/schooltool/app/browser/configure.zcml:534
 #: /src/schooltool/app/help/configure.zcml:87
@@ -749,7 +749,7 @@ msgstr "Šabloni"
 
 #: /src/schooltool/app/browser/configure.zcml:781
 msgid "Configure"
-msgstr ""
+msgstr "Podešavanje"
 
 #: /src/schooltool/app/browser/configure.zcml:788
 msgid "Error List"
@@ -929,11 +929,11 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/about.pt:24
 msgid "For more information:"
-msgstr ""
+msgstr "Za više informacija:"
 
 #: /src/schooltool/app/browser/templates/about.pt:27
 msgid "Website"
-msgstr ""
+msgstr "Web stranica"
 
 #: /src/schooltool/app/browser/templates/about.pt:28
 msgid "Launchpad project page"
@@ -941,7 +941,7 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/about.pt:29
 msgid "Mailing list"
-msgstr ""
+msgstr "Dopisna lista"
 
 #: /src/schooltool/app/browser/templates/about.pt:30
 msgid "IRC channel: #schooltool on freenode.net"
@@ -965,7 +965,7 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/about.pt:47
 msgid "Contributors:"
-msgstr ""
+msgstr "Saradnici"
 
 #: /src/schooltool/app/browser/templates/application_preferences.pt:4
 msgid "Edit site preferences"
@@ -1136,9 +1136,8 @@ msgid "There are no resources with calendars accessible to you."
 msgstr "Нема извора са календарима који су доступни Вама."
 
 #: /src/schooltool/app/browser/templates/default_report_template.pt:23
-#, fuzzy
 msgid "Created with SchoolTool"
-msgstr "Добродошли на Школску Таблу"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/default_report_template.pt:37
 msgid "Page ${page_number}"
@@ -4270,9 +4269,8 @@ msgid "has no date in it"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:73
-#, fuzzy
 msgid "end date cannot be before start date"
-msgstr "Датум завршетка је пре датума почетка"
+msgstr ""
 
 #: /src/schooltool/export/importer.py:74
 msgid "start date overlaps another year"
@@ -4593,23 +4591,20 @@ msgid "Help"
 msgstr ""
 
 #: /src/schooltool/level/browser.py:47
-#, fuzzy
 msgid "Add a level"
-msgstr "Додај догађај"
+msgstr ""
 
 #: /src/schooltool/level/interfaces.py:37
-#, fuzzy
 msgid "Title of the level."
-msgstr "Naziv kursa"
+msgstr ""
 
 #: /src/schooltool/level/security.zcml:7
 msgid "The teaching levels (student learning years)."
 msgstr ""
 
 #: /src/schooltool/level/security.zcml:12
-#, fuzzy
 msgid "Add/Remove"
-msgstr "Уклони"
+msgstr ""
 
 #: /src/schooltool/level/security.zcml:19
 msgid "Modify/Rename"
@@ -5258,19 +5253,16 @@ msgid "Copy data from active school year: ${active_schoolyear}"
 msgstr ""
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_add.pt:40
-#, fuzzy
 msgid "All Courses"
-msgstr "Kursevi"
+msgstr ""
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_add.pt:50
-#, fuzzy
 msgid "All Timetable Schemas"
-msgstr "Распоред"
+msgstr ""
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_add.pt:62
-#, fuzzy
 msgid "Copy members"
-msgstr "izmeni članove"
+msgstr ""
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:39
 msgid "Activate next school year"
@@ -5752,19 +5744,16 @@ msgid "Save"
 msgstr ""
 
 #: /src/schooltool/timetable/browser/__init__.py:686
-#, fuzzy
 msgid "School timetable"
-msgstr "Увези распоред"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/__init__.py:691
-#, fuzzy
 msgid "Apply from"
-msgstr "Primeni"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/__init__.py:693
-#, fuzzy
 msgid "Apply until"
-msgstr "Primeni"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/__init__.py:794
 msgid "Timetable conflicts with another:"
@@ -5965,15 +5954,13 @@ msgid "Manage..."
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/confirm-timetable-delete.pt:15
-#, fuzzy
 msgid "Are you sure you want to unschedule this timetable?"
-msgstr "Да ли сте сигурни да желите да избришете овај догађај?"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/confirm-timetable-delete.pt:27
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:48
-#, fuzzy
 msgid "Timetable \"${title}\""
-msgstr "Распоред"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/confirm-timetable-delete.pt:38
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:60
@@ -6068,14 +6055,12 @@ msgid "Time table schedule of ${courses} ${section}."
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:25
-#, fuzzy
 msgid "school days"
-msgstr "школа"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:27
-#, fuzzy
 msgid "available timetables"
-msgstr "Dostupni studenti"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:31
 msgid ""
@@ -6084,14 +6069,12 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:39
-#, fuzzy
 msgid "There are no timetables assigned."
-msgstr "Нема ништа да се дода."
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:49
-#, fuzzy
 msgid "(edit periods)"
-msgstr "izmeni grupe"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:91
 msgid "Consecutive periods are treated as a single meeting."
@@ -6187,9 +6170,8 @@ msgid "Using timetable: ${schema_titles}"
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:97
-#, fuzzy
 msgid "Apply from:"
-msgstr "Primeni"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:111
 msgid "Apply until:"
@@ -6394,6 +6376,3 @@ msgstr ""
 #: /src/schooltool/widget/password.py:55
 msgid "Supplied passwords are not identical"
 msgstr ""
-
-#~ msgid "confirm password"
-#~ msgstr "Потврди"

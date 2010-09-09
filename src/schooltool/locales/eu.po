@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-08-22 18:49+0300\n"
-"PO-Revision-Date: 2010-06-22 15:34+0000\n"
-"Last-Translator: Abel Camacho <didaktika@santurtzieus.com>\n"
+"PO-Revision-Date: 2010-09-02 17:40+0000\n"
+"Last-Translator: gorkaazk <gorkaazkarate@euskalerria.org>\n"
 "Language-Team: Basque <eu@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-06-23 03:44+0000\n"
+"X-Launchpad-Export-Date: 2010-09-03 03:41+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -53,7 +53,7 @@ msgstr "Egungo zuzendaritza taldea"
 
 #: /src/schooltool/app/browser/app.py:324
 msgid "Available leaders"
-msgstr ""
+msgstr "Libre dauden liderrak"
 
 #: /src/schooltool/app/browser/app.py:347
 msgid "school"
@@ -324,7 +324,7 @@ msgstr "Aurreko egunera joan"
 #. Default: ""
 #: /src/schooltool/app/browser/cal.py:1446
 msgid "Add new event starting at ${title}"
-msgstr ""
+msgstr "Gehitu gertakizun berria, noiz hasiko: ${title}"
 
 #: /src/schooltool/app/browser/cal.py:1735
 #: /src/schooltool/app/interfaces.py:146 /src/schooltool/app/interfaces.py:157
@@ -468,7 +468,7 @@ msgstr "Gertaera kopurua"
 #: /src/schooltool/app/browser/cal.py:1801
 #: /src/schooltool/app/browser/templates/event_add.pt:303
 msgid "Repeat until"
-msgstr ""
+msgstr "Errepikatu, noiz arte:"
 
 #: /src/schooltool/app/browser/cal.py:1805
 msgid "Weekdays"
@@ -490,7 +490,7 @@ msgstr "Data bereziak"
 
 #: /src/schooltool/app/browser/cal.py:1912
 msgid "same weekday"
-msgstr ""
+msgstr "astegun berbera"
 
 #: /src/schooltool/app/browser/cal.py:1917
 msgid "1st"
@@ -514,12 +514,12 @@ msgstr "5."
 
 #: /src/schooltool/app/browser/cal.py:1932
 msgid "last weekday"
-msgstr ""
+msgstr "azken asteguna"
 
 #. Default: ""
 #: /src/schooltool/app/browser/cal.py:1942
 msgid "Last ${weekday}"
-msgstr ""
+msgstr "Azken ${weekday}"
 
 #: /src/schooltool/app/browser/cal.py:1965
 #: /src/schooltool/app/browser/cal.py:2274
@@ -532,7 +532,7 @@ msgstr "Ordu baliogabea"
 
 #: /src/schooltool/app/browser/cal.py:2019
 msgid "End date is earlier than start date"
-msgstr ""
+msgstr "Amaierako data hasiera data baino lehenago da"
 
 #: /src/schooltool/app/browser/cal.py:2028
 msgid "Invalid date.  Please specify YYYY-MM-DD, one per line."
@@ -722,7 +722,7 @@ msgstr "Belaunaldiak"
 
 #: /src/schooltool/app/browser/configure.zcml:666
 msgid "Browser UI"
-msgstr ""
+msgstr "Nabigatzaileko erabiltzailearen interfazea"
 
 #: /src/schooltool/app/browser/configure.zcml:672
 #: /src/schooltool/app/browser/templates/login.pt:3
@@ -742,7 +742,7 @@ msgstr "Aplikazioa"
 
 #: /src/schooltool/app/browser/configure.zcml:696
 msgid "Calendar Widget"
-msgstr ""
+msgstr "Egitegiaren osagarria, widgeta"
 
 #: /src/schooltool/app/browser/configure.zcml:702
 msgid "Templates"
@@ -811,16 +811,20 @@ msgid ""
 "Wrong section header on line ${line_no} (it should contain a course id and "
 "an instructor id)"
 msgstr ""
+"On line sailaren goiburu okerra ${line_no} (ikastaroaren ID bat izan behar "
+"zuen eta irakaslearen beste ID bat)"
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:357
 msgid "Malformed line ${line_no} (it should contain a day id and a period id)"
 msgstr ""
+"Txarto eraikitako lerroa ${line_no} (egunaren ID eta aldiaren ID eduki "
+"beharko luke)"
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:380
 msgid "Incomplete section description on line ${line}"
-msgstr ""
+msgstr "Osatua ez dagoen sailaen deskripzioa lerro honetan: ${line}"
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:385
@@ -830,16 +834,17 @@ msgstr "Ikaslerik ez (line ${line}) eremuan"
 #: /src/schooltool/app/browser/csvimport.py:466
 msgid "The first row of the CSV file must contain the timetable schema id."
 msgstr ""
+"CSV fitxategiko lehen lerroak ordutegiaren eskemaren IDa izan beharko du."
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:477
 msgid "The timetable schema ${schema} does not exist."
-msgstr ""
+msgstr "Ez da existitzen ordutegiaren eskema ${schema} hori."
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:508
 msgid "Error in timetable CSV data, line ${line_no}"
-msgstr ""
+msgstr "Akatsa CSV ordutegiko datuetan,  ${line_no} lerroan"
 
 #: /src/schooltool/app/browser/csvimport.py:548
 msgid "Day ids not defined in selected schema: ${args}."
@@ -855,7 +860,7 @@ msgstr "Pertsonak ez dira aurkitu: ${args}."
 
 #: /src/schooltool/app/browser/csvimport.py:551
 msgid "Courses not found: ${args}."
-msgstr ""
+msgstr "Ez dira ikastaro hauek topatu: ${args}."
 
 #: /src/schooltool/app/browser/csvimport.py:552
 msgid "Sections not found: ${args}."
@@ -863,7 +868,7 @@ msgstr "Ez dira eremuak aurkitu: ${args}."
 
 #: /src/schooltool/app/browser/csvimport.py:553
 msgid "Invalid records: ${args}."
-msgstr ""
+msgstr "Balio gabeko agiriak: ${args}."
 
 #: /src/schooltool/app/browser/overlay.py:205
 msgid "Saved changes."
@@ -875,32 +880,32 @@ msgstr "Eguneroko egutegia %s-entzat"
 
 #: /src/schooltool/app/browser/pdfcal.py:95
 msgid "recurrent"
-msgstr ""
+msgstr "errepikaria"
 
 #. Default: ""
 #: /src/schooltool/app/browser/pdfcal.py:99
 msgid "from the calendar of ${calendar_owner}"
-msgstr ""
+msgstr "honen egitegitik: ${calendar_owner}"
 
 #: /src/schooltool/app/browser/pdfcal.py:115
 msgid "all day"
-msgstr ""
+msgstr "egun osoan"
 
 #: /src/schooltool/app/browser/pdfcal.py:177
 msgid "Weekly calendar for %s"
-msgstr ""
+msgstr "Asteroko egutegia honetarako: %s"
 
 #: /src/schooltool/app/browser/pdfcal.py:186
 msgid "Week %d (%s - %s), %d"
-msgstr ""
+msgstr "Astea %d (%s - %s), %d"
 
 #: /src/schooltool/app/browser/pdfcal.py:197
 msgid "Monthly calendar for %s"
-msgstr "Hileko egutegia %s-entat"
+msgstr "Hileroko egutegia %s-rentzat"
 
 #: /src/schooltool/app/browser/report.py:57
 msgid "PDF support is disabled.  It can be enabled by your administrator."
-msgstr ""
+msgstr "PDF euskarria desgaitua dago.  Zeure kudeatzaileak gai lezake."
 
 #: /src/schooltool/app/browser/templates/about.pt:5
 msgid "About SchoolTool"
@@ -914,6 +919,12 @@ msgid ""
 "well as a framework for building customized applications and configurations "
 "for individual schools or states."
 msgstr ""
+"SchoolTool administrazioko software librea da mundu osoan zehar dauden "
+"eskolentzat. Proiektuaren helburuak hauek dira, ikasleen arteko informazioa "
+"elkar trukatzeko sistema sortu, lehen eta bigarren hezkuntzako ikastetxeetan "
+"administraziorako lagungarri izan daitekeen sistema bat sortu eta lan-sare "
+"bat sortu aplikazio pertsonalizatuekin eta eskoletarako edo lurraldeetarako "
+"propio eraikitako aplikazioekin."
 
 #: /src/schooltool/app/browser/templates/about.pt:16
 msgid ""
@@ -921,12 +932,17 @@ msgid ""
 "\"http://python.org\">Python</a> using the <a href=\"http://zope.org\">Zope "
 "3</a> framework."
 msgstr ""
+"SchoolTool %100 software librea da, open source software stack, <a href="
+"\"http://python.org\">Python</a> erabiliz idatzita, <a href=\"http://zope.org"
+"\">Zope 3</a> euskarria erabiliz."
 
 #: /src/schooltool/app/browser/templates/about.pt:20
 msgid ""
 "SchoolTool is licensed under the <a href=\"http://www.gnu.org/licenses/gpl-"
 "2.0.html\">GNU General Public License, Version 2</a>."
 msgstr ""
+"SchoolTool honek <a href=\"http://www.gnu.org/licenses/gpl-2.0.html\">GNU "
+"General Public License, Version 2</a> lizentziapean dago."
 
 #: /src/schooltool/app/browser/templates/about.pt:24
 msgid "For more information:"
@@ -946,11 +962,11 @@ msgstr "Posta zerrenda"
 
 #: /src/schooltool/app/browser/templates/about.pt:30
 msgid "IRC channel: #schooltool on freenode.net"
-msgstr ""
+msgstr "IRC kanalal: #schooltool ; freenode.net horretan"
 
 #: /src/schooltool/app/browser/templates/about.pt:35
 msgid "Founder and funder:"
-msgstr ""
+msgstr "Sortzailea eta mantentzailea:"
 
 #: /src/schooltool/app/browser/templates/about.pt:38
 msgid "Project Manager:"
@@ -958,11 +974,11 @@ msgstr "Proiektu Zuzendaria:"
 
 #: /src/schooltool/app/browser/templates/about.pt:41
 msgid "Lead Developer:"
-msgstr ""
+msgstr "Garatzaile nagusia:"
 
 #: /src/schooltool/app/browser/templates/about.pt:44
 msgid "Release Manager:"
-msgstr ""
+msgstr "Bertsioen kudeatzailea:"
 
 #: /src/schooltool/app/browser/templates/about.pt:47
 msgid "Contributors:"
@@ -1015,30 +1031,30 @@ msgstr "IkastolakoTresna"
 
 #: /src/schooltool/app/browser/templates/cal_atom.pt:21
 msgid "Events for"
-msgstr ""
+msgstr "Gertakizunak noizko:"
 
 #. Default: "This is an Atom formatted XML site feed. It is intended to be viewed in a Newsreader or syndicated to another site. Please visit"
 #: /src/schooltool/app/browser/templates/cal_atom.pt:42
 msgid "atom_description"
-msgstr ""
+msgstr "atom_deskripzioa"
 
 #. Default: "Atom Enabled"
 #: /src/schooltool/app/browser/templates/cal_atom.pt:46
 msgid "atom_enabled"
-msgstr ""
+msgstr "atom_gaitua"
 
 #. Default: "for more info."
 #: /src/schooltool/app/browser/templates/cal_atom.pt:49
 msgid "atom_more_info"
-msgstr ""
+msgstr "atom_info_gehiago"
 
 #: /src/schooltool/app/browser/templates/cal_atom.pt:56
 msgid "Validate my Atom feed"
-msgstr ""
+msgstr "Gaitu nire Atom jarioa"
 
 #: /src/schooltool/app/browser/templates/cal_atom.pt:56
 msgid "[Valid Atom]"
-msgstr ""
+msgstr "[Balio duen Atom]"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:24
 msgid "Daily"
@@ -1046,11 +1062,11 @@ msgstr "Egunero"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:24
 msgid "View daily calendar"
-msgstr ""
+msgstr "Ikusi eguneroko egutegia"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:30
 msgid "View weekly calendar"
-msgstr ""
+msgstr "Ikusi asteroko egutegia"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:30
 #: /src/schooltool/app/browser/templates/event_add.pt:235
@@ -1059,11 +1075,11 @@ msgstr "Astero"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:36
 msgid "View monthly calendar"
-msgstr ""
+msgstr "Ikusi hilabeteroko egutegia"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:42
 msgid "View yearly calendar"
-msgstr ""
+msgstr "Ikusi urteroko egutegia"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:42
 msgid "Yearly"
@@ -1072,7 +1088,7 @@ msgstr "Urtero"
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:55
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:91
 msgid "Calendar for ${title} - ${calendar_title}"
-msgstr ""
+msgstr "Egutegia honetarako ${title} - ${calendar_title}"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:115
 msgid "Jump To ..."
@@ -1106,15 +1122,16 @@ msgstr "Gehiago..."
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:4
 msgid "Select calendars to display"
-msgstr ""
+msgstr "Hautatu erakusteko egutegiak"
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:15
 msgid "Select additional calendars to display"
-msgstr ""
+msgstr "Hautatu erakusteko egutegi gehigarriak"
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:27
 msgid "Hold down Ctrl or Shift to select multiple calendars."
 msgstr ""
+"Sakatuta eutsi ezazu Ctrl edo Shift giltzak hainbat egutegi aukeratzeko."
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:32
 msgid "Public Calendar"
@@ -1122,7 +1139,7 @@ msgstr "Egutegi publikoa"
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:37
 msgid "site-wide calendar"
-msgstr ""
+msgstr "guneko egutegia"
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:42
 #: /src/schooltool/app/browser/templates/index.pt:14
@@ -1134,16 +1151,15 @@ msgstr "Baliabideak"
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:43
 msgid "There are no resources with calendars accessible to you."
-msgstr ""
+msgstr "Ez dago zuretzat eskuragarri egutegiak dauzkan baliabiderik"
 
 #: /src/schooltool/app/browser/templates/default_report_template.pt:23
-#, fuzzy
 msgid "Created with SchoolTool"
-msgstr "SchoolToolera ongietorria"
+msgstr "SchoolTool honekin sortua"
 
 #: /src/schooltool/app/browser/templates/default_report_template.pt:37
 msgid "Page ${page_number}"
-msgstr ""
+msgstr "Orrialdea ${page_number}"
 
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:26
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:27
@@ -1167,7 +1183,7 @@ msgstr "Ezabatu"
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:49
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:71
 msgid "invert-selection-button"
-msgstr ""
+msgstr "alderantzikatu-hautatu-giltza"
 
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:37
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:38
@@ -1182,7 +1198,7 @@ msgstr ""
 #: /src/schooltool/skin/templates/table_container.pt:39
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:15
 msgid "There are none."
-msgstr ""
+msgstr "Ez dago bat  ere."
 
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:48
 #: /src/schooltool/app/browser/templates/event_booking.pt:42
@@ -1203,14 +1219,14 @@ msgstr ""
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:68
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:77
 msgid "There are none to add."
-msgstr ""
+msgstr "Ez dago gehitzeko bat ere."
 
 #. Default: "OK"
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:65
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:75
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:84
 msgid "ok-button"
-msgstr ""
+msgstr "onartzeko-giltza"
 
 #: /src/schooltool/app/browser/templates/event.pt:15
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:15
@@ -1220,7 +1236,7 @@ msgstr "Egun osoko gertaera"
 #: /src/schooltool/app/browser/templates/event.pt:20
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:21
 msgid "This is a recurring event."
-msgstr ""
+msgstr "Hau errepikatzen den gertakizuna da."
 
 #: /src/schooltool/app/browser/templates/event.pt:33
 #: /src/schooltool/basicperson/browser/templates/person_view.pt:29
@@ -1235,18 +1251,18 @@ msgstr "Xehetasunak"
 #: /src/schooltool/schoolyear/browser/schoolyear.py:128
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:38
 msgid "Starts"
-msgstr ""
+msgstr "Hasiko da"
 
 #: /src/schooltool/app/browser/templates/event.pt:42
 #: /src/schooltool/schoolyear/browser/schoolyear.py:130
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:43
 msgid "Ends"
-msgstr ""
+msgstr "Bukatuko da"
 
 #: /src/schooltool/app/browser/templates/event.pt:53
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:54
 msgid "Change the details of this event"
-msgstr ""
+msgstr "Aldatu gertakizun honen zehaztasunak"
 
 #: /src/schooltool/app/browser/templates/event.pt:53
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:54
@@ -1256,7 +1272,7 @@ msgstr "editatu ekitaldia"
 #: /src/schooltool/app/browser/templates/event.pt:64
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:65
 msgid "Scheduled resources"
-msgstr ""
+msgstr "Planifikatutako baliabideak"
 
 #: /src/schooltool/app/browser/templates/event.pt:72
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:73
@@ -1278,11 +1294,11 @@ msgstr "Ekitaldiaren xehetasunak"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:197
 msgid "Book Resources"
-msgstr ""
+msgstr "Liburu diren baliabideak"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:207
 msgid "Update form"
-msgstr ""
+msgstr "Eguneratu inprimakia"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:224
 msgid "day"
@@ -1302,46 +1318,46 @@ msgstr "urtea"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:236
 msgid "This section only applies when weekly recurrence is selected."
-msgstr ""
+msgstr "Atal hau asteroko errepikapena hautatzen denean aplikatuko da."
 
 #: /src/schooltool/app/browser/templates/event_add.pt:257
 msgid "This section only applies when the monthly recurrence is selected."
-msgstr ""
+msgstr "Atal hau hilabeteroko errepikapena hautatzen denean aplikatuko da."
 
 #: /src/schooltool/app/browser/templates/event_add.pt:264
 msgid "Day ${monthday} of every month"
-msgstr ""
+msgstr "Eguna ${monthday} edozein hilabetekoa"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:271
 #: /src/schooltool/app/browser/templates/event_add.pt:278
 msgid "${weekday} of every month"
-msgstr ""
+msgstr "${weekday} edozein hilabetekoa"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:288
 msgid "Repeat"
-msgstr ""
+msgstr "Errepikatu"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:291
 msgid "times"
-msgstr ""
+msgstr "aldiz"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:306
 #: /src/schooltool/term/browser/templates/emergency_select.pt:31
 #: /src/schooltool/timetable/browser/templates/specialday_select.pt:31
 msgid "[popup calendar]"
-msgstr ""
+msgstr "[azaleratzen den popup egutegia]"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:324
 msgid "Repeat forever"
-msgstr ""
+msgstr "Beti ere errepikatu"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:348
 msgid "Booked Resources"
-msgstr ""
+msgstr "Baliabide erresalbatuak"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:369
 msgid "Book resources"
-msgstr ""
+msgstr "Liburu diren baliabideak"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:375
 #: /src/schooltool/skin/templates/view_macros.pt:161
@@ -1350,7 +1366,7 @@ msgstr ""
 #: /src/schooltool/skin/templates/view_macros.pt:180
 #: /src/schooltool/skin/templates/view_macros.pt:187
 msgid "Shortcut: Alt-A"
-msgstr ""
+msgstr "Laster-bidea: Alt-A"
 
 #. Default: "Cancel"
 #: /src/schooltool/app/browser/templates/event_add.pt:378
@@ -1375,15 +1391,15 @@ msgstr ""
 #: /src/schooltool/timetable/browser/templates/specialday_select.pt:41
 #: /src/schooltool/timetable/browser/templates/timetable-container-delete.pt:29
 msgid "cancel-button"
-msgstr ""
+msgstr "Bertan-behera-giltza"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:4
 msgid "Resource Booking"
-msgstr ""
+msgstr "Baliabideak erresalbatu"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:12
 msgid "Resource Booking for ${title}"
-msgstr ""
+msgstr "Baliabidea erresalbatu honetarako: ${title}"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:18
 msgid "Title:"
@@ -1391,27 +1407,27 @@ msgstr "Izenburua:"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:22
 msgid "Starts:"
-msgstr ""
+msgstr "Hasiko da:"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:26
 msgid "Ends:"
-msgstr ""
+msgstr "Amaituko:"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:30
 msgid "This is a recurring event!"
-msgstr ""
+msgstr "Hau errepikatzen den gertakizuna da!"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:38
 msgid "Booked resources"
-msgstr ""
+msgstr "Erresalbatutako baliabideak"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:42
 msgid "UnBook"
-msgstr ""
+msgstr "Erresalba bertan behera utzi"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:51
 msgid "Available resources"
-msgstr ""
+msgstr "Eskuragarri dauden baliabideak"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:57
 msgid "Book"
@@ -1419,7 +1435,7 @@ msgstr "Liburua"
 
 #: /src/schooltool/app/browser/templates/event_info_viewlet.pt:12
 msgid "Location: ${location}"
-msgstr ""
+msgstr "Kokapena: ${location}"
 
 #: /src/schooltool/app/browser/templates/index.pt:6
 msgid "Welcome to SchoolTool"
@@ -1454,13 +1470,16 @@ msgstr "Mailak"
 
 #: /src/schooltool/app/browser/templates/login.pt:8
 msgid "Your session has expired."
-msgstr ""
+msgstr "Zure saioa iraungi egin da."
 
 #: /src/schooltool/app/browser/templates/login.pt:13
 msgid ""
 "You are not allowed to access this page. You can click on the back button in "
 "your browser to go back, or ask a more privileged user to log in."
 msgstr ""
+"Ez zaude orrialde honetara sartzeko baimendua. Atzera egiteko giltza sakatu "
+"ezazu atzera egiteko edo eskatu baimena handiagoko erabiltzaile bati zure "
+"ordez izena ematea."
 
 #: /src/schooltool/app/browser/templates/login.pt:23
 msgid "Please log in"
@@ -1468,7 +1487,7 @@ msgstr "Mesedez, sar zaitez"
 
 #: /src/schooltool/app/browser/templates/login.pt:35
 msgid "User Information"
-msgstr ""
+msgstr "Erabiltzaileari buruzko informazioa"
 
 #: /src/schooltool/app/browser/templates/login.pt:38
 #: /src/schooltool/basicperson/browser/person.py:59
@@ -1502,28 +1521,28 @@ msgstr "Saioa hasi"
 
 #: /src/schooltool/app/browser/templates/portlet_tomorrow_events.pt:5
 msgid "Tomorrow's Events"
-msgstr ""
+msgstr "Biharko gertakizunak"
 
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:4
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:14
 msgid "Deleting a repeating event (${event_title})"
-msgstr ""
+msgstr "Ezabatzen errepikatzen den gertakizun bat (${event_title})"
 
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:19
 msgid "You are trying to delete a repeating event."
-msgstr ""
+msgstr "Errepikatzen den gertakizuna ezabatzeko ahaleginak egiten ari zara"
 
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:41
 msgid "Current"
-msgstr ""
+msgstr "Egungoa"
 
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:43
 msgid "Future"
-msgstr ""
+msgstr "Etorkizuna"
 
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:45
 msgid "All"
-msgstr ""
+msgstr "Guztiak"
 
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:47
 #: /src/schooltool/basicperson/browser/demographics.py:153
@@ -1562,25 +1581,28 @@ msgstr "Utzi"
 #: /src/schooltool/app/browser/templates/simple_event_delete.pt:4
 #: /src/schooltool/app/browser/templates/simple_event_delete.pt:13
 msgid "Deleting an event (${event_title})"
-msgstr ""
+msgstr "Gertakizun bat ezabatzen (${event_title})"
 
 #: /src/schooltool/app/browser/templates/simple_event_delete.pt:18
 msgid "Are you sure you want to delete this event?"
-msgstr ""
+msgstr "Gertakizun hau ezabatu nahi duzu? Ziur zaude?"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:4
 msgid "Upload SchoolTool timetable as CSV"
-msgstr ""
+msgstr "Kargatu SchoolTool egutegia CSV bezala"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:20
 msgid "Import Timetable"
-msgstr ""
+msgstr "Inportatu orgutegi koadroa"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:24
 msgid ""
 "You can create the CSV file in a spreadsheet and export it in CSV (Comma-"
 "Separated Values) format. The structure of the table is described below."
 msgstr ""
+"CSV fitxategia kalkulu-orri batean  sor dezakezu eta gero esportatu CSV "
+"(Comma-Separated Values) formatuan. Taularen estruktura hemen behean "
+"deskribatzen da."
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:30
 msgid ""
@@ -1589,12 +1611,19 @@ msgid ""
 "timetable schema can be found by going to its view page under School "
 "Timetables for the school year."
 msgstr ""
+"Fitxategiaren lehen lerroak  <strong>ordutegi taularen eskema</strong>ren "
+"IDa izan beharko du bere baitan ordutegi taula berrietan erabili ahal "
+"izateko. Ordutegi taularen eskemaren IDa aurkitu ahal izango da bistaratzeko "
+"orrialdera joanda ikasturteko Eskola Ordutegiak atalean."
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:37
 msgid ""
 "The second row should be empty. After that, several section descriptions may "
 "follow. They are separated by an extra carriage return (i.e., a blank line)."
 msgstr ""
+"Bigarren lerroa hutsik egon beharko. Horren ostean, hainbat sailen "
+"deskripzioak ezar daitezke. Bereizita egongo dira aparteko lerro-jauzi bidez "
+"(hau da, lerro zurien bidez)."
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:43
 msgid ""
@@ -1606,6 +1635,13 @@ msgid ""
 "<strong>person ids</strong> may follow, the denoted persons will be added to "
 "the section as learners."
 msgstr ""
+"Atal bakoitzaren deskripzioaren lehen lerroak bere barnean badauka "
+"<strong>ikastaroaren IDa</strong> eta  <strong>irakaslearen IDa</strong> "
+"atal berrirako. Horren ostean, lerro kopuru bat eta lerro bakoitzak  "
+"<strong>egunaren IDa</strong> eta <strong>aldiaren IDa</strong> jarraian. "
+"Aldiaren deskripzioen zerrenda hiru izarñorekin ('***') amaituko da lehen "
+"zutabean. Mugatzailearen ostean, edozein <strong>pertsona ID</strong> egon "
+"daitekeeta pertsona horiek atalera gehituko dira ikasle gisa."
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:54
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:33
@@ -1637,6 +1673,23 @@ msgid ""
 "\"johnny\"\n"
 "\"pete\"\n"
 msgstr ""
+"\n"
+"\"hiru-egun\"\n"
+"\"\",\"\",\"\"\n"
+"\"filosofia\",\"lorch\"\n"
+"\"Astelehena\",\"A\"\n"
+"\"Astelehena\",\"B\"\n"
+"\"Asteartea\",\"C\"\n"
+"\"***\"\n"
+"\"jontxu\"\n"
+"\"miren\"\n"
+"\"\"\n"
+"\"literatura\",\"guzman\"\n"
+"\"Asteazkena\",\"B\"\n"
+"\"Asteazkena\",\"C\"\n"
+"\"***\"\n"
+"\"jontxu\"\n"
+"\"ane\"\n"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:74
 msgid ""
@@ -1721,7 +1774,7 @@ msgstr "Western (ISO-8859-1)"
 #: /src/schooltool/person/browser/person-csvimport.pt:59
 #: /src/schooltool/resource/browser/resource-csvimport.pt:56
 msgid "Western (ISO-8859-15)"
-msgstr ""
+msgstr "Mendebaldeko (ISO-8859-15)"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:106
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:60
@@ -1732,7 +1785,7 @@ msgstr ""
 #: /src/schooltool/person/browser/person-csvimport.pt:60
 #: /src/schooltool/resource/browser/resource-csvimport.pt:57
 msgid "Western (Windows-1252)"
-msgstr ""
+msgstr "Mendebaldeko (Windows-1252)"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:107
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:61
@@ -1743,7 +1796,7 @@ msgstr ""
 #: /src/schooltool/person/browser/person-csvimport.pt:61
 #: /src/schooltool/resource/browser/resource-csvimport.pt:58
 msgid "Other (please specify)"
-msgstr ""
+msgstr "Beste (zehaztu mesedez)"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:111
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:65
@@ -1754,7 +1807,7 @@ msgstr ""
 #: /src/schooltool/person/browser/person-csvimport.pt:65
 #: /src/schooltool/resource/browser/resource-csvimport.pt:62
 msgid "Other charset: ${other_charset}"
-msgstr ""
+msgstr "Beste karaktere-sorta: ${other_charset}"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:115
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:69
@@ -1765,7 +1818,7 @@ msgstr ""
 #: /src/schooltool/person/browser/person-csvimport.pt:69
 #: /src/schooltool/resource/browser/resource-csvimport.pt:66
 msgid "Input CSV Data"
-msgstr ""
+msgstr "Sartu CSV datuak"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:116
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:70
@@ -1776,7 +1829,7 @@ msgstr ""
 #: /src/schooltool/person/browser/person-csvimport.pt:70
 #: /src/schooltool/resource/browser/resource-csvimport.pt:67
 msgid "CSV Data"
-msgstr ""
+msgstr "CSV datuak"
 
 #. Default: "Submit"
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:122
@@ -1789,19 +1842,19 @@ msgstr ""
 #: /src/schooltool/person/browser/person-csvimport.pt:75
 #: /src/schooltool/resource/browser/resource-csvimport.pt:72
 msgid "submit-button"
-msgstr ""
+msgstr "bidali-botoia"
 
 #: /src/schooltool/app/configure.zcml:340
 msgid "Security (General)"
-msgstr ""
+msgstr "Segurtasuna (Orokorra)"
 
 #: /src/schooltool/app/configure.zcml:355
 msgid "Booking Resources"
-msgstr ""
+msgstr "Erreserbatze baliabideak"
 
 #: /src/schooltool/app/help/admin.pt:6
 msgid "SchoolTool Administration"
-msgstr ""
+msgstr "SchoolTool Administrazioa"
 
 #: /src/schooltool/app/help/admin.pt:8
 msgid ""
@@ -1813,11 +1866,20 @@ msgid ""
 "<p>This branch of the help tree contains items relevant to administrators "
 "configuring SchoolTool, but not end users.</p>"
 msgstr ""
+"<h1>SchoolTool Administrazioa</h1> <p>Ikastetxeek estruktura konplexuak "
+"izaten dituzte, pertsonen arteko organizazioa, pedagogiaren kudeaketa, "
+"denbora eta baliabide materialen kudeaketa... Zoritxarrez ikastetxean "
+"gertatzen direnak kudeatzeko lanabes informatiko batek, SchoolTool hau "
+"bezalako batek, beraz, konplexutasun pittin bat izan beharko, eta lanabes "
+"hau ikastetxe batean ezartzeko hainbat eragile inplikatu beharko. </p> "
+"<p>Laguntza-arbolaren adar honek erakutsiko ditu SchoolTool lanabesaren "
+"kudeatzaileentzat erabilgarriak izan daitezkeen elementuak baina atal hau ez "
+"da azken erabiltzaile arruntentzako atala .</p>"
 
 #: /src/schooltool/app/help/calendar_selection.pt:6
 #: /src/schooltool/app/help/configure.zcml:97
 msgid "Calendar Selection"
-msgstr ""
+msgstr "Egutegiaren hautaketa"
 
 #: /src/schooltool/app/help/calendar_selection.pt:8
 msgid ""
@@ -1839,7 +1901,7 @@ msgstr ""
 
 #: /src/schooltool/app/help/calendaring.pt:6
 msgid "Calendaring in SchoolTool"
-msgstr ""
+msgstr "SchoolTool egutegiak"
 
 #: /src/schooltool/app/help/calendaring.pt:8
 msgid ""
@@ -1879,27 +1941,27 @@ msgstr "Erakundea"
 
 #: /src/schooltool/app/help/configure.zcml:29
 msgid "Calendaring"
-msgstr ""
+msgstr "Egutegiak"
 
 #: /src/schooltool/app/help/configure.zcml:37
 #: /src/schooltool/app/help/daily_calendar.pt:6
 msgid "Daily Calendar"
-msgstr ""
+msgstr "Eguneroko  egutegiak"
 
 #: /src/schooltool/app/help/configure.zcml:47
 #: /src/schooltool/app/help/weekly_calendar.pt:6
 msgid "Weekly Calendar"
-msgstr ""
+msgstr "Asteroko egutegia"
 
 #: /src/schooltool/app/help/configure.zcml:57
 #: /src/schooltool/app/help/monthly_calendar.pt:6
 msgid "Monthly Calendar"
-msgstr ""
+msgstr "Hileroko egutegia"
 
 #: /src/schooltool/app/help/configure.zcml:67
 #: /src/schooltool/app/help/yearly_calendar.pt:6
 msgid "Yearly Calendar"
-msgstr ""
+msgstr "Urteroko egutegia"
 
 #: /src/schooltool/app/help/daily_calendar.pt:8
 msgid ""
@@ -1925,7 +1987,7 @@ msgstr ""
 #: /src/schooltool/app/help/event_add.pt:10
 #: /src/schooltool/app/help/event_edit.pt:10
 msgid "This form has a few issues:"
-msgstr ""
+msgstr "Inprimaki honek elementu gutxi ditu:"
 
 #: /src/schooltool/app/help/event_add.pt:12
 msgid ""
@@ -1973,12 +2035,16 @@ msgid ""
 "\"Exception dates\" are specific dates a repeating event skips, such as "
 "holidays."
 msgstr ""
+"\"Salbuespen datak\" behin eta berriro errepikatzen den gertakizuna "
+"saihesten duten data zehatzak dira, oporrak bezalakoak."
 
 #: /src/schooltool/app/help/event_edit.pt:12
 msgid ""
 "If you need to edit a resource reservation, click the <code>Book resources</"
 "code> link at the bottom of the form."
 msgstr ""
+"Baliabide baten erreserba editatu behar baduzu, egin klik <code>Baliabideak "
+"erreserbatu</code> estekan inprimakiaren amaiera aldean."
 
 #: /src/schooltool/app/help/monthly_calendar.pt:8
 msgid ""
@@ -2007,13 +2073,16 @@ msgstr ""
 
 #: /src/schooltool/app/help/org.pt:6
 msgid "SchoolTool Organization"
-msgstr ""
+msgstr "SchoolTool antolakuntza"
 
 #: /src/schooltool/app/help/org.pt:8
 msgid ""
 "<h1>SchoolTool Organization</h1> <p>This branch of the help tree contains "
 "items explaining the basic organization of SchoolTool.</p>"
 msgstr ""
+"<h1>SchoolTool antolakuntza</h1> <p>Laguntza arbolaren adar honek baditu "
+"SchoolTool lanabesaren oinarrizko antolakuntza azaltzen duten elementuak .</"
+"p>"
 
 #: /src/schooltool/app/help/schooltool.pt:8
 msgid ""
@@ -2282,7 +2351,7 @@ msgstr ""
 
 #: /src/schooltool/app/security.zcml:87
 msgid "Manage school settings and configuration"
-msgstr ""
+msgstr "Kudeatu eskola ezarpenak eta konfigurazioa"
 
 #: /src/schooltool/app/security.zcml:95
 #: /src/schooltool/course/security.zcml:141
@@ -2765,7 +2834,7 @@ msgstr ""
 #. Default: ""
 #: /src/schooltool/contact/browser/relationship.py:91
 msgid "Manage contacts of ${person}"
-msgstr ""
+msgstr "Kudeatu honen kontaktuak ${person}"
 
 #: /src/schooltool/contact/browser/templates/contact_view.pt:16
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:18
@@ -2978,7 +3047,7 @@ msgstr ""
 
 #: /src/schooltool/contact/security.zcml:36
 msgid "Manage user's contacts"
-msgstr ""
+msgstr "Kudeatu erabiltzailearen kontaktuak"
 
 #: /src/schooltool/contact/security.zcml:46
 msgid "Create/Delete an external contact"
@@ -3320,7 +3389,7 @@ msgstr ""
 
 #: /src/schooltool/course/browser/templates/section.pt:58
 msgid "Change the name or description of this section."
-msgstr ""
+msgstr "Aldatu sail honen izena edo deskribapena"
 
 #: /src/schooltool/course/browser/templates/section.pt:58
 msgid "edit info"
@@ -3349,7 +3418,7 @@ msgstr ""
 
 #: /src/schooltool/course/browser/templates/section_container.pt:39
 msgid "Section"
-msgstr ""
+msgstr "Saila"
 
 #: /src/schooltool/course/browser/templates/section_edit.pt:60
 msgid "Linked sections"
@@ -4304,14 +4373,12 @@ msgid "${title} has no day templates in A${row}"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:83
-#, fuzzy
 msgid "is not a valid time range"
-msgstr "\"${username}\"-k ez du balio."
+msgstr ""
 
 #: /src/schooltool/export/importer.py:84
-#, fuzzy
 msgid "is not a valid timetable model"
-msgstr "Denbora tarte ez da baliagarria: $slot."
+msgstr ""
 
 #: /src/schooltool/export/importer.py:85
 msgid "is the same day id as another in this timetable"
@@ -4347,9 +4414,8 @@ msgid "${title} has no courses in A${row}"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:93
-#, fuzzy
 msgid "is not a valid username"
-msgstr "\"${username}\"-k ez du balio."
+msgstr ""
 
 #: /src/schooltool/export/importer.py:94
 msgid "is not a valid schema in the given school year"
@@ -4590,9 +4656,8 @@ msgid "Help"
 msgstr ""
 
 #: /src/schooltool/level/browser.py:47
-#, fuzzy
 msgid "Add a level"
-msgstr "Gertaera gehitu"
+msgstr ""
 
 #: /src/schooltool/level/interfaces.py:37
 msgid "Title of the level."
@@ -4603,14 +4668,12 @@ msgid "The teaching levels (student learning years)."
 msgstr ""
 
 #: /src/schooltool/level/security.zcml:12
-#, fuzzy
 msgid "Add/Remove"
-msgstr "Ezabatu"
+msgstr ""
 
 #: /src/schooltool/level/security.zcml:19
-#, fuzzy
 msgid "Modify/Rename"
-msgstr "Aldatu"
+msgstr ""
 
 #: /src/schooltool/level/templates/levels.pt:3
 #: /src/schooltool/level/templates/levels.pt:6
@@ -4671,7 +4734,7 @@ msgstr ""
 
 #: /src/schooltool/person/browser/configure.zcml:91
 msgid "Edit Preferences"
-msgstr ""
+msgstr "Editatu hobespenak"
 
 #: /src/schooltool/person/browser/configure.zcml:103
 msgid "Change Password"
@@ -4893,7 +4956,7 @@ msgstr ""
 
 #: /src/schooltool/person/security.zcml:107
 msgid "Change password"
-msgstr ""
+msgstr "Aldatu pasahitza"
 
 #: /src/schooltool/person/security.zcml:114
 msgid "View preferences"
@@ -5255,19 +5318,16 @@ msgid "Copy data from active school year: ${active_schoolyear}"
 msgstr ""
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_add.pt:40
-#, fuzzy
 msgid "All Courses"
-msgstr "Kurtsoak"
+msgstr ""
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_add.pt:50
-#, fuzzy
 msgid "All Timetable Schemas"
-msgstr "Ordutegi egitura lehenetsia:"
+msgstr ""
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_add.pt:62
-#, fuzzy
 msgid "Copy members"
-msgstr "Azaroa"
+msgstr ""
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:39
 msgid "Activate next school year"
@@ -5425,7 +5485,7 @@ msgstr ""
 
 #: /src/schooltool/skin/templates/view_macros.pt:45
 msgid "Log In"
-msgstr ""
+msgstr "Hasi saioa"
 
 #: /src/schooltool/skin/templates/view_macros.pt:53
 msgid "Logged in as:"
@@ -5749,19 +5809,16 @@ msgid "Save"
 msgstr ""
 
 #: /src/schooltool/timetable/browser/__init__.py:686
-#, fuzzy
 msgid "School timetable"
-msgstr "Eskola ordutegiak"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/__init__.py:691
-#, fuzzy
 msgid "Apply from"
-msgstr "Aplikatu"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/__init__.py:693
-#, fuzzy
 msgid "Apply until"
-msgstr "Aplikatu"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/__init__.py:794
 msgid "Timetable conflicts with another:"
@@ -5967,15 +6024,13 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/confirm-timetable-delete.pt:27
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:48
-#, fuzzy
 msgid "Timetable \"${title}\""
-msgstr "Ordutegia ${object}-(r)entzat"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/confirm-timetable-delete.pt:38
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:60
-#, fuzzy
 msgid "No periods selected."
-msgstr "Hautatu gabe"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/confirm-timetable-delete.pt:67
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:89
@@ -6061,19 +6116,16 @@ msgid "Choose school timetable to use"
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:17
-#, fuzzy
 msgid "Time table schedule of ${courses} ${section}."
-msgstr "Ordutegia ${object}-(r)entzat"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:25
-#, fuzzy
 msgid "school days"
-msgstr "ikastetxea"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:27
-#, fuzzy
 msgid "available timetables"
-msgstr "Eskola ordutegiak"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:31
 msgid ""
@@ -6181,14 +6233,12 @@ msgid "Are you sure you want to delete the selected timetables?"
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:35
-#, fuzzy
 msgid "Using timetable: ${schema_titles}"
-msgstr "Ordutegia erabiliz:"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:97
-#, fuzzy
 msgid "Apply from:"
-msgstr "Aplikatu"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:111
 msgid "Apply until:"
@@ -6308,7 +6358,7 @@ msgstr "Denbora tarteak izenik dute edo denboraz beiztuko dira?"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:533
 msgid "Have names"
-msgstr ""
+msgstr "Izena dute"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:534
 msgid "Designated by time"
@@ -6395,7 +6445,4 @@ msgstr "Agenda aldatu"
 
 #: /src/schooltool/widget/password.py:55
 msgid "Supplied passwords are not identical"
-msgstr ""
-
-#~ msgid "For term:"
-#~ msgstr "Tarte honetarako:"
+msgstr "Ordezkatutako pasahitzak ez dira berdin-berdinak"
