@@ -464,5 +464,11 @@ def getRequestFromInteraction(request_type=IApplicationRequest):
     return None
 
 
-from zope.i18nmessageid import MessageFactory
+from zope.i18nmessageid import Message, MessageFactory
 SchoolToolMessage = MessageFactory("schooltool")
+
+def format_message(message, mapping=None):
+    """Add mapping to a zope.i18nmessageid.Message."""
+    assert isinstance(message, Message)
+    return message.__class__(message, mapping=mapping)
+

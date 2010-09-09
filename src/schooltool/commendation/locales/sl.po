@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-04-29 01:54+0300\n"
+"POT-Creation-Date: 2010-08-22 18:49+0300\n"
 "PO-Revision-Date: 2009-11-04 17:15+0000\n"
 "Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
 "Language-Team: Slovenian <sl@li.org>\n"
@@ -17,40 +17,12 @@ msgstr ""
 "X-Launchpad-Export-Date: 2010-06-16 03:45+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
-#: /src/schooltool/commendation/browser.py:70
-#: /src/schooltool/commendation/commendation.py:72
+#: /src/schooltool/commendation/browser.py:71
+#: /src/schooltool/commendation/commendation.py:73
 msgid "<unknown>"
 msgstr "<neznano>"
 
-#: /src/schooltool/commendation/interfaces.py:48
-msgid "Title"
-msgstr "Naslov"
-
-#: /src/schooltool/commendation/interfaces.py:53
-msgid "Description"
-msgstr "Opis"
-
-#: /src/schooltool/commendation/interfaces.py:60
-msgid "group"
-msgstr "skupina"
-
-#: /src/schooltool/commendation/interfaces.py:60
-msgid "school-wide"
-msgstr "šolsko"
-
-#: /src/schooltool/commendation/interfaces.py:61
-msgid "global"
-msgstr "svetovno"
-
-#: /src/schooltool/commendation/interfaces.py:61
-msgid "national"
-msgstr "državno"
-
-#: /src/schooltool/commendation/interfaces.py:65
-msgid "Date"
-msgstr "Datum"
-
-#: /src/schooltool/commendation/commendation.py:88
+#: /src/schooltool/commendation/commendation.py:89
 msgid "commendations"
 msgstr "pohvale"
 
@@ -68,9 +40,17 @@ msgstr "Dodaj pohvalo"
 msgid "All Commendations"
 msgstr "Vse pohvale"
 
+#: /src/schooltool/commendation/interfaces.py:48
+msgid "Title"
+msgstr "Naslov"
+
 #: /src/schooltool/commendation/interfaces.py:49
 msgid "Title of the commendation."
 msgstr "Naslov pohvale."
+
+#: /src/schooltool/commendation/interfaces.py:53
+msgid "Description"
+msgstr "Opis"
 
 #: /src/schooltool/commendation/interfaces.py:54
 msgid "A detailed description of the commendation."
@@ -88,9 +68,29 @@ msgstr "Področje pohvale."
 msgid "community"
 msgstr "Skupnost"
 
+#: /src/schooltool/commendation/interfaces.py:60
+msgid "group"
+msgstr "skupina"
+
+#: /src/schooltool/commendation/interfaces.py:60
+msgid "school-wide"
+msgstr "šolsko"
+
+#: /src/schooltool/commendation/interfaces.py:61
+msgid "global"
+msgstr "svetovno"
+
+#: /src/schooltool/commendation/interfaces.py:61
+msgid "national"
+msgstr "državno"
+
 #: /src/schooltool/commendation/interfaces.py:61
 msgid "state"
 msgstr "država"
+
+#: /src/schooltool/commendation/interfaces.py:65
+msgid "Date"
+msgstr "Datum"
 
 #: /src/schooltool/commendation/interfaces.py:66
 msgid "The date the commendation was issued."

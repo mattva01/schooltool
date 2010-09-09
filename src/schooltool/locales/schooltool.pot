@@ -17,7 +17,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
-"POT-Creation-Date: 2010-07-13 20:58+0300\n"
+"POT-Creation-Date: 2010-08-22 18:49+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Schooltool Development Team <schooltool-dev@schooltool.org>\n"
@@ -771,7 +771,7 @@ msgstr ""
 
 #: /src/schooltool/app/browser/csvimport.py:107
 #: /src/schooltool/app/browser/csvimport.py:289
-#: /src/schooltool/export/importer.py:971
+#: /src/schooltool/export/importer.py:994
 msgid "No data provided"
 msgstr ""
 
@@ -1476,7 +1476,7 @@ msgstr ""
 #: /src/schooltool/demographics/browser/personform.py:253
 #: /src/schooltool/demographics/browser/personform.py:254
 #: /src/schooltool/demographics/browser/table.py:67
-#: /src/schooltool/email/browser/email.py:115
+#: /src/schooltool/email/browser/email.py:117
 #: /src/schooltool/email/interfaces.py:104
 #: /src/schooltool/person/browser/person.py:287
 #: /src/schooltool/person/browser/person.py:288
@@ -1536,9 +1536,9 @@ msgstr ""
 #: /src/schooltool/course/browser/section.py:341
 #: /src/schooltool/demographics/browser/personform.py:107
 #: /src/schooltool/demographics/browser/personform.py:301
-#: /src/schooltool/email/browser/email.py:186
-#: /src/schooltool/email/browser/email.py:302
-#: /src/schooltool/email/browser/email.py:518
+#: /src/schooltool/email/browser/email.py:188
+#: /src/schooltool/email/browser/email.py:304
+#: /src/schooltool/email/browser/email.py:520
 #: /src/schooltool/level/browser.py:88
 #: /src/schooltool/person/browser/person.py:181
 #: /src/schooltool/schoolyear/browser/schoolyear.py:338
@@ -2472,7 +2472,7 @@ msgstr ""
 
 #: /src/schooltool/contact/browser/configure.zcml:168
 #: /src/schooltool/contact/browser/contact.py:402
-#: /src/schooltool/email/browser/email.py:498
+#: /src/schooltool/email/browser/email.py:500
 msgid "Send Email"
 msgstr ""
 
@@ -2500,44 +2500,44 @@ msgid "Address"
 msgstr ""
 
 #: /src/schooltool/contact/browser/contact.py:384
-#: /src/schooltool/email/browser/email.py:220
-#: /src/schooltool/email/browser/email.py:353
-#: /src/schooltool/email/browser/email.py:469
+#: /src/schooltool/email/browser/email.py:222
+#: /src/schooltool/email/browser/email.py:355
+#: /src/schooltool/email/browser/email.py:471
 #: /src/schooltool/email/interfaces.py:39
 msgid "From"
 msgstr ""
 
 #: /src/schooltool/contact/browser/contact.py:385
-#: /src/schooltool/email/browser/email.py:225
-#: /src/schooltool/email/browser/email.py:358
-#: /src/schooltool/email/browser/email.py:473
+#: /src/schooltool/email/browser/email.py:227
+#: /src/schooltool/email/browser/email.py:360
+#: /src/schooltool/email/browser/email.py:475
 #: /src/schooltool/email/interfaces.py:43
 msgid "To"
 msgstr ""
 
 #: /src/schooltool/contact/browser/contact.py:386
-#: /src/schooltool/email/browser/email.py:235
-#: /src/schooltool/email/browser/email.py:364
-#: /src/schooltool/email/browser/email.py:477
+#: /src/schooltool/email/browser/email.py:237
+#: /src/schooltool/email/browser/email.py:366
+#: /src/schooltool/email/browser/email.py:479
 #: /src/schooltool/email/interfaces.py:53
 msgid "Subject"
 msgstr ""
 
 #: /src/schooltool/contact/browser/contact.py:387
-#: /src/schooltool/email/browser/email.py:240
-#: /src/schooltool/email/browser/email.py:482
+#: /src/schooltool/email/browser/email.py:242
+#: /src/schooltool/email/browser/email.py:484
 #: /src/schooltool/email/interfaces.py:49
 #: /src/schooltool/note/interfaces.py:46
 msgid "Body"
 msgstr ""
 
 #: /src/schooltool/contact/browser/contact.py:405
-#: /src/schooltool/email/browser/email.py:501
+#: /src/schooltool/email/browser/email.py:503
 msgid "Send"
 msgstr ""
 
 #: /src/schooltool/contact/browser/contact.py:409
-#: /src/schooltool/email/browser/email.py:505
+#: /src/schooltool/email/browser/email.py:507
 msgid "There were some errors."
 msgstr ""
 
@@ -3712,194 +3712,194 @@ msgstr ""
 msgid "Send Test"
 msgstr ""
 
-#: /src/schooltool/email/browser/email.py:79
-#: /src/schooltool/email/browser/email.py:412
+#: /src/schooltool/email/browser/email.py:81
+#: /src/schooltool/email/browser/email.py:414
 #. Default: ""
 msgid "Enabled on ${info}"
 msgstr ""
 
-#: /src/schooltool/email/browser/email.py:83
-#: /src/schooltool/email/browser/email.py:416
+#: /src/schooltool/email/browser/email.py:85
+#: /src/schooltool/email/browser/email.py:418
 #: /src/schooltool/securitypolicy/browser/control.py:97
 msgid "Disabled"
 msgstr ""
 
-#: /src/schooltool/email/browser/email.py:92
-#: /src/schooltool/email/browser/email.py:215
-#: /src/schooltool/email/browser/email.py:464
+#: /src/schooltool/email/browser/email.py:94
+#: /src/schooltool/email/browser/email.py:217
+#: /src/schooltool/email/browser/email.py:466
 #: /src/schooltool/email/browser/templates/email_container.pt:20
 msgid "Server Status"
 msgstr ""
 
-#: /src/schooltool/email/browser/email.py:93
-#: /src/schooltool/email/browser/email.py:216
-#: /src/schooltool/email/browser/email.py:465
+#: /src/schooltool/email/browser/email.py:95
+#: /src/schooltool/email/browser/email.py:218
+#: /src/schooltool/email/browser/email.py:467
 msgid "Current status of the SchoolTool email service"
 msgstr ""
 
-#: /src/schooltool/email/browser/email.py:97
+#: /src/schooltool/email/browser/email.py:99
 #: /src/schooltool/email/interfaces.py:87
 msgid "Enable"
 msgstr ""
 
-#: /src/schooltool/email/browser/email.py:98
+#: /src/schooltool/email/browser/email.py:100
 #: /src/schooltool/email/interfaces.py:88
 msgid "Mark to enable the service."
 msgstr ""
 
-#: /src/schooltool/email/browser/email.py:103
+#: /src/schooltool/email/browser/email.py:105
 #: /src/schooltool/email/interfaces.py:92
 msgid "Hostname"
 msgstr ""
 
-#: /src/schooltool/email/browser/email.py:104
+#: /src/schooltool/email/browser/email.py:106
 #: /src/schooltool/email/interfaces.py:93
 msgid "SMTP server hostname. Required if the service is enabled."
 msgstr ""
 
-#: /src/schooltool/email/browser/email.py:108
+#: /src/schooltool/email/browser/email.py:110
 #: /src/schooltool/email/interfaces.py:97
 msgid "Port"
 msgstr ""
 
-#: /src/schooltool/email/browser/email.py:109
+#: /src/schooltool/email/browser/email.py:111
 #: /src/schooltool/email/interfaces.py:98
 msgid "Port of the SMTP service. Using 25 by default."
 msgstr ""
 
-#: /src/schooltool/email/browser/email.py:116
+#: /src/schooltool/email/browser/email.py:118
 #: /src/schooltool/email/interfaces.py:105
 msgid "Username used for optional SMTP authentication."
 msgstr ""
 
-#: /src/schooltool/email/browser/email.py:120
+#: /src/schooltool/email/browser/email.py:122
 msgid "Current Password"
 msgstr ""
 
-#: /src/schooltool/email/browser/email.py:121
+#: /src/schooltool/email/browser/email.py:123
 msgid "Current password to authenticate to the SMTP server."
 msgstr ""
 
-#: /src/schooltool/email/browser/email.py:125
+#: /src/schooltool/email/browser/email.py:127
 #: /src/schooltool/email/interfaces.py:109
 msgid "New Password"
 msgstr ""
 
-#: /src/schooltool/email/browser/email.py:126
+#: /src/schooltool/email/browser/email.py:128
 #: /src/schooltool/email/interfaces.py:110
 msgid "The password to authenticate to the SMTP server."
 msgstr ""
 
-#: /src/schooltool/email/browser/email.py:130
+#: /src/schooltool/email/browser/email.py:132
 msgid "Confirm New Password"
 msgstr ""
 
-#: /src/schooltool/email/browser/email.py:131
+#: /src/schooltool/email/browser/email.py:133
 msgid "Verification for the new password."
 msgstr ""
 
-#: /src/schooltool/email/browser/email.py:135
+#: /src/schooltool/email/browser/email.py:137
 #: /src/schooltool/email/interfaces.py:114
 msgid "TLS"
 msgstr ""
 
-#: /src/schooltool/email/browser/email.py:136
+#: /src/schooltool/email/browser/email.py:138
 #: /src/schooltool/email/interfaces.py:115
 msgid "Use TLS connection?"
 msgstr ""
 
-#: /src/schooltool/email/browser/email.py:143
+#: /src/schooltool/email/browser/email.py:145
 msgid "New passwords don't match"
 msgstr ""
 
-#: /src/schooltool/email/browser/email.py:148
+#: /src/schooltool/email/browser/email.py:150
 msgid "Hostname is required for enabling the service"
 msgstr ""
 
-#: /src/schooltool/email/browser/email.py:182
+#: /src/schooltool/email/browser/email.py:184
 msgid "Change Email Settings"
 msgstr ""
 
-#: /src/schooltool/email/browser/email.py:207
+#: /src/schooltool/email/browser/email.py:209
 msgid "Unset"
 msgstr ""
 
-#: /src/schooltool/email/browser/email.py:221
-#: /src/schooltool/email/browser/email.py:470
+#: /src/schooltool/email/browser/email.py:223
+#: /src/schooltool/email/browser/email.py:472
 #: /src/schooltool/email/interfaces.py:40
 msgid "The sender address"
 msgstr ""
 
-#: /src/schooltool/email/browser/email.py:226
-#: /src/schooltool/email/browser/email.py:474
+#: /src/schooltool/email/browser/email.py:228
+#: /src/schooltool/email/browser/email.py:476
 msgid "Recipient addresses comma separated"
 msgstr ""
 
-#: /src/schooltool/email/browser/email.py:230
-#: /src/schooltool/email/browser/email.py:370
+#: /src/schooltool/email/browser/email.py:232
+#: /src/schooltool/email/browser/email.py:372
 #: /src/schooltool/email/interfaces.py:70
 msgid "Created on"
 msgstr ""
 
-#: /src/schooltool/email/browser/email.py:231
+#: /src/schooltool/email/browser/email.py:233
 #: /src/schooltool/email/interfaces.py:71
 msgid "Date and time when the message was created"
 msgstr ""
 
-#: /src/schooltool/email/browser/email.py:236
-#: /src/schooltool/email/browser/email.py:478
+#: /src/schooltool/email/browser/email.py:238
+#: /src/schooltool/email/browser/email.py:480
 #: /src/schooltool/email/interfaces.py:54
 msgid "Subject of the message"
 msgstr ""
 
-#: /src/schooltool/email/browser/email.py:241
-#: /src/schooltool/email/browser/email.py:483
+#: /src/schooltool/email/browser/email.py:243
+#: /src/schooltool/email/browser/email.py:485
 #: /src/schooltool/email/interfaces.py:50
 msgid "Body of the message"
 msgstr ""
 
-#: /src/schooltool/email/browser/email.py:245
+#: /src/schooltool/email/browser/email.py:247
 msgid "Email Status"
 msgstr ""
 
-#: /src/schooltool/email/browser/email.py:246
+#: /src/schooltool/email/browser/email.py:248
 msgid "Status of the message"
 msgstr ""
 
-#: /src/schooltool/email/browser/email.py:250
-#: /src/schooltool/email/browser/email.py:376
+#: /src/schooltool/email/browser/email.py:252
+#: /src/schooltool/email/browser/email.py:378
 msgid "Last time tried"
 msgstr ""
 
-#: /src/schooltool/email/browser/email.py:251
+#: /src/schooltool/email/browser/email.py:253
 msgid "Date and time when the message was last tried"
 msgstr ""
 
-#: /src/schooltool/email/browser/email.py:276
+#: /src/schooltool/email/browser/email.py:278
 msgid "Email View"
 msgstr ""
 
-#: /src/schooltool/email/browser/email.py:286
+#: /src/schooltool/email/browser/email.py:288
 msgid "Retry"
 msgstr ""
 
-#: /src/schooltool/email/browser/email.py:297
+#: /src/schooltool/email/browser/email.py:299
 #: /src/schooltool/note/notes.pt:17
 #: /src/schooltool/timetable/browser/configure.zcml:62
 #: /src/schooltool/timetable/browser/templates/timetable_list.pt:28
 msgid "Delete"
 msgstr ""
 
-#: /src/schooltool/email/browser/email.py:396
+#: /src/schooltool/email/browser/email.py:398
 msgid "Email Queue"
 msgstr ""
 
-#: /src/schooltool/email/browser/email.py:454
+#: /src/schooltool/email/browser/email.py:456
 #. Default: ""
 msgid "Queue (${count} failed)"
 msgstr ""
 
-#: /src/schooltool/email/browser/email.py:456
+#: /src/schooltool/email/browser/email.py:458
 msgid "Queue"
 msgstr ""
 
@@ -3993,119 +3993,131 @@ msgstr ""
 msgid "XLS Export"
 msgstr ""
 
-#: /src/schooltool/export/importer.py:66
-msgid "is not a valid integer"
-msgstr ""
-
-#: /src/schooltool/export/importer.py:67
-msgid "not unicode or ascii string"
-msgstr ""
-
 #: /src/schooltool/export/importer.py:68
-msgid "missing required text"
+msgid "${sheet_name} ${column}${row} ${message}"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:69
-msgid "has no date in it"
+msgid "is not a valid integer"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:70
-msgid "end date cannot be before start date"
+msgid "not unicode or ascii string"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:71
-msgid "start date overlaps another year"
+msgid "missing required text"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:72
-msgid "end date overlaps another year"
+msgid "has no date in it"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:73
-msgid "invalid school year"
+msgid "end date cannot be before start date"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:74
-msgid "start date before start of school year"
+msgid "start date overlaps another year"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:75
-msgid "end date after end of school year"
+msgid "end date overlaps another year"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:76
-msgid "start date overlaps another term"
+msgid "invalid school year"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:77
-msgid "end date overlaps another term"
+msgid "start date before start of school year"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:78
-msgid "%s has no days in A%s"
+msgid "end date after end of school year"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:79
-msgid "%s has no day templates in A%s"
+msgid "start date overlaps another term"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:80
-msgid "is not a valid time range"
+msgid "end date overlaps another term"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:81
-msgid "is not a valid timetable model"
+msgid "${title} has no days in A${row}"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:82
-msgid "is the same day id as another in this timetable"
+msgid "${title} has no day templates in A${row}"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:83
-msgid "is not defined in the 'Day Templates' section"
+msgid "is not a valid time range"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:84
-msgid "must be either 'Location' or 'Resource'"
+msgid "is not a valid timetable model"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:85
-msgid "is not a valid term in the given school year"
+msgid "is the same day id as another in this timetable"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:86
-msgid "is not a valid course in the given school year"
+msgid "is not defined in the 'Day Templates' section"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:87
-msgid "%s has no courses in A%s"
+msgid "is the same period id as another in this day"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:88
-msgid "is not a valid username"
+msgid "is the same homeroom period id as another in this day"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:89
-msgid "is not a valid schema in the given school year"
+msgid "must be either 'Location' or 'Resource'"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:90
-msgid "is not a valid day id for the given schema"
+msgid "is not a valid term in the given school year"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:91
-msgid "is not a valid period id for the given day"
+msgid "is not a valid course in the given school year"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:92
-msgid "is not a valid resource id"
+msgid "${title} has no courses in A${row}"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:93
-msgid "Username cannot contain non-ascii characters: %s"
+msgid "is not a valid username"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:94
+msgid "is not a valid schema in the given school year"
+msgstr ""
+
+#: /src/schooltool/export/importer.py:95
+msgid "is not a valid day id for the given schema"
+msgstr ""
+
+#: /src/schooltool/export/importer.py:96
+msgid "is not a valid period id for the given day"
+msgstr ""
+
+#: /src/schooltool/export/importer.py:97
+msgid "is not a valid resource id"
+msgstr ""
+
+#: /src/schooltool/export/importer.py:98
+msgid "Username cannot contain non-ascii characters: ${string}"
+msgstr ""
+
+#: /src/schooltool/export/importer.py:100
 msgid "is not a valid weekday number (0-6)"
 msgstr ""
 

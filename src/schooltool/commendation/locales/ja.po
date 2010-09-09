@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-04-29 01:54+0300\n"
+"POT-Creation-Date: 2010-08-22 18:49+0300\n"
 "PO-Revision-Date: 2010-04-06 01:54+0000\n"
 "Last-Translator: Bundo <bundo@bundo.biz>\n"
 "Language-Team: Japanese <ja@li.org>\n"
@@ -17,16 +17,12 @@ msgstr ""
 "X-Launchpad-Export-Date: 2010-06-16 03:45+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
-#: /src/schooltool/commendation/interfaces.py:72
-msgid "The grantor of the commendation."
-msgstr "賞状の授与者"
-
-#: /src/schooltool/commendation/browser.py:70
-#: /src/schooltool/commendation/commendation.py:72
+#: /src/schooltool/commendation/browser.py:71
+#: /src/schooltool/commendation/commendation.py:73
 msgid "<unknown>"
 msgstr "<不明>"
 
-#: /src/schooltool/commendation/commendation.py:88
+#: /src/schooltool/commendation/commendation.py:89
 msgid "commendations"
 msgstr "賞状"
 
@@ -103,3 +99,7 @@ msgstr "賞状が発行された日付"
 #: /src/schooltool/commendation/interfaces.py:71
 msgid "Grantor"
 msgstr "授与者"
+
+#: /src/schooltool/commendation/interfaces.py:72
+msgid "The grantor of the commendation."
+msgstr "賞状の授与者"

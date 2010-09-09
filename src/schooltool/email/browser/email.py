@@ -45,12 +45,14 @@ from zc.table.interfaces import ISortableColumn
 
 from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.app.interfaces import ISchoolToolApplication
-from schooltool.common import SchoolToolMessage as _
 from schooltool.skin.containers import TableContainerView
 from schooltool.table.table import SchoolToolTableFormatter
 from schooltool.email.interfaces import IEmailContainer, IEmail
 from schooltool.email.interfaces import IEmailUtility
 from schooltool.email.mail import Email, status_messages
+
+from schooltool.common import format_message
+from schooltool.common import SchoolToolMessage as _
 
 
 # Helpers
@@ -320,12 +322,12 @@ class EmailView(form.Form):
     def updateDisplayWidgets(self):
         set_server_status_message(self, self.context.__parent__)
         if self.context.status_code is not None:
-            # XXX: mapping is a read-only attribute for MessageIDs
-            # and translate doesn't use the mapping parameter
-            message = _(status_messages[self.context.status_code],
-                        mapping=self.context.status_parameters)
-            self.widgets['status'].value = translate(message,
-                                                     context=self.request)
+            status_text = translate(
+                format_message(
+                    status_messages[self.context.status_code],
+                    mapping=self.context.status_parameters),
+                context=self.request)
+            self.widgets['status'].value = status_text
             self.widgets['status'].style = u'color: red;'
 
 

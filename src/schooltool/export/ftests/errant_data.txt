@@ -66,14 +66,16 @@ This file has examples of bad data for the School Timetables sheet:
     <p class="error">School Timetables B7 not unicode or ascii string</p>
     <p class="error">School Timetables B8 not unicode or ascii string</p>
     <p class="error">School Timetables B9 not unicode or ascii string</p>
-    <p class="error">School Timetables B12 invalid school year</p>
-    <p class="error">School Timetables B13 is not a valid timetable model</p>
+    <p class="error">School Timetables B13 invalid school year</p>
+    <p class="error">School Timetables B14 is not a valid timetable model</p>
     <p class="error">Schema has no day templates in A21</p>
     <p class="error">School Timetables A27 not unicode or ascii string</p>
     <p class="error">School Timetables B27 is not a valid time range</p>
     <p class="error">School Timetables A29 is the same day id as another in this timetable</p>
     <p class="error">School Timetables A40 is not defined in the 'Day Templates' section</p>
     <p class="error">School Timetables A42 is the same day id as another in this timetable</p>
+    <p class="error">School Timetables E42 is the same period id as another in this day</p>
+    <p class="error">School Timetables I42 is the same homeroom period id as another in this day</p>
     <p class="error">School Timetables A50 is not a valid integer</p>
     <p class="error">School Timetables A51 is not a valid integer</p>
     <p class="error">School Timetables A52 is not a valid weekday number (0-6)</p>
@@ -110,7 +112,6 @@ This file has examples of bad data for the Persons sheet:
     <p class="error">Persons E2 missing required text</p>
     <p class="error">Persons F2 not unicode or ascii string</p>
     <p class="error">Persons G2 not unicode or ascii string</p>
-    <p class="error">Persons H2 not unicode or ascii string</p>
     <p class="error">Persons I2 not unicode or ascii string</p>
     <p class="error">Persons J2 not unicode or ascii string</p>
     <p class="error">Persons K2 not unicode or ascii string</p>

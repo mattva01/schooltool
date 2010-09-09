@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-04-29 01:54+0300\n"
+"POT-Creation-Date: 2010-08-22 18:49+0300\n"
 "PO-Revision-Date: 2009-10-12 13:18+0000\n"
 "Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
 "Language-Team: German <de@li.org>\n"
@@ -17,12 +17,12 @@ msgstr ""
 "X-Launchpad-Export-Date: 2010-06-16 03:45+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
-#: /src/schooltool/commendation/browser.py:70
-#: /src/schooltool/commendation/commendation.py:72
+#: /src/schooltool/commendation/browser.py:71
+#: /src/schooltool/commendation/commendation.py:73
 msgid "<unknown>"
 msgstr "<Unbekannt>"
 
-#: /src/schooltool/commendation/commendation.py:88
+#: /src/schooltool/commendation/commendation.py:89
 msgid "commendations"
 msgstr "Bewertungen"
 
@@ -31,9 +31,18 @@ msgstr "Bewertungen"
 msgid "View Commendations"
 msgstr "Bewertungen anzeigen"
 
+#: /src/schooltool/commendation/configure.zcml:100
+#: /src/schooltool/commendation/configure.zcml:110
+msgid "Add Commendation"
+msgstr "Bewertung hinzufügen"
+
 #: /src/schooltool/commendation/configure.zcml:128
 msgid "All Commendations"
 msgstr "Alle Bewertungen"
+
+#: /src/schooltool/commendation/interfaces.py:48
+msgid "Title"
+msgstr "Überschrift"
 
 #: /src/schooltool/commendation/interfaces.py:49
 msgid "Title of the commendation."
@@ -94,12 +103,3 @@ msgstr "Bewerter"
 #: /src/schooltool/commendation/interfaces.py:72
 msgid "The grantor of the commendation."
 msgstr "Aussteller der Bewertung."
-
-#: /src/schooltool/commendation/configure.zcml:100
-#: /src/schooltool/commendation/configure.zcml:110
-msgid "Add Commendation"
-msgstr "Bewertung hinzufügen"
-
-#: /src/schooltool/commendation/interfaces.py:48
-msgid "Title"
-msgstr "Überschrift"
