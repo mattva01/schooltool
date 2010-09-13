@@ -87,6 +87,7 @@
 
     <tal:block define="target view/actualContext|nocall:context">
       <div id="content-nav-group" tal:content="structure provider:schooltool.ActionsMenu" />
+      <div class="clear"> </div>
     </tal:block>
 
     <div id="action-bar">
