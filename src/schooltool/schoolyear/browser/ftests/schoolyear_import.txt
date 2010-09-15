@@ -504,7 +504,8 @@ If we change the active school year:
 
     >>> manager.getLink('Manage').click()
     >>> manager.getLink('School Years').click()
-    >>> manager.getControl('Activate next school year').click()
+    >>> manager.getControl(name='delete.2010').value = True
+    >>> manager.getControl('Activate selected school year').click()
 
 The New School Year form should reflect the change:
 
