@@ -25,7 +25,9 @@ from zope.schema import Password, TextLine, Bytes, Bool
 from zope.schema.interfaces import ValidationError
 from zope.schema.interfaces import IIterableSource
 from zope.schema.interfaces import ITitledTokenizedTerm
+from zope.proxy import sameProxiedObjects
 from zope.security.proxy import removeSecurityProxy
+from zope.security.checker import canAccess
 from zope.app.form.browser.add import AddView
 from zope.app.form.browser.source import SourceMultiCheckBoxWidget as SourceMultiCheckBoxWidget_
 from zope.app.form.browser.interfaces import ITerms
@@ -484,3 +486,21 @@ class PreferencesMenuViewletCrowd(Crowd):
                              ICrowd,
                              name="schooltool.view")
         return crowd.contains(principal)
+
+
+class PersonAddPersonViewlet(object):
+
+    @property
+    def container(self):
+        return IPersonContainer(self.context)
+
+    @property
+    def visible(self):
+        if not canAccess(self.container, '__delitem__'):
+            return False
+        authenticated = IPerson(self.request.principal, None)
+        target = IPerson(self.context, None)
+        if sameProxiedObjects(authenticated, target):
+            return False
+        return True
+

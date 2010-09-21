@@ -99,6 +99,9 @@
       factory=".person.getPersonCatalog"
       provides="zope.catalog.interfaces.ICatalog" />
 
+  <adapter
+      factory=".person.getContainerOfPerson" />
+
   <configure
       xmlns:zcml="http://namespaces.zope.org/zcml"
       zcml:condition="have devmode">

@@ -25,11 +25,11 @@ $Id$
 import hashlib
 from persistent import Persistent
 
-from zope.interface import implements
+from zope.interface import implements, implementer
 from zope.annotation.interfaces import IAttributeAnnotatable
 from zope.container import btree
 from zope.container.contained import Contained
-from zope.component import adapts
+from zope.component import adapts, adapter
 from zope.component import getUtility
 
 from schooltool.app.interfaces import ISchoolToolApplication
@@ -165,6 +165,12 @@ class PersonCalendarCrowd(AggregateCrowd):
 
 def getCalendarOwner(calendar):
     return IPerson(calendar.__parent__, None)
+
+
+@adapter(IPerson)
+@implementer(interfaces.IPersonContainer)
+def getContainerOfPerson(person):
+    return person.__parent__
 
 
 class PersonPasswordWriter(object):
