@@ -19,7 +19,7 @@
 
   <allow
       interface="schooltool.contact.basicperson.IBoundContact"
-      crowds="administration owner person_info_viewers contact_person_instructors"
+      crowds="administration owner contact_person_instructors"
       permission="schooltool.view" />
 
   <!-- Security descriptions -->

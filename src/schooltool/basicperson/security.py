@@ -32,33 +32,6 @@ from schooltool.person.interfaces import IPerson
 from schooltool.securitypolicy.crowds import Crowd, ConfigurableCrowd
 
 
-class PersonInfoViewersCrowd(ConfigurableCrowd):
-    """The crowd of people who can view the info of a person."""
-
-    setting_key = 'everyone_can_view_person_info'
-
-    def contains(self, principal):
-        container = IGroupContainer(ISchoolToolApplication(None), None)
-        if container is None or 'teachers' not in container:
-            return False
-        teachers = container['teachers']
-
-        # XXX: hack to obtain basic person, because if we write an adapter
-        #      to it, all objects adaptable to IBasicPerson will get indexed.
-        #      This is to be removed as soon as basic person catalogs learn
-        #      how to index *only* basic persons.
-        person = self.context
-        while person is not None and not IBasicPerson.providedBy(person):
-            person = getParent(person)
-        if person is None:
-            groups = []
-        else:
-            groups = list(person.groups)
-
-        return (ConfigurableCrowd.contains(self, principal) or
-                teachers in groups)
-
-
 class PersonAdvisorsCrowd(Crowd):
     """Crowd of advisors of a person."""
 

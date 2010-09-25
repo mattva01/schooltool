@@ -4,22 +4,26 @@
 
   <setting
       key="everyone_can_view_group_list"
-      text="Everyone can view group lists."
+      text="The list of groups in the system is visible to the general public."
+      alt_text="Only school administration can view the list of groups."
       default="False" />
 
   <setting
       key="everyone_can_view_group_info"
-      text="Everyone can view group information."
+      text="Information about each group is visible to the general public."
+      alt_text="Information about each group is visible to school administration, and members and leaders of the group."
       default="False" />
 
   <setting
       key="everyone_can_view_group_calendar"
-      text="Everyone can view group calendars."
+      text="Each group calendar is visible to the general public."
+      alt_text="Each group calendar is visible to school administration, and members and leaders of the group."
       default="False" />
 
   <setting
       key="members_can_edit_group_calendar"
-      text="Group members can edit group calendars."
+      text="All members of a group and school administration can edit its calendar."
+      alt_text="The leaders of a group and school administration can edit its calendar."
       default="False" />
 
   <crowd

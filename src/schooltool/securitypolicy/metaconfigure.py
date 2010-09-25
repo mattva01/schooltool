@@ -122,9 +122,10 @@ def deny(_context, interface=None, crowds=None, permission=None):
 class AccessControlSetting(object):
     implements(IAccessControlSetting)
 
-    def __init__(self, key, text, default):
+    def __init__(self, key, text, alt_text, default):
         self.key = key
         self.text = text
+        self.alt_text = alt_text
         self.default = default
 
     def getValue(self):
@@ -138,20 +139,24 @@ class AccessControlSetting(object):
         return customisations.set(self.key, value)
 
     def __repr__(self):
-        return "<AccessControlSetting key=%s, text=%s, default=%s>" % (
+        if self.alt_text is None:
+            return "<AccessControlSetting key=%s, text=%s, default=%s>" % (
                 self.key, self.text, self.default)
+        return "<AccessControlSetting key=%s, text=%s, alt_text=%s, default=%s>" % (
+            self.key, self.text, self.alt_text, self.default)
 
 
-def handle_setting(key, text, default):
+def handle_setting(key, text, alt_text, default):
     def accessControlSettingFactory(context=None):
-        return AccessControlSetting(key, text, default)
+        return AccessControlSetting(key, text, alt_text, default)
     provideSubscriptionAdapter(accessControlSettingFactory,
                                adapts=[None],
                                provides=IAccessControlSetting)
 
-def setting(_context, key=None, text=None, default=None):
-    _context.action(discriminator=('setting', key),
-                    callable=handle_setting, args=(key, text, default))
+def setting(_context, key=None, text=None, alt_text=None, default=None):
+    _context.action(
+        discriminator=('setting', key),
+        callable=handle_setting, args=(key, text, alt_text, default))
 
 
 def handle_aggregate_crowd(name, crowd_names):

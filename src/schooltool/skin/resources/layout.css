@@ -1497,6 +1497,17 @@ PRE.traceback SPAN.source {
     padding-bottom: 10px
 }
 
+/* Radio button label wrapping for access control */
+
+INPUT[type=radio].choice_field{
+    float: left;
+}
+
+label.choice_field{
+      margin-left: 1.5em;
+      display: block;
+}
+
 /*********************************************************** END: Style.css */
 
 /* vi: sw=4 ts=4 noet

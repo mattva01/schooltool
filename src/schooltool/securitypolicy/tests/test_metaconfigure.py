@@ -260,7 +260,7 @@ def doctest_AccessControlSetting():
     """Doctests for AccessControlSetting.
 
         >>> from schooltool.securitypolicy.metaconfigure import AccessControlSetting
-        >>> setting = AccessControlSetting("key", "Some text", False)
+        >>> setting = AccessControlSetting("key", "Some text", "Alt text", False)
 
     Setting should implement the IAccessControlSetting interface:
 
@@ -315,7 +315,7 @@ def doctest_handle_setting():
         >>> subscribers([None], IAccessControlSetting)
         []
 
-        >>> handle_setting("key", "text", False)
+        >>> handle_setting("key", "text", None, False)
 
     Now we should have one:
 
@@ -324,10 +324,11 @@ def doctest_handle_setting():
 
     Let's add another one:
 
-        >>> handle_setting("another_key", "more text", True)
+        >>> handle_setting("another_key", "more text", "alt text", True)
         >>> subscribers([None], IAccessControlSetting)
         [<AccessControlSetting key=key, text=text, default=False>,
-         <AccessControlSetting key=another_key, text=more text, default=True>]
+         <AccessControlSetting key=another_key, text=more text,
+                               alt_text=alt text, default=True>]
 
     """
 
