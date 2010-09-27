@@ -11,6 +11,10 @@ CHANGES
   (https://bugs.launchpad.net/bugs/268127)
 - Empty usernames no longer crash when adding a person
   (https://bugs.launchpad.net/bugs/644296)
+- Replace access setting checkboxes with radio buttons
+  (https://bugs.launchpad.net/bugs/638651)
+- [minor] Empty usernames do not crash the add person form
+  (https://bugs.launchpad.net/bugs/644296)
 
 
 1.5.1 (2010-09-09)
