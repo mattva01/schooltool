@@ -79,7 +79,7 @@ coverage: build
 	mv parts/test/coverage .
 
 .PHONY: coverage-reports-html
-coverage-reports-html coverage/reports: build
+coverage-reports-html coverage/reports: coverage
 	test -d parts/test/coverage && ! test -d coverage && mv parts/test/coverage . || true
 	rm -rf coverage/reports
 	mkdir coverage/reports
@@ -94,7 +94,7 @@ ftest-coverage: build
 	mv parts/test/ftest-coverage .
 
 .PHONY: ftest-coverage-reports-html
-ftest-coverage-reports-html ftest-coverage/reports: build
+ftest-coverage-reports-html ftest-coverage/reports: ftest-coverage
 	test -d parts/test/ftest-coverage && ! test -d ftest-coverage && mv parts/test/ftest-coverage . || true
 	rm -rf ftest-coverage/reports
 	mkdir ftest-coverage/reports
