@@ -4,31 +4,25 @@
 
   <setting
       key="everyone_can_view_person_list"
-      text="Everyone can view the list of persons"
-      default="False" />
-
-  <setting
-      key="everyone_can_view_person_info"
-      text="Everyone can view info of persons"
+      text="The list of people with accounts in the system is visible to the general public."
+      alt_text="The list of people with accounts in the system is visible only to school administration."
       default="False" />
 
   <setting
       key="persons_can_set_their_preferences"
-      text="Persons can set their own preferences"
+      text="Users can make their own calendars public."
+      alt_text="Users cannot make their own calendars public."
       default="True" />
 
   <setting
       key="persons_can_change_their_passwords"
-      text="Persons can change their own passwords"
+      text="Users can change their own passwords."
+      alt_text="Only school administration can change passwords."
       default="True" />
 
   <crowd
       name="person_list_viewers"
       factory=".person.PersonListViewersCrowd" />
-
-  <crowd
-      name="person_info_viewers"
-      factory=".person.PersonInfoViewersCrowd" />
 
   <crowd
       name="person_prefs_editors"
@@ -49,7 +43,7 @@
 
   <allow
       interface="schooltool.person.interfaces.IPerson"
-      crowds="administration owner person_info_viewers"
+      crowds="administration owner"
       permission="schooltool.view" />
   <allow
       interface="schooltool.person.interfaces.IPerson"
@@ -144,6 +138,7 @@
   <describe_action
      group="schooltool.person" name="edit_overlays"
      title="Manage visible calendars"
+     description="Change the list of calendars overlayed on the user's calendar"
      order="80"
      interface="schooltool.person.interfaces.IPerson"
      permission="schooltool.editCalendarOverlays"

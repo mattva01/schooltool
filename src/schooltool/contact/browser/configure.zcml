@@ -33,6 +33,7 @@
       for="schooltool.contact.basicperson.IBoundContact"
       class=".basicperson.ContactOverviewView"
       permission="schooltool.view"
+      template="templates/view_contacts.pt"
       menu="schooltool_actions"
       title="View"
       />

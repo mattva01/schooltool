@@ -89,6 +89,8 @@ class IAccessControlSetting(Interface):
     default = schema.Bool(title=u"The default value for the setting.")
     text = schema.TextLine(
         title=u"Description of the setting for the user interface.")
+    alt_text = schema.TextLine(
+        title=u"Description of the effect when the setting is off.")
 
     def getValue():
         """Return the value of the setting.

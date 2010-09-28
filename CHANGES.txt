@@ -5,7 +5,16 @@ CHANGES
 1.5.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Activation of selected school year (https://launchpad.net/bugs/635160)
+- Added "Add Multiple Persons" to Manage->Persons and "New Person" (for
+  administration) to all other person views
+  (https://bugs.launchpad.net/bugs/268127)
+- Empty usernames no longer crash when adding a person
+  (https://bugs.launchpad.net/bugs/644296)
+- Replace access setting checkboxes with radio buttons
+  (https://bugs.launchpad.net/bugs/638651)
+- [minor] Empty usernames do not crash the add person form
+  (https://bugs.launchpad.net/bugs/644296)
 
 
 1.5.1 (2010-09-09)
@@ -171,17 +180,17 @@ More info at https://launchpad.net/schooltool/+release/1.2.0
 1.0.3 (2009-07-07)
 ------------------
 
-New features 
+New features
 ++++++++++++
 
-- New section adding view.  
+- New section adding view.
 
   - Multiple-term (linked) sections can now be created.
-  
-  - "New Section" button replaced with a link in action menu in course view.  
-  
-  - Sections now can also be added from term's "sections" view. 
-  
+
+  - "New Section" button replaced with a link in action menu in course view.
+
+  - Sections now can also be added from term's "sections" view.
+
   - See https://launchpad.net/bugs/389283
 
 - You can specify the relationship between a person and a contact from a

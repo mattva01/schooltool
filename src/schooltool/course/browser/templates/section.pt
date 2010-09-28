@@ -25,8 +25,9 @@
       <tal:block i18n:name="schoolyear" tal:replace="structure view/school_year/@@link" />
     </h1>
 
-    <h3 tal:define="section context/previous"
-        tal:condition="section" i18n:translate="">
+    <tal:block define="section context/previous"
+               tal:condition="section">
+    <h3 tal:condition="section/schooltool:can_view" i18n:translate="">
       Previous:
       <tal:loop tal:repeat="course section/courses" i18n:name="course">
         <a tal:replace="structure course/@@link" />
@@ -36,8 +37,11 @@
       <tal:block i18n:name="term"
                  tal:replace="structure section/@@index.html/term/@@link"/>
     </h3>
-    <h3 tal:define="section context/next"
-        tal:condition="section" i18n:translate="">
+    </tal:block>
+
+    <tal:block tal:define="section context/next"
+               tal:condition="section">
+    <h3 tal:condition="section/schooltool:can_view" i18n:translate="">
       Next:
       <tal:loop tal:repeat="course section/courses" i18n:name="course">
         <a tal:replace="structure course/@@link" />
@@ -47,6 +51,7 @@
       <tal:block i18n:name="term"
                  tal:replace="structure section/@@index.html/term/@@link"/>
     </h3>
+    </tal:block>
   </tal:block>
 
 <metal:block metal:fill-slot="body">
@@ -60,7 +65,7 @@
        tal:attributes="href string:${context/@@absolute_url}/edit.html"
        i18n:attributes="title"
        i18n:translate=""
-       tal:condition="view/canModify">
+       tal:condition="context/schooltool:can_edit">
        edit info
     </a>
 
@@ -89,7 +94,7 @@
          tal:attributes="href string:${context/@@absolute_url}/instructors.html"
          i18n:attributes="title"
          i18n:translate=""
-         tal:condition="view/canModify">
+         tal:condition="context/schooltool:can_edit">
          edit instructors
       </a>
     </div>
@@ -104,7 +109,7 @@
          tal:attributes="href string:${context/@@absolute_url}/learners.html"
          i18n:attributes="title"
          i18n:translate=""
-         tal:condition="view/canModify">
+         tal:condition="context/schooltool:can_edit">
          edit individuals
       </a>
     </div>

@@ -41,7 +41,8 @@ class AccessControlView(BrowserView):
         prefix = 'setting.'
         if 'UPDATE_SUBMIT' in self.request:
             for setting in self.settings():
-                setting.setValue(prefix + setting.key in self.request)
+                val = self.request.get(prefix + setting.key, 'False')
+                setting.setValue(bool(val != 'False'))
         elif 'CANCEL' in self.request:
             url = absoluteURL(self.context, self.request)
             self.request.response.redirect(url)

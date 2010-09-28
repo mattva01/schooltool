@@ -87,13 +87,12 @@ class AccessSettingSnippets(CrowdDescriptionSnippetBase):
     template = ViewPageTemplateFile('templates/access_setting_snippet.pt')
 
     @property
-    def text(self):
-        setting = self.crowd.settings.getSetting(self.crowd.setting_key)
-        return setting.text
+    def setting(self):
+        return self.crowd.settings.getSetting(self.crowd.setting_key)
 
     @property
     def status(self):
-        status = bool(self.crowd.settings.get(self.crowd.setting_key))
+        status = bool(self.setting.getValue())
         return status and _("Enabled") or _("Disabled")
 
 

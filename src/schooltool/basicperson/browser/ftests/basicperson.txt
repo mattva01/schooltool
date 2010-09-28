@@ -295,7 +295,7 @@ We can fill the New Person form with Unicode text:
     >>> manager.getControl('Confirm').value = "pwd"
     >>> manager.getControl('Add').click()
 
-    >>> analyze.printQuery("//div[@class='content-nav'][10]/a",
+    >>> analyze.printQuery("//div[@class='content-nav'][11]/a",
     ...                    manager.contents)
     <a href="http://localhost/persons/pedro/contact">Contacts</a>
 
@@ -321,3 +321,60 @@ But we cannot assign non-ascii usernames:
             <div class="error">Usernames cannot contain non-ascii characters</div>
           </li>
         </ul></div>
+
+We can also add a batch of persons.
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('Persons').click()
+    >>> manager.getLink('Add Multiple Persons').click()
+    >>> manager.getControl('First name').value = "Juan"
+    >>> manager.getControl('Last name').value = "Perez"
+    >>> manager.getControl('Username').value = "juan"
+    >>> manager.getControl('Password').value = "pwd"
+    >>> manager.getControl('Confirm').value = "pwd"
+    >>> manager.getControl('Add').click()
+
+    >>> manager.getControl('First name').value = "Emanuel"
+    >>> manager.getControl('Last name').value = "Perez"
+    >>> manager.getControl('Username').value = "emanuel"
+    >>> manager.getControl('Password').value = "pwd"
+    >>> manager.getControl('Confirm').value = "pwd"
+    >>> manager.getControl('Add').click()
+
+    >>> analyze.printQuery("//form//fieldset[1]",
+    ...                    manager.contents)
+    <fieldset><legend>Added persons</legend>
+      <p>
+        <span>juan</span>
+        <a href="http://localhost/persons/juan">Perez, Juan</a>
+      </p>
+      <p>
+        <span>emanuel</span>
+        <a href="http://localhost/persons/emanuel">Perez, Emanuel</a>
+      </p>
+    </fieldset>
+
+There's a know flaw though - if the user reloads the form, he will
+get an error that the person he just entered is already in the
+database.  As modern browsers give warnings before reloading the page
+this flaw is somewhat acceptable.
+
+    >>> manager.reload()
+    >>> analyze.printQuery("//form//fieldset[1]",
+    ...                    manager.contents)
+    <fieldset><legend>Added persons</legend>
+      <p>
+        <span>juan</span>
+        <a href="http://localhost/persons/juan">Perez, Juan</a>
+      </p>
+    </fieldset>
+
+    >>> manager.reload()
+    >>> analyze.printQuery('//form//div[@class="status"]', manager.contents)
+    <div class="status">
+      <div class="summary">There were some errors.</div>
+        <ul class="errors"><li>
+          Username:
+          <div class="error">This username is already in use!</div>
+        </li>
+    </ul></div>

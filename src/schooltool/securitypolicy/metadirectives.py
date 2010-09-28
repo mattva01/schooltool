@@ -68,7 +68,11 @@ class ISettingDirective(Interface):
         title=u"Key")
 
     text = fields.MessageID(
-        title=u"Text")
+        title=u"Text that describes the setting")
+
+    alt_text = fields.MessageID(
+        title=u"Text that describes 'setting=False'",
+        required=False)
 
     default = fields.Bool(
         title=u"Default setting",

@@ -146,9 +146,15 @@ class SchoolYearContainerView(TableContainerView, SchoolYearContainerBaseView):
         self.setUpTableFormatter(self.table)
         return self.template()
 
+    def nextURL(self):
+        return absoluteURL(self.context, self.request)
+
     def update(self):
         if 'ACTIVATE_NEXT_SCHOOLYEAR' in self.request:
-            self.context.activateNextSchoolYear()
+            for key in self.listIdsForDeletion():
+                if key in self.context:
+                    self.context.activateNextSchoolYear(key)
+                    self.request.response.redirect(self.nextURL())
 
 
 class ISchoolYearAddForm(Interface):
