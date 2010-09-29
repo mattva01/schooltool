@@ -38,6 +38,17 @@
       title="View"
       />
 
+  <navigationViewlet
+    name="bound_contact_to_person"
+    for="schooltool.contact.basicperson.IBoundContact"
+    manager="schooltool.skin.IActionMenuManager"
+    template="templates/back_to_person_viewlet.pt"
+    class=".contact.BoundContactPersonActionViewlet"
+    permission="schooltool.view"
+    title="View Person"
+    order="1"
+    />
+
   <page
       name="edit.html"
       for="schooltool.contact.basicperson.IBoundContact"
