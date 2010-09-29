@@ -1,5 +1,5 @@
 <fieldset>
-  <legend i18n:translate="">
+  <legend i18n:translate="" i18n:domain="schooltool">
     New person
   </legend>
   <div metal:use-macro="macro:form-header" />

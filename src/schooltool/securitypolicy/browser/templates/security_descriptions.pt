@@ -6,7 +6,7 @@
 <body>
 <metal:block metal:fill-slot="body">
 
-  <h1>Object model and access rights</h1>
+  <h1 i18n:translate="">Object model and access rights</h1>
 
 
   <tal:block repeat="item view/groups">
