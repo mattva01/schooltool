@@ -1,0 +1,6 @@
+<tal:block condition="view/person/schooltool:can_view">
+<div class="content-nav">
+  <a tal:attributes="href view/person/@@absolute_url"
+     tal:content="view/title">Title</a>
+</div>
+</tal:block>
