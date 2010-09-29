@@ -26,6 +26,7 @@ from zope.schema.interfaces import ValidationError
 from zope.schema.interfaces import IIterableSource
 from zope.schema.interfaces import ITitledTokenizedTerm
 from zope.proxy import sameProxiedObjects
+from zope.security import checkPermission
 from zope.security.proxy import removeSecurityProxy
 from zope.security.checker import canAccess
 from zope.app.form.browser.add import AddView
@@ -40,7 +41,6 @@ from zope.formlib import form
 from zope.component import getUtility
 from zope.interface import implements
 from zope.browserpage import ViewPageTemplateFile
-from zope.security.management import checkPermission
 from zope.viewlet.viewlet import ViewletBase
 from zope.component import queryAdapter
 from zope.component import adapts
@@ -496,7 +496,7 @@ class PersonAddPersonViewlet(object):
 
     @property
     def visible(self):
-        if not canAccess(self.container, '__delitem__'):
+        if not checkPermission("schooltool.edit", self.container):
             return False
         authenticated = IPerson(self.request.principal, None)
         target = IPerson(self.context, None)
