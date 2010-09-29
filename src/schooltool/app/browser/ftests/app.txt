@@ -342,7 +342,7 @@ we can give them the permission:
 
     >>> url = manager.url
     >>> manager.open('http://localhost/access_control.html')
-    >>> manager.getControl('Everyone can view section information and calendars').click()
+    >>> manager.getControl('Basic information about sections, including rosters, is visible to the general public').click()
     >>> manager.getControl('Apply').click()
 
 Students still aren't given the option to change the location:

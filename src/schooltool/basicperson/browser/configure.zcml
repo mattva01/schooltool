@@ -103,6 +103,15 @@
      permission="schooltool.edit"
      menu="schooltool_actions" title="New Person"
      layer=".skin.IBasicPersonLayer" />
+
+  <page
+     name="add_multiple.html"
+     for="schooltool.person.interfaces.IPersonContainer"
+     class=".person.MultiplePersonAddView"
+     permission="schooltool.edit"
+     menu="schooltool_actions" title="Add Multiple Persons"
+     layer=".skin.IBasicPersonLayer" />
+
   <page
      name="person-csvimport.html"
      for="schooltool.person.interfaces.IPersonContainer"

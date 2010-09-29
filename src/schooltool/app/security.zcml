@@ -66,12 +66,6 @@
       permission="schooltool.edit"
       crowds="administration owner calendar_editors" />
 
-  <setting
-      key="everyone_can_view_app_calendar"
-      text="Everyone can view the application calendar."
-      default="True"
-      />
-
   <!-- Security descriptions -->
 
   <describe_group name="schooltool.app"
@@ -111,7 +105,7 @@
   <!-- Parent crowds -->
 
   <zope:adapter
-      factory=".security.ApplicationCalendarCrowd"
+      factory="schooltool.securitypolicy.crowds.EverybodyCrowd"
       for="schooltool.app.interfaces.ISchoolToolApplication"
       provides=".security.ICalendarParentCrowd"
       name="schooltool.view" />
@@ -119,7 +113,7 @@
   <switch_description
      group="schooltool.app"
      crowd_factory="schooltool.app.security.CalendarViewersCrowd"
-     use_crowd_factory="schooltool.app.security.ApplicationCalendarCrowd"
+     use_crowd_factory="schooltool.securitypolicy.crowds.EverybodyCrowd"
   />
 
 </configure>

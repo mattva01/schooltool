@@ -29,12 +29,13 @@ from zope.component import adapts
 from zope.publisher.browser import BrowserView
 from zope.size.interfaces import ISized
 from zope.traversing.interfaces import IPathAdapter, ITraversable
+from zope.security import checkPermission
 from zope.security.interfaces import IPrincipal
 from zope.authentication.interfaces import IUnauthenticatedPrincipal
 from zope.app.dependable.interfaces import IDependable
 from zope.tales.interfaces import ITALESFunctionNamespace
 from zope.security.proxy import removeSecurityProxy
-from zope.security.checker import canAccess
+from zope.security.checker import canAccess, canWrite
 
 from pytz import timezone
 
@@ -150,6 +151,13 @@ class SchoolToolAPI(object):
             return bool(dependable.dependents())
     has_dependents = property(has_dependents)
 
+    def can_view(self):
+        return checkPermission("schooltool.view", self.context)
+
+    def can_edit(self):
+        return checkPermission("schooltool.edit", self.context)
+
+
 
 class PathAdapterUtil(object):
 
@@ -210,6 +218,15 @@ class CanAccess(PathAdapterUtil):
     def traverse(self, name, furtherPath=()):
         """Returns True if self.context.(name) can be accessed."""
         return canAccess(self.context, name)
+
+
+class CanModify(PathAdapterUtil):
+    """TALES path adapter for checking access rights.
+    """
+
+    def traverse(self, name, furtherPath=()):
+        """Returns True if self.context.(name) can be changed."""
+        return canWrite(self.context, name)
 
 
 class FilterAccessible(PathAdapterUtil):

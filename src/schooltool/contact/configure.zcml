@@ -66,6 +66,8 @@
       for="schooltool.app.interfaces.ISchoolToolApplication"
       factory=".contact.getContactContainer" />
 
+  <adapter factory=".basicperson.getPersonOfBoundContact" />
+
   <adapter
       for="schooltool.basicperson.interfaces.IBasicPerson"
       factory=".basicperson.getBoundContact" />

@@ -47,8 +47,6 @@ class ContactOverviewView(BrowserView):
 
     __used_for__ = IBoundContact
 
-    __call__ = ViewPageTemplateFile('templates/view_contacts.pt')
-
     @property
     def person(self):
         return self.context.__parent__

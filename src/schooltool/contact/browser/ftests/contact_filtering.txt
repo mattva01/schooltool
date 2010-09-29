@@ -86,6 +86,7 @@ it by default:
     ...                    browser.contents)
     <a href="http://localhost/persons/manager/contact/@@index.html">View</a>
     <a href="http://localhost/persons/manager/contact/@@edit.html">Edit</a>
+    <a href="http://localhost/persons/manager">View Person</a>
     <a href="http://localhost/persons/manager/@@manage_contacts.html?SEARCH_LAST_NAME=P%C3%A9rez">Manage Contacts</a>
 
     >>> browser.getLink('Manage Contacts').click()

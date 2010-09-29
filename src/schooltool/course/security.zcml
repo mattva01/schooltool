@@ -41,7 +41,8 @@
 
   <setting
       key="everyone_can_view_section_info"
-      text="Everyone can view section information and calendars"
+      text="Basic information about sections, including rosters, is visible to the general public."
+      alt_text="Basic information about sections is only visible to instructors and students in that section, and school administration."
       default="False" />
 
   <allow

@@ -476,3 +476,12 @@ class SendEmailView(form.Form):
 class NoTeacherEmailView(BrowserView):
 
     __call__ = ViewPageTemplateFile('templates/noteacheremail.pt')
+
+
+class BoundContactPersonActionViewlet(object):
+
+    @property
+    def person(self):
+        return IPerson(self.context)
+
+

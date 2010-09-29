@@ -289,11 +289,6 @@ def authSetUpSubscriber(app, event):
     setUpLocalAuth(app)
 
 
-class ApplicationCalendarCrowd(ConfigurableCrowd):
-
-    setting_key = 'everyone_can_view_app_calendar'
-
-
 CalendarViewersCrowd = ParentCrowd(
     ICalendarParentCrowd, 'schooltool.view')
 

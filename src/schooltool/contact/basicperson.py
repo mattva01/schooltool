@@ -42,6 +42,7 @@ from schooltool.schoolyear.subscriber import ObjectEventAdapterSubscriber
 from schooltool.contact.interfaces import IContact
 from schooltool.contact.contact import Contact
 from schooltool.basicperson.interfaces import IBasicPerson
+from schooltool.person.interfaces import IPerson
 from schooltool.contact.interfaces import IUniqueFormKey
 from schooltool.table.table import simple_form_key
 
@@ -87,6 +88,12 @@ class BoundContact(Contact):
 
     # XXX: person's language is stored both in a default demographics field
     #      and self contact information now.
+
+
+@implementer(IPerson)
+@adapter(IBoundContact)
+def getPersonOfBoundContact(contact):
+    return contact.__parent__
 
 
 @implementer(IContact)

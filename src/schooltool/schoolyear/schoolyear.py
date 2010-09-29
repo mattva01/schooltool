@@ -108,10 +108,12 @@ class SchoolYearContainer(BTreeContainer):
     def sorted_schoolyears(self):
         return sorted(self.values(), key=lambda s: s.last)
 
-    def activateNextSchoolYear(self):
-        next_school_year = self.getNextSchoolYear()
-        if next_school_year is not None:
-            self._set_active_id(next_school_year.__name__)
+    def activateNextSchoolYear(self, year_id=None):
+        if year_id is None:
+            next = self.getNextSchoolYear()
+            if next is not None:
+                year_id = next.__name__
+        self._set_active_id(year_id)
 
     def getSchoolYearForToday(self):
         dtm = queryUtility(IDateManager)
