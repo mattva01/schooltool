@@ -214,10 +214,11 @@ class TermEditForm(form.EditForm, TermFormBase):
 
     def updateActions(self):
         super(TermEditForm, self).updateActions()
-        for button_id in ['refresh', 'apply']:
+        for button_id, cls in zip(['refresh', 'apply'],
+                                  ['button-neutral', 'button-ok']):
             button = self.actions.get(button_id)
             if button is not None:
-                button.addClass('button-ok')
+                button.addClass(cls)
         self.actions['cancel'].addClass('button-cancel')
 
     @button.buttonAndHandler(_('Refresh'), name='refresh',
