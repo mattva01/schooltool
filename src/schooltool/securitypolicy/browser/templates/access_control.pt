@@ -8,8 +8,10 @@
 
   <form method="post" tal:attributes="action request/URL"
         class="standalone">
+
+    <h3 i18n:translate="">Access Control</h3>
+
     <fieldset>
-      <label i18n:translate="">Access Control</label>
       <div tal:repeat="setting view/settings"
            class="row">
         <tal:block condition="setting/alt_text"

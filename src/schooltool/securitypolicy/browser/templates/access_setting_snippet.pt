@@ -1,7 +1,5 @@
 <p i18n:domain="schooltool">
-  <tal:block i18n:translate="">
-  Access <a href="access_control.html">setting</a>:
-  </tal:block>
+  <a href="access_control.html" i18n:translate="">Access setting</a>:
 
   <tal:block condition="view/setting/alt_text">
     <tal:block condition="view/setting/getValue"

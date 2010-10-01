@@ -434,20 +434,20 @@ A.button-neutral {
 
 
 #header .tools .breadcrumbs a {
-        text-transform: capitalize;
+    text-transform: capitalize;
 }
 
 
 #column-center .navigation_header {
-   display: block;
-   font-size: 2em;
-   white-space: nowrap;
-   margin-bottom: 4px;
- }
+    font-size: 2em;
+    white-space: nowrap;
+    margin-bottom: 4px;
+}
 
 #manage_menu {
-
- }
+    padding-left: 0;
+    list-style: none;
+}
 
 /*
 * Left Column and portlets
