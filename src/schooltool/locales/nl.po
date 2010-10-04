@@ -7,14 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-08-22 18:49+0300\n"
-"PO-Revision-Date: 2010-08-22 20:25+0000\n"
-"Last-Translator: Gwijde <gwijde.maegherman@gmail.com>\n"
+"POT-Creation-Date: 2010-09-30 19:38+0300\n"
+"PO-Revision-Date: 2010-10-03 15:31+0000\n"
+"Last-Translator: rob <linuxned@gmail.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
+"Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-08-23 03:47+0000\n"
+"X-Launchpad-Export-Date: 2010-10-04 04:50+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: /src/schooltool/app/app.py:197
@@ -535,7 +536,7 @@ msgstr "Einddatum is eerder dan begindatum"
 
 #: /src/schooltool/app/browser/cal.py:2028
 msgid "Invalid date.  Please specify YYYY-MM-DD, one per line."
-msgstr "Ongeldige datum.  Invoeren als JJJJ-MM-DD, een per regel."
+msgstr "Ongeldige datum. Invoeren als JJJJ-MM-DD, één per regel."
 
 #: /src/schooltool/app/browser/cal.py:2076
 msgid "Add event"
@@ -745,7 +746,7 @@ msgstr "Agenda-hulpprogramma"
 
 #: /src/schooltool/app/browser/configure.zcml:702
 msgid "Templates"
-msgstr "Modellen"
+msgstr "Sjablonen"
 
 #: /src/schooltool/app/browser/configure.zcml:781
 msgid "Configure"
@@ -827,7 +828,7 @@ msgstr "Onvolledige sectiebeschrijving op regel ${line}"
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:385
 msgid "No students in section (line ${line})"
-msgstr "Geen studenten in sectie (lijn ${line})"
+msgstr "Geen leerlingen in sectie (lijn ${line})"
 
 #: /src/schooltool/app/browser/csvimport.py:466
 msgid "The first row of the CSV file must contain the timetable schema id."
@@ -921,10 +922,10 @@ msgid ""
 "for individual schools or states."
 msgstr ""
 "SchoolTool is gratis administratieve software voor scholen over de hele "
-"wereld. De doelen van het project zijn om een simpele omslag voor een "
-"studenten-informatiesysteem of een managementsysteem voor basisscholen en "
-"middelbare scholen te maken, en om een applicatie voor configuraties voor "
-"individuele scholen of staten."
+"wereld. De doelen van het project zijn om een simpel "
+"leerlingeninformatiesysteem of een managementsysteem voor basisscholen en "
+"middelbare scholen te maken en om een framewerk te zijn voor het maken van "
+"aangepaste applicaties en configuraties voor individuele scholen of staten."
 
 #: /src/schooltool/app/browser/templates/about.pt:16
 msgid ""
@@ -939,8 +940,8 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/about.pt:20
 msgid ""
-"SchoolTool is licensed under the <a href=\"http://www.gnu.org/licenses/gpl-"
-"2.0.html\">GNU General Public License, Version 2</a>."
+"SchoolTool is licensed under the <a href=\"http://www.gnu.org/licenses/"
+"gpl-2.0.html\">GNU General Public License, Version 2</a>."
 msgstr ""
 "SchoolTool wordt gedistribueerd onder de <a href=\"http://www.gnu.org/"
 "licenses/gpl-2.0.html\">GNU General Public License, Versie 2</a>."
@@ -1000,7 +1001,7 @@ msgstr "Algemene voorkeuren"
 #: /src/schooltool/app/browser/templates/application_preferences.pt:34
 #: /src/schooltool/person/browser/person_preferences.pt:28
 msgid "Calendar Preferences"
-msgstr "Agenda Voorkeuren"
+msgstr "Agendavoorkeuren"
 
 #: /src/schooltool/app/browser/templates/cal_atom.pt:14
 #: /src/schooltool/app/configure.zcml:334
@@ -1637,12 +1638,12 @@ msgid ""
 "<strong>person ids</strong> may follow, the denoted persons will be added to "
 "the section as learners."
 msgstr ""
-"De eerste regel van elke sectiebeschrijving bevat de <strong>vak-ID</strong> "
-"en de <strong>instructeur ID</strong> voor de nieuwe sectie. Dan volgt een "
-"aantal regels, die elk een <strong>dag ID</strong> en een <strong>lesuur "
+"De eerste regel van elke sectiebeschrijving bevat het <strong>vak-ID</"
+"strong> en het <strong>leraar-ID</strong> voor de nieuwe sectie. Dan volgt "
+"een aantal regels, die elk een <strong>dag-ID</strong> en een <strong>lesuur-"
 "ID<strong/> bevatten. De lijst van lesuur-omschrijvingen wordt beëindigd met "
 "drie asterisken (***) in de eerste kolom. Na deze beëindigingscode kan een "
-"willekeurig aantal <strong>personen ID's</strong> volgen, de betreffende "
+"willekeurig aantal <strong>personen-ID's</strong> volgen, de betreffende "
 "personen worden aan de sectie toegevoegd als leerlingen."
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:54
@@ -2558,11 +2559,7 @@ msgstr "\"$group\" groep."
 msgid "\"$group\" group and the super user."
 msgstr "\"$group\" groep en de supergebruiker."
 
-#: /src/schooltool/app/security.zcml:69
-msgid "Everyone can view the application calendar."
-msgstr "Iedereen kan de agenda bekijken."
-
-#: /src/schooltool/app/security.zcml:77
+#: /src/schooltool/app/security.zcml:71
 msgid "SchoolTool application"
 msgstr "SchoolTool applicatie"
 
@@ -2627,7 +2624,11 @@ msgstr "Leerlingen"
 msgid "New Person"
 msgstr "Nieuwe persoon"
 
-#: /src/schooltool/basicperson/browser/configure.zcml:113
+#: /src/schooltool/basicperson/browser/configure.zcml:107
+msgid "Add Multiple Persons"
+msgstr "Meerdere personen toevoegen"
+
+#: /src/schooltool/basicperson/browser/configure.zcml:129
 #: /src/schooltool/basicperson/security.zcml:22
 #: /src/schooltool/demographics/browser/personform.py:180
 msgid "Demographics"
@@ -2686,7 +2687,15 @@ msgstr "Namen kunnen niet beginnen met '+' of '@' en mogen geen '/' bevatten."
 msgid "Usernames cannot contain non-ascii characters"
 msgstr "Gebruikersnamen mogen geen non-ASCII lettertekens bevatten"
 
-#: /src/schooltool/basicperson/browser/demographics.py:133
+#: /src/schooltool/basicperson/browser/demographics.py:85
+msgid "Duplicate entry \"${value}\""
+msgstr "Dubbele invoer \"${value}\""
+
+#: /src/schooltool/basicperson/browser/demographics.py:90
+msgid "Value too long \"${value}\""
+msgstr "Waarde is te lang \"${value}\""
+
+#: /src/schooltool/basicperson/browser/demographics.py:151
 msgid "Add new Field"
 msgstr "Voeg nieuw veld toe"
 
@@ -2710,22 +2719,25 @@ msgstr "Adviseur"
 msgid "Confirm password"
 msgstr "Bevestig wachtwoord"
 
-#: /src/schooltool/basicperson/browser/person.py:104
-msgid "This username is already in use!"
-msgstr "Deze gebruikersnaam wordt al gebruikt!"
+#: /src/schooltool/basicperson/browser/person.py:76
+msgid "Passwords do not match"
+msgstr "Wachtwoorden zijn niet hetzelfde"
 
 #: /src/schooltool/basicperson/browser/person.py:149
 msgid "Add new person"
 msgstr "Voeg een nieuw persoon toe."
 
-#: /src/schooltool/basicperson/browser/person.py:169
-msgid "Passwords do not match"
-msgstr "Wachtwoorden zijn niet hetzelfde"
+#: /src/schooltool/basicperson/browser/person.py:152
+msgid "This username is already in use!"
+msgstr "Deze gebruikersnaam wordt al gebruikt!"
 
-#. Default: ""
-#: /src/schooltool/basicperson/browser/person.py:234
-msgid "Change information for ${fullname}"
-msgstr "Informatie wijzigen van ${fullname}"
+#: /src/schooltool/basicperson/browser/person.py:283
+msgid "Usernames"
+msgstr "Gebruikersnamen"
+
+#: /src/schooltool/basicperson/browser/person.py:300
+msgid "Add multiple persons"
+msgstr "Meerdere personen toevoegen"
 
 #: /src/schooltool/basicperson/browser/person.py:304
 msgid "Current Advisors"
@@ -2738,20 +2750,29 @@ msgstr "Adviseurs toevoegen"
 #. Default: ""
 #: /src/schooltool/basicperson/browser/person.py:309
 msgid "Advisors of ${person}"
-msgstr "adviseur van ${person}"
+msgstr "Adviseurs van ${person}"
 
 #: /src/schooltool/basicperson/browser/person.py:328
 msgid "Current Advisees"
-msgstr "Huidige Pupil"
+msgstr "Huidige leerling"
 
 #: /src/schooltool/basicperson/browser/person.py:329
 msgid "Add Advisees"
-msgstr "Voeg Pupil Toe"
+msgstr "Leerlingen toevoegen"
 
 #. Default: ""
 #: /src/schooltool/basicperson/browser/person.py:333
 msgid "Advisees of ${person}"
-msgstr "Pupil van ${person}"
+msgstr "Leerlingen van ${person}"
+
+#: /src/schooltool/basicperson/browser/person.py:357
+msgid "Done"
+msgstr "Gereed"
+
+#. Default: ""
+#: /src/schooltool/basicperson/browser/person.py:402
+msgid "Change information for ${fullname}"
+msgstr "Informatie wijzigen van ${fullname}"
 
 #: /src/schooltool/basicperson/browser/templates/demographics-view.pt:4
 #: /src/schooltool/basicperson/browser/templates/demographics-view.pt:7
@@ -2802,6 +2823,10 @@ msgstr ""
 "en 'koen'. Alleen 'dfpeeters' heeft een wachtwoord ('r2m45J') en zal in het "
 "systeem kunnen inloggen. NB: de wachtwoorden moeten onversleuteld "
 "meegezonden worden."
+
+#: /src/schooltool/basicperson/browser/templates/person_add_subform.pt:2
+msgid "New person"
+msgstr "Nieuw persoon"
 
 #: /src/schooltool/basicperson/browser/templates/person_view.pt:13
 #: /src/schooltool/person/browser/home.pt:13
@@ -2907,7 +2932,7 @@ msgstr "Achternaam"
 
 #: /src/schooltool/basicperson/security.py:66
 msgid "Advisors of a person."
-msgstr "Adviseurs."
+msgstr "Adviseurs van een persoon."
 
 #: /src/schooltool/basicperson/security.zcml:26
 msgid "Create, delete demographics fields and change their order."
@@ -2960,7 +2985,11 @@ msgstr "Voeg informatie toe."
 msgid "Edit Calendar Overlays"
 msgstr "Agenda-overlappingen bewerken"
 
-#: /src/schooltool/contact/browser/configure.zcml:49
+#: /src/schooltool/contact/browser/configure.zcml:41
+msgid "View Person"
+msgstr "Persoon bekijken"
+
+#: /src/schooltool/contact/browser/configure.zcml:61
 msgid "New Contact"
 msgstr "Nieuw contact"
 
@@ -2984,7 +3013,7 @@ msgstr "Andere contacten"
 #: /src/schooltool/contact/browser/contact.py:402
 #: /src/schooltool/email/browser/email.py:500
 msgid "Send Email"
-msgstr "Verstuur e-mail"
+msgstr "E-mail verzenden"
 
 #: /src/schooltool/contact/browser/contact.py:79
 msgid "Add new contact"
@@ -3044,7 +3073,7 @@ msgstr "Inhoud"
 #: /src/schooltool/contact/browser/contact.py:405
 #: /src/schooltool/email/browser/email.py:503
 msgid "Send"
-msgstr "Verstuur"
+msgstr "Verzenden"
 
 #: /src/schooltool/contact/browser/contact.py:409
 #: /src/schooltool/email/browser/email.py:507
@@ -3147,8 +3176,8 @@ msgid ""
 "You don't have an email address set. Ask your administrator to set your "
 "email address in your contact information."
 msgstr ""
-"Er is geen e-mail adres ingesteld. Vraag aan uw administrator om uw e-mail "
-"adres in te voeren in uw contactinformatie."
+"Er is geen e-mail adres ingesteld. Vraag aan uw beheerder om uw e-mail adres "
+"in te voeren in uw contactinformatie."
 
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:8
 msgid "Contact information for ${person}"
@@ -3203,7 +3232,7 @@ msgstr ""
 #: /src/schooltool/course/browser/templates/section_container.pt:42
 #: /src/schooltool/course/section.py:281 /src/schooltool/course/section.py:291
 msgid "Instructors"
-msgstr "Docenten"
+msgstr "Leraren"
 
 #: /src/schooltool/contact/contact.py:199
 msgid "Instructors of student(s) related to this contact."
@@ -3445,11 +3474,11 @@ msgstr "Vak"
 
 #: /src/schooltool/course/browser/section.py:523
 msgid "Current Instructors"
-msgstr "Huidige Docenten"
+msgstr "Huidige leraren"
 
 #: /src/schooltool/course/browser/section.py:524
 msgid "Available Instructors"
-msgstr "Beschikbare Docenten"
+msgstr "Beschikbare leraren"
 
 #: /src/schooltool/course/browser/section.py:538
 #: /src/schooltool/course/browser/templates/copy_sections.pt:145
@@ -3458,15 +3487,15 @@ msgstr "Beschikbare Docenten"
 #: /src/schooltool/course/browser/templates/section.pt:98
 #: /src/schooltool/course/browser/templates/section_container.pt:87
 msgid "Students"
-msgstr "Studenten"
+msgstr "Leerlingen"
 
 #: /src/schooltool/course/browser/section.py:539
 msgid "Current Students"
-msgstr "Huidige Leerlingen"
+msgstr "Huidige leerlingen"
 
 #: /src/schooltool/course/browser/section.py:540
 msgid "Available Students"
-msgstr "Beschikbare Leerlingen"
+msgstr "Beschikbare leerlingen"
 
 #: /src/schooltool/course/browser/templates/copy_sections.pt:9
 #: /src/schooltool/course/browser/templates/link_section.pt:9
@@ -3588,7 +3617,7 @@ msgstr "foto"
 
 #: /src/schooltool/course/browser/templates/course.pt:71
 msgid "students"
-msgstr "studenten"
+msgstr "leerlingen"
 
 #: /src/schooltool/course/browser/templates/course_container.pt:12
 msgid "Courses for ${schoolyear}"
@@ -3670,15 +3699,15 @@ msgstr "info bewerken"
 
 #: /src/schooltool/course/browser/templates/section.pt:87
 msgid "Change the instructors for this section."
-msgstr "Docenten voor deze sectie wijzigen."
+msgstr "Leraren voor deze sectie wijzigen."
 
 #: /src/schooltool/course/browser/templates/section.pt:87
 msgid "edit instructors"
-msgstr "docenten bewerken"
+msgstr "leraren bewerken"
 
 #: /src/schooltool/course/browser/templates/section.pt:102
 msgid "Change the students in this section individually"
-msgstr "Studenten binnen deze sectie individueel wijzigen"
+msgstr "Leerlingen binnen deze sectie individueel wijzigen"
 
 #: /src/schooltool/course/browser/templates/section.pt:102
 msgid "edit individuals"
@@ -3759,7 +3788,7 @@ msgid ""
 "</li> </ul>"
 msgstr ""
 "<h1>Vakken</h1> <p>Gebruik deze pagina om de vakken in het systeem te "
-"ordenen.</p> <h3>Hoe moet ikI...</h3> <ul> <li><strong>Een vak zoeken:</"
+"ordenen.</p> <h3>Hoe moet ik...</h3> <ul> <li><strong>Een vak zoeken:</"
 "strong> Gebruik het zoekvak links van de <code>Zoek Nu</code> knop om door "
 "de hele vakkenlijst te zoeken. De <code>Legen</code> knop maakt het zoekvak "
 "leeg.</li> <li><strong>Toon een lijst van de verschillende secties van een "
@@ -3813,7 +3842,7 @@ msgid ""
 "An identifier for a section, made up of instructor\n"
 "            names, courses, and meeting time."
 msgstr ""
-"Een kenmerk voor een sectie, bestaande uit een docent\n"
+"Een kenmerk voor een sectie, bestaande uit een leraar\n"
 "            namen, vakken en de tijd van bijeenkomst."
 
 #: /src/schooltool/course/interfaces.py:96
@@ -3839,11 +3868,11 @@ msgstr "Kan deze sectie niet als volgende aan zichzelf toewijzen"
 
 #: /src/schooltool/course/section.py:282
 msgid "Instructors of the section."
-msgstr "Docent van de sectie."
+msgstr "Leraren van de sectie."
 
 #: /src/schooltool/course/section.py:292
 msgid "Instructors of a person in any of his sections."
-msgstr "Docent van een persoon in één van zijn secties."
+msgstr "Leraren van een persoon in één van zijn secties."
 
 #: /src/schooltool/course/section.py:315
 msgid "Learners"
@@ -3866,10 +3895,22 @@ msgid "Sections must be in consecutive terms"
 msgstr "Secties moeten in opvolgende periodes staan"
 
 #: /src/schooltool/course/security.zcml:42
-msgid "Everyone can view section information and calendars"
-msgstr "Iedereen kan sectie-informatie en agenda's bekijken."
+msgid ""
+"Basic information about sections is only visible to instructors and students "
+"in that section, and school administration."
+msgstr ""
+"Basisinformatie over de secties is alleen zichtbaar voor leraren en "
+"leerlingen in die sectie en de schooladministratie."
 
-#: /src/schooltool/course/security.zcml:73
+#: /src/schooltool/course/security.zcml:42
+msgid ""
+"Basic information about sections, including rosters, is visible to the "
+"general public."
+msgstr ""
+"Basisinformatie over de secties, inclusief de roosters, is zichtbaar voor "
+"iedereen."
+
+#: /src/schooltool/course/security.zcml:74
 msgid ""
 "A course in SchoolTool describes a set curriculum                    taught "
 "in a section."
@@ -4053,7 +4094,7 @@ msgstr "Deze gebruikersnaam is al in gebruik!"
 
 #: /src/schooltool/demographics/browser/personform.py:333
 msgid "Invalid teacher. Possible causes: deleted or renamed."
-msgstr "Ongeldige docent. Mogelijke oorzaken: verwijderd of hernoemd."
+msgstr "Ongeldige leraar. Mogelijke oorzaken: verwijderd of hernoemd."
 
 #: /src/schooltool/demographics/browser/personform.py:365
 msgid "Invalid group. Possible causes: deleted or renamed."
@@ -4276,7 +4317,7 @@ msgstr "Volledige tekst zoeken in namen ouders"
 
 #: /src/schooltool/demographics/interfaces.py:310
 msgid "Student ID"
-msgstr "Leerling ID"
+msgstr "Leerling-ID"
 
 #: /src/schooltool/demographics/overrides.zcml:22
 msgid "Search"
@@ -4323,7 +4364,7 @@ msgstr "Instellingen"
 
 #: /src/schooltool/email/browser/configure.zcml:87
 msgid "Send Test"
-msgstr "Verstuur test"
+msgstr "Test verzenden"
 
 #. Default: ""
 #: /src/schooltool/email/browser/email.py:81
@@ -4358,7 +4399,7 @@ msgstr "Inschakelen"
 #: /src/schooltool/email/browser/email.py:100
 #: /src/schooltool/email/interfaces.py:88
 msgid "Mark to enable the service."
-msgstr "Duid dit aan om de service in te schakelen."
+msgstr "Selecteren om de service in te schakelen."
 
 #: /src/schooltool/email/browser/email.py:105
 #: /src/schooltool/email/interfaces.py:92
@@ -4368,7 +4409,7 @@ msgstr "Computernaam"
 #: /src/schooltool/email/browser/email.py:106
 #: /src/schooltool/email/interfaces.py:93
 msgid "SMTP server hostname. Required if the service is enabled."
-msgstr "SMTP server hostname. Nodig wanneer de service is ingeschakeld"
+msgstr "SMTP-servercomputernaam. Nodig wanneer de service is ingeschakeld"
 
 #: /src/schooltool/email/browser/email.py:110
 #: /src/schooltool/email/interfaces.py:97
@@ -4427,7 +4468,7 @@ msgstr "De nieuwe wachtwoorden komen niet overeen"
 
 #: /src/schooltool/email/browser/email.py:150
 msgid "Hostname is required for enabling the service"
-msgstr "Hostname is nodig om de service in te schakelen"
+msgstr "Computernaam is nodig om de service in te schakelen"
 
 #: /src/schooltool/email/browser/email.py:184
 msgid "Change Email Settings"
@@ -4563,11 +4604,11 @@ msgstr "Parameter-waarde"
 
 #: /src/schooltool/email/interfaces.py:74
 msgid "Sent on"
-msgstr "Verstuurd op"
+msgstr "Verzonden op"
 
 #: /src/schooltool/email/interfaces.py:75
 msgid "Date and time when the message was sent"
-msgstr "Datum en tijd waarop bericht verstuurd werd"
+msgstr "Datum en tijd waarop bericht verzonden werd"
 
 #: /src/schooltool/email/mail.py:52
 msgid "The SchoolTool mail service is disabled"
@@ -4601,8 +4642,7 @@ msgstr ""
 #: /src/schooltool/email/mail.py:59
 msgid "The server (${info}) replied that the message data was malformed"
 msgstr ""
-"De server (${info}) gaf als antwoord dat de berichtgegevens (message data) "
-"slechtgevormd was."
+"De server (${info}) gaf als antwoord dat de berichtgegevens ongeldig waren."
 
 #: /src/schooltool/export/configure.zcml:6
 msgid "XLS Import"
@@ -4614,7 +4654,7 @@ msgstr "Exporteer als XLS"
 
 #: /src/schooltool/export/importer.py:68
 msgid "${sheet_name} ${column}${row} ${message}"
-msgstr ""
+msgstr "${sheet_name} ${column}${row} ${message}"
 
 #: /src/schooltool/export/importer.py:69
 msgid "is not a valid integer"
@@ -4622,7 +4662,7 @@ msgstr "is geen geldig geheel getal"
 
 #: /src/schooltool/export/importer.py:70
 msgid "not unicode or ascii string"
-msgstr ""
+msgstr "geen unicode of ascii-tekens"
 
 #: /src/schooltool/export/importer.py:71
 msgid "missing required text"
@@ -4638,11 +4678,11 @@ msgstr "einddatum kan niet voor de startdatum liggen"
 
 #: /src/schooltool/export/importer.py:74
 msgid "start date overlaps another year"
-msgstr "startdatum overlapt met een ander jaar"
+msgstr "startdatum overlapt een ander jaar"
 
 #: /src/schooltool/export/importer.py:75
 msgid "end date overlaps another year"
-msgstr "einddatum overlapt met een ander jaar"
+msgstr "einddatum overlapt een ander jaar"
 
 #: /src/schooltool/export/importer.py:76
 msgid "invalid school year"
@@ -4658,21 +4698,19 @@ msgstr "einddatum ligt na het einde van het shooljaar"
 
 #: /src/schooltool/export/importer.py:79
 msgid "start date overlaps another term"
-msgstr "startdatum overlapt met een ander semester"
+msgstr "startdatum overlapt een andere periode"
 
 #: /src/schooltool/export/importer.py:80
 msgid "end date overlaps another term"
-msgstr "einddatum overlapt met een ander semester"
+msgstr "einddatum overlapt een andere periode"
 
 #: /src/schooltool/export/importer.py:81
-#, fuzzy
 msgid "${title} has no days in A${row}"
-msgstr "datum ontbreekt"
+msgstr "${title} heeft geen dagen in A${row}"
 
 #: /src/schooltool/export/importer.py:82
-#, fuzzy
 msgid "${title} has no day templates in A${row}"
-msgstr "datum ontbreekt"
+msgstr "${title} heeft geen dagsjablonen in A${row}"
 
 #: /src/schooltool/export/importer.py:83
 msgid "is not a valid time range"
@@ -4684,66 +4722,63 @@ msgstr "is geen geldig tijdstabelmodel"
 
 #: /src/schooltool/export/importer.py:85
 msgid "is the same day id as another in this timetable"
-msgstr "heeft dezelfde dag id als een andere in deze tijdstabel"
+msgstr "is dezelfde dag als van een andere in dit rooster"
 
 #: /src/schooltool/export/importer.py:86
 msgid "is not defined in the 'Day Templates' section"
-msgstr "is niet gedefiniëerd in de sectie 'Dagborderellen'"
+msgstr "is niet aangegeven in de sectie 'Dagsjablonen'"
 
 #: /src/schooltool/export/importer.py:87
-#, fuzzy
 msgid "is the same period id as another in this day"
-msgstr "heeft dezelfde dag id als een andere in deze tijdstabel"
+msgstr "is hetzelfde uur als van een ander op deze dag"
 
 #: /src/schooltool/export/importer.py:88
-#, fuzzy
 msgid "is the same homeroom period id as another in this day"
-msgstr "heeft dezelfde dag id als een andere in deze tijdstabel"
+msgstr "is hetzelfde thuis-klas uur als van een ander op deze dag"
 
 #: /src/schooltool/export/importer.py:89
 msgid "must be either 'Location' or 'Resource'"
-msgstr ""
+msgstr "moet ofwel een 'Locatie' ofwel een 'Voorziening' zijn"
 
 #: /src/schooltool/export/importer.py:90
 msgid "is not a valid term in the given school year"
-msgstr ""
+msgstr "is geen geldige periode in het aangegeven schooljaar"
 
 #: /src/schooltool/export/importer.py:91
 msgid "is not a valid course in the given school year"
-msgstr ""
+msgstr "is geen geldig vak in het aangegeven schooljaar"
 
 #: /src/schooltool/export/importer.py:92
 msgid "${title} has no courses in A${row}"
-msgstr ""
+msgstr "${title} heeft geen vakken in A${row}"
 
 #: /src/schooltool/export/importer.py:93
 msgid "is not a valid username"
-msgstr ""
+msgstr "is geen geldige gebruikersnaam"
 
 #: /src/schooltool/export/importer.py:94
 msgid "is not a valid schema in the given school year"
-msgstr ""
+msgstr "is geen geldig schema in het aangegeven schooljaar"
 
 #: /src/schooltool/export/importer.py:95
 msgid "is not a valid day id for the given schema"
-msgstr ""
+msgstr "is geen geldig dag voor het aangegeven schema"
 
 #: /src/schooltool/export/importer.py:96
 msgid "is not a valid period id for the given day"
-msgstr ""
+msgstr "is geen geldig uur voor de aangegeven dag"
 
 #: /src/schooltool/export/importer.py:97
 msgid "is not a valid resource id"
-msgstr ""
+msgstr "is geen geldige voorziening"
 
 #: /src/schooltool/export/importer.py:98
-#, fuzzy
 msgid "Username cannot contain non-ascii characters: ${string}"
-msgstr "Gebruikersnamen mogen geen non-ASCII lettertekens bevatten"
+msgstr "Gebruikersnaam mag geen ascii-tekens bevatten: ${string}"
 
 #: /src/schooltool/export/importer.py:100
 msgid "is not a valid weekday number (0-6)"
-msgstr ""
+msgstr "is geen geldige werkdag (0-6)"
 
 #: /src/schooltool/export/templates/import.pt:4
 msgid "Upload SchoolTool as XLS"
@@ -4948,7 +4983,7 @@ msgid ""
 msgstr ""
 "<h1>Groepen</h1> <p>Gebruik deze pagina om <b>groepen</b> of personen bij te "
 "houden.</p> <p><b>Groepen</b> die zijn toegevoegd maken geen deel uit van de "
-"hoofdgroepen (<b>Leraren</b>, <b>Studenten</b>, <b>Site-beheerders</b>, "
+"hoofdgroepen (<b>Leraren</b>, <b>Leerlingen</b>, <b>Site-beheerders</b>, "
 "<b>Schoolbeheerders</b>, of <b>Clerken</b>). U kunt ze selecteren door ze "
 "aan te vinken en verwijderen door op de <b>Verwijder</b> knop te klikken "
 "onderaan de pagina.</p> <h3>Hoe kan ik...</h3> <ul> <li><b>Zoeken naar een "
@@ -4972,22 +5007,48 @@ msgid "Description of the group."
 msgstr "Omschrijving van de groep."
 
 #: /src/schooltool/group/security.zcml:5
-msgid "Everyone can view group lists."
-msgstr "Iedereen kan de groeplijst bekijken"
+msgid "Only school administration can view the list of groups."
+msgstr "Alleen de schooladministratie kan de groepslijst bekijken."
 
-#: /src/schooltool/group/security.zcml:10
-msgid "Everyone can view group information."
-msgstr "Iedereen kan groepsinformatie bekijken."
+#: /src/schooltool/group/security.zcml:5
+msgid "The list of groups in the system is visible to the general public."
+msgstr "De groepslijst is zichtbaar voor iedereen."
 
-#: /src/schooltool/group/security.zcml:15
-msgid "Everyone can view group calendars."
-msgstr "Iedereen kan de groepkalenders bekijken"
+#: /src/schooltool/group/security.zcml:11
+msgid ""
+"Information about each group is visible to school administration, and "
+"members and leaders of the group."
+msgstr ""
+"Informatie over elke groep is zichtbaar voor de schooladministratie en voor "
+"de leden en leiders van de groep."
 
-#: /src/schooltool/group/security.zcml:20
-msgid "Group members can edit group calendars."
-msgstr "Groepsleden kunnen de groepsagenda bewerken."
+#: /src/schooltool/group/security.zcml:11
+msgid "Information about each group is visible to the general public."
+msgstr "Informatie over elke groep is zichtbaar voor iedereen."
 
-#: /src/schooltool/group/security.zcml:53
+#: /src/schooltool/group/security.zcml:17
+msgid ""
+"Each group calendar is visible to school administration, and members and "
+"leaders of the group."
+msgstr ""
+"Elke groepsagenda is zichtbaar voor de schooladministratie en voor de leden "
+"en leiders van de groep."
+
+#: /src/schooltool/group/security.zcml:17
+msgid "Each group calendar is visible to the general public."
+msgstr "Elke groepsagenda is zichtbaar voor iedereen."
+
+#: /src/schooltool/group/security.zcml:23
+msgid "All members of a group and school administration can edit its calendar."
+msgstr ""
+"Alle leden van een groep en de schooladministratie kunnen de agenda bewerken."
+
+#: /src/schooltool/group/security.zcml:23
+msgid "The leaders of a group and school administration can edit its calendar."
+msgstr ""
+"De leiders van een groep en de schooladministratie kunnen de agenda bewerken."
+
+#: /src/schooltool/group/security.zcml:57
 msgid "Groups are essentially sets of users."
 msgstr "Groepen bestaan uit meerdere gebruikers."
 
@@ -5001,37 +5062,36 @@ msgstr "Help"
 
 #: /src/schooltool/level/browser.py:47
 msgid "Add a level"
-msgstr ""
+msgstr "Niveau toevoegen"
 
 #: /src/schooltool/level/interfaces.py:37
-#, fuzzy
 msgid "Title of the level."
-msgstr "Titel van de notitie."
+msgstr "Titel van het niveau."
 
 #: /src/schooltool/level/security.zcml:7
 msgid "The teaching levels (student learning years)."
-msgstr ""
+msgstr "De leerniveaus (student leerjaren)."
 
 #: /src/schooltool/level/security.zcml:12
 msgid "Add/Remove"
-msgstr ""
+msgstr "Toevoegen/verwijderen"
 
 #: /src/schooltool/level/security.zcml:19
 msgid "Modify/Rename"
-msgstr ""
+msgstr "Wijzigen/hernoemen"
 
 #: /src/schooltool/level/templates/levels.pt:3
 #: /src/schooltool/level/templates/levels.pt:6
 msgid "Teaching Levels"
-msgstr ""
+msgstr "Leerniveaus"
 
 #: /src/schooltool/level/templates/levels.pt:11
 msgid "Levels (student learning years) taught in ${schoolyear}"
-msgstr ""
+msgstr "Niveaus (student leerjaren) onderwezen in ${schoolyear}"
 
 #: /src/schooltool/level/templates/link_to_levels.pt:1
 msgid "Teaching levels"
-msgstr ""
+msgstr "Leerniveaus"
 
 #: /src/schooltool/note/configure.zcml:68
 msgid "New Note"
@@ -5236,7 +5296,7 @@ msgstr ""
 "<li><strong>De details van een persoon bekijken:</strong> Klik op de naam.</"
 "li> <li><strong>Bladeren naar een persoon:</strong> Gebruik <code>Volgende "
 "10</code> (en <code>Vorige</code>) en de links in de blauwe balk.</li> "
-"<li><strong>Alle studenten tonen:</strong> Klik <code>Alles tonen</code> in "
+"<li><strong>Alle leerlingen tonen:</strong> Klik <code>Alles tonen</code> in "
 "de blauwe balk.</li> </ul>"
 
 #: /src/schooltool/person/interfaces.py:157
@@ -5299,22 +5359,38 @@ msgid "Make calendar public"
 msgstr "Agenda openbaar maken"
 
 #: /src/schooltool/person/security.zcml:5
-msgid "Everyone can view the list of persons"
-msgstr "Iedereen kan de personenlijst bekijken"
+msgid ""
+"The list of people with accounts in the system is visible only to school "
+"administration."
+msgstr ""
+"De lijst van mensen met een account in het systeem, is alleen zichtbaar voor "
+"de schooladministratie."
 
-#: /src/schooltool/person/security.zcml:10
-msgid "Everyone can view info of persons"
-msgstr "Iedereen kan info over personen bekijken"
+#: /src/schooltool/person/security.zcml:5
+msgid ""
+"The list of people with accounts in the system is visible to the general "
+"public."
+msgstr ""
+"De lijst van mensen met een account in het systeem, is zichtbaar voor "
+"iedereen."
 
-#: /src/schooltool/person/security.zcml:15
-msgid "Persons can set their own preferences"
-msgstr "Personen kunnen hun eigen voorkeuren instellen"
+#: /src/schooltool/person/security.zcml:11
+msgid "Users can make their own calendars public."
+msgstr "Gebruikers kunnen hun eigen agenda openbaar maken."
 
-#: /src/schooltool/person/security.zcml:20
-msgid "Persons can change their own passwords"
-msgstr "Personen kunnen hun eigen wachtwoord wijzigen"
+#: /src/schooltool/person/security.zcml:11
+msgid "Users cannot make their own calendars public."
+msgstr "Gebruikers kunnen hun eigen agenda niet openbaar maken."
 
-#: /src/schooltool/person/security.zcml:77
+#: /src/schooltool/person/security.zcml:17
+msgid "Only school administration can change passwords."
+msgstr "Alleen de schooladministratie kan wachtwoorden wijzigen."
+
+#: /src/schooltool/person/security.zcml:17
+msgid "Users can change their own passwords."
+msgstr "Gebruikers kunnen hun eigen wachtwoorden wijzigen."
+
+#: /src/schooltool/person/security.zcml:71
 msgid "Users"
 msgstr "Gebruikers"
 
@@ -5330,7 +5406,11 @@ msgstr "Voorkeuren bekijken"
 msgid "Change preferences"
 msgstr "Voorkeuren wijzigen"
 
-#: /src/schooltool/person/security.zcml:144
+#: /src/schooltool/person/security.zcml:138
+msgid "Change the list of calendars overlayed on the user's calendar"
+msgstr "Wijzig de lijst met agenda's die de agenda van de gebruiker overlappen"
+
+#: /src/schooltool/person/security.zcml:138
 msgid "Manage visible calendars"
 msgstr "Zichtbare agenda's beheren"
 
@@ -5549,20 +5629,36 @@ msgid "Resource"
 msgstr "Voorziening"
 
 #: /src/schooltool/resource/security.zcml:7
-msgid "Everyone can view resource lists."
-msgstr "Iedereen kan voorzieningenlijst bekijken."
+msgid "Only school administration can view the list of resources."
+msgstr "Alleen de schooladministratie kan de lijst met voorzieningen zien."
 
-#: /src/schooltool/resource/security.zcml:12
-msgid "Everyone can view resource information."
-msgstr "Iedereen kan voorzieningeninformatie bekijken."
+#: /src/schooltool/resource/security.zcml:7
+msgid "The list of resources in the system is visible to the general public."
+msgstr "De lijst met voorzieningen is zichtbaar voor iedereen."
 
-#: /src/schooltool/resource/security.zcml:17
-msgid "Everyone can view resource calendars."
-msgstr "Iedereen kan voorzieningenagenda bekijken."
+#: /src/schooltool/resource/security.zcml:13
+msgid ""
+"Information about each resource is visible to school administration and "
+"leaders of the resource."
+msgstr ""
+"Informatie over elke voorziening is zichtbaar voor de schooladministratie en "
+"de leiders van de voorziening."
 
-#: /src/schooltool/resource/security.zcml:50
-msgid "Reservations"
-msgstr "Reserveringen"
+#: /src/schooltool/resource/security.zcml:13
+msgid "Information about each resource is visible to the general public."
+msgstr "Informatie over elke voorziening is zichtbaar voor iedereen."
+
+#: /src/schooltool/resource/security.zcml:19
+msgid ""
+"Resource calendars are visible to school administration, teachers, and "
+"leaders of the resource."
+msgstr ""
+"Voorzieningsagenda's zijn zichtbaar voor de schooladministratie, leraren en "
+"de leiders van de voorziening."
+
+#: /src/schooltool/resource/security.zcml:19
+msgid "Resource calendars are visible to the general public."
+msgstr "Voorzieningsagenda's zijn zichtbaar voor iedereen."
 
 #: /src/schooltool/resource/security.zcml:50
 msgid ""
@@ -5573,6 +5669,10 @@ msgstr ""
 "Voorzieningen zijn locaties of objecten in de school. SchoolTool's agenda "
 "kunt u gebruiken als een reserverings- en traceringssysteem van "
 "voorzieningen."
+
+#: /src/schooltool/resource/security.zcml:53
+msgid "Reservations"
+msgstr "Reserveringen"
 
 #: /src/schooltool/resource/security.zcml:57
 msgid "List/Search resources"
@@ -5624,9 +5724,9 @@ msgid ""
 "This creates a school of 1,000 students and data for 4 terms. If you select "
 "all options, it can take a <strong>long</strong> time. Just let it run."
 msgstr ""
-"Dit creëert een school met 1000 studenten en gegevens voor 4 semesters. "
-"Indien je alle opties selecteert kan dit een <strong>lange</strong> tijd "
-"duren. Gelieve dit proces niet te onderbreken."
+"Dit creëert een school met 1000 leerlingen en data voor 4 periodes. Indien u "
+"alle opties selecteert kan dit een <strong>lange</strong> tijd duren. "
+"Gelieve dit proces niet te onderbreken."
 
 #: /src/schooltool/sampledata/sampledata.pt:25
 msgid ""
@@ -5708,23 +5808,27 @@ msgstr "Voeg een nieuwe periode toe"
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_add.pt:35
 msgid "Copy data from active school year: ${active_schoolyear}"
-msgstr ""
+msgstr "Kopieer data van het actieve schooljaar: ${active_schoolyear}"
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_add.pt:40
 msgid "All Courses"
-msgstr ""
+msgstr "Alle vakken"
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_add.pt:50
 msgid "All Timetable Schemas"
-msgstr ""
+msgstr "Alle roosterschema's"
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_add.pt:62
 msgid "Copy members"
-msgstr ""
+msgstr "Leden kopiëren"
 
-#: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:39
-msgid "Activate next school year"
-msgstr "Activeer volgende schooljaar"
+#: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:27
+msgid "The active school year is ${year} (${start_date} - ${end_date})"
+msgstr "Het actieve schooljaar is ${year} (${start_date} - ${end_date})"
+
+#: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:52
+msgid "Activate selected school year"
+msgstr "Actieve geselecteerde schooljaar"
 
 #: /src/schooltool/schoolyear/browser/templates/term-delete.pt:10
 #: /src/schooltool/term/browser/templates/term-container-delete.pt:10
@@ -5762,13 +5866,17 @@ msgstr "Ingeschakeld"
 msgid "School administration"
 msgstr "Schooladministratie"
 
-#: /src/schooltool/securitypolicy/browser/templates/access_setting_snippet.pt:4
-msgid "Access setting: ${setting} (${status})"
-msgstr "Toegang instelling: ${setting} (${status})"
+#: /src/schooltool/securitypolicy/browser/templates/access_setting_snippet.pt:2
+msgid "Access setting"
+msgstr "Toegangsinstellingen"
 
 #: /src/schooltool/securitypolicy/browser/templates/security_descriptions.pt:4
 msgid "Access Rights"
 msgstr "Toegangsrechten"
+
+#: /src/schooltool/securitypolicy/browser/templates/security_descriptions.pt:9
+msgid "Object model and access rights"
+msgstr "Objectmodel en toegangsrechten"
 
 #: /src/schooltool/securitypolicy/browser/templates/security_descriptions.pt:57
 msgid "Legend"
@@ -5908,6 +6016,8 @@ msgid ""
 "&copy; The <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth "
 "Foundation</a> 2003 - <span>2010</span>: Supporting Social Innovation."
 msgstr ""
+"&copy; De <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth "
+"Foundation</a> 2003 - <span>2010</span>: Ondersteunt sociale innovatie."
 
 #: /src/schooltool/skin/templates/view_macros.pt:132
 msgid ""
@@ -5983,11 +6093,11 @@ msgstr "Werkbalk configuratie"
 msgid "The name of the toolbar configuration to use."
 msgstr "De naam van de te gebruiken knoppenbalk-configuratie"
 
-#: /src/schooltool/skin/widgets.py:122
-msgid "Configuration path"
-msgstr "Configuratie pad"
+#: /src/schooltool/skin/widgets.py:110
+msgid "Relative configuration path"
+msgstr "Relatieve configuratiepad"
 
-#: /src/schooltool/skin/widgets.py:123
+#: /src/schooltool/skin/widgets.py:111
 msgid "Path to the FCKconfiguration javascript file."
 msgstr "Pad naar het  javascript bestand FCKconfiguration."
 
@@ -6230,7 +6340,7 @@ msgstr "Niet gekoppeld rooster"
 
 #: /src/schooltool/timetable/browser/__init__.py:513
 msgid "Show consecutive periods as one period in journal"
-msgstr ""
+msgstr "Laat achtereenvolgende uren als één uur zien in het journaal"
 
 #: /src/schooltool/timetable/browser/__init__.py:614
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:107
@@ -6240,27 +6350,27 @@ msgstr "Opslaan"
 
 #: /src/schooltool/timetable/browser/__init__.py:686
 msgid "School timetable"
-msgstr ""
+msgstr "Schoolrooster"
 
 #: /src/schooltool/timetable/browser/__init__.py:691
 msgid "Apply from"
-msgstr ""
+msgstr "Toepassen vanaf"
 
 #: /src/schooltool/timetable/browser/__init__.py:693
 msgid "Apply until"
-msgstr ""
+msgstr "Toepassen tot"
 
 #: /src/schooltool/timetable/browser/__init__.py:794
 msgid "Timetable conflicts with another:"
-msgstr ""
+msgstr "Roosters conflicteren met elkaar:"
 
 #: /src/schooltool/timetable/browser/__init__.py:802
 msgid "Timetable does not fit in term"
-msgstr ""
+msgstr "Rooster past niet in periode"
 
 #: /src/schooltool/timetable/browser/__init__.py:805
 msgid "Timetable must begin before it ends."
-msgstr ""
+msgstr "Het begin van een rooster moet voor het einde liggen."
 
 #: /src/schooltool/timetable/browser/__init__.py:910
 msgid "Invalid date. Please use YYYY-MM-DD format."
@@ -6411,8 +6521,8 @@ msgid ""
 "Third, define the time and duration of periods when they fall on certain "
 "days of week. Use one of the the following format: <tt>HH:MM</tt> (also, "
 "don't forget to specify the duration in the text box below) or <tt>HH:MM-HH:"
-"MM</tt> (when you want to specify both endpoints explicitly, e.g., 9:30-"
-"10:15). It is not necessary to define all periods for all days of week, "
+"MM</tt> (when you want to specify both endpoints explicitly, e.g., "
+"9:30-10:15). It is not necessary to define all periods for all days of week, "
 "omissions will just cause that period to be skipped if it happens to fall on "
 "that day of week. If the list of periods is not up to date with the changes "
 "you made in the table above, use the Update button to refresh the form."
@@ -6469,22 +6579,22 @@ msgstr "Beheren..."
 
 #: /src/schooltool/timetable/browser/templates/confirm-timetable-delete.pt:15
 msgid "Are you sure you want to unschedule this timetable?"
-msgstr ""
+msgstr "Weet u zeker dat u dit rooster wilt verwijderen?"
 
 #: /src/schooltool/timetable/browser/templates/confirm-timetable-delete.pt:27
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:48
 msgid "Timetable \"${title}\""
-msgstr ""
+msgstr "Rooster \"${title}\""
 
 #: /src/schooltool/timetable/browser/templates/confirm-timetable-delete.pt:38
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:60
 msgid "No periods selected."
-msgstr ""
+msgstr "Geen uren geelecteerd."
 
 #: /src/schooltool/timetable/browser/templates/confirm-timetable-delete.pt:67
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:89
 msgid "Scheduled from ${from} until ${until}"
-msgstr ""
+msgstr "Ingepland vanaf ${from} tot ${until}"
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:4
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:10
@@ -6558,7 +6668,7 @@ msgstr "Roosteren voor ${section}"
 #: /src/schooltool/timetable/browser/templates/section-timetable-add.pt:25
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:31
 msgid "For term: ${term_title} (from ${starts} to ${ends})"
-msgstr ""
+msgstr "Voor periode: ${term_title} (from ${starts} tot ${ends})"
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:17
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:19
@@ -6571,33 +6681,35 @@ msgstr "Selecteer het schoolrooster dat u wilt gebruiken"
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:17
 msgid "Time table schedule of ${courses} ${section}."
-msgstr ""
+msgstr "Rooster van ${courses} ${section}."
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:25
 msgid "school days"
-msgstr ""
+msgstr "schooldagen"
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:27
 msgid "available timetables"
-msgstr ""
+msgstr "beschikbare roosters"
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:31
 msgid ""
 "For more information, see ${school_days} and ${available_timetables} in "
 "${term} of ${schoolyear}"
 msgstr ""
+"Voor meer informatie, zie ${school_days} en ${available_timetables} in "
+"${term} van ${schoolyear}"
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:39
 msgid "There are no timetables assigned."
-msgstr ""
+msgstr "Er zijn geen toegewezen roosters."
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:49
 msgid "(edit periods)"
-msgstr ""
+msgstr "(uren bewerken)"
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:91
 msgid "Consecutive periods are treated as a single meeting."
-msgstr ""
+msgstr "Achtereenvolgende uren worden beschouwd als één enkele les"
 
 #: /src/schooltool/timetable/browser/templates/simpletts.pt:11
 msgid ""
@@ -6696,15 +6808,15 @@ msgstr "Weet u zeker dat u de geselecteerde roosters wilt verwijderen?"
 
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:35
 msgid "Using timetable: ${schema_titles}"
-msgstr ""
+msgstr "Gebruikte rooster: ${schema_titles}"
 
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:97
 msgid "Apply from:"
-msgstr ""
+msgstr "Toepassen vanaf:"
 
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:111
 msgid "Apply until:"
-msgstr ""
+msgstr "Toepassen tot:"
 
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:40
 msgid "Default Timetable Schema:"
@@ -6892,7 +7004,7 @@ msgid ""
 "Do you check student attendance for the day in a homeroom period or "
 "equivalent?"
 msgstr ""
-"Controleert u de aanwezigheid van de studenten voor de gehele dag in een "
+"Controleert u de aanwezigheid van de leerlingen voor de gehele dag in een "
 "\"thuisklas\"-periode/lesuur of het equivalent daarvan?"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:736

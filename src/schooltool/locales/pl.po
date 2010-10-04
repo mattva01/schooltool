@@ -7,14 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-08-22 18:49+0300\n"
-"PO-Revision-Date: 2010-07-12 00:30+0000\n"
-"Last-Translator: Maciej Jędrusik <Unknown>\n"
+"POT-Creation-Date: 2010-09-30 19:38+0300\n"
+"PO-Revision-Date: 2010-09-14 10:06+0000\n"
+"Last-Translator: skrzat <Unknown>\n"
 "Language-Team: Polish <pl@li.org>\n"
+"Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-07-12 03:42+0000\n"
+"X-Launchpad-Export-Date: 2010-09-15 04:52+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -936,11 +937,11 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/about.pt:20
 msgid ""
-"SchoolTool is licensed under the <a href=\"http://www.gnu.org/licenses/gpl-"
-"2.0.html\">GNU General Public License, Version 2</a>."
+"SchoolTool is licensed under the <a href=\"http://www.gnu.org/licenses/"
+"gpl-2.0.html\">GNU General Public License, Version 2</a>."
 msgstr ""
-"SchoolTool jest objęty licencją <a href=\"http://www.gnu.org/licenses/gpl-"
-"2.0.html\">GNU General Public License, wersja 2</a>."
+"SchoolTool jest objęty licencją <a href=\"http://www.gnu.org/licenses/"
+"gpl-2.0.html\">GNU General Public License, wersja 2</a>."
 
 #: /src/schooltool/app/browser/templates/about.pt:24
 msgid "For more information:"
@@ -1151,9 +1152,8 @@ msgid "There are no resources with calendars accessible to you."
 msgstr "Brak zasobów z kalendarzami dostępnych dla Ciebie."
 
 #: /src/schooltool/app/browser/templates/default_report_template.pt:23
-#, fuzzy
 msgid "Created with SchoolTool"
-msgstr "Stosowanie kalendarzy w SchoolTool"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/default_report_template.pt:37
 msgid "Page ${page_number}"
@@ -2381,11 +2381,7 @@ msgstr "Grupa \"$group\"."
 msgid "\"$group\" group and the super user."
 msgstr "grupa \"$group\" i administrator."
 
-#: /src/schooltool/app/security.zcml:69
-msgid "Everyone can view the application calendar."
-msgstr "Każdy może przeglądać kalendarz aplikacji."
-
-#: /src/schooltool/app/security.zcml:77
+#: /src/schooltool/app/security.zcml:71
 msgid "SchoolTool application"
 msgstr "Aplikacja SchoolTool"
 
@@ -2450,7 +2446,11 @@ msgstr "Rady"
 msgid "New Person"
 msgstr "Nowa osoba"
 
-#: /src/schooltool/basicperson/browser/configure.zcml:113
+#: /src/schooltool/basicperson/browser/configure.zcml:107
+msgid "Add Multiple Persons"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/configure.zcml:129
 #: /src/schooltool/basicperson/security.zcml:22
 #: /src/schooltool/demographics/browser/personform.py:180
 msgid "Demographics"
@@ -2509,7 +2509,15 @@ msgstr "Nazwy nie mogą zaczynać się od '+' lub '@', ani zawierać ')'"
 msgid "Usernames cannot contain non-ascii characters"
 msgstr "Nazwy użytkowników nie mogą zawierać znaków non-ascii"
 
-#: /src/schooltool/basicperson/browser/demographics.py:133
+#: /src/schooltool/basicperson/browser/demographics.py:85
+msgid "Duplicate entry \"${value}\""
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/demographics.py:90
+msgid "Value too long \"${value}\""
+msgstr "Zbyt długa wartość \"${value}\""
+
+#: /src/schooltool/basicperson/browser/demographics.py:151
 msgid "Add new Field"
 msgstr "Dodaj nowe pole"
 
@@ -2533,22 +2541,25 @@ msgstr "Doradca"
 msgid "Confirm password"
 msgstr "Potwierdź hasło"
 
-#: /src/schooltool/basicperson/browser/person.py:104
-msgid "This username is already in use!"
-msgstr "Nazwa użytkownika jest już w użyciu."
+#: /src/schooltool/basicperson/browser/person.py:76
+msgid "Passwords do not match"
+msgstr "Podane hasła są różne."
 
 #: /src/schooltool/basicperson/browser/person.py:149
 msgid "Add new person"
 msgstr "Dodaj nowe osoby"
 
-#: /src/schooltool/basicperson/browser/person.py:169
-msgid "Passwords do not match"
-msgstr "Podane hasła są różne."
+#: /src/schooltool/basicperson/browser/person.py:152
+msgid "This username is already in use!"
+msgstr "Nazwa użytkownika jest już w użyciu."
 
-#. Default: ""
-#: /src/schooltool/basicperson/browser/person.py:234
-msgid "Change information for ${fullname}"
-msgstr "Zmień informacje dla ${fullname}"
+#: /src/schooltool/basicperson/browser/person.py:283
+msgid "Usernames"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/person.py:300
+msgid "Add multiple persons"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/person.py:304
 msgid "Current Advisors"
@@ -2576,6 +2587,15 @@ msgstr "Dodaj doradcę"
 msgid "Advisees of ${person}"
 msgstr "Rady osoby ${osoba}"
 
+#: /src/schooltool/basicperson/browser/person.py:357
+msgid "Done"
+msgstr ""
+
+#. Default: ""
+#: /src/schooltool/basicperson/browser/person.py:402
+msgid "Change information for ${fullname}"
+msgstr "Zmień informacje dla ${fullname}"
+
 #: /src/schooltool/basicperson/browser/templates/demographics-view.pt:4
 #: /src/schooltool/basicperson/browser/templates/demographics-view.pt:7
 msgid "Demographics Container"
@@ -2597,6 +2617,8 @@ msgid ""
 "CSV data <strong>must</strong> contain a user name a first name and a last "
 "name. An optional password <strong>may</strong> be included as well."
 msgstr ""
+"Dane CSV <strong>muszą</strong> zawierać nazwę użytkownika, imię oraz "
+"nazwisko.Opcjonalnie <strong>może</strong> zawierać hasło."
 
 #. Default: "jjones, Jimmy, Jones jbjones, Jim Bob, Jones, r2m45J howard, Howard, Jobs"
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:35
@@ -2617,6 +2639,10 @@ msgstr ""
 "Powyższy przykład stworzy trzech użytkowników, jkowalski,jckowalski i adam. "
 "Tylko jckowalski ma ustawione hasło i będzie mógł się zalogować do systemu. "
 "Uwaga: hasła muszą byc przesłane czytym tekstem."
+
+#: /src/schooltool/basicperson/browser/templates/person_add_subform.pt:2
+msgid "New person"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/templates/person_view.pt:13
 #: /src/schooltool/person/browser/home.pt:13
@@ -2774,7 +2800,11 @@ msgstr "Dodaj informacje"
 msgid "Edit Calendar Overlays"
 msgstr "Edytuj nakładki kalendarza"
 
-#: /src/schooltool/contact/browser/configure.zcml:49
+#: /src/schooltool/contact/browser/configure.zcml:41
+msgid "View Person"
+msgstr ""
+
+#: /src/schooltool/contact/browser/configure.zcml:61
 msgid "New Contact"
 msgstr "Nowy kontakt"
 
@@ -3378,7 +3408,7 @@ msgstr ""
 
 #: /src/schooltool/course/browser/templates/course.pt:9
 msgid "${course} course for ${schoolyear}"
-msgstr ""
+msgstr "Kurs ${course} w ${schoolyear}"
 
 #: /src/schooltool/course/browser/templates/course.pt:52
 #: /src/schooltool/demographics/browser/nameinfo_view.pt:11
@@ -3393,7 +3423,7 @@ msgstr "uczniowie"
 
 #: /src/schooltool/course/browser/templates/course_container.pt:12
 msgid "Courses for ${schoolyear}"
-msgstr ""
+msgstr "Kursy w ${schoolyear}"
 
 #: /src/schooltool/course/browser/templates/course_container.pt:28
 #: /src/schooltool/demographics/browser/search.pt:30
@@ -3650,10 +3680,18 @@ msgid "Sections must be in consecutive terms"
 msgstr ""
 
 #: /src/schooltool/course/security.zcml:42
-msgid "Everyone can view section information and calendars"
+msgid ""
+"Basic information about sections is only visible to instructors and students "
+"in that section, and school administration."
 msgstr ""
 
-#: /src/schooltool/course/security.zcml:73
+#: /src/schooltool/course/security.zcml:42
+msgid ""
+"Basic information about sections, including rosters, is visible to the "
+"general public."
+msgstr ""
+
+#: /src/schooltool/course/security.zcml:74
 msgid ""
 "A course in SchoolTool describes a set curriculum                    taught "
 "in a section."
@@ -4389,9 +4427,8 @@ msgid "${sheet_name} ${column}${row} ${message}"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:69
-#, fuzzy
 msgid "is not a valid integer"
-msgstr "Dana nie jest liczbącałkowitą"
+msgstr ""
 
 #: /src/schooltool/export/importer.py:70
 msgid "not unicode or ascii string"
@@ -4406,9 +4443,8 @@ msgid "has no date in it"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:73
-#, fuzzy
 msgid "end date cannot be before start date"
-msgstr "Początek jest później niż zakończenie"
+msgstr ""
 
 #: /src/schooltool/export/importer.py:74
 msgid "start date overlaps another year"
@@ -4419,19 +4455,16 @@ msgid "end date overlaps another year"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:76
-#, fuzzy
 msgid "invalid school year"
-msgstr "Dodaj nowy rok szkolny"
+msgstr ""
 
 #: /src/schooltool/export/importer.py:77
-#, fuzzy
 msgid "start date before start of school year"
-msgstr "Aktywuj bieżący rok szkolny"
+msgstr ""
 
 #: /src/schooltool/export/importer.py:78
-#, fuzzy
 msgid "end date after end of school year"
-msgstr "Aktywuj bieżący rok szkolny"
+msgstr ""
 
 #: /src/schooltool/export/importer.py:79
 msgid "start date overlaps another term"
@@ -4450,9 +4483,8 @@ msgid "${title} has no day templates in A${row}"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:83
-#, fuzzy
 msgid "is not a valid time range"
-msgstr "\"${username}\" nie jest poprawnym imieniem użytkownika."
+msgstr ""
 
 #: /src/schooltool/export/importer.py:84
 msgid "is not a valid timetable model"
@@ -4479,28 +4511,24 @@ msgid "must be either 'Location' or 'Resource'"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:90
-#, fuzzy
 msgid "is not a valid term in the given school year"
-msgstr "Nie można powiązać sekcji w różnych latach szkolnych"
+msgstr ""
 
 #: /src/schooltool/export/importer.py:91
-#, fuzzy
 msgid "is not a valid course in the given school year"
-msgstr "Nie można powiązać sekcji w różnych latach szkolnych"
+msgstr ""
 
 #: /src/schooltool/export/importer.py:92
 msgid "${title} has no courses in A${row}"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:93
-#, fuzzy
 msgid "is not a valid username"
-msgstr "\"${username}\" nie jest poprawnym imieniem użytkownika."
+msgstr ""
 
 #: /src/schooltool/export/importer.py:94
-#, fuzzy
 msgid "is not a valid schema in the given school year"
-msgstr "Nie można powiązać sekcji w różnych latach szkolnych"
+msgstr ""
 
 #: /src/schooltool/export/importer.py:95
 msgid "is not a valid day id for the given schema"
@@ -4515,9 +4543,8 @@ msgid "is not a valid resource id"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:98
-#, fuzzy
 msgid "Username cannot contain non-ascii characters: ${string}"
-msgstr "Nazwy użytkowników nie mogą zawierać znaków non-ascii"
+msgstr ""
 
 #: /src/schooltool/export/importer.py:100
 msgid "is not a valid weekday number (0-6)"
@@ -4740,22 +4767,42 @@ msgid "Description of the group."
 msgstr "Opis grupy."
 
 #: /src/schooltool/group/security.zcml:5
-msgid "Everyone can view group lists."
-msgstr "Każdy może obejrzeć listy grup."
+msgid "Only school administration can view the list of groups."
+msgstr ""
 
-#: /src/schooltool/group/security.zcml:10
-msgid "Everyone can view group information."
-msgstr "Każdy może obejrzeć informacje o grupie."
+#: /src/schooltool/group/security.zcml:5
+msgid "The list of groups in the system is visible to the general public."
+msgstr ""
 
-#: /src/schooltool/group/security.zcml:15
-msgid "Everyone can view group calendars."
-msgstr "Każdy może obejrzeć kalendarze grupy."
+#: /src/schooltool/group/security.zcml:11
+msgid ""
+"Information about each group is visible to school administration, and "
+"members and leaders of the group."
+msgstr ""
 
-#: /src/schooltool/group/security.zcml:20
-msgid "Group members can edit group calendars."
-msgstr "Członkowie grupy mogą edytować kalendarze."
+#: /src/schooltool/group/security.zcml:11
+msgid "Information about each group is visible to the general public."
+msgstr ""
 
-#: /src/schooltool/group/security.zcml:53
+#: /src/schooltool/group/security.zcml:17
+msgid ""
+"Each group calendar is visible to school administration, and members and "
+"leaders of the group."
+msgstr ""
+
+#: /src/schooltool/group/security.zcml:17
+msgid "Each group calendar is visible to the general public."
+msgstr ""
+
+#: /src/schooltool/group/security.zcml:23
+msgid "All members of a group and school administration can edit its calendar."
+msgstr ""
+
+#: /src/schooltool/group/security.zcml:23
+msgid "The leaders of a group and school administration can edit its calendar."
+msgstr ""
+
+#: /src/schooltool/group/security.zcml:57
 msgid "Groups are essentially sets of users."
 msgstr ""
 
@@ -4768,28 +4815,24 @@ msgid "Help"
 msgstr "Pomoc"
 
 #: /src/schooltool/level/browser.py:47
-#, fuzzy
 msgid "Add a level"
-msgstr "Dodaj wydarzenie"
+msgstr ""
 
 #: /src/schooltool/level/interfaces.py:37
-#, fuzzy
 msgid "Title of the level."
-msgstr "Tytuł notatki."
+msgstr ""
 
 #: /src/schooltool/level/security.zcml:7
 msgid "The teaching levels (student learning years)."
 msgstr ""
 
 #: /src/schooltool/level/security.zcml:12
-#, fuzzy
 msgid "Add/Remove"
-msgstr "Usuń"
+msgstr ""
 
 #: /src/schooltool/level/security.zcml:19
-#, fuzzy
 msgid "Modify/Rename"
-msgstr "Modyfikuj"
+msgstr ""
 
 #: /src/schooltool/level/templates/levels.pt:3
 #: /src/schooltool/level/templates/levels.pt:6
@@ -5057,22 +5100,34 @@ msgid "Make calendar public"
 msgstr ""
 
 #: /src/schooltool/person/security.zcml:5
-msgid "Everyone can view the list of persons"
-msgstr "Każdy może przeglądać listę osób"
-
-#: /src/schooltool/person/security.zcml:10
-msgid "Everyone can view info of persons"
+msgid ""
+"The list of people with accounts in the system is visible only to school "
+"administration."
 msgstr ""
 
-#: /src/schooltool/person/security.zcml:15
-msgid "Persons can set their own preferences"
+#: /src/schooltool/person/security.zcml:5
+msgid ""
+"The list of people with accounts in the system is visible to the general "
+"public."
 msgstr ""
 
-#: /src/schooltool/person/security.zcml:20
-msgid "Persons can change their own passwords"
+#: /src/schooltool/person/security.zcml:11
+msgid "Users can make their own calendars public."
 msgstr ""
 
-#: /src/schooltool/person/security.zcml:77
+#: /src/schooltool/person/security.zcml:11
+msgid "Users cannot make their own calendars public."
+msgstr ""
+
+#: /src/schooltool/person/security.zcml:17
+msgid "Only school administration can change passwords."
+msgstr ""
+
+#: /src/schooltool/person/security.zcml:17
+msgid "Users can change their own passwords."
+msgstr ""
+
+#: /src/schooltool/person/security.zcml:71
 msgid "Users"
 msgstr "Użytkownicy"
 
@@ -5088,7 +5143,11 @@ msgstr "Pokaż ustawienia"
 msgid "Change preferences"
 msgstr "Zmień ustawienia"
 
-#: /src/schooltool/person/security.zcml:144
+#: /src/schooltool/person/security.zcml:138
+msgid "Change the list of calendars overlayed on the user's calendar"
+msgstr ""
+
+#: /src/schooltool/person/security.zcml:138
 msgid "Manage visible calendars"
 msgstr "Zarządzaj widocznymi kalendarzami"
 
@@ -5294,20 +5353,32 @@ msgid "Resource"
 msgstr "Zasób"
 
 #: /src/schooltool/resource/security.zcml:7
-msgid "Everyone can view resource lists."
-msgstr "Każdy może przeglądać listę zasobów"
-
-#: /src/schooltool/resource/security.zcml:12
-msgid "Everyone can view resource information."
+msgid "Only school administration can view the list of resources."
 msgstr ""
 
-#: /src/schooltool/resource/security.zcml:17
-msgid "Everyone can view resource calendars."
-msgstr "Każdy może przeglądać kalendarze zasobu"
+#: /src/schooltool/resource/security.zcml:7
+msgid "The list of resources in the system is visible to the general public."
+msgstr ""
 
-#: /src/schooltool/resource/security.zcml:50
-msgid "Reservations"
-msgstr "Rezerwacje"
+#: /src/schooltool/resource/security.zcml:13
+msgid ""
+"Information about each resource is visible to school administration and "
+"leaders of the resource."
+msgstr ""
+
+#: /src/schooltool/resource/security.zcml:13
+msgid "Information about each resource is visible to the general public."
+msgstr ""
+
+#: /src/schooltool/resource/security.zcml:19
+msgid ""
+"Resource calendars are visible to school administration, teachers, and "
+"leaders of the resource."
+msgstr ""
+
+#: /src/schooltool/resource/security.zcml:19
+msgid "Resource calendars are visible to the general public."
+msgstr ""
 
 #: /src/schooltool/resource/security.zcml:50
 msgid ""
@@ -5315,6 +5386,10 @@ msgid ""
 "SchoolTool's calendar can function as a reservation                    and "
 "tracking system for resources."
 msgstr ""
+
+#: /src/schooltool/resource/security.zcml:53
+msgid "Reservations"
+msgstr "Rezerwacje"
 
 #: /src/schooltool/resource/security.zcml:57
 msgid "List/Search resources"
@@ -5445,23 +5520,24 @@ msgid "Copy data from active school year: ${active_schoolyear}"
 msgstr ""
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_add.pt:40
-#, fuzzy
 msgid "All Courses"
-msgstr "Przedmioty"
+msgstr ""
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_add.pt:50
-#, fuzzy
 msgid "All Timetable Schemas"
-msgstr "Nowy schemat planu zajęć"
+msgstr ""
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_add.pt:62
-#, fuzzy
 msgid "Copy members"
-msgstr "Członkowie"
+msgstr ""
 
-#: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:39
-msgid "Activate next school year"
-msgstr "Aktywuj nowy rok szkolny"
+#: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:27
+msgid "The active school year is ${year} (${start_date} - ${end_date})"
+msgstr ""
+
+#: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:52
+msgid "Activate selected school year"
+msgstr ""
 
 #: /src/schooltool/schoolyear/browser/templates/term-delete.pt:10
 #: /src/schooltool/term/browser/templates/term-container-delete.pt:10
@@ -5499,13 +5575,17 @@ msgstr "Włączone"
 msgid "School administration"
 msgstr "Administracja szkoły"
 
-#: /src/schooltool/securitypolicy/browser/templates/access_setting_snippet.pt:4
-msgid "Access setting: ${setting} (${status})"
-msgstr "Dostęp do opcji: ${setting} (${status})"
+#: /src/schooltool/securitypolicy/browser/templates/access_setting_snippet.pt:2
+msgid "Access setting"
+msgstr ""
 
 #: /src/schooltool/securitypolicy/browser/templates/security_descriptions.pt:4
 msgid "Access Rights"
 msgstr "Prawa dostępu"
+
+#: /src/schooltool/securitypolicy/browser/templates/security_descriptions.pt:9
+msgid "Object model and access rights"
+msgstr ""
 
 #: /src/schooltool/securitypolicy/browser/templates/security_descriptions.pt:57
 msgid "Legend"
@@ -5710,11 +5790,11 @@ msgstr "Konfiguracja paska narzędzi"
 msgid "The name of the toolbar configuration to use."
 msgstr ""
 
-#: /src/schooltool/skin/widgets.py:122
-msgid "Configuration path"
+#: /src/schooltool/skin/widgets.py:110
+msgid "Relative configuration path"
 msgstr ""
 
-#: /src/schooltool/skin/widgets.py:123
+#: /src/schooltool/skin/widgets.py:111
 msgid "Path to the FCKconfiguration javascript file."
 msgstr ""
 
@@ -5941,33 +6021,28 @@ msgid "Save"
 msgstr "Zapisz"
 
 #: /src/schooltool/timetable/browser/__init__.py:686
-#, fuzzy
 msgid "School timetable"
-msgstr "Szkolne plany zajęć"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/__init__.py:691
-#, fuzzy
 msgid "Apply from"
-msgstr "Zastosuj"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/__init__.py:693
-#, fuzzy
 msgid "Apply until"
-msgstr "Zastosuj"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/__init__.py:794
-#, fuzzy
 msgid "Timetable conflicts with another:"
-msgstr "Tytuł notatki."
+msgstr ""
 
 #: /src/schooltool/timetable/browser/__init__.py:802
 msgid "Timetable does not fit in term"
 msgstr ""
 
 #: /src/schooltool/timetable/browser/__init__.py:805
-#, fuzzy
 msgid "Timetable must begin before it ends."
-msgstr "Termin musi zaczynać się przed tym jak się skończy."
+msgstr ""
 
 #: /src/schooltool/timetable/browser/__init__.py:910
 msgid "Invalid date. Please use YYYY-MM-DD format."
@@ -6114,8 +6189,8 @@ msgid ""
 "Third, define the time and duration of periods when they fall on certain "
 "days of week. Use one of the the following format: <tt>HH:MM</tt> (also, "
 "don't forget to specify the duration in the text box below) or <tt>HH:MM-HH:"
-"MM</tt> (when you want to specify both endpoints explicitly, e.g., 9:30-"
-"10:15). It is not necessary to define all periods for all days of week, "
+"MM</tt> (when you want to specify both endpoints explicitly, e.g., "
+"9:30-10:15). It is not necessary to define all periods for all days of week, "
 "omissions will just cause that period to be skipped if it happens to fall on "
 "that day of week. If the list of periods is not up to date with the changes "
 "you made in the table above, use the Update button to refresh the form."
@@ -6157,21 +6232,18 @@ msgid "Manage..."
 msgstr "Zarządzaj..."
 
 #: /src/schooltool/timetable/browser/templates/confirm-timetable-delete.pt:15
-#, fuzzy
 msgid "Are you sure you want to unschedule this timetable?"
-msgstr "Czy jesteś pewien, że chcesz usunąć zaznaczone plany zajęć?"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/confirm-timetable-delete.pt:27
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:48
-#, fuzzy
 msgid "Timetable \"${title}\""
-msgstr "Terminarz"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/confirm-timetable-delete.pt:38
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:60
-#, fuzzy
 msgid "No periods selected."
-msgstr "Nie wybrano sekcji."
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/confirm-timetable-delete.pt:67
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:89
@@ -6246,9 +6318,8 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-add.pt:25
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:31
-#, fuzzy
 msgid "For term: ${term_title} (from ${starts} to ${ends})"
-msgstr "${term_title} (${start_date} &mdash; ${end_date})"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:17
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:19
@@ -6264,14 +6335,12 @@ msgid "Time table schedule of ${courses} ${section}."
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:25
-#, fuzzy
 msgid "school days"
-msgstr "Dzień szkolny"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:27
-#, fuzzy
 msgid "available timetables"
-msgstr "Dostępni liderzy"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:31
 msgid ""
@@ -6280,14 +6349,12 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:39
-#, fuzzy
 msgid "There are no timetables assigned."
-msgstr "Nie ma określonego schematu planu zajęć."
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:49
-#, fuzzy
 msgid "(edit periods)"
-msgstr "Dodaj okres"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:91
 msgid "Consecutive periods are treated as a single meeting."
@@ -6379,14 +6446,12 @@ msgid "Are you sure you want to delete the selected timetables?"
 msgstr "Czy jesteś pewien, że chcesz usunąć zaznaczone plany zajęć?"
 
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:35
-#, fuzzy
 msgid "Using timetable: ${schema_titles}"
-msgstr "Nowy schemat planu zajęć"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:97
-#, fuzzy
 msgid "Apply from:"
-msgstr "Zastosuj"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:111
 msgid "Apply until:"
@@ -6595,21 +6660,3 @@ msgstr "Zmień harmonogram"
 #: /src/schooltool/widget/password.py:55
 msgid "Supplied passwords are not identical"
 msgstr "Podane hasła nie są identyczne"
-
-#~ msgid ""
-#~ "\n"
-#~ "This is not a SchoolTool 0.10 database file, aborting.\n"
-#~ "\n"
-#~ "Please run the standalone database upgrade script.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "To nie jest plik bazy danych SchoolTool 0.10, przerywam.\n"
-#~ "\n"
-#~ "Proszę uruchomić oddzielny skrypt aktualizacji bazy danych.\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "This is not a SchoolTool 0.11 database file, aborting.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "To nie jest plik bazy danych SchoolTool 0.11, przerywam.\n"
