@@ -1,0 +1,43 @@
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+  <body>
+    <metal:nothing metal:fill-slot="content-header" />
+    <metal:block metal:fill-slot="body">
+      <div metal:use-macro="macro:form">
+        <div metal:fill-slot="main">
+          <tal:block repeat="widget view/widgets/values">
+            <div class="widget" tal:content="structure widget/render">
+            </div>
+          </tal:block>
+
+          <fieldset tal:condition="view/addedPersons">
+            <legend>Added persons</legend>
+            <p tal:repeat="person view/addedPersons">
+              <span tal:content="person/username" />
+              <a tal:replace="structure person/@@link" />
+            </p>
+          </fieldset>
+
+          <tal:block content="structure view/addform/render" />
+
+        </div>
+
+      <div metal:fill-slot="buttons">
+        <div class="buttons controls">
+          <tal:block condition="view/addform/actions|nothing">
+            <input tal:repeat="action view/addform/actions/values"
+                   tal:replace="structure action/render"
+                   />
+          </tal:block>
+          <tal:block condition="view/actions|nothing">
+            <input tal:repeat="action view/actions/values"
+                   tal:replace="structure action/render"
+                   />
+          </tal:block>
+        </div>
+      </div>
+
+      </div>
+
+    </metal:block>
+  </body>
+</html>

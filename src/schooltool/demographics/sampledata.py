@@ -53,7 +53,7 @@ class SampleStudents(object):
     implements(ISampleDataPlugin)
 
     name = 'students'
-    dependencies = ()
+    dependencies = ('terms', )
 
     # Number of persons to generate
     power = 1000
@@ -90,7 +90,7 @@ class SampleTeachers(object):
     implements(ISampleDataPlugin)
 
     name = 'teachers'
-    dependencies = ()
+    dependencies = ('terms', )
 
     # Number of teachers to generate
     power = 48

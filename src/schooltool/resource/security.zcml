@@ -6,17 +6,20 @@
 
   <setting
       key="everyone_can_view_resource_list"
-      text="Everyone can view resource lists."
+      text="The list of resources in the system is visible to the general public."
+      alt_text="Only school administration can view the list of resources."
       default="False" />
 
   <setting
       key="everyone_can_view_resource_info"
-      text="Everyone can view resource information."
+      text="Information about each resource is visible to the general public."
+      alt_text="Information about each resource is visible to school administration and leaders of the resource."
       default="False" />
 
   <setting
       key="everyone_can_view_resource_calendar"
-      text="Everyone can view resource calendars."
+      text="Resource calendars are visible to the general public."
+      alt_text="Resource calendars are visible to school administration, teachers, and leaders of the resource."
       default="False" />
 
   <crowd

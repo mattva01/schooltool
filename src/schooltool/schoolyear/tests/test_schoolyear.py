@@ -134,6 +134,14 @@ def doctest_SchoolYearContainer_schoolyear_activation():
         >>> syc.getNextSchoolYear() is None
         True
 
+    You can pass a schoolyear key to override the "default" next.
+
+        >>> syc.activateNextSchoolYear(year_id=sy1.__name__)
+        >>> syc.getActiveSchoolYear() is sy1
+        True
+        >>> syc.getNextSchoolYear() is sy2
+        True
+
     """
 
 

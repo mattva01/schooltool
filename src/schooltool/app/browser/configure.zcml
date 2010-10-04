@@ -85,6 +85,13 @@
 
   <zope:adapter
       for="*"
+      name="can_modify"
+      provides="zope.traversing.interfaces.IPathAdapter"
+      factory=".CanModify"
+      />
+
+  <zope:adapter
+      for="*"
       name="filter_accessible"
       provides="zope.traversing.interfaces.IPathAdapter"
       factory=".FilterAccessible"

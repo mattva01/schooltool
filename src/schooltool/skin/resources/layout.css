@@ -374,10 +374,10 @@ DIV.error {
 A.button-cancel,
 A.button-ok,
 A.button-neutral {
-    color: white;
+    color: #fff;
     text-decoration: none;
-    margin: 5px;
-    padding: 2px 5px 4px 5px;
+    display: inline-block;
+    padding: 2px;
 }
 
 .button-ok {
@@ -434,20 +434,20 @@ A.button-neutral {
 
 
 #header .tools .breadcrumbs a {
-        text-transform: capitalize;
+    text-transform: capitalize;
 }
 
 
 #column-center .navigation_header {
-   display: block;
-   font-size: 2em;
-   white-space: nowrap;
-   margin-bottom: 4px;
- }
+    font-size: 2em;
+    white-space: nowrap;
+    margin-bottom: 4px;
+}
 
 #manage_menu {
-
- }
+    padding-left: 0;
+    list-style: none;
+}
 
 /*
 * Left Column and portlets
@@ -564,12 +564,12 @@ div.content-nav {
   color: black;
   border: 1px solid #bab5ab;
   padding: 0.2em 0.3em;
-  margin: 0 0 0 4px;
+  margin: 0.1em 0.1em 0.3em 0.4em;
   width: auto;
   display: inline;
+  float: left;
   font-weight: bold;
   font-size: 1em;
-  line-height: 2em;
   white-space: nowrap;
  }
 
@@ -1495,6 +1495,17 @@ PRE.traceback SPAN.source {
     float: left;
     margin-right: 5px;
     padding-bottom: 10px
+}
+
+/* Radio button label wrapping for access control */
+
+INPUT[type=radio].choice_field{
+    float: left;
+}
+
+label.choice_field{
+      margin-left: 1.5em;
+      display: block;
 }
 
 /*********************************************************** END: Style.css */

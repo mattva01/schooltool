@@ -6,10 +6,6 @@
 
   <utility factory=".person.PersonFactoryUtility" />
 
-  <security:crowd
-      name="person_info_viewers"
-      factory=".security.PersonInfoViewersCrowd" />
-
   <adapter factory=".person.PersonCatalog"
            name="schooltool.person.person.PersonCatalog" />
 

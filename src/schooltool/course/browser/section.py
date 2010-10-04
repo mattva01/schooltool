@@ -232,10 +232,6 @@ class SectionView(BrowserView):
                         batch_size=0)
         return formatter.render()
 
-    @property
-    def canModify(self):
-        return canAccess(self.context.__parent__, '__delitem__')
-
 
 class SectionNameChooser(NameChooser):
 

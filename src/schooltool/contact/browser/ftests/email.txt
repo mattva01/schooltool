@@ -70,16 +70,6 @@ Add a contact with no email for Mario:
     >>> manager.getControl('Relationship').value = ['parent']
     >>> manager.getControl('Add').click()
 
-XXX: Hack to allow teacher to access student's contact.
-XXX: The teacher should be allowed to access student/contact page
-XXX: The teacher should be allowed to access student groups
-
-    >>> manager.getLink('Manage').click()
-    >>> manager.getLink('Access Control').click()
-    >>> manager.getControl('Everyone can view info of persons').click()
-    >>> manager.getControl('Everyone can view group information.').click()
-    >>> manager.getControl('Apply').click()
-
 A teacher will be able to send a student contact an email only if:
 
 1. The teacher has an email address

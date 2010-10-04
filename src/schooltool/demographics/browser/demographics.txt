@@ -243,7 +243,7 @@ The form is not reset so your query stays visible:
 Allow normal users to view the table of persons:
 
   >>> browser.open('http://localhost/access_control.html')
-  >>> browser.getControl('Everyone can view the list of persons').click()
+  >>> browser.getControl('The list of people with accounts in the system is visible to the general public').click()
   >>> browser.getControl('Apply').click()
 
 Try seeing the table of persons with a normal user:

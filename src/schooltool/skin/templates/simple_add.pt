@@ -13,12 +13,12 @@
   <form tal:attributes="action request/URL"
         method="post" enctype="multipart/form-data" class="standalone">
 
-    <fieldset metal:define-macro="formbody">
+    <h3 tal:condition="view/label"
+        tal:content="view/label"
+        metal:define-slot="heading"
+        >Edit something</h3>
 
-      <h3 tal:condition="view/label"
-          tal:content="view/label"
-          metal:define-slot="heading"
-          >Edit something</h3>
+    <fieldset metal:define-macro="formbody">
 
       <p tal:define="status view/update"
          tal:condition="status"

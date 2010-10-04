@@ -9,13 +9,27 @@
 
 <span metal:fill-slot="zonki">
   <img src="zonki.png" alt="SchoolTool" i18n:attributes="alt"
-    tal:attributes="src context/++resource++zonki-reading.png" /> 
+    tal:attributes="src context/++resource++zonki-reading.png" />
 </span>
 
 <h1 metal:fill-slot="content-header"
     tal:content="view/index_title">Contents</h1>
 <metal:block metal:fill-slot="body"
              tal:define="canModify view/canModify">
+
+  <tal:block define="active_year context/getActiveSchoolYear"
+             condition="python: active_year is not None">
+    <p i18n:translate="">
+      The active school year is
+      <strong tal:content="active_year/@@title" i18n:name="year" />
+      (<tal:block content="active_year/first/@@mediumDate"
+                  i18n:name="start_date"/> -
+       <tal:block content="active_year/last/@@mediumDate"
+                  i18n:name="end_date"/>)
+    </p>
+  </tal:block>
+
+
   <div tal:condition="view/error"
        class="error"
        tal:content="view/error" />
@@ -34,12 +48,14 @@
           <input type="submit" class="button-cancel" value="Delete"
                  name="DELETE"
                  i18n:attributes="value delete-button;" />
+          <tal:block condition="canModify">
+            <input type="submit" class="button-ok"
+                   value="Activate selected school year"
+                   name="ACTIVATE_NEXT_SCHOOLYEAR"
+                   i18n:attributes="value" />
+          </tal:block>
         </div>
-        <div class="controls" tal:condition="canModify">
-          <input type="submit" class="button-ok" value="Activate next school year"
-                 name="ACTIVATE_NEXT_SCHOOLYEAR"
-                 i18n:attributes="value" />
-        </div>
+
     </tal:if>
   </form>
   <p tal:condition="not:view/table/batch" i18n:translate="">There are none.</p>

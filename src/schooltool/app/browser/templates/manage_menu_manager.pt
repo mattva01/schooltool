@@ -1,4 +1,5 @@
-<div id="manage_menu">
-  <span tal:repeat="viewlet options/viewlets"
-        tal:replace="structure viewlet/render" />
-</div>
+<ul id="manage_menu">
+  <li tal:repeat="viewlet options/viewlets">
+    <span tal:replace="structure viewlet/render" />
+  </li>
+</ul>

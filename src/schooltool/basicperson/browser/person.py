@@ -19,18 +19,20 @@
 """
 Basic person browser views.
 """
+from zope.interface import Interface, implements
 from zope.container.interfaces import INameChooser
 from zope.app.form.browser.interfaces import ITerms
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import adapts
-from zope.component import getUtility
+from zope.component import getUtility, queryMultiAdapter
 from z3c.form import form, field, button, validator
-from zope.interface import implements
-from zope.schema import Password, TextLine, Choice
+from zope.interface import implements, invariant, Invalid
+from zope.schema import Password, TextLine, Choice, List, Object
 from zope.schema import ValidationError
-from zope.schema.interfaces import ITitledTokenizedTerm
+from zope.schema.interfaces import ITitledTokenizedTerm, IField
 from zope.traversing.browser.absoluteurl import absoluteURL
 
+import z3c.form.interfaces
 from z3c.form.validator import SimpleFieldValidator
 
 from schooltool.app.browser.app import RelationshipViewBase
@@ -68,6 +70,11 @@ class IPersonAddForm(IBasicPerson):
         title=_("Confirm password"),
         required=False)
 
+    @invariant
+    def isPaswswordConfirmed(person):
+        if person.password != person.confirm:
+            raise Invalid(_(u"Passwords do not match"))
+
 
 class PersonAddFormAdapter(object):
     implements(IPersonAddForm)
@@ -88,33 +95,93 @@ class PersonAddFormAdapter(object):
         return getattr(self.context, name)
 
 
-# XXX: I don't know why ValidationError returns a docstring instead
-# of the actual error message it gets instantiated with, so I had to
-# subclass to get useful error messages.
-class UsernameValidationError(ValidationError):
-    """Validation error related to a username."""
-    def doc(self):
-        return str(self)
+class FieldValidator(object):
+    """Copied from z3c.form.validator.SimpleFieldValidator."""
+    implements(z3c.form.interfaces.IValidator)
+    adapts(Interface, Interface, Interface, IField, Interface)
+
+    def __init__(self, context, request, view, field, widget):
+        self.context = context
+        self.request = request
+        self.view = view
+        self.field = field
+        self.widget = widget
+
+    def validate(self, value):
+        """See interfaces.IValidator"""
+        context = self.context
+        field = self.field
+        widget = self.widget
+        if context is not None:
+            field = field.bind(context)
+        if value is z3c.form.interfaces.NOT_CHANGED:
+            if (interfaces.IContextAware.providedBy(widget) and
+                not widget.ignoreContext):
+                # get value from context
+                value = getMultiAdapter(
+                    (context, field),
+                    z3c.form.interfaces.IDataManager).query()
+            else:
+                value = z3c.form.interfaces.NO_VALUE
+            if value is z3c.form.interfaces.NO_VALUE:
+                # look up default value
+                value = field.default
+                adapter = queryMultiAdapter(
+                    (context, self.request, self.view, field, widget),
+                    z3c.form.interfaces.IValue, name='default')
+                if adapter:
+                    value = adapter.get()
+        # XXX: and all this copy-pasting was done for this single line:
+        return self.validateValue(value)
+
+    def validateValue(self, value):
+        context = self.context
+        field = self.field
+        if context is not None:
+            field = field.bind(context)
+        return field.validate(value)
+
+    def __repr__(self):
+        return "<%s for %s['%s']>" %(
+            self.__class__.__name__,
+            self.field.interface.getName(),
+            self.field.__name__)
 
 
-class UsernameValidator(SimpleFieldValidator):
+class UsernameAlreadyUsed(ValidationError):
+    __doc__ = _("This username is already in use!")
 
-    def validate(self, username):
-        if username in self.context:
-            raise UsernameValidationError(_("This username is already in use!"))
-        try:
-            INameChooser(self.context).checkName(username, None)
-        except ValueError:
-            raise UsernameValidationError(_("Names cannot begin with '+' or '@' or contain '/'"))
+
+class UsernameBadName(ValidationError):
+    __doc__ = _("Names cannot begin with '+' or '@' or contain '/'")
+
+
+class UsernameNonASCII(ValidationError):
+    __doc__ = _("Usernames cannot contain non-ascii characters")
+
+
+class UsernameValidator(FieldValidator):
+
+    def validateValue(self, username):
+        super(UsernameValidator, self).validateValue(username)
+        if username is not None:
+            if username in self.context:
+                raise UsernameAlreadyUsed(username)
+            try:
+                INameChooser(self.context).checkName(username, None)
+            except ValueError:
+                raise UsernameBadName(username)
         # XXX: this has to be fixed
         # XXX: SchoolTool should handle UTF-8
         try:
             username.encode('ascii')
         except UnicodeEncodeError:
-            raise UsernameValidationError(_("Usernames cannot contain non-ascii characters"))
+            raise UsernameNonASCII(username)
+
 
 validator.WidgetValidatorDiscriminators(UsernameValidator,
                                         field=IPersonAddForm['username'])
+
 
 class PersonForm(object):
 
@@ -144,34 +211,21 @@ class PersonView(form.DisplayForm, PersonForm):
         return self.render()
 
 
-class PersonAddView(form.AddForm, PersonForm):
+class PersonAddFormBase(form.AddForm, PersonForm):
     """Person add form for basic persons."""
-    label = _("Add new person")
-    template = ViewPageTemplateFile('templates/person_add.pt')
 
     def update(self):
         self.fields = field.Fields(IPersonAddForm)
         self.fields += self.generateExtraFields()
-        super(PersonAddView, self).update()
+        super(PersonAddFormBase, self).update()
 
     def updateActions(self):
-        super(PersonAddView, self).updateActions()
+        super(PersonAddFormBase, self).updateActions()
         self.actions['add'].addClass('button-ok')
-        self.actions['cancel'].addClass('button-cancel')
 
     @button.buttonAndHandler(_('Add'), name='add')
     def handleAdd(self, action):
-        data, errors = self.extractData()
-        if errors:
-            self.status = self.formErrorsMessage
-            return
-        if data['password'] != data['confirm']:
-            self.status = _(u"Passwords do not match")
-            return
-        obj = self.createAndAdd(data)
-        if obj is not None:
-            # mark only as finished if we get the new object
-            self._finishedAdd = True
+        super(PersonAddFormBase, self).handleAdd.func(self, action)
 
     def create(self, data):
         person = self._factory(data['username'], data['first_name'],
@@ -203,10 +257,124 @@ class PersonAddView(form.AddForm, PersonForm):
         self.context[name] = person
         return person
 
+
+class PersonAddView(PersonAddFormBase):
+    """Person add form for basic persons."""
+    label = _("Add new person")
+    template = ViewPageTemplateFile('templates/person_add.pt')
+
+    def updateActions(self):
+        super(PersonAddView, self).updateActions()
+        self.actions['add'].addClass('button-ok')
+        self.actions['cancel'].addClass('button-cancel')
+
+    @button.buttonAndHandler(_('Add'), name='add')
+    def handleAdd(self, action):
+        super(PersonAddView, self).handleAdd.func(self, action)
+
     @button.buttonAndHandler(_("Cancel"))
     def handle_cancel_action(self, action):
         url = absoluteURL(self.context, self.request)
         self.request.response.redirect(url)
+
+
+class ITempPersonList(Interface):
+    usernames = List(
+        title=_('Usernames'),
+        value_type=TextLine(
+            title=_('Username'),
+            required=False),
+        required=False,
+        )
+
+
+class TempPersonList(object):
+    implements(ITempPersonList)
+
+    def __init__(self):
+        self.usernames = []
+
+
+class MultiplePersonAddView(form.Form):
+    template = ViewPageTemplateFile('templates/person_add_multiple.pt')
+    label = _("Add multiple persons")
+    fields = field.Fields(ITempPersonList)
+    addform = None
+    temp_content = None
+
+    def __init__(self, *args, **kw):
+        self.temp_content = TempPersonList()
+        super(MultiplePersonAddView, self).__init__(*args, **kw)
+
+    def getContent(self):
+        return self.temp_content
+
+    def buildAddForm(self):
+        self.addform = PersonAddSubForm(self.context, self.request, self)
+        n = len(self.widgets['usernames'].value)
+        self.addform.prefix = 'addform_%d.' % n
+
+    def updateWidgets(self):
+        super(MultiplePersonAddView, self).updateWidgets()
+        self.widgets['usernames'].mode = z3c.form.interfaces.HIDDEN_MODE
+        self.buildAddForm()
+
+    def update(self):
+        super(MultiplePersonAddView, self).update()
+        data, errors = self.extractData(setErrors=False)
+        form.applyChanges(self, self.getContent(), data)
+        self.addform.update()
+
+    def appendAdded(self, username):
+        usernames = self.widgets['usernames'].value
+        usernames.append(username)
+        self.widgets['usernames'].value = usernames
+        content = self.getContent()
+        content.usernames = usernames
+
+    def render(self):
+        if self.addform._finishedAdd:
+            self.appendAdded(self.addform._person.__name__)
+            # And build a fresh add form.
+            self.buildAddForm()
+            self.addform.update()
+        return super(MultiplePersonAddView, self).render()
+
+    @property
+    def addedPersons(self):
+        app_persons = ISchoolToolApplication(None)['persons']
+        content = self.getContent()
+        if not content.usernames:
+            return []
+        return [app_persons[username]
+                for username in content.usernames
+                if username in app_persons]
+
+    def updateActions(self):
+        super(MultiplePersonAddView, self).updateActions()
+        self.actions['done'].addClass('button-neutral')
+
+    @button.buttonAndHandler(_("Done"))
+    def handle_done_action(self, action):
+        url = absoluteURL(self.context, self.request)
+        self.request.response.redirect(url)
+
+
+class PersonAddSubForm(PersonAddFormBase):
+    template = ViewPageTemplateFile('templates/person_add_subform.pt')
+
+    def __init__(self, context, request, parentForm):
+        self.parentForm = parentForm
+        super(PersonAddSubForm, self).__init__(context, request)
+
+    def update(self):
+        super(PersonAddSubForm, self).update()
+        for action in self.parentForm.actions.executedActions:
+            handler = queryMultiAdapter(
+                (self, self.request, self.getContent(), action),
+                interface=z3c.form.interfaces.IActionHandler)
+            if handler is not None:
+                handler()
 
 
 class PersonEditView(form.EditForm, PersonForm):
@@ -306,7 +474,7 @@ class PersonAdvisorView(RelationshipViewBase):
 
     @property
     def title(self):
-        return _("Advisors of ${person}", 
+        return _("Advisors of ${person}",
             mapping={'person': self.context.title})
 
     def getSelectedItems(self):
@@ -330,7 +498,7 @@ class PersonAdviseeView(RelationshipViewBase):
 
     @property
     def title(self):
-        return _("Advisees of ${person}", 
+        return _("Advisees of ${person}",
             mapping={'person': self.context.title})
 
     def getSelectedItems(self):

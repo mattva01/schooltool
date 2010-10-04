@@ -81,12 +81,23 @@ after it.
     <a class="active_schoolyear" href="http://localhost/schoolyears/2005-2006">2005-2006</a>
     <a class="next_schoolyear" href="http://localhost/schoolyears/2006-2007">2006-2007</a>
 
-You can activate the next school year by clicking a button in the
-school year container view:
+You can change the active schoolyear.
 
     >>> manager.getLink('Manage').click()
     >>> manager.getLink('School Years').click()
-    >>> manager.getControl('Activate next school year').click()
+    >>> manager.getControl(name='delete.2006-2007').value = True
+    >>> manager.getControl('Activate selected school year').click()
+    >>> print manager.contents
+    <BLANKLINE>
+    ...
+    <p>
+      The active school year is
+      <strong>2006-2007</strong>
+      (Sep 1, 2006 -
+       Jul 15, 2007)
+    </p>
+    ...
+
 
 Now tabs have shifted and are displaying 2006-2007 school year as
 active, and 2007-2008 school year as next:

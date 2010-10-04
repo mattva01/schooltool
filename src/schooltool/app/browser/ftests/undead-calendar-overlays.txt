@@ -14,7 +14,7 @@ Setup
     >>> manager_browser = Browser('manager', 'schooltool')
 
     >>> manager_browser.open('http://localhost/access_control.html')
-    >>> manager_browser.getControl('Everyone can view resource calendars').click()
+    >>> manager_browser.getControl('Resource calendars are visible to the general public').click()
     >>> manager_browser.getControl('Apply').click()
 
 We will need a user and a resource:
