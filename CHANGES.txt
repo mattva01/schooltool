@@ -2,19 +2,20 @@
 CHANGES
 =======
 
-1.5.2 (unreleased)
+1.5.2 (2010-10-04)
 ------------------
 
 - Activation of selected school year (https://launchpad.net/bugs/635160)
 - Added "Add Multiple Persons" to Manage->Persons and "New Person" (for
-  administration) to all other person views
-  (https://bugs.launchpad.net/bugs/268127)
-- Empty usernames no longer crash when adding a person
-  (https://bugs.launchpad.net/bugs/644296)
-- Replace access setting checkboxes with radio buttons
-  (https://bugs.launchpad.net/bugs/638651)
-- [minor] Empty usernames do not crash the add person form
-  (https://bugs.launchpad.net/bugs/644296)
+  administration) to all other person views (https://launchpad.net/bugs/268127)
+- Empty usernames no longer crash when adding a person (https://launchpad.net/bugs/644296)
+- Replace access setting checkboxes with radio buttons (https://launchpad.net/bugs/638651)
+- Fix security checks to let teachers edit learners and other section info
+  if they have access rights.
+- Add "View Person" action button in contact views (https://launchpad.net/bugs/635207)
+- Update translations.
+
+More info at https://launchpad.net/schooltool/+release/1.5.2
 
 
 1.5.1 (2010-09-09)
@@ -27,6 +28,8 @@ CHANGES
   This change is not backwards compatible, plugins may need updating.
 - Added error checking on demographics edit form (https://launchpad.net/bugs/610870)
 - Update translations.
+
+More info at https://launchpad.net/schooltool/+release/1.5.1
 
 
 1.5.0 (2010-07-13)
