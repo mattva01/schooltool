@@ -374,10 +374,10 @@ DIV.error {
 A.button-cancel,
 A.button-ok,
 A.button-neutral {
-    color: white;
+    color: #fff;
     text-decoration: none;
-    margin: 5px;
-    padding: 2px 5px 4px 5px;
+    display: inline-block;
+    padding: 2px;
 }
 
 .button-ok {

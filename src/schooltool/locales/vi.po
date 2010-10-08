@@ -7,14 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-08-22 18:49+0300\n"
-"PO-Revision-Date: 2010-08-22 20:33+0000\n"
+"POT-Creation-Date: 2010-09-30 19:38+0300\n"
+"PO-Revision-Date: 2010-09-10 04:52+0000\n"
 "Last-Translator: missthom <thom43th.dhtl@gmail.com>\n"
 "Language-Team: Vietnamese <vi@li.org>\n"
+"Language: vi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-08-23 03:50+0000\n"
+"X-Launchpad-Export-Date: 2010-09-11 04:45+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: /src/schooltool/app/app.py:197
@@ -936,11 +937,11 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/about.pt:20
 msgid ""
-"SchoolTool is licensed under the <a href=\"http://www.gnu.org/licenses/gpl-"
-"2.0.html\">GNU General Public License, Version 2</a>."
+"SchoolTool is licensed under the <a href=\"http://www.gnu.org/licenses/"
+"gpl-2.0.html\">GNU General Public License, Version 2</a>."
 msgstr ""
-"Schooltool được giữ bản quyền dưới <a href=\"http://www.gnu.org/licenses/gpl-"
-"2.0.html\">GNU General Public License, Version 2</a>."
+"Schooltool được giữ bản quyền dưới <a href=\"http://www.gnu.org/licenses/"
+"gpl-2.0.html\">GNU General Public License, Version 2</a>."
 
 #: /src/schooltool/app/browser/templates/about.pt:24
 msgid "For more information:"
@@ -2551,11 +2552,7 @@ msgstr "Nhóm \"$group\"."
 msgid "\"$group\" group and the super user."
 msgstr "Nhóm \"$group\" và người quản lý"
 
-#: /src/schooltool/app/security.zcml:69
-msgid "Everyone can view the application calendar."
-msgstr "Mọi người đều có thể xem lịch ứng dụng"
-
-#: /src/schooltool/app/security.zcml:77
+#: /src/schooltool/app/security.zcml:71
 msgid "SchoolTool application"
 msgstr "Ứng dụng SchoolTool"
 
@@ -2620,7 +2617,11 @@ msgstr "Người được cố vấn."
 msgid "New Person"
 msgstr "Người dùng mới"
 
-#: /src/schooltool/basicperson/browser/configure.zcml:113
+#: /src/schooltool/basicperson/browser/configure.zcml:107
+msgid "Add Multiple Persons"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/configure.zcml:129
 #: /src/schooltool/basicperson/security.zcml:22
 #: /src/schooltool/demographics/browser/personform.py:180
 msgid "Demographics"
@@ -2679,7 +2680,15 @@ msgstr "Tên không bắt đầu bằng '+, @' hoặc chứa '/'"
 msgid "Usernames cannot contain non-ascii characters"
 msgstr "Tên không bao gồm các ký tự không có trong bảng mã ascci"
 
-#: /src/schooltool/basicperson/browser/demographics.py:133
+#: /src/schooltool/basicperson/browser/demographics.py:85
+msgid "Duplicate entry \"${value}\""
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/demographics.py:90
+msgid "Value too long \"${value}\""
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/demographics.py:151
 msgid "Add new Field"
 msgstr "Thêm một trường mới"
 
@@ -2703,22 +2712,25 @@ msgstr "Người tư vấn"
 msgid "Confirm password"
 msgstr "Xác nhận mật khẩu"
 
-#: /src/schooltool/basicperson/browser/person.py:104
-msgid "This username is already in use!"
-msgstr "Tên người sử dụng đã sử dụng"
+#: /src/schooltool/basicperson/browser/person.py:76
+msgid "Passwords do not match"
+msgstr "Mật khẩu không trùng hợp"
 
 #: /src/schooltool/basicperson/browser/person.py:149
 msgid "Add new person"
 msgstr "Thêm người mới"
 
-#: /src/schooltool/basicperson/browser/person.py:169
-msgid "Passwords do not match"
-msgstr "Mật khẩu không trùng hợp"
+#: /src/schooltool/basicperson/browser/person.py:152
+msgid "This username is already in use!"
+msgstr "Tên người sử dụng đã sử dụng"
 
-#. Default: ""
-#: /src/schooltool/basicperson/browser/person.py:234
-msgid "Change information for ${fullname}"
-msgstr "Thay đổi thông tin cho ${fullname}"
+#: /src/schooltool/basicperson/browser/person.py:283
+msgid "Usernames"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/person.py:300
+msgid "Add multiple persons"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/person.py:304
 msgid "Current Advisors"
@@ -2745,6 +2757,15 @@ msgstr "Thêm người được tư vấn"
 #: /src/schooltool/basicperson/browser/person.py:333
 msgid "Advisees of ${person}"
 msgstr "Người được tư vấn bởi ${person}"
+
+#: /src/schooltool/basicperson/browser/person.py:357
+msgid "Done"
+msgstr ""
+
+#. Default: ""
+#: /src/schooltool/basicperson/browser/person.py:402
+msgid "Change information for ${fullname}"
+msgstr "Thay đổi thông tin cho ${fullname}"
 
 #: /src/schooltool/basicperson/browser/templates/demographics-view.pt:4
 #: /src/schooltool/basicperson/browser/templates/demographics-view.pt:7
@@ -2794,6 +2815,10 @@ msgstr ""
 "Trong ba người này chỉ có 'jbjones' là có mật khẩu ('r2m45J') và có thể sẽ "
 "đăng nhập và hệ thống. Chú ý rằng các mật khẩu phải được gửi dưới dạng text "
 "plain"
+
+#: /src/schooltool/basicperson/browser/templates/person_add_subform.pt:2
+msgid "New person"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/templates/person_view.pt:13
 #: /src/schooltool/person/browser/home.pt:13
@@ -2951,7 +2976,11 @@ msgstr "Thêm thông tin"
 msgid "Edit Calendar Overlays"
 msgstr "Sửa Lịch bên ngoài"
 
-#: /src/schooltool/contact/browser/configure.zcml:49
+#: /src/schooltool/contact/browser/configure.zcml:41
+msgid "View Person"
+msgstr ""
+
+#: /src/schooltool/contact/browser/configure.zcml:61
 msgid "New Contact"
 msgstr "Liện hệ mới"
 
@@ -3854,10 +3883,18 @@ msgid "Sections must be in consecutive terms"
 msgstr "Các lớp học phải nằm trong các học kỳ liền nhau"
 
 #: /src/schooltool/course/security.zcml:42
-msgid "Everyone can view section information and calendars"
-msgstr "Mọi người đều có thể xem thông tin và lịch học của lớp học."
+msgid ""
+"Basic information about sections is only visible to instructors and students "
+"in that section, and school administration."
+msgstr ""
 
-#: /src/schooltool/course/security.zcml:73
+#: /src/schooltool/course/security.zcml:42
+msgid ""
+"Basic information about sections, including rosters, is visible to the "
+"general public."
+msgstr ""
+
+#: /src/schooltool/course/security.zcml:74
 msgid ""
 "A course in SchoolTool describes a set curriculum                    taught "
 "in a section."
@@ -4646,14 +4683,12 @@ msgid "end date overlaps another term"
 msgstr "ngày kết thúc trùng với kỳ khác"
 
 #: /src/schooltool/export/importer.py:81
-#, fuzzy
 msgid "${title} has no days in A${row}"
-msgstr "không có ngày"
+msgstr ""
 
 #: /src/schooltool/export/importer.py:82
-#, fuzzy
 msgid "${title} has no day templates in A${row}"
-msgstr "không có ngày"
+msgstr ""
 
 #: /src/schooltool/export/importer.py:83
 msgid "is not a valid time range"
@@ -4672,14 +4707,12 @@ msgid "is not defined in the 'Day Templates' section"
 msgstr "không được định nghĩa trong phần"
 
 #: /src/schooltool/export/importer.py:87
-#, fuzzy
 msgid "is the same period id as another in this day"
-msgstr "trùng mã ngày trong thời khóa biểu"
+msgstr ""
 
 #: /src/schooltool/export/importer.py:88
-#, fuzzy
 msgid "is the same homeroom period id as another in this day"
-msgstr "trùng mã ngày trong thời khóa biểu"
+msgstr ""
 
 #: /src/schooltool/export/importer.py:89
 msgid "must be either 'Location' or 'Resource'"
@@ -4718,9 +4751,8 @@ msgid "is not a valid resource id"
 msgstr "không đúng mã tài nguyên"
 
 #: /src/schooltool/export/importer.py:98
-#, fuzzy
 msgid "Username cannot contain non-ascii characters: ${string}"
-msgstr "Tên không bao gồm các ký tự không có trong bảng mã ascci"
+msgstr ""
 
 #: /src/schooltool/export/importer.py:100
 msgid "is not a valid weekday number (0-6)"
@@ -4956,22 +4988,42 @@ msgid "Description of the group."
 msgstr "Mô tả một nhóm"
 
 #: /src/schooltool/group/security.zcml:5
-msgid "Everyone can view group lists."
-msgstr "Mọi người đều có thể xem danh sách các nhóm"
+msgid "Only school administration can view the list of groups."
+msgstr ""
 
-#: /src/schooltool/group/security.zcml:10
-msgid "Everyone can view group information."
-msgstr "Mọi người đều có thể xem thông tin của nhóm"
+#: /src/schooltool/group/security.zcml:5
+msgid "The list of groups in the system is visible to the general public."
+msgstr ""
 
-#: /src/schooltool/group/security.zcml:15
-msgid "Everyone can view group calendars."
-msgstr "Mọi người đều có thể xem lịch của nhóm"
+#: /src/schooltool/group/security.zcml:11
+msgid ""
+"Information about each group is visible to school administration, and "
+"members and leaders of the group."
+msgstr ""
 
-#: /src/schooltool/group/security.zcml:20
-msgid "Group members can edit group calendars."
-msgstr "Các thành viên của nhóm có thể hiệu chỉnh lịch của nhóm"
+#: /src/schooltool/group/security.zcml:11
+msgid "Information about each group is visible to the general public."
+msgstr ""
 
-#: /src/schooltool/group/security.zcml:53
+#: /src/schooltool/group/security.zcml:17
+msgid ""
+"Each group calendar is visible to school administration, and members and "
+"leaders of the group."
+msgstr ""
+
+#: /src/schooltool/group/security.zcml:17
+msgid "Each group calendar is visible to the general public."
+msgstr ""
+
+#: /src/schooltool/group/security.zcml:23
+msgid "All members of a group and school administration can edit its calendar."
+msgstr ""
+
+#: /src/schooltool/group/security.zcml:23
+msgid "The leaders of a group and school administration can edit its calendar."
+msgstr ""
+
+#: /src/schooltool/group/security.zcml:57
 msgid "Groups are essentially sets of users."
 msgstr "Các nhóm đã được gán thành viên"
 
@@ -5281,22 +5333,34 @@ msgid "Make calendar public"
 msgstr "Tạo lịch chung"
 
 #: /src/schooltool/person/security.zcml:5
-msgid "Everyone can view the list of persons"
-msgstr "Mọi người có thể xem danh sách người dùng"
+msgid ""
+"The list of people with accounts in the system is visible only to school "
+"administration."
+msgstr ""
 
-#: /src/schooltool/person/security.zcml:10
-msgid "Everyone can view info of persons"
-msgstr "Mọi người đều có thể xem thông tin các nhân của nhau"
+#: /src/schooltool/person/security.zcml:5
+msgid ""
+"The list of people with accounts in the system is visible to the general "
+"public."
+msgstr ""
 
-#: /src/schooltool/person/security.zcml:15
-msgid "Persons can set their own preferences"
-msgstr "Người dùng có thể thiết lập các tham chiếu riêng của họ"
+#: /src/schooltool/person/security.zcml:11
+msgid "Users can make their own calendars public."
+msgstr ""
 
-#: /src/schooltool/person/security.zcml:20
-msgid "Persons can change their own passwords"
-msgstr "Người dùng có thể xem xét sự chuyển đổi này"
+#: /src/schooltool/person/security.zcml:11
+msgid "Users cannot make their own calendars public."
+msgstr ""
 
-#: /src/schooltool/person/security.zcml:77
+#: /src/schooltool/person/security.zcml:17
+msgid "Only school administration can change passwords."
+msgstr ""
+
+#: /src/schooltool/person/security.zcml:17
+msgid "Users can change their own passwords."
+msgstr ""
+
+#: /src/schooltool/person/security.zcml:71
 msgid "Users"
 msgstr "Nhiều người dùng"
 
@@ -5312,7 +5376,11 @@ msgstr "Xem các tham chiếu"
 msgid "Change preferences"
 msgstr "Thay đổi các tham chiếu"
 
-#: /src/schooltool/person/security.zcml:144
+#: /src/schooltool/person/security.zcml:138
+msgid "Change the list of calendars overlayed on the user's calendar"
+msgstr ""
+
+#: /src/schooltool/person/security.zcml:138
 msgid "Manage visible calendars"
 msgstr "Quản lý các lịch biểu hiện"
 
@@ -5531,20 +5599,32 @@ msgid "Resource"
 msgstr "Tài nguyên"
 
 #: /src/schooltool/resource/security.zcml:7
-msgid "Everyone can view resource lists."
-msgstr "Mọi người có thể xem danh sách tài nguyên"
+msgid "Only school administration can view the list of resources."
+msgstr ""
 
-#: /src/schooltool/resource/security.zcml:12
-msgid "Everyone can view resource information."
-msgstr "Mọi người đều có thể xem thông tin về các tài nguyên"
+#: /src/schooltool/resource/security.zcml:7
+msgid "The list of resources in the system is visible to the general public."
+msgstr ""
 
-#: /src/schooltool/resource/security.zcml:17
-msgid "Everyone can view resource calendars."
-msgstr "Mọi người đều có thể xem lịch biểu của tài nguyên"
+#: /src/schooltool/resource/security.zcml:13
+msgid ""
+"Information about each resource is visible to school administration and "
+"leaders of the resource."
+msgstr ""
 
-#: /src/schooltool/resource/security.zcml:50
-msgid "Reservations"
-msgstr "đặt trước"
+#: /src/schooltool/resource/security.zcml:13
+msgid "Information about each resource is visible to the general public."
+msgstr ""
+
+#: /src/schooltool/resource/security.zcml:19
+msgid ""
+"Resource calendars are visible to school administration, teachers, and "
+"leaders of the resource."
+msgstr ""
+
+#: /src/schooltool/resource/security.zcml:19
+msgid "Resource calendars are visible to the general public."
+msgstr ""
 
 #: /src/schooltool/resource/security.zcml:50
 msgid ""
@@ -5554,6 +5634,10 @@ msgid ""
 msgstr ""
 "Tài nguyên được định vị hoặc các đối tượng trong trường.Lịch biểu của "
 "Schooltool có chức năng đặt trước và ghi băng hệ thống và tài nguyên"
+
+#: /src/schooltool/resource/security.zcml:53
+msgid "Reservations"
+msgstr "đặt trước"
 
 #: /src/schooltool/resource/security.zcml:57
 msgid "List/Search resources"
@@ -5703,9 +5787,13 @@ msgstr "Tất cả lược đồ thời khỏa biểu"
 msgid "Copy members"
 msgstr "Sao thành viên"
 
-#: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:39
-msgid "Activate next school year"
-msgstr "Kích hoạt năm học tiếp theo"
+#: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:27
+msgid "The active school year is ${year} (${start_date} - ${end_date})"
+msgstr ""
+
+#: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:52
+msgid "Activate selected school year"
+msgstr ""
 
 #: /src/schooltool/schoolyear/browser/templates/term-delete.pt:10
 #: /src/schooltool/term/browser/templates/term-container-delete.pt:10
@@ -5743,13 +5831,17 @@ msgstr "Cho phép"
 msgid "School administration"
 msgstr "Quản trị trường học"
 
-#: /src/schooltool/securitypolicy/browser/templates/access_setting_snippet.pt:4
-msgid "Access setting: ${setting} (${status})"
-msgstr "Cài đặt truy cập: ${setting} (${status})"
+#: /src/schooltool/securitypolicy/browser/templates/access_setting_snippet.pt:2
+msgid "Access setting"
+msgstr ""
 
 #: /src/schooltool/securitypolicy/browser/templates/security_descriptions.pt:4
 msgid "Access Rights"
 msgstr "Truy cập đúng"
+
+#: /src/schooltool/securitypolicy/browser/templates/security_descriptions.pt:9
+msgid "Object model and access rights"
+msgstr ""
 
 #: /src/schooltool/securitypolicy/browser/templates/security_descriptions.pt:57
 msgid "Legend"
@@ -5964,11 +6056,11 @@ msgstr "Cấu hình các thanh"
 msgid "The name of the toolbar configuration to use."
 msgstr "Tên của thanh công cụ vừa cấu hình đã được sử dụng"
 
-#: /src/schooltool/skin/widgets.py:122
-msgid "Configuration path"
-msgstr "Cấu hình đường dẫn"
+#: /src/schooltool/skin/widgets.py:110
+msgid "Relative configuration path"
+msgstr ""
 
-#: /src/schooltool/skin/widgets.py:123
+#: /src/schooltool/skin/widgets.py:111
 msgid "Path to the FCKconfiguration javascript file."
 msgstr "Đường dẫn đến cấu hình FCK trong file javaScript"
 
@@ -6392,8 +6484,8 @@ msgid ""
 "Third, define the time and duration of periods when they fall on certain "
 "days of week. Use one of the the following format: <tt>HH:MM</tt> (also, "
 "don't forget to specify the duration in the text box below) or <tt>HH:MM-HH:"
-"MM</tt> (when you want to specify both endpoints explicitly, e.g., 9:30-"
-"10:15). It is not necessary to define all periods for all days of week, "
+"MM</tt> (when you want to specify both endpoints explicitly, e.g., "
+"9:30-10:15). It is not necessary to define all periods for all days of week, "
 "omissions will just cause that period to be skipped if it happens to fall on "
 "that day of week. If the list of periods is not up to date with the changes "
 "you made in the table above, use the Update button to refresh the form."

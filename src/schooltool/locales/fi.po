@@ -7,14 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-08-22 18:49+0300\n"
-"PO-Revision-Date: 2010-06-15 12:13+0000\n"
+"POT-Creation-Date: 2010-09-30 19:38+0300\n"
+"PO-Revision-Date: 2010-08-22 20:08+0000\n"
 "Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
 "Language-Team: Finnish <fi@li.org>\n"
+"Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-06-16 03:39+0000\n"
+"X-Launchpad-Export-Date: 2010-09-10 04:34+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -934,8 +935,8 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/about.pt:20
 msgid ""
-"SchoolTool is licensed under the <a href=\"http://www.gnu.org/licenses/gpl-"
-"2.0.html\">GNU General Public License, Version 2</a>."
+"SchoolTool is licensed under the <a href=\"http://www.gnu.org/licenses/"
+"gpl-2.0.html\">GNU General Public License, Version 2</a>."
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/about.pt:24
@@ -1148,9 +1149,8 @@ msgid "There are no resources with calendars accessible to you."
 msgstr "Ei löydetty resursseja, joiden kalentereita pääsisit tarkastelemaan."
 
 #: /src/schooltool/app/browser/templates/default_report_template.pt:23
-#, fuzzy
 msgid "Created with SchoolTool"
-msgstr "Kalenterit SchoolToolissa"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/default_report_template.pt:37
 msgid "Page ${page_number}"
@@ -2541,11 +2541,7 @@ msgstr "\"$group\"-ryhmä."
 msgid "\"$group\" group and the super user."
 msgstr "\"$group\"-ryhmä ja pääkäyttäjä."
 
-#: /src/schooltool/app/security.zcml:69
-msgid "Everyone can view the application calendar."
-msgstr "Kaikki voivat katsoa ohjelmistokalenteria"
-
-#: /src/schooltool/app/security.zcml:77
+#: /src/schooltool/app/security.zcml:71
 msgid "SchoolTool application"
 msgstr "SchoolTool-sovellus"
 
@@ -2610,7 +2606,11 @@ msgstr ""
 msgid "New Person"
 msgstr "Uusi henkilö"
 
-#: /src/schooltool/basicperson/browser/configure.zcml:113
+#: /src/schooltool/basicperson/browser/configure.zcml:107
+msgid "Add Multiple Persons"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/configure.zcml:129
 #: /src/schooltool/basicperson/security.zcml:22
 #: /src/schooltool/demographics/browser/personform.py:180
 msgid "Demographics"
@@ -2669,7 +2669,15 @@ msgstr "Nimet eivät voi alkaa merkillä '+' tai '@' tai sisältää merkkiä '/
 msgid "Usernames cannot contain non-ascii characters"
 msgstr ""
 
-#: /src/schooltool/basicperson/browser/demographics.py:133
+#: /src/schooltool/basicperson/browser/demographics.py:85
+msgid "Duplicate entry \"${value}\""
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/demographics.py:90
+msgid "Value too long \"${value}\""
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/demographics.py:151
 msgid "Add new Field"
 msgstr "Lisää uusi kenttä"
 
@@ -2693,22 +2701,25 @@ msgstr "Neuvonantaja"
 msgid "Confirm password"
 msgstr "Vahvista salasana"
 
-#: /src/schooltool/basicperson/browser/person.py:104
-msgid "This username is already in use!"
-msgstr "Tämä käyttäjätunnus on jo käytössä."
+#: /src/schooltool/basicperson/browser/person.py:76
+msgid "Passwords do not match"
+msgstr "Salasanat eivät täsmää"
 
 #: /src/schooltool/basicperson/browser/person.py:149
 msgid "Add new person"
 msgstr "Lisää uusi henkilö"
 
-#: /src/schooltool/basicperson/browser/person.py:169
-msgid "Passwords do not match"
-msgstr "Salasanat eivät täsmää"
+#: /src/schooltool/basicperson/browser/person.py:152
+msgid "This username is already in use!"
+msgstr "Tämä käyttäjätunnus on jo käytössä."
 
-#. Default: ""
-#: /src/schooltool/basicperson/browser/person.py:234
-msgid "Change information for ${fullname}"
-msgstr "Muuta tietoa ${fullname}"
+#: /src/schooltool/basicperson/browser/person.py:283
+msgid "Usernames"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/person.py:300
+msgid "Add multiple persons"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/person.py:304
 msgid "Current Advisors"
@@ -2735,6 +2746,15 @@ msgstr "Lisää Neuvoja"
 #: /src/schooltool/basicperson/browser/person.py:333
 msgid "Advisees of ${person}"
 msgstr "${person} antamat neuvot"
+
+#: /src/schooltool/basicperson/browser/person.py:357
+msgid "Done"
+msgstr ""
+
+#. Default: ""
+#: /src/schooltool/basicperson/browser/person.py:402
+msgid "Change information for ${fullname}"
+msgstr "Muuta tietoa ${fullname}"
 
 #: /src/schooltool/basicperson/browser/templates/demographics-view.pt:4
 #: /src/schooltool/basicperson/browser/templates/demographics-view.pt:7
@@ -2784,6 +2804,10 @@ msgstr ""
 "\" ja \"makkonen\" Näistä kolmesta vain \"memeikalaisella\" on salasana "
 "(r2m45j) ja on ainoa joka voi kirjautua järjestelmään. Huomaa, että "
 "salasanojen tulee olla tekstinä ja numeroina. (ei erikoismerkkejä)"
+
+#: /src/schooltool/basicperson/browser/templates/person_add_subform.pt:2
+msgid "New person"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/templates/person_view.pt:13
 #: /src/schooltool/person/browser/home.pt:13
@@ -2941,7 +2965,11 @@ msgstr "Lisää tieto"
 msgid "Edit Calendar Overlays"
 msgstr "Muokkaa kalenterinäkymää"
 
-#: /src/schooltool/contact/browser/configure.zcml:49
+#: /src/schooltool/contact/browser/configure.zcml:41
+msgid "View Person"
+msgstr ""
+
+#: /src/schooltool/contact/browser/configure.zcml:61
 msgid "New Contact"
 msgstr "Uusi yhteystieto"
 
@@ -3814,10 +3842,18 @@ msgid "Sections must be in consecutive terms"
 msgstr "Osioiden tulee olla toisiaan seuraavilla lukukausilla"
 
 #: /src/schooltool/course/security.zcml:42
-msgid "Everyone can view section information and calendars"
-msgstr "Kaikki voivat katsoa osion tietoja ja kalentereita"
+msgid ""
+"Basic information about sections is only visible to instructors and students "
+"in that section, and school administration."
+msgstr ""
 
-#: /src/schooltool/course/security.zcml:73
+#: /src/schooltool/course/security.zcml:42
+msgid ""
+"Basic information about sections, including rosters, is visible to the "
+"general public."
+msgstr ""
+
+#: /src/schooltool/course/security.zcml:74
 msgid ""
 "A course in SchoolTool describes a set curriculum                    taught "
 "in a section."
@@ -4560,9 +4596,8 @@ msgid "${sheet_name} ${column}${row} ${message}"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:69
-#, fuzzy
 msgid "is not a valid integer"
-msgstr "Virheellinen numerotieto"
+msgstr ""
 
 #: /src/schooltool/export/importer.py:70
 msgid "not unicode or ascii string"
@@ -4577,9 +4612,8 @@ msgid "has no date in it"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:73
-#, fuzzy
 msgid "end date cannot be before start date"
-msgstr "Loppupäivämäärä on ennen aloituspäivämäärää"
+msgstr ""
 
 #: /src/schooltool/export/importer.py:74
 msgid "start date overlaps another year"
@@ -4590,19 +4624,16 @@ msgid "end date overlaps another year"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:76
-#, fuzzy
 msgid "invalid school year"
-msgstr "Lisää uusi lukuvuosi"
+msgstr ""
 
 #: /src/schooltool/export/importer.py:77
-#, fuzzy
 msgid "start date before start of school year"
-msgstr "Osioluettelo lukukaudelle ${term} lukuvuonna ${schoolyear}"
+msgstr ""
 
 #: /src/schooltool/export/importer.py:78
-#, fuzzy
 msgid "end date after end of school year"
-msgstr "Nykyisen lukuvuoden aktivointi"
+msgstr ""
 
 #: /src/schooltool/export/importer.py:79
 msgid "start date overlaps another term"
@@ -4621,14 +4652,12 @@ msgid "${title} has no day templates in A${row}"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:83
-#, fuzzy
 msgid "is not a valid time range"
-msgstr "\"${username}\" ei ole käypä käyttäjänimi."
+msgstr ""
 
 #: /src/schooltool/export/importer.py:84
-#, fuzzy
 msgid "is not a valid timetable model"
-msgstr "Aikalokero ei ole käypä."
+msgstr ""
 
 #: /src/schooltool/export/importer.py:85
 msgid "is the same day id as another in this timetable"
@@ -4643,37 +4672,32 @@ msgid "is the same period id as another in this day"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:88
-#, fuzzy
 msgid "is the same homeroom period id as another in this day"
-msgstr "Määrittele luokanvalvojan tunnit jokaiselle päivälle:"
+msgstr ""
 
 #: /src/schooltool/export/importer.py:89
 msgid "must be either 'Location' or 'Resource'"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:90
-#, fuzzy
 msgid "is not a valid term in the given school year"
-msgstr "Eri lukuvuosien osioita ei voi linkittää"
+msgstr ""
 
 #: /src/schooltool/export/importer.py:91
-#, fuzzy
 msgid "is not a valid course in the given school year"
-msgstr "Eri lukuvuosien osioita ei voi linkittää"
+msgstr ""
 
 #: /src/schooltool/export/importer.py:92
 msgid "${title} has no courses in A${row}"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:93
-#, fuzzy
 msgid "is not a valid username"
-msgstr "\"${username}\" ei ole käypä käyttäjänimi."
+msgstr ""
 
 #: /src/schooltool/export/importer.py:94
-#, fuzzy
 msgid "is not a valid schema in the given school year"
-msgstr "Eri lukuvuosien osioita ei voi linkittää"
+msgstr ""
 
 #: /src/schooltool/export/importer.py:95
 msgid "is not a valid day id for the given schema"
@@ -4915,22 +4939,42 @@ msgid "Description of the group."
 msgstr "Ryhmän kuvaus"
 
 #: /src/schooltool/group/security.zcml:5
-msgid "Everyone can view group lists."
-msgstr "Kaikki voivat katsoa ryhmäluetteloita."
+msgid "Only school administration can view the list of groups."
+msgstr ""
 
-#: /src/schooltool/group/security.zcml:10
-msgid "Everyone can view group information."
-msgstr "Kaikki voivat tarkastella ryhmän tietoja."
+#: /src/schooltool/group/security.zcml:5
+msgid "The list of groups in the system is visible to the general public."
+msgstr ""
 
-#: /src/schooltool/group/security.zcml:15
-msgid "Everyone can view group calendars."
-msgstr "Kaikki voivat katsoa ryhmän kalentereita."
+#: /src/schooltool/group/security.zcml:11
+msgid ""
+"Information about each group is visible to school administration, and "
+"members and leaders of the group."
+msgstr ""
 
-#: /src/schooltool/group/security.zcml:20
-msgid "Group members can edit group calendars."
-msgstr "Ryhmän jäsenet voivat muokata ryhmän kalentereita."
+#: /src/schooltool/group/security.zcml:11
+msgid "Information about each group is visible to the general public."
+msgstr ""
 
-#: /src/schooltool/group/security.zcml:53
+#: /src/schooltool/group/security.zcml:17
+msgid ""
+"Each group calendar is visible to school administration, and members and "
+"leaders of the group."
+msgstr ""
+
+#: /src/schooltool/group/security.zcml:17
+msgid "Each group calendar is visible to the general public."
+msgstr ""
+
+#: /src/schooltool/group/security.zcml:23
+msgid "All members of a group and school administration can edit its calendar."
+msgstr ""
+
+#: /src/schooltool/group/security.zcml:23
+msgid "The leaders of a group and school administration can edit its calendar."
+msgstr ""
+
+#: /src/schooltool/group/security.zcml:57
 msgid "Groups are essentially sets of users."
 msgstr ""
 
@@ -4943,28 +4987,24 @@ msgid "Help"
 msgstr "Ohje"
 
 #: /src/schooltool/level/browser.py:47
-#, fuzzy
 msgid "Add a level"
-msgstr "Lisää tapahtuma"
+msgstr ""
 
 #: /src/schooltool/level/interfaces.py:37
-#, fuzzy
 msgid "Title of the level."
-msgstr "Muistiinpanon nimike."
+msgstr ""
 
 #: /src/schooltool/level/security.zcml:7
 msgid "The teaching levels (student learning years)."
 msgstr ""
 
 #: /src/schooltool/level/security.zcml:12
-#, fuzzy
 msgid "Add/Remove"
-msgstr "Poista"
+msgstr ""
 
 #: /src/schooltool/level/security.zcml:19
-#, fuzzy
 msgid "Modify/Rename"
-msgstr "Muokkaa"
+msgstr ""
 
 #: /src/schooltool/level/templates/levels.pt:3
 #: /src/schooltool/level/templates/levels.pt:6
@@ -5243,22 +5283,34 @@ msgid "Make calendar public"
 msgstr "Tee kalenterista julkinen"
 
 #: /src/schooltool/person/security.zcml:5
-msgid "Everyone can view the list of persons"
-msgstr "Kaikki voivat tarkastella henkilöluetteloa"
+msgid ""
+"The list of people with accounts in the system is visible only to school "
+"administration."
+msgstr ""
 
-#: /src/schooltool/person/security.zcml:10
-msgid "Everyone can view info of persons"
-msgstr "Kaikki voivat tarkastella henkilöiden tietoja"
+#: /src/schooltool/person/security.zcml:5
+msgid ""
+"The list of people with accounts in the system is visible to the general "
+"public."
+msgstr ""
 
-#: /src/schooltool/person/security.zcml:15
-msgid "Persons can set their own preferences"
-msgstr "Henkilöt voivat itse asettaa asetuksensa"
+#: /src/schooltool/person/security.zcml:11
+msgid "Users can make their own calendars public."
+msgstr ""
 
-#: /src/schooltool/person/security.zcml:20
-msgid "Persons can change their own passwords"
-msgstr "Henkilöt voivat muokata omia salasanojaan"
+#: /src/schooltool/person/security.zcml:11
+msgid "Users cannot make their own calendars public."
+msgstr ""
 
-#: /src/schooltool/person/security.zcml:77
+#: /src/schooltool/person/security.zcml:17
+msgid "Only school administration can change passwords."
+msgstr ""
+
+#: /src/schooltool/person/security.zcml:17
+msgid "Users can change their own passwords."
+msgstr ""
+
+#: /src/schooltool/person/security.zcml:71
 msgid "Users"
 msgstr "Käyttäjät"
 
@@ -5274,7 +5326,11 @@ msgstr "Asetuksien tarkastelu"
 msgid "Change preferences"
 msgstr "Asetuksien muuttaminen"
 
-#: /src/schooltool/person/security.zcml:144
+#: /src/schooltool/person/security.zcml:138
+msgid "Change the list of calendars overlayed on the user's calendar"
+msgstr ""
+
+#: /src/schooltool/person/security.zcml:138
 msgid "Manage visible calendars"
 msgstr ""
 
@@ -5492,20 +5548,32 @@ msgid "Resource"
 msgstr "Resurssi"
 
 #: /src/schooltool/resource/security.zcml:7
-msgid "Everyone can view resource lists."
-msgstr "Kaikki voivat tarkastella resurssiluetteloa."
+msgid "Only school administration can view the list of resources."
+msgstr ""
 
-#: /src/schooltool/resource/security.zcml:12
-msgid "Everyone can view resource information."
-msgstr "Kaikki voivat tarkastella resurssin tietoa"
+#: /src/schooltool/resource/security.zcml:7
+msgid "The list of resources in the system is visible to the general public."
+msgstr ""
 
-#: /src/schooltool/resource/security.zcml:17
-msgid "Everyone can view resource calendars."
-msgstr "Kaikki voivat tarkastella resurssien kalentereita."
+#: /src/schooltool/resource/security.zcml:13
+msgid ""
+"Information about each resource is visible to school administration and "
+"leaders of the resource."
+msgstr ""
 
-#: /src/schooltool/resource/security.zcml:50
-msgid "Reservations"
-msgstr "Varaukset"
+#: /src/schooltool/resource/security.zcml:13
+msgid "Information about each resource is visible to the general public."
+msgstr ""
+
+#: /src/schooltool/resource/security.zcml:19
+msgid ""
+"Resource calendars are visible to school administration, teachers, and "
+"leaders of the resource."
+msgstr ""
+
+#: /src/schooltool/resource/security.zcml:19
+msgid "Resource calendars are visible to the general public."
+msgstr ""
 
 #: /src/schooltool/resource/security.zcml:50
 msgid ""
@@ -5515,6 +5583,10 @@ msgid ""
 msgstr ""
 "Resurssit ovat koulun tiloja tai välineistöä. SchoolToolin kalenteri voi "
 "toimia resurssien varaus- ja urantajärjestelmänä."
+
+#: /src/schooltool/resource/security.zcml:53
+msgid "Reservations"
+msgstr "Varaukset"
 
 #: /src/schooltool/resource/security.zcml:57
 msgid "List/Search resources"
@@ -5648,23 +5720,24 @@ msgid "Copy data from active school year: ${active_schoolyear}"
 msgstr ""
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_add.pt:40
-#, fuzzy
 msgid "All Courses"
-msgstr "Kurssit"
+msgstr ""
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_add.pt:50
-#, fuzzy
 msgid "All Timetable Schemas"
-msgstr "Oletus aikataulukaavio"
+msgstr ""
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_add.pt:62
-#, fuzzy
 msgid "Copy members"
-msgstr "muokkaa jäseniä"
+msgstr ""
 
-#: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:39
-msgid "Activate next school year"
-msgstr "Aktivoi seuraava lukuvuosi"
+#: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:27
+msgid "The active school year is ${year} (${start_date} - ${end_date})"
+msgstr ""
+
+#: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:52
+msgid "Activate selected school year"
+msgstr ""
 
 #: /src/schooltool/schoolyear/browser/templates/term-delete.pt:10
 #: /src/schooltool/term/browser/templates/term-container-delete.pt:10
@@ -5702,13 +5775,17 @@ msgstr "Käytössä"
 msgid "School administration"
 msgstr "Hallintohenkilöstö"
 
-#: /src/schooltool/securitypolicy/browser/templates/access_setting_snippet.pt:4
-msgid "Access setting: ${setting} (${status})"
-msgstr "Käyttöoikeusasetus: ${setting} (${status})"
+#: /src/schooltool/securitypolicy/browser/templates/access_setting_snippet.pt:2
+msgid "Access setting"
+msgstr ""
 
 #: /src/schooltool/securitypolicy/browser/templates/security_descriptions.pt:4
 msgid "Access Rights"
 msgstr "Käyttöoikeudet"
+
+#: /src/schooltool/securitypolicy/browser/templates/security_descriptions.pt:9
+msgid "Object model and access rights"
+msgstr ""
 
 #: /src/schooltool/securitypolicy/browser/templates/security_descriptions.pt:57
 msgid "Legend"
@@ -5920,11 +5997,11 @@ msgstr "Työkalupalkin asetukset"
 msgid "The name of the toolbar configuration to use."
 msgstr ""
 
-#: /src/schooltool/skin/widgets.py:122
-msgid "Configuration path"
+#: /src/schooltool/skin/widgets.py:110
+msgid "Relative configuration path"
 msgstr ""
 
-#: /src/schooltool/skin/widgets.py:123
+#: /src/schooltool/skin/widgets.py:111
 msgid "Path to the FCKconfiguration javascript file."
 msgstr ""
 
@@ -6169,34 +6246,28 @@ msgid "Save"
 msgstr "Tallenna"
 
 #: /src/schooltool/timetable/browser/__init__.py:686
-#, fuzzy
 msgid "School timetable"
-msgstr "Koulun aikataulut"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/__init__.py:691
-#, fuzzy
 msgid "Apply from"
-msgstr "Hyväksy"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/__init__.py:693
-#, fuzzy
 msgid "Apply until"
-msgstr "Hyväksy ja seuraava"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/__init__.py:794
-#, fuzzy
 msgid "Timetable conflicts with another:"
-msgstr "Muistiinpanon nimike."
+msgstr ""
 
 #: /src/schooltool/timetable/browser/__init__.py:802
-#, fuzzy
 msgid "Timetable does not fit in term"
-msgstr "Päivämäärä ei kuulu mihinkään lukukauteen."
+msgstr ""
 
 #: /src/schooltool/timetable/browser/__init__.py:805
-#, fuzzy
 msgid "Timetable must begin before it ends."
-msgstr "Lukukauden pitää alkaa ennen sen loppumista."
+msgstr ""
 
 #: /src/schooltool/timetable/browser/__init__.py:910
 msgid "Invalid date. Please use YYYY-MM-DD format."
@@ -6346,8 +6417,8 @@ msgid ""
 "Third, define the time and duration of periods when they fall on certain "
 "days of week. Use one of the the following format: <tt>HH:MM</tt> (also, "
 "don't forget to specify the duration in the text box below) or <tt>HH:MM-HH:"
-"MM</tt> (when you want to specify both endpoints explicitly, e.g., 9:30-"
-"10:15). It is not necessary to define all periods for all days of week, "
+"MM</tt> (when you want to specify both endpoints explicitly, e.g., "
+"9:30-10:15). It is not necessary to define all periods for all days of week, "
 "omissions will just cause that period to be skipped if it happens to fall on "
 "that day of week. If the list of periods is not up to date with the changes "
 "you made in the table above, use the Update button to refresh the form."
@@ -6398,21 +6469,18 @@ msgid "Manage..."
 msgstr "Hallinta..."
 
 #: /src/schooltool/timetable/browser/templates/confirm-timetable-delete.pt:15
-#, fuzzy
 msgid "Are you sure you want to unschedule this timetable?"
-msgstr "Haluatko varmasti poistaa valitut aikataulut?"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/confirm-timetable-delete.pt:27
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:48
-#, fuzzy
 msgid "Timetable \"${title}\""
-msgstr "Aikataulut kohteelle: ${object}"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/confirm-timetable-delete.pt:38
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:60
-#, fuzzy
 msgid "No periods selected."
-msgstr "Ei osiota valittuna."
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/confirm-timetable-delete.pt:67
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:89
@@ -6489,9 +6557,8 @@ msgstr "Aikataulutus osiolle ${section}"
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-add.pt:25
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:31
-#, fuzzy
 msgid "For term: ${term_title} (from ${starts} to ${ends})"
-msgstr "${term_title} (${start_date} &mdash; ${end_date})"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:17
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:19
@@ -6503,38 +6570,30 @@ msgid "Choose school timetable to use"
 msgstr "Valitse käytettävä kouluaikataulu"
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:17
-#, fuzzy
 msgid "Time table schedule of ${courses} ${section}."
-msgstr "Aikataulut kohteelle: ${object}"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:25
-#, fuzzy
 msgid "school days"
-msgstr "Koulupäivä"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:27
-#, fuzzy
 msgid "available timetables"
-msgstr "Saatavilla olevat valvojat"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:31
-#, fuzzy
 msgid ""
 "For more information, see ${school_days} and ${available_timetables} in "
 "${term} of ${schoolyear}"
 msgstr ""
-"Kurssin ${course} osio -- ${section_title} lukukaudelle ${term} lukuvuonna "
-"${schoolyear}"
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:39
-#, fuzzy
 msgid "There are no timetables assigned."
-msgstr "Yhtään aikataulukaaviota ei ole määritelty."
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:49
-#, fuzzy
 msgid "(edit periods)"
-msgstr "Lisää oppitunti"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:91
 msgid "Consecutive periods are treated as a single meeting."
@@ -6633,19 +6692,16 @@ msgid "Are you sure you want to delete the selected timetables?"
 msgstr "Haluatko varmasti poistaa valitut aikataulut?"
 
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:35
-#, fuzzy
 msgid "Using timetable: ${schema_titles}"
-msgstr "Käyttää aikataulua:"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:97
-#, fuzzy
 msgid "Apply from:"
-msgstr "Hyväksy"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:111
-#, fuzzy
 msgid "Apply until:"
-msgstr "Hyväksy ja seuraava"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:40
 msgid "Default Timetable Schema:"
@@ -6858,39 +6914,3 @@ msgstr "Aikataulun muutokset"
 #: /src/schooltool/widget/password.py:55
 msgid "Supplied passwords are not identical"
 msgstr "Salasanat eivät täsmää"
-
-#~ msgid "SMTP server hostname. Leave empty to disable email."
-#~ msgstr ""
-#~ "SMTP-palvelimen nimi. Jätä tyhjäksi, jos et halua ottaa sähköpostia "
-#~ "käyttöön."
-
-#~ msgid ""
-#~ "<a href=\"#\" onclick=\"$('#more_overlays').toggle();return false;"
-#~ "\">More...</a>"
-#~ msgstr ""
-#~ "<a href=\"#\" onclick=\"$('#more_overlays').toggle();return false;"
-#~ "\">Lisää...</a>"
-
-#~ msgid "confirm password"
-#~ msgstr "Vahvista salasana"
-
-#~ msgid "For term:"
-#~ msgstr "Lukukaudelle:"
-
-#~ msgid ""
-#~ "\n"
-#~ "This is not a SchoolTool 0.10 database file, aborting.\n"
-#~ "\n"
-#~ "Please run the standalone database upgrade script.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Tämä ei ole SchoolTool 0.10 -tietokantatiedosto. Poistutaan.\n"
-#~ "\n"
-#~ "Suorita muusta ohjelmistosta riippumaton tietokannan päivitys.\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "This is not a SchoolTool 0.11 database file, aborting.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Tämä ei ole SchoolTool 0.11 -tietokantatiedosto. Poistutaan.\n"
