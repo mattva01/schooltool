@@ -1337,31 +1337,34 @@ class DailyCalendarView(CalendarViewBase):
                     break
         return max(width) or 1
 
-    def _setRange(self, events):
-        """Set the starthour and endhour attributes according to events.
+    def _setRange(self, events, periods):
+        """Set the starthour and endhour attributes according to events and
+        periods.
 
         The range of the hours to display is the union of the range
         8:00-18:00 and time spans of all the events in the events
-        list.
+        list and all the periods as well.
         """
-        for event in events:
+        time_blocks = ([(event.dtstart, event.duration) for event in events] +
+            [(dtstart, duration) for id, dtstart, duration in periods])
+        for dtstart, duration in time_blocks:
             start = self.timezone.localize(datetime.combine(self.cursor,
                                             time(self.starthour)))
             end = self.timezone.localize(datetime.combine(self.cursor,
                    time()) + timedelta(hours=self.endhour)) # endhour may be 24
-            if event.dtstart < start:
+            if dtstart < start:
                 newstart = max(self.timezone.localize(
                                         datetime.combine(self.cursor, time())),
-                                        event.dtstart.astimezone(self.timezone))
+                                        dtstart.astimezone(self.timezone))
                 self.starthour = newstart.hour
 
-            if event.dtstart + event.duration > end and \
-                event.dtstart.astimezone(self.timezone).day <= self.cursor.day:
+            if dtstart + duration > end and \
+                dtstart.astimezone(self.timezone).day <= self.cursor.day:
                 newend = min(self.timezone.localize(
                                         datetime.combine(self.cursor,
                                                         time())) + timedelta(1),
-                            event.dtstart.astimezone(self.timezone) +
-                                        event.duration + timedelta(0, 3599))
+                            dtstart.astimezone(self.timezone) +
+                                        duration + timedelta(0, 3599))
                 self.endhour = newend.hour
                 if self.endhour == 0:
                     self.endhour = 24
@@ -1403,7 +1406,15 @@ class DailyCalendarView(CalendarViewBase):
         # Filter allday events
         simple_events = [event for event in all_events
                          if not event.allday]
-        self._setRange(simple_events)
+        # use daily_calendar_rows view to get the periods
+        view = getMultiAdapter((self.context, self.request),
+                                    name='daily_calendar_rows')
+        if 'getPeriods' in dir(view):
+            periods = view.getPeriods(self.cursor)
+        else:
+            periods = []
+        # set this view's start and end hours from the events and periods
+        self._setRange(simple_events, periods)
         slots = Slots()
         top = 0
         for title, start, duration in self.calendarRows(simple_events):

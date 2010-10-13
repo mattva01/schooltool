@@ -3517,24 +3517,28 @@ class TestDailyCalendarView(unittest.TestCase):
         view = DailyCalendarView(cal, TestRequest())
         view.cursor = date(2004, 8, 16)
 
-        def do_test(events, expected):
+        def do_test(events, periods, expected):
             view.starthour, view.endhour = 8, 19
-            view._setRange(events)
+            view._setRange(events, periods)
             self.assertEquals((view.starthour, view.endhour), expected)
 
-        do_test([], (8, 19))
+        do_test([], [], (8, 19))
 
         events = [createEvent('2004-08-16 7:00', '1min', 'workout')]
-        do_test(events, (7, 19))
+        do_test(events, [], (7, 19))
 
         events = [createEvent('2004-08-15 8:00', '1d', "long workout")]
-        do_test(events, (0, 19))
+        do_test(events, [], (0, 19))
 
         events = [createEvent('2004-08-16 20:00', '30min', "late workout")]
-        do_test(events, (8, 21))
+        do_test(events, [], (8, 21))
 
         events = [createEvent('2004-08-16 20:00', '5h', "long late workout")]
-        do_test(events, (8, 24))
+        do_test(events, [], (8, 24))
+
+        dummy_event = createEvent('2004-08-16 7:00', '1min', 'workout')
+        periods = [('', dummy_event.dtstart, dummy_event.duration)]
+        do_test(events, periods, (7, 24))
 
     def test__setRange_timezones(self):
         from schooltool.app.browser.cal import DailyCalendarView
@@ -3550,7 +3554,7 @@ class TestDailyCalendarView(unittest.TestCase):
 
         def do_test(events, expected):
             view.starthour, view.endhour = 8, 19
-            view._setRange(events)
+            view._setRange(events, [])
             self.assertEquals((view.starthour, view.endhour), expected)
 
         for tz in (utc, london, vilnius, eastern):
