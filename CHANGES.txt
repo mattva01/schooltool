@@ -5,6 +5,7 @@ CHANGES
 1.5.3 (unreleased)
 ------------------
 
+- Made the SampleDataView to accept sample data plugin names with dots
 - Fixed Section meeting time misalignment in calendar (https://launchpad.net/bugs/611797)
 
 

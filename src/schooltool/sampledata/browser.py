@@ -60,7 +60,7 @@ class SampleDataView(BrowserView):
     def _getSelectedPlugins(self):
         for key in self.request.keys():
             if key.startswith('plugin'):
-                yield key.split('.')[1]
+                yield key.split('.', 1)[1]
 
     def getPlugins(self):
         selectedPlugins = self._getSelectedPlugins()
