@@ -58,9 +58,10 @@ class SampleDataView(BrowserView):
                                   pluginNames=self._getSelectedPlugins())
 
     def _getSelectedPlugins(self):
+        prefix = 'plugin.'
         for key in self.request.keys():
-            if key.startswith('plugin'):
-                yield key.split('.', 1)[1]
+            if key.startswith(prefix):
+                yield key[len(prefix):]
 
     def getPlugins(self):
         selectedPlugins = self._getSelectedPlugins()
