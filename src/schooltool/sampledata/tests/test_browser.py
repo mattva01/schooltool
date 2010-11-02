@@ -73,9 +73,9 @@ def doctest_SampleDataView_update():
 
         >>> from schooltool.sampledata.tests.test_generator import DummyPlugin
         >>> from schooltool.sampledata.interfaces import ISampleDataPlugin
-        >>> p1 = DummyPlugin("work", ())
-        >>> p2 = DummyPlugin("play", ("work", ))
-        >>> provideUtility(p1, ISampleDataPlugin, 'work')
+        >>> p1 = DummyPlugin("work.day", ())
+        >>> p2 = DummyPlugin("play", ("work.day", ))
+        >>> provideUtility(p1, ISampleDataPlugin, 'work.day')
         >>> provideUtility(p2, ISampleDataPlugin, 'play')
 
     If we fill in the seed and press the submit button, we get sample
@@ -83,12 +83,12 @@ def doctest_SampleDataView_update():
 
         >>> DummyPlugin.log = []
         >>> request = TestRequest(form={'seed': 'data', 'SUBMIT': 'Generate',
-        ...                             'plugin.work': 'checked',
+        ...                             'plugin.work.day': 'checked',
         ...                             'plugin.play': 'checked'})
         >>> view = SampleDataView(app, request)
         >>> view.update()
         >>> pprint(DummyPlugin.log)
-        [('work',
+        [('work.day',
           <schooltool.app.app.SchoolToolApplication object at ...>,
           'data'),
          ('play',
@@ -98,7 +98,7 @@ def doctest_SampleDataView_update():
     When the work is done the times attribute is set on the view:
 
         >>> sorted(view.times)
-        ['play', 'work']
+        ['play', 'work.day']
         >>> for item, time in view.times.items():
         ...     assert time < 0.1   # 100 ms ought to be enough to do nothing
         >>> view.work_done
@@ -131,9 +131,9 @@ def doctest_SampleDataView__call__():
 
         >>> from schooltool.sampledata.tests.test_generator import DummyPlugin
         >>> from schooltool.sampledata.interfaces import ISampleDataPlugin
-        >>> p1 = DummyPlugin("work", ())
-        >>> p2 = DummyPlugin("play", ("work", ))
-        >>> provideUtility(p1, ISampleDataPlugin, 'work')
+        >>> p1 = DummyPlugin("work.day", ())
+        >>> p2 = DummyPlugin("play", ("work.day", ))
+        >>> provideUtility(p1, ISampleDataPlugin, 'work.day')
         >>> provideUtility(p2, ISampleDataPlugin, 'play')
 
     Let's create an application object and a view:
@@ -171,8 +171,8 @@ def doctest_SampleDataView__call__():
             </div>
             <div>
               <label>
-                <input type="checkbox" name="plugin.work" />
-                work
+                <input type="checkbox" name="plugin.work.day" />
+                work.day
               </label>
             </div>
             <div class="controls">
@@ -194,7 +194,7 @@ def doctest_SampleDataView__call__():
     Let's render the view.  The default value of the seed is displayed there.
 
         >>> request = TestRequest(form={'seed': 'test', 'SUBMIT': 'Generate',
-        ...                             'plugin.work': 'checked',
+        ...                             'plugin.work.day': 'checked',
         ...                             'plugin.play': 'checked'})
         >>> view = SampleDataView(app, request)
         >>> print view()
@@ -213,7 +213,7 @@ def doctest_SampleDataView__call__():
             <td>...</td>
           </tr>
           <tr>
-            <td>work</td>
+            <td>work.day</td>
             <td>...</td>
           </tr>
         </table>
