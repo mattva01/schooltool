@@ -2,7 +2,7 @@
 
 PACKAGE=schooltool
 
-DIST=/home/ftp/pub/schooltool/1.4
+DIST=/home/ftp/pub/schooltool/trunk
 BOOTSTRAP_PYTHON=python
 
 INSTANCE_TYPE=schooltool
