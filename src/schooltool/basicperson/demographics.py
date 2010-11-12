@@ -24,7 +24,7 @@ from persistent import Persistent
 
 from zope.schema._field import Choice
 from zope.schema._field import Date
-from zope.schema import TextLine
+from zope.schema import TextLine, Bool
 from zope.location.location import Location
 from zope.location.location import locate
 from zope.interface import Interface
@@ -202,3 +202,10 @@ class TextFieldDescription(FieldDescription):
 
     def makeField(self):
         return self.setUpField(TextLine(title=unicode(self.title)))
+
+
+class BoolFieldDescription(FieldDescription):
+
+    def makeField(self):
+        return self.setUpField(Bool(title=unicode(self.title)))
+

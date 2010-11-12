@@ -6,6 +6,7 @@ CHANGES
 ------------------
 
 - Fixed Section meeting time misalignment in calendar (https://launchpad.net/bugs/611797)
+- Added BooFieldDescription for boolean demographic fields
 
 
 1.5.2 (2010-10-04)

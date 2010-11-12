@@ -31,6 +31,7 @@ from schooltool.basicperson.demographics import EnumFieldDescription
 from schooltool.basicperson.demographics import setUpDefaultDemographics
 from schooltool.basicperson.demographics import IDemographicsForm
 from schooltool.basicperson.demographics import TextFieldDescription
+from schooltool.basicperson.demographics import BoolFieldDescription
 from schooltool.basicperson.demographics import PersonDemographicsData
 from schooltool.schoolyear.testing import (setUp, tearDown,
                                            provideStubUtility,
@@ -187,6 +188,33 @@ def doctest_TextFieldDescription():
 
        >>> field.field
        <zope.schema._bootstrapfields.TextLine object at ...>
+
+       >>> field.__name__
+       'ID'
+
+    """
+
+
+def doctest_BoolFieldDescription():
+    """Tests for BoolFieldDescription
+
+    Boolean field description is a class that defines a boolean field shown
+    in person add/edit form.
+
+       >>> fd = BoolFieldDescription("ID", "ID")
+       >>> fields = fd.makeField()
+       >>> len(fields)
+       1
+
+       >>> field = fields['ID']
+       >>> field
+       <Field 'ID'>
+
+       >>> field.interface
+       <InterfaceClass schooltool.basicperson.demographics.IDemographicsForm>
+
+       >>> field.field
+       <zope.schema._bootstrapfields.Bool object at ...>
 
        >>> field.__name__
        'ID'
