@@ -141,6 +141,47 @@ def doctest_setUpDefaultDemographics():
     """
 
 
+def doctest_DemographicsFields():
+    """Tests for DemographicsFields
+
+    DemographicsFields is a class that contains demo fields that themselves
+    may or may not be limited to a group or groups.
+
+        >>> dfs = IDemographicsFields(ISchoolToolApplication(None))
+        >>> dfs['email'] = TextFieldDescription("email", "Email")
+        >>> dfs['supervisor'] = TextFieldDescription("supervisor", "Supervisor",
+        ...     limit_group_ids=['teachers'])
+        >>> dfs['advisor'] = TextFieldDescription("advisor", "Advisor",
+        ...     limit_group_ids=['students'])
+        >>> dfs['phone'] = TextFieldDescription("phone", "Phone",
+        ...     limit_group_ids=['teachers', 'students'])
+
+
+    When we pass the filter_group_id method a group_id that does not belong
+    to any of the limit_group_ids lists, then it will only return those
+    fields that have empty limit_group_ids lists.
+
+        >>> [f.__name__ for f in dfs.filter_group_id('anything')]
+        [u'ID', u'ethnicity', u'language', u'placeofbirth', u'citizenship',
+                u'email']
+
+    When we pass 'teachers', it picks up the additional fields that are for
+    teachers.
+
+        >>> [f.__name__ for f in dfs.filter_group_id('teachers')]
+        [u'ID', u'ethnicity', u'language', u'placeofbirth', u'citizenship',
+                u'email', u'supervisor', u'phone']
+
+    When we pass 'students', it picks up the additional fields that are for
+    students.
+
+        >>> [f.__name__ for f in dfs.filter_group_id('students')]
+        [u'ID', u'ethnicity', u'language', u'placeofbirth', u'citizenship',
+                u'email', u'advisor', u'phone']
+
+    """
+
+
 def doctest_EnumFieldDescription():
     """Tests for EnumFieldDescription
 

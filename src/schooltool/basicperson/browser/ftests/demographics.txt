@@ -147,6 +147,7 @@ Let's try making some fields required, and maybe even changing them:
     >>> manager.getLink('Demographics').click()
     >>> manager.getLink('ethnicity').click()
     >>> manager.getLink('Edit').click()
+    >>> print manager.getControl('Limit groups').value
     >>> print manager.getControl('List of values').value
     American Indian or Alaska Native
     Asian
@@ -154,12 +155,31 @@ Let's try making some fields required, and maybe even changing them:
     Native Hawaiian or Other Pacific Islander
     White
 
-Let's make the field required, and add Martians to it:
+Let's make the field required, and add Martians to it.  Also, we'll put a limit
+group into the empty list so that we can test that it is saved:
 
     >>> values = manager.getControl('List of values').value.splitlines()
+    >>> manager.getControl('Limit groups').value = "students\nteachers"
     >>> manager.getControl('List of values').value = "\n".join(values + ['Martians'])
     >>> manager.getControl('yes').click()
     >>> manager.getControl('Apply').click()
+
+Calling the edit form back up, we see that our changes took:
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('Demographics').click()
+    >>> manager.getLink('ethnicity').click()
+    >>> manager.getLink('Edit').click()
+    >>> print manager.getControl('Limit groups').value
+    students
+    teachers
+    >>> print manager.getControl('List of values').value
+    American Indian or Alaska Native
+    Asian
+    Black or African American
+    Native Hawaiian or Other Pacific Islander
+    White
+    Martians
 
 Now if we go to the add person form, we should see the additional
 value in the select box, and have the field required:

@@ -113,6 +113,15 @@ class DemographicsFormAdapter(object):
 class DemographicsFields(OrderedContainer):
     implements(IDemographicsFields)
 
+    def filter_group_id(self, group_id):
+        """Return the subset of fields whose limited_groups_ids list is either
+           empty, or it contains the group_id passed."""
+        result = []
+        for field in self.values():
+            if not field.limit_group_ids or group_id in field.limit_group_ids:
+                result.append(field)
+        return result
+
 
 def setUpDefaultDemographics(app):
     dfs = DemographicsFields()
@@ -152,9 +161,11 @@ def getDemographicsFields(app):
 
 class FieldDescription(Persistent, Location):
     implements(IFieldDescription)
+    limit_group_ids = []
 
-    def __init__(self, name, title, required=False):
-        self.name, self.title,self.required = name, title, required
+    def __init__(self, name, title, required=False, limit_group_ids=[]):
+        self.name, self.title, self.required, self.limit_group_ids = (name,
+            title, required, limit_group_ids)
 
     def setUpField(self, form_field):
         form_field.required = self.required

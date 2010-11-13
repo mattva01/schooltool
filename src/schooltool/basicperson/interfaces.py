@@ -21,7 +21,7 @@ SchoolTool basic person interfaces.
 """
 from zope.container.interfaces import IContainer
 from zope.container.interfaces import IOrderedContainer
-from zope.schema import Date, Choice, TextLine, Bool
+from zope.schema import Date, Choice, TextLine, Bool, List
 from zope.configuration.fields import PythonIdentifier
 from zope.interface import Interface, Attribute
 
@@ -113,6 +113,10 @@ class IDemographics(IContainer):
 class IDemographicsFields(IOrderedContainer):
     """Demographics field storage."""
 
+    def filter_group_id(group_id):
+        """Return the subset of fields whose limited_groups_ids list is either
+           empty, or it contains the group_id passed"""
+
 
 class IFieldDescription(Interface):
     """Demographics field."""
@@ -128,6 +132,11 @@ class IFieldDescription(Interface):
     required = Bool(
         title = _(u"Required"),
         description = _(u"Whether this Field is required or not"))
+
+    limit_group_ids = List(
+        title = _(u"Limit groups ids"),
+        description = _(u"An optional list of group ids for this field"),
+        required=False)
 
 
 class IEnumFieldDescription(IFieldDescription):
