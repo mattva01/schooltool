@@ -52,6 +52,13 @@
              set_schema="schooltool.basicperson.interfaces.IFieldDescription" />
   </class>
 
+  <class class=".demographics.BoolFieldDescription">
+    <allow interface="zope.location.interfaces.ILocation" />
+    <allow interface="schooltool.basicperson.interfaces.IFieldDescription" />
+    <require permission="schooltool.edit"
+             set_schema="schooltool.basicperson.interfaces.IFieldDescription" />
+  </class>
+
   <class class=".demographics.EnumFieldDescription">
     <allow interface="zope.location.interfaces.ILocation" />
     <allow interface="schooltool.basicperson.interfaces.IEnumFieldDescription" />

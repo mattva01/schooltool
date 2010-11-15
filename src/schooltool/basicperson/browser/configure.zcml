@@ -171,6 +171,13 @@
      menu="schooltool_actions" title="New Date Field" />
 
   <page
+     name="addBool.html"
+     for="schooltool.basicperson.interfaces.IDemographicsFields"
+     class=".demographics.BoolFieldDescriptionAddView"
+     permission="schooltool.edit"
+     menu="schooltool_actions" title="New Yes/No Field" />
+
+  <page
      name="addEnum.html"
      for="schooltool.basicperson.interfaces.IDemographicsFields"
      class=".demographics.EnumFieldDescriptionAddView"
@@ -193,6 +200,13 @@
 
   <page
      name="edit.html"
+     for="schooltool.basicperson.demographics.BoolFieldDescription"
+     class=".demographics.FieldDescriptionEditView"
+     permission="schooltool.edit"
+     menu="schooltool_actions" title="Edit" />
+
+  <page
+     name="edit.html"
      for="schooltool.basicperson.demographics.EnumFieldDescription"
      class=".demographics.EnumFieldDescriptionEditView"
      permission="schooltool.edit"
@@ -209,6 +223,13 @@
      name="index.html"
      for="schooltool.basicperson.demographics.DateFieldDescription"
      class=".demographics.DateFieldDescriptionView"
+     permission="schooltool.view"
+     menu="schooltool_actions" title="View" />
+
+  <page
+     name="index.html"
+     for="schooltool.basicperson.demographics.BoolFieldDescription"
+     class=".demographics.BoolFieldDescriptionView"
      permission="schooltool.view"
      menu="schooltool_actions" title="View" />
 

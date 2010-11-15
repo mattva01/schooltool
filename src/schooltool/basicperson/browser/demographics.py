@@ -38,6 +38,7 @@ from z3c.form.widget import FieldWidget
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.basicperson.demographics import TextFieldDescription
 from schooltool.basicperson.demographics import DateFieldDescription
+from schooltool.basicperson.demographics import BoolFieldDescription
 from schooltool.basicperson.demographics import EnumFieldDescription
 from schooltool.basicperson.interfaces import IEnumFieldDescription
 from schooltool.basicperson.interfaces import IDemographicsFields
@@ -196,6 +197,18 @@ class DateFieldDescriptionAddView(FieldDescriptionAddView):
         self._fd = fd
         return fd
 
+
+class BoolFieldDescriptionAddView(FieldDescriptionAddView):
+
+    def create(self, data):
+        fd = BoolFieldDescription(data['title'],
+                                  str(data['name']),
+                                  data['required'])
+        form.applyChanges(self, fd, data)
+        self._fd = fd
+        return fd
+
+
 class EnumFieldDescriptionAddView(FieldDescriptionAddView):
 
     fields = field.Fields(IEnumFieldDescription)
@@ -258,6 +271,10 @@ class TextFieldDescriptionView(FieldDescriptionView):
 
 class DateFieldDescriptionView(FieldDescriptionView):
     """Display form for a date field description."""
+
+
+class BoolFieldDescriptionView(FieldDescriptionView):
+    """Display form for a bool field description."""
 
 
 class EnumFieldDescriptionView(FieldDescriptionView):

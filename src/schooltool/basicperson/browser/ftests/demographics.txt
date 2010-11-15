@@ -237,6 +237,36 @@ We can use unicode in select boxes too:
      'Martians',
      'N\xc3\xb6rds']
 
+Boolean fields are available, so we'll create one called 'certified' and test
+the values in the display view:
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('Demographics').click()
+    >>> manager.getLink('New Yes/No Field').click()
+    >>> manager.getControl('Title').value = "Certified"
+    >>> manager.getControl('ID').value = "certified"
+    >>> manager.getControl(name='form.widgets.required:list').value = ['true']
+    >>> manager.getControl('Add').click()
+
+    >>> manager.printQuery('//span[@id="form-widgets-title"]')
+    <span id="form-widgets-title" class="text-widget required textline-field">Certified</span>
+    >>> manager.printQuery('//span[@id="form-widgets-name"]')
+    <span id="form-widgets-name" class="text-widget required pythonidentifier-field">certified</span>
+    >>> manager.printQuery('//span[@id="form-widgets-required"]//span')
+    <span class="selected-option">yes</span>
+
+Now when we add a new person, the new 'Certified' field appears as a boolean
+radio field:
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('Persons').click()
+    >>> manager.getLink('New Person').click()
+
+    >>> manager.printQuery('//input[@id="form-widgets-certified-0"]')
+    <input id="form-widgets-certified-0" ... value="true" type="radio" />
+    >>> manager.printQuery('//input[@id="form-widgets-certified-1"]')
+    <input id="form-widgets-certified-1" ... value="false" type="radio" />
+
 TODO
 Test values being unset if you remove a field
 Test export
