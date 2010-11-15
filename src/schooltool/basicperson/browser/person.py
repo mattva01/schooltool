@@ -26,7 +26,7 @@ from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import adapts
 from zope.component import getUtility, queryMultiAdapter
 from z3c.form import form, field, button, validator
-from zope.interface import implements, invariant, Invalid
+from zope.interface import invariant, Invalid
 from zope.schema import Password, TextLine, Choice, List, Object
 from zope.schema import ValidationError
 from zope.schema.interfaces import ITitledTokenizedTerm, IField
@@ -71,7 +71,7 @@ class IPersonAddForm(IBasicPerson):
         required=False)
 
     @invariant
-    def isPaswswordConfirmed(person):
+    def isPasswordConfirmed(person):
         if person.password != person.confirm:
             raise Invalid(_(u"Passwords do not match"))
 
@@ -95,59 +95,6 @@ class PersonAddFormAdapter(object):
         return getattr(self.context, name)
 
 
-class FieldValidator(object):
-    """Copied from z3c.form.validator.SimpleFieldValidator."""
-    implements(z3c.form.interfaces.IValidator)
-    adapts(Interface, Interface, Interface, IField, Interface)
-
-    def __init__(self, context, request, view, field, widget):
-        self.context = context
-        self.request = request
-        self.view = view
-        self.field = field
-        self.widget = widget
-
-    def validate(self, value):
-        """See interfaces.IValidator"""
-        context = self.context
-        field = self.field
-        widget = self.widget
-        if context is not None:
-            field = field.bind(context)
-        if value is z3c.form.interfaces.NOT_CHANGED:
-            if (interfaces.IContextAware.providedBy(widget) and
-                not widget.ignoreContext):
-                # get value from context
-                value = getMultiAdapter(
-                    (context, field),
-                    z3c.form.interfaces.IDataManager).query()
-            else:
-                value = z3c.form.interfaces.NO_VALUE
-            if value is z3c.form.interfaces.NO_VALUE:
-                # look up default value
-                value = field.default
-                adapter = queryMultiAdapter(
-                    (context, self.request, self.view, field, widget),
-                    z3c.form.interfaces.IValue, name='default')
-                if adapter:
-                    value = adapter.get()
-        # XXX: and all this copy-pasting was done for this single line:
-        return self.validateValue(value)
-
-    def validateValue(self, value):
-        context = self.context
-        field = self.field
-        if context is not None:
-            field = field.bind(context)
-        return field.validate(value)
-
-    def __repr__(self):
-        return "<%s for %s['%s']>" %(
-            self.__class__.__name__,
-            self.field.interface.getName(),
-            self.field.__name__)
-
-
 class UsernameAlreadyUsed(ValidationError):
     __doc__ = _("This username is already in use!")
 
@@ -160,10 +107,10 @@ class UsernameNonASCII(ValidationError):
     __doc__ = _("Usernames cannot contain non-ascii characters")
 
 
-class UsernameValidator(FieldValidator):
+class UsernameValidator(SimpleFieldValidator):
 
-    def validateValue(self, username):
-        super(UsernameValidator, self).validateValue(username)
+    def validate(self, username):
+        super(UsernameValidator, self).validate(username)
         if username is not None:
             if username in self.context:
                 raise UsernameAlreadyUsed(username)
