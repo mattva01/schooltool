@@ -57,11 +57,17 @@
       factory="schooltool.app.app.SimpleNameChooser"
       provides="zope.container.interfaces.INameChooser" />
 
-  <!-- Application hook -->
+  <!-- Application Init -->
   <adapter
       for="schooltool.app.interfaces.ISchoolToolApplication"
       factory=".resource.ResourceInit"
       name="schooltool.resources"
+      />
+
+  <!-- Application StartUp -->
+  <adapter
+      factory=".resource.ResourceStartUp"
+      name="schooltool.resources.startup"
       />
 
   <!-- sample data -->

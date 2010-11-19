@@ -21,7 +21,9 @@ Resource-related interfaces
 """
 
 import zope.schema
+from zope.configuration.fields import PythonIdentifier
 from zope.container.interfaces import IContainer, IContained
+from zope.container.interfaces import IContainer, IOrderedContainer
 from zope.container.constraints import contains, containers
 from zope.interface import Interface, Attribute
 
@@ -160,3 +162,48 @@ class IBookingCalendarEvent(ICalendarEvent):
 
 class IBookingTimetableEvent(ICalendarEvent):
     """Event that represents a possible booking in a timetable slot."""
+
+
+class IDemographics(IContainer):
+    """Demographics data storage for a resource
+
+    Stores any kind of data defined by field descriptions that are set
+    up for the resource container.
+    """
+
+
+class IDemographicsFields(IOrderedContainer):
+    """Demographics field storage."""
+
+    def filter_resource_type(resource_type):
+        """Return the subset of fields whose limited_resource_types list is
+           either empty, or it contains the resource_type passed"""
+
+
+class IFieldDescription(Interface):
+    """Demographics field."""
+
+    title = zope.schema.TextLine(
+        title = _(u"Title"),
+        description = _(u"The title of this Field Description"))
+
+    name = PythonIdentifier(
+        title = _(u"ID"),
+        description = _(u"Unique ID of this Field Description"))
+
+    required = zope.schema.Bool(
+        title = _(u"Required"),
+        description = _(u"Whether this Field is required or not"))
+
+    limit_resource_types = zope.schema.List(
+        title = _(u"Limit resource types"),
+        description = _(u"An optional list of resource types for this field"),
+        required=False)
+
+
+class IEnumFieldDescription(IFieldDescription):
+    """Enumeration demographics field."""
+
+    items = zope.schema.List(
+        title = _('List of values'))
+
