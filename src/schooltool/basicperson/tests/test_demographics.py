@@ -150,32 +150,32 @@ def doctest_DemographicsFields():
         >>> dfs = IDemographicsFields(ISchoolToolApplication(None))
         >>> dfs['email'] = TextFieldDescription("email", "Email")
         >>> dfs['supervisor'] = TextFieldDescription("supervisor", "Supervisor",
-        ...     limit_group_ids=['teachers'])
+        ...     limit_keys=['teachers'])
         >>> dfs['advisor'] = TextFieldDescription("advisor", "Advisor",
-        ...     limit_group_ids=['students'])
+        ...     limit_keys=['students'])
         >>> dfs['phone'] = TextFieldDescription("phone", "Phone",
-        ...     limit_group_ids=['teachers', 'students'])
+        ...     limit_keys=['teachers', 'students'])
 
 
-    When we pass the filter_group_id method a group_id that does not belong
-    to any of the limit_group_ids lists, then it will only return those
-    fields that have empty limit_group_ids lists.
+    When we pass the filter_key method a key that does not belong
+    to any of the limit_keys lists, then it will only return those
+    fields that have empty limit_keys lists.
 
-        >>> [f.__name__ for f in dfs.filter_group_id('anything')]
+        >>> [f.__name__ for f in dfs.filter_key('anything')]
         [u'ID', u'ethnicity', u'language', u'placeofbirth', u'citizenship',
                 u'email']
 
     When we pass 'teachers', it picks up the additional fields that are for
     teachers.
 
-        >>> [f.__name__ for f in dfs.filter_group_id('teachers')]
+        >>> [f.__name__ for f in dfs.filter_key('teachers')]
         [u'ID', u'ethnicity', u'language', u'placeofbirth', u'citizenship',
                 u'email', u'supervisor', u'phone']
 
     When we pass 'students', it picks up the additional fields that are for
     students.
 
-        >>> [f.__name__ for f in dfs.filter_group_id('students')]
+        >>> [f.__name__ for f in dfs.filter_key('students')]
         [u'ID', u'ethnicity', u'language', u'placeofbirth', u'citizenship',
                 u'email', u'advisor', u'phone']
 

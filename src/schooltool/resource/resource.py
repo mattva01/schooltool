@@ -40,10 +40,12 @@ from zope.schema.vocabulary import SimpleTerm
 from schooltool.app.app import Asset
 from schooltool.app.app import InitBase, StartUpBase
 from schooltool.app.security import LeaderCrowd
-from schooltool.securitypolicy.crowds import TeachersCrowd
 from schooltool.app.interfaces import ICalendarParentCrowd
 from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.basicperson.demographics import PersonDemographicsData
+from schooltool.basicperson.demographics import DemographicsFields
 from schooltool.resource import interfaces
+from schooltool.securitypolicy.crowds import TeachersCrowd
 from schooltool.securitypolicy.crowds import ConfigurableCrowd, AggregateCrowd
 from schooltool.securitypolicy.crowds import AuthenticatedCrowd
 from schooltool.common import SchoolToolMessage as _
@@ -105,7 +107,7 @@ class ResourceInit(InitBase):
 
     def __call__(self):
         self.app['resources'] = ResourceContainer()
-        self.app[RESOURCE_DEMO_FIELDS_KEY] = DemographicsFields()
+        self.app[RESOURCE_DEMO_FIELDS_KEY] = ResourceDemographicsFields()
         self.app[RESOURCE_DEMO_DATA_KEY] = ResourceDemographicsDataContainer()
 
 
@@ -153,125 +155,34 @@ class ResourceCalendarEditorsCrowd(AggregateCrowd):
         return [LeaderCrowd, TeachersCrowd]
 
 
-###################  DemographicsFields   #################
-class DemographicsFields(OrderedContainer):
-    implements(interfaces.IDemographicsFields)
-
-    def filter_resource_type(self, resource_type):
-        """Return the subset of fields whose limited_resource_types list is
-           either empty, or it contains the resource_type passed."""
-        result = []
-        for field in self.values():
-            if (not field.limit_resource_types or
-                resource_type in field.limit_resource_types):
-                result.append(field)
-        return result
+###################  Demographics   #################
+class ResourceDemographicsFields(DemographicsFields):
+    """Storage for demographics fields for all resources."""
+    implements(interfaces.IResourceDemographicsFields)
 
 
-@implementer(interfaces.IDemographicsFields)
+@implementer(interfaces.IResourceDemographicsFields)
 @adapter(ISchoolToolApplication)
 def getDemographicsFields(app):
     return app[RESOURCE_DEMO_FIELDS_KEY]
 
 
-class FieldDescription(Location, Persistent):
-    implements(interfaces.IFieldDescription)
-    limit_resource_types = []
-
-    def __init__(self, name, title, required=False, limit_resource_types=[]):
-        self.name, self.title, self.required, self.limit_resource_types = (name,
-            title, required, limit_resource_types)
-
-    def setUpField(self, form_field):
-        form_field.required = self.required
-        form_field.__name__ = str(self.name)
-        form_field.interface = IDemographicsForm
-        return field.Fields(form_field)
-
-
-# XXX: IMHO all IDNA conversions should be replaced by punycode.
-#      64 max length limitation simply breaks things too often.
-class IDNAVocabulary(SimpleVocabulary):
-
-    def createTerm(cls, *args):
-        """Create a single term from data.
-
-        Encode the value using idna encoding so it would look sane in
-        the form if it's ascii, but still work if it uses unicode.
-        """
-        value = args[0]
-        token = value.encode('idna')
-        title = value
-        return SimpleTerm(value, token, title)
-    createTerm = classmethod(createTerm)
-
-
-class EnumFieldDescription(FieldDescription):
-    implements(interfaces.IEnumFieldDescription)
-
-    items = []
-
-    def makeField(self):
-        return self.setUpField(Choice(
-                title=unicode(self.title),
-                vocabulary=IDNAVocabulary.fromValues(self.items)
-                ))
-
-
-class DateFieldDescription(FieldDescription):
-
-    def makeField(self):
-        return self.setUpField(Date(title=unicode(self.title)))
-
-
-class TextFieldDescription(FieldDescription):
-
-    def makeField(self):
-        return self.setUpField(TextLine(title=unicode(self.title)))
-
-
-class BoolFieldDescription(FieldDescription):
-
-    def makeField(self):
-        return self.setUpField(Bool(title=unicode(self.title)))
-
-
-###################  DemographicsData   #################
 class ResourceDemographicsDataContainer(BTreeContainer):
     """Storage for demographics information for all resources."""
 
 
-class InvalidKeyError(Exception):
-    """Key is not in demographics fields."""
-
-
-class ResourceDemographicsData(PersistentDict):
+class ResourceDemographicsData(PersonDemographicsData):
     """Storage for demographics information for a resource."""
-    implements(interfaces.IDemographics)
+    implements(interfaces.IResourceDemographics)
 
     def isValidKey(self, key):
         app = ISchoolToolApplication(None)
-        demographics_fields = interfaces.IDemographicsFields(app)
+        demographics_fields = interfaces.IResourceDemographicsFields(app)
         return key in demographics_fields
-
-    def __repr__(self):
-        return '%s: %s' % (
-            object.__repr__(self),
-            super(ResourceDemographicsData, self).__repr__())
-
-    def __setitem__(self, key, v):
-        if not self.isValidKey(key):
-            raise InvalidKeyError(key)
-        super(ResourceDemographicsData, self).__setitem__(key, v)
-
-    def __getitem__(self, key):
-        if key not in self and self.isValidKey(key):
-            self[key] = None
-        return super(ResourceDemographicsData, self).__getitem__(key)
 
 
 @adapter(interfaces.IResource)
-@implementer(interfaces.IDemographics)
+@implementer(interfaces.IResourceDemographics)
 def getResourceDemographics(resource):
     app = ISchoolToolApplication(None)
     rdc = app[RESOURCE_DEMO_DATA_KEY]

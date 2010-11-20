@@ -112,6 +112,7 @@ def doctest_ResourceDemographics():
     r"""Test Resource Demographics objects and adapters
 
         >>> from schooltool.resource import interfaces, resource
+        >>> from schooltool.basicperson import demographics
 
     First we need to set up a mock app and register its adapter:
 
@@ -135,8 +136,8 @@ def doctest_ResourceDemographics():
     There's an adapter for the resource demo fields container:
 
         >>> provideAdapter(resource.getDemographicsFields)
-        >>> dfs = interfaces.IDemographicsFields(app)
-        >>> interfaces.IDemographicsFields.providedBy(dfs)
+        >>> dfs = interfaces.IResourceDemographicsFields(app)
+        >>> interfaces.IResourceDemographicsFields.providedBy(dfs)
         True
         >>> len(dfs)
         0
@@ -144,32 +145,32 @@ def doctest_ResourceDemographics():
     We'll add some demo fields to the container, some that are limited to a
     specific resource type or types:
 
-        >>> dfs['ID'] = resource.TextFieldDescription("ID", "Identifier")
-        >>> dfs['square_feet'] = resource.TextFieldDescription("square_feet",
-        ...     "Square Feet", limit_resource_types=['location'])
-        >>> dfs['warranty'] = resource.TextFieldDescription("warranty",
-        ...     "Warranty", limit_resource_types=['equiptment'])
-        >>> dfs['creation_date'] = resource.DateFieldDescription(
+        >>> dfs['ID'] = demographics.TextFieldDescription("ID", "Identifier")
+        >>> dfs['square_ft'] = demographics.TextFieldDescription("square_ft",
+        ...     "Square Feet", limit_keys=['location'])
+        >>> dfs['warranty'] = demographics.TextFieldDescription("warranty",
+        ...     "Warranty", limit_keys=['equiptment'])
+        >>> dfs['creation_date'] = demographics.DateFieldDescription(
         ...      "creation_date", "Creation Date",
-        ...      limit_resource_types=['location', 'equiptment'])
+        ...      limit_keys=['location', 'equiptment'])
 
-    When we pass the filter_resource_type method a resource_type that does not
-    belong  to any of the limit_resource_types lists, then it will only return
-    those fields that have empty limit_resource_types lists.
+    When we pass the filter_key method a key that does not
+    belong  to any of the limit_keys lists, then it will only return
+    those fields that have empty limit_keys lists.
 
-        >>> [f.__name__ for f in dfs.filter_resource_type('anything')]
+        >>> [f.__name__ for f in dfs.filter_key('anything')]
         [u'ID']
 
     When we pass 'location', it picks up the additional fields that are for
     location type resources.
 
-        >>> [f.__name__ for f in dfs.filter_resource_type('location')]
-        [u'ID', u'square_feet', u'creation_date']
+        >>> [f.__name__ for f in dfs.filter_key('location')]
+        [u'ID', u'square_ft', u'creation_date']
 
     When we pass 'equiptment', it picks up the additional fields that are for
     equiptment type resources.
 
-        >>> [f.__name__ for f in dfs.filter_resource_type('equiptment')]
+        >>> [f.__name__ for f in dfs.filter_key('equiptment')]
         [u'ID', u'warranty', u'creation_date']
 
     Finally there's an adapter that adapts a resource it's demo data:
@@ -181,8 +182,8 @@ def doctest_ResourceDemographics():
 
         >>> sample = resource.Resource('Sample Resource')
         >>> sample.__name__ = 'sample'
-        >>> demos = interfaces.IDemographics(sample)
-        >>> interfaces.IDemographics.providedBy(demos)
+        >>> demos = interfaces.IResourceDemographics(sample)
+        >>> interfaces.IResourceDemographics.providedBy(demos)
         True
         >>> len(demos)
         0

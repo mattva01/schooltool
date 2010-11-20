@@ -113,9 +113,9 @@ class IDemographics(IContainer):
 class IDemographicsFields(IOrderedContainer):
     """Demographics field storage."""
 
-    def filter_group_id(group_id):
-        """Return the subset of fields whose limited_groups_ids list is either
-           empty, or it contains the group_id passed"""
+    def filter_key(key):
+        """Return the subset of fields whose limited_keys list is either
+           empty, or it contains the key passed"""
 
 
 class IFieldDescription(Interface):
@@ -133,9 +133,9 @@ class IFieldDescription(Interface):
         title = _(u"Required"),
         description = _(u"Whether this Field is required or not"))
 
-    limit_group_ids = List(
-        title = _(u"Limit groups ids"),
-        description = _(u"An optional list of group ids for this field"),
+    limit_keys = List(
+        title = _(u"Limit keys"),
+        description = _(u"An optional list of limit keys for this field"),
         required=False)
 
 

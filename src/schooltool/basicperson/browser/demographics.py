@@ -153,7 +153,7 @@ class FieldDescriptionAddView(form.AddForm):
     form.extends(form.AddForm)
     template = ViewPageTemplateFile('templates/person_add.pt')
     fields = field.Fields(IFieldDescription)
-    fields['limit_group_ids'].widgetFactory = CustomEnumFieldTextWidget
+    fields['limit_keys'].widgetFactory = CustomEnumFieldTextWidget
 
     def updateActions(self):
         super(FieldDescriptionAddView, self).updateActions()
@@ -212,7 +212,7 @@ class BoolFieldDescriptionAddView(FieldDescriptionAddView):
 class EnumFieldDescriptionAddView(FieldDescriptionAddView):
 
     fields = field.Fields(IEnumFieldDescription)
-    fields['limit_group_ids'].widgetFactory = CustomEnumFieldTextWidget
+    fields['limit_keys'].widgetFactory = CustomEnumFieldTextWidget
     fields['items'].widgetFactory = CustomEnumFieldTextWidget
 
     def create(self, data):
@@ -229,7 +229,7 @@ class FieldDescriptionEditView(form.EditForm):
     form.extends(form.EditForm)
     template = ViewPageTemplateFile('templates/person_add.pt')
     fields = field.Fields(IFieldDescription).omit('name')
-    fields['limit_group_ids'].widgetFactory = CustomEnumFieldTextWidget
+    fields['limit_keys'].widgetFactory = CustomEnumFieldTextWidget
 
     @button.buttonAndHandler(_("Cancel"))
     def handle_cancel_action(self, action):
@@ -250,7 +250,7 @@ class FieldDescriptionEditView(form.EditForm):
 class EnumFieldDescriptionEditView(FieldDescriptionEditView):
 
     fields = field.Fields(IEnumFieldDescription).omit('name')
-    fields['limit_group_ids'].widgetFactory = CustomEnumFieldTextWidget
+    fields['limit_keys'].widgetFactory = CustomEnumFieldTextWidget
     fields['items'].widgetFactory = CustomEnumFieldTextWidget
 
 
@@ -258,7 +258,7 @@ class FieldDescriptionView(form.DisplayForm):
     """Display form for a field description."""
     template = ViewPageTemplateFile('templates/field_description_view.pt')
     fields = field.Fields(IFieldDescription)
-    fields['limit_group_ids'].widgetFactory = CustomEnumFieldTextWidget
+    fields['limit_keys'].widgetFactory = CustomEnumFieldTextWidget
 
     def __call__(self):
         self.update()
@@ -281,5 +281,5 @@ class EnumFieldDescriptionView(FieldDescriptionView):
     """Display form for an enum field description."""
 
     fields = field.Fields(IEnumFieldDescription)
-    fields['limit_group_ids'].widgetFactory = CustomEnumFieldTextWidget
+    fields['limit_keys'].widgetFactory = CustomEnumFieldTextWidget
     fields['items'].widgetFactory = CustomEnumFieldTextWidget
