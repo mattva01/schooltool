@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-09-30 19:38+0300\n"
-"PO-Revision-Date: 2010-09-14 10:06+0000\n"
-"Last-Translator: skrzat <Unknown>\n"
+"POT-Creation-Date: 2010-11-22 16:40+0200\n"
+"PO-Revision-Date: 2010-11-21 15:52+0000\n"
+"Last-Translator: Emil Magnuski <Unknown>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-09-15 04:52+0000\n"
+"X-Launchpad-Export-Date: 2010-11-22 04:45+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -1153,7 +1153,7 @@ msgstr "Brak zasobów z kalendarzami dostępnych dla Ciebie."
 
 #: /src/schooltool/app/browser/templates/default_report_template.pt:23
 msgid "Created with SchoolTool"
-msgstr ""
+msgstr "Stworzony za pomocą SchoolTool"
 
 #: /src/schooltool/app/browser/templates/default_report_template.pt:37
 msgid "Page ${page_number}"
@@ -2448,7 +2448,7 @@ msgstr "Nowa osoba"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:107
 msgid "Add Multiple Persons"
-msgstr ""
+msgstr "Dodaj wiele osób"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:129
 #: /src/schooltool/basicperson/security.zcml:22
@@ -2511,7 +2511,7 @@ msgstr "Nazwy użytkowników nie mogą zawierać znaków non-ascii"
 
 #: /src/schooltool/basicperson/browser/demographics.py:85
 msgid "Duplicate entry \"${value}\""
-msgstr ""
+msgstr "Powielający się wpis \"${value}\""
 
 #: /src/schooltool/basicperson/browser/demographics.py:90
 msgid "Value too long \"${value}\""
@@ -2545,23 +2545,32 @@ msgstr "Potwierdź hasło"
 msgid "Passwords do not match"
 msgstr "Podane hasła są różne."
 
-#: /src/schooltool/basicperson/browser/person.py:149
-msgid "Add new person"
-msgstr "Dodaj nowe osoby"
-
 #: /src/schooltool/basicperson/browser/person.py:152
 msgid "This username is already in use!"
 msgstr "Nazwa użytkownika jest już w użyciu."
 
+#: /src/schooltool/basicperson/browser/person.py:263
+msgid "Add new person"
+msgstr "Dodaj nowe osoby"
+
 #: /src/schooltool/basicperson/browser/person.py:283
 msgid "Usernames"
-msgstr ""
+msgstr "Nazwy użytkowników"
 
 #: /src/schooltool/basicperson/browser/person.py:300
 msgid "Add multiple persons"
-msgstr ""
+msgstr "Dodaj wiele osób"
 
-#: /src/schooltool/basicperson/browser/person.py:304
+#: /src/schooltool/basicperson/browser/person.py:357
+msgid "Done"
+msgstr "Gotowe"
+
+#. Default: ""
+#: /src/schooltool/basicperson/browser/person.py:402
+msgid "Change information for ${fullname}"
+msgstr "Zmień informacje dla ${fullname}"
+
+#: /src/schooltool/basicperson/browser/person.py:472
 msgid "Current Advisors"
 msgstr "Obecni doradcy"
 
@@ -2586,15 +2595,6 @@ msgstr "Dodaj doradcę"
 #: /src/schooltool/basicperson/browser/person.py:333
 msgid "Advisees of ${person}"
 msgstr "Rady osoby ${osoba}"
-
-#: /src/schooltool/basicperson/browser/person.py:357
-msgid "Done"
-msgstr ""
-
-#. Default: ""
-#: /src/schooltool/basicperson/browser/person.py:402
-msgid "Change information for ${fullname}"
-msgstr "Zmień informacje dla ${fullname}"
 
 #: /src/schooltool/basicperson/browser/templates/demographics-view.pt:4
 #: /src/schooltool/basicperson/browser/templates/demographics-view.pt:7
@@ -2642,7 +2642,7 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/templates/person_add_subform.pt:2
 msgid "New person"
-msgstr ""
+msgstr "Nowa osoba"
 
 #: /src/schooltool/basicperson/browser/templates/person_view.pt:13
 #: /src/schooltool/person/browser/home.pt:13
@@ -2802,7 +2802,7 @@ msgstr "Edytuj nakładki kalendarza"
 
 #: /src/schooltool/contact/browser/configure.zcml:41
 msgid "View Person"
-msgstr ""
+msgstr "Pokaż osobę"
 
 #: /src/schooltool/contact/browser/configure.zcml:61
 msgid "New Contact"
@@ -3241,6 +3241,8 @@ msgid ""
 "Course \"${course_title}\" credits \"${invalid_credits}\" value must be an "
 "integer."
 msgstr ""
+"Kurs \"${course_title}\" kredyty \"${invalid_credits}\" musi być wartością "
+"całkowitą."
 
 #. Default: ""
 #: /src/schooltool/course/browser/csvimport.py:95
@@ -3433,7 +3435,7 @@ msgstr "Kursy w ${schoolyear}"
 #: /src/schooltool/skin/templates/container.pt:28
 #: /src/schooltool/skin/templates/table_container.pt:28
 msgid "Showing ${count} of ${total} items"
-msgstr ""
+msgstr "Wyświetlanie ${count} z ${total} pozycji"
 
 #. Default: "Delete"
 #: /src/schooltool/course/browser/templates/course_container.pt:40
@@ -3481,19 +3483,19 @@ msgstr ""
 msgid "link-section-button"
 msgstr ""
 
-#: /src/schooltool/course/browser/templates/section.pt:36
+#: /src/schooltool/course/browser/templates/section.pt:37
 msgid "Previous: ${course} -- ${section_title} for ${term}"
-msgstr ""
+msgstr "Poprzedni: ${course} -- ${section_title} dla ${term}"
 
-#: /src/schooltool/course/browser/templates/section.pt:47
+#: /src/schooltool/course/browser/templates/section.pt:51
 msgid "Next: ${course} -- ${section_title} for ${term}"
-msgstr ""
+msgstr "Kolejny: ${course} -- ${section_title} dla ${term}"
 
-#: /src/schooltool/course/browser/templates/section.pt:58
+#: /src/schooltool/course/browser/templates/section.pt:63
 msgid "Change the name or description of this section."
-msgstr ""
+msgstr "Zmień nazwę lub opis tej sekcji."
 
-#: /src/schooltool/course/browser/templates/section.pt:58
+#: /src/schooltool/course/browser/templates/section.pt:63
 msgid "edit info"
 msgstr "Edytuj info"
 
@@ -3516,7 +3518,7 @@ msgstr "edytuj osoby"
 #: /src/schooltool/course/browser/templates/section_container.pt:9
 #: /src/schooltool/course/browser/templates/section_container.pt:20
 msgid "Section list for ${term} of ${schoolyear}"
-msgstr ""
+msgstr "Lista sekcji dla ${term} z ${schoolyear}"
 
 #: /src/schooltool/course/browser/templates/section_container.pt:39
 msgid "Section"
@@ -3537,7 +3539,7 @@ msgstr ""
 #: /src/schooltool/course/browser/templates/section_edit.pt:72
 #: /src/schooltool/course/browser/templates/section_edit.pt:106
 msgid "${section_title} for ${term}"
-msgstr ""
+msgstr "${section_title} dla ${term}"
 
 #. Default: "Unlink"
 #: /src/schooltool/course/browser/templates/section_edit.pt:75
@@ -3590,7 +3592,7 @@ msgstr ""
 
 #: /src/schooltool/course/interfaces.py:37
 msgid "Title of the course."
-msgstr ""
+msgstr "Nazwa kursu."
 
 #: /src/schooltool/course/interfaces.py:42
 msgid "Description of the course."
@@ -3622,7 +3624,7 @@ msgstr ""
 
 #: /src/schooltool/course/interfaces.py:87
 msgid "Label"
-msgstr ""
+msgstr "Etykieta"
 
 #: /src/schooltool/course/interfaces.py:89
 msgid ""
@@ -3632,7 +3634,7 @@ msgstr ""
 
 #: /src/schooltool/course/interfaces.py:96
 msgid "Title for the section."
-msgstr ""
+msgstr "Tytuł sekcji."
 
 #: /src/schooltool/course/interfaces.py:101
 msgid "Description of the section."
@@ -3641,7 +3643,7 @@ msgstr "Opis sekcji."
 #. Default: ""
 #: /src/schooltool/course/section.py:87
 msgid "${instructors} -- ${section_title}"
-msgstr ""
+msgstr "${instructors} -- ${section_title}"
 
 #: /src/schooltool/course/section.py:124
 msgid "Cannot assign section as previous to itself"
@@ -3752,7 +3754,7 @@ msgstr ""
 
 #: /src/schooltool/dashboard/school.pt:10
 msgid "Activity Categories"
-msgstr ""
+msgstr "Kategorie czynności"
 
 #: /src/schooltool/dashboard/school.pt:16
 #: /src/schooltool/timetable/browser/schema.py:236
@@ -3803,12 +3805,12 @@ msgstr ""
 #: /src/schooltool/demographics/browser/configure.zcml:203
 #: /src/schooltool/demographics/browser/configure.zcml:264
 msgid "emergency2"
-msgstr ""
+msgstr "awaryjne2"
 
 #: /src/schooltool/demographics/browser/configure.zcml:209
 #: /src/schooltool/demographics/browser/configure.zcml:270
 msgid "emergency3"
-msgstr ""
+msgstr "awaryjne3"
 
 #: /src/schooltool/demographics/browser/configure.zcml:217
 msgid "Schooltool Person Display Menu"
@@ -3817,7 +3819,7 @@ msgstr ""
 #: /src/schooltool/demographics/browser/demographics_macros.pt:4
 #: /src/schooltool/demographics/browser/personform.py:96
 msgid "Apply and Next"
-msgstr ""
+msgstr "Potwierdź i dalej"
 
 #: /src/schooltool/demographics/browser/demographics_macros.pt:4
 msgid "N"
@@ -3838,7 +3840,7 @@ msgstr ""
 #. Default: ""
 #: /src/schooltool/demographics/browser/personform.py:148
 msgid "Change name information for ${fullname}"
-msgstr ""
+msgstr "Zmień informacje o nazwie dla ${fullname}"
 
 #: /src/schooltool/demographics/browser/personform.py:164
 msgid "Change name"
@@ -3861,14 +3863,14 @@ msgstr "Dane szkoły"
 #. Default: ""
 #: /src/schooltool/demographics/browser/personform.py:209
 msgid "Change contact information for ${fullname}"
-msgstr ""
+msgstr "Zmień dane kontaktowe dla ${fullname}"
 
 #: /src/schooltool/demographics/browser/personform.py:217
 msgid "Contact information"
-msgstr ""
+msgstr "Dane kontaktowe"
 
 #: /src/schooltool/demographics/browser/personform.py:273
-#: /src/schooltool/person/browser/person.py:325
+#: /src/schooltool/person/browser/person.py:327
 msgid "This username is already used!"
 msgstr "Ta nazwa użytkownika jest już zajęta!"
 
@@ -3885,11 +3887,11 @@ msgid ""
 "Search for persons here. Note that in fulltext fields you can use wildcard "
 "characters such as *. For example, to search for everyone with John in their "
 "name, use <em>*john*</em>."
-msgstr ""
+msgstr "Szukaj osób tutaj."
 
 #: /src/schooltool/demographics/browser/search.pt:42
 msgid "There were no results."
-msgstr ""
+msgstr "Brak rezultatów."
 
 #: /src/schooltool/demographics/browser/table.py:73
 #: /src/schooltool/demographics/interfaces.py:76
@@ -5380,18 +5382,18 @@ msgstr ""
 msgid "Resource calendars are visible to the general public."
 msgstr ""
 
-#: /src/schooltool/resource/security.zcml:50
+#: /src/schooltool/resource/security.zcml:53
+msgid "Reservations"
+msgstr "Rezerwacje"
+
+#: /src/schooltool/resource/security.zcml:53
 msgid ""
 "Resources are locations or objects within a school.                    "
 "SchoolTool's calendar can function as a reservation                    and "
 "tracking system for resources."
 msgstr ""
 
-#: /src/schooltool/resource/security.zcml:53
-msgid "Reservations"
-msgstr "Rezerwacje"
-
-#: /src/schooltool/resource/security.zcml:57
+#: /src/schooltool/resource/security.zcml:60
 msgid "List/Search resources"
 msgstr ""
 

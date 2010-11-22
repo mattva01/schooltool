@@ -9,15 +9,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: el-1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-09-30 19:38+0300\n"
-"PO-Revision-Date: 2010-09-25 13:50+0000\n"
-"Last-Translator: T.Parganas <t.parganas@gmail.com>\n"
+"POT-Creation-Date: 2010-11-22 16:40+0200\n"
+"PO-Revision-Date: 2010-11-01 07:19+0000\n"
+"Last-Translator: Yannis Kaskamanidis <ttnfy17@yahoo.gr>\n"
 "Language-Team: Greek <team@gnome.gr>\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-09-26 04:31+0000\n"
+"X-Launchpad-Export-Date: 2010-11-02 04:44+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: /src/schooltool/app/app.py:197
@@ -226,7 +226,7 @@ msgstr "Προηγούμενη Εβδομάδα"
 
 #: /src/schooltool/app/browser/cal.py:927
 msgid "Go to next week"
-msgstr ""
+msgstr "Μετάβαση στην επόμενη εβδομάδα"
 
 #: /src/schooltool/app/browser/cal.py:928
 msgid "Go to current week"
@@ -289,7 +289,7 @@ msgstr "Προηγούμενο έτος"
 
 #: /src/schooltool/app/browser/cal.py:1220
 msgid "Go to next year"
-msgstr ""
+msgstr "Μετάβαση στον επόμενο χρόνο"
 
 #: /src/schooltool/app/browser/cal.py:1221
 msgid "Go to current year"
@@ -2480,12 +2480,12 @@ msgstr "Επιβεβαίωση κωδικού πρόσβασης"
 msgid "Passwords do not match"
 msgstr ""
 
-#: /src/schooltool/basicperson/browser/person.py:149
-msgid "Add new person"
-msgstr ""
-
 #: /src/schooltool/basicperson/browser/person.py:152
 msgid "This username is already in use!"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/person.py:263
+msgid "Add new person"
 msgstr ""
 
 #: /src/schooltool/basicperson/browser/person.py:283
@@ -2496,7 +2496,16 @@ msgstr ""
 msgid "Add multiple persons"
 msgstr ""
 
-#: /src/schooltool/basicperson/browser/person.py:304
+#: /src/schooltool/basicperson/browser/person.py:357
+msgid "Done"
+msgstr ""
+
+#. Default: ""
+#: /src/schooltool/basicperson/browser/person.py:402
+msgid "Change information for ${fullname}"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/person.py:472
 msgid "Current Advisors"
 msgstr ""
 
@@ -2520,15 +2529,6 @@ msgstr ""
 #. Default: ""
 #: /src/schooltool/basicperson/browser/person.py:333
 msgid "Advisees of ${person}"
-msgstr ""
-
-#: /src/schooltool/basicperson/browser/person.py:357
-msgid "Done"
-msgstr ""
-
-#. Default: ""
-#: /src/schooltool/basicperson/browser/person.py:402
-msgid "Change information for ${fullname}"
 msgstr ""
 
 #: /src/schooltool/basicperson/browser/templates/demographics-view.pt:4
@@ -5246,18 +5246,18 @@ msgstr ""
 msgid "Resource calendars are visible to the general public."
 msgstr ""
 
-#: /src/schooltool/resource/security.zcml:50
+#: /src/schooltool/resource/security.zcml:53
+msgid "Reservations"
+msgstr ""
+
+#: /src/schooltool/resource/security.zcml:53
 msgid ""
 "Resources are locations or objects within a school.                    "
 "SchoolTool's calendar can function as a reservation                    and "
 "tracking system for resources."
 msgstr ""
 
-#: /src/schooltool/resource/security.zcml:53
-msgid "Reservations"
-msgstr ""
-
-#: /src/schooltool/resource/security.zcml:57
+#: /src/schooltool/resource/security.zcml:60
 msgid "List/Search resources"
 msgstr ""
 
@@ -6397,7 +6397,7 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:346
 msgid "Day of week"
-msgstr ""
+msgstr "Μέρα της εβδομάδας"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:347
 msgid "Day in cycle"

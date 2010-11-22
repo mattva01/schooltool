@@ -10,8 +10,12 @@
 ./src/schooltool.egg-info
 **/LC_MESSAGES/*.mo
 ./src/schooltool/generations/tests/Data27.fs.*
-./src/schooltool/locales/*
-./src/schooltool/commendation/locales/*
+./src/schooltool/locales/??
+./src/schooltool/locales/???
+./src/schooltool/locales/??_??
+./src/schooltool/commendation/locales/??
+./src/schooltool/commendation/locales/???
+./src/schooltool/commendation/locales/??_??
 ./ID
 ./TAGS
 ./tags
