@@ -115,7 +115,7 @@ class ResourceStartUp(StartUpBase):
 
     def __call__(self):
         if RESOURCE_DEMO_FIELDS_KEY not in self.app:
-            self.app[RESOURCE_DEMO_FIELDS_KEY] = DemographicsFields()
+            self.app[RESOURCE_DEMO_FIELDS_KEY] = ResourceDemographicsFields()
         if RESOURCE_DEMO_DATA_KEY not in self.app:
             self.app[RESOURCE_DEMO_DATA_KEY] = \
                 ResourceDemographicsDataContainer()
@@ -163,7 +163,7 @@ class ResourceDemographicsFields(DemographicsFields):
 
 @implementer(interfaces.IResourceDemographicsFields)
 @adapter(ISchoolToolApplication)
-def getDemographicsFields(app):
+def getResourceDemographicsFields(app):
     return app[RESOURCE_DEMO_FIELDS_KEY]
 
 

@@ -178,6 +178,18 @@
       order="60"
       />
 
+    <navigationViewlet
+      name="resource_demographics"
+      for="*"
+      manager="schooltool.app.browser.interfaces.IManageMenuViewletManager"
+      template="templates/navigationViewlet.pt"
+      class="schooltool.skin.skin.NavigationViewlet"
+      permission="schooltool.edit"
+      link="resource_demographics"
+      title="Resource Demographics"
+      order="65"
+      />
+
   </configure>
 
 
@@ -301,5 +313,26 @@
       layer="schooltool.skin.ISchoolToolLayer"
       order="5"
       />
+
+  <zope:adapterTraverserPlugin
+     for="schooltool.app.interfaces.ISchoolToolApplication"
+     layer="zope.publisher.interfaces.http.IHTTPRequest"
+     name="resource_demographics"
+     adapter="schooltool.resource.interfaces.IResourceDemographicsFields"
+     permission="zope.Public"
+     />
+
+  <configure package="schooltool.skin">
+    <navigationViewlet
+      name="addResourceText.html"
+      for="schooltool.resource.interfaces.IResourceDemographicsFields"
+      manager="schooltool.skin.IActionMenuManager"
+      template="templates/actionsViewlet.pt"
+      permission="schooltool.view"
+      link="addResourceText.html"
+      title="New Resource Text Field"
+      order="10"
+      />
+  </configure>
 
 </configure>

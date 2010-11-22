@@ -126,6 +126,9 @@
       name="booking"
       />
 
+  <adapter factory=".resource.getResourceDemographics" />
+  <adapter factory=".resource.getResourceDemographicsFields" />
+
 
   <class class=".booking.ResourceBookingCalendar">
     <require permission="schooltool.view"
@@ -137,6 +140,14 @@
     <require permission="schooltool.view"
              interface=".interfaces.IBookingCalendarEvent"
              />
+  </class>
+
+  <class class=".resource.ResourceDemographicsFields">
+    <implements interface="schooltool.resource.interfaces.IResourceDemographicsFields" />
+    <require
+       permission="schooltool.edit"
+       interface="schooltool.resource.interfaces.IResourceDemographicsFields"
+       set_schema="schooltool.resource.interfaces.IResourceDemographicsFields" />
   </class>
 
 

@@ -135,7 +135,7 @@ def doctest_ResourceDemographics():
 
     There's an adapter for the resource demo fields container:
 
-        >>> provideAdapter(resource.getDemographicsFields)
+        >>> provideAdapter(resource.getResourceDemographicsFields)
         >>> dfs = interfaces.IResourceDemographicsFields(app)
         >>> interfaces.IResourceDemographicsFields.providedBy(dfs)
         True
