@@ -7,14 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-08-22 18:49+0300\n"
-"PO-Revision-Date: 2010-07-15 12:21+0000\n"
-"Last-Translator: hoang <Unknown>\n"
+"POT-Creation-Date: 2010-11-22 16:40+0200\n"
+"PO-Revision-Date: 2010-10-08 05:53+0000\n"
+"Last-Translator: Lê Trường An <Unknown>\n"
 "Language-Team: Vietnamese <vi@li.org>\n"
+"Language: vi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-07-16 03:35+0000\n"
+"X-Launchpad-Export-Date: 2010-10-09 12:07+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: /src/schooltool/commendation/browser.py:71
@@ -62,7 +63,7 @@ msgstr "Phạm vi"
 
 #: /src/schooltool/commendation/interfaces.py:59
 msgid "The scope of the commendation."
-msgstr "Phạm vi của khen thưởng"
+msgstr "Phạm vi khen thưởng"
 
 #: /src/schooltool/commendation/interfaces.py:60
 msgid "community"

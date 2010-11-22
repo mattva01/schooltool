@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-09-30 19:38+0300\n"
-"PO-Revision-Date: 2010-09-10 05:09+0000\n"
-"Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
+"POT-Creation-Date: 2010-11-22 16:40+0200\n"
+"PO-Revision-Date: 2010-11-06 11:19+0000\n"
+"Last-Translator: Fakhrul Rijal <frijal@gmail.com>\n"
 "Language-Team: Indonesian <id@li.org>\n"
 "Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-09-11 04:44+0000\n"
+"X-Launchpad-Export-Date: 2010-11-07 04:40+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -42,19 +42,19 @@ msgstr "${number} orang"
 
 #: /src/schooltool/app/browser/app.py:226
 msgid "Username or password is incorrect"
-msgstr "Nama pengguna dan kata sandi salah"
+msgstr "Nama atau sandi anda salah"
 
-#: /src/schooltool/app/browser/app.py:322 /src/schooltool/app/security.py:308
+#: /src/schooltool/app/browser/app.py:322 /src/schooltool/app/security.py:303
 msgid "Leaders"
-msgstr "Pimpinan"
+msgstr "Pemimpin"
 
 #: /src/schooltool/app/browser/app.py:323
 msgid "Current leaders"
-msgstr "Pimpinan saat ini"
+msgstr "Pemimpin sekarang"
 
 #: /src/schooltool/app/browser/app.py:324
 msgid "Available leaders"
-msgstr "Pimpinan yang tersedia"
+msgstr "Pemimpin yang ada"
 
 #: /src/schooltool/app/browser/app.py:347
 msgid "school"
@@ -62,7 +62,7 @@ msgstr "Sekolah"
 
 #: /src/schooltool/app/browser/cal.py:113
 msgid "February"
-msgstr "Pebruari"
+msgstr "Februari"
 
 #: /src/schooltool/app/browser/cal.py:113
 msgid "January"
@@ -2483,7 +2483,7 @@ msgstr "Orang Baru"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:107
 msgid "Add Multiple Persons"
-msgstr ""
+msgstr "tambahkan banyak orang"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:129
 #: /src/schooltool/basicperson/security.zcml:22
@@ -2546,11 +2546,11 @@ msgstr "Nama pengguna tidak dapat berisi karakter non-ascii"
 
 #: /src/schooltool/basicperson/browser/demographics.py:85
 msgid "Duplicate entry \"${value}\""
-msgstr ""
+msgstr "masukan ganda \"${nilai}\""
 
 #: /src/schooltool/basicperson/browser/demographics.py:90
 msgid "Value too long \"${value}\""
-msgstr ""
+msgstr "nilai terlalu panjang \"${nilai}\""
 
 #: /src/schooltool/basicperson/browser/demographics.py:151
 msgid "Add new Field"
@@ -2580,23 +2580,32 @@ msgstr "Konfirmasi kata kunci"
 msgid "Passwords do not match"
 msgstr "Kata sandi tidak cocok"
 
-#: /src/schooltool/basicperson/browser/person.py:149
-msgid "Add new person"
-msgstr "Tambah orang baru"
-
 #: /src/schooltool/basicperson/browser/person.py:152
 msgid "This username is already in use!"
 msgstr "Username ini sudah digunakan!"
 
+#: /src/schooltool/basicperson/browser/person.py:263
+msgid "Add new person"
+msgstr "Tambah orang baru"
+
 #: /src/schooltool/basicperson/browser/person.py:283
 msgid "Usernames"
-msgstr ""
+msgstr "nama pengguna"
 
 #: /src/schooltool/basicperson/browser/person.py:300
 msgid "Add multiple persons"
-msgstr ""
+msgstr "tambahkan banyak orang"
 
-#: /src/schooltool/basicperson/browser/person.py:304
+#: /src/schooltool/basicperson/browser/person.py:357
+msgid "Done"
+msgstr "Selesai"
+
+#. Default: ""
+#: /src/schooltool/basicperson/browser/person.py:402
+msgid "Change information for ${fullname}"
+msgstr "Rubah informasi untuk ${fullname}"
+
+#: /src/schooltool/basicperson/browser/person.py:472
 msgid "Current Advisors"
 msgstr "Penasehat saat ini"
 
@@ -2621,15 +2630,6 @@ msgstr "Tambahkan Nasehat"
 #: /src/schooltool/basicperson/browser/person.py:333
 msgid "Advisees of ${person}"
 msgstr "Nasehat dari ${person}"
-
-#: /src/schooltool/basicperson/browser/person.py:357
-msgid "Done"
-msgstr ""
-
-#. Default: ""
-#: /src/schooltool/basicperson/browser/person.py:402
-msgid "Change information for ${fullname}"
-msgstr "Rubah informasi untuk ${fullname}"
 
 #: /src/schooltool/basicperson/browser/templates/demographics-view.pt:4
 #: /src/schooltool/basicperson/browser/templates/demographics-view.pt:7
@@ -2843,7 +2843,7 @@ msgstr "Mengedit Pengaturan Kalender"
 
 #: /src/schooltool/contact/browser/configure.zcml:41
 msgid "View Person"
-msgstr ""
+msgstr "Tampilkan Orang"
 
 #: /src/schooltool/contact/browser/configure.zcml:61
 msgid "New Contact"
@@ -2934,7 +2934,7 @@ msgstr "Kirim"
 #: /src/schooltool/contact/browser/contact.py:409
 #: /src/schooltool/email/browser/email.py:507
 msgid "There were some errors."
-msgstr ""
+msgstr "Terdapat beberapa kesalahan"
 
 #: /src/schooltool/contact/browser/relationship.py:75
 #: /src/schooltool/contact/interfaces.py:101
@@ -3190,12 +3190,12 @@ msgid "Modify user's contact information"
 msgstr "Mengubah informasi kontak pengguna"
 
 #: /src/schooltool/contact/security.zcml:86
-#: /src/schooltool/person/security.zcml:152
+#: /src/schooltool/person/security.zcml:147
 msgid "The user himself."
-msgstr ""
+msgstr "Pengguna sendiri."
 
 #: /src/schooltool/contact/security.zcml:86
-#: /src/schooltool/person/security.zcml:152
+#: /src/schooltool/person/security.zcml:147
 msgid "User"
 msgstr "Pengguna"
 
@@ -5416,18 +5416,18 @@ msgstr ""
 msgid "Resource calendars are visible to the general public."
 msgstr ""
 
-#: /src/schooltool/resource/security.zcml:50
+#: /src/schooltool/resource/security.zcml:53
+msgid "Reservations"
+msgstr "Reservasi"
+
+#: /src/schooltool/resource/security.zcml:53
 msgid ""
 "Resources are locations or objects within a school.                    "
 "SchoolTool's calendar can function as a reservation                    and "
 "tracking system for resources."
 msgstr ""
 
-#: /src/schooltool/resource/security.zcml:53
-msgid "Reservations"
-msgstr "Reservasi"
-
-#: /src/schooltool/resource/security.zcml:57
+#: /src/schooltool/resource/security.zcml:60
 msgid "List/Search resources"
 msgstr ""
 

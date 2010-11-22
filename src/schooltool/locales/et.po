@@ -7,23 +7,23 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-09-30 19:38+0300\n"
-"PO-Revision-Date: 2010-08-22 20:06+0000\n"
-"Last-Translator: lyyser <Unknown>\n"
+"POT-Creation-Date: 2010-11-22 16:40+0200\n"
+"PO-Revision-Date: 2010-11-03 23:39+0000\n"
+"Last-Translator: Kristjan <kristjan.t@hotmail.com>\n"
 "Language-Team: Estonian <et@li.org>\n"
 "Language: et\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-09-10 04:33+0000\n"
+"X-Launchpad-Export-Date: 2010-11-05 04:42+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "X-Rosetta-Version: 0.1\n"
 
 #: /src/schooltool/app/app.py:197
 msgid "Your School"
-msgstr ""
+msgstr "Sinu kool"
 
-#: /src/schooltool/app/browser/__init__.py:256
+#: /src/schooltool/app/browser/__init__.py:273
 #: /src/schooltool/app/browser/templates/index.pt:11
 #: /src/schooltool/person/browser/configure.zcml:26
 #: /src/schooltool/person/help/configure.zcml:8
@@ -31,30 +31,30 @@ msgstr ""
 msgid "Persons"
 msgstr "Kasutajad"
 
-#: /src/schooltool/app/browser/__init__.py:261
+#: /src/schooltool/app/browser/__init__.py:278
 msgid "1 person"
-msgstr "1 inimene"
+msgstr "1 kasutaja"
 
 #. Default: ""
-#: /src/schooltool/app/browser/__init__.py:263
+#: /src/schooltool/app/browser/__init__.py:280
 msgid "${number} persons"
-msgstr ""
+msgstr "${number} kasutajat"
 
 #: /src/schooltool/app/browser/app.py:226
 msgid "Username or password is incorrect"
-msgstr "Kasutajanimi või salasõna on vale"
+msgstr "Kasutajanimi või parool on vale"
 
-#: /src/schooltool/app/browser/app.py:322 /src/schooltool/app/security.py:308
+#: /src/schooltool/app/browser/app.py:322 /src/schooltool/app/security.py:303
 msgid "Leaders"
-msgstr ""
+msgstr "Juhid"
 
 #: /src/schooltool/app/browser/app.py:323
 msgid "Current leaders"
-msgstr ""
+msgstr "Präegused juhid"
 
 #: /src/schooltool/app/browser/app.py:324
 msgid "Available leaders"
-msgstr ""
+msgstr "Saadaolevad juhid"
 
 #: /src/schooltool/app/browser/app.py:347
 msgid "school"
@@ -209,70 +209,70 @@ msgstr "Püh"
 
 #: /src/schooltool/app/browser/cal.py:484
 msgid "Unnamed Event"
-msgstr ""
+msgstr "Nimetu sündmus"
 
 #: /src/schooltool/app/browser/cal.py:923
 msgid "Next week"
-msgstr ""
+msgstr "Järgmine nädal"
 
 #: /src/schooltool/app/browser/cal.py:924
 msgid "Current week"
-msgstr ""
+msgstr "Präegune nädal"
 
 #: /src/schooltool/app/browser/cal.py:925
 msgid "Previous week"
-msgstr ""
+msgstr "Eelmine nädal"
 
 #: /src/schooltool/app/browser/cal.py:927
 msgid "Go to next week"
-msgstr ""
+msgstr "Mine järgmisse nädalasse"
 
 #: /src/schooltool/app/browser/cal.py:928
 msgid "Go to current week"
-msgstr ""
+msgstr "Mine praegusse nädalasse"
 
 #: /src/schooltool/app/browser/cal.py:929
 msgid "Go to previous week"
-msgstr ""
+msgstr "Mine eelmisse nädalasse"
 
 #. Default: ""
 #: /src/schooltool/app/browser/cal.py:950
 msgid "${month}, ${year} (week ${week})"
-msgstr ""
+msgstr "${month}, ${year} (week ${week})"
 
 #: /src/schooltool/app/browser/cal.py:1164
 msgid "Next month"
-msgstr ""
+msgstr "Järgmine kuu"
 
 #: /src/schooltool/app/browser/cal.py:1165
 msgid "Current month"
-msgstr ""
+msgstr "Präegune kuu"
 
 #: /src/schooltool/app/browser/cal.py:1166
 msgid "Previous month"
-msgstr ""
+msgstr "Eelmine kuu"
 
 #: /src/schooltool/app/browser/cal.py:1168
 msgid "Go to next month"
-msgstr ""
+msgstr "Mine järgmisse kuusse"
 
 #: /src/schooltool/app/browser/cal.py:1169
 msgid "Go to current month"
-msgstr ""
+msgstr "Mine praegusse kuusse"
 
 #: /src/schooltool/app/browser/cal.py:1170
 msgid "Go to previous month"
-msgstr ""
+msgstr "Mine eelmisse kuuse"
 
 #. Default: ""
 #: /src/schooltool/app/browser/cal.py:1178
 msgid "${month}, ${year}"
-msgstr ""
+msgstr "${month}, ${year}"
 
 #. Default: ""
 #: /src/schooltool/app/browser/cal.py:1200
 msgid "Week ${week_no}"
-msgstr ""
+msgstr "${week_no} nädal"
 
 #: /src/schooltool/app/browser/cal.py:1216
 msgid "Next year"
@@ -280,7 +280,7 @@ msgstr "Järgmine aasta"
 
 #: /src/schooltool/app/browser/cal.py:1217
 msgid "Current year"
-msgstr "Jooksev aasta"
+msgstr "Praegune aasta"
 
 #: /src/schooltool/app/browser/cal.py:1218
 msgid "Previous year"
@@ -288,19 +288,19 @@ msgstr "Eelmine aasta"
 
 #: /src/schooltool/app/browser/cal.py:1220
 msgid "Go to next year"
-msgstr ""
+msgstr "Mine järgmisse aastasse"
 
 #: /src/schooltool/app/browser/cal.py:1221
 msgid "Go to current year"
-msgstr ""
+msgstr "Mine praegusse aastasse"
 
 #: /src/schooltool/app/browser/cal.py:1222
 msgid "Go to previous year"
-msgstr ""
+msgstr "Mine eelmisse aastase"
 
 #: /src/schooltool/app/browser/cal.py:1288
 msgid "The next day"
-msgstr ""
+msgstr "Järgmine päev"
 
 #: /src/schooltool/app/browser/cal.py:1289
 msgid "Today"
@@ -308,24 +308,24 @@ msgstr "Täna"
 
 #: /src/schooltool/app/browser/cal.py:1290
 msgid "The previous day"
-msgstr ""
+msgstr "Eelmine päev"
 
 #: /src/schooltool/app/browser/cal.py:1292
 msgid "Go to the next day"
-msgstr ""
+msgstr "Mine järgmisse päeva"
 
 #: /src/schooltool/app/browser/cal.py:1293
 msgid "Go to today"
-msgstr ""
+msgstr "Mine tänasesse päeva"
 
 #: /src/schooltool/app/browser/cal.py:1294
 msgid "Go to the previous day"
-msgstr ""
+msgstr "Mine eelmisse päeva"
 
 #. Default: ""
 #: /src/schooltool/app/browser/cal.py:1446
 msgid "Add new event starting at ${title}"
-msgstr ""
+msgstr "Lisa uus sündmus, alates ${title}"
 
 #: /src/schooltool/app/browser/cal.py:1735
 #: /src/schooltool/app/interfaces.py:146 /src/schooltool/app/interfaces.py:157
@@ -373,7 +373,7 @@ msgstr "Aeg"
 
 #: /src/schooltool/app/browser/cal.py:1745
 msgid "Start time in 24h format"
-msgstr ""
+msgstr "Kasuta 24 tunni aja formaati"
 
 #: /src/schooltool/app/browser/cal.py:1749
 #: /src/schooltool/timetable/browser/schema.py:269
@@ -382,7 +382,7 @@ msgstr "Kestvus"
 
 #: /src/schooltool/app/browser/cal.py:1754
 msgid "Duration Type"
-msgstr ""
+msgstr "Kestvuse tüüp"
 
 #: /src/schooltool/app/browser/cal.py:1757
 #: /src/schooltool/app/browser/templates/event_add.pt:168
@@ -392,19 +392,19 @@ msgstr "Minutid"
 #: /src/schooltool/app/browser/cal.py:1758
 #: /src/schooltool/app/browser/templates/event_add.pt:171
 msgid "Hours"
-msgstr ""
+msgstr "Tunnid"
 
 #: /src/schooltool/app/browser/cal.py:1759
 #: /src/schooltool/app/browser/templates/event_add.pt:175
 msgid "Days"
-msgstr ""
+msgstr "Päevad"
 
 #: /src/schooltool/app/browser/cal.py:1762
 #: /src/schooltool/app/browser/templates/event.pt:48
 #: /src/schooltool/resource/types.py:69
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:49
 msgid "Location"
-msgstr ""
+msgstr "Asukoht"
 
 #: /src/schooltool/app/browser/cal.py:1766
 #: /src/schooltool/course/interfaces.py:40
@@ -418,19 +418,19 @@ msgstr "Kirjeldus"
 
 #: /src/schooltool/app/browser/cal.py:1771
 msgid "Recurring"
-msgstr ""
+msgstr "Kordumine"
 
 #: /src/schooltool/app/browser/cal.py:1775
 msgid "Recurs every"
-msgstr ""
+msgstr "Kordub iga"
 
 #: /src/schooltool/app/browser/cal.py:1778
 msgid "Day"
-msgstr ""
+msgstr "Päev"
 
 #: /src/schooltool/app/browser/cal.py:1779
 msgid "Week"
-msgstr ""
+msgstr "Nädal"
 
 #: /src/schooltool/app/browser/cal.py:1780
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:119
@@ -444,123 +444,124 @@ msgstr "Aasta"
 
 #: /src/schooltool/app/browser/cal.py:1784
 msgid "Repeat every"
-msgstr ""
+msgstr "Korda iga"
 
 #: /src/schooltool/app/browser/cal.py:1789
 msgid "Range"
-msgstr ""
+msgstr "Ulatus"
 
 #: /src/schooltool/app/browser/cal.py:1792
 msgid "Count"
-msgstr ""
+msgstr "Loendus"
 
 #: /src/schooltool/app/browser/cal.py:1793
 msgid "Until"
-msgstr ""
+msgstr "Kuni"
 
 #: /src/schooltool/app/browser/cal.py:1794
 msgid "forever"
-msgstr ""
+msgstr "igavesti"
 
 #: /src/schooltool/app/browser/cal.py:1797
 msgid "Number of events"
-msgstr ""
+msgstr "Sündmuste arv"
 
 #: /src/schooltool/app/browser/cal.py:1801
 #: /src/schooltool/app/browser/templates/event_add.pt:303
 msgid "Repeat until"
-msgstr ""
+msgstr "Korda kuni"
 
 #: /src/schooltool/app/browser/cal.py:1805
 msgid "Weekdays"
-msgstr ""
+msgstr "Nädalapäevad"
 
 #: /src/schooltool/app/browser/cal.py:1808
 msgid "Weekday"
-msgstr ""
+msgstr "Nädalapäev"
 
 #: /src/schooltool/app/browser/cal.py:1818
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:36
 #: /src/schooltool/app/browser/templates/event_add.pt:256
 msgid "Monthly"
-msgstr "Iga kuu"
+msgstr "Igakuine"
 
 #: /src/schooltool/app/browser/cal.py:1826
 msgid "Exception dates"
-msgstr ""
+msgstr "Erandite kuupäevad"
 
-#: /src/schooltool/app/browser/cal.py:1912
+#: /src/schooltool/app/browser/cal.py:1905
 msgid "same weekday"
-msgstr ""
+msgstr "sama nädalapäev"
 
-#: /src/schooltool/app/browser/cal.py:1917
+#: /src/schooltool/app/browser/cal.py:1910
 msgid "1st"
-msgstr ""
+msgstr "Esimene"
 
-#: /src/schooltool/app/browser/cal.py:1917
+#: /src/schooltool/app/browser/cal.py:1910
 msgid "2nd"
-msgstr ""
+msgstr "Teine"
 
-#: /src/schooltool/app/browser/cal.py:1917
+#: /src/schooltool/app/browser/cal.py:1910
 msgid "3rd"
-msgstr ""
+msgstr "Kolmas"
 
-#: /src/schooltool/app/browser/cal.py:1917
+#: /src/schooltool/app/browser/cal.py:1910
 msgid "4th"
-msgstr ""
+msgstr "Neljas"
 
-#: /src/schooltool/app/browser/cal.py:1918
+#: /src/schooltool/app/browser/cal.py:1911
 msgid "5th"
-msgstr ""
+msgstr "Viies"
 
-#: /src/schooltool/app/browser/cal.py:1932
+#: /src/schooltool/app/browser/cal.py:1925
 msgid "last weekday"
-msgstr ""
+msgstr "viimane nädalapäev"
 
 #. Default: ""
-#: /src/schooltool/app/browser/cal.py:1942
+#: /src/schooltool/app/browser/cal.py:1935
 msgid "Last ${weekday}"
-msgstr ""
+msgstr "Viimane ${weekday}"
 
-#: /src/schooltool/app/browser/cal.py:1965
-#: /src/schooltool/app/browser/cal.py:2274
+#: /src/schooltool/app/browser/cal.py:1958
+#: /src/schooltool/app/browser/cal.py:2265
 msgid "An error occurred."
-msgstr ""
+msgstr "Tekkis tõrge."
 
-#: /src/schooltool/app/browser/cal.py:1998
+#: /src/schooltool/app/browser/cal.py:1991
 msgid "Invalid time"
-msgstr ""
+msgstr "Kehtetu aeg"
 
-#: /src/schooltool/app/browser/cal.py:2019
+#: /src/schooltool/app/browser/cal.py:2012
 msgid "End date is earlier than start date"
-msgstr ""
+msgstr "Lõppkuupäev on varem kui alguskuupäev"
 
-#: /src/schooltool/app/browser/cal.py:2028
+#: /src/schooltool/app/browser/cal.py:2021
 msgid "Invalid date.  Please specify YYYY-MM-DD, one per line."
-msgstr ""
+msgstr "Kehtetu kuupäev. Palun täpsusta PP-KK-AAAA, üks rea kohta."
 
-#: /src/schooltool/app/browser/cal.py:2076
+#: /src/schooltool/app/browser/cal.py:2069
 msgid "Add event"
-msgstr ""
+msgstr "Lisa sündmus"
 
-#: /src/schooltool/app/browser/cal.py:2077
+#: /src/schooltool/app/browser/cal.py:2070
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:48
-#: /src/schooltool/basicperson/browser/person.py:162
+#: /src/schooltool/basicperson/browser/person.py:226
+#: /src/schooltool/basicperson/browser/person.py:271
 #: /src/schooltool/contact/browser/contact.py:92
-#: /src/schooltool/course/browser/section.py:331
+#: /src/schooltool/course/browser/section.py:327
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:67
 #: /src/schooltool/level/browser.py:55
-#: /src/schooltool/schoolyear/browser/schoolyear.py:308
+#: /src/schooltool/schoolyear/browser/schoolyear.py:314
 #: /src/schooltool/timetable/browser/__init__.py:704
 #: /src/schooltool/timetable/browser/templates/timetable-add.pt:25
 msgid "Add"
-msgstr ""
+msgstr "Lisa"
 
-#: /src/schooltool/app/browser/cal.py:2148
+#: /src/schooltool/app/browser/cal.py:2140
 msgid "Edit event"
-msgstr ""
+msgstr "Redigeeri sündmust"
 
-#: /src/schooltool/app/browser/cal.py:2149
+#: /src/schooltool/app/browser/cal.py:2141
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:29
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:81
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:185
@@ -569,19 +570,19 @@ msgid "Update"
 msgstr "Uuenda"
 
 #. Default: ""
-#: /src/schooltool/app/browser/cal.py:2280 /src/schooltool/skin/form.py:76
+#: /src/schooltool/app/browser/cal.py:2271 /src/schooltool/skin/form.py:76
 msgid "Updated on ${date_time}"
-msgstr ""
+msgstr "Uuendatud kuupäeval ${date_time}"
 
-#: /src/schooltool/app/browser/cal.py:2715
-#: /src/schooltool/app/browser/configure.zcml:597
-#: /src/schooltool/app/browser/configure.zcml:684
+#: /src/schooltool/app/browser/cal.py:2706
+#: /src/schooltool/app/browser/configure.zcml:604
+#: /src/schooltool/app/browser/configure.zcml:691
 #: /src/schooltool/app/browser/templates/calendar_tab_viewlet.pt:3
 #: /src/schooltool/app/configure.zcml:348
 msgid "Calendar"
-msgstr ""
+msgstr "Kalender"
 
-#: /src/schooltool/app/browser/configure.zcml:166
+#: /src/schooltool/app/browser/configure.zcml:173
 msgid "Actions"
 msgstr "Tegevused"
 
@@ -620,187 +621,188 @@ msgstr "Tegevused"
 msgid "View"
 msgstr "Vaata"
 
-#: /src/schooltool/app/browser/configure.zcml:310
+#: /src/schooltool/app/browser/configure.zcml:317
 msgid "View Calendar"
-msgstr ""
+msgstr "Vaata kalendrit"
 
-#: /src/schooltool/app/browser/configure.zcml:322
+#: /src/schooltool/app/browser/configure.zcml:329
 msgid "New Event"
-msgstr ""
+msgstr "Uus sündmus"
 
-#: /src/schooltool/app/browser/configure.zcml:333
+#: /src/schooltool/app/browser/configure.zcml:340
 msgid "Open in iCal"
-msgstr ""
+msgstr "Ava rakenduses iCal"
 
-#: /src/schooltool/app/browser/configure.zcml:345
+#: /src/schooltool/app/browser/configure.zcml:352
 msgid "Import Sections"
 msgstr "Impordi sektsioonid"
 
-#: /src/schooltool/app/browser/configure.zcml:356
+#: /src/schooltool/app/browser/configure.zcml:363
 msgid "Edit Leaders"
-msgstr ""
+msgstr "Redigeeri juhte"
 
-#: /src/schooltool/app/browser/configure.zcml:367
+#: /src/schooltool/app/browser/configure.zcml:374
 msgid "Change Site Preferences"
-msgstr ""
+msgstr "Muuda lehe eelistusi"
 
-#: /src/schooltool/app/browser/configure.zcml:399
+#: /src/schooltool/app/browser/configure.zcml:406
 msgid "Calendar (Daily)"
-msgstr ""
+msgstr "Kalender (Päevane)"
 
-#: /src/schooltool/app/browser/configure.zcml:409
+#: /src/schooltool/app/browser/configure.zcml:416
 msgid "Calendar (Daily, PDF)"
-msgstr ""
+msgstr "Kalender (Päevane, PDF)"
 
-#: /src/schooltool/app/browser/configure.zcml:418
+#: /src/schooltool/app/browser/configure.zcml:425
 msgid "Calendar (Weekly)"
-msgstr ""
+msgstr "Kalender (Nädalane)"
 
-#: /src/schooltool/app/browser/configure.zcml:428
+#: /src/schooltool/app/browser/configure.zcml:435
 msgid "Calendar (Weekly, PDF)"
-msgstr ""
+msgstr "Kalender (Nädalane, PDF)"
 
-#: /src/schooltool/app/browser/configure.zcml:437
+#: /src/schooltool/app/browser/configure.zcml:444
 msgid "Calendar (Monthly)"
-msgstr ""
+msgstr "Kalender (Kuune)"
 
-#: /src/schooltool/app/browser/configure.zcml:447
+#: /src/schooltool/app/browser/configure.zcml:454
 msgid "Calendar (Monthly, PDF)"
-msgstr ""
+msgstr "Kalender (Kuune, PDF)"
 
-#: /src/schooltool/app/browser/configure.zcml:456
+#: /src/schooltool/app/browser/configure.zcml:463
 #: /src/schooltool/timetable/browser/configure.zcml:219
 msgid "Calendar (Yearly)"
-msgstr ""
+msgstr "Kalender (Aastane)"
 
-#: /src/schooltool/app/browser/configure.zcml:466
+#: /src/schooltool/app/browser/configure.zcml:473
 msgid "Atom View"
-msgstr ""
+msgstr "Aatom vaade"
 
-#: /src/schooltool/app/browser/configure.zcml:476
+#: /src/schooltool/app/browser/configure.zcml:483
 msgid "iCalendar"
-msgstr ""
+msgstr "iKalender"
 
-#: /src/schooltool/app/browser/configure.zcml:486
+#: /src/schooltool/app/browser/configure.zcml:493
 msgid "Free/Busy"
-msgstr ""
+msgstr "Vaba/Hõivatud"
 
-#: /src/schooltool/app/browser/configure.zcml:515
+#: /src/schooltool/app/browser/configure.zcml:522
 #: /src/schooltool/app/help/configure.zcml:77
 #: /src/schooltool/app/help/event_add.pt:6
 #: /src/schooltool/app/help/event_add.pt:9
 msgid "Add Event"
-msgstr ""
+msgstr "Lisa sündmus"
 
-#: /src/schooltool/app/browser/configure.zcml:534
+#: /src/schooltool/app/browser/configure.zcml:541
 #: /src/schooltool/app/help/configure.zcml:87
 #: /src/schooltool/app/help/event_edit.pt:6
 #: /src/schooltool/app/help/event_edit.pt:9
 msgid "Edit Event"
-msgstr ""
+msgstr "Redigeeri sündmust"
 
-#: /src/schooltool/app/browser/configure.zcml:587
+#: /src/schooltool/app/browser/configure.zcml:594
 msgid "ZODB Control"
-msgstr ""
+msgstr "ZODB juhtimine"
 
-#: /src/schooltool/app/browser/configure.zcml:610
+#: /src/schooltool/app/browser/configure.zcml:617
 #: /src/schooltool/app/browser/templates/manage_menu.pt:3
 #: /src/schooltool/basicperson/security.zcml:26
 msgid "Manage"
-msgstr ""
+msgstr "Halda"
 
-#: /src/schooltool/app/browser/configure.zcml:622
+#: /src/schooltool/app/browser/configure.zcml:629
 msgid "Application Control"
-msgstr ""
+msgstr "Rakenduse juhtimine"
 
-#: /src/schooltool/app/browser/configure.zcml:634
+#: /src/schooltool/app/browser/configure.zcml:641
 msgid "Translation Domains"
-msgstr ""
+msgstr "Tõlke domeenid"
 
-#: /src/schooltool/app/browser/configure.zcml:645
+#: /src/schooltool/app/browser/configure.zcml:652
 msgid "Generations"
-msgstr ""
+msgstr "Generatsioonid"
 
-#: /src/schooltool/app/browser/configure.zcml:666
+#: /src/schooltool/app/browser/configure.zcml:673
 msgid "Browser UI"
-msgstr ""
+msgstr "Sirvija UI"
 
-#: /src/schooltool/app/browser/configure.zcml:672
+#: /src/schooltool/app/browser/configure.zcml:679
 #: /src/schooltool/app/browser/templates/login.pt:3
 #: /src/schooltool/app/browser/templates/menu_view.pt:3
 msgid "Login"
-msgstr ""
+msgstr "Logi sisse"
 
-#: /src/schooltool/app/browser/configure.zcml:678
-#: /src/schooltool/app/browser/configure.zcml:765
+#: /src/schooltool/app/browser/configure.zcml:685
+#: /src/schooltool/app/browser/configure.zcml:772
 #: /src/schooltool/devmode/devmode.pt:17
 msgid "Errors"
-msgstr ""
+msgstr "Tõrked"
 
-#: /src/schooltool/app/browser/configure.zcml:690
+#: /src/schooltool/app/browser/configure.zcml:697
 msgid "Application"
-msgstr ""
+msgstr "Rakendus"
 
-#: /src/schooltool/app/browser/configure.zcml:696
+#: /src/schooltool/app/browser/configure.zcml:703
 msgid "Calendar Widget"
-msgstr ""
+msgstr "Kalendri vidin"
 
-#: /src/schooltool/app/browser/configure.zcml:702
+#: /src/schooltool/app/browser/configure.zcml:709
 msgid "Templates"
-msgstr ""
-
-#: /src/schooltool/app/browser/configure.zcml:781
-msgid "Configure"
-msgstr ""
+msgstr "Mallid"
 
 #: /src/schooltool/app/browser/configure.zcml:788
+msgid "Configure"
+msgstr "Seadista"
+
+#: /src/schooltool/app/browser/configure.zcml:795
 msgid "Error List"
-msgstr ""
+msgstr "Tõrgete nimekiri"
 
 #: /src/schooltool/app/browser/csvimport.py:107
 #: /src/schooltool/app/browser/csvimport.py:289
-#: /src/schooltool/export/importer.py:994
+#: /src/schooltool/export/importer.py:995
 msgid "No data provided"
-msgstr ""
+msgstr "Andmed puuduvad"
 
 #: /src/schooltool/app/browser/csvimport.py:114
 msgid "Could not convert data to Unicode (incorrect charset?)."
 msgstr ""
+"Andmete muutmine Unicode formaati ebaõnnestus (ebakorrektne kooditabel?)."
 
 #: /src/schooltool/app/browser/csvimport.py:123
 msgid "CSV file imported successfully."
-msgstr ""
+msgstr "CSV fail imporditi edukalt."
 
 #: /src/schooltool/app/browser/csvimport.py:125
 msgid "Failed to import CSV file"
-msgstr ""
+msgstr "CSV faili importimine ebaõnnestus"
 
 #: /src/schooltool/app/browser/csvimport.py:135
 msgid "CSV text imported successfully."
-msgstr ""
+msgstr "CSV tekst imporditi edukalt."
 
 #: /src/schooltool/app/browser/csvimport.py:137
 msgid "Failed to import CSV text"
-msgstr ""
+msgstr "CSV teksti importimine ebaõnnestus"
 
 #: /src/schooltool/app/browser/csvimport.py:159
 msgid "No charset specified"
-msgstr ""
+msgstr "Kooditabelit pole määratud."
 
 #: /src/schooltool/app/browser/csvimport.py:164
 msgid "Unknown charset"
-msgstr ""
+msgstr "Tundmatu kooditabel"
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:208
 msgid "Error in CSV data, line ${line_no}"
-msgstr ""
+msgstr "CSV andmetes esines tõrge, ${line_no} rida"
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:212
 #: /src/schooltool/app/browser/csvimport.py:513
 msgid "Conversion to unicode failed in line ${line_no}"
-msgstr ""
+msgstr "Konverteerimine unicode formaati ebaõnnestus, ${line_no} rida"
 
 #: /src/schooltool/app/browser/csvimport.py:295
 msgid "Row 2 is not empty"
@@ -812,100 +814,103 @@ msgid ""
 "Wrong section header on line ${line_no} (it should contain a course id and "
 "an instructor id)"
 msgstr ""
+"Vale sektsiooni päis, ${line_no} rida (see peaks sisaldama kursuse -ja "
+"juhendaja ID-d)"
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:357
 msgid "Malformed line ${line_no} (it should contain a day id and a period id)"
 msgstr ""
+"Rida ${line_no} on vigane (see peaks sisaldama päeva -ja perioodi ID-d)"
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:380
 msgid "Incomplete section description on line ${line}"
-msgstr "Mitte komplektne sektsiooni kirjeldus real ${line}"
+msgstr "Puudulik sektsiooni kirjeldus real ${line}"
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:385
 msgid "No students in section (line ${line})"
-msgstr ""
+msgstr "Sektsioonis puuduvad õpilased (rida ${line})"
 
 #: /src/schooltool/app/browser/csvimport.py:466
 msgid "The first row of the CSV file must contain the timetable schema id."
-msgstr ""
+msgstr "CSV faili esimene rida peab sisaldama tunniplaani skeemi ID-d."
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:477
 msgid "The timetable schema ${schema} does not exist."
-msgstr "Tunniplaani visandit ${schema} ei ole olemas."
+msgstr "Tunniplaani skeem ${schema} puudub."
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:508
 msgid "Error in timetable CSV data, line ${line_no}"
-msgstr "Viga tunniplaani CSV andmetes, rida ${line_no}"
+msgstr "Tunniplaani CSV andmetes on tõrge, rida ${line_no}"
 
 #: /src/schooltool/app/browser/csvimport.py:548
 msgid "Day ids not defined in selected schema: ${args}."
-msgstr ""
+msgstr "Päeva ID-d ei ole määratletud valitud skeemis: ${args}"
 
 #: /src/schooltool/app/browser/csvimport.py:549
 msgid "Periods not defined in selected days: ${args}."
-msgstr "Tunnid on defineerimata antud päevadel: ${args}."
+msgstr "Tunnid on määratlematta valitud päevadel: ${args}"
 
 #: /src/schooltool/app/browser/csvimport.py:550
 msgid "Persons not found: ${args}."
-msgstr "Kasutajaid ei leitud"
+msgstr "Ei leitud kasutajad: ${args}"
 
 #: /src/schooltool/app/browser/csvimport.py:551
 msgid "Courses not found: ${args}."
-msgstr "Kursuseid ei leitud"
+msgstr "Ei leitud kursuseid: ${args}"
 
 #: /src/schooltool/app/browser/csvimport.py:552
 msgid "Sections not found: ${args}."
-msgstr "Sektsiooni ei leitud: ${args}."
+msgstr "Ei leitud sektsioone: ${args}"
 
 #: /src/schooltool/app/browser/csvimport.py:553
 msgid "Invalid records: ${args}."
-msgstr ""
+msgstr "Kehtetu arhiivid: ${args}"
 
 #: /src/schooltool/app/browser/overlay.py:205
 msgid "Saved changes."
-msgstr "Salvesta muudatused"
+msgstr "Salvesta muudatused."
 
 #: /src/schooltool/app/browser/pdfcal.py:52
 msgid "Daily calendar for %s"
-msgstr ""
+msgstr "Päevane kalender %s jaoks"
 
 #: /src/schooltool/app/browser/pdfcal.py:95
 msgid "recurrent"
-msgstr ""
+msgstr "korduv"
 
 #. Default: ""
 #: /src/schooltool/app/browser/pdfcal.py:99
 msgid "from the calendar of ${calendar_owner}"
-msgstr ""
+msgstr "kalendri omanikust ${calendar_owner}"
 
 #: /src/schooltool/app/browser/pdfcal.py:115
 msgid "all day"
-msgstr ""
+msgstr "terve päev"
 
 #: /src/schooltool/app/browser/pdfcal.py:177
 msgid "Weekly calendar for %s"
-msgstr ""
+msgstr "Nädalane kalender %s jaoks"
 
 #: /src/schooltool/app/browser/pdfcal.py:186
 msgid "Week %d (%s - %s), %d"
-msgstr ""
+msgstr "Nädal %d (%s - %s), %d"
 
 #: /src/schooltool/app/browser/pdfcal.py:197
 msgid "Monthly calendar for %s"
-msgstr ""
+msgstr "Kuune kalender %s jaoks"
 
 #: /src/schooltool/app/browser/report.py:57
 msgid "PDF support is disabled.  It can be enabled by your administrator."
-msgstr ""
+msgstr "PDF tugi puudub. Sinu administraator saab selle lubada."
 
 #: /src/schooltool/app/browser/templates/about.pt:5
 msgid "About SchoolTool"
-msgstr ""
+msgstr "Teabe SchoolToolist"
 
 #: /src/schooltool/app/browser/templates/about.pt:10
 msgid ""
@@ -915,6 +920,10 @@ msgid ""
 "well as a framework for building customized applications and configurations "
 "for individual schools or states."
 msgstr ""
+"SchoolTool on vaba administratiivne tarkvara koolide jaoks üle terve "
+"maailma. Projekti eesmärkideks on luua lihtne õpilaste informatsiooni "
+"süsteem ning informatsiooni haldamine koolide jaoks ja võrgustik kohandatud "
+"rakenduste loomiseks individuaalsete koolide ja riikide jaoks."
 
 #: /src/schooltool/app/browser/templates/about.pt:16
 msgid ""
@@ -922,69 +931,74 @@ msgid ""
 "\"http://python.org\">Python</a> using the <a href=\"http://zope.org\">Zope "
 "3</a> framework."
 msgstr ""
+"SchoolTool on loodud 100% avatud lähtekoodi poolt, kirjutatud rakenduse <a "
+"href=\"http://python.org\">Python</a> poolt, kasutades <a href=\"http://zope."
+"org\">Zope 3</a> võrgustikku."
 
 #: /src/schooltool/app/browser/templates/about.pt:20
 msgid ""
 "SchoolTool is licensed under the <a href=\"http://www.gnu.org/licenses/"
 "gpl-2.0.html\">GNU General Public License, Version 2</a>."
 msgstr ""
+"SchoolTool on litsentsitud <a href=\"http://www.gnu.org/licenses/gpl-2.0.html"
+"\">GNU General Public License, Version 2</a> poolt."
 
 #: /src/schooltool/app/browser/templates/about.pt:24
 msgid "For more information:"
-msgstr ""
+msgstr "Rohkema informatsiooni jaoks:"
 
 #: /src/schooltool/app/browser/templates/about.pt:27
 msgid "Website"
-msgstr ""
+msgstr "Veebisait"
 
 #: /src/schooltool/app/browser/templates/about.pt:28
 msgid "Launchpad project page"
-msgstr ""
+msgstr "Launchpadi projekti leht"
 
 #: /src/schooltool/app/browser/templates/about.pt:29
 msgid "Mailing list"
-msgstr ""
+msgstr "Postituste nimekiri"
 
 #: /src/schooltool/app/browser/templates/about.pt:30
 msgid "IRC channel: #schooltool on freenode.net"
-msgstr ""
+msgstr "IRC kanal: #schooltool veebisaidil freenode.net"
 
 #: /src/schooltool/app/browser/templates/about.pt:35
 msgid "Founder and funder:"
-msgstr ""
+msgstr "Asutaja ja rahastaja"
 
 #: /src/schooltool/app/browser/templates/about.pt:38
 msgid "Project Manager:"
-msgstr ""
+msgstr "Projekti haldur:"
 
 #: /src/schooltool/app/browser/templates/about.pt:41
 msgid "Lead Developer:"
-msgstr ""
+msgstr "Juhtiv arendaja:"
 
 #: /src/schooltool/app/browser/templates/about.pt:44
 msgid "Release Manager:"
-msgstr ""
+msgstr "Väljalaske haldur:"
 
 #: /src/schooltool/app/browser/templates/about.pt:47
 msgid "Contributors:"
-msgstr ""
+msgstr "Koostajad:"
 
 #: /src/schooltool/app/browser/templates/application_preferences.pt:4
 msgid "Edit site preferences"
-msgstr ""
+msgstr "Redigeeri saidi eelistusi"
 
 #: /src/schooltool/app/browser/templates/application_preferences.pt:13
 msgid "Change site preferences"
-msgstr ""
+msgstr "Muuda saidi eelistusi"
 
 #: /src/schooltool/app/browser/templates/application_preferences.pt:19
 msgid "General preferences"
-msgstr ""
+msgstr "Üldised eelistused"
 
 #: /src/schooltool/app/browser/templates/application_preferences.pt:34
 #: /src/schooltool/person/browser/person_preferences.pt:28
 msgid "Calendar Preferences"
-msgstr "Kalendri seaded"
+msgstr "Kalendri eelistused"
 
 #: /src/schooltool/app/browser/templates/cal_atom.pt:14
 #: /src/schooltool/app/configure.zcml:334
@@ -1012,72 +1026,72 @@ msgstr "Kalendri seaded"
 #: /src/schooltool/skin/templates/table_container.pt:11
 #: /src/schooltool/timetable/browser/templates/confirm-timetable-delete.pt:10
 msgid "SchoolTool"
-msgstr ""
+msgstr "SchoolTool"
 
 #: /src/schooltool/app/browser/templates/cal_atom.pt:21
 msgid "Events for"
-msgstr ""
+msgstr "Sündmused jaoks:"
 
 #. Default: "This is an Atom formatted XML site feed. It is intended to be viewed in a Newsreader or syndicated to another site. Please visit"
 #: /src/schooltool/app/browser/templates/cal_atom.pt:42
 msgid "atom_description"
-msgstr ""
+msgstr "aatom_kirjeldus"
 
 #. Default: "Atom Enabled"
 #: /src/schooltool/app/browser/templates/cal_atom.pt:46
 msgid "atom_enabled"
-msgstr ""
+msgstr "aatom_lubatud"
 
 #. Default: "for more info."
 #: /src/schooltool/app/browser/templates/cal_atom.pt:49
 msgid "atom_more_info"
-msgstr ""
+msgstr "aatom_rohkem_informatsiooni"
 
 #: /src/schooltool/app/browser/templates/cal_atom.pt:56
 msgid "Validate my Atom feed"
-msgstr ""
+msgstr "Kinnita minu Aatomi varustamine"
 
 #: /src/schooltool/app/browser/templates/cal_atom.pt:56
 msgid "[Valid Atom]"
-msgstr ""
+msgstr "[Kinnitatud Aatom]"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:24
 msgid "Daily"
-msgstr ""
+msgstr "Päevane"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:24
 msgid "View daily calendar"
-msgstr ""
+msgstr "Vaata päevast kalendrit"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:30
 msgid "View weekly calendar"
-msgstr ""
+msgstr "Vaata nädalast kalendrit"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:30
 #: /src/schooltool/app/browser/templates/event_add.pt:235
 msgid "Weekly"
-msgstr "Iga nädal"
+msgstr "Nädalane"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:36
 msgid "View monthly calendar"
-msgstr ""
+msgstr "Vaata kuulist kalendrit"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:42
 msgid "View yearly calendar"
-msgstr ""
+msgstr "Vaata aastast kalendrit"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:42
 msgid "Yearly"
-msgstr ""
+msgstr "Aastane"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:55
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:91
 msgid "Calendar for ${title} - ${calendar_title}"
-msgstr ""
+msgstr "Kalender ${title} jaoks - ${calendar_title}"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:115
 msgid "Jump To ..."
-msgstr "Hüppa ..."
+msgstr "Mine..."
 
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:4
 #: /src/schooltool/timetable/browser/templates/calendar_overlay.pt:4
@@ -1107,23 +1121,23 @@ msgstr "Veel..."
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:4
 msgid "Select calendars to display"
-msgstr ""
+msgstr "Valid kuvamiseks kalendrid"
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:15
 msgid "Select additional calendars to display"
-msgstr ""
+msgstr "Vali kuvamiseks täiendav kalender"
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:27
 msgid "Hold down Ctrl or Shift to select multiple calendars."
-msgstr ""
+msgstr "Hoia all nuppe Ctrl või Shift, et valida mitmeid kalendreid."
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:32
 msgid "Public Calendar"
-msgstr ""
+msgstr "Avalik kalender"
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:37
 msgid "site-wide calendar"
-msgstr ""
+msgstr "kogu-saidi kalender"
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:42
 #: /src/schooltool/app/browser/templates/index.pt:14
@@ -1131,32 +1145,32 @@ msgstr ""
 #: /src/schooltool/dashboard/school.pt:22
 #: /src/schooltool/resource/browser/configure.zcml:169
 msgid "Resources"
-msgstr "Vahendid"
+msgstr "Ressursid"
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:43
 msgid "There are no resources with calendars accessible to you."
-msgstr ""
+msgstr "Ei ole ressursse, mis on kalendritega sulle kättesaadavad"
 
 #: /src/schooltool/app/browser/templates/default_report_template.pt:23
 msgid "Created with SchoolTool"
-msgstr ""
+msgstr "Loodud SchoolTooli abil"
 
 #: /src/schooltool/app/browser/templates/default_report_template.pt:37
 msgid "Page ${page_number}"
-msgstr ""
+msgstr "Leht ${page_number}"
 
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:26
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:27
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:45
 msgid "R"
-msgstr ""
+msgstr "R"
 
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:26
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:27
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:45
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:103
 msgid "Remove"
-msgstr ""
+msgstr "Eemalda"
 
 #. Default: "Invert Selection"
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:30
@@ -1167,7 +1181,7 @@ msgstr ""
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:49
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:71
 msgid "invert-selection-button"
-msgstr ""
+msgstr "pöörd-valik-nupp"
 
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:37
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:38
@@ -1182,7 +1196,7 @@ msgstr ""
 #: /src/schooltool/skin/templates/table_container.pt:39
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:15
 msgid "There are none."
-msgstr ""
+msgstr "Ei ole ühtegi."
 
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:48
 #: /src/schooltool/app/browser/templates/event_booking.pt:42
@@ -1203,24 +1217,24 @@ msgstr "A"
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:68
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:77
 msgid "There are none to add."
-msgstr ""
+msgstr "Ei ole ühtegi lisada."
 
 #. Default: "OK"
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:65
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:75
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:84
 msgid "ok-button"
-msgstr ""
+msgstr "ok-nupp"
 
 #: /src/schooltool/app/browser/templates/event.pt:15
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:15
 msgid "All day event"
-msgstr ""
+msgstr "Terve päeva sündmus"
 
 #: /src/schooltool/app/browser/templates/event.pt:20
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:21
 msgid "This is a recurring event."
-msgstr ""
+msgstr "See on korduv sündmus."
 
 #: /src/schooltool/app/browser/templates/event.pt:33
 #: /src/schooltool/basicperson/browser/templates/person_view.pt:29
@@ -1235,122 +1249,122 @@ msgstr "Üksikasjad"
 #: /src/schooltool/schoolyear/browser/schoolyear.py:128
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:38
 msgid "Starts"
-msgstr ""
+msgstr "Alustab"
 
 #: /src/schooltool/app/browser/templates/event.pt:42
 #: /src/schooltool/schoolyear/browser/schoolyear.py:130
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:43
 msgid "Ends"
-msgstr ""
+msgstr "Lõpetab"
 
 #: /src/schooltool/app/browser/templates/event.pt:53
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:54
 msgid "Change the details of this event"
-msgstr ""
+msgstr "Muuda selle sündmuse üksikasju"
 
 #: /src/schooltool/app/browser/templates/event.pt:53
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:54
 msgid "edit event"
-msgstr ""
+msgstr "redigeeri sündmust"
 
 #: /src/schooltool/app/browser/templates/event.pt:64
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:65
 msgid "Scheduled resources"
-msgstr ""
+msgstr "Plaanipärased ressursid"
 
 #: /src/schooltool/app/browser/templates/event.pt:72
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:73
 msgid "edit resources"
-msgstr ""
+msgstr "redigeeri ressursse"
 
 #: /src/schooltool/app/browser/templates/event.pt:80
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:81
 msgid "delete event"
-msgstr ""
+msgstr "kustuta sündmus"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:137
 msgid "Event information"
-msgstr ""
+msgstr "Sündmuse informatsioon"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:143
 msgid "Event details"
-msgstr ""
+msgstr "Sündmuse üksikasjad"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:197
 msgid "Book Resources"
-msgstr ""
+msgstr "Reserveeringu ressursid"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:207
 msgid "Update form"
-msgstr ""
+msgstr "Uuenduse formaat"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:224
 msgid "day"
-msgstr ""
+msgstr "päev"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:225
 msgid "week"
-msgstr ""
+msgstr "nädal"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:226
 msgid "month"
-msgstr ""
+msgstr "kuu"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:227
 msgid "year"
-msgstr ""
+msgstr "aasta"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:236
 msgid "This section only applies when weekly recurrence is selected."
-msgstr ""
+msgstr "See sektsioon rakendatakse ainult siis, kui valitud on korduv nädal."
 
 #: /src/schooltool/app/browser/templates/event_add.pt:257
 msgid "This section only applies when the monthly recurrence is selected."
-msgstr ""
+msgstr "See sektsioon rakendatakse ainult siis, kui valitud on korduv kuu."
 
 #: /src/schooltool/app/browser/templates/event_add.pt:264
 msgid "Day ${monthday} of every month"
-msgstr ""
+msgstr "Iga kuu ${monthday}-s päev"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:271
 #: /src/schooltool/app/browser/templates/event_add.pt:278
 msgid "${weekday} of every month"
-msgstr ""
+msgstr "Iga kuu ${monthday}"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:288
 msgid "Repeat"
-msgstr ""
+msgstr "Korda"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:291
 msgid "times"
-msgstr ""
+msgstr "ajad"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:306
 #: /src/schooltool/term/browser/templates/emergency_select.pt:31
 #: /src/schooltool/timetable/browser/templates/specialday_select.pt:31
 msgid "[popup calendar]"
-msgstr ""
+msgstr "[üpiku kalender]"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:324
 msgid "Repeat forever"
-msgstr ""
+msgstr "Korda igavesti"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:348
 msgid "Booked Resources"
-msgstr ""
+msgstr "Reserveeritud ressursid"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:369
 msgid "Book resources"
-msgstr ""
+msgstr "Reserveeritud ressursid"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:375
-#: /src/schooltool/skin/templates/view_macros.pt:161
-#: /src/schooltool/skin/templates/view_macros.pt:167
-#: /src/schooltool/skin/templates/view_macros.pt:174
-#: /src/schooltool/skin/templates/view_macros.pt:180
-#: /src/schooltool/skin/templates/view_macros.pt:187
+#: /src/schooltool/skin/templates/view_macros.pt:162
+#: /src/schooltool/skin/templates/view_macros.pt:168
+#: /src/schooltool/skin/templates/view_macros.pt:175
+#: /src/schooltool/skin/templates/view_macros.pt:181
+#: /src/schooltool/skin/templates/view_macros.pt:188
 msgid "Shortcut: Alt-A"
-msgstr ""
+msgstr "Otsetee: Alt+A"
 
 #. Default: "Cancel"
 #: /src/schooltool/app/browser/templates/event_add.pt:378
@@ -1375,55 +1389,55 @@ msgstr ""
 #: /src/schooltool/timetable/browser/templates/specialday_select.pt:41
 #: /src/schooltool/timetable/browser/templates/timetable-container-delete.pt:29
 msgid "cancel-button"
-msgstr ""
+msgstr "tühistamise-nupp"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:4
 msgid "Resource Booking"
-msgstr ""
+msgstr "Ressurside reserveerimine"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:12
 msgid "Resource Booking for ${title}"
-msgstr ""
+msgstr "Ressurside reserveerimine ${title} jaoks"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:18
 msgid "Title:"
-msgstr ""
+msgstr "Pealkiri:"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:22
 msgid "Starts:"
-msgstr ""
+msgstr "Alustab:"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:26
 msgid "Ends:"
-msgstr ""
+msgstr "Lõpetab:"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:30
 msgid "This is a recurring event!"
-msgstr ""
+msgstr "See on korduv sündmus!"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:38
 msgid "Booked resources"
-msgstr ""
+msgstr "Reserveeritud ressursid"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:42
 msgid "UnBook"
-msgstr ""
+msgstr "Eemalda reserveering"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:51
 msgid "Available resources"
-msgstr ""
+msgstr "Saadaolevad ressursid"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:57
 msgid "Book"
-msgstr ""
+msgstr "Reserveering"
 
 #: /src/schooltool/app/browser/templates/event_info_viewlet.pt:12
 msgid "Location: ${location}"
-msgstr ""
+msgstr "Asukoht: ${location}"
 
 #: /src/schooltool/app/browser/templates/index.pt:6
 msgid "Welcome to SchoolTool"
-msgstr "Tere tulemast SchoolTool'i"
+msgstr "Tere tulemast SchoolTooli"
 
 #: /src/schooltool/app/browser/templates/index.pt:12
 #: /src/schooltool/course/browser/templates/copy_sections.pt:86
@@ -1450,86 +1464,90 @@ msgstr "Grupid"
 #: /src/schooltool/dashboard/school.pt:4 /src/schooltool/level/browser.zcml:7
 #: /src/schooltool/level/security.zcml:7
 msgid "Levels"
-msgstr ""
+msgstr "Astmed"
 
 #: /src/schooltool/app/browser/templates/login.pt:8
 msgid "Your session has expired."
-msgstr ""
+msgstr "Sinu seanss on aegunud."
 
 #: /src/schooltool/app/browser/templates/login.pt:13
 msgid ""
 "You are not allowed to access this page. You can click on the back button in "
 "your browser to go back, or ask a more privileged user to log in."
 msgstr ""
+"Sul pole lubatud sellele lehele ligipääseda. Tagasimnekuks vajuta "
+"veebisirvijas tagasi nuppu või küsi suuremate õigustega kasutajal sisse "
+"logida."
 
 #: /src/schooltool/app/browser/templates/login.pt:23
 msgid "Please log in"
-msgstr ""
+msgstr "Palun logi sisse"
 
 #: /src/schooltool/app/browser/templates/login.pt:35
 msgid "User Information"
-msgstr ""
+msgstr "Kasutaja informatsioon"
 
 #: /src/schooltool/app/browser/templates/login.pt:38
-#: /src/schooltool/basicperson/browser/person.py:59
-#: /src/schooltool/basicperson/browser/person.py:60
+#: /src/schooltool/basicperson/browser/person.py:61
+#: /src/schooltool/basicperson/browser/person.py:62
+#: /src/schooltool/basicperson/browser/person.py:285
 #: /src/schooltool/demographics/browser/personform.py:253
 #: /src/schooltool/demographics/browser/personform.py:254
 #: /src/schooltool/demographics/browser/table.py:67
 #: /src/schooltool/email/browser/email.py:117
 #: /src/schooltool/email/interfaces.py:104
-#: /src/schooltool/person/browser/person.py:287
-#: /src/schooltool/person/browser/person.py:288
+#: /src/schooltool/person/browser/person.py:289
+#: /src/schooltool/person/browser/person.py:290
 #: /src/schooltool/person/interfaces.py:60
 msgid "Username"
-msgstr ""
+msgstr "Kasutajanimi"
 
 #: /src/schooltool/app/browser/templates/login.pt:44
-#: /src/schooltool/basicperson/browser/person.py:64
+#: /src/schooltool/basicperson/browser/person.py:66
 #: /src/schooltool/demographics/browser/personform.py:258
-#: /src/schooltool/person/browser/person.py:160
-#: /src/schooltool/person/browser/person.py:291
+#: /src/schooltool/person/browser/person.py:162
+#: /src/schooltool/person/browser/person.py:293
 msgid "Password"
-msgstr ""
+msgstr "Parool"
 
 #: /src/schooltool/app/browser/templates/login.pt:57
 msgid "L"
-msgstr ""
+msgstr "L"
 
 #: /src/schooltool/app/browser/templates/login.pt:57
 msgid "Log in"
-msgstr ""
+msgstr "Logi sisse"
 
 #: /src/schooltool/app/browser/templates/portlet_tomorrow_events.pt:5
 msgid "Tomorrow's Events"
-msgstr ""
+msgstr "Homsed sündmused"
 
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:4
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:14
 msgid "Deleting a repeating event (${event_title})"
-msgstr ""
+msgstr "Kustutan korduvat sündmust - ${event_title}"
 
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:19
 msgid "You are trying to delete a repeating event."
-msgstr ""
+msgstr "Sa proovid kustutada korduvat sündmust."
 
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:41
 msgid "Current"
-msgstr ""
+msgstr "Präegune"
 
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:43
 msgid "Future"
-msgstr ""
+msgstr "Tulevane"
 
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:45
 msgid "All"
-msgstr ""
+msgstr "Kõik"
 
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:47
-#: /src/schooltool/basicperson/browser/demographics.py:153
-#: /src/schooltool/basicperson/browser/demographics.py:200
-#: /src/schooltool/basicperson/browser/person.py:206
-#: /src/schooltool/basicperson/browser/person.py:222
+#: /src/schooltool/basicperson/browser/demographics.py:171
+#: /src/schooltool/basicperson/browser/demographics.py:218
+#: /src/schooltool/basicperson/browser/person.py:275
+#: /src/schooltool/basicperson/browser/person.py:390
 #: /src/schooltool/contact/browser/contact.py:120
 #: /src/schooltool/contact/browser/contact.py:195
 #: /src/schooltool/contact/browser/contact.py:419
@@ -1557,20 +1575,20 @@ msgstr ""
 #: /src/schooltool/timetable/browser/templates/ttwizard_period_order2.pt:41
 #: /src/schooltool/timetable/browser/templates/ttwizard_slottimes.pt:34
 msgid "Cancel"
-msgstr ""
+msgstr "Katkesta"
 
 #: /src/schooltool/app/browser/templates/simple_event_delete.pt:4
 #: /src/schooltool/app/browser/templates/simple_event_delete.pt:13
 msgid "Deleting an event (${event_title})"
-msgstr ""
+msgstr "Kustutab sündmust - ${event_title}"
 
 #: /src/schooltool/app/browser/templates/simple_event_delete.pt:18
 msgid "Are you sure you want to delete this event?"
-msgstr ""
+msgstr "Oled sa kindel, et soovid kustutada selle sündmuse?"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:4
 msgid "Upload SchoolTool timetable as CSV"
-msgstr "Lae SchoolTool tunniplaanid ülesse kui CSV"
+msgstr "Lae SchoolTool tunniplaan ülesse kui CSV"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:20
 msgid "Import Timetable"
@@ -1581,6 +1599,8 @@ msgid ""
 "You can create the CSV file in a spreadsheet and export it in CSV (Comma-"
 "Separated Values) format. The structure of the table is described below."
 msgstr ""
+"Sa saad luua CSV faili arvutustabelis ja eksportida selle CSV-sse (komaga-"
+"eraldatud väärtuse) formaadis. Tabeli ülesehitust on kirjeldatud allpool."
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:30
 msgid ""
@@ -1589,12 +1609,17 @@ msgid ""
 "timetable schema can be found by going to its view page under School "
 "Timetables for the school year."
 msgstr ""
+"Faili esimene rida pead sisaldama <strong>tunniplaani skeemi</strong> ID-d "
+"mida kasutatakse uute tunniplaanide jaoks. Tunniplaani skeemi ID saab leida, "
+"kui vaadata kooli tunniplaane kooliaasta jaoks."
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:37
 msgid ""
 "The second row should be empty. After that, several section descriptions may "
 "follow. They are separated by an extra carriage return (i.e., a blank line)."
 msgstr ""
+"Teine rida peaks olema tühi. Pärast seda võivad järgneda mitmed sektsioonide "
+"kirjeldused. Need on eraldatud taandridadega."
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:43
 msgid ""
@@ -1606,6 +1631,12 @@ msgid ""
 "<strong>person ids</strong> may follow, the denoted persons will be added to "
 "the section as learners."
 msgstr ""
+"Iga sektsiooni kirjelduse esimene rida sisaldab <strong>kursuse -ja "
+"juhendaja ID-d</strong> uue sektsiooni jaoks.  Seejärel mitmed read mis "
+"sisaldavad <strong>päeva -ja perioodi ID-d</strong>, järgenvad. Esimeses "
+"veergus on perioodide nimekiri kindlaks määraatud kolme tärni poolt(***). "
+"Pärast kindlaks määramist võib järgneda mistahes <strong>kasutajate ID-de</"
+"strong> arv, märgitud kasutajad on lisatud sektsiooni kui õpetajad."
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:54
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:33
@@ -1789,7 +1820,7 @@ msgstr "CSV andmed"
 #: /src/schooltool/person/browser/person-csvimport.pt:75
 #: /src/schooltool/resource/browser/resource-csvimport.pt:72
 msgid "submit-button"
-msgstr ""
+msgstr "saatmise nupp"
 
 #: /src/schooltool/app/configure.zcml:340
 msgid "Security (General)"
@@ -2432,12 +2463,12 @@ msgstr ""
 msgid "Passwords do not match"
 msgstr ""
 
-#: /src/schooltool/basicperson/browser/person.py:149
-msgid "Add new person"
-msgstr ""
-
 #: /src/schooltool/basicperson/browser/person.py:152
 msgid "This username is already in use!"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/person.py:263
+msgid "Add new person"
 msgstr ""
 
 #: /src/schooltool/basicperson/browser/person.py:283
@@ -2448,7 +2479,16 @@ msgstr ""
 msgid "Add multiple persons"
 msgstr ""
 
-#: /src/schooltool/basicperson/browser/person.py:304
+#: /src/schooltool/basicperson/browser/person.py:357
+msgid "Done"
+msgstr ""
+
+#. Default: ""
+#: /src/schooltool/basicperson/browser/person.py:402
+msgid "Change information for ${fullname}"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/person.py:472
 msgid "Current Advisors"
 msgstr ""
 
@@ -2472,15 +2512,6 @@ msgstr ""
 #. Default: ""
 #: /src/schooltool/basicperson/browser/person.py:333
 msgid "Advisees of ${person}"
-msgstr ""
-
-#: /src/schooltool/basicperson/browser/person.py:357
-msgid "Done"
-msgstr ""
-
-#. Default: ""
-#: /src/schooltool/basicperson/browser/person.py:402
-msgid "Change information for ${fullname}"
 msgstr ""
 
 #: /src/schooltool/basicperson/browser/templates/demographics-view.pt:4
@@ -3299,13 +3330,13 @@ msgstr ""
 #: /src/schooltool/demographics/browser/table.pt:28
 #: /src/schooltool/email/browser/templates/email_container.pt:48
 #: /src/schooltool/schoolyear/browser/templates/schoolyear.pt:42
-#: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:34
+#: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:48
 #: /src/schooltool/skin/templates/container.pt:42
 #: /src/schooltool/skin/templates/table_container.pt:33
-#: /src/schooltool/skin/templates/view_macros.pt:194
+#: /src/schooltool/skin/templates/view_macros.pt:195
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:29
 msgid "delete-button"
-msgstr ""
+msgstr "kustutamise nupp"
 
 #: /src/schooltool/course/browser/templates/course_edit.pt:22
 #: /src/schooltool/course/browser/templates/section_edit.pt:23
@@ -5202,18 +5233,18 @@ msgstr ""
 msgid "Resource calendars are visible to the general public."
 msgstr ""
 
-#: /src/schooltool/resource/security.zcml:50
+#: /src/schooltool/resource/security.zcml:53
+msgid "Reservations"
+msgstr ""
+
+#: /src/schooltool/resource/security.zcml:53
 msgid ""
 "Resources are locations or objects within a school.                    "
 "SchoolTool's calendar can function as a reservation                    and "
 "tracking system for resources."
 msgstr ""
 
-#: /src/schooltool/resource/security.zcml:53
-msgid "Reservations"
-msgstr ""
-
-#: /src/schooltool/resource/security.zcml:57
+#: /src/schooltool/resource/security.zcml:60
 msgid "List/Search resources"
 msgstr ""
 
@@ -5566,13 +5597,13 @@ msgid "apply-button"
 msgstr ""
 
 #. Default: "Add"
-#: /src/schooltool/skin/templates/view_macros.pt:174
-#: /src/schooltool/skin/templates/view_macros.pt:180
-#: /src/schooltool/skin/templates/view_macros.pt:187
+#: /src/schooltool/skin/templates/view_macros.pt:175
+#: /src/schooltool/skin/templates/view_macros.pt:181
+#: /src/schooltool/skin/templates/view_macros.pt:188
 msgid "add-button"
 msgstr ""
 
-#: /src/schooltool/skin/templates/view_macros.pt:194
+#: /src/schooltool/skin/templates/view_macros.pt:195
 msgid "D"
 msgstr ""
 

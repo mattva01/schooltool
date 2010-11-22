@@ -1,34 +1,35 @@
-# translation of src_schooltool_locales_schooltool.po to Khmer
-# Khoem Sokhem <khoemsokhem@khmeros.info>, 2009.
+# translation of src_schooltool_locales_schooltool-km.po to Khmer
+# Khoem Sokhem <khoemsokhem@khmeros.info>, 2009, 2010.
 msgid ""
 msgstr ""
-"Project-Id-Version: src_schooltool_locales_schooltool\n"
+"Project-Id-Version: src_schooltool_locales_schooltool-km\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-09-30 19:38+0300\n"
-"PO-Revision-Date: 2010-08-22 20:11+0000\n"
+"POT-Creation-Date: 2010-11-22 16:40+0200\n"
+"PO-Revision-Date: 2010-11-10 06:19+0000\n"
 "Last-Translator: Khoem Sokhem <khoemsokhem@khmeros.info>\n"
 "Language-Team: Khmer <support@khmeros.info>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-09-10 04:35+0000\n"
+"X-Launchpad-Export-Date: 2010-11-11 04:35+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
+"X-Language: km_KH\n"
 "Generated-By: i18nextract.py\n"
 
 #: /src/schooltool/app/app.py:197
 msgid "Your School"
-msgstr "សាលារៀន​របស់​អ្នក"
+msgstr "សាលា​រៀន​របស់​អ្នក"
 
-#: /src/schooltool/app/browser/__init__.py:256
+#: /src/schooltool/app/browser/__init__.py:273
 #: /src/schooltool/app/browser/templates/index.pt:11
 #: /src/schooltool/person/browser/configure.zcml:26
 #: /src/schooltool/person/help/configure.zcml:8
 #: /src/schooltool/person/help/person_container.pt:6
 msgid "Persons"
-msgstr "មនុស្ស"
+msgstr "នាក់"
 
-#: /src/schooltool/app/browser/__init__.py:261
+#: /src/schooltool/app/browser/__init__.py:278
 msgid "1 person"
 msgstr "១ នាក់"
 
@@ -39,27 +40,27 @@ msgstr "${number} នាក់"
 
 #: /src/schooltool/app/browser/app.py:226
 msgid "Username or password is incorrect"
-msgstr "ឈ្មោះអ្នកប្រើប្រាស់ ឬ ពាក្យសំងាត់ មិនត្រឹមត្រូវ"
+msgstr "ឈ្មោះ​អ្នកប្រើប្រាស់ ឬ ពាក្យសំងាត់ មិន​ត្រឹមត្រូវ"
 
-#: /src/schooltool/app/browser/app.py:322 /src/schooltool/app/security.py:308
+#: /src/schooltool/app/browser/app.py:322 /src/schooltool/app/security.py:303
 msgid "Leaders"
 msgstr "អ្នកដឹកនាំ"
 
 #: /src/schooltool/app/browser/app.py:323
 msgid "Current leaders"
-msgstr "អ្នកដឹកនាំ បច្ចុប្បន្ន"
+msgstr "អ្នកដឹកនាំ​បច្ចុប្បន្ន"
 
 #: /src/schooltool/app/browser/app.py:324
 msgid "Available leaders"
-msgstr "អ្នកដឹកនាំ មានស្រាប់"
+msgstr "អ្នកដឹកនាំ​​ដែលមាន"
 
 #: /src/schooltool/app/browser/app.py:347
 msgid "school"
-msgstr "សាលា"
+msgstr "សាលារៀន"
 
 #: /src/schooltool/app/browser/cal.py:113
 msgid "February"
-msgstr "កុម្ភះ"
+msgstr "កុម្ភៈ"
 
 #: /src/schooltool/app/browser/cal.py:113
 msgid "January"
@@ -67,7 +68,7 @@ msgstr "មករា"
 
 #: /src/schooltool/app/browser/cal.py:113
 msgid "March"
-msgstr "ខែ មិនា"
+msgstr "មិនា"
 
 #: /src/schooltool/app/browser/cal.py:114
 msgid "April"
@@ -322,7 +323,7 @@ msgstr "ទៅ​ថ្ងៃ​មុន"
 #. Default: ""
 #: /src/schooltool/app/browser/cal.py:1446
 msgid "Add new event starting at ${title}"
-msgstr "បន្ថែម ព្រឹត្តិការថ្មី ផ្តើមនៅ ${title}"
+msgstr "បន្ថែម ព្រឹត្តិការ​ថ្មី ផ្ដើម​នៅ ${title}"
 
 #: /src/schooltool/app/browser/cal.py:1735
 #: /src/schooltool/app/interfaces.py:146 /src/schooltool/app/interfaces.py:157
@@ -563,16 +564,16 @@ msgstr "កែ​សម្រួល​ព្រឹត្តិការណ៍"
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:185
 #: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:39
 msgid "Update"
-msgstr "ធ្វើ​ឲ្យ​ទាន់​សម័យ"
+msgstr "ធ្វើ​បច្ចុប្បន្នភាព"
 
 #. Default: ""
-#: /src/schooltool/app/browser/cal.py:2280 /src/schooltool/skin/form.py:76
+#: /src/schooltool/app/browser/cal.py:2271 /src/schooltool/skin/form.py:76
 msgid "Updated on ${date_time}"
-msgstr "ធ្វើ​ឲ្យ​ទាន់​សម័យ​នៅ ${date_time}"
+msgstr "ធ្វើ​បច្ចុប្បន្នភាព​លើ​​ ${date_time}"
 
-#: /src/schooltool/app/browser/cal.py:2715
-#: /src/schooltool/app/browser/configure.zcml:597
-#: /src/schooltool/app/browser/configure.zcml:684
+#: /src/schooltool/app/browser/cal.py:2706
+#: /src/schooltool/app/browser/configure.zcml:604
+#: /src/schooltool/app/browser/configure.zcml:691
 #: /src/schooltool/app/browser/templates/calendar_tab_viewlet.pt:3
 #: /src/schooltool/app/configure.zcml:348
 msgid "Calendar"
@@ -645,11 +646,11 @@ msgstr "ផ្លាស់ប្ដូរ​ចំណូល​ចិត្ត​
 msgid "Calendar (Daily)"
 msgstr "ប្រតិទិន (ប្រចាំ​ថ្ងៃ)"
 
-#: /src/schooltool/app/browser/configure.zcml:409
+#: /src/schooltool/app/browser/configure.zcml:416
 msgid "Calendar (Daily, PDF)"
-msgstr "ប្រតិទិន្ន (ប្រចាំ​ថ្ងៃ, PDF)"
+msgstr "ប្រតិទិន (ប្រចាំ​ថ្ងៃ, PDF)"
 
-#: /src/schooltool/app/browser/configure.zcml:418
+#: /src/schooltool/app/browser/configure.zcml:425
 msgid "Calendar (Weekly)"
 msgstr "ប្រតិទិន (ប្រចាំ​សប្ដាហ៍)"
 
@@ -718,11 +719,11 @@ msgstr "ដែន​ការ​បកប្រែ"
 msgid "Generations"
 msgstr "ការ​បង្កើត"
 
-#: /src/schooltool/app/browser/configure.zcml:666
+#: /src/schooltool/app/browser/configure.zcml:673
 msgid "Browser UI"
-msgstr "ចំណុច​ប្រទាក់​អ្នក​ប្រើ​ការ​រុករក"
+msgstr "កម្មវិធី​រុក​រក​ចំណុច​ប្រទាក់​អ្នក​ប្រើ"
 
-#: /src/schooltool/app/browser/configure.zcml:672
+#: /src/schooltool/app/browser/configure.zcml:679
 #: /src/schooltool/app/browser/templates/login.pt:3
 #: /src/schooltool/app/browser/templates/menu_view.pt:3
 msgid "Login"
@@ -801,7 +802,7 @@ msgstr "ការ​បម្លែង​ទៅ​ជា​យូនីកូដ
 
 #: /src/schooltool/app/browser/csvimport.py:295
 msgid "Row 2 is not empty"
-msgstr "ជួរ​ដេក​ទី ២ មិន​ទទេ​ទេ"
+msgstr "ជួរ​ដេក​ទី ២ មិន​ទទេ​ឡើយ"
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:331
@@ -816,7 +817,7 @@ msgstr ""
 #: /src/schooltool/app/browser/csvimport.py:357
 msgid "Malformed line ${line_no} (it should contain a day id and a period id)"
 msgstr ""
-"បន្ទាត់​មាន​ទ្រង់ទ្រាយ​មិនត្រឹមត្រូវ ${line_no} (វា​គួរ​តែ​មាន​លេខ​សម្គាល់​ថ្ងៃ និង​លេខសម្គាល់​រយៈពេល)"
+"បន្ទាត់​មាន​ទ្រង់ទ្រាយ​មិន​ត្រឹមត្រូវ ${line_no} (វា​គួរ​តែ​មាន​លេខ​សម្គាល់​ថ្ងៃ និង​លេខ​សម្គាល់​រយៈពេល)"
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:380
@@ -830,12 +831,12 @@ msgstr "មិន​មាន​សិស្ស​នៅ​ក្នុង​ផ
 
 #: /src/schooltool/app/browser/csvimport.py:466
 msgid "The first row of the CSV file must contain the timetable schema id."
-msgstr "ជួរ​ដំបូង​របស់​ឯកសារ CSV ត្រូវ​តែ​មាន​លេខ​សម្គាល់​កាលវិភាគ"
+msgstr "ជួរដេក​​ដំបូង​របស់​ឯកសារ CSV ត្រូវ​តែ​មាន​លេខ​សម្គាល់​គម្រោង​​កាលវិភាគ ។"
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:477
 msgid "The timetable schema ${schema} does not exist."
-msgstr "មិនទាន់មាន​កាលវិភាគ​សាលា ${schema} ។"
+msgstr "មិន​ទាន់​មាន​គម្រោង​កាលវិភាគ​ ${schema} ​ឡើយ ។"
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:508
@@ -844,15 +845,15 @@ msgstr "កំហុស​ក្នុង​ទិន្នន័យ CSV កា�
 
 #: /src/schooltool/app/browser/csvimport.py:548
 msgid "Day ids not defined in selected schema: ${args}."
-msgstr "លេខ​សម្គាល់​ថ្ងៃ​មិន​បាន​កំណត់​ក្នុង​គ្រោងការណ៍​ដែល​បានជ្រើស​ទេ ៖ ${args} ។"
+msgstr "លេខ​សម្គាល់​ថ្ងៃ​មិន​បាន​កំណត់​ក្នុង​គម្រោង​​ដែល​បាន​ជ្រើស​ទេ ៖ ${args} ។"
 
 #: /src/schooltool/app/browser/csvimport.py:549
 msgid "Periods not defined in selected days: ${args}."
-msgstr "ថិរវេលា​មិនបាន​កំណត់​នៅ​ក្នុងថ្ងៃ​ដែល​បាន​ជ្រើស​ទេ ៖ ${args} ។"
+msgstr "ថិរវេលា​មិនបាន​កំណត់​នៅ​ក្នុង​ថ្ងៃ​ដែល​បាន​ជ្រើស​ទេ ៖ ${args} ។"
 
 #: /src/schooltool/app/browser/csvimport.py:550
 msgid "Persons not found: ${args}."
-msgstr "រក​មិន​ឃើញ​មនុស្ស ៖ ${args} ។"
+msgstr "រក​មិន​ឃើញ​អ្នកប្រើ​ ៖ ${args} ។"
 
 #: /src/schooltool/app/browser/csvimport.py:551
 msgid "Courses not found: ${args}."
@@ -915,9 +916,9 @@ msgid ""
 "well as a framework for building customized applications and configurations "
 "for individual schools or states."
 msgstr ""
-"SchoolTool គឺ​ជា​កម្មវិធី​គ្រប់គ្រង​ប្រើ​ដោយ​សេរី​សម្រាប់​សាលា​រៀន​ទូទាំង​ពិភព​លោក ។ គោល​បំណង​របស់គម្រោង​គឺ​​"
+"SchoolTool គឺ​ជា​កម្មវិធី​គ្រប់គ្រង​ប្រើ​ដោយ​សេរី​សម្រាប់​សាលា​រៀន​ទូទាំង​ពិភព​លោក ។ គោល​បំណង​របស់​គម្រោង​គឺ​​"
 "បង្កើត​ប្រព័ន្ធ​ព័ត៌មាន​របស់​សិស្ស​ដ៏​សាមញ្ញ​ ឬ​ប្រព័ន្ធ​គ្រប់គ្រង​ព័ត៌មាន​សម្រាប់​សាលា​បឋម​សិក្សា និង​អនុវិទ្យាល័យ ព្រម​"
-"ទាំង​ជា​ក្របខ័ណ្ឌ​សម្រាប់​ស្ថាបនា​កម្មវិធី​ដែល​អាច​ប្ដូរ​ និង​កំណត់​រចនាសម្ព័ន្ធ​តាម​បំណង​សម្រាប់​សាលា​នីមួយៗ ។"
+"ទាំង​ជា​ក្របខ័ណ្ឌ​សម្រាប់​ស្ថាបនា​កម្មវិធី​ដែល​អាច​ប្ដូរ​ និង​កំណត់​រចនាសម្ព័ន្ធ​តាម​បំណង​សម្រាប់​សាលា​នីមួយៗ ។"
 
 #: /src/schooltool/app/browser/templates/about.pt:16
 msgid ""
@@ -934,7 +935,7 @@ msgid ""
 "SchoolTool is licensed under the <a href=\"http://www.gnu.org/licenses/"
 "gpl-2.0.html\">GNU General Public License, Version 2</a>."
 msgstr ""
-"SchoolTool ស្ថិត​នៅ​ក្រោម​អជ្ញាបណ្ណ <a href=\"http://www.gnu.org/licenses/gpl-2.0."
+"SchoolTool ស្ថិត​នៅ​ក្រោម​អជ្ញាប័ណ្ណ <a href=\"http://www.gnu.org/licenses/gpl-2.0."
 "html\">GNU General Public License, Version 2</a> ។"
 
 #: /src/schooltool/app/browser/templates/about.pt:24
@@ -943,7 +944,7 @@ msgstr "សម្រាប់​ព័ត៌មាន​បន្ថែម ៖"
 
 #: /src/schooltool/app/browser/templates/about.pt:27
 msgid "Website"
-msgstr "វ៉ែបសៃថ៍"
+msgstr "តំបន់បណ្ដាញ"
 
 #: /src/schooltool/app/browser/templates/about.pt:28
 msgid "Launchpad project page"
@@ -1034,16 +1035,16 @@ msgstr "atom_description"
 #. Default: "Atom Enabled"
 #: /src/schooltool/app/browser/templates/cal_atom.pt:46
 msgid "atom_enabled"
-msgstr ""
+msgstr "atom_enabled"
 
 #. Default: "for more info."
 #: /src/schooltool/app/browser/templates/cal_atom.pt:49
 msgid "atom_more_info"
-msgstr ""
+msgstr "atom_more_info"
 
 #: /src/schooltool/app/browser/templates/cal_atom.pt:56
 msgid "Validate my Atom feed"
-msgstr "ធ្វើ​ឲ្យ​មតិព័ត៌មាន​ Atom របស់​ខ្ញុំ​មាន​សុពលភាព"
+msgstr "ធ្វើ​ឲ្យ​មតិ​ព័ត៌មាន​ Atom របស់​ខ្ញុំ​មាន​សុពលភាព"
 
 #: /src/schooltool/app/browser/templates/cal_atom.pt:56
 msgid "[Valid Atom]"
@@ -1147,7 +1148,7 @@ msgstr "គ្មាន​ធនធាន​ដែល​មាន​ប្រត
 
 #: /src/schooltool/app/browser/templates/default_report_template.pt:23
 msgid "Created with SchoolTool"
-msgstr ""
+msgstr "បាន​បង្កើត​តាម​​ SchoolTool"
 
 #: /src/schooltool/app/browser/templates/default_report_template.pt:37
 msgid "Page ${page_number}"
@@ -1264,7 +1265,7 @@ msgstr "កែ​សម្រួល​ព្រឹត្តិការណ៍"
 #: /src/schooltool/app/browser/templates/event.pt:64
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:65
 msgid "Scheduled resources"
-msgstr "ធនធាន​ដែល​កំណត់"
+msgstr "Scheduled resources"
 
 #: /src/schooltool/app/browser/templates/event.pt:72
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:73
@@ -1517,11 +1518,11 @@ msgstr "ព្រឹត្តិការ ថ្ងៃស្អែក"
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:4
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:14
 msgid "Deleting a repeating event (${event_title})"
-msgstr "លុប​ព្រឹត្តិការណ៍​ដែល​ធ្វើ​ដដែលៗ (${event_title})"
+msgstr "លុប​ព្រឹត្តិការណ៍​ដែល​ធ្វើ​ដដែល (${event_title})"
 
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:19
 msgid "You are trying to delete a repeating event."
-msgstr "អ្នក​កំពុង​ព្យាយាម​លុប​ព្រឹត្តិការណ៍​ដែល​ធ្វើ​ដដែលៗ ។"
+msgstr "អ្នក​កំពុង​ព្យាយាម​លុប​ព្រឹត្តិការណ៍​ដែល​ធ្វើ​ដដែល​ៗ ។"
 
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:41
 msgid "Current"
@@ -1576,7 +1577,7 @@ msgstr "លុប​ព្រឹត្តិការណ៍ (${event_title})"
 
 #: /src/schooltool/app/browser/templates/simple_event_delete.pt:18
 msgid "Are you sure you want to delete this event?"
-msgstr "តើ​អ្នក​ប្រាកដ​ជា​ចង់​លុប​ព្រឹត្តិការណ៍​នេះ​ឬ?"
+msgstr "តើ​អ្នក​ប្រាកដ​ជា​ចង់​លុប​ព្រឹត្តិការណ៍​នេះ​ឬ ?"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:4
 msgid "Upload SchoolTool timetable as CSV"
@@ -1592,7 +1593,7 @@ msgid ""
 "Separated Values) format. The structure of the table is described below."
 msgstr ""
 "អ្នក​អាច​បង្កើត​ឯកសារ CSV ក្នុង​សៀវភៅ​បញ្ជី និង​នាំចេញ​វា​ជា​ទ្រង់ទ្រាយ CSV (តម្លៃ​បំបែក​ដោយ​សញ្ញា​"
-"ក្បៀស) ។ រចនា​សម្ព័ន្ធ​តារាង​ត្រូវ​បាន​ពិពណ៌នា​ដូច​ខាងក្រោម ។"
+"ក្បៀស) ។ រចនា​​សម្ព័ន្ធ​តារាង​ត្រូវ​បាន​ពិពណ៌នា​ដូច​ខាងក្រោម ។"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:30
 msgid ""
@@ -1601,16 +1602,16 @@ msgid ""
 "timetable schema can be found by going to its view page under School "
 "Timetables for the school year."
 msgstr ""
-"ជួរដេក​ទី​មួយ​​របស់​ឯកសារ​ត្រូវ​តែ​មាន​លេខ​សម្គាល់​របស់ <strong>កាលវិភាគ​សាលា</strong> ដែល​នឹង​ត្រូវ​"
-"បានប្រើ​សម្រាប់​កាលវិភាគ​ថ្មី  ។ លេខ​សម្គាល់​របស់​កាលវិភាគ​សាលា​អាច​រក​បាន​ដោយ​មើល​ទំព័រ​ ដែល​ស្ថិត​នៅ​"
-"ខាងក្រោម​កាលវិភាគ​សាលា​សម្រាប់​ឆ្នាំ​សិក្សា ។"
+"ជួរដេក​ទី​មួយ​​របស់​ឯកសារ​ត្រូវ​តែ​មាន​លេខ​សម្គាល់​របស់ <strong>គម្រោង​កាលវិភាគ​</strong> ដែល​នឹង​ត្រូវ​បាន​"
+"ប្រើ​សម្រាប់​កាលវិភាគ​ថ្មី  ។ លេខ​សម្គាល់​របស់​កាលវិភាគ​សាលា​អាច​រក​បាន​ដោយ​មើល​ទំព័រ​ ដែល​ស្ថិត​នៅ​ខាងក្រោម​"
+"កាលវិភាគ​សាលា​សម្រាប់​ឆ្នាំ​សិក្សា ។"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:37
 msgid ""
 "The second row should be empty. After that, several section descriptions may "
 "follow. They are separated by an extra carriage return (i.e., a blank line)."
 msgstr ""
-"ជួរដេក​ទីពីរ​គួរ​តែ​ទទេ ។ បន្ទាប់​មក សេចក្ដី​ពិពណ៌​នា​​ភាគ​ជា​ច្រើន​នឹង​អនុវត្ត  ពួកវា​ត្រូវ​បានបំបែក​ដោយ​ការ​"
+"ជួរដេក​ទីពីរ​គួរ​តែ​ទទេ ។ បន្ទាប់​មក សេចក្ដី​ពិពណ៌នា​​ភាគ​ជា​ច្រើន​នឹង​អនុវត្ត  ពួកវា​ត្រូវ​បាន​បំបែក​ដោយ​ការ​"
 "ត្រឡប់​ដែល​នាំ​បន្ថែម (ឧ. បន្ទាត់​ទទេ) ។"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:43
@@ -1624,10 +1625,10 @@ msgid ""
 "the section as learners."
 msgstr ""
 "ជួរដេក​ដំបូង​​នៃ​សេចក្ដី​ពិពណ៌នា​របស់​ភាគ​នីមួយៗ​មាន <strong>លេខ​សម្គាល់​វគ្គសិក្សា</strong> និង "
-"<strong>លេខ​សម្គាល់​គ្រូ​បង្រៀន</strong> សម្រាប់​ភាគ​ថ្មី ។ បន្ទាប់មក​ចំនួន​ជួរដេក នីមួយៗ​មាន "
+"<strong>លេខ​សម្គាល់​គ្រូ​បង្រៀន</strong> សម្រាប់​ភាគ​ថ្មី ។ បន្ទាប់មក​ចំនួន​ជួរដេក នីមួយៗ​មាន "
 "<strong>លេខ​សម្គាល់​ថ្ងៃ</strong> និង <strong>លេខ​សម្គាល់​រយៈពេល</strong> ។ បញ្ជី​សេចក្ដី​"
-"ពិពណ៌នា​រយៈពេល​ត្រូវ​បាន​បញ្ចប់​ដោយ​សញ្ញា ('***') នៅ​ក្នុង​ជួរឈរ​ទីមួយ ។ បន្ទាប់​ពី​ធាតុ​បញ្ចប់​អាច​មាន "
-"<strong>លេខ​សម្គាល់មនុស្ស</strong> មនុស្ស​ដែល​ចំណាំ​នឹង​ត្រូ​វបានបន្ថែម​ទៅ​ភាគ​ជា​អ្នក​រៀន ។"
+"ពិពណ៌នា​រយៈពេល​ត្រូវ​បាន​បញ្ចប់​ដោយ​សញ្ញា ('***') នៅ​ក្នុង​ជួរឈរ​ទី​មួយ ។ បន្ទាប់​ពី​ធាតុ​បញ្ចប់​អាច​មាន "
+"<strong>លេខ​សម្គាល់​មនុស្ស</strong> មនុស្ស​ដែល​ចំណាំ​នឹង​ត្រូវវ​បាន​បន្ថែម​ទៅ​ភាគ​ជា​អ្នក​រៀន ។"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:54
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:33
@@ -1685,8 +1686,8 @@ msgid ""
 "learners, and its timetable will contain three timetable activities, two on "
 "Monday. The literature section will be processed in a similar fashion."
 msgstr ""
-"ឧទាហរណ៍​ខាង​លើ​នឹង​បង្កើត​ភាគ​ថ្មី​ពីរ មួយ​សម្រាប់​ការ​បង្រៀន​ទស្សនៈវិជ្ជា និង​មួយ​ទៀត​សម្រាប់​ការ​បង្រៀន​អក្សរ​"
-"សាស្ត្រ ។ ភាគ​សម្រាប់​ការ​បង្រៀន​ទស្សនៈវិជ្ជា​​នឹង​មាន​​មនុស្ស​ដែលមាន​លេខ​សម្គាល់ 'johnny' និង 'billy' "
+"ឧទាហរណ៍​ខាង​លើ​នឹង​បង្កើត​ភាគ​ថ្មី​ពីរ មួយ​សម្រាប់​ការ​បង្រៀន​ទស្សនៈ​វិជ្ជា និង​មួយ​ទៀត​សម្រាប់​ការ​បង្រៀន​អក្សរ​"
+"សាស្ត្រ ។ ភាគ​សម្រាប់​ការ​បង្រៀន​ទស្សនៈ​វិជ្ជា​​នឹង​មាន​​មនុស្ស​ដែល​មាន​លេខ​សម្គាល់ 'johnny' និង 'billy' "
 "ជា​អ្នក​រៀន ហើយ​កាលវិភាគ​របស់​វា​នឹង​មាន​សកម្មភាព​កាលវិភាគ​បី ដោយ​សកម្មភាព​ពីរ​នៅ​ថ្ងៃ​ច័ន្ទ ។ ភាគ​អក្សរ​"
 "សាស្ត្រ​នឹង​​ត្រូវ​បាន​ដំណើរការ​នៅ​ក្នុង​បែបផែន​ដូច​គ្នា ។"
 
@@ -1699,11 +1700,11 @@ msgid ""
 "containing the person ids is processed, the other columns are ignored. You "
 "can import the same data several times without any side effects."
 msgstr ""
-"ចំណាំ​ថា មាន​តែ​លេខ​សម្គាល់​របស់​វត្ថុ​ត្រូវ​បាន​ប្រើ​នៅ​ក្នុង​ឯកសារ គ្មាន​ចំណង​ជើង​ទេ ។ ប្រសិនបើ​ជួរដេក​បញ្ចប់​"
+"ចំណាំ​ថា មាន​តែ​លេខ​សម្គាល់​របស់​វត្ថុ​ត្រូវ​បាន​ប្រើ​នៅ​ក្នុង​ឯកសារ គ្មាន​ចំណង​ជើង​ទេ ។ ប្រសិនបើ​ជួរដេក​បញ្ចប់​"
 "ដោយ​ក្រឡា​ទទេ (ឧ.<em>\"philosophy\",\"lorch\",\"\",\"\"</em>) ក្រឡា​ទាំង​នោះ​នឹង​ត្រូវ​"
-"បានបោះបង់ ។ អ្នក​អាច​បំបែក​សេចក្ដី​ពិពណ៌នា​ភាគ​ដោយ​បន្ទាត់​ច្រើនជាង​មួយ ។ នៅ​ក្នុង​បញ្ជី​អ្នក​សិក្សា មានតែ​"
-"ជួរឈរ​ដំបូង​ទេ​​មាន​លេខ​សម្គាល់​មនុស្ស​ត្រូវ​បានដំណើរ​ការ ជួរឈរ​ផ្សេង​ទៀត​ត្រូវ​បាន​មិនអើពើ ។ អ្នក​អាច​នាំចូល​"
-"ទិន្នន័យ​ដូចគ្នា​ច្រើន​ដង​ដោយ​គ្មាន​ផល​ប៉ះពាល់នោះ​ទេ ។"
+"បានបោះបង់ ។ អ្នក​អាច​បំបែក​សេចក្ដី​ពិពណ៌នា​ភាគ​ដោយ​បន្ទាត់​ច្រើនជាង​មួយ ។ នៅ​ក្នុង​បញ្ជី​អ្នក​សិក្សា មានតែ​"
+"ជួរឈរ​ដំបូង​ទេ​​មាន​លេខ​សម្គាល់​មនុស្ស​ត្រូវ​បាន​ដំណើរ​ការ ជួរឈរ​ផ្សេង​ទៀត​ត្រូវ​បាន​មិនអើពើ ។ អ្នក​អាច​នាំចូល​"
+"ទិន្នន័យ​ដូចគ្នា​ច្រើន​ដង​ដោយ​គ្មាន​ផល​ប៉ះពាល់​នោះ​ទេ ។"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:94
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:48
@@ -1824,7 +1825,7 @@ msgstr "បញ្ចូល​ទិន្នន័យ CSV"
 #: /src/schooltool/person/browser/person-csvimport.pt:70
 #: /src/schooltool/resource/browser/resource-csvimport.pt:67
 msgid "CSV Data"
-msgstr "ទិន្នន័យ"
+msgstr "ទិន្នន័យ CSV"
 
 #. Default: "Submit"
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:122
@@ -1849,7 +1850,7 @@ msgstr "ធនធាន​សៀវភៅ"
 
 #: /src/schooltool/app/help/admin.pt:6
 msgid "SchoolTool Administration"
-msgstr "ការ​គ្រប់គ្រង SchoolTool"
+msgstr "គណៈ​គ្រប់គ្រង​ SchoolTool"
 
 #: /src/schooltool/app/help/admin.pt:8
 msgid ""
@@ -1861,11 +1862,11 @@ msgid ""
 "<p>This branch of the help tree contains items relevant to administrators "
 "configuring SchoolTool, but not end users.</p>"
 msgstr ""
-"<h1>ការ​គ្រប់គ្រង​ SchoolTool​</h1> <p>សាលា​មាន​រចនាសម្ព័ន្ធ​ស្មុគស្មាញ ពង្រីក​វិសាល​ភាពការ​គ្រប់គ្រង​"
-"មនុស្ស គរុកោសល្យ ពេលវេលា និង​ធនធាន​មនុស្ស ។ ជា​អកុសល នេះ​មាន​ន័យ​ថា​កម្មវិធី​ដែល​រកមើល​ម៉ូដែល​ដំណើរការ​"
-"ទាំងអស់​នេះ ដូចជា SchoolTool ក៏មាន​លក្ខណៈ​ស្មុគស្មាញ​ដែរ ហើយ​ដំណើរការ​នៃ ការ​រៀបចំ​នៅ​ក្នុង "
-"SchoolTool ចាំបាច់​កម្មវិធីដែលពាក់ព័ន្ធ​មួយ ។</p> <p>ផ្នែកនៃ​មែកធាង​ជំនួយ​នេះ​មាន​ធាតុ​ដែលទាក់ទង​នឹង​ "
-"SchoolTool កំណត់​រចនាសម្ព័ន្ធ​របស់​អ្នកគ្រប់គ្រង ប៉ុន្តែ​មិន​សម្រាប់​អ្នក​ប្រើ​ទេ ។</p>"
+"<h1>គណៈ​គ្រប់គ្រង​ SchoolTool​</h1> <p>សាលា​មាន​រចនាសម្ព័ន្ធ​ស្មុគស្មាញ ពង្រីក​វិសាល​ភាព​ការ​គ្រប់គ្រង​"
+"មនុស្ស គរុកោសល្យ ពេលវេលា និង​ធនធាន​មនុស្ស ។ ជា​ភាព​លំបាក នេះ​មាន​ន័យ​ថា​កម្មវិធី​ដែល​រកមើល​ម៉ូដែល​"
+"ដំណើរការ​ទាំងអស់​នេះ ដូចជា SchoolTool ក៏​មាន​លក្ខណៈ​ស្មុគស្មាញ​ដែរ ហើយ​ដំណើរការ​នៃ ការ​រៀបចំ​នៅ​"
+"ក្នុង SchoolTool ចាំបាច់​កម្មវិធី​ដែល​ពាក់ព័ន្ធ​មួយ ។</p> <p>ផ្នែក​នៃ​មែកធាង​ជំនួយ​នេះ​មាន​ធាតុ​ដែល​"
+"ទាក់ទង​នឹង​ SchoolTool កំណត់​រចនាសម្ព័ន្ធ​របស់​​គណៈ​​គ្រប់គ្រង ប៉ុន្តែ​មិន​សម្រាប់​អ្នក​ប្រើ​ទេ ។</p>"
 
 #: /src/schooltool/app/help/calendar_selection.pt:6
 #: /src/schooltool/app/help/configure.zcml:97
@@ -1889,17 +1890,17 @@ msgid ""
 "strong> If you press the <code>Shift</code> key while clicking on calendars, "
 "you can select a range.</li> </ul>"
 msgstr ""
-"<h1>ការ​ជ្រើស​ប្រតិទិន</h1> <p>អ្នកអាច​បន្ថែម​ព្រឹត្តិការណ៍​កូដ​ដែលមាន​ពណ៌​ពី​ប្រតិទិន​ជា​ច្រើន​ទៅកាន់​ទិដ្ឋភាព​"
-"ប្រតិទិន​ផ្ទាល់​ខ្លួន​របស់​អ្នក ។ អ្នកអាច​បន្ថែម​ព្រឹត្តិការណ៍​ពី​ការ​ជ្រើស​រើស​វគ្គសិក្សា​ដែល​អ្នក​​ចូលរួម ក្រុម មនុស្ស​"
-"ផ្សេងៗ​ទៀត ឬ​ធនធាន​ព្រឹត្តិការណ៍​ដូចជា​ថ្នាក់​រៀន​ ឬ​អ្នក​ធ្វើគម្រោង ។</p> <p>ប្រតិទិន​មួយ​ចំនួន​គឺ​ជា​លក្ខណៈ​"
-"ឯកជន ឬ​មាន​ដែន​កំណត់​ទៅ​ក្រុម​ជាក់លាក់ ។</p> <p>នៅលើសំណុំ​បែបបទ​​ជម្រើស​ប្រតិទិន​ដែល​អ្នក​ត្រូវ​បានផ្ដល់​ឲ្យ​​បញ្ជី​"
-"ប្រតិទិន​ដែល​អ្នកអាច​ប្រើ​បានទាំងអស់ ។ វា​អាច​ជា​បញ្ជី​វែង ។</p> <p> \"SchoolTool site-wide "
-"calendar\" ត្រូវ​បាន​​បម្រុង​ទុក​ប្រើ​ជា​ប្រតិទិន​ផ្លូវការ​ជា​សាធារណៈ​របស់​សាលារៀន ។</p> <h3>តើ​ខ្ញុំ​"
-"គួរ...</h3> <ul> <li><strong>ជ្រើស ឬ​មិនជ្រើស​ប្រតិទិន​នីមួយៗ​នៃ​ប្រភេទ​មួយ ៖</strong> ប្រសិនបើ​"
-"អ្នក​ចុច​​គ្រាប់ចុច <code>Ctrl</code> នៅ​លើ​ក្ដារចុច​របស់​អ្នក​ខណៈពេល​អ្នក​ជ្រើស​ប្រតិទិន​ពី​បញ្ជី​​ដោយ​ប្រើ​"
-"កណ្ដុរ​របស់​អ្នក អ្នកអាច​ជ្រើស​ប្រតិទិន ។</li> <li><strong>ជ្រើស​ជួរ​ប្រតិទិន​របស់​ប្រភេទ​មួយ ៖</"
-"strong> ប្រសិនបើ​អ្នក​ចុច​គ្រាប់ចុច​ <code>ប្ដូរ(Shift)</code> ខណៈពេល​ដែល​ចុច​លើ​ប្រតិទិន អ្នកអាច​"
-"ជ្រើសជួរ ។</li> </ul>"
+"<h1>ការ​ជ្រើស​ប្រតិទិន</h1> <p>អ្នក​អាច​បន្ថែម​ព្រឹត្តិការណ៍​កូដ​ដែល​មាន​ពណ៌​ពី​ប្រតិទិន​ជា​ច្រើន​ទៅកាន់​ទិដ្ឋភាព​"
+"ប្រតិទិន​ផ្ទាល់​ខ្លួន​របស់​អ្នក ។ អ្នក​អាច​បន្ថែម​ព្រឹត្តិការណ៍​ពី​ការ​ជ្រើស​រើស​វគ្គសិក្សា​ដែល​អ្នក​​ចូលរួម ក្រុម មនុស្ស​"
+"ផ្សេងៗ​ទៀត ឬ​ធនធាន​ព្រឹត្តិការណ៍​ដូចជា​ថ្នាក់​រៀន​ ឬ​អ្នក​ធ្វើគម្រោង ។</p> <p>ប្រតិទិន​មួយ​ចំនួន​គឺ​ជា​លក្ខណៈ​"
+"ឯកជន ឬ​មាន​ដែន​កំណត់​ទៅ​ក្រុម​ជាក់លាក់ ។</p> <p>នៅ​លើ​សំណុំ​បែបបទ​​ជម្រើស​ប្រតិទិន​ដែល​អ្នក​ត្រូវ​បាន​ផ្ដល់​ឲ្យ​​បញ្ជី​"
+"ប្រតិទិន​ដែល​អ្នក​អាច​ប្រើ​បានទាំងអស់ ។ វា​អាច​ជា​បញ្ជី​វែង ។</p> <p> \"SchoolTool site-wide "
+"calendar\" ត្រូវ​បាន​​បម្រុង​ទុក​ប្រើ​ជា​ប្រតិទិន​ផ្លូវការ​ជា​សាធារណៈ​របស់​សាលារៀន ។</p> <h3>តើ​ខ្ញុំ​"
+"គួរ...</h3> <ul> <li><strong>ជ្រើស ឬ​មិន​ជ្រើស​ប្រតិទិន​នីមួយៗ​នៃ​ប្រភេទ​មួយ ៖</strong> ប្រសិនបើ​"
+"អ្នក​ចុច​​គ្រាប់ចុច <code>Ctrl</code> នៅ​លើ​ក្ដារចុច​របស់​អ្នក​ខណៈ​ពេល​អ្នក​ជ្រើស​ប្រតិទិន​ពី​បញ្ជី​​ដោយ​ប្រើ​"
+"កណ្ដុរ​របស់​អ្នក អ្នក​អាច​ជ្រើស​ប្រតិទិន ។</li> <li><strong>ជ្រើស​ជួរ​ប្រតិទិន​របស់​ប្រភេទ​មួយ ៖</"
+"strong> ប្រសិនបើ​អ្នក​ចុច​គ្រាប់ចុច​ <code>ប្ដូរ(Shift)</code> ខណៈ​ពេល​ដែល​ចុច​លើ​ប្រតិទិន អ្នក​អាច​"
+"ជ្រើសជួរ ។</li> </ul>"
 
 #: /src/schooltool/app/help/calendaring.pt:6
 msgid "Calendaring in SchoolTool"
@@ -1932,28 +1933,28 @@ msgid ""
 "<li><strong>Day/week/month/year buttons:</strong> These buttons allow you to "
 "switch between daily, weekly, monthly and annual views.</li> </ul>"
 msgstr ""
-"<h1>បង្កើត​ប្រតិទិន​នៅ​ក្នុង SchoolTool​</h1> <p>SchoolTool រួម​មាន​ប្រព័ន្ធ​បង្កើត​ប្រតិទិន​ដែលមាន​"
-"លក្ខណៈ​សម្បត្តិ​ពេញលេញ ដូច​ទៅនឹង Apple iCal ឬ​ប្រតិទិន Google ប៉ុន្តែ​អាច​តំណាង​កាលវិភាគ​សាលា​"
-"ស្មុគស្មាញ រួមាន​ផ្លាស់ប្ដូរ​កាលវិភាគ ។ SchoolTool ក៏មានប្រយោជន៍​ផង​ដែរ​សម្រាប់​ការ​កំណត់​ពេលវេលា​"
-"ធនធាន​ធម្មតា ដោយ​អនុញ្ញាត​ឲ្យ​អ្នក​គ្រប់គ្រង​ការ​ផ្ដល់បន្ទប់ និង​កក់​ធនធនា​រួម​ដូចជា កុំព្យូទ័រ ឬ​ឧបករណ៍​បញ្ចាំង​"
-"ស្លាយ ។ មនុស្ស​ ក្រុម ឬ​ផ្នែក​នៃ​វគ្គសិក្សា​នីមួយៗ​ ឬ​ធនធាន​មាន​ប្រតិទិន​ផ្ទាល់​របស់​វា ។ អ្នកអាច​រួម​បញ្ចូល​"
-"ប្រតិទិន​ក្នុង​ទិដ្ឋភាព​ប្រតិទិន​ផ្ទាល់​ខ្លួន​របស់​អ្នក ។</p> <h3>ផ្នែក​របស់​ទិដ្ឋភាព​ប្រតិទិន​ស្តង់ដារ</h3> "
-"<ul> <li><strong>តារាង​ប្រតិទិន ៖</strong> បំពេញ​ផ្នែក (ខាង​ក្រោម-ខាង​ស្ដាំ) នៃ​ទំព័រ ។ វា​"
-"តំណាង​ឲ្យ​ប្រតិទិន​សម្រាប់​មួយ​ថ្ងៃ មួយ​សប្ដាហ៍ មួយ​ខែ ឬ​មួយ​ឆ្នាំ​ ដោយ​អាស្រ័យ​លើ​ទិដ្ឋភាព ។</li> "
-"<li><strong>របារ​រុករក​ប្រតិទិន ៖</strong> នៅ​​ខាង​លើ​តារាង​ប្រតិទិន ។ អនុញ្ញាត​ឲ្យ​អ្នក​រុករក​ទៅ​មុខ "
-"ឬ​ថយក្រោយ​ក្នុង​ពេលវេលា ឬ​ត្រឡប់​ទៅ​ពេលវេលា​បច្ចុប្បន្ន ។</li> <li><strong>ចំណង​ជើង​ប្រតិទិន ៖</"
-"strong> ​នៅ​​ខាង​លើរ​របាររុករក​ប្រតិទិន រាយ​ម្ចាស់​​ប្រតិទិន​នេះ និង​កាលបរិច្ឆេទ​សម្រាប់ \"ទំព័រ\" នៃ​"
-"ប្រតិទិន ។</li> <li><strong>របារ​ចំហៀង​ខាង​ឆ្វេង ៖</strong> សម្រាប់​ប្រតិទិន វា​មានផ្នែក "
-"<code>លោត​ទៅ...</code> មាន​ម៉ឺនុយ និង​តំណ​ដើម្បី​អនុញ្ញាត​ឲ្យរក​ខែ ឆ្នាំ ឬ​កាលរិច្ឆេទ​ជាក់លាក់​យ៉ាង​"
-"រហ័ស ។ <br /> ប្រសិនបើ​អ្នក​ត្រូវ​បានចូល​ក្នុង​ ហើយ​មើល​ប្រតិទិន​ផ្ទាល់​របស់​អ្នក អ្នក​នឹង​ឃើញ​​"
-"ផ្នែក<code>ប្រតិទិន</code> នៅ​កំពូល​នៃ​របារ​ចំហៀង​ដែល​អនុញ្ញាត​ឲ្យ​អ្នក​មាន​ព្រឹត្តិការណ៍ \"ត្រួតគ្នា\" ពី​"
-"ប្រតិទិន​ផ្សេង​នៅ​ក្នុង​ទិដ្ឋភាព​នេះ ។ អ្នក​អាច​មើល​ប្រតិទិន​ស្រាប់​ថ្នាក់​ដែល​អ្នក​បង្រៀន ឬ​ចូល​រួម​ដែល​បាន​រាយ​នៅ​"
-"ទីនេះ ។</li> <li><strong>ប៊ូតុង​ថ្ងៃ/សប្ដាហ៍/ឆ្នាំ ៖</strong> ប៊ូតុង​ទាំង​នេះ​អនុញ្ញាត​ឲ្យ​អ្នក​ប្ដូរ​"
-"រវាង​ទិដ្ឋភាព​ប្រចាំ​ថ្ងៃ ខែ និង​ឆ្នាំ ។</li> </ul>"
+"<h1>បង្កើត​ប្រតិទិន​នៅ​ក្នុង SchoolTool​</h1> <p>SchoolTool រួម​មាន​ប្រព័ន្ធ​បង្កើត​ប្រតិទិន​ដែល​មាន​"
+"លក្ខណៈ​សម្បត្តិ​ពេញលេញ ដូច​ទៅ​នឹង Apple iCal ឬ​ប្រតិទិន Google ប៉ុន្តែ​អាច​តំណាង​កាលវិភាគ​សាលា​"
+"ស្មុគស្មាញ រួម​មាន​ផ្លាស់ប្ដូរ​កាលវិភាគ ។ SchoolTool ក៏​មាន​ប្រយោជន៍​ផង​ដែរ​សម្រាប់​ការ​កំណត់​ពេលវេលា​"
+"ធនធាន​ធម្មតា ដោយ​អនុញ្ញាត​ឲ្យ​អ្នក​គ្រប់គ្រង​ការ​ផ្ដល់​បន្ទប់ និង​កក់​ធនធាន​រួម​ដូចជា កុំព្យូទ័រ ឬ​ឧបករណ៍​បញ្ចាំង​"
+"ស្លាយ ។ មនុស្ស​ ក្រុម ឬ​ផ្នែក​នៃ​វគ្គសិក្សា​នីមួយៗ​ ឬ​ធនធាន​មាន​ប្រតិទិន​ផ្ទាល់​របស់​វា ។ អ្នក​អាច​រួម​បញ្ចូល​"
+"ប្រតិទិន​ក្នុង​ទិដ្ឋភាព​ប្រតិទិន​ផ្ទាល់​ខ្លួន​របស់​អ្នក ។</p> <h3>ផ្នែក​របស់​ទិដ្ឋភាព​ប្រតិទិន​ស្តង់ដារ</h3> "
+"<ul> <li><strong>តារាង​ប្រតិទិន ៖</strong> បំពេញ​ផ្នែក (ខាង​ក្រោម-ខាង​ស្ដាំ) នៃ​ទំព័រ ។ វា​"
+"តំណាង​ឲ្យ​ប្រតិទិន​សម្រាប់​មួយ​ថ្ងៃ មួយ​សប្ដាហ៍ មួយ​ខែ ឬ​មួយ​ឆ្នាំ​ ដោយ​អាស្រ័យ​លើ​ទិដ្ឋភាព ។</li> "
+"<li><strong>របារ​រុករក​ប្រតិទិន ៖</strong> នៅ​​ខាង​លើ​តារាង​ប្រតិទិន ។ អនុញ្ញាត​ឲ្យ​អ្នក​រុករក​ទៅ​មុខ "
+"ឬ​ថយក្រោយ​ក្នុង​ពេលវេលា ឬ​ត្រឡប់​ទៅ​ពេលវេលា​បច្ចុប្បន្ន ។</li> <li><strong>ចំណង​ជើង​ប្រតិទិន ៖</"
+"strong> ​នៅ​​ខាង​លើ​របារ​រុករក​ប្រតិទិន រាយ​ម្ចាស់​​ប្រតិទិន​នេះ និង​កាលបរិច្ឆេទ​សម្រាប់ \"ទំព័រ\" នៃ​"
+"ប្រតិទិន ។</li> <li><strong>របារ​ចំហៀង​ខាង​ឆ្វេង ៖</strong> សម្រាប់​ប្រតិទិន វា​មាន​ផ្នែក "
+"<code>លោត​ទៅ...</code> មាន​ម៉ឺនុយ និង​តំណ​ដើម្បី​អនុញ្ញាត​ឲ្យ​រក​ខែ ឆ្នាំ ឬ​កាលបរិច្ឆេទ​ជាក់លាក់​យ៉ាង​រហ័ស "
+"។ <br /> ប្រសិនបើ​អ្នក​ត្រូវ​បាន​ចូល​ក្នុង​ ហើយ​មើល​ប្រតិទិន​ផ្ទាល់​របស់​អ្នក អ្នក​នឹង​ឃើញ​​ផ្នែក<code>ប្រតិទិន</"
+"code> នៅ​កំពូល​នៃ​របារ​ចំហៀង​ដែល​អនុញ្ញាត​ឲ្យ​អ្នក​មាន​ព្រឹត្តិការណ៍ \"ត្រួត​គ្នា\" ពី​ប្រតិទិន​ផ្សេង​នៅ​ក្នុង​"
+"ទិដ្ឋភាព​នេះ ។ អ្នក​អាច​មើល​ប្រតិទិន​ស្រាប់​ថ្នាក់​ដែល​អ្នក​បង្រៀន ឬ​ចូល​រួម​ដែល​បាន​រាយ​នៅ​ទីនេះ ។</li> "
+"<li><strong>ប៊ូតុង​ថ្ងៃ/សប្ដាហ៍/ឆ្នាំ ៖</strong> ប៊ូតុង​ទាំង​នេះ​អនុញ្ញាត​ឲ្យ​អ្នក​ប្ដូរ​រវាង​ទិដ្ឋភាព​ប្រចាំ​"
+"ថ្ងៃ ខែ និង​ឆ្នាំ ។</li> </ul>"
 
 #: /src/schooltool/app/help/configure.zcml:13
 msgid "Administration"
-msgstr "ការអភិបាល"
+msgstr "គណៈ​គ្រប់គ្រង"
 
 #: /src/schooltool/app/help/configure.zcml:21
 msgid "Organization"
@@ -2003,20 +2004,20 @@ msgid ""
 "the calendar: </strong> append <code>/atom.xml</code> to the calendar's URL."
 "</li> </ul>"
 msgstr ""
-"<h1>ប្រតិទិន​ប្រចាំ​ថ្ងៃ</h1> <p>នេះ​ជា​ទិដ្ឋភាព​ប្រចាំថ្ងៃ​នៃ​ប្រតិទិន ។ វា​អាច​ជា​ប្រតិទិន​របស់​អ្នក ឬ​វា​"
-"អាច​ជា​ប្រតិនទិន​របស់​អ្នក​ផ្សេង ក្រុម ឬ​ធនធាន​ផ្សេង​នៅក្នុង​សាលា​របស់​អ្នក ។ <a href=\"/++help++/"
+"<h1>ប្រតិទិន​ប្រចាំ​ថ្ងៃ</h1> <p>នេះ​ជា​ទិដ្ឋភាព​ប្រចាំថ្ងៃ​នៃ​ប្រតិទិន ។ វា​អាច​ជា​ប្រតិទិន​របស់​អ្នក ឬ​វា​"
+"អាច​ជា​ប្រតិទិន​របស់​អ្នក​ផ្សេង ក្រុម ឬ​ធនធាន​ផ្សេង​នៅ​ក្នុង​សាលា​របស់​អ្នក ។ <a href=\"/++help++/"
 "schooltool/calendaring\">ជំនួយ​បង្កើត​ប្រតិទិន​បន្ថែម...</a></p> <h3>តើ​ខ្ញុំ​គួរ...</h3> "
-"<ul> <li><strong>បង្កើត​ព្រឹត្តិការណ៍​មួយ ៖</strong> ចុច​ក្នុង​តារាង​ប្រតិទិន​នៅ​ពេល​ចាប់ផ្ដើម​"
-"ព្រឹត្តិការណ៍ ។ ឬ​ជ្រើស <code>ព្រឹត្តិការណ៍​ថ្មី</code> ពី​ម៉ឺនុយ​ <code>សកម្មភាព</code> ។</li> "
-"<li><strong>កក់​ធនធាន ៖</strong> បង្កើត​ព្រឹត្តិការណ៍​ចាប់ផ្ដើម​នៅ​ពេល​អ្នក​ចង់​បម្រុង​ទុកធនធាន ។ "
-"ជ្រើស <code>កក់ធនធាន</code> នៅ​ក្នុង​សំណុំ​ព័ត៌មាន​ព្រឹត្តិការណ៍ ។</li> <li><strong>បង្ហាញ ឬ​លាក់​"
-"ព្រឹត្តិការណ៍​ក្នុង​ប្រតិទិន​មួយ​ក្នុង​ចំណោម​ប្រតិទិន​ជា​ច្រើន​ដែល​បាន​រាយ​នៅ​ក្រោម <code>ប្រតិទិន</code> ៖</"
-"strong> គូស​ធីក ឬ​មិនគូស​ធីក​ប្រអប់​នៅ​ក្រោម <code>Cal</code> ហើយ​​ចុច <code>អនុវត្ត</code> ។</"
+"<ul> <li><strong>បង្កើត​ព្រឹត្តិការណ៍​មួយ ៖</strong> ចុច​ក្នុង​តារាង​ប្រតិទិន​នៅ​ពេល​ចាប់ផ្ដើម​"
+"ព្រឹត្តិការណ៍ ។ ឬ​ជ្រើស <code>ព្រឹត្តិការណ៍​ថ្មី</code> ពី​ម៉ឺនុយ​ <code>សកម្មភាព</code> ។</li> "
+"<li><strong>កក់​ធនធាន ៖</strong> បង្កើត​ព្រឹត្តិការណ៍​ចាប់ផ្ដើម​នៅ​ពេល​អ្នក​ចង់​បម្រុង​ទុក​​ធនធាន ។ "
+"ជ្រើស <code>កក់​ធនធាន</code> នៅ​ក្នុង​សំណុំ​ព័ត៌មាន​ព្រឹត្តិការណ៍ ។</li> <li><strong>បង្ហាញ ឬ​លាក់​"
+"ព្រឹត្តិការណ៍​ក្នុង​ប្រតិទិន​មួយ​ក្នុង​ចំណោម​ប្រតិទិន​ជា​ច្រើន​ដែល​បាន​រាយ​នៅ​ក្រោម <code>ប្រតិទិន</code> ៖</"
+"strong> គូស​ធីក ឬ​មិន​គូស​ធីក​ប្រអប់​នៅ​ក្រោម <code>Cal</code> ហើយ​​ចុច <code>អនុវត្ត</code> ។</"
 "li> <li><strong>បន្ថែម ឬ​យកចេញ​ពី/ទៅ​បញ្ជី <code>ប្រតិទិន</code> ៖</strong> ចុច​ប៊ូតុង "
-"<code>ផ្សេង​ទៀត...</code> ។</li> <li><strong>ចូល​កំណែ​ទ្រង់ទ្រាយ​របស់ iCal នៃ​ប្រតិទិន​ ៖</"
-"strong>៖ ជ្រើស <code>បើក​ក្នុង iCal​</code> ពី​ម៉ឺនុយ​សកម្មភាព ។</li> <li><strong>ចូល​"
-"ដំណើរការ​កំណែ​មតិព័ត៌មាន​ Atom របស់​ប្រតិទិន ៖ </strong> បន្ថែម <code>/atom.xml</code> ទៅ​ "
-"URL របស់​ប្រតិទិន ។</li> </ul>"
+"<code>ផ្សេង​ទៀត...</code> ។</li> <li><strong>ចូល​កំណែ​ទ្រង់ទ្រាយ​របស់ iCal នៃ​ប្រតិទិន​ ៖</"
+"strong>៖ ជ្រើស <code>បើក​ក្នុង iCal​</code> ពី​ម៉ឺនុយ​សកម្មភាព ។</li> <li><strong>ចូល​"
+"ដំណើរការ​កំណែ​មតិ​ព័ត៌មាន​ Atom របស់​ប្រតិទិន ៖ </strong> បន្ថែម <code>/atom.xml</code> ទៅ​ "
+"URL របស់​ប្រតិទិន ។</li> </ul>"
 
 #: /src/schooltool/app/help/event_add.pt:10
 #: /src/schooltool/app/help/event_edit.pt:10
@@ -2030,8 +2031,8 @@ msgid ""
 "and check the <code>Book Resources</code> checkbox at the bottom of the page."
 msgstr ""
 "ប្រសិនបើ​អ្នក​ត្រូវ​បម្រុង​ទុក​ធនធាន ដូចជា​បន្ទប់ ឬ​​ឧបករណ៍​បញ្ចាំង​ស្លាយ បាន​តាមដាន​ដោយ SchoolTool នៅ​"
-"សាលា​របស់​អ្នក អ្នកគួរ​បង្កើត​ព្រឹត្តិការណ៍​សម្រាប់​ពេលវេលា​ចាំបាច់ និង​គូស​ធីក​ប្រអប់ <code>ធនធាន​សៀវភៅ</"
-"code> នៅ​បាត​ទំព័រ ។"
+"សាលា​របស់​អ្នក អ្នក​គួរ​បង្កើត​ព្រឹត្តិការណ៍​សម្រាប់​ពេលវេលា​ចាំបាច់ និង​គូស​ធីក​ប្រអប់ <code>ធនធាន​សៀវភៅ</"
+"code> នៅ​បាត​ទំព័រ ។"
 
 #: /src/schooltool/app/help/event_add.pt:16
 #: /src/schooltool/app/help/event_edit.pt:14
@@ -2040,9 +2041,9 @@ msgid ""
 "the event's start time in 24-hour or \"military\" time, and the date is "
 "displayed in year-month-day format."
 msgstr ""
-"សំណុំ​បែបបទ​មិនអើពើ​ចំណូល​​ចិត្ត​របស់​អ្នក​សម្រាប់​ទ្រង់ទ្រាយ​ពេលវេលា និង​កាលបរិច្ឆេទ ។ អ្នក​ត្រូវ​តែ​បញ្ចូល​"
-"ពេលវេលា​ចាប់ផ្ដើម​របស់​ព្រឹត្តិការណ៍ ២៤ ម៉ោង ឬពេលវេលា​\"ទាហាន\" ហើយ​កាលបរិច្ឆេទ​ត្រូវ​បាន​បង្ហាញ​ក្នុង​"
-"ទ្រង់ទ្រាយ​ថ្ងៃ ខែ ឆ្នាំ ។"
+"សំណុំ​បែបបទ​មិន​អើពើ​ចំណូល​​ចិត្ត​របស់​អ្នក​សម្រាប់​ទ្រង់ទ្រាយ​ពេលវេលា និង​កាលបរិច្ឆេទ ។ អ្នក​ត្រូវ​តែ​បញ្ចូល​"
+"ពេលវេលា​ចាប់ផ្ដើម​របស់​ព្រឹត្តិការណ៍ ២៤ ម៉ោង ឬពេលវេលា​\"ទាហាន\" ហើយ​កាលបរិច្ឆេទ​ត្រូវ​បាន​បង្ហាញ​ក្នុង​"
+"ទ្រង់ទ្រាយ​ថ្ងៃ ខែ ឆ្នាំ ។"
 
 #: /src/schooltool/app/help/event_add.pt:19
 #: /src/schooltool/app/help/event_edit.pt:17
@@ -2052,9 +2053,9 @@ msgid ""
 "If your school uses SchoolTool to manage room reservations you need to check "
 "the <code>Book Resources</code> checkbox at the bottom of the form."
 msgstr ""
-"វាល<code>ទីតាំង</code> អនុញ្ញាត​ឲ្យ​អ្នក​បញ្ចូល​សេចក្ដី​ពិពណ៌នា​នៃទីតាំង​របស់​ព្រឹត្តិការណ៍ ប៉ុន្តែ​វា​មិន​ត្រូវ​"
-"បាន​តភ្ជាប់​ទៅ​កាន់​ប្រព័ន្ធ​បម្រុង​ទុក​ទេ ។ ប្រសិនបើ​​សាលា​របស់​អ្នក​ប្រើ SchoolTool ដើម្បី​គ្រប់គ្រង​ការ​បម្រុង​"
-"ទុកបន្ទប់​ អ្នក​ត្រូវតែ​គូស​ធីក​ប្រអប់ <code>ធនធាន​សៀវភៅ</code> នៅ​បាត​នៃ​សំណុំ​បែបបទ ។"
+"វាល<code>ទីតាំង</code> អនុញ្ញាត​ឲ្យ​អ្នក​បញ្ចូល​សេចក្ដី​ពិពណ៌នា​នៃ​ទីតាំង​របស់​ព្រឹត្តិការណ៍ ប៉ុន្តែ​វា​មិន​ត្រូវ​"
+"បាន​តភ្ជាប់​ទៅ​កាន់​ប្រព័ន្ធ​បម្រុង​ទុក​ទេ ។ ប្រសិនបើ​​សាលា​របស់​អ្នក​ប្រើ SchoolTool ដើម្បី​គ្រប់គ្រង​ការ​បម្រុង​"
+"ទុក​បន្ទប់​ អ្នក​ត្រូវតែ​គូស​ធីក​ប្រអប់ <code>ធនធាន​សៀវភៅ</code> នៅ​បាត​នៃ​សំណុំ​បែបបទ ។"
 
 #: /src/schooltool/app/help/event_add.pt:24
 #: /src/schooltool/app/help/event_edit.pt:22
@@ -2064,10 +2065,10 @@ msgid ""
 "you change the original day of a weekly recurring event) you may need to "
 "click the <code>Update form</code> button to update the recurrence fields."
 msgstr ""
-"ប្រសិនបើ​អ្នក​ព្រឹត្តិការណ៍​កើតឡើង​នៅ​ក្នុង​លំនាំខ្លះ គូស​ធីក <code>កើត​ឡើង</code> ហើយ​បំពេញ​វាល​ថ្មី​ដែល​"
-"លេច​​ឡើង ។ នៅ​ក្នុង​កាលៈទេសៈ​ជាក់ស្ដែង (ដូចជា ប្រសិនបើ​អ្នក​ផ្លាស់ប្ដូរ​ថ្ងៃ​ដើម​នៃ​ព្រឹត្តិការណ៍​កើតឡើង​"
+"ប្រសិនបើ​អ្នក​ព្រឹត្តិការណ៍​កើតឡើង​នៅ​ក្នុង​លំនាំ​ខ្លះ គូស​ធីក <code>កើត​ឡើង</code> ហើយ​បំពេញ​វាល​ថ្មី​ដែល​"
+"លេច​​ឡើង ។ នៅ​ក្នុង​កាលៈទេសៈ​ជាក់ស្ដែង (ដូចជា ប្រសិនបើ​អ្នក​ផ្លាស់ប្ដូរ​ថ្ងៃ​ដើម​នៃ​ព្រឹត្តិការណ៍​កើតឡើង​"
 "ប្រចាំ​សប្ដាហ៍) ដែល​អ្នក​អាច​ចុច​ប៊ូតុង <code>ធ្វើ​ឲ្យ​សំណុំ​បែបបទ​ទាន់សម័យ</code> ដើម្បី​ធ្វើ​ឲ្យ​វាល​កើតឡើង​"
-"ទាន់សម័យ ។"
+"ទាន់សម័យ ។"
 
 #: /src/schooltool/app/help/event_add.pt:29
 #: /src/schooltool/app/help/event_edit.pt:27
@@ -2084,7 +2085,7 @@ msgid ""
 "\"Exception dates\" are specific dates a repeating event skips, such as "
 "holidays."
 msgstr ""
-"\"កាល​បរិច្ឆេទ​លើក​លែង\" គឺ​ជា​កាល​បរិច្ឆេទ​ជាក់លាក់​ដែល​ព្រឹត្តិការណ៍​ធ្វើ​ដដែលៗ រំលង ដូច​ជា ថ្ងៃ​ឈប់​"
+"\"កាល​បរិច្ឆេទ​លើក​លែង\" គឺ​ជា​កាល​បរិច្ឆេទ​ជាក់លាក់​ដែល​ព្រឹត្តិការណ៍​ធ្វើ​ដដែល​ៗ រំលង ដូច​ជា ថ្ងៃ​ឈប់​"
 "សម្រាក ។"
 
 #: /src/schooltool/app/help/event_edit.pt:12
@@ -2184,28 +2185,27 @@ msgid ""
 "</ul>"
 msgstr ""
 "<h1>SchoolTool</h1> <p>SchoolTool គឺ​ជា​ប្រព័ន្ធ​គ្រប់គ្រង​ប្រើ​ដោយ​សេរី​សម្រាប់​សាលា​ជុំវិញ​ពិភព​លោក "
-"ដែលបាន​ឧបត្ថម្ភ​ដោយ​មូលនិធិ Shuttleworth ។​</p> <h2>ការ​បង្កើត​ចំណុច​ប្រទាក់​អ្នក​ប្រើ​ស្តង់ដារ​នៅ​ក្នុង "
+"ដែល​បាន​ឧបត្ថម្ភ​ដោយ​មូលនិធិ Shuttleworth ។​</p> <h2>ការ​បង្កើត​ចំណុច​ប្រទាក់​អ្នក​ប្រើ​ស្តង់ដារ​នៅ​ក្នុង "
 "SchoolTool​</h2> <ul> <li><strong>របារ​ខាង​លើ​ពណ៌​ក្រហម</strong></li> <ul> "
-"<li><strong>Breadcrumbs ៖</strong> តំណ​នៅ​ខាង​ឆ្វេង​ដៃ​នៃ​របារ​ពណ៌​ក្រហម​បង្ហាញ​អ្នក​កន្លែង​ដែល​"
-"អ្នក​ស្ថិត​ក្នុង​ថានានុក្រម​វត្ថុ​របស់ SchoolTool ។ ចំណាំ​ថា​វា​មិន​ចាំបាច់​នាំអ្នក​ទៅ​កន្លែង​ដែល​អ្នក​មក​នោះ​ទេ "
-"ប៉ុន្តែ​មាន​ប្រយោជន៍​សម្រាប់​នាំអ្នក​ពី​​ផ្នែក​ទូទៅ​ជាក់លាក់​នៃ​កម្មវិធី ។</li> <li><strong>ឈ្មោះ​របស់​អ្នក</"
-"strong> (ប្រសិន​បើ​អ្នក​ចូល)​៖ ចុច​លើ​ឈ្មោះ​របស់​អ្នក​នាំអ្នក​ទៅ​ផ្ទាំង​ធម្មតា​នៃ​តំណ​ដែល​ទាក់ទង ។ ពី​ទំព័រ​នេះ​"
-"អ្នក​អាច​ប្រើ​ម៉ឺនុយ <code>សកម្មភាព</code> ដើម្បី​ផ្លាស់ប្ដូរ​ចំណូល​ចិត្ត និង​ការ​កំណត់​ផ្ទាល់​ខ្លួន ។</li> "
-"<li><strong>ចូល/ចេញ ៖</strong> វា​ធ្វើ​ឲ្យ​ចូល ឬ​ចេញ ។ ជា​គំនិត​ដ៏​ល្អ​ដើម្បី​ចេញ​នៅពេល​អ្នក​មិន​ប្រើ​ "
-"SchoolTool ។</li> <li><strong>ជំនួយ ៖</strong> ប្រសិនបើ​​មាន​ឯកសារ​ជំនួយ​សម្រាប់​ទំព័រ​ដែល​អ្នក​"
-"កំពុង​មើល អ្នកនឹង​ឃើញ​តំណ​នេះ ។</li> </ul> <li><strong>ម៉ឺនុយ</strong></li> <ul> "
-"<li><strong>រុករក ៖</strong> ម៉ឺនុយ​នេះ​ផ្ដល់​ឲ្យ​អ្នក​នូវ​ជម្រើស​មូលដ្ឋាន​ដើម្បីចូល​ផ្នែក​ផ្សេង​របស់ "
-"SchoolTool ដូច​ជា​លិបិក្រម​មនុស្ស ឬ​វគ្គសិក្សា ។ អ្វី​ដែល​អ្នក​ឃើញ​នៅ​ទីនេះ​ អាស្រ័យ​លើ​សិទ្ធិ​របស់​អ្នកនៅ​ក្នុង​"
-"ប្រព័ន្ធ ។</li> <li><strong>សកម្មភាព ៖</strong> ម៉ឺនុយ​នេះ មាន​ធាតុ​ផ្សេងៗ​ដែល​អ្នក​អាច​ធ្វើ​"
-"នៅលើ​ទំព័រ​នេះ ។ ធាតុ​នៅ​ក្នុង​ម៉ឺនុយ​នេះ​ផ្លាស់ប្ដូរ​ដោយ​អាស្រ័យ​លើ​ទំព័រ​ដែល​អ្នកកំពុង​មើល​ និង​សិទ្ធិអ្វី​ដែល​អ្នក​"
-"មាន ។</li> </ul> <li><strong>ខាង​លើ​របារ​ពណ៌​ក្រហម</strong></li> <ul> "
-"<li><strong>រូប​សញ្ញា និង​ឈ្មោះ​សាលា ៖</strong> ចុច​នៅ​ក្នុង​ផ្ទៃ​នេះនឹង​នាំ​អ្នក​ទៅ​កំពូល​នៃ​តំបន់​បណ្ដាញ​"
-"របស់​សាលា តាម​ធម្មតា​ប្រតិទិន​សម្រាប់​សាលា ។</li> <li><strong>ទិដ្ឋភាព​ប្រតិទិន​ថ្ងៃ/ខែ/ឆ្នាំ ៖</"
-"strong> ប្រសិនបើ​អ្នក​កំពុង​មើល​ប្រតិទិន អ្នកនឹង​ឃើញ​រូប​តំណាង​នៅ​ក្នុងជ្រុង​ខាង​ស្ដាំ​ ដែល​​នឹង​អនុញ្ញាត​ឲ្យ​ប្ដូរ​"
-"ទិដ្ឋភាព​ប្រតិទិន ។</li> <li><strong>ម៉ឺនុយ Devmode ៖</strong> ប្រសិនបើ​អ្នកជា​ អ្នក​គ្រប់គ្រង​"
-"តំបន់​បណ្ដាញ​ ហើយ​អ្នក​បានបើក \"devmode\" នៅ​ក្នុង schooltool.conf អ្នក​ឃើញ​ម៉ឺនុយ​ពិសេស​នៅ​ក្នុង​ជ្រុង​"
-"ខាង​ស្ដាំ ខាង​លើ​នៃ​តំបន់​បណ្ដាញ ។ អ្នក​គួរ​តែ​បិទ​ devmode នៅ​ក្នុង​ម៉ាស៊ីន​បម្រើ​ផលិតកម្ម ។</li> </ul> "
-"</ul>"
+"<li><strong>Breadcrumbs ៖</strong> តំណ​នៅ​ខាង​ឆ្វេង​ដៃ​នៃ​របារ​ពណ៌​ក្រហម​បង្ហាញ​អ្នក​កន្លែង​ដែល​"
+"អ្នក​ស្ថិត​ក្នុង​ថានានុក្រម​វត្ថុ​របស់ SchoolTool ។ ចំណាំ​ថា​វា​មិន​ចាំបាច់​នាំ​អ្នក​ទៅ​កន្លែង​ដែល​អ្នក​មក​នោះ​ទេ "
+"ប៉ុន្តែ​មាន​ប្រយោជន៍​សម្រាប់​នាំ​អ្នក​ពី​​ផ្នែក​ទូទៅ​ជាក់លាក់​នៃ​កម្មវិធី ។</li> <li><strong>ឈ្មោះ​របស់​អ្នក</"
+"strong> (ប្រសិន​បើ​អ្នក​ចូល)​៖ ចុច​លើ​ឈ្មោះ​របស់​អ្នក​នាំ​អ្នក​ទៅ​ផ្ទាំង​ធម្មតា​នៃ​តំណ​ដែល​ទាក់ទង ។ ពី​ទំព័រ​នេះ​"
+"អ្នក​អាច​ប្រើ​ម៉ឺនុយ <code>សកម្មភាព</code> ដើម្បី​ផ្លាស់ប្ដូរ​ចំណូល​ចិត្ត និង​ការ​កំណត់​ផ្ទាល់​ខ្លួន ។</li> "
+"<li><strong>ចូល/ចេញ ៖</strong> វា​ធ្វើ​ឲ្យ​ចូល ឬ​ចេញ ។ ជា​គំនិត​ដ៏​ល្អ​ដើម្បី​ចេញ​នៅ​ពេល​អ្នក​មិន​ប្រើ​ "
+"SchoolTool ។</li> <li><strong>ជំនួយ ៖</strong> ប្រសិនបើ​​មាន​ឯកសារ​ជំនួយ​សម្រាប់​ទំព័រ​ដែល​អ្នក​"
+"កំពុង​មើល អ្នកនឹង​ឃើញ​តំណ​នេះ ។</li> </ul> <li><strong>ម៉ឺនុយ</strong></li> <ul> "
+"<li><strong>រុករក ៖</strong> ម៉ឺនុយ​នេះ​ផ្ដល់​ឲ្យ​អ្នក​នូវ​ជម្រើស​មូលដ្ឋាន​ដើម្បីចូល​ផ្នែក​ផ្សេង​របស់ "
+"SchoolTool ដូច​ជា​លិបិក្រម​មនុស្ស ឬ​វគ្គសិក្សា ។ អ្វី​ដែល​អ្នក​ឃើញ​នៅ​ទីនេះ​ អាស្រ័យ​លើ​សិទ្ធិ​របស់​អ្នក​នៅ​ក្នុង​"
+"ប្រព័ន្ធ ។</li> <li><strong>សកម្មភាព ៖</strong> ម៉ឺនុយ​នេះ មាន​ធាតុ​ផ្សេងៗ​ដែល​អ្នក​អាច​ធ្វើ​នៅ​"
+"លើ​ទំព័រ​នេះ ។ ធាតុ​នៅ​ក្នុង​ម៉ឺនុយ​នេះ​ផ្លាស់ប្ដូរ​ដោយ​អាស្រ័យ​លើ​ទំព័រ​ដែល​អ្នក​កំពុង​មើល​ និង​សិទ្ធិ​ដែល​អ្នក​មាន ។</"
+"li> </ul> <li><strong>ខាង​លើ​របារ​ពណ៌​ក្រហម</strong></li> <ul> <li><strong>រូប​សញ្ញា "
+"និង​ឈ្មោះ​សាលា ៖</strong> ចុច​នៅ​ក្នុង​ផ្ទៃ​នេះ​នឹង​នាំ​អ្នក​ទៅ​កំពូល​នៃ​តំបន់​បណ្ដាញ​របស់​សាលា តាម​ធម្មតា​"
+"ប្រតិទិន​សម្រាប់​សាលា ។</li> <li><strong>ទិដ្ឋភាព​ប្រតិទិន​ថ្ងៃ/ខែ/ឆ្នាំ ៖</strong> ប្រសិនបើ​អ្នក​"
+"កំពុង​មើល​ប្រតិទិន អ្នក​នឹង​ឃើញ​រូប​តំណាង​នៅ​ក្នុង​​ជ្រុង​ខាង​ស្ដាំ​ ដែល​​នឹង​អនុញ្ញាត​ឲ្យ​ប្ដូរ​ទិដ្ឋភាព​ប្រតិទិន ។</li> "
+"<li><strong>ម៉ឺនុយ Devmode ៖</strong> ប្រសិនបើ​អ្នកជា​ អ្នក​គ្រប់គ្រង​តំបន់​បណ្ដាញ​ ហើយ​អ្នក​បាន​"
+"បើក \"devmode\" នៅ​ក្នុង schooltool.conf អ្នក​ឃើញ​ម៉ឺនុយ​ពិសេស​នៅ​ក្នុង​ជ្រុង​ខាង​ស្ដាំ ខាង​លើ​នៃ​តំបន់​"
+"បណ្ដាញ ។ អ្នក​គួរ​តែ​បិទ​ devmode នៅ​ក្នុង​ម៉ាស៊ីន​បម្រើ​ផលិតកម្ម ។</li> </ul> </ul>"
 
 #: /src/schooltool/app/help/weekly_calendar.pt:8
 msgid ""
@@ -2231,23 +2231,23 @@ msgid ""
 "iCal format version of the calendar:</strong>: select <code>Open in iCal</"
 "code> from the Action menu.</li> </ul>"
 msgstr ""
-"<h1>ប្រតិទិន​ប្រចាំ​សប្ដាហ៍</h1> <p>នេះ​ជា​​ទិដ្ឋភាព​ប្រចាំ​សប្ដាហ៍​របស់​ប្រតិទិន ។ វា​អាច​ជា​ប្រតិទិន​របស់​អ្នក "
-"ឬ​អាច​ជា​ប្រតិទិន​របស់​អ្នក​ផ្សេង ក្រុម ឬ​ធនធាន​ផ្សេង​នៅ​ក្នុងសាលារបស់​អ្នក ។ <a href=\"/++help++/"
-"schooltool/calendaring\">ជំនួយ​បង្កើត​ប្រតិទិន​ផ្សេង​ទៀត...</a></p> <h3>តើខ្ញុំ​គួរ...</h3> "
-"<ul> <li><strong>មើល​ថ្ងៃ​នីមួយៗ​នៅ​ក្នុង​សេចក្ដី​លម្អិត ៖ </strong> ចុច​លើ​ថ្ងៃ​សមរម្យ​នៅ​ក្នុង​ជួរដេក​"
-"ពណ៌​ខៀវ​របស់​តារាង​ប្រតិទិន ។</li> <li><strong>មើល​​ទិដ្ឋភាព​លម្អិត​អំពី​ព្រឹត្តិការណ៍ ឬ​កែសម្រួល​វា ៖</"
-"strong> ចុច​លើ​ព្រឹត្តិការណ៍ ។ ប្រសិនបើ​អ្នក​បាន​សិទ្ធិ​ត្រឹមត្រូវ​សម្រាប់​ព្រឹត្តិការណ៍​ដែល​អ្នក​អាច​កែសម្រួល​បាន ។"
-"</li> <li><strong>បង្កើត​ព្រឹត្តិការណ៍ ៖</strong> ជ្រើស​ថ្ងៃ​ដែល​ព្រឹត្តិការណ៍​ចាប់ផ្ដើម និង​បង្កើត​"
-"ព្រឹត្តិការណ៍​នៅ​ក្នុង​ទិដ្ឋភាព​ប្រចាំ​ថ្ងៃ ។</li> <li><strong>បង្ហាញ​ ឬ​លាក់​ព្រឹត្តិការណ៍​នៅ​ក្នុង​ប្រតិទិន​មួយ​"
-"ក្នុង​ចំណោម​ប្រតិទិន​ដែល​បាន​រាយនៅ​ក្រោម <code>ប្រតិទិន</code> ៖</strong> គូស​ធីក ឬ​មិនគូស​ធីក​ប្រអប់​នៅ​"
-"ក្រោម<code>Cal</code> ហើយ​ចុច <code>អនុវត្ត</code> ។</li> <li><strong>បន្ថែម ឬ​យក​"
+"<h1>ប្រតិទិន​ប្រចាំ​សប្ដាហ៍</h1> <p>នេះ​ជា​​ទិដ្ឋភាព​ប្រចាំ​សប្ដាហ៍​របស់​ប្រតិទិន ។ វា​អាច​ជា​ប្រតិទិន​របស់​អ្នក "
+"ឬ​អាច​ជា​ប្រតិទិន​របស់​អ្នក​ផ្សេង ក្រុម ឬ​ធនធាន​ផ្សេង​នៅ​ក្នុង​សាលា​របស់​​អ្នក ។ <a href=\"/++help++/"
+"schooltool/calendaring\">ជំនួយ​បង្កើត​ប្រតិទិន​ផ្សេង​ទៀត...</a></p> <h3>តើ​ខ្ញុំ​គួរ...</h3> "
+"<ul> <li><strong>មើល​ថ្ងៃ​នីមួយៗ​នៅ​ក្នុង​សេចក្ដី​លម្អិត ៖ </strong> ចុច​លើ​ថ្ងៃ​សមរម្យ​នៅ​ក្នុង​ជួរដេក​"
+"ពណ៌​ខៀវ​របស់​តារាង​ប្រតិទិន ។</li> <li><strong>មើល​​ទិដ្ឋភាព​លម្អិត​អំពី​ព្រឹត្តិការណ៍ ឬ​កែសម្រួល​វា ៖</"
+"strong> ចុច​លើ​ព្រឹត្តិការណ៍ ។ ប្រសិនបើ​អ្នក​បាន​សិទ្ធិ​ត្រឹមត្រូវ​សម្រាប់​ព្រឹត្តិការណ៍​ដែល​អ្នក​អាច​កែសម្រួល​បាន ។"
+"</li> <li><strong>បង្កើត​ព្រឹត្តិការណ៍ ៖</strong> ជ្រើស​ថ្ងៃ​ដែល​ព្រឹត្តិការណ៍​ចាប់ផ្ដើម និង​បង្កើត​"
+"ព្រឹត្តិការណ៍​នៅ​ក្នុង​ទិដ្ឋភាព​ប្រចាំ​ថ្ងៃ ។</li> <li><strong>បង្ហាញ​ ឬ​លាក់​ព្រឹត្តិការណ៍​នៅ​ក្នុង​ប្រតិទិន​មួយ​"
+"ក្នុង​ចំណោម​ប្រតិទិន​ដែល​បាន​រាយ​នៅ​ក្រោម <code>ប្រតិទិន</code> ៖</strong> គូស​ធីក ឬ​មិន​គូស​ធីក​ប្រអប់​នៅ​"
+"ក្រោម<code>Cal</code> ហើយ​ចុច <code>អនុវត្ត</code> ។</li> <li><strong>បន្ថែម ឬ​យក​"
 "ប្រតិទិន​ចេញ​ពី/ទៅ​បញ្ជី <code>ប្រតិទិន</code> ៖</strong> ចុច​លើ​ប៊ូតុង <code>ផ្សេង​ទៀត...</"
-"code> ។</li> <li><strong>បង្កើត​ប្រតិទិន​ដែល​ចាប់ផ្ដើម​នៅ​ថ្ងៃ​ត្រឹមត្រូវ ៖</strong> ថ្ងៃ​ទី​មួយ​នៃ​"
-"សប្ដាហ៍​ខុស​គ្នា​នៅ​ក្នុង​ផ្នែក​ផ្សេងៗ​នៃ​ពិភព​លោក ។ ប្រសិនបើ SchoolTool មិន​កំណត់​ត្រឹមត្រូវ​សម្រាប់​អ្នក​ទេ ចុច​"
-"លើ​ឈ្មោះ​នៅ​ក្នុង​របារ​ពណ៌​ក្រហម​នៅ​ផ្នែក​ខាង​លើ​នៃ​ទំព័រ ។ បន្ទាប់​មក​ចុច​លើម៉ឺនុយ <code>សកម្មភាព</code> "
-"ហើយ​ជ្រើស​ <code>ផ្លាស់ប្ដូរ​ចំណូល​ចិត្ត</code> ។ ជ្រើស​ \"សប្ដាហ៍​ចាប់ផ្ដើម​នៅ\" ថ្ងៃ​ត្រឹមត្រូវ ហើយ​ចុច "
-"<code>អនុវត្ត</code> ។</li> <li><strong>ចូល​កំណែ​ទ្រង់ទ្រាយ iCal របស់​ប្រតិទិន ៖</"
-"strong> ៖ ជ្រើស <code>បើក​ក្នុង iCal​</code> ពី​ម៉ឺនុយ​សកម្មភាព ។</li> </ul>"
+"code> ។</li> <li><strong>បង្កើត​ប្រតិទិន​ដែល​ចាប់ផ្ដើម​នៅ​ថ្ងៃ​ត្រឹមត្រូវ ៖</strong> ថ្ងៃ​ទី​មួយ​នៃ​"
+"សប្ដាហ៍​ខុស​គ្នា​នៅ​ក្នុង​ផ្នែក​ផ្សេងៗ​នៃ​ពិភព​លោក ។ ប្រសិនបើ SchoolTool មិន​កំណត់​ត្រឹមត្រូវ​សម្រាប់​អ្នក​ទេ ចុច​"
+"លើ​ឈ្មោះ​នៅ​ក្នុង​របារ​ពណ៌​ក្រហម​នៅ​ផ្នែក​ខាង​លើ​នៃ​ទំព័រ ។ បន្ទាប់​មក​ចុច​លើ​ម៉ឺនុយ <code>សកម្មភាព</code> "
+"ហើយ​ជ្រើស​ <code>ផ្លាស់ប្ដូរ​ចំណូល​ចិត្ត</code> ។ ជ្រើស​ \"សប្ដាហ៍​ចាប់ផ្ដើម​នៅ\" ថ្ងៃ​ត្រឹមត្រូវ ហើយ​ចុច "
+"<code>អនុវត្ត</code> ។</li> <li><strong>ចូល​កំណែ​ទ្រង់ទ្រាយ iCal របស់​ប្រតិទិន ៖</strong> "
+"៖ ជ្រើស <code>បើក​ក្នុង iCal​</code> ពី​ម៉ឺនុយ​សកម្មភាព ។</li> </ul>"
 
 #: /src/schooltool/app/help/yearly_calendar.pt:8
 msgid ""
@@ -2273,27 +2273,27 @@ msgid ""
 "iCal format version of the calendar:</strong>: select <code>Open in iCal</"
 "code> from the Action menu.</li> </ul>"
 msgstr ""
-"<h1>ប្រតិទិន​ប្រចាំ​ឆ្នាំ</h1> <p>នេះ​ជា​ទិដ្ឋភាព​ឆ្នាំ​របស់​ប្រតិទិន ។ វា​អាច​ជា​ប្រតិទិន​របស់​អ្នក ឬ​វាអាច​ជា​"
-"ប្រតិទិន​របស់​អ្នក​ផ្សេង ក្រុម​ ឬ​ធនធាន​នៅ​ក្នុង​សាលា​របស់​អ្នក ។ <a href=\"/++help++/schooltool/"
-"calendaring\">ជំនួយ​បង្កើត​ប្រតិទិន​ផ្សេង​ទៀត...</a></p> <h3>តើខ្ញុំ​គួរ...</h3> <ul> "
-"<li><strong>ដឹង​ថា​ថ្ងៃ​ណា​មាន​ព្រឹត្តិការណ៍ ៖ ប្រសិនបើ​ថ្ងៃ​មាន​ផ្ទៃ​ពណ៌​ខៀវ មាន​ព្រឹត្តិការណ៍​យ៉ាង​ហោចណាស់​"
-"មួយ​ ។</strong></li> <li><strong>មើល​ថ្ងៃ​នីមួយៗ​នៅ​ក្នុង​សេចក្ដី​លម្អិត ៖</strong> ចុច​លើ​ថ្ងៃ​"
-"នោះ ។</li> <li><strong>មើល​ខែ​នីមួយៗ ៖</strong> ចុច​លើ​ឈ្មោះ​ខែ ។</li> "
-"<li><strong>បង្កើត​ព្រឹត្តិការណ៍ ៖</strong> ជ្រើស​ព្រឹត្តិការណ៍​ថ្ងៃ​ដែល​ចាប់ផ្ដើម និង​បង្កើត​"
-"ព្រឹត្តិការណ៍​នៅទិដ្ឋភាព​ប្រចាំ​ថ្ងៃ ។</li> <li><strong>បង្ហាញ ឬ​​លាក់​ព្រឹត្តិការណ៍​នៅ​ក្នុង​ប្រតិទិន​មួយ​ក្នុង​"
+"<h1>ប្រតិទិន​ប្រចាំ​ឆ្នាំ</h1> <p>នេះ​ជា​ទិដ្ឋភាព​ឆ្នាំ​របស់​ប្រតិទិន ។ វា​អាច​ជា​ប្រតិទិន​របស់​អ្នក ឬ​វា​អាច​ជា​"
+"ប្រតិទិន​របស់​អ្នក​ផ្សេង ក្រុម​ ឬ​ធនធាន​នៅ​ក្នុង​សាលា​របស់​អ្នក ។ <a href=\"/++help++/schooltool/"
+"calendaring\">ជំនួយ​បង្កើត​ប្រតិទិន​ផ្សេង​ទៀត...</a></p> <h3>តើ​ខ្ញុំ​គួរ...</h3> <ul> "
+"<li><strong>ដឹង​ថា​ថ្ងៃ​ណា​មាន​ព្រឹត្តិការណ៍ ៖ ប្រសិនបើ​ថ្ងៃ​មាន​ផ្ទៃ​ពណ៌​ខៀវ មាន​ព្រឹត្តិការណ៍​យ៉ាង​ហោច​ណាស់​"
+"មួយ​ ។</strong></li> <li><strong>មើល​ថ្ងៃ​នីមួយៗ​នៅ​ក្នុង​សេចក្ដី​លម្អិត ៖</strong> ចុច​លើ​ថ្ងៃ​"
+"នោះ ។</li> <li><strong>មើល​ខែ​នីមួយៗ ៖</strong> ចុច​លើ​ឈ្មោះ​ខែ ។</li> "
+"<li><strong>បង្កើត​ព្រឹត្តិការណ៍ ៖</strong> ជ្រើស​ព្រឹត្តិការណ៍​ថ្ងៃ​ដែល​ចាប់ផ្ដើម និង​បង្កើត​"
+"ព្រឹត្តិការណ៍​នៅ​ទិដ្ឋភាព​ប្រចាំ​ថ្ងៃ ។</li> <li><strong>បង្ហាញ ឬ​​លាក់​ព្រឹត្តិការណ៍​នៅ​ក្នុង​ប្រតិទិន​មួយ​ក្នុង​"
 "ចំណោម​ប្រតិទិន​ដែល​បាន​រាយ​នៅ​ក្រោម <code>ប្រតិទិន</code>៖</strong> គូស​ធីក ឬ​មិន​គូស​ធីក​នៅ​ក្រោម "
-"<code>Cal</code> ហើយ​ចុច <code>អនុវត្ត</code> ។</li> <li><strong>បន្ថែម ឬ​យក​ប្រតិទិន​"
+"<code>Cal</code> ហើយ​ចុច <code>អនុវត្ត</code> ។</li> <li><strong>បន្ថែម ឬ​យក​ប្រតិទិន​"
 "ទៅ/ពី​បញ្ជី <code>ប្រតិទិន</code> ៖</strong> ចុច​លើ​ប៊ូតុង​ <code>ច្រើន​ទៀត...</code> ។</li> "
-"<li><strong>បង្កើត​ប្រតិទិន​ចាប់ផ្ដើម​នៅ​ថ្ងៃ​ត្រឹមត្រូវ ៖</strong> ថ្ងៃ​ដំបូង​នៃ​សប្ដាហ៍​ខុសគ្នា​​ក្នុង​ផ្នែក​"
-"ផ្សេងៗ​នៃ​ពិភព​លោក ។ ប្រសិនបើ SchoolTool មិន​ត្រូវ​បាន​កំណត់​ត្រឹមត្រូវ​សម្រាប់​អ្នក​ទេ ចុច​លើ​ឈ្មោះ​របស់​"
-"អ្នកនៅ​ក្នុងរបារ​ពណ៌​ក្រហម​នៅ​​ផ្នែក​ខាង​លើ​នៃ​ទំព័រ ។ បន្ទាប់​មក​ចុច​លើ​ម៉ឺនុយ​ <code>សកម្មភាព</code> ហើយ​"
-"ជ្រើស <code>ផ្លាស់ប្ដូរ​​ចំណូច​ចិត្ត​</code> ។ ជ្រើស​ \"សប្ដាហ៍​ចាប់ផ្ដើម​នៅ​\" ថ្ងៃ ហើយ​ចុច "
-"<code>អនុវត្ត</code> ។</li> <li><strong>ចូល​​​កំណែ​ទ្រង់ទ្រាយ iCal នៃ​ប្រតិទិន ៖</strong> ៖ "
-"ជ្រើស <code>បើក​ក្នុង iCal​</code> ពី​ម៉ឺនុយ​សកម្មភាព ។</li> </ul>"
+"<li><strong>បង្កើត​ប្រតិទិន​ចាប់ផ្ដើម​នៅ​ថ្ងៃ​ត្រឹមត្រូវ ៖</strong> ថ្ងៃ​ដំបូង​នៃ​សប្ដាហ៍​ខុសគ្នា​​ក្នុង​ផ្នែក​"
+"ផ្សេងៗ​នៃ​ពិភព​លោក ។ ប្រសិនបើ SchoolTool មិន​ត្រូវ​បាន​កំណត់​ត្រឹមត្រូវ​សម្រាប់​អ្នក​ទេ ចុច​លើ​ឈ្មោះ​របស់​អ្នក​"
+"នៅ​ក្នុង​របារ​ពណ៌​ក្រហម​នៅ​​ផ្នែក​ខាង​លើ​នៃ​ទំព័រ ។ បន្ទាប់​មក​ចុច​លើ​ម៉ឺនុយ​ <code>សកម្មភាព</code> ហើយ​"
+"ជ្រើស <code>ផ្លាស់ប្ដូរ​​ចំណូល​ចិត្ត​</code> ។ ជ្រើស​ \"សប្ដាហ៍​ចាប់ផ្ដើម​នៅ​\" ថ្ងៃ ហើយ​ចុច "
+"<code>អនុវត្ត</code> ។</li> <li><strong>ចូល​​​កំណែ​ទ្រង់ទ្រាយ iCal នៃ​ប្រតិទិន ៖</strong> ៖ "
+"ជ្រើស <code>បើក​ក្នុង iCal​</code> ពី​ម៉ឺនុយ​សកម្មភាព ។</li> </ul>"
 
 #: /src/schooltool/app/interfaces.py:44
 msgid "Form input is not a file object"
-msgstr "ការ​បញ្ចូល​សំណុំ​បែបបទ​មិនមែនជា​វត្ថុ​ឯកសារ​ទេ"
+msgstr "ការ​បញ្ចូល​សំណុំ​បែបបទ​មិន​មែន​ជា​វត្ថុ​ឯកសារ​ទេ"
 
 #: /src/schooltool/app/interfaces.py:45 /src/schooltool/app/interfaces.py:49
 msgid "Invalid integer data"
@@ -2376,16 +2376,16 @@ msgid ""
 "  --manage               only do management tasks, don't run the server\n"
 msgstr ""
 "\n"
-"កា​រប្រើប្រាស់ ៖ %s [ជម្រើស]\n"
-"ជម្រើស ៖\n"
-"  -c, --config xxx       ប្រើ​ឯកសារ​កំណត់​រចនាសម្ព័ន្ធ​ជំនួស​ឲ្យ​ឯកសារ​កំណត់​រចនាសម្ព័ន្ធលំនាំដើម\n"
+"កា​រប្រើប្រាស់ ៖ %s [ជម្រើស]\n"
+"ជម្រើស ៖\n"
+"  -c, --config xxx       ប្រើ​ឯកសារ​កំណត់​រចនាសម្ព័ន្ធ​ជំនួស​ឲ្យ​ឯកសារ​កំណត់​រចនាសម្ព័ន្ធ​លំនាំដើម\n"
 "  -h, --help             បង្ហាញ​សារ​ជំនួយ​នេះ\n"
-"  -d, --daemon           ទៅផ្ទៃ​ខាងក្រោយ​បន្ទាប់​ពី​ចាប់ផ្ដើម\n"
+"  -d, --daemon           ទៅ​​​​​ផ្ទៃ​ខាងក្រោយ​បន្ទាប់​ពី​ចាប់ផ្ដើម\n"
 "  -r, --ស្ដារ​កម្មវិធី​គ្រប់គ្រង​ពាក្យ​សម្ងាត់\n"
-"                         ស្ដារ​កម្មវិធីគ្រប់គ្រង​​អ្នក​ប្រើ​ដែលមាន​ពាក្យ​សម្ងាត់​ដែល​បានផ្ដល់\n"
+"                         ស្ដារ​កម្មវិធី​គ្រប់គ្រង​​អ្នក​ប្រើ​ដែល​មាន​ពាក្យ​សម្ងាត់​ដែល​បាន​ផ្ដល់\n"
 "                         (អាន​ពាក្យ​សម្ងាត់​ពី​ការ​បញ្ចូល​ស្តង់ដារ​ប្រសិន​បើ 'ពាក្យ​សម្ងាត់'\n"
 "                         ជា '-')\n"
-"  --manage               ធ្វើ​តែ​កិច្ចការ​គ្រប់គ្រង កុំ​រត់​ម៉ាស៊ីនបម្រើ\n"
+"  --manage               ធ្វើ​តែ​កិច្ចការ​គ្រប់គ្រង កុំ​រត់​ម៉ា​ស៊ីន​​បម្រើ\n"
 
 #: /src/schooltool/app/main.py:110
 msgid ""
@@ -2396,10 +2396,10 @@ msgid ""
 "uncomment one of the ZODB storage sections.\n"
 msgstr ""
 "\n"
-"គ្មាន​ឧបករណ៍​ផ្ទុក​បានកំណត់​នៅ​ក្នុង​ឯកសារ​កំណត់​រចនាសម្ព័ន្ធ​ទេ ។\n"
+"គ្មាន​ឧបករណ៍​ផ្ទុក​បាន​កំណត់​នៅ​ក្នុង​ឯកសារ​កំណត់​រចនាសម្ព័ន្ធ​ទេ ។\n"
 "\n"
-"ប្រសើ​បើ​អ្នក​កំពុង​ប្រើ​ឯកសារ​កំណត់​រចនាសម្ព័ន្ធ​លំនាំដើម សូម​កែសម្រួល​វា​ឥឡូវ ហើយ\n"
-"មិន​ផ្ដល់​មតិយោបល់​របស់​ភាគ​នៃ​ឧបករណ៍​ផ្ទុក ZODB ។\n"
+"ប្រសើរ​បើ​អ្នក​កំពុង​ប្រើ​ឯកសារ​កំណត់​រចនាសម្ព័ន្ធ​លំនាំដើម សូម​កែសម្រួល​វា​ឥឡូវ ហើយ\n"
+"មិន​ផ្ដល់​មតិ​យោបល់​របស់​ភាគ​នៃ​ឧបករណ៍​ផ្ទុក ZODB ។\n"
 
 #: /src/schooltool/app/main.py:335
 msgid "Going to background, daemon pid %d"
@@ -2407,12 +2407,12 @@ msgstr "ទៅកាន់​ផ្ទៃ​ខាង​ក្រោយ ដេ�
 
 #: /src/schooltool/app/main.py:382
 msgid "Cannot resolve plugin action order:\n"
-msgstr "មិនអាច​ដោះស្រាយ​លំដាប់​សកម្មភាព​កម្មវិធី​ជំនួយ​បានទេ ៖\n"
+msgstr "មិន​​អាច​ដោះស្រាយ​លំដាប់​សកម្មភាព​កម្មវិធី​ជំនួយ​បានទេ ៖\n"
 
 #: /src/schooltool/app/main.py:536 /src/schooltool/app/main.py:580
 #: /src/schooltool/app/main.py:583
 msgid "%s: %s"
-msgstr "%s ៖ %s"
+msgstr "%s: %s"
 
 #: /src/schooltool/app/main.py:537
 msgid "Run %s -h for help."
@@ -2420,7 +2420,7 @@ msgstr "រត់ %s -h សម្រាប់​ជំនួយ ។"
 
 #: /src/schooltool/app/main.py:549
 msgid "%s: daemon mode not supported on your operating system."
-msgstr "%s ៖ មិនគាំទ្រ​របៀប​ដេមិន​នៅ​លើ​ប្រព័ន្ធ​ប្រតិបត្តិការ​របស់​អ្នក​ទេ ។"
+msgstr "%s ៖ មិន​គាំទ្រ​របៀប​ដេមិន​នៅ​លើ​ប្រព័ន្ធ​ប្រតិបត្តិការ​របស់​អ្នក​ទេ ។"
 
 #: /src/schooltool/app/main.py:575
 msgid "Reading configuration from %s"
@@ -2452,7 +2452,7 @@ msgid ""
 "Warning: could not find the reportlab library.\n"
 "PDF support disabled."
 msgstr ""
-"ការ​ព្រមាន ៖ មិនអាច​រក​បណ្ណាល័យ reportlab បានទេ ។ \n"
+"ការ​ព្រមាន ៖ មិន​អាច​រក​បណ្ណាល័យ reportlab បានទេ ។ \n"
 "ការ​គាំទ្រ PDF បាន​បិទ ។"
 
 #: /src/schooltool/app/main.py:778
@@ -2468,7 +2468,7 @@ msgid ""
 "Warning: font '%s' does not exist.\n"
 "PDF support disabled."
 msgstr ""
-"ព្រមាន ៖ ពុម្ព​អក្សរ '%s' មិនមាន ។\n"
+"ព្រមាន ៖ ពុម្ព​អក្សរ '%s' មិន​មាន ។\n"
 "ការ​គាំទ្រ PDF មិន​បាន​អនុញ្ញាត ។"
 
 #: /src/schooltool/app/membership.py:261
@@ -2478,38 +2478,38 @@ msgstr "សមាជិក"
 
 #: /src/schooltool/app/membership.py:262
 msgid "Members of the group."
-msgstr "សមាជិក នៃក្រុម។"
+msgstr "សមាជិក នៃ​ក្រុម​ ។"
 
-#: /src/schooltool/app/security.py:309
+#: /src/schooltool/app/security.py:304
 msgid "Assigned leaders."
-msgstr ""
+msgstr "អ្នកដឹកនាំ​ដែល​បាន​កំណត់ ។"
 
 #. Default: ""
-#: /src/schooltool/app/security.py:353
+#: /src/schooltool/app/security.py:348
 msgid "\"$group\" group."
 msgstr "\"$group\" ក្រុម"
 
 #. Default: ""
-#: /src/schooltool/app/security.py:368
+#: /src/schooltool/app/security.py:363
 msgid "\"$group\" group and the super user."
-msgstr "\"$group\" ក្រម និង​ អ្នកប្រើប្រាស់ពិសេស។"
+msgstr "\"$group\" ក្រម និង​ អ្នក​ប្រើប្រាស់​ពិសេស ។"
 
 #: /src/schooltool/app/security.zcml:71
 msgid "SchoolTool application"
-msgstr "កម្មវិធីអនុវត្ត SchoolToo"
+msgstr "កម្មវិធី​​​អនុវត្ត SchoolToo"
 
-#: /src/schooltool/app/security.zcml:80
+#: /src/schooltool/app/security.zcml:74
 msgid "Access"
 msgstr "ការចូលទៅ"
 
-#: /src/schooltool/app/security.zcml:87
+#: /src/schooltool/app/security.zcml:81
 msgid "Manage school settings and configuration"
-msgstr "គ្រប់គ្រង ការកំណត់ទំរង់ និង ការកំណត់ សាលា"
+msgstr "គ្រប់គ្រង ការ​កំណត់​ទម្រង់ និង ការកំណត់ សាលា"
 
-#: /src/schooltool/app/security.zcml:95
-#: /src/schooltool/course/security.zcml:141
-#: /src/schooltool/group/security.zcml:86
-#: /src/schooltool/person/security.zcml:128
+#: /src/schooltool/app/security.zcml:89
+#: /src/schooltool/course/security.zcml:142
+#: /src/schooltool/group/security.zcml:90
+#: /src/schooltool/person/security.zcml:122
 msgid "View calendar"
 msgstr "មើល ប្រក្រតីទិន"
 
@@ -2561,7 +2561,7 @@ msgstr "អ្នក​ប្រើ​ថ្មី"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:107
 msgid "Add Multiple Persons"
-msgstr ""
+msgstr "បន្ថែម​មនុស្ស​​ច្រើន​​នាក់"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:129
 #: /src/schooltool/basicperson/security.zcml:22
@@ -2618,17 +2618,17 @@ msgid "Names cannot begin with '+' or '@' or contain '/'"
 msgstr "ឈ្មោះ​មិន​អាច​ចាប់ផ្ដើម​ដោយ '+' ឬ '@' ឬ​មាន '/' ទេ"
 
 #: /src/schooltool/basicperson/browser/csvimport.py:85
-#: /src/schooltool/basicperson/browser/person.py:114
+#: /src/schooltool/basicperson/browser/person.py:160
 msgid "Usernames cannot contain non-ascii characters"
-msgstr ""
+msgstr "ឈ្មោះ​អ្នកប្រើ​មិន​អាច​មាន​តួ​អក្សរ non-ascii ទេ"
 
 #: /src/schooltool/basicperson/browser/demographics.py:85
 msgid "Duplicate entry \"${value}\""
-msgstr ""
+msgstr "ស្ទួន​ធាតុ​ \"${value}\""
 
 #: /src/schooltool/basicperson/browser/demographics.py:90
 msgid "Value too long \"${value}\""
-msgstr ""
+msgstr "តម្លៃវែង​​ពេក \"${value}\""
 
 #: /src/schooltool/basicperson/browser/demographics.py:151
 msgid "Add new Field"
@@ -2658,23 +2658,32 @@ msgstr "សូម​អះអាង​ពាក្យ​សម្ងាត់"
 msgid "Passwords do not match"
 msgstr "ពាក្យ​សម្ងាត់​មិន​ផ្គូផ្គង"
 
-#: /src/schooltool/basicperson/browser/person.py:149
-msgid "Add new person"
-msgstr "បន្ថែម​អ្នក​ប្រើ​ថ្មី"
-
 #: /src/schooltool/basicperson/browser/person.py:152
 msgid "This username is already in use!"
 msgstr "ឈ្មោះ​អ្នក​ប្រើ​នេះ​ត្រូវ​បាន​ប្រើ​រួច​ហើយ"
 
+#: /src/schooltool/basicperson/browser/person.py:263
+msgid "Add new person"
+msgstr "បន្ថែម​អ្នក​ប្រើ​ថ្មី"
+
 #: /src/schooltool/basicperson/browser/person.py:283
 msgid "Usernames"
-msgstr ""
+msgstr "ឈ្មោះ​អ្នកប្រើ"
 
 #: /src/schooltool/basicperson/browser/person.py:300
 msgid "Add multiple persons"
-msgstr ""
+msgstr "បន្ថែម​​អ្នកប្រើ​​ច្រើន"
 
-#: /src/schooltool/basicperson/browser/person.py:304
+#: /src/schooltool/basicperson/browser/person.py:357
+msgid "Done"
+msgstr "ធ្វើ​រួច"
+
+#. Default: ""
+#: /src/schooltool/basicperson/browser/person.py:402
+msgid "Change information for ${fullname}"
+msgstr "ផ្លាស់ប្ដូរ​ព័ត៌មាន​សម្រាប់ ${fullname}"
+
+#: /src/schooltool/basicperson/browser/person.py:472
 msgid "Current Advisors"
 msgstr "ទីប្រឹក្សា​បច្ចុប្បន្ន"
 
@@ -2700,19 +2709,10 @@ msgstr "បន្ថែម​ទី​ប្រឹក្សា"
 msgid "Advisees of ${person}"
 msgstr "ទីប្រឹក្សា​របស់ ${person}"
 
-#: /src/schooltool/basicperson/browser/person.py:357
-msgid "Done"
-msgstr ""
-
-#. Default: ""
-#: /src/schooltool/basicperson/browser/person.py:402
-msgid "Change information for ${fullname}"
-msgstr "ផ្លាស់ប្ដូរ​ព័ត៌មាន​សម្រាប់ ${fullname}"
-
 #: /src/schooltool/basicperson/browser/templates/demographics-view.pt:4
 #: /src/schooltool/basicperson/browser/templates/demographics-view.pt:7
 msgid "Demographics Container"
-msgstr ""
+msgstr "ធាតុ​​ផ្ទុក​​ប្រជាសាស្ត្រ"
 
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:4
 #: /src/schooltool/person/browser/person-csvimport.pt:4
@@ -2759,7 +2759,7 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/templates/person_add_subform.pt:2
 msgid "New person"
-msgstr ""
+msgstr "អ្នក​ប្រើ​ថ្មី"
 
 #: /src/schooltool/basicperson/browser/templates/person_view.pt:13
 #: /src/schooltool/person/browser/home.pt:13
@@ -2863,21 +2863,21 @@ msgstr "នាម​ខ្លួន"
 msgid "Last Name"
 msgstr "នាម​ត្រកូល"
 
-#: /src/schooltool/basicperson/security.py:66
+#: /src/schooltool/basicperson/security.py:39
 msgid "Advisors of a person."
-msgstr ""
+msgstr "ទី​ប្រឹក្សា​របស់​អ្នកប្រើ​​ ។"
 
 #: /src/schooltool/basicperson/security.zcml:26
 msgid "Create, delete demographics fields and change their order."
-msgstr ""
+msgstr "បង្កើត​ លុប​វាល​ប្រជាសាស្ត្រ និង​ប្ដូរ​លំដាប់​របស់​វា ។"
 
 #: /src/schooltool/basicperson/security.zcml:35
 msgid "Edit fields"
-msgstr "កែប្រែវាល"
+msgstr "កែសម្រួល​វាល"
 
 #: /src/schooltool/basicperson/security.zcml:43
 msgid "View user demographics"
-msgstr ""
+msgstr "មើល​ប្រជាសាស្ត្រ​អ្នក​ប្រើ"
 
 #: /src/schooltool/basicperson/security.zcml:43
 msgid "View user's demographics information"
@@ -2885,11 +2885,11 @@ msgstr "មើល​ព័ត៌មាន​ប្រជាសាស្ត្រ
 
 #: /src/schooltool/basicperson/security.zcml:52
 msgid "Modify user demographics"
-msgstr ""
+msgstr "កែប្រែ​ប្រជាសាស្ត្រ​អ្នកប្រើ"
 
 #: /src/schooltool/basicperson/security.zcml:52
 msgid "Modify user's demographics information."
-msgstr ""
+msgstr "កែប្រែ​ព័ត៌មាន​ប្រជាសាស្ត្រ​របស់​អ្នកប្រើ ។"
 
 #: /src/schooltool/commendation/commendation_add.pt:4
 msgid "Add Commendation"
@@ -2897,9 +2897,9 @@ msgstr "បន្ថែម​មតិយោបល់"
 
 #: /src/schooltool/commendation/commendation_add.pt:13
 msgid "Commendation"
-msgstr "មតិយោបល់"
+msgstr "មតិ​យោបល់"
 
-#: /src/schooltool/common/configure.zcml:88
+#: /src/schooltool/common/configure.zcml:89
 #: /src/schooltool/course/browser/configure.zcml:25
 #: /src/schooltool/course/browser/configure.zcml:180
 #: /src/schooltool/group/browser/configure.zcml:38
@@ -2913,13 +2913,13 @@ msgstr "កែ​សម្រួល​ព័ត៌មាន"
 msgid "Add Info"
 msgstr "បន្ថែម​ព័ត៌មាន"
 
-#: /src/schooltool/common/configure.zcml:90
+#: /src/schooltool/common/configure.zcml:91
 msgid "Edit Calendar Overlays"
-msgstr "កែសម្រួលប្រតិទិនដែល​ត្រួត​លើ​គ្នា"
+msgstr "កែ​សម្រួល​ប្រតិទិន​ដែល​ត្រួត​លើ​គ្នា"
 
 #: /src/schooltool/contact/browser/configure.zcml:41
 msgid "View Person"
-msgstr ""
+msgstr "មើល​អ្នក​ប្រើ"
 
 #: /src/schooltool/contact/browser/configure.zcml:61
 msgid "New Contact"
@@ -2945,11 +2945,11 @@ msgstr "ទំនាក់ទំនង​ផ្សេង​ទៀត"
 #: /src/schooltool/contact/browser/contact.py:402
 #: /src/schooltool/email/browser/email.py:500
 msgid "Send Email"
-msgstr "ផ្ញើអ៊ីមែវល៍"
+msgstr "ផ្ញើ​អ៊ីមែល"
 
 #: /src/schooltool/contact/browser/contact.py:79
 msgid "Add new contact"
-msgstr "បន្ថែម​ទមនាក់ទំនង​ថ្មី"
+msgstr "បន្ថែម​ទំនាក់ទំនង​ថ្មី"
 
 #. Default: ""
 #: /src/schooltool/contact/browser/contact.py:162
@@ -3010,7 +3010,7 @@ msgstr "ផ្ញើ"
 #: /src/schooltool/contact/browser/contact.py:409
 #: /src/schooltool/email/browser/email.py:507
 msgid "There were some errors."
-msgstr ""
+msgstr "មាន​កំហុស​ខ្លះ​ៗ ។"
 
 #: /src/schooltool/contact/browser/relationship.py:75
 #: /src/schooltool/contact/interfaces.py:101
@@ -3045,7 +3045,7 @@ msgstr "ទំនាក់ទំនង​របស់ ${person}"
 #: /src/schooltool/resource/browser/container_delete.pt:10
 #: /src/schooltool/skin/templates/container_delete.pt:15
 msgid "Are you sure you want to delete selected items?"
-msgstr "តើ​អ្នក​ប្រាកដ​ជា​ចង់​លុប​ធាតុ​ដែល​ជ្រើស​ឬ?"
+msgstr "តើ​អ្នក​ប្រាកដ​ជា​ចង់​លុប​ធាតុ​ដែល​ជ្រើស​ឬ ?"
 
 #: /src/schooltool/contact/browser/templates/contacts_delete.pt:21
 #: /src/schooltool/email/browser/templates/email_delete.pt:21
@@ -3108,6 +3108,8 @@ msgid ""
 "You don't have an email address set. Ask your administrator to set your "
 "email address in your contact information."
 msgstr ""
+"អ្នក​មិន​បាន​កំណត់​អាសយដ្ឋាន​អ៊ីមែល​របស់​អ្នក​ឡើយ​ ។ សួរ​អ្នក​គ្រប់គ្រង​របស់​អ្នក​ ដើម្បី​កំណត់​អាសយដ្ឋាន​​អ៊ីមែល​របស់​​"
+"អ្នក​នូវ​ព័ត៌មាន​ដែល​ទាក់ទង​របស់​អ្នក​ ។"
 
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:8
 msgid "Contact information for ${person}"
@@ -3143,12 +3145,20 @@ msgid ""
 "    or the school as a whole.\n"
 "    "
 msgstr ""
+"\n"
+"    គ្រប់​អ្នក​ប្រើ​ SchoolTool មាន​ទាក់ទង​ព័ត៌មាន​ ​ដែល​រួម​មាន​អាសយដ្ឋាន​ផ្ទះ\n"
+"    លេខ​ទូរស័ព្ទ អាសយដ្ឋាន​អ៊ីមែល ។​ល​។\n"
+"\n"
+"    \"ទាក់ទង​ខាងក្រៅ​​\" អាច​ត្រូវ​បាន​បង្កើត - មនុស្ស​ដែល​មិន​មែន​ជា​​អ្នក​ប្រើ​ SchoolTool \n"
+"    ប៉ុន្តែ​អាច​ត្រូវ​ការ​ទទួល​ការ​ជូន​ដំណឹង និង​ព័ត៌មាន​​​អំពី​សិស្ស​\n"
+"    ឬ​សាលារៀន​ទាំងមូល ។\n"
+"    "
 
 #: /src/schooltool/contact/contact.py:198
-#: /src/schooltool/course/browser/section.py:522
+#: /src/schooltool/course/browser/section.py:518
 #: /src/schooltool/course/browser/templates/copy_sections.pt:93
 #: /src/schooltool/course/browser/templates/link_section.pt:69
-#: /src/schooltool/course/browser/templates/section.pt:80
+#: /src/schooltool/course/browser/templates/section.pt:85
 #: /src/schooltool/course/browser/templates/section_container.pt:42
 #: /src/schooltool/course/section.py:281 /src/schooltool/course/section.py:291
 msgid "Instructors"
@@ -3156,7 +3166,7 @@ msgstr "គ្រូ"
 
 #: /src/schooltool/contact/contact.py:199
 msgid "Instructors of student(s) related to this contact."
-msgstr ""
+msgstr "គ្រូ​​​របស់​សិស្ស​ដែល​ទាក់ទង​នឹង​ទំនាក់ទំនង​នេះ ។"
 
 #: /src/schooltool/contact/interfaces.py:53
 msgid "Address line 1"
@@ -3181,12 +3191,12 @@ msgid "Country"
 msgstr "ប្រទេស"
 
 #: /src/schooltool/contact/interfaces.py:63
-#: /src/schooltool/demographics/interfaces.py:268
+#: /src/schooltool/demographics/interfaces.py:271
 msgid "Postal code"
-msgstr "លេខកូដ​ប្រៃសនីយ៍"
+msgstr "លេខ​កូដ​ប្រៃសណីយ៍"
 
 #: /src/schooltool/contact/interfaces.py:73
-#: /src/schooltool/demographics/interfaces.py:273
+#: /src/schooltool/demographics/interfaces.py:276
 msgid "Home phone"
 msgstr "ទូរស័ព្ទ​នៅ​ផ្ទះ"
 
@@ -3228,50 +3238,51 @@ msgid "Sibling"
 msgstr "បង​ប្អូន"
 
 #: /src/schooltool/contact/security.zcml:29
-#: /src/schooltool/person/security.zcml:79
+#: /src/schooltool/person/security.zcml:73
 #: /src/schooltool/timetable/security.zcml:18
 msgid "List/Search"
-msgstr "រាយបញ្ជី/ស្វែងរក"
+msgstr "រាយ​បញ្ជី/ស្វែងរក"
 
 #: /src/schooltool/contact/security.zcml:36
 msgid ""
 "Assign / remove contacts of a user,                   define user's "
 "relationship with a contact."
 msgstr ""
+"ផ្ដល់​តម្លៃ​ / យក​ការ​ទាក់ទង​របស់​អ្នក​ប្រើ​                   កំណត់​ទំនាក់ទំនង​ដោយ​ទាក់ទង​អ្នក​ប្រើ ។"
 
 #: /src/schooltool/contact/security.zcml:36
 msgid "Manage user's contacts"
-msgstr "គ្រប់គ្រង ជំនួប របស់អ្នកប្រើប្រាស់"
+msgstr "គ្រប់គ្រង ជំនួប របស់​អ្នកប្រើប្រាស់"
 
 #: /src/schooltool/contact/security.zcml:46
 msgid "Create/Delete an external contact"
-msgstr "បង្កើត/លុបចេញ មួយជំនួបខាងក្រៅ"
+msgstr "បង្កើត​/លុប​ទាក់ទង​ខាង​ក្រៅ"
 
 #: /src/schooltool/contact/security.zcml:54
 msgid "View an external contact"
-msgstr "មើល មួយជំនួបខាងក្រៅ"
+msgstr "មើល​ទាក់ទង​ខាង​ក្រៅ"
 
 #: /src/schooltool/contact/security.zcml:62
 msgid "Modify an external contact"
-msgstr "ផ្លាស់ប្តូរ មួយជំនួបខាងក្រៅ"
+msgstr "កែប្រែ​ទាក់ទង​ខាងក្រៅ"
 
 #: /src/schooltool/contact/security.zcml:70
 msgid "View user's contact information"
-msgstr "មើលពត៌មានជំនួប របស់អ្នកប្រើប្រាស់"
+msgstr "មើល​ព័ត៌មាន​​ទាក់ទង​អំពី​អ្នក​ប្រើ"
 
 #: /src/schooltool/contact/security.zcml:78
 msgid "Modify user's contact information"
-msgstr "ផ្លាស់ប្តូរ ពត៌មានជំនួប របស់អ្នកប្រើប្រាស់"
+msgstr "កែ​ប្រែ​ព័ត៌មាន​ទាក់ទង​អំពី​អ្នក​ប្រើ"
 
 #: /src/schooltool/contact/security.zcml:86
-#: /src/schooltool/person/security.zcml:152
+#: /src/schooltool/person/security.zcml:147
 msgid "The user himself."
-msgstr ""
+msgstr "អ្នក​ប្រើ​ខ្លួន​ឯង ។"
 
 #: /src/schooltool/contact/security.zcml:86
-#: /src/schooltool/person/security.zcml:152
+#: /src/schooltool/person/security.zcml:147
 msgid "User"
-msgstr "អ្នកប្រើប្រាស់"
+msgstr "អ្នកប្រើ"
 
 #: /src/schooltool/course/browser/configure.zcml:10
 msgid "Add a Course"
@@ -3292,15 +3303,15 @@ msgstr "វគ្គ​សិក្សា​ថ្មី"
 
 #: /src/schooltool/course/browser/configure.zcml:113
 msgid "Copy Sections"
-msgstr ""
+msgstr "ចម្លង​ផ្នែក"
 
 #: /src/schooltool/course/browser/configure.zcml:123
 msgid "View Next"
-msgstr ""
+msgstr "មើល​បន្ទាប់"
 
 #: /src/schooltool/course/browser/configure.zcml:133
 msgid "View Previous"
-msgstr ""
+msgstr "មើល​មុន"
 
 #: /src/schooltool/course/browser/configure.zcml:160
 #: /src/schooltool/course/browser/configure.zcml:170
@@ -3344,7 +3355,8 @@ msgid ""
 "Course \"${course_title}\" credits \"${invalid_credits}\" value must be an "
 "integer."
 msgstr ""
-"តម្លៃ​វគ្គ​សិក្សា \"${course_title}\" ក្រេឌីត \"${invalid_credits}\" ត្រូវ​តែ​ជា​ចំនួន​គត់ ។"
+"តម្លៃ​វគ្គ​សិក្សា​តម្លៃ​ \"${course_title}\"ឥណទាន​ \"${invalid_credits}\" ត្រូវ​តែ​ជា​ចំនួន​គត់ "
+"។"
 
 #. Default: ""
 #: /src/schooltool/course/browser/csvimport.py:95
@@ -3386,11 +3398,11 @@ msgstr "បញ្ចប់​ក្នុង​វគ្គ"
 msgid "Starting term ($starts_in) is later than ending term ($ends_in)"
 msgstr "វគ្គ​ចាប់ផ្ដើម ($starts_in) នៅ​ក្រោយ​វគ្គ​បញ្ចប់ ($ends_in)"
 
-#: /src/schooltool/course/browser/section.py:438
+#: /src/schooltool/course/browser/section.py:434
 msgid "Course"
-msgstr "មុខ​វិជ្ជា"
+msgstr "វគ្គសិក្សា"
 
-#: /src/schooltool/course/browser/section.py:523
+#: /src/schooltool/course/browser/section.py:519
 msgid "Current Instructors"
 msgstr "គ្រូ​បច្ចុប្បន្ន"
 
@@ -3448,7 +3460,7 @@ msgstr "ផ្នែក​ក្នុង ${term}"
 #: /src/schooltool/course/browser/templates/section_container.pt:45
 #: /src/schooltool/timetable/browser/configure.zcml:40
 msgid "Schedule"
-msgstr "កាល​វិភាគ"
+msgstr "ចែកពេល"
 
 #: /src/schooltool/course/browser/templates/copy_sections.pt:99
 #: /src/schooltool/course/browser/templates/link_section.pt:75
@@ -3477,9 +3489,9 @@ msgid ""
 "and <strong>may</strong> include an optional credits value."
 msgstr ""
 "ទិន្នន័យ CSV<strong>ត្រូវតែ​</strong> មាន​ចំណង​ជើង​វគ្គសិក្សា<strong>អាច</strong> មាន​សេចក្ដី​"
-"ពិពណ៌នា​វគ្គសិក្សា​ជា​ជម្រើស <strong>អាច​</strong> មាន​លេខសម្គាល់​វគ្គសិក្សា​ជា​ជម្រើស "
-"<strong>អាច</strong> រួម​មាន​លេខសម្គាល់​រដ្ឋាភិបាល​ជា​ជម្រើស និង<strong>អាច</strong> មាន​"
-"តម្លៃ​ក្រេឌីត​ជា​ជម្រើស ។"
+"ពិពណ៌នា​វគ្គសិក្សា​ជា​ជម្រើស <strong>អាច​</strong> មាន​លេខ​សម្គាល់​វគ្គសិក្សា​ជា​ជម្រើស "
+"<strong>អាច</strong> រួម​មាន​លេខ​សម្គាល់​រដ្ឋាភិបាល​ជា​ជម្រើស និង<strong>អាច</strong> មាន​"
+"តម្លៃ​ក្រេឌីត​ជា​ជម្រើស ។"
 
 #. Default: "Ancient History, Pre-history through 1000 A.D. US History,,us-history World History, 1000 A.D. through the 20th century, history-world Spanish,,,spanish-gov,5"
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:33
@@ -3509,14 +3521,14 @@ msgid ""
 "database, existing courses will be updated. Course Ids take precedence when "
 "determining which course should be updated."
 msgstr ""
-"ឧទាហរណ៍​ខាង​លើ​នឹង​បង្កើត​វគ្គសិក្សា​ចំនួន ៤ ដែលមាន​ចំណង​ជើង​ថា 'Ancient History', 'US "
-"History', 'World History' និង 'Spanish' ។ វគ្គសិក្សា​ទី​មួយ និង​ទីបី​នឹង​មាន​សេចក្ដី​ពិពណ៌នា 'Pre-"
-"history through 1000 A.D.' និង '1000 A.D ។ តាមរយៈ​សតវត្សន៍​ទី ២០ ។ វគ្គសិក្សាទីពីរ និងទី​បួន​"
-"នឹង​មិនមាន​សេចក្ដីពិពណ៌នា ។ វគ្គសិក្សា​ទីពីរ ទីបី និង​ទីបួន​នឹង​មាន​លេខ​សម្គាល់​វគ្គសិក្សា​របស់​ពួកវា កំណត់​ទៅជា​"
-"ប្រវត្តិ​អាមេរិក និងពិភព​ប្រវត្តិសាស្ត្រ ។ វគ្គសិក្សាទី​បួន​នឹង​មាន​លេខ​សម្គាល់​រដ្ឋាភិបាល​របស់​វា​កំណត់ទៅជា​"
-"រដ្ឋាភិបាល​អេស្ប៉ាញ និង​តម្លៃក្រេឌីក​របស់​វា​កំណត់​ទី ៥ ។ ប្រសិនបើ​អ្នក​ផ្ទុក​នូវ​ CSV ដែលមាន​ចំណងជើង ឬ​លេខ​"
-"សម្គាល់​វគ្គសិក្សា​ដែល​មាន​​រួច​ហើយ​នៅ​ក្នុង​មូលដ្ឋាន​ទិន្នន័យ វគ្គសិក្សា​ដែល​ស្រាប់​នឹង​ត្រូវ​បាន​ធ្វើ​ឲ្យ​ប្រសើ​"
-"រឡើង ។ លេខសម្គាល់​វគ្គសិក្សា​មាន​អាទិភាព​នៅពេល​កំណត់​វគ្គសិក្សា​ណាមួយ​គួរ​ត្រូវ​បានធ្វើ​ឲ្យ​ប្រសើរ​ឡើង ។"
+"ឧទាហរណ៍​ខាង​លើ​នឹង​បង្កើត​វគ្គសិក្សា​ចំនួន ៤ ដែល​មាន​ចំណង​ជើង​ថា 'Ancient History', 'US "
+"History', 'World History' និង 'Spanish' ។ វគ្គសិក្សា​ទី​មួយ និង​ទីបី​នឹង​មាន​សេចក្ដី​ពិពណ៌នា 'Pre-"
+"history through 1000 A.D.' និង '1000 A.D ។ តាមរយៈ​សតវត្សន៍​ទី ២០ ។ វគ្គ​សិក្សា​ទីពីរ និង​ទី​បួន​"
+"នឹង​មិន​មាន​សេចក្ដី​ពិពណ៌នា ។ វគ្គសិក្សា​ទីពីរ ទីបី និង​ទី​បួន​នឹង​មាន​លេខ​សម្គាល់​វគ្គសិក្សា​របស់​ពួកវា កំណត់​ទៅជា​"
+"ប្រវត្តិ​អាមេរិក និង​ពិភព​ប្រវត្តិសាស្ត្រ ។ វគ្គ​សិក្សា​ទី​​បួន​នឹង​មាន​លេខ​សម្គាល់​រដ្ឋាភិបាល​របស់​វា​កំណត់​ទៅជា​"
+"រដ្ឋាភិបាល​អេស្ប៉ាញ និង​តម្លៃ​ក្រេឌីត​របស់​វា​កំណត់​ទី ៥ ។ ប្រសិនបើ​អ្នក​ផ្ទុក​នូវ​ CSV ដែល​មាន​ចំណងជើង ឬ​លេខ​"
+"សម្គាល់​វគ្គសិក្សា​ដែល​មាន​​រួច​ហើយ​នៅ​ក្នុង​មូលដ្ឋាន​ទិន្នន័យ វគ្គសិក្សា​ដែល​ស្រាប់​នឹង​ត្រូវ​បាន​ធ្វើ​ឲ្យ​ប្រ​សើ​រ​ឡើង "
+"។ លេខ​សម្គាល់​វគ្គសិក្សា​មាន​អាទិភាព​នៅ​ពេល​កំណត់​វគ្គសិក្សា​ណាមួយ​គួរ​ត្រូវ​បាន​ធ្វើ​ឲ្យ​ប្រសើរ​ឡើង ។"
 
 #: /src/schooltool/course/browser/templates/course.pt:9
 msgid "${course} course for ${schoolyear}"
@@ -3617,11 +3629,11 @@ msgstr "ផ្លាស់ប្ដូរ​គ្រូ​សម្រាប់
 msgid "edit instructors"
 msgstr "កែ​សម្រួល​គ្រូ"
 
-#: /src/schooltool/course/browser/templates/section.pt:102
+#: /src/schooltool/course/browser/templates/section.pt:107
 msgid "Change the students in this section individually"
-msgstr "ផ្លាស់ប្ដូរ​សិស្ស​ក្នុង​ផ្នែក​នេះ​ដោយ​ឡែកៗ"
+msgstr "ផ្លាស់ប្ដូរ​សិស្ស​ក្នុង​ផ្នែក​នេះ​ដោយ​ឡែក​ៗ"
 
-#: /src/schooltool/course/browser/templates/section.pt:102
+#: /src/schooltool/course/browser/templates/section.pt:107
 msgid "edit individuals"
 msgstr "កែ​សម្រួល​នីមួយៗ"
 
@@ -3699,16 +3711,16 @@ msgid ""
 "All</code> button is also there to show all of the courses on a single page."
 "</li> </ul>"
 msgstr ""
-"<h1>វគ្គសិក្សា</h1> <p>ប្រើ​ទំព័រ​នេះ​ដើម្បី​រៀបចំ​វគ្គសិក្សា​ដែល​បានរាយ​នៅ​ក្នុង​ប្រព័ន្ធ ។</p> <h3>តើ​"
-"ខ្ញុំ​គួរ...</h3> <ul> <li><strong>រក​មើល​វគ្គសិក្សា ៖</strong> ប្រើ​ប្រអប់ស្វែងរក​នៅ​ខាង​ឆ្វេង​"
-"ប៊ូតុង <code>រក​ឥឡូវ</code> ដើម្បីរកមើល​បញ្ជី​វគ្គសិក្សាទាំង​មូល​សម្រាប់​លក្ខខ័ណ្ឌ​​ស្វែងរក ។ ប៊ូតុង​ "
-"<code>ជម្រះ</code> ជម្រះ​ប្រអប់​ស្វែងរក​នៃ​ធាតុ​បច្ចុប្បន្ន ។</li> <li><strong>បង្ហាញ​បញ្ជី​នៃ​"
-"ផ្នែក​ផ្សេងៗ​របស់​វគ្គសិក្សា ៖</strong> ចុច​លើ​ឈ្មោះវគ្គសិក្សា ។</li> <li><strong>បង្ហាញ​បញ្ជី​សិស្ស​"
-"នៅ​ក្នុង​ថ្នាក់​ជាក់លាក់ ៖</strong> ចុច​លើ​តំណ <code>គ្រូ -- វគ្គសិក្សា</code> ។ ចំនួន​សិស្ស​ក៏ត្រូវ​បាន​"
-"រាយ​នៅ​ជាប់នឹង​គ្រូ ព្រម​ទាំង​វគ្គសិក្សា ។</li> <li><strong>រកមើល​វគ្គសិក្សា ៖</strong> បំបែក "
+"<h1>វគ្គសិក្សា</h1> <p>ប្រើ​ទំព័រ​នេះ​ដើម្បី​រៀបចំ​វគ្គសិក្សា​ដែល​បាន​រាយ​នៅ​ក្នុង​ប្រព័ន្ធ ។</p> <h3>តើ​"
+"ខ្ញុំ​គួរ...</h3> <ul> <li><strong>រក​មើល​វគ្គសិក្សា ៖</strong> ប្រើ​ប្រអប់​ស្វែងរក​នៅ​ខាង​ឆ្វេង​"
+"ប៊ូតុង <code>រក​ឥឡូវ</code> ដើម្បី​រកមើល​បញ្ជី​វគ្គសិក្សា​ទាំង​មូល​សម្រាប់​លក្ខខ័ណ្ឌ​​ស្វែងរក ។ ប៊ូតុង​ "
+"<code>ជម្រះ</code> ជម្រះ​ប្រអប់​ស្វែងរក​នៃ​ធាតុ​បច្ចុប្បន្ន ។</li> <li><strong>បង្ហាញ​បញ្ជី​នៃ​"
+"ផ្នែក​ផ្សេងៗ​របស់​វគ្គសិក្សា ៖</strong> ចុច​លើ​ឈ្មោះវគ្គសិក្សា ។</li> <li><strong>បង្ហាញ​បញ្ជី​សិស្ស​"
+"នៅ​ក្នុង​ថ្នាក់​ជាក់លាក់ ៖</strong> ចុច​លើ​តំណ <code>គ្រូ -- វគ្គសិក្សា</code> ។ ចំនួន​សិស្ស​ក៏​ត្រូវ​បាន​"
+"រាយ​នៅ​ជាប់នឹង​គ្រូ ព្រម​ទាំង​វគ្គសិក្សា ។</li> <li><strong>រកមើល​វគ្គសិក្សា ៖</strong> បំបែក "
 "<q>ក្រុម</q> របស់​បញ្ជី​វគ្គសិក្សា​អាច​ត្រូវ​បាន​ចូល​តាម​រយៈ <code>បន្ទាប់​ទៀត ១០</code> (និង "
-"<code>មុន</code>) ហើយ​តំណ​នៅ​ក្នុង​របារពណ៌​ខៀវ ។ ប៊ូតុង <code>បង្ហាញ​ទាំងអស់</code> ក៏មាន​នៅ​ទីនោះ​"
-"ដែរ ដើម្បី​បង្ហាញ​វគ្គសិក្សា​ទាំងអស់​នៅ​ក្នុងទំព័រ​តែ​មួយ ។</li> </ul>"
+"<code>មុន</code>) ហើយ​តំណ​នៅ​ក្នុង​របារ​ពណ៌​ខៀវ ។ ប៊ូតុង <code>បង្ហាញ​ទាំងអស់</code> ក៏​មាន​នៅ​ទីនោះ​"
+"ដែរ ដើម្បី​បង្ហាញ​វគ្គសិក្សា​ទាំងអស់​នៅ​ក្នុង​ទំព័រ​តែ​មួយ ។</li> </ul>"
 
 #: /src/schooltool/course/interfaces.py:37
 msgid "Title of the course."
@@ -3728,11 +3740,11 @@ msgstr "ឧបករណ៍​សម្គាល់​វគ្គសិក្ស
 
 #: /src/schooltool/course/interfaces.py:54
 msgid "Government ID"
-msgstr "លេខសម្គាល់​រដ្ឋាភិបាល"
+msgstr "លេខ​សម្គាល់​រដ្ឋាភិបាល"
 
 #: /src/schooltool/course/interfaces.py:56
 msgid "Course identifier used by the government."
-msgstr "ឧបករណ៍​សម្គាល់​វគ្គសិក្សា​បានប្រើ​ដោយ​រដ្ឋាភិបាល ។"
+msgstr "ឧបករណ៍​សម្គាល់​វគ្គសិក្សា​បាន​ប្រើ​ដោយ​រដ្ឋាភិបាល ។"
 
 #: /src/schooltool/course/interfaces.py:59
 msgid "Credits"
@@ -3751,8 +3763,8 @@ msgid ""
 "An identifier for a section, made up of instructor\n"
 "            names, courses, and meeting time."
 msgstr ""
-"ឧបករណ៍​សម្គាល់​សម្រាប់​ភាគ បានបង្កើត​​ឡើង​សម្រាប់​អ្នកបង្រៀន\n"
-"            ឈ្មោះ, វគ្គសិក្សា, និង​ពេលវេលា​ប្រជុំ ។"
+"ឧបករណ៍​សម្គាល់​សម្រាប់​ភាគ បាន​បង្កើត​​ឡើង​សម្រាប់​អ្នកបង្រៀន\n"
+"            ឈ្មោះ, វគ្គសិក្សា, និង​ពេលវេលា​ប្រជុំ ។"
 
 #: /src/schooltool/course/interfaces.py:96
 msgid "Title for the section."
@@ -3769,19 +3781,19 @@ msgstr "${instructors} -- ${section_title}"
 
 #: /src/schooltool/course/section.py:124
 msgid "Cannot assign section as previous to itself"
-msgstr "មិនអាច​ផ្ដល់​ភាគ​ជា​ភាគ​មុន​ទៅ​ខ្លួន​វា​បានទេ"
+msgstr "មិន​អាច​កំណត់​ផ្នែក ​​​ជា​ផ្នែក​​មុន​ទៅ​ខ្លួន​វា​បានទេ"
 
 #: /src/schooltool/course/section.py:151
 msgid "Cannot assign section as next to itself"
-msgstr "មិនអាច​ផ្ដល់​ភាគ​ជា​ភាគ​បន្ទាប់​ទៅខ្លួន​វា​បានទេ"
+msgstr "មិន​អាច​កំណត់​ផ្នែក ​​ជា​ផ្នែក​​បន្ទាប់​ទៅ​ខ្លួន​វា​បានទេ"
 
 #: /src/schooltool/course/section.py:282
 msgid "Instructors of the section."
-msgstr ""
+msgstr "គ្រូ​តាម​ផ្នែក ។"
 
 #: /src/schooltool/course/section.py:292
 msgid "Instructors of a person in any of his sections."
-msgstr ""
+msgstr "គ្រូ​តាម​ផ្នែក​របស់​គាត់​មួយ​ចំនួន ។"
 
 #: /src/schooltool/course/section.py:315
 msgid "Learners"
@@ -3789,7 +3801,7 @@ msgstr "អ្នករៀន"
 
 #: /src/schooltool/course/section.py:316
 msgid "Students of the section."
-msgstr "និស្សិត ក្នុងផ្នែក។"
+msgstr "សិស្ស​តាមផ្នែក ។"
 
 #: /src/schooltool/course/section.py:394
 msgid "Cannot link sections in same term"
@@ -3801,29 +3813,30 @@ msgstr "មិន​អាច​តភ្ជាប់​ផ្នែក​នៅ
 
 #: /src/schooltool/course/section.py:403
 msgid "Sections must be in consecutive terms"
-msgstr "ភាគត្រូវតែ​នៅ​ក្នុង​វគ្គសិក្សា​បន្ត​បន្ទាប់"
+msgstr "ផ្នែក​ត្រូវតែ​នៅ​ក្នុង​វគ្គសិក្សា​បន្ត​បន្ទាប់"
 
 #: /src/schooltool/course/security.zcml:42
 msgid ""
 "Basic information about sections is only visible to instructors and students "
 "in that section, and school administration."
 msgstr ""
+"ព័ត៌មាន​ជា​មូលដ្ឋាន​អំពី​ផ្នែក​ អាច​មើល​ឃើញ​តែ​គ្រូ​ ​សិស្ស​តាម​ផ្នែក​នេះ​ និង​គណៈ​គ្រប់គ្រង​សាលា​តែប៉ុណ្ណោះ ។"
 
 #: /src/schooltool/course/security.zcml:42
 msgid ""
 "Basic information about sections, including rosters, is visible to the "
 "general public."
-msgstr ""
+msgstr "ព័ត៌មាន​​ជា​មូលដ្ឋាន​អំពី​ផ្នែក រួម​មាន​បញ្ជី​ឈ្មោះ អាច​មើល​ឃើញ​ជា​សាធារណៈ ។"
 
 #: /src/schooltool/course/security.zcml:74
 msgid ""
 "A course in SchoolTool describes a set curriculum                    taught "
 "in a section."
-msgstr ""
+msgstr "វគ្គសិក្សា​ក្នុង​សេចក្ដី​ពណ៌នា​ SchoolTool កំណត់​កម្មវិធី​បង្រៀន​​តាម​ផ្នែក ។"
 
-#: /src/schooltool/course/security.zcml:79
-#: /src/schooltool/course/security.zcml:113
-#: /src/schooltool/group/security.zcml:58
+#: /src/schooltool/course/security.zcml:80
+#: /src/schooltool/course/security.zcml:114
+#: /src/schooltool/group/security.zcml:62
 #: /src/schooltool/schoolyear/security.zcml:9
 #: /src/schooltool/term/security.zcml:21
 msgid "List"
@@ -3837,12 +3850,12 @@ msgstr "បញ្ជី"
 #: /src/schooltool/term/security.zcml:28
 #: /src/schooltool/timetable/security.zcml:25
 msgid "Create/Delete"
-msgstr "បង្កើត/លុបចេញ"
+msgstr "បង្កើត/លុប"
 
-#: /src/schooltool/course/security.zcml:100
-#: /src/schooltool/course/security.zcml:134
-#: /src/schooltool/group/security.zcml:79
-#: /src/schooltool/person/security.zcml:100
+#: /src/schooltool/course/security.zcml:101
+#: /src/schooltool/course/security.zcml:135
+#: /src/schooltool/group/security.zcml:83
+#: /src/schooltool/person/security.zcml:94
 #: /src/schooltool/schoolyear/security.zcml:38
 #: /src/schooltool/term/security.zcml:42
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:62
@@ -3854,7 +3867,7 @@ msgstr "កែប្រែ"
 msgid ""
 "A section is a set of one or more learners                    who meet "
 "during a term."
-msgstr ""
+msgstr "ផ្នែក​គឺ​កំណត់​​អ្នក​សិក្សា​ច្រើន​ ឬ​តិច ដែល​ជួប​គ្នា​ខណៈ​ពេល​វគ្គ​ណាមួយ ។"
 
 #: /src/schooltool/dashboard/configure.zcml:41
 msgid "My Sections"
@@ -3892,7 +3905,7 @@ msgstr "វគ្គសិក្សា"
 
 #: /src/schooltool/demographics/browser/configure.zcml:156
 msgid "Schooltool Person Menu"
-msgstr "ម៉ឺនុយ​មនុស្ស​របស់ Schooltool"
+msgstr "ម៉ឺនុយ​អ្នកប្រើ Schooltool"
 
 #: /src/schooltool/demographics/browser/configure.zcml:167
 #: /src/schooltool/demographics/browser/configure.zcml:228
@@ -3936,7 +3949,7 @@ msgstr "បន្ទាន់ ៣"
 
 #: /src/schooltool/demographics/browser/configure.zcml:217
 msgid "Schooltool Person Display Menu"
-msgstr "ម៉ឺនុយ​បង្ហាញ​មនុស្ស Schooltool"
+msgstr "ម៉ឺនុយ​បង្ហាញ​អ្នកប្រើ Schooltool"
 
 #: /src/schooltool/demographics/browser/demographics_macros.pt:4
 #: /src/schooltool/demographics/browser/personform.py:96
@@ -4010,8 +4023,8 @@ msgid ""
 "characters such as *. For example, to search for everyone with John in their "
 "name, use <em>*john*</em>."
 msgstr ""
-"ស្វែងរក​មនុស្ស​នៅ​ទីនេះ ។ ចំណាំ​ថា​នៅ​ក្នុង​វាល​អត្ថបទ​ពេញលេញ​អ្នក​អាច​ប្រើតួអក្សរ​ជំនួស​ដូចជា *។ ឧទាហរណ៍ "
-"ដើម្បី​ស្វែងរក​អ្នក​ណាម្នាក់​ដែល​មាន​ឈ្មោះ John ប្រើ <em>*john*</em> ។"
+"ស្វែងរក​មនុស្ស​នៅ​ទីនេះ ។ ចំណាំ​ថា​នៅ​ក្នុង​វាល​អត្ថបទ​ពេញលេញ​អ្នក​អាច​ប្រើ​តួ​អក្សរ​ជំនួស​ដូចជា *។ ឧទាហរណ៍ "
+"ដើម្បី​ស្វែងរក​អ្នក​ណា​ម្នាក់​ដែល​មាន​ឈ្មោះ John ប្រើ <em>*john*</em> ។"
 
 #: /src/schooltool/demographics/browser/search.pt:42
 msgid "There were no results."
@@ -4190,11 +4203,11 @@ msgstr "ទំនាក់ទំនង​ជាមួយ​សិស្ស"
 msgid "Street"
 msgstr "ផ្លូវ"
 
-#: /src/schooltool/demographics/interfaces.py:283
+#: /src/schooltool/demographics/interfaces.py:286
 msgid "Cell phone"
-msgstr "ទូរស័ទ្ទ​ចល័ត"
+msgstr "ទូរស័ព្ទចល័ត"
 
-#: /src/schooltool/demographics/interfaces.py:288
+#: /src/schooltool/demographics/interfaces.py:291
 #: /src/schooltool/note/configure.zcml:94 /src/schooltool/note/notes.pt:2
 #: /src/schooltool/resource/interfaces.py:52
 msgid "Notes"
@@ -4249,7 +4262,7 @@ msgstr "រៀបចំ​ទិន្នន័យ"
 
 #: /src/schooltool/devmode/devmode.pt:11
 msgid "Developer Tools"
-msgstr "ឧបករណ៍​របស់​អ្នក​ភិវឌ្ឍន៍"
+msgstr "ឧបករណ៍​របស់​អ្នកអ​ភិវឌ្ឍន៍"
 
 #: /src/schooltool/devmode/devmode.pt:18
 msgid "Introspector"
@@ -4257,7 +4270,7 @@ msgstr "អ្នក​​ត្រួតពិនិត្យ"
 
 #: /src/schooltool/email/browser/configure.zcml:54
 msgid "Outgoing Email"
-msgstr ""
+msgstr "អ៊ីមែល​ចេញ"
 
 #: /src/schooltool/email/browser/configure.zcml:76
 msgid "Settings"
@@ -4265,52 +4278,52 @@ msgstr "ការកំណត់"
 
 #: /src/schooltool/email/browser/configure.zcml:87
 msgid "Send Test"
-msgstr "ផ្ញើ ការសាក"
+msgstr "ផ្ញើ សាកល្បង"
 
 #. Default: ""
 #: /src/schooltool/email/browser/email.py:81
 #: /src/schooltool/email/browser/email.py:414
 msgid "Enabled on ${info}"
-msgstr "អនុញ្ញាត លើ ${info}"
+msgstr "បើក លើ ${info}"
 
 #: /src/schooltool/email/browser/email.py:85
 #: /src/schooltool/email/browser/email.py:418
-#: /src/schooltool/securitypolicy/browser/control.py:97
+#: /src/schooltool/securitypolicy/browser/control.py:96
 msgid "Disabled"
-msgstr "មិនអនុញ្ញាត"
+msgstr "បិទ"
 
 #: /src/schooltool/email/browser/email.py:94
 #: /src/schooltool/email/browser/email.py:217
 #: /src/schooltool/email/browser/email.py:466
 #: /src/schooltool/email/browser/templates/email_container.pt:20
 msgid "Server Status"
-msgstr "ស្ថានភាព ខំព្យូរើបំរើសេវា"
+msgstr "ស្ថានភាព ម៉ាស៊ីន​បម្រើ"
 
 #: /src/schooltool/email/browser/email.py:95
 #: /src/schooltool/email/browser/email.py:218
 #: /src/schooltool/email/browser/email.py:467
 msgid "Current status of the SchoolTool email service"
-msgstr "ស្ថានភាពបច្ចុប្បន្ន នៃសេវាអ៊ីមែវល៍ របស់ SchoolTool"
+msgstr "ស្ថានភាព​បច្ចុប្បន្ន​របស់​សេវា​អ៊ីមែល SchoolTool"
 
 #: /src/schooltool/email/browser/email.py:99
 #: /src/schooltool/email/interfaces.py:87
 msgid "Enable"
-msgstr ""
+msgstr "បើក"
 
 #: /src/schooltool/email/browser/email.py:100
 #: /src/schooltool/email/interfaces.py:88
 msgid "Mark to enable the service."
-msgstr ""
+msgstr "សញ្ញាសម្គាល់​ត្រូវ​បើក​សេវា ។"
 
 #: /src/schooltool/email/browser/email.py:105
 #: /src/schooltool/email/interfaces.py:92
 msgid "Hostname"
-msgstr "ឈ្មោះខំព្យូរើ"
+msgstr "ឈ្មោះ​ម៉ាស៊ីន​បម្រើ"
 
 #: /src/schooltool/email/browser/email.py:106
 #: /src/schooltool/email/interfaces.py:93
 msgid "SMTP server hostname. Required if the service is enabled."
-msgstr ""
+msgstr "ឈ្មោះ​ម៉ាស៊ីន​បម្រើ SMTP ។ ទាមទារ បើ​សេវា​ត្រូវ​បាន​បើក ។"
 
 #: /src/schooltool/email/browser/email.py:110
 #: /src/schooltool/email/interfaces.py:97
@@ -4320,20 +4333,20 @@ msgstr "ច្រក"
 #: /src/schooltool/email/browser/email.py:111
 #: /src/schooltool/email/interfaces.py:98
 msgid "Port of the SMTP service. Using 25 by default."
-msgstr "ច្រក នៃសេវា SMTP។ ប្រើប្រាស់ 25 ជាលំនាំដើម។"
+msgstr "ច្រក នៃ​សេវា SMTP ។ ប្រើ 25 ជា​លំនាំដើម ។"
 
 #: /src/schooltool/email/browser/email.py:118
 #: /src/schooltool/email/interfaces.py:105
 msgid "Username used for optional SMTP authentication."
-msgstr ""
+msgstr "ឈ្មោះ​អ្នកប្រើ​បាន​ប្រើ​ សម្រាប់​ការ​ផ្ទៀងផ្ទាត់​ភាព​ត្រឹមត្រូវ​ SMTP ជា​ជម្រើស ។"
 
 #: /src/schooltool/email/browser/email.py:122
 msgid "Current Password"
-msgstr "ពាក្យសំងាត់បច្ចុប្បន្ន"
+msgstr "ពាក្យសម្ងាត់​បច្ចុប្បន្ន"
 
 #: /src/schooltool/email/browser/email.py:123
 msgid "Current password to authenticate to the SMTP server."
-msgstr ""
+msgstr "ពាក្យ​សម្ងាត់​បច្ចុប្បន្ន ដើម្បី​ផ្ទៀងផ្ទាត់​ម៉ាស៊ីន​បម្រើ SMTP ។"
 
 #: /src/schooltool/email/browser/email.py:127
 #: /src/schooltool/email/interfaces.py:109
@@ -4343,15 +4356,15 @@ msgstr "ពាក្យសំងាត់ ថ្មី"
 #: /src/schooltool/email/browser/email.py:128
 #: /src/schooltool/email/interfaces.py:110
 msgid "The password to authenticate to the SMTP server."
-msgstr ""
+msgstr "ពាក្យ​សម្ងាត់​ត្រូវ​ផ្ទៀងផ្ទាត់​ម៉ាស៊ីន​បម្រើ SMTP ។"
 
 #: /src/schooltool/email/browser/email.py:132
 msgid "Confirm New Password"
-msgstr "បញ្ជាក់ទទួលស្គាល់ ពាក្យសំងាត់ថ្មី"
+msgstr "អះអាង​ពាក្យ​សម្ងាត់​ថ្មី"
 
 #: /src/schooltool/email/browser/email.py:133
 msgid "Verification for the new password."
-msgstr "ផ្ទៀង សំរាប់ ពាក្យសំងាត់ថ្មី"
+msgstr "ការ​ពិនិត្យ​បញ្ជាក់ សម្រាប់​ពាក្យសម្ងាត់​ថ្មី"
 
 #: /src/schooltool/email/browser/email.py:137
 #: /src/schooltool/email/interfaces.py:114
@@ -4361,61 +4374,61 @@ msgstr "TLS"
 #: /src/schooltool/email/browser/email.py:138
 #: /src/schooltool/email/interfaces.py:115
 msgid "Use TLS connection?"
-msgstr "ប្រើប្រាស់ បញ្ជាប់ TLS"
+msgstr "ប្រើ​ការ​តភ្ជាប់ TLS ឬ ?"
 
 #: /src/schooltool/email/browser/email.py:145
 msgid "New passwords don't match"
-msgstr ""
+msgstr "ពាក្យ​សម្ងាត់​ថ្មី​មិន​​ដូច​គ្នា​ទេ"
 
 #: /src/schooltool/email/browser/email.py:150
 msgid "Hostname is required for enabling the service"
-msgstr ""
+msgstr "ទាមទារ​ឈ្មោះ​ម៉ាស៊ីន ដើម្បី​បើក​សេវា"
 
 #: /src/schooltool/email/browser/email.py:184
 msgid "Change Email Settings"
-msgstr "ផ្លាស់ប្តូរ ការកំណត់អ៊ីមែវល៍"
+msgstr "ផ្លាស់​ប្ដូរ ការ​កំណត់​អ៊ីមែល"
 
 #: /src/schooltool/email/browser/email.py:209
 msgid "Unset"
-msgstr "លែងកំណត់"
+msgstr "លែង​កំណត់"
 
 #: /src/schooltool/email/browser/email.py:223
 #: /src/schooltool/email/browser/email.py:472
 #: /src/schooltool/email/interfaces.py:40
 msgid "The sender address"
-msgstr "អាសយដ្ឋាន អ្នកផ្ញើ"
+msgstr "អាសយដ្ឋាន អ្នក​ផ្ញើ"
 
 #: /src/schooltool/email/browser/email.py:228
 #: /src/schooltool/email/browser/email.py:476
 msgid "Recipient addresses comma separated"
-msgstr "អាសយដ្ឋានអ្នកទទួល ញែកដោយ សញ្ញាក្បៀស"
+msgstr "អាសយដ្ឋាន​អ្នកទទួល ញែក​ដោយ សញ្ញា​​ក្បៀស"
 
 #: /src/schooltool/email/browser/email.py:232
 #: /src/schooltool/email/browser/email.py:372
 #: /src/schooltool/email/interfaces.py:70
 msgid "Created on"
-msgstr "បានបង្កើត"
+msgstr "បាន​បង្កើត"
 
 #: /src/schooltool/email/browser/email.py:233
 #: /src/schooltool/email/interfaces.py:71
 msgid "Date and time when the message was created"
-msgstr "ថ្ងៃខែឆ្នាំ និង ពេលម៉ោង ពេលសារ​ ត្រូវបានបង្កើត"
+msgstr "កាលបរិច្ឆេទ និង​ពេលវេលា នៅ​ពេល​សារ​ត្រូវ​​បាន​បង្កើត"
 
 #: /src/schooltool/email/browser/email.py:238
 #: /src/schooltool/email/browser/email.py:480
 #: /src/schooltool/email/interfaces.py:54
 msgid "Subject of the message"
-msgstr "ប្រធានបទ នៃសារ"
+msgstr "ប្រធានបទរបស់​​សារ"
 
 #: /src/schooltool/email/browser/email.py:243
 #: /src/schooltool/email/browser/email.py:485
 #: /src/schooltool/email/interfaces.py:50
 msgid "Body of the message"
-msgstr "តួ នៃសារ"
+msgstr "តួ​របស់​សារ"
 
 #: /src/schooltool/email/browser/email.py:247
 msgid "Email Status"
-msgstr "ស្ថានភាពអ៊ីមែវល៍"
+msgstr "ស្ថានភាពអ៊ីមែល"
 
 #: /src/schooltool/email/browser/email.py:248
 msgid "Status of the message"
@@ -4424,19 +4437,19 @@ msgstr "ស្ថានភាពសារ"
 #: /src/schooltool/email/browser/email.py:252
 #: /src/schooltool/email/browser/email.py:378
 msgid "Last time tried"
-msgstr ""
+msgstr "ពេល​វេលា​សាកល្បង​ចុងក្រោយ"
 
 #: /src/schooltool/email/browser/email.py:253
 msgid "Date and time when the message was last tried"
-msgstr ""
+msgstr "កាល​បរិច្ឆេទ និង​ពេលវេលា​ នៅ​ពេល​សារ​ត្រូវ​បាន​សាកល្បង​ចុងក្រោយ"
 
 #: /src/schooltool/email/browser/email.py:278
 msgid "Email View"
-msgstr "ការបង្ហាញអ៊ីមែវល៍"
+msgstr "ទិដ្ឋភាព​អ៊ីមែល"
 
 #: /src/schooltool/email/browser/email.py:288
 msgid "Retry"
-msgstr "ព្យាយាម​ឡើង​វិញ"
+msgstr "ព្យាយាមម្តងទៀត"
 
 #: /src/schooltool/email/browser/email.py:299 /src/schooltool/note/notes.pt:17
 #: /src/schooltool/timetable/browser/configure.zcml:62
@@ -4446,38 +4459,38 @@ msgstr "លុប"
 
 #: /src/schooltool/email/browser/email.py:398
 msgid "Email Queue"
-msgstr "ជួររង់ចាំ អ៊ីមែវល៍"
+msgstr "ជួរអ៊ីមែល"
 
 #. Default: ""
 #: /src/schooltool/email/browser/email.py:456
 msgid "Queue (${count} failed)"
-msgstr "ជួររង់ចាំ (${count} បានបរាជ័យ)"
+msgstr "ជួរ (${count} បានបរាជ័យ)"
 
 #: /src/schooltool/email/browser/email.py:458
 msgid "Queue"
-msgstr "ជួររង់ចាំ"
+msgstr "ជួរ"
 
 #. Default: "Retry"
 #: /src/schooltool/email/browser/templates/email_container.pt:39
 #: /src/schooltool/email/browser/templates/email_container.pt:44
 msgid "retry-button"
-msgstr ""
+msgstr "ប៊ូតុង​ព្យាយាម​ម្ដងទៀត"
 
 #: /src/schooltool/email/browser/templates/email_container.pt:54
 msgid "There are no messages queued."
-msgstr "គ្មានសារ ក្នុងជួររង់ចាំ"
+msgstr "គ្មាន​សារ ក្នុង​ជួរ ។"
 
 #: /src/schooltool/email/browser/templates/email_delete.pt:15
 msgid "Are you sure you want to delete the selected emails?"
-msgstr "អ្នកប្រាកដចង់ លុបចេញ អ៊ីមែវល៍​បានជ្រើសយក ?"
+msgstr "តើ​អ្នក​ប្រាកដ​ជា​ចង់​លុប​អ៊ីមែល​ដែល​បាន​ជ្រើស​​ឬ ?"
 
 #: /src/schooltool/email/interfaces.py:44
 msgid "Recipient addresses"
-msgstr "អាសយដ្ឋានអ្នកទទួល"
+msgstr "អាសយដ្ឋាន​អ្នកទទួល"
 
 #: /src/schooltool/email/interfaces.py:45
 msgid "Recipient address"
-msgstr "អាសយដ្ឋានអ្នកទទួល"
+msgstr "អាសយដ្ឋាន​អ្នកទទួល"
 
 #: /src/schooltool/email/interfaces.py:58
 msgid "Status"
@@ -4485,23 +4498,23 @@ msgstr "ស្ថានភាព"
 
 #: /src/schooltool/email/interfaces.py:59
 msgid "Code for the status of the message"
-msgstr "អក្សរកូដ សំរាប់ស្ថានភាព នៃសារ"
+msgstr "កូដ សម្រាប់​​ស្ថានភាព​របស់​សារ"
 
 #: /src/schooltool/email/interfaces.py:63
 msgid "Status Parameters"
-msgstr ""
+msgstr "ប៉ារ៉ាម៉ែត្រ​ស្ថានភាព"
 
 #: /src/schooltool/email/interfaces.py:64
 msgid "Parameters for the status of the message"
-msgstr ""
+msgstr "ប៉ារ៉ាម៉ែត្រ​សម្រាប់​ស្ថានភាព​សារ"
 
 #: /src/schooltool/email/interfaces.py:65
 msgid "Parameter key"
-msgstr ""
+msgstr "សោ​ប៉ារ៉ាម៉ែត្រ"
 
 #: /src/schooltool/email/interfaces.py:66
 msgid "Parameter value"
-msgstr ""
+msgstr "តម្លៃ​ប៉ារ៉ាម៉ែត្រ"
 
 #: /src/schooltool/email/interfaces.py:74
 msgid "Sent on"
@@ -4509,39 +4522,38 @@ msgstr "បានផ្ញើ"
 
 #: /src/schooltool/email/interfaces.py:75
 msgid "Date and time when the message was sent"
-msgstr "ថ្ងៃខែឆ្នាំ និង ពេលម៉ោង ពេលសារ ត្រូវបានផ្ញើ"
+msgstr "កាលបរិច្ឆេទ និង​ពេលវេលា​ នៅ​ពេល​សារ​ត្រូវ​បាន​ផ្ញើ"
 
 #: /src/schooltool/email/mail.py:52
 msgid "The SchoolTool mail service is disabled"
-msgstr "សេវាសារ SchoolTool គ្មានត្រូវបានអនុញ្ញាត"
+msgstr "សេវា​អ៊ីមែល SchoolTool ត្រូវ​បាន​បិទ"
 
 #: /src/schooltool/email/mail.py:53
 msgid "Couldn't connect to the SMTP server (${info})"
-msgstr "គ្មានអាចភ្ជាប់ទៅ ខំព្យូរើបំរើសេវា SMTP (${info})"
+msgstr "មិនអាច​តភ្ជាប់​ទៅ​កាន់ម៉ាស៊ីន​បម្រើ SMTP បាន​ទេ (${info})"
 
 #: /src/schooltool/email/mail.py:54
 msgid "Error sending HELO to the SMTP server (${info})"
-msgstr "កំហុសផ្ញើ HELO ទៅ ខំព្យូរើបំរើសេវា SMTP (${info})"
+msgstr "កំហុស​ក្នុងការ​ផ្ញើ​ HELO ទៅ​ម៉ាស៊ីន​បម្រើ SMTP (${info})"
 
 #: /src/schooltool/email/mail.py:55
 msgid "Couldn't login as ($username) to SMTP server (${info})"
-msgstr "គ្មានអាចពិនិត្យចូល ជា ($username) ទៅ ខំព្យូរើបំរើសេវា SMTP (${info})"
+msgstr "មិនអាច​ចូល​ជា ($username) ទៅកាន់​សេវា SMTP បាន​ឡើយ (${info})"
 
 #: /src/schooltool/email/mail.py:56
 msgid "The server (${info}) rejected the From address: ${from_address}"
-msgstr "ខំព្យូរើបំរើសេវា SMTP (${info}) បានបដិសេធ អាសយដ្ឋានអ្នកផ្ញើ៖ ${from_address}"
+msgstr "សេវា (${info}) បាន​ច្រានចោល​អាសយដ្ឋាន​ ៖​ ${from_address}"
 
 #: /src/schooltool/email/mail.py:57
 msgid ""
 "The server (${info}) rejected the following recipient addresses: ${addresses}"
-msgstr ""
-"ខំព្យូរើបំរើសេវា SMTP (${info}) បានបដិសេធ អាសយដ្ឋានអ្នកទទួល ខាងក្រោម៖ ${addresses}"
+msgstr "សេវា (${info}) បាន​ច្រានចោល​អាសយដ្ឋាន​អ្នកទទួល​ខាងក្រោម ៖ ${addresses}"
 
 #: /src/schooltool/email/mail.py:59
 msgid "The server (${info}) replied that the message data was malformed"
-msgstr ""
+msgstr "ម៉ាស៊ីន​បម្រើ (${info}) បាន​ឆ្លើយ​តប​ថា ទិន្នន័យ​សារ​ត្រូវបាន​រៀបចំ​​មិន​ត្រឹមត្រូវ"
 
-#: /src/schooltool/export/configure.zcml:6
+#: /src/schooltool/export/configure.zcml:20
 msgid "XLS Import"
 msgstr "នាំចូល XLS"
 
@@ -4549,133 +4561,133 @@ msgstr "នាំចូល XLS"
 msgid "XLS Export"
 msgstr "នាំចេញ XLS"
 
-#: /src/schooltool/export/importer.py:68
-msgid "${sheet_name} ${column}${row} ${message}"
-msgstr ""
-
 #: /src/schooltool/export/importer.py:69
-msgid "is not a valid integer"
-msgstr ""
+msgid "${sheet_name} ${column}${row} ${message}"
+msgstr "${sheet_name} ${column}${row} ${message}"
 
 #: /src/schooltool/export/importer.py:70
-msgid "not unicode or ascii string"
-msgstr ""
+msgid "is not a valid integer"
+msgstr "មិនមែន​ជា​ចំនួន​ត្រឹមត្រូវ​ទេ"
 
 #: /src/schooltool/export/importer.py:71
-msgid "missing required text"
-msgstr ""
+msgid "not unicode or ascii string"
+msgstr "មិនមែន​ជា​យូនីកូដ ឬ​ខ្សែអក្សរ ascii"
 
 #: /src/schooltool/export/importer.py:72
-msgid "has no date in it"
-msgstr ""
+msgid "missing required text"
+msgstr "បាត់​អត្ថបទ​ដែល​ត្រូវការ"
 
 #: /src/schooltool/export/importer.py:73
-msgid "end date cannot be before start date"
-msgstr ""
+msgid "has no date in it"
+msgstr "គ្មាន​កាលបរិច្ឆេទ​នៅ​ក្នុង​វា​ទេ"
 
 #: /src/schooltool/export/importer.py:74
-msgid "start date overlaps another year"
-msgstr ""
+msgid "end date cannot be before start date"
+msgstr "កាលបរិច្ឆេទ​បញ្ចប់មិនអាច​មុន​កាលបរិច្ឆេទ​ចាប់ផ្ដើម"
 
 #: /src/schooltool/export/importer.py:75
-msgid "end date overlaps another year"
-msgstr ""
+msgid "start date overlaps another year"
+msgstr "កាលបរិច្ឆេទ​ចាប់​ផ្ដើម​​​ជាន់​ឆ្នាំ​​ផ្សេង​ទៀត"
 
 #: /src/schooltool/export/importer.py:76
-msgid "invalid school year"
-msgstr ""
+msgid "end date overlaps another year"
+msgstr "កាលបរិច្ឆេទ​បញ្ចប់​ជាន់​ឆ្នាំ​ផ្សេង​ទៀត"
 
 #: /src/schooltool/export/importer.py:77
-msgid "start date before start of school year"
-msgstr ""
+msgid "invalid school year"
+msgstr "ឆ្នាំ​សិក្សា​​មិន​ត្រឹមត្រូវ"
 
 #: /src/schooltool/export/importer.py:78
-msgid "end date after end of school year"
-msgstr ""
+msgid "start date before start of school year"
+msgstr "កាលបរិច្ឆេទ​ចាប់​ផ្ដើម​មុន​ពេល​ឆ្នាំ​សិក្សា​ថ្មី"
 
 #: /src/schooltool/export/importer.py:79
-msgid "start date overlaps another term"
-msgstr ""
+msgid "end date after end of school year"
+msgstr "កាលបរិច្ឆេទ​បញ្ចប់​បន្ទាប់​ពី​ចុង​ឆ្នាំ"
 
 #: /src/schooltool/export/importer.py:80
-msgid "end date overlaps another term"
-msgstr ""
+msgid "start date overlaps another term"
+msgstr "កាល​បរិច្ឆេទ​ចាប់​ផ្ដើម​​ជាន់​វគ្គ​​ផ្សេង​ទៀត"
 
 #: /src/schooltool/export/importer.py:81
-msgid "${title} has no days in A${row}"
-msgstr ""
+msgid "end date overlaps another term"
+msgstr "កាល​បរិច្ឆេទ​បញ្ចប់​ជាន់​​វគ្គ​​ផ្សេង​ទៀត"
 
 #: /src/schooltool/export/importer.py:82
-msgid "${title} has no day templates in A${row}"
-msgstr ""
+msgid "${title} has no days in A${row}"
+msgstr "${title} គ្មាន​ថ្ងៃនៅ​ក្នុង  A${row}"
 
 #: /src/schooltool/export/importer.py:83
-msgid "is not a valid time range"
-msgstr ""
+msgid "${title} has no day templates in A${row}"
+msgstr "${title} គ្មាន​ពុម្ព​ថ្ងៃ​នៅក្នុង A${row}"
 
 #: /src/schooltool/export/importer.py:84
-msgid "is not a valid timetable model"
-msgstr ""
+msgid "is not a valid time range"
+msgstr "គ្មាន​ជួរ​ពេលវេលាត្រឹមត្រូវ​ឡើយ"
 
 #: /src/schooltool/export/importer.py:85
-msgid "is the same day id as another in this timetable"
-msgstr ""
+msgid "is not a valid timetable model"
+msgstr "គ្មាន​គំរូ​កាលវិភាគ​ត្រឹមត្រូវ​ទេ"
 
 #: /src/schooltool/export/importer.py:86
-msgid "is not defined in the 'Day Templates' section"
-msgstr ""
+msgid "is the same day id as another in this timetable"
+msgstr "ដូច​គ្នា​នឹង​​លេខ​សម្គាល់​ថ្ងៃ​ផ្សេង​ទៀត​នៅ​ក្នុង​កាលវិភាគ​នេះ"
 
 #: /src/schooltool/export/importer.py:87
-msgid "is the same period id as another in this day"
-msgstr ""
+msgid "is not defined in the 'Day Templates' section"
+msgstr "មិន​បាន​កំណត់​នៅ​ក្នុង​ផ្នែក​ 'ពុម្ព​ថ្ងៃ' ឡើយ"
 
 #: /src/schooltool/export/importer.py:88
-msgid "is the same homeroom period id as another in this day"
-msgstr ""
+msgid "is the same period id as another in this day"
+msgstr "ដូច​គ្នា​នឹង​ថិរវេលា​ផ្សេង​ទៀត​នៅ​ក្នុង​ថ្ងៃ​នេះ"
 
 #: /src/schooltool/export/importer.py:89
-msgid "must be either 'Location' or 'Resource'"
-msgstr ""
+msgid "is the same homeroom period id as another in this day"
+msgstr "លេខ​សម្គាល់​ខណៈ​ពេល​សិក្សា​ដូច​ជា​ខណៈពេលសិក្សា​ផ្សេង​ទៀត​នៅ​ក្នុង​ថ្ងៃ​នេះ"
 
 #: /src/schooltool/export/importer.py:90
-msgid "is not a valid term in the given school year"
-msgstr ""
+msgid "must be either 'Location' or 'Resource'"
+msgstr "ត្រូវ​តែ​ជា​ 'ទីតាំង​​' ឬ​'​ធនធាន'"
 
 #: /src/schooltool/export/importer.py:91
-msgid "is not a valid course in the given school year"
-msgstr ""
+msgid "is not a valid term in the given school year"
+msgstr "គ្មាន​ពាក្យ​ត្រឹមត្រូវ​​នៅ​ក្នុង​ឆ្នាំ​សិក្សា​ដែល​បាន​ផ្ដល់​ឡើយ"
 
 #: /src/schooltool/export/importer.py:92
-msgid "${title} has no courses in A${row}"
-msgstr ""
+msgid "is not a valid course in the given school year"
+msgstr "គ្មាន​វគ្គសិក្សា​ត្រឹមត្រូវ​នៅ​​ក្នុង​ឆ្នាំ​សិក្សា​ដែល​បាន​ផ្ដល់​ឡើយ"
 
 #: /src/schooltool/export/importer.py:93
-msgid "is not a valid username"
-msgstr ""
+msgid "${title} has no courses in A${row}"
+msgstr "${title} គ្មាន​វគ្គ​សិក្សា​នៅ​ក្នុង A${row}"
 
 #: /src/schooltool/export/importer.py:94
-msgid "is not a valid schema in the given school year"
-msgstr ""
+msgid "is not a valid username"
+msgstr "មិន​មានឈ្មោះ​​អ្នកប្រើ​ត្រឹមត្រូវ​ឡើយ"
 
 #: /src/schooltool/export/importer.py:95
-msgid "is not a valid day id for the given schema"
-msgstr ""
+msgid "is not a valid schema in the given school year"
+msgstr "គ្មាន​គម្រោង​​ត្រឹមត្រូវ​នៅ​ក្នុង​ឆ្នាំ​សិក្សា​ដែល​បាន​ផ្ដល់​ឡើយ"
 
 #: /src/schooltool/export/importer.py:96
-msgid "is not a valid period id for the given day"
-msgstr ""
+msgid "is not a valid day id for the given schema"
+msgstr "គ្មាន​លេខ​សម្គាល់​ថ្ងៃ​ត្រឹមត្រូវ សម្រាប់​គម្រោង​ដែល​បាន​ផ្ដល់​ឡើយ"
 
 #: /src/schooltool/export/importer.py:97
-msgid "is not a valid resource id"
-msgstr ""
+msgid "is not a valid period id for the given day"
+msgstr "គ្មាន​លេខ​សម្គាល់​រយៈពេល​​​ត្រឹមត្រូវ​ សម្រាប់​ថ្ងៃ​ដែល​បាន​ផ្ដល់​ឡើយ"
 
 #: /src/schooltool/export/importer.py:98
-msgid "Username cannot contain non-ascii characters: ${string}"
-msgstr ""
+msgid "is not a valid resource id"
+msgstr "គ្មាន​​លេខ​សម្គាល់​​ធនធាន​ត្រឹមត្រូវ​ឡើយ"
 
-#: /src/schooltool/export/importer.py:100
+#: /src/schooltool/export/importer.py:99
+msgid "Username cannot contain non-ascii characters: ${string}"
+msgstr "ឈ្មោះ​អ្នក​ប្រើ​មិន​អាច​មាន​ជា​ខ្សែ​អក្សរ​ non-ascii ឡើយ ៖ ${string}"
+
+#: /src/schooltool/export/importer.py:101
 msgid "is not a valid weekday number (0-6)"
-msgstr ""
+msgstr "គ្មាន​លេខ​ថ្ងៃ​ធ្វើ​ការ​ត្រឹម​ត្រូវ​ឡើយ (០-៦)"
 
 #: /src/schooltool/export/templates/import.pt:4
 msgid "Upload SchoolTool as XLS"
@@ -4691,8 +4703,8 @@ msgid ""
 "also import data from a spreadsheet using this template: ${link-to-empty-"
 "data-file}."
 msgstr ""
-"បន្ថែម​លើ​ការ​បញ្ចូលទិន្នន័យ​តាមរយៈ​ចំណុច​ប្រទាក់​បណ្ដាញ​របស់ SchoolTool's អ្នក​ក៏​អាច​នាំចូល​ទិន្នន័យ​ពី​សៀវភៅ​"
-"បញ្ជី ដោយ​ប្រើ​ពុម្ព​នេះ ៖ ${link-to-empty-data-file} ។"
+"បន្ថែម​លើ​ការ​បញ្ចូល​ទិន្នន័យ​តាមរយៈ​ចំណុច​ប្រទាក់​បណ្ដាញ​របស់ SchoolTool's អ្នក​ក៏​អាច​នាំចូល​ទិន្នន័យ​ពី​សៀវភៅ​"
+"បញ្ជី ដោយ​ប្រើ​ពុម្ព​នេះ ៖ ${link-to-empty-data-file} ។"
 
 #: /src/schooltool/export/templates/import.pt:34
 msgid ""
@@ -4709,25 +4721,25 @@ msgid ""
 "with an error. Simply remove the duplicate data from the spreadsheet and run "
 "the import again. We're working on making this process even smoother."
 msgstr ""
-"ចំណាំ​ថា​ប្រព័ន្ធនាំចូល​មិន​គ្រប់គ្រង​ទិន្នន័យ​ស្ទួន​ល្អ​ទេ​ខាងក្នុង​នៃ​សន្លឹក​ការងារ​មនុស្ស ។ នោះ​ប្រសិន​បើ​អ្នក​ព្យាយាម​"
-"នាំចូល​ឆ្នាំ​សិក្សា ឧទាហរណ៍ មាន​ក្នុង​ប្រព័ន្ធ​រួ​ច​ហើយ ការ​នាំ​ចូលនឹង​បរាជ័យ​ដោយ​មានកំហុស ។ តាម​ធម្មតា​យក​ទិន្នន័យ​"
-"ស្ទួន​ចេញ​ពី​សៀវភៅ​បញ្ជី ហើយ​រត់​ការ​នាំចូល​ម្ដង​ទៀត ។ យើង​កំពុង​ធ្វើការ​លើ​ការ​បង្កើត​ដំណើរការ​ឲ្យ​កាន់តែ​"
-"រលូន ។"
+"ចំណាំ​ថា​ប្រព័ន្ធ​នាំចូល​មិន​គ្រប់គ្រង​ទិន្នន័យ​ស្ទួន​ល្អ​ទេ​ខាងក្នុង​នៃ​សន្លឹក​ការងារ​មនុស្ស ។ នោះ​ប្រសិន​បើ​អ្នក​ព្យាយាម​"
+"នាំចូល​ឆ្នាំ​សិក្សា ឧទាហរណ៍ មាន​ក្នុង​ប្រព័ន្ធ​រួ​ច​ហើយ ការ​នាំ​ចូល​នឹង​បរាជ័យ​ដោយ​មានកំហុស ។ តាម​ធម្មតា​យក​ទិន្នន័យ​"
+"ស្ទួន​ចេញ​ពី​សៀវភៅ​បញ្ជី ហើយ​រត់​ការ​នាំចូល​ម្ដង​ទៀត ។ យើង​កំពុង​ធ្វើការ​លើ​ការ​បង្កើត​ដំណើរការ​ឲ្យ​កាន់តែ​រលូន "
+"។"
 
 #: /src/schooltool/export/templates/import.pt:50
 msgid ""
 "For people interested in testing and exploring SchoolTool, we provide a set "
 "of sample data: ${link-to-sample-data-file}."
 msgstr ""
-"ចំពោះ​មនុស្ស​ដែល​ចាប់អារម្មណ៍​ក្នុងការ​សាកល្បង និង​រុករក SchoolTool យើ​ង​ផ្ដល់​ជា​សំណុំ​គំរូ ៖ ${link-to-"
-"sample-data-file} ។"
+"ចំពោះ​មនុស្ស​ដែល​ចាប់អារម្មណ៍​ក្នុង​ការ​សាកល្បង និង​រុករក SchoolTool យើ​ង​ផ្ដល់​ជា​សំណុំ​គំរូ ៖ ${link-to-"
+"sample-data-file} ។"
 
 #: /src/schooltool/export/templates/import.pt:53
 msgid ""
 "If you are importing your own data, we highly recommend downloading the "
 "sample spreadsheet as a reference."
 msgstr ""
-"ប្រសិនបើ​អ្នក​កំពុង​នាំចូល​ទិន្នន័យ​ផ្ទាល់​របស់​អ្នក នឹង​សូម​ផ្ដល់​អនុសាសន៍​ឲ្យ​ទាញយក​​សៀវភៅ​បញ្ជី​​គំរូ​ជា​សេចក្ដី​យោង ។"
+"ប្រសិនបើ​អ្នក​កំពុង​នាំចូល​ទិន្នន័យ​ផ្ទាល់​របស់​អ្នក នឹង​សូម​ផ្ដល់​អនុសាសន៍​ឲ្យ​ទាញ​យក​​សៀវភៅ​បញ្ជី​​គំរូ​ជា​សេចក្ដី​យោង ។"
 
 #: /src/schooltool/export/templates/import.pt:59
 msgid "Upload XLS File"
@@ -4773,7 +4785,7 @@ msgid ""
 "discarded."
 msgstr ""
 "ទិន្នន័យ CSV <strong>ត្រូវ​តែ</strong> មាន​​ចំណង​ជើង​ក្រុម និង <strong>អាច</strong> មាន​"
-"សេចក្ដី​ពិពណ៌​ក្រុម​ជម្រើស ។ ព័ត៌មាន​បន្ថែម​ណាមួយ​នឹង​ត្រូ​វបានបោះបង់ ។"
+"សេចក្ដី​ពិពណ៌នា​ក្រុម​ជម្រើស ។ ព័ត៌មាន​បន្ថែម​ណាមួយ​នឹង​ត្រូវ​​បាន​បោះបង់ ។"
 
 #. Default: "LUG, Linux Users Group Chess Club Sports Club, After-school sports club, <em>text after a second comma</em>"
 #: /src/schooltool/group/browser/group-csvimport.pt:31
@@ -4784,7 +4796,7 @@ msgid ""
 "Sports Club, After-school sports club, <em>text after a second comma</em>\n"
 msgstr ""
 "\n"
-"LUG, ក្រុ​ម​អ្នក​ប្រើ​លីនុច\n"
+"LUG, ក្រុម​​អ្នក​ប្រើ​លីនុច\n"
 "ក្លឹប​អុក\n"
 "ក្លឹប​កីឡា ក្លឹប​​កីឡា​បន្ទាប់ពី​សាលា <em>អត្ថបទ​បន្ទាប់​ពី​សញ្ញា (,) ទីពីរ</em>\n"
 
@@ -4796,10 +4808,10 @@ msgid ""
 "group will have no description, and the extra \"text after a second comma\" "
 "text on the third group will be ignored."
 msgstr ""
-"ឧទាហរណ៍​ខាង​លើ​នឹង​បង្កើត​ក្រុម​បី​ដែល​មាន​ចំណង​ជើង 'LUG', 'Chess Club' និង 'Sports Club' ។ ក្រុម​"
-"ទីមួយ និង​ចុងក្រោយ​នឹង​មាន​សេចក្ដី​ពិពណ៌នា​ 'ក្រុម​អ្នក​ប្រើ​លីនុច' និង 'បន្ទាប់​ពី​ក្លឹប​កីឡា​សាលា' រៀង​ខ្លួនៗ ។ "
+"ឧទាហរណ៍​ខាង​លើ​នឹង​បង្កើត​ក្រុម​បី​ដែល​មាន​ចំណង​ជើង 'LUG', 'Chess Club' និង 'Sports Club' ។ ក្រុម​"
+"ទី​មួយ និង​ចុងក្រោយ​នឹង​មាន​សេចក្ដី​ពិពណ៌នា​ 'ក្រុម​អ្នក​ប្រើ​លីនុច' និង 'បន្ទាប់​ពី​ក្លឹប​កីឡា​សាលា' រៀង​ខ្លួនៗ ។ "
 "ក្រុម 'ក្លឹប​អុក' នឹង​គ្មាន​សេចក្ដី​ពិពណ៌នា​ទេ និង​អត្ថបទ \"អត្ថបទ​បន្ទាប់​ពី​សញ្ញា(,) ទីពីរ\" នៅ​ក្នុង​​ក្រុម​ទីបី​"
-"នឹង​​មិន​ត្រូ​វបាន​អើពើ​ទេ ។"
+"នឹង​​មិន​ត្រូវ​បាន​អើពើ​ទេ ។"
 
 #: /src/schooltool/group/browser/group-member-csvimport.pt:4
 msgid "Upload SchoolTool group members as CSV"
@@ -4873,66 +4885,66 @@ msgid ""
 "<code>Previous</code>) and links in the blue bar.</li> <li><strong>Show all "
 "groups:</strong> Click <code>Show All</code> in the blue bar.</li> </ul>"
 msgstr ""
-"<h1>ក្រុម</h1> <p>ប្រើ​ទំព័រ​នេះ​ដើម្បី​​តាមដាន​ <b>ក្រុម</b> មនុស្ស ។</p> <p><b>ក្រុម</b> ដែល​"
+"<h1>ក្រុម</h1> <p>ប្រើ​ទំព័រ​នេះ​ដើម្បី​​តាមដាន​ <b>ក្រុម</b> មនុស្ស ។</p> <p><b>ក្រុម</b> ដែល​"
 "ត្រូវ​បាន​បន្ថែម​មិនមែន​ជា​ផ្នែក​របស់​ក្រុម​សំខាន់​ទេ (<b>គ្រូ</b> <b>សិស្ស</b> <b>អ្នក​គ្រប់គ្រង​តំបន់</b> "
-"<b>អ្នក​គ្រប់គ្រង​សាលា</b> ឬ<b>ស្មៀន</b>) ។ ពួកគេ​អាច​ត្រូវ​បានជ្រើស​ដោយ​ប្រអប់គូស​ធីក​នៅ​ជាប់​នឹង​ពួកវា "
-"និង​បាន​យកចេញ​ដោយ​ចុច​ប៊ូតុង <b>លុប</b> នៅ​ផ្នែក​ខាងក្រោម​ទំព័រ ។</p> <h3>តើ​ខ្ញុំគួរ...</h3> <ul> "
-"<li><b>រកមើល​ក្រុម ៖</b> ប្រើ​ប្រអប់​ស្វែងរក​នៅ​ខាង​ឆ្វេង​ប៊ូតុង <code>រក​ឥឡូវ</code> ដើម្បី​មើល​បញ្ជី​"
-"ក្រុម​ទាំង​មូល​សម្រាប់​លក្ខខ័ណ្ឌ​ស្វែងរក ។ ប៊ូតុង<code>ជម្រះ</code> ជម្រះ​ប្រអប់​ស្វែងរក​ធាតុ​បច្ចុប្បន្ន ។</"
-"li> <li><b>មើល​មនុស្ស​នៅ​ក្នុង​ក្រុម​ពិតប្រាកដ ៖</b> ចុច​លើ​ឈ្មោះក្រុម ។</li> <li><b>តម្រៀប​បញ្ជី ៖"
-"</b> ចុច​នៅ​លើ​ក្បាល <code>ចំណង​ជើង</code> ដើម្បី​ផ្លាស់ប្ដូរ​លំដាប់​ក្រុម​ពី​​លំដាប់​ចុះ​ទៅ​លំដាប់​ឡើង និង​"
-"ផ្ទុយមក​វិញ ។</li> <li><strong>រក​មើល​ក្រុម ៖</strong> ប្រើ <code>បន្ទាប់​ទៀត ១០</code> "
-"(និង<code>មុន</code>) និង​តំណ​នៅ​ក្នុង​របារ​ពណ៌​ខៀវ ។</li> <li><strong>បង្ហាញ​ក្រុម​ទាំងអស់ ៖</"
-"strong> ចុច <code>បង្ហាញ​ទាំងអស់</code> នៅ​ក្នុង​របារ​ពណ៌​ខៀវ ។</li> </ul>"
+"<b>គណៈ​គ្រប់គ្រង​សាលា</b> ឬ<b>ស្មៀន</b>) ។ ពួកគេ​អាច​ត្រូវ​បាន​ជ្រើស​ដោយ​ប្រអប់​គូស​ធីក​នៅ​ជាប់​នឹង​ពួកវា "
+"និង​បាន​យកចេញ​ដោយ​ចុច​ប៊ូតុង <b>លុប</b> នៅ​ផ្នែក​ខាងក្រោម​ទំព័រ ។</p> <h3>តើ​ខ្ញុំ​គួរ​...</h3> <ul> "
+"<li><b>រកមើល​ក្រុម ៖</b> ប្រើ​ប្រអប់​ស្វែងរក​នៅ​ខាង​ឆ្វេង​ប៊ូតុង <code>រក​ឥឡូវ</code> ដើម្បី​មើល​បញ្ជី​"
+"ក្រុម​ទាំង​មូល​សម្រាប់​លក្ខខ័ណ្ឌ​ស្វែងរក ។ ប៊ូតុង<code>ជម្រះ</code> ជម្រះ​ប្រអប់​ស្វែងរក​ធាតុ​បច្ចុប្បន្ន ។</"
+"li> <li><b>មើល​មនុស្ស​នៅ​ក្នុង​ក្រុម​ពិតប្រាកដ ៖</b> ចុច​លើ​ឈ្មោះ​ក្រុម ។</li> <li><b>តម្រៀប​បញ្ជី ៖"
+"</b> ចុច​នៅ​លើ​ក្បាល <code>ចំណង​ជើង</code> ដើម្បី​ផ្លាស់ប្ដូរ​លំដាប់​ក្រុម​ពី​​លំដាប់​ចុះ​ទៅ​លំដាប់​ឡើង និង​ផ្ទុយ​"
+"មក​វិញ ។</li> <li><strong>រក​មើល​ក្រុម ៖</strong> ប្រើ <code>បន្ទាប់​ទៀត ១០</code> "
+"(និង<code>មុន</code>) និង​តំណ​នៅ​ក្នុង​របារ​ពណ៌​ខៀវ ។</li> <li><strong>បង្ហាញ​ក្រុម​ទាំងអស់ ៖</"
+"strong> ចុច <code>បង្ហាញ​ទាំងអស់</code> នៅ​ក្នុង​របារ​ពណ៌​ខៀវ ។</li> </ul>"
 
 #: /src/schooltool/group/interfaces.py:41
-#: /src/schooltool/securitypolicy/interfaces.py:109
+#: /src/schooltool/securitypolicy/interfaces.py:111
 msgid "Title of the group."
 msgstr "ចំណង​ជើង​ក្រុម ។"
 
 #: /src/schooltool/group/interfaces.py:46
 msgid "Description of the group."
-msgstr "ការ​ពិពណ៌នា​របស់​ក្រុម ។"
+msgstr "សេចក្ដី​ពិពណ៌នា​​របស់​ក្រុម ។"
 
 #: /src/schooltool/group/security.zcml:5
 msgid "Only school administration can view the list of groups."
-msgstr ""
+msgstr "គណៈ​គ្រប់​គ្រង​សាលា​​ប៉ុណ្ណោះ​​អាច​មើល​បញ្ជី​ក្រុម​បាន ។"
 
 #: /src/schooltool/group/security.zcml:5
 msgid "The list of groups in the system is visible to the general public."
-msgstr ""
+msgstr "អ្នក​រាល់​គ្នា​​អាច​មើល​ឃើញ​បញ្ជី​ក្រុម​នៅ​ក្នុង​ប្រព័ន្ធ​បាន ។"
 
 #: /src/schooltool/group/security.zcml:11
 msgid ""
 "Information about each group is visible to school administration, and "
 "members and leaders of the group."
-msgstr ""
+msgstr "គណៈ​គ្រប់គ្រង​សាលា​អាច​មើល​ឃើញ​ព័ត៌មាន​អំពី​​​ក្រុម​នីមួយ​ៗ​ សមាជិក និង​​អ្នក​ដឹកនាំ​ក្រុម ។"
 
 #: /src/schooltool/group/security.zcml:11
 msgid "Information about each group is visible to the general public."
-msgstr ""
+msgstr "អ្នក​រាល់​គ្នា​ទូទៅ​អាច​មើល​ឃើញ​ព័ត៌មាន​អំពី​ក្រុម​នីមួយ​ៗ​បាន​ ។"
 
 #: /src/schooltool/group/security.zcml:17
 msgid ""
 "Each group calendar is visible to school administration, and members and "
 "leaders of the group."
-msgstr ""
+msgstr "គណៈ​គ្រប់គ្រង​សាលា​អាច​មើល​ឃើញ​ប្រតិទិន​ក្រុម​នីមួយ​ៗ​ សមាជិក និង​​អ្នក​ដឹកនាំ​ក្រុម ។"
 
 #: /src/schooltool/group/security.zcml:17
 msgid "Each group calendar is visible to the general public."
-msgstr ""
+msgstr "អ្នក​រាល់​គ្នា​​​អាច​មើល​ឃើញ​​ប្រតិទិន​ក្រុម​នីមួយៗ ។"
 
 #: /src/schooltool/group/security.zcml:23
 msgid "All members of a group and school administration can edit its calendar."
-msgstr ""
+msgstr "សមាជិក​ក្រុម​ទាំងអស់ និង​គណៈ​គ្រប់គ្រង​សាលា​អាច​កែ​សម្រួល​ប្រតិទិន​របស់​ពួក​គេ​បាន ។"
 
 #: /src/schooltool/group/security.zcml:23
 msgid "The leaders of a group and school administration can edit its calendar."
-msgstr ""
+msgstr "អ្នក​ដឹក​នាំ​ក្រុម​ និង​គណៈ​គ្រប់គ្រង​សាលា​អាច​កែសម្រួល​ប្រតិទិន​របស់​ពួក​គេ​បាន ។"
 
 #: /src/schooltool/group/security.zcml:57
 msgid "Groups are essentially sets of users."
-msgstr ""
+msgstr "ក្រុម​គឺ​មាន​សារៈសំខាន់​នៃ​ក្រុម​អ្នក​ប្រើ ។"
 
 #: /src/schooltool/help/configure.zcml:47
 msgid "Contextual Help"
@@ -4944,36 +4956,36 @@ msgstr "ជំនួយ"
 
 #: /src/schooltool/level/browser.py:47
 msgid "Add a level"
-msgstr ""
+msgstr "បន្ថែម​កម្រិត"
 
 #: /src/schooltool/level/interfaces.py:37
 msgid "Title of the level."
-msgstr ""
+msgstr "ចំណង​ជើង​កម្រិត"
 
 #: /src/schooltool/level/security.zcml:7
 msgid "The teaching levels (student learning years)."
-msgstr ""
+msgstr "កម្រិត​អប់រំ (ឆ្នាំ​សិក្សា​របស់​សិស្ស​) ។"
 
 #: /src/schooltool/level/security.zcml:12
 msgid "Add/Remove"
-msgstr ""
+msgstr "បន្ថែម/យកចេញ"
 
 #: /src/schooltool/level/security.zcml:19
 msgid "Modify/Rename"
-msgstr ""
+msgstr "កែប្រែ/ប្តូរឈ្មោះ"
 
 #: /src/schooltool/level/templates/levels.pt:3
 #: /src/schooltool/level/templates/levels.pt:6
 msgid "Teaching Levels"
-msgstr ""
+msgstr "កម្រិត​អប់រំ"
 
 #: /src/schooltool/level/templates/levels.pt:11
 msgid "Levels (student learning years) taught in ${schoolyear}"
-msgstr ""
+msgstr "កម្រិត (​ឆ្នាំ​សិក្សា​​​របស់​សិស្ស) បង្រៀន​នៅ​​​ក្នុង ${schoolyear}"
 
 #: /src/schooltool/level/templates/link_to_levels.pt:1
 msgid "Teaching levels"
-msgstr ""
+msgstr "កម្រិត​អប់រំ"
 
 #: /src/schooltool/note/configure.zcml:68
 msgid "New Note"
@@ -5048,7 +5060,7 @@ msgstr "កែ​សម្រួល​ឈ្មោះ"
 
 #: /src/schooltool/person/browser/home_tab_viewlet.pt:3
 msgid "Home"
-msgstr "ទំព័រដើម"
+msgstr "ផ្ទះ"
 
 #: /src/schooltool/person/browser/person-csvimport.pt:29
 msgid ""
@@ -5122,11 +5134,11 @@ msgstr "ពាក្យ​សម្ងាត់​ថ្មី"
 msgid "Passwords do not match."
 msgstr "ពាក្យ​សម្ងាត់​មិន​ផ្គូផ្គង"
 
-#: /src/schooltool/person/browser/person.py:424
+#: /src/schooltool/person/browser/person.py:426
 msgid "Password was successfully changed!"
-msgstr "ពាក្យ​សម្ងាត់​ត្រូវ​បាន​ផ្លាស់ប្ដូរ​ដោយ​ជោគជ័យ!"
+msgstr "ពាក្យ​សម្ងាត់​ត្រូវ​បាន​ផ្លាស់ប្ដូរ​ដោយ​ជោគជ័យ ​!"
 
-#: /src/schooltool/person/browser/person.py:447
+#: /src/schooltool/person/browser/person.py:449
 msgid "Person index"
 msgstr "លិបិក្រម​មនុស្ស"
 
@@ -5167,14 +5179,14 @@ msgid ""
 "<code>Previous</code>) and links in the blue bar.</li> <li><strong>Show all "
 "students:</strong> Click <code>Show All</code> in the blue bar.</li> </ul>"
 msgstr ""
-"<h1>មនុស្ស</h1> <p>ប្រើ​ទំព័រ​នេះ​ដើម្បីរកមើល​មនុស្ស​ម្នាក់ៗ ។</p> <h3>តើខ្ញុំ​គួរ...</h3> <ul> "
-"<li><strong>តម្រៀប​បញ្ជី ៖</strong> ចុច​លើ <code>នាម​ខ្លួន</code> ឬ <code>នាម​ត្រកូល</"
-"code> ដើម្បី​តម្រៀប ។</li> <li><strong>ស្វែងរក​អ្នក​ប្រើ ៖</strong> ប្រើ​វាល​ស្វែងរក​នៅ​"
-"កំពូលទំព័រ​ដើម្បី​រក​មើល​មនុស្ស​ទាំងអស់​នៅ​ក្នុង​ប្រព័ន្ធ ។ ប្រសិន​បើ​អ្នក​ចង់​ត្រង​តាម​ក្រុម ជ្រើស​ក្រុម​នៅ​​​ជាប់នឹង​"
-"បញ្ជីទម្លាក់ចុះ ។</li> <li><strong>មើលសេចក្ដី​លម្អិត​របស់មនុស្ស​ម្នាក់ ៖ </strong> ចុច​លើ​ឈ្មោះ ។"
-"</li> <li><strong>រកមើលមនុស្ស ៖</strong> ប្រើ <code>បន្ទាប់ទៀត ១០</code> (និង "
-"<code>មុន</code>) ហើយ​តំណ​នៅ​ក្នុង​របារ​ពណ៌​ខៀវ ។</li> <li><strong>បង្ហាញ​សិស្ស​ទាំងអស់ ៖</"
-"strong> ចុច <code>បង្ហាញ​ទាំងអស់</code> នៅ​ក្នុង​របារ​ពណ៌​ខៀវ ។</li> </ul>"
+"<h1>អ្នក​ប្រើ</h1> <p>ប្រើ​ទំព័រ​នេះ​ដើម្បី​រកមើល​អ្នកប្រើ​ម្នាក់ៗ ។</p> <h3>តើ​ខ្ញុំ​គួរ...</h3> "
+"<ul> <li><strong>តម្រៀប​បញ្ជី ៖</strong> ចុច​លើ <code>នាម​ខ្លួន</code> ឬ <code>នាម​"
+"ត្រកូល</code> ដើម្បី​តម្រៀប ។</li> <li><strong>ស្វែងរក​អ្នក​ប្រើ ៖</strong> ប្រើ​វាល​ស្វែងរក​"
+"នៅ​កំពូល​ទំព័រ​ដើម្បី​រក​មើល​មនុស្ស​ទាំងអស់​នៅ​ក្នុង​ប្រព័ន្ធ ។ ប្រសិន​បើ​អ្នក​ចង់​ត្រង​តាម​ក្រុម ជ្រើស​ក្រុម​នៅ​​​ជាប់នឹង​បញ្ជី​"
+"ទម្លាក់​ចុះ ។</li> <li><strong>មើល​សេចក្ដី​លម្អិត​របស់​អ្នកប្រើ ៖ </strong> ចុច​លើ​ឈ្មោះ ។</li> "
+"<li><strong>រកមើល​អ្នកប្រើ ៖</strong> ប្រើ <code>បន្ទាប់​ទៀត ១០</code> (និង "
+"<code>មុន</code>) ហើយ​តំណ​នៅ​ក្នុង​របារ​ពណ៌​ខៀវ ។</li> <li><strong>បង្ហាញ​សិស្ស​ទាំងអស់ ៖</"
+"strong> ចុច <code>បង្ហាញ​ទាំងអស់</code> នៅ​ក្នុង​របារ​ពណ៌​ខៀវ ។</li> </ul>"
 
 #: /src/schooltool/person/interfaces.py:157
 msgid "Time Zone"
@@ -5239,61 +5251,61 @@ msgstr "ធ្វើ​ឲ្យ​ប្រតិទិន​ជា​សាធ
 msgid ""
 "The list of people with accounts in the system is visible only to school "
 "administration."
-msgstr ""
+msgstr "គណៈ​គ្រប់គ្រង​តែប៉ុណ្ណោះ​ដែល​អាច​មើល​បញ្ជី​គណនី​នៅ​ក្នុង​ប្រព័ន្ធ​បាន ។"
 
 #: /src/schooltool/person/security.zcml:5
 msgid ""
 "The list of people with accounts in the system is visible to the general "
 "public."
-msgstr ""
+msgstr "អ្នក​រាល់គ្នា​​​អាច​មើល​បញ្ជី​​គណនី​នៅ​ក្នុង​ប្រព័ន្ធ​បាន ។"
 
 #: /src/schooltool/person/security.zcml:11
 msgid "Users can make their own calendars public."
-msgstr ""
+msgstr "អ្នក​ប្រើ​អាច​បង្កើត​ប្រតិទិន​ផ្ទាល់ខ្លួន​របស់​ពួក​គេ​ជា​សាធារណៈ​បាន​ ។"
 
 #: /src/schooltool/person/security.zcml:11
 msgid "Users cannot make their own calendars public."
-msgstr ""
+msgstr "អ្នក​ប្រើ​មិន​អាច​បង្កើត​ប្រតិទិន​ផ្ទាល់ខ្លួន​របស់​ពួក​គេ​ជា​សាធារណៈ​បាន​ទេ ។"
 
 #: /src/schooltool/person/security.zcml:17
 msgid "Only school administration can change passwords."
-msgstr ""
+msgstr "គណៈ​គ្រប់គ្រង​សាលា​តែ​ប៉ុណ្ណោះ​អាច​ផ្លាស់​ប្ដូរ​ពាក្យ​សម្ងាត់​បាន ។"
 
 #: /src/schooltool/person/security.zcml:17
 msgid "Users can change their own passwords."
-msgstr ""
+msgstr "អ្នកប្រើ​អាច​ផ្លាស់​ប្ដូរ​​ពាក្យ​សម្ងាត់​ផ្ទាល់​ខ្លួន​​របស់​ពួក​គេ​បាន ។"
 
 #: /src/schooltool/person/security.zcml:71
 msgid "Users"
-msgstr "អ្នកប្រើប្រាស់"
+msgstr "អ្នកប្រើ"
 
-#: /src/schooltool/person/security.zcml:107
+#: /src/schooltool/person/security.zcml:101
 msgid "Change password"
-msgstr "ផ្លាស់ប្តូរ ពាក្យសំងាត់"
+msgstr "ផ្លាស់​ប្ដូរ ពាក្យ​សម្ងាត់"
 
-#: /src/schooltool/person/security.zcml:114
+#: /src/schooltool/person/security.zcml:108
 msgid "View preferences"
 msgstr "មើល ចំណូលចិត្ត"
 
-#: /src/schooltool/person/security.zcml:121
+#: /src/schooltool/person/security.zcml:115
 msgid "Change preferences"
-msgstr "ផ្លាស់ប្តូរ ចំណូលចិត្ត"
+msgstr "ផ្លាស់​ប្ដូរ ចំណូលចិត្ត"
 
 #: /src/schooltool/person/security.zcml:138
 msgid "Change the list of calendars overlayed on the user's calendar"
-msgstr ""
+msgstr "ផ្លាស់ប្ដូរ​បញ្ជី​ប្រតិទិន​ជាន់​លើ​ប្រតិទិន​របស់​​អ្នក​ប្រើ ។"
 
 #: /src/schooltool/person/security.zcml:138
 msgid "Manage visible calendars"
-msgstr "គ្រប់គ្រង ប្រក្រតីទិនអាចឃើញ"
+msgstr "គ្រប់គ្រង​ប្រតិទិន​អាច​មើល​ឃើញ"
 
-#: /src/schooltool/person/security.zcml:172
+#: /src/schooltool/person/security.zcml:167
 msgid "Calendar is public"
-msgstr "ប្រក្រតីទិន ជាសាធារណៈ"
+msgstr "ប្រតិទិន​ជា​សាធារណៈ"
 
-#: /src/schooltool/person/security.zcml:172
+#: /src/schooltool/person/security.zcml:167
 msgid "Everybody, if the calendar is made public in user preferences."
-msgstr ""
+msgstr "អ្នក​គ្រប់គ្នា​ បើ​ប្រតិទិន​ត្រូវ​បាន​បង្កើត​​ជា​សាធារណៈ​នៅ​ក្នុង​ចំណូល​ចិត្ត​របស់​​អ្នក​ប្រើ ។"
 
 #: /src/schooltool/relationship/configure.zcml:13
 msgid "Relationships"
@@ -5317,11 +5329,11 @@ msgstr "កែសម្រួល​ព័ត៌មាន​ទីតាំង"
 
 #: /src/schooltool/resource/browser/configure.zcml:133
 msgid "Add an Equipment"
-msgstr "បន្ថែម​បរិក្ខា"
+msgstr "បន្ថែម​​បរិក្ខារ"
 
 #: /src/schooltool/resource/browser/configure.zcml:151
 msgid "Edit Equipment Information"
-msgstr "កែសម្រួល​ព័ត៌មាន​បរិក្ខា"
+msgstr "កែសម្រួល​ព័ត៌មាន​បរិក្ខារ"
 
 #: /src/schooltool/resource/browser/configure.zcml:190
 msgid "New Resource"
@@ -5333,7 +5345,7 @@ msgstr "ទីតាំង​ថ្មី"
 
 #: /src/schooltool/resource/browser/configure.zcml:204
 msgid "New Equipment"
-msgstr "បរិក្ខា​ថ្មី"
+msgstr "បរិក្ខារ​ថ្មី"
 
 #: /src/schooltool/resource/browser/configure.zcml:232
 #: /src/schooltool/resource/browser/resource-csvimport.pt:21
@@ -5374,10 +5386,10 @@ msgid ""
 "\"Main Auditorium\" resource will have no description, but will be a "
 "location."
 msgstr ""
-"ឧទាហរណ៍​ខាង​លើ​នឹង​បង្កើត​ធនធាន​ចំនួន​​បី ដែលមាន​ចំណង​ជើង​ថា 'PRJ302', 'Main Auditorium' និង "
-"'LC-805' ។ ធនធាន​ដំបូង​ និង​ធនធាន​​ចុងក្រោយ​នឹង​មាន​សេចក្ដី​ពិពណ៌នា​ 'Overhead Projector #302' "
-"and 'Laptop Computer #805' រៀងៗ​ខ្លួន ។ ធនធាន \"Main Auditorium\" នឹង​គ្មាន​សេចក្ដី​"
-"ពិពណ៌នា​ទេ ប៉ុន្តែ​នឹង​មាន​ទីតាំង ។"
+"ឧទាហរណ៍​ខាង​លើ​នឹង​បង្កើត​ធនធាន​ចំនួន​​បី ដែល​មាន​ចំណង​ជើង​ថា 'PRJ302', 'Main Auditorium' និង "
+"'LC-805' ។ ធនធាន​ដំបូង​ និង​ធនធាន​​ចុងក្រោយ​នឹង​មាន​សេចក្ដី​ពិពណ៌នា​ 'Overhead Projector #302' "
+"and 'Laptop Computer #805' រៀង​ៗ​ខ្លួន ។ ធនធាន \"Main Auditorium\" នឹង​គ្មាន​សេចក្ដី​"
+"ពិពណ៌នា​ទេ ប៉ុន្តែ​នឹង​មាន​ទីតាំង ។"
 
 #: /src/schooltool/resource/browser/resource.py:56
 msgid "Resource index"
@@ -5397,11 +5409,11 @@ msgstr "ប្រភេទ​ធនធាន"
 
 #: /src/schooltool/resource/interfaces.py:42
 msgid "Type of resource"
-msgstr "ប្រភេទ​របស់​ធានធាន"
+msgstr "ប្រភេទ​របស់​ធនធាន"
 
 #: /src/schooltool/resource/interfaces.py:49
 msgid "Description of the resource."
-msgstr "សេចក្ដីពិពណ៌នា​ធនធាន ។"
+msgstr "សេចក្ដី​ពិពណ៌នា​ធនធាន ។"
 
 #: /src/schooltool/resource/interfaces.py:54
 msgid "Notes for the resource."
@@ -5426,11 +5438,11 @@ msgstr "សមត្ថភាព​ថ្នាក់​រៀន"
 
 #: /src/schooltool/resource/interfaces.py:92
 msgid "Equipment Type"
-msgstr "ប្រភេទ​បរិក្ខា"
+msgstr "ប្រភេទ​បរិក្ខារ"
 
 #: /src/schooltool/resource/interfaces.py:93
 msgid "Type of equipment (i.e. camcorder, computer, etc.)"
-msgstr "ប្រភេទ​បរិក្ខា (ឧ. កុំព្យូទ័រ ម៉ាស៊ីន​ថត ។ល។)"
+msgstr "ប្រភេទ​បរិក្ខារ (ឧ. កុំព្យូទ័រ ម៉ាស៊ីន​ថត​វីដេអូ ។ល។)"
 
 #: /src/schooltool/resource/interfaces.py:97
 #: /src/schooltool/resource/types.py:113
@@ -5439,7 +5451,7 @@ msgstr "ក្រុមហ៊ុន​ផលិត"
 
 #: /src/schooltool/resource/interfaces.py:98
 msgid "Manufacturer of Equipment"
-msgstr "ក្រុមហ៊ុន​ផលិត​របស់​បរិក្ខា"
+msgstr "ក្រុមហ៊ុន​ផលិត​របស់​បរិក្ខារ"
 
 #: /src/schooltool/resource/interfaces.py:102
 #: /src/schooltool/resource/types.py:119
@@ -5448,7 +5460,7 @@ msgstr "ម៉ូដែល"
 
 #: /src/schooltool/resource/interfaces.py:103
 msgid "Model of Equipment"
-msgstr "ម៉ូដែល​របស់បរិក្ខា"
+msgstr "ម៉ូដែល​របស់​បរិក្ខា"
 
 #: /src/schooltool/resource/interfaces.py:107
 #: /src/schooltool/resource/types.py:125
@@ -5457,20 +5469,20 @@ msgstr "លេខ​សម្គាល់"
 
 #: /src/schooltool/resource/interfaces.py:108
 msgid "Serial Number of Equipment"
-msgstr "លេខ​សម្គាល់​​របស់បរិក្ខា"
+msgstr "លេខ​សម្គាល់​​របស់​បរិក្ខារ"
 
 #: /src/schooltool/resource/interfaces.py:112
 #: /src/schooltool/resource/types.py:131
 msgid "Purchase Date"
-msgstr "កាបរិច្ឆេទ​ទិញ"
+msgstr "កាលបរិច្ឆេទ​ទិញ"
 
 #: /src/schooltool/resource/interfaces.py:113
 msgid "Purchase Date of Equipment"
-msgstr "កាលបរិច្ឆេទ​ទិញ​បរិក្ខា"
+msgstr "កាលបរិច្ឆេទ​ទិញ​បរិក្ខារ"
 
 #: /src/schooltool/resource/interfaces.py:120
 msgid "Id of the resource type."
-msgstr "លេខសម្គាល់​​នៃ​​ប្រភេទ​ធនធាន"
+msgstr "លេខ​សម្គាល់​​នៃ​​ប្រភេទ​ធនធាន"
 
 #: /src/schooltool/resource/interfaces.py:121
 msgid ""
@@ -5489,7 +5501,7 @@ msgstr "ចំណង​ជើង​ប្រភេទ​ធនធាន ។"
 msgid ""
 "A string that will be displayed to users in tables or\n"
 "        resource type selection widgets."
-msgstr "ខ្សែអក្សរ​ដែល​នឹង​​ត្រូវ​បានបង្ហាញ​ដល់​អ្នកប្រើ នៅ​ក្នុង​តារាង ឬ​ធាតុក្រាហ្វិក​ជម្រើស​ប្រភេទ​ធនធាន ។"
+msgstr "ខ្សែ​អក្សរ​ដែល​នឹង​​ត្រូវ​បាន​បង្ហាញ​ដល់​អ្នកប្រើ នៅ​ក្នុង​តារាង ឬ​ធាតុ​ក្រាហ្វិក​ជម្រើស​ប្រភេទ​ធនធាន ។"
 
 #: /src/schooltool/resource/resource.py:55
 #: /src/schooltool/resource/types.py:55
@@ -5498,70 +5510,72 @@ msgstr "ធនធាន"
 
 #: /src/schooltool/resource/security.zcml:7
 msgid "Only school administration can view the list of resources."
-msgstr ""
+msgstr "គណៈ​គ្រប់គ្រង​ប៉ុណ្ណោះ​​អាច​មើល​បញ្ជី​ធនធាន​បាន ។"
 
 #: /src/schooltool/resource/security.zcml:7
 msgid "The list of resources in the system is visible to the general public."
-msgstr ""
+msgstr "អ្នក​រាល់​គ្នា​​​​អាច​មើល​បញ្ជី​ធនធាន​នៅ​ក្នុង​ប្រព័ន្ធ​បាន ។"
 
 #: /src/schooltool/resource/security.zcml:13
 msgid ""
 "Information about each resource is visible to school administration and "
 "leaders of the resource."
-msgstr ""
+msgstr "គណៈ​គ្រប់គ្រង​សាលា​ និង​អ្នក​ដឹក​នាំ​ធនធាន​អាច​មើល​ឃើញ​ព័ត៌មាន​អំពី​ធនធាន​នីមួយ​ៗ ។"
 
 #: /src/schooltool/resource/security.zcml:13
 msgid "Information about each resource is visible to the general public."
-msgstr ""
+msgstr "អ្នក​រាល់​គ្នា​​អាច​មើល​ឃើញ​ព័ត​មាន​អំពី​ធនធាន​នីមួយ​​ៗ​បាន ។"
 
 #: /src/schooltool/resource/security.zcml:19
 msgid ""
 "Resource calendars are visible to school administration, teachers, and "
 "leaders of the resource."
-msgstr ""
+msgstr "គណៈ​គ្រប់គ្រង​សាលា គ្រូ និង​អ្នកដឹកនាំ​ធនធាន​អាច​មើល​ឃើញ​ប្រតិទិន​ធនធាន​បាន ។"
 
 #: /src/schooltool/resource/security.zcml:19
 msgid "Resource calendars are visible to the general public."
-msgstr ""
+msgstr "អ្នក​រាល់​គ្នា​​អាច​មើល​ឃើញ​ប្រតិទិន​ធនធាន​បាន ។"
 
-#: /src/schooltool/resource/security.zcml:50
+#: /src/schooltool/resource/security.zcml:53
+msgid "Reservations"
+msgstr "ការ​បម្រុង​ទុក"
+
+#: /src/schooltool/resource/security.zcml:53
 msgid ""
 "Resources are locations or objects within a school.                    "
 "SchoolTool's calendar can function as a reservation                    and "
 "tracking system for resources."
 msgstr ""
+"ធនធាន​ជា​ទីតាំង​​ ឬ​វត្ថុ​បំណង​នៅ​ក្នុង​សាលា ។ ប្រតិទិន​របស់​ SchoolTool ​អាច​ជា​មុខ​ងារ​ដូច​ជា​ការ​បម្រុង​ទុក​ និង​"
+"ប្រព័ន្ធ​តាមដាន​ សម្រាប់​ធនធាន ។"
 
-#: /src/schooltool/resource/security.zcml:53
-msgid "Reservations"
-msgstr ""
-
-#: /src/schooltool/resource/security.zcml:57
+#: /src/schooltool/resource/security.zcml:60
 msgid "List/Search resources"
-msgstr "ធនធាន រាយបញ្ជី/ស្វែងរក"
+msgstr "ធនធាន រាយប​ញ្ជី/ស្វែងរក"
 
-#: /src/schooltool/resource/security.zcml:64
+#: /src/schooltool/resource/security.zcml:67
 msgid "Add/Remove resources"
-msgstr "បន្ថែម/ដកចេញ ធនធាន"
+msgstr "បន្ថែម/យក​ចេញ ធនធាន"
 
-#: /src/schooltool/resource/security.zcml:71
+#: /src/schooltool/resource/security.zcml:74
 msgid "View a resource"
-msgstr "មើល មួយធនធាន"
+msgstr "មើល​ធនធាន"
 
-#: /src/schooltool/resource/security.zcml:78
+#: /src/schooltool/resource/security.zcml:81
 msgid "Modify a resource"
-msgstr "ផ្លាស់ប្តូរ មួយធនធាន"
+msgstr "កែប្រែ​ធនធាន"
 
-#: /src/schooltool/resource/security.zcml:85
+#: /src/schooltool/resource/security.zcml:88
 msgid "View reservation calendar"
-msgstr ""
+msgstr "មើល​ប្រតិទិន​ដែល​បម្រុង​ទុក"
 
-#: /src/schooltool/resource/security.zcml:93
+#: /src/schooltool/resource/security.zcml:96
 msgid "Schedule reservation via calendar"
-msgstr ""
+msgstr "ការ​បម្រុង​ទុក​កំណត់ពេល​តាម​ប្រតិទិន"
 
 #: /src/schooltool/resource/types.py:93
 msgid "Equipment"
-msgstr "បរិក្ខា"
+msgstr "បរិក្ខារ"
 
 #: /src/schooltool/resource/types.py:107
 msgid "Type"
@@ -5577,8 +5591,8 @@ msgid ""
 "Warning: proceeding will populate the database with randomly generated data. "
 "Do not do this if you have any valuable data in your SchoolTool instance."
 msgstr ""
-"ការ​ព្រមាន ៖ ការ​ធ្វើបន្ត​នឹង​គណនា​មូលដ្ឋាន​ទិន្នន័យ​ដែលមាន​ទិន្នន័យ​ដែលបានបង្កើត​ដោយ​ចៃដន្យ ។ កុំ​​ធ្វើវា​"
-"ប្រសិនបើ​អ្នក​មាន​ទិនន្ន័យ​ដែល​មាន​តម្លៃ​នៅ​ក្នុង​ធាតុ SchoolTool របស់​អ្នក ។"
+"ការ​ព្រមាន ៖ ការ​ធ្វើ​បន្ត​នឹង​គណនា​មូលដ្ឋាន​ទិន្នន័យ​ដែល​មាន​ទិន្នន័យ​ដែល​បាន​បង្កើត​ដោយ​ចៃដន្យ ។ កុំ​​ធ្វើ​វា​"
+"ប្រសិនបើ​អ្នក​មាន​ទិន្នន័យ​ដែល​មាន​តម្លៃ​នៅ​ក្នុង​ធាតុ SchoolTool របស់​អ្នក ។"
 
 #: /src/schooltool/sampledata/sampledata.pt:20
 msgid ""
@@ -5586,14 +5600,14 @@ msgid ""
 "all options, it can take a <strong>long</strong> time. Just let it run."
 msgstr ""
 "វា​បង្កើត​សាលា​រៀន​​មាន​សិស្ស ១០០០ និង​ ទិន្នន័យ​សម្រាប់​​ ៤ វគ្គ ។ ប្រសិនបើ​អ្នក​ជ្រើស​ជម្រើស​ទាំងអស់ វា​អាច​"
-"ត្រូវការ​ពេលវេលា <strong>ច្រើន</strong> ។ គ្រាន់​តែរត់​វា ។"
+"ត្រូវការ​ពេលវេលា <strong>ច្រើន</strong> ។ គ្រាន់​តែ​រត់​វា ។"
 
 #: /src/schooltool/sampledata/sampledata.pt:25
 msgid ""
 "Setting a random seed allows you to to reproduce the same set of sample data "
 "by generating it again with the same value of the random seed."
 msgstr ""
-"ការ​កំណត់​ចៃដន្យ​អនុញ្ញាត​ឲ្យ​អ្នក​បង្កើត​គំរូ​ទិន្នន័យ​ដូច​គ្នា​ដោយ​បង្កើត​វា​ម្ដង​ទៀត​ដែលមាន​តម្លៃ​ចៃដន្យ​ដូច​គ្នា ។"
+"ការ​កំណត់​ចៃដន្យ​អនុញ្ញាត​ឲ្យ​អ្នក​បង្កើត​គំរូ​ទិន្នន័យ​ដូច​គ្នា​ដោយ​បង្កើត​វា​ម្ដង​ទៀត​ដែល​មាន​តម្លៃ​ចៃដន្យ​ដូច​គ្នា ។"
 
 #: /src/schooltool/sampledata/sampledata.pt:42
 msgid "Plugins"
@@ -5622,9 +5636,9 @@ msgstr "ឆ្នាំ​សិក្សា​ថ្មី"
 msgid ""
 "You can not delete the active school year. Unless you are deleting all the "
 "school years."
-msgstr "អ្នក​មិនអាច​លុប​ឆ្នាំ​សិក្សា​សកម្ម​បានទេ ។ លុះត្រា​តែ​អ្នកលុប​ឆ្នាំ​សិក្សាទាំងអស់ ។"
+msgstr "អ្នក​មិន​អាច​លុប​ឆ្នាំ​សិក្សា​សកម្ម​បានទេ ។ លុះ​​​ត្រា​តែ​អ្នក​លុប​ឆ្នាំ​សិក្សា​ទាំងអស់ ។"
 
-#: /src/schooltool/schoolyear/browser/schoolyear.py:160
+#: /src/schooltool/schoolyear/browser/schoolyear.py:166
 msgid "First day"
 msgstr "ថ្ងៃដំបូង"
 
@@ -5664,48 +5678,48 @@ msgstr "បន្ថែម​វគ្គសិក្សា​ថ្មី"
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_add.pt:35
 msgid "Copy data from active school year: ${active_schoolyear}"
-msgstr ""
+msgstr "ចម្លង​ទិន្នន័យ​ពី​ឆ្នាំ​សិក្សា​​សកម្ម ៖ ${active_schoolyear}"
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_add.pt:40
 msgid "All Courses"
-msgstr ""
+msgstr "គ្រប់​វគ្គ​សិក្សា"
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_add.pt:50
 msgid "All Timetable Schemas"
-msgstr ""
+msgstr "គ្រប់​កាលវិភាគ"
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_add.pt:62
 msgid "Copy members"
-msgstr ""
+msgstr "ចម្លង​សមាជិក"
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:27
 msgid "The active school year is ${year} (${start_date} - ${end_date})"
-msgstr ""
+msgstr "ឆ្នាំ​សិក្សា​សកម្ម​គឺ ${year} (${start_date} - ${end_date})"
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:52
 msgid "Activate selected school year"
-msgstr ""
+msgstr "ធ្វើ​ឲ្យ​ឆ្នាំ​សិក្សា​ដែល​បាន​ជ្រើស​សកម្ម"
 
 #: /src/schooltool/schoolyear/browser/templates/term-delete.pt:10
 #: /src/schooltool/term/browser/templates/term-container-delete.pt:10
 msgid "Are you sure you want to delete the selected terms?"
-msgstr "តើ​អ្នក​ប្រាកដ​ជា​ចង់​លុប​វគ្គសិក្សា​ដែលបាន​ជ្រើស​ឬ ?"
+msgstr "តើ​អ្នក​ប្រាកដ​ជា​ចង់​លុប​វគ្គសិក្សា​ដែល​បាន​ជ្រើស​ឬ ?"
 
 #: /src/schooltool/schoolyear/interfaces.py:44
 msgid "The first day of the period of time covered."
-msgstr ""
+msgstr "ថ្ងៃ​ដំបូង​នៃ​ថិរវេលា​ដែលបាន​ប្រើ ។"
 
 #: /src/schooltool/schoolyear/interfaces.py:47
 msgid "The last day of the period covered."
-msgstr ""
+msgstr "ថ្ងៃ​ចុង​ក្រោយ​នៃ​រយៈ​ពេល​គ្រប់គ្រង ។"
 
 #: /src/schooltool/schoolyear/security.zcml:23
 msgid "Activate current school year"
-msgstr "ធ្វើសកម្ម ឆ្នាំសិក្សាបច្ចុប្បន្ន"
+msgstr "ធ្វើឲ្យ​​​ឆ្នាំ​សិក្សា​បច្ចុប្បន្ន​សកម្ម"
 
 #: /src/schooltool/securitypolicy/browser/configure.zcml:7
 msgid "View Access Rights"
-msgstr "មើល សិទ្ធិចូលទៅ"
+msgstr "មើល​សិទ្ធិ​ចូល​ដំណើរការ"
 
 #: /src/schooltool/securitypolicy/browser/configure.zcml:17
 #: /src/schooltool/securitypolicy/browser/configure.zcml:28
@@ -5718,25 +5732,25 @@ msgstr "ចូល​ដំណើរការ​វត្ថុ​បញ្ជា
 msgid "Enabled"
 msgstr "បានអនុញ្ញាត"
 
-#: /src/schooltool/securitypolicy/browser/control.py:106
+#: /src/schooltool/securitypolicy/browser/control.py:105
 msgid "School administration"
-msgstr "ការអភិបាលសាលា"
+msgstr "គណៈ​គ្រប់គ្រង​សាលា"
 
 #: /src/schooltool/securitypolicy/browser/templates/access_setting_snippet.pt:2
 msgid "Access setting"
-msgstr ""
+msgstr "ការ​កំណត់​ចូល​ដំណើរការ"
 
 #: /src/schooltool/securitypolicy/browser/templates/security_descriptions.pt:4
 msgid "Access Rights"
-msgstr "សិទ្ធិចូលទៅ"
+msgstr "សិទ្ធិ​ចូល​ដំណើរ​ការ"
 
 #: /src/schooltool/securitypolicy/browser/templates/security_descriptions.pt:9
 msgid "Object model and access rights"
-msgstr ""
+msgstr "គំរូ​វត្ថុ និង​សិទ្ធិ​ចូល​ដំណើរការ"
 
 #: /src/schooltool/securitypolicy/browser/templates/security_descriptions.pt:57
 msgid "Legend"
-msgstr ""
+msgstr "តាង"
 
 #: /src/schooltool/securitypolicy/crowds.py:199
 msgid "Everybody"
@@ -5744,15 +5758,15 @@ msgstr "រាល់គ្នា"
 
 #: /src/schooltool/securitypolicy/crowds.py:200
 msgid "Everybody, including users that are not logged in."
-msgstr ""
+msgstr "អ្នក​រាល់​​គ្នា​ រួម​មាន​អ្នក​ប្រើ​ដែល​មិន​បាន​ចូល ។"
 
 #: /src/schooltool/securitypolicy/crowds.py:233
 msgid "Authenticated user"
-msgstr ""
+msgstr "អ្នក​ប្រើ​ដែល​ផ្ទៀង​ផ្ទាត់​ភាព​ត្រឹមត្រូវ"
 
 #: /src/schooltool/securitypolicy/crowds.py:234
 msgid "All logged in users."
-msgstr "គ្រប់ អ្នកប្រើប្រាស់បានពិនិត្យចូល"
+msgstr "គ្រប់​អ្នក​ប្រើ​ដែល​បាន​ចូល ។"
 
 #: /src/schooltool/securitypolicy/crowds.py:242
 msgid "Anybody"
@@ -5760,20 +5774,20 @@ msgstr "គ្រប់គ្នា"
 
 #: /src/schooltool/securitypolicy/crowds.py:243
 msgid "Users who did not log in"
-msgstr "អ្នកប្រើប្រាស់ គ្មានបានពិនិត្យចូល"
+msgstr "អ្នក​ប្រើ​ដែល​មិន​បាន​ចូល"
 
 #: /src/schooltool/securitypolicy/crowds.py:250
 msgid "Super user"
-msgstr "អ្នកប្រើប្រាស់ ពិសេស"
+msgstr "អ្នក​ប្រើ​ជាន់​ខ្ពស់"
 
 #: /src/schooltool/securitypolicy/crowds.py:251
 msgid "The super user - owner of this SchoolTool application."
-msgstr ""
+msgstr "ម្ចាស់​កម្មសិទ្ធិ​អ្នក​ប្រើ​ជាន់​ខ្ពស់​​នៃ​កម្មវិធី SchoolTool នេះ ។"
 
 #: /src/schooltool/setupdata/setupdata.pt:3
 #: /src/schooltool/setupdata/setupdata.pt:9
 msgid "Initial School Setup Scripts"
-msgstr "ចាប់ផ្ដើម​ស្គ្រីប​រៀបចំ​សាលា"
+msgstr "ស្គ្រីប​រៀបចំ​សាលា​លើ​ដំបូង"
 
 #: /src/schooltool/setupdata/setupdata.pt:14
 msgid ""
@@ -5782,13 +5796,13 @@ msgid ""
 "have any valuable data in this SchoolTool instance or don't already "
 "understand what this is for."
 msgstr ""
-"ការ​ព្រមាន ៖ កា​រធ្វើ​បន្ត​នឹង​គណនា​មូលដ្ឋាន​ទិន្នន័យ​​ដែល​បានបង្កើត​ពី​ស្គ្រីប ដែល​បាន​ដំឡើង​ក្នុង​ប្រព័ន្ធ​ឯកសារ​"
-"នៃ​ម៉ាស៊ីនបម្រើ​នេះ ។ កុំ​ធ្វើ​វា ប្រសិនបើ​អ្នក​មាន​ទិន្នន័យ​ដែល​មាន​ទិន្នន័យ​មាន​តម្លៃ​​នៅ​ក្នុង​ធាតុ "
+"ការ​ព្រមាន ៖ កា​រ​ធ្វើ​បន្ត​នឹង​គណនា​មូលដ្ឋាន​ទិន្នន័យ​​ដែល​បាន​បង្កើត​ពី​ស្គ្រីប ដែល​បាន​ដំឡើង​ក្នុង​ប្រព័ន្ធ​ឯកសារ​"
+"នៃ​ម៉ាស៊ីន​បម្រើ​នេះ ។ កុំ​ធ្វើ​វា ប្រសិនបើ​អ្នក​មាន​ទិន្នន័យ​ដែល​មាន​ទិន្នន័យ​មាន​តម្លៃ​​នៅ​ក្នុង​ធាតុ "
 "SchoolTool នេះ ឬ​មិន​យល់​នេះ​ជា​អ្វី ។"
 
 #: /src/schooltool/skin/breadcrumbs.py:76
 msgid "top"
-msgstr "កំពូល"
+msgstr "ផ្នែក​ខាង​លើ"
 
 #: /src/schooltool/skin/form.py:64
 msgid "No changes"
@@ -5805,8 +5819,8 @@ msgid ""
 "found a bug in SchoolTool. Please report it on <a href=\"http://issues."
 "schooltool.org\">the issue tracker</a>."
 msgstr ""
-"កំហុស​ម៉ាស៊ីន​បម្រើ​ខាង​​ក្នុង​បានកើត​ឡើង ។ ទំនង​ជា​មាន​ន័យ​ថា អ្នក​ជួប​ប្រទះ​កំហុស​នៅ​ក្នុង SchoolTool ។ សូម​"
-"រាយការណ៍​វា​នៅ​ក្នុង <a href=\"http://issues.schooltool.org\">កម្មវិធី​តាមដាន​កំហុស</a> ។"
+"មាន​កំហុស​ម៉ាស៊ីន​បម្រើ​ខាង​​ក្នុង​ ។ ទំនង​ជា​មាន​ន័យ​ថា អ្នក​ជួប​ប្រទះ​កំហុស​នៅ​ក្នុង SchoolTool ។ សូម​រាយការណ៍​"
+"វា​នៅ​ក្នុង <a href=\"http://issues.schooltool.org\">កម្មវិធី​តាមដាន​កំហុស</a> ។"
 
 #: /src/schooltool/skin/templates/error.pt:19
 msgid "Exception"
@@ -5827,7 +5841,7 @@ msgstr "រក​មិន​ឃើញ"
 
 #: /src/schooltool/skin/templates/notfound.pt:14
 msgid "The page that you are trying to access is not available"
-msgstr "ទំព័រ​ដែល​អ្នក​ព្យាយាម​ចូល​មិន​មាន​ទេ"
+msgstr "ទំព័រ​ដែល​អ្នក​ព្យាយាម​ចូល​ដំណើរការ​​មិនអាច​ប្រើ​បាន​ទេ"
 
 #: /src/schooltool/skin/templates/notfound.pt:18
 msgid "Please note the following:"
@@ -5839,7 +5853,7 @@ msgstr "អ្នក​អាច​ប្រកប​ខុស​ url"
 
 #: /src/schooltool/skin/templates/notfound.pt:22
 msgid "You might be trying to access a non-existing page"
-msgstr "អ្នក​អាច​ព្យាយាម​ចូល​ទំព័រ​ដែល​មិន​ទាន់​មាន"
+msgstr "អ្នក​អាច​ព្យាយាម​ចូល​ដំណើរការ​​ទំព័រ​ដែល​មិនទាន់​មាន"
 
 #: /src/schooltool/skin/templates/onlinehelp_macros.pt:55
 msgid "SchoolTool Onlinehelp"
@@ -5851,7 +5865,7 @@ msgstr "ចូល"
 
 #: /src/schooltool/skin/templates/view_macros.pt:53
 msgid "Logged in as:"
-msgstr "បានចូល​ជា ៖"
+msgstr "បាន​ចូល​ជា ៖"
 
 #: /src/schooltool/skin/templates/view_macros.pt:71
 msgid "Log Out"
@@ -5859,9 +5873,9 @@ msgstr "ចេញ"
 
 #: /src/schooltool/skin/templates/view_macros.pt:82
 msgid "free administration software for"
-msgstr ""
+msgstr "កម្មវិធី​គ្រប់គ្រង​ឥត​គិត​ថ្លៃ​សម្រាប់"
 
-#: /src/schooltool/skin/templates/view_macros.pt:114
+#: /src/schooltool/skin/templates/view_macros.pt:115
 msgid "Report a bug on Launchpad."
 msgstr "រាយការណ៍​កំហុស​នៅ​លើ Launchpad ។"
 
@@ -5870,53 +5884,57 @@ msgid ""
 "&copy; The <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth "
 "Foundation</a> 2003 - <span>2010</span>: Supporting Social Innovation."
 msgstr ""
+"&copy;  <a href=\"http://www.shuttleworthfoundation.org\">មូលនិធិ Shuttleworth "
+"</a> ២០០៣ - <span>២០១០</span> ៖ ​គាំទ្រ​​ធ្វើ​ឲ្យ​​សង្គម​រីក​ចម្រើន​​ ។"
 
-#: /src/schooltool/skin/templates/view_macros.pt:132
+#: /src/schooltool/skin/templates/view_macros.pt:133
 msgid ""
 "<a href=\"http://www.schooltool.org\">SchoolTool</a>&trade; is a Trademark "
 "of The <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth "
 "Foundation</a>."
 msgstr ""
+"<a href=\"http://www.schooltool.org\">SchoolTool</a>&trade; គឺ​ជា​​និក្ខិត្តិ​សញ្ញា​របស់ "
+"<a href=\"http://www.shuttleworthfoundation.org\">មូលនិធិ Shuttleworth</a> ។"
 
-#: /src/schooltool/skin/templates/view_macros.pt:155
+#: /src/schooltool/skin/templates/view_macros.pt:156
 msgid "Shortcut: Alt-U"
 msgstr "ផ្លូវកាត់ ៖ ជំនួស (Alt) - U"
 
-#: /src/schooltool/skin/templates/view_macros.pt:155
+#: /src/schooltool/skin/templates/view_macros.pt:156
 msgid "U"
-msgstr ""
+msgstr "U"
 
 #. Default: "Update"
-#: /src/schooltool/skin/templates/view_macros.pt:155
+#: /src/schooltool/skin/templates/view_macros.pt:156
 msgid "update-button"
-msgstr "ធ្វើ​ឲ្យ​ទាន់​សម័យ"
+msgstr "ប៊ូតុង​​ធ្វើ​បច្ចុប្បន្នភាព"
 
 #. Default: "Apply"
-#: /src/schooltool/skin/templates/view_macros.pt:161
-#: /src/schooltool/skin/templates/view_macros.pt:167
+#: /src/schooltool/skin/templates/view_macros.pt:162
+#: /src/schooltool/skin/templates/view_macros.pt:168
 msgid "apply-button"
-msgstr "អនុវត្ត"
+msgstr "ប៊ូតុង​អនុវត្ត"
 
 #. Default: "Add"
-#: /src/schooltool/skin/templates/view_macros.pt:174
-#: /src/schooltool/skin/templates/view_macros.pt:180
-#: /src/schooltool/skin/templates/view_macros.pt:187
+#: /src/schooltool/skin/templates/view_macros.pt:175
+#: /src/schooltool/skin/templates/view_macros.pt:181
+#: /src/schooltool/skin/templates/view_macros.pt:188
 msgid "add-button"
-msgstr "បន្ថែម"
+msgstr "ប៊ូតុង​បន្ថែម"
 
-#: /src/schooltool/skin/templates/view_macros.pt:194
+#: /src/schooltool/skin/templates/view_macros.pt:195
 msgid "D"
-msgstr ""
+msgstr "D"
 
-#: /src/schooltool/skin/templates/view_macros.pt:194
+#: /src/schooltool/skin/templates/view_macros.pt:195
 msgid "Shortcut: Alt-D"
 msgstr "ផ្លូវកាត់ ៖ ជំនួស (Alt) - D"
 
-#: /src/schooltool/skin/widgets.py:87
+#: /src/schooltool/skin/widgets.py:91
 msgid "The datetime string did not match the pattern yyyy-mm-dd"
-msgstr "ខ្សែអក្សរ​ពេលវេលា​ កាលបរិច្ឆេទ​មិន​ផ្គូផ្គង​នឹង​លំនាំ yyyy-mm-dd នេះ​នោះ​ទេ"
+msgstr "ខ្សែ​អក្សរ​ពេលវេលា​ កាលបរិច្ឆេទ​មិន​ផ្គូផ្គង​នឹង​លំនាំ yyyy-mm-dd នេះ​នោះ​ទេ"
 
-#: /src/schooltool/skin/widgets.py:110
+#: /src/schooltool/skin/widgets.py:98
 msgid "Width"
 msgstr "ទទឹង"
 
@@ -5942,19 +5960,19 @@ msgstr "ឈ្មោះ​នៃ​ការ​កំណត់​រចនាស
 
 #: /src/schooltool/skin/widgets.py:110
 msgid "Relative configuration path"
-msgstr ""
+msgstr "ផ្លូវ​កំណត់​រចនាសម្ព័ន្ធ​ដែល​ទាក់ទង"
 
 #: /src/schooltool/skin/widgets.py:111
 msgid "Path to the FCKconfiguration javascript file."
 msgstr "ផ្លូវ​ទៅ​កាន់​ឯកសារ javascript FCKconfiguration ។"
 
-#: /src/schooltool/skin/widgets.py:130
+#: /src/schooltool/skin/widgets.py:136
 msgid "Configuration"
-msgstr "ការ​កំណត់​រចនា​សម្ព័ន្ធ"
+msgstr "ការ​កំណត់​រចនាសម្ព័ន្ធ"
 
-#: /src/schooltool/skin/widgets.py:131
+#: /src/schooltool/skin/widgets.py:137
 msgid "FCK editor configuration."
-msgstr "ការ​កំណត់​រចនា​សម្ព័ន្ធ​កម្មវិធី​និពន្ធ FCK"
+msgstr "ការ​កំណត់​រចនាសម្ព័ន្ធ​កម្មវិធី​កែសម្រួល FCK ។"
 
 #: /src/schooltool/table/templates/batch.pt:5
 #: /src/schooltool/table/templates/batch.pt:7
@@ -5976,33 +5994,33 @@ msgstr "&raquo; បន្ទាប់"
 
 #: /src/schooltool/term/browser/configure.zcml:31
 msgid "Cancel School in Emergency"
-msgstr "បោះបង់​សាលាពេល​មាន​ករណី​បន្ទាន់"
+msgstr "បោះបង់​សាលា​ពេល​មាន​ករណី​បន្ទាន់"
 
 #: /src/schooltool/term/browser/emergency.py:88
 msgid "The date you entered is invalid.  Please use the YYYY-MM-DD format."
-msgstr "កាលបរិច្ឆេទ​ដែល​អ្នកបាន​បញ្ចូលមិន​ត្រឹមត្រូវ​ទេ ។ សូម​ប្រើ​ទ្រង់ទ្រាយ YYYY-MM-DD ។"
+msgstr "កាលបរិច្ឆេទ​ដែល​អ្នក​បាន​​បញ្ចូល​មិន​ត្រឹមត្រូវ​ទេ ។ សូម​ប្រើ​ទ្រង់ទ្រាយ YYYY-MM-DD ។"
 
 #: /src/schooltool/term/browser/emergency.py:92
 msgid "The date you entered does not belong to this term."
-msgstr "កាល​បរិច្ឆេទ​ដែល​អ្នក​បានបញ្ចូល​មិន​មែនជា​របស់​វគ្គសិក្សា​នេះ​ទេ ។"
+msgstr "កាលបរិច្ឆេទ​ដែល​អ្នក​បាន​បញ្ចូល​មិនមែន​ជា​របស់​វគ្គសិក្សា​នេះ​ទេ ។"
 
 #: /src/schooltool/term/browser/emergency.py:96
 msgid "The date you entered is not a schoolday."
-msgstr "កាលបរិច្ឆេទ​ដែល​អ្នក​បាន​បញ្ចូល​មិន​មែន​ជា​ថ្ងៃ​សិក្សា​ទេ ។"
+msgstr "កាលបរិច្ឆេទ​ដែល​​​​អ្នក​បាន​បញ្ចូល​មិនមែន​ជា​ថ្ងៃ​សិក្សា​ទេ ។"
 
 #: /src/schooltool/term/browser/emergency.py:104
 msgid "The replacement date you entered is invalid."
-msgstr "កាល​បរិច្ឆេទ​ជំនួស​ដែល​អ្នក​បាន​បញ្ចូល​មិន​ត្រឹមត្រូវ ។"
+msgstr "កាល​បរិច្ឆេទ​ជំនួស​ដែល​អ្នក​បាន​បញ្ចូល​មិន​ត្រឹមត្រូវ​ឡើយ​ ។"
 
 #. Default: ""
 #: /src/schooltool/term/browser/emergency.py:127
 msgid "School cancelled due to emergency. Replacement day $replacement."
-msgstr "សាលា​បានបោះបង់​ដោយសារ​តែ​មានករណី​បន្ទាន់ ។ ថ្ងៃ​ជំនួស $replacement ។"
+msgstr "សាលា​បាន​បោះបង់​ដោយសារ​តែ​មាន​ករណី​បន្ទាន់ ។ ថ្ងៃ​ជំនួស $replacement ។"
 
 #. Default: ""
 #: /src/schooltool/term/browser/emergency.py:137
 msgid "Replacement day for emergency day $emergency."
-msgstr "ថ្ងៃ​ជំនួស​សម្រាប់​ថ្ងៃ​បន្ទាន់ $emergency ។"
+msgstr "ថ្ងៃ​ជំនួស​ សម្រាប់​ថ្ងៃ​បន្ទាន់ $emergency ។"
 
 #: /src/schooltool/term/browser/templates/emergency2.pt:3
 #: /src/schooltool/term/browser/templates/emergency_select.pt:3
@@ -6020,8 +6038,8 @@ msgid ""
 "replacement day. The selection below consists of non-schooldays in this term "
 "following the emergency day and several days after the term."
 msgstr ""
-"អ្នក​​បាន​​ជ្រើស ${date} ជា​ថ្ងៃ​បន្ទាន់ ។ ឥឡូវ​សូម​ជ្រើស​ថ្ងៃ​ជំនួស ។ ជម្រើស​ខាង​ក្រោម​មាន​ថ្ងៃ​មិនមែន​ជា​"
-"ថ្ងៃ​រៀន​នៅ​ក្នុង​វគ្គសិក្សា​នេះ​ ថ្ងៃ​បន្ទាន់​ដូច​ខាងក្រោម​ និងថ្ងៃ​ជា​ច្រើន​បន្ទាប់​ពី​វគ្គ​សិក្សា​នេះ ។"
+"អ្នក​​បាន​​ជ្រើស ${date} ជា​ថ្ងៃ​បន្ទាន់ ។ ឥឡូវ​សូម​ជ្រើស​ថ្ងៃ​ជំនួស ។ ជម្រើស​ខាង​ក្រោម​មាន​ថ្ងៃ​មិនមែន​ជា​"
+"ថ្ងៃ​រៀន​នៅ​ក្នុង​វគ្គសិក្សា​នេះ​ ថ្ងៃ​បន្ទាន់​ដូច​ខាងក្រោម​ និង​ថ្ងៃ​ជា​ច្រើន​បន្ទាប់​ពី​វគ្គ​សិក្សា​នេះ ។"
 
 #: /src/schooltool/term/browser/templates/emergency2.pt:27
 msgid "Please enter the replacement date below."
@@ -6072,19 +6090,19 @@ msgstr "${month} ${year}"
 #: /src/schooltool/term/browser/templates/term.pt:41
 #: /src/schooltool/term/browser/templates/term_add.pt:90
 msgid "Week ${week_number}"
-msgstr "សប្ដាហ៍ ${week_number}"
+msgstr "សប្តាហ៍ ${week_number}"
 
 #: /src/schooltool/term/browser/templates/term_add.pt:34
 msgid "Please specify which days are school days, and which days are holidays."
-msgstr "សូម​បញ្ជាក់​ថ្ងៃ​ណា​ជា​ថ្ងៃ​រៀន និង​ថ្ងៃ​ណា​ជា​ថ្ងៃ​ឈប់​សម្រាក ។"
+msgstr "សូម​បញ្ជាក់​ថ្ងៃ​ណា​ជា​ថ្ងៃ​រៀន​ និង​ថ្ងៃ​ណា​ជា​ថ្ងៃ​ឈប់​សម្រាក ។"
 
 #: /src/schooltool/term/browser/templates/term_add.pt:53
 msgid "Toggle the following days of week:"
-msgstr "បិទ/បើក​ថ្ងៃ​នៃ​សប្ដាហ៍​ដូច​ខាងក្រោម ៖"
+msgstr "បិទ/បើក​ថ្ងៃ​នៃ​សប្តាហ៍​ដូច​ខាងក្រោម ៖"
 
 #: /src/schooltool/term/browser/templates/term_add.pt:70
 msgid "Click on a day to toggle its state."
-msgstr ""
+msgstr "ចុច​លើ​ថ្ងៃ​ ដើម្បី​បិទ​/​បើក​ស្ថានភាព ។"
 
 #: /src/schooltool/term/browser/term.py:61
 msgid "Start date"
@@ -6151,17 +6169,17 @@ msgid ""
 "should <strong>not</strong> delete terms simply because they are over, or "
 "you will lose important data.</li> </ul>"
 msgstr ""
-"<h1>វគ្គសិក្សា​នៅ​ក្នុង SchoolTool​</h1> <p>SchoolTool គាំទ្រ​កា​រកំណត់​វគ្គសិក្សា​មូលដ្ឋាន​​​ដែល​កំណត់​​​"
-"ពេល​វេលាចាប់ផ្ដើម និង​បញ្ចប់ ​​ហើយ​នៅ​ពេល​ដែល​ពួកវា​ត្រូវ​បាន​វាយតម្លៃ ។ ការ​អនុវត្ត​បច្ចុប្បន្ន​មិន​គាំទ្រ​"
-"ថាឋានុក្រម​នៃ​វគ្គសិក្សាទេ ឧទាហរណ៍ ឆ្នាំ ដែល​មាន​ពីរ​ឆមាស មាន​រយៈពេល​សម្គាល់​ពីរ ។ អ្នក​អាច​បង្កើត​"
-"វគ្គសិក្សា​ជា​ច្រើន ដែល​អាច​ជាន់​គ្នា ឧទាហរណ៍ ពីរ​ឆមាស​ និង​បី​ឆមាស​នៅ​ក្នុង​សាលា​តែ​មួយ ប៉ុន្តែ​អ្នកមិនអាច​"
-"បញ្ជាក់​ទំនាក់ទំនង​រវាង​វគ្គសិក្សា​បានទេ ។</p> <h3>តើ​ខ្ញុំ​គួរ...</h3> <ul> <li><strong>បន្ថែម​"
-"វគ្គសិក្សា ៖</strong> ជ្រើស <code>វគ្គសិក្សា​ថ្មី</code> ពី​ម៉ឺនុយ <code>សកម្មភាព</code> ។</"
-"li> <li><strong>កែសម្រួល​វ​គ្គសិក្សា ៖</strong> ចុច​លើ​វគ្គសិក្សា ។ បន្ទាប់​មក​ជ្រើស "
-"<code>កែសម្រួល</code> ពី​ម៉ឺនុយ <code>សកម្មភាព</code> ។</li> <li><strong>លុប​វគ្គសិក្សា ៖"
-"</strong> គូស​ធីក​ប្រអប់​នៅ​ជាប់​នឹង​ឈ្មោះ​វគ្គសិក្សា ហើយ​ចុច <code>លុប</code> ។ លុប​តែ​វគ្គសិក្សា​ "
-"ប្រសិនបើ​អ្នក​មាន​កំហុស​នៅពេល​បង្កើត​ពួកវា ប៉ុន្តែ​អ្នក​មិន​បានប្រើ​ពួកវា​ទេ ។ អ្នក​ <strong>មិនគួរ</"
-"strong> លុប​វគ្គសិក្សា​ដោយ​ធម្មតា​ទេ ពីព្រោះ​ពួកវា​ចប់​ហើយ បើ​មិន​ដូច្នេះទេ​ អ្នកនឹង​បាត់បង់​ទិន្នន័យ​សំខាន់ ។"
+"<h1>វគ្គសិក្សា​នៅ​ក្នុង SchoolTool​</h1> <p>SchoolTool គាំទ្រ​កា​រ​កំណត់​វគ្គសិក្សា​មូលដ្ឋាន​​​ដែល​កំណត់​​​"
+"ពេល​វេលា​ចាប់ផ្ដើម និង​បញ្ចប់ ​​ហើយ​នៅ​ពេល​ដែល​ពួកវា​ត្រូវ​បាន​វាយតម្លៃ ។ ការ​អនុវត្ត​បច្ចុប្បន្ន​មិន​គាំទ្រ​ថា​"
+"ឋានានុក្រម​នៃ​វគ្គ​សិក្សា​ទេ ឧទាហរណ៍ ឆ្នាំ ដែល​មាន​ពីរ​ឆមាស មាន​រយៈពេល​សម្គាល់​ពីរ ។ អ្នក​អាច​បង្កើត​"
+"វគ្គសិក្សា​ជា​ច្រើន ដែល​អាច​ជាន់​គ្នា ឧទាហរណ៍ ពីរ​ឆមាស​ និង​បី​ឆមាស​នៅ​ក្នុង​សាលា​តែ​មួយ ប៉ុន្តែ​អ្នក​មិន​អាច​"
+"បញ្ជាក់​ទំនាក់ទំនង​រវាង​វគ្គសិក្សា​បានទេ ។</p> <h3>តើ​ខ្ញុំ​គួរ...</h3> <ul> <li><strong>បន្ថែម​"
+"វគ្គសិក្សា ៖</strong> ជ្រើស <code>វគ្គសិក្សា​ថ្មី</code> ពី​ម៉ឺនុយ <code>សកម្មភាព</code> ។</"
+"li> <li><strong>កែសម្រួល​​​វគ្គសិក្សា ៖</strong> ចុច​លើ​វគ្គសិក្សា ។ បន្ទាប់​មក​ជ្រើស "
+"<code>កែសម្រួល</code> ពី​ម៉ឺនុយ <code>សកម្មភាព</code> ។</li> <li><strong>លុប​វគ្គសិក្សា ៖"
+"</strong> គូស​ធីក​ប្រអប់​នៅ​ជាប់​នឹង​ឈ្មោះ​វគ្គសិក្សា ហើយ​ចុច <code>លុប</code> ។ លុប​តែ​វគ្គសិក្សា​ "
+"ប្រសិនបើ​អ្នក​មាន​កំហុស​នៅ​ពេល​បង្កើត​ពួកវា ប៉ុន្តែ​អ្នក​មិន​បាន​ប្រើ​ពួកវា​ទេ ។ អ្នក​ <strong>មិន​គួរ</"
+"strong> លុប​វគ្គសិក្សា​ដោយ​ធម្មតា​ទេ ពីព្រោះ​ពួកវា​ចប់​ហើយ បើ​មិន​ដូច្នេះ​ទេ​ អ្នក​នឹង​បាត់បង់​ទិន្នន័យ​សំខាន់ ។"
 "</li> </ul>"
 
 #: /src/schooltool/term/term.py:306
@@ -6178,7 +6196,7 @@ msgstr "កាលវិភាគ​មិន​ជាប់​គ្នា"
 
 #: /src/schooltool/timetable/browser/__init__.py:513
 msgid "Show consecutive periods as one period in journal"
-msgstr ""
+msgstr "បង្ហាញ​ថិរវេលា​ជាប់ៗគ្នា​ជា​ថិរវេលា​នៅ​ក្នុង​ទិនាប្បវត្តិ"
 
 #: /src/schooltool/timetable/browser/__init__.py:614
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:107
@@ -6188,27 +6206,27 @@ msgstr "រក្សា​ទុក"
 
 #: /src/schooltool/timetable/browser/__init__.py:686
 msgid "School timetable"
-msgstr ""
+msgstr "កាល​វិភាគ​សិក្សា"
 
 #: /src/schooltool/timetable/browser/__init__.py:691
 msgid "Apply from"
-msgstr ""
+msgstr "អនុវត្ថពី"
 
 #: /src/schooltool/timetable/browser/__init__.py:693
 msgid "Apply until"
-msgstr ""
+msgstr "អនុវត្ត​រហូតដល់"
 
 #: /src/schooltool/timetable/browser/__init__.py:794
 msgid "Timetable conflicts with another:"
-msgstr ""
+msgstr "កាល​វិភាគ​ជាន់​គ្នា​ជាមួយ​កាល​វិភាគ​ផ្សេង​ទៀត ៖"
 
 #: /src/schooltool/timetable/browser/__init__.py:802
 msgid "Timetable does not fit in term"
-msgstr ""
+msgstr "កាល​វិភាគ​មិន​ត្រូវ​នឹង​វគ្គសិក្សា​​ទេ"
 
 #: /src/schooltool/timetable/browser/__init__.py:805
 msgid "Timetable must begin before it ends."
-msgstr ""
+msgstr "កាល​វិភាគ​ត្រូវ​តែ​ចាប់​ផ្ដើម​មុន​ពេល​​វា​បញ្ចប់ ។"
 
 #: /src/schooltool/timetable/browser/__init__.py:910
 msgid "Invalid date. Please use YYYY-MM-DD format."
@@ -6216,7 +6234,7 @@ msgstr "កាល​បរិច្ឆេទ​មិន​ត្រឹមត្
 
 #: /src/schooltool/timetable/browser/__init__.py:914
 msgid "The date does not belong to any term."
-msgstr "កាល​បរិច្ឆេទ​មិន​មែន​ជា​របស់​វគ្គ​ណា​មួយ​ទេ ។"
+msgstr "កាល​បរិច្ឆេទ​មិន​មែន​ជា​​វគ្គ​ណា​មួយ​ទេ ។"
 
 #: /src/schooltool/timetable/browser/__init__.py:923
 msgid "Some values were invalid.  They are highlighted in red."
@@ -6228,7 +6246,7 @@ msgstr "បន្ថែម​កាល​វិភាគ"
 
 #: /src/schooltool/timetable/browser/configure.zcml:102
 msgid "Change Timetable for One Day"
-msgstr "ផ្លាស់ប្ដូរ​កាល​វិភាគ​សម្រាប់​មួយ​ថ្ងៃ"
+msgstr "ផ្លាស់ប្ដូរ​កាល​វិភាគ​ សម្រាប់​មួយ​ថ្ងៃ"
 
 #: /src/schooltool/timetable/browser/configure.zcml:158
 msgid "New Timetable"
@@ -6245,7 +6263,7 @@ msgstr "កែប្រែ​ព័ត៌មាន​ព្រឹត្តិក
 #. Default: ""
 #: /src/schooltool/timetable/browser/schema.py:94
 msgid "Timetable schema ${schema}"
-msgstr "កាលវិភាគសាលា ${schema}"
+msgstr "គម្រោង​កាលវិភាគ ${schema}"
 
 #: /src/schooltool/timetable/browser/schema.py:175
 msgid "Please use HH:MM format for period start and end times"
@@ -6253,11 +6271,11 @@ msgstr "សូម​ប្រើ​ទ្រង់ទ្រាយ HH:MM សម�
 
 #: /src/schooltool/timetable/browser/schema.py:215
 msgid "You must specify at least one period."
-msgstr "អ្នក​ត្រូវ​តែ​បញ្ជាក់​យ៉ាង​ហោចណាស់​រយៈពេល​មួយ ។"
+msgstr "អ្នក​ត្រូវ​តែ​បញ្ជាក់​យ៉ាង​ហោច​ណាស់​រយៈពេល​មួយ ។"
 
 #: /src/schooltool/timetable/browser/schema.py:269
 msgid "Duration in minutes"
-msgstr ""
+msgstr "ថិរវេលា​ជា​នាទី"
 
 #: /src/schooltool/timetable/browser/schema.py:316
 msgid "Please select a value"
@@ -6297,15 +6315,15 @@ msgstr "រយៈពេល ${number}"
 #: /src/schooltool/timetable/browser/templates/ttwizard_slottimes.pt:3
 #: /src/schooltool/timetable/browser/templates/ttwizard_slottimes.pt:6
 msgid "New timetable schema"
-msgstr "កាលវិភាគ​សាលា​ថ្មី"
+msgstr "គម្រោង​កាល​វិភាគ​ថ្មី"
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:17
 msgid "Please choose a name for the timetable schema you want to create."
-msgstr "សូម​ជ្រើស​ឈ្មោះ​សម្រាប់​កាលវិភាគ​សាលា​ដែលអ្នក​ចង់​បង្កើត ។"
+msgstr "សូម​ជ្រើស​ឈ្មោះ​ សម្រាប់​គម្រោង​កាលវិភាគ​ដែល​អ្នក​ចង់​បង្កើត ។"
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:36
 msgid "First, please define the days and periods of the timetable."
-msgstr "ទី​មួយ សូម​កំណត់​ថ្ងៃ និង​រយៈពេល​របស់​កាលវិភាគ ។"
+msgstr "ដំបូង សូម​កំណត់​ថ្ងៃ និង​រយៈពេល​របស់​កាលវិភាគ ។"
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:51
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:155
@@ -6335,21 +6353,21 @@ msgstr "បន្ថែម​រយៈពេល"
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:94
 msgid "Second, select the way timetable days are aligned with calendar days."
-msgstr "ទី​ពីរ ជ្រើស​វិធី​ដែល​ថ្ងៃ​របស់កាលវិភាគ​ត្រូវ​បាន​​តម្រូវ​ជា​មួយនឹង​ថ្ងៃ​របស់​ប្រតិទិន ។"
+msgstr "ទី​ពីរ ជ្រើស​វិធី​ដែល​ថ្ងៃ​របស់​កាលវិភាគ​ត្រូវ​បាន​​តម្រូវ​ជា​មួយ​នឹង​ថ្ងៃ​របស់​ប្រតិទិន ។"
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:114
 msgid ""
 "Timetable day always coincides with the day of week (i.e. on Mondays the "
 "first timetable day is used, on Tuesdays the second, and so on)."
 msgstr ""
-"ថ្ងៃ​ក្នុងកាលវិភាគ​តែ​ងតែ​ស្រប​គ្នា​ជា​មួយ​នឹង​ថ្ងៃ​នៃ​សប្ដាហ៍ (ឧ. ថ្ងៃ​ច័ន្ទ​ជា​ថ្ងៃ​ដំបូង​នៃ​កាលវិភាគ​ត្រូវ​ប្រើ "
-"ថ្ងៃ​អង្គារ​ជា​ថ្ងៃ​ទីពីរ​ និង​បន្តបន្ទាប់​) ។"
+"ថ្ងៃ​ក្នុង​កាលវិភាគ​តែ​ង​តែ​ស្រប​គ្នា​ជា​មួយ​នឹង​ថ្ងៃ​នៃ​​ស​​ប្ដាហ៍ (ឧ. ថ្ងៃចន្ទ​​ជា​ថ្ងៃ​ដំបូង​នៃ​កាលវិភាគ​ត្រូវ​ប្រើ "
+"ថ្ងៃ​អង្គារ​ជា​ថ្ងៃ​ទីពីរ​ និង​បន្តបន្ទាប់​) ។"
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:129
 msgid ""
 "Timetable days are used sequentially, jumping over days that are not school "
 "days."
-msgstr "ថ្ងៃ​ក្នុងកាលវិភាគ​ត្រូ​វបាន​ប្រើ​ជា​បន្តបន្ទាប់ លោត​ទៅ​ថ្ងៃ​ដែល​មិនមែនជា​ថ្ងៃ​សិក្សា ។"
+msgstr "ថ្ងៃ​ក្នុង​កាលវិភាគ​ត្រូវ​​បាន​ប្រើ​ជា​បន្តបន្ទាប់ លោត​ទៅ​ថ្ងៃ​ដែល​មិន​មែន​ជា​ថ្ងៃ​សិក្សា ។"
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:136
 msgid ""
@@ -6362,12 +6380,12 @@ msgid ""
 "that day of week. If the list of periods is not up to date with the changes "
 "you made in the table above, use the Update button to refresh the form."
 msgstr ""
-"ទីបី កំណត់​ពេលវេលា និង​ថិរវេលា​របស់​រយៈពេល​នៅពេល​ពួកវា​នៅ​ចំ​ថ្ងៃ​ពិតប្រាកដ​នៃ​សប្ដាហ៍ ។ ប្រើ​ទ្រង់ទ្រាយ​មួយ​"
-"ចំនួន​​ក្នុង​ចំណោម​​ដូច​ខាងក្រោម ៖ <tt>HH:MM</tt> (កុំ​ភ្លេច​បញ្ជាក់​ថិរវេលា​នៅ​ក្នុង​ប្រអប់​អត្ថបទ​ខាង​ក្រោម) "
-"ឬ <tt>HH:MM-HH:MM</tt> (នៅពេល​អ្នក​ចង់​បញ្ជាក់​ចំណុច​ចុង​ទាំងពីរ​យ៉ាង​ជាក់លាក់ ឧ. 9:30-10:15) ។ "
-"វា​មិនចាំបាច់​កំណត់​រយៈពេល​សម្រាប់​គ្រប់​ថ្ងៃ​នៃ​សប្ដាហ៍ ការ​លុប​នឹង​ធ្វើ​ឲ្យ​រយៈពេល​រំលង ប្រសិន​បើ​វា​កើត​ឡើង​ចំថ្ងៃ​"
-"នៃ​សប្ដាហ៍ ។ ប្រសិនបើ​រយៈពេល​មិន​ទាន់សម័យ​ទេ​ជា​មួយនឹង​ការ​ផ្លាស់ប្ដូរ​ដែល​អ្នកបានធ្វើ​នៅ​ក្នុង​តារាង​ខាង​លើ​"
-"ទេ ប្រើ​ប៊ូតុង​ធ្វើ​ឲ្យ​ទាន់សម័យ​ដើម្បី​ធ្វើ​ឲ្យ​សំណុំ​បែបបទ​ស្រស់ ។"
+"ទីបី កំណត់​ពេលវេលា និង​ថិរវេលា​របស់​រយៈពេល​នៅ​ពេល​ពួកវា​នៅ​ចំ​ថ្ងៃ​ពិតប្រាកដ​នៃ​សប្ដាហ៍ ។ ប្រើ​ទ្រង់ទ្រាយ​មួយ​"
+"ចំនួន​​ក្នុង​ចំណោម​​ដូច​ខាងក្រោម ៖ <tt>HH:MM</tt> (កុំ​ភ្លេច​បញ្ជាក់​ថិរវេលា​នៅ​ក្នុង​ប្រអប់​អត្ថបទ​ខាង​ក្រោម) "
+"ឬ <tt>HH:MM-HH:MM</tt> (នៅ​ពេល​អ្នក​ចង់​បញ្ជាក់​ចំណុច​ចុង​ទាំងពីរ​យ៉ាង​ជាក់លាក់ ឧ. 9:30-10:15) ។ "
+"វា​មិន​ចាំបាច់​កំណត់​រយៈពេល​សម្រាប់​គ្រប់​ថ្ងៃ​នៃ​សប្ដាហ៍ ការ​លុប​នឹង​ធ្វើ​ឲ្យ​រយៈពេល​រំលង ប្រសិន​បើ​វា​កើត​ឡើង​ចំ​ថ្ងៃ​"
+"នៃ​សប្ដាហ៍​។ ប្រសិនបើ​រយៈពេល​មិន​ទាន់សម័យ​ទេ​ជា​មួយ​នឹង​ការ​ផ្លាស់ប្ដូរ​ដែល​អ្នក​បាន​ធ្វើ​នៅ​ក្នុង​តារាង​ខាង​លើ​ទេ "
+"ប្រើ​ប៊ូតុង​ធ្វើ​ឲ្យ​ទាន់សម័យ​ដើម្បី​ធ្វើ​ឲ្យ​សំណុំ​បែបបទ​ស្រស់ ។"
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:175
 msgid ""
@@ -6379,12 +6397,12 @@ msgid ""
 "Finally, make sure the information in this form is correct, because the only "
 "way to correct it will be to remove this timetable schema and recreate it."
 msgstr ""
-"ទី​បញ្ចប់ ត្រូវ​ប្រាកដ​ថា​ព័ត៌មាន​នៅ​ក្នុង​សំណុំ​បែបបទ​នេះ​ត្រឹមត្រូវ ពីព្រោះ​មាន​តែ​វិធី​តែ​មួយ​គត់​ដើម្បី​កែ​វា​ នឹង​ត្រូវ​យក​"
-"កាលវិភាគ​សាលា​ចេញ​ ហើយ​បង្កើត​វា​ឡើង​វិញ។ ។"
+"ទី​បញ្ចប់ ត្រូវ​ប្រាកដ​ថា​ព័ត៌មាន​នៅ​ក្នុង​សំណុំ​បែបបទ​នេះគឺ​​ត្រឹមត្រូវ ពីព្រោះ​មាន​តែ​វិធី​តែ​មួយ​គត់​ដើម្បី​កែ​វា​ នឹង​ត្រូវ​"
+"យក​គម្រោង​កាលវិភាគ​​នេះ​ចេញ​ ហើយ​បង្កើត​វា​ឡើង​វិញ ។"
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:197
 msgid "Create timetable schema"
-msgstr "បង្កើត​កាលវិភាគ​សាលា"
+msgstr "ធ្វើ​គម្រោង​កាលវិភាគ"
 
 #: /src/schooltool/timetable/browser/templates/calendar_overlay.pt:14
 msgid "Cal"
@@ -6408,32 +6426,32 @@ msgstr "គ្រប់គ្រង..."
 
 #: /src/schooltool/timetable/browser/templates/confirm-timetable-delete.pt:15
 msgid "Are you sure you want to unschedule this timetable?"
-msgstr ""
+msgstr "តើ​អ្នក​ប្រាកដថា អ្នក​មិន​ចង់​បង្កើត​កាលវិភាគ​នេះ​ឬ ?"
 
 #: /src/schooltool/timetable/browser/templates/confirm-timetable-delete.pt:27
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:48
 msgid "Timetable \"${title}\""
-msgstr ""
+msgstr "កាល​វិភាគ​ \"${title}\""
 
 #: /src/schooltool/timetable/browser/templates/confirm-timetable-delete.pt:38
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:60
 msgid "No periods selected."
-msgstr ""
+msgstr "គ្មាន​ថិរវេលា​បាន​ជ្រើស​ទេ ។"
 
 #: /src/schooltool/timetable/browser/templates/confirm-timetable-delete.pt:67
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:89
 msgid "Scheduled from ${from} until ${until}"
-msgstr ""
+msgstr "ចែកកាលវិភាគ​ពី ${from} ដល់ ${until}"
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:4
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:10
 msgid "Scheduling for ${person}"
-msgstr "កាល​វិភាគ​សម្រាប់ ${person}"
+msgstr "កា​រកំណត់​កាលវិភាគ​សម្រាប់ ${person}"
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:15
 #: /src/schooltool/timetable/browser/templates/timetable-add.pt:8
 msgid "There are no terms or timetable schemas defined."
-msgstr "មិនមាន​វគ្គសិក្សា ឬ​កាលវិភាគ​សាលា​ត្រូវ​បានកំណត់​ទេ ។"
+msgstr "មិន​មាន​វគ្គ ឬ​​គម្រោង​កាលវិភាគ​​បាន​កំណត់​ឡើយ ។"
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:22
 msgid "Timetable"
@@ -6445,7 +6463,7 @@ msgstr "វគ្គ​សិក្សា"
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:34
 msgid "Schema"
-msgstr "គ្រោងការណ៍"
+msgstr "គម្រោង"
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:43
 msgid "Choose"
@@ -6456,7 +6474,7 @@ msgid ""
 "This form lets you set up the timetable of a person by adding and removing "
 "the person to and from sections that have classes in their timetables."
 msgstr ""
-"សំណុំ​បែបបទ​នេះ​អនុញ្ញាត​ឲ្យ​អ្នក​បង្កើត​កាលវិភាគ​របស់​មនុស្ស​ម្នាក់ ដោយ​បន្ថែម និង​យក​មនុស្ស​ចេញ​ពី​ផ្នែក​មួយ​ដែល​"
+"សំណុំ​បែបបទ​នេះ​អនុញ្ញាត​ឲ្យ​អ្នក​បង្កើត​កាលវិភាគ​របស់​អ្នក​ប្រើ ដោយ​បន្ថែម និង​យក​​អ្នក​ប្រើ​ចេញ​ពី​ផ្នែក​មួយ​ដែល​"
 "មាន​ថ្នាក់​ក្នុង​កាលវិភាគ​របស់​ពួកគេ ។"
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:73
@@ -6469,19 +6487,19 @@ msgstr "គ្មាន"
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:93
 msgid "Scheduling conflict."
-msgstr "កា​រកំណត់​កាលវិភាគ​មិន​ត្រូវ​គ្នា ។"
+msgstr "កា​រកំណត់កាលវិភាគ​ជាន់គ្នា ។"
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:101
 msgid ""
 "Note: if a section appears in more than one slot, all of them have to be set "
 "to <em>none</em> to remove it."
 msgstr ""
-"ចំណាំ ៖ ប្រសិនបើ​ផ្នែកបង្ហាញ​ច្រើន​ជាង​មួយ​រន្ធ ពួកវា​ទាំងអស់​ត្រូវ​តែ​បានកំណត់​ទៅ​ជា <em>គ្មាន</em> ដើម្បី​"
+"ចំណាំ ៖ ប្រសិនបើ​ផ្នែក​​បង្ហាញ​ច្រើន​ជាង​មួយ​រន្ធ ពួកវា​ទាំងអស់​ត្រូវ​តែ​បាន​កំណត់​ទៅ​ជា <em>គ្មាន</em> ដើម្បី​"
 "យក​វា​ចេញ ។"
 
 #: /src/schooltool/timetable/browser/templates/schooltt-delete.pt:10
 msgid "Are you sure you want to delete the selected school timetables?"
-msgstr "តើ​អ្នក​ប្រាកដ​ជា​ចង់​លុប​កាល​វិភាគ​សាលា​ដែល​ជ្រើស​ឬ?"
+msgstr "តើ​អ្នក​ប្រាកដ​ជា​ចង់​លុប​កាល​វិភាគ​សិក្សា​ដែល​បាន​​ជ្រើស​ឬ ។"
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-add.pt:4
 #: /src/schooltool/timetable/browser/templates/section-timetable-add.pt:12
@@ -6496,54 +6514,56 @@ msgstr "កាល​វិភាគ​សម្រាប់ ${section}"
 #: /src/schooltool/timetable/browser/templates/section-timetable-add.pt:25
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:31
 msgid "For term: ${term_title} (from ${starts} to ${ends})"
-msgstr ""
+msgstr "សម្រាប់​វគ្គ ៖ ${term_title} (ពី ${starts} ដល់ ${ends})"
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:17
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:19
 msgid "There are no timetable schemas defined."
-msgstr "មិនមាន​កាលវិភាគ​សាលា​បាន​កំណត់​ទេ ។"
+msgstr "គ្មាន​គម្រោង​កាល​វិភាគ​ដែល​បាន​កំណត់​ឡើយ ។"
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:24
 msgid "Choose school timetable to use"
-msgstr "ជ្រើស​កាល​វិភាគ​សាលា​ដើម្បី​ប្រើ"
+msgstr "ជ្រើស​កាល​វិភាគ​សិក្សា​​ដើម្បី​ប្រើ"
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:17
 msgid "Time table schedule of ${courses} ${section}."
-msgstr ""
+msgstr "កាលវិភាគ​​​នៃ ${courses} ${section} ។"
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:25
 msgid "school days"
-msgstr ""
+msgstr "ថ្ងៃ​សិក្សា"
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:27
 msgid "available timetables"
-msgstr ""
+msgstr "កាល​វិភាគ​មាន"
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:31
 msgid ""
 "For more information, see ${school_days} and ${available_timetables} in "
 "${term} of ${schoolyear}"
 msgstr ""
+"ព័ត៌មាន​ជាច្រើន​ មើល​ ${school_days} និង ${available_timetables} ក្នុង ${term} នៃ "
+"${schoolyear}"
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:39
 msgid "There are no timetables assigned."
-msgstr ""
+msgstr "គ្មាន​កាលវិភាគ​បាន​កំណត់​ឡើយ ។"
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:49
 msgid "(edit periods)"
-msgstr ""
+msgstr "(កែសម្រួល​រយៈពេល​​)"
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:91
 msgid "Consecutive periods are treated as a single meeting."
-msgstr ""
+msgstr "ថិរវេលា​បន្ទាប់​ត្រូវ​ធ្វើ​កិច្ច​ប្រជុំ​តែ​ប៉ុណ្ណោះ ។"
 
 #: /src/schooltool/timetable/browser/templates/simpletts.pt:11
 msgid ""
 "This is a simple way to create a weekly timetable schema. Just fill in a "
 "sufficient number of lines for your periods."
 msgstr ""
-"នេះ​គឺ​ជា​វិធីធម្មតា​ដើម្បី​បង្កើត​កាលវិភាគ​សាលា​ប្រចាំ​សប្ដាហ៍ ។ គ្រាន់​តែ​បំពេញ​​​ចំនួន​បន្ទាត់​សម្រាប់​រយៈពេល​​របស់​"
-"អ្នក ។"
+"នេះ​គឺ​ជា​វិធី​ធម្មតា​ដើម្បី​បង្កើត​​គម្រោង​កាលវិភាគ​ប្រចាំ​សប្ដាហ៍ ។ គ្រាន់​តែ​បំពេញ​​​ចំនួន​បន្ទាត់​សម្រាប់​រយៈពេល​​"
+"របស់​អ្នក ។"
 
 #: /src/schooltool/timetable/browser/templates/simpletts.pt:16
 msgid ""
@@ -6551,12 +6571,13 @@ msgid ""
 "schema creation wizard</a>, or a <a href=\"complexadd.html\">complex "
 "timetable schema set up form</a>."
 msgstr ""
-"ប្រសិនបើ​អ្នក​ត្រូវការ​ភាពបត់បែន​ផ្សេង​ទៀត អ្នក​អាច​ប្រើ <a href=\"add.html\">អ្នក​ជំនួយ​ការ​បង្កើត​"
-"កាលវិភាគ​សាលា</a> ឬ <a href=\"complexadd.html\">ការ​រៀបចំ​សំណុំ​បែបបទ​កាលវិភាគ​សាលា</a> ។"
+"ប្រសិនបើ​អ្នក​ត្រូវការ​ភាព​បត់បែន​ផ្សេង​ទៀត អ្នក​អាច​ប្រើ <a href=\"add.html\">អ្នក​ជំនួយ​ការ​បង្កើត​"
+"គម្រោង​​កាលវិភាគ​</a> ឬ <a href=\"complexadd.html\">ការ​រៀបចំ​សំណុំ​បែបបទ​​គម្រោង​កាលវិភាគ</"
+"a> ។"
 
 #: /src/schooltool/timetable/browser/templates/simpletts.pt:36
 msgid "Period title (optional)"
-msgstr "ចំណង​ជើង​រយៈពេល (​ជាជម្រើស)"
+msgstr "ចំណង​ជើង​រយៈពេល (​ជា​ជម្រើស)"
 
 #: /src/schooltool/timetable/browser/templates/simpletts.pt:37
 msgid "Period start time"
@@ -6611,12 +6632,12 @@ msgid ""
 "This form allows you to change the start and end times for periods on a "
 "certain date, or to cancel some periods altogether."
 msgstr ""
-"សំណុំ​បែបបទ​នេះ​អនុញ្ញាត​ឲ្យ​អ្នក​ផ្លាស់ប្ដូរ​ពេលវេលា​ចាប់ផ្ដើម​ និង​បញ្ចប់​សម្រាប់​រយៈ​ពេល​​​នៅ​កាលបរិច្ឆេទ​"
-"ជាក់លាក់ ឬ​ដើម្បីបោះបង់​រយៈពេល​មួយ​ចំនួន​រួម​គ្នា ។"
+"សំណុំ​បែបបទ​នេះ​អនុញ្ញាត​ឲ្យ​អ្នក​ផ្លាស់ប្ដូរ​ពេលវេលា​ចាប់ផ្ដើម​ និង​បញ្ចប់ ​សម្រាប់​រយៈ​ពេល​​​នៅ​កាលបរិច្ឆេទ​"
+"ជាក់លាក់ ឬ​ដើម្បី​បោះបង់​រយៈពេល​មួយ​ចំនួន​រួម​គ្នា ។"
 
 #: /src/schooltool/timetable/browser/templates/specialday_select.pt:23
 msgid "Please enter the date when the periods need to be changed below."
-msgstr "សូម​បញ្ចូល​កាលបរិច្ឆេទ​នៅពេល​ដែល​រយៈពេល​តម្រូវ​ឲ្យ​ផ្លាស់ប្ដូរ​ ។"
+msgstr "សូម​បញ្ចូល​កាលបរិច្ឆេទ​នៅ​ពេល​ដែល​រយៈពេល​តម្រូវ​ឲ្យ​ផ្លាស់ប្ដូរ​ ។"
 
 #: /src/schooltool/timetable/browser/templates/timetable-add.pt:13
 msgid "Create a New Timetable"
@@ -6628,23 +6649,23 @@ msgstr "ជ្រើស​កាល​វិភាគ​សាលា​ដើម
 
 #: /src/schooltool/timetable/browser/templates/timetable-container-delete.pt:10
 msgid "Are you sure you want to delete the selected timetables?"
-msgstr "តើ​អ្នក​ប្រាកដ​ជា​ចង់​លុប​កាល​វិភាគ​ដែល​ជ្រើស​ឬ?"
+msgstr "តើ​អ្នក​ប្រាកដ​ជា​ចង់​លុប​កាល​វិភាគ​ដែល​ជ្រើស​ឬ ?"
 
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:35
 msgid "Using timetable: ${schema_titles}"
-msgstr ""
+msgstr "ដោយ​ប្រើ​កាលវិភាគ​ ៖ ${schema_titles}"
 
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:97
 msgid "Apply from:"
-msgstr ""
+msgstr "អនុវត្ត​ពី ៖"
 
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:111
 msgid "Apply until:"
-msgstr ""
+msgstr "អនុវត្ត​រហូត​ដល់ ៖"
 
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:40
 msgid "Default Timetable Schema:"
-msgstr "កាលវិភាគ​សាលា​លំនាំដើម ៖"
+msgstr "គម្រោង​កាលវិភាគ​​លំនាំដើម ៖"
 
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:47
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:54
@@ -6659,7 +6680,7 @@ msgstr "ប៊ូតុង​ផ្លាស់ប្ដូរ"
 #: /src/schooltool/timetable/browser/templates/timetable_list.pt:4
 #: /src/schooltool/timetable/browser/templates/timetable_list.pt:11
 msgid "Timetables for ${object}"
-msgstr "កាល​សម្រាប់ ${object}"
+msgstr "កាលវិភាគ​​សម្រាប់ ${object}"
 
 #: /src/schooltool/timetable/browser/templates/timetableschema.pt:33
 msgid "Homeroom"
@@ -6678,7 +6699,7 @@ msgstr ""
 #: /src/schooltool/timetable/browser/ttwizard.py:259
 msgid ""
 "Does your school's timetable cycle use days of the week, or a rotating cycle?"
-msgstr "តើ​ខួប​កាលវិភាគ​​សាលា​របស់​ប្រើ​ថ្ងៃ​នៃ​សប្ដាហ៍ ឬ​បង្វិល​ខួប ?"
+msgstr "តើ​ខួប​កាល​វិភាគ​សិក្សា​​របស់​អ្នក​ ប្រើ​ថ្ងៃ​នៃ​សប្ដាហ៍ ឬ​បង្វិល​ខួប ?"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:262
 msgid "Days of the week"
@@ -6686,11 +6707,11 @@ msgstr "ថ្ងៃ​នៃ​សប្ដាហ៍"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:263
 msgid "Rotating cycle"
-msgstr "បង្វិល​រង្វង់"
+msgstr "បង្វិល​​ខ្លួប"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:286
 msgid "Enter names of days in cycle, one per line."
-msgstr "បញ្ចូល​ឈ្មោះ​ថ្ងៃ​ក្នុង​រង្វង់ មួយ​ក្នុង​មួយ​បន្ទាត់ ។"
+msgstr "បញ្ចូល​ឈ្មោះ​ថ្ងៃ​ក្នុង​ខួប​ មួយ​ក្នុង​មួយ​បន្ទាត់ ។"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:298
 msgid "Please enter at least one day name."
@@ -6704,7 +6725,7 @@ msgstr "សូម​ប្រាកដ​ថា​ឈ្មោះ​ថ្ងៃ
 msgid ""
 "Do classes begin and end at the same time each day in your school's "
 "timetable?"
-msgstr "តើ​ថ្នាក់​ចាប់ផ្ដើម និង​បញ្ចប់​ក្នុង​ពេល​តែ​មួយ​រាល់ថ្ងៃ​ក្នុង​កាលវិភាគ​សាលា​របស់​អ្នក​ដែរឬទេ ?"
+msgstr "តើ​ថ្នាក់​ចាប់ផ្ដើម និង​បញ្ចប់​ក្នុង​ពេល​តែ​មួយ​រាល់ថ្ងៃ​ក្នុង​កាលវិភាគ​​សិក្សា​​របស់​អ្នក​ដែរ​ឬទេ ?"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:323
 msgid "Same time each day"
@@ -6740,23 +6761,23 @@ msgstr ""
 #: /src/schooltool/timetable/browser/ttwizard.py:426
 #: /src/schooltool/timetable/browser/ttwizard.py:483
 msgid "Not a valid time slot: $slot."
-msgstr "មិនមែនជា​ចន្លោះ​ពេល​វេលា​ត្រឹមត្រូវ​ទេ ៖ $slot ។"
+msgstr "មិនមែន​ជា​ចន្លោះ​ពេល​វេលា​ត្រឹមត្រូវ​ទេ ៖ $slot ។"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:430
 msgid "Please enter at least one time slot."
-msgstr "សូម​បញ្ចូល​យ៉ាងហោចណាស់​ចន្លោះពេល​មួយ ។"
+msgstr "សូម​បញ្ចូល​យ៉ាងហោចណាស់​ចន្លោះ​ពេលវេលា​​មួយ ។"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:454
 msgid ""
 "Enter start and end times for each slot on each day, one slot (HH:MM - HH:"
 "MM) per line."
 msgstr ""
-"បញ្ចូល​ពេលវេលា​ចាប់ផ្ដើម និង​បញ្ចប់​សម្រាប់​ចន្លោះ​ពេល​នៅ​ថ្ងៃ​នីមួយៗ​ ចន្លោះពេល​មួយ (HH:MM - HH:MM) "
+"បញ្ចូល​ពេលវេលា​ចាប់ផ្ដើម និង​បញ្ចប់​សម្រាប់​ចន្លោះ​ពេល​នៅ​ថ្ងៃ​នីមួយៗ​ ចន្លោះ​ពេល​មួយ (HH:MM - HH:MM) "
 "ក្នុង​មួយ​បន្ទាត់ ។"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:530
 msgid "Do periods have names or are they simply designated by time?"
-msgstr "តើ​រយៈពេល​មាន​ឈ្មោះ ឬ​ពួកវា​ត្រូវ​បាន​សម្គាល់​​យ៉ាង​សាមញ្ញា​ដោយ​ពេលវេលា ?"
+msgstr "តើ​រយៈពេល​មាន​ឈ្មោះ ឬ​ពួកវា​ត្រូវ​បាន​សម្គាល់​​យ៉ាង​សាមញ្ញ​ដោយ​ពេលវេលា​ឬ ?"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:533
 msgid "Have names"
@@ -6773,7 +6794,7 @@ msgstr "បញ្ចូល​ឈ្មោះ​ថិរវេលា មួយ�
 #. Default: ""
 #: /src/schooltool/timetable/browser/ttwizard.py:583
 msgid "Please enter at least $number periods."
-msgstr "សូម​បញ្ចូល​រយៈពេ​ល​យ៉ាង​ហោចណស់  $number ។"
+msgstr "សូម​បញ្ចូល​រយៈពេល​ល​​​យ៉ាងហោចណាស់  $number ។"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:589
 msgid "Please make sure the period names are unique."
@@ -6808,7 +6829,7 @@ msgstr "រយៈពេល​ដូច​ខាងក្រោម​ត្រូ
 
 #: /src/schooltool/timetable/browser/ttwizard.py:676
 msgid "Please put the periods in order for each day:"
-msgstr "សូម​ដាក់​រយៈពេល​ជា​លំដាប់​​សម្រាប់​ថ្ងៃ​នីមួយៗ ៖"
+msgstr "សូម​ដាក់​រយៈពេល​ជា​លំដាប់​​ សម្រាប់​ថ្ងៃ​នីមួយៗ ៖"
 
 #. Default: ""
 #: /src/schooltool/timetable/browser/ttwizard.py:712
@@ -6835,11 +6856,11 @@ msgstr "សូម​បង្ហាញ​រយៈពេល​​សិក្ស
 
 #: /src/schooltool/timetable/security.zcml:16
 msgid "School timetables"
-msgstr ""
+msgstr "កាល​វិភាគសិក្សា"
 
 #: /src/schooltool/timetable/security.zcml:46
 msgid "Assign timetables"
-msgstr ""
+msgstr "កំណត់​កាលវិភាគ"
 
 #: /src/schooltool/timetable/security.zcml:54
 msgid "Change schedule"
