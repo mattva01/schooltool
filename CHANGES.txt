@@ -2,7 +2,7 @@
 CHANGES
 =======
 
-1.5.3 (unreleased)
+1.5.3 (2010-11-24)
 ------------------
 
 - Fixed Section meeting time misalignment in calendar (https://launchpad.net/bugs/611797)
