@@ -322,17 +322,23 @@
      permission="zope.Public"
      />
 
-  <configure package="schooltool.skin">
-    <navigationViewlet
-      name="addResourceText.html"
-      for="schooltool.resource.interfaces.IResourceDemographicsFields"
-      manager="schooltool.skin.IActionMenuManager"
-      template="templates/actionsViewlet.pt"
-      permission="schooltool.view"
-      link="addResourceText.html"
-      title="New Resource Text Field"
-      order="10"
-      />
-  </configure>
+  <zope:configure package="schooltool.basicperson.browser">
+    <page
+       name="index.html"
+       for="schooltool.resource.interfaces.IResourceDemographicsFields"
+       class="schooltool.resource.browser.resource.ResourceDemographicsView"
+       template="templates/demographics-view.pt"
+       permission="schooltool.edit"
+       />
+  </zope:configure>
+
+  <zope:adapter
+      factory=".resource.ResourceDemographicsFieldsAbsoluteURLAdapter"
+      provides="zope.traversing.browser.interfaces.IAbsoluteURL" />
+
+  <zope:adapter
+      factory=".resource.ResourceDemographicsFieldsAbsoluteURLAdapter"
+      provides="zope.interface.Interface"
+      name="absolute_url"/>
 
 </configure>

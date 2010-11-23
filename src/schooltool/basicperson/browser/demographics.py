@@ -111,6 +111,8 @@ class DemographicsFieldsAbsoluteURLAdapter(BrowserView):
 class DemographicsView(BrowserView):
     """A Demographics List view."""
 
+    title = _('Demographics Container')
+
     def demographics(self):
         pos = 0
         for demo in list(self.context.values()):

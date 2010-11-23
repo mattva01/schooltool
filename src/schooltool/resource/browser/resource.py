@@ -24,20 +24,28 @@ $Id$
 
 from zc.table import table
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
+from zope.component import adapts
 from zope.component import getUtilitiesFor
 from zope.component import queryAdapter
 from zope.component import queryMultiAdapter
 from zope.component import queryUtility
+from zope.component import getMultiAdapter
 from zope.formlib import form
+from zope.interface import implements
+from zope.publisher.browser import BrowserView
+from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.session.interfaces import ISession
 from zope.app.form.browser import widget
 from zope.traversing.browser.absoluteurl import absoluteURL
+from zope.traversing.browser.interfaces import IAbsoluteURL
 
 from schooltool.app.browser.app import BaseEditView
+from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.basicperson.browser.demographics import DemographicsView
 from schooltool.resource.interfaces import IBookingCalendar
 from schooltool.resource.interfaces import (IBaseResourceContained,
              IResourceContainer, IResourceTypeInformation, IResourceSubTypes,
-             IResource, IEquipment, ILocation)
+             IResource, IEquipment, ILocation, IResourceDemographicsFields)
 from schooltool.table.interfaces import IFilterWidget
 from schooltool.table.table import url_cell_formatter
 from schooltool.table.table import CheckboxColumn
@@ -291,3 +299,22 @@ class ResourceContainerFilterWidget(PersonFilterWidget):
                 results = filter_widget.filter(results)
 
         return results
+
+
+class ResourceDemographicsFieldsAbsoluteURLAdapter(BrowserView):
+
+    adapts(IResourceDemographicsFields, IBrowserRequest)
+    implements(IAbsoluteURL)
+
+    def __str__(self):
+        app = ISchoolToolApplication(None)
+        url = str(getMultiAdapter((app, self.request), name='absolute_url'))
+        return url + '/resource_demographics'
+
+    __call__ = __str__
+
+
+class ResourceDemographicsView(DemographicsView):
+
+    title = _('Resource Demographics Container')
+
