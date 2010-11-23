@@ -66,6 +66,9 @@
       permission="zope.ManageApplication" />
   <security:allow
       crowds="administration"
+      permission="zope.ManageContent" />
+  <security:allow
+      crowds="administration"
       permission="zope.ManageServices" />
   <security:allow
       crowds="administration"

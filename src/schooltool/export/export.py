@@ -497,8 +497,8 @@ class MegaExporter(SchoolTimetableExportView):
         for school_year in sorted(school_years, key=lambda i: i.last):
             for term in sorted(school_year.values(), key=lambda i: i.last):
                 row = 0
-                ws = wb.add_sheet("Sections %s %s" % (school_year.__name__,
-                                                      term.__name__))
+                ws = wb.add_sheet("Sections %s %s" % (school_year.__name__[:10],
+                                                      term.__name__[:11]))
 
                 self.write_header(ws, row, 0,  "School Year")
                 self.write(ws, row, 1,  school_year.__name__)
