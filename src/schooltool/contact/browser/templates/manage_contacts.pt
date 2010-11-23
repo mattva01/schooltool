@@ -27,7 +27,7 @@
 	      <input type="submit" class="button-cancel" name="REMOVE_ITEMS"
 		     value="Remove"
 		     title="Shortcut: Alt-R" accesskey="R"
-		     i18n:attributes="value; accesskey" />
+		     i18n:attributes="value; title; accesskey" />
 	      <input onclick="invertSelection('remove_item')"
                      type="button" class="button-neutral"
 		     value="Invert Selection"
