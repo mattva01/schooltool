@@ -22,7 +22,10 @@ group views.
 $Id$
 """
 
+from z3c.form import form, field, button, subform, validator, widget
+from z3c.form.interfaces import DISPLAY_MODE, HIDDEN_MODE, IActionHandler
 from zc.table import table
+
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import adapts
 from zope.component import getUtilitiesFor
@@ -30,12 +33,14 @@ from zope.component import queryAdapter
 from zope.component import queryMultiAdapter
 from zope.component import queryUtility
 from zope.component import getMultiAdapter
-from zope.formlib import form
+from zope.container.interfaces import INameChooser
+from zope.event import notify
+from zope.formlib import form as oldform
 from zope.interface import implements
+from zope.lifecycleevent import ObjectCreatedEvent
 from zope.publisher.browser import BrowserView
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.session.interfaces import ISession
-from zope.app.form.browser import widget
 from zope.traversing.browser.absoluteurl import absoluteURL
 from zope.traversing.browser.interfaces import IAbsoluteURL
 
@@ -46,6 +51,7 @@ from schooltool.resource.interfaces import IBookingCalendar
 from schooltool.resource.interfaces import (IBaseResourceContained,
              IResourceContainer, IResourceTypeInformation, IResourceSubTypes,
              IResource, IEquipment, ILocation, IResourceDemographicsFields)
+from schooltool.resource.resource import Resource, Location, Equipment
 from schooltool.table.interfaces import IFilterWidget
 from schooltool.table.table import url_cell_formatter
 from schooltool.table.table import CheckboxColumn
@@ -56,7 +62,7 @@ from schooltool.resource.interfaces import IResourceFactoryUtility
 from schooltool.common import SchoolToolMessage as _
 
 
-class ResourceContainerView(form.FormBase):
+class ResourceContainerView(oldform.FormBase):
     """A Resource Container view."""
 
     __used_for__ = IResourceContainer
@@ -64,20 +70,20 @@ class ResourceContainerView(form.FormBase):
     index_title = _("Resource index")
 
     prefix = "resources"
-    form_fields = form.Fields()
-    searchActions = form.Actions(
-        form.Action('Search', success='handle_search_action'),)
+    form_fields = oldform.Fields()
+    searchActions = oldform.Actions(
+        oldform.Action('Search', success='handle_search_action'),)
 
-    actions = form.Actions(
-                form.Action('Delete', success='handle_delete_action'),
-                form.Action('Book', success='handle_book_action'))
+    actions = oldform.Actions(
+                oldform.Action('Delete', success='handle_delete_action'),
+                oldform.Action('Book', success='handle_book_action'))
     template = ViewPageTemplateFile("resourcecontainer.pt")
     delete_template = ViewPageTemplateFile('container_delete.pt')
 
     resourceType = None
 
     def __init__(self, context, request):
-        form.FormBase.__init__(self, context, request)
+        oldform.FormBase.__init__(self, context, request)
         self.resourceType = self.request.get('SEARCH_TYPE','|').split('|')[0]
         self.filter_widget = queryMultiAdapter((self.getResourceUtility(),
                                                 self.request), IFilterWidget)
@@ -193,9 +199,13 @@ class ResourceTypeFilter(BaseTypeFilter):
     """Resource Type Filter"""
 
 
-class ResourceSubTypeWidget(widget.SimpleInputWidget):
+class ResourceSubTypeWidget(widget.Widget):
 
-    __call__ = ViewPageTemplateFile('subtype_widget.pt')
+    template = ViewPageTemplateFile('subtype_widget.pt')
+
+    def __init__(self, field, request):
+        super(ResourceSubTypeWidget, self).__init__(request)
+        self.field = field
 
     def subTypes(self):
         util = queryUtility(IResourceFactoryUtility, name=self.utility, default=None)
@@ -216,36 +226,14 @@ class ResourceSubTypeWidget(widget.SimpleInputWidget):
         return newSubType or subType
 
 
-class ResourceView(form.DisplayFormBase):
-    """A Resource info view."""
-
-    __used_for__ = IResource
-
-    form_fields = form.Fields(IResource)
-
-    template = ViewPageTemplateFile("resource.pt")
-
-    def __init__(self, context, request):
-        self.context = context
-        self.request = request
+class LocationSubTypeWidget(ResourceSubTypeWidget):
+    label = _('Location Type')
+    utility = 'location'
 
 
-class LocationView(ResourceView):
-    """A location info view."""
-    __used_for__ = ILocation
-    form_fields = form.Fields(ILocation)
-
-
-class EquipmentView(ResourceView):
-    """A equipment info view."""
-    __used_for__ = IEquipment
-    form_fields = form.Fields(IEquipment)
-
-
-class ResourceEditView(BaseEditView):
-    """A view for editing resource info."""
-
-    __used_for__ = IBaseResourceContained
+class EquipmentSubTypeWidget(ResourceSubTypeWidget):
+    label = _('Equipment Type')
+    utility = 'equipment'
 
 
 class ResourceContainerFilterWidget(PersonFilterWidget):
@@ -317,4 +305,257 @@ class ResourceDemographicsFieldsAbsoluteURLAdapter(BrowserView):
 class ResourceDemographicsView(DemographicsView):
 
     title = _('Resource Demographics Container')
+
+
+##########  Base class of all resource views (uses self.resource_type) #########
+class ResourceFieldGenerator(object):
+
+    def makeRows(self, fields, cols=1):
+        rows = []
+        while fields:
+            rows.append(fields[:cols])
+            fields = fields[cols:]
+        return rows
+
+    def makeFieldSet(self, fieldset_id, legend, fields, cols=1):
+        result = {
+            'id': fieldset_id,
+            'legend': legend,
+            }
+        result['rows'] = self.makeRows(fields, cols)
+        return result
+
+    def fieldsets(self):
+        result = []
+        sources = [
+            (self.base_id, self.base_legend, list(self.getBaseFields())),
+            (self.demo_id, self.demo_legend, list(self.getDemoFields())),
+            ]
+        for fieldset_id, legend, fields in sources:
+            result.append(self.makeFieldSet(fieldset_id, legend, fields, 2))
+        return result
+
+    def getDemoFields(self):
+        fields = field.Fields()
+        dfs = IResourceDemographicsFields(ISchoolToolApplication(None))
+        for field_desc in dfs.filter_key(self.resource_type):
+            fields += field_desc.makeField()
+        return fields
+
+
+###############  Resource view (group determined by base class) #################
+class BaseResourceView(form.Form, ResourceFieldGenerator):
+
+    template = ViewPageTemplateFile('templates/resource_view.pt')
+    mode = DISPLAY_MODE
+    id = 'resource-view'
+
+    @property
+    def label(self):
+        return self.context.title
+
+    def update(self):
+        self.fields = self.getBaseFields()
+        self.fields += self.getDemoFields()
+        self.subforms = []
+        super(BaseResourceView, self).update()
+
+    def __call__(self):
+        self.update()
+        return self.render()
+
+    def updateWidgets(self):
+        super(BaseResourceView, self).updateWidgets()
+        for widget in self.widgets:
+            if not self.widgets[widget].value:
+                self.widgets[widget].mode = HIDDEN_MODE
+
+
+class ResourceView(BaseResourceView):
+    """A location info view."""
+
+    resource_type = 'resource'
+
+    def getBaseFields(self):
+        return field.Fields(IResource)
+
+
+class LocationView(BaseResourceView):
+    """A location info view."""
+
+    resource_type = 'location'
+
+    def getBaseFields(self):
+        return field.Fields(ILocation)
+
+
+class EquipmentView(BaseResourceView):
+    """A equipment info view."""
+
+    resource_type = 'equipment'
+
+    def getBaseFields(self):
+        return field.Fields(IEquipment)
+
+
+###############  Base classes of all resource add/edit views ################
+class BaseResourceAddView(form.AddForm, ResourceFieldGenerator):
+
+    id = 'resource-form'
+    template = ViewPageTemplateFile('templates/resource_form.pt')
+
+    def getBaseFields(self):
+        return field.Fields(IResource)
+
+    def groupViewURL(self):
+        return '%s/%s.html' % (absoluteURL(self.context, self.request),
+                               self.group_id)
+
+    def updateActions(self):
+        super(BaseResourceAddView, self).updateActions()
+        self.actions['add'].addClass('button-ok')
+        self.actions['cancel'].addClass('button-cancel')
+
+    @button.buttonAndHandler(_('Add'))
+    def handleAdd(self, action):
+        super(BaseResourceAddView, self).handleAdd.func(self, action)
+
+    @button.buttonAndHandler(_('Cancel'))
+    def handle_cancel_action(self, action):
+        self.request.response.redirect(self.groupViewURL())
+
+    def createAndAdd(self, data):
+        resource = self._factory()
+        resource.title = data.get('title')
+        chooser = INameChooser(self.context)
+        resource.__name__ = chooser.chooseName('', resource)
+        form.applyChanges(self, resource, data)
+        notify(ObjectCreatedEvent(resource))
+        self.context[resource.__name__] = resource
+        return resource
+
+    def update(self):
+        self.fields = self.getBaseFields()
+        self.fields += self.getDemoFields()
+        self.updateWidgets()
+        self.updateActions()
+        self.actions.execute()
+
+    def updateWidgets(self):
+        super(BaseResourceAddView, self).updateWidgets()
+
+    def nextURL(self):
+        return absoluteURL(self.context, self.request)
+
+
+class BaseResourceEditView(form.EditForm, ResourceFieldGenerator):
+
+    id = 'resource-form'
+    template = ViewPageTemplateFile('templates/resource_form.pt')
+
+    def update(self):
+        self.fields = self.getBaseFields()
+        self.fields += self.getDemoFields()
+        super(BaseResourceEditView, self).update()
+
+    @button.buttonAndHandler(_('Apply'))
+    def handle_apply_action(self, action):
+        data, errors = self.extractData()
+        if errors:
+            self.status = self.formErrorsMessage
+            return
+        self.applyChanges(data)
+        url = absoluteURL(self.context, self.request)
+        self.request.response.redirect(url)
+
+    @button.buttonAndHandler(_('Cancel'))
+    def handle_cancel_action(self, action):
+        url = absoluteURL(self.context, self.request)
+        self.request.response.redirect(url)
+
+    @property
+    def label(self):
+        return _(u'Change information for ${fullname}',
+                 mapping={'fullname': self.context.title})
+
+    def updateActions(self):
+        super(BaseResourceEditView, self).updateActions()
+        self.actions['apply'].addClass('button-ok')
+        self.actions['cancel'].addClass('button-cancel')
+
+
+###############  Resource add/edit views ################
+class BaseResourceForm(object):
+
+    resource_type = 'resource'
+    base_id = 'base-data'
+    base_legend = _('Resource identification')
+    demo_id = 'demo-data'
+    demo_legend = _('Resource demographics')
+
+    def getBaseFields(self):
+        return field.Fields(IResource).omit('type')
+
+
+class ResourceAddView(BaseResourceForm, BaseResourceAddView):
+
+    label = _('Add new resource')
+    _factory = Resource
+ 
+
+class ResourceEditView(BaseResourceForm, BaseResourceEditView):
+
+    label = _('Edit resource')
+
+
+###############  Location add/edit views ################
+class BaseLocationForm(object):
+
+    resource_type = 'location'
+    base_id = 'base-data'
+    base_legend = _('Location identification')
+    demo_id = 'demo-data'
+    demo_legend = _('Location demographics')
+
+    def getBaseFields(self):
+        fields = field.Fields(ILocation)
+        fields['type'].widgetFactory = LocationSubTypeWidget
+        return fields
+
+
+class LocationAddView(BaseLocationForm, BaseResourceAddView):
+
+    label = _('Add new location')
+    _factory = Location
+
+
+class LocationEditView(BaseLocationForm, BaseResourceEditView):
+
+    label = _('Edit location')
+
+
+###############  Equipment add/edit views ################
+class BaseEquipmentForm(object):
+
+    resource_type = 'equipment'
+    base_id = 'base-data'
+    base_legend = _('Equipment identification')
+    demo_id = 'demo-data'
+    demo_legend = _('Equipment demographics')
+
+    def getBaseFields(self):
+        fields = field.Fields(IEquipment)
+        fields['type'].widgetFactory = EquipmentSubTypeWidget
+        return fields
+
+
+class EquipmentAddView(BaseEquipmentForm, BaseResourceAddView):
+
+    label = _('Add new equipment')
+    _factory = Equipment
+
+
+class EquipmentEditView(BaseEquipmentForm, BaseResourceEditView):
+
+    label = _('Edit equipment')
 

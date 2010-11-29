@@ -127,6 +127,7 @@
       />
 
   <adapter factory=".resource.getResourceDemographics" />
+  <adapter factory=".resource.DemographicsFormAdapter" />
   <adapter factory=".resource.getResourceDemographicsFields" />
 
 

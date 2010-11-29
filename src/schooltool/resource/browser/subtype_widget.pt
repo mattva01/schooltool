@@ -1,7 +1,7 @@
 <input type="text"
        tal:attributes="id string:${view/name}.newSubType;
 		       name string:${view/name}.newSubType;
-		       value: view/_getFormValue"
+		       value: view/getInputValue"
        />
 
 <select tal:attributes="id string:${view/name};

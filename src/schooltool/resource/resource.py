@@ -28,6 +28,7 @@ from persistent.dict import PersistentDict
 
 from zope.component import adapts, adapter
 from zope.interface import implements, implementer
+from zope.interface import Interface
 from zope.annotation.interfaces import IAttributeAnnotatable
 from zope.container.contained import Contained
 from zope.container.btree import BTreeContainer
@@ -44,6 +45,7 @@ from schooltool.app.interfaces import ICalendarParentCrowd
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.basicperson.demographics import PersonDemographicsData
 from schooltool.basicperson.demographics import DemographicsFields
+from schooltool.basicperson.demographics import IDemographicsForm
 from schooltool.resource import interfaces
 from schooltool.securitypolicy.crowds import TeachersCrowd
 from schooltool.securitypolicy.crowds import ConfigurableCrowd, AggregateCrowd
@@ -190,4 +192,20 @@ def getResourceDemographics(resource):
     if demographics is None:
         rdc[resource.__name__] = demographics = ResourceDemographicsData()
     return demographics
+
+
+class DemographicsFormAdapter(object):
+    implements(IDemographicsForm)
+    adapts(interfaces.IResource)
+
+    def __init__(self, context):
+        self.__dict__['context'] = context
+        self.__dict__['demographics'] = interfaces.IResourceDemographics(
+            self.context)
+
+    def __setattr__(self, name, value):
+        self.demographics[name] = value
+
+    def __getattr__(self, name):
+        return self.demographics.get(name, None)
 
