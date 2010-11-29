@@ -1,7 +1,30 @@
 <?xml version="1.0"?>
 <configure xmlns="http://namespaces.zope.org/browser"
+    xmlns:z3c="http://namespaces.zope.org/z3c"
            xmlns:zope="http://namespaces.zope.org/zope"
            i18n_domain="schooltool">
+
+  <zope:class class=".resource.ResourceSubTypeWidget">
+    <require
+        permission="zope.Public"
+        interface="z3c.form.interfaces.ITextWidget"
+        />
+  </zope:class>
+
+  <zope:adapter
+      factory=".resource.ResourceSubTypeFieldWidget"
+      provides="z3c.form.interfaces.IFieldWidget"
+      for="schooltool.resource.interfaces.ResourceSubType
+           z3c.form.interfaces.IFormLayer"
+      />
+
+  <z3c:widgetTemplate
+      mode="input"
+      widget=".resource.IResourceSubTypeWidget"
+      layer="z3c.form.interfaces.IFormLayer"
+      template="subtype_widget.pt"
+      />
+
 
   <!-- Resource Traverser -->
   <zope:view
