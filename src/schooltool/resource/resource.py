@@ -183,7 +183,7 @@ class ResourceDemographicsData(PersonDemographicsData):
         return key in demographics_fields
 
 
-@adapter(interfaces.IResource)
+@adapter(interfaces.IBaseResource)
 @implementer(interfaces.IResourceDemographics)
 def getResourceDemographics(resource):
     app = ISchoolToolApplication(None)
@@ -196,7 +196,7 @@ def getResourceDemographics(resource):
 
 class DemographicsFormAdapter(object):
     implements(IDemographicsForm)
-    adapts(interfaces.IResource)
+    adapts(interfaces.IBaseResource)
 
     def __init__(self, context):
         self.__dict__['context'] = context
