@@ -22,12 +22,13 @@ group views.
 $Id$
 """
 
+import z3c.form
 from z3c.form import form, field, button, subform, validator, widget
-from z3c.form.interfaces import DISPLAY_MODE, HIDDEN_MODE, IActionHandler
+from z3c.form.interfaces import DISPLAY_MODE, HIDDEN_MODE, NO_VALUE, IActionHandler
 from zc.table import table
 
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
-from zope.component import adapts
+from zope.component import adapter, adapts
 from zope.component import getUtilitiesFor
 from zope.component import queryAdapter
 from zope.component import queryMultiAdapter
@@ -36,7 +37,7 @@ from zope.component import getMultiAdapter
 from zope.container.interfaces import INameChooser
 from zope.event import notify
 from zope.formlib import form as oldform
-from zope.interface import implements
+from zope.interface import implementer, implements, implementsOnly
 from zope.lifecycleevent import ObjectCreatedEvent
 from zope.publisher.browser import BrowserView
 from zope.publisher.interfaces.browser import IBrowserRequest
@@ -199,16 +200,28 @@ class ResourceTypeFilter(BaseTypeFilter):
     """Resource Type Filter"""
 
 
-class ResourceSubTypeWidget(widget.Widget):
+class IResourceSubTypeWidget(z3c.form.interfaces.ITextWidget):
+    pass
 
-    template = ViewPageTemplateFile('subtype_widget.pt')
 
-    def __init__(self, field, request):
+class ResourceSubTypeWidget(z3c.form.browser.text.TextWidget):
+    implementsOnly(IResourceSubTypeWidget)
+
+    utility = None
+
+    def __init__(self, request, utility=None):
         super(ResourceSubTypeWidget, self).__init__(request)
-        self.field = field
+        self.utility = utility
+
+    def freeTextValue(self):
+        if self.value in self.subTypes():
+            return ''
+        return self.value
 
     def subTypes(self):
-        util = queryUtility(IResourceFactoryUtility, name=self.utility, default=None)
+        util = queryUtility(IResourceFactoryUtility,
+                            name=self.utility,
+                            default=None)
         if IResourceSubTypes.providedBy(util):
             subtypes = util
         else:
@@ -220,20 +233,26 @@ class ResourceSubTypeWidget(widget.Widget):
     def hasInput(self):
         return self.request.get(self.name,None) != '' or self.request.get(self.name+'.newSubType',None)
 
-    def getInputValue(self):
-        subType = self.request.get(self.name)
-        newSubType = self.request.get(self.name+'.newSubType')
-        return newSubType or subType
+    def extract(self, default=NO_VALUE):
+        subType = self.request.get(self.name, default)
+        newSubType = self.request.get(self.name+'.newSubType', default)
+        if subType and subType != default:
+            return subType
+        return newSubType or default
 
 
-class LocationSubTypeWidget(ResourceSubTypeWidget):
-    label = _('Location Type')
-    utility = 'location'
-
-
-class EquipmentSubTypeWidget(ResourceSubTypeWidget):
-    label = _('Equipment Type')
-    utility = 'equipment'
+def ResourceSubTypeFieldWidget(field, request):
+    utility_name = 'resource'
+    if not field.interface is None:
+        # XXX: this is what we get for using named utilities
+        if issubclass(field.interface, IEquipment):
+            utility_name = 'equipment'
+        elif issubclass(field.interface, ILocation):
+            utility_name = 'location'
+    return widget.FieldWidget(
+        field,
+        ResourceSubTypeWidget(request, utility=utility_name)
+        )
 
 
 class ResourceContainerFilterWidget(PersonFilterWidget):
@@ -501,7 +520,7 @@ class ResourceAddView(BaseResourceForm, BaseResourceAddView):
 
     label = _('Add new resource')
     _factory = Resource
- 
+
 
 class ResourceEditView(BaseResourceForm, BaseResourceEditView):
 
@@ -519,7 +538,6 @@ class BaseLocationForm(object):
 
     def getBaseFields(self):
         fields = field.Fields(ILocation)
-        fields['type'].widgetFactory = LocationSubTypeWidget
         return fields
 
 
@@ -545,7 +563,6 @@ class BaseEquipmentForm(object):
 
     def getBaseFields(self):
         fields = field.Fields(IEquipment)
-        fields['type'].widgetFactory = EquipmentSubTypeWidget
         return fields
 
 

@@ -33,6 +33,10 @@ from schooltool.calendar.interfaces import ICalendar
 from schooltool.common import SchoolToolMessage as _
 
 
+class ResourceSubType(zope.schema.TextLine):
+    """Sub-type of the resource is a free-form text line."""
+
+
 class IBaseResource(Interface):
     """Resource."""
 
@@ -40,7 +44,7 @@ class IBaseResource(Interface):
         title=_("Title"),
         description=_("Title of the resource."))
 
-    type = zope.schema.TextLine(
+    type = ResourceSubType(
         title=_("Resource Type"),
         description=_("Type of resource"),
         required=True)
@@ -76,7 +80,7 @@ class IResource(IBaseResource):
 class ILocation(IBaseResource):
     """Location."""
 
-    type = zope.schema.TextLine(
+    type = ResourceSubType(
         title=_("Location Type"),
         description=_("Type of location (i.e. computer lab, class room, etc.)"),
         required=True)
@@ -91,7 +95,7 @@ class ILocation(IBaseResource):
 class IEquipment(IBaseResource):
     """Equipment."""
 
-    type = zope.schema.TextLine(
+    type = ResourceSubType(
         title=_("Equipment Type"),
         description=_("Type of equipment (i.e. camcorder, computer, etc.)"),
         required=True)
