@@ -29,7 +29,6 @@ We can create Location resources, which also have a capacity option
     >>> manager.getLink('New Location').click()
     >>> manager.getControl('Title').value = 'Room 101'
     >>> manager.getControl(name='form.widgets.type.newSubType').value = 'class room'
-    >>> #manager.getControl('Type').value = ['']
     >>> manager.getControl('Capacity').value = '10'
     >>> manager.getControl('Add').click()
     >>> manager.getLink('class room').click()
@@ -56,7 +55,7 @@ can choose an existing type from a drop down box.
 
     >>> manager.getLink('New Equipment').click()
     >>> manager.getControl('Title').value = 'Projector 2'
-    >>> manager.getControl('Type').value = ['Projector']
+    >>> manager.getControl(name='form.widgets.type').value = ['Projector']
     >>> manager.getControl('Manufacturer').value = 'Sony'
     >>> manager.getControl('Model').value = 'RS-1'
     >>> manager.getControl('Serial Number').value = 'ABC123-9876'

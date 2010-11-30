@@ -1,14 +1,5 @@
 <html metal:use-macro="view/@@standard_macros/page">
 
-  <metal:block metal:fill-slot="extrahead">
-    <link type="text/css" rel="stylesheet"
-          tal:attributes="href context/++resource++jstree/style.css" />
-    <script type="text/javascript"
-            tal:attributes="src context/++resource++jstree/jquery.tree.js"></script>
-    <script type="text/javascript"
-            tal:attributes="src context/++resource++jstree/script.js"></script>
-  </metal:block>
-
   <body>
     <metal:nothing metal:fill-slot="content-header" />
     <metal:block metal:fill-slot="body">
