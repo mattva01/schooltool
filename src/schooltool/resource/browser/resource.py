@@ -537,7 +537,8 @@ class BaseLocationForm(object):
     demo_legend = _('Location demographics')
 
     def getBaseFields(self):
-        fields = field.Fields(ILocation)
+        fields = field.Fields(ILocation).select('title', 'type', 'description',
+            'capacity', 'notes')
         return fields
 
 
@@ -562,7 +563,8 @@ class BaseEquipmentForm(object):
     demo_legend = _('Equipment demographics')
 
     def getBaseFields(self):
-        fields = field.Fields(IEquipment)
+        fields = field.Fields(IEquipment).select('title', 'type', 'description',
+            'manufacturer', 'model', 'serialNumber', 'purchaseDate', 'notes')
         return fields
 
 
