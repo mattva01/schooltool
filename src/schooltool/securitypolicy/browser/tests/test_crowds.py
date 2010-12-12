@@ -305,6 +305,7 @@ def doctest_described_interfaces():
 
         >>> printDiscriminators(missing)
         None, zope.ManageApplication
+        None, zope.ManageContent
         None, zope.ManageServices
         None, zope.View
         None, zope.dublincore.change
@@ -326,7 +327,7 @@ def doctest_described_interfaces():
 
         >>> print 'Total undescribed interface permissions: %d of %d (%d done)' % (
         ...     len(missing), len(crowds), len(actions))
-        Total undescribed interface permissions: 10 of 46 (36 done)
+        Total undescribed interface permissions: 11 of 47 (36 done)
 
     """
 

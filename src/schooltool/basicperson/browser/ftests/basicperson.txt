@@ -147,8 +147,7 @@ Now let's create another teacher, Bob.
     button-neutral
     button-neutral
 
-Now, when we create a student, we will have two persons available to
-choose as an advisor.  We will choose John.
+Now, create a student.
 
     >>> manager.getLink('Manage').click()
     >>> manager.getLink('Persons').click()
@@ -158,10 +157,41 @@ choose as an advisor.  We will choose John.
     >>> manager.getControl('Gender').value = ['male']
     >>> manager.getControl('Birth date').value = '1980-01-01'
 
+Username cannot be empty:
+
+    >>> manager.getControl('Add').click()
+    >>> analyze.printQuery("//ul[@class='errors']", manager.contents)
+    <ul class="errors"><li>
+      Username:
+      <div class="error">Required input is missing.</div>
+      </li>
+    </ul>
+
+Username cannot contain weird characters:
+
+    >>> manager.getControl('Username').value = "@student"
+    >>> manager.getControl('Add').click()
+    >>> analyze.printQuery("//ul[@class='errors']", manager.contents)
+    <ul class="errors"><li>
+      Username:
+      <div class="error">Names cannot begin with '+' or '@' or contain '/'</div>
+      </li>
+    </ul>
+
     >>> manager.getControl('Username').value = "student"
+
+And passwords have to match:
+
+    >>> manager.getControl('Password').value = "pwd"
+    >>> manager.getControl('Confirm').value = "pow"
+    >>> manager.getControl('Add').click()
+    >>> analyze.printQuery("//div[@class='error']", manager.contents)
+    <div class="error">Passwords do not match</div>
+
     >>> manager.getControl('Password').value = "pwd"
     >>> manager.getControl('Confirm').value = "pwd"
     >>> manager.getControl('Add').click()
+    >>> analyze.printQuery("//div[@class='error']", manager.contents)
 
 By the way - CVS import views should still be working even when we are
 using this kind of person:

@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-09-30 19:38+0300\n"
-"PO-Revision-Date: 2009-10-12 11:39+0000\n"
-"Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
+"POT-Creation-Date: 2010-11-22 16:40+0200\n"
+"PO-Revision-Date: 2010-10-04 14:43+0000\n"
+"Last-Translator: Cheng-Chia Tseng <Unknown>\n"
 "Language-Team: Traditional Chinese <zh_TW@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-09-10 04:39+0000\n"
+"X-Launchpad-Export-Date: 2010-10-05 04:50+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: /src/schooltool/app/app.py:197
@@ -35,9 +35,9 @@ msgid "1 person"
 msgstr "單人"
 
 #. Default: ""
-#: /src/schooltool/app/browser/__init__.py:263
+#: /src/schooltool/app/browser/__init__.py:280
 msgid "${number} persons"
-msgstr "${number}人"
+msgstr "${number} 人"
 
 #: /src/schooltool/app/browser/app.py:226
 msgid "Username or password is incorrect"
@@ -224,15 +224,15 @@ msgstr "上週"
 
 #: /src/schooltool/app/browser/cal.py:927
 msgid "Go to next week"
-msgstr ""
+msgstr "前往上週"
 
 #: /src/schooltool/app/browser/cal.py:928
 msgid "Go to current week"
-msgstr ""
+msgstr "前往本週"
 
 #: /src/schooltool/app/browser/cal.py:929
 msgid "Go to previous week"
-msgstr ""
+msgstr "前往上週"
 
 #. Default: ""
 #: /src/schooltool/app/browser/cal.py:950
@@ -253,15 +253,15 @@ msgstr "上個月"
 
 #: /src/schooltool/app/browser/cal.py:1168
 msgid "Go to next month"
-msgstr ""
+msgstr "前往下個月"
 
 #: /src/schooltool/app/browser/cal.py:1169
 msgid "Go to current month"
-msgstr ""
+msgstr "前往這個月"
 
 #: /src/schooltool/app/browser/cal.py:1170
 msgid "Go to previous month"
-msgstr ""
+msgstr "前往上個月"
 
 #. Default: ""
 #: /src/schooltool/app/browser/cal.py:1178
@@ -2431,12 +2431,12 @@ msgstr ""
 msgid "Passwords do not match"
 msgstr ""
 
-#: /src/schooltool/basicperson/browser/person.py:149
-msgid "Add new person"
-msgstr ""
-
 #: /src/schooltool/basicperson/browser/person.py:152
 msgid "This username is already in use!"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/person.py:263
+msgid "Add new person"
 msgstr ""
 
 #: /src/schooltool/basicperson/browser/person.py:283
@@ -2447,7 +2447,16 @@ msgstr ""
 msgid "Add multiple persons"
 msgstr ""
 
-#: /src/schooltool/basicperson/browser/person.py:304
+#: /src/schooltool/basicperson/browser/person.py:357
+msgid "Done"
+msgstr ""
+
+#. Default: ""
+#: /src/schooltool/basicperson/browser/person.py:402
+msgid "Change information for ${fullname}"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/person.py:472
 msgid "Current Advisors"
 msgstr ""
 
@@ -2471,15 +2480,6 @@ msgstr ""
 #. Default: ""
 #: /src/schooltool/basicperson/browser/person.py:333
 msgid "Advisees of ${person}"
-msgstr ""
-
-#: /src/schooltool/basicperson/browser/person.py:357
-msgid "Done"
-msgstr ""
-
-#. Default: ""
-#: /src/schooltool/basicperson/browser/person.py:402
-msgid "Change information for ${fullname}"
 msgstr ""
 
 #: /src/schooltool/basicperson/browser/templates/demographics-view.pt:4
@@ -5197,18 +5197,18 @@ msgstr ""
 msgid "Resource calendars are visible to the general public."
 msgstr ""
 
-#: /src/schooltool/resource/security.zcml:50
+#: /src/schooltool/resource/security.zcml:53
+msgid "Reservations"
+msgstr ""
+
+#: /src/schooltool/resource/security.zcml:53
 msgid ""
 "Resources are locations or objects within a school.                    "
 "SchoolTool's calendar can function as a reservation                    and "
 "tracking system for resources."
 msgstr ""
 
-#: /src/schooltool/resource/security.zcml:53
-msgid "Reservations"
-msgstr ""
-
-#: /src/schooltool/resource/security.zcml:57
+#: /src/schooltool/resource/security.zcml:60
 msgid "List/Search resources"
 msgstr ""
 

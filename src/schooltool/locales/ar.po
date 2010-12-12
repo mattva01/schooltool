@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-09-30 19:38+0300\n"
-"PO-Revision-Date: 2010-09-10 04:49+0000\n"
-"Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
+"POT-Creation-Date: 2010-11-22 16:40+0200\n"
+"PO-Revision-Date: 2010-10-28 07:55+0000\n"
+"Last-Translator: drsaudi <mon7b6@gmail.com>\n"
 "Language-Team: Arabic <ar@li.org>\n"
 "Language: ar\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-09-11 04:43+0000\n"
+"X-Launchpad-Export-Date: 2010-10-29 05:17+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: /src/schooltool/app/app.py:197
@@ -951,7 +951,7 @@ msgstr "الموقع"
 
 #: /src/schooltool/app/browser/templates/about.pt:28
 msgid "Launchpad project page"
-msgstr "صفحة المشروعلى لانش باد"
+msgstr "صفحة المشروع على Launchpad"
 
 #: /src/schooltool/app/browser/templates/about.pt:29
 msgid "Mailing list"
@@ -963,7 +963,7 @@ msgstr "قناة الآي ار سي \"IRC\": #schooltool على freenode.net"
 
 #: /src/schooltool/app/browser/templates/about.pt:35
 msgid "Founder and funder:"
-msgstr "المنشأ والممول:"
+msgstr "المنشىء والممول:"
 
 #: /src/schooltool/app/browser/templates/about.pt:38
 msgid "Project Manager:"
@@ -983,7 +983,7 @@ msgstr "المتبرعون"
 
 #: /src/schooltool/app/browser/templates/application_preferences.pt:4
 msgid "Edit site preferences"
-msgstr "تعدل خيارات الموقع"
+msgstr "تعديل خيارات الموقع"
 
 #: /src/schooltool/app/browser/templates/application_preferences.pt:13
 msgid "Change site preferences"
@@ -1462,7 +1462,7 @@ msgstr "مجموعات"
 #: /src/schooltool/dashboard/school.pt:4 /src/schooltool/level/browser.zcml:7
 #: /src/schooltool/level/security.zcml:7
 msgid "Levels"
-msgstr ""
+msgstr "المستويات"
 
 #: /src/schooltool/app/browser/templates/login.pt:8
 msgid "Your session has expired."
@@ -2461,13 +2461,13 @@ msgstr "أكد كلمة السر"
 msgid "Passwords do not match"
 msgstr "كلمات المرور لم تتوافق"
 
-#: /src/schooltool/basicperson/browser/person.py:149
-msgid "Add new person"
-msgstr "إضافة شخص جديد"
-
 #: /src/schooltool/basicperson/browser/person.py:152
 msgid "This username is already in use!"
 msgstr "اسم المستخدم هذا مستخدم من قبل!"
+
+#: /src/schooltool/basicperson/browser/person.py:263
+msgid "Add new person"
+msgstr "إضافة شخص جديد"
 
 #: /src/schooltool/basicperson/browser/person.py:283
 msgid "Usernames"
@@ -2477,7 +2477,16 @@ msgstr ""
 msgid "Add multiple persons"
 msgstr ""
 
-#: /src/schooltool/basicperson/browser/person.py:304
+#: /src/schooltool/basicperson/browser/person.py:357
+msgid "Done"
+msgstr ""
+
+#. Default: ""
+#: /src/schooltool/basicperson/browser/person.py:402
+msgid "Change information for ${fullname}"
+msgstr "تغيير المعلومات لـ ${fullname}"
+
+#: /src/schooltool/basicperson/browser/person.py:472
 msgid "Current Advisors"
 msgstr ""
 
@@ -2502,15 +2511,6 @@ msgstr ""
 #: /src/schooltool/basicperson/browser/person.py:333
 msgid "Advisees of ${person}"
 msgstr ""
-
-#: /src/schooltool/basicperson/browser/person.py:357
-msgid "Done"
-msgstr ""
-
-#. Default: ""
-#: /src/schooltool/basicperson/browser/person.py:402
-msgid "Change information for ${fullname}"
-msgstr "تغيير المعلومات لـ ${fullname}"
 
 #: /src/schooltool/basicperson/browser/templates/demographics-view.pt:4
 #: /src/schooltool/basicperson/browser/templates/demographics-view.pt:7
@@ -5240,18 +5240,18 @@ msgstr ""
 msgid "Resource calendars are visible to the general public."
 msgstr ""
 
-#: /src/schooltool/resource/security.zcml:50
+#: /src/schooltool/resource/security.zcml:53
+msgid "Reservations"
+msgstr ""
+
+#: /src/schooltool/resource/security.zcml:53
 msgid ""
 "Resources are locations or objects within a school.                    "
 "SchoolTool's calendar can function as a reservation                    and "
 "tracking system for resources."
 msgstr ""
 
-#: /src/schooltool/resource/security.zcml:53
-msgid "Reservations"
-msgstr ""
-
-#: /src/schooltool/resource/security.zcml:57
+#: /src/schooltool/resource/security.zcml:60
 msgid "List/Search resources"
 msgstr ""
 

@@ -379,14 +379,14 @@ def doctest_ViewPrefences():
         >>> provideAdapter(getApplicationPreferences,
         ...                (ISchoolToolApplication,), IApplicationPreferences)
         >>> aprefs = IApplicationPreferences(app)
-        >>> aprefs.timezone = 'Africa/Lusaka'
+        >>> aprefs.timezone = 'Africa/Johannesburg'
         >>> aprefs.dateformat = '%m/%d/%y'
         >>> aprefs.timeformat = '%I:%M %p'
         >>> aprefs.weekstart = calendar.SUNDAY
         >>> request = TestRequest()
         >>> prefs = ViewPreferences(request)
         >>> prefs.timezone.tzname(datetime.utcnow())
-        'CAT'
+        'SAST'
         >>> prefs.timeformat
         '%I:%M %p'
         >>> prefs.dateformat

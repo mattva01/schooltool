@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-09-30 19:38+0300\n"
-"PO-Revision-Date: 2010-09-10 05:13+0000\n"
+"POT-Creation-Date: 2010-11-22 16:40+0200\n"
+"PO-Revision-Date: 2010-11-06 22:08+0000\n"
 "Last-Translator: gorkaazk <gorkaazkarate@euskalerria.org>\n"
 "Language-Team: Basque <eu@li.org>\n"
 "Language: eu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-09-11 04:43+0000\n"
+"X-Launchpad-Export-Date: 2010-11-07 04:39+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -1166,7 +1166,7 @@ msgstr "Orrialdea ${page_number}"
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:27
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:45
 msgid "R"
-msgstr ""
+msgstr "Esk."
 
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:26
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:27
@@ -1206,14 +1206,14 @@ msgstr "Ez dago bat  ere."
 #: /src/schooltool/app/browser/templates/event_booking.pt:57
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:58
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:67
-#: /src/schooltool/skin/templates/view_macros.pt:161
-#: /src/schooltool/skin/templates/view_macros.pt:167
-#: /src/schooltool/skin/templates/view_macros.pt:174
-#: /src/schooltool/skin/templates/view_macros.pt:180
-#: /src/schooltool/skin/templates/view_macros.pt:187
+#: /src/schooltool/skin/templates/view_macros.pt:162
+#: /src/schooltool/skin/templates/view_macros.pt:168
+#: /src/schooltool/skin/templates/view_macros.pt:175
+#: /src/schooltool/skin/templates/view_macros.pt:181
+#: /src/schooltool/skin/templates/view_macros.pt:188
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:60
 msgid "A"
-msgstr ""
+msgstr "Gain."
 
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:58
 #: /src/schooltool/app/browser/templates/event_booking.pt:63
@@ -1514,7 +1514,7 @@ msgstr "Pasahitza"
 
 #: /src/schooltool/app/browser/templates/login.pt:57
 msgid "L"
-msgstr ""
+msgstr "Ezk."
 
 #: /src/schooltool/app/browser/templates/login.pt:57
 msgid "Log in"
@@ -1996,6 +1996,10 @@ msgid ""
 "SchoolTool at your school, you should create an event for the necessary time "
 "and check the <code>Book Resources</code> checkbox at the bottom of the page."
 msgstr ""
+"Baliabide bat erreserbatu nahi baduzu, gela bat, proiektore bat-edo, eta "
+"baliabide horri SchoolTool honen bidez jarraiki egiten bazaio zuen eskolak, "
+"gertaera bat sortu egin beharko duzu behar den denborarako eta egiaztatu "
+"<code>Baliabideen liburua</code>aren bere tokian, orrialdearen azpian."
 
 #: /src/schooltool/app/help/event_add.pt:16
 #: /src/schooltool/app/help/event_edit.pt:14
@@ -2004,6 +2008,9 @@ msgid ""
 "the event's start time in 24-hour or \"military\" time, and the date is "
 "displayed in year-month-day format."
 msgstr ""
+"Inprimakiak ez ditu zure denbora eta data hautaketak kontuan hartuko. Sartu "
+"beharko duzu gertakizunaren hasiera ordua 24-ordu moldearekin edo denbora "
+"\"militarra\" eta data erakutsiko da urtea-hilabetea-eguna itxurarekin."
 
 #: /src/schooltool/app/help/event_add.pt:19
 #: /src/schooltool/app/help/event_edit.pt:17
@@ -2029,6 +2036,9 @@ msgid ""
 "An \"all day\" event does not show up as a 24 hour event. It indicates that "
 "the day as a whole has some significance, like a birthday or holiday."
 msgstr ""
+"\"Egun osoa\" motako gertakizunak ez dira 24 orduko gertakizunak bezala "
+"erakutsiko. \"Egun osoa\" adierazpenak, hemen, egunak baduela zerbait "
+"esanguratsua iradokitzen du, urtebetetze bat esate baterako."
 
 #: /src/schooltool/app/help/event_add.pt:32
 #: /src/schooltool/app/help/event_edit.pt:30
@@ -2172,31 +2182,31 @@ msgstr ""
 
 #: /src/schooltool/app/interfaces.py:44
 msgid "Form input is not a file object"
-msgstr ""
+msgstr "Inprimaki sorburua ez da fitxategi helburua"
 
 #: /src/schooltool/app/interfaces.py:45 /src/schooltool/app/interfaces.py:49
 msgid "Invalid integer data"
-msgstr ""
+msgstr "Osoko datuak baliogabeak"
 
 #: /src/schooltool/app/interfaces.py:46
 msgid "Invalid text data"
-msgstr ""
+msgstr "Testu datuak baliogabeak"
 
 #: /src/schooltool/app/interfaces.py:47
 msgid "Invalid textual data"
-msgstr ""
+msgstr "Testuko datuak baliogabeak"
 
 #: /src/schooltool/app/interfaces.py:48
 msgid "Invalid unicode data"
-msgstr ""
+msgstr "Uncode datuak baliogabeak"
 
 #: /src/schooltool/app/interfaces.py:50
 msgid "Invalid floating point data"
-msgstr ""
+msgstr "Floating point datuak baliogabeak"
 
 #: /src/schooltool/app/interfaces.py:51
 msgid "Invalid datetime data"
-msgstr ""
+msgstr "Eguna-ordua datuak baliogabeak"
 
 #: /src/schooltool/app/interfaces.py:148 /src/schooltool/app/interfaces.py:159
 msgid ""
@@ -2205,20 +2215,25 @@ msgid ""
 "the\n"
 "            bottom of all pages and in the page title."
 msgstr ""
+"Eskola edo erakundearen izena martxan dabil\n"
+"            zerbitzari hau.  Hau egutegi publikoan erakutsi egingo da\n"
+"            orrialde guztien azpiko aldean eta orrialdearen goiburuan."
 
 #: /src/schooltool/app/interfaces.py:164
 msgid "Front Page Calendar"
-msgstr ""
+msgstr "Hasiera orriko egutegia"
 
 #: /src/schooltool/app/interfaces.py:165
 msgid ""
 "Display site-wide calendar as the front page of the\n"
 "            site."
 msgstr ""
+"Erakutsi gune osoan zehar egutegia hasiera orria bezala\n"
+"            gunean."
 
 #: /src/schooltool/app/interfaces.py:182
 msgid "Show timetables"
-msgstr ""
+msgstr "Erakutsi ordutegiak"
 
 #: /src/schooltool/app/interfaces.py:183
 msgid ""
@@ -2228,6 +2243,10 @@ msgid ""
 "            owner is shown in the calendar views.\n"
 "            "
 msgstr ""
+"\n"
+"            Aukera bat kontrolatzeko ea egutegi honen ordutegiaren\n"
+"            jabea nor den erakutsi den egutegiaren erakusketetan.\n"
+"            "
 
 #: /src/schooltool/app/main.py:96
 msgid ""
@@ -2266,11 +2285,11 @@ msgstr ""
 #: /src/schooltool/app/main.py:536 /src/schooltool/app/main.py:580
 #: /src/schooltool/app/main.py:583
 msgid "%s: %s"
-msgstr ""
+msgstr "%s: %s"
 
 #: /src/schooltool/app/main.py:537
 msgid "Run %s -h for help."
-msgstr ""
+msgstr "Idatz ezazu %s -h laguntza lortzeko (help)."
 
 #: /src/schooltool/app/main.py:549
 msgid "%s: daemon mode not supported on your operating system."
@@ -2384,12 +2403,12 @@ msgstr ""
 msgid "Export Persons as XML"
 msgstr ""
 
-#: /src/schooltool/basicperson/browser/configure.zcml:33
+#: /src/schooltool/basicperson/browser/configure.zcml:40
 msgid "Export"
-msgstr ""
+msgstr "Esportatu"
 
-#: /src/schooltool/basicperson/browser/configure.zcml:42
-#: /src/schooltool/basicperson/security.py:65
+#: /src/schooltool/basicperson/browser/configure.zcml:49
+#: /src/schooltool/basicperson/security.py:38
 msgid "Advisors"
 msgstr ""
 
@@ -2483,13 +2502,13 @@ msgstr ""
 msgid "Change information for ${field_title}"
 msgstr ""
 
-#: /src/schooltool/basicperson/browser/person.py:49
+#: /src/schooltool/basicperson/browser/person.py:51
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_add.pt:61
 msgid "Group"
-msgstr ""
+msgstr "Taldea"
 
-#: /src/schooltool/basicperson/browser/person.py:54
-#: /src/schooltool/demographics/interfaces.py:209
+#: /src/schooltool/basicperson/browser/person.py:56
+#: /src/schooltool/demographics/interfaces.py:212
 msgid "Advisor"
 msgstr ""
 
@@ -2502,23 +2521,32 @@ msgstr "Berrezarri pasahitza"
 msgid "Passwords do not match"
 msgstr "Pasahitzak ez datoz bat"
 
-#: /src/schooltool/basicperson/browser/person.py:149
-msgid "Add new person"
-msgstr ""
-
 #: /src/schooltool/basicperson/browser/person.py:152
 msgid "This username is already in use!"
 msgstr ""
 
+#: /src/schooltool/basicperson/browser/person.py:263
+msgid "Add new person"
+msgstr ""
+
 #: /src/schooltool/basicperson/browser/person.py:283
 msgid "Usernames"
-msgstr ""
+msgstr "Erabiltzaile-izenak"
 
 #: /src/schooltool/basicperson/browser/person.py:300
 msgid "Add multiple persons"
 msgstr ""
 
-#: /src/schooltool/basicperson/browser/person.py:304
+#: /src/schooltool/basicperson/browser/person.py:357
+msgid "Done"
+msgstr "Eginda"
+
+#. Default: ""
+#: /src/schooltool/basicperson/browser/person.py:402
+msgid "Change information for ${fullname}"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/person.py:472
 msgid "Current Advisors"
 msgstr ""
 
@@ -2542,15 +2570,6 @@ msgstr ""
 #. Default: ""
 #: /src/schooltool/basicperson/browser/person.py:333
 msgid "Advisees of ${person}"
-msgstr ""
-
-#: /src/schooltool/basicperson/browser/person.py:357
-msgid "Done"
-msgstr ""
-
-#. Default: ""
-#: /src/schooltool/basicperson/browser/person.py:402
-msgid "Change information for ${fullname}"
 msgstr ""
 
 #: /src/schooltool/basicperson/browser/templates/demographics-view.pt:4
@@ -2606,14 +2625,14 @@ msgstr ""
 #: /src/schooltool/contact/interfaces.py:40
 #: /src/schooltool/demographics/interfaces.py:44
 msgid "Prefix"
-msgstr ""
+msgstr "Aurrizkia"
 
 #: /src/schooltool/basicperson/interfaces.py:43
 #: /src/schooltool/contact/browser/templates/filter.pt:5
 #: /src/schooltool/contact/interfaces.py:42
 #: /src/schooltool/demographics/interfaces.py:50
 msgid "First name"
-msgstr ""
+msgstr "Izena"
 
 #: /src/schooltool/basicperson/interfaces.py:48
 #: /src/schooltool/contact/interfaces.py:44
@@ -2626,7 +2645,7 @@ msgstr ""
 #: /src/schooltool/contact/interfaces.py:46
 #: /src/schooltool/demographics/interfaces.py:60
 msgid "Last name"
-msgstr ""
+msgstr "Deitura"
 
 #: /src/schooltool/basicperson/interfaces.py:58
 #: /src/schooltool/contact/interfaces.py:48
@@ -2668,9 +2687,9 @@ msgid "The title of this Field Description"
 msgstr ""
 
 #: /src/schooltool/basicperson/interfaces.py:125
-#: /src/schooltool/demographics/interfaces.py:194
+#: /src/schooltool/demographics/interfaces.py:197
 msgid "ID"
-msgstr ""
+msgstr "ID-a"
 
 #: /src/schooltool/basicperson/interfaces.py:126
 msgid "Unique ID of this Field Description"
@@ -5268,18 +5287,18 @@ msgstr ""
 msgid "Resource calendars are visible to the general public."
 msgstr ""
 
-#: /src/schooltool/resource/security.zcml:50
+#: /src/schooltool/resource/security.zcml:53
+msgid "Reservations"
+msgstr ""
+
+#: /src/schooltool/resource/security.zcml:53
 msgid ""
 "Resources are locations or objects within a school.                    "
 "SchoolTool's calendar can function as a reservation                    and "
 "tracking system for resources."
 msgstr ""
 
-#: /src/schooltool/resource/security.zcml:53
-msgid "Reservations"
-msgstr ""
-
-#: /src/schooltool/resource/security.zcml:57
+#: /src/schooltool/resource/security.zcml:60
 msgid "List/Search resources"
 msgstr ""
 
