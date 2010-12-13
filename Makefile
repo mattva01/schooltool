@@ -51,9 +51,10 @@ clean:
 	find . -name 'LC_MESSAGES' -exec rmdir -p --ignore-fail-on-non-empty {} +
 
 .PHONY: realclean
-realclean: clean
+realclean:
 	rm -rf eggs
 	rm -rf instance
+	$(MAKE) clean
 
 # Tests
 
