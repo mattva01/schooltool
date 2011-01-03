@@ -1,0 +1,30 @@
+SchoolTool Documentation
+========================
+
+Contents:
+
+.. toctree::
+   :maxdepth: 2
+
+   calendar/README
+   app/booking
+   app/security
+   securitypolicy/README
+   securitypolicy/security_descriptions
+   term/README
+   demographics/README
+   relationship/README
+   level/tests/level-integration
+   help/README
+   traverser/README
+   testing/README
+   devmode/devmode
+   sampledata/README
+
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
