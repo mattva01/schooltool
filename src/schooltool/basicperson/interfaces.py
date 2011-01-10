@@ -21,7 +21,7 @@ SchoolTool basic person interfaces.
 """
 from zope.container.interfaces import IContainer
 from zope.container.interfaces import IOrderedContainer
-from zope.schema import Date, Choice, TextLine, Bool, List
+from zope.schema import Date, Choice, TextLine, Bool, List, Set
 from zope.configuration.fields import PythonIdentifier
 from zope.interface import Interface, Attribute
 
@@ -133,9 +133,14 @@ class IFieldDescription(Interface):
         title = _(u"Required"),
         description = _(u"Whether this Field is required or not"))
 
-    limit_keys = List(
+    limit_keys = Set(
         title = _(u"Limit keys"),
         description = _(u"An optional list of limit keys for this field"),
+        value_type=Choice(
+            title=_(u"Limit key"),
+            values=[_('students'), _('teachers'), _('administrators')],
+            required=True,
+            ),
         required=False)
 
 
