@@ -81,6 +81,15 @@
      provides="zope.schema.interfaces.IVocabularyFactory"
      name="schooltool.basicperson.advisor_vocabulary" />
 
+  <utility
+     factory=".vocabularies.LimitKeyVocabFactory"
+     provides="zope.schema.interfaces.IVocabularyFactory"
+     name="schooltool.basicperson.limit_keys_vocabulary" />
+
+  <adapter factory=".vocabularies.getLimitKeyVocabularyForFieldDescription" />
+  <adapter factory=".vocabularies.getLimitKeyVocabularyForPersonFields" />
+  <adapter factory=".vocabularies.getLimitKeyVocabularyForResourceFields" />
+
   <include package="schooltool.basicperson.browser" />
 
   <adapter factory=".demographics.getPersonDemographics" />

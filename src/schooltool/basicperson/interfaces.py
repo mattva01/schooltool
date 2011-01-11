@@ -138,7 +138,7 @@ class IFieldDescription(Interface):
         description = _(u"An optional list of limit keys for this field"),
         value_type=Choice(
             title=_(u"Limit key"),
-            values=[_('students'), _('teachers'), _('administrators')],
+            source="schooltool.basicperson.limit_keys_vocabulary",
             required=True,
             ),
         required=False)
