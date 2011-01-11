@@ -88,7 +88,6 @@
 
   <adapter factory=".vocabularies.getLimitKeyVocabularyForFieldDescription" />
   <adapter factory=".vocabularies.getLimitKeyVocabularyForPersonFields" />
-  <adapter factory=".vocabularies.getLimitKeyVocabularyForResourceFields" />
 
   <include package="schooltool.basicperson.browser" />
 

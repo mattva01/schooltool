@@ -149,3 +149,10 @@ class IEnumFieldDescription(IFieldDescription):
 
     items = List(
         title = _('List of values'))
+
+
+class IFieldFilterVocabulary(IVocabularyTokenized):
+    """Marker interface for vocabularies that give keys that are used
+    to filder demographics fields for the context.
+    """
+

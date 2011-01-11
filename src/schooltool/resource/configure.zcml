@@ -130,6 +130,7 @@
   <adapter factory=".resource.DemographicsFormAdapter" />
   <adapter factory=".resource.getResourceDemographicsFields" />
 
+  <adapter factory=".resource.getLimitKeyVocabularyForResourceFields" />
 
   <class class=".booking.ResourceBookingCalendar">
     <require permission="schooltool.view"

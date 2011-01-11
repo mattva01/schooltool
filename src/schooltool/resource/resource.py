@@ -40,12 +40,14 @@ from zope.schema.vocabulary import SimpleTerm
 
 from schooltool.app.app import Asset
 from schooltool.app.app import InitBase, StartUpBase
+from schooltool.app.utils import vocabulary
 from schooltool.app.security import LeaderCrowd
 from schooltool.app.interfaces import ICalendarParentCrowd
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.basicperson.demographics import PersonDemographicsData
 from schooltool.basicperson.demographics import DemographicsFields
 from schooltool.basicperson.demographics import IDemographicsForm
+from schooltool.basicperson.interfaces import IFieldFilterVocabulary
 from schooltool.resource import interfaces
 from schooltool.securitypolicy.crowds import TeachersCrowd
 from schooltool.securitypolicy.crowds import ConfigurableCrowd, AggregateCrowd
@@ -208,4 +210,14 @@ class DemographicsFormAdapter(object):
 
     def __getattr__(self, name):
         return self.demographics.get(name, None)
+
+
+@adapter(interfaces.IResourceDemographicsFields)
+@implementer(IFieldFilterVocabulary)
+def getLimitKeyVocabularyForResourceFields(resource_field_description_container):
+     return vocabulary([
+        ('resource', _('Resource')),
+        ('location', _('Location')),
+        ('equipment', _('Equipment')),
+        ])
 
