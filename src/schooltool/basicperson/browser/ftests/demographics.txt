@@ -147,7 +147,7 @@ Let's try making some fields required, and maybe even changing them:
     >>> manager.getLink('Demographics').click()
     >>> manager.getLink('ethnicity').click()
     >>> manager.getLink('Edit').click()
-    >>> print manager.getControl('Limit keys').value
+    >>> print manager.getControl(name='form.widgets.limit_keys:list').value
     []
     >>> print manager.getControl('List of values').value
     American Indian or Alaska Native
@@ -159,7 +159,7 @@ Let's try making some fields required, and maybe even changing them:
 Let's make the field required, and add Martians to it.  Also, we'll put a limit
 group into the empty list so that we can test that it is saved:
 
-    >>> manager.getControl('Limit keys').value = ['students', 'teachers']
+    >>> manager.getControl(name='form.widgets.limit_keys:list').value = ['students', 'teachers']
     >>> values = manager.getControl('List of values').value.splitlines()
     >>> manager.getControl('List of values').value = "\n".join(values + ['Martians'])
     >>> manager.getControl('yes').click()
@@ -171,7 +171,7 @@ Calling the edit form back up, we see that our changes took:
     >>> manager.getLink('Demographics').click()
     >>> manager.getLink('ethnicity').click()
     >>> manager.getLink('Edit').click()
-    >>> print manager.getControl('Limit keys').value
+    >>> print manager.getControl(name='form.widgets.limit_keys:list').value
     ['students', 'teachers']
     >>> print manager.getControl('List of values').value
     American Indian or Alaska Native

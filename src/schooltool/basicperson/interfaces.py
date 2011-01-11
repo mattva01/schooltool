@@ -133,7 +133,7 @@ class IFieldDescription(Interface):
         title = _(u"Required"),
         description = _(u"Whether this Field is required or not"))
 
-    limit_keys = Set(
+    limit_keys = List(
         title = _(u"Limit keys"),
         description = _(u"An optional list of limit keys for this field"),
         value_type=Choice(

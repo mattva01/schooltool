@@ -29,6 +29,7 @@ from zope.traversing.browser.absoluteurl import absoluteURL
 from zope.container.interfaces import INameChooser
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 
+from z3c.form.browser.checkbox import CheckBoxFieldWidget
 from z3c.form.browser.textarea import TextAreaWidget
 from z3c.form.interfaces import ITextAreaWidget
 from z3c.form import form, field, button
@@ -155,6 +156,7 @@ class FieldDescriptionAddView(form.AddForm):
     form.extends(form.AddForm)
     template = ViewPageTemplateFile('templates/person_add.pt')
     fields = field.Fields(IFieldDescription)
+    fields['limit_keys'].widgetFactory = CheckBoxFieldWidget
 
     def updateActions(self):
         super(FieldDescriptionAddView, self).updateActions()
@@ -214,6 +216,7 @@ class EnumFieldDescriptionAddView(FieldDescriptionAddView):
 
     fields = field.Fields(IEnumFieldDescription)
     fields['items'].widgetFactory = CustomEnumFieldTextWidget
+    fields['limit_keys'].widgetFactory = CheckBoxFieldWidget
 
     def create(self, data):
         fd = EnumFieldDescription(data['title'],
@@ -229,6 +232,7 @@ class FieldDescriptionEditView(form.EditForm):
     form.extends(form.EditForm)
     template = ViewPageTemplateFile('templates/person_add.pt')
     fields = field.Fields(IFieldDescription).omit('name')
+    fields['limit_keys'].widgetFactory = CheckBoxFieldWidget
 
     @button.buttonAndHandler(_("Cancel"))
     def handle_cancel_action(self, action):
@@ -250,6 +254,7 @@ class EnumFieldDescriptionEditView(FieldDescriptionEditView):
 
     fields = field.Fields(IEnumFieldDescription).omit('name')
     fields['items'].widgetFactory = CustomEnumFieldTextWidget
+    fields['limit_keys'].widgetFactory = CheckBoxFieldWidget
 
 
 class FieldDescriptionView(form.DisplayForm):
@@ -279,3 +284,4 @@ class EnumFieldDescriptionView(FieldDescriptionView):
 
     fields = field.Fields(IEnumFieldDescription)
     fields['items'].widgetFactory = CustomEnumFieldTextWidget
+
