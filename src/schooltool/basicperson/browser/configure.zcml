@@ -3,13 +3,6 @@
            xmlns:zope="http://namespaces.zope.org/zope"
            i18n_domain="schooltool">
 
-  <zope:class class=".demographics.CustomEnumTextWidget">
-    <require
-        permission="zope.Public"
-        interface=".demographics.IEnumTextWidget"
-        />
-  </zope:class>
-
   <page
       name="index.html"
       for="schooltool.basicperson.interfaces.IBasicPerson"
@@ -250,7 +243,22 @@
       name="absolute_url"/>
 
   <zope:adapter
-      factory=".demographics.CustomEnumDataConverter" />
+      factory="z3c.form.browser.checkbox.CheckBoxFieldWidget"
+      for="schooltool.basicperson.interfaces.FilterKeyList
+           z3c.form.interfaces.IFormLayer"
+      provides="z3c.form.interfaces.IFieldWidget" />
+
+  <zope:adapter
+      factory=".demographics.CustomEnumDataConverter"
+      for="schooltool.basicperson.interfaces.EnumValueList
+           z3c.form.interfaces.ITextAreaWidget"
+      />
+
+  <zope:adapter
+      factory="z3c.form.browser.textarea.TextAreaFieldWidget"
+      for="schooltool.basicperson.interfaces.EnumValueList
+           z3c.form.interfaces.IFormLayer"
+      />
 
   <resourceDirectory
       name="jstree"

@@ -29,12 +29,9 @@ from zope.traversing.browser.absoluteurl import absoluteURL
 from zope.container.interfaces import INameChooser
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 
-from z3c.form.browser.checkbox import CheckBoxFieldWidget
-from z3c.form.browser.textarea import TextAreaWidget
 from z3c.form.interfaces import ITextAreaWidget
 from z3c.form import form, field, button
 from z3c.form.converter import BaseDataConverter, FormatterValidationError
-from z3c.form.widget import FieldWidget
 
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.basicperson.demographics import TextFieldDescription
@@ -44,28 +41,16 @@ from schooltool.basicperson.demographics import EnumFieldDescription
 from schooltool.basicperson.interfaces import IEnumFieldDescription
 from schooltool.basicperson.interfaces import IDemographicsFields
 from schooltool.basicperson.interfaces import IFieldDescription
+from schooltool.basicperson.interfaces import EnumValueList
 
 from schooltool.common import format_message
 from schooltool.common import SchoolToolMessage as _
 
 
-class IEnumTextWidget(ITextAreaWidget):
-    """Marker interface for custom enum widget."""
-
-
-class CustomEnumTextWidget(TextAreaWidget):
-    implements(IEnumTextWidget)
-
-
-def CustomEnumFieldTextWidget(field, request):
-    """IFieldWidget factory for CustomEnumTextWidget."""
-    return FieldWidget(field, CustomEnumTextWidget(request))
-
-
 class CustomEnumDataConverter(BaseDataConverter):
     """A special data converter for iso enums."""
 
-    adapts(IList, CustomEnumTextWidget)
+    adapts(EnumValueList, ITextAreaWidget)
 
     def toWidgetValue(self, value):
         """See interfaces.IDataConverter"""
@@ -156,7 +141,6 @@ class FieldDescriptionAddView(form.AddForm):
     form.extends(form.AddForm)
     template = ViewPageTemplateFile('templates/person_add.pt')
     fields = field.Fields(IFieldDescription)
-    fields['limit_keys'].widgetFactory = CheckBoxFieldWidget
 
     def updateActions(self):
         super(FieldDescriptionAddView, self).updateActions()
@@ -215,8 +199,6 @@ class BoolFieldDescriptionAddView(FieldDescriptionAddView):
 class EnumFieldDescriptionAddView(FieldDescriptionAddView):
 
     fields = field.Fields(IEnumFieldDescription)
-    fields['items'].widgetFactory = CustomEnumFieldTextWidget
-    fields['limit_keys'].widgetFactory = CheckBoxFieldWidget
 
     def create(self, data):
         fd = EnumFieldDescription(data['title'],
@@ -232,7 +214,6 @@ class FieldDescriptionEditView(form.EditForm):
     form.extends(form.EditForm)
     template = ViewPageTemplateFile('templates/person_add.pt')
     fields = field.Fields(IFieldDescription).omit('name')
-    fields['limit_keys'].widgetFactory = CheckBoxFieldWidget
 
     @button.buttonAndHandler(_("Cancel"))
     def handle_cancel_action(self, action):
@@ -253,8 +234,6 @@ class FieldDescriptionEditView(form.EditForm):
 class EnumFieldDescriptionEditView(FieldDescriptionEditView):
 
     fields = field.Fields(IEnumFieldDescription).omit('name')
-    fields['items'].widgetFactory = CustomEnumFieldTextWidget
-    fields['limit_keys'].widgetFactory = CheckBoxFieldWidget
 
 
 class FieldDescriptionView(form.DisplayForm):
@@ -283,5 +262,4 @@ class EnumFieldDescriptionView(FieldDescriptionView):
     """Display form for an enum field description."""
 
     fields = field.Fields(IEnumFieldDescription)
-    fields['items'].widgetFactory = CustomEnumFieldTextWidget
 
