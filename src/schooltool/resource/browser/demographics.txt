@@ -16,10 +16,21 @@ container view.
 We'll create some demographics fields.
 
     >>> manager.getLink('New Text Field').click()
+
+    >>> manager.printQuery("id('column-center')//input[@type='checkbox']")
+    <input ... value="resource" type="checkbox" />
+    <input ... value="location" type="checkbox" />
+    <input ... value="equipment" type="checkbox" />
+
     >>> manager.getControl('Title').value = "Room Number"
     >>> manager.getControl('ID').value = "room"
     >>> manager.getControl(name='form.widgets.required:list').value = ['true']
+    >>> manager.getControl(name='form.widgets.limit_keys:list').value = ['location']
     >>> manager.getControl('Add').click()
+
+    >>> manager.getLink('Edit').click()
+    >>> print manager.getControl(name='form.widgets.limit_keys:list').value
+    ['location']
 
     >>> manager.getLink('Manage').click()
     >>> manager.getLink('Resource Demographics').click()
