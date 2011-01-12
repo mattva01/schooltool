@@ -43,9 +43,11 @@ from schooltool.app.app import InitBase, StartUpBase
 from schooltool.app.security import LeaderCrowd
 from schooltool.app.interfaces import ICalendarParentCrowd
 from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.app.utils import vocabulary
 from schooltool.basicperson.demographics import PersonDemographicsData
 from schooltool.basicperson.demographics import DemographicsFields
 from schooltool.basicperson.demographics import IDemographicsForm
+from schooltool.basicperson.vocabularies import IFieldFilterVocabulary
 from schooltool.resource import interfaces
 from schooltool.securitypolicy.crowds import TeachersCrowd
 from schooltool.securitypolicy.crowds import ConfigurableCrowd, AggregateCrowd
@@ -192,6 +194,16 @@ def getResourceDemographics(resource):
     if demographics is None:
         rdc[resource.__name__] = demographics = ResourceDemographicsData()
     return demographics
+
+
+@adapter(interfaces.IResourceDemographicsFields)
+@implementer(IFieldFilterVocabulary)
+def getLimitKeyVocabularyForResourceFields(resource_field_description_container):
+     return vocabulary([
+        ('resource', _('Resource')),
+        ('location', _('Location')),
+        ('equipment', _('Equipment')),
+        ])
 
 
 class DemographicsFormAdapter(object):

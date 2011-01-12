@@ -150,13 +150,3 @@ def getLimitKeyVocabularyForPersonFields(person_field_description_container):
         ('administrators', _('Administrators')),
         ])
 
-
-@adapter(IResourceDemographicsFields)
-@implementer(IFieldFilterVocabulary)
-def getLimitKeyVocabularyForResourceFields(resource_field_description_container):
-     return vocabulary([
-        ('resource', _('Resource')),
-        ('location', _('Location')),
-        ('equipment', _('Equipment')),
-        ])
-

@@ -143,6 +143,8 @@
              />
   </class>
 
+  <!-- resource demos -->
+
   <class class=".resource.ResourceDemographicsFields">
     <implements interface="schooltool.resource.interfaces.IResourceDemographicsFields" />
     <require
@@ -151,6 +153,7 @@
        set_schema="schooltool.resource.interfaces.IResourceDemographicsFields" />
   </class>
 
+  <adapter factory=".resource.getLimitKeyVocabularyForResourceFields" />
 
   <subscriber
       for="schooltool.resource.interfaces.IBookingCalendar
