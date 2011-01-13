@@ -23,6 +23,7 @@ $Id$
 """
 
 import z3c.form
+import z3c.form.browser.text
 from z3c.form import form, field, button, subform, validator, widget
 from z3c.form.interfaces import DISPLAY_MODE, HIDDEN_MODE, NO_VALUE, IActionHandler
 from zc.table import table

@@ -118,6 +118,10 @@ class IDemographicsFields(IOrderedContainer):
            empty, or it contains the key passed"""
 
 
+class FilterKeyList(List):
+    """Marker field to pin widgets on."""
+
+
 class IFieldDescription(Interface):
     """Demographics field."""
 
@@ -133,7 +137,7 @@ class IFieldDescription(Interface):
         title = _(u"Required"),
         description = _(u"Whether this Field is required or not"))
 
-    limit_keys = List(
+    limit_keys = FilterKeyList(
         title = _(u"Limit keys"),
         description = _(u"An optional list of limit keys for this field"),
         value_type=Choice(
@@ -144,8 +148,19 @@ class IFieldDescription(Interface):
         required=False)
 
 
+class EnumValueList(List):
+    """Marker field to pin custom validation on."""
+
+
 class IEnumFieldDescription(IFieldDescription):
     """Enumeration demographics field."""
 
-    items = List(
+    items = EnumValueList(
         title = _('List of values'))
+
+
+class IFieldFilterVocabulary(IVocabularyTokenized):
+    """Marker interface for vocabularies that give keys that are used
+    to filder demographics fields for the context.
+    """
+

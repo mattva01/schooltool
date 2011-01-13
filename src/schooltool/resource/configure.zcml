@@ -130,7 +130,6 @@
   <adapter factory=".resource.DemographicsFormAdapter" />
   <adapter factory=".resource.getResourceDemographicsFields" />
 
-
   <class class=".booking.ResourceBookingCalendar">
     <require permission="schooltool.view"
              interface=".interfaces.IBookingCalendar"

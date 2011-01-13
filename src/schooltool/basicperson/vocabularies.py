@@ -23,7 +23,6 @@ from zope.interface import implements
 from zope.interface import implementer
 from zope.component import adapter
 from zope.schema.interfaces import ITitledTokenizedTerm
-from zope.schema.interfaces import IVocabularyTokenized
 
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.utils import vocabulary
@@ -37,7 +36,7 @@ from schooltool.basicperson.interfaces import IGroupVocabulary
 from schooltool.basicperson.interfaces import IBasicPersonVocabulary
 from schooltool.basicperson.interfaces import IDemographicsFields
 from schooltool.basicperson.interfaces import IFieldDescription
-from schooltool.resource.interfaces import IResourceDemographicsFields
+from schooltool.basicperson.interfaces import IFieldFilterVocabulary
 
 from schooltool.common import SchoolToolMessage as _
 
@@ -124,10 +123,6 @@ class AdvisorVocabulary(object):
 
 def advisorVocabularyFactory():
     return AdvisorVocabulary
-
-
-class IFieldFilterVocabulary(IVocabularyTokenized):
-    pass
 
 
 def LimitKeyVocabFactory():
