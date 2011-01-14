@@ -188,7 +188,11 @@ class PersonForm(object):
     def generateExtraFields(self):
         field_descriptions = IDemographicsFields(ISchoolToolApplication(None))
         fields = field.Fields()
-        for field_desc in field_descriptions.values():
+        if IBasicPerson.providedBy(self.context):
+            limit_keys = [group.__name__ for group in self.context.groups]
+        else:
+            limit_keys = []
+        for field_desc in field_descriptions.filter_keys(limit_keys):
             fields += field_desc.makeField()
         return fields
 

@@ -156,8 +156,8 @@ Let's try making some fields required, and maybe even changing them:
     Native Hawaiian or Other Pacific Islander
     White
 
-Let's make the field required, and add Martians to it.  Also, we'll put a limit
-group into the empty list so that we can test that it is saved:
+Let's make the field required, and add Martians to it.  Also, we'll put limit
+keys into the empty list so that we can test that they get saved:
 
     >>> manager.getControl(name='form.widgets.limit_keys:list').value = ['students', 'teachers']
     >>> values = manager.getControl('List of values').value.splitlines()
@@ -181,8 +181,8 @@ Calling the edit form back up, we see that our changes took:
     White
     Martians
 
-Now if we go to the add person form, we should see the additional
-value in the select box, and have the field required:
+When we go to the add person form, we should still not see the additional
+value in the select box as the group is not yet set:
 
     >>> manager.getLink('Manage').click()
     >>> manager.getLink('Persons').click()
@@ -203,9 +203,42 @@ value in the select box, and have the field required:
     Confirm password
     ID
     Language
-    Ethnicity *
     Citizenship
 
+However, if we make john a teacher, it will show up when we edit him.
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('Persons').click()
+    >>> manager.getLink('John').click()
+    >>> manager.getLink('Groups').click()
+    >>> manager.getControl(name='add_item.teachers').value = 'checked'
+    >>> manager.getControl('Add').click()
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('Persons').click()
+    >>> manager.getLink('John').click()
+    >>> manager.getLink('Edit').click()
+    >>> manager.getControl('Ethnicity').displayOptions
+    ['American Indian or Alaska Native',
+     'Asian',
+     'Black or African American',
+     'Native Hawaiian or Other Pacific Islander',
+     'White',
+     'Martians']
+
+When we change the demo to not have a limit_key, then it will show when we add
+a new person:
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('Demographics').click()
+    >>> manager.getLink('ethnicity').click()
+    >>> manager.getLink('Edit').click()
+    >>> manager.getControl(name='form.widgets.limit_keys:list').value = []
+    >>> manager.getControl('Apply').click()
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('Persons').click()
+    >>> manager.getLink('New Person').click()
     >>> manager.getControl('Ethnicity').displayOptions
     ['American Indian or Alaska Native',
      'Asian',

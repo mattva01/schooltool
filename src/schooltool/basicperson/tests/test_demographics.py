@@ -179,6 +179,24 @@ def doctest_DemographicsFields():
         [u'ID', u'ethnicity', u'language', u'placeofbirth', u'citizenship',
                 u'email', u'advisor', u'phone']
 
+    We also have a filter_keys method to return fields whose keys are in the
+    list passed.
+
+        >>> [f.__name__ for f in dfs.filter_keys([])]
+        [u'ID', u'ethnicity', u'language', u'placeofbirth', u'citizenship',
+                u'email']
+
+        >>> [f.__name__ for f in dfs.filter_keys(['students'])]
+        [u'ID', u'ethnicity', u'language', u'placeofbirth', u'citizenship',
+                u'email', u'advisor', u'phone']
+
+        >>> [f.__name__ for f in dfs.filter_keys(['teachers'])]
+        [u'ID', u'ethnicity', u'language', u'placeofbirth', u'citizenship',
+                u'email', u'supervisor', u'phone']
+
+        >>> [f.__name__ for f in dfs.filter_keys(['students', 'teachers'])]
+        [u'ID', u'ethnicity', u'language', u'placeofbirth', u'citizenship',
+                u'email', u'supervisor', u'advisor', u'phone']
     """
 
 

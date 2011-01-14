@@ -122,6 +122,16 @@ class DemographicsFields(OrderedContainer):
                 result.append(field)
         return result
 
+    def filter_keys(self, keys):
+        """Return the subset of fields whose limited_keys list is either
+           empty, or it contains one of the keys passed."""
+        result = []
+        for field in self.values():
+            limit_keys = field.limit_keys
+            if not limit_keys or [key for key in keys if key in limit_keys]:
+                result.append(field)
+        return result
+
 
 def setUpDefaultDemographics(app):
     dfs = DemographicsFields()

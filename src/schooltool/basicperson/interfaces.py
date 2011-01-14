@@ -117,6 +117,10 @@ class IDemographicsFields(IOrderedContainer):
         """Return the subset of fields whose limited_keys list is either
            empty, or it contains the key passed"""
 
+    def filter_keys(keys):
+        """Return the subset of fields whose limited_keys list is either
+           empty, or it contains one of the keys passed"""
+
 
 class FilterKeyList(List):
     """Marker field to pin widgets on."""
