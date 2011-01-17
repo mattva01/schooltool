@@ -37,7 +37,9 @@ from z3c.form.validator import SimpleFieldValidator
 
 from schooltool.app.browser.app import RelationshipViewBase
 from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.group.interfaces import IGroupContainer
 from schooltool.person.interfaces import IPersonFactory
+from schooltool.schoolyear.interfaces import ISchoolYearContainer
 
 from schooltool.basicperson.interfaces import IDemographicsFields
 from schooltool.basicperson.interfaces import IBasicPerson
@@ -514,4 +516,121 @@ class PersonAdviseeView(RelationshipViewBase):
 
     def getCollection(self):
         return self.context.advisees
+
+
+###############  Base class of all group-aware add views ################
+class PersonAddViewBase(PersonAddFormBase):
+
+    id = 'person-form'
+    template = ViewPageTemplateFile('templates/person_form.pt')
+
+    def makeRows(self, fields, cols=1):
+        rows = []
+        while fields:
+            rows.append(fields[:cols])
+            fields = fields[cols:]
+        return rows
+
+    def makeFieldSet(self, fieldset_id, legend, fields, cols=1):
+        result = {
+            'id': fieldset_id,
+            'legend': legend,
+            }
+        result['rows'] = self.makeRows(fields, cols)
+        return result
+
+    def fieldsets(self):
+        result = []
+        sources = [
+            (self.base_id, self.base_legend, list(self.getBaseFields())),
+            (self.demo_id, self.demo_legend, list(self.getDemoFields())),
+            ]
+        for fieldset_id, legend, fields in sources:
+            result.append(self.makeFieldSet(fieldset_id, legend, fields, 2))
+        return result
+
+    def getDemoFields(self):
+        fields = field.Fields()
+        dfs = IDemographicsFields(ISchoolToolApplication(None))
+        for field_desc in dfs.filter_key(self.group_id):
+            fields += field_desc.makeField()
+        return fields
+
+    def getBaseFields(self):
+        return field.Fields(IPersonAddForm).omit('group')
+
+    def groupViewURL(self):
+        return '%s/%s.html' % (absoluteURL(self.context, self.request),
+                               self.group_id)
+
+    def updateActions(self):
+        super(PersonAddViewBase, self).updateActions()
+        self.actions['add'].addClass('button-ok')
+        self.actions['cancel'].addClass('button-cancel')
+
+    @button.buttonAndHandler(_('Add'))
+    def handleAdd(self, action):
+        super(PersonAddViewBase, self).handleAdd.func(self, action)
+
+    @button.buttonAndHandler(_('Cancel'))
+    def handle_cancel_action(self, action):
+        self.request.response.redirect(self.groupViewURL())
+
+    def create(self, data):
+        username = data.get('username')
+        first_name = data.get('first_name')
+        last_name = data.get('last_name')
+        person = self._factory(username, first_name, last_name)
+        data.pop('confirm')
+        form.applyChanges(self, person, data)
+        group = None
+        syc = ISchoolYearContainer(ISchoolToolApplication(None))
+        active_schoolyear = syc.getActiveSchoolYear()
+        if active_schoolyear is not None:
+            group = IGroupContainer(active_schoolyear).get(self.group_id)
+        if group is not None:
+            person.groups.add(group)
+        self._person = person
+        return person
+
+    def update(self):
+        self.fields = self.getBaseFields()
+        self.fields += self.getDemoFields()
+        self.updateWidgets()
+        self.updateActions()
+        self.actions.execute()
+
+    def updateWidgets(self):
+        super(PersonAddViewBase, self).updateWidgets()
+
+
+###############  Group-aware add views ################
+class TeacherAddView(PersonAddViewBase):
+
+    group_id = 'teachers'
+    base_id = 'base-data'
+    base_legend = _('Teacher identification')
+    demo_id = 'demo-data'
+    demo_legend = _('Teacher demographics')
+    label = _('Add new teacher')
+
+
+class StudentAddView(PersonAddViewBase):
+
+    group_id = 'students'
+    base_id = 'base-data'
+    base_legend = _('Student identification')
+    demo_id = 'demo-data'
+    demo_legend = _('Student demographics')
+    label = _('Add new student')
+
+
+class AdministratorAddView(PersonAddViewBase):
+
+    group_id = 'administrators'
+    base_id = 'base-data'
+    base_legend = _('Administrator identification')
+    demo_id = 'demo-data'
+    demo_legend = _('Administrator demographics')
+    label = _('Add new administrator')
 
