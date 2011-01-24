@@ -68,6 +68,7 @@ def doctest_Resource():
 
     """
 
+
 def doctest_Location():
     r"""Test for Location
 
@@ -83,6 +84,7 @@ def doctest_Location():
         >>> room.capacity
 
     """
+
 
 def doctest_Equipment():
     r"""Test for Equipment
@@ -103,6 +105,88 @@ def doctest_Equipment():
         >>> projector.serialNumber
         u''
         >>> projector.purchaseDate
+    """
+
+
+def doctest_ResourceDemographics():
+    r"""Test Resource Demographics objects and adapters
+
+        >>> from schooltool.resource import interfaces, resource
+        >>> from schooltool.basicperson import demographics
+
+    First we need to set up a mock app and register its adapter:
+
+        >>> from zope.component import provideAdapter
+        >>> from zope.interface import implements
+        >>> from schooltool.app.interfaces import ISchoolToolApplication
+
+        >>> class MockSchoolToolApplication(dict):
+        ...     implements(ISchoolToolApplication)
+        >>> app = MockSchoolToolApplication()
+        >>> provideAdapter(lambda context: app, (None,), ISchoolToolApplication)
+
+    We need to do what the AppInit adapter would otherwise do:
+
+        >>> resource.ResourceInit(app)()
+        >>> resource.RESOURCE_DEMO_FIELDS_KEY in app
+        True
+        >>> resource.RESOURCE_DEMO_DATA_KEY in app
+        True
+
+    There's an adapter for the resource demo fields container:
+
+        >>> provideAdapter(resource.getResourceDemographicsFields)
+        >>> dfs = interfaces.IResourceDemographicsFields(app)
+        >>> interfaces.IResourceDemographicsFields.providedBy(dfs)
+        True
+        >>> len(dfs)
+        0
+
+    We'll add some demo fields to the container, some that are limited to a
+    specific resource type or types:
+
+        >>> dfs['ID'] = demographics.TextFieldDescription("ID", "Identifier")
+        >>> dfs['square_ft'] = demographics.TextFieldDescription("square_ft",
+        ...     "Square Feet", limit_keys=['location'])
+        >>> dfs['warranty'] = demographics.TextFieldDescription("warranty",
+        ...     "Warranty", limit_keys=['equiptment'])
+        >>> dfs['creation_date'] = demographics.DateFieldDescription(
+        ...      "creation_date", "Creation Date",
+        ...      limit_keys=['location', 'equiptment'])
+
+    When we pass the filter_key method a key that does not
+    belong  to any of the limit_keys lists, then it will only return
+    those fields that have empty limit_keys lists.
+
+        >>> [f.__name__ for f in dfs.filter_key('anything')]
+        [u'ID']
+
+    When we pass 'location', it picks up the additional fields that are for
+    location type resources.
+
+        >>> [f.__name__ for f in dfs.filter_key('location')]
+        [u'ID', u'square_ft', u'creation_date']
+
+    When we pass 'equiptment', it picks up the additional fields that are for
+    equiptment type resources.
+
+        >>> [f.__name__ for f in dfs.filter_key('equiptment')]
+        [u'ID', u'warranty', u'creation_date']
+
+    Finally there's an adapter that adapts a resource it's demo data:
+
+        >>> provideAdapter(resource.getResourceDemographics)
+
+    Now we will create a resource and see what we get when we adapt it to
+    IDemographics:
+
+        >>> sample = resource.Resource('Sample Resource')
+        >>> sample.__name__ = 'sample'
+        >>> demos = interfaces.IResourceDemographics(sample)
+        >>> interfaces.IResourceDemographics.providedBy(demos)
+        True
+        >>> len(demos)
+        0
     """
 
 def test_suite():

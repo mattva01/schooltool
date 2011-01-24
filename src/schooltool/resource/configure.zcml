@@ -57,11 +57,17 @@
       factory="schooltool.app.app.SimpleNameChooser"
       provides="zope.container.interfaces.INameChooser" />
 
-  <!-- Application hook -->
+  <!-- Application Init -->
   <adapter
       for="schooltool.app.interfaces.ISchoolToolApplication"
       factory=".resource.ResourceInit"
       name="schooltool.resources"
+      />
+
+  <!-- Application StartUp -->
+  <adapter
+      factory=".resource.ResourceStartUp"
+      name="schooltool.resources.startup"
       />
 
   <!-- sample data -->
@@ -120,6 +126,9 @@
       name="booking"
       />
 
+  <adapter factory=".resource.getResourceDemographics" />
+  <adapter factory=".resource.DemographicsFormAdapter" />
+  <adapter factory=".resource.getResourceDemographicsFields" />
 
   <class class=".booking.ResourceBookingCalendar">
     <require permission="schooltool.view"
@@ -133,6 +142,17 @@
              />
   </class>
 
+  <!-- resource demos -->
+
+  <class class=".resource.ResourceDemographicsFields">
+    <implements interface="schooltool.resource.interfaces.IResourceDemographicsFields" />
+    <require
+       permission="schooltool.edit"
+       interface="schooltool.resource.interfaces.IResourceDemographicsFields"
+       set_schema="schooltool.resource.interfaces.IResourceDemographicsFields" />
+  </class>
+
+  <adapter factory=".resource.getLimitKeyVocabularyForResourceFields" />
 
   <subscriber
       for="schooltool.resource.interfaces.IBookingCalendar

@@ -3,12 +3,15 @@
            xmlns:zope="http://namespaces.zope.org/zope"
            i18n_domain="schooltool">
 
-  <zope:class class=".demographics.CustomEnumTextWidget">
-    <require
-        permission="zope.Public"
-        interface=".demographics.IEnumTextWidget"
-        />
-  </zope:class>
+  <page
+      name="index.html"
+      for="schooltool.person.interfaces.IPersonContainer"
+      class=".person.BasicPersonContainerView"
+      layer=".skin.IBasicPersonLayer"
+      permission="schooltool.view"
+      menu="zmi_views"
+      title="View"
+      />
 
   <page
       name="index.html"
@@ -171,6 +174,13 @@
      menu="schooltool_actions" title="New Date Field" />
 
   <page
+     name="addBool.html"
+     for="schooltool.basicperson.interfaces.IDemographicsFields"
+     class=".demographics.BoolFieldDescriptionAddView"
+     permission="schooltool.edit"
+     menu="schooltool_actions" title="New Yes/No Field" />
+
+  <page
      name="addEnum.html"
      for="schooltool.basicperson.interfaces.IDemographicsFields"
      class=".demographics.EnumFieldDescriptionAddView"
@@ -187,6 +197,13 @@
   <page
      name="edit.html"
      for="schooltool.basicperson.demographics.DateFieldDescription"
+     class=".demographics.FieldDescriptionEditView"
+     permission="schooltool.edit"
+     menu="schooltool_actions" title="Edit" />
+
+  <page
+     name="edit.html"
+     for="schooltool.basicperson.demographics.BoolFieldDescription"
      class=".demographics.FieldDescriptionEditView"
      permission="schooltool.edit"
      menu="schooltool_actions" title="Edit" />
@@ -214,6 +231,13 @@
 
   <page
      name="index.html"
+     for="schooltool.basicperson.demographics.BoolFieldDescription"
+     class=".demographics.BoolFieldDescriptionView"
+     permission="schooltool.view"
+     menu="schooltool_actions" title="View" />
+
+  <page
+     name="index.html"
      for="schooltool.basicperson.demographics.EnumFieldDescription"
      class=".demographics.EnumFieldDescriptionView"
      permission="schooltool.view"
@@ -229,7 +253,22 @@
       name="absolute_url"/>
 
   <zope:adapter
-      factory=".demographics.CustomEnumDataConverter" />
+      factory="z3c.form.browser.checkbox.CheckBoxFieldWidget"
+      for="schooltool.basicperson.interfaces.FilterKeyList
+           z3c.form.interfaces.IFormLayer"
+      provides="z3c.form.interfaces.IFieldWidget" />
+
+  <zope:adapter
+      factory=".demographics.CustomEnumDataConverter"
+      for="schooltool.basicperson.interfaces.EnumValueList
+           z3c.form.interfaces.ITextAreaWidget"
+      />
+
+  <zope:adapter
+      factory="z3c.form.browser.textarea.TextAreaFieldWidget"
+      for="schooltool.basicperson.interfaces.EnumValueList
+           z3c.form.interfaces.IFormLayer"
+      />
 
   <resourceDirectory
       name="jstree"
@@ -240,5 +279,56 @@
       name="jquery.js"
       file="resources/jstree/jquery.min.js"
       layer=".skin.IBasicPersonLayer" />
+
+  <!-- Group-aware add views -->
+  <page
+      name="addTeacher.html"
+      for="schooltool.person.interfaces.IPersonContainer"
+      class=".person.TeacherAddView"
+      permission="schooltool.edit"
+      />
+  <page
+      name="addStudent.html"
+      for="schooltool.person.interfaces.IPersonContainer"
+      class=".person.StudentAddView"
+      permission="schooltool.edit"
+      />
+  <page
+      name="addAdministrator.html"
+      for="schooltool.person.interfaces.IPersonContainer"
+      class=".person.AdministratorAddView"
+      permission="schooltool.edit"
+      />
+
+  <navigationViewlet
+      name="add_teacher"
+      for="schooltool.person.interfaces.IPersonContainer"
+      manager="schooltool.skin.IActionMenuManager"
+      template="templates/addPersonViewlet.pt"
+      class="schooltool.basicperson.browser.person.AddPersonViewlet"
+      permission="schooltool.edit"
+      link="addTeacher.html"
+      title="Add Teacher"
+      />
+  <navigationViewlet
+      name="add_student"
+      for="schooltool.person.interfaces.IPersonContainer"
+      manager="schooltool.skin.IActionMenuManager"
+      template="templates/addPersonViewlet.pt"
+      class="schooltool.basicperson.browser.person.AddPersonViewlet"
+      permission="schooltool.edit"
+      link="addStudent.html"
+      title="Add Student"
+      />
+  <navigationViewlet
+      name="add_administrator"
+      for="schooltool.person.interfaces.IPersonContainer"
+      manager="schooltool.skin.IActionMenuManager"
+      template="templates/addPersonViewlet.pt"
+      class="schooltool.basicperson.browser.person.AddPersonViewlet"
+      permission="schooltool.edit"
+      link="addAdministrator.html"
+      title="Add Administrator"
+      />
 
 </configure>

@@ -24,21 +24,40 @@ $Id$
 __docformat__ = 'restructuredtext'
 
 from persistent import Persistent
-from zope.component import adapts
-from zope.interface import implements
+from persistent.dict import PersistentDict
+
+from zope.component import adapts, adapter
+from zope.interface import implements, implementer
+from zope.interface import Interface
 from zope.annotation.interfaces import IAttributeAnnotatable
 from zope.container.contained import Contained
 from zope.container.btree import BTreeContainer
+from zope.container.ordered import OrderedContainer
+from zope.location.location import Location
+from zope.schema import TextLine, Bool, Date, Choice
+from zope.schema.vocabulary import SimpleVocabulary
+from zope.schema.vocabulary import SimpleTerm
 
 from schooltool.app.app import Asset
-from schooltool.app.app import InitBase
+from schooltool.app.app import InitBase, StartUpBase
+from schooltool.app.utils import vocabulary
 from schooltool.app.security import LeaderCrowd
-from schooltool.securitypolicy.crowds import TeachersCrowd
 from schooltool.app.interfaces import ICalendarParentCrowd
+from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.app.utils import vocabulary
+from schooltool.basicperson.demographics import PersonDemographicsData
+from schooltool.basicperson.demographics import DemographicsFields
+from schooltool.basicperson.demographics import IDemographicsForm
+from schooltool.basicperson.interfaces import IFieldFilterVocabulary
 from schooltool.resource import interfaces
+from schooltool.securitypolicy.crowds import TeachersCrowd
 from schooltool.securitypolicy.crowds import ConfigurableCrowd, AggregateCrowd
 from schooltool.securitypolicy.crowds import AuthenticatedCrowd
 from schooltool.common import SchoolToolMessage as _
+
+
+RESOURCE_DEMO_FIELDS_KEY = 'schooltool.resource.demographics_fields'
+RESOURCE_DEMO_DATA_KEY = 'schooltool.resource.demographics_data'
 
 
 class ResourceContainer(BTreeContainer):
@@ -93,6 +112,18 @@ class ResourceInit(InitBase):
 
     def __call__(self):
         self.app['resources'] = ResourceContainer()
+        self.app[RESOURCE_DEMO_FIELDS_KEY] = ResourceDemographicsFields()
+        self.app[RESOURCE_DEMO_DATA_KEY] = ResourceDemographicsDataContainer()
+
+
+class ResourceStartUp(StartUpBase):
+
+    def __call__(self):
+        if RESOURCE_DEMO_FIELDS_KEY not in self.app:
+            self.app[RESOURCE_DEMO_FIELDS_KEY] = ResourceDemographicsFields()
+        if RESOURCE_DEMO_DATA_KEY not in self.app:
+            self.app[RESOURCE_DEMO_DATA_KEY] = \
+                ResourceDemographicsDataContainer()
 
 
 class ResourceViewersCrowd(ConfigurableCrowd):
@@ -127,3 +158,77 @@ class ResourceCalendarEditorsCrowd(AggregateCrowd):
 
     def crowdFactories(self):
         return [LeaderCrowd, TeachersCrowd]
+
+
+###################  Demographics   #################
+class ResourceDemographicsFields(DemographicsFields):
+    """Storage for demographics fields for all resources."""
+    implements(interfaces.IResourceDemographicsFields)
+
+
+@implementer(interfaces.IResourceDemographicsFields)
+@adapter(ISchoolToolApplication)
+def getResourceDemographicsFields(app):
+    return app[RESOURCE_DEMO_FIELDS_KEY]
+
+
+class ResourceDemographicsDataContainer(BTreeContainer):
+    """Storage for demographics information for all resources."""
+
+
+class ResourceDemographicsData(PersonDemographicsData):
+    """Storage for demographics information for a resource."""
+    implements(interfaces.IResourceDemographics)
+
+    def isValidKey(self, key):
+        app = ISchoolToolApplication(None)
+        demographics_fields = interfaces.IResourceDemographicsFields(app)
+        return key in demographics_fields
+
+
+@adapter(interfaces.IBaseResource)
+@implementer(interfaces.IResourceDemographics)
+def getResourceDemographics(resource):
+    app = ISchoolToolApplication(None)
+    rdc = app[RESOURCE_DEMO_DATA_KEY]
+    demographics = rdc.get(resource.__name__, None)
+    if demographics is None:
+        rdc[resource.__name__] = demographics = ResourceDemographicsData()
+    return demographics
+
+
+@adapter(interfaces.IResourceDemographicsFields)
+@implementer(IFieldFilterVocabulary)
+def getLimitKeyVocabularyForResourceFields(resource_field_description_container):
+     return vocabulary([
+        ('resource', _('Resource')),
+        ('location', _('Location')),
+        ('equipment', _('Equipment')),
+        ])
+
+
+class DemographicsFormAdapter(object):
+    implements(IDemographicsForm)
+    adapts(interfaces.IBaseResource)
+
+    def __init__(self, context):
+        self.__dict__['context'] = context
+        self.__dict__['demographics'] = interfaces.IResourceDemographics(
+            self.context)
+
+    def __setattr__(self, name, value):
+        self.demographics[name] = value
+
+    def __getattr__(self, name):
+        return self.demographics.get(name, None)
+
+
+@adapter(interfaces.IResourceDemographicsFields)
+@implementer(IFieldFilterVocabulary)
+def getLimitKeyVocabularyForResourceFields(resource_field_description_container):
+     return vocabulary([
+        ('resource', _('Resource')),
+        ('location', _('Location')),
+        ('equipment', _('Equipment')),
+        ])
+

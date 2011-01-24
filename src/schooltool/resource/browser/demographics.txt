@@ -1,0 +1,50 @@
+Resource demographics
+=====================
+
+A manager logs in.
+
+    >>> manager = Browser('manager', 'schooltool')
+
+There's a link in the manage tab that brings up the Resource Demographics
+container view.
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('Resource Demographics').click()
+    >>> manager.printQuery("id('content-header')//h1")
+    <h1>Resource Demographics Container</h1>
+
+We'll create some demographics fields.
+
+    >>> manager.getLink('New Text Field').click()
+
+    >>> manager.printQuery("id('column-center')//input[@type='checkbox']")
+    <input ... value="resource" type="checkbox" />
+    <input ... value="location" type="checkbox" />
+    <input ... value="equipment" type="checkbox" />
+
+    >>> manager.getControl('Title').value = "Room Number"
+    >>> manager.getControl('ID').value = "room"
+    >>> manager.getControl(name='form.widgets.required:list').value = ['true']
+    >>> manager.getControl(name='form.widgets.limit_keys:list').value = ['location']
+    >>> manager.getControl('Add').click()
+
+    >>> manager.getLink('Edit').click()
+    >>> print manager.getControl(name='form.widgets.limit_keys:list').value
+    ['location']
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('Resource Demographics').click()
+    >>> manager.getLink('New Yes/No Field').click()
+    >>> manager.getControl('Title').value = "Certified"
+    >>> manager.getControl('ID').value = "certified"
+    >>> manager.getControl(name='form.widgets.required:list').value = ['true']
+    >>> manager.getControl('Add').click()
+
+Now we see them in the container view.
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('Resource Demographics').click()
+    >>> manager.printQuery("id('column-center')//a")
+    <a href="http://localhost/resource_demographics/room">room</a>
+    <a href="http://localhost/resource_demographics/certified">certified</a>
+

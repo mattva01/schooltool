@@ -31,6 +31,7 @@ from schooltool.basicperson.demographics import EnumFieldDescription
 from schooltool.basicperson.demographics import setUpDefaultDemographics
 from schooltool.basicperson.demographics import IDemographicsForm
 from schooltool.basicperson.demographics import TextFieldDescription
+from schooltool.basicperson.demographics import BoolFieldDescription
 from schooltool.basicperson.demographics import PersonDemographicsData
 from schooltool.schoolyear.testing import (setUp, tearDown,
                                            provideStubUtility,
@@ -140,6 +141,65 @@ def doctest_setUpDefaultDemographics():
     """
 
 
+def doctest_DemographicsFields():
+    """Tests for DemographicsFields
+
+    DemographicsFields is a class that contains demo fields that themselves
+    may or may not be limited to a group or groups.
+
+        >>> dfs = IDemographicsFields(ISchoolToolApplication(None))
+        >>> dfs['email'] = TextFieldDescription("email", "Email")
+        >>> dfs['supervisor'] = TextFieldDescription("supervisor", "Supervisor",
+        ...     limit_keys=['teachers'])
+        >>> dfs['advisor'] = TextFieldDescription("advisor", "Advisor",
+        ...     limit_keys=['students'])
+        >>> dfs['phone'] = TextFieldDescription("phone", "Phone",
+        ...     limit_keys=['teachers', 'students'])
+
+
+    When we pass the filter_key method a key that does not belong
+    to any of the limit_keys lists, then it will only return those
+    fields that have empty limit_keys lists.
+
+        >>> [f.__name__ for f in dfs.filter_key('anything')]
+        [u'ID', u'ethnicity', u'language', u'placeofbirth', u'citizenship',
+                u'email']
+
+    When we pass 'teachers', it picks up the additional fields that are for
+    teachers.
+
+        >>> [f.__name__ for f in dfs.filter_key('teachers')]
+        [u'ID', u'ethnicity', u'language', u'placeofbirth', u'citizenship',
+                u'email', u'supervisor', u'phone']
+
+    When we pass 'students', it picks up the additional fields that are for
+    students.
+
+        >>> [f.__name__ for f in dfs.filter_key('students')]
+        [u'ID', u'ethnicity', u'language', u'placeofbirth', u'citizenship',
+                u'email', u'advisor', u'phone']
+
+    We also have a filter_keys method to return fields whose keys are in the
+    list passed.
+
+        >>> [f.__name__ for f in dfs.filter_keys([])]
+        [u'ID', u'ethnicity', u'language', u'placeofbirth', u'citizenship',
+                u'email']
+
+        >>> [f.__name__ for f in dfs.filter_keys(['students'])]
+        [u'ID', u'ethnicity', u'language', u'placeofbirth', u'citizenship',
+                u'email', u'advisor', u'phone']
+
+        >>> [f.__name__ for f in dfs.filter_keys(['teachers'])]
+        [u'ID', u'ethnicity', u'language', u'placeofbirth', u'citizenship',
+                u'email', u'supervisor', u'phone']
+
+        >>> [f.__name__ for f in dfs.filter_keys(['students', 'teachers'])]
+        [u'ID', u'ethnicity', u'language', u'placeofbirth', u'citizenship',
+                u'email', u'supervisor', u'advisor', u'phone']
+    """
+
+
 def doctest_EnumFieldDescription():
     """Tests for EnumFieldDescription
 
@@ -187,6 +247,33 @@ def doctest_TextFieldDescription():
 
        >>> field.field
        <zope.schema._bootstrapfields.TextLine object at ...>
+
+       >>> field.__name__
+       'ID'
+
+    """
+
+
+def doctest_BoolFieldDescription():
+    """Tests for BoolFieldDescription
+
+    Boolean field description is a class that defines a boolean field shown
+    in person add/edit form.
+
+       >>> fd = BoolFieldDescription("ID", "ID")
+       >>> fields = fd.makeField()
+       >>> len(fields)
+       1
+
+       >>> field = fields['ID']
+       >>> field
+       <Field 'ID'>
+
+       >>> field.interface
+       <InterfaceClass schooltool.basicperson.demographics.IDemographicsForm>
+
+       >>> field.field
+       <zope.schema._bootstrapfields.Bool object at ...>
 
        >>> field.__name__
        'ID'
