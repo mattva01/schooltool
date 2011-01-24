@@ -5,6 +5,16 @@
 
   <page
       name="index.html"
+      for="schooltool.person.interfaces.IPersonContainer"
+      class=".person.BasicPersonContainerView"
+      layer=".skin.IBasicPersonLayer"
+      permission="schooltool.view"
+      menu="zmi_views"
+      title="View"
+      />
+
+  <page
+      name="index.html"
       for="schooltool.basicperson.interfaces.IBasicPerson"
       class=".person.PersonView"
       permission="schooltool.view"
@@ -290,37 +300,35 @@
       permission="schooltool.edit"
       />
 
-  <configure package="schooltool.skin">
-    <navigationViewlet
-        name="add_teacher"
-        for="schooltool.person.interfaces.IPersonContainer"
-        manager="schooltool.skin.IActionMenuManager"
-        template="templates/actionsViewlet.pt"
-        class="schooltool.skin.skin.ActionMenuViewlet"
-        permission="schooltool.edit"
-        link="addTeacher.html"
-        title="Add Teacher"
-        />
-    <navigationViewlet
-        name="add_student"
-        for="schooltool.person.interfaces.IPersonContainer"
-        manager="schooltool.skin.IActionMenuManager"
-        template="templates/actionsViewlet.pt"
-        class="schooltool.skin.skin.ActionMenuViewlet"
-        permission="schooltool.edit"
-        link="addStudent.html"
-        title="Add Student"
-        />
-    <navigationViewlet
-        name="add_administrator"
-        for="schooltool.person.interfaces.IPersonContainer"
-        manager="schooltool.skin.IActionMenuManager"
-        template="templates/actionsViewlet.pt"
-        class="schooltool.skin.skin.ActionMenuViewlet"
-        permission="schooltool.edit"
-        link="addAdministrator.html"
-        title="Add Administrator"
-        />
-  </configure>
+  <navigationViewlet
+      name="add_teacher"
+      for="schooltool.person.interfaces.IPersonContainer"
+      manager="schooltool.skin.IActionMenuManager"
+      template="templates/addPersonViewlet.pt"
+      class="schooltool.basicperson.browser.person.AddPersonViewlet"
+      permission="schooltool.edit"
+      link="addTeacher.html"
+      title="Add Teacher"
+      />
+  <navigationViewlet
+      name="add_student"
+      for="schooltool.person.interfaces.IPersonContainer"
+      manager="schooltool.skin.IActionMenuManager"
+      template="templates/addPersonViewlet.pt"
+      class="schooltool.basicperson.browser.person.AddPersonViewlet"
+      permission="schooltool.edit"
+      link="addStudent.html"
+      title="Add Student"
+      />
+  <navigationViewlet
+      name="add_administrator"
+      for="schooltool.person.interfaces.IPersonContainer"
+      manager="schooltool.skin.IActionMenuManager"
+      template="templates/addPersonViewlet.pt"
+      class="schooltool.basicperson.browser.person.AddPersonViewlet"
+      permission="schooltool.edit"
+      link="addAdministrator.html"
+      title="Add Administrator"
+      />
 
 </configure>

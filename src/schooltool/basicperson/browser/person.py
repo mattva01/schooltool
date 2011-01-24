@@ -39,12 +39,32 @@ from schooltool.app.browser.app import RelationshipViewBase
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.group.interfaces import IGroupContainer
 from schooltool.person.interfaces import IPersonFactory
+from schooltool.person.browser.person import PersonContainerView
 from schooltool.schoolyear.interfaces import ISchoolYearContainer
 
 from schooltool.basicperson.interfaces import IDemographicsFields
 from schooltool.basicperson.interfaces import IBasicPerson
 
 from schooltool.common import SchoolToolMessage as _
+
+
+from schooltool.skin.containers import TableContainerView
+class BasicPersonContainerView(TableContainerView):
+    """A Person Container view."""
+    template = ViewPageTemplateFile("templates/container.pt")
+    delete_template = ViewPageTemplateFile("templates/person_container_delete.pt")
+
+    index_title = _("Person index")
+
+    def isDeletingHimself(self):
+        person = IBasicPerson(self.request.principal, None)
+        return person in self.itemsToDelete
+
+    @property
+    def schoolyears(self):
+        app = ISchoolToolApplication(None)
+        syc = ISchoolYearContainer(app)
+        return syc
 
 
 class IPersonAddForm(IBasicPerson):
@@ -633,4 +653,15 @@ class AdministratorAddView(PersonAddViewBase):
     demo_id = 'demo-data'
     demo_legend = _('Administrator demographics')
     label = _('Add new administrator')
+
+
+class AddPersonViewlet(object):
+
+    def hasSchoolYear(self):
+        app = ISchoolToolApplication(None)
+        syc = ISchoolYearContainer(app)
+        sy = syc.getActiveSchoolYear()
+        return sy is not None
+
+
 
