@@ -1,0 +1,102 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/browser"
+           xmlns:zope="http://namespaces.zope.org/zope"
+           i18n_domain="schooltool">
+
+  <!-- Manage Tab -->
+  <configure package="schooltool.skin">
+    <navigationViewlet
+        name="report_reference"
+        for="*"
+        manager="schooltool.app.browser.interfaces.IManageMenuViewletManager"
+        template="templates/navigationViewlet.pt"
+        class="schooltool.skin.skin.NavigationViewlet"
+        permission="schooltool.edit"
+        link="report_reference.html"
+        title="Reports"
+        />
+    <navigationViewlet
+        name="student_reports"
+        for="schooltool.basicperson.interfaces.IBasicPerson"
+        manager="schooltool.skin.IActionMenuManager"
+        template="templates/actionsViewlet.pt"
+        class="schooltool.skin.skin.ActionMenuViewlet"
+        permission="schooltool.edit"
+        link="report_request.html"
+        title="Reports"
+        />
+    <navigationViewlet
+        name="group_reports"
+        for="schooltool.group.interfaces.IGroup"
+        manager="schooltool.skin.IActionMenuManager"
+        template="templates/actionsViewlet.pt"
+        class="schooltool.skin.skin.ActionMenuViewlet"
+        permission="schooltool.edit"
+        link="report_request.html"
+        title="Reports"
+        />
+    <navigationViewlet
+        name="schoolyear_reports"
+        for="schooltool.schoolyear.interfaces.ISchoolYear"
+        manager="schooltool.skin.IActionMenuManager"
+        template="templates/actionsViewlet.pt"
+        class="schooltool.skin.skin.ActionMenuViewlet"
+        permission="schooltool.edit"
+        link="report_request.html"
+        title="Reports"
+        />
+    <navigationViewlet
+        name="term_reports"
+        for="schooltool.term.interfaces.ITerm"
+        manager="schooltool.skin.IActionMenuManager"
+        template="templates/actionsViewlet.pt"
+        class="schooltool.skin.skin.ActionMenuViewlet"
+        permission="schooltool.edit"
+        link="report_request.html"
+        title="Reports"
+        />
+    <navigationViewlet
+        name="section_reports"
+        for="schooltool.course.interfaces.ISection"
+        manager="schooltool.skin.IActionMenuManager"
+        template="templates/actionsViewlet.pt"
+        class="schooltool.skin.skin.ActionMenuViewlet"
+        permission="schooltool.edit"
+        link="report_request.html"
+        title="Reports"
+        />
+  </configure>
+
+  <!-- Pages -->
+  <page
+     name="report_reference.html"
+     for="schooltool.app.interfaces.ISchoolToolApplication"
+     class="schooltool.report.browser.report.ReportReferenceView"
+     permission="schooltool.edit" />
+  <page
+     name="report_request.html"
+     for="schooltool.basicperson.interfaces.IBasicPerson"
+     class="schooltool.report.browser.report.StudentReportRequestView"
+     permission="schooltool.edit" />
+  <page
+     name="report_request.html"
+     for="schooltool.group.interfaces.IGroup"
+     class="schooltool.report.browser.report.GroupReportRequestView"
+     permission="schooltool.edit" />
+  <page
+     name="report_request.html"
+     for="schooltool.schoolyear.interfaces.ISchoolYear"
+     class="schooltool.report.browser.report.SchoolYearReportRequestView"
+     permission="schooltool.edit" />
+  <page
+     name="report_request.html"
+     for="schooltool.term.interfaces.ITerm"
+     class="schooltool.report.browser.report.TermReportRequestView"
+     permission="schooltool.edit" />
+  <page
+     name="report_request.html"
+     for="schooltool.course.interfaces.ISection"
+     class="schooltool.report.browser.report.SectionReportRequestView"
+     permission="schooltool.edit" />
+
+</configure>

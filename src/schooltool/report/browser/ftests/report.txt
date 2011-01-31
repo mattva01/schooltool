@@ -1,0 +1,20 @@
+=================
+SchoolTool Report
+=================
+
+A manager logs in:
+
+    >>> manager = Browser('manager', 'schooltool')
+
+And goes to the report referece view:
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('Reports').click()
+
+The url for the container:
+
+    >>> manager.printQuery('//table[@class="container"]//th')
+    <th>Category</th>
+    <th>Title</th>
+    <th>Description</th>
+

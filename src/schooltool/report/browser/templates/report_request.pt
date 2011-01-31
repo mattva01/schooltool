@@ -1,0 +1,19 @@
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title" tal:content="view/title">Report Request</title>
+</head>
+<body>
+
+<h1 metal:fill-slot="content-header"
+    tal:content="view/title">Report Request</h1>
+
+<metal:block metal:fill-slot="body">
+  <div tal:repeat="link view/links">
+    <a tal:attributes="href link/url"
+       tal:content="link/title">Title</a>
+  </div>
+</metal:block>
+
+</body>
+</html>
+
