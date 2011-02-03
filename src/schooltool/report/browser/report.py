@@ -69,7 +69,7 @@ class ReportRequestView(BrowserView):
         return self.template()
 
     def title(self):
-        return '%s %s' % (self.category, _('Reports'))
+        return _('${category} Reports', mapping={'category': self.category})
 
     def links(self):
         result = []
