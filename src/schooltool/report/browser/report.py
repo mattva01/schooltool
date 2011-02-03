@@ -22,6 +22,7 @@ Report browser views.
 """
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import getAdapters
+from zope.i18n import translate
 from zope.i18n.interfaces.locales import ICollator
 from zope.publisher.browser import BrowserView
 
@@ -55,8 +56,9 @@ class ReportReferenceView(BrowserView):
                     break
             else:
                 index = len(key_order)
+            translated_title = translate(ref.title, context=self.request)
 
-            rows.append([index, collator.key(ref.title), row])
+            rows.append([index, collator.key(translated_title), row])
 
         return [row for index, title, row in sorted(rows)]
 
