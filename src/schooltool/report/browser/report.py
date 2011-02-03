@@ -56,9 +56,9 @@ class ReportReferenceView(BrowserView):
             else:
                 index = len(key_order)
 
-            rows.append(['%02d' % index, ref.title, row])
+            rows.append([index, collator.key(ref.title), row])
 
-        return [row for index, title, row in sorted(rows, cmp=collator.cmp)]
+        return [row for index, title, row in sorted(rows)]
 
 
 class ReportRequestView(BrowserView):
