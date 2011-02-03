@@ -46,6 +46,7 @@ class BaseReportReference(object):
     title = None
     description = None
     category = None
+    category_key = None
     url = None
 
     def __init__(self, context, request):
@@ -64,6 +65,7 @@ class CurrentTermBasedReportReference(BaseReportReference):
 
 class StudentReportReference(BaseReportReference):
     category = _('Student')
+    category_key = 'student'
 
     @property
     def url(self):
@@ -72,6 +74,7 @@ class StudentReportReference(BaseReportReference):
 
 class GroupReportReference(CurrentTermBasedReportReference):
     category = _('Group')
+    category_key = 'group'
 
     def fromTerm(self, term):
         return absoluteURL(IGroupContainer(ISchoolYear(term)), self.request)
@@ -79,6 +82,7 @@ class GroupReportReference(CurrentTermBasedReportReference):
 
 class SchoolYearReportReference(CurrentTermBasedReportReference):
     category = _('School Year')
+    category_key = 'schoolyear'
 
     def fromTerm(self, term):
         return absoluteURL(ISchoolYear(term), self.request)
@@ -86,6 +90,7 @@ class SchoolYearReportReference(CurrentTermBasedReportReference):
 
 class TermReportReference(CurrentTermBasedReportReference):
     category = _('Term')
+    category_key = 'term'
 
     def fromTerm(self, term):
         return absoluteURL(term, self.request)
@@ -93,6 +98,7 @@ class TermReportReference(CurrentTermBasedReportReference):
 
 class SectionReportReference(CurrentTermBasedReportReference):
     category = _('Section')
+    category_key = 'section'
 
     def fromTerm(self, term):
         return absoluteURL(ISectionContainer(term), self.request)

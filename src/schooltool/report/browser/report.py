@@ -22,6 +22,7 @@ Report browser views.
 """
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import getAdapters
+from zope.i18n.interfaces.locales import ICollator
 from zope.publisher.browser import BrowserView
 
 from schooltool.report.interfaces import IReportReference, IReportRequest
@@ -36,6 +37,9 @@ class ReportReferenceView(BrowserView):
         return self.template()
 
     def rows(self):
+        key_order = ['student', 'group', 'section', 'schoolyear', 'term']
+        collator = ICollator(self.request.locale)
+
         rows = []
         for name, ref in getAdapters((self.context, self.request),
                                      IReportReference):
@@ -45,10 +49,16 @@ class ReportReferenceView(BrowserView):
                 'description': ref.description,
                 'url': ref.url,
                 }
-            rows.append(row)
 
-        sortable_rows = [(row['category'], row['title'], row) for row in rows]
-        return [row for category, title, row in sorted(sortable_rows)]
+            for index, key in enumerate(key_order):
+                if key == ref.category_key:
+                    break
+            else:
+                index = len(key_order)
+
+            rows.append(['%02d' % index, ref.title, row])
+
+        return [row for index, title, row in sorted(rows, cmp=collator.cmp)]
 
 
 class ReportRequestView(BrowserView):

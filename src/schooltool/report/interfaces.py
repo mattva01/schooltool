@@ -64,6 +64,11 @@ class IReportReference(Interface):
         required=True,
         )
 
+    category_key = TextLine(
+        title=u"Category key",
+        required=True,
+        )
+
     url = TextLine(
         title=u"URL",
         required=True,
