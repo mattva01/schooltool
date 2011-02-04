@@ -2,9 +2,6 @@
 SchoolTool security infrastructure
 ==================================
 
-General design
---------------
-
 The security system of SchoolTool consists of:
 
  * SchoolToolAuthenticationUtility
@@ -15,7 +12,7 @@ The login/logout views store/reset the authentication data in the
 session.  The authentication utility authenticates the request
 according to the data stored in the session.
 
-The security policy is documented in src/schooltool/securitypolicy/README.txt
+The security policy is documented in :doc:`../securitypolicy/README`.
 
 
 SchoolTool authentication utility
