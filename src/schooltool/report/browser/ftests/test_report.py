@@ -17,19 +17,20 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Functional tests for schooltool.email
+Functional tests for schooltool.report
 
 """
 
 import unittest
 
 from schooltool.testing.functional import collect_ftests
-from schooltool.email.ftesting import email_functional_layer
+from schooltool.report.ftesting import report_functional_layer
 
 
 def test_suite():
-    return collect_ftests(layer=email_functional_layer)
+    return collect_ftests(layer=report_functional_layer)
 
 
 if __name__ == '__main__':
     unittest.main(defaultTest='test_suite')
+

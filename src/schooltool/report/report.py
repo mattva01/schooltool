@@ -109,6 +109,7 @@ class BaseReportRequest(object):
     implements(IReportRequest)
 
     title = None
+    extra = ''
 
     def __init__(self, context, request):
         self.context = context

@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Unit tests for email functionality.
+Unit tests for report functionality.
 
 """
 import unittest
@@ -30,10 +30,11 @@ from zope.container.contained import NameChooser
 from zope.app.testing import setup
 
 from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.report import report
 
 
-def doctest_Somethng(self):
-    """Tests for someting.
+def doctest_Something(self):
+    """Tests for something.
     """
 
 
