@@ -1,8 +1,9 @@
 Relationship
 ============
 
-schooltool.relationship is a library for managing arbitrary many-to-many binary
+``schooltool.relationship`` is a library for managing arbitrary many-to-many binary
 relationships.
+
 
 Quick overview
 --------------
@@ -11,7 +12,7 @@ This package lets you define arbitrary many-to-many relationship schemas and
 use them to relate arbitrary components (that are annotatable or have an
 adapter to IRelationshipLinks).
 
-Usage example:
+Usage example::
 
     # Establish a relationship
     Membership(member=frog, group=frogpond)
@@ -23,7 +24,7 @@ Usage example:
     Membership.unlink(member=frog, group=frogpond)
 
 You can also define relationship properties in your component classes, and
-rewrite the example above as
+rewrite the example above as::
 
     # Establish a relationship
     frogpond.members.add(frog)      # or frog.groups.add(frogpond)
@@ -43,8 +44,8 @@ Dependencies
 - zope.schema
 - zope.event
 - ZODB (persistent and persistent.list)
-- zope.app (only if you want to use the provided adapter for IAnnotatable,
-  and the provided event handlers for object change events)
+- zope.annotation
+- zope.lifecycleevent
 
 
 Details

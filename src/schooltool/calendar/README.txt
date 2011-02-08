@@ -367,6 +367,15 @@ You can check if an even is "empty" by calling event.hasOccurrences():
     False
 
 
+Timezones
+---------
+
+.. toctree::
+   :maxdepth: 2
+
+   timezones
+
+
 Utilities
 ---------
 
