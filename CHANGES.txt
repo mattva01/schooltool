@@ -2,10 +2,13 @@
 CHANGES
 =======
 
-1.5.4 (unreleased)
+1.6.0 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Added boolean demographic fields.
+- Added limit_keys list to IFieldDescription and filter_key method to IDemographicsFields
+- Added demographics for resources.
+- Created group-aware (teacher, student, administrator) person add views
 
 
 1.5.3 (2010-11-24)
@@ -13,9 +16,6 @@ CHANGES
 
 - Fixed Section meeting time misalignment in calendar (https://launchpad.net/bugs/611797)
 - Added Bengali and Faroese translations, updated many others
-- Added BooFieldDescription for boolean demographic fields
-- Added limit_keys list to IFieldDescription and filter_key method to IDemographicsFields
-- Created resource demographics and changed resource views to have demos
 
 
 1.5.2 (2010-10-04)
