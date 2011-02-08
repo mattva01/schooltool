@@ -106,8 +106,6 @@
       class=".section.SectionContainerView"
       template="templates/section_container.pt"
       permission="schooltool.view"
-      menu="zmi_views"
-      title="View"
       />
 
   <page
@@ -116,8 +114,6 @@
       class=".section.SectionCopyingView"
       template="templates/copy_sections.pt"
       permission="schooltool.view"
-      menu="zmi_views"
-      title="Copy Sections"
       />
 
   <page
@@ -126,8 +122,6 @@
       class=".section.SectionLinkNextView"
       template="templates/link_section.pt"
       permission="schooltool.view"
-      menu="zmi_views"
-      title="View Next"
       />
 
   <page
@@ -136,8 +130,6 @@
       class=".section.SectionLinkPreviousView"
       template="templates/link_section.pt"
       permission="schooltool.view"
-      menu="zmi_views"
-      title="View Previous"
       />
 
   <page
@@ -146,8 +138,6 @@
       class=".section.SectionView"
       template="templates/section.pt"
       permission="zope.View"
-      menu="zmi_views"
-      title="View"
       layer="schooltool.skin.ISchoolToolLayer"
       />
 

@@ -103,8 +103,6 @@
         class="schooltool.contact.browser.contact.ContactContainerView"
         template="templates/container.pt"
         permission="schooltool.view"
-        menu="zmi_views"
-        title="View"
         />
 
   </configure>
