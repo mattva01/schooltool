@@ -17,27 +17,6 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Upgrade SchoolTool to generation 27.
-
-Fix timetables to reference theirs school timetables and terms
-directly instead of using __name__ to do that.
+Stub of the evolution script for generation 27.
 """
-from zope.app.generations.utility import findObjectsProviding
-from zope.app.publication.zopepublication import ZopePublication
-
-from schooltool.app.interfaces import ISchoolToolApplication
-
-def evolve(context):
-    root = context.connection.root().get(ZopePublication.root_name, None)
-
-    for app in findObjectsProviding(root, ISchoolToolApplication):
-        sections = app['sections']
-        for section in sections.values():
-            annotations = getattr(section, '__annotations__', {})
-            ttdict = annotations.get('schooltool.timetable.timetables', {})
-            for key, timetable in ttdict.items():
-                term_id, schooltt_id = key.split('.')
-                term = app['terms'][term_id]
-                schooltt = app['ttschemas'][schooltt_id]
-                timetable.term = term
-                timetable.schooltt = schooltt
+from schooltool.generations.evolve1 import evolve

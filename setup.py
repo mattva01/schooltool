@@ -83,18 +83,15 @@ Javascript will be usable, although perhaps not very nice or convenient.""",
                       'zope.app.applicationcontrol',
                       'zope.app.appsetup',
                       'zope.app.basicskin',
-                      'zope.app.catalog', # BBB
                       'zope.app.content',
                       'zope.app.dependable',
                       'zope.app.exception',
                       'zope.app.file',
                       'zope.app.form',
                       'zope.app.generations>=3.5',
-                      'zope.app.intid', # BBB
                       'zope.app.onlinehelp',
                       'zope.app.publication',
                       'zope.app.server',
-                      'zope.app.session', # BBB
                       'zope.app.tree',
                       'zope.app.wsgi',
                       'zope.app.zcmlfiles',
