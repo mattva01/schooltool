@@ -38,7 +38,6 @@ from schooltool.skin.skin import ISchoolToolLayer
 from schooltool.term.interfaces import ITerm, IDateManager
 
 
-##################     Report Reference   ####################
 class BaseReportReference(object):
     adapts(ISchoolToolApplication, ISchoolToolLayer)
     implements(IReportReference)
@@ -104,7 +103,6 @@ class SectionReportReference(CurrentTermBasedReportReference):
         return absoluteURL(ISectionContainer(term), self.request)
 
 
-##################     Report Request   ####################
 class BaseReportRequest(object):
     implements(IReportRequest)
 
