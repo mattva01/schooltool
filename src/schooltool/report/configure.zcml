@@ -15,7 +15,7 @@
       for="*"
       name="Student"
       factory="schooltool.report.report.StudentReportLinksURL"
-      type="zope.publisher.interfaces.browser.IBrowserView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
       permission="zope.Public"
       provides="schooltool.report.interfaces.IReportLinksURL"
       />
@@ -23,15 +23,15 @@
       for="*"
       name="Group"
       factory="schooltool.report.report.GroupReportLinksURL"
-      type="zope.publisher.interfaces.browser.IBrowserView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
       permission="zope.Public"
       provides="schooltool.report.interfaces.IReportLinksURL"
       />
   <view
       for="*"
-      name="SchoolYear"
+      name="School Year"
       factory="schooltool.report.report.SchoolYearReportLinksURL"
-      type="zope.publisher.interfaces.browser.IBrowserView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
       permission="zope.Public"
       provides="schooltool.report.interfaces.IReportLinksURL"
       />
@@ -39,7 +39,7 @@
       for="*"
       name="Term"
       factory="schooltool.report.report.TermReportLinksURL"
-      type="zope.publisher.interfaces.browser.IBrowserView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
       permission="zope.Public"
       provides="schooltool.report.interfaces.IReportLinksURL"
       />
@@ -47,7 +47,7 @@
       for="*"
       name="Section"
       factory="schooltool.report.report.SectionReportLinksURL"
-      type="zope.publisher.interfaces.browser.IBrowserView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
       permission="zope.Public"
       provides="schooltool.report.interfaces.IReportLinksURL"
       />

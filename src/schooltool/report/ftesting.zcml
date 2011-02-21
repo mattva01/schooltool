@@ -40,7 +40,7 @@
        name="mock_schoolyear_report"
        for="schooltool.schoolyear.interfaces.ISchoolYear"
        permission="schooltool.edit"
-       group="SchoolYear"
+       group="School Year"
        description="Just a mock schoolyear report."
        title="Mock SchoolYear Report"
        link="request_schoolyear_report.html"
