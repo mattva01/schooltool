@@ -9,6 +9,7 @@ CHANGES
 - Added limit_keys list to IFieldDescription and filter_key method to IDemographicsFields
 - Added demographics for resources.
 - Created group-aware (teacher, student, administrator) person add views
+- Removed obsolete dependencies, support upgrading from schooltool >= 1.0 only.
 
 
 1.5.3 (2010-11-24)

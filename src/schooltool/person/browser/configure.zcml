@@ -160,8 +160,6 @@
         class="schooltool.person.browser.person.PersonContainerView"
         template="templates/container.pt"
         permission="schooltool.view"
-        menu="zmi_views"
-        title="View"
         />
 
   </configure>

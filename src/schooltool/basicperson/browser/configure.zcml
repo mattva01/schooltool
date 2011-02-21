@@ -9,8 +9,6 @@
       class=".person.BasicPersonContainerView"
       layer=".skin.IBasicPersonLayer"
       permission="schooltool.view"
-      menu="zmi_views"
-      title="View"
       />
 
   <page

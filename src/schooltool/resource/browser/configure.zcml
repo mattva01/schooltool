@@ -110,8 +110,6 @@
         for="schooltool.resource.interfaces.IResourceContainer"
         class="schooltool.resource.browser.resource.ResourceContainerView"
         permission="schooltool.view"
-        menu="zmi_views"
-        title="View"
         />
   </configure>
 

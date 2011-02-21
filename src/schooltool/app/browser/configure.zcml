@@ -226,12 +226,6 @@
       permission="schooltool.edit"
       />
 
-  <!-- Make index.html the default ZMI view for ISchoolToolApplication -->
-
-  <menuItem
-      for="schooltool.app.interfaces.ISchoolToolApplication"
-      menu="zmi_views" title="View" action="index.html" />
-
   <!-- Views for everything -->
 
   <page
@@ -409,8 +403,6 @@
       class=".cal.DailyCalendarView"
       template="templates/cal_daily.pt"
       permission="schooltool.view"
-      menu="zmi_views"
-      title="Calendar (Daily)"
       />
 
   <page
@@ -418,8 +410,6 @@
       for="schooltool.app.interfaces.ISchoolToolCalendar"
       class=".pdfcal.DailyPDFCalendarView"
       permission="schooltool.view"
-      menu="zmi_views"
-      title="Calendar (Daily, PDF)"
       />
 
   <page
@@ -428,8 +418,6 @@
       class=".cal.WeeklyCalendarView"
       template="templates/cal_weekly.pt"
       permission="schooltool.view"
-      menu="zmi_views"
-      title="Calendar (Weekly)"
       />
 
   <page
@@ -437,8 +425,6 @@
       for="schooltool.app.interfaces.ISchoolToolCalendar"
       class=".pdfcal.WeeklyPDFCalendarView"
       permission="schooltool.view"
-      menu="zmi_views"
-      title="Calendar (Weekly, PDF)"
       />
 
   <page
@@ -447,8 +433,6 @@
       class=".cal.MonthlyCalendarView"
       template="templates/cal_monthly.pt"
       permission="schooltool.view"
-      menu="zmi_views"
-      title="Calendar (Monthly)"
       />
 
   <page
@@ -456,8 +440,6 @@
       for="schooltool.app.interfaces.ISchoolToolCalendar"
       class=".pdfcal.MonthlyPDFCalendarView"
       permission="schooltool.view"
-      menu="zmi_views"
-      title="Calendar (Monthly, PDF)"
       />
 
   <page
@@ -466,8 +448,6 @@
       class=".cal.YearlyCalendarView"
       template="templates/cal_yearly.pt"
       permission="schooltool.view"
-      menu="zmi_views"
-      title="Calendar (Yearly)"
       />
 
   <page
@@ -476,8 +456,6 @@
       class=".cal.AtomCalendarView"
       template="templates/cal_atom.pt"
       permission="schooltool.view"
-      menu="zmi_views"
-      title="Atom View"
       />
 
   <page
@@ -486,8 +464,6 @@
       permission="schooltool.view"
       class="schooltool.calendar.browser.CalendarICalendarView"
       attribute="show"
-      menu="zmi_views"
-      title="iCalendar"
       />
 
   <page
@@ -496,8 +472,6 @@
       permission="zope.Public"
       class="schooltool.calendar.browser.CalendarVfbView"
       attribute="show"
-      menu="zmi_views"
-      title="Free/Busy"
       />
 
   <page
@@ -515,8 +489,6 @@
       class="schooltool.app.browser.cal.CalendarEventView"
       template="templates/event.pt"
       permission="zope.View"
-      menu="zmi_views"
-      title="View"
       />
 
   <addform

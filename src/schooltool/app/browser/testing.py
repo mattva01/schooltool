@@ -175,8 +175,6 @@ def setUp(test=None):
 
     # menus
     ztapi.browserView(None, 'view_get_menu', MenuAccessView)
-    provideUtility(BrowserMenuStub('zmi_views'), IBrowserMenu,
-                   'zmi_views')
     provideUtility(BrowserMenuStub('schooltool_actions'), IBrowserMenu,
                    'schooltool_actions')
 

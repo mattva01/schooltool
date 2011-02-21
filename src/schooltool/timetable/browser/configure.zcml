@@ -55,8 +55,6 @@
       class=".schema.TimetableSchemaContainerView"
       template="templates/timetable-schema-container.pt"
       permission="schooltool.view"
-      menu="zmi_views"
-      title="View"
       />
 
   <page
@@ -65,8 +63,6 @@
       class=".schema.TimetableDependentDeleteView"
       template="templates/schooltt-delete.pt"
       permission="schooltool.edit"
-      menu="zmi_views"
-      title="Delete"
       />
 
   <page
@@ -96,7 +92,6 @@
       class=".schema.TimetableSchemaView"
       template="templates/timetableschema.pt"
       permission="schooltool.view"
-      menu="zmi_views" title="View"
       />
 
   <page
@@ -114,7 +109,6 @@
       class=".TimetableEditView"
       template="templates/timetable-edit.pt"
       permission="schooltool.edit"
-      menu="zmi_views" title="View"
       />
 
   <zope:adapter
@@ -223,8 +217,6 @@
        class=".cal.TimetablingYearlyCalendarView"
        template="templates/timetable_cal_yearly.pt"
        permission="schooltool.view"
-       menu="zmi_views"
-       title="Calendar (Yearly)"
        />
 
   <page
