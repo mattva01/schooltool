@@ -5999,10 +5999,10 @@ msgstr "Launchpad üzerinden bir hata bildir."
 #: /src/schooltool/skin/templates/view_macros.pt:128
 msgid ""
 "&copy; The <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth "
-"Foundation</a> 2003 - <span>2010</span>: Supporting Social Innovation."
+"Foundation</a> 2003 - 2011: Supporting Social Innovation."
 msgstr ""
 "&copy; The <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth "
-"Vakfı</a> 2003 - <span>2010</span>: Sosyal Gelişimi Destekler."
+"Vakfı</a> 2003 - 2011: Sosyal Gelişimi Destekler."
 
 #: /src/schooltool/skin/templates/view_macros.pt:133
 msgid ""

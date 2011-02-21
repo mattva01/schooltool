@@ -6014,10 +6014,10 @@ msgstr "Rapporteer een bug op Launchpad."
 #: /src/schooltool/skin/templates/view_macros.pt:127
 msgid ""
 "&copy; The <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth "
-"Foundation</a> 2003 - <span>2010</span>: Supporting Social Innovation."
+"Foundation</a> 2003 - 2011: Supporting Social Innovation."
 msgstr ""
 "&copy; De <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth "
-"Foundation</a> 2003 - <span>2010</span>: Ondersteunt sociale innovatie."
+"Foundation</a> 2003 - 2011: Ondersteunt sociale innovatie."
 
 #: /src/schooltool/skin/templates/view_macros.pt:132
 msgid ""

@@ -5882,7 +5882,7 @@ msgstr "រាយការណ៍​កំហុស​នៅ​លើ Launchpad �
 #: /src/schooltool/skin/templates/view_macros.pt:127
 msgid ""
 "&copy; The <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth "
-"Foundation</a> 2003 - <span>2010</span>: Supporting Social Innovation."
+"Foundation</a> 2003 - 2011: Supporting Social Innovation."
 msgstr ""
 "&copy;  <a href=\"http://www.shuttleworthfoundation.org\">មូលនិធិ Shuttleworth "
 "</a> ២០០៣ - <span>២០១០</span> ៖ ​គាំទ្រ​​ធ្វើ​ឲ្យ​​សង្គម​រីក​ចម្រើន​​ ។"

@@ -21,7 +21,7 @@
       <p i18n:translate="">To add teachers, students or administrators,
         please set up a
         <a tal:attributes="href view/schoolyears/@@absolute_url"
-           i18n:attributes="href">school year</a>.
+           i18n:translate="" i18n:name="school_year">school year</a>.
       </p>
     </div>
   </tal:block>
