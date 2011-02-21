@@ -21,30 +21,6 @@
     </example>
   </section>
 
-  <multikey name="path" datatype="string">
-    <description>
-      This specifies additional paths directories that are inserted into
-      the beginning of Python's module search path.  The set of directories
-      specified is inserted into the beginning of the module search path in
-      the order which they are specified here.  Note that the processing of
-      this directive may happen too late under some circumstances; it is
-      recommended that you use the PYTHONPATH environment variable if
-      using this directive doesn't work for you.
-
-      This option is obsolete.
-    </description>
-  </multikey>
-
-  <multikey name="module" datatype="string">
-    <description>
-      This specifies additional modules to be set up when the server starts.
-      Modules must provide the interface IModuleSetup.
-
-      This option is obsolete.
-    </description>
-    <metadefault>schooltool.main</metadefault>
-  </multikey>
-
   <multikey name="listen" datatype="inet-address">
     <description>
       Network interface and port number the HTTP server should listen on.
@@ -66,18 +42,6 @@
     <example>
       web 80
       web 127.0.0.1:80
-    </example>
-  </multikey>
-
-  <multikey name="rest" datatype="inet-address">
-    <description>
-      Network interface and port number the RESTive server should listen on.
-
-      Network interface can be omitted and just the port number specified.
-    </description>
-    <example>
-      rest 80
-      rest 127.0.0.1:80
     </example>
   </multikey>
 
@@ -129,21 +93,6 @@
     </example>
   </key>
 
-  <key name="test-mode" datatype="boolean" default="off">
-    <description>
-      Enables or disables in-memory database snapshots that are used
-      for functional testing.  Do not use for live servers.  This option
-      is not guaranteed to work if you use ZODB storage other than
-      MappingStorage.
-
-      This option is obsolete.
-    </description>
-    <example>
-      test-mode off
-    </example>
-  </key>
-
-
   <key name="pid-file" datatype="string">
     <description>
       Specifies the path of a pid file.
@@ -166,19 +115,6 @@
     </example>
   </multikey>
 
-  <multikey name="rest-access-log-file" datatype="string">
-    <description>
-      Specifies the path of a file used for an Apache combined format
-      access log for the RESTive API server.  Special values STDERR
-      and STDOUT mean standard error and standard output respectively.
-    </description>
-    <default>STDOUT</default>
-    <example>
-      access-log-file /var/log/schooltool/rest-access.log
-      access-log-file STDOUT
-    </example>
-  </multikey>
-
   <multikey name="web-access-log-file" datatype="string">
     <description>
       Specifies the path of a file used for an Apache combined format
@@ -193,24 +129,13 @@
     </example>
   </multikey>
 
-  <multikey name="app-log-file" datatype="string">
-    <description>
-      Specifies the path of a file used for the application log.
-      Special values STDERR and STDOUT mean standard error and standard
-      output respectively.
-
-      This option is obsolete.
-    </description>
-    <example>
-      app-log-file /var/log/schooltool/app.log
-    </example>
-  </multikey>
-
   <multikey name="attendance-log-file" datatype="string">
     <description>
       Specifies the path of a file used for the attendance log.
       Special values STDERR and STDOUT mean standard error and standard
       output respectively.
+
+      This option is obsolete.
     </description>
     <example>
       attendance-log-file /var/log/schooltool/attendance.log
@@ -226,17 +151,6 @@
     </description>
     <example>
       lang en_US
-    </example>
-  </key>
-
-  <key name="domain" datatype="string">
-    <description>
-      Specifies the name of the message catalog to be used on the server.
-
-      This option is obsolete.
-    </description>
-    <example>
-      domain schoolbell
     </example>
   </key>
 
@@ -278,6 +192,8 @@
   <key name="school-type" default="">
     <description>
       The school type to be used when initializing the database.
+
+      This option is obsolete.
     </description>
     <example>
       school-type lyceum
