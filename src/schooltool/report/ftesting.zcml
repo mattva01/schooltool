@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <configure xmlns="http://namespaces.zope.org/zope"
            xmlns:browser="http://namespaces.zope.org/browser"
+           xmlns:report="http://namespaces.schooltool.org/report"
            i18n_domain="schooltool">
 
   <include package="schooltool.common" />
@@ -17,35 +18,50 @@
 
   <browser:defaultSkin name="BasicPerson" />
 
-  <adapter
-      factory="schooltool.report.ftesting.MockStudentReference"
-      name="mock_student_reference" />
-  <adapter
-      factory="schooltool.report.ftesting.MockStudentRequest"
-      name="mock_student_request" />
-  <adapter
-      factory="schooltool.report.ftesting.MockGroupReference"
-      name="mock_group_reference" />
-  <adapter
-      factory="schooltool.report.ftesting.MockGroupRequest"
-      name="mock_group_request" />
-  <adapter
-      factory="schooltool.report.ftesting.MockSchoolYearReference"
-      name="mock_schoolyear_reference" />
-  <adapter
-      factory="schooltool.report.ftesting.MockSchoolYearRequest"
-      name="mock_schoolyear_request" />
-  <adapter
-      factory="schooltool.report.ftesting.MockTermReference"
-      name="mock_term_reference" />
-  <adapter
-      factory="schooltool.report.ftesting.MockTermRequest"
-      name="mock_term_request" />
-  <adapter
-      factory="schooltool.report.ftesting.MockSectionReference"
-      name="mock_section_reference" />
-  <adapter
-      factory="schooltool.report.ftesting.MockSectionRequest"
-      name="mock_section_request" />
+  <report:reportLink
+       name="mock_student_report"
+       for="schooltool.basicperson.interfaces.IBasicPerson"
+       permission="schooltool.edit"
+       group="Student"
+       description="Just a mock student report."
+       title="Mock Student Report"
+       link="request_student_report.html"
+       />
+  <report:reportLink
+       name="mock_group_report"
+       for="schooltool.group.interfaces.IGroup"
+       permission="schooltool.edit"
+       group="Group"
+       description="Just a mock group report."
+       title="Mock Group Report"
+       link="request_group_report.html"
+       />
+  <report:reportLink
+       name="mock_schoolyear_report"
+       for="schooltool.schoolyear.interfaces.ISchoolYear"
+       permission="schooltool.edit"
+       group="SchoolYear"
+       description="Just a mock schoolyear report."
+       title="Mock SchoolYear Report"
+       link="request_schoolyear_report.html"
+       />
+  <report:reportLink
+       name="mock_term_report"
+       for="schooltool.term.interfaces.ITerm"
+       permission="schooltool.edit"
+       group="Term"
+       description="Just a mock term report."
+       title="Mock Term Report"
+       link="request_term_report.html"
+       />
+  <report:reportLink
+       name="mock_section_report"
+       for="schooltool.course.interfaces.ISection"
+       permission="schooltool.edit"
+       group="Section"
+       description="Just a mock section report."
+       title="Mock Section Report"
+       link="request_section_report.html"
+       />
 
 </configure>

@@ -1,7 +1,60 @@
 <?xml version="1.0"?>
 <configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:browser="http://namespaces.zope.org/browser"
            i18n_domain="schooltool">
+
+  <browser:viewletManager
+      name="schooltool.ReportLinks"
+      permission="zope.Public"
+      provides=".interfaces.IReportLinkViewletManager"
+      class=".report.ReportLinkViewletManager"
+      template="templates/report_link_manager.pt"
+      />
+
+  <view
+      for="*"
+      name="Student"
+      factory="schooltool.report.report.StudentReportLinksURL"
+      type="zope.publisher.interfaces.browser.IBrowserView"
+      permission="zope.Public"
+      provides="schooltool.report.interfaces.IReportLinksURL"
+      />
+  <view
+      for="*"
+      name="Group"
+      factory="schooltool.report.report.GroupReportLinksURL"
+      type="zope.publisher.interfaces.browser.IBrowserView"
+      permission="zope.Public"
+      provides="schooltool.report.interfaces.IReportLinksURL"
+      />
+  <view
+      for="*"
+      name="SchoolYear"
+      factory="schooltool.report.report.SchoolYearReportLinksURL"
+      type="zope.publisher.interfaces.browser.IBrowserView"
+      permission="zope.Public"
+      provides="schooltool.report.interfaces.IReportLinksURL"
+      />
+  <view
+      for="*"
+      name="Term"
+      factory="schooltool.report.report.TermReportLinksURL"
+      type="zope.publisher.interfaces.browser.IBrowserView"
+      permission="zope.Public"
+      provides="schooltool.report.interfaces.IReportLinksURL"
+      />
+  <view
+      for="*"
+      name="Section"
+      factory="schooltool.report.report.SectionReportLinksURL"
+      type="zope.publisher.interfaces.browser.IBrowserView"
+      permission="zope.Public"
+      provides="schooltool.report.interfaces.IReportLinksURL"
+      />
+
+  <include file="meta.zcml" />
 
   <include package="schooltool.report.browser" />
 
 </configure>
+

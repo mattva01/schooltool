@@ -21,18 +21,18 @@ The view has a table with three columns:
 We registered some mock report adapters to test the view's ability to find them:
 
     >>> manager.printQuery('//table[@class="container"]//td/a')
-    <a href="http://localhost/persons">Student</a>
-    <a href="http://localhost/persons">Mock Student Report</a>
-    <a href="http://localhost/persons">Just a mock student report.</a>
     <a href="">Group</a>
     <a href="">Mock Group Report</a>
     <a href="">Just a mock group report.</a>
-    <a href="">Section</a>
-    <a href="">Mock Section Report</a>
-    <a href="">Just a mock section report.</a>
     <a href="">School Year</a>
     <a href="">Mock SchoolYear Report</a>
     <a href="">Just a mock schoolyear report.</a>
+    <a href="">Section</a>
+    <a href="">Mock Section Report</a>
+    <a href="">Just a mock section report.</a>
+    <a href="http://localhost/persons">Student</a>
+    <a href="http://localhost/persons">Mock Student Report</a>
+    <a href="http://localhost/persons">Just a mock student report.</a>
     <a href="">Term</a>
     <a href="">Mock Term Report</a>
     <a href="">Just a mock term report.</a>
@@ -51,18 +51,18 @@ Now the same view will have better hrefs:
     >>> manager.getLink('Manage').click()
     >>> manager.getLink('Reports').click()
     >>> manager.printQuery('//table[@class="container"]//td/a')
-    <a href="http://localhost/persons">Student</a>
-    <a href="http://localhost/persons">Mock Student Report</a>
-    <a href="http://localhost/persons">Just a mock student report.</a>
     <a href="http://localhost/schoolyears/2005-2006/groups">Group</a>
     <a href="http://localhost/schoolyears/2005-2006/groups">Mock Group Report</a>
     <a href="http://localhost/schoolyears/2005-2006/groups">Just a mock group report.</a>
-    <a href="http://localhost/schoolyears/2005-2006/spring/sections">Section</a>
-    <a href="http://localhost/schoolyears/2005-2006/spring/sections">Mock Section Report</a>
-    <a href="http://localhost/schoolyears/2005-2006/spring/sections">Just a mock section report.</a>
     <a href="http://localhost/schoolyears/2005-2006">School Year</a>
     <a href="http://localhost/schoolyears/2005-2006">Mock SchoolYear Report</a>
     <a href="http://localhost/schoolyears/2005-2006">Just a mock schoolyear report.</a>
+    <a href="http://localhost/schoolyears/2005-2006/spring/sections">Section</a>
+    <a href="http://localhost/schoolyears/2005-2006/spring/sections">Mock Section Report</a>
+    <a href="http://localhost/schoolyears/2005-2006/spring/sections">Just a mock section report.</a>
+    <a href="http://localhost/persons">Student</a>
+    <a href="http://localhost/persons">Mock Student Report</a>
+    <a href="http://localhost/persons">Just a mock student report.</a>
     <a href="http://localhost/schoolyears/2005-2006/spring">Term</a>
     <a href="http://localhost/schoolyears/2005-2006/spring">Mock Term Report</a>
     <a href="http://localhost/schoolyears/2005-2006/spring">Just a mock term report.</a>

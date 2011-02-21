@@ -15,6 +15,10 @@
         link="report_reference.html"
         title="Reports"
         />
+  </configure>
+
+  <!-- Action links -->
+  <configure package="schooltool.skin">
     <navigationViewlet
         name="student_reports"
         for="schooltool.basicperson.interfaces.IBasicPerson"
@@ -22,8 +26,9 @@
         template="templates/actionsViewlet.pt"
         class="schooltool.skin.skin.ActionMenuViewlet"
         permission="schooltool.edit"
-        link="report_request.html"
+        link="reports"
         title="Reports"
+        order="90"
         />
     <navigationViewlet
         name="group_reports"
@@ -32,8 +37,9 @@
         template="templates/actionsViewlet.pt"
         class="schooltool.skin.skin.ActionMenuViewlet"
         permission="schooltool.edit"
-        link="report_request.html"
+        link="reports"
         title="Reports"
+        order="90"
         />
     <navigationViewlet
         name="schoolyear_reports"
@@ -42,8 +48,9 @@
         template="templates/actionsViewlet.pt"
         class="schooltool.skin.skin.ActionMenuViewlet"
         permission="schooltool.edit"
-        link="report_request.html"
+        link="reports"
         title="Reports"
+        order="90"
         />
     <navigationViewlet
         name="term_reports"
@@ -52,8 +59,9 @@
         template="templates/actionsViewlet.pt"
         class="schooltool.skin.skin.ActionMenuViewlet"
         permission="schooltool.edit"
-        link="report_request.html"
+        link="reports"
         title="Reports"
+        order="90"
         />
     <navigationViewlet
         name="section_reports"
@@ -62,8 +70,9 @@
         template="templates/actionsViewlet.pt"
         class="schooltool.skin.skin.ActionMenuViewlet"
         permission="schooltool.edit"
-        link="report_request.html"
+        link="reports"
         title="Reports"
+        order="90"
         />
   </configure>
 
@@ -74,29 +83,29 @@
      class="schooltool.report.browser.report.ReportReferenceView"
      permission="schooltool.edit" />
   <page
-     name="report_request.html"
+     name="reports"
      for="schooltool.basicperson.interfaces.IBasicPerson"
-     class="schooltool.report.browser.report.StudentReportRequestView"
+     class="schooltool.report.browser.report.StudentReportsView"
      permission="schooltool.edit" />
   <page
-     name="report_request.html"
+     name="reports"
      for="schooltool.group.interfaces.IGroup"
-     class="schooltool.report.browser.report.GroupReportRequestView"
+     class="schooltool.report.browser.report.GroupReportsView"
      permission="schooltool.edit" />
   <page
-     name="report_request.html"
+     name="reports"
      for="schooltool.schoolyear.interfaces.ISchoolYear"
-     class="schooltool.report.browser.report.SchoolYearReportRequestView"
+     class="schooltool.report.browser.report.SchoolYearReportsView"
      permission="schooltool.edit" />
   <page
-     name="report_request.html"
+     name="reports"
      for="schooltool.term.interfaces.ITerm"
-     class="schooltool.report.browser.report.TermReportRequestView"
+     class="schooltool.report.browser.report.TermReportsView"
      permission="schooltool.edit" />
   <page
-     name="report_request.html"
+     name="reports"
      for="schooltool.course.interfaces.ISection"
-     class="schooltool.report.browser.report.SectionReportRequestView"
+     class="schooltool.report.browser.report.SectionReportsView"
      permission="schooltool.edit" />
 
 </configure>

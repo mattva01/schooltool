@@ -21,10 +21,14 @@ Base classes for report reference and request adapters
 
 """
 
+from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import adapts, adapter
-from zope.component import getUtility
+from zope.component import getUtility, queryUtility, getGlobalSiteManager
 from zope.interface import implements, implementer
-from zope.traversing.browser import absoluteURL
+from zope.publisher.browser import BrowserView
+from zope.traversing.browser.absoluteurl import absoluteURL
+from zope.viewlet.interfaces import IViewletManager
+from zope.viewlet.viewlet import SimpleAttributeViewlet
 
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.basicperson.interfaces import IBasicPerson
@@ -32,108 +36,118 @@ from schooltool.common import SchoolToolMessage as _
 from schooltool.course.interfaces import ISection, ISectionContainer
 from schooltool.group.interfaces import IGroup, IGroupContainer
 from schooltool.person.interfaces import IPersonContainer
-from schooltool.report.interfaces import IReportRequest, IReportReference
+from schooltool.report.interfaces import IReportLinkViewletManager
+from schooltool.report.interfaces import IRegisteredReportsUtility
+from schooltool.report.interfaces import IReportLinksURL
 from schooltool.schoolyear.interfaces import ISchoolYear
-from schooltool.skin.skin import ISchoolToolLayer
+from schooltool.skin.skin import ISchoolToolLayer, OrderedViewletManager
 from schooltool.term.interfaces import ITerm, IDateManager
 
 
-class BaseReportReference(object):
-    adapts(ISchoolToolApplication, ISchoolToolLayer)
-    implements(IReportReference)
-
-    title = None
-    description = None
-    category = None
-    category_key = None
-    url = None
-
-    def __init__(self, context, request):
-        self.context = context
-        self.request = request
+class ReportLinkViewletManager(OrderedViewletManager):
+    implements(IReportLinkViewletManager)
 
 
-class CurrentTermBasedReportReference(BaseReportReference):
+class ReportLinkViewlet(object):
+    template=ViewPageTemplateFile('templates/report_link.pt')
+    group=u''
+    title=u''
+    link=u'' # an optional relative link - subclasses can override report_link property in some cases
+
     @property
-    def url(self):
+    def report_link(self):
+        return '%s/%s' % (absoluteURL(self.context, self.request), self.link)
+
+    def render(self, *args, **kw):
+        return self.template()
+
+
+class RegisteredReportsUtility(object):
+    implements(IRegisteredReportsUtility)
+
+    def __init__(self):
+        self.reports_by_group = {}
+
+    def registerReport(self, group, title, description):
+        # make a non-translatable group key
+        group_key = unicode(group)
+
+        if group_key not in self.reports_by_group:
+            self.reports_by_group[group_key] = []
+        self.reports_by_group[group_key].append({
+            'group': group, # remember the translatable group title
+            'title': title,
+            'description': description,
+            })
+
+
+def getReportRegistrationUtility():
+    """Helper - returns report registration utility and registers a new one
+    if missing."""
+    utility = queryUtility(IRegisteredReportsUtility)
+    if not utility:
+        utility = RegisteredReportsUtility()
+        getGlobalSiteManager().registerUtility(utility,
+            IRegisteredReportsUtility)
+    return utility
+
+
+class ReportLinksURL(BrowserView):
+    implements(IReportLinksURL)
+
+    def actualContext(self):
+        return self.context
+
+    def __unicode__(self):
+        return urllib.unquote(self.__str__()).decode('utf-8')
+
+    def __str__(self):
+        url = absoluteURL(self.actualContext(), self.request)
+        return url
+        #return '%s/%s' % (url, 'reports')
+
+    def __call__(self):
+        return self.__str__()
+
+
+class StudentReportLinksURL(ReportLinksURL):
+
+    def actualContext(self):
+        return ISchoolToolApplication(None)['persons']
+
+
+class GroupReportLinksURL(ReportLinksURL):
+
+    def actualContext(self):
         current_term = getUtility(IDateManager).current_term
         if current_term is None:
-            return ''
-        return self.fromTerm(current_term)
+            return ISchoolToolApplication(None)
+        return IGroupContainer(ISchoolYear(current_term))
 
 
-class StudentReportReference(BaseReportReference):
-    category = _('Student')
-    category_key = 'student'
+class SchoolYearReportLinksURL(ReportLinksURL):
 
-    @property
-    def url(self):
-        return absoluteURL(self.context['persons'], self.request)
-
-
-class GroupReportReference(CurrentTermBasedReportReference):
-    category = _('Group')
-    category_key = 'group'
-
-    def fromTerm(self, term):
-        return absoluteURL(IGroupContainer(ISchoolYear(term)), self.request)
+    def actualContext(self):
+        current_term = getUtility(IDateManager).current_term
+        if current_term is None:
+            return ISchoolToolApplication(None)
+        return ISchoolYear(current_term)
 
 
-class SchoolYearReportReference(CurrentTermBasedReportReference):
-    category = _('School Year')
-    category_key = 'schoolyear'
+class TermReportLinksURL(ReportLinksURL):
 
-    def fromTerm(self, term):
-        return absoluteURL(ISchoolYear(term), self.request)
-
-
-class TermReportReference(CurrentTermBasedReportReference):
-    category = _('Term')
-    category_key = 'term'
-
-    def fromTerm(self, term):
-        return absoluteURL(term, self.request)
+    def actualContext(self):
+        current_term = getUtility(IDateManager).current_term
+        if current_term is None:
+            return ISchoolToolApplication(None)
+        return current_term
 
 
-class SectionReportReference(CurrentTermBasedReportReference):
-    category = _('Section')
-    category_key = 'section'
+class SectionReportLinksURL(ReportLinksURL):
 
-    def fromTerm(self, term):
-        return absoluteURL(ISectionContainer(term), self.request)
-
-
-class BaseReportRequest(object):
-    implements(IReportRequest)
-
-    title = None
-    extra = ''
-
-    def __init__(self, context, request):
-        self.context = context
-        self.request = request
-
-    @property
-    def url(self):
-        return absoluteURL(self.context, self.request) + self.extra
-
-
-class StudentReportRequest(BaseReportRequest):
-    adapts(IBasicPerson, ISchoolToolLayer)
-
-
-class GroupReportRequest(BaseReportRequest):
-    adapts(IGroup, ISchoolToolLayer)
-
-
-class SchoolYearReportRequest(BaseReportRequest):
-    adapts(ISchoolYear, ISchoolToolLayer)
-
-
-class TermReportRequest(BaseReportRequest):
-    adapts(ITerm, ISchoolToolLayer)
-
-
-class SectionReportRequest(BaseReportRequest):
-    adapts(ISection, ISchoolToolLayer)
+    def actualContext(self):
+        current_term = getUtility(IDateManager).current_term
+        if current_term is None:
+            return ISchoolToolApplication(None)
+        return ISectionContainer(current_term)
 

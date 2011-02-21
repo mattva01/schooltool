@@ -21,13 +21,55 @@ Report browser views.
 
 """
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
-from zope.component import getAdapters
+from zope.component import getAdapters, queryMultiAdapter
 from zope.i18n import translate
 from zope.i18n.interfaces.locales import ICollator
 from zope.publisher.browser import BrowserView
 
-from schooltool.report.interfaces import IReportReference, IReportRequest
+from schooltool.report.interfaces import IReportLinksURL
+from schooltool.report.report import getReportRegistrationUtility
 from schooltool.common import SchoolToolMessage as _
+
+
+class ReportsView(BrowserView):
+
+    template = ViewPageTemplateFile('templates/report_links.pt')
+
+    def __call__(self):
+        return self.template()
+
+
+class StudentReportsView(ReportsView):
+
+    title = _('Student Reports')
+
+
+class GroupReportsView(ReportsView):
+
+    title = _('Group Reports')
+
+
+class SchoolYearReportsView(ReportsView):
+
+    title = _('School Year Reports')
+
+
+class TermReportsView(ReportsView):
+
+    title = _('Term Reports')
+
+
+class SectionReportsView(ReportsView):
+
+    title = _('Section Reports')
+
+
+def reportLinksURL(ob, request, name=''):
+    """Helper method to obtain the report links URL"""
+    url = queryMultiAdapter((ob, request), IReportLinksURL, name=name)
+    if url is None:
+       return ''
+    return url
 
 
 class ReportReferenceView(BrowserView):
@@ -38,69 +80,23 @@ class ReportReferenceView(BrowserView):
         return self.template()
 
     def rows(self):
-        key_order = ['student', 'group', 'section', 'schoolyear', 'term']
         collator = ICollator(self.request.locale)
+        utility = getReportRegistrationUtility()
+        app = self.context
 
         rows = []
-        for name, ref in getAdapters((self.context, self.request),
-                                     IReportReference):
-            row = {
-                'category': ref.category,
-                'title': ref.title,
-                'description': ref.description,
-                'url': ref.url,
-                }
+        for group_key, group_reports in utility.reports_by_group.items():
+            reference_url = reportLinksURL(app, self.request, name=group_key)
+            for report in group_reports:
+                row = { 
+                    'url': reference_url,
+                    'group': report['group'],
+                    'title': report['title'],
+                    'description': report['description'],
+                    }
+                group = translate(report['group'], context=self.request)
+                title = translate(report['title'], context=self.request)
+                rows.append([collator.key(group), collator.key(title), row])
 
-            for index, key in enumerate(key_order):
-                if key == ref.category_key:
-                    break
-            else:
-                index = len(key_order)
-            translated_title = translate(ref.title, context=self.request)
-
-            rows.append([index, collator.key(translated_title), row])
-
-        return [row for index, title, row in sorted(rows)]
-
-
-class ReportRequestView(BrowserView):
-
-    template = ViewPageTemplateFile('templates/report_request.pt')
-
-    def __call__(self):
-        return self.template()
-
-    def title(self):
-        return _('${category} Reports', mapping={'category': self.category})
-
-    def links(self):
-        result = []
-        for name, req in getAdapters((self.context, self.request),
-                                     IReportRequest):
-            link = {
-                'title': req.title,
-                'url': req.url,
-                }
-            result.append(link)
-        return result
-
-
-class StudentReportRequestView(ReportRequestView):
-    category = _('Student')
-
-
-class GroupReportRequestView(ReportRequestView):
-    category = _('Group')
-
-
-class SchoolYearReportRequestView(ReportRequestView):
-    category = _('School Year')
-
-
-class TermReportRequestView(ReportRequestView):
-    category = _('Term')
-
-
-class SectionReportRequestView(ReportRequestView):
-    category = _('Section')
+        return [row for group, title, row in sorted(rows)]
 

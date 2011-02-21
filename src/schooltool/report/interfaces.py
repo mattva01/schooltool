@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Email interfaces
+Report interfaces
 
 """
 
@@ -28,49 +28,36 @@ from zope.interface import Interface
 from zope.location.interfaces import ILocation
 from zope.schema import Bool, Datetime, Dict
 from zope.schema import TextLine, List, Text, Int, Password
+from zope.viewlet.interfaces import IViewletManager
 
 from schooltool.common import SchoolToolMessage as _
 
 
-class IReportRequest(Interface):
-    """An adapter to register report requests"""
-
-    title = TextLine(
-        title=u"Title",
-        required=True,
-        )
-
-    url = TextLine(
-        title=u"URL",
-        required=True,
-        )
+class IReportLinkViewletManager(IViewletManager):
+   """The manager for report links."""
 
 
-class IReportReference(Interface):
-    """An adapter to register report references"""
+class IRegisteredReportsUtility(Interface):
 
-    title = TextLine(
-        title=u"Title",
-        required=True,
-        )
+    reports_by_group = Dict(
+        title=u"Reports by group",
+        description=u"Maps report group names to lists of report descriptions")
 
-    description = TextLine(
-        title=u"Description",
-        required=True,
-        )
 
-    category = TextLine(
-        title=u"Category",
-        required=True,
-        )
+class IReportLinksURL(Interface):
 
-    category_key = TextLine(
-        title=u"Category key",
-        required=True,
-        )
+    def actualContext():
+        """Returns the actual object the report links are for."""
 
-    url = TextLine(
-        title=u"URL",
-        required=True,
-        )
+    def __unicode__():
+        """Returns the URL as a unicode string."""
+
+    def __str__():
+        """Returns an ASCII string with all unicode characters url quoted."""
+
+    def __repr__():
+        """Get a string representation """
+
+    def __call__():
+        """Returns an ASCII string with all unicode characters url quoted."""
 
