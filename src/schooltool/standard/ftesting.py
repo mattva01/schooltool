@@ -1,6 +1,6 @@
 #
 # SchoolTool - common information systems platform for school administration
-# Copyright (c) 2008 Shuttleworth Foundation
+# Copyright (c) 2005 Shuttleworth Foundation
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,13 +16,13 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-"""
-SchoolTool 2005 skin.
-"""
-from schooltool.skin.skin import ISchoolToolSkin
-from schooltool.basicperson.browser.skin import IBasicPersonLayer
-from schooltool.timetable.browser.skin import ITimetableLayer
+import os
 
+from schooltool.testing.functional import ZCMLLayer
 
-class ISchoolTool2005Skin(ITimetableLayer, IBasicPersonLayer, ISchoolToolSkin):
-    """The SchoolTool2005 skin"""
+dir = os.path.abspath(os.path.dirname(__file__))
+filename = os.path.join(dir, 'ftesting.zcml')
+
+standard_functional_layer = ZCMLLayer(filename,
+                                  __name__,
+                                  'standard_functional_layer')

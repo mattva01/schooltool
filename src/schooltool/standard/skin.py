@@ -1,6 +1,6 @@
 #
 # SchoolTool - common information systems platform for school administration
-# Copyright (c) 2005 Shuttleworth Foundation
+# Copyright (c) Standard Shuttleworth Foundation
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,19 +17,14 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Functional tests for schooltool.stapp2007
-
-$Id$
+SchoolTool Standard skin.
 """
-
-import unittest
-
-from schooltool.testing.functional import collect_ftests
-from schooltool.stapp2007.ftesting import stapp2007_functional_layer
-
-def test_suite():
-    return collect_ftests(layer=stapp2007_functional_layer)
+from schooltool.skin.skin import ISchoolToolSkin
+from schooltool.basicperson.browser.skin import IBasicPersonLayer
+from schooltool.timetable.browser.skin import ITimetableLayer
 
 
-if __name__ == '__main__':
-    unittest.main(defaultTest='test_suite')
+class ISchoolToolStandardSkin(ITimetableLayer,
+                              IBasicPersonLayer,
+                              ISchoolToolSkin):
+    """The Standard SchoolTool skin"""
