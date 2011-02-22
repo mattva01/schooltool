@@ -22,7 +22,7 @@
   <page
       name="timetables-csvimport.html"
       for="schooltool.course.interfaces.ISectionContainer"
-      class="schooltool.app.browser.csvimport.TimetableCSVImportView"
+      class="schooltool.app.browser.timetablecsvimport.TimetableCSVImportView"
       template="templates/timetables-csvimport.pt"
       permission="schooltool.edit"
       layer="schooltool.skin.ISchoolToolLayer"
