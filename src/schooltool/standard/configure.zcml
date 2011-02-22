@@ -6,8 +6,14 @@
   <include package="schooltool.help" file="meta.zcml" />
 
   <include package="schooltool.common" />
+
   <include package="z3c.autoinclude" file="meta.zcml" />
   <includePlugins package="schooltool" file="plugin.zcml" />
+
+  <include package="schooltool.help" />
+  <include package="schooltool.timetable" />
+  <include package="schooltool.basicperson" />
+  <includeOverrides package="schooltool.basicperson" file="overrides.zcml" />
 
   <interface
       interface=".skin.ISchoolToolStandardSkin"
@@ -15,18 +21,13 @@
       name="SchoolToolStandard"
       />
 
-  <include xmlns:zcml="http://namespaces.zope.org/zcml"
-           zcml:condition="have devmode"
-           package="schooltool.devmode" />
-  <include package="schooltool.help" />
-  <include package="schooltool.timetable" />
-  <include package="schooltool.basicperson" />
-
   <browser:defaultSkin name="SchoolToolStandard" />
 
-  <!-- Provide local overrides of standard configurations-->
-  <includeOverrides package="schooltool.basicperson" file="overrides.zcml" />
-  <includeOverrides package="schooltool.devmode" file="overrides.zcml" />
+  <configure xmlns:zcml="http://namespaces.zope.org/zcml"
+             zcml:condition="have devmode">
+    <include package="schooltool.devmode" />
+    <includeOverrides package="schooltool.devmode" file="overrides.zcml" />
+  </configure>
 
 </configure>
 
