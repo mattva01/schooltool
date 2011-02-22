@@ -15,12 +15,6 @@
       name="SchoolToolStandard"
       />
 
-  <utility
-      name="schooltool.standard"
-      provides="zope.app.generations.interfaces.ISchemaManager"
-      component=".generations.schemaManager"
-      />
-
   <include xmlns:zcml="http://namespaces.zope.org/zcml"
            zcml:condition="have devmode"
            package="schooltool.devmode" />
