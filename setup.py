@@ -157,8 +157,7 @@ Javascript will be usable, although perhaps not very nice or convenient.""",
     schooltool_deploy = schooltool.paste.templates:SchoolToolDeploy
 
     [schooltool.instance_type]
-    stapp2007 = schooltool.stapp2007
-    schooltool = schooltool.stapp2007
+    schooltool = schooltool.standard
 
     """,
     )

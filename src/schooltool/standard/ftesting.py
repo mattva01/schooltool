@@ -16,15 +16,13 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-"""
-Generations for database version upgrades.
+import os
 
-$Id$
-"""
+from schooltool.testing.functional import ZCMLLayer
 
-from zope.app.generations.generations import SchemaManager
+dir = os.path.abspath(os.path.dirname(__file__))
+filename = os.path.join(dir, 'ftesting.zcml')
 
-schemaManager = SchemaManager(
-    minimum_generation=0,
-    generation=0,
-    package_name='schooltool.stapp2007.generations')
+standard_functional_layer = ZCMLLayer(filename,
+                                  __name__,
+                                  'standard_functional_layer')

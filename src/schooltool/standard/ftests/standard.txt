@@ -1,5 +1,5 @@
-Teh Schooltool Application 2007
-===============================
+The SchoolTool Application
+==========================
 
 A manager logs in
 

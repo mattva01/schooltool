@@ -17,17 +17,12 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Functional Testing Utilities for stapp2007
-
-$Id$
+Generations for database version upgrades.
 """
-import os
 
-from schooltool.testing.functional import ZCMLLayer
+from zope.app.generations.generations import SchemaManager
 
-dir = os.path.abspath(os.path.dirname(__file__))
-filename = os.path.join(dir, 'ftesting.zcml')
-
-stapp2007_functional_layer = ZCMLLayer(filename,
-                                  __name__,
-                                  'stapp2007_functional_layer')
+schemaManager = SchemaManager(
+    minimum_generation=0,
+    generation=0,
+    package_name='schooltool.standard.generations')
