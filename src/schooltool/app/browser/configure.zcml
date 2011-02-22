@@ -344,17 +344,6 @@
       />
 
     <navigationViewlet
-      name="timetables-csvimport"
-      for="schooltool.course.interfaces.ISectionContainer"
-      manager="schooltool.skin.IActionMenuManager"
-      template="templates/actionsViewlet.pt"
-      permission="schooltool.edit"
-      link="@@timetables-csvimport.html"
-      title="Import Sections"
-      order="50"
-      />
-
-    <navigationViewlet
       name="edit-leaders"
       for="schooltool.app.interfaces.IAsset"
       manager="schooltool.skin.IActionMenuManager"
@@ -540,17 +529,6 @@
       layer="schooltool.skin.ISchoolToolLayer"
       class=".cal.DailyCalendarRowsView"
       permission="zope.View"
-      />
-
-  <!-- XXX: Mmh, is ISectionContainer the only component using this -->
-  <!--      view class? -->
-  <page
-      name="timetables-csvimport.html"
-      for="schooltool.course.interfaces.ISectionContainer"
-      class="schooltool.app.browser.csvimport.TimetableCSVImportView"
-      template="templates/timetables-csvimport.pt"
-      permission="schooltool.edit"
-      layer="schooltool.skin.ISchoolToolLayer"
       />
 
   <page
@@ -770,5 +748,8 @@
       action="@@index.html"
       title="Error List"
       />
+
+  <!-- Timetable support -->
+  <include file="timetable-integration.zcml" />
 
 </configure>
