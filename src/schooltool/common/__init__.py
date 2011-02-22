@@ -283,6 +283,10 @@ class IDateRange(Interface):
     def overlaps(date_range):
         """Return whether this daterange overlaps with the other daterange."""
 
+    def intersection(other_range):
+        """Return intersection of date ranges (or None)."""
+
+
 
 class DateRange(object):
     """A date range implementation using the standard datetime module.
@@ -433,6 +437,51 @@ class DateRange(object):
 
         """
         return self.last >= date_range.first and self.first <= date_range.last
+
+    def intersection(self, other_range):
+        """Return whether this daterange overlaps with the other daterange.
+
+           >>> dr = DateRange(datetime.date(2005, 2, 10),
+           ...                datetime.date(2005, 2, 15))
+
+           >>> dr_before = DateRange(datetime.date(2005, 2, 1),
+           ...                       datetime.date(2005, 2, 9))
+
+           >>> print dr.intersection(dr_before)
+           None
+
+           >>> dr_after = DateRange(datetime.date(2005, 2, 16),
+           ...                      datetime.date(2005, 2, 19))
+
+           >>> print dr.intersection(dr_after)
+           None
+
+           >>> intersection = dr.intersection(DateRange(
+           ...     datetime.date(2005, 2, 1), datetime.date(2005, 2, 10)))
+           >>> print intersection.first, intersection.last
+           2005-01-10 2005-01-10
+
+           >>> intersection = dr.intersection(DateRange(
+           ...     datetime.date(2005, 2, 13), datetime.date(2005, 2, 25)))
+           >>> print intersection.first, intersection.last
+           2005-01-13 2005-01-15
+
+           >>> intersection = dr.intersection(DateRange(
+           ...     datetime.date(2005, 2, 15), datetime.date(2005, 2, 25)))
+           >>> print intersection.first, intersection.last
+           2005-01-15 2005-01-15
+
+           >>> intersection = dr.intersection(DateRange(
+           ...     datetime.date(2005, 2, 13), datetime.date(2005, 2, 14)))
+           >>> print intersection.first, intersection.last
+           2005-01-13 2005-01-14
+
+        """
+        if (other_range.last < self.first or
+            other_range.first > self.last):
+            return None
+        return DateRange(max(self.first, other_range.first),
+                         min(self.last, other_range.last))
 
 
 _version = None
