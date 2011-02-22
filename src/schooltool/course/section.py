@@ -70,7 +70,7 @@ class SectionBeforeLinkingEvent(object):
 class Section(Persistent, Contained):
 
     implements(interfaces.ISectionContained,
-                              IAttributeAnnotatable)
+               IAttributeAnnotatable)
 
     _location = None
 
