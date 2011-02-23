@@ -158,6 +158,6 @@ move-release:
 
 .PHONY: ubuntu-environment
 ubuntu-environment:
-	sudo apt-get install bzr build-essential gettext enscript \
+	sudo apt-get install bzr build-essential gettext enscript ttf-liberation \
 	    python-all-dev libc6-dev libicu-dev libxslt1-dev libfreetype6-dev libjpeg62-dev 
 

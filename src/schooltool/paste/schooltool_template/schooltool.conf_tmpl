@@ -146,16 +146,15 @@ web-access-log-file ${abspath}/log/web-access.log
 #
 # reportlab_fontdir
 #
-#   Specifies the path to TrueType fonts (Arial and Times New Roman)
+#   Specifies the path to TrueType fonts (Liberation)
 #   for ReportLab.
 #
 #   Comment out or set to empty string to disable reportlab.
 #
 # Examples:
-#    reportlab_fontdir /usr/share/fonts/truetype/msttcorefonts
+#    reportlab_fontdir /usr/share/fonts/truetype/ttf-liberation
 #
-# Uncomment the following and update the path to enable PDF generation:
-#reportlab_fontdir /usr/share/fonts/truetype/msttcorefonts
+reportlab_fontdir /usr/share/fonts/truetype/ttf-liberation
 
 # devmode
 #
