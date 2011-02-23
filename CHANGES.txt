@@ -2,13 +2,13 @@
 CHANGES
 =======
 
-1.6.0 (unreleased)
-------------------
+1.6.0a1 (2011-02-23)
+--------------------
 
 - Added boolean demographic fields.
-- Added limit_keys list to IFieldDescription and filter_key method to IDemographicsFields
 - Added demographics for resources.
-- Created group-aware (teacher, student, administrator) person add views
+- Added limit keys property to demographic fields.
+- Created group-aware (teacher, student, administrator) person add views.
 - Removed obsolete dependencies, support upgrading from schooltool >= 1.0 only.
 - Use Liberation fonts instead of non-free Microsoft fonts (https://launchpad.net/bugs/371655).
   You have to edit schooltool.conf and change msttcorefonts to ttf-liberation to
