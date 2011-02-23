@@ -94,9 +94,7 @@ class SectionContainerView(ContainerView):
     def getTimetables(self, obj):
         # XXX: old comment: very hacky, but necessary for now. :-(
 
-        # XXX: move this to schooltool.timetable! borken!
-        return []
-
+        # XXX: misplaced timetable integration
         from schooltool.timetable.interfaces import ITimetables
         tt_adapter = ITimetables(obj, None)
         if tt_adapter is not None:
