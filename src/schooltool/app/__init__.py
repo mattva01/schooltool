@@ -34,6 +34,7 @@ def registerTestSetup():
     registry.register('CalendarComponents', haveCalendar)
 
     def haveTimetables():
+        # XXX: will be broken when refactoring
         from schooltool.timetable.interfaces import IHaveTimetables
 
         from schooltool.person.person import Person
