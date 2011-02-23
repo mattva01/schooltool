@@ -1,5 +1,5 @@
 # Chinese (China) translation for schooltool
-# Copyright (c) 2009 Free Software Foundation, Inc.
+# Copyright (c) 2009 Rosetta Contributors and Canonical Ltd 2009
 # This file is distributed under the same license as the schooltool package.
 # Aron Xu <aronxu@gnome.org>, 2006, 2009.
 # fujianwzh <fujianwzh@gmail.com>, 2009.
