@@ -787,7 +787,7 @@ class StandaloneServer(object):
                                        "PDF support disabled.") % font_path
                 return
 
-        pdf.setUpMSTTCoreFonts(fontdir)
+        pdf.setUpLiberationFonts(fontdir)
 
 
 def main():

@@ -5,7 +5,9 @@ CHANGES
 1.5.4 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Use Liberation fonts instead of non-free Microsoft fonts (https://launchpad.net/bugs/371655).
+  You have to edit schooltool.conf and change msttcorefonts to ttf-liberation to
+  re-enable PDF generation.
 
 
 1.5.3 (2010-11-24)

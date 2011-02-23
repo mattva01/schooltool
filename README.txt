@@ -34,15 +34,15 @@ Javascript will be usable, although perhaps not very nice or convenient.
 System requirements
 -------------------
 
-- Python 2.5 (http://www.python.org/)
+- Python (http://www.python.org/)
 
 - libicu-dev: International Components for Unicode libraries (http://icu.sourceforge.net/download/)
 
 - the Python Imaging Library (PIL) (http://www.pythonware.com/products/pil/)
 
 - (optional) the ReportLab Toolkit (http://www.reportlab.org), and
-  Arial and Times New Roman TrueType fonts.  ReportLab is only needed if
-  you want to generate PDF calendars.  To enable PDF support you will
+  Liberation TrueType fonts.  ReportLab is only needed if you want to
+  generate PDF reports and calendars.  To enable PDF support you will
   need to specify the path to fonts in the configuration file.
 
 
@@ -65,6 +65,10 @@ You also need the python imaging library:
 
 $ sudo apt-get install python-imaging
 
+Optional: For pdf generation to work, you need to install fonts:
+
+$ sudo apt-get install ttf-liberation
+
 Run make to download and install all the required zope packages into
 the eggs folder:
 
@@ -74,35 +78,21 @@ Now test the installation by running:
 
 $ make test ftest
 
-Create a fresh configuration file for yourself:
+Create a fresh instance:
 
-$ cp schooltool.conf.in schooltool.conf
+$ make instance
 
-Edit it with your favorite editor. If you want to - uncomment the line
+The instance is created in instance directory. If you want to,
+edit instance/schooltool.conf and uncomment the line
 that says devmode on. This allows you to add sample data, view the
 online docs and other useful things. You don't want to leave this on
 for a production server, however.
 
-After saving your new schooltool.conf, start your server:
+Start your server:
 
 $ make run
 
 Go to http://localhost:7080 to see your new server in action.
-
-Optional: To work with pdf generation, you need to pull a couple
-packages from the "universe" and "multiverse" repositories. Packages
-from these repositories are not supported by Canonical, but these
-should work fine.
-
-As a superuser (sudo) edit /etc/apt/sources.list to include this line
-deb http://us.archive.ubuntu.com/ubuntu/ karmic universe multiverse
-
-Then install the required package:
-
-$ sudo apt-get install msttcorefonts
-
-In case you're wondering, we need these fonts to support unicode in
-our pdf's
 
 
 Building SchoolTool from a checkout
@@ -143,15 +133,12 @@ connect to it with a web browser.
 Project structure (checkout only)
 --------------------------------------------
 
-  GPL                   the GNU General Public License, version 2
+  GPL.txt               the GNU General Public License, version 2
   README.txt            this file
   CHANGES.txt           release notes for the latest release
 
   Makefile              makefile for building extension modules
   setup.py              distutils setup script for building extension modules
-  test.py               test runner
-  remove-stale-bytecode.py
-                        script to remove stale *.pyc files
 
   schooltool.conf.in    sample configuration file
 
@@ -284,7 +271,7 @@ the only differing thing would be the local port number.
 Copyright information
 ---------------------
 
-SchoolTool is copyright (c) 2003--2009 Shuttleworth Foundation
+SchoolTool is copyright (c) 2003-2011 Shuttleworth Foundation
 
 All files in the src/schooltool directory are part of SchoolTool, and
 are (c) Shuttleworth Foundation, with the exception of translations in
