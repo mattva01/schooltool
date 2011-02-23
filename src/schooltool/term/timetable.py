@@ -50,7 +50,7 @@ class EmergencyDayTimetableSubscriber(EventAdapterSubscriber):
     implements(ISubscriber)
 
     def __call__(self):
-        term = getTermForDate(self.date)
+        term = getTermForDate(self.event.date)
         if term is None:
             return
         # Update all schemas
@@ -60,9 +60,9 @@ class EmergencyDayTimetableSubscriber(EventAdapterSubscriber):
             # XXX: removing of security proxies is evil
             exceptionDays = removeSecurityProxy(model.exceptionDays)
             exceptionDayIds = removeSecurityProxy(model.exceptionDayIds)
-            exceptionDays[self.date] = SchooldayTemplate()
-            day_id = model.getDayId(term, self.date)
-            exceptionDayIds[self.replacement_date] = removeSecurityProxy(day_id)
+            exceptionDays[self.event.date] = SchooldayTemplate()
+            day_id = removeSecurityProxy(model.getDayId(term, self.event.date))
+            exceptionDayIds[self.event.replacement_date] = day_id
 
 
 @adapter(ITerm)
