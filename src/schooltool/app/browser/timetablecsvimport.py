@@ -27,7 +27,7 @@ from zope.security.proxy import removeSecurityProxy
 from zope.container.interfaces import INameChooser
 
 from schooltool.app.interfaces import ISchoolToolApplication
-from shcooltool.app.browser.csvimport import BaseCSVImportView, InvalidCSVError
+from schooltool.app.browser.csvimport import BaseCSVImportView, InvalidCSVError
 from schooltool.course.interfaces import ICourseContainer
 from schooltool.course.interfaces import ISectionContainer
 from schooltool.course.section import Section
