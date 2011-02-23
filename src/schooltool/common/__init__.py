@@ -459,22 +459,22 @@ class DateRange(object):
            >>> intersection = dr.intersection(DateRange(
            ...     datetime.date(2005, 2, 1), datetime.date(2005, 2, 10)))
            >>> print intersection.first, intersection.last
-           2005-01-10 2005-01-10
+           2005-02-10 2005-02-10
 
            >>> intersection = dr.intersection(DateRange(
            ...     datetime.date(2005, 2, 13), datetime.date(2005, 2, 25)))
            >>> print intersection.first, intersection.last
-           2005-01-13 2005-01-15
+           2005-02-13 2005-02-15
 
            >>> intersection = dr.intersection(DateRange(
            ...     datetime.date(2005, 2, 15), datetime.date(2005, 2, 25)))
            >>> print intersection.first, intersection.last
-           2005-01-15 2005-01-15
+           2005-02-15 2005-02-15
 
            >>> intersection = dr.intersection(DateRange(
            ...     datetime.date(2005, 2, 13), datetime.date(2005, 2, 14)))
            >>> print intersection.first, intersection.last
-           2005-01-13 2005-01-14
+           2005-02-13 2005-02-14
 
         """
         if (other_range.last < self.first or
