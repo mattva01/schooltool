@@ -35,10 +35,8 @@ from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.app.interfaces import IAsset
 from schooltool.schoolyear.interfaces import ISchoolYear
+# XXX: weird import
 from schooltool.timetable.browser import format_time_range
-from schooltool.timetable.interfaces import ITimetableCalendarEvent
-from schooltool.timetable.interfaces import ITimetables
-from schooltool.timetable.interfaces import ITimetableSchemaContainer
 from schooltool.schoolyear.interfaces import ISchoolYearContainer
 from schooltool.term.interfaces import ITermContainer
 from schooltool.course.interfaces import ICourseContainer
@@ -53,7 +51,7 @@ class ExcelExportView(BrowserView):
         self._style_cache = {}
 
     def setUpHeaders(self, data):
-        """Set up HTTP headers to serve data as PDF."""
+        """Set up HTTP headers to serve data as excel spreadsheet."""
         response = self.request.response
         response.setHeader('Content-Type', 'application/excel')
         response.setHeader('Content-Length', len(data))
@@ -191,6 +189,8 @@ class SchoolTimetableExportView(ExcelExportView):
         return offset + 1
 
     def export_school_timetables(self, wb):
+        # XXX: temporary isolation of timetable imports
+        from schooltool.timetable.interfaces import ITimetableSchemaContainer
         ws = wb.add_sheet("School Timetables")
         school_years = sorted(ISchoolYearContainer(self.context).values(),
                               key=lambda s: s.first)
@@ -446,6 +446,11 @@ class MegaExporter(SchoolTimetableExportView):
         self.print_table(self.format_courses(), ws)
 
     def format_timetables(self, section, ws, offset):
+
+        # XXX: temporary isolation of timetable imports
+        from schooltool.timetable.interfaces import ITimetableCalendarEvent
+        from schooltool.timetable.interfaces import ITimetables
+
         timetables = ITimetables(section).timetables.values()
         if not timetables:
             return offset
