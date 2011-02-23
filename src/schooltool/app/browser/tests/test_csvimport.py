@@ -22,6 +22,8 @@ Unit tests for schooltool.app.browser.csvimport
 import unittest
 import doctest
 
+from zope.i18n import translate
+
 from schooltool.app.browser.testing import setUp as testSetUp, tearDown
 
 __metaclass__ = type
