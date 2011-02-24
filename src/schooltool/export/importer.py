@@ -440,7 +440,7 @@ class SchoolTimetableImporter(ImporterBase):
     def import_school_timetable(self, sh, row):
         # XXX: temporary isolation of timetable imports
         from schooltool.timetable.interfaces import ITimetableModelFactory
-        from schooltool.timetable.browser import parse_time_range
+        from schooltool.common import parse_time_range
 
         num_errors = len(self.errors)
         data = {}

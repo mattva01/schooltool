@@ -35,8 +35,7 @@ from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.app.interfaces import IAsset
 from schooltool.schoolyear.interfaces import ISchoolYear
-# XXX: weird import
-from schooltool.timetable.browser import format_time_range
+from schooltool.common import format_time_range
 from schooltool.schoolyear.interfaces import ISchoolYearContainer
 from schooltool.term.interfaces import ITermContainer
 from schooltool.course.interfaces import ICourseContainer
