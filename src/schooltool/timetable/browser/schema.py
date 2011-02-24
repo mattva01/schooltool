@@ -43,6 +43,7 @@ from zope.traversing.browser.interfaces import IAbsoluteURL
 from zope.traversing.browser.absoluteurl import absoluteURL
 
 from schooltool.common import SchoolToolMessage as _
+from schooltool.common import format_time_range, parse_time_range
 from schooltool.skin.containers import ContainerView, ContainerDeleteView
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
@@ -52,11 +53,49 @@ from schooltool.timetable.interfaces import ITimetableSchema
 from schooltool.timetable.interfaces import ITimetableSchemaContainer
 from schooltool.timetable.schema import TimetableSchema, TimetableSchemaDay
 from schooltool.timetable import findRelatedTimetables
+from schooltool.timetable.browser.timetable import TimetableView, TabindexMixin
+from schooltool.timetable.browser.timetable import format_timetable_for_presentation
 
-from schooltool.timetable.browser import TimetableView, TabindexMixin
-from schooltool.timetable.browser import fix_duplicates, parse_time_range
-from schooltool.timetable.browser import format_timetable_for_presentation
-from schooltool.common import format_time_range
+
+def fix_duplicates(names):
+    """Change a list of names so that there are no duplicates.
+
+    Trivial cases:
+
+      >>> fix_duplicates([])
+      []
+      >>> fix_duplicates(['a', 'b', 'c'])
+      ['a', 'b', 'c']
+
+    Simple case:
+
+      >>> fix_duplicates(['a', 'b', 'b', 'a', 'b'])
+      ['a', 'b', 'b (2)', 'a (2)', 'b (3)']
+
+    More interesting cases:
+
+      >>> fix_duplicates(['a', 'b', 'b', 'a', 'b (2)', 'b (2)'])
+      ['a', 'b', 'b (3)', 'a (2)', 'b (2)', 'b (2) (2)']
+
+    """
+    seen = set(names)
+    if len(seen) == len(names):
+        return names    # no duplicates
+    result = []
+    used = set()
+    for name in names:
+        if name in used:
+            n = 2
+            while True:
+                candidate = '%s (%d)' % (name, n)
+                if not candidate in seen:
+                    name = candidate
+                    break
+                n += 1
+            seen.add(name)
+        result.append(name)
+        used.add(name)
+    return result
 
 
 class TimetableSchemaContainerAbsoluteURLAdapter(BrowserView):

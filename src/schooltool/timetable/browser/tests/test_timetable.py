@@ -100,7 +100,7 @@ def createDayTemplate(periods):
 def doctest_TimetablesTraverser():
     """Tests for TimetablesTraverser.
 
-        >>> from schooltool.timetable.browser import TimetablesTraverser
+        >>> from schooltool.timetable.browser.timetable import TimetablesTraverser
         >>> class TimetablesStub:
         ...     implements(ITimetables)
         ...     timetables = 'Timetables'
@@ -134,7 +134,7 @@ def print_cal(calendar, day_format='%(number)3d'):
 def doctest_TimetableView():
     """Test for TimetableView.
 
-        >>> from schooltool.timetable.browser import TimetableView
+        >>> from schooltool.timetable.browser.timetable import TimetableView
         >>> from schooltool.timetable import Timetable
         >>> from schooltool.timetable import TimetableDay, TimetableActivity
 
@@ -222,7 +222,7 @@ def doctest_SectionTimetableSetupView():
 
     We can now create the view to look at the Math timetable
 
-        >>> from schooltool.timetable.browser import SectionTimetableSetupView
+        >>> from schooltool.timetable.browser.timetable import SectionTimetableSetupView
         >>> context = math
         >>> request = TestRequest()
         >>> view = SectionTimetableSetupView(context, request)
@@ -403,6 +403,8 @@ def test_suite():
     suite.addTest(doctest.DocTestSuite(setUp=setUp, tearDown=tearDown,
                                        optionflags=optionflags))
     suite.addTest(doctest.DocTestSuite('schooltool.timetable.browser',
+                                       optionflags=optionflags))
+    suite.addTest(doctest.DocTestSuite('schooltool.timetable.browser.timetable',
                                        optionflags=optionflags))
     suite.addTest(doctest.DocFileSuite(
         'specialdays.txt', setUp=setUp, tearDown=tearDown,

@@ -5,7 +5,7 @@
 
   <!-- Traversers -->
 
-  <zope:class class=".TimetablesTraverser">
+  <zope:class class=".timetable.TimetablesTraverser">
     <zope:allow
         interface="schooltool.traverser.interfaces.ITraverserPlugin" />
   </zope:class>
@@ -15,7 +15,7 @@
            zope.publisher.interfaces.browser.IBrowserRequest"
       provides="schooltool.traverser.interfaces.ITraverserPlugin"
       name="timetables"
-      factory=".TimetablesTraverser"
+      factory=".timetable.TimetablesTraverser"
       />
 
   <!-- Views -->
@@ -23,7 +23,7 @@
   <page
       name="schedule.html"
       for="schooltool.course.interfaces.ISection"
-      class="schooltool.timetable.browser.SectionTimetableSetupView"
+      class="schooltool.timetable.browser.timetable.SectionTimetableSetupView"
       permission="schooltool.edit" />
 
   <configure package="schooltool.skin">
@@ -97,7 +97,7 @@
   <page
       name="special.html"
       for="schooltool.timetable.interfaces.ITimetableSchema"
-      class=".SpecialDayView"
+      class=".timetable.SpecialDayView"
       permission="schooltool.edit"
       menu="schooltool_actions"
       title="Change Timetable for One Day"
@@ -106,45 +106,45 @@
   <page
       name="index.html"
       for="schooltool.timetable.interfaces.ITimetable"
-      class=".TimetableEditView"
+      class=".timetable.TimetableEditView"
       template="templates/timetable-edit.pt"
       permission="schooltool.edit"
       />
 
   <zope:adapter
-      factory=".TimetableFormValidator" />
+      factory=".timetable.TimetableFormValidator" />
 
   <page
       name="index.html"
       for="schooltool.timetable.interfaces.ITimetableDict"
-      class="schooltool.timetable.browser.SectionTimetablesView"
+      class="schooltool.timetable.browser.timetable.SectionTimetablesView"
       permission="schooltool.edit" />
 
   <page
       name="confirm-delete.html"
       for="schooltool.timetable.interfaces.ITimetableDict"
-      class="schooltool.timetable.browser.SectionTimetableDeleteView"
+      class="schooltool.timetable.browser.timetable.SectionTimetableDeleteView"
       permission="schooltool.edit" />
 
   <zope:adapter
-       factory=".TimetableAdd_default_first"
+       factory=".timetable.TimetableAdd_default_first"
        name="default"
        />
 
   <zope:adapter
-       factory=".TimetableAdd_default_last"
+       factory=".timetable.TimetableAdd_default_last"
        name="default"
        />
 
   <page
       name="addTimetable.html"
       for="schooltool.timetable.interfaces.ITimetableDict"
-      class=".TimetableAddView"
+      class=".timetable.TimetableAddView"
       permission="schooltool.edit"
       />
 
   <zope:utility
-     factory=".timetableSchemaVocabularyFactory"
+     factory=".timetable.timetableSchemaVocabularyFactory"
      provides="zope.schema.interfaces.IVocabularyFactory"
      name="schooltool.timetable.browser.timetable_schema_vocabulary" />
 
