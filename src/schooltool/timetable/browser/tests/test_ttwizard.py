@@ -42,7 +42,7 @@ from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.testing.setup import setUpApplicationPreferences
 from schooltool.timetable.schema import TimetableSchemaContainer
 from schooltool.timetable.interfaces import ITimetableSchemaContainer
-from schooltool.timetable.browser import format_time_range
+from schooltool.common import format_time_range
 
 
 def setUp(test):

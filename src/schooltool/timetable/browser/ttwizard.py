@@ -138,18 +138,17 @@ from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.timetable.model import SequentialDayIdBasedTimetableModel
 from schooltool.timetable.model import SequentialDaysTimetableModel
 from schooltool.timetable.model import WeeklyTimetableModel
-from schooltool.timetable.browser import parse_time_range
-from schooltool.timetable.browser import format_time_range
-from schooltool.common import SchoolToolMessage as _
+from schooltool.common import parse_time_range, format_time_range
 from schooltool.timetable.interfaces import ITimetableSchemaContainer
 from schooltool.timetable.schema import TimetableSchema, TimetableSchemaDay
 from schooltool.timetable import SchooldayTemplate, SchooldaySlot
+
+from schooltool.common import SchoolToolMessage as _
 
 
 def getSessionData(view):
     """Return the data container stored in the session."""
     return ISession(view.request)['schooltool.ttwizard']
-
 
 #
 # Abstract step classes

@@ -56,7 +56,7 @@ from schooltool.timetable import findRelatedTimetables
 from schooltool.timetable.browser import TimetableView, TabindexMixin
 from schooltool.timetable.browser import fix_duplicates, parse_time_range
 from schooltool.timetable.browser import format_timetable_for_presentation
-from schooltool.timetable.browser import format_time_range
+from schooltool.common import format_time_range
 
 
 class TimetableSchemaContainerAbsoluteURLAdapter(BrowserView):
