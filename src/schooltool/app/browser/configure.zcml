@@ -750,6 +750,7 @@
       />
 
   <!-- Timetable support -->
-  <include file="timetable-integration.zcml" />
+  <!-- XXX: disable timetable support for refactoring -->
+  <!--include file="timetable-integration.zcml" /-->
 
 </configure>
