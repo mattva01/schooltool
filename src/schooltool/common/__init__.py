@@ -101,7 +101,7 @@ def parse_time_range(value, default_duration=None):
     """Parse a range of times (e.g. 9:45-14:20).
 
     This is an alternative implementation of time span parsing, taken from
-    schooltool.timetable.browser.
+    schooltool timetabling package.
 
     Example:
 
@@ -186,7 +186,7 @@ def format_time_range(start, duration):
     """Format a range of times (e.g. 9:45-14:20).
 
     This is an alternative implementation of time span formatting, taken from
-    schooltool.timetable.browser.
+    schooltool timetabling package.
 
     Example:
 
