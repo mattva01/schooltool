@@ -59,8 +59,9 @@ __metaclass__ = type
 
 class WeekdayBasedModelMixin:
     """A mixin for a timetable model that indexes day templates by weekday"""
-
     implements(IWeekdayBasedTimetableModel)
+
+    dayTemplates = None # dict of day templates (default None + up to 7 weekdays)
 
     def _validateDayTemplates(self):
         if None not in self.dayTemplates:
@@ -78,41 +79,18 @@ class WeekdayBasedModelMixin:
 
 
 class BaseTimetableModel(Persistent):
-    """An abstract base class for timetable models.
-
-    The models are persistent, but all the data structures inside,
-    including the day templates, are not.  Timetable models are
-    considered to be volatile.  Making the timetable models persistent
-    is an optimisation.  Everything would work without that as well,
-    but a separate pickle of a model would be included in each
-    timetable.
-
-    Subclasses must define these methods:
-
-       def schooldayStrategy(self, date, day_iterator):
-           '''Return a day_id for a certain date.
-
-           Will be called sequentially for all school days.
-
-           May return None if the schoolday model thinks that there should
-           be no classes on this date.
-           '''
-
-       def _dayGenerator(self):
-           '''Return an iterator to be passed to schooldayStrategy'''
-
-       def _validateDayTemplates(self):
-           '''Check that the dayTemplates attribute is well formed'''
-
-       def _getUsualTemplateForDay(self, date, day_id):
-           '''Return the schoolday template for a certain date
-           disregarding special days.
-           '''
-
+    """
+    Interesting methods:
+        createCalendar(self, term, timetable, first=None, last=None)
+        getDayId(self, term, day, day_id_gen=None)
+        periodsInDay(self, term, timetable, day)
+        originalPeriodsInDay(self, term, timetable, day)
     """
 
-    timetableDayIds = ()
-    dayTemplates = {}       # overriden in the __init__s of descendants
+    timetableDayIds = () # day ids of templates built by timetable
+    dayTemplates = {} # day id -> [(period, SchoolDaySlot), ...]
+    exceptionDays = None # date -> [(period, SchoolDaySlot), ...]
+    exceptionDayIds = None # exception date -> day id in dayTemplates
 
     def __init__(self):
         self.exceptionDays = PersistentDict()
@@ -155,13 +133,13 @@ class BaseTimetableModel(Persistent):
         return ImmutableCalendar(events)
 
     def getDayId(self, term, day, day_id_gen=None):
-        """See ITimetableModel.originalPeriodsInDay
-
-        `day_id_gen` is an optimization for a case when all day ids
-        are gotten in sequence, e.g. when generating a timetable
-        calendar.
         """
-
+        scroll day_id_gen to day
+        if not schoolday:
+            return None
+        else:
+            return self.schooldayStrategy(day)
+        """
         if day_id_gen is None:
             # Scroll to the required day
             day_id_gen = self._dayGenerator()
@@ -178,11 +156,8 @@ class BaseTimetableModel(Persistent):
 
     def _periodsInDay(self, term, timetable, day,
                       day_id_gen=None, original=False):
-        """Return a timetable day_id and a list of periods for a given day.
-
-        If day_id_gen is not provided, a new generator is created and
-        scrolled to the date requested.  If day_id_gen is provided, it
-        is called once to gain a day_id.
+        """
+        return day_id, sorted([(period, tstart, duration), ...])
 
         `original` is boolean flag that makes this method disregard
         exceptionDays.
@@ -207,11 +182,16 @@ class BaseTimetableModel(Persistent):
         return day_id, result
 
     def periodsInDay(self, term, timetable, day):
-        """See ITimetableModel.periodsInDay"""
+        """
+        return sorted([(period, tstart, duration), ...])
+        """
         return self._periodsInDay(term, timetable, day)[1]
 
     def originalPeriodsInDay(self, term, timetable, day):
-        """See ITimetableModel.originalPeriodsInDay"""
+        """
+        return sorted([(period, tstart, duration), ...])
+        Ignore exception days.
+        """
         return self._periodsInDay(term, timetable, day, original=True)[1]
 
     def schooldayStrategy(self, date, generator):
@@ -234,25 +214,11 @@ class BaseTimetableModel(Persistent):
 
 
 class BaseSequentialTimetableModel(BaseTimetableModel):
-    """A timetable model in which the school days go in sequence with
-    shifts over non-schooldays:
 
-    Mon     Day 1
-    Tue     Day 2
-    Wed     ----- National holiday!
-    Thu     Day 3
-    Fri     Day 4
-    Sat     ----- Weekend
-    Sun     -----
-    Mon     Day 1
-    Tue     Day 2
-    Wed     Day 3
-    Thu     Day 4
-    Fri     Day 1
-    Sat     ----- Weekend
-    Sun     -----
-    Mon     Day 2
-    """
+    timetableDayIds = () # day ids of templates built by timetable
+    dayTemplates = {} # day id -> [(period, SchoolDaySlot), ...]
+    exceptionDays = None # date -> [(period, SchoolDaySlot), ...]
+    exceptionDayIds = None # exception date -> day id in dayTemplates
 
     def __init__(self, day_ids, day_templates):
         BaseTimetableModel.__init__(self)
@@ -270,25 +236,66 @@ class BaseSequentialTimetableModel(BaseTimetableModel):
             return generator.next()
 
 
+#
+#  Implementations of actually used models
+#
+#
+
+
 class SequentialDaysTimetableModel(BaseSequentialTimetableModel,
                                    WeekdayBasedModelMixin):
     """A sequential days timetable model in which the days are chosen
     by weekday
     """
+    classProvides(ITimetableModelFactory)
 
     factory_id = "SequentialDaysTimetableModel"
 
-    classProvides(ITimetableModelFactory)
+    timetableDayIds = () # day ids of templates built by timetable
+    dayTemplates = {} # day id -> [(period, SchoolDaySlot), ...]
+    exceptionDays = None # date -> [(period, SchoolDaySlot), ...]
+    exceptionDayIds = None # exception date -> day id in dayTemplates
+
+    def _validateDayTemplates(self):
+        """
+        if None not in self.dayTemplates:
+            for weekday in range(7): assert weekday in self.dayTemplates
+        """
+        return WeekdayBasedModelMixin._validateDayTemplates(self)
+
+    def _getUsualTemplateForDay(self, date, day_id):
+        """
+        return self.dayTemplates[date.weekday()] or self.dayTemplates[None]
+        """
+        return WeekdayBasedModelMixin._getUsualTemplateForDay(self, date, day_id)
+
+    def _dayGenerator(self):
+        """
+        return itertools.cycle(self.timetableDayIds)
+        """
+        return BaseSequentialTimetableModel._dayGenerator(self)
+
+    def schooldayStrategy(self, date, generator):
+        """
+        if exception: return self.exceptionDayIds[date]
+        else: return generator.next()
+        """
+        return BaseSequentialTimetableModel.schooldayStrategy(self, date, generator)
 
 
 class SequentialDayIdBasedTimetableModel(BaseSequentialTimetableModel):
     """A sequential timetable model in which the day templates are
     indexed by day id rather than weekday.
     """
-
-    factory_id = "SequentialDayIdBasedTimetableModel"
     classProvides(ITimetableModelFactory)
     implements(IDayIdBasedTimetableModel)
+
+    factory_id = "SequentialDayIdBasedTimetableModel"
+
+    timetableDayIds = () # day ids of templates built by timetable
+    dayTemplates = {} # day id -> [(period, SchoolDaySlot), ...]
+    exceptionDays = None # date -> [(period, SchoolDaySlot), ...]
+    exceptionDayIds = None # exception date -> day id in dayTemplates
 
     def _validateDayTemplates(self):
         for day_id in self.timetableDayIds:
@@ -301,15 +308,29 @@ class SequentialDayIdBasedTimetableModel(BaseSequentialTimetableModel):
         """
         return self.dayTemplates[day_id]
 
+    def _dayGenerator(self):
+        """return itertools.cycle(self.timetableDayIds)"""
+        return BaseSequentialTimetableModel._dayGenerator(self)
+
+    def schooldayStrategy(self, date, generator):
+        """
+        if exception: return self.exceptionDayIds[date]
+        else: return generator.next()
+        """
+        return BaseSequentialTimetableModel.schooldayStrategy(self, date, generator)
+
 
 class WeeklyTimetableModel(BaseTimetableModel, WeekdayBasedModelMixin):
     """A timetable model where the schedule depends only on weekdays."""
+    classProvides(ITimetableModelFactory)
 
     factory_id = "WeeklyTimetableModel"
 
+    # day ids of templates built by timetable:
     timetableDayIds = "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"
-
-    classProvides(ITimetableModelFactory)
+    dayTemplates = {} # day id -> [(period, SchoolDaySlot), ...]
+    exceptionDays = None # date -> [(period, SchoolDaySlot), ...]
+    exceptionDayIds = None # exception date -> day id in dayTemplates
 
     def __init__(self, day_ids=None, day_templates={}):
         BaseTimetableModel.__init__(self)
@@ -318,7 +339,25 @@ class WeeklyTimetableModel(BaseTimetableModel, WeekdayBasedModelMixin):
             self.timetableDayIds = day_ids
         self._validateDayTemplates()
 
+    def _validateDayTemplates(self):
+        """
+        if None not in self.dayTemplates:
+            for weekday in range(7): assert weekday in self.dayTemplates
+        """
+        return WeekdayBasedModelMixin._validateDayTemplates(self)
+
+    def _getUsualTemplateForDay(self, date, day_id):
+        """return self.dayTemplates[date.weekday()] or self.dayTemplates[None]"""
+        return WeekdayBasedModelMixin._getUsualTemplateForDay(self, date, day_id)
+
+    def _dayGenerator(self):
+        return None
+
     def schooldayStrategy(self, date, generator):
+        """
+        if exception: return self.exceptionDayIds[date]
+        else: return self.timetableDayIds[date.weekday()]
+        """
         if date in self.exceptionDayIds:
             return self.exceptionDayIds[date]
         try:
@@ -326,17 +365,25 @@ class WeeklyTimetableModel(BaseTimetableModel, WeekdayBasedModelMixin):
         except IndexError:
             return None
 
-    def _dayGenerator(self):
-        return None
-
+#
+#  Calendar events
+#
+#
+#
 
 class TimetableCalendarEvent(CalendarEvent):
-
+    """For the ImmutableCalendar generated in BaseTimetableModel.createCalendar."""
     implements(ITimetableCalendarEvent)
 
     day_id = property(lambda self: self._day_id)
     period_id = property(lambda self: self._period_id)
     activity = property(lambda self: self._activity)
+
+    # de facto, tuple of section resources, probably unused anymore
+    resources = property(lambda self: self.activity.resources)
+
+    # XXX: is this used anywhere?
+    owner = property(lambda self: self.activity.owner) # [section]
 
     def __init__(self, *args, **kwargs):
         self._day_id = kwargs.pop('day_id')
@@ -344,17 +391,25 @@ class TimetableCalendarEvent(CalendarEvent):
         self._activity = kwargs.pop('activity')
         CalendarEvent.__init__(self, *args, **kwargs)
 
-    @property
-    def resources(self):
-        return self.activity.resources
-
-    @property
-    def owner(self):
-        return self.activity.owner
-
 
 class PersistentTimetableCalendarEvent(CalendarEvent):
+    """A calendar event that has been created from a timetable."""
     implements(ITimetableCalendarEvent)
+
+    __name__ = None
+    unique_id = None
+
+    _day_id = None
+    _period_id = None
+    _activity = None
+    _resources = None
+
+    dtstart = None
+    duration = None
+    description = None
+    location = None
+    recurrence = None # XXX: for timetables? really?
+    allday = None # XXX: for timetables? really?
 
     day_id = property(lambda self: self._day_id)
     period_id = property(lambda self: self._period_id)
@@ -386,6 +441,11 @@ class PersistentTimetableCalendarEvent(CalendarEvent):
         timezone = pytz.timezone(tz_id)
         return self.dtstart.astimezone(timezone).date()
 
+
+#
+#  More calendar integration for reference
+#
+#
 
 def addEventsToCalendar(event):
     timetable = event.activity.timetable

@@ -53,18 +53,27 @@ from schooltool.schoolyear.subscriber import ObjectEventAdapterSubscriber
 
 
 class TimetableSchemaDay(Persistent):
+    """A day in a timetable schema.
+
+    A timetable day is an ordered collection of periods.
+
+    Different days within the same timetable schema may have different periods.
+
+    ITimetableSchemaDay has keys, items and __getitem__ for interface
+    compatibility with ITimetableDay -- so that, for example, views for
+    ITimetable can be used to render ITimetableSchemas.
+    """
 
     implements(ITimetableSchemaDay)
 
-    def __init__(self, periods=(), homeroom_period_ids=None):
-        if homeroom_period_ids is not None:
-            for id in homeroom_period_ids:
-                assert id in periods, "%s not in %s" % (id, periods)
-        else:
-            homeroom_period_ids = []
+    periods = None # list of period IDs for this day
+    homeroom_period_ids = None # list of homeroom period IDs
 
-        self.periods = periods
-        self.homeroom_period_ids = homeroom_period_ids
+    def __init__(self, periods=(), homeroom_period_ids=None):
+        """
+        periods: list of titles/IDs
+        homeroom_period_ids: non-persistent list of homeroom IDs
+        """
 
     def keys(self):
         return self.periods
@@ -73,24 +82,31 @@ class TimetableSchemaDay(Persistent):
         return [(period, set()) for period in self.periods]
 
     def __getitem__(self, period):
+        # XXX: wow...
         if period not in self.periods:
             raise KeyError(period)
         return set()
 
-    def __eq__(self, other):
-        if ITimetableSchemaDay.providedBy(other):
-            return (self.periods, self.homeroom_period_ids) == \
-                    (other.periods, other.homeroom_period_ids)
-        else:
-            return False
-
-    def __ne__(self, other):
-        return not self.__eq__(other)
-
 
 class TimetableSchema(Persistent, Contained):
+    """A timetable schema.
 
+    A timetable schema is an ordered collection of timetable days that contain
+    periods.
+    """
     implements(ITimetableSchemaContained, ITimetableSchemaWrite)
+
+    title = None
+    model = None # timetable model
+    timezone = None
+
+    day_ids = None # day IDs within this timetable
+
+    # PersistentDict
+    # keys - only from day_ids
+    # values - implementing ITimetableDay only
+    days = None
+
 
     def __init__(self, day_ids, title=None, model=None, timezone='UTC'):
         """Create a new empty timetable schema.
@@ -117,64 +133,29 @@ class TimetableSchema(Persistent, Contained):
     def __getitem__(self, key):
         return self.days[key]
 
-    def __setitem__(self, key, value):
-        if not ITimetableSchemaDay.providedBy(value):
-            raise TypeError("Timetable schema can only contain"
-                            " ITimetableSchemaDay objects (got %r)" % (value,))
-        elif key not in self.day_ids:
-            raise ValueError("Key %r not in day_ids %r" % (key, self.day_ids))
-        self.days[key] = value
-
     def createTimetable(self, term):
-        new = Timetable(self.day_ids)
-        new.model = self.model
-        new.timezone = self.timezone
-        new.schooltt = self
-        new.term = term
-        for day_id in self.day_ids:
-            new[day_id] = TimetableDay(self[day_id].periods,
-                                       self[day_id].homeroom_period_ids)
-        return new
+        """Return a new empty timetable with the same structure.
 
-    def __eq__(self, other):
-        if ITimetableSchema.providedBy(other):
-            return (self.items() == other.items()
-                    and self.model == other.model
-                    and self.timezone == other.timezone)
-        else:
-            return False
+        The new timetable has the same set of day_ids, and the sets of
+        period ids within each day.  It has no activities.
 
-    def __ne__(self, other):
-        return not self.__eq__(other)
+        The new timetable is bound to the term passed as the argument.
+        """
 
 
 class TimetableSchemaContainerContainer(BTreeContainer):
-    """Container of Timetable Schema Containers."""
-
+    """Container  of Timetable Schema Containers [for each school year]."""
     implements(ITimetableSchemaContainerContainer,
                IAttributeAnnotatable)
 
 
 class TimetableSchemaContainer(BTreeContainer):
-
+    """Container of schemas for a school year."""
     implements(ITimetableSchemaContainer, IAttributeAnnotatable)
 
-    _default_id = None
+    _default_id = None # default schema for calendars
 
-    def _set_default_id(self, new_id):
-        if new_id is not None and new_id not in self:
-            raise ValueError("Timetable schema %r does not exist" % new_id)
-        self._default_id = new_id
-
-    default_id = property(lambda self: self._default_id, _set_default_id)
-
-    def __setitem__(self, schema_id, ttschema):
-        assert ITimetableSchema.providedBy(ttschema)
-        if self.has_key(schema_id):
-            BTreeContainer.__delitem__(self, schema_id)
-        BTreeContainer.__setitem__(self, schema_id, ttschema)
-        if self.default_id is None:
-            self.default_id = schema_id
+    default_id = property(lambda self: self._default_id)
 
     def __delitem__(self, schema_id):
         BTreeContainer.__delitem__(self, schema_id)
@@ -182,32 +163,30 @@ class TimetableSchemaContainer(BTreeContainer):
             self.default_id = None
 
     def getDefault(self):
+        """Default schema for the school year.
+        Used in resource booking calendar
+        and in daily calendar views to display default periods.
+        """
         return self[self.default_id]
 
 
+#
+# Integration
+#
+#
+
+
 def clearTimetablesOnDeletion(obj, event):
-    """
-    This event subscriber for term and schema will remove all timetable
-    related to the term
-    """
-    object = event.object
+    """Integration: on term deletion, remove all timetables for the term"""
     for tt in findRelatedTimetables(obj):
         ttdict = getParent(tt)
         del ttdict[getName(tt)]
 
 
-@adapter(ISchoolToolApplication)
-@implementer(ITimetableSchemaContainer)
-def getTimetableSchemaContainerForApp(app):
-    syc = ISchoolYearContainer(app)
-    sy = syc.getActiveSchoolYear()
-    if sy is not None:
-        return ITimetableSchemaContainer(sy)
-
-
 @adapter(ISchoolYear)
 @implementer(ITimetableSchemaContainer)
 def getTimetableSchemaContainer(sy):
+    """Integration: schema containers for all school years"""
     int_ids = getUtility(IIntIds)
     sy_id = str(int_ids.getId(sy))
     app = ISchoolToolApplication(None)
@@ -217,38 +196,17 @@ def getTimetableSchemaContainer(sy):
     return cc
 
 
-@adapter(ITerm)
-@implementer(ITimetableSchemaContainer)
-def getTimetableSchemaContainerForTerm(term):
-    return ITimetableSchemaContainer(ISchoolYear(term))
-
-
-@adapter(ITimetableSchemaContainer)
-@implementer(ISchoolYear)
-def getSchoolYearForTimetableSchemaContainer(ttschema_container):
-    container_id = int(ttschema_container.__name__)
-    int_ids = getUtility(IIntIds)
-    container = int_ids.getObject(container_id)
-    return container
-
-
-@adapter(ITimetableSchema)
-@implementer(ISchoolYear)
-def getSchoolYearForTTschema(ttschema):
-    return ISchoolYear(ttschema.__parent__)
-
-
-def locationCopy(loc):
-    tmp = StringIO()
-    persistent = CopyPersistent(loc)
-
-    # Pickle the object to a temporary file
-    pickler = cPickle.Pickler(tmp, 2)
-    pickler.persistent_id = persistent.id
-    pickler.dump(loc)
-
-    # Now load it back
-    tmp.seek(0)
-    unpickler = cPickle.Unpickler(tmp)
-    unpickler.persistent_load = persistent.load
-    return unpickler.load()
+#def locationCopy(loc):
+#    tmp = StringIO()
+#    persistent = CopyPersistent(loc)
+#
+#    # Pickle the object to a temporary file
+#    pickler = cPickle.Pickler(tmp, 2)
+#    pickler.persistent_id = persistent.id
+#    pickler.dump(loc)
+#
+#    # Now load it back
+#    tmp.seek(0)
+#    unpickler = cPickle.Unpickler(tmp)
+#    unpickler.persistent_load = persistent.load
+#    return unpickler.load()
