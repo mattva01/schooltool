@@ -1,0 +1,300 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/browser"
+           xmlns:zope="http://namespaces.zope.org/zope"
+           i18n_domain="schooltool">
+
+  <!-- Traversers -->
+
+  <zope:class class=".timetable.TimetablesTraverser">
+    <zope:allow
+        interface="schooltool.traverser.interfaces.ITraverserPlugin" />
+  </zope:class>
+
+  <zope:adapter
+      for="schooltool.timetable.interfaces.IOwnTimetables
+           zope.publisher.interfaces.browser.IBrowserRequest"
+      provides="schooltool.traverser.interfaces.ITraverserPlugin"
+      name="timetables"
+      factory=".timetable.TimetablesTraverser"
+      />
+
+  <zope:adapterTraverserPlugin
+      for="schooltool.schoolyear.interfaces.ISchoolYear"
+      layer="zope.publisher.interfaces.browser.IBrowserRequest"
+      name="school_timetables"
+      adapter="schooltool.timetable.interfaces.ITimetableSchemaContainer"
+      />
+
+  <zope:adapter
+      factory=".schema.TimetableSchemaContainerAbsoluteURLAdapter"
+      provides="zope.traversing.browser.interfaces.IAbsoluteURL" />
+
+  <zope:adapter
+      factory=".schema.TimetableSchemaContainerAbsoluteURLAdapter"
+      provides="zope.interface.Interface"
+      name="absolute_url"/>
+
+  <!-- Timetable schema containers
+
+    To be replaced with schedule containers in
+    schooltool.timetable.browser.app.ITimetableSource layer
+
+  -->
+
+  <navigationViewlet
+      name="school_timetables"
+      for="*"
+      manager="schooltool.schoolyear.browser.interfaces.ISchoolYearViewMenuViewletManager"
+      template="templates/link_to_school_timetables.pt"
+      permission="schooltool.view"
+      order="60"
+      />
+
+  <page
+      name="index.html"
+      for="schooltool.timetable.interfaces.ITimetableSchemaContainer"
+      class=".schema.TimetableSchemaContainerView"
+      template="templates/timetable-schema-container.pt"
+      permission="schooltool.view"
+      />
+
+  <page
+      name="delete.html"
+      for="schooltool.timetable.interfaces.ITimetableSchemaContainer"
+      class=".schema.TimetableDependentDeleteView"
+      template="templates/schooltt-delete.pt"
+      permission="schooltool.edit"
+      />
+
+  <zope:utility
+     factory=".timetable.timetableSchemaVocabularyFactory"
+     provides="zope.schema.interfaces.IVocabularyFactory"
+     name="schooltool.timetable.browser.timetable_schema_vocabulary" />
+
+  <!-- Timetable schemas
+
+    Timetable creation views for
+    schooltool.timetable.browser.app.ITimetableSource layer
+
+  -->
+
+  <page
+      name="export.xml"
+      for="schooltool.timetable.interfaces.ITimetableSchema"
+      class=".schema.TimetableSchemaXMLView"
+      permission="schooltool.view"
+      />
+
+  <page
+      name="simpleadd.html"
+      for="schooltool.timetable.interfaces.ITimetableSchemaContainer"
+      class=".schema.SimpleTimetableSchemaAdd"
+      permission="schooltool.edit"
+      />
+
+  <page
+      name="complexadd.html"
+      for="schooltool.timetable.interfaces.ITimetableSchemaContainer"
+      class=".schema.AdvancedTimetableSchemaAdd"
+      permission="schooltool.edit"
+      />
+
+  <page
+      name="add.html"
+      for="schooltool.timetable.interfaces.ITimetableSchemaContainer"
+      class=".ttwizard.TimetableSchemaWizard"
+      permission="schooltool.edit"
+      menu="schooltool_actions"
+      title="New Timetable"
+      />
+
+  <!-- Timetable schema views
+
+  To be replaced with plain timetable views.
+
+  -->
+
+  <page
+      name="index.html"
+      for="schooltool.timetable.interfaces.ITimetableSchema"
+      class=".schema.TimetableSchemaView"
+      template="templates/timetableschema.pt"
+      permission="schooltool.view"
+      />
+
+  <page
+      name="special.html"
+      for="schooltool.timetable.interfaces.ITimetableSchema"
+      class=".timetable.SpecialDayView"
+      permission="schooltool.edit"
+      menu="schooltool_actions"
+      title="Change Timetable for One Day"
+      />
+
+
+  <!-- Section scheduling
+
+  -->
+
+  <page
+      name="schedule.html"
+      for="schooltool.course.interfaces.ISection"
+      class="schooltool.timetable.browser.timetable.SectionTimetableSetupView"
+      permission="schooltool.edit" />
+
+  <configure package="schooltool.skin">
+    <navigationViewlet
+      name="schedule-section"
+      for="schooltool.course.interfaces.ISection"
+      manager="schooltool.skin.IActionMenuManager"
+      template="templates/actionsViewlet.pt"
+      permission="schooltool.edit"
+      link="timetables"
+      title="Schedule"
+      order="10"
+      />
+  </configure>
+
+  <!-- ITimetableDict
+
+    To be replaced with schedule containers within
+    schooltool.skin.ISchoolToolLayer layer.
+
+  -->
+
+  <configure package="schooltool.skin">
+    <navigationViewlet
+      name="add-timetable"
+      for="schooltool.timetable.interfaces.ITimetableDict"
+      manager="schooltool.skin.IActionMenuManager"
+      template="templates/actionsViewlet.pt"
+      permission="schooltool.edit"
+      link="addTimetable.html"
+      title="Add Timetable"
+      order="10"
+      />
+  </configure>
+
+  <page
+      name="index.html"
+      for="schooltool.timetable.interfaces.ITimetableDict"
+      class="schooltool.timetable.browser.timetable.SectionTimetablesView"
+      permission="schooltool.edit" />
+
+  <page
+      name="confirm-delete.html"
+      for="schooltool.timetable.interfaces.ITimetableDict"
+      class="schooltool.timetable.browser.timetable.SectionTimetableDeleteView"
+      permission="schooltool.edit" />
+
+  <zope:adapter
+       factory=".timetable.TimetableAdd_default_first"
+       name="default"
+       />
+
+  <zope:adapter
+       factory=".timetable.TimetableAdd_default_last"
+       name="default"
+       />
+
+  <page
+      name="addTimetable.html"
+      for="schooltool.timetable.interfaces.ITimetableDict"
+      class=".timetable.TimetableAddView"
+      permission="schooltool.edit"
+      />
+
+
+  <!-- Timetable editing views
+
+  -->
+
+  <page
+      name="index.html"
+      for="schooltool.timetable.interfaces.ITimetable"
+      class=".timetable.TimetableEditView"
+      template="templates/timetable-edit.pt"
+      permission="schooltool.edit"
+      />
+
+  <zope:adapter
+      factory=".timetable.TimetableFormValidator" />
+
+  <!-- Calendar integration
+
+  -->
+
+   <page
+      for="schooltool.timetable.interfaces.ITimetableCalendarEvent"
+      name="edit.html"
+      layer="schooltool.skin.ISchoolToolLayer"
+      class=".event.TimetableEventEditView"
+      permission="schooltool.edit"
+      />
+
+   <zope:subscriber
+       for="schooltool.app.interfaces.ISchoolToolCalendar
+            zope.publisher.interfaces.http.IHTTPRequest"
+       provides="schooltool.app.browser.interfaces.ICalendarProvider"
+       factory=".overlay.TimetableCalendarListSubscriber"
+       />
+
+  <viewlet
+      name="calendar-overlay"
+      for="*"
+      view="schooltool.app.browser.interfaces.IHaveEventLegend"
+      class="schooltool.timetable.browser.overlay.CalendarSTOverlayView"
+      manager="schooltool.app.browser.cal.ICalendarPortletViewletManager"
+      template="templates/calendar_overlay.pt"
+      permission="zope.Public"
+      layer="schooltool.timetable.browser.skin.ITimetableLayer"
+      order="10"
+      />
+
+  <viewlet
+      name="calendar-term-legend"
+      for="*"
+      class="schooltool.timetable.browser.cal.TermLegendViewlet"
+      view=".cal.TimetablingYearlyCalendarView"
+      manager="schooltool.app.browser.cal.ICalendarPortletViewletManager"
+      template="templates/timetable_cal_yearly_legend.pt"
+      permission="schooltool.view"
+      layer="schooltool.timetable.browser.skin.ITimetableLayer"
+      order="6"
+      />
+
+   <page
+       name="yearly.html"
+       layer="schooltool.timetable.browser.skin.ITimetableLayer"
+       for="schooltool.app.interfaces.ISchoolToolCalendar"
+       class=".cal.TimetablingYearlyCalendarView"
+       template="templates/timetable_cal_yearly.pt"
+       permission="schooltool.view"
+       />
+
+  <page
+      for="schooltool.calendar.interfaces.ICalendar"
+      name="daily_calendar_rows"
+      layer="schooltool.timetable.browser.skin.ITimetableLayer"
+      class=".cal.DailyTimetableCalendarRowsView"
+      permission="zope.View"
+      />
+
+  <!-- Section timetable table formatters.
+
+     Didn't take a look yet where they are actually used.
+
+  -->
+
+  <zope:adapter
+      for="schooltool.timetable.interfaces.ITimetableDict
+           zope.publisher.interfaces.browser.IBrowserRequest"
+      factory="schooltool.table.table.FilterWidget" />
+
+  <zope:adapter
+      for="schooltool.timetable.interfaces.ITimetableDict
+           zope.publisher.interfaces.browser.IBrowserRequest"
+      factory="schooltool.table.table.SchoolToolTableFormatter" />
+
+
+</configure>

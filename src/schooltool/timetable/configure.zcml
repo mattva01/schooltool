@@ -10,7 +10,6 @@
   <include file="timetable.zcml" />
   <include file="integration.zcml" />
 
-  <!-- XXX: disable timetable support for refactoring -->
-  <!--include package=".browser" /-->
+  <include package=".browser" />
 
 </configure>
