@@ -309,3 +309,68 @@ pass module instead of it's dotted name.
     >>> other.context is not zcml.context
     True
 
+
+Fake modules and their globals
+------------------------------
+
+Sometimes it is useful to define a class or method inside a test,
+replacing actual counterpart in some module for the test only.
+
+    >>> from schooltool.testing import mock
+
+    >>> @mock.module('schooltool.imaginarium')
+    ... def greet():
+    ...     print 'Hello world!'
+
+A fake module was created.
+
+    >>> from schooltool import imaginarium
+    >>> print imaginarium
+    <module 'schooltool.imaginarium' (built-in)>
+
+With the injected function.
+
+    >>> for a in sorted(dir(imaginarium)):
+    ...     print '%s: %s' % (a, getattr(imaginarium, a))
+    __doc__: None
+    __name__: schooltool.imaginarium
+    __package__: None
+    greet: <function greet at ...>
+
+    >>> imaginarium.greet()
+    Hello world!
+
+We can mock classes the same way too.
+
+    >>> @mock.module(imaginarium)
+    ... class Pond(object):
+    ...    frog = 'Kermit'
+
+    >>> pond = imaginarium.Pond()
+    >>> print pond.frog
+    Kermit
+
+Note that some attributes of mocked objects are not updated:
+
+    >>> print imaginarium.greet.__module__
+    None
+
+    >>> print imaginarium.Pond.__module__
+    __builtin__
+
+Oh, and we can set global variables too.
+
+    >>> mock.fake_global(imaginarium, 'the_answer', 42)
+
+    >>> imaginarium.the_answer
+    42
+
+After the test is finished, fake modules will be removed.
+
+    >>> mock.restoreModules()
+
+    >>> from schooltool.imaginarium import foo
+    Traceback (most recent call last):
+    ...
+    ImportError: No module named imaginarium
+
