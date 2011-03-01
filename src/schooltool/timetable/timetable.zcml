@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:i18n="http://namespaces.zope.org/i18n"
+           i18n_domain="schooltool">
+
+  <class class=".timetable.TimetableSchedule">
+    <require
+        permission="schooltool.view"
+        interface="schooltool.timetable.interfaces.ITimetableSchedule" />
+    <require
+        permission="schooltool.edit"
+        set_schema="schooltool.timetable.interfaces.ITimetableSchedule" />
+  </class>
+
+  <class class=".timetable.WeeklyTimetable">
+    <require
+        permission="schooltool.view"
+        interface="schooltool.timetable.interfaces.IWeeklyTimetableSchedule" />
+    <require
+        permission="schooltool.edit"
+        set_schema="schooltool.timetable.interfaces.IWeeklyTimetableSchedule" />
+  </class>
+
+  <class class=".timetable.RotatingTimetable">
+    <require
+        permission="schooltool.view"
+        interface="schooltool.timetable.interfaces.IRotatingTimetableSchedule" />
+    <require
+        permission="schooltool.edit"
+        set_schema="schooltool.timetable.interfaces.IRotatingTimetableSchedule" />
+  </class>
+
+</configure>

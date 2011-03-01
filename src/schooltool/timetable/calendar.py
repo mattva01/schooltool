@@ -1,6 +1,6 @@
 #
 # SchoolTool - common information systems platform for school administration
-# Copyright (c) 2011 Shuttleworth Foundation
+# Copyright (c) 2010 Shuttleworth Foundation
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,5 +17,20 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Schedules and timetables.
+Synchronisation between timetables and calendars.
 """
+
+from zope.interface import implements
+
+from schooltool.timetable import interfaces
+from schooltool.app import CalendarEvent
+
+
+class ScheduleCalendarEvent(CalendarEvent):
+    """Period scheduled in a calendar."""
+    implements(interfaces.IScheduleCalendarEvent)
+
+    period = None
+    timetable = None # timetable that generated this event
+    meeting_id = None
+

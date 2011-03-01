@@ -22,39 +22,41 @@ Section implementation
 from persistent import Persistent
 import rwproperty
 
-from zope.event import notify
 from zope.annotation.interfaces import IAttributeAnnotatable
-from zope.lifecycleevent.interfaces import IObjectRemovedEvent
+from zope.intid.interfaces import IIntIds
+from zope.interface import implements
+from zope.interface import implementer
+from zope.event import notify
+from zope.component import getUtility
+from zope.component import adapter
+from zope.component import adapts
 from zope.container.interfaces import INameChooser
 from zope.container.btree import BTreeContainer
 from zope.container.contained import Contained
-from zope.component import adapts
-from zope.interface import implements
+from zope.lifecycleevent.interfaces import IObjectRemovedEvent
 from zope.proxy import sameProxiedObjects
 from zope.security.proxy import removeSecurityProxy
 
-from schooltool.relationship import RelationshipProperty
 from schooltool.app import membership
-from schooltool.app.relationships import URIInstruction
-from schooltool.app.relationships import URISection
+from schooltool.app.relationships import URIInstruction, URISection
 from schooltool.app.app import InitBase
+from schooltool.app import relationships
+from schooltool.app.security import ConfigurableCrowd
+from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.course import interfaces, booking
 from schooltool.group.interfaces import IBaseGroup as IGroup
 from schooltool.person.interfaces import IPerson
-
-from schooltool.common import SchoolToolMessage as _
-from schooltool.app import relationships
-from schooltool.course import interfaces, booking
+from schooltool.relationship.relationship import getRelatedObjects
+from schooltool.relationship import RelationshipProperty
 from schooltool.schoolyear.subscriber import EventAdapterSubscriber
 from schooltool.schoolyear.subscriber import ObjectEventAdapterSubscriber
 from schooltool.schoolyear.interfaces import ISubscriber
 from schooltool.schoolyear.interfaces import ISchoolYear
 from schooltool.securitypolicy.crowds import Crowd, AggregateCrowd
-from schooltool.course.interfaces import ICourseContainer
-from schooltool.course.interfaces import ISection
-from schooltool.app.security import ConfigurableCrowd
-from schooltool.relationship.relationship import getRelatedObjects
-from schooltool.course.interfaces import ILearner, IInstructor
 from schooltool.term.term import getNextTerm
+from schooltool.term.interfaces import ITerm
+
+from schooltool.common import SchoolToolMessage as _
 
 
 class InvalidSectionLinkException(Exception):
@@ -70,7 +72,7 @@ class SectionBeforeLinkingEvent(object):
 class Section(Persistent, Contained):
 
     implements(interfaces.ISectionContained,
-                              IAttributeAnnotatable)
+               IAttributeAnnotatable)
 
     _location = None
 
@@ -198,16 +200,8 @@ class Section(Persistent, Contained):
                                      booking.URIResource)
 
 
-from zope.intid.interfaces import IIntIds
-from zope.component import getUtility
-from zope.component import adapter
-from zope.interface import implementer
-from schooltool.course.interfaces import ISectionContainer
-from schooltool.app.interfaces import ISchoolToolApplication
-from schooltool.term.interfaces import ITerm
-
 @adapter(ITerm)
-@implementer(ISectionContainer)
+@implementer(interfaces.ISectionContainer)
 def getSectionContainer(term):
     int_ids = getUtility(IIntIds)
     term_id = str(int_ids.getId(term))
@@ -218,19 +212,19 @@ def getSectionContainer(term):
     return sc
 
 
-@adapter(ISectionContainer)
+@adapter(interfaces.ISectionContainer)
 @implementer(ISchoolYear)
 def getSchoolYearForSectionContainer(section_container):
     return ISchoolYear(ITerm(section_container))
 
 
-@adapter(ISection)
+@adapter(interfaces.ISection)
 @implementer(ISchoolYear)
 def getSchoolYearForSection(section):
     return ISchoolYear(ITerm(section.__parent__))
 
 
-@adapter(ISectionContainer)
+@adapter(interfaces.ISectionContainer)
 @implementer(ITerm)
 def getTermForSectionContainer(section_container):
     container_id = int(section_container.__name__)
@@ -239,22 +233,22 @@ def getTermForSectionContainer(section_container):
     return container
 
 
-@adapter(ISection)
+@adapter(interfaces.ISection)
 @implementer(ITerm)
 def getTermForSection(section):
     return ITerm(section.__parent__)
 
 
-@adapter(ISectionContainer)
-@implementer(ICourseContainer)
+@adapter(interfaces.ISectionContainer)
+@implementer(interfaces.ICourseContainer)
 def getCourseContainerForSectionContainer(section_container):
-    return ICourseContainer(ISchoolYear(section_container))
+    return interfaces.ICourseContainer(ISchoolYear(section_container))
 
 
-@adapter(ISection)
-@implementer(ICourseContainer)
+@adapter(interfaces.ISection)
+@implementer(interfaces.ICourseContainer)
 def getCourseContainerForSection(section):
-    return ICourseContainer(ISchoolYear(section))
+    return interfaces.ICourseContainer(ISchoolYear(section))
 
 
 class SectionContainerContainer(BTreeContainer):
@@ -282,7 +276,8 @@ class InstructorsCrowd(Crowd):
     description = _(u'Instructors of the section.')
 
     def contains(self, principal):
-        return IPerson(principal, None) in ISection(self.context).instructors
+        instructors = interfaces.ISection(self.context).instructors
+        return IPerson(principal, None) in instructors
 
 
 class PersonInstructorsCrowd(Crowd):
@@ -293,7 +288,7 @@ class PersonInstructorsCrowd(Crowd):
 
     def _getSections(self, ob):
         return [section for section in getRelatedObjects(ob, membership.URIGroup)
-                if ISection.providedBy(section)]
+                if interfaces.ISection.providedBy(section)]
 
     def contains(self, principal):
         user = IPerson(principal, None)
@@ -310,7 +305,7 @@ class LearnersCrowd(Crowd):
     At the moment only direct members of a section are considered as
     learners.
     """
-    adapts(ISection)
+    adapts(interfaces.ISection)
 
     title = _(u'Learners')
     description = _(u'Students of the section.')
@@ -320,20 +315,20 @@ class LearnersCrowd(Crowd):
 
 
 class SectionCalendarSettingCrowd(ConfigurableCrowd):
-    adapts(ISection)
+    adapts(interfaces.ISection)
     setting_key = 'everyone_can_view_section_info'
 
 
 class SectionCalendarViewers(AggregateCrowd):
     """Crowd of those who can see the section calendar."""
-    adapts(ISection)
+    adapts(interfaces.ISection)
 
     def crowdFactories(self):
         return [InstructorsCrowd, LearnersCrowd, SectionCalendarSettingCrowd]
 
 
 class PersonLearnerAdapter(object):
-    implements(ILearner)
+    implements(interfaces.ILearner)
     adapts(IPerson)
 
     def __init__(self, person):
@@ -341,7 +336,7 @@ class PersonLearnerAdapter(object):
 
     def _getSections(self, ob):
         return [section for section in getRelatedObjects(ob, membership.URIGroup)
-                if ISection.providedBy(section)]
+                if interfaces.ISection.providedBy(section)]
 
     def sections(self):
         # First check the the sections a pupil is in directly
@@ -350,7 +345,7 @@ class PersonLearnerAdapter(object):
 
 
 class PersonInstructorAdapter(object):
-    implements(IInstructor)
+    implements(interfaces.IInstructor)
     adapts(IPerson)
 
     def __init__(self, person):
@@ -365,13 +360,13 @@ class RemoveSectionsWhenTermIsDeleted(ObjectEventAdapterSubscriber):
     adapts(IObjectRemovedEvent, ITerm)
 
     def __call__(self):
-        section_container = ISectionContainer(self.object)
+        section_container = interfaces.ISectionContainer(self.object)
         for section_id in list(section_container.keys()):
             del section_container[section_id]
 
 
 class UnlinkSectionWhenDeleted(ObjectEventAdapterSubscriber):
-    adapts(IObjectRemovedEvent, ISection)
+    adapts(IObjectRemovedEvent, interfaces.ISection)
 
     def __call__(self):
         self.object.previous = None
@@ -406,7 +401,7 @@ class SectionLinkContinuinityValidationSubscriber(EventAdapterSubscriber):
 def copySection(section, target_term):
     """Create a copy of a section in a desired term."""
     section_copy = Section(section.title, section.description)
-    sections = ISectionContainer(target_term)
+    sections = interfaces.ISectionContainer(target_term)
     name = section.__name__
     if name in sections:
         name = INameChooser(sections).chooseName(name, section_copy)
