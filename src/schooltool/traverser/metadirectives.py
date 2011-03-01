@@ -18,31 +18,56 @@
 #
 """
 SchoolTool traverser metadirectives.
-
-$Id$
-
 """
 from zope.security.zcml import Permission
 from zope.schema import TextLine
 from zope.interface import Interface
-from zope.configuration.fields import GlobalObject
+from zope.configuration.fields import GlobalObject, GlobalInterface
 
 
-class ITraverserPluginDirective(Interface):
-
-    name = TextLine(
-        title=u"The name the tracerser will be traversing into.",
-        required=True
+class IPluggableTraverser(Interface):
+    for_ = GlobalInterface(
+        title=u"The interface this traverser is for.",
+        required=True,
         )
+
+    type = GlobalInterface(
+        title=u"Request type",
+        required=True,
+        )
+
+    factory = GlobalObject(
+        title=u"The pluggable traverser implementation.",
+        required=False,
+        )
+
+    permission = Permission(
+        title=u"Permission",
+        description=u"The permission needed to use the view.",
+        required=False,
+        )
+
+    provides = GlobalInterface(
+        title=u"Interface the component provides",
+        required=False,
+        )
+
+
+class ITraverserPluginBase(Interface):
 
     for_ = GlobalObject(
         title=u"The interface this plugin is for.",
-        required=True
+        required=True,
         )
 
     layer = GlobalObject(
         title=u"The layer the plugin is declared for",
-        required=False
+        required=False,
+        )
+
+    name = TextLine(
+        title=u"The name the traverser will be traversing into.",
+        required=False,
         )
 
     permission = Permission(
@@ -51,18 +76,52 @@ class ITraverserPluginDirective(Interface):
         )
 
 
-class IAdapterTraverserPlugin(ITraverserPluginDirective):
-    """Adapter traverser plugin zcml directive."""
+class ITraverserPlugin(ITraverserPluginBase):
+    """Traverser plugin zcml directive."""
 
-    adapter = GlobalObject(
-        title=u"The interface this plugin will be adapting to.",
-        required=True
+    plugin = GlobalObject(
+        title=u"The plugin that does the traversal.",
+        required=True,
         )
 
 
-class ISingleAttributeTraverserPlugin(ITraverserPluginDirective):
-    """Single attribute traverser plugin zcml directive."""
+class INamedTraverserPlugin(ITraverserPluginBase):
+    """A simple safeguard against rogue generic traversers.
+
+    Make traversal name mandatory.
+    """
+    name = TextLine(
+        title=u"The name the traverser will be traversing into.",
+        required=True,
+        )
 
 
-class INullTraverserPlugin(ITraverserPluginDirective):
-    """Null traverser plugin zcml directive."""
+class INullTraverserPlugin(INamedTraverserPlugin):
+    """Null traverser plugin zcml directive.
+
+    The traverser returns the context.
+    """
+
+
+class IAttributeTraverserPlugin(INamedTraverserPlugin):
+    """Attribute traverser plugin zcml directive.
+
+    Traverses to an attribute of the context.
+    """
+
+
+class IAdapterTraverserPlugin(INamedTraverserPlugin):
+    """Adapter traverser plugin zcml directive.
+
+    Adapts context to the given interface.
+    """
+
+    adapter = GlobalObject(
+        title=u"The interface this plugin will be adapting to.",
+        required=True,
+        )
+
+    adapter_name = TextLine(
+        title=u"Adapter name to use when adapting to given interface.",
+        required=False,
+        )

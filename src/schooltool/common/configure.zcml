@@ -100,6 +100,8 @@
 
   <!-- *Core* sub-packages -->
 
+  <include package="schooltool.traverser" />
+
   <include package="schooltool.skin" />
   <include package="schooltool.relationship" />
   <include package="schooltool.app" />

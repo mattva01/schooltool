@@ -57,7 +57,7 @@ from schooltool.timetable.interfaces import ITimetables, ITimetableDict
 from schooltool.timetable import TimetableOverlapError, TimetableOverflowError
 from schooltool.timetable import validateAgainstTerm
 from schooltool.timetable import validateAgainstOthers
-from schooltool.traverser.interfaces import ITraverserPlugin
+from schooltool.traverser.traverser import TraverserPlugin
 from schooltool.schoolyear.interfaces import ISchoolYear
 
 from schooltool.common import SchoolToolMessage as _
@@ -121,21 +121,11 @@ class TabindexMixin(object):
         self.__tabindex += nrows * ncols
 
 
-class TimetablesTraverser(object):
+class TimetablesTraverser(TraverserPlugin):
     """A traverser that allows to traverse to a timetable of its context."""
 
-    adapts(IOwnTimetables)
-    implements(ITraverserPlugin)
-
-    def __init__(self, context, request):
-        self.context = context
-        self.request = request
-
-    def publishTraverse(self, request, name):
-        if name == 'timetables':
-            return ITimetables(self.context).timetables
-
-        raise NotFound(self.context, name, request)
+    def traverse(self, name):
+        return ITimetables(self.context).timetables
 
 
 def fix_duplicates(names):

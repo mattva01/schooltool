@@ -117,13 +117,11 @@
       factory=".booking.ResourceBookingCalendar"
       provides=".booking.IBookingCalendar" />
 
-  <adapter
-      for=".interfaces.IResourceContainer
-           zope.publisher.interfaces.browser.IBrowserRequest"
-      provides="schooltool.traverser.interfaces.ITraverserPlugin"
-      factory=".booking.ResourceBookingTraverserPlugin"
-      permission="zope.Public"
+  <traverserPlugin
+      for=".interfaces.IResourceContainer"
+      layer="zope.publisher.interfaces.browser.IBrowserRequest"
       name="booking"
+      plugin=".booking.ResourceBookingTraverserPlugin"
       />
 
   <adapter factory=".resource.getResourceDemographics" />

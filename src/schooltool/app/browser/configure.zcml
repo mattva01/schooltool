@@ -278,17 +278,11 @@
 
   <!-- Calendar views -->
 
-  <!-- Sigh. Cannot specify multiple for and permission in subsscriber ;-( -->
-  <zope:class class=".cal.ToCalendarTraverser">
-    <allow interface="schooltool.traverser.interfaces.ITraverserPlugin" />
-  </zope:class>
-
-  <zope:adapter
-      for="schooltool.app.interfaces.IHaveCalendar
-           zope.publisher.interfaces.browser.IBrowserRequest"
-      provides="schooltool.traverser.interfaces.ITraverserPlugin"
-      factory=".cal.ToCalendarTraverser"
+  <zope:adapterTraverserPlugin
+      for="schooltool.app.interfaces.IHaveCalendar"
+      layer="zope.publisher.interfaces.browser.IBrowserRequest"
       name="calendar"
+      adapter="schooltool.app.interfaces.ISchoolToolCalendar"
       />
 
   <zope:view

@@ -110,7 +110,7 @@ def doctest_TimetablesTraverser():
 
     If we ask for timetables, the corresponding object will be returned:
 
-        >>> t.publishTraverse(request, 'timetables')
+        >>> t.traverse('timetables')
         'Timetables'
     """
 

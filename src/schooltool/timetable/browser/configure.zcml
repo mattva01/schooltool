@@ -5,17 +5,12 @@
 
   <!-- Traversers -->
 
-  <zope:class class=".TimetablesTraverser">
-    <zope:allow
-        interface="schooltool.traverser.interfaces.ITraverserPlugin" />
-  </zope:class>
-
-  <zope:adapter
-      for="schooltool.timetable.interfaces.IOwnTimetables
-           zope.publisher.interfaces.browser.IBrowserRequest"
-      provides="schooltool.traverser.interfaces.ITraverserPlugin"
+  <zope:traverserPlugin
+      for="schooltool.timetable.interfaces.IOwnTimetables"
+      layer="zope.publisher.interfaces.browser.IBrowserRequest"
       name="timetables"
-      factory=".TimetablesTraverser"
+      plugin=".TimetablesTraverser"
+      permission="schooltool.edit"
       />
 
   <!-- Views -->

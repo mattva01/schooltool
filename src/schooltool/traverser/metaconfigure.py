@@ -18,35 +18,34 @@
 #
 """
 SchoolTool traverser metaconfiguration code.
-
-$Id$
-
 """
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
+from zope.publisher.interfaces import IPublishTraverse
 from zope.component.zcml import adapter as handle_adapter
+from zope.component.zcml import view
 
+from schooltool.traverser.traverser import PluggableTraverser
 from schooltool.traverser.traverser import NullTraverserPlugin
-from schooltool.traverser.traverser import SingleAttributeTraverserPlugin
+from schooltool.traverser.traverser import AttributeTraverserPlugin
 from schooltool.traverser.traverser import AdapterTraverserPlugin
 from schooltool.traverser.interfaces import ITraverserPlugin
 
 
-def adapterTraverserPlugin(_context, for_, name, adapter,
-                           layer=IDefaultBrowserLayer,
-                           permission=None):
-    factory = AdapterTraverserPlugin(name, adapter)
-    handle_adapter(_context, [factory],
-                   provides=ITraverserPlugin,
-                   for_=(for_, layer),
-                   permission=permission,
-                   name=name)
+def pluggableTraverser(_context, for_, type,
+                       factory=PluggableTraverser,
+                       provides=IPublishTraverse,
+                       permission=None):
+    view(_context, [factory], type, '', [for_],
+         layer=None, permission=permission,
+         allowed_interface=None, allowed_attributes=None,
+         provides=provides)
 
 
-def singleAttributeTraverserPlugin(_context, for_, name,
-                           layer=IDefaultBrowserLayer,
-                           permission=None):
-    factory = SingleAttributeTraverserPlugin(name)
-    handle_adapter(_context, [factory],
+def traverserPlugin(_context, for_, plugin,
+                    name='',
+                    layer=IDefaultBrowserLayer,
+                    permission=None):
+    handle_adapter(_context, [plugin],
                    provides=ITraverserPlugin,
                    for_=(for_, layer),
                    permission=permission,
@@ -54,11 +53,28 @@ def singleAttributeTraverserPlugin(_context, for_, name,
 
 
 def nullTraverserPlugin(_context, for_, name,
+                        layer=IDefaultBrowserLayer,
+                        permission=None):
+    traverserPlugin(
+        _context, for_, NullTraverserPlugin,
+        name=name, layer=layer, permission=permission)
+
+
+def attributeTraverserPlugin(_context, for_, name,
+                             layer=IDefaultBrowserLayer,
+                             permission=None):
+    traverserPlugin(
+        _context, for_, AttributeTraverserPlugin,
+        name=name, layer=layer, permission=permission)
+
+
+def adapterTraverserPlugin(_context, for_, name, adapter,
+                           adapter_name='',
                            layer=IDefaultBrowserLayer,
                            permission=None):
-    factory = NullTraverserPlugin(name)
-    handle_adapter(_context, [factory],
-                   provides=ITraverserPlugin,
-                   for_=(for_, layer),
-                   permission=permission,
-                   name=name)
+    plugin = type('%sAdapterTraverserPlugin' % adapter.__name__,
+                  (AdapterTraverserPlugin,),
+                  {'adapterName': adapter_name,
+                   'interface': adapter})
+    traverserPlugin(_context, for_, plugin,
+                    name=name, layer=layer, permission=permission)
