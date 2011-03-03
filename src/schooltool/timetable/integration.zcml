@@ -3,7 +3,7 @@
            xmlns:i18n="http://namespaces.zope.org/i18n"
            i18n_domain="schooltool">
 
-  <class class=".app.SchoolYearsScheduleContainer">
+  <class class=".app.SchoolToolSchedules">
     <require permission="schooltool.edit"
              interface="zope.container.interfaces.IWriteContainer" />
     <require permission="schooltool.view"
@@ -11,9 +11,9 @@
              />
   </class>
 
-  <adapter for="schooltool.schoolyear.interfaces.ISchoolYear"
-           factory=".app.getScheduleContainer" />
-  <adapter for="schooltool.course.interfaces.ISection"
+  <adapter for=".interfaces.IHaveTimetables"
+           factory=".app.getTimetableContainer" />
+  <adapter for=".interfaces.IScheduleTimetables"
            factory=".app.getScheduleContainer" />
 
   <adapter

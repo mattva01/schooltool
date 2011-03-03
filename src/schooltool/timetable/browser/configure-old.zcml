@@ -4,7 +4,7 @@
            i18n_domain="schooltool">
 
   <!-- Traversers -->
-
+  <!-- DONE
   <zope:traverserPlugin
       for="schooltool.timetable.interfaces.IOwnTimetables"
       layer="zope.publisher.interfaces.browser.IBrowserRequest"
@@ -28,6 +28,8 @@
       factory=".schema.TimetableSchemaContainerAbsoluteURLAdapter"
       provides="zope.interface.Interface"
       name="absolute_url"/>
+
+  -->
 
   <!-- Timetable schema containers
 

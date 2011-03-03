@@ -23,7 +23,7 @@ Timetables are meeting schedules created from scheduled day templates.
 import datetime
 
 from zope.interface import implements
-from zope.component import adapts
+from zope.container.btree import BTreeContainer
 
 from schooltool.common import DateRange
 from schooltool.timetable import interfaces
@@ -92,3 +92,9 @@ def combineTemplates(periods_template, time_slots_template):
         period = periods_by_activity[activity].pop(0)
         result.append((period, time_slot))
     return result
+
+
+class TimetableContainer(BTreeContainer):
+    implements(interfaces.ITimetableContainer)
+
+    default_id = None

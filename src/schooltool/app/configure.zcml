@@ -157,8 +157,7 @@
   <include file="catalog.zcml" />
 
   <!-- Timetable support -->
-  <!-- XXX: disable timetable support for refactoring -->
-  <!--include file="timetable-integration.zcml" /-->
+  <include file="timetable-integration.zcml" />
 
   <!-- Core and Domain content objects -->
 

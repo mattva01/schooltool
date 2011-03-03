@@ -98,20 +98,6 @@ from schooltool.timetable.browser.timetable import format_timetable_for_presenta
 #    return result
 
 
-#class TimetableSchemaDayaContainerAbsoluteURLAdapter(BrowserView):
-#
-#    adapts(ITimetableSchemaContainer, IBrowserRequest)
-#    implements(IAbsoluteURL)
-#
-#    def __str__(self):
-#        container_id = int(self.context.__name__)
-#        int_ids = getUtility(IIntIds)
-#        container = int_ids.getObject(container_id)
-#        url = str(getMultiAdapter((container, self.request), name='absolute_url'))
-#        return url + '/school_timetables'
-#
-#    __call__ = __str__
-
 
 #class TimetableSchemaView(TimetableView):
 #
@@ -267,6 +253,7 @@ from schooltool.timetable.browser.timetable import format_timetable_for_presenta
 #        return self.template()
 
 
+# MOVED to schooltool.timetable.browser.app.TimetableContainerView
 #class TimetableSchemaContainerView(ContainerView):
 #    """TimetableSchema Container view."""
 #

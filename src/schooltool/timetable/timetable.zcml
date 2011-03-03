@@ -30,4 +30,15 @@
         set_schema="schooltool.timetable.interfaces.IRotatingTimetableSchedule" />
   </class>
 
+  <class class=".timetable.TimetableContainer">
+    <require permission="schooltool.edit"
+             interface="zope.container.interfaces.IWriteContainer" />
+    <require permission="schooltool.view"
+             interface=".interfaces.ITimetableContainerBase"
+             />
+    <require permission="schooltool.view"
+             interface="zope.container.interfaces.IReadContainer"
+             />
+  </class>
+
 </configure>

@@ -4,5 +4,76 @@
            xmlns:zope="http://namespaces.zope.org/zope"
            i18n_domain="schooltool">
 
+  <zope:adapterTraverserPlugin
+      for="schooltool.timetable.interfaces.IScheduleTimetables"
+      layer="zope.publisher.interfaces.browser.IBrowserRequest"
+      name="schedule"
+      adapter="schooltool.timetable.interfaces.IScheduleContainer"
+      permission="schooltool.view"
+      />
+
+  <zope:adapter
+      factory=".app.ScheduleContainerAbsoluteURLAdapter"
+      provides="zope.traversing.browser.interfaces.IAbsoluteURL" />
+
+  <zope:adapter
+      factory=".app.ScheduleContainerAbsoluteURLAdapter"
+      provides="zope.interface.Interface"
+      name="absolute_url"/>
+
+  <zope:adapterTraverserPlugin
+      for="schooltool.timetable.interfaces.IHaveTimetables"
+      layer="zope.publisher.interfaces.browser.IBrowserRequest"
+      name="timetables"
+      adapter="schooltool.timetable.interfaces.ITimetableContainer"
+      permission="schooltool.view"
+      />
+
+  <zope:adapter
+      factory=".app.TimetableContainerAbsoluteURLAdapter"
+      provides="zope.traversing.browser.interfaces.IAbsoluteURL" />
+
+  <zope:adapter
+      factory=".app.TimetableContainerAbsoluteURLAdapter"
+      provides="zope.interface.Interface"
+      name="absolute_url"/>
+
+
+  <!-- XXX: this should be declared where ISchoolYear gets IHaveTimetables -->
+  <navigationViewlet
+      name="school_timetables"
+      for="*"
+      manager="schooltool.schoolyear.browser.interfaces.ISchoolYearViewMenuViewletManager"
+      template="templates/link_to_school_timetables.pt"
+      permission="schooltool.view"
+      order="60"
+      />
+
+  <page
+      name="index.html"
+      for="schooltool.timetable.interfaces.ITimetableContainer"
+      class=".app.TimetableContainerView"
+      template="templates/timetable-container.pt"
+      permission="schooltool.view"
+      />
+
+<!--
+
+  <configure package="schooltool.skin">
+    <navigationViewlet
+      name="section-timetables"
+      for="schooltool.course.interfaces.ISection"
+      layer="schooltool.skin.ISchoolToolLayer"
+      manager="schooltool.skin.IActionMenuManager"
+      template="templates/actionsViewlet.pt"
+      permission="schooltool.view"
+      link="timetables"
+      title="Schedule"
+      order="50"
+      />
+  </configure>
+
+
+-->
 
 </configure>

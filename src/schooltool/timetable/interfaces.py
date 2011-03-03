@@ -23,6 +23,7 @@ Schedule and timetabling interfaces
 import pytz
 
 import zope.schema
+from zope.annotation.interfaces import IAnnotatable
 from zope.interface import Interface, Attribute
 from zope.container.constraints import contains
 from zope.container.interfaces import IContainer, IOrderedContainer
@@ -282,6 +283,18 @@ class IRotatingTimetableSchedule(ITimetableSchedule):
         required=True)
 
 
+class ITimetableContainerBase(Interface):
+
+    default_id = zope.schema.TextLine(
+        title=u"Id of the default timetable.",
+        required=False)
+
+
+class ITimetableContainer(IContainer, ITimetableContainerBase):
+    """A container of timetables."""
+    contains(ITimetableSchedule)
+
+
 #
 #  Calendar
 #
@@ -294,3 +307,16 @@ class IScheduledCalendarEvent(IMeeting, ISchoolToolCalendarEvent):
         title=u"Schedule that generated this event.",
         schema=ISchedule,
         required=False)
+
+
+#
+#  Integration
+#
+
+
+class IScheduleTimetables(IAnnotatable):
+    """Marker interface for objects that schedule existing timetables."""
+
+
+class IHaveTimetables(IAnnotatable):
+    """Marker interface for objects that have timetables."""

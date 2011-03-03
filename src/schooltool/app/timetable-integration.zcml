@@ -18,6 +18,7 @@
   </class>
 
   <!-- Timetables for content components -->
+  <!--
   <class class="schooltool.app.app.SchoolToolApplication">
     <implements interface="schooltool.timetable.interfaces.IHaveTimetables" />
   </class>
@@ -33,9 +34,12 @@
   <class class="schooltool.resource.resource.BaseResource">
     <implements interface="schooltool.timetable.interfaces.IHaveTimetables" />
   </class>
-
+  -->
+  <class class="schooltool.schoolyear.schoolyear.SchoolYear">
+    <implements interface="schooltool.timetable.interfaces.IHaveTimetables" />
+  </class>
   <class class="schooltool.course.section.Section">
-    <implements interface="schooltool.timetable.interfaces.IOwnTimetables" />
+    <implements interface="schooltool.timetable.interfaces.IScheduleTimetables" />
   </class>
 
 </configure>
