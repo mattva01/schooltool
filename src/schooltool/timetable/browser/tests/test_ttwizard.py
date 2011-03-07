@@ -92,7 +92,7 @@ def print_ttschema(ttschema):
         print " ".join(['%-12s' % cell for cell in row])
 
 
-def doctest_getSessionData():
+def doctest_wizard_getSessionData():
     """Unit test for getSessionData.
 
     This function is used as a method for both Step and TimetableSchemaWizard
@@ -121,7 +121,7 @@ def doctest_getSessionData():
     """
 
 
-def doctest_ChoiceStep():
+def doctest_wizard_ChoiceStep():
     """Unit test for ChoiceStep
 
         >>> from schooltool.timetable.browser.ttwizard import ChoiceStep
@@ -164,7 +164,7 @@ def doctest_ChoiceStep():
     """
 
 
-def doctest_FormStep():
+def doctest_wizard_FormStep():
     """Unit test for FormStep
 
     FormStep needs to be subclassed, and a subclass has to provide a `schema`
@@ -234,7 +234,7 @@ def doctest_FormStep():
     """
 
 
-def doctest_FirstStep():
+def doctest_wizard_FirstStep():
     """Unit test for FirstStep
 
         >>> from schooltool.timetable.browser.ttwizard import FirstStep
@@ -276,7 +276,7 @@ def doctest_FirstStep():
     """
 
 
-def doctest_CycleStep():
+def doctest_wizard_CycleStep():
     """Unit test for CycleStep
 
         >>> from schooltool.timetable.browser.ttwizard import CycleStep
@@ -316,7 +316,7 @@ def doctest_CycleStep():
     """
 
 
-def doctest_DayEntryStep():
+def doctest_wizard_DayEntryStep():
     r"""Unit test for DayEntryStep
 
         >>> from schooltool.timetable.browser.ttwizard import DayEntryStep
@@ -374,7 +374,7 @@ def doctest_DayEntryStep():
     """
 
 
-def doctest_IndependentDaysStep():
+def doctest_wizard_IndependentDaysStep():
     r"""Unit test for IndependentDaysStep
 
         >>> from schooltool.timetable.browser.ttwizard \
@@ -411,7 +411,7 @@ def doctest_IndependentDaysStep():
     """
 
 
-def doctest_SequentialModelStep():
+def doctest_wizard_SequentialModelStep():
     r"""Unit test for SequentialModelStep
 
         >>> from schooltool.timetable.browser.ttwizard import SequentialModelStep
@@ -436,7 +436,7 @@ def doctest_SequentialModelStep():
     """
 
 
-def doctest_SimpleSlotEntryStep():
+def doctest_wizard_SimpleSlotEntryStep():
     r"""Unit test for SimpleSlotEntryStep
 
         >>> from schooltool.timetable.browser.ttwizard import SimpleSlotEntryStep
@@ -512,7 +512,7 @@ def doctest_SimpleSlotEntryStep():
     """
 
 
-def doctest_RotatingSlotEntryStep():
+def doctest_wizard_RotatingSlotEntryStep():
     r"""Unit test for RotatingSlotEntryStep
 
         >>> from schooltool.timetable.browser.ttwizard import RotatingSlotEntryStep
@@ -606,7 +606,7 @@ def doctest_RotatingSlotEntryStep():
     """
 
 
-def doctest_WeeklySlotEntryStep():
+def doctest_wizard_WeeklySlotEntryStep():
     r"""Unit test for WeeklySlotEntryStep
 
         >>> from schooltool.timetable.browser.ttwizard import WeeklySlotEntryStep
@@ -714,7 +714,7 @@ def doctest_WeeklySlotEntryStep():
     """
 
 
-def doctest_NamedPeriodsStep():
+def doctest_wizard_NamedPeriodsStep():
     r"""Unit test for NamedPeriodsStep
 
         >>> from schooltool.timetable.browser.ttwizard \
@@ -752,7 +752,7 @@ def doctest_NamedPeriodsStep():
     """
 
 
-def doctest_PeriodNamesStep():
+def doctest_wizard_PeriodNamesStep():
     r"""Unit test for PeriodNamesStep
 
         >>> from schooltool.timetable.browser.ttwizard import PeriodNamesStep
@@ -830,7 +830,7 @@ def doctest_PeriodNamesStep():
     """
 
 
-def doctest_PeriodSequenceSameStep():
+def doctest_wizard_PeriodSequenceSameStep():
     r"""Unit test for PeriodSequenceSameStep
 
         >>> from schooltool.timetable.browser.ttwizard \
@@ -854,7 +854,7 @@ def doctest_PeriodSequenceSameStep():
     """
 
 
-def doctest_PeriodOrderSimple():
+def doctest_wizard_PeriodOrderSimple():
     """Unit test for PeriodOrderSimple view
 
         >>> from schooltool.timetable.browser.ttwizard import PeriodOrderSimple
@@ -1000,7 +1000,7 @@ def doctest_PeriodOrderSimple():
     """
 
 
-def doctest_PeriodOrderComplex():
+def doctest_wizard_PeriodOrderComplex():
     """Unit test for PeriodOrderComplex view
 
         >>> from schooltool.timetable.browser.ttwizard import \\
@@ -1226,7 +1226,7 @@ def doctest_PeriodOrderComplex():
     """
 
 
-def doctest_PeriodOrderComplex_weekly_rotating():
+def doctest_wizard_PeriodOrderComplex_weekly_rotating():
     """Unit test for PeriodOrderComplex view
 
         >>> from schooltool.timetable.browser.ttwizard import \\
@@ -1276,7 +1276,7 @@ def doctest_PeriodOrderComplex_weekly_rotating():
     """
 
 
-def doctest_HomeroomStep():
+def doctest_wizard_HomeroomStep():
     r"""Unit test for HomeroomStep
 
         >>> from schooltool.timetable.browser.ttwizard import HomeroomStep
@@ -1301,7 +1301,7 @@ def doctest_HomeroomStep():
     """
 
 
-def doctest_HomeroomPeriodsStep():
+def doctest_wizard_HomeroomPeriodsStep():
     r"""Unit test for HomeroomPeriodsStep view
 
         >>> from schooltool.timetable.browser.ttwizard \
@@ -1377,7 +1377,7 @@ def doctest_HomeroomPeriodsStep():
     """
 
 
-def doctest_FinalStep():
+def doctest_wizard_FinalStep():
     r"""Unit test for FinalStep
 
         >>> from schooltool.timetable.browser.ttwizard import FinalStep
@@ -1425,7 +1425,7 @@ def doctest_FinalStep():
     """
 
 
-def doctest_FinalStep_dayTemplates():
+def doctest_wizard_FinalStep_dayTemplates():
     """Unit test for FinalStep.dayTemplates
 
         >>> from schooltool.timetable.browser.ttwizard import FinalStep
@@ -1489,7 +1489,7 @@ def doctest_FinalStep_dayTemplates():
     """
 
 
-def doctest_FinalStep_createSchema():
+def doctest_wizard_FinalStep_createSchema():
     r"""Unit test for FinalStep.createSchema
 
         >>> from schooltool.timetable.browser.ttwizard import FinalStep
@@ -1579,7 +1579,7 @@ def doctest_FinalStep_createSchema():
     """
 
 
-def doctest_FinalStep_createSchema_different_order_on_different_days_weekly():
+def doctest_wizard_FinalStep_createSchema_different_order_on_different_days_weekly():
     """Unit test for FinalStep.createSchema
 
     Weekly cycle, same time slots on each day, different period order in
@@ -1630,7 +1630,7 @@ def doctest_FinalStep_createSchema_different_order_on_different_days_weekly():
     """
 
 
-def doctest_FinalStep_createSchema_different_order_on_different_days_cyclic():
+def doctest_wizard_FinalStep_createSchema_different_order_on_different_days_cyclic():
     """Unit test for FinalStep.createSchema
 
     Rotating cycle, same time slots on each day, different period order in
@@ -1688,7 +1688,7 @@ def doctest_FinalStep_createSchema_different_order_on_different_days_cyclic():
     """
 
 
-def doctest_FinalStep_createSchema_different_order_cyclic_weekly():
+def doctest_wizard_FinalStep_createSchema_different_order_cyclic_weekly():
     """Unit test for FinalStep.createSchema
 
     Rotating cycle, different time slots on a weekly basis, different period
@@ -1761,7 +1761,7 @@ def doctest_FinalStep_createSchema_different_order_cyclic_weekly():
     """
 
 
-def doctest_FinalStep_createSchema_different_times():
+def doctest_wizard_FinalStep_createSchema_different_times():
     """Unit test for FinalStep.createSchema
 
     Weekly cycle, different time slots on each day, different period order in
@@ -1839,7 +1839,7 @@ def doctest_FinalStep_createSchema_different_times():
     """
 
 
-def doctest_FinalStep_createSchema_with_homeroom():
+def doctest_wizard_FinalStep_createSchema_with_homeroom():
     """Unit test for FinalStep.createSchema
 
     Weekly cycle, different time slots on each day, different period order in
@@ -1922,7 +1922,7 @@ def doctest_FinalStep_createSchema_with_homeroom():
     """
 
 
-def doctest_FinalStep_add():
+def doctest_wizard_FinalStep_add():
     """Unit test for FinalStep.createSchema
 
         >>> from schooltool.timetable.browser.ttwizard import FinalStep
@@ -1940,7 +1940,7 @@ def doctest_FinalStep_add():
     """
 
 
-def doctest_TimetableSchemaWizard():
+def doctest_wizard_TimetableSchemaWizard():
     """Unit test for TimetableSchemaWizard
 
         >>> from schooltool.timetable.browser.ttwizard import \\
@@ -2007,7 +2007,7 @@ def doctest_TimetableSchemaWizard():
     """
 
 
-def doctest_TimetableSchemaWizard_getLastStep():
+def doctest_wizard_TimetableSchemaWizard_getLastStep():
     """Unit test for TimetableSchemaWizard.getLastStep
 
         >>> from schooltool.timetable.browser.ttwizard import \\
@@ -2032,7 +2032,7 @@ def doctest_TimetableSchemaWizard_getLastStep():
     """
 
 
-def doctest_TimetableSchemaWizard_rememberLastStep():
+def doctest_wizard_TimetableSchemaWizard_rememberLastStep():
     """Unit test for TimetableSchemaWizard.rememberLastStep
 
         >>> from schooltool.timetable.browser.ttwizard import \\
