@@ -135,13 +135,14 @@ from zope.traversing.browser.absoluteurl import absoluteURL
 from schooltool.app.browser.cal import day_of_week_names
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
-from schooltool.timetable.model import SequentialDayIdBasedTimetableModel
-from schooltool.timetable.model import SequentialDaysTimetableModel
-from schooltool.timetable.model import WeeklyTimetableModel
 from schooltool.common import parse_time_range, format_time_range
-from schooltool.timetable.interfaces import ITimetableSchemaContainer
-from schooltool.timetable.schema import TimetableSchema, TimetableSchemaDay
-from schooltool.timetable import SchooldayTemplate, SchooldaySlot
+
+#from schooltool.timetable.model import SequentialDayIdBasedTimetableModel
+#from schooltool.timetable.model import SequentialDaysTimetableModel
+#from schooltool.timetable.model import WeeklyTimetableModel
+#from schooltool.timetable.interfaces import ITimetableSchemaContainer
+#from schooltool.timetable.schema import TimetableSchema, TimetableSchemaDay
+#from schooltool.timetable import SchooldayTemplate, SchooldaySlot
 
 from schooltool.common import SchoolToolMessage as _
 
@@ -168,9 +169,6 @@ class Step(BrowserView):
         `next` returns the next step.
 
     """
-
-    __used_for__ = ITimetableSchemaContainer
-
     getSessionData = getSessionData
 
 
@@ -897,8 +895,6 @@ class FinalStep(Step):
 
 class TimetableSchemaWizard(BrowserView):
     """View for defining a new timetable schema."""
-
-    __used_for__ = ITimetableSchemaContainer
 
     getSessionData = getSessionData
 

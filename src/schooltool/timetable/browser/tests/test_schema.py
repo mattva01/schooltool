@@ -40,14 +40,24 @@ from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.testing import setup as sbsetup
 from schooltool.testing.util import XMLCompareMixin
 from schooltool.testing.util import NiceDiffsMixin
-from schooltool.timetable.schema import TimetableSchemaContainer
-from schooltool.timetable.model import WeeklyTimetableModel
-from schooltool.timetable.model import SequentialDaysTimetableModel
-from schooltool.timetable.interfaces import ITimetableModelFactory
-from schooltool.timetable.interfaces import ITimetableSchemaContainer
-from schooltool.timetable.browser.tests.test_timetable import setUp, tearDown
-from schooltool.timetable.browser.tests import test_timetable
-from schooltool.timetable.browser.tests.test_timetable import createDayTemplate
+
+
+try:
+    from schooltool.timetable.schema import TimetableSchemaContainer
+    from schooltool.timetable.model import WeeklyTimetableModel
+    from schooltool.timetable.model import SequentialDaysTimetableModel
+    from schooltool.timetable.interfaces import ITimetableModelFactory
+    from schooltool.timetable.interfaces import ITimetableSchemaContainer
+    from schooltool.timetable.browser.tests import test_timetable
+    from schooltool.timetable.browser.tests.test_timetable import createDayTemplate
+except:
+    pass # XXX: tests not refactored yet
+
+try:
+    from schooltool.timetable.browser.tests.test_timetable import setUp, tearDown
+except:
+    # XXX: replace with wrong setUp/tearDown
+    from schooltool.app.browser.testing import setUp, tearDown
 
 
 def createSchema(*args):

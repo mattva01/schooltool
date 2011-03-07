@@ -36,18 +36,34 @@ from schooltool.schoolyear.interfaces import ISchoolYearContainer
 from schooltool.schoolyear.schoolyear import getSchoolYearContainer
 from schooltool.app.browser import testing
 from schooltool.app.interfaces import ISchoolToolApplication
-from schooltool.timetable.interfaces import ITimetables
-from schooltool.timetable.interfaces import IOwnTimetables
 from schooltool.app.app import getSchoolToolApplication
-from schooltool.timetable import TimetablesAdapter
 from schooltool.term.term import getTermContainer
 from schooltool.term.interfaces import ITermContainer
 from schooltool.testing import setup as sbsetup
 
+try:
+    from schooltool.timetable.interfaces import ITimetables
+    from schooltool.timetable.interfaces import IOwnTimetables
+    from schooltool.timetable import TimetablesAdapter
+except:
+    pass # XXX: tests not refactored yet
+
+
+def setUpTimetabling():
+    # XXX: broken timetable test integration
+    try:
+        from schooltool.timetable import TimetablesAdapter
+        from schooltool.timetable import CompositeTimetables
+        provideAdapter(TimetablesAdapter)
+        provideAdapter(CompositeTimetables)
+        registry.setupTimetablesComponents()
+    except:
+        pass # XXX: tests not refactored yet
+
 
 def setUp(test=None):
     testing.setUp(test)
-    sbsetup.setUpTimetabling()
+    setUpTimetabling()
     sbsetup.setUpApplicationPreferences()
     provideAdapter(getSchoolToolApplication, (None,), ISchoolToolApplication)
     provideAdapter(getTermContainer, [Interface], ITermContainer)

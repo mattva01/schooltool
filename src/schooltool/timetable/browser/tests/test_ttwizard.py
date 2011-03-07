@@ -40,9 +40,14 @@ from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.testing.setup import setUpApplicationPreferences
-from schooltool.timetable.schema import TimetableSchemaContainer
-from schooltool.timetable.interfaces import ITimetableSchemaContainer
 from schooltool.common import format_time_range
+
+
+try:
+    from schooltool.timetable.schema import TimetableSchemaContainer
+    from schooltool.timetable.interfaces import ITimetableSchemaContainer
+except:
+    pass # XXX: tests not refactored yet
 
 
 def setUp(test):

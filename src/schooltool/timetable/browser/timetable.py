@@ -46,15 +46,15 @@ from schooltool.course.interfaces import ISection
 from schooltool.common import DateRange
 from schooltool.term.interfaces import ITerm
 from schooltool.term.term import getTermForDate
-from schooltool.timetable import SchooldaySlot
-from schooltool.timetable import TimetableActivity
-from schooltool.timetable import TimetableReplacedEvent
-from schooltool.timetable.interfaces import ITimetableSchemaContainer
-from schooltool.timetable.interfaces import ITimetable, IOwnTimetables
-from schooltool.timetable.interfaces import ITimetables, ITimetableDict
-from schooltool.timetable import TimetableOverlapError, TimetableOverflowError
-from schooltool.timetable import validateAgainstTerm
-from schooltool.timetable import validateAgainstOthers
+#from schooltool.timetable import SchooldaySlot
+#from schooltool.timetable import TimetableActivity
+#from schooltool.timetable import TimetableReplacedEvent
+#from schooltool.timetable.interfaces import ITimetableSchemaContainer
+#from schooltool.timetable.interfaces import ITimetable, IOwnTimetables
+#from schooltool.timetable.interfaces import ITimetables, ITimetableDict
+#from schooltool.timetable import TimetableOverlapError, TimetableOverflowError
+#from schooltool.timetable import validateAgainstTerm
+#from schooltool.timetable import validateAgainstOthers
 from schooltool.traverser.traverser import TraverserPlugin
 from schooltool.schoolyear.interfaces import ISchoolYear
 
