@@ -1548,6 +1548,17 @@ def doctest_FinalStep_createSchema():
         09:30-10:25  09:30-10:25  09:30-10:25
         10:30-11:25  10:30-11:25  10:30-11:25
 
+        >>> print_day_templates(ttschema.model.dayTemplates)
+        --- day template 'D1'
+        09:30-10:25
+        10:30-11:25
+        --- day template 'D2'
+        09:30-10:25
+        10:30-11:25
+        --- day template 'D3'
+        09:30-10:25
+        10:30-11:25
+
     The periods can be named rather than be designated by time:
 
         >>> data['cycle'] = 'rotating'
