@@ -17,7 +17,9 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-More or less interesting code:
+
+Code layout
+-----------
 
 __init__.py
 
@@ -57,6 +59,51 @@ model.py
   handleTimetableReplacedEvent
 
   PersistentTimetableCalendarEvent
+
+
+Period and time slot scheduling
+-------------------------------
+
+  day_id = self.schooldayStrategy(day, day_id_gen)
+  timeslots = self._getUsualTemplateForDay(day, day_id)
+  periods = timetable[day_id].keys()
+  result = zip(periods, sorted(timeslots))
+  if not original:
+      result = self.exceptionDays.get(day, result)
+
+
+Evolving data
+-------------
+
+SequentialDaysTimetableModel:
+  day_id: itertools.cycle(self.timetableDayIds) on schoolday
+          OR exception day id
+  time_slot_template: self.dayTemplates[day.weekday()]
+                      OR self.dayTemplates[None]
+
+  time_slots (SchoolDayTemplate) -> WeekDayTemplates (+ default)
+  periods (TimetableDay) -> SchoolDayTemplates (+ don't scroll on exception)
+
+
+SequentialDayIdBasedTimetableModel:
+  day_id: itertools.cycle(self.timetableDayIds) on schoolday
+          OR exception day id
+  time_slot_template: self.dayTemplates[day_id]
+
+  time_slots (SchoolDayTemplate) -> SchoolDayTemplates
+                                    (+ don't scroll on exception)
+  periods (TimetableDay) -> SchoolDayTemplates
+                            (+ don't scroll on exception)
+
+WeeklyTimetableModel:
+  day_id: self.timetableDayIds[date.weekday()]
+          OR exception day id
+          OR None
+  time_slot_template: self.dayTemplates[day.weekday()]
+                      OR self.dayTemplates[None]
+
+  time_slots (SchoolDayTemplate) -> WeekDayTemplates (+ default)
+  periods (TimetableDay) -> WeekDayTemplates (+ default)
 
 """
 
