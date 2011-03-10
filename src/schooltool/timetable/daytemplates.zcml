@@ -25,25 +25,11 @@
              set_schema="schooltool.timetable.interfaces.ITimeSlot" />
   </class>
 
-  <class class=".daytemplates.TimePeriod">
+  <class class=".daytemplates.PeriodWithTime">
     <require permission="schooltool.view"
-             interface="schooltool.timetable.interfaces.ITimePeriod" />
+             interface="schooltool.timetable.interfaces.IPeriodWithTime" />
     <require permission="schooltool.edit"
-             set_schema="schooltool.timetable.interfaces.ITimePeriod" />
-  </class>
-
-  <class class=".daytemplates.DayScheduleTemplate">
-    <require permission="schooltool.view"
-             interface="schooltool.timetable.interfaces.IDayScheduleTemplate" />
-    <require permission="schooltool.edit"
-             set_schema="schooltool.timetable.interfaces.IDayScheduleTemplate" />
-  </class>
-
-  <class class=".daytemplates.DayScheduleTemplateContainer">
-    <require permission="schooltool.view"
-             interface="zope.container.interfaces.IReadContainer" />
-    <require permission="schooltool.edit"
-             set_schema="zope.container.interfaces.IWriteContainer" />
+             set_schema="schooltool.timetable.interfaces.IPeriodWithTime" />
   </class>
 
   <class class=".daytemplates.DayTemplateSchedule">

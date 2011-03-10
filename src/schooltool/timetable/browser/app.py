@@ -52,7 +52,7 @@ class ScheduleContainerAbsoluteURLAdapter(BrowserView):
     __call__ = __str__
 
 
-class TimetableContainerAbsoluteURLAdapter(BrowserView):
+class TimetableContainerAbsoluteURLAdapter(ScheduleContainerAbsoluteURLAdapter):
     adapts(ITimetableContainer, IBrowserRequest)
 
     traversal_name = 'timetables'

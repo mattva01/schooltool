@@ -57,6 +57,15 @@
       permission="schooltool.view"
       />
 
+  <page
+      name="add.html"
+      for="schooltool.timetable.interfaces.ITimetableContainer"
+      class=".ttwizard.TimetableWizard"
+      permission="schooltool.edit"
+      menu="schooltool_actions"
+      title="New Timetable"
+      />
+
 <!--
 
   <configure package="schooltool.skin">

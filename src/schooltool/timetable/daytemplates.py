@@ -21,10 +21,13 @@ Period and time slot schedule templates.
 Template scheduling over dates.
 """
 
+from persistent import Persistent
 from zope.interface import implements, implementer
 from zope.component import adapts, adapter
 from zope.container.contained import Contained
 from zope.container.ordered import OrderedContainer
+from zope.container.contained import containedEvent
+from zope.event import notify
 
 from schooltool.common import DateRange
 from schooltool.timetable import interfaces
@@ -43,19 +46,9 @@ class DayTemplate(OrderedContainer):
 
 class DayTemplateContainer(OrderedContainer):
     implements(interfaces.IDayTemplateContainer)
-    factory = DayTemplate
 
 
-class DayPeriodsTemplate(DayTemplate):
-    implements(interfaces.IDayPeriodsTemplate)
-
-
-class DayPeriodsTemplateContainer(DayTemplateContainer):
-    implements(interfaces.IPeriodTemplateContainer)
-    factory = DayPeriodsTemplate
-
-
-class TimeSlot(Contained):
+class TimeSlot(Persistent, Contained):
     implements(interfaces.ITimeSlot)
 
     tstart = None
@@ -73,17 +66,8 @@ class TimeSlot(Contained):
                    (other.tstart, other.duration))
 
 
-class DayTimeSlotsTemplate(DayTemplate):
-    implements(interfaces.IDayTimeSlotsTemplate)
-
-
-class DayTimeSlotsTemplateContainer(DayTemplateContainer):
-    implements(interfaces.IPeriodTemplateContainer)
-    factory = DayTimeSlotsTemplate
-
-
-class TimePeriod(Contained):
-    implements(interfaces.ITimePeriod)
+class PeriodWithTime(Persistent, Contained):
+    implements(interfaces.IPeriodWithTime)
 
     title = None
     activity_type = None
@@ -98,19 +82,16 @@ class TimePeriod(Contained):
         self.activity_type = activity_type
 
 
-class DayScheduleTemplate(DayTemplate):
-    implements(interfaces.IDayScheduleTemplate)
-
-
-class DayScheduleTemplateContainer(DayTemplateContainer):
-    implements(interfaces.IDayScheduleTemplateContainer)
-    factory = DayScheduleTemplate
-
-
-class DayTemplateSchedule(Contained):
+class DayTemplateSchedule(Persistent, Contained):
+    """Day templates scheduled by date."""
     implements(interfaces.IDayTemplateSchedule)
 
     templates = None
+
+    def initTemplates(self):
+        self.templates, event = containedEvent(
+            DayTemplateContainer(), self, 'templates')
+        notify(event)
 
     def iterDates(self, dates):
         for date in dates:
@@ -123,6 +104,7 @@ class CalendarDayTemplates(DayTemplateSchedule):
     starting_index = 0
 
     def getDay(self, schedule, date):
+        assert self.templates
         days_passed = (date - schedule.first).days
         keys = self.templates.keys()
         n = (self.templates.starting_index + days_passed) % len(keys)
@@ -150,10 +132,9 @@ class WeekDayTemplates(DayTemplateSchedule):
         return u'%d' % weekday
 
     def getWeekDay(self, weekday):
+        assert self.templates is not None
         key = self.getWeekDayKey(weekday)
-        if key not in self.templates:
-            self.templates[key] = self.templates.factory()
-        return self.templates[key]
+        return self.templates.get(key, None)
 
     def iterDates(self, dates):
         if not self.templates:
@@ -176,6 +157,7 @@ class SchoolDayTemplates(DayTemplateSchedule):
     starting_index = 0
 
     def getDayIndex(self, schedule, schooldays, date):
+        assert self.templates
         day_index = self.starting_index
         if date == schedule.first:
             return day_index

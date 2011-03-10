@@ -22,6 +22,7 @@ Timetables are meeting schedules created from scheduled day templates.
 
 import datetime
 
+from persistent import Persistent
 from zope.interface import implements
 from zope.container.btree import BTreeContainer
 
@@ -30,8 +31,8 @@ from schooltool.timetable import interfaces
 from schooltool.timetable.schedule import Meeting, Schedule
 
 
-class TimetableSchedule(Schedule):
-    implements(interfaces.ITimetableSchedule)
+class Timetable(Persistent, Schedule):
+    implements(interfaces.ITimetable)
 
     periods = None
     time_slots = None
@@ -54,24 +55,6 @@ class TimetableSchedule(Schedule):
                     meeting_id=None)
                 meetings.append(meeting)
             yield sorted(meetings, key=lambda m: m.dtstart)
-
-
-class WeeklyTimetable(TimetableSchedule):
-    implements(interfaces.IWeeklyTimetableSchedule)
-
-    def initTemplates(self, template_schedule=None, templates=None):
-        self.periods = template_schedule
-        if self.periods is not None:
-            self.periods.__name__ = 'periods'
-            self.periods.__parent__ = self
-            self.periods.templates = templates
-            if templates is not None:
-                templates.__name__ = 'templates'
-                templates.__parent__ = self.periods
-
-
-class RotatingTimetable(TimetableSchedule):
-    implements(interfaces.IRotatingTimetableSchedule)
 
 
 def combineTemplates(periods_template, time_slots_template):

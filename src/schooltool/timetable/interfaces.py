@@ -145,16 +145,6 @@ class IDayTemplateContainer(IOrderedContainer):
     """Ordered container of day templates."""
     contains(IDayTemplate)
 
-    factory = Attribute("The template factory.")
-
-
-class IDayPeriodsTemplate(IDayTemplate):
-    contains(IPeriod)
-
-
-class IPeriodTemplateContainer(IDayTemplateContainer):
-    contains(IDayPeriodsTemplate)
-
 
 class ITimeSlot(IContained):
     """Time slot designated for an activity."""
@@ -174,28 +164,12 @@ class ITimeSlot(IContained):
         vocabulary=activity_types)
 
 
-class IDayTimeSlotsTemplate(IDayTemplate):
-    contains(ITimeSlot)
-
-
-class ITimeSlotTemplateContainer(IDayTemplateContainer):
-    contains(IDayTimeSlotsTemplate)
-
-
-class ITimePeriod(IPeriod, ITimeSlot):
-    """A period with additional scheduling information."""
-
-
-class IDayScheduleTemplate(IDayTemplate):
-    contains(ITimePeriod)
-
-
-class IDayScheduleTemplateContainer(IDayTemplateContainer):
-    contains(IDayScheduleTemplate)
+class IPeriodWithTime(IPeriod, ITimeSlot):
+    """A period with time slot for scheduling."""
 
 
 class IDayTemplateSchedule(IContained):
-    """Day templates scheduled for some dates."""
+    """Day templates scheduled by date."""
 
     templates = zope.schema.Object(
         title=u"The template container.",
@@ -256,7 +230,7 @@ class ISchoolDayTemplates(IDayTemplateSchedule):
 #
 
 
-class ITimetableSchedule(ISchedule):
+class ITimetable(ISchedule):
     """The schedule of meetings built from day templates."""
 
     periods = zope.schema.Object(
@@ -264,22 +238,9 @@ class ITimetableSchedule(ISchedule):
         schema=IDayTemplateSchedule,
         required=True)
 
-
-class IWeeklyTimetableSchedule(ITimetableSchedule):
-    """The schedule of a weekly timetable."""
-
-    periods = zope.schema.Object(
-        title=u"Periods.",
-        schema=IWeekDayTemplates,
-        required=True)
-
-
-class IRotatingTimetableSchedule(ITimetableSchedule):
-    """The schedule of a rotating timetable."""
-
-    periods = zope.schema.Object(
-        title=u"Periods.",
-        schema=ISchoolDayTemplates,
+    time_slots = zope.schema.Object(
+        title=u"Time slots.",
+        schema=IDayTemplateSchedule,
         required=True)
 
 
@@ -292,7 +253,7 @@ class ITimetableContainerBase(Interface):
 
 class ITimetableContainer(IContainer, ITimetableContainerBase):
     """A container of timetables."""
-    contains(ITimetableSchedule)
+    contains(ITimetable)
 
 
 #

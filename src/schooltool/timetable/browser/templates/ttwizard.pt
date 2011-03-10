@@ -1,13 +1,13 @@
 <html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
 <head>
-  <title metal:fill-slot="title" i18n:translate="">New timetable schema</title>
+  <title metal:fill-slot="title" i18n:translate="">New timetable</title>
 </head>
 <body>
-  <h1 metal:fill-slot="content-header" i18n:translate="">New timetable schema</h1>
+  <h1 metal:fill-slot="content-header" i18n:translate="">New timetable</h1>
 <metal:block metal:fill-slot="body">
 
 <p i18n:translate="">This wizard presents you with a series of questions.  You may alternatively
-create a <a href="simpleadd.html">simple weekly timetable schema</a>, or use
+create a <a href="simpleadd.html">simple weekly timetable</a>, or use
 a more complex <a href="complexadd.html">advanced adding form</a>.</p>
 
 <form class="plain" method="POST" tal:attributes="action request/URL">

@@ -47,7 +47,6 @@ class Meeting(Persistent):
     implements(interfaces.IMeeting)
 
     def __init__(self, dtstart, duration, period=None, meeting_id=None):
-        Persistent.__init__(self)
         self.dtstart = dtstart
         self.duration = duration
         self.period = period
@@ -55,6 +54,7 @@ class Meeting(Persistent):
 
 
 class Schedule(Contained):
+    """A non-persistent abstract schedule."""
     implements(interfaces.ISchedule)
 
     first = None
@@ -62,7 +62,7 @@ class Schedule(Contained):
     title = None
     timezone = None
 
-    def __init__(self, first, last, title=None, timezone=pytz.utc):
+    def __init__(self, first, last, title=None, timezone='UTC'):
         Contained.__init__(self)
         self.title = title
         self.first = first
@@ -97,7 +97,7 @@ def iterMeetingsInTimezone(schedule, other_timezone, date, until_date=None):
             yield meeting
 
 
-class SelectedPeriodsSchedule(Schedule):
+class SelectedPeriodsSchedule(Persistent, Schedule):
     implements(interfaces.ISelectedPeriodsSchedule)
 
     # XXX: think about storing intid here
