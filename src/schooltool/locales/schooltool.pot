@@ -5254,7 +5254,7 @@ msgid "&copy; The <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth
 msgstr ""
 
 #: /src/schooltool/skin/templates/view_macros.pt:133
-msgid "<a href=\"http://www.schooltool.org\">SchoolTool</a>&trade; is a Trademark of The <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth Foundation</a>."
+msgid "<a href=\"http://www.schooltool.org\">SchoolTool</a>&trade; is a Trademark of the <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth Foundation</a>."
 msgstr ""
 
 #: /src/schooltool/skin/templates/view_macros.pt:155
