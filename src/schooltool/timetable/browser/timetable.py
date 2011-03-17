@@ -181,39 +181,6 @@ class TimetableView(BrowserView):
         return self.template()
 
 
-#class TimetableSchemaView(TimetableView):
-#
-#    __used_for__ = ITimetableSchema
-#
-#    def homerooms(self):
-#        """Returns a dictionary of day indexes to homeroom period indexes"""
-#        result = {}
-#        for daynr, dayid in enumerate(self.context.keys()):
-#            day = self.context[dayid]
-#            result[daynr] = set()
-#            if day.homeroom_period_ids:
-#                for periodnr, periodid in enumerate(day.keys()):
-#                    if periodid in day.homeroom_period_ids:
-#                        result[daynr].add(periodnr)
-#        return result
-#
-#    def title(self):
-#        msg = _("Timetable schema ${schema}",
-#                mapping = {'schema': self.context.title})
-#        return msg
-#
-#    @property
-#    def timezone(self):
-#        """Return a timezone if it is different from app default.
-#
-#        Return None if it is not.
-#        """
-#        app = ISchoolToolApplication(None)
-#        apptz = IApplicationPreferences(app).timezone
-#        if self.context.timezone != apptz:
-#            return self.context.timezone
-
-
 #class SimpleTimetableSchemaAdd(BrowserView):
 #    """A simple timetable schema definition view"""
 #
