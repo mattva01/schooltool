@@ -148,10 +148,31 @@ class DayTemplatesTableSnippet(BrowserView):
             table=table)
 
 
+def getActivityTitle(vocabulary, activity_type):
+    if activity_type not in vocabulary:
+        return None
+    term = vocabulary.getTerm(activity_type)
+    return term.title
+from schooltool.timetable.browser.app import getActivityVocabulary
+
+
 class TimetableView(BrowserView):
     adapts(ITimetable, IBrowserRequest)
 
     template = ViewPageTemplateFile("templates/timetable.pt")
+
+    activity_vocabulary = None
+
+    def __init__(self, *args, **kw):
+        BrowserView.__init__(self, *args, **kw)
+        self.activity_vocabulary = getActivityVocabulary(self.context)
+
+    def activityTitle(self, activity_type):
+        vocabulary = self.activity_vocabulary
+        if activity_type in vocabulary:
+            term = vocabulary.getTerm(activity_type)
+            return term.title
+        return None
 
     def periods_snippet(self):
         snippet = queryMultiAdapter(
@@ -160,8 +181,7 @@ class TimetableView(BrowserView):
         if not snippet:
             return ''
         format_period = lambda period: (
-            period.title,
-            period.activity_type)
+            period.title, self.activityTitle(period.activity_type))
         table = snippet(item_formatter=format_period)
         return table
 
@@ -173,7 +193,7 @@ class TimetableView(BrowserView):
             return ''
         format_time_slot = lambda slot: (
             format_time_range(slot.tstart, slot.duration),
-            slot.activity_type)
+            self.activityTitle(slot.activity_type))
         table = snippet(item_formatter=format_time_slot)
         return table
 

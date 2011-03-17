@@ -21,13 +21,15 @@ Timetabling app integration.
 """
 
 from zope.interface import implements, alsoProvides
+from zope.intid.interfaces import IIntIds
 from zope.component import adapts, getMultiAdapter, getUtility
 from zope.traversing.browser.interfaces import IAbsoluteURL
 from zope.publisher.browser import BrowserView
 from zope.publisher.interfaces import NotFound
 from zope.publisher.interfaces.browser import IBrowserRequest
-from zope.intid.interfaces import IIntIds
+from zope.schema.vocabulary import getVocabularyRegistry
 
+from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.skin.containers import ContainerView
 from schooltool.timetable.interfaces import IScheduleContainer
 from schooltool.timetable.interfaces import ITimetableContainer
@@ -68,3 +70,12 @@ class TimetableContainerView(ContainerView):
         if 'UPDATE_SUBMIT' in self.request:
             self.context.default_id = self.request['ttschema'] or None
         return ''
+
+
+def getActivityVocabulary(object=None):
+    if object is None:
+        object = ISchoolToolApplication(None)
+    vr = getVocabularyRegistry()
+    vocabulary = vr.get(object, 'schooltool.timetable.activityvocbulary')
+    return vocabulary
+

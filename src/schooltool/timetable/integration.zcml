@@ -22,4 +22,9 @@
       name="schooltool.timetable.app"
       />
 
+  <utility
+     factory=".app.activityVocabularyFactory"
+     provides="zope.schema.interfaces.IVocabularyFactory"
+     name="schooltool.timetable.activityvocbulary" />
+
 </configure>

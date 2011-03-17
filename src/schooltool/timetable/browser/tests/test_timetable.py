@@ -37,13 +37,16 @@ from zope.traversing.interfaces import ITraversable
 from zope.traversing.interfaces import IContainmentRoot
 from zope.app.testing import setup
 from zope.traversing import namespace
+from zope.schema.vocabulary import getVocabularyRegistry
 
-from schooltool.testing.util import normalize_xml
+from schooltool.app.browser import testing
 from schooltool.app.app import SimpleNameChooser
 from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.testing import setup as sbsetup
+from schooltool.testing.util import normalize_xml
 from schooltool.testing.util import XMLCompareMixin
 from schooltool.testing.util import NiceDiffsMixin
+from schooltool.timetable.app import activityVocabularyFactory
 from schooltool.timetable.daytemplates import DayTemplateSchedule
 from schooltool.timetable.daytemplates import DayTemplate
 from schooltool.timetable.daytemplates import TimeSlot
@@ -62,11 +65,16 @@ try:
 except:
     pass # XXX: tests not refactored yet
 
-try:
-    from schooltool.timetable.browser.tests.test_timetable import setUp, tearDown
-except:
-    # XXX: replace with wrong setUp/tearDown
-    from schooltool.app.browser.testing import setUp, tearDown
+
+def setUp(test=None):
+    testing.setUp(test)
+    sbsetup.setUpApplicationPreferences()
+
+    vr = getVocabularyRegistry()
+    vr.register('schooltool.timetable.activityvocbulary',
+                activityVocabularyFactory())
+
+tearDown = testing.tearDown
 
 
 def createSchema(*args):
@@ -554,7 +562,7 @@ def doctest_DayTemplatesTableSnippet():
     """
 
 
-def doctest_TimetableView_new():
+def doctest_TimetableView():
     """Test for TimetableView.
 
     This view queries snippets to render the period and time slot tables.
@@ -611,10 +619,10 @@ def doctest_TimetableView_new():
         ...                name="day_templates_table_snippet")
 
         >>> view.periods_snippet()
-        ('One', 'lesson')
+        ('One', u'Lesson')
 
         >>> view.time_snippet()
-        ('12:00-12:45', 'lunch')
+        ('12:00-12:45', u'Lunch')
 
 
     """

@@ -75,3 +75,7 @@ def getTimetableContainer(obj):
         container = app[TIMETABLES_KEY][obj_id] = TimetableContainer()
     return container
 
+
+
+def activityVocabularyFactory():
+    return lambda context: interfaces.activity_types
