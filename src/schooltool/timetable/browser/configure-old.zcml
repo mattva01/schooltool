@@ -111,6 +111,7 @@
 
   -->
 
+<!--
   <page
       name="index.html"
       for="schooltool.timetable.interfaces.ITimetableSchema"
@@ -118,7 +119,7 @@
       template="templates/timetableschema.pt"
       permission="schooltool.view"
       />
-
+-->
   <page
       name="special.html"
       for="schooltool.timetable.interfaces.ITimetableSchema"

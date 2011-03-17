@@ -22,39 +22,43 @@ Timetabling Schema views.
 $Id$
 """
 
-from zope.i18n import translate
-from zope.component import getMultiAdapter
-from zope.component import adapts, getUtility, queryUtility
-from zope.interface import Interface, implements
-from zope.schema import TextLine, Int
-from zope.schema.interfaces import RequiredMissing
-from zope.intid.interfaces import IIntIds
-from zope.container.interfaces import INameChooser
-from zope.app.form.interfaces import IWidgetInputError
-from zope.app.form.interfaces import IInputWidget
-from zope.app.form.interfaces import WidgetInputError
-from zope.app.form.interfaces import WidgetsError
-from zope.app.form.utility import getWidgetsData, setUpWidgets
+#from zope.i18n import translate
+from zope.component import queryMultiAdapter
+from zope.component import adapts
+#from zope.component import getUtility, queryUtility
+#from zope.interface import Interface, implements
+#from zope.schema import TextLine, Int
+#from zope.schema.interfaces import RequiredMissing
+#from zope.intid.interfaces import IIntIds
+#from zope.container.interfaces import INameChooser
+#from zope.app.form.interfaces import IWidgetInputError
+#from zope.app.form.interfaces import IInputWidget
+#from zope.app.form.interfaces import WidgetInputError
+#from zope.app.form.interfaces import WidgetsError
+#from zope.app.form.utility import getWidgetsData, setUpWidgets
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.publisher.browser import BrowserView
-from zope.publisher.interfaces.browser import IBrowserPublisher
+#from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.publisher.interfaces.browser import IBrowserRequest
-from zope.traversing.browser.interfaces import IAbsoluteURL
-from zope.traversing.browser.absoluteurl import absoluteURL
-
-from schooltool.common import SchoolToolMessage as _
-from schooltool.common import format_time_range, parse_time_range
-from schooltool.skin.containers import ContainerView, ContainerDeleteView
-from schooltool.app.interfaces import ISchoolToolApplication
-from schooltool.app.interfaces import IApplicationPreferences
-from schooltool.timetable import SchooldayTemplate, SchooldaySlot
-from schooltool.timetable.interfaces import ITimetableModelFactory
-from schooltool.timetable.interfaces import ITimetableSchema
-from schooltool.timetable.interfaces import ITimetableSchemaContainer
-from schooltool.timetable.schema import TimetableSchema, TimetableSchemaDay
-from schooltool.timetable import findRelatedTimetables
-from schooltool.timetable.browser.schedule import TimetableView, TabindexMixin
-from schooltool.timetable.browser.schedule import format_timetable_for_presentation
+#from zope.publisher.interfaces.browser import IBrowserView
+#from zope.traversing.browser.interfaces import IAbsoluteURL
+#from zope.traversing.browser.absoluteurl import absoluteURL
+#
+from schooltool.common import format_time_range
+#from schooltool.common import parse_time_range
+#from schooltool.skin.containers import ContainerView, ContainerDeleteView
+#from schooltool.app.interfaces import ISchoolToolApplication
+#from schooltool.app.interfaces import IApplicationPreferences
+#from schooltool.timetable import SchooldayTemplate, SchooldaySlot
+#from schooltool.timetable.interfaces import ITimetableModelFactory
+#from schooltool.timetable.interfaces import ITimetableSchema
+#from schooltool.timetable.interfaces import ITimetableSchemaContainer
+#from schooltool.timetable.schema import TimetableSchema, TimetableSchemaDay
+#from schooltool.timetable import findRelatedTimetables
+#from schooltool.timetable.browser.schedule import TimetableView, TabindexMixin
+#from schooltool.timetable.browser.schedule import format_timetable_for_presentation
+from schooltool.timetable.interfaces import ITimetable
+from schooltool.timetable.interfaces import IDayTemplateSchedule
 
 
 #def fix_duplicates(names):
@@ -97,6 +101,84 @@ from schooltool.timetable.browser.schedule import format_timetable_for_presentat
 #        used.add(name)
 #    return result
 
+
+class DayTemplatesTableSnippet(BrowserView):
+    adapts(IDayTemplateSchedule, IBrowserRequest)
+
+    template = ViewPageTemplateFile("templates/daytemplates-snippet.pt")
+
+    def makeTable(self, days):
+        table = {'header': [title for title, items in days]}
+        day_items = [items for title, items in days]
+
+        def to_dict(item):
+            return item and {'title': item[0], 'value': item[1]} or {}
+        cols = [map(to_dict, items) for items in day_items]
+
+        max_rows = max([len(rows) for rows in cols])
+        cols = [rows + [{}]*(max_rows-len(rows)) for rows in cols]
+
+        table['rows'] = map(None, *cols)
+
+        ncols = len(days) or 1
+        table['col_width'] ='%d%%' % (100 / ncols);
+        table['th_width'] = '%d%%' % (10 / ncols);
+        table['td_width'] = '%d%%' % (90 / ncols);
+        return table
+
+    def extractDays(self, formatter):
+        days = []
+        for day in self.templates:
+            entries = [formatter(item) for item in day.values()]
+            days.append((day.title, entries))
+        return days
+
+    @property
+    def templates(self):
+        return self.context.templates.values()
+
+    def titleGetter(self, item):
+        return ('', getattr(item, 'title', ''))
+
+    def __call__(self, item_formatter=titleGetter):
+        days = self.extractDays(item_formatter)
+        table = self.makeTable(days)
+        return self.template(
+            view=self, context=self.context, request=self.request,
+            table=table)
+
+
+class TimetableView(BrowserView):
+    adapts(ITimetable, IBrowserRequest)
+
+    template = ViewPageTemplateFile("templates/timetable.pt")
+
+    def periods_snippet(self):
+        snippet = queryMultiAdapter(
+            (self.context.periods, self.request),
+            name='day_templates_table_snippet')
+        if not snippet:
+            return ''
+        format_period = lambda period: (
+            period.title,
+            period.activity_type)
+        table = snippet(item_formatter=format_period)
+        return table
+
+    def time_snippet(self):
+        snippet = queryMultiAdapter(
+            (self.context.time_slots, self.request),
+            name='day_templates_table_snippet')
+        if not snippet:
+            return ''
+        format_time_slot = lambda slot: (
+            format_time_range(slot.tstart, slot.duration),
+            slot.activity_type)
+        table = snippet(item_formatter=format_time_slot)
+        return table
+
+    def __call__(self):
+        return self.template()
 
 
 #class TimetableSchemaView(TimetableView):

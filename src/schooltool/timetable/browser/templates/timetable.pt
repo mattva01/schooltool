@@ -1,33 +1,25 @@
 <html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
 <head>
   <title metal:fill-slot="title"
-         tal:content="view/title" />
+         tal:content="context/title" />
 </head>
 <body>
 
-<h1 metal:fill-slot="content-header"
-    tal:content="view/title" />
+<h1 metal:fill-slot="content-header">
+  <tal:block i18n:translate="">
+    Timetable <tal:block i18n:name="title" content="context/title" />
+  </tal:block>
+</h1>
 
-<metal:block metal:fill-slot="body"
-             tal:define="owner_url context/__parent__/__parent__/@@absolute_url;
-                         calendar_url string:$owner_url/calendar/daily.html">
+<metal:block metal:fill-slot="body">
 
-  <table class="timetable"
-         tal:define="ncols python:len(context.keys()) or 1;
-                     col_width python:'%d%%' % (100 / ncols);
-                     th_width python: '%d%%' % (10 / ncols);
-                     td_width python: '%d%%' % (90 / ncols)">
-    <tr>
-      <th tal:repeat="day context/keys" tal:content="day"
-          tal:attributes="width col_width" colspan="2" class="day">Day N</th>
-    </tr>
-    <tr tal:repeat="row view/rows"><tal:block tal:repeat="col row">
-      <th tal:attributes="width th_width" tal:content="col/period"
-          class="period">1</th>
-      <td tal:attributes="width td_width" tal:content="col/activity"
-          class="activity">Act1</td>
-    </tal:block></tr>
-  </table>
+  <p tal:condition="view/context/timezone"
+     tal:content="string:Timezone: ${view/context/timezone}"/>
+
+  <h2 i18n:translate="">Periods</h2>
+  <tal:block content="structure view/periods_snippet" />
+  <h2 i18n:translate="">Time schedule</h2>
+  <tal:block content="structure view/time_snippet" />
 
 </metal:block>
 </body>

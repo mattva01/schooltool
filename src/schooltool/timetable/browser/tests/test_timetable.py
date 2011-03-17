@@ -19,28 +19,37 @@
 """
 Tests for schooltool timetable schema views.
 """
+import datetime
 import unittest
 import doctest
 from pprint import pprint
 
 from zope.component import provideAdapter, provideHandler, provideUtility
+from zope.component import adapts
 from zope.location.location import locate
-from zope.interface import Interface
+from zope.interface import Interface, implements
 from zope.interface import directlyProvides
 from zope.interface import directlyProvidedBy
 from zope.i18n import translate
 from zope.publisher.browser import TestRequest
+from zope.publisher.browser import BrowserView
 from zope.traversing.interfaces import ITraversable
 from zope.traversing.interfaces import IContainmentRoot
 from zope.app.testing import setup
 from zope.traversing import namespace
 
+from schooltool.testing.util import normalize_xml
 from schooltool.app.app import SimpleNameChooser
 from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.testing import setup as sbsetup
 from schooltool.testing.util import XMLCompareMixin
 from schooltool.testing.util import NiceDiffsMixin
-
+from schooltool.timetable.daytemplates import DayTemplateSchedule
+from schooltool.timetable.daytemplates import DayTemplate
+from schooltool.timetable.daytemplates import TimeSlot
+from schooltool.timetable.schedule import Period
+from schooltool.timetable.browser.timetable import DayTemplatesTableSnippet
+from schooltool.timetable.browser.timetable import TimetableView
 
 try:
     from schooltool.timetable.schema import TimetableSchemaContainer
@@ -417,57 +426,197 @@ class TestAdvancedTimetableSchemaAdd(NiceDiffsMixin, unittest.TestCase):
         self.assertEquals(times[2], ['11:22-11:55'] + [None] * 6)
 
 
-def doctest_TimetableSchemaView():
-    """Test for TimetableSchemaView.
+def doctest_DayTemplatesTableSnippet():
+    """Test for DayTemplatesTableSnippet.
 
-        >>> from schooltool.timetable.browser.timetable import TimetableSchemaView
-        >>> from schooltool.timetable.schema import TimetableSchema
-        >>> from schooltool.timetable.schema import TimetableSchemaDay
+    The purpose of this snippet is to iterate day templates and render
+    them as a table.
 
-        >>> app = sbsetup.setUpSchoolToolSite()
+        >>> schedule = DayTemplateSchedule()
+        >>> schedule.initTemplates()
 
-    Create some context:
+        >>> class Lesson(object):
+        ...     def __init__(self, title, description):
+        ...         self.title = title
+        ...         self.description = description
 
-        >>> tts = TimetableSchema(['day 1', 'day 2'])
-        >>> tts.__name__ = 'some-schema'
-        >>> tts.title = "Some Schema"
-        >>> tts['day 1'] = ttd1 = TimetableSchemaDay(['A', 'B'])
-        >>> tts['day 2'] = ttd2 = TimetableSchemaDay(['A', 'B'])
+        >>> templates = schedule.templates
 
-        >>> request = TestRequest()
-        >>> view = TimetableSchemaView(tts, request)
+    Let's add a few days.
 
-    title() returns the view's title:
+        >>> def add_day(templates, title, lessons):
+        ...     d = len(templates)
+        ...     template = templates[u'%d' % d] = DayTemplate(title)
+        ...     for n, lesson in enumerate(lessons):
+        ...        template[u'%d' % n] = Lesson(u'lesson %d' % n, lesson)
 
-        >>> translate(view.title())
-        u'Timetable schema Some Schema'
+        >>> lessons = ['math', 'english', 'history']
+        >>> add_day(templates, u'Day 1', lessons)
+        >>> add_day(templates, u'Day 2', lessons[1:])
 
-    ``rows()`` delegates the job to ``format_timetable_for_presentation``:
+    And create the view.
 
-        >>> view.rows()
-        [[{'period': 'A', 'activity': ''}, {'period': 'A', 'activity': ''}],
-         [{'period': 'B', 'activity': ''}, {'period': 'B', 'activity': ''}]]
+        >>> view = DayTemplatesTableSnippet(schedule, TestRequest())
 
-    ``homerooms()`` returns a dict of homeroom periods.  It is for use
-    by the template, so the days and the periods are designated by
-    their index rather than id:
+        >>> [t.title for t in view.templates]
+        [u'Day 1', u'Day 2']
 
-        >>> ttd1.homeroom_period_ids = ['A', 'B']
-        >>> ttd2.homeroom_period_ids = []
-        >>> view.homerooms()
-        {0: set([0, 1]), 1: set([])}
+    The view knows nothing about items in day templates, so we'll
+    need to pass formatters that, given the item, return tuples
+    of (title, value) for presentation.
 
-    ``timezone`` is a property that is not None only if the schema
-    timezone is different from the app default:
+        >>> formatter = lambda item: (item.__name__, item.title)
 
-        >>> tts.timezone
-        'UTC'
+        >>> pprint(view.extractDays(formatter))
+        [(u'Day 1', [(u'0', u'lesson 0'),
+                     (u'1', u'lesson 1'),
+                     (u'2', u'lesson 2')]),
+         (u'Day 2', [(u'0', u'lesson 0'),
+                     (u'1', u'lesson 1')])]
 
-        >>> view.timezone
+    Let's write a formatter better suited to represent our Lesson.
 
-        >>> tts.timezone = 'Asia/Tokyo'
-        >>> view.timezone
-        'Asia/Tokyo'
+        >>> lesson_formatter = lambda t: (t.title, t.description)
+
+        >>> days = view.extractDays(lesson_formatter)
+        >>> pprint(days)
+        [(u'Day 1',
+          [(u'lesson 0', 'math'),
+           (u'lesson 1', 'english'),
+           (u'lesson 2', 'history')]),
+         (u'Day 2',
+          [(u'lesson 0', 'english'),
+           (u'lesson 1', 'history')])]
+
+    makeTable massages data into dict, better suited for page templates.
+
+        >>> pprint(view.makeTable(days))
+        {'col_width': '50%',
+         'header': [u'Day 1', u'Day 2'],
+         'rows': [({'title': u'lesson 0', 'value': 'math'},
+                   {'title': u'lesson 0', 'value': 'english'}),
+                  ({'title': u'lesson 1', 'value': 'english'},
+                   {'title': u'lesson 1', 'value': 'history'}),
+                  ({'title': u'lesson 2', 'value': 'history'},
+                   {})],
+         'td_width': '45%',
+         'th_width': '5%'}
+
+        >>> print normalize_xml(view(item_formatter=lesson_formatter))
+        <table class="timetable">
+          <tr>
+            <th class="day" colspan="2" width="50%">
+              Day 1
+            </th>
+            <th class="day" colspan="2" width="50%">
+              Day 2
+            </th>
+          </tr>
+          <tr>
+            <th class="period" width="5%">
+              lesson 0
+            </th>
+            <td class="activity" width="45%">
+              math
+            </td>
+            <th class="period" width="5%">
+              lesson 0
+            </th>
+            <td class="activity" width="45%">
+              english
+            </td>
+          </tr>
+          <tr>
+            <th class="period" width="5%">
+              lesson 1
+            </th>
+            <td class="activity" width="45%">
+              english
+            </td>
+            <th class="period" width="5%">
+              lesson 1
+            </th>
+            <td class="activity" width="45%">
+              history
+            </td>
+          </tr>
+          <tr>
+            <th class="period" width="5%">
+              lesson 2
+            </th>
+            <td class="activity" width="45%">
+              history
+            </td>
+            <td class="activity" colspan="2" width="50%"/>
+          </tr>
+        </table>
+
+    """
+
+
+def doctest_TimetableView_new():
+    """Test for TimetableView.
+
+    This view queries snippets to render the period and time slot tables.
+
+    The view is responsible for final formatting of period/time slot entries.
+    To demonstrate this, we need stub day templates with samples of actual
+    objects.
+
+        >>> class IStubDayTemplates(Interface):
+        ...     pass
+
+        >>> class StubDayTemplates(object):
+        ...     implements(IStubDayTemplates)
+        ...     def __init__(self, sample=None):
+        ...         self.sample = sample
+
+        >>> period = Period(title='One', activity_type='lesson')
+        >>> time_slot = TimeSlot(
+        ...     datetime.time(12, 0),
+        ...     datetime.timedelta(0, 2700),
+        ...     activity_type='lunch')
+
+        >>> class TimetableStub(object):
+        ...     pass
+
+        >>> timetable = TimetableStub()
+        >>> timetable.periods = StubDayTemplates(sample=period)
+        >>> timetable.time_slots = StubDayTemplates(sample=time_slot)
+
+   Let's create our view.
+
+        >>> view = TimetableView(timetable, TestRequest())
+
+  The snippet is not registered yet, so not much action here.
+
+        >>> view.periods_snippet()
+        ''
+
+        >>> view.time_snippet()
+        ''
+
+   Let's register a snippet that uses a fromatter from the view to render
+   the sample object.
+
+        >>> class TableSnippet(BrowserView):
+        ...     adapts(IStubDayTemplates, TestRequest)
+        ...     def __call__(self, item_formatter=None):
+        ...         return item_formatter(self.context.sample)
+
+        >>> from zope.publisher.interfaces.browser import IBrowserView
+
+        >>> provideAdapter(TableSnippet,
+        ...                provides=IBrowserView,
+        ...                name="day_templates_table_snippet")
+
+        >>> view.periods_snippet()
+        ('One', 'lesson')
+
+        >>> view.time_snippet()
+        ('12:00-12:45', 'lunch')
+
+
     """
 
 
@@ -1239,7 +1388,6 @@ class TestTimetableSchemaXMLViewDayIdBased(DayIdBasedModelMixin,
 def test_suite():
     suite = unittest.TestSuite()
     optionflags = (doctest.ELLIPSIS | doctest.REPORT_NDIFF |
-                   doctest.REPORT_ONLY_FIRST_FAILURE |
                    doctest.NORMALIZE_WHITESPACE)
     suite.addTest(doctest.DocTestSuite(setUp=setUp, tearDown=tearDown,
                                        optionflags=optionflags))

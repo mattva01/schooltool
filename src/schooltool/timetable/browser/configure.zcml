@@ -66,6 +66,19 @@
       title="New Timetable"
       />
 
+  <page
+      name="day_templates_table_snippet"
+      class=".timetable.DayTemplatesTableSnippet"
+      permission="schooltool.view"
+      />
+
+  <page
+      name="index.html"
+      for="schooltool.timetable.interfaces.ITimetable"
+      class=".timetable.TimetableView"
+      permission="schooltool.view"
+      />
+
 <!--
 
   <configure package="schooltool.skin">

@@ -1,0 +1,32 @@
+<table class="timetable"
+    xmlns:tal="http://xml.zope.org/namespaces/tal"
+    xmlns:metal="http://xml.zope.org/namespaces/metal"
+    xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+
+  <tr>
+    <th tal:repeat="title options/table/header" tal:content="title"
+        tal:attributes="width options/table/col_width"
+        colspan="2" class="day">Day N</th>
+  </tr>
+
+  <tr tal:repeat="row options/table/rows">
+  <tal:block repeat="col row">
+    <tal:block condition="col">
+      <th tal:attributes="width options/table/th_width"
+          tal:content="col/title"
+          class="period"
+          >1</th>
+      <td tal:attributes="width options/table/td_width"
+          tal:content='col/value'
+          class="activity">
+      </td>
+    </tal:block>
+    <tal:block tal:condition="not: col">
+      <td tal:attributes="width options/table/col_width"
+          class="activity" colspan="2"></td>
+    </tal:block>
+  </tal:block>
+  </tr>
+
+</table>
+
