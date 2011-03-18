@@ -17,7 +17,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
-"POT-Creation-Date: 2011-02-21 15:51+0200\n"
+"POT-Creation-Date: 2011-03-18 20:12+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Schooltool Development Team <schooltool-dev@schooltool.org>\n"
@@ -5245,15 +5245,11 @@ msgstr ""
 msgid "free administration software for"
 msgstr ""
 
-#: /src/schooltool/skin/templates/view_macros.pt:114
-msgid "Report a bug on Launchpad."
+#: /src/schooltool/skin/templates/view_macros.pt:124
+msgid "&copy; The <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth Foundation</a> 2003 - 2011: Supporting Social Innovation."
 msgstr ""
 
-#: /src/schooltool/skin/templates/view_macros.pt:128
-msgid "&copy; The <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth Foundation</a> 2003 - <span>2011</span>: Supporting Social Innovation."
-msgstr ""
-
-#: /src/schooltool/skin/templates/view_macros.pt:133
+#: /src/schooltool/skin/templates/view_macros.pt:129
 msgid "<a href=\"http://www.schooltool.org\">SchoolTool</a>&trade; is a Trademark of the <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth Foundation</a>."
 msgstr ""
 
