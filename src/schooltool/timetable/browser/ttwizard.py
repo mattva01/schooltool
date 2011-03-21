@@ -818,8 +818,8 @@ class FinalStep(Step):
             timetable.time_slots, object_event = containedEvent(
                 WeekDayTemplates(), timetable, 'time_slots')
             days = [
-                (timetable.time_slots.getWeekDayKey(n%7),
-                 translate(day_of_week_names[n%7], context=self.request),
+                (timetable.time_slots.getWeekDayKey(n),
+                 translate(day_of_week_names[n], context=self.request),
                  time_slot)
                 for n, time_slot in zip(range(7), time_slots)]
         elif model == 'rotating':
