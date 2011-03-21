@@ -246,8 +246,9 @@ class ITimetable(ISchedule):
 
 class ITimetableContainerBase(Interface):
 
-    default_id = zope.schema.TextLine(
-        title=u"Id of the default timetable.",
+    default = zope.schema.Object(
+        title=u"The default timetable.",
+        schema=ITimetable,
         required=False)
 
 

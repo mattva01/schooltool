@@ -81,3 +81,19 @@ class TimetableContainer(BTreeContainer):
     implements(interfaces.ITimetableContainer)
 
     default_id = None
+
+    @property
+    def default(self):
+        if self.default_id is None:
+            return None
+        return self.get(self.default_id, None)
+
+    @default.setter
+    def default(self, timetable):
+        if timetable is None:
+            self.default_id = None
+            return
+        key = timetable.__name__
+        if key not in self:
+            raise KeyError(key)
+        self.default_id = key
