@@ -1,12 +1,17 @@
 SchoolTool Documentation
 ========================
 
+This is `SchoolTool <http://schooltool.org>`_ developers documentation.
+
+See `SchoolTool Book <http://book.schooltool.org>`_ for a users guide.
+
 Contents:
 
 .. toctree::
    :maxdepth: 2
 
    calendar/README
+   calendar/timezones
    app/booking
    app/security
    securitypolicy/README

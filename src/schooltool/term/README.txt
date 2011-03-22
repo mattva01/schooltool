@@ -76,9 +76,6 @@ term is to provide the ``IDateRange`` API:
   >>> list(dates)
   [datetime.date(2005, 8, 15), ..., datetime.date(2006, 8, 14)]
 
-__Note__: For a full demonstration of the ``IDateRange`` API see the
-          corresponding section below.
-
 The academic year component is also a container. Initially, there are no
 items:
 
@@ -375,21 +372,13 @@ Now, if the condition is not fulfilled, we get an error:
   TermEventConditionError: The warning must be sent within two weeks ...
 
 
-The Term Type Vocabulary
-------------------------
-
-
-The Term Event Vocabulary
--------------------------
-
-
 Setting Up the Year at FHS
 --------------------------
 
-* We need an efficient API for multiple evaluations. *
+* We need an efficient API for multiple evaluations.
 
 * We need custom evaluation objects that keep track of the term and section being
-  assessed. *
+  assessed.
 
 Each course has a set of special requirements -- these are requirements that
 will appear on the report cards & must be evaluated each semester or marking
@@ -416,4 +405,4 @@ the gradebook for the section.
 
 Requirements may need to be wrapped to prevent name duplication.
 
-When I set up a term, I indicate what info, if any is reported each term
+When I set up a term, I indicate what info, if any, is reported each term.
