@@ -1,5 +1,5 @@
 Time zones used in SchoolTool
------------------------------
+=============================
 
 In schooltool, there are three significant time zones: the school
 timezone (the application preference), the user's preferred one, and

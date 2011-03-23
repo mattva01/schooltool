@@ -1,14 +1,6 @@
 The Design of the Demographics Package
 ======================================
 
-Not a doctest
--------------
-
-This document is not a doctest. This has a reason: the demographics
-functionality does not contain a lot of algorithmic or API-heavy code,
-but is mostly an exercise in integration of existing packages without
-the introduction of much that is new in the way of APIs.
-
 What the demographics package does
 ----------------------------------
 
