@@ -6004,15 +6004,15 @@ msgstr "Riporta un bug su Launchpad."
 #: /src/schooltool/skin/templates/view_macros.pt:127
 msgid ""
 "&copy; The <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth "
-"Foundation</a> 2003 - <span>2010</span>: Supporting Social Innovation."
+"Foundation</a> 2003 - 2011: Supporting Social Innovation."
 msgstr ""
 "&copy; La <a href=\"http://www.shuttleworthfoundation.org\">Fondazione "
-"Shuttleworth</a> 2003 - <span>2010</span>: Supporto All'Innovazione Sociale."
+"Shuttleworth</a> 2003 - 2011: Supporto All'Innovazione Sociale."
 
 #: /src/schooltool/skin/templates/view_macros.pt:132
 msgid ""
 "<a href=\"http://www.schooltool.org\">SchoolTool</a>&trade; is a Trademark "
-"of The <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth "
+"of the <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth "
 "Foundation</a>."
 msgstr ""
 "<a href=\"http://www.schooltool.org\">SchoolTool</a>&trade; è un marchio "

@@ -21,13 +21,20 @@ Resource-related interfaces
 """
 
 import zope.schema
+from zope.configuration.fields import PythonIdentifier
 from zope.container.interfaces import IContainer, IContained
+from zope.container.interfaces import IContainer, IOrderedContainer
 from zope.container.constraints import contains, containers
 from zope.interface import Interface, Attribute
 
+from schooltool.basicperson.interfaces import IDemographics, IDemographicsFields
 from schooltool.calendar.interfaces import ICalendarEvent
 from schooltool.calendar.interfaces import ICalendar
 from schooltool.common import SchoolToolMessage as _
+
+
+class ResourceSubType(zope.schema.TextLine):
+    """Sub-type of the resource is a free-form text line."""
 
 
 class IBaseResource(Interface):
@@ -37,7 +44,7 @@ class IBaseResource(Interface):
         title=_("Title"),
         description=_("Title of the resource."))
 
-    type = zope.schema.TextLine(
+    type = ResourceSubType(
         title=_("Resource Type"),
         description=_("Type of resource"),
         required=True)
@@ -73,7 +80,7 @@ class IResource(IBaseResource):
 class ILocation(IBaseResource):
     """Location."""
 
-    type = zope.schema.TextLine(
+    type = ResourceSubType(
         title=_("Location Type"),
         description=_("Type of location (i.e. computer lab, class room, etc.)"),
         required=True)
@@ -88,7 +95,7 @@ class ILocation(IBaseResource):
 class IEquipment(IBaseResource):
     """Equipment."""
 
-    type = zope.schema.TextLine(
+    type = ResourceSubType(
         title=_("Equipment Type"),
         description=_("Type of equipment (i.e. camcorder, computer, etc.)"),
         required=True)
@@ -160,3 +167,16 @@ class IBookingCalendarEvent(ICalendarEvent):
 
 class IBookingTimetableEvent(ICalendarEvent):
     """Event that represents a possible booking in a timetable slot."""
+
+
+class IResourceDemographics(IDemographics):
+    """Demographics data storage for a resource
+
+    Stores any kind of data defined by field descriptions that are set
+    up for the resource container.
+    """
+
+
+class IResourceDemographicsFields(IDemographicsFields):
+    """Demographics field storage for resource demos."""
+

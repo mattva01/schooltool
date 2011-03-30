@@ -32,8 +32,8 @@ def doctest_evolve1():
         >>> evolve(None)
         Traceback (most recent call last):
         ...
-        NotImplementedError: Evolving from versions prior to 2008.04 is not
-        supported! Please upgrade to SchoolTool version 2008.04 first.
+        NotImplementedError: Evolving from versions prior to 1.0 is not
+        supported! Please upgrade to SchoolTool version 1.0 first.
 
     """
 

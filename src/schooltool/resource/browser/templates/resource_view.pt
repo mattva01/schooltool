@@ -1,0 +1,36 @@
+<html metal:use-macro="view/@@standard_macros/page">
+
+  <body>
+    <metal:nothing metal:fill-slot="content-header" />
+    <metal:block metal:fill-slot="body">
+      <tal:block repeat="widget view/widgets/values">
+        <div id="" class="row"
+             tal:attributes="id string:${widget/id}-row"
+             tal:condition="python:widget.mode != 'hidden'">
+          <metal:widget-row define-macro="widget-row">
+            <div class="label">
+              <label tal:attributes="for widget/id">
+                <span i18n:translate=""
+                      tal:content="widget/label">label</span>
+                <span class="required"
+                      tal:condition="widget/required">*</span>
+              </label>
+            </div>
+            <p class="hint" tal:content="widget/field/description">Description of this field.</p>
+            <div class="widget" tal:content="structure widget/render">
+              <input type="text" size="24" value="" />
+            </div>
+            <div class="error"
+                 tal:condition="widget/error">
+              <span tal:replace="structure widget/error/render">error</span>
+            </div>
+          </metal:widget-row>
+        </div>
+        <input type="hidden" value=""
+               tal:condition="python:widget.mode == 'hidden'"
+               tal:replace="structure widget/render" />
+      </tal:block>
+    </metal:block>
+  </body>
+</html>
+

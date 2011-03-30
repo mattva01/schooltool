@@ -21,6 +21,6 @@ Stub of the evolution script for generation 1.
 """
 
 def evolve(context):
-    raise NotImplementedError("Evolving from versions prior to 2008.04 is not"
+    raise NotImplementedError("Evolving from versions prior to 1.0 is not"
                               " supported! Please upgrade to SchoolTool"
-                              " version 2008.04 first.")
+                              " version 1.0 first.")

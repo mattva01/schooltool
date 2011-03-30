@@ -31,8 +31,6 @@ from ZODB.DemoStorage import DemoStorage
 from ZODB.DB import DB
 from zope.app.appsetup import config
 
-from schooltool.generations.evolve28 import evolve
-from schooltool.generations.evolve27 import evolve as evolve27
 import schooltool.app
 
 
@@ -44,24 +42,21 @@ class ContextStub(object):
         self.connection = connection
 
 
-def FileStorage27():
+def FileStorage28():
     here = os.path.dirname(__file__)
-    data_fs = os.path.join(here, "Data27.fs")
+    data_fs = os.path.join(here, "Data28.fs")
     return FileStorage(data_fs)
 
 
 def doctest_evolve28():
-    """Test evolve28
+    """Test that a database at generation 28 can be opened.
 
-       >>> storage = DemoStorage(base=FileStorage27())
+       >>> storage = DemoStorage(base=FileStorage28())
        >>> db = DB(storage, database_name="")
        >>> context = ContextStub(db)
        >>> app = context.connection.root()[ZopePublication.root_name]
        >>> from zope.component.hooks import setSite
        >>> setSite(app)
-
-       >>> evolve27(context)
-       >>> evolve(context)
 
        >>> sy = app['schooltool.schoolyear'][u'2008-2009']
        >>> sy.title, sy.first, sy.last

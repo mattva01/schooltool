@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:browser="http://namespaces.zope.org/browser"
+           i18n_domain="schooltool">
+
+  <include package="schooltool.help" file="meta.zcml" />
+
+  <include package="schooltool.common" />
+
+  <include package="z3c.autoinclude" file="meta.zcml" />
+  <includePlugins package="schooltool" file="plugin.zcml" />
+
+  <include package="schooltool.help" />
+  <include package="schooltool.timetable" />
+  <include package="schooltool.basicperson" />
+  <includeOverrides package="schooltool.basicperson" file="overrides.zcml" />
+
+  <interface
+      interface=".skin.ISchoolToolStandardSkin"
+      type="zope.publisher.interfaces.browser.IBrowserSkinType"
+      name="SchoolToolStandard"
+      />
+
+  <browser:defaultSkin name="SchoolToolStandard" />
+
+  <configure xmlns:zcml="http://namespaces.zope.org/zcml"
+             zcml:condition="have devmode">
+    <include package="schooltool.devmode" />
+    <includeOverrides package="schooltool.devmode" file="overrides.zcml" />
+  </configure>
+
+</configure>
+

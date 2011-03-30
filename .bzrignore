@@ -9,7 +9,7 @@
 ./schooltool.conf
 ./src/schooltool.egg-info
 **/LC_MESSAGES/*.mo
-./src/schooltool/generations/tests/Data27.fs.*
+./src/schooltool/generations/tests/Data2?.fs.*
 ./src/schooltool/locales/??
 ./src/schooltool/locales/???
 ./src/schooltool/locales/??_??
@@ -21,3 +21,4 @@
 ./tags
 ./coverage
 ./ftest-coverage
+./docs

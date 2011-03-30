@@ -147,6 +147,8 @@ Let's try making some fields required, and maybe even changing them:
     >>> manager.getLink('Demographics').click()
     >>> manager.getLink('ethnicity').click()
     >>> manager.getLink('Edit').click()
+    >>> print manager.getControl(name='form.widgets.limit_keys:list').value
+    []
     >>> print manager.getControl('List of values').value
     American Indian or Alaska Native
     Asian
@@ -154,15 +156,33 @@ Let's try making some fields required, and maybe even changing them:
     Native Hawaiian or Other Pacific Islander
     White
 
-Let's make the field required, and add Martians to it:
+Let's make the field required, and add Martians to it.  Also, we'll put limit
+keys into the empty list so that we can test that they get saved:
 
+    >>> manager.getControl(name='form.widgets.limit_keys:list').value = ['students', 'teachers']
     >>> values = manager.getControl('List of values').value.splitlines()
     >>> manager.getControl('List of values').value = "\n".join(values + ['Martians'])
     >>> manager.getControl('yes').click()
     >>> manager.getControl('Apply').click()
 
-Now if we go to the add person form, we should see the additional
-value in the select box, and have the field required:
+Calling the edit form back up, we see that our changes took:
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('Demographics').click()
+    >>> manager.getLink('ethnicity').click()
+    >>> manager.getLink('Edit').click()
+    >>> print manager.getControl(name='form.widgets.limit_keys:list').value
+    ['students', 'teachers']
+    >>> print manager.getControl('List of values').value
+    American Indian or Alaska Native
+    Asian
+    Black or African American
+    Native Hawaiian or Other Pacific Islander
+    White
+    Martians
+
+When we go to the add person form, we should still not see the additional
+value in the select box as the group is not yet set:
 
     >>> manager.getLink('Manage').click()
     >>> manager.getLink('Persons').click()
@@ -183,9 +203,42 @@ value in the select box, and have the field required:
     Confirm password
     ID
     Language
-    Ethnicity *
     Citizenship
 
+However, if we make john a teacher, it will show up when we edit him.
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('Persons').click()
+    >>> manager.getLink('John').click()
+    >>> manager.getLink('Groups').click()
+    >>> manager.getControl(name='add_item.teachers').value = 'checked'
+    >>> manager.getControl('Add').click()
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('Persons').click()
+    >>> manager.getLink('John').click()
+    >>> manager.getLink('Edit').click()
+    >>> manager.getControl('Ethnicity').displayOptions
+    ['American Indian or Alaska Native',
+     'Asian',
+     'Black or African American',
+     'Native Hawaiian or Other Pacific Islander',
+     'White',
+     'Martians']
+
+When we change the demo to not have a limit_key, then it will show when we add
+a new person:
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('Demographics').click()
+    >>> manager.getLink('ethnicity').click()
+    >>> manager.getLink('Edit').click()
+    >>> manager.getControl(name='form.widgets.limit_keys:list').value = []
+    >>> manager.getControl('Apply').click()
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('Persons').click()
+    >>> manager.getLink('New Person').click()
     >>> manager.getControl('Ethnicity').displayOptions
     ['American Indian or Alaska Native',
      'Asian',
@@ -216,6 +269,36 @@ We can use unicode in select boxes too:
      'White',
      'Martians',
      'N\xc3\xb6rds']
+
+Boolean fields are available, so we'll create one called 'certified' and test
+the values in the display view:
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('Demographics').click()
+    >>> manager.getLink('New Yes/No Field').click()
+    >>> manager.getControl('Title').value = "Certified"
+    >>> manager.getControl('ID').value = "certified"
+    >>> manager.getControl(name='form.widgets.required:list').value = ['true']
+    >>> manager.getControl('Add').click()
+
+    >>> manager.printQuery('//span[@id="form-widgets-title"]')
+    <span id="form-widgets-title" class="text-widget required textline-field">Certified</span>
+    >>> manager.printQuery('//span[@id="form-widgets-name"]')
+    <span id="form-widgets-name" class="text-widget required pythonidentifier-field">certified</span>
+    >>> manager.printQuery('//span[@id="form-widgets-required"]//span')
+    <span class="selected-option">yes</span>
+
+Now when we add a new person, the new 'Certified' field appears as a boolean
+radio field:
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('Persons').click()
+    >>> manager.getLink('New Person').click()
+
+    >>> manager.printQuery('//input[@id="form-widgets-certified-0"]')
+    <input id="form-widgets-certified-0" ... value="true" type="radio" />
+    >>> manager.printQuery('//input[@id="form-widgets-certified-1"]')
+    <input id="form-widgets-certified-1" ... value="false" type="radio" />
 
 TODO
 Test values being unset if you remove a field

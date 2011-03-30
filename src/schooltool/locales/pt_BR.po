@@ -6021,15 +6021,15 @@ msgstr "Reporte um defeito no Launchpad."
 #: /src/schooltool/skin/templates/view_macros.pt:127
 msgid ""
 "&copy; The <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth "
-"Foundation</a> 2003 - <span>2010</span>: Supporting Social Innovation."
+"Foundation</a> 2003 - 2011: Supporting Social Innovation."
 msgstr ""
 "&copy; A <a href=\"http://www.shuttleworthfoundation.org\">Fundação "
-"Shuttleworth</a> 2003 - <span>2010</span>: Apoia a inovação Social"
+"Shuttleworth</a> 2003 - 2011: Apoia a inovação Social"
 
 #: /src/schooltool/skin/templates/view_macros.pt:132
 msgid ""
 "<a href=\"http://www.schooltool.org\">SchoolTool</a>&trade; is a Trademark "
-"of The <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth "
+"of the <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth "
 "Foundation</a>."
 msgstr ""
 "<a href=\"http://www.schooltool.org\">SchoolTool</a>&trade; é uma marca da "

@@ -217,8 +217,8 @@ def doctest_configureReportlab():
 
         >>> def setupStub(fontdir):
         ...     print 'reportlab set up: %s' % fontdir
-        >>> realSetup = pdf.setUpMSTTCoreFonts
-        >>> pdf.setUpMSTTCoreFonts = setupStub
+        >>> realSetup = pdf.setUpLiberationFonts
+        >>> pdf.setUpLiberationFonts = setupStub
 
     First, if a null path is given, nothing happens (PDF support is
     left disabled):
@@ -282,7 +282,7 @@ def doctest_configureReportlab():
         >>> sys.stderr = old_stderr
         >>> if real_reportlab:
         ...     sys.modules['reportlab'] = real_reportlab
-        >>> pdf.setUpMSTTCoreFonts = realSetup
+        >>> pdf.setUpLiberationFonts = realSetup
 
     """
 

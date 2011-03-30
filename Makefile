@@ -51,9 +51,10 @@ clean:
 	find . -name 'LC_MESSAGES' -exec rmdir -p --ignore-fail-on-non-empty {} +
 
 .PHONY: realclean
-realclean: clean
+realclean:
 	rm -rf eggs
 	rm -rf instance
+	$(MAKE) clean
 
 # Tests
 
@@ -141,6 +142,11 @@ update-translations: extract-translations
 	done
 	$(MAKE) compile-translations
 
+# Docs
+
+docs: build
+	bin/docs
+
 # Release
 
 .PHONY: release
@@ -157,6 +163,6 @@ move-release:
 
 .PHONY: ubuntu-environment
 ubuntu-environment:
-	sudo apt-get install bzr build-essential gettext enscript \
+	sudo apt-get install bzr build-essential gettext enscript ttf-liberation \
 	    python-all-dev libc6-dev libicu-dev libxslt1-dev libfreetype6-dev libjpeg62-dev 
 

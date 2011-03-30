@@ -3,37 +3,15 @@
  *
  */
 
-/******************************************************* BEGIN: Base.css */
-
-BODY {
-    font-size: x-small; /* for IE5/Win */
-    voice-family: "\"}\"";
-    voice-family: inherit;
-    font-size: small; /* for IE6/Win */
-}
-
-HTML>BODY {
-    font-size: x-small; /* for Opera */
-}
-
-head:first-child+BODY {
-    font-size: small; /* for Mozilla, IE5/Mac */
-}
-
-BODY {
-        margin: 0px 0px;
-}
-
-/********************************************************* END: Base.css */
-
-
 /************************************************* BEGIN: Schooltool.css */
 
 BODY {
     font-family: Verdana, Helvetica, Arial, Sans-Serif;
+    font-size: small;
     background: #fff;
     color: #000;
     min-width: 700px;
+    margin: 0px 0px;
 }
 
 UL {
@@ -636,17 +614,12 @@ div.content-nav {
 
 #footer P {
     position: absolute;
-    left: 170px;
+    left: 85px;
 }
 
 #footer IMG.logo {
     position: absolute;
     left: 10px;
-}
-
-#footer IMG.bug {
-    position: absolute;
-    left: 85px;
 }
 
 /*
