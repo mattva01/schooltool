@@ -141,7 +141,7 @@ def doctest_SchoolToolAPI_content():
 
         >>> providers = api.content
         >>> providers.context, providers.request, providers.view
-        (None, None, None)
+        (<...PersonContainer ...>, None, None)
 
     Parameters for the adapter are looked up from tal variables.
 
@@ -156,13 +156,21 @@ def doctest_SchoolToolAPI_content():
         <...ContentProvidersStub object at ...>
 
         >>> providers.context
-        <...SchoolYearContainer object at ...>
+        <...PersonContainer object at ...>
 
         >>> providers.request
         <...TestRequest ...>
 
         >>> providers.view
         <...ViewStub object at ...>
+
+    Note that:
+
+        >>> providers.context is api.context
+        True
+
+        >>> providers.context is not api.engine.vars['context']
+        True
 
     If content providers implement ITALESFunctionNamespace, api.contacts
     also set the engine context.
