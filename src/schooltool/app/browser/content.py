@@ -26,6 +26,7 @@ import zope.contentprovider.interfaces
 from zope.contentprovider.interfaces import IContentProvider
 from zope.contentprovider.interfaces import ContentProviderLookupError
 from zope.contentprovider.tales import addTALNamespaceData
+from zope.contentprovider.provider import ContentProviderBase
 from zope.event import notify
 from zope.location.interfaces import ILocation
 from zope.proxy.decorator import SpecificationDecoratorBase
@@ -41,6 +42,26 @@ class IContentProviders(ITraversable):
 class ISchoolToolContentProvider(IBrowserView):
     def __call__(*args, **kw):
         """Compute the response body."""
+
+
+class ContentProvider(ContentProviderBase):
+    """Base SchoolTool content provider class."""
+
+    implements(ISchoolToolContentProvider)
+
+    @property
+    def view(self):
+        return self.__parent__
+
+    @view.setter
+    def view(self, value):
+        self.__parent__ = value
+
+    def __call__(self, *args, **kw):
+        event = zope.contentprovider.interfaces.BeforeUpdateEvent
+        notify(event(self, self.request))
+        self.update()
+        return self.render(*args, **kw)
 
 
 class SchoolToolContentProviderProxy(SpecificationDecoratorBase):
