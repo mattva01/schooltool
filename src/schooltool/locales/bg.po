@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-09-30 19:38+0300\n"
+"POT-Creation-Date: 2011-03-18 20:12+0200\n"
 "PO-Revision-Date: 2010-09-10 05:26+0000\n"
 "Last-Translator: Blagovest Petrov <blagovest@petrovs.info>\n"
 "Language-Team: Bulgarian <bg@li.org>\n"
@@ -15,8 +15,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-09-11 04:43+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-03-19 04:44+0000\n"
+"X-Generator: Launchpad (build 12559)\n"
 
 #: /src/schooltool/app/app.py:197
 msgid "Your School"
@@ -584,42 +584,7 @@ msgstr "Календар"
 msgid "Actions"
 msgstr "Действия"
 
-#: /src/schooltool/app/browser/configure.zcml:224
-#: /src/schooltool/app/browser/configure.zcml:505
-#: /src/schooltool/basicperson/browser/configure.zcml:6
-#: /src/schooltool/basicperson/browser/configure.zcml:185
-#: /src/schooltool/basicperson/browser/configure.zcml:192
-#: /src/schooltool/basicperson/browser/configure.zcml:199
-#: /src/schooltool/common/configure.zcml:87
-#: /src/schooltool/contact/browser/configure.zcml:6
-#: /src/schooltool/contact/browser/configure.zcml:31
-#: /src/schooltool/contact/browser/configure.zcml:88
-#: /src/schooltool/course/browser/configure.zcml:58
-#: /src/schooltool/course/browser/configure.zcml:69
-#: /src/schooltool/course/browser/configure.zcml:103
-#: /src/schooltool/course/browser/configure.zcml:143
-#: /src/schooltool/course/security.zcml:93
-#: /src/schooltool/course/security.zcml:127
-#: /src/schooltool/demographics/browser/configure.zcml:13
-#: /src/schooltool/group/browser/configure.zcml:16
-#: /src/schooltool/group/browser/configure.zcml:85
-#: /src/schooltool/group/security.zcml:72
-#: /src/schooltool/person/browser/configure.zcml:157
-#: /src/schooltool/person/browser/configure.zcml:187
-#: /src/schooltool/person/security.zcml:93
-#: /src/schooltool/resource/browser/configure.zcml:62
-#: /src/schooltool/schoolyear/browser/configure.zcml:101
-#: /src/schooltool/schoolyear/security.zcml:31
-#: /src/schooltool/term/browser/configure.zcml:14
-#: /src/schooltool/term/security.zcml:35
-#: /src/schooltool/timetable/browser/configure.zcml:52
-#: /src/schooltool/timetable/browser/configure.zcml:93
-#: /src/schooltool/timetable/browser/configure.zcml:111
-#: /src/schooltool/timetable/security.zcml:32
-msgid "View"
-msgstr "Изглед"
-
-#: /src/schooltool/app/browser/configure.zcml:310
+#: /src/schooltool/app/browser/configure.zcml:311
 msgid "View Calendar"
 msgstr "Преглед на календара"
 
@@ -643,48 +608,7 @@ msgstr "Редактиране на ръководители"
 msgid "Change Site Preferences"
 msgstr "Промяна на настройките на сайта"
 
-#: /src/schooltool/app/browser/configure.zcml:399
-msgid "Calendar (Daily)"
-msgstr "Календар (Дневно)"
-
-#: /src/schooltool/app/browser/configure.zcml:409
-msgid "Calendar (Daily, PDF)"
-msgstr "Календар (Дневно, PDF)"
-
-#: /src/schooltool/app/browser/configure.zcml:418
-msgid "Calendar (Weekly)"
-msgstr "Календар (Седмично)"
-
-#: /src/schooltool/app/browser/configure.zcml:428
-msgid "Calendar (Weekly, PDF)"
-msgstr "Календар (Седмично, PDF)"
-
-#: /src/schooltool/app/browser/configure.zcml:437
-msgid "Calendar (Monthly)"
-msgstr "Календар (Месечно)"
-
-#: /src/schooltool/app/browser/configure.zcml:447
-msgid "Calendar (Monthly, PDF)"
-msgstr "Календар (Месечно, PDF)"
-
-#: /src/schooltool/app/browser/configure.zcml:456
-#: /src/schooltool/timetable/browser/configure.zcml:219
-msgid "Calendar (Yearly)"
-msgstr "Календар (Годишно)"
-
-#: /src/schooltool/app/browser/configure.zcml:466
-msgid "Atom View"
-msgstr "Детайлен преглед"
-
-#: /src/schooltool/app/browser/configure.zcml:476
-msgid "iCalendar"
-msgstr "iCalendar"
-
-#: /src/schooltool/app/browser/configure.zcml:486
-msgid "Free/Busy"
-msgstr "Свободен/зает"
-
-#: /src/schooltool/app/browser/configure.zcml:515
+#: /src/schooltool/app/browser/configure.zcml:494
 #: /src/schooltool/app/help/configure.zcml:77
 #: /src/schooltool/app/help/event_add.pt:6
 #: /src/schooltool/app/help/event_add.pt:9
@@ -976,7 +900,7 @@ msgstr "Главен Разработчик:"
 
 #: /src/schooltool/app/browser/templates/about.pt:44
 msgid "Release Manager:"
-msgstr ""
+msgstr "Мениджър по рилийза:"
 
 #: /src/schooltool/app/browser/templates/about.pt:47
 msgid "Contributors:"
@@ -2349,12 +2273,35 @@ msgstr ""
 msgid "Change calendar"
 msgstr ""
 
-#: /src/schooltool/basicperson/browser/configure.zcml:15
-#: /src/schooltool/basicperson/browser/configure.zcml:164
-#: /src/schooltool/basicperson/browser/configure.zcml:171
-#: /src/schooltool/basicperson/browser/configure.zcml:178
+#: /src/schooltool/basicperson/browser/configure.zcml:14
+#: /src/schooltool/basicperson/browser/configure.zcml:216
+#: /src/schooltool/basicperson/browser/configure.zcml:223
+#: /src/schooltool/basicperson/browser/configure.zcml:230
+#: /src/schooltool/basicperson/browser/configure.zcml:237
+#: /src/schooltool/common/configure.zcml:88
+#: /src/schooltool/contact/browser/configure.zcml:6
+#: /src/schooltool/contact/browser/configure.zcml:31
+#: /src/schooltool/course/browser/configure.zcml:58
+#: /src/schooltool/course/browser/configure.zcml:69
+#: /src/schooltool/course/security.zcml:94
+#: /src/schooltool/course/security.zcml:128
+#: /src/schooltool/demographics/browser/configure.zcml:13
+#: /src/schooltool/group/security.zcml:76
+#: /src/schooltool/person/browser/configure.zcml:197
+#: /src/schooltool/person/security.zcml:87
+#: /src/schooltool/schoolyear/security.zcml:31
+#: /src/schooltool/term/security.zcml:35
+#: /src/schooltool/timetable/security.zcml:32
+msgid "View"
+msgstr "Изглед"
+
+#: /src/schooltool/basicperson/browser/configure.zcml:23
+#: /src/schooltool/basicperson/browser/configure.zcml:188
+#: /src/schooltool/basicperson/browser/configure.zcml:195
+#: /src/schooltool/basicperson/browser/configure.zcml:202
+#: /src/schooltool/basicperson/browser/configure.zcml:209
 #: /src/schooltool/contact/browser/configure.zcml:22
-#: /src/schooltool/contact/browser/configure.zcml:40
+#: /src/schooltool/contact/browser/configure.zcml:52
 #: /src/schooltool/demographics/browser/configure.zcml:22
 #: /src/schooltool/demographics/browser/table.py:100
 #: /src/schooltool/demographics/browser/table.py:196
@@ -3110,20 +3057,8 @@ msgstr ""
 msgid "New Course"
 msgstr ""
 
-#: /src/schooltool/course/browser/configure.zcml:113
-msgid "Copy Sections"
-msgstr ""
-
-#: /src/schooltool/course/browser/configure.zcml:123
-msgid "View Next"
-msgstr ""
-
-#: /src/schooltool/course/browser/configure.zcml:133
-msgid "View Previous"
-msgstr ""
-
+#: /src/schooltool/course/browser/configure.zcml:150
 #: /src/schooltool/course/browser/configure.zcml:160
-#: /src/schooltool/course/browser/configure.zcml:170
 msgid "New Section"
 msgstr ""
 
@@ -5580,11 +5515,7 @@ msgstr ""
 msgid "free administration software for"
 msgstr ""
 
-#: /src/schooltool/skin/templates/view_macros.pt:114
-msgid "Report a bug on Launchpad."
-msgstr ""
-
-#: /src/schooltool/skin/templates/view_macros.pt:127
+#: /src/schooltool/skin/templates/view_macros.pt:124
 msgid ""
 "&copy; The <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth "
 "Foundation</a> 2003 - 2011: Supporting Social Innovation."

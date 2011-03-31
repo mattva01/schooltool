@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-11-22 16:40+0200\n"
-"PO-Revision-Date: 2010-10-29 10:09+0000\n"
-"Last-Translator: Gunleif Joensen <Unknown>\n"
+"POT-Creation-Date: 2011-03-18 20:12+0200\n"
+"PO-Revision-Date: 2010-11-22 18:44+0000\n"
+"Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
 "Language-Team: Føroyabólkurin\n"
 "Language: fo\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-10-30 04:59+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-03-19 04:45+0000\n"
+"X-Generator: Launchpad (build 12559)\n"
 
 #: /src/schooltool/app/app.py:197
 msgid "Your School"
@@ -585,42 +585,7 @@ msgstr "Kalendari"
 msgid "Actions"
 msgstr "Atgerðir"
 
-#: /src/schooltool/app/browser/configure.zcml:231
-#: /src/schooltool/app/browser/configure.zcml:512
-#: /src/schooltool/basicperson/browser/configure.zcml:13
-#: /src/schooltool/basicperson/browser/configure.zcml:201
-#: /src/schooltool/basicperson/browser/configure.zcml:208
-#: /src/schooltool/basicperson/browser/configure.zcml:215
-#: /src/schooltool/common/configure.zcml:88
-#: /src/schooltool/contact/browser/configure.zcml:6
-#: /src/schooltool/contact/browser/configure.zcml:31
-#: /src/schooltool/contact/browser/configure.zcml:100
-#: /src/schooltool/course/browser/configure.zcml:58
-#: /src/schooltool/course/browser/configure.zcml:69
-#: /src/schooltool/course/browser/configure.zcml:103
-#: /src/schooltool/course/browser/configure.zcml:143
-#: /src/schooltool/course/security.zcml:94
-#: /src/schooltool/course/security.zcml:128
-#: /src/schooltool/demographics/browser/configure.zcml:13
-#: /src/schooltool/group/browser/configure.zcml:16
-#: /src/schooltool/group/browser/configure.zcml:85
-#: /src/schooltool/group/security.zcml:76
-#: /src/schooltool/person/browser/configure.zcml:157
-#: /src/schooltool/person/browser/configure.zcml:199
-#: /src/schooltool/person/security.zcml:87
-#: /src/schooltool/resource/browser/configure.zcml:62
-#: /src/schooltool/schoolyear/browser/configure.zcml:101
-#: /src/schooltool/schoolyear/security.zcml:31
-#: /src/schooltool/term/browser/configure.zcml:14
-#: /src/schooltool/term/security.zcml:35
-#: /src/schooltool/timetable/browser/configure.zcml:52
-#: /src/schooltool/timetable/browser/configure.zcml:93
-#: /src/schooltool/timetable/browser/configure.zcml:111
-#: /src/schooltool/timetable/security.zcml:32
-msgid "View"
-msgstr "Vís"
-
-#: /src/schooltool/app/browser/configure.zcml:317
+#: /src/schooltool/app/browser/configure.zcml:311
 msgid "View Calendar"
 msgstr "Hygg at kalendara"
 
@@ -644,48 +609,7 @@ msgstr "Ritstjórna leiðarar"
 msgid "Change Site Preferences"
 msgstr "Broyta staðarsertokkar"
 
-#: /src/schooltool/app/browser/configure.zcml:406
-msgid "Calendar (Daily)"
-msgstr "Kalendari (dagliga)"
-
-#: /src/schooltool/app/browser/configure.zcml:416
-msgid "Calendar (Daily, PDF)"
-msgstr "Kalendari (dagliga, PDF)"
-
-#: /src/schooltool/app/browser/configure.zcml:425
-msgid "Calendar (Weekly)"
-msgstr "Kalendari (vikuliga)"
-
-#: /src/schooltool/app/browser/configure.zcml:435
-msgid "Calendar (Weekly, PDF)"
-msgstr "Kalendari (vikuliga, PDF)"
-
-#: /src/schooltool/app/browser/configure.zcml:444
-msgid "Calendar (Monthly)"
-msgstr "Kalendari (mánaðarliga)"
-
-#: /src/schooltool/app/browser/configure.zcml:454
-msgid "Calendar (Monthly, PDF)"
-msgstr "Kalendari (mánaðarliga, PDF)"
-
-#: /src/schooltool/app/browser/configure.zcml:463
-#: /src/schooltool/timetable/browser/configure.zcml:219
-msgid "Calendar (Yearly)"
-msgstr "Kalendari (árliga)"
-
-#: /src/schooltool/app/browser/configure.zcml:473
-msgid "Atom View"
-msgstr "Atom sýni"
-
-#: /src/schooltool/app/browser/configure.zcml:483
-msgid "iCalendar"
-msgstr "iCalendar"
-
-#: /src/schooltool/app/browser/configure.zcml:493
-msgid "Free/Busy"
-msgstr ""
-
-#: /src/schooltool/app/browser/configure.zcml:522
+#: /src/schooltool/app/browser/configure.zcml:494
 #: /src/schooltool/app/help/configure.zcml:77
 #: /src/schooltool/app/help/event_add.pt:6
 #: /src/schooltool/app/help/event_add.pt:9
@@ -2308,10 +2232,33 @@ msgstr "Hygg at kalendara"
 msgid "Change calendar"
 msgstr "Broyt kalendara"
 
-#: /src/schooltool/basicperson/browser/configure.zcml:22
-#: /src/schooltool/basicperson/browser/configure.zcml:180
-#: /src/schooltool/basicperson/browser/configure.zcml:187
-#: /src/schooltool/basicperson/browser/configure.zcml:194
+#: /src/schooltool/basicperson/browser/configure.zcml:14
+#: /src/schooltool/basicperson/browser/configure.zcml:216
+#: /src/schooltool/basicperson/browser/configure.zcml:223
+#: /src/schooltool/basicperson/browser/configure.zcml:230
+#: /src/schooltool/basicperson/browser/configure.zcml:237
+#: /src/schooltool/common/configure.zcml:88
+#: /src/schooltool/contact/browser/configure.zcml:6
+#: /src/schooltool/contact/browser/configure.zcml:31
+#: /src/schooltool/course/browser/configure.zcml:58
+#: /src/schooltool/course/browser/configure.zcml:69
+#: /src/schooltool/course/security.zcml:94
+#: /src/schooltool/course/security.zcml:128
+#: /src/schooltool/demographics/browser/configure.zcml:13
+#: /src/schooltool/group/security.zcml:76
+#: /src/schooltool/person/browser/configure.zcml:197
+#: /src/schooltool/person/security.zcml:87
+#: /src/schooltool/schoolyear/security.zcml:31
+#: /src/schooltool/term/security.zcml:35
+#: /src/schooltool/timetable/security.zcml:32
+msgid "View"
+msgstr "Vís"
+
+#: /src/schooltool/basicperson/browser/configure.zcml:23
+#: /src/schooltool/basicperson/browser/configure.zcml:188
+#: /src/schooltool/basicperson/browser/configure.zcml:195
+#: /src/schooltool/basicperson/browser/configure.zcml:202
+#: /src/schooltool/basicperson/browser/configure.zcml:209
 #: /src/schooltool/contact/browser/configure.zcml:22
 #: /src/schooltool/contact/browser/configure.zcml:52
 #: /src/schooltool/demographics/browser/configure.zcml:22
@@ -2366,9 +2313,25 @@ msgstr "Nýggjan tekstteig"
 msgid "New Date Field"
 msgstr "Nýggjan datoteig"
 
-#: /src/schooltool/basicperson/browser/configure.zcml:173
+#: /src/schooltool/basicperson/browser/configure.zcml:174
+msgid "New Yes/No Field"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/configure.zcml:181
 msgid "New Selection List Field"
 msgstr "Nýggjan úrvalslistateig"
+
+#: /src/schooltool/basicperson/browser/configure.zcml:291
+msgid "Add Teacher"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/configure.zcml:301
+msgid "Add Student"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/configure.zcml:311
+msgid "Add Administrator"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/csvimport.py:44
 #: /src/schooltool/course/browser/csvimport.py:45
@@ -2419,7 +2382,11 @@ msgstr "Tvíføld innskriving \"${value}\""
 msgid "Value too long \"${value}\""
 msgstr "Virði ov langt \"${value}\""
 
-#: /src/schooltool/basicperson/browser/demographics.py:151
+#: /src/schooltool/basicperson/browser/demographics.py:100
+msgid "Demographics Container"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/demographics.py:140
 msgid "Add new Field"
 msgstr "Legg nýggjan teig afturat"
 
@@ -2428,20 +2395,25 @@ msgstr "Legg nýggjan teig afturat"
 msgid "Change information for ${field_title}"
 msgstr "Broyt upplýsing um ${field_title}"
 
-#: /src/schooltool/basicperson/browser/person.py:51
-#: /src/schooltool/schoolyear/browser/templates/schoolyear_add.pt:61
-msgid "Group"
-msgstr "Bólkur"
-
-#: /src/schooltool/basicperson/browser/person.py:56
-#: /src/schooltool/demographics/interfaces.py:212
+#: /src/schooltool/basicperson/browser/person.py:54
+#: /src/schooltool/demographics/interfaces.py:209
 msgid "Advisor"
 msgstr "Ráðgevi"
 
-#: /src/schooltool/basicperson/browser/person.py:70
+#: /src/schooltool/basicperson/browser/person.py:57
+#: /src/schooltool/person/browser/person.py:449
+msgid "Person index"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/person.py:68
 #: /src/schooltool/widget/password.py:39
 msgid "Confirm password"
 msgstr "Vátta atlát"
+
+#: /src/schooltool/basicperson/browser/person.py:73
+#: /src/schooltool/schoolyear/browser/templates/schoolyear_add.pt:61
+msgid "Group"
+msgstr "Bólkur"
 
 #: /src/schooltool/basicperson/browser/person.py:76
 msgid "Passwords do not match"
@@ -2463,16 +2435,7 @@ msgstr "Brúkaranøvn"
 msgid "Add multiple persons"
 msgstr "Legg fleiri persónar afturat"
 
-#: /src/schooltool/basicperson/browser/person.py:357
-msgid "Done"
-msgstr "Liðugt"
-
-#. Default: ""
-#: /src/schooltool/basicperson/browser/person.py:402
-msgid "Change information for ${fullname}"
-msgstr "Broyt upplýsing um ${fullname}"
-
-#: /src/schooltool/basicperson/browser/person.py:472
+#: /src/schooltool/basicperson/browser/person.py:304
 msgid "Current Advisors"
 msgstr "Núverandi ráðgevar"
 
@@ -2498,9 +2461,85 @@ msgstr ""
 msgid "Advisees of ${person}"
 msgstr ""
 
-#: /src/schooltool/basicperson/browser/templates/demographics-view.pt:4
-#: /src/schooltool/basicperson/browser/templates/demographics-view.pt:7
-msgid "Demographics Container"
+#: /src/schooltool/basicperson/browser/person.py:357
+msgid "Done"
+msgstr "Liðugt"
+
+#. Default: ""
+#: /src/schooltool/basicperson/browser/person.py:402
+msgid "Change information for ${fullname}"
+msgstr "Broyt upplýsing um ${fullname}"
+
+#: /src/schooltool/basicperson/browser/person.py:579
+msgid "Teacher identification"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/person.py:581
+msgid "Teacher demographics"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/person.py:582
+msgid "Add new teacher"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/person.py:589
+msgid "Student identification"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/person.py:591
+msgid "Student demographics"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/person.py:592
+msgid "Add new student"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/person.py:599
+msgid "Administrator identification"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/person.py:601
+msgid "Administrator demographics"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/person.py:602
+msgid "Add new administrator"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/templates/container.pt:23
+msgid ""
+"To add teachers, students or administrators, please set up a ${school_year}."
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/templates/container.pt:23
+msgid "school year"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/templates/container.pt:37
+#: /src/schooltool/course/browser/templates/course_container.pt:28
+#: /src/schooltool/demographics/browser/search.pt:30
+#: /src/schooltool/demographics/browser/table.pt:23
+#: /src/schooltool/email/browser/templates/email_container.pt:33
+#: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:43
+#: /src/schooltool/skin/templates/container.pt:28
+#: /src/schooltool/skin/templates/table_container.pt:28
+msgid "Showing ${count} of ${total} items"
+msgstr ""
+
+#. Default: "Delete"
+#: /src/schooltool/basicperson/browser/templates/container.pt:42
+#: /src/schooltool/course/browser/templates/course_container.pt:40
+#: /src/schooltool/course/browser/templates/section_container.pt:93
+#: /src/schooltool/demographics/browser/search.pt:35
+#: /src/schooltool/demographics/browser/table.pt:28
+#: /src/schooltool/email/browser/templates/email_container.pt:48
+#: /src/schooltool/schoolyear/browser/templates/schoolyear.pt:42
+#: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:48
+#: /src/schooltool/skin/templates/container.pt:42
+#: /src/schooltool/skin/templates/table_container.pt:33
+#: /src/schooltool/skin/templates/view_macros.pt:195
+#: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:29
+msgid "delete-button"
 msgstr ""
 
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:4
@@ -2543,6 +2582,46 @@ msgstr ""
 #: /src/schooltool/basicperson/browser/templates/person_add_subform.pt:2
 msgid "New person"
 msgstr "Nýggjur persónur"
+
+#: /src/schooltool/basicperson/browser/templates/person_container_delete.pt:15
+#: /src/schooltool/contact/browser/templates/contacts_delete.pt:15
+#: /src/schooltool/person/browser/person_container_delete.pt:15
+#: /src/schooltool/resource/browser/container_delete.pt:10
+#: /src/schooltool/skin/templates/container_delete.pt:15
+msgid "Are you sure you want to delete selected items?"
+msgstr "Er tú viss/ur í at strika hesar liðir?"
+
+#: /src/schooltool/basicperson/browser/templates/person_container_delete.pt:21
+#: /src/schooltool/contact/browser/templates/contacts_delete.pt:21
+#: /src/schooltool/email/browser/templates/email_delete.pt:21
+#: /src/schooltool/person/browser/person_container_delete.pt:21
+#: /src/schooltool/resource/browser/container_delete.pt:16
+#: /src/schooltool/schoolyear/browser/templates/term-delete.pt:16
+#: /src/schooltool/skin/templates/container_delete.pt:21
+#: /src/schooltool/term/browser/templates/term-container-delete.pt:16
+#: /src/schooltool/timetable/browser/templates/schooltt-delete.pt:16
+#: /src/schooltool/timetable/browser/templates/timetable-container-delete.pt:16
+msgid "You have not selected any items."
+msgstr "Tú hevur ikki valt nakrar liðir."
+
+#: /src/schooltool/basicperson/browser/templates/person_container_delete.pt:23
+#: /src/schooltool/person/browser/person_container_delete.pt:23
+msgid "Sorry, you may not delete your own user account."
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/templates/person_container_delete.pt:35
+#: /src/schooltool/contact/browser/templates/contacts_delete.pt:34
+#: /src/schooltool/email/browser/templates/email_delete.pt:31
+#: /src/schooltool/person/browser/person_container_delete.pt:35
+#: /src/schooltool/resource/browser/container_delete.pt:27
+#: /src/schooltool/schoolyear/browser/templates/term-delete.pt:27
+#: /src/schooltool/skin/templates/container_delete.pt:32
+#: /src/schooltool/term/browser/templates/term-container-delete.pt:29
+#: /src/schooltool/timetable/browser/templates/confirm-timetable-delete.pt:77
+#: /src/schooltool/timetable/browser/templates/schooltt-delete.pt:29
+#: /src/schooltool/timetable/browser/templates/timetable-container-delete.pt:27
+msgid "Confirm"
+msgstr "Vátta"
 
 #: /src/schooltool/basicperson/browser/templates/person_view.pt:13
 #: /src/schooltool/person/browser/home.pt:13
@@ -2632,7 +2711,19 @@ msgstr "Kravd"
 msgid "Whether this Field is required or not"
 msgstr "Um hesin teigurin er kravdur ella ei"
 
-#: /src/schooltool/basicperson/interfaces.py:137
+#: /src/schooltool/basicperson/interfaces.py:145
+msgid "Limit keys"
+msgstr ""
+
+#: /src/schooltool/basicperson/interfaces.py:146
+msgid "An optional list of limit keys for this field"
+msgstr ""
+
+#: /src/schooltool/basicperson/interfaces.py:148
+msgid "Limit key"
+msgstr ""
+
+#: /src/schooltool/basicperson/interfaces.py:163
 msgid "List of values"
 msgstr "Listi við virðum"
 
@@ -2672,6 +2763,24 @@ msgstr "Broyt brúkara lýðfrøði"
 
 #: /src/schooltool/basicperson/security.zcml:52
 msgid "Modify user's demographics information."
+msgstr ""
+
+#: /src/schooltool/basicperson/vocabularies.py:143
+#: /src/schooltool/course/browser/section.py:534
+#: /src/schooltool/course/browser/templates/copy_sections.pt:145
+#: /src/schooltool/course/browser/templates/course_container.pt:57
+#: /src/schooltool/course/browser/templates/link_section.pt:114
+#: /src/schooltool/course/browser/templates/section.pt:103
+#: /src/schooltool/course/browser/templates/section_container.pt:87
+msgid "Students"
+msgstr "Næmingar"
+
+#: /src/schooltool/basicperson/vocabularies.py:144
+msgid "Teachers"
+msgstr ""
+
+#: /src/schooltool/basicperson/vocabularies.py:145
+msgid "Administrators"
 msgstr ""
 
 #: /src/schooltool/commendation/commendation_add.pt:4
@@ -2823,38 +2932,6 @@ msgstr ""
 msgid "Contact of ${person}"
 msgstr ""
 
-#: /src/schooltool/contact/browser/templates/contacts_delete.pt:15
-#: /src/schooltool/person/browser/person_container_delete.pt:15
-#: /src/schooltool/resource/browser/container_delete.pt:10
-#: /src/schooltool/skin/templates/container_delete.pt:15
-msgid "Are you sure you want to delete selected items?"
-msgstr "Er tú viss/ur í at strika hesar liðir?"
-
-#: /src/schooltool/contact/browser/templates/contacts_delete.pt:21
-#: /src/schooltool/email/browser/templates/email_delete.pt:21
-#: /src/schooltool/person/browser/person_container_delete.pt:21
-#: /src/schooltool/resource/browser/container_delete.pt:16
-#: /src/schooltool/schoolyear/browser/templates/term-delete.pt:16
-#: /src/schooltool/skin/templates/container_delete.pt:21
-#: /src/schooltool/term/browser/templates/term-container-delete.pt:16
-#: /src/schooltool/timetable/browser/templates/schooltt-delete.pt:16
-#: /src/schooltool/timetable/browser/templates/timetable-container-delete.pt:16
-msgid "You have not selected any items."
-msgstr "Tú hevur ikki valt nakrar liðir."
-
-#: /src/schooltool/contact/browser/templates/contacts_delete.pt:34
-#: /src/schooltool/email/browser/templates/email_delete.pt:31
-#: /src/schooltool/person/browser/person_container_delete.pt:35
-#: /src/schooltool/resource/browser/container_delete.pt:27
-#: /src/schooltool/schoolyear/browser/templates/term-delete.pt:27
-#: /src/schooltool/skin/templates/container_delete.pt:32
-#: /src/schooltool/term/browser/templates/term-container-delete.pt:29
-#: /src/schooltool/timetable/browser/templates/confirm-timetable-delete.pt:77
-#: /src/schooltool/timetable/browser/templates/schooltt-delete.pt:29
-#: /src/schooltool/timetable/browser/templates/timetable-container-delete.pt:27
-msgid "Confirm"
-msgstr "Vátta"
-
 #: /src/schooltool/contact/browser/templates/filter.pt:21
 #: /src/schooltool/person/browser/person_filter.pt:11
 #: /src/schooltool/resource/browser/resource_filter.pt:37
@@ -2873,6 +2950,10 @@ msgstr "Finn nú"
 #: /src/schooltool/table/templates/filter.pt:6
 msgid "Clear"
 msgstr "Reinsa"
+
+#: /src/schooltool/contact/browser/templates/manage_contacts.pt:27
+msgid "Shortcut: Alt-R"
+msgstr ""
 
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:43
 msgid "Create contact"
@@ -3073,20 +3154,8 @@ msgstr "Flyt inn skeið"
 msgid "New Course"
 msgstr "Nýtt skeið"
 
-#: /src/schooltool/course/browser/configure.zcml:113
-msgid "Copy Sections"
-msgstr "Avrita partar"
-
-#: /src/schooltool/course/browser/configure.zcml:123
-msgid "View Next"
-msgstr "Sýn næsta"
-
-#: /src/schooltool/course/browser/configure.zcml:133
-msgid "View Previous"
-msgstr "Sýn fyrra"
-
+#: /src/schooltool/course/browser/configure.zcml:150
 #: /src/schooltool/course/browser/configure.zcml:160
-#: /src/schooltool/course/browser/configure.zcml:170
 msgid "New Section"
 msgstr "Næsti partur"
 
@@ -3177,15 +3246,6 @@ msgstr ""
 #: /src/schooltool/course/browser/section.py:520
 msgid "Available Instructors"
 msgstr ""
-
-#: /src/schooltool/course/browser/section.py:534
-#: /src/schooltool/course/browser/templates/copy_sections.pt:145
-#: /src/schooltool/course/browser/templates/course_container.pt:57
-#: /src/schooltool/course/browser/templates/link_section.pt:114
-#: /src/schooltool/course/browser/templates/section.pt:103
-#: /src/schooltool/course/browser/templates/section_container.pt:87
-msgid "Students"
-msgstr "Næmingar"
 
 #: /src/schooltool/course/browser/section.py:535
 msgid "Current Students"
@@ -3298,31 +3358,6 @@ msgstr ""
 
 #: /src/schooltool/course/browser/templates/course_container.pt:12
 msgid "Courses for ${schoolyear}"
-msgstr ""
-
-#: /src/schooltool/course/browser/templates/course_container.pt:28
-#: /src/schooltool/demographics/browser/search.pt:30
-#: /src/schooltool/demographics/browser/table.pt:23
-#: /src/schooltool/email/browser/templates/email_container.pt:33
-#: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:43
-#: /src/schooltool/skin/templates/container.pt:28
-#: /src/schooltool/skin/templates/table_container.pt:28
-msgid "Showing ${count} of ${total} items"
-msgstr ""
-
-#. Default: "Delete"
-#: /src/schooltool/course/browser/templates/course_container.pt:40
-#: /src/schooltool/course/browser/templates/section_container.pt:93
-#: /src/schooltool/demographics/browser/search.pt:35
-#: /src/schooltool/demographics/browser/table.pt:28
-#: /src/schooltool/email/browser/templates/email_container.pt:48
-#: /src/schooltool/schoolyear/browser/templates/schoolyear.pt:42
-#: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:48
-#: /src/schooltool/skin/templates/container.pt:42
-#: /src/schooltool/skin/templates/table_container.pt:33
-#: /src/schooltool/skin/templates/view_macros.pt:195
-#: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:29
-msgid "delete-button"
 msgstr ""
 
 #: /src/schooltool/course/browser/templates/course_edit.pt:22
@@ -4837,14 +4872,6 @@ msgstr ""
 msgid "Password was successfully changed!"
 msgstr ""
 
-#: /src/schooltool/person/browser/person.py:449
-msgid "Person index"
-msgstr ""
-
-#: /src/schooltool/person/browser/person_container_delete.pt:23
-msgid "Sorry, you may not delete your own user account."
-msgstr ""
-
 #: /src/schooltool/person/browser/person_edit.pt:4
 msgid "Edit person"
 msgstr ""
@@ -5002,32 +5029,13 @@ msgstr ""
 msgid "Relationships"
 msgstr ""
 
-#: /src/schooltool/resource/browser/configure.zcml:71
-msgid "Add a Resource"
+#: /src/schooltool/resource/browser/configure.zcml:96
+msgid "Resource Demographics"
 msgstr ""
 
-#: /src/schooltool/resource/browser/configure.zcml:84
-msgid "Edit Resource Information"
-msgstr ""
-
-#: /src/schooltool/resource/browser/configure.zcml:99
-msgid "Add a Location"
-msgstr ""
-
-#: /src/schooltool/resource/browser/configure.zcml:115
-msgid "Edit Location Information"
-msgstr ""
-
-#: /src/schooltool/resource/browser/configure.zcml:133
-msgid "Add an Equipment"
-msgstr ""
-
-#: /src/schooltool/resource/browser/configure.zcml:151
-msgid "Edit Equipment Information"
-msgstr ""
-
-#: /src/schooltool/resource/browser/configure.zcml:190
-msgid "New Resource"
+#: /src/schooltool/resource/browser/configure.zcml:143
+#: /src/schooltool/resource/browser/resource-csvimport.pt:21
+msgid "Import Resources"
 msgstr ""
 
 #: /src/schooltool/resource/browser/configure.zcml:197
@@ -5038,9 +5046,8 @@ msgstr ""
 msgid "New Equipment"
 msgstr ""
 
-#: /src/schooltool/resource/browser/configure.zcml:232
-#: /src/schooltool/resource/browser/resource-csvimport.pt:21
-msgid "Import Resources"
+#: /src/schooltool/resource/browser/configure.zcml:286
+msgid "New Resource"
 msgstr ""
 
 #: /src/schooltool/resource/browser/resource-csvimport.pt:4
@@ -5074,6 +5081,58 @@ msgstr ""
 
 #: /src/schooltool/resource/browser/resource.py:56
 msgid "Resource index"
+msgstr ""
+
+#: /src/schooltool/resource/browser/resource.py:327
+msgid "Resource Demographics Container"
+msgstr ""
+
+#: /src/schooltool/resource/browser/resource.py:512
+msgid "Resource identification"
+msgstr ""
+
+#: /src/schooltool/resource/browser/resource.py:514
+msgid "Resource demographics"
+msgstr ""
+
+#: /src/schooltool/resource/browser/resource.py:522
+msgid "Add new resource"
+msgstr ""
+
+#: /src/schooltool/resource/browser/resource.py:528
+msgid "Edit resource"
+msgstr ""
+
+#: /src/schooltool/resource/browser/resource.py:536
+msgid "Location identification"
+msgstr ""
+
+#: /src/schooltool/resource/browser/resource.py:538
+msgid "Location demographics"
+msgstr ""
+
+#: /src/schooltool/resource/browser/resource.py:548
+msgid "Add new location"
+msgstr ""
+
+#: /src/schooltool/resource/browser/resource.py:554
+msgid "Edit location"
+msgstr ""
+
+#: /src/schooltool/resource/browser/resource.py:562
+msgid "Equipment identification"
+msgstr ""
+
+#: /src/schooltool/resource/browser/resource.py:564
+msgid "Equipment demographics"
+msgstr ""
+
+#: /src/schooltool/resource/browser/resource.py:574
+msgid "Add new equipment"
+msgstr ""
+
+#: /src/schooltool/resource/browser/resource.py:580
+msgid "Edit equipment"
 msgstr ""
 
 #: /src/schooltool/resource/help/resource_help.pt:6
@@ -5543,11 +5602,7 @@ msgstr ""
 msgid "free administration software for"
 msgstr ""
 
-#: /src/schooltool/skin/templates/view_macros.pt:115
-msgid "Report a bug on Launchpad."
-msgstr ""
-
-#: /src/schooltool/skin/templates/view_macros.pt:128
+#: /src/schooltool/skin/templates/view_macros.pt:124
 msgid ""
 "&copy; The <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth "
 "Foundation</a> 2003 - 2011: Supporting Social Innovation."

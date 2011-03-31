@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-09-30 19:38+0300\n"
+"POT-Creation-Date: 2011-03-18 20:12+0200\n"
 "PO-Revision-Date: 2010-01-25 18:58+0000\n"
 "Last-Translator: Dean Mumby <dean@mumby.co.za>\n"
 "Language-Team: Afrikaans <af@li.org>\n"
@@ -15,8 +15,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-09-10 04:32+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-03-19 04:43+0000\n"
+"X-Generator: Launchpad (build 12559)\n"
 "X-Rosetta-Version: 0.1\n"
 
 #: /src/schooltool/app/app.py:197
@@ -586,41 +586,6 @@ msgstr "Kalender"
 msgid "Actions"
 msgstr "Aksies"
 
-#: /src/schooltool/app/browser/configure.zcml:224
-#: /src/schooltool/app/browser/configure.zcml:505
-#: /src/schooltool/basicperson/browser/configure.zcml:6
-#: /src/schooltool/basicperson/browser/configure.zcml:185
-#: /src/schooltool/basicperson/browser/configure.zcml:192
-#: /src/schooltool/basicperson/browser/configure.zcml:199
-#: /src/schooltool/common/configure.zcml:87
-#: /src/schooltool/contact/browser/configure.zcml:6
-#: /src/schooltool/contact/browser/configure.zcml:31
-#: /src/schooltool/contact/browser/configure.zcml:88
-#: /src/schooltool/course/browser/configure.zcml:58
-#: /src/schooltool/course/browser/configure.zcml:69
-#: /src/schooltool/course/browser/configure.zcml:103
-#: /src/schooltool/course/browser/configure.zcml:143
-#: /src/schooltool/course/security.zcml:93
-#: /src/schooltool/course/security.zcml:127
-#: /src/schooltool/demographics/browser/configure.zcml:13
-#: /src/schooltool/group/browser/configure.zcml:16
-#: /src/schooltool/group/browser/configure.zcml:85
-#: /src/schooltool/group/security.zcml:72
-#: /src/schooltool/person/browser/configure.zcml:157
-#: /src/schooltool/person/browser/configure.zcml:187
-#: /src/schooltool/person/security.zcml:93
-#: /src/schooltool/resource/browser/configure.zcml:62
-#: /src/schooltool/schoolyear/browser/configure.zcml:101
-#: /src/schooltool/schoolyear/security.zcml:31
-#: /src/schooltool/term/browser/configure.zcml:14
-#: /src/schooltool/term/security.zcml:35
-#: /src/schooltool/timetable/browser/configure.zcml:52
-#: /src/schooltool/timetable/browser/configure.zcml:93
-#: /src/schooltool/timetable/browser/configure.zcml:111
-#: /src/schooltool/timetable/security.zcml:32
-msgid "View"
-msgstr "Besigtig"
-
 #: /src/schooltool/app/browser/configure.zcml:310
 msgid "View Calendar"
 msgstr "Besigtig Kalender"
@@ -645,48 +610,7 @@ msgstr "Redigeer Leerders"
 msgid "Change Site Preferences"
 msgstr "Verander Tuiste Voorkeure"
 
-#: /src/schooltool/app/browser/configure.zcml:399
-msgid "Calendar (Daily)"
-msgstr "Kalender (Daagliks)"
-
-#: /src/schooltool/app/browser/configure.zcml:409
-msgid "Calendar (Daily, PDF)"
-msgstr "Kalender (Daagliks, PDF)"
-
-#: /src/schooltool/app/browser/configure.zcml:418
-msgid "Calendar (Weekly)"
-msgstr "Kalender (Weekliks)"
-
-#: /src/schooltool/app/browser/configure.zcml:428
-msgid "Calendar (Weekly, PDF)"
-msgstr "Kalender (Weekliks, PDF)"
-
-#: /src/schooltool/app/browser/configure.zcml:437
-msgid "Calendar (Monthly)"
-msgstr "Kalender (Maandeliks)"
-
-#: /src/schooltool/app/browser/configure.zcml:447
-msgid "Calendar (Monthly, PDF)"
-msgstr "Kalender (Maandeliks, PDF)"
-
-#: /src/schooltool/app/browser/configure.zcml:456
-#: /src/schooltool/timetable/browser/configure.zcml:219
-msgid "Calendar (Yearly)"
-msgstr "Kalender (Jaarliks)"
-
-#: /src/schooltool/app/browser/configure.zcml:466
-msgid "Atom View"
-msgstr "Atoom perspektief"
-
-#: /src/schooltool/app/browser/configure.zcml:476
-msgid "iCalendar"
-msgstr "iKalender"
-
-#: /src/schooltool/app/browser/configure.zcml:486
-msgid "Free/Busy"
-msgstr "Beskikbaar/Besig"
-
-#: /src/schooltool/app/browser/configure.zcml:515
+#: /src/schooltool/app/browser/configure.zcml:494
 #: /src/schooltool/app/help/configure.zcml:77
 #: /src/schooltool/app/help/event_add.pt:6
 #: /src/schooltool/app/help/event_add.pt:9
@@ -1028,12 +952,12 @@ msgstr "Gebeurlikhede vir"
 #. Default: "This is an Atom formatted XML site feed. It is intended to be viewed in a Newsreader or syndicated to another site. Please visit"
 #: /src/schooltool/app/browser/templates/cal_atom.pt:42
 msgid "atom_description"
-msgstr "atom_beskrywing"
+msgstr ""
 
 #. Default: "Atom Enabled"
 #: /src/schooltool/app/browser/templates/cal_atom.pt:46
 msgid "atom_enabled"
-msgstr "atom_aan"
+msgstr ""
 
 #. Default: "for more info."
 #: /src/schooltool/app/browser/templates/cal_atom.pt:49
@@ -2305,12 +2229,35 @@ msgstr ""
 msgid "Change calendar"
 msgstr ""
 
-#: /src/schooltool/basicperson/browser/configure.zcml:15
-#: /src/schooltool/basicperson/browser/configure.zcml:164
-#: /src/schooltool/basicperson/browser/configure.zcml:171
-#: /src/schooltool/basicperson/browser/configure.zcml:178
+#: /src/schooltool/basicperson/browser/configure.zcml:14
+#: /src/schooltool/basicperson/browser/configure.zcml:216
+#: /src/schooltool/basicperson/browser/configure.zcml:223
+#: /src/schooltool/basicperson/browser/configure.zcml:230
+#: /src/schooltool/basicperson/browser/configure.zcml:237
+#: /src/schooltool/common/configure.zcml:88
+#: /src/schooltool/contact/browser/configure.zcml:6
+#: /src/schooltool/contact/browser/configure.zcml:31
+#: /src/schooltool/course/browser/configure.zcml:58
+#: /src/schooltool/course/browser/configure.zcml:69
+#: /src/schooltool/course/security.zcml:94
+#: /src/schooltool/course/security.zcml:128
+#: /src/schooltool/demographics/browser/configure.zcml:13
+#: /src/schooltool/group/security.zcml:76
+#: /src/schooltool/person/browser/configure.zcml:197
+#: /src/schooltool/person/security.zcml:87
+#: /src/schooltool/schoolyear/security.zcml:31
+#: /src/schooltool/term/security.zcml:35
+#: /src/schooltool/timetable/security.zcml:32
+msgid "View"
+msgstr "Besigtig"
+
+#: /src/schooltool/basicperson/browser/configure.zcml:23
+#: /src/schooltool/basicperson/browser/configure.zcml:188
+#: /src/schooltool/basicperson/browser/configure.zcml:195
+#: /src/schooltool/basicperson/browser/configure.zcml:202
+#: /src/schooltool/basicperson/browser/configure.zcml:209
 #: /src/schooltool/contact/browser/configure.zcml:22
-#: /src/schooltool/contact/browser/configure.zcml:40
+#: /src/schooltool/contact/browser/configure.zcml:52
 #: /src/schooltool/demographics/browser/configure.zcml:22
 #: /src/schooltool/demographics/browser/table.py:100
 #: /src/schooltool/demographics/browser/table.py:196
@@ -3066,20 +3013,8 @@ msgstr ""
 msgid "New Course"
 msgstr ""
 
-#: /src/schooltool/course/browser/configure.zcml:113
-msgid "Copy Sections"
-msgstr ""
-
-#: /src/schooltool/course/browser/configure.zcml:123
-msgid "View Next"
-msgstr ""
-
-#: /src/schooltool/course/browser/configure.zcml:133
-msgid "View Previous"
-msgstr ""
-
+#: /src/schooltool/course/browser/configure.zcml:150
 #: /src/schooltool/course/browser/configure.zcml:160
-#: /src/schooltool/course/browser/configure.zcml:170
 msgid "New Section"
 msgstr ""
 
@@ -3171,16 +3106,7 @@ msgstr ""
 msgid "Available Instructors"
 msgstr ""
 
-#: /src/schooltool/course/browser/section.py:538
-#: /src/schooltool/course/browser/templates/copy_sections.pt:145
-#: /src/schooltool/course/browser/templates/course_container.pt:57
-#: /src/schooltool/course/browser/templates/link_section.pt:114
-#: /src/schooltool/course/browser/templates/section.pt:98
-#: /src/schooltool/course/browser/templates/section_container.pt:87
-msgid "Students"
-msgstr ""
-
-#: /src/schooltool/course/browser/section.py:539
+#: /src/schooltool/course/browser/section.py:535
 msgid "Current Students"
 msgstr ""
 
@@ -4995,32 +4921,13 @@ msgstr ""
 msgid "Relationships"
 msgstr ""
 
-#: /src/schooltool/resource/browser/configure.zcml:71
-msgid "Add a Resource"
+#: /src/schooltool/resource/browser/configure.zcml:96
+msgid "Resource Demographics"
 msgstr ""
 
-#: /src/schooltool/resource/browser/configure.zcml:84
-msgid "Edit Resource Information"
-msgstr ""
-
-#: /src/schooltool/resource/browser/configure.zcml:99
-msgid "Add a Location"
-msgstr ""
-
-#: /src/schooltool/resource/browser/configure.zcml:115
-msgid "Edit Location Information"
-msgstr ""
-
-#: /src/schooltool/resource/browser/configure.zcml:133
-msgid "Add an Equipment"
-msgstr ""
-
-#: /src/schooltool/resource/browser/configure.zcml:151
-msgid "Edit Equipment Information"
-msgstr ""
-
-#: /src/schooltool/resource/browser/configure.zcml:190
-msgid "New Resource"
+#: /src/schooltool/resource/browser/configure.zcml:143
+#: /src/schooltool/resource/browser/resource-csvimport.pt:21
+msgid "Import Resources"
 msgstr ""
 
 #: /src/schooltool/resource/browser/configure.zcml:197
@@ -5031,9 +4938,8 @@ msgstr ""
 msgid "New Equipment"
 msgstr ""
 
-#: /src/schooltool/resource/browser/configure.zcml:232
-#: /src/schooltool/resource/browser/resource-csvimport.pt:21
-msgid "Import Resources"
+#: /src/schooltool/resource/browser/configure.zcml:286
+msgid "New Resource"
 msgstr ""
 
 #: /src/schooltool/resource/browser/resource-csvimport.pt:4
@@ -5536,11 +5442,7 @@ msgstr ""
 msgid "free administration software for"
 msgstr ""
 
-#: /src/schooltool/skin/templates/view_macros.pt:114
-msgid "Report a bug on Launchpad."
-msgstr ""
-
-#: /src/schooltool/skin/templates/view_macros.pt:127
+#: /src/schooltool/skin/templates/view_macros.pt:124
 msgid ""
 "&copy; The <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth "
 "Foundation</a> 2003 - 2011: Supporting Social Innovation."
