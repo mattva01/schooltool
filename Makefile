@@ -142,6 +142,11 @@ update-translations: extract-translations
 	done
 	$(MAKE) compile-translations
 
+# Docs
+
+docs: build
+	bin/docs
+
 # Release
 
 .PHONY: release

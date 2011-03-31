@@ -8,6 +8,7 @@
   <include package="schooltool.common" />
 
   <include package="z3c.autoinclude" file="meta.zcml" />
+  <includePlugins package="schooltool" file="plugin-meta.zcml" />
   <includePlugins package="schooltool" file="plugin.zcml" />
 
   <include package="schooltool.help" />

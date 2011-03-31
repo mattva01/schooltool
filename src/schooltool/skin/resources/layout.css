@@ -614,17 +614,12 @@ div.content-nav {
 
 #footer P {
     position: absolute;
-    left: 170px;
+    left: 85px;
 }
 
 #footer IMG.logo {
     position: absolute;
     left: 10px;
-}
-
-#footer IMG.bug {
-    position: absolute;
-    left: 85px;
 }
 
 /*

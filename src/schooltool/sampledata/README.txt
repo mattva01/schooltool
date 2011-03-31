@@ -1,6 +1,6 @@
-==============================================
-Pluggable sample data framework for SchoolTool
-==============================================
+===============================
+Pluggable sample data framework
+===============================
 
 There are several goals to this framework:
 
@@ -99,7 +99,9 @@ You need to define a plugin::
 
 Now, you need to register it in your configure.zcml.  You need to
 conditionally include your registration of the sample data plugin for
-the developer mode::
+the developer mode:
+
+.. code-block:: xml
 
   <configure xmlns="http://namespaces.zope.org/zope">
 

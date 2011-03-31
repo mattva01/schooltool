@@ -30,6 +30,7 @@ from zope.app.testing import setup
 from zope.annotation.interfaces import IAttributeAnnotatable
 from zope.app.dependable.interfaces import IDependable
 from zope.i18n import translate
+from zope.publisher.browser import TestRequest
 from zope.traversing.interfaces import ITraversable, IPathAdapter
 
 from schooltool.app.browser.testing import setUp, tearDown
@@ -53,7 +54,7 @@ def doctest_SchoolToolAPI():
     """
 
 
-def doctest_SchoolToolAPI_aap():
+def doctest_SchoolToolAPI_app():
     r"""Tests for SchoolToolAPI.app.
 
     'context/schooltool:app' returns the nearest ISchoolToolApplication
@@ -74,6 +75,115 @@ def doctest_SchoolToolAPI_aap():
         >>> adding = Adding()
         >>> SchoolToolAPI(adding).app is app
         True
+
+    """
+
+
+def doctest_SchoolToolAPI_content():
+    r"""Tests for SchoolToolAPI.content.
+
+        >>> from zope.traversing.interfaces import ITraversable
+        >>> from zope.tales.interfaces import ITALESFunctionNamespace
+
+        >>> from schooltool.app.browser import SchoolToolAPI
+        >>> from schooltool.app.browser.content import IContentProviders
+
+    'context/schooltool:content' returns a traversable to content providers
+    for given context and request, view defined in tal.
+
+        >>> class TALContext(object):
+        ...     def __init__(self, vars=()):
+        ...         self.vars = dict(vars)
+
+        >>> application = sbsetup.setUpSchoolToolSite()
+
+    We need the api.
+
+        >>> api = SchoolToolAPI(application['persons'])
+
+        >>> print api.content
+        None
+
+    Tal engine must be set.  It will be set externally, because:
+
+        >>> verifyObject(ITALESFunctionNamespace, api)
+        True
+
+    But in this test we'll do that manually.
+
+        >>> api.setEngine(TALContext())
+
+        >>> print api.content
+        None
+
+    Content providers are looked up via adapter.
+
+        >>> class ContentProvidersStub(object):
+        ...     implements(IContentProviders)
+        ...     def __init__(self, context, request, view):
+        ...         self.context = context
+        ...         self.request = request
+        ...         self.view = view
+
+        >>> issubclass(IContentProviders, ITraversable)
+        True
+
+        >>> class ViewStub(object):
+        ...     def __init__(self, context, request):
+        ...         self.context = context
+        ...         self.request = request
+
+        >>> view = ViewStub(application['schooltool.schoolyear'], TestRequest())
+
+        >>> provideAdapter(ContentProvidersStub,
+        ...                (None, None, None),
+        ...                IContentProviders)
+
+        >>> providers = api.content
+        >>> providers.context, providers.request, providers.view
+        (None, None, None)
+
+    Parameters for the adapter are looked up from tal variables.
+
+        >>> api.setEngine(TALContext({
+        ...     'context': view.context,
+        ...     'request': view.request,
+        ...     'view': view,
+        ...     }))
+
+        >>> providers = api.content
+        >>> print providers
+        <...ContentProvidersStub object at ...>
+
+        >>> providers.context
+        <...SchoolYearContainer object at ...>
+
+        >>> providers.request
+        <...TestRequest ...>
+
+        >>> providers.view
+        <...ViewStub object at ...>
+
+    If content providers implement ITALESFunctionNamespace, api.contacts
+    also set the engine context.
+
+        >>> class TALAwareContentProviders(ContentProvidersStub):
+        ...     implements(ITALESFunctionNamespace)
+        ...     engine = None
+        ...     def setEngine(self, engine):
+        ...         self.engine = engine
+
+        >>> provideAdapter(TALAwareContentProviders,
+        ...                (None, None, None),
+        ...                IContentProviders)
+
+        >>> providers = api.content
+
+        >>> providers
+        <...TALAwareContentProviders object at ...>
+
+        >>> providers.engine
+        <...TALContext object at ...>
 
     """
 
@@ -257,7 +367,6 @@ def doctest_SortBy_security():
 
         >>> from zope.security.management import newInteraction
         >>> from zope.security.management import endInteraction
-        >>> from zope.publisher.browser import TestRequest
         >>> endInteraction()
         >>> newInteraction(TestRequest())
 
@@ -319,8 +428,6 @@ def doctest_SchoolToolSized():
 def doctest_ViewPrefences():
     r"""Unit tests for ViewPreferences.
 
-        >>> from zope.publisher.browser import TestRequest
-
         >>> from schooltool.app.browser import ViewPreferences
         >>> from schooltool.person.interfaces import IPerson
         >>> from schooltool.person.interfaces import IPersonPreferences
@@ -353,7 +460,7 @@ def doctest_ViewPrefences():
         >>> from pytz import utc
         >>> prefs.renderDatetime(datetime(2005, 1, 7, 14, 15, tzinfo=utc))
         '2005-01-07 14:15'
-        
+
     We have no principal (anonymous user) and no SchoolTool site (test
     environment):
 
@@ -398,7 +505,9 @@ def doctest_ViewPrefences():
 
 def test_suite():
     suite = unittest.TestSuite()
-    suite.addTest(doctest.DocTestSuite(setUp=setUp, tearDown=tearDown))
+    optionflags = doctest.NORMALIZE_WHITESPACE | doctest.ELLIPSIS
+    suite.addTest(doctest.DocTestSuite(setUp=setUp, tearDown=tearDown,
+                                       optionflags=optionflags))
     suite.addTest(doctest.DocTestSuite('schooltool.app.browser'))
     suite.addTest(doctest.DocFileSuite('../templates.txt'))
     return suite
