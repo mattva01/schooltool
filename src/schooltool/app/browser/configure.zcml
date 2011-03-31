@@ -769,7 +769,7 @@
 
   <!-- SchoolTool content providers -->
 
-  <zope:adapter factory=".content.CallableContentProviderProxy" />
+  <zope:adapter factory=".content.SchoolToolContentProviderProxy" />
 
   <zope:adapter
       for="*
