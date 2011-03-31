@@ -94,7 +94,7 @@ class SchoolToolAPI(object):
         if self.engine is None:
             return None
         vars = self.engine.vars
-        context = vars.get('context', None)
+        context = self.context
         request = vars.get('request', None)
         view = vars.get('view', None)
         providers = queryMultiAdapter(
