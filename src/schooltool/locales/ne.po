@@ -2,25 +2,28 @@
 # Copyright (c) (c) 2006 Canonical Ltd, and Rosetta Contributors 2006
 # This file is distributed under the same license as the schooltool package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2006.
-#
+# Krishna Giri <krishna.giri@olenepal.org>, 2010.
+# Abhishek Singh <aks@asingh.com.np>, 2010.
+# olenepal <aayoushraj.onta@olenepal.org>, 2010
+# ole <ujjwollamichhane@gmail.com>, 2010.
 msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-09-30 19:38+0300\n"
-"PO-Revision-Date: 2010-08-22 20:24+0000\n"
-"Last-Translator: Justas Sadzevičius <Unknown>\n"
-"Language-Team: Ole nepal <info@olenepal.org>\n"
-"Language: \n"
+"POT-Creation-Date: 2011-03-18 20:12+0200\n"
+"PO-Revision-Date: 2010-11-26 08:31+0000\n"
+"Last-Translator: Krishna Giri <Unknown>\n"
+"Language-Team: OLENepal\n"
+"Language: ne\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-09-10 04:36+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-03-19 04:49+0000\n"
+"X-Generator: Launchpad (build 12559)\n"
 
 #: /src/schooltool/app/app.py:197
 msgid "Your School"
-msgstr "तपाईको विद्यालय"
+msgstr "तपाईँको विद्यालय"
 
 #: /src/schooltool/app/browser/__init__.py:256
 #: /src/schooltool/app/browser/templates/index.pt:11
@@ -41,7 +44,7 @@ msgstr "${number} व्यक्तिहरू"
 
 #: /src/schooltool/app/browser/app.py:226
 msgid "Username or password is incorrect"
-msgstr "प्रयोगकर्तानाम वा पासवर्ड गलत छ"
+msgstr "प्रयोगकर्ताको नाम वा पासवर्ड गलत छ ।"
 
 #: /src/schooltool/app/browser/app.py:322 /src/schooltool/app/security.py:308
 msgid "Leaders"
@@ -237,7 +240,7 @@ msgstr "अघिल्लो हप्तामा जानुहोस्"
 #. Default: ""
 #: /src/schooltool/app/browser/cal.py:950
 msgid "${month}, ${year} (week ${week})"
-msgstr "${month} ,$ {year} (week $ {week } )"
+msgstr "${month}, ${year} (week ${week})"
 
 #: /src/schooltool/app/browser/cal.py:1164
 msgid "Next month"
@@ -266,12 +269,12 @@ msgstr "अघिल्लो महिनामा जानुहोस्"
 #. Default: ""
 #: /src/schooltool/app/browser/cal.py:1178
 msgid "${month}, ${year}"
-msgstr "$ {month } , ${ year}"
+msgstr "${month}, ${year}"
 
 #. Default: ""
 #: /src/schooltool/app/browser/cal.py:1200
 msgid "Week ${week_no}"
-msgstr "हप्ता $ { week_no }"
+msgstr "हप्ता ${week_no}"
 
 #: /src/schooltool/app/browser/cal.py:1216
 msgid "Next year"
@@ -283,7 +286,7 @@ msgstr "हालको वर्ष"
 
 #: /src/schooltool/app/browser/cal.py:1218
 msgid "Previous year"
-msgstr "अघिल्लो  वर्ष"
+msgstr "अघिल्लो वर्ष"
 
 #: /src/schooltool/app/browser/cal.py:1220
 msgid "Go to next year"
@@ -324,7 +327,7 @@ msgstr "अघिल्लो दिनमा जानुहोस्"
 #. Default: ""
 #: /src/schooltool/app/browser/cal.py:1446
 msgid "Add new event starting at ${title}"
-msgstr "${title} मा हुने नया घटना जोद्नुहोस"
+msgstr "${title} मा हुने नया घटना जोड्नुहोस्"
 
 #: /src/schooltool/app/browser/cal.py:1735
 #: /src/schooltool/app/interfaces.py:146 /src/schooltool/app/interfaces.py:157
@@ -358,7 +361,7 @@ msgstr "शीर्षक"
 #: /src/schooltool/app/browser/templates/cal_weekly_timetable.pt:97
 #: /src/schooltool/app/browser/templates/cal_weekly_timetable.pt:127
 msgid "All day"
-msgstr "सबै दिन"
+msgstr "पुरा दिन"
 
 #: /src/schooltool/app/browser/cal.py:1741
 #: /src/schooltool/term/browser/templates/emergency_select.pt:28
@@ -372,7 +375,7 @@ msgstr "समय"
 
 #: /src/schooltool/app/browser/cal.py:1745
 msgid "Start time in 24h format"
-msgstr "समय २४ घण्टा ढाँचामा सुरु गर्नुहोस्"
+msgstr "समय २४ घण्टे ढाँचामा सुरु गर्नुहोस्"
 
 #: /src/schooltool/app/browser/cal.py:1749
 #: /src/schooltool/timetable/browser/schema.py:269
@@ -386,17 +389,17 @@ msgstr "अवधि प्रकार"
 #: /src/schooltool/app/browser/cal.py:1757
 #: /src/schooltool/app/browser/templates/event_add.pt:168
 msgid "Minutes"
-msgstr "मिनेटहरु"
+msgstr "मिनेट"
 
 #: /src/schooltool/app/browser/cal.py:1758
 #: /src/schooltool/app/browser/templates/event_add.pt:171
 msgid "Hours"
-msgstr "घण्टाहरु"
+msgstr "घण्टा"
 
 #: /src/schooltool/app/browser/cal.py:1759
 #: /src/schooltool/app/browser/templates/event_add.pt:175
 msgid "Days"
-msgstr "दिनहरु"
+msgstr "दिन"
 
 #: /src/schooltool/app/browser/cal.py:1762
 #: /src/schooltool/app/browser/templates/event.pt:48
@@ -417,7 +420,7 @@ msgstr "विवरण"
 
 #: /src/schooltool/app/browser/cal.py:1771
 msgid "Recurring"
-msgstr "पुनरावृत्ति"
+msgstr "दोहोरिने"
 
 #: /src/schooltool/app/browser/cal.py:1775
 msgid "Recurs every"
@@ -439,7 +442,7 @@ msgstr "महिना"
 #: /src/schooltool/app/browser/cal.py:1781
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:132
 msgid "Year"
-msgstr "बर्ष"
+msgstr "वर्ष"
 
 #: /src/schooltool/app/browser/cal.py:1784
 msgid "Repeat every"
@@ -514,7 +517,7 @@ msgstr "पाँचौं"
 
 #: /src/schooltool/app/browser/cal.py:1932
 msgid "last weekday"
-msgstr "अन्तिम हप्तादिन"
+msgstr "हिजो"
 
 #. Default: ""
 #: /src/schooltool/app/browser/cal.py:1942
@@ -536,11 +539,11 @@ msgstr "सुरु मिति भन्दा अन्त्य समय �
 
 #: /src/schooltool/app/browser/cal.py:2028
 msgid "Invalid date.  Please specify YYYY-MM-DD, one per line."
-msgstr "अवैध मिति। कृपया, एउटा प्रत्येक पङ्क्तिमा वर्ष-महिना-दिन  निर्दिष्ट गर्नुहोस्।"
+msgstr "अवैध मिति। कृपया, प्रत्येक पङ्क्तिमा वर्ष-महिना-दिन  निर्दिष्ट गर्नुहोस्।"
 
 #: /src/schooltool/app/browser/cal.py:2076
 msgid "Add event"
-msgstr "कार्यक्रम थप्नहोस"
+msgstr "कार्यक्रम थप्नहोस्"
 
 #: /src/schooltool/app/browser/cal.py:2077
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:48
@@ -570,7 +573,7 @@ msgstr "अद्यावधिक गर्नुहोस्"
 #. Default: ""
 #: /src/schooltool/app/browser/cal.py:2280 /src/schooltool/skin/form.py:76
 msgid "Updated on ${date_time}"
-msgstr "अद्यावधिक गरिएको मिति $ {date_time }"
+msgstr "अद्यावधिक गरिएको मिति ${date_time}"
 
 #: /src/schooltool/app/browser/cal.py:2715
 #: /src/schooltool/app/browser/configure.zcml:597
@@ -584,44 +587,9 @@ msgstr "भित्तेपात्रो"
 msgid "Actions"
 msgstr "कार्यहरु"
 
-#: /src/schooltool/app/browser/configure.zcml:224
-#: /src/schooltool/app/browser/configure.zcml:505
-#: /src/schooltool/basicperson/browser/configure.zcml:6
-#: /src/schooltool/basicperson/browser/configure.zcml:185
-#: /src/schooltool/basicperson/browser/configure.zcml:192
-#: /src/schooltool/basicperson/browser/configure.zcml:199
-#: /src/schooltool/common/configure.zcml:87
-#: /src/schooltool/contact/browser/configure.zcml:6
-#: /src/schooltool/contact/browser/configure.zcml:31
-#: /src/schooltool/contact/browser/configure.zcml:88
-#: /src/schooltool/course/browser/configure.zcml:58
-#: /src/schooltool/course/browser/configure.zcml:69
-#: /src/schooltool/course/browser/configure.zcml:103
-#: /src/schooltool/course/browser/configure.zcml:143
-#: /src/schooltool/course/security.zcml:93
-#: /src/schooltool/course/security.zcml:127
-#: /src/schooltool/demographics/browser/configure.zcml:13
-#: /src/schooltool/group/browser/configure.zcml:16
-#: /src/schooltool/group/browser/configure.zcml:85
-#: /src/schooltool/group/security.zcml:72
-#: /src/schooltool/person/browser/configure.zcml:157
-#: /src/schooltool/person/browser/configure.zcml:187
-#: /src/schooltool/person/security.zcml:93
-#: /src/schooltool/resource/browser/configure.zcml:62
-#: /src/schooltool/schoolyear/browser/configure.zcml:101
-#: /src/schooltool/schoolyear/security.zcml:31
-#: /src/schooltool/term/browser/configure.zcml:14
-#: /src/schooltool/term/security.zcml:35
-#: /src/schooltool/timetable/browser/configure.zcml:52
-#: /src/schooltool/timetable/browser/configure.zcml:93
-#: /src/schooltool/timetable/browser/configure.zcml:111
-#: /src/schooltool/timetable/security.zcml:32
-msgid "View"
-msgstr "हेर्नुहोस्"
-
-#: /src/schooltool/app/browser/configure.zcml:310
+#: /src/schooltool/app/browser/configure.zcml:311
 msgid "View Calendar"
-msgstr "भित्तेपात्रो हेर्नुहोस"
+msgstr "भित्तेपात्रो हेर्नुहोस्"
 
 #: /src/schooltool/app/browser/configure.zcml:322
 msgid "New Event"
@@ -637,54 +605,13 @@ msgstr "सेक्सनहरु आयात गर्नुहोस"
 
 #: /src/schooltool/app/browser/configure.zcml:356
 msgid "Edit Leaders"
-msgstr "लिडरहरू सम्पादन गर्नुहोस"
+msgstr "लिडरहरू सम्पादन गर्नुहोस्"
 
 #: /src/schooltool/app/browser/configure.zcml:367
 msgid "Change Site Preferences"
-msgstr "साइटको प्राथमिकताहरू परिवर्तन"
+msgstr "साइटको प्राथमिकताहरू परिवर्तन गर्नुहोस्"
 
-#: /src/schooltool/app/browser/configure.zcml:399
-msgid "Calendar (Daily)"
-msgstr "भित्तेपात्रो (दैनिक)"
-
-#: /src/schooltool/app/browser/configure.zcml:409
-msgid "Calendar (Daily, PDF)"
-msgstr "भित्तेपात्रो (दैनिक, PDF)"
-
-#: /src/schooltool/app/browser/configure.zcml:418
-msgid "Calendar (Weekly)"
-msgstr "भित्तेपात्रो (साप्ताहिक)"
-
-#: /src/schooltool/app/browser/configure.zcml:428
-msgid "Calendar (Weekly, PDF)"
-msgstr "भित्तेपात्रो (साप्ताहिक, PDF)"
-
-#: /src/schooltool/app/browser/configure.zcml:437
-msgid "Calendar (Monthly)"
-msgstr "भित्तेपात्रो (मासिक)"
-
-#: /src/schooltool/app/browser/configure.zcml:447
-msgid "Calendar (Monthly, PDF)"
-msgstr "भित्तेपात्रो (मासिक, PDF)"
-
-#: /src/schooltool/app/browser/configure.zcml:456
-#: /src/schooltool/timetable/browser/configure.zcml:219
-msgid "Calendar (Yearly)"
-msgstr "भित्तेपात्रो (वार्षिक)"
-
-#: /src/schooltool/app/browser/configure.zcml:466
-msgid "Atom View"
-msgstr "एटमको दृस्य"
-
-#: /src/schooltool/app/browser/configure.zcml:476
-msgid "iCalendar"
-msgstr "आई भित्तेपात्रो"
-
-#: /src/schooltool/app/browser/configure.zcml:486
-msgid "Free/Busy"
-msgstr "स्वतन्त्र/ब्यस्त"
-
-#: /src/schooltool/app/browser/configure.zcml:515
+#: /src/schooltool/app/browser/configure.zcml:494
 #: /src/schooltool/app/help/configure.zcml:77
 #: /src/schooltool/app/help/event_add.pt:6
 #: /src/schooltool/app/help/event_add.pt:9
@@ -722,7 +649,7 @@ msgstr "पीढ़ी"
 
 #: /src/schooltool/app/browser/configure.zcml:666
 msgid "Browser UI"
-msgstr "यु आई ब्राउजर"
+msgstr "ब्राउजर UI"
 
 #: /src/schooltool/app/browser/configure.zcml:672
 #: /src/schooltool/app/browser/templates/login.pt:3
@@ -750,7 +677,7 @@ msgstr "टेम्प्लेट"
 
 #: /src/schooltool/app/browser/configure.zcml:781
 msgid "Configure"
-msgstr "कन्फिगर"
+msgstr "उपकरणपट्टी"
 
 #: /src/schooltool/app/browser/configure.zcml:788
 msgid "Error List"
@@ -764,7 +691,7 @@ msgstr "कुनै डाटा उपलब्ध गराइएको छ�
 
 #: /src/schooltool/app/browser/csvimport.py:114
 msgid "Could not convert data to Unicode (incorrect charset?)."
-msgstr "युनिकोडमा डाटा रुपान्तर गर्न सकिँदैन (गलत क्यारेक्टर सेट ?)।"
+msgstr "डाटालाई युनिकोडमा रुपान्तर गर्न सकिँएन (गलत क्यारेक्टर सेट ?)।"
 
 #: /src/schooltool/app/browser/csvimport.py:123
 msgid "CSV file imported successfully."
@@ -811,7 +738,7 @@ msgid ""
 "Wrong section header on line ${line_no} (it should contain a course id and "
 "an instructor id)"
 msgstr ""
-"${line_no}पङ्क्तिमा गलत हेडर सेक्सन छ  (यसले पाठ्यक्रम आई डी र अध्यापक आई डी समावेश "
+"${line_no} पङ्क्तिमा गलत  सेक्सन हेडर छ  (यसले पाठ्यक्रम आई डी र अध्यापक आई डी समावेश "
 "गरेको हुनुपर्छ)"
 
 #. Default: ""
@@ -841,15 +768,15 @@ msgstr "समयतालिका रूपरेखा ${schema} अवस्
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:508
 msgid "Error in timetable CSV data, line ${line_no}"
-msgstr "समयतालिका CSV डाटा पङ्क्ति, $ {line_no} मा त्रुटि"
+msgstr "समयतालिका CSV डाटा पङ्क्ति, ${line_no} मा त्रुटि"
 
 #: /src/schooltool/app/browser/csvimport.py:548
 msgid "Day ids not defined in selected schema: ${args}."
-msgstr "चयन गरिएको स्कीमामा दिन आई डीहरु परिभाषित गरिएको छैन: $ {args}"
+msgstr "चयन गरिएको रुपरेखामा दिन आई डीहरु परिभाषित गरिएको छैन: ${args}"
 
 #: /src/schooltool/app/browser/csvimport.py:549
 msgid "Periods not defined in selected days: ${args}."
-msgstr "चयन गरिएका दिनमा अवधि परिभाषित गरिएको छैन: $ {args}"
+msgstr "चयन गरिएका दिनमा अवधि परिभाषित गरिएको छैन: ${args}"
 
 #: /src/schooltool/app/browser/csvimport.py:550
 msgid "Persons not found: ${args}."
@@ -936,7 +863,7 @@ msgstr "विस्तृत जानकारीको लागि:"
 
 #: /src/schooltool/app/browser/templates/about.pt:27
 msgid "Website"
-msgstr "वेवसाईट"
+msgstr "वेबसाईट"
 
 #: /src/schooltool/app/browser/templates/about.pt:28
 msgid "Launchpad project page"
@@ -972,11 +899,11 @@ msgstr "योगदान कर्ता"
 
 #: /src/schooltool/app/browser/templates/application_preferences.pt:4
 msgid "Edit site preferences"
-msgstr "साइट प्राथमिकताहरू सम्पादन गर्नुहोस"
+msgstr "साइट प्राथमिकताहरू सम्पादन गर्नुहोस्"
 
 #: /src/schooltool/app/browser/templates/application_preferences.pt:13
 msgid "Change site preferences"
-msgstr "साइटको प्राथमिकताहरू परिवर्तन"
+msgstr "साइटको प्राथमिकताहरू परिवर्तन गर्नुहोस्"
 
 #: /src/schooltool/app/browser/templates/application_preferences.pt:19
 msgid "General preferences"
@@ -1022,17 +949,17 @@ msgstr "धटनाको लागि"
 #. Default: "This is an Atom formatted XML site feed. It is intended to be viewed in a Newsreader or syndicated to another site. Please visit"
 #: /src/schooltool/app/browser/templates/cal_atom.pt:42
 msgid "atom_description"
-msgstr "एटम_विबरण"
+msgstr "एटम_विवरण"
 
 #. Default: "Atom Enabled"
 #: /src/schooltool/app/browser/templates/cal_atom.pt:46
 msgid "atom_enabled"
-msgstr "एटम_सक्षम"
+msgstr "atom_enabled"
 
 #. Default: "for more info."
 #: /src/schooltool/app/browser/templates/cal_atom.pt:49
 msgid "atom_more_info"
-msgstr "एटम_अझ धेरै_सूचना"
+msgstr "atom_more_info"
 
 #: /src/schooltool/app/browser/templates/cal_atom.pt:56
 msgid "Validate my Atom feed"
@@ -1074,11 +1001,11 @@ msgstr "वार्षिक"
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:55
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:91
 msgid "Calendar for ${title} - ${calendar_title}"
-msgstr "${title} - ${calendar_title}को लागि भित्तेपात्रो"
+msgstr "${title} - ${calendar_title} को लागि भित्तेपात्रो"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:115
 msgid "Jump To ..."
-msgstr "यसमा जानुहोस्..."
+msgstr "यसमा जानुहोस् ..."
 
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:4
 #: /src/schooltool/timetable/browser/templates/calendar_overlay.pt:4
@@ -1104,7 +1031,7 @@ msgstr "लागू गर्नुहोस्"
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:33
 #: /src/schooltool/timetable/browser/templates/calendar_overlay.pt:66
 msgid "More..."
-msgstr "अझ धेरै."
+msgstr "अझ धेरै ..."
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:4
 msgid "Select calendars to display"
@@ -1116,7 +1043,7 @@ msgstr "प्रदर्शन गर्न थप क्यालेन्ड
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:27
 msgid "Hold down Ctrl or Shift to select multiple calendars."
-msgstr "बहु क्यालेन्डरहरू चयन गर्न 'कन्ट्रोल' वा 'सिफ्ट' समाती राख्नुहोस्।"
+msgstr "एक भन्दा बढी क्यालेन्डरहरू चयन गर्न 'कन्टोल' वा 'सिफ्ट' थिची राख्नुहोस्।"
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:32
 msgid "Public Calendar"
@@ -1136,7 +1063,7 @@ msgstr "संशाधनहरू"
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:43
 msgid "There are no resources with calendars accessible to you."
-msgstr "तपाईं समक्ष पहुँच राख्न त्यहाँ कुनै पनि संसाधनहरू छैनन्।"
+msgstr "तपाईँको पहुँच भएको भित्तेपात्रो सहितको कुनै पनि संशाधनहरु छैनन्।"
 
 #: /src/schooltool/app/browser/templates/default_report_template.pt:23
 msgid "Created with SchoolTool"
@@ -1150,14 +1077,14 @@ msgstr "पृष्ठ ${page_number}"
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:27
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:45
 msgid "R"
-msgstr "आर"
+msgstr "R"
 
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:26
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:27
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:45
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:103
 msgid "Remove"
-msgstr "हटाऊनुहोस"
+msgstr "हटाऊनुहोस्"
 
 #. Default: "Invert Selection"
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:30
@@ -1183,7 +1110,7 @@ msgstr "छनौट बटनलाई उल्ट्याउ"
 #: /src/schooltool/skin/templates/table_container.pt:39
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:15
 msgid "There are none."
-msgstr "यहाँ छैनन"
+msgstr "यहाँ कोही छैनन् ।"
 
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:48
 #: /src/schooltool/app/browser/templates/event_booking.pt:42
@@ -1197,31 +1124,31 @@ msgstr "यहाँ छैनन"
 #: /src/schooltool/skin/templates/view_macros.pt:187
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:60
 msgid "A"
-msgstr "ए"
+msgstr "A"
 
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:58
 #: /src/schooltool/app/browser/templates/event_booking.pt:63
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:68
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:77
 msgid "There are none to add."
-msgstr "थप्नकोलागि यहा केहि छैन ।"
+msgstr "थप्नका लागि यहाँ केहि छैन ।"
 
 #. Default: "OK"
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:65
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:75
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:84
 msgid "ok-button"
-msgstr "हुन्छ- बटन"
+msgstr "हुन्छ"
 
 #: /src/schooltool/app/browser/templates/event.pt:15
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:15
 msgid "All day event"
-msgstr "सबै दिनका धटना"
+msgstr "दिनभरीका धटना"
 
 #: /src/schooltool/app/browser/templates/event.pt:20
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:21
 msgid "This is a recurring event."
-msgstr "यो पुनरावृत्तिक घटना !"
+msgstr "यो दोहोरिरहने घटना हो ।"
 
 #: /src/schooltool/app/browser/templates/event.pt:33
 #: /src/schooltool/basicperson/browser/templates/person_view.pt:29
@@ -1279,11 +1206,11 @@ msgstr "कार्यक्रम विवरण"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:197
 msgid "Book Resources"
-msgstr "बुक गरिएका संशाधन"
+msgstr "संशाधन बुक गर्नुहोस्"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:207
 msgid "Update form"
-msgstr "अद्यावधिक फारम"
+msgstr "फारम अद्यावधिक गर्नुहोस्"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:224
 msgid "day"
@@ -1303,15 +1230,15 @@ msgstr "वर्ष"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:236
 msgid "This section only applies when weekly recurrence is selected."
-msgstr "यो सेक्सनले तब मात्र लागू गर्दछ जब साप्ताहिक पुनरावृत्ति चयन गरिन्छ।"
+msgstr "साप्ताहिक पुनरावृत्ति चयन गरिएको बेला मात्र यो सेक्सन लागु हुन्छ।"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:257
 msgid "This section only applies when the monthly recurrence is selected."
-msgstr "यो सेक्सनले मात्र लागू गर्दछ जब मासिक पुनरावृत्ति चयन गरिन्छ।"
+msgstr "मासिक पुनरावृत्ति चयन गरिएको बेला मात्र यो सेक्सन लागु हुन्छ।"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:264
 msgid "Day ${monthday} of every month"
-msgstr "दिन ${monthday} हरेक महिनाको"
+msgstr "हरेक महिनाको ${monthday} दिन"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:271
 #: /src/schooltool/app/browser/templates/event_add.pt:278
@@ -1376,11 +1303,11 @@ msgstr "सर्टकट: Alt-A"
 #: /src/schooltool/timetable/browser/templates/specialday_select.pt:41
 #: /src/schooltool/timetable/browser/templates/timetable-container-delete.pt:29
 msgid "cancel-button"
-msgstr "रद्द -बटन"
+msgstr "रद्द"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:4
 msgid "Resource Booking"
-msgstr "संशाधन बुकिङ्ग भैरहेको"
+msgstr "संशाधन बुकिङ्ग"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:12
 msgid "Resource Booking for ${title}"
@@ -1396,11 +1323,11 @@ msgstr "शुरु:"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:26
 msgid "Ends:"
-msgstr "अन्तिम:"
+msgstr "क्रमश:"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:30
 msgid "This is a recurring event!"
-msgstr "यो पुनरावृत्तिक घटना !"
+msgstr "यो दोहोरिरहने घटना हो ।"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:38
 msgid "Booked resources"
@@ -1424,7 +1351,7 @@ msgstr "स्थान: ${location}"
 
 #: /src/schooltool/app/browser/templates/index.pt:6
 msgid "Welcome to SchoolTool"
-msgstr "स्कूलटुलमा स्वागत छ"
+msgstr "स्कूलटूलमा स्वागत छ"
 
 #: /src/schooltool/app/browser/templates/index.pt:12
 #: /src/schooltool/course/browser/templates/copy_sections.pt:86
@@ -1455,15 +1382,15 @@ msgstr "स्तरहरू"
 
 #: /src/schooltool/app/browser/templates/login.pt:8
 msgid "Your session has expired."
-msgstr "तपाइको सेसन काम नलाग्नेभयो ।"
+msgstr "तपाइको सेसन समाप्त भईसक्यो।"
 
 #: /src/schooltool/app/browser/templates/login.pt:13
 msgid ""
 "You are not allowed to access this page. You can click on the back button in "
 "your browser to go back, or ask a more privileged user to log in."
 msgstr ""
-"यो पृष्ठलाई पहुँच गर्न तपाईसँग अनुमति छैन। पछाडि जानका लागि ब्राउजरको 'पछाडि' बटन "
-"थिच्नुहोस् वा लगइन गर्नका लागि विशेषाधिकार प्राप्त प्रयोगकर्तालाई सोध्नुहोस्।"
+"यो पृष्ठमा तपाईको पहुँच छैन। पछाडि जानका लागि ब्राउजरको 'पछाडि' बटन थिच्नुहोस् वा "
+"लगइन गर्नका लागि विशेषाधिकार प्राप्त प्रयोगकर्तालाई सोध्नुहोस्।"
 
 #: /src/schooltool/app/browser/templates/login.pt:23
 msgid "Please log in"
@@ -1471,7 +1398,7 @@ msgstr "कृपया लगईन गर्नुहोस"
 
 #: /src/schooltool/app/browser/templates/login.pt:35
 msgid "User Information"
-msgstr "प्रयोगकर्ताको सूचना"
+msgstr "प्रयोगकर्ताको जानकारी"
 
 #: /src/schooltool/app/browser/templates/login.pt:38
 #: /src/schooltool/basicperson/browser/person.py:59
@@ -1584,7 +1511,7 @@ msgid ""
 "You can create the CSV file in a spreadsheet and export it in CSV (Comma-"
 "Separated Values) format. The structure of the table is described below."
 msgstr ""
-"तपाईं CSV फाइल स्प्रेडसिटमा सिर्जना गर्न सक्नुहुन्छ र CSV (अल्पविराम-बिच्छेद मानहरू) "
+"तपाईं स्प्रेडशीटमा CSV फाइल  सिर्जना गर्न सक्नुहुन्छ र CSV (अल्पविराम-बिच्छेद मानहरू) "
 "ढाँचामा निर्यात गर्न सक्नुहुन्छ। तालिकाको बनावट तल वर्णन गरिएको छ।"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:30
@@ -1616,12 +1543,12 @@ msgid ""
 "<strong>person ids</strong> may follow, the denoted persons will be added to "
 "the section as learners."
 msgstr ""
-"प्रत्येक सेक्सन वर्णनले पहिला पङ्क्ति जनाउँछ <strong>पाठ्यक्रम आई डी</strong> र "
-"<strong>अध्यापक आई डी</strong> नयाँ सेक्सनको लागि समावेश गर्दछ. त्यसपछि पङ्क्तिहरूको "
-"संख्या, प्रत्येकले <strong>दिन आई डी</strong> र <strong>अवधि आई डी समावेश गर्दछ</"
-"strong>, अनुगमन. अवधि वर्णनहरूको सूची तीन वटा एस्टरिक्सद्वारा समापन गरिन्छ ('***') "
-"पहिलो स्तम्भमा. टर्मिनेटर पछि, कुनै पनि <strong>व्यक्ति आई डीहरूको संख्याले</strong> "
-"अनुगमन गर्न सक्दछ, सङ्केत व्यक्तिहरू शिष्यको रूपमा सेक्सनमा थपिन्छ।"
+"प्रत्येक सेक्सनको पहिलो पङ्क्तिले <strong>पाठ्यक्रम आई डी</strong> र <strong>अध्यापक आई "
+"डी</strong> समावेश गर्दछ। त्यसपछिका पङ्क्तिहरुमा, हरेक पङ्क्तिले <strong>दिन आई डी</"
+"strong> र <strong>अवधि आई डी</strong> समावेश गर्दछ। पहिले स्तम्भमा भएको अवधि सूचि "
+"तीन वटा एस्टेरिक्स ('***') ले समापन गरिन्छ। टर्मिनेटर पछि, <strong>व्यक्ति आई डीहरु</"
+"strong>को जति संख्या पनि हुन सक्दछ, अंकित गरिएका व्यक्तिहरुलाई शिष्यको रुपमा सेक्सनमा "
+"थपिन्छ।"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:54
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:33
@@ -1662,10 +1589,10 @@ msgid ""
 "learners, and its timetable will contain three timetable activities, two on "
 "Monday. The literature section will be processed in a similar fashion."
 msgstr ""
-"माथिको उदाहरणले दुईवटा नयाँ सेक्सनहरू सृजना गर्दछ, एटा फिलोसोफी वक्ता र अर्को शास्त्र "
-"वक्ताको लागि। फिलोसोफी वक्ताको लागि सेक्सनसँग व्यक्तिहरू हुन्छ आई डीसँग 'जोनी' र "
-"'बिल्ली' शिष्यका रुपमा, र यसको समयतालिकाले तीनवटा समयतालिका क्रियाकलाप समावेश "
-"गर्दछ, दुईवटा सोमबार। वक्ता सेक्सनले समान फेसनमा पहुँच गर्दछ।"
+"माथिको उदाहरणले दुईवटा नयाँ सेक्सनहरू सृजना गर्दछ, एउटा दर्शन व्याख्यान र अर्को साहित्य "
+"व्याख्यानको लागि। दर्शन व्याख्यानको सेक्सनले 'जनी' र 'बिल्ली' लाई शिष्यको रुपमा समावेश "
+"गर्नेछ, र यसको समयतालिकाले सोमबार दुईवटा कार्यक्रम भएको जम्मा तीन समयतालिका कार्यक्रम "
+"सामवेश गर्नेछ। साहित्य व्याख्यानलाई पनि समान रुपमा प्रक्रिया गरिनेछ।"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:83
 msgid ""
@@ -1675,7 +1602,13 @@ msgid ""
 "by more than one line. In the list of learners, only the first column "
 "containing the person ids is processed, the other columns are ignored. You "
 "can import the same data several times without any side effects."
-msgstr "मदन पुरस्कार"
+msgstr ""
+"ध्यान दिनुहोला: फाईलमा वस्तुहरुको आई डी प्रयोग गर्नुहोला, शिर्षक होईन। यदि सेल खाली "
+"सेलमा (उदाहरण: <em>\"दर्शन\",\"लर्च\",\"\",\"\"</em>) मा अन्त्य  हुन्छ भने , लाई "
+"त्याग गरिने छ। तपाईँले सेक्सन विवरणलाई एक भन्दा बढी लाईनमा राख्न सक्नु हुन्छ । शिष्यहरुको "
+"सूचिमा व्यक्ति आई डी भएको पहिलो स्तम्भलाई मात्र प्रक्रिया गरिनेछ, अन्य स्तम्भहरुलाई "
+"प्रक्रिया गरिनेछैन । समान डाटा लाई कुनै पनि अतिरिक्त असर बिना नै पुन: पुन: आयात गर्न "
+"सक्नुहुन्छ।"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:94
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:48
@@ -1708,7 +1641,7 @@ msgstr "CSV फाइल"
 #: /src/schooltool/person/browser/person-csvimport.pt:55
 #: /src/schooltool/resource/browser/resource-csvimport.pt:52
 msgid "Charset:"
-msgstr "क्यारेक्टर सेट"
+msgstr "क्यारेक्टर सेट:"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:103
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:57
@@ -1752,7 +1685,7 @@ msgstr "पश्चिमी (ISO-८८५९-१)"
 #: /src/schooltool/person/browser/person-csvimport.pt:60
 #: /src/schooltool/resource/browser/resource-csvimport.pt:57
 msgid "Western (Windows-1252)"
-msgstr "पश्चिमी (सन्झ्याल-१२५२)"
+msgstr "पश्चिमी (Windows-१२५२)"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:107
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:61
@@ -1809,7 +1742,7 @@ msgstr "CSV डाटा"
 #: /src/schooltool/person/browser/person-csvimport.pt:75
 #: /src/schooltool/resource/browser/resource-csvimport.pt:72
 msgid "submit-button"
-msgstr "दाखिला-बटन"
+msgstr "पेश गर्नुहोस्"
 
 #: /src/schooltool/app/configure.zcml:340
 msgid "Security (General)"
@@ -1964,12 +1897,15 @@ msgstr ""
 
 #: /src/schooltool/app/help/event_add.pt:19
 #: /src/schooltool/app/help/event_edit.pt:17
+#, fuzzy
 msgid ""
 "The <code>Location</code> field allows you to enter a description of the "
 "location of the event, but this is not connected to the reservation system. "
 "If your school uses SchoolTool to manage room reservations you need to check "
 "the <code>Book Resources</code> checkbox at the bottom of the form."
 msgstr ""
+"<code>स्थान</code> क्षेत्रले तपाईँलाई स्थानको क्षेत्र वर्णन गर्न अनुमति दिन्छ, तर यो आरक्षण "
+"प्रणाली सँग सम्बन्धित छैन।<code>बुक भएका संशाधन</code> चेकबक्स आकृतिको अन्तिममा छ।"
 
 #: /src/schooltool/app/help/event_add.pt:24
 #: /src/schooltool/app/help/event_edit.pt:22
@@ -2071,6 +2007,34 @@ msgid ""
 "of the site. You should disable devmode in any production server.</li> </ul> "
 "</ul>"
 msgstr ""
+"<h1>स्कुल टुल</h1> <p>स्कुल टुल विश्व भरिका विद्यालयका लागि फ्री प्रशासकीय प्रणाली हो, "
+"जुन सटलवोर्थ संस्थाबाटप्रायोजित छ।</p> <h2>स्कुल टुलमा स्तरीय प्रयोगकर्ता समझौता सम्मेलन</"
+"h2> <ul> <li><strong>माथिको रातो बार</strong></li> <ul> <li><strong>ब्रेडक्रम्ब:"
+"</strong> स्कुल टुलको वस्तु पदानुक्रममा तपाईँ कहाँ हुनुहुन्छ भनेर तपाईँलाई रेड बारको बायाँ "
+"भागमा भएको लिकंले देखाउँछ।याद गर्नुहोस् कि यसले तपाईँलाई रिपोर्ट पत्र टेम्प्लेट बनाउन, "
+"सम्पादन गर्न र अभिनियोजित गर्ने तर्फ लान्छ भन्ने जरुरी छैन। तपाईँ जहाँबाट अउनु भएको, तर "
+"यो तपाईँलाई अधिक विशिष्ट बाट अधिक सामान्य तर्फ लान सुलभ छ।</li> "
+"<li><strong>तपाईँको नाम</strong> (यदि तपाईँ लग-ईन हुनुहुन्छ भने): आफ्नो नाममा क्लिक "
+"गर्नाले तपाईँलाई प्रासंगिक लिङ्क को सामान्य ड्याशबोर्डमा लान्छ। यो पेजबाट तपाईँले संदर्भ वा "
+"अरु व्यक्तिगत परिवर्तन गर्नु छ भने <code>एक्सन</code> मेनुको प्रयोग गर्न सक्नुहुन्छ।</li> "
+"<li><strong>लग-इन/आउट:</strong> यसले तपाईँलाई लग-इन वा आउट गर्छ। तपाईँले स्कुल टुल "
+"प्रयोग नगरेको बेला लग-आउट गर्नु बुद्दीमानि हुन्छ।</li> <li><strong>मद्दत:</strong> यदि "
+"तापाईले हेरिरहनु भएको फाईलमा मद्दत पृष्ठ छ भने, तपाईँले यो लिकं देख्न सक्नुहुन्छ।</li> </ul> "
+"<li><strong>मेनु</strong></li> <ul> <li><strong>नेविगेशन:</strong> यो मेनुले "
+"तपाईँलाई स्कुल टुलको विभिन्न भागहरुमा पहुच गर्न केहि सामान्य विकल्प दिन्छ, जस्तै व्यक्ति वा "
+"पाठ्यक्रमको निर्देशिका। तपाईँले यहाँ देख्ने कुरा तपाईँको प्रणालीको अनुमतिमा भर पर्छ।</li> "
+"<li><strong>एक्सन:</strong> तपाईँले हालको पृष्ठमा गर्न मिल्ने विविध कुराहरु यो मेनुले "
+"समेटेको छ। यो मेनुमा भएको प्रविष्टियां परिवर्तन तपाईँले हेरिरहनुभएको पृष्ठ र तपाईँसँग भएको "
+"अनुमतिमा भर पर्छ।</li> </ul> <li><strong>रेडबार भन्दा माथि</strong></li> <ul> "
+"<li><strong>लोगो र विद्यालयको नाम:</strong> यो क्षत्रमा क्लिक गर्नाले तपाईँ स्कुल "
+"साइटको माथिल्लो भागमा पुग्नुहुन्छ, प्राय: विद्यालयको लागि भित्तेपात्रो।</li> "
+"<li><strong>भित्तेपात्रो दिवस/हप्ता/महिना/वर्ष दृष्टि:</strong> यदि तपाईँ भित्तेपात्रो "
+"हेर्दै हुनुहुन्छ भने, तपाईँले माथिल्लो दायाँ भागको कुनामा आइकनहरु भेट्नुहुन्छ जसले तपाईँलाई "
+"भित्तेपात्रो दृष्टि बीचमा स्वीच गर्ने अनुमति दिन्छ।</li> <li><strong>देबमोड मेनु:</"
+"strong> यदि तपाईँ साइट प्रशासक हुनुहुन्छ भने र तपाईँले स्कुल टुल.कन्फ मा \"devmode\" "
+"चलाउन योग्य बनाउनु भएको छ भने, तपाईँले साइटको माथिल्लो दायाँ भागको कुनामा एउटा विशेष "
+"मेनु देख्नुहुन्छ। तपाईँले कुनै पनि उत्पादन परिसेवकमा देवमोड निर्योग्य बनाउनु पर्छ।</li> </ul> "
+"</ul>"
 
 #: /src/schooltool/app/help/weekly_calendar.pt:8
 msgid ""
@@ -2157,9 +2121,8 @@ msgid ""
 "the\n"
 "            bottom of all pages and in the page title."
 msgstr ""
-"\"विद्यालय वा संस्थाको लागि नामले \\n\"\n"
-"\"यो सर्भर चालू गरिरहेको छ।यो सार्वजनिक क्यालेन्डरमा सबै पृष्ठहरू र पृष्ठ \\n\"\n"
-" शीर्षकहरूको तल्लो भागमा प्रदर्शन गरिनेछ।"
+"यो सर्भर संचालन गर्ने विद्यालय वा संस्थाको नाम । उक्त नाम सार्वजनिक भित्तेपात्रो तथा हरेक "
+"पृष्ठको तल्लो भागमा देखिनेछ ।"
 
 #: /src/schooltool/app/interfaces.py:164
 msgid "Front Page Calendar"
@@ -2247,7 +2210,7 @@ msgstr "प्लगइन एक्सन अर्डरलाई समाध
 #: /src/schooltool/app/main.py:536 /src/schooltool/app/main.py:580
 #: /src/schooltool/app/main.py:583
 msgid "%s: %s"
-msgstr "%s:%s"
+msgstr "%s: %s"
 
 #: /src/schooltool/app/main.py:537
 msgid "Run %s -h for help."
@@ -2255,7 +2218,7 @@ msgstr "मद्दतका लागि %s -h चलाउनुहोस्�
 
 #: /src/schooltool/app/main.py:549
 msgid "%s: daemon mode not supported on your operating system."
-msgstr "तपाईंको सञ्चालन प्रणालीमा %s: डेमोन मोड समर्थन गर्दैन।"
+msgstr "तपाईंको सञ्चालन प्रणालीमा %s: डेमन मोड समर्थन गर्दैन।"
 
 #: /src/schooltool/app/main.py:575
 msgid "Reading configuration from %s"
@@ -2356,12 +2319,35 @@ msgstr "भित्तेपात्रो हेर्नुहोस्"
 msgid "Change calendar"
 msgstr "भित्तपात्रो परिर्वतन गर्नुहोस्"
 
-#: /src/schooltool/basicperson/browser/configure.zcml:15
-#: /src/schooltool/basicperson/browser/configure.zcml:164
-#: /src/schooltool/basicperson/browser/configure.zcml:171
-#: /src/schooltool/basicperson/browser/configure.zcml:178
+#: /src/schooltool/basicperson/browser/configure.zcml:14
+#: /src/schooltool/basicperson/browser/configure.zcml:216
+#: /src/schooltool/basicperson/browser/configure.zcml:223
+#: /src/schooltool/basicperson/browser/configure.zcml:230
+#: /src/schooltool/basicperson/browser/configure.zcml:237
+#: /src/schooltool/common/configure.zcml:88
+#: /src/schooltool/contact/browser/configure.zcml:6
+#: /src/schooltool/contact/browser/configure.zcml:31
+#: /src/schooltool/course/browser/configure.zcml:58
+#: /src/schooltool/course/browser/configure.zcml:69
+#: /src/schooltool/course/security.zcml:94
+#: /src/schooltool/course/security.zcml:128
+#: /src/schooltool/demographics/browser/configure.zcml:13
+#: /src/schooltool/group/security.zcml:76
+#: /src/schooltool/person/browser/configure.zcml:197
+#: /src/schooltool/person/security.zcml:87
+#: /src/schooltool/schoolyear/security.zcml:31
+#: /src/schooltool/term/security.zcml:35
+#: /src/schooltool/timetable/security.zcml:32
+msgid "View"
+msgstr "दृश्य"
+
+#: /src/schooltool/basicperson/browser/configure.zcml:23
+#: /src/schooltool/basicperson/browser/configure.zcml:188
+#: /src/schooltool/basicperson/browser/configure.zcml:195
+#: /src/schooltool/basicperson/browser/configure.zcml:202
+#: /src/schooltool/basicperson/browser/configure.zcml:209
 #: /src/schooltool/contact/browser/configure.zcml:22
-#: /src/schooltool/contact/browser/configure.zcml:40
+#: /src/schooltool/contact/browser/configure.zcml:52
 #: /src/schooltool/demographics/browser/configure.zcml:22
 #: /src/schooltool/demographics/browser/table.py:100
 #: /src/schooltool/demographics/browser/table.py:196
@@ -2403,7 +2389,7 @@ msgstr ""
 #: /src/schooltool/basicperson/security.zcml:22
 #: /src/schooltool/demographics/browser/personform.py:180
 msgid "Demographics"
-msgstr "डेमोग्राफिक्स"
+msgstr "जनसांख्यिकी"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:143
 msgid "New Text Field"
@@ -2413,9 +2399,25 @@ msgstr "नयाँ पाठ क्षेत्र"
 msgid "New Date Field"
 msgstr "नयाँ मिति क्षेत्र"
 
-#: /src/schooltool/basicperson/browser/configure.zcml:157
+#: /src/schooltool/basicperson/browser/configure.zcml:174
+msgid "New Yes/No Field"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/configure.zcml:181
 msgid "New Selection List Field"
 msgstr "नयाँ छनोट सूची क्षेत्र"
+
+#: /src/schooltool/basicperson/browser/configure.zcml:291
+msgid "Add Teacher"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/configure.zcml:301
+msgid "Add Student"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/configure.zcml:311
+msgid "Add Administrator"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/csvimport.py:44
 #: /src/schooltool/course/browser/csvimport.py:45
@@ -2425,7 +2427,7 @@ msgstr "नयाँ छनोट सूची क्षेत्र"
 #: /src/schooltool/person/browser/csvimport.py:43
 #: /src/schooltool/resource/browser/csvimport.py:46
 msgid "Insufficient data provided."
-msgstr "अपर्याप्त डाटा उपलब्ध गरियो।"
+msgstr "अपर्याप्त डाटा"
 
 #: /src/schooltool/basicperson/browser/csvimport.py:48
 #: /src/schooltool/person/browser/csvimport.py:47
@@ -2444,7 +2446,7 @@ msgstr "अन्तिम नाम खालि नहुन सक्छ"
 #: /src/schooltool/basicperson/browser/csvimport.py:68
 #: /src/schooltool/person/browser/csvimport.py:62
 msgid "Duplicate username: ${username}"
-msgstr "नक्कली प्रयोगकर्तानाम: $ {username}"
+msgstr "नक्कली प्रयोगकर्तानाम: ${username}"
 
 #: /src/schooltool/basicperson/browser/csvimport.py:76
 #: /src/schooltool/basicperson/browser/person.py:108
@@ -2466,7 +2468,11 @@ msgstr ""
 msgid "Value too long \"${value}\""
 msgstr ""
 
-#: /src/schooltool/basicperson/browser/demographics.py:151
+#: /src/schooltool/basicperson/browser/demographics.py:100
+msgid "Demographics Container"
+msgstr "जनसंख्याको कंटेनर"
+
+#: /src/schooltool/basicperson/browser/demographics.py:140
 msgid "Add new Field"
 msgstr "नयाँ क्षेत्र थप्नुहोस्"
 
@@ -2475,20 +2481,25 @@ msgstr "नयाँ क्षेत्र थप्नुहोस्"
 msgid "Change information for ${field_title}"
 msgstr "${क्षेत्र शीर्षक} को लागि सूचना बदल्नुहोस्"
 
-#: /src/schooltool/basicperson/browser/person.py:49
-#: /src/schooltool/schoolyear/browser/templates/schoolyear_add.pt:61
-msgid "Group"
-msgstr "समुह"
-
 #: /src/schooltool/basicperson/browser/person.py:54
 #: /src/schooltool/demographics/interfaces.py:209
 msgid "Advisor"
-msgstr "सल्लाहकार"
+msgstr "परामर्शदाता"
+
+#: /src/schooltool/basicperson/browser/person.py:57
+#: /src/schooltool/person/browser/person.py:449
+msgid "Person index"
+msgstr "व्यक्ति सूची"
 
 #: /src/schooltool/basicperson/browser/person.py:68
 #: /src/schooltool/widget/password.py:39
 msgid "Confirm password"
 msgstr "पासवर्ड पक्का गर्नुहोस्"
+
+#: /src/schooltool/basicperson/browser/person.py:73
+#: /src/schooltool/schoolyear/browser/templates/schoolyear_add.pt:61
+msgid "Group"
+msgstr "समुह"
 
 #: /src/schooltool/basicperson/browser/person.py:76
 msgid "Passwords do not match"
@@ -2545,15 +2556,82 @@ msgstr ""
 msgid "Change information for ${fullname}"
 msgstr "${पुरानाम} को लागि सुचना परिवर्तन गर्नुहोस्"
 
-#: /src/schooltool/basicperson/browser/templates/demographics-view.pt:4
-#: /src/schooltool/basicperson/browser/templates/demographics-view.pt:7
-msgid "Demographics Container"
-msgstr "जनसंख्याको कंटेनर"
+#: /src/schooltool/basicperson/browser/person.py:579
+msgid "Teacher identification"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/person.py:581
+msgid "Teacher demographics"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/person.py:582
+msgid "Add new teacher"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/person.py:589
+msgid "Student identification"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/person.py:591
+msgid "Student demographics"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/person.py:592
+msgid "Add new student"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/person.py:599
+msgid "Administrator identification"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/person.py:601
+msgid "Administrator demographics"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/person.py:602
+msgid "Add new administrator"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/templates/container.pt:23
+msgid ""
+"To add teachers, students or administrators, please set up a ${school_year}."
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/templates/container.pt:23
+msgid "school year"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/templates/container.pt:37
+#: /src/schooltool/course/browser/templates/course_container.pt:28
+#: /src/schooltool/demographics/browser/search.pt:30
+#: /src/schooltool/demographics/browser/table.pt:23
+#: /src/schooltool/email/browser/templates/email_container.pt:33
+#: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:43
+#: /src/schooltool/skin/templates/container.pt:28
+#: /src/schooltool/skin/templates/table_container.pt:28
+msgid "Showing ${count} of ${total} items"
+msgstr "${total} आइटमको ${count} देखाउने"
+
+#. Default: "Delete"
+#: /src/schooltool/basicperson/browser/templates/container.pt:42
+#: /src/schooltool/course/browser/templates/course_container.pt:40
+#: /src/schooltool/course/browser/templates/section_container.pt:93
+#: /src/schooltool/demographics/browser/search.pt:35
+#: /src/schooltool/demographics/browser/table.pt:28
+#: /src/schooltool/email/browser/templates/email_container.pt:48
+#: /src/schooltool/schoolyear/browser/templates/schoolyear.pt:42
+#: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:48
+#: /src/schooltool/skin/templates/container.pt:42
+#: /src/schooltool/skin/templates/table_container.pt:33
+#: /src/schooltool/skin/templates/view_macros.pt:195
+#: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:29
+msgid "delete-button"
+msgstr "मेटाउनुहोस्"
 
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:4
 #: /src/schooltool/person/browser/person-csvimport.pt:4
 msgid "Upload SchoolTool persons as CSV"
-msgstr "CSV को रूपमा स्कूल टूल ब्यक्तिहरु अपलोड गर्नुहोस्"
+msgstr "CSV को रूपमा स्कूल टूल व्यक्तिहरु अपलोड गर्नुहोस्"
 
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:26
 #: /src/schooltool/person/browser/configure.zcml:80
@@ -2587,43 +2665,83 @@ msgid ""
 msgstr ""
 "माथिको उदाहरणले तीन वटा प्रयोगकर्ताहरू सिर्जना गर्दछ, 'जेजोन्स', 'जेबीजोन्स' र "
 "'हवार्ड'। तीन वटामा; मात्र 'जेबीजोन्स सँग पासवर्ड ('r2m45J') भन्ने हुन्छ र प्रणालीमा "
-"लगईन गर्न सक्षम पनि हुन्छ। टिप्पणी गर्नुहोस् कि पासवर्ड सादा पाठमा पठाउनुपर्दछ।"
+"लगईन गर्न सक्षम पनि हुन्छ। याद गर्नुहोस् कि पासवर्ड सादा पाठमा पठाउनुपर्दछ।"
 
 #: /src/schooltool/basicperson/browser/templates/person_add_subform.pt:2
 msgid "New person"
 msgstr ""
 
+#: /src/schooltool/basicperson/browser/templates/person_container_delete.pt:15
+#: /src/schooltool/contact/browser/templates/contacts_delete.pt:15
+#: /src/schooltool/person/browser/person_container_delete.pt:15
+#: /src/schooltool/resource/browser/container_delete.pt:10
+#: /src/schooltool/skin/templates/container_delete.pt:15
+msgid "Are you sure you want to delete selected items?"
+msgstr "के तपाईं पक्का चयन गरिएका चीजहरू मेटाउन चाहनुहुन्छ?"
+
+#: /src/schooltool/basicperson/browser/templates/person_container_delete.pt:21
+#: /src/schooltool/contact/browser/templates/contacts_delete.pt:21
+#: /src/schooltool/email/browser/templates/email_delete.pt:21
+#: /src/schooltool/person/browser/person_container_delete.pt:21
+#: /src/schooltool/resource/browser/container_delete.pt:16
+#: /src/schooltool/schoolyear/browser/templates/term-delete.pt:16
+#: /src/schooltool/skin/templates/container_delete.pt:21
+#: /src/schooltool/term/browser/templates/term-container-delete.pt:16
+#: /src/schooltool/timetable/browser/templates/schooltt-delete.pt:16
+#: /src/schooltool/timetable/browser/templates/timetable-container-delete.pt:16
+msgid "You have not selected any items."
+msgstr "तपाईंले कुनै चीजहरू चयन गर्नुभएको छैन।"
+
+#: /src/schooltool/basicperson/browser/templates/person_container_delete.pt:23
+#: /src/schooltool/person/browser/person_container_delete.pt:23
+msgid "Sorry, you may not delete your own user account."
+msgstr "माफ गर्नुहोला, तपाईं आफ्नै खाता मेटाउन सक्नुहुन्न।"
+
+#: /src/schooltool/basicperson/browser/templates/person_container_delete.pt:35
+#: /src/schooltool/contact/browser/templates/contacts_delete.pt:34
+#: /src/schooltool/email/browser/templates/email_delete.pt:31
+#: /src/schooltool/person/browser/person_container_delete.pt:35
+#: /src/schooltool/resource/browser/container_delete.pt:27
+#: /src/schooltool/schoolyear/browser/templates/term-delete.pt:27
+#: /src/schooltool/skin/templates/container_delete.pt:32
+#: /src/schooltool/term/browser/templates/term-container-delete.pt:29
+#: /src/schooltool/timetable/browser/templates/confirm-timetable-delete.pt:77
+#: /src/schooltool/timetable/browser/templates/schooltt-delete.pt:29
+#: /src/schooltool/timetable/browser/templates/timetable-container-delete.pt:27
+msgid "Confirm"
+msgstr "पक्का"
+
 #: /src/schooltool/basicperson/browser/templates/person_view.pt:13
 #: /src/schooltool/person/browser/home.pt:13
 #: /src/schooltool/person/browser/person.pt:4
 msgid "Person info: ${title}"
-msgstr "व्यत्तिको विबरण: $ { title }"
+msgstr "व्यत्तिको विबरण: ${title}"
 
 #: /src/schooltool/basicperson/interfaces.py:38
 #: /src/schooltool/contact/interfaces.py:40
 #: /src/schooltool/demographics/interfaces.py:44
 msgid "Prefix"
-msgstr "उपसर्ग"
+msgstr "श्री/श्रीमती/सुश्री"
 
 #: /src/schooltool/basicperson/interfaces.py:43
 #: /src/schooltool/contact/browser/templates/filter.pt:5
 #: /src/schooltool/contact/interfaces.py:42
 #: /src/schooltool/demographics/interfaces.py:50
 msgid "First name"
-msgstr "पहिलो नाम"
+msgstr "नाम"
 
 #: /src/schooltool/basicperson/interfaces.py:48
 #: /src/schooltool/contact/interfaces.py:44
 #: /src/schooltool/demographics/interfaces.py:55
 msgid "Middle name"
-msgstr "मध्य नाम"
+msgstr "बीचको नाम"
 
 #: /src/schooltool/basicperson/interfaces.py:53
 #: /src/schooltool/contact/browser/templates/filter.pt:12
 #: /src/schooltool/contact/interfaces.py:46
 #: /src/schooltool/demographics/interfaces.py:60
 msgid "Last name"
-msgstr "अन्तिम नाम"
+msgstr "थर"
 
 #: /src/schooltool/basicperson/interfaces.py:58
 #: /src/schooltool/contact/interfaces.py:48
@@ -2681,7 +2799,19 @@ msgstr "चाहिएको"
 msgid "Whether this Field is required or not"
 msgstr "यो क्षेत्र चाहिन्छ कि चाहिँदैन"
 
-#: /src/schooltool/basicperson/interfaces.py:137
+#: /src/schooltool/basicperson/interfaces.py:145
+msgid "Limit keys"
+msgstr ""
+
+#: /src/schooltool/basicperson/interfaces.py:146
+msgid "An optional list of limit keys for this field"
+msgstr ""
+
+#: /src/schooltool/basicperson/interfaces.py:148
+msgid "Limit key"
+msgstr ""
+
+#: /src/schooltool/basicperson/interfaces.py:163
 msgid "List of values"
 msgstr "मानहरुको सुची"
 
@@ -2723,6 +2853,24 @@ msgstr "प्रयोगकर्ताको जनसंख्या शं�
 msgid "Modify user's demographics information."
 msgstr "प्रयोगकर्ताको जनसांख्यीक सूचना शंसोधन गर्नुहोस्"
 
+#: /src/schooltool/basicperson/vocabularies.py:143
+#: /src/schooltool/course/browser/section.py:534
+#: /src/schooltool/course/browser/templates/copy_sections.pt:145
+#: /src/schooltool/course/browser/templates/course_container.pt:57
+#: /src/schooltool/course/browser/templates/link_section.pt:114
+#: /src/schooltool/course/browser/templates/section.pt:103
+#: /src/schooltool/course/browser/templates/section_container.pt:87
+msgid "Students"
+msgstr "विद्यार्थीहरू"
+
+#: /src/schooltool/basicperson/vocabularies.py:144
+msgid "Teachers"
+msgstr ""
+
+#: /src/schooltool/basicperson/vocabularies.py:145
+msgid "Administrators"
+msgstr ""
+
 #: /src/schooltool/commendation/commendation_add.pt:4
 msgid "Add Commendation"
 msgstr "प्रशंसा थप्नुहोस्"
@@ -2739,7 +2887,7 @@ msgstr "प्रशंसा"
 #: /src/schooltool/resource/browser/configure.zcml:115
 #: /src/schooltool/resource/browser/configure.zcml:151
 msgid "Edit Info"
-msgstr "सुचना सम्पादन गर्नुहोस्"
+msgstr "जानकारी सम्पादन गर्नुहोस्"
 
 #: /src/schooltool/common/configure.zcml:89
 msgid "Add Info"
@@ -2747,7 +2895,7 @@ msgstr "सुचना थप्नुहोस"
 
 #: /src/schooltool/common/configure.zcml:90
 msgid "Edit Calendar Overlays"
-msgstr "भित्तेपात्राे overlays सम्पादन गर्नुहोस्"
+msgstr "भित्तेपात्रो overlays सम्पादन गर्नुहोस्"
 
 #: /src/schooltool/contact/browser/configure.zcml:41
 msgid "View Person"
@@ -2872,38 +3020,6 @@ msgstr "${व्यक्ति} को ${नाता}"
 msgid "Contact of ${person}"
 msgstr "${व्यक्ति} को सम्पर्क"
 
-#: /src/schooltool/contact/browser/templates/contacts_delete.pt:15
-#: /src/schooltool/person/browser/person_container_delete.pt:15
-#: /src/schooltool/resource/browser/container_delete.pt:10
-#: /src/schooltool/skin/templates/container_delete.pt:15
-msgid "Are you sure you want to delete selected items?"
-msgstr "के तपाईं पक्का चयन गरिएका चीजहरू मेटाउन चाहनुहुन्छ?"
-
-#: /src/schooltool/contact/browser/templates/contacts_delete.pt:21
-#: /src/schooltool/email/browser/templates/email_delete.pt:21
-#: /src/schooltool/person/browser/person_container_delete.pt:21
-#: /src/schooltool/resource/browser/container_delete.pt:16
-#: /src/schooltool/schoolyear/browser/templates/term-delete.pt:16
-#: /src/schooltool/skin/templates/container_delete.pt:21
-#: /src/schooltool/term/browser/templates/term-container-delete.pt:16
-#: /src/schooltool/timetable/browser/templates/schooltt-delete.pt:16
-#: /src/schooltool/timetable/browser/templates/timetable-container-delete.pt:16
-msgid "You have not selected any items."
-msgstr "तपाईंले कुनै चीजहरू चयन गर्नुभएको छैन।"
-
-#: /src/schooltool/contact/browser/templates/contacts_delete.pt:34
-#: /src/schooltool/email/browser/templates/email_delete.pt:31
-#: /src/schooltool/person/browser/person_container_delete.pt:35
-#: /src/schooltool/resource/browser/container_delete.pt:27
-#: /src/schooltool/schoolyear/browser/templates/term-delete.pt:27
-#: /src/schooltool/skin/templates/container_delete.pt:32
-#: /src/schooltool/term/browser/templates/term-container-delete.pt:29
-#: /src/schooltool/timetable/browser/templates/confirm-timetable-delete.pt:77
-#: /src/schooltool/timetable/browser/templates/schooltt-delete.pt:29
-#: /src/schooltool/timetable/browser/templates/timetable-container-delete.pt:27
-msgid "Confirm"
-msgstr "पक्का"
-
 #: /src/schooltool/contact/browser/templates/filter.pt:21
 #: /src/schooltool/person/browser/person_filter.pt:11
 #: /src/schooltool/resource/browser/resource_filter.pt:37
@@ -2922,6 +3038,10 @@ msgstr "अहिले फेला पार्नुहोस्"
 #: /src/schooltool/table/templates/filter.pt:6
 msgid "Clear"
 msgstr "खाली गर्नुहोस्"
+
+#: /src/schooltool/contact/browser/templates/manage_contacts.pt:27
+msgid "Shortcut: Alt-R"
+msgstr ""
 
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:43
 msgid "Create contact"
@@ -3104,12 +3224,13 @@ msgstr "प्रयोगकर्ता आफैँ"
 
 #: /src/schooltool/contact/security.zcml:86
 #: /src/schooltool/person/security.zcml:152
+#, fuzzy
 msgid "User"
-msgstr ""
+msgstr "प्रयोगकर्ताहरु"
 
 #: /src/schooltool/course/browser/configure.zcml:10
 msgid "Add a Course"
-msgstr "पाठ्यक्रमहरू  थप्नुहोस"
+msgstr "पाठ्यक्रम  थप्नुहोस्"
 
 #: /src/schooltool/course/browser/configure.zcml:25
 msgid "Edit Course Information"
@@ -3124,26 +3245,14 @@ msgstr "पाठ्यक्रमहरू आयात गर्नुहो�
 msgid "New Course"
 msgstr "नयाँ पाठ्यक्रमहरू"
 
-#: /src/schooltool/course/browser/configure.zcml:113
-msgid "Copy Sections"
-msgstr "सेक्सनको प्रतिलिपि बनाउनुहोस्"
-
-#: /src/schooltool/course/browser/configure.zcml:123
-msgid "View Next"
-msgstr "पछाडिको हेर्नुहोस्"
-
-#: /src/schooltool/course/browser/configure.zcml:133
-msgid "View Previous"
-msgstr "अगाडीको हेर्नुहोस्"
-
+#: /src/schooltool/course/browser/configure.zcml:150
 #: /src/schooltool/course/browser/configure.zcml:160
-#: /src/schooltool/course/browser/configure.zcml:170
 msgid "New Section"
 msgstr "नयाँ सेक्सन"
 
 #: /src/schooltool/course/browser/configure.zcml:180
 msgid "Edit Section Information"
-msgstr "सेक्सनको सूचना सम्पादन गर्नुहोस्"
+msgstr "सेक्सनको जानकारी सम्पादन गर्नुहोस्"
 
 #: /src/schooltool/course/browser/configure.zcml:194
 #: /src/schooltool/course/browser/section-member-csvimport.pt:21
@@ -3232,16 +3341,7 @@ msgstr "हालका प्रशिक्षकहरु"
 msgid "Available Instructors"
 msgstr "उपलब्ध प्रशिक्षकहरु"
 
-#: /src/schooltool/course/browser/section.py:538
-#: /src/schooltool/course/browser/templates/copy_sections.pt:145
-#: /src/schooltool/course/browser/templates/course_container.pt:57
-#: /src/schooltool/course/browser/templates/link_section.pt:114
-#: /src/schooltool/course/browser/templates/section.pt:98
-#: /src/schooltool/course/browser/templates/section_container.pt:87
-msgid "Students"
-msgstr "विद्यार्थीहरू"
-
-#: /src/schooltool/course/browser/section.py:539
+#: /src/schooltool/course/browser/section.py:535
 msgid "Current Students"
 msgstr "हालका विद्यार्थीहरू"
 
@@ -3355,31 +3455,6 @@ msgstr "विद्यार्थीहरू"
 msgid "Courses for ${schoolyear}"
 msgstr "${schoolyear} को लागि पाठ्यक्रम"
 
-#: /src/schooltool/course/browser/templates/course_container.pt:28
-#: /src/schooltool/demographics/browser/search.pt:30
-#: /src/schooltool/demographics/browser/table.pt:23
-#: /src/schooltool/email/browser/templates/email_container.pt:33
-#: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:29
-#: /src/schooltool/skin/templates/container.pt:28
-#: /src/schooltool/skin/templates/table_container.pt:28
-msgid "Showing ${count} of ${total} items"
-msgstr "${total} आइटमको ${count} देखाउने"
-
-#. Default: "Delete"
-#: /src/schooltool/course/browser/templates/course_container.pt:40
-#: /src/schooltool/course/browser/templates/section_container.pt:93
-#: /src/schooltool/demographics/browser/search.pt:35
-#: /src/schooltool/demographics/browser/table.pt:28
-#: /src/schooltool/email/browser/templates/email_container.pt:48
-#: /src/schooltool/schoolyear/browser/templates/schoolyear.pt:42
-#: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:34
-#: /src/schooltool/skin/templates/container.pt:42
-#: /src/schooltool/skin/templates/table_container.pt:33
-#: /src/schooltool/skin/templates/view_macros.pt:194
-#: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:29
-msgid "delete-button"
-msgstr "मेटाउने-बटन"
-
 #: /src/schooltool/course/browser/templates/course_edit.pt:22
 #: /src/schooltool/course/browser/templates/section_edit.pt:23
 #: /src/schooltool/skin/templates/simple_add.pt:28
@@ -3426,11 +3501,11 @@ msgstr "यो सेक्सनको नाम वा विबरण पर�
 
 #: /src/schooltool/course/browser/templates/section.pt:58
 msgid "edit info"
-msgstr "सुचना सम्पादन गर्नुहोस्"
+msgstr "जानकारी सम्पादन गर्नुहोस्"
 
 #: /src/schooltool/course/browser/templates/section.pt:87
 msgid "Change the instructors for this section."
-msgstr "यो सेक्सनको लागि प्रशिक्षकहरु परिवर्तन गर्नुहोस"
+msgstr "यो सेक्सनको लागि प्रशिक्षकहरु परिवर्तन गर्नुहोस्"
 
 #: /src/schooltool/course/browser/templates/section.pt:87
 msgid "edit instructors"
@@ -3521,7 +3596,7 @@ msgstr ""
 
 #: /src/schooltool/course/interfaces.py:37
 msgid "Title of the course."
-msgstr "पाठ्यक्रमको शीर्षक"
+msgstr "पाठ्यक्रमको शीर्षक।"
 
 #: /src/schooltool/course/interfaces.py:42
 msgid "Description of the course."
@@ -3657,7 +3732,7 @@ msgstr "बनाउने/मेटाउने"
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:62
 #: /src/schooltool/timetable/security.zcml:39
 msgid "Modify"
-msgstr "परिमार्जन गर्नुहोस"
+msgstr "परिमार्जन गर्नुहोस्"
 
 #: /src/schooltool/course/security.zcml:107
 msgid ""
@@ -3672,11 +3747,11 @@ msgstr "मेरो सेक्सन"
 #: /src/schooltool/dashboard/dashboard.pt:62
 #: /src/schooltool/dashboard/dashboard.pt:66
 msgid "Dashboard"
-msgstr "डायसबोर्ड"
+msgstr "ड्याशबोर्ड"
 
 #: /src/schooltool/dashboard/interfaces.py:45
 msgid "Category Title."
-msgstr "कोटि शीर्षक।"
+msgstr "वर्ग शीर्षक।"
 
 #: /src/schooltool/dashboard/interfaces.py:49
 #: /src/schooltool/dashboard/interfaces.py:50
@@ -3685,7 +3760,7 @@ msgstr "तौल"
 
 #: /src/schooltool/dashboard/school.pt:10
 msgid "Activity Categories"
-msgstr "क्रियाकलापको कोटिहरू"
+msgstr "क्रियाकलापका वर्गहरू"
 
 #: /src/schooltool/dashboard/school.pt:16
 #: /src/schooltool/timetable/browser/schema.py:236
@@ -3697,7 +3772,7 @@ msgstr "स्कूल समयतालिकाहरू"
 #: /src/schooltool/term/help/configure.zcml:18
 #: /src/schooltool/term/security.zcml:19
 msgid "Terms"
-msgstr "सर्तहरु"
+msgstr "अवधिहरु"
 
 #: /src/schooltool/demographics/browser/configure.zcml:156
 msgid "Schooltool Person Menu"
@@ -3711,12 +3786,12 @@ msgstr "नामको सुचना"
 #: /src/schooltool/demographics/browser/configure.zcml:173
 #: /src/schooltool/demographics/browser/configure.zcml:234
 msgid "demographics"
-msgstr "डेमोग्राफिक्स"
+msgstr "जनसांख्यिकी"
 
 #: /src/schooltool/demographics/browser/configure.zcml:179
 #: /src/schooltool/demographics/browser/configure.zcml:240
 msgid "schooldata"
-msgstr "स्कल डाटा"
+msgstr "स्कुल डाटा"
 
 #: /src/schooltool/demographics/browser/configure.zcml:185
 #: /src/schooltool/demographics/browser/configure.zcml:246
@@ -3750,7 +3825,7 @@ msgstr "स्कूलटूल व्यक्ति प्रदर्शन 
 #: /src/schooltool/demographics/browser/demographics_macros.pt:4
 #: /src/schooltool/demographics/browser/personform.py:96
 msgid "Apply and Next"
-msgstr "लागु गर्नुहोस र अर्को"
+msgstr "लागु गर्नुहोस् र अर्को"
 
 #: /src/schooltool/demographics/browser/demographics_macros.pt:4
 msgid "N"
@@ -3780,7 +3855,7 @@ msgstr "नाम परिवर्तन गर्नुहोस्"
 #. Default: ""
 #: /src/schooltool/demographics/browser/personform.py:172
 msgid "Change demographics for ${fullname}"
-msgstr "${fullname} का लागि डेमोग्राफिक्स परिवर्तन गर्नुहोस्"
+msgstr "${fullname} का लागि जनसांख्यिकी परिवर्तन गर्नुहोस्"
 
 #. Default: ""
 #: /src/schooltool/demographics/browser/personform.py:188
@@ -3819,9 +3894,9 @@ msgid ""
 "characters such as *. For example, to search for everyone with John in their "
 "name, use <em>*john*</em>."
 msgstr ""
-"व्यक्तिहरूका लागि यहाँ खोजी गर्नुहोस्। टिप्पणी गर्नुहोस् कि पूरापाठ फाँटहरूमा तपाई "
-"वाइल्डकार्ड क्यारेक्टरहरू प्रयोग गर्न सक्नुहुन्छ जस्तै *। उदाहरणको लागि, तिनीहरूको नाममा "
-"जोनसँगै हरेकलाई खोजी गर्न, <em>*जोन*</em> प्रयोग गर्नुहोस्।"
+"व्यक्तिहरूका लागि यहाँ खोजी गर्नुहोस्। याद गर्नुहोस् कि पूरापाठ फाँटहरूमा तपाईँ वाइल्डकार्ड "
+"क्यारेक्टरहरू प्रयोग गर्न सक्नुहुन्छ जस्तै *। उदाहरणको लागि, तिनीहरूको नाममा जोनसँगै हरेकलाई "
+"खोजी गर्न, <em>*जोन*</em> प्रयोग गर्नुहोस्।"
 
 #: /src/schooltool/demographics/browser/search.pt:42
 msgid "There were no results."
@@ -4290,8 +4365,9 @@ msgid "Recipient address"
 msgstr "पाउनेको ठेगाना"
 
 #: /src/schooltool/email/interfaces.py:58
+#, fuzzy
 msgid "Status"
-msgstr ""
+msgstr "राज्य"
 
 #: /src/schooltool/email/interfaces.py:59
 msgid "Code for the status of the message"
@@ -4538,7 +4614,7 @@ msgstr "XLS फाईल"
 
 #: /src/schooltool/group/browser/configure.zcml:25
 msgid "Add a Group"
-msgstr "समूह थप्नुहोस"
+msgstr "समूह थप्नुहोस्"
 
 #: /src/schooltool/group/browser/configure.zcml:38
 msgid "Edit Group Information"
@@ -4571,8 +4647,8 @@ msgid ""
 "strong> include an optional group description. Any extra information will be "
 "discarded."
 msgstr ""
-"CSV डाटाले <strong>अनिवार्य</strong> समूह शीर्षक समावेश गर्नुपर्छ र <strong>सम्भव:</"
-"strong> वैकल्पिक समूह वर्णन समावेश गरेको हुनुपर्दछ । अरू कुनै सूचना छोडिनेछ।"
+"CSV डाटामा <strong>अनिवार्य</strong> समूह शीर्षक समावेश गर्नुपर्छ र <strong>सम्भवत</"
+"strong> वैकल्पिक समूह वर्णन समावेश भएको हुन सक्दछ । अरू सूचना छोडिनेछ।"
 
 #. Default: "LUG, Linux Users Group Chess Club Sports Club, After-school sports club, <em>text after a second comma</em>"
 #: /src/schooltool/group/browser/group-csvimport.pt:31
@@ -4598,7 +4674,7 @@ msgid ""
 "text on the third group will be ignored."
 msgstr ""
 "माथिको उदाहरणले ३ वटा समूहहरू सिर्जना गर्दछ 'LUG', 'चेस क्लब' र 'खेलकूद क्लब'। पहिलो र "
-"अन्तिम समूहसँग 'लीनक्स प्रयोगकर्ता समूहहरू' र 'स्कूल-पछिको खेलकूद क्लबहरू' क्रमश: वर्णन "
+"अन्तिम समूहसँग क्रमश: 'लीनक्स प्रयोगकर्ता समूहहरू' र 'स्कूल-पछिको खेलकूद क्लबहरू' वर्णन "
 "हुन्छन्। 'चेस क्लब' समूहसँग कुनै वर्णन हुँदैन, र अन्य तेस्रो समूहमा \\\"दोस्रो अल्पविराम पछिको "
 "पाठ\\\" चाँहि रद्द गरिन्छ।"
 
@@ -4620,7 +4696,7 @@ msgstr "सदस्यहरू सम्पादन गर्नुहोस�
 
 #: /src/schooltool/group/browser/group.py:73
 msgid "Group index"
-msgstr "समुहको अनुक्रमणिका"
+msgstr "समूहको अनुक्रमणिका"
 
 #. Default: ""
 #: /src/schooltool/group/browser/group.py:83
@@ -4654,7 +4730,7 @@ msgstr "यो ब्यक्तिको सदस्यता मिलाऊ
 
 #: /src/schooltool/group/browser/groupsviewlet.pt:22
 msgid "edit groups"
-msgstr "समुह सम्पादन गर्नुहोस्"
+msgstr "समूह सम्पादन गर्नुहोस्"
 
 #: /src/schooltool/group/help/group_container.pt:8
 msgid ""
@@ -4737,8 +4813,9 @@ msgid "Add a level"
 msgstr ""
 
 #: /src/schooltool/level/interfaces.py:37
+#, fuzzy
 msgid "Title of the level."
-msgstr ""
+msgstr "टिप्पणीको शीर्षक।"
 
 #: /src/schooltool/level/security.zcml:7
 msgid "The teaching levels (student learning years)."
@@ -4868,7 +4945,7 @@ msgstr "पासवर्ड सम्पादन गर्नुहोस्"
 
 #: /src/schooltool/person/browser/person.py:174
 msgid "No new password was supplied so original password is unchanged"
-msgstr "कुनै नयाँ पासवर्ड प्रदान गरिएन त्यसैले मौलिक पासवर्ड परिवर्तन गरिएन"
+msgstr "कुनै नयाँ पासवर्ड प्रदान गरिएन त्यसैले पुरानो पासवर्ड परिवर्तन गरिएन"
 
 #: /src/schooltool/person/browser/person.py:179
 msgid "Changed password"
@@ -4917,14 +4994,6 @@ msgstr "पासवर्ड मिलेन"
 msgid "Password was successfully changed!"
 msgstr "पासवर्ड सफलतापूर्वक बदलियो"
 
-#: /src/schooltool/person/browser/person.py:447
-msgid "Person index"
-msgstr "व्यक्ति सूची"
-
-#: /src/schooltool/person/browser/person_container_delete.pt:23
-msgid "Sorry, you may not delete your own user account."
-msgstr "माफ गर्नुहोला, तपाईं आफ्नै खाता मेटाउन सक्नुहुन्न।"
-
 #: /src/schooltool/person/browser/person_edit.pt:4
 msgid "Edit person"
 msgstr "व्यक्ति सम्पादन"
@@ -4939,7 +5008,7 @@ msgstr "सबै समूहहरु"
 
 #: /src/schooltool/person/browser/person_preferences.pt:4
 msgid "Edit person preferences"
-msgstr "ब्यक्ति प्राथमिकताहरू सम्पादन गर्नुहोस्"
+msgstr "व्यक्ति प्राथमिकताहरू सम्पादन गर्नुहोस्"
 
 #: /src/schooltool/person/browser/person_preferences.pt:20
 msgid "Change preferences for ${user}"
@@ -5003,7 +5072,7 @@ msgstr "हप्ताको सुरु हुने दिन:"
 
 #: /src/schooltool/person/interfaces.py:177
 msgid "Start display of weeks on Sunday or Monday"
-msgstr "हप्ताको प्रदर्शन आइतबार र सोमबार सुरु गर्नुहोस्"
+msgstr "हप्ताको प्रदर्शन आइतबार वा सोमबार बाट सुरु गर्नुहोस्"
 
 #: /src/schooltool/person/interfaces.py:191
 msgid "Show periods"
@@ -5082,33 +5151,14 @@ msgstr "सबैजना, यदि भित्तेपात्रोला
 msgid "Relationships"
 msgstr "सम्बन्धहरु"
 
-#: /src/schooltool/resource/browser/configure.zcml:71
-msgid "Add a Resource"
-msgstr "संशाधन थप्नुहोस"
+#: /src/schooltool/resource/browser/configure.zcml:96
+msgid "Resource Demographics"
+msgstr ""
 
-#: /src/schooltool/resource/browser/configure.zcml:84
-msgid "Edit Resource Information"
-msgstr "संशाधनको जानकारि सम्पादन"
-
-#: /src/schooltool/resource/browser/configure.zcml:99
-msgid "Add a Location"
-msgstr "ठाउँ थप्नुहोस्"
-
-#: /src/schooltool/resource/browser/configure.zcml:115
-msgid "Edit Location Information"
-msgstr "ठाउँको बारेमा सुचना सम्पादन गर्नुहोस्"
-
-#: /src/schooltool/resource/browser/configure.zcml:133
-msgid "Add an Equipment"
-msgstr "सामग्री थप्नुहोस्"
-
-#: /src/schooltool/resource/browser/configure.zcml:151
-msgid "Edit Equipment Information"
-msgstr "सामग्रीको बारेमा सूचना सम्पादन गर्नुहोस्"
-
-#: /src/schooltool/resource/browser/configure.zcml:190
-msgid "New Resource"
-msgstr "नयाँ संशाधन"
+#: /src/schooltool/resource/browser/configure.zcml:143
+#: /src/schooltool/resource/browser/resource-csvimport.pt:21
+msgid "Import Resources"
+msgstr "संशाधनहरू आयात गर्नुहोस्"
 
 #: /src/schooltool/resource/browser/configure.zcml:197
 msgid "New Location"
@@ -5118,10 +5168,9 @@ msgstr "नयाँ ठाउँ"
 msgid "New Equipment"
 msgstr "नयाँ सामग्री"
 
-#: /src/schooltool/resource/browser/configure.zcml:232
-#: /src/schooltool/resource/browser/resource-csvimport.pt:21
-msgid "Import Resources"
-msgstr "संशाधनहरू आयात गर्नुहोस्"
+#: /src/schooltool/resource/browser/configure.zcml:286
+msgid "New Resource"
+msgstr "नयाँ संशाधन"
 
 #: /src/schooltool/resource/browser/resource-csvimport.pt:4
 msgid "Upload schooltool resources as CSV"
@@ -5157,6 +5206,58 @@ msgstr ""
 #: /src/schooltool/resource/browser/resource.py:56
 msgid "Resource index"
 msgstr "संशाधन अनुक्रमणिका"
+
+#: /src/schooltool/resource/browser/resource.py:327
+msgid "Resource Demographics Container"
+msgstr ""
+
+#: /src/schooltool/resource/browser/resource.py:512
+msgid "Resource identification"
+msgstr ""
+
+#: /src/schooltool/resource/browser/resource.py:514
+msgid "Resource demographics"
+msgstr ""
+
+#: /src/schooltool/resource/browser/resource.py:522
+msgid "Add new resource"
+msgstr ""
+
+#: /src/schooltool/resource/browser/resource.py:528
+msgid "Edit resource"
+msgstr ""
+
+#: /src/schooltool/resource/browser/resource.py:536
+msgid "Location identification"
+msgstr ""
+
+#: /src/schooltool/resource/browser/resource.py:538
+msgid "Location demographics"
+msgstr ""
+
+#: /src/schooltool/resource/browser/resource.py:548
+msgid "Add new location"
+msgstr ""
+
+#: /src/schooltool/resource/browser/resource.py:554
+msgid "Edit location"
+msgstr ""
+
+#: /src/schooltool/resource/browser/resource.py:562
+msgid "Equipment identification"
+msgstr ""
+
+#: /src/schooltool/resource/browser/resource.py:564
+msgid "Equipment demographics"
+msgstr ""
+
+#: /src/schooltool/resource/browser/resource.py:574
+msgid "Add new equipment"
+msgstr ""
+
+#: /src/schooltool/resource/browser/resource.py:580
+msgid "Edit equipment"
+msgstr ""
 
 #: /src/schooltool/resource/help/resource_help.pt:6
 msgid "Resource Help"
@@ -5270,6 +5371,12 @@ msgstr ""
 msgid "Resource"
 msgstr "संशाधन"
 
+#: /src/schooltool/resource/resource.py:206
+#: /src/schooltool/resource/resource.py:232
+#: /src/schooltool/resource/types.py:93
+msgid "Equipment"
+msgstr "सामग्री"
+
 #: /src/schooltool/resource/security.zcml:7
 msgid "Only school administration can view the list of resources."
 msgstr ""
@@ -5332,10 +5439,6 @@ msgstr "आरक्षण भित्तेपात्रो हेर्न�
 #: /src/schooltool/resource/security.zcml:93
 msgid "Schedule reservation via calendar"
 msgstr "भित्तेपात्रोद्वारा आरक्षण अनुसूची गर्नुहोस्"
-
-#: /src/schooltool/resource/types.py:93
-msgid "Equipment"
-msgstr "सामग्री"
 
 #: /src/schooltool/resource/types.py:107
 msgid "Type"
@@ -5434,7 +5537,7 @@ msgstr "${term_title} (${start_date} &mड्यास; ${end_date})"
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear.pt:49
 msgid "Add a new term"
-msgstr "नयाँ सर्त थप्नुहोस्"
+msgstr "नयाँ अवधि थप्नुहोस्"
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_add.pt:35
 msgid "Copy data from active school year: ${active_schoolyear}"
@@ -5463,7 +5566,7 @@ msgstr ""
 #: /src/schooltool/schoolyear/browser/templates/term-delete.pt:10
 #: /src/schooltool/term/browser/templates/term-container-delete.pt:10
 msgid "Are you sure you want to delete the selected terms?"
-msgstr "के तपाइ चयन गरियका सर्तहरु मेटाउन चाहानुहुन्छ ?"
+msgstr "के तपाइ चयन गरियका अवधिहरु मेटाउन चाहानुहुन्छ ?"
 
 #: /src/schooltool/schoolyear/interfaces.py:44
 msgid "The first day of the period of time covered."
@@ -5498,7 +5601,7 @@ msgstr "विद्दालय प्रशासन"
 
 #: /src/schooltool/securitypolicy/browser/templates/access_setting_snippet.pt:2
 msgid "Access setting"
-msgstr ""
+msgstr "पहुँच सेटिङ"
 
 #: /src/schooltool/securitypolicy/browser/templates/security_descriptions.pt:4
 msgid "Access Rights"
@@ -5510,7 +5613,7 @@ msgstr ""
 
 #: /src/schooltool/securitypolicy/browser/templates/security_descriptions.pt:57
 msgid "Legend"
-msgstr ""
+msgstr "लिजेन्ड"
 
 #: /src/schooltool/securitypolicy/crowds.py:199
 msgid "Everybody"
@@ -5556,9 +5659,9 @@ msgid ""
 "have any valuable data in this SchoolTool instance or don't already "
 "understand what this is for."
 msgstr ""
-"चेतावनी: कार्यबिवरणले यो सर्भरको फाइलप्रणालीमा स्थापना गरिएको स्क्रिप्टहरुबाट सिर्जना "
+"चेतावनी: अधि बढ्नाले यो सर्भरको फाइलप्रणालीमा स्थापना गरिएको स्क्रिप्टहरुबाट सिर्जना "
 "गरिएको डाटासँगै डाटाबेसलाई राख्नेछ ।यदि तपाईँसँग यो स्कूलउपकरण दृष्टान्तमा कुनै महत्वपूर्ण "
-"डाटा छ भने यसलाई नगर्नुहोस् वा यो के को लागि हो पहिल्यै नबुझ्नुहोस् ।"
+"डाटा छ अथवा यो केका लागि हो नबुझ्नुभएको भए यो नगर्नुहोस्।"
 
 #: /src/schooltool/skin/breadcrumbs.py:76
 msgid "top"
@@ -5590,7 +5693,7 @@ msgstr "ट्रेसब्याक"
 
 #: /src/schooltool/skin/templates/generic_macros.pt:12
 msgid "Server Running SchoolTool"
-msgstr "सर्भर सँचालित स्कुलटुल"
+msgstr "स्कुलटुल संचालित सर्भर"
 
 #: /src/schooltool/skin/templates/notfound.pt:3
 #: /src/schooltool/skin/templates/notfound.pt:11
@@ -5607,7 +5710,7 @@ msgstr "कृपया तलको टिप्पणी गर्नुहो
 
 #: /src/schooltool/skin/templates/notfound.pt:21
 msgid "You might have misspelled the url"
-msgstr "तपाईले सायद युआरएल अशुद्व हिज्जे गर्नुभयो"
+msgstr "सायद युआरएल मिलेन"
 
 #: /src/schooltool/skin/templates/notfound.pt:22
 msgid "You might be trying to access a non-existing page"
@@ -5633,11 +5736,7 @@ msgstr "लग आउट"
 msgid "free administration software for"
 msgstr "निर्वाध प्रशासकीय सफ्टवेयर"
 
-#: /src/schooltool/skin/templates/view_macros.pt:114
-msgid "Report a bug on Launchpad."
-msgstr "प्रक्षेपणडबली मा त्रुटी रिपोर्ट गर्नुहोस्।"
-
-#: /src/schooltool/skin/templates/view_macros.pt:127
+#: /src/schooltool/skin/templates/view_macros.pt:124
 msgid ""
 "&copy; The <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth "
 "Foundation</a> 2003 - 2011: Supporting Social Innovation."
@@ -5666,8 +5765,9 @@ msgstr "अपडेट-बटन"
 #. Default: "Apply"
 #: /src/schooltool/skin/templates/view_macros.pt:161
 #: /src/schooltool/skin/templates/view_macros.pt:167
+#, fuzzy
 msgid "apply-button"
-msgstr ""
+msgstr "प्रतिलिपि बटन"
 
 #. Default: "Add"
 #: /src/schooltool/skin/templates/view_macros.pt:174
@@ -5757,7 +5857,7 @@ msgstr ""
 
 #: /src/schooltool/term/browser/emergency.py:92
 msgid "The date you entered does not belong to this term."
-msgstr "तपाईंले प्रविष्ट गर्नुभएको मिति यो सर्तमा पर्दैन।"
+msgstr "तपाईंले प्रविष्ट गर्नुभएको मिति यो अवधिमा पर्दैन।"
 
 #: /src/schooltool/term/browser/emergency.py:96
 msgid "The date you entered is not a schoolday."
@@ -5793,6 +5893,9 @@ msgid ""
 "replacement day. The selection below consists of non-schooldays in this term "
 "following the emergency day and several days after the term."
 msgstr ""
+"तपाईंले ${date} लाई इमर्जेन्सी दिनमा चयन गर्नुभयो। अब कृपया प्रतिस्थापन दिन चयन "
+"गर्नुहोस्। तलको चयनले नन-स्कूलडेहरू यो नियममा समावेश गर्दछ जुन इमर्जेन्सी दिन र नियम पछिको "
+"विभिन्न दिनहरूलाई अनुगमन गर्दछ।"
 
 #: /src/schooltool/term/browser/templates/emergency2.pt:27
 msgid "Please enter the replacement date below."
@@ -5813,8 +5916,8 @@ msgid ""
 "This form allows you to mark a date as an emergency non-schoolday and add a "
 "replacement day to the term."
 msgstr ""
-"यो फारमले तपाईलाई इमर्जेन्सी नन-स्कूलडे चिनो लगाउन अनुमति दिन्छ र सर्तमा प्रतिस्थापन दिन "
-"थप्नुहोस्।"
+"यो फारमले तपाईँलाई इमर्जेन्सी गैर-विद्यालय दिन चिनो लगाउन अनुमति दिन्छ र अवधिमा "
+"प्रतिस्थापन दिन थप्नुहोस्।"
 
 #: /src/schooltool/term/browser/templates/emergency_select.pt:23
 msgid "Please enter the emergency date below."
@@ -5828,7 +5931,7 @@ msgstr "लिजेन्ड:"
 #: /src/schooltool/term/browser/templates/term.pt:13
 #: /src/schooltool/term/browser/templates/term_add.pt:42
 msgid "Schoolday"
-msgstr "स्कूलडे"
+msgstr "विद्यालय भएको दिन"
 
 #: /src/schooltool/term/browser/templates/term.pt:14
 #: /src/schooltool/term/browser/templates/term_add.pt:43
@@ -5877,7 +5980,7 @@ msgstr "ताजा पार्नुहोस्"
 
 #: /src/schooltool/term/browser/term.py:163
 msgid "Add term"
-msgstr "सर्त थप्नुहोस्"
+msgstr "अवधि थप्नुहोस्"
 
 #: /src/schooltool/term/browser/term.py:237
 msgid "Save changes"
@@ -5976,7 +6079,7 @@ msgstr "अवैध मिति। कृपया वर्ष-महिन�
 
 #: /src/schooltool/timetable/browser/__init__.py:914
 msgid "The date does not belong to any term."
-msgstr "कुनै सर्तसँग पनि मिति मिल्दैन।"
+msgstr "कुनै अवधिसँग पनि मिति मिल्दैन।"
 
 #: /src/schooltool/timetable/browser/__init__.py:923
 msgid "Some values were invalid.  They are highlighted in red."
@@ -6005,7 +6108,7 @@ msgstr "धटनाको सूचना परिवर्तन"
 #. Default: ""
 #: /src/schooltool/timetable/browser/schema.py:94
 msgid "Timetable schema ${schema}"
-msgstr "समयतालिका रुपरेखा $ {schema }"
+msgstr "समयतालिका रुपरेखा ${schema}"
 
 #: /src/schooltool/timetable/browser/schema.py:175
 msgid "Please use HH:MM format for period start and end times"
@@ -6027,7 +6130,7 @@ msgstr "कृपया मान चयन गर्नुहोस्"
 #: /src/schooltool/timetable/browser/schema.py:343
 #: /src/schooltool/timetable/browser/schema.py:350
 msgid "Day ${number}"
-msgstr "दिन $ { number }"
+msgstr "दिन ${number}"
 
 #: /src/schooltool/timetable/browser/schema.py:373
 msgid "Period 1"
@@ -6102,8 +6205,8 @@ msgid ""
 "Timetable day always coincides with the day of week (i.e. on Mondays the "
 "first timetable day is used, on Tuesdays the second, and so on)."
 msgstr ""
-"समयतालिका दिन जहिले पनि हप्ताको दिन अनुरुप हुन्छ (त्यो हो सोमबारमा पहिलो समयतालिका "
-"दिन प्रयोग गरिन्छ, मङ्गलबारमा दोस्रो, र लगातार)।"
+"समयतालिका दिन जहिले पनि हप्ताको दिन अनुरुप हुन्छ (त्यो हो आइतबार पहिलो समयतालिका "
+"दिन प्रयोग गरिन्छ, सोमबार दोस्रो, र लगातार)।"
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:129
 msgid ""
@@ -6123,18 +6226,18 @@ msgid ""
 "that day of week. If the list of periods is not up to date with the changes "
 "you made in the table above, use the Update button to refresh the form."
 msgstr ""
-"तेस्रो, तिनीहरू हप्ताको निश्चित दिनहरुमा झर्दा अवधिहरुको समय र अवधि परिभाषित गर्नुहोस् "
-"। निम्न ढाँचा मध्य एउटा प्रयोग गर्नुहोस्: <tt>धण्टा:मिनेट</tt> (तल पाठ बाकसमा अवधि "
-"निर्दिष्ट गर्नु पनि नबिर्सिनुहोस्) वा <tt>धण्टा:मिनेट</tt> (जब तपाईँ दुवै समाप्ति "
-"बिन्दुहरूको अभिव्यक्ति निर्दिष्ट गर्न चाहनुहुन्छ, e.g., ९:३०-१०:१५) ।हप्ताको सबै दिनहरुका "
-"लागि सबै अवधिहरू परिभाषित गर्न जरुरी छैन, यदि त्यो हप्ताको दिनमा झर्ने भयो भने भुलहरू "
-"त्यो अवधिमा फडकाइनेछ । यदि अवधिहरुको सूची परिवर्तनहरूसँग मिल्दो छैन भने तपाईँ माथि "
-"टेबुलमा बनाउनुहोस्, फारामलाई ताजा गर्न अद्यावधिक बटन प्रयोग गर्नुहोस् ।"
+"तेस्रो, तिनीहरू हप्ताको निश्चित दिनहरुमा पर्ने समय र अवधि परिभाषित गर्नुहोस् । निम्न "
+"ढाँचा मध्य एउटा प्रयोग गर्नुहोस्: <tt>धण्टा:मिनेट</tt> (तल पाठ बाकसमा अवधि निर्दिष्ट "
+"गर्नु पनि नबिर्सिनुहोस्) वा <tt>धण्टा:मिनेट</tt> (जब तपाईँ दुवै समाप्ति बिन्दुहरूको "
+"अभिव्यक्ति निर्दिष्ट गर्न चाहनुहुन्छ, e.g., ९:३०-१०:१५) ।हप्ताको सबै दिनहरुका लागि सबै "
+"अवधिहरू परिभाषित गर्न जरुरी छैन, यदि त्यो हप्ताको दिनमा झर्ने भयो भने भुलहरू त्यो अवधिमा "
+"फडकाइनेछ । यदि अवधिहरुको सूची परिवर्तनहरूसँग मिल्दो छैन भने तपाईँ माथि टेबुलमा बनाउनुहोस्, "
+"फारामलाई ताजा गर्न अद्यावधिक बटन प्रयोग गर्नुहोस् ।"
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:175
 msgid ""
 "Certain period specifications were incorrect, and therefore were discarded."
-msgstr "निश्चित अवधिको विशेष वर्णनहरू गलत छन्, र त्यसैले छोडियो।"
+msgstr "केहि अवधिको वर्णन गलत थिए, र त्यसैले छोडियो।"
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:191
 msgid ""
@@ -6154,11 +6257,11 @@ msgstr "क्याल"
 
 #: /src/schooltool/timetable/browser/templates/calendar_overlay.pt:14
 msgid "Personal calendar"
-msgstr "ब्यक्तिगत भित्तेपात्रो"
+msgstr "व्यक्तिगत भित्तेपात्रो"
 
 #: /src/schooltool/timetable/browser/templates/calendar_overlay.pt:17
 msgid "TT"
-msgstr "टि टि"
+msgstr "टिटि"
 
 #: /src/schooltool/timetable/browser/templates/calendar_overlay.pt:17
 msgid "Timetable calendar"
@@ -6203,7 +6306,7 @@ msgstr "समयतालिका"
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:24
 msgid "Term"
-msgstr "सर्त"
+msgstr "अवधि"
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:34
 msgid "Schema"
@@ -6243,7 +6346,7 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/schooltt-delete.pt:10
 msgid "Are you sure you want to delete the selected school timetables?"
-msgstr "के तपाइ छनैाट गरिएको स्कुल समय तालिका मेटाउन चाहानु हुन्छ ?"
+msgstr "के तपाइ छनौट गरिएको स्कुल समय तालिका मेटाउन चाहानुहुन्छ ?"
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-add.pt:4
 #: /src/schooltool/timetable/browser/templates/section-timetable-add.pt:12
@@ -6313,7 +6416,7 @@ msgid ""
 "schema creation wizard</a>, or a <a href=\"complexadd.html\">complex "
 "timetable schema set up form</a>."
 msgstr ""
-"यदि तपाईं बढि लचकता चाहनुहुन्छ भने, तपाई <a href=\\\"add.html\\\"> समयतालिका "
+"यदि तपाईं बढि लचकता चाहनुहुन्छ भने, तपाईँ <a href=\\\"add.html\\\"> समयतालिका "
 "रुपरेखा सिर्जना विजार्ड</a>, वा <a href=\\\"complexadd.html\\\"> जटिल समयतालिका "
 "रुपरेखा सेट अप फारम</a> प्रयोग गर्न सक्नुहुन्छ"
 
@@ -6393,7 +6496,7 @@ msgstr "के तपाई छानिएका समय तालिका �
 
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:35
 msgid "Using timetable: ${schema_titles}"
-msgstr ""
+msgstr "समयतालिका प्रयोग गर्दै: ${schema_titles}"
 
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:97
 msgid "Apply from:"
@@ -6415,7 +6518,7 @@ msgstr "चयन गरिएको छैन"
 #. Default: "Change"
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:60
 msgid "change-button"
-msgstr "परिवर्तन -बटन"
+msgstr "परिवर्तन"
 
 #: /src/schooltool/timetable/browser/templates/timetable_list.pt:4
 #: /src/schooltool/timetable/browser/templates/timetable_list.pt:11
@@ -6437,7 +6540,7 @@ msgstr ""
 msgid ""
 "Does your school's timetable cycle use days of the week, or a rotating cycle?"
 msgstr ""
-"के तपाईंको स्कूलको समयतालिका चक्र हप्ताको दिनहरू प्रयोग गर्दछ, वा चक्र परिक्रमा गर्दछ?"
+"के तपाईंको स्कूलको समयतालिका-चक्र हप्ताको दिनहरू प्रयोग गर्दछ, वा चक्र-परिक्रमा गर्दछ?"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:262
 msgid "Days of the week"
@@ -6457,7 +6560,7 @@ msgstr "कृपया कम्तिमा एक दिन नाम प्�
 
 #: /src/schooltool/timetable/browser/ttwizard.py:304
 msgid "Please make sure the day names are unique."
-msgstr "कृपया निश्चय गर्नुहोस् कि दिन नामहरू अनौठो छन्।"
+msgstr "कृपया निश्चय गर्नुहोस् कि दिन नामहरू फरक फरक छन्।"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:320
 msgid ""
@@ -6572,13 +6675,13 @@ msgstr "कृपया प्रत्येक दिनको लागि �
 #. Default: ""
 #: /src/schooltool/timetable/browser/ttwizard.py:712
 msgid "$period on day $day"
-msgstr "$period दिनमा $day"
+msgstr "$day दिनको $period"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:733
 msgid ""
 "Do you check student attendance for the day in a homeroom period or "
 "equivalent?"
-msgstr "के तपाईंले विद्यार्थीको हाजिरी दिनको लागि गृहकोठा अवधि वा समानमा जाँच गर्नुभयो?"
+msgstr "के तपाईँले उक्त दिनका लागि गृहकोठा वा समक्षमा विद्यार्थीको हाजिरी जाँच गर्नुहुन्छ ?"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:736
 msgid "Yes"
@@ -6607,3 +6710,220 @@ msgstr "तालिका बदल्नुहोस्"
 #: /src/schooltool/widget/password.py:55
 msgid "Supplied passwords are not identical"
 msgstr "प्रदान गरिएको पासवर्ड पहिचानयोग्य छैन"
+
+#~ msgid "Booked resources: %s"
+#~ msgstr "बुक गरिएका संसाधन: %s"
+
+#~ msgid "Location: %s"
+#~ msgstr "स्थान : %s"
+
+#~ msgid "Calendar for %s"
+#~ msgstr "भित्तेपात्राे %s"
+
+#~ msgid "No such course."
+#~ msgstr "त्यस्तो पाठ्यक्रम हैन।"
+
+#~ msgid "Need a course ID."
+#~ msgstr "पाठ्यक्रम आई डी आवश्यक छ।"
+
+#~ msgid "Categories"
+#~ msgstr "कोटिहरू"
+
+#~ msgid "New Category"
+#~ msgstr "नयाँ कोटि"
+
+#~ msgid "Essay"
+#~ msgstr "निबन्ध"
+
+#~ msgid "Exam"
+#~ msgstr "परिक्षा"
+
+#~ msgid "Lab"
+#~ msgstr "ल्याब"
+
+#~ msgid "Average"
+#~ msgstr "औसत"
+
+#~ msgid "The grade $value for activity $name is not valid."
+#~ msgstr "क्रियाकलाप $name को लागि ग्रेड $value अवैध छ।"
+
+#~ msgid "Project"
+#~ msgstr "परियोजना"
+
+#~ msgid "Category"
+#~ msgstr "कोटि"
+
+#~ msgid "The activity category"
+#~ msgstr "क्रियाकलाप कोटि"
+
+#~ msgid "Add a Section"
+#~ msgstr "नयाँ पाठ्यक्रम थप्नुहोस्"
+
+#~ msgid "book resources"
+#~ msgstr "बुक गरिएका संसाधन:"
+
+#~ msgid "Change the resources for this section."
+#~ msgstr "यो सेक्सनको सँशाधनहरु परिवर्तन गर्नुहोस"
+
+#~ msgid "Everyone can view section information and calendars"
+#~ msgstr "सबैले सेक्सनको  सूचना र भित्तेपात्रोहरु हेर्न  सक्छन"
+
+#~ msgid "Everyone can view group calendars."
+#~ msgstr "सबैले समूहको भित्तेपात्रोहरु हेर्न  सक्छन ।"
+
+#~ msgid "Persons can set their own preferences"
+#~ msgstr "ब्यक्तिहरुले तिनिहरुको आफ्नो प्राथमिकिकरणहरु सेट गर्न सक्छन"
+
+#~ msgid "Persons can change their own passwords"
+#~ msgstr "ब्यक्तिहरुले तिनिहरुको आफ्नो पासवर्डहरु परिवर्तन गर्न सक्छन"
+
+#~ msgid "Everyone can view the application calendar."
+#~ msgstr "सबैले एप्लिकेसन भित्तेपात्रो हेर्न  सक्छन"
+
+#~ msgid "Everyone can view group lists."
+#~ msgstr "सबैले  समूहको सूचीहरु हेर्न  सक्छन ।"
+
+#~ msgid "Everyone can view group information."
+#~ msgstr "सबैले समूहको जानकारी हेर्न सक्छन"
+
+#~ msgid "Group members can edit group calendars."
+#~ msgstr "समूहका सदस्यहरु ले समूहको भित्तेपात्रोहरु परिमार्जन गर्न सक्छन"
+
+#~ msgid "Everyone can view the list of persons"
+#~ msgstr "सबैले व्यक्तिहरुको सूची हेर्न सक्छन्"
+
+#~ msgid "Everyone can view info of persons"
+#~ msgstr "सबैले व्यक्तिहरुको जानकारी हेर्नसक्छन्"
+
+#~ msgid "Add a Resource"
+#~ msgstr "संशाधन थप्नुहोस्"
+
+#~ msgid "Everyone can view resource lists."
+#~ msgstr "सबैले शंसाधनहरुको सूचीहरु  हेर्न सक्छन"
+
+#~ msgid "Everyone can view resource information."
+#~ msgstr "सबैले शंसाधनहरुको जानकारी  हेर्न सक्छन्"
+
+#~ msgid "Everyone can view resource calendars."
+#~ msgstr "सबैले शंसाधनको भित्तेपात्रोहरु  हेर्न सक्छन्"
+
+#~ msgid "Copy Sections"
+#~ msgstr "सेक्सनको प्रतिलिपि बनाउनुहोस्"
+
+#~ msgid "View Next"
+#~ msgstr "पछाडिको हेर्नुहोस्"
+
+#~ msgid "View Previous"
+#~ msgstr "अगाडीको हेर्नुहोस्"
+
+#~ msgid "Add a Location"
+#~ msgstr "ठाउँ थप्नुहोस्"
+
+#~ msgid "Edit Location Information"
+#~ msgstr "ठाउँको बारेमा सुचना सम्पादन गर्नुहोस्"
+
+#~ msgid "Add an Equipment"
+#~ msgstr "सामग्री थप्नुहोस्"
+
+#~ msgid "Edit Equipment Information"
+#~ msgstr "सामग्रीको बारेमा सूचना सम्पादन गर्नुहोस्"
+
+#~ msgid "Activate next school year"
+#~ msgstr "पछिल्लो विद्दालय वर्षलाई सक्रिय बनाउनुहोस्"
+
+#~ msgid "For term:"
+#~ msgstr "अवधिको लागि"
+
+#~ msgid "Hide"
+#~ msgstr "लुकाउनुहोस्"
+
+#~ msgid "Export XLS"
+#~ msgstr "XLS निर्यात गर्नुहोस्"
+
+#~ msgid "Preferences"
+#~ msgstr "वरीयता"
+
+#~ msgid "Download PDF"
+#~ msgstr "PDF डाउनलोड गर्नुहोस्"
+
+#~ msgid "Reports"
+#~ msgstr "रिपोर्टहरु"
+
+#~ msgid "Template"
+#~ msgstr "टेम्प्लेट"
+
+#~ msgid "Term:"
+#~ msgstr "अवधि"
+
+#~ msgid "Section:"
+#~ msgstr "सेक्सन"
+
+#~ msgid "Classes you teach"
+#~ msgstr "तपाईले पढाउने कक्षाहरु"
+
+#~ msgid "Classes you attend"
+#~ msgstr "तपाई उपस्थीत हुने कक्षा"
+
+#~ msgid "No Current Term"
+#~ msgstr "कुनै हालको अवधि छैन"
+
+#~ msgid ""
+#~ "The operation you attempted cannot be completed because there are "
+#~ "currently no terms set up in your SchoolTool instance. Please have a user "
+#~ "with administration access set up at least one term and try the operation "
+#~ "again."
+#~ msgstr ""
+#~ "तपाईले प्रयत्न गर्नुभएको कार्य पुरा हुन सकेन किनभने हालमा तपाईको स्कुल टुल उदाहरणमा कुनै "
+#~ "पनि शब्द स्थापित भएको छैन। कृपया प्रशासनको उपयोग गर्न सक्ने प्रयोगकर्ता राख्नुहोस् "
+#~ "कम्तिमा पनि एउटा शब्द स्थापित गर्नुहोस् र कार्य पुन: प्रयास गर्नुहोस्।"
+
+#~ msgid "Student"
+#~ msgstr "विद्यार्थी"
+
+#~ msgid "Dates"
+#~ msgstr "मिति"
+
+#~ msgid "User Id"
+#~ msgstr "प्रयोगकर्ताको आइडि"
+
+#~ msgid "Teacher(s)"
+#~ msgstr "शिक्षक(हरु)"
+
+#~ msgid "Teacher"
+#~ msgstr "शिक्षक"
+
+#~ msgid "Download"
+#~ msgstr "डाउनलोड"
+
+#~ msgid "Request Report"
+#~ msgstr "रिपोर्ट"
+
+#~ msgid "Student Reports"
+#~ msgstr "विद्यार्थीको रिपोर्ट"
+
+#~ msgid "Group Reports"
+#~ msgstr "समूह रिपोर्ट"
+
+#~ msgid "Term Reports"
+#~ msgstr "अवधि रिपोर्ट"
+
+#~ msgid "School Year Reports"
+#~ msgstr "विद्यालय वर्ष रिपोर्ट"
+
+#~ msgid "Section Reports"
+#~ msgstr "सेक्सनको रिपोर्ट"
+
+#~ msgid "You must specify a valid date within the school year."
+#~ msgstr "तपाईले विद्यालय वर्ष भित्र मान्य मिति उल्लेख गर्नुपर्छ।"
+
+#~ msgid "Term or Year"
+#~ msgstr "अवधि वा वर्ष"
+
+#~ msgid "Edit Templates"
+#~ msgstr "टेम्प्लेट्स सम्पादन गर्नुहोस्"
+
+#~ msgid "The Title field must not be empty."
+#~ msgstr "शीर्षक क्षेत्र खालि हुनु हुदैँन।"
+
+#~ msgid "Value field must contain a valid number."
+#~ msgstr "मान क्षेत्रमा मान्य अंक हुनै पर्दछ।"

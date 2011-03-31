@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-11-22 16:40+0200\n"
-"PO-Revision-Date: 2010-11-10 08:42+0000\n"
+"POT-Creation-Date: 2011-03-18 20:12+0200\n"
+"PO-Revision-Date: 2010-11-22 18:00+0000\n"
 "Last-Translator: Aniruddha Adhikary <Unknown>\n"
 "Language-Team: Bengali <bn@li.org>\n"
 "Language: bn\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-11-11 04:35+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-03-19 04:44+0000\n"
+"X-Generator: Launchpad (build 12559)\n"
 
 #: /src/schooltool/app/app.py:197
 msgid "Your School"
@@ -585,42 +585,7 @@ msgstr "ক্যালেন্ডার"
 msgid "Actions"
 msgstr "কার্যসমূহ"
 
-#: /src/schooltool/app/browser/configure.zcml:231
-#: /src/schooltool/app/browser/configure.zcml:512
-#: /src/schooltool/basicperson/browser/configure.zcml:13
-#: /src/schooltool/basicperson/browser/configure.zcml:201
-#: /src/schooltool/basicperson/browser/configure.zcml:208
-#: /src/schooltool/basicperson/browser/configure.zcml:215
-#: /src/schooltool/common/configure.zcml:88
-#: /src/schooltool/contact/browser/configure.zcml:6
-#: /src/schooltool/contact/browser/configure.zcml:31
-#: /src/schooltool/contact/browser/configure.zcml:100
-#: /src/schooltool/course/browser/configure.zcml:58
-#: /src/schooltool/course/browser/configure.zcml:69
-#: /src/schooltool/course/browser/configure.zcml:103
-#: /src/schooltool/course/browser/configure.zcml:143
-#: /src/schooltool/course/security.zcml:94
-#: /src/schooltool/course/security.zcml:128
-#: /src/schooltool/demographics/browser/configure.zcml:13
-#: /src/schooltool/group/browser/configure.zcml:16
-#: /src/schooltool/group/browser/configure.zcml:85
-#: /src/schooltool/group/security.zcml:76
-#: /src/schooltool/person/browser/configure.zcml:157
-#: /src/schooltool/person/browser/configure.zcml:199
-#: /src/schooltool/person/security.zcml:87
-#: /src/schooltool/resource/browser/configure.zcml:62
-#: /src/schooltool/schoolyear/browser/configure.zcml:101
-#: /src/schooltool/schoolyear/security.zcml:31
-#: /src/schooltool/term/browser/configure.zcml:14
-#: /src/schooltool/term/security.zcml:35
-#: /src/schooltool/timetable/browser/configure.zcml:52
-#: /src/schooltool/timetable/browser/configure.zcml:93
-#: /src/schooltool/timetable/browser/configure.zcml:111
-#: /src/schooltool/timetable/security.zcml:32
-msgid "View"
-msgstr "প্রদর্শন"
-
-#: /src/schooltool/app/browser/configure.zcml:317
+#: /src/schooltool/app/browser/configure.zcml:311
 msgid "View Calendar"
 msgstr "ক্যালেন্ডার দেখাও"
 
@@ -644,48 +609,7 @@ msgstr "নেতানেত্রীবৃন্দকে সম্পাদ�
 msgid "Change Site Preferences"
 msgstr "সাইট-এর পছন্দতালিকা বদলান"
 
-#: /src/schooltool/app/browser/configure.zcml:406
-msgid "Calendar (Daily)"
-msgstr "ক্যালেন্ডার (দৈনিক)"
-
-#: /src/schooltool/app/browser/configure.zcml:416
-msgid "Calendar (Daily, PDF)"
-msgstr "ক্যালেন্ডার (দৈনিক, পিডিএফ)"
-
-#: /src/schooltool/app/browser/configure.zcml:425
-msgid "Calendar (Weekly)"
-msgstr "ক্যালেন্ডার (সাপ্তাহিক)"
-
-#: /src/schooltool/app/browser/configure.zcml:435
-msgid "Calendar (Weekly, PDF)"
-msgstr "ক্যালেন্ডার (সাপ্তাহিক,পিডিএফ)"
-
-#: /src/schooltool/app/browser/configure.zcml:444
-msgid "Calendar (Monthly)"
-msgstr "ক্যালেন্ডার (মাসিক)"
-
-#: /src/schooltool/app/browser/configure.zcml:454
-msgid "Calendar (Monthly, PDF)"
-msgstr "ক্যালেন্ডার (মাসিক,পিডিএফ)"
-
-#: /src/schooltool/app/browser/configure.zcml:463
-#: /src/schooltool/timetable/browser/configure.zcml:219
-msgid "Calendar (Yearly)"
-msgstr "ক্যালেন্ডার (বাৎসরিক)"
-
-#: /src/schooltool/app/browser/configure.zcml:473
-msgid "Atom View"
-msgstr ""
-
-#: /src/schooltool/app/browser/configure.zcml:483
-msgid "iCalendar"
-msgstr "iক্যালেন্ডার"
-
-#: /src/schooltool/app/browser/configure.zcml:493
-msgid "Free/Busy"
-msgstr "মুক্ত/ব্যস্ত"
-
-#: /src/schooltool/app/browser/configure.zcml:522
+#: /src/schooltool/app/browser/configure.zcml:494
 #: /src/schooltool/app/help/configure.zcml:77
 #: /src/schooltool/app/help/event_add.pt:6
 #: /src/schooltool/app/help/event_add.pt:9
@@ -2312,10 +2236,33 @@ msgstr ""
 msgid "Change calendar"
 msgstr ""
 
-#: /src/schooltool/basicperson/browser/configure.zcml:22
-#: /src/schooltool/basicperson/browser/configure.zcml:180
-#: /src/schooltool/basicperson/browser/configure.zcml:187
-#: /src/schooltool/basicperson/browser/configure.zcml:194
+#: /src/schooltool/basicperson/browser/configure.zcml:14
+#: /src/schooltool/basicperson/browser/configure.zcml:216
+#: /src/schooltool/basicperson/browser/configure.zcml:223
+#: /src/schooltool/basicperson/browser/configure.zcml:230
+#: /src/schooltool/basicperson/browser/configure.zcml:237
+#: /src/schooltool/common/configure.zcml:88
+#: /src/schooltool/contact/browser/configure.zcml:6
+#: /src/schooltool/contact/browser/configure.zcml:31
+#: /src/schooltool/course/browser/configure.zcml:58
+#: /src/schooltool/course/browser/configure.zcml:69
+#: /src/schooltool/course/security.zcml:94
+#: /src/schooltool/course/security.zcml:128
+#: /src/schooltool/demographics/browser/configure.zcml:13
+#: /src/schooltool/group/security.zcml:76
+#: /src/schooltool/person/browser/configure.zcml:197
+#: /src/schooltool/person/security.zcml:87
+#: /src/schooltool/schoolyear/security.zcml:31
+#: /src/schooltool/term/security.zcml:35
+#: /src/schooltool/timetable/security.zcml:32
+msgid "View"
+msgstr "প্রদর্শন"
+
+#: /src/schooltool/basicperson/browser/configure.zcml:23
+#: /src/schooltool/basicperson/browser/configure.zcml:188
+#: /src/schooltool/basicperson/browser/configure.zcml:195
+#: /src/schooltool/basicperson/browser/configure.zcml:202
+#: /src/schooltool/basicperson/browser/configure.zcml:209
 #: /src/schooltool/contact/browser/configure.zcml:22
 #: /src/schooltool/contact/browser/configure.zcml:52
 #: /src/schooltool/demographics/browser/configure.zcml:22
@@ -2673,6 +2620,24 @@ msgstr ""
 
 #: /src/schooltool/basicperson/security.zcml:52
 msgid "Modify user's demographics information."
+msgstr ""
+
+#: /src/schooltool/basicperson/vocabularies.py:143
+#: /src/schooltool/course/browser/section.py:534
+#: /src/schooltool/course/browser/templates/copy_sections.pt:145
+#: /src/schooltool/course/browser/templates/course_container.pt:57
+#: /src/schooltool/course/browser/templates/link_section.pt:114
+#: /src/schooltool/course/browser/templates/section.pt:103
+#: /src/schooltool/course/browser/templates/section_container.pt:87
+msgid "Students"
+msgstr ""
+
+#: /src/schooltool/basicperson/vocabularies.py:144
+msgid "Teachers"
+msgstr ""
+
+#: /src/schooltool/basicperson/vocabularies.py:145
+msgid "Administrators"
 msgstr ""
 
 #: /src/schooltool/commendation/commendation_add.pt:4
@@ -3074,20 +3039,8 @@ msgstr ""
 msgid "New Course"
 msgstr ""
 
-#: /src/schooltool/course/browser/configure.zcml:113
-msgid "Copy Sections"
-msgstr ""
-
-#: /src/schooltool/course/browser/configure.zcml:123
-msgid "View Next"
-msgstr ""
-
-#: /src/schooltool/course/browser/configure.zcml:133
-msgid "View Previous"
-msgstr ""
-
+#: /src/schooltool/course/browser/configure.zcml:150
 #: /src/schooltool/course/browser/configure.zcml:160
-#: /src/schooltool/course/browser/configure.zcml:170
 msgid "New Section"
 msgstr ""
 
@@ -3177,15 +3130,6 @@ msgstr ""
 
 #: /src/schooltool/course/browser/section.py:520
 msgid "Available Instructors"
-msgstr ""
-
-#: /src/schooltool/course/browser/section.py:534
-#: /src/schooltool/course/browser/templates/copy_sections.pt:145
-#: /src/schooltool/course/browser/templates/course_container.pt:57
-#: /src/schooltool/course/browser/templates/link_section.pt:114
-#: /src/schooltool/course/browser/templates/section.pt:103
-#: /src/schooltool/course/browser/templates/section_container.pt:87
-msgid "Students"
 msgstr ""
 
 #: /src/schooltool/course/browser/section.py:535
@@ -5544,11 +5488,7 @@ msgstr ""
 msgid "free administration software for"
 msgstr ""
 
-#: /src/schooltool/skin/templates/view_macros.pt:115
-msgid "Report a bug on Launchpad."
-msgstr ""
-
-#: /src/schooltool/skin/templates/view_macros.pt:128
+#: /src/schooltool/skin/templates/view_macros.pt:124
 msgid ""
 "&copy; The <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth "
 "Foundation</a> 2003 - 2011: Supporting Social Innovation."
