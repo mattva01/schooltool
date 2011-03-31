@@ -29,9 +29,72 @@ from zope.interface.verify import verifyObject
 
 from schooltool.app.browser.content import ISchoolToolContentProvider
 from schooltool.app.browser.content import ContentProviders
+from schooltool.app.browser.content import ContentProvider
 from schooltool.app.browser.content import SchoolToolContentProviderProxy
 from schooltool.app.browser.content import IContentProviders
 from schooltool.app.browser.testing import setUp, tearDown
+
+
+def doctest_ContentProvider():
+    """Tests for ContentProvider base class.
+
+        >>> from zope.contentprovider.interfaces import IBeforeUpdateEvent
+
+        >>> provider = ContentProvider('context', 'request', 'view')
+        >>> verifyObject(ISchoolToolContentProvider, provider)
+        True
+
+        >>> events = []
+        >>> def log_event(event):
+        ...     events.append('%s for %s' %
+        ...         (event.__class__.__name__, event.object.__class__.__name__))
+        >>> provideHandler(log_event, [IBeforeUpdateEvent])
+
+        >>> provider()
+        Traceback (most recent call last):
+        ...
+        NotImplementedError: ``render`` method must be implemented by subclass
+
+        >>> events
+        ['BeforeUpdateEvent for ContentProvider']
+
+        >>> events[:] = []
+
+        >>> class ProviderForTest(ContentProvider):
+        ...     def update(self):
+        ...         events.append('%s.update' % self.__class__.__name__)
+        ...     def render(self, *args, **kw):
+        ...         events.append('%s.render' % self.__class__.__name__)
+        ...         return 'rendered with %s %s' % (args, kw)
+
+        >>> provider = ProviderForTest('context', 'request', 'view')
+
+        >>> result = provider('param1', keyword='hello')
+
+        >>> events
+        ['BeforeUpdateEvent for ProviderForTest',
+         'ProviderForTest.update',
+         'ProviderForTest.render']
+
+        >>> print result
+        rendered with ('param1',) {'keyword': 'hello'}
+
+        >>> provider.context, provider.request, provider.view
+        ('context', 'request', 'view')
+
+    ContentProvider.view is an alternative to ContentProvider.__parent__.
+
+        >>> provider.__parent__ = 'the view'
+
+        >>> provider.view
+        'the view'
+
+        >>> provider.view = 'again with the view'
+
+        >>> provider.__parent__
+        'again with the view'
+
+    """
 
 
 def doctest_SchoolToolContentProviderProxy():
@@ -118,14 +181,9 @@ def doctest_ContentProviders():
 
    Let's register a content provider.
 
-        >>> from zope.contentprovider.provider import ContentProviderBase
-        >>> class ContentProviderStub(ContentProviderBase):
+        >>> class SchoolToolContentProvider(ContentProvider):
         ...     def render(self, *args, **kw):
         ...         return 'Rendered %r for %r' % (self, self.context)
-
-        >>> class SchoolToolContentProvider(ContentProviderStub):
-        ...     implements(ISchoolToolContentProvider)
-        ...     __call__ = lambda self, *args, **kw: self.render(*args, **kw)
 
         >>> provideAdapter(SchoolToolContentProvider,
         ...                (SomeContext, None, None),
@@ -145,6 +203,11 @@ def doctest_ContentProviders():
         ContentProviderLookupError: info
 
     It is possible to traverse to zope's content providers.
+
+        >>> from zope.contentprovider.provider import ContentProviderBase
+        >>> class ContentProviderStub(ContentProviderBase):
+        ...     def render(self, *args, **kw):
+        ...         return 'Rendered %r for %r' % (self, self.context)
 
         >>> from zope.contentprovider.interfaces import IContentProvider
         >>> provideAdapter(ContentProviderStub,
@@ -200,12 +263,9 @@ def doctest_TALESAwareContentProviders():
 
         >>> providers = TALESAwareContentProviders('context', 'request', 'view')
 
-        >>> from zope.contentprovider.provider import ContentProviderBase
-        >>> class ContentProviderStub(ContentProviderBase):
-        ...     implements(ISchoolToolContentProvider)
+        >>> class ContentProviderStub(ContentProvider):
         ...     def render(self, *args, **kw):
         ...         return 'Rendered %r for %r' % (self, self.context)
-        ...     __call__ = lambda self, *args, **kw: self.render(*args, **kw)
 
         >>> provideAdapter(ContentProviderStub,
         ...                (None, None, None),
