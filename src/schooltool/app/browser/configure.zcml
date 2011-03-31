@@ -5,10 +5,6 @@
 
   <!-- Viewlet Managers -->
 
-  <zope:interface
-      interface=".skin.ICalendarEventContext"
-      type="zope.contentprovider.interfaces.ITALNamespaceData" />
-
   <viewletManager
       name="schooltool.CalendarEvent"
       permission="zope.Public"
@@ -770,5 +766,16 @@
       action="@@index.html"
       title="Error List"
       />
+
+  <!-- SchoolTool content providers -->
+
+  <zope:adapter factory=".content.CallableContentProviderProxy" />
+
+  <zope:adapter
+      for="*
+           schooltool.skin.ISchoolToolLayer
+           *"
+      provides=".content.IContentProviders"
+      factory=".content.TALESAwareContentProviders" />
 
 </configure>

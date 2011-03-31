@@ -6,7 +6,7 @@ CHANGES
 ------------------
 
 - Removed 'Report a bug on Launchpad' link from the footer
-
+- Developer: enhanced ST tal API with schooltool:content
 
 1.6.0a1 (2011-02-23)
 --------------------
