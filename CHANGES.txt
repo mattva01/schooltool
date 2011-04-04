@@ -5,7 +5,7 @@ CHANGES
 1.5.4 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Created report package with reportLink directive for registering reports.
 
 
 1.5.3 (2010-11-24)
