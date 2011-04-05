@@ -778,4 +778,22 @@
       provides=".content.IContentProviders"
       factory=".content.TALESAwareContentProviders" />
 
+  <zope:adapter
+      factory=".app.ContentTitle"
+      provides=".content.ISchoolToolContentProvider"
+      name="title"
+      />
+
+  <zope:adapter
+      factory=".app.ContentLink"
+      provides=".content.ISchoolToolContentProvider"
+      name="link"
+      />
+
+  <zope:adapter
+      factory=".app.ContentLabel"
+      provides=".content.ISchoolToolContentProvider"
+      name="label"
+      />
+
 </configure>
