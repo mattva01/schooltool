@@ -442,6 +442,62 @@ def doctest_RelationshipViewBase():
 
     """
 
+
+def doctest_ContentTitle():
+    """Tests for ContentTitle.
+
+        >>> from schooltool.app.browser.app import ContentTitle
+
+        >>> class ContentStub(object):
+        ...     title='Foo'
+
+        >>> provider = ContentTitle(ContentStub(), TestRequest(), None)
+        >>> print provider()
+        <span>Foo</span>
+
+    """
+
+
+def doctest_ContentLink():
+    """Tests for ContentLink.
+
+        >>> from schooltool.app.browser.app import ContentLink
+
+        >>> class ContentStub(object):
+        ...     title='Foo'
+
+        >>> app = sbsetup.createSchoolToolApplication()
+        >>> app['content'] = ContentStub()
+
+        >>> provider = ContentLink(app['content'], TestRequest(), None)
+        >>> print provider()
+        <a href="http://127.0.0.1/content">Foo</a>
+
+    """
+
+
+def doctest_ContentLabel():
+    """Tests for ContentLabel.
+
+        >>> from schooltool.app.browser.app import ContentLabel
+
+        >>> class ContentStub(object):
+        ...     title='Foo'
+
+        >>> app = sbsetup.createSchoolToolApplication()
+        >>> app['content'] = ContentStub()
+
+        >>> provider = ContentLabel(app['content'], TestRequest(), None)
+        >>> print provider()
+        <a href="http://127.0.0.1/content">Foo</a>
+
+        >>> app['content'].label = 'This is the Foo!'
+        >>> print provider()
+        <a href="http://127.0.0.1/content">This is the Foo!</a>
+
+    """
+
+
 def test_suite():
     optionflags = (doctest.ELLIPSIS | doctest.REPORT_NDIFF
                    | doctest.REPORT_ONLY_FIRST_FAILURE

@@ -24,7 +24,7 @@ import unittest
 import doctest
 import datetime
 
-__metaclass__ = type
+from zope.traversing.testing import setUp
 
 
 class TestHelpers(unittest.TestCase):
@@ -63,9 +63,15 @@ class TestHelpers(unittest.TestCase):
 
 
 def test_suite():
+    optionflags = (doctest.ELLIPSIS
+                   | doctest.REPORT_NDIFF
+                   | doctest.NORMALIZE_WHITESPACE)
     suite = unittest.TestSuite()
-    suite.addTest(doctest.DocTestSuite('schooltool.common'))
-    suite.addTest(doctest.DocTestSuite('schooltool.common.inlinept'))
+    suite.addTest(doctest.DocTestSuite('schooltool.common',
+                                       optionflags=optionflags))
+    suite.addTest(doctest.DocTestSuite('schooltool.common.inlinept',
+                                       optionflags=optionflags,
+                                       setUp=lambda test: setUp()))
     suite.addTest(unittest.makeSuite(TestHelpers))
     return suite
 

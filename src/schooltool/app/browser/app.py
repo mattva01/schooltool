@@ -43,19 +43,22 @@ from zope.publisher.browser import BrowserPage
 from zope.traversing.browser.absoluteurl import absoluteURL
 
 from schooltool.calendar.icalendar import convert_calendar_to_ical
-from schooltool.common import SchoolToolMessage as _
 from schooltool.app.browser.interfaces import IManageMenuViewletManager
 from schooltool.app.interfaces import ISchoolToolAuthenticationPlugin
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.app.interfaces import IAsset
+from schooltool.app.browser.content import ContentProvider
+from schooltool.common.inlinept import InlineViewPageTemplate
 from schooltool.person.interfaces import IPerson
 from schooltool.table.table import CheckboxColumn
 from schooltool.table.table import label_cell_formatter_factory
 from schooltool.table.interfaces import ITableFormatter
 from schooltool.skin.skin import OrderedViewletManager
 from schooltool.skin.breadcrumbs import CustomNameBreadCrumbInfo
+
+from schooltool.common import SchoolToolMessage as _
 
 
 class ApplicationView(BrowserView):
@@ -426,3 +429,34 @@ class TitleView(BrowserView):
 
     def __call__(self):
         return self.context.title
+
+
+class ContentTitle(ContentProvider):
+    render = InlineViewPageTemplate('''
+        <span tal:content="view/title"></span>
+    '''.strip())
+
+    def title(self):
+        __not_set = object()
+        title = getattr(self.context, 'title', __not_set)
+        if title is __not_set:
+            return getattr(self.context, '__name__', None)
+        return title
+
+
+class ContentLink(ContentTitle):
+    render = InlineViewPageTemplate('''
+        <a tal:attributes="href view/url" tal:content="view/title"></a>
+    '''.strip())
+
+    def url(self):
+        return absoluteURL(self.context, self.request)
+
+
+class ContentLabel(ContentLink):
+    def title(self):
+        __not_set = object()
+        label = getattr(self.context, 'label', __not_set)
+        if label is __not_set:
+            return ContentLink.title(self)
+        return label
