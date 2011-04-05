@@ -6,6 +6,7 @@ CHANGES
 ------------------
 
 - Removed 'Report a bug on Launchpad' link from the footer
+- Fixed crash when term title is "First" or "Last" (https://launchpad.net/bugs/485639).
 - Updated translations.
 
 

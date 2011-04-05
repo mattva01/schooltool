@@ -458,6 +458,14 @@ class SchoolYearView(TableContainerView):
     def sorted_terms(self):
         return sorted(self.context.values(), key=lambda t: t.last)
 
+    @property
+    def first(self):
+        return self.context.first
+
+    @property
+    def last(self):
+        return self.context.last
+
     def update(self):
         if 'CONFIRM' in self.request:
             for key in self.listIdsForDeletion():
