@@ -447,3 +447,9 @@ td.changed_bg { background-color: #90ee90; }
 td.error_bg { background-color: #f66; }
 td.warning_bg { background-color: yellow; }
 div.warning_bg { background-color: yellow; }
+
+/* section display */
+div.linked_terms {
+    padding-left: 0.25em;
+}
+

@@ -223,6 +223,24 @@ class SectionView(BrowserView):
     def school_year(self):
         return ISchoolYear(self.context)
 
+    @property
+    def linked_terms(self):
+        sections = []
+        current = self.context
+        while current.previous:
+            sections.append(current.previous)
+            current = current.previous
+        sections.reverse()
+        current = self.context
+        while current.next:
+            sections.append(current.next)
+            current = current.next
+        for section in sections:
+            yield {
+                'url': absoluteURL(section, self.request),
+                'title': ITerm(section).title,
+                }
+
     def renderPersonTable(self):
         persons = ISchoolToolApplication(None)['persons']
         formatter = getMultiAdapter((persons, self.request), ITableFormatter)
