@@ -97,31 +97,6 @@ def iterMeetingsInTimezone(schedule, other_timezone, date, until_date=None):
             yield meeting
 
 
-class SelectedPeriodsSchedule(Persistent, Schedule):
-    implements(interfaces.ISelectedPeriodsSchedule)
-
-    # XXX: think about storing intid here
-    # or maybe better - a relationship
-    schedule = None
-
-    periods = None # XXX: think about storing list of intids here
-
-    def __init__(self, schedule, *args, **kw):
-        Schedule.__init__(self, *args, **kw)
-        self.schedule = schedule
-        self.periods = PersistentList()
-
-    def iterMeetings(self, date, until_date=None):
-        if self.schedule is None:
-            return
-        meetings = iterMeetingsInTimezone(
-            self.schedule, self.timezone, date, until_date=until_date)
-        for meeting in meetings:
-            # XXX: proxy issues may breed here
-            if meeting.period in self.periods:
-                yield meeting
-
-
 class ScheduleContainer(BTreeContainer):
     implements(interfaces.IScheduleContainer)
 

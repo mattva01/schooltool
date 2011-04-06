@@ -140,6 +140,7 @@
       class="schooltool.timetable.browser.timetable.SectionTimetableSetupView"
       permission="schooltool.edit" />
 
+  <!--
   <configure package="schooltool.skin">
     <navigationViewlet
       name="schedule-section"
@@ -152,6 +153,7 @@
       order="10"
       />
   </configure>
+  -->
 
   <!-- ITimetableDict
 
@@ -160,6 +162,7 @@
 
   -->
 
+  <!--
   <configure package="schooltool.skin">
     <navigationViewlet
       name="add-timetable"
@@ -172,19 +175,24 @@
       order="10"
       />
   </configure>
+  -->
 
+  <!-- replaced with schedule.ScheduleContainerView
   <page
       name="index.html"
       for="schooltool.timetable.interfaces.ITimetableDict"
       class="schooltool.timetable.browser.timetable.SectionTimetablesView"
       permission="schooltool.edit" />
+  -->
 
+  <!--
   <page
       name="confirm-delete.html"
       for="schooltool.timetable.interfaces.ITimetableDict"
       class="schooltool.timetable.browser.timetable.SectionTimetableDeleteView"
       permission="schooltool.edit" />
-
+  -->
+  <!--
   <zope:adapter
        factory=".timetable.TimetableAdd_default_first"
        name="default"
@@ -201,7 +209,7 @@
       class=".timetable.TimetableAddView"
       permission="schooltool.edit"
       />
-
+  -->
 
   <!-- Timetable editing views
 

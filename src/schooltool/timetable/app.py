@@ -19,8 +19,8 @@
 """Timetable integration with SchoolTool app.
 XXX: move to schooltool/app/timetable.py or similar.
 """
-from zope.interface import implements, implementer
-from zope.component import getUtility
+from zope.interface import implements, implementer, Interface
+from zope.component import adapter, getUtility
 from zope.annotation.interfaces import IAttributeAnnotatable
 from zope.container.interfaces import IContainer
 from zope.container.btree import BTreeContainer
@@ -54,6 +54,7 @@ class TimetableStartUp(StartUpBase):
             self.app[TIMETABLES_KEY] = SchoolToolSchedules()
 
 
+@adapter(interfaces.IHaveSchedule)
 @implementer(interfaces.IScheduleContainer)
 def getScheduleContainer(obj):
     int_ids = getUtility(IIntIds)
@@ -65,6 +66,23 @@ def getScheduleContainer(obj):
     return container
 
 
+@implementer(interfaces.IHaveSchedule)
+@adapter(interfaces.IScheduleContainer)
+def getScheduleContainerOwner(container):
+    int_ids = getUtility(IIntIds)
+    obj_id = int(container.__name__)
+    obj = int_ids.queryObject(obj_id)
+    return obj
+
+
+@implementer(interfaces.IHaveSchedule)
+@adapter(interfaces.ISchedule)
+def getScheduleOwner(schedule):
+    container = schedule.__parent__
+    return interfaces.IHaveSchedule(container)
+
+
+@adapter(interfaces.IHaveTimetables)
 @implementer(interfaces.ITimetableContainer)
 def getTimetableContainer(obj):
     int_ids = getUtility(IIntIds)
@@ -75,6 +93,21 @@ def getTimetableContainer(obj):
         container = app[TIMETABLES_KEY][obj_id] = TimetableContainer()
     return container
 
+
+@implementer(interfaces.IHaveTimetables)
+@adapter(interfaces.ITimetableContainer)
+def getTimetableContainerOwner(container):
+    int_ids = getUtility(IIntIds)
+    obj_id = int(container.__name__)
+    obj = int_ids.queryObject(obj_id)
+    return obj
+
+
+@implementer(interfaces.IHaveTimetables)
+@adapter(interfaces.ISchedule)
+def getScheduleTimetableOwner(schedule):
+    container = schedule.__parent__
+    return interfaces.IHaveTimetables(container)
 
 
 def activityVocabularyFactory():

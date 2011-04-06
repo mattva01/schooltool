@@ -11,10 +11,12 @@
              />
   </class>
 
-  <adapter for=".interfaces.IHaveTimetables"
-           factory=".app.getTimetableContainer" />
-  <adapter for=".interfaces.IScheduleTimetables"
-           factory=".app.getScheduleContainer" />
+  <adapter factory=".app.getScheduleContainer" />
+  <adapter factory=".app.getScheduleOwner" />
+  <adapter factory=".app.getScheduleContainerOwner" />
+  <adapter factory=".app.getTimetableContainer" />
+  <adapter factory=".app.getScheduleTimetableOwner" />
+  <adapter factory=".app.getTimetableContainerOwner" />
 
   <adapter
       for="schooltool.app.interfaces.ISchoolToolApplication"

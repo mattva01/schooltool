@@ -5,7 +5,7 @@
            i18n_domain="schooltool">
 
   <zope:adapterTraverserPlugin
-      for="schooltool.timetable.interfaces.IScheduleTimetables"
+      for="schooltool.timetable.interfaces.IHaveSchedule"
       layer="zope.publisher.interfaces.browser.IBrowserRequest"
       name="schedule"
       adapter="schooltool.timetable.interfaces.IScheduleContainer"
@@ -66,11 +66,13 @@
       title="New Timetable"
       />
 
-  <page
-      name="day_templates_table_snippet"
-      class=".timetable.DayTemplatesTableSnippet"
+  <content
+      class=".timetable.DayTemplatesTable"
+      for="schooltool.timetable.interfaces.IDayTemplateSchedule"
+      view=".timetable.IRenderDayTableCells"
+      template="templates/daytemplates-table.pt"
       permission="schooltool.view"
-      />
+      name="table" />
 
   <page
       name="index.html"
@@ -79,23 +81,109 @@
       permission="schooltool.view"
       />
 
-<!--
+  <zope:utility
+     factory=".app.timetableVocabularyFactory"
+     provides="zope.schema.interfaces.IVocabularyFactory"
+     name="schooltool.timetable.browser.timetable_vocabulary" />
 
   <configure package="schooltool.skin">
     <navigationViewlet
-      name="section-timetables"
-      for="schooltool.course.interfaces.ISection"
-      layer="schooltool.skin.ISchoolToolLayer"
+      name="schedule"
+      for="schooltool.timetable.interfaces.IHaveSchedule"
       manager="schooltool.skin.IActionMenuManager"
       template="templates/actionsViewlet.pt"
-      permission="schooltool.view"
-      link="timetables"
+      permission="schooltool.edit"
+      link="schedule"
       title="Schedule"
-      order="50"
+      order="10"
+      />
+  </configure>
+
+  <page
+      name="index.html"
+      for="schooltool.timetable.interfaces.IScheduleContainer"
+      class="schooltool.timetable.browser.schedule.ScheduleContainerView"
+      permission="schooltool.edit" />
+
+  <page
+      name="confirm-delete.html"
+      for="schooltool.timetable.interfaces.IScheduleContainer"
+      class="schooltool.timetable.browser.schedule.ScheduleDeleteView"
+      permission="schooltool.edit" />
+
+  <configure package="schooltool.skin">
+    <navigationViewlet
+      name="add-timetable"
+      for="schooltool.timetable.interfaces.IScheduleContainer"
+      manager="schooltool.skin.IActionMenuManager"
+      template="templates/actionsViewlet.pt"
+      permission="schooltool.edit"
+      link="addTimetable.html"
+      title="Add Timetable"
+      order="10"
       />
   </configure>
 
 
--->
+  <zope:adapter
+       factory=".timetable.TimetableAdd_default_first"
+       name="default"
+       />
+
+  <zope:adapter
+       factory=".timetable.TimetableAdd_default_last"
+       name="default"
+       />
+
+
+  <page
+      name="addTimetable.html"
+      for="schooltool.timetable.interfaces.IScheduleContainer"
+      class=".timetable.SelectedPeriodsAddView"
+      permission="schooltool.edit"
+      />
+
+  <page
+      name="edit.html"
+      for="schooltool.timetable.interfaces.ISelectedPeriodsSchedule"
+      class=".timetable.SelectedPeriodsScheduleEditView"
+      permission="schooltool.edit"
+      />
+
+  <content
+      class=".timetable.SelectedPeriodsContent"
+      for="schooltool.timetable.interfaces.ISelectedPeriodsSchedule"
+      template="templates/selected-periods-content.pt"
+      permission="schooltool.view"
+      name="view" />
+
+  <content
+      class=".timetable.SelectedPeriodsContent"
+      for="schooltool.term.interfaces.ITerm"
+      template="templates/selected-periods-content.pt"
+      display_title="Term"
+      permission="schooltool.view"
+      name="view" />
+
+  <content
+      for="schooltool.term.interfaces.ITerm"
+      template="templates/date-boundaries-content.pt"
+      display_title="Term"
+      permission="schooltool.view"
+      name="boundaries" />
+
+  <content
+      for="schooltool.timetable.interfaces.ISchedule"
+      template="templates/date-boundaries-content.pt"
+      display_title="Schedule"
+      permission="schooltool.view"
+      name="boundaries" />
+
+  <content
+      for="schooltool.timetable.interfaces.ITimetable"
+      template="templates/date-boundaries-content.pt"
+      display_title="Timetable"
+      permission="schooltool.view"
+      name="boundaries" />
 
 </configure>

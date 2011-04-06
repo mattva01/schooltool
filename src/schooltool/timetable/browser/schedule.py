@@ -17,531 +17,622 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Timetabling Schema views.
-
-$Id$
+SchoolTool timetabling views.
 """
+import datetime
 
-from zope.i18n import translate
-from zope.component import getMultiAdapter
-from zope.component import adapts, getUtility, queryUtility
-from zope.interface import Interface, implements
-from zope.schema import TextLine, Int
-from zope.schema.interfaces import RequiredMissing
-from zope.intid.interfaces import IIntIds
+import zope.schema
+import zope.event
 from zope.container.interfaces import INameChooser
-from zope.app.form.interfaces import IWidgetInputError
-from zope.app.form.interfaces import IInputWidget
-from zope.app.form.interfaces import WidgetInputError
-from zope.app.form.interfaces import WidgetsError
-from zope.app.form.utility import getWidgetsData, setUpWidgets
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
+from zope.component import adapts
+from zope.component import queryMultiAdapter
+from zope.interface.exceptions import Invalid
+from zope.interface import implements
+from zope.interface import Interface
 from zope.publisher.browser import BrowserView
-from zope.publisher.interfaces.browser import IBrowserPublisher
-from zope.publisher.interfaces.browser import IBrowserRequest
-from zope.traversing.browser.interfaces import IAbsoluteURL
+from zope.publisher.interfaces import NotFound
+from zope.security.proxy import removeSecurityProxy
 from zope.traversing.browser.absoluteurl import absoluteURL
 
-from schooltool.common import SchoolToolMessage as _
-from schooltool.common import format_time_range, parse_time_range
-from schooltool.skin.containers import ContainerView, ContainerDeleteView
+from z3c.form import form, field, button, widget, validator
+from z3c.form.util import getSpecification
+
 from schooltool.app.interfaces import ISchoolToolApplication
-from schooltool.app.interfaces import IApplicationPreferences
-from schooltool.timetable import SchooldayTemplate, SchooldaySlot
-from schooltool.timetable.interfaces import ITimetableModelFactory
-from schooltool.timetable.interfaces import ITimetableSchema
-from schooltool.timetable.interfaces import ITimetableSchemaContainer
-from schooltool.timetable.schema import TimetableSchema, TimetableSchemaDay
-from schooltool.timetable import findRelatedTimetables
-from schooltool.timetable.browser.timetable import TimetableView, TabindexMixin
-from schooltool.timetable.browser.timetable import format_timetable_for_presentation
+from schooltool.calendar.utils import parse_date, parse_time
+from schooltool.common import DateRange
+from schooltool.course.interfaces import ISection
+from schooltool.schoolyear.interfaces import ISchoolYear
+from schooltool.term.interfaces import ITerm
+from schooltool.term.term import getTermForDate
+#from schooltool.timetable import SchooldaySlot
+#from schooltool.timetable import TimetableActivity
+#from schooltool.timetable import TimetableReplacedEvent
+#from schooltool.timetable.interfaces import ITimetableSchemaContainer
+#from schooltool.timetable.interfaces import ITimetable, IOwnTimetables
+#from schooltool.timetable.interfaces import ITimetables, ITimetableDict
+#from schooltool.timetable import TimetableOverlapError, TimetableOverflowError
+#from schooltool.timetable import validateAgainstTerm
+#from schooltool.timetable import validateAgainstOthers
+from schooltool.timetable.interfaces import IHaveSchedule
+from schooltool.traverser.traverser import TraverserPlugin
+
+from schooltool.common import SchoolToolMessage as _
 
 
-#def fix_duplicates(names):
-#    """Change a list of names so that there are no duplicates.
+
+#def format_timetable_for_presentation(timetable):
+#    """Prepare a timetable for presentation with Page Templates.
 #
-#    Trivial cases:
+#    Returns a matrix where columns correspond to days, rows correspond to
+#    periods, and cells contain a dict with two keys
 #
-#      >>> fix_duplicates([])
-#      []
-#      >>> fix_duplicates(['a', 'b', 'c'])
-#      ['a', 'b', 'c']
+#      'period' -- the name of this period (different days may have different
+#                  periods)
 #
-#    Simple case:
+#      'activity' -- activity or activities that occur during that period of a
+#                    day.
 #
-#      >>> fix_duplicates(['a', 'b', 'b', 'a', 'b'])
-#      ['a', 'b', 'b (2)', 'a (2)', 'b (3)']
+#    First, let us create a timetable:
 #
-#    More interesting cases:
+#      >>> from schooltool.timetable import Timetable, TimetableDay
+#      >>> timetable = Timetable(['day 0', 'day 1', 'day 2', 'day 3'])
+#      >>> timetable['day 0'] = TimetableDay()
+#      >>> timetable['day 1'] = TimetableDay(['A', 'B'])
+#      >>> timetable['day 2'] = TimetableDay(['C', 'D', 'E'])
+#      >>> timetable['day 3'] = TimetableDay(['F'])
+#      >>> timetable['day 1'].add('A', TimetableActivity('Something'))
+#      >>> timetable['day 1'].add('B', TimetableActivity('A2'))
+#      >>> timetable['day 1'].add('B', TimetableActivity('A1'))
+#      >>> timetable['day 2'].add('C', TimetableActivity('Else'))
+#      >>> timetable['day 3'].add('F', TimetableActivity('A3'))
 #
-#      >>> fix_duplicates(['a', 'b', 'b', 'a', 'b (2)', 'b (2)'])
-#      ['a', 'b', 'b (3)', 'a (2)', 'b (2)', 'b (2) (2)']
+#    Here's how it looks like
+#
+#      >>> matrix = format_timetable_for_presentation(timetable)
+#      >>> for row in matrix:
+#      ...    for cell in row:
+#      ...        print '%(period)1s: %(activity)-11s |' % cell,
+#      ...    print
+#       :             | A: Something   | C: Else        | F: A3          |
+#       :             | B: A1 / A2     | D:             |  :             |
+#       :             |  :             | E:             |  :             |
+#
 #
 #    """
-#    seen = set(names)
-#    if len(seen) == len(names):
-#        return names    # no duplicates
-#    result = []
-#    used = set()
-#    for name in names:
-#        if name in used:
-#            n = 2
-#            while True:
-#                candidate = '%s (%d)' % (name, n)
-#                if not candidate in seen:
-#                    name = candidate
-#                    break
-#                n += 1
-#            seen.add(name)
-#        result.append(name)
-#        used.add(name)
-#    return result
+#    rows = []
+#    for ncol, (id, day) in enumerate(timetable.items()):
+#        nrow = 0
+#        for nrow, (period, actiter) in enumerate(day.items()):
+#            activities = []
+#            for a in actiter:
+#                activities.append(a.title)
+#            activities.sort()
+#            if nrow >= len(rows):
+#                rows.append([{'period': '', 'activity': ''}] * ncol)
+#            rows[nrow].append({'period': period,
+#                               'activity': " / ".join(activities)})
+#        for nrow in range(nrow + 1, len(rows)):
+#            rows[nrow].append({'period': '', 'activity': ''})
+#    return rows
 
 
+#class TimetablesTraverser(TraverserPlugin):
+#    """A traverser that allows to traverse to a timetable of its context."""
+#
+#    def traverse(self, name):
+#        return ITimetables(self.context).timetables
 
-#class TimetableSchemaView(TimetableView):
+
+#class TimetableView(BrowserView):
 #
-#    __used_for__ = ITimetableSchema
+#    __used_for__ = ITimetable
 #
-#    def homerooms(self):
-#        """Returns a dictionary of day indexes to homeroom period indexes"""
-#        result = {}
-#        for daynr, dayid in enumerate(self.context.keys()):
-#            day = self.context[dayid]
-#            result[daynr] = set()
-#            if day.homeroom_period_ids:
-#                for periodnr, periodid in enumerate(day.keys()):
-#                    if periodid in day.homeroom_period_ids:
-#                        result[daynr].add(periodnr)
-#        return result
+#    def rows(self):
+#        return format_timetable_for_presentation(self.context)
+
+
+#class TabindexMixin(object):
+#    """Tab index calculator mixin for views."""
 #
-#    def title(self):
-#        msg = _("Timetable schema ${schema}",
-#                mapping = {'schema': self.context.title})
-#        return msg
+#    def __init__(self):
+#        self.__tabindex = 0
+#        self.__tabindex_matrix = []
 #
-#    @property
-#    def timezone(self):
-#        """Return a timezone if it is different from app default.
+#    def next_tabindex(self):
+#        """Return the next tabindex.
 #
-#        Return None if it is not.
+#          >>> view = TabindexMixin()
+#          >>> [view.next_tabindex() for n in range(5)]
+#          [1, 2, 3, 4, 5]
+#
+#        See the docstring for tabindex_matrix for an example where
+#        next_tabindex() returns values out of order
+#        """
+#        if self.__tabindex_matrix:
+#            return self.__tabindex_matrix.pop(0)
+#        else:
+#            self.__tabindex += 1
+#            return self.__tabindex
+#
+#    def tabindex_matrix(self, nrows, ncols):
+#        """Ask next_tabindex to return transposed tab indices for a matrix.
+#
+#        For example, suppose that you have a 3 x 5 matrix like this:
+#
+#               col1 col2 col3 col4 col5
+#          row1   1    4    7   10   13
+#          row2   2    5    8   11   14
+#          row3   3    6    9   12   15
+#
+#        Then you do
+#
+#          >>> view = TabindexMixin()
+#          >>> view.tabindex_matrix(3, 5)
+#          >>> [view.next_tabindex() for n in range(5)]
+#          [1, 4, 7, 10, 13]
+#          >>> [view.next_tabindex() for n in range(5)]
+#          [2, 5, 8, 11, 14]
+#          >>> [view.next_tabindex() for n in range(5)]
+#          [3, 6, 9, 12, 15]
+#
+#        After the matrix is finished, next_tabindex reverts back to linear
+#        allocation:
+#
+#          >>> [view.next_tabindex() for n in range(5)]
+#          [16, 17, 18, 19, 20]
+#
+#        """
+#        first = self.__tabindex + 1
+#        self.__tabindex_matrix += [first + col * nrows + row
+#                                     for row in range(nrows)
+#                                       for col in range(ncols)]
+#        self.__tabindex += nrows * ncols
+
+
+#class TimetableConflictMixin(object):
+#    """A mixin for views that check for booking conflicts."""
+#
+#    def sectionMap(self, term, ttschema):
+#        """Compute a mapping of timetable slots to sections.
+#
+#        Returns a dict {(day_id, period_id): Set([section])}.  The set for
+#        each period contains all sections that have activities in the
+#        (non-composite) timetable during that timetable period.
+#        """
+#        from schooltool.timetable import findRelatedTimetables
+#
+#        section_map = {}
+#        for day_id, day in ttschema.items():
+#            for period_id in day.periods:
+#                section_map[day_id, period_id] = set()
+#
+#        term_tables = [removeSecurityProxy(tt)
+#                       for tt in findRelatedTimetables(term)]
+#
+#        for timetable in findRelatedTimetables(ttschema):
+#            if removeSecurityProxy(timetable) not in term_tables:
+#                continue
+#            for day_id, period_id, activity in timetable.activities():
+#                section_map[day_id, period_id].add(timetable.__parent__.__parent__)
+#
+#        return section_map
+#
+#    def getSchema(self):
+#        """Return the chosen timetable schema.
+#
+#        If there are no timetable schemas, None is returned.
 #        """
 #        app = ISchoolToolApplication(None)
-#        apptz = IApplicationPreferences(app).timezone
-#        if self.context.timezone != apptz:
-#            return self.context.timezone
+#        ttschemas = ITimetableSchemaContainer(app, None)
+#        if ttschemas is None:
+#            return None
+#        ttschema_id = self.request.get('ttschema', ttschemas.default_id)
+#        ttschema = ttschemas.get(ttschema_id, None)
+#        if not ttschema and ttschemas:
+#            ttschema = ttschemas.values()[0]
+#        return ttschema
+#
+#    @property
+#    def owner(self):
+#        # XXX: make this property obsolete as soon as possible
+#        return self.context
+#
+#    def getTerm(self):
+#        """Return the chosen term."""
+#        # XXX: make this method obsolete as soon as possible
+#        return ITerm(self.owner)
+#
+#    def getSections(self, item):
+#        raise NotImplementedError(
+#            "This method should be implemented in subclasses")
+#
+#    def getGroupSections(self):
+#        raise NotImplementedError(
+#            "This method should be implemented in subclasses")
+#
+#    def getTimetable(self):
+#        # XXX: somewhat broken as of now.
+#        timetables = ITimetables(self.owner)
+#        term = self.getTerm()
+#        ttschema = self.getSchema()
+#        return timetables.lookup(term, ttschema)
 
 
-#class SimpleTimetableSchemaAdd(BrowserView):
-#    """A simple timetable schema definition view"""
+#class TimetableSetupViewBase(BrowserView, TimetableConflictMixin):
+#    """Common methods for setting up timetables."""
 #
-#    _nrperiods = 9
+#    @property
+#    def ttschemas(self):
+#        return ITimetableSchemaContainer(ISchoolToolApplication(None))
+
+
+#class TimetableAddForm(TimetableSetupViewBase):
 #
-#    day_ids = (_("Monday"),
-#               _("Tuesday"),
-#               _("Wednesday"),
-#               _("Thursday"),
-#               _("Friday"),
-#               )
+#    template = ViewPageTemplateFile('templates/timetable-add.pt')
 #
-#    error = None
+#    def getTerm(self):
+#        """Return the chosen term."""
+#        return ITerm(self.context)
 #
-#    template = ViewPageTemplateFile('templates/simpletts.pt')
-#
-#    def __init__(self, content, request):
-#        BrowserView.__init__(self, content, request)
-#        self._schema = {}
-#        self._schema['title'] = TextLine(__name__='title', title=_(u"Title"))
-#        for nr in range(1, self._nrperiods + 1):
-#            pname = 'period_name_%s' % nr
-#            pstart = 'period_start_%s' % nr
-#            pfinish = 'period_finish_%s' % nr
-#            self._schema[pname] = TextLine(__name__=pname,
-#                                           title=u"Period title",
-#                                           required=False)
-#            self._schema[pstart] = TextLine(__name__=pstart,
-#                                            title=u"Period start time",
-#                                            required=False)
-#            self._schema[pfinish] = TextLine(__name__=pfinish,
-#                                             title=u"Period finish time",
-#                                             required=False)
-#        setUpWidgets(self, self._schema, IInputWidget,
-#                     initial={'title': 'default'})
-#
-#    def _setError(self, name, error=RequiredMissing()):
-#        """Set an error on a widget."""
-#        # XXX Touching widget._error is bad, see
-#        #     http://dev.zope.org/Zope3/AccessToWidgetErrors
-#        # The call to setRenderedValue is necessary because
-#        # otherwise _getFormValue will call getInputValue and
-#        # overwrite _error while rendering.
-#        widget = getattr(self, name + '_widget')
-#        widget.setRenderedValue(widget._getFormValue())
-#        if not IWidgetInputError.providedBy(error):
-#            error = WidgetInputError(name, widget.label, error)
-#        widget._error = error
-#
-#    def getPeriods(self):
-#        try:
-#            data = getWidgetsData(self, self._schema)
-#        except WidgetsError:
-#            return []
-#
-#        result = []
-#        for nr in range(1, self._nrperiods + 1):
-#            pname = 'period_name_%s' % nr
-#            pstart = 'period_start_%s' % nr
-#            pfinish = 'period_finish_%s' % nr
-#            if data.get(pstart) or data.get(pfinish):
-#                try:
-#                    start, duration = parse_time_range(
-#                        "%s-%s" % (data[pstart], data[pfinish]))
-#                except ValueError:
-#                    self.error = _('Please use HH:MM format for period '
-#                                   'start and end times')
-#                    continue
-#                name = data[pname]
-#                if not name:
-#                    name = data[pstart]
-#                result.append((name, start, duration))
-#        return result
-#
-#    def createSchema(self, periods):
-#        daytemplate = SchooldayTemplate()
-#        for title, start, duration in periods:
-#            daytemplate.add(SchooldaySlot(start, duration))
-#
-#        factory = getUtility(ITimetableModelFactory, 'WeeklyTimetableModel')
-#        model = factory(self.day_ids, {None: daytemplate})
-#        app = ISchoolToolApplication(None)
-#        tzname = IApplicationPreferences(app).timezone
-#        schema = TimetableSchema(self.day_ids, timezone=tzname)
-#        for day_id in self.day_ids:
-#            schema[day_id] = TimetableSchemaDay(
-#                [title for title, start, duration in periods])
-#        schema.model = model
-#        return schema
+#    def addTimetable(self, timetable):
+#        chooser = INameChooser(self.context)
+#        name = chooser.chooseName('', timetable)
+#        self.context[name] = timetable
 #
 #    def __call__(self):
-#        try:
-#            data = getWidgetsData(self, self._schema)
-#        except WidgetsError:
+#        self.has_timetables = bool(self.ttschemas)
+#        if not self.has_timetables:
 #            return self.template()
+#        self.term = self.getTerm()
+#        self.ttschema = self.getSchema()
+#        self.ttkeys = ['.'.join((self.term.__name__, self.ttschema.__name__))]
+#        if 'SUBMIT' in self.request:
+#            timetable = self.ttschema.createTimetable(self.term)
+#            self.addTimetable(timetable)
+#            # TODO: find a better place to redirect to
+#            self.request.response.redirect(
+#                absoluteURL(self.context, self.request))
+#        return self.template()
+
+
+# XXX: remove this class soon!
+#class SectionTimetableSetupView(TimetableSetupViewBase):
 #
+#    __used_for__ = ISection
+#
+#    template = ViewPageTemplateFile('templates/section-timetable-setup.pt')
+#
+#    def singleSchema(self):
+#        return len(self.ttschemas.values()) == 1
+#
+#    def addTimetable(self, timetable):
+#        tt_dict = ITimetables(self.context).timetables
+#        chooser = INameChooser(tt_dict)
+#        name = chooser.chooseName('', timetable)
+#        tt_dict[name] = timetable
+#
+#    def getDays(self, ttschema):
+#        """Return the current selection.
+#
+#        Returns a list of dicts with the following keys
+#
+#            title   -- title of the timetable day
+#            periods -- list of timetable periods in that day
+#
+#        Each period is represented by a dict with the following keys
+#
+#            title    -- title of the period
+#            selected -- a boolean whether that period is in self.context's tt
+#                            for this shcema
+#
+#        """
+#        timetable = self.getTimetable()
+#
+#        def days(schema):
+#            for day_id, day in schema.items():
+#                yield {'title': day_id,
+#                       'periods': list(periods(day_id, day))}
+#
+#        def periods(day_id, day):
+#            for period_id in day.periods:
+#                if timetable:
+#                    selected = timetable[day_id][period_id]
+#                else:
+#                    selected = False
+#                yield {'title': period_id,
+#                       'selected': selected}
+#
+#        return list(days(ttschema))
+#
+#    @property
+#    def consecutive_label(self):
+#        return _('Show consecutive periods as one period in journal')
+#
+#    def __call__(self):
+#        self.has_timetables = bool(self.ttschemas)
+#        if not self.has_timetables:
+#            return self.template()
+#        self.ttschema = self.getSchema()
+#        self.term = ITerm(self.context)
+#        self.ttkeys = ['.'.join((self.term.__name__, self.ttschema.__name__))]
+#        self.days = self.getDays(self.ttschema)
+#        #XXX dumb, this doesn't space course names
+#        course_title = ''.join([course.title
+#                                for course in self.context.courses])
+#        section = removeSecurityProxy(self.context)
+#        timetable = ITimetables(section).lookup(self.term, self.ttschema)
+#        if timetable is None:
+#            self.consecutive_value = False
+#        else:
+#            self.consecutive_value = timetable.consecutive_periods_as_one
+#
+#        if 'CANCEL' in self.request:
+#            self.request.response.redirect(self.nextURL())
+#
+#        if 'SAVE' in self.request:
+#            if timetable is None:
+#                timetable = self.ttschema.createTimetable(self.term)
+#                self.addTimetable(timetable)
+#            if self.request.get('consecutive') == 'on':
+#                timetable.consecutive_periods_as_one = True
+#            else:
+#                timetable.consecutive_periods_as_one = False
+#
+#            for day_id, day in timetable.items():
+#                for period_id, period in list(day.items()):
+#                    if '.'.join((day_id, period_id)) in self.request:
+#                        if not period:
+#                            # XXX Resource list is being copied
+#                            # from section as this view can't do
+#                            # proper resource booking
+#                            act = TimetableActivity(title=course_title,
+#                                                    owner=section,
+#                                                    resources=section.resources)
+#                            day.add(period_id, act)
+#                    else:
+#                        if period:
+#                            for act in list(period):
+#                                day.remove(period_id, act)
+#
+#            self.request.response.redirect(self.nextURL())
+#
+#        return self.template()
+#
+#    def nextURL(self):
+#        return absoluteURL(self.context, self.request)
+
+
+#class SpecialDayView(BrowserView):
+#    """The view for changing the periods for a particular day.
+#
+#    The typical use case: some periods get shortened or and some get
+#    cancelled altogether if some special event is held at noon.
+#    """
+#
+#    select_template = ViewPageTemplateFile('templates/specialday_select.pt')
+#    form_template = ViewPageTemplateFile('templates/specialday_change.pt')
+#
+#    error = None
+#    field_errors = None
+#    date = None
+#    term = None
+#
+#    def delta(self, start, end):
+#        """
+#        Returns a timedelta between two times
+#
+#            >>> from datetime import time, timedelta
+#            >>> view = SpecialDayView(None, None)
+#            >>> view.delta(time(11, 10), time(12, 20))
+#            datetime.timedelta(0, 4200)
+#
+#        If a result is negative, it is 'wrapped around':
+#
+#            >>> view.delta(time(11, 10), time(10, 10)) == timedelta(hours=23)
+#            True
+#        """
+#        today = datetime.date.today()
+#        dtstart = datetime.datetime.combine(today, start)
+#        dtend = datetime.datetime.combine(today, end)
+#        delta = dtend - dtstart
+#        if delta < datetime.timedelta(0):
+#            delta += datetime.timedelta(1)
+#        return delta
+#
+#    def extractPeriods(self):
+#        """Return a list of three-tuples with period titles, tstarts,
+#        durations.
+#
+#        If errors are encountered in some fields, the names of the
+#        fields get added to field_errors.
+#        """
+#        model = self.context.model
+#        result = []
+#        for info in model.originalPeriodsInDay(self.term, self.context,
+#                                               self.date):
+#            period_id, tstart, duration = info
+#            start_name = period_id + '_start'
+#            end_name = period_id + '_end'
+#            if (start_name in self.request and end_name in self.request
+#                and (self.request[start_name] or self.request[end_name])):
+#                start = end = None
+#                try:
+#                    start = parse_time(self.request[start_name])
+#                except ValueError:
+#                    pass
+#                try:
+#                    end = parse_time(self.request[end_name])
+#                except ValueError:
+#                    pass
+#                if start is None:
+#                    self.field_errors.append(start_name)
+#                if end is None:
+#                    self.field_errors.append(end_name)
+#                elif start is not None:
+#                    duration = self.delta(start, end)
+#                    result.append((period_id, start, duration))
+#
+#        return result
+#
+#    def update(self):
+#        """Read and validate form data, and update model if necessary.
+#
+#        Also choose the correct template to render.
+#        """
+#        self.field_errors = []
+#        self.template = self.select_template
 #        if 'CANCEL' in self.request:
 #            self.request.response.redirect(
 #                absoluteURL(self.context, self.request))
-#        elif 'CREATE' in self.request:
-#            periods = self.getPeriods()
-#            if self.error:
-#                return self.template()
+#            return
+#        if 'date' in self.request:
+#            try:
+#                self.date = parse_date(self.request['date'])
+#            except ValueError:
+#                self.error = _("Invalid date. Please use YYYY-MM-DD format.")
+#            else:
+#                self.term = getTermForDate(self.date)
+#                if self.term is None:
+#                    self.error = _("The date does not belong to any term.")
+#                    self.date = None
+#        if self.date:
+#            self.template = self.form_template
+#        if self.date and 'SUBMIT' in self.request:
+#            daytemplate = []
+#            for title, start, duration in self.extractPeriods():
+#                daytemplate.append((title, SchooldaySlot(start, duration)))
+#            if self.field_errors:
+#                self.error = _('Some values were invalid.'
+#                               '  They are highlighted in red.')
+#            else:
+#                exceptionDays = removeSecurityProxy(
+#                    self.context.model.exceptionDays)
+#                exceptionDays[self.date] = daytemplate
+#                self.request.response.redirect(
+#                    absoluteURL(self.context, self.request))
 #
-#            if not periods:
-#                self.error = _('You must specify at least one period.')
-#                return self.template()
+#    def timeplustd(self, t, td):
+#        """Add a timedelta to time.
 #
-#            schema = self.createSchema(periods)
-#            schema.title = data['title']
+#        datetime authors are cowards.
 #
-#            nameChooser = INameChooser(self.context)
-#            name = nameChooser.chooseName('', schema)
+#            >>> view = SpecialDayView(None, None)
+#            >>> from datetime import time, timedelta
+#            >>> view.timeplustd(time(10,0), timedelta(0, 5))
+#            datetime.time(10, 0, 5)
+#            >>> view.timeplustd(time(23,0), timedelta(0, 3660))
+#            datetime.time(0, 1)
+#        """
+#        dt = datetime.datetime.combine(datetime.date.today(), t)
+#        dt += td
+#        return dt.time()
 #
-#            self.context[name] = schema
-#            self.request.response.redirect(
-#                absoluteURL(self.context, self.request))
+#    def getPeriods(self):
+#        """A helper method that returns a list of tuples of:
 #
-#        return self.template()
-
-
-# MOVED to schooltool.timetable.browser.app.TimetableContainerView
-#class TimetableSchemaContainerView(ContainerView):
-#    """TimetableSchema Container view."""
-#
-#    __used_for__ = ITimetableSchemaContainer
-#
-#    index_title = _("School Timetables")
-#
-#    def update(self):
-#        if 'UPDATE_SUBMIT' in self.request:
-#            self.context.default_id = self.request['ttschema'] or None
-#        return ''
-
-
-#class TimetableDependentDeleteView(ContainerDeleteView):
-#    """The delete view for school timetables and schemas.
-#
-#    Finds all timetables that use the object to be deleted and deletes
-#    them too.
-#    """
-#
-#    adapts((ITimetableSchemaContainer, IBrowserRequest))
-#    implements(IBrowserPublisher)
-#
-#    def timetables(self, obj):
-#        return findRelatedTimetables(obj)
-#
-#    def update(self):
-#        if 'CONFIRM' in self.request:
-#            for key in self.listIdsForDeletion():
-#                del self.context[key]
-#            self.request.response.redirect(self.nextURL())
-#        elif 'CANCEL' in self.request:
-#            self.request.response.redirect(self.nextURL())
-
-
-#class IAdvancedTimetableSchemaAddSchema(Interface):
-#
-#    title = TextLine(title=_(u"Title"), required=False)
-#    duration = Int(title=_(u"Duration"), description=_(u"Duration in minutes"),
-#                   required=False)
-
-
-#class AdvancedTimetableSchemaAdd(BrowserView, TabindexMixin):
-#    """View for defining a new timetable schema.
-#
-#    Can be accessed at /ttschemas/complexadd.html.
-#    """
-#
-#    __used_for__ = ITimetableSchemaContainer
-#
-#    template = ViewPageTemplateFile("templates/advancedtts.pt")
-#
-#    # Used in the page template
-#    days_of_week = (_("Monday"),
-#                    _("Tuesday"),
-#                    _("Wednesday"),
-#                    _("Thursday"),
-#                    _("Friday"),
-#                    _("Saturday"),
-#                    _("Sunday"),
-#                   )
-#
-#    _schema = IAdvancedTimetableSchemaAddSchema
-#
-#    def __init__(self, context, request):
-#        BrowserView.__init__(self, context, request)
-#        TabindexMixin.__init__(self)
-#        setUpWidgets(self, self._schema, IInputWidget,
-#                     initial={'title': 'default'})
+#        (period_title, orig_start, orig_end, actual_start, actual_end)
+#        """
+#        model = self.context.model
+#        result = []
+#        actual_times = {}
+#        for info in model.periodsInDay(self.term, self.context, self.date):
+#            period_id, tstart, duration = info
+#            endtime = self.timeplustd(tstart, duration)
+#            actual_times[period_id] = (tstart.strftime("%H:%M"),
+#                                       endtime.strftime("%H:%M"))
+#        for info in model.originalPeriodsInDay(self.term, self.context,
+#                                                 self.date):
+#            period_id, tstart, duration = info
+#            # datetime authors are cowards
+#            endtime = self.timeplustd(tstart, duration)
+#            result.append((period_id,
+#                           tstart.strftime("%H:%M"),
+#                           endtime.strftime("%H:%M")) +
+#                          actual_times.get(period_id, ('', '')))
+#        return result
 #
 #    def __call__(self):
-#
-#        # We could build a custom widget for the model radio buttons, but I do
-#        # not think it is worth the trouble.
-#        self.model_error = None
-#        self.model_name = self.request.get('model')
-#
-#        self.ttschema = self._buildSchema()
-#        self.day_templates = self._buildDayTemplates()
-#
-#        if 'CREATE' in self.request:
-#            data = getWidgetsData(self, self._schema)
-#            factory = queryUtility(ITimetableModelFactory,
-#                                   name=self.model_name)
-#            if factory is None:
-#                self.model_error = _("Please select a value")
-#            if not self.title_widget.error() and not self.model_error:
-#                model = factory(self.ttschema.day_ids, self.day_templates)
-#                self.ttschema.model = model
-#                self.ttschema.title = data['title']
-#                nameChooser = INameChooser(self.context)
-#                key = nameChooser.chooseName('', self.ttschema)
-#                self.context[key] = self.ttschema
-#                #Note: if you uncomment this, fix the i18n bug inside too.
-#                #self.request.appLog(_("Timetable schema %s created") %
-#                #               getPath(self.context[key]))
-#                return self.request.response.redirect(
-#                    absoluteURL(self.context, self.request))
+#        self.update()
 #        return self.template()
-#
-#    def rows(self):
-#        return format_timetable_for_presentation(self.ttschema)
-#
-#    def _buildSchema(self):
-#        """Build a timetable schema from data in the request."""
-#        n = 1
-#        day_ids = []
-#        day_idxs = []
-#        while 'day%d' % n in self.request:
-#            if 'DELETE_DAY_%d' % n not in self.request:
-#                day_id = self.request['day%d' % n].strip()
-#                if not day_id:
-#                    day_id_msgid = _('Day ${number}',
-#                                     mapping={'number': len(day_ids) + 1})
-#                    day_id = translate(day_id_msgid, context=self.request)
-#                day_ids.append(day_id)
-#                day_idxs.append(n)
-#            n += 1
-#        if 'ADD_DAY' in self.request or not day_ids:
-#            day_id_msgid = _('Day ${number}',
-#                             mapping={'number': len(day_ids) + 1})
-#            day_id = translate(day_id_msgid, context=self.request)
-#            day_ids.append(day_id)
-#            day_idxs.append(-1)
-#        day_ids = fix_duplicates(day_ids)
-#
-#        periods_for_day = []
-#        longest_day = None
-#        previous_day = None
-#        for idx, day in zip(day_idxs, day_ids):
-#            n = 1
-#            if ('COPY_DAY_%d' % (idx - 1) in self.request
-#                and previous_day is not None):
-#                periods = list(previous_day)
-#            else:
-#                periods = []
-#                while 'day%d.period%d' % (idx, n) in self.request:
-#                    per_id = self.request['day%d.period%d' % (idx, n)].strip()
-#                    periods.append(per_id)
-#                    n += 1
-#                periods = filter(None, periods)
-#                if not periods:
-#                    period1 = translate(_("Period 1"), context=self.request)
-#                    periods = [period1]
-#                else:
-#                    periods = fix_duplicates(periods)
-#            periods_for_day.append(periods)
-#            if longest_day is None or len(periods) > len(longest_day):
-#                longest_day = periods
-#            previous_day = periods
-#
-#        if 'ADD_PERIOD' in self.request:
-#            period_name_msgid = _('Period ${number}',
-#                                  mapping={'number': len(longest_day) + 1})
-#            period_name = translate(period_name_msgid, context=self.request)
-#            longest_day.append(period_name)
-#
-#        app = ISchoolToolApplication(None)
-#        tzname = IApplicationPreferences(app).timezone
-#        ttschema = TimetableSchema(day_ids, timezone=tzname)
-#        for day, periods in zip(day_ids, periods_for_day):
-#            ttschema[day] = TimetableSchemaDay(periods)
-#
-#        return ttschema
-#
-#    def _buildDayTemplates(self):
-#        """Built a dict of day templates from data contained in the request.
-#
-#        The dict is suitable to be passed as the second argument to the
-#        timetable model factory.
-#        """
-#        data = getWidgetsData(self, self._schema)
-#        default_duration = data.get('duration')
-#        result = {None: SchooldayTemplate()}
-#        n = 1
-#        self.discarded_some_periods = False
-#        while 'time%d.day0' % n in self.request:
-#            raw_value = [0]
-#            for day in range(7):
-#                value = self.request.form.get('time%d.day%d' % (n, day), '')
-#                if not value:
-#                    continue
-#                try:
-#                    start, duration = parse_time_range(value, default_duration)
-#                except ValueError:
-#                    # ignore invalid values for now, but tell the user
-#                    self.discarded_some_periods = True
-#                    continue
-#                if day not in result:
-#                    result[day] = SchooldayTemplate()
-#                result[day].add(SchooldaySlot(start, duration))
-#            n += 1
-#        for day in range(1, 7):
-#            if 'COPY_PERIODS_%d' % day in self.request:
-#                if (day - 1) in result:
-#                    result[day] = result[day - 1]
-#                elif day in result:
-#                    del result[day]
-#        return result
-#
-#    def all_periods(self):
-#        """Return a list of all period names in order of occurrence."""
-#        periods = []
-#        for day_id in self.ttschema.day_ids:
-#            for period in self.ttschema[day_id].periods:
-#                if period not in periods:
-#                    periods.append(period)
-#        return periods
-#
-#    def slot_times(self):
-#        """Return a list of lists of time periods for each day for each slot.
-#
-#                      |  mo tu we thu fri sa su
-#             ---------+-------------------------
-#             1st slot |
-#             2nd slot |
-#             ...      |
-#        """
-#        nr_rows = max([len(day.keys())
-#                       for day_id, day in self.ttschema.items()])
-#        result =  [[None] * 7 for i in range(nr_rows)]
-#        for day, template in self.day_templates.items():
-#            for idx, slot in enumerate(template):
-#                slotfmt = format_time_range(slot.tstart, slot.duration)
-#                result[idx][day] = slotfmt
-#        return result
 
 
-#class TimetableSchemaXMLView(BrowserView):
-#    """View for ITimetableSchema"""
+#class SectionTimetablesViewBase(TimetableSetupViewBase):
 #
-#    dows = ['Monday', 'Tuesday', 'Wednesday', 'Thursday',
-#            'Friday', 'Saturday', 'Sunday']
-#
-#    template = ViewPageTemplateFile("templates/schema_export.pt",
-#                                    content_type="text/xml; charset=UTF-8")
-#
-#    __call__ = template
-#
-#    def exceptiondayids(self):
-#        result = []
-#
-#        for date, id in self.context.model.exceptionDayIds.items():
-#            result.append({'when': str(date), 'id': id})
-#
-#        result.sort(lambda a, b: cmp((a['when'], a['id']),
-#                                     (b['when'], b['id'])))
-#        return result
-#
-#    def daytemplates(self):
-#        items = self.context.items()
-#        id = items[0][0]
-#        result = []
-#        for id, day in self.context.model.dayTemplates.items():
-#            if id is None:
-#                used = "default"
-#            elif id in self.context.keys():
-#                used = id
-#            else:
-#                used = self.dows[id]
+#    def formatTimetableForTemplate(self, timetable):
+#        timetable = removeSecurityProxy(timetable)
+#        has_activities = False
+#        days = []
+#        for day_id, day in timetable.items():
 #            periods = []
-#            for period in day:
-#                periods.append(
-#                    {'id': None,
-#                     'tstart': period.tstart.strftime("%H:%M"),
-#                     'duration': period.duration.seconds / 60})
-#            periods.sort()
-#            for template in result:
-#                if template['periods'] == periods:
-#                    days = template['used'].split()
-#                    days.append(used)
-#                    days.sort()
-#                    template['used'] = " ".join(days)
-#                    break
-#            else:
-#                result.append({'used': used, 'periods': periods})
-#
-#        for date, day in self.context.model.exceptionDays.items():
-#            periods = []
-#            for period, slot in day:
-#                periods.append(
-#                    {'id': period,
-#                     'tstart': slot.tstart.strftime("%H:%M"),
-#                     'duration': slot.duration.seconds / 60})
-#            periods.sort()
-#            result.append({'used': str(date), 'periods': periods})
-#
-#        result.sort(lambda a, b: cmp((a['used'], a['periods']),
-#                                     (b['used'], b['periods'])))
-#
-#        return result
+#            for period, activities in day.items():
+#                periods.append({
+#                    'title': period,
+#                    'activities': " / ".join(
+#                        sorted([a.title for a in activities])),
+#                    })
+#                has_activities |= bool(len(activities))
+#            days.append({
+#                'title': day_id,
+#                'periods': periods,
+#                })
+#        return {
+#            'timetable': timetable,
+#            'has_activities': has_activities,
+#            'days': days,
+#            }
+
+
+class ScheduleContainerView(BrowserView):
+    template = ViewPageTemplateFile('templates/schedule-container-view.pt')
+
+    @property
+    def owner(self):
+        return IHaveSchedule(self.context)
+
+    @property
+    def term(self):
+        return ITerm(self.owner, None)
+
+    @property
+    def school_year(self):
+        term = self.term
+        if term is None:
+            return None
+        return ISchoolYear(term, None)
+
+    def timetables(self):
+        snippets = filter(None, [
+            queryMultiAdapter((schedule, self.request), name='schedule_table')
+            for schedule in self.context.values()])
+        return snippets
+
+    def __call__(self):
+        return self.template()
+
+
+class ScheduleDeleteView(BrowserView):
+    template = ViewPageTemplateFile('templates/confirm-schedule-delete.pt')
+
+    @property
+    def schedule(self):
+        name = self.request.get('schedule')
+        if name is None or name not in self.context:
+            return None
+        return self.context[name]
+
+    def nextURL(self):
+        return absoluteURL(self.context, self.request)
+
+    def __call__(self):
+        schedule = self.schedule
+        if schedule is not None:
+            if 'CONFIRM' in self.request:
+                del self.context[schedule.__name__]
+                self.request.response.redirect(self.nextURL())
+            elif 'CANCEL' in self.request:
+                self.request.response.redirect(self.nextURL())
+            else:
+                return self.template()
+        else:
+            self.request.response.redirect(self.nextURL())

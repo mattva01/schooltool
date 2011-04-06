@@ -23,6 +23,7 @@ Timetables are meeting schedules created from scheduled day templates.
 import datetime
 
 from persistent import Persistent
+from persistent.list import PersistentList
 from zope.interface import implements
 from zope.container.btree import BTreeContainer
 
@@ -97,3 +98,58 @@ class TimetableContainer(BTreeContainer):
         if key not in self:
             raise KeyError(key)
         self.default_id = key
+
+
+class SelectedPeriodsSchedule(Persistent, Schedule):
+    implements(interfaces.ISelectedPeriodsSchedule)
+
+    # XXX: think about storing intid here
+    # or maybe better - a relationship
+    timetable = None
+
+    _periods = None
+
+    consecutive_periods_as_one = False
+
+    def __init__(self, timetable, *args, **kw):
+        Schedule.__init__(self, *args, **kw)
+        self.timetable = timetable
+        self._periods = PersistentList()
+
+    @property
+    def periods(self):
+        result = []
+        for day in self.timetable.periods.templates.values():
+            result.extend([period for period in day.values()
+                           if self.hasPeriod(period)])
+        return result
+
+    def periodKey(self, period):
+        day = period.__parent__
+        return (day.__name__, period.__name__)
+
+    def hasPeriod(self, period):
+        key = self.periodKey(period)
+        return key in self._periods
+
+    def addPeriod(self, period):
+        key = self.periodKey(period)
+        if key not in self._periods:
+            self._periods.append(key)
+
+    def removePeriod(self, period):
+        key = self.periodKey(period)
+        if key in self._periods:
+            self._periods.remove(key)
+
+    def iterMeetings(self, date, until_date=None):
+        if self.schedule is None:
+            return
+        meetings = iterMeetingsInTimezone(
+            self.schedule, self.timezone, date, until_date=until_date)
+        periods = list(self.periods)
+        for meeting in meetings:
+            # XXX: update meetings by consecutive_periods_as_one
+            # XXX: proxy issues may breed here
+            if meeting.period in self.periods:
+                yield meeting

@@ -23,4 +23,13 @@
              />
   </class>
 
+  <class class=".timetable.SelectedPeriodsSchedule">
+    <require permission="schooltool.view"
+             interface=".interfaces.ISelectedPeriodsSchedule"
+             />
+    <require permission="schooltool.edit"
+             set_schema=".interfaces.ISelectedPeriodsSchedule"
+             />
+  </class>
+
 </configure>

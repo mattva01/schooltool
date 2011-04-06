@@ -23,14 +23,17 @@ $Id$
 """
 
 #from zope.i18n import translate
-from zope.component import queryMultiAdapter
+import zope.schema
+from zope.proxy import sameProxiedObjects
+from zope.component import getMultiAdapter, queryMultiAdapter
 from zope.component import adapts
 #from zope.component import getUtility, queryUtility
-#from zope.interface import Interface, implements
+from zope.container.interfaces import INameChooser
+from zope.interface import Interface, implements
+from zope.interface.exceptions import Invalid
 #from zope.schema import TextLine, Int
 #from zope.schema.interfaces import RequiredMissing
 #from zope.intid.interfaces import IIntIds
-#from zope.container.interfaces import INameChooser
 #from zope.app.form.interfaces import IWidgetInputError
 #from zope.app.form.interfaces import IInputWidget
 #from zope.app.form.interfaces import WidgetInputError
@@ -40,10 +43,14 @@ from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.publisher.browser import BrowserView
 #from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.publisher.interfaces.browser import IBrowserRequest
-#from zope.publisher.interfaces.browser import IBrowserView
+from zope.publisher.interfaces.browser import IBrowserView
 #from zope.traversing.browser.interfaces import IAbsoluteURL
-#from zope.traversing.browser.absoluteurl import absoluteURL
-#
+from zope.traversing.browser.absoluteurl import absoluteURL
+from z3c.form import form, field, button, widget, validator
+from z3c.form.util import getSpecification
+from z3c.form.browser.checkbox import SingleCheckBoxFieldWidget
+
+from schooltool.app.browser.content import ContentProvider
 from schooltool.common import format_time_range
 #from schooltool.common import parse_time_range
 #from schooltool.skin.containers import ContainerView, ContainerDeleteView
@@ -57,8 +64,16 @@ from schooltool.common import format_time_range
 #from schooltool.timetable import findRelatedTimetables
 #from schooltool.timetable.browser.schedule import TimetableView, TabindexMixin
 #from schooltool.timetable.browser.schedule import format_timetable_for_presentation
+from schooltool.table.table import simple_form_key
 from schooltool.timetable.interfaces import ITimetable
 from schooltool.timetable.interfaces import IDayTemplateSchedule
+from schooltool.timetable.interfaces import ISelectedPeriodsSchedule
+from schooltool.timetable.interfaces import IHaveSchedule
+from schooltool.timetable.browser.app import getActivityVocabulary
+from schooltool.timetable.timetable import SelectedPeriodsSchedule
+from schooltool.term.interfaces import ITerm
+
+from schooltool.common import SchoolToolMessage as _
 
 
 #def fix_duplicates(names):
@@ -102,61 +117,45 @@ from schooltool.timetable.interfaces import IDayTemplateSchedule
 #    return result
 
 
-class DayTemplatesTableSnippet(BrowserView):
-    adapts(IDayTemplateSchedule, IBrowserRequest)
+class IRenderDayTableCells(IBrowserView):
+    def renderCells(schedule, day, item):
+        """Return contents for two <td> cells: (title_html, value_html)
+           Or return None if don't want to render the cell.
+        """
 
-    template = ViewPageTemplateFile("templates/daytemplates-snippet.pt")
 
-    def makeTable(self, days):
-        table = {'header': [title for title, items in days]}
-        day_items = [items for title, items in days]
+class DayTemplatesTable(ContentProvider):
+
+    @property
+    def days(self):
+        return self.context.templates.values()
+
+    def makeTable(self):
+        days = self.days
+        table = {'header': [day.title for day in days]}
 
         def to_dict(item):
             return item and {'title': item[0], 'value': item[1]} or {}
-        cols = [map(to_dict, items) for items in day_items]
 
-        max_rows = max([len(rows) for rows in cols])
-        cols = [rows + [{}]*(max_rows-len(rows)) for rows in cols]
+        cols = []
+        for day in days:
+            cells = [self.view.renderCells(self.context, day, item)
+                     for item in day.values()]
+            cols.append(map(to_dict, filter(None, cells)))
+
+        max_rows = max([len(cells) for cells in cols])
+        cols = [cells + [{}]*(max_rows-len(cells)) for cells in cols]
 
         table['rows'] = map(None, *cols)
-
-        ncols = len(days) or 1
+        ncols = len(cols) or 1
         table['col_width'] ='%d%%' % (100 / ncols);
         table['th_width'] = '%d%%' % (10 / ncols);
         table['td_width'] = '%d%%' % (90 / ncols);
         return table
 
-    def extractDays(self, formatter):
-        days = []
-        for day in self.templates:
-            entries = [formatter(item) for item in day.values()]
-            days.append((day.title, entries))
-        return days
-
-    @property
-    def templates(self):
-        return self.context.templates.values()
-
-    def titleGetter(self, item):
-        return ('', getattr(item, 'title', ''))
-
-    def __call__(self, item_formatter=titleGetter):
-        days = self.extractDays(item_formatter)
-        table = self.makeTable(days)
-        return self.template(
-            view=self, context=self.context, request=self.request,
-            table=table)
-
-
-def getActivityTitle(vocabulary, activity_type):
-    if activity_type not in vocabulary:
-        return None
-    term = vocabulary.getTerm(activity_type)
-    return term.title
-from schooltool.timetable.browser.app import getActivityVocabulary
-
 
 class TimetableView(BrowserView):
+    implements(IRenderDayTableCells)
     adapts(ITimetable, IBrowserRequest)
 
     template = ViewPageTemplateFile("templates/timetable.pt")
@@ -168,37 +167,25 @@ class TimetableView(BrowserView):
         self.activity_vocabulary = getActivityVocabulary(self.context)
 
     def activityTitle(self, activity_type):
-        vocabulary = self.activity_vocabulary
-        if activity_type in vocabulary:
-            term = vocabulary.getTerm(activity_type)
+        if activity_type in self.activity_vocabulary:
+            term = self.activity_vocabulary.getTerm(activity_type)
             return term.title
         return None
 
-    def periods_snippet(self):
-        snippet = queryMultiAdapter(
-            (self.context.periods, self.request),
-            name='day_templates_table_snippet')
-        if not snippet:
-            return ''
-        format_period = lambda period: (
-            period.title, self.activityTitle(period.activity_type))
-        table = snippet(item_formatter=format_period)
-        return table
-
-    def time_snippet(self):
-        snippet = queryMultiAdapter(
-            (self.context.time_slots, self.request),
-            name='day_templates_table_snippet')
-        if not snippet:
-            return ''
-        format_time_slot = lambda slot: (
-            format_time_range(slot.tstart, slot.duration),
-            self.activityTitle(slot.activity_type))
-        table = snippet(item_formatter=format_time_slot)
-        return table
+    def renderCells(self, schedule, day, item):
+        if sameProxiedObjects(schedule, self.context.periods):
+            period = item
+            return (period.title,
+                    self.activityTitle(period.activity_type) or '')
+        if sameProxiedObjects(schedule, self.context.time_slots):
+            slot = item
+            return (format_time_range(slot.tstart, slot.duration),
+                    self.activityTitle(slot.activity_type) or '')
+        return None
 
     def __call__(self):
         return self.template()
+
 
 
 #class SimpleTimetableSchemaAdd(BrowserView):
@@ -614,3 +601,288 @@ class TimetableView(BrowserView):
 #                                     (b['used'], b['periods'])))
 #
 #        return result
+
+
+
+class ISelectedPeriodsAddForm(Interface):
+    """Form schema for ITerm add/edit views."""
+
+    timetable = zope.schema.Choice(
+        title=_("School timetable"),
+        source="schooltool.timetable.browser.timetable_vocabulary",
+        required=True,
+    )
+
+    first = zope.schema.Date(title=_("Apply from"))
+
+    last = zope.schema.Date(title=_("Apply until"))
+
+
+
+class SelectedPeriodsAddView(form.AddForm):
+
+    template = ViewPageTemplateFile('templates/selected-periods-add.pt')
+    fields = field.Fields(ISelectedPeriodsAddForm)
+
+    _object_added = None
+
+    buttons = button.Buttons(
+        button.Button('add', title=_('Add')),
+        button.Button('cancel', title=_('Cancel')))
+
+    @property
+    def owner(self):
+        return IHaveSchedule(self.context)
+
+    @property
+    def term(self):
+        return ITerm(self.owner, None)
+
+    @button.handler(buttons["add"])
+    def handleAdd(self, action):
+        return form.AddForm.handleAdd.func(self, action)
+
+    @button.handler(buttons["cancel"])
+    def handleCancel(self, action):
+        url = absoluteURL(self.context, self.request)
+        self.request.response.redirect(url)
+
+    def updateActions(self):
+        super(SelectedPeriodsAddView, self).updateActions()
+        self.actions['add'].addClass('button-ok')
+        self.actions['cancel'].addClass('button-cancel')
+
+    def create(self, data):
+        timetable = data['timetable']
+        schedule = SelectedPeriodsSchedule(
+            timetable, data['first'], data['last'],
+            title=timetable.title, timezone=None)
+        return schedule
+
+    def add(self, schedule):
+        chooser = INameChooser(self.context)
+        name = chooser.chooseName('', schedule)
+        self.context[name] = schedule
+        self._object_added = schedule
+
+    def nextURL(self):
+        if self._object_added is not None:
+            return '%s/edit.html' % (
+                absoluteURL(self._object_added, self.request))
+        return absoluteURL(self.context, self.request)
+
+
+TimetableAdd_default_first = widget.ComputedWidgetAttribute(
+    lambda adapter: adapter.view.term.first,
+    view=SelectedPeriodsAddView,
+    field=ISelectedPeriodsAddForm['first']
+    )
+
+
+TimetableAdd_default_last = widget.ComputedWidgetAttribute(
+    lambda adapter: adapter.view.term.last,
+    view=SelectedPeriodsAddView,
+    field=ISelectedPeriodsAddForm['last']
+    )
+
+
+class SelectedPeriodsFormValidator(validator.InvariantsValidator):
+
+    def _formatTitle(self, object):
+        if object is None:
+            return None
+        def dateTitle(date):
+            if date is None:
+                return '...'
+            formatter = getMultiAdapter((date, self.request), name='mediumDate')
+            return formatter()
+        return u"%s (%s - %s)" % (
+            object.title, dateTitle(object.first), dateTitle(object.last))
+
+    def getOthers(self, schedule):
+        container = schedule.__parent__
+        others = [other for key, other in container.items()
+                  if key != schedule.__name__]
+        return others
+
+#    def validateAgainstOthers(self, schedule, others):
+#        pass
+
+#    def validateAgainstTerm(self, schedule, term):
+#    term_daterange = IDateRange(term)
+#    if ((first is not None and first not in term_daterange) or
+#        (last is not None and last not in term_daterange)):
+#        raise TimetableOverflowError(
+#            schema, first, last, term)
+
+    def validateObject(self, schedule):
+        #errors = super(SelectedPeriodsFormValidator, self).validateObject(schedule)
+        #try:
+        #    dr = DateRange(schedule.first, schedule.last)
+        #
+        #    others = self.getOthers()
+        #
+        #    term = ITerm(timetable_dict)
+        #
+        #    try:
+        #        validateAgainstOthers(
+        #            timetable.schooltt, timetable.first, timetable.last,
+        #            others)
+        #    except TimetableOverlapError, e:
+        #        for tt in e.overlapping:
+        #            errors += (Invalid(
+        #                u"%s %s" % (
+        #                    _("Timetable conflicts with another:"),
+        #                    self._formatTitle(tt))), )
+        #    try:
+        #        validateAgainstTerm(
+        #            timetable.schooltt, timetable.first, timetable.last,
+        #            term)
+        #    except TimetableOverflowError, e:
+        #        errors += (Invalid(u"%s %s" % (
+        #            _("Timetable does not fit in term"),
+        #            self._formatTitle(term))), )
+        #except ValueError, e:
+        #    errors += (Invalid(_("Schedule must begin before it ends.")), )
+        #except validator.NoInputData:
+        #    return errors
+        #return errors
+        return []
+
+
+class SelectedPeriodsAddFormValidator(validator.InvariantsValidator):
+    def getOthers(self, schedule):
+        container = self.context
+        return container.values()
+
+
+validator.WidgetsValidatorDiscriminators(
+    SelectedPeriodsAddFormValidator,
+    view=SelectedPeriodsAddView,
+    schema=getSpecification(ISelectedPeriodsAddForm, force=True))
+
+
+class SelectedPeriodsContent(ContentProvider):
+    implements(IRenderDayTableCells)
+
+    def __init__(self, *args, **kw):
+        ContentProvider.__init__(self, *args, **kw)
+        self.owner = IHaveSchedule(self.context)
+
+    def renderCells(self, schedule, day, item):
+        timetable = self.context.timetable
+        if sameProxiedObjects(schedule, timetable.periods):
+            if self.context.hasPeriod(item):
+                return (item.title,
+                        self.owner.title)
+            else:
+                return (item.title, '')
+        return None
+
+    def __call__(self):
+        return self.template()
+
+
+class SelectedPeriodsScheduleEditView(form.EditForm):
+    implements(IRenderDayTableCells)
+
+    template = ViewPageTemplateFile('templates/selected-periods-edit.pt')
+    fields = field.Fields(ISelectedPeriodsSchedule).select(
+        'first', 'last',
+        'consecutive_periods_as_one')
+    fields['consecutive_periods_as_one'].widgetFactory = SingleCheckBoxFieldWidget
+
+    def __init__(self, *args, **kw):
+        form.EditForm.__init__(self, *args, **kw)
+        self.owner = IHaveSchedule(self.context)
+        self.activity_vocabulary = getActivityVocabulary(self.context)
+
+    def getPeriodKey(self, day, period):
+        return 'period.%s.%s' % (simple_form_key(day),
+                                 simple_form_key(period))
+
+    def activityTitle(self, activity_type):
+        if activity_type in self.activity_vocabulary:
+            term = self.activity_vocabulary.getTerm(activity_type)
+            return term.title
+        return None
+
+    def renderCells(self, schedule, day, item):
+        timetable = self.context.timetable
+        if sameProxiedObjects(schedule, timetable.periods):
+            checked = self.context.hasPeriod(item)
+            key = self.getPeriodKey(day, item)
+            checkbox = """
+              <input class="activity" type="checkbox"
+                     id="%(key)s" name="%(key)s"
+                     value="%(key)s"%(checked)s></input>""" % {
+                'key': key,
+                'checked': checked and ' checked="checked"' or ''}
+            label = """
+              <label class="period" for="%(key)s">%(title)s</label>""" % {
+                'key': key, 'title': item.title or ''}
+            return (checkbox, label)
+        if sameProxiedObjects(schedule, timetable.time_slots):
+            slot = item
+            return (format_time_range(slot.tstart, slot.duration),
+                    self.activityTitle(slot.activity_type) or '')
+        return None
+
+    def updateActions(self):
+        super(SelectedPeriodsScheduleEditView, self).updateActions()
+        self.actions['apply'].addClass('button-ok')
+        self.actions['cancel'].addClass('button-cancel')
+
+    @button.buttonAndHandler(_('Save'), name='apply')
+    def handleApply(self, action):
+        data, errors = self.extractData()
+        if errors:
+            self.status = self.formErrorsMessage
+            return
+        changes = self.applyChanges(data)
+
+        schedule_changed = bool(changes)
+
+        timetable = self.context.timetable
+        for day in timetable.periods.templates.values():
+            for period in day.values():
+                key = self.getPeriodKey(day, period)
+                selected = bool(self.request.get(key))
+                scheduled = self.context.hasPeriod(period)
+                if selected and not scheduled:
+                    self.context.addPeriod(period)
+                    schedule_changed = True
+                elif not selected and scheduled:
+                    self.context.removePeriod(period)
+                    schedule_changed = True
+
+        self.status = self.successMessage
+
+        if schedule_changed:
+            # XXX: notify that timetable changed - or use default event?!
+            #timetable = removeSecurityProxy(self.context)
+            #event = TimetableReplacedEvent(
+            #    timetable.__parent__.__parent__, timetable.__name__,
+            #    timetable, timetable)
+            #zope.event.notify(event)
+            pass
+        self.redirectToParent()
+
+    @button.buttonAndHandler(_("Cancel"), name='cancel')
+    def handle_cancel_action(self, action):
+        self.redirectToParent()
+
+    def redirectToParent(self):
+        self.request.response.redirect(
+            absoluteURL(self.context.__parent__,
+                        self.request))
+
+    @property
+    def term(self):
+        return ITerm(self.owner, None)
+
+
+validator.WidgetsValidatorDiscriminators(
+    SelectedPeriodsFormValidator,
+    view=SelectedPeriodsScheduleEditView,
+    schema=getSpecification(ITimetable, force=True))

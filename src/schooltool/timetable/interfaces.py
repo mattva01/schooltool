@@ -111,19 +111,6 @@ class ISchedule(Interface):
         """Yields lists of meetings for the given date range."""
 
 
-class ISelectedPeriodsSchedule(ISchedule):
-    """Schedule composed of meetings from another schedule with
-    selected periods only."""
-
-    schedule = zope.schema.Object(
-        title=u"Schedule to filter meetings from.",
-        schema=ISchedule,
-        required=False)
-
-    periods = Attribute(
-        """Iterate only over meetings for these periods.""")
-
-
 class IScheduleContainer(IContainer, ISchedule):
     """A container of schedules.
 
@@ -257,6 +244,46 @@ class ITimetableContainer(IContainer, ITimetableContainerBase):
     contains(ITimetable)
 
 
+class ISelectedPeriodsScheduleRead(ISchedule):
+
+    timetable = zope.schema.Object(
+        title=u"Timetable to filter meetings from.",
+        schema=ITimetable,
+        required=False)
+
+    periods = Attribute(
+        """Iterate only over meetings for these periods.""")
+
+    consecutive_periods_as_one = zope.schema.Bool(
+        title=u"Treat consecutive periods as one meeting.",
+        default=False,
+        required=False)
+
+    def hasPeriod(period):
+        """Is the period added to this schedule."""
+
+
+class ISelectedPeriodsScheduleWrite(Interface):
+
+    def addPeriod(period):
+        """Schedule meetings for this period."""
+
+    def removePeriod(period):
+        """Unschedule meeting for this period."""
+
+
+class ISelectedPeriodsSchedule(ISelectedPeriodsScheduleRead,
+                               ISelectedPeriodsScheduleWrite):
+    """Schedule composed of meetings from another schedule with
+    selected periods only."""
+
+    def addPeriod(period):
+        """Schedule meetings for this period."""
+
+    def removePeriod(period):
+        """Unschedule meeting for this period."""
+
+
 #
 #  Calendar
 #
@@ -276,7 +303,7 @@ class IScheduledCalendarEvent(IMeeting, ISchoolToolCalendarEvent):
 #
 
 
-class IScheduleTimetables(IAnnotatable):
+class IHaveSchedule(IAnnotatable):
     """Marker interface for objects that schedule existing timetables."""
 
 

@@ -17,9 +17,9 @@
      tal:content="string:Timezone: ${view/context/timezone}"/>
 
   <h2 i18n:translate="">Periods</h2>
-  <tal:block content="structure view/periods_snippet" />
+  <div tal:content="structure context/periods/schooltool:content/table"></div>
   <h2 i18n:translate="">Time schedule</h2>
-  <tal:block content="structure view/time_snippet" />
+  <div tal:content="structure context/time_slots/schooltool:content/table"></div>
 
 </metal:block>
 </body>

@@ -39,7 +39,7 @@
     <implements interface="schooltool.timetable.interfaces.IHaveTimetables" />
   </class>
   <class class="schooltool.course.section.Section">
-    <implements interface="schooltool.timetable.interfaces.IScheduleTimetables" />
+    <implements interface="schooltool.timetable.interfaces.IHaveSchedule" />
   </class>
 
 </configure>

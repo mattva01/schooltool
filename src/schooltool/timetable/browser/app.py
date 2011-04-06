@@ -30,8 +30,13 @@ from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.schema.vocabulary import getVocabularyRegistry
 
 from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.app.utils import TitledContainerItemVocabulary
+from schooltool.schoolyear.interfaces import ISchoolYear
 from schooltool.skin.containers import ContainerView
+from schooltool.term.interfaces import ITerm
+from schooltool.timetable.interfaces import IHaveSchedule
 from schooltool.timetable.interfaces import IScheduleContainer
+from schooltool.timetable.interfaces import ITimetableContainer
 from schooltool.timetable.interfaces import ITimetableContainer
 
 from schooltool.common import SchoolToolMessage as _
@@ -79,3 +84,13 @@ def getActivityVocabulary(object=None):
     vocabulary = vr.get(object, 'schooltool.timetable.activityvocbulary')
     return vocabulary
 
+
+class TimetableVocabulary(TitledContainerItemVocabulary):
+    @property
+    def container(self):
+        owner = IHaveSchedule(self.context)
+        return ITimetableContainer(ISchoolYear(ITerm(owner)), {})
+
+
+def timetableVocabularyFactory():
+    return TimetableVocabulary
