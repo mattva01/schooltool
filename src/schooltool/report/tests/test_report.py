@@ -1,6 +1,6 @@
 #
 # SchoolTool - common information systems platform for school administration
-# Copyright (c) 2009 Shuttleworth Foundation
+# Copyright (c) 2011 Shuttleworth Foundation
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -23,13 +23,8 @@ Unit tests for report functionality.
 import unittest
 import doctest
 
-from zope.interface import implements
-from zope.interface.verify import verifyObject
-from zope.component import provideAdapter
-from zope.container.contained import NameChooser
 from zope.app.testing import setup
 
-from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.report import report
 
 

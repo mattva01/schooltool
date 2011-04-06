@@ -1,6 +1,6 @@
 #
 # SchoolTool - common information systems platform for school administration
-# Copyright (c) 2009 Shuttleworth Foundation
+# Copyright (c) 2011 Shuttleworth Foundation
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -23,7 +23,6 @@ Functional Testing Utilities for schooltool.report
 import os
 
 from schooltool.testing.functional import ZCMLLayer
-from schooltool.report import report
 
 
 dir = os.path.abspath(os.path.dirname(__file__))

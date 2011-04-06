@@ -1,6 +1,6 @@
 #
 # SchoolTool - common information systems platform for school administration
-# Copyright (c) 2009 Shuttleworth Foundation
+# Copyright (c) 2011 Shuttleworth Foundation
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -21,16 +21,9 @@ Report interfaces
 
 """
 
-from zope.container.constraints import contains, containers
-from zope.location.interfaces import IContained
-from zope.container.interfaces import IReadContainer, IWriteContainer
 from zope.interface import Interface
-from zope.location.interfaces import ILocation
-from zope.schema import Bool, Datetime, Dict
-from zope.schema import TextLine, List, Text, Int, Password
+from zope.schema import Dict
 from zope.viewlet.interfaces import IViewletManager
-
-from schooltool.common import SchoolToolMessage as _
 
 
 class IReportLinkViewletManager(IViewletManager):

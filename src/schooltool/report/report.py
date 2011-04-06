@@ -1,6 +1,6 @@
 #
 # SchoolTool - common information systems platform for school administration
-# Copyright (c) 2009 Shuttleworth Foundation
+# Copyright (c) 2011 Shuttleworth Foundation
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -21,27 +21,23 @@ Base classes for report reference and request adapters
 
 """
 
+import urllib
+
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
-from zope.component import adapts, adapter
 from zope.component import getUtility, queryUtility, getGlobalSiteManager
-from zope.interface import implements, implementer
+from zope.interface import implements
 from zope.publisher.browser import BrowserView
 from zope.traversing.browser.absoluteurl import absoluteURL
-from zope.viewlet.interfaces import IViewletManager
-from zope.viewlet.viewlet import SimpleAttributeViewlet
 
 from schooltool.app.interfaces import ISchoolToolApplication
-from schooltool.basicperson.interfaces import IBasicPerson
-from schooltool.common import SchoolToolMessage as _
-from schooltool.course.interfaces import ISection, ISectionContainer
-from schooltool.group.interfaces import IGroup, IGroupContainer
-from schooltool.person.interfaces import IPersonContainer
+from schooltool.course.interfaces import ISectionContainer
+from schooltool.group.interfaces import IGroupContainer
 from schooltool.report.interfaces import IReportLinkViewletManager
 from schooltool.report.interfaces import IRegisteredReportsUtility
 from schooltool.report.interfaces import IReportLinksURL
 from schooltool.schoolyear.interfaces import ISchoolYear
-from schooltool.skin.skin import ISchoolToolLayer, OrderedViewletManager
-from schooltool.term.interfaces import ITerm, IDateManager
+from schooltool.skin.skin import OrderedViewletManager
+from schooltool.term.interfaces import IDateManager
 
 
 class ReportLinkViewletManager(OrderedViewletManager):
@@ -102,9 +98,7 @@ class ReportLinksURL(BrowserView):
         return urllib.unquote(self.__str__()).decode('utf-8')
 
     def __str__(self):
-        url = absoluteURL(self.actualContext(), self.request)
-        return url
-        #return '%s/%s' % (url, 'reports')
+        return absoluteURL(self.actualContext(), self.request)
 
     def __call__(self):
         return self.__str__()

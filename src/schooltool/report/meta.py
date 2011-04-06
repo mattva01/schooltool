@@ -1,6 +1,6 @@
 #
 # SchoolTool - common information systems platform for school administration
-# Copyright (c) 2009 Shuttleworth Foundation
+# Copyright (c) 2011 Shuttleworth Foundation
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,30 +17,20 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Base classes for report reference and request adapters
+ZCML directives for reports
 
 """
 
-from zope.component import adapts, adapter
-from zope.component import getUtility
 from zope.configuration.fields import MessageID
-from zope.interface import implements, implementer, Interface
+from zope.interface import Interface
 from zope.publisher.interfaces.browser import IBrowserView
-from zope.traversing.browser import absoluteURL
 from zope.viewlet.metadirectives import IViewletDirective
 from zope.viewlet.metaconfigure import viewletDirective
 
-from schooltool.app.interfaces import ISchoolToolApplication
-from schooltool.basicperson.interfaces import IBasicPerson
 from schooltool.common import SchoolToolMessage as _
-from schooltool.course.interfaces import ISection, ISectionContainer
-from schooltool.group.interfaces import IGroup, IGroupContainer
-from schooltool.person.interfaces import IPersonContainer
 from schooltool.report.report import ReportLinkViewletManager, ReportLinkViewlet
 from schooltool.report.report import getReportRegistrationUtility
-from schooltool.schoolyear.interfaces import ISchoolYear
 from schooltool.skin.skin import ISchoolToolLayer
-from schooltool.term.interfaces import ITerm, IDateManager
 
 
 class IReportLinkDirective(IViewletDirective):

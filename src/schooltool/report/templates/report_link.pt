@@ -1,2 +1,2 @@
-<a tal:attributes="href view/report_link" tal:content="view/title" i18n:domain="schooltool">Report title</a>
+<a tal:attributes="href view/report_link" tal:content="view/title">Report title</a>
 

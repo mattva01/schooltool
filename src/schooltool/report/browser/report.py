@@ -1,6 +1,6 @@
 #
 # SchoolTool - common information systems platform for school administration
-# Copyright (c) 2009 Shuttleworth Foundation
+# Copyright (c) 2011 Shuttleworth Foundation
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@ Report browser views.
 
 """
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
-from zope.component import getAdapters, queryMultiAdapter
+from zope.component import queryMultiAdapter
 from zope.i18n import translate
 from zope.i18n.interfaces.locales import ICollator
 from zope.publisher.browser import BrowserView
