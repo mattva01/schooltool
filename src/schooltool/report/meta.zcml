@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/meta">
+
+  <directives namespace="http://namespaces.schooltool.org/report">
+    <directive
+        name="reportLink"
+        schema="schooltool.report.meta.IReportLinkDirective"
+        handler="schooltool.report.meta.reportLinkDirective"
+        />
+  </directives>
+
+</configure>

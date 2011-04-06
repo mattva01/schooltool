@@ -5,6 +5,8 @@ CHANGES
 1.6.0 (unreleased)
 ------------------
 
+- Created report package with reportLink directive for registering reports
+  (https://launchpad.net/bugs/429588).
 - Removed 'Report a bug on Launchpad' link from the footer
 - Fixed crash when term title is "First" or "Last" (https://launchpad.net/bugs/485639).
 - Updated translations.

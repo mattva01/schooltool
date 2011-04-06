@@ -1,0 +1,105 @@
+=================
+SchoolTool Report
+=================
+
+A manager logs in:
+
+    >>> manager = Browser('manager', 'schooltool')
+
+And goes to the report referece view:
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('Reports').click()
+
+The view has a table with three columns:
+
+    >>> manager.printQuery('//table[@class="container"]//th')
+    <th>Category</th>
+    <th>Title</th>
+    <th>Description</th>
+
+We registered some mock report adapters to test the view's ability to find them:
+
+    >>> manager.printQuery('//table[@class="container"]//td/a')
+    <a href="http://localhost">Group</a>
+    <a href="http://localhost">Mock Group Report</a>
+    <a href="http://localhost">Just a mock group report.</a>
+    <a href="http://localhost">School Year</a>
+    <a href="http://localhost">Mock SchoolYear Report</a>
+    <a href="http://localhost">Just a mock schoolyear report.</a>
+    <a href="http://localhost">Section</a>
+    <a href="http://localhost">Mock Section Report</a>
+    <a href="http://localhost">Just a mock section report.</a>
+    <a href="http://localhost/persons">Student</a>
+    <a href="http://localhost/persons">Mock Student Report</a>
+    <a href="http://localhost/persons">Just a mock student report.</a>
+    <a href="http://localhost">Term</a>
+    <a href="http://localhost">Mock Term Report</a>
+    <a href="http://localhost">Just a mock term report.</a>
+
+The non-person references have no href set becuase there isn't any current term.
+
+    >>> from schooltool.app.browser.ftests import setup
+    >>> setup.setUpBasicSchool()
+    >>> setup.addCourse('Math I', '2005-2006')
+    >>> setup.addSection('Math I', '2005-2006', 'Fall',
+    ...                  instructors=[],
+    ...                  members=[])
+
+Now the same view will have better hrefs:
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('Reports').click()
+    >>> manager.printQuery('//table[@class="container"]//td/a')
+    <a href="http://localhost/schoolyears/2005-2006/groups">Group</a>
+    <a href="http://localhost/schoolyears/2005-2006/groups">Mock Group Report</a>
+    <a href="http://localhost/schoolyears/2005-2006/groups">Just a mock group report.</a>
+    <a href="http://localhost/schoolyears/2005-2006">School Year</a>
+    <a href="http://localhost/schoolyears/2005-2006">Mock SchoolYear Report</a>
+    <a href="http://localhost/schoolyears/2005-2006">Just a mock schoolyear report.</a>
+    <a href="http://localhost/schoolyears/2005-2006/spring/sections">Section</a>
+    <a href="http://localhost/schoolyears/2005-2006/spring/sections">Mock Section Report</a>
+    <a href="http://localhost/schoolyears/2005-2006/spring/sections">Just a mock section report.</a>
+    <a href="http://localhost/persons">Student</a>
+    <a href="http://localhost/persons">Mock Student Report</a>
+    <a href="http://localhost/persons">Just a mock student report.</a>
+    <a href="http://localhost/schoolyears/2005-2006/spring">Term</a>
+    <a href="http://localhost/schoolyears/2005-2006/spring">Mock Term Report</a>
+    <a href="http://localhost/schoolyears/2005-2006/spring">Just a mock term report.</a>
+
+Now we visit the various context types and see that the registered report
+request adapters are reflected in the report request views.
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('Persons').click()
+    >>> manager.getLink('Administrator').click()
+    >>> manager.getLink('Reports').click()
+    >>> manager.printQuery('//div[@id="content-body"]//a')
+    <a href="http://localhost/persons/manager/request_student_report.html">Mock Student Report</a>
+
+    >>> manager.getLink('2005-2006').click()
+    >>> manager.getLink('Groups').click()
+    >>> manager.getLink('Students').click()
+    >>> manager.getLink('Reports').click()
+    >>> manager.printQuery('//div[@id="content-body"]//a')
+    <a href="http://localhost/schoolyears/2005-2006/groups/students/request_group_report.html">Mock Group Report</a>
+
+    >>> manager.getLink('2005-2006').click()
+    >>> manager.getLink('Reports').click()
+    >>> manager.printQuery('//div[@id="content-body"]//a')
+    <a href="http://localhost/schoolyears/2005-2006/request_schoolyear_report.html">Mock SchoolYear Report</a>
+
+    >>> manager.getLink('2005-2006').click()
+    >>> manager.getLink('Fall').click()
+    >>> manager.getLink('Reports').click()
+    >>> manager.printQuery('//div[@id="content-body"]//a')
+    <a href="http://localhost/schoolyears/2005-2006/fall/request_term_report.html">Mock Term Report</a>
+
+    >>> manager.getLink('2005-2006').click()
+    >>> manager.getLink('Fall').click()
+    >>> manager.getLink('Sections').click()
+    >>> manager.getLink('Math I (1)').click()
+    >>> manager.getLink('Reports').click()
+    >>> manager.printQuery('//div[@id="content-body"]//a')
+    <a href="http://localhost/schoolyears/2005-2006/fall/sections/1/request_section_report.html">Mock Section Report</a>
+
