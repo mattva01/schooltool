@@ -750,23 +750,20 @@
       provides=".content.IContentProviders"
       factory=".content.TALESAwareContentProviders" />
 
-  <zope:adapter
-      factory=".app.ContentTitle"
-      provides=".content.ISchoolToolContentProvider"
-      name="title"
-      />
+  <content
+      class=".app.ContentTitle"
+      permission="schooltool.view"
+      name="title" />
 
-  <zope:adapter
-      factory=".app.ContentLink"
-      provides=".content.ISchoolToolContentProvider"
-      name="link"
-      />
+  <content
+      class=".app.ContentLink"
+      permission="schooltool.view"
+      name="link" />
 
-  <zope:adapter
-      factory=".app.ContentLabel"
-      provides=".content.ISchoolToolContentProvider"
-      name="label"
-      />
+  <content
+      class=".app.ContentLabel"
+      permission="schooltool.view"
+      name="label" />
 
   <!-- Timetable support -->
   <!-- XXX: disable timetable support for refactoring -->

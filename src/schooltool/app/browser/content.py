@@ -30,7 +30,9 @@ from zope.contentprovider.provider import ContentProviderBase
 from zope.event import notify
 from zope.location.interfaces import ILocation
 from zope.proxy.decorator import SpecificationDecoratorBase
-from zope.publisher.interfaces.browser import IBrowserView
+from zope.publisher.interfaces.browser import IBrowserPage
+from zope.publisher.interfaces import NotFound
+from zope.publisher.browser import BrowserPage
 from zope.tales.interfaces import ITALESFunctionNamespace
 from zope.traversing.interfaces import ITraversable
 
@@ -39,12 +41,12 @@ class IContentProviders(ITraversable):
     pass
 
 
-class ISchoolToolContentProvider(IBrowserView):
+class ISchoolToolContentProvider(IBrowserPage, IContentProvider):
     def __call__(*args, **kw):
         """Compute the response body."""
 
 
-class ContentProvider(ContentProviderBase):
+class ContentProvider(ContentProviderBase, BrowserPage):
     """Base SchoolTool content provider class."""
 
     implements(ISchoolToolContentProvider)
@@ -71,13 +73,20 @@ class SchoolToolContentProviderProxy(SpecificationDecoratorBase):
     adapts(IContentProvider)
     implements(ISchoolToolContentProvider)
 
-    __slots__ = ('__call__', )
+    __slots__ = ('__call__', 'browserDefault', 'publishTraverse')
+
+    def browserDefault(self, request):
+        return self, ()
+
+    def publishTraverse(self, request, name):
+        raise NotFound(self, name, request)
 
     def __call__(self, *args, **kw):
         event = zope.contentprovider.interfaces.BeforeUpdateEvent
         notify(event(self, self.request))
         self.update()
         return self.render(*args, **kw)
+
 
 
 class ContentProviders(object):
