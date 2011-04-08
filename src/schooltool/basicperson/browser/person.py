@@ -526,10 +526,6 @@ class PersonAddViewBase(PersonAddFormBase):
     def getBaseFields(self):
         return field.Fields(IPersonAddForm).omit('group')
 
-    def groupViewURL(self):
-        return '%s/%s.html' % (absoluteURL(self.context, self.request),
-                               self.group_id)
-
     def updateActions(self):
         super(PersonAddViewBase, self).updateActions()
         self.actions['add'].addClass('button-ok')
@@ -541,7 +537,8 @@ class PersonAddViewBase(PersonAddFormBase):
 
     @button.buttonAndHandler(_('Cancel'))
     def handle_cancel_action(self, action):
-        self.request.response.redirect(self.groupViewURL())
+        url = absoluteURL(self.context, self.request)
+        self.request.response.redirect(url)
 
     def create(self, data):
         username = data.get('username')

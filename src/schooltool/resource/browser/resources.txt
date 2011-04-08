@@ -65,3 +65,11 @@ can choose an existing type from a drop down box.
     >>> manager.getLink('Projector').click()
     >>> 'Projector 2' in manager.contents
     True
+
+If we click Cancel in any of the forms, we get back to resources index.
+
+    >>> manager.getLink('New Equipment').click()
+    >>> manager.getControl('Cancel').click()
+    >>> manager.url
+    'http://localhost/resources'
+

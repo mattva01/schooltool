@@ -121,3 +121,12 @@ Adding an administrator will have only administrator demos:
     >>> manager.printQuery('//span[@id="form-widgets-citizenship"]/text()')
     Spain
 
+Clicking Cancel will return to persons index:
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('Persons').click()
+    >>> manager.getLink('Add Teacher').click()
+    >>> manager.getControl('Cancel').click()
+    >>> manager.url
+    'http://localhost/persons'
+
