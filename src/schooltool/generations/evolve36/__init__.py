@@ -271,8 +271,7 @@ class TimetableBuilder(object):
         else:
             timezone = self.timezone
 
-        # XXX: probably take some sane defaluts from context.schoolyear
-        first, last = None, None
+        first, last = context.schoolyear.first, context.schoolyear.last
 
         timetable = Timetable(
             first, last,

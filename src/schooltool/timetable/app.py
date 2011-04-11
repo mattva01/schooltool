@@ -19,8 +19,11 @@
 """Timetable integration with SchoolTool app.
 XXX: move to schooltool/app/timetable.py or similar.
 """
-from zope.interface import implements, implementer, Interface
-from zope.component import adapter, getUtility
+import zope.lifecycleevent
+import zope.lifecycleevent.interfaces
+
+from zope.interface import implements, implementer
+from zope.component import adapts, adapter, getUtility
 from zope.annotation.interfaces import IAttributeAnnotatable
 from zope.container.interfaces import IContainer
 from zope.container.btree import BTreeContainer
@@ -28,6 +31,9 @@ from zope.intid.interfaces import IIntIds
 
 from schooltool.app.app import StartUpBase
 from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.common import DateRange
+from schooltool.schoolyear.subscriber import ObjectEventAdapterSubscriber
+from schooltool.schoolyear.interfaces import ISchoolYear
 from schooltool.timetable import interfaces
 from schooltool.timetable.schedule import ScheduleContainer
 from schooltool.timetable.timetable import TimetableContainer
@@ -79,7 +85,7 @@ def getScheduleContainerOwner(container):
 @adapter(interfaces.ISchedule)
 def getScheduleOwner(schedule):
     container = schedule.__parent__
-    return interfaces.IHaveSchedule(container)
+    return interfaces.IHaveSchedule(container, None)
 
 
 @adapter(interfaces.IHaveTimetables)
@@ -94,8 +100,8 @@ def getTimetableContainer(obj):
     return container
 
 
-@implementer(interfaces.IHaveTimetables)
 @adapter(interfaces.ITimetableContainer)
+@implementer(interfaces.IHaveTimetables)
 def getTimetableContainerOwner(container):
     int_ids = getUtility(IIntIds)
     obj_id = int(container.__name__)
@@ -107,8 +113,62 @@ def getTimetableContainerOwner(container):
 @adapter(interfaces.ISchedule)
 def getScheduleTimetableOwner(schedule):
     container = schedule.__parent__
-    return interfaces.IHaveTimetables(container)
+    return interfaces.IHaveTimetables(container, None)
 
 
 def activityVocabularyFactory():
     return lambda context: interfaces.activity_types
+
+
+class UpdateSelectedPeriodsSchedules(ObjectEventAdapterSubscriber):
+    adapts(zope.lifecycleevent.interfaces.IObjectModifiedEvent,
+           interfaces.ITimetable)
+
+    def __call__(self):
+        print 'UpdateSelectedPeriodsSchedules'
+        app = ISchoolToolApplication(None)
+        # XXX: extremely nasty loop through all schedules.
+        schedule_containers = app[SCHEDULES_KEY]
+        for container in schedule_containers.values():
+            for schedule in container.values():
+                if interfaces.ISelectedPeriodsSchedule.providedBy(schedule):
+                    print 'UpdateSelectedPeriodsSchedules:', schedule
+                    zope.lifecycleevent.modified(schedule)
+
+
+class SchooldaysForSchedule(object):
+    adapts(interfaces.ISchedule)
+    implements(interfaces.ISchooldays)
+
+    def __init__(self, context):
+        self.schedule = context
+
+    @property
+    def schoolyear(self):
+        return ISchoolYear(self.schedule)
+
+    def __contains__(self, date):
+        for term in self.schoolyear.values():
+            if date in term:
+                return term.isSchoolday(date)
+        return False
+
+    def __iter__(self):
+        schedule = self.schedule
+        dates = DateRange(schedule.first, schedule.last)
+        return self.iterDates(dates)
+
+    def iterDates(self, dates):
+        for date in dates:
+            if date in self:
+                yield date
+
+
+class SchooldaysForTimetable(SchooldaysForSchedule):
+    adapts(interfaces.ITimetable)
+
+    @property
+    def schoolyear(self):
+        container = self.schedule.__parent__
+        owner = interfaces.IHaveTimetables(container)
+        return ISchoolYear(owner)

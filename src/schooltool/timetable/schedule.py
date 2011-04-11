@@ -31,7 +31,7 @@ from zope.container.btree import BTreeContainer
 from schooltool.timetable import interfaces
 
 
-class Period(Contained):
+class Period(Persistent, Contained):
     implements(interfaces.IPeriod)
 
     title = None
@@ -74,19 +74,25 @@ class Schedule(Contained):
 
 
 def date_timespan(date, tzinfo=None):
-    starts = datetime.datetime.combine(date, datetime.min).replace(tzinfo=tzinfo)
-    ends = datetime.datetime.combine(date, datetime.max).replace(tzinfo=tzinfo)
+    starts = datetime.datetime.combine(date, datetime.time.min)
+    starts = starts.replace(tzinfo=tzinfo)
+    ends = datetime.datetime.combine(date, datetime.time.max)
+    ends = ends.replace(tzinfo=tzinfo)
     return starts, ends
 
 
 def iterMeetingsInTimezone(schedule, other_timezone, date, until_date=None):
     if until_date == None:
         until_date = date
+    # XXX: what to do with obsolete timezones???
+    other_timezone = pytz.timezone(other_timezone)
+    schedule_timezone = pytz.timezone(schedule.timezone)
+
     start_time = date_timespan(date, tzinfo=other_timezone)[0]
     end_time = date_timespan(until_date, tzinfo=other_timezone)[1]
 
-    tt_start_date = start_time.astimezone(schedule.timezone).date()
-    tt_end_date = end_time.astimezone(schedule.timezone).date()
+    tt_start_date = start_time.astimezone(schedule_timezone).date()
+    tt_end_date = end_time.astimezone(schedule_timezone).date()
     if tt_start_date == tt_end_date:
         tt_end_date = None
 
@@ -102,7 +108,7 @@ class ScheduleContainer(BTreeContainer):
 
     timezone = None
 
-    def __init__(self, timezone=pytz.utc):
+    def __init__(self, timezone='UTC'):
         BTreeContainer.__init__(self)
         self.timezone = timezone
 
@@ -123,7 +129,7 @@ class ScheduleContainer(BTreeContainer):
         for schedule in self.values():
             tt_meetings = iterMeetingsInTimezone(
                 schedule, self.timezone, date, until_date=until_date)
-            meetings.append(list(tt_meetings))
+            meetings.extend(list(tt_meetings))
         for meeting in sorted(meetings, key=lambda m: m.dtstart):
             yield meeting
 

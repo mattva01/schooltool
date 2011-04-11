@@ -29,4 +29,40 @@
      provides="zope.schema.interfaces.IVocabularyFactory"
      name="schooltool.timetable.activityvocbulary" />
 
+  <adapter factory=".calendar.ImmutableScheduleCalendar"
+           provides=".interfaces.IImmutableScheduleCalendar" />
+
+  <adapter factory=".calendar.getScheduleCalendar"
+           provides="schooltool.app.interfaces.ISchoolToolCalendar"
+           trusted="true" />
+
+  <adapter factory=".calendar.getScheduleCalendar"
+           provides="schooltool.timetable.interfaces.IScheduleCalendar"
+           trusted="true" />
+
+  <adapter factory=".app.UpdateSelectedPeriodsSchedules" />
+
+  <adapter for="zope.lifecycleevent.interfaces.IObjectAddedEvent
+           schooltool.timetable.interfaces.ISchedule"
+      factory=".calendar.UpdateScheduleCalendar" />
+
+  <adapter
+      for="zope.lifecycleevent.interfaces.IObjectModifiedEvent
+           schooltool.timetable.interfaces.ISchedule"
+      factory=".calendar.UpdateScheduleCalendar" />
+
+  <adapter
+      for="zope.lifecycleevent.interfaces.IObjectRemovedEvent
+           schooltool.timetable.interfaces.ISchedule"
+      factory=".calendar.RemoveScheduleCalendar" />
+
+  <class class=".app.SchooldaysForSchedule">
+    <require permission="schooltool.view"
+             interface="schooltool.timetable.interfaces.ISchooldays" />
+  </class>
+
+  <adapter factory=".app.SchooldaysForSchedule" />
+
+  <adapter factory=".app.SchooldaysForTimetable" />
+
 </configure>

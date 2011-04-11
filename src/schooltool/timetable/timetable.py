@@ -19,17 +19,20 @@
 """
 Timetables are meeting schedules created from scheduled day templates.
 """
-
+import pytz
 import datetime
 
 from persistent import Persistent
 from persistent.list import PersistentList
 from zope.interface import implements
 from zope.container.btree import BTreeContainer
+from zope.component import getUtility
+from zope.intid.interfaces import IIntIds
 
 from schooltool.common import DateRange
 from schooltool.timetable import interfaces
 from schooltool.timetable.schedule import Meeting, Schedule
+from schooltool.timetable.schedule import iterMeetingsInTimezone
 
 
 class Timetable(Persistent, Schedule):
@@ -38,24 +41,34 @@ class Timetable(Persistent, Schedule):
     periods = None
     time_slots = None
 
+    def uniqueMeetingId(self, date, period, int_ids):
+        date_id = date.isoformat()
+        period_id = int_ids.getId(period)
+        uid = '%s.%s' % (date_id, period_id)
+        return uid
+
     def iterMeetings(self, from_date, until_date):
+        timezone = pytz.timezone(self.timezone)
+        int_ids = getUtility(IIntIds)
+
         dates = DateRange(from_date, until_date)
-        days = zip(dates, self.periods.iter(dates))
-        for day_date, day_periods in days:
-            meetings = []
+        days = zip(dates,
+                   self.periods.iterDates(dates),
+                   self.time_slots.iterDates(dates))
+        for day_date, day_periods, day_time_slots in days:
             if day_periods is None:
-                yield meetings
                 continue
-            for time_period in day_periods.values():
-                tstart = time_period.tstart
+            day = combineTemplates(day_periods, day_time_slots)
+            for period, time_slot in day:
+                tstart = time_slot.tstart
                 dtstart = datetime.datetime.combine(day_date, tstart)
-                dtstart = dtstart.replace(tzinfo=self.timezone)
+                dtstart = dtstart.replace(tzinfo=timezone)
+                meeting_id = self.uniqueMeetingId(day_date, period, int_ids)
                 meeting = Meeting(
-                    dtstart, time_period.duration,
-                    period=time_period,
-                    meeting_id=None)
-                meetings.append(meeting)
-            yield sorted(meetings, key=lambda m: m.dtstart)
+                    dtstart, time_slot.duration,
+                    period=period,
+                    meeting_id=meeting_id)
+                yield meeting
 
 
 def combineTemplates(periods_template, time_slots_template):
@@ -63,18 +76,25 @@ def combineTemplates(periods_template, time_slots_template):
     result = []
 
     periods_by_activity = {}
-    for period in periods_template.values():
+    period_queue = periods_template.values()
+    for period in period_queue:
         if period.activity_type not in periods_by_activity:
             periods_by_activity[period.activity_type] = []
         periods_by_activity[period.activity_type].append(period)
 
-    for time_slot in time_slots_template.values():
+    for time_slot in sorted(time_slots_template.values()):
         activity = time_slot.activity_type
-        if (activity not in periods_by_activity or
-            not periods_by_activity[activity]):
-            continue # no more periods for this activity
-        period = periods_by_activity[activity].pop(0)
-        result.append((period, time_slot))
+        if activity is not None:
+            if (activity not in periods_by_activity or
+                not periods_by_activity[activity]):
+                continue # no more periods for this activity
+            period = periods_by_activity[activity].pop(0)
+            period_queue.remove(period)
+            result.append((period, time_slot))
+        else:
+            period = period_queue.pop()
+            periods_by_activity[period.activity_type].remove(period)
+            result.append((period, time_slot))
     return result
 
 
@@ -143,13 +163,13 @@ class SelectedPeriodsSchedule(Persistent, Schedule):
             self._periods.remove(key)
 
     def iterMeetings(self, date, until_date=None):
-        if self.schedule is None:
+        if self.timetable is None:
             return
         meetings = iterMeetingsInTimezone(
-            self.schedule, self.timezone, date, until_date=until_date)
-        periods = list(self.periods)
+            self.timetable, self.timezone, date, until_date=until_date)
+        selected_periods = list(self.periods)
         for meeting in meetings:
             # XXX: update meetings by consecutive_periods_as_one
             # XXX: proxy issues may breed here
-            if meeting.period in self.periods:
+            if meeting.period in selected_periods:
                 yield meeting

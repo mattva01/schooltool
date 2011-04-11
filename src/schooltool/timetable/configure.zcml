@@ -8,6 +8,7 @@
   <include file="schedule.zcml" />
   <include file="daytemplates.zcml" />
   <include file="timetable.zcml" />
+  <include file="calendar.zcml" />
   <include file="integration.zcml" />
 
   <include package=".browser" />

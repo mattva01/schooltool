@@ -60,11 +60,6 @@
              set_schema="schooltool.timetable.interfaces.ISchoolDayTemplates" />
   </class>
 
-  <class class=".daytemplates.Schooldays">
-    <require permission="schooltool.view"
-             interface="schooltool.timetable.interfaces.ISchooldays" />
-  </class>
-
   <adapter factory=".daytemplates.getScheduledTemplatesSchedule" />
 
 </configure>

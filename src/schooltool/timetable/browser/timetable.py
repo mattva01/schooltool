@@ -24,6 +24,7 @@ $Id$
 
 #from zope.i18n import translate
 import zope.schema
+import zope.lifecycleevent
 from zope.proxy import sameProxiedObjects
 from zope.component import getMultiAdapter, queryMultiAdapter
 from zope.component import adapts
@@ -656,7 +657,8 @@ class SelectedPeriodsAddView(form.AddForm):
         timetable = data['timetable']
         schedule = SelectedPeriodsSchedule(
             timetable, data['first'], data['last'],
-            title=timetable.title, timezone=None)
+            title=timetable.title,
+            timezone=timetable.timezone)
         return schedule
 
     def add(self, schedule):
@@ -859,13 +861,7 @@ class SelectedPeriodsScheduleEditView(form.EditForm):
         self.status = self.successMessage
 
         if schedule_changed:
-            # XXX: notify that timetable changed - or use default event?!
-            #timetable = removeSecurityProxy(self.context)
-            #event = TimetableReplacedEvent(
-            #    timetable.__parent__.__parent__, timetable.__name__,
-            #    timetable, timetable)
-            #zope.event.notify(event)
-            pass
+            zope.lifecycleevent.modified(self.context)
         self.redirectToParent()
 
     @button.buttonAndHandler(_("Cancel"), name='cancel')

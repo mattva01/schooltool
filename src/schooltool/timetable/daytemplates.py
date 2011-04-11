@@ -23,7 +23,7 @@ Template scheduling over dates.
 
 from persistent import Persistent
 from zope.interface import implements, implementer
-from zope.component import adapts, adapter
+from zope.component import adapter
 from zope.container.contained import Contained
 from zope.container.ordered import OrderedContainer
 from zope.container.contained import containedEvent
@@ -31,7 +31,6 @@ from zope.event import notify
 
 from schooltool.common import DateRange
 from schooltool.timetable import interfaces
-from schooltool.schoolyear.interfaces import ISchoolYear
 
 
 class DayTemplate(OrderedContainer):
@@ -202,32 +201,6 @@ class SchoolDayTemplates(DayTemplateSchedule):
                 yield self.templates[keys[day_index]]
                 prev_index = day_index
             prev_date = date
-
-
-class Schooldays(object):
-    adapts(interfaces.ISchedule)
-    implements(interfaces.ISchooldays)
-
-    def __init__(self, context):
-        # XXX: maybe use ITermContainer instead?
-        self.schedule = context
-        self.schoolyear = ISchoolYear(context)
-
-    def __contains__(self, date):
-        for term in self.schoolyear.values():
-            if date in term:
-                return term.isSchoolday(date)
-        return False
-
-    def __iter__(self):
-        schedule = self.schedule
-        dates = DateRange(schedule.first, schedule.last)
-        return self.iterDates(dates)
-
-    def iterDates(self, dates):
-        for date in dates:
-            if date in self:
-                yield date
 
 
 @adapter(interfaces.IDayTemplateSchedule)
