@@ -186,4 +186,31 @@
       permission="schooltool.view"
       name="boundaries" />
 
+   <page
+      for="schooltool.timetable.interfaces.IScheduleCalendarEvent"
+      name="edit.html"
+      layer="schooltool.skin.ISchoolToolLayer"
+      class=".calendar.ScheduleEventEditView"
+      permission="schooltool.edit"
+      />
+
+  <addform
+      label="Add Meeting"
+      name="add.html"
+      for="schooltool.timetable.interfaces.IScheduleCalendar"
+      schema=".calendar.IScheduleEventAddForm"
+      arguments=""
+      keyword_arguments="title description
+                         start_date start_time
+                         duration duration_type allday
+                         location
+                         "
+      content_factory="schooltool.timetable.calendar.ScheduleCalendarEvent"
+      permission="schooltool.edit"
+      template="templates/schedule_event_add.pt"
+      class=".calendar.ScheduleEventAddView">
+
+    <widget field="description" height="5" />
+  </addform>
+
 </configure>

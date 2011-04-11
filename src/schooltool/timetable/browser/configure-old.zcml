@@ -228,7 +228,6 @@
 
   <!-- Calendar integration
 
-  -->
 
    <page
       for="schooltool.timetable.interfaces.ITimetableCalendarEvent"
@@ -237,6 +236,7 @@
       class=".event.TimetableEventEditView"
       permission="schooltool.edit"
       />
+  -->
 
    <zope:subscriber
        for="schooltool.app.interfaces.ISchoolToolCalendar
