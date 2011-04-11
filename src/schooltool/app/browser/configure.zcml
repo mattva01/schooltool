@@ -5,6 +5,10 @@
 
   <!-- Viewlet Managers -->
 
+  <zope:interface
+      interface=".skin.ICalendarEventContext"
+      type="zope.contentprovider.interfaces.ITALNamespaceData" />
+
   <viewletManager
       name="schooltool.CalendarEvent"
       permission="zope.Public"
