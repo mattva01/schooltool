@@ -1,0 +1,73 @@
+<html metal:use-macro="view/@@standard_macros/page"
+      i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title" i18n:translate="">
+    All Terms for Section
+  </title>
+</head>
+<body>
+
+<metal:block metal:fill-slot="content-header">
+  <table class="all_terms_header">
+    <tr>
+      <td>
+        <span i18n:translate="">Course:</span>
+        <tal:loop tal:repeat="course context/courses">
+          <a tal:replace="structure course/@@link" />
+        </tal:loop>
+      <td>
+        <span i18n:translate="">Year:</span>
+        <a tal:replace="structure view/year/@@link" />
+      </td>
+    </tr>
+  </table>
+</metal:block>
+
+<metal:block metal:fill-slot="body">
+  <table class="all_terms_table">
+    <thead>
+      <tr>
+        <th tal:repeat="heading view/headings"
+            tal:content="heading" />
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td tal:repeat="cell view/cells">
+          <tal:block condition="python: view.isRoster(cell)">
+            <div><a tal:replace="structure cell/section/@@link" /></div>
+            <p />
+            <div><h2 i18n:translate="">Instructors</h2></div>
+            <div><ul>
+              <li tal:repeat="teacher cell/roster/teachers">
+                <a tal:replace="structure teacher/@@link" />
+              </li>
+            <ul></div>
+            <div><h2 i18n:translate="">Students</h2></div>
+            <div><ul>
+              <li tal:repeat="student cell/roster/students">
+                <a tal:replace="structure student/@@link" />
+              </li>
+            <ul></div>
+          </tal:block>
+          <tal:block condition="python: view.isAction(cell)">
+            <table class="linkage_actions">
+              <tr><td>
+                <a tal:attributes="href cell/action/extend"
+                   i18n:translate="">Extend to This Term</a>
+              </td></tr>
+              <tr><td>
+                <a tal:attributes="href cell/action/link"
+                   i18n:translate="">Link an Existing Section</a>
+              </td></tr>
+            </table>
+          </tal:block>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+</metal:block>
+
+</body>
+</html>
