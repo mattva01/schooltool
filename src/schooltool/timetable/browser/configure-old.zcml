@@ -256,7 +256,7 @@
       layer="schooltool.timetable.browser.skin.ITimetableLayer"
       order="10"
       />
-
+<!--
   <viewlet
       name="calendar-term-legend"
       for="*"
@@ -277,7 +277,6 @@
        template="templates/timetable_cal_yearly.pt"
        permission="schooltool.view"
        />
-
   <page
       for="schooltool.calendar.interfaces.ICalendar"
       name="daily_calendar_rows"
@@ -285,6 +284,7 @@
       class=".cal.DailyTimetableCalendarRowsView"
       permission="zope.View"
       />
+-->
 
   <!-- Section timetable table formatters.
 

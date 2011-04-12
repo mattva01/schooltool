@@ -73,7 +73,8 @@ class TimetableContainerView(ContainerView):
 
     def update(self):
         if 'UPDATE_SUBMIT' in self.request:
-            self.context.default_id = self.request['ttschema'] or None
+            default = self.context.get(self.request['ttschema'])
+            self.context.default = default
         return ''
 
 

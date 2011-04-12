@@ -47,7 +47,9 @@ class Timetable(Persistent, Schedule):
         uid = '%s.%s' % (date_id, period_id)
         return uid
 
-    def iterMeetings(self, from_date, until_date):
+    def iterMeetings(self, from_date, until_date=None):
+        if until_date is None:
+            until_date = from_date
         timezone = pytz.timezone(self.timezone)
         int_ids = getUtility(IIntIds)
 

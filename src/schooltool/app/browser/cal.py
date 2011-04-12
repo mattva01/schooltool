@@ -1509,21 +1509,21 @@ class DailyCalendarRowsView(BrowserView):
         rows = [daystart + timedelta(hours=hour)
                 for hour in range(starthour, endhour+1)]
 
-        calendarRows = []
+        calendar_rows = []
 
-        start, row_ends = rows[0], rows[1:]
-        start = start.astimezone(tz)
+        starts, row_ends = rows[0], rows[1:]
+        starts = starts.astimezone(tz)
         for end in row_ends:
-            duration = end - start
-            calendarRows.append(('%d:%02d' % (start.hour, start.minute),
-                                 start, duration))
-            start = end
-        return calendarRows
+            duration = end - starts
+            calendar_rows.append(
+                (self.rowTitle(starts, duration), starts, duration))
+            starts = end
+        return calendar_rows
 
-    def rowTitle(self, hour, minute):
+    def rowTitle(self, starts, duration):
         """Return the row title as HH:MM or H:MM am/pm."""
         prefs = ViewPreferences(self.request)
-        return time(hour, minute).strftime(prefs.timeformat)
+        return starts.strftime(prefs.timeformat)
 
 
 class CalendarListSubscriber(object):

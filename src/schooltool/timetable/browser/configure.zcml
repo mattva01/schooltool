@@ -213,4 +213,33 @@
     <widget field="description" height="5" />
   </addform>
 
+  <viewlet
+      name="calendar-term-legend"
+      for="*"
+      class="schooltool.timetable.browser.calendar.TermLegendViewlet"
+      view="schooltool.timetable.browser.calendar.ScheduleYearlyCalendarView"
+      manager="schooltool.app.browser.cal.ICalendarPortletViewletManager"
+      template="templates/calendar_yearly_legend.pt"
+      permission="schooltool.view"
+      layer="schooltool.skin.ISchoolToolLayer"
+      order="6"
+      />
+
+   <page
+       name="yearly.html"
+       for="schooltool.timetable.interfaces.IScheduleCalendar"
+       class=".calendar.ScheduleYearlyCalendarView"
+       template="templates/calendar_yearly.pt"
+       permission="schooltool.view"
+       layer="schooltool.skin.ISchoolToolLayer"
+       />
+
+  <page
+      for="schooltool.timetable.interfaces.IScheduleCalendar"
+      name="daily_calendar_rows"
+      layer="schooltool.skin.ISchoolToolLayer"
+      class=".calendar.ScheduleDailyCalendarRowsView"
+      permission="zope.View"
+      />
+
 </configure>

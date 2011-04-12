@@ -145,7 +145,8 @@ class SchooldaysForSchedule(object):
 
     @property
     def schoolyear(self):
-        return ISchoolYear(self.schedule)
+        owner = interfaces.IHaveSchedule(self.schedule)
+        return ISchoolYear(owner)
 
     def __contains__(self, date):
         for term in self.schoolyear.values():
@@ -169,6 +170,5 @@ class SchooldaysForTimetable(SchooldaysForSchedule):
 
     @property
     def schoolyear(self):
-        container = self.schedule.__parent__
-        owner = interfaces.IHaveTimetables(container)
+        owner = interfaces.IHaveTimetables(self.schedule)
         return ISchoolYear(owner)

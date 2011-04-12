@@ -16,10 +16,12 @@
     <require permission="schooltool.edit"
              interface="zope.container.interfaces.IWriteContainer" />
     <require permission="schooltool.view"
-             interface=".interfaces.ITimetableContainerBase"
-             />
-    <require permission="schooltool.view"
              interface="zope.container.interfaces.IReadContainer"
+             />
+    <require permission="schooltool.edit"
+             set_schema=".interfaces.ITimetableContainerBase" />
+    <require permission="schooltool.view"
+             interface=".interfaces.ITimetableContainerBase"
              />
   </class>
 

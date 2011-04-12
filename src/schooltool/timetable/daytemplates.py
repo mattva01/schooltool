@@ -165,7 +165,7 @@ class SchoolDayTemplates(DayTemplateSchedule):
             skip_dates = DateRange(schedule.first, date - date.resolution)
         else:
             skip_dates = DateRange(date + date.resolution, schedule.first)
-        skipped_schooldays = len(schooldays.iter(skip_dates))
+        skipped_schooldays = len(list(schooldays.iterDates(skip_dates)))
         if date < schedule.first:
             skipped_schooldays = -skipped_schooldays
 

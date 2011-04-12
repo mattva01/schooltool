@@ -19,22 +19,31 @@
 """
 Timetabling calendar integration.
 """
+from datetime import datetime, time, timedelta
 
 import zope.schema
 from zope.app.form.browser.add import AddView
-from zope.interface import Interface
+from zope.interface import Interface, implements
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
+from zope.cachedescriptors.property import CachedProperty
 from zope.component import getUtility
 from zope.formlib import form
 from zope.html.field import HtmlFragment
 from zope.traversing.browser.absoluteurl import absoluteURL
 from zope.session.interfaces import ISession
+from zope.viewlet.interfaces import IViewlet
 
 from schooltool.app.browser import ViewPreferences
 from schooltool.app.browser.cal import CalendarEventView
 from schooltool.app.browser.cal import CalendarEventViewMixin
+from schooltool.app.browser.cal import YearlyCalendarView
+from schooltool.app.browser.cal import DailyCalendarRowsView
 from schooltool.app.utils import vocabulary
-from schooltool.term.interfaces import IDateManager
+from schooltool.schoolyear.interfaces import ISchoolYear
+from schooltool.timetable import interfaces
+from schooltool.timetable.schedule import iterMeetingsInTimezone
+from schooltool.term.interfaces import IDateManager, ITermContainer
+from schooltool.term.term import getTermForDate
 
 from schooltool.common import SchoolToolMessage as _
 
@@ -173,3 +182,134 @@ class ScheduleEventAddView(CalendarEventViewMixin, AddView):
             return '%s/%s/booking.html' % (url, self._event_name)
         else:
             return absoluteURL(self.context, self.request)
+
+
+class TermLegendViewlet(object):
+    implements(IViewlet)
+
+    def legend(self):
+        terms = self.__parent__.legend.items()
+        terms.sort(key=lambda t: t[0].first)
+        return [{'title': term.title,
+                 'cssclass': "legend-item term%s" % cssClass}
+                for term, cssClass in terms]
+
+
+class ScheduleYearlyCalendarView(YearlyCalendarView):
+
+    def __init__(self, context, request):
+        super(YearlyCalendarView, self).__init__(context,request)
+        self.numterms = 1
+        self.calendar = None
+
+    @CachedProperty
+    def legend(self):
+        numterms = 1
+        legend = {}
+        terms = ITermContainer(None, {})
+        for quarter in self.getYear(self.cursor):
+            for month in quarter:
+                for week in month:
+                    for day in week:
+                        term = None
+                        for term in terms.values():
+                            if day.date in term:
+                                break
+                        if term and not term in legend:
+                            legend[term] = self.numterms
+                            numterms += 1
+        return legend
+
+    def renderRow(self, week, month):
+        result = []
+
+        terms = ITermContainer(None, {})
+
+        for day in week:
+            term = None
+            for term in terms.values():
+                if day.date in term:
+                    break
+            cssClass = "term%d" % self.legend.get(term, 0)
+            result.append('<td class="cal_yearly_day">')
+            if day.date.month == month:
+                if day.today():
+                    cssClass += ' today'
+                # Let us hope that URLs will not contain < > & or "
+                # This is somewhat related to
+                # https://bugs.launchpad.net/schooltool/+bug/79781
+                result.append('<a href="%s" class="%s">%s</a>' %
+                              (self.calURL('daily', day.date), cssClass,
+                               day.date.day))
+            result.append('</td>')
+
+        return "\n".join(result)
+
+
+class ScheduleDailyCalendarRowsView(DailyCalendarRowsView):
+    """Daily calendar rows view for SchoolTool.
+
+    This view differs from the original view in SchoolTool in that it can
+    also show schedule periods instead of hour numbers.
+    """
+
+    def getDefaultMeetings(self, date, timezone):
+        term = getTermForDate(date)
+        if term is None:
+            return []
+        schoolyear = ISchoolYear(term)
+        timetable_container = interfaces.ITimetableContainer(schoolyear)
+        default_schedule = timetable_container.default
+        if default_schedule is None:
+            return []
+        # XXX: this back-and-forth zone name to zone conversion is annoying
+        meetings = list(iterMeetingsInTimezone(
+                default_schedule, timezone, date))
+        return meetings
+
+    def meetingTitle(self, meeting):
+        if (meeting.period is None or
+            not meeting.period.title):
+            return self.rowTitle(meeting.dtstart.time(), meeting.duration)
+        return meeting.period.title
+
+    def calendarRows(self, cursor, starthour, endhour, events):
+        tz = self.getPersonTimezone()
+        meetings = self.getDefaultMeetings(cursor, tz.zone)
+        meeting_rows = [
+            (self.meetingTitle(meeting), meeting.dtstart, meeting.duration)
+            for meeting in meetings]
+
+        if meeting_rows:
+            starthour = min(starthour, meeting_rows[0][1].hour)
+            endhour = max(endhour, meeting_rows[-1][1].hour)
+
+        daystart = tz.localize(datetime.combine(cursor, time()))
+
+        rows = []
+
+        row_start = daystart + timedelta(hours=starthour)
+        rows_end = daystart + timedelta(hours=endhour+1)
+
+        while row_start <= rows_end:
+            row = None
+            if meeting_rows:
+                time_until_meeting = meeting_rows[0][1] - row_start
+                if time_until_meeting < time.resolution:
+                    meeting = meeting_rows.pop(0)
+                    row = meeting
+                elif time_until_meeting < timedelta(hours=1, minutes=15):
+                    row = (self.rowTitle(row_start.time(), time_until_meeting),
+                           row_start, time_until_meeting)
+
+            if row is None:
+                delta = (daystart +
+                         timedelta(hours=row_start.hour+1) -
+                         row_start)
+                if delta < timedelta(minutes=15):
+                    delta += timedelta(hours=1)
+                row = (self.rowTitle(row_start.time(), delta), row_start, delta)
+
+            rows.append(row)
+            row_start = row_start + row[2]
+        return rows
