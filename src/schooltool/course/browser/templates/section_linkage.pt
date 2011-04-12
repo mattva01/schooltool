@@ -27,37 +27,37 @@
   <table class="all_terms_table">
     <thead>
       <tr>
-        <th tal:repeat="heading view/headings"
-            tal:content="heading" />
+        <th tal:repeat="column view/columns"
+            tal:content="column/term/title" />
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td tal:repeat="cell view/cells">
-          <tal:block condition="python: view.isRoster(cell)">
-            <div><a tal:replace="structure cell/section/@@link" /></div>
+        <td tal:repeat="column view/columns">
+          <tal:block condition="column/section">
+            <div><a tal:replace="structure column/section/@@link" /></div>
             <p />
             <div><h2 i18n:translate="">Instructors</h2></div>
             <div><ul>
-              <li tal:repeat="teacher cell/roster/teachers">
+              <li tal:repeat="teacher column/section/instructors">
                 <a tal:replace="structure teacher/@@link" />
               </li>
             <ul></div>
             <div><h2 i18n:translate="">Students</h2></div>
             <div><ul>
-              <li tal:repeat="student cell/roster/students">
+              <li tal:repeat="student column/section/members">
                 <a tal:replace="structure student/@@link" />
               </li>
             <ul></div>
           </tal:block>
-          <tal:block condition="python: view.isAction(cell)">
+          <tal:block condition="not: column/section">
             <table class="linkage_actions">
               <tr><td>
-                <a tal:attributes="href cell/action/extend"
+                <a tal:attributes="href string:${context/@@absolute_url}/extend_term.html?term=${column/term/__name__}"
                    i18n:translate="">Extend to This Term</a>
               </td></tr>
               <tr><td>
-                <a tal:attributes="href cell/action/link"
+                <a tal:attributes="href string:${context/@@absolute_url}/link_existing.html?term=${column/term/__name__}"
                    i18n:translate="">Link an Existing Section</a>
               </td></tr>
             </table>

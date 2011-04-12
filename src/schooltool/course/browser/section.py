@@ -571,62 +571,16 @@ class SectionLinkageView(BrowserView):
         return ISchoolYear(self.context)
 
     @property
-    def terms(self):
-        return sorted(self.year.values(), key=lambda t: t.first)
-
-    @property
-    def last_term(self):
-        return ITerm(self.context.linked_sections[-1])
-
-    @property
-    def headings(self):
-        return [term.title for term in self.terms]
-
-    @property
-    def cells(self):
-        return [self.formatCell(term) for term in self.terms]
-
-    def isAction(self, cell):
-        return cell['action'] is not None
-
-    def isRoster(self, cell):
-        return cell['roster'] is not None
-
-    def formatCell(self, term):
-        section = self.getSection(term)
-        if section is None:
-            roster = None
-            action = self.actionContent(term)
-        else:
-            roster = self.rosterContent(section)
-            action = None
-        return {
-            'term': term,
-            'section': section,
-            'roster': roster,
-            'action': action,
-            }
-
-    def getSection(self, term):
-        for section in self.context.linked_sections:
-            if ITerm(section) == term:   
-                return section
-
-    def actionContent(self, term):
-        if self.last_term.first < term.first:
-            section_url = absoluteURL(self.context, self.request)
-            return {
-                'extend': '%s/extend_term.html?term=%s' % (section_url,
-                                                           term.__name__),
-                'link': '%s/link_existing.html?term=%s' % (section_url,
-                                                           term.__name__),
-                }
-
-    def rosterContent(self, section):
-        return {
-            'teachers': list(section.instructors),
-            'students': list(section.members),
-            }
+    def columns(self):
+        linked_sections = dict([(ITerm(section), section)
+                                 for section in self.context.linked_sections])
+        columns = []
+        for term in sorted(self.year.values(), key=lambda t: t.first):
+            columns.append({
+                'term': term,
+                'section': linked_sections.get(term),
+                })
+        return columns
 
 
 class ExtendTermView(BrowserView):
