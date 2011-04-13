@@ -21,11 +21,10 @@ SchoolTool basic person interfaces.
 """
 from zope.container.interfaces import IContainer
 from zope.container.interfaces import IOrderedContainer
-from zope.schema import Date, Choice, TextLine, Bool, List, Set
+from zope.schema import Date, Choice, TextLine, Bool, List
 from zope.configuration.fields import PythonIdentifier
 from zope.interface import Interface, Attribute
 
-from zope.schema import List
 from zope.schema.interfaces import IVocabularyTokenized
 
 from schooltool.common import SchoolToolMessage as _
@@ -145,7 +144,6 @@ class IFieldDescription(Interface):
         title = _(u"Limit keys"),
         description = _(u"An optional list of limit keys for this field"),
         value_type=Choice(
-            title=_(u"Limit key"),
             source="schooltool.basicperson.limit_keys_vocabulary",
             required=True,
             ),
