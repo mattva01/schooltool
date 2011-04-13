@@ -17,7 +17,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
-"POT-Creation-Date: 2011-04-07 18:11+0300\n"
+"POT-Creation-Date: 2011-04-13 23:08+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Schooltool Development Team <schooltool-dev@schooltool.org>\n"
@@ -68,15 +68,15 @@ msgstr ""
 msgid "school"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:113
-msgid "February"
-msgstr ""
-
-#: /src/schooltool/app/browser/cal.py:113
+#: /src/schooltool/app/browser/cal.py:115
 msgid "January"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:113
+#: /src/schooltool/app/browser/cal.py:116
+msgid "February"
+msgstr ""
+
+#: /src/schooltool/app/browser/cal.py:117
 msgid "March"
 msgstr ""
 
@@ -84,39 +84,39 @@ msgstr ""
 msgid "April"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:114
-msgid "June"
-msgstr ""
-
-#: /src/schooltool/app/browser/cal.py:114
+#: /src/schooltool/app/browser/cal.py:119
 msgid "May"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:115
-msgid "August"
+#: /src/schooltool/app/browser/cal.py:120
+msgid "June"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:115
+#: /src/schooltool/app/browser/cal.py:121
 msgid "July"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:115
+#: /src/schooltool/app/browser/cal.py:122
+msgid "August"
+msgstr ""
+
+#: /src/schooltool/app/browser/cal.py:123
 msgid "September"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:116
-msgid "December"
-msgstr ""
-
-#: /src/schooltool/app/browser/cal.py:116
-msgid "November"
-msgstr ""
-
-#: /src/schooltool/app/browser/cal.py:116
+#: /src/schooltool/app/browser/cal.py:124
 msgid "October"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:119
+#: /src/schooltool/app/browser/cal.py:125
+msgid "November"
+msgstr ""
+
+#: /src/schooltool/app/browser/cal.py:126
+msgid "December"
+msgstr ""
+
+#: /src/schooltool/app/browser/cal.py:129
 #: /src/schooltool/person/interfaces.py:180
 #: /src/schooltool/term/browser/templates/term.pt:31
 #: /src/schooltool/term/browser/templates/term_add.pt:54
@@ -153,7 +153,16 @@ msgstr ""
 msgid "Thursday"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:120
+#: /src/schooltool/app/browser/cal.py:133
+#: /src/schooltool/term/browser/templates/term.pt:35
+#: /src/schooltool/term/browser/templates/term_add.pt:62
+#: /src/schooltool/term/browser/templates/term_add.pt:84
+#: /src/schooltool/timetable/browser/schema.py:119
+#: /src/schooltool/timetable/browser/schema.py:288
+msgid "Friday"
+msgstr ""
+
+#: /src/schooltool/app/browser/cal.py:134
 #: /src/schooltool/person/interfaces.py:178
 #: /src/schooltool/term/browser/templates/term.pt:36
 #: /src/schooltool/term/browser/templates/term_add.pt:64
@@ -171,17 +180,7 @@ msgstr ""
 msgid "Sunday"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:120
-#: /src/schooltool/term/browser/templates/term.pt:35
-#: /src/schooltool/term/browser/templates/term_add.pt:62
-#: /src/schooltool/term/browser/templates/term_add.pt:84
-#: /src/schooltool/timetable/browser/schema.py:119
-#: /src/schooltool/timetable/browser/schema.py:288
-msgid "Friday"
-msgstr ""
-
-#: /src/schooltool/app/browser/cal.py:123
-#: /src/schooltool/app/browser/cal.py:1809
+#: /src/schooltool/app/browser/cal.py:138
 msgid "Mon"
 msgstr ""
 
@@ -2492,11 +2491,7 @@ msgstr ""
 msgid "An optional list of limit keys for this field"
 msgstr ""
 
-#: /src/schooltool/basicperson/interfaces.py:148
-msgid "Limit key"
-msgstr ""
-
-#: /src/schooltool/basicperson/interfaces.py:163
+#: /src/schooltool/basicperson/interfaces.py:161
 msgid "List of values"
 msgstr ""
 
