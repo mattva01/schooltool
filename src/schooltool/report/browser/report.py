@@ -94,9 +94,9 @@ class ReportReferenceView(BrowserView):
                     'title': report['title'],
                     'description': report['description'],
                     }
-                group = translate(report['group'], context=self.request)
-                title = translate(report['title'], context=self.request)
-                rows.append([collator.key(group), collator.key(title), row])
+                rows.append([collator.key(report['group']),
+                             collator.key(report['title']),
+                             row])
 
         return [row for group, title, row in sorted(rows)]
 

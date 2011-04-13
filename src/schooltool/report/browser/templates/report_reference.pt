@@ -17,7 +17,7 @@
     <tr tal:repeat="row view/rows">
       <td><a tal:attributes="href row/url" tal:content="row/group" /></td>
       <td><a tal:attributes="href row/url" tal:content="row/title" /></td>
-      <td><a tal:attributes="href row/url" tal:content="row/description" /></td>
+      <td tal:content="row/description" />
     </tr>
   </table>
 </metal:block>

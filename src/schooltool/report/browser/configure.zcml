@@ -14,6 +14,7 @@
         permission="schooltool.edit"
         link="report_reference.html"
         title="Reports"
+        order="209"
         />
   </configure>
 
