@@ -24,10 +24,10 @@ ZCML directives for reports
 from zope.configuration.fields import MessageID
 from zope.interface import Interface
 from zope.publisher.interfaces.browser import IBrowserView
+from zope.schema import TextLine
 from zope.viewlet.metadirectives import IViewletDirective
 from zope.viewlet.metaconfigure import viewletDirective
 
-from schooltool.common import SchoolToolMessage as _
 from schooltool.report.report import ReportLinkViewletManager, ReportLinkViewlet
 from schooltool.report.report import getReportRegistrationUtility
 from schooltool.skin.skin import ISchoolToolLayer
@@ -37,7 +37,7 @@ class IReportLinkDirective(IViewletDirective):
     group = MessageID(title=u"Report group", required=True)
     title = MessageID(title=u"Report link text", required=True)
     description = MessageID(title=u"Report link description", required=True)
-    link = MessageID(title=u"Link to the report", required=False)
+    link = TextLine(title=u"Link to the report", required=False)
 
 
 def reportLinkDirective(_context, name, permission, for_=Interface,
