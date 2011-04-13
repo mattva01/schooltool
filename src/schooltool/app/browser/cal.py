@@ -28,12 +28,11 @@ from datetime import datetime, date, time, timedelta
 import transaction
 from pytz import utc
 from zope.component import getUtility
-from zope.component import queryMultiAdapter, adapts, getMultiAdapter
-from zope.component import provideAdapter
+from zope.component import queryMultiAdapter, getMultiAdapter
+from zope.component import adapts, adapter
 from zope.component import subscribers
 from zope.event import notify
-from zope.interface import implements, Interface
-from zope.interface import directlyProvides
+from zope.interface import implements, implementer, Interface
 from zope.i18n import translate
 from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.publisher.interfaces import NotFound
@@ -51,6 +50,7 @@ from zope.app.form.interfaces import IWidgetInputError, IInputWidget
 from zope.app.form.interfaces import WidgetInputError, WidgetsError
 from zope.app.form.utility import getWidgetsData
 from zope.publisher.browser import BrowserView
+from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.traversing.browser.absoluteurl import absoluteURL
 from zope.traversing.api import getParent
 from zope.filerepresentation.interfaces import IWriteFile, IReadFile
@@ -237,6 +237,19 @@ class CalendarTraverser(object):
 # Calendar displaying backend
 #
 
+@adapter(IEventForDisplay, IBrowserRequest, IEditCalendar)
+@implementer(Interface)
+def getCalendarEventDeleteLink(event, request, calendar):
+    url = '%s/delete.html?event_id=%s&date=%s' % (
+        absoluteURL(calendar, request),
+        event.unique_id,
+        event.dtstarttz.strftime('%Y-%m-%d'))
+    back_url = urllib.quote(event.parent_view_link)
+    if back_url:
+        url = '%s&back_url=%s' % (url, back_url)
+    return url
+
+
 class EventForDisplay(object):
     """A decorated calendar event."""
 
@@ -340,17 +353,10 @@ class EventForDisplay(object):
         if self.context.__parent__ is None:
             return None
 
-        if not IEditCalendar.providedBy(self.source_calendar):
-            return None
-
-        url = '%s/delete.html?event_id=%s&date=%s' % (
-            absoluteURL(self.source_calendar, self.request),
-            self.unique_id,
-            self.dtstarttz.strftime('%Y-%m-%d'))
-        back_url = urllib.quote(self.parent_view_link)
-        if back_url:
-            url = '%s&back_url=%s' % (url, back_url)
-        return url
+        link = queryMultiAdapter(
+            (self, self.request, self.source_calendar), Interface,
+            name="delete_link")
+        return link
 
     def linkAllowed(self):
         """Return the URL where you can view/edit this event.

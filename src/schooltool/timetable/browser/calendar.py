@@ -20,24 +20,28 @@
 Timetabling calendar integration.
 """
 from datetime import datetime, time, timedelta
+import urllib
 
 import zope.schema
 from zope.app.form.browser.add import AddView
-from zope.interface import Interface, implements
+from zope.interface import Interface, implements, implementer
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.cachedescriptors.property import CachedProperty
-from zope.component import getUtility
+from zope.component import adapter, getUtility
 from zope.formlib import form
 from zope.html.field import HtmlFragment
-from zope.traversing.browser.absoluteurl import absoluteURL
 from zope.session.interfaces import ISession
+from zope.publisher.interfaces.browser import IBrowserRequest
+from zope.traversing.browser.absoluteurl import absoluteURL
 from zope.viewlet.interfaces import IViewlet
 
 from schooltool.app.browser import ViewPreferences
+from schooltool.app.browser.interfaces import IEventForDisplay
 from schooltool.app.browser.cal import CalendarEventView
 from schooltool.app.browser.cal import CalendarEventViewMixin
 from schooltool.app.browser.cal import YearlyCalendarView
 from schooltool.app.browser.cal import DailyCalendarRowsView
+from schooltool.app.browser.cal import getCalendarEventDeleteLink
 from schooltool.app.utils import vocabulary
 from schooltool.schoolyear.interfaces import ISchoolYear
 from schooltool.timetable import interfaces
@@ -313,3 +317,12 @@ class ScheduleDailyCalendarRowsView(DailyCalendarRowsView):
             rows.append(row)
             row_start = row_start + row[2]
         return rows
+
+
+@adapter(IEventForDisplay, IBrowserRequest, interfaces.IScheduleCalendar)
+@implementer(Interface)
+def getScheduleCalendarEventDeleteLink(event, request, calendar):
+    schedule = event.context.schedule
+    if schedule is not None:
+        return None
+    return getCalendarEventDeleteLink(event, request, calendar)

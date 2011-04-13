@@ -301,6 +301,10 @@
       permission="zope.Public"
       />
 
+  <zope:adapter
+      factory=".cal.getCalendarEventDeleteLink"
+      name="delete_link" />
+
   <configure package="schooltool.skin">
     <navigationViewlet
       name="view-calendar"

@@ -242,4 +242,8 @@
       permission="zope.View"
       />
 
+  <zope:adapter
+      factory=".calendar.getScheduleCalendarEventDeleteLink"
+      name="delete_link" />
+
 </configure>
