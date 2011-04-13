@@ -19,21 +19,35 @@
 """
 Upgrade SchoolTool to generation 36.
 """
-from zope.app.generations.utility import findObjectsProviding
-from zope.app.publication.zopepublication import ZopePublication
-from zope.component.hooks import getSite, setSite
 
-from schooltool.app.interfaces import ISchoolToolApplication
-from schooltool.generations.evolve36.evolve import evolveTimetables
+from schooltool.testing.mock import ModulesSnapshot
+from schooltool.generations.evolve36.helper import BuildContext
+from schooltool.generations.evolve36.timetable_builders import \
+    SchoolTimetablesBuilder
 
 
-def evolve(context):
-    root = context.connection.root().get(ZopePublication.root_name, None)
-    old_site = getSite()
+# XXX: This holds references to substitute classes
+#      so that they can be pickled afterwards.
+from schooltool.generations.evolve36 import model
 
-    apps = findObjectsProviding(root, ISchoolToolApplication)
-    for app in apps:
-        setSite(app)
-        evolveTimetables(app)
+def evolveTimetables(app):
+    modules = ModulesSnapshot()
 
-    setSite(old_site)
+    modules.mock_module('schooltool.timetable')
+    modules.mock(model.substitutes)
+
+    builders = [
+        SchoolTimetablesBuilder(),
+        ]
+
+    for builder in builders:
+        builder.read(app)
+
+    modules.restore()
+
+    for builder in builders:
+        builder.clean(app)
+
+    for builder in builders:
+        builder.build(BuildContext(app=app))
+
