@@ -120,7 +120,6 @@ class ScheduleCalendar(Calendar):
     def updateSchedule(self, schedule):
         schedule = removeSecurityProxy(schedule)
         schedule_cal = interfaces.IImmutableScheduleCalendar(schedule)
-        print 'updateSchedule: ', schedule_cal
         if schedule_cal is None:
             self.removeSchedule(schedule)
             return
@@ -165,7 +164,6 @@ getScheduleCalendar.factory = ScheduleCalendar
 
 class UpdateScheduleCalendar(ObjectEventAdapterSubscriber):
     def __call__(self):
-        print 'UpdateScheduleCalendar'
         owner = interfaces.IHaveSchedule(self.object, None)
         if owner is None:
             return
@@ -175,13 +173,11 @@ class UpdateScheduleCalendar(ObjectEventAdapterSubscriber):
         container = interfaces.IScheduleContainer(owner, None)
         if container is None:
             return
-        print 'UpdateScheduleCalendar:', container, calendar
         calendar.updateSchedule(container)
 
 
 class RemoveScheduleCalendar(ObjectEventAdapterSubscriber):
     def __call__(self):
-        print 'RemoveScheduleCalendar'
         owner = interfaces.IHaveSchedule(self.object, None)
         if owner is None:
             return
@@ -191,6 +187,5 @@ class RemoveScheduleCalendar(ObjectEventAdapterSubscriber):
         container = interfaces.IScheduleContainer(owner, None)
         if container is None:
             return
-        print 'RemoveScheduleCalendar:', container, calendar
         calendar.updateSchedule(container)
 

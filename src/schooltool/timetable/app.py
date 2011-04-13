@@ -125,14 +125,12 @@ class UpdateSelectedPeriodsSchedules(ObjectEventAdapterSubscriber):
            interfaces.ITimetable)
 
     def __call__(self):
-        print 'UpdateSelectedPeriodsSchedules'
         app = ISchoolToolApplication(None)
         # XXX: extremely nasty loop through all schedules.
         schedule_containers = app[SCHEDULES_KEY]
         for container in schedule_containers.values():
             for schedule in container.values():
                 if interfaces.ISelectedPeriodsSchedule.providedBy(schedule):
-                    print 'UpdateSelectedPeriodsSchedules:', schedule
                     zope.lifecycleevent.modified(schedule)
 
 
