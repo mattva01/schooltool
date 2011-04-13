@@ -83,12 +83,52 @@ The other terms have action links.
     <a href="http://localhost/schoolyears/2005-2006/term1/sections/1/extend_term.html?term=term4">Extend to This Term</a>
     <a href="http://localhost/schoolyears/2005-2006/term1/sections/1/link_existing.html?term=term4">Link an Existing Section</a>
 
+We will want to test which terms are filled in with a roster often enough that
+we could use a helper function.
+
+    >>> def filled_terms():
+    ...     terms = []
+    ...     for index in [i + 1 for i in range(4)]:
+    ...         query = "id('content-body')//table[@class='all_terms_table']/tbody/tr/td[%s]//a/text()" % index
+    ...         results = manager.queryHTML(query)
+    ...         if results[0] != 'Extend to This Term':
+    ...             terms.append(index)
+    ...     return terms
+
 Let's extend the section to Term2 by clicking the link in the second column.
-We see that the section is now linked to a section in the second term that has
-the same teacher and students.  The third and fourth columns still have the
-action buttons.
+First we see that we are taken to a confirmation view with a message and
+two buttons, Extend and Cancel.
 
     >>> manager.getLink("Extend to This Term", index=0).click()
+
+    >>> manager.printQuery("id('content-header')//a")
+    <a href="http://localhost/schoolyears/2005-2006/term1/sections/1">History (1)</a>
+    <a href="http://localhost/schoolyears/2005-2006/term1">Term1</a>
+    <a href="http://localhost/schoolyears/2005-2006/term2">Term2</a>
+
+    >>> manager.printQuery("id('content-header')//span/text()")
+    Click 'Extend' if you would like to copy and link this section to the target term.
+
+    >>> manager.printQuery("id('content-body')//input[@type='submit']/@value")
+    Extend
+    Cancel
+
+If we hit Cancel, we are returned to the section_lankage view with nothing new
+in the Term2 column.
+
+    >>> manager.getControl("Cancel").click()
+
+    >>> manager.printQuery("id('content-body')//table[@class='all_terms_table']/tbody/tr/td[2]//a")
+    <a href="http://localhost/schoolyears/2005-2006/term1/sections/1/extend_term.html?term=term2">Extend to This Term</a>
+    <a href="http://localhost/schoolyears/2005-2006/term1/sections/1/link_existing.html?term=term2">Link an Existing Section</a>
+
+We'll hit the same link again, but this time we'll hit Extend.  We see that
+the section is now linked to a section in the second term that has the same
+teacher and students.  The third and fourth columns still have the action
+buttons.
+
+    >>> manager.getLink("Extend to This Term", index=0).click()
+    >>> manager.getControl("Extend").click()
 
     >>> manager.printQuery("id('content-header')//a")
     <a href="http://localhost/schoolyears/2005-2006/courses/history">History</a>
@@ -114,11 +154,41 @@ action buttons.
     <a href="http://localhost/schoolyears/2005-2006/term1/sections/1/extend_term.html?term=term4">Extend to This Term</a>
     <a href="http://localhost/schoolyears/2005-2006/term1/sections/1/link_existing.html?term=term4">Link an Existing Section</a>
 
+We'll use our helper funtion to show how much trouble it saves testing which
+terms have a roster.  Not all of our tests will care about the deatils of that
+roster.
+
+    >>> filled_terms()
+    [1, 2]
+
+We'll take this opportunity to demostrate that a clever user can't cause a
+program exception by putting a bad term in the query string.
+
+    >>> url = manager.queryHTML("id('content-body')//table[@class='all_terms_table']/tbody/tr/td[1]//a/@href")[0]
+    >>> manager.open(url + '/extend_term.html?term=invalid')
+    >>> manager.url
+    'http://localhost/schoolyears/2005-2006/term1/sections/1/section_linkage.html'
+
+Even if we pass it a valid term that is already linked to the context, no
+harm will come.
+
+    >>> manager.open(url + '/extend_term.html?term=term1')
+    >>> manager.url
+    'http://localhost/schoolyears/2005-2006/term1/sections/1/section_linkage.html'
+
+    >>> manager.open(url + '/extend_term.html?term=term2')
+    >>> manager.url
+    'http://localhost/schoolyears/2005-2006/term1/sections/1/section_linkage.html'
+
+    >>> filled_terms()
+    [1, 2]
+
 We can extend the section to Term4 by clicking the link in the fourth column.
 This will create a section in both the third and fourth terms, again copying
 the teachers and students.
 
     >>> manager.getLink("Extend to This Term", index=1).click()
+    >>> manager.getControl("Extend").click()
 
     >>> manager.printQuery("id('content-header')//a")
     <a href="http://localhost/schoolyears/2005-2006/courses/history">History</a>
@@ -204,6 +274,50 @@ missing student in Term3, the other terms staying the same.
     <a href="http://localhost/persons/student2">Student2, Student2</a>
 
 
+Extending Backwards
+-------------------
+
+To show that we can extend backwards in time, we'll set up a section in Term4
+of a new course.
+
+    >>> setup.addCourse("English", "2005-2006")
+    >>> setup.addSection("English", "2005-2006", "Term4",
+    ...     instructors=["Teacher1"], members=['Student1', 'Student2'])
+
+We'll navigate to the section and hit the All Terms link.
+
+    >>> manager.getLink("2005-2006").click()
+    >>> manager.getLink("Courses").click()
+    >>> manager.getLink("English").click()
+    >>> manager.getLink("English (2)").click()
+    >>> manager.getLink("All Terms").click()
+
+We see that the section is only found in Term4.
+
+    >>> manager.printQuery("id('content-header')//a")
+    <a href="http://localhost/schoolyears/2005-2006/courses/english">English</a>
+    <a href="http://localhost/schoolyears/2005-2006">2005-2006</a>
+
+    >>> manager.printQuery("id('content-body')//table[@class='all_terms_table']/tbody/tr/td[4]//a")
+    <a href="http://localhost/schoolyears/2005-2006/term4/sections/2">English (2)</a>
+    <a href="http://localhost/persons/teacher1">Teacher1, Teacher1</a>
+    <a href="http://localhost/persons/student1">Student1, Student1</a>
+    <a href="http://localhost/persons/student2">Student2, Student2</a>
+
+    >>> filled_terms()
+    [4]
+
+We'll extend all the way back to Term1.
+
+    >>> manager.getLink("Extend to This Term", index=0).click()
+    >>> manager.getControl("Extend").click()
+
+We see that the section is found in all the terms now.
+
+    >>> filled_terms()
+    [1, 2, 3, 4]
+
+
 Link an Existing Section
 ------------------------
 
@@ -212,23 +326,23 @@ terms before realizing how easy it is to extend a section using the
 section_linkage view.  In those cases we will offer them the ability to
 link two sections together.
 
-We'll create another course and two sections, one in Term2, and one in Term3.
+We'll create another course and two sections, one in Term1, and one in Term4.
 
     >>> setup.addCourse("Math", "2005-2006")
-    >>> setup.addSection("Math", "2005-2006", "Term2",
+    >>> setup.addSection("Math", "2005-2006", "Term1",
     ...     instructors=["Teacher1"], members=['Student1', 'Student2'])
-    >>> setup.addSection("Math", "2005-2006", "Term3",
-    ...     instructors=["Teacher1"], members=['Student1', 'Student2'])
+    >>> setup.addSection("Math", "2005-2006", "Term4",
+    ...     instructors=["Teacher1"], members=['Student1'])
 
 We'll navigate to the Term2 section and hit the All Terms link.
 
     >>> manager.getLink("2005-2006").click()
     >>> manager.getLink("Courses").click()
     >>> manager.getLink("Math").click()
-    >>> manager.getLink("Math (2)", index=0).click()
+    >>> manager.getLink("Math (3)", index=0).click()
     >>> manager.getLink("All Terms").click()
 
-We see that only the Term2 column is filled in because the Term3 section is
+We see that only the Term1 column is filled in because the Term4 section is
 not linked to it.
 
     >>> manager.printQuery("id('content-header')//a")
@@ -236,35 +350,11 @@ not linked to it.
     <a href="http://localhost/schoolyears/2005-2006">2005-2006</a>
 
     >>> manager.printQuery("id('content-body')//table[@class='all_terms_table']/tbody/tr/td[1]//a")
-    <a href="http://localhost/schoolyears/2005-2006/term2/sections/2/extend_term.html?term=term1">Extend to This Term</a>
-    <a href="http://localhost/schoolyears/2005-2006/term2/sections/2/link_existing.html?term=term1">Link an Existing Section</a>
-
-    >>> manager.printQuery("id('content-body')//table[@class='all_terms_table']/tbody/tr/td[2]//a")
-    <a href="http://localhost/schoolyears/2005-2006/term2/sections/2">Math (2)</a>
+    <a href="http://localhost/schoolyears/2005-2006/term1/sections/3">Math (3)</a>
     <a href="http://localhost/persons/teacher1">Teacher1, Teacher1</a>
     <a href="http://localhost/persons/student1">Student1, Student1</a>
     <a href="http://localhost/persons/student2">Student2, Student2</a>
 
-    >>> manager.printQuery("id('content-body')//table[@class='all_terms_table']/tbody/tr/td[3]//a")
-    <a href="http://localhost/schoolyears/2005-2006/term2/sections/2/extend_term.html?term=term3">Extend to This Term</a>
-    <a href="http://localhost/schoolyears/2005-2006/term2/sections/2/link_existing.html?term=term3">Link an Existing Section</a>
-
-    >>> manager.printQuery("id('content-body')//table[@class='all_terms_table']/tbody/tr/td[4]//a")
-    <a href="http://localhost/schoolyears/2005-2006/term2/sections/2/extend_term.html?term=term4">Extend to This Term</a>
-    <a href="http://localhost/schoolyears/2005-2006/term2/sections/2/link_existing.html?term=term4">Link an Existing Section</a>
-
-We'll take this opportunity to demostrate that a clever user can't cause a
-program exception by putting a bad term in the query string.
-
-    >>> term2_url = manager.queryHTML("id('content-body')//table[@class='all_terms_table']/tbody/tr/td[2]//a/@href")[0]
-    >>> manager.open(term2_url + '/extend_term.html?term=invalid')
-    >>> manager.url
-    'http://localhost/schoolyears/2005-2006/term2/sections/2/section_linkage.html'
-
-Even if we pass it a valid term that is already linked to the context, no
-harm will come.
-
-    >>> manager.open(term2_url + '/extend_term.html?term=term2')
-    >>> manager.url
-    'http://localhost/schoolyears/2005-2006/term2/sections/2/section_linkage.html'
+    >>> filled_terms()
+    [1]
 

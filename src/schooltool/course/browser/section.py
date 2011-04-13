@@ -586,18 +586,47 @@ class SectionLinkageView(BrowserView):
 class ExtendTermView(BrowserView):
     """A view for extending a section to a target term."""
 
+    template = ViewPageTemplateFile('templates/extend_term.pt')
+
+    @property
+    def term(self):
+        return ITerm(self.context)
+
+    @property
+    def extend_term(self):
+        return ISchoolYear(self.context).get(self.request['term'])
+
     def __call__(self):
         section = removeSecurityProxy(self.context)
         year = ISchoolYear(section)
+        linked_names = [ITerm(s).__name__ for s in section.linked_sections]
         key = self.request['term']
-        if key in year:
+
+        if key not in year or key in linked_names or 'CANCEL' in self.request:
+            self.request.response.redirect(self.nextURL())
+
+        elif 'EXTEND' in self.request:
             extend_term = year[key]
-            current = section.linked_sections[-1]
-            while ITerm(current).first < extend_term.first:
+            if extend_term.first < self.term.first:
+                current = section.linked_sections[0]
+                target_term = getPreviousTerm(ITerm(current))
+            else:
+                current = section.linked_sections[-1]
                 target_term = getNextTerm(ITerm(current))
+            while ITerm(current).first != extend_term.first:
                 new_section = copySection(current, target_term)
-                new_section.previous = current
+                if extend_term.first < self.term.first:
+                    new_section.next = current
+                    target_term = getPreviousTerm(target_term)
+                else:
+                    new_section.previous = current
+                    target_term = getNextTerm(target_term)
                 current = new_section
-        url = '%s/section_linkage.html' % absoluteURL(section, self.request)
-        self.request.response.redirect(url)
+            self.request.response.redirect(self.nextURL())
+
+        else:
+            return self.template()
+
+    def nextURL(self):
+        return absoluteURL(self.context, self.request) + '/section_linkage.html' 
 
