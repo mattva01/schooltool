@@ -87,11 +87,11 @@ class DayTemplateScheduleBuilder(object):
         # populate self.days
         raise NotImplementedError()
 
-    def addDayTemplate(self, templates, day):
+    def addDayTemplate(self, templates, day_key, day):
         # add day from self.days to the template
         raise NotImplementedError()
 
-    def build(self, context):
+    def buildSchedule(self, context):
         if (self.schedule_factory is None or
             not self.schedule_attr):
             raise NotImplementedError()
@@ -101,10 +101,13 @@ class DayTemplateScheduleBuilder(object):
         schedule.__parent__ = context.timetable
         schedule.__name__ = unicode(self.schedule_attr)
         schedule.initTemplates()
-        templates = schedule.templates
+        return schedule
 
+    def build(self, context):
+        schedule = self.buildSchedule(context)
         for day in self.days:
-            self.addDayTemplate(templates, day)
+            # XXX: title as key is not very safe, isn't it
+            self.addDayTemplate(schedule.templates, day['title'], day)
 
 
 class PeriodsBuilder(DayTemplateScheduleBuilder):
@@ -132,10 +135,7 @@ class PeriodsBuilder(DayTemplateScheduleBuilder):
                     'periods': self.readPeriods(day),
                     })
 
-    def addDayTemplate(self, templates, day):
-        # XXX: umm, that's not very nice, isn't it
-        day_key = day['title']
-
+    def addDayTemplate(self, templates, day_key, day):
         template = DayTemplate(title=day['title'])
         templates[day_key] = template
 
@@ -149,6 +149,28 @@ class PeriodsBuilder(DayTemplateScheduleBuilder):
 
 class WeekDayPeriodsBuilder(PeriodsBuilder):
     schedule_factory = WeekDayTemplates
+
+    weekday_keys = ["Monday", "Tuesday", "Wednesday",
+                    "Thursday", "Friday", "Saturday", "Sunday"]
+
+    def getDay(self, weekday):
+        key = self.weekday_keys[weekday]
+        days = dict([(day['title'], day) for day in self.days])
+        if key in days:
+            return days[key]
+        if 'None' in days:
+            day = dict(days['None'])
+            day['title'] = unicode(key) # XXX: hmmm
+            return day
+        return None
+
+    def build(self, context):
+        schedule = self.buildSchedule(context)
+
+        for weekday in range(7):
+            day = self.getDay(weekday)
+            key = schedule.getWeekDayKey(weekday)
+            self.addDayTemplate(schedule.templates, key, day)
 
 
 class SchoolDayPeriodsBuilder(PeriodsBuilder):
@@ -177,10 +199,7 @@ class TimeSlotsBuilder(DayTemplateScheduleBuilder):
     def read(self, schema):
         raise NotImplementedError()
 
-    def addDayTemplate(self, templates, day):
-        # XXX: umm, that's not very nice, isn't it
-        day_key = day['title']
-
+    def addDayTemplate(self, templates, day_key, day):
         template = DayTemplate(title=day['title'])
         templates[day_key] = template
 
@@ -196,6 +215,9 @@ class TimeSlotsBuilder(DayTemplateScheduleBuilder):
 class WeekDayTimeSlotsBuilder(TimeSlotsBuilder):
     schedule_factory = WeekDayTemplates
 
+    weekdays = ["Monday", "Tuesday", "Wednesday",
+                "Thursday", "Friday", "Saturday", "Sunday"]
+
     def read(self, schema):
         model = schema.model
         assert_not_broken(model)
@@ -208,9 +230,16 @@ class WeekDayTimeSlotsBuilder(TimeSlotsBuilder):
 
             slots = self.readSlots(template)
             self.days.append({
-                    'title': u'%d' % weekday, # XXX: ummm???
+                    'title': self.weekdays[weekday],
                     'time_slots': slots,
                     })
+
+    def build(self, context):
+        schedule = self.buildSchedule(context)
+
+        for weekday, day in enumerate(self.days):
+            key = schedule.getWeekDayKey(weekday)
+            self.addDayTemplate(schedule.templates, key, day)
 
 
 class SchoolDayTimeSlotsBuilder(TimeSlotsBuilder):
