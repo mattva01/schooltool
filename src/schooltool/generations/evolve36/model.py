@@ -22,10 +22,14 @@ Various timetable classes from generation 35.
 """
 
 from persistent import Persistent
+from zope.annotation.interfaces import IAttributeAnnotatable
 from zope.interface import Interface, implements
 from zope.container.interfaces import IContained
 from zope.container.contained import Contained
 from zope.container.btree import BTreeContainer
+
+from schooltool.app.interfaces import ISchoolToolCalendarEvent
+from schooltool.calendar.simple import SimpleCalendarEvent
 
 
 substitutes = {}
@@ -174,3 +178,50 @@ class SchooldayTemplate(object):
     def __iter__(self):
         return iter(sorted(self.events))
 
+
+@substituteIn('schooltool.timetable.interface')
+class ITimetableCalendarEvent(ISchoolToolCalendarEvent):
+    """A calendar event that has been created from a timetable."""
+
+
+class STAppCalendarEvent(SimpleCalendarEvent, Persistent, Contained):
+    """Taken from schooltool.app.cal.CalendarEvent"""
+    implements(ISchoolToolCalendarEvent, IAttributeAnnotatable)
+
+
+@substituteIn('schooltool.timetable.model')
+class PersistentTimetableCalendarEvent(STAppCalendarEvent):
+    """A calendar event that has been created from a timetable."""
+    implements(ITimetableCalendarEvent)
+
+    __name__ = None
+    __parent__ = None # calendar
+    unique_id = None
+
+    _day_id = None
+    _period_id = None
+    _activity = None
+    _resources = None
+
+    dtstart = None
+    duration = None
+    description = None
+    location = None
+    recurrence = None # XXX: for timetables? really?
+    allday = None # XXX: for timetables? really?
+
+    day_id = property(lambda self: self._day_id)
+    period_id = property(lambda self: self._period_id)
+    activity = property(lambda self: self._activity)
+    title = property(lambda self: self.activity.title)
+    resources = property(lambda self: self._resources)
+
+    def unbookResource(self, resource):
+        # XXX: Free the resources!
+        #      Rebook them to real events if feasible.
+        #if resource not in self.resources:
+        #    raise ValueError('resource not booked')
+        #self._resources = tuple([r for r in self.resources
+        #                         if r is not resource])
+        #ISchoolToolCalendar(resource).removeEvent(self)
+        pass
