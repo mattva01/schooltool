@@ -48,9 +48,9 @@ class BuildContext(object):
     def __getattr__(self, name):
         if name in self._options:
             return self._options[name]
-        return object.__getattr__(self, name)
+        raise AttributeError(name)
 
-    def expand(self, **options):
+    def __call__(self, **options):
         new_options = dict(self._options)
         new_options.update(options)
-        return BuildContext(**new_options)
+        return self.__class__(**new_options)

@@ -42,7 +42,7 @@ class DayTemplateScheduleBuilder(object):
     schedule_factory = None
     days = None
 
-    def read(self, schema):
+    def read(self, schema, context):
         # populate self.days
         raise NotImplementedError()
 
@@ -50,20 +50,20 @@ class DayTemplateScheduleBuilder(object):
         # add day from self.days to the template
         raise NotImplementedError()
 
-    def buildSchedule(self, context):
+    def buildSchedule(self, timetable):
         if (self.schedule_factory is None or
             not self.schedule_attr):
             raise NotImplementedError()
 
         schedule = self.schedule_factory()
-        setattr(context.timetable, self.schedule_attr, schedule)
-        schedule.__parent__ = context.timetable
+        setattr(timetable, self.schedule_attr, schedule)
+        schedule.__parent__ = timetable
         schedule.__name__ = unicode(self.schedule_attr)
         schedule.initTemplates()
         return schedule
 
-    def build(self, context):
-        schedule = self.buildSchedule(context)
+    def build(self, timetable, context):
+        schedule = self.buildSchedule(timetable)
         for day in self.days:
             # XXX: title as key is not very safe, isn't it
             self.addDayTemplate(schedule.templates, day['title'], day)
@@ -84,7 +84,7 @@ class PeriodsBuilder(DayTemplateScheduleBuilder):
                     })
         return periods
 
-    def read(self, schema):
+    def read(self, schema, context):
         assert_not_broken(schema)
         self.days = []
         for day_id, day in schema.items():
@@ -123,8 +123,8 @@ class WeekDayPeriodsBuilder(PeriodsBuilder):
             return day
         return None
 
-    def build(self, context):
-        schedule = self.buildSchedule(context)
+    def build(self, timetable, context):
+        schedule = self.buildSchedule(timetable)
 
         for weekday in range(7):
             day = self.getDay(weekday)
@@ -155,7 +155,7 @@ class TimeSlotsBuilder(DayTemplateScheduleBuilder):
                  for slot in school_day_template]
         return slots
 
-    def read(self, schema):
+    def read(self, schema, context):
         raise NotImplementedError()
 
     def addDayTemplate(self, templates, day_key, day):
@@ -177,7 +177,7 @@ class WeekDayTimeSlotsBuilder(TimeSlotsBuilder):
     weekdays = ["Monday", "Tuesday", "Wednesday",
                 "Thursday", "Friday", "Saturday", "Sunday"]
 
-    def read(self, schema):
+    def read(self, schema, context):
         model = schema.model
         assert_not_broken(model)
 
@@ -193,8 +193,8 @@ class WeekDayTimeSlotsBuilder(TimeSlotsBuilder):
                     'time_slots': slots,
                     })
 
-    def build(self, context):
-        schedule = self.buildSchedule(context)
+    def build(self, timetable, context):
+        schedule = self.buildSchedule(timetable)
 
         for weekday, day in enumerate(self.days):
             key = schedule.getWeekDayKey(weekday)
@@ -204,7 +204,7 @@ class WeekDayTimeSlotsBuilder(TimeSlotsBuilder):
 class SchoolDayTimeSlotsBuilder(TimeSlotsBuilder):
     schedule_factory = SchoolDayTemplates
 
-    def read(self, schema):
+    def read(self, schema, context):
         model = schema.model
         assert_not_broken(model)
 
@@ -228,7 +228,7 @@ class TimetableBuilder(object):
     time_slosts = None
     set_default = False
 
-    def read(self, schema):
+    def read(self, schema, context):
         assert_not_broken(schema)
 
         self.timezone = unicode(schema.timezone)
@@ -249,10 +249,10 @@ class TimetableBuilder(object):
             self.periods = WeekDayPeriodsBuilder()
             self.time_slots = WeekDayTimeSlotsBuilder()
 
-        self.periods.read(schema)
-        self.time_slots.read(schema)
+        self.periods.read(schema, context())
+        self.time_slots.read(schema, context())
 
-    def build(self, context):
+    def build(self, timetables, context):
         # XXX: what if timezone is broken or outdated?
         if self.timezone is None:
             timezone = IApplicationPreferences(context.app).timezone
@@ -265,21 +265,21 @@ class TimetableBuilder(object):
             first, last,
             title=self.title,
             timezone=timezone)
-        context.timetables[self.__name__] = timetable
-        timetable.__parent__ = context.timetables
+        timetables[self.__name__] = timetable
+        timetable.__parent__ = timetables
 
-        self.periods.build(context.expand(timetable=timetable))
-        self.time_slots.build(context.expand(timetable=timetable))
+        self.periods.build(timetable, context(timetables=timetables))
+        self.time_slots.build(timetable, context(timetables=timetables))
 
         if self.set_default:
-            context.timetables.default = timetable
+            timetables.default = timetable
 
 
 class TimetableContainerBuilder(object):
     year_int_id = None
     timetables = None
 
-    def read(self, schema_container):
+    def read(self, schema_container, context):
         assert_not_broken(schema_container)
 
         self.year_int_id = int(schema_container.__name__)
@@ -292,38 +292,38 @@ class TimetableContainerBuilder(object):
             builder = TimetableBuilder()
             if (default_id is not None and default_id == key):
                 builder.set_default = True
-            builder.read(schema)
+            builder.read(schema, context(schema_container=schema_container))
             self.timetables.append(builder)
 
-    def build(self, context):
+    def build(self, timetable_root, context):
         key = unicode(self.year_int_id)
-        container = context.timetable_root[key] = TimetableContainer()
+        container = timetable_root[key] = TimetableContainer()
         schoolyear = getUtility(IIntIds).getObject(self.year_int_id)
         for builder in self.timetables:
-            builder.build(context.expand(
-                    timetables=container,
-                    schoolyear=schoolyear))
+            builder.build(container, context(timetable_root=timetable_root,
+                                             schoolyear=schoolyear))
 
 
 class SchoolTimetablesBuilder(object):
     builders = None
 
-    def read(self, app):
+    def read(self, app, context):
         assert_not_broken(app)
         schema_root = app['schooltool.timetable.schooltt']
         self.builders = []
         for container in schema_root.values():
             builder = TimetableContainerBuilder()
             assert_not_broken(container)
-            builder.read(container)
+            builder.read(container, context(app=app))
             self.builders.append(builder)
 
-    def clean(self, app):
+    def clean(self, app, context):
         del app['schooltool.timetable.schooltt']
 
-    def build(self, context):
-        if APP_TIMETABLES_KEY not in context.app:
-            context.app[APP_TIMETABLES_KEY] = SchoolToolSchedules()
-        timetable_root = context.app[APP_TIMETABLES_KEY]
+    def build(self, app, context):
+        if APP_TIMETABLES_KEY not in app:
+            app[APP_TIMETABLES_KEY] = SchoolToolSchedules()
+        timetable_root = app[APP_TIMETABLES_KEY]
+
         for builder in self.builders:
-            builder.build(context.expand(timetable_root=timetable_root))
+            builder.build(timetable_root, context(app=app))

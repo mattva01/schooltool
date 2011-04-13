@@ -41,13 +41,13 @@ def evolveTimetables(app):
         ]
 
     for builder in builders:
-        builder.read(app)
+        builder.read(app, BuildContext())
 
     modules.restore()
 
     for builder in builders:
-        builder.clean(app)
+        builder.clean(app, BuildContext())
 
     for builder in builders:
-        builder.build(BuildContext(app=app))
+        builder.build(app, BuildContext())
 
