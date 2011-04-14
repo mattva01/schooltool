@@ -571,6 +571,10 @@ class SectionLinkageView(BrowserView):
         return ISchoolYear(self.context)
 
     @property
+    def linked(self):
+        return len(self.context.linked_sections) > 1
+
+    @property
     def columns(self):
         linked_sections = dict([(ITerm(section), section)
                                  for section in self.context.linked_sections])

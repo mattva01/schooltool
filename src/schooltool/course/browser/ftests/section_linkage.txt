@@ -59,7 +59,9 @@ We'll navigate to the section and hit the All Terms link.
 
 We see that there is a header with links to the section's course and year.
 Additionally, there is a table of terms with only Term1 having a roster.
-The other terms have action links.
+The other terms have action links.  Since this section is not linked to
+another section, there is no 'Unlink this Section' link under the section
+link.
 
     >>> manager.printQuery("id('content-header')//a")
     <a href="http://localhost/schoolyears/2005-2006/courses/history">History</a>
@@ -125,7 +127,8 @@ in the Term2 column.
 We'll hit the same link again, but this time we'll hit Extend.  We see that
 the section is now linked to a section in the second term that has the same
 teacher and students.  The third and fourth columns still have the action
-buttons.
+buttons.  Now that the section is linked with another, both sections will have
+an 'Unlink ths Section' link under the section link.
 
     >>> manager.getLink("Extend to This Term", index=0).click()
     >>> manager.getControl("Extend").click()
@@ -136,12 +139,14 @@ buttons.
 
     >>> manager.printQuery("id('content-body')//table[@class='all_terms_table']/tbody/tr/td[1]//a")
     <a href="http://localhost/schoolyears/2005-2006/term1/sections/1">History (1)</a>
+    <a href="http://localhost/schoolyears/2005-2006/term1/sections/1/unlink_section.html">Unlink this Section</a>
     <a href="http://localhost/persons/teacher1">Teacher1, Teacher1</a>
     <a href="http://localhost/persons/student1">Student1, Student1</a>
     <a href="http://localhost/persons/student2">Student2, Student2</a>
 
     >>> manager.printQuery("id('content-body')//table[@class='all_terms_table']/tbody/tr/td[2]//a")
     <a href="http://localhost/schoolyears/2005-2006/term2/sections/1">History (1)</a>
+    <a href="http://localhost/schoolyears/2005-2006/term2/sections/1/unlink_section.html">Unlink this Section</a>
     <a href="http://localhost/persons/teacher1">Teacher1, Teacher1</a>
     <a href="http://localhost/persons/student1">Student1, Student1</a>
     <a href="http://localhost/persons/student2">Student2, Student2</a>
@@ -196,24 +201,28 @@ the teachers and students.
 
     >>> manager.printQuery("id('content-body')//table[@class='all_terms_table']/tbody/tr/td[1]//a")
     <a href="http://localhost/schoolyears/2005-2006/term1/sections/1">History (1)</a>
+    <a href="http://localhost/schoolyears/2005-2006/term1/sections/1/unlink_section.html">Unlink this Section</a>
     <a href="http://localhost/persons/teacher1">Teacher1, Teacher1</a>
     <a href="http://localhost/persons/student1">Student1, Student1</a>
     <a href="http://localhost/persons/student2">Student2, Student2</a>
 
     >>> manager.printQuery("id('content-body')//table[@class='all_terms_table']/tbody/tr/td[2]//a")
     <a href="http://localhost/schoolyears/2005-2006/term2/sections/1">History (1)</a>
+    <a href="http://localhost/schoolyears/2005-2006/term2/sections/1/unlink_section.html">Unlink this Section</a>
     <a href="http://localhost/persons/teacher1">Teacher1, Teacher1</a>
     <a href="http://localhost/persons/student1">Student1, Student1</a>
     <a href="http://localhost/persons/student2">Student2, Student2</a>
 
     >>> manager.printQuery("id('content-body')//table[@class='all_terms_table']/tbody/tr/td[3]//a")
     <a href="http://localhost/schoolyears/2005-2006/term3/sections/1">History (1)</a>
+    <a href="http://localhost/schoolyears/2005-2006/term3/sections/1/unlink_section.html">Unlink this Section</a>
     <a href="http://localhost/persons/teacher1">Teacher1, Teacher1</a>
     <a href="http://localhost/persons/student1">Student1, Student1</a>
     <a href="http://localhost/persons/student2">Student2, Student2</a>
 
     >>> manager.printQuery("id('content-body')//table[@class='all_terms_table']/tbody/tr/td[4]//a")
     <a href="http://localhost/schoolyears/2005-2006/term4/sections/1">History (1)</a>
+    <a href="http://localhost/schoolyears/2005-2006/term4/sections/1/unlink_section.html">Unlink this Section</a>
     <a href="http://localhost/persons/teacher1">Teacher1, Teacher1</a>
     <a href="http://localhost/persons/student1">Student1, Student1</a>
     <a href="http://localhost/persons/student2">Student2, Student2</a>
@@ -251,12 +260,14 @@ missing student in Term3, the other terms staying the same.
 
     >>> manager.printQuery("id('content-body')//table[@class='all_terms_table']/tbody/tr/td[1]//a")
     <a href="http://localhost/schoolyears/2005-2006/term1/sections/1">History (1)</a>
+    <a href="http://localhost/schoolyears/2005-2006/term1/sections/1/unlink_section.html">Unlink this Section</a>
     <a href="http://localhost/persons/teacher1">Teacher1, Teacher1</a>
     <a href="http://localhost/persons/student1">Student1, Student1</a>
     <a href="http://localhost/persons/student2">Student2, Student2</a>
 
     >>> manager.printQuery("id('content-body')//table[@class='all_terms_table']/tbody/tr/td[2]//a")
     <a href="http://localhost/schoolyears/2005-2006/term2/sections/1">History (1)</a>
+    <a href="http://localhost/schoolyears/2005-2006/term2/sections/1/unlink_section.html">Unlink this Section</a>
     <a href="http://localhost/persons/teacher1">Teacher1, Teacher1</a>
     <a href="http://localhost/persons/student1">Student1, Student1</a>
     <a href="http://localhost/persons/student2">Student2, Student2</a>
@@ -264,11 +275,13 @@ missing student in Term3, the other terms staying the same.
 
     >>> manager.printQuery("id('content-body')//table[@class='all_terms_table']/tbody/tr/td[3]//a")
     <a href="http://localhost/schoolyears/2005-2006/term3/sections/1">History (1)</a>
+    <a href="http://localhost/schoolyears/2005-2006/term3/sections/1/unlink_section.html">Unlink this Section</a>
     <a href="http://localhost/persons/teacher1">Teacher1, Teacher1</a>
     <a href="http://localhost/persons/student2">Student2, Student2</a>
 
     >>> manager.printQuery("id('content-body')//table[@class='all_terms_table']/tbody/tr/td[4]//a")
     <a href="http://localhost/schoolyears/2005-2006/term4/sections/1">History (1)</a>
+    <a href="http://localhost/schoolyears/2005-2006/term4/sections/1/unlink_section.html">Unlink this Section</a>
     <a href="http://localhost/persons/teacher1">Teacher1, Teacher1</a>
     <a href="http://localhost/persons/student1">Student1, Student1</a>
     <a href="http://localhost/persons/student2">Student2, Student2</a>
@@ -454,24 +467,28 @@ of the selected section.
 
     >>> manager.printQuery("id('content-body')//table[@class='all_terms_table']/tbody/tr/td[1]//a")
     <a href="http://localhost/schoolyears/2005-2006/term1/sections/3">Math (3)</a>
+    <a href="http://localhost/schoolyears/2005-2006/term1/sections/3/unlink_section.html">Unlink this Section</a>
     <a href="http://localhost/persons/teacher1">Teacher1, Teacher1</a>
     <a href="http://localhost/persons/student1">Student1, Student1</a>
     <a href="http://localhost/persons/student2">Student2, Student2</a>
 
     >>> manager.printQuery("id('content-body')//table[@class='all_terms_table']/tbody/tr/td[2]//a")
     <a href="http://localhost/schoolyears/2005-2006/term2/sections/3">Math (3)</a>
+    <a href="http://localhost/schoolyears/2005-2006/term2/sections/3/unlink_section.html">Unlink this Section</a>
     <a href="http://localhost/persons/teacher1">Teacher1, Teacher1</a>
     <a href="http://localhost/persons/student1">Student1, Student1</a>
     <a href="http://localhost/persons/student2">Student2, Student2</a>
 
     >>> manager.printQuery("id('content-body')//table[@class='all_terms_table']/tbody/tr/td[3]//a")
     <a href="http://localhost/schoolyears/2005-2006/term3/sections/3">Math (3)</a>
+    <a href="http://localhost/schoolyears/2005-2006/term3/sections/3/unlink_section.html">Unlink this Section</a>
     <a href="http://localhost/persons/teacher1">Teacher1, Teacher1</a>
     <a href="http://localhost/persons/student1">Student1, Student1</a>
     <a href="http://localhost/persons/student2">Student2, Student2</a>
 
     >>> manager.printQuery("id('content-body')//table[@class='all_terms_table']/tbody/tr/td[4]//a")
     <a href="http://localhost/schoolyears/2005-2006/term4/sections/4">Math (4)</a>
+    <a href="http://localhost/schoolyears/2005-2006/term4/sections/4/unlink_section.html">Unlink this Section</a>
     <a href="http://localhost/persons/teacher2">Doe, John</a>
     <a href="http://localhost/persons/student1">Student1, Student1</a>
 
@@ -524,22 +541,26 @@ the selected Term1 section.  Again, the rosters reflect this.
 
     >>> manager.printQuery("id('content-body')//table[@class='all_terms_table']/tbody/tr/td[1]//a")
     <a href="http://localhost/schoolyears/2005-2006/term1/sections/4">Health (4)</a>
+    <a href="http://localhost/schoolyears/2005-2006/term1/sections/4/unlink_section.html">Unlink this Section</a>
     <a href="http://localhost/persons/teacher2">Doe, John</a>
     <a href="http://localhost/persons/student1">Student1, Student1</a>
     <a href="http://localhost/persons/student2">Student2, Student2</a>
 
     >>> manager.printQuery("id('content-body')//table[@class='all_terms_table']/tbody/tr/td[2]//a")
     <a href="http://localhost/schoolyears/2005-2006/term2/sections/5">Health (5)</a>
+    <a href="http://localhost/schoolyears/2005-2006/term2/sections/5/unlink_section.html">Unlink this Section</a>
     <a href="http://localhost/persons/teacher1">Teacher1, Teacher1</a>
     <a href="http://localhost/persons/student1">Student1, Student1</a>
 
     >>> manager.printQuery("id('content-body')//table[@class='all_terms_table']/tbody/tr/td[3]//a")
     <a href="http://localhost/schoolyears/2005-2006/term3/sections/5">Health (5)</a>
+    <a href="http://localhost/schoolyears/2005-2006/term3/sections/5/unlink_section.html">Unlink this Section</a>
     <a href="http://localhost/persons/teacher1">Teacher1, Teacher1</a>
     <a href="http://localhost/persons/student1">Student1, Student1</a>
 
     >>> manager.printQuery("id('content-body')//table[@class='all_terms_table']/tbody/tr/td[4]//a")
     <a href="http://localhost/schoolyears/2005-2006/term4/sections/5">Health (5)</a>
+    <a href="http://localhost/schoolyears/2005-2006/term4/sections/5/unlink_section.html">Unlink this Section</a>
     <a href="http://localhost/persons/teacher1">Teacher1, Teacher1</a>
     <a href="http://localhost/persons/student1">Student1, Student1</a>
 
