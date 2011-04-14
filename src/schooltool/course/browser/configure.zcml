@@ -158,6 +158,14 @@
       layer="schooltool.skin.ISchoolToolLayer"
       />
 
+  <page
+      name="link_existing.html"
+      for="..interfaces.ISection"
+      class=".section.LinkExistingView"
+      permission="schooltool.edit"
+      layer="schooltool.skin.ISchoolToolLayer"
+      />
+
   <containerViews
       for="..interfaces.ISectionContainer"
       contents="schooltool.view"

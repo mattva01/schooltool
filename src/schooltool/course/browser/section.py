@@ -630,3 +630,106 @@ class ExtendTermView(BrowserView):
     def nextURL(self):
         return absoluteURL(self.context, self.request) + '/section_linkage.html' 
 
+
+class LinkExistingView(BrowserView):
+    """A view for finding a target section in anoother term for linking."""
+
+    template = ViewPageTemplateFile('templates/link_existing.pt')
+
+    @property
+    def term(self):
+        return ITerm(self.context)
+
+    @property
+    def link_term(self):
+        term = ISchoolYear(self.context).get(self.request.get('term'))
+        if (term is not None and
+            term not in [ITerm(s) for s in self.context.linked_sections]):
+            return term
+
+    @property
+    def sections(self):
+        section = removeSecurityProxy(self.context)
+        term = self.link_term
+
+        sections = []
+        if term is None:
+            return sections
+
+        courses = list(section.courses)
+        for target in ISectionContainer(term).values():
+            if target in section.linked_sections:
+                continue
+            if not self.filterSection(target):
+                continue
+            if courses == list(target.courses):
+                sections.append(target)
+        return sections
+
+    def filterSection(self, section):
+        teacher_filter = self.request.get('teacher', '').lower()
+        if not teacher_filter:
+            return True
+        for teacher in section.instructors:
+            name = '%s %s' % (teacher.first_name, teacher.last_name)
+            if (teacher_filter in name.lower() or
+                teacher_filter in teacher.username.lower()):
+                return True
+        return False
+
+    @property
+    def selected_section(self):
+        term = self.link_term
+        selection = self.request.get('LINK_SECTION')
+        if term is not None and selection is not None:
+            section = ISectionContainer(term).get(selection[8:])
+            if section not in self.context.linked_sections:
+                return section
+
+    @property
+    def error(self):
+        return 'LINK' in self.request and self.selected_section is None
+
+    def __call__(self):
+        section = removeSecurityProxy(self.context)
+        term = self.term
+        link_term = self.link_term
+
+        if link_term is None or 'CANCEL' in self.request:
+            self.request.response.redirect(self.nextURL())
+
+        elif 'LINK' in self.request:
+            target_section = self.selected_section
+            if target_section is None:
+                return self.template()
+
+            if link_term.first < term.first:
+                current = section.linked_sections[0]
+                target_term = getPreviousTerm(ITerm(current))
+            else:
+                current = section.linked_sections[-1]
+                target_term = getNextTerm(ITerm(current))
+
+            while target_term.first != link_term.first:
+                new_section = copySection(current, target_term)
+                if link_term.first < term.first:
+                    new_section.next = current
+                    target_term = getPreviousTerm(target_term)
+                else:
+                    new_section.previous = current
+                    target_term = getNextTerm(target_term)
+                current = new_section
+
+            if link_term.first < term.first:
+                target_section.next = current
+            else:
+                target_section.previous = current
+
+            self.request.response.redirect(self.nextURL())
+
+        else:
+            return self.template()
+
+    def nextURL(self):
+        return absoluteURL(self.context, self.request) + '/section_linkage.html' 
+

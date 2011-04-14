@@ -480,4 +480,12 @@ table.all_terms_table td {
 table.linkage_actions td {
     border-bottom: none;
 }
+table.link_help td {
+    width: 600px;
+}
+tr.link_error td {
+    color: red;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
 
