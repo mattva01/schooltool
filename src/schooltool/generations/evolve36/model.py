@@ -22,11 +22,13 @@ Various timetable classes from generation 35.
 """
 
 from persistent import Persistent
+from persistent.dict import PersistentDict
 from zope.annotation.interfaces import IAttributeAnnotatable
 from zope.interface import Interface, implements
-from zope.container.interfaces import IContained
+from zope.container.interfaces import IContainer, IContained
 from zope.container.contained import Contained
 from zope.container.btree import BTreeContainer
+from zope.location.interfaces import ILocation
 
 from schooltool.app.interfaces import ISchoolToolCalendarEvent
 from schooltool.calendar.simple import SimpleCalendarEvent
@@ -225,3 +227,165 @@ class PersistentTimetableCalendarEvent(STAppCalendarEvent):
         #                         if r is not resource])
         #ISchoolToolCalendar(resource).removeEvent(self)
         pass
+
+
+@substituteIn('schooltool.timetable.interface')
+class ITimetableDict(IContainer, ILocation):
+    """Container for [section] timetables."""
+
+
+@substituteIn('schooltool.timetable')
+class TimetableDict(PersistentDict):
+    """The id of the timetable is composed by joining term id and
+    timetable schema id with a dot.  For example,"2005-fall.default"
+    means a timetable for a term "2005-fall" with a timetable schema
+    "default".
+    """
+    implements(ILocation, ITimetableDict)
+
+    __name__ = 'timetables'
+    __parent__ = None # [section] this timetable is scheduled for
+
+
+@substituteIn('schooltool.timetable.interface')
+class ITimetable(ILocation):
+    """A timetable interface."""
+
+
+@substituteIn('schooltool.timetable')
+class Timetable(Persistent):
+    """A timetable.
+
+    A timetable is an ordered collection of timetable days that contain
+    periods. Each period either contains a class, or is empty.
+
+    A timetable represents the repeating lesson schedule for just one
+    pupil, or one teacher, or one bookable resource.
+
+    Contained in a TimetableDict.
+    """
+    implements(ITimetable)
+
+    __name__ = None
+    __parent__ = None
+    _first = None
+    _last = None
+    timezone = 'UTC'
+    consecutive_periods_as_one = False
+    term = None # always set for bound timetables
+    schooltt = None # schema, always set for bound timetables
+
+    model = None # model, set from views
+    day_ids = None # list of day ids, set from views
+
+    # persistent dict of day templates
+    # keys - subset of day_ids
+    # values - ITimetableDay, ITimetableDay.timetable set to self
+    days = None
+
+    @property
+    def title(self):
+        if self.term and self.schooltt:
+            return "%s.%s" % (self.term.__name__, self.schooltt.__name__)
+        else:
+            return u"Unbound timetable."
+
+    def __init__(self, day_ids):
+        self.day_ids = day_ids
+        self.days = PersistentDict()
+        self.model = None
+
+    @property
+    def first(self):
+        if self._first is None:
+            term = getattr(self, 'term', None)
+            if term is None:
+                return None
+            return term.first
+        return self._first
+
+    @property
+    def last(self):
+        if self._last is None:
+            term = getattr(self, 'term', None)
+            if term is None:
+                return None
+            return term.last
+        return self._last
+
+    def keys(self):
+        return list(self.day_ids)
+
+    def items(self):
+        return [(day, self.days[day]) for day in self.day_ids]
+
+    def __getitem__(self, key):
+        return self.days[key]
+
+    def activities(self):
+        """Returns a list of tuples (day_id, period_id, activity)."""
+        act = []
+        for day_id in self.day_ids:
+            for period_id, iactivities in self.days[day_id].items():
+                act.extend([(day_id, period_id, activity)
+                            for activity in iactivities])
+        return act
+
+
+@substituteIn('schooltool.timetable.interface')
+class ITimetableDay(Interface):
+    pass
+
+
+@substituteIn('schooltool.timetable')
+class TimetableDay(Persistent):
+    """A day in a timetable.
+
+    A timetable day is an ordered collection of periods that each have
+    a set of activites that occur during that period.
+
+    Different days within the same timetable may have different periods.
+    """
+    implements(ITimetableDay)
+
+    timetable = None
+    day_id = None
+    periods = None # list of periods (titles, or maybe IDs?)
+    homeroom_period_ids = None # IDs of homeroom periods
+    activities = None # persistent dict of (period, set of TimetableActivity)
+
+    def keys(self):
+        return self.periods
+
+    def items(self):
+        return [(period, self.activities[period]) for period in self.periods]
+
+    def __getitem__(self, period):
+        return self.activities[period]
+
+
+@substituteIn('schooltool.timetable.interface')
+class ITimetableActivity(Interface):
+    pass
+
+
+@substituteIn('schooltool.timetable')
+class TimetableActivity(object):
+    """Timetable activity.
+
+    Instances are immutable.
+
+    Equivalent timetable activities must compare and hash equally after
+    pickling and unpickling.
+    """
+    implements(ITimetableActivity)
+
+    _title = None # usually course title
+    _owner = None # usually section object
+    _timetable = None # bound timetable
+    _resources = None # tuple of section resources, probably unused nowadays
+
+    title = property(lambda self: self._title)
+    owner = property(lambda self: self._owner)
+    timetable = property(lambda self: self._timetable)
+    resources = property(lambda self: self._resources)

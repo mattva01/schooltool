@@ -42,15 +42,22 @@ def assert_not_broken(*objects):
 
 class BuildContext(object):
     _options = None
-    def __init__(self, **kw):
-        self._options = dict(kw)
+    def __init__(self, *args, **kw):
+        self._options = {}
+        self.update(*args, **kw)
 
     def __getattr__(self, name):
         if name in self._options:
             return self._options[name]
         raise AttributeError(name)
 
-    def __call__(self, **options):
-        new_options = dict(self._options)
-        new_options.update(options)
-        return self.__class__(**new_options)
+    def update(self, *args, **options):
+        if len(args) == 1 and isinstance(args[0], BuildContext):
+            self._options.update(args[0]._options)
+        self._options.update(options)
+
+    def __call__(self, *args, **options):
+        new_context = self.__class__(**self._options)
+        new_context.update(*args, **options)
+        return new_context
+

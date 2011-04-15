@@ -24,6 +24,8 @@ from schooltool.testing.mock import ModulesSnapshot
 from schooltool.generations.evolve36.helper import BuildContext
 from schooltool.generations.evolve36.timetable_builders import \
     SchoolTimetablesBuilder
+from schooltool.generations.evolve36.schedule_builders import \
+    AppSchedulesBuilder
 
 
 # XXX: This holds references to substitute classes
@@ -38,6 +40,7 @@ def evolveTimetables(app):
 
     builders = [
         SchoolTimetablesBuilder(),
+        AppSchedulesBuilder(),
         ]
 
     for builder in builders:
@@ -48,6 +51,8 @@ def evolveTimetables(app):
     for builder in builders:
         builder.clean(app, BuildContext())
 
+    result = BuildContext()
     for builder in builders:
-        builder.build(app, BuildContext())
+        built = builder.build(app, BuildContext(shared=result))
+        result.update(built)
 

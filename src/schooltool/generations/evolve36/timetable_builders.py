@@ -19,12 +19,13 @@
 """
 Timetable builders.
 """
-from zope.intid.interfaces import IIntIds
 from zope.container.interfaces import INameChooser
 from zope.component import getUtility
+from zope.intid.interfaces import IIntIds
 
 from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.generations.evolve36.helper import assert_not_broken
+from schooltool.generations.evolve36.helper import BuildContext
 from schooltool.timetable.app import SchoolToolSchedules
 from schooltool.timetable.timetable import TimetableContainer
 from schooltool.timetable.timetable import Timetable
@@ -37,42 +38,17 @@ from schooltool.timetable.schedule import Period
 APP_TIMETABLES_KEY = 'schooltool.timetable.timetables'
 
 
-class DayTemplateScheduleBuilder(object):
-    schedule_attr = ''
-    schedule_factory = None
+def createDayTemplates(timetable, factory, attr):
+    schedule = factory()
+    setattr(timetable, attr, schedule)
+    schedule.__parent__ = timetable
+    schedule.__name__ = unicode(attr)
+    schedule.initTemplates()
+    return schedule
+
+
+class PeriodsBuilder(object):
     days = None
-
-    def read(self, schema, context):
-        # populate self.days
-        raise NotImplementedError()
-
-    def addDayTemplate(self, templates, day_key, day):
-        # add day from self.days to the template
-        raise NotImplementedError()
-
-    def buildSchedule(self, timetable):
-        if (self.schedule_factory is None or
-            not self.schedule_attr):
-            raise NotImplementedError()
-
-        schedule = self.schedule_factory()
-        setattr(timetable, self.schedule_attr, schedule)
-        schedule.__parent__ = timetable
-        schedule.__name__ = unicode(self.schedule_attr)
-        schedule.initTemplates()
-        return schedule
-
-    def build(self, timetable, context):
-        schedule = self.buildSchedule(timetable)
-        for day in self.days:
-            # XXX: title as key is not very safe, isn't it
-            self.addDayTemplate(schedule.templates, day['title'], day)
-
-
-class PeriodsBuilder(DayTemplateScheduleBuilder):
-    days = None
-    schedule_attr = 'periods'
-    schedule_factory = None
 
     def readPeriods(self, schema_day):
         periods = []
@@ -90,11 +66,14 @@ class PeriodsBuilder(DayTemplateScheduleBuilder):
         for day_id, day in schema.items():
             assert_not_broken(day)
             self.days.append({
+                    'id': day_id,
                     'title': unicode(day_id),
                     'periods': self.readPeriods(day),
                     })
 
     def addDayTemplate(self, templates, day_key, day):
+        period_map = {}
+
         template = DayTemplate(title=day['title'])
         templates[day_key] = template
 
@@ -104,11 +83,11 @@ class PeriodsBuilder(DayTemplateScheduleBuilder):
                             activity_type=item['activity_type'])
             key = name_chooser.chooseName('', period)
             template[key] = period
+            period_map[(day['id'], item['title'])] = period
+        return BuildContext(period_map=period_map)
 
 
 class WeekDayPeriodsBuilder(PeriodsBuilder):
-    schedule_factory = WeekDayTemplates
-
     weekday_keys = ["Monday", "Tuesday", "Wednesday",
                     "Thursday", "Friday", "Saturday", "Sunday"]
 
@@ -124,19 +103,33 @@ class WeekDayPeriodsBuilder(PeriodsBuilder):
         return None
 
     def build(self, timetable, context):
-        schedule = self.buildSchedule(timetable)
+        schedule = createDayTemplates(
+            timetable, WeekDayTemplates, 'periods')
 
+        result = BuildContext(period_map={})
         for weekday in range(7):
             day = self.getDay(weekday)
             key = schedule.getWeekDayKey(weekday)
-            self.addDayTemplate(schedule.templates, key, day)
+            built = self.addDayTemplate(schedule.templates, key, day)
+            result.period_map.update(built.period_map)
+        return result(schedule=schedule)
 
 
 class SchoolDayPeriodsBuilder(PeriodsBuilder):
-    schedule_factory = SchoolDayTemplates
+
+    def build(self, timetable, context):
+        schedule = createDayTemplates(
+            timetable, SchoolDayTemplates, 'periods')
+
+        result = BuildContext(period_map={})
+        for day in self.days:
+            # XXX: title as key is not very safe, isn't it
+            built = self.addDayTemplate(schedule.templates, day['title'], day)
+            result.period_map.update(built.period_map)
+        return result(schedule=schedule)
 
 
-class TimeSlotsBuilder(DayTemplateScheduleBuilder):
+class TimeSlotsBuilder(object):
     schedule_factory = None
     schedule_attr = 'time_slots'
     days = None
@@ -172,8 +165,6 @@ class TimeSlotsBuilder(DayTemplateScheduleBuilder):
 
 
 class WeekDayTimeSlotsBuilder(TimeSlotsBuilder):
-    schedule_factory = WeekDayTemplates
-
     weekdays = ["Monday", "Tuesday", "Wednesday",
                 "Thursday", "Friday", "Saturday", "Sunday"]
 
@@ -194,16 +185,16 @@ class WeekDayTimeSlotsBuilder(TimeSlotsBuilder):
                     })
 
     def build(self, timetable, context):
-        schedule = self.buildSchedule(timetable)
+        schedule = createDayTemplates(
+            timetable, WeekDayTemplates, 'time_slots')
 
         for weekday, day in enumerate(self.days):
             key = schedule.getWeekDayKey(weekday)
             self.addDayTemplate(schedule.templates, key, day)
+        return BuildContext(schedule=schedule)
 
 
 class SchoolDayTimeSlotsBuilder(TimeSlotsBuilder):
-    schedule_factory = SchoolDayTemplates
-
     def read(self, schema, context):
         model = schema.model
         assert_not_broken(model)
@@ -216,6 +207,15 @@ class SchoolDayTimeSlotsBuilder(TimeSlotsBuilder):
                     'title': unicode(day_id),
                     'time_slots': slots,
                     })
+
+    def build(self, timetable, context):
+        schedule = createDayTemplates(
+            timetable, SchoolDayTemplates, 'time_slots')
+
+        for day in self.days:
+            # XXX: title as key is not very safe, isn't it
+            self.addDayTemplate(schedule.templates, day['title'], day)
+        return BuildContext(schedule=schedule)
 
 
 class TimetableBuilder(object):
@@ -268,11 +268,17 @@ class TimetableBuilder(object):
         timetables[self.__name__] = timetable
         timetable.__parent__ = timetables
 
-        self.periods.build(timetable, context(timetables=timetables))
-        self.time_slots.build(timetable, context(timetables=timetables))
+        built_periods = self.periods.build(
+            timetable, context(timetables=timetables))
+        built_time_slots = self.time_slots.build(
+            timetable, context(timetables=timetables))
 
         if self.set_default:
             timetables.default = timetable
+
+        return BuildContext(timetable=timetable,
+                            schema_id=self.__name__,
+                            period_map=built_periods.period_map)
 
 
 class TimetableContainerBuilder(object):
@@ -299,9 +305,23 @@ class TimetableContainerBuilder(object):
         key = unicode(self.year_int_id)
         container = timetable_root[key] = TimetableContainer()
         schoolyear = getUtility(IIntIds).getObject(self.year_int_id)
+
+        result = BuildContext(period_map={})
+
         for builder in self.timetables:
-            builder.build(container, context(timetable_root=timetable_root,
-                                             schoolyear=schoolyear))
+            built = builder.build(
+                container, context(timetable_root=timetable_root,
+                                   schoolyear=schoolyear))
+
+            schema_period_map = dict(
+                [((built.schema_id, day_id, period_id), period)
+                 for (day_id, period_id), period
+                 in built.period_map.items()])
+
+            result.period_map.update(schema_period_map)
+
+        return result(timetables=container,
+                      year_int_id=self.year_int_id)
 
 
 class SchoolTimetablesBuilder(object):
@@ -325,5 +345,16 @@ class SchoolTimetablesBuilder(object):
             app[APP_TIMETABLES_KEY] = SchoolToolSchedules()
         timetable_root = app[APP_TIMETABLES_KEY]
 
+        result = BuildContext(period_map={})
+
         for builder in self.builders:
-            builder.build(timetable_root, context(app=app))
+            built = builder.build(timetable_root, context(app=app))
+
+            year_period_map = dict(
+                [((built.year_int_id, schema_id, day_id, period_id), period)
+                 for (schema_id, day_id, period_id), period
+                 in built.period_map.items()])
+
+            result.period_map.update(year_period_map)
+
+        return result(timetable_root=timetable_root)
