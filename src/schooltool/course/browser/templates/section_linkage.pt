@@ -36,6 +36,7 @@
         <td tal:repeat="column view/columns">
           <tal:block condition="column/section">
             <div><a tal:replace="structure column/section/@@link" /></div>
+            <p />
             <div tal:condition="view/linked">
               <a tal:attributes="href string:${column/section/@@absolute_url}/unlink_section.html"
                  i18n:translate="">Unlink this Section</a>
