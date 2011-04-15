@@ -76,7 +76,6 @@ class Timetable(Persistent, Schedule):
 def combineTemplates(periods_template, time_slots_template):
     """Return ordered list of period, time_slot tuples."""
     result = []
-
     periods_by_activity = {}
     period_queue = periods_template.values()
     for period in period_queue:
@@ -94,7 +93,7 @@ def combineTemplates(periods_template, time_slots_template):
             period_queue.remove(period)
             result.append((period, time_slot))
         else:
-            period = period_queue.pop()
+            period = period_queue.pop(0)
             periods_by_activity[period.activity_type].remove(period)
             result.append((period, time_slot))
     return result

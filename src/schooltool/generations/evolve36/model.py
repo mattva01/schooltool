@@ -31,6 +31,7 @@ from zope.container.btree import BTreeContainer
 from zope.location.interfaces import ILocation
 
 from schooltool.app.interfaces import ISchoolToolCalendarEvent
+from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.calendar.simple import SimpleCalendarEvent
 
 
@@ -63,7 +64,7 @@ class TimetableSchemaContainer(BTreeContainer):
         return self[self.default_id]
 
 
-@substituteIn('schooltool.timetable.interface')
+@substituteIn('schooltool.timetable.interfaces')
 class ITimetableSchemaDay(Interface):
     pass
 
@@ -87,7 +88,7 @@ class TimetableSchemaDay(Persistent):
         return set()
 
 
-@substituteIn('schooltool.timetable.interface')
+@substituteIn('schooltool.timetable.interfaces')
 class ITimetableSchema(IContained):
     pass
 
@@ -112,17 +113,17 @@ class TimetableSchema(Persistent, Contained):
         return self.days[key]
 
 
-@substituteIn('schooltool.timetable.interface')
+@substituteIn('schooltool.timetable.interfaces')
 class ITimetableModel(Interface):
     pass
 
 
-@substituteIn('schooltool.timetable.interface')
+@substituteIn('schooltool.timetable.interfaces')
 class IWeekdayBasedTimetableModel(ITimetableModel):
     pass
 
 
-@substituteIn('schooltool.timetable.interface')
+@substituteIn('schooltool.timetable.interfaces')
 class IDayIdBasedTimetableModel(ITimetableModel):
     pass
 
@@ -181,7 +182,7 @@ class SchooldayTemplate(object):
         return iter(sorted(self.events))
 
 
-@substituteIn('schooltool.timetable.interface')
+@substituteIn('schooltool.timetable.interfaces')
 class ITimetableCalendarEvent(ISchoolToolCalendarEvent):
     """A calendar event that has been created from a timetable."""
 
@@ -219,17 +220,14 @@ class PersistentTimetableCalendarEvent(STAppCalendarEvent):
     resources = property(lambda self: self._resources)
 
     def unbookResource(self, resource):
-        # XXX: Free the resources!
-        #      Rebook them to real events if feasible.
-        #if resource not in self.resources:
-        #    raise ValueError('resource not booked')
-        #self._resources = tuple([r for r in self.resources
-        #                         if r is not resource])
-        #ISchoolToolCalendar(resource).removeEvent(self)
-        pass
+        if resource not in self.resources:
+            raise ValueError('resource not booked')
+        self._resources = tuple([r for r in self.resources
+                                 if r is not resource])
+        ISchoolToolCalendar(resource).removeEvent(self)
 
 
-@substituteIn('schooltool.timetable.interface')
+@substituteIn('schooltool.timetable.interfaces')
 class ITimetableDict(IContainer, ILocation):
     """Container for [section] timetables."""
 
@@ -247,7 +245,7 @@ class TimetableDict(PersistentDict):
     __parent__ = None # [section] this timetable is scheduled for
 
 
-@substituteIn('schooltool.timetable.interface')
+@substituteIn('schooltool.timetable.interfaces')
 class ITimetable(ILocation):
     """A timetable interface."""
 
@@ -332,7 +330,7 @@ class Timetable(Persistent):
         return act
 
 
-@substituteIn('schooltool.timetable.interface')
+@substituteIn('schooltool.timetable.interfaces')
 class ITimetableDay(Interface):
     pass
 
@@ -364,7 +362,7 @@ class TimetableDay(Persistent):
         return self.activities[period]
 
 
-@substituteIn('schooltool.timetable.interface')
+@substituteIn('schooltool.timetable.interfaces')
 class ITimetableActivity(Interface):
     pass
 

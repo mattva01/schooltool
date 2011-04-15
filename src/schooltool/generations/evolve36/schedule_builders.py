@@ -37,13 +37,15 @@ APP_SCHEDULES_KEY = 'schooltool.timetable.schedules'
 class ScheduleBuilder(object):
 
     data = None
+    store_data = ('__name__', 'first', 'last',
+                   'timezone', 'term',
+                   'consecutive_periods_as_one')
     schema_id = None
     year_int_id = None
 
     def read(self, timetable, context):
         self.data = {}
-        for name in ['__name__', 'first', 'last', 'timezone', 'term',
-                     'consecutive_periods_as_one']:
+        for name in self.store_data:
             self.data[name] = getattr(timetable, name, None)
 
         for value in self.data.values():
@@ -66,7 +68,12 @@ class ScheduleBuilder(object):
             timetable, self.data['first'], self.data['last'],
             timezone=self.data['timezone'] or 'UTC')
 
-        result = BuildContext(schedule=schedule)
+        result = BuildContext(
+            schedule=schedule,
+            unique_key=(self.data['term'],
+                        context.owner,
+                        self.data['__name__'])
+            )
 
         schedule.consecutive_periods_as_one = \
             self.data['consecutive_periods_as_one']
@@ -76,8 +83,7 @@ class ScheduleBuilder(object):
             schedule.addPeriod(period)
 
         container[self.data['__name__']] = schedule
-
-        return result
+        return result(term=self.data['term'])
 
 
 class SchedulesBuilder(object):
@@ -104,12 +110,13 @@ class SchedulesBuilder(object):
         key = unicode(owner_int_id)
         container = schedule_root[key] = ScheduleContainer()
 
-        result = BuildContext(period_map={})
+        result = BuildContext(schedule_map={})
 
         for builder in self.builders:
             built = builder.build(
                 container, context(schedule_root=schedule_root,
                                    owner=self.owner))
+            result.schedule_map[built.unique_key] = built.schedule
 
         return result(schedules=container)
 
@@ -144,11 +151,10 @@ class AppSchedulesBuilder(object):
             app[APP_SCHEDULES_KEY] = SchoolToolSchedules()
         schedule_root = app[APP_SCHEDULES_KEY]
 
-        result = BuildContext()
+        result = BuildContext(schedule_map={})
 
         for builder in self.builders:
             built = builder.build(schedule_root, context(app=app))
+            result.schedule_map.update(built.schedule_map)
 
         return result(schedule_root=schedule_root)
-
-

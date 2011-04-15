@@ -26,6 +26,8 @@ from schooltool.generations.evolve36.timetable_builders import \
     SchoolTimetablesBuilder
 from schooltool.generations.evolve36.schedule_builders import \
     AppSchedulesBuilder
+from schooltool.generations.evolve36.calendar_builders import \
+    AppTimetableCalendarBuilder
 
 
 # XXX: This holds references to substitute classes
@@ -41,6 +43,7 @@ def evolveTimetables(app):
     builders = [
         SchoolTimetablesBuilder(),
         AppSchedulesBuilder(),
+        AppTimetableCalendarBuilder(),
         ]
 
     for builder in builders:
