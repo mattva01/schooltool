@@ -166,6 +166,14 @@
       layer="schooltool.skin.ISchoolToolLayer"
       />
 
+  <page
+      name="unlink_section.html"
+      for="..interfaces.ISection"
+      class=".section.UnlinkSectionView"
+      permission="schooltool.edit"
+      layer="schooltool.skin.ISchoolToolLayer"
+      />
+
   <containerViews
       for="..interfaces.ISectionContainer"
       contents="schooltool.view"

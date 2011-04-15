@@ -737,3 +737,43 @@ class LinkExistingView(BrowserView):
     def nextURL(self):
         return absoluteURL(self.context, self.request) + '/section_linkage.html' 
 
+
+class UnlinkSectionView(BrowserView):
+    """A view for unlinking a section."""
+
+    template = ViewPageTemplateFile('templates/unlink_section.pt')
+
+    @property
+    def term(self):
+        return ITerm(self.context)
+
+    @property
+    def sections(self):
+        sections = []
+        for section in [self.context.previous, self.context.next]:
+            if section:
+                sections.append({
+                    'section': section,
+                    'term': ITerm(section),
+                    })
+        return sections
+
+    def __call__(self):
+        section = removeSecurityProxy(self.context)
+
+        if not self.sections or 'CANCEL' in self.request:
+            self.request.response.redirect(self.nextURL())
+
+        elif 'UNLINK' in self.request:
+            if section.previous:
+                section.previous = None
+            if section.next:
+                section.next = None
+            self.request.response.redirect(self.nextURL())
+
+        else:
+            return self.template()
+
+    def nextURL(self):
+        return absoluteURL(self.context, self.request) + '/section_linkage.html' 
+

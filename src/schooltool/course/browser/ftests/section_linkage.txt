@@ -564,3 +564,155 @@ the selected Term1 section.  Again, the rosters reflect this.
     <a href="http://localhost/persons/teacher1">Teacher1, Teacher1</a>
     <a href="http://localhost/persons/student1">Student1, Student1</a>
 
+
+Unlinking Sections
+------------------
+
+In the section_linkage view, we provide the user a link in each roster column,
+right below the section link, for unlinking a section from its linkage partner
+or partners.
+
+We'll start by unlinking the Term1 section of our Health class.  After we click
+the 'Unink this Section' link we are taken to a confirmation view that tells
+the user what section they are unlinking and the one or two sections from
+which is is being unlinked.  In this first case, there is just the one.
+
+    >>> manager.getLink("Unlink this Section", index=0).click()
+    >>> manager.printQuery("id('content-header')//table[1]//a")
+    <a href="http://localhost/schoolyears/2005-2006/term1/sections/4">Health (4)</a>
+    <a href="http://localhost/schoolyears/2005-2006/courses/health">Health</a>
+    <a href="http://localhost/schoolyears/2005-2006/term1">Term1</a>
+
+    >>> manager.printQuery("id('content-header')//table[2]//td/text()")
+    Click 'Unlink' if you would like to remove the link this section has to
+    the following section(s):
+
+    >>> manager.printQuery("id('content-header')//table[3]//a")
+    <a href="http://localhost/schoolyears/2005-2006/term2/sections/5">Health (5)</a>
+    <a href="http://localhost/schoolyears/2005-2006/term2">Term2</a>
+
+If we hit cancel, we get returned to the section_linkage view.  The section
+remains unchanged.  All four terms are linked.
+
+    >>> manager.getControl("Cancel").click()
+    >>> manager.url
+    'http://localhost/schoolyears/2005-2006/term1/sections/4/section_linkage.html'
+
+    >>> filled_terms()
+    [1, 2, 3, 4]
+
+We'll return to the unlink view and this time click 'Unlink'.  It takes us
+back to the section_linkage view, and we see that the section is no longer
+linked to anything.
+
+    >>> manager.getLink("Unlink this Section", index=0).click()
+    >>> manager.getControl("Unlink").click()
+    >>> manager.url
+    'http://localhost/schoolyears/2005-2006/term1/sections/4/section_linkage.html'
+
+    >>> filled_terms()
+    [1]
+
+We'll navigate to Term4 section that used to be linked to the Term1 section.
+We see that it is still linked to sections in Term3 and Term2.
+
+    >>> manager.getLink("2005-2006").click()
+    >>> manager.getLink("Term4").click()
+    >>> manager.getLink("Sections").click()
+    >>> manager.getLink("Health (5)").click()
+    >>> manager.getLink("All Terms").click()
+
+    >>> filled_terms()
+    [2, 3, 4]
+
+We'll unlink the Term4 section to demomstrate unlinking backwards only.  The
+view shows us that we are unlinking with Term3.  After we click 'Unlink', we
+see that we are no longer linked to any other sections.
+
+    >>> manager.getLink("Unlink this Section", index=2).click()
+    >>> manager.printQuery("id('content-header')//table[1]//a")
+    <a href="http://localhost/schoolyears/2005-2006/term4/sections/5">Health (5)</a>
+    <a href="http://localhost/schoolyears/2005-2006/courses/health">Health</a>
+    <a href="http://localhost/schoolyears/2005-2006/term4">Term4</a>
+
+    >>> manager.printQuery("id('content-header')//table[3]//a")
+    <a href="http://localhost/schoolyears/2005-2006/term3/sections/5">Health (5)</a>
+    <a href="http://localhost/schoolyears/2005-2006/term3">Term3</a>
+
+    >>> manager.getControl("Unlink").click()
+    >>> manager.url
+    'http://localhost/schoolyears/2005-2006/term4/sections/5/section_linkage.html'
+
+    >>> filled_terms()
+    [4]
+
+When we go to the Term2 section_linkage view, we see that it is still linked to
+Term3, the links having been separated from Term1 and Term4.
+
+    >>> manager.getLink("2005-2006").click()
+    >>> manager.getLink("Term2").click()
+    >>> manager.getLink("Sections").click()
+    >>> manager.getLink("Health (5)").click()
+    >>> manager.getLink("All Terms").click()
+
+    >>> filled_terms()
+    [2, 3]
+
+Finally, to demostrate unlinking with sections from both the previous and
+next terms, we'll navigate to the Term2 section of English.  We are reminded
+that it is linked to sections in all the terms.
+
+    >>> manager.getLink("2005-2006").click()
+    >>> manager.getLink("Term2").click()
+    >>> manager.getLink("Sections").click()
+    >>> manager.getLink("English (2)").click()
+    >>> manager.getLink("All Terms").click()
+
+    >>> filled_terms()
+    [1, 2, 3, 4]
+
+When we go to unlink the Term2 section, we see that we will be unlinking from
+both a previous and a next term, Term1 and Term3.
+
+    >>> manager.getLink("Unlink this Section", index=1).click()
+    >>> manager.printQuery("id('content-header')//table[1]//a")
+    <a href="http://localhost/schoolyears/2005-2006/term2/sections/2">English (2)</a>
+    <a href="http://localhost/schoolyears/2005-2006/courses/english">English</a>
+    <a href="http://localhost/schoolyears/2005-2006/term2">Term2</a>
+
+    >>> manager.printQuery("id('content-header')//table[3]//a")
+    <a href="http://localhost/schoolyears/2005-2006/term1/sections/2">English (2)</a>
+    <a href="http://localhost/schoolyears/2005-2006/term1">Term1</a>
+    <a href="http://localhost/schoolyears/2005-2006/term3/sections/2">English (2)</a>
+    <a href="http://localhost/schoolyears/2005-2006/term3">Term3</a>
+
+After we click 'Unlink', we see that we are no longer linked to another section.
+
+    >>> manager.getControl("Unlink").click()
+    >>> manager.url
+    'http://localhost/schoolyears/2005-2006/term2/sections/2/section_linkage.html'
+
+    >>> filled_terms()
+    [2]
+
+The Term1 section is now also linked to nothing, but the Term3 and Term4
+sections remain linked.
+
+    >>> manager.getLink("2005-2006").click()
+    >>> manager.getLink("Term1").click()
+    >>> manager.getLink("Sections").click()
+    >>> manager.getLink("English (2)").click()
+    >>> manager.getLink("All Terms").click()
+
+    >>> filled_terms()
+    [1]
+
+    >>> manager.getLink("2005-2006").click()
+    >>> manager.getLink("Term3").click()
+    >>> manager.getLink("Sections").click()
+    >>> manager.getLink("English (2)").click()
+    >>> manager.getLink("All Terms").click()
+
+    >>> filled_terms()
+    [3, 4]
+
