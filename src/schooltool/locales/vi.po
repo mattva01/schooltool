@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-03-18 20:12+0200\n"
-"PO-Revision-Date: 2011-03-15 05:16+0000\n"
+"POT-Creation-Date: 2011-04-17 23:49+0300\n"
+"PO-Revision-Date: 2011-04-01 18:49+0000\n"
 "Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
 "Language-Team: Vietnamese <vi@li.org>\n"
 "Language: vi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-03-19 04:52+0000\n"
-"X-Generator: Launchpad (build 12559)\n"
+"X-Launchpad-Export-Date: 2011-04-08 04:39+0000\n"
+"X-Generator: Launchpad (build 12735)\n"
 
 #: /src/schooltool/app/app.py:197
 msgid "Your School"
@@ -59,15 +59,15 @@ msgstr "Lãnh đạo sẵn sàng"
 msgid "school"
 msgstr "trường"
 
-#: /src/schooltool/app/browser/cal.py:113
-msgid "February"
-msgstr "Tháng Hai"
-
-#: /src/schooltool/app/browser/cal.py:113
+#: /src/schooltool/app/browser/cal.py:115
 msgid "January"
 msgstr "Tháng Một"
 
-#: /src/schooltool/app/browser/cal.py:113
+#: /src/schooltool/app/browser/cal.py:116
+msgid "February"
+msgstr "Tháng Hai"
+
+#: /src/schooltool/app/browser/cal.py:117
 msgid "March"
 msgstr "Tháng Ba"
 
@@ -75,39 +75,39 @@ msgstr "Tháng Ba"
 msgid "April"
 msgstr "Tháng Tư"
 
-#: /src/schooltool/app/browser/cal.py:114
-msgid "June"
-msgstr "Tháng Sáu"
-
-#: /src/schooltool/app/browser/cal.py:114
+#: /src/schooltool/app/browser/cal.py:119
 msgid "May"
 msgstr "Tháng Năm"
 
-#: /src/schooltool/app/browser/cal.py:115
-msgid "August"
-msgstr "Tháng Tám"
+#: /src/schooltool/app/browser/cal.py:120
+msgid "June"
+msgstr "Tháng Sáu"
 
-#: /src/schooltool/app/browser/cal.py:115
+#: /src/schooltool/app/browser/cal.py:121
 msgid "July"
 msgstr "Tháng Bảy"
 
-#: /src/schooltool/app/browser/cal.py:115
+#: /src/schooltool/app/browser/cal.py:122
+msgid "August"
+msgstr "Tháng Tám"
+
+#: /src/schooltool/app/browser/cal.py:123
 msgid "September"
 msgstr "Tháng Chín"
 
-#: /src/schooltool/app/browser/cal.py:116
-msgid "December"
-msgstr "Tháng Mười Hai"
-
-#: /src/schooltool/app/browser/cal.py:116
-msgid "November"
-msgstr "Tháng Mười Một"
-
-#: /src/schooltool/app/browser/cal.py:116
+#: /src/schooltool/app/browser/cal.py:124
 msgid "October"
 msgstr "Tháng Mười"
 
-#: /src/schooltool/app/browser/cal.py:119
+#: /src/schooltool/app/browser/cal.py:125
+msgid "November"
+msgstr "Tháng Mười Một"
+
+#: /src/schooltool/app/browser/cal.py:126
+msgid "December"
+msgstr "Tháng Mười Hai"
+
+#: /src/schooltool/app/browser/cal.py:129
 #: /src/schooltool/person/interfaces.py:180
 #: /src/schooltool/term/browser/templates/term.pt:31
 #: /src/schooltool/term/browser/templates/term_add.pt:54
@@ -117,16 +117,7 @@ msgstr "Tháng Mười"
 msgid "Monday"
 msgstr "Thứ Hai"
 
-#: /src/schooltool/app/browser/cal.py:119
-#: /src/schooltool/term/browser/templates/term.pt:34
-#: /src/schooltool/term/browser/templates/term_add.pt:60
-#: /src/schooltool/term/browser/templates/term_add.pt:83
-#: /src/schooltool/timetable/browser/schema.py:118
-#: /src/schooltool/timetable/browser/schema.py:287
-msgid "Thursday"
-msgstr "Thứ Năm"
-
-#: /src/schooltool/app/browser/cal.py:119
+#: /src/schooltool/app/browser/cal.py:130
 #: /src/schooltool/term/browser/templates/term.pt:32
 #: /src/schooltool/term/browser/templates/term_add.pt:56
 #: /src/schooltool/term/browser/templates/term_add.pt:81
@@ -144,7 +135,16 @@ msgstr "Thứ Ba"
 msgid "Wednesday"
 msgstr "Thứ Tư"
 
-#: /src/schooltool/app/browser/cal.py:120
+#: /src/schooltool/app/browser/cal.py:132
+#: /src/schooltool/term/browser/templates/term.pt:34
+#: /src/schooltool/term/browser/templates/term_add.pt:60
+#: /src/schooltool/term/browser/templates/term_add.pt:83
+#: /src/schooltool/timetable/browser/schema.py:118
+#: /src/schooltool/timetable/browser/schema.py:287
+msgid "Thursday"
+msgstr "Thứ Năm"
+
+#: /src/schooltool/app/browser/cal.py:133
 #: /src/schooltool/term/browser/templates/term.pt:35
 #: /src/schooltool/term/browser/templates/term_add.pt:62
 #: /src/schooltool/term/browser/templates/term_add.pt:84
@@ -176,13 +176,7 @@ msgstr "Chủ Nhật"
 msgid "Mon"
 msgstr "T2"
 
-#: /src/schooltool/app/browser/cal.py:123
-#: /src/schooltool/app/browser/cal.py:1812
-msgid "Thu"
-msgstr "T5"
-
-#: /src/schooltool/app/browser/cal.py:123
-#: /src/schooltool/app/browser/cal.py:1810
+#: /src/schooltool/app/browser/cal.py:139
 msgid "Tue"
 msgstr "T3"
 
@@ -191,8 +185,11 @@ msgstr "T3"
 msgid "Wed"
 msgstr "T4"
 
-#: /src/schooltool/app/browser/cal.py:124
-#: /src/schooltool/app/browser/cal.py:1813
+#: /src/schooltool/app/browser/cal.py:141
+msgid "Thu"
+msgstr "T5"
+
+#: /src/schooltool/app/browser/cal.py:142
 msgid "Fri"
 msgstr "T6"
 
@@ -2665,7 +2662,12 @@ msgstr "Thêm một trường mới"
 msgid "Change information for ${field_title}"
 msgstr "Thay đổi thông tin cho: ${field_title}"
 
-#: /src/schooltool/basicperson/browser/person.py:49
+#: /src/schooltool/basicperson/browser/person.py:57
+#: /src/schooltool/person/browser/person.py:449
+msgid "Person index"
+msgstr "Danh mục người"
+
+#: /src/schooltool/basicperson/browser/person.py:73
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_add.pt:61
 msgid "Group"
 msgstr "Nhóm"
@@ -2675,12 +2677,7 @@ msgstr "Nhóm"
 msgid "Advisor"
 msgstr "Người tư vấn"
 
-#: /src/schooltool/basicperson/browser/person.py:57
-#: /src/schooltool/person/browser/person.py:449
-msgid "Person index"
-msgstr "Danh mục người"
-
-#: /src/schooltool/basicperson/browser/person.py:68
+#: /src/schooltool/basicperson/browser/person.py:92
 #: /src/schooltool/widget/password.py:39
 msgid "Confirm password"
 msgstr "Xác nhận mật khẩu"
@@ -2705,7 +2702,17 @@ msgstr "Tên người dùng"
 msgid "Add multiple persons"
 msgstr "Thêm nhiều người dùng"
 
-#: /src/schooltool/basicperson/browser/person.py:304
+#: /src/schooltool/basicperson/browser/person.py:330
+msgid "Done"
+msgstr "Xong"
+
+#. Default: ""
+#: /src/schooltool/basicperson/browser/person.py:375
+#: /src/schooltool/resource/browser/resource.py:496
+msgid "Change information for ${fullname}"
+msgstr "Thay đổi thông tin cho ${fullname}"
+
+#: /src/schooltool/basicperson/browser/person.py:445
 msgid "Current Advisors"
 msgstr "Người tư vấn hiện thời"
 
@@ -2731,16 +2738,7 @@ msgstr "Thêm người được tư vấn"
 msgid "Advisees of ${person}"
 msgstr "Người được tư vấn bởi ${person}"
 
-#: /src/schooltool/basicperson/browser/person.py:357
-msgid "Done"
-msgstr "Xong"
-
-#. Default: ""
-#: /src/schooltool/basicperson/browser/person.py:402
-msgid "Change information for ${fullname}"
-msgstr "Thay đổi thông tin cho ${fullname}"
-
-#: /src/schooltool/basicperson/browser/person.py:579
+#: /src/schooltool/basicperson/browser/person.py:576
 msgid "Teacher identification"
 msgstr ""
 
@@ -2996,11 +2994,7 @@ msgstr ""
 msgid "An optional list of limit keys for this field"
 msgstr ""
 
-#: /src/schooltool/basicperson/interfaces.py:148
-msgid "Limit key"
-msgstr ""
-
-#: /src/schooltool/basicperson/interfaces.py:163
+#: /src/schooltool/basicperson/interfaces.py:161
 msgid "List of values"
 msgstr "Danh sách các giá trị"
 
@@ -3060,21 +3054,13 @@ msgstr ""
 msgid "Administrators"
 msgstr ""
 
-#: /src/schooltool/commendation/commendation_add.pt:4
-msgid "Add Commendation"
-msgstr "Thêm góp ý"
-
-#: /src/schooltool/commendation/commendation_add.pt:13
-msgid "Commendation"
-msgstr "Góp ý"
-
-#: /src/schooltool/common/configure.zcml:88
+#: /src/schooltool/common/configure.zcml:89
 #: /src/schooltool/course/browser/configure.zcml:25
-#: /src/schooltool/course/browser/configure.zcml:180
-#: /src/schooltool/group/browser/configure.zcml:38
-#: /src/schooltool/resource/browser/configure.zcml:84
-#: /src/schooltool/resource/browser/configure.zcml:115
-#: /src/schooltool/resource/browser/configure.zcml:151
+#: /src/schooltool/course/browser/configure.zcml:170
+#: /src/schooltool/group/browser/configure.zcml:36
+#: /src/schooltool/resource/browser/configure.zcml:243
+#: /src/schooltool/resource/browser/configure.zcml:257
+#: /src/schooltool/resource/browser/configure.zcml:271
 msgid "Edit Info"
 msgstr "Thay đổi thông tin"
 
@@ -5431,6 +5417,44 @@ msgstr ""
 msgid "Relationships"
 msgstr "Các quan hệ"
 
+#: /src/schooltool/report/browser/configure.zcml:8
+#: /src/schooltool/report/browser/configure.zcml:22
+#: /src/schooltool/report/browser/configure.zcml:33
+#: /src/schooltool/report/browser/configure.zcml:44
+#: /src/schooltool/report/browser/configure.zcml:55
+#: /src/schooltool/report/browser/configure.zcml:66
+msgid "Reports"
+msgstr "Báo cáo"
+
+#: /src/schooltool/report/browser/report.py:44
+msgid "Student Reports"
+msgstr "Báo cáo học sinh"
+
+#: /src/schooltool/report/browser/report.py:49
+msgid "Group Reports"
+msgstr "Các báo cáo nhóm"
+
+#: /src/schooltool/report/browser/report.py:54
+msgid "School Year Reports"
+msgstr "Các báo cáo năm"
+
+#: /src/schooltool/report/browser/report.py:59
+msgid "Term Reports"
+msgstr "Các báo cáo học kỳ"
+
+#: /src/schooltool/report/browser/report.py:64
+msgid "Section Reports"
+msgstr "Báo cáo lớp"
+
+#: /src/schooltool/report/browser/templates/report_reference.pt:3
+#: /src/schooltool/report/browser/templates/report_reference.pt:7
+msgid "Report Reference"
+msgstr ""
+
+#: /src/schooltool/report/browser/templates/report_reference.pt:13
+msgid "Category"
+msgstr "Phân mục"
+
 #: /src/schooltool/resource/browser/configure.zcml:96
 msgid "Resource Demographics"
 msgstr ""
@@ -5440,17 +5464,17 @@ msgstr ""
 msgid "Import Resources"
 msgstr "Thêm vào các tài nguyên"
 
-#: /src/schooltool/resource/browser/configure.zcml:197
+#: /src/schooltool/resource/browser/configure.zcml:286
+msgid "New Resource"
+msgstr "Tài nguyên mới"
+
+#: /src/schooltool/resource/browser/configure.zcml:300
 msgid "New Location"
 msgstr "Địa chỉ mới"
 
 #: /src/schooltool/resource/browser/configure.zcml:204
 msgid "New Equipment"
 msgstr "Thiết bị mới"
-
-#: /src/schooltool/resource/browser/configure.zcml:286
-msgid "New Resource"
-msgstr "Tài nguyên mới"
 
 #: /src/schooltool/resource/browser/resource-csvimport.pt:4
 msgid "Upload schooltool resources as CSV"
@@ -5663,6 +5687,12 @@ msgstr ""
 msgid "Resource"
 msgstr "Tài nguyên"
 
+#: /src/schooltool/resource/resource.py:206
+#: /src/schooltool/resource/resource.py:232
+#: /src/schooltool/resource/types.py:93
+msgid "Equipment"
+msgstr "Thiết bị"
+
 #: /src/schooltool/resource/security.zcml:7
 msgid "Only school administration can view the list of resources."
 msgstr "Chỉ người quản trị xem được danh sách tài nguyên."
@@ -5729,10 +5759,6 @@ msgstr "Xem Lịch biểu đặt trước"
 #: /src/schooltool/resource/security.zcml:93
 msgid "Schedule reservation via calendar"
 msgstr "Kế hoạch đặt trước qua Lịch biểu"
-
-#: /src/schooltool/resource/types.py:93
-msgid "Equipment"
-msgstr "Thiết bị"
 
 #: /src/schooltool/resource/types.py:107
 msgid "Type"
@@ -6053,6 +6079,9 @@ msgid ""
 "of the <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth "
 "Foundation</a>."
 msgstr ""
+"<a href=\"http://www.schooltool.org\">SchoolTool</a>&trade; is a Trademark "
+"of the <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth "
+"Foundation</a>."
 
 #: /src/schooltool/skin/templates/view_macros.pt:155
 msgid "Shortcut: Alt-U"
@@ -7068,46 +7097,19 @@ msgstr "Mật khẩu cung cấp không trùng"
 #~ msgid "Add a Section"
 #~ msgstr "Thêm học phần"
 
-#~ msgid "No such course."
-#~ msgstr "Không có khóa học như thế"
-
-#~ msgid "Need a course ID."
-#~ msgstr "Thêm ID cho khóa học"
-
 #~ msgid "Change the resources for this section."
 #~ msgstr "Thay đổi tài nguyên của học phần này"
 
-#~ msgid "book resources"
-#~ msgstr "Đăng ký tài nguyên"
-
-#~ msgid "Change the students in this section by groups"
-#~ msgstr "Thay đổi sinh viên cho học phần này theo nhóm"
-
-#~ msgid "Everyone can view group lists."
-#~ msgstr "Mọi người đều có thể xem danh sách các nhóm"
-
-#~ msgid "Group members can edit group calendars."
-#~ msgstr "Các thành viên của nhóm có thể hiệu chỉnh lịch của nhóm"
-
-#~ msgid "Everyone can view group calendars."
-#~ msgstr "Mọi người đều có thể xem lịch của nhóm"
-
-#~ msgid "Everyone can view group information."
-#~ msgstr "Mọi người đều có thể xem thông tin của nhóm"
-
-#~ msgid "Please select a term."
-#~ msgstr "Xin mời lựa chọn thuật ngữ"
-
-#~ msgid "Selected term does not exist."
-#~ msgstr "Thuật ngữ lựa chọn không tồn tại"
-
 #~ msgid ""
-#~ "CSV data <strong>must</strong> include a course title,<strong>may</"
-#~ "strong> include an optional course description and <strong>may</strong> "
-#~ "include an optional course id."
+#~ "\n"
+#~ "Ancient History, Pre-history through 1000 A.D.\n"
+#~ "US History,,us-history\n"
+#~ "World History, 1000 A.D. through the 20th century, history-world\n"
 #~ msgstr ""
-#~ "Dữ liệu CSV  phải bao gồm tiêu đề của khóa học, có thể bao gồm một tùy "
-#~ "chọn về mô tả và một tùy chọn về id của khóa"
+#~ "\n"
+#~ "Lịch sử cổ đại, lịch sử tiền sử đến năm 1000 sau công nguyên. Lịch sử US, "
+#~ "lịch sử thế giới, từ năm 1000 năm sau công nguyên đến thế kỷ 20, lịch sử "
+#~ "thế giới\n"
 
 #~ msgid ""
 #~ "The above example will create 3 courses titled 'Ancient History', 'US "
@@ -7129,30 +7131,15 @@ msgstr "Mật khẩu cung cấp không trùng"
 #~ "sẽ được cập nhật. Các định danh đưa đến các khóa học được cập nhật"
 
 #~ msgid ""
-#~ "\n"
-#~ "Ancient History, Pre-history through 1000 A.D.\n"
-#~ "US History,,us-history\n"
-#~ "World History, 1000 A.D. through the 20th century, history-world\n"
+#~ "CSV data <strong>must</strong> include a course title,<strong>may</"
+#~ "strong> include an optional course description and <strong>may</strong> "
+#~ "include an optional course id."
 #~ msgstr ""
-#~ "\n"
-#~ "Lịch sử cổ đại, lịch sử tiền sử đến năm 1000 sau công nguyên. Lịch sử US, "
-#~ "lịch sử thế giới, từ năm 1000 năm sau công nguyên đến thế kỷ 20, lịch sử "
-#~ "thế giới\n"
-
-#~ msgid "Excel Import"
-#~ msgstr "Nhập từ Exel"
-
-#~ msgid "Everyone can view the list of persons"
-#~ msgstr "Mọi người có thể xem danh sách người dùng"
-
-#~ msgid "Everyone can view info of persons"
-#~ msgstr "Mọi người đều có thể xem thông tin các nhân của nhau"
+#~ "Dữ liệu CSV  phải bao gồm tiêu đề của khóa học, có thể bao gồm một tùy "
+#~ "chọn về mô tả và một tùy chọn về id của khóa"
 
 #~ msgid "Edit Location Information"
 #~ msgstr "Hiệu chỉnh thông tin định vị"
-
-#~ msgid "A Resource"
-#~ msgstr "Tài nguyên"
 
 #~ msgid "Add a Resource"
 #~ msgstr "Thêm một tài nguyên"
@@ -7175,23 +7162,11 @@ msgstr "Mật khẩu cung cấp không trùng"
 #~ msgid "Everyone can view resource lists."
 #~ msgstr "Mọi người có thể xem danh sách tài nguyên"
 
-#~ msgid "Access control"
-#~ msgstr "Điều khiển Truy cập"
-
-#~ msgid "Activate next school year"
-#~ msgstr "Kích hoạt năm học tiếp theo"
-
 #~ msgid "Everyone can view section information and calendars"
 #~ msgstr "Mọi người đều có thể xem thông tin và lịch học của lớp học."
-
-#~ msgid "Persons can set their own preferences"
-#~ msgstr "Người dùng có thể thiết lập các tham chiếu riêng của họ"
-
-#~ msgid "Persons can change their own passwords"
-#~ msgstr "Người dùng có thể xem xét sự chuyển đổi này"
 
 #~ msgid "Edit Resource Information"
 #~ msgstr "Hiệu chỉnh thông tin về tài nguyên"
 
-#~ msgid "For term:"
-#~ msgstr "Cho học kỳ:"
+#~ msgid "Copy Sections"
+#~ msgstr "Sao chép lớp học"

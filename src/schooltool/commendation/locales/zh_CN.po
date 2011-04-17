@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-11-22 16:40+0200\n"
+"POT-Creation-Date: 2011-04-17 23:26+0300\n"
 "PO-Revision-Date: 2008-09-07 10:03+0000\n"
 "Last-Translator: Aron Xu <happyaron.xu@gmail.com>\n"
 "Language-Team: Simplified Chinese <zh_CN@li.org>\n"
@@ -29,15 +29,20 @@ msgstr "<未知>"
 msgid "commendations"
 msgstr "奖励"
 
-#: /src/schooltool/commendation/configure.zcml:82
-#: /src/schooltool/commendation/configure.zcml:92
-msgid "View Commendations"
-msgstr "查看奖励"
-
+#: /src/schooltool/commendation/commendation_add.pt:5
 #: /src/schooltool/commendation/configure.zcml:100
 #: /src/schooltool/commendation/configure.zcml:110
 msgid "Add Commendation"
 msgstr "添加奖励"
+
+#: /src/schooltool/commendation/commendation_add.pt:14
+msgid "Commendation"
+msgstr "表彰"
+
+#: /src/schooltool/commendation/configure.zcml:82
+#: /src/schooltool/commendation/configure.zcml:92
+msgid "View Commendations"
+msgstr "查看奖励"
 
 #: /src/schooltool/commendation/configure.zcml:128
 msgid "All Commendations"
