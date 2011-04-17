@@ -106,23 +106,44 @@ from schooltool.resource.interfaces import IBookingCalendar
 from schooltool.resource.interfaces import IResourceTypeInformation
 
 #
-# Constants
+# Calendar names
 #
 
+# TODO: use zope.i18n.locales to get this data from CLDR
+
 month_names = {
-    1: _("January"), 2: _("February"), 3: _("March"),
-    4: _("April"), 5: _("May"), 6: _("June"),
-    7: _("July"), 8: _("August"), 9: _("September"),
-    10: _("October"), 11: _("November"), 12: _("December")}
+    1: _("January"),
+    2: _("February"),
+    3: _("March"),
+    4: _("April"),
+    5: _("May"),
+    6: _("June"),
+    7: _("July"),
+    8: _("August"),
+    9: _("September"),
+    10: _("October"),
+    11: _("November"),
+    12: _("December")}
 
 day_of_week_names = {
-    0: _("Monday"), 1: _("Tuesday"), 2: _("Wednesday"), 3: _("Thursday"),
-    4: _("Friday"), 5: _("Saturday"), 6: _("Sunday")}
+    0: _("Monday"),
+    1: _("Tuesday"),
+    2: _("Wednesday"),
+    3: _("Thursday"),
+    4: _("Friday"),
+    5: _("Saturday"),
+    6: _("Sunday")}
 
-short_day_of_week_names = {
-    0: _("Mon"), 1: _("Tue"), 2: _("Wed"), 3: _("Thu"),
-    4: _("Fri"), 5: _("Sat"), 6: _("Sun"),
-}
+weekday_names = [
+    (0, _("Mon")),
+    (1, _("Tue")),
+    (2, _("Wed")),
+    (3, _("Thu")),
+    (4, _("Fri")),
+    (5, _("Sat")),
+    (6, _("Sun"))]
+
+short_day_of_week_names = dict(weekday_names)
 
 
 #
@@ -1817,13 +1838,7 @@ class ICalendarEventAddForm(Interface):
         required=False,
         value_type=Choice(
             title=_("Weekday"),
-            vocabulary=vocabulary([(0, _("Mon")),
-                                   (1, _("Tue")),
-                                   (2, _("Wed")),
-                                   (3, _("Thu")),
-                                   (4, _("Fri")),
-                                   (5, _("Sat")),
-                                   (6, _("Sun"))])))
+            vocabulary=vocabulary(weekday_names)))
 
     monthly = Choice(
         title=_("Monthly"),

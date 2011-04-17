@@ -15,10 +15,10 @@
 <h1 metal:fill-slot="content-header" i18n:translate="">
   <tal:block tal:content="view/context/title"
              i18n:name="schoolyear_title">School Year Title</tal:block>
-  (<tal:block tal:content="view/context/first/@@mediumDate"
+  (<tal:block tal:content="view/first/@@mediumDate"
               i18n:name="start_date"/>
   &mdash;
-  <tal:block tal:content="view/context/last/@@mediumDate"
+  <tal:block tal:content="view/last/@@mediumDate"
              i18n:name="end_date"/>)
 </h1>
 <metal:block metal:fill-slot="body"

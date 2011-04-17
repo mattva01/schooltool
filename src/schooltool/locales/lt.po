@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-03-18 20:12+0200\n"
+"POT-Creation-Date: 2011-04-07 18:11+0300\n"
 "PO-Revision-Date: 2011-02-14 08:41+0000\n"
 "Last-Translator: Izumi <Unknown>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
@@ -119,15 +119,6 @@ msgid "Monday"
 msgstr "Pirmadienis"
 
 #: /src/schooltool/app/browser/cal.py:119
-#: /src/schooltool/term/browser/templates/term.pt:34
-#: /src/schooltool/term/browser/templates/term_add.pt:60
-#: /src/schooltool/term/browser/templates/term_add.pt:83
-#: /src/schooltool/timetable/browser/schema.py:118
-#: /src/schooltool/timetable/browser/schema.py:287
-msgid "Thursday"
-msgstr "Ketvirtadienis"
-
-#: /src/schooltool/app/browser/cal.py:119
 #: /src/schooltool/term/browser/templates/term.pt:32
 #: /src/schooltool/term/browser/templates/term_add.pt:56
 #: /src/schooltool/term/browser/templates/term_add.pt:81
@@ -145,14 +136,14 @@ msgstr "Antradienis"
 msgid "Wednesday"
 msgstr "Trečiadienis"
 
-#: /src/schooltool/app/browser/cal.py:120
-#: /src/schooltool/term/browser/templates/term.pt:35
-#: /src/schooltool/term/browser/templates/term_add.pt:62
-#: /src/schooltool/term/browser/templates/term_add.pt:84
-#: /src/schooltool/timetable/browser/schema.py:119
-#: /src/schooltool/timetable/browser/schema.py:288
-msgid "Friday"
-msgstr "Penktadienis"
+#: /src/schooltool/app/browser/cal.py:119
+#: /src/schooltool/term/browser/templates/term.pt:34
+#: /src/schooltool/term/browser/templates/term_add.pt:60
+#: /src/schooltool/term/browser/templates/term_add.pt:83
+#: /src/schooltool/timetable/browser/schema.py:118
+#: /src/schooltool/timetable/browser/schema.py:287
+msgid "Thursday"
+msgstr "Ketvirtadienis"
 
 #: /src/schooltool/app/browser/cal.py:120
 #: /src/schooltool/person/interfaces.py:178
@@ -172,15 +163,19 @@ msgstr "Šeštadienis"
 msgid "Sunday"
 msgstr "Sekmadienis"
 
+#: /src/schooltool/app/browser/cal.py:120
+#: /src/schooltool/term/browser/templates/term.pt:35
+#: /src/schooltool/term/browser/templates/term_add.pt:62
+#: /src/schooltool/term/browser/templates/term_add.pt:84
+#: /src/schooltool/timetable/browser/schema.py:119
+#: /src/schooltool/timetable/browser/schema.py:288
+msgid "Friday"
+msgstr "Penktadienis"
+
 #: /src/schooltool/app/browser/cal.py:123
 #: /src/schooltool/app/browser/cal.py:1809
 msgid "Mon"
 msgstr "Pir"
-
-#: /src/schooltool/app/browser/cal.py:123
-#: /src/schooltool/app/browser/cal.py:1812
-msgid "Thu"
-msgstr "Ket"
 
 #: /src/schooltool/app/browser/cal.py:123
 #: /src/schooltool/app/browser/cal.py:1810
@@ -191,6 +186,11 @@ msgstr "Ant"
 #: /src/schooltool/app/browser/cal.py:1811
 msgid "Wed"
 msgstr "Tre"
+
+#: /src/schooltool/app/browser/cal.py:123
+#: /src/schooltool/app/browser/cal.py:1812
+msgid "Thu"
+msgstr "Ket"
 
 #: /src/schooltool/app/browser/cal.py:124
 #: /src/schooltool/app/browser/cal.py:1813
@@ -558,7 +558,7 @@ msgstr "Pridėti"
 
 #: /src/schooltool/app/browser/cal.py:2148
 msgid "Edit event"
-msgstr "Redaguoti įvykį"
+msgstr "Keisti įvykį"
 
 #: /src/schooltool/app/browser/cal.py:2149
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:29
@@ -2329,11 +2329,11 @@ msgstr "Eksportuoti"
 #: /src/schooltool/basicperson/browser/configure.zcml:42
 #: /src/schooltool/basicperson/security.py:65
 msgid "Advisors"
-msgstr ""
+msgstr "Auklėtojai"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:51
 msgid "Advisees"
-msgstr ""
+msgstr "Auklėtiniai"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:92
 #: /src/schooltool/demographics/overrides.zcml:7
@@ -2343,7 +2343,7 @@ msgstr "Naujas asmuo"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:107
 msgid "Add Multiple Persons"
-msgstr ""
+msgstr "Pridėti keletą asmenų"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:129
 #: /src/schooltool/basicperson/security.zcml:22
@@ -2353,31 +2353,31 @@ msgstr "Demografija"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:143
 msgid "New Text Field"
-msgstr ""
+msgstr "Naujas teksto laukas"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:150
 msgid "New Date Field"
-msgstr ""
+msgstr "Naujas datos laukas"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:174
 msgid "New Yes/No Field"
-msgstr ""
+msgstr "Naujas taip/ne laukas"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:181
 msgid "New Selection List Field"
-msgstr ""
+msgstr "Naujas pasirinkimo laukas"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:291
 msgid "Add Teacher"
-msgstr ""
+msgstr "Pridėti mokytoją"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:301
 msgid "Add Student"
-msgstr ""
+msgstr "Pridėti mokinį"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:311
 msgid "Add Administrator"
-msgstr ""
+msgstr "Pridėti administratorių"
 
 #: /src/schooltool/basicperson/browser/csvimport.py:44
 #: /src/schooltool/course/browser/csvimport.py:45
@@ -2437,88 +2437,88 @@ msgid "Add new Field"
 msgstr "Pridėti naują lauką"
 
 #. Default: ""
-#: /src/schooltool/basicperson/browser/demographics.py:212
+#: /src/schooltool/basicperson/browser/demographics.py:230
 msgid "Change information for ${field_title}"
 msgstr "Pakeisti ${field_title} informaciją"
-
-#: /src/schooltool/basicperson/browser/person.py:54
-#: /src/schooltool/demographics/interfaces.py:209
-msgid "Advisor"
-msgstr "Auklėtojas"
 
 #: /src/schooltool/basicperson/browser/person.py:57
 #: /src/schooltool/person/browser/person.py:449
 msgid "Person index"
 msgstr "Asmenų indeksas"
 
-#: /src/schooltool/basicperson/browser/person.py:68
-#: /src/schooltool/widget/password.py:39
-msgid "Confirm password"
-msgstr "Patvirtinkite slaptažodį"
-
 #: /src/schooltool/basicperson/browser/person.py:73
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_add.pt:61
 msgid "Group"
 msgstr "Grupė"
 
+#: /src/schooltool/basicperson/browser/person.py:54
+#: /src/schooltool/demographics/interfaces.py:209
+msgid "Advisor"
+msgstr "Auklėtojas"
+
+#: /src/schooltool/basicperson/browser/person.py:68
+#: /src/schooltool/widget/password.py:39
+msgid "Confirm password"
+msgstr "Patvirtinkite slaptažodį"
+
 #: /src/schooltool/basicperson/browser/person.py:76
 msgid "Passwords do not match"
 msgstr "Slaptažodžiai nesutampa"
-
-#: /src/schooltool/basicperson/browser/person.py:149
-msgid "Add new person"
-msgstr "Sukurti naują asmenį"
 
 #: /src/schooltool/basicperson/browser/person.py:152
 msgid "This username is already in use!"
 msgstr "Šis naudotojo vardas jau užimtas!"
 
+#: /src/schooltool/basicperson/browser/person.py:149
+msgid "Add new person"
+msgstr "Pridėti naują asmenį"
+
 #: /src/schooltool/basicperson/browser/person.py:283
 msgid "Usernames"
-msgstr ""
+msgstr "Naudotojų vardai"
 
 #: /src/schooltool/basicperson/browser/person.py:300
 msgid "Add multiple persons"
-msgstr ""
-
-#: /src/schooltool/basicperson/browser/person.py:304
-msgid "Current Advisors"
-msgstr ""
-
-#: /src/schooltool/basicperson/browser/person.py:305
-msgid "Add Advisors"
-msgstr ""
-
-#. Default: ""
-#: /src/schooltool/basicperson/browser/person.py:309
-msgid "Advisors of ${person}"
-msgstr ""
-
-#: /src/schooltool/basicperson/browser/person.py:328
-msgid "Current Advisees"
-msgstr ""
-
-#: /src/schooltool/basicperson/browser/person.py:329
-msgid "Add Advisees"
-msgstr ""
-
-#. Default: ""
-#: /src/schooltool/basicperson/browser/person.py:333
-msgid "Advisees of ${person}"
-msgstr ""
+msgstr "Pridėti keletą asmenų"
 
 #: /src/schooltool/basicperson/browser/person.py:357
 msgid "Done"
-msgstr ""
+msgstr "Atlikta"
 
 #. Default: ""
 #: /src/schooltool/basicperson/browser/person.py:402
 msgid "Change information for ${fullname}"
 msgstr "Keisti ${fullname} informaciją"
 
+#: /src/schooltool/basicperson/browser/person.py:304
+msgid "Current Advisors"
+msgstr "Esami auklėtojai"
+
+#: /src/schooltool/basicperson/browser/person.py:305
+msgid "Add Advisors"
+msgstr "Pridėti auklėtojus"
+
+#. Default: ""
+#: /src/schooltool/basicperson/browser/person.py:309
+msgid "Advisors of ${person}"
+msgstr "${person} auklėtojai"
+
+#: /src/schooltool/basicperson/browser/person.py:328
+msgid "Current Advisees"
+msgstr "Esami auklėtiniai"
+
+#: /src/schooltool/basicperson/browser/person.py:329
+msgid "Add Advisees"
+msgstr "Pridėti auklėtinius"
+
+#. Default: ""
+#: /src/schooltool/basicperson/browser/person.py:333
+msgid "Advisees of ${person}"
+msgstr "${person} auklėtiniai"
+
 #: /src/schooltool/basicperson/browser/person.py:579
 msgid "Teacher identification"
-msgstr ""
+msgstr "Mokytojo duomenys"
 
 #: /src/schooltool/basicperson/browser/person.py:581
 msgid "Teacher demographics"
@@ -2526,7 +2526,7 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/person.py:582
 msgid "Add new teacher"
-msgstr ""
+msgstr "Pridėti naują mokytoją"
 
 #: /src/schooltool/basicperson/browser/person.py:589
 msgid "Student identification"
@@ -2538,7 +2538,7 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/person.py:592
 msgid "Add new student"
-msgstr ""
+msgstr "Pridėti naują mokinį"
 
 #: /src/schooltool/basicperson/browser/person.py:599
 msgid "Administrator identification"
@@ -2550,16 +2550,18 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/person.py:602
 msgid "Add new administrator"
-msgstr ""
+msgstr "Pridėti naują administratorių"
 
 #: /src/schooltool/basicperson/browser/templates/container.pt:23
 msgid ""
 "To add teachers, students or administrators, please set up a ${school_year}."
 msgstr ""
+"Kad galėtumėte pridėti mokytojus, mokinius ar administratorius, pirma turite "
+"sukurti ${school_year}."
 
 #: /src/schooltool/basicperson/browser/templates/container.pt:23
 msgid "school year"
-msgstr ""
+msgstr "mokslo metus"
 
 #: /src/schooltool/basicperson/browser/templates/container.pt:37
 #: /src/schooltool/course/browser/templates/course_container.pt:28
@@ -2570,7 +2572,7 @@ msgstr ""
 #: /src/schooltool/skin/templates/container.pt:28
 #: /src/schooltool/skin/templates/table_container.pt:28
 msgid "Showing ${count} of ${total} items"
-msgstr ""
+msgstr "Rodoma ${count} iš ${total}"
 
 #. Default: "Delete"
 #: /src/schooltool/basicperson/browser/templates/container.pt:42
@@ -2627,7 +2629,7 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/templates/person_add_subform.pt:2
 msgid "New person"
-msgstr ""
+msgstr "Naujas asmuo"
 
 #: /src/schooltool/basicperson/browser/templates/person_container_delete.pt:15
 #: /src/schooltool/contact/browser/templates/contacts_delete.pt:15
@@ -2745,7 +2747,7 @@ msgstr ""
 msgid "ID"
 msgstr "ID"
 
-#: /src/schooltool/basicperson/interfaces.py:126
+#: src/schooltool/basicperson/interfaces.py:126
 msgid "Unique ID of this Field Description"
 msgstr ""
 
@@ -2759,15 +2761,11 @@ msgstr ""
 
 #: /src/schooltool/basicperson/interfaces.py:145
 msgid "Limit keys"
-msgstr ""
+msgstr "Taikoma tik"
 
 #: /src/schooltool/basicperson/interfaces.py:146
 msgid "An optional list of limit keys for this field"
-msgstr ""
-
-#: /src/schooltool/basicperson/interfaces.py:148
-msgid "Limit key"
-msgstr ""
+msgstr "Taikyti šį lauką tik pasirinktoms grupėms"
 
 #: /src/schooltool/basicperson/interfaces.py:163
 msgid "List of values"
@@ -2785,7 +2783,7 @@ msgstr "Pavardė"
 
 #: /src/schooltool/basicperson/security.py:66
 msgid "Advisors of a person."
-msgstr ""
+msgstr "Asmens auklėtojai."
 
 #: /src/schooltool/basicperson/security.zcml:26
 msgid "Create, delete demographics fields and change their order."
@@ -2823,11 +2821,11 @@ msgstr "Mokiniai"
 
 #: /src/schooltool/basicperson/vocabularies.py:144
 msgid "Teachers"
-msgstr ""
+msgstr "Mokytojai"
 
 #: /src/schooltool/basicperson/vocabularies.py:145
 msgid "Administrators"
-msgstr ""
+msgstr "Administratoriai"
 
 #: /src/schooltool/commendation/commendation_add.pt:4
 msgid "Add Commendation"
@@ -2857,7 +2855,7 @@ msgstr ""
 
 #: /src/schooltool/contact/browser/configure.zcml:41
 msgid "View Person"
-msgstr ""
+msgstr "Rodyti asmenį"
 
 #: /src/schooltool/contact/browser/configure.zcml:61
 msgid "New Contact"
@@ -2901,7 +2899,7 @@ msgstr "Keisti ${first_name} ${last_name} kontaktinę informaciją"
 
 #: /src/schooltool/contact/browser/contact.py:247
 msgid "Contact index"
-msgstr ""
+msgstr "Kontaktų sąrašas"
 
 #: /src/schooltool/contact/browser/contact.py:310
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:31
@@ -2948,12 +2946,12 @@ msgstr "Siųsti"
 #: /src/schooltool/contact/browser/contact.py:409
 #: /src/schooltool/email/browser/email.py:507
 msgid "There were some errors."
-msgstr ""
+msgstr "Yra klaidų."
 
 #: /src/schooltool/contact/browser/relationship.py:75
 #: /src/schooltool/contact/interfaces.py:101
 msgid "Relationship"
-msgstr ""
+msgstr "Ryšys"
 
 #: /src/schooltool/contact/browser/relationship.py:86
 msgid "Assigned Contacts"
@@ -2999,7 +2997,7 @@ msgstr "Išvalyti"
 
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:27
 msgid "Shortcut: Alt-R"
-msgstr ""
+msgstr "Trumpinys: Alt-R"
 
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:43
 msgid "Create contact"
@@ -3212,7 +3210,7 @@ msgstr "Keisti kurso duomenis"
 #: /src/schooltool/course/browser/configure.zcml:194
 #: /src/schooltool/course/browser/section-member-csvimport.pt:21
 msgid "Import Section Members"
-msgstr ""
+msgstr "Įkelti kurso narius"
 
 #: /src/schooltool/course/browser/configure.zcml:265
 #: /src/schooltool/course/browser/templates/course.pt:33
@@ -3266,7 +3264,7 @@ msgstr ""
 
 #: /src/schooltool/course/browser/section.py:188
 msgid "No section selected."
-msgstr ""
+msgstr "Kursas nepasirinktas"
 
 #: /src/schooltool/course/browser/section.py:376
 msgid "Starts in term"
@@ -3404,7 +3402,7 @@ msgstr "mokiniai"
 
 #: /src/schooltool/course/browser/templates/course_container.pt:12
 msgid "Courses for ${schoolyear}"
-msgstr ""
+msgstr "Dalykai ${schoolyear} metais"
 
 #: /src/schooltool/course/browser/templates/course_edit.pt:22
 #: /src/schooltool/course/browser/templates/section_edit.pt:23
@@ -3422,7 +3420,7 @@ msgstr "Moko kursus"
 #: /src/schooltool/course/browser/templates/section.pt:11
 #: /src/schooltool/course/browser/templates/section.pt:25
 msgid "Section of ${course} -- ${section_title} for ${term} of ${schoolyear}"
-msgstr ""
+msgstr "${course} kursas -- ${section_title} ${schoolyear} metų ${term} semestre"
 
 #: /src/schooltool/course/browser/templates/link_section.pt:24
 msgid "Link ${section}, ${term} with a section in ${target_term}"
@@ -3467,12 +3465,12 @@ msgstr "Keisti mokinius šiame kurse po vieną"
 
 #: /src/schooltool/course/browser/templates/section.pt:102
 msgid "edit individuals"
-msgstr "redaguoti asmenis"
+msgstr "keisti asmenis"
 
 #: /src/schooltool/course/browser/templates/section_container.pt:9
 #: /src/schooltool/course/browser/templates/section_container.pt:20
 msgid "Section list for ${term} of ${schoolyear}"
-msgstr ""
+msgstr "Kursų sąrašas ${schoolyear} metų ${term} semestre"
 
 #: /src/schooltool/course/browser/templates/section_container.pt:39
 msgid "Section"
@@ -3493,7 +3491,7 @@ msgstr "Kursas praeitame semestre."
 #: /src/schooltool/course/browser/templates/section_edit.pt:72
 #: /src/schooltool/course/browser/templates/section_edit.pt:106
 msgid "${section_title} for ${term}"
-msgstr ""
+msgstr "${section_title} ${term} semestre"
 
 #. Default: "Unlink"
 #: /src/schooltool/course/browser/templates/section_edit.pt:75
@@ -3504,7 +3502,7 @@ msgstr "Atsieti"
 #: /src/schooltool/course/browser/templates/section_edit.pt:85
 #: /src/schooltool/course/browser/templates/section_edit.pt:119
 msgid "Pick a section from ${term}"
-msgstr ""
+msgstr "Pasirinkite kursą iš ${term}"
 
 #: /src/schooltool/course/browser/templates/section_edit.pt:90
 #: /src/schooltool/course/browser/templates/section_edit.pt:124
@@ -3574,7 +3572,7 @@ msgstr "Kreditai"
 
 #: /src/schooltool/course/interfaces.py:61
 msgid "Amount of credits for this course."
-msgstr ""
+msgstr "Kreditų skaičius šiam dalykui"
 
 #: /src/schooltool/course/interfaces.py:87
 msgid "Label"
@@ -3599,7 +3597,7 @@ msgstr "Kurso aprašymas"
 #. Default: ""
 #: /src/schooltool/course/section.py:87
 msgid "${instructors} -- ${section_title}"
-msgstr ""
+msgstr "${instructors} -- ${section_title}"
 
 #: /src/schooltool/course/section.py:124
 msgid "Cannot assign section as previous to itself"
@@ -3619,11 +3617,11 @@ msgstr ""
 
 #: /src/schooltool/course/section.py:315
 msgid "Learners"
-msgstr ""
+msgstr "Mokiniai"
 
 #: /src/schooltool/course/section.py:316
 msgid "Students of the section."
-msgstr ""
+msgstr "Kursą lankantys mokiniai"
 
 #: /src/schooltool/course/section.py:394
 msgid "Cannot link sections in same term"
@@ -3773,17 +3771,17 @@ msgid "Schooltool Person Display Menu"
 msgstr ""
 
 #: /src/schooltool/demographics/browser/demographics_macros.pt:4
-#: /src/schooltool/demographics/browser/personform.py:96
-msgid "Apply and Next"
-msgstr "Pritaikyti ir tęsti"
-
-#: /src/schooltool/demographics/browser/demographics_macros.pt:4
 msgid "N"
 msgstr "N"
 
 #: /src/schooltool/demographics/browser/demographics_macros.pt:4
 msgid "Shortcut: Alt-N"
 msgstr "Trumpinys: Alt-N"
+
+#: /src/schooltool/demographics/browser/demographics_macros.pt:4
+#: /src/schooltool/demographics/browser/personform.py:96
+msgid "Apply and Next"
+msgstr "Pritaikyti ir tęsti"
 
 #: /src/schooltool/demographics/browser/display_form.pt:3
 #: /src/schooltool/demographics/browser/nameinfo_view.pt:3
@@ -4089,7 +4087,7 @@ msgstr ""
 
 #: /src/schooltool/email/browser/configure.zcml:54
 msgid "Outgoing Email"
-msgstr ""
+msgstr "El. pašto siuntimas"
 
 #: /src/schooltool/email/browser/configure.zcml:76
 msgid "Settings"
@@ -4097,7 +4095,7 @@ msgstr "Nustatymai"
 
 #: /src/schooltool/email/browser/configure.zcml:87
 msgid "Send Test"
-msgstr ""
+msgstr "Siųsti testą"
 
 #. Default: ""
 #: /src/schooltool/email/browser/email.py:81
@@ -4127,7 +4125,7 @@ msgstr ""
 #: /src/schooltool/email/browser/email.py:99
 #: /src/schooltool/email/interfaces.py:87
 msgid "Enable"
-msgstr ""
+msgstr "Įjungti"
 
 #: /src/schooltool/email/browser/email.py:100
 #: /src/schooltool/email/interfaces.py:88
@@ -4581,7 +4579,7 @@ msgstr "Įkelti grupes"
 
 #: /src/schooltool/group/browser/configure.zcml:114
 msgid "Import Groups Members"
-msgstr ""
+msgstr "Įkelti grupės narius"
 
 #: /src/schooltool/group/browser/group-csvimport.pt:4
 msgid "Upload SchoolTool groups as CSV"
@@ -5008,7 +5006,7 @@ msgstr "YYYY-MM-DD"
 
 #: /src/schooltool/person/interfaces.py:172
 msgid "Day Month, Year"
-msgstr "Diena, Mėnuo, Metai"
+msgstr "Diena Mėnuo, Metai"
 
 #: /src/schooltool/person/interfaces.py:176
 msgid "Week starts on:"
@@ -5093,28 +5091,66 @@ msgstr "Visi, jei kalendorius yra paviešintas naudotojo nustatymuose."
 
 #: /src/schooltool/relationship/configure.zcml:13
 msgid "Relationships"
-msgstr "Pavaldumo ryšiai"
+msgstr "Ryšiai"
+
+#: /src/schooltool/report/browser/configure.zcml:8
+#: /src/schooltool/report/browser/configure.zcml:22
+#: /src/schooltool/report/browser/configure.zcml:33
+#: /src/schooltool/report/browser/configure.zcml:44
+#: /src/schooltool/report/browser/configure.zcml:55
+#: /src/schooltool/report/browser/configure.zcml:66
+msgid "Reports"
+msgstr "Ataskaitos"
+
+#: /src/schooltool/report/browser/report.py:44
+msgid "Student Reports"
+msgstr "Mokinio ataskaitos"
+
+#: /src/schooltool/report/browser/report.py:49
+msgid "Group Reports"
+msgstr "Grupės ataskaitos"
+
+#: /src/schooltool/report/browser/report.py:54
+msgid "School Year Reports"
+msgstr "Mokslo metų ataskaitos"
+
+#: /src/schooltool/report/browser/report.py:59
+msgid "Term Reports"
+msgstr "Semestro ataskaitos"
+
+#: /src/schooltool/report/browser/report.py:64
+msgid "Section Reports"
+msgstr "Kurso ataskaitos"
+
+#: /src/schooltool/report/browser/templates/report_reference.pt:3
+#: /src/schooltool/report/browser/templates/report_reference.pt:7
+msgid "Report Reference"
+msgstr "Visos ataskaitos"
+
+#: /src/schooltool/report/browser/templates/report_reference.pt:13
+msgid "Category"
+msgstr "Kategorija"
 
 #: /src/schooltool/resource/browser/configure.zcml:96
 msgid "Resource Demographics"
-msgstr ""
+msgstr "Resursų demografija"
 
 #: /src/schooltool/resource/browser/configure.zcml:143
 #: /src/schooltool/resource/browser/resource-csvimport.pt:21
 msgid "Import Resources"
 msgstr "Įkelti resursus"
 
+#: /src/schooltool/resource/browser/configure.zcml:286
+msgid "New Resource"
+msgstr "Naujas resursas"
+
 #: /src/schooltool/resource/browser/configure.zcml:197
 msgid "New Location"
-msgstr ""
+msgstr "Nauja patalpa"
 
 #: /src/schooltool/resource/browser/configure.zcml:204
 msgid "New Equipment"
 msgstr "Nauja įranga"
-
-#: /src/schooltool/resource/browser/configure.zcml:286
-msgid "New Resource"
-msgstr "Naujas Resursas"
 
 #: /src/schooltool/resource/browser/resource-csvimport.pt:4
 msgid "Upload schooltool resources as CSV"
@@ -5161,15 +5197,15 @@ msgstr ""
 
 #: /src/schooltool/resource/browser/resource.py:514
 msgid "Resource demographics"
-msgstr ""
+msgstr "Resursų demografija"
 
 #: /src/schooltool/resource/browser/resource.py:522
 msgid "Add new resource"
-msgstr ""
+msgstr "Pridėti naują resursą"
 
 #: /src/schooltool/resource/browser/resource.py:528
 msgid "Edit resource"
-msgstr ""
+msgstr "Keisti resursą"
 
 #: /src/schooltool/resource/browser/resource.py:536
 msgid "Location identification"
@@ -5181,11 +5217,11 @@ msgstr ""
 
 #: /src/schooltool/resource/browser/resource.py:548
 msgid "Add new location"
-msgstr ""
+msgstr "Pridėti naują patalpą"
 
 #: /src/schooltool/resource/browser/resource.py:554
 msgid "Edit location"
-msgstr ""
+msgstr "Keisti patalpą"
 
 #: /src/schooltool/resource/browser/resource.py:562
 msgid "Equipment identification"
@@ -5197,11 +5233,11 @@ msgstr ""
 
 #: /src/schooltool/resource/browser/resource.py:574
 msgid "Add new equipment"
-msgstr ""
+msgstr "Pridėti naują įrangą"
 
 #: /src/schooltool/resource/browser/resource.py:580
 msgid "Edit equipment"
-msgstr ""
+msgstr "Keisti įrangą"
 
 #: /src/schooltool/resource/help/resource_help.pt:6
 msgid "Resource Help"
@@ -5213,11 +5249,11 @@ msgstr "Resurso pavadinimas"
 
 #: /src/schooltool/resource/interfaces.py:41
 msgid "Resource Type"
-msgstr ""
+msgstr "Resurso tipas"
 
 #: /src/schooltool/resource/interfaces.py:42
 msgid "Type of resource"
-msgstr ""
+msgstr "Resurso tipas"
 
 #: /src/schooltool/resource/interfaces.py:49
 msgid "Description of the resource."
@@ -5229,7 +5265,7 @@ msgstr ""
 
 #: /src/schooltool/resource/interfaces.py:77
 msgid "Location Type"
-msgstr ""
+msgstr "Patalpos tipas"
 
 #: /src/schooltool/resource/interfaces.py:78
 msgid "Type of location (i.e. computer lab, class room, etc.)"
@@ -5242,15 +5278,15 @@ msgstr "Talpa"
 
 #: /src/schooltool/resource/interfaces.py:84
 msgid "Capacity of the room"
-msgstr ""
+msgstr "Kiek žmonių telpa patalpoje"
 
 #: /src/schooltool/resource/interfaces.py:92
 msgid "Equipment Type"
-msgstr ""
+msgstr "Įrangos tipas"
 
 #: /src/schooltool/resource/interfaces.py:93
 msgid "Type of equipment (i.e. camcorder, computer, etc.)"
-msgstr ""
+msgstr "Įrangos tipas (pvz., projektorius, kompiuteris, žemėlapis)"
 
 #: /src/schooltool/resource/interfaces.py:97
 #: /src/schooltool/resource/types.py:113
@@ -5315,6 +5351,12 @@ msgstr ""
 msgid "Resource"
 msgstr "Resursas"
 
+#: /src/schooltool/resource/resource.py:206
+#: /src/schooltool/resource/resource.py:232
+#: /src/schooltool/resource/types.py:93
+msgid "Equipment"
+msgstr "Įranga"
+
 #: /src/schooltool/resource/security.zcml:7
 msgid "Only school administration can view the list of resources."
 msgstr ""
@@ -5347,14 +5389,14 @@ msgstr ""
 msgid "Reservations"
 msgstr ""
 
-#: /src/schooltool/resource/security.zcml:53
+#: /src/schooltool/resource/security.zcml:50
 msgid ""
 "Resources are locations or objects within a school.                    "
 "SchoolTool's calendar can function as a reservation                    and "
 "tracking system for resources."
 msgstr ""
 
-#: /src/schooltool/resource/security.zcml:60
+#: /src/schooltool/resource/security.zcml:57
 msgid "List/Search resources"
 msgstr ""
 
@@ -5378,13 +5420,9 @@ msgstr ""
 msgid "Schedule reservation via calendar"
 msgstr ""
 
-#: /src/schooltool/resource/types.py:93
-msgid "Equipment"
-msgstr ""
-
 #: /src/schooltool/resource/types.py:107
 msgid "Type"
-msgstr ""
+msgstr "Tipas"
 
 #: /src/schooltool/sampledata/sampledata.pt:3
 #: /src/schooltool/sampledata/sampledata.pt:9
@@ -5482,7 +5520,7 @@ msgstr ""
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_add.pt:40
 msgid "All Courses"
-msgstr ""
+msgstr "Visi dalykai"
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_add.pt:50
 msgid "All Timetable Schemas"
@@ -5490,7 +5528,7 @@ msgstr ""
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_add.pt:62
 msgid "Copy members"
-msgstr ""
+msgstr "Kopijuoti narius"
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:27
 msgid "The active school year is ${year} (${start_date} - ${end_date})"
@@ -5534,15 +5572,15 @@ msgstr "Įjungta"
 
 #: /src/schooltool/securitypolicy/browser/control.py:106
 msgid "School administration"
-msgstr ""
+msgstr "Mokyklos administracija"
 
 #: /src/schooltool/securitypolicy/browser/templates/access_setting_snippet.pt:2
 msgid "Access setting"
-msgstr ""
+msgstr "Saugumo nuostata"
 
 #: /src/schooltool/securitypolicy/browser/templates/security_descriptions.pt:4
 msgid "Access Rights"
-msgstr ""
+msgstr "Prieigos teisės"
 
 #: /src/schooltool/securitypolicy/browser/templates/security_descriptions.pt:9
 msgid "Object model and access rights"
@@ -5554,11 +5592,11 @@ msgstr ""
 
 #: /src/schooltool/securitypolicy/crowds.py:199
 msgid "Everybody"
-msgstr ""
+msgstr "Visi"
 
 #: /src/schooltool/securitypolicy/crowds.py:200
 msgid "Everybody, including users that are not logged in."
-msgstr ""
+msgstr "Visi, įskaitant neprisijungusius naudotojus."
 
 #: /src/schooltool/securitypolicy/crowds.py:233
 msgid "Authenticated user"
@@ -5627,7 +5665,7 @@ msgstr ""
 
 #: /src/schooltool/skin/templates/generic_macros.pt:12
 msgid "Server Running SchoolTool"
-msgstr ""
+msgstr "Serveris naudoja SchoolTool"
 
 #: /src/schooltool/skin/templates/notfound.pt:3
 #: /src/schooltool/skin/templates/notfound.pt:11
@@ -5640,15 +5678,15 @@ msgstr "Puslapis nepasiekiamas"
 
 #: /src/schooltool/skin/templates/notfound.pt:18
 msgid "Please note the following:"
-msgstr ""
+msgstr "Turėkite omenyje:"
 
 #: /src/schooltool/skin/templates/notfound.pt:21
 msgid "You might have misspelled the url"
-msgstr "Gal būt klaida užrašant adresą"
+msgstr "Galbūt klaidingai užrašėte adresą"
 
 #: /src/schooltool/skin/templates/notfound.pt:22
 msgid "You might be trying to access a non-existing page"
-msgstr "Gal būt bandoma kreiptis į puslapį, kurio nėra"
+msgstr "Galbūt bandoma kreiptis į puslapį, kurio nėra"
 
 #: /src/schooltool/skin/templates/onlinehelp_macros.pt:55
 msgid "SchoolTool Onlinehelp"
@@ -5668,20 +5706,25 @@ msgstr "Atsijungti"
 
 #: /src/schooltool/skin/templates/view_macros.pt:82
 msgid "free administration software for"
-msgstr ""
+msgstr "nemokama administravimo programa skirta"
 
 #: /src/schooltool/skin/templates/view_macros.pt:124
 msgid ""
 "&copy; The <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth "
 "Foundation</a> 2003 - 2011: Supporting Social Innovation."
 msgstr ""
+"&copy; The <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth "
+"Foundation</a> 2003 - 2011: Remiame socialines inovacijas."
 
-#: /src/schooltool/skin/templates/view_macros.pt:132
+#: /src/schooltool/skin/templates/view_macros.pt:129
 msgid ""
 "<a href=\"http://www.schooltool.org\">SchoolTool</a>&trade; is a Trademark "
 "of the <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth "
 "Foundation</a>."
 msgstr ""
+"<a href=\"http://www.schooltool.org\">SchoolTool</a>&trade; yra "
+"<a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth "
+"Foundation</a> prekinis ženklas."
 
 #: /src/schooltool/skin/templates/view_macros.pt:155
 msgid "Shortcut: Alt-U"
@@ -5717,31 +5760,31 @@ msgstr "D"
 msgid "Shortcut: Alt-D"
 msgstr "Trumpinys: Alt-D"
 
-#: /src/schooltool/skin/widgets.py:87
+#: /src/schooltool/skin/widgets.py:91
 msgid "The datetime string did not match the pattern yyyy-mm-dd"
 msgstr ""
 
-#: /src/schooltool/skin/widgets.py:110
+#: /src/schooltool/skin/widgets.py:98
 msgid "Width"
 msgstr "Plotis"
 
-#: /src/schooltool/skin/widgets.py:111
+#: /src/schooltool/skin/widgets.py:99
 msgid "Editor frame width"
 msgstr ""
 
-#: /src/schooltool/skin/widgets.py:114
+#: /src/schooltool/skin/widgets.py:102
 msgid "Height"
 msgstr "Aukštis"
 
-#: /src/schooltool/skin/widgets.py:115
+#: /src/schooltool/skin/widgets.py:103
 msgid "Editor frame height"
 msgstr ""
 
-#: /src/schooltool/skin/widgets.py:118
+#: /src/schooltool/skin/widgets.py:106
 msgid "Toolbar configuration"
 msgstr ""
 
-#: /src/schooltool/skin/widgets.py:119
+#: /src/schooltool/skin/widgets.py:107
 msgid "The name of the toolbar configuration to use."
 msgstr ""
 
@@ -5753,11 +5796,11 @@ msgstr ""
 msgid "Path to the FCKconfiguration javascript file."
 msgstr ""
 
-#: /src/schooltool/skin/widgets.py:130
+#: /src/schooltool/skin/widgets.py:136
 msgid "Configuration"
 msgstr ""
 
-#: /src/schooltool/skin/widgets.py:131
+#: /src/schooltool/skin/widgets.py:137
 msgid "FCK editor configuration."
 msgstr ""
 
@@ -5891,7 +5934,7 @@ msgstr "Perjungti šias savaitės dienas:"
 
 #: /src/schooltool/term/browser/templates/term_add.pt:70
 msgid "Click on a day to toggle its state."
-msgstr ""
+msgstr "Spustelkite ant dienos, norėdami pakeisti jos būseną"
 
 #: /src/schooltool/term/browser/term.py:61
 msgid "Start date"
@@ -5903,7 +5946,7 @@ msgstr "Pabaigos data"
 
 #: /src/schooltool/term/browser/term.py:122
 msgid "Add new term"
-msgstr ""
+msgstr "Pridėti naują semestrą"
 
 #: /src/schooltool/term/browser/term.py:145
 #: /src/schooltool/term/browser/term.py:222
@@ -5921,16 +5964,16 @@ msgstr "Išsaugoti"
 #. Default: ""
 #: /src/schooltool/term/browser/term.py:253
 msgid "Change information for ${term_title}"
-msgstr ""
+msgstr "Pakeisti ${term_title} informaciją"
 
 #: /src/schooltool/term/browser/term.py:268
 #: /src/schooltool/term/browser/term.py:291
 msgid "Term must begin before it ends."
-msgstr ""
+msgstr "Semestras turi prasidėŧi anksčiau nei baigtis"
 
 #: /src/schooltool/term/help/configure.zcml:8
 msgid "Add a term"
-msgstr "Sukurti semestrą"
+msgstr "Pridėti semestrą"
 
 #: /src/schooltool/term/help/term_add.pt:6
 msgid "Term Search Help"
@@ -5973,7 +6016,7 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/__init__.py:513
 msgid "Show consecutive periods as one period in journal"
-msgstr ""
+msgstr "Rodyti gretimas pamokas kaip vieną pamoką žurnale"
 
 #: /src/schooltool/timetable/browser/__init__.py:614
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:107
@@ -5983,19 +6026,19 @@ msgstr "Išsaugoti"
 
 #: /src/schooltool/timetable/browser/__init__.py:686
 msgid "School timetable"
-msgstr ""
+msgstr "Mokyklos tvarkaraštis"
 
 #: /src/schooltool/timetable/browser/__init__.py:691
 msgid "Apply from"
-msgstr ""
+msgstr "Taikyti nuo"
 
 #: /src/schooltool/timetable/browser/__init__.py:693
 msgid "Apply until"
-msgstr ""
+msgstr "Taikyti iki"
 
 #: /src/schooltool/timetable/browser/__init__.py:794
 msgid "Timetable conflicts with another:"
-msgstr ""
+msgstr "Tvarkaraštis konfliktuoja su kitu:"
 
 #: /src/schooltool/timetable/browser/__init__.py:802
 msgid "Timetable does not fit in term"
@@ -6019,7 +6062,7 @@ msgstr "Kai kurios reikšmės netinkamos. Jos išskirtos raudonai."
 
 #: /src/schooltool/timetable/browser/configure.zcml:30
 msgid "Add Timetable"
-msgstr "Sukurti tvarkaraštį"
+msgstr "Pridėti tvarkaraštį"
 
 #: /src/schooltool/timetable/browser/configure.zcml:102
 msgid "Change Timetable for One Day"
@@ -6035,7 +6078,7 @@ msgstr "Tvarkaraščiai"
 
 #: /src/schooltool/timetable/browser/event.py:53
 msgid "Modify event information"
-msgstr ""
+msgstr "Keisti įvykio informaciją"
 
 #. Default: ""
 #: /src/schooltool/timetable/browser/schema.py:94
@@ -6056,7 +6099,7 @@ msgstr "Trukmė minutėmis"
 
 #: /src/schooltool/timetable/browser/schema.py:316
 msgid "Please select a value"
-msgstr "Prašau, parinkite reikšmę"
+msgstr "Prašom pasirinkti reikšmę"
 
 #. Default: ""
 #: /src/schooltool/timetable/browser/schema.py:343
@@ -6194,7 +6237,7 @@ msgstr "Mano kalendorius"
 
 #: /src/schooltool/timetable/browser/templates/calendar_overlay.pt:17
 msgid "TT"
-msgstr "TT"
+msgstr "Tv"
 
 #: /src/schooltool/timetable/browser/templates/calendar_overlay.pt:17
 msgid "Timetable calendar"
@@ -6202,7 +6245,7 @@ msgstr "Tvarkaraščio kalendorius"
 
 #: /src/schooltool/timetable/browser/templates/calendar_overlay.pt:95
 msgid "Manage..."
-msgstr ""
+msgstr "Tvarkyti..."
 
 #: /src/schooltool/timetable/browser/templates/confirm-timetable-delete.pt:15
 msgid "Are you sure you want to unschedule this timetable?"
@@ -6211,7 +6254,7 @@ msgstr ""
 #: /src/schooltool/timetable/browser/templates/confirm-timetable-delete.pt:27
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:48
 msgid "Timetable \"${title}\""
-msgstr ""
+msgstr "Tvarkaraštis \"${title}\""
 
 #: /src/schooltool/timetable/browser/templates/confirm-timetable-delete.pt:38
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:60
@@ -6644,20 +6687,20 @@ msgstr ""
 msgid "Supplied passwords are not identical"
 msgstr "Pateikti slaptažodžiai nėra identiški"
 
-#~ msgid "Everyone can view the list of persons"
-#~ msgstr "Visiems leidžiama matyti asmenų sąrašą"
-
-#~ msgid "Everyone can view section information and calendars"
-#~ msgstr "Visi gali matyti kursų informaciją ir kalendorius"
+#~ msgid "Everyone can view group calendars."
+#~ msgstr "Visiems leidžiama matyti grupių kalendorius"
 
 #~ msgid "Everyone can view group information."
 #~ msgstr "Visiems leidžiama matyti grupių informaciją"
 
-#~ msgid "Everyone can view group calendars."
-#~ msgstr "Visiems leidžiama matyti grupių kalendorius"
+#~ msgid "Everyone can view group lists."
+#~ msgstr "Visiems leidžiama matyti grupių sąrašą"
+
+#~ msgid "Everyone can view section information and calendars"
+#~ msgstr "Visi gali matyti kursų informaciją ir kalendorius"
+
+#~ msgid "Everyone can view the list of persons"
+#~ msgstr "Visiems leidžiama matyti asmenų sąrašą"
 
 #~ msgid "Group members can edit group calendars."
 #~ msgstr "Grupių nariai gali keisti grupių kalendorius"
-
-#~ msgid "Everyone can view group lists."
-#~ msgstr "Visiems leidžiama matyti grupių sąrašą"
