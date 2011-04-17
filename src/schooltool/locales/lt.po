@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-04-07 18:11+0300\n"
+"POT-Creation-Date: 2011-04-17 23:49+0300\n"
 "PO-Revision-Date: 2011-02-14 08:41+0000\n"
 "Last-Translator: Izumi <Unknown>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
@@ -60,15 +60,15 @@ msgstr "Neužimti vadovai"
 msgid "school"
 msgstr "mokykla"
 
-#: /src/schooltool/app/browser/cal.py:113
-msgid "February"
-msgstr "Vasaris"
-
-#: /src/schooltool/app/browser/cal.py:113
+#: /src/schooltool/app/browser/cal.py:115
 msgid "January"
 msgstr "Sausis"
 
-#: /src/schooltool/app/browser/cal.py:113
+#: /src/schooltool/app/browser/cal.py:116
+msgid "February"
+msgstr "Vasaris"
+
+#: /src/schooltool/app/browser/cal.py:117
 msgid "March"
 msgstr "Kovas"
 
@@ -76,39 +76,39 @@ msgstr "Kovas"
 msgid "April"
 msgstr "Balandis"
 
-#: /src/schooltool/app/browser/cal.py:114
-msgid "June"
-msgstr "Birželis"
-
-#: /src/schooltool/app/browser/cal.py:114
+#: /src/schooltool/app/browser/cal.py:119
 msgid "May"
 msgstr "Gegužė"
 
-#: /src/schooltool/app/browser/cal.py:115
-msgid "August"
-msgstr "Rugpjūtis"
+#: /src/schooltool/app/browser/cal.py:120
+msgid "June"
+msgstr "Birželis"
 
-#: /src/schooltool/app/browser/cal.py:115
+#: /src/schooltool/app/browser/cal.py:121
 msgid "July"
 msgstr "Liepa"
 
-#: /src/schooltool/app/browser/cal.py:115
+#: /src/schooltool/app/browser/cal.py:122
+msgid "August"
+msgstr "Rugpjūtis"
+
+#: /src/schooltool/app/browser/cal.py:123
 msgid "September"
 msgstr "Rugsėjis"
 
-#: /src/schooltool/app/browser/cal.py:116
-msgid "December"
-msgstr "Gruodis"
-
-#: /src/schooltool/app/browser/cal.py:116
-msgid "November"
-msgstr "Lapkritis"
-
-#: /src/schooltool/app/browser/cal.py:116
+#: /src/schooltool/app/browser/cal.py:124
 msgid "October"
 msgstr "Spalis"
 
-#: /src/schooltool/app/browser/cal.py:119
+#: /src/schooltool/app/browser/cal.py:125
+msgid "November"
+msgstr "Lapkritis"
+
+#: /src/schooltool/app/browser/cal.py:126
+msgid "December"
+msgstr "Gruodis"
+
+#: /src/schooltool/app/browser/cal.py:129
 #: /src/schooltool/person/interfaces.py:180
 #: /src/schooltool/term/browser/templates/term.pt:31
 #: /src/schooltool/term/browser/templates/term_add.pt:54
@@ -145,7 +145,16 @@ msgstr "Trečiadienis"
 msgid "Thursday"
 msgstr "Ketvirtadienis"
 
-#: /src/schooltool/app/browser/cal.py:120
+#: /src/schooltool/app/browser/cal.py:133
+#: /src/schooltool/term/browser/templates/term.pt:35
+#: /src/schooltool/term/browser/templates/term_add.pt:62
+#: /src/schooltool/term/browser/templates/term_add.pt:84
+#: /src/schooltool/timetable/browser/schema.py:119
+#: /src/schooltool/timetable/browser/schema.py:288
+msgid "Friday"
+msgstr "Penktadienis"
+
+#: /src/schooltool/app/browser/cal.py:134
 #: /src/schooltool/person/interfaces.py:178
 #: /src/schooltool/term/browser/templates/term.pt:36
 #: /src/schooltool/term/browser/templates/term_add.pt:64
@@ -163,17 +172,7 @@ msgstr "Šeštadienis"
 msgid "Sunday"
 msgstr "Sekmadienis"
 
-#: /src/schooltool/app/browser/cal.py:120
-#: /src/schooltool/term/browser/templates/term.pt:35
-#: /src/schooltool/term/browser/templates/term_add.pt:62
-#: /src/schooltool/term/browser/templates/term_add.pt:84
-#: /src/schooltool/timetable/browser/schema.py:119
-#: /src/schooltool/timetable/browser/schema.py:288
-msgid "Friday"
-msgstr "Penktadienis"
-
-#: /src/schooltool/app/browser/cal.py:123
-#: /src/schooltool/app/browser/cal.py:1809
+#: /src/schooltool/app/browser/cal.py:138
 msgid "Mon"
 msgstr "Pir"
 
@@ -2827,21 +2826,13 @@ msgstr "Mokytojai"
 msgid "Administrators"
 msgstr "Administratoriai"
 
-#: /src/schooltool/commendation/commendation_add.pt:4
-msgid "Add Commendation"
-msgstr "Pridėti pagyrimą"
-
-#: /src/schooltool/commendation/commendation_add.pt:13
-msgid "Commendation"
-msgstr "Pagyrimas"
-
-#: /src/schooltool/common/configure.zcml:88
+#: /src/schooltool/common/configure.zcml:89
 #: /src/schooltool/course/browser/configure.zcml:25
-#: /src/schooltool/course/browser/configure.zcml:180
-#: /src/schooltool/group/browser/configure.zcml:38
-#: /src/schooltool/resource/browser/configure.zcml:84
-#: /src/schooltool/resource/browser/configure.zcml:115
-#: /src/schooltool/resource/browser/configure.zcml:151
+#: /src/schooltool/course/browser/configure.zcml:170
+#: /src/schooltool/group/browser/configure.zcml:36
+#: /src/schooltool/resource/browser/configure.zcml:243
+#: /src/schooltool/resource/browser/configure.zcml:257
+#: /src/schooltool/resource/browser/configure.zcml:271
 msgid "Edit Info"
 msgstr "Keisti duomenis"
 
@@ -3420,7 +3411,8 @@ msgstr "Moko kursus"
 #: /src/schooltool/course/browser/templates/section.pt:11
 #: /src/schooltool/course/browser/templates/section.pt:25
 msgid "Section of ${course} -- ${section_title} for ${term} of ${schoolyear}"
-msgstr "${course} kursas -- ${section_title} ${schoolyear} metų ${term} semestre"
+msgstr ""
+"${course} kursas -- ${section_title} ${schoolyear} metų ${term} semestre"
 
 #: /src/schooltool/course/browser/templates/link_section.pt:24
 msgid "Link ${section}, ${term} with a section in ${target_term}"
@@ -3771,17 +3763,17 @@ msgid "Schooltool Person Display Menu"
 msgstr ""
 
 #: /src/schooltool/demographics/browser/demographics_macros.pt:4
+#: /src/schooltool/demographics/browser/personform.py:96
+msgid "Apply and Next"
+msgstr "Pritaikyti ir tęsti"
+
+#: /src/schooltool/demographics/browser/demographics_macros.pt:4
 msgid "N"
 msgstr "N"
 
 #: /src/schooltool/demographics/browser/demographics_macros.pt:4
 msgid "Shortcut: Alt-N"
 msgstr "Trumpinys: Alt-N"
-
-#: /src/schooltool/demographics/browser/demographics_macros.pt:4
-#: /src/schooltool/demographics/browser/personform.py:96
-msgid "Apply and Next"
-msgstr "Pritaikyti ir tęsti"
 
 #: /src/schooltool/demographics/browser/display_form.pt:3
 #: /src/schooltool/demographics/browser/nameinfo_view.pt:3
@@ -5722,11 +5714,11 @@ msgid ""
 "of the <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth "
 "Foundation</a>."
 msgstr ""
-"<a href=\"http://www.schooltool.org\">SchoolTool</a>&trade; yra "
-"<a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth "
-"Foundation</a> prekinis ženklas."
+"<a href=\"http://www.schooltool.org\">SchoolTool</a>&trade; yra <a href="
+"\"http://www.shuttleworthfoundation.org\">Shuttleworth Foundation</a> "
+"prekinis ženklas."
 
-#: /src/schooltool/skin/templates/view_macros.pt:155
+#: /src/schooltool/skin/templates/view_macros.pt:152
 msgid "Shortcut: Alt-U"
 msgstr "Trumpinys: Alt-U"
 
@@ -6686,21 +6678,3 @@ msgstr ""
 #: /src/schooltool/widget/password.py:55
 msgid "Supplied passwords are not identical"
 msgstr "Pateikti slaptažodžiai nėra identiški"
-
-#~ msgid "Everyone can view group calendars."
-#~ msgstr "Visiems leidžiama matyti grupių kalendorius"
-
-#~ msgid "Everyone can view group information."
-#~ msgstr "Visiems leidžiama matyti grupių informaciją"
-
-#~ msgid "Everyone can view group lists."
-#~ msgstr "Visiems leidžiama matyti grupių sąrašą"
-
-#~ msgid "Everyone can view section information and calendars"
-#~ msgstr "Visi gali matyti kursų informaciją ir kalendorius"
-
-#~ msgid "Everyone can view the list of persons"
-#~ msgstr "Visiems leidžiama matyti asmenų sąrašą"
-
-#~ msgid "Group members can edit group calendars."
-#~ msgstr "Grupių nariai gali keisti grupių kalendorius"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-03-18 20:12+0200\n"
+"POT-Creation-Date: 2011-04-17 23:49+0300\n"
 "PO-Revision-Date: 2011-01-19 11:32+0000\n"
 "Last-Translator: jhalevy <Unknown>\n"
 "Language-Team: Hebrew <he@li.org>\n"
@@ -15,8 +15,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-03-19 04:46+0000\n"
-"X-Generator: Launchpad (build 12559)\n"
+"X-Launchpad-Export-Date: 2011-04-08 04:33+0000\n"
+"X-Generator: Launchpad (build 12735)\n"
 "X-Rosetta-Version: 0.1\n"
 
 #: /src/schooltool/app/app.py:197
@@ -60,15 +60,15 @@ msgstr "מובילים קיימים"
 msgid "school"
 msgstr "בית ספר"
 
-#: /src/schooltool/app/browser/cal.py:113
-msgid "February"
-msgstr "פברואר"
-
-#: /src/schooltool/app/browser/cal.py:113
+#: /src/schooltool/app/browser/cal.py:115
 msgid "January"
 msgstr "חודש ינואר"
 
-#: /src/schooltool/app/browser/cal.py:113
+#: /src/schooltool/app/browser/cal.py:116
+msgid "February"
+msgstr "פברואר"
+
+#: /src/schooltool/app/browser/cal.py:117
 msgid "March"
 msgstr "חודש מרץ"
 
@@ -76,39 +76,39 @@ msgstr "חודש מרץ"
 msgid "April"
 msgstr "חודש אפריל"
 
-#: /src/schooltool/app/browser/cal.py:114
-msgid "June"
-msgstr "חודש יוני"
-
-#: /src/schooltool/app/browser/cal.py:114
+#: /src/schooltool/app/browser/cal.py:119
 msgid "May"
 msgstr "חודש מאי"
 
-#: /src/schooltool/app/browser/cal.py:115
-msgid "August"
-msgstr "חודש אוגוסט"
+#: /src/schooltool/app/browser/cal.py:120
+msgid "June"
+msgstr "חודש יוני"
 
-#: /src/schooltool/app/browser/cal.py:115
+#: /src/schooltool/app/browser/cal.py:121
 msgid "July"
 msgstr "חודש יולי"
 
-#: /src/schooltool/app/browser/cal.py:115
+#: /src/schooltool/app/browser/cal.py:122
+msgid "August"
+msgstr "חודש אוגוסט"
+
+#: /src/schooltool/app/browser/cal.py:123
 msgid "September"
 msgstr "חודש ספטמבר"
 
-#: /src/schooltool/app/browser/cal.py:116
-msgid "December"
-msgstr "חודש דצמבר"
-
-#: /src/schooltool/app/browser/cal.py:116
-msgid "November"
-msgstr "חודש נובמבר"
-
-#: /src/schooltool/app/browser/cal.py:116
+#: /src/schooltool/app/browser/cal.py:124
 msgid "October"
 msgstr "חודש אוקטובר"
 
-#: /src/schooltool/app/browser/cal.py:119
+#: /src/schooltool/app/browser/cal.py:125
+msgid "November"
+msgstr "חודש נובמבר"
+
+#: /src/schooltool/app/browser/cal.py:126
+msgid "December"
+msgstr "חודש דצמבר"
+
+#: /src/schooltool/app/browser/cal.py:129
 #: /src/schooltool/person/interfaces.py:180
 #: /src/schooltool/term/browser/templates/term.pt:31
 #: /src/schooltool/term/browser/templates/term_add.pt:54
@@ -118,16 +118,7 @@ msgstr "חודש אוקטובר"
 msgid "Monday"
 msgstr "יום שני"
 
-#: /src/schooltool/app/browser/cal.py:119
-#: /src/schooltool/term/browser/templates/term.pt:34
-#: /src/schooltool/term/browser/templates/term_add.pt:60
-#: /src/schooltool/term/browser/templates/term_add.pt:83
-#: /src/schooltool/timetable/browser/schema.py:118
-#: /src/schooltool/timetable/browser/schema.py:287
-msgid "Thursday"
-msgstr "יום חמישי"
-
-#: /src/schooltool/app/browser/cal.py:119
+#: /src/schooltool/app/browser/cal.py:130
 #: /src/schooltool/term/browser/templates/term.pt:32
 #: /src/schooltool/term/browser/templates/term_add.pt:56
 #: /src/schooltool/term/browser/templates/term_add.pt:81
@@ -145,7 +136,16 @@ msgstr "יום שלישי"
 msgid "Wednesday"
 msgstr "יום רביעי"
 
-#: /src/schooltool/app/browser/cal.py:120
+#: /src/schooltool/app/browser/cal.py:132
+#: /src/schooltool/term/browser/templates/term.pt:34
+#: /src/schooltool/term/browser/templates/term_add.pt:60
+#: /src/schooltool/term/browser/templates/term_add.pt:83
+#: /src/schooltool/timetable/browser/schema.py:118
+#: /src/schooltool/timetable/browser/schema.py:287
+msgid "Thursday"
+msgstr "יום חמישי"
+
+#: /src/schooltool/app/browser/cal.py:133
 #: /src/schooltool/term/browser/templates/term.pt:35
 #: /src/schooltool/term/browser/templates/term_add.pt:62
 #: /src/schooltool/term/browser/templates/term_add.pt:84
@@ -177,13 +177,7 @@ msgstr "יום ראשון"
 msgid "Mon"
 msgstr "יום שני"
 
-#: /src/schooltool/app/browser/cal.py:123
-#: /src/schooltool/app/browser/cal.py:1812
-msgid "Thu"
-msgstr "יום חמישי"
-
-#: /src/schooltool/app/browser/cal.py:123
-#: /src/schooltool/app/browser/cal.py:1810
+#: /src/schooltool/app/browser/cal.py:139
 msgid "Tue"
 msgstr "יום שלישי"
 
@@ -192,8 +186,11 @@ msgstr "יום שלישי"
 msgid "Wed"
 msgstr "יום רביעי"
 
-#: /src/schooltool/app/browser/cal.py:124
-#: /src/schooltool/app/browser/cal.py:1813
+#: /src/schooltool/app/browser/cal.py:141
+msgid "Thu"
+msgstr "יום חמישי"
+
+#: /src/schooltool/app/browser/cal.py:142
 msgid "Fri"
 msgstr "יום שישי"
 
@@ -2387,7 +2384,12 @@ msgstr ""
 msgid "Change information for ${field_title}"
 msgstr ""
 
-#: /src/schooltool/basicperson/browser/person.py:49
+#: /src/schooltool/basicperson/browser/person.py:57
+#: /src/schooltool/person/browser/person.py:449
+msgid "Person index"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/person.py:73
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_add.pt:61
 msgid "Group"
 msgstr ""
@@ -2397,12 +2399,7 @@ msgstr ""
 msgid "Advisor"
 msgstr ""
 
-#: /src/schooltool/basicperson/browser/person.py:57
-#: /src/schooltool/person/browser/person.py:449
-msgid "Person index"
-msgstr ""
-
-#: /src/schooltool/basicperson/browser/person.py:68
+#: /src/schooltool/basicperson/browser/person.py:92
 #: /src/schooltool/widget/password.py:39
 msgid "Confirm password"
 msgstr "אשר סיסמא"
@@ -2411,15 +2408,15 @@ msgstr "אשר סיסמא"
 msgid "Passwords do not match"
 msgstr ""
 
-#: /src/schooltool/basicperson/browser/person.py:149
-msgid "Add new person"
-msgstr ""
-
-#: /src/schooltool/basicperson/browser/person.py:152
+#: /src/schooltool/basicperson/browser/person.py:121
 msgid "This username is already in use!"
 msgstr ""
 
-#: /src/schooltool/basicperson/browser/person.py:283
+#: /src/schooltool/basicperson/browser/person.py:236
+msgid "Add new person"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/person.py:256
 msgid "Usernames"
 msgstr ""
 
@@ -2427,7 +2424,17 @@ msgstr ""
 msgid "Add multiple persons"
 msgstr ""
 
-#: /src/schooltool/basicperson/browser/person.py:304
+#: /src/schooltool/basicperson/browser/person.py:330
+msgid "Done"
+msgstr ""
+
+#. Default: ""
+#: /src/schooltool/basicperson/browser/person.py:375
+#: /src/schooltool/resource/browser/resource.py:496
+msgid "Change information for ${fullname}"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/person.py:445
 msgid "Current Advisors"
 msgstr ""
 
@@ -2453,16 +2460,7 @@ msgstr ""
 msgid "Advisees of ${person}"
 msgstr ""
 
-#: /src/schooltool/basicperson/browser/person.py:357
-msgid "Done"
-msgstr ""
-
-#. Default: ""
-#: /src/schooltool/basicperson/browser/person.py:402
-msgid "Change information for ${fullname}"
-msgstr ""
-
-#: /src/schooltool/basicperson/browser/person.py:579
+#: /src/schooltool/basicperson/browser/person.py:576
 msgid "Teacher identification"
 msgstr ""
 
@@ -2708,11 +2706,7 @@ msgstr ""
 msgid "An optional list of limit keys for this field"
 msgstr ""
 
-#: /src/schooltool/basicperson/interfaces.py:148
-msgid "Limit key"
-msgstr ""
-
-#: /src/schooltool/basicperson/interfaces.py:163
+#: /src/schooltool/basicperson/interfaces.py:161
 msgid "List of values"
 msgstr ""
 
@@ -2772,21 +2766,13 @@ msgstr ""
 msgid "Administrators"
 msgstr ""
 
-#: /src/schooltool/commendation/commendation_add.pt:4
-msgid "Add Commendation"
-msgstr ""
-
-#: /src/schooltool/commendation/commendation_add.pt:13
-msgid "Commendation"
-msgstr ""
-
-#: /src/schooltool/common/configure.zcml:88
+#: /src/schooltool/common/configure.zcml:89
 #: /src/schooltool/course/browser/configure.zcml:25
-#: /src/schooltool/course/browser/configure.zcml:180
-#: /src/schooltool/group/browser/configure.zcml:38
-#: /src/schooltool/resource/browser/configure.zcml:84
-#: /src/schooltool/resource/browser/configure.zcml:115
-#: /src/schooltool/resource/browser/configure.zcml:151
+#: /src/schooltool/course/browser/configure.zcml:170
+#: /src/schooltool/group/browser/configure.zcml:36
+#: /src/schooltool/resource/browser/configure.zcml:243
+#: /src/schooltool/resource/browser/configure.zcml:257
+#: /src/schooltool/resource/browser/configure.zcml:271
 msgid "Edit Info"
 msgstr ""
 
@@ -5018,6 +5004,44 @@ msgstr ""
 msgid "Relationships"
 msgstr ""
 
+#: /src/schooltool/report/browser/configure.zcml:8
+#: /src/schooltool/report/browser/configure.zcml:22
+#: /src/schooltool/report/browser/configure.zcml:33
+#: /src/schooltool/report/browser/configure.zcml:44
+#: /src/schooltool/report/browser/configure.zcml:55
+#: /src/schooltool/report/browser/configure.zcml:66
+msgid "Reports"
+msgstr ""
+
+#: /src/schooltool/report/browser/report.py:44
+msgid "Student Reports"
+msgstr ""
+
+#: /src/schooltool/report/browser/report.py:49
+msgid "Group Reports"
+msgstr ""
+
+#: /src/schooltool/report/browser/report.py:54
+msgid "School Year Reports"
+msgstr ""
+
+#: /src/schooltool/report/browser/report.py:59
+msgid "Term Reports"
+msgstr ""
+
+#: /src/schooltool/report/browser/report.py:64
+msgid "Section Reports"
+msgstr ""
+
+#: /src/schooltool/report/browser/templates/report_reference.pt:3
+#: /src/schooltool/report/browser/templates/report_reference.pt:7
+msgid "Report Reference"
+msgstr ""
+
+#: /src/schooltool/report/browser/templates/report_reference.pt:13
+msgid "Category"
+msgstr ""
+
 #: /src/schooltool/resource/browser/configure.zcml:96
 msgid "Resource Demographics"
 msgstr ""
@@ -5027,16 +5051,16 @@ msgstr ""
 msgid "Import Resources"
 msgstr "ייבוא משאבים"
 
-#: /src/schooltool/resource/browser/configure.zcml:197
+#: /src/schooltool/resource/browser/configure.zcml:286
+msgid "New Resource"
+msgstr ""
+
+#: /src/schooltool/resource/browser/configure.zcml:300
 msgid "New Location"
 msgstr ""
 
-#: /src/schooltool/resource/browser/configure.zcml:204
+#: /src/schooltool/resource/browser/configure.zcml:314
 msgid "New Equipment"
-msgstr ""
-
-#: /src/schooltool/resource/browser/configure.zcml:286
-msgid "New Resource"
 msgstr ""
 
 #: /src/schooltool/resource/browser/resource-csvimport.pt:4
@@ -5236,6 +5260,12 @@ msgstr ""
 msgid "Resource"
 msgstr ""
 
+#: /src/schooltool/resource/resource.py:206
+#: /src/schooltool/resource/resource.py:232
+#: /src/schooltool/resource/types.py:93
+msgid "Equipment"
+msgstr ""
+
 #: /src/schooltool/resource/security.zcml:7
 msgid "Only school administration can view the list of resources."
 msgstr ""
@@ -5264,18 +5294,18 @@ msgstr ""
 msgid "Resource calendars are visible to the general public."
 msgstr ""
 
-#: /src/schooltool/resource/security.zcml:50
+#: /src/schooltool/resource/security.zcml:53
+msgid "Reservations"
+msgstr ""
+
+#: /src/schooltool/resource/security.zcml:53
 msgid ""
 "Resources are locations or objects within a school.                    "
 "SchoolTool's calendar can function as a reservation                    and "
 "tracking system for resources."
 msgstr ""
 
-#: /src/schooltool/resource/security.zcml:53
-msgid "Reservations"
-msgstr ""
-
-#: /src/schooltool/resource/security.zcml:57
+#: /src/schooltool/resource/security.zcml:60
 msgid "List/Search resources"
 msgstr ""
 
@@ -5297,10 +5327,6 @@ msgstr ""
 
 #: /src/schooltool/resource/security.zcml:93
 msgid "Schedule reservation via calendar"
-msgstr ""
-
-#: /src/schooltool/resource/types.py:93
-msgid "Equipment"
 msgstr ""
 
 #: /src/schooltool/resource/types.py:107

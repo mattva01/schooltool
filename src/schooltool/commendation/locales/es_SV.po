@@ -7,10 +7,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-08-22 18:49+0300\n"
+"POT-Creation-Date: 2011-04-17 23:26+0300\n"
 "PO-Revision-Date: 2010-05-13 14:36+0000\n"
 "Last-Translator: Javier Sanchez <fco.javier.sanchez@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
+"Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -26,15 +27,20 @@ msgstr "<desconocido>"
 msgid "commendations"
 msgstr "menciones"
 
-#: /src/schooltool/commendation/configure.zcml:82
-#: /src/schooltool/commendation/configure.zcml:92
-msgid "View Commendations"
-msgstr "Ver Menciones"
-
+#: /src/schooltool/commendation/commendation_add.pt:5
 #: /src/schooltool/commendation/configure.zcml:100
 #: /src/schooltool/commendation/configure.zcml:110
 msgid "Add Commendation"
 msgstr "Añadir una mención"
+
+#: /src/schooltool/commendation/commendation_add.pt:14
+msgid "Commendation"
+msgstr "Mención"
+
+#: /src/schooltool/commendation/configure.zcml:82
+#: /src/schooltool/commendation/configure.zcml:92
+msgid "View Commendations"
+msgstr "Ver Menciones"
 
 #: /src/schooltool/commendation/configure.zcml:128
 msgid "All Commendations"

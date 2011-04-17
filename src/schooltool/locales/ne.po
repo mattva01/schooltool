@@ -10,16 +10,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-03-18 20:12+0200\n"
-"PO-Revision-Date: 2010-11-26 08:31+0000\n"
+"POT-Creation-Date: 2011-04-17 23:49+0300\n"
+"PO-Revision-Date: 2011-04-01 18:53+0000\n"
 "Last-Translator: Krishna Giri <Unknown>\n"
 "Language-Team: OLENepal\n"
 "Language: ne\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-03-19 04:49+0000\n"
-"X-Generator: Launchpad (build 12559)\n"
+"X-Launchpad-Export-Date: 2011-04-08 04:36+0000\n"
+"X-Generator: Launchpad (build 12735)\n"
 
 #: /src/schooltool/app/app.py:197
 msgid "Your School"
@@ -62,15 +62,15 @@ msgstr "उपलब्ध लिडरहरु"
 msgid "school"
 msgstr "विद्यालय"
 
-#: /src/schooltool/app/browser/cal.py:113
-msgid "February"
-msgstr "फेब्रुअरी"
-
-#: /src/schooltool/app/browser/cal.py:113
+#: /src/schooltool/app/browser/cal.py:115
 msgid "January"
 msgstr "जनवरी"
 
-#: /src/schooltool/app/browser/cal.py:113
+#: /src/schooltool/app/browser/cal.py:116
+msgid "February"
+msgstr "फेब्रुअरी"
+
+#: /src/schooltool/app/browser/cal.py:117
 msgid "March"
 msgstr "मार्च"
 
@@ -78,39 +78,39 @@ msgstr "मार्च"
 msgid "April"
 msgstr "अप्रिल"
 
-#: /src/schooltool/app/browser/cal.py:114
-msgid "June"
-msgstr "जुन"
-
-#: /src/schooltool/app/browser/cal.py:114
+#: /src/schooltool/app/browser/cal.py:119
 msgid "May"
 msgstr "मे"
 
-#: /src/schooltool/app/browser/cal.py:115
-msgid "August"
-msgstr "अगस्ट"
+#: /src/schooltool/app/browser/cal.py:120
+msgid "June"
+msgstr "जुन"
 
-#: /src/schooltool/app/browser/cal.py:115
+#: /src/schooltool/app/browser/cal.py:121
 msgid "July"
 msgstr "जुलाई"
 
-#: /src/schooltool/app/browser/cal.py:115
+#: /src/schooltool/app/browser/cal.py:122
+msgid "August"
+msgstr "अगस्ट"
+
+#: /src/schooltool/app/browser/cal.py:123
 msgid "September"
 msgstr "सेप्टेम्बर"
 
-#: /src/schooltool/app/browser/cal.py:116
-msgid "December"
-msgstr "डिसेम्बर"
-
-#: /src/schooltool/app/browser/cal.py:116
-msgid "November"
-msgstr "नोभेम्बर"
-
-#: /src/schooltool/app/browser/cal.py:116
+#: /src/schooltool/app/browser/cal.py:124
 msgid "October"
 msgstr "अक्टोबर"
 
-#: /src/schooltool/app/browser/cal.py:119
+#: /src/schooltool/app/browser/cal.py:125
+msgid "November"
+msgstr "नोभेम्बर"
+
+#: /src/schooltool/app/browser/cal.py:126
+msgid "December"
+msgstr "डिसेम्बर"
+
+#: /src/schooltool/app/browser/cal.py:129
 #: /src/schooltool/person/interfaces.py:180
 #: /src/schooltool/term/browser/templates/term.pt:31
 #: /src/schooltool/term/browser/templates/term_add.pt:54
@@ -120,16 +120,7 @@ msgstr "अक्टोबर"
 msgid "Monday"
 msgstr "सोमबार"
 
-#: /src/schooltool/app/browser/cal.py:119
-#: /src/schooltool/term/browser/templates/term.pt:34
-#: /src/schooltool/term/browser/templates/term_add.pt:60
-#: /src/schooltool/term/browser/templates/term_add.pt:83
-#: /src/schooltool/timetable/browser/schema.py:118
-#: /src/schooltool/timetable/browser/schema.py:287
-msgid "Thursday"
-msgstr "बिहिबार"
-
-#: /src/schooltool/app/browser/cal.py:119
+#: /src/schooltool/app/browser/cal.py:130
 #: /src/schooltool/term/browser/templates/term.pt:32
 #: /src/schooltool/term/browser/templates/term_add.pt:56
 #: /src/schooltool/term/browser/templates/term_add.pt:81
@@ -147,7 +138,16 @@ msgstr "मंगलबार"
 msgid "Wednesday"
 msgstr "बुधबार"
 
-#: /src/schooltool/app/browser/cal.py:120
+#: /src/schooltool/app/browser/cal.py:132
+#: /src/schooltool/term/browser/templates/term.pt:34
+#: /src/schooltool/term/browser/templates/term_add.pt:60
+#: /src/schooltool/term/browser/templates/term_add.pt:83
+#: /src/schooltool/timetable/browser/schema.py:118
+#: /src/schooltool/timetable/browser/schema.py:287
+msgid "Thursday"
+msgstr "बिहिबार"
+
+#: /src/schooltool/app/browser/cal.py:133
 #: /src/schooltool/term/browser/templates/term.pt:35
 #: /src/schooltool/term/browser/templates/term_add.pt:62
 #: /src/schooltool/term/browser/templates/term_add.pt:84
@@ -179,13 +179,7 @@ msgstr "आइतबार"
 msgid "Mon"
 msgstr "सोम"
 
-#: /src/schooltool/app/browser/cal.py:123
-#: /src/schooltool/app/browser/cal.py:1812
-msgid "Thu"
-msgstr "बिहि"
-
-#: /src/schooltool/app/browser/cal.py:123
-#: /src/schooltool/app/browser/cal.py:1810
+#: /src/schooltool/app/browser/cal.py:139
 msgid "Tue"
 msgstr "मङ्गल"
 
@@ -194,8 +188,11 @@ msgstr "मङ्गल"
 msgid "Wed"
 msgstr "बुघ"
 
-#: /src/schooltool/app/browser/cal.py:124
-#: /src/schooltool/app/browser/cal.py:1813
+#: /src/schooltool/app/browser/cal.py:141
+msgid "Thu"
+msgstr "बिहि"
+
+#: /src/schooltool/app/browser/cal.py:142
 msgid "Fri"
 msgstr "शुक्र"
 
@@ -2481,39 +2478,39 @@ msgstr "नयाँ क्षेत्र थप्नुहोस्"
 msgid "Change information for ${field_title}"
 msgstr "${क्षेत्र शीर्षक} को लागि सूचना बदल्नुहोस्"
 
-#: /src/schooltool/basicperson/browser/person.py:54
-#: /src/schooltool/demographics/interfaces.py:209
-msgid "Advisor"
-msgstr "परामर्शदाता"
-
 #: /src/schooltool/basicperson/browser/person.py:57
 #: /src/schooltool/person/browser/person.py:449
 msgid "Person index"
 msgstr "व्यक्ति सूची"
-
-#: /src/schooltool/basicperson/browser/person.py:68
-#: /src/schooltool/widget/password.py:39
-msgid "Confirm password"
-msgstr "पासवर्ड पक्का गर्नुहोस्"
 
 #: /src/schooltool/basicperson/browser/person.py:73
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_add.pt:61
 msgid "Group"
 msgstr "समुह"
 
-#: /src/schooltool/basicperson/browser/person.py:76
+#: /src/schooltool/basicperson/browser/person.py:78
+#: /src/schooltool/demographics/interfaces.py:212
+msgid "Advisor"
+msgstr "परामर्शदाता"
+
+#: /src/schooltool/basicperson/browser/person.py:92
+#: /src/schooltool/widget/password.py:39
+msgid "Confirm password"
+msgstr "पासवर्ड पक्का गर्नुहोस्"
+
+#: /src/schooltool/basicperson/browser/person.py:98
 msgid "Passwords do not match"
 msgstr "पासवर्ड मिलेन"
 
-#: /src/schooltool/basicperson/browser/person.py:149
-msgid "Add new person"
-msgstr "नयाँ व्यक्ति थप्नुहोस"
-
-#: /src/schooltool/basicperson/browser/person.py:152
+#: /src/schooltool/basicperson/browser/person.py:121
 msgid "This username is already in use!"
 msgstr "यो युजरनेम पहिले नै प्रयोगमा आईसकेको छ!"
 
-#: /src/schooltool/basicperson/browser/person.py:283
+#: /src/schooltool/basicperson/browser/person.py:236
+msgid "Add new person"
+msgstr "नयाँ व्यक्ति थप्नुहोस"
+
+#: /src/schooltool/basicperson/browser/person.py:256
 msgid "Usernames"
 msgstr ""
 
@@ -2521,7 +2518,17 @@ msgstr ""
 msgid "Add multiple persons"
 msgstr ""
 
-#: /src/schooltool/basicperson/browser/person.py:304
+#: /src/schooltool/basicperson/browser/person.py:330
+msgid "Done"
+msgstr ""
+
+#. Default: ""
+#: /src/schooltool/basicperson/browser/person.py:375
+#: /src/schooltool/resource/browser/resource.py:496
+msgid "Change information for ${fullname}"
+msgstr "${पुरानाम} को लागि सुचना परिवर्तन गर्नुहोस्"
+
+#: /src/schooltool/basicperson/browser/person.py:445
 msgid "Current Advisors"
 msgstr "हालको सल्लाहकार"
 
@@ -2547,16 +2554,7 @@ msgstr "सल्लाहहरु थप्नुहोस्"
 msgid "Advisees of ${person}"
 msgstr "${व्यक्ति} को सल्लाह"
 
-#: /src/schooltool/basicperson/browser/person.py:357
-msgid "Done"
-msgstr ""
-
-#. Default: ""
-#: /src/schooltool/basicperson/browser/person.py:402
-msgid "Change information for ${fullname}"
-msgstr "${पुरानाम} को लागि सुचना परिवर्तन गर्नुहोस्"
-
-#: /src/schooltool/basicperson/browser/person.py:579
+#: /src/schooltool/basicperson/browser/person.py:576
 msgid "Teacher identification"
 msgstr ""
 
@@ -2807,11 +2805,7 @@ msgstr ""
 msgid "An optional list of limit keys for this field"
 msgstr ""
 
-#: /src/schooltool/basicperson/interfaces.py:148
-msgid "Limit key"
-msgstr ""
-
-#: /src/schooltool/basicperson/interfaces.py:163
+#: /src/schooltool/basicperson/interfaces.py:161
 msgid "List of values"
 msgstr "मानहरुको सुची"
 
@@ -2871,21 +2865,13 @@ msgstr ""
 msgid "Administrators"
 msgstr ""
 
-#: /src/schooltool/commendation/commendation_add.pt:4
-msgid "Add Commendation"
-msgstr "प्रशंसा थप्नुहोस्"
-
-#: /src/schooltool/commendation/commendation_add.pt:13
-msgid "Commendation"
-msgstr "प्रशंसा"
-
-#: /src/schooltool/common/configure.zcml:88
+#: /src/schooltool/common/configure.zcml:89
 #: /src/schooltool/course/browser/configure.zcml:25
-#: /src/schooltool/course/browser/configure.zcml:180
-#: /src/schooltool/group/browser/configure.zcml:38
-#: /src/schooltool/resource/browser/configure.zcml:84
-#: /src/schooltool/resource/browser/configure.zcml:115
-#: /src/schooltool/resource/browser/configure.zcml:151
+#: /src/schooltool/course/browser/configure.zcml:170
+#: /src/schooltool/group/browser/configure.zcml:36
+#: /src/schooltool/resource/browser/configure.zcml:243
+#: /src/schooltool/resource/browser/configure.zcml:257
+#: /src/schooltool/resource/browser/configure.zcml:271
 msgid "Edit Info"
 msgstr "जानकारी सम्पादन गर्नुहोस्"
 
@@ -4813,9 +4799,8 @@ msgid "Add a level"
 msgstr ""
 
 #: /src/schooltool/level/interfaces.py:37
-#, fuzzy
 msgid "Title of the level."
-msgstr "टिप्पणीको शीर्षक।"
+msgstr ""
 
 #: /src/schooltool/level/security.zcml:7
 msgid "The teaching levels (student learning years)."
@@ -5151,6 +5136,44 @@ msgstr "सबैजना, यदि भित्तेपात्रोला
 msgid "Relationships"
 msgstr "सम्बन्धहरु"
 
+#: /src/schooltool/report/browser/configure.zcml:8
+#: /src/schooltool/report/browser/configure.zcml:22
+#: /src/schooltool/report/browser/configure.zcml:33
+#: /src/schooltool/report/browser/configure.zcml:44
+#: /src/schooltool/report/browser/configure.zcml:55
+#: /src/schooltool/report/browser/configure.zcml:66
+msgid "Reports"
+msgstr "रिपोर्टहरु"
+
+#: /src/schooltool/report/browser/report.py:44
+msgid "Student Reports"
+msgstr "विद्यार्थीको रिपोर्ट"
+
+#: /src/schooltool/report/browser/report.py:49
+msgid "Group Reports"
+msgstr "समूह रिपोर्ट"
+
+#: /src/schooltool/report/browser/report.py:54
+msgid "School Year Reports"
+msgstr "विद्यालय वर्ष रिपोर्ट"
+
+#: /src/schooltool/report/browser/report.py:59
+msgid "Term Reports"
+msgstr "अवधि रिपोर्ट"
+
+#: /src/schooltool/report/browser/report.py:64
+msgid "Section Reports"
+msgstr "सेक्सनको रिपोर्ट"
+
+#: /src/schooltool/report/browser/templates/report_reference.pt:3
+#: /src/schooltool/report/browser/templates/report_reference.pt:7
+msgid "Report Reference"
+msgstr ""
+
+#: /src/schooltool/report/browser/templates/report_reference.pt:13
+msgid "Category"
+msgstr "कोटि"
+
 #: /src/schooltool/resource/browser/configure.zcml:96
 msgid "Resource Demographics"
 msgstr ""
@@ -5160,17 +5183,17 @@ msgstr ""
 msgid "Import Resources"
 msgstr "संशाधनहरू आयात गर्नुहोस्"
 
-#: /src/schooltool/resource/browser/configure.zcml:197
+#: /src/schooltool/resource/browser/configure.zcml:286
+msgid "New Resource"
+msgstr "नयाँ संशाधन"
+
+#: /src/schooltool/resource/browser/configure.zcml:300
 msgid "New Location"
 msgstr "नयाँ ठाउँ"
 
 #: /src/schooltool/resource/browser/configure.zcml:204
 msgid "New Equipment"
 msgstr "नयाँ सामग्री"
-
-#: /src/schooltool/resource/browser/configure.zcml:286
-msgid "New Resource"
-msgstr "नयाँ संशाधन"
 
 #: /src/schooltool/resource/browser/resource-csvimport.pt:4
 msgid "Upload schooltool resources as CSV"
@@ -5405,18 +5428,18 @@ msgstr ""
 msgid "Resource calendars are visible to the general public."
 msgstr ""
 
-#: /src/schooltool/resource/security.zcml:50
+#: /src/schooltool/resource/security.zcml:53
+msgid "Reservations"
+msgstr "आरक्षण"
+
+#: /src/schooltool/resource/security.zcml:53
 msgid ""
 "Resources are locations or objects within a school.                    "
 "SchoolTool's calendar can function as a reservation                    and "
 "tracking system for resources."
 msgstr ""
 
-#: /src/schooltool/resource/security.zcml:53
-msgid "Reservations"
-msgstr "आरक्षण"
-
-#: /src/schooltool/resource/security.zcml:57
+#: /src/schooltool/resource/security.zcml:60
 msgid "List/Search resources"
 msgstr "संशाधनहरुको सूची बनाउनुहोस्/खोज्नुहोस्"
 
@@ -5765,9 +5788,8 @@ msgstr "अपडेट-बटन"
 #. Default: "Apply"
 #: /src/schooltool/skin/templates/view_macros.pt:161
 #: /src/schooltool/skin/templates/view_macros.pt:167
-#, fuzzy
 msgid "apply-button"
-msgstr "प्रतिलिपि बटन"
+msgstr ""
 
 #. Default: "Add"
 #: /src/schooltool/skin/templates/view_macros.pt:174
@@ -6711,66 +6733,6 @@ msgstr "तालिका बदल्नुहोस्"
 msgid "Supplied passwords are not identical"
 msgstr "प्रदान गरिएको पासवर्ड पहिचानयोग्य छैन"
 
-#~ msgid "Booked resources: %s"
-#~ msgstr "बुक गरिएका संसाधन: %s"
-
-#~ msgid "Location: %s"
-#~ msgstr "स्थान : %s"
-
-#~ msgid "Calendar for %s"
-#~ msgstr "भित्तेपात्राे %s"
-
-#~ msgid "No such course."
-#~ msgstr "त्यस्तो पाठ्यक्रम हैन।"
-
-#~ msgid "Need a course ID."
-#~ msgstr "पाठ्यक्रम आई डी आवश्यक छ।"
-
-#~ msgid "Categories"
-#~ msgstr "कोटिहरू"
-
-#~ msgid "New Category"
-#~ msgstr "नयाँ कोटि"
-
-#~ msgid "Essay"
-#~ msgstr "निबन्ध"
-
-#~ msgid "Exam"
-#~ msgstr "परिक्षा"
-
-#~ msgid "Lab"
-#~ msgstr "ल्याब"
-
-#~ msgid "Average"
-#~ msgstr "औसत"
-
-#~ msgid "The grade $value for activity $name is not valid."
-#~ msgstr "क्रियाकलाप $name को लागि ग्रेड $value अवैध छ।"
-
-#~ msgid "Project"
-#~ msgstr "परियोजना"
-
-#~ msgid "Category"
-#~ msgstr "कोटि"
-
-#~ msgid "The activity category"
-#~ msgstr "क्रियाकलाप कोटि"
-
-#~ msgid "Add a Section"
-#~ msgstr "नयाँ पाठ्यक्रम थप्नुहोस्"
-
-#~ msgid "book resources"
-#~ msgstr "बुक गरिएका संसाधन:"
-
-#~ msgid "Change the resources for this section."
-#~ msgstr "यो सेक्सनको सँशाधनहरु परिवर्तन गर्नुहोस"
-
-#~ msgid "Everyone can view section information and calendars"
-#~ msgstr "सबैले सेक्सनको  सूचना र भित्तेपात्रोहरु हेर्न  सक्छन"
-
-#~ msgid "Everyone can view group calendars."
-#~ msgstr "सबैले समूहको भित्तेपात्रोहरु हेर्न  सक्छन ।"
-
 #~ msgid "Persons can set their own preferences"
 #~ msgstr "ब्यक्तिहरुले तिनिहरुको आफ्नो प्राथमिकिकरणहरु सेट गर्न सक्छन"
 
@@ -6806,124 +6768,3 @@ msgstr "प्रदान गरिएको पासवर्ड पहिच
 
 #~ msgid "Everyone can view resource calendars."
 #~ msgstr "सबैले शंसाधनको भित्तेपात्रोहरु  हेर्न सक्छन्"
-
-#~ msgid "Copy Sections"
-#~ msgstr "सेक्सनको प्रतिलिपि बनाउनुहोस्"
-
-#~ msgid "View Next"
-#~ msgstr "पछाडिको हेर्नुहोस्"
-
-#~ msgid "View Previous"
-#~ msgstr "अगाडीको हेर्नुहोस्"
-
-#~ msgid "Add a Location"
-#~ msgstr "ठाउँ थप्नुहोस्"
-
-#~ msgid "Edit Location Information"
-#~ msgstr "ठाउँको बारेमा सुचना सम्पादन गर्नुहोस्"
-
-#~ msgid "Add an Equipment"
-#~ msgstr "सामग्री थप्नुहोस्"
-
-#~ msgid "Edit Equipment Information"
-#~ msgstr "सामग्रीको बारेमा सूचना सम्पादन गर्नुहोस्"
-
-#~ msgid "Activate next school year"
-#~ msgstr "पछिल्लो विद्दालय वर्षलाई सक्रिय बनाउनुहोस्"
-
-#~ msgid "For term:"
-#~ msgstr "अवधिको लागि"
-
-#~ msgid "Hide"
-#~ msgstr "लुकाउनुहोस्"
-
-#~ msgid "Export XLS"
-#~ msgstr "XLS निर्यात गर्नुहोस्"
-
-#~ msgid "Preferences"
-#~ msgstr "वरीयता"
-
-#~ msgid "Download PDF"
-#~ msgstr "PDF डाउनलोड गर्नुहोस्"
-
-#~ msgid "Reports"
-#~ msgstr "रिपोर्टहरु"
-
-#~ msgid "Template"
-#~ msgstr "टेम्प्लेट"
-
-#~ msgid "Term:"
-#~ msgstr "अवधि"
-
-#~ msgid "Section:"
-#~ msgstr "सेक्सन"
-
-#~ msgid "Classes you teach"
-#~ msgstr "तपाईले पढाउने कक्षाहरु"
-
-#~ msgid "Classes you attend"
-#~ msgstr "तपाई उपस्थीत हुने कक्षा"
-
-#~ msgid "No Current Term"
-#~ msgstr "कुनै हालको अवधि छैन"
-
-#~ msgid ""
-#~ "The operation you attempted cannot be completed because there are "
-#~ "currently no terms set up in your SchoolTool instance. Please have a user "
-#~ "with administration access set up at least one term and try the operation "
-#~ "again."
-#~ msgstr ""
-#~ "तपाईले प्रयत्न गर्नुभएको कार्य पुरा हुन सकेन किनभने हालमा तपाईको स्कुल टुल उदाहरणमा कुनै "
-#~ "पनि शब्द स्थापित भएको छैन। कृपया प्रशासनको उपयोग गर्न सक्ने प्रयोगकर्ता राख्नुहोस् "
-#~ "कम्तिमा पनि एउटा शब्द स्थापित गर्नुहोस् र कार्य पुन: प्रयास गर्नुहोस्।"
-
-#~ msgid "Student"
-#~ msgstr "विद्यार्थी"
-
-#~ msgid "Dates"
-#~ msgstr "मिति"
-
-#~ msgid "User Id"
-#~ msgstr "प्रयोगकर्ताको आइडि"
-
-#~ msgid "Teacher(s)"
-#~ msgstr "शिक्षक(हरु)"
-
-#~ msgid "Teacher"
-#~ msgstr "शिक्षक"
-
-#~ msgid "Download"
-#~ msgstr "डाउनलोड"
-
-#~ msgid "Request Report"
-#~ msgstr "रिपोर्ट"
-
-#~ msgid "Student Reports"
-#~ msgstr "विद्यार्थीको रिपोर्ट"
-
-#~ msgid "Group Reports"
-#~ msgstr "समूह रिपोर्ट"
-
-#~ msgid "Term Reports"
-#~ msgstr "अवधि रिपोर्ट"
-
-#~ msgid "School Year Reports"
-#~ msgstr "विद्यालय वर्ष रिपोर्ट"
-
-#~ msgid "Section Reports"
-#~ msgstr "सेक्सनको रिपोर्ट"
-
-#~ msgid "You must specify a valid date within the school year."
-#~ msgstr "तपाईले विद्यालय वर्ष भित्र मान्य मिति उल्लेख गर्नुपर्छ।"
-
-#~ msgid "Term or Year"
-#~ msgstr "अवधि वा वर्ष"
-
-#~ msgid "Edit Templates"
-#~ msgstr "टेम्प्लेट्स सम्पादन गर्नुहोस्"
-
-#~ msgid "The Title field must not be empty."
-#~ msgstr "शीर्षक क्षेत्र खालि हुनु हुदैँन।"
-
-#~ msgid "Value field must contain a valid number."
-#~ msgstr "मान क्षेत्रमा मान्य अंक हुनै पर्दछ।"

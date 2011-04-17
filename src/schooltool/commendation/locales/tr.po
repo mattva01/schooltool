@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-11-22 16:40+0200\n"
+"POT-Creation-Date: 2011-04-17 23:26+0300\n"
 "PO-Revision-Date: 2010-11-02 16:03+0000\n"
 "Last-Translator: Kaya Zeren <Unknown>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -27,15 +27,20 @@ msgstr "<bilinmeyen>"
 msgid "commendations"
 msgstr "öneriler"
 
-#: /src/schooltool/commendation/configure.zcml:82
-#: /src/schooltool/commendation/configure.zcml:92
-msgid "View Commendations"
-msgstr "Önerileri Göster"
-
+#: /src/schooltool/commendation/commendation_add.pt:5
 #: /src/schooltool/commendation/configure.zcml:100
 #: /src/schooltool/commendation/configure.zcml:110
 msgid "Add Commendation"
 msgstr "Öneri Ekle"
+
+#: /src/schooltool/commendation/commendation_add.pt:14
+msgid "Commendation"
+msgstr "Takdirname"
+
+#: /src/schooltool/commendation/configure.zcml:82
+#: /src/schooltool/commendation/configure.zcml:92
+msgid "View Commendations"
+msgstr "Önerileri Göster"
 
 #: /src/schooltool/commendation/configure.zcml:128
 msgid "All Commendations"

@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-03-18 20:12+0200\n"
-"PO-Revision-Date: 2011-03-15 05:15+0000\n"
-"Last-Translator: Yves MATHIEU <ymathieu@moulins-vichy.cci.fr>\n"
+"POT-Creation-Date: 2011-04-17 23:49+0300\n"
+"PO-Revision-Date: 2011-04-13 10:53+0000\n"
+"Last-Translator: issyl0 <isabell121@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-03-19 04:46+0000\n"
-"X-Generator: Launchpad (build 12559)\n"
+"X-Launchpad-Export-Date: 2011-04-15 04:49+0000\n"
+"X-Generator: Launchpad (build 12735)\n"
 "X-Rosetta-Version: 0.1\n"
 
 #: /src/schooltool/app/app.py:197
@@ -60,15 +60,15 @@ msgstr "Chefs de groupe disponibles"
 msgid "school"
 msgstr "école"
 
-#: /src/schooltool/app/browser/cal.py:113
-msgid "February"
-msgstr "Février"
-
-#: /src/schooltool/app/browser/cal.py:113
+#: /src/schooltool/app/browser/cal.py:115
 msgid "January"
 msgstr "Janvier"
 
-#: /src/schooltool/app/browser/cal.py:113
+#: /src/schooltool/app/browser/cal.py:116
+msgid "February"
+msgstr "Février"
+
+#: /src/schooltool/app/browser/cal.py:117
 msgid "March"
 msgstr "Mars"
 
@@ -76,39 +76,39 @@ msgstr "Mars"
 msgid "April"
 msgstr "Avril"
 
-#: /src/schooltool/app/browser/cal.py:114
-msgid "June"
-msgstr "Juin"
-
-#: /src/schooltool/app/browser/cal.py:114
+#: /src/schooltool/app/browser/cal.py:119
 msgid "May"
 msgstr "Mai"
 
-#: /src/schooltool/app/browser/cal.py:115
-msgid "August"
-msgstr "Août"
+#: /src/schooltool/app/browser/cal.py:120
+msgid "June"
+msgstr "Juin"
 
-#: /src/schooltool/app/browser/cal.py:115
+#: /src/schooltool/app/browser/cal.py:121
 msgid "July"
 msgstr "Juillet"
 
-#: /src/schooltool/app/browser/cal.py:115
+#: /src/schooltool/app/browser/cal.py:122
+msgid "August"
+msgstr "Août"
+
+#: /src/schooltool/app/browser/cal.py:123
 msgid "September"
 msgstr "Septembre"
 
-#: /src/schooltool/app/browser/cal.py:116
-msgid "December"
-msgstr "Décembre"
-
-#: /src/schooltool/app/browser/cal.py:116
-msgid "November"
-msgstr "Novembre"
-
-#: /src/schooltool/app/browser/cal.py:116
+#: /src/schooltool/app/browser/cal.py:124
 msgid "October"
 msgstr "Octobre"
 
-#: /src/schooltool/app/browser/cal.py:119
+#: /src/schooltool/app/browser/cal.py:125
+msgid "November"
+msgstr "Novembre"
+
+#: /src/schooltool/app/browser/cal.py:126
+msgid "December"
+msgstr "Décembre"
+
+#: /src/schooltool/app/browser/cal.py:129
 #: /src/schooltool/person/interfaces.py:180
 #: /src/schooltool/term/browser/templates/term.pt:31
 #: /src/schooltool/term/browser/templates/term_add.pt:54
@@ -118,16 +118,7 @@ msgstr "Octobre"
 msgid "Monday"
 msgstr "Lundi"
 
-#: /src/schooltool/app/browser/cal.py:119
-#: /src/schooltool/term/browser/templates/term.pt:34
-#: /src/schooltool/term/browser/templates/term_add.pt:60
-#: /src/schooltool/term/browser/templates/term_add.pt:83
-#: /src/schooltool/timetable/browser/schema.py:118
-#: /src/schooltool/timetable/browser/schema.py:287
-msgid "Thursday"
-msgstr "Jeudi"
-
-#: /src/schooltool/app/browser/cal.py:119
+#: /src/schooltool/app/browser/cal.py:130
 #: /src/schooltool/term/browser/templates/term.pt:32
 #: /src/schooltool/term/browser/templates/term_add.pt:56
 #: /src/schooltool/term/browser/templates/term_add.pt:81
@@ -145,7 +136,16 @@ msgstr "Mardi"
 msgid "Wednesday"
 msgstr "Mercredi"
 
-#: /src/schooltool/app/browser/cal.py:120
+#: /src/schooltool/app/browser/cal.py:132
+#: /src/schooltool/term/browser/templates/term.pt:34
+#: /src/schooltool/term/browser/templates/term_add.pt:60
+#: /src/schooltool/term/browser/templates/term_add.pt:83
+#: /src/schooltool/timetable/browser/schema.py:118
+#: /src/schooltool/timetable/browser/schema.py:287
+msgid "Thursday"
+msgstr "Jeudi"
+
+#: /src/schooltool/app/browser/cal.py:133
 #: /src/schooltool/term/browser/templates/term.pt:35
 #: /src/schooltool/term/browser/templates/term_add.pt:62
 #: /src/schooltool/term/browser/templates/term_add.pt:84
@@ -177,13 +177,7 @@ msgstr "Dimanche"
 msgid "Mon"
 msgstr "Lun"
 
-#: /src/schooltool/app/browser/cal.py:123
-#: /src/schooltool/app/browser/cal.py:1812
-msgid "Thu"
-msgstr "Jeu"
-
-#: /src/schooltool/app/browser/cal.py:123
-#: /src/schooltool/app/browser/cal.py:1810
+#: /src/schooltool/app/browser/cal.py:139
 msgid "Tue"
 msgstr "Mar"
 
@@ -192,8 +186,11 @@ msgstr "Mar"
 msgid "Wed"
 msgstr "Mer"
 
-#: /src/schooltool/app/browser/cal.py:124
-#: /src/schooltool/app/browser/cal.py:1813
+#: /src/schooltool/app/browser/cal.py:141
+msgid "Thu"
+msgstr "Jeu"
+
+#: /src/schooltool/app/browser/cal.py:142
 msgid "Fri"
 msgstr "Ven"
 
@@ -1364,7 +1361,7 @@ msgstr "Emprunt"
 
 #: /src/schooltool/app/browser/templates/event_info_viewlet.pt:12
 msgid "Location: ${location}"
-msgstr "Lieu : ${location}"
+msgstr "Emplacement : ${location}"
 
 #: /src/schooltool/app/browser/templates/index.pt:6
 msgid "Welcome to SchoolTool"
@@ -2588,7 +2585,7 @@ msgstr "Nouveau Champ Date"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:174
 msgid "New Yes/No Field"
-msgstr ""
+msgstr "Nouveau champ Oui / Non"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:181
 msgid "New Selection List Field"
@@ -2596,15 +2593,15 @@ msgstr "Nouveau champ de liste de sélection"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:291
 msgid "Add Teacher"
-msgstr ""
+msgstr "Ajouter un Enseignant"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:301
 msgid "Add Student"
-msgstr ""
+msgstr "Ajouter un Edudiant"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:311
 msgid "Add Administrator"
-msgstr ""
+msgstr "Ajouter un Administrateur"
 
 #: /src/schooltool/basicperson/browser/csvimport.py:44
 #: /src/schooltool/course/browser/csvimport.py:45
@@ -2669,7 +2666,12 @@ msgstr "Ajouter nouveau Champ"
 msgid "Change information for ${field_title}"
 msgstr "Change l'information de ${field_title}"
 
-#: /src/schooltool/basicperson/browser/person.py:49
+#: /src/schooltool/basicperson/browser/person.py:57
+#: /src/schooltool/person/browser/person.py:449
+msgid "Person index"
+msgstr "Index des personnes"
+
+#: /src/schooltool/basicperson/browser/person.py:73
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_add.pt:61
 msgid "Group"
 msgstr "Groupe"
@@ -2679,12 +2681,7 @@ msgstr "Groupe"
 msgid "Advisor"
 msgstr "Superviseur"
 
-#: /src/schooltool/basicperson/browser/person.py:57
-#: /src/schooltool/person/browser/person.py:449
-msgid "Person index"
-msgstr "Index des personnes"
-
-#: /src/schooltool/basicperson/browser/person.py:68
+#: /src/schooltool/basicperson/browser/person.py:92
 #: /src/schooltool/widget/password.py:39
 msgid "Confirm password"
 msgstr "Confirmez le mot de passe"
@@ -2693,15 +2690,15 @@ msgstr "Confirmez le mot de passe"
 msgid "Passwords do not match"
 msgstr "Le mote de passe ne correspond pas"
 
-#: /src/schooltool/basicperson/browser/person.py:149
-msgid "Add new person"
-msgstr "Ajouter une nouvelle personne"
-
-#: /src/schooltool/basicperson/browser/person.py:152
+#: /src/schooltool/basicperson/browser/person.py:121
 msgid "This username is already in use!"
 msgstr "Ce nom d'utilisateur est déjà utilisé!"
 
-#: /src/schooltool/basicperson/browser/person.py:283
+#: /src/schooltool/basicperson/browser/person.py:236
+msgid "Add new person"
+msgstr "Ajouter une nouvelle personne"
+
+#: /src/schooltool/basicperson/browser/person.py:256
 msgid "Usernames"
 msgstr "Noms d'utilisateur"
 
@@ -2709,7 +2706,17 @@ msgstr "Noms d'utilisateur"
 msgid "Add multiple persons"
 msgstr "Ajouter de multiple personnes"
 
-#: /src/schooltool/basicperson/browser/person.py:304
+#: /src/schooltool/basicperson/browser/person.py:330
+msgid "Done"
+msgstr "Fait"
+
+#. Default: ""
+#: /src/schooltool/basicperson/browser/person.py:375
+#: /src/schooltool/resource/browser/resource.py:496
+msgid "Change information for ${fullname}"
+msgstr "Changez l'information pour ${fullname}"
+
+#: /src/schooltool/basicperson/browser/person.py:445
 msgid "Current Advisors"
 msgstr "Adviseurs courrants"
 
@@ -2735,59 +2742,52 @@ msgstr "Ajouter Advisés"
 msgid "Advisees of ${person}"
 msgstr "Advisés de ${person}"
 
-#: /src/schooltool/basicperson/browser/person.py:357
-msgid "Done"
-msgstr "Fait"
-
-#. Default: ""
-#: /src/schooltool/basicperson/browser/person.py:402
-msgid "Change information for ${fullname}"
-msgstr "Changez l'information pour ${fullname}"
-
-#: /src/schooltool/basicperson/browser/person.py:579
+#: /src/schooltool/basicperson/browser/person.py:576
 msgid "Teacher identification"
-msgstr ""
+msgstr "Identification de l'enseignant"
 
 #: /src/schooltool/basicperson/browser/person.py:581
 msgid "Teacher demographics"
-msgstr ""
+msgstr "Démographie des enseignants"
 
 #: /src/schooltool/basicperson/browser/person.py:582
 msgid "Add new teacher"
-msgstr ""
+msgstr "Ajouter un nouvel enseignant"
 
 #: /src/schooltool/basicperson/browser/person.py:589
 msgid "Student identification"
-msgstr ""
+msgstr "Identification de l'étudiant"
 
 #: /src/schooltool/basicperson/browser/person.py:591
 msgid "Student demographics"
-msgstr ""
+msgstr "Démographie des étudiants"
 
 #: /src/schooltool/basicperson/browser/person.py:592
 msgid "Add new student"
-msgstr ""
+msgstr "Ajouter un nouvel étudiant"
 
 #: /src/schooltool/basicperson/browser/person.py:599
 msgid "Administrator identification"
-msgstr ""
+msgstr "Identification de l'administrateur"
 
 #: /src/schooltool/basicperson/browser/person.py:601
 msgid "Administrator demographics"
-msgstr ""
+msgstr "Démographie des administrateurs"
 
 #: /src/schooltool/basicperson/browser/person.py:602
 msgid "Add new administrator"
-msgstr ""
+msgstr "Ajouter un nouvel administrateur"
 
 #: /src/schooltool/basicperson/browser/templates/container.pt:23
 msgid ""
 "To add teachers, students or administrators, please set up a ${school_year}."
 msgstr ""
+"Pour ajouter des enseignants, des étudiants ou des administrateurs, veuillez "
+"donner une ${school_year}."
 
 #: /src/schooltool/basicperson/browser/templates/container.pt:23
 msgid "school year"
-msgstr ""
+msgstr "année scolaire"
 
 #: /src/schooltool/basicperson/browser/templates/container.pt:37
 #: /src/schooltool/course/browser/templates/course_container.pt:28
@@ -2994,17 +2994,13 @@ msgstr "Que ce champ soit exigé ou non"
 
 #: /src/schooltool/basicperson/interfaces.py:145
 msgid "Limit keys"
-msgstr ""
+msgstr "Caractères limités"
 
 #: /src/schooltool/basicperson/interfaces.py:146
 msgid "An optional list of limit keys for this field"
-msgstr ""
+msgstr "un liste optionnelle de caractères limités pour ce champ"
 
-#: /src/schooltool/basicperson/interfaces.py:148
-msgid "Limit key"
-msgstr ""
-
-#: /src/schooltool/basicperson/interfaces.py:163
+#: /src/schooltool/basicperson/interfaces.py:161
 msgid "List of values"
 msgstr "Liste de valeurs"
 
@@ -3059,27 +3055,19 @@ msgstr "Etudiants"
 
 #: /src/schooltool/basicperson/vocabularies.py:144
 msgid "Teachers"
-msgstr ""
+msgstr "Enseignants"
 
 #: /src/schooltool/basicperson/vocabularies.py:145
 msgid "Administrators"
-msgstr ""
+msgstr "Administrateurs"
 
-#: /src/schooltool/commendation/commendation_add.pt:4
-msgid "Add Commendation"
-msgstr "Ajouter une gratitudes"
-
-#: /src/schooltool/commendation/commendation_add.pt:13
-msgid "Commendation"
-msgstr "Gratitudes"
-
-#: /src/schooltool/common/configure.zcml:88
+#: /src/schooltool/common/configure.zcml:89
 #: /src/schooltool/course/browser/configure.zcml:25
-#: /src/schooltool/course/browser/configure.zcml:180
-#: /src/schooltool/group/browser/configure.zcml:38
-#: /src/schooltool/resource/browser/configure.zcml:84
-#: /src/schooltool/resource/browser/configure.zcml:115
-#: /src/schooltool/resource/browser/configure.zcml:151
+#: /src/schooltool/course/browser/configure.zcml:170
+#: /src/schooltool/group/browser/configure.zcml:36
+#: /src/schooltool/resource/browser/configure.zcml:243
+#: /src/schooltool/resource/browser/configure.zcml:257
+#: /src/schooltool/resource/browser/configure.zcml:271
 msgid "Edit Info"
 msgstr "Modifier les informations"
 
@@ -3235,7 +3223,7 @@ msgstr "Effacer"
 
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:27
 msgid "Shortcut: Alt-R"
-msgstr ""
+msgstr "Raccourci : Alt-R"
 
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:43
 msgid "Create contact"
@@ -4764,7 +4752,7 @@ msgstr "n'est pas un modèle d'emploi du temps valide"
 
 #: /src/schooltool/export/importer.py:85
 msgid "is the same day id as another in this timetable"
-msgstr ""
+msgstr "cet id est déjà utilisé par un autre jour dans cet emploi de temps"
 
 #: /src/schooltool/export/importer.py:86
 msgid "is not defined in the 'Day Templates' section"
@@ -4772,19 +4760,19 @@ msgstr "n'est pas défini dans les 'Modèles de Jour' de la section"
 
 #: /src/schooltool/export/importer.py:87
 msgid "is the same period id as another in this day"
-msgstr ""
+msgstr "est le même id d'une autre période du même jour"
 
 #: /src/schooltool/export/importer.py:88
 msgid "is the same homeroom period id as another in this day"
-msgstr ""
+msgstr "est le même id de période de titularisation qu'un autre en ce jour"
 
 #: /src/schooltool/export/importer.py:89
 msgid "must be either 'Location' or 'Resource'"
-msgstr ""
+msgstr "doit être une 'Situation' ou 'Ressource'"
 
 #: /src/schooltool/export/importer.py:90
 msgid "is not a valid term in the given school year"
-msgstr ""
+msgstr "n'est pas une durée valide étant donné l'année scolaire"
 
 #: /src/schooltool/export/importer.py:91
 msgid "is not a valid course in the given school year"
@@ -5072,7 +5060,7 @@ msgstr ""
 
 #: /src/schooltool/group/security.zcml:11
 msgid "Information about each group is visible to the general public."
-msgstr ""
+msgstr "L'information concernant chaque groupe est visible au public."
 
 #: /src/schooltool/group/security.zcml:17
 msgid ""
@@ -5409,20 +5397,22 @@ msgid ""
 "The list of people with accounts in the system is visible only to school "
 "administration."
 msgstr ""
+"La liste des personnes avec des comptes est visible qu'à l'administration de "
+"l'école."
 
 #: /src/schooltool/person/security.zcml:5
 msgid ""
 "The list of people with accounts in the system is visible to the general "
 "public."
-msgstr ""
+msgstr "La liste des personnes avec des comptes est visible au public."
 
 #: /src/schooltool/person/security.zcml:11
 msgid "Users can make their own calendars public."
-msgstr ""
+msgstr "Les utilisateurs peuvent mettre leurs calendriers publique."
 
 #: /src/schooltool/person/security.zcml:11
 msgid "Users cannot make their own calendars public."
-msgstr ""
+msgstr "Les utilisateurs ne peuvent mettre leurs calendriers publique."
 
 #: /src/schooltool/person/security.zcml:17
 msgid "Only school administration can change passwords."
@@ -5451,6 +5441,8 @@ msgstr "Modifier les préférences"
 #: /src/schooltool/person/security.zcml:138
 msgid "Change the list of calendars overlayed on the user's calendar"
 msgstr ""
+"Modifier la liste des calendriers superposés sur le calendrier de "
+"l'utilisateur"
 
 #: /src/schooltool/person/security.zcml:138
 msgid "Manage visible calendars"
@@ -5470,6 +5462,44 @@ msgstr ""
 msgid "Relationships"
 msgstr "Rapports"
 
+#: /src/schooltool/report/browser/configure.zcml:8
+#: /src/schooltool/report/browser/configure.zcml:22
+#: /src/schooltool/report/browser/configure.zcml:33
+#: /src/schooltool/report/browser/configure.zcml:44
+#: /src/schooltool/report/browser/configure.zcml:55
+#: /src/schooltool/report/browser/configure.zcml:66
+msgid "Reports"
+msgstr "Rapports"
+
+#: /src/schooltool/report/browser/report.py:44
+msgid "Student Reports"
+msgstr "Rapports de l'étudiant"
+
+#: /src/schooltool/report/browser/report.py:49
+msgid "Group Reports"
+msgstr "Rapports de groupe"
+
+#: /src/schooltool/report/browser/report.py:54
+msgid "School Year Reports"
+msgstr "Rapports d'année scolaire"
+
+#: /src/schooltool/report/browser/report.py:59
+msgid "Term Reports"
+msgstr ""
+
+#: /src/schooltool/report/browser/report.py:64
+msgid "Section Reports"
+msgstr "Section rapports"
+
+#: /src/schooltool/report/browser/templates/report_reference.pt:3
+#: /src/schooltool/report/browser/templates/report_reference.pt:7
+msgid "Report Reference"
+msgstr ""
+
+#: /src/schooltool/report/browser/templates/report_reference.pt:13
+msgid "Category"
+msgstr "Catégorie"
+
 #: /src/schooltool/resource/browser/configure.zcml:96
 msgid "Resource Demographics"
 msgstr ""
@@ -5479,17 +5509,17 @@ msgstr ""
 msgid "Import Resources"
 msgstr "Importer des Ressources"
 
-#: /src/schooltool/resource/browser/configure.zcml:197
+#: /src/schooltool/resource/browser/configure.zcml:286
+msgid "New Resource"
+msgstr "Nouvelle ressource"
+
+#: /src/schooltool/resource/browser/configure.zcml:300
 msgid "New Location"
 msgstr "Nouveau lieu"
 
 #: /src/schooltool/resource/browser/configure.zcml:204
 msgid "New Equipment"
 msgstr "Nouvel équipement"
-
-#: /src/schooltool/resource/browser/configure.zcml:286
-msgid "New Resource"
-msgstr "Nouvelle ressource"
 
 #: /src/schooltool/resource/browser/resource-csvimport.pt:4
 msgid "Upload schooltool resources as CSV"
@@ -5538,55 +5568,55 @@ msgstr "Index des ressources"
 
 #: /src/schooltool/resource/browser/resource.py:327
 msgid "Resource Demographics Container"
-msgstr ""
+msgstr "Conteneur de démographie des ressources"
 
 #: /src/schooltool/resource/browser/resource.py:512
 msgid "Resource identification"
-msgstr ""
+msgstr "Identification d'une ressource"
 
 #: /src/schooltool/resource/browser/resource.py:514
 msgid "Resource demographics"
-msgstr ""
+msgstr "Démographie des ressources"
 
 #: /src/schooltool/resource/browser/resource.py:522
 msgid "Add new resource"
-msgstr ""
+msgstr "Ajouter une nouvelle ressource"
 
 #: /src/schooltool/resource/browser/resource.py:528
 msgid "Edit resource"
-msgstr ""
+msgstr "Éditer la ressource"
 
 #: /src/schooltool/resource/browser/resource.py:536
 msgid "Location identification"
-msgstr ""
+msgstr "identification de l'emplacement"
 
 #: /src/schooltool/resource/browser/resource.py:538
 msgid "Location demographics"
-msgstr ""
+msgstr "Demographie des emplacements"
 
 #: /src/schooltool/resource/browser/resource.py:548
 msgid "Add new location"
-msgstr ""
+msgstr "Ajouter un nouvel emplacement"
 
 #: /src/schooltool/resource/browser/resource.py:554
 msgid "Edit location"
-msgstr ""
+msgstr "Editer l'emplacement"
 
 #: /src/schooltool/resource/browser/resource.py:562
 msgid "Equipment identification"
-msgstr ""
+msgstr "Identification de l'équipement"
 
 #: /src/schooltool/resource/browser/resource.py:564
 msgid "Equipment demographics"
-msgstr ""
+msgstr "Démographie des équipements"
 
 #: /src/schooltool/resource/browser/resource.py:574
 msgid "Add new equipment"
-msgstr ""
+msgstr "Ajouter un nouvel équipement"
 
 #: /src/schooltool/resource/browser/resource.py:580
 msgid "Edit equipment"
-msgstr ""
+msgstr "Editer l'équipement"
 
 #: /src/schooltool/resource/help/resource_help.pt:6
 msgid "Resource Help"
@@ -5704,6 +5734,12 @@ msgstr ""
 msgid "Resource"
 msgstr "Ressource"
 
+#: /src/schooltool/resource/resource.py:206
+#: /src/schooltool/resource/resource.py:232
+#: /src/schooltool/resource/types.py:93
+msgid "Equipment"
+msgstr "Équipement"
+
 #: /src/schooltool/resource/security.zcml:7
 msgid "Only school administration can view the list of resources."
 msgstr "Seule l'administration de l'école peut voir la liste des ressources."
@@ -5722,17 +5758,19 @@ msgstr ""
 
 #: /src/schooltool/resource/security.zcml:13
 msgid "Information about each resource is visible to the general public."
-msgstr ""
+msgstr "L'information de chaque ressource est visible de tout le monde."
 
 #: /src/schooltool/resource/security.zcml:19
 msgid ""
 "Resource calendars are visible to school administration, teachers, and "
 "leaders of the resource."
 msgstr ""
+"les calendriers de ressource sont visible au administrateurs, enseignants, "
+"et propriétaires de la ressource."
 
 #: /src/schooltool/resource/security.zcml:19
 msgid "Resource calendars are visible to the general public."
-msgstr ""
+msgstr "Les calendriers de ressource sont visible de tout le monde."
 
 #: /src/schooltool/resource/security.zcml:53
 msgid "Reservations"
@@ -5771,10 +5809,6 @@ msgstr "Afficher le calendrier de réservation"
 #: /src/schooltool/resource/security.zcml:93
 msgid "Schedule reservation via calendar"
 msgstr "Enregistrer une réservation au calendrier"
-
-#: /src/schooltool/resource/types.py:93
-msgid "Equipment"
-msgstr "Équipement"
 
 #: /src/schooltool/resource/types.py:107
 msgid "Type"
@@ -5891,7 +5925,7 @@ msgstr "Tous les cours"
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_add.pt:50
 msgid "All Timetable Schemas"
-msgstr ""
+msgstr "Tous les Schémas des Emplois de Temps"
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_add.pt:62
 msgid "Copy members"
@@ -5899,11 +5933,11 @@ msgstr "Copier les membres"
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:27
 msgid "The active school year is ${year} (${start_date} - ${end_date})"
-msgstr ""
+msgstr "L'année scolaire activée est ${year} (${start_date} - ${end_date})"
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:52
 msgid "Activate selected school year"
-msgstr ""
+msgstr "Activation de l'année scolaire sélectionnée"
 
 #: /src/schooltool/schoolyear/browser/templates/term-delete.pt:10
 #: /src/schooltool/term/browser/templates/term-container-delete.pt:10
@@ -5943,7 +5977,7 @@ msgstr "Administration de l'école"
 
 #: /src/schooltool/securitypolicy/browser/templates/access_setting_snippet.pt:2
 msgid "Access setting"
-msgstr "Réglage d'accès"
+msgstr "Parramètres d'accès"
 
 #: /src/schooltool/securitypolicy/browser/templates/security_descriptions.pt:4
 msgid "Access Rights"
@@ -5951,7 +5985,7 @@ msgstr "Droits d'accès"
 
 #: /src/schooltool/securitypolicy/browser/templates/security_descriptions.pt:9
 msgid "Object model and access rights"
-msgstr ""
+msgstr "Modèle d'objet et droits d'accès"
 
 #: /src/schooltool/securitypolicy/browser/templates/security_descriptions.pt:57
 msgid "Legend"
@@ -6164,7 +6198,7 @@ msgstr "Le nom de la configuration de barre d'outils à user."
 
 #: /src/schooltool/skin/widgets.py:110
 msgid "Relative configuration path"
-msgstr ""
+msgstr "L'emplacement de la configuration relative"
 
 #: /src/schooltool/skin/widgets.py:111
 msgid "Path to the FCKconfiguration javascript file."
@@ -7108,74 +7142,62 @@ msgstr "Modifier les horaires"
 msgid "Supplied passwords are not identical"
 msgstr "Les mots de passe fournis ne sont pas identiques"
 
-#~ msgid "For term:"
-#~ msgstr "Pour le terme :"
-
-#~ msgid "Activate next school year"
-#~ msgstr "Activer l'année scolaire suivante"
-
-#~ msgid "Selected term does not exist."
-#~ msgstr "Le terme choisi n'exite pas."
-
-#~ msgid "Please select a term."
-#~ msgstr "Veuillez choisir un terme."
-
-#~ msgid "The name of this Field Description"
-#~ msgstr "Le nom de cette Description de Champ"
-
-#~ msgid "Required input is missing."
-#~ msgstr "L'entrée requise est manquante"
-
-#~ msgid "Everyone can view info of persons"
-#~ msgstr "Tout le monde peut acceder à l'information sur des personnes"
-
-#~ msgid "Persons can change their own passwords"
-#~ msgstr "Les personnes peuvent choisir leur propre mot de passe"
-
-#~ msgid "Everyone can view the list of persons"
-#~ msgstr "Tout le monde peut voir la liste des personnes"
-
-#~ msgid "Everyone can view group calendars."
-#~ msgstr "Tout le monde peut acceder aux calendriers de groupe"
-
-#~ msgid "Group members can edit group calendars."
-#~ msgstr "Membres des groupes peuvent editer les calendriers de groupe"
-
-#~ msgid "Everyone can view group lists."
-#~ msgstr "Tout le monde peut acceder aux listes des groupes"
-
-#~ msgid "Edit Location Information"
-#~ msgstr "Éditer les informations du lieu"
-
-#~ msgid "Add an Equipment"
-#~ msgstr "Ajouter un équipement"
-
-#~ msgid "Edit Equipment Information"
-#~ msgstr "Éditer les informations de l'équipement"
-
-#~ msgid "Add a Location"
-#~ msgstr "Ajouter un lieu"
-
-#~ msgid "Add a Resource"
-#~ msgstr "Ajouter une ressource"
-
-#~ msgid "Edit Resource Information"
-#~ msgstr "Éditer les informations de la ressource"
-
-#~ msgid "Everyone can view resource lists."
-#~ msgstr "Tout le monde peut visualiser les listes de la ressource."
-
-#~ msgid "Everyone can view resource information."
-#~ msgstr "Tout le monde peut visualiser les information de la ressource."
-
-#~ msgid "Everyone can view resource calendars."
-#~ msgstr "Tout le monde peut visualiser les calendriers de la ressource."
-
-#~ msgid "Everyone can view the application calendar."
-#~ msgstr "Tout le monde peut voir l'application calendrier."
+#~ msgid "Add a Section"
+#~ msgstr "Ajouter une section"
 
 #~ msgid "Change the students in this section by groups"
 #~ msgstr "Changer les étudiants de cette classe par groupe"
 
-#~ msgid "Add a Section"
-#~ msgstr "Ajouter une section"
+#~ msgid "Everyone can view the application calendar."
+#~ msgstr "Tout le monde peut voir l'application calendrier."
+
+#~ msgid "Everyone can view resource calendars."
+#~ msgstr "Tout le monde peut visualiser les calendriers de la ressource."
+
+#~ msgid "Everyone can view resource information."
+#~ msgstr "Tout le monde peut visualiser les information de la ressource."
+
+#~ msgid "Everyone can view resource lists."
+#~ msgstr "Tout le monde peut visualiser les listes de la ressource."
+
+#~ msgid "Edit Resource Information"
+#~ msgstr "Éditer les informations de la ressource"
+
+#~ msgid "Add a Resource"
+#~ msgstr "Ajouter une ressource"
+
+#~ msgid "Add a Location"
+#~ msgstr "Ajouter un lieu"
+
+#~ msgid "Edit Equipment Information"
+#~ msgstr "Éditer les informations de l'équipement"
+
+#~ msgid "Add an Equipment"
+#~ msgstr "Ajouter un équipement"
+
+#~ msgid "Edit Location Information"
+#~ msgstr "Éditer les informations du lieu"
+
+#~ msgid "Everyone can view group lists."
+#~ msgstr "Tout le monde peut acceder aux listes des groupes"
+
+#~ msgid "Group members can edit group calendars."
+#~ msgstr "Membres des groupes peuvent editer les calendriers de groupe"
+
+#~ msgid "Everyone can view group calendars."
+#~ msgstr "Tout le monde peut acceder aux calendriers de groupe"
+
+#~ msgid "Everyone can view the list of persons"
+#~ msgstr "Tout le monde peut voir la liste des personnes"
+
+#~ msgid "Persons can change their own passwords"
+#~ msgstr "Les personnes peuvent choisir leur propre mot de passe"
+
+#~ msgid "Everyone can view info of persons"
+#~ msgstr "Tout le monde peut acceder à l'information sur des personnes"
+
+#~ msgid "Required input is missing."
+#~ msgstr "L'entrée requise est manquante"
+
+#~ msgid "The name of this Field Description"
+#~ msgstr "Le nom de cette Description de Champ"

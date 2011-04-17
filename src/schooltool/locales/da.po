@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-03-18 20:12+0200\n"
-"PO-Revision-Date: 2010-08-22 20:03+0000\n"
+"POT-Creation-Date: 2011-04-17 23:49+0300\n"
+"PO-Revision-Date: 2011-04-01 18:26+0000\n"
 "Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
 "Language-Team: Danish <da@li.org>\n"
 "Language: da\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-03-19 04:45+0000\n"
-"X-Generator: Launchpad (build 12559)\n"
+"X-Launchpad-Export-Date: 2011-04-08 04:32+0000\n"
+"X-Generator: Launchpad (build 12735)\n"
 
 #: /src/schooltool/app/app.py:197
 msgid "Your School"
@@ -59,15 +59,15 @@ msgstr "Ledere til rådighed"
 msgid "school"
 msgstr "skole"
 
-#: /src/schooltool/app/browser/cal.py:113
-msgid "February"
-msgstr "Februar"
-
-#: /src/schooltool/app/browser/cal.py:113
+#: /src/schooltool/app/browser/cal.py:115
 msgid "January"
 msgstr "Januar"
 
-#: /src/schooltool/app/browser/cal.py:113
+#: /src/schooltool/app/browser/cal.py:116
+msgid "February"
+msgstr "Februar"
+
+#: /src/schooltool/app/browser/cal.py:117
 msgid "March"
 msgstr "Marts"
 
@@ -75,39 +75,39 @@ msgstr "Marts"
 msgid "April"
 msgstr "April"
 
-#: /src/schooltool/app/browser/cal.py:114
-msgid "June"
-msgstr "Juni"
-
-#: /src/schooltool/app/browser/cal.py:114
+#: /src/schooltool/app/browser/cal.py:119
 msgid "May"
 msgstr "Maj"
 
-#: /src/schooltool/app/browser/cal.py:115
-msgid "August"
-msgstr "August"
+#: /src/schooltool/app/browser/cal.py:120
+msgid "June"
+msgstr "Juni"
 
-#: /src/schooltool/app/browser/cal.py:115
+#: /src/schooltool/app/browser/cal.py:121
 msgid "July"
 msgstr "Juli"
 
-#: /src/schooltool/app/browser/cal.py:115
+#: /src/schooltool/app/browser/cal.py:122
+msgid "August"
+msgstr "August"
+
+#: /src/schooltool/app/browser/cal.py:123
 msgid "September"
 msgstr "September"
 
-#: /src/schooltool/app/browser/cal.py:116
-msgid "December"
-msgstr "December"
-
-#: /src/schooltool/app/browser/cal.py:116
-msgid "November"
-msgstr "November"
-
-#: /src/schooltool/app/browser/cal.py:116
+#: /src/schooltool/app/browser/cal.py:124
 msgid "October"
 msgstr "Oktober"
 
-#: /src/schooltool/app/browser/cal.py:119
+#: /src/schooltool/app/browser/cal.py:125
+msgid "November"
+msgstr "November"
+
+#: /src/schooltool/app/browser/cal.py:126
+msgid "December"
+msgstr "December"
+
+#: /src/schooltool/app/browser/cal.py:129
 #: /src/schooltool/person/interfaces.py:180
 #: /src/schooltool/term/browser/templates/term.pt:31
 #: /src/schooltool/term/browser/templates/term_add.pt:54
@@ -117,16 +117,7 @@ msgstr "Oktober"
 msgid "Monday"
 msgstr "Mandag"
 
-#: /src/schooltool/app/browser/cal.py:119
-#: /src/schooltool/term/browser/templates/term.pt:34
-#: /src/schooltool/term/browser/templates/term_add.pt:60
-#: /src/schooltool/term/browser/templates/term_add.pt:83
-#: /src/schooltool/timetable/browser/schema.py:118
-#: /src/schooltool/timetable/browser/schema.py:287
-msgid "Thursday"
-msgstr "Torsdag"
-
-#: /src/schooltool/app/browser/cal.py:119
+#: /src/schooltool/app/browser/cal.py:130
 #: /src/schooltool/term/browser/templates/term.pt:32
 #: /src/schooltool/term/browser/templates/term_add.pt:56
 #: /src/schooltool/term/browser/templates/term_add.pt:81
@@ -144,7 +135,16 @@ msgstr "Tirsdag"
 msgid "Wednesday"
 msgstr "Onsdag"
 
-#: /src/schooltool/app/browser/cal.py:120
+#: /src/schooltool/app/browser/cal.py:132
+#: /src/schooltool/term/browser/templates/term.pt:34
+#: /src/schooltool/term/browser/templates/term_add.pt:60
+#: /src/schooltool/term/browser/templates/term_add.pt:83
+#: /src/schooltool/timetable/browser/schema.py:118
+#: /src/schooltool/timetable/browser/schema.py:287
+msgid "Thursday"
+msgstr "Torsdag"
+
+#: /src/schooltool/app/browser/cal.py:133
 #: /src/schooltool/term/browser/templates/term.pt:35
 #: /src/schooltool/term/browser/templates/term_add.pt:62
 #: /src/schooltool/term/browser/templates/term_add.pt:84
@@ -176,13 +176,7 @@ msgstr "Søndag"
 msgid "Mon"
 msgstr "Man"
 
-#: /src/schooltool/app/browser/cal.py:123
-#: /src/schooltool/app/browser/cal.py:1812
-msgid "Thu"
-msgstr "Tor"
-
-#: /src/schooltool/app/browser/cal.py:123
-#: /src/schooltool/app/browser/cal.py:1810
+#: /src/schooltool/app/browser/cal.py:139
 msgid "Tue"
 msgstr "Tirs"
 
@@ -191,8 +185,11 @@ msgstr "Tirs"
 msgid "Wed"
 msgstr "Ons"
 
-#: /src/schooltool/app/browser/cal.py:124
-#: /src/schooltool/app/browser/cal.py:1813
+#: /src/schooltool/app/browser/cal.py:141
+msgid "Thu"
+msgstr "Tor"
+
+#: /src/schooltool/app/browser/cal.py:142
 msgid "Fri"
 msgstr "Fre"
 
@@ -2461,7 +2458,12 @@ msgstr "Tilføj nyt felt"
 msgid "Change information for ${field_title}"
 msgstr "Ændre information for ${field_title}"
 
-#: /src/schooltool/basicperson/browser/person.py:49
+#: /src/schooltool/basicperson/browser/person.py:57
+#: /src/schooltool/person/browser/person.py:449
+msgid "Person index"
+msgstr "Person indeks"
+
+#: /src/schooltool/basicperson/browser/person.py:73
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_add.pt:61
 msgid "Group"
 msgstr "Gruppe"
@@ -2471,12 +2473,7 @@ msgstr "Gruppe"
 msgid "Advisor"
 msgstr "Rådgiver"
 
-#: /src/schooltool/basicperson/browser/person.py:57
-#: /src/schooltool/person/browser/person.py:449
-msgid "Person index"
-msgstr "Person indeks"
-
-#: /src/schooltool/basicperson/browser/person.py:68
+#: /src/schooltool/basicperson/browser/person.py:92
 #: /src/schooltool/widget/password.py:39
 msgid "Confirm password"
 msgstr "Bekræft adgangskode"
@@ -2485,15 +2482,15 @@ msgstr "Bekræft adgangskode"
 msgid "Passwords do not match"
 msgstr "Adgangskoder er ikke ens"
 
-#: /src/schooltool/basicperson/browser/person.py:149
-msgid "Add new person"
-msgstr "Tilføj en ny person"
-
-#: /src/schooltool/basicperson/browser/person.py:152
+#: /src/schooltool/basicperson/browser/person.py:121
 msgid "This username is already in use!"
 msgstr "Dette brugernavn er allerede i brug!"
 
-#: /src/schooltool/basicperson/browser/person.py:283
+#: /src/schooltool/basicperson/browser/person.py:236
+msgid "Add new person"
+msgstr "Tilføj en ny person"
+
+#: /src/schooltool/basicperson/browser/person.py:256
 msgid "Usernames"
 msgstr ""
 
@@ -2501,7 +2498,17 @@ msgstr ""
 msgid "Add multiple persons"
 msgstr ""
 
-#: /src/schooltool/basicperson/browser/person.py:304
+#: /src/schooltool/basicperson/browser/person.py:330
+msgid "Done"
+msgstr ""
+
+#. Default: ""
+#: /src/schooltool/basicperson/browser/person.py:375
+#: /src/schooltool/resource/browser/resource.py:496
+msgid "Change information for ${fullname}"
+msgstr "Ændre information for ${fullname}"
+
+#: /src/schooltool/basicperson/browser/person.py:445
 msgid "Current Advisors"
 msgstr "Aktuel rådgivere"
 
@@ -2527,16 +2534,7 @@ msgstr ""
 msgid "Advisees of ${person}"
 msgstr ""
 
-#: /src/schooltool/basicperson/browser/person.py:357
-msgid "Done"
-msgstr ""
-
-#. Default: ""
-#: /src/schooltool/basicperson/browser/person.py:402
-msgid "Change information for ${fullname}"
-msgstr "Ændre information for ${fullname}"
-
-#: /src/schooltool/basicperson/browser/person.py:579
+#: /src/schooltool/basicperson/browser/person.py:576
 msgid "Teacher identification"
 msgstr ""
 
@@ -2792,11 +2790,7 @@ msgstr ""
 msgid "An optional list of limit keys for this field"
 msgstr ""
 
-#: /src/schooltool/basicperson/interfaces.py:148
-msgid "Limit key"
-msgstr ""
-
-#: /src/schooltool/basicperson/interfaces.py:163
+#: /src/schooltool/basicperson/interfaces.py:161
 msgid "List of values"
 msgstr "Liste af værdier"
 
@@ -2856,21 +2850,13 @@ msgstr ""
 msgid "Administrators"
 msgstr ""
 
-#: /src/schooltool/commendation/commendation_add.pt:4
-msgid "Add Commendation"
-msgstr "Tilføj udmærkelse"
-
-#: /src/schooltool/commendation/commendation_add.pt:13
-msgid "Commendation"
-msgstr "Udmærkelse"
-
-#: /src/schooltool/common/configure.zcml:88
+#: /src/schooltool/common/configure.zcml:89
 #: /src/schooltool/course/browser/configure.zcml:25
-#: /src/schooltool/course/browser/configure.zcml:180
-#: /src/schooltool/group/browser/configure.zcml:38
-#: /src/schooltool/resource/browser/configure.zcml:84
-#: /src/schooltool/resource/browser/configure.zcml:115
-#: /src/schooltool/resource/browser/configure.zcml:151
+#: /src/schooltool/course/browser/configure.zcml:170
+#: /src/schooltool/group/browser/configure.zcml:36
+#: /src/schooltool/resource/browser/configure.zcml:243
+#: /src/schooltool/resource/browser/configure.zcml:257
+#: /src/schooltool/resource/browser/configure.zcml:271
 msgid "Edit Info"
 msgstr "Redigér information"
 
@@ -5118,6 +5104,44 @@ msgstr "Alle, hvis kalenderen er gjort offentlig i brugerindstillinger."
 msgid "Relationships"
 msgstr "Relationer"
 
+#: /src/schooltool/report/browser/configure.zcml:8
+#: /src/schooltool/report/browser/configure.zcml:22
+#: /src/schooltool/report/browser/configure.zcml:33
+#: /src/schooltool/report/browser/configure.zcml:44
+#: /src/schooltool/report/browser/configure.zcml:55
+#: /src/schooltool/report/browser/configure.zcml:66
+msgid "Reports"
+msgstr "Rapporter"
+
+#: /src/schooltool/report/browser/report.py:44
+msgid "Student Reports"
+msgstr "Elevrapporter"
+
+#: /src/schooltool/report/browser/report.py:49
+msgid "Group Reports"
+msgstr "Gruppe rapporter"
+
+#: /src/schooltool/report/browser/report.py:54
+msgid "School Year Reports"
+msgstr "Skoleårs rapport"
+
+#: /src/schooltool/report/browser/report.py:59
+msgid "Term Reports"
+msgstr "Termins rapporter"
+
+#: /src/schooltool/report/browser/report.py:64
+msgid "Section Reports"
+msgstr ""
+
+#: /src/schooltool/report/browser/templates/report_reference.pt:3
+#: /src/schooltool/report/browser/templates/report_reference.pt:7
+msgid "Report Reference"
+msgstr ""
+
+#: /src/schooltool/report/browser/templates/report_reference.pt:13
+msgid "Category"
+msgstr "Kategori"
+
 #: /src/schooltool/resource/browser/configure.zcml:96
 msgid "Resource Demographics"
 msgstr ""
@@ -5127,17 +5151,17 @@ msgstr ""
 msgid "Import Resources"
 msgstr "Importer ressourcer"
 
-#: /src/schooltool/resource/browser/configure.zcml:197
+#: /src/schooltool/resource/browser/configure.zcml:286
+msgid "New Resource"
+msgstr "Ny ressource"
+
+#: /src/schooltool/resource/browser/configure.zcml:300
 msgid "New Location"
 msgstr "Nyt sted"
 
 #: /src/schooltool/resource/browser/configure.zcml:204
 msgid "New Equipment"
 msgstr "Nyt udstyr"
-
-#: /src/schooltool/resource/browser/configure.zcml:286
-msgid "New Resource"
-msgstr "Ny ressource"
 
 #: /src/schooltool/resource/browser/resource-csvimport.pt:4
 msgid "Upload schooltool resources as CSV"
@@ -5339,6 +5363,12 @@ msgstr ""
 msgid "Resource"
 msgstr "Ressourse"
 
+#: /src/schooltool/resource/resource.py:206
+#: /src/schooltool/resource/resource.py:232
+#: /src/schooltool/resource/types.py:93
+msgid "Equipment"
+msgstr "Udstyr"
+
 #: /src/schooltool/resource/security.zcml:7
 msgid "Only school administration can view the list of resources."
 msgstr ""
@@ -5367,18 +5397,18 @@ msgstr ""
 msgid "Resource calendars are visible to the general public."
 msgstr ""
 
-#: /src/schooltool/resource/security.zcml:50
+#: /src/schooltool/resource/security.zcml:53
+msgid "Reservations"
+msgstr "Reservationer"
+
+#: /src/schooltool/resource/security.zcml:53
 msgid ""
 "Resources are locations or objects within a school.                    "
 "SchoolTool's calendar can function as a reservation                    and "
 "tracking system for resources."
 msgstr ""
 
-#: /src/schooltool/resource/security.zcml:53
-msgid "Reservations"
-msgstr "Reservationer"
-
-#: /src/schooltool/resource/security.zcml:57
+#: /src/schooltool/resource/security.zcml:60
 msgid "List/Search resources"
 msgstr "List/søg ressourcer"
 
@@ -5401,10 +5431,6 @@ msgstr "Vis reservationskalender"
 #: /src/schooltool/resource/security.zcml:93
 msgid "Schedule reservation via calendar"
 msgstr "Planlæg reservation via kalender"
-
-#: /src/schooltool/resource/types.py:93
-msgid "Equipment"
-msgstr "Udstyr"
 
 #: /src/schooltool/resource/types.py:107
 msgid "Type"
@@ -6642,65 +6668,47 @@ msgstr "Ændre skema"
 msgid "Supplied passwords are not identical"
 msgstr "De angivne adgangskoder er ikke ens"
 
-#~ msgid "Identifier (optional)"
-#~ msgstr "Identifikation (valgfri)"
-
-#~ msgid "Change the resources for this section."
-#~ msgstr "Ændre ressourcer for denne sektion."
-
-#~ msgid "Need a course ID."
-#~ msgstr "Kursus ID nødvendigt."
-
-#~ msgid "No such course."
-#~ msgstr "Kursus findes ikke."
-
-#~ msgid "Add a Section"
-#~ msgstr "Tilføj en sektion"
-
-#~ msgid "Everyone can view resource lists."
-#~ msgstr "Alle kan se ressourcelister."
-
-#~ msgid "Everyone can view resource calendars."
-#~ msgstr "Alle kan se ressourcekalendere."
-
-#~ msgid "Everyone can view resource information."
-#~ msgstr "Alle kan se ressourceinformation."
-
-#~ msgid "Add a Location"
-#~ msgstr "Tilføj et sted"
-
-#~ msgid "Edit Resource Information"
-#~ msgstr "Redigér ressourceinformation"
-
-#~ msgid "Add an Equipment"
-#~ msgstr "Tilføj udstyr"
-
-#~ msgid "Edit Equipment Information"
-#~ msgstr "Redigér udstyrsinformation"
-
-#~ msgid "Add a Resource"
-#~ msgstr "Tilføj en ressource"
-
-#~ msgid "Everyone can view info of persons"
-#~ msgstr "Alle kan se information om personer"
-
-#~ msgid "Persons can set their own preferences"
-#~ msgstr "Personer kan indstille deres egne preferencer"
-
-#~ msgid "Persons can change their own passwords"
-#~ msgstr "Personer kan ændre deres egen adgangskoder"
-
-#~ msgid "Everyone can view the list of persons"
-#~ msgstr "Alle kan se listen over personer"
-
-#~ msgid "Access control"
-#~ msgstr "Adgangskontrol"
+#~ msgid "Required input is missing."
+#~ msgstr "Nødvendigt input mangler."
 
 #~ msgid "Everyone can view the application calendar."
 #~ msgstr "Alle kan se applikationskalenderen."
 
-#~ msgid "Required input is missing."
-#~ msgstr "Nødvendigt input mangler."
+#~ msgid "Everyone can view the list of persons"
+#~ msgstr "Alle kan se listen over personer"
 
-#~ msgid "For term:"
-#~ msgstr "For termin:"
+#~ msgid "Persons can change their own passwords"
+#~ msgstr "Personer kan ændre deres egen adgangskoder"
+
+#~ msgid "Persons can set their own preferences"
+#~ msgstr "Personer kan indstille deres egne preferencer"
+
+#~ msgid "Everyone can view info of persons"
+#~ msgstr "Alle kan se information om personer"
+
+#~ msgid "Add a Resource"
+#~ msgstr "Tilføj en ressource"
+
+#~ msgid "Edit Equipment Information"
+#~ msgstr "Redigér udstyrsinformation"
+
+#~ msgid "Add an Equipment"
+#~ msgstr "Tilføj udstyr"
+
+#~ msgid "Edit Resource Information"
+#~ msgstr "Redigér ressourceinformation"
+
+#~ msgid "Add a Location"
+#~ msgstr "Tilføj et sted"
+
+#~ msgid "Everyone can view resource information."
+#~ msgstr "Alle kan se ressourceinformation."
+
+#~ msgid "Everyone can view resource calendars."
+#~ msgstr "Alle kan se ressourcekalendere."
+
+#~ msgid "Everyone can view resource lists."
+#~ msgstr "Alle kan se ressourcelister."
+
+#~ msgid "Add a Section"
+#~ msgstr "Tilføj en sektion"
