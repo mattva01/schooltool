@@ -1,1 +1,1 @@
-1.6 (development)
+1.6
