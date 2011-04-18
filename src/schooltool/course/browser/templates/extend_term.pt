@@ -8,17 +8,9 @@
 <body>
 
 <metal:block metal:fill-slot="content-header">
-  <table class="all_terms_header">
-    <tr>
-      <td i18n:translate="">Section: <a tal:replace="structure context/@@link" /></td>
-      <td i18n:translate="">Term: <a tal:replace="structure view/term/@@link" /></td>
-      <td i18n:translate="">Target Term: <a tal:replace="structure view/extend_term/@@link" /></td>
-    </tr>
-  </table>
-  <table><tr><td>
-    <span i18n:translate="">Click 'Extend' if you would like to copy and link
-    this section to the target term.</span>
-  </td></tr></table>
+  <table class="link_help"><tr>
+    <td tal:content="view/message" />
+  </tr></table>
 </metal:block>
 
 <metal:block metal:fill-slot="body">

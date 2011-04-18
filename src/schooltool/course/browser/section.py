@@ -593,12 +593,15 @@ class ExtendTermView(BrowserView):
     template = ViewPageTemplateFile('templates/extend_term.pt')
 
     @property
-    def term(self):
-        return ITerm(self.context)
-
-    @property
-    def extend_term(self):
-        return ISchoolYear(self.context).get(self.request['term'])
+    def message(self):
+        mapping = {
+            'extend': ISchoolYear(self.context)[self.request['term']].title,
+            'section': self.context.title,
+            'term': ITerm(self.context).title,
+            }
+        return _('Click "Extend" to create a linked section in term "${extend}"'
+                 ' containing the students and instructors from "${section}"'
+                 ' term "${term}"', mapping=mapping)
 
     def __call__(self):
         section = removeSecurityProxy(self.context)
@@ -610,8 +613,9 @@ class ExtendTermView(BrowserView):
             self.request.response.redirect(self.nextURL())
 
         elif 'EXTEND' in self.request:
+            this_term = ITerm(self.context)
             extend_term = year[key]
-            if extend_term.first < self.term.first:
+            if extend_term.first < this_term.first:
                 current = section.linked_sections[0]
                 target_term = getPreviousTerm(ITerm(current))
             else:
@@ -619,7 +623,7 @@ class ExtendTermView(BrowserView):
                 target_term = getNextTerm(ITerm(current))
             while ITerm(current).first != extend_term.first:
                 new_section = copySection(current, target_term)
-                if extend_term.first < self.term.first:
+                if extend_term.first < this_term.first:
                     new_section.next = current
                     target_term = getPreviousTerm(target_term)
                 else:

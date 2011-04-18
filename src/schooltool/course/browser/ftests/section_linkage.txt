@@ -103,13 +103,9 @@ two buttons, Extend and Cancel.
 
     >>> manager.getLink("Extend to This Term", index=0).click()
 
-    >>> manager.printQuery("id('content-header')//a")
-    <a href="http://localhost/schoolyears/2005-2006/term1/sections/1">History (1)</a>
-    <a href="http://localhost/schoolyears/2005-2006/term1">Term1</a>
-    <a href="http://localhost/schoolyears/2005-2006/term2">Term2</a>
-
-    >>> manager.printQuery("id('content-header')//span/text()")
-    Click 'Extend' if you would like to copy and link this section to the target term.
+    >>> manager.printQuery("id('content-header')//td/text()")
+    Click "Extend" to create a linked section in term "Term2" containing the
+    students and instructors from "History (1)" term "Term1"
 
     >>> manager.printQuery("id('content-body')//input[@type='submit']/@value")
     Extend

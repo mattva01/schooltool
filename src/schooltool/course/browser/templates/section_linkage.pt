@@ -10,15 +10,16 @@
 <metal:block metal:fill-slot="content-header">
   <table class="all_terms_header">
     <tr>
-      <td>
+      <td><h2>
         <span i18n:translate="">Course:</span>
         <tal:loop tal:repeat="course context/courses">
           <a tal:replace="structure course/@@link" />
         </tal:loop>
-      <td>
+      </h2></td>
+      <td><h2>
         <span i18n:translate="">Year:</span>
         <a tal:replace="structure view/year/@@link" />
-      </td>
+      </h2></td>
     </tr>
   </table>
 </metal:block>
