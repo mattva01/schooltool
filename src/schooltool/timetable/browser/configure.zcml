@@ -111,7 +111,36 @@
       class="schooltool.timetable.browser.schedule.ScheduleDeleteView"
       permission="schooltool.edit" />
 
+  <page
+      name="special.html"
+      for="schooltool.timetable.interfaces.IScheduleWithExceptions"
+      class=".schedule.SpecialDayView"
+      permission="schooltool.edit"
+      />
+
   <configure package="schooltool.skin">
+    <navigationViewlet
+      name="special-day"
+      for="schooltool.timetable.interfaces.IScheduleWithExceptions"
+      manager="schooltool.skin.IActionMenuManager"
+      template="templates/actionsViewlet.pt"
+      permission="schooltool.edit"
+      link="special.html"
+      title="Change Schedule for One Day"
+      order="70"
+      />
+
+    <navigationViewlet
+      name="special-day"
+      for="schooltool.timetable.interfaces.ITimetable"
+      manager="schooltool.skin.IActionMenuManager"
+      template="templates/actionsViewlet.pt"
+      permission="schooltool.edit"
+      link="special.html"
+      title="Change Timetable for One Day"
+      order="70"
+      />
+
     <navigationViewlet
       name="add-timetable"
       for="schooltool.timetable.interfaces.IScheduleContainer"

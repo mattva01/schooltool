@@ -110,16 +110,54 @@ class ISchedule(Interface):
         values=pytz.common_timezones,
         required=True)
 
-    def iterMeetings(date, until_date):
-        """Yields lists of meetings for the given date range."""
+    def iterMeetings(date, until_date=None):
+        """Yields meetings for the given date range."""
 
 
-class IScheduleContainer(IContainer, ISchedule):
+class IMeetingException(IMeeting):
+    """A persistent exception meeting."""
+
+
+class IScheduleExceptions(Interface):
+
+    # XXX: if exception values were objects instead of meeting lists
+    #      we could log additional info, like reason for the exception
+    exceptions = zope.schema.Dict(
+        title=_("Exceptions"),
+        description=_("Exceptions by date."),
+        key_type=zope.schema.Date(
+            title=_("Exception date")),
+        value_type=zope.schema.List(
+            title=_("Meetings"),
+            value_type = zope.schema.Object(
+                title=_("Meeting"),
+                schema=IMeetingException),
+            ),
+        )
+
+    def iterOriginalMeetings(date, until_date=None):
+        """Yields meetings disregarding exception dates."""
+
+
+class IScheduleWithExceptions(ISchedule, IScheduleExceptions):
+    """Schedule with exception days."""
+
+
+class IScheduleContainer(IContainer, IScheduleWithExceptions):
     """A container of schedules.
 
     The container itself is as a big composite schedule.
     """
     contains(ISchedule)
+
+    first = zope.schema.Date(
+        title=u"First scheduled day.",
+        required=False)
+
+    last = zope.schema.Date(
+        title=u"Last scheduled day.",
+        required=False)
+
 
 #
 #  Day templates
@@ -152,10 +190,6 @@ class ITimeSlot(IContained):
         required=False,
         default="lesson",
         vocabulary=activity_types)
-
-
-class IPeriodWithTime(IPeriod, ITimeSlot):
-    """A period with time slot for scheduling."""
 
 
 class IDayTemplateSchedule(IContained):
@@ -220,7 +254,7 @@ class ISchoolDayTemplates(IDayTemplateSchedule):
 #
 
 
-class ITimetable(ISchedule):
+class ITimetable(IScheduleWithExceptions):
     """The schedule of meetings built from day templates."""
 
     periods = zope.schema.Object(

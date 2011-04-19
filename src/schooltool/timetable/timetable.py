@@ -24,6 +24,7 @@ import datetime
 
 from persistent import Persistent
 from persistent.list import PersistentList
+from persistent.dict import PersistentDict
 from zope.interface import implements
 from zope.container.btree import BTreeContainer
 from zope.component import getUtility
@@ -33,6 +34,7 @@ from schooltool.common import DateRange
 from schooltool.timetable import interfaces
 from schooltool.timetable.schedule import Meeting, Schedule
 from schooltool.timetable.schedule import iterMeetingsInTimezone
+from schooltool.timetable.schedule import iterMeetingsWithExceptions
 
 
 class Timetable(Persistent, Schedule):
@@ -40,6 +42,12 @@ class Timetable(Persistent, Schedule):
 
     periods = None
     time_slots = None
+    exceptions = None
+
+    def __init__(self, *args, **kw):
+        Persistent.__init__(self)
+        Schedule.__init__(self, *args, **kw)
+        self.exceptions = PersistentDict()
 
     def uniqueMeetingId(self, date, period, int_ids):
         date_id = date.isoformat()
@@ -47,7 +55,7 @@ class Timetable(Persistent, Schedule):
         uid = '%s.%s' % (date_id, period_id)
         return uid
 
-    def iterMeetings(self, from_date, until_date=None):
+    def iterOriginalMeetings(self, from_date, until_date=None):
         if until_date is None:
             until_date = from_date
         timezone = pytz.timezone(self.timezone)
@@ -71,6 +79,13 @@ class Timetable(Persistent, Schedule):
                     period=period,
                     meeting_id=meeting_id)
                 yield meeting
+
+    def iterMeetings(self, date, until_date=None):
+        meetings = self.iterOriginalMeetings(date, until_date=until_date)
+
+        return iterMeetingsWithExceptions(
+            meetings, self.exceptions, self.timezone,
+            date, until_date=until_date)
 
 
 def combineTemplates(periods_template, time_slots_template):

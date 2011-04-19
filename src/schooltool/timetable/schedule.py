@@ -22,12 +22,15 @@ Scheduling of meetings.
 import pytz
 import datetime
 from persistent import Persistent
-from persistent.list import PersistentList
+from persistent.dict import PersistentDict
 
-from zope.interface import implements
+from zope.component import getUtility
 from zope.container.contained import Contained
 from zope.container.btree import BTreeContainer
+from zope.intid.interfaces import IIntIds
+from zope.interface import implements
 
+from schooltool.common import DateRange
 from schooltool.timetable import interfaces
 
 
@@ -43,7 +46,7 @@ class Period(Persistent, Contained):
         self.activity_type = activity_type
 
 
-class Meeting(Persistent):
+class Meeting(object):
     implements(interfaces.IMeeting)
 
     def __init__(self, dtstart, duration, period=None, meeting_id=None):
@@ -51,6 +54,27 @@ class Meeting(Persistent):
         self.duration = duration
         self.period = period
         self.meeting_id = meeting_id
+
+
+class MeetingException(Persistent, Meeting):
+    implements(interfaces.IMeetingException)
+
+    _period_id = None
+
+    @property
+    def period(self):
+        if self._period_id is None:
+            return None
+        int_ids = getUtility(IIntIds)
+        return int_ids.queryObject(self._period_id)
+
+    @period.setter
+    def period(self, value):
+        if value is None:
+            self._period_id = None
+        else:
+            int_ids = getUtility(IIntIds)
+            self._period_id = int_ids.getId(value)
 
 
 class Schedule(Contained):
@@ -103,14 +127,43 @@ def iterMeetingsInTimezone(schedule, other_timezone, date, until_date=None):
             yield meeting
 
 
+def iterMeetingsWithExceptions(meetings, exceptions, timezone,
+                               date, until_date=None):
+    if until_date is None:
+        until_date = date
+
+    by_date = {}
+    for d in DateRange(date, until_date):
+        if d in exceptions:
+            by_date[d] = list(exceptions[d])
+
+    tz = pytz.timezone(timezone)
+
+    for original_meeting in meetings:
+        meeting_date = original_meeting.dtstart.astimezone(tz).date()
+
+        if meeting_date in exceptions:
+            continue
+
+        if meeting_date not in by_date:
+            by_date[meeting_date] = list()
+        by_date[meeting_date].append(original_meeting)
+
+    for d in sorted(by_date):
+        for meeting in sorted(by_date[d], key=lambda m: m.dtstart):
+            yield meeting
+
+
 class ScheduleContainer(BTreeContainer):
     implements(interfaces.IScheduleContainer)
 
     timezone = None
+    exceptions = None
 
     def __init__(self, timezone='UTC'):
         BTreeContainer.__init__(self)
         self.timezone = timezone
+        self.exceptions = PersistentDict()
 
     @property
     def first(self):
@@ -124,12 +177,19 @@ class ScheduleContainer(BTreeContainer):
                  if schedule.last is not None]
         return dates and max(dates) or None
 
-    def iterMeetings(self, date, until_date=None):
+    def iterOriginalMeetings(self, date, until_date=None):
+        if until_date is None:
+            until_date = date
         meetings = []
         for schedule in self.values():
             tt_meetings = iterMeetingsInTimezone(
                 schedule, self.timezone, date, until_date=until_date)
             meetings.extend(list(tt_meetings))
-        for meeting in sorted(meetings, key=lambda m: m.dtstart):
-            yield meeting
+        return sorted(meetings, key=lambda m: m.dtstart)
+
+    def iterMeetings(self, date, until_date=None):
+        meetings = self.iterOriginalMeetings(date, until_date=until_date)
+        return iterMeetingsWithExceptions(
+            meetings, self.exceptions, self.timezone,
+            date, until_date=until_date)
 

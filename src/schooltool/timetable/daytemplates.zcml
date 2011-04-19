@@ -25,13 +25,6 @@
              set_schema="schooltool.timetable.interfaces.ITimeSlot" />
   </class>
 
-  <class class=".daytemplates.PeriodWithTime">
-    <require permission="schooltool.view"
-             interface="schooltool.timetable.interfaces.IPeriodWithTime" />
-    <require permission="schooltool.edit"
-             set_schema="schooltool.timetable.interfaces.IPeriodWithTime" />
-  </class>
-
   <class class=".daytemplates.DayTemplateSchedule">
     <require permission="schooltool.view"
              interface="schooltool.timetable.interfaces.IDayTemplateSchedule" />

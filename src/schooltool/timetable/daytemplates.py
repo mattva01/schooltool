@@ -65,22 +65,6 @@ class TimeSlot(Persistent, Contained):
                    (other.tstart, other.duration))
 
 
-class PeriodWithTime(Persistent, Contained):
-    implements(interfaces.IPeriodWithTime)
-
-    title = None
-    activity_type = None
-    tstart = None
-    duration = None
-
-    def __init__(self, title, tstart, duration, activity_type=None):
-        Contained.__init__(self)
-        self.title = title
-        self.tstart = tstart
-        self.duration = duration
-        self.activity_type = activity_type
-
-
 class DayTemplateSchedule(Persistent, Contained):
     """Day templates scheduled by date."""
     implements(interfaces.IDayTemplateSchedule)

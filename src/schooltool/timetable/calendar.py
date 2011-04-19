@@ -80,6 +80,10 @@ class ImmutableScheduleCalendar(ImmutableCalendar):
         title = getattr(owner, 'title', u'')
 
         schedule = self.schedule
+        if (schedule.first is None or
+            schedule.last is None):
+            return # Empty schedule
+
         meetings = schedule.iterMeetings(schedule.first, schedule.last)
 
         for meeting in meetings:

@@ -119,7 +119,6 @@
       template="templates/timetableschema.pt"
       permission="schooltool.view"
       />
--->
   <page
       name="special.html"
       for="schooltool.timetable.interfaces.ITimetableSchema"
@@ -129,6 +128,7 @@
       title="Change Timetable for One Day"
       />
 
+-->
 
   <!-- Section scheduling
 
