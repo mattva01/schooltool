@@ -19,6 +19,11 @@
 """
 Timetable builders.
 """
+import itertools
+import pytz
+import datetime
+from persistent.list import PersistentList
+
 from zope.container.interfaces import INameChooser
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
@@ -34,6 +39,7 @@ from schooltool.timetable.daytemplates import SchoolDayTemplates
 from schooltool.timetable.daytemplates import DayTemplate
 from schooltool.timetable.daytemplates import TimeSlot
 from schooltool.timetable.schedule import Period
+from schooltool.timetable.schedule import MeetingException
 
 APP_TIMETABLES_KEY = 'schooltool.timetable.timetables'
 
@@ -218,6 +224,130 @@ class SchoolDayTimeSlotsBuilder(TimeSlotsBuilder):
         return BuildContext(schedule=schedule)
 
 
+class ExceptionDayBuilder(object):
+
+    def getOriginalDayId(self, term, schema, day_date):
+        raise NotImplementedError()
+
+    def getTimeSlotTemplate(self, schema, date, day_id):
+        raise NotImplementedError()
+
+    def readReplacementDay(self, schema, date):
+        day_id = schema.model.exceptionDayIds[date]
+        schema_day = schema[day_id]
+        time_slots = self.getTimeSlotTemplate(schema, date, day_id)
+
+        result = [
+            (date, day_id, period, slot.tstart, slot.duration)
+            for (period, slot) in zip(schema_day.keys()), sorted(time_slots)]
+        return result
+
+    def readExceptionDay(self, schema, date, day_id):
+        exception_day = schema.model.exceptionDays[date]
+        schema_day = schema[day_id]
+        schema_periods = schema_day.keys()
+        result = [
+            (date, day_id, period, slot.tstart, slot.duration)
+            for (period, slot) in exception_day
+            if period in schema_periods]
+        return result
+
+    def getTerm(self, schoolyear, date):
+        for term in schoolyear.values():
+            if date in term:
+                return term
+        return None
+
+    def read(self, schema, context):
+        self.templates = []
+
+        for date in schema.model.exceptionDays:
+            term = self.getTerm(context.schoolyear, date)
+            if term is None:
+                continue
+            if date in schema.model.exceptionDayIds:
+                day_id = schema.model.exceptionDayIds[date]
+            else:
+                day_id = self.getOriginalDayId(term, schema, date)
+            self.templates.append(self.readExceptionDay(schema, date, day_id))
+
+        for date in schema.model.exceptionDayIds:
+            if date not in schema.model.exceptionDays:
+                self.templates.append(self.readReplacementDay(schema, date))
+
+    def build(self, timetable, context):
+        period_map = context.period_map
+        tz = pytz.timezone(timetable.timezone)
+        int_ids = getUtility(IIntIds)
+        by_date = {}
+
+        for day_templates in self.templates:
+            for info in day_templates:
+                date, day_id, period_id, tstart, duration = info
+
+                period_key = (day_id, period_id)
+                period = period_map.get(period_key)
+
+                dtstart = datetime.datetime.combine(date, tstart)
+                dtstart = dtstart.replace(tzinfo=tz)
+                if period is None:
+                    meeting_id = None
+                else:
+                    meeting_id = timetable.uniqueMeetingId(
+                        date, period, int_ids)
+                meeting = MeetingException(
+                    dtstart, duration,
+                    period=period,
+                    meeting_id=meeting_id)
+                if date not in by_date:
+                    by_date[date] = []
+                by_date[date].append(meeting)
+
+        for date in by_date:
+            timetable.exceptions[date] = PersistentList(
+                sorted(by_date[date], key=lambda m: m.dtstart))
+        return BuildContext(exceptions=timetable.exceptions)
+
+
+class SequentialModelExceptions(ExceptionDayBuilder):
+
+    def getOriginalDayId(self, term, schema, day_date):
+        generator = itertools.cycle(schema.model.timetableDayIds)
+        for date in term:
+            if date == day_date:
+                break
+            if term.isSchoolday(date):
+                if date not in schema.model.exceptionDayIds:
+                    generator.next()
+        if not term.isSchoolday(day_date):
+            return None
+        return generator.next()
+
+
+class SequentialDaysModelExceptions(SequentialModelExceptions):
+
+    def getTimeSlotTemplate(self, schema, date, day_id):
+        return self.dayTemplates[date.weekday()]
+
+
+class SequentialDayIdModelExceptions(SequentialModelExceptions):
+
+    def getTimeSlotTemplate(self, schema, date, day_id):
+        return schema.dayTemplates[day_id]
+
+
+class WeeklyModelExceptions(ExceptionDayBuilder):
+
+    def getOriginalDayId(self, term, schema, day_date):
+        try:
+            return schema.model.timetableDayIds[day_date.weekday()]
+        except IndexError:
+            return None
+
+    def getTimeSlotTemplate(self, schema, date, day_id):
+        return self.dayTemplates[date.weekday()]
+
+
 class TimetableBuilder(object):
 
     __name__ = None
@@ -226,6 +356,7 @@ class TimetableBuilder(object):
 
     periods = None
     time_slosts = None
+    exceptions = None
     set_default = False
 
     def read(self, schema, context):
@@ -240,17 +371,21 @@ class TimetableBuilder(object):
         if model_name == 'SequentialDaysTimetableModel':
             self.periods = SchoolDayPeriodsBuilder()
             self.time_slots = WeekDayTimeSlotsBuilder()
+            self.exceptions = SequentialDaysModelExceptions()
 
         elif model_name == 'SequentialDayIdBasedTimetableModel':
             self.periods = SchoolDayPeriodsBuilder()
             self.time_slots = SchoolDayTimeSlotsBuilder()
+            self.exceptions = SequentialDayIdModelExceptions()
 
         elif model_name == 'WeeklyTimetableModel':
             self.periods = WeekDayPeriodsBuilder()
             self.time_slots = WeekDayTimeSlotsBuilder()
+            self.exceptions = WeeklyModelExceptions()
 
         self.periods.read(schema, context())
         self.time_slots.read(schema, context())
+        self.exceptions.read(schema, context())
 
     def build(self, timetables, context):
         # XXX: what if timezone is broken or outdated?
@@ -272,6 +407,9 @@ class TimetableBuilder(object):
             timetable, context(timetables=timetables))
         built_time_slots = self.time_slots.build(
             timetable, context(timetables=timetables))
+        built_exceptions = self.exceptions.build(
+            timetable, context(timetables=timetables,
+                               period_map=built_periods.period_map))
 
         if self.set_default:
             timetables.default = timetable
@@ -289,6 +427,7 @@ class TimetableContainerBuilder(object):
         assert_not_broken(schema_container)
 
         self.year_int_id = int(schema_container.__name__)
+        schoolyear = getUtility(IIntIds).getObject(self.year_int_id)
 
         default_id = schema_container._default_id
 
@@ -298,7 +437,8 @@ class TimetableContainerBuilder(object):
             builder = TimetableBuilder()
             if (default_id is not None and default_id == key):
                 builder.set_default = True
-            builder.read(schema, context(schema_container=schema_container))
+            builder.read(schema, context(schema_container=schema_container,
+                                         schoolyear=schoolyear))
             self.timetables.append(builder)
 
     def build(self, timetable_root, context):
