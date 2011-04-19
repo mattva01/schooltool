@@ -67,6 +67,12 @@
       />
 
   <content
+      for="schooltool.timetable.interfaces.IScheduleWithExceptions"
+      template="templates/schedule-exceptions-content.pt"
+      permission="schooltool.view"
+      name="exceptions" />
+
+  <content
       class=".timetable.DayTemplatesTable"
       for="schooltool.timetable.interfaces.IDayTemplateSchedule"
       view=".timetable.IRenderDayTableCells"

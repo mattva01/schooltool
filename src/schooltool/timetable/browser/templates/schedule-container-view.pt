@@ -60,6 +60,12 @@
 
   </tal:block>
 
+  <div tal:define="exceptions nocall:context/schooltool:content/exceptions|nothing"
+       tal:condition="exceptions">
+    <h2 i18n:translate="">Exception days</h2>
+    <div tal:content="structure exceptions"></div>
+  </div>
+
 </tal:if>
 
 </metal:block>

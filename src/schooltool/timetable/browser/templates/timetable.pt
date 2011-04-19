@@ -16,10 +16,21 @@
   <p tal:condition="view/context/timezone"
      tal:content="string:Timezone: ${view/context/timezone}"/>
 
-  <h2 i18n:translate="">Periods</h2>
-  <div tal:content="structure context/periods/schooltool:content/table"></div>
-  <h2 i18n:translate="">Time schedule</h2>
-  <div tal:content="structure context/time_slots/schooltool:content/table"></div>
+  <div>
+    <h2 i18n:translate="">Periods</h2>
+    <div tal:content="structure context/periods/schooltool:content/table"></div>
+  </div>
+
+  <div>
+    <h2 i18n:translate="">Time schedule</h2>
+    <div tal:content="structure context/time_slots/schooltool:content/table"></div>
+  </div>
+
+  <div tal:define="exceptions nocall:context/schooltool:content/exceptions|nothing"
+       tal:condition="exceptions">
+    <h2 i18n:translate="">Exception days</h2>
+    <div tal:content="structure exceptions"></div>
+  </div>
 
 </metal:block>
 </body>
