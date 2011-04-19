@@ -46,3 +46,10 @@ Also, we see that the terms are in fact there.
     <input type="checkbox" name="delete.first" id="delete.first" />
     <input type="checkbox" name="delete.last" id="delete.last" />
 
+The School Years view also needs to not crash.
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('School Years').click()
+    >>> manager.printQuery("id('content-body')/p[1]/text()")
+    The active school year is (... - ...)
+
