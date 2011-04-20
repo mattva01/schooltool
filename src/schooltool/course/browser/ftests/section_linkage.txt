@@ -105,7 +105,7 @@ two buttons, Extend and Cancel.
 
     >>> manager.printQuery("id('content-header')//td/text()")
     Click "Extend" to create a linked section in term "Term2" containing the
-    students and instructors from "History (1)" term "Term1"
+    students and instructors from section "History (1)" in term "Term1".
 
     >>> manager.printQuery("id('content-body')//input[@type='submit']/@value")
     Extend

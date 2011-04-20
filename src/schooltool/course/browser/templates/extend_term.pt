@@ -9,7 +9,14 @@
 
 <metal:block metal:fill-slot="content-header">
   <table class="link_help"><tr>
-    <td tal:content="view/message" />
+    <td i18n:translate="">
+      Click "Extend" to create a linked section in term
+      "<tal:block i18n:name="from_term_title" content="view/extend_term/@@title" />"
+      containing the students and instructors from section
+      "<tal:block i18n:name="section_title" content="context/@@title" />"
+      in term
+      "<tal:block i18n:name="to_term_title" content="view/term/@@title" />".
+    </td>
   </tr></table>
 </metal:block>
 

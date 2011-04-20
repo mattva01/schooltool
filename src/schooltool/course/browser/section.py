@@ -593,15 +593,12 @@ class ExtendTermView(BrowserView):
     template = ViewPageTemplateFile('templates/extend_term.pt')
 
     @property
-    def message(self):
-        mapping = {
-            'extend': ISchoolYear(self.context)[self.request['term']].title,
-            'section': self.context.title,
-            'term': ITerm(self.context).title,
-            }
-        return _('Click "Extend" to create a linked section in term "${extend}"'
-                 ' containing the students and instructors from "${section}"'
-                 ' term "${term}"', mapping=mapping)
+    def term(self):
+        return ITerm(self.context)
+
+    @property
+    def extend_term(self):
+        return ISchoolYear(self.context).get(self.request['term'])
 
     def __call__(self):
         section = removeSecurityProxy(self.context)
