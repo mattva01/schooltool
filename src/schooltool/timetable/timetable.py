@@ -66,7 +66,7 @@ class Timetable(Persistent, Schedule):
                    self.periods.iterDates(dates),
                    self.time_slots.iterDates(dates))
         for day_date, day_periods, day_time_slots in days:
-            if day_periods is None:
+            if not day_periods:
                 continue
             day = combineTemplates(day_periods, day_time_slots)
             for period, time_slot in day:

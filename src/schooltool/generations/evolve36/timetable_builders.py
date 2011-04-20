@@ -79,7 +79,6 @@ class PeriodsBuilder(object):
 
     def addDayTemplate(self, templates, day_key, day):
         period_map = {}
-
         template = DayTemplate(title=day['title'])
         templates[day_key] = template
 
@@ -106,7 +105,9 @@ class WeekDayPeriodsBuilder(PeriodsBuilder):
             day = dict(days['None'])
             day['title'] = unicode(key) # XXX: hmmm
             return day
-        return None
+        return {'id': key,
+                'title': unicode(key),
+                'periods': []}
 
     def build(self, timetable, context):
         schedule = createDayTemplates(
