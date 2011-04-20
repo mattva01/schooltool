@@ -5,7 +5,7 @@ CHANGES
 1.6.0 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Move schooltool.commendation example plugin into its own project.
 
 
 1.6.0b1 (2011-04-18)

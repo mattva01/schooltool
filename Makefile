@@ -110,10 +110,6 @@ extract-translations: build
 	                --domain $(PACKAGE) \
 	                --zcml schooltool/common/translations.zcml \
 	                --output-file src/schooltool/locales/schooltool.pot
-	bin/i18nextract --egg $(PACKAGE) \
-	                --domain schooltool.commendation \
-	                --zcml schooltool/commendation/translations.zcml \
-	                --output-file src/schooltool/commendation/locales/schooltool.commendation.pot
 
 .PHONY: compile-translations
 compile-translations:
@@ -123,11 +119,6 @@ compile-translations:
 	    mkdir -p $${f%.po}/LC_MESSAGES; \
 	    msgfmt -o $${f%.po}/LC_MESSAGES/$(PACKAGE).mo $$f;\
 	done
-	locales=src/schooltool/commendation/locales; \
-	for f in $${locales}/*.po; do \
-	    mkdir -p $${f%.po}/LC_MESSAGES; \
-	    msgfmt -o $${f%.po}/LC_MESSAGES/schooltool.commendation.mo $$f;\
-	done
 
 .PHONY: update-translations
 update-translations: extract-translations
@@ -135,10 +126,6 @@ update-translations: extract-translations
 	locales=src/schooltool/locales; \
 	for f in $${locales}/*.po; do \
 	    msgmerge -qUFN $$f $${locales}/$(PACKAGE).pot ;\
-	done
-	locales=src/schooltool/commendation/locales; \
-	for f in $${locales}/*.po; do \
-	    msgmerge -qUFN $$f $${locales}/schooltool.commendation.pot ;\
 	done
 	$(MAKE) compile-translations
 
