@@ -21,9 +21,13 @@ from zope.annotation.interfaces import IAnnotatable, IAnnotations
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
 
+from schooltool.app.overlay import URICalendarSubscriber
+from schooltool.app.overlay import CalendarOverlayInfo
 from schooltool.generations.evolve36.helper import assert_not_broken
 from schooltool.generations.evolve36.helper import BuildContext
 from schooltool.generations.evolve36.model import ITimetableCalendarEvent
+from schooltool.relationship import relate, unrelate
+from schooltool.relationship.interfaces import IRelationshipLinks
 from schooltool.timetable.calendar import getScheduleCalendar
 
 
@@ -72,7 +76,7 @@ class CalendarBuilder(object):
                     # copy
                     'description': event.description,
                     'location': event.location,
-                    'resources': event.resources, # XXX: ???
+                    'resources': event.resources,
                     })
 
     def clean(self, context):
@@ -90,6 +94,9 @@ class CalendarBuilder(object):
 
     def build(self, context):
         int_ids = getUtility(IIntIds)
+        schedule_calendars = set()
+        schedule_calendars.add(getScheduleCalendar(self.calendar.__parent__))
+
         for event in self.events:
             schedule = context.shared.schedule_map[event['timetable_key']]
             period = context.shared.period_map[event['period_key']]
@@ -98,6 +105,10 @@ class CalendarBuilder(object):
 
             # XXX: this method should be reimplemented here
             calendar = getScheduleCalendar(owner)
+
+            if calendar not in schedule_calendars:
+                schedule_calendars.add(calendar)
+
             new_event = self.findEvent(
                 calendar, period, event['dtstart'], event['duration'])
             if new_event is not None:
@@ -106,6 +117,35 @@ class CalendarBuilder(object):
                 for resource in event['resources']:
                     if resource not in new_event.resources:
                         new_event.bookResource(resource)
+
+        # XXX: maybe copy over old "free" section events here
+
+        schedule_cal_relationships = [
+            (cal, IRelationshipLinks(cal)) for cal in schedule_calendars]
+
+        old_relationships = IRelationshipLinks(self.calendar)
+        old_subscriptions = list(
+            old_relationships.getLinksByRole(URICalendarSubscriber))
+
+        for link in old_subscriptions:
+            old_info = link.extra_info
+            for schedule_cal, relationships in schedule_cal_relationships:
+                info = CalendarOverlayInfo(schedule_cal, old_info.show,
+                                           old_info.color1, old_info.color2)
+                info.__parent__ = old_info.__parent__
+                try:
+                    relationships.find(
+                        link.my_role, link.target, link.role, link.rel_type)
+                except ValueError:
+                    relate(link.rel_type,
+                           (schedule_cal, link.my_role),
+                           (link.target, link.role),
+                           extra_info = info)
+
+        for link in old_subscriptions:
+            unrelate(link.rel_type,
+                     (self.calendar, link.my_role),
+                     (link.target, link.role))
 
 
 class AppTimetableCalendarBuilder(object):
