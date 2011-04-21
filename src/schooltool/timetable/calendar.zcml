@@ -6,11 +6,12 @@
   <class class=".calendar.ScheduleCalendarEvent">
     <require permission="schooltool.view"
              interface="schooltool.calendar.interfaces.ICalendarEvent"
-             attributes="resources" />
+             attributes="resources period meeting_id" />
     <require permission="schooltool.edit"
              set_schema="schooltool.calendar.interfaces.ICalendarEvent"
              attributes="bookResource unbookResource"
-             set_attributes="__parent__" />
+             set_attributes="__parent__ period meeting_id" />
+             />
   </class>
 
   <class class=".calendar.ScheduleCalendar">
