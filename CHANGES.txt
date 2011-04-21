@@ -6,6 +6,7 @@ CHANGES
 ------------------
 
 - Move schooltool.commendation example plugin into its own project.
+- Workaround tests failing if translations have been compiled (https://launchpad.net/bugs/79761).
 
 
 1.6.0b1 (2011-04-18)

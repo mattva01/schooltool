@@ -818,6 +818,10 @@ def doctest_PluginActionSorter():
 
 
 def test_suite():
+    # Override _ to not get translated test output
+    import schooltool.app.main
+    schooltool.app.main._ = lambda x: x
+
     optionflags = (doctest.ELLIPSIS |
                    doctest.NORMALIZE_WHITESPACE |
                    doctest.REPORT_NDIFF)
