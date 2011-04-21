@@ -55,6 +55,14 @@ class Meeting(object):
         self.period = period
         self.meeting_id = meeting_id
 
+    def clone(self, **kw):
+        dtstart = kw.get('dtstart', self.dtstart)
+        duration = kw.get('duration', self.duration)
+        period = kw.get('period', self.period)
+        meeting_id = kw.get('meeting_id', self.meeting_id)
+        return self.__class__(dtstart, duration,
+                              period=period, meeting_id=meeting_id)
+
 
 class MeetingException(Persistent, Meeting):
     implements(interfaces.IMeetingException)

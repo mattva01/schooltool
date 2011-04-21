@@ -88,6 +88,10 @@ class IMeeting(Interface):
         """,
         required=False)
 
+    def clone(dtstart=None, duration=None,
+              period=None, meeting_id=None):
+        """Return a copy of the meeting with replaced given values."""
+
 
 class ISchedule(Interface):
     """A schedule of meetings."""

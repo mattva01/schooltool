@@ -184,8 +184,23 @@ class SelectedPeriodsSchedule(Persistent, Schedule):
         meetings = iterMeetingsInTimezone(
             self.timetable, self.timezone, date, until_date=until_date)
         selected_periods = list(self.periods)
-        for meeting in meetings:
-            # XXX: update meetings by consecutive_periods_as_one
+
+        last_meeting = None
+        for orig_meeting in meetings:
             # XXX: proxy issues may breed here
-            if meeting.period in selected_periods:
+            if orig_meeting.period in selected_periods:
+                meeting = orig_meeting
+
+                if (self.consecutive_periods_as_one and
+                    last_meeting is not None and
+                    meeting.dtstart.date() == last_meeting.dtstart.date()):
+                    period_ids = meeting.period.__parent__.keys()
+                    idx = period_ids.index(meeting.period.__name__)
+                    if (idx > 0 and
+                        period_ids[idx-1] == last_meeting.period.__name__):
+                        meeting = meeting.clone(
+                            meeting_id=last_meeting.meeting_id)
+
+                last_meeting = orig_meeting
+
                 yield meeting
