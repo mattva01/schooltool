@@ -270,7 +270,7 @@
        />
 
   <page
-      for="schooltool.timetable.interfaces.IScheduleCalendar"
+      for="schooltool.app.interfaces.ISchoolToolCalendar"
       name="daily_calendar_rows"
       layer="schooltool.skin.ISchoolToolLayer"
       class=".calendar.ScheduleDailyCalendarRowsView"
@@ -280,5 +280,12 @@
   <zope:adapter
       factory=".calendar.getScheduleCalendarEventDeleteLink"
       name="delete_link" />
+
+   <zope:subscriber
+       for="schooltool.app.interfaces.ISchoolToolCalendar
+            zope.publisher.interfaces.http.IHTTPRequest"
+       provides="schooltool.app.browser.interfaces.ICalendarProvider"
+       factory=".calendar.TimetableCalendarListSubscriber"
+       />
 
 </configure>

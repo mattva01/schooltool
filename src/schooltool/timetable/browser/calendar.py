@@ -42,10 +42,15 @@ from schooltool.app.browser.cal import CalendarEventViewMixin
 from schooltool.app.browser.cal import YearlyCalendarView
 from schooltool.app.browser.cal import DailyCalendarRowsView
 from schooltool.app.browser.cal import getCalendarEventDeleteLink
+from schooltool.app.interfaces import ISchoolToolCalendar
+from schooltool.app.membership import URIMembership, URIGroup
 from schooltool.app.utils import vocabulary
+from schooltool.app.relationships import URISection, URIInstruction
+from schooltool.relationship import getRelatedObjects
 from schooltool.schoolyear.interfaces import ISchoolYear
 from schooltool.timetable import interfaces
 from schooltool.timetable.schedule import iterMeetingsInTimezone
+from schooltool.timetable.interfaces import IHaveSchedule
 from schooltool.term.interfaces import IDateManager, ITermContainer
 from schooltool.term.term import getTermForDate
 
@@ -326,3 +331,29 @@ def getScheduleCalendarEventDeleteLink(event, request, calendar):
     if schedule is not None:
         return None
     return getCalendarEventDeleteLink(event, request, calendar)
+
+
+class TimetableCalendarListSubscriber(object):
+    """A subscriber that can tell which calendars should be displayed."""
+
+    def __init__(self, context, request):
+        self.context = context
+        self.request = request
+
+    def getCalendars(self):
+        """Get a list of calendars to display.
+
+        Yields tuples (calendar, color1, color2).
+        """
+        owner = self.context.__parent__
+
+        instructs = list(getRelatedObjects(
+                owner, URISection, rel_type=URIInstruction))
+        member_of = list(getRelatedObjects(
+                owner, URIGroup, rel_type=URIMembership))
+
+        for obj in instructs + member_of:
+            if IHaveSchedule.providedBy(obj):
+                cal = ISchoolToolCalendar(obj, None)
+                if cal is not None:
+                    yield(ISchoolToolCalendar(obj), '#9db8d2', '#7590ae')
