@@ -36,7 +36,7 @@ site-definition ${abspath}/school.zcml
 #
 # Default: no pidfile
 #
-pid-file var/schooltool.pid
+pid-file ${abspath}/var/schooltool.pid
 
 #
 # error-log-file
