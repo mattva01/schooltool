@@ -36,7 +36,6 @@
     To be replaced with schedule containers in
     schooltool.timetable.browser.app.ITimetableSource layer
 
-  -->
 
   <navigationViewlet
       name="school_timetables"
@@ -67,6 +66,7 @@
      factory=".timetable.timetableSchemaVocabularyFactory"
      provides="zope.schema.interfaces.IVocabularyFactory"
      name="schooltool.timetable.browser.timetable_schema_vocabulary" />
+  -->
 
   <!-- Timetable schemas
 
@@ -96,6 +96,7 @@
       permission="schooltool.edit"
       />
 
+ <!--
   <page
       name="add.html"
       for="schooltool.timetable.interfaces.ITimetableSchemaContainer"
@@ -104,7 +105,7 @@
       menu="schooltool_actions"
       title="New Timetable"
       />
-
+ -->
   <!-- Timetable schema views
 
   To be replaced with plain timetable views.
@@ -133,6 +134,7 @@
   <!-- Section scheduling
 
   -->
+  <!--
 
   <page
       name="schedule.html"
@@ -140,7 +142,6 @@
       class="schooltool.timetable.browser.timetable.SectionTimetableSetupView"
       permission="schooltool.edit" />
 
-  <!--
   <configure package="schooltool.skin">
     <navigationViewlet
       name="schedule-section"
@@ -213,7 +214,6 @@
 
   <!-- Timetable editing views
 
-  -->
 
   <page
       name="index.html"
@@ -225,6 +225,7 @@
 
   <zope:adapter
       factory=".timetable.TimetableFormValidator" />
+  -->
 
   <!-- Calendar integration
 
