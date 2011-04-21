@@ -5,18 +5,23 @@ CHANGES
 1.6.0 (unreleased)
 ------------------
 
-- Move schooltool.commendation example plugin into its own project.
+- Move schooltool.commendation example plugin into its own project
+  https://launchpad.net/schooltool.commendation
 - Workaround tests failing if translations have been compiled (https://launchpad.net/bugs/79761).
+- Fixed crashes when term title is "First" or "Last" (https://launchpad.net/bugs/485639).
 
 
 1.6.0b1 (2011-04-18)
 --------------------
 
+New features
+++++++++++++
+
 - Added report package (https://launchpad.net/bugs/429588)
   - New Manage->Reports page listing all available reports.
   - New reportLink directive for registering reports.
+  - Copied translations from gradebook.
 - Removed 'Report a bug on Launchpad' link from the footer
-- Fixed crash when term title is "First" or "Last" (https://launchpad.net/bugs/485639).
 - Include meta.zcml of plugins first to allow them have optional dependencies.
 - Updated translations.
 
