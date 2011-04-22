@@ -288,4 +288,21 @@
        factory=".calendar.TimetableCalendarListSubscriber"
        />
 
+<!-- TODO:
+  <page
+      name="export.xml"
+      for="schooltool.timetable.interfaces.ITimetableSchema"
+      class=".schema.TimetableSchemaXMLView"
+      permission="schooltool.view"
+      />
+
+  <page
+      name="simpleadd.html"
+      for="schooltool.timetable.interfaces.ITimetableSchemaContainer"
+      class=".schema.SimpleTimetableSchemaAdd"
+      permission="schooltool.edit"
+      />
+
+-->
+
 </configure>
