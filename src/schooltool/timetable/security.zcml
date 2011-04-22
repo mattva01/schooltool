@@ -2,5 +2,45 @@
 <configure xmlns="http://schooltool.org/securitypolicy"
            xmlns:zope="http://namespaces.zope.org/zope">
 
+  <allow
+      interface="schooltool.timetable.interfaces.ITimetableContainer"
+      crowds="administration everybody"
+      permission="schooltool.view" />
+  <allow
+      interface="schooltool.timetable.interfaces.ITimetableContainer"
+      crowds="administration"
+      permission="schooltool.edit" />
+
+  <!-- Security descriptions -->
+
+  <describe_group name="schooltool.timetable" title="School timetables" />
+
+  <describe_action
+     group="schooltool.timetable" name="list" title="List/Search"
+     order="10"
+     interface="schooltool.timetable.interfaces.ITimetableContainer"
+     permission="schooltool.view"
+  />
+
+  <describe_action
+     group="schooltool.timetable" name="create_delete" title="Create/Delete"
+     order="20"
+     interface="schooltool.timetable.interfaces.ITimetableContainer"
+     permission="schooltool.edit"
+  />
+
+  <describe_action
+     group="schooltool.timetable" name="view" title="View"
+     order="30"
+     interface="schooltool.timetable.interfaces.ITimetableContainer"
+     permission="schooltool.view"
+  />
+
+  <describe_action
+     group="schooltool.timetable" name="modify" title="Modify"
+     order="40"
+     interface="schooltool.timetable.interfaces.ITimetableContainer"
+     permission="schooltool.edit"
+  />
 
 </configure>

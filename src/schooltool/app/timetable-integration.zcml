@@ -12,4 +12,20 @@
   <adapter factory=".timetable.EmergencyDayTimetableSubscriber"
            name="update-timetables-on-emergency" />
 
+  <describe_action
+      group="schooltool.course-sections" name="edit_timetables"
+      title="Assign timetables"
+      order="41"
+      interface="schooltool.course.interfaces.ISection"
+      permission="schooltool.edit"
+  />
+
+  <describe_action
+      group="schooltool.course-sections" name="edit_schedule"
+      title="Change schedule"
+      order="42"
+      interface="schooltool.course.interfaces.ISection"
+      permission="schooltool.edit"
+  />
+
 </configure>
