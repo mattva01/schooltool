@@ -21,7 +21,7 @@ XXX: move to schooltool/app/timetable.py or similar.
 """
 import zope.lifecycleevent
 import zope.lifecycleevent.interfaces
-
+from zope.proxy import sameProxiedObjects
 from zope.interface import implements, implementer
 from zope.component import adapts, adapter, getUtility
 from zope.annotation.interfaces import IAttributeAnnotatable
@@ -129,9 +129,13 @@ class UpdateSelectedPeriodsSchedules(ObjectEventAdapterSubscriber):
         # XXX: extremely nasty loop through all schedules.
         schedule_containers = app[SCHEDULES_KEY]
         for container in schedule_containers.values():
+            notify_container = False
             for schedule in container.values():
-                if interfaces.ISelectedPeriodsSchedule.providedBy(schedule):
-                    zope.lifecycleevent.modified(schedule)
+                if (interfaces.ISelectedPeriodsSchedule.providedBy(schedule) and
+                    sameProxiedObjects(schedule.timetable, self.object)):
+                    notify_container = True
+            if notify_container:
+                zope.lifecycleevent.modified(container)
 
 
 class SchooldaysForSchedule(object):
@@ -170,3 +174,4 @@ class SchooldaysForTimetable(SchooldaysForSchedule):
     def schoolyear(self):
         owner = interfaces.IHaveTimetables(self.schedule)
         return ISchoolYear(owner)
+

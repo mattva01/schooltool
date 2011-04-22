@@ -177,6 +177,7 @@ class UpdateScheduleCalendar(ObjectEventAdapterSubscriber):
         container = interfaces.IScheduleContainer(owner, None)
         if container is None:
             return
+
         calendar.updateSchedule(container)
 
 
