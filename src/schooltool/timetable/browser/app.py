@@ -20,12 +20,11 @@
 Timetabling app integration.
 """
 
-from zope.interface import implements, alsoProvides
+from zope.interface import implements
 from zope.intid.interfaces import IIntIds
 from zope.component import adapts, getMultiAdapter, getUtility
 from zope.traversing.browser.interfaces import IAbsoluteURL
 from zope.publisher.browser import BrowserView
-from zope.publisher.interfaces import NotFound
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.schema.vocabulary import getVocabularyRegistry
 
@@ -36,7 +35,6 @@ from schooltool.skin.containers import ContainerView
 from schooltool.term.interfaces import ITerm
 from schooltool.timetable.interfaces import IHaveSchedule
 from schooltool.timetable.interfaces import IScheduleContainer
-from schooltool.timetable.interfaces import ITimetableContainer
 from schooltool.timetable.interfaces import ITimetableContainer
 
 from schooltool.common import SchoolToolMessage as _
