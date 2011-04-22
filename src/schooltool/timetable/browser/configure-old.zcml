@@ -237,7 +237,6 @@
       class=".event.TimetableEventEditView"
       permission="schooltool.edit"
       />
-  -->
 
    <zope:subscriber
        for="schooltool.app.interfaces.ISchoolToolCalendar
@@ -257,6 +256,7 @@
       layer="schooltool.timetable.browser.skin.ITimetableLayer"
       order="10"
       />
+  -->
 <!--
   <viewlet
       name="calendar-term-legend"
@@ -302,6 +302,5 @@
       for="schooltool.timetable.interfaces.ITimetableDict
            zope.publisher.interfaces.browser.IBrowserRequest"
       factory="schooltool.table.table.SchoolToolTableFormatter" />
-
 
 </configure>
