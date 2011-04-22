@@ -254,7 +254,7 @@ class SpecialDayView(BrowserView):
 
 
 class ScheduleContainerView(BrowserView):
-    template = ViewPageTemplateFile('templates/schedule-container-view.pt')
+    template = ViewPageTemplateFile('templates/schedule_container_view.pt')
 
     @property
     def owner(self):
@@ -282,7 +282,7 @@ class ScheduleContainerView(BrowserView):
 
 
 class ScheduleDeleteView(BrowserView):
-    template = ViewPageTemplateFile('templates/confirm-schedule-delete.pt')
+    template = ViewPageTemplateFile('templates/confirm_schedule_delete.pt')
 
     @property
     def schedule(self):

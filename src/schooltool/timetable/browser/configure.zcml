@@ -53,7 +53,7 @@
       name="index.html"
       for="schooltool.timetable.interfaces.ITimetableContainer"
       class=".app.TimetableContainerView"
-      template="templates/timetable-container.pt"
+      template="templates/timetable_container.pt"
       permission="schooltool.view"
       />
 
@@ -68,7 +68,7 @@
 
   <content
       for="schooltool.timetable.interfaces.IScheduleWithExceptions"
-      template="templates/schedule-exceptions-content.pt"
+      template="templates/schedule_exceptions_content.pt"
       permission="schooltool.view"
       name="exceptions" />
 
@@ -76,7 +76,7 @@
       class=".timetable.DayTemplatesTable"
       for="schooltool.timetable.interfaces.IDayTemplateSchedule"
       view=".timetable.IRenderDayTableCells"
-      template="templates/daytemplates-table.pt"
+      template="templates/daytemplates_table.pt"
       permission="schooltool.view"
       name="table" />
 
@@ -188,35 +188,35 @@
   <content
       class=".timetable.SelectedPeriodsContent"
       for="schooltool.timetable.interfaces.ISelectedPeriodsSchedule"
-      template="templates/selected-periods-content.pt"
+      template="templates/selected_periods_content.pt"
       permission="schooltool.view"
       name="view" />
 
   <content
       class=".timetable.SelectedPeriodsContent"
       for="schooltool.term.interfaces.ITerm"
-      template="templates/selected-periods-content.pt"
+      template="templates/selected_periods_content.pt"
       display_title="Term"
       permission="schooltool.view"
       name="view" />
 
   <content
       for="schooltool.term.interfaces.ITerm"
-      template="templates/date-boundaries-content.pt"
+      template="templates/date_boundaries_content.pt"
       display_title="Term"
       permission="schooltool.view"
       name="boundaries" />
 
   <content
       for="schooltool.timetable.interfaces.ISchedule"
-      template="templates/date-boundaries-content.pt"
+      template="templates/date_boundaries_content.pt"
       display_title="Schedule"
       permission="schooltool.view"
       name="boundaries" />
 
   <content
       for="schooltool.timetable.interfaces.ITimetable"
-      template="templates/date-boundaries-content.pt"
+      template="templates/date_boundaries_content.pt"
       display_title="Timetable"
       permission="schooltool.view"
       name="boundaries" />

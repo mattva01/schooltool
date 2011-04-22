@@ -325,7 +325,7 @@ class ISelectedPeriodsAddForm(Interface):
 
 class SelectedPeriodsAddView(form.AddForm):
 
-    template = ViewPageTemplateFile('templates/selected-periods-add.pt')
+    template = ViewPageTemplateFile('templates/selected_periods_add.pt')
     fields = field.Fields(ISelectedPeriodsAddForm)
 
     _object_added = None
@@ -491,7 +491,7 @@ class SelectedPeriodsContent(ContentProvider):
 class SelectedPeriodsScheduleEditView(form.EditForm):
     implements(IRenderDayTableCells)
 
-    template = ViewPageTemplateFile('templates/selected-periods-edit.pt')
+    template = ViewPageTemplateFile('templates/selected_periods_edit.pt')
     fields = field.Fields(ISelectedPeriodsSchedule).select(
         'first', 'last',
         'consecutive_periods_as_one')
