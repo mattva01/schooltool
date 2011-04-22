@@ -63,7 +63,8 @@ class TimetableContainerAbsoluteURLAdapter(ScheduleContainerAbsoluteURLAdapter):
     traversal_name = 'timetables'
 
 
-# XXX: the view is not working yet
+# XXX: the view is not working yet, default selection broken
+# XXX: timetable deletion view not implemented
 class TimetableContainerView(ContainerView):
     """TimetableContainer view."""
 
