@@ -1,23 +1,6 @@
 <?xml version="1.0"?>
 <configure xmlns="http://namespaces.zope.org/zope">
 
-  <adapter
-      for="schooltool.app.overlay.ICalendarOverlayInfo"
-      provides=".interfaces.IShowTimetables"
-      factory=".app.ShowTimetables"
-      trusted="true"
-      />
-
-  <class class=".app.ShowTimetables">
-    <require
-        permission="schooltool.view"
-        interface=".interfaces.IShowTimetables" />
-    <require
-        permission="schooltool.view"
-        set_schema=".interfaces.IShowTimetables" />
-  </class>
-
-
   <class class="schooltool.schoolyear.schoolyear.SchoolYear">
     <implements interface="schooltool.timetable.interfaces.IHaveTimetables" />
   </class>
