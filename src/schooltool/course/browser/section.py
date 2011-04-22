@@ -91,18 +91,6 @@ class SectionContainerView(ContainerView):
     def school_year(self):
         return ISchoolYear(self.context)
 
-    def getTimetables(self, obj):
-        # XXX: old comment: very hacky, but necessary for now. :-(
-
-        # XXX: misplaced timetable integration
-        from schooltool.timetable.interfaces import ITimetables
-        tt_adapter = ITimetables(obj, None)
-        if tt_adapter is not None:
-            timetables = sorted(tt_adapter.timetables.items())
-            return [timetable
-                    for key, timetable in timetables]
-        return []
-
 
 class SectionCopyingView(SectionContainerView):
     """A view to copy sections from the previous term."""
