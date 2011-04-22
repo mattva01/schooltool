@@ -3,7 +3,7 @@
 PACKAGE=schooltool
 
 DIST=/home/ftp/pub/schooltool/trunk
-BOOTSTRAP_PYTHON=python
+BOOTSTRAP_PYTHON=python2.6
 
 INSTANCE_TYPE=schooltool
 BUILDOUT_FLAGS=
@@ -12,16 +12,15 @@ BUILDOUT_FLAGS=
 all: build
 
 .PHONY: build
-build: bin/test
+build: .installed.cfg
 
 .PHONY: bootstrap
 bootstrap bin/buildout python:
 	$(BOOTSTRAP_PYTHON) bootstrap.py
 
 .PHONY: buildout
-buildout bin/test: python bin/buildout buildout.cfg base.cfg setup.py
+buildout .installed.cfg: python bin/buildout buildout.cfg base.cfg setup.py
 	bin/buildout $(BUILDOUT_FLAGS)
-	@touch --no-create bin/test
 
 .PHONY: update
 update:
@@ -29,7 +28,6 @@ update:
 	$(MAKE) buildout BUILDOUT_FLAGS=-n
 
 instance:
-	$(MAKE) buildout
 	bin/make-schooltool-instance instance instance_type=$(INSTANCE_TYPE)
 
 .PHONY: run
@@ -42,17 +40,19 @@ tags: build
 
 .PHONY: clean
 clean:
-	rm -rf bin develop-eggs parts python
-	rm -rf build dist
-	rm -f .installed.cfg
+	rm -rf python
+	rm -rf bin develop-eggs parts .installed.cfg
+	rm -rf build
 	rm -f ID TAGS tags
-	find . -name '*.py[co]' -exec rm -f {} \;
-	find . -name '*.mo' -exec rm -f {} +
+	rm -rf coverage
+	find . -name '*.py[co]' -delete
+	find . -name '*.mo' -delete
 	find . -name 'LC_MESSAGES' -exec rmdir -p --ignore-fail-on-non-empty {} +
 
 .PHONY: realclean
 realclean:
 	rm -rf eggs
+	rm -rf dist
 	rm -rf instance
 	$(MAKE) clean
 
@@ -121,7 +121,7 @@ compile-translations:
 	done
 
 .PHONY: update-translations
-update-translations: extract-translations
+update-translations:
 	set -e; \
 	locales=src/schooltool/locales; \
 	for f in $${locales}/*.po; do \
@@ -138,7 +138,7 @@ docs: build
 
 .PHONY: release
 release: bin/buildout compile-translations
-	grep -qv 'dev' version.txt.in || echo -n `cat version.txt.in`_r`bzr revno` > version.txt
+	grep -qv 'dev' version.txt.in || echo -n `cat version.txt.in`-r`bzr revno` > version.txt
 	bin/buildout setup setup.py sdist
 	rm -f version.txt
 
