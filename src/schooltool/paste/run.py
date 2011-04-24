@@ -1,6 +1,6 @@
 #
 # SchoolTool - common information systems platform for school administration
-# Copyright (c) 2007 Shuttleworth Foundation
+# Copyright (c) 2007, 2011 Shuttleworth Foundation
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -12,15 +12,18 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 #
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 """
 SchoolTool run script.
 """
 import optparse
 import os.path
+import re
+import sys
+
 import paste.script.command
 
 
@@ -48,10 +51,51 @@ def parse_args():
     return options, args
 
 
+def update_instance(instance_root):
+    """Renames configuration files to match Ubuntu layout"""
+    os.rename(os.path.join(instance_root, 'schooltool.ini'),
+              os.path.join(instance_root, 'paste.ini'))
+    os.rename(os.path.join(instance_root, 'school.zcml'),
+              os.path.join(instance_root, 'site.zcml'))
+    with open(os.path.join(instance_root, 'schooltool.conf'), 'r') as f:
+        schooltool_conf = f.read()
+
+        instance = os.path.basename(instance_root)
+        schooltool_conf = re.sub(os.path.join(instance, 'school.zcml'),
+                                 os.path.join(instance, 'site.zcml'),
+                                 schooltool_conf, 1)
+        schooltool_conf = re.sub('Arial and Times New Roman',
+                                 'Liberation',
+                                 schooltool_conf, 1)
+        schooltool_conf = re.sub('msttcorefonts',
+                                 'ttf-liberation',
+                                 schooltool_conf)
+        # uncomment reportlab_fontdir
+        schooltool_conf = re.sub('\n#?(reportlab_fontdir.*)ttf-liberation\n',
+                                 r'\n\1ttf-liberation\n',
+                                 schooltool_conf, 1)
+        # comment out obsolete attendance-log-file option
+        schooltool_conf = re.sub('\n(attendance-log-file.*)\n',
+                                 r'\n#\1\n',
+                                 schooltool_conf, 1)
+        # specify absolute path to pid file
+        schooltool_conf = re.sub('\npid-file (var/schooltool.pid)\n',
+                                 r'\npid-file %(instance)s/\1\n' % {
+                                     'instance': instance_root},
+                                 schooltool_conf, 1)
+
+    with open(os.path.join(instance_root, 'schooltool.conf'), 'w') as f:
+        f.write(schooltool_conf)
+
+
 def main():
     options, args = parse_args()
     instance_root = os.path.abspath(args[0])
-    conf_file = os.path.join(instance_root, "schooltool.ini")
+    conf_file = os.path.join(instance_root, "paste.ini")
+    if not os.path.exists(conf_file):
+        print >> sys.stderr, 'Updating instance files...'
+        update_instance(instance_root)
+        print >> sys.stderr, 'Done.'
     pid_file = os.path.join(instance_root, "var", "schooltool.pid")
     log_file = os.path.join(instance_root, "log", "paster.log")
 

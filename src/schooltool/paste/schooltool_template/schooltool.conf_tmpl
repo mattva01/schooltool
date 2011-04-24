@@ -1,15 +1,7 @@
 # Sample SchoolTool server configuration file
 
 # identify the component configuration used to define the site:
-site-definition ${abspath}/school.zcml
-
-#
-# ssl_certificate certificate
-#
-#   Specifies a certificate in PEM format which contains a certificate and
-#   private key for use in SSL connections.
-#   This is required to use web_ssl
-#
+site-definition ${abspath}/site.zcml
 
 #
 # thread-pool-size n
