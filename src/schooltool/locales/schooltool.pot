@@ -3441,16 +3441,16 @@ msgid "Schooltool Person Display Menu"
 msgstr ""
 
 #: /src/schooltool/demographics/browser/demographics_macros.pt:4
+#: /src/schooltool/demographics/browser/personform.py:96
+msgid "Apply and Next"
+msgstr ""
+
+#: /src/schooltool/demographics/browser/demographics_macros.pt:4
 msgid "N"
 msgstr ""
 
 #: /src/schooltool/demographics/browser/demographics_macros.pt:4
 msgid "Shortcut: Alt-N"
-msgstr ""
-
-#: /src/schooltool/demographics/browser/demographics_macros.pt:4
-#: /src/schooltool/demographics/browser/personform.py:96
-msgid "Apply and Next"
 msgstr ""
 
 #: /src/schooltool/demographics/browser/display_form.pt:3

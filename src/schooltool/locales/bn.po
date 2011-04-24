@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2011-04-17 23:49+0300\n"
-"PO-Revision-Date: 2010-11-22 18:00+0000\n"
-"Last-Translator: Aniruddha Adhikary <Unknown>\n"
+"PO-Revision-Date: 2011-04-22 21:59+0000\n"
+"Last-Translator: Himel (হিমেল) <Unknown>\n"
 "Language-Team: Bengali <bn@li.org>\n"
 "Language: bn\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-04-08 04:31+0000\n"
-"X-Generator: Launchpad (build 12735)\n"
+"X-Launchpad-Export-Date: 2011-04-23 04:30+0000\n"
+"X-Generator: Launchpad (build 12758)\n"
 
 #: /src/schooltool/app/app.py:197
 msgid "Your School"
@@ -1946,7 +1946,7 @@ msgstr ""
 
 #: /src/schooltool/app/help/org.pt:6
 msgid "SchoolTool Organization"
-msgstr ""
+msgstr "স্কুলটুলস্ অরগানাইজেশন"
 
 #: /src/schooltool/app/help/org.pt:8
 msgid ""
@@ -2219,19 +2219,19 @@ msgstr ""
 msgid "Manage school settings and configuration"
 msgstr ""
 
-#: /src/schooltool/app/security.zcml:89
-#: /src/schooltool/course/security.zcml:142
-#: /src/schooltool/group/security.zcml:90
-#: /src/schooltool/person/security.zcml:122
+#: /src/schooltool/app/security.zcml:95
+#: /src/schooltool/course/security.zcml:141
+#: /src/schooltool/group/security.zcml:86
+#: /src/schooltool/person/security.zcml:128
 msgid "View calendar"
-msgstr ""
+msgstr "ক্যালেন্ডার দেখুন"
 
-#: /src/schooltool/app/security.zcml:97
-#: /src/schooltool/course/security.zcml:150
-#: /src/schooltool/group/security.zcml:98
-#: /src/schooltool/person/security.zcml:130
+#: /src/schooltool/app/security.zcml:103
+#: /src/schooltool/course/security.zcml:149
+#: /src/schooltool/group/security.zcml:94
+#: /src/schooltool/person/security.zcml:136
 msgid "Change calendar"
-msgstr ""
+msgstr "ক্যালেন্ডার পরিবর্তন"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:14
 #: /src/schooltool/basicperson/browser/configure.zcml:216
@@ -2324,11 +2324,11 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/configure.zcml:291
 msgid "Add Teacher"
-msgstr ""
+msgstr "শিক্ষক যোগ"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:301
 msgid "Add Student"
-msgstr ""
+msgstr "ছাত্র যোগ"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:311
 msgid "Add Administrator"
@@ -2422,15 +2422,15 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/person.py:152
 msgid "This username is already in use!"
-msgstr ""
+msgstr "এই ইউজারনেম পূর্বে ব্যবহার করা হয়েছে!"
 
-#: /src/schooltool/basicperson/browser/person.py:263
+#: /src/schooltool/basicperson/browser/person.py:149
 msgid "Add new person"
-msgstr ""
+msgstr "নতুন মানুষ যোগ করুন"
 
 #: /src/schooltool/basicperson/browser/person.py:283
 msgid "Usernames"
-msgstr ""
+msgstr "ইউজারনেম"
 
 #: /src/schooltool/basicperson/browser/person.py:300
 msgid "Add multiple persons"
@@ -2481,7 +2481,7 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/person.py:582
 msgid "Add new teacher"
-msgstr ""
+msgstr "নতুন শিক্ষক যোগ"
 
 #: /src/schooltool/basicperson/browser/person.py:589
 msgid "Student identification"
@@ -2493,7 +2493,7 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/person.py:592
 msgid "Add new student"
-msgstr ""
+msgstr "নতুন ছাত্র যোগ"
 
 #: /src/schooltool/basicperson/browser/person.py:599
 msgid "Administrator identification"
@@ -2514,7 +2514,7 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/templates/container.pt:23
 msgid "school year"
-msgstr ""
+msgstr "শিক্ষাবর্ষ"
 
 #: /src/schooltool/basicperson/browser/templates/container.pt:37
 #: /src/schooltool/course/browser/templates/course_container.pt:28
@@ -2600,7 +2600,7 @@ msgstr ""
 #: /src/schooltool/timetable/browser/templates/schooltt-delete.pt:16
 #: /src/schooltool/timetable/browser/templates/timetable-container-delete.pt:16
 msgid "You have not selected any items."
-msgstr ""
+msgstr "আপনি কোন আইটেম সিলেক্ট করেননি।"
 
 #: /src/schooltool/basicperson/browser/templates/person_container_delete.pt:23
 #: /src/schooltool/person/browser/person_container_delete.pt:23
@@ -2670,23 +2670,23 @@ msgid "Gender"
 msgstr ""
 
 #: /src/schooltool/basicperson/interfaces.py:69
-#: /src/schooltool/demographics/interfaces.py:127
+#: /src/schooltool/demographics/interfaces.py:124
 msgid "female"
-msgstr ""
+msgstr "স্ত্রী"
 
 #: /src/schooltool/basicperson/interfaces.py:69
-#: /src/schooltool/demographics/interfaces.py:127
+#: /src/schooltool/demographics/interfaces.py:124
 msgid "male"
-msgstr ""
+msgstr "পুরুষ"
 
 #: /src/schooltool/basicperson/interfaces.py:74
-#: /src/schooltool/demographics/interfaces.py:132
+#: /src/schooltool/demographics/interfaces.py:129
 msgid "Birth date"
-msgstr ""
+msgstr "জন্ম তারিখ"
 
 #: /src/schooltool/basicperson/interfaces.py:75
 msgid "(yyyy-mm-dd)"
-msgstr ""
+msgstr "বছর-মাস-দিন"
 
 #: /src/schooltool/basicperson/interfaces.py:122
 msgid "The title of this Field Description"
@@ -2767,15 +2767,15 @@ msgstr ""
 #: /src/schooltool/course/browser/templates/section.pt:103
 #: /src/schooltool/course/browser/templates/section_container.pt:87
 msgid "Students"
-msgstr ""
+msgstr "ছাত্রগণ"
 
 #: /src/schooltool/basicperson/vocabularies.py:144
 msgid "Teachers"
-msgstr ""
+msgstr "শিক্ষকগণ"
 
 #: /src/schooltool/basicperson/vocabularies.py:145
 msgid "Administrators"
-msgstr ""
+msgstr "প্রশাসকগণ"
 
 #: /src/schooltool/common/configure.zcml:89
 #: /src/schooltool/course/browser/configure.zcml:25
@@ -2827,7 +2827,7 @@ msgstr ""
 
 #: /src/schooltool/contact/browser/contact.py:79
 msgid "Add new contact"
-msgstr ""
+msgstr "নুতুন পরিচিতি যোগ"
 
 #. Default: ""
 #: /src/schooltool/contact/browser/contact.py:162
@@ -2893,7 +2893,7 @@ msgstr ""
 #: /src/schooltool/contact/browser/relationship.py:75
 #: /src/schooltool/contact/interfaces.py:101
 msgid "Relationship"
-msgstr ""
+msgstr "সম্পর্ক"
 
 #: /src/schooltool/contact/browser/relationship.py:86
 msgid "Assigned Contacts"
@@ -3036,14 +3036,14 @@ msgid "Postal code"
 msgstr ""
 
 #: /src/schooltool/contact/interfaces.py:73
-#: /src/schooltool/demographics/interfaces.py:276
+#: /src/schooltool/demographics/interfaces.py:273
 msgid "Home phone"
-msgstr ""
+msgstr "বাসার ফোন"
 
 #: /src/schooltool/contact/interfaces.py:75
-#: /src/schooltool/demographics/interfaces.py:281
+#: /src/schooltool/demographics/interfaces.py:278
 msgid "Work phone"
-msgstr ""
+msgstr "কাজের ফোন"
 
 #: /src/schooltool/contact/interfaces.py:77
 msgid "Mobile phone"
@@ -3071,7 +3071,7 @@ msgstr ""
 
 #: /src/schooltool/contact/interfaces.py:107
 msgid "Guardian"
-msgstr ""
+msgstr "অভিভাবক"
 
 #: /src/schooltool/contact/interfaces.py:108
 msgid "Sibling"
@@ -3138,12 +3138,12 @@ msgstr ""
 
 #: /src/schooltool/course/browser/configure.zcml:96
 msgid "New Course"
-msgstr ""
+msgstr "নতুন কোর্স"
 
 #: /src/schooltool/course/browser/configure.zcml:150
 #: /src/schooltool/course/browser/configure.zcml:160
 msgid "New Section"
-msgstr ""
+msgstr "নতুন বিভাগ"
 
 #: /src/schooltool/course/browser/configure.zcml:180
 msgid "Edit Section Information"
@@ -3221,11 +3221,11 @@ msgstr ""
 msgid "Starting term ($starts_in) is later than ending term ($ends_in)"
 msgstr ""
 
-#: /src/schooltool/course/browser/section.py:434
+#: /src/schooltool/course/browser/section.py:438
 msgid "Course"
-msgstr ""
+msgstr "কোর্স"
 
-#: /src/schooltool/course/browser/section.py:519
+#: /src/schooltool/course/browser/section.py:523
 msgid "Current Instructors"
 msgstr ""
 
@@ -3235,9 +3235,9 @@ msgstr ""
 
 #: /src/schooltool/course/browser/section.py:535
 msgid "Current Students"
-msgstr ""
+msgstr "বতর্মান ছাত্র"
 
-#: /src/schooltool/course/browser/section.py:536
+#: /src/schooltool/course/browser/section.py:540
 msgid "Available Students"
 msgstr ""
 
@@ -3340,7 +3340,7 @@ msgstr ""
 
 #: /src/schooltool/course/browser/templates/course.pt:71
 msgid "students"
-msgstr ""
+msgstr "ছাত্রগণ"
 
 #: /src/schooltool/course/browser/templates/course_container.pt:12
 msgid "Courses for ${schoolyear}"
@@ -3486,15 +3486,15 @@ msgstr ""
 
 #: /src/schooltool/course/interfaces.py:37
 msgid "Title of the course."
-msgstr ""
+msgstr "কোর্সের শিরোনাম"
 
 #: /src/schooltool/course/interfaces.py:42
 msgid "Description of the course."
-msgstr ""
+msgstr "কোর্সের বনর্না"
 
 #: /src/schooltool/course/interfaces.py:49
 msgid "Course ID"
-msgstr ""
+msgstr "কোর্স আইডি"
 
 #: /src/schooltool/course/interfaces.py:51
 msgid "Localy used course identifier."
