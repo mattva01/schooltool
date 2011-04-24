@@ -119,6 +119,18 @@ class SchoolYearContainerView(TableContainerView, SchoolYearContainerBaseView):
     index_title = _("School Years")
     error = None
 
+    @property
+    def first(self):
+        year = self.context.getActiveSchoolYear()
+        if year is not None:
+            return year.first
+
+    @property
+    def last(self):
+        year = self.context.getActiveSchoolYear()
+        if year is not None:
+            return year.last
+
     def setUpTableFormatter(self, formatter):
         columns_before = []
         if self.canModify():
