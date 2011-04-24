@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2011-04-17 23:49+0300\n"
-"PO-Revision-Date: 2011-04-13 10:53+0000\n"
+"PO-Revision-Date: 2011-04-20 10:44+0000\n"
 "Last-Translator: issyl0 <isabell121@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-04-15 04:49+0000\n"
-"X-Generator: Launchpad (build 12735)\n"
+"X-Launchpad-Export-Date: 2011-04-21 04:33+0000\n"
+"X-Generator: Launchpad (build 12758)\n"
 "X-Rosetta-Version: 0.1\n"
 
 #: /src/schooltool/app/app.py:197
@@ -5057,6 +5057,8 @@ msgid ""
 "Information about each group is visible to school administration, and "
 "members and leaders of the group."
 msgstr ""
+"Informations concernant chaque groupe est visible aux administrateurs, et "
+"aux membres et enseignants du groupe."
 
 #: /src/schooltool/group/security.zcml:11
 msgid "Information about each group is visible to the general public."
@@ -5108,7 +5110,7 @@ msgstr "Titre du niveau"
 
 #: /src/schooltool/level/security.zcml:7
 msgid "The teaching levels (student learning years)."
-msgstr ""
+msgstr "Les niveaux d'enseignement (élèves)"
 
 #: /src/schooltool/level/security.zcml:12
 msgid "Add/Remove"
@@ -5125,7 +5127,7 @@ msgstr "Niveaux d'apprentissage"
 
 #: /src/schooltool/level/templates/levels.pt:11
 msgid "Levels (student learning years) taught in ${schoolyear}"
-msgstr ""
+msgstr "Niveaux (d'élèves) enseignés en ${schoolyear}"
 
 #: /src/schooltool/level/templates/link_to_levels.pt:1
 msgid "Teaching levels"
@@ -5485,7 +5487,7 @@ msgstr "Rapports d'année scolaire"
 
 #: /src/schooltool/report/browser/report.py:59
 msgid "Term Reports"
-msgstr ""
+msgstr "Bulletins trimestriels"
 
 #: /src/schooltool/report/browser/report.py:64
 msgid "Section Reports"

@@ -125,7 +125,7 @@ update-translations:
 	set -e; \
 	locales=src/schooltool/locales; \
 	for f in $${locales}/*.po; do \
-	    msgmerge -qUFN $$f $${locales}/$(PACKAGE).pot ;\
+	    msgmerge -qUN $$f $${locales}/$(PACKAGE).pot ;\
 	done
 	$(MAKE) compile-translations
 
