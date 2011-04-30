@@ -698,9 +698,9 @@ class StandaloneServer(object):
         # Open the database
         db_configuration = options.config.database
         try:
-           db = db_configuration.open()
-           if options.pack:
-               db.pack()
+            db = db_configuration.open()
+            if options.pack:
+                db.pack()
         except IOError, e:
             print >> sys.stderr, _("Could not initialize the database:\n%s" %
                                    (e, ))

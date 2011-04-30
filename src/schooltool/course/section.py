@@ -49,9 +49,9 @@ from schooltool.schoolyear.subscriber import ObjectEventAdapterSubscriber
 from schooltool.schoolyear.interfaces import ISubscriber
 from schooltool.schoolyear.interfaces import ISchoolYear
 from schooltool.securitypolicy.crowds import Crowd, AggregateCrowd
+from schooltool.securitypolicy.crowds import ConfigurableCrowd
 from schooltool.course.interfaces import ICourseContainer
 from schooltool.course.interfaces import ISection
-from schooltool.app.security import ConfigurableCrowd
 from schooltool.relationship.relationship import getRelatedObjects
 from schooltool.course.interfaces import ILearner, IInstructor
 from schooltool.term.term import getNextTerm
