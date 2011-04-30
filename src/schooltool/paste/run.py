@@ -19,6 +19,9 @@
 """
 SchoolTool run script.
 """
+
+from __future__ import with_statement
+
 import optparse
 import os.path
 import re
