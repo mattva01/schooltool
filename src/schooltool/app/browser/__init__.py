@@ -25,8 +25,7 @@ import calendar
 import itertools
 
 from zope.interface import implements
-from zope.component import adapts
-from zope.publisher.browser import BrowserView
+from zope.component import adapts, queryMultiAdapter
 from zope.size.interfaces import ISized
 from zope.traversing.interfaces import IPathAdapter, ITraversable
 from zope.security import checkPermission
@@ -39,11 +38,12 @@ from zope.security.checker import canAccess, canWrite
 
 from pytz import timezone
 
-from schooltool.common import SchoolToolMessage as _
 from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.app.browser.content import IContentProviders
 from schooltool.person.interfaces import IPerson
-from schooltool.person.interfaces import IPersonPreferences
+
+from schooltool.common import SchoolToolMessage as _
 
 
 class SchoolToolAPI(object):
@@ -57,13 +57,15 @@ class SchoolToolAPI(object):
 
     implements(IPathAdapter, ITALESFunctionNamespace)
 
+    engine = None
+
     def __init__(self, context):
         self.context = context
 
     def setEngine(self, engine):
-        """See ITALESFunctionNamespace."""
-        pass
+        self.engine = engine
 
+    @property
     def app(self):
         """Return the ISchoolToolApplication.
 
@@ -75,8 +77,34 @@ class SchoolToolAPI(object):
 
         """
         return ISchoolToolApplication(None)
-    app = property(app)
 
+    @property
+    def content(self):
+        """Get traversable content providers for the context.
+
+        Say, we have a viewlet manager named ExtraInfo, registered for persons.
+        As viewlet managers implement IContentProvider, we can do:
+
+        <div tal:repeat="person view/persons">
+          <p tal:content="person/title"></p>
+          <div tal:replace="structure person/schooltool:content/ExtraInfo"></div>
+        </div>
+
+        """
+        if self.engine is None:
+            return None
+        vars = self.engine.vars
+        context = self.context
+        request = vars.get('request', None)
+        view = vars.get('view', None)
+        providers = queryMultiAdapter(
+            (context, request, view),
+            IContentProviders)
+        if ITALESFunctionNamespace.providedBy(providers):
+            providers.setEngine(self.engine)
+        return providers
+
+    @property
     def person(self):
         """Adapt context to IPerson, default to None.
 
@@ -90,8 +118,8 @@ class SchoolToolAPI(object):
 
         """
         return IPerson(self.context, None)
-    person = property(person)
 
+    @property
     def authenticated(self):
         """Check whether context is an authenticated principal.
 
@@ -114,8 +142,8 @@ class SchoolToolAPI(object):
             raise TypeError("schooltool:authenticated can only be applied"
                             " to a principal but was applied on %r" % self.context)
         return not IUnauthenticatedPrincipal.providedBy(self.context)
-    authenticated = property(authenticated)
 
+    @property
     def preferences(self):
         """Return ApplicationPreferences for the SchoolToolApplication.
 
@@ -127,8 +155,8 @@ class SchoolToolAPI(object):
 
         """
         return IApplicationPreferences(self.app)
-    preferences = property(preferences)
 
+    @property
     def has_dependents(self):
         """Check whether an object has dependents (via IDependable).
 
@@ -149,7 +177,6 @@ class SchoolToolAPI(object):
             return False
         else:
             return bool(dependable.dependents())
-    has_dependents = property(has_dependents)
 
     def can_view(self):
         return checkPermission("schooltool.view", self.context)
