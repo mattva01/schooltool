@@ -6,6 +6,7 @@ CHANGES
 ------------------
 
 - Nothing changed yet.
+- Pluggable traverser refactoring, traversers lost redundant request parameter
 
 
 1.6.0 (2011-04-25)

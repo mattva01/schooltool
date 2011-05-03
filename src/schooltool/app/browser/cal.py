@@ -150,31 +150,6 @@ short_day_of_week_names = dict(weekday_names)
 # Traversal
 #
 
-class ToCalendarTraverser(object):
-    """A traverser that allows to traverse to a calendar owner's calendar."""
-
-    adapts(IHaveCalendar)
-    implements(IBrowserPublisher)
-
-    def __init__(self, context, request):
-        self.context = context
-        self.request = request
-
-    def publishTraverse(self, request, name):
-        if name == 'calendar':
-            return ISchoolToolCalendar(self.context)
-        elif name in ('calendar.ics', 'calendar.vfb'):
-            calendar = ISchoolToolCalendar(self.context)
-            view = queryMultiAdapter((calendar, request), name=name)
-            if view is not None:
-                return view
-
-        raise NotFound(self.context, name, request)
-
-    def browserDefault(self, request):
-        return self.context, ('index.html', )
-
-
 class CalendarTraverser(object):
     """A smart calendar traverser that can handle dates in the URL."""
 

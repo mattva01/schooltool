@@ -2,6 +2,20 @@
 
   <directive
       namespace="http://namespaces.zope.org/zope"
+      name="pluggableTraverser"
+      schema=".metadirectives.IPluggableTraverser"
+      handler=".metaconfigure.pluggableTraverser"
+      />
+
+  <directive
+      namespace="http://namespaces.zope.org/zope"
+      name="traverserPlugin"
+      schema=".metadirectives.ITraverserPlugin"
+      handler=".metaconfigure.traverserPlugin"
+      />
+
+  <directive
+      namespace="http://namespaces.zope.org/zope"
       name="adapterTraverserPlugin"
       schema=".metadirectives.IAdapterTraverserPlugin"
       handler=".metaconfigure.adapterTraverserPlugin"
@@ -9,9 +23,9 @@
 
   <directive
       namespace="http://namespaces.zope.org/zope"
-      name="singleAttributeTraverserPlugin"
-      schema=".metadirectives.ISingleAttributeTraverserPlugin"
-      handler=".metaconfigure.singleAttributeTraverserPlugin"
+      name="attributeTraverserPlugin"
+      schema=".metadirectives.IAttributeTraverserPlugin"
+      handler=".metaconfigure.attributeTraverserPlugin"
       />
 
   <directive

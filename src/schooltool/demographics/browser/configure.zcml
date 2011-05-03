@@ -70,42 +70,42 @@
       permission="schooltool.view"
       />
 
-  <zope:singleAttributeTraverserPlugin
+  <zope:attributeTraverserPlugin
       for="schooltool.demographics.interfaces.IDemographicsPerson"
       name="parent1"
       permission="zope.Public" />
 
-  <zope:singleAttributeTraverserPlugin
+  <zope:attributeTraverserPlugin
       for="schooltool.demographics.interfaces.IDemographicsPerson"
       name="parent2"
       permission="zope.Public" />
 
-  <zope:singleAttributeTraverserPlugin
+  <zope:attributeTraverserPlugin
       for="schooltool.demographics.interfaces.IDemographicsPerson"
       name="emergency1"
       permission="zope.Public" />
 
-  <zope:singleAttributeTraverserPlugin
+  <zope:attributeTraverserPlugin
       for="schooltool.demographics.interfaces.IDemographicsPerson"
       name="emergency2"
       permission="zope.Public" />
 
-  <zope:singleAttributeTraverserPlugin
+  <zope:attributeTraverserPlugin
       for="schooltool.demographics.interfaces.IDemographicsPerson"
       name="emergency3"
       permission="zope.Public" />
 
-  <zope:singleAttributeTraverserPlugin
+  <zope:attributeTraverserPlugin
       for="schooltool.demographics.interfaces.IDemographicsPerson"
       name="nameinfo"
       permission="zope.Public" />
 
-  <zope:singleAttributeTraverserPlugin
+  <zope:attributeTraverserPlugin
       for="schooltool.demographics.interfaces.IDemographicsPerson"
       name="demographics"
       permission="zope.Public" />
 
-  <zope:singleAttributeTraverserPlugin
+  <zope:attributeTraverserPlugin
       for="schooltool.demographics.interfaces.IDemographicsPerson"
       name="schooldata"
       permission="zope.Public" />

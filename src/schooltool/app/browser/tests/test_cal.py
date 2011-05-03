@@ -167,64 +167,6 @@ def createEvent(dtstart, duration, title, **kw):
     return CalendarEvent(dtstart, dur, title, **kw)
 
 
-def doctest_ToCalendarTraverser():
-    """Tests for CalendarOwnerTraverser.
-
-    CalendarOwnerTraverser allows you to traverse directly to the calendar
-    of a calendar owner.
-
-        >>> from schooltool.app.browser.cal import ToCalendarTraverser
-        >>> person = Person()
-        >>> request = TestRequest()
-        >>> traverser = ToCalendarTraverser(person, request)
-        >>> traverser.context is person
-        True
-        >>> traverser.request is request
-        True
-
-    The traverser should implement IBrowserPublisher:
-
-        >>> from zope.publisher.interfaces.browser import IBrowserPublisher
-        >>> verifyObject(IBrowserPublisher, traverser)
-        True
-
-    Let's check that browserDefault suggests 'index.html':
-
-        >>> context, path = traverser.browserDefault(request)
-        >>> context is person
-        True
-        >>> path
-        ('index.html',)
-
-    The whole point of this class is that we can ask for the calendar:
-
-        >>> calendar = ISchoolToolCalendar(person)
-        >>> traverser.publishTraverse(request, 'calendar') is calendar
-        True
-
-    We can also get the calendar as iCalendar:
-
-        >>> from schooltool.app.interfaces import ISchoolToolCalendar
-        >>> from zope.publisher.interfaces.browser import IDefaultBrowserLayer
-        >>> provideAdapter(BrowserView,
-        ...                (ISchoolToolCalendar, IDefaultBrowserLayer),
-        ...                Interface, 'calendar.ics')
-        >>> view = traverser.publishTraverse(request, 'calendar.ics')
-        >>> view.context is ISchoolToolCalendar(traverser.context)
-        True
-        >>> view.request is traverser.request
-        True
-
-    If we try to look up a nonexistent view, we should get a NotFound error:
-
-        >>> traverser.publishTraverse(request,
-        ...                           'nonexistent.html') # doctest: +ELLIPSIS
-        Traceback (most recent call last):
-        ...
-        NotFound: Object: <...Person object at ...>, name: 'nonexistent.html'
-
-    """
-
 def doctest_CalendarTraverser():
     """Tests for CalendarTraverser.
 

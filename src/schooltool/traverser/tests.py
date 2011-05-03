@@ -23,13 +23,27 @@ import doctest
 
 from zope.component import testing
 
+from schooltool.testing.setup import ZCMLWrapper
+
+
+def setUp(test=None):
+    testing.setUp(test=test)
+    zcml = ZCMLWrapper()
+    zcml.include('zope.app.zcmlfiles')
+    zcml.include('schooltool.traverser', file='meta.zcml')
+    zcml.include('schooltool.traverser')
+    test.globs['zcml'] = zcml
 
 def test_suite():
+    optionflags = (doctest.NORMALIZE_WHITESPACE |
+                   doctest.ELLIPSIS |
+                   doctest.REPORT_NDIFF)
+
     return unittest.TestSuite((
         doctest.DocFileSuite(
             'README.txt',
-            setUp=testing.setUp, tearDown=testing.tearDown,
-            optionflags=doctest.NORMALIZE_WHITESPACE|doctest.ELLIPSIS),
+            setUp=setUp, tearDown=testing.tearDown,
+            optionflags=optionflags),
         ))
 
 if __name__ == '__main__':
