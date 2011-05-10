@@ -5,7 +5,10 @@ CHANGES
 1.6.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Add paste.ini_tmpl to .tar.gz to fix start-schooltool-instance not creating
+  the required paste.ini file.
+  NOTE: run ``make-schooltool-instance instance`` to fix ``instance`` if it does
+  not start.
 
 
 1.6.0 (2011-04-25)
