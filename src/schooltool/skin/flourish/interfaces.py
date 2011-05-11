@@ -19,11 +19,43 @@
 """
 SchoolTool flourish skin interfaces.
 """
+
+import zope.schema
+from zope.interface import Interface, Attribute
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
+import zope.viewlet.interfaces
 
 from z3c.form.interfaces import IFormLayer
+
+# XXX: move content providers to schooltool.skin
+from schooltool.app.browser.content import ISchoolToolContentProvider
+from schooltool.common import SchoolToolMessage as _
 
 
 class IFlourishLayer(IDefaultBrowserLayer, IFormLayer):
     """SchoolTool flourish skin."""
+
+
+class IViewletOrder(Interface):
+    """Attributes to specify viewlet display order."""
+
+    after = Attribute(
+        _("Display this viewlet after the given list of viewlets."))
+
+    before = Attribute(
+        _("Display this viewlet before the given list of viewlets."))
+
+    requires = Attribute(
+        _("Display only if all specified viewlets are available."))
+
+
+class IViewlet(zope.viewlet.interfaces.IViewlet,
+               ISchoolToolContentProvider,
+               IViewletOrder):
+    """A viewlet."""
+
+
+class IViewletManager(zope.viewlet.interfaces.IViewletManager,
+                      ISchoolToolContentProvider):
+    """A viewlet manager."""
 
