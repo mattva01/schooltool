@@ -80,16 +80,13 @@ class ViewletManager(ContentProvider):
         viewlets = list(zope.component.getAdapters(
             (self.context, self.request, self.view, self),
             IViewlet))
-
-        viewlets = self.filter(viewlets)
         for name, viewlet in viewlets:
             viewlet.__name__ = name
+        viewlets = self.filter(viewlets)
         return dict(viewlets)
 
     def filter(self, viewlets):
         can_access = lambda (n, v): zope.security.canAccess(v, 'render')
-        # XXX: borken security wokraraund
-        can_access = lambda (n, v): True
         viewlets = filter(can_access, viewlets)
 
         names = set([n for n, v in viewlets])

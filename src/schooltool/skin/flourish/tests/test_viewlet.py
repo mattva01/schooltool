@@ -22,11 +22,17 @@ Unit tests for schooltool.app.
 import unittest
 import doctest
 
+from zope.interface import implements
 from zope.interface.verify import verifyObject
 from zope.app.testing import setup
 from zope.component import getMultiAdapter, provideAdapter
 from zope.component import provideHandler
 from zope.publisher.browser import TestRequest
+from zope.security.interfaces import ISecurityPolicy
+from zope.security.checker import defineChecker, CheckerPublic, NamesChecker
+from zope.security.management import setSecurityPolicy
+from zope.security.management import newInteraction, endInteraction
+from zope.security.management import restoreInteraction
 
 from schooltool.skin.flourish import interfaces, viewlet
 
@@ -49,8 +55,10 @@ class TestViewlet(viewlet.Viewlet):
         return '<%s %r>' % (self.__class__.__name__, self.__name__)
 
 
-def viewletClass(**classdict):
-    return type('TestViewlet', (TestViewlet, ), classdict)
+def viewletClass(permission=CheckerPublic, **classdict):
+    cls = type('TestViewlet', (TestViewlet, ), classdict)
+    defineChecker(cls, NamesChecker(list(interfaces.IViewlet), permission))
+    return cls
 
 
 class TestManager(viewlet.ViewletManager):
@@ -144,11 +152,8 @@ def doctest_ViewletManager():
 
     Let's provide some viewlets for the manager.
 
-        >>> V1 = viewletClass()
-        >>> provideViewlet(V1, manager, 'v1')
-
-        >>> V2 = viewletClass()
-        >>> provideViewlet(V2, manager, 'v2')
+        >>> provideViewlet(viewletClass(), manager, 'v1')
+        >>> provideViewlet(viewletClass(), manager, 'v2')
 
         >>> getMultiAdapter(
         ...     (manager.context, manager.request,
@@ -204,11 +209,8 @@ def doctest_ViewletManager_call():
 
     Let's provide some viewlets for the manager.
 
-        >>> V1 = viewletClass()
-        >>> provideViewlet(V1, manager, 'v1')
-
-        >>> V2 = viewletClass()
-        >>> provideViewlet(V2, manager, 'v2')
+        >>> provideViewlet(viewletClass(), manager, 'v1')
+        >>> provideViewlet(viewletClass(), manager, 'v2')
 
         >>> def beforeUpdate(e):
         ...     print 'About to update', e.object
@@ -232,7 +234,27 @@ def doctest_ViewletManager_call():
 def doctest_ViewletManager_order():
     """Tests for ViewletManager.order.
 
+        >>> context = 'context'
+        >>> request = TestRequest()
+        >>> view = 'view'
+        >>> manager = TestManager(context, request, view)
 
+        >>> provideViewlet(
+        ...     viewletClass(before=('v3')),
+        ...     manager, 'v1')
+
+        >>> provideViewlet(viewletClass(), manager, 'v2')
+
+        >>> provideViewlet(
+        ...     viewletClass(after=('v4')),
+        ...     manager, 'v3')
+
+        >>> provideViewlet(viewletClass(), manager, 'v4')
+
+        >>> manager.order
+        [u'v2', u'v4', u'v1', u'v3']
+
+        >>> manager = TestManager(context, request, view)
 
     """
 
@@ -240,15 +262,72 @@ def doctest_ViewletManager_order():
 def doctest_ViewletManager_filter():
     """Tests for ViewletManager.filter
 
+        >>> context = 'context'
+        >>> request = TestRequest()
+        >>> view = 'view'
+
+        >>> class TestManager(viewlet.ViewletManager):
+        ...     def filter(self, viewlets):
+        ...         print 'Filter viewlets:'
+        ...         print sorted(viewlets)
+        ...         return viewlet.ViewletManager.filter(self, viewlets)
+
+        >>> manager = TestManager(context, request, view)
+
+        >>> provideViewlet(viewletClass(), manager, 'v1')
+
+        >>> provideViewlet(
+        ...     viewletClass(permission='deny'),
+        ...     manager, 'v2')
+
+        >>> provideViewlet(
+        ...     viewletClass(requires=('v1',)),
+        ...     manager, 'v3')
+
+        >>> provideViewlet(
+        ...     viewletClass(requires=('v2',)),
+        ...     manager, 'v4')
+
+        >>> provideViewlet(
+        ...     viewletClass(requires=('v1', 'v3')),
+        ...     manager, 'v5')
+
+        >>> provideViewlet(
+        ...     viewletClass(requires=('v1', 'v2')),
+        ...     manager, 'v6')
+
+        >>> filtered = manager.viewlets
+        Filter viewlets:
+        [(u'v1', <TestViewlet u'v1'>),
+         (u'v2', <TestViewlet u'v2'>),
+         (u'v3', <TestViewlet u'v3'>),
+         (u'v4', <TestViewlet u'v4'>),
+         (u'v5', <TestViewlet u'v5'>),
+         (u'v6', <TestViewlet u'v6'>)]
+
+        >>> print filtered
+        [<TestViewlet u'v1'>, <TestViewlet u'v3'>, <TestViewlet u'v5'>]
 
     """
 
 
+class SecurityPolicy(object):
+    implements(ISecurityPolicy)
+
+    def checkPermission(self, permission, object):
+        return permission == 'allow'
+
+
 def setUp(test=None):
     setup.placelessSetUp()
+    test.globs['__policy'] = setSecurityPolicy(SecurityPolicy)
+    endInteraction()
+    newInteraction()
 
 
 def tearDown(test=None):
+    setSecurityPolicy(test.globs['__policy'])
+    restoreInteraction()
     setup.placelessTearDown()
 
 
