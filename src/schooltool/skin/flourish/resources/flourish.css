@@ -1,0 +1,195 @@
+/*
+
+  Base CSS:
+
+  - body
+  - fonts, font sizes
+  - header, page and footer layout
+
+*/
+
+body {
+    font-family: 'Ubuntubeta', 'Ubuntu', 'Bitstream Vera Sans',
+                 'DejaVu Sans', Tahoma, sans-serif;
+    font-size: 100%;
+
+    background: white;
+    color: #000;
+    margin: 0px;
+    line-height: 1em;
+}
+
+body div.schooltool {
+    color: #000;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    margin: 0px;
+    padding: 0px;
+    font-weight: normal;
+}
+
+h1 {
+    font-size: 36px;
+    line-height: 40px;
+}
+
+
+h2 {
+    font-size: 24px;
+    line-height: 28px;
+}
+
+h3 {
+    font-size: 16px;
+    line-height: 20px;
+}
+
+h4, h5, h6 {
+    font-size: 12px;
+    line-height: 20px;
+}
+
+p, ul, li {
+    font-size: 12px;
+    line-height: 16px;
+}
+
+p {
+    margin: 8px 0px;
+}
+
+A, A:link, A:visited, A:hover, A:active {
+        color: #304d6b;
+}
+
+p.small {
+  font-size: 10px;
+  line-height: 14px;
+}
+
+.schooltool>div.header {
+    margin: 0px auto;
+    width: 976px;
+    background:#a00;
+
+    position: relative;
+    z-index: 1;
+
+    -moz-box-shadow: 0px 0px 4px #888;
+    -webkit-box-shadow: 0px 0px 4px #888;
+    box-shadow: 0px 0px 4px #888;
+}
+
+.header ul.navigation {
+    width: 960px;
+    padding-left: 16px;
+    height: 72px;
+    margin: 0px;
+
+    list-style-type: none;
+    background-color: #eae8e3;
+
+    -moz-border-radius: 0 0 4px 4px;
+    border-radius: 0 0 4px 4px;
+
+    position: relative;
+    z-index: 2;
+
+    -moz-box-shadow: 0px 1px 6px #888;
+    -webkit-box-shadow: 0px 1px 6px #888;
+    box-shadow: 0px 1px 6px #888;
+}
+
+.header ul.navigation li {
+    display: inline-block;
+    height: 70px;
+}
+
+.header ul.navigation li.last {
+    display: inline-block;
+    height: 70px;
+}
+
+.header ul.navigation li a {
+    color: black;
+    display: block;
+    padding: 26px 8px 30px 8px;
+    text-decoration: none;
+
+    font-size: 14px;
+    line-height: 16px;
+}
+
+.header ul.navigation li.active a {
+    background: #bcbab6;
+}
+
+.header ul.navigation li a:hover {
+    background: #bcbab6;
+}
+
+.header div.headband {
+    padding: 4px 8px;
+    font-size: 10px;
+    line-height: 14px;
+    color: white;
+    text-shadow: 0 1px #30302f;
+}
+
+.header div.headband a {
+    color: white;
+}
+
+.header div.headband .login {
+    float: right;
+}
+
+.header ul.breadcrumbs {
+    border-top: solid 1px black;
+    margin: 0px;
+    padding: 3px 8px 4px 8px;
+    font-size: 12px;
+    line-height: 16px;
+    list-style-type: none;
+    background-color: white;
+}
+
+.header ul.breadcrumbs li {
+    display: inline-block;
+    padding: 0px 2px;
+    color: black;
+}
+
+.header ul.breadcrumbs li:after {
+    content: "\0020 \00BB";
+}
+
+.header ul.breadcrumbs li.last:after {
+    content: "";
+}
+
+.schooltool>div.page {
+    position: relative;
+    z-index: 0;
+
+    width: 960px;
+    padding: 0px 8px;
+    margin: 0px auto;
+    background-color: #f7f6f5;
+
+    -moz-box-shadow: 0px 1px 4px #888;
+    -webkit-box-shadow: 0px 1px 4px #888;
+    box-shadow: 0px 1px 4px #888;
+}
+
+.schooltool>div.footer {
+    position: relative;
+    z-index: -1;
+    width: 960px;
+    margin: 0px auto;
+    padding: 8px;
+    background-color: #f7f7f7;
+    -moz-border-radius: 0 0 4px 4px;
+    border-radius: 0 0 4px 4px;
+}
