@@ -8,6 +8,8 @@
 
 */
 
+@media all {
+
 body {
     font-family: 'Ubuntubeta', 'Ubuntu', 'Bitstream Vera Sans',
                  'DejaVu Sans', Tahoma, sans-serif;
@@ -81,7 +83,7 @@ p.small {
     box-shadow: 0px 0px 4px #888;
 }
 
-.header ul.navigation {
+.header .navigation ul {
     width: 960px;
     padding-left: 16px;
     height: 72px;
@@ -101,17 +103,17 @@ p.small {
     box-shadow: 0px 1px 6px #888;
 }
 
-.header ul.navigation li {
+.header .navigation ul li {
     display: inline-block;
     height: 70px;
 }
 
-.header ul.navigation li.last {
+.header .navigation ul li.last {
     display: inline-block;
     height: 70px;
 }
 
-.header ul.navigation li a {
+.header .navigation ul li a {
     color: black;
     display: block;
     padding: 26px 8px 30px 8px;
@@ -121,11 +123,11 @@ p.small {
     line-height: 16px;
 }
 
-.header ul.navigation li.active a {
+.header .navigation ul li.active a {
     background: #bcbab6;
 }
 
-.header ul.navigation li a:hover {
+.header .navigation ul li a:hover {
     background: #bcbab6;
 }
 
@@ -192,4 +194,25 @@ p.small {
     background-color: #f7f7f7;
     -moz-border-radius: 0 0 4px 4px;
     border-radius: 0 0 4px 4px;
+}
+
+}
+
+@media print {
+
+.schooltool>div.header {
+    display: none;
+}
+
+.schooltool>div.page {
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+.schooltool>div.footer {
+    display: none;
+}
+
+
 }

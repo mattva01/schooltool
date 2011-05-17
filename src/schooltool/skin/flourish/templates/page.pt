@@ -1,0 +1,59 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:tal="http://xml.zope.org/namespaces/tal">
+
+<div class="heading"
+     tal:define="navigation context/schooltool:content/page_navigation|nothing">
+
+  <h1 tal:condition="view/title"
+      tal:content="view/title">
+    Title
+  </h1>
+
+  <h1 tal:condition="not view/title"
+      tal:content="context/@@title">
+    Alternative title
+  </h1>
+
+  <h2 tal:condition="not navigation"
+      tal:content="view/subtitle">
+    Subtitle
+  </h2>
+
+  <div tal:condition="navigation"
+       tal:replace="structure navigation">
+    [Context] [navigation] [links]
+  </div>
+</div>
+
+<div class="refine"
+     tal:content="structure providers/page_refine|nothing">
+  [Refine content blocks]
+</div>
+
+<div class="container">
+  <div class="main"
+       tal:define="main_content view/content_template|nothing"
+       tal:condition="main_content">
+    <div class="header"
+         tal:define="actions context/schootlool:content/actions"
+         tal:condition="actions"
+         tal:content="structure actions">
+      [action] [buttons]
+    </div>
+    <div class="body" tal:content="structure main_content">
+      [ Main content here ]
+    </div>
+  </div>
+  <div class="additional"
+       tal:define="additional providers/page_content|nothing"
+       tal:condition="additional">
+    [Additional content blocks]
+  </div>
+</div>
+
+<div class="related"
+     tal:content="structure providers/page_related|nothing">
+  [Related content blocks]
+</div>
+
+</html>

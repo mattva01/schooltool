@@ -21,10 +21,10 @@ SchoolTool flourish skin interfaces.
 """
 
 import zope.schema
+import zope.viewlet.interfaces
 from zope.interface import Interface, Attribute
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
-import zope.viewlet.interfaces
-
+from zope.publisher.interfaces.browser import IBrowserPage
 from z3c.form.interfaces import IFormLayer
 
 # XXX: move content providers to schooltool.skin
@@ -58,4 +58,23 @@ class IViewlet(zope.viewlet.interfaces.IViewlet,
 class IViewletManager(zope.viewlet.interfaces.IViewletManager,
                       ISchoolToolContentProvider):
     """A viewlet manager."""
+
+
+class IPage(IBrowserPage):
+    title = zope.schema.TextLine(
+        title=_("Page title"), required=False)
+
+    subtitle = zope.schema.TextLine(
+        title=_("Page subtitle"), required=False)
+
+    template = Attribute(
+        _("""Main page template, renders the whole browser page,
+        including header and footer.
+        """))
+
+    page_template = Attribute(
+        _("Template that renders all contents between header and footer."))
+
+    content_template = Attribute(
+        _("Template that renders the main content."))
 

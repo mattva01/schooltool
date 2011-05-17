@@ -8,6 +8,8 @@
 
 */
 
+@media all {
+
 .page div.heading {
     padding: 32px 8px;
 }
@@ -262,3 +264,4 @@
 
 }
 
+}
