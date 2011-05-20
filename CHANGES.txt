@@ -6,6 +6,7 @@ CHANGES
 ------------------
 
 - Removed 'Report a bug on Launchpad' link from the footer
+- XLS importer now automatically links sections with same ID that are marked to link
 
 
 1.6.0a1 (2011-02-23)

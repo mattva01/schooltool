@@ -16,8 +16,10 @@ defined by the user between the terms:
     >>> browser.queryHTML("//p[@class='error']")
     []
 
-We see that each term has three sections, some with ids matching another term
-and some not.
+We see that each term has three sections, all with ids matching a section in
+another term.  However, as we will see, if the cell after the 'Link?' heading
+is not set to 'y' or 'yes', or the matching section is not in an adjacent term,
+then the section will not end up linked.
 
     >>> browser.getLink('2006-2007').click()
     >>> browser.getLink('Fall').click()
@@ -41,10 +43,13 @@ and some not.
     >>> browser.printQuery('//table[@class="container"]//tr/td[3]/a/@href')
     http://localhost/schoolyears/2006-2007/spring/sections/Art_1
     http://localhost/schoolyears/2006-2007/spring/sections/Art_3
-    http://localhost/schoolyears/2006-2007/spring/sections/Art_5
+    http://localhost/schoolyears/2006-2007/spring/sections/Art_4
 
-We'll show all the linked sections for each section in the Fall term.  We see
-the ones with matching ids in other terms are linked.
+We'll show all the linked sections for each term, starting with Fall.  We see
+the ones with matching ids in other terms are linked, except in the case of
+the Art_3 section which was not marked to link in either term (see 'Link?'
+heading in linked_sections.xls) and Art_4 which is found in two terms that are
+not adjacent.
 
     >>> browser.getLink('2006-2007').click()
     >>> browser.getLink('Fall').click()
@@ -107,7 +112,6 @@ Now we'll do the same for the Winter sections.
 
     >>> browser.printQuery('id("content-body")//tbody/tr/td//div[1]/a/@href')
     http://localhost/schoolyears/2006-2007/winter/sections/Art_3
-    http://localhost/schoolyears/2006-2007/spring/sections/Art_3
 
 Finally the same for the Spring sections.
 
@@ -129,17 +133,16 @@ Finally the same for the Spring sections.
     >>> browser.getLink('All Terms').click()
 
     >>> browser.printQuery('id("content-body")//tbody/tr/td//div[1]/a/@href')
-    http://localhost/schoolyears/2006-2007/winter/sections/Art_3
     http://localhost/schoolyears/2006-2007/spring/sections/Art_3
 
     >>> browser.getLink('2006-2007').click()
     >>> browser.getLink('Spring').click()
     >>> browser.getLink('Sections').click()
-    >>> browser.getLink('Art_5').click()
+    >>> browser.getLink('Art_4').click()
     >>> browser.getLink('All Terms').click()
 
     >>> browser.printQuery('id("content-body")//tbody/tr/td//div[1]/a/@href')
-    http://localhost/schoolyears/2006-2007/spring/sections/Art_5
+    http://localhost/schoolyears/2006-2007/spring/sections/Art_4
 
 Now let's try reimporting the same file:
 
@@ -177,7 +180,7 @@ No problem.  The same sections are there.
     >>> browser.printQuery('//table[@class="container"]//tr/td[3]/a/@href')
     http://localhost/schoolyears/2006-2007/spring/sections/Art_1
     http://localhost/schoolyears/2006-2007/spring/sections/Art_3
-    http://localhost/schoolyears/2006-2007/spring/sections/Art_5
+    http://localhost/schoolyears/2006-2007/spring/sections/Art_4
 
 Just to be sure, we'll make sure the first one is linked to the other terms.
 

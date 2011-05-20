@@ -746,17 +746,17 @@ class SectionImporter(ImporterBase):
         if section.__name__ not in sc:
             sc[section.__name__] = section
 
-        previous_term = getPreviousTerm(term)
-        if previous_term is not None:
-            previous_sections = ISectionContainer(previous_term)
-            if section.__name__ in previous_sections:
-                previous_sections[section.__name__].next = section
-
-        next_term = getNextTerm(term)
-        if next_term is not None:
-            next_sections = ISectionContainer(next_term)
-            if section.__name__ in next_sections:
-                next_sections[section.__name__].previous = section
+        if data['link']:
+            previous_term = getPreviousTerm(term)
+            if previous_term is not None:
+                previous_sections = ISectionContainer(previous_term)
+                if section.__name__ in previous_sections:
+                    previous_sections[section.__name__].next = section
+            next_term = getNextTerm(term)
+            if next_term is not None:
+                next_sections = ISectionContainer(next_term)
+                if section.__name__ in next_sections:
+                    next_sections[section.__name__].previous = section
 
     def import_timetable(self, sh, row, section):
         schemas = ITimetableSchemaContainer(ISchoolYear(section))
@@ -815,6 +815,8 @@ class SectionImporter(ImporterBase):
         data = {}
         data['title'] = self.getRequiredTextFromCell(sh, row, 1)
         data['__name__'] = self.getRequiredTextFromCell(sh, row+1, 1)
+        link = self.getTextFromCell(sh, row+1, 3)
+        data['link'] = link.lower() in ['y', 'yes']
         data['description'] = self.getTextFromCell(sh, row+2, 1)
 
         section = self.createSection(data, year, term)
