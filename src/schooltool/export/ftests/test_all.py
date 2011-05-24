@@ -24,8 +24,12 @@ import unittest
 from schooltool.testing.functional import collect_ftests
 from schooltool.export.ftesting import export_functional_layer
 
+
 def test_suite():
-    return collect_ftests(layer=export_functional_layer)
+    """
+    use "--at-level 2" or "make testall" to reach these tests
+    """
+    return collect_ftests(layer=export_functional_layer, level=2)
 
 
 if __name__ == '__main__':
