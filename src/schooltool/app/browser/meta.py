@@ -21,13 +21,15 @@ Meta directives and their handlers.
 """
 import os
 
+import zope.component.zcml
+import zope.configuration.fields
+from zope.security.checker import defineChecker, Checker, CheckerPublic
 from zope.browserpage import ViewPageTemplateFile
 from zope.interface import Interface
 from zope.configuration.exceptions import ConfigurationError
 from zope.component import zcml
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 from zope.publisher.interfaces.browser import IBrowserView
-from zope.security import checker
 from zope.viewlet.metadirectives import ITemplatedContentProvider
 from zope.viewlet.metaconfigure import _handle_permission
 from zope.viewlet.metaconfigure import _handle_allowed_interface
@@ -42,71 +44,88 @@ from schooltool.skin import ISchoolToolLayer
 class ISchoolToolContentDirective(ITemplatedContentProvider):
     """Define the SchoolTool content provider."""
 
+    update = zope.configuration.fields.PythonIdentifier(
+        title=u"The name of the view attribute implementing content update.",
+        required=False,
+        )
+
+    render = zope.configuration.fields.PythonIdentifier(
+        title=u"The name of the view attribute that renders the content.",
+        required=False,
+        )
+
+
 ISchoolToolContentDirective.setTaggedValue('keyword_arguments', True)
 
 
-def createContentProviderClass(name, base, template=None, extra_attrs=None):
-    attrs = extra_attrs and dict(extra_attrs) or {}
+def handle_security(class_, permission, interfaces, attributes):
+    required = set(attributes)
+    for ifc in interfaces:
+        required.update(set(ifc))
 
-    attrs['__name__'] = name
+    if permission == 'zope.Public':
+        permission = CheckerPublic
 
-    if template is not None:
-        attrs['template'] = ViewPageTemplateFile(template)
-        base_render = getattr(base, 'render', ContentProvider.render)
-        if base_render == ContentProvider.render:
-            def renderTemplate(self, *args, **kw):
-                return self.template(*args, **kw)
-            attrs['render'] = renderTemplate
+    defineChecker(class_, Checker(dict.fromkeys(required, permission)))
 
-    if ISchoolToolContentProvider.implementedBy(base):
-        bases = (base,)
-    else:
-        bases = (base, ContentProvider)
 
-    NewContentProvider = type(base.__name__, bases, attrs)
-    return NewContentProvider
+def handle_interfaces(_context, interfaces):
+    for ifc in interfaces:
+        if ifc is not None:
+            zope.component.zcml.interface(_context, ifc)
+
+
+def subclass_content(class_, name,
+                     update_attr, render_attr,
+                     template_dict, class_dict):
+    class_dict = dict(class_dict)
+    class_dict['__name__'] = name
+    class_dict['update'] = getattr(class_, update_attr)
+    class_dict['render'] = getattr(class_, render_attr)
+    for attr, template in template_dict.items():
+        if template:
+            class_dict[attr] = ViewPageTemplateFile(template)
+    new_class = type('%s_%s' % (class_.__name__, name), (class_, ), class_dict)
+    return new_class
 
 
 def contentDirective(
     _context, name, permission,
     for_=Interface, layer=ISchoolToolLayer, view=IBrowserView,
     class_=ContentProvider, template=None,
-    allowed_interface=None, allowed_attributes=None,
+    update='update', render='render',
+    allowed_interface=(), allowed_attributes=(),
     **kwargs):
 
-    permission = _handle_permission(_context, permission)
+    if not ISchoolToolContentProvider.implementedBy(class_):
+        class_ = type(name, (class_, ContentProvider), {})
 
-    if template is not None:
-        template = os.path.abspath(str(_context.path(template)))
-        if not os.path.isfile(template):
-            raise ConfigurationError("No such file", template)
+    allowed_interface = (tuple(allowed_interface) +
+                         (ISchoolToolContentProvider, ))
 
-    new_class = createContentProviderClass(
-        name, class_, template=template, extra_attrs=kwargs)
+    if (render == 'render' and
+        class_.render == ContentProvider.render):
+        if template:
+            render = 'template'
+        else:
+            raise ConfigurationError("When template and render not specified, class must implement 'render' method")
 
-    required = dict.fromkeys(ISchoolToolContentProvider, permission)
+    class_ = subclass_content(
+        class_, name, update, render,
+        {'template': template}, kwargs)
 
-    _handle_allowed_interface(
-        _context, (ISchoolToolContentProvider,), permission, required)
+    handle_interfaces(_context, (for_, view))
+    handle_interfaces(_context, allowed_interface)
 
-    if allowed_interface is not None:
-        _handle_allowed_interface(
-            _context, allowed_interface, permission, required)
-
-    if allowed_attributes is not None:
-        _handle_allowed_attributes(
-            _context, allowed_attributes, permission, required)
-
-    _handle_for(_context, for_)
-    zcml.interface(_context, view)
-
-    checker.defineChecker(new_class, checker.Checker(required))
+    handle_security(class_, permission,
+                    allowed_interface, allowed_attributes)
 
     _context.action(
-        discriminator = ('content', for_, layer, view, name),
-        callable = zcml.handler,
+        discriminator = ('schooltool.skin.flourish.content',
+                         for_, layer, view, name),
+        callable = zope.component.zcml.handler,
         args = ('registerAdapter',
-                new_class,
+                class_,
                 (for_, layer, view),
                 ISchoolToolContentProvider,
                 name,
