@@ -153,7 +153,7 @@ def doctest_SchoolToolContentProviderProxy():
     """
 
 
-def doctest_ContentProviders():
+def doctest_ContentProviders_traversal():
     """Tests for ContentProviders.
 
     ContentProviders are designed as multi adapter to IContentProviders.
@@ -195,6 +195,14 @@ def doctest_ContentProviders():
         >>> dummy()
         'Rendered <...SchoolToolContentProvider ...> for <...SomeContext ...>'
 
+    Traversal does not modify further path:
+
+        >>> path = ['more', 'to', 'follow']
+        >>> name = 'dummy'
+        >>> dummy = providers.traverse(name, path)
+        >>> path
+        ['more', 'to', 'follow']
+
     Traversing to non-existent providers throws an exception.
 
         >>> providers.traverse('info', ())
@@ -224,6 +232,15 @@ def doctest_ContentProviders():
 
         >>> provideAdapter(SchoolToolContentProviderProxy)
         >>> info = providers.traverse('info', ())
+        Traceback (most recent call last):
+        ...
+        ContentProviderLookupError: info
+
+    Also, content providers cache the looked up providers, so we need to reset
+    the cache.
+
+        >>> providers = adapt(SomeContext(), 'request', 'view')
+        >>> info = providers.traverse('info', ())
 
         >>> info()
         'Rendered <...ContentProviderStub ...> for <...SomeContext ...>'
@@ -248,6 +265,54 @@ def doctest_ContentProviders():
         Traceback (most recent call last):
         ...
         ContentProviderLookupError: dummy
+
+    """
+
+
+def doctest_ContentProviders_getitem():
+    """Tests demonstrating dict-like ContentProviders behaviour.
+
+    ContentProviders are designed as multi adapter to IContentProviders.
+
+        >>> class SomeContext(object):
+        ...     pass
+
+        >>> provideAdapter(ContentProviders,
+        ...                (SomeContext, None, None),
+        ...                IContentProviders)
+
+        >>> def adapt(*args):
+        ...     return queryMultiAdapter(args, IContentProviders)
+
+        >>> providers = adapt(SomeContext(), 'request', 'view')
+
+        >>> class TestProvider(ContentProvider):
+        ...     def __repr__(self):
+        ...         return '<%s %r>' % (self.__class__.__name__, self.__name__)
+
+        >>> provideAdapter(TestProvider,
+        ...                (SomeContext, None, None),
+        ...                provides=ISchoolToolContentProvider,
+        ...                name='frog')
+
+        >>> provideAdapter(TestProvider,
+        ...                (SomeContext, None, None),
+        ...                provides=ISchoolToolContentProvider,
+        ...                name='pond')
+
+        >>> providers['frog']
+        <TestProvider 'frog'>
+
+        >>> providers.get('pond')
+        <TestProvider 'pond'>
+
+        >>> providers['spoon']
+        Traceback (most recent call last):
+        ...
+        KeyError: 'spoon'
+
+        >>> providers.get('spoon', default='There is no spoon')
+        'There is no spoon'
 
     """
 

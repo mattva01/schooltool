@@ -88,7 +88,6 @@ class SchoolToolContentProviderProxy(SpecificationDecoratorBase):
         return self.render(*args, **kw)
 
 
-
 class ContentProviders(object):
     implements(IContentProviders)
 
@@ -96,8 +95,26 @@ class ContentProviders(object):
         self.context = context
         self.request = request
         self.view = view
+        self.cache = {}
 
-    def traverse(self, name, furtherPath):
+    def __contains__(self, name):
+        return self.cache.get(name) is not None
+
+    def get(self, name, default=None):
+        if name not in self.cache:
+            self.cache[name] = self.lookup(name)
+        ob = self.cache.get(name)
+        if ob is None:
+            return default
+        return ob
+
+    def __getitem__(self, name):
+        ob = self.get(name, None)
+        if ob is None:
+            raise KeyError(name)
+        return ob
+
+    def lookup(self, name):
         provider = queryMultiAdapter(
             (self.context, self.request, self.view),
             ISchoolToolContentProvider, name)
@@ -107,12 +124,15 @@ class ContentProviders(object):
                 IContentProvider, name)
             if provider is not None:
                 provider = ISchoolToolContentProvider(provider, None)
+        if (provider is not None and
+            ILocation.providedBy(provider)):
+            provider.__name__ = name
+        return provider
+
+    def traverse(self, name, furtherPath):
+        provider = self.get(name, None)
         if provider is None:
             raise ContentProviderLookupError(name)
-
-        if ILocation.providedBy(provider):
-            provider.__name__ = name
-
         return provider
 
 
