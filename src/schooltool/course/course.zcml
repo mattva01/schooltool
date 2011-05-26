@@ -153,4 +153,23 @@
   <adapter factory=".section.SectionLinkContinuinityValidationSubscriber"
            name="validate_term_continuinity"/>
 
+  <!-- Propagation of roster changes -->
+
+  <subscriber
+      for="schooltool.relationship.interfaces.IRelationshipAddedEvent"
+      handler=".section.propagateSectionInstructorAdded"
+      />
+  <subscriber
+      for="schooltool.relationship.interfaces.IRelationshipRemovedEvent"
+      handler=".section.propagateSectionInstructorRemoved"
+      />
+  <subscriber
+      for="schooltool.relationship.interfaces.IRelationshipAddedEvent"
+      handler=".section.propagateSectionStudentAdded"
+      />
+  <subscriber
+      for="schooltool.relationship.interfaces.IRelationshipRemovedEvent"
+      handler=".section.propagateSectionStudentRemoved"
+      />
+
 </configure>

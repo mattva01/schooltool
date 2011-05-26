@@ -5,6 +5,16 @@ CHANGES
 1.6.1 (unreleased)
 ------------------
 
+New features
+++++++++++++
+
+- All terms view for a section, allowing to extend a section to another term
+  or link an existing section (https://launchpad.net/bugs/424498)
+- XLS importer now automatically links sections with same ID that are marked to link
+
+Bugfixes
+++++++++
+
 - Add paste.ini_tmpl to .tar.gz to fix start-schooltool-instance not creating
   the required paste.ini file.
   NOTE: run ``make-schooltool-instance instance`` to fix ``instance`` if it does

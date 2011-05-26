@@ -443,3 +443,45 @@ td.changed_bg { background-color: #90ee90; }
 td.error_bg { background-color: #f66; }
 td.warning_bg { background-color: yellow; }
 div.warning_bg { background-color: yellow; }
+
+/* section display */
+div.linked_terms {
+    padding-left: 0.25em;
+}
+
+/* section_linkage view */
+table.all_terms_header td {
+    padding-right: 40px;
+}
+table.all_terms_table th {
+    background-color: #aea79f;
+    color: #ffffff;
+    font-size: 12px;
+    line-height: 16px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+table.all_terms_table td {
+    width: 220px;
+    vertical-align: top;
+    color: #333333;
+    font-size: 12px;
+    line-height: 16px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    border-bottom: 1px dotted #cccccc;
+}
+table.linkage_actions td {
+    border-bottom: none;
+}
+table.link_help td {
+    width: 600px;
+}
+tr.link_error td {
+    color: red;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
