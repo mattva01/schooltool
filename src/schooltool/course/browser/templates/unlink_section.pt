@@ -10,13 +10,13 @@
 <metal:block metal:fill-slot="content-header">
   <table class="all_terms_header">
     <tr>
-      <td><h2 i18n:translate="">Section: <a tal:replace="structure context/@@link" /></h2></td>
-      <td><h2 i18n:translate>Course:
+      <td><h2><span i18n:translate="">Section:</span> <a tal:replace="structure context/@@link" /></h2></td>
+      <td><h2><span i18n:translate="">Course:</span>
         <tal:loop tal:repeat="course context/courses">
           <a tal:replace="structure course/@@link" />
         </tal:loop></h2>
       </td>
-      <td><h2 i18n:translate="">Term: <a tal:replace="structure view/term/@@link" /></h2></td>
+      <td><h2><span i18n:translate="">Term:</span> <a tal:replace="structure view/term/@@link" /></h2></td>
     </tr>
   </table>
   <table><tr>
@@ -25,8 +25,8 @@
   </tr></table>
   <table class="all_terms_header">
     <tr tal:repeat="section view/sections">
-      <td i18n:translate="">Section: <a tal:replace="structure section/section/@@link" /></td>
-      <td i18n:translate="">Term: <a tal:replace="structure section/term/@@link" /></td>
+      <td><span i18n:translate="">Section:</span> <a tal:replace="structure section/section/@@link" /></td>
+      <td><span i18n:translate="">Term:</span> <a tal:replace="structure section/term/@@link" /></td>
     </tr>
   </table>
 </metal:block>
@@ -35,9 +35,9 @@
   <form method="post" tal:attributes="action request/URL">
     <div class="controls">
       <input type="submit" class="button-ok" name="UNLINK"
-             value="Unlink" i18n:attributes="value" />
+             value="Unlink" i18n:attributes="value unlink-section-button" />
       <input type="submit" class="button-cancel" name="CANCEL"
-             value="Cancel"  i18n:attributes="value" />
+             value="Cancel" i18n:attributes="value cancel-button" />
     </div>
   </form>
 </metal:block>
