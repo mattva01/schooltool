@@ -35,7 +35,6 @@ And some additional items to the Manage tab:
     <a class="navigation_header" href="http://localhost/++etc++site/default/RootErrorReportingUtility">Errors</a>
     <a class="navigation_header" href="http://localhost/++apidoc++/@@index.html">API Docs</a>
     <a class="navigation_header" href="http://localhost/@@sampledata.html">Sample data</a>
-    <a class="navigation_header" href="http://localhost/@@setupdata.html">Setup data</a>...
 
 Note that we only see the developer tools here, because these tests are run
 with the developer mode turned on. Commonly, the developer mode can be
