@@ -112,10 +112,6 @@
       <div class="clearer">&nbsp;</div>
     </div>
     <div id="footer">
-    <a href="https://bugs.launchpad.net/schooltool/+filebug"
-     i18n:attributes="alt" alt="Report a bug on Launchpad.">
-      <img class="bug" tal:attributes="src context/++resource++bugs.gif" />
-    </a>
     <a tal:attributes="href string:${context/schooltool:app/@@absolute_url}/@@about.html">
       <img class="logo" tal:attributes="src context/++resource++zonki-regular.png" />
     </a>
@@ -126,12 +122,12 @@
             use-macro="view/@@schooltool_macros/generic/serverinfo" />
           <br />
           <span i18n:translate="">
-            &copy; The <a href="http://www.shuttleworthfoundation.org">Shuttleworth Foundation</a> 2003 - <span>2011</span>:
+            &copy; The <a href="http://www.shuttleworthfoundation.org">Shuttleworth Foundation</a> 2003 - 2011:
             Supporting Social Innovation.
           </span>
         <br />
         <span i18n:translate="">
-        <a href="http://www.schooltool.org">SchoolTool</a>&trade; is a Trademark of The <a href="http://www.shuttleworthfoundation.org">Shuttleworth Foundation</a>.
+        <a href="http://www.schooltool.org">SchoolTool</a>&trade; is a Trademark of the <a href="http://www.shuttleworthfoundation.org">Shuttleworth Foundation</a>.
         </span>
       </p>
       <div class="clearer"></div>

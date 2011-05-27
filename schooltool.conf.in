@@ -173,10 +173,9 @@ web-access-log-file instance/log/web-access.log
 #   Comment out or set to empty string to disable reportlab.
 #
 # Examples:
-#    reportlab_fontdir /usr/share/fonts/truetype/msttcorefonts
+#    reportlab_fontdir /usr/share/fonts/truetype/ttf-liberation
 #
-# Uncomment the following and update the path to enable PDF generation:
-#reportlab_fontdir /usr/share/fonts/truetype/msttcorefonts
+reportlab_fontdir /usr/share/fonts/truetype/ttf-liberation
 
 # devmode
 #

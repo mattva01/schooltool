@@ -1,8 +1,8 @@
 Relationship
 ============
 
-``schooltool.relationship`` is a library for managing arbitrary many-to-many binary
-relationships.
+``schooltool.relationship`` is a library for managing arbitrary many-to-many
+binary relationships.
 
 
 Quick overview
@@ -10,7 +10,7 @@ Quick overview
 
 This package lets you define arbitrary many-to-many relationship schemas and
 use them to relate arbitrary components (that are annotatable or have an
-adapter to IRelationshipLinks).
+adapter to `IRelationshipLinks`).
 
 Usage example::
 
@@ -69,10 +69,10 @@ following URIs:
     ...                       'Member', 'A group member role.')
 
 To demonstrate relationships we need some objects that can be related.  Any
-object that has an adapter to IRelationshipLinks can be used in relationships.
-Since schooltool.relationship provides a default adapter from IAnnotatable
-to IRelationshipLinks, it is enough to declare that our objects are
-IAttributeAnnotatable.
+object that has an adapter to `IRelationshipLinks` can be used in relationships.
+Since schooltool.relationship provides a default adapter from `IAnnotatable`
+to `IRelationshipLinks`, it is enough to declare that our objects are
+`IAttributeAnnotatable`.
 
     >>> from zope.interface import implements
     >>> from zope.annotation.interfaces import IAttributeAnnotatable
@@ -89,10 +89,10 @@ We need some setup to make Zope 3 annotations work.
     >>> setup.placelessSetUp()
     >>> setup.setUpAnnotations()
 
-We need to define the adapter from IAnnotatable to IRelationshipLinks.
+We need to define the adapter from `IAnnotatable` to `IRelationshipLinks`.
 In real life you would include the ZCML configuration of the
-'schooltool.relationship' package via Zope 3 package includes.  In a test
-you can use setUpRelationships from schooltool.relationship.tests.
+``schooltool.relationship`` package via Zope 3 package includes.  In a test
+you can use `setUpRelationships` from ``schooltool.relationship.tests``.
 
     >>> from schooltool.relationship.tests import setUpRelationships
     >>> setUpRelationships()
@@ -106,7 +106,7 @@ You can create relationships by calling the `relate` function
 
 Since you will always want to use a particular set of roles for a given
 relationship type, you can define a relationship schema and use it as a
-shortcut:
+shortcut::
 
     >>> from schooltool.relationship import RelationshipSchema
     >>> Membership = RelationshipSchema(URIMembership, group=URIGroup,
@@ -116,7 +116,7 @@ shortcut:
     >>> Membership(member=lilfroggy, group=frogs)
 
 If you try to create the same relationship between the same objects more
-than once, you will get a DuplicateRelationship exception.
+than once, you will get a `DuplicateRelationship` exception.
 
     >>> Membership(member=lilfroggy, group=frogs)
     Traceback (most recent call last):
@@ -132,7 +132,7 @@ to sort them alphabetically:
     ...     items.sort()
     ...     return [row[-1] for row in items]
 
-For example, you can get a list of all members of the `frogs` group like
+For example, you can get a list of all members of the "frogs" group like
 this:
 
     >>> from schooltool.relationship import getRelatedObjects
@@ -145,8 +145,8 @@ belongs to
     >>> getRelatedObjects(frogger, URIGroup)
     [frogs]
 
-You can also explicitly say that you want all URIGroups that participate
-in a URIMembership relationship.
+You can also explicitly say that you want all `URIGroup`'s that participate
+in a `URIMembership` relationship.
 
     >>> getRelatedObjects(frogger, URIGroup, URIMembership)
     [frogs]
@@ -155,7 +155,7 @@ in a URIMembership relationship.
 
 In general, avoid reusing the same role for different relationship types.
 
-You can remove relationships by calling the `unrelate` function
+You can remove relationships by calling the `unrelate` function::
 
     >>> from schooltool.relationship import unrelate
     >>> unrelate(URIMembership, (frogs, URIGroup), (frogger, URIMember))
@@ -189,7 +189,7 @@ Relationship properties
 -----------------------
 
 You can define a property in a class and use it instead of explicitly
-calling global functions and passing roles around.
+calling global functions and passing roles around::
 
     >>> from schooltool.relationship import RelationshipProperty
 
@@ -199,7 +199,7 @@ calling global functions and passing roles around.
     >>> class Member(SomeObject):
     ...     groups = RelationshipProperty(URIMembership, URIMember, URIGroup)
 
-Usage example:
+Usage example::
 
     >>> fido = Member('fido')
     >>> dogs = Group('dogs')
@@ -239,8 +239,8 @@ Events
     >>> old_subscribers = zope.event.subscribers
     >>> zope.event.subscribers = []
 
-Before you establish a relationship, a BeforeRelationshipEvent is sent out.
-You can implement constraints by raising an exception in an event subscriber.
+Before you establish a relationship, a `BeforeRelationshipEvent` is sent out.
+You can implement constraints by raising an exception in an event subscriber::
 
     >>> from zope.interface import Interface, directlyProvides
     >>> class IFrog(Interface):
@@ -261,7 +261,7 @@ You can implement constraints by raising an exception in an event subscriber.
       ...
     Exception: Only frogs can be members of the frogs group
 
-When you establish a relationship, a RelationshipAddedEvent is sent out.
+When you establish a relationship, a `RelationshipAddedEvent` is sent out::
 
     >>> from schooltool.relationship.interfaces import IRelationshipAddedEvent
     >>> def my_subscriber(event):
@@ -279,12 +279,12 @@ When you establish a relationship, a RelationshipAddedEvent is sent out.
     >>> Membership(member=kermit, group=frogs)
     Relationship Membership added between kermit (Member) and frogs (Group)
 
-Before you break a relationship, a BeforeRemovingRelationshipEvent is sent out.
-You can implement constraints by raising exceptions in the subscriber (e.g.
+Before you break a relationship, a `BeforeRemovingRelationshipEvent` is sent
+out. You can implement constraints by raising exceptions in the subscriber (e.g.
 prevent members from leaving a group before they do something they have to
 do).
 
-When you break a relationship, a RelationshipRemovedEvent is sent out.
+When you break a relationship, a `RelationshipRemovedEvent` is sent out::
 
     >>> from schooltool.relationship.interfaces \
     ...         import IBeforeRemovingRelationshipEvent
@@ -312,7 +312,7 @@ When you break a relationship, a RelationshipRemovedEvent is sent out.
 Symmetric relationships
 -----------------------
 
-Symmetric relationships work too:
+Symmetric relationships work too::
 
     >>> URIFriendship = URIObject('example:Friendship', 'Friendship')
     >>> URIFriend = URIObject('example:Friend', 'Friend')
@@ -334,7 +334,7 @@ Symmetric relationships work too:
     [fido, neko]
 
 Note that if you use symmetric relationships, you cannot use `__getitem__`
-on IBeforeRelationshipEvents.
+on `IBeforeRelationshipEvent`'s.
 
 
 Annotated relationships
@@ -362,7 +362,7 @@ You can access this extra information from relationship links directly:
     kermit and frogger know each other for years
 
 Since this is very inconvenient, I expect you will write your own access
-properties that mimic RelationshipProperty, and override the `__iter__`
+properties that mimic `RelationshipProperty`, and override the `__iter__`
 method.  For example:
 
     >>> from schooltool.relationship.relationship import BoundRelationshipProperty
@@ -379,7 +379,7 @@ method.  For example:
     ...             if link.role == self.other_role and link.rel_type == self.rel_type:
     ...                 yield link.target, link.extra_info
 
-You can then use it like this:
+You can then use it like this::
 
     >>> class Friend(SomeObject):
     ...     friends = FriendshipProperty()
@@ -406,10 +406,10 @@ Caveats
 
 - When you delete objects, you should remove all relationships for those
   objects.  If you use Zope 3 objects events, you can register the
-  `unrelateOnDeletion` event handler from schooltool.relationship.objectevents.
-  configure.zcml of schooltool.relationship does that.
+  `unrelateOnDeletion` event handler from ``schooltool.relationship.objectevents``.
+  `configure.zcml` of ``schooltool.relationship`` does that.
 
-- When you copy objects (e.g. using Zope's IObjectCopier), you should take
+- When you copy objects (e.g. using Zope's `IObjectCopier`), you should take
   care to ensure that you do not duplicate just one half of relationship
   links.  It is tricky.  locationCopy from zope.location.pickling
   performs deep copies of all objects that are located within the object you
@@ -418,8 +418,8 @@ Caveats
   an object that is copied and another object that is not copied.
 
   You can register the `unrelateOnCopy` event handler from
-  schooltool.relationship.objectevents to solve *part* of the problem
-  (configure.zcml of schooltool.relationship does that).  This event handler
+  ``schooltool.relationship.objectevents`` to solve *part* of the problem
+  (`configure.zcml` of ``schooltool.relationship`` does that).  This event handler
   removes all relationships from the copy of the object that you are copying.
   It does not traverse the whole deply-copied subtree, therefore if you
   have subobjects that participate in relationships with objects outside of
@@ -427,12 +427,11 @@ Caveats
 
   An alternative solution is to disallow copying of objects that may have
   subobjects related with other objects that are not located within the
-  original object.  To do so, declare and IObjectCopier adapter for the object
+  original object.  To do so, declare and `IObjectCopier` adapter for the object
   and make the `copyable` method return False.
 
 
-Cleaning up
------------
+.. Cleaning up
 
     >>> zope.event.subscribers = old_subscribers
     >>> setup.placelessTearDown()

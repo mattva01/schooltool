@@ -319,15 +319,10 @@ def doctest_described_interfaces():
         ----------------------------------
         IRelationshipLink, schooltool.edit
         IRelationshipLink, schooltool.view
-        --------------------------
-        schooltool.term.interfaces
-        --------------------------
-        IDateManager, schooltool.edit
-        IDateManager, schooltool.view
 
         >>> print 'Total undescribed interface permissions: %d of %d (%d done)' % (
         ...     len(missing), len(crowds), len(actions))
-        Total undescribed interface permissions: 11 of 47 (36 done)
+        Total undescribed interface permissions: 9 of 45 (36 done)
 
     """
 

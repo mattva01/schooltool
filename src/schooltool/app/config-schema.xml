@@ -156,13 +156,13 @@
 
   <key name="reportlab_fontdir" datatype="string">
     <description>
-      Specifies the path to TrueType fonts (Arial and Times New Roman)
+      Specifies the path to TrueType fonts (Liberation)
       for reportlab.
 
       Comment out to disable reportlab.
     </description>
     <example>
-      reportlab_fontdir /usr/share/fonts/truetype/msttcorefonts
+      reportlab_fontdir /usr/share/fonts/truetype/ttf-liberation
     </example>
   </key>
 
@@ -179,13 +179,13 @@
     <metadefault>off</metadefault>
   </key>
 
-  <key name="site-definition" default="schooltool-site.zcml">
+  <key name="site-definition" default="site.zcml">
     <description>
       The name of the top-level ZCML file that defines the component
       configuration used for this site.
     </description>
     <example>
-      site-definition schooltool-site.zcml
+      site-definition site.zcml
     </example>
   </key>
 

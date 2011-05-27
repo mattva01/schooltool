@@ -107,14 +107,6 @@ Options:
 """).strip()
 
 
-st_no_storage_error_msg = _("""
-No storage defined in the configuration file.
-
-If you're using the default configuration file, please edit it now and
-uncomment one of the ZODB storage sections.
-""").strip()
-
-
 schooltool_server = ServerType(WSGIHTTPServer,
                                WSGIPublisherApplication,
                                CommonAccessLogger,
@@ -332,7 +324,7 @@ def daemonize():
 
     pid = os.fork()
     if pid:
-        print _("Going to background, daemon pid %d" % pid)
+        print _("Going to background, daemon pid %d") % pid
         sys.exit(0)
 
     os.close(0)
@@ -493,7 +485,6 @@ class StandaloneServer(object):
                                   'config-schema.xml')
 
     usage_message = st_usage_message
-    no_storage_error_msg = st_no_storage_error_msg
 
     system_name = "SchoolTool"
 
@@ -533,7 +524,7 @@ class StandaloneServer(object):
                                             'restore-manager=',
                                             'manage'])
         except getopt.error, e:
-            print >> sys.stderr, _("%s: %s") % (progname, e)
+            print >> sys.stderr, "%s: %s" % (progname, e)
             print >> sys.stderr, _("Run %s -h for help.") % progname
             sys.exit(1)
         for k, v in opts:
@@ -546,8 +537,8 @@ class StandaloneServer(object):
                 options.pack = True
             if k in ('-d', '--daemon'):
                 if not hasattr(os, 'fork'):
-                    print >> sys.stderr, _("%s: daemon mode not supported on"
-                                           " your operating system.")
+                    print >> sys.stderr, _("%s: daemon mode not supported on "
+                                           "your operating system.") % progname
                     sys.exit(1)
                 else:
                     options.daemon = True
@@ -577,11 +568,15 @@ class StandaloneServer(object):
             options.config, handler = ZConfig.loadConfig(schema,
                                                          options.config_file)
         except ZConfig.ConfigurationError, e:
-            print >> sys.stderr, _("%s: %s") % (progname, e)
+            print >> sys.stderr, "%s: %s" % (progname, e)
             sys.exit(1)
         if options.config.database.config.storage is None:
-            print >> sys.stderr, _("%s: %s") % (progname,
-                                                self.no_storage_error_msg)
+            print >> sys.stderr, "%s: %s" % (progname, _("\n"
+                "No storage defined in the configuration file.\n"
+                "\n"
+                "If you're using the default configuration file, please edit it now and\n"
+                "uncomment one of the ZODB storage sections.\n").strip())
+
             sys.exit(1)
 
         return options
@@ -702,11 +697,10 @@ class StandaloneServer(object):
             if options.pack:
                 db.pack()
         except IOError, e:
-            print >> sys.stderr, _("Could not initialize the database:\n%s" %
-                                   (e, ))
+            print >> sys.stderr, _("Could not initialize the database:\n%s") % e
             if e.errno == errno.EAGAIN: # Resource temporarily unavailable
                 print >> sys.stderr, _("\nPerhaps another %s instance"
-                                       " is using it?" % self.system_name)
+                                       " is using it?") % self.system_name
             sys.exit(1)
 
         self.bootstrapSchoolTool(db, options.config.school_type)
@@ -787,7 +781,7 @@ class StandaloneServer(object):
                                        "PDF support disabled.") % font_path
                 return
 
-        pdf.setUpMSTTCoreFonts(fontdir)
+        pdf.setUpLiberationFonts(fontdir)
 
 
 def main():

@@ -217,8 +217,8 @@ def doctest_configureReportlab():
 
         >>> def setupStub(fontdir):
         ...     print 'reportlab set up: %s' % fontdir
-        >>> realSetup = pdf.setUpMSTTCoreFonts
-        >>> pdf.setUpMSTTCoreFonts = setupStub
+        >>> realSetup = pdf.setUpLiberationFonts
+        >>> pdf.setUpLiberationFonts = setupStub
 
     First, if a null path is given, nothing happens (PDF support is
     left disabled):
@@ -282,7 +282,7 @@ def doctest_configureReportlab():
         >>> sys.stderr = old_stderr
         >>> if real_reportlab:
         ...     sys.modules['reportlab'] = real_reportlab
-        >>> pdf.setUpMSTTCoreFonts = realSetup
+        >>> pdf.setUpLiberationFonts = realSetup
 
     """
 
@@ -404,13 +404,13 @@ def doctest_setup():
         >>> logger1.propagate
         False
         >>> logger1.handlers
-        [<logging.StreamHandler instance at 0x...>]
+        [<logging.StreamHandler ...>]
 
     A generic access logger has been set up too:
 
         >>> logger2 = logging.getLogger(None)
         >>> logger2.handlers
-        [<logging.StreamHandler instance at 0x...>]
+        [<logging.StreamHandler ...>]
 
     The language adapter shouldn't have been installed:
 
@@ -680,11 +680,11 @@ def test_setUpLogger():
         >>> logger.propagate
         False
         >>> logger.handlers
-        [<logging.StreamHandler instance ...>, <...UnicodeFileHandler ...>]
+        [<logging.StreamHandler ...>, <...UnicodeFileHandler ...>]
         >>> logger.handlers[0].stream is sys.stderr
         True
         >>> logger.handlers[0].formatter
-        <logging.Formatter instance at ...>
+        <logging.Formatter ...>
         >>> logger.handlers[0].formatter._fmt
         '%(asctime)s %(message)s'
 
@@ -818,6 +818,10 @@ def doctest_PluginActionSorter():
 
 
 def test_suite():
+    # Override _ to not get translated test output
+    import schooltool.app.main
+    schooltool.app.main._ = lambda x: x
+
     optionflags = (doctest.ELLIPSIS |
                    doctest.NORMALIZE_WHITESPACE |
                    doctest.REPORT_NDIFF)

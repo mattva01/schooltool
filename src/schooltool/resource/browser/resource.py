@@ -427,10 +427,6 @@ class BaseResourceAddView(form.AddForm, ResourceFieldGenerator):
     def getBaseFields(self):
         return field.Fields(IResource)
 
-    def groupViewURL(self):
-        return '%s/%s.html' % (absoluteURL(self.context, self.request),
-                               self.group_id)
-
     def updateActions(self):
         super(BaseResourceAddView, self).updateActions()
         self.actions['add'].addClass('button-ok')
@@ -442,7 +438,9 @@ class BaseResourceAddView(form.AddForm, ResourceFieldGenerator):
 
     @button.buttonAndHandler(_('Cancel'))
     def handle_cancel_action(self, action):
-        self.request.response.redirect(self.groupViewURL())
+        url = absoluteURL(self.context, self.request)
+        self.request.response.redirect(url)
+
 
     def createAndAdd(self, data):
         resource = self._factory()

@@ -1,15 +1,7 @@
 # Sample SchoolTool server configuration file
 
 # identify the component configuration used to define the site:
-site-definition ${abspath}/school.zcml
-
-#
-# ssl_certificate certificate
-#
-#   Specifies a certificate in PEM format which contains a certificate and
-#   private key for use in SSL connections.
-#   This is required to use web_ssl
-#
+site-definition ${abspath}/site.zcml
 
 #
 # thread-pool-size n
@@ -36,7 +28,7 @@ site-definition ${abspath}/school.zcml
 #
 # Default: no pidfile
 #
-pid-file var/schooltool.pid
+pid-file ${abspath}/var/schooltool.pid
 
 #
 # error-log-file
@@ -146,16 +138,15 @@ web-access-log-file ${abspath}/log/web-access.log
 #
 # reportlab_fontdir
 #
-#   Specifies the path to TrueType fonts (Arial and Times New Roman)
+#   Specifies the path to TrueType fonts (Liberation)
 #   for ReportLab.
 #
 #   Comment out or set to empty string to disable reportlab.
 #
 # Examples:
-#    reportlab_fontdir /usr/share/fonts/truetype/msttcorefonts
+#    reportlab_fontdir /usr/share/fonts/truetype/ttf-liberation
 #
-# Uncomment the following and update the path to enable PDF generation:
-#reportlab_fontdir /usr/share/fonts/truetype/msttcorefonts
+reportlab_fontdir /usr/share/fonts/truetype/ttf-liberation
 
 # devmode
 #
