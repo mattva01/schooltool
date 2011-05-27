@@ -1,0 +1,83 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    i18n_domain="zope"
+    >
+
+  <!-- Meta configuration (new directives) -->
+  <include file="meta.zcml" />
+
+  <!-- Note that we need to do this early, as later startup
+       subscribers may break without fixups -->
+
+  <include package="zope.app.component" />
+  <include package="zope.app.schema" />
+
+  <include package="zope.app.generations" file="subscriber.zcml" />
+
+  <!-- Ordinary Application (non-view) configuration) -->
+  <include package="zope.componentvocabulary" />
+  <include package="zope.app.security" />
+  <include package="zope.component" />
+  <include package="zope.annotation" />
+  <include package="zope.app.dependable" />
+  <include package="zope.app.content" />
+  <include package="zope.publisher" />
+
+  <include file="menus.zcml" />
+
+  <include package="zope.copypastemove" />
+  <include package="zope.size" />
+  <include package="zope.location" />
+
+  <include package="zope.app.publisher" />
+
+  <include package="zope.app.publication" file="meta.zcml" />
+  <include package="zope.app.publication" />
+
+
+  <include package="zope.traversing" />
+  <include package="zope.app.pagetemplate" />
+  <include package="zope.app.generations" />
+
+  <!-- Views -->
+  <include package="zope.app.http" />
+
+  <!-- Translations -->
+  <configure package="zope.app.locales">
+    <i18n:registerTranslations directory="." />
+  </configure>
+
+  <include package="zope.app.i18n" />
+
+  <!-- Database boostrapping and maintanance -->
+  <include package="zope.app.appsetup" />
+
+  <!-- Services -->
+  <include package="zope.app.principalannotation" />
+
+  <!-- Utilities -->
+  <include package="zope.app.error" />
+
+  <!-- Broken-object support -->
+  <include package="zope.app.broken" />
+
+  <!-- Skins -->
+
+  <include package="zope.app.basicskin" />
+
+  <!-- Additional packages -->
+
+  <include package="zope.app.applicationcontrol" />
+  <include package="zope.dublincore" />
+  <include package="zope.formlib" />
+  <include package="zope.app.wsgi" />
+
+
+  <!-- Content types -->
+  <include package="zope.app.folder" />
+
+  <!-- Browser Configurations -->
+  <include file="browser.zcml" />
+
+</configure>

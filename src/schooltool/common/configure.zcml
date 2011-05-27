@@ -3,9 +3,10 @@
            xmlns:i18n="http://namespaces.zope.org/i18n"
            i18n_domain="schooltool">
 
-  <include package="zope.app.zcmlfiles" />
-  <include package="zope.login" />
+  <include file="zcmlfiles.zcml" />
+
   <include package="zope.password" />
+  <include package="zope.login" />
   <include package="zope.viewlet" file="meta.zcml" />
   <include package="zope.mimetype" file="meta.zcml"/>
   <include package="zc.resourcelibrary" file="meta.zcml"/>

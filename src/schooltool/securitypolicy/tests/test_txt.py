@@ -58,7 +58,7 @@ class ClassroomCalendarCrowd(Crowd):
 def setUpSecurityDirectives(test=None):
     setup.placelessSetUp()
     zcml = ZCMLWrapper()
-    zcml.include('zope.app.zcmlfiles')
+    zcml.include('schooltool.common', file='zcmlfiles.zcml')
     zcml.include('schooltool.securitypolicy', file='meta.zcml')
     zcml.include('schooltool.securitypolicy')
     zcml.setUp(

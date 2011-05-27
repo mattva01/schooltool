@@ -719,7 +719,7 @@ def setUpIntegration(test):
     zcml.setUp(
         namespaces={"": "http://namespaces.zope.org/zope"},
         i18n_domain='schooltool')
-    zcml.include('zope.app.zcmlfiles')
+    zcml.include('schooltool.common', file='zcmlfiles.zcml')
     zcml.include('schooltool.app', file='catalog.zcml')
     root = rootFolder()
     root['app'] = provideApplicationStub()
