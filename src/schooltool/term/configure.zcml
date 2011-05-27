@@ -66,6 +66,5 @@
   </configure>
 
   <include package=".browser" />
-  <include package=".help" />
 
 </configure>

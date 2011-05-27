@@ -122,7 +122,4 @@
 
   <include package=".browser" />
 
-  <!-- Help files -->
-  <include package=".help" />
-
 </configure>

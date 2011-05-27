@@ -5,8 +5,6 @@
 
   <meta:provides feature="devmode" />
 
-  <include package="schooltool.help" file="meta.zcml" />
-
   <include package="schooltool.common" />
 
   <include package="schooltool.course" />

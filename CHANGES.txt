@@ -5,6 +5,7 @@ CHANGES
 1.6.1 (unreleased)
 ------------------
 
+- Removed help (https://launchpad.net/bugs/789157)
 - Removed school setup data framework (https://launchpad.net/bugs/307237)
 - Add paste.ini_tmpl to .tar.gz to fix start-schooltool-instance not creating
   the required paste.ini file.

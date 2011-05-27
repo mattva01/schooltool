@@ -250,7 +250,6 @@
   <!-- Views -->
 
   <include package=".browser" />
-  <include package=".help" />
 
   <!-- XXX It feels wrong to tweak permissions of objects in a sibling. -->
 

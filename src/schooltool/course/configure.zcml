@@ -12,6 +12,5 @@
       factory=".section.PersonInstructorAdapter" />
 
   <include package=".browser" />
-  <include package=".help" />
 
 </configure>
