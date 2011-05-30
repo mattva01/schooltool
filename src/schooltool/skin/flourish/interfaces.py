@@ -50,7 +50,7 @@ class IViewletOrder(Interface):
 
 
 class IViewlet(zope.viewlet.interfaces.IViewlet,
-               ISchoolToolContentProvider,
+               IBrowserPage,
                IViewletOrder):
     """A viewlet."""
 
@@ -61,6 +61,11 @@ class IViewletManager(zope.viewlet.interfaces.IViewletManager,
 
 
 class IPage(IBrowserPage):
+    __name__ = zope.schema.TextLine(
+        title=u"The name of the page",
+        required=False,
+        default=None)
+
     title = zope.schema.TextLine(
         title=_("Page title"), required=False)
 
@@ -78,3 +83,8 @@ class IPage(IBrowserPage):
     content_template = Attribute(
         _("Template that renders the main content."))
 
+    def update(self):
+        pass
+
+    def render(*args, **kw):
+        pass
