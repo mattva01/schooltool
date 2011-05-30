@@ -4,18 +4,17 @@
       xml:lang="en"
       i18n:domain="schooltool">
 <head>
-
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
   <link rel="icon" type="image/png" href="favicon.ico"
         tal:attributes="href context/++resource++favicon.ico"/>
 
-  <tal:resource replace="resource_library:schooltool.skin.flourish" />
+  <!-- zc.resourcelibrary -->
 
-  <tal:block replace="structure provider:CSS|nothing" />
-  <tal:block replace="structure provider:JavaScript|nothing" />
+  <tal:block content="structure providers/html_head|nothing" />
 
-  <!-- XXX: put this in a provider maybe? -->
+  <!--
+
   <title i18n:translate="">
     SchoolTool -
     <tal:block i18n:name="title"
@@ -34,6 +33,8 @@
       Subtitle
     </tal:block>
   </title>
+
+  -->
 
 </head>
 

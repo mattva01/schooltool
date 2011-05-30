@@ -2,7 +2,7 @@
       xmlns:tal="http://xml.zope.org/namespaces/tal">
 
 <div class="heading"
-     tal:define="navigation context/schooltool:content/page_navigation|nothing">
+     tal:define="navigation providers/page_navigation|nothing">
 
   <h1 tal:condition="view/title"
       tal:content="view/title">

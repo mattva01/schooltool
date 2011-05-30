@@ -2,6 +2,7 @@
 <configure xmlns="http://namespaces.zope.org/browser"
            xmlns:z3c="http://namespaces.zope.org/z3c"
            xmlns:zope="http://namespaces.zope.org/zope"
+           xmlns:flourish="http://schooltool.org/flourish"
            i18n_domain="schooltool">
 
   <zope:resourceLibrary
@@ -13,6 +14,56 @@
                page.css"
       />
   </zope:resourceLibrary>
+
+  <flourish:viewletManager
+      name="header_navigation"
+      provides=".page.IHeaderNavigationManager"
+      permission="zope.Public"
+      />
+
+  <flourish:viewletManager
+      name="page_navigation"
+      class=".page.PageNavigationManager"
+      permission="zope.Public"
+      />
+
+  <flourish:viewletManager
+      name="page_refine"
+      provides=".page.IPageRefineManager"
+      permission="zope.Public"
+      />
+
+  <flourish:viewletManager
+      name="page_content"
+      provides=".page.IPageContentManager"
+      permission="zope.Public"
+      />
+
+  <flourish:viewletManager
+      name="actions"
+      view=".page.IPageContentManager"
+      provides=".page.IContentActionsManager"
+      permission="zope.Public"
+      />
+
+  <flourish:viewletManager
+      name="page_related"
+      provides=".page.IPageRelatedManager"
+      permission="zope.Public"
+      />
+
+  <content
+      name="breadcrumbs"
+      class=".breadcrumbs.Breadcrumbs"
+      permission="zope.Public"
+      />
+
+  <content
+      name="breadcrumbs"
+      class=".breadcrumbs.PageBreadcrumbs"
+      view=".interfaces.IPage"
+      permission="zope.Public"
+      />
 
 
 </configure>
