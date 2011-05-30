@@ -23,18 +23,16 @@ import zope.contentprovider.interfaces
 import zope.event
 import zope.security
 from zope.cachedescriptors.property import Lazy
-from zope.contentprovider.provider import ContentProviderBase
-from zope.event import notify
 from zope.interface import implements
-from zope.location.interfaces import ILocation
 from zope.publisher.browser import BrowserPage
 
 from schooltool.app.browser.content import ContentProvider
+from schooltool.common.inlinept import InlinePageTemplate
 from schooltool.skin.flourish.interfaces import IViewlet, IViewletManager
 from schooltool.skin.flourish.sorting import dependency_sort
 
 
-class Viewlet(ContentProviderBase, BrowserPage):
+class Viewlet(BrowserPage):
     implements(IViewlet)
 
     manager = None
@@ -44,9 +42,9 @@ class Viewlet(ContentProviderBase, BrowserPage):
     requires = ()
 
     def __init__(self, context, request, view, manager):
-        ContentProviderBase.__init__(self, context, request, manager)
-        self.view = view
+        BrowserPage.__init__(self, context, request)
         self.manager = manager
+        self.view = view
 
     @property
     def manager(self):
@@ -64,8 +62,6 @@ class Viewlet(ContentProviderBase, BrowserPage):
             '`render` method must be implemented by subclass.')
 
     def __call__(self, *args, **kw):
-        event = zope.contentprovider.interfaces.BeforeUpdateEvent
-        notify(event(self, self.request))
         self.update()
         return self.render(*args, **kw)
 
@@ -73,7 +69,12 @@ class Viewlet(ContentProviderBase, BrowserPage):
 class ViewletManager(ContentProvider):
     implements(IViewletManager)
 
-    template = None
+    template = InlinePageTemplate("""
+        <tal:block repeat="viewlet view/viewlets"
+                   content="structure viewlet" />
+    """)
+
+    render = lambda self, *args, **kw: self.template(*args, **kw)
 
     @Lazy
     def viewlet_dict(self):
@@ -128,6 +129,3 @@ class ViewletManager(ContentProvider):
         for viewlet in self.viewlets:
             zope.event.notify(event(viewlet, self.request))
             viewlet.update()
-
-    def render(self, *args, **kw):
-        raise NotImplementedError()

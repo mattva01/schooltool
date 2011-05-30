@@ -117,19 +117,12 @@ def doctest_Viewlet():
 def doctest_Viewlet_call():
     """Tests for Viewlet.__call__
 
-        >>> from zope.contentprovider.interfaces import IBeforeUpdateEvent
-
-        >>> def beforeUpdate(e):
-        ...     print 'About to update', e.object, 'for', e.request
-        >>> provideHandler(beforeUpdate, [IBeforeUpdateEvent])
-
         >>> v = TestViewlet(None, 'request', None, None)
 
         >>> print v.render()
         A fresh ViewletTest. Called render()
 
         >>> result =  v('arg', option='something')
-        About to update <TestViewlet None> for request
         Updating <TestViewlet None>
 
         >>> print result
