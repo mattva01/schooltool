@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:browser="http://namespaces.zope.org/browser"
+           i18n_domain="schooltool">
+
+  <include package="zope.browserpage" file="meta.zcml" />
+  <include package="zc.resourcelibrary" file="meta.zcml" />
+  <include package="schooltool.skin.flourish" file="meta.zcml" />
+
+  <include package="schooltool.help" file="meta.zcml" />
+
+  <include package="schooltool.common" />
+  <include package="zc.resourcelibrary" />
+  <include package="schooltool.skin.flourish" />
+
+  <include package="z3c.autoinclude" file="meta.zcml" />
+  <includePlugins package="schooltool" file="meta.zcml" />
+  <includePlugins package="schooltool" file="plugin.zcml" />
+
+  <include package="schooltool.help" />
+  <include package="schooltool.timetable" />
+  <include package="schooltool.basicperson" />
+  <includeOverrides package="schooltool.basicperson" file="overrides.zcml" />
+
+  <interface
+      interface="schooltool.skin.flourish.interfaces.IFlourishLayer"
+      type="zope.publisher.interfaces.browser.IBrowserSkinType"
+      name="SchoolToolFlourish"
+      />
+
+  <browser:defaultSkin name="SchoolToolFlourish" />
+
+  <configure xmlns:zcml="http://namespaces.zope.org/zcml"
+             zcml:condition="have devmode">
+    <include package="schooltool.devmode" />
+    <includeOverrides package="schooltool.devmode" file="overrides.zcml" />
+  </configure>
+
+</configure>
