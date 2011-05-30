@@ -21,4 +21,3 @@ SchoolTool flourish skin.
 """
 
 from schooltool.skin.flourish.interfaces import IFlourishLayer
-
