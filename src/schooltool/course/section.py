@@ -403,6 +403,53 @@ class SectionLinkContinuinityValidationSubscriber(EventAdapterSubscriber):
                 _("Sections must be in consecutive terms"))
 
 
+def getSectionRosterEventParticipants(event, rel_type):
+    if rel_type != event.rel_type:
+        return None, None
+    if ISection.providedBy(event.participant1):
+        return event.participant1, event.participant2
+    elif ISection.providedBy(event.participant2):
+        return event.participant2, event.participant1
+    else:
+        return None, None
+
+
+def propagateSectionInstructorAdded(event):
+    section, teacher = getSectionRosterEventParticipants(event, 
+        relationships.URIInstruction)
+    if section is None:
+        return
+    if section.next and teacher not in section.next.instructors:
+        section.next.instructors.add(teacher)
+
+
+def propagateSectionInstructorRemoved(event):
+    section, teacher = getSectionRosterEventParticipants(event, 
+        relationships.URIInstruction)
+    if section is None:
+        return
+    if section.next and teacher in section.next.instructors:
+        section.next.instructors.remove(teacher)
+
+
+def propagateSectionStudentAdded(event):
+    section, student = getSectionRosterEventParticipants(event, 
+        relationships.URIMembership)
+    if section is None:
+        return
+    if section.next and student not in section.next.members:
+        section.next.members.add(student)
+
+
+def propagateSectionStudentRemoved(event):
+    section, student = getSectionRosterEventParticipants(event, 
+        relationships.URIMembership)
+    if section is None:
+        return
+    if section.next and student in section.next.members:
+        section.next.members.remove(student)
+
+
 def copySection(section, target_term):
     """Create a copy of a section in a desired term."""
     section_copy = Section(section.title, section.description)

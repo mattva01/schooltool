@@ -1,0 +1,655 @@
+Tests for linking sections between multiple terms
+=================================================
+
+When we click the All Terms link in the section view, we get to a view that
+has a table with one column per term.  The section that is the context will
+appear in the column for its term with a section title link and a listing of
+the teachers and students of that section.  Any section in other terms which
+are linked to the context will have their column filled in with their teachers
+and students.  This allows the user to see how the roster has changed in the
+section from term to term.
+
+Any term for which there is no section linked to the context will have its
+column filled with two action links.  One will allow the user to extend the
+section to that term by copying it and linking it.  The other will bring the
+user to a search view for finding an existing section in that term for the user
+to select for linking.
+
+We log in as the manager user.
+
+    >>> manager = Browser('manager', 'schooltool')
+
+We need a teacher and some students.
+
+    >>> from schooltool.basicperson.browser.ftests.setup import addPerson
+    >>> addPerson('Teacher1', 'Teacher1', 'teacher1', 'pwd')
+    >>> addPerson('Student1', 'Student1', 'student1', 'pwd')
+    >>> addPerson('Student2', 'Student2', 'student2', 'pwd')
+    >>> addPerson('Student3', 'Student3', 'student3', 'pwd')
+
+We'll create a school year with four terms.
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('School Years').click()
+    >>> manager.getLink('New School Year').click()
+    >>> manager.getControl('Title').value = '2005-2006'
+    >>> manager.getControl('First day').value = '2005-09-01'
+    >>> manager.getControl('Last day').value = '2006-07-15'
+    >>> manager.getControl('Add').click()
+
+    >>> from schooltool.app.browser.ftests import setup
+    >>> setup.addTerm('Term1', '2005-09-01', '2005-12-31', '2005-2006')
+    >>> setup.addTerm('Term2', '2006-01-01', '2006-03-15', '2005-2006')
+    >>> setup.addTerm('Term3', '2006-03-16', '2006-05-31', '2005-2006')
+    >>> setup.addTerm('Term4', '2006-06-01', '2006-07-15', '2005-2006')
+
+We'll create a course and a Term1 section for it.
+
+    >>> setup.addCourse("History", "2005-2006")
+    >>> setup.addSection("History", "2005-2006", "Term1",
+    ...     instructors=["Teacher1"], members=['Student1', 'Student2'])
+
+We'll navigate to the section and hit the All Terms link.
+
+    >>> manager.getLink("2005-2006").click()
+    >>> manager.getLink("Courses").click()
+    >>> manager.getLink("History").click()
+    >>> manager.getLink("History (1)").click()
+    >>> manager.getLink("All Terms").click()
+
+We see that there is a header with links to the section's course and year.
+Additionally, there is a table of terms with only Term1 having a roster.
+The other terms have action links.  Since this section is not linked to
+another section, there is no 'Unlink this Section' link under the section
+link.
+
+    >>> manager.printQuery("id('content-header')//a")
+    <a href="http://localhost/schoolyears/2005-2006/courses/history">History</a>
+    <a href="http://localhost/schoolyears/2005-2006">2005-2006</a>
+
+    >>> manager.printQuery("id('content-body')//table[@class='all_terms_table']/tbody/tr/td[1]//a")
+    <a href="http://localhost/schoolyears/2005-2006/term1/sections/1">History (1)</a>
+    <a href="http://localhost/persons/teacher1">Teacher1, Teacher1</a>
+    <a href="http://localhost/persons/student1">Student1, Student1</a>
+    <a href="http://localhost/persons/student2">Student2, Student2</a>
+
+    >>> manager.printQuery("id('content-body')//table[@class='all_terms_table']/tbody/tr/td[2]//a")
+    <a href="http://localhost/schoolyears/2005-2006/term1/sections/1/extend_term.html?term=term2">Extend to This Term</a>
+    <a href="http://localhost/schoolyears/2005-2006/term1/sections/1/link_existing.html?term=term2">Link an Existing Section</a>
+
+    >>> manager.printQuery("id('content-body')//table[@class='all_terms_table']/tbody/tr/td[3]//a")
+    <a href="http://localhost/schoolyears/2005-2006/term1/sections/1/extend_term.html?term=term3">Extend to This Term</a>
+    <a href="http://localhost/schoolyears/2005-2006/term1/sections/1/link_existing.html?term=term3">Link an Existing Section</a>
+
+    >>> manager.printQuery("id('content-body')//table[@class='all_terms_table']/tbody/tr/td[4]//a")
+    <a href="http://localhost/schoolyears/2005-2006/term1/sections/1/extend_term.html?term=term4">Extend to This Term</a>
+    <a href="http://localhost/schoolyears/2005-2006/term1/sections/1/link_existing.html?term=term4">Link an Existing Section</a>
+
+We will want to test which terms are filled in with a roster often enough that
+we could use a helper function.
+
+    >>> def filled_terms():
+    ...     terms = []
+    ...     for index in [i + 1 for i in range(4)]:
+    ...         query = "id('content-body')//table[@class='all_terms_table']/tbody/tr/td[%s]//a/text()" % index
+    ...         results = manager.queryHTML(query)
+    ...         if results[0] != 'Extend to This Term':
+    ...             terms.append(index)
+    ...     return terms
+
+Let's extend the section to Term2 by clicking the link in the second column.
+First we see that we are taken to a confirmation view with a message and
+two buttons, Extend and Cancel.
+
+    >>> manager.getLink("Extend to This Term", index=0).click()
+
+    >>> manager.printQuery("id('content-header')//td/text()")
+    Click "Extend" to create a linked section in term "Term2" containing the
+    students and instructors from section "History (1)" in term "Term1".
+
+    >>> manager.printQuery("id('content-body')//input[@type='submit']/@value")
+    Extend
+    Cancel
+
+If we hit Cancel, we are returned to the section_lankage view with nothing new
+in the Term2 column.
+
+    >>> manager.getControl("Cancel").click()
+
+    >>> manager.printQuery("id('content-body')//table[@class='all_terms_table']/tbody/tr/td[2]//a")
+    <a href="http://localhost/schoolyears/2005-2006/term1/sections/1/extend_term.html?term=term2">Extend to This Term</a>
+    <a href="http://localhost/schoolyears/2005-2006/term1/sections/1/link_existing.html?term=term2">Link an Existing Section</a>
+
+We'll hit the same link again, but this time we'll hit Extend.  We see that
+the section is now linked to a section in the second term that has the same
+teacher and students.  The third and fourth columns still have the action
+buttons.  Now that the section is linked with another, both sections will have
+an 'Unlink ths Section' link under the section link.
+
+    >>> manager.getLink("Extend to This Term", index=0).click()
+    >>> manager.getControl("Extend").click()
+
+    >>> manager.printQuery("id('content-header')//a")
+    <a href="http://localhost/schoolyears/2005-2006/courses/history">History</a>
+    <a href="http://localhost/schoolyears/2005-2006">2005-2006</a>
+
+    >>> manager.printQuery("id('content-body')//table[@class='all_terms_table']/tbody/tr/td[1]//a")
+    <a href="http://localhost/schoolyears/2005-2006/term1/sections/1">History (1)</a>
+    <a href="http://localhost/schoolyears/2005-2006/term1/sections/1/unlink_section.html">Unlink this Section</a>
+    <a href="http://localhost/persons/teacher1">Teacher1, Teacher1</a>
+    <a href="http://localhost/persons/student1">Student1, Student1</a>
+    <a href="http://localhost/persons/student2">Student2, Student2</a>
+
+    >>> manager.printQuery("id('content-body')//table[@class='all_terms_table']/tbody/tr/td[2]//a")
+    <a href="http://localhost/schoolyears/2005-2006/term2/sections/1">History (1)</a>
+    <a href="http://localhost/schoolyears/2005-2006/term2/sections/1/unlink_section.html">Unlink this Section</a>
+    <a href="http://localhost/persons/teacher1">Teacher1, Teacher1</a>
+    <a href="http://localhost/persons/student1">Student1, Student1</a>
+    <a href="http://localhost/persons/student2">Student2, Student2</a>
+
+    >>> manager.printQuery("id('content-body')//table[@class='all_terms_table']/tbody/tr/td[3]//a")
+    <a href="http://localhost/schoolyears/2005-2006/term1/sections/1/extend_term.html?term=term3">Extend to This Term</a>
+    <a href="http://localhost/schoolyears/2005-2006/term1/sections/1/link_existing.html?term=term3">Link an Existing Section</a>
+
+    >>> manager.printQuery("id('content-body')//table[@class='all_terms_table']/tbody/tr/td[4]//a")
+    <a href="http://localhost/schoolyears/2005-2006/term1/sections/1/extend_term.html?term=term4">Extend to This Term</a>
+    <a href="http://localhost/schoolyears/2005-2006/term1/sections/1/link_existing.html?term=term4">Link an Existing Section</a>
+
+We'll use our helper funtion to show how much trouble it saves testing which
+terms have a roster.  Not all of our tests will care about the deatils of that
+roster.
+
+    >>> filled_terms()
+    [1, 2]
+
+We'll take this opportunity to demostrate that a clever user can't cause a
+program exception by putting a bad term in the query string.
+
+    >>> url = manager.queryHTML("id('content-body')//table[@class='all_terms_table']/tbody/tr/td[1]//a/@href")[0]
+    >>> manager.open(url + '/extend_term.html?term=invalid')
+    >>> manager.url
+    'http://localhost/schoolyears/2005-2006/term1/sections/1/section_linkage.html'
+
+Even if we pass it a valid term that is already linked to the context, no
+harm will come.
+
+    >>> manager.open(url + '/extend_term.html?term=term1')
+    >>> manager.url
+    'http://localhost/schoolyears/2005-2006/term1/sections/1/section_linkage.html'
+
+    >>> manager.open(url + '/extend_term.html?term=term2')
+    >>> manager.url
+    'http://localhost/schoolyears/2005-2006/term1/sections/1/section_linkage.html'
+
+    >>> filled_terms()
+    [1, 2]
+
+We can extend the section to Term4 by clicking the link in the fourth column.
+This will create a section in both the third and fourth terms, again copying
+the teachers and students.
+
+    >>> manager.getLink("Extend to This Term", index=1).click()
+    >>> manager.getControl("Extend").click()
+
+    >>> manager.printQuery("id('content-header')//a")
+    <a href="http://localhost/schoolyears/2005-2006/courses/history">History</a>
+    <a href="http://localhost/schoolyears/2005-2006">2005-2006</a>
+
+    >>> manager.printQuery("id('content-body')//table[@class='all_terms_table']/tbody/tr/td[1]//a")
+    <a href="http://localhost/schoolyears/2005-2006/term1/sections/1">History (1)</a>
+    <a href="http://localhost/schoolyears/2005-2006/term1/sections/1/unlink_section.html">Unlink this Section</a>
+    <a href="http://localhost/persons/teacher1">Teacher1, Teacher1</a>
+    <a href="http://localhost/persons/student1">Student1, Student1</a>
+    <a href="http://localhost/persons/student2">Student2, Student2</a>
+
+    >>> manager.printQuery("id('content-body')//table[@class='all_terms_table']/tbody/tr/td[2]//a")
+    <a href="http://localhost/schoolyears/2005-2006/term2/sections/1">History (1)</a>
+    <a href="http://localhost/schoolyears/2005-2006/term2/sections/1/unlink_section.html">Unlink this Section</a>
+    <a href="http://localhost/persons/teacher1">Teacher1, Teacher1</a>
+    <a href="http://localhost/persons/student1">Student1, Student1</a>
+    <a href="http://localhost/persons/student2">Student2, Student2</a>
+
+    >>> manager.printQuery("id('content-body')//table[@class='all_terms_table']/tbody/tr/td[3]//a")
+    <a href="http://localhost/schoolyears/2005-2006/term3/sections/1">History (1)</a>
+    <a href="http://localhost/schoolyears/2005-2006/term3/sections/1/unlink_section.html">Unlink this Section</a>
+    <a href="http://localhost/persons/teacher1">Teacher1, Teacher1</a>
+    <a href="http://localhost/persons/student1">Student1, Student1</a>
+    <a href="http://localhost/persons/student2">Student2, Student2</a>
+
+    >>> manager.printQuery("id('content-body')//table[@class='all_terms_table']/tbody/tr/td[4]//a")
+    <a href="http://localhost/schoolyears/2005-2006/term4/sections/1">History (1)</a>
+    <a href="http://localhost/schoolyears/2005-2006/term4/sections/1/unlink_section.html">Unlink this Section</a>
+    <a href="http://localhost/persons/teacher1">Teacher1, Teacher1</a>
+    <a href="http://localhost/persons/student1">Student1, Student1</a>
+    <a href="http://localhost/persons/student2">Student2, Student2</a>
+
+
+Extending Backwards
+-------------------
+
+To show that we can extend backwards in time, we'll set up a section in Term4
+of a new course.
+
+    >>> setup.addCourse("English", "2005-2006")
+    >>> setup.addSection("English", "2005-2006", "Term4",
+    ...     instructors=["Teacher1"], members=['Student1', 'Student2'])
+
+We'll navigate to the section and hit the All Terms link.
+
+    >>> manager.getLink("2005-2006").click()
+    >>> manager.getLink("Courses").click()
+    >>> manager.getLink("English").click()
+    >>> manager.getLink("English (2)").click()
+    >>> manager.getLink("All Terms").click()
+
+We see that the section is only found in Term4.
+
+    >>> manager.printQuery("id('content-header')//a")
+    <a href="http://localhost/schoolyears/2005-2006/courses/english">English</a>
+    <a href="http://localhost/schoolyears/2005-2006">2005-2006</a>
+
+    >>> manager.printQuery("id('content-body')//table[@class='all_terms_table']/tbody/tr/td[4]//a")
+    <a href="http://localhost/schoolyears/2005-2006/term4/sections/2">English (2)</a>
+    <a href="http://localhost/persons/teacher1">Teacher1, Teacher1</a>
+    <a href="http://localhost/persons/student1">Student1, Student1</a>
+    <a href="http://localhost/persons/student2">Student2, Student2</a>
+
+    >>> filled_terms()
+    [4]
+
+We'll extend all the way back to Term1.
+
+    >>> manager.getLink("Extend to This Term", index=0).click()
+    >>> manager.getControl("Extend").click()
+
+We see that the section is found in all the terms now.
+
+    >>> filled_terms()
+    [1, 2, 3, 4]
+
+
+Link an Existing Section
+------------------------
+
+From time to time, a user will create sections for the same course in multiple
+terms before realizing how easy it is to extend a section using the
+section_linkage view.  In those cases we will offer them the ability to
+link two sections together.
+
+We'll create another course and two sections, one in Term1, and one in Term4.
+
+    >>> setup.addCourse("Math", "2005-2006")
+    >>> setup.addSection("Math", "2005-2006", "Term1",
+    ...     instructors=["Teacher1"], members=['Student1', 'Student2'])
+    >>> setup.addSection("Math", "2005-2006", "Term4",
+    ...     instructors=["Teacher1"], members=['Student1'])
+
+We'll navigate to the Term1 section and hit the All Terms link.
+
+    >>> manager.getLink("2005-2006").click()
+    >>> manager.getLink("Courses").click()
+    >>> manager.getLink("Math").click()
+    >>> manager.getLink("Math (3)", index=0).click()
+    >>> manager.getLink("All Terms").click()
+
+We see that only the Term1 column is filled in because the Term4 section is
+not linked to it.
+
+    >>> manager.printQuery("id('content-header')//a")
+    <a href="http://localhost/schoolyears/2005-2006/courses/math">Math</a>
+    <a href="http://localhost/schoolyears/2005-2006">2005-2006</a>
+
+    >>> manager.printQuery("id('content-body')//table[@class='all_terms_table']/tbody/tr/td[1]//a")
+    <a href="http://localhost/schoolyears/2005-2006/term1/sections/3">Math (3)</a>
+    <a href="http://localhost/persons/teacher1">Teacher1, Teacher1</a>
+    <a href="http://localhost/persons/student1">Student1, Student1</a>
+    <a href="http://localhost/persons/student2">Student2, Student2</a>
+
+    >>> filled_terms()
+    [1]
+
+If we click the 'Link an Existing Section' link, we are taken to a search view
+that lists all sections in the target term that have the same course as the
+context.  Additionally, there is an instructor filter to limit the list to
+sections taught by a given instructor.
+
+To test filtering in this view, we will add another teacher and a section for
+the same course in Term4.
+
+    >>> addPerson('John', 'Doe', 'teacher2', 'pwd')
+    >>> setup.addSection("Math", "2005-2006", "Term4",
+    ...     instructors=["John"], members=['Student1'])
+
+Now we click the link and take note of the view that is presented to us.  It
+has a header that shows the user what section is being linked and the target
+term for finding a target section.  It also has a message telling the user
+what to do.  The body has a table of sections from which the user chooses a
+link target.
+
+    >>> manager.getLink("Link an Existing Section", index=2).click()
+
+    >>> manager.printQuery("id('content-header')//a")
+    <a href="http://localhost/schoolyears/2005-2006/term1/sections/3">Math (3)</a>
+    <a href="http://localhost/schoolyears/2005-2006/courses/math">Math</a>
+    <a href="http://localhost/schoolyears/2005-2006/term1">Term1</a>
+    <a href="http://localhost/schoolyears/2005-2006/term4">Term4</a>
+
+    >>> manager.printQuery("id('content-header')//table[@class='link_help']//td/text()")
+    Select a section and click 'Link' if you would like to copy and link
+    this section to the target section.
+    You may provide part of an instructor's name or username  and click 'Filter'
+    to limit the list of sections to those taught by a matching instructor.
+
+    >>> manager.printQuery("id('content-body')//td/input")
+    <input type="radio" name="LINK_SECTION" value="section_3" />
+    <input type="radio" name="LINK_SECTION" value="section_4" />
+
+We can filter the list of available names by instructor name or username.
+
+    >>> manager.getControl("Instructor").value = 'teacher1'
+    >>> manager.getControl("Filter").click()
+    >>> manager.printQuery("id('content-body')//td/input/@value")
+    section_3
+
+    >>> manager.getControl("Instructor").value = 'teacher2'
+    >>> manager.getControl("Filter").click()
+    >>> manager.printQuery("id('content-body')//td/input/@value")
+    section_4
+
+    >>> manager.getControl("Instructor").value = 'teacher'
+    >>> manager.getControl("Filter").click()
+    >>> manager.printQuery("id('content-body')//td/input/@value")
+    section_3
+    section_4
+
+    >>> manager.getControl("Instructor").value = 'john'
+    >>> manager.getControl("Filter").click()
+    >>> manager.printQuery("id('content-body')//td/input/@value")
+    section_4
+
+If we hit cancel, we get returned to the section_linkage view.
+
+    >>> manager.getControl("Cancel").click()
+    >>> manager.url
+    'http://localhost/schoolyears/2005-2006/term1/sections/3/section_linkage.html'
+
+We'll go back, and this time we'll go ahead and hit 'Link', even though we
+forgot to select a section from the list.  In that case, it will stay in the
+link_existing view, but display an error message in red after the other help
+text.
+
+    >>> manager.getLink("Link an Existing Section", index=2).click()
+    >>> manager.getControl("Link").click()
+    >>> print manager.queryHTML("id('content-header')//table[@class='link_help']//td/text()")[2]
+    You must select a section before clicking 'Link'.
+
+    >>> manager.printQuery("id('content-body')//td/input/@value")
+    section_3
+    section_4
+
+Finally, we'll click on one of the sections and click 'Link',  This time it
+will take us back to the section_linkage view revealing the changes.  In order
+to link the two sections, the view had to copy the context section forward
+to Term2 and Term3, finally linking to the selected Term4 section.  We see this
+reflected in the fact that the roster in Term2 and Term3 matches that of the
+Term1 column, whereas the Term4 column has a completely different roster, that
+of the selected section.
+
+    >>> manager.getControl(name="LINK_SECTION").value = ["section_4"]
+    >>> manager.getControl("Link").click()
+
+    >>> manager.printQuery("id('content-header')//a")
+    <a href="http://localhost/schoolyears/2005-2006/courses/math">Math</a>
+    <a href="http://localhost/schoolyears/2005-2006">2005-2006</a>
+
+    >>> manager.printQuery("id('content-body')//table[@class='all_terms_table']/tbody/tr/td[1]//a")
+    <a href="http://localhost/schoolyears/2005-2006/term1/sections/3">Math (3)</a>
+    <a href="http://localhost/schoolyears/2005-2006/term1/sections/3/unlink_section.html">Unlink this Section</a>
+    <a href="http://localhost/persons/teacher1">Teacher1, Teacher1</a>
+    <a href="http://localhost/persons/student1">Student1, Student1</a>
+    <a href="http://localhost/persons/student2">Student2, Student2</a>
+
+    >>> manager.printQuery("id('content-body')//table[@class='all_terms_table']/tbody/tr/td[2]//a")
+    <a href="http://localhost/schoolyears/2005-2006/term2/sections/3">Math (3)</a>
+    <a href="http://localhost/schoolyears/2005-2006/term2/sections/3/unlink_section.html">Unlink this Section</a>
+    <a href="http://localhost/persons/teacher1">Teacher1, Teacher1</a>
+    <a href="http://localhost/persons/student1">Student1, Student1</a>
+    <a href="http://localhost/persons/student2">Student2, Student2</a>
+
+    >>> manager.printQuery("id('content-body')//table[@class='all_terms_table']/tbody/tr/td[3]//a")
+    <a href="http://localhost/schoolyears/2005-2006/term3/sections/3">Math (3)</a>
+    <a href="http://localhost/schoolyears/2005-2006/term3/sections/3/unlink_section.html">Unlink this Section</a>
+    <a href="http://localhost/persons/teacher1">Teacher1, Teacher1</a>
+    <a href="http://localhost/persons/student1">Student1, Student1</a>
+    <a href="http://localhost/persons/student2">Student2, Student2</a>
+
+    >>> manager.printQuery("id('content-body')//table[@class='all_terms_table']/tbody/tr/td[4]//a")
+    <a href="http://localhost/schoolyears/2005-2006/term4/sections/4">Math (4)</a>
+    <a href="http://localhost/schoolyears/2005-2006/term4/sections/4/unlink_section.html">Unlink this Section</a>
+    <a href="http://localhost/persons/teacher2">Doe, John</a>
+    <a href="http://localhost/persons/student1">Student1, Student1</a>
+
+
+Linking Backwards
+-------------------
+
+To show that we can link backwards in time, we'll set up a section in Term1 and
+Term4 of a new course.
+
+    >>> setup.addCourse("Health", "2005-2006")
+    >>> setup.addSection("Health", "2005-2006", "Term1",
+    ...     instructors=["John"], members=['Student1', 'Student2'])
+    >>> setup.addSection("Health", "2005-2006", "Term4",
+    ...     instructors=["Teacher1"], members=['Student1'])
+
+We'll navigate to the Term4 section and hit the All Terms link.  As we would
+expect, only the Term4 column is filled in.
+
+    >>> manager.getLink("2005-2006").click()
+    >>> manager.getLink("Courses").click()
+    >>> manager.getLink("Health").click()
+    >>> manager.getLink("Health (5)").click()
+    >>> manager.getLink("All Terms").click()
+
+    >>> filled_terms()
+    [4]
+
+Now we'll hit the link for linking to a Term1 section.
+
+    >>> manager.getLink("Link an Existing Section", index=0).click()
+
+    >>> manager.printQuery("id('content-body')//td/input/@value")
+    section_4
+
+    >>> manager.printQuery("id('content-body')//td/a")
+    <a href="http://localhost/schoolyears/2005-2006/term1/sections/4">Health (4)</a>
+    <a href="http://localhost/persons/teacher2">Doe, John</a>
+
+We'll choose the section and hit 'Link'.  The section_linkage view now reflects
+the Term4 section being copied and linked to Term3 and Term2, then linked to
+the selected Term1 section.  Again, the rosters reflect this.
+
+    >>> manager.getControl(name="LINK_SECTION").value = ["section_4"]
+    >>> manager.getControl("Link").click()
+
+    >>> manager.printQuery("id('content-header')//a")
+    <a href="http://localhost/schoolyears/2005-2006/courses/health">Health</a>
+    <a href="http://localhost/schoolyears/2005-2006">2005-2006</a>
+
+    >>> manager.printQuery("id('content-body')//table[@class='all_terms_table']/tbody/tr/td[1]//a")
+    <a href="http://localhost/schoolyears/2005-2006/term1/sections/4">Health (4)</a>
+    <a href="http://localhost/schoolyears/2005-2006/term1/sections/4/unlink_section.html">Unlink this Section</a>
+    <a href="http://localhost/persons/teacher2">Doe, John</a>
+    <a href="http://localhost/persons/student1">Student1, Student1</a>
+    <a href="http://localhost/persons/student2">Student2, Student2</a>
+
+    >>> manager.printQuery("id('content-body')//table[@class='all_terms_table']/tbody/tr/td[2]//a")
+    <a href="http://localhost/schoolyears/2005-2006/term2/sections/5">Health (5)</a>
+    <a href="http://localhost/schoolyears/2005-2006/term2/sections/5/unlink_section.html">Unlink this Section</a>
+    <a href="http://localhost/persons/teacher1">Teacher1, Teacher1</a>
+    <a href="http://localhost/persons/student1">Student1, Student1</a>
+
+    >>> manager.printQuery("id('content-body')//table[@class='all_terms_table']/tbody/tr/td[3]//a")
+    <a href="http://localhost/schoolyears/2005-2006/term3/sections/5">Health (5)</a>
+    <a href="http://localhost/schoolyears/2005-2006/term3/sections/5/unlink_section.html">Unlink this Section</a>
+    <a href="http://localhost/persons/teacher1">Teacher1, Teacher1</a>
+    <a href="http://localhost/persons/student1">Student1, Student1</a>
+
+    >>> manager.printQuery("id('content-body')//table[@class='all_terms_table']/tbody/tr/td[4]//a")
+    <a href="http://localhost/schoolyears/2005-2006/term4/sections/5">Health (5)</a>
+    <a href="http://localhost/schoolyears/2005-2006/term4/sections/5/unlink_section.html">Unlink this Section</a>
+    <a href="http://localhost/persons/teacher1">Teacher1, Teacher1</a>
+    <a href="http://localhost/persons/student1">Student1, Student1</a>
+
+
+Unlinking Sections
+------------------
+
+In the section_linkage view, we provide the user a link in each roster column,
+right below the section link, for unlinking a section from its linkage partner
+or partners.
+
+We'll start by unlinking the Term1 section of our Health class.  After we click
+the 'Unink this Section' link we are taken to a confirmation view that tells
+the user what section they are unlinking and the one or two sections from
+which is is being unlinked.  In this first case, there is just the one.
+
+    >>> manager.getLink("Unlink this Section", index=0).click()
+    >>> manager.printQuery("id('content-header')//table[1]//a")
+    <a href="http://localhost/schoolyears/2005-2006/term1/sections/4">Health (4)</a>
+    <a href="http://localhost/schoolyears/2005-2006/courses/health">Health</a>
+    <a href="http://localhost/schoolyears/2005-2006/term1">Term1</a>
+
+    >>> manager.printQuery("id('content-header')//table[2]//td/text()")
+    Click 'Unlink' if you would like to remove the link this section has to
+    the following section(s):
+
+    >>> manager.printQuery("id('content-header')//table[3]//a")
+    <a href="http://localhost/schoolyears/2005-2006/term2/sections/5">Health (5)</a>
+    <a href="http://localhost/schoolyears/2005-2006/term2">Term2</a>
+
+If we hit cancel, we get returned to the section_linkage view.  The section
+remains unchanged.  All four terms are linked.
+
+    >>> manager.getControl("Cancel").click()
+    >>> manager.url
+    'http://localhost/schoolyears/2005-2006/term1/sections/4/section_linkage.html'
+
+    >>> filled_terms()
+    [1, 2, 3, 4]
+
+We'll return to the unlink view and this time click 'Unlink'.  It takes us
+back to the section_linkage view, and we see that the section is no longer
+linked to anything.
+
+    >>> manager.getLink("Unlink this Section", index=0).click()
+    >>> manager.getControl("Unlink").click()
+    >>> manager.url
+    'http://localhost/schoolyears/2005-2006/term1/sections/4/section_linkage.html'
+
+    >>> filled_terms()
+    [1]
+
+We'll navigate to Term4 section that used to be linked to the Term1 section.
+We see that it is still linked to sections in Term3 and Term2.
+
+    >>> manager.getLink("2005-2006").click()
+    >>> manager.getLink("Term4").click()
+    >>> manager.getLink("Sections").click()
+    >>> manager.getLink("Health (5)").click()
+    >>> manager.getLink("All Terms").click()
+
+    >>> filled_terms()
+    [2, 3, 4]
+
+We'll unlink the Term4 section to demomstrate unlinking backwards only.  The
+view shows us that we are unlinking with Term3.  After we click 'Unlink', we
+see that we are no longer linked to any other sections.
+
+    >>> manager.getLink("Unlink this Section", index=2).click()
+    >>> manager.printQuery("id('content-header')//table[1]//a")
+    <a href="http://localhost/schoolyears/2005-2006/term4/sections/5">Health (5)</a>
+    <a href="http://localhost/schoolyears/2005-2006/courses/health">Health</a>
+    <a href="http://localhost/schoolyears/2005-2006/term4">Term4</a>
+
+    >>> manager.printQuery("id('content-header')//table[3]//a")
+    <a href="http://localhost/schoolyears/2005-2006/term3/sections/5">Health (5)</a>
+    <a href="http://localhost/schoolyears/2005-2006/term3">Term3</a>
+
+    >>> manager.getControl("Unlink").click()
+    >>> manager.url
+    'http://localhost/schoolyears/2005-2006/term4/sections/5/section_linkage.html'
+
+    >>> filled_terms()
+    [4]
+
+When we go to the Term2 section_linkage view, we see that it is still linked to
+Term3, the links having been separated from Term1 and Term4.
+
+    >>> manager.getLink("2005-2006").click()
+    >>> manager.getLink("Term2").click()
+    >>> manager.getLink("Sections").click()
+    >>> manager.getLink("Health (5)").click()
+    >>> manager.getLink("All Terms").click()
+
+    >>> filled_terms()
+    [2, 3]
+
+Finally, to demostrate unlinking with sections from both the previous and
+next terms, we'll navigate to the Term2 section of English.  We are reminded
+that it is linked to sections in all the terms.
+
+    >>> manager.getLink("2005-2006").click()
+    >>> manager.getLink("Term2").click()
+    >>> manager.getLink("Sections").click()
+    >>> manager.getLink("English (2)").click()
+    >>> manager.getLink("All Terms").click()
+
+    >>> filled_terms()
+    [1, 2, 3, 4]
+
+When we go to unlink the Term2 section, we see that we will be unlinking from
+both a previous and a next term, Term1 and Term3.
+
+    >>> manager.getLink("Unlink this Section", index=1).click()
+    >>> manager.printQuery("id('content-header')//table[1]//a")
+    <a href="http://localhost/schoolyears/2005-2006/term2/sections/2">English (2)</a>
+    <a href="http://localhost/schoolyears/2005-2006/courses/english">English</a>
+    <a href="http://localhost/schoolyears/2005-2006/term2">Term2</a>
+
+    >>> manager.printQuery("id('content-header')//table[3]//a")
+    <a href="http://localhost/schoolyears/2005-2006/term1/sections/2">English (2)</a>
+    <a href="http://localhost/schoolyears/2005-2006/term1">Term1</a>
+    <a href="http://localhost/schoolyears/2005-2006/term3/sections/2">English (2)</a>
+    <a href="http://localhost/schoolyears/2005-2006/term3">Term3</a>
+
+After we click 'Unlink', we see that we are no longer linked to another section.
+
+    >>> manager.getControl("Unlink").click()
+    >>> manager.url
+    'http://localhost/schoolyears/2005-2006/term2/sections/2/section_linkage.html'
+
+    >>> filled_terms()
+    [2]
+
+The Term1 section is now also linked to nothing, but the Term3 and Term4
+sections remain linked.
+
+    >>> manager.getLink("2005-2006").click()
+    >>> manager.getLink("Term1").click()
+    >>> manager.getLink("Sections").click()
+    >>> manager.getLink("English (2)").click()
+    >>> manager.getLink("All Terms").click()
+
+    >>> filled_terms()
+    [1]
+
+    >>> manager.getLink("2005-2006").click()
+    >>> manager.getLink("Term3").click()
+    >>> manager.getLink("Sections").click()
+    >>> manager.getLink("English (2)").click()
+    >>> manager.getLink("All Terms").click()
+
+    >>> filled_terms()
+    [3, 4]
+

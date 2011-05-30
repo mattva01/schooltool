@@ -209,7 +209,6 @@ class SectionLinkPreviousView(SectionLinkNextView):
         section.previous = target_section
 
 
-
 class SectionView(BrowserView):
     """A view for courses providing a list of sections."""
 
@@ -222,6 +221,24 @@ class SectionView(BrowserView):
     @property
     def school_year(self):
         return ISchoolYear(self.context)
+
+    @property
+    def linked_terms(self):
+        sections = []
+        current = self.context
+        while current.previous:
+            sections.append(current.previous)
+            current = current.previous
+        sections.reverse()
+        current = self.context
+        while current.next:
+            sections.append(current.next)
+            current = current.next
+        for section in sections:
+            yield {
+                'url': absoluteURL(section, self.request),
+                'title': ITerm(section).title,
+                }
 
     def renderPersonTable(self):
         persons = ISchoolToolApplication(None)['persons']
@@ -544,3 +561,220 @@ class SectionLearnerView(RelationshipEditConfView):
 
     def getAvailableItemsContainer(self):
         return ISchoolToolApplication(None)['persons']
+
+
+class SectionLinkageView(BrowserView):
+    """A view for seeing all terms of a section and linking it to others."""
+
+    @property
+    def year(self):
+        return ISchoolYear(self.context)
+
+    @property
+    def linked(self):
+        return len(self.context.linked_sections) > 1
+
+    @property
+    def columns(self):
+        linked_sections = dict([(ITerm(section), section)
+                                 for section in self.context.linked_sections])
+        columns = []
+        for term in sorted(self.year.values(), key=lambda t: t.first):
+            columns.append({
+                'term': term,
+                'section': linked_sections.get(term),
+                })
+        return columns
+
+
+class ExtendTermView(BrowserView):
+    """A view for extending a section to a target term."""
+
+    template = ViewPageTemplateFile('templates/extend_term.pt')
+
+    @property
+    def term(self):
+        return ITerm(self.context)
+
+    @property
+    def extend_term(self):
+        return ISchoolYear(self.context).get(self.request['term'])
+
+    def __call__(self):
+        section = removeSecurityProxy(self.context)
+        year = ISchoolYear(section)
+        linked_names = [ITerm(s).__name__ for s in section.linked_sections]
+        key = self.request['term']
+
+        if key not in year or key in linked_names or 'CANCEL' in self.request:
+            self.request.response.redirect(self.nextURL())
+
+        elif 'EXTEND' in self.request:
+            this_term = ITerm(self.context)
+            extend_term = year[key]
+            if extend_term.first < this_term.first:
+                current = section.linked_sections[0]
+                target_term = getPreviousTerm(ITerm(current))
+            else:
+                current = section.linked_sections[-1]
+                target_term = getNextTerm(ITerm(current))
+            while ITerm(current).first != extend_term.first:
+                new_section = copySection(current, target_term)
+                if extend_term.first < this_term.first:
+                    new_section.next = current
+                    target_term = getPreviousTerm(target_term)
+                else:
+                    new_section.previous = current
+                    target_term = getNextTerm(target_term)
+                current = new_section
+            self.request.response.redirect(self.nextURL())
+
+        else:
+            return self.template()
+
+    def nextURL(self):
+        return absoluteURL(self.context, self.request) + '/section_linkage.html' 
+
+
+class LinkExistingView(BrowserView):
+    """A view for finding a target section in anoother term for linking."""
+
+    template = ViewPageTemplateFile('templates/link_existing.pt')
+
+    @property
+    def term(self):
+        return ITerm(self.context)
+
+    @property
+    def link_term(self):
+        term = ISchoolYear(self.context).get(self.request.get('term'))
+        if (term is not None and
+            term not in [ITerm(s) for s in self.context.linked_sections]):
+            return term
+
+    @property
+    def sections(self):
+        section = removeSecurityProxy(self.context)
+        term = self.link_term
+
+        sections = []
+        if term is None:
+            return sections
+
+        courses = list(section.courses)
+        for target in ISectionContainer(term).values():
+            if target in section.linked_sections:
+                continue
+            if not self.filterSection(target):
+                continue
+            if courses == list(target.courses):
+                sections.append(target)
+        return sections
+
+    def filterSection(self, section):
+        teacher_filter = self.request.get('teacher', '').lower()
+        if not teacher_filter:
+            return True
+        for teacher in section.instructors:
+            name = '%s %s' % (teacher.first_name, teacher.last_name)
+            if (teacher_filter in name.lower() or
+                teacher_filter in teacher.username.lower()):
+                return True
+        return False
+
+    @property
+    def selected_section(self):
+        term = self.link_term
+        selection = self.request.get('LINK_SECTION')
+        if term is not None and selection is not None:
+            section = ISectionContainer(term).get(selection[8:])
+            if section not in self.context.linked_sections:
+                return section
+
+    @property
+    def error(self):
+        return 'LINK' in self.request and self.selected_section is None
+
+    def __call__(self):
+        section = removeSecurityProxy(self.context)
+        term = self.term
+        link_term = self.link_term
+
+        if link_term is None or 'CANCEL' in self.request:
+            self.request.response.redirect(self.nextURL())
+
+        elif 'LINK' in self.request:
+            target_section = self.selected_section
+            if target_section is None:
+                return self.template()
+
+            if link_term.first < term.first:
+                current = section.linked_sections[0]
+                target_term = getPreviousTerm(ITerm(current))
+            else:
+                current = section.linked_sections[-1]
+                target_term = getNextTerm(ITerm(current))
+
+            while target_term.first != link_term.first:
+                new_section = copySection(current, target_term)
+                if link_term.first < term.first:
+                    new_section.next = current
+                    target_term = getPreviousTerm(target_term)
+                else:
+                    new_section.previous = current
+                    target_term = getNextTerm(target_term)
+                current = new_section
+
+            if link_term.first < term.first:
+                target_section.next = current
+            else:
+                target_section.previous = current
+
+            self.request.response.redirect(self.nextURL())
+
+        else:
+            return self.template()
+
+    def nextURL(self):
+        return absoluteURL(self.context, self.request) + '/section_linkage.html' 
+
+
+class UnlinkSectionView(BrowserView):
+    """A view for unlinking a section."""
+
+    template = ViewPageTemplateFile('templates/unlink_section.pt')
+
+    @property
+    def term(self):
+        return ITerm(self.context)
+
+    @property
+    def sections(self):
+        sections = []
+        for section in [self.context.previous, self.context.next]:
+            if section:
+                sections.append({
+                    'section': section,
+                    'term': ITerm(section),
+                    })
+        return sections
+
+    def __call__(self):
+        section = removeSecurityProxy(self.context)
+
+        if not self.sections or 'CANCEL' in self.request:
+            self.request.response.redirect(self.nextURL())
+
+        elif 'UNLINK' in self.request:
+            if section.previous:
+                section.previous = None
+            if section.next:
+                section.next = None
+            self.request.response.redirect(self.nextURL())
+
+        else:
+            return self.template()
+
+    def nextURL(self):
+        return absoluteURL(self.context, self.request) + '/section_linkage.html' 
+

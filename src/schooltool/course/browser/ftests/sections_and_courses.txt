@@ -220,46 +220,24 @@ We can now see that the section spans both terms.
     </a>
 
     >>> manager.getLink('History (2)', index=0).click()
-    >>> manager.printQuery("id('content-header')/h1")
-    <h1>
-      Section of
-      <a href="http://localhost/schoolyears/2005-2006/courses/history">History</a>
-      -- History (2)
-      for
-      <a href="http://localhost/schoolyears/2005-2006/fall">Fall</a> of
-      <a href="http://localhost/schoolyears/2005-2006">2005-2006</a>
-    </h1>
-
-    >>> manager.printQuery("id('content-header')/h3")
-    <h3>
-      Next:
-      <a href="http://localhost/schoolyears/2005-2006/courses/history">History</a>
-      --
-      <a href="http://localhost/schoolyears/2005-2006/spring/sections/2">History (2)</a>
-      for
-      <a href="http://localhost/schoolyears/2005-2006/spring">Spring</a>
-    </h3>
+    >>> manager.printQuery("id('content-header')//tr[1]/td[2]")
+    <td>History (2)</td>
+    >>> manager.printQuery("id('content-header')//a")
+    <a href="http://localhost/schoolyears/2005-2006/courses/history">History</a>
+    <a href="http://localhost/schoolyears/2005-2006">2005-2006</a>
+    <a href="http://localhost/schoolyears/2005-2006/fall">Fall</a>
+    <a href="http://localhost/schoolyears/2005-2006/fall/sections/2/section_linkage.html">All Terms</a>
+    <a href="http://localhost/schoolyears/2005-2006/spring/sections/2">Spring</a>
 
 Sections are linked, so can navigate to the next section.
 
-    >>> manager.getLink('History (2)').click()
-    >>> manager.printQuery("id('content-header')/h1")
-    <h1>
-      Section of
-      <a href="http://localhost/schoolyears/2005-2006/courses/history">History</a>
-      -- History (2)
-      for
-      <a href="http://localhost/schoolyears/2005-2006/spring">Spring</a> of
-      <a href="http://localhost/schoolyears/2005-2006">2005-2006</a>
-    </h1>
-
-    >>> manager.printQuery("id('content-header')/h3")
-    <h3>
-      Previous:
-      <a href="http://localhost/schoolyears/2005-2006/courses/history">History</a>
-      --
-      <a href="http://localhost/schoolyears/2005-2006/fall/sections/2">History (2)</a>
-      for
-      <a href="http://localhost/schoolyears/2005-2006/fall">Fall</a>
-    </h3>
+    >>> manager.getLink('Spring').click()
+    >>> manager.printQuery("id('content-header')//tr[1]/td[2]")
+    <td>History (2)</td>
+    >>> manager.printQuery("id('content-header')//a")
+    <a href="http://localhost/schoolyears/2005-2006/courses/history">History</a>
+    <a href="http://localhost/schoolyears/2005-2006">2005-2006</a>
+    <a href="http://localhost/schoolyears/2005-2006/spring">Spring</a>
+    <a href="http://localhost/schoolyears/2005-2006/spring/sections/2/section_linkage.html">All Terms</a>
+    <a href="http://localhost/schoolyears/2005-2006/fall/sections/2">Fall</a>
 

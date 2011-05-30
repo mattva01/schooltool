@@ -124,14 +124,13 @@ Looking at the section:
 
     >>> manager.reload()
     >>> manager.getLink('(1)').click()
-    >>> print manager.contents
-    <!DOCTYPE ...>
-    ...
-    ...Section of
-    <BLANKLINE>
-          <a href="http://localhost/schoolyears/2007/courses/history">History</a>
-    <BLANKLINE>
-    ...
+    >>> manager.printQuery("id('content-header')//tr[1]/td[2]")
+    <td>History (1)</td>
+    >>> manager.printQuery("id('content-header')//a")
+    <a href="http://localhost/schoolyears/2007/courses/history">History</a>
+    <a href="http://localhost/schoolyears/2007">2007</a>
+    <a href="http://localhost/schoolyears/2007/term-1">Term 1</a>
+    <a href="http://localhost/schoolyears/2007/term-1/sections/1/section_linkage.html">All Terms</a>
 
 Frog can't see the section's calendar by default
 
@@ -196,21 +195,10 @@ Adding a teacher:
 Now Frog is in the Instructors div
 
     >>> manager.getControl('OK').click()
-    >>> print manager.contents
-    <!DOCTYPE ...>
-    ...
-    ...Section of
-    <BLANKLINE>
-          <a href="http://localhost/schoolyears/2007/courses/history">History</a>
-    <BLANKLINE>
-    ...
-          <h3>Instructors</h3>
-          <ul>
-            <li>
-              <a href="http://localhost/persons/frog">Frog, Frog</a>
-            </li>
-          </ul>
-    ...
+    >>> manager.printQuery("id('content-body')//div[@class='info-block'][2]/h3")
+    <h3>Instructors</h3>
+    >>> manager.printQuery("id('content-body')//div[@class='info-block'][2]/ul[1]//a")
+    <a href="http://localhost/persons/frog">Frog, Frog</a>
 
 Toad should still be able to see the course view even though it is
 showing bits of frog's personal information as well as the section
@@ -261,13 +249,10 @@ Frog can't see the section's calendar any more
 and he's no longer an instructor:
 
     >>> manager.getControl('OK').click()
-    >>> print manager.contents
-    <!DOCTYPE ...>
-    ...
-          <h3>Instructors</h3>
-          <ul>
-          </ul>
-    ...
+    >>> manager.printQuery("id('content-body')//div[@class='info-block'][2]/h3")
+    <h3>Instructors</h3>
+    >>> manager.printQuery("id('content-body')//div[@class='info-block'][2]/ul")
+    <ul></ul>
 
 And the section's calendar is no longer in his overlay portlet.
 
@@ -293,18 +278,11 @@ Adding a student:
 
 Now toad is in the Students div
 
-    >>> print manager.contents
-    <BLANKLINE>
-    ...
-    ...Section of
-    <BLANKLINE>
-        <a href="http://localhost/schoolyears/2007/courses/history">History</a>
-    <BLANKLINE>
-    ...
-          <h3>Students</h3>
-    ...
-          <a href="http://localhost/persons/toad">Toad</a>
-    ...
+    >>> manager.printQuery("id('content-body')//div[@class='info-block'][3]/h3")
+    <h3>Students</h3>
+    >>> manager.printQuery("id('content-body')//div[@class='info-block'][3]/ul[1]//a")
+    <a href="http://localhost/persons/toad">Toad</a>
+    <a href="http://localhost/persons/toad">Toad</a>
 
 Toad can see the calendar now:
 

@@ -404,13 +404,13 @@ def doctest_setup():
         >>> logger1.propagate
         False
         >>> logger1.handlers
-        [<logging.StreamHandler instance at 0x...>]
+        [<logging.StreamHandler ...>]
 
     A generic access logger has been set up too:
 
         >>> logger2 = logging.getLogger(None)
         >>> logger2.handlers
-        [<logging.StreamHandler instance at 0x...>]
+        [<logging.StreamHandler ...>]
 
     The language adapter shouldn't have been installed:
 
@@ -680,11 +680,11 @@ def test_setUpLogger():
         >>> logger.propagate
         False
         >>> logger.handlers
-        [<logging.StreamHandler instance ...>, <...UnicodeFileHandler ...>]
+        [<logging.StreamHandler ...>, <...UnicodeFileHandler ...>]
         >>> logger.handlers[0].stream is sys.stderr
         True
         >>> logger.handlers[0].formatter
-        <logging.Formatter instance at ...>
+        <logging.Formatter ...>
         >>> logger.handlers[0].formatter._fmt
         '%(asctime)s %(message)s'
 
