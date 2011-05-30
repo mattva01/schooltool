@@ -1,0 +1,19 @@
+<configure xmlns="http://namespaces.zope.org/meta">
+
+  <directives namespace="http://schooltool.org/flourish">
+
+    <directive
+        name="viewlet"
+        schema=".zcml.IViewletDirective"
+        handler=".zcml.viewlet"
+        />
+
+    <directive
+        name="viewletManager"
+        schema=".zcml.IManagerDirective"
+        handler=".zcml.viewletManager"
+        />
+
+  </directives>
+
+</configure>
