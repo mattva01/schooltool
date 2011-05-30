@@ -161,7 +161,7 @@ Javascript will be usable, although perhaps not very nice or convenient.""",
     schooltool_deploy = schooltool.paste.templates:SchoolToolDeploy
 
     [schooltool.instance_type]
-    schooltool = schooltool.standard
+    schooltool = schooltool.skin.flourish.instance
 
     """,
     )
