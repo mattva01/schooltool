@@ -85,7 +85,8 @@ def subclass_content(class_, name,
     for attr, template in template_dict.items():
         if template:
             class_dict[attr] = ViewPageTemplateFile(template)
-    new_class = type('%s_%s' % (class_.__name__, name), (class_, ), class_dict)
+    classname = (u'%s_%s' % (class_.__name__, name)).encode('ASCII')
+    new_class = type(classname, (class_, ), class_dict)
     return new_class
 
 
