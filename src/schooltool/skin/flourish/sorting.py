@@ -32,7 +32,7 @@ def scc_tarjan(items, graph):
     def visit(n):
         if n in low:
             return
-	i = len(low)
+        i = len(low)
         low[n] = i
         pos = len(stack)
         stack.append(n)
@@ -45,11 +45,11 @@ def scc_tarjan(items, graph):
                     low[n] = min(low[n], low[m])
 
         if low[n] == i:
-	    component = tuple(stack[pos:])
+            component = tuple(stack[pos:])
             stack[pos:] = []
             result.append(component)
-	    for item in component:
-	        low[item] = lmax
+            for item in component:
+                low[item] = lmax
 
     for n in items:
         visit(n)
