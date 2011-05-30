@@ -27,7 +27,7 @@ update:
 	bzr up
 	$(MAKE) buildout BUILDOUT_FLAGS=-n
 
-instance:
+instance: build
 	bin/make-schooltool-instance instance instance_type=$(INSTANCE_TYPE)
 
 .PHONY: run
