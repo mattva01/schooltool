@@ -130,7 +130,7 @@ def viewletManager(
     **kwargs):
 
     if not interfaces.IViewletManager.implementedBy(class_):
-        class_ = type(name, (class_, ViewletManager), {})
+        class_ = type(class_.__name__, (class_, ViewletManager), {})
     allowed_interface = (tuple(allowed_interface) +
                          (interfaces.IViewletManager, ))
     if not provides.implementedBy(class_):
@@ -156,7 +156,7 @@ def viewlet(
     **kwargs):
 
     if not interfaces.IViewlet.implementedBy(class_):
-        class_ = type(name, (class_, Viewlet), {})
+        class_ = type(class_.__name__, (class_, Viewlet), {})
     allowed_interface = (tuple(allowed_interface) +
                          (interfaces.IViewlet, ))
 
@@ -200,7 +200,7 @@ def page(_context, name, permission,
          ):
 
     if not interfaces.IPage.implementedBy(class_):
-        class_ = type(name, (class_, Page), {})
+        class_ = type(class_.__name__, (class_, Page), {})
 
     allowed_interface = (tuple(allowed_interface) +
                          (interfaces.IPage, ))
