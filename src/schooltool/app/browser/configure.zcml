@@ -394,6 +394,7 @@
   <page
       name="daily.html"
       for="schooltool.app.interfaces.ISchoolToolCalendar"
+      layer="schooltool.skin.ISchoolToolLayer"
       class=".cal.DailyCalendarView"
       template="templates/cal_daily.pt"
       permission="schooltool.view"
