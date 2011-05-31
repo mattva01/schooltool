@@ -139,7 +139,7 @@ def getLimitKeyVocabularyForFieldDescription(field_description):
 @adapter(IDemographicsFields)
 @implementer(IFieldFilterVocabulary)
 def getLimitKeyVocabularyForPersonFields(person_field_description_container):
-     return vocabulary([
+    return vocabulary([
         ('students', _('Students')),
         ('teachers', _('Teachers')),
         ('administrators', _('Administrators')),

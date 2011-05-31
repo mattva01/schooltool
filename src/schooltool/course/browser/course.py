@@ -36,10 +36,7 @@ from zope.viewlet.viewlet import ViewletBase
 from schooltool.term.interfaces import ITerm
 from schooltool.schoolyear.interfaces import ISchoolYear
 from schooltool.skin.containers import ContainerView
-from schooltool.course.interfaces import ICourse, ICourseContainer, ISection
-from schooltool.app.relationships import URIInstruction, URISection
-from schooltool.app.membership import URIGroup, URIMembership
-from schooltool.relationship import getRelatedObjects
+from schooltool.course.interfaces import ICourse, ICourseContainer
 from schooltool.course.interfaces import ILearner, IInstructor
 
 from schooltool.common import SchoolToolMessage as _
