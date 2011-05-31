@@ -9,12 +9,12 @@
     Title
   </h1>
 
-  <h1 tal:condition="not view/title"
+  <h1 tal:condition="not:view/title"
       tal:content="context/@@title">
     Alternative title
   </h1>
 
-  <h2 tal:condition="not navigation"
+  <h2 tal:condition="not:navigation"
       tal:content="view/subtitle">
     Subtitle
   </h2>
@@ -35,7 +35,7 @@
        tal:define="main_content view/content_template|nothing"
        tal:condition="main_content">
     <div class="header"
-         tal:define="actions context/schootlool:content/actions"
+         tal:define="actions context/schooltool:content/actions|nothing"
          tal:condition="actions"
          tal:content="structure actions">
       [action] [buttons]
