@@ -40,6 +40,8 @@
 
 <body>
 
+<tal:block replace="resource_library:schooltool.skin.flourish" />
+
 <div class="schooltool">
 
 <div class="header">
@@ -51,7 +53,7 @@
 
 <div class="headband">
   <span class="about">
-    <a id="about-link" tal:attributes="href string:${context/schooltool:app/@@absolute_url}/@@about.html">
+    <a id="about-link" tal:attributes="href string:${context/schooltool:app/@@absolute_url}/@@about.html" />
     &mdash;
     <span i18n:translate="">free administration software for</span>
     <span tal:replace="context/schooltool:app/title">Lee High School</span>
@@ -60,21 +62,21 @@
     <tal:block define="user request/principal;
                        url context/schooltool:app/@@absolute_url">
 
-      <tal:if condition="not:user/schooltool:authenticated">
+      <tal:block condition="not:user/schooltool:authenticated"
+              define="url context/schooltool:app/@@absolute_url">
         <a id="tools-login" i18n:translate=""
            tal:attributes="href string:${url}/auth/@@login.html">Log In</a>
-      </tal:if>
+      </tal:block>
 
-      <tal:if condition="user/schooltool:authenticated"
+      <tal:block condition="user/schooltool:authenticated"
               define="person user/schooltool:person">
-        <span>
           <tal:block i18n:translate="">Logged in as:</tal:block>
           <!-- XXX: do we support this ATM? -->
-          <tal:if condition="not:person">
+          <tal:block condition="not:person">
             <span tal:content="user/title">ZMI Principal</span>
-          </tal:if>
+          </tal:block>
 
-          <tal:if condition="person">
+          <tal:block condition="person">
             <a id="login-name"
                tal:attributes="href string: ${person/@@absolute_url}/home.html"
                tal:content="user/title">Person Loggedin</a>
@@ -86,7 +88,8 @@
                tal:attributes="href string:${url}/auth/@@logout.html">
                Log Out
             </a>
-          </tal:if>
+          </tal:block>
+      </tal:block>
     </tal:block>
   </span>
 </div>
