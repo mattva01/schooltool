@@ -59,18 +59,6 @@
       order="230"
       />
 
-    <browser:navigationViewlet
-      name="setup-data"
-      for="*"
-      manager="schooltool.app.browser.interfaces.IManageMenuViewletManager"
-      template="templates/navigationViewlet.pt"
-      class="schooltool.skin.skin.NavigationViewlet"
-      permission="schooltool.view"
-      link="@@setupdata.html"
-      title="Setup data"
-      order="240"
-      />
-
   </configure>
 
   <browser:viewlet

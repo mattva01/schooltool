@@ -12,6 +12,11 @@ New features
   or link an existing section (https://launchpad.net/bugs/424498)
 - XLS importer now automatically links sections with same ID that are marked to link
 
+Cleanup
++++++++
+
+- Removed school setup data framework (https://launchpad.net/bugs/307237)
+
 Bugfixes
 ++++++++
 
