@@ -80,8 +80,12 @@ def subclass_content(class_, name,
                      template_dict, class_dict):
     class_dict = dict(class_dict)
     class_dict['__name__'] = name
-    class_dict['update'] = getattr(class_, update_attr)
-    class_dict['render'] = getattr(class_, render_attr)
+    if update_attr != 'update':
+        update = getattr(class_, update_attr)
+        class_dict['update'] = lambda *a, **kw: update(*a, **kw)
+    if render_attr != 'render':
+        render = getattr(class_, render_attr)
+        class_dict['render'] = lambda *a, **kw: render(*a, **kw)
     for attr, template in template_dict.items():
         if template:
             class_dict[attr] = ViewPageTemplateFile(template)
