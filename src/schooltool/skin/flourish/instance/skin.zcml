@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/browser"
+           xmlns:z3c="http://namespaces.zope.org/z3c"
+           xmlns:zope="http://namespaces.zope.org/zope"
+           xmlns:flourish="http://schooltool.org/flourish"
+           i18n_domain="schooltool">
+
+  <!-- Skin resources -->
+
+  <configure package="schooltool.skin">
+
+    <resource
+        name="logo.png"
+        file="resources/schooltool.png"
+        layer="schooltool.skin.flourish.IFlourishLayer" />
+
+    <resource
+        name="schooltool-report-logo.png"
+        file="resources/schooltool-report-logo.png"
+        layer="schooltool.skin.flourish.IFlourishLayer" />
+
+<!--
+  <resource
+      name="editor_config.js"
+      file="resources/editor_config.js"
+      layer="schooltool.skin.flourish.IFlourishLayer" />
+
+  <resource name="jquery.js"
+            file="resources/jquery.min.js"
+	    layer="schooltool.skin.flourish.IFlourishLayer" />
+  <resourceDirectory
+            name="jstree"
+            directory="resources/jstree"
+	    layer="schooltool.skin.flourish.IFlourishLayer" />
+-->
+
+    <resource
+        name="favicon.ico"
+        file="resources/favicon.ico"
+        layer="schooltool.skin.flourish.IFlourishLayer" />
+
+  </configure>
+
+  <!-- Error messages -->
+
+  <configure package="schooltool.skin">
+
+  <flourish:page
+      for="zope.interface.common.interfaces.IException"
+      name="index.html"
+      title="Server Error"
+      class="schooltool.skin.flourish.error.ErrorPage"
+      content_template="templates/f_error.pt"
+      permission="zope.Public"
+      />
+
+  <flourish:page
+      for="zope.publisher.interfaces.INotFound"
+      name="index.html"
+      title="Not Found"
+      class="schooltool.skin.flourish.error.NotFound"
+      content_template="templates/f_notfound.pt"
+      permission="zope.Public"
+      />
+
+  <flourish:page
+      for="zope.security.interfaces.IUnauthorized"
+      name="index.html"
+      title="Unauthorized"
+      class="schooltool.skin.flourish.error.UnauthorizedPage"
+      content_template="templates/f_unauthorized.pt"
+      permission="zope.Public"
+      />
+
+  </configure>
+
+
+</configure>

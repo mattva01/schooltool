@@ -27,7 +27,7 @@ from zope.interface import implements
 from zope.publisher.browser import BrowserPage
 
 from schooltool.app.browser.content import ContentProvider
-from schooltool.common.inlinept import InlinePageTemplate
+from schooltool.common.inlinept import InlineViewPageTemplate
 from schooltool.skin.flourish.interfaces import IViewlet, IViewletManager
 from schooltool.skin.flourish.sorting import dependency_sort
 
@@ -69,7 +69,7 @@ class Viewlet(BrowserPage):
 class ViewletManager(ContentProvider):
     implements(IViewletManager)
 
-    template = InlinePageTemplate("""
+    template = InlineViewPageTemplate("""
         <tal:block repeat="viewlet view/viewlets"
                    content="structure viewlet" />
     """)

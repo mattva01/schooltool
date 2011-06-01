@@ -108,6 +108,10 @@
     width: 224px;
 }
 
+.page div.expand_container {
+    width: 948px;
+}
+
 .page .container {
 }
 

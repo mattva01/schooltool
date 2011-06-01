@@ -11,7 +11,7 @@
 
   <!-- zc.resourcelibrary -->
 
-  <tal:block content="structure providers/html_head|nothing" />
+  <tal:block content="structure view/providers/html_head|nothing" />
 
   <!--
 
@@ -46,10 +46,9 @@
 
 <div class="header">
 
-<div class="navigation"
-     tal:content="structure providers/header_navigation|nothing">
+<tal:block replace="structure view/providers/header_navigation">
     [ | Header | Navigation | Bar | Here | ]
-</div>
+</tal:block>
 
 <div class="headband">
   <span class="about">
@@ -95,17 +94,48 @@
 </div>
 
 <div class="breadcrumbs">
-  <div tal:replace="structure providers/breadcrumbs|nothing">
+  <div tal:replace="structure view/providers/breadcrumbs|nothing">
     [ bread > crumbs > here ]
   </div>
 </div>
 
 </div>
 
-<div class="page"
-     tal:content="structure view/page_template|nothing">
 
-  [ The page ]
+<div class="page">
+
+  <div class="heading"
+     tal:define="navigation providers/page_navigation|nothing">
+
+    <h1 tal:condition="view/title"
+        tal:content="view/title">
+      Title
+    </h1>
+
+    <h1 tal:condition="not:view/title"
+        tal:content="context/@@title">
+      Alternative title
+    </h1>
+
+    <div tal:condition="navigation">
+         tal:replace="structure navigation">
+      [Context] [navigation] [links]
+    </div>
+
+    <tal:block condition="not:navigation">
+      <h2 tal:condition="not:view/subtitle"
+          tal:content="view/subtitle">
+        Subtitle
+      </h2>
+    </tal:block>
+
+  </div>
+
+  <tal:block content="structure view/page_template|nothing">
+
+    [ The page ]
+
+  </tal:block>
 
 </div>
 

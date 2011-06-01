@@ -1,12 +1,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:tal="http://xml.zope.org/namespaces/tal">
 
-<div class="refine"
-     tal:content="structure providers/page_refine|nothing">
-  [Refine content blocks]
-</div>
-
-<div class="container">
+<div class="container expand_container">
   <div class="main"
        tal:define="main_content view/content_template|nothing"
        tal:condition="main_content">
@@ -25,11 +20,6 @@
        tal:condition="additional">
     [Additional content blocks]
   </div>
-</div>
-
-<div class="related"
-     tal:content="structure providers/page_related|nothing">
-  [Related content blocks]
 </div>
 
 </html>

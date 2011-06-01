@@ -26,7 +26,7 @@ from zope.publisher.browser import BrowserPage
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 
 from schooltool.app.browser.content import IContentProviders
-from schooltool.common.inlinept import InlinePageTemplate
+from schooltool.common.inlinept import InlineViewPageTemplate
 from schooltool.skin.flourish.viewlet import Viewlet, ViewletManager
 from schooltool.skin.flourish import interfaces
 
@@ -60,9 +60,21 @@ class Page(BrowserPage):
         return result
 
 
+class ExpandedPage(Page):
+    page_template = ViewPageTemplateFile('templates/page_expanded.pt')
+
+
+class HomeHeaderNavLink(Viewlet):
+    template = InlineViewPageTemplate('''
+    <a i18n:translate=""
+       tal:attributes="href context/schooltool:app/@@absolute_url">SchoolTool</a>
+    ''')
+    render = lambda self, *a, **kw: self.template(*a, **kw)
+
+
 class Refine(Viewlet):
 
-    template = InlinePageTemplate('''
+    template = InlineViewPageTemplate('''
       <div class="header"
            tal:condition="view/title"
            tal:content="view/title">
@@ -78,7 +90,7 @@ class Refine(Viewlet):
 
 class Content(Viewlet):
 
-    template = InlinePageTemplate('''
+    template = InlineViewPageTemplate('''
       <div class="header"
            tal:define="actions context/schootlool:content/actions"
            tal:condition="actions"
@@ -94,7 +106,7 @@ class Content(Viewlet):
 
 class Related(Viewlet):
 
-    template = InlinePageTemplate('''
+    template = InlineViewPageTemplate('''
       <div class="header"
            tal:condition="view/title"
            tal:content="view/title">
@@ -109,14 +121,8 @@ class Related(Viewlet):
     title = None
 
 
-class IPageNavigationManager(interfaces.IViewletManager):
-    pass
-
-
-class PageNavigationManager(ViewletManager):
-    implements(IPageNavigationManager)
-
-    template = InlinePageTemplate("""
+class ListNavigationManager(ViewletManager):
+    template = InlineViewPageTemplate("""
         <ul class="navigation">
           <li tal:repeat="item view/items"
               tal:attributes="class item/class"
@@ -125,9 +131,7 @@ class PageNavigationManager(ViewletManager):
         </ul>
     """)
 
-    @property
-    def active_viewlet(self):
-        return getattr(self.view, '__name__', None)
+    active_viewlet = None
 
     @property
     def items(self):
@@ -140,6 +144,10 @@ class PageNavigationManager(ViewletManager):
                 })
         return result
 
+    @property
+    def active(self):
+        return self.active_viewlet in self.order
+
     def render(self, *args, **kw):
         active = self.active_viewlet
         if not active or active not in self.order:
@@ -147,11 +155,27 @@ class PageNavigationManager(ViewletManager):
         return ViewletManager.render(self, *args, **kw)
 
 
+class PageNavigationManager(ListNavigationManager):
+
+    @property
+    def active_viewlet(self):
+        return getattr(self.view, '__name__', None)
+
+    def render(self, *args, **kw):
+        if not self.active:
+            return ''
+        return ListNavigationManager.render(*args, **kw)
+
+
 class IHTMLHeadManager(interfaces.IViewletManager):
     pass
 
 
 class IHeaderNavigationManager(interfaces.IViewletManager):
+    pass
+
+
+class IPageNavigationManager(interfaces.IViewletManager):
     pass
 
 

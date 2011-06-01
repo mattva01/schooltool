@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/browser"
+           xmlns:z3c="http://namespaces.zope.org/z3c"
+           xmlns:zope="http://namespaces.zope.org/zope"
+           xmlns:flourish="http://schooltool.org/flourish"
+           i18n_domain="schooltool">
+
+  <configure package="schooltool.app.browser">
+
+    <!-- SchoolTool content providers -->
+    <zope:adapter
+        for="*
+             schooltool.skin.flourish.IFlourishLayer
+             *"
+        provides="schooltool.app.browser.content.IContentProviders"
+        factory="schooltool.app.browser.content.TALESAwareContentProviders" />
+
+    <!-- SchoolTool app pages -->
+
+    <flourish:page
+        name="index.html"
+        title="SchoolTool"
+        for="schooltool.app.interfaces.ISchoolToolApplication"
+        class="schooltool.app.browser.app.ApplicationView"
+        permission="zope.Public"
+        />
+  </configure>
+
+</configure>

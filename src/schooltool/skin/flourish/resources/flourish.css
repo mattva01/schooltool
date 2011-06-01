@@ -70,6 +70,10 @@ p.small {
   line-height: 14px;
 }
 
+pre {
+  overflow: auto;
+}
+
 .schooltool>div.header {
     margin: 0px auto;
     width: 976px;
@@ -83,7 +87,7 @@ p.small {
     box-shadow: 0px 0px 4px #888;
 }
 
-.header .navigation ul {
+.header ul.navigation {
     width: 960px;
     padding-left: 16px;
     height: 72px;
@@ -103,17 +107,17 @@ p.small {
     box-shadow: 0px 1px 6px #888;
 }
 
-.header .navigation ul li {
+.header ul.navigation li {
     display: inline-block;
     height: 70px;
 }
 
-.header .navigation ul li.last {
+.header ul.navigation li.last {
     display: inline-block;
     height: 70px;
 }
 
-.header .navigation ul li a {
+.header ul.navigation li a {
     color: black;
     display: block;
     padding: 26px 8px 30px 8px;
@@ -123,11 +127,11 @@ p.small {
     line-height: 16px;
 }
 
-.header .navigation ul li.active a {
+.header ul.navigation li.active a {
     background: #bcbab6;
 }
 
-.header .navigation ul li a:hover {
+.header ul.navigation li a:hover {
     background: #bcbab6;
 }
 

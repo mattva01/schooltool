@@ -1,0 +1,23 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xml:lang="en"
+      i18n:domain="schooltool">
+
+  <p i18n:translate="">
+    An internal server error has occurred.
+    This most likely means that you have found a bug in SchoolTool.
+    Please report it on
+    <a href="http://issues.schooltool.org">the issue tracker</a>.
+  </p>
+
+  <h2 i18n:translate="">Exception</h2>
+  <pre class="traceback">
+<span class="exc_type" tal:content="python:context.__class__.__name__" />: <span class="exc_value" tal:content="context" />
+  </pre>
+
+  <h2 i18n:translate="">Traceback</h2>
+
+  <pre class="traceback">
+<tal:block tal:replace="structure view/traceback" />
+  </pre>
+
+</html>

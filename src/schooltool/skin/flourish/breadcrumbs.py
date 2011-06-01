@@ -28,7 +28,7 @@ from zope.traversing.browser.absoluteurl import absoluteURL
 
 from schooltool.app.browser.content import ISchoolToolContentProvider
 from schooltool.app.browser.content import ContentProvider
-from schooltool.common.inlinept import InlinePageTemplate
+from schooltool.common.inlinept import InlineViewPageTemplate
 
 from schooltool.common import SchoolToolMessage as _
 
@@ -71,7 +71,7 @@ class BreadCrumbInfo(object):
 class Breadcrumbs(ContentProvider):
     implements(IBreadcrumb)
 
-    template = InlinePageTemplate('''
+    template = InlineViewPageTemplate('''
       <ul class="breadcrumbs">
         <tal:block repeat="crumb view/breadcrumbs"
                    condition="crumb/title">

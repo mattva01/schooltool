@@ -36,4 +36,7 @@
     <includeOverrides package="schooltool.devmode" file="overrides.zcml" />
   </configure>
 
+  <include file="app.zcml" />
+  <include file="skin.zcml" />
+
 </configure>

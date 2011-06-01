@@ -102,6 +102,14 @@ class IPageDirective(zope.browserpage.metadirectives.IPagesDirective,
         required=False,
         )
 
+    template = zope.configuration.fields.Path(
+        title=u"Main template.",
+        description=u"""
+        Change the main template that renders everything.
+        """,
+        required=False,
+        )
+
     page_template = zope.configuration.fields.Path(
         title=u"Template for the page.",
         description=u"""
@@ -152,7 +160,7 @@ def viewlet(
     manager=interfaces.IViewletManager,
     class_=Viewlet, template=None,
     update='update', render='render',
-    allowed_interface=None, allowed_attributes=None,
+    allowed_interface=(), allowed_attributes=(),
     **kwargs):
 
     if not interfaces.IViewlet.implementedBy(class_):
