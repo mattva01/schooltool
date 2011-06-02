@@ -76,16 +76,14 @@ def handle_interfaces(_context, interfaces):
 
 
 def subclass_content(class_, name,
-                     update_attr, render_attr,
+                     forward_call_dict,
                      template_dict, class_dict):
     class_dict = dict(class_dict)
     class_dict['__name__'] = name
-    if update_attr != 'update':
-        update = getattr(class_, update_attr)
-        class_dict['update'] = lambda *a, **kw: update(*a, **kw)
-    if render_attr != 'render':
-        render = getattr(class_, render_attr)
-        class_dict['render'] = lambda *a, **kw: render(*a, **kw)
+    for attr, base_attr in forward_call_dict.items():
+        if attr != base_attr:
+            method = getattr(class_, base_attr)
+            class_dict[attr] = lambda *a, **kw: method(*a, **kw)
     for attr, template in template_dict.items():
         if template:
             class_dict[attr] = ViewPageTemplateFile(template)
@@ -116,7 +114,8 @@ def contentDirective(
             raise ConfigurationError("When template and render not specified, class must implement 'render' method")
 
     class_ = subclass_content(
-        class_, name, update, render,
+        class_, name,
+        {'update': update, 'render': render},
         {'template': template}, kwargs)
 
     handle_interfaces(_context, (for_, view))

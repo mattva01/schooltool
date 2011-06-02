@@ -28,6 +28,7 @@ import zope.viewlet.metadirectives
 from zope.interface import Interface, classImplements
 from zope.configuration.exceptions import ConfigurationError
 from zope.publisher.interfaces.browser import IBrowserRequest
+from zope.publisher.interfaces.browser import IBrowserView
 
 from schooltool.app.browser.meta import contentDirective
 from schooltool.app.browser.meta import subclass_content
@@ -55,10 +56,16 @@ class IViewletOrder(Interface):
 
     after = zope.configuration.fields.Tokens(
         title=_("Display this viewlet after the specified viewlets."),
+        value_type = zope.schema.TextLine(
+            title=u"Names of viewlets",
+            required=True),
         required=False)
 
     before = zope.configuration.fields.Tokens(
         title=_("Display this viewlet before the specified viewlets."),
+        value_type = zope.schema.TextLine(
+            title=u"Names of viewlets",
+            required=True),
         required=False)
 
 
@@ -128,6 +135,39 @@ class IPageDirective(zope.browserpage.metadirectives.IPagesDirective,
         )
 
 
+class IActiveViewletDirective(Interface):
+
+    name = zope.schema.TextLine(
+        title=u"The name of the active viewlet.",
+        required=False,
+        )
+
+    factory = zope.configuration.fields.GlobalObject(
+        title=u"The adapter name of the active viewlet.",
+        required=False,
+        )
+
+    for_ = zope.configuration.fields.GlobalObject(
+        title=u"The interface or class this viewlet is active in.",
+        required=False,
+        )
+
+    layer = zope.configuration.fields.GlobalInterface(
+        title=_("The layer."),
+        required=False,
+        )
+
+    view = zope.configuration.fields.GlobalObject(
+        title=_("The view."),
+        required=False,
+        )
+
+    manager = zope.configuration.fields.GlobalObject(
+        title=_("The viewlet manager."),
+        required=True,
+        )
+
+
 def viewletManager(
     _context, name, permission,
     for_=Interface, layer=interfaces.IFlourishLayer, view=interfaces.IPage,
@@ -177,7 +217,8 @@ def viewlet(
                                      "class must implement 'render' method")
 
     class_ = subclass_content(
-        class_, name, update, render,
+        class_, name,
+        {'update': update, 'render': render},
         {'template': template}, kwargs)
 
     handle_interfaces(_context, (for_, view))
@@ -207,6 +248,16 @@ def page(_context, name, permission,
          allowed_interface=(), allowed_attributes=(),
          ):
 
+    forward_methods = {
+        'update': update,
+        'render': render,
+        }
+
+    # BBB: add index to ease porting from old style views
+    if (IBrowserView.implementedBy(class_) and
+        getattr(class_, 'index', None) is None):
+        forward_methods['index'] = render
+
     if not interfaces.IPage.implementedBy(class_):
         class_ = type(class_.__name__, (class_, Page), {})
 
@@ -222,11 +273,16 @@ def page(_context, name, permission,
     # XXX: raise ConfigurationError if class_ is Page and
     #      no templates specified
 
+    templates = {
+        'template': template,
+        'page_template': page_template,
+        'content_template': content_template,
+        }
+
     class_ = subclass_content(
-        class_, name, update, render,
-        {'template': template,
-         'page_template': page_template,
-         'content_template': content_template},
+        class_, name,
+        forward_methods,
+        templates,
         class_dict,
         )
 
@@ -241,4 +297,24 @@ def page(_context, name, permission,
         callable=zope.component.zcml.handler,
         args=('registerAdapter',
               class_, (for_, layer), Interface, name, _context.info),
+        )
+
+
+def activeViewlet(_context, name=None, factory=None,
+                  for_=Interface, layer=interfaces.IFlourishLayer,
+                  view=IBrowserView, manager=interfaces.IViewletManager):
+
+    if name is not None and factory is not None:
+        raise ConfigurationError("name and factory are mutually exclusive.")
+
+    if name is not None:
+        factory = lambda *args: name
+
+    _context.action(
+        discriminator=('flourish activeViewlet',
+                       for_, layer, view, manager),
+        callable=zope.component.zcml.handler,
+        args=('registerAdapter',
+              factory, (for_, layer, view, manager),
+              interfaces.IActiveViewletName, '', _context.info),
         )

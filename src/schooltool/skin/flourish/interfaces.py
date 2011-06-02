@@ -60,6 +60,10 @@ class IViewletManager(zope.viewlet.interfaces.IViewletManager,
     """A viewlet manager."""
 
 
+class IActiveViewletName(Interface):
+    """Interface for adapter that returns the active viewlet name."""
+
+
 class IPage(IBrowserPage):
     __name__ = zope.schema.TextLine(
         title=u"The name of the page",

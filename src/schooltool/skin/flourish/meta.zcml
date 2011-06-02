@@ -15,6 +15,12 @@
         />
 
     <directive
+        name="activeViewlet"
+        schema=".zcml.IActiveViewletDirective"
+        handler=".zcml.activeViewlet"
+        />
+
+    <directive
         name="page"
         schema=".zcml.IPageDirective"
         handler=".zcml.page"
