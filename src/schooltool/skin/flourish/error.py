@@ -24,6 +24,7 @@ from zope.app.exception.browser.unauthorized import Unauthorized
 from schooltool.skin.error import ErrorView
 from schooltool.skin.flourish.page import ExpandedPage
 
+
 class NotFound(object):
 
     def __call__(self, *args, **kw):
