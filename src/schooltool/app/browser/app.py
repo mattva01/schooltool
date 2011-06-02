@@ -469,12 +469,20 @@ class ManageSiteNavLink(flourish.page.LinkViewlet):
     def link(self):
         app = ISchoolToolApplication(None)
         app_url = absoluteURL(app, self.request)
-        return '%s/manage.html' % app_url
+        return '%s/manage' % app_url
 
 
-class ManageAppNavLink(flourish.page.LinkViewlet):
+class ManageSchoolNavLink(flourish.page.LinkViewlet):
     @property
     def link(self):
         app = ISchoolToolApplication(None)
         app_url = absoluteURL(app, self.request)
-        return '%s/settings.html' % app_url
+        return '%s/settings' % app_url
+
+
+class ManageSite(flourish.page.Page):
+    pass
+
+
+class ManageSchool(flourish.page.Page):
+    pass

@@ -72,43 +72,66 @@
         permission="zope.Public"
         />
 
+    <flourish:page
+        name="manage"
+        for="schooltool.app.interfaces.ISchoolToolApplication"
+        subtitle="Site Settings"
+        class="schooltool.app.browser.app.ManageSite"
+        permission="schooltool.edit"
+        />
+
+    <flourish:page
+        name="manage.html"
+        for="schooltool.app.interfaces.ISchoolToolApplication"
+        subtitle="Site Settings"
+        class="schooltool.app.browser.app.ManageSite"
+        permission="schooltool.edit"
+        />
+
     <flourish:viewlet
         name="manage_site"
         manager="schooltool.skin.flourish.page.IHeaderNavigationManager"
         class="schooltool.app.browser.app.ManageSiteNavLink"
         title="Application"
-        permission="zope.Public"
+        permission="schooltool.edit"
         />
 
-<!--
     <flourish:activeViewlet
         name="manage_site"
         manager="schooltool.skin.flourish.page.IHeaderNavigationManager"
-        view="XXX: Not found"
+        view="schooltool.app.browser.app.ManageSite"
         />
--->
+
+    <flourish:page
+        name="settings"
+        for="schooltool.app.interfaces.ISchoolToolApplication"
+        class="schooltool.app.browser.app.ManageSchool"
+        permission="schooltool.edit"
+        />
 
     <flourish:viewlet
-        name="manage_app"
+        name="manage_school"
         after="manage_site"
         manager="schooltool.skin.flourish.page.IHeaderNavigationManager"
-        class="schooltool.app.browser.app.ManageAppNavLink"
+        class="schooltool.app.browser.app.ManageSchoolNavLink"
         title="School"
         permission="zope.Public"
         />
 
-<!--
     <flourish:activeViewlet
-        name="manage_app"
+        name="manage_school"
         manager="schooltool.skin.flourish.page.IHeaderNavigationManager"
-        view="XXX: Not found"
+        view="schooltool.app.browser.app.ManageSchool"
         />
--->
 
-    <flourish:activeViewlet
-        factory="schooltool.skin.flourish.page.getParentActiveViewletName"
-        manager="schooltool.skin.flourish.page.IHeaderNavigationManager"
-        />
+
+    <!-- Content providers -->
+
+    <content
+        class=".app.ContentTitle"
+        layer="schooltool.skin.flourish.IFlourishLayer"
+        permission="schooltool.view"
+        name="title" />
 
   </configure>
 

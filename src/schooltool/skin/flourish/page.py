@@ -146,19 +146,23 @@ class ListNavigationManager(ViewletManager):
 
 def getParentActiveViewletName(context, request, view, manager):
     parent = getParent(context)
-    name = getMultiAdapter(
+    if parent is None:
+        return None
+    name = queryMultiAdapter(
         (parent, request, view),
-        interfaces.IActiveViewletName)
+        interfaces.IActiveViewletName,
+        None)
     return name
 
 
-class HeaderNavigationManager(ViewletManager):
+class HeaderNavigationManager(ListNavigationManager):
 
     @Lazy
     def active_viewlet(self):
         name = queryMultiAdapter(
-            (self.context, self.request, self.view),
+            (self.context, self.request, self.view, self),
             interfaces.IActiveViewletName,
+            name='',
             default=None)
         return name
 

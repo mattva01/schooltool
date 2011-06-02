@@ -113,7 +113,7 @@
     </h1>
 
     <h1 tal:condition="not:view/title"
-        tal:content="context/@@title">
+        tal:content="structure context/schooltool:content/title">
       Alternative title
     </h1>
 
@@ -123,7 +123,7 @@
     </div>
 
     <tal:block condition="not:navigation">
-      <h2 tal:condition="not:view/subtitle"
+      <h2 tal:condition="view/subtitle"
           tal:content="view/subtitle">
         Subtitle
       </h2>

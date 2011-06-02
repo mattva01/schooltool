@@ -18,7 +18,7 @@
   <flourish:viewletManager
       name="header_navigation"
       provides=".page.IHeaderNavigationManager"
-      class=".page.ListNavigationManager"
+      class=".page.HeaderNavigationManager"
       permission="zope.Public"
       />
 
@@ -58,6 +58,11 @@
       name="breadcrumbs"
       class=".breadcrumbs.Breadcrumbs"
       permission="zope.Public"
+      />
+
+  <flourish:activeViewlet
+      factory="schooltool.skin.flourish.page.getParentActiveViewletName"
+      manager="schooltool.skin.flourish.page.IHeaderNavigationManager"
       />
 
   <content
