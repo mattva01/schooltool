@@ -19,14 +19,6 @@
       name="header_navigation"
       provides=".page.IHeaderNavigationManager"
       class=".page.ListNavigationManager"
-      active_viewlet="schooltool"
-      permission="zope.Public"
-      />
-
-  <flourish:viewlet
-      name="schooltool"
-      manager=".page.IHeaderNavigationManager"
-      class=".page.HomeHeaderNavLink"
       permission="zope.Public"
       />
 

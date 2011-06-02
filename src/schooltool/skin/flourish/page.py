@@ -19,11 +19,13 @@
 """
 SchoolTool flourish pages.
 """
+from zope.interface import Interface
+from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.cachedescriptors.property import Lazy
-from zope.component import getMultiAdapter
+from zope.component import getMultiAdapter, queryMultiAdapter
 from zope.interface import implements
 from zope.publisher.browser import BrowserPage
-from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
+from zope.traversing.api import getParent
 
 from schooltool.app.browser.content import IContentProviders
 from schooltool.common.inlinept import InlineViewPageTemplate
@@ -62,14 +64,6 @@ class Page(BrowserPage):
 
 class ExpandedPage(Page):
     page_template = ViewPageTemplateFile('templates/page_expanded.pt')
-
-
-class HomeHeaderNavLink(Viewlet):
-    template = InlineViewPageTemplate('''
-    <a i18n:translate=""
-       tal:attributes="href context/schooltool:app/@@absolute_url">SchoolTool</a>
-    ''')
-    render = lambda self, *a, **kw: self.template(*a, **kw)
 
 
 class Refine(Viewlet):
@@ -140,19 +134,33 @@ class ListNavigationManager(ViewletManager):
         for viewlet in self.viewlets:
             result.append({
                 'class': viewlet.__name__ == active and 'active' or None,
-                'viewlet': viewlet
+                'viewlet': viewlet,
                 })
         return result
 
     @property
     def active(self):
-        return self.active_viewlet in self.order
+        name = self.active_viewlet
+        return(name and name in self.order)
 
-    def render(self, *args, **kw):
-        active = self.active_viewlet
-        if not active or active not in self.order:
-            return ''
-        return ViewletManager.render(self, *args, **kw)
+
+def getParentActiveViewletName(context, request, view, manager):
+    parent = getParent(context)
+    name = getMultiAdapter(
+        (parent, request, view),
+        interfaces.IActiveViewletName)
+    return name
+
+
+class HeaderNavigationManager(ViewletManager):
+
+    @Lazy
+    def active_viewlet(self):
+        name = queryMultiAdapter(
+            (self.context, self.request, self.view),
+            interfaces.IActiveViewletName,
+            default=None)
+        return name
 
 
 class PageNavigationManager(ListNavigationManager):
@@ -194,3 +202,16 @@ class IContentActionsManager(interfaces.IViewletManager):
 class IPageRelatedManager(interfaces.IViewletManager):
     pass
 
+
+class LinkViewlet(Viewlet):
+    template = InlineViewPageTemplate('''
+    <a tal:attributes="href view/link" tal:content="view/title"></a>
+    ''')
+
+    render = lambda self, *a, **kw: self.template(*a, **kw)
+
+    title = None
+
+    @property
+    def link(self):
+        return None

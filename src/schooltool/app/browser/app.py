@@ -57,6 +57,8 @@ from schooltool.table.table import label_cell_formatter_factory
 from schooltool.table.interfaces import ITableFormatter
 from schooltool.skin.skin import OrderedViewletManager
 from schooltool.skin.breadcrumbs import CustomNameBreadCrumbInfo
+from schooltool.skin import flourish
+import schooltool.skin.flourish.page
 
 from schooltool.common import SchoolToolMessage as _
 
@@ -460,3 +462,19 @@ class ContentLabel(ContentLink):
         if label is __not_set:
             return ContentLink.title(self)
         return label
+
+
+class ManageSiteNavLink(flourish.page.LinkViewlet):
+    @property
+    def link(self):
+        app = ISchoolToolApplication(None)
+        app_url = absoluteURL(app, self.request)
+        return '%s/manage.html' % app_url
+
+
+class ManageAppNavLink(flourish.page.LinkViewlet):
+    @property
+    def link(self):
+        app = ISchoolToolApplication(None)
+        app_url = absoluteURL(app, self.request)
+        return '%s/settings.html' % app_url

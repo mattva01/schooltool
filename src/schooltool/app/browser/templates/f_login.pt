@@ -1,0 +1,50 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xml:lang="en"
+      i18n:domain="schooltool">
+
+  <p id="message" tal:condition="request/expired | nothing"
+    i18n:translate="">
+    Your session has expired.
+  </p>
+
+  <p id="message" tal:condition="request/forbidden | nothing"
+    i18n:translate="">
+    You are not allowed to access this page.  You can click on the back
+    button in your browser to go back, or ask a more privileged user to log
+    in.
+  </p>
+
+  <form action="." method="post" class="standalone"
+    tal:attributes="action string:${context/@@absolute_url}/@@login.html">
+
+    <input type="hidden" name="nexturl"
+      tal:condition="request/nexturl | nothing"
+      tal:attributes="value request/nexturl" />
+
+    <p class="error" tal:condition="view/error"
+      tal:content="view/error">
+      Incorrect username or password.
+    </p>
+
+    <fieldset>
+      <legend i18n:translate="">User Information</legend>
+
+      <div class="row">
+        <label for="username" i18n:translate="">Username</label>
+        <input id="username" name="username" type="text" tabindex="1"
+          tal:attributes="value request/username|nothing" />
+      </div>
+
+      <div class="row">
+        <label for="password" i18n:translate="">Password</label>
+        <input id="password" name="password" type="password" tabindex="2" />
+      </div>
+    </fieldset>
+
+    <div class="controls">
+      <input class="button-ok" type="submit" value="Log in" accesskey="L"
+        tabindex="3" i18n:attributes="value; accesskey" name="LOGIN" />
+    </div>
+  </form>
+
+</html>

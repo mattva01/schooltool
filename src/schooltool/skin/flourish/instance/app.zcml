@@ -24,6 +24,92 @@
         class="schooltool.app.browser.app.ApplicationView"
         permission="zope.Public"
         />
+
+  <!-- Views for everything -->
+
+
+  <!-- Authentication adapter traverser and views -->
+
+    <flourish:page
+        for="schooltool.app.interfaces.ISchoolToolAuthenticationPlugin"
+        name="login.html"
+        title="Log in"
+        content_template="templates/f_login.pt"
+        class="schooltool.app.browser.app.LoginView"
+        permission="zope.Public"
+        />
+
+    <flourish:page
+        for="schooltool.app.interfaces.ISchoolToolApplication"
+        name="login.html"
+        title="Log in"
+        content_template="templates/f_login.pt"
+        class="schooltool.app.browser.app.LoginView"
+        permission="zope.Public"
+        />
+
+    <page
+        for="schooltool.person.interfaces.IPerson"
+        name="logindispatch"
+        layer="schooltool.skin.flourish.IFlourishLayer"
+        class="schooltool.app.browser.app.LoginDispatchView"
+        permission="zope.Public"
+        />
+
+    <flourish:page
+        for="schooltool.app.interfaces.ISchoolToolApplication"
+        name="logout.html"
+        layer="schooltool.skin.flourish.IFlourishLayer"
+        class=".app.ApplicationLogoutView"
+        permission="zope.Public"
+        />
+
+    <flourish:page
+        for="schooltool.app.interfaces.ISchoolToolAuthenticationPlugin"
+        name="logout.html"
+        layer="schooltool.skin.flourish.IFlourishLayer"
+        class=".app.LogoutView"
+        permission="zope.Public"
+        />
+
+    <flourish:viewlet
+        name="manage_site"
+        manager="schooltool.skin.flourish.page.IHeaderNavigationManager"
+        class="schooltool.app.browser.app.ManageSiteNavLink"
+        title="Application"
+        permission="zope.Public"
+        />
+
+<!--
+    <flourish:activeViewlet
+        name="manage_site"
+        manager="schooltool.skin.flourish.page.IHeaderNavigationManager"
+        view="XXX: Not found"
+        />
+-->
+
+    <flourish:viewlet
+        name="manage_app"
+        after="manage_site"
+        manager="schooltool.skin.flourish.page.IHeaderNavigationManager"
+        class="schooltool.app.browser.app.ManageAppNavLink"
+        title="School"
+        permission="zope.Public"
+        />
+
+<!--
+    <flourish:activeViewlet
+        name="manage_app"
+        manager="schooltool.skin.flourish.page.IHeaderNavigationManager"
+        view="XXX: Not found"
+        />
+-->
+
+    <flourish:activeViewlet
+        factory="schooltool.skin.flourish.page.getParentActiveViewletName"
+        manager="schooltool.skin.flourish.page.IHeaderNavigationManager"
+        />
+
   </configure>
 
 </configure>
