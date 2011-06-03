@@ -131,6 +131,12 @@
         permission="schooltool.edit"
         />
 
+    <flourish:activeViewlet
+        name="manage_site"
+        manager="schooltool.skin.flourish.page.IHeaderNavigationManager"
+        view="schooltool.app.browser.app.ApplicationPreferencesView"
+        />
+
     <!-- Manage School page -->
 
     <flourish:page
