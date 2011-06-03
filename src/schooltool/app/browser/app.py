@@ -469,7 +469,7 @@ class ManageSiteNavLink(flourish.page.LinkViewlet):
     def link(self):
         app = ISchoolToolApplication(None)
         app_url = absoluteURL(app, self.request)
-        return '%s/manage' % app_url
+        return '%s/settings' % app_url
 
 
 class ManageSchoolNavLink(flourish.page.LinkViewlet):
@@ -477,7 +477,7 @@ class ManageSchoolNavLink(flourish.page.LinkViewlet):
     def link(self):
         app = ISchoolToolApplication(None)
         app_url = absoluteURL(app, self.request)
-        return '%s/settings' % app_url
+        return '%s/manage' % app_url
 
 
 class ManageSite(flourish.page.Page):
@@ -486,3 +486,25 @@ class ManageSite(flourish.page.Page):
 
 class ManageSchool(flourish.page.Page):
     pass
+
+
+class ManageSiteLinkManager(flourish.page.ListNavigationBase,
+                            flourish.page.ViewletManager):
+
+    list_class = "filter"
+
+    @property
+    def active_viewlet(self):
+        refine_viewlet = self.view
+        view = refine_viewlet.view
+        return getattr(view, '__name__', None)
+
+
+class ManageSiteLinks(flourish.page.Refine):
+
+    def __init__(self, context, request, view, manager):
+        flourish.page.Refine.__init__(
+            self, context, request, view, manager)
+        self.body_template = ManageSiteLinkManager(
+            context, request, self)
+

@@ -177,10 +177,14 @@ def viewletManager(
     allowed_interface=(), allowed_attributes=(),
     **kwargs):
 
+    bases = (class_, )
     if not interfaces.IViewletManager.implementedBy(class_):
-        class_ = type(class_.__name__, (class_, ViewletManager), {})
+        bases = bases + (ViewletManager, )
+    class_ = type(class_.__name__, bases, {})
+
     allowed_interface = (tuple(allowed_interface) +
                          (interfaces.IViewletManager, ))
+
     if not provides.implementedBy(class_):
         classImplements(class_, provides)
 

@@ -107,6 +107,7 @@
   <div class="heading"
      tal:define="navigation providers/page_navigation|nothing">
 
+
     <h1 tal:condition="view/title"
         tal:content="view/title">
       Title

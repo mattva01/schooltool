@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/browser"
+           xmlns:z3c="http://namespaces.zope.org/z3c"
+           xmlns:zope="http://namespaces.zope.org/zope"
+           xmlns:flourish="http://schooltool.org/flourish"
+           i18n_domain="schooltool">
+
+  <configure package="schooltool.securitypolicy.browser">
+
+    <flourish:page
+        name="security.html"
+        subtitle="Access Rights"
+        for="schooltool.app.interfaces.ISchoolToolApplication"
+        class=".control.SecurityDescriptions"
+        content_template="templates/f_security_descriptions.pt"
+        permission="schooltool.edit"
+        />
+
+    <flourish:viewlet
+        name="manage_site_links"
+        manager="schooltool.skin.flourish.page.IPageRefineManager"
+        class="schooltool.app.browser.app.ManageSiteLinks"
+        view=".control.SecurityDescriptions"
+        title="Application control"
+        permission="schooltool.edit"
+        />
+
+    <flourish:viewlet
+        name="security.html"
+        title="Access Rights"
+        class="schooltool.skin.flourish.page.LinkViewlet"
+        view="schooltool.app.browser.app.ManageSiteLinks"
+        permission="schooltool.edit"
+        />
+
+    <flourish:page
+        name="access_control.html"
+        subtitle="Access Control"
+        for="schooltool.app.interfaces.ISchoolToolApplication"
+        class=".views.AccessControlView"
+        content_template="templates/f_access_control.pt"
+        permission="schooltool.edit"
+        />
+
+    <flourish:viewlet
+        name="manage_site_links"
+        manager="schooltool.skin.flourish.page.IPageRefineManager"
+        class="schooltool.app.browser.app.ManageSiteLinks"
+        view=".views.AccessControlView"
+        title="Application control"
+        permission="schooltool.edit"
+        />
+
+    <flourish:viewlet
+        name="access_control.html"
+        title="Access Control"
+        class="schooltool.skin.flourish.page.LinkViewlet"
+        view="schooltool.app.browser.app.ManageSiteLinks"
+        permission="schooltool.edit"
+        />
+
+  </configure>
+
+</configure>

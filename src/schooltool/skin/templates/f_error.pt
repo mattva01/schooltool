@@ -1,7 +1,4 @@
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xml:lang="en"
-      i18n:domain="schooltool">
-
+<div>
   <p i18n:translate="">
     An internal server error has occurred.
     This most likely means that you have found a bug in SchoolTool.
@@ -20,4 +17,4 @@
 <tal:block tal:replace="structure view/traceback" />
   </pre>
 
-</html>
+</div>

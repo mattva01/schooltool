@@ -223,6 +223,7 @@
       for="schooltool.app.interfaces.ISchoolToolApplication"
       class="schooltool.app.browser.app.ApplicationPreferencesView"
       template="templates/application_preferences.pt"
+      layer="schooltool.skin.ISchoolToolLayer"
       permission="schooltool.edit"
       />
 

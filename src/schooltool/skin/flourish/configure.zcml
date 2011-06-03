@@ -32,12 +32,14 @@
   <flourish:viewletManager
       name="page_refine"
       provides=".page.IPageRefineManager"
+      class=".page.ContentViewletManager"
       permission="zope.Public"
       />
 
   <flourish:viewletManager
       name="page_content"
       provides=".page.IPageContentManager"
+      class=".page.ContentViewletManager"
       permission="zope.Public"
       />
 
@@ -51,6 +53,7 @@
   <flourish:viewletManager
       name="page_related"
       provides=".page.IPageRelatedManager"
+      class=".page.ContentViewletManager"
       permission="zope.Public"
       />
 

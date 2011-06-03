@@ -211,7 +211,7 @@
 
 }
 
-.page .refine div.content>div.body ul.filter li.selected {
+.page .refine div.content>div.body ul.filter li.active {
     margin: 4px 0px;
     padding: 2px 2px 2px 14px;
     font-size: 12px;
@@ -231,7 +231,7 @@
     color: black;
 }
 
-.page .refine ul.filter li.selected a {
+.page .refine ul.filter li.active a {
     text-decoration: none;
     color: black;
 }

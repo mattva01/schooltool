@@ -1,7 +1,4 @@
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xml:lang="en"
-      i18n:domain="schooltool">
-
+<div>
   <p id="message" tal:condition="request/expired | nothing"
     i18n:translate="">
     Your session has expired.
@@ -47,4 +44,4 @@
     </div>
   </form>
 
-</html>
+</div>

@@ -26,6 +26,7 @@ from zope.component import getMultiAdapter, queryMultiAdapter
 from zope.interface import implements
 from zope.publisher.browser import BrowserPage
 from zope.traversing.api import getParent
+from zope.traversing.browser.absoluteurl import absoluteURL
 
 from schooltool.app.browser.content import IContentProviders
 from schooltool.common.inlinept import InlineViewPageTemplate
@@ -66,6 +67,15 @@ class ExpandedPage(Page):
     page_template = ViewPageTemplateFile('templates/page_expanded.pt')
 
 
+class ContentViewletManager(ViewletManager):
+    template = InlineViewPageTemplate("""
+        <div class="content"
+             tal:repeat="viewlet view/viewlets"
+             tal:content="structure viewlet">
+        </div>
+    """)
+
+
 class Refine(Viewlet):
 
     template = InlineViewPageTemplate('''
@@ -79,6 +89,7 @@ class Refine(Viewlet):
       </div>
     ''')
     body_template = None
+    render = lambda self, *a, **kw: self.template(*a, **kw)
     title = None
 
 
@@ -96,6 +107,7 @@ class Content(Viewlet):
       </div>
     ''')
     body_template = None
+    render = lambda self, *a, **kw: self.template(*a, **kw)
 
 
 class Related(Viewlet):
@@ -112,19 +124,20 @@ class Related(Viewlet):
     ''')
 
     body_template = None
+    render = lambda self, *a, **kw: self.template(*a, **kw)
     title = None
 
 
-class ListNavigationManager(ViewletManager):
+class ListNavigationBase(object):
     template = InlineViewPageTemplate("""
-        <ul class="navigation">
+        <ul tal:attributes="class view/list_class">
           <li tal:repeat="item view/items"
               tal:attributes="class item/class"
               tal:content="structure item/viewlet">
           </li>
         </ul>
     """)
-
+    list_class = None
     active_viewlet = None
 
     @property
@@ -155,7 +168,9 @@ def getParentActiveViewletName(context, request, view, manager):
     return name
 
 
-class HeaderNavigationManager(ListNavigationManager):
+class HeaderNavigationManager(ListNavigationBase, ViewletManager):
+
+    list_class = "navigation"
 
     @Lazy
     def active_viewlet(self):
@@ -167,7 +182,10 @@ class HeaderNavigationManager(ListNavigationManager):
         return name
 
 
-class PageNavigationManager(ListNavigationManager):
+
+class PageNavigationManager(ListNavigationBase, ViewletManager):
+
+    list_class = "navigation"
 
     @property
     def active_viewlet(self):
@@ -176,7 +194,7 @@ class PageNavigationManager(ListNavigationManager):
     def render(self, *args, **kw):
         if not self.active:
             return ''
-        return ListNavigationManager.render(*args, **kw)
+        return ViewletManager.render(*args, **kw)
 
 
 class IHTMLHeadManager(interfaces.IViewletManager):
@@ -218,4 +236,7 @@ class LinkViewlet(Viewlet):
 
     @property
     def link(self):
-        return None
+        if not self.__name__:
+            return None
+        return "%s/%s" % (absoluteURL(self.context, self.request),
+                          self.__name__)

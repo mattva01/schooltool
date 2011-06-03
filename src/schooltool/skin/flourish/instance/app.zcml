@@ -72,16 +72,10 @@
         permission="zope.Public"
         />
 
-    <flourish:page
-        name="manage"
-        for="schooltool.app.interfaces.ISchoolToolApplication"
-        subtitle="Site Settings"
-        class="schooltool.app.browser.app.ManageSite"
-        permission="schooltool.edit"
-        />
+    <!-- Site control page -->
 
     <flourish:page
-        name="manage.html"
+        name="settings"
         for="schooltool.app.interfaces.ISchoolToolApplication"
         subtitle="Site Settings"
         class="schooltool.app.browser.app.ManageSite"
@@ -102,8 +96,52 @@
         view="schooltool.app.browser.app.ManageSite"
         />
 
+    <flourish:viewlet
+        name="manage_site_links"
+        manager="schooltool.skin.flourish.page.IPageRefineManager"
+        class="schooltool.app.browser.app.ManageSiteLinks"
+        view="schooltool.app.browser.app.ManageSite"
+        title="Application control"
+        permission="schooltool.edit"
+        />
+
+    <flourish:viewlet
+        name="site-preferences.html"
+        title="Site Preferences"
+        class="schooltool.skin.flourish.page.LinkViewlet"
+        view="schooltool.app.browser.app.ManageSiteLinks"
+        permission="schooltool.edit"
+        />
+
+    <flourish:viewlet
+        name="manage_site_links"
+        manager="schooltool.skin.flourish.page.IPageRefineManager"
+        class="schooltool.app.browser.app.ManageSiteLinks"
+        view="schooltool.app.browser.app.ApplicationPreferencesView"
+        title="Application control"
+        permission="schooltool.edit"
+        />
+
     <flourish:page
-        name="settings"
+        name="site-preferences.html"
+        subtitle="Edit site preferences"
+        for="schooltool.app.interfaces.ISchoolToolApplication"
+        class="schooltool.app.browser.app.ApplicationPreferencesView"
+        content_template="templates/f_application_preferences.pt"
+        permission="schooltool.edit"
+        />
+
+    <!-- Manage School page -->
+
+    <flourish:page
+        name="manage.html"
+        for="schooltool.app.interfaces.ISchoolToolApplication"
+        class="schooltool.app.browser.app.ManageSite"
+        permission="schooltool.edit"
+        />
+
+    <flourish:page
+        name="manage"
         for="schooltool.app.interfaces.ISchoolToolApplication"
         class="schooltool.app.browser.app.ManageSchool"
         permission="schooltool.edit"
@@ -123,7 +161,6 @@
         manager="schooltool.skin.flourish.page.IHeaderNavigationManager"
         view="schooltool.app.browser.app.ManageSchool"
         />
-
 
     <!-- Content providers -->
 

@@ -1,6 +1,4 @@
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xml:lang="en"
-      i18n:domain="schooltool">
+<div>
 
 <h3 i18n:translate="">
   The page that you are trying to access is not available
@@ -17,4 +15,4 @@
   </li>
 </ol>
 
-</html>
+</div>

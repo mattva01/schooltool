@@ -72,6 +72,66 @@
       permission="zope.Public"
       />
 
+  <!-- XXX: all of these macros need a review! -->
+
+  <page
+      name="standard_macros"
+      for="*"
+      class=".macros.StandardMacros"
+      allowed_interface="zope.interface.common.mapping.IItemMapping"
+      permission="zope.Public"
+      layer="schooltool.skin.flourish.IFlourishLayer"
+      />
+
+  <page
+      name="schooltool_macros"
+      for="*"
+      class=".macros.SchoolToolMacros"
+      allowed_interface="zope.interface.common.mapping.IItemMapping"
+      permission="zope.Public"
+      layer="schooltool.skin.flourish.IFlourishLayer"
+      />
+
+  <page
+      name="view_macros"
+      for="*"
+      permission="zope.View"
+      template="templates/view_macros.pt"
+      layer="schooltool.skin.flourish.IFlourishLayer"
+      />
+
+  <page
+      name="rml_macros"
+      for="*"
+      permission="zope.View"
+      template="templates/rml_macros.pt"
+      layer="schooltool.skin.flourish.IFlourishLayer"
+      />
+
+  <page
+      name="generic_macros"
+      for="*"
+      permission="zope.View"
+      template="templates/generic_macros.pt"
+      layer="schooltool.skin.flourish.IFlourishLayer"
+      />
+
+  <page
+      name="widget_macros"
+      for="*"
+      permission="zope.View"
+      template="templates/widget_macros.pt"
+      layer="schooltool.skin.flourish.IFlourishLayer"
+      />
+
+  <page
+      name="formlib_macros"
+      for="*"
+      permission="zope.View"
+      template="templates/formlib_macros.pt"
+      layer="schooltool.skin.flourish.IFlourishLayer"
+      />
+
   </configure>
 
 

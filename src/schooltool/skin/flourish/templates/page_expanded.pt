@@ -1,18 +1,19 @@
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:tal="http://xml.zope.org/namespaces/tal">
+<div>
 
 <div class="container expand_container">
   <div class="main"
        tal:define="main_content view/content_template|nothing"
        tal:condition="main_content">
-    <div class="header"
-         tal:define="actions context/schooltool:content/actions|nothing"
-         tal:condition="actions"
-         tal:content="structure actions">
-      [action] [buttons]
-    </div>
-    <div class="body" tal:content="structure main_content">
-      [ Main content here ]
+    <div class="content">
+      <div class="header"
+           tal:define="actions context/schooltool:content/actions|nothing"
+           tal:condition="actions"
+           tal:content="structure actions">
+        [action] [buttons]
+      </div>
+      <div class="body" tal:content="structure main_content">
+        [ Main content here ]
+      </div>
     </div>
   </div>
   <div class="additional"
@@ -22,4 +23,4 @@
   </div>
 </div>
 
-</html>
+</div>
