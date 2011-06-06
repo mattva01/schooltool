@@ -488,23 +488,9 @@ class ManageSchool(flourish.page.Page):
     pass
 
 
-class ManageSiteLinkManager(flourish.page.ListNavigationBase,
-                            flourish.page.ViewletManager):
-
-    list_class = "filter"
-
-    @property
-    def active_viewlet(self):
-        refine_viewlet = self.view
-        view = refine_viewlet.view
-        return getattr(view, '__name__', None)
+class ManageSiteLinks(flourish.page.RefineLinksContent):
+    """Manage Site links viewlet."""
 
 
-class ManageSiteLinks(flourish.page.Refine):
-
-    def __init__(self, context, request, view, manager):
-        flourish.page.Refine.__init__(
-            self, context, request, view, manager)
-        self.body_template = ManageSiteLinkManager(
-            context, request, self)
-
+class ManageSchoolLinks(flourish.page.RefineLinksContent):
+    """Manage School links viewlet."""

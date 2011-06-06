@@ -128,6 +128,34 @@ class Related(Viewlet):
     title = None
 
 
+def getViewletViewName(context, request, view, manager):
+    return getattr(view, '__name__', None)
+
+
+def getViewParentActiveViewletName(context, request, view, manager):
+    parent = getattr(view, 'view', None)
+    if parent is None:
+        return None
+    name = queryMultiAdapter(
+        (context, request, parent, manager),
+        interfaces.IActiveViewletName,
+        name='',
+        default=None)
+    return name
+
+
+def getParentActiveViewletName(context, request, view, manager):
+    parent = getParent(context)
+    if parent is None:
+        return None
+    name = queryMultiAdapter(
+        (parent, request, view, manager),
+        interfaces.IActiveViewletName,
+        name='',
+        default=None)
+    return name
+
+
 class ListNavigationBase(object):
     template = InlineViewPageTemplate("""
         <ul tal:attributes="class view/list_class">
@@ -138,7 +166,6 @@ class ListNavigationBase(object):
         </ul>
     """)
     list_class = None
-    active_viewlet = None
 
     @property
     def items(self):
@@ -151,27 +178,6 @@ class ListNavigationBase(object):
                 })
         return result
 
-    @property
-    def active(self):
-        name = self.active_viewlet
-        return(name and name in self.order)
-
-
-def getParentActiveViewletName(context, request, view, manager):
-    parent = getParent(context)
-    if parent is None:
-        return None
-    name = queryMultiAdapter(
-        (parent, request, view),
-        interfaces.IActiveViewletName,
-        None)
-    return name
-
-
-class HeaderNavigationManager(ListNavigationBase, ViewletManager):
-
-    list_class = "navigation"
-
     @Lazy
     def active_viewlet(self):
         name = queryMultiAdapter(
@@ -181,20 +187,34 @@ class HeaderNavigationManager(ListNavigationBase, ViewletManager):
             default=None)
         return name
 
+    @property
+    def active(self):
+        name = self.active_viewlet
+        return(name and name in self.order)
+
+
+class HeaderNavigationManager(ListNavigationBase, ViewletManager):
+    list_class = "navigation"
 
 
 class PageNavigationManager(ListNavigationBase, ViewletManager):
-
     list_class = "navigation"
-
-    @property
-    def active_viewlet(self):
-        return getattr(self.view, '__name__', None)
 
     def render(self, *args, **kw):
         if not self.active:
             return ''
         return ViewletManager.render(*args, **kw)
+
+
+class RefineLinksManager(ListNavigationBase, ViewletManager):
+    list_class = "filter"
+
+
+class RefineLinksContent(Refine):
+    def __init__(self, context, request, view, manager):
+        Refine.__init__(self, context, request, view, manager)
+        self.body_template = RefineLinksManager(
+            context, request, self)
 
 
 class IHTMLHeadManager(interfaces.IViewletManager):

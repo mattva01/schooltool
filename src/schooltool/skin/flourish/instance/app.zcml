@@ -105,6 +105,12 @@
         permission="schooltool.edit"
         />
 
+    <flourish:activeViewlet
+        factory="schooltool.skin.flourish.page.getViewParentActiveViewletName"
+        manager="schooltool.skin.flourish.page.RefineLinksManager"
+        view="schooltool.skin.flourish.page.RefineLinksContent"
+        />
+
     <flourish:viewlet
         name="site-preferences.html"
         title="Site Preferences"
@@ -166,6 +172,15 @@
         name="manage_school"
         manager="schooltool.skin.flourish.page.IHeaderNavigationManager"
         view="schooltool.app.browser.app.ManageSchool"
+        />
+
+    <flourish:viewlet
+        name="manage_school_links"
+        manager="schooltool.skin.flourish.page.IPageRefineManager"
+        class="schooltool.app.browser.app.ManageSchoolLinks"
+        view="schooltool.app.browser.app.ManageSchool"
+        title="School"
+        permission="schooltool.edit"
         />
 
     <!-- Content providers -->

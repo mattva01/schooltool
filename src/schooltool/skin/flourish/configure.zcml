@@ -64,6 +64,11 @@
       />
 
   <flourish:activeViewlet
+      factory="schooltool.skin.flourish.page.getViewletViewName"
+      manager="schooltool.skin.flourish.interfaces.IViewletManager"
+      />
+
+  <flourish:activeViewlet
       factory="schooltool.skin.flourish.page.getParentActiveViewletName"
       manager="schooltool.skin.flourish.page.IHeaderNavigationManager"
       />
