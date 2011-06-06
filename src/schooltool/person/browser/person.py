@@ -19,7 +19,7 @@
 """
 Person browser views.
 """
-from zope.interface import Interface
+from zope.interface import Interface, invariant, Invalid
 from zope.publisher.interfaces import NotFound
 from zope.schema import Password, TextLine, Bytes, Bool
 from zope.schema.interfaces import ValidationError
@@ -37,7 +37,6 @@ from zope.app.form.interfaces import WidgetsError
 from zope.app.form.utility import getWidgetsData, setUpWidgets
 from zope.publisher.browser import BrowserView
 from zope.viewlet.interfaces import IViewletManager
-from zope.formlib import form
 from zope.component import getUtility
 from zope.interface import implements
 from zope.browserpage import ViewPageTemplateFile
@@ -48,16 +47,16 @@ from zope.catalog.interfaces import ICatalog
 from zope.intid.interfaces import IIntIds
 from zope.traversing.browser.absoluteurl import absoluteURL
 from zope.security.checker import canAccess
+from z3c.form import form, field, button, widget
+from z3c.form.browser.checkbox import SingleCheckBoxWidget
 
 from schooltool.group.interfaces import IGroupContainer
 from schooltool.common import SchoolToolMessage as _
-from schooltool.skin.form import BasicForm
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.person.interfaces import IPasswordWriter
 from schooltool.person.interfaces import IPerson, IPersonFactory
 from schooltool.person.interfaces import IPersonPreferences
 from schooltool.person.interfaces import IPersonContainer, IPersonContained
-from schooltool.widget.password import PasswordConfirmationWidget
 from schooltool.table.catalog import IndexedFilterWidget
 from schooltool.table.catalog import IndexedTableFormatter
 from schooltool.skin.containers import TableContainerView
@@ -83,38 +82,44 @@ class PersonPhotoView(BrowserView):
         return photo
 
 
-class PersonPreferencesView(BrowserView):
+def CheckBoxWidgetFactory(field, request):
+    return widget.FieldWidget(field, SingleCheckBoxWidget(request))
+
+
+class PersonPreferencesView(form.EditForm):
     """View used for editing person preferences."""
 
-    __used_for__ = IPersonPreferences
+    fields = field.Fields(IPersonPreferences)
+    fields['cal_periods'].widgetFactory = CheckBoxWidgetFactory
+    fields['cal_public'].widgetFactory = CheckBoxWidgetFactory
+    template = ViewPageTemplateFile('person_preferences.pt')
 
-    # TODO: these aren't used yet but should be
-    error = None
-    message = None
+    @property
+    def label(self):
+        return _(u'Change preferences for ${person}',
+                 mapping={'person': self.context.__parent__.title})
 
-    schema = IPersonPreferences
+    @button.buttonAndHandler(_("Apply"))
+    def handle_edit_action(self, action):
+        data, errors = self.extractData()
+        if errors:
+            self.status = self.formErrorsMessage
+            return
+        self.applyChanges(data)
+        self.redirectToPerson()
 
-    def __init__(self, context, request):
-        BrowserView.__init__(self, context, request)
-        self.person = self.context.__parent__
-        initial = {}
-        for field in self.schema:
-            initial[field] = getattr(context, field)
-        setUpWidgets(self, self.schema, IInputWidget, initial=initial)
+    @button.buttonAndHandler(_("Cancel"))
+    def handle_cancel_action(self, action):
+        self.redirectToPerson()
 
-    def update(self):
-        if 'CANCEL' in self.request:
-            url = absoluteURL(self.person, self.request)
-            self.request.response.redirect(url)
-        elif 'UPDATE_SUBMIT' in self.request:
-            try:
-                data = getWidgetsData(self, self.schema)
-            except WidgetsError:
-                return # Errors will be displayed next to widgets
+    def updateActions(self):
+        super(PersonPreferencesView, self).updateActions()
+        self.actions['apply'].addClass('button-ok')
+        self.actions['cancel'].addClass('button-cancel')
 
-            for field in self.schema:
-                if field in data: # skip non-fields
-                    setattr(self.context, field, data[field])
+    def redirectToPerson(self):
+        url = absoluteURL(self.context.__parent__, self.request)
+        self.request.response.redirect(url)
 
 
 # Should this be moved to a interface.py file ?
@@ -162,16 +167,28 @@ class IPasswordEditForm(Interface):
         title=_("Password"),
         required=False)
 
+    verify_password = Password(
+        title=_("Verify password"),
+        required=False)
 
-class PersonPasswordEditView(BasicForm):
-    form_fields = form.Fields(IPasswordEditForm, render_context=False)
-    form_fields['password'].custom_widget = PasswordConfirmationWidget
+    @invariant
+    def checkPasswordsMatch(obj):
+        if obj.password != obj.verify_password:
+            raise Invalid(_(u"Supplied passwords are not identical"))
 
-    def title(self):
-        return _("Edit password")
 
-    @form.action(_("Apply"))
-    def handle_edit_action(self, action, data):
+class PersonPasswordEditView(form.Form):
+
+    label = _("Edit password")
+    fields = field.Fields(IPasswordEditForm, ignoreContext=True)
+    template = ViewPageTemplateFile('password_form.pt')
+
+    @button.buttonAndHandler(_("Apply"))
+    def handle_edit_action(self, action):
+        data, errors = self.extractData()
+        if errors:
+            self.status = self.formErrorsMessage
+            return
         if not data['password']:
             self.status = _("No new password was supplied so "
                             "original password is unchanged")
@@ -180,12 +197,16 @@ class PersonPasswordEditView(BasicForm):
         writer.setPassword(data['password'])
         self.status = _('Changed password')
 
-    @form.action(_("Cancel"))
-    def handle_cancel_action(self, action, data):
+    @button.buttonAndHandler(_("Cancel"))
+    def handle_cancel_action(self, action):
         # redirect to parent
         url = absoluteURL(self.context, self.request)
         self.request.response.redirect(url)
-        return ''
+
+    def updateActions(self):
+        super(PersonPasswordEditView, self).updateActions()
+        self.actions['apply'].addClass('button-ok')
+        self.actions['cancel'].addClass('button-cancel')
 
 
 class IPersonInfoManager(IViewletManager):

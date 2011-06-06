@@ -118,7 +118,6 @@
       name="index.html"
       for="..interfaces.IPersonPreferences"
       class=".person.PersonPreferencesView"
-      template="person_preferences.pt"
       permission="schooltool.edit" />
 
   <page
