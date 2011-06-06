@@ -27,11 +27,11 @@ update:
 	bzr up
 	$(MAKE) buildout BUILDOUT_FLAGS=-n
 
-instance: build
+instance:
 	bin/make-schooltool-instance instance instance_type=$(INSTANCE_TYPE)
 
 .PHONY: run
-run: build
+run: build instance
 	bin/start-schooltool-instance instance
 
 .PHONY: tags
