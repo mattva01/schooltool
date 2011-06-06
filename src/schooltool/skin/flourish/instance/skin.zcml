@@ -134,5 +134,6 @@
 
   </configure>
 
+  <include file="z3cform.zcml" />
 
 </configure>

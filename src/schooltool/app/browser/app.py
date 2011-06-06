@@ -466,7 +466,7 @@ class ContentLabel(ContentLink):
 
 class ManageSiteNavLink(flourish.page.LinkViewlet):
     @property
-    def link(self):
+    def url(self):
         app = ISchoolToolApplication(None)
         app_url = absoluteURL(app, self.request)
         return '%s/settings' % app_url
@@ -474,7 +474,7 @@ class ManageSiteNavLink(flourish.page.LinkViewlet):
 
 class ManageSchoolNavLink(flourish.page.LinkViewlet):
     @property
-    def link(self):
+    def url(self):
         app = ISchoolToolApplication(None)
         app_url = absoluteURL(app, self.request)
         return '%s/manage' % app_url

@@ -35,12 +35,14 @@ from zope.traversing.browser.absoluteurl import absoluteURL
 import z3c.form.interfaces
 from z3c.form.validator import SimpleFieldValidator
 
+import schooltool.skin.flourish.page
+import schooltool.skin.flourish.containers
+from schooltool.skin import flourish
 from schooltool.app.browser.app import RelationshipViewBase
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.skin.containers import TableContainerView
 from schooltool.group.interfaces import IGroupContainer
 from schooltool.person.interfaces import IPersonFactory
-from schooltool.person.browser.person import PersonContainerView
 from schooltool.schoolyear.interfaces import ISchoolYearContainer
 
 from schooltool.basicperson.interfaces import IDemographicsFields
@@ -55,6 +57,23 @@ class BasicPersonContainerView(TableContainerView):
     delete_template = ViewPageTemplateFile("templates/person_container_delete.pt")
 
     index_title = _("Person index")
+
+    def isDeletingHimself(self):
+        person = IBasicPerson(self.request.principal, None)
+        return person in self.itemsToDelete
+
+    @property
+    def schoolyears(self):
+        app = ISchoolToolApplication(None)
+        syc = ISchoolYearContainer(app)
+        return syc
+
+
+class FlourishBasicPersonContainerView(flourish.containers.TableContainerView):
+    """A Person Container view."""
+
+    content_template = ViewPageTemplateFile("templates/f_container.pt")
+    delete_template = ViewPageTemplateFile("templates/f_person_container_delete.pt")
 
     def isDeletingHimself(self):
         person = IBasicPerson(self.request.principal, None)

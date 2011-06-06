@@ -46,6 +46,19 @@
   <flourish:viewletManager
       name="actions"
       view=".page.IPageContentManager"
+      class=".page.ListNavigationBase"
+      list_class="actions"
+      active_viewlet=""
+      provides=".page.IContentActionsManager"
+      permission="zope.Public"
+      />
+
+  <flourish:viewletManager
+      name="actions"
+      view=".interfaces.IPage"
+      class=".page.ListNavigationBase"
+      list_class="actions"
+      active_viewlet=""
       provides=".page.IContentActionsManager"
       permission="zope.Public"
       />

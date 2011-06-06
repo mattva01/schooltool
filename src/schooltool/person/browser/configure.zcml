@@ -43,6 +43,7 @@
         name="calendar_selection.html"
         class=".overlay.CalendarSelectionView"
         template="templates/calendar_selection.pt"
+        layer="schooltool.skin.ISchoolToolLayer"
         permission="schooltool.editCalendarOverlays"
         />
   </configure>
@@ -63,6 +64,7 @@
       for="..interfaces.IPersonContainer"
       class=".csvimport.PersonCSVImportView"
       template="person-csvimport.pt"
+      layer="schooltool.skin.ISchoolToolLayer"
       permission="schooltool.edit"
       />
 
@@ -119,12 +121,14 @@
       for="..interfaces.IPersonPreferences"
       class=".person.PersonPreferencesView"
       template="person_preferences.pt"
+      layer="schooltool.skin.ISchoolToolLayer"
       permission="schooltool.edit" />
 
   <page
      name="password_edit.html"
      for="..interfaces.IPerson"
      class=".person.PersonPasswordEditView"
+     layer="schooltool.skin.ISchoolToolLayer"
      permission="schooltool.view"
      />
 
@@ -132,6 +136,7 @@
       name="photo.jpg"
       for="..interfaces.IPerson"
       class=".person.PersonPhotoView"
+      layer="schooltool.skin.ISchoolToolLayer"
       permission="schooltool.view" />
 
   <zope:adapterTraverserPlugin
@@ -159,6 +164,7 @@
         for="schooltool.person.interfaces.IPersonContainer"
         class="schooltool.person.browser.person.PersonContainerView"
         template="templates/container.pt"
+        layer="schooltool.skin.ISchoolToolLayer"
         permission="schooltool.view"
         />
 
@@ -170,6 +176,7 @@
      class=".person.PersonAddView"
      template="person_add.pt"
      permission="schooltool.edit"
+     layer="schooltool.skin.ISchoolToolLayer"
      menu="schooltool_actions" title="New Person" />
 
   <navigationViewlet
@@ -190,6 +197,7 @@
      class=".person.PersonEditView"
      template="person_edit.pt"
      permission="schooltool.edit"
+     layer="schooltool.skin.ISchoolToolLayer"
      menu="schooltool_actions"
      title="Edit"
      />
@@ -200,6 +208,7 @@
       class=".person.PersonView"
       template="person.pt"
       permission="schooltool.view"
+      layer="schooltool.skin.ISchoolToolLayer"
       menu="schooltool_actions"
       title="View"
       />
@@ -209,6 +218,7 @@
       for="..interfaces.IPerson"
       class=".person.HomeView"
       template="home.pt"
+      layer="schooltool.skin.ISchoolToolLayer"
       permission="schooltool.view"
       />
 

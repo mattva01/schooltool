@@ -59,6 +59,8 @@ class Page(BrowserPage):
 
     def __call__(self, *args, **kw):
         self.update()
+        if self.request.response.getStatus() in [302, 303]:
+            return ''
         result = self.render(*args, **kw)
         return result
 
@@ -172,8 +174,14 @@ class ListNavigationBase(object):
         result = []
         active = self.active_viewlet
         for viewlet in self.viewlets:
+            html_classes = []
+            if viewlet.__name__ == active:
+                html_classes.append('active')
+            viewlet_class = getattr(viewlet, 'html_class', None)
+            if viewlet_class:
+                html_classes.append(viewlet_class)
             result.append({
-                'class': viewlet.__name__ == active and 'active' or None,
+                'class': ' '.join(html_classes) or None,
                 'viewlet': viewlet,
                 })
         return result
@@ -247,7 +255,7 @@ class IPageRelatedManager(interfaces.IViewletManager):
 
 class LinkViewlet(Viewlet):
     template = InlineViewPageTemplate('''
-    <a tal:attributes="href view/link" tal:content="view/title"></a>
+    <a tal:attributes="href view/url" tal:content="view/title"></a>
     ''')
 
     render = lambda self, *a, **kw: self.template(*a, **kw)
@@ -258,5 +266,12 @@ class LinkViewlet(Viewlet):
     def link(self):
         if not self.__name__:
             return None
+        return self.__name__
+
+    @property
+    def url(self):
+        link = self.link
+        if not link:
+            return None
         return "%s/%s" % (absoluteURL(self.context, self.request),
-                          self.__name__)
+                          self.link)

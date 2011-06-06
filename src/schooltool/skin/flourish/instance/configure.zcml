@@ -39,5 +39,6 @@
   <include file="skin.zcml" />
   <include file="app.zcml" />
   <include file="security.zcml" />
+  <include file="basicperson.zcml" />
 
 </configure>

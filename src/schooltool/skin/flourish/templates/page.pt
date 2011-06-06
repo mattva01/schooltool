@@ -11,7 +11,7 @@
        tal:condition="main_content">
     <div class="content">
       <div class="header"
-           tal:define="actions context/schooltool:content/actions|nothing"
+           tal:define="actions context/schooltool:content/actions"
            tal:condition="actions"
            tal:content="structure actions">
         [action] [buttons]

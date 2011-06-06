@@ -1,0 +1,34 @@
+<div tal:define="canModify context/can_modify:__delitem__">
+
+  <tal:block condition="python: view.schoolyears.getActiveSchoolYear() is None">
+    <div class="info">
+      <p i18n:translate="">To add teachers, students or administrators,
+        please set up a
+        <a tal:attributes="href view/schoolyears/@@absolute_url"
+           i18n:translate="" i18n:name="school_year">school year</a>.
+      </p>
+    </div>
+  </tal:block>
+  <tal:block replace="structure view/table/batch/render" />
+  <form method="post" tal:attributes="action string:${context/@@absolute_url}">
+    <tal:block tal:condition="view/table/filter_widget"
+               tal:replace="structure view/table/filter_widget/render" />
+    <tal:if condition="view/table/batch">
+      <div class="count" i18n:translate="">
+        Showing
+        <span i18n:name="count" tal:content="view/table/batch/length"/>
+        of
+        <span i18n:name="total" tal:content="view/table/batch/full_size"/>
+        items
+      </div>
+        <tal:block replace="structure view/table/render" />
+        <div class="controls" tal:condition="canModify">
+          <input type="submit" class="button-cancel" value="Delete"
+                 name="DELETE"
+                 i18n:attributes="value delete-button;" />
+        </div>
+    </tal:if>
+  </form>
+  <p tal:condition="not:view/table/batch" i18n:translate="">There are none.</p>
+
+</div>
