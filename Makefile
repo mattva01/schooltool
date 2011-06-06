@@ -31,7 +31,7 @@ instance: build
 	bin/make-schooltool-instance instance instance_type=$(INSTANCE_TYPE)
 
 .PHONY: run
-run: build instance
+run: build
 	bin/start-schooltool-instance instance
 
 .PHONY: tags
