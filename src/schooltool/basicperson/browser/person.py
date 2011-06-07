@@ -72,7 +72,7 @@ class BasicPersonContainerView(TableContainerView):
 class FlourishBasicPersonContainerView(flourish.containers.TableContainerView):
     """A Person Container view."""
 
-    content_template = ViewPageTemplateFile("templates/f_container.pt")
+    view_template = ViewPageTemplateFile("templates/f_container.pt")
     delete_template = ViewPageTemplateFile("templates/f_person_container_delete.pt")
 
     def isDeletingHimself(self):
@@ -625,6 +625,3 @@ class AddPersonViewlet(object):
         syc = ISchoolYearContainer(app)
         sy = syc.getActiveSchoolYear()
         return sy is not None
-
-
-

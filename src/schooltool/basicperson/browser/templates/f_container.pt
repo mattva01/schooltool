@@ -1,4 +1,4 @@
-<div tal:define="canModify context/can_modify:__delitem__">
+<div tal:define="canModify view/canModify">
 
   <tal:block condition="python: view.schoolyears.getActiveSchoolYear() is None">
     <div class="info">
