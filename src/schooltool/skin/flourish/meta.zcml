@@ -9,6 +9,12 @@
         />
 
     <directive
+        name="viewletFactory"
+        schema=".zcml.IViewletFactoryDirective"
+        handler=".zcml.viewletFactory"
+        />
+
+    <directive
         name="viewletManager"
         schema=".zcml.IManagerDirective"
         handler=".zcml.viewletManager"

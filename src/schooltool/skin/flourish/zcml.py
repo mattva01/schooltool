@@ -75,6 +75,42 @@ class IViewletDirective(zope.viewlet.metadirectives.IViewletDirective,
     """A viewlet directive."""
 
 
+class IViewletFactoryDirective(zope.component.zcml.IAdapterDirective):
+
+    for_ = zope.configuration.fields.GlobalObject(
+        title=u"The interface or class this view is for.",
+        required=False,
+        default=Interface,
+        )
+
+    provides = zope.configuration.fields.GlobalInterface(
+        title=_("Interface the component provides"),
+        required=False,
+        default=interfaces.IViewlet,
+        )
+
+    view = zope.configuration.fields.GlobalObject(
+        title=_("The view the content provider is registered for."),
+        description=_("The view can either be an interface or a class. By "
+                      "default the provider is registered for all views, "
+                      "the most common case."),
+        required=False,
+        default=interfaces.IPage,
+        )
+
+    layer = zope.configuration.fields.GlobalInterface(
+        title=_("The layer the view is in."),
+        required=False,
+        default=interfaces.IFlourishLayer,
+        )
+
+    manager = zope.configuration.fields.GlobalObject(
+        title=_("The viewlet manager this viewlet is in."),
+        required=False,
+        default=interfaces.IViewletManager,
+        )
+
+
 # Arbitrary keys and values are allowed to be passed to the viewlet.
 IViewletDirective.setTaggedValue('keyword_arguments', True)
 
@@ -241,6 +277,17 @@ def viewlet(
               interfaces.IViewlet,
               name,
               _context.info),)
+
+
+def viewletFactory(
+    _context, factory, provides=None, for_=None, permission=None,
+    name='', trusted=False, locate=False,
+    layer=None, view=None, manager=None):
+
+    objects = [for_, layer, view, manager]
+    zope.comonent.zcml(_context, factory, provides=provides,
+                       for_=objects, permission=permission,
+                       trusted=trusted, locate=locate)
 
 
 def page(_context, name, permission,
