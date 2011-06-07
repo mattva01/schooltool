@@ -23,17 +23,8 @@
         permission="schooltool.view"
         />
 
-<!--
-    <flourish:activeViewlet
-        name="manage_site"
-        manager="schooltool.skin.flourish.page.IHeaderNavigationManager"
-        view=".control.SecurityDescriptions"
-        />
--->
-
     <flourish:page
         name="index.html"
-
         for="schooltool.person.interfaces.IPersonContainer"
         class=".person.FlourishBasicPersonContainerView"
         permission="schooltool.view"
