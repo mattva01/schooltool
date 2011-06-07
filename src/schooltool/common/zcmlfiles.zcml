@@ -35,10 +35,14 @@
   <include package="zope.app.publication" file="meta.zcml" />
   <include package="zope.app.publication" />
 
+  <include package="zope.site" />
+  <include package="zope.container" />
 
   <include package="zope.traversing" />
   <include package="zope.app.pagetemplate" />
   <include package="zope.app.generations" />
+
+  <include package="zope.i18n" />
 
   <!-- Views -->
   <include package="zope.app.http" />
@@ -47,8 +51,6 @@
   <configure package="zope.app.locales">
     <i18n:registerTranslations directory="." />
   </configure>
-
-  <include package="zope.app.i18n" />
 
   <!-- Database boostrapping and maintanance -->
   <include package="zope.app.appsetup" />
@@ -72,10 +74,6 @@
   <include package="zope.dublincore" />
   <include package="zope.formlib" />
   <include package="zope.app.wsgi" />
-
-
-  <!-- Content types -->
-  <include package="zope.app.folder" />
 
   <!-- Browser Configurations -->
   <include file="browser.zcml" />
