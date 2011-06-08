@@ -19,8 +19,14 @@
         name="persons"
         title="Persons"
         class="schooltool.skin.flourish.page.LinkViewlet"
-        view="schooltool.app.browser.app.ManageSchoolLinks"
+        manager="schooltool.app.browser.app.ManageSchoolLinks"
         permission="schooltool.view"
+        />
+
+    <flourish:activeViewlet
+        name="persons"
+        manager="schooltool.app.browser.app.ManageSchoolLinks"
+        for="schooltool.person.interfaces.IPersonContainer"
         />
 
     <flourish:page
@@ -30,13 +36,11 @@
         permission="schooltool.view"
         />
 
-    <flourish:viewlet
+    <flourish:viewletFactory
         name="manage_school_links"
         manager="schooltool.skin.flourish.page.IPageRefineManager"
-        class="schooltool.app.browser.app.ManageSchoolLinks"
         for="schooltool.person.interfaces.IPersonContainer"
-        title="School"
-        permission="schooltool.edit"
+        factory="schooltool.app.browser.app.getAppViewlet"
         />
 
     <flourish:activeViewlet

@@ -46,7 +46,7 @@
   <flourish:viewletManager
       name="actions"
       view=".page.IPageContentManager"
-      class=".page.ListNavigationBase"
+      class=".page.ListNavigationContent"
       list_class="actions"
       active_viewlet=""
       provides=".page.IContentActionsManager"
@@ -56,7 +56,7 @@
   <flourish:viewletManager
       name="actions"
       view=".interfaces.IPage"
-      class=".page.ListNavigationBase"
+      class=".page.ListNavigationContent"
       list_class="actions"
       active_viewlet=""
       provides=".page.IContentActionsManager"
@@ -77,11 +77,6 @@
       />
 
   <flourish:activeViewlet
-      factory="schooltool.skin.flourish.page.getViewletViewName"
-      manager="schooltool.skin.flourish.interfaces.IViewletManager"
-      />
-
-  <flourish:activeViewlet
       factory="schooltool.skin.flourish.page.getParentActiveViewletName"
       manager="schooltool.skin.flourish.page.IHeaderNavigationManager"
       />
@@ -92,6 +87,5 @@
       view=".interfaces.IPage"
       permission="zope.Public"
       />
-
 
 </configure>

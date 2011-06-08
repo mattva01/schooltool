@@ -488,9 +488,16 @@ class ManageSchool(flourish.page.Page):
     pass
 
 
-class ManageSiteLinks(flourish.page.RefineLinksContent):
+class ManageSiteLinks(flourish.page.RefineLinksViewlet):
     """Manage Site links viewlet."""
 
 
-class ManageSchoolLinks(flourish.page.RefineLinksContent):
+class ManageSchoolLinks(flourish.page.RefineLinksViewlet):
     """Manage School links viewlet."""
+
+
+def getAppViewlet(context, request, view, manager, name):
+    app = ISchoolToolApplication(None)
+    viewlet = flourish.viewlet.lookupViewlet(
+        app, request, view, manager, name=name)
+    return viewlet

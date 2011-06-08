@@ -30,7 +30,9 @@ from zope.traversing.browser.absoluteurl import absoluteURL
 
 from schooltool.app.browser.content import IContentProviders
 from schooltool.common.inlinept import InlineViewPageTemplate
+from schooltool.common.inlinept import InheritTemplate
 from schooltool.skin.flourish.viewlet import Viewlet, ViewletManager
+from schooltool.skin.flourish.viewlet import ManagerViewlet
 from schooltool.skin.flourish import interfaces
 
 
@@ -188,8 +190,9 @@ class ListNavigationBase(object):
 
     @Lazy
     def active_viewlet(self):
+        view = self.view
         name = queryMultiAdapter(
-            (self.context, self.request, self.view, self),
+            (view.context, view.request, view, self),
             interfaces.IActiveViewletName,
             name='',
             default=None)
@@ -201,11 +204,19 @@ class ListNavigationBase(object):
         return(name and name in self.order)
 
 
-class HeaderNavigationManager(ListNavigationBase, ViewletManager):
+class ListNavigationContent(ListNavigationBase, ViewletManager):
+    pass
+
+
+class ListNavigationViewlet(ListNavigationBase, ManagerViewlet):
+    pass
+
+
+class HeaderNavigationManager(ListNavigationContent):
     list_class = "navigation"
 
 
-class PageNavigationManager(ListNavigationBase, ViewletManager):
+class PageNavigationManager(ListNavigationContent):
     list_class = "navigation"
 
     def render(self, *args, **kw):
@@ -214,15 +225,9 @@ class PageNavigationManager(ListNavigationBase, ViewletManager):
         return ViewletManager.render(*args, **kw)
 
 
-class RefineLinksManager(ListNavigationBase, ViewletManager):
+class RefineLinksViewlet(Refine, ListNavigationViewlet):
     list_class = "filter"
-
-
-class RefineLinksContent(Refine):
-    def __init__(self, context, request, view, manager):
-        Refine.__init__(self, context, request, view, manager)
-        self.body_template = RefineLinksManager(
-            context, request, self)
+    body_template = InheritTemplate(ListNavigationBase.template)
 
 
 class IHTMLHeadManager(interfaces.IViewletManager):

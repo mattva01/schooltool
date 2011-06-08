@@ -125,7 +125,6 @@ class TableContainerView(Page):
         formatter.setUp(formatters=[url_cell_formatter],
                         columns_before=columns_before)
 
-
     @property
     def content_template(self):
         if 'DELETE' in self.request:

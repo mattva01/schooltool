@@ -24,6 +24,7 @@ import zope.event
 import zope.security
 from zope.cachedescriptors.property import Lazy
 from zope.interface import implements
+from zope.proxy import removeAllProxies
 from zope.publisher.browser import BrowserPage
 
 from schooltool.app.browser.content import ContentProvider
@@ -82,9 +83,21 @@ class ViewletManager(ContentProvider):
         viewlets = list(zope.component.getAdapters(
             (self.context, self.request, self.view, self),
             IViewlet))
+        # XXX: a workaround Zope's bug - if an adapter has a specified
+        #      permission and returns None, instead of being filtered
+        #      by getAdapters it returns a security proxied located
+        #      instance of None.
+        viewlets = [
+            (v, a) for v, a in viewlets
+            if removeAllProxies(a) is not None]
+
         for name, viewlet in viewlets:
-            viewlet.__name__ = name
+            if viewlet.__name__ != name:
+                unproxied = zope.security.proxy.removeSecurityProxy(viewlet)
+                unproxied.__name__ = name
+
         viewlets = self.filter(viewlets)
+
         return dict(viewlets)
 
     def filter(self, viewlets):
@@ -141,3 +154,10 @@ class ManagerViewlet(Viewlet, ViewletManager):
 
     def __call__(self, *args, **kw):
         return ViewletManager.__call__(self, *args, **kw)
+
+
+def lookupViewlet(context, request, view, manager, name="", default=None):
+    viewlet = zope.component.queryMultiAdapter(
+        (context, request, view, manager),
+        IViewlet, name=name, default=default)
+    return viewlet

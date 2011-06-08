@@ -111,27 +111,27 @@ def provideViewlet(factory, manager, name):
 def doctest_Viewlet():
     """Tests for Viewlet.
 
-        >>> v = Viewlet('context', 'request', 'view', 'manager')
+        >>> viewlet = Viewlet('context', 'request', 'view', 'manager')
 
-        >>> verifyObject(interfaces.IViewlet, v)
+        >>> verifyObject(interfaces.IViewlet, viewlet)
         True
 
-        >>> v.context, v.request, v.view, v.manager
+        >>> viewlet.context, viewlet.request, viewlet.view, viewlet.manager
         ('context', 'request', 'view', 'manager')
 
-        >>> v.__parent__
+        >>> viewlet.__parent__
         'manager'
 
-        >>> print v.__name__
+        >>> print viewlet.__name__
         None
 
-        >>> v.before, v.after, v.requires
+        >>> viewlet.before, viewlet.after, viewlet.requires
         ((), (), ())
 
-        >>> print v.update()
+        >>> print viewlet.update()
         None
 
-        >>> print v.render()
+        >>> print viewlet.render()
         Traceback (most recent call last):
         ...
         NotImplementedError: `render` method must be implemented by subclass.
@@ -143,12 +143,12 @@ def doctest_Viewlet():
 def doctest_Viewlet_call():
     """Tests for Viewlet.__call__
 
-        >>> v = TestViewlet(None, 'request', None, None)
+        >>> viewlet = TestViewlet(None, 'request', None, None)
 
-        >>> print v.render()
+        >>> print viewlet.render()
         A fresh ViewletTest. Called render()
 
-        >>> result =  v('arg', option='something')
+        >>> result =  viewlet('arg', option='something')
         Updating <TestViewlet None>
 
         >>> print result

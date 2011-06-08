@@ -23,6 +23,7 @@ SchoolTool flourish skin interfaces.
 import zope.schema
 import zope.viewlet.interfaces
 from zope.interface import Interface, Attribute
+from zope.location.interfaces import ILocation
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 from zope.publisher.interfaces.browser import IBrowserPage
 from z3c.form.interfaces import IFormLayer
@@ -50,26 +51,27 @@ class IViewletOrder(Interface):
 
 
 class IViewlet(zope.viewlet.interfaces.IViewlet,
+               ILocation,
                IBrowserPage,
                IViewletOrder):
     """A viewlet."""
 
 
 class IViewletManager(zope.viewlet.interfaces.IViewletManager,
+                      ILocation,
                       ISchoolToolContentProvider):
     """A viewlet manager."""
+
+
+class IManagerViewlet(IViewlet, IViewletManager):
+    """A viewlet that is also a manager."""
 
 
 class IActiveViewletName(Interface):
     """Interface for adapter that returns the active viewlet name."""
 
 
-class IPage(IBrowserPage):
-    __name__ = zope.schema.TextLine(
-        title=u"The name of the page",
-        required=False,
-        default=None)
-
+class IPage(IBrowserPage, ILocation):
     title = zope.schema.TextLine(
         title=_("Page title"), required=False)
 

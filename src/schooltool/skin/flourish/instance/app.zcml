@@ -98,33 +98,26 @@
 
     <flourish:viewlet
         name="manage_site_links"
+        before="manage_school_links"
         manager="schooltool.skin.flourish.page.IPageRefineManager"
         class="schooltool.app.browser.app.ManageSiteLinks"
         view="schooltool.app.browser.app.ManageSite"
-        title="Application control"
+        title="Application"
         permission="schooltool.edit"
         />
 
     <flourish:activeViewlet
         factory="schooltool.skin.flourish.page.getViewParentActiveViewletName"
-        manager="schooltool.skin.flourish.page.RefineLinksManager"
-        view="schooltool.skin.flourish.page.RefineLinksContent"
-        />
-
-    <flourish:viewlet
-        name="site-preferences.html"
-        title="Site Preferences"
-        class="schooltool.skin.flourish.page.LinkViewlet"
-        view="schooltool.app.browser.app.ManageSiteLinks"
-        permission="schooltool.edit"
+        manager="schooltool.skin.flourish.page.RefineLinksViewlet"
         />
 
     <flourish:viewlet
         name="manage_site_links"
+        before="manage_school_links"
         manager="schooltool.skin.flourish.page.IPageRefineManager"
         class="schooltool.app.browser.app.ManageSiteLinks"
         view="schooltool.app.browser.app.ApplicationPreferencesView"
-        title="Application control"
+        title="Application"
         permission="schooltool.edit"
         />
 
@@ -135,6 +128,19 @@
         class="schooltool.app.browser.app.ApplicationPreferencesView"
         content_template="templates/f_application_preferences.pt"
         permission="schooltool.edit"
+        />
+
+    <flourish:viewlet
+        name="site-preferences.html"
+        title="Site Preferences"
+        class="schooltool.skin.flourish.page.LinkViewlet"
+        manager="schooltool.app.browser.app.ManageSiteLinks"
+        permission="schooltool.edit"
+        />
+
+    <flourish:activeViewlet
+        factory="schooltool.skin.flourish.page.getViewletViewName"
+        manager="schooltool.app.browser.app.ManageSiteLinks"
         />
 
     <flourish:activeViewlet
@@ -178,7 +184,7 @@
         name="manage_school_links"
         manager="schooltool.skin.flourish.page.IPageRefineManager"
         class="schooltool.app.browser.app.ManageSchoolLinks"
-        view="schooltool.app.browser.app.ManageSchool"
+        for="schooltool.app.interfaces.ISchoolToolApplication"
         title="School"
         permission="schooltool.edit"
         />

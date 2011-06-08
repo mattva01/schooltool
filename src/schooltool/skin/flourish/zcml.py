@@ -56,14 +56,14 @@ class IViewletOrder(Interface):
 
     after = zope.configuration.fields.Tokens(
         title=_("Display this viewlet after the specified viewlets."),
-        value_type = zope.schema.TextLine(
+        value_type=zope.schema.TextLine(
             title=u"Names of viewlets",
             required=True),
         required=False)
 
     before = zope.configuration.fields.Tokens(
         title=_("Display this viewlet before the specified viewlets."),
-        value_type = zope.schema.TextLine(
+        value_type=zope.schema.TextLine(
             title=u"Names of viewlets",
             required=True),
         required=False)
@@ -81,6 +81,11 @@ class IViewletFactoryDirective(zope.component.zcml.IAdapterDirective):
         title=u"The interface or class this view is for.",
         required=False,
         default=Interface,
+        )
+
+    factory = zope.configuration.fields.GlobalObject(
+        title=u"The adapter factory.",
+        required=False,
         )
 
     provides = zope.configuration.fields.GlobalInterface(
@@ -280,14 +285,20 @@ def viewlet(
 
 
 def viewletFactory(
-    _context, factory, provides=None, for_=None, permission=None,
-    name='', trusted=False, locate=False,
-    layer=None, view=None, manager=None):
+    _context, factory, provides=interfaces.IViewlet,
+    for_=Interface, permission=None,
+    name='', trusted=True, locate=False,
+    layer=interfaces.IFlourishLayer,
+    view=interfaces.IPage,
+    manager=interfaces.IViewletManager):
 
+    wrapper = lambda c, r, v, m: factory(c, r, v, m, name)
     objects = [for_, layer, view, manager]
-    zope.comonent.zcml(_context, factory, provides=provides,
-                       for_=objects, permission=permission,
-                       trusted=trusted, locate=locate)
+    zope.component.zcml.adapter(
+        _context, [wrapper],
+        provides=provides, for_=objects, permission=permission,
+        name=name,
+        trusted=trusted, locate=locate)
 
 
 def page(_context, name, permission,
