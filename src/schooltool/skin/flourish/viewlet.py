@@ -29,6 +29,7 @@ from zope.publisher.browser import BrowserPage
 from schooltool.app.browser.content import ContentProvider
 from schooltool.common.inlinept import InlineViewPageTemplate
 from schooltool.skin.flourish.interfaces import IViewlet, IViewletManager
+from schooltool.skin.flourish.interfaces import IManagerViewlet
 from schooltool.skin.flourish.sorting import dependency_sort
 
 
@@ -129,3 +130,14 @@ class ViewletManager(ContentProvider):
         for viewlet in self.viewlets:
             zope.event.notify(event(viewlet, self.request))
             viewlet.update()
+
+
+class ManagerViewlet(Viewlet, ViewletManager):
+    implements(IManagerViewlet)
+    view = None
+
+    def update(self):
+        return ViewletManager.update(self)
+
+    def __call__(self, *args, **kw):
+        return ViewletManager.__call__(self, *args, **kw)

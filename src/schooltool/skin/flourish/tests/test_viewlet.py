@@ -34,10 +34,12 @@ from zope.security.management import setSecurityPolicy
 from zope.security.management import newInteraction, endInteraction
 from zope.security.management import restoreInteraction
 
-from schooltool.skin.flourish import interfaces, viewlet
+from schooltool.skin.flourish import interfaces
+from schooltool.skin.flourish.viewlet import Viewlet, ViewletManager
+from schooltool.skin.flourish.viewlet import ManagerViewlet
 
 
-class TestViewlet(viewlet.Viewlet):
+class TestViewlet(Viewlet):
     status = 'A fresh'
 
     def update(self):
@@ -61,10 +63,34 @@ def viewletClass(permission=CheckerPublic, **classdict):
     return cls
 
 
-class TestManager(viewlet.ViewletManager):
+class TestManager(ViewletManager):
 
     def render(self, *args, **kw):
         rendered = ['TestManager.render:']
+        rendered += [str(v.render(*args, **kw))
+                     for v in self.viewlets]
+        return '\n'.join(rendered)
+
+    def __repr__(self):
+        return '<%s %r>' % (self.__class__.__name__, self.__name__)
+
+
+class TestManagerViewlet(ManagerViewlet):
+    status = 'A fresh'
+
+    def update(self):
+        print 'Updating', self
+        self.status = 'An updated'
+        ManagerViewlet.update(self)
+
+    def render(self, *args, **kw):
+        passed = (
+            [repr(a) for a in args] +
+            ['%s=%r' % a for a in sorted(kw.items())])
+        call_str = '%s %s.render(%s)' % (
+            self.status, self.__class__.__name__,
+            ', '.join(passed))
+        rendered = [call_str]
         rendered += [str(v.render(*args, **kw))
                      for v in self.viewlets]
         return '\n'.join(rendered)
@@ -85,7 +111,7 @@ def provideViewlet(factory, manager, name):
 def doctest_Viewlet():
     """Tests for Viewlet.
 
-        >>> v = viewlet.Viewlet('context', 'request', 'view', 'manager')
+        >>> v = Viewlet('context', 'request', 'view', 'manager')
 
         >>> verifyObject(interfaces.IViewlet, v)
         True
@@ -138,7 +164,7 @@ def doctest_ViewletManager():
         >>> request = TestRequest()
         >>> view = 'view'
 
-        >>> manager = viewlet.ViewletManager(context, request, view)
+        >>> manager = ViewletManager(context, request, view)
 
         >>> verifyObject(interfaces.IViewletManager, manager)
         True
@@ -259,11 +285,11 @@ def doctest_ViewletManager_filter():
         >>> request = TestRequest()
         >>> view = 'view'
 
-        >>> class TestManager(viewlet.ViewletManager):
+        >>> class TestManager(ViewletManager):
         ...     def filter(self, viewlets):
         ...         print 'Filter viewlets:'
         ...         print sorted(viewlets)
-        ...         return viewlet.ViewletManager.filter(self, viewlets)
+        ...         return ViewletManager.filter(self, viewlets)
 
         >>> manager = TestManager(context, request, view)
 
@@ -300,6 +326,99 @@ def doctest_ViewletManager_filter():
 
         >>> print filtered
         [<TestViewlet u'v1'>, <TestViewlet u'v3'>, <TestViewlet u'v5'>]
+
+    """
+
+
+def doctest_ManagerViewlet():
+    """Tests for ManagerViewlet.
+
+        >>> names = sorted(interfaces.IManagerViewlet)
+
+        >>> context = 'context'
+        >>> request = TestRequest()
+        >>> view = 'view'
+        >>> manager = 'manager'
+
+        >>> viewlet = ManagerViewlet(context, request, view, manager)
+        >>> verifyObject(interfaces.IManagerViewlet, viewlet)
+        True
+
+        >>> viewlet.context, viewlet.request, viewlet.view, viewlet.manager
+        ('context', <...TestRequest ...>, 'view', 'manager')
+
+        >>> viewlet.__parent__
+        'manager'
+
+        >>> print viewlet.update()
+        None
+
+        >>> print viewlet.render()
+        Traceback (most recent call last):
+        ...
+        NotImplementedError: `render` method must be implemented by subclass.
+
+    The render method is inherited from the Viewlet.
+
+        >>> viewlet.__class__.render == Viewlet.render
+        True
+
+    """
+
+
+def doctest_ManagerViewlet_call():
+    """Tests for ViewletManager.__call__
+
+        >>> v = TestManagerViewlet(None, 'request', None, None)
+
+        >>> print v.render()
+        A fresh TestManagerViewlet.render()
+
+        >>> result =  v('arg', option='something')
+        Updating <TestManagerViewlet None>
+
+        >>> print result
+        An updated TestManagerViewlet.render('arg', option='something')
+
+    """
+
+
+def doctest_ManagerViewlet_viewlets():
+    """Tests for ViewletManager.
+
+        >>> from zope.contentprovider.interfaces import IBeforeUpdateEvent
+
+        >>> context = 'context'
+        >>> request = TestRequest()
+        >>> view = 'view'
+        >>> manager = 'manager'
+
+        >>> viewlet = TestManagerViewlet(context, request, view, manager)
+
+    Let's provide some viewlets for the manager.
+
+        >>> provideViewlet(viewletClass(), viewlet, 'v1')
+        >>> provideViewlet(viewletClass(), viewlet, 'v2')
+
+        >>> def beforeUpdate(e):
+        ...     print 'About to update', e.object
+        >>> provideHandler(beforeUpdate, [IBeforeUpdateEvent])
+
+        >>> print viewlet.viewlets
+        [<TestViewlet u'v1'>, <TestViewlet u'v2'>]
+
+        >>> result = viewlet('foo', bar='bar')
+        About to update <TestManagerViewlet None>
+        Updating <TestManagerViewlet None>
+        About to update <TestViewlet u'v1'>
+        Updating <TestViewlet u'v1'>
+        About to update <TestViewlet u'v2'>
+        Updating <TestViewlet u'v2'>
+
+        >>> print result
+        An updated TestManagerViewlet.render('foo', bar='bar')
+        An updated ViewletTest. Called render('foo', bar='bar')
+        An updated ViewletTest. Called render('foo', bar='bar')
 
     """
 
