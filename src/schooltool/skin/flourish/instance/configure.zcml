@@ -37,8 +37,8 @@
   </configure>
 
   <include file="skin.zcml" />
-  <include file="app.zcml" />
-  <include file="security.zcml" />
-  <include file="basicperson.zcml" />
+  <include package="schooltool.app.browser" file="flourish.zcml" />
+  <include package="schooltool.securitypolicy.browser" file="flourish.zcml" />
+  <include package="schooltool.basicperson.browser" file="flourish.zcml" />
 
 </configure>
