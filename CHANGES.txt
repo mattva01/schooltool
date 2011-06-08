@@ -15,6 +15,9 @@ New features
 Cleanup
 +++++++
 
+- Removed help (https://launchpad.net/bugs/789157)
+- Made ``zope.app.apidoc`` dependency optional, it is only useful for
+  developers.
 - Removed school setup data framework (https://launchpad.net/bugs/307237)
 
 Bugfixes

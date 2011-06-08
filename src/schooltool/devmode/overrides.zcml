@@ -9,6 +9,9 @@
 
   <!-- apidoc overriding -->
 
+  <configure xmlns:zcml="http://namespaces.zope.org/zcml"
+             zcml:condition="have apidoc">
+
   <view
       name="apidoc" type="*"
       provides="zope.traversing.interfaces.ITraversable" for="*"
@@ -19,5 +22,7 @@
       provides="zope.traversing.interfaces.ITraversable" for="*"
       factory=".apidoc.schooltoolApidocNamespace"
       />
+
+  </configure>
 
 </configure>
