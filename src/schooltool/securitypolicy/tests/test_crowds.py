@@ -141,7 +141,7 @@ def doctest_ConfigurableCrowd():
         ...                adapts=[None],
         ...                provides=ISchoolToolApplication)
 
-        >>> from schooltool.app.security import ConfigurableCrowd
+        >>> from schooltool.securitypolicy.crowds import ConfigurableCrowd
 
     Off we go:
 

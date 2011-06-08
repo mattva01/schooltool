@@ -32,7 +32,6 @@ from zope.intid import addIntIdSubscriber
 from zope.intid.interfaces import IIntIds
 from zope.lifecycleevent import ObjectAddedEvent
 from zope.lifecycleevent.interfaces import IObjectRemovedEvent
-from zope.lifecycleevent.interfaces import IObjectAddedEvent
 from zope.container.contained import Contained
 from zope.container.btree import BTreeContainer
 

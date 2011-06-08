@@ -77,7 +77,6 @@
     <include package="zope.app.renderer" />
     <include package="zope.app.tree" />
     <include package="schooltool.sampledata" />
-    <include package="schooltool.setupdata" />
   </configure>
 
   <!-- Translations -->

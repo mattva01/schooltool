@@ -44,7 +44,6 @@ from schooltool.app.interfaces import ICalendarParentCrowd
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.membership import GroupMemberCrowd
 from schooltool.app.membership import URIMembership, URIMember, URIGroup
-from schooltool.app.security import ConfigurableCrowd
 from schooltool.app.security import LeaderCrowd
 from schooltool.course.interfaces import ISection
 from schooltool.group import interfaces
@@ -55,6 +54,7 @@ from schooltool.schoolyear.interfaces import ISchoolYearContainer
 from schooltool.schoolyear.subscriber import ObjectEventAdapterSubscriber
 from schooltool.securitypolicy.crowds import Crowd, AggregateCrowd
 from schooltool.securitypolicy.crowds import AggregateCrowdDescription
+from schooltool.securitypolicy.crowds import ConfigurableCrowd
 from schooltool.securitypolicy.metaconfigure import getCrowdsUtility
 from schooltool.securitypolicy.interfaces import ICrowd
 
