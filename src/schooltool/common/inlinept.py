@@ -117,3 +117,36 @@ class InlineViewPageTemplate(InlineTemplateBase):
 
     def __get__(self, instance, type):
         return BoundPageTemplate(self, instance)
+
+
+class InheritTemplate(object):
+    """Re-bind templates from other classes.
+
+        >>> class Foo(object):
+        ...     template = InlineViewPageTemplate("")
+        ...     other_template = InlinePageTemplate("")
+
+        >>> class Bar(object):
+        ...     template = InheritTemplate(Foo.template)
+        ...     other_template = InheritTemplate(Foo.other_template)
+
+        >>> Foo().template
+        <BoundPageTemplateFile of <schooltool.common.inlinept.Foo ...>>
+
+        >>> Bar().template
+        <BoundPageTemplateFile of <schooltool.common.inlinept.Bar ...>>
+
+    Unbound templates are returned unaffected.
+
+        >>> Bar().other_template
+        <schooltool.common.inlinept.InlinePageTemplate ...>
+
+    """
+
+    def __init__(self, template):
+        self.template = template
+
+    def __get__(self, instance, type):
+        if isinstance(self.template, BoundPageTemplate):
+            return BoundPageTemplate(self.template.im_func, instance)
+        return self.template
