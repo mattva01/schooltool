@@ -7,6 +7,8 @@ CHANGES
 
 - Removed help (https://launchpad.net/bugs/789157)
 - Removed school setup data framework (https://launchpad.net/bugs/307237)
+- Made ``zope.app.apidoc`` dependency optional, it is only useful for
+  developers.
 - Add paste.ini_tmpl to .tar.gz to fix start-schooltool-instance not creating
   the required paste.ini file.
   NOTE: run ``make-schooltool-instance instance`` to fix ``instance`` if it does

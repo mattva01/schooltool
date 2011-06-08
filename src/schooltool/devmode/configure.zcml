@@ -2,7 +2,7 @@
     xmlns="http://namespaces.zope.org/zope"
     xmlns:security="http://schooltool.org/securitypolicy"
     xmlns:browser="http://namespaces.zope.org/browser"
-    xmlns:apidoc="http://namespaces.zope.org/apidoc">
+    xmlns:zcml="http://namespaces.zope.org/zcml">
 
   <!-- Register the skin for devmode -->
   <interface
@@ -10,9 +10,6 @@
       type="zope.publisher.interfaces.browser.IBrowserSkinType"
       name="SchoolToolDevMode"
       />
-
-  <!-- Setup schooltool as a top-level package in API doc -->
-  <apidoc:rootModule module="schooltool" />
 
   <!-- Generic DevMode setup -->
 
@@ -23,6 +20,8 @@
       />
 
   <configure package="schooltool.skin">
+
+    <configure zcml:condition="have apidoc">
 
     <browser:navigationViewlet
       name="inspect"
@@ -46,6 +45,8 @@
       title="API Docs"
       order="220"
       />
+
+    </configure>
 
     <browser:navigationViewlet
       name="sample-data"
@@ -76,6 +77,13 @@
       name="devmode.css" file="devmode.css"
       layer=".skin.IDevModeLayer"
       />
+
+  <configure zcml:condition="have apidoc">
+
+  <!-- Setup schooltool as a top-level package in API doc -->
+  <apidoc:rootModule 
+    xmlns:apidoc="http://namespaces.zope.org/apidoc"
+    module="schooltool" />
 
   <!-- Introspector -->
   <browser:viewlet
@@ -143,5 +151,7 @@
   <security:allow
       crowds="administration"
       permission="zope.app.apidoc.UseAPIDoc" />
+
+  </configure>
 
 </configure>
