@@ -49,7 +49,7 @@ from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.app.interfaces import IAsset
-from schooltool.app.browser.content import ContentProvider
+from schooltool.skin.flourish.content import ContentProvider
 from schooltool.common.inlinept import InlineViewPageTemplate
 from schooltool.person.interfaces import IPerson
 from schooltool.table.table import CheckboxColumn

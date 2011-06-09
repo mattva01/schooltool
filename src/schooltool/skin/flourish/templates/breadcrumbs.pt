@@ -1,0 +1,24 @@
+<ul class="breadcrumbs">
+  <tal:block repeat="crumb view/breadcrumbs">
+    <tal:block condition="crumb/name">
+      <li tal:condition="not:repeat/crumb/end">
+        <metal:block define-macro="render_crumb">
+          <a tal:condition="crumb/url"
+             tal:attributes="href crumb/url"
+             tal:content="structure crumb/name">
+            [crumb with url]
+          </a>
+          <span tal:condition="not:crumb/url"
+                tal:content="structure crumb/name">
+            [crumb without url]
+          </span>
+        </metal:block>
+      </li>
+      <li tal:condition="repeat/crumb/end"
+          class="last">
+        <metal:block use-macro="template/macros/render_crumb" />
+      </li>
+    </tal:block>
+  </tal:block>
+
+</ul>

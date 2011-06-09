@@ -5,63 +5,65 @@
            xmlns:flourish="http://schooltool.org/flourish"
            i18n_domain="schooltool">
 
-  <configure package="schooltool.basicperson.browser">
 
-    <content
-        class="schooltool.app.browser.app.ContentTitle"
-        permission="schooltool.view"
-        for="schooltool.person.interfaces.IPersonContainer"
-        layer="schooltool.skin.flourish.IFlourishLayer"
-        title="Persons"
-        name="title" />
+  <flourish:breadcrumb
+      for="schooltool.person.interfaces.IPersonContainer"
+      title="Persons"
+      />
 
-    <flourish:viewlet
-        name="persons"
-        title="Persons"
-        class="schooltool.skin.flourish.page.LinkViewlet"
-        manager="schooltool.app.browser.app.ManageSchoolLinks"
-        permission="schooltool.view"
-        />
+  <flourish:content
+      class="schooltool.app.browser.app.ContentTitle"
+      permission="schooltool.view"
+      for="schooltool.person.interfaces.IPersonContainer"
+      layer="schooltool.skin.flourish.IFlourishLayer"
+      title="Persons"
+      name="title" />
 
-    <flourish:activeViewlet
-        name="persons"
-        manager="schooltool.app.browser.app.ManageSchoolLinks"
-        for="schooltool.person.interfaces.IPersonContainer"
-        />
+  <flourish:viewlet
+      name="persons"
+      title="Persons"
+      class="schooltool.skin.flourish.page.LinkViewlet"
+      manager="schooltool.app.browser.app.ManageSchoolLinks"
+      permission="schooltool.view"
+      />
 
-    <flourish:page
-        name="index.html"
-        for="schooltool.person.interfaces.IPersonContainer"
-        class=".person.FlourishBasicPersonContainerView"
-        permission="schooltool.view"
-        />
+  <flourish:activeViewlet
+      name="persons"
+      manager="schooltool.app.browser.app.ManageSchoolLinks"
+      for="schooltool.person.interfaces.IPersonContainer"
+      />
 
-    <flourish:viewletFactory
-        name="manage_school_links"
-        manager="schooltool.skin.flourish.page.IPageRefineManager"
-        for="schooltool.person.interfaces.IPersonContainer"
-        factory="schooltool.app.browser.app.getAppViewlet"
-        />
+  <flourish:page
+      name="index.html"
+      for="schooltool.person.interfaces.IPersonContainer"
+      class=".person.FlourishBasicPersonContainerView"
+      permission="schooltool.view"
+      />
 
-    <flourish:activeViewlet
-        name="manage_school"
-        manager="schooltool.skin.flourish.page.IHeaderNavigationManager"
-        for="schooltool.person.interfaces.IPersonContainer"
-        />
+  <flourish:viewletFactory
+      name="manage_school_links"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      for="schooltool.person.interfaces.IPersonContainer"
+      factory="schooltool.app.browser.app.getAppViewlet"
+      />
 
-    <flourish:viewlet
-        name="add_person"
-        link="add.html"
-        title="Add Person"
-        view=".person.FlourishBasicPersonContainerView"
-        for="schooltool.person.interfaces.IPersonContainer"
-        manager="schooltool.skin.flourish.page.IContentActionsManager"
-        class="schooltool.skin.flourish.page.LinkViewlet"
-        permission="schooltool.edit"
-        html_class="create"
-        />
+  <flourish:activeViewlet
+      name="manage_school"
+      manager="schooltool.skin.flourish.page.IHeaderNavigationManager"
+      for="schooltool.person.interfaces.IPersonContainer"
+      />
 
-  </configure>
+  <flourish:viewlet
+      name="add_person"
+      link="add.html"
+      title="Add Person"
+      view=".person.FlourishBasicPersonContainerView"
+      for="schooltool.person.interfaces.IPersonContainer"
+      manager="schooltool.skin.flourish.page.IContentActionsManager"
+      class="schooltool.skin.flourish.page.LinkViewlet"
+      permission="schooltool.edit"
+      html_class="create"
+      />
 
   <configure package="schooltool.skin.flourish">
     <flourish:page

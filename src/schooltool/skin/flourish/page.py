@@ -28,7 +28,6 @@ from zope.publisher.browser import BrowserPage
 from zope.traversing.api import getParent
 from zope.traversing.browser.absoluteurl import absoluteURL
 
-from schooltool.app.browser.content import IContentProviders
 from schooltool.common.inlinept import InlineViewPageTemplate
 from schooltool.common.inlinept import InheritTemplate
 from schooltool.skin.flourish.viewlet import Viewlet, ViewletManager
@@ -50,7 +49,7 @@ class Page(BrowserPage):
     def providers(self):
         providers = getMultiAdapter(
             (self.context, self.request, self),
-            IContentProviders)
+            interfaces.IContentProviders)
         return providers
 
     def update(self):

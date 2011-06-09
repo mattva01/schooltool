@@ -767,30 +767,4 @@
       title="Error List"
       />
 
-  <!-- SchoolTool content providers -->
-
-  <zope:adapter factory=".content.SchoolToolContentProviderProxy" />
-
-  <zope:adapter
-      for="*
-           schooltool.skin.ISchoolToolLayer
-           *"
-      provides=".content.IContentProviders"
-      factory=".content.TALESAwareContentProviders" />
-
-  <content
-      class=".app.ContentTitle"
-      permission="schooltool.view"
-      name="title" />
-
-  <content
-      class=".app.ContentLink"
-      permission="schooltool.view"
-      name="link" />
-
-  <content
-      class=".app.ContentLabel"
-      permission="schooltool.view"
-      name="label" />
-
 </configure>

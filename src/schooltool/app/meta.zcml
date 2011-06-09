@@ -1,6 +1,0 @@
-<?xml version="1.0"?>
-<configure xmlns:meta="http://namespaces.zope.org/meta">
-
-  <include package=".browser" file="meta.zcml"/>
-
-</configure>

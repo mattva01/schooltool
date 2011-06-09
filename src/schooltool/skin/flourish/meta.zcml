@@ -3,6 +3,12 @@
   <directives namespace="http://schooltool.org/flourish">
 
     <directive
+        name="content"
+        schema=".zcml_content.IContentDirective"
+        handler=".zcml_content.contentDirective"
+        />
+
+    <directive
         name="viewlet"
         schema=".zcml.IViewletDirective"
         handler=".zcml.viewlet"
@@ -30,6 +36,12 @@
         name="page"
         schema=".zcml.IPageDirective"
         handler=".zcml.page"
+        />
+
+    <directive
+        name="breadcrumb"
+        schema=".zcml_breadcrumb.IBreadcrumbDirective"
+        handler=".zcml_breadcrumb.breadcrumbDirective"
         />
 
   </directives>

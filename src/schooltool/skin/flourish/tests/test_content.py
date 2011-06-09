@@ -27,11 +27,11 @@ from zope.component import queryMultiAdapter
 from zope.interface import implements, Interface
 from zope.interface.verify import verifyObject
 
-from schooltool.app.browser.content import ISchoolToolContentProvider
-from schooltool.app.browser.content import ContentProviders
-from schooltool.app.browser.content import ContentProvider
-from schooltool.app.browser.content import SchoolToolContentProviderProxy
-from schooltool.app.browser.content import IContentProviders
+from schooltool.skin.flourish.interfaces import IContentProvider
+from schooltool.skin.flourish.interfaces import IContentProviders
+from schooltool.skin.flourish.content import ContentProviders
+from schooltool.skin.flourish.content import ContentProvider
+from schooltool.skin.flourish.content import ContentProviderProxy
 from schooltool.app.browser.testing import setUp, tearDown
 
 
@@ -41,13 +41,14 @@ def doctest_ContentProvider():
         >>> from zope.contentprovider.interfaces import IBeforeUpdateEvent
 
         >>> provider = ContentProvider('context', 'request', 'view')
-        >>> verifyObject(ISchoolToolContentProvider, provider)
+        >>> verifyObject(IContentProvider, provider)
         True
 
         >>> events = []
         >>> def log_event(event):
         ...     events.append('%s for %s' %
-        ...         (event.__class__.__name__, event.object.__class__.__name__))
+        ...         (event.__class__.__name__,
+        ...          event.object.__class__.__name__))
         >>> provideHandler(log_event, [IBeforeUpdateEvent])
 
         >>> provider()
@@ -97,10 +98,11 @@ def doctest_ContentProvider():
     """
 
 
-def doctest_SchoolToolContentProviderProxy():
-    """Tests for SchoolToolContentProviderProxy.
+def doctest_ContentProviderProxy():
+    """Tests for ContentProviderProxy.
 
-        >>> from zope.contentprovider.interfaces import IContentProvider
+        >>> from zope.contentprovider.interfaces import (
+        ...     IContentProvider as IZopeContentProvider)
         >>> from zope.contentprovider.interfaces import IBeforeUpdateEvent
         >>> from zope.contentprovider.provider import ContentProviderBase
 
@@ -124,8 +126,8 @@ def doctest_SchoolToolContentProviderProxy():
     The proxied provider behaviour of TALESProviderExpression from
     zope.contentprovider.
 
-        >>> provideAdapter(SchoolToolContentProviderProxy)
-        >>> provider = ISchoolToolContentProvider(old_provider)
+        >>> provideAdapter(ContentProviderProxy)
+        >>> provider = IContentProvider(old_provider)
 
         >>> def print_event(event):
         ...     print event.__class__.__name__, 'for', event.object
@@ -141,10 +143,10 @@ def doctest_SchoolToolContentProviderProxy():
 
     The proxied provider is otherwise transparent.
 
-        >>> verifyObject(IContentProvider, provider)
+        >>> verifyObject(IZopeContentProvider, provider)
         True
 
-        >>> verifyObject(ISchoolToolContentProvider, provider)
+        >>> verifyObject(IContentProvider, provider)
         True
 
         >>> provider.context, provider.request, provider.__parent__
@@ -177,23 +179,23 @@ def doctest_ContentProviders_traversal():
         (<...SomeContext ...>, 'request', 'view')
 
    The adapter is traversable - it looks up content providers by
-   adapting to ISchoolToolContentProvider.
+   adapting to IContentProvider.
 
    Let's register a content provider.
 
-        >>> class SchoolToolContentProvider(ContentProvider):
+        >>> class ContentProvider(ContentProvider):
         ...     def render(self, *args, **kw):
         ...         return 'Rendered %r for %r' % (self, self.context)
 
-        >>> provideAdapter(SchoolToolContentProvider,
+        >>> provideAdapter(ContentProvider,
         ...                (SomeContext, None, None),
-        ...                provides=ISchoolToolContentProvider,
+        ...                provides=IContentProvider,
         ...                name='dummy')
 
         >>> dummy = providers.traverse('dummy', ())
 
         >>> dummy()
-        'Rendered <...SchoolToolContentProvider ...> for <...SomeContext ...>'
+        'Rendered <...ContentProvider ...> for <...SomeContext ...>'
 
     Traversal does not modify further path:
 
@@ -217,10 +219,11 @@ def doctest_ContentProviders_traversal():
         ...     def render(self, *args, **kw):
         ...         return 'Rendered %r for %r' % (self, self.context)
 
-        >>> from zope.contentprovider.interfaces import IContentProvider
+        >>> from zope.contentprovider.interfaces import (
+        ...     IContentProvider as IZopeContentProvider)
         >>> provideAdapter(ContentProviderStub,
         ...                (SomeContext, None, None),
-        ...                provides=IContentProvider,
+        ...                provides=IZopeContentProvider,
         ...                name='info')
 
         >>> providers.traverse('info', ())
@@ -228,18 +231,19 @@ def doctest_ContentProviders_traversal():
         ...
         ContentProviderLookupError: info
 
-    But they need to be adaptable to ISchoolToolContentProvider.
+    But they need to be adaptable to IContentProvider.
+    Also, content providers cache the looked up providers, so we need to reset
+    the cache.
 
-        >>> provideAdapter(SchoolToolContentProviderProxy)
+        >>> provideAdapter(ContentProviderProxy)
+
         >>> info = providers.traverse('info', ())
         Traceback (most recent call last):
         ...
         ContentProviderLookupError: info
 
-    Also, content providers cache the looked up providers, so we need to reset
-    the cache.
-
         >>> providers = adapt(SomeContext(), 'request', 'view')
+
         >>> info = providers.traverse('info', ())
 
         >>> info()
@@ -292,12 +296,12 @@ def doctest_ContentProviders_getitem():
 
         >>> provideAdapter(TestProvider,
         ...                (SomeContext, None, None),
-        ...                provides=ISchoolToolContentProvider,
+        ...                provides=IContentProvider,
         ...                name='frog')
 
         >>> provideAdapter(TestProvider,
         ...                (SomeContext, None, None),
-        ...                provides=ISchoolToolContentProvider,
+        ...                provides=IContentProvider,
         ...                name='pond')
 
         >>> providers['frog']
@@ -324,9 +328,11 @@ def doctest_TALESAwareContentProviders():
     they add the requested TAL attributes to the provider.  Tal attributes are
     taken from the tal engine.
 
-        >>> from schooltool.app.browser.content import TALESAwareContentProviders
+        >>> from schooltool.skin.flourish.content import (
+        ...     TALESAwareContentProviders)
 
-        >>> providers = TALESAwareContentProviders('context', 'request', 'view')
+        >>> providers = TALESAwareContentProviders(
+        ...     'context', 'request', 'view')
 
         >>> class ContentProviderStub(ContentProvider):
         ...     def render(self, *args, **kw):
@@ -334,7 +340,7 @@ def doctest_TALESAwareContentProviders():
 
         >>> provideAdapter(ContentProviderStub,
         ...                (None, None, None),
-        ...                provides=ISchoolToolContentProvider,
+        ...                provides=IContentProvider,
         ...                name='dummy')
 
         >>> class TALContext(object):
@@ -375,7 +381,7 @@ def doctest_TALESAwareContentProviders():
 
         >>> provideAdapter(GreetingContentProvider,
         ...                (None, None, None),
-        ...                provides=ISchoolToolContentProvider,
+        ...                provides=IContentProvider,
         ...                name='greeting')
 
    We can now see that relevant data is passed from tal.

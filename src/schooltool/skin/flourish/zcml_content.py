@@ -28,20 +28,13 @@ from zope.browserpage import ViewPageTemplateFile
 from zope.interface import Interface
 from zope.configuration.exceptions import ConfigurationError
 from zope.component import zcml
-from zope.publisher.interfaces.browser import IDefaultBrowserLayer
-from zope.publisher.interfaces.browser import IBrowserView
 from zope.viewlet.metadirectives import ITemplatedContentProvider
-from zope.viewlet.metaconfigure import _handle_permission
-from zope.viewlet.metaconfigure import _handle_allowed_interface
-from zope.viewlet.metaconfigure import _handle_allowed_attributes
-from zope.viewlet.metaconfigure import _handle_for
 
-from schooltool.app.browser.content import ISchoolToolContentProvider
-from schooltool.app.browser.content import ContentProvider
-from schooltool.skin import ISchoolToolLayer
+from schooltool.skin.flourish.content import ContentProvider
+from schooltool.skin.flourish import interfaces
 
 
-class ISchoolToolContentDirective(ITemplatedContentProvider):
+class IContentDirective(ITemplatedContentProvider):
     """Define the SchoolTool content provider."""
 
     update = zope.configuration.fields.PythonIdentifier(
@@ -54,8 +47,14 @@ class ISchoolToolContentDirective(ITemplatedContentProvider):
         required=False,
         )
 
+    provides = zope.configuration.fields.GlobalInterface(
+        title=u"Interface the component provides",
+        required=False,
+        default=interfaces.IContentProvider,
+        )
 
-ISchoolToolContentDirective.setTaggedValue('keyword_arguments', True)
+
+IContentDirective.setTaggedValue('keyword_arguments', True)
 
 
 def handle_security(class_, permission, interfaces, attributes):
@@ -94,24 +93,26 @@ def subclass_content(class_, name,
 
 def contentDirective(
     _context, name, permission,
-    for_=Interface, layer=ISchoolToolLayer, view=IBrowserView,
+    for_=Interface, layer=interfaces.IFlourishLayer, view=interfaces.IPage,
     class_=ContentProvider, template=None,
     update='update', render='render',
     allowed_interface=(), allowed_attributes=(),
     **kwargs):
 
-    if not ISchoolToolContentProvider.implementedBy(class_):
+    if not interfaces.IContentProvider.implementedBy(class_):
         class_ = type(name, (class_, ContentProvider), {})
 
     allowed_interface = (tuple(allowed_interface) +
-                         (ISchoolToolContentProvider, ))
+                         (interfaces.IContentProvider, ))
 
     if (render == 'render' and
         class_.render == ContentProvider.render):
         if template:
             render = 'template'
         else:
-            raise ConfigurationError("When template and render not specified, class must implement 'render' method")
+            raise ConfigurationError(
+                "When template and render not specified, "
+                "class must implement 'render' method")
 
     class_ = subclass_content(
         class_, name,
@@ -125,12 +126,13 @@ def contentDirective(
                     allowed_interface, allowed_attributes)
 
     _context.action(
-        discriminator = ('schooltool.skin.flourish.content',
-                         for_, layer, view, name),
-        callable = zope.component.zcml.handler,
-        args = ('registerAdapter',
-                class_,
-                (for_, layer, view),
-                ISchoolToolContentProvider,
-                name,
-                _context.info),)
+        discriminator=('schooltool.skin.flourish.content',
+                       for_, layer, view, name),
+        callable=zope.component.zcml.handler,
+        args=('registerAdapter',
+              class_,
+              (for_, layer, view),
+              interfaces.IContentProvider,
+              name,
+              _context.info),
+        )

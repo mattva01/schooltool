@@ -23,33 +23,23 @@ Schooltool content providers.
 from zope.component import adapts, queryMultiAdapter
 from zope.interface import implements
 import zope.contentprovider.interfaces
-from zope.contentprovider.interfaces import IContentProvider
 from zope.contentprovider.interfaces import ContentProviderLookupError
 from zope.contentprovider.tales import addTALNamespaceData
 from zope.contentprovider.provider import ContentProviderBase
 from zope.event import notify
 from zope.location.interfaces import ILocation
 from zope.proxy.decorator import SpecificationDecoratorBase
-from zope.publisher.interfaces.browser import IBrowserPage
 from zope.publisher.interfaces import NotFound
 from zope.publisher.browser import BrowserPage
 from zope.tales.interfaces import ITALESFunctionNamespace
-from zope.traversing.interfaces import ITraversable
 
-
-class IContentProviders(ITraversable):
-    pass
-
-
-class ISchoolToolContentProvider(IBrowserPage, IContentProvider):
-    def __call__(*args, **kw):
-        """Compute the response body."""
+from schooltool.skin.flourish import interfaces
 
 
 class ContentProvider(ContentProviderBase, BrowserPage):
     """Base SchoolTool content provider class."""
 
-    implements(ISchoolToolContentProvider)
+    implements(interfaces.IContentProvider)
 
     @property
     def view(self):
@@ -66,12 +56,12 @@ class ContentProvider(ContentProviderBase, BrowserPage):
         return self.render(*args, **kw)
 
 
-class SchoolToolContentProviderProxy(SpecificationDecoratorBase):
+class ContentProviderProxy(SpecificationDecoratorBase):
     """A content provider proxy that mimics behaviour of
     zope.contentrpovider.tales.TALESProviderExpression
     """
-    adapts(IContentProvider)
-    implements(ISchoolToolContentProvider)
+    adapts(zope.contentprovider.interfaces.IContentProvider)
+    implements(interfaces.IContentProvider)
 
     __slots__ = ('__call__', 'browserDefault', 'publishTraverse')
 
@@ -89,7 +79,7 @@ class SchoolToolContentProviderProxy(SpecificationDecoratorBase):
 
 
 class ContentProviders(object):
-    implements(IContentProviders)
+    implements(interfaces.IContentProviders)
 
     def __init__(self, context, request, view):
         self.context = context
@@ -117,13 +107,13 @@ class ContentProviders(object):
     def lookup(self, name):
         provider = queryMultiAdapter(
             (self.context, self.request, self.view),
-            ISchoolToolContentProvider, name)
+            interfaces.IContentProvider, name)
         if provider is None:
             provider = queryMultiAdapter(
                 (self.context, self.request, self.view),
-                IContentProvider, name)
+                zope.contentprovider.interfaces.IContentProvider, name)
             if provider is not None:
-                provider = ISchoolToolContentProvider(provider, None)
+                provider = interfaces.IContentProvider(provider, None)
         if (provider is not None and
             ILocation.providedBy(provider)):
             provider.__name__ = name

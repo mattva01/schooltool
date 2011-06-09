@@ -30,9 +30,10 @@ from zope.configuration.exceptions import ConfigurationError
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.publisher.interfaces.browser import IBrowserView
 
-from schooltool.app.browser.meta import contentDirective
-from schooltool.app.browser.meta import subclass_content
-from schooltool.app.browser.meta import handle_interfaces, handle_security
+from schooltool.skin.flourish.zcml_content import contentDirective
+from schooltool.skin.flourish.zcml_content import subclass_content
+from schooltool.skin.flourish.zcml_content import handle_interfaces
+from schooltool.skin.flourish.zcml_content import handle_security
 from schooltool.skin.flourish import interfaces
 from schooltool.skin.flourish.page import Page
 from schooltool.skin.flourish.viewlet import Viewlet, ViewletManager
@@ -176,17 +177,7 @@ class IPageDirective(zope.browserpage.metadirectives.IPagesDirective,
         )
 
 
-class IActiveViewletDirective(Interface):
-
-    name = zope.schema.TextLine(
-        title=u"The name of the active viewlet.",
-        required=False,
-        )
-
-    factory = zope.configuration.fields.GlobalObject(
-        title=u"The adapter name of the active viewlet.",
-        required=False,
-        )
+class IContentOrientedDirective(Interface):
 
     for_ = zope.configuration.fields.GlobalObject(
         title=u"The interface or class this viewlet is active in.",
@@ -200,6 +191,19 @@ class IActiveViewletDirective(Interface):
 
     view = zope.configuration.fields.GlobalObject(
         title=_("The view."),
+        required=False,
+        )
+
+
+class IActiveViewletDirective(IContentOrientedDirective):
+
+    name = zope.schema.TextLine(
+        title=u"The name of the active viewlet.",
+        required=False,
+        )
+
+    factory = zope.configuration.fields.GlobalObject(
+        title=u"The adapter name of the active viewlet.",
         required=False,
         )
 

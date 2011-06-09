@@ -21,16 +21,15 @@ Flourish breadcrumbs.
 """
 
 import zope.schema
+from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import queryMultiAdapter
 from zope.interface import implements, Interface, Attribute
+from zope.traversing.api import getParent
 from zope.traversing.interfaces import IContainmentRoot
 from zope.traversing.browser.absoluteurl import absoluteURL
 
-from schooltool.app.browser.content import ISchoolToolContentProvider
-from schooltool.app.browser.content import ContentProvider
-from schooltool.common.inlinept import InlineViewPageTemplate
-
-from schooltool.common import SchoolToolMessage as _
+from schooltool.skin.flourish.content import ContentProvider
+from schooltool.skin.flourish import interfaces
 
 
 class IBreadcrumbInfo(Interface):
@@ -49,7 +48,7 @@ class IBreadcrumbInfo(Interface):
         required=False)
 
 
-class IBreadcrumb(IBreadcrumbInfo, ISchoolToolContentProvider):
+class IBreadcrumb(IBreadcrumbInfo, interfaces.IContentProvider):
 
     crumb_parent = Attribute(
         u"Suggested parent context for breadcrumb lookup.")
@@ -67,37 +66,24 @@ class BreadCrumbInfo(object):
         self.name = name
         self.url = url
 
+    def __repr__(self):
+        return '<%s %r>' % (self.__class__.__name__, self.name)
+
 
 class Breadcrumbs(ContentProvider):
     implements(IBreadcrumb)
 
-    template = InlineViewPageTemplate('''
-      <ul class="breadcrumbs">
-        <tal:block repeat="crumb view/breadcrumbs"
-                   condition="crumb/title">
-          <li tal:attributes="
-                class python:repeat['crumb'].end() and 'last' or None">
-            <a tal:condition="crumb/link"
-               tal:attributes="href crumb/link"
-               tal:content="crumb/name">
-               [crumb with link]
-            </a>
-            <span tal:condition="not:crumb/link"
-                  tal:content="crumb/name">
-               [crumb without link]
-            </span>
-          </li>
-        </tal:block>
-    ''')
+    template = ViewPageTemplateFile('templates/breadcrumbs.pt')
 
     @property
     def title(self):
-        name = getattr(self.context, 'title', None)
-        if name is None:
-            name = getattr(self.context, '__name__', None)
-        if name is None and IContainmentRoot.providedBy(self.context):
-            name = _('SchoolTool')
-        return name
+        title_content = queryMultiAdapter(
+            (self.context, self.request, self.view),
+            interfaces.IContentProvider, 'title')
+        if title_content is None:
+            return None
+
+        return title_content()
 
     @property
     def link(self):
@@ -105,19 +91,22 @@ class Breadcrumbs(ContentProvider):
 
     @property
     def crumb_parent(self):
-        if self.context.__parent__ is None:
+        if getattr(self.context, '__parent__', None) is None:
             return None
         if IContainmentRoot.providedBy(self.context):
             return None
         return self.context.__parent__
 
+    @property
     def follow_crumb(self):
         parent = self.crumb_parent
         if parent is None:
             return None
         breadcrumb = queryMultiAdapter(
             (parent, self.request, self.view),
-            IBreadcrumb)
+            IBreadcrumb,
+            name="",
+            default=None)
         return breadcrumb
 
     @property
@@ -129,7 +118,7 @@ class Breadcrumbs(ContentProvider):
         follow = self.follow_crumb
         if follow is not None:
             breadcrumbs = follow.breadcrumbs + breadcrumbs
-        return breadcrumbs
+        return [b for b in breadcrumbs if b.name]
 
     def render(self, *args, **kw):
         return self.template(*args, **kw)
@@ -139,12 +128,15 @@ class PageBreadcrumbs(Breadcrumbs):
     implements(IBreadcrumb)
 
     @property
-    def breadcrumbs(self):
-        crumb = BreadCrumbInfo(self.title, self.link)
-        breadcrumbs = [crumb]
-        if self.request.URL != self.link:
-            breadcrumbs.append(BreadCrumbInfo(self.view.title, None))
-        follow = self.follow_crumb
-        if follow is not None:
-            breadcrumbs = follow.breadcrumbs + breadcrumbs
-        return breadcrumbs
+    def title(self):
+        title = getattr(self.view, 'subtitle', None)
+        title = title or getattr(self.view, 'title', None)
+        return title
+
+    @property
+    def link(self):
+        return None
+
+    @property
+    def crumb_parent(self):
+        return self.context

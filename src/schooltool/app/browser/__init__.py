@@ -40,7 +40,7 @@ from pytz import timezone
 
 from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.app.interfaces import ISchoolToolApplication
-from schooltool.app.browser.content import IContentProviders
+from schooltool.skin.flourish.interfaces import IContentProviders
 from schooltool.person.interfaces import IPerson
 
 from schooltool.common import SchoolToolMessage as _

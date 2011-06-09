@@ -11,7 +11,6 @@
   <include package="zc.resourcelibrary" file="meta.zcml"/>
   <include package="schooltool.securitypolicy" file="meta.zcml" />
   <include package="schooltool.skin" file="meta.zcml" />
-  <include package="schooltool.app" file="meta.zcml" />
   <include package="z3c.form" file="meta.zcml" />
   <include package="z3c.macro" file="meta.zcml" />
   <include package="z3c.template" file="meta.zcml" />

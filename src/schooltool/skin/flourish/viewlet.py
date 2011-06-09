@@ -27,7 +27,7 @@ from zope.interface import implements
 from zope.proxy import removeAllProxies
 from zope.publisher.browser import BrowserPage
 
-from schooltool.app.browser.content import ContentProvider
+from schooltool.skin.flourish.content import ContentProvider
 from schooltool.common.inlinept import InlineViewPageTemplate
 from schooltool.skin.flourish.interfaces import IViewlet, IViewletManager
 from schooltool.skin.flourish.interfaces import IManagerViewlet

@@ -5,6 +5,8 @@
            xmlns:flourish="http://schooltool.org/flourish"
            i18n_domain="schooltool">
 
+  <!-- Common resources -->
+
   <zope:resourceLibrary
       name="schooltool.skin.flourish"
       require="" >
@@ -14,6 +16,19 @@
                page.css"
       />
   </zope:resourceLibrary>
+
+  <!-- Content provider machinery -->
+
+  <zope:adapter
+      for="*
+           schooltool.skin.flourish.IFlourishLayer
+           *"
+      provides="schooltool.skin.flourish.interfaces.IContentProviders"
+      factory="schooltool.skin.flourish.content.TALESAwareContentProviders" />
+
+  <zope:adapter factory="schooltool.skin.flourish.content.ContentProviderProxy" />
+
+  <!-- Page viewlet managers and other conent -->
 
   <flourish:viewletManager
       name="header_navigation"
@@ -70,18 +85,12 @@
       permission="zope.Public"
       />
 
-  <content
-      name="breadcrumbs"
-      class=".breadcrumbs.Breadcrumbs"
-      permission="zope.Public"
-      />
-
   <flourish:activeViewlet
       factory="schooltool.skin.flourish.page.getParentActiveViewletName"
       manager="schooltool.skin.flourish.page.IHeaderNavigationManager"
       />
 
-  <content
+  <flourish:content
       name="breadcrumbs"
       class=".breadcrumbs.PageBreadcrumbs"
       view=".interfaces.IPage"

@@ -86,7 +86,7 @@ def doctest_SchoolToolAPI_content():
         >>> from zope.tales.interfaces import ITALESFunctionNamespace
 
         >>> from schooltool.app.browser import SchoolToolAPI
-        >>> from schooltool.app.browser.content import IContentProviders
+        >>> from schooltool.skin.flourish.interfaces import IContentProviders
 
     'context/schooltool:content' returns a traversable to content providers
     for given context and request, view defined in tal.
