@@ -119,7 +119,7 @@ class InlineViewPageTemplate(InlineTemplateBase):
         return BoundPageTemplate(self, instance)
 
 
-class InheritTemplate(object):
+def InheritTemplate(template):
     """Re-bind templates from other classes.
 
         >>> class Foo(object):
@@ -142,11 +142,6 @@ class InheritTemplate(object):
         <schooltool.common.inlinept.InlinePageTemplate ...>
 
     """
-
-    def __init__(self, template):
-        self.template = template
-
-    def __get__(self, instance, type):
-        if isinstance(self.template, BoundPageTemplate):
-            return BoundPageTemplate(self.template.im_func, instance)
-        return self.template
+    if isinstance(template, BoundPageTemplate):
+        return template.im_func
+    return template
