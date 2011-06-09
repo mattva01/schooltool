@@ -404,6 +404,27 @@ class PersonEditView(form.EditForm, PersonForm):
                  mapping={'fullname': self.context.title})
 
 
+class FlourishPersonEditView(flourish.page.Page, PersonEditView):
+    def update(self):
+        PersonEditView.update(self)
+
+    @button.buttonAndHandler(_("Cancel"))
+    def handle_cancel_action(self, action):
+        self.request.response.redirect(self.nextURL())
+
+    @button.buttonAndHandler(_('Apply'), name='apply')
+    def handleApply(self, action):
+        super(FlourishPersonEditView, self).handleApply.func(self, action)
+        # XXX: hacky sucessful submit check
+        if (self.status == self.successMessage or
+            self.status == self.noChangesMessage):
+            self.request.response.redirect(self.nextURL())
+
+    def nextURL(self):
+        url = absoluteURL(self.context, self.request)
+        return url
+
+
 class PersonTerm(object):
     """A term for displaying a person."""
     implements(ITitledTokenizedTerm)
