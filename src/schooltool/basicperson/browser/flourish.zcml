@@ -79,6 +79,11 @@
 
   <!-- Person index page -->
 
+  <flourish:breadcrumb
+      for="schooltool.basicperson.interfaces.IBasicPerson"
+      class="schooltool.skin.flourish.breadcrumbs.TitleBreadcrumb"
+      />
+
   <configure package="schooltool.skin.flourish">
     <flourish:page
         name="index.html"

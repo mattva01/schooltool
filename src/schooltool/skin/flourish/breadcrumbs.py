@@ -140,3 +140,10 @@ class PageBreadcrumbs(Breadcrumbs):
     @property
     def crumb_parent(self):
         return self.context
+
+
+class TitleBreadcrumb(Breadcrumbs):
+
+    @property
+    def title(self):
+        return self.context.title
