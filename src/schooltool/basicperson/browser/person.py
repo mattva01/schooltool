@@ -40,11 +40,11 @@ import schooltool.skin.flourish.containers
 from schooltool.skin import flourish
 from schooltool.app.browser.app import RelationshipViewBase
 from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.common.inlinept import InlineViewPageTemplate
 from schooltool.skin.containers import TableContainerView
 from schooltool.group.interfaces import IGroupContainer
 from schooltool.person.interfaces import IPersonFactory
 from schooltool.schoolyear.interfaces import ISchoolYearContainer
-
 from schooltool.basicperson.interfaces import IDemographicsFields
 from schooltool.basicperson.interfaces import IBasicPerson
 
@@ -201,6 +201,15 @@ class PersonView(form.DisplayForm, PersonForm):
     def __call__(self):
         self.update()
         return self.render()
+
+
+class FlourishPersonView(flourish.page.Page, PersonView):
+    def update(self):
+        PersonView.update(self)
+
+
+class FlourishPersonInfo(flourish.page.Content):
+    body_template = ViewPageTemplateFile('templates/f_person_view_details.pt')
 
 
 class PersonAddFormBase(form.AddForm, PersonForm):

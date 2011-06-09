@@ -75,6 +75,10 @@ class IViewletDirective(zope.viewlet.metadirectives.IViewletDirective,
                         IViewletOrder):
     """A viewlet directive."""
 
+    manager = zope.configuration.fields.GlobalObject(
+        title=_("The viewlet Manager"),
+        required=True)
+
 
 class IViewletFactoryDirective(zope.component.zcml.IAdapterDirective):
 
@@ -246,7 +250,7 @@ def viewletManager(
 def viewlet(
     _context, name, permission,
     for_=Interface, layer=interfaces.IFlourishLayer, view=interfaces.IPage,
-    manager=interfaces.IViewletManager,
+    manager=None,
     class_=Viewlet, template=None,
     update='update', render='render',
     allowed_interface=(), allowed_attributes=(),

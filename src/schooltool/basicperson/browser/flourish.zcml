@@ -73,8 +73,28 @@
        class="schooltool.basicperson.browser.person.PersonAddView"
        permission="schooltool.edit"
        template="templates/main.pt"
-       content_template="templates/z3c_form.pt"
+       content_template="templates/z3c_form_edit.pt"
        />
   </configure>
+
+  <!-- Person index page -->
+
+  <configure package="schooltool.skin.flourish">
+    <flourish:page
+        name="index.html"
+        for="schooltool.basicperson.interfaces.IBasicPerson"
+        class="schooltool.basicperson.browser.person.FlourishPersonView"
+        content_template="templates/z3c_form_display.pt"
+        permission="schooltool.view"
+        />
+  </configure>
+
+  <flourish:viewlet
+      name="details"
+      view=".person.FlourishPersonView"
+      permission="schooltool.view"
+      manager="schooltool.skin.flourish.page.IPageContentManager"
+      class=".person.FlourishPersonInfo"
+      />
 
 </configure>

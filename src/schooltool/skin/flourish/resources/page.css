@@ -119,12 +119,12 @@
     margin: 0px 0px 8px 0px;
 }
 
-.page .container div.content>div.header {
+.page .container div.content div.header {
     margin: 0px;
     padding: 0px
 }
 
-.page .container div.content>div.body {
+.page .container div.content div.body {
     margin: 0px;
     padding: 7px;
     border: 1px solid #bcbab6;
@@ -247,7 +247,7 @@
     border-radius: 6px 6px 0px 0px;
 }
 
-.page div.related div.content>div.header {
+.page div.related div.content div.header {
     font-size: 16px;
     line-height: 20px;
     padding: 3px 7px 4px 8px;
@@ -260,7 +260,7 @@
     border-radius: 6px 6px 0px 0px;
 }
 
-.page div.related div.content>div.body {
+.page div.related div.content div.body {
     padding: 7px;
 
     background-color: white;

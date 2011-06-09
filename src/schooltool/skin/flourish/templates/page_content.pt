@@ -1,0 +1,11 @@
+<div>
+  <div class="header"
+       tal:define="actions context/schooltool:content/actions"
+       tal:condition="actions"
+       tal:content="structure actions">
+    [action] [buttons]
+  </div>
+  <div class="body" tal:content="structure view/body_template">
+    [ The content itself ]
+  </div>
+</div>

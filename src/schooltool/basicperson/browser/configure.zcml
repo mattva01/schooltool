@@ -17,6 +17,7 @@
       class=".person.PersonView"
       permission="schooltool.view"
       menu="schooltool_actions"
+      layer=".skin.IBasicPersonLayer"
       title="View"
       />
 

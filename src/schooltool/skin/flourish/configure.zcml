@@ -60,7 +60,7 @@
 
   <flourish:viewletManager
       name="actions"
-      view=".page.IPageContentManager"
+      view=".page.Content"
       class=".page.ListNavigationContent"
       list_class="actions"
       active_viewlet=""

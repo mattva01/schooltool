@@ -97,18 +97,7 @@ class Refine(Viewlet):
 
 
 class Content(Viewlet):
-
-    template = InlineViewPageTemplate('''
-      <div class="header"
-           tal:define="actions context/schootlool:content/actions"
-           tal:condition="actions"
-           tal:content="structure actions">
-        [action] [buttons]
-      </div>
-      <div class="body" tal:content="structure view/body_template">
-        [ The content itself ]
-      </div>
-    ''')
+    template = ViewPageTemplateFile('templates/page_content.pt')
     body_template = None
     render = lambda self, *a, **kw: self.template(*a, **kw)
 
