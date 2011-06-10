@@ -97,4 +97,6 @@
       permission="zope.Public"
       />
 
+  <include file="containers.zcml" />
+
 </configure>

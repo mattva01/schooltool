@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/browser"
+           xmlns:z3c="http://namespaces.zope.org/z3c"
+           xmlns:zope="http://namespaces.zope.org/zope"
+           xmlns:flourish="http://schooltool.org/flourish"
+           i18n_domain="schooltool">
+
+  <flourish:page
+    name="delete.html"
+    for="zope.container.interfaces.IContainer"
+    class="schooltool.skin.flourish.containers.ContainerDeleteView"
+    content_template="templates/container_delete.pt"
+    permission="schooltool.edit"
+    />
+
+</configure>
