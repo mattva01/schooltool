@@ -31,6 +31,7 @@ from zope.schema import Password, TextLine, Choice, List, Object
 from zope.schema import ValidationError
 from zope.schema.interfaces import ITitledTokenizedTerm, IField
 from zope.traversing.browser.absoluteurl import absoluteURL
+from zope.viewlet.viewlet import ViewletBase
 
 import z3c.form.interfaces
 from z3c.form.validator import SimpleFieldValidator
@@ -532,6 +533,18 @@ class PersonAdviseeView(RelationshipViewBase):
 
     def getCollection(self):
         return self.context.advisees
+
+
+class AdvisoryViewlet(ViewletBase):
+    """A viewlet showing the advisors/advisees of a person."""
+
+    @property
+    def advisors(self):
+        return list(self.context.advisors)
+
+    @property
+    def advisees(self):
+        return list(self.context.advisees)
 
 
 ###############  Base class of all group-aware add views ################

@@ -1,0 +1,44 @@
+<div>
+<h5 i18n:translate="">Advisory</h5>
+<div>
+<div tal:define="advisors view/advisors"
+     i18n:domain="schooltool">
+  <h3 i18n:translate="">Advisors</h3>
+  <ul>
+    <li tal:repeat="advisor advisors">
+      <a tal:replace="structure advisor/title" />
+    </li>
+  </ul>
+  <div>
+    <a class="modify" href="" title="Manage this person's advisors"
+       tal:attributes="href string:${context/@@absolute_url}/@@advisors.html"
+       i18n:attributes="title"
+       i18n:translate="">
+      edit advisors
+    </a>
+  </div>
+</div>
+
+<div>&nbsp;</div>
+
+<div tal:define="advisees view/advisees"
+     i18n:domain="schooltool">
+  <h3 i18n:translate="">Advisees</h3>
+  <ul>
+    <li tal:repeat="advisee advisees">
+      <a tal:replace="structure advisee/title" />
+    </li>
+  </ul>
+  <div>
+    <a class="modify" href="" title="Manage this person's advisees"
+       tal:attributes="href string:${context/@@absolute_url}/@@advisees.html"
+       i18n:attributes="title"
+       i18n:translate="">
+      edit advisees
+    </a>
+  </div>
+</div>
+
+</div>
+</div>
+

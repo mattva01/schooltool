@@ -1,7 +1,10 @@
+<div>
+<h5 i18n:translate="">Sections</h5>
+<div>
 <div class="info-block clearfix" tal:define="schoolyears view/instructorOf"
      tal:condition="view/isTeacher"
      i18n:domain="schooltool">
-  <h5 i18n:translate="">Sections Taught</h5>
+  <h3 i18n:translate="">Sections Taught</h3>
   <div class="tree_list" tal:condition="schoolyears">
     <ul>
       <li tal:repeat="schoolyear schoolyears">
@@ -31,7 +34,7 @@
 <div class="info-block clearfix" tal:define="schoolyears view/learnerOf"
      tal:condition="view/isLearner"
      i18n:domain="schooltool">
-  <h5 i18n:translate="">Sections</h5>
+  <h3 i18n:translate="">Sections Attended</h3>
   <div class="tree_list" tal:condition="schoolyears">
     <ul>
       <li tal:repeat="schoolyear schoolyears">
@@ -57,3 +60,6 @@
     </ul>
   </div>
 </div>
+</div>
+</div>
+
