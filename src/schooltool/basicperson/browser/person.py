@@ -44,10 +44,11 @@ from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.common.inlinept import InlineViewPageTemplate
 from schooltool.skin.containers import TableContainerView
 from schooltool.group.interfaces import IGroupContainer
-from schooltool.person.interfaces import IPersonFactory
+from schooltool.person.interfaces import IPerson, IPersonFactory
 from schooltool.schoolyear.interfaces import ISchoolYearContainer
 from schooltool.basicperson.interfaces import IDemographicsFields
 from schooltool.basicperson.interfaces import IBasicPerson
+from schooltool.table.table import DependableCheckboxColumn
 
 from schooltool.common import SchoolToolMessage as _
 
@@ -70,21 +71,33 @@ class BasicPersonContainerView(TableContainerView):
         return syc
 
 
+class DeletePersonCheckboxColumn(DependableCheckboxColumn):
+
+    def __init__(self, *args, **kw):
+        kw = dict(kw)
+        self.disable_items = kw.pop('disable_items', None)
+        super(DeletePersonCheckboxColumn, self).__init__(*args, **kw)
+
+    def hasDependents(self, item):
+        if self.disable_items and item.__name__ in self.disable_items:
+            return True
+        return DependableCheckboxColumn.hasDependents(self, item)
+
+
 class FlourishBasicPersonContainerView(flourish.containers.TableContainerView):
     """A Person Container view."""
 
-    view_template = ViewPageTemplateFile("templates/f_container.pt")
-    delete_template = ViewPageTemplateFile("templates/f_person_container_delete.pt")
-
-    def isDeletingHimself(self):
-        person = IBasicPerson(self.request.principal, None)
-        return person in self.itemsToDelete
-
-    @property
-    def schoolyears(self):
-        app = ISchoolToolApplication(None)
-        syc = ISchoolYearContainer(app)
-        return syc
+    def getColumnsBefore(self):
+        disable_users = []
+        person = IPerson(self.request.principal, None)
+        if person is not None:
+            disable_users.append(person.__name__)
+        if self.canModify():
+            return [DeletePersonCheckboxColumn(disable_items=disable_users,
+                                               prefix="delete",
+                                               name='delete_checkbox',
+                                               title=u'')]
+        return []
 
 
 class IPersonAddForm(IBasicPerson):

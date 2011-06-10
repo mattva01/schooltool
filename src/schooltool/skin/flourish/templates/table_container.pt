@@ -1,6 +1,7 @@
 <div tal:define="canModify view/canModify">
   <tal:block replace="structure view/table/batch/render" />
-  <form method="post" tal:attributes="action string:${context/@@absolute_url}">
+  <form method="post"
+        tal:attributes="action view/deleteURL">
     <tal:block tal:condition="view/table/filter_widget"
                tal:replace="structure view/table/filter_widget/render" />
     <tal:if condition="view/table/batch">
@@ -13,7 +14,7 @@
       </div>
         <tal:block replace="structure view/table/render" />
         <div class="controls" tal:condition="canModify">
-          <input type="submit" class="button-cancel" value="Delete"
+          <input type="submit" class="button-cancel" value="Delete selected"
                  name="DELETE"
                  i18n:attributes="value delete-button;" />
         </div>

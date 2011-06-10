@@ -99,59 +99,38 @@ class ContainerDeleteView(Page):
 
 
 class TableContainerView(Page):
-    """A base view for containers that use zc.table to display items.
+    """A base view for containers that use zc.table to display items."""
 
-    Subclasses must provide the following attributes that are used in the
-    page template:
-
-        `index_title` -- Title of the index page.
-
-    """
-
-    view_template = ViewPageTemplateFile('templates/table_container.pt')
-    delete_template = ViewPageTemplateFile('templates/container_delete.pt')
+    content_template = ViewPageTemplateFile('templates/table_container.pt')
 
     def __init__(self, context, request):
         self.request = request
         self.context = context
         self.table = queryMultiAdapter((context, request), ITableFormatter)
 
-    def setUpTableFormatter(self, formatter):
-        columns_before = []
+    def getColumnsBefore(self):
         if self.canModify():
-            columns_before = [DependableCheckboxColumn(prefix="delete",
-                                                       name='delete_checkbox',
-                                                       title=u'')]
+            return [DependableCheckboxColumn(prefix="delete",
+                                             name='delete_checkbox',
+                                             title=u'')]
+        return []
+
+    def setUpTableFormatter(self, formatter):
+        columns_before = self.getColumnsBefore()
         formatter.setUp(formatters=[url_cell_formatter],
                         columns_before=columns_before)
 
     @property
-    def content_template(self):
-        if 'DELETE' in self.request:
-            return self.delete_template
-        return self.view_template
+    def container(self):
+        return self.context
 
     def update(self):
-        if 'CONFIRM' in self.request:
-            for key in self.listIdsForDeletion():
-                del self.context[key]
-                self.request.response.redirect(self.nextURL())
-        elif 'CANCEL' in self.request:
-            self.request.response.redirect(self.nextURL())
-        elif 'DELETE' not in self.request:
-            self.setUpTableFormatter(self.table)
+        self.setUpTableFormatter(self.table)
 
-    def nextURL(self):
-        return absoluteURL(self.container, self.request)
+    @property
+    def deleteURL(self):
+        container_url = absoluteURL(self.container, self.request)
+        return '%s/%s' % (container_url, 'delete.html')
 
     def canModify(self):
-        return canAccess(self.context, '__delitem__')
-
-    def listIdsForDeletion(self):
-        return [key for key in self.context
-                if "delete.%s" % key in self.request]
-
-    def _listItemsForDeletion(self):
-        return [self.context[key] for key in self.listIdsForDeletion()]
-
-    itemsToDelete = property(_listItemsForDeletion)
+        return canAccess(self.container, '__delitem__')
