@@ -10,25 +10,13 @@
 
 @media all {
 
+/* General elements */
+
 body {
+    background: #ffffff url(bg_dotted.png) repeat scroll 0 0;
+    color: #333333;
     font-family: 'Ubuntubeta', 'Ubuntu', 'Bitstream Vera Sans',
                  'DejaVu Sans', Tahoma, sans-serif;
-    font-size: 100%;
-
-    background: white;
-    color: #000;
-    margin: 0px;
-    line-height: 1em;
-}
-
-body div.schooltool {
-    color: #000;
-}
-
-h1, h2, h3, h4, h5, h6 {
-    margin: 0px;
-    padding: 0px;
-    font-weight: normal;
 }
 
 h1 {
@@ -52,171 +40,135 @@ h4, h5, h6 {
     line-height: 20px;
 }
 
-p, ul, li {
-    font-size: 12px;
-    line-height: 16px;
-}
-
 p {
-    margin: 8px 0px;
+    margin-bottom: 8px;
 }
 
-A, A:link, A:visited, A:hover, A:active {
-        color: #304d6b;
+a, a:link, a:visited, a:hover, a:active {
+    color: #dd4814;
 }
 
 p.small {
-  font-size: 10px;
-  line-height: 14px;
+    font-size: 10px;
+    line-height: 14px;
 }
 
 pre {
-  overflow: auto;
+    overflow: auto;
 }
 
-.schooltool>div.header {
-    margin: 0px auto;
+/* Layout */
+
+.schooltool > .header,
+.schooltool > .page,
+.schooltool > .footer {
     width: 976px;
-    background:#a00;
-
+    margin: 0 auto;
     position: relative;
-    z-index: 1;
+}
 
-    -moz-box-shadow: 0px 0px 4px #888;
-    -webkit-box-shadow: 0px 0px 4px #888;
-    box-shadow: 0px 0px 4px #888;
+.schooltool > .header {
+    background-color: #ffffff;
+}
+
+.schooltool > .page {
+    background-color: #ffffff;
+    padding-bottom: 64px;
+}
+
+.schooltool > .footer {
+    background-color: #f7f7f7;
+    clear: both;
+    padding-bottom: 16px;
+}
+
+.schooltool > .footer > p {
+    color: #aea79f;
+    font-size: 10px;
+    line-height: 14px;
+    padding: 4px 16px;
+}
+
+/* Header - main navigation, second navigation, headinfo, breadcrumbs*/
+
+.header > h1.brand {
+    color: #ffffff;
+    font-size: 36px;
+    line-height: 40px;
+    position: absolute;
+    right: 16px;
+    top: 16px;
+    z-index: 1;
 }
 
 .header ul.navigation {
-    width: 960px;
+    background-color: #aa0000;
+    height: 64px;
     padding-left: 16px;
-    height: 72px;
-    margin: 0px;
-
-    list-style-type: none;
-    background-color: #eae8e3;
-
-    -moz-border-radius: 0 0 4px 4px;
-    border-radius: 0 0 4px 4px;
-
     position: relative;
-    z-index: 2;
 
-    -moz-box-shadow: 0px 1px 6px #888;
-    -webkit-box-shadow: 0px 1px 6px #888;
-    box-shadow: 0px 1px 6px #888;
+    -moz-border-radius: 0px 0px 4px 4px;
+    border-radius: 0px 0px 4px 4px;
 }
 
 .header ul.navigation li {
-    display: inline-block;
-    height: 70px;
-}
-
-.header ul.navigation li.last {
-    display: inline-block;
-    height: 70px;
+    display: block;
+    float: left;
+    padding: 0 1px;
 }
 
 .header ul.navigation li a {
-    color: black;
+    color: #ffffff;
     display: block;
-    padding: 26px 8px 30px 8px;
-    text-decoration: none;
-
     font-size: 14px;
     line-height: 16px;
-}
-
-.header ul.navigation li.active a {
-    background: #bcbab6;
+    padding: 24px 8px;
+    text-decoration: none;
 }
 
 .header ul.navigation li a:hover {
-    background: #bcbab6;
+    background: #540000;
 }
 
-.header div.headband {
-    padding: 4px 8px;
-    font-size: 10px;
-    line-height: 14px;
-    color: white;
-    text-shadow: 0 1px #30302f;
+.header ul.navigation li.active a {
+    background: #540000;
 }
 
-.header div.headband a {
-    color: white;
+.header ul.second-nav {
+    background-color: #f7f7f7;
+    height: 40px;
+    margin-left: 16px;
+    margin-right: 16px;
+
+    -moz-border-radius: 0px 0px 4px 4px;
+    border-radius: 0px 0px 4px 4px;
 }
 
-.header div.headband .login {
-    float: right;
+.header ul.second-nav li {
+    background: transparent url(subnav_divider.png) no-repeat scroll right bottom;
+    display: block;
+    float: left;
 }
 
-.header ul.breadcrumbs {
-    border-top: solid 1px black;
-    margin: 0px;
-    padding: 3px 8px 4px 8px;
+.header ul.second-nav li:first-child {
+    border-left: medium none;
+}
+
+.header ul.second-nav li a {
+    color: #333333;
+    display: block;
     font-size: 12px;
     line-height: 16px;
-    list-style-type: none;
-    background-color: white;
+    margin-left: -1px;
+    padding: 12px 8px;
+    text-decoration: none;
 }
 
-.header ul.breadcrumbs li {
-    display: inline-block;
-    padding: 0px 2px;
-    color: black;
+.header ul.second-nav li.active a,
+.header ul.second-nav li a:hover {
+    background: transparent url(subnav_active_bg.png) repeat left 1px;
 }
 
-.header ul.breadcrumbs li:after {
-    content: "\0020 \00BB";
-}
-
-.header ul.breadcrumbs li.last:after {
-    content: "";
-}
-
-.schooltool>div.page {
-    position: relative;
-    z-index: 0;
-
-    width: 960px;
-    padding: 0px 8px;
-    margin: 0px auto;
-    background-color: #f7f6f5;
-
-    -moz-box-shadow: 0px 1px 4px #888;
-    -webkit-box-shadow: 0px 1px 4px #888;
-    box-shadow: 0px 1px 4px #888;
-}
-
-.schooltool>div.footer {
-    position: relative;
-    z-index: -1;
-    width: 960px;
-    margin: 0px auto;
-    padding: 8px;
-    background-color: #f7f7f7;
-    -moz-border-radius: 0 0 4px 4px;
-    border-radius: 0 0 4px 4px;
-}
-
-}
-
-@media print {
-
-.schooltool>div.header {
-    display: none;
-}
-
-.schooltool>div.page {
-    -moz-box-shadow: none;
-    -webkit-box-shadow: none;
-    box-shadow: none;
-}
-
-.schooltool>div.footer {
-    display: none;
-}
-
-
+.header ul.second-nav li.active a {
+    color: #dd4814;
 }
