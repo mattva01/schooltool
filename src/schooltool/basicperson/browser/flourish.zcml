@@ -89,7 +89,6 @@
         name="index.html"
         for="schooltool.basicperson.interfaces.IBasicPerson"
         class="schooltool.basicperson.browser.person.FlourishPersonView"
-        content_template="templates/z3c_form_display.pt"
         permission="schooltool.view"
         />
   </configure>

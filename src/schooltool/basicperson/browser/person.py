@@ -217,9 +217,8 @@ class PersonView(form.DisplayForm, PersonForm):
         return self.render()
 
 
-class FlourishPersonView(flourish.page.Page, PersonView):
-    def update(self):
-        PersonView.update(self)
+class FlourishPersonView(flourish.page.Page):
+    """Person index.html view."""
 
 
 class FlourishPersonInfo(flourish.page.Content):

@@ -12,3 +12,19 @@
 .ui-accordion {
     width: 544px;
 }
+
+.ui-accordion-header {
+    background-color: #aea79f;
+    background-image: none;
+    color: #ffffff;
+    font-weight: bold;
+    text-align: left;
+    padding: 4px 8px;
+    font-size: 12px;
+    line-height: 16px;
+}
+
+.ui-accordion-content {
+    background-image: none;
+}
+
