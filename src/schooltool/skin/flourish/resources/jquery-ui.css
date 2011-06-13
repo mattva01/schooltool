@@ -28,3 +28,7 @@
     background-image: none;
 }
 
+h5.ui-accordion-header {
+    padding-left: 2em;
+}
+
