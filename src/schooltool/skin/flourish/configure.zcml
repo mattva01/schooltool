@@ -16,7 +16,8 @@
                flourish.css
                page.css
                form.css
-               table.css"
+               table.css
+               jquery-ui.css"
       />
   </zope:resourceLibrary>
 
