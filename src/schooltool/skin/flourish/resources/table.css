@@ -1,0 +1,33 @@
+/*
+
+  Table CSS:
+
+*/
+
+table {
+    width: 100%;
+}
+
+.zc-table-sortable {
+    cursor: pointer;
+}
+
+td, th {
+    text-align: left;
+    padding: 4px 8px;
+    font-size: 12px;
+    line-height: 16px;
+}
+
+th {
+    color: #ffffff;
+    font-weight: bold;
+}
+
+thead {
+    background-color: #aea79f;
+}
+
+tr {
+    border-bottom: 1px dotted #cccccc;
+}

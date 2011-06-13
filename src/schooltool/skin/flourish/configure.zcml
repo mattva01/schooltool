@@ -12,8 +12,11 @@
       require="" >
     <directory
       source="resources"
-      include="flourish.css
-               page.css"
+      include="reset.css
+               flourish.css
+               page.css
+               form.css
+               table.css"
       />
   </zope:resourceLibrary>
 

@@ -1,0 +1,97 @@
+/*
+
+  Form CSS:
+
+  - fieldset
+  - rows: labels, widgets
+
+*/
+
+form {
+    position: relative;
+}
+
+form > .count {
+    color: #ffffff;
+    font-size: 12px;
+    line-height: 16px;
+    position: absolute;
+    right: 8px;
+    top: -24px;
+    z-index: 1;
+}
+
+form > fieldset {
+    background-color: #dfdcd9;
+    margin-bottom: 8px;
+    margin-top: 32px;
+    padding-bottom: 4px;
+    position: relative;
+}
+
+form > fieldset > legend > span {
+    background-color: #aea79f;
+    color: #ffffff;
+    font-size: 16px;
+    line-height: 16px;
+    padding: 8px;
+    position: absolute;
+    top: -32px;
+}
+
+form > fieldset > legend > span {
+    width: 528px;
+}
+
+.expand_container form > fieldset > legend > span {
+    width: 928px;
+}
+
+form fieldset .row {
+    padding: 4px 8px;
+}
+
+form fieldset .row:first-child {
+    padding-top: 8px;
+}
+
+form fieldset .row .label {
+    margin-bottom: 4px;
+}
+
+form fieldset .row .label span {
+    font-size: 12px;
+}
+
+form fieldset .row .widget .text-widget {
+    background-color: #ffffff;
+    border: 1px solid #ccc1c1;
+    color: #333333;
+    font-size: 12px;
+    height: 20px;
+    width: 286px;
+}
+
+form fieldset .row .widget .text-widget:focus {
+    border: 2px solid #dd4814;
+    height: 18px;
+}
+
+form fieldset .row .widget .select-widget {
+    width: 286px;
+}
+
+form .button-controls {
+    margin-bottom: 8px;
+}
+
+form .button-controls .submit-widget {
+    background-color: #aea79f;
+    color: #ffffff;
+    font-size: 14px;
+    line-height: 20px;
+}
+
+form .button-controls .submit-widget:hover {
+    background-color: #dd4814;
+}

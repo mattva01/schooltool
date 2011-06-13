@@ -2,270 +2,114 @@
 
   Page CSS:
 
-  - heading (title), heading navigation
+  - header (title)
   - refine, container and related content columns
-  - action buttons for container content
 
 */
 
 @media all {
 
-.page div.heading {
-    padding: 32px 8px;
+/* Header */
+
+.page > .header {
+    padding: 32px 24px;
 }
 
-.page .heading h1,
-.page .heading h2,
-.page .heading ul.navigation {
+.page > .header h1,
+.page > .header h2 {
     display: inline-block;
     vertical-align: top;
-    padding: 0 4px;
 }
 
-.page .heading h1 {
+.page > .header h1 {
     font-size: 36px;
     line-height: 40px;
+    margin-right: 16px;
 }
 
-.page .heading a h1 {
-    padding: 0px 4px 2px 4px;
-    color: black;
-    font-size: 36px;
-    line-height: 38px;
-    border: 1px solid black;
-    background-color: white;
-    -moz-border-radius: 4px;
-    border-radius: 4px;
-}
-
-.page .heading h2 {
-    font-size: 36px;
-    line-height: 40px;
+.page > .header h2 {
     color: #aea79f;
+    font-size: 36px;
+    line-height: 40px;
 }
 
-.page .heading ul.navigation {
-    margin: 0px 0px 0px 12px;
-    padding: 0px;
-    list-style-type: none;
+/* Page layout */
+
+.page > .body {
+    background-color: #f7f7f7;
+    margin: 0px auto;
+    overflow: auto;
+    padding-bottom: 32px;
+    width: 944px;
 }
 
-.page .heading ul.navigation li {
-    display: inline-block;
-    padding: 5px;
-    font-size: 16px;
-    line-height: 20px;
-    border: 1px solid #888;
-    margin: 4px 0px;
-    background-color: white;
-    color: black;
-    -moz-box-shadow: 0px 1px 2px #888;
-    -webkit-box-shadow: 0px 1px 2px #888;
-    box-shadow: 0px 1px 2px #888;
-    -moz-border-radius: 4px;
-    border-radius: 4px;
+.page > .body > .refine,
+.page > .body > .container,
+.page > .body > .related {
+    display: block;
+    float: left;
+    margin-right: 16px;
 }
 
-.page .heading ul.navigation li a {
-    text-decoration: none;
-    color: black;
-}
-
-.page .heading ul.navigation li.active {
-    margin: 6px 0px;
-    padding: 3px;
-    border: none;
-    background-color: #30302f;
-    color: white;
-    -moz-box-shadow: none;
-    -webkit-box-shadow: none;
-    box-shadow: none;
-}
-
-.page .heading ul.navigation li.active a {
-    text-decoration: none;
-    color: white;
-}
-
-.page div.refine,
-.page div.container,
-.page div.related {
-    margin: 0px 6px;
-    display: inline-block;
-    vertical-align: top;
-    padding: 0px 0px 24px 0px;
-}
-
-.page div.refine {
+.page > .body > .refine {
     width: 144px;
 }
 
-.page div.container {
+.page > .body > .container {
     width: 544px;
 }
 
-.page div.related {
+.page > .body > .related {
+    margin-right: 0px;
     width: 224px;
 }
 
-.page div.expand_container {
-    width: 948px;
+.page > .body > .expand_container {
+    width: 944px;
 }
 
-.page .container {
+/* Refine */
+
+.page > .body > .refine > .content {
+    padding: 8px;
+    margin-bottom: 8px;
 }
 
-.page .container div.content {
-    margin: 0px 0px 8px 0px;
-}
-
-.page .container div.content div.header {
-    margin: 0px;
-    padding: 0px
-}
-
-.page .container div.content div.body {
-    margin: 0px;
-    padding: 7px;
-    border: 1px solid #bcbab6;
-    background-color: white;
-    -moz-border-radius: 4px;
-    border-radius: 4px;
-}
-
-
-.page .container div.content>div.header ul.actions {
-    margin: 0px 0px 0px auto;
-    text-align: right;
-    width: 85%;
-}
-
-.page .container div.content>div.header ul.actions li {
-    font-size: 14px;
+.page > .body > .refine > .content > .header {
+    border-bottom: 1px dotted #333333;
+    font-size: 12px;
+    font-weight: bold;
     line-height: 16px;
-
-    text-align: center;
-    margin: 2px 0px 2px 0px;
-    padding: 3px;
-    display: inline-block;
-    border: 1px solid black;
-
-    background: #9DB8D2;
 }
 
-.page .container div.content>div.header ul.actions li.modify {
-    background: #9DB8D2;
+.page > .body > .refine > .content > .body > ul.filter > li {
+    border-bottom: 1px dotted #333333;
 }
 
-.page .container div.content>div.header ul.actions li.create {
-    background: #83A67F;
+.page > .body > .refine > .content > .body > ul.filter > li.active {
+    font-size: 12px;
+    line-height: 16px;
 }
 
-.page .container div.content>div.header ul.actions li.delete {
-    background: #C1665A;
-}
-
-.page .container div.content>div.header .actions a {
-    color: black;
-    text-shadow: 0px 0px 4px white;
+.page > .body > .refine > .content > .body > ul.filter > li > a {
+    color: #333333;
+    font-size: 12px;
+    line-height: 16px;
     text-decoration: none;
 }
 
-.page .refine div.content {
-    margin: 0px 0px 8px 0px;
-    padding: 3px;
-    border: 1px solid #bcbab6;
-
-    background-color: white;
-    -moz-border-radius: 3px;
-    border-radius: 3px;
-
-    -moz-box-shadow: 0px 1px 4px #888;
-    -webkit-box-shadow: 0px 1px 4px #888;
-    box-shadow: 0px 1px 4px #888;
-
+.page > .body > .refine > .content > .body > ul.filter > li > a:hover,
+.page > .body > .refine > .content > .body > ul.filter > li.active > a:hover {
+    text-decoration: underline;
 }
 
-.page .refine div.content>div.header {
-    padding: 4px;
-}
-
-
-.page .refine div.content>div.body {
-    padding: 4px;
-}
-
-.page .refine div.content>div.body ul.filter {
-    margin: 0px;
-    padding: 0px;
-    list-style-type: none;
-}
-
-.page .refine div.content>div.body ul.filter li {
-    display: block;
-    margin: 4px 0px;
-    padding: 2px 2px 2px 14px;
-    font-size: 12px;
-    line-height: 16px;
-    color: black;
-
-}
-
-.page .refine div.content>div.body ul.filter li.active {
-    margin: 4px 0px;
-    padding: 2px 2px 2px 14px;
-    font-size: 12px;
-    line-height: 16px;
-    color: black;
-    background-color: #bcbab6;
-
-    -moz-box-shadow: 0px 1px 2px #888;
-    -webkit-box-shadow: 0px 1px 2px #888;
-    box-shadow: 0px 1px 2px #888;
-
-    -moz-border-radius: 4px;
-    border-radius: 4px;
-}
-
-.page .refine ul.filter li a {
-    color: black;
-}
-
-.page .refine ul.filter li.active a {
+.page > .body > .refine > .content > .body > ul.filter > li.active > a {
+    color: #dd4814;
     text-decoration: none;
-    color: black;
 }
 
-.page div.related div.content {
-    margin: 0px 0px 8px 0px;
+/* Container */
 
-    -moz-box-shadow: 0px 1px 4px #888;
-    -webkit-box-shadow: 0px 1px 4px #888;
-    box-shadow: 0px 1px 4px #888;
-
-    -moz-border-radius: 6px 6px 0px 0px;
-    border-radius: 6px 6px 0px 0px;
-}
-
-.page div.related div.content div.header {
-    font-size: 16px;
-    line-height: 20px;
-    padding: 3px 7px 4px 8px;
-
-    border-top: 1px solid #bcbab6;
-    border-left: 1px solid #bcbab6;
-    border-right: 1px solid #bcbab6;
-    background-color: #eaebeb;
-    -moz-border-radius: 6px 6px 0px 0px;
-    border-radius: 6px 6px 0px 0px;
-}
-
-.page div.related div.content div.body {
-    padding: 7px;
-
-    background-color: white;
-    border: 1px solid #bcbab6;
-
-}
-
+.page > .body > .container {
+    padding-bottom: 8px;
 }
