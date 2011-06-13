@@ -189,6 +189,10 @@
             name="jstree"
             directory="resources/jstree"
 	    layer="schooltool.skin.ISchoolToolLayer" />
+  <resourceDirectory
+            name="jquery-ui"
+            directory="resources/jquery-ui"
+	    layer="schooltool.skin.ISchoolToolLayer" />
 
   <resource name="favicon.ico" file="resources/favicon.ico"
 	    layer="schooltool.skin.ISchoolToolLayer" />

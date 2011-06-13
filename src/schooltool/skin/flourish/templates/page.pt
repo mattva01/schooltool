@@ -1,4 +1,4 @@
-<div>
+<div class="body">
 
 <div class="refine"
      tal:content="structure view/providers/page_refine|nothing">
@@ -10,12 +10,14 @@
        tal:define="main_content view/content_template|nothing"
        tal:condition="main_content">
     <div class="content">
+      <!--
       <div class="header"
            tal:define="actions context/schooltool:content/actions"
            tal:condition="actions"
            tal:content="structure actions">
         [action] [buttons]
       </div>
+      -->
       <div class="body" tal:content="structure main_content">
         [ Main content here ]
       </div>
@@ -29,9 +31,12 @@
   </div>
 </div>
 
-<div class="related"
+<!--<div class="related"
      tal:content="structure view/providers/page_related|nothing">
   [Related content blocks]
+</div>-->
+<div class="related">
+  BAR BAZ PUT RELATED CONTENT HERE
 </div>
 
 </div>

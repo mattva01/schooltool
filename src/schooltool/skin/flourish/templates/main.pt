@@ -8,6 +8,14 @@
 
   <link rel="icon" type="image/png" href="favicon.ico"
         tal:attributes="href context/++resource++favicon.ico"/>
+  <script type="text/javascript" src="jquery.js"
+          tal:attributes="src context/++resource++jquery.js">
+  </script>
+  <link rel="stylesheet" type="text/css" media="screen"
+        tal:attributes="href context/++resource++jquery-ui/theme/jquery-ui.css" />
+  <script type="text/javascript" src="jquery-ui/jquery.ui.js"
+          tal:attributes="src context/++resource++jquery-ui/jquery.ui.js">
+  </script>
 
   <!-- zc.resourcelibrary -->
 
@@ -46,10 +54,13 @@
 
 <div class="header">
 
+<h1 class="brand">SchoolTool</h1>
+
 <tal:block replace="structure view/providers/header_navigation">
     [ | Header | Navigation | Bar | Here | ]
 </tal:block>
 
+<!--
 <div class="headband">
   <span class="about">
     <a id="about-link" tal:attributes="href string:${context/schooltool:app/@@absolute_url}/@@about.html" />
@@ -70,7 +81,7 @@
       <tal:block condition="user/schooltool:authenticated"
               define="person user/schooltool:person">
           <tal:block i18n:translate="">Logged in as:</tal:block>
-          <!-- XXX: do we support this ATM? -->
+
           <tal:block condition="not:person">
             <span tal:content="user/title">ZMI Principal</span>
           </tal:block>
@@ -80,7 +91,7 @@
                tal:attributes="href string: ${person/@@absolute_url}/home.html"
                tal:content="user/title">Person Loggedin</a>
             |
-            <!-- XXX: keep this?  change this? Language selectod and such. -->
+
             <tal:block replace="structure provider:schooltool.Header" />
 
             <a id="login-logout" i18n:translate=""
@@ -98,13 +109,35 @@
     [ bread > crumbs > here ]
   </div>
 </div>
+-->
+
+<ul class="second-nav">
+  <li>
+    <a href="#">Foo</a>
+  </li>
+  <li>
+    <a href="#">Bar</a>
+  </li>
+  <li>
+    <a href="#">Put</a>
+  </li>
+  <li class="active">
+    <a href="#">Secondary</a>
+  </li>
+  <li>
+    <a href="#">Navigation</a>
+  </li>
+  <li>
+    <a href="#">Here</a>
+  </li>
+</ul>
 
 </div>
 
 
 <div class="page">
 
-  <div class="heading"
+  <div class="header"
      tal:define="navigation providers/page_navigation|nothing">
 
 

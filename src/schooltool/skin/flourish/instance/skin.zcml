@@ -19,7 +19,6 @@
         file="resources/schooltool-report-logo.png"
         layer="schooltool.skin.flourish.IFlourishLayer" />
 
-<!--
   <resource
       name="editor_config.js"
       file="resources/editor_config.js"
@@ -32,7 +31,10 @@
             name="jstree"
             directory="resources/jstree"
 	    layer="schooltool.skin.flourish.IFlourishLayer" />
--->
+  <resourceDirectory
+            name="jquery-ui"
+            directory="resources/jquery-ui"
+           layer="schooltool.skin.flourish.IFlourishLayer" />
 
     <resource
         name="favicon.ico"
