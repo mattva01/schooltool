@@ -31,12 +31,9 @@
   </div>
 </div>
 
-<!--<div class="related"
+<div class="related"
      tal:content="structure view/providers/page_related|nothing">
   [Related content blocks]
-</div>-->
-<div class="related">
-  BAR BAZ PUT RELATED CONTENT HERE
 </div>
 
 </div>

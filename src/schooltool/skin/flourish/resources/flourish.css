@@ -45,7 +45,7 @@ p {
 }
 
 a, a:link, a:visited, a:hover, a:active {
-    color: #dd4814;
+    color: #dd0000;
 }
 
 p.small {
@@ -170,5 +170,5 @@ pre {
 }
 
 .header ul.second-nav li.active a {
-    color: #dd4814;
+    color: #dd0000;
 }
