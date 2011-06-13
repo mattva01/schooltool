@@ -13,9 +13,13 @@
     width: 544px;
 }
 
+.ui-state-active {
+    background-color: #AA0000;
+}
+
 .ui-accordion-header {
-    background-color: #aea79f;
     background-image: none;
+    background-color: #540000;
     color: #ffffff;
     font-weight: bold;
     text-align: left;
@@ -25,7 +29,7 @@
 }
 
 .ui-accordion-content {
-    background-image: none;
+    background: none;
 }
 
 h5.ui-accordion-header {
