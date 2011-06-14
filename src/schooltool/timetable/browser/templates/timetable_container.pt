@@ -12,6 +12,7 @@
 <metal:block metal:fill-slot="body"
              tal:define="objects context/values;
                          canModify view/canModify">
+
   <p tal:condition="not:objects" i18n:translate="">There are none.</p>
   <tal:block tal:condition="objects"
              tal:define="default context/default">
@@ -51,10 +52,18 @@
         <select name="ttschema" size="1"
                 id="ttschema">
           <option value="" i18n:translate="">Not Selected</option>
-          <option tal:repeat="obj objects/sortby:title"
-                  tal:content="obj/title"
-                  tal:attributes="selected python:obj.__name__ == default.__name__;
-                                  value python: obj.__name__">(Schema title)</option>
+          <tal:block condition="not:default">
+            <option tal:repeat="obj objects/sortby:title"
+                    tal:content="obj/title"
+                    tal:attributes="value python: obj.__name__">(Schema title)</option>
+          </tal:block>
+          <tal:block condition="default">
+            <option tal:repeat="obj objects/sortby:title"
+                    tal:content="obj/title"
+                    tal:attributes="selected python:obj.__name__ == default.__name__;
+                                    value python: obj.__name__">(Schema title)</option>
+          </tal:block>
+
         </select>
         <input type="submit" class="button-ok" name="UPDATE_SUBMIT" value="Change"
                title="Shortcut: Alt-A" accesskey="A"

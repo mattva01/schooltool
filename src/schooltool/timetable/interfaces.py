@@ -23,7 +23,7 @@ Schedule and timetabling interfaces
 import pytz
 
 import zope.schema
-from zope.annotation.interfaces import IAnnotatable
+from zope.annotation.interfaces import IAttributeAnnotatable
 from zope.interface import Interface, Attribute
 from zope.container.constraints import contains
 from zope.container.interfaces import IContainer, IOrderedContainer
@@ -358,9 +358,9 @@ class IScheduleCalendar(ISchoolToolCalendar):
 #
 
 
-class IHaveSchedule(IAnnotatable, IHaveCalendar):
+class IHaveSchedule(IAttributeAnnotatable, IHaveCalendar):
     """Marker interface for objects that schedule existing timetables."""
 
 
-class IHaveTimetables(IAnnotatable):
+class IHaveTimetables(IAttributeAnnotatable):
     """Marker interface for objects that have timetables."""

@@ -137,6 +137,7 @@ from schooltool.app.browser.cal import day_of_week_names
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.common import parse_time_range, format_time_range
+from schooltool.timetable.interfaces import IHaveTimetables
 from schooltool.timetable.daytemplates import WeekDayTemplates
 from schooltool.timetable.daytemplates import SchoolDayTemplates
 from schooltool.timetable.daytemplates import DayTemplate
@@ -794,8 +795,9 @@ class FinalStep(Step):
         app = ISchoolToolApplication(None)
         tzname = IApplicationPreferences(app).timezone
 
-        # XXX: probably take some sane defaluts from context
-        first, last = None, None
+        # XXX: quick fix for date range
+        owner = IHaveTimetables(self.context)
+        first, last = owner.first, owner.last
 
         timetable = Timetable(
             first, last,
