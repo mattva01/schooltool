@@ -130,13 +130,14 @@
 
   <flourish:viewletManager
       name="schooltool.person.FlourishInfo"
+      view="schooltool.basicperson.browser.person.FlourishPersonInfo"
       provides="schooltool.basicperson.browser.person.IFlourishPersonInfoManager"
       class="schooltool.basicperson.browser.person.FlourishPersonInfoManager"
       permission="zope.Public"
       />
 
   <!-- viewlets -->
-  
+
   <flourish:viewlet
       name="advisory"
       for="schooltool.basicperson.interfaces.IBasicPerson"
