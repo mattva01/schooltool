@@ -68,18 +68,36 @@ pre {
 }
 
 .schooltool > .header {
+    -moz-box-shadow: 0px -3px 4px #888;
+    -webkit-box-shadow: 0px -3px 4px #888;
+    box-shadow: 0px -3px 4px #888;
+}
+
+.schooltool > .page {
+    -moz-box-shadow: 0px 1px 4px #888;
+    -webkit-box-shadow: 0px 1px 4px #888;
+    box-shadow: 0px 1px 4px #888;
+
+    -moz-border-radius: 0px 0px 4px 4px;
+    border-radius: 0px 0px 4px 4px;
+}
+
+.schooltool > .header {
     background-color: #ffffff;
+    z-index: 2;
 }
 
 .schooltool > .page {
     background-color: #ffffff;
     padding-bottom: 64px;
+    z-index: 1;
 }
 
 .schooltool > .footer {
     background-color: #f7f7f7;
     clear: both;
     padding-bottom: 16px;
+    z-index: 0;
 }
 
 .schooltool > .footer > p {

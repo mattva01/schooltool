@@ -1,0 +1,14 @@
+/*
+
+  Overrides for jQuery UI CSS:
+
+*/
+
+/* XXX: temporary, just to simulate sidebars */
+.content {
+    margin-left: 172px;
+}
+
+.ui-accordion {
+    width: 544px;
+}
