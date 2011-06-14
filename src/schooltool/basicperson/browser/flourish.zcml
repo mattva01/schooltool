@@ -130,6 +130,7 @@
 
   <flourish:viewletManager
       name="schooltool.person.FlourishInfo"
+      for="schooltool.basicperson.interfaces.IBasicPerson"
       view="schooltool.basicperson.browser.person.FlourishPersonInfo"
       provides="schooltool.basicperson.browser.person.IFlourishPersonInfoManager"
       class="schooltool.basicperson.browser.person.FlourishPersonInfoManager"
