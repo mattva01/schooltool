@@ -105,7 +105,7 @@ class IViewletFactoryDirective(zope.component.zcml.IAdapterDirective):
                       "default the provider is registered for all views, "
                       "the most common case."),
         required=False,
-        default=interfaces.IPage,
+        default=IBrowserView,
         )
 
     layer = zope.configuration.fields.GlobalInterface(
@@ -249,7 +249,7 @@ def viewletManager(
 
 def viewlet(
     _context, name, permission,
-    for_=Interface, layer=interfaces.IFlourishLayer, view=interfaces.IPage,
+    for_=Interface, layer=interfaces.IFlourishLayer, view=IBrowserView,
     manager=None,
     class_=Viewlet, template=None,
     update='update', render='render',
@@ -297,7 +297,7 @@ def viewletFactory(
     for_=Interface, permission=None,
     name='', trusted=True, locate=False,
     layer=interfaces.IFlourishLayer,
-    view=interfaces.IPage,
+    view=IBrowserView,
     manager=interfaces.IViewletManager):
 
     wrapper = lambda c, r, v, m: factory(c, r, v, m, name)
