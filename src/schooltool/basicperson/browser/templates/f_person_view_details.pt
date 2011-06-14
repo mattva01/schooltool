@@ -15,5 +15,5 @@
     <metal:block tal:replace="structure string:&lt;/script&gt;" />
 
 <div class="person-info">
-  <tal:block tal:replace="structure provider:schooltool.person.Info"/>
+  <tal:block tal:replace="structure provider:schooltool.person.FlourishInfo"/>
 </div>

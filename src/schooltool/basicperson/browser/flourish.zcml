@@ -126,4 +126,23 @@
       html_class="modify"
       />
 
+  <!-- Viewlet Mangers -->
+
+  <flourish:viewletManager
+      name="schooltool.person.FlourishInfo"
+      provides="schooltool.basicperson.browser.person.IFlourishPersonInfoManager"
+      class="schooltool.basicperson.browser.person.FlourishPersonInfoManager"
+      permission="zope.Public"
+      />
+
+  <!-- viewlets -->
+  
+  <flourish:viewlet
+      name="advisory"
+      for="schooltool.basicperson.interfaces.IBasicPerson"
+      manager="schooltool.basicperson.browser.person.IFlourishPersonInfoManager"
+      class="schooltool.basicperson.browser.person.FlourishAdvisoryViewlet"
+      permission="schooltool.edit"
+      />
+
 </configure>

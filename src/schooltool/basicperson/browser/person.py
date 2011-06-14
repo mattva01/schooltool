@@ -52,6 +52,9 @@ from schooltool.table.table import DependableCheckboxColumn
 
 from schooltool.common import SchoolToolMessage as _
 
+from schooltool.skin.flourish.interfaces import IViewletManager
+from schooltool.skin.flourish.viewlet import Viewlet, ViewletManager
+
 
 class BasicPersonContainerView(TableContainerView):
     """A Person Container view."""
@@ -547,8 +550,20 @@ class PersonAdviseeView(RelationshipViewBase):
         return self.context.advisees
 
 
-class AdvisoryViewlet(ViewletBase):
+class IFlourishPersonInfoManager(IViewletManager):
+    pass
+
+
+class FlourishPersonInfoManager(ViewletManager):
+    pass
+
+
+class FlourishAdvisoryViewlet(Viewlet):
     """A viewlet showing the advisors/advisees of a person."""
+
+    template = ViewPageTemplateFile('templates/advisoryViewlet.pt')
+    body_template = None
+    render = lambda self, *a, **kw: self.template(*a, **kw)
 
     @property
     def advisors(self):
