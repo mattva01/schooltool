@@ -25,7 +25,7 @@ form > fieldset {
     background-color: #dfdcd9;
     margin-bottom: 8px;
     margin-top: 32px;
-    padding-bottom: 4px;
+    padding-bottom: 8px;
     position: relative;
 }
 
@@ -48,11 +48,7 @@ form > fieldset > legend > span {
 }
 
 form fieldset .row {
-    padding: 4px 8px;
-}
-
-form fieldset .row:first-child {
-    padding-top: 8px;
+    padding: 8px 8px 0px 8px;
 }
 
 form fieldset .row .label {
@@ -82,7 +78,7 @@ form fieldset .row .widget .select-widget {
 }
 
 form .button-controls {
-    margin-bottom: 8px;
+    margin-bottom: 16px;
 }
 
 form .button-controls .submit-widget {
