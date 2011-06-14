@@ -27,6 +27,7 @@
 
 .ui-state-active {
     background-color: #540000;
+    border: none;
 }
 
 .ui-accordion-content {
