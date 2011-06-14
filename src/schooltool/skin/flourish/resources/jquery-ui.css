@@ -4,11 +4,28 @@
 
 */
 
-/* XXX: temporary, just to simulate sidebars */
-.content {
-    margin-left: 172px;
-}
-
 .ui-accordion {
     width: 544px;
 }
+
+.ui-accordion-header {
+    background-image: none;
+    background-color: #AA0000;
+    color: #ffffff;
+    font-weight: bold;
+    text-align: left;
+    padding: 4px 8px;
+    padding-left: 2em;
+    font-size: 12px;
+    line-height: 16px;
+}
+
+.ui-state-active {
+    background-color: #540000;
+    border: none;
+}
+
+.ui-accordion-content {
+    background: none;
+}
+

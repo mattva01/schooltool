@@ -320,15 +320,4 @@
       title="Add Administrator"
       />
 
-  <!-- viewlets -->
-  <viewlet
-      name="advisory"
-      for="*"
-      manager="schooltool.person.browser.person.IPersonInfoManager"
-      template="templates/advisoryViewlet.pt"
-      class="schooltool.basicperson.browser.person.AdvisoryViewlet"
-      permission="schooltool.edit"
-      order="10"
-      />
-
 </configure>

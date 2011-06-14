@@ -174,13 +174,13 @@
 </div>
 
 <div class="footer">
-  <p>
+  <p class="server-info">
     <strong tal:replace="context/schooltool:preferences/title"/>
     -
     <span i18n:translate="">Server Running SchoolTool</span>
     <span tal:content="modules/schooltool/common/get_version"/>
     <span i18n:translate="">
-      &copy; The
+      &copy; the
       <a i18n:name="link_swf"
          href="http://www.shuttleworthfoundation.org">
         Shuttleworth Foundation
@@ -189,7 +189,7 @@
     </span>
   </p>
 
-  <p i18n:translate="">
+  <p i18n:translate="" class="trademark">
     <a i18n:name="link_st_org"
        href="http://www.schooltool.org">SchoolTool</a>&trade;
     is a Trademark of the
