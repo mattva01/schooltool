@@ -24,7 +24,6 @@ h1 {
     line-height: 40px;
 }
 
-
 h2 {
     font-size: 24px;
     line-height: 28px;
@@ -47,9 +46,9 @@ h1, h2, h3, h4, h5, h6 {
 
 a, a:link, a:visited, a:active {
     color: #aa0000;
-    text-decoration: none;
     font-size: 12px;
     line-height: 16px;
+    text-decoration: none;
 }
 
 a:hover {
@@ -85,9 +84,9 @@ pre {
 .schooltool > .header,
 .schooltool > .page,
 .schooltool > .footer {
-    width: 976px;
     margin: 0 auto;
     position: relative;
+    width: 976px;
 }
 
 .schooltool > .header {
@@ -146,9 +145,10 @@ pre {
     color: #ffffff;
     font-size: 36px;
     line-height: 40px;
+    margin-top: 0px;
     position: absolute;
     right: 16px;
-    top: 16px;
+    top: 12px;
     z-index: 1;
 }
 
@@ -194,6 +194,7 @@ pre {
     height: 40px;
     margin-left: 16px;
     margin-right: 16px;
+    text-align: right;
 
     -moz-border-radius: 0px 0px 4px 4px;
     border-radius: 0px 0px 4px 4px;
@@ -205,8 +206,9 @@ pre {
 
 .header ul.secondary_nav > li {
     background: transparent url(subnav_divider.png) no-repeat scroll right bottom;
-    display: block;
-    float: left;
+    display: inline-block;
+    margin-left: -4px;
+    position: relative;
 }
 
 .header ul.secondary_nav > li:first-child {
@@ -234,9 +236,13 @@ pre {
 }
 
 .header ul.secondary_nav > li > ul.breadcrumbs {
-    padding: 0px 8px;
     font-size: 12px;
     list-style-type: none;
+    position: absolute;
+    right: 532px;
+    text-align: left;
+    top: -24px;
+    width: 400px;
 }
 
 .header ul.secondary_nav > li > ul.breadcrumbs > li a:hover {
@@ -245,9 +251,9 @@ pre {
 
 .header ul.secondary_nav > li > ul.breadcrumbs li {
     background: none;
+    color: black;
     display: inline-block;
     padding: 0px 2px;
-    color: black;
 }
 
 .header ul.secondary_nav > li > ul.breadcrumbs li:after {

@@ -43,10 +43,6 @@ form fieldset > legend > span {
     width: 528px;
 }
 
-.expand_container form fieldset > legend > span {
-    width: 928px;
-}
-
 form fieldset .row {
     padding: 8px 8px 0px 8px;
 }
@@ -64,14 +60,15 @@ form fieldset .row .widget {
 }
 
 form fieldset .row .error {
-    display: inline;
     color: #AA0000;
-    width: 224px;
+    display: inline;
     margin-left: 16px;
+    width: 224px;
 }
 
 
-form fieldset .row .widget .text-widget {
+form fieldset .row .widget .text-widget,
+form fieldset .row .widget .password-widget {
     background-color: #ffffff;
     border: 1px solid #ccc1c1;
     color: #333333;
@@ -80,7 +77,8 @@ form fieldset .row .widget .text-widget {
     width: 286px;
 }
 
-form fieldset .row .widget .text-widget:focus {
+form fieldset .row .widget .text-widget:focus,
+form fieldset .row .widget .password-widget:focus {
     border: 2px solid #dd4814;
     height: 18px;
     width: 284px;
@@ -137,6 +135,6 @@ form .status > .errors {
 
 /* XXX: hackery for the login form */
 form > .error {
-    padding: 8px 0px;
     color: #AA0000;
+    padding: 8px 0px;
 }
