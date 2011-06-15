@@ -21,7 +21,7 @@ form > .count {
     z-index: 1;
 }
 
-form > fieldset {
+form fieldset {
     background-color: #dfdcd9;
     margin-bottom: 8px;
     margin-top: 32px;
@@ -29,7 +29,7 @@ form > fieldset {
     position: relative;
 }
 
-form > fieldset > legend > span {
+form fieldset > legend > span {
     background-color: #aea79f;
     color: #ffffff;
     font-size: 16px;
@@ -39,11 +39,11 @@ form > fieldset > legend > span {
     top: -32px;
 }
 
-form > fieldset > legend > span {
+form fieldset > legend > span {
     width: 528px;
 }
 
-.expand_container form > fieldset > legend > span {
+.expand_container form fieldset > legend > span {
     width: 928px;
 }
 
@@ -65,7 +65,7 @@ form fieldset .row .widget .text-widget {
     color: #333333;
     font-size: 12px;
     height: 20px;
-    width: 286px;
+    width: 288px;
 }
 
 form fieldset .row .widget .text-widget:focus {
@@ -74,10 +74,11 @@ form fieldset .row .widget .text-widget:focus {
 }
 
 form fieldset .row .widget .select-widget {
-    width: 286px;
+    width: 288px;
 }
 
-form .button-controls {
+form .button-controls,
+form .controls {
     margin-bottom: 16px;
 }
 
@@ -90,4 +91,21 @@ form .button-controls .submit-widget {
 
 form .button-controls .submit-widget:hover {
     background-color: #dd0000;
+}
+
+
+form .controls .button-ok {
+    background-color: #aea79f;
+    color: #ffffff;
+    font-size: 14px;
+    line-height: 20px;
+}
+
+form .controls .button-ok:hover {
+    background-color: #dd0000;
+}
+
+form > .error {
+    padding: 8px 0px;
+    color: #AA0000;
 }
