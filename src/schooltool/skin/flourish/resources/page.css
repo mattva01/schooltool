@@ -45,8 +45,9 @@
 .page > .body > .refine {
     display: block;
     float: left;
-    width: 192px;
+    width: 160px;
     background-color: #f7f7f7;
+    padding: 32px 16px 0px 16px;
 }
 
 .page > .body > .container {
@@ -64,8 +65,7 @@
 /* Refine */
 
 .page > .body > .refine > .content {
-    padding: 32px 16px 8px 16px;
-    margin-bottom: 8px;
+    margin-bottom: 32px;
 }
 
 .page > .body > .refine > .content > .header {
