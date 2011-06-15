@@ -1,0 +1,65 @@
+<div>
+<h5 i18n:translate="">Sections</h5>
+<div>
+<div class="info-block clearfix" tal:define="schoolyears view/instructorOf"
+     tal:condition="view/isTeacher"
+     i18n:domain="schooltool">
+  <h3 i18n:translate="">Sections Taught</h3>
+  <div class="tree_list" tal:condition="schoolyears">
+    <ul>
+      <li tal:repeat="schoolyear schoolyears">
+        <a tal:attributes="href schoolyear/obj/@@absolute_url;
+                           title schoolyear/obj/title"
+           tal:content="schoolyear/obj/title"></a>
+        <ul>
+          <li tal:repeat="term schoolyear/terms">
+            <a tal:attributes="href term/obj/@@absolute_url;
+                               title term/obj/title"
+               tal:content="term/obj/title"></a>
+            <ul>
+              <li tal:repeat="section_data term/sections">
+                <a tal:attributes="href section_data/obj/@@absolute_url;
+                                   title section_data/title"
+                   class="leaf_url"
+                   tal:content="section_data/title"></a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="info-block clearfix" tal:define="schoolyears view/learnerOf"
+     tal:condition="view/isLearner"
+     i18n:domain="schooltool">
+  <h3 i18n:translate="">Sections Attended</h3>
+  <div class="tree_list" tal:condition="schoolyears">
+    <ul>
+      <li tal:repeat="schoolyear schoolyears">
+        <a tal:attributes="href schoolyear/obj/@@absolute_url;
+                           title schoolyear/obj/title"
+           tal:content="schoolyear/obj/title"></a>
+        <ul>
+          <li tal:repeat="term schoolyear/terms">
+            <a tal:attributes="href term/obj/@@absolute_url;
+                               title term/obj/title"
+               tal:content="term/obj/title"></a>
+            <ul>
+              <li tal:repeat="section_data term/sections">
+                <a tal:attributes="href section_data/obj/@@absolute_url;
+                                   title section_data/title"
+                   class="leaf_url"
+                   tal:content="section_data/title"></a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</div>
+</div>
+</div>
+
