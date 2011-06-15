@@ -92,34 +92,34 @@ form fieldset .row .widget .select-widget {
     width: 288px;
 }
 
-form .button-controls,
+form .buttons,
 form .controls {
     margin-bottom: 16px;
 }
 
-form .button-controls .submit-widget {
+form .buttons .submit-widget {
     background-color: #aea79f;
     color: #ffffff;
     font-size: 14px;
     line-height: 20px;
 }
 
-form .button-controls .submit-widget:hover {
+form .buttons .submit-widget:hover {
     background-color: #dd0000;
 }
 
-form .button-controls .button-ok,
-form .button-controls .button-neutral,
-form .button-controls .button-cancel {
+form .buttons .button-ok,
+form .buttons .button-neutral,
+form .buttons .button-cancel {
     background-color: #aea79f;
     color: #ffffff;
     font-size: 14px;
     line-height: 20px;
 }
 
-form .button-controls .button-ok:hover,
-form .button-controls .button-neutral:hover,
-form .button-controls .button-cancel:hover {
+form .buttons .button-ok:hover,
+form .buttons .button-neutral:hover,
+form .buttons .button-cancel:hover {
     background-color: #dd0000;
 }
 

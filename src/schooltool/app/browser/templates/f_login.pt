@@ -18,11 +18,6 @@
       tal:condition="request/nexturl | nothing"
       tal:attributes="value request/nexturl" />
 
-    <p class="error" tal:condition="view/error"
-      tal:content="view/error">
-      Incorrect username or password.
-    </p>
-
     <fieldset>
       <legend><span i18n:translate="">User Information</span></legend>
 
@@ -35,6 +30,12 @@
         <div class="widget">
           <input id="username" name="username" type="text" tabindex="1"
                  tal:attributes="value request/username|nothing" />
+        </div>
+        <div class="error" tal:condition="view/error"
+             tal:content="view/error">
+          <div class="error" i18n:translate="">
+            Incorrect username or password.
+          </div>
         </div>
       </div>
 
@@ -50,7 +51,7 @@
       </div>
     </fieldset>
 
-    <div class="button-controls">
+    <div class="buttons controls">
       <input class="button-ok" type="submit" value="Log in" accesskey="L"
              tabindex="3" i18n:attributes="value; accesskey" name="LOGIN" />
     </div>
