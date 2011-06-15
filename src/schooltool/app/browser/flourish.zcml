@@ -96,6 +96,13 @@
       permission="zope.Public"
       />
 
+  <flourish:content
+      name="breadcrumbs"
+      class="schooltool.skin.flourish.Empty"
+      view="schooltool.app.browser.app.LoginView"
+      permission="zope.Public"
+      />
+
   <!-- Site control page -->
 
   <flourish:page
