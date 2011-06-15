@@ -21,6 +21,7 @@ group views.
 
 $Id$
 """
+from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.intid.interfaces import IIntIds
 from zope.traversing.browser.interfaces import IAbsoluteURL
 from zope.interface import implements
@@ -48,6 +49,7 @@ from schooltool.group.interfaces import IGroupMember
 from schooltool.group.interfaces import IGroupContainer, IGroupContained
 from schooltool.app.browser.app import RelationshipViewBase
 
+from schooltool.skin.flourish.viewlet import Viewlet
 
 
 class GroupContainerAbsoluteURLAdapter(BrowserView):
@@ -180,3 +182,38 @@ class GroupsViewlet(ViewletBase):
     @property
     def canModify(self):
         return canAccess(self.context.__parent__, '__delitem__')
+
+
+class FlourishGroupsViewlet(Viewlet):
+    """A flourish viewlet showing the groups a person is in."""
+
+    template = ViewPageTemplateFile('groupsviewlet.pt')
+    body_template = None
+    render = lambda self, *a, **kw: self.template(*a, **kw)
+
+    def update(self):
+        self.collator = ICollator(self.request.locale)
+        groups = [
+            group for group in self.context.groups
+            if (canAccess(group, 'title') and
+                not ISection.providedBy(group))]
+
+        schoolyears_data = {}
+        for group in groups:
+            sy = ISchoolYear(group.__parent__)
+            if sy not in schoolyears_data:
+                schoolyears_data[sy] = []
+            schoolyears_data[sy].append(group)
+
+        self.schoolyears = []
+        for sy in sorted(schoolyears_data, key=lambda x:x.first, reverse=True):
+            sy_info = {'obj': sy,
+                       'groups': sorted(schoolyears_data[sy],
+                                        cmp=self.collator.cmp,
+                                        key=lambda x:x.title)}
+            self.schoolyears.append(sy_info)
+
+    @property
+    def canModify(self):
+        return canAccess(self.context.__parent__, '__delitem__')
+
