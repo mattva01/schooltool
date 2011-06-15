@@ -53,9 +53,9 @@
 .page > .body > .container {
     display: block;
     float: right;
-    width: 704px;
+    width: 544px;
     background-color: #f7f7f7;
-    padding: 32px 16px 16px 16px;
+    padding: 32px 176px 16px 16px;
 }
 
 .page > .body > .expand_container {
