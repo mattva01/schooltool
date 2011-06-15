@@ -4,7 +4,7 @@
     xmlns:z3c="http://namespaces.zope.org/z3c">
 
   <!-- form macros -->
-  <configure package="schooltool.skin">
+  <configure package="schooltool.skin.flourish">
 
   <z3c:macro
       name="display"

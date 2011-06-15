@@ -21,7 +21,7 @@ form > .count {
     z-index: 1;
 }
 
-form > fieldset {
+form fieldset {
     background-color: #dfdcd9;
     margin-bottom: 8px;
     margin-top: 32px;
@@ -29,7 +29,7 @@ form > fieldset {
     position: relative;
 }
 
-form > fieldset > legend > span {
+form fieldset > legend > span {
     background-color: #aea79f;
     color: #ffffff;
     font-size: 16px;
@@ -39,11 +39,11 @@ form > fieldset > legend > span {
     top: -32px;
 }
 
-form > fieldset > legend > span {
+form fieldset > legend > span {
     width: 528px;
 }
 
-.expand_container form > fieldset > legend > span {
+.expand_container form fieldset > legend > span {
     width: 928px;
 }
 
@@ -59,6 +59,18 @@ form fieldset .row .label span {
     font-size: 12px;
 }
 
+form fieldset .row .widget {
+    display: inline;
+}
+
+form fieldset .row .error {
+    display: inline;
+    color: #AA0000;
+    width: 224px;
+    margin-left: 16px;
+}
+
+
 form fieldset .row .widget .text-widget {
     background-color: #ffffff;
     border: 1px solid #ccc1c1;
@@ -71,13 +83,15 @@ form fieldset .row .widget .text-widget {
 form fieldset .row .widget .text-widget:focus {
     border: 2px solid #dd4814;
     height: 18px;
+    width: 284px;
 }
 
 form fieldset .row .widget .select-widget {
-    width: 286px;
+    width: 288px;
 }
 
-form .button-controls {
+form .button-controls,
+form .controls {
     margin-bottom: 16px;
 }
 
@@ -90,4 +104,39 @@ form .button-controls .submit-widget {
 
 form .button-controls .submit-widget:hover {
     background-color: #dd0000;
+}
+
+
+form .controls .button-ok,
+form .controls .button-neutral,
+form .controls .button-cancel {
+    background-color: #aea79f;
+    color: #ffffff;
+    font-size: 14px;
+    line-height: 20px;
+}
+
+form .controls .button-ok:hover,
+form .controls .button-neutral:hover,
+form .controls .button-cancel:hover {
+    background-color: #dd0000;
+}
+
+/* XXX: temporary hackery to make forms look decent */
+
+form > .viewspace > .status {
+}
+
+form > .viewspace > h3 {
+    display: none;
+}
+
+form .status > .errors {
+    display: none;
+}
+
+/* XXX: hackery for the login form */
+form > .error {
+    padding: 8px 0px;
+    color: #AA0000;
 }

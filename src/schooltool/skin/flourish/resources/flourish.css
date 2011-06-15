@@ -40,9 +40,15 @@ h4, h5, h6 {
     line-height: 20px;
 }
 
+h1, h2, h3, h4, h5, h6 {
+    margin-bottom: 8px;
+}
+
 a, a:link, a:visited, a:active {
     color: #aa0000;
     text-decoration: none;
+    font-size: 12px;
+    line-height: 16px;
 }
 
 a:hover {
@@ -51,6 +57,17 @@ a:hover {
 
 .active a:hover {
     text-decoration: none;
+}
+
+p {
+    font-size: 12px;
+    line-height: 16px;
+    padding-bottom: 8px;
+}
+
+li {
+    font-size: 12px;
+    line-height: 16px;
 }
 
 p.small {
@@ -159,13 +176,14 @@ pre {
 
 .header ul.navigation li a:hover {
     background: #540000;
+    text-decoration: none;
 }
 
 .header ul.navigation li.active a {
     background: #540000;
 }
 
-.header ul.second-nav {
+.header ul.secondary_nav {
     background-color: #f7f7f7;
     height: 40px;
     margin-left: 16px;
@@ -179,30 +197,70 @@ pre {
     box-shadow: 0px 1px 6px #bbbbbb;
 }
 
-.header ul.second-nav li {
+.header ul.secondary_nav > li {
     background: transparent url(subnav_divider.png) no-repeat scroll right bottom;
     display: block;
     float: left;
 }
 
-.header ul.second-nav li:first-child {
+.header ul.secondary_nav > li:first-child {
     border-left: medium none;
 }
 
-.header ul.second-nav li a {
+.header ul.secondary_nav > li a,
+.header ul.secondary_nav > li span {
     color: #333333;
     display: block;
     font-size: 12px;
     line-height: 16px;
     margin-left: -1px;
     padding: 12px 8px;
+    text-decoration: none;
 }
 
-.header ul.second-nav li.active a,
-.header ul.second-nav li a:hover {
+.header ul.secondary_nav > li.active a,
+.header ul.secondary_nav > li a:hover {
     background: transparent url(subnav_active_bg.png) repeat left 1px;
 }
 
-.header ul.second-nav li.active a {
+.header ul.secondary_nav > li.active a {
+    color: #aa0000;
+}
+
+.header ul.secondary_nav > li > ul.breadcrumbs {
+    padding: 0px 8px;
+    font-size: 12px;
+    list-style-type: none;
+}
+
+.header ul.secondary_nav > li > ul.breadcrumbs > li a:hover {
+    background: none;
+}
+
+.header ul.secondary_nav > li > ul.breadcrumbs li {
+    background: none;
+    display: inline-block;
+    padding: 0px 2px;
+    color: black;
+}
+
+.header ul.secondary_nav > li > ul.breadcrumbs li:after {
+    content: "\0020 \00BB";
+}
+
+.header ul.secondary_nav > li > ul.breadcrumbs li.last:after {
+    content: "";
+}
+
+.header ul.secondary_nav > li > ul.breadcrumbs a,
+.header ul.secondary_nav > li > ul.breadcrumbs span {
+    display: inline-block;
+    font-size: 12px;
+    line-height: 16px;
+    margin-left: -4px;
+    padding: 12px 2px;
+}
+
+.header ul.secondary_nav > li > ul.breadcrumbs a {
     color: #aa0000;
 }

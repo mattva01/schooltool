@@ -24,7 +24,7 @@
     </p>
 
     <fieldset>
-      <legend i18n:translate="">User Information</legend>
+      <legend><span i18n:translate="">User Information</span></legend>
 
       <div class="row">
         <label for="username" i18n:translate="">Username</label>

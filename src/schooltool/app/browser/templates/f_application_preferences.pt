@@ -8,8 +8,8 @@
     <div class="error" tal:condition="view/error" tal:content="view/error" />
 
     <fieldset>
-      <legend i18n:translate="">
-        General preferences
+      <legend>
+        <span i18n:translate="">General preferences</span>
       </legend>
 
       <div class="row" tal:define="widget nocall:view/title_widget">
@@ -23,8 +23,8 @@
     </fieldset>
 
     <fieldset>
-      <legend i18n:translate="">
-        Calendar Preferences
+      <legend>
+        <span i18n:translate="">Calendar Preferences</span>
       </legend>
 
       <div class="row" tal:define="widget nocall:view/timezone_widget">

@@ -20,16 +20,18 @@
     line-height: 16px;
 }
 
+.ui-state-hover {
+    border: 1px solid #540000;
+}
+
 .ui-state-active {
     background-color: #540000;
     border: none;
 }
 
-.ui-state-hover {
-    border: none;
-}
-
-.ui-accordion-content {
+.ui-accordion .ui-accordion-content {
     background: none;
+    padding-right: 8px;
+    padding-left: 8px;
 }
 
