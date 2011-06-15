@@ -31,9 +31,4 @@
   </div>
 </div>
 
-<div class="related" tal:define="related view/providers/page_related|nothing">
-  <tal:block content="structure related" />
-  <tal:block condition="not:related">&nbsp;</tal:block>
-</div>
-
 </div>

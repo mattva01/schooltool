@@ -130,6 +130,11 @@ pre {
     padding: 0px 16px 2px 16px;
 }
 
+.schooltool > .footer a {
+    font-size: 10px;
+    line-height: 14px;
+}
+
 .schooltool > .footer > p.server-info {
     padding-top: 4px;
 }
