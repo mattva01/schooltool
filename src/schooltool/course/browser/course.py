@@ -247,11 +247,10 @@ class FlourishCoursesViewlet(Viewlet):
                 for section in sorted(schoolyears_data[sy][term],
                                       cmp=self.sortByCourseAndSection,
                                       key=sortingKey):
-                    section_info = {'obj': section,
-                                    'title': '%s -- %s' % \
-                                    (', '.join(course.title
-                                               for course in section.courses),
-                                     section.title)}
+                    section_info = {
+                        'obj': section,
+                        'title': section.title,
+                        }
                     term_info['sections'].append(section_info)
                 sy_info['terms'].append(term_info)
             result.append(sy_info)
