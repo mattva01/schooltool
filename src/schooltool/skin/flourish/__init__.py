@@ -21,3 +21,18 @@ SchoolTool flourish skin.
 """
 
 from schooltool.skin.flourish.interfaces import IFlourishLayer
+
+
+class Empty(object):
+
+    def __init__(self, *args, **kw):
+        pass
+
+    def update(self):
+        pass
+
+    def render(self, *args, **kw):
+        return ''
+
+    def __call__(self, *args, **kw):
+        return ''
