@@ -33,8 +33,9 @@ from zope.app.form.browser.add import AddView
 from zope.app.form.browser.editview import EditView
 from zope.app.form.interfaces import IInputWidget
 from zope.app.form.interfaces import WidgetsError
+from zope.authentication.interfaces import IUnauthenticatedPrincipal
 from zope.publisher.browser import BrowserView
-from zope.component import getMultiAdapter
+from zope.component import getMultiAdapter, queryMultiAdapter
 from zope.component import getUtility
 from zope.component import adapter
 from zope.authentication.interfaces import IAuthentication
@@ -264,6 +265,58 @@ class LogoutView(BrowserView):
         url = absoluteURL(ISchoolToolApplication(None),
                                self.request)
         self.request.response.redirect(url)
+
+
+class LoginNavigationViewlet(flourish.page.LinkViewlet):
+
+    @property
+    def authenticated_person(self):
+        principal = getattr(self.request, 'principal', None)
+        if principal is None:
+            return None
+        if IUnauthenticatedPrincipal.providedBy(principal):
+            return None
+        return IPerson(principal, None)
+
+    @property
+    def title(self):
+        person = self.authenticated_person
+        if person is None:
+            return _("Log in")
+        return _("Log out")
+
+    @property
+    def url(self):
+        person = self.authenticated_person
+        app = ISchoolToolApplication(None)
+        app_url = absoluteURL(app, self.request)
+        if person is None:
+            return '%s/%s' % (app_url, 'login.html')
+        return '%s/%s' % (app_url, 'logout.html')
+
+
+class LoggedInNameViewlet(LoginNavigationViewlet):
+
+    url = None
+
+    @property
+    def title(self):
+        person = self.authenticated_person
+        if not person:
+            return None
+        return person.title
+
+
+class BreadcrumbViewlet(flourish.viewlet.Viewlet):
+
+    def render(self, *args, **kw):
+        breadcrumbs = queryMultiAdapter(
+            (self.context, self.request, self.view),
+            flourish.interfaces.IContentProvider,
+            'breadcrumbs')
+        if breadcrumbs is None:
+            return ''
+        return breadcrumbs()
 
 
 class ApplicationPreferencesView(BrowserView):

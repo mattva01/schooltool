@@ -54,83 +54,15 @@
 
 <div class="header">
 
-<h1 class="brand">SchoolTool</h1>
+  <h1 class="brand">SchoolTool</h1>
 
-<tal:block replace="structure view/providers/header_navigation">
+  <tal:block replace="structure view/providers/header_navigation">
     [ | Header | Navigation | Bar | Here | ]
-</tal:block>
+  </tal:block>
 
-<!--
-<div class="headband">
-  <span class="about">
-    <a id="about-link" tal:attributes="href string:${context/schooltool:app/@@absolute_url}/@@about.html" />
-    &mdash;
-    <span i18n:translate="">free administration software for</span>
-    <span tal:replace="context/schooltool:app/title">Lee High School</span>
-  </span>
-  <span class="login">
-    <tal:block define="user request/principal;
-                       url context/schooltool:app/@@absolute_url">
-
-      <tal:block condition="not:user/schooltool:authenticated"
-              define="url context/schooltool:app/@@absolute_url">
-        <a id="tools-login" i18n:translate=""
-           tal:attributes="href string:${url}/auth/@@login.html">Log In</a>
-      </tal:block>
-
-      <tal:block condition="user/schooltool:authenticated"
-              define="person user/schooltool:person">
-          <tal:block i18n:translate="">Logged in as:</tal:block>
-
-          <tal:block condition="not:person">
-            <span tal:content="user/title">ZMI Principal</span>
-          </tal:block>
-
-          <tal:block condition="person">
-            <a id="login-name"
-               tal:attributes="href string: ${person/@@absolute_url}/home.html"
-               tal:content="user/title">Person Loggedin</a>
-            |
-
-            <tal:block replace="structure provider:schooltool.Header" />
-
-            <a id="login-logout" i18n:translate=""
-               tal:attributes="href string:${url}/auth/@@logout.html">
-               Log Out
-            </a>
-          </tal:block>
-      </tal:block>
-    </tal:block>
-  </span>
-</div>
-
-<div class="breadcrumbs">
-  <div tal:replace="structure view/providers/breadcrumbs|nothing">
-    [ bread > crumbs > here ]
-  </div>
-</div>
--->
-
-<ul class="second-nav">
-  <li>
-    <a href="#">Foo</a>
-  </li>
-  <li>
-    <a href="#">Bar</a>
-  </li>
-  <li>
-    <a href="#">Put</a>
-  </li>
-  <li class="active">
-    <a href="#">Secondary</a>
-  </li>
-  <li>
-    <a href="#">Navigation</a>
-  </li>
-  <li>
-    <a href="#">Here</a>
-  </li>
-</ul>
+  <tal:block replace="structure view/providers/secondary_navigation|nothing">
+    [ | Secondary | Navigation | Bar | Here | ]
+  </tal:block>
 
 </div>
 

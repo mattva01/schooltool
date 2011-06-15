@@ -42,6 +42,7 @@ from schooltool.skin import flourish
 from schooltool.app.browser.app import RelationshipViewBase
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.common.inlinept import InlineViewPageTemplate
+from schooltool.common.inlinept import InheritTemplate
 from schooltool.skin.containers import TableContainerView
 from schooltool.group.interfaces import IGroupContainer
 from schooltool.person.interfaces import IPerson, IPersonFactory
@@ -101,6 +102,10 @@ class FlourishBasicPersonContainerView(flourish.containers.TableContainerView):
                                                name='delete_checkbox',
                                                title=u'')]
         return []
+
+
+class PersonContainerLinks(flourish.page.RefineLinksViewlet):
+    """Person container links viewlet."""
 
 
 class IPersonAddForm(IBasicPerson):
@@ -377,6 +382,16 @@ class MultiplePersonAddView(form.Form):
         self.request.response.redirect(url)
 
 
+class FlourishMultiplePersonAddView(MultiplePersonAddView):
+    template = InheritTemplate(flourish.page.Page.template)
+
+    def buildAddForm(self):
+        self.addform = FlourishPersonAddSubForm(
+            self.context, self.request, self)
+        n = len(self.widgets['usernames'].value)
+        self.addform.prefix = 'addform_%d.' % n
+
+
 class PersonAddSubForm(PersonAddFormBase):
     template = ViewPageTemplateFile('templates/person_add_subform.pt')
 
@@ -392,6 +407,10 @@ class PersonAddSubForm(PersonAddFormBase):
                 interface=z3c.form.interfaces.IActionHandler)
             if handler is not None:
                 handler()
+
+
+class FlourishPersonAddSubForm(PersonAddSubForm):
+    template = ViewPageTemplateFile('templates/f_person_add_subform.pt')
 
 
 class PersonEditView(form.EditForm, PersonForm):

@@ -100,7 +100,7 @@ def contentDirective(
     **kwargs):
 
     if not interfaces.IContentProvider.implementedBy(class_):
-        class_ = type(name, (class_, ContentProvider), {})
+        class_ = type(class_.__name__, (class_, ContentProvider), {})
 
     allowed_interface = (tuple(allowed_interface) +
                          (interfaces.IContentProvider, ))
