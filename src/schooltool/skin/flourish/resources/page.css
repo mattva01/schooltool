@@ -69,15 +69,20 @@
 }
 
 .page > .body > .refine > .content > .header {
-    border-bottom: 1px dotted #333333;
-    font-size: 12px;
-    font-weight: bold;
+    color: #aa0000;
+    border-bottom: 1px dotted #aa0000;
+    font-size: 14px;
     line-height: 16px;
+    padding-bottom: 4px;
+    margin-bottom: 8px;
+}
+
+.page > .body > .refine > .content > .body > ul.filter {
+    margin-left: 8px;
 }
 
 .page > .body > .refine > .content > .body > ul.filter > li {
-    padding: 2px 0px 1px 0px;
-    border-bottom: 1px dotted #333333;
+    padding-bottom: 2px;
 }
 
 .page > .body > .refine > .content > .body > ul.filter > li.active {
@@ -86,7 +91,6 @@
 }
 
 .page > .body > .refine > .content > .body > ul.filter > li > a {
-    color: #333333;
     font-size: 12px;
     line-height: 16px;
 }
