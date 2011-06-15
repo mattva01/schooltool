@@ -40,9 +40,15 @@ h4, h5, h6 {
     line-height: 20px;
 }
 
+h1, h2, h3, h4, h5, h6 {
+    margin-bottom: 8px;
+}
+
 a, a:link, a:visited, a:active {
     color: #aa0000;
     text-decoration: none;
+    font-size: 12px;
+    line-height: 16px;
 }
 
 a:hover {
@@ -54,7 +60,14 @@ a:hover {
 }
 
 p {
+    font-size: 12px;
+    line-height: 16px;
     padding-bottom: 8px;
+}
+
+li {
+    font-size: 12px;
+    line-height: 16px;
 }
 
 p.small {
