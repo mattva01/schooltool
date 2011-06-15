@@ -42,6 +42,13 @@
       />
 
   <flourish:viewletManager
+      name="secondary_navigation"
+      provides=".page.ISecondaryNavigationManager"
+      class=".page.SecondaryNavigationManager"
+      permission="zope.Public"
+      />
+
+  <flourish:viewletManager
       name="page_navigation"
       class=".page.PageNavigationManager"
       provides=".page.IPageNavigationManager"

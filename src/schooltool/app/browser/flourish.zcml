@@ -67,6 +67,35 @@
       permission="zope.Public"
       />
 
+  <flourish:viewlet
+      name="login"
+      manager="schooltool.skin.flourish.page.ISecondaryNavigationManager"
+      class="schooltool.app.browser.app.LoginNavigationViewlet"
+      permission="zope.Public"
+      />
+
+  <flourish:viewlet
+      name="logged-in-name"
+      before="login"
+      manager="schooltool.skin.flourish.page.ISecondaryNavigationManager"
+      class="schooltool.app.browser.app.LoggedInNameViewlet"
+      permission="zope.Public"
+      />
+
+  <flourish:activeViewlet
+      name="login"
+      manager="schooltool.skin.flourish.page.ISecondaryNavigationManager"
+      view="schooltool.app.browser.app.LoginView"
+      />
+
+  <flourish:viewlet
+      name="breadcrumbs"
+      after="login"
+      manager="schooltool.skin.flourish.page.ISecondaryNavigationManager"
+      class="schooltool.app.browser.app.BreadcrumbViewlet"
+      permission="zope.Public"
+      />
+
   <!-- Site control page -->
 
   <flourish:page

@@ -204,6 +204,10 @@ class HeaderNavigationManager(ListNavigationContent):
     list_class = "navigation"
 
 
+class SecondaryNavigationManager(ListNavigationContent):
+    list_class = "secondary_nav"
+
+
 class PageNavigationManager(ListNavigationContent):
     list_class = "navigation"
 
@@ -223,6 +227,10 @@ class IHTMLHeadManager(interfaces.IViewletManager):
 
 
 class IHeaderNavigationManager(interfaces.IViewletManager):
+    pass
+
+
+class ISecondaryNavigationManager(interfaces.IViewletManager):
     pass
 
 
@@ -248,7 +256,13 @@ class IPageRelatedManager(interfaces.IViewletManager):
 
 class LinkViewlet(Viewlet):
     template = InlineViewPageTemplate('''
-    <a tal:attributes="href view/url" tal:content="view/title"></a>
+    <tal:block define="url view/url">
+      <a tal:condition="url"
+         tal:attributes="href view/url"
+         tal:content="view/title"></a>
+      <span tal:condition="not:url"
+            tal:content="view/title"></span>
+    </tal:block>
     ''')
 
     render = lambda self, *a, **kw: self.template(*a, **kw)
