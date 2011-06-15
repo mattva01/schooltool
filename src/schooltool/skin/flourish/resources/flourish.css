@@ -13,7 +13,7 @@
 /* General elements */
 
 body {
-    background: #ffffff url(bg_dotted.png) repeat scroll 0 0;
+    background-color: #ffffff;
     color: #333333;
     font-family: 'Ubuntubeta', 'Ubuntu', 'Bitstream Vera Sans',
                  'DejaVu Sans', Tahoma, sans-serif;
@@ -40,12 +40,17 @@ h4, h5, h6 {
     line-height: 20px;
 }
 
-p {
-    margin-bottom: 8px;
+a, a:link, a:visited, a:active {
+    color: #aa0000;
+    text-decoration: none;
 }
 
-a, a:link, a:visited, a:hover, a:active {
-    color: #aa0000;
+a:hover {
+    text-decoration: underline;
+}
+
+.active a:hover {
+    text-decoration: none;
 }
 
 p.small {
@@ -68,18 +73,21 @@ pre {
 }
 
 .schooltool > .header {
-    -moz-box-shadow: 0px -3px 4px #888;
-    -webkit-box-shadow: 0px -3px 4px #888;
-    box-shadow: 0px -3px 4px #888;
+    -moz-box-shadow: 0px -3px 4px #bbbbbb;
+    -webkit-box-shadow: 0px -3px 4px #bbbbbb;
+    box-shadow: 0px -3px 4px #bbbbbb;
 }
 
 .schooltool > .page {
-    -moz-box-shadow: 0px 1px 4px #888;
-    -webkit-box-shadow: 0px 1px 4px #888;
-    box-shadow: 0px 1px 4px #888;
+    margin-top: -4px; /* Hack to close the  */
+    padding-top: 4px; /* gap in the shadows */
 
     -moz-border-radius: 0px 0px 4px 4px;
     border-radius: 0px 0px 4px 4px;
+
+    -moz-box-shadow: 0px 1px 4px #bbbbbb;
+    -webkit-box-shadow: 0px 1px 4px #bbbbbb;
+    box-shadow: 0px 1px 4px #bbbbbb;
 }
 
 .schooltool > .header {
@@ -94,9 +102,7 @@ pre {
 }
 
 .schooltool > .footer {
-    background-color: #f7f7f7;
     clear: both;
-    padding-bottom: 16px;
     z-index: 0;
 }
 
@@ -104,7 +110,11 @@ pre {
     color: #aea79f;
     font-size: 10px;
     line-height: 14px;
-    padding: 4px 16px;
+    padding: 0px 16px 2px 16px;
+}
+
+.schooltool > .footer > p.server-info {
+    padding-top: 4px;
 }
 
 /* Header - main navigation, second navigation, headinfo, breadcrumbs*/
@@ -127,6 +137,10 @@ pre {
 
     -moz-border-radius: 0px 0px 4px 4px;
     border-radius: 0px 0px 4px 4px;
+
+    -moz-box-shadow: 0px 1px 6px #bbbbbb;
+    -webkit-box-shadow: 0px 1px 6px #bbbbbb;
+    box-shadow: 0px 1px 6px #bbbbbb;
 }
 
 .header ul.navigation li {
@@ -141,7 +155,6 @@ pre {
     font-size: 14px;
     line-height: 16px;
     padding: 24px 8px;
-    text-decoration: none;
 }
 
 .header ul.navigation li a:hover {
@@ -160,6 +173,10 @@ pre {
 
     -moz-border-radius: 0px 0px 4px 4px;
     border-radius: 0px 0px 4px 4px;
+
+    -moz-box-shadow: 0px 1px 6px #bbbbbb;
+    -webkit-box-shadow: 0px 1px 6px #bbbbbb;
+    box-shadow: 0px 1px 6px #bbbbbb;
 }
 
 .header ul.second-nav li {
@@ -179,7 +196,6 @@ pre {
     line-height: 16px;
     margin-left: -1px;
     padding: 12px 8px;
-    text-decoration: none;
 }
 
 .header ul.second-nav li.active a,
