@@ -59,13 +59,18 @@ form fieldset .row .widget {
     display: inline;
 }
 
-form fieldset .row .error {
-    color: #AA0000;
-    display: inline;
-    margin-left: 16px;
-    width: 224px;
+form fieldset .row > .error {
+    display: block;
+    float: right;
+    width: 222px;
 }
 
+form fieldset .row > .error .error {
+    color: #AA0000;
+    font-size: 12px;
+    padding-left: 16px;
+    background: transparent url(error-icon.png) no-repeat scroll top left;
+}
 
 form fieldset .row .widget .text-widget,
 form fieldset .row .widget input[type="text"],
@@ -134,11 +139,4 @@ form > .viewspace > h3 {
 
 form .status > .errors {
     display: none;
-}
-
-/* XXX: hackery for the login form */
-form > .error {
-    color: #AA0000;
-    padding: 8px 0px;
-    font-size: 12px;
 }

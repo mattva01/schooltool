@@ -31,10 +31,9 @@
           <input id="username" name="username" type="text" tabindex="1"
                  tal:attributes="value request/username|nothing" />
         </div>
-        <div class="error" tal:condition="view/error"
-             tal:content="view/error">
-          <div class="error" i18n:translate="">
-            Incorrect username or password.
+        <div class="error" tal:condition="view/error">
+          <div class="error" tal:content="view/error">
+            Error message
           </div>
         </div>
       </div>
