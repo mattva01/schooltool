@@ -5,5 +5,15 @@
            xmlns:flourish="http://schooltool.org/flourish"
            i18n_domain="schooltool">
 
+  <!-- viewlets -->
+
+  <flourish:viewlet
+      name="coursesinfo"
+      for="schooltool.basicperson.interfaces.IBasicPerson"
+      manager="schooltool.basicperson.browser.person.IFlourishPersonInfoManager"
+      class="schooltool.course.browser.course.FlourishCoursesViewlet"
+      permission="schooltool.edit"
+      />
+
 
 </configure>

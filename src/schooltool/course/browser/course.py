@@ -19,6 +19,7 @@
 """
 course browser views.
 """
+from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.interface import implements
 from zope.component import adapts
 from zope.component import getMultiAdapter
@@ -40,6 +41,8 @@ from schooltool.course.interfaces import ICourse, ICourseContainer
 from schooltool.course.interfaces import ILearner, IInstructor
 
 from schooltool.common import SchoolToolMessage as _
+
+from schooltool.skin.flourish.viewlet import Viewlet
 
 
 class CourseContainerAbsoluteURLAdapter(BrowserView):
@@ -188,3 +191,75 @@ class CoursesViewlet(ViewletBase):
             return self.collator.cmp(this['section_title'],
                                      other['section_title'])
         return self.collator.cmp(this['course'], other['course'])
+
+
+class FlourishCoursesViewlet(Viewlet):
+    """A flourish viewlet showing the courses a person is in."""
+
+    template = ViewPageTemplateFile('templates/f_coursesviewlet.pt')
+    body_template = None
+    render = lambda self, *a, **kw: self.template(*a, **kw)
+
+    def __init__(self, *args, **kw):
+        super(FlourishCoursesViewlet, self).__init__(*args, **kw)
+        self.collator = ICollator(self.request.locale)
+
+    def update(self):
+        self.instructorOf = self.sectionsAsTeacher()
+        self.learnerOf = self.sectionsAsLearner()
+
+    def isTeacher(self):
+        """Find out if the person is an instructor for any sections."""
+        return bool(self.instructorOf)
+
+    def isLearner(self):
+        """Find out if the person is a member of any sections."""
+        return bool(self.learnerOf)
+
+    def sectionsAsTeacher(self):
+        """Get the sections the person instructs."""
+        return self.sectionsAs(IInstructor)
+
+    def sectionsAsLearner(self):
+        """Get the sections the person is a member of."""
+        return self.sectionsAs(ILearner)
+
+    def sectionsAs(self, role_interface):
+        schoolyears_data = {}
+        for section in role_interface(self.context).sections():
+            sy = ISchoolYear(section)
+            if sy not in schoolyears_data:
+                schoolyears_data[sy] = {}
+            term = ITerm(section)
+            if term not in schoolyears_data[sy]:
+                schoolyears_data[sy][term] = []
+            schoolyears_data[sy][term].append(section)
+        result = []
+        for sy in sorted(schoolyears_data, key=lambda x:x.first, reverse=True):
+            sy_info = {'obj': sy, 'terms': []}
+            for term in sorted(schoolyears_data[sy], key=lambda x:x.first):
+                sortingKey = lambda section:{'course':
+                                             ', '.join([course.title
+                                                        for course in
+                                                        section.courses]),
+                                             'section_title': section.title}
+                term_info = {'obj': term, 'sections': []}
+                for section in sorted(schoolyears_data[sy][term],
+                                      cmp=self.sortByCourseAndSection,
+                                      key=sortingKey):
+                    section_info = {'obj': section,
+                                    'title': '%s -- %s' % \
+                                    (', '.join(course.title
+                                               for course in section.courses),
+                                     section.title)}
+                    term_info['sections'].append(section_info)
+                sy_info['terms'].append(term_info)
+            result.append(sy_info)
+        return result
+
+    def sortByCourseAndSection(self, this, other):
+        if this['course'] is other['course']:
+            return self.collator.cmp(this['section_title'],
+                                     other['section_title'])
+        return self.collator.cmp(this['course'], other['course'])
+

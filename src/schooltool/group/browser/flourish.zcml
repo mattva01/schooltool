@@ -5,5 +5,14 @@
            xmlns:flourish="http://schooltool.org/flourish"
            i18n_domain="schooltool">
 
+  <!-- viewlets -->
+
+  <flourish:viewlet
+      name="groupsinfo"
+      for="schooltool.basicperson.interfaces.IBasicPerson"
+      manager="schooltool.basicperson.browser.person.IFlourishPersonInfoManager"
+      class="schooltool.group.browser.group.FlourishGroupsViewlet"
+      permission="schooltool.edit"
+      />
 
 </configure>
