@@ -1,0 +1,38 @@
+<div class="info-block person-groups clearfix"
+     i18n:domain="schooltool">
+  <h5 i18n:translate="">Groups</h5>
+  <div>
+  <table>
+    <thead>
+      <tr>
+        <th i18n:translate="">School Year</th>
+        <th i18n:translate="">Group</th>
+      </tr>
+    </thead>
+    <tal:block repeat="schoolyear view/schoolyears">
+      <tal:block repeat="group schoolyear/groups">
+        <tr>
+          <td>
+            <a tal:attributes="href schoolyear/obj/@@absolute_url;
+                               title schoolyear/obj/title"
+               tal:content="schoolyear/obj/title"></a>
+          </td>
+          <td>
+            <a tal:attributes="href group/@@absolute_url;
+                               title group/title"
+               tal:content="group/title"></a>
+          </td>
+        </tr>
+      </tal:block>
+    </tal:block>
+  </table>
+  <div style="clear: both;" tal:condition="view/canModify">
+    <a class="modify" href="" title="Manage this person's memberships"
+       tal:attributes="href string:${context/@@absolute_url}/@@groups.html"
+       i18n:attributes="title"
+       i18n:translate="">
+      edit groups
+    </a>
+  </div>
+  </div>
+</div>
