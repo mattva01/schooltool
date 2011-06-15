@@ -108,6 +108,7 @@ form .button-controls .submit-widget:hover {
 
 
 form .controls .button-ok,
+form .controls .button-neutral,
 form .controls .button-cancel {
     background-color: #aea79f;
     color: #ffffff;
@@ -116,6 +117,7 @@ form .controls .button-cancel {
 }
 
 form .controls .button-ok:hover,
+form .controls .button-neutral:hover,
 form .controls .button-cancel:hover {
     background-color: #dd0000;
 }

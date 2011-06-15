@@ -5,6 +5,7 @@
            xmlns:flourish="http://schooltool.org/flourish"
            i18n_domain="schooltool">
 
+  <!-- Container views -->
 
   <flourish:breadcrumb
       for="schooltool.person.interfaces.IPersonContainer"
@@ -40,6 +41,15 @@
       permission="schooltool.view"
       />
 
+  <flourish:viewlet
+      name="person_container"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      class="schooltool.basicperson.browser.person.PersonContainerLinks"
+      for="schooltool.person.interfaces.IPersonContainer"
+      title="People"
+      permission="schooltool.view"
+      />
+
   <flourish:viewletFactory
       name="manage_school_links"
       manager="schooltool.skin.flourish.page.IPageRefineManager"
@@ -53,17 +63,25 @@
       for="schooltool.person.interfaces.IPersonContainer"
       />
 
-  <flourish:viewlet
-      name="add_person"
-      link="add.html"
-      title="Add Person"
-      view=".person.FlourishBasicPersonContainerView"
+  <!-- Add views -->
+
+
+  <flourish:page
+      name="add_multiple.html"
+      subtitle="Add new persons"
       for="schooltool.person.interfaces.IPersonContainer"
-      manager="schooltool.skin.flourish.page.IContentActionsManager"
-      class="schooltool.skin.flourish.page.LinkViewlet"
+      class="schooltool.basicperson.browser.person.FlourishMultiplePersonAddView"
       permission="schooltool.edit"
-      html_class="create"
+      content_template="templates/f_person_add_multiple.pt"
       />
+
+    <flourish:viewlet
+        name="add_multiple.html"
+        title="Add Persons"
+        class="schooltool.skin.flourish.page.LinkViewlet"
+        manager="schooltool.basicperson.browser.person.PersonContainerLinks"
+        permission="schooltool.edit"
+        />
 
   <configure package="schooltool.skin.flourish">
     <flourish:page
@@ -75,6 +93,82 @@
        template="templates/main.pt"
        content_template="templates/z3c_form_edit.pt"
        />
+    <flourish:viewlet
+        name="add.html"
+        title="Add Person"
+        class="schooltool.skin.flourish.page.LinkViewlet"
+        manager="schooltool.basicperson.browser.person.PersonContainerLinks"
+        permission="schooltool.edit"
+        />
+
+    <flourish:viewlet
+        name="add_person"
+        link="add.html"
+        title="Add Person"
+        view="schooltool.basicperson.browser.person.FlourishBasicPersonContainerView"
+        for="schooltool.person.interfaces.IPersonContainer"
+        manager="schooltool.skin.flourish.page.IContentActionsManager"
+        class="schooltool.skin.flourish.page.LinkViewlet"
+        permission="schooltool.edit"
+        html_class="create"
+        />
+
+    <flourish:page
+       name="addTeacher.html"
+       subtitle="Add new teacher"
+       for="schooltool.person.interfaces.IPersonContainer"
+       class="schooltool.basicperson.browser.person.TeacherAddView"
+       permission="schooltool.edit"
+       template="templates/main.pt"
+       content_template="templates/z3c_form_edit.pt"
+       />
+    <flourish:viewlet
+        name="addTeacher.html"
+        title="Add Teacher"
+        class="schooltool.skin.flourish.page.LinkViewlet"
+        manager="schooltool.basicperson.browser.person.PersonContainerLinks"
+        permission="schooltool.edit"
+        />
+
+    <flourish:page
+       name="addStudent.html"
+       subtitle="Add new student"
+       for="schooltool.person.interfaces.IPersonContainer"
+       class="schooltool.basicperson.browser.person.StudentAddView"
+       permission="schooltool.edit"
+       template="templates/main.pt"
+       content_template="templates/z3c_form_edit.pt"
+       />
+    <flourish:viewlet
+        name="addStudent.html"
+        title="Add Student"
+        class="schooltool.skin.flourish.page.LinkViewlet"
+        manager="schooltool.basicperson.browser.person.PersonContainerLinks"
+        permission="schooltool.edit"
+        />
+
+    <flourish:page
+       name="addAdministrator.html"
+       subtitle="Add new administrator"
+       for="schooltool.person.interfaces.IPersonContainer"
+       class="schooltool.basicperson.browser.person.AdministratorAddView"
+       permission="schooltool.edit"
+       template="templates/main.pt"
+       content_template="templates/z3c_form_edit.pt"
+       />
+    <flourish:viewlet
+        name="addAdministrator.html"
+        title="Add Administrator"
+        class="schooltool.skin.flourish.page.LinkViewlet"
+        manager="schooltool.basicperson.browser.person.PersonContainerLinks"
+        permission="schooltool.edit"
+        />
+
+    <flourish:activeViewlet
+        factory="schooltool.skin.flourish.page.getViewletViewName"
+        manager="schooltool.basicperson.browser.person.PersonContainerLinks"
+        />
+
   </configure>
 
   <!-- Person index page -->
