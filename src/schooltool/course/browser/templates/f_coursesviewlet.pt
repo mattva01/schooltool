@@ -4,13 +4,13 @@
 <div class="info-block clearfix" tal:define="schoolyears view/instructorOf"
      tal:condition="view/isTeacher"
      i18n:domain="schooltool">
-  <h3 i18n:translate="">Sections Taught</h3>
+  <h3 i18n:translate="">Sections taught</h3>
   <table>
     <thead>
       <tr>
-        <th i18n:translate="">School Year</th>
-        <th i18n:translate="">Term</th>
         <th i18n:translate="">Section</th>
+        <th i18n:translate="">Term</th>
+        <th i18n:translate="">School Year</th>
       </tr>
     </thead>
     <tal:block repeat="schoolyear schoolyears">
@@ -18,9 +18,9 @@
         <tal:block repeat="section_data term/sections">
           <tr>
             <td>
-              <a tal:attributes="href schoolyear/obj/@@absolute_url;
-                                 title schoolyear/obj/title"
-                 tal:content="schoolyear/obj/title"></a>
+              <a tal:attributes="href section_data/obj/@@absolute_url;
+                                 title section_data/title"
+                 tal:content="section_data/title"></a>
             </td>
             <td>
               <a tal:attributes="href term/obj/@@absolute_url;
@@ -28,9 +28,9 @@
                  tal:content="term/obj/title"></a>
             </td>
             <td>
-              <a tal:attributes="href section_data/obj/@@absolute_url;
-                                 title section_data/title"
-                 tal:content="section_data/title"></a>
+              <a tal:attributes="href schoolyear/obj/@@absolute_url;
+                                 title schoolyear/obj/title"
+                 tal:content="schoolyear/obj/title"></a>
             </td>
           </tr>
         </tal:block>
@@ -42,13 +42,13 @@
 <div class="info-block clearfix" tal:define="schoolyears view/learnerOf"
      tal:condition="view/isLearner"
      i18n:domain="schooltool">
-  <h3 i18n:translate="">Sections Attended</h3>
+  <h3 i18n:translate="">Sections attended</h3>
   <table>
     <thead>
       <tr>
-        <th i18n:translate="">School Year</th>
-        <th i18n:translate="">Term</th>
         <th i18n:translate="">Section</th>
+        <th i18n:translate="">Term</th>
+        <th i18n:translate="">School Year</th>
       </tr>
     </thead>
     <tal:block repeat="schoolyear schoolyears">
@@ -56,9 +56,9 @@
         <tal:block repeat="section_data term/sections">
           <tr>
             <td>
-              <a tal:attributes="href schoolyear/obj/@@absolute_url;
-                                 title schoolyear/obj/title"
-                 tal:content="schoolyear/obj/title"></a>
+              <a tal:attributes="href section_data/obj/@@absolute_url;
+                                 title section_data/title"
+                 tal:content="section_data/title"></a>
             </td>
             <td>
               <a tal:attributes="href term/obj/@@absolute_url;
@@ -66,9 +66,9 @@
                  tal:content="term/obj/title"></a>
             </td>
             <td>
-              <a tal:attributes="href section_data/obj/@@absolute_url;
-                                 title section_data/title"
-                 tal:content="section_data/title"></a>
+              <a tal:attributes="href schoolyear/obj/@@absolute_url;
+                                 title schoolyear/obj/title"
+                 tal:content="schoolyear/obj/title"></a>
             </td>
           </tr>
         </tal:block>
