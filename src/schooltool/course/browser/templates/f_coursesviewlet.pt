@@ -4,7 +4,7 @@
 <div class="info-block clearfix" tal:define="schoolyears view/instructorOf"
      tal:condition="view/isTeacher"
      i18n:domain="schooltool">
-  <h3 i18n:translate="">Sections Taught</h3>
+  <h3 i18n:translate="">Sections taught</h3>
   <table>
     <thead>
       <tr>
@@ -42,7 +42,7 @@
 <div class="info-block clearfix" tal:define="schoolyears view/learnerOf"
      tal:condition="view/isLearner"
      i18n:domain="schooltool">
-  <h3 i18n:translate="">Sections Attended</h3>
+  <h3 i18n:translate="">Sections attended</h3>
   <table>
     <thead>
       <tr>
