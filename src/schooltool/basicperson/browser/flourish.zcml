@@ -8,7 +8,7 @@
 
   <flourish:breadcrumb
       for="schooltool.person.interfaces.IPersonContainer"
-      title="Persons"
+      title="People"
       />
 
   <flourish:content
@@ -16,12 +16,12 @@
       permission="schooltool.view"
       for="schooltool.person.interfaces.IPersonContainer"
       layer="schooltool.skin.flourish.IFlourishLayer"
-      title="Persons"
+      title="People"
       name="title" />
 
   <flourish:viewlet
       name="persons"
-      title="Persons"
+      title="People"
       class="schooltool.skin.flourish.page.LinkViewlet"
       manager="schooltool.app.browser.app.ManageSchoolLinks"
       permission="schooltool.view"
