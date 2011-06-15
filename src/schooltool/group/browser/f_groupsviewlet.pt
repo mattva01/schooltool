@@ -2,25 +2,26 @@
      i18n:domain="schooltool">
   <h2 i18n:translate="">Groups</h2>
   <div>
+  <h3 i18n:translate="">Group memberships</h3>
   <table>
     <thead>
       <tr>
-        <th i18n:translate="">School Year</th>
         <th i18n:translate="">Group</th>
+        <th i18n:translate="">School Year</th>
       </tr>
     </thead>
     <tal:block repeat="schoolyear view/schoolyears">
       <tal:block repeat="group schoolyear/groups">
         <tr>
           <td>
-            <a tal:attributes="href schoolyear/obj/@@absolute_url;
-                               title schoolyear/obj/title"
-               tal:content="schoolyear/obj/title"></a>
-          </td>
-          <td>
             <a tal:attributes="href group/@@absolute_url;
                                title group/title"
                tal:content="group/title"></a>
+          </td>
+          <td>
+            <a tal:attributes="href schoolyear/obj/@@absolute_url;
+                               title schoolyear/obj/title"
+               tal:content="schoolyear/obj/title"></a>
           </td>
         </tr>
       </tal:block>
