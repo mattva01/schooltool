@@ -1,5 +1,5 @@
 <div>
-<h5 i18n:translate="">Sections</h5>
+<h2 i18n:translate="">Sections</h2>
 <div>
 <div class="info-block clearfix" tal:define="schoolyears view/instructorOf"
      tal:condition="view/isTeacher"

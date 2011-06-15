@@ -1,6 +1,6 @@
 <div class="info-block person-groups clearfix"
      i18n:domain="schooltool">
-  <h5 i18n:translate="">Groups</h5>
+  <h2 i18n:translate="">Groups</h2>
   <div>
   <table>
     <thead>

@@ -1,5 +1,5 @@
 <div>
-<h5 i18n:translate="">Advisory</h5>
+<h2 i18n:translate="">Advisory</h2>
 <div>
 <div tal:define="advisors view/advisors"
      i18n:domain="schooltool">

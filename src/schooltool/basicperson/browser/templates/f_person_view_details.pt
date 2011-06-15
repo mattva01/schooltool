@@ -9,7 +9,8 @@
       $(document).ready(function() {
         // accordion setup
         $( ".person-info" ).accordion({
-          header: 'h5'
+          header: 'h2',
+          autoHeight: false,
         });
       });
     <metal:block tal:replace="structure string:&lt;/script&gt;" />
