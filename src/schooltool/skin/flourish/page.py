@@ -78,6 +78,11 @@ class ContentViewletManager(ViewletManager):
         </div>
     """)
 
+    def render(self, *args, **kw):
+        if not self.viewlets:
+            return ''
+        return ViewletManager.render(self, *args, **kw)
+
 
 class Refine(Viewlet):
 

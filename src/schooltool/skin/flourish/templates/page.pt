@@ -1,8 +1,8 @@
 <div class="body">
 
-<div class="refine"
-     tal:content="structure view/providers/page_refine|nothing">
-  [Refine content blocks]
+<div class="refine" tal:define="refine view/providers/page_refine|nothing">
+  <tal:block content="structure refine" />
+  <tal:block condition="not:refine">&nbsp;</tal:block>
 </div>
 
 <div class="container">
@@ -31,9 +31,9 @@
   </div>
 </div>
 
-<div class="related"
-     tal:content="structure view/providers/page_related|nothing">
-  [Related content blocks]
+<div class="related" tal:define="related view/providers/page_related|nothing">
+  <tal:block content="structure related" />
+  <tal:block condition="not:related">&nbsp;</tal:block>
 </div>
 
 </div>
