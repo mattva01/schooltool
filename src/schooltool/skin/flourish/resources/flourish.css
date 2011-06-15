@@ -53,6 +53,10 @@ a:hover {
     text-decoration: none;
 }
 
+p {
+    padding-bottom: 8px;
+}
+
 p.small {
     font-size: 10px;
     line-height: 14px;
