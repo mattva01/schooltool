@@ -202,6 +202,7 @@ pre {
     line-height: 16px;
     margin-left: -1px;
     padding: 12px 8px;
+    text-decoration: none;
 }
 
 .header ul.secondary_nav > li.active a,
