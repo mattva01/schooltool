@@ -29,7 +29,9 @@
     border: none;
 }
 
-.ui-accordion-content {
+.ui-accordion .ui-accordion-content {
     background: none;
+    padding-right: 8px;
+    padding-left: 8px;
 }
 
