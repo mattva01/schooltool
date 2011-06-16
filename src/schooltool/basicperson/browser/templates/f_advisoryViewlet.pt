@@ -1,34 +1,34 @@
-<div>
-<h2 i18n:translate="">Advisory</h2>
-<div>
-<div tal:define="advisors view/advisors"
-     i18n:domain="schooltool">
-  <h3 i18n:translate="">Advisors</h3>
-  <div tal:replace="structure view/advisors_table/render" />
-  <div tal:condition="view/canModify">
-    <a class="modify" href="" title="Manage this person's advisors"
-       tal:attributes="href string:${context/@@absolute_url}/@@advisors.html"
-       i18n:attributes="title"
-       i18n:translate="">
-      edit advisors
-    </a>
+<div i18n:domain="schooltool">
+  <h2 i18n:translate="">Advisory</h2>
+  <div>
+    <div tal:define="advisors view/advisors">
+      <h3 i18n:translate="">
+        Advisors
+        <metal:block tal:condition="view/canModify">
+          <a class="modify" href="" title="Manage this person's advisors"
+             tal:attributes="href string:${context/@@absolute_url}/@@advisors.html"
+             i18n:attributes="title"
+             i18n:translate="">
+            edit
+          </a>
+        </metal:block>
+      </h3>
+      <div tal:replace="structure view/advisors_table/render" />
+    </div>
+    <div tal:define="advisees view/advisees">
+      <h3 i18n:translate="">
+        Advisees
+        <metal:block tal:condition="view/canModify">
+          <a class="modify" href="" title="Manage this person's advisees"
+             tal:attributes="href string:${context/@@absolute_url}/@@advisees.html"
+             i18n:attributes="title"
+             i18n:translate="">
+            edit
+          </a>
+        </metal:block>
+      </h3>
+      <div tal:replace="structure view/advisees_table/render" />
+    </div>
   </div>
-</div>
-
-<div tal:define="advisees view/advisees"
-     i18n:domain="schooltool">
-  <h3 i18n:translate="">Advisees</h3>
-  <div tal:replace="structure view/advisees_table/render" />
-  <div tal:condition="view/canModify">
-    <a class="modify" href="" title="Manage this person's advisees"
-       tal:attributes="href string:${context/@@absolute_url}/@@advisees.html"
-       i18n:attributes="title"
-       i18n:translate="">
-      edit advisees
-    </a>
-  </div>
-</div>
-
-</div>
 </div>
 

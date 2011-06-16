@@ -79,6 +79,12 @@ pre {
     overflow: auto;
 }
 
+a.modify {
+    background: transparent url(edit-icon.png) no-repeat scroll top left;
+    font-size: 12px;
+    padding-left: 16px;
+}
+
 /* Layout */
 
 .schooltool > .header,
