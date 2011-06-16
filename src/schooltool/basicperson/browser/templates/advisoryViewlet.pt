@@ -15,8 +15,6 @@
   </div>
 </div>
 
-<div>&nbsp;</div>
-
 <div tal:define="advisees view/advisees"
      i18n:domain="schooltool">
   <h3 i18n:translate="">Advisees</h3>
