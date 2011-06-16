@@ -1,11 +1,11 @@
 <div>
 <h2 i18n:translate="">Sections</h2>
 <div>
-<div class="info-block clearfix" tal:define="schoolyears view/instructorOf"
+<div tal:define="schoolyears view/instructorOf"
      tal:condition="view/isTeacher"
      i18n:domain="schooltool">
   <h3 i18n:translate="">Sections taught</h3>
-  <table>
+  <table class="person-view-sections">
     <thead>
       <tr>
         <th i18n:translate="">Section</th>
@@ -39,11 +39,11 @@
   </table>
 </div>
 
-<div class="info-block clearfix" tal:define="schoolyears view/learnerOf"
+<div tal:define="schoolyears view/learnerOf"
      tal:condition="view/isLearner"
      i18n:domain="schooltool">
   <h3 i18n:translate="">Sections attended</h3>
-  <table>
+  <table class="person-view-sections">
     <thead>
       <tr>
         <th i18n:translate="">Section</th>

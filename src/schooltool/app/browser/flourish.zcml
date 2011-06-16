@@ -88,13 +88,13 @@
       view="schooltool.app.browser.app.LoginView"
       />
 
-  <flourish:viewlet
+<!--  <flourish:viewlet
       name="breadcrumbs"
       after="login"
       manager="schooltool.skin.flourish.page.ISecondaryNavigationManager"
       class="schooltool.app.browser.app.BreadcrumbViewlet"
       permission="zope.Public"
-      />
+      /> -->
 
   <flourish:content
       name="breadcrumbs"

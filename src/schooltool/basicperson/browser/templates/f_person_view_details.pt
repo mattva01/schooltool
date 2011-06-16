@@ -4,16 +4,6 @@
             tal:attributes="src context/++resource++jstree/jquery.tree.js"></script>
     <script type="text/javascript"
             tal:attributes="src context/++resource++jstree/script.js"></script>
-    <metal:block
-        tal:replace='structure string:&lt;script type="text/javascript"&gt;' />
-      $(document).ready(function() {
-        // accordion setup
-        $( ".person-info" ).accordion({
-          header: 'h2',
-          autoHeight: false,
-        });
-      });
-    <metal:block tal:replace="structure string:&lt;/script&gt;" />
 
 <div class="person-info">
   <tal:block tal:replace="structure context/schooltool:content/schooltool.person.FlourishInfo"/>

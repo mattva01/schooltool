@@ -1,17 +1,16 @@
-<div class="info-block person-groups clearfix"
-     i18n:domain="schooltool">
+<div i18n:domain="schooltool">
   <h2 i18n:translate="">Groups</h2>
   <div>
     <h3 i18n:translate="">
       Group memberships
-      <metal:block tal:condition="view/canModify">
-        <a class="modify" href="" title="Manage this person's memberships"
-           tal:attributes="href string:${context/@@absolute_url}/@@groups.html"
-           i18n:attributes="title"
-           i18n:translate="">
-          edit
-        </a>
-      </metal:block>
+      <a class="modify" href="" title="Manage this person's memberships"
+         tal:attributes="href string:${context/@@absolute_url}/@@groups.html"
+         i18n:attributes="title"
+         tal:condition="view/canModify">
+        <img tal:attributes="src context/++resource++schooltool.skin.flourish/edit-icon.png"
+             alt="Edit"
+             i18n:attributes="alt" />
+      </a>
     </h3>
     <table>
       <thead>
