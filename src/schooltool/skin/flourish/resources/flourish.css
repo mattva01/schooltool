@@ -80,10 +80,12 @@ pre {
 }
 
 a.modify {
-    background: transparent url(edit-icon.png) no-repeat scroll top left;
     font-size: 12px;
-    padding-left: 16px;
     vertical-align: middle;
+}
+
+a.modify img {
+    border: none;
 }
 
 /* Layout */
@@ -242,38 +244,36 @@ a.modify {
     color: #aa0000;
 }
 
-.header ul.secondary_nav > li > ul.breadcrumbs {
+.header ul.breadcrumbs {
     font-size: 12px;
-    left: 0px;
+    height: 40px;
     list-style-type: none;
-    margin-left: 16px;
+    margin-left: 32px;
     position: absolute;
-    text-align: left;
-    top: 0px;
-    width: 50%;
+    z-index: 1;
 }
 
-.header ul.secondary_nav > li > ul.breadcrumbs > li a:hover {
+.header ul.breadcrumbs > li a:hover {
     background: none;
 }
 
-.header ul.secondary_nav > li > ul.breadcrumbs li {
+.header ul.breadcrumbs li {
     background: none;
     color: black;
     display: inline-block;
     padding: 0px 2px;
 }
 
-.header ul.secondary_nav > li > ul.breadcrumbs li:after {
+.header ul.breadcrumbs li:after {
     content: "\0020 \00BB";
 }
 
-.header ul.secondary_nav > li > ul.breadcrumbs li.last:after {
+.header ul.breadcrumbs li.last:after {
     content: "";
 }
 
-.header ul.secondary_nav > li > ul.breadcrumbs a,
-.header ul.secondary_nav > li > ul.breadcrumbs span {
+.header ul.breadcrumbs a,
+.header ul.breadcrumbs span {
     display: inline-block;
     font-size: 12px;
     line-height: 16px;
@@ -281,6 +281,6 @@ a.modify {
     padding: 12px 2px;
 }
 
-.header ul.secondary_nav > li > ul.breadcrumbs a {
+.header ul.breadcrumbs a {
     color: #aa0000;
 }

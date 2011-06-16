@@ -6,9 +6,10 @@
       <a class="modify" href="" title="Manage this person's memberships"
          tal:attributes="href string:${context/@@absolute_url}/@@groups.html"
          i18n:attributes="title"
-         i18n:translate=""
          tal:condition="view/canModify">
-        edit
+        <img tal:attributes="src context/++resource++schooltool.skin.flourish/edit-icon.png"
+             alt="Edit"
+             i18n:attributes="alt" />
       </a>
     </h3>
     <table>

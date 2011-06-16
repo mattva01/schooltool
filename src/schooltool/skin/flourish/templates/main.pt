@@ -60,6 +60,10 @@
     [ | Header | Navigation | Bar | Here | ]
   </tal:block>
 
+  <tal:block replace="structure view/providers/breadcrumbs|nothing">
+    [ Breadcrumbs >> go >> here ]
+  </tal:block>
+
   <tal:block replace="structure view/providers/secondary_navigation|nothing">
     [ | Secondary | Navigation | Bar | Here | ]
   </tal:block>
