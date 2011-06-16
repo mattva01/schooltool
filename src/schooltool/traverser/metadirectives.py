@@ -25,7 +25,7 @@ from zope.interface import Interface
 from zope.configuration.fields import GlobalObject, GlobalInterface
 
 
-class IPluggableTraverser(Interface):
+class ITraverser(Interface):
     for_ = GlobalInterface(
         title=u"The interface this traverser is for.",
         required=True,
@@ -38,7 +38,7 @@ class IPluggableTraverser(Interface):
 
     factory = GlobalObject(
         title=u"The pluggable traverser implementation.",
-        required=False,
+        required=True,
         )
 
     permission = Permission(
@@ -49,6 +49,14 @@ class IPluggableTraverser(Interface):
 
     provides = GlobalInterface(
         title=u"Interface the component provides",
+        required=False,
+        )
+
+
+class IPluggableTraverser(ITraverser):
+
+    factory = GlobalObject(
+        title=u"The pluggable traverser implementation.",
         required=False,
         )
 

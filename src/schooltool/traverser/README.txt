@@ -9,17 +9,22 @@ implementation is not flexible enough to deal with arbitrary extensions (via
 adapters) of objects that also wish to participate in the traversal decision
 process.
 
-The pluggable traverser allows developers, especially third-party developers,
-to add new traversers to an object without altering the original traversal
-implementation.
-
-Let's say that we have an object that we wish to traverse to.
+Let's say that we have some objects that we wish to traverse to.
 
     >>> from schooltool.testing import mock
     >>> mock.fake_module('schooltool.traverser.test_pluggable')
     >>> from schooltool.traverser import test_pluggable
 
     >>> from zope.interface import Interface, implements
+
+    >>> @mock.module(test_pluggable)
+    ... class ISimpleContent(Interface):
+    ...     pass
+
+    >>> @mock.module(test_pluggable)
+    ... class SimpleContent(object):
+    ...     implements(ISimpleContent)
+    ...     name = 'simple content'
 
     >>> @mock.module(test_pluggable)
     ... class IContent(Interface):
@@ -31,8 +36,6 @@ Let's say that we have an object that we wish to traverse to.
     ...     var = 'Some value'
     ...     other = 'Other value'
 
-    >>> content = Content()
-
 Traversal in its essence works like this:
 
     >>> from zope.component import getMultiAdapter
@@ -42,9 +45,45 @@ Traversal in its essence works like this:
     ...     adapter = getMultiAdapter((ob, request), IPublishTraverse)
     ...     return adapter.publishTraverse(request, name)
 
-Let's make traversal from our content object pluggable.
+
+The simplest case is a stand-alone traverser:
 
     >>> zcml.setUp(namespaces={'': 'http://namespaces.zope.org/zope'})
+
+    >>> from schooltool.traverser.traverser import Traverser
+
+    >>> @mock.module(test_pluggable)
+    ... class HelloTraverser(Traverser):
+    ...
+    ...     def traverse(self, name):
+    ...         return '%s, %s' % (name, self.context.name)
+
+    >>> zcml.string('''
+    ...   <traverser
+    ...       for="schooltool.traverser.test_pluggable.ISimpleContent"
+    ...       factory="schooltool.traverser.test_pluggable.HelloTraverser"
+    ...       type="zope.publisher.interfaces.http.IHTTPRequest"
+    ...       />
+    ... ''')
+
+    >>> from zope.publisher.browser import TestRequest
+    >>> request = TestRequest()
+
+    >>> simple_content = SimpleContent()
+
+    >>> print traverse(simple_content, request, 'Hello')
+    Hello, simple content
+
+    >>> print traverse(simple_content, request, 'Bye')
+    Bye, simple content
+
+
+The pluggable traverser allows developers, especially third-party developers,
+to add new traversers to an object without altering the original traversal
+implementation.
+
+Let's make traversal from our content object pluggable.
+
 
     >>> zcml.string('''
     ...   <pluggableTraverser
@@ -55,8 +94,9 @@ Let's make traversal from our content object pluggable.
 
 We can now try to lookup the variable:
 
-    >>> from zope.publisher.browser import TestRequest
     >>> request = TestRequest()
+
+    >>> content = Content()
 
     >>> traverse(content, request, 'var')
     Traceback (most recent call last):
