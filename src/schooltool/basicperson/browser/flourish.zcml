@@ -248,4 +248,9 @@
       permission="schooltool.view"
       name="title" />
 
+  <zope:adapter
+      for="schooltool.person.interfaces.IPersonContainer
+           schooltool.skin.flourish.IFlourishLayer"
+      factory=".person.BasicPersonTableFormatter" />
+
 </configure>

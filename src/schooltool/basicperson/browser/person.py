@@ -47,6 +47,7 @@ from schooltool.basicperson.interfaces import IDemographicsFields
 from schooltool.basicperson.interfaces import IBasicPerson
 from schooltool.group.interfaces import IGroupContainer
 from schooltool.person.interfaces import IPerson, IPersonFactory
+from schooltool.person.browser.person import PersonTableFormatter
 from schooltool.schoolyear.interfaces import ISchoolYearContainer
 from schooltool.skin.containers import TableContainerView
 from schooltool.skin import flourish
@@ -734,3 +735,10 @@ class PersonTitle(ContentProvider):
     def title(self):
         person = self.context
         return "%s %s" % (person.first_name, person.last_name)
+
+
+class BasicPersonTableFormatter(PersonTableFormatter):
+
+    def columns(self):
+        cols = list(reversed(PersonTableFormatter.columns(self)))
+        return cols
