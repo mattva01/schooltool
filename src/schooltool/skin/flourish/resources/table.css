@@ -31,3 +31,7 @@ thead {
 tr {
     border-bottom: 1px dotted #cccccc;
 }
+
+table.person-view-sections th {
+    width: 33%;
+}

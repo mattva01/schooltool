@@ -5,7 +5,7 @@
      tal:condition="view/isTeacher"
      i18n:domain="schooltool">
   <h3 i18n:translate="">Sections taught</h3>
-  <table>
+  <table class="person-view-sections">
     <thead>
       <tr>
         <th i18n:translate="">Section</th>
@@ -43,7 +43,7 @@
      tal:condition="view/isLearner"
      i18n:domain="schooltool">
   <h3 i18n:translate="">Sections attended</h3>
-  <table>
+  <table class="person-view-sections">
     <thead>
       <tr>
         <th i18n:translate="">Section</th>
