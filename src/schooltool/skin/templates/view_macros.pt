@@ -125,14 +125,14 @@
         -
         <metal:block
             use-macro="view/@@schooltool_macros/generic/serverinfo" />
-          <br />
-          <span i18n:translate="">
-            &copy; The <a href="http://www.shuttleworthfoundation.org">Shuttleworth Foundation</a> 2003 - 2011:
-            Supporting Social Innovation.
-          </span>
         <br />
         <span i18n:translate="">
-        <a href="http://www.schooltool.org">SchoolTool</a>&trade; is a Trademark of the <a href="http://www.shuttleworthfoundation.org">Shuttleworth Foundation</a>.
+          &copy; The <a href="http://www.shuttleworthfoundation.org">Shuttleworth Foundation</a> 2003 - 2011:
+          Supporting Social Innovation.
+        </span>
+        <br />
+        <span i18n:translate="">
+          <a href="http://www.schooltool.org">SchoolTool</a>&trade; is a Trademark of the <a href="http://www.shuttleworthfoundation.org">Shuttleworth Foundation</a>.
         </span>
       </p>
       <div class="clearer"></div>

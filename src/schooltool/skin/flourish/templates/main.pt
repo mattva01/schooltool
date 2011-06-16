@@ -115,26 +115,16 @@
     -
     <span i18n:translate="">Server Running SchoolTool</span>
     <span tal:content="modules/schooltool/common/get_version"/>
+    <br />
     <span i18n:translate="">
-      &copy; the
-      <a i18n:name="link_swf"
-         href="http://www.shuttleworthfoundation.org">
-        Shuttleworth Foundation
-      </a>
-      2003 - 2011: Supporting Social Innovation.
+      &copy; The <a href="http://www.shuttleworthfoundation.org">Shuttleworth Foundation</a> 2003 - 2011:
+      Supporting Social Innovation.
+    </span>
+    <br />
+    <span i18n:translate="">
+      <a href="http://www.schooltool.org">SchoolTool</a>&trade; is a Trademark of the <a href="http://www.shuttleworthfoundation.org">Shuttleworth Foundation</a>.
     </span>
   </p>
-
-  <p i18n:translate="" class="trademark">
-    <a i18n:name="link_st_org"
-       href="http://www.schooltool.org">SchoolTool</a>&trade;
-    is a Trademark of the
-    <a i18n:name="link_swf"
-       href="http://www.shuttleworthfoundation.org">
-      Shuttleworth Foundation
-    </a>.
-  </p>
-
 </div>
 
 </div>
