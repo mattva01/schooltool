@@ -304,7 +304,13 @@ class LoggedInNameViewlet(LoginNavigationViewlet):
         person = self.authenticated_person
         if not person:
             return None
-        return person.title
+        title_content = queryMultiAdapter(
+            (person, self.request, self.view),
+            flourish.interfaces.IContentProvider,
+            'title')
+        if title_content is None:
+            return ''
+        return title_content.title
 
 
 class BreadcrumbViewlet(flourish.viewlet.Viewlet):
