@@ -600,8 +600,8 @@ class FlourishAdvisoryViewlet(Viewlet):
         return list(self.context.advisors)
 
     @property
-    def advisees_table(self):
-        return getTable(self.advisees)
+    def advisors_table(self):
+        return self.getTable(self.advisors)
 
     @property
     def advisees(self):
@@ -609,7 +609,7 @@ class FlourishAdvisoryViewlet(Viewlet):
 
     @property
     def advisees_table(self):
-        return getTable(self.advisees)
+        return self.getTable(self.advisees)
 
 
 ###############  Base class of all group-aware add views ################
