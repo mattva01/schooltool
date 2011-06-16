@@ -27,7 +27,7 @@
       </tal:block>
     </tal:block>
   </table>
-  <div style="clear: both;" tal:condition="view/canModify">
+  <div tal:condition="view/canModify">
     <a class="modify" href="" title="Manage this person's memberships"
        tal:attributes="href string:${context/@@absolute_url}/@@groups.html"
        i18n:attributes="title"

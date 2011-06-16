@@ -32,6 +32,7 @@ from zope.schema import ValidationError
 from zope.schema.interfaces import ITitledTokenizedTerm, IField
 from zope.traversing.browser.absoluteurl import absoluteURL
 from zope.viewlet.viewlet import ViewletBase
+from zope.security.checker import canAccess
 
 import z3c.form.interfaces
 from z3c.form.validator import SimpleFieldValidator
@@ -585,7 +586,7 @@ class FlourishPersonInfoManager(ViewletManager):
 class FlourishAdvisoryViewlet(Viewlet):
     """A viewlet showing the advisors/advisees of a person."""
 
-    template = ViewPageTemplateFile('templates/advisoryViewlet.pt')
+    template = ViewPageTemplateFile('templates/f_advisoryViewlet.pt')
     body_template = None
     render = lambda self, *a, **kw: self.template(*a, **kw)
 
@@ -605,11 +606,15 @@ class FlourishAdvisoryViewlet(Viewlet):
 
     @property
     def advisees(self):
-        return list(self.context.advisors)
+        return list(self.context.advisees)
 
     @property
     def advisees_table(self):
         return self.getTable(self.advisees)
+
+    @property
+    def canModify(self):
+        return canAccess(self.context.__parent__, '__delitem__')
 
 
 ###############  Base class of all group-aware add views ################
