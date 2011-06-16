@@ -31,6 +31,15 @@ from schooltool.traverser.traverser import AdapterTraverserPlugin
 from schooltool.traverser.interfaces import ITraverserPlugin
 
 
+def traverser(_context, for_, type, factory,
+              provides=IPublishTraverse,
+              permission=None):
+    view(_context, [factory], type, '', [for_],
+         layer=None, permission=permission,
+         allowed_interface=None, allowed_attributes=None,
+         provides=provides)
+
+
 def pluggableTraverser(_context, for_, type,
                        factory=PluggableTraverser,
                        provides=IPublishTraverse,
@@ -45,6 +54,7 @@ def traverserPlugin(_context, for_, plugin,
                     name='',
                     layer=IDefaultBrowserLayer,
                     permission=None):
+    plugin = type(plugin.__name__, (plugin, ), {'__name__': name})
     handle_adapter(_context, [plugin],
                    provides=ITraverserPlugin,
                    for_=(for_, layer),

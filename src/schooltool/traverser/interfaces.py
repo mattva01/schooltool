@@ -37,7 +37,7 @@ class IPluggableTraverser(IPublishTraverse):
     """
 
 
-class ITraverserPlugin(Interface):
+class ISchoolToolTraverser(Interface):
     """A plugin for the pluggable traverser."""
 
     context = Attribute("The context object the plugin traverses")
@@ -52,3 +52,17 @@ class ITraverserPlugin(Interface):
         This method should return an object having the specified name and
         `self` as parent.
         """
+
+
+class ITraverser(IPublishTraverse,
+                 ISchoolToolTraverser):
+    """A simple traverser.
+
+    This traverser traverses a name by utilizing helper traversers that are
+    registered as ``ITraverserPlugin`` subscribers.
+    """
+
+
+class ITraverserPlugin(ISchoolToolTraverser):
+    """A plugin for the pluggable traverser."""
+
