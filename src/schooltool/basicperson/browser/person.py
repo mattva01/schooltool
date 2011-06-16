@@ -597,20 +597,12 @@ class FlourishAdvisoryViewlet(Viewlet):
         return result
 
     @property
-    def advisors(self):
-        return list(self.context.advisors)
-
-    @property
     def advisors_table(self):
-        return self.getTable(self.advisors)
-
-    @property
-    def advisees(self):
-        return list(self.context.advisees)
+        return self.getTable(list(self.context.advisors))
 
     @property
     def advisees_table(self):
-        return self.getTable(self.advisees)
+        return self.getTable(list(self.context.advisees))
 
     @property
     def canModify(self):
