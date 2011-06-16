@@ -43,10 +43,6 @@ form fieldset > legend > span {
     width: 528px;
 }
 
-.expand_container form fieldset > legend > span {
-    width: 928px;
-}
-
 form fieldset .row {
     padding: 8px 8px 0px 8px;
 }
@@ -63,15 +59,23 @@ form fieldset .row .widget {
     display: inline;
 }
 
-form fieldset .row .error {
-    display: inline;
-    color: #AA0000;
-    width: 224px;
-    margin-left: 16px;
+form fieldset .row > .error {
+    display: block;
+    float: right;
+    width: 222px;
 }
 
+form fieldset .row > .error .error {
+    color: #AA0000;
+    font-size: 12px;
+    padding-left: 16px;
+    background: transparent url(error-icon.png) no-repeat scroll top left;
+}
 
-form fieldset .row .widget .text-widget {
+form fieldset .row .widget .text-widget,
+form fieldset .row .widget input[type="text"],
+form fieldset .row .widget .password-widget,
+form fieldset .row .widget input[type="password"] {
     background-color: #ffffff;
     border: 1px solid #ccc1c1;
     color: #333333;
@@ -80,7 +84,10 @@ form fieldset .row .widget .text-widget {
     width: 286px;
 }
 
-form fieldset .row .widget .text-widget:focus {
+form fieldset .row .widget .text-widget:focus,
+form fieldset .row .widget input[type="text"]:focus,
+form fieldset .row .widget .password-widget:focus,
+form fieldset .row .widget input[type="password"]:focus {
     border: 2px solid #dd4814;
     height: 18px;
     width: 284px;
@@ -90,35 +97,34 @@ form fieldset .row .widget .select-widget {
     width: 288px;
 }
 
-form .button-controls,
+form .buttons,
 form .controls {
     margin-bottom: 16px;
 }
 
-form .button-controls .submit-widget {
+form .buttons .submit-widget {
     background-color: #aea79f;
     color: #ffffff;
     font-size: 14px;
     line-height: 20px;
 }
 
-form .button-controls .submit-widget:hover {
+form .buttons .submit-widget:hover {
     background-color: #dd0000;
 }
 
-
-form .controls .button-ok,
-form .controls .button-neutral,
-form .controls .button-cancel {
+form .buttons .button-ok,
+form .buttons .button-neutral,
+form .buttons .button-cancel {
     background-color: #aea79f;
     color: #ffffff;
     font-size: 14px;
     line-height: 20px;
 }
 
-form .controls .button-ok:hover,
-form .controls .button-neutral:hover,
-form .controls .button-cancel:hover {
+form .buttons .button-ok:hover,
+form .buttons .button-neutral:hover,
+form .buttons .button-cancel:hover {
     background-color: #dd0000;
 }
 
@@ -133,10 +139,4 @@ form > .viewspace > h3 {
 
 form .status > .errors {
     display: none;
-}
-
-/* XXX: hackery for the login form */
-form > .error {
-    padding: 8px 0px;
-    color: #AA0000;
 }

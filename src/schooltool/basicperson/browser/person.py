@@ -39,24 +39,27 @@ from zc.table import table
 
 import schooltool.skin.flourish.page
 import schooltool.skin.flourish.containers
-from schooltool.skin import flourish
+import schooltool.skin.flourish.breadcrumbs
 from schooltool.app.browser.app import RelationshipViewBase
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.common.inlinept import InlineViewPageTemplate
 from schooltool.common.inlinept import InheritTemplate
-from schooltool.skin.containers import TableContainerView
-from schooltool.table.interfaces import ITableFormatter
-from schooltool.group.interfaces import IGroupContainer
-from schooltool.person.interfaces import IPerson, IPersonFactory
-from schooltool.schoolyear.interfaces import ISchoolYearContainer
 from schooltool.basicperson.interfaces import IDemographicsFields
 from schooltool.basicperson.interfaces import IBasicPerson
+from schooltool.group.interfaces import IGroupContainer
+from schooltool.person.interfaces import IPerson, IPersonFactory
+from schooltool.person.browser.person import PersonTableFormatter
+from schooltool.schoolyear.interfaces import ISchoolYearContainer
+from schooltool.skin.containers import TableContainerView
+from schooltool.skin import flourish
+from schooltool.skin.flourish.interfaces import IViewletManager
+from schooltool.skin.flourish.viewlet import Viewlet, ViewletManager
+from schooltool.skin.flourish.content import ContentProvider
+from schooltool.table.interfaces import ITableFormatter
 from schooltool.table.table import DependableCheckboxColumn
 
 from schooltool.common import SchoolToolMessage as _
 
-from schooltool.skin.flourish.interfaces import IViewletManager
-from schooltool.skin.flourish.viewlet import Viewlet, ViewletManager
 
 
 class BasicPersonContainerView(TableContainerView):
@@ -730,3 +733,28 @@ class AddPersonViewlet(object):
         syc = ISchoolYearContainer(app)
         sy = syc.getActiveSchoolYear()
         return sy is not None
+
+
+class TitleBreadcrumb(flourish.breadcrumbs.Breadcrumbs):
+
+    @property
+    def title(self):
+        person = self.context
+        return "%s %s" % (person.first_name, person.last_name)
+
+
+class PersonTitle(ContentProvider):
+    render = InlineViewPageTemplate('''
+        <span tal:content="view/title"></span>
+    '''.strip())
+
+    def title(self):
+        person = self.context
+        return "%s %s" % (person.first_name, person.last_name)
+
+
+class BasicPersonTableFormatter(PersonTableFormatter):
+
+    def columns(self):
+        cols = list(reversed(PersonTableFormatter.columns(self)))
+        return cols

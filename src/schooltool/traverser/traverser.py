@@ -27,6 +27,21 @@ from zope.publisher.interfaces import NotFound
 from schooltool.traverser import interfaces
 
 
+class Traverser(object):
+    """A sipmple traverser base."""
+    implements(interfaces.IPluggableTraverser)
+
+    def __init__(self, context, request):
+        self.context = context
+        self.request = request
+
+    def publishTraverse(self, request, name):
+        return self.traverse(name)
+
+    def traverse(self, name):
+        raise NotFound(self.context, name, self.request)
+
+
 class PluggableTraverser(object):
     """Generic Pluggable Traverser."""
 

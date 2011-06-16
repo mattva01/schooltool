@@ -65,7 +65,6 @@
 
   <!-- Add views -->
 
-
   <flourish:page
       name="add_multiple.html"
       subtitle="Add new persons"
@@ -175,7 +174,7 @@
 
   <flourish:breadcrumb
       for="schooltool.basicperson.interfaces.IBasicPerson"
-      class="schooltool.skin.flourish.breadcrumbs.TitleBreadcrumb"
+      class="schooltool.basicperson.browser.person.TitleBreadcrumb"
       />
 
   <configure package="schooltool.skin.flourish">
@@ -240,5 +239,18 @@
       class="schooltool.basicperson.browser.person.FlourishAdvisoryViewlet"
       permission="schooltool.edit"
       />
+
+  <!-- Other -->
+
+  <flourish:content
+      class="schooltool.basicperson.browser.person.PersonTitle"
+      for="schooltool.basicperson.interfaces.IBasicPerson"
+      permission="schooltool.view"
+      name="title" />
+
+  <zope:adapter
+      for="schooltool.person.interfaces.IPersonContainer
+           schooltool.skin.flourish.IFlourishLayer"
+      factory=".person.BasicPersonTableFormatter" />
 
 </configure>
