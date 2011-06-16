@@ -24,7 +24,7 @@ from zope.container.interfaces import INameChooser
 from zope.app.form.browser.interfaces import ITerms
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import adapts
-from zope.component import getUtility, queryMultiAdapter
+from zope.component import getUtility, queryMultiAdapter, getMultiAdapter
 from z3c.form import form, field, button, validator
 from zope.interface import invariant, Invalid
 from zope.schema import Password, TextLine, Choice, List, Object
@@ -35,6 +35,7 @@ from zope.viewlet.viewlet import ViewletBase
 
 import z3c.form.interfaces
 from z3c.form.validator import SimpleFieldValidator
+from zc.table import table
 
 import schooltool.skin.flourish.page
 import schooltool.skin.flourish.containers
@@ -44,6 +45,7 @@ from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.common.inlinept import InlineViewPageTemplate
 from schooltool.common.inlinept import InheritTemplate
 from schooltool.skin.containers import TableContainerView
+from schooltool.table.interfaces import ITableFormatter
 from schooltool.group.interfaces import IGroupContainer
 from schooltool.person.interfaces import IPerson, IPersonFactory
 from schooltool.schoolyear.interfaces import ISchoolYearContainer
@@ -584,13 +586,27 @@ class FlourishAdvisoryViewlet(Viewlet):
     body_template = None
     render = lambda self, *a, **kw: self.template(*a, **kw)
 
+    def getTable(self, items):
+        persons = ISchoolToolApplication(None)['persons']
+        result = getMultiAdapter((persons, self.request), ITableFormatter)
+        result.setUp(table_formatter=table.StandaloneFullFormatter, items=items)
+        return result
+
     @property
     def advisors(self):
         return list(self.context.advisors)
 
     @property
+    def advisees_table(self):
+        return getTable(self.advisees)
+
+    @property
     def advisees(self):
-        return list(self.context.advisees)
+        return list(self.context.advisors)
+
+    @property
+    def advisees_table(self):
+        return getTable(self.advisees)
 
 
 ###############  Base class of all group-aware add views ################
