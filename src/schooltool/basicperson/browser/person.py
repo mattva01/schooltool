@@ -626,8 +626,10 @@ class FlourishDemographicsViewlet(Viewlet):
     @property
     def base_table(self):
         rows = []
-        for attr in field.Fields(IBasicPerson):
-            rows.append(self.makeRow(attr, getattr(self.context, attr)))
+        fields = field.Fields(IBasicPerson)
+        for attr in fields:
+            label = fields[attr].field.title
+            rows.append(self.makeRow(label, getattr(self.context, attr)))
         return rows
 
     @property
@@ -641,7 +643,8 @@ class FlourishDemographicsViewlet(Viewlet):
         rows = []
         demographics = IDemographics(self.context)
         for attr in fields:
-            rows.append(self.makeRow(attr, demographics[attr]))
+            label = fields[attr].field.title
+            rows.append(self.makeRow(label, demographics[attr]))
         return rows
 
     @property
