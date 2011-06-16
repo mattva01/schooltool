@@ -243,7 +243,7 @@ pre {
     position: absolute;
     text-align: left;
     top: 0px;
-    width: 400px;
+    width: 50%;
 }
 
 .header ul.secondary_nav > li > ul.breadcrumbs > li a:hover {
