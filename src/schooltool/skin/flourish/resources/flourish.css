@@ -195,6 +195,7 @@ pre {
     margin-left: 16px;
     margin-right: 16px;
     text-align: right;
+    position: relative;
 
     -moz-border-radius: 0px 0px 4px 4px;
     border-radius: 0px 0px 4px 4px;
@@ -208,7 +209,6 @@ pre {
     background: transparent url(subnav_divider.png) no-repeat scroll right bottom;
     display: inline-block;
     margin-left: -4px;
-    position: relative;
 }
 
 .header ul.secondary_nav > li:first-child {
@@ -237,11 +237,12 @@ pre {
 
 .header ul.secondary_nav > li > ul.breadcrumbs {
     font-size: 12px;
+    left: 0px;
     list-style-type: none;
+    margin-left: 16px;
     position: absolute;
-    right: 532px;
     text-align: left;
-    top: -24px;
+    top: 0px;
     width: 400px;
 }
 
