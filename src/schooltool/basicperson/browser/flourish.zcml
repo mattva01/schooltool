@@ -237,7 +237,7 @@
       for="schooltool.basicperson.interfaces.IBasicPerson"
       manager="schooltool.basicperson.browser.person.IFlourishPersonInfoManager"
       class="schooltool.basicperson.browser.person.FlourishAdvisoryViewlet"
-      permission="schooltool.edit"
+      permission="schooltool.view"
       />
 
   <!-- Other -->
