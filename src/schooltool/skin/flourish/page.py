@@ -270,9 +270,11 @@ class LinkViewlet(Viewlet):
     </tal:block>
     ''')
 
-    render = lambda self, *a, **kw: self.template(*a, **kw)
-
     title = None
+
+    @property
+    def enabled(self):
+        return bool(self.title)
 
     @property
     def link(self):
@@ -287,3 +289,8 @@ class LinkViewlet(Viewlet):
             return None
         return "%s/%s" % (absoluteURL(self.context, self.request),
                           self.link)
+
+    def render(self, *args, **kw):
+        if not self.enabled:
+            return ''
+        return self.template(*args, **kw)

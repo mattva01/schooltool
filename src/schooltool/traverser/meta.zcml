@@ -2,6 +2,13 @@
 
   <directive
       namespace="http://namespaces.zope.org/zope"
+      name="traverser"
+      schema=".metadirectives.ITraverser"
+      handler=".metaconfigure.traverser"
+      />
+
+  <directive
+      namespace="http://namespaces.zope.org/zope"
       name="pluggableTraverser"
       schema=".metadirectives.IPluggableTraverser"
       handler=".metaconfigure.pluggableTraverser"
