@@ -12,7 +12,7 @@
 /* Header */
 
 .page > .header {
-    padding: 32px 24px 24px 24px;
+    padding: 24px;
 }
 
 .page > .header h1,
@@ -36,32 +36,26 @@
 /* Page layout */
 
 .page > .body {
-    background-color: #f7f7f7;
+    background-color: #ffffff;
     margin: 0px auto;
     overflow: auto;
-    padding-bottom: 32px;
     width: 944px;
 }
 
-.page > .body > .refine,
-.page > .body > .container,
-.page > .body > .related {
+.page > .body > .refine {
     display: block;
     float: left;
-    margin-right: 16px;
-}
-
-.page > .body > .refine {
-    width: 144px;
+    width: 160px;
+    background-color: #f7f7f7;
+    padding: 32px 16px 0px 16px;
 }
 
 .page > .body > .container {
+    display: block;
+    float: right;
     width: 544px;
-}
-
-.page > .body > .related {
-    margin-right: 0px;
-    width: 224px;
+    background-color: #f7f7f7;
+    padding: 32px 176px 16px 16px;
 }
 
 .page > .body > .expand_container {
@@ -71,20 +65,24 @@
 /* Refine */
 
 .page > .body > .refine > .content {
-    padding: 32px 8px 8px 8px;
-    margin-bottom: 8px;
+    margin-bottom: 32px;
 }
 
 .page > .body > .refine > .content > .header {
-    border-bottom: 1px dotted #333333;
-    font-size: 12px;
-    font-weight: bold;
+    color: #aa0000;
+    border-bottom: 1px dotted #aa0000;
+    font-size: 14px;
     line-height: 16px;
+    padding-bottom: 4px;
+    margin-bottom: 8px;
+}
+
+.page > .body > .refine > .content > .body > ul.filter {
+    margin-left: 8px;
 }
 
 .page > .body > .refine > .content > .body > ul.filter > li {
-    padding: 2px 0px 1px 0px;
-    border-bottom: 1px dotted #333333;
+    padding-bottom: 2px;
 }
 
 .page > .body > .refine > .content > .body > ul.filter > li.active {
@@ -93,18 +91,10 @@
 }
 
 .page > .body > .refine > .content > .body > ul.filter > li > a {
-    color: #333333;
     font-size: 12px;
     line-height: 16px;
 }
 
 .page > .body > .refine > .content > .body > ul.filter > li.active > a {
     color: #aa0000;
-}
-
-/* Container */
-
-.page > .body > .container {
-    padding-top: 32px;
-    padding-bottom: 8px;
 }

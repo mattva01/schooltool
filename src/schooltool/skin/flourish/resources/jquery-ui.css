@@ -5,7 +5,7 @@
 */
 
 .ui-accordion {
-    width: 544px;
+    width: 542px;
 }
 
 .ui-accordion-header {
@@ -33,5 +33,6 @@
     background: none;
     padding-right: 8px;
     padding-left: 8px;
+    padding-top: 4px;
 }
 

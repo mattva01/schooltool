@@ -20,7 +20,7 @@
       title="People"
       name="title" />
 
-  <flourish:viewlet
+<!--  <flourish:viewlet
       name="persons"
       title="People"
       class="schooltool.skin.flourish.page.LinkViewlet"
@@ -32,7 +32,7 @@
       name="persons"
       manager="schooltool.app.browser.app.ManageSchoolLinks"
       for="schooltool.person.interfaces.IPersonContainer"
-      />
+      /> -->
 
   <flourish:page
       name="index.html"
@@ -46,7 +46,7 @@
       manager="schooltool.skin.flourish.page.IPageRefineManager"
       class="schooltool.basicperson.browser.person.PersonContainerLinks"
       for="schooltool.person.interfaces.IPersonContainer"
-      title="People"
+      title="Add"
       permission="schooltool.view"
       />
 
@@ -75,13 +75,13 @@
       content_template="templates/f_person_add_multiple.pt"
       />
 
-    <flourish:viewlet
+<!--    <flourish:viewlet
         name="add_multiple.html"
         title="Add Persons"
         class="schooltool.skin.flourish.page.LinkViewlet"
         manager="schooltool.basicperson.browser.person.PersonContainerLinks"
         permission="schooltool.edit"
-        />
+        /> -->
 
   <configure package="schooltool.skin.flourish">
     <flourish:page
@@ -95,7 +95,7 @@
        />
     <flourish:viewlet
         name="add.html"
-        title="Add Person"
+        title="Person"
         class="schooltool.skin.flourish.page.LinkViewlet"
         manager="schooltool.basicperson.browser.person.PersonContainerLinks"
         permission="schooltool.edit"
@@ -124,7 +124,7 @@
        />
     <flourish:viewlet
         name="addTeacher.html"
-        title="Add Teacher"
+        title="Teacher"
         class="schooltool.skin.flourish.page.LinkViewlet"
         manager="schooltool.basicperson.browser.person.PersonContainerLinks"
         permission="schooltool.edit"
@@ -141,7 +141,7 @@
        />
     <flourish:viewlet
         name="addStudent.html"
-        title="Add Student"
+        title="Student"
         class="schooltool.skin.flourish.page.LinkViewlet"
         manager="schooltool.basicperson.browser.person.PersonContainerLinks"
         permission="schooltool.edit"
@@ -158,7 +158,7 @@
        />
     <flourish:viewlet
         name="addAdministrator.html"
-        title="Add Administrator"
+        title="Administrator"
         class="schooltool.skin.flourish.page.LinkViewlet"
         manager="schooltool.basicperson.browser.person.PersonContainerLinks"
         permission="schooltool.edit"

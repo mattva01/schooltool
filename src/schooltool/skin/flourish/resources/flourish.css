@@ -41,6 +41,7 @@ h4, h5, h6 {
 }
 
 h1, h2, h3, h4, h5, h6 {
+    margin-top: 8px;
     margin-bottom: 8px;
 }
 
@@ -128,6 +129,11 @@ pre {
     font-size: 10px;
     line-height: 14px;
     padding: 0px 16px 2px 16px;
+}
+
+.schooltool > .footer a {
+    font-size: 10px;
+    line-height: 14px;
 }
 
 .schooltool > .footer > p.server-info {
