@@ -8,7 +8,9 @@
            tal:attributes="href string:${context/@@absolute_url}/@@edit.html"
            i18n:attributes="title"
            i18n:translate="">
-          edit
+          <img tal:attributes="src context/++resource++schooltool.skin.flourish/edit-icon.png"
+               alt="Edit"
+               i18n:attributes="alt" />
         </a>
       </metal:block>
     </h3>
@@ -31,7 +33,9 @@
            tal:attributes="href string:${context/@@absolute_url}/@@edit.html"
            i18n:attributes="title"
            i18n:translate="">
-          edit
+          <img tal:attributes="src context/++resource++schooltool.skin.flourish/edit-icon.png"
+               alt="Edit"
+               i18n:attributes="alt" />
         </a>
       </metal:block>
     </h3>
