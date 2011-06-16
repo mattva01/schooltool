@@ -1,7 +1,7 @@
 <div i18n:domain="schooltool">
   <h2 i18n:translate="">Advisory</h2>
   <div>
-    <div tal:define="advisors view/advisors">
+    <div>
       <h3 i18n:translate="">
         Advisors
         <metal:block tal:condition="view/canModify">
@@ -15,7 +15,7 @@
       </h3>
       <div tal:replace="structure view/advisors_table/render" />
     </div>
-    <div tal:define="advisees view/advisees">
+    <div>
       <h3 i18n:translate="">
         Advisees
         <metal:block tal:condition="view/canModify">
