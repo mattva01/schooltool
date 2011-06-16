@@ -45,6 +45,7 @@ from schooltool.app.browser.app import RelationshipViewBase
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.common.inlinept import InlineViewPageTemplate
 from schooltool.common.inlinept import InheritTemplate
+from schooltool.basicperson.interfaces import IDemographics
 from schooltool.basicperson.interfaces import IDemographicsFields
 from schooltool.basicperson.interfaces import IBasicPerson
 from schooltool.group.interfaces import IGroupContainer
@@ -588,7 +589,6 @@ class FlourishAdvisoryViewlet(Viewlet):
 
     template = ViewPageTemplateFile('templates/f_advisoryViewlet.pt')
     body_template = None
-    render = lambda self, *a, **kw: self.template(*a, **kw)
 
     def getTable(self, items):
         persons = ISchoolToolApplication(None)['persons']
@@ -603,6 +603,46 @@ class FlourishAdvisoryViewlet(Viewlet):
     @property
     def advisees_table(self):
         return self.getTable(list(self.context.advisees))
+
+    @property
+    def canModify(self):
+        return canAccess(self.context.__parent__, '__delitem__')
+
+
+class FlourishDemographicsViewlet(Viewlet):
+    """A viewlet showing the core and demographic attributes of a person."""
+
+    template = ViewPageTemplateFile('templates/f_demographicsViewlet.pt')
+    body_template = None
+
+    def makeRow(self, attr, value):
+        if value is None:
+            value = u''
+        return {
+            'label': attr,
+            'value': unicode(value),
+            }
+
+    @property
+    def base_table(self):
+        rows = []
+        for attr in field.Fields(IBasicPerson):
+            rows.append(self.makeRow(attr, getattr(self.context, attr)))
+        return rows
+
+    @property
+    def demographics_table(self):
+        field_descriptions = IDemographicsFields(ISchoolToolApplication(None))
+        fields = field.Fields()
+        limit_keys = [group.__name__ for group in self.context.groups]
+        for field_desc in field_descriptions.filter_keys(limit_keys):
+            fields += field_desc.makeField()
+
+        rows = []
+        demographics = IDemographics(self.context)
+        for attr in fields:
+            rows.append(self.makeRow(attr, demographics[attr]))
+        return rows
 
     @property
     def canModify(self):

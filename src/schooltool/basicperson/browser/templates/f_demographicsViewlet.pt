@@ -1,0 +1,52 @@
+<div i18n:domain="schooltool">
+  <h2 i18n:translate="">Attributes</h2>
+  <div>
+    <h3 i18n:translate="">
+      General Information
+      <metal:block tal:condition="view/canModify">
+        <a class="modify" href="" title="Edit this person's information"
+           tal:attributes="href string:${context/@@absolute_url}/@@edit.html"
+           i18n:attributes="title"
+           i18n:translate="">
+          edit
+        </a>
+      </metal:block>
+    </h3>
+    <table>
+      <thead>
+        <tr>
+          <th i18n:translate="">Label</th>
+          <th i18n:translate="">Value</th>
+        </tr>
+      </thead>
+      <tr tal:repeat="row view/base_table">
+        <td tal:content="row/label" />
+        <td tal:content="row/value" />
+      </tr>
+    </table>
+    <h3 i18n:translate="">
+      Demographics
+      <metal:block tal:condition="view/canModify">
+        <a class="modify" href="" title="Edit this person's information"
+           tal:attributes="href string:${context/@@absolute_url}/@@edit.html"
+           i18n:attributes="title"
+           i18n:translate="">
+          edit
+        </a>
+      </metal:block>
+    </h3>
+    <table>
+      <thead>
+        <tr>
+          <th i18n:translate="">Label</th>
+          <th i18n:translate="">Value</th>
+        </tr>
+      </thead>
+      <tr tal:repeat="row view/demographics_table">
+        <td tal:content="row/label" />
+        <td tal:content="row/value" />
+      </tr>
+    </table>
+  </div>
+</div>
+
