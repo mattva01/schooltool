@@ -19,6 +19,8 @@
 
   <!-- zc.resourcelibrary -->
 
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu:regular,bold&subset=Latin">
+
   <tal:block content="structure view/providers/html_head|nothing" />
 
   <!--
