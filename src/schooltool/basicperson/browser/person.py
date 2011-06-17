@@ -609,8 +609,46 @@ class FlourishAdvisoryViewlet(Viewlet):
         return canAccess(self.context.__parent__, '__delitem__')
 
 
+class FlourishGeneralViewlet(Viewlet):
+    """A viewlet showing the core attributes of a person."""
+
+    template = ViewPageTemplateFile('templates/f_generalViewlet.pt')
+    body_template = None
+
+    @property
+    def heading(self):
+        attrs = ['prefix', 'first_name', 'middle_name', 'last_name', 'suffix']
+        values = []
+        for attr in attrs:
+            value = getattr(self.context, attr)
+            if value:
+                values.append(value)
+        return ' '.join(values)
+
+    def makeRow(self, attr, value):
+        if value is None:
+            value = u''
+        return {
+            'label': attr,
+            'value': unicode(value),
+            }
+
+    @property
+    def table(self):
+        rows = []
+        fields = field.Fields(IBasicPerson)
+        for attr in fields:
+            label = fields[attr].field.title
+            rows.append(self.makeRow(label, getattr(self.context, attr)))
+        return rows
+
+    @property
+    def canModify(self):
+        return canAccess(self.context.__parent__, '__delitem__')
+
+
 class FlourishDemographicsViewlet(Viewlet):
-    """A viewlet showing the core and demographic attributes of a person."""
+    """A viewlet showing the demographics of a person."""
 
     template = ViewPageTemplateFile('templates/f_demographicsViewlet.pt')
     body_template = None
@@ -624,16 +662,7 @@ class FlourishDemographicsViewlet(Viewlet):
             }
 
     @property
-    def base_table(self):
-        rows = []
-        fields = field.Fields(IBasicPerson)
-        for attr in fields:
-            label = fields[attr].field.title
-            rows.append(self.makeRow(label, getattr(self.context, attr)))
-        return rows
-
-    @property
-    def demographics_table(self):
+    def table(self):
         field_descriptions = IDemographicsFields(ISchoolToolApplication(None))
         fields = field.Fields()
         limit_keys = [group.__name__ for group in self.context.groups]
