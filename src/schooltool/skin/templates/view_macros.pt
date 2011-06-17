@@ -131,7 +131,6 @@
 </html>
 </metal:block>
 
-<metal:block i18n:domain="schooltool">
 <metal:block define-macro="batch-search">
   <form method="post" class="batch-search">
     <input id="batch-search-box" type="text" name="SEARCH"
@@ -197,5 +196,4 @@
   <input type="submit" id="form.actions.cancel" name="form.actions.cancel"
          value="Cancel" class="button-cancel"
          i18n:attributes="value cancel-button" />
-</metal:block>
 </metal:block>

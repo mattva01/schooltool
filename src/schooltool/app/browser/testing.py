@@ -170,7 +170,7 @@ def setUp(test=None):
                  'calwidget-icon.gif', 'print.css', 'jquery.js',
                  'zonki-angry.png', 'zonki-pointing.png',
                  'zonki-question.png', 'zonki-reading.png',
-                 'zonki-regular.png', 'bugs.gif']:
+                 'zonki-regular.png']:
         ztapi.browserResource(name, ResourceStub)
 
     # menus
