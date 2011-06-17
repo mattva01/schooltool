@@ -36,7 +36,13 @@ devmode_functional_layer = ZCMLLayer(filename,
                                      'devmode_functional_layer')
 
 def test_suite():
-    return collect_ftests(filenames=['devmode.txt'],
+    filenames=['devmode.txt']
+    try:
+        import zope.app.apidoc
+        filenames.append('apidoc.txt')
+    except ImportError:
+        pass
+    return collect_ftests(filenames=filenames,
                           layer=devmode_functional_layer)
 
 if __name__ == '__main__':

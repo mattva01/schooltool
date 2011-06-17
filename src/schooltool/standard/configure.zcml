@@ -3,15 +3,12 @@
            xmlns:browser="http://namespaces.zope.org/browser"
            i18n_domain="schooltool">
 
-  <include package="schooltool.help" file="meta.zcml" />
-
   <include package="schooltool.common" />
 
   <include package="z3c.autoinclude" file="meta.zcml" />
   <includePlugins package="schooltool" file="meta.zcml" />
   <includePlugins package="schooltool" file="plugin.zcml" />
 
-  <include package="schooltool.help" />
   <include package="schooltool.timetable" />
   <include package="schooltool.basicperson" />
   <includeOverrides package="schooltool.basicperson" file="overrides.zcml" />

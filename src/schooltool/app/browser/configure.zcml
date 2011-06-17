@@ -646,36 +646,6 @@
         doc_path="ftests/README.txt" />
 
     <apidoc:bookchapter
-        id="login"
-        title="Login"
-        parent="schooltool/browser"
-        doc_path="ftests/login.txt" />
-
-    <apidoc:bookchapter
-        id="errors"
-        title="Errors"
-        parent="schooltool/browser"
-        doc_path="ftests/errors.txt" />
-
-    <apidoc:bookchapter
-        id="cal"
-        title="Calendar"
-        parent="schooltool/browser"
-        doc_path="ftests/cal.txt" />
-
-    <apidoc:bookchapter
-        id="app"
-        title="Application"
-        parent="schooltool/browser"
-        doc_path="ftests/app.txt" />
-
-    <apidoc:bookchapter
-        id="calwidget"
-        title="Calendar Widget"
-        parent="schooltool/browser"
-        doc_path="resources/calwidget/README.txt" />
-
-    <apidoc:bookchapter
         id="templates"
         title="Templates"
         parent="schooltool/browser"

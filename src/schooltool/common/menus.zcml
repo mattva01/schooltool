@@ -1,0 +1,17 @@
+<configure
+    xmlns="http://namespaces.zope.org/browser"
+    i18n_domain="zope">
+
+  <menu
+      id="zmi_views"
+      title="Views"
+      description="Menu for displaying alternate representations of an object"
+      />
+
+  <menu
+      id="zmi_actions"
+      title="Actions"
+      description="Menu for displaying actions to be performed"
+      />
+
+</configure>
