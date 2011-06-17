@@ -242,7 +242,7 @@
       />
   <flourish:viewlet
       name="general"
-      before="advisory"
+      before="demographics"
       for="schooltool.basicperson.interfaces.IBasicPerson"
       manager="schooltool.basicperson.browser.person.IFlourishPersonInfoManager"
       class="schooltool.basicperson.browser.person.FlourishGeneralViewlet"
@@ -251,6 +251,7 @@
       />
   <flourish:viewlet
       name="demographics"
+      before="advisory"
       for="schooltool.basicperson.interfaces.IBasicPerson"
       manager="schooltool.basicperson.browser.person.IFlourishPersonInfoManager"
       class="schooltool.basicperson.browser.person.FlourishDemographicsViewlet"
