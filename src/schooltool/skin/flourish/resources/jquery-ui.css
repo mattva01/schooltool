@@ -18,10 +18,12 @@
     padding-left: 26px;
     font-size: 12px;
     line-height: 16px;
+    border: 1px solid #aa0000;
 }
 
 .ui-state-hover {
     border: 1px solid #540000;
+    background-color: #540000;
 }
 
 .ui-state-active {
@@ -35,4 +37,3 @@
     padding-left: 8px;
     padding-top: 4px;
 }
-

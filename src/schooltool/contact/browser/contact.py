@@ -20,6 +20,9 @@
 """
 Contact browser views.
 """
+import urllib
+from zope.security.checker import canAccess
+from zope.schema import getFieldsInOrder
 from zope.interface import implements, Interface
 from zope.component import getMultiAdapter
 from zope.component import adapts
@@ -56,6 +59,12 @@ from schooltool.contact.contact import Contact
 from schooltool.person.interfaces import IPerson
 from schooltool.email.interfaces import IEmailUtility
 from schooltool.email.mail import Email
+from schooltool.skin.flourish.viewlet import Viewlet
+from schooltool.relationship.relationship import IRelationshipLinks
+from schooltool.contact.contact import URIPerson, URIContact
+from schooltool.contact.contact import URIContactRelationship
+from schooltool.contact.interfaces import IContactPerson
+from schooltool.contact.interfaces import IAddress, IEmails, IPhones, ILanguages
 
 from schooltool.common import SchoolToolMessage as _
 
@@ -485,3 +494,78 @@ class BoundContactPersonActionViewlet(object):
         return IPerson(self.context)
 
 
+class FlourishContactsViewlet(Viewlet):
+    """A viewlet showing contacts of a person"""
+
+    template = ViewPageTemplateFile('templates/f_contactsViewlet.pt')
+    body_template = None
+
+    @property
+    def getContacts(self):
+        contacts = IContactable(removeSecurityProxy(self.context)).contacts
+        return [self.buildInfo(contact) for contact in contacts]
+
+    # XXX: copied from relationship.py to avoid circular dependency
+    def get_relationship_title(self, contact):
+        try:
+            links = IRelationshipLinks(self.context)
+            link = links.find(
+                URIPerson, contact, URIContact, URIContactRelationship)
+        except ValueError:
+            return u''
+        return link.extra_info.getRelationshipTitle()
+
+    def buildInfo(self, contact):
+        return {
+            'link': absoluteURL(contact, self.request),
+            'relationship': self.get_relationship_title(contact),
+            'name': " ".join(self._extract_attrs(
+                contact, IContactPerson)),
+            'address': ", ".join(self._extract_attrs(contact, IAddress)),
+            'emails': ", ".join(self._extract_attrs(contact, IEmails)),
+            'phones': list(self._extract_attrs(contact, IPhones, add_title=True)),
+            'languages': ", ".join(self._extract_attrs(contact, ILanguages)),
+            'obj': contact,
+            }
+
+    def _extract_attrs(self, contact, interface,
+                       conjunctive=", ", add_title=False):
+        parts = []
+        for name, field in getFieldsInOrder(interface):
+            part = getattr(contact, name, None)
+            part = part and part.strip() or part
+            if not part:
+                continue
+            if add_title:
+                parts.append("%s (%s)" % (part, field.title))
+            else:
+                parts.append(part)
+        return parts
+
+    @property
+    def canModify(self):
+        return canAccess(self.context.__parent__, '__delitem__')
+
+    def makeRows(self, contact):
+        rows = []
+        fields = field.Fields(IAddress, IEmails, IPhones, ILanguages)
+        for attr in fields:
+            label = fields[attr].field.title
+            rows.append(self.makeRow(label, getattr(contact, attr)))
+        return rows
+
+    def makeRow(self, attr, value):
+        if value is None:
+            value = u''
+        return {
+            'label': attr,
+            'value': unicode(value),
+            }
+
+    @property
+    def manage_link(self):
+        base_url = absoluteURL(self.context, self.request)
+        return "%s/@@manage_contacts.html?%s" % (
+            base_url,
+            urllib.urlencode([('SEARCH_LAST_NAME',
+                               self.context.last_name.encode("utf-8"))]))

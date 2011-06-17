@@ -50,6 +50,23 @@
       permission="schooltool.view"
       />
 
+  <flourish:viewlet
+      name="person-links"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      class="schooltool.basicperson.browser.person.PersonLinks"
+      for="schooltool.person.interfaces.IPerson"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="person-settings-links"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      class="schooltool.basicperson.browser.person.PersonSettingsLinks"
+      title="Settings"
+      for="schooltool.person.interfaces.IPerson"
+      permission="schooltool.view"
+      />
+
   <flourish:viewletFactory
       name="manage_school_links"
       manager="schooltool.skin.flourish.page.IPageRefineManager"
@@ -242,7 +259,7 @@
       />
   <flourish:viewlet
       name="general"
-      before="demographics"
+      before="contacts-accordion"
       for="schooltool.basicperson.interfaces.IBasicPerson"
       manager="schooltool.basicperson.browser.person.IFlourishPersonInfoManager"
       class="schooltool.basicperson.browser.person.FlourishGeneralViewlet"

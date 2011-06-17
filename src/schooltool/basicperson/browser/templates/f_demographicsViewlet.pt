@@ -3,29 +3,23 @@
   <div>
     <h3 i18n:translate="">
       Demographics and other personal data
-      <metal:block tal:condition="view/canModify">
-        <a class="modify" href="" title="Edit this person's information"
-           tal:attributes="href string:${context/@@absolute_url}/@@edit.html"
-           i18n:attributes="title"
-           i18n:translate="">
-          <img tal:attributes="src context/++resource++schooltool.skin.flourish/edit-icon.png"
-               alt="Edit"
-               i18n:attributes="alt" />
-        </a>
-      </metal:block>
+      <a class="modify" href="" title="Edit this person's information"
+         tal:attributes="href string:${context/@@absolute_url}/@@edit.html"
+         i18n:attributes="title"
+         i18n:translate=""
+         tal:condition="view/canModify">
+        <img tal:attributes="src context/++resource++schooltool.skin.flourish/edit-icon.png"
+             alt="Edit"
+             i18n:attributes="alt" />
+      </a>
     </h3>
-    <table>
-      <thead>
-        <tr>
-          <th i18n:translate="">Label</th>
-          <th i18n:translate="">Value</th>
+    <table class="person-view-demographics">
+      <tbody>
+        <tr tal:repeat="row view/table">
+          <td tal:content="row/label" class="label" />
+          <td tal:content="row/value" />
         </tr>
-      </thead>
-      <tr tal:repeat="row view/table">
-        <td tal:content="row/label" />
-        <td tal:content="row/value" />
-      </tr>
+      </tbody>
     </table>
   </div>
 </div>
-
