@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/browser"
+           xmlns:z3c="http://namespaces.zope.org/z3c"
+           xmlns:zope="http://namespaces.zope.org/zope"
+           xmlns:flourish="http://schooltool.org/flourish"
+           i18n_domain="schooltool">
+
+  <!-- Edit person preferences page -->
+<!--
+  <configure package="schooltool.skin.flourish">
+    <flourish:page
+        name="index.html"
+        for="schooltool.person.interfaces.IPersonPreferences"
+        class="schooltool.person.browser.person.FlourishPersonPreferencesView"
+        content_template="templates/z3c_form_edit.pt"
+        permission="schooltool.edit"
+        subtitle="Edit"
+        />
+  </configure>
+-->
+
+</configure>
