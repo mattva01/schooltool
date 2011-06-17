@@ -1,5 +1,5 @@
 <div i18n:domain="schooltool">
-  <h2 i18n:translate="">Demographics</h2>
+  <h2 i18n:translate="">Attributes</h2>
   <div>
     <h3 i18n:translate="">
       Demographics and other personal data
