@@ -241,6 +241,14 @@
       permission="schooltool.view"
       />
   <flourish:viewlet
+      name="general"
+      for="schooltool.basicperson.interfaces.IBasicPerson"
+      manager="schooltool.basicperson.browser.person.IFlourishPersonInfoManager"
+      class="schooltool.basicperson.browser.person.FlourishGeneralViewlet"
+      render="template"
+      permission="schooltool.view"
+      />
+  <flourish:viewlet
       name="demographics"
       for="schooltool.basicperson.interfaces.IBasicPerson"
       manager="schooltool.basicperson.browser.person.IFlourishPersonInfoManager"
