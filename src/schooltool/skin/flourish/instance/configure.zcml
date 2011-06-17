@@ -7,8 +7,6 @@
   <include package="zc.resourcelibrary" file="meta.zcml" />
   <include package="schooltool.skin.flourish" file="meta.zcml" />
 
-  <include package="schooltool.help" file="meta.zcml" />
-
   <include package="schooltool.common" />
   <include package="zc.resourcelibrary" />
   <include package="schooltool.skin.flourish" />
@@ -17,7 +15,6 @@
   <includePlugins package="schooltool" file="meta.zcml" />
   <includePlugins package="schooltool" file="plugin.zcml" />
 
-  <include package="schooltool.help" />
   <include package="schooltool.timetable" />
   <include package="schooltool.basicperson" />
   <includeOverrides package="schooltool.basicperson" file="overrides.zcml" />
