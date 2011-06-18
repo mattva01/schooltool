@@ -550,8 +550,10 @@ class FlourishContactsViewlet(Viewlet):
         rows = []
         fields = field.Fields(IAddress, IEmails, IPhones, ILanguages)
         for attr in fields:
-            label = fields[attr].field.title
-            rows.append(self.makeRow(label, getattr(contact, attr)))
+            value = getattr(contact, attr) 
+            if value:
+                label = fields[attr].field.title
+                rows.append(self.makeRow(label, value))
         return rows
 
     def makeRow(self, attr, value):
