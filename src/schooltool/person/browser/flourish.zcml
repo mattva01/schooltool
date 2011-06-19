@@ -6,7 +6,7 @@
            i18n_domain="schooltool">
 
   <!-- Edit person preferences page -->
-<!--
+
   <configure package="schooltool.skin.flourish">
     <flourish:page
         name="index.html"
@@ -17,6 +17,6 @@
         subtitle="Edit"
         />
   </configure>
--->
+
 
 </configure>
