@@ -82,16 +82,48 @@
         permission="schooltool.edit"
         />
 
+
+  <flourish:page
+     name="add.html"
+     subtitle="Add new person"
+     for="schooltool.person.interfaces.IPersonContainer"
+     class="schooltool.basicperson.browser.person.FlourishPersonAddView"
+     permission="schooltool.edit"
+     content_template="templates/f_person_form.pt"
+     />
+
+  <flourish:page
+     name="addTeacher.html"
+     subtitle="Add new teacher"
+     for="schooltool.person.interfaces.IPersonContainer"
+     class="schooltool.basicperson.browser.person.FlourishPersonAddView"
+     group_id="teachers"
+     permission="schooltool.edit"
+     content_template="templates/f_person_form.pt"
+     />
+
+  <flourish:page
+     name="addStudent.html"
+     subtitle="Add new student"
+     for="schooltool.person.interfaces.IPersonContainer"
+     class="schooltool.basicperson.browser.person.FlourishPersonAddView"
+     group_id="students"
+     permission="schooltool.edit"
+     content_template="templates/f_person_form.pt"
+     />
+
+  <flourish:page
+     name="addAdministrator.html"
+     subtitle="Add new administrator"
+     for="schooltool.person.interfaces.IPersonContainer"
+     class="schooltool.basicperson.browser.person.FlourishPersonAddView"
+     group_id="administrators"
+     permission="schooltool.edit"
+     content_template="templates/f_person_form.pt"
+     />
+
+
   <configure package="schooltool.skin.flourish">
-    <flourish:page
-       name="add.html"
-       subtitle="Add new person"
-       for="schooltool.person.interfaces.IPersonContainer"
-       class="schooltool.basicperson.browser.person.PersonAddView"
-       permission="schooltool.edit"
-       template="templates/main.pt"
-       content_template="templates/z3c_form_edit.pt"
-       />
     <flourish:viewlet
         name="add.html"
         title="Add Person"
@@ -112,15 +144,6 @@
         html_class="create"
         />
 
-    <flourish:page
-       name="addTeacher.html"
-       subtitle="Add new teacher"
-       for="schooltool.person.interfaces.IPersonContainer"
-       class="schooltool.basicperson.browser.person.TeacherAddView"
-       permission="schooltool.edit"
-       template="templates/main.pt"
-       content_template="templates/z3c_form_edit.pt"
-       />
     <flourish:viewlet
         name="addTeacher.html"
         title="Add Teacher"
@@ -129,15 +152,6 @@
         permission="schooltool.edit"
         />
 
-    <flourish:page
-       name="addStudent.html"
-       subtitle="Add new student"
-       for="schooltool.person.interfaces.IPersonContainer"
-       class="schooltool.basicperson.browser.person.StudentAddView"
-       permission="schooltool.edit"
-       template="templates/main.pt"
-       content_template="templates/z3c_form_edit.pt"
-       />
     <flourish:viewlet
         name="addStudent.html"
         title="Add Student"
@@ -146,15 +160,6 @@
         permission="schooltool.edit"
         />
 
-    <flourish:page
-       name="addAdministrator.html"
-       subtitle="Add new administrator"
-       for="schooltool.person.interfaces.IPersonContainer"
-       class="schooltool.basicperson.browser.person.AdministratorAddView"
-       permission="schooltool.edit"
-       template="templates/main.pt"
-       content_template="templates/z3c_form_edit.pt"
-       />
     <flourish:viewlet
         name="addAdministrator.html"
         title="Add Administrator"
