@@ -59,6 +59,8 @@ from schooltool.skin.flourish.viewlet import Viewlet, ViewletManager
 from schooltool.skin.flourish.content import ContentProvider
 from schooltool.table.interfaces import ITableFormatter
 from schooltool.table.table import DependableCheckboxColumn
+from schooltool.table.catalog import IndexedLocaleAwareGetterColumn
+from schooltool.table.table import url_cell_formatter
 
 from schooltool.common import SchoolToolMessage as _
 
@@ -98,17 +100,19 @@ class DeletePersonCheckboxColumn(DependableCheckboxColumn):
 class FlourishBasicPersonContainerView(flourish.containers.TableContainerView):
     """A Person Container view."""
 
-    def getColumnsBefore(self):
-        disable_users = []
-        person = IPerson(self.request.principal, None)
-        if person is not None:
-            disable_users.append(person.__name__)
-        if self.canModify():
-            return [DeletePersonCheckboxColumn(disable_items=disable_users,
-                                               prefix="delete",
-                                               name='delete_checkbox',
-                                               title=u'')]
-        return []
+    def getColumnsAfter(self):
+        username = IndexedLocaleAwareGetterColumn(
+            index='__name__',
+            name='username',
+            title=_(u'Username'),
+            getter=lambda i, f: i.__name__,
+            subsort=True)
+        return [username]
+
+    def setUpTableFormatter(self, formatter):
+        columns_after = self.getColumnsAfter()
+        formatter.setUp(formatters=[url_cell_formatter],
+                        columns_after=columns_after)
 
 
 class PersonContainerLinks(flourish.page.RefineLinksViewlet):
