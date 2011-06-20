@@ -19,6 +19,8 @@
 
   <!-- zc.resourcelibrary -->
 
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu:regular,bold&subset=Latin">
+
   <tal:block content="structure view/providers/html_head|nothing" />
 
   <!--
@@ -58,6 +60,10 @@
 
   <tal:block replace="structure view/providers/header_navigation">
     [ | Header | Navigation | Bar | Here | ]
+  </tal:block>
+
+  <tal:block replace="structure view/providers/breadcrumbs|nothing">
+    [ Breadcrumbs >> go >> here ]
   </tal:block>
 
   <tal:block replace="structure view/providers/secondary_navigation|nothing">
@@ -109,26 +115,17 @@
   <p class="server-info">
     <strong tal:replace="context/schooltool:preferences/title"/>
     -
-    <span i18n:translate="">Server Running SchoolTool</span>
+    <span i18n:translate="">server running SchoolTool</span>
     <span tal:content="modules/schooltool/common/get_version"/>
-    <span i18n:translate="">
-      &copy; the
-      <a i18n:name="link_swf"
-         href="http://www.shuttleworthfoundation.org">
-        Shuttleworth Foundation
-      </a>
-      2003 - 2011: Supporting Social Innovation.
-    </span>
+
   </p>
 
-  <p i18n:translate="" class="trademark">
-    <a i18n:name="link_st_org"
-       href="http://www.schooltool.org">SchoolTool</a>&trade;
-    is a Trademark of the
-    <a i18n:name="link_swf"
-       href="http://www.shuttleworthfoundation.org">
+  <p i18n:translate="" class="copyright">
+
+    &copy; 2003 - 2011 the
+    <a i18n:name="link_swf" href="http://www.shuttleworthfoundation.org">
       Shuttleworth Foundation
-    </a>.
+      </a>: We support exceptional people to change the world in extraordinary ways.
   </p>
 
 </div>

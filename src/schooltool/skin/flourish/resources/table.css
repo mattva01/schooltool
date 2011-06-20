@@ -26,8 +26,21 @@ th {
 
 thead {
     background-color: #aea79f;
+    border-bottom: 0;
 }
 
-tr {
+tbody {
+    border-top: 1px solid #aea79f;
+}
+
+tbody tr {
     border-bottom: 1px dotted #cccccc;
+}
+
+table.person-view-sections th {
+    width: 33%;
+}
+
+table.person-view-demographics .label {
+    width: 33%;
 }

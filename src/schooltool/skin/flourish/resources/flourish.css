@@ -24,7 +24,6 @@ h1 {
     line-height: 40px;
 }
 
-
 h2 {
     font-size: 24px;
     line-height: 28px;
@@ -40,8 +39,15 @@ h4, h5, h6 {
     line-height: 20px;
 }
 
+h1, h2, h3, h4, h5, h6 {
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
 a, a:link, a:visited, a:active {
     color: #aa0000;
+    font-size: 12px;
+    line-height: 16px;
     text-decoration: none;
 }
 
@@ -54,7 +60,14 @@ a:hover {
 }
 
 p {
+    font-size: 12px;
+    line-height: 16px;
     padding-bottom: 8px;
+}
+
+li {
+    font-size: 12px;
+    line-height: 16px;
 }
 
 p.small {
@@ -66,14 +79,23 @@ pre {
     overflow: auto;
 }
 
+a.modify {
+    font-size: 12px;
+    vertical-align: middle;
+}
+
+a.modify img {
+    border: none;
+}
+
 /* Layout */
 
 .schooltool > .header,
 .schooltool > .page,
 .schooltool > .footer {
-    width: 976px;
     margin: 0 auto;
     position: relative;
+    width: 976px;
 }
 
 .schooltool > .header {
@@ -117,6 +139,11 @@ pre {
     padding: 0px 16px 2px 16px;
 }
 
+.schooltool > .footer a {
+    font-size: 10px;
+    line-height: 14px;
+}
+
 .schooltool > .footer > p.server-info {
     padding-top: 4px;
 }
@@ -127,9 +154,10 @@ pre {
     color: #ffffff;
     font-size: 36px;
     line-height: 40px;
+    margin-top: 0px;
     position: absolute;
     right: 16px;
-    top: 16px;
+    top: 12px;
     z-index: 1;
 }
 
@@ -175,6 +203,8 @@ pre {
     height: 40px;
     margin-left: 16px;
     margin-right: 16px;
+    text-align: right;
+    position: relative;
 
     -moz-border-radius: 0px 0px 4px 4px;
     border-radius: 0px 0px 4px 4px;
@@ -186,8 +216,8 @@ pre {
 
 .header ul.secondary_nav > li {
     background: transparent url(subnav_divider.png) no-repeat scroll right bottom;
-    display: block;
-    float: left;
+    display: inline-block;
+    margin-left: -4px;
 }
 
 .header ul.secondary_nav > li:first-child {
@@ -214,33 +244,36 @@ pre {
     color: #aa0000;
 }
 
-.header ul.secondary_nav > li > ul.breadcrumbs {
-    padding: 0px 8px;
+.header ul.breadcrumbs {
     font-size: 12px;
+    height: 40px;
     list-style-type: none;
+    margin-left: 32px;
+    position: absolute;
+    z-index: 1;
 }
 
-.header ul.secondary_nav > li > ul.breadcrumbs > li a:hover {
+.header ul.breadcrumbs > li a:hover {
     background: none;
 }
 
-.header ul.secondary_nav > li > ul.breadcrumbs li {
+.header ul.breadcrumbs li {
     background: none;
+    color: black;
     display: inline-block;
     padding: 0px 2px;
-    color: black;
 }
 
-.header ul.secondary_nav > li > ul.breadcrumbs li:after {
+.header ul.breadcrumbs li:after {
     content: "\0020 \00BB";
 }
 
-.header ul.secondary_nav > li > ul.breadcrumbs li.last:after {
+.header ul.breadcrumbs li.last:after {
     content: "";
 }
 
-.header ul.secondary_nav > li > ul.breadcrumbs a,
-.header ul.secondary_nav > li > ul.breadcrumbs span {
+.header ul.breadcrumbs a,
+.header ul.breadcrumbs span {
     display: inline-block;
     font-size: 12px;
     line-height: 16px;
@@ -248,6 +281,18 @@ pre {
     padding: 12px 2px;
 }
 
-.header ul.secondary_nav > li > ul.breadcrumbs a {
+.header ul.breadcrumbs a {
     color: #aa0000;
+}
+
+
+/* XXX: where do we put styles like this? */
+
+a.manage-contacts-link {
+    width: auto;
+    float: left;
+    display: block;
+    line-height: 16px;
+    font-size: 12px;
+    margin-top: 8px;
 }

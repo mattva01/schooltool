@@ -120,7 +120,6 @@
       name="index.html"
       for="..interfaces.IPersonPreferences"
       class=".person.PersonPreferencesView"
-      template="person_preferences.pt"
       layer="schooltool.skin.ISchoolToolLayer"
       permission="schooltool.edit" />
 
@@ -225,5 +224,7 @@
   <zope:adapter
       factory=".person.PreferencesMenuViewletCrowd"
       name="schooltool.view" />
+
+  <include file="flourish.zcml" />
 
 </configure>

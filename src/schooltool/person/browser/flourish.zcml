@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/browser"
+           xmlns:flourish="http://schooltool.org/flourish"
+           i18n_domain="schooltool">
+
+  <flourish:viewlet
+      name="preferences"
+      before="password_edit.html"
+      for="schooltool.person.interfaces.IPerson"
+      title="Preferences"
+      class="schooltool.skin.flourish.page.LinkViewlet"
+      manager="schooltool.basicperson.browser.person.PersonSettingsLinks"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="password_edit.html"
+      for="schooltool.person.interfaces.IPerson"
+      title="Password"
+      class="schooltool.skin.flourish.page.LinkViewlet"
+      manager="schooltool.basicperson.browser.person.PersonSettingsLinks"
+      permission="schooltool.view"
+      />
+
+  <configure package="schooltool.skin.flourish">
+    <flourish:page
+        name="index.html"
+        for="schooltool.person.interfaces.IPersonPreferences"
+        class="schooltool.person.browser.person.FlourishPersonPreferencesView"
+        template="templates/z3c_form_edit.pt"
+        permission="schooltool.edit"
+        subtitle="Edit"
+        />
+  </configure>
+
+</configure>

@@ -65,11 +65,6 @@
               <tal:if condition="person">
                 <a id="login-name" tal:attributes="href string: ${person/@@absolute_url}/home.html"
                    tal:content="user/title">Schoolbell Person</a>
-                <!-- XXX either all modules should include Help, or core
-                     should provide a dummy replacement, because eating errors is
-                     a bad idea -->
-                <tal:block replace="structure provider:schooltool.Help"
-                           on-error="nothing" /> |
 
                 <tal:block replace="structure provider:schooltool.Header" />
 
@@ -125,14 +120,14 @@
         -
         <metal:block
             use-macro="view/@@schooltool_macros/generic/serverinfo" />
-          <br />
-          <span i18n:translate="">
-            &copy; The <a href="http://www.shuttleworthfoundation.org">Shuttleworth Foundation</a> 2003 - 2011:
-            Supporting Social Innovation.
-          </span>
         <br />
         <span i18n:translate="">
-        <a href="http://www.schooltool.org">SchoolTool</a>&trade; is a Trademark of the <a href="http://www.shuttleworthfoundation.org">Shuttleworth Foundation</a>.
+          &copy; The <a href="http://www.shuttleworthfoundation.org">Shuttleworth Foundation</a> 2003 - 2011:
+          Supporting Social Innovation.
+        </span>
+        <br />
+        <span i18n:translate="">
+          <a href="http://www.schooltool.org">SchoolTool</a>&trade; is a Trademark of the <a href="http://www.shuttleworthfoundation.org">Shuttleworth Foundation</a>.
         </span>
       </p>
       <div class="clearer"></div>
@@ -141,7 +136,6 @@
 </html>
 </metal:block>
 
-<metal:block i18n:domain="schooltool">
 <metal:block define-macro="batch-search">
   <form method="post" class="batch-search">
     <input id="batch-search-box" type="text" name="SEARCH"
@@ -207,5 +201,4 @@
   <input type="submit" id="form.actions.cancel" name="form.actions.cancel"
          value="Cancel" class="button-cancel"
          i18n:attributes="value cancel-button" />
-</metal:block>
 </metal:block>

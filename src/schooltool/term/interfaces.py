@@ -105,7 +105,7 @@ class ITermContainer(IContainer, ILocation):
 class IDateManager(Interface):
     """A class that handles dates and time.
 
-    It soes so taking the preferred timezone into account.
+    It does so taking the preferred timezone into account.
     """
 
     today = zope.schema.Date(

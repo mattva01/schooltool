@@ -3,14 +3,11 @@
            xmlns:browser="http://namespaces.zope.org/browser"
            i18n_domain="schooltool">
 
-  <include package="schooltool.help" file="meta.zcml" />
-
   <include package="schooltool.common" />
 
   <include package="schooltool.course" />
   <include package="schooltool.dashboard" />
   <include package="schooltool.devmode" />
-  <include package="schooltool.help" />
   <include package="schooltool.note" />
   <include package="schooltool.term" />
   <include package="schooltool.timetable" />

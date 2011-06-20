@@ -22,6 +22,17 @@
 
   <!-- Views for everything -->
 
+  <!-- XXX: how do we handle multiple objects implementing IHaveCalendar
+       multiple viewlet registrations for different managers? -->
+  <flourish:viewlet
+      name="calendar"
+      for="schooltool.app.interfaces.IHaveCalendar"
+      title="Calendar"
+      before="intervention/intervention_center.html"
+      class="schooltool.skin.flourish.page.LinkViewlet"
+      manager="schooltool.basicperson.browser.person.PersonLinks"
+      permission="schooltool.view"
+      />
 
   <!-- Authentication adapter traverser and views -->
 
@@ -88,13 +99,13 @@
       view="schooltool.app.browser.app.LoginView"
       />
 
-  <flourish:viewlet
+<!--  <flourish:viewlet
       name="breadcrumbs"
       after="login"
       manager="schooltool.skin.flourish.page.ISecondaryNavigationManager"
       class="schooltool.app.browser.app.BreadcrumbViewlet"
       permission="zope.Public"
-      />
+      /> -->
 
   <flourish:content
       name="breadcrumbs"
@@ -211,14 +222,14 @@
       view="schooltool.app.browser.app.ManageSchool"
       />
 
-  <flourish:viewlet
+<!--  <flourish:viewlet
       name="manage_school_links"
       manager="schooltool.skin.flourish.page.IPageRefineManager"
       class="schooltool.app.browser.app.ManageSchoolLinks"
       for="schooltool.app.interfaces.ISchoolToolApplication"
       title="School"
       permission="schooltool.edit"
-      />
+      /> -->
 
   <!-- Content providers -->
 

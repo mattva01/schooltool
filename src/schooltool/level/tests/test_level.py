@@ -329,7 +329,7 @@ def setUpIntegration(test):
     zcml.setUp(
         namespaces={"": "http://namespaces.zope.org/zope"},
         i18n_domain='schooltool')
-    zcml.include('zope.app.zcmlfiles')
+    zcml.include('schooltool.common', file='zcmlfiles.zcml')
     # We define the default pemissions here, because though widely used,
     # they are currently mangled with other stuff in schooltool.common
     zcml.string('''

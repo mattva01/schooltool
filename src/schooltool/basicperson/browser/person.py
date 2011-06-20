@@ -24,7 +24,7 @@ from zope.container.interfaces import INameChooser
 from zope.app.form.browser.interfaces import ITerms
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import adapts
-from zope.component import getUtility, queryMultiAdapter
+from zope.component import getUtility, queryMultiAdapter, getMultiAdapter
 from z3c.form import form, field, button, validator
 from zope.interface import invariant, Invalid
 from zope.schema import Password, TextLine, Choice, List, Object
@@ -32,9 +32,11 @@ from zope.schema import ValidationError
 from zope.schema.interfaces import ITitledTokenizedTerm, IField
 from zope.traversing.browser.absoluteurl import absoluteURL
 from zope.viewlet.viewlet import ViewletBase
+from zope.security.checker import canAccess
 
 import z3c.form.interfaces
 from z3c.form.validator import SimpleFieldValidator
+from zc.table import table
 
 import schooltool.skin.flourish.page
 import schooltool.skin.flourish.containers
@@ -43,16 +45,19 @@ from schooltool.app.browser.app import RelationshipViewBase
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.common.inlinept import InlineViewPageTemplate
 from schooltool.common.inlinept import InheritTemplate
+from schooltool.basicperson.interfaces import IDemographics
 from schooltool.basicperson.interfaces import IDemographicsFields
 from schooltool.basicperson.interfaces import IBasicPerson
 from schooltool.group.interfaces import IGroupContainer
 from schooltool.person.interfaces import IPerson, IPersonFactory
+from schooltool.person.browser.person import PersonTableFormatter
 from schooltool.schoolyear.interfaces import ISchoolYearContainer
 from schooltool.skin.containers import TableContainerView
 from schooltool.skin import flourish
 from schooltool.skin.flourish.interfaces import IViewletManager
 from schooltool.skin.flourish.viewlet import Viewlet, ViewletManager
 from schooltool.skin.flourish.content import ContentProvider
+from schooltool.table.interfaces import ITableFormatter
 from schooltool.table.table import DependableCheckboxColumn
 
 from schooltool.common import SchoolToolMessage as _
@@ -108,6 +113,20 @@ class FlourishBasicPersonContainerView(flourish.containers.TableContainerView):
 
 class PersonContainerLinks(flourish.page.RefineLinksViewlet):
     """Person container links viewlet."""
+
+
+class PersonLinks(flourish.page.RefineLinksViewlet):
+    """Person links viewlet."""
+
+    @property
+    def title(self):
+        return _("${person_full_name}'s",
+                 mapping={'person_full_name': "%s %s" % (self.context.first_name,
+                                                         self.context.last_name)})
+
+
+class PersonSettingsLinks(flourish.page.RefineLinksViewlet):
+    """Person settings links viewlet."""
 
 
 class IPersonAddForm(IBasicPerson):
@@ -582,17 +601,98 @@ class FlourishPersonInfoManager(ViewletManager):
 class FlourishAdvisoryViewlet(Viewlet):
     """A viewlet showing the advisors/advisees of a person."""
 
-    template = ViewPageTemplateFile('templates/advisoryViewlet.pt')
+    template = ViewPageTemplateFile('templates/f_advisoryViewlet.pt')
     body_template = None
-    render = lambda self, *a, **kw: self.template(*a, **kw)
+
+    def getTable(self, items):
+        persons = ISchoolToolApplication(None)['persons']
+        result = getMultiAdapter((persons, self.request), ITableFormatter)
+        result.setUp(table_formatter=table.StandaloneFullFormatter, items=items)
+        return result
 
     @property
-    def advisors(self):
-        return list(self.context.advisors)
+    def advisors_table(self):
+        return self.getTable(list(self.context.advisors))
 
     @property
-    def advisees(self):
-        return list(self.context.advisees)
+    def advisees_table(self):
+        return self.getTable(list(self.context.advisees))
+
+    @property
+    def canModify(self):
+        return canAccess(self.context.__parent__, '__delitem__')
+
+
+class FlourishGeneralViewlet(Viewlet):
+    """A viewlet showing the core attributes of a person."""
+
+    template = ViewPageTemplateFile('templates/f_generalViewlet.pt')
+    body_template = None
+
+    @property
+    def heading(self):
+        attrs = ['prefix', 'first_name', 'middle_name', 'last_name', 'suffix']
+        values = []
+        for attr in attrs:
+            value = getattr(self.context, attr)
+            if value:
+                values.append(value)
+        return ' '.join(values)
+
+    def makeRow(self, attr, value):
+        if value is None:
+            value = u''
+        return {
+            'label': attr,
+            'value': unicode(value),
+            }
+
+    @property
+    def table(self):
+        rows = []
+        fields = field.Fields(IBasicPerson)
+        for attr in fields:
+            label = fields[attr].field.title
+            rows.append(self.makeRow(label, getattr(self.context, attr)))
+        return rows
+
+    @property
+    def canModify(self):
+        return canAccess(self.context.__parent__, '__delitem__')
+
+
+class FlourishDemographicsViewlet(Viewlet):
+    """A viewlet showing the demographics of a person."""
+
+    template = ViewPageTemplateFile('templates/f_demographicsViewlet.pt')
+    body_template = None
+
+    def makeRow(self, attr, value):
+        if value is None:
+            value = u''
+        return {
+            'label': attr,
+            'value': unicode(value),
+            }
+
+    @property
+    def table(self):
+        field_descriptions = IDemographicsFields(ISchoolToolApplication(None))
+        fields = field.Fields()
+        limit_keys = [group.__name__ for group in self.context.groups]
+        for field_desc in field_descriptions.filter_keys(limit_keys):
+            fields += field_desc.makeField()
+
+        rows = []
+        demographics = IDemographics(self.context)
+        for attr in fields:
+            label = fields[attr].field.title
+            rows.append(self.makeRow(label, demographics[attr]))
+        return rows
+
+    @property
+    def canModify(self):
+        return canAccess(self.context.__parent__, '__delitem__')
 
 
 ###############  Base class of all group-aware add views ################
@@ -786,3 +886,10 @@ class PersonTitle(ContentProvider):
     def title(self):
         person = self.context
         return "%s %s" % (person.first_name, person.last_name)
+
+
+class BasicPersonTableFormatter(PersonTableFormatter):
+
+    def columns(self):
+        cols = list(reversed(PersonTableFormatter.columns(self)))
+        return cols

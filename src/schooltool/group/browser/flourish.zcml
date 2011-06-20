@@ -12,7 +12,7 @@
       for="schooltool.basicperson.interfaces.IBasicPerson"
       manager="schooltool.basicperson.browser.person.IFlourishPersonInfoManager"
       class="schooltool.group.browser.group.FlourishGroupsViewlet"
-      permission="schooltool.edit"
+      permission="schooltool.view"
       />
 
 </configure>

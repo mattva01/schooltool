@@ -1,7 +1,7 @@
 # Sample SchoolTool HTTP server configuration file
 
 # identify the component configuration used to define the site:
-site-definition instance/school.zcml
+site-definition instance/site.zcml
 
 #
 # web[_ssl] port

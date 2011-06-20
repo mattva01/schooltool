@@ -20,7 +20,7 @@
       title="People"
       name="title" />
 
-  <flourish:viewlet
+<!--  <flourish:viewlet
       name="persons"
       title="People"
       class="schooltool.skin.flourish.page.LinkViewlet"
@@ -32,7 +32,7 @@
       name="persons"
       manager="schooltool.app.browser.app.ManageSchoolLinks"
       for="schooltool.person.interfaces.IPersonContainer"
-      />
+      /> -->
 
   <flourish:page
       name="index.html"
@@ -46,7 +46,24 @@
       manager="schooltool.skin.flourish.page.IPageRefineManager"
       class="schooltool.basicperson.browser.person.PersonContainerLinks"
       for="schooltool.person.interfaces.IPersonContainer"
-      title="People"
+      title="Add"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="person-links"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      class="schooltool.basicperson.browser.person.PersonLinks"
+      for="schooltool.person.interfaces.IPerson"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="person-settings-links"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      class="schooltool.basicperson.browser.person.PersonSettingsLinks"
+      title="Settings"
+      for="schooltool.person.interfaces.IPerson"
       permission="schooltool.view"
       />
 
@@ -74,13 +91,13 @@
       content_template="templates/f_person_add_multiple.pt"
       />
 
-    <flourish:viewlet
+<!--    <flourish:viewlet
         name="add_multiple.html"
         title="Add Persons"
         class="schooltool.skin.flourish.page.LinkViewlet"
         manager="schooltool.basicperson.browser.person.PersonContainerLinks"
         permission="schooltool.edit"
-        />
+        /> -->
 
 
   <flourish:page
@@ -126,7 +143,7 @@
   <configure package="schooltool.skin.flourish">
     <flourish:viewlet
         name="add.html"
-        title="Add Person"
+        title="Person"
         class="schooltool.skin.flourish.page.LinkViewlet"
         manager="schooltool.basicperson.browser.person.PersonContainerLinks"
         permission="schooltool.edit"
@@ -146,7 +163,7 @@
 
     <flourish:viewlet
         name="addTeacher.html"
-        title="Add Teacher"
+        title="Teacher"
         class="schooltool.skin.flourish.page.LinkViewlet"
         manager="schooltool.basicperson.browser.person.PersonContainerLinks"
         permission="schooltool.edit"
@@ -154,7 +171,7 @@
 
     <flourish:viewlet
         name="addStudent.html"
-        title="Add Student"
+        title="Student"
         class="schooltool.skin.flourish.page.LinkViewlet"
         manager="schooltool.basicperson.browser.person.PersonContainerLinks"
         permission="schooltool.edit"
@@ -162,7 +179,7 @@
 
     <flourish:viewlet
         name="addAdministrator.html"
-        title="Add Administrator"
+        title="Administrator"
         class="schooltool.skin.flourish.page.LinkViewlet"
         manager="schooltool.basicperson.browser.person.PersonContainerLinks"
         permission="schooltool.edit"
@@ -242,7 +259,26 @@
       for="schooltool.basicperson.interfaces.IBasicPerson"
       manager="schooltool.basicperson.browser.person.IFlourishPersonInfoManager"
       class="schooltool.basicperson.browser.person.FlourishAdvisoryViewlet"
-      permission="schooltool.edit"
+      render="template"
+      permission="schooltool.view"
+      />
+  <flourish:viewlet
+      name="general"
+      before="contacts-accordion"
+      for="schooltool.basicperson.interfaces.IBasicPerson"
+      manager="schooltool.basicperson.browser.person.IFlourishPersonInfoManager"
+      class="schooltool.basicperson.browser.person.FlourishGeneralViewlet"
+      render="template"
+      permission="schooltool.view"
+      />
+  <flourish:viewlet
+      name="demographics"
+      before="advisory"
+      for="schooltool.basicperson.interfaces.IBasicPerson"
+      manager="schooltool.basicperson.browser.person.IFlourishPersonInfoManager"
+      class="schooltool.basicperson.browser.person.FlourishDemographicsViewlet"
+      render="template"
+      permission="schooltool.view"
       />
 
   <!-- Other -->
@@ -252,5 +288,10 @@
       for="schooltool.basicperson.interfaces.IBasicPerson"
       permission="schooltool.view"
       name="title" />
+
+  <zope:adapter
+      for="schooltool.person.interfaces.IPersonContainer
+           schooltool.skin.flourish.IFlourishLayer"
+      factory=".person.BasicPersonTableFormatter" />
 
 </configure>

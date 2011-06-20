@@ -22,7 +22,9 @@ Contents:
    level/tests/level-integration
    help/README
    traverser/README
+   app/browser/templates
    testing/README
+   app/browser/ftests/README
    devmode/devmode
    sampledata/README
 

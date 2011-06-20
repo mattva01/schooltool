@@ -5,7 +5,7 @@
 */
 
 .ui-accordion {
-    width: 544px;
+    width: 542px;
 }
 
 .ui-accordion-header {
@@ -15,9 +15,15 @@
     font-weight: bold;
     text-align: left;
     padding: 4px 8px;
-    padding-left: 2em;
+    padding-left: 26px;
     font-size: 12px;
     line-height: 16px;
+    border: 1px solid #aa0000;
+}
+
+.ui-state-hover {
+    border: 1px solid #540000;
+    background-color: #540000;
 }
 
 .ui-state-active {
@@ -25,7 +31,9 @@
     border: none;
 }
 
-.ui-accordion-content {
+.ui-accordion .ui-accordion-content {
     background: none;
+    padding-right: 8px;
+    padding-left: 8px;
+    padding-top: 4px;
 }
-

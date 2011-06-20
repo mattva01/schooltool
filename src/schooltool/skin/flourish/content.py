@@ -58,7 +58,7 @@ class ContentProvider(ContentProviderBase, BrowserPage):
 
 class ContentProviderProxy(SpecificationDecoratorBase):
     """A content provider proxy that mimics behaviour of
-    zope.contentrpovider.tales.TALESProviderExpression
+    zope.contentprovider.tales.TALESProviderExpression
     """
     adapts(zope.contentprovider.interfaces.IContentProvider)
     implements(interfaces.IContentProvider)
