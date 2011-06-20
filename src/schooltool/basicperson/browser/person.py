@@ -729,7 +729,8 @@ class PersonAddViewBase(PersonAddFormBase):
     def getDemoFields(self):
         fields = field.Fields()
         dfs = IDemographicsFields(ISchoolToolApplication(None))
-        for field_desc in dfs.filter_key(self.group_id):
+        keys = self.group_id and [self.group_id] or []
+        for field_desc in dfs.filter_keys(keys):
             fields += field_desc.makeField()
         return fields
 
@@ -761,7 +762,10 @@ class PersonAddViewBase(PersonAddFormBase):
         syc = ISchoolYearContainer(ISchoolToolApplication(None))
         active_schoolyear = syc.getActiveSchoolYear()
         if active_schoolyear is not None:
-            group = IGroupContainer(active_schoolyear).get(self.group_id)
+            if self.group_id:
+                group = IGroupContainer(active_schoolyear).get(self.group_id)
+            else:
+                group = data.get('group')
         if group is not None:
             person.groups.add(group)
         self._person = person
@@ -776,6 +780,54 @@ class PersonAddViewBase(PersonAddFormBase):
 
     def updateWidgets(self):
         super(PersonAddViewBase, self).updateWidgets()
+
+
+class FlourishPersonAddView(PersonAddViewBase):
+    template = InheritTemplate(flourish.page.Page.template)
+
+    fieldset_groups = None
+    fieldset_order = None
+
+    group_id = None
+
+    def update(self):
+        self.buildFieldsetGroups()
+        PersonAddViewBase.update(self)
+
+    def getBaseFields(self):
+        if self.group_id:
+            return field.Fields(IPersonAddForm).omit('group')
+        return field.Fields(IPersonAddForm)
+
+    def buildFieldsetGroups(self):
+        relationship_fields = ['advisor']
+        if not self.group_id:
+            relationship_fields[0:0] = ['group']
+        self.fieldset_groups = {
+            'full_name': (
+                _('Full Name'),
+                ['prefix', 'first_name', 'middle_name', 'last_name',
+                 'suffix', 'preferred_name']),
+            'details': (
+                _('Details'), ['gender', 'birth_date']),
+            'demographics': (
+                _('Demographics'), list(self.getDemoFields())),
+            'relationships': (
+                _('Relationships'), relationship_fields),
+            'user': (
+                _('User'), ['username', 'password', 'confirm']),
+            }
+        self.fieldset_order = (
+            'full_name', 'details', 'demographics',
+            'relationships', 'user')
+
+    def fieldsets(self):
+        result = []
+        for fieldset_id in self.fieldset_order:
+            legend, fields = self.fieldset_groups[fieldset_id]
+            result.append(self.makeFieldSet(
+                    fieldset_id, legend, list(fields)))
+        return result
 
 
 ###############  Group-aware add views ################
