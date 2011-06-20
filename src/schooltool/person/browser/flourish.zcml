@@ -22,4 +22,15 @@
       permission="schooltool.view"
       />
 
+  <configure package="schooltool.skin.flourish">
+    <flourish:page
+        name="index.html"
+        for="schooltool.person.interfaces.IPersonPreferences"
+        class="schooltool.person.browser.person.FlourishPersonPreferencesView"
+        template="templates/z3c_form_edit.pt"
+        permission="schooltool.edit"
+        subtitle="Edit"
+        />
+  </configure>
+
 </configure>

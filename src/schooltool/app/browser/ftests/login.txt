@@ -67,6 +67,10 @@ We get a log in form:
     >>> anonymous.getControl('Password').value = 'secret'
     >>> anonymous.getControl('Log in').click()
 
+We visit the user's preferences again:
+
+    >>> anonymous.open("http://localhost/persons/user/preferences")
+
 And the option we have clicked on is set:
 
     >>> anonymous.getControl('Make calendar public').selected
