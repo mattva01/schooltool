@@ -203,4 +203,6 @@
   <zope:adapter
       factory=".contact.SendEmailFormAdapter" />
 
+  <include file="flourish.zcml" />
+
 </configure>

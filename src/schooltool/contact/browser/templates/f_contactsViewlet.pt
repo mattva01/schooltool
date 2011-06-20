@@ -1,0 +1,38 @@
+<div i18n:domain="schooltool">
+  <h2 i18n:translate="">Contacts</h2>
+  <div tal:define="contacts view/getContacts">
+    <tal:block repeat="contact contacts">
+    <h3>
+      <tal:block content="contact/name" />,
+      <tal:block condition="contact/relationship">
+        <span tal:replace="contact/relationship" />
+      </tal:block>
+      <a class="modify" href="" title="Edit this contact"
+         tal:attributes="href string:${contact/link}/@@edit.html"
+         i18n:attributes="title"
+         tal:condition="view/canModify">
+        <img tal:attributes="src context/++resource++schooltool.skin.flourish/edit-icon.png"
+             alt="Edit"
+             i18n:attributes="alt" />
+      </a>
+    </h3>
+    <table class="person-view-demographics">
+      <tbody>
+        <tr tal:repeat="row python:view.makeRows(contact['obj'])">
+          <td tal:content="row/label" class="label"/>
+          <td tal:content="row/value" />
+        </tr>
+      </tbody>
+    </table>
+    </tal:block>
+    <h3 tal:condition="not:contacts" i18n:translate="">
+      This person has no contacts.
+    </h3>
+    <a class="manage-contacts-link"
+       tal:condition="view/canModify"
+       tal:attributes="href view/manage_link"
+       i18n:translate="">
+      Manage contacts
+    </a>
+  </div>
+</div>

@@ -284,3 +284,15 @@ a.modify img {
 .header ul.breadcrumbs a {
     color: #aa0000;
 }
+
+
+/* XXX: where do we put styles like this? */
+
+a.manage-contacts-link {
+    width: auto;
+    float: left;
+    display: block;
+    line-height: 16px;
+    font-size: 12px;
+    margin-top: 8px;
+}

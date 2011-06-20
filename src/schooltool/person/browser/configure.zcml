@@ -225,4 +225,6 @@
       factory=".person.PreferencesMenuViewletCrowd"
       name="schooltool.view" />
 
+  <include file="flourish.zcml" />
+
 </configure>

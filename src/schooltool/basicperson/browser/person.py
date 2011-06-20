@@ -115,6 +115,20 @@ class PersonContainerLinks(flourish.page.RefineLinksViewlet):
     """Person container links viewlet."""
 
 
+class PersonLinks(flourish.page.RefineLinksViewlet):
+    """Person links viewlet."""
+
+    @property
+    def title(self):
+        return _("${person_full_name}'s",
+                 mapping={'person_full_name': "%s %s" % (self.context.first_name,
+                                                         self.context.last_name)})
+
+
+class PersonSettingsLinks(flourish.page.RefineLinksViewlet):
+    """Person settings links viewlet."""
+
+
 class IPersonAddForm(IBasicPerson):
 
     group = Choice(

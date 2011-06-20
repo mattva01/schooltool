@@ -19,6 +19,8 @@
 
   <!-- zc.resourcelibrary -->
 
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu:regular,bold&subset=Latin">
+
   <tal:block content="structure view/providers/html_head|nothing" />
 
   <!--
@@ -113,18 +115,19 @@
   <p class="server-info">
     <strong tal:replace="context/schooltool:preferences/title"/>
     -
-    <span i18n:translate="">Server Running SchoolTool</span>
+    <span i18n:translate="">server running SchoolTool</span>
     <span tal:content="modules/schooltool/common/get_version"/>
-    <br />
-    <span i18n:translate="">
-      &copy; The <a href="http://www.shuttleworthfoundation.org">Shuttleworth Foundation</a> 2003 - 2011:
-      Supporting Social Innovation.
-    </span>
-    <br />
-    <span i18n:translate="">
-      <a href="http://www.schooltool.org">SchoolTool</a>&trade; is a Trademark of the <a href="http://www.shuttleworthfoundation.org">Shuttleworth Foundation</a>.
-    </span>
+
   </p>
+
+  <p i18n:translate="" class="copyright">
+
+    &copy; 2003 - 2011 the
+    <a i18n:name="link_swf" href="http://www.shuttleworthfoundation.org">
+      Shuttleworth Foundation
+      </a>: We support exceptional people to change the world in extraordinary ways.
+  </p>
+
 </div>
 
 </div>
