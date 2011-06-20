@@ -181,6 +181,10 @@ class IPageDirective(zope.browserpage.metadirectives.IPagesDirective,
         )
 
 
+# Arbitrary keys and values are allowed to be passed to the manager.
+IPageDirective.setTaggedValue('keyword_arguments', True)
+
+
 class IContentOrientedDirective(Interface):
 
     for_ = zope.configuration.fields.GlobalObject(
@@ -316,6 +320,7 @@ def page(_context, name, permission,
          class_=Page,
          update='update', render='render',
          allowed_interface=(), allowed_attributes=(),
+         **kwargs
          ):
 
     forward_methods = {
@@ -334,7 +339,9 @@ def page(_context, name, permission,
     allowed_interface = (tuple(allowed_interface) +
                          (interfaces.IPage, ))
 
-    class_dict = {'__name__': name}
+    class_dict = dict(kwargs)
+    class_dict['__name__'] = name
+
     if title is not None:
         class_dict['title'] = title
     if subtitle is not None:

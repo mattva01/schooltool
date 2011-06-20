@@ -25,14 +25,15 @@ import zope.viewlet.interfaces
 import zope.contentprovider.interfaces
 from zope.interface import Interface, Attribute
 from zope.location.interfaces import ILocation
+from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 from zope.publisher.interfaces.browser import IBrowserPage
 from zope.traversing.interfaces import ITraversable
+from z3c.form.interfaces import IFormLayer
 
 from schooltool.common import SchoolToolMessage as _
-from schooltool.skin.skin import ISchoolToolLayer
 
 
-class IFlourishLayer(ISchoolToolLayer):
+class IFlourishLayer(IDefaultBrowserLayer, IFormLayer):
     """SchoolTool flourish skin."""
 
 
