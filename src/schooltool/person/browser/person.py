@@ -126,6 +126,9 @@ class PersonPreferencesView(form.EditForm):
 class FlourishPersonPreferencesView(flourish.page.Page, PersonPreferencesView):
     """View used for editing person preferences."""
 
+    def update(self):
+        PersonPreferencesView.update(self)
+
 
 # Should this be moved to a interface.py file ?
 class IGroupsSource(IIterableSource):
