@@ -6,6 +6,8 @@ Generic Relationship Management
 
 Switch to filter form over table design (like /persons).  Put Add/Remove buttons in each row.  Douglas notes that future year groups should be shown as available.
 
+*** In progress. -DC
+
 $PERSON
 -------
 
@@ -18,12 +20,26 @@ Tables should work for this.  The table should include title(link) and descripti
 
 I do propose one data model change, however.  We need to move all types of reports into here, including XML, CSV and XLS exports.  So we need a "type" (or whatever) attribute, and we should have sub-section headers by type.  And then all those exports have to be registered as reports. -TEH
 
+*** In progress. -AE
+
 $PERSON/preferences
 -------------------
 
 Implement as modal dialog. -TEH
 
+*** Basic implementation completed. -AE
+
+Styling tbd by DC & TEH.
+
 $PERSON/password
 ----------------
 
 Just a simple form in a regular page should be sufficient. -TEH
+
+$PERSON/@@person_export.xml
+---------------------------
+
+Register as a report
+
+
+
