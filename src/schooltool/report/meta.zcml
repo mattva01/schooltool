@@ -7,6 +7,11 @@
         schema="schooltool.report.meta.IReportLinkDirective"
         handler="schooltool.report.meta.reportLinkDirective"
         />
+    <directive
+        name="flourishReportLink"
+        schema="schooltool.report.meta.IReportLinkDirective"
+        handler="schooltool.report.meta.flourishReportLinkDirective"
+        />
   </directives>
 
 </configure>

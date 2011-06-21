@@ -28,6 +28,9 @@ from zope.publisher.browser import BrowserView
 
 from schooltool.report.interfaces import IReportLinksURL
 from schooltool.report.report import getReportRegistrationUtility
+from schooltool.report.report import ReportLinkViewletManager
+from schooltool.skin import flourish
+
 from schooltool.common import SchoolToolMessage as _
 
 
@@ -62,6 +65,19 @@ class TermReportsView(ReportsView):
 class SectionReportsView(ReportsView):
 
     title = _('Section Reports')
+
+
+class FlourishReportsView(flourish.page.Page):
+    """Report request view base class."""
+
+
+class FlourishStudentReportsView(FlourishReportsView):
+
+    title = _('Student Reports')
+
+
+class FlourishReportsInfo(flourish.page.Content):
+    body_template = ViewPageTemplateFile('templates/f_report_links.pt')
 
 
 def reportLinksURL(ob, request, name=''):
