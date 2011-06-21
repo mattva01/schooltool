@@ -45,17 +45,13 @@ class ReportLinkViewletManager(OrderedViewletManager):
     implements(IReportLinkViewletManager)
 
 
-class IFlourishReportLinkViewletManager(flourish.interfaces.IViewletManager):
+class IFlourishReportLinkViewletManager(flourish.interfaces.IViewletManager,
+                                        IReportLinkViewletManager):
     pass
 
 
 class FlourishReportLinkViewletManager(flourish.viewlet.ViewletManager):
-    body_template = ViewPageTemplateFile('templates/f_report_link_manager.pt')
-
-
-class FlourishReportLinkViewlet(flourish.viewlet.Viewlet):
-    template=ViewPageTemplateFile('templates/f_report_link.pt')
-    render = lambda self, *args, **kw: self.template(*args, **kw)
+    template = ViewPageTemplateFile('templates/f_report_link_manager.pt')
 
 
 class ReportLinkViewlet(object):

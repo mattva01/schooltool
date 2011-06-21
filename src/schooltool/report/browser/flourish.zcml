@@ -20,17 +20,9 @@
         />
   </configure>
 
-  <flourish:viewlet
-      name="studentreports"
-      view="schooltool.report.browser.report.FlourishStudentReportsView"
-      permission="schooltool.view"
-      manager="schooltool.skin.flourish.page.IPageContentManager"
-      class="schooltool.report.browser.report.FlourishReportsInfo"
-      />
-
   <flourish:viewletManager
       name="schooltool.FlourishReportLinks"
-      view="schooltool.report.browser.report.FlourishReportsInfo"
+      view="schooltool.report.browser.report.FlourishReportsView"
       provides="schooltool.report.report.IFlourishReportLinkViewletManager"
       class="schooltool.report.report.FlourishReportLinkViewletManager"
       permission="zope.Public"
