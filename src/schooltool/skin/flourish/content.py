@@ -63,6 +63,10 @@ class ContentProviderProxy(SpecificationDecoratorBase):
     adapts(zope.contentprovider.interfaces.IContentProvider)
     implements(interfaces.IContentProvider)
 
+    @property
+    def view(self):
+        return self.__parent__
+
     def browserDefault(self, request):
         return self, ()
 

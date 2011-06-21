@@ -36,6 +36,7 @@ from zope.security.management import restoreInteraction
 
 from schooltool.skin.flourish import interfaces
 from schooltool.skin.flourish.viewlet import Viewlet, ViewletManager
+from schooltool.skin.flourish.viewlet import ViewletProxy
 from schooltool.skin.flourish.viewlet import ManagerViewlet
 
 
@@ -45,6 +46,7 @@ class TestViewlet(Viewlet):
     def update(self):
         print 'Updating', self
         self.status = 'An updated'
+        Viewlet.update(self)
 
     def render(self, *args, **kw):
         passed = (
@@ -153,6 +155,148 @@ def doctest_Viewlet_call():
 
         >>> print result
         An updated ViewletTest. Called render('arg', option='something')
+
+    Viewlets are not updated twice.
+
+        >>> print viewlet('arg', option='something')
+        An updated ViewletTest. Called render('arg', option='something')
+
+    """
+
+
+def doctest_ViewletProxy():
+    """Tests for ViewletProxy.
+
+        >>> print ViewletProxy.__doc__
+        A viewlet proxy that turns a zope viewlet into flourish viewlet.
+
+    Say, we have an old zope viewlet.
+
+        >>> from zope.contentprovider.interfaces import IBeforeUpdateEvent
+        >>> from zope.viewlet.viewlet import SimpleViewletClass
+
+        >>> def beforeUpdate(e):
+        ...     print 'About to update', e.object
+        >>> provideHandler(beforeUpdate, [IBeforeUpdateEvent])
+
+        >>> class ViewletBase(object):
+        ...     def update(self):
+        ...         print 'Updating.'
+
+        >>> ZopeViewlet = SimpleViewletClass('simple_viewlet.pt',
+        ...                                  bases=(ViewletBase,))
+
+        >>> zope_viewlet = ZopeViewlet(
+        ...     'context', TestRequest(), 'view', 'manager')
+
+    It does not implement flourish viewlet interface.
+
+        >>> verifyObject(interfaces.IViewlet, zope_viewlet)
+        Traceback (most recent call last):
+        ...
+        DoesNotImplement: An object does not implement interface
+        <InterfaceClass schooltool.skin.flourish.interfaces.IViewlet>
+
+        >>> print interfaces.IViewlet(zope_viewlet, None)
+        None
+
+    But if we provide ViewletProxy adapter, we can adapt the old viewlet:
+
+        >>> provideAdapter(ViewletProxy)
+
+        >>> proxied = interfaces.IViewlet(zope_viewlet, None)
+
+        >>> verifyObject(interfaces.IViewlet, proxied)
+        True
+
+    Proxied viewlet behaves as any other flourish viewlet.
+
+        >>> proxied.context, proxied.request, proxied.view, proxied.manager
+        ('context', <...TestRequest ...>, 'view', 'manager')
+
+        >>> proxied.__parent__
+        'manager'
+
+        >>> print proxied.__name__
+        <BLANKLINE>
+
+        >>> proxied.before, proxied.after, proxied.requires
+        ((), (), ())
+
+     Let's render it.
+
+        >>> result = proxied()
+        About to update <...SimpleViewletClass from simple_viewlet.pt ...>
+        Updating.
+
+     Note that template of the old zope's viewlet knows nothing about
+     methods and attributes of our proxy.  Hence the difference between
+     __parent__s.
+
+        >>> proxied.__parent__
+        'manager'
+
+        >>> print result
+        <div>
+          class: SimpleViewletClass from simple_viewlet.pt
+          __parent__: view
+          Class dict:
+          ('_parent', 'view')
+          ('context', 'context')
+          ('manager', 'manager')
+          ('request', <zope.publisher.browser.TestRequest instance
+                       URL=http://127.0.0.1>)
+        </div>
+
+    Proxy has slots for attributes missing in Zope's viewlet.  We can
+    change them if we like.
+
+        >>> ViewletProxy.__slots__
+        ('before', 'after', 'requires', '_updated')
+
+        >>> print proxied._updated
+        True
+
+        >>> proxied.before = ('before',)
+        >>> proxied.after = ('after',)
+        >>> proxied.requires = ('requires',)
+
+        >>> proxied.before, proxied.after, proxied.requires
+        (('before',), ('after',), ('requires',))
+
+        >>> proxied.view = 'new view'
+        >>> proxied.manager = 'new manager'
+        >>> proxied.context = 'new context'
+
+        >>> proxied.context, proxied.request, proxied.view, proxied.manager
+        ('new context', <...TestRequest ...>, 'new view', 'new manager')
+
+        >>> proxied.__parent__
+        'new manager'
+
+    We can also add random new attributes as for normal class instances.
+
+        >>> proxied.new_attribute = 'a new attribute'
+
+    Viewlet does not get updated twice when rendering again:
+
+        >>> result = proxied()
+
+    Attributes from slots are not reflected in original viewlet's class dict.
+    Otherwise, relevant changes made to proxied viewlet are transparent:
+
+        >>> print result
+        <div>
+          class: SimpleViewletClass from simple_viewlet.pt
+          __parent__: new view
+          Class dict:
+          ('_parent', 'new view')
+          ('context', 'new context')
+          ('manager', 'new manager')
+          ('new_attribute', 'a new attribute')
+          ('request', <zope.publisher.browser.TestRequest instance
+                       URL=http://127.0.0.1>)
+        </div>
 
     """
 
