@@ -1,4 +1,4 @@
 <div>
-  <tal:block replace="structure provider:schooltool.FlourshReportLinks" />
+  <tal:block replace="structure provider:schooltool.FlourishReportLinks" />
 </div>
 
