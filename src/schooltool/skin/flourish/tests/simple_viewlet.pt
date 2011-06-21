@@ -1,0 +1,7 @@
+<div>
+  class: <tal:block content="python:view.__class__.__name__" />
+  __parent__: <tal:block content="python:view.__parent__" />
+  Class dict:
+  <tal:block repeat="item python:sorted(view.__dict__.items())"
+             content="structure item" />
+</div>

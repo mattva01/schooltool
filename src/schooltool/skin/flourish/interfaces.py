@@ -44,6 +44,16 @@ class IContentProviders(ITraversable):
 class IContentProvider(
     IBrowserPage, zope.contentprovider.interfaces.IContentProvider):
 
+    view = zope.interface.Attribute(
+        """The view the provider appears in.
+
+        The view is the third discriminator of the content provider. It allows
+        that the content can be controlled for different views.
+
+        Having it stored as the parent is also very important for the security
+        context to be kept.
+        """)
+
     def __call__(*args, **kw):
         """Compute the response body."""
 
@@ -61,11 +71,19 @@ class IViewletOrder(Interface):
         _("Display only if all specified viewlets are available."))
 
 
-class IViewlet(zope.viewlet.interfaces.IViewlet,
+class IViewlet(IContentProvider,
                ILocation,
                IBrowserPage,
                IViewletOrder):
     """A viewlet."""
+
+    manager = zope.interface.Attribute(
+        """The Viewlet Manager
+
+        The viewlet manager for which the viewlet is registered. The viewlet
+        manager will contain any additional data that was provided by the
+        view, for example the TAL namespace attributes.
+        """)
 
 
 class IViewletManager(zope.viewlet.interfaces.IViewletManager,

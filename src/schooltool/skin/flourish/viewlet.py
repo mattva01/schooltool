@@ -22,9 +22,12 @@ SchoolTool flourish viewlets and viewlet managers.
 import zope.contentprovider.interfaces
 import zope.event
 import zope.security
+import zope.viewlet.interfaces
 from zope.cachedescriptors.property import Lazy
+from zope.component import adapts
 from zope.interface import implements
 from zope.proxy import removeAllProxies
+from zope.proxy.decorator import SpecificationDecoratorBase
 from zope.publisher.browser import BrowserPage
 
 from schooltool.skin.flourish.content import ContentProvider
@@ -38,14 +41,16 @@ class Viewlet(BrowserPage):
     implements(IViewlet)
 
     manager = None
+    _updated = False
 
     after = ()
     before = ()
     requires = ()
 
-    def __init__(self, context, request, view, manager):
+    def __init__(self, context, request, view, manager=None):
         BrowserPage.__init__(self, context, request)
-        self.manager = manager
+        if manager is not None:
+            self.manager = manager
         self.view = view
 
     @property
@@ -57,14 +62,64 @@ class Viewlet(BrowserPage):
         self.__parent__ = value
 
     def update(self):
-        pass
+        self._updated = True
 
     def render(self, *args, **kw):
         raise NotImplementedError(
             '`render` method must be implemented by subclass.')
 
     def __call__(self, *args, **kw):
-        self.update()
+        if not self._updated:
+            event = zope.contentprovider.interfaces.BeforeUpdateEvent
+            zope.event.notify(event(self, self.request))
+            self.update()
+        return self.render(*args, **kw)
+
+
+class ViewletProxy(SpecificationDecoratorBase):
+    """A viewlet proxy that turns a zope viewlet into flourish viewlet."""
+    adapts(zope.viewlet.interfaces.IViewlet)
+    implements(IViewlet)
+
+    __slots__ = ('before', 'after', 'requires', '_updated')
+
+    def __init__(self, *args, **kw):
+        self.before = ()
+        self.after = ()
+        self.requires = ()
+        self._updated = False
+        super(ViewletProxy, self).__init__(*args, **kw)
+
+    @property
+    def view(self):
+        unproxied = zope.proxy.getProxiedObject(self)
+        return unproxied.__parent__
+
+    @view.setter
+    def view(self, value):
+        unproxied = zope.proxy.getProxiedObject(self)
+        unproxied.__parent__ = value
+
+    @property
+    def __parent__(self):
+        return self.manager
+
+    @__parent__.setter
+    def __parent__(self, value):
+        self.manager = value
+
+    @zope.proxy.non_overridable
+    def update(self):
+        unproxied = zope.proxy.getProxiedObject(self)
+        self._updated = True
+        unproxied.update()
+
+    @zope.proxy.non_overridable
+    def __call__(self, *args, **kw):
+        if not self._updated:
+            event = zope.contentprovider.interfaces.BeforeUpdateEvent
+            zope.event.notify(event(self, self.request))
+            self.update()
         return self.render(*args, **kw)
 
 
@@ -80,25 +135,34 @@ class ViewletManager(ContentProvider):
 
     @Lazy
     def viewlet_dict(self):
-        viewlets = list(zope.component.getAdapters(
-            (self.context, self.request, self.view, self),
-            IViewlet))
-        # XXX: a workaround Zope's bug - if an adapter has a specified
-        #      permission and returns None, instead of being filtered
-        #      by getAdapters it returns a security proxied located
-        #      instance of None.
-        viewlets = [
-            (v, a) for v, a in viewlets
-            if removeAllProxies(a) is not None]
+        indirect = list(zope.component.getAdapters(
+                (self.context, self.request, self.view, self),
+                zope.viewlet.interfaces.IViewlet))
+        adapted = [(v, IViewlet(a, None))
+                   for (v, a) in indirect]
 
-        for name, viewlet in viewlets:
+        result = dict(adapted)
+
+        direct = list(zope.component.getAdapters(
+                (self.context, self.request, self.view, self),
+                IViewlet))
+        result.update(dict(direct))
+
+        # XXX: This is also a workaround Zope's bug - if an adapter
+        #      has a specified a permission and returns None, instead
+        #      of being filtered by getAdapters it returns a security
+        #      proxied located instance of None.
+        for name in list(result):
+            if removeAllProxies(result[name]) is None:
+                del result[name]
+
+        for name, viewlet in result.items():
             if viewlet.__name__ != name:
                 unproxied = zope.security.proxy.removeSecurityProxy(viewlet)
                 unproxied.__name__ = name
 
-        viewlets = self.filter(viewlets)
-
-        return dict(viewlets)
+        result = dict(self.filter(result.items()))
+        return result
 
     def filter(self, viewlets):
         can_access = lambda (n, v): zope.security.canAccess(v, 'render')

@@ -63,7 +63,9 @@ class ContentProviderProxy(SpecificationDecoratorBase):
     adapts(zope.contentprovider.interfaces.IContentProvider)
     implements(interfaces.IContentProvider)
 
-    __slots__ = ('__call__', 'browserDefault', 'publishTraverse')
+    @property
+    def view(self):
+        return self.__parent__
 
     def browserDefault(self, request):
         return self, ()
@@ -118,6 +120,29 @@ class ContentProviders(object):
             ILocation.providedBy(provider)):
             provider.__name__ = name
         return provider
+
+    def get_providers(self, direct=True, adapted=True):
+        """Get all content providers.
+        Use this for debugging purposes only.
+        """
+        if direct:
+            direct_providers = list(zope.component.getAdapters(
+                    (self.context, self.request, self.view),
+                    interfaces.IContentProvider))
+        else:
+            direct_providers = []
+        if adapted:
+            indirect = list(zope.component.getAdapters(
+                    (self.context, self.request, self.view),
+                    zope.contentprovider.interfaces.IContentProvider))
+            adapted_providers = [
+                (name, interfaces.IContentProvider(provider, None))
+                for name, provider in indirect]
+        else:
+            adapted_providers = []
+        result = dict(adapted_providers)
+        result.update(dict(direct_providers))
+        return result
 
     def traverse(self, name, furtherPath):
         provider = self.get(name, None)
