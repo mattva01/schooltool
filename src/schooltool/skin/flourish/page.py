@@ -19,12 +19,15 @@
 """
 SchoolTool flourish pages.
 """
+import re
+
 from zope.interface import Interface
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.cachedescriptors.property import Lazy
 from zope.component import getMultiAdapter, queryMultiAdapter
 from zope.interface import implements
 from zope.publisher.browser import BrowserPage
+from zope.browser.interfaces import IBrowserView
 from zope.traversing.api import getParent
 from zope.traversing.browser.absoluteurl import absoluteURL
 
@@ -294,3 +297,46 @@ class LinkViewlet(Viewlet):
         if not self.enabled:
             return ''
         return self.template(*args, **kw)
+
+
+_invalid_html_id_characters = re.compile('[^a-zA-Z0-9-._]')
+
+
+def sanitize_id(html_id):
+    if not html_id:
+        return html_id
+    html_id = html_id.encode('punycode')
+    html_id = _invalid_html_id_characters.sub(
+        lambda m: ':'+str(ord(m.group(0))), html_id)
+    if not html_id[0].isalpha():
+        html_id = 'i' + html_id
+    return html_id
+
+
+class LinkIdViewlet(LinkViewlet):
+    template = InlineViewPageTemplate('''
+    <tal:block define="url view/url">
+      <a tal:condition="url"
+         tal:attributes="href view/url;
+                         id view/html_id"
+         tal:content="view/title"></a>
+      <span tal:condition="not:url"
+            tal:attributes="id view/html_id"
+            tal:content="view/title"></span>
+    </tal:block>
+    ''')
+
+    @property
+    def html_id(self):
+        parent = self.manager.__parent__
+        parents = []
+        while (parent is not None and
+               IBrowserView.providedBy(parent)):
+            name = getattr(parent, '__name__', None)
+            parents.append(str(name))
+            parent = parent.__parent__
+        name_list = ([str(self.__name__),
+                      getattr(self.manager, '__name__', 'manager')] +
+                     parents[:-1] +
+                     ['LinkIdViewlet'])
+        return sanitize_id('-'.join(reversed(name_list)))
