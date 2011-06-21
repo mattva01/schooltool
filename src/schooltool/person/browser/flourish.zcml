@@ -8,7 +8,7 @@
       before="password_edit.html"
       for="schooltool.person.interfaces.IPerson"
       title="Preferences"
-      class="schooltool.skin.flourish.page.LinkViewlet"
+      class="schooltool.skin.flourish.page.LinkIdViewlet"
       manager="schooltool.basicperson.browser.person.PersonSettingsLinks"
       permission="schooltool.view"
       />

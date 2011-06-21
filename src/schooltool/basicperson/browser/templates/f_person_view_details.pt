@@ -7,6 +7,7 @@
     <metal:block
         tal:replace='structure string:&lt;script type="text/javascript"&gt;' />
       $(document).ready(function() {
+
         var person_preferences_form_id = '#person_preferences_form';
         $(person_preferences_form_id).load('<metal:block tal:replace="string:${context/@@absolute_url}/preferences" />').hide();
         $(person_preferences_form_id).dialog({
@@ -16,7 +17,8 @@
           draggable: false
         });
         // XXX: we need to assign better this JS to the action button
-        $('#edit_preferences').click(function(e) {
+        var link_id = '#LinkIdViewlet-page_refine-person-settings-links-preferences-';
+        $(link_id).click(function(e) {
           $(person_preferences_form_id).dialog({
             width: $(person_preferences_form_id).find('form').width() + 30
           });
@@ -28,6 +30,5 @@
 
 <div class="person-info">
   <tal:block tal:replace="structure context/schooltool:content/schooltool.person.FlourishInfo"/>
-  <a id="edit_preferences" href="#">Preferences</a>
   <div id="person_preferences_form" />
 </div>
