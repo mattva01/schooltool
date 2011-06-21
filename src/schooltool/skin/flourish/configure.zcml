@@ -33,14 +33,14 @@
 
   <zope:adapter
       factory="schooltool.skin.flourish.content.ContentProviderProxy"
-      trusted="true"
+      permission="zope.Public"
       />
 
   <!-- Page viewlet managers and other conent -->
 
   <zope:adapter
       factory="schooltool.skin.flourish.viewlet.ViewletProxy"
-      trusted="true"
+      permission="zope.Public"
       />
 
   <flourish:viewletManager
