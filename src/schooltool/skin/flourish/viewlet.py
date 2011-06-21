@@ -165,7 +165,12 @@ class ViewletManager(ContentProvider):
         return result
 
     def filter(self, viewlets):
-        can_access = lambda (n, v): zope.security.canAccess(v, 'render')
+        def can_access(item):
+            name, viewlet = item
+            try:
+                return zope.security.canAccess(viewlet, 'render')
+            except zope.security.interfaces.ForbiddenAttribute:
+                return False
         viewlets = filter(can_access, viewlets)
 
         names = set([n for n, v in viewlets])

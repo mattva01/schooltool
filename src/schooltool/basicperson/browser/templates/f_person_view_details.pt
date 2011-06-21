@@ -1,9 +1,3 @@
-    <link type="text/css" rel="stylesheet"
-          tal:attributes="href context/++resource++jstree/style.css" />
-    <script type="text/javascript"
-            tal:attributes="src context/++resource++jstree/jquery.tree.js"></script>
-    <script type="text/javascript"
-            tal:attributes="src context/++resource++jstree/script.js"></script>
     <metal:block
         tal:replace='structure string:&lt;script type="text/javascript"&gt;' />
       $(document).ready(function() {
@@ -30,5 +24,6 @@
 
 <div class="person-info">
   <tal:block tal:replace="structure context/schooltool:content/schooltool.person.FlourishInfo"/>
-  <div id="person_preferences_form" />
+  <div id="person_preferences_form">
+  </div>
 </div>

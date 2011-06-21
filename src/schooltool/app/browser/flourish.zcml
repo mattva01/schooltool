@@ -28,7 +28,7 @@
       name="calendar"
       for="schooltool.app.interfaces.IHaveCalendar"
       title="Calendar"
-      before="intervention/intervention_center.html"
+      before="intervention-center-person-link reports"
       class="schooltool.skin.flourish.page.LinkViewlet"
       manager="schooltool.basicperson.browser.person.PersonLinks"
       permission="schooltool.view"
