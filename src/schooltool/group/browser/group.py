@@ -21,10 +21,11 @@ group views.
 
 $Id$
 """
+from zope.cachedescriptors.property import Lazy
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.intid.interfaces import IIntIds
 from zope.traversing.browser.interfaces import IAbsoluteURL
-from zope.interface import implements
+from zope.interface import implements, directlyProvides
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.publisher.browser import BrowserView
 from zope.component import adapts
@@ -34,7 +35,8 @@ from zope.security.checker import canAccess
 from zope.i18n.interfaces.locales import ICollator
 from zope.viewlet.viewlet import ViewletBase
 
-from zc.table import table
+from zc.table import table, column
+from zc.table.interfaces import ISortableColumn
 
 from schooltool.common import SchoolToolMessage as _
 from schooltool.app.interfaces import ISchoolToolApplication
@@ -44,10 +46,14 @@ from schooltool.person.interfaces import IPerson
 from schooltool.course.interfaces import ISection
 from schooltool.table.interfaces import ITableFormatter
 from schooltool.schoolyear.interfaces import ISchoolYear
-
+from schooltool.schoolyear.interfaces import ISchoolYearContainer
 from schooltool.group.interfaces import IGroupMember
 from schooltool.group.interfaces import IGroupContainer, IGroupContained
 from schooltool.app.browser.app import RelationshipViewBase
+from schooltool.app.browser.app import FlourishRelationshipViewBase
+from schooltool.table.table import FilterWidget
+from schooltool.table.table import SchoolToolTableFormatter
+from schooltool.table.table import stupid_form_key
 
 from schooltool.skin.flourish.viewlet import Viewlet
 
@@ -217,3 +223,126 @@ class FlourishGroupsViewlet(Viewlet):
     def canModify(self):
         return canAccess(self.context.__parent__, '__delitem__')
 
+
+class CSSFormatter(table.FormFullFormatter):
+
+    def renderHeaders(self):
+        result = []
+        old_css_class = self.cssClasses.get('th')
+        for index, col in enumerate(self.visible_columns):
+            self.cssClasses['th'] = 'column-' + str(index)
+            result.append(self.renderHeader(col))
+        self.cssClasses['th'] = old_css_class
+        return ''.join(result)
+
+
+class FlourishGroupFilterWidget(FilterWidget):
+
+    template = ViewPageTemplateFile('f_group_filter.pt')
+
+
+class FlourishGroupTableFormatter(SchoolToolTableFormatter):
+
+    def render(self):
+        formatter = self._table_formatter(
+            self.context, self.request, self._items,
+            columns=self._columns,
+            batch_start=self.batch.start, batch_size=self.batch.size,
+            sort_on=self._sort_on,
+            prefix=self.prefix)
+        formatter.cssClasses['table'] = 'groups-relationship-table'
+        return formatter()
+
+    def sortOn(self):
+        return (('schoolyear', False), ("title", False))
+
+
+class ActionColumn(column.Column):
+
+    def __init__(self, prefix, name=None, label=None, id_getter=None):
+        self.name = name
+        self.title = _(u'Action')
+        self.prefix = prefix
+        self.label = label
+        if id_getter is None:
+            self.id_getter = stupid_form_key
+        else:
+            self.id_getter = id_getter
+
+    def renderCell(self, item, formatter):
+        form_id = ".".join(filter(None, [self.prefix, self.id_getter(item)]))
+        return '<input type="submit" value="%s" name="%s" />' % (self.label,
+                                                                 form_id)
+
+
+class FlourishGroupListView(FlourishRelationshipViewBase):
+
+    current_title = _('Current Groups')
+    available_title = _('Available Groups')
+
+    @Lazy
+    def schoolyears(self):
+        app = ISchoolToolApplication(None)
+        schoolyears = ISchoolYearContainer(app)
+        active_schoolyear = schoolyears.getActiveSchoolYear()
+        return [schoolyear for schoolyear in schoolyears.values()
+                if schoolyear.first >= active_schoolyear.first]
+
+    def getSelectedItems(self):
+        return [group for group in self.getCollection()
+                if not ISection.providedBy(group) and
+                ISchoolYear(group.__parent__) in self.schoolyears]
+
+    def getAvailableItemsContainer(self):
+        app = ISchoolToolApplication(None)
+        groups = IGroupContainer(app, {})
+        return groups
+
+    def getAvailableItems(self):
+        result = []
+        selected_items = set(self.getSelectedItems())
+        for schoolyear in self.schoolyears:
+            groups = IGroupContainer(schoolyear)
+            result.extend([group for group in groups.values()
+                           if group not in selected_items])
+        return result
+
+    def getCollection(self):
+        return self.context.groups
+
+    def getColumnsAfter(self, prefix):
+        schoolyear = column.GetterColumn(
+            name='schoolyear',
+            title=_(u'School Year'),
+            getter=lambda i, f: ISchoolYear(i.__parent__).title,
+            subsort=True)
+        directlyProvides(schoolyear, ISortableColumn)
+        if prefix == 'add_item':
+            action = ActionColumn(prefix, 'add', _('Add'), self.getKey)
+        elif prefix == 'remove_item':
+            action = ActionColumn(prefix, 'remove', _('Remove'), self.getKey)
+        return [schoolyear, action]
+
+    def createTableFormatter(self, **kwargs):
+        kwargs['columns_after'] = self.getColumnsAfter(kwargs['prefix'])
+        kwargs['table_formatter'] = CSSFormatter
+        container = self.getAvailableItemsContainer()
+        formatter = getMultiAdapter((container, self.request),
+                                    ITableFormatter)
+        formatter.setUp(**kwargs)
+        return formatter
+
+    def setUpTables(self):
+        self.available_table = self.createTableFormatter(
+            ommit=self.getOmmitedItems(),
+            items=self.getAvailableItems(),
+            prefix="add_item")
+        self.selected_table = self.createTableFormatter(
+            filter=lambda l: l,
+            items=self.getSelectedItems(),
+            prefix="remove_item",
+            batch_size=0)
+
+    def getKey(self, item):
+        schoolyear = ISchoolYear(item.__parent__)
+        return "%s.%s" % (schoolyear.__name__, item.__name__)

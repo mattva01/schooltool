@@ -15,4 +15,26 @@
       permission="schooltool.view"
       />
 
+  <!-- views -->
+
+  <flourish:page
+      name="groups.html"
+      for="schooltool.group.interfaces.IGroupMember"
+      class=".group.FlourishGroupListView"
+      permission="schooltool.edit"
+      />
+
+  <!-- others -->
+
+  <zope:adapter
+      for="schooltool.group.interfaces.IGroupContainer
+           schooltool.skin.flourish.interfaces.IFlourishLayer"
+      factory=".group.FlourishGroupFilterWidget" />
+
+  <zope:adapter
+      for="schooltool.group.interfaces.IGroupContainer
+           schooltool.skin.flourish.interfaces.IFlourishLayer"
+      factory=".group.FlourishGroupTableFormatter " />
+
+
 </configure>

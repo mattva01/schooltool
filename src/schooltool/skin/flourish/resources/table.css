@@ -44,3 +44,24 @@ table.person-view-sections th {
 table.person-view-demographics .label {
     width: 33%;
 }
+
+table.groups-relationship-table .column-0,
+table.groups-relationship-table .column-1 {
+    width: 40%;
+}
+
+table.groups-relationship-table .column-2 {
+    width: 20%;
+}
+
+table.groups-relationship-table input[type="submit"] {
+    width: 100%;
+    background-color: #aea79f;
+    color: #ffffff;
+    font-size: 12px;
+    line-height: 16px;
+}
+
+table.groups-relationship-table input[type="submit"]:hover {
+    background-color: #dd0000;
+}

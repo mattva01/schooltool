@@ -192,6 +192,95 @@ class RelationshipViewBase(BrowserView):
         self.setUpTables()
 
 
+class FlourishRelationshipViewBase(flourish.page.Page):
+
+    content_template = ViewPageTemplateFile('templates/f_edit_relationships.pt')
+
+    current_title = None
+    available_title = None
+
+    def add(self, item):
+        collection = removeSecurityProxy(self.getCollection())
+        collection.add(item)
+
+    def remove(self, item):
+        collection = removeSecurityProxy(self.getCollection())
+        collection.remove(item)
+
+    def getCollection(self):
+        """Return the backend storage for related objects."""
+        raise NotImplementedError("Subclasses should override this method.")
+
+    def getSelectedItems(self):
+        """Return a sequence of items that are already selected."""
+        return self.getCollection()
+
+    def getAvailableItems(self):
+        """Return a sequence of items that can be selected."""
+        container = self.getAvailableItemsContainer()
+        selected_items = set(self.getSelectedItems())
+        return [p for p in container.values()
+                if p not in selected_items]
+
+    def getAvailableItemsContainer(self):
+        """Returns the backend storage for available items."""
+        raise NotImplementedError("Subclasses should override this method.")
+
+    def createTableFormatter(self, **kwargs):
+        container = self.getAvailableItemsContainer()
+        formatter = getMultiAdapter((container, self.request),
+                                    ITableFormatter)
+        formatter.setUp(**kwargs)
+        return formatter
+
+    def getOmmitedItems(self):
+        return self.getSelectedItems()
+
+    def setUpTables(self):
+        self.available_table = self.createTableFormatter(
+            ommit=self.getOmmitedItems(),
+            prefix="add_item")
+
+        self.selected_table = self.createTableFormatter(
+            filter=lambda l: l,
+            items=self.getSelectedItems(),
+            prefix="remove_item",
+            batch_size=0)
+
+    def getKey(self, item):
+        return item.__name__
+
+    def applyFormChanges(self):
+        changed = False
+        add_item_prefix = 'add_item.'
+        remove_item_prefix = 'remove_item.'
+        add_item_submitted = False
+        remove_item_submitted = False
+        for param in self.request.form:
+            if param.startswith(add_item_prefix):
+                add_item_submitted = True
+            elif param.startswith(remove_item_prefix):  
+                remove_item_submitted = True
+        if add_item_submitted:
+            for item in self.getAvailableItems():
+                if add_item_prefix + self.getKey(item) in self.request:
+                    self.add(removeSecurityProxy(item))
+                    changed = True
+        if remove_item_submitted:
+            for item in self.getSelectedItems():
+                if remove_item_prefix + self.getKey(item) in self.request:
+                    self.remove(removeSecurityProxy(item))
+                    changed = True
+        return changed
+
+    def update(self):
+        changes = self.applyFormChanges()
+        if changes:
+            self.request.response.redirect(self.request.getURL())
+            return
+        self.setUpTables()
+
+
 class ApplicationLoginView(BrowserView):
     """Backwards compatible login view that redirects to the actual login view."""
 
