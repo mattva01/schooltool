@@ -22,6 +22,7 @@
       for="schooltool.group.interfaces.IGroupMember"
       class=".group.FlourishGroupListView"
       permission="schooltool.edit"
+      subtitle="Groups"
       />
 
   <!-- others -->
@@ -35,6 +36,5 @@
       for="schooltool.group.interfaces.IGroupContainer
            schooltool.skin.flourish.interfaces.IFlourishLayer"
       factory=".group.FlourishGroupTableFormatter " />
-
 
 </configure>
