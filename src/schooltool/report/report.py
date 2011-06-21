@@ -36,12 +36,26 @@ from schooltool.report.interfaces import IReportLinkViewletManager
 from schooltool.report.interfaces import IRegisteredReportsUtility
 from schooltool.report.interfaces import IReportLinksURL
 from schooltool.schoolyear.interfaces import ISchoolYear
+from schooltool.skin import flourish
 from schooltool.skin.skin import OrderedViewletManager
 from schooltool.term.interfaces import IDateManager
 
 
 class ReportLinkViewletManager(OrderedViewletManager):
     implements(IReportLinkViewletManager)
+
+
+class IFlourishReportLinkViewletManager(flourish.interfaces.IViewletManager):
+    pass
+
+
+class FlourishReportLinkViewletManager(flourish.viewlet.ViewletManager):
+    body_template = ViewPageTemplateFile('templates/f_report_link_manager.pt')
+
+
+class FlourishReportLinkViewlet(flourish.viewlet.Viewlet):
+    template=ViewPageTemplateFile('templates/f_report_link.pt')
+    render = lambda self, *args, **kw: self.template(*args, **kw)
 
 
 class ReportLinkViewlet(object):

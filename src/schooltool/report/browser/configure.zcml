@@ -109,6 +109,4 @@
      class="schooltool.report.browser.report.SectionReportsView"
      permission="schooltool.edit" />
 
-  <include file="flourish.zcml" />
-
 </configure>

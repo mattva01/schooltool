@@ -3,6 +3,7 @@
            xmlns:z3c="http://namespaces.zope.org/z3c"
            xmlns:zope="http://namespaces.zope.org/zope"
            xmlns:flourish="http://schooltool.org/flourish"
+           xmlns:report="http://namespaces.schooltool.org/report"
            i18n_domain="schooltool">
 
   <!-- Container views -->
@@ -293,5 +294,17 @@
       for="schooltool.person.interfaces.IPersonContainer
            schooltool.skin.flourish.IFlourishLayer"
       factory=".person.BasicPersonTableFormatter" />
+
+  <!-- Reports -->
+
+  <report:flourishReportLink
+       name="student_report_card"
+       for="schooltool.basicperson.interfaces.IBasicPerson"
+       permission="schooltool.edit"
+       group="Student"
+       description="Contains scores from report sheets.  Formatted to be sent to parents."
+       title="Student Report Card"
+       link="request_report_card.html"
+       />
 
 </configure>

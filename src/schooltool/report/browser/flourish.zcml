@@ -11,4 +11,29 @@
       permission="schooltool.edit"
       />
 
+  <configure package="schooltool.skin.flourish">
+    <flourish:page
+        name="reports"
+        for="schooltool.basicperson.interfaces.IBasicPerson"
+        class="schooltool.report.browser.report.FlourishStudentReportsView"
+        permission="schooltool.edit"
+        />
+  </configure>
+
+  <flourish:viewlet
+      name="studentreports"
+      view="schooltool.report.browser.report.FlourishStudentReportsView"
+      permission="schooltool.view"
+      manager="schooltool.skin.flourish.page.IPageContentManager"
+      class="schooltool.report.browser.report.FlourishReportsInfo"
+      />
+
+  <flourish:viewletManager
+      name="schooltool.FlourishReportLinks"
+      view="schooltool.report.browser.report.FlourishReportsInfo"
+      provides="schooltool.report.report.IFlourishReportLinkViewletManager"
+      class="schooltool.report.report.FlourishReportLinkViewletManager"
+      permission="zope.Public"
+      />
+
 </configure>
