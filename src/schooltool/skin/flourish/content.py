@@ -63,8 +63,6 @@ class ContentProviderProxy(SpecificationDecoratorBase):
     adapts(zope.contentprovider.interfaces.IContentProvider)
     implements(interfaces.IContentProvider)
 
-    __slots__ = ('__call__', 'browserDefault', 'publishTraverse')
-
     def browserDefault(self, request):
         return self, ()
 
