@@ -322,7 +322,7 @@
        for="schooltool.person.interfaces.IPerson"
        permission="schooltool.edit"
        group="Student"
-       description="Contains AN XML representation of the person."
+       description="Contains an XML representation of the person."
        title="Export Person as XML"
        file_type="xml"
        link="person_export.xml"
