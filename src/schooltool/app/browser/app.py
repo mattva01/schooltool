@@ -43,6 +43,9 @@ from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.publisher.browser import BrowserPage
 from zope.traversing.browser.absoluteurl import absoluteURL
 
+from zc.table.column import Column
+from zc.table.table import FormFullFormatter
+
 from schooltool.calendar.icalendar import convert_calendar_to_ical
 from schooltool.app.browser.interfaces import IManageMenuViewletManager
 from schooltool.app.interfaces import ISchoolToolAuthenticationPlugin
@@ -55,6 +58,7 @@ from schooltool.common.inlinept import InlineViewPageTemplate
 from schooltool.person.interfaces import IPerson
 from schooltool.table.table import CheckboxColumn
 from schooltool.table.table import label_cell_formatter_factory
+from schooltool.table.table import stupid_form_key
 from schooltool.table.interfaces import ITableFormatter
 from schooltool.skin.skin import OrderedViewletManager
 from schooltool.skin.breadcrumbs import CustomNameBreadCrumbInfo
@@ -192,6 +196,36 @@ class RelationshipViewBase(BrowserView):
         self.setUpTables()
 
 
+class CSSFormatter(FormFullFormatter):
+
+    def renderHeaders(self):
+        result = []
+        old_css_class = self.cssClasses.get('th')
+        for col in self.visible_columns:
+            self.cssClasses['th'] = col.name
+            result.append(self.renderHeader(col))
+        self.cssClasses['th'] = old_css_class
+        return ''.join(result)
+
+
+class ActionColumn(Column):
+
+    def __init__(self, prefix, label=None, id_getter=None):
+        self.name = 'action'
+        self.title = _(u'Action')
+        self.prefix = prefix
+        self.label = label
+        if id_getter is None:
+            self.id_getter = stupid_form_key
+        else:
+            self.id_getter = id_getter
+
+    def renderCell(self, item, formatter):
+        form_id = ".".join(filter(None, [self.prefix, self.id_getter(item)]))
+        return '<input type="submit" value="%s" name="%s" />' % (self.label,
+                                                                 form_id)
+
+
 class FlourishRelationshipViewBase(flourish.page.Page):
 
     content_template = ViewPageTemplateFile('templates/f_edit_relationships.pt')
@@ -226,11 +260,22 @@ class FlourishRelationshipViewBase(flourish.page.Page):
         """Returns the backend storage for available items."""
         raise NotImplementedError("Subclasses should override this method.")
 
+    def getColumnsAfter(self, prefix):
+        label = ''
+        if prefix == 'add_item':
+            label = _('Add')
+        elif prefix == 'remove_item':
+            label = _('Remove')
+        action = ActionColumn(prefix, label, self.getKey)
+        return [action]
+
     def createTableFormatter(self, **kwargs):
         container = self.getAvailableItemsContainer()
         formatter = getMultiAdapter((container, self.request),
                                     ITableFormatter)
-        formatter.setUp(**kwargs)
+        formatter.setUp(columns_after=self.getColumnsAfter(kwargs['prefix']),
+                        table_formatter=CSSFormatter,
+                        **kwargs)
         return formatter
 
     def getOmmitedItems(self):

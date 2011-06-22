@@ -53,7 +53,6 @@ from schooltool.app.browser.app import RelationshipViewBase
 from schooltool.app.browser.app import FlourishRelationshipViewBase
 from schooltool.table.table import FilterWidget
 from schooltool.table.table import SchoolToolTableFormatter
-from schooltool.table.table import stupid_form_key
 from schooltool.table.table import LocaleAwareGetterColumn
 
 from schooltool.skin.flourish.viewlet import Viewlet
@@ -225,18 +224,6 @@ class FlourishGroupsViewlet(Viewlet):
         return canAccess(self.context.__parent__, '__delitem__')
 
 
-class CSSFormatter(table.FormFullFormatter):
-
-    def renderHeaders(self):
-        result = []
-        old_css_class = self.cssClasses.get('th')
-        for index, col in enumerate(self.visible_columns):
-            self.cssClasses['th'] = 'column-' + str(index)
-            result.append(self.renderHeader(col))
-        self.cssClasses['th'] = old_css_class
-        return ''.join(result)
-
-
 class FlourishGroupFilterWidget(FilterWidget):
 
     template = ViewPageTemplateFile('f_group_filter.pt')
@@ -251,24 +238,6 @@ class SchoolYearColumn(column.GetterColumn):
     def getSortKey(self, item, formatter):
         schoolyear = ISchoolYear(item.__parent__)
         return schoolyear.first
-
-
-class ActionColumn(column.Column):
-
-    def __init__(self, prefix, name=None, label=None, id_getter=None):
-        self.name = name
-        self.title = _(u'Action')
-        self.prefix = prefix
-        self.label = label
-        if id_getter is None:
-            self.id_getter = stupid_form_key
-        else:
-            self.id_getter = id_getter
-
-    def renderCell(self, item, formatter):
-        form_id = ".".join(filter(None, [self.prefix, self.id_getter(item)]))
-        return '<input type="submit" value="%s" name="%s" />' % (self.label,
-                                                                 form_id)
 
 
 class FlourishGroupTableFormatter(SchoolToolTableFormatter):
@@ -294,7 +263,7 @@ class FlourishGroupTableFormatter(SchoolToolTableFormatter):
             batch_start=self.batch.start, batch_size=self.batch.size,
             sort_on=self._sort_on,
             prefix=self.prefix)
-        formatter.cssClasses['table'] = 'groups-relationship-table'
+        formatter.cssClasses['table'] = 'groups-table'
         return formatter()
 
     def sortOn(self):
@@ -335,22 +304,6 @@ class FlourishGroupListView(FlourishRelationshipViewBase):
 
     def getCollection(self):
         return self.context.groups
-
-    def getColumnsAfter(self, prefix):
-        if prefix == 'add_item':
-            action = ActionColumn(prefix, 'add', _('Add'), self.getKey)
-        elif prefix == 'remove_item':
-            action = ActionColumn(prefix, 'remove', _('Remove'), self.getKey)
-        return [action]
-
-    def createTableFormatter(self, **kwargs):
-        kwargs['columns_after'] = self.getColumnsAfter(kwargs['prefix'])
-        kwargs['table_formatter'] = CSSFormatter
-        container = self.getAvailableItemsContainer()
-        formatter = getMultiAdapter((container, self.request),
-                                    ITableFormatter)
-        formatter.setUp(**kwargs)
-        return formatter
 
     def setUpTables(self):
         self.available_table = self.createTableFormatter(

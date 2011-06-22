@@ -51,16 +51,26 @@ table.person-view-demographics .label {
     width: 33%;
 }
 
-table.groups-relationship-table .column-0,
-table.groups-relationship-table .column-1 {
+table.groups-table th.title,
+table.groups-table th.schoolyear {
     width: 40%;
 }
 
-table.groups-relationship-table .column-2 {
+table.groups-table th.action {
     width: 20%;
 }
 
-table.groups-relationship-table input[type="submit"] {
+table.persons-table th.last_name,
+table.persons-table th.first_name {
+    width: 40%;
+}
+
+table.persons-table th.action {
+    width: 20%;
+}
+
+table.groups-table input[type="submit"],
+table.persons-table input[type="submit"] {
     width: 100%;
     background-color: #aea79f;
     color: #ffffff;
@@ -68,6 +78,7 @@ table.groups-relationship-table input[type="submit"] {
     line-height: 16px;
 }
 
-table.groups-relationship-table input[type="submit"]:hover {
+table.groups-table input[type="submit"]:hover,
+table.persons-table input[type="submit"]:hover {
     background-color: #dd0000;
 }
