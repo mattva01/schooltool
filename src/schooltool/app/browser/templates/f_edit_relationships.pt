@@ -1,17 +1,25 @@
 <metal:block tal:define="batch view/available_table/batch;
                          items view/getSelectedItems">
-  <form method="post" tal:attributes="action request/URL" class="standalone">
-    <h2 tal:content="view/current_title" />
+  <h2 tal:content="view/current_title" />
+  <form method="post" tal:attributes="action request/URL">
     <tal:block replace="structure view/selected_table/render"
                tal:condition="items"/>
     <p tal:condition="not:items" i18n:translate="">
       There are none.
     </p>
   </form>
-  <form method="post" tal:attributes="action request/URL" class="standalone">
-    <h2 tal:content="view/available_title" />
-    <tal:block replace="structure view/available_table/batch/render"
-               tal:condition="batch"/>
+  <h2 tal:content="view/available_title" />
+  <tal:block replace="structure view/available_table/batch/render" />
+  <form method="post" tal:attributes="action request/URL">
+    <tal:if condition="batch">
+      <div class="count" i18n:translate="">
+        Showing
+        <span i18n:name="count" tal:content="view/available_table/batch/length"/>
+        of
+        <span i18n:name="total" tal:content="view/available_table/batch/full_size"/>
+        items
+      </div>
+    </tal:if>
     <tal:block replace="structure view/available_table/filter_widget/render|nothing" />
     <tal:block replace="structure view/available_table/render"
                tal:condition="batch"/>

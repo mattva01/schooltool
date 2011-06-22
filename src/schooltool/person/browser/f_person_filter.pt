@@ -1,0 +1,37 @@
+<fieldset i18n:domain="schooltool">
+  <legend><span i18n:translate="">Search</span></legend>
+  <div class="row">
+    <div class="label">
+      <label for="SEARCH_TITLE">
+        <span>First name, last name or username</span>
+      </label>
+    </div>
+    <div class="widget">
+      <input type="text" name="SEARCH_TITLE"
+             id="SEARCH_TITLE" class="text-widget"
+             tal:attributes="value request/SEARCH_TITLE|nothing"
+             />
+    </div>
+  </div>
+  <div class="row">
+    <div class="label">
+      <label for="SEARCH_GROUP">
+        <span>Filter by...</span>
+      </label>
+    </div>
+    <div class="widget">
+      <select name="SEARCH_GROUP" id="SEARCH_GROUP"
+              class="select-widget">
+        <option i18n:translate="">All groups</option>
+        <option tal:repeat="group view/groups"
+                tal:content="group/title"
+                tal:attributes="value group/id;
+                                selected python:group['id'] == request.get('SEARCH_GROUP')"/>
+      </select>
+    </div>
+  </div>
+</fieldset>
+<div class="buttons controls">
+  <input type="submit" name="SEARCH_BUTTON" value="Submit"
+         class="submit-widget" i18n:attributes="value" />
+</div>

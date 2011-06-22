@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <configure xmlns="http://namespaces.zope.org/browser"
+           xmlns:zope="http://namespaces.zope.org/zope"
            xmlns:flourish="http://schooltool.org/flourish"
            i18n_domain="schooltool">
 
@@ -32,5 +33,10 @@
         subtitle="Edit"
         />
   </configure>
+
+  <zope:adapter
+      for="schooltool.person.interfaces.IPersonContainer
+           schooltool.skin.flourish.interfaces.IFlourishLayer"
+      factory=".person.FlourishPersonFilterWidget" />
 
 </configure>
