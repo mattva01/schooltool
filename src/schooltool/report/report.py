@@ -53,6 +53,21 @@ class IFlourishReportLinkViewletManager(flourish.interfaces.IViewletManager,
 class FlourishReportLinkViewletManager(flourish.viewlet.ViewletManager):
     template = ViewPageTemplateFile('templates/f_report_link_manager.pt')
 
+    @property
+    def table(self):
+        result = {}
+        for viewlet in self.viewlets:
+            group = result.setdefault(viewlet.file_type, {
+                'file_type': viewlet.file_type.upper(),
+                'rows': [],
+                })
+            group['rows'].append({
+                'title': viewlet.title,
+                'url': viewlet.link,
+                'description': viewlet.description,
+                })
+        return [group for key, group in sorted(result.items())]
+
 
 class ReportLinkViewlet(object):
     template=ViewPageTemplateFile('templates/report_link.pt')
@@ -74,7 +89,7 @@ class RegisteredReportsUtility(object):
     def __init__(self):
         self.reports_by_group = {}
 
-    def registerReport(self, group, title, description):
+    def registerReport(self, group, title, description, file_type):
         # make a non-translatable group key
         group_key = unicode(group)
 
@@ -84,6 +99,7 @@ class RegisteredReportsUtility(object):
             'group': group, # remember the translatable group title
             'title': title,
             'description': description,
+            'file_type': file_type,
             })
 
 

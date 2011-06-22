@@ -1,5 +1,22 @@
-<ul>
-  <li tal:repeat="viewlet view/viewlets">
-    <span tal:replace="structure viewlet/render" />
-  </li>
-</ul>
+<div i18n:domain="schooltool">
+  <table>
+    <thead>
+      <tr>
+        <th i18n:translate="">Title</th>
+        <th i18n:translate="">Description</th>
+      </tr>
+    </thead>
+    <tal:block repeat="group view/table">
+      <tr>
+        <th colspan="2" i18n:translate="" tal:content="string: ${group/file_type} Reports" />
+      </tr>
+      <tr tal:repeat="row group/rows">
+        <td>
+          <a tal:attributes="href row/url" tal:content="row/title" />
+        </td>
+        <td tal:content="row/description" />
+      </tr>
+    </tal:block>
+  </table>
+</div>
+
