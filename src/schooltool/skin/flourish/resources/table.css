@@ -37,6 +37,12 @@ tbody tr {
     border-bottom: 1px dotted #cccccc;
 }
 
+tbody th {
+    background-color: #dfdcd9;
+    color: #333333;
+    font-weight: normal;
+}
+
 table.person-view-sections th {
     width: 33%;
 }

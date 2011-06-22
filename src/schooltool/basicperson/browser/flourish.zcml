@@ -295,4 +295,37 @@
            schooltool.skin.flourish.IFlourishLayer"
       factory=".person.BasicPersonTableFormatter" />
 
+  <!-- Reports -->
+
+  <report:reportLink
+       name="student_report_card"
+       for="schooltool.basicperson.interfaces.IBasicPerson"
+       permission="schooltool.edit"
+       group="Student"
+       description="Contains scores from report sheets.  Formatted to be sent to parents."
+       title="Student Report Card"
+       file_type="pdf"
+       link="request_report_card.html"
+       />
+  <report:reportLink
+       name="student_detail_report"
+       for="schooltool.basicperson.interfaces.IBasicPerson"
+       permission="schooltool.edit"
+       group="Student"
+       description="Contains scores from report sheets and attendance.  For use by school staff."
+       title="Student Detail Report"
+       file_type="pdf"
+       link="request_student_detail.html"
+       />
+  <report:reportLink
+       name="person_export_xml"
+       for="schooltool.person.interfaces.IPerson"
+       permission="schooltool.edit"
+       group="Student"
+       description="Contains AN XML representation of the person."
+       title="Export Person as XML"
+       file_type="xml"
+       link="person_export.xml"
+       />
+
 </configure>
