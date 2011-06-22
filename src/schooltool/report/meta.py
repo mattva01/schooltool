@@ -38,6 +38,7 @@ class IReportLinkDirective(IViewletDirective):
     group = MessageID(title=u"Report group", required=True)
     title = MessageID(title=u"Report link text", required=True)
     description = MessageID(title=u"Report link description", required=True)
+    file_type = MessageID(title=u"Report file extension", required=True)
     link = TextLine(title=u"Link to the report", required=False)
 
 
@@ -45,14 +46,15 @@ def reportLinkDirective(_context, name, permission, for_=Interface,
     layer=IDefaultBrowserLayer, view=IBrowserView,
     manager=IReportLinkViewletManager,
     class_=ReportLinkViewlet, template=None, group=u'', title=u'',
-    description='', link='', **kwargs):
+    description='', link='', file_type='', **kwargs):
 
     # forward our defaults to the viewletDirective
     viewletDirective(_context, name, permission,
         for_=for_, layer=layer, view=view, manager=manager,
         class_=class_, template=template,
-        group=group, title=title, description=description, link=link, **kwargs)
+        group=group, title=title, description=description, link=link,
+        file_type=file_type, **kwargs)
 
     # and register the report for reference
     utility = getReportRegistrationUtility()
-    utility.registerReport(group, title, description)
+    utility.registerReport(group, title, description, file_type)
