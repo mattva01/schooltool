@@ -533,3 +533,7 @@ class PersonAddPersonViewlet(object):
             return False
         return True
 
+
+class FlourishPersonFilterWidget(PersonFilterWidget):
+
+    template = ViewPageTemplateFile('f_person_filter.pt')

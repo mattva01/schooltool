@@ -17,16 +17,20 @@ form > .count {
     line-height: 16px;
     position: absolute;
     right: 8px;
-    top: -24px;
+    top: 8px;
     z-index: 1;
 }
 
 form fieldset {
     background-color: #dfdcd9;
     margin-bottom: 8px;
-    margin-top: 32px;
+    padding-top: 32px;
     padding-bottom: 8px;
     position: relative;
+}
+
+form fieldset > legend {
+    position: absolute;
 }
 
 form fieldset > legend > span {

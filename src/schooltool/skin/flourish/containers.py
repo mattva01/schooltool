@@ -29,13 +29,10 @@ from zope.security.checker import canAccess
 from zope.traversing.browser.absoluteurl import absoluteURL
 
 from schooltool.table.batch import IterableBatch
-from schooltool.table.catalog import IndexedLocaleAwareGetterColumn
-
+from schooltool.table.table import DependableCheckboxColumn
 from schooltool.table.table import url_cell_formatter
 from schooltool.table.interfaces import ITableFormatter
 from schooltool.skin.flourish.page import Page
-
-from schooltool.common import SchoolToolMessage as _
 
 
 class ContainerView(Page):
@@ -110,19 +107,17 @@ class TableContainerView(Page):
         self.context = context
         self.table = queryMultiAdapter((context, request), ITableFormatter)
 
-    def getColumnsAfter(self):
-        username = IndexedLocaleAwareGetterColumn(
-            index='__name__',
-            name='username',
-            title=_(u'Username'),
-            getter=lambda i, f: i.__name__,
-            subsort=True)
-        return [username]
+    def getColumnsBefore(self):
+        if self.canModify():
+            return [DependableCheckboxColumn(prefix="delete",
+                                             name='delete_checkbox',
+                                             title=u'')]
+        return []
 
     def setUpTableFormatter(self, formatter):
-        columns_after = self.getColumnsAfter()
+        columns_before = self.getColumnsBefore()
         formatter.setUp(formatters=[url_cell_formatter],
-                        columns_after=columns_after)
+                        columns_before=columns_before)
 
     @property
     def container(self):

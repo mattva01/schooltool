@@ -42,6 +42,7 @@ import schooltool.skin.flourish.page
 import schooltool.skin.flourish.containers
 import schooltool.skin.flourish.breadcrumbs
 from schooltool.app.browser.app import RelationshipViewBase
+from schooltool.app.browser.app import FlourishRelationshipViewBase
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.common.inlinept import InlineViewPageTemplate
 from schooltool.common.inlinept import InheritTemplate
@@ -59,6 +60,9 @@ from schooltool.skin.flourish.viewlet import Viewlet, ViewletManager
 from schooltool.skin.flourish.content import ContentProvider
 from schooltool.table.interfaces import ITableFormatter
 from schooltool.table.table import DependableCheckboxColumn
+from schooltool.table.catalog import IndexedLocaleAwareGetterColumn
+from schooltool.table.interfaces import IIndexedColumn
+from schooltool.table.table import url_cell_formatter
 
 from schooltool.common import SchoolToolMessage as _
 
@@ -98,17 +102,19 @@ class DeletePersonCheckboxColumn(DependableCheckboxColumn):
 class FlourishBasicPersonContainerView(flourish.containers.TableContainerView):
     """A Person Container view."""
 
-    def getColumnsBefore(self):
-        disable_users = []
-        person = IPerson(self.request.principal, None)
-        if person is not None:
-            disable_users.append(person.__name__)
-        if self.canModify():
-            return [DeletePersonCheckboxColumn(disable_items=disable_users,
-                                               prefix="delete",
-                                               name='delete_checkbox',
-                                               title=u'')]
-        return []
+    def getColumnsAfter(self):
+        username = IndexedLocaleAwareGetterColumn(
+            index='__name__',
+            name='username',
+            title=_(u'Username'),
+            getter=lambda i, f: i.__name__,
+            subsort=True)
+        return [username]
+
+    def setUpTableFormatter(self, formatter):
+        columns_after = self.getColumnsAfter()
+        formatter.setUp(formatters=[url_cell_formatter],
+                        columns_after=columns_after)
 
 
 class PersonContainerLinks(flourish.page.RefineLinksViewlet):
@@ -566,6 +572,21 @@ class PersonAdvisorView(RelationshipViewBase):
         return self.context.advisors
 
 
+class FlourishPersonAdvisorView(FlourishRelationshipViewBase):
+
+    current_title = _('Current Advisors')
+    available_title = _('Available Advisors')
+
+    def getSelectedItems(self):
+        return self.context.advisors
+
+    def getAvailableItemsContainer(self):
+        return ISchoolToolApplication(None)['persons']
+
+    def getCollection(self):
+        return self.context.advisors
+
+
 class PersonAdviseeView(RelationshipViewBase):
     """View class for adding/removing advisees to/from a person."""
 
@@ -581,6 +602,21 @@ class PersonAdviseeView(RelationshipViewBase):
 
     def getSelectedItems(self):
         """Return a list of current advisees."""
+        return self.context.advisees
+
+    def getAvailableItemsContainer(self):
+        return ISchoolToolApplication(None)['persons']
+
+    def getCollection(self):
+        return self.context.advisees
+
+
+class FlourishPersonAdviseeView(FlourishRelationshipViewBase):
+
+    current_title = _("Current Advisees")
+    available_title = _("Available Advisees")
+
+    def getSelectedItems(self):
         return self.context.advisees
 
     def getAvailableItemsContainer(self):
@@ -893,3 +929,14 @@ class BasicPersonTableFormatter(PersonTableFormatter):
     def columns(self):
         cols = list(reversed(PersonTableFormatter.columns(self)))
         return cols
+
+    def render(self):
+        columns = [IIndexedColumn(c) for c in self._columns]
+        formatter = self._table_formatter(
+            self.context, self.request, self._items,
+            columns=columns,
+            batch_start=self.batch.start, batch_size=self.batch.size,
+            sort_on=self._sort_on,
+            prefix=self.prefix)
+        formatter.cssClasses['table'] = 'persons-table'
+        return formatter()

@@ -295,4 +295,33 @@
            schooltool.skin.flourish.IFlourishLayer"
       factory=".person.BasicPersonTableFormatter" />
 
+  <!-- Reports -->
+
+  <report:reportLink
+       name="person_export_xml"
+       for="schooltool.person.interfaces.IPerson"
+       permission="schooltool.edit"
+       group="Student"
+       description="Contains an XML representation of the person."
+       title="Export Person as XML"
+       file_type="xml"
+       link="person_export.xml"
+       />
+
+  <flourish:page
+      name="advisors.html"
+      for="schooltool.basicperson.interfaces.IBasicPerson"
+      class=".person.FlourishPersonAdvisorView"
+      permission="schooltool.edit"
+      subtitle="Advisors"
+      />
+
+  <flourish:page
+      name="advisees.html"
+      for="schooltool.basicperson.interfaces.IBasicPerson"
+      class=".person.FlourishPersonAdviseeView"
+      permission="schooltool.edit"
+      subtitle="Advisees"
+      />
+
 </configure>
