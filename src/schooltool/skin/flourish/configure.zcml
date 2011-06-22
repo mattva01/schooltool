@@ -17,6 +17,7 @@
                page.css
                form.css
                table.css
+               batch.css
                jquery-ui.css
                flourish.js"
       />

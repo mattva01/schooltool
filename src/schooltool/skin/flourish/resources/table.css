@@ -69,16 +69,12 @@ table.persons-table th.action {
     width: 20%;
 }
 
-table.groups-table input[type="submit"],
-table.persons-table input[type="submit"] {
-    width: 100%;
-    background-color: #aea79f;
-    color: #ffffff;
-    font-size: 12px;
-    line-height: 16px;
+table.groups-table input[type="image"],
+table.persons-table input[type="image"] {
+    vertical-align: middle;
 }
 
-table.groups-table input[type="submit"]:hover,
-table.persons-table input[type="submit"]:hover {
-    background-color: #dd0000;
+table.groups-table tbody tr:hover ,
+table.persons-table tbody tr:hover {
+    background-color: #DFDCD9;
 }

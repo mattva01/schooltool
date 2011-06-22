@@ -272,8 +272,8 @@ class FlourishGroupTableFormatter(SchoolToolTableFormatter):
 
 class FlourishGroupListView(FlourishRelationshipViewBase):
 
-    current_title = _('Current Groups')
-    available_title = _('Available Groups')
+    current_title = _('Current groups')
+    available_title = _('Available groups')
 
     @Lazy
     def schoolyears(self):

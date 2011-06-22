@@ -574,8 +574,8 @@ class PersonAdvisorView(RelationshipViewBase):
 
 class FlourishPersonAdvisorView(FlourishRelationshipViewBase):
 
-    current_title = _('Current Advisors')
-    available_title = _('Available Advisors')
+    current_title = _('Current advisors')
+    available_title = _('Available advisors')
 
     def getSelectedItems(self):
         return self.context.advisors
@@ -613,8 +613,8 @@ class PersonAdviseeView(RelationshipViewBase):
 
 class FlourishPersonAdviseeView(FlourishRelationshipViewBase):
 
-    current_title = _("Current Advisees")
-    available_title = _("Available Advisees")
+    current_title = _("Current advisees")
+    available_title = _("Available advisees")
 
     def getSelectedItems(self):
         return self.context.advisees

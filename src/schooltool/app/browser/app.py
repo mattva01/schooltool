@@ -25,6 +25,7 @@ $Id$
 from zope.location.location import LocationProxy
 from zope.interface import implementer
 from zope.interface import implements
+from zope.interface import Interface
 from zope.security.interfaces import IParticipation
 from zope.security.management import getSecurityPolicy
 from zope.security.proxy import removeSecurityProxy
@@ -38,11 +39,13 @@ from zope.publisher.browser import BrowserView
 from zope.component import getMultiAdapter, queryMultiAdapter
 from zope.component import getUtility
 from zope.component import adapter
+from zope.component import getAdapter
 from zope.authentication.interfaces import IAuthentication
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.publisher.browser import BrowserPage
 from zope.traversing.browser.absoluteurl import absoluteURL
 
+import zc.resourcelibrary
 from zc.table.column import Column
 from zc.table.table import FormFullFormatter
 
@@ -210,11 +213,12 @@ class CSSFormatter(FormFullFormatter):
 
 class ActionColumn(Column):
 
-    def __init__(self, prefix, label=None, id_getter=None):
+    def __init__(self, prefix, label=None, icon=None, id_getter=None):
         self.name = 'action'
-        self.title = _(u'Action')
+        self.title = label
         self.prefix = prefix
         self.label = label
+        self.icon = icon
         if id_getter is None:
             self.id_getter = stupid_form_key
         else:
@@ -222,8 +226,10 @@ class ActionColumn(Column):
 
     def renderCell(self, item, formatter):
         form_id = ".".join(filter(None, [self.prefix, self.id_getter(item)]))
-        return '<input type="submit" value="%s" name="%s" />' % (self.label,
-                                                                 form_id)
+        return '<input type="image" alt="%s" name="%s" src="%s" value="1" title="%s" />' % (self.label,
+                                                                       form_id,
+                                                                       self.icon,
+                                                                                            self.label)
 
 
 class FlourishRelationshipViewBase(flourish.page.Page):
@@ -262,11 +268,16 @@ class FlourishRelationshipViewBase(flourish.page.Page):
 
     def getColumnsAfter(self, prefix):
         label = ''
+        icon = ''
+        resource_directory = getAdapter(self.request, Interface,
+                                        name='schooltool.skin.flourish')
         if prefix == 'add_item':
             label = _('Add')
+            icon = resource_directory.get('add-icon.png')()
         elif prefix == 'remove_item':
             label = _('Remove')
-        action = ActionColumn(prefix, label, self.getKey)
+            icon = resource_directory.get('remove-icon.png')()
+        action = ActionColumn(prefix, label, icon, self.getKey)
         return [action]
 
     def createTableFormatter(self, **kwargs):
