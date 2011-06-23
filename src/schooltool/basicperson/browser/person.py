@@ -42,6 +42,7 @@ import schooltool.skin.flourish.page
 import schooltool.skin.flourish.containers
 import schooltool.skin.flourish.breadcrumbs
 from schooltool.app.browser.app import RelationshipViewBase
+from schooltool.app.browser.app import FlourishRelationshipViewBase
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.common.inlinept import InlineViewPageTemplate
 from schooltool.common.inlinept import InheritTemplate
@@ -60,6 +61,7 @@ from schooltool.skin.flourish.content import ContentProvider
 from schooltool.table.interfaces import ITableFormatter
 from schooltool.table.table import DependableCheckboxColumn
 from schooltool.table.catalog import IndexedLocaleAwareGetterColumn
+from schooltool.table.interfaces import IIndexedColumn
 from schooltool.table.table import url_cell_formatter
 
 from schooltool.common import SchoolToolMessage as _
@@ -570,6 +572,21 @@ class PersonAdvisorView(RelationshipViewBase):
         return self.context.advisors
 
 
+class FlourishPersonAdvisorView(FlourishRelationshipViewBase):
+
+    current_title = _('Current advisors')
+    available_title = _('Available advisors')
+
+    def getSelectedItems(self):
+        return self.context.advisors
+
+    def getAvailableItemsContainer(self):
+        return ISchoolToolApplication(None)['persons']
+
+    def getCollection(self):
+        return self.context.advisors
+
+
 class PersonAdviseeView(RelationshipViewBase):
     """View class for adding/removing advisees to/from a person."""
 
@@ -585,6 +602,21 @@ class PersonAdviseeView(RelationshipViewBase):
 
     def getSelectedItems(self):
         """Return a list of current advisees."""
+        return self.context.advisees
+
+    def getAvailableItemsContainer(self):
+        return ISchoolToolApplication(None)['persons']
+
+    def getCollection(self):
+        return self.context.advisees
+
+
+class FlourishPersonAdviseeView(FlourishRelationshipViewBase):
+
+    current_title = _("Current advisees")
+    available_title = _("Available advisees")
+
+    def getSelectedItems(self):
         return self.context.advisees
 
     def getAvailableItemsContainer(self):
@@ -897,3 +929,14 @@ class BasicPersonTableFormatter(PersonTableFormatter):
     def columns(self):
         cols = list(reversed(PersonTableFormatter.columns(self)))
         return cols
+
+    def render(self):
+        columns = [IIndexedColumn(c) for c in self._columns]
+        formatter = self._table_formatter(
+            self.context, self.request, self._items,
+            columns=columns,
+            batch_start=self.batch.start, batch_size=self.batch.size,
+            sort_on=self._sort_on,
+            prefix=self.prefix)
+        formatter.cssClasses['table'] = 'persons-table'
+        return formatter()

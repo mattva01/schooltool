@@ -25,6 +25,7 @@ $Id$
 from zope.location.location import LocationProxy
 from zope.interface import implementer
 from zope.interface import implements
+from zope.interface import Interface
 from zope.security.interfaces import IParticipation
 from zope.security.management import getSecurityPolicy
 from zope.security.proxy import removeSecurityProxy
@@ -38,10 +39,15 @@ from zope.publisher.browser import BrowserView
 from zope.component import getMultiAdapter, queryMultiAdapter
 from zope.component import getUtility
 from zope.component import adapter
+from zope.component import getAdapter
 from zope.authentication.interfaces import IAuthentication
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.publisher.browser import BrowserPage
 from zope.traversing.browser.absoluteurl import absoluteURL
+
+import zc.resourcelibrary
+from zc.table.column import Column
+from zc.table.table import FormFullFormatter
 
 from schooltool.calendar.icalendar import convert_calendar_to_ical
 from schooltool.app.browser.interfaces import IManageMenuViewletManager
@@ -55,6 +61,7 @@ from schooltool.common.inlinept import InlineViewPageTemplate
 from schooltool.person.interfaces import IPerson
 from schooltool.table.table import CheckboxColumn
 from schooltool.table.table import label_cell_formatter_factory
+from schooltool.table.table import stupid_form_key
 from schooltool.table.interfaces import ITableFormatter
 from schooltool.skin.skin import OrderedViewletManager
 from schooltool.skin.breadcrumbs import CustomNameBreadCrumbInfo
@@ -189,6 +196,144 @@ class RelationshipViewBase(BrowserView):
         elif 'CANCEL' in self.request:
             self.request.response.redirect(context_url)
 
+        self.setUpTables()
+
+
+class CSSFormatter(FormFullFormatter):
+
+    def renderHeaders(self):
+        result = []
+        old_css_class = self.cssClasses.get('th')
+        for col in self.visible_columns:
+            self.cssClasses['th'] = col.name
+            result.append(self.renderHeader(col))
+        self.cssClasses['th'] = old_css_class
+        return ''.join(result)
+
+
+class ActionColumn(Column):
+
+    def __init__(self, prefix, label=None, icon=None, id_getter=None):
+        self.name = 'action'
+        self.title = label
+        self.prefix = prefix
+        self.label = label
+        self.icon = icon
+        if id_getter is None:
+            self.id_getter = stupid_form_key
+        else:
+            self.id_getter = id_getter
+
+    def renderCell(self, item, formatter):
+        form_id = ".".join(filter(None, [self.prefix, self.id_getter(item)]))
+        return '<input type="image" alt="%s" name="%s" src="%s" value="1" title="%s" />' % (self.label,
+                                                                       form_id,
+                                                                       self.icon,
+                                                                                            self.label)
+
+
+class FlourishRelationshipViewBase(flourish.page.Page):
+
+    content_template = ViewPageTemplateFile('templates/f_edit_relationships.pt')
+
+    current_title = None
+    available_title = None
+
+    def add(self, item):
+        collection = removeSecurityProxy(self.getCollection())
+        collection.add(item)
+
+    def remove(self, item):
+        collection = removeSecurityProxy(self.getCollection())
+        collection.remove(item)
+
+    def getCollection(self):
+        """Return the backend storage for related objects."""
+        raise NotImplementedError("Subclasses should override this method.")
+
+    def getSelectedItems(self):
+        """Return a sequence of items that are already selected."""
+        return self.getCollection()
+
+    def getAvailableItems(self):
+        """Return a sequence of items that can be selected."""
+        container = self.getAvailableItemsContainer()
+        selected_items = set(self.getSelectedItems())
+        return [p for p in container.values()
+                if p not in selected_items]
+
+    def getAvailableItemsContainer(self):
+        """Returns the backend storage for available items."""
+        raise NotImplementedError("Subclasses should override this method.")
+
+    def getColumnsAfter(self, prefix):
+        label = ''
+        icon = ''
+        resource_directory = getAdapter(self.request, Interface,
+                                        name='schooltool.skin.flourish')
+        if prefix == 'add_item':
+            label = _('Add')
+            icon = resource_directory.get('add-icon.png')()
+        elif prefix == 'remove_item':
+            label = _('Remove')
+            icon = resource_directory.get('remove-icon.png')()
+        action = ActionColumn(prefix, label, icon, self.getKey)
+        return [action]
+
+    def createTableFormatter(self, **kwargs):
+        container = self.getAvailableItemsContainer()
+        formatter = getMultiAdapter((container, self.request),
+                                    ITableFormatter)
+        formatter.setUp(columns_after=self.getColumnsAfter(kwargs['prefix']),
+                        table_formatter=CSSFormatter,
+                        **kwargs)
+        return formatter
+
+    def getOmmitedItems(self):
+        return self.getSelectedItems()
+
+    def setUpTables(self):
+        self.available_table = self.createTableFormatter(
+            ommit=self.getOmmitedItems(),
+            prefix="add_item")
+
+        self.selected_table = self.createTableFormatter(
+            filter=lambda l: l,
+            items=self.getSelectedItems(),
+            prefix="remove_item",
+            batch_size=0)
+
+    def getKey(self, item):
+        return item.__name__
+
+    def applyFormChanges(self):
+        changed = False
+        add_item_prefix = 'add_item.'
+        remove_item_prefix = 'remove_item.'
+        add_item_submitted = False
+        remove_item_submitted = False
+        for param in self.request.form:
+            if param.startswith(add_item_prefix):
+                add_item_submitted = True
+            elif param.startswith(remove_item_prefix):  
+                remove_item_submitted = True
+        if add_item_submitted:
+            for item in self.getAvailableItems():
+                if add_item_prefix + self.getKey(item) in self.request:
+                    self.add(removeSecurityProxy(item))
+                    changed = True
+        if remove_item_submitted:
+            for item in self.getSelectedItems():
+                if remove_item_prefix + self.getKey(item) in self.request:
+                    self.remove(removeSecurityProxy(item))
+                    changed = True
+        return changed
+
+    def update(self):
+        changes = self.applyFormChanges()
+        if changes:
+            self.request.response.redirect(self.request.getURL())
+            return
         self.setUpTables()
 
 
