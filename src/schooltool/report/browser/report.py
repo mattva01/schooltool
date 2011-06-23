@@ -70,11 +70,7 @@ class SectionReportsView(ReportsView):
 class FlourishReportsView(flourish.page.Page):
     """Report request view base class."""
     content_template = ViewPageTemplateFile('templates/f_report_links.pt')
-
-
-class FlourishStudentReportsView(FlourishReportsView):
-
-    title = _('Student Reports')
+    subtitle = _('Reports')
 
 
 def reportLinksURL(ob, request, name=''):
