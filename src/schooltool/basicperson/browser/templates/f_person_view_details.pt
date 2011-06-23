@@ -14,7 +14,7 @@
         var link_id = '#LinkIdViewlet-page_refine-person-settings-links-preferences-';
         $(link_id).click(function(e) {
           $(person_preferences_form_id).dialog({
-            width: $(person_preferences_form_id).find('form').width() + 30
+            width: $(person_preferences_form_id).find('form').width() + 4
           });
           $(person_preferences_form_id).dialog('open');
           e.preventDefault();

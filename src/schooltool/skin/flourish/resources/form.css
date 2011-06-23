@@ -101,6 +101,16 @@ form fieldset .row .widget .select-widget {
     width: 288px;
 }
 
+form fieldset .row .widget .option {
+    color: #333333;
+    font-size: 12px;
+    line-height: 16px;
+}
+
+form fieldset .row .widget .option label {
+    display: none;
+}
+
 form .buttons,
 form .controls {
     margin-bottom: 16px;
