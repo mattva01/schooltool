@@ -15,7 +15,7 @@
     <flourish:page
         name="reports"
         for="schooltool.basicperson.interfaces.IBasicPerson"
-        class="schooltool.report.browser.report.FlourishStudentReportsView"
+        class="schooltool.report.browser.report.FlourishReportsView"
         permission="schooltool.edit"
         />
   </configure>

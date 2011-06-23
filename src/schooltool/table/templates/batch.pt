@@ -26,14 +26,6 @@
   </div>
 
   <tal:if condition="view/needsBatch">
-    <a class="next"
-       tal:condition="view/next_url"
-       tal:attributes="href view/next_url"
-       i18n:translate=""
-       >Next &raquo;</a>
-
-    <span tal:condition="not:view/next_url" i18n:translate=""
-          class="next">Next &raquo;</span>
 
     <tal:if define="cur view/num;
                     total view/numBatches;
@@ -81,5 +73,15 @@
         <a tal:attributes="href b/href; class b/class" tal:content="b/num" />
       </span>
     </tal:if>
+
+    <a class="next"
+       tal:condition="view/next_url"
+       tal:attributes="href view/next_url"
+       i18n:translate=""
+       >Next &raquo;</a>
+
+    <span tal:condition="not:view/next_url" i18n:translate=""
+          class="next">Next &raquo;</span>
+
   </tal:if>
 </div>
