@@ -64,6 +64,8 @@ class FlourishReportLinkViewletManager(flourish.viewlet.ViewletManager):
             group['rows'].append({
                 'title': viewlet.title,
                 'url': viewlet.link,
+                'link_id': viewlet.link.replace('.', '_'),
+                'form_id': viewlet.link.replace('.', '_') + '_form',
                 'description': viewlet.description,
                 })
         return [group for key, group in sorted(result.items())]
