@@ -226,10 +226,7 @@ class ActionColumn(Column):
 
     def renderCell(self, item, formatter):
         form_id = ".".join(filter(None, [self.prefix, self.id_getter(item)]))
-        return '<input type="image" alt="%s" name="%s" src="%s" value="1" title="%s" />' % (self.label,
-                                                                       form_id,
-                                                                       self.icon,
-                                                                                            self.label)
+        return '<input type="image" alt="%s" name="%s" src="%s" value="1" title="%s" />' % (self.label, form_id, self.icon, self.label)
 
 
 class FlourishRelationshipViewBase(flourish.page.Page):
