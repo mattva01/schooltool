@@ -48,7 +48,8 @@ from zope.intid.interfaces import IIntIds
 from zope.traversing.browser.absoluteurl import absoluteURL
 from zope.security.checker import canAccess
 from z3c.form import form, field, button, widget
-from z3c.form.browser.checkbox import SingleCheckBoxWidget
+from z3c.form.browser.radio import RadioWidget
+from zope.i18n import translate
 
 from schooltool.group.interfaces import IGroupContainer
 from schooltool.common import SchoolToolMessage as _
@@ -83,22 +84,65 @@ class PersonPhotoView(BrowserView):
         return photo
 
 
-def CheckBoxWidgetFactory(field, request):
-    return widget.FieldWidget(field, SingleCheckBoxWidget(request))
+class RadioWidgetBase(RadioWidget):
+
+    labels = None
+
+    def update(self):
+        super(RadioWidgetBase, self).update()
+        self.items = []
+        for count, term in enumerate(self.terms):
+            checked = self.isChecked(term)
+            id = '%s-%i' % (self.id, count)
+            label = term.token
+            if term.token in self.labels:
+                title = self.labels[term.token]
+                label = translate(title, context=self.request,
+                                  default=title)
+            self.items.append(
+                {'id':id, 'name':self.name + ':list', 'value':term.token,
+                 'label':label, 'checked':checked})
+
+
+class CalendarPeriodsRadioWidget(RadioWidgetBase):
+
+    labels = {'true': _('Show periods'),
+              'false': _('Show hours')}
+
+
+class CalendarPublicRadioWidget(RadioWidgetBase):
+
+    @property
+    def labels(self):
+        person = self.context.__parent__
+        result = {'true': _('the public')}
+        result['false'] = _('${person_full_name} and school administration',
+                            mapping={'person_full_name': "%s %s" % (person.first_name,
+                                                                    person.last_name)})
+        return result
+
+
+def CalendarPeriodsWidgetFactory(field, request):
+    return widget.FieldWidget(field, CalendarPeriodsRadioWidget(request))
+
+
+def CalendarPublicWidgetFactory(field, request):
+    return widget.FieldWidget(field, CalendarPublicRadioWidget(request))
 
 
 class PersonPreferencesView(form.EditForm):
     """View used for editing person preferences."""
 
     fields = field.Fields(IPersonPreferences)
-    fields['cal_periods'].widgetFactory = CheckBoxWidgetFactory
-    fields['cal_public'].widgetFactory = CheckBoxWidgetFactory
+    fields['cal_periods'].widgetFactory = CalendarPeriodsWidgetFactory
+    fields['cal_public'].widgetFactory = CalendarPublicWidgetFactory
     template = ViewPageTemplateFile('person_preferences.pt')
 
     @property
     def label(self):
-        return _(u'Change preferences for ${person}',
-                 mapping={'person': self.context.__parent__.title})
+        person = self.context.__parent__
+        return _(u'Change preferences for ${person_full_name}',
+                 mapping={'person_full_name': "%s %s" % (person.first_name, person.last_name)})
 
     @button.buttonAndHandler(_("Apply"))
     def handle_edit_action(self, action):
@@ -121,6 +165,13 @@ class PersonPreferencesView(form.EditForm):
     def redirectToPerson(self):
         url = absoluteURL(self.context.__parent__, self.request)
         self.request.response.redirect(url)
+
+    def updateWidgets(self):
+        super(PersonPreferencesView, self).updateWidgets()
+        person = self.context.__parent__
+        widget = self.widgets['cal_public']
+        widget.label = _("${person_full_name}'s calendar is visible to...",
+                         mapping={'person_full_name': "%s %s" % (person.first_name, person.last_name)})
 
 
 class FlourishPersonPreferencesView(flourish.page.Page, PersonPreferencesView):

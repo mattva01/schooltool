@@ -139,6 +139,7 @@ class IPersonAddForm(IBasicPerson):
 
     group = Choice(
         title=_(u"Group"),
+        description=_(u"You can select one group membership now.  Manage multiple memberships after account creation."),
         source="schooltool.basicperson.group_vocabulary",
         required=False)
 
@@ -149,11 +150,12 @@ class IPersonAddForm(IBasicPerson):
 
     username = TextLine(
         title=_("Username"),
-        description=_("Username"),
+        description=_(u"Cannot begin with '+' or '@,' contain non-ascii characters or '/.'"),
         required=True)
 
     password = Password(
         title=_("Password"),
+        description=_(u"Users cannot log in until a password is assigned."),
         required=False)
 
     confirm = Password(
@@ -467,12 +469,12 @@ class PersonEditView(form.EditForm, PersonForm):
 
 
 class FlourishPersonEditView(flourish.page.Page, PersonEditView):
-    def update(self):
-        PersonEditView.update(self)
 
-    @button.buttonAndHandler(_("Cancel"))
-    def handle_cancel_action(self, action):
-        self.request.response.redirect(self.nextURL())
+    group_id = None
+
+    def update(self):
+        self.buildFieldsetGroups()
+        PersonEditView.update(self)
 
     @button.buttonAndHandler(_('Apply'), name='apply')
     def handleApply(self, action):
@@ -482,9 +484,58 @@ class FlourishPersonEditView(flourish.page.Page, PersonEditView):
             self.status == self.noChangesMessage):
             self.request.response.redirect(self.nextURL())
 
+    @button.buttonAndHandler(_("Cancel"))
+    def handle_cancel_action(self, action):
+        self.request.response.redirect(self.nextURL())
+
     def nextURL(self):
         url = absoluteURL(self.context, self.request)
         return url
+
+    def makeRows(self, fields, cols=1):
+        rows = []
+        while fields:
+            rows.append(fields[:cols])
+            fields = fields[cols:]
+        return rows
+
+    def makeFieldSet(self, fieldset_id, legend, fields, cols=1):
+        result = {
+            'id': fieldset_id,
+            'legend': legend,
+            }
+        result['rows'] = self.makeRows(fields, cols)
+        return result
+
+    def buildFieldsetGroups(self):
+        self.fieldset_groups = {
+            'full_name': (
+                _('Full Name'),
+                ['prefix', 'first_name', 'middle_name', 'last_name',
+                 'suffix', 'preferred_name']),
+            'details': (
+                _('Details'), ['gender', 'birth_date']),
+            'demographics': (
+                _('Demographics'), list(self.getDemoFields())),
+            }
+        self.fieldset_order = (
+            'full_name', 'details', 'demographics')
+
+    def fieldsets(self):
+        result = []
+        for fieldset_id in self.fieldset_order:
+            legend, fields = self.fieldset_groups[fieldset_id]
+            result.append(self.makeFieldSet(
+                    fieldset_id, legend, list(fields)))
+        return result
+
+    def getDemoFields(self):
+        fields = field.Fields()
+        dfs = IDemographicsFields(ISchoolToolApplication(None))
+        keys = self.group_id and [self.group_id] or []
+        for field_desc in dfs.filter_keys(keys):
+            fields += field_desc.makeField()
+        return fields
 
 
 class PersonTerm(object):

@@ -219,16 +219,14 @@
 
   <!-- Edit person page -->
 
-  <configure package="schooltool.skin.flourish">
-    <flourish:page
-        name="edit.html"
-        for="schooltool.basicperson.interfaces.IBasicPerson"
-        class="schooltool.basicperson.browser.person.FlourishPersonEditView"
-        content_template="templates/z3c_form_edit.pt"
-        permission="schooltool.edit"
-        subtitle="Edit"
-        />
-  </configure>
+  <flourish:page
+      name="edit.html"
+      for="schooltool.basicperson.interfaces.IBasicPerson"
+      class="schooltool.basicperson.browser.person.FlourishPersonEditView"
+      content_template="templates/f_person_form.pt"
+      permission="schooltool.edit"
+      subtitle="Edit"
+      />
 
   <flourish:viewlet
       name="edit_person"

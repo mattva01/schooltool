@@ -67,7 +67,8 @@
                                   tal:condition="widget/required">*</span>
                           </label>
                         </div>
-                        <p class="hint" tal:content="widget/field/description">Description of this field.</p>
+                        <p class="hint" tal:content="widget/field/description"
+			   tal:condition="widget/field/description">Description of this field.</p>
                         <div class="widget" tal:content="structure widget/render">
                           <input type="text" size="24" value="" />
                         </div>
@@ -82,7 +83,6 @@
                            tal:replace="structure widget/render" />
                   </metal:block>
                 </tal:block>
-                <br class="clearboth" />
               </tal:loop>
               <div metal:define-slot="extra-widgets" tal:replace="nothing">
               </div>

@@ -12,8 +12,11 @@
         });
         // XXX: we need to assign better this JS to the action button
         var link_id = '#LinkIdViewlet-page_refine-person-settings-links-preferences-';
+        var title = $(person_preferences_form_id).find('h3').html();
         $(link_id).click(function(e) {
+          var dialog_title = $('#person_preferences_form h3').html();
           $(person_preferences_form_id).dialog({
+            title: dialog_title,
             width: $(person_preferences_form_id).find('form').width() + 4
           });
           $(person_preferences_form_id).dialog('open');
