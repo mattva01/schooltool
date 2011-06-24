@@ -229,7 +229,7 @@ class ActionColumn(Column):
         return '<input type="image" alt="%s" name="%s" src="%s" value="1" title="%s" />' % (self.label, form_id, self.icon, self.label)
 
 
-class FlourishRelationshipViewBase(flourish.page.Page):
+class FlourishRelationshipViewBase(flourish.page.ExpandedPage):
 
     content_template = ViewPageTemplateFile('templates/f_edit_relationships.pt')
 

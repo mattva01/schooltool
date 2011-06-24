@@ -468,7 +468,7 @@ class PersonEditView(form.EditForm, PersonForm):
                  mapping={'fullname': self.context.title})
 
 
-class FlourishPersonEditView(flourish.page.Page, PersonEditView):
+class FlourishPersonEditView(flourish.page.ExpandedPage, PersonEditView):
 
     def update(self):
         self.buildFieldsetGroups()
@@ -869,6 +869,7 @@ class PersonAddViewBase(PersonAddFormBase):
 
 class FlourishPersonAddView(PersonAddViewBase):
     template = InheritTemplate(flourish.page.Page.template)
+    page_template = InheritTemplate(flourish.page.ExpandedPage.page_template)
 
     fieldset_groups = None
     fieldset_order = None
