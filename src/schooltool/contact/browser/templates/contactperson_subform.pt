@@ -1,6 +1,8 @@
 <fieldset>
-  <legend tal:condition="view/person" i18n:translate="">
+  <legend tal:condition="view/person">
+    <span i18n:translate="">
     Contact of <span tal:replace="view/person/title" i18n:name="person" />
+    </span>
   </legend>
   <legend tal:condition="not:view/person">
     <span i18n:translate="">Relationship</span>

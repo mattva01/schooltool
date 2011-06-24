@@ -17,6 +17,11 @@
   <zope:adapter
       for="schooltool.contact.interfaces.IContactContainer
            schooltool.skin.flourish.interfaces.IFlourishLayer"
+      factory=".contact.FlourishContactTableFormatter " />
+
+  <zope:adapter
+      for="schooltool.contact.interfaces.IContactContainer
+           schooltool.skin.flourish.interfaces.IFlourishLayer"
       factory=".contact.FlourishContactFilterWidget" />
 
   <flourish:page
@@ -46,16 +51,22 @@
       manager="schooltool.contact.browser.contact.PersonManageContactsLinks"
       permission="schooltool.view"
       />
+  
+  <flourish:page
+      name="add_contact.html"
+      for="schooltool.basicperson.interfaces.IBasicPerson"
+      class="schooltool.contact.browser.contact.FlourishPersonContactAddView"
+      content_template="templates/f_contact_form.pt"
+      permission="schooltool.edit"
+      subtitle="New contact"
+      />
 
-  <configure package="schooltool.basicperson.browser">
-    <flourish:page
-        name="add_contact.html"
-        for="schooltool.basicperson.interfaces.IBasicPerson"
-        class="schooltool.contact.browser.contact.FlourishPersonContactAddView"
-        content_template="templates/f_person_form.pt"
-        permission="schooltool.edit"
-        subtitle="New contact"
-        />
-  </configure>
+  <flourish:page
+      name="edit.html"
+      for="schooltool.contact.interfaces.IContact"
+      class=".contact.FlourishContactEditView"
+      content_template="templates/f_contact_form.pt"
+      permission="schooltool.edit"
+      />
 
 </configure>

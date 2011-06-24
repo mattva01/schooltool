@@ -294,6 +294,78 @@ class ContactEditView(form.EditForm):
                           'last_name': self.context.last_name})
 
 
+class FlourishContactEditView(ExpandedPage, ContactEditView):
+
+    form.extends(ContactEditView)
+
+    def update(self):
+        self.buildFieldsetGroups()
+        ContactEditView.update(self)
+
+    @button.handler(ContactEditView.buttons['apply'])
+    def handle_apply(self, action):
+        # Pretty, isn't it?
+        self.handleApply.func(self, action)
+        self.redirect()
+
+    def redirect(self):
+        if 'person_id' in self.request:
+            person_id = self.request['person_id']
+            app = ISchoolToolApplication(None)
+            persons = app['persons']
+            if person_id in persons:
+                url = absoluteURL(persons[person_id], self.request)
+                self.request.response.redirect(url)
+                return
+        url = absoluteURL(self.context, self.request)
+        self.request.response.redirect(url)
+
+    @button.buttonAndHandler(_("Cancel"))
+    def handle_cancel_action(self, action):
+        self.redirect()
+
+    def makeRows(self, fields, cols=1):
+        rows = []
+        while fields:
+            rows.append(fields[:cols])
+            fields = fields[cols:]
+        return rows
+
+    def makeFieldSet(self, fieldset_id, legend, fields, cols=1):
+        result = {
+            'id': fieldset_id,
+            'legend': legend,
+            }
+        result['rows'] = self.makeRows(fields, cols)
+        return result
+
+    def buildFieldsetGroups(self):
+        self.fieldset_groups = {
+            'full_name': (
+                _('Full Name'),
+                ['prefix', 'first_name', 'middle_name', 'last_name',
+                 'suffix']),
+            'address': (
+                _('Address'),
+                ['address_line_1', 'address_line_2', 'city', 'state',
+                 'country', 'postal_code']),
+            'contact_information': (
+                _('Contact Information'),
+                ['home_phone', 'work_phone', 'mobile_phone', 'email',
+                 'language']),
+            }
+        self.fieldset_order = (
+            'full_name', 'address', 'contact_information')
+
+    def fieldsets(self):
+        result = []
+        for fieldset_id in self.fieldset_order:
+            legend, fields = self.fieldset_groups[fieldset_id]
+            result.append(self.makeFieldSet(
+                    fieldset_id, legend, list(fields)))
+        return result
+
+
 class ContactView(form.DisplayForm):
     """Display form for basic contact."""
     template = ViewPageTemplateFile('templates/contact_view.pt')
@@ -379,7 +451,7 @@ def contact_table_collumns():
         address = GetterColumn(name='address',
                                title=_(u"Address"),
                                getter=format_street_address)
-        return [first_name, last_name, address]
+        return [last_name, first_name, address]
 
 
 class ContactTableFormatter(IndexedTableFormatter):
@@ -388,6 +460,12 @@ class ContactTableFormatter(IndexedTableFormatter):
 
     def sortOn(self):
         return (("first_name", False),)
+
+
+class FlourishContactTableFormatter(ContactTableFormatter):
+
+    def sortOn(self):
+        return (('last_name', False), ("first_name", False),)
 
 
 class ContactFilterWidget(FilterWidget):
