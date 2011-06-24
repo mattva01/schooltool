@@ -47,7 +47,7 @@ from zope.catalog.interfaces import ICatalog
 from zope.intid.interfaces import IIntIds
 from zope.traversing.browser.absoluteurl import absoluteURL
 from zope.security.checker import canAccess
-from z3c.form import form, field, button, widget
+from z3c.form import form, field, button, widget, term
 from z3c.form.browser.radio import RadioWidget
 from zope.i18n import translate
 
@@ -84,42 +84,51 @@ class PersonPhotoView(BrowserView):
         return photo
 
 
-class RadioWidgetBase(RadioWidget):
+class CalendarPeriodsWidgetTerms(term.BoolTerms):
 
-    labels = None
-
-    def update(self):
-        super(RadioWidgetBase, self).update()
-        self.items = []
-        for count, term in enumerate(self.terms):
-            checked = self.isChecked(term)
-            id = '%s-%i' % (self.id, count)
-            label = term.token
-            if term.token in self.labels:
-                title = self.labels[term.token]
-                label = translate(title, context=self.request,
-                                  default=title)
-            self.items.append(
-                {'id':id, 'name':self.name + ':list', 'value':term.token,
-                 'label':label, 'checked':checked})
+    trueLabel = _('Show periods')
+    falseLabel =  _('Show hours')
 
 
-class CalendarPeriodsRadioWidget(RadioWidgetBase):
+class CalendarPublicWidgetTerms(term.BoolTerms):
 
-    labels = {'true': _('Show periods'),
-              'false': _('Show hours')}
-
-
-class CalendarPublicRadioWidget(RadioWidgetBase):
+    trueLabel = _(u'the public')
 
     @property
-    def labels(self):
+    def falseLabel(self):
         person = self.context.__parent__
-        result = {'true': _('the public')}
-        result['false'] = _('${person_full_name} and school administration',
-                            mapping={'person_full_name': "%s %s" % (person.first_name,
-                                                                    person.last_name)})
-        return result
+        return _('${person_full_name} and school administration',
+                 mapping={'person_full_name': "%s %s" % (person.first_name,
+                                                         person.last_name)})
+
+
+class CalendarPeriodsRadioWidget(RadioWidget):
+
+    @property
+    def terms(self):
+        return CalendarPeriodsWidgetTerms(self.context, self.request,
+                                          self.form, self.field, self)
+
+
+class CalendarPublicRadioWidget(RadioWidget):
+
+    @property
+    def terms(self):
+        return CalendarPublicWidgetTerms(self.context, self.request,
+                                         self.form, self.field, self)
+
+
+def calendar_public_widget_label(adapter):
+    person = adapter.context.__parent__
+    return _("${person_full_name}'s calendar is visible to...",
+             mapping={'person_full_name': "%s %s" % (person.first_name,
+                                                     person.last_name)})
+
+
+CalendarPublicWidgetLabel = widget.ComputedWidgetAttribute(
+    calendar_public_widget_label,
+    field=IPersonPreferences['cal_public'],
+    widget=CalendarPublicRadioWidget)
 
 
 def CalendarPeriodsWidgetFactory(field, request):
@@ -142,7 +151,8 @@ class PersonPreferencesView(form.EditForm):
     def label(self):
         person = self.context.__parent__
         return _(u'Change preferences for ${person_full_name}',
-                 mapping={'person_full_name': "%s %s" % (person.first_name, person.last_name)})
+                 mapping={'person_full_name': "%s %s" % (person.first_name,
+                                                         person.last_name)})
 
     @button.buttonAndHandler(_("Apply"))
     def handle_edit_action(self, action):
@@ -165,13 +175,6 @@ class PersonPreferencesView(form.EditForm):
     def redirectToPerson(self):
         url = absoluteURL(self.context.__parent__, self.request)
         self.request.response.redirect(url)
-
-    def updateWidgets(self):
-        super(PersonPreferencesView, self).updateWidgets()
-        person = self.context.__parent__
-        widget = self.widgets['cal_public']
-        widget.label = _("${person_full_name}'s calendar is visible to...",
-                         mapping={'person_full_name': "%s %s" % (person.first_name, person.last_name)})
 
 
 class FlourishPersonPreferencesView(flourish.page.Page, PersonPreferencesView):

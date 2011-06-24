@@ -470,8 +470,6 @@ class PersonEditView(form.EditForm, PersonForm):
 
 class FlourishPersonEditView(flourish.page.Page, PersonEditView):
 
-    group_id = None
-
     def update(self):
         self.buildFieldsetGroups()
         PersonEditView.update(self)
@@ -532,7 +530,7 @@ class FlourishPersonEditView(flourish.page.Page, PersonEditView):
     def getDemoFields(self):
         fields = field.Fields()
         dfs = IDemographicsFields(ISchoolToolApplication(None))
-        keys = self.group_id and [self.group_id] or []
+        keys = []
         for field_desc in dfs.filter_keys(keys):
             fields += field_desc.makeField()
         return fields
