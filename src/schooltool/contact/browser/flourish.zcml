@@ -76,4 +76,11 @@
       permission="schooltool.view"
       name="title" />
 
+  <flourish:page
+      name="index.html"
+      for="schooltool.contact.interfaces.IContact"
+      class=".contact.FlourishContactView"
+      permission="schooltool.view"
+      />
+
 </configure>

@@ -380,6 +380,24 @@ class ContactView(form.DisplayForm):
         return self.render()
 
 
+class FlourishContactView(ExpandedPage, form.DisplayForm):
+
+    content_template = ViewPageTemplateFile('templates/f_contact_view.pt')
+    fields = field.Fields(IContact)
+
+    def relationships(self):
+        return [relationship_info.extra_info
+                for relationship_info in self.context.persons.relationships]
+
+    def __call__(self):
+        form.DisplayForm.update(self)
+        return self.render()
+
+    @property
+    def canModify(self):
+        return canAccess(self.context.__parent__, '__delitem__')
+
+
 class ContactContainerView(TableContainerView):
     """A Contact Container view."""
 
