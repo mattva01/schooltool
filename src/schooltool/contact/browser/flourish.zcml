@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <configure xmlns="http://namespaces.zope.org/browser"
+           xmlns:zope="http://namespaces.zope.org/zope"
            xmlns:flourish="http://schooltool.org/flourish"
            i18n_domain="schooltool">
 
@@ -12,5 +13,49 @@
       render="template"
       permission="schooltool.view"
       />
+
+  <zope:adapter
+      for="schooltool.contact.interfaces.IContactContainer
+           schooltool.skin.flourish.interfaces.IFlourishLayer"
+      factory=".contact.FlourishContactFilterWidget" />
+
+  <flourish:page
+      name="manage_contacts.html"
+      for="schooltool.basicperson.interfaces.IBasicPerson"
+      class=".relationship.FlourishContactManagementView"
+      permission="schooltool.edit"
+      subtitle="Contacts"
+      />
+
+  <flourish:viewlet
+      name="person-manage-contacts-links"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      class="schooltool.contact.browser.contact.PersonManageContactsLinks"
+      for="schooltool.person.interfaces.IPerson"
+      view=".relationship.FlourishContactManagementView"
+      permission="schooltool.view"
+      title="Add"
+      />
+
+  <flourish:viewlet
+      name="manage-contacts"
+      link="add_contact.html"
+      for="schooltool.person.interfaces.IPerson"
+      title="New Contact"
+      class="schooltool.skin.flourish.page.LinkIdViewlet"
+      manager="schooltool.contact.browser.contact.PersonManageContactsLinks"
+      permission="schooltool.view"
+      />
+
+  <configure package="schooltool.basicperson.browser">
+    <flourish:page
+        name="add_contact.html"
+        for="schooltool.basicperson.interfaces.IBasicPerson"
+        class="schooltool.contact.browser.contact.FlourishPersonContactAddView"
+        content_template="templates/f_person_form.pt"
+        permission="schooltool.edit"
+        subtitle="New contact"
+        />
+  </configure>
 
 </configure>

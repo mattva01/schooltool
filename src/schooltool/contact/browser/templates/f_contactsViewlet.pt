@@ -3,8 +3,7 @@
   <div tal:define="contacts view/getContacts">
     <tal:block repeat="contact contacts">
     <h3>
-      <tal:block content="contact/name" />,
-      <tal:block condition="contact/relationship">
+      <tal:block content="contact/name" /><tal:block condition="contact/relationship">,
         <span tal:replace="contact/relationship" />
       </tal:block>
       <a class="modify" href="" title="Edit this contact"

@@ -2,5 +2,8 @@
   <legend tal:condition="view/person" i18n:translate="">
     Contact of <span tal:replace="view/person/title" i18n:name="person" />
   </legend>
+  <legend tal:condition="not:view/person">
+    <span i18n:translate="">Relationship</span>
+  </legend>
   <div metal:use-macro="macro:widget-rows" />
 </fieldset>
