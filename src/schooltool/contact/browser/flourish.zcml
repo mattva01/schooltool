@@ -67,6 +67,13 @@
       class=".contact.FlourishContactEditView"
       content_template="templates/f_contact_form.pt"
       permission="schooltool.edit"
+      subtitle="Edit"
       />
+
+  <flourish:content
+      class="schooltool.basicperson.browser.person.PersonTitle"
+      for="schooltool.contact.interfaces.IContact"
+      permission="schooltool.view"
+      name="title" />
 
 </configure>

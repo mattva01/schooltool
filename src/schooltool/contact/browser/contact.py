@@ -306,23 +306,23 @@ class FlourishContactEditView(ExpandedPage, ContactEditView):
     def handle_apply(self, action):
         # Pretty, isn't it?
         self.handleApply.func(self, action)
-        self.redirect()
+        # XXX: hacky sucessful submit check
+        if (self.status == self.successMessage or
+            self.status == self.noChangesMessage):
+            self.request.response.redirect(self.nextURL())
 
-    def redirect(self):
+    def nextURL(self):
         if 'person_id' in self.request:
             person_id = self.request['person_id']
             app = ISchoolToolApplication(None)
             persons = app['persons']
             if person_id in persons:
-                url = absoluteURL(persons[person_id], self.request)
-                self.request.response.redirect(url)
-                return
-        url = absoluteURL(self.context, self.request)
-        self.request.response.redirect(url)
+                return absoluteURL(persons[person_id], self.request)
+        return absoluteURL(self.context, self.request)
 
     @button.buttonAndHandler(_("Cancel"))
     def handle_cancel_action(self, action):
-        self.redirect()
+        self.request.response.redirect(self.nextURL())
 
     def makeRows(self, fields, cols=1):
         rows = []
