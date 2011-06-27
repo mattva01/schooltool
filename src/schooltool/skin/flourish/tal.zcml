@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/browser"
+           xmlns:z3c="http://namespaces.zope.org/z3c"
+           xmlns:zope="http://namespaces.zope.org/zope"
+           xmlns:tales="http://namespaces.zope.org/tales"
+           xmlns:flourish="http://schooltool.org/flourish"
+           i18n_domain="schooltool">
+
+  <tales:expressiontype
+      name="json"
+      handler=".tal.JSONExpression"
+      />
+
+  <tales:expressiontype
+      name="scriptlocal"
+      handler=".tal.ScriptLocalExpression"
+      />
+
+</configure>
