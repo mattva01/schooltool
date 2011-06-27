@@ -870,7 +870,6 @@ class PersonAddViewBase(PersonAddFormBase):
 
 
 class FlourishPersonAddView(PersonAddViewBase):
-    form.extends(PersonAddViewBase)
     template = InheritTemplate(flourish.page.Page.template)
     page_template = InheritTemplate(flourish.page.ExpandedPage.page_template)
 
@@ -918,7 +917,7 @@ class FlourishPersonAddView(PersonAddViewBase):
                     fieldset_id, legend, list(fields)))
         return result
 
-    @button.buttonAndHandler(_('Submit'), name='submit')
+    @button.buttonAndHandler(_('Submit'), name='add')
     def handleSubmit(self, action):
         super(FlourishPersonAddView, self).handleAdd.func(self, action)
 
@@ -929,9 +928,10 @@ class FlourishPersonAddView(PersonAddViewBase):
             self.request.response.redirect(self.action)
             self._finishedAdd = False
 
-    def updateActions(self):
-        super(FlourishPersonAddView, self).updateActions()
-        del self.actions['add']
+    @button.buttonAndHandler(_("Cancel"))
+    def handle_cancel_action(self, action):
+        url = absoluteURL(self.context, self.request)
+        self.request.response.redirect(url)
 
 
 ###############  Group-aware add views ################
