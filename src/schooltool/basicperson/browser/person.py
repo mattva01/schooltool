@@ -188,7 +188,7 @@ class PersonAddFormAdapter(object):
 
 
 class UsernameAlreadyUsed(ValidationError):
-    __doc__ = _("This username is already in use!")
+    __doc__ = _("This username is already in use")
 
 
 class UsernameBadName(ValidationError):
@@ -224,6 +224,8 @@ validator.WidgetValidatorDiscriminators(UsernameValidator,
 
 class PersonForm(object):
 
+    formErrorsMessage = _('Please correct the marked fields below.')
+
     def generateExtraFields(self):
         field_descriptions = IDemographicsFields(ISchoolToolApplication(None))
         fields = field.Fields()
@@ -236,7 +238,7 @@ class PersonForm(object):
         return fields
 
 
-class PersonView(form.DisplayForm, PersonForm):
+class PersonView(PersonForm, form.DisplayForm):
 
     template = ViewPageTemplateFile('templates/person_view.pt')
 
@@ -262,7 +264,7 @@ class FlourishPersonInfo(flourish.page.Content):
     body_template = ViewPageTemplateFile('templates/f_person_view_details.pt')
 
 
-class PersonAddFormBase(form.AddForm, PersonForm):
+class PersonAddFormBase(PersonForm, form.AddForm):
     """Person add form for basic persons."""
 
     def update(self):
@@ -442,7 +444,7 @@ class FlourishPersonAddSubForm(PersonAddSubForm):
     template = ViewPageTemplateFile('templates/f_person_add_subform.pt')
 
 
-class PersonEditView(form.EditForm, PersonForm):
+class PersonEditView(PersonForm, form.EditForm):
     """Edit form for basic person."""
     form.extends(form.EditForm)
     template = ViewPageTemplateFile('templates/person_add.pt')
