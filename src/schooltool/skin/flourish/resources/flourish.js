@@ -91,6 +91,7 @@ ST.dialogs = function() {
 
     modal_form: function(link_id, form_url, form_id)
     {
+        $(link_id).attr("href", "#");
         $(document).ready(function(){
                 $(link_id).click(function(e) {
                         call_modal_form(form_url, form_id);
