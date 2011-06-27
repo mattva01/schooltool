@@ -1,3 +1,13 @@
 <div class="person-info">
   <tal:block tal:replace="structure context/schooltool:content/schooltool.person.FlourishInfo"/>
 </div>
+<script>
+$(document).ready(function() {
+    // accordion setup
+    $( ".person-info" ).accordion({
+        header: 'h2',
+        collapsible: true,
+        autoHeight: false,
+    });
+});
+</script>
