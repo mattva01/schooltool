@@ -1,3 +1,4 @@
+
 <div i18n:domain="schooltool">
   <table>
     <thead>
@@ -12,18 +13,6 @@
       </tr>
       <tr tal:repeat="row group/rows">
         <td>
-          <metal:block tal:replace='structure string:&lt;script type="text/javascript"&gt;' />
-            $(document).ready(function() {
-              var link_id = '#<metal:block tal:replace="row/link_id" />';
-              var form_id = '#<metal:block tal:replace="row/form_id" />';
-              var url = '<metal:block tal:replace="row/url" />';
-              $(link_id).click(function(e) {
-                call_dialog(url, form_id);
-                e.preventDefault();
-              });
-            });
-          <metal:block tal:replace="structure string:&lt;/script&gt;" />
-
           <a tal:attributes="href row/url;
                              id row/link_id"
              tal:content="row/title" />
@@ -36,3 +25,15 @@
   </table>
 </div>
 
+<script>ST.state.push()</script>
+<tal:script tal:replace="structure scriptlocal: groups view/table" />
+<script>
+  for(var i=0, groups_len=ST.local.groups.length;
+      group=ST.local.groups[i], i<groups_len; i++) {
+      for(var j=0, rows_len=group.rows.length;
+          row=group.rows[j], j<rows_len; j++) {
+          ST.dialogs.modal_form('#'+row.link_id, row.url, '#'+row.form_id);
+      };
+  };
+</script>
+<script>ST.state.pop()</script>

@@ -97,7 +97,7 @@ class ReportReferenceView(BrowserView):
         for group_key, group_reports in utility.reports_by_group.items():
             reference_url = reportLinksURL(app, self.request, name=group_key)
             for report in group_reports:
-                row = { 
+                row = {
                     'url': reference_url,
                     'group': report['group'],
                     'title': report['title'],
