@@ -1,21 +1,3 @@
-
-<script>ST.state.push()</script>
-
-<tal:script tal:replace="structure scriptlocal:
-  link_id string:#LinkIdViewlet-page_refine-person-settings-links-preferences-;
-  form_id string:#person_preferences_form;
-  form_url string:${context/@@absolute_url}/preferences" />
-
-<script>
-  ST.dialogs.modal_form(ST.local.link_id,
-                        ST.local.form_url,
-                        ST.local.form_id);
-</script>
-
 <div class="person-info">
   <tal:block tal:replace="structure context/schooltool:content/schooltool.person.FlourishInfo"/>
-  <div id="person_preferences_form">
-  </div>
 </div>
-
-<script>ST.state.pop()</script>

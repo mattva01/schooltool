@@ -340,3 +340,11 @@ class LinkIdViewlet(LinkViewlet):
                      parents[:-1] +
                      ['LinkIdViewlet'])
         return sanitize_id('-'.join(reversed(name_list)))
+
+
+class ModalFormLinkViewlet(LinkIdViewlet):
+    template = ViewPageTemplateFile('templates/modal_form_link.pt')
+
+    @property
+    def form_container_id(self):
+        return '%s-container' % self.html_id
