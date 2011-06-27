@@ -924,7 +924,6 @@ class FlourishPersonAddView(PersonAddViewBase):
         super(FlourishPersonAddView, self).handleAdd.func(self, action)
         if self._finishedAdd:
             self.request.response.redirect(self.action)
-            self._finishedAdd = False
 
     @button.buttonAndHandler(_("Cancel"))
     def handle_cancel_action(self, action):
