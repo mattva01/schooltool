@@ -60,11 +60,12 @@ from schooltool.person.interfaces import IPerson
 from schooltool.email.interfaces import IEmailUtility
 from schooltool.email.mail import Email
 from schooltool.skin.flourish.viewlet import Viewlet
+from schooltool.skin.flourish.page import RefineLinksViewlet, ExpandedPage
 from schooltool.relationship.relationship import IRelationshipLinks
 from schooltool.contact.contact import URIPerson, URIContact
 from schooltool.contact.contact import URIContactRelationship
 from schooltool.contact.interfaces import IContactPerson
-from schooltool.contact.interfaces import IAddress, IEmails, IPhones, ILanguages
+from schooltool.contact.interfaces import IEmails, IPhones, ILanguages
 
 from schooltool.common import SchoolToolMessage as _
 
@@ -128,8 +129,7 @@ class ContactAddView(form.AddForm):
 
     @button.buttonAndHandler(_("Cancel"))
     def handle_cancel_action(self, action):
-        url = absoluteURL(self.context, self.request)
-        self.request.response.redirect(url)
+        self.request.response.redirect(self.nextURL())
 
 
 class ContactPersonInfoSubForm(subform.EditSubForm):
@@ -195,6 +195,67 @@ class PersonContactAddView(ContactAddView):
         return contact
 
 
+class FlourishPersonContactAddView(ExpandedPage, PersonContactAddView):
+
+    def update(self):
+        self.buildFieldsetGroups()
+        PersonContactAddView.update(self)
+
+    def render(self):
+        if self._finishedAdd:
+            self.request.response.redirect(self.nextURL())
+            return ""
+        return super(FlourishPersonContactAddView, self).render()
+
+    def nextURL(self):
+        base_url = absoluteURL(self.context, self.request)
+        return "%s/@@manage_contacts.html?%s" % (
+            base_url,
+            urllib.urlencode([('SEARCH_TITLE',
+                               self.context.last_name.encode("utf-8"))]))
+
+    def makeRows(self, fields, cols=1):
+        rows = []
+        while fields:
+            rows.append(fields[:cols])
+            fields = fields[cols:]
+        return rows
+
+    def makeFieldSet(self, fieldset_id, legend, fields, cols=1):
+        result = {
+            'id': fieldset_id,
+            'legend': legend,
+            }
+        result['rows'] = self.makeRows(fields, cols)
+        return result
+
+    def buildFieldsetGroups(self):
+        self.fieldset_groups = {
+            'full_name': (
+                _('Full Name'),
+                ['prefix', 'first_name', 'middle_name', 'last_name',
+                 'suffix']),
+            'address': (
+                _('Address'),
+                ['address_line_1', 'address_line_2', 'city', 'state',
+                 'country', 'postal_code']),
+            'contact_information': (
+                _('Contact Information'),
+                ['home_phone', 'work_phone', 'mobile_phone', 'email',
+                 'language']),
+            }
+        self.fieldset_order = (
+            'full_name', 'address', 'contact_information')
+
+    def fieldsets(self):
+        result = []
+        for fieldset_id in self.fieldset_order:
+            legend, fields = self.fieldset_groups[fieldset_id]
+            result.append(self.makeFieldSet(
+                    fieldset_id, legend, list(fields)))
+        return result
+
+
 class ContactEditView(form.EditForm):
     """Edit form for basic contact."""
     form.extends(form.EditForm)
@@ -233,6 +294,78 @@ class ContactEditView(form.EditForm):
                           'last_name': self.context.last_name})
 
 
+class FlourishContactEditView(ExpandedPage, ContactEditView):
+
+    form.extends(ContactEditView)
+
+    def update(self):
+        self.buildFieldsetGroups()
+        ContactEditView.update(self)
+
+    @button.handler(ContactEditView.buttons['apply'])
+    def handle_apply(self, action):
+        # Pretty, isn't it?
+        self.handleApply.func(self, action)
+        # XXX: hacky sucessful submit check
+        if (self.status == self.successMessage or
+            self.status == self.noChangesMessage):
+            self.request.response.redirect(self.nextURL())
+
+    def nextURL(self):
+        if 'person_id' in self.request:
+            person_id = self.request['person_id']
+            app = ISchoolToolApplication(None)
+            persons = app['persons']
+            if person_id in persons:
+                return absoluteURL(persons[person_id], self.request)
+        return absoluteURL(self.context, self.request)
+
+    @button.buttonAndHandler(_("Cancel"))
+    def handle_cancel_action(self, action):
+        self.request.response.redirect(self.nextURL())
+
+    def makeRows(self, fields, cols=1):
+        rows = []
+        while fields:
+            rows.append(fields[:cols])
+            fields = fields[cols:]
+        return rows
+
+    def makeFieldSet(self, fieldset_id, legend, fields, cols=1):
+        result = {
+            'id': fieldset_id,
+            'legend': legend,
+            }
+        result['rows'] = self.makeRows(fields, cols)
+        return result
+
+    def buildFieldsetGroups(self):
+        self.fieldset_groups = {
+            'full_name': (
+                _('Full Name'),
+                ['prefix', 'first_name', 'middle_name', 'last_name',
+                 'suffix']),
+            'address': (
+                _('Address'),
+                ['address_line_1', 'address_line_2', 'city', 'state',
+                 'country', 'postal_code']),
+            'contact_information': (
+                _('Contact Information'),
+                ['home_phone', 'work_phone', 'mobile_phone', 'email',
+                 'language']),
+            }
+        self.fieldset_order = (
+            'full_name', 'address', 'contact_information')
+
+    def fieldsets(self):
+        result = []
+        for fieldset_id in self.fieldset_order:
+            legend, fields = self.fieldset_groups[fieldset_id]
+            result.append(self.makeFieldSet(
+                    fieldset_id, legend, list(fields)))
+        return result
+
+
 class ContactView(form.DisplayForm):
     """Display form for basic contact."""
     template = ViewPageTemplateFile('templates/contact_view.pt')
@@ -245,6 +378,24 @@ class ContactView(form.DisplayForm):
     def __call__(self):
         self.update()
         return self.render()
+
+
+class FlourishContactView(ExpandedPage, form.DisplayForm):
+
+    content_template = ViewPageTemplateFile('templates/f_contact_view.pt')
+    fields = field.Fields(IContact)
+
+    def relationships(self):
+        return [relationship_info.extra_info
+                for relationship_info in self.context.persons.relationships]
+
+    def __call__(self):
+        form.DisplayForm.update(self)
+        return self.render()
+
+    @property
+    def canModify(self):
+        return canAccess(self.context.__parent__, '__delitem__')
 
 
 class ContactContainerView(TableContainerView):
@@ -318,7 +469,7 @@ def contact_table_collumns():
         address = GetterColumn(name='address',
                                title=_(u"Address"),
                                getter=format_street_address)
-        return [first_name, last_name, address]
+        return [last_name, first_name, address]
 
 
 class ContactTableFormatter(IndexedTableFormatter):
@@ -327,6 +478,12 @@ class ContactTableFormatter(IndexedTableFormatter):
 
     def sortOn(self):
         return (("first_name", False),)
+
+
+class FlourishContactTableFormatter(ContactTableFormatter):
+
+    def sortOn(self):
+        return (('last_name', False), ("first_name", False),)
 
 
 class ContactFilterWidget(FilterWidget):
@@ -370,6 +527,31 @@ class ContactFilterWidget(FilterWidget):
             if parameter in self.request:
                 url += '&%s=%s' % (parameter, self.request.get(parameter))
         return url
+
+
+class FlourishContactFilterWidget(ContactFilterWidget):
+
+    template = ViewPageTemplateFile('templates/f_contact_filter.pt')
+
+    parameters = ['SEARCH_TITLE']
+
+    def match(self, item, idx, search_terms):
+        matches = []
+        for term in search_terms:
+            if term in idx.documents_to_values[item['id']].lower():
+               matches.append(term)
+        return len(matches) == len(search_terms)
+
+    def filter(self, items):
+        if 'SEARCH_TITLE' in self.request:
+            catalog = ICatalog(self.context)
+            title_idx = catalog['title']
+            # XXX: applying normalized catalog queries would be nicer
+            search_terms = self.request['SEARCH_TITLE'].lower().split(' ')
+            items = [item for item in items if self.match(item,
+                                                          title_idx,
+                                                          search_terms)]
+        return items
 
 
 class ContactBackToContainerViewlet(object):
@@ -567,5 +749,9 @@ class FlourishContactsViewlet(Viewlet):
         base_url = absoluteURL(self.context, self.request)
         return "%s/@@manage_contacts.html?%s" % (
             base_url,
-            urllib.urlencode([('SEARCH_LAST_NAME',
+            urllib.urlencode([('SEARCH_TITLE',
                                self.context.last_name.encode("utf-8"))]))
+
+
+class PersonManageContactsLinks(RefineLinksViewlet):
+    """Links for manage contact page"""

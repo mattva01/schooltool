@@ -112,6 +112,10 @@ class Contact(Persistent, Contained):
                                    my_role=URIContact,
                                    other_role=URIPerson)
 
+    @property
+    def title(self):
+        return "%s %s" % (self.first_name, self.last_name)
+
 
 class ContactPersonInfo(Persistent, Contained):
     """Additional information about contact of a specific person."""
@@ -180,9 +184,9 @@ def getContactFormKey(contact):
 
 
 class ContactCatalog(AttributeCatalog):
-    version = '1 - replaced catalog utility'
+    version = '2 - indexed contact titles'
     interface = IContact
-    attributes = ('first_name', 'last_name')
+    attributes = ('first_name', 'last_name', 'title')
 
     def setIndexes(self, catalog):
         super(ContactCatalog, self).setIndexes(catalog)

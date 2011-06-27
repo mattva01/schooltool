@@ -34,6 +34,7 @@ from zc.table.column import GetterColumn
 from schooltool.relationship.relationship import IRelationshipLinks
 from schooltool.basicperson.interfaces import IBasicPerson
 from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.common.inlinept import InheritTemplate
 from schooltool.contact.interfaces import IContactable
 from schooltool.contact.interfaces import IContact
 from schooltool.contact.interfaces import IContactContainer
@@ -45,6 +46,8 @@ from schooltool.contact.browser.contact import contact_table_collumns
 from schooltool.table.table import CheckboxColumn
 from schooltool.table.table import label_cell_formatter_factory
 from schooltool.table.interfaces import ITableFormatter
+from schooltool.app.browser.app import FlourishRelationshipViewBase
+from schooltool.skin.flourish.page import Page
 
 from schooltool.common import SchoolToolMessage as _
 
@@ -175,3 +178,92 @@ class ContactManagementView(BrowserView):
 
         self.setUpTables()
 
+
+class FlourishContactManagementView(FlourishRelationshipViewBase):
+
+    page_template = InheritTemplate(Page.page_template)
+
+    current_title = _('Current contacts')
+    available_title = _('Available contacts')
+
+    def add(self, item):
+        """Add an item to the list of selected items."""
+        collection = removeSecurityProxy(self.getCollection())
+        info = ContactPersonInfo()
+        info.__parent__ = removeSecurityProxy(self.context)
+        collection.add(item, info)
+
+    def remove(self, item):
+        """Remove an item from selected items."""
+        collection = removeSecurityProxy(self.getCollection())
+        collection.remove(item)
+
+    def getCollection(self):
+        return IContactable(removeSecurityProxy(self.context)).contacts
+
+    def getSelectedItemIds(self):
+        int_ids = getUtility(IIntIds)
+        return [int_ids.getId(item) for item in self.getCollection()]
+
+    def getAvailableItemsContainer(self):
+        return IContactContainer(ISchoolToolApplication(None))
+
+    def getCatalog(self):
+        return ICatalog(self.getAvailableItemsContainer())
+
+    def getAvailableItemIds(self):
+        selected = self.getSelectedItemIds()
+        catalog = self.getCatalog()
+        return [intid for intid in catalog.extent
+                if intid not in selected]
+
+    def getOmmitedItemIds(self):
+        int_ids = getUtility(IIntIds)
+        self_contact = IContact(self.context)
+        return self.getSelectedItemIds() + [int_ids.getId(self_contact)]
+
+    def setUpTables(self):
+        int_ids = getUtility(IIntIds)
+        self.available_table = self.createTableFormatter(
+            ommit=[int_ids.getObject(intid)
+                   for intid in self.getOmmitedItemIds()],
+            prefix="add_item")
+
+        self.selected_table = self.createTableFormatter(
+            filter=lambda l: l,
+            items=[int_ids.getObject(intid)
+                   for intid in self.getSelectedItemIds()],
+            columns=assigned_contacts_columns(self.context),
+            prefix="remove_item",
+            batch_size=0)
+
+    def getKey(self, item):
+        return IUniqueFormKey(item)
+
+    def applyFormChanges(self):
+        changed = False
+        add_item_prefix = 'add_item.'
+        remove_item_prefix = 'remove_item.'
+        add_item_submitted = False
+        remove_item_submitted = False
+        catalog = self.getCatalog()
+        int_ids = getUtility(IIntIds)
+        index = catalog['form_keys']
+        for param in self.request.form:
+            if param.startswith(add_item_prefix):
+                add_item_submitted = True
+            elif param.startswith(remove_item_prefix):  
+                remove_item_submitted = True
+        if add_item_submitted:
+            for intid in self.getAvailableItemIds():
+                key = add_item_prefix + index.documents_to_values[intid]
+                if key in self.request:
+                    self.add(IContact(int_ids.getObject(intid)))
+                    changed = True
+        if remove_item_submitted:
+            for intid in self.getSelectedItemIds():
+                key = remove_item_prefix + index.documents_to_values[intid]
+                if key in self.request:
+                    self.remove(int_ids.getObject(intid))
+                    changed = True
+        return changed

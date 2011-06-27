@@ -42,31 +42,27 @@
     padding: 2px;
 }
 
-.ui-dialog-content form {
+.ui-dialog .ui-dialog-content form {
     width: 544px;
 }
 
-.ui-dialog-content form p.hint {
-    display: none;
+.ui-dialog .ui-dialog-content form fieldset {
+    padding-top: 0px;
+    margin-bottom: 8px;
+    background-color: #ffffff;
 }
 
-.ui-dialog-content .buttons {
+.ui-dialog .ui-dialog-content .buttons {
     margin-bottom: 0px;
 }
 
-.ui-dialog-content form > .viewspace > h3 {
-    background-color: #AEA79F;
-    color: #ffffff;
-    display: block;
-    font-size: 16px;
-    line-height: 16px;
-    margin: 0;
-    padding: 8px;
-    position: absolute;
-    width: 528px;
-    z-index: 1;
+.ui-dialog .ui-dialog-titlebar {
+    background: #aa0000;
+    padding-left: 8px;
 }
 
-.ui-dialog-titlebar {
-    display: none;
+.ui-dialog .ui-dialog-titlebar .ui-dialog-title {
+    line-height: 20px;
+    font-size: 16px;
+    color: #ffffff;
 }

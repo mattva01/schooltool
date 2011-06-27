@@ -2,14 +2,14 @@
   <legend><span i18n:translate="">Search</span></legend>
   <div class="row">
     <div class="label">
-      <label for="SEARCH">
-        <span>Group title</span>
+      <label for="SEARCH_TITLE">
+        <span>First name and/or last name</span>
       </label>
     </div>
     <div class="widget">
-      <input type="text" name="SEARCH"
+      <input type="text" name="SEARCH_TITLE"
              id="SEARCH_TITLE" class="text-widget"
-             tal:attributes="value request/SEARCH|nothing"
+             tal:attributes="value request/SEARCH_TITLE|nothing"
              />
     </div>
   </div>

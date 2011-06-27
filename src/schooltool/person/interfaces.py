@@ -188,9 +188,7 @@ class IPersonPreferences(Interface):
 
     # XXX: Only available in SchoolTool, but that's ok for now.
     cal_periods = Bool(
-        title=_("Show periods"),
-        description=_("Show period names in daily view"))
+        title=_("Daily calendar rows..."))
 
     cal_public = Bool(
-        title=_("Make calendar public"),
-        description=_("Make calendar public"))
+        title=_("$PERSON calendar is visible to..."))

@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <configure xmlns="http://namespaces.zope.org/browser"
+           xmlns:zope="http://namespaces.zope.org/zope"
            xmlns:flourish="http://schooltool.org/flourish"
            i18n_domain="schooltool">
 
@@ -10,6 +11,75 @@
       manager="schooltool.basicperson.browser.person.IFlourishPersonInfoManager"
       class=".contact.FlourishContactsViewlet"
       render="template"
+      permission="schooltool.view"
+      />
+
+  <zope:adapter
+      for="schooltool.contact.interfaces.IContactContainer
+           schooltool.skin.flourish.interfaces.IFlourishLayer"
+      factory=".contact.FlourishContactTableFormatter " />
+
+  <zope:adapter
+      for="schooltool.contact.interfaces.IContactContainer
+           schooltool.skin.flourish.interfaces.IFlourishLayer"
+      factory=".contact.FlourishContactFilterWidget" />
+
+  <flourish:page
+      name="manage_contacts.html"
+      for="schooltool.basicperson.interfaces.IBasicPerson"
+      class=".relationship.FlourishContactManagementView"
+      permission="schooltool.edit"
+      subtitle="Contacts"
+      />
+
+  <flourish:viewlet
+      name="person-manage-contacts-links"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      class="schooltool.contact.browser.contact.PersonManageContactsLinks"
+      for="schooltool.person.interfaces.IPerson"
+      view=".relationship.FlourishContactManagementView"
+      permission="schooltool.view"
+      title="Add"
+      />
+
+  <flourish:viewlet
+      name="manage-contacts"
+      link="add_contact.html"
+      for="schooltool.person.interfaces.IPerson"
+      title="New Contact"
+      class="schooltool.skin.flourish.page.LinkIdViewlet"
+      manager="schooltool.contact.browser.contact.PersonManageContactsLinks"
+      permission="schooltool.view"
+      />
+  
+  <flourish:page
+      name="add_contact.html"
+      for="schooltool.basicperson.interfaces.IBasicPerson"
+      class="schooltool.contact.browser.contact.FlourishPersonContactAddView"
+      content_template="templates/f_contact_form.pt"
+      permission="schooltool.edit"
+      subtitle="New contact"
+      />
+
+  <flourish:page
+      name="edit.html"
+      for="schooltool.contact.interfaces.IContact"
+      class=".contact.FlourishContactEditView"
+      content_template="templates/f_contact_form.pt"
+      permission="schooltool.edit"
+      subtitle="Edit"
+      />
+
+  <flourish:content
+      class="schooltool.basicperson.browser.person.PersonTitle"
+      for="schooltool.contact.interfaces.IContact"
+      permission="schooltool.view"
+      name="title" />
+
+  <flourish:page
+      name="index.html"
+      for="schooltool.contact.interfaces.IContact"
+      class=".contact.FlourishContactView"
       permission="schooltool.view"
       />
 

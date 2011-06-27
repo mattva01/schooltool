@@ -39,4 +39,6 @@
            schooltool.skin.flourish.interfaces.IFlourishLayer"
       factory=".person.FlourishPersonFilterWidget" />
 
+  <zope:adapter factory=".person.CalendarPublicWidgetLabel" name="label" />
+
 </configure>
