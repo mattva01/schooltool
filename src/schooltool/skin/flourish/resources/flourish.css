@@ -77,6 +77,8 @@ p.small {
 
 pre {
     overflow: auto;
+    font-size: 12px;
+    line-height: 16px;
 }
 
 a.modify {

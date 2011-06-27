@@ -62,6 +62,14 @@
     width: 944px;
 }
 
+.page > .body > .expand_container {
+    display: block;
+    float: none;
+    width: 912px;
+    background-color: #f7f7f7;
+    padding: 16px;
+}
+
 /* Refine */
 
 .page > .body > .refine > .content {
