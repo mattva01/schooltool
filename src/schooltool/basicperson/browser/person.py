@@ -915,6 +915,11 @@ class FlourishPersonAddView(PersonAddViewBase):
                     fieldset_id, legend, list(fields)))
         return result
 
+    @button.buttonAndHandler(_('Submit'), name='submit')
+    def handleSubmit(self, action):
+        url = absoluteURL(self.context, self.request)
+        self.request.response.redirect(url)
+
 
 ###############  Group-aware add views ################
 class TeacherAddView(PersonAddViewBase):
