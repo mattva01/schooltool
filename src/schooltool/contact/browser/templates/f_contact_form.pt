@@ -129,4 +129,6 @@
     <metal:bottom define-slot="bottom">
     </metal:bottom>
   </metal:subform>
+  <input type="hidden" name="person_id" tal:condition="request/person_id|nothing"
+         tal:attributes="value request/person_id" />
 </form>

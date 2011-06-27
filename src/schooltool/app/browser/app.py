@@ -44,8 +44,8 @@ from zope.authentication.interfaces import IAuthentication
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.publisher.browser import BrowserPage
 from zope.traversing.browser.absoluteurl import absoluteURL
+from zope.traversing.api import traverse
 
-import zc.resourcelibrary
 from zc.table.column import Column
 from zc.table.table import FormFullFormatter
 
@@ -229,7 +229,7 @@ class ActionColumn(Column):
         return '<input type="image" alt="%s" name="%s" src="%s" value="1" title="%s" />' % (self.label, form_id, self.icon, self.label)
 
 
-class FlourishRelationshipViewBase(flourish.page.Page):
+class FlourishRelationshipViewBase(flourish.page.ExpandedPage):
 
     content_template = ViewPageTemplateFile('templates/f_edit_relationships.pt')
 
@@ -266,14 +266,15 @@ class FlourishRelationshipViewBase(flourish.page.Page):
     def getColumnsAfter(self, prefix):
         label = ''
         icon = ''
-        resource_directory = getAdapter(self.request, Interface,
-                                        name='schooltool.skin.flourish')
         if prefix == 'add_item':
             label = _('Add')
-            icon = resource_directory.get('add-icon.png')()
+            icon = 'add-icon.png'
         elif prefix == 'remove_item':
             label = _('Remove')
-            icon = resource_directory.get('remove-icon.png')()
+            icon = 'remove-icon.png'
+        icon = traverse(self.context,
+                        '++resource++schooltool.skin.flourish/%s' % icon,
+                        request=self.request)()
         action = ActionColumn(prefix, label, icon, self.getKey)
         return [action]
 

@@ -32,6 +32,6 @@
   </div>
 </fieldset>
 <div class="buttons controls">
-  <input type="submit" name="SEARCH_BUTTON" value="Submit"
+  <input type="submit" name="SEARCH_BUTTON" value="Search"
          class="submit-widget" i18n:attributes="value" />
 </div>

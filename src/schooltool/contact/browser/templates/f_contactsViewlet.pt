@@ -3,12 +3,11 @@
   <div tal:define="contacts view/getContacts">
     <tal:block repeat="contact contacts">
     <h3>
-      <tal:block content="contact/name" />,
-      <tal:block condition="contact/relationship">
+      <tal:block content="contact/name" /><tal:block condition="contact/relationship">,
         <span tal:replace="contact/relationship" />
       </tal:block>
       <a class="modify" href="" title="Edit this contact"
-         tal:attributes="href string:${contact/link}/@@edit.html"
+         tal:attributes="href string:${contact/link}/@@edit.html?person_id=${context/__name__}"
          i18n:attributes="title"
          tal:condition="view/canModify">
         <img tal:attributes="src context/++resource++schooltool.skin.flourish/edit-icon.png"

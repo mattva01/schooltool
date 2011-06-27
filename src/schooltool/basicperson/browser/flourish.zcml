@@ -57,6 +57,7 @@
       class="schooltool.basicperson.browser.person.PersonLinks"
       for="schooltool.person.interfaces.IPerson"
       permission="schooltool.view"
+      view=".person.FlourishPersonView"
       />
 
   <flourish:viewlet
@@ -66,6 +67,7 @@
       title="Settings"
       for="schooltool.person.interfaces.IPerson"
       permission="schooltool.view"
+      view=".person.FlourishPersonView"
       />
 
   <flourish:viewletFactory
@@ -219,16 +221,14 @@
 
   <!-- Edit person page -->
 
-  <configure package="schooltool.skin.flourish">
-    <flourish:page
-        name="edit.html"
-        for="schooltool.basicperson.interfaces.IBasicPerson"
-        class="schooltool.basicperson.browser.person.FlourishPersonEditView"
-        content_template="templates/z3c_form_edit.pt"
-        permission="schooltool.edit"
-        subtitle="Edit"
-        />
-  </configure>
+  <flourish:page
+      name="edit.html"
+      for="schooltool.basicperson.interfaces.IBasicPerson"
+      class="schooltool.basicperson.browser.person.FlourishPersonEditView"
+      content_template="templates/f_person_form.pt"
+      permission="schooltool.edit"
+      subtitle="Edit"
+      />
 
   <flourish:viewlet
       name="edit_person"

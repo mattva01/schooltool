@@ -47,8 +47,9 @@ from zope.catalog.interfaces import ICatalog
 from zope.intid.interfaces import IIntIds
 from zope.traversing.browser.absoluteurl import absoluteURL
 from zope.security.checker import canAccess
-from z3c.form import form, field, button, widget
-from z3c.form.browser.checkbox import SingleCheckBoxWidget
+from z3c.form import form, field, button, widget, term
+from z3c.form.browser.radio import RadioWidget
+from zope.i18n import translate
 
 from schooltool.group.interfaces import IGroupContainer
 from schooltool.common import SchoolToolMessage as _
@@ -83,22 +84,75 @@ class PersonPhotoView(BrowserView):
         return photo
 
 
-def CheckBoxWidgetFactory(field, request):
-    return widget.FieldWidget(field, SingleCheckBoxWidget(request))
+class CalendarPeriodsWidgetTerms(term.BoolTerms):
+
+    trueLabel = _('Show periods')
+    falseLabel =  _('Show hours')
+
+
+class CalendarPublicWidgetTerms(term.BoolTerms):
+
+    trueLabel = _(u'the public')
+
+    @property
+    def falseLabel(self):
+        person = self.context.__parent__
+        return _('${person_full_name} and school administration',
+                 mapping={'person_full_name': "%s %s" % (person.first_name,
+                                                         person.last_name)})
+
+
+class CalendarPeriodsRadioWidget(RadioWidget):
+
+    @property
+    def terms(self):
+        return CalendarPeriodsWidgetTerms(self.context, self.request,
+                                          self.form, self.field, self)
+
+
+class CalendarPublicRadioWidget(RadioWidget):
+
+    @property
+    def terms(self):
+        return CalendarPublicWidgetTerms(self.context, self.request,
+                                         self.form, self.field, self)
+
+
+def calendar_public_widget_label(adapter):
+    person = adapter.context.__parent__
+    return _("${person_full_name}'s calendar is visible to...",
+             mapping={'person_full_name': "%s %s" % (person.first_name,
+                                                     person.last_name)})
+
+
+CalendarPublicWidgetLabel = widget.ComputedWidgetAttribute(
+    calendar_public_widget_label,
+    field=IPersonPreferences['cal_public'],
+    widget=CalendarPublicRadioWidget)
+
+
+def CalendarPeriodsWidgetFactory(field, request):
+    return widget.FieldWidget(field, CalendarPeriodsRadioWidget(request))
+
+
+def CalendarPublicWidgetFactory(field, request):
+    return widget.FieldWidget(field, CalendarPublicRadioWidget(request))
 
 
 class PersonPreferencesView(form.EditForm):
     """View used for editing person preferences."""
 
     fields = field.Fields(IPersonPreferences)
-    fields['cal_periods'].widgetFactory = CheckBoxWidgetFactory
-    fields['cal_public'].widgetFactory = CheckBoxWidgetFactory
+    fields['cal_periods'].widgetFactory = CalendarPeriodsWidgetFactory
+    fields['cal_public'].widgetFactory = CalendarPublicWidgetFactory
     template = ViewPageTemplateFile('person_preferences.pt')
 
     @property
     def label(self):
-        return _(u'Change preferences for ${person}',
-                 mapping={'person': self.context.__parent__.title})
+        person = self.context.__parent__
+        return _(u'Change preferences for ${person_full_name}',
+                 mapping={'person_full_name': "%s %s" % (person.first_name,
+                                                         person.last_name)})
 
     @button.buttonAndHandler(_("Apply"))
     def handle_edit_action(self, action):

@@ -23,7 +23,7 @@ form > .count {
 
 form fieldset {
     background-color: #dfdcd9;
-    margin-bottom: 8px;
+    margin-bottom: 16px;
     padding-top: 32px;
     padding-bottom: 8px;
     position: relative;
@@ -57,6 +57,14 @@ form fieldset .row .label {
 
 form fieldset .row .label span {
     font-size: 12px;
+}
+
+form fieldset .row .hint {
+    margin-top: -2px;
+    font-size: 10px;
+    line-height: 14px;
+    color: #333333;
+    padding-bottom: 4px;
 }
 
 form fieldset .row .widget {
@@ -101,8 +109,18 @@ form fieldset .row .widget .select-widget {
     width: 288px;
 }
 
+form fieldset .row .widget .option {
+    color: #333333;
+    font-size: 12px;
+    line-height: 16px;
+}
+
+form fieldset .row .widget .option label {
+}
+
 form .buttons,
 form .controls {
+    margin-top: -8px;
     margin-bottom: 16px;
 }
 
@@ -113,8 +131,18 @@ form .buttons .submit-widget {
     line-height: 20px;
 }
 
-form .buttons .submit-widget:hover {
-    background-color: #dd0000;
+form .buttons .submit-widget:hover,
+form .buttons .button-ok:hover,
+form .buttons .button-neutral:hover,
+form .buttons .button-cancel:hover {
+    background-color: #aa0000;
+}
+
+form .buttons .submit-widget:active,
+form .buttons .button-ok:active,
+form .buttons .button-neutral:active,
+form .buttons .button-cancel:active {
+    background-color: #540000;
 }
 
 form .buttons .button-ok,
@@ -124,12 +152,6 @@ form .buttons .button-cancel {
     color: #ffffff;
     font-size: 14px;
     line-height: 20px;
-}
-
-form .buttons .button-ok:hover,
-form .buttons .button-neutral:hover,
-form .buttons .button-cancel:hover {
-    background-color: #dd0000;
 }
 
 /* XXX: temporary hackery to make forms look decent */

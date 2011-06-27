@@ -37,3 +37,32 @@
     padding-left: 8px;
     padding-top: 4px;
 }
+
+.ui-dialog .ui-dialog-content {
+    padding: 2px;
+}
+
+.ui-dialog .ui-dialog-content form {
+    width: 544px;
+}
+
+.ui-dialog .ui-dialog-content form fieldset {
+    padding-top: 0px;
+    margin-bottom: 8px;
+    background-color: #ffffff;
+}
+
+.ui-dialog .ui-dialog-content .buttons {
+    margin-bottom: 0px;
+}
+
+.ui-dialog .ui-dialog-titlebar {
+    background: #aa0000;
+    padding-left: 8px;
+}
+
+.ui-dialog .ui-dialog-titlebar .ui-dialog-title {
+    line-height: 20px;
+    font-size: 16px;
+    color: #ffffff;
+}
