@@ -1,32 +1,21 @@
-    <metal:block
-        tal:replace='structure string:&lt;script type="text/javascript"&gt;' />
-      $(document).ready(function() {
 
-        var person_preferences_form_id = '#person_preferences_form';
-        $(person_preferences_form_id).load('<metal:block tal:replace="string:${context/@@absolute_url}/preferences" />').hide();
-        $(person_preferences_form_id).dialog({
-          autoOpen: false,
-          modal: true,
-          resizable: false,
-          draggable: false
-        });
-        // XXX: we need to assign better this JS to the action button
-        var link_id = '#LinkIdViewlet-page_refine-person-settings-links-preferences-';
-        var title = $(person_preferences_form_id).find('h3').html();
-        $(link_id).click(function(e) {
-          var dialog_title = $('#person_preferences_form h3').html();
-          $(person_preferences_form_id).dialog({
-            title: dialog_title,
-            width: $(person_preferences_form_id).find('form').width() + 4
-          });
-          $(person_preferences_form_id).dialog('open');
-          e.preventDefault();
-        });
-      });
-    <metal:block tal:replace="structure string:&lt;/script&gt;" />
+<script>ST.state.push()</script>
+
+<tal:script tal:replace="structure scriptlocal:
+  link_id string:#LinkIdViewlet-page_refine-person-settings-links-preferences-;
+  form_id string:#person_preferences_form;
+  form_url string:${context/@@absolute_url}/preferences" />
+
+<script>
+  ST.dialogs.modal_form(ST.local.link_id,
+                        ST.local.form_url,
+                        ST.local.form_id);
+</script>
 
 <div class="person-info">
   <tal:block tal:replace="structure context/schooltool:content/schooltool.person.FlourishInfo"/>
   <div id="person_preferences_form">
   </div>
 </div>
+
+<script>ST.state.pop()</script>
