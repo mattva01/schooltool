@@ -12,7 +12,7 @@
              i18n:attributes="alt" />
       </a>
     </h3>
-    <table>
+    <table tal:condition="view/schoolyears">
       <thead>
         <tr>
           <th i18n:translate="">Group</th>
@@ -36,5 +36,9 @@
         </tal:block>
       </tal:block>
     </table>
+    <h3 tal:condition="not: view/schoolyears"
+        i18n:translate="">
+      The person is not a member of any groups.
+    </h3>
   </div>
 </div>
