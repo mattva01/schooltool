@@ -13,7 +13,12 @@
                i18n:attributes="alt" />
         </a>
       </h3>
-      <div tal:replace="structure view/advisors_table/render" />
+      <div tal:condition="python: len(list(view.context.advisors))"
+           tal:replace="structure view/advisors_table/render" />
+      <h3 tal:condition="python: not len(list(view.context.advisors))"
+         i18n:translate="">
+        The person has no advisors.
+      </h3>
     </div>
     <div>
       <h3 i18n:translate="">
@@ -27,7 +32,12 @@
                i18n:attributes="alt" />
         </a>
       </h3>
-      <div tal:replace="structure view/advisees_table/render" />
+      <div tal:condition="python: len(list(view.context.advisees))"
+           tal:replace="structure view/advisees_table/render" />
+      <h3 tal:condition="python: not len(list(view.context.advisees))"
+         i18n:translate="">
+        The person has no advisees.
+      </h3>
     </div>
   </div>
 </div>
