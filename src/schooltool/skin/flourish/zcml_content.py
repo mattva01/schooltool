@@ -79,15 +79,15 @@ def subclass_content(class_, name,
                      template_dict, class_dict):
     class_dict = dict(class_dict)
     class_dict['__name__'] = name
-    for attr, base_attr in forward_call_dict.items():
-        if attr != base_attr:
-            method = getattr(class_, base_attr)
-            class_dict[attr] = lambda *a, **kw: method(*a, **kw)
     for attr, template in template_dict.items():
         if template:
             class_dict[attr] = ViewPageTemplateFile(template)
     classname = (u'%s_%s' % (class_.__name__, name)).encode('ASCII')
     new_class = type(classname, (class_, ), class_dict)
+    for attr, base_attr in forward_call_dict.items():
+        if attr != base_attr:
+            method = getattr(new_class, base_attr)
+            setattr(new_class, attr, lambda *a, **kw: method(*a, **kw))
     return new_class
 
 
