@@ -55,8 +55,6 @@
       factory="schooltool.table.table.SchoolToolTableFormatter " />
 
   <zope:adapter
-      factory=".emergency.getTimetableSchemaContainerForTerm" />
-  <zope:adapter
       factory=".errors.OverlapErrorViewSnippet" />
   <zope:adapter
       factory=".term.TermFormAdapter" />

@@ -1,0 +1,21 @@
+<div xmlns:tal="http://xml.zope.org/namespaces/tal"
+     xmlns:metal="http://xml.zope.org/namespaces/metal"
+     xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+
+<tal:block define="timetable context/timetable"
+           condition="timetable">
+
+  <tal:block condition="not:context/periods">
+    <p i18n:translate="">No periods selected.</p>
+  </tal:block>
+
+  <tal:block condition="context/periods"
+             content="structure timetable/periods/schooltool:content/table" />
+
+  <p i18n:translate="" tal:condition="context/consecutive_periods_as_one">
+    Consecutive periods are treated as a single meeting.
+  </p>
+
+</tal:block>
+
+</div>

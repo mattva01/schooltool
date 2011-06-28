@@ -97,6 +97,123 @@ def parse_time(value):
         raise ValueError("Invalid time: %r" % value)
 
 
+def parse_time_range(value, default_duration=None):
+    """Parse a range of times (e.g. 9:45-14:20).
+
+    This is an alternative implementation of time span parsing, taken from
+    schooltool timetabling package.
+
+    Example:
+
+        >>> parse_time_range('9:45-14:20')
+        (datetime.time(9, 45), datetime.timedelta(0, 16500))
+
+        >>> parse_time_range('00:00-24:00')
+        (datetime.time(0, 0), datetime.timedelta(1))
+
+        >>> parse_time_range('10:00-10:00')
+        (datetime.time(10, 0), datetime.timedelta(0))
+
+    Time ranges may span midnight
+
+        >>> parse_time_range('23:00-02:00')
+        (datetime.time(23, 0), datetime.timedelta(0, 10800))
+
+    When the default duration is specified, you may omit the second time
+
+        >>> parse_time_range('23:00', 45)
+        (datetime.time(23, 0), datetime.timedelta(0, 2700))
+
+    Invalid values cause a ValueError
+
+        >>> parse_time_range('something else')
+        Traceback (most recent call last):
+          ...
+        ValueError: bad time range: something else
+
+        >>> parse_time_range('9:00')
+        Traceback (most recent call last):
+          ...
+        ValueError: duration is not specified
+
+        >>> parse_time_range('9:00-9:75')
+        Traceback (most recent call last):
+          ...
+        ValueError: minute must be in 0..59
+
+        >>> parse_time_range('5:99-6:00')
+        Traceback (most recent call last):
+          ...
+        ValueError: minute must be in 0..59
+
+        >>> parse_time_range('14:00-24:01')
+        Traceback (most recent call last):
+          ...
+        ValueError: hour must be in 0..23
+
+    White space can be inserted between times
+
+        >>> parse_time_range(' 9:45 - 14:20 ')
+        (datetime.time(9, 45), datetime.timedelta(0, 16500))
+
+    but not inside times
+
+        >>> parse_time_range('9: 45-14:20')
+        Traceback (most recent call last):
+          ...
+        ValueError: bad time range: 9: 45-14:20
+
+    """
+    m = re.match(r'\s*(\d+):(\d+)\s*(?:-\s*(\d+):(\d+)\s*)?$', value)
+    if not m:
+        raise ValueError('bad time range: %s' % value)
+    h1, m1 = int(m.group(1)), int(m.group(2))
+    if not m.group(3):
+        if default_duration is None:
+            raise ValueError('duration is not specified')
+        duration = default_duration
+    else:
+        h2, m2 = int(m.group(3)), int(m.group(4))
+        if (h2, m2) != (24, 0):   # 24:00 is expressly allowed here
+            datetime.time(h2, m2) # validate the second time
+        duration = (h2*60+m2) - (h1*60+m1)
+        if duration < 0:
+            duration += 1440
+    return datetime.time(h1, m1), datetime.timedelta(minutes=duration)
+
+
+def format_time_range(start, duration):
+    """Format a range of times (e.g. 9:45-14:20).
+
+    This is an alternative implementation of time span formatting, taken from
+    schooltool timetabling package.
+
+    Example:
+
+        >>> format_time_range(datetime.time(9, 45),
+        ...                   datetime.timedelta(0, 16500))
+        '09:45-14:20'
+
+        >>> format_time_range(datetime.time(0, 0), datetime.timedelta(1))
+        '00:00-24:00'
+
+        >>> format_time_range(datetime.time(10, 0), datetime.timedelta(0))
+        '10:00-10:00'
+
+        >>> format_time_range(datetime.time(23, 0),
+        ...                   datetime.timedelta(0, 10800))
+        '23:00-02:00'
+
+    """
+    end = (datetime.datetime.combine(datetime.date.today(), start) + duration)
+    ends = end.strftime('%H:%M')
+    if ends == '00:00' and duration == datetime.timedelta(1):
+        return '00:00-24:00' # special case
+    else:
+        return '%s-%s' % (start.strftime('%H:%M'), ends)
+
+
+
 def parse_datetime(s):
     """Parse a ISO 8601 date/time value.
 
@@ -283,6 +400,10 @@ class IDateRange(Interface):
     def overlaps(date_range):
         """Return whether this daterange overlaps with the other daterange."""
 
+    def intersection(other_range):
+        """Return intersection of date ranges (or None)."""
+
+
 
 class DateRange(object):
     """A date range implementation using the standard datetime module.
@@ -433,6 +554,51 @@ class DateRange(object):
 
         """
         return self.last >= date_range.first and self.first <= date_range.last
+
+    def intersection(self, other_range):
+        """Return whether this daterange overlaps with the other daterange.
+
+           >>> dr = DateRange(datetime.date(2005, 2, 10),
+           ...                datetime.date(2005, 2, 15))
+
+           >>> dr_before = DateRange(datetime.date(2005, 2, 1),
+           ...                       datetime.date(2005, 2, 9))
+
+           >>> print dr.intersection(dr_before)
+           None
+
+           >>> dr_after = DateRange(datetime.date(2005, 2, 16),
+           ...                      datetime.date(2005, 2, 19))
+
+           >>> print dr.intersection(dr_after)
+           None
+
+           >>> intersection = dr.intersection(DateRange(
+           ...     datetime.date(2005, 2, 1), datetime.date(2005, 2, 10)))
+           >>> print intersection.first, intersection.last
+           2005-02-10 2005-02-10
+
+           >>> intersection = dr.intersection(DateRange(
+           ...     datetime.date(2005, 2, 13), datetime.date(2005, 2, 25)))
+           >>> print intersection.first, intersection.last
+           2005-02-13 2005-02-15
+
+           >>> intersection = dr.intersection(DateRange(
+           ...     datetime.date(2005, 2, 15), datetime.date(2005, 2, 25)))
+           >>> print intersection.first, intersection.last
+           2005-02-15 2005-02-15
+
+           >>> intersection = dr.intersection(DateRange(
+           ...     datetime.date(2005, 2, 13), datetime.date(2005, 2, 14)))
+           >>> print intersection.first, intersection.last
+           2005-02-13 2005-02-14
+
+        """
+        if (other_range.last < self.first or
+            other_range.first > self.last):
+            return None
+        return DateRange(max(self.first, other_range.first),
+                         min(self.last, other_range.last))
 
 
 _version = None

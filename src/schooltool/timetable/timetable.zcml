@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:i18n="http://namespaces.zope.org/i18n"
+           i18n_domain="schooltool">
+
+  <class class=".timetable.Timetable">
+    <require
+        permission="schooltool.view"
+        interface="schooltool.timetable.interfaces.ITimetable" />
+    <require
+        permission="schooltool.edit"
+        set_schema="schooltool.timetable.interfaces.ITimetable" />
+  </class>
+
+  <class class=".timetable.TimetableContainer">
+    <require permission="schooltool.edit"
+             interface="zope.container.interfaces.IWriteContainer" />
+    <require permission="schooltool.view"
+             interface="zope.container.interfaces.IReadContainer"
+             />
+    <require permission="schooltool.edit"
+             set_schema=".interfaces.ITimetableContainerBase" />
+    <require permission="schooltool.view"
+             interface=".interfaces.ITimetableContainerBase"
+             />
+  </class>
+
+  <class class=".timetable.SelectedPeriodsSchedule">
+    <require permission="schooltool.view"
+             interface=".interfaces.ISelectedPeriodsSchedule"
+             />
+    <require permission="schooltool.edit"
+             set_schema=".interfaces.ISelectedPeriodsSchedule"
+             />
+  </class>
+
+</configure>

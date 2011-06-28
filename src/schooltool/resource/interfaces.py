@@ -156,6 +156,13 @@ class IResourceSubTypes(Interface):
         """returns Types among a type (subtypes)"""
 
 
+class IBookResources(Interface):
+    """An object that can have booked resources."""
+
+    resources = zope.schema.Iterable(
+        title=u"Booked resources")
+
+
 class IBookingCalendar(ICalendar):
 
     title = Attribute("")

@@ -175,17 +175,6 @@ class IWriteCalendar(Interface):
         """
 
 
-class IShowTimetables(Interface):
-    """Adapter to flag whether to show timetables in the calendar overlay."""
-
-    showTimetables = zope.schema.Bool(
-            title=_("Show timetables"),
-            description=_("""
-            An option that controls whether the timetable of this calendar's
-            owner is shown in the calendar views.
-            """))
-
-
 class ISchoolToolAuthentication(IAuthentication, ILogout):
     """A local authentication utility for SchoolTool"""
 

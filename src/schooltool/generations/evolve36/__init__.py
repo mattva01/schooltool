@@ -1,6 +1,6 @@
 #
 # SchoolTool - common information systems platform for school administration
-# Copyright (c) 2005 Shuttleworth Foundation
+# Copyright (c) 2010 Shuttleworth Foundation
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,8 +16,24 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-from zope.publisher.interfaces.browser import IBrowserRequest
+"""
+Upgrade SchoolTool to generation 36.
+"""
+from zope.app.generations.utility import findObjectsProviding
+from zope.app.publication.zopepublication import ZopePublication
+from zope.component.hooks import getSite, setSite
+
+from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.generations.evolve36.evolve import evolveTimetables
 
 
-class ITimetableLayer(IBrowserRequest):
-    """SchoolTool Timetabling layer."""
+def evolve(context):
+    root = context.connection.root().get(ZopePublication.root_name, None)
+    old_site = getSite()
+
+    apps = findObjectsProviding(root, ISchoolToolApplication)
+    for app in apps:
+        setSite(app)
+        evolveTimetables(app)
+
+    setSite(old_site)

@@ -1,32 +1,23 @@
 <html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
 <head>
   <title metal:fill-slot="title" i18n:translate="">
-      Scheduling for <span i18n:name="section"
-                           tal:define="section context/__parent__"
-                           tal:replace="section/label" />
+      Scheduling for <span i18n:name="object"
+                           tal:replace="view/owner/label" />
   </title>
 </head>
 <body>
 
 <h1 metal:fill-slot="content-header" i18n:translate="">
-  Scheduling for <span i18n:name="section"
-                       tal:define="section context/__parent__"
-                       tal:replace="section/label" />
+  Scheduling for <span i18n:name="object"
+                       tal:replace="view/owner/label" />
 </h1>
 
 <metal:block metal:fill-slot="body">
 
-  <div tal:define="term view/term">
-    <div i18n:translate="">For term:
-      <strong i18n:name="term_title" tal:content="term/title" />
-      (from
-        <tal:block i18n:name="starts" tal:content="term/first/@@mediumDate"/>
-       to
-        <tal:block i18n:name="ends" tal:content="term/last/@@mediumDate"/>)
-    </div>
-
+  <div tal:define="term view/term"
+       tal:condition="term"
+       tal:content="structure term/schooltool:content/boundaries">
   </div>
-
 
   <div class="status" tal:condition="view/status">
     <ul class="errors"

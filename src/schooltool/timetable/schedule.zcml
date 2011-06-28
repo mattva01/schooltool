@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:i18n="http://namespaces.zope.org/i18n"
+           i18n_domain="schooltool">
+
+  <class class=".schedule.Period">
+    <require permission="schooltool.view"
+             interface="schooltool.timetable.interfaces.IPeriod" />
+    <require permission="schooltool.edit"
+             set_schema="schooltool.timetable.interfaces.IPeriod" />
+  </class>
+
+  <class class=".schedule.Meeting">
+    <require permission="schooltool.view"
+             interface="schooltool.timetable.interfaces.IMeeting" />
+    <require permission="schooltool.edit"
+             set_schema="schooltool.timetable.interfaces.IMeeting" />
+  </class>
+
+  <class class=".schedule.MeetingException">
+    <require permission="schooltool.view"
+             interface="schooltool.timetable.interfaces.IMeetingException" />
+    <require permission="schooltool.edit"
+             set_schema="schooltool.timetable.interfaces.IMeetingException" />
+  </class>
+
+
+  <class class=".schedule.ScheduleContainer">
+    <require permission="schooltool.edit"
+             interface="zope.container.interfaces.IWriteContainer" />
+    <require permission="schooltool.edit"
+             set_schema=".interfaces.IScheduleExceptions" />
+    <require permission="schooltool.view"
+             interface=".interfaces.IScheduleWithExceptions"
+             />
+    <require permission="schooltool.view"
+             interface="zope.container.interfaces.IReadContainer"
+             />
+  </class>
+
+  <class class=".schedule.Schedule">
+    <require permission="schooltool.view"
+             interface="schooltool.timetable.interfaces.ISchedule" />
+    <require permission="schooltool.edit"
+             set_schema="schooltool.timetable.interfaces.ISchedule" />
+  </class>
+
+</configure>

@@ -1,0 +1,73 @@
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title" i18n:translate="">
+      Scheduling for <span i18n:name="section"
+                           tal:define="section view/owner"
+                           tal:replace="section/label" />
+  </title>
+</head>
+<body>
+
+<h1 metal:fill-slot="content-header" i18n:translate="">
+  Scheduling for <span i18n:name="section"
+                       tal:define="section view/owner"
+                       tal:replace="section/label" />
+</h1>
+
+<metal:block metal:fill-slot="body">
+
+  <div tal:define="term view/term">
+    <div tal:condition="term"
+         tal:content="structure term/schooltool:content/boundaries">
+    </div>
+    <div i18n:translate="">Using timetable:
+      <strong i18n:name="timetable"
+              tal:content="structure context/timetable/schooltool:content/title" />
+    </div>
+  </div>
+
+
+  <div class="status" tal:condition="view/status">
+    <ul class="errors"
+        tal:condition="view/widgets/errors"
+        metal:define-macro="form-errors">
+      <li tal:repeat="error view/widgets/errors">
+        <tal:block condition="error/widget">
+          <span tal:replace="error/widget/label" />:
+        </tal:block>
+        <span tal:replace="structure error/render">Error Type</span>
+      </li>
+    </ul>
+  </div>
+
+<form action="." method="post" enctype="multipart/form-data"
+      metal:define-macro="form"
+      tal:attributes="method view/method;
+                      enctype view/enctype;
+                      acceptCharset view/acceptCharset;
+                      accept view/accept;
+                      action view/action;
+                      name view/name;
+                      id view/id">
+
+  <div metal:use-macro="macro:widget-rows" />
+
+  <h2 i18n:translate="">Scheduled periods</h2>
+  <div tal:content="structure context/timetable/periods/schooltool:content/table"></div>
+
+
+  <h2 i18n:translate="">Time schedule</h2>
+  <div tal:content="structure context/timetable/time_slots/schooltool:content/table"></div>
+
+
+
+  <div metal:use-macro="macro:form-buttons">
+  </div>
+
+</form>
+
+
+
+</metal:block>
+</body>
+</html>

@@ -23,7 +23,6 @@ import xlrd
 import transaction
 import datetime
 
-from zope.i18n import translate
 from zope.container.interfaces import INameChooser
 from zope.component import queryUtility
 from zope.security.proxy import removeSecurityProxy
@@ -37,16 +36,6 @@ from schooltool.resource.resource import Resource
 from schooltool.resource.resource import Location
 from schooltool.group.group import Group
 from schooltool.group.interfaces import IGroupContainer
-from schooltool.timetable import TimetableActivity
-from schooltool.timetable import SchooldaySlot
-from schooltool.timetable import SchooldayTemplate
-from schooltool.timetable.browser import parse_time_range
-from schooltool.timetable.interfaces import ITimetableCalendarEvent
-from schooltool.timetable.interfaces import ITimetables
-from schooltool.timetable.interfaces import ITimetableSchemaContainer
-from schooltool.timetable.interfaces import ITimetableModelFactory
-from schooltool.timetable.schema import TimetableSchema
-from schooltool.timetable.schema import TimetableSchemaDay
 from schooltool.term.interfaces import ITerm
 from schooltool.term.term import Term, getNextTerm, getPreviousTerm
 from schooltool.app.interfaces import ISchoolToolApplication
@@ -378,12 +367,21 @@ class SchoolTimetableImporter(ImporterBase):
 
 
     def setUpSchemaDays(self, timetable, days):
+        # XXX: temporary isolation of timetable imports
+        from schooltool.timetable.schema import TimetableSchemaDay
+
         for day in days:
             day_id = day['id']
-            timetable[day_id] = TimetableSchemaDay(day['periods'], 
+            timetable[day_id] = TimetableSchemaDay(day['periods'],
                                                    day['homeroom_periods'])
 
     def createSchoolTimetable(self, data):
+        # XXX: temporary isolation of timetable imports
+        from schooltool.timetable.interfaces import ITimetableModelFactory
+        from schooltool.timetable import SchooldayTemplate
+        from schooltool.timetable.schema import TimetableSchema
+        from schooltool.timetable import SchooldaySlot
+
         title = data['title']
         factory = queryUtility(ITimetableModelFactory, data['model'])
         day_ids = [day['id'] for day in data['days']]
@@ -418,6 +416,9 @@ class SchoolTimetableImporter(ImporterBase):
         return timetable
 
     def addSchoolTimetable(self, school_timetable, data):
+        # XXX: temporary isolation of timetable imports
+        from schooltool.timetable.interfaces import ITimetableSchemaContainer
+
         syc = ISchoolYearContainer(self.context)
         sy = syc[data['school_year']]
         sc = ITimetableSchemaContainer(sy)
@@ -437,6 +438,10 @@ class SchoolTimetableImporter(ImporterBase):
         return day_id
 
     def import_school_timetable(self, sh, row):
+        # XXX: temporary isolation of timetable imports
+        from schooltool.timetable.interfaces import ITimetableModelFactory
+        from schooltool.common import parse_time_range
+
         num_errors = len(self.errors)
         data = {}
         data['title'] = self.getRequiredTextFromCell(sh, row, 1)
@@ -759,6 +764,12 @@ class SectionImporter(ImporterBase):
                     next_sections[section.__name__].previous = section
 
     def import_timetable(self, sh, row, section):
+        # XXX: temporary isolation of timetable imports
+        from schooltool.timetable.interfaces import ITimetableSchemaContainer
+        from schooltool.timetable.interfaces import ITimetables
+        from schooltool.timetable import TimetableActivity
+        from schooltool.timetable.interfaces import ITimetableCalendarEvent
+
         schemas = ITimetableSchemaContainer(ISchoolYear(section))
         schema_id = self.getRequiredTextFromCell(sh, row, 1)
         if schema_id not in schemas:

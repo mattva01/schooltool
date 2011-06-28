@@ -66,6 +66,13 @@ class TermAfterChangeEvent(object):
         self.new_dates = new_dates
 
 
+class EmergencyDayEvent(object):
+
+    def __init__(self, date, replacement_date):
+        self.date = date
+        self.replacement_date = replacement_date
+
+
 class Term(DateRange, contained.Contained, persistent.Persistent):
     zope.interface.implements(interfaces.ITerm, interfaces.ITermWrite)
 
