@@ -1,11 +1,18 @@
 Test for sample data import
 ---------------------------
 
-Let's import a subset of the sample data:
-
     >>> browser = Browser('manager', 'schooltool')
     >>> browser.getLink('Manage').click()
     >>> browser.getLink('XLS Import').click()
+
+Click the submit button without selecting a file:
+
+    >>> browser.getControl('Submit').click()
+    >>> browser.printQuery("//p[@class='error']")
+    <p class="error">No data provided</p>
+
+Let's import a subset of the sample data:
+
     >>> import pkg_resources
     >>> browser.getControl('XLS File').add_file(
     ...     pkg_resources.resource_stream('schooltool.export.ftests', 'test_data.xls'),

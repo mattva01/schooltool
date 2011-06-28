@@ -986,23 +986,16 @@ class MegaImporter(BrowserView):
         self.errors = []
         self.success = []
 
-    def getWorkbook(self):
-        xlsfile = self.request.get('xlsfile', '')
-        if xlsfile:
-            xlsfile = xlsfile.read()
-
-        if not xlsfile:
-            self.errors.append(_('No data provided'))
-            return
-
-        book = xlrd.open_workbook(file_contents=xlsfile)
-        return book
-
     def update(self):
         if "UPDATE_SUBMIT" not in self.request:
             return
 
-        wb = self.getWorkbook()
+        xlsfile = self.request.get('xlsfile', '')
+        if not xlsfile:
+            self.errors.append(_('No data provided'))
+            return
+
+        wb = xlrd.open_workbook(file_contents=xlsfile.read())
 
         sp = transaction.savepoint(optimistic=True)
 
