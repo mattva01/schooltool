@@ -20,6 +20,10 @@ Let's import a subset of the sample data:
     ...     'sample_data.xls')
     >>> browser.getControl('Submit').click()
 
+There should be no errors:
+
+    >>> browser.printQuery("//p[@class='error']")
+
 Let's check the data. We have 4 terms:
 
     >>> browser.getLink('2006-2008').click()
