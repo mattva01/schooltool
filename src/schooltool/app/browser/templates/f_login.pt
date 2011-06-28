@@ -1,22 +1,44 @@
+<script>
+  $(document).ready(function() {
+    $('form fieldset .row .error').prev().children(':first-child').addClass('error');
+  });
+</script>
 <div>
-  <p id="message" tal:condition="request/expired | nothing"
-    i18n:translate="">
-    Your session has expired.
-  </p>
-
-  <p id="message" tal:condition="request/forbidden | nothing"
-    i18n:translate="">
-    You are not allowed to access this page.  You can click on the back
-    button in your browser to go back, or ask a more privileged user to log
-    in.
-  </p>
-
-  <form action="." method="post" class="standalone"
+  <form action="." method="post"
     tal:attributes="action string:${context/@@absolute_url}/@@login.html">
 
     <input type="hidden" name="nexturl"
       tal:condition="request/nexturl | nothing"
       tal:attributes="value request/nexturl" />
+
+    <div class="status" tal:condition="request/expired | nothing">
+      <div class="summary ui-state-error ui-corner-all">
+        <span class="ui-icon ui-icon-alert">icon</span>
+        <tal:block i18n:translate="">
+          Your session has expired.
+        </tal:block>
+      </div>
+    </div>
+
+    <div class="status" tal:condition="request/forbidden | nothing">
+      <div class="summary ui-state-error ui-corner-all">
+        <span class="ui-icon ui-icon-alert">icon</span>
+        <tal:block i18n:translate="">
+          You are not allowed to access this page.  You can click on the
+          back button in your browser to go back, or ask a more privileged
+          user to log in.
+        </tal:block>
+      </div>
+    </div>
+
+    <div class="status" tal:condition="view/error|nothing">
+      <div class="summary ui-state-error ui-corner-all">
+        <span class="ui-icon ui-icon-alert">icon</span>
+        <tal:block i18n:translate="">
+          Please correct the marked fields below.
+        </tal:block>
+      </div>
+    </div>
 
     <fieldset>
       <legend><span i18n:translate="">User Information</span></legend>

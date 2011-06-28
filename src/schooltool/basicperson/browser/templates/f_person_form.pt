@@ -1,6 +1,6 @@
 <script>
   $(document).ready(function() {
-    $('form fieldset .row .error').prev().find('input').addClass('error');
+    $('form fieldset .row .error').prev().children(':first-child').addClass('error');
   });
 </script>
 <form action="." method="post" enctype="multipart/form-data" class="standalone"
@@ -35,7 +35,7 @@
              tal:define="errors view/errors|view/widgets/errors">
 	  <div class="summary ui-state-highlight ui-corner-all"
 	       tal:condition="not:errors">
-	    <span class="ui-icon ui-icon-info">
+	    <span class="ui-icon ui-icon-info">icon</span>
             <tal:block content="view/status" />
           </div>
           <div class="summary ui-state-error ui-corner-all"

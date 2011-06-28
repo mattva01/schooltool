@@ -328,9 +328,6 @@ class FlourishRelationshipViewBase(flourish.page.ExpandedPage):
         return changed
 
     def update(self):
-        if 'DONE' in self.request:
-            self.request.response.redirect(self.nextURL())
-            return
         changes = self.applyFormChanges()
         if changes:
             self.request.response.redirect(self.request.getURL())

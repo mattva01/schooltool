@@ -158,14 +158,14 @@ form .buttons .button-cancel {
 
 /* XXX: temporary hackery to make forms look decent */
 
-form > .viewspace > .status > .summary {
+form .status > .summary {
     font-size: 12px;
     line-height: 16px;
     margin-bottom: 8px;
     padding: 4px 8px;
 }
 
-form > .viewspace > .status > .summary .ui-icon {
+form .status > .summary .ui-icon {
     float: left;
     margin-right: 2px;
 }
