@@ -1,10 +1,6 @@
 <metal:block tal:define="batch view/available_table/batch;
                          items view/getSelectedItems">
   <form method="post" tal:attributes="action request/URL">
-    <div class="buttons controls">
-      <input class="submit-widget" type="submit" value="Done" name="DONE"
-             i18n:attributes="value" />
-    </div>
     <h2 tal:content="view/current_title" />
     <tal:block replace="structure view/selected_table/render"
                tal:condition="items"/>
@@ -12,6 +8,10 @@
       There are none.
     </p>
   </form>
+  <h3>
+    <a tal:attributes="href context/@@absolute_url"
+       i18n:translate="">Done</a>
+  </h3>
   <h2 tal:content="view/available_title" />
   <form method="post" tal:attributes="action request/URL">
     <tal:if condition="batch">
