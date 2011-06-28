@@ -29,8 +29,7 @@ $PERSON/request_student_detail.html & $PERSON/request_report_card.html
 
 Try these as modals.
 
-*** assigned to Alan. 
-*** needs to be brought more into line with the style in the pref. dialog
+*** Done. -AE.
 
 $PERSON/preferences
 -------------------
