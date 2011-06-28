@@ -328,11 +328,17 @@ class FlourishRelationshipViewBase(flourish.page.ExpandedPage):
         return changed
 
     def update(self):
+        if 'DONE' in self.request:
+            self.request.response.redirect(self.nextURL())
+            return
         changes = self.applyFormChanges()
         if changes:
             self.request.response.redirect(self.request.getURL())
             return
         self.setUpTables()
+
+    def nextURL(self):
+        return absoluteURL(self.context, self.request)
 
 
 class ApplicationLoginView(BrowserView):
