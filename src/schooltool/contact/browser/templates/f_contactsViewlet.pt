@@ -27,11 +27,11 @@
     <h3 tal:condition="not:contacts" i18n:translate="">
       This person has no contacts.
     </h3>
-    <a class="manage-contacts-link"
-       tal:condition="view/canModify"
-       tal:attributes="href view/manage_link"
-       i18n:translate="">
-      Manage contacts
-    </a>
+    <h3 tal:condition="view/canModify">
+      <a tal:attributes="href view/manage_link"
+         i18n:translate="">
+        Manage contacts
+      </a>
+    </h3>
   </div>
 </div>
