@@ -46,6 +46,7 @@ from schooltool.table.table import DependableCheckboxColumn
 from schooltool.table.catalog import FilterWidget
 from schooltool.table.catalog import IndexedTableFormatter
 from schooltool.table.catalog import IndexedLocaleAwareGetterColumn
+from schooltool.table.interfaces import IIndexedColumn
 from schooltool.skin.containers import TableContainerView
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.contact.interfaces import IContactable
@@ -466,10 +467,7 @@ def contact_table_collumns():
             title=_(u'Last Name'),
             getter=lambda i, f: i.last_name,
             subsort=True)
-        address = GetterColumn(name='address',
-                               title=_(u"Address"),
-                               getter=format_street_address)
-        return [last_name, first_name, address]
+        return [last_name, first_name]
 
 
 class ContactTableFormatter(IndexedTableFormatter):
@@ -481,6 +479,17 @@ class ContactTableFormatter(IndexedTableFormatter):
 
 
 class FlourishContactTableFormatter(ContactTableFormatter):
+
+    def render(self):
+        columns = [IIndexedColumn(c) for c in self._columns]
+        formatter = self._table_formatter(
+            self.context, self.request, self._items,
+            columns=columns,
+            batch_start=self.batch.start, batch_size=self.batch.size,
+            sort_on=self._sort_on,
+            prefix=self.prefix)
+        formatter.cssClasses['table'] = 'contacts-table relationships-table'
+        return formatter()
 
     def sortOn(self):
         return (('last_name', False), ("first_name", False),)

@@ -1005,5 +1005,5 @@ class BasicPersonTableFormatter(PersonTableFormatter):
             batch_start=self.batch.start, batch_size=self.batch.size,
             sort_on=self._sort_on,
             prefix=self.prefix)
-        formatter.cssClasses['table'] = 'persons-table'
+        formatter.cssClasses['table'] = 'persons-table relationships-table'
         return formatter()

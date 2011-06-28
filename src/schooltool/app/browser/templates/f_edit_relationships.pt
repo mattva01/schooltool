@@ -1,7 +1,7 @@
 <metal:block tal:define="batch view/available_table/batch;
                          items view/getSelectedItems">
+  <h2 tal:content="view/current_title" />
   <form method="post" tal:attributes="action request/URL">
-    <h2 tal:content="view/current_title" />
     <tal:block replace="structure view/selected_table/render"
                tal:condition="items"/>
     <p tal:condition="not:items" i18n:translate="">

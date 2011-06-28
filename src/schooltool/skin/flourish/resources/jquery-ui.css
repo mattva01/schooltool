@@ -5,6 +5,7 @@
 */
 
 .ui-accordion {
+    margin-top: 16px;
     width: 542px;
 }
 
@@ -43,6 +44,7 @@
 }
 
 .ui-dialog .ui-dialog-content form {
+    margin-top: 0px;
     width: 544px;
 }
 
