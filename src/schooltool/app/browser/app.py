@@ -334,9 +334,6 @@ class FlourishRelationshipViewBase(flourish.page.ExpandedPage):
             return
         self.setUpTables()
 
-    def nextURL(self):
-        return absoluteURL(self.context, self.request)
-
 
 class ApplicationLoginView(BrowserView):
     """Backwards compatible login view that redirects to the actual login view."""
