@@ -650,7 +650,7 @@ class PersonImporter(ImporterBase):
             # XXX: this has to be fixed
             # XXX: SchoolTool should handle UTF-8
             try:
-                data['__name__'].encode('ascii')
+                str(data['__name__'])
             except UnicodeEncodeError:
                 self.error(
                     row, 0,

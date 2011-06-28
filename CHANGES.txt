@@ -9,6 +9,7 @@ CHANGES
   the required paste.ini file.
   NOTE: run ``make-schooltool-instance instance`` to fix ``instance`` if it does
   not start.
+- Fixed XLS import crash when username is a number (https://launchpad.net/bugs/801870)
 
 
 1.6.0 (2011-04-25)
