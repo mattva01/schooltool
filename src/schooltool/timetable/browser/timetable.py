@@ -36,7 +36,7 @@ from z3c.form import form, field, button, widget, validator
 from z3c.form.util import getSpecification
 from z3c.form.browser.checkbox import SingleCheckBoxFieldWidget
 
-from schooltool.app.browser.content import ContentProvider
+from schooltool.skin.flourish.content import ContentProvider
 from schooltool.common import format_time_range
 from schooltool.table.table import simple_form_key
 from schooltool.timetable.interfaces import ITimetable
