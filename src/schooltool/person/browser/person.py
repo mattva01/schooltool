@@ -186,6 +186,17 @@ class FlourishPersonPreferencesView(flourish.page.Page, PersonPreferencesView):
         PersonPreferencesView.update(self)
 
 
+class FlourishPersonPreferencesLink(flourish.page.ModalFormLinkViewlet):
+
+    @property
+    def dialog_title(self):
+        person = self.context
+        title = _(u'Change preferences for ${person_full_name}',
+                  mapping={'person_full_name': "%s %s" % (person.first_name,
+                                                          person.last_name)})
+        return translate(title, context=self.request)
+
+
 # Should this be moved to a interface.py file ?
 class IGroupsSource(IIterableSource):
     pass
