@@ -254,6 +254,15 @@
      />
 
   <flourish:page
+     name="reorder.html"
+     for="schooltool.basicperson.interfaces.IDemographicsFields"
+     class=".demographics.FlourishReorderDemographicsView"
+     content_template="templates/f_demographics_reorder.pt"
+     permission="schooltool.edit"
+     title="Demographics and Personal Information"
+     />
+
+  <flourish:page
      name="addText.html"
      for="schooltool.basicperson.interfaces.IDemographicsFields"
      class=".demographics.FlourishTextFieldDescriptionAddView"

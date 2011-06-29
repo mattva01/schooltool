@@ -268,7 +268,36 @@ class EnumFieldDescriptionView(FieldDescriptionView):
     fields = field.Fields(IEnumFieldDescription)
 
 
-class FlourishDemographicsView(flourish.page.Page, DemographicsView):
+class FlourishDemographicsView(flourish.page.Page):
+
+    def table(self):
+        result = []
+        bool_dict = {True: 'x', False: ''}
+        for demo in list(self.context.values()):
+            classname = demo.__class__.__name__
+            teacher, student, admin = False, False, False
+            all = not(demo.limit_keys)
+            for key in demo.limit_keys:
+                if key == 'teacher':
+                    teacher = True
+                if key == 'student':
+                    student = True
+                if key == 'admin':
+                    admin = True
+            result.append({
+               'title': demo.title,
+               'id': demo.name,
+               'type': classname[:classname.find('FieldDescription')],
+               'required': bool_dict[demo.required],
+               'all': bool_dict[all],
+               'teacher': bool_dict[teacher],
+               'student': bool_dict[student],
+               'admin': bool_dict[admin],
+               })
+        return result
+
+
+class FlourishReorderDemographicsView(flourish.page.Page, DemographicsView):
 
     def update(self):
         DemographicsView.update(self)

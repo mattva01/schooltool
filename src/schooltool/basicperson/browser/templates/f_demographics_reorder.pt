@@ -1,0 +1,33 @@
+<tal:dummy condition="view/update"> </tal:dummy>
+<div>
+
+  <form method="post" action=".">
+    <input type="hidden" name="form-submitted" value="yes" />
+    <div tal:repeat="demo view/demographics">
+      <select name=""
+              onchange="this.form.submit()"
+              tal:attributes="name string:pos.${demo/name}">
+        <tal:block repeat="num view/positions">
+          <option value="1"
+		  tal:condition="python:num != demo['pos']"
+		  tal:attributes="value num"
+		  tal:content="num" />
+          <option value="1" selected="selected"
+		  tal:condition="python:num == demo['pos']"
+		  tal:attributes="value num"
+		  tal:content="num" />
+        </tal:block>
+      </select>
+      <input type="checkbox" name="delete:list"
+             tal:attributes="value demo/name" />
+
+      <a tal:content="demo/title"
+         tal:attributes="href demo/url">Demo</a>
+
+    </div>
+    <tal:block metal:use-macro="view/@@standard_macros/apply-button" />
+    <tal:block metal:use-macro="view/@@standard_macros/delete-button" />
+  </form>
+
+</div>
+
