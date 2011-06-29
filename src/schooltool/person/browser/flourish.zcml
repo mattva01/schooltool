@@ -9,6 +9,7 @@
       before="password_edit.html"
       for="schooltool.person.interfaces.IPerson"
       title="Preferences"
+      dialog_title="Change Preferences"
       class="schooltool.skin.flourish.page.ModalFormLinkViewlet"
       manager="schooltool.basicperson.browser.person.PersonSettingsLinks"
       permission="schooltool.view"
