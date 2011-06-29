@@ -42,6 +42,10 @@ from schooltool.basicperson.interfaces import IEnumFieldDescription
 from schooltool.basicperson.interfaces import IDemographicsFields
 from schooltool.basicperson.interfaces import IFieldDescription
 from schooltool.basicperson.interfaces import EnumValueList
+from schooltool.skin import flourish
+from schooltool.skin.flourish.interfaces import IViewletManager
+from schooltool.skin.flourish.viewlet import Viewlet, ViewletManager
+from schooltool.skin.flourish.content import ContentProvider
 
 from schooltool.common import format_message
 from schooltool.common import SchoolToolMessage as _
@@ -262,4 +266,70 @@ class EnumFieldDescriptionView(FieldDescriptionView):
     """Display form for an enum field description."""
 
     fields = field.Fields(IEnumFieldDescription)
+
+
+class FlourishDemographicsView(flourish.page.Page, DemographicsView):
+
+    def update(self):
+        DemographicsView.update(self)
+
+
+class FlourishTextFieldDescriptionAddView(flourish.page.Page, TextFieldDescriptionAddView):
+
+    def update(self):
+        TextFieldDescriptionAddView.update(self)
+
+
+class FlourishDateFieldDescriptionAddView(flourish.page.Page, DateFieldDescriptionAddView):
+
+    def update(self):
+        DateFieldDescriptionAddView.update(self)
+
+
+class FlourishBoolFieldDescriptionAddView(flourish.page.Page, BoolFieldDescriptionAddView):
+
+    def update(self):
+        BoolFieldDescriptionAddView.update(self)
+
+
+class FlourishEnumFieldDescriptionAddView(flourish.page.Page, EnumFieldDescriptionAddView):
+
+    def update(self):
+        EnumFieldDescriptionAddView.update(self)
+
+
+class FlourishFieldDescriptionEditView(flourish.page.Page, FieldDescriptionEditView):
+
+    def update(self):
+        FieldDescriptionEditView.update(self)
+
+
+class FlourishEnumFieldDescriptionEditView(flourish.page.Page, EnumFieldDescriptionEditView):
+
+    def update(self):
+        EnumFieldDescriptionEditView.update(self)
+
+
+class FlourishTextFieldDescriptionView(flourish.page.Page, TextFieldDescriptionView):
+
+    def update(self):
+        TextFieldDescriptionView.update(self)
+
+
+class FlourishDateFieldDescriptionView(flourish.page.Page, DateFieldDescriptionView):
+
+    def update(self):
+        DateFieldDescriptionView.update(self)
+
+
+class FlourishBoolFieldDescriptionView(flourish.page.Page, BoolFieldDescriptionView):
+
+    def update(self):
+        BoolFieldDescriptionView.update(self)
+
+
+class FlourishEnumFieldDescriptionView(flourish.page.Page, EnumFieldDescriptionView):
+
+    def update(self):
+        EnumFieldDescriptionView.update(self)
 
