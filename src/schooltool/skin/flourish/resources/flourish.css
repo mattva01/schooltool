@@ -137,6 +137,7 @@ a.modify img {
 }
 
 .schooltool > .footer > p.server-info {
+    margin-bottom: 0px;
     padding-top: 4px;
 }
 

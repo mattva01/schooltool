@@ -472,6 +472,8 @@ class PersonEditView(PersonForm, form.EditForm):
 
 class FlourishPersonEditView(flourish.page.ExpandedPage, PersonEditView):
 
+    label = None
+
     def update(self):
         self.buildFieldsetGroups()
         PersonEditView.update(self)
@@ -922,7 +924,7 @@ class FlourishPersonAddView(PersonAddViewBase):
         super(FlourishPersonAddView, self).handleAdd.func(self, action)
 
     @button.buttonAndHandler(_('Submit and add'), name='submitadd')
-    def handleSubmit(self, action):
+    def handleSubmitAndAdd(self, action):
         super(FlourishPersonAddView, self).handleAdd.func(self, action)
         if self._finishedAdd:
             self.request.response.redirect(self.action)

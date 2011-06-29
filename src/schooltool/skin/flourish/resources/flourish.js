@@ -43,11 +43,10 @@ ST.state = function() {
 ST.dialogs = function() {
 
   /* "private" */
-  function call_modal_form(form_url, form_id) {
+  function modal_form_dialog(form_url, form_id, title) {
       // Fade out and/or add spinner or something here
       $(form_id).empty();
       $(form_id).load(form_url, function(){
-              var title_hack = $(form_id).find('h3').html();
               $(form_id).dialog({
                   autoOpen: true,
                   modal: true,
@@ -55,7 +54,7 @@ ST.dialogs = function() {
                   draggable: false,
                   position: ['center','middle'],
                   width: 'auto',
-                  title: title_hack
+                  title: title
                   })
           });
   }
@@ -63,12 +62,12 @@ ST.dialogs = function() {
   /* "public" */
   return {
 
-    modal_form: function(link_id, form_url, form_id)
+    modal_form: function(link_id, form_url, form_id, title)
     {
         $(link_id).attr("href", "#");
         $(document).ready(function(){
                 $(link_id).click(function(e) {
-                        call_modal_form(form_url, form_id);
+                        modal_form_dialog(form_url, form_id, title);
                         e.preventDefault();
                     });
             });

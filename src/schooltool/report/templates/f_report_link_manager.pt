@@ -32,7 +32,7 @@
       group=ST.local.groups[i], i<groups_len; i++) {
       for(var j=0, rows_len=group.rows.length;
           row=group.rows[j], j<rows_len; j++) {
-          ST.dialogs.modal_form('#'+row.link_id, row.url, '#'+row.form_id);
+          ST.dialogs.modal_form('#'+row.link_id, row.url, '#'+row.form_id, row.title);
       };
   };
 </script>
