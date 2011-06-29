@@ -157,8 +157,6 @@ form .buttons .button-cancel {
     line-height: 20px;
 }
 
-/* XXX: temporary hackery to make forms look decent */
-
 form .status > .summary {
     font-size: 12px;
     line-height: 16px;
@@ -169,10 +167,6 @@ form .status > .summary {
 form .status > .summary .ui-icon {
     float: left;
     margin-right: 2px;
-}
-
-form > .viewspace > h3 {
-    display: none;
 }
 
 form .status > .errors {

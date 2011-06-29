@@ -180,6 +180,8 @@ class PersonPreferencesView(form.EditForm):
 class FlourishPersonPreferencesView(flourish.page.Page, PersonPreferencesView):
     """View used for editing person preferences."""
 
+    label = None
+
     def update(self):
         PersonPreferencesView.update(self)
 
