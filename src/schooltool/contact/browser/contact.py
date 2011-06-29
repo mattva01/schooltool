@@ -198,6 +198,8 @@ class PersonContactAddView(ContactAddView):
 
 class FlourishPersonContactAddView(ExpandedPage, PersonContactAddView):
 
+    label = None
+
     def update(self):
         self.buildFieldsetGroups()
         PersonContactAddView.update(self)
