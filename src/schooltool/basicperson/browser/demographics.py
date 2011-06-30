@@ -286,11 +286,11 @@ class FlourishDemographicsView(flourish.page.Page):
             teacher, student, admin = False, False, False
             limited = bool(demo.limit_keys)
             for key in demo.limit_keys:
-                if key == 'teacher':
+                if key == 'teachers':
                     teacher = True
-                if key == 'student':
+                if key == 'students':
                     student = True
-                if key == 'admin':
+                if key == 'administrators':
                     admin = True
             result.append({
                'title': demo.title,
