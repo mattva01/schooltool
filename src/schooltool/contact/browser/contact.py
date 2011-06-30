@@ -90,6 +90,7 @@ class ContactAddView(form.AddForm):
     label = _("Add new contact")
     template = ViewPageTemplateFile('templates/contact_add.pt')
     fields = field.Fields(IContact)
+    formErrorsMessage = _('Please correct the marked fields below.')
 
     def __init__(self, *args, **kw):
         super(ContactAddView, self).__init__(*args, **kw)
@@ -265,6 +266,8 @@ class ContactEditView(form.EditForm):
     template = ViewPageTemplateFile('templates/contact_add.pt')
     fields = field.Fields(IContact)
 
+    formErrorsMessage = _('Please correct the marked fields below.')
+
     @button.buttonAndHandler(_("Cancel"))
     def handle_cancel_action(self, action):
         url = absoluteURL(self.context, self.request)
@@ -300,6 +303,8 @@ class ContactEditView(form.EditForm):
 class FlourishContactEditView(NoSidebarPage, ContactEditView):
 
     form.extends(ContactEditView)
+
+    label = None
 
     def update(self):
         self.buildFieldsetGroups()
