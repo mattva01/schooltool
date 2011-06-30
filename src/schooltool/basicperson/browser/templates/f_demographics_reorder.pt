@@ -1,7 +1,7 @@
 <tal:dummy condition="view/update"> </tal:dummy>
 <div>
 
-  <form method="post" action=".">
+  <form method="post" tal:attributes="action request/getURL">
     <input type="hidden" name="form-submitted" value="yes" />
     <table>
       <tr tal:repeat="demo view/demographics">
@@ -31,8 +31,10 @@
         </td>
       </tr>
     </table>
-    <tal:block metal:use-macro="view/@@standard_macros/apply-button" />
-    <tal:block metal:use-macro="view/@@standard_macros/delete-button" />
+    <div class="buttons">
+      <tal:block metal:use-macro="view/@@standard_macros/apply-button" />
+      <tal:block metal:use-macro="view/@@standard_macros/delete-button" />
+    </div>
   </form>
 
 </div>
