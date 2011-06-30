@@ -7,8 +7,8 @@
         <th i18n:translate="">Type</th>
         <th i18n:translate="">Required</th>
         <th i18n:translate="">Limited</th>
-        <th i18n:translate="">Teach.</th>
         <th i18n:translate="">Stud.</th>
+        <th i18n:translate="">Teach.</th>
         <th i18n:translate="">Admin.</th>
       </tr>
     </thead>
@@ -20,8 +20,8 @@
       <td tal:content="row/type" />
       <td tal:content="row/required" />
       <td tal:content="row/limited" />
-      <td tal:content="row/teacher" />
       <td tal:content="row/student" />
+      <td tal:content="row/teacher" />
       <td tal:content="row/admin" />
     </tr>
   </table>
