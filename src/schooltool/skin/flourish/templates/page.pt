@@ -1,8 +1,8 @@
 <div class="body">
 
-<div class="refine" tal:define="refine view/providers/page_refine|nothing">
+<div class="refine" tal:define="refine view/providers/page_refine|nothing"
+     tal:condition="refine">
   <tal:block content="structure refine" />
-  <tal:block condition="not:refine">&nbsp;</tal:block>
 </div>
 
 <div class="container">

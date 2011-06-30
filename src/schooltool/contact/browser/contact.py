@@ -61,7 +61,7 @@ from schooltool.person.interfaces import IPerson
 from schooltool.email.interfaces import IEmailUtility
 from schooltool.email.mail import Email
 from schooltool.skin.flourish.viewlet import Viewlet
-from schooltool.skin.flourish.page import RefineLinksViewlet, ExpandedPage
+from schooltool.skin.flourish.page import RefineLinksViewlet, NoSidebarPage
 from schooltool.relationship.relationship import IRelationshipLinks
 from schooltool.contact.contact import URIPerson, URIContact
 from schooltool.contact.contact import URIContactRelationship
@@ -196,7 +196,7 @@ class PersonContactAddView(ContactAddView):
         return contact
 
 
-class FlourishPersonContactAddView(ExpandedPage, PersonContactAddView):
+class FlourishPersonContactAddView(NoSidebarPage, PersonContactAddView):
 
     label = None
 
@@ -297,7 +297,7 @@ class ContactEditView(form.EditForm):
                           'last_name': self.context.last_name})
 
 
-class FlourishContactEditView(ExpandedPage, ContactEditView):
+class FlourishContactEditView(NoSidebarPage, ContactEditView):
 
     form.extends(ContactEditView)
 
@@ -383,7 +383,7 @@ class ContactView(form.DisplayForm):
         return self.render()
 
 
-class FlourishContactView(ExpandedPage, form.DisplayForm):
+class FlourishContactView(NoSidebarPage, form.DisplayForm):
 
     content_template = ViewPageTemplateFile('templates/f_contact_view.pt')
     fields = field.Fields(IContact)

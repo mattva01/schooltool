@@ -470,7 +470,7 @@ class PersonEditView(PersonForm, form.EditForm):
                  mapping={'fullname': self.context.title})
 
 
-class FlourishPersonEditView(flourish.page.ExpandedPage, PersonEditView):
+class FlourishPersonEditView(flourish.page.Page, PersonEditView):
 
     label = None
 
@@ -873,7 +873,7 @@ class PersonAddViewBase(PersonAddFormBase):
 
 class FlourishPersonAddView(PersonAddViewBase):
     template = InheritTemplate(flourish.page.Page.template)
-    page_template = InheritTemplate(flourish.page.ExpandedPage.page_template)
+    page_template = InheritTemplate(flourish.page.NoSidebarPage.page_template)
 
     fieldset_groups = None
     fieldset_order = None
