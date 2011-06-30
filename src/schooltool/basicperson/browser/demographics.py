@@ -268,6 +268,14 @@ class EnumFieldDescriptionView(FieldDescriptionView):
     fields = field.Fields(IEnumFieldDescription)
 
 
+class FlourishDemographicsFieldsLinks(flourish.page.RefineLinksViewlet):
+    """demographics fields add links viewlet."""
+
+
+class FlourishDemographicsFieldsActions(flourish.page.RefineLinksViewlet):
+    """demographics fields action links viewlet."""
+
+
 class FlourishDemographicsView(flourish.page.Page):
 
     def table(self):
