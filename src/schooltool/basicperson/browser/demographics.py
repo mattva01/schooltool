@@ -312,28 +312,40 @@ class FlourishReorderDemographicsView(flourish.page.Page, DemographicsView):
         DemographicsView.update(self)
 
 
-class FlourishTextFieldDescriptionAddView(flourish.page.Page, TextFieldDescriptionAddView):
+class FlourishFieldDescriptionAddView(flourish.page.Page, FieldDescriptionAddView):
 
     def update(self):
-        TextFieldDescriptionAddView.update(self)
+        FieldDescriptionAddView.update(self)
+
+    @button.buttonAndHandler(_('Add'), name='add')
+    def handleAdd(self, action):
+        super(FlourishFieldDescriptionAddView, self).handleAdd.func(self, action)
+        # XXX: hacky sucessful submit check
+        if (self._finishedAdd):
+            self.request.response.redirect(self.nextURL())
+
+    @button.buttonAndHandler(_("Cancel"))
+    def handle_cancel_action(self, action):
+        self.request.response.redirect(self.nextURL())
+
+    def nextURL(self):
+        return absoluteURL(self.context, self.request)
 
 
-class FlourishDateFieldDescriptionAddView(flourish.page.Page, DateFieldDescriptionAddView):
-
-    def update(self):
-        DateFieldDescriptionAddView.update(self)
+class FlourishTextFieldDescriptionAddView(FlourishFieldDescriptionAddView, TextFieldDescriptionAddView):
+    pass
 
 
-class FlourishBoolFieldDescriptionAddView(flourish.page.Page, BoolFieldDescriptionAddView):
-
-    def update(self):
-        BoolFieldDescriptionAddView.update(self)
+class FlourishDateFieldDescriptionAddView(FlourishFieldDescriptionAddView, DateFieldDescriptionAddView):
+    pass
 
 
-class FlourishEnumFieldDescriptionAddView(flourish.page.Page, EnumFieldDescriptionAddView):
+class FlourishBoolFieldDescriptionAddView(FlourishFieldDescriptionAddView, BoolFieldDescriptionAddView):
+    pass
 
-    def update(self):
-        EnumFieldDescriptionAddView.update(self)
+
+class FlourishEnumFieldDescriptionAddView(FlourishFieldDescriptionAddView, EnumFieldDescriptionAddView):
+    pass
 
 
 class FlourishFieldDescriptionEditView(flourish.page.Page, FieldDescriptionEditView):
