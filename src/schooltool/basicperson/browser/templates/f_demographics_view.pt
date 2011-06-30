@@ -13,7 +13,9 @@
       </tr>
     </thead>
     <tr tal:repeat="row view/table">
-      <td tal:content="row/title" />
+      <td>
+        <a tal:content="row/title" tal:attributes="href row/url" />
+      </td>
       <td tal:content="row/id" />
       <td tal:content="row/type" />
       <td tal:content="row/required" />

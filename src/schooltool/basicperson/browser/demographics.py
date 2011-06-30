@@ -294,6 +294,7 @@ class FlourishDemographicsView(flourish.page.Page):
                     admin = True
             result.append({
                'title': demo.title,
+               'url': '%s/edit.html' % absoluteURL(demo, self.request),
                'id': demo.name,
                'type': classname[:classname.find('FieldDescription')],
                'required': bool_dict[demo.required],
@@ -340,8 +341,23 @@ class FlourishFieldDescriptionEditView(flourish.page.Page, FieldDescriptionEditV
     def update(self):
         FieldDescriptionEditView.update(self)
 
+    @button.buttonAndHandler(_('Apply'), name='apply')
+    def handleApply(self, action):
+        super(FlourishFieldDescriptionEditView, self).handleApply.func(self, action)
+        # XXX: hacky sucessful submit check
+        if (self.status == self.successMessage or
+            self.status == self.noChangesMessage):
+            self.request.response.redirect(self.nextURL())
 
-class FlourishEnumFieldDescriptionEditView(flourish.page.Page, EnumFieldDescriptionEditView):
+    @button.buttonAndHandler(_("Cancel"))
+    def handle_cancel_action(self, action):
+        self.request.response.redirect(self.nextURL())
+
+    def nextURL(self):
+        return absoluteURL(self.context.__parent__, self.request)
+
+
+class FlourishEnumFieldDescriptionEditView(FlourishFieldDescriptionEditView, EnumFieldDescriptionEditView):
 
     def update(self):
         EnumFieldDescriptionEditView.update(self)
