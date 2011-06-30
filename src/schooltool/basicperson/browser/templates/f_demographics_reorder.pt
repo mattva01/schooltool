@@ -37,10 +37,10 @@
         </td>
       </tr>
     </table>
-    <div class="buttons">
-      <input type="submit" class="submit-widget" name="DONE" value="Done"
-             i18n:attributes="value" />
-    </div>
+    <h3>
+      <a tal:attributes="href context/@@absolute_url"
+         i18n:translate="">Done</a>
+    </h3>
   </form>
 
 </div>
