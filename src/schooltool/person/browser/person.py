@@ -188,6 +188,12 @@ class PersonPasswordEditView(BasicForm):
         return ''
 
 
+class FlourishPersonPasswordEditView(flourish.page.Page, PersonPasswordEditView):
+
+    def update(self):
+        PersonPasswordEditView.update(self)
+
+
 class IPersonInfoManager(IViewletManager):
     """Provides a viewlet hook for the information on a Person's page."""
 

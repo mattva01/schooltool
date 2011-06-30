@@ -22,4 +22,13 @@
       permission="schooltool.view"
       />
 
+  <flourish:page
+      name="password_edit.html"
+      for="schooltool.person.interfaces.IPerson"
+      class=".person.FlourishPersonPasswordEditView"
+      content_template="f_password_form.pt"
+      permission="schooltool.edit"
+      subtitle="Password"
+      />
+
 </configure>
