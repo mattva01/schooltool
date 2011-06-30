@@ -276,7 +276,7 @@ class FlourishDemographicsView(flourish.page.Page):
         for demo in list(self.context.values()):
             classname = demo.__class__.__name__
             teacher, student, admin = False, False, False
-            all = not(demo.limit_keys)
+            limited = bool(demo.limit_keys)
             for key in demo.limit_keys:
                 if key == 'teacher':
                     teacher = True
@@ -289,7 +289,7 @@ class FlourishDemographicsView(flourish.page.Page):
                'id': demo.name,
                'type': classname[:classname.find('FieldDescription')],
                'required': bool_dict[demo.required],
-               'all': bool_dict[all],
+               'limited': bool_dict[limited],
                'teacher': bool_dict[teacher],
                'student': bool_dict[student],
                'admin': bool_dict[admin],
