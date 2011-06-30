@@ -268,6 +268,14 @@ class EnumFieldDescriptionView(FieldDescriptionView):
     fields = field.Fields(IEnumFieldDescription)
 
 
+class FlourishDemographicsFieldsLinks(flourish.page.RefineLinksViewlet):
+    """demographics fields add links viewlet."""
+
+
+class FlourishDemographicsFieldsActions(flourish.page.RefineLinksViewlet):
+    """demographics fields action links viewlet."""
+
+
 class FlourishDemographicsView(flourish.page.Page):
 
     def table(self):
@@ -276,7 +284,7 @@ class FlourishDemographicsView(flourish.page.Page):
         for demo in list(self.context.values()):
             classname = demo.__class__.__name__
             teacher, student, admin = False, False, False
-            all = not(demo.limit_keys)
+            limited = bool(demo.limit_keys)
             for key in demo.limit_keys:
                 if key == 'teacher':
                     teacher = True
@@ -286,10 +294,11 @@ class FlourishDemographicsView(flourish.page.Page):
                     admin = True
             result.append({
                'title': demo.title,
+               'url': '%s/edit.html' % absoluteURL(demo, self.request),
                'id': demo.name,
                'type': classname[:classname.find('FieldDescription')],
                'required': bool_dict[demo.required],
-               'all': bool_dict[all],
+               'limited': bool_dict[limited],
                'teacher': bool_dict[teacher],
                'student': bool_dict[student],
                'admin': bool_dict[admin],
@@ -332,8 +341,23 @@ class FlourishFieldDescriptionEditView(flourish.page.Page, FieldDescriptionEditV
     def update(self):
         FieldDescriptionEditView.update(self)
 
+    @button.buttonAndHandler(_('Apply'), name='apply')
+    def handleApply(self, action):
+        super(FlourishFieldDescriptionEditView, self).handleApply.func(self, action)
+        # XXX: hacky sucessful submit check
+        if (self.status == self.successMessage or
+            self.status == self.noChangesMessage):
+            self.request.response.redirect(self.nextURL())
 
-class FlourishEnumFieldDescriptionEditView(flourish.page.Page, EnumFieldDescriptionEditView):
+    @button.buttonAndHandler(_("Cancel"))
+    def handle_cancel_action(self, action):
+        self.request.response.redirect(self.nextURL())
+
+    def nextURL(self):
+        return absoluteURL(self.context.__parent__, self.request)
+
+
+class FlourishEnumFieldDescriptionEditView(FlourishFieldDescriptionEditView, EnumFieldDescriptionEditView):
 
     def update(self):
         EnumFieldDescriptionEditView.update(self)

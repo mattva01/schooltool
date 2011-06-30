@@ -6,18 +6,20 @@
         <th i18n:translate="">ID</th>
         <th i18n:translate="">Type</th>
         <th i18n:translate="">Required</th>
-        <th i18n:translate="">All</th>
+        <th i18n:translate="">Limited</th>
         <th i18n:translate="">Teach.</th>
         <th i18n:translate="">Stud.</th>
-        <th i18n:translate="">Admin</th>
+        <th i18n:translate="">Admin.</th>
       </tr>
     </thead>
     <tr tal:repeat="row view/table">
-      <td tal:content="row/title" />
+      <td>
+        <a tal:content="row/title" tal:attributes="href row/url" />
+      </td>
       <td tal:content="row/id" />
       <td tal:content="row/type" />
       <td tal:content="row/required" />
-      <td tal:content="row/all" />
+      <td tal:content="row/limited" />
       <td tal:content="row/teacher" />
       <td tal:content="row/student" />
       <td tal:content="row/admin" />
