@@ -61,7 +61,7 @@ from schooltool.person.interfaces import IPerson
 from schooltool.email.interfaces import IEmailUtility
 from schooltool.email.mail import Email
 from schooltool.skin.flourish.viewlet import Viewlet
-from schooltool.skin.flourish.page import RefineLinksViewlet, ExpandedPage
+from schooltool.skin.flourish.page import RefineLinksViewlet, NoSidebarPage
 from schooltool.relationship.relationship import IRelationshipLinks
 from schooltool.contact.contact import URIPerson, URIContact
 from schooltool.contact.contact import URIContactRelationship
@@ -90,6 +90,7 @@ class ContactAddView(form.AddForm):
     label = _("Add new contact")
     template = ViewPageTemplateFile('templates/contact_add.pt')
     fields = field.Fields(IContact)
+    formErrorsMessage = _('Please correct the marked fields below.')
 
     def __init__(self, *args, **kw):
         super(ContactAddView, self).__init__(*args, **kw)
@@ -196,7 +197,7 @@ class PersonContactAddView(ContactAddView):
         return contact
 
 
-class FlourishPersonContactAddView(ExpandedPage, PersonContactAddView):
+class FlourishPersonContactAddView(NoSidebarPage, PersonContactAddView):
 
     label = None
 
@@ -265,6 +266,8 @@ class ContactEditView(form.EditForm):
     template = ViewPageTemplateFile('templates/contact_add.pt')
     fields = field.Fields(IContact)
 
+    formErrorsMessage = _('Please correct the marked fields below.')
+
     @button.buttonAndHandler(_("Cancel"))
     def handle_cancel_action(self, action):
         url = absoluteURL(self.context, self.request)
@@ -297,9 +300,11 @@ class ContactEditView(form.EditForm):
                           'last_name': self.context.last_name})
 
 
-class FlourishContactEditView(ExpandedPage, ContactEditView):
+class FlourishContactEditView(NoSidebarPage, ContactEditView):
 
     form.extends(ContactEditView)
+
+    label = None
 
     def update(self):
         self.buildFieldsetGroups()
@@ -383,7 +388,7 @@ class ContactView(form.DisplayForm):
         return self.render()
 
 
-class FlourishContactView(ExpandedPage, form.DisplayForm):
+class FlourishContactView(NoSidebarPage, form.DisplayForm):
 
     content_template = ViewPageTemplateFile('templates/f_contact_view.pt')
     fields = field.Fields(IContact)
