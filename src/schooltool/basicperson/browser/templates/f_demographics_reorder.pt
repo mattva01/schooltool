@@ -1,9 +1,15 @@
-<tal:dummy condition="view/update"> </tal:dummy>
 <div>
-
   <form method="post" tal:attributes="action request/getURL">
     <input type="hidden" name="form-submitted" value="yes" />
     <table>
+      <thead>
+        <tr>
+          <th i18n:translate="">Order</th>
+          <th i18n:translate="">Title</th>
+          <th i18n:translate="">ID</th>
+          <th i18n:translate="">Delete</th>
+        </tr>
+      </thead>
       <tr tal:repeat="demo view/demographics">
         <td>
           <select name=""
@@ -21,19 +27,19 @@
             </tal:block>
           </select>
         </td>
+        <td tal:content="demo/title" />
+        <td tal:content="demo/name" />
         <td>
-          <input type="checkbox" name="delete:list"
-                 tal:attributes="value demo/name" />
-        </td>
-        <td>
-          <a tal:content="demo/title"
-             tal:attributes="href demo/url">Demo</a>
+          <input type="image" alt="Delete" value="1" title="Delete"
+                 tal:attributes="name string:delete.${demo/name};
+                                 src context/++resource++schooltool.skin.flourish/remove-icon.png"
+                 i18n:attributes="alt title" />
         </td>
       </tr>
     </table>
     <div class="buttons">
-      <tal:block metal:use-macro="view/@@standard_macros/apply-button" />
-      <tal:block metal:use-macro="view/@@standard_macros/delete-button" />
+      <input type="submit" class="submit-widget" name="DONE" value="Done"
+             i18n:attributes="value" />
     </div>
   </form>
 

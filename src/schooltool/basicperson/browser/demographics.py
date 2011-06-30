@@ -308,8 +308,40 @@ class FlourishDemographicsView(flourish.page.Page):
 
 class FlourishReorderDemographicsView(flourish.page.Page, DemographicsView):
 
+    def demographics(self):
+        pos = 0
+        for demo in self.context.values():
+            pos += 1
+            yield {'name': demo.__name__,
+                   'title': demo.title,
+                   'pos': pos}
+
     def update(self):
-        DemographicsView.update(self)
+        if 'DONE' in self.request:
+            url = absoluteURL(self.context, self.request)
+            self.request.response.redirect(url)
+        elif 'form-submitted' in self.request:
+            for demo in self.context.values():
+                name = 'delete.%s' % demo.__name__
+                if name in self.request:
+                    del self.context[demo.__name__]
+                    return
+            old_pos, new_pos, move_detected = 0, 0, False
+            for demo in self.context.values():
+                old_pos += 1
+                name = getName(demo)
+                if 'pos.'+name not in self.request:
+                    continue
+                new_pos = int(self.request['pos.'+name])
+                if new_pos != old_pos:
+                    move_detected = True
+                    break
+            old_pos, new_pos = old_pos-1, new_pos-1
+            keys = list(self.context.keys())
+            moving = keys[old_pos]
+            keys.remove(moving)
+            keys.insert(new_pos,moving)
+            self.context.updateOrder(keys)
 
 
 class FlourishFieldDescriptionAddView(flourish.page.Page, FieldDescriptionAddView):
