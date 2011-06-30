@@ -248,6 +248,7 @@
       name="demographics_fields"
       before="demographics_actions"
       manager="schooltool.skin.flourish.page.IPageRefineManager"
+      view=".demographics.FlourishDemographicsView"
       class=".demographics.FlourishDemographicsFieldsLinks"
       for="schooltool.basicperson.interfaces.IDemographicsFields"
       title="Add"
@@ -257,6 +258,7 @@
   <flourish:viewlet
       name="demographics_actions"
       manager="schooltool.skin.flourish.page.IPageRefineManager"
+      view=".demographics.FlourishDemographicsView"
       class=".demographics.FlourishDemographicsFieldsActions"
       for="schooltool.basicperson.interfaces.IDemographicsFields"
       title="Actions"
