@@ -741,8 +741,10 @@ class FlourishGeneralViewlet(Viewlet):
         rows = []
         fields = field.Fields(IBasicPerson)
         for attr in fields:
-            label = fields[attr].field.title
-            rows.append(self.makeRow(label, getattr(self.context, attr)))
+            value = getattr(self.context, attr)
+            if value:
+                label = fields[attr].field.title
+                rows.append(self.makeRow(label, value))
         return rows
 
     @property
@@ -775,8 +777,10 @@ class FlourishDemographicsViewlet(Viewlet):
         rows = []
         demographics = IDemographics(self.context)
         for attr in fields:
-            label = fields[attr].field.title
-            rows.append(self.makeRow(label, demographics[attr]))
+            value = demographics[attr]
+            if value:
+                label = fields[attr].field.title
+                rows.append(self.makeRow(label, value))
         return rows
 
     @property
