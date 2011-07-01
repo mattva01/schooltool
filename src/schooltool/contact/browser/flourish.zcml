@@ -51,6 +51,15 @@
       manager="schooltool.contact.browser.contact.PersonManageContactsLinks"
       permission="schooltool.view"
       />
+
+  <flourish:viewlet
+      name="person-as-contact"
+      link="contact/edit.html"
+      for="schooltool.person.interfaces.IPerson"
+      class="schooltool.contact.browser.contact.PersonAsContactLinkViewlet"
+      manager="schooltool.contact.browser.contact.PersonManageContactsLinks"
+      permission="schooltool.view"
+      />
   
   <flourish:page
       name="add_contact.html"
@@ -81,6 +90,15 @@
       for="schooltool.contact.interfaces.IContact"
       class=".contact.FlourishContactView"
       permission="schooltool.view"
+      />
+
+  <flourish:page
+      name="edit.html"
+      for="schooltool.contact.basicperson.IBoundContact"
+      class=".basicperson.FlourishBoundContactEditView"
+      content_template="templates/f_contact_form.pt"
+      permission="schooltool.edit"
+      subtitle="XXX"
       />
 
 </configure>

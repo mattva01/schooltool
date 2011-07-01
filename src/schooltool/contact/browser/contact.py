@@ -62,6 +62,7 @@ from schooltool.email.interfaces import IEmailUtility
 from schooltool.email.mail import Email
 from schooltool.skin.flourish.viewlet import Viewlet
 from schooltool.skin.flourish.page import RefineLinksViewlet, NoSidebarPage
+from schooltool.skin.flourish.page import LinkIdViewlet
 from schooltool.relationship.relationship import IRelationshipLinks
 from schooltool.contact.contact import URIPerson, URIContact
 from schooltool.contact.contact import URIContactRelationship
@@ -748,8 +749,10 @@ class FlourishContactsViewlet(Viewlet):
         rows = []
         fields = field.Fields(IAddress, IEmails, IPhones, ILanguages)
         for attr in fields:
-            label = fields[attr].field.title
-            rows.append(self.makeRow(label, getattr(contact, attr)))
+            value = getattr(contact, attr) 
+            if value:
+                label = fields[attr].field.title
+                rows.append(self.makeRow(label, value))
         return rows
 
     def makeRow(self, attr, value):
@@ -771,3 +774,13 @@ class FlourishContactsViewlet(Viewlet):
 
 class PersonManageContactsLinks(RefineLinksViewlet):
     """Links for manage contact page"""
+
+
+class PersonAsContactLinkViewlet(LinkIdViewlet):
+
+    @property
+    def title(self):
+        person = self.context
+        return _('${person_full_name} as Contact',
+                 mapping={'person_full_name': '%s %s' % (person.first_name,
+                                                         person.last_name)})

@@ -284,6 +284,15 @@ class PersonPasswordEditView(form.Form):
         self.actions['cancel'].addClass('button-cancel')
 
 
+class FlourishPersonPasswordEditView(flourish.page.Page,
+                                     PersonPasswordEditView):
+
+    label = None
+
+    def update(self):
+        PersonPasswordEditView.update(self)
+
+
 class IPersonInfoManager(IViewletManager):
     """Provides a viewlet hook for the information on a Person's page."""
 
