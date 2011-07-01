@@ -347,6 +347,7 @@ class FlourishReorderDemographicsView(flourish.page.Page, DemographicsView):
 class FlourishFieldDescriptionAddView(flourish.page.Page, FieldDescriptionAddView):
 
     label = None
+    legend = 'Field Details' 
 
     def update(self):
         FieldDescriptionAddView.update(self)

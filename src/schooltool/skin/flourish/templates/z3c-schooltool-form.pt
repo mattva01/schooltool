@@ -49,8 +49,8 @@
       <div metal:define-slot="main">
         <metal:widget-rows define-macro="widget-rows">
           <fieldset>
-            <legend tal:condition="view/title">
-              <span tal:content="view/title">Label</span>
+            <legend tal:condition="view/legend|nothing">
+              <span tal:content="view/legend">Legend</span>
             </legend>
             <tal:block repeat="widget view/widgets/values">
               <div id="" class="row"
