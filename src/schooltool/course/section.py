@@ -401,16 +401,16 @@ class SectionLinkContinuinityValidationSubscriber(EventAdapterSubscriber):
 def getSectionRosterEventParticipants(event, rel_type):
     if rel_type != event.rel_type:
         return None, None
-    if ISection.providedBy(event.participant1):
+    if interfaces.ISection.providedBy(event.participant1):
         return event.participant1, event.participant2
-    elif ISection.providedBy(event.participant2):
+    elif interfaces.ISection.providedBy(event.participant2):
         return event.participant2, event.participant1
     else:
         return None, None
 
 
 def propagateSectionInstructorAdded(event):
-    section, teacher = getSectionRosterEventParticipants(event, 
+    section, teacher = getSectionRosterEventParticipants(event,
         relationships.URIInstruction)
     if section is None:
         return
@@ -419,7 +419,7 @@ def propagateSectionInstructorAdded(event):
 
 
 def propagateSectionInstructorRemoved(event):
-    section, teacher = getSectionRosterEventParticipants(event, 
+    section, teacher = getSectionRosterEventParticipants(event,
         relationships.URIInstruction)
     if section is None:
         return
@@ -428,7 +428,7 @@ def propagateSectionInstructorRemoved(event):
 
 
 def propagateSectionStudentAdded(event):
-    section, student = getSectionRosterEventParticipants(event, 
+    section, student = getSectionRosterEventParticipants(event,
         relationships.URIMembership)
     if section is None:
         return
@@ -437,7 +437,7 @@ def propagateSectionStudentAdded(event):
 
 
 def propagateSectionStudentRemoved(event):
-    section, student = getSectionRosterEventParticipants(event, 
+    section, student = getSectionRosterEventParticipants(event,
         relationships.URIMembership)
     if section is None:
         return
