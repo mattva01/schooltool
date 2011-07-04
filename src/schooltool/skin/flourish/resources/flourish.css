@@ -27,27 +27,19 @@ h1 {
 h2 {
     font-size: 24px;
     line-height: 28px;
+    margin-bottom: 8px;
+    margin-top: 16px;
 }
 
 h3 {
     font-size: 16px;
     line-height: 20px;
-}
-
-h4, h5, h6 {
-    font-size: 12px;
-    line-height: 20px;
-}
-
-h1, h2, h3, h4, h5, h6 {
-    margin-top: 8px;
     margin-bottom: 8px;
+    margin-top: 16px;
 }
 
 a, a:link, a:visited, a:active {
     color: #aa0000;
-    font-size: 12px;
-    line-height: 16px;
     text-decoration: none;
 }
 
@@ -62,7 +54,7 @@ a:hover {
 p {
     font-size: 12px;
     line-height: 16px;
-    padding-bottom: 8px;
+    margin-bottom: 8px;
 }
 
 li {
@@ -145,6 +137,7 @@ a.modify img {
 }
 
 .schooltool > .footer > p.server-info {
+    margin-bottom: 0px;
     padding-top: 4px;
 }
 
@@ -283,16 +276,4 @@ a.modify img {
 
 .header ul.breadcrumbs a {
     color: #aa0000;
-}
-
-
-/* XXX: where do we put styles like this? */
-
-a.manage-contacts-link {
-    width: auto;
-    float: left;
-    display: block;
-    line-height: 16px;
-    font-size: 12px;
-    margin-top: 8px;
 }

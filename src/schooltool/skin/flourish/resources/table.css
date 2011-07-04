@@ -5,6 +5,8 @@
 */
 
 table {
+    margin-bottom: 8px;
+    margin-top: 16px;
     width: 100%;
 }
 
@@ -51,6 +53,16 @@ table.person-view-demographics .label {
     width: 33%;
 }
 
+/* Styles used in tables in relationship views */
+
+table.relationships-table input[type="image"] {
+    vertical-align: middle;
+}
+
+table.relationships-table tbody tr:hover {
+    background-color: #DFDCD9;
+}
+
 table.groups-table th.title,
 table.groups-table th.schoolyear {
     width: 40%;
@@ -69,12 +81,11 @@ table.persons-table th.action {
     width: 20%;
 }
 
-table.groups-table input[type="image"],
-table.persons-table input[type="image"] {
-    vertical-align: middle;
+table.contacts-table th.last_name,
+table.contacts-table th.first_name {
+    width: 30%;
 }
 
-table.groups-table tbody tr:hover ,
-table.persons-table tbody tr:hover {
-    background-color: #DFDCD9;
+table.contacts-table th.action {
+    width: 15%;
 }

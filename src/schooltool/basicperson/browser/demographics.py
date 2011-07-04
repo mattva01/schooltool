@@ -42,6 +42,10 @@ from schooltool.basicperson.interfaces import IEnumFieldDescription
 from schooltool.basicperson.interfaces import IDemographicsFields
 from schooltool.basicperson.interfaces import IFieldDescription
 from schooltool.basicperson.interfaces import EnumValueList
+from schooltool.skin import flourish
+from schooltool.skin.flourish.interfaces import IViewletManager
+from schooltool.skin.flourish.viewlet import Viewlet, ViewletManager
+from schooltool.skin.flourish.content import ContentProvider
 
 from schooltool.common import format_message
 from schooltool.common import SchoolToolMessage as _
@@ -262,4 +266,167 @@ class EnumFieldDescriptionView(FieldDescriptionView):
     """Display form for an enum field description."""
 
     fields = field.Fields(IEnumFieldDescription)
+
+
+class FlourishDemographicsFieldsLinks(flourish.page.RefineLinksViewlet):
+    """demographics fields add links viewlet."""
+
+
+class FlourishDemographicsFieldsActions(flourish.page.RefineLinksViewlet):
+    """demographics fields action links viewlet."""
+
+
+class FlourishDemographicsView(flourish.page.Page):
+
+    def table(self):
+        result = []
+        bool_dict = {True: 'x', False: ''}
+        for demo in list(self.context.values()):
+            classname = demo.__class__.__name__
+            teacher, student, admin = False, False, False
+            limited = bool(demo.limit_keys)
+            for key in demo.limit_keys:
+                if key == 'teachers':
+                    teacher = True
+                if key == 'students':
+                    student = True
+                if key == 'administrators':
+                    admin = True
+            result.append({
+               'title': demo.title,
+               'url': '%s/edit.html' % absoluteURL(demo, self.request),
+               'id': demo.name,
+               'type': classname[:classname.find('FieldDescription')],
+               'required': bool_dict[demo.required],
+               'limited': bool_dict[limited],
+               'teacher': bool_dict[teacher],
+               'student': bool_dict[student],
+               'admin': bool_dict[admin],
+               })
+        return result
+
+
+class FlourishReorderDemographicsView(flourish.page.Page, DemographicsView):
+
+    def demographics(self):
+        pos = 0
+        for demo in self.context.values():
+            pos += 1
+            yield {'name': demo.__name__,
+                   'title': demo.title,
+                   'pos': pos}
+
+    def update(self):
+        if 'DONE' in self.request:
+            url = absoluteURL(self.context, self.request)
+            self.request.response.redirect(url)
+        elif 'form-submitted' in self.request:
+            for demo in self.context.values():
+                name = 'delete.%s' % demo.__name__
+                if name in self.request:
+                    del self.context[demo.__name__]
+                    return
+            old_pos, new_pos, move_detected = 0, 0, False
+            for demo in self.context.values():
+                old_pos += 1
+                name = getName(demo)
+                if 'pos.'+name not in self.request:
+                    continue
+                new_pos = int(self.request['pos.'+name])
+                if new_pos != old_pos:
+                    move_detected = True
+                    break
+            old_pos, new_pos = old_pos-1, new_pos-1
+            keys = list(self.context.keys())
+            moving = keys[old_pos]
+            keys.remove(moving)
+            keys.insert(new_pos,moving)
+            self.context.updateOrder(keys)
+
+
+class FlourishFieldDescriptionAddView(flourish.page.Page, FieldDescriptionAddView):
+
+    def update(self):
+        FieldDescriptionAddView.update(self)
+
+    @button.buttonAndHandler(_('Add'), name='add')
+    def handleAdd(self, action):
+        super(FlourishFieldDescriptionAddView, self).handleAdd.func(self, action)
+        # XXX: hacky sucessful submit check
+        if (self._finishedAdd):
+            self.request.response.redirect(self.nextURL())
+
+    @button.buttonAndHandler(_("Cancel"))
+    def handle_cancel_action(self, action):
+        self.request.response.redirect(self.nextURL())
+
+    def nextURL(self):
+        return absoluteURL(self.context, self.request)
+
+
+class FlourishTextFieldDescriptionAddView(FlourishFieldDescriptionAddView, TextFieldDescriptionAddView):
+    pass
+
+
+class FlourishDateFieldDescriptionAddView(FlourishFieldDescriptionAddView, DateFieldDescriptionAddView):
+    pass
+
+
+class FlourishBoolFieldDescriptionAddView(FlourishFieldDescriptionAddView, BoolFieldDescriptionAddView):
+    pass
+
+
+class FlourishEnumFieldDescriptionAddView(FlourishFieldDescriptionAddView, EnumFieldDescriptionAddView):
+    pass
+
+
+class FlourishFieldDescriptionEditView(flourish.page.Page, FieldDescriptionEditView):
+
+    def update(self):
+        FieldDescriptionEditView.update(self)
+
+    @button.buttonAndHandler(_('Apply'), name='apply')
+    def handleApply(self, action):
+        super(FlourishFieldDescriptionEditView, self).handleApply.func(self, action)
+        # XXX: hacky sucessful submit check
+        if (self.status == self.successMessage or
+            self.status == self.noChangesMessage):
+            self.request.response.redirect(self.nextURL())
+
+    @button.buttonAndHandler(_("Cancel"))
+    def handle_cancel_action(self, action):
+        self.request.response.redirect(self.nextURL())
+
+    def nextURL(self):
+        return absoluteURL(self.context.__parent__, self.request)
+
+
+class FlourishEnumFieldDescriptionEditView(FlourishFieldDescriptionEditView, EnumFieldDescriptionEditView):
+
+    def update(self):
+        EnumFieldDescriptionEditView.update(self)
+
+
+class FlourishTextFieldDescriptionView(flourish.page.Page, TextFieldDescriptionView):
+
+    def update(self):
+        TextFieldDescriptionView.update(self)
+
+
+class FlourishDateFieldDescriptionView(flourish.page.Page, DateFieldDescriptionView):
+
+    def update(self):
+        DateFieldDescriptionView.update(self)
+
+
+class FlourishBoolFieldDescriptionView(flourish.page.Page, BoolFieldDescriptionView):
+
+    def update(self):
+        BoolFieldDescriptionView.update(self)
+
+
+class FlourishEnumFieldDescriptionView(flourish.page.Page, EnumFieldDescriptionView):
+
+    def update(self):
+        EnumFieldDescriptionView.update(self)
 

@@ -5,6 +5,7 @@
 */
 
 .ui-accordion {
+    margin-top: 16px;
     width: 542px;
 }
 
@@ -39,21 +40,23 @@
 }
 
 .ui-dialog .ui-dialog-content {
-    padding: 2px;
+    padding: 8px;
 }
 
 .ui-dialog .ui-dialog-content form {
+    margin-top: 0px;
     width: 544px;
 }
 
 .ui-dialog .ui-dialog-content form fieldset {
     padding-top: 0px;
-    margin-bottom: 8px;
+    margin-bottom: 0px;
     background-color: #ffffff;
 }
 
 .ui-dialog .ui-dialog-content .buttons {
     margin-bottom: 0px;
+    margin-top: 0px;
 }
 
 .ui-dialog .ui-dialog-titlebar {

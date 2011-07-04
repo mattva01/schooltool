@@ -1,0 +1,47 @@
+<div>
+  <form method="post" tal:attributes="action request/getURL">
+    <input type="hidden" name="form-submitted" value="yes" />
+    <table>
+      <thead>
+        <tr>
+          <th i18n:translate="">Order</th>
+          <th i18n:translate="">Title</th>
+          <th i18n:translate="">ID</th>
+          <th i18n:translate="">Delete</th>
+        </tr>
+      </thead>
+      <tr tal:repeat="demo view/demographics">
+        <td>
+          <select name=""
+                  onchange="this.form.submit()"
+                  tal:attributes="name string:pos.${demo/name}">
+            <tal:block repeat="num view/positions">
+              <option value="1"
+	  	              tal:condition="python:num != demo['pos']"
+		              tal:attributes="value num"
+    		          tal:content="num" />
+              <option value="1" selected="selected"
+	    	          tal:condition="python:num == demo['pos']"
+		              tal:attributes="value num"
+		              tal:content="num" />
+            </tal:block>
+          </select>
+        </td>
+        <td tal:content="demo/title" />
+        <td tal:content="demo/name" />
+        <td>
+          <input type="image" alt="Delete" value="1" title="Delete"
+                 tal:attributes="name string:delete.${demo/name};
+                                 src context/++resource++schooltool.skin.flourish/remove-icon.png"
+                 i18n:attributes="alt title" />
+        </td>
+      </tr>
+    </table>
+    <h3>
+      <a tal:attributes="href context/@@absolute_url"
+         i18n:translate="">Done</a>
+    </h3>
+  </form>
+
+</div>
+

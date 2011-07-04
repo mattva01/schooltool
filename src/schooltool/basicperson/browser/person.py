@@ -470,7 +470,9 @@ class PersonEditView(PersonForm, form.EditForm):
                  mapping={'fullname': self.context.title})
 
 
-class FlourishPersonEditView(flourish.page.ExpandedPage, PersonEditView):
+class FlourishPersonEditView(flourish.page.Page, PersonEditView):
+
+    label = None
 
     def update(self):
         self.buildFieldsetGroups()
@@ -739,8 +741,10 @@ class FlourishGeneralViewlet(Viewlet):
         rows = []
         fields = field.Fields(IBasicPerson)
         for attr in fields:
-            label = fields[attr].field.title
-            rows.append(self.makeRow(label, getattr(self.context, attr)))
+            value = getattr(self.context, attr)
+            if value:
+                label = fields[attr].field.title
+                rows.append(self.makeRow(label, value))
         return rows
 
     @property
@@ -773,8 +777,10 @@ class FlourishDemographicsViewlet(Viewlet):
         rows = []
         demographics = IDemographics(self.context)
         for attr in fields:
-            label = fields[attr].field.title
-            rows.append(self.makeRow(label, demographics[attr]))
+            value = demographics[attr]
+            if value:
+                label = fields[attr].field.title
+                rows.append(self.makeRow(label, value))
         return rows
 
     @property
@@ -871,7 +877,7 @@ class PersonAddViewBase(PersonAddFormBase):
 
 class FlourishPersonAddView(PersonAddViewBase):
     template = InheritTemplate(flourish.page.Page.template)
-    page_template = InheritTemplate(flourish.page.ExpandedPage.page_template)
+    page_template = InheritTemplate(flourish.page.NoSidebarPage.page_template)
 
     fieldset_groups = None
     fieldset_order = None
@@ -922,7 +928,7 @@ class FlourishPersonAddView(PersonAddViewBase):
         super(FlourishPersonAddView, self).handleAdd.func(self, action)
 
     @button.buttonAndHandler(_('Submit and add'), name='submitadd')
-    def handleSubmit(self, action):
+    def handleSubmitAndAdd(self, action):
         super(FlourishPersonAddView, self).handleAdd.func(self, action)
         if self._finishedAdd:
             self.request.response.redirect(self.action)
@@ -1005,5 +1011,5 @@ class BasicPersonTableFormatter(PersonTableFormatter):
             batch_start=self.batch.start, batch_size=self.batch.size,
             sort_on=self._sort_on,
             prefix=self.prefix)
-        formatter.cssClasses['table'] = 'persons-table'
+        formatter.cssClasses['table'] = 'persons-table relationships-table'
         return formatter()

@@ -9,7 +9,7 @@
       before="password_edit.html"
       for="schooltool.person.interfaces.IPerson"
       title="Preferences"
-      class="schooltool.skin.flourish.page.ModalFormLinkViewlet"
+      class=".person.FlourishPersonPreferencesLink"
       manager="schooltool.basicperson.browser.person.PersonSettingsLinks"
       permission="schooltool.view"
       />
@@ -40,5 +40,14 @@
       factory=".person.FlourishPersonFilterWidget" />
 
   <zope:adapter factory=".person.CalendarPublicWidgetLabel" name="label" />
+
+  <flourish:page
+      name="password_edit.html"
+      for="schooltool.person.interfaces.IPerson"
+      class=".person.FlourishPersonPasswordEditView"
+      content_template="f_password_form.pt"
+      permission="schooltool.edit"
+      subtitle="Password"
+      />
 
 </configure>

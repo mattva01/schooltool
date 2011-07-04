@@ -229,7 +229,7 @@ class ActionColumn(Column):
         return '<input type="image" alt="%s" name="%s" src="%s" value="1" title="%s" />' % (self.label, form_id, self.icon, self.label)
 
 
-class FlourishRelationshipViewBase(flourish.page.ExpandedPage):
+class FlourishRelationshipViewBase(flourish.page.NoSidebarPage):
 
     content_template = ViewPageTemplateFile('templates/f_edit_relationships.pt')
 
@@ -328,17 +328,11 @@ class FlourishRelationshipViewBase(flourish.page.ExpandedPage):
         return changed
 
     def update(self):
-        if 'DONE' in self.request:
-            self.request.response.redirect(self.nextURL())
-            return
         changes = self.applyFormChanges()
         if changes:
             self.request.response.redirect(self.request.getURL())
             return
         self.setUpTables()
-
-    def nextURL(self):
-        return absoluteURL(self.context, self.request)
 
 
 class ApplicationLoginView(BrowserView):
