@@ -43,11 +43,27 @@ ST.state = function() {
 ST.dialogs = function() {
 
   /* "private" */
-  function modal_form_dialog(form_url, form_id, title) {
+
+  function before_dialog_load(selector) {
       // Fade out and/or add spinner or something here
-      $(form_id).empty();
-      $(form_id).load(form_url, function(){
-              $(form_id).dialog({
+      $(selector).empty();
+  }
+
+  function after_dialog_load(selector) {
+  }
+
+  function close_modal_form_dialog(selector) {
+      // Fade out and/or add spinner or something here
+      var dialog = $(selector);
+      dialog.dialog("close");
+      dialog.empty();
+  }
+
+  function modal_form_dialog(form_url, form_sel, title) {
+      before_dialog_load(form_sel);
+      $(form_sel).load(form_url, function(){
+              after_dialog_load(form_sel);
+              $(form_sel).dialog({
                   autoOpen: true,
                   modal: true,
                   resizable: false,
@@ -59,18 +75,61 @@ ST.dialogs = function() {
           });
   }
 
+  function find_dialog(selector)
+  {
+      return $(selector).closest(".ui-dialog-content");
+  }
+
   /* "public" */
   return {
 
-    modal_form: function(link_id, form_url, form_id, title)
+    modal_form: function(link_sel, form_url, form_sel, title)
     {
-        $(link_id).attr("href", "#");
+        $(link_sel).attr("href", "#");
         $(document).ready(function(){
-                $(link_id).click(function(e) {
-                        modal_form_dialog(form_url, form_id, title);
+                $(link_sel).click(function(e) {
+                        modal_form_dialog(form_url, form_sel, title);
                         e.preventDefault();
                     });
             });
+    },
+
+    find: find_dialog,
+
+    submit: function(form_sel, button_sel)
+    {
+        var dialog = find_dialog(form_sel);
+        var form = $(form_sel).closest('form');
+
+        data = form.serializeArray();
+
+        if (button_sel) {
+            var button = $(button_sel);
+            data.push({
+                name: button.attr('name'),
+                value: button.attr('value')});
+        }
+
+        before_dialog_load(dialog);
+
+        $.ajax({
+            type: "POST",
+            url: form.attr('action'),
+            data: data,
+            success: function(result){
+                after_dialog_load(dialog);
+                dialog.html(result);
+                // XXX: congratulations, we have just screwed up dialog witdth.
+                }
+            });
+        return false;
+    },
+
+    close: function(form_sel)
+    {
+        var dialog = find_dialog(form_sel);
+        close_modal_form_dialog(dialog);
+        return false;
     },
 
   }
