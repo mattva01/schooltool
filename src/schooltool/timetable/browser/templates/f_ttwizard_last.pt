@@ -1,0 +1,14 @@
+<form class="plain" method="POST" tal:attributes="action request/URL">
+
+  <p i18n:translate="">
+    Timetable
+    <span i18n:name="title" tal:content="view/timetable/title"> [title] </span>
+    created.
+  </p>
+  <div class="controls">
+    <input type="submit" class="button-ok" name="DONE" value="Done"
+           onclick="ST.dialogs.close(this)"
+           i18n:attributes="value" />
+  </div>
+
+</form>

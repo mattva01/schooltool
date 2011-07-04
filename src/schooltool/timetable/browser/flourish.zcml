@@ -129,7 +129,6 @@
       name="final_step"
       class=".ttwizard.FlourishFinalStep"
       view=".ttwizard.FlourishTimetableWizard"
-      render="template"
       permission="zope.Public"
       />
 

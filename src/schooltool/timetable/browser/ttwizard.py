@@ -1078,17 +1078,6 @@ class FlourishTimetableWizard(flourish.page.Page, TimetableWizard):
             steps.append(next_step.__name__)
 
 
-class TweakedFlourishFinalStep(FinalStep):
-    template = InlineViewPageTemplate('')
-
-    def update(self):
-        self.createAndAdd()
-        # XXX: close the dialog or implement redirecting
-        self.request.response.redirect(
-            absoluteURL(self.context, self.request))
-        return True
-
-
 def flourishStep(base, auto_template=True):
 
     template = None
@@ -1133,7 +1122,21 @@ FlourishPeriodOrderSimple = flourishStep(PeriodOrderSimple)
 FlourishPeriodOrderComplex = flourishStep(PeriodOrderComplex)
 FlourishHomeroomStep = flourishStep(HomeroomStep)
 FlourishHomeroomPeriodsStep = flourishStep(HomeroomPeriodsStep)
-FlourishFinalStep = flourishStep(TweakedFlourishFinalStep)
+
+
+class FlourishFinalStep(flourish.content.ContentProvider, FinalStep):
+    template = ViewPageTemplateFile("templates/f_ttwizard_last.pt")
+    timetable = None
+
+    getSessionData = lambda self: self.view.state
+    next = lambda self: None
+
+    def render(self, *args, **kw):
+        # XXX: risky:
+        if self.timetable is None:
+            self.timetable = self.createAndAdd()
+        return self.template(*args, **kw)
+
 
 
 class HackModalWizardLink(flourish.page.ModalFormLinkViewlet):
