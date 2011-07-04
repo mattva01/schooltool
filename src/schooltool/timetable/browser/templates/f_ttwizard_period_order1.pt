@@ -18,7 +18,7 @@
   </tal:block>
   </div>
 
-  <div class="controls">
+  <div class="buttons">
     <input type="submit" class="button-cancel" name="STEP_BACK" value="Back"
            onclick="ST.dialogs.submit(this, this)"
            i18n:attributes="value" />

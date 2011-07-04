@@ -1,10 +1,10 @@
-<form class="plain" method="POST" tal:attributes="action request/URL">
+<form class="standalone" method="POST" tal:attributes="action request/URL">
 
   <div class="row" tal:define="widget nocall:view/title_widget">
     <metal:block use-macro="context/@@form_macros/widget_row" />
   </div>
 
-  <div class="controls">
+  <div class="buttons">
     <input type="submit" class="button-ok" name="NEXT" value="Next"
            onclick="ST.dialogs.submit(this, this)"
            i18n:attributes="value" />
