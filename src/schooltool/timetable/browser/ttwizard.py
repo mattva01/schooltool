@@ -1138,7 +1138,6 @@ class FlourishFinalStep(flourish.content.ContentProvider, FinalStep):
         return self.template(*args, **kw)
 
 
-
 class HackModalWizardLink(flourish.page.ModalFormLinkViewlet):
 
     @property
