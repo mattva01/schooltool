@@ -130,11 +130,11 @@ class IFieldDescription(Interface):
 
     title = TextLine(
         title = _(u"Title"),
-        description = _(u"The title of this Field Description"))
+        description = _(u"As it should appear on forms and reports."))
 
     name = PythonIdentifier(
         title = _(u"ID"),
-        description = _(u"Unique ID of this Field Description"))
+        description = _(u"A unique one word identifier."))
 
     required = Bool(
         title = _(u"Required"),
@@ -142,7 +142,9 @@ class IFieldDescription(Interface):
 
     limit_keys = FilterKeyList(
         title = _(u"Limit keys"),
-        description = _(u"An optional list of limit keys for this field"),
+        description = _(u"""If you select one or more groups below, this field
+                            will only be displayed in forms and reports for
+                            members of the selected groups."""),
         value_type=Choice(
             source="schooltool.basicperson.limit_keys_vocabulary",
             required=True,

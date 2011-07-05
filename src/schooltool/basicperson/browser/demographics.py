@@ -346,10 +346,14 @@ class FlourishReorderDemographicsView(flourish.page.Page, DemographicsView):
 
 class FlourishFieldDescriptionAddView(flourish.page.Page, FieldDescriptionAddView):
 
+    label = None
+    title = 'Demographics'
+    legend = 'Field Details' 
+
     def update(self):
         FieldDescriptionAddView.update(self)
 
-    @button.buttonAndHandler(_('Add'), name='add')
+    @button.buttonAndHandler(_('Submit'), name='add')
     def handleAdd(self, action):
         super(FlourishFieldDescriptionAddView, self).handleAdd.func(self, action)
         # XXX: hacky sucessful submit check
@@ -382,10 +386,19 @@ class FlourishEnumFieldDescriptionAddView(FlourishFieldDescriptionAddView, EnumF
 
 class FlourishFieldDescriptionEditView(flourish.page.Page, FieldDescriptionEditView):
 
+    label = None
+    title = 'Demographics'
+    legend = 'Field Details' 
+
+    @property
+    def subtitle(self):
+        return _(u'Change information for ${field_title}',
+                 mapping={'field_title': self.context.title})
+
     def update(self):
         FieldDescriptionEditView.update(self)
 
-    @button.buttonAndHandler(_('Apply'), name='apply')
+    @button.buttonAndHandler(_('Submit'), name='apply')
     def handleApply(self, action):
         super(FlourishFieldDescriptionEditView, self).handleApply.func(self, action)
         # XXX: hacky sucessful submit check
