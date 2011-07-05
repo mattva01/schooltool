@@ -244,6 +244,24 @@
 
   <!-- DemographicsFields pages -->
 
+  <flourish:page
+     name="index.html"
+     for="schooltool.basicperson.interfaces.IDemographicsFields"
+     class=".demographics.FlourishDemographicsView"
+     content_template="templates/f_demographics_view.pt"
+     permission="schooltool.edit"
+     title="Demographics and Personal Information"
+     />
+
+  <flourish:page
+     name="reorder.html"
+     for="schooltool.basicperson.interfaces.IDemographicsFields"
+     class=".demographics.FlourishReorderDemographicsView"
+     content_template="templates/f_demographics_reorder.pt"
+     permission="schooltool.edit"
+     title="Demographics and Personal Information"
+     />
+
   <flourish:viewlet
       name="demographics_fields"
       before="demographics_actions"
@@ -308,129 +326,111 @@
         manager="schooltool.basicperson.browser.demographics.FlourishDemographicsFieldsActions"
         permission="schooltool.edit"
         />
+
+    <flourish:page
+       name="addText.html"
+       for="schooltool.basicperson.interfaces.IDemographicsFields"
+       class="schooltool.basicperson.browser.demographics.FlourishTextFieldDescriptionAddView"
+       content_template="templates/z3c_form_edit.pt"
+       permission="schooltool.edit"
+       subtitle="New Text Field"
+       />
+
+    <flourish:page
+       name="addDate.html"
+       for="schooltool.basicperson.interfaces.IDemographicsFields"
+       class="schooltool.basicperson.browser.demographics.FlourishDateFieldDescriptionAddView"
+       content_template="templates/z3c_form_edit.pt"
+       permission="schooltool.edit"
+       subtitle="New Date Field"
+       />
+
+    <flourish:page
+       name="addBool.html"
+       for="schooltool.basicperson.interfaces.IDemographicsFields"
+       class="schooltool.basicperson.browser.demographics.FlourishBoolFieldDescriptionAddView"
+       content_template="templates/z3c_form_edit.pt"
+       permission="schooltool.edit"
+       subtitle="New Yes/No Field"
+       />
+
+    <flourish:page
+       name="addEnum.html"
+       for="schooltool.basicperson.interfaces.IDemographicsFields"
+       class="schooltool.basicperson.browser.demographics.FlourishEnumFieldDescriptionAddView"
+       content_template="templates/z3c_form_edit.pt"
+       permission="schooltool.edit"
+       subtitle="New Selection List Field"
+       />
+
+    <flourish:page
+       name="edit.html"
+       for="schooltool.basicperson.demographics.TextFieldDescription"
+       class="schooltool.basicperson.browser.demographics.FlourishFieldDescriptionEditView"
+       content_template="templates/z3c_form_edit.pt"
+       permission="schooltool.edit"
+       />
+
+    <flourish:page
+       name="edit.html"
+       for="schooltool.basicperson.demographics.DateFieldDescription"
+       class="schooltool.basicperson.browser.demographics.FlourishFieldDescriptionEditView"
+       content_template="templates/z3c_form_edit.pt"
+       permission="schooltool.edit"
+       />
+
+    <flourish:page
+       name="edit.html"
+       for="schooltool.basicperson.demographics.BoolFieldDescription"
+       class="schooltool.basicperson.browser.demographics.FlourishFieldDescriptionEditView"
+       content_template="templates/z3c_form_edit.pt"
+       permission="schooltool.edit"
+       />
+
+    <flourish:page
+       name="edit.html"
+       for="schooltool.basicperson.demographics.EnumFieldDescription"
+       class="schooltool.basicperson.browser.demographics.FlourishEnumFieldDescriptionEditView"
+       content_template="templates/z3c_form_edit.pt"
+       permission="schooltool.edit"
+       />
+
+    <flourish:page
+       name="index.html"
+       for="schooltool.basicperson.demographics.TextFieldDescription"
+       class="schooltool.basicperson.browser.demographics.FlourishTextFieldDescriptionView"
+       content_template="templates/z3c_form_display.pt"
+       permission="schooltool.view"
+       title="View"
+       />
+
+    <flourish:page
+       name="index.html"
+       for="schooltool.basicperson.demographics.DateFieldDescription"
+       class="schooltool.basicperson.browser.demographics.FlourishDateFieldDescriptionView"
+       content_template="templates/z3c_form_display.pt"
+       permission="schooltool.view"
+       title="View"
+       />
+
+    <flourish:page
+       name="index.html"
+       for="schooltool.basicperson.demographics.BoolFieldDescription"
+       class="schooltool.basicperson.browser.demographics.FlourishBoolFieldDescriptionView"
+       content_template="templates/z3c_form_display.pt"
+       permission="schooltool.view"
+       title="View"
+       />
+
+    <flourish:page
+       name="index.html"
+       for="schooltool.basicperson.demographics.EnumFieldDescription"
+       class="schooltool.basicperson.browser.demographics.FlourishEnumFieldDescriptionView"
+       content_template="templates/z3c_form_display.pt"
+       permission="schooltool.view"
+       title="View"
+       />
   </configure>
-
-  <flourish:page
-     name="index.html"
-     for="schooltool.basicperson.interfaces.IDemographicsFields"
-     class=".demographics.FlourishDemographicsView"
-     content_template="templates/f_demographics_view.pt"
-     permission="schooltool.edit"
-     title="Demographics and Personal Information"
-     />
-
-  <flourish:page
-     name="reorder.html"
-     for="schooltool.basicperson.interfaces.IDemographicsFields"
-     class=".demographics.FlourishReorderDemographicsView"
-     content_template="templates/f_demographics_reorder.pt"
-     permission="schooltool.edit"
-     title="Demographics and Personal Information"
-     />
-
-  <flourish:page
-     name="addText.html"
-     for="schooltool.basicperson.interfaces.IDemographicsFields"
-     class=".demographics.FlourishTextFieldDescriptionAddView"
-     content_template="templates/f_demographic_field_edit.pt"
-     permission="schooltool.edit"
-     subtitle="New Text Field"
-     />
-
-  <flourish:page
-     name="addDate.html"
-     for="schooltool.basicperson.interfaces.IDemographicsFields"
-     class=".demographics.FlourishDateFieldDescriptionAddView"
-     content_template="templates/f_demographic_field_edit.pt"
-     permission="schooltool.edit"
-     subtitle="New Date Field"
-     />
-
-  <flourish:page
-     name="addBool.html"
-     for="schooltool.basicperson.interfaces.IDemographicsFields"
-     class=".demographics.FlourishBoolFieldDescriptionAddView"
-     content_template="templates/f_demographic_field_edit.pt"
-     permission="schooltool.edit"
-     subtitle="New Yes/No Field"
-     />
-
-  <flourish:page
-     name="addEnum.html"
-     for="schooltool.basicperson.interfaces.IDemographicsFields"
-     class=".demographics.FlourishEnumFieldDescriptionAddView"
-     content_template="templates/f_demographic_field_edit.pt"
-     permission="schooltool.edit"
-     subtitle="New Selection List Field"
-     />
-
-  <flourish:page
-     name="edit.html"
-     for="schooltool.basicperson.demographics.TextFieldDescription"
-     class=".demographics.FlourishFieldDescriptionEditView"
-     content_template="templates/f_demographic_field_edit.pt"
-     permission="schooltool.edit"
-     />
-
-  <flourish:page
-     name="edit.html"
-     for="schooltool.basicperson.demographics.DateFieldDescription"
-     class=".demographics.FlourishFieldDescriptionEditView"
-     content_template="templates/f_demographic_field_edit.pt"
-     permission="schooltool.edit"
-     />
-
-  <flourish:page
-     name="edit.html"
-     for="schooltool.basicperson.demographics.BoolFieldDescription"
-     class=".demographics.FlourishFieldDescriptionEditView"
-     content_template="templates/f_demographic_field_edit.pt"
-     permission="schooltool.edit"
-     />
-
-  <flourish:page
-     name="edit.html"
-     for="schooltool.basicperson.demographics.EnumFieldDescription"
-     class=".demographics.FlourishEnumFieldDescriptionEditView"
-     content_template="templates/f_demographic_field_edit.pt"
-     permission="schooltool.edit"
-     />
-
-  <flourish:page
-     name="index.html"
-     for="schooltool.basicperson.demographics.TextFieldDescription"
-     class=".demographics.FlourishTextFieldDescriptionView"
-     content_template="templates/f_demographic_field_display.pt"
-     permission="schooltool.view"
-     title="View"
-     />
-
-  <flourish:page
-     name="index.html"
-     for="schooltool.basicperson.demographics.DateFieldDescription"
-     class=".demographics.FlourishDateFieldDescriptionView"
-     content_template="templates/f_demographic_field_display.pt"
-     permission="schooltool.view"
-     title="View"
-     />
-
-  <flourish:page
-     name="index.html"
-     for="schooltool.basicperson.demographics.BoolFieldDescription"
-     class=".demographics.FlourishBoolFieldDescriptionView"
-     content_template="templates/f_demographic_field_display.pt"
-     permission="schooltool.view"
-     title="View"
-     />
-
-  <flourish:page
-     name="index.html"
-     for="schooltool.basicperson.demographics.EnumFieldDescription"
-     class=".demographics.FlourishEnumFieldDescriptionView"
-     content_template="templates/f_demographic_field_display.pt"
-     permission="schooltool.view"
-     title="View"
-     />
 
   <!-- Viewlet Mangers -->
 
