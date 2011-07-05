@@ -427,7 +427,7 @@ class TimetableContainerBuilder(object):
     def read(self, schema_container, context):
         assert_not_broken(schema_container)
 
-        self.year_int_id = int(schema_container.__name__)
+        self.year_int_id = context.year_int_id
         schoolyear = getUtility(IIntIds).getObject(self.year_int_id)
 
         default_id = schema_container._default_id
@@ -473,9 +473,18 @@ class SchoolTimetablesBuilder(object):
         schema_root = app['schooltool.timetable.schooltt']
         self.builders = []
         for container in schema_root.values():
+            year_int_id = int(container.__name__)
+            schoolyear = getUtility(IIntIds).queryObject(year_int_id)
+            if schoolyear is None:
+                # Dirty database: year was deleted, but timetable schemas
+                #                 were left
+                continue
+
             builder = TimetableContainerBuilder()
+
             assert_not_broken(container)
-            builder.read(container, context(app=app))
+            builder.read(container, context(app=app,
+                                            year_int_id=year_int_id))
             self.builders.append(builder)
 
     def clean(self, app, context):
