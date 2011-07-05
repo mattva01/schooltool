@@ -1,0 +1,183 @@
+<tal:defs define="dummy view/update" />
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title"
+         tal:content="view/title">Add/edit event</title>
+  <script type="text/javascript" metal:fill-slot="extrahead">
+    first_run = true;
+    stored_duration = null;
+    stored_duration_type = null;
+
+    function allday_changed() {
+        /// XXX: No effect in IE
+        var form = document.getElementById('form');
+        var allday = document.getElementById('field.allday');
+        var start_time = document.getElementById('field.start_time');
+        var duration = document.getElementById('field.duration');
+        var duration_type = document.getElementById('field.duration_type');
+
+        current_duration = duration.value;
+        current_duration_type = duration_type.value;
+
+        if (allday.checked) {
+            start_time.disabled = true;
+            duration_type.disabled = true;
+
+            if (!first_run) {
+                if (stored_duration) {
+                     duration.value = stored_duration;
+                }
+                else if (current_duration_type != 'days'){
+                     duration.value = 1;
+                }
+                duration_type.value = 'days';
+                stored_duration = current_duration;
+                stored_duration_type = current_duration_type;
+            }
+        } else {
+            start_time.disabled = false;
+            duration_type.disabled = false;
+
+            if (!first_run) {
+                if (stored_duration) {
+                     duration.value = stored_duration;
+                     duration_type.value = stored_duration_type;
+                }
+                stored_duration = current_duration;
+                stored_duration_type = current_duration_type;
+            }
+        }
+        first_run = false;
+    }
+    function range_changed() {
+        var range_c = document.getElementById('field.range_c');
+        var range_u = document.getElementById('field.range_u');
+        var count = document.getElementById('field.count');
+        var until = document.getElementById('field.until');
+        count.disabled = !range_c.checked;
+        until.disabled = !range_u.checked;
+    }
+    function onloadhook() {
+        allday_changed();
+        var allday = document.getElementById('field.allday');
+        addEvent(allday, "click", allday_changed);
+    }
+    function addEvent(obj, event, handler) {
+      if (obj.addEventListener) {
+          obj.addEventListener(event, handler, false);
+      } else if (obj.attachEvent) {
+          obj.attachEvent("on" + event, handler);
+      }
+    }
+    addEvent(window, "load", onloadhook);
+  </script>
+</head>
+<body>
+<metal:nothing metal:fill-slot="content-header" />
+
+<metal:block metal:fill-slot="body">
+  <form id="form" class="standalone" method="post" enctype="multipart/form-data"
+        tal:attributes="action request/URL">
+    <h3 i18n:translate="">Event information</h3>
+
+    <div class="error" tal:condition="view/error" tal:content="view/error" />
+    <input type="hidden" tal:condition="request/date|nothing"
+           name="date" tal:attributes="value request/date" />
+    <fieldset>
+      <legend i18n:translate="">Event details</legend>
+
+      <div class="row" tal:define="widget nocall:view/title_widget">
+        <div metal:use-macro="context/@@form_macros/widget_row" />
+      </div>
+      <div class="row" tal:define="widget nocall:view/start_date_widget">
+        <div metal:use-macro="context/@@form_macros/widget_row" />
+      </div>
+      <div class="row" tal:define="widget nocall:view/allday_widget">
+        <div metal:use-macro="context/@@form_macros/widget_row" />
+      </div>
+      <div class="row" tal:define="widget nocall:view/start_time_widget">
+        <div metal:use-macro="context/@@form_macros/widget_row" />
+      </div>
+
+      <div class="row">
+        <tal:def define="widget nocall:view/duration_widget">
+          <div metal:use-macro="context/@@form_macros/widget_row" >
+            <metal:block fill-slot="extra">
+              <tal:comment condition="nothing">
+                Very similar to Repeat Every field
+              </tal:comment>
+              <select name="field.duration_type" size="1"
+                      id="field.duration_type"
+                      tal:define="duration_type python: view.duration_type_widget._getFormValue() or 'minutes'">
+                <option i18n:translate="" value="minutes"
+                    tal:attributes="selected python: duration_type == 'minutes'">
+                  Minutes</option>
+                <option i18n:translate="" value="hours"
+                    tal:attributes="selected python: duration_type == 'hours'">
+                  Hours
+                </option>
+                <option i18n:translate="" value="days"
+                    tal:attributes="selected python: duration_type == 'days'">
+                  Days
+                </option>
+              </select>
+            </metal:block>
+          </div>
+        </tal:def>
+
+      </div>
+      <div class="row" tal:define="widget nocall:view/location_widget">
+        <div metal:use-macro="context/@@form_macros/widget_row" />
+      </div>
+      <div class="row" tal:define="widget nocall:view/description_widget">
+        <div metal:use-macro="context/@@form_macros/widget_row" />
+      </div>
+
+      <div class="row" tal:condition="view/show_book_checkbox">
+        <div class="field">
+          <input class="hiddenType" id="field.book.used" name="field.book.used" type="hidden" value="" />
+          <input class="checkboxType" id="field.book" name="field.book" type="checkbox" value="on"
+                 tal:attributes="checked request/field.book|nothing" />
+          <label for="field.book" i18n:translate="">Book Resources</label>
+        </div>
+      </div>
+
+
+    <div class="resources" tal:condition="view/show_book_link">
+      <fieldset>
+        <legend i18n:translate="">Booked Resources</legend>
+        <table width="100%" condition="context/resources">
+          <tr>
+            <th align="left">Title</th>
+            <th align="left">Type</th>
+          </tr>
+          <tal:loop repeat="resource context/resources">
+            <tr>
+              <td>
+                <p tal:replace="resource/title">resource title</p>
+              </td>
+              <td>
+                <p tal:replace="resource/type">resource type</p>
+              </td>
+            </tr>
+          </tal:loop>
+        </table>
+
+        <p tal:condition="not:context/resources">No Resources Booked</p>
+        <br />
+
+        <a tal:attributes="href string:${context/@@absolute_url}/booking.html"
+           i18n:translate="">Book resources</a>
+      </fieldset>
+    </div>
+
+    <div class="controls">
+      <input type="submit" class="button-ok" name="UPDATE_SUBMIT"
+             tal:attributes="value view/submit_button_title"
+             i18n:attributes="title" title="Shortcut: Alt-A" accesskey="A" />
+      <input type="submit" class="button-cancel" name="CANCEL" value="Cancel"
+             i18n:attributes="value cancel-button" />
+    </div>
+  </form>
+</metal:block>
+</html>

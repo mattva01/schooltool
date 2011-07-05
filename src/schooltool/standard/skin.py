@@ -21,10 +21,8 @@ SchoolTool Standard skin.
 """
 from schooltool.skin.skin import ISchoolToolSkin
 from schooltool.basicperson.browser.skin import IBasicPersonLayer
-from schooltool.timetable.browser.skin import ITimetableLayer
 
 
-class ISchoolToolStandardSkin(ITimetableLayer,
-                              IBasicPersonLayer,
+class ISchoolToolStandardSkin(IBasicPersonLayer,
                               ISchoolToolSkin):
     """The Standard SchoolTool skin"""

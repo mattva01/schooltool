@@ -1,6 +1,6 @@
 <script>ST.state.push()</script>
 
-<tal:block define="url view/url; title view/dialog_title">
+<tal:block define="url view/url; title view/dialog_title|nothing">
   <tal:block condition="url">
     <a href="#"
        tal:attributes="href url;

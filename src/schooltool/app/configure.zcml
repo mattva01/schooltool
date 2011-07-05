@@ -11,22 +11,6 @@
   </class>
 
   <adapter
-      for="schooltool.app.overlay.ICalendarOverlayInfo"
-      provides=".interfaces.IShowTimetables"
-      factory=".app.ShowTimetables"
-      trusted="true"
-      />
-
-  <class class=".app.ShowTimetables">
-    <require
-        permission="schooltool.view"
-        interface=".interfaces.IShowTimetables" />
-    <require
-        permission="schooltool.view"
-        set_schema=".interfaces.IShowTimetables" />
-  </class>
-
-  <adapter
       for=".interfaces.IHaveCalendar"
       provides=".interfaces.ISchoolToolCalendar"
       factory=".cal.getCalendar"
@@ -172,22 +156,8 @@
   <!-- Catalog support -->
   <include file="catalog.zcml" />
 
-  <!-- Timetables for content components -->
-  <class class="schooltool.app.app.SchoolToolApplication">
-    <implements interface="schooltool.timetable.interfaces.IHaveTimetables" />
-  </class>
-
-  <class class="schooltool.person.person.Person">
-    <implements interface="schooltool.timetable.interfaces.IHaveTimetables" />
-  </class>
-
-  <class class="schooltool.group.group.Group">
-    <implements interface="schooltool.timetable.interfaces.IHaveTimetables" />
-  </class>
-
-  <class class="schooltool.resource.resource.BaseResource">
-    <implements interface="schooltool.timetable.interfaces.IHaveTimetables" />
-  </class>
+  <!-- Timetable support -->
+  <include file="timetable-integration.zcml" />
 
   <!-- Core and Domain content objects -->
 

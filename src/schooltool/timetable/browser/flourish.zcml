@@ -1,0 +1,182 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/browser"
+           xmlns:z3c="http://namespaces.zope.org/z3c"
+           xmlns:zope="http://namespaces.zope.org/zope"
+           xmlns:flourish="http://schooltool.org/flourish"
+           i18n_domain="schooltool">
+
+  <!-- timetable container -->
+
+  <flourish:page
+      name="index.html"
+      title="School Timetables"
+      for="schooltool.timetable.interfaces.ITimetableContainer"
+      class=".app.FlourishTimetableContainerView"
+      content_template="templates/f_timetable_container.pt"
+      permission="schooltool.view"
+      />
+
+  <zope:adapter
+      for="schooltool.timetable.interfaces.ITimetableContainer
+           schooltool.skin.flourish.IFlourishLayer"
+      factory=".app.TimetableContainerTableFormatter" />
+
+  <flourish:viewlet
+      name="timetable_container"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      view="schooltool.timetable.browser.app.FlourishTimetableContainerView"
+      class="schooltool.timetable.browser.app.FlourishTimetableContainerLinks"
+      for="schooltool.timetable.interfaces.ITimetableContainer"
+      title="Add"
+      permission="schooltool.view"
+      />
+
+  <!-- timetable wizard -->
+
+  <flourish:content
+      name="first_step"
+      class=".ttwizard.FlourishFirstStep"
+      view=".ttwizard.FlourishTimetableWizard"
+      template="templates/f_ttwizard_first.pt"
+      permission="schooltool.edit"
+      />
+
+  <flourish:content
+      name="cycle_step"
+      class=".ttwizard.FlourishCycleStep"
+      view=".ttwizard.FlourishTimetableWizard"
+      render="template"
+      permission="schooltool.edit"
+      />
+
+  <flourish:content
+      name="day_entry_step"
+      class=".ttwizard.FlourishDayEntryStep"
+      view=".ttwizard.FlourishTimetableWizard"
+      render="template"
+      permission="schooltool.edit"
+      />
+
+  <flourish:content
+      name="independent_days_step"
+      class=".ttwizard.FlourishIndependentDaysStep"
+      view=".ttwizard.FlourishTimetableWizard"
+      render="template"
+      permission="schooltool.edit"
+      />
+
+  <flourish:content
+      name="sequential_model_step"
+      class=".ttwizard.FlourishSequentialModelStep"
+      view=".ttwizard.FlourishTimetableWizard"
+      render="template"
+      permission="schooltool.edit"
+      />
+
+  <flourish:content
+      name="simple_slot_entry_step"
+      class=".ttwizard.FlourishSimpleSlotEntryStep"
+      view=".ttwizard.FlourishTimetableWizard"
+      render="template"
+      permission="schooltool.edit"
+      />
+
+  <flourish:content
+      name="rotating_slot_entry_step"
+      class=".ttwizard.FlourishRotatingSlotEntryStep"
+      view=".ttwizard.FlourishTimetableWizard"
+      render="template"
+      permission="schooltool.edit"
+      />
+
+  <flourish:content
+      name="weekly_slot_entry_step"
+      class=".ttwizard.FlourishWeeklySlotEntryStep"
+      view=".ttwizard.FlourishTimetableWizard"
+      render="template"
+      permission="schooltool.edit"
+      />
+
+  <flourish:content
+      name="named_periods_step"
+      class=".ttwizard.FlourishNamedPeriodsStep"
+      view=".ttwizard.FlourishTimetableWizard"
+      render="template"
+      permission="schooltool.edit"
+      />
+
+  <flourish:content
+      name="period_names_step"
+      class=".ttwizard.FlourishPeriodNamesStep"
+      view=".ttwizard.FlourishTimetableWizard"
+      render="template"
+      permission="schooltool.edit"
+      />
+
+  <flourish:content
+      name="period_sequence_same_step"
+      class=".ttwizard.FlourishPeriodSequenceSameStep"
+      view=".ttwizard.FlourishTimetableWizard"
+      render="template"
+      permission="schooltool.edit"
+      />
+
+  <flourish:content
+      name="period_order_simple_step"
+      class=".ttwizard.FlourishPeriodOrderSimple"
+      view=".ttwizard.FlourishTimetableWizard"
+      render="template"
+      permission="schooltool.edit"
+      />
+
+  <flourish:content
+      name="period_order_complex_step"
+      class=".ttwizard.FlourishPeriodOrderComplex"
+      view=".ttwizard.FlourishTimetableWizard"
+      render="template"
+      permission="schooltool.edit"
+      />
+
+  <flourish:content
+      name="homeroom_step"
+      class=".ttwizard.FlourishHomeroomStep"
+      view=".ttwizard.FlourishTimetableWizard"
+      render="template"
+      permission="schooltool.edit"
+      />
+
+  <flourish:content
+      name="homeroom_periods_step"
+      class=".ttwizard.FlourishHomeroomPeriodsStep"
+      view=".ttwizard.FlourishTimetableWizard"
+      render="template"
+      permission="schooltool.edit"
+      />
+
+  <flourish:content
+      name="final_step"
+      class=".ttwizard.FlourishFinalStep"
+      view=".ttwizard.FlourishTimetableWizard"
+      permission="schooltool.edit"
+      />
+
+  <flourish:page
+      name="add.html"
+      title="New Timetable"
+      for="schooltool.timetable.interfaces.ITimetableContainer"
+      class="schooltool.timetable.browser.ttwizard.FlourishTimetableWizard"
+      permission="schooltool.edit"
+      template="templates/f_ttwizard.pt"
+      render="template"
+      />
+
+  <flourish:viewlet
+      name="add_timetable"
+      title="School Timetable"
+      dialog_title="New timetable"
+      class="schooltool.timetable.browser.ttwizard.HackModalWizardLink"
+      manager="schooltool.timetable.browser.app.FlourishTimetableContainerLinks"
+      permission="schooltool.edit"
+      />
+
+</configure>

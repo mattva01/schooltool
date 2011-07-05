@@ -1,4 +1,4 @@
-  <a tal:attributes="href string:${view/context/@@absolute_url}/school_timetables"
+  <a tal:attributes="href string:${view/context/@@absolute_url}/timetables"
      class="navigation_header"
      i18n:domain="schooltool"
      i18n:translate="">School Timetables</a>

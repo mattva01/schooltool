@@ -43,6 +43,10 @@ class JSONEncoder(json.JSONEncoder):
         return json.JSONEncoder.default(self, ob)
 
 
+class JSONDecoder(json.JSONDecoder):
+    pass
+
+
 class JSONExpression(object):
     implements(ITALESExpression)
 

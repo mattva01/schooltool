@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:security="http://schooltool.org/securitypolicy">
+
+  <class class="schooltool.schoolyear.schoolyear.SchoolYear">
+    <implements interface="schooltool.timetable.interfaces.IHaveTimetables" />
+  </class>
+
+  <class class="schooltool.course.section.Section">
+    <implements interface="schooltool.timetable.interfaces.IHaveSchedule" />
+  </class>
+
+  <adapter factory=".timetable.EmergencyDayTimetableSubscriber"
+           name="update-timetables-on-emergency" />
+
+  <security:describe_action
+      group="schooltool.course-sections" name="edit_timetables"
+      title="Assign timetables"
+      order="41"
+      interface="schooltool.course.interfaces.ISection"
+      permission="schooltool.edit"
+  />
+
+  <security:describe_action
+      group="schooltool.course-sections" name="edit_schedule"
+      title="Change schedule"
+      order="42"
+      interface="schooltool.course.interfaces.ISection"
+      permission="schooltool.edit"
+  />
+
+</configure>

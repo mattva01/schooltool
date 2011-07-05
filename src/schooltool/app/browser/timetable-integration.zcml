@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/browser"
+           xmlns:zope="http://namespaces.zope.org/zope"
+           i18n_domain="schooltool">
+
+  <configure package="schooltool.skin">
+    <navigationViewlet
+      name="timetables-csvimport"
+      for="schooltool.course.interfaces.ISectionContainer"
+      manager="schooltool.skin.IActionMenuManager"
+      template="templates/actionsViewlet.pt"
+      permission="schooltool.edit"
+      link="@@timetables-csvimport.html"
+      title="Import Sections"
+      order="50"
+      />
+  </configure>
+
+  <!-- XXX: Mmh, is ISectionContainer the only component using this -->
+  <!--      view class? -->
+
+  <page
+      name="timetables-csvimport.html"
+      for="schooltool.course.interfaces.ISectionContainer"
+      class="schooltool.app.browser.timetablecsvimport.TimetableCSVImportView"
+      template="templates/timetables-csvimport.pt"
+      permission="schooltool.edit"
+      layer="schooltool.skin.ISchoolToolLayer"
+      />
+
+</configure>
+

@@ -40,9 +40,6 @@ from zope.annotation.interfaces import IAttributeAnnotatable
 
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.common import parse_datetime
-from schooltool.timetable import SchooldayTemplate, SchooldaySlot
-from schooltool.timetable.interfaces import ITimetableSchemaContainer
-from schooltool.timetable.model import SequentialDaysTimetableModel
 from schooltool.term.interfaces import ITermContainer
 from schooltool.term.tests import setUpDateManagerStub
 from schooltool.testing.util import NiceDiffsMixin
@@ -78,6 +75,13 @@ from schooltool.app.browser.interfaces import ICalendarProvider
 from schooltool.app.browser.cal import EventForDisplay
 from schooltool.app.browser.cal import CalendarDay
 
+try:
+    from schooltool.timetable import SchooldayTemplate, SchooldaySlot
+    from schooltool.timetable.interfaces import ITimetableSchemaContainer
+    from schooltool.timetable.model import SequentialDaysTimetableModel
+except:
+    pass # XXX: tests not refactored yet
+
 
 class PrincipalStub:
 
@@ -107,6 +111,15 @@ def setUp(test=None):
     setUpDateManagerStub(test_today)
     app = ApplicationStub()
     provideAdapter(lambda x: app, (None,), ISchoolToolApplication)
+
+
+def setUpTimetabling():
+    # XXX: broken timetable test integration
+    from schooltool.timetable import TimetablesAdapter
+    from schooltool.timetable import CompositeTimetables
+    provideAdapter(TimetablesAdapter)
+    provideAdapter(CompositeTimetables)
+    registry.setupTimetablesComponents()
 
 
 class EventStub(object):
@@ -1061,7 +1074,7 @@ class TestCalendarViewBase(unittest.TestCase):
             >>> from schooltool.app.cal import Calendar
 
             >>> app = sbsetup.setUpSchoolToolSite()
-            >>> sbsetup.setUpTimetabling()
+            >>> setUpTimetabling()
             >>> setUpDateManagerStub(date(2005, 5, 13))
 
             >>> person = app['persons']['ignas'] = Person(u'Ignas')
@@ -1197,7 +1210,7 @@ class TestCalendarViewBase(unittest.TestCase):
             >>> registerCalendarHelperViews()
             >>> registerCalendarSubscribers()
             >>> sbsetup.setUpSessions()
-            >>> sbsetup.setUpTimetabling()
+            >>> setUpTimetabling()
             >>> setUpDateManagerStub(date(2005, 5, 13))
 
         CalendarViewBase.getEvents returns a list of wrapped calendar
@@ -1304,7 +1317,7 @@ class TestCalendarViewBase(unittest.TestCase):
         from schooltool.app.browser.cal import CalendarViewBase
         from schooltool.app.cal import Calendar
         app = sbsetup.setUpSchoolToolSite()
-        sbsetup.setUpTimetabling()
+        setUpTimetabling()
 
         e0 = createEvent('2004-08-10 11:00', '1h', "e0")
         e2 = createEvent('2004-08-11 11:00', '1h', "e2")
@@ -1353,7 +1366,7 @@ class TestCalendarViewBase(unittest.TestCase):
         from schooltool.app.browser.cal import CalendarViewBase
         from schooltool.app.cal import Calendar
         app = sbsetup.setUpSchoolToolSite()
-        sbsetup.setUpTimetabling()
+        setUpTimetabling()
 
         e0 = createEvent('2004-08-10 22:00', '30m', "e0")
         e1 = createEvent('2004-08-11 02:00', '1h', "e1")
@@ -1426,7 +1439,7 @@ class TestCalendarViewBase(unittest.TestCase):
         from schooltool.app.browser.cal import CalendarViewBase
         from schooltool.app.cal import Calendar
         app = sbsetup.setUpSchoolToolSite()
-        sbsetup.setUpTimetabling()
+        setUpTimetabling()
 
         event = createEvent('2004-08-10', "1d", "e0", allday=True)
 
@@ -3417,7 +3430,7 @@ class TestDailyCalendarView(unittest.TestCase):
         registerCalendarHelperViews()
         registerCalendarSubscribers()
         sbsetup.setUpSessions()
-        sbsetup.setUpTimetabling()
+        setUpTimetabling()
         sbsetup.setUpCalendaring()
         setUpDateManagerStub(self.today)
 
@@ -4088,7 +4101,7 @@ class TestDailyCalendarView(unittest.TestCase):
             >>> registerCalendarHelperViews()
             >>> registerCalendarSubscribers()
             >>> sbsetup.setUpSessions()
-            >>> sbsetup.setUpTimetabling()
+            >>> setUpTimetabling()
             >>> setUpDateManagerStub(date(2005, 5, 13))
 
         DailyCalendarView.getAllDayEvents returns a list of wrapped
@@ -4674,7 +4687,7 @@ def doctest_AtomCalendarView():
 
         >>> setup.placefulSetUp()
         >>> app = sbsetup.setUpSchoolToolSite()
-        >>> sbsetup.setUpTimetabling()
+        >>> setUpTimetabling()
         >>> registerCalendarHelperViews()
         >>> registerCalendarSubscribers()
 

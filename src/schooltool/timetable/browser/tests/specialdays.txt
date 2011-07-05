@@ -27,7 +27,7 @@ We have a timetable schema to put the view on:
 
     >>> from schooltool.timetable.browser.tests.test_timetable import \
     ...      createSchema
-    >>> from schooltool.timetable.browser import SpecialDayView
+    >>> from schooltool.timetable.browser.timetable import SpecialDayView
     >>> ttschema = createSchema(['Day 1', 'Day 2'],
     ...                         ['First',
     ...                          'Second',

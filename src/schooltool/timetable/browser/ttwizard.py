@@ -29,7 +29,7 @@ of the workflow in src/schooltool/app/browser/ftests/images/
 
 The workflow is as follows:
 
-    1. "New timetable schema"
+    1. "New timetable"
 
        (The user enters a name.)
 
@@ -103,7 +103,7 @@ The workflow is as follows:
 
         (The user sees a list of drop-downs.)
 
-    16. The timetable schema is created.
+    16. The timetable is created.
 
 
 The shortest path through this workflow contains 7 steps, the longest contains
@@ -118,6 +118,7 @@ Step 16 needs the following data:
     - a list of day templates (weekday -> period_id -> start time & duration)
 
 """
+import os
 
 from zope.interface import Interface
 from zope.schema import TextLine, Text, getFieldNamesInOrder
@@ -126,30 +127,38 @@ from zope.app.form.utility import setUpWidgets
 from zope.app.form.utility import getWidgetsData
 from zope.app.form.interfaces import IInputWidget
 from zope.app.form.interfaces import WidgetsError
-from zope.publisher.browser import BrowserView
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
+from zope.browserpage.viewpagetemplatefile import BoundPageTemplate
 from zope.container.interfaces import INameChooser
+from zope.container.contained import containedEvent
+from zope.event import notify
+from zope.publisher.browser import BrowserView
 from zope.session.interfaces import ISession
 from zope.traversing.browser.absoluteurl import absoluteURL
 
+import schooltool.skin.flourish.page
 from schooltool.app.browser.cal import day_of_week_names
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
-from schooltool.timetable.model import SequentialDayIdBasedTimetableModel
-from schooltool.timetable.model import SequentialDaysTimetableModel
-from schooltool.timetable.model import WeeklyTimetableModel
-from schooltool.timetable.browser import parse_time_range
-from schooltool.timetable.browser import format_time_range
+from schooltool.common import parse_time_range, format_time_range
+from schooltool.common.inlinept import InlineViewPageTemplate
+from schooltool.skin import flourish
+from schooltool.skin.flourish.tal import JSONDecoder
+from schooltool.schoolyear.interfaces import ISchoolYearContainer
+from schooltool.timetable.interfaces import IHaveTimetables
+from schooltool.timetable.daytemplates import WeekDayTemplates
+from schooltool.timetable.daytemplates import SchoolDayTemplates
+from schooltool.timetable.daytemplates import DayTemplate
+from schooltool.timetable.daytemplates import TimeSlot
+from schooltool.timetable.schedule import Period
+from schooltool.timetable.timetable import Timetable
+
 from schooltool.common import SchoolToolMessage as _
-from schooltool.timetable.interfaces import ITimetableSchemaContainer
-from schooltool.timetable.schema import TimetableSchema, TimetableSchemaDay
-from schooltool.timetable import SchooldayTemplate, SchooldaySlot
 
 
 def getSessionData(view):
     """Return the data container stored in the session."""
     return ISession(view.request)['schooltool.ttwizard']
-
 
 #
 # Abstract step classes
@@ -169,9 +178,6 @@ class Step(BrowserView):
         `next` returns the next step.
 
     """
-
-    __used_for__ = ITimetableSchemaContainer
-
     getSessionData = getSessionData
 
 
@@ -231,7 +237,9 @@ class FormStep(Step):
 #
 
 class FirstStep(FormStep):
-    """First step: enter the title for the new schema."""
+    """First step: enter the title for the new timetable."""
+
+    __name__ = 'first_step'
 
     __call__ = ViewPageTemplateFile("templates/ttwizard.pt")
 
@@ -248,12 +256,13 @@ class FirstStep(FormStep):
         return True
 
     def next(self):
-        return CycleStep(self.context, self.request)
+        return CycleStep
 
 
 class CycleStep(ChoiceStep):
     """A step for choosing the timetable cycle."""
 
+    __name__ = 'cycle_step'
     key = 'cycle'
 
     question = _("Does your school's timetable cycle use days of the week,"
@@ -265,9 +274,9 @@ class CycleStep(ChoiceStep):
     def next(self):
         session = self.getSessionData()
         if session['cycle'] == 'weekly':
-            return IndependentDaysStep(self.context, self.request)
+            return IndependentDaysStep
         else:
-            return DayEntryStep(self.context, self.request)
+            return DayEntryStep
 
     def update(self):
         success = ChoiceStep.update(self)
@@ -283,6 +292,7 @@ class CycleStep(ChoiceStep):
 class DayEntryStep(FormStep):
     """A step for entering names of days."""
 
+    __name__ = 'day_entry_step'
     description = _("Enter names of days in cycle, one per line.")
 
     class schema(Interface):
@@ -309,12 +319,13 @@ class DayEntryStep(FormStep):
         return True
 
     def next(self):
-        return IndependentDaysStep(self.context, self.request)
+        return IndependentDaysStep
 
 
 class IndependentDaysStep(ChoiceStep):
     """A step for choosing if all period times are the same each day."""
 
+    __name__ = 'independent_days_step'
     key = 'similar_days'
 
     question = _("Do classes begin and end at the same time each day in"
@@ -326,32 +337,33 @@ class IndependentDaysStep(ChoiceStep):
     def next(self):
         session = self.getSessionData()
         if session['similar_days']:
-            return SimpleSlotEntryStep(self.context, self.request)
+            return SimpleSlotEntryStep
         else:
             if session['cycle'] == 'weekly':
-                return WeeklySlotEntryStep(self.context, self.request)
+                return WeeklySlotEntryStep
             else:
-                return SequentialModelStep(self.context, self.request)
+                return SequentialModelStep
 
 
 class SequentialModelStep(ChoiceStep):
     """Step for choosing if start and end times vay based on the day of
     the week or the day in the cycle."""
 
+    __name__ = 'sequential_model_step'
     key = 'time_model'
 
     question = _("Do start and end times vary based on the day of the week"
                  " (Monday - Friday) or the day in the cycle?")
 
     choices = [('weekly', _("Day of week")),
-               ('cycle_day', _("Day in cycle"))]
+               ('rotating', _("Day in cycle"))]
 
     def next(self):
         session = self.getSessionData()
         if session['time_model'] == 'weekly':
-            return WeeklySlotEntryStep(self.context, self.request)
+            return WeeklySlotEntryStep
         else:
-            return RotatingSlotEntryStep(self.context, self.request)
+            return RotatingSlotEntryStep
 
 
 def parse_name_list(names):
@@ -403,11 +415,35 @@ def parse_time_range_list(times):
     return result
 
 
+def format_time_range_list(times):
+    r"""Format a multi-line string from a list of time slots.
+
+    One slot per line (HH:MM - HH:MM).  Empty lines are ignored.  Extra
+    spaces are stripped.
+
+        >>> import datetime
+        >>> times = [(datetime.time(9, 30), datetime.timedelta(0, 3300)),
+        ...          (datetime.time(12, 30), datetime.timedelta(0, 3300))]
+
+        >>> print format_time_range_list(times)
+        09:30-10:25
+        12:30-13:25
+
+    """
+    lines = []
+    for tr_time, tr_delta in times:
+        lines.append(format_time_range(tr_time, tr_delta))
+
+    return '\n'.join(lines)
+
+
 class SimpleSlotEntryStep(FormStep):
     """A step for entering times for classes.
 
     This step is used when the times are the same in each day.
     """
+
+    __name__ = 'simple_slot_entry_step'
 
     description = _("Enter start and end times for each slot,"
                     " one slot (HH:MM - HH:MM) per line.")
@@ -438,7 +474,7 @@ class SimpleSlotEntryStep(FormStep):
         return True
 
     def next(self):
-        return NamedPeriodsStep(self.context, self.request)
+        return NamedPeriodsStep
 
 
 class RotatingSlotEntryStep(Step):
@@ -449,6 +485,7 @@ class RotatingSlotEntryStep(Step):
     chosen in the SequentialModelStep.
     """
 
+    __name__ = 'rotating_slot_entry_step'
     __call__ = ViewPageTemplateFile("templates/ttwizard_slottimes.pt")
 
     description = _("Enter start and end times for each slot on each day,"
@@ -490,7 +527,7 @@ class RotatingSlotEntryStep(Step):
         return True
 
     def next(self):
-        return NamedPeriodsStep(self.context, self.request)
+        return NamedPeriodsStep
 
 
 class WeeklySlotEntryStep(RotatingSlotEntryStep):
@@ -500,6 +537,8 @@ class WeeklySlotEntryStep(RotatingSlotEntryStep):
     and the weekly cycle is chosen in the CycleStep or in the
     SequentialModelStep.
     """
+
+    __name__ = 'weekly_slot_entry_step'
 
     def dayNames(self):
         """Return the list of day names."""
@@ -525,6 +564,7 @@ class WeeklySlotEntryStep(RotatingSlotEntryStep):
 class NamedPeriodsStep(ChoiceStep):
     """A step for choosing if periods have names or are designated by time"""
 
+    __name__ = 'named_periods_step'
     key = 'named_periods'
 
     question = _("Do periods have names or are they simply"
@@ -536,11 +576,11 @@ class NamedPeriodsStep(ChoiceStep):
     def next(self):
         session = self.getSessionData()
         if session['named_periods']:
-            return PeriodNamesStep(self.context, self.request)
+            return PeriodNamesStep
         else:
             periods_order = default_period_names(session['time_slots'])
             session['periods_order'] = periods_order
-            return HomeroomStep(self.context, self.request)
+            return HomeroomStep
 
 
 def default_period_names(time_slots):
@@ -567,6 +607,7 @@ def default_period_names(time_slots):
 class PeriodNamesStep(FormStep):
     """A step for entering names of periods"""
 
+    __name__ = 'period_names_step'
     description = _("Enter names of periods, one per line.")
 
     class schema(Interface):
@@ -600,12 +641,13 @@ class PeriodNamesStep(FormStep):
         return max(map(len, times))
 
     def next(self):
-        return PeriodSequenceSameStep(self.context, self.request)
+        return PeriodSequenceSameStep
 
 
 class PeriodSequenceSameStep(ChoiceStep):
     """A step for choosing whether periods are the same on all days"""
 
+    __name__ = 'period_sequence_same_step'
     key = 'periods_same'
 
     question = _("Is the sequence of periods each day the same or different?")
@@ -616,13 +658,15 @@ class PeriodSequenceSameStep(ChoiceStep):
     def next(self):
         session = self.getSessionData()
         if session[self.key]:
-            return PeriodOrderSimple(self.context, self.request)
+            return PeriodOrderSimple
         else:
-            return PeriodOrderComplex(self.context, self.request)
+            return PeriodOrderComplex
 
 
 class PeriodOrderSimple(Step):
     """Step to put periods in order if all days are the same."""
+
+    __name__ = 'period_order_simple_step'
 
     __call__ = ViewPageTemplateFile('templates/ttwizard_period_order1.pt')
 
@@ -665,12 +709,13 @@ class PeriodOrderSimple(Step):
         return True
 
     def next(self):
-        return HomeroomStep(self.context, self.request)
+        return HomeroomStep
 
 
 class PeriodOrderComplex(Step):
     """Step to put periods in order if order is different on different days"""
 
+    __name__ = 'period_order_complex_step'
     __call__ = ViewPageTemplateFile('templates/ttwizard_period_order2.pt')
 
     description = _('Please put the periods in order for each day:')
@@ -722,12 +767,13 @@ class PeriodOrderComplex(Step):
         return True
 
     def next(self):
-        return HomeroomStep(self.context, self.request)
+        return HomeroomStep
 
 
 class HomeroomStep(ChoiceStep):
     """A step for choosing whether the school has homeroom periods."""
 
+    __name__ = 'homeroom_step'
     key = 'homeroom'
 
     question = _("Do you check student attendance for the day in a homeroom"
@@ -739,14 +785,15 @@ class HomeroomStep(ChoiceStep):
     def next(self):
         session = self.getSessionData()
         if session['homeroom']:
-            return HomeroomPeriodsStep(self.context, self.request)
+            return HomeroomPeriodsStep
         else:
-            return FinalStep(self.context, self.request)
+            return FinalStep
 
 
 class HomeroomPeriodsStep(Step):
     """Step to indicate the homeroom period for each day."""
 
+    __name__ = 'homeroom_periods_step'
     __call__ = ViewPageTemplateFile('templates/ttwizard_homeroom.pt')
 
     description = _('Please indicate the homeroom period(s) for each day:')
@@ -773,133 +820,165 @@ class HomeroomPeriodsStep(Step):
         return True
 
     def next(self):
-        return FinalStep(self.context, self.request)
+        return FinalStep
 
 
 class FinalStep(Step):
-    """Final step: create the schema."""
+    """Final step: create the timetable."""
+
+    __name__ = 'final_step'
 
     def __call__(self):
-        ttschema = self.createSchema()
-        self.add(ttschema)
+        self.createAndAdd()
         self.request.response.redirect(
             absoluteURL(self.context, self.request))
+
+    def createAndAdd(self):
+        timetable = self.createTimetable()
+        self.add(timetable)
+        self.setUpTimetable(timetable)
+        return timetable
 
     def update(self):
         return True
 
     def next(self):
-        return FirstStep(self.context, self.request)
+        return FirstStep
 
-    def modelFactory(cycle, similar_days, time_model):
-        """Return the timetable model factory for the chosen cycle.
-
-        Cycle can be either 'weekly' or 'rotating'.  Weekly cycles always
-        use the WeeklyTimetableModel.
-
-            >>> FinalStep.modelFactory('weekly', None, None)
-            <...WeeklyTimetableModel...>
-
-        Rotating cycles can either vary based on the day of the week, or
-        on the day in the cycle.
-
-            >>> FinalStep.modelFactory('rotating', False, 'weekly')
-            <...SequentialDaysTimetableModel...>
-
-            >>> FinalStep.modelFactory('rotating', False, 'cycle_day')
-            <...SequentialDayIdBasedTimetableModel...>
-
-        but there's no distinction between the two if all days have the same
-        time slots.
-
-            >>> FinalStep.modelFactory('rotating', True, None)
-            <...SequentialDayIdBasedTimetableModel...>
-
-        """
-        assert cycle in ('weekly', 'rotating')
-        if cycle == 'weekly':
-            return WeeklyTimetableModel
-        if similar_days:
-            return SequentialDayIdBasedTimetableModel
-        assert time_model in ('weekly', 'cycle_day')
-        if time_model == 'weekly':
-            return SequentialDaysTimetableModel
-        else:
-            return SequentialDayIdBasedTimetableModel
-
-    modelFactory = staticmethod(modelFactory)
-
-    def dayTemplates(periods_order, time_slots):
-        """Return a dict of day templates for ITimetableModelFactory.
-
-        `periods_order` is a list of lists of period names in order (one list
-        per day).
-
-        `time_slots` is a list of day definitions, where each day is a
-        list of slots, and each slot is a tuple (tstart, duration).
-        """
-        templates = {None: SchooldayTemplate()}
-        same = True
-        for n, slots in enumerate(time_slots):
-            template = SchooldayTemplate()
-            for tstart, duration in slots:
-                template.add(SchooldaySlot(tstart, duration))
-            templates[n] = template
-            if n > 0 and template != templates[n-1]:
-                same = False
-        if same:
-            return {None: templates[0]}
-        else:
-            return templates
-
-    dayTemplates = staticmethod(dayTemplates)
-
-    def createSchema(self):
-        """Create the timetable schema."""
+    def createTimetable(self):
         session = self.getSessionData()
-        title = session['title']
-        day_ids = session['day_names']
-        periods_order = session['periods_order']
+        app = ISchoolToolApplication(None)
+        tzname = IApplicationPreferences(app).timezone
+
+        # XXX: quick fix for date range
+        owner = IHaveTimetables(self.context)
+        first, last = owner.first, owner.last
+
+        timetable = Timetable(
+            first, last,
+            title=session['title'],
+            timezone=tzname)
+        return timetable
+
+    def addTimeSlotTemplates(self, day_template_schedule, days):
+        for key, title, time_slots in days:
+            template = DayTemplate(title=title)
+            day_template_schedule.templates[key] = template
+            name_chooser = INameChooser(template)
+            for tstart, duration in time_slots:
+                timeslot = TimeSlot(tstart, duration, activity_type=None)
+                key = name_chooser.chooseName('', timeslot)
+                template[key] = timeslot
+
+    def createTimeSlots(self, timetable, model, day_titles, time_slots):
+        if model == 'weekly':
+            timetable.time_slots, object_event = containedEvent(
+                WeekDayTemplates(), timetable, 'time_slots')
+            days = [
+                (timetable.time_slots.getWeekDayKey(n),
+                 translate(day_of_week_names[n], context=self.request),
+                 time_slot)
+                for n, time_slot in zip(range(7), time_slots)]
+        elif model == 'rotating':
+            timetable.time_slots, object_event = containedEvent(
+                SchoolDayTemplates(), timetable, 'time_slots')
+            # An UI limitations at the time of writing
+            time_slots = time_slots[:len(day_titles)]
+            day_ids = [u'%d' % n for n in range(len(day_titles))]
+            days = zip(day_ids, day_titles, time_slots)
+        else:
+            raise NotImplementedError()
+
+        notify(object_event)
+        timetable.time_slots.initTemplates()
+
+        self.addTimeSlotTemplates(timetable.time_slots, days)
+
+    def addPeriodTemplates(self, day_template_schedule, days):
+        for day_key, day_title, periods in days:
+            template = DayTemplate(title=day_title)
+            day_template_schedule.templates[day_key] = template
+
+            name_chooser = INameChooser(template)
+            for period_title, activity_type in periods:
+                period = Period(title=period_title,
+                                activity_type=activity_type)
+                key = name_chooser.chooseName('', period)
+                template[key] = period
+
+    def createPeriods(self, timetable, model, day_titles,
+                      period_names, homeroom_periods):
+        if model == 'weekly':
+            timetable.periods, object_event = containedEvent(
+                WeekDayTemplates(), timetable, 'periods')
+            day_ids = [timetable.periods.getWeekDayKey(n)
+                       for n in range(min(len(day_titles), 7))]
+        elif model == 'rotating':
+            timetable.periods, object_event = containedEvent(
+                SchoolDayTemplates(), timetable, 'periods')
+            day_ids = [u'%d' % n for n in range(len(day_titles))]
+        else:
+            raise NotImplementedError()
+
+        notify(object_event)
+        timetable.periods.initTemplates()
+
+        periods = []
+        for titles, homeroom_titles in zip(period_names, homeroom_periods):
+            periods.append(
+                [(title, title in homeroom_titles and 'homeroom' or 'lesson')
+                 for title in titles])
+
+        days = zip(day_ids, day_titles, periods)
+
+        self.addPeriodTemplates(timetable.periods, days)
+
+    def setUpTimetable(self, timetable):
+        session = self.getSessionData()
+
+        # XXX: would be nice to set theese properly in previous steps
+        periods_model = session['cycle']
+        time_model = session.get('time_model', 'rotating')
+        if periods_model == 'weekly':
+            time_model = 'weekly'
+        if periods_model == 'rotating' and session['similar_days']:
+            time_model = 'rotating'
+
+        assert time_model in ('weekly', 'rotating')
+        assert periods_model in ('weekly', 'rotating')
+
+        # An UI limitations at the time of writing
+        assert not(time_model == 'rotating' and periods_model != 'rotating')
+
+        day_titles = session['day_names']
+
+        # set time slots
+        time_slots = session['time_slots']
+        self.createTimeSlots(timetable, time_model, day_titles, time_slots)
+
+        # set periods
+        period_names = session['periods_order']
         if session['homeroom']:
             homeroom_periods = session['homeroom_periods']
         else:
-            homeroom_periods = [None] * len(day_ids)
+            homeroom_periods = [tuple() for day in day_titles]
 
-        day_templates = self.dayTemplates(periods_order, session['time_slots'])
+        self.createPeriods(timetable, periods_model, day_titles,
+                           period_names, homeroom_periods)
 
-        model_factory = self.modelFactory(session['cycle'],
-                                          session['similar_days'],
-                                          session.get('time_model'))
-        if model_factory is SequentialDayIdBasedTimetableModel:
-            # This conversion is not very nice
-            default = day_templates[None]
-            day_templates = dict([(day_id, day_templates.get(idx, default))
-                                  for idx, day_id in enumerate(day_ids)])
-        model = model_factory(day_ids, day_templates)
-        app = ISchoolToolApplication(None)
-        tzname = IApplicationPreferences(app).timezone
-        ttschema = TimetableSchema(day_ids, title=title, model=model,
-                                   timezone=tzname)
-        for day_id, periods, hpids in zip(day_ids, periods_order,
-                                          homeroom_periods):
-            ttschema[day_id] = TimetableSchemaDay(periods, hpids)
-        return ttschema
-
-    def add(self, ttschema):
-        """Add the timetable schema to self.context."""
+    def add(self, timetable):
+        """Add the timetable to self.context."""
         nameChooser = INameChooser(self.context)
-        key = nameChooser.chooseName('', ttschema)
-        self.context[key] = ttschema
+        key = nameChooser.chooseName('', timetable)
+        self.context[key] = timetable
 
 
 #
 # The wizard itself
 #
 
-class TimetableSchemaWizard(BrowserView):
-    """View for defining a new timetable schema."""
-
-    __used_for__ = ITimetableSchemaContainer
+class TimetableWizard(BrowserView):
+    """View for defining a new timetable."""
 
     getSessionData = getSessionData
 
@@ -921,6 +1000,152 @@ class TimetableSchemaWizard(BrowserView):
             return
         current_step = self.getLastStep()
         if current_step.update():
-            current_step = current_step.next()
+            next = current_step.next()
+            current_step = next(self.context, self.request)
         self.rememberLastStep(current_step)
         return current_step()
+
+
+class FlourishTimetableWizard(flourish.page.Page, TimetableWizard):
+
+    _state = None
+    _session = None
+    current_step = None
+
+    def getLastStep(self):
+        raise NotImplemented('No longer used.')
+
+    def rememberLastStep(self, step):
+        raise NotImplemented('No longer used.')
+
+    @property
+    def state(self):
+        if self._state is None:
+            if 'viewstate' in self.request:
+                decoder = JSONDecoder()
+                self._state = decoder.decode(self.request['viewstate'])
+                slots = self._state.get('time_slots')
+                if slots is not None:
+                    self._state['time_slots'] = [
+                        parse_time_range_list(day) for day in slots]
+            else:
+                self._state = {}
+        if not self._state.get('steps'):
+            self._state['steps'] = []
+        return self._state
+
+    @property
+    def json_state(self):
+        state = self.state
+        slots = state.get('time_slots')
+        if slots is not None:
+            state['time_slots'] = [
+                format_time_range_list(day) for day in slots]
+        return state
+
+    def queryStep(self, name):
+        return flourish.content.queryContentProvider(
+            self.context, self.request, self, name)
+
+    def update(self):
+        if 'CANCEL' in self.request:
+            self.request.response.redirect(
+                    absoluteURL(self.context, self.request))
+            return
+
+        steps = self.state['steps']
+
+        if 'STEP_BACK' in self.request:
+            if len(steps) > 1:
+                steps.pop()
+            self.current_step = self.queryStep(steps[-1])
+            return
+
+        if not steps:
+            first_step_name = FirstStep.__dict__['__name__']
+            self.current_step = self.queryStep(first_step_name)
+            steps.append(self.current_step.__name__)
+            return
+
+        self.current_step = self.queryStep(steps[-1])
+
+        step = self.current_step
+        step.update()
+
+        if step.finished:
+            next_step = step.next()
+            self.current_step = next_step
+            steps.append(next_step.__name__)
+
+
+def flourishStep(base, auto_template=True):
+
+    template = None
+    if auto_template and isinstance:
+        if isinstance(base.__call__, BoundPageTemplate):
+            filename = os.path.split(base.__call__.filename)[-1]
+            template = os.path.join('templates', 'f_%s' % filename)
+
+    def getSessionData(self):
+        return self.view.state
+    def update(self):
+        self.finished = base.update(self)
+    def next(self):
+        cls = base.next(self)
+        next_step_name = cls.__dict__['__name__']
+        return self.view.queryStep(next_step_name)
+    class_dict = {
+        'getSessionData': lambda self: self.view.state,
+        'update': update,
+        'next': next,
+        }
+    if template is not None:
+        class_dict['template'] = ViewPageTemplateFile(template)
+    new_class = type('Flourish%s' % base.__name__,
+                     (flourish.content.ContentProvider, base),
+                     class_dict)
+    return new_class
+
+
+FlourishFirstStep = flourishStep(FirstStep, auto_template=False)
+FlourishCycleStep = flourishStep(CycleStep)
+FlourishDayEntryStep = flourishStep(DayEntryStep)
+FlourishIndependentDaysStep = flourishStep(IndependentDaysStep)
+FlourishSequentialModelStep = flourishStep(SequentialModelStep)
+FlourishSimpleSlotEntryStep = flourishStep(SimpleSlotEntryStep)
+FlourishRotatingSlotEntryStep = flourishStep(RotatingSlotEntryStep)
+FlourishWeeklySlotEntryStep = flourishStep(WeeklySlotEntryStep)
+FlourishNamedPeriodsStep = flourishStep(NamedPeriodsStep)
+FlourishPeriodNamesStep = flourishStep(PeriodNamesStep)
+FlourishPeriodSequenceSameStep = flourishStep(PeriodSequenceSameStep)
+FlourishPeriodOrderSimple = flourishStep(PeriodOrderSimple)
+FlourishPeriodOrderComplex = flourishStep(PeriodOrderComplex)
+FlourishHomeroomStep = flourishStep(HomeroomStep)
+FlourishHomeroomPeriodsStep = flourishStep(HomeroomPeriodsStep)
+
+
+class FlourishFinalStep(flourish.content.ContentProvider, FinalStep):
+    template = ViewPageTemplateFile("templates/f_ttwizard_last.pt")
+    timetable = None
+
+    getSessionData = lambda self: self.view.state
+    next = lambda self: None
+
+    def render(self, *args, **kw):
+        # XXX: risky:
+        if self.timetable is None:
+            self.timetable = self.createAndAdd()
+        return self.template(*args, **kw)
+
+
+class HackModalWizardLink(flourish.page.ModalFormLinkViewlet):
+
+    @property
+    def url(self):
+        app = ISchoolToolApplication(None)
+        syc = ISchoolYearContainer(app)
+        sy = syc.getActiveSchoolYear()
+        if sy is None:
+            return None
+        base_url = absoluteURL(sy, self.request)
+        return '%s/timetables/add.html' % base_url
