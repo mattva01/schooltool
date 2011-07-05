@@ -141,7 +141,7 @@ class IFieldDescription(Interface):
         description = _(u"Whether this Field is required or not"))
 
     limit_keys = FilterKeyList(
-        title = _(u"Limit keys"),
+        title = _(u"List to group(s)"),
         description = _(u"""If you select one or more groups below, this field
                             will only be displayed in forms and reports for
                             members of the selected groups."""),

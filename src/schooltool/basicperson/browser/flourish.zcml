@@ -303,7 +303,7 @@
 
     <flourish:viewlet
         name="reorder.html"
-        title="Reorder fields"
+        title="Reorder or Delete Fields"
         class="schooltool.skin.flourish.page.LinkViewlet"
         manager="schooltool.basicperson.browser.demographics.FlourishDemographicsFieldsActions"
         permission="schooltool.edit"

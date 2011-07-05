@@ -202,7 +202,8 @@ class BoolFieldDescriptionAddView(FieldDescriptionAddView):
 
 class EnumFieldDescriptionAddView(FieldDescriptionAddView):
 
-    fields = field.Fields(IEnumFieldDescription)
+    fields = field.Fields(IEnumFieldDescription).select('title', 'name',
+        'items', 'required', 'limit_keys')
 
     def create(self, data):
         fd = EnumFieldDescription(data['title'],
@@ -237,7 +238,8 @@ class FieldDescriptionEditView(form.EditForm):
 
 class EnumFieldDescriptionEditView(FieldDescriptionEditView):
 
-    fields = field.Fields(IEnumFieldDescription).omit('name')
+    fields = field.Fields(IEnumFieldDescription).select('title',
+        'items', 'required', 'limit_keys')
 
 
 class FieldDescriptionView(form.DisplayForm):
