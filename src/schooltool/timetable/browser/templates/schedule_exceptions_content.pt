@@ -1,0 +1,21 @@
+<tal:block xmlns:tal="http://xml.zope.org/namespaces/tal"
+           xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+           define="exceptions context/exceptions"
+           i18n:translate="">
+
+  <tal:block repeat="date exceptions"
+             condition="not:context/schooltool:can_edit">
+    <p tal:content="structure date/@@mediumDate" />
+  </tal:block>
+  <tal:block repeat="date exceptions"
+             condition="context/schooltool:can_edit">
+    <p><a tal:attributes="href string:${context/@@absolute_url}/special.html?date=${date}"
+       tal:content="date/@@mediumDate" /></p>
+  </tal:block>
+
+  <p tal:condition="not:exceptions"
+     i18n:translate="">
+    There are no exceptions.
+  </p>
+
+</tal:block>

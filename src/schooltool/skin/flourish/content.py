@@ -164,3 +164,21 @@ class TALESAwareContentProviders(ContentProviders):
         if self.engine is not None:
             addTALNamespaceData(provider, self.engine)
         return provider
+
+
+def queryContentProvider(context, request, view, name):
+    provider = queryMultiAdapter(
+        (context, request, view),
+        interfaces.IContentProvider,
+        name)
+    if provider is not None:
+        return provider
+
+    zope_provider = queryMultiAdapter(
+        (context, request, view),
+        zope.contentprovider.interfaces.IContentProvider,
+        name)
+    if zope_provider is None:
+        return None
+    provider = interfaces.IContentProvider(provider, None)
+    return provider

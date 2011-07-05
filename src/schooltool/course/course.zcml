@@ -86,14 +86,13 @@
       />
 
   <class class=".section.Section">
-    <implements interface="schooltool.timetable.interfaces.IOwnTimetables" />
-    <implements interface="schooltool.timetable.interfaces.IBookResources" />
+    <implements interface="schooltool.resource.interfaces.IBookResources" />
     <implements interface="schooltool.app.interfaces.IHaveCalendar" />
 
     <require permission="schooltool.view"
              interface=".interfaces.ISection" />
     <require permission="schooltool.view"
-             interface="schooltool.timetable.interfaces.IBookResources" />
+             interface="schooltool.resource.interfaces.IBookResources" />
     <require permission="schooltool.view"
              attributes="__cmp__" />
     <require permission="schooltool.edit"

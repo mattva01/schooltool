@@ -70,6 +70,60 @@ def diff(old, new, oldlabel="expected output", newlabel="actual output"):
     return "\n".join(diff)
 
 
+def format_table(table, header_rows=0):
+    """Format an ASCII-art table.
+
+    Example:
+
+      >>> print format_table([['11', '12', '13'],
+      ...                     ['21', 'center', '23'],
+      ...                     ['31', 32, None]])
+      +----+--------+------+
+      | 11 | 12     | 13   |
+      | 21 | center | 23   |
+      | 31 | 32     | None |
+      +----+--------+------+
+
+      >>> print format_table([])
+      +-+
+      +-+
+
+      >>> print format_table([['', 'x']])
+      +-+---+
+      | | x |
+      +-+---+
+
+      >>> print format_table([['x', 'y', 'z'],
+      ...                     ['11', '12', '13'],
+      ...                     ['31', 32, '33']], header_rows=1)
+      +----+----+----+
+      | x  | y  | z  |
+      +----+----+----+
+      | 11 | 12 | 13 |
+      | 31 | 32 | 33 |
+      +----+----+----+
+
+    """
+    ncols = table and len(table[0]) or 1
+    col_width = [1] * ncols
+    for row_data in table:
+        for col, cell_data in enumerate(row_data):
+            if cell_data != '':
+                col_width[col] = max(col_width[col], len(str(cell_data)) + 2)
+    hline = '+'.join([''] + ['-' * w for w in col_width] + [''])
+    table_rows = ([hline] +
+                  ['|'.join([''] +
+                            [' ' + str(s).ljust(w - 1)
+                             for s, w in zip(row_data, col_width)] +
+                            [''])
+                   for row_data in table] +
+                  [hline])
+    if 0 < header_rows < len(table):
+        table_rows.insert(1 + header_rows, hline)
+    table = '\n'.join(table_rows)
+    return table
+
+
 def pformat_set(s):
     """Pretty-print a Set."""
     items = list(s)

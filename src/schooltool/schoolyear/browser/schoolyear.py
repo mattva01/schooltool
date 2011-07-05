@@ -61,10 +61,8 @@ from schooltool.common import DateRange
 from schooltool.common import SchoolToolMessage as _
 from schooltool.course.interfaces import ICourseContainer
 from schooltool.course.course import Course
-from schooltool.timetable.interfaces import ITimetableSchemaContainer
 from schooltool.group.interfaces import IGroupContainer
 from schooltool.group.group import Group, defaultGroups
-from schooltool.timetable.schema import locationCopy
 
 
 class SchoolYearContainerAbsoluteURLAdapter(AbsoluteURL):
@@ -202,6 +200,8 @@ class ImportSchoolYearData(object):
         return bool(courses)
 
     def hasTimetableSchemas(self, schoolyear):
+        # XXX: temporary isolation of timetable imports
+        from schooltool.timetable.interfaces import ITimetableSchemaContainer
         timetables = ITimetableSchemaContainer(schoolyear)
         return bool(timetables)
 
@@ -238,6 +238,11 @@ class ImportSchoolYearData(object):
             newCourses[course.__name__] = Course(course.title, course.description)
 
     def importAllTimetables(self):
+        # XXX: temporary isolation of timetable imports
+        from schooltool.timetable.interfaces import ITimetableSchemaContainer
+        # XXX: would be nice to replace with something else
+        from schooltool.timetable.schema import locationCopy
+
         if not self.shouldImportAllTimetables():
             return
         oldTimetables = ITimetableSchemaContainer(self.activeSchoolyear)

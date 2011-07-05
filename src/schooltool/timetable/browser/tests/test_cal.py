@@ -28,11 +28,6 @@ from zope.publisher.browser import TestRequest
 from schooltool.common import parse_datetime
 from schooltool.person.interfaces import IPersonPreferences
 from schooltool.person.person import Person
-from schooltool.timetable.interfaces import ITimetableSchemaContainer
-from schooltool.timetable.schema import TimetableSchema
-from schooltool.timetable.model import SequentialDaysTimetableModel
-from schooltool.timetable import SchooldaySlot
-from schooltool.timetable import SchooldayTemplate
 from schooltool.term.interfaces import ITermContainer
 from schooltool.testing.util import NiceDiffsMixin
 from schooltool.app.interfaces import ISchoolToolCalendar
@@ -43,6 +38,14 @@ from schooltool.app.browser.testing import layeredTestSetup
 from schooltool.app.browser.testing import makeLayeredSuite
 from schooltool.app.testing import app_functional_layer
 
+try:
+    from schooltool.timetable.interfaces import ITimetableSchemaContainer
+    from schooltool.timetable.schema import TimetableSchema
+    from schooltool.timetable.model import SequentialDaysTimetableModel
+    from schooltool.timetable import SchooldaySlot
+    from schooltool.timetable import SchooldayTemplate
+except:
+    pass # XXX: tests not refactored yet
 
 class TestDailyTimetableCalendarRowsView(NiceDiffsMixin, unittest.TestCase):
 

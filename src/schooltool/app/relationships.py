@@ -24,7 +24,6 @@ from schooltool.course.interfaces import ICourse, ISection
 from schooltool.person.interfaces import IPerson
 from schooltool.group.interfaces import IGroup
 from schooltool.app.interfaces import ISchoolToolCalendar
-from schooltool.app.interfaces import IShowTimetables
 from schooltool.app.membership import URIMembership, URIMember, URIGroup
 from schooltool.relationship import URIObject, RelationshipSchema
 from schooltool.relationship.interfaces import IBeforeRelationshipEvent
@@ -75,8 +74,7 @@ def updateInstructorCalendars(event):
     calendar = ISchoolToolCalendar(section)
     if IRelationshipAddedEvent.providedBy(event):
         if calendar not in person.overlaid_calendars:
-            overlay_info = person.overlaid_calendars.add(calendar)
-            IShowTimetables(overlay_info).showTimetables = False
+            person.overlaid_calendars.add(calendar)
     elif IRelationshipRemovedEvent.providedBy(event):
         if calendar in person.overlaid_calendars:
             person.overlaid_calendars.remove(calendar)
@@ -148,8 +146,7 @@ def updateStudentCalendars(event):
     if IRelationshipAddedEvent.providedBy(event):
         if IPerson.providedBy(member) and \
                 calendar not in member.overlaid_calendars:
-            overlay_info = member.overlaid_calendars.add(calendar)
-            IShowTimetables(overlay_info).showTimetables = False
+            member.overlaid_calendars.add(calendar)
 
         elif IGroup.providedBy(member):
             for person in member.members:
@@ -157,8 +154,7 @@ def updateStudentCalendars(event):
                 # shouldn't be more than one layer of groups
                 if IPerson.providedBy(person) and \
                         calendar not in person.overlaid_calendars:
-                    overlay_info = person.overlaid_calendars.add(calendar)
-                    IShowTimetables(overlay_info).showTimetables = False
+                    person.overlaid_calendars.add(calendar)
 
     elif IRelationshipRemovedEvent.providedBy(event):
         if IPerson.providedBy(member):

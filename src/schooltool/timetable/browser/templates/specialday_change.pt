@@ -31,30 +31,29 @@
        <th i18n:translate="">New start</th>
        <th i18n:translate="">New end</th>
      </tr>
-     <tr tal:repeat="period view/getPeriods">
-     <tal:block define="title python: period[0];
-                        orig_start python: period[1];
-                        orig_end python: period[2];
-                        start python: period[3];
-                        end python: period[4];">
-       <td tal:content="title"/>
-       <td tal:content="orig_start"/>
-       <td tal:content="orig_end"/>
-       <td tal:define="name string:${title}_start"
+     <tr tal:repeat="info view/getMeetings">
+       <td tal:condition="info/meeting/period"
+           tal:content="info/meeting/period/title" />
+       <td tal:condition="not:info/meeting/period"></td>
+
+       <td tal:content="info/orig_start_time" />
+       <td tal:content="info/orig_end_time" />
+
+       <td tal:define="name string:${info/form_key}_start"
            tal:attributes="
              class python: name in view.field_errors and 'error' or None">
          <input type="text"
                 tal:attributes="name name;
-                                value python: request.form.get(name, start)"/>
+                                value info/start_time" />
+
        </td>
-       <td tal:define="name string:${title}_end"
+       <td tal:define="name string:${info/form_key}_end"
            tal:attributes="
              class python: name in view.field_errors and 'error' or None">
          <input type="text"
                 tal:attributes="name name;
-                                value python: request.form.get(name, end)"/>
+                                value info/end_time"/>
        </td>
-     </tal:block>
      </tr>
    </table>
 

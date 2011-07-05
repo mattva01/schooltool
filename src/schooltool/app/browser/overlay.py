@@ -33,7 +33,6 @@ from zope.viewlet.viewlet import ViewletBase
 from schooltool.common import SchoolToolMessage as _
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.app.interfaces import ISchoolToolApplication
-from schooltool.app.interfaces import IShowTimetables
 from schooltool.person.interfaces import IPerson
 
 
@@ -213,9 +212,7 @@ class CalendarSelectionView(BrowserView):
             selected = set(self.request.form.get(container, []))
             for item in self.getCalendars(container):
                 if item['id'] in selected and not item['selected']:
-                    ovl_info = user.overlaid_calendars.add(item['calendar'])
-                    if container != 'persons':
-                        IShowTimetables(ovl_info).showTimetables = False
+                    user.overlaid_calendars.add(item['calendar'])
                 elif item['id'] not in selected and item['selected']:
                     user.overlaid_calendars.remove(item['calendar'])
         appcal = self.getApplicationCalendar().get('calendar')

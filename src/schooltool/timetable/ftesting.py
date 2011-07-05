@@ -25,9 +25,8 @@ import os
 
 from schooltool.skin.skin import ISchoolToolSkin
 from schooltool.testing.functional import ZCMLLayer
-from schooltool.timetable.browser.skin import ITimetableLayer
 
-class ITimetableFtestingSkin(ITimetableLayer, ISchoolToolSkin):
+class ITimetableFtestingSkin(ISchoolToolSkin):
     """Skin for Timetable functional tests."""
 
 dir = os.path.abspath(os.path.dirname(__file__))

@@ -1,0 +1,38 @@
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title">
+    Delete items
+  </title>
+</head>
+<body>
+
+<span metal:fill-slot="zonki">
+  <img src="zonki.png" alt="SchoolTool" i18n:attributes="alt"
+    tal:attributes="src context/++resource++zonki-question.png" />
+</span>
+
+<div metal:fill-slot="content-header">
+  <h1 i18n:translate="">Are you sure you want to unschedule?</h1>
+</div>
+
+<metal:block metal:fill-slot="body">
+
+  <form method="post"
+        tal:define="schedule view/schedule"
+        tal:attributes="action string:${context/@@absolute_url}/confirm-delete.html">
+
+    <div tal:content="structure schedule/schooltool:content/view"></div>
+
+    <div class="controls">
+      <input type="submit" class="button-cancel" name="CONFIRM" value="Confirm"
+             i18n:attributes="value"/>
+      <input type="hidden" name="schedule"
+             tal:attributes="value schedule/__name__" />
+      <input type="submit" class="button-cancel" name="CANCEL" value="Cancel"
+             i18n:attributes="value" />
+    </div>
+  </form>
+
+
+</metal:block>
+</body></html>

@@ -34,23 +34,28 @@ def registerTestSetup():
     registry.register('CalendarComponents', haveCalendar)
 
     def haveTimetables():
-        from schooltool.timetable.interfaces import IHaveTimetables
-
-        from schooltool.person.person import Person
-        if not IHaveTimetables.implementedBy(Person):
-            classImplements(Person, IHaveTimetables)
-
-        from schooltool.group.group import Group
-        if not IHaveTimetables.implementedBy(Group):
-            classImplements(Group, IHaveTimetables)
-
-        from schooltool.resource.resource import Resource
-        if not IHaveTimetables.implementedBy(Resource):
-            classImplements(Resource, IHaveTimetables)
-
-        from schooltool.app.app import SchoolToolApplication
-        if not IHaveTimetables.implementedBy(SchoolToolApplication):
-            classImplements(SchoolToolApplication, IHaveTimetables)
+        # XXX: Old IHaveTimetables marker interface lost it's meaning.
+        #      It was used to mark objects that composit timetables from
+        #      related objects that own timetables.
+        #
+        #from schooltool.timetable.interfaces import IHaveTimetables
+        #
+        #from schooltool.person.person import Person
+        #if not IHaveTimetables.implementedBy(Person):
+        #    classImplements(Person, IHaveTimetables)
+        #
+        #from schooltool.group.group import Group
+        #if not IHaveTimetables.implementedBy(Group):
+        #    classImplements(Group, IHaveTimetables)
+        #
+        #from schooltool.resource.resource import Resource
+        #if not IHaveTimetables.implementedBy(Resource):
+        #    classImplements(Resource, IHaveTimetables)
+        #
+        #from schooltool.app.app import SchoolToolApplication
+        #if not IHaveTimetables.implementedBy(SchoolToolApplication):
+        #    classImplements(SchoolToolApplication, IHaveTimetables)
+        pass
     registry.register('TimetablesComponents', haveTimetables)
 
 registerTestSetup()

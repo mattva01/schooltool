@@ -43,15 +43,11 @@ from schooltool.app.overlay import ICalendarOverlayInfo
 from schooltool.app.interfaces import IPluginInit, IPluginStartUp
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
-from schooltool.app.interfaces import IShowTimetables
 from schooltool.app import relationships
 from schooltool.app.interfaces import IAsset
 from schooltool.relationship.relationship import RelationshipProperty
 from schooltool.common import getRequestFromInteraction
 from schooltool.common import SchoolToolMessage as _
-
-
-SHOW_TIMETABLES_KEY = 'schooltool.timetable.showTimetables'
 
 
 class SchoolToolApplication(Persistent, sample.SampleContainer,
@@ -233,58 +229,6 @@ def getApplicationPreferences(app):
         annotations[key] = ApplicationPreferences()
         annotations[key].__parent__ = app
         return annotations[key]
-
-
-class ShowTimetables(object):
-    """Adapter from ICalendarOverlayInfo to IShowTimetables.
-
-        >>> from zope.app.testing import setup
-        >>> setup.setUpAnnotations()
-
-        >>> from zope.interface import classImplements
-        >>> from schooltool.app.overlay import CalendarOverlayInfo
-        >>> from zope.annotation.interfaces import IAttributeAnnotatable
-        >>> classImplements(CalendarOverlayInfo, IAttributeAnnotatable)
-
-        >>> calendar = object()
-        >>> info = CalendarOverlayInfo(calendar, True, 'red', 'yellow')
-        >>> info.__parent__ = calendar
-        >>> stt = ShowTimetables(info)
-
-        >>> from zope.interface.verify import verifyObject
-        >>> verifyObject(IShowTimetables, stt)
-        True
-
-        >>> stt.showTimetables
-        True
-
-    The `showTimetables` attribute is changeable:
-
-        >>> stt.showTimetables = False
-        >>> stt.showTimetables
-        False
-
-    We need a __parent__ attribute for local security grants:
-
-        >>> stt.__parent__ is calendar
-        True
-
-    """
-
-    adapts(ICalendarOverlayInfo)
-    implements(IShowTimetables)
-
-    def __init__(self, context):
-        self.annotations = IAnnotations(context)
-        self.__parent__ = context.__parent__ # for local security grants
-
-    def getShowTimetables(self):
-        return self.annotations.get(SHOW_TIMETABLES_KEY, True)
-
-    def setShowTimetables(self, value):
-        self.annotations[SHOW_TIMETABLES_KEY] = value
-
-    showTimetables = property(getShowTimetables, setShowTimetables)
 
 
 class SchoolToolInitializationUtility(object):

@@ -46,7 +46,6 @@ from z3c.form.interfaces import ActionExecutionError
 from schooltool.common import SchoolToolMessage as _
 from schooltool.person.interfaces import IPerson
 from schooltool.term.interfaces import ITerm
-from schooltool.timetable.interfaces import ITimetables
 from schooltool.schoolyear.interfaces import ISchoolYear
 from schooltool.skin.containers import ContainerView
 from schooltool.app.browser.app import BaseEditView
@@ -90,15 +89,6 @@ class SectionContainerView(ContainerView):
     @property
     def school_year(self):
         return ISchoolYear(self.context)
-
-    # XXX: very hacky, but necessary for now. :-(
-    def getTimetables(self, obj):
-        tt_adapter = ITimetables(obj, None)
-        if tt_adapter is not None:
-            timetables = sorted(tt_adapter.timetables.items())
-            return [timetable
-                    for key, timetable in timetables]
-        return []
 
 
 class SectionCopyingView(SectionContainerView):

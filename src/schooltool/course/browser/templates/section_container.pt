@@ -43,9 +43,6 @@
           Instructors
         </th>
         <th i18n:translate="">
-          Schedule
-        </th>
-        <th i18n:translate="">
           Current Size
         </th>
       </tr>
@@ -72,13 +69,6 @@
             <span tal:condition="not:repeat/instructor/start">, </span>
             <a href="" tal:attributes="href instructor/@@absolute_url"
                tal:content="instructor/title" />
-          </tal:loop>
-        </td>
-        <td>
-          <tal:loop repeat="tt python: view.getTimetables(obj)">
-            <span tal:condition="not:repeat/tt/start">, </span>
-            <a href="" tal:attributes="href tt/@@absolute_url"
-               tal:content="tt/title" />
           </tal:loop>
         </td>
         <td>

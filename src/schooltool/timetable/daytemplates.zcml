@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:i18n="http://namespaces.zope.org/i18n"
+           i18n_domain="schooltool">
+
+  <class class=".daytemplates.DayTemplate">
+    <require permission="schooltool.view"
+             interface="schooltool.timetable.interfaces.IDayTemplate" />
+    <require permission="schooltool.edit"
+             set_schema="schooltool.timetable.interfaces.IDayTemplate" />
+  </class>
+
+  <class class=".daytemplates.DayTemplateContainer">
+    <require permission="schooltool.view"
+             interface="zope.container.interfaces.IReadContainer"
+             />
+    <require permission="schooltool.edit"
+             set_schema="zope.container.interfaces.IWriteContainer" />
+  </class>
+
+  <class class=".daytemplates.TimeSlot">
+    <require permission="schooltool.view"
+             interface="schooltool.timetable.interfaces.ITimeSlot" />
+    <require permission="schooltool.edit"
+             set_schema="schooltool.timetable.interfaces.ITimeSlot" />
+  </class>
+
+  <class class=".daytemplates.DayTemplateSchedule">
+    <require permission="schooltool.view"
+             interface="schooltool.timetable.interfaces.IDayTemplateSchedule" />
+    <require permission="schooltool.edit"
+             set_schema="schooltool.timetable.interfaces.IDayTemplateSchedule" />
+  </class>
+
+  <class class=".daytemplates.CalendarDayTemplates">
+    <require permission="schooltool.view"
+             interface="schooltool.timetable.interfaces.ICalendarDayTemplates" />
+    <require permission="schooltool.edit"
+             set_schema="schooltool.timetable.interfaces.ICalendarDayTemplates" />
+  </class>
+
+  <class class=".daytemplates.WeekDayTemplates">
+    <require permission="schooltool.view"
+             interface="schooltool.timetable.interfaces.IWeekDayTemplates" />
+    <require permission="schooltool.edit"
+             set_schema="schooltool.timetable.interfaces.IWeekDayTemplates" />
+  </class>
+
+  <class class=".daytemplates.SchoolDayTemplates">
+    <require permission="schooltool.view"
+             interface="schooltool.timetable.interfaces.ISchoolDayTemplates" />
+    <require permission="schooltool.edit"
+             set_schema="schooltool.timetable.interfaces.ISchoolDayTemplates" />
+  </class>
+
+  <adapter factory=".daytemplates.getScheduledTemplatesSchedule" />
+
+</configure>
