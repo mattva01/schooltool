@@ -20,18 +20,26 @@
 Timetabling app integration.
 """
 
-from zope.interface import implements
+from zope.interface import implements, directlyProvides
 from zope.intid.interfaces import IIntIds
-from zope.component import adapts, getMultiAdapter, getUtility
+from zope.component import adapts, queryAdapter, getUtility, getMultiAdapter
 from zope.traversing.browser.interfaces import IAbsoluteURL
 from zope.publisher.browser import BrowserView
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.schema.vocabulary import getVocabularyRegistry
+from zope.traversing.browser.absoluteurl import absoluteURL
+from zc.table.interfaces import ISortableColumn
 
+import schooltool.skin.flourish.page
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.utils import TitledContainerItemVocabulary
 from schooltool.schoolyear.interfaces import ISchoolYear
 from schooltool.skin.containers import ContainerView
+from schooltool.skin import flourish
+from schooltool.table.table import SchoolToolTableFormatter
+from schooltool.table.table import GetterColumn, LocaleAwareGetterColumn
+from schooltool.table.table import ImageInputColumn
+from schooltool.table.table import simple_form_key
 from schooltool.term.interfaces import ITerm
 from schooltool.timetable.interfaces import IHaveSchedule
 from schooltool.timetable.interfaces import IScheduleContainer
@@ -75,6 +83,63 @@ class TimetableContainerView(ContainerView):
             default = self.context.get(self.request['ttschema'])
             self.context.default = default
         return ''
+
+
+class TimetableContainerTableFormatter(SchoolToolTableFormatter):
+
+    def columns(self):
+        title = LocaleAwareGetterColumn(
+            name='title',
+            title=_(u"Title"),
+            getter=lambda i, f: i.title,
+            subsort=True)
+        starts = GetterColumn(
+            name='starts',
+            title=_(u"Starts"),
+            getter=lambda i, f: i.first,
+            subsort=True)
+        ends = GetterColumn(
+            name='ends',
+            title=_(u"Ends"),
+            getter=lambda i, f: i.last,
+            subsort=True)
+        directlyProvides(title, ISortableColumn)
+        directlyProvides(starts, ISortableColumn)
+        directlyProvides(ends, ISortableColumn)
+        return [title, starts, ends]
+
+    def sortOn(self):
+        return (('title', False), ("starts", False), ("ends", False),)
+
+
+class FlourishTimetableContainerView(flourish.containers.TableContainerView):
+
+    def getColumnsBefore(self):
+        return []
+
+    def getColumnsAfter(self):
+        delete = ImageInputColumn(
+            'delete', title=_('Delete'),
+            library='schooltool.skin.flourish',
+            image='remove-icon.png',
+            id_getter=simple_form_key)
+        return [delete]
+
+    def update(self):
+        super(FlourishTimetableContainerView, self).update()
+
+        # XXX: deletion without confirmation is quite dangerous
+        delete = [key for key, item in self.container.items()
+                  if "delete.%s" % simple_form_key(item) in self.request]
+        for key in delete:
+            del self.container[key]
+        if delete:
+            self.request.response.redirect(
+                absoluteURL(self.context, self.request))
+
+
+class FlourishTimetableContainerLinks(flourish.page.RefineLinksViewlet):
+    """demographics fields add links viewlet."""
 
 
 def getActivityVocabulary(object=None):

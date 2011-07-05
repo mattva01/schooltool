@@ -5,12 +5,40 @@
            xmlns:flourish="http://schooltool.org/flourish"
            i18n_domain="schooltool">
 
+  <!-- timetable container -->
+
+  <flourish:page
+      name="index.html"
+      title="School Timetables"
+      for="schooltool.timetable.interfaces.ITimetableContainer"
+      class=".app.FlourishTimetableContainerView"
+      content_template="templates/f_timetable_container.pt"
+      permission="schooltool.view"
+      />
+
+  <zope:adapter
+      for="schooltool.timetable.interfaces.ITimetableContainer
+           schooltool.skin.flourish.IFlourishLayer"
+      factory=".app.TimetableContainerTableFormatter" />
+
+  <flourish:viewlet
+      name="timetable_container"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      view="schooltool.timetable.browser.app.FlourishTimetableContainerView"
+      class="schooltool.timetable.browser.app.FlourishTimetableContainerLinks"
+      for="schooltool.timetable.interfaces.ITimetableContainer"
+      title="Add"
+      permission="schooltool.view"
+      />
+
+  <!-- timetable wizard -->
+
   <flourish:content
       name="first_step"
       class=".ttwizard.FlourishFirstStep"
       view=".ttwizard.FlourishTimetableWizard"
       template="templates/f_ttwizard_first.pt"
-      permission="zope.Public"
+      permission="schooltool.edit"
       />
 
   <flourish:content
@@ -18,7 +46,7 @@
       class=".ttwizard.FlourishCycleStep"
       view=".ttwizard.FlourishTimetableWizard"
       render="template"
-      permission="zope.Public"
+      permission="schooltool.edit"
       />
 
   <flourish:content
@@ -26,7 +54,7 @@
       class=".ttwizard.FlourishDayEntryStep"
       view=".ttwizard.FlourishTimetableWizard"
       render="template"
-      permission="zope.Public"
+      permission="schooltool.edit"
       />
 
   <flourish:content
@@ -34,7 +62,7 @@
       class=".ttwizard.FlourishIndependentDaysStep"
       view=".ttwizard.FlourishTimetableWizard"
       render="template"
-      permission="zope.Public"
+      permission="schooltool.edit"
       />
 
   <flourish:content
@@ -42,7 +70,7 @@
       class=".ttwizard.FlourishSequentialModelStep"
       view=".ttwizard.FlourishTimetableWizard"
       render="template"
-      permission="zope.Public"
+      permission="schooltool.edit"
       />
 
   <flourish:content
@@ -50,7 +78,7 @@
       class=".ttwizard.FlourishSimpleSlotEntryStep"
       view=".ttwizard.FlourishTimetableWizard"
       render="template"
-      permission="zope.Public"
+      permission="schooltool.edit"
       />
 
   <flourish:content
@@ -58,7 +86,7 @@
       class=".ttwizard.FlourishRotatingSlotEntryStep"
       view=".ttwizard.FlourishTimetableWizard"
       render="template"
-      permission="zope.Public"
+      permission="schooltool.edit"
       />
 
   <flourish:content
@@ -66,7 +94,7 @@
       class=".ttwizard.FlourishWeeklySlotEntryStep"
       view=".ttwizard.FlourishTimetableWizard"
       render="template"
-      permission="zope.Public"
+      permission="schooltool.edit"
       />
 
   <flourish:content
@@ -74,7 +102,7 @@
       class=".ttwizard.FlourishNamedPeriodsStep"
       view=".ttwizard.FlourishTimetableWizard"
       render="template"
-      permission="zope.Public"
+      permission="schooltool.edit"
       />
 
   <flourish:content
@@ -82,7 +110,7 @@
       class=".ttwizard.FlourishPeriodNamesStep"
       view=".ttwizard.FlourishTimetableWizard"
       render="template"
-      permission="zope.Public"
+      permission="schooltool.edit"
       />
 
   <flourish:content
@@ -90,7 +118,7 @@
       class=".ttwizard.FlourishPeriodSequenceSameStep"
       view=".ttwizard.FlourishTimetableWizard"
       render="template"
-      permission="zope.Public"
+      permission="schooltool.edit"
       />
 
   <flourish:content
@@ -98,7 +126,7 @@
       class=".ttwizard.FlourishPeriodOrderSimple"
       view=".ttwizard.FlourishTimetableWizard"
       render="template"
-      permission="zope.Public"
+      permission="schooltool.edit"
       />
 
   <flourish:content
@@ -106,7 +134,7 @@
       class=".ttwizard.FlourishPeriodOrderComplex"
       view=".ttwizard.FlourishTimetableWizard"
       render="template"
-      permission="zope.Public"
+      permission="schooltool.edit"
       />
 
   <flourish:content
@@ -114,7 +142,7 @@
       class=".ttwizard.FlourishHomeroomStep"
       view=".ttwizard.FlourishTimetableWizard"
       render="template"
-      permission="zope.Public"
+      permission="schooltool.edit"
       />
 
   <flourish:content
@@ -122,14 +150,14 @@
       class=".ttwizard.FlourishHomeroomPeriodsStep"
       view=".ttwizard.FlourishTimetableWizard"
       render="template"
-      permission="zope.Public"
+      permission="schooltool.edit"
       />
 
   <flourish:content
       name="final_step"
       class=".ttwizard.FlourishFinalStep"
       view=".ttwizard.FlourishTimetableWizard"
-      permission="zope.Public"
+      permission="schooltool.edit"
       />
 
   <flourish:page
@@ -137,16 +165,17 @@
       title="New Timetable"
       for="schooltool.timetable.interfaces.ITimetableContainer"
       class="schooltool.timetable.browser.ttwizard.FlourishTimetableWizard"
-      permission="zope.Public"
+      permission="schooltool.edit"
       template="templates/f_ttwizard.pt"
       render="template"
       />
 
   <flourish:viewlet
       name="add_timetable"
-      title="Add Timetable"
+      title="School Timetable"
+      dialog_title="New timetable"
       class="schooltool.timetable.browser.ttwizard.HackModalWizardLink"
-      manager="schooltool.app.browser.app.ManageSiteLinks"
+      manager="schooltool.timetable.browser.app.FlourishTimetableContainerLinks"
       permission="schooltool.edit"
       />
 

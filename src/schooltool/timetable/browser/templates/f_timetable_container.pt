@@ -1,0 +1,53 @@
+<div tal:define="objects context/values;
+                 canModify view/canModify">
+
+  <p tal:condition="not:objects" i18n:translate="">There are none.</p>
+  <tal:block tal:condition="objects"
+             tal:define="default context/default">
+
+  <form method="post" tal:attributes="action request/getURL">
+
+    <tal:block define="batch view/table/batch">
+      <tal:block replace="structure batch/render" />
+      <tal:block replace="structure view/table/render" tal:condition="batch" />
+    </tal:block>
+
+  </form>
+
+<!--
+    <div class="row">
+      <label i18n:translate="" for="ttschema">Default Timetable Schema:</label>
+      <tal:block tal:condition="not:canModify">
+        <span tal:condition="default">
+        <a tal:content="default/title"
+           tal:attributes="href default/@@absolute_url">(Default Schema)</a>
+        </span>
+        <span tal:condition="not:default" i18n:translate="">Not Selected</span>
+      </tal:block>
+      <form tal:condition="canModify"
+            method="post"
+            action=".">
+        <select name="ttschema" size="1"
+                id="ttschema">
+          <option value="" i18n:translate="">Not Selected</option>
+          <tal:block condition="not:default">
+            <option tal:repeat="obj objects/sortby:title"
+                    tal:content="obj/title"
+                    tal:attributes="value python: obj.__name__">(Schema title)</option>
+          </tal:block>
+          <tal:block condition="default">
+            <option tal:repeat="obj objects/sortby:title"
+                    tal:content="obj/title"
+                    tal:attributes="selected python:obj.__name__ == default.__name__;
+                                    value python: obj.__name__">(Schema title)</option>
+          </tal:block>
+
+        </select>
+        <input type="submit" class="button-ok" name="UPDATE_SUBMIT" value="Change"
+               title="Shortcut: Alt-A" accesskey="A"
+               i18n:attributes="value change-button; accesskey" />
+      </form>
+    </div>
+-->
+  </tal:block>
+</div>
