@@ -21,9 +21,17 @@
 import unittest
 import doctest
 
+from zope.interface import implements, Interface
 from zope.component import provideAdapter
+from zope.publisher.browser import TestRequest
+from zope.traversing.browser.interfaces import IAbsoluteURL
 
 from schooltool.app.browser.testing import setUp, tearDown
+
+
+class FormatterStub(object):
+    def __init__(self):
+        self.request = TestRequest()
 
 
 def doctest_FilterWidget():
@@ -159,7 +167,6 @@ def doctest_LocaleAwareGetterColumn():
 
         >>> from zope.i18n.interfaces.locales import ICollator
         >>> from zope.i18n.interfaces.locales import ILocale
-        >>> from zope.interface import implements
         >>> from zope.component import adapts
         >>> class CollatorAdapterStub(object):
         ...     implements(ICollator)
@@ -178,6 +185,104 @@ def doctest_LocaleAwareGetterColumn():
         >>> item = "Item"
         >>> lac.getSortKey(item, formatter)
         'CollatorKey(Item)'
+
+    """
+
+
+def doctest_ImageInputColumn():
+    """Tests for ImageInputColumn.
+
+    Let's try creating a ImageInputColumn first:
+
+        >>> from schooltool.table.table import ImageInputColumn
+        >>> column = ImageInputColumn("prefix", title="title",
+        ...                           alt="alt", image="image.png")
+
+        >>> column.title
+        'title'
+        >>> column.alt
+        'alt'
+        >>> column.name
+        'title'
+        >>> column.prefix
+        'prefix'
+        >>> column.image
+        'image.png'
+
+        >>> class ItemStub(object):
+        ...     def __init__(self, name="itemStub"):
+        ...         self.__name__ = name
+
+    When resources are not found, column will render empty.
+
+        >>> column.renderCell(ItemStub(), FormatterStub())
+        ''
+
+    Let's register a resource and a library with one resource.
+
+        >>> class IStubResource(Interface):
+        ...     pass
+
+        >>> class ImageStub(object):
+        ...     implements(IStubResource)
+        ...     __parent__ = None
+        ...     def __init__(self, name):
+        ...         self.name = name
+        ...
+        ...     def __repr__(self):
+        ...         return '<%s %r>' % (self.__class__.__name__, self.name)
+
+        >>> class LibraryStub(object):
+        ...     implements(IStubResource)
+        ...     def __init__(self, name, resources):
+        ...         self.name = name
+        ...         self.resources = dict([(r.name, r) for r in resources])
+        ...         for r in resources:
+        ...             r.__parent__ = self
+        ...
+        ...     def get(self, name):
+        ...         return self.resources.get(name)
+
+        >>> def resourceURL(resource, request):
+        ...     url = resource.name
+        ...     if resource.__parent__:
+        ...         url = '%s/%s' % (resource.__parent__.name, url)
+        ...     return lambda: 'http://localhost/@@/%s' % url
+
+        >>> def provideResource(resource):
+        ...     provideAdapter(lambda x: resource, (TestRequest,),
+        ...                    provides=Interface,
+        ...                    name=resource.name)
+
+        >>> image = ImageStub('image.png')
+        >>> image2 = ImageStub('hello.png')
+        >>> library = LibraryStub('images', [image2])
+
+        >>> provideResource(image)
+        >>> provideResource(library)
+
+        >>> provideAdapter(resourceURL, (IStubResource, TestRequest),
+        ...                provides=IAbsoluteURL)
+
+    Now we can render our image directly.
+
+        >>> print column.renderCell(ItemStub(), FormatterStub())
+        <input type="image" value="1" alt="alt"
+               name="prefix.itemStub"
+               src="http://localhost/@@/image.png"
+               title="title" />
+
+    Or have a column that renders an image from a library.
+
+        >>> column = ImageInputColumn("prefix", title="title",
+        ...                           alt="alt", library="images",
+        ...                           image="hello.png")
+
+        >>> print column.renderCell(ItemStub('otherItem'), FormatterStub())
+        <input type="image" value="1" alt="alt"
+               name="prefix.otherItem"
+               src="http://localhost/@@/images/hello.png"
+               title="title" />
 
     """
 
@@ -288,7 +393,6 @@ def doctest_SchoolToolTableFormatter():
     Lets provide a filter widget:
 
         >>> from schooltool.table.interfaces import IFilterWidget
-        >>> from zope.interface import implements
         >>> class FilterWidget(object):
         ...     implements(IFilterWidget)
         ...     def __init__(self, context, request):
