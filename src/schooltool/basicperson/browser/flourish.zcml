@@ -370,7 +370,6 @@
      class=".demographics.FlourishFieldDescriptionEditView"
      content_template="templates/f_demographic_field_edit.pt"
      permission="schooltool.edit"
-     title="Edit"
      />
 
   <flourish:page
@@ -379,7 +378,6 @@
      class=".demographics.FlourishFieldDescriptionEditView"
      content_template="templates/f_demographic_field_edit.pt"
      permission="schooltool.edit"
-     title="Edit"
      />
 
   <flourish:page
@@ -388,7 +386,6 @@
      class=".demographics.FlourishFieldDescriptionEditView"
      content_template="templates/f_demographic_field_edit.pt"
      permission="schooltool.edit"
-     title="Edit"
      />
 
   <flourish:page
@@ -397,7 +394,6 @@
      class=".demographics.FlourishEnumFieldDescriptionEditView"
      content_template="templates/f_demographic_field_edit.pt"
      permission="schooltool.edit"
-     title="Edit"
      />
 
   <flourish:page
