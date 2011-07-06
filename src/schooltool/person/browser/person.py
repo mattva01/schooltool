@@ -51,6 +51,8 @@ from z3c.form import form, field, button, widget, term
 from z3c.form.browser.radio import RadioWidget
 from zope.i18n import translate
 
+import schooltool.skin.flourish.page
+import schooltool.skin.flourish.form
 from schooltool.group.interfaces import IGroupContainer
 from schooltool.common import SchoolToolMessage as _
 from schooltool.app.interfaces import ISchoolToolApplication
@@ -177,13 +179,12 @@ class PersonPreferencesView(form.EditForm):
         self.request.response.redirect(url)
 
 
-class FlourishPersonPreferencesView(flourish.page.Page, PersonPreferencesView):
+class FlourishPersonPreferencesView(flourish.form.DialogForm,
+                                    PersonPreferencesView):
     """View used for editing person preferences."""
 
+    dialog_close_actions = ('cancel',)
     label = None
-
-    def update(self):
-        PersonPreferencesView.update(self)
 
 
 class FlourishPersonPreferencesLink(flourish.page.ModalFormLinkViewlet):
