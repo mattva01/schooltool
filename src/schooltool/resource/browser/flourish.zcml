@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/browser"
+           xmlns:z3c="http://namespaces.zope.org/z3c"
+           xmlns:zope="http://namespaces.zope.org/zope"
+           xmlns:flourish="http://schooltool.org/flourish"
+           i18n_domain="schooltool">
+
+  <!-- ResourceDemographicsFields pages -->
+
+  <configure package="schooltool.basicperson.browser">
+    <flourish:page
+       name="index.html"
+       for="schooltool.resource.interfaces.IResourceDemographicsFields"
+       class="schooltool.resource.browser.resource.FlourishResourceDemographicsView"
+       content_template="templates/f_demographics_view.pt"
+       permission="schooltool.edit"
+       title="Resource attributes"
+       />
+
+    <flourish:page
+       name="reorder.html"
+       for="schooltool.resource.interfaces.IResourceDemographicsFields"
+       class="schooltool.resource.browser.resource.FlourishReorderResourceDemographicsView"
+       content_template="templates/f_demographics_reorder.pt"
+       permission="schooltool.edit"
+       title="Resource attributes"
+       />
+  </configure>
+
+</configure>
