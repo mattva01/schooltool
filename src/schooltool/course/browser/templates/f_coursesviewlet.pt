@@ -1,9 +1,8 @@
-<div>
+<div i18n:domain="schooltool">
 <h2 i18n:translate="">Sections</h2>
 <div>
 <div tal:define="schoolyears view/instructorOf"
-     tal:condition="view/isTeacher"
-     i18n:domain="schooltool">
+     tal:condition="view/isTeacher">
   <h3 i18n:translate="">Sections taught</h3>
   <table class="person-view-sections">
     <thead>
@@ -40,8 +39,7 @@
 </div>
 
 <div tal:define="schoolyears view/learnerOf"
-     tal:condition="view/isLearner"
-     i18n:domain="schooltool">
+     tal:condition="view/isLearner">
   <h3 i18n:translate="">Sections attended</h3>
   <table class="person-view-sections">
     <thead>
@@ -75,6 +73,10 @@
       </tal:block>
     </tal:block>
   </table>
+</div>
+
+<div tal:condition="python: not(view.isTeacher() or view.isLearner())">
+  <h3 i18n:translate="">This person has no sections.</h3>
 </div>
 </div>
 </div>

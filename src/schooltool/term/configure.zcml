@@ -47,11 +47,6 @@
              set_schema=".interfaces.ITerm" />
   </class>
 
-  <subscriber
-      for=".interfaces.ITerm
-           zope.lifecycleevent.interfaces.IObjectRemovedEvent"
-      handler="schooltool.timetable.schema.clearTimetablesOnDeletion" />
-
   <!-- sample data -->
   <configure
       xmlns:zcml="http://namespaces.zope.org/zcml"
@@ -64,6 +59,9 @@
         />
 
   </configure>
+
+  <!-- XXX: disable timetable support for refactoring -->
+  <!--include file="timetable-integration.zcml" /-->
 
   <include package=".browser" />
 

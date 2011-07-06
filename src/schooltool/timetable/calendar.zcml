@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:i18n="http://namespaces.zope.org/i18n"
+           i18n_domain="schooltool">
+
+  <class class=".calendar.ScheduleCalendarEvent">
+    <require permission="schooltool.view"
+             interface="schooltool.calendar.interfaces.ICalendarEvent"
+             attributes="resources period meeting_id" />
+    <require permission="schooltool.edit"
+             set_schema="schooltool.calendar.interfaces.ICalendarEvent"
+             attributes="bookResource unbookResource"
+             set_attributes="__parent__ period meeting_id" />
+             />
+  </class>
+
+  <class class=".calendar.ScheduleCalendar">
+    <require permission="schooltool.view"
+             interface="schooltool.calendar.interfaces.ICalendar"
+             attributes="title __cmp__" />
+    <require permission="schooltool.edit"
+             attributes="addEvent" />
+    <require permission="schooltool.edit"
+             attributes="clear removeEvent" />
+  </class>
+
+</configure>

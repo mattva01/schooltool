@@ -50,7 +50,8 @@ from schooltool.app.interfaces import ICalendarParentCrowd
 from schooltool.securitypolicy.interfaces import ICrowdDescription
 from schooltool.securitypolicy.crowds import Crowd, Description
 from schooltool.securitypolicy.crowds import ManagerGroupCrowd
-from schooltool.securitypolicy.crowds import ParentCrowd
+# XXX: move ConfigurableCrowd here
+from schooltool.securitypolicy.crowds import ConfigurableCrowd, ParentCrowd
 
 from schooltool.common import SchoolToolMessage as _
 

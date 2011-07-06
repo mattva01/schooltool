@@ -188,7 +188,7 @@ class PersonAddFormAdapter(object):
 
 
 class UsernameAlreadyUsed(ValidationError):
-    __doc__ = _("This username is already in use!")
+    __doc__ = _("This username is already in use")
 
 
 class UsernameBadName(ValidationError):
@@ -224,6 +224,8 @@ validator.WidgetValidatorDiscriminators(UsernameValidator,
 
 class PersonForm(object):
 
+    formErrorsMessage = _('Please correct the marked fields below.')
+
     def generateExtraFields(self):
         field_descriptions = IDemographicsFields(ISchoolToolApplication(None))
         fields = field.Fields()
@@ -236,7 +238,7 @@ class PersonForm(object):
         return fields
 
 
-class PersonView(form.DisplayForm, PersonForm):
+class PersonView(PersonForm, form.DisplayForm):
 
     template = ViewPageTemplateFile('templates/person_view.pt')
 
@@ -262,7 +264,7 @@ class FlourishPersonInfo(flourish.page.Content):
     body_template = ViewPageTemplateFile('templates/f_person_view_details.pt')
 
 
-class PersonAddFormBase(form.AddForm, PersonForm):
+class PersonAddFormBase(PersonForm, form.AddForm):
     """Person add form for basic persons."""
 
     def update(self):
@@ -442,7 +444,7 @@ class FlourishPersonAddSubForm(PersonAddSubForm):
     template = ViewPageTemplateFile('templates/f_person_add_subform.pt')
 
 
-class PersonEditView(form.EditForm, PersonForm):
+class PersonEditView(PersonForm, form.EditForm):
     """Edit form for basic person."""
     form.extends(form.EditForm)
     template = ViewPageTemplateFile('templates/person_add.pt')
@@ -468,7 +470,9 @@ class PersonEditView(form.EditForm, PersonForm):
                  mapping={'fullname': self.context.title})
 
 
-class FlourishPersonEditView(flourish.page.ExpandedPage, PersonEditView):
+class FlourishPersonEditView(flourish.page.Page, PersonEditView):
+
+    label = None
 
     def update(self):
         self.buildFieldsetGroups()
@@ -737,8 +741,10 @@ class FlourishGeneralViewlet(Viewlet):
         rows = []
         fields = field.Fields(IBasicPerson)
         for attr in fields:
-            label = fields[attr].field.title
-            rows.append(self.makeRow(label, getattr(self.context, attr)))
+            value = getattr(self.context, attr)
+            if value:
+                label = fields[attr].field.title
+                rows.append(self.makeRow(label, value))
         return rows
 
     @property
@@ -771,8 +777,10 @@ class FlourishDemographicsViewlet(Viewlet):
         rows = []
         demographics = IDemographics(self.context)
         for attr in fields:
-            label = fields[attr].field.title
-            rows.append(self.makeRow(label, demographics[attr]))
+            value = demographics[attr]
+            if value:
+                label = fields[attr].field.title
+                rows.append(self.makeRow(label, value))
         return rows
 
     @property
@@ -869,7 +877,7 @@ class PersonAddViewBase(PersonAddFormBase):
 
 class FlourishPersonAddView(PersonAddViewBase):
     template = InheritTemplate(flourish.page.Page.template)
-    page_template = InheritTemplate(flourish.page.ExpandedPage.page_template)
+    page_template = InheritTemplate(flourish.page.NoSidebarPage.page_template)
 
     fieldset_groups = None
     fieldset_order = None
@@ -914,6 +922,21 @@ class FlourishPersonAddView(PersonAddViewBase):
             result.append(self.makeFieldSet(
                     fieldset_id, legend, list(fields)))
         return result
+
+    @button.buttonAndHandler(_('Submit'), name='add')
+    def handleSubmit(self, action):
+        super(FlourishPersonAddView, self).handleAdd.func(self, action)
+
+    @button.buttonAndHandler(_('Submit and add'), name='submitadd')
+    def handleSubmitAndAdd(self, action):
+        super(FlourishPersonAddView, self).handleAdd.func(self, action)
+        if self._finishedAdd:
+            self.request.response.redirect(self.action)
+
+    @button.buttonAndHandler(_("Cancel"))
+    def handle_cancel_action(self, action):
+        url = absoluteURL(self.context, self.request)
+        self.request.response.redirect(url)
 
 
 ###############  Group-aware add views ################
@@ -988,5 +1011,5 @@ class BasicPersonTableFormatter(PersonTableFormatter):
             batch_start=self.batch.start, batch_size=self.batch.size,
             sort_on=self._sort_on,
             prefix=self.prefix)
-        formatter.cssClasses['table'] = 'persons-table'
+        formatter.cssClasses['table'] = 'persons-table relationships-table'
         return formatter()

@@ -1,7 +1,8 @@
 .batch-navigation {
+    background-color: #DFDCD9;
     font-size: 12px;
     line-height: 16px;
-    background-color: #DFDCD9;
+    margin-bottom: -16px;
     padding: 4px 8px;
 }
 

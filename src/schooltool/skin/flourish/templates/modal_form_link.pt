@@ -1,6 +1,6 @@
 <script>ST.state.push()</script>
 
-<tal:block define="url view/url">
+<tal:block define="url view/url; title view/dialog_title|nothing">
   <tal:block condition="url">
     <a href="#"
        tal:attributes="href url;
@@ -11,12 +11,14 @@
     <tal:script tal:replace="structure scriptlocal:
        link_id string:#${view/html_id};
        form_id string:#${view/form_container_id};
+       title;
        url" />
 
     <script>
       ST.dialogs.modal_form(ST.local.link_id,
                             ST.local.url,
-                            ST.local.form_id);
+                            ST.local.form_id,
+                            ST.local.title);
     </script>
 
   </tal:block>

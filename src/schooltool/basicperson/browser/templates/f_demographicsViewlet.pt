@@ -13,9 +13,10 @@
              i18n:attributes="alt" />
       </a>
     </h3>
-    <table class="person-view-demographics">
+    <table class="person-view-demographics" tal:define="rows view/table"
+           tal:condition="rows">
       <tbody>
-        <tr tal:repeat="row view/table">
+        <tr tal:repeat="row rows">
           <td tal:content="row/label" class="label" />
           <td tal:content="row/value" />
         </tr>

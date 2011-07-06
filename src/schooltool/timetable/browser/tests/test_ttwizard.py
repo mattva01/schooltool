@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Tests for SchoolTool timetable schema wizard.
+Tests for SchoolTool timetable wizard.
 """
 
 import unittest
@@ -25,24 +25,29 @@ import doctest
 import datetime
 from pprint import pprint
 
-from zope.location.location import locate
-from zope.publisher.browser import TestRequest
 from zope.component import provideAdapter
 from zope.interface import Interface
-from zope.schema import TextLine
 from zope.i18n import translate
+from zope.location.location import locate
+from zope.publisher.browser import TestRequest
+from zope.schema import TextLine
 
-from schooltool.testing import setup
 from schooltool.app.browser import testing as schooltool_setup
 from schooltool.app.app import SimpleNameChooser
 from schooltool.app.app import getApplicationPreferences
 from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
-from schooltool.testing.setup import setUpApplicationPreferences
-from schooltool.timetable.schema import TimetableSchemaContainer
-from schooltool.timetable.interfaces import ITimetableSchemaContainer
-from schooltool.timetable.browser import format_time_range
+from schooltool.common import format_time_range
+from schooltool.testing import setup
+from schooltool.timetable.interfaces import ITimetableContainer
+from schooltool.timetable.daytemplates import TimeSlot
+from schooltool.timetable.schedule import Period
+from schooltool.timetable.timetable import Timetable
+from schooltool.timetable.timetable import TimetableContainer
+from schooltool.timetable.browser.ttwizard import TimetableWizard
+from schooltool.testing.util import format_table
+
 
 
 def setUp(test):
@@ -56,15 +61,15 @@ def setUp(test):
     """
     schooltool_setup.setUp(test)
     setup.setUpSessions()
-    setUpApplicationPreferences()
-    provideAdapter(SimpleNameChooser, (ITimetableSchemaContainer,))
+    setup.setUpApplicationPreferences()
+    provideAdapter(SimpleNameChooser, (ITimetableContainer,))
     provideAdapter(getApplicationPreferences,
                    (ISchoolToolApplication,), IApplicationPreferences)
     provideAdapter(getSchoolToolApplication, (None,), ISchoolToolApplication)
 
     test.globs['app'] = setup.setUpSchoolToolSite()
-    test.globs['schemas'] = TimetableSchemaContainer()
-    locate(test.globs['schemas'], test.globs['app'], 'ttschemas')
+    test.globs['timetables'] = TimetableContainer()
+    locate(test.globs['timetables'], test.globs['app'], 'timetables')
 
 
 def tearDown(test):
@@ -72,34 +77,46 @@ def tearDown(test):
     schooltool_setup.tearDown(test)
 
 
-def print_day_templates(daytemplates):
-    """Print day templates."""
-    keys = daytemplates.keys()
-    keys.sort()
-    for key in keys:
-        print "--- day template %r" % key
-        slots = [(period.tstart, period.duration)
-                 for period in daytemplates[key]]
-        slots.sort()
-        for tstart, duration in slots:
-            print format_time_range(tstart, duration)
+def print_day_templates(templates):
+    cols = []
+    for day in templates.values():
+        col = [day.title]
+        for item in day.values():
+            if isinstance(item, Period):
+                cell = item.title or ''
+                if item.activity_type is not None:
+                    cell = '%s %s' % (item.activity_type, cell)
+                col.append(cell or '?')
+            elif isinstance(item, TimeSlot):
+                cell = format_time_range(item.tstart, item.duration)
+                if item.activity_type is not None:
+                    cell = '%s %s' % (item.activity_type, cell)
+                col.append(cell or '?')
+            else:
+                col.append(item.__class__.__name_)
+        cols.append(col)
+    max_len = max([len(c) for c in cols])
+    cols = [c + ['']*(max_len-len(c)) for c in cols]
+    rows = map(None, *cols)
+    print format_table(rows, header_rows=1)
 
 
-def print_ttschema(ttschema):
-    """Print a timetable schema as a grid."""
-    for row in map(None, *[[day_id] + list(day.periods)
-                           for day_id, day in ttschema.items()]):
-        print " ".join(['%-12s' % cell for cell in row])
+def print_timetable(timetable):
+    print "Timetable '%s'" % timetable.title
+    print 'Periods (%s)' % timetable.periods.__class__.__name__
+    print_day_templates(timetable.periods.templates)
+    print 'Time slots (%s)' % timetable.time_slots.__class__.__name__
+    print_day_templates(timetable.time_slots.templates)
 
 
-def doctest_getSessionData():
+def doctest_wizard_getSessionData():
     """Unit test for getSessionData.
 
-    This function is used as a method for both Step and TimetableSchemaWizard
+    This function is used as a method for both Step and TimetableWizard
     classes (and subclasses of the former).
 
         >>> from schooltool.timetable.browser.ttwizard import Step
-        >>> context = schemas
+        >>> context = timetables
         >>> request = TestRequest()
         >>> step = Step(context, request)
         >>> data = step.getSessionData()
@@ -112,20 +129,18 @@ def doctest_getSessionData():
         >>> data['something']
         42
 
-        >>> from schooltool.timetable.browser.ttwizard import \\
-        ...                                     TimetableSchemaWizard
-        >>> view = TimetableSchemaWizard(context, request)
+        >>> view = TimetableWizard(context, request)
         >>> data['something']
         42
 
     """
 
 
-def doctest_ChoiceStep():
+def doctest_wizard_ChoiceStep():
     """Unit test for ChoiceStep
 
         >>> from schooltool.timetable.browser.ttwizard import ChoiceStep
-        >>> context = schemas
+        >>> context = timetables
         >>> request = TestRequest()
         >>> view = ChoiceStep(context, request)
 
@@ -164,7 +179,7 @@ def doctest_ChoiceStep():
     """
 
 
-def doctest_FormStep():
+def doctest_wizard_FormStep():
     """Unit test for FormStep
 
     FormStep needs to be subclassed, and a subclass has to provide a `schema`
@@ -179,7 +194,7 @@ def doctest_FormStep():
 
     The constructor sets up input widgets.
 
-        >>> context = schemas
+        >>> context = timetables
         >>> request = TestRequest()
         >>> view = SampleFormStep(context, request)
         >>> view.a_field_widget
@@ -234,11 +249,11 @@ def doctest_FormStep():
     """
 
 
-def doctest_FirstStep():
+def doctest_wizard_FirstStep():
     """Unit test for FirstStep
 
         >>> from schooltool.timetable.browser.ttwizard import FirstStep
-        >>> context = schemas
+        >>> context = timetables
         >>> request = TestRequest()
         >>> view = FirstStep(context, request)
 
@@ -253,13 +268,13 @@ def doctest_FirstStep():
     FirstStep.update can take the title from the request and put it into
     the session.
 
-        >>> request = TestRequest(form={'field.title': u'Sample Schema'})
+        >>> request = TestRequest(form={'field.title': u'Sample Timetable'})
         >>> view = FirstStep(context, request)
         >>> view.update()
         True
 
         >>> view.getSessionData()['title']
-        u'Sample Schema'
+        u'Sample Timetable'
 
     If the form is incomplete, update says so by returning False
 
@@ -276,11 +291,11 @@ def doctest_FirstStep():
     """
 
 
-def doctest_CycleStep():
+def doctest_wizard_CycleStep():
     """Unit test for CycleStep
 
         >>> from schooltool.timetable.browser.ttwizard import CycleStep
-        >>> context = schemas
+        >>> context = timetables
         >>> request = TestRequest()
         >>> view = CycleStep(context, request)
         >>> session = view.getSessionData()
@@ -316,11 +331,11 @@ def doctest_CycleStep():
     """
 
 
-def doctest_DayEntryStep():
+def doctest_wizard_DayEntryStep():
     r"""Unit test for DayEntryStep
 
         >>> from schooltool.timetable.browser.ttwizard import DayEntryStep
-        >>> context = schemas
+        >>> context = timetables
         >>> request = TestRequest()
         >>> view = DayEntryStep(context, request)
 
@@ -374,12 +389,12 @@ def doctest_DayEntryStep():
     """
 
 
-def doctest_IndependentDaysStep():
+def doctest_wizard_IndependentDaysStep():
     r"""Unit test for IndependentDaysStep
 
         >>> from schooltool.timetable.browser.ttwizard \
         ...                                         import IndependentDaysStep
-        >>> context = schemas
+        >>> context = timetables
         >>> request = TestRequest()
         >>> view = IndependentDaysStep(context, request)
 
@@ -411,11 +426,11 @@ def doctest_IndependentDaysStep():
     """
 
 
-def doctest_SequentialModelStep():
+def doctest_wizard_SequentialModelStep():
     r"""Unit test for SequentialModelStep
 
         >>> from schooltool.timetable.browser.ttwizard import SequentialModelStep
-        >>> context = schemas
+        >>> context = timetables
         >>> request = TestRequest()
         >>> view = SequentialModelStep(context, request)
 
@@ -429,18 +444,18 @@ def doctest_SequentialModelStep():
 
     Otherwise, the rotating cycle will be used:
 
-        >>> session['time_model'] = 'cycle_day'
+        >>> session['time_model'] = 'rotating'
         >>> view.next()
         <...ttwizard.RotatingSlotEntryStep...>
 
     """
 
 
-def doctest_SimpleSlotEntryStep():
+def doctest_wizard_SimpleSlotEntryStep():
     r"""Unit test for SimpleSlotEntryStep
 
         >>> from schooltool.timetable.browser.ttwizard import SimpleSlotEntryStep
-        >>> context = schemas
+        >>> context = timetables
         >>> request = TestRequest()
         >>> view = SimpleSlotEntryStep(context, request)
 
@@ -512,11 +527,11 @@ def doctest_SimpleSlotEntryStep():
     """
 
 
-def doctest_RotatingSlotEntryStep():
+def doctest_wizard_RotatingSlotEntryStep():
     r"""Unit test for RotatingSlotEntryStep
 
         >>> from schooltool.timetable.browser.ttwizard import RotatingSlotEntryStep
-        >>> context = schemas
+        >>> context = timetables
         >>> request = TestRequest()
         >>> view = RotatingSlotEntryStep(context, request)
 
@@ -606,11 +621,11 @@ def doctest_RotatingSlotEntryStep():
     """
 
 
-def doctest_WeeklySlotEntryStep():
+def doctest_wizard_WeeklySlotEntryStep():
     r"""Unit test for WeeklySlotEntryStep
 
         >>> from schooltool.timetable.browser.ttwizard import WeeklySlotEntryStep
-        >>> context = schemas
+        >>> context = timetables
         >>> request = TestRequest()
         >>> view = WeeklySlotEntryStep(context, request)
         >>> view.getSessionData()['cycle'] = 'weekly'
@@ -714,12 +729,12 @@ def doctest_WeeklySlotEntryStep():
     """
 
 
-def doctest_NamedPeriodsStep():
+def doctest_wizard_NamedPeriodsStep():
     r"""Unit test for NamedPeriodsStep
 
         >>> from schooltool.timetable.browser.ttwizard \
         ...     import NamedPeriodsStep
-        >>> context = schemas
+        >>> context = timetables
         >>> request = TestRequest()
         >>> view = NamedPeriodsStep(context, request)
 
@@ -752,11 +767,11 @@ def doctest_NamedPeriodsStep():
     """
 
 
-def doctest_PeriodNamesStep():
+def doctest_wizard_PeriodNamesStep():
     r"""Unit test for PeriodNamesStep
 
         >>> from schooltool.timetable.browser.ttwizard import PeriodNamesStep
-        >>> context = schemas
+        >>> context = timetables
         >>> request = TestRequest()
         >>> view = PeriodNamesStep(context, request)
 
@@ -830,12 +845,12 @@ def doctest_PeriodNamesStep():
     """
 
 
-def doctest_PeriodSequenceSameStep():
+def doctest_wizard_PeriodSequenceSameStep():
     r"""Unit test for PeriodSequenceSameStep
 
         >>> from schooltool.timetable.browser.ttwizard \
         ...     import PeriodSequenceSameStep
-        >>> context = schemas
+        >>> context = timetables
         >>> request = TestRequest()
         >>> view = PeriodSequenceSameStep(context, request)
 
@@ -854,11 +869,11 @@ def doctest_PeriodSequenceSameStep():
     """
 
 
-def doctest_PeriodOrderSimple():
+def doctest_wizard_PeriodOrderSimple():
     """Unit test for PeriodOrderSimple view
 
         >>> from schooltool.timetable.browser.ttwizard import PeriodOrderSimple
-        >>> context = schemas
+        >>> context = timetables
         >>> request = TestRequest()
         >>> view = PeriodOrderSimple(context, request)
 
@@ -1000,12 +1015,12 @@ def doctest_PeriodOrderSimple():
     """
 
 
-def doctest_PeriodOrderComplex():
+def doctest_wizard_PeriodOrderComplex():
     """Unit test for PeriodOrderComplex view
 
         >>> from schooltool.timetable.browser.ttwizard import \\
         ...     PeriodOrderComplex
-        >>> context = schemas
+        >>> context = timetables
         >>> request = TestRequest()
         >>> view = PeriodOrderComplex(context, request)
 
@@ -1015,7 +1030,7 @@ def doctest_PeriodOrderComplex():
         >>> session['period_names'] = ['A', 'B', 'C', 'D']
         >>> session['day_names'] = ['Day One', 'Day Two']
         >>> session['cycle'] = 'rotating'
-        >>> session['time_model'] = 'cycle_day'
+        >>> session['time_model'] = 'rotating'
 
     The number of period dropdowns is the maximum of slots in a day:
 
@@ -1106,7 +1121,7 @@ def doctest_PeriodOrderComplex():
         >>> view.getSessionData()['day_names'] = ['Day 1', 'Day 2']
         >>> view.getSessionData()['time_slots'] = time_slots
         >>> view.getSessionData()['cycle'] = 'rotating'
-        >>> view.getSessionData()['time_model'] = 'cycle_day'
+        >>> view.getSessionData()['time_model'] = 'rotating'
         >>> view.update()
         True
         >>> print view.getSessionData()['periods_order']
@@ -1128,7 +1143,7 @@ def doctest_PeriodOrderComplex():
         >>> view.getSessionData()['day_names'] = ['Z', 'X']
         >>> view.getSessionData()['time_slots'] = time_slots
         >>> view.getSessionData()['cycle'] = 'rotating'
-        >>> view.getSessionData()['time_model'] = 'cycle_day'
+        >>> view.getSessionData()['time_model'] = 'rotating'
         >>> view.update()
         False
         >>> print translate(view.error)
@@ -1152,7 +1167,7 @@ def doctest_PeriodOrderComplex():
         ...      (datetime.time(10, 35), datetime.timedelta(0, 2700)),
         ...      (datetime.time(10, 35), datetime.timedelta(0, 2700)),]]
         >>> view.getSessionData()['cycle'] = 'rotating'
-        >>> view.getSessionData()['time_model'] = 'cycle_day'
+        >>> view.getSessionData()['time_model'] = 'rotating'
         >>> view.update()
         False
         >>> print translate(view.error)
@@ -1226,12 +1241,12 @@ def doctest_PeriodOrderComplex():
     """
 
 
-def doctest_PeriodOrderComplex_weekly_rotating():
+def doctest_wizard_PeriodOrderComplex_weekly_rotating():
     """Unit test for PeriodOrderComplex view
 
         >>> from schooltool.timetable.browser.ttwizard import \\
         ...     PeriodOrderComplex
-        >>> context = schemas
+        >>> context = timetables
         >>> request = TestRequest()
         >>> view = PeriodOrderComplex(context, request)
 
@@ -1276,11 +1291,11 @@ def doctest_PeriodOrderComplex_weekly_rotating():
     """
 
 
-def doctest_HomeroomStep():
+def doctest_wizard_HomeroomStep():
     r"""Unit test for HomeroomStep
 
         >>> from schooltool.timetable.browser.ttwizard import HomeroomStep
-        >>> context = schemas
+        >>> context = timetables
         >>> request = TestRequest()
         >>> view = HomeroomStep(context, request)
 
@@ -1301,12 +1316,12 @@ def doctest_HomeroomStep():
     """
 
 
-def doctest_HomeroomPeriodsStep():
+def doctest_wizard_HomeroomPeriodsStep():
     r"""Unit test for HomeroomPeriodsStep view
 
         >>> from schooltool.timetable.browser.ttwizard \
         ...         import HomeroomPeriodsStep
-        >>> context = schemas
+        >>> context = timetables
         >>> request = TestRequest()
         >>> view = HomeroomPeriodsStep(context, request)
 
@@ -1377,17 +1392,17 @@ def doctest_HomeroomPeriodsStep():
     """
 
 
-def doctest_FinalStep():
+def doctest_wizard_FinalStep():
     r"""Unit test for FinalStep
 
         >>> from schooltool.timetable.browser.ttwizard import FinalStep
-        >>> context = schemas
+        >>> context = timetables
         >>> request = TestRequest()
         >>> view = FinalStep(context, request)
 
         >>> from datetime import time, timedelta
         >>> data = view.getSessionData()
-        >>> data['title'] = u'Sample Schema'
+        >>> data['title'] = u'Sample Timetable'
         >>> data['cycle'] = 'weekly'
         >>> data['day_names'] = ['Monday', 'Tuesday', 'Wednesday',
         ...                      'Thursday', 'Friday']
@@ -1402,18 +1417,19 @@ def doctest_FinalStep():
 
         >>> view()
 
-        >>> ttschema = context['sample-schema']
-        >>> ttschema
-        <...TimetableSchema object at ...>
-        >>> print ttschema.title
-        Sample Schema
+        >>> timetable = context['sample-timetable']
+        >>> timetable
+        <...Timetable object at ...>
 
-    We should get redirected to the ttschemas index:
+        >>> print timetable.title
+        Sample Timetable
+
+    We should get redirected to the timetables index:
 
         >>> request.response.getStatus()
         302
         >>> request.response.getHeader('Location')
-        'http://127.0.0.1/ttschemas'
+        'http://127.0.0.1/timetables'
 
     The cycle of steps loops here
 
@@ -1424,76 +1440,221 @@ def doctest_FinalStep():
 
     """
 
+def doctest_wizard_FinalStep_createTimeSlots():
+    """Unit test for FinalStep.createTimeSlots
 
-def doctest_FinalStep_dayTemplates():
-    """Unit test for FinalStep.dayTemplates
-
-        >>> from schooltool.timetable.browser.ttwizard import FinalStep
         >>> from datetime import time, timedelta
-        >>> names = ['A', 'B', 'C']
-        >>> slots = [(time(9, 0), timedelta(minutes=50)),
-        ...          (time(12, 35), timedelta(minutes=50)),
-        ...          (time(14, 15), timedelta(minutes=55))]
+        >>> from schooltool.timetable.timetable import Timetable
+        >>> from schooltool.timetable.browser.ttwizard import FinalStep
 
-    Simple case: all days are the same.
+        >>> class FinalStepForTest(FinalStep):
+        ...     def addTimeSlotTemplates(self, schedule, days):
+        ...         for key, title, time_slots in days:
+        ...             slots = [format_time_range(*slot) for slot in time_slots]
+        ...             print '%s, %s: %s' % (key, title, slots)
 
-        >>> dt = FinalStep.dayTemplates([names] * 4, [slots] * 4)
-        >>> print_day_templates(dt)
-        --- day template None
-        09:00-09:50
-        12:35-13:25
-        14:15-15:10
+        >>> day_names = ['Day one', 'Day two', 'Day three']
+        >>> slots = [[(time(9, 0), timedelta(minutes=50)),
+        ...           (time(12, 35), timedelta(minutes=50))],
+        ...          [(time(10, 0), timedelta(minutes=50))],
+        ...          [(time(11, 0), timedelta(minutes=50)),
+        ...           (time(14, 35), timedelta(minutes=50))],
+        ...         ]
 
-    Time slots are the same for all days, but period order differs.
+        >>> context = timetables
+        >>> request = TestRequest()
 
-        >>> dt = FinalStep.dayTemplates([['A', 'B', 'C'],
-        ...                              ['B', 'C', 'A'],
-        ...                              ['C', 'A', 'B'],
-        ...                              ['B', 'A', 'C']],
-        ...                             [slots] * 4)
-        >>> print_day_templates(dt)
-        --- day template None
-        09:00-09:50
-        12:35-13:25
-        14:15-15:10
+    Weekly model replaces day names with weekday names.
 
-    Time slots are different.
+        >>> view = FinalStepForTest(context, request)
+        >>> timetable = Timetable(None, None, title=u'Default')
 
-        >>> duration = timedelta(minutes=30)
-        >>> dt = FinalStep.dayTemplates([['A', 'B', 'C'],
-        ...                              ['B', 'C', 'A'],
-        ...                              ['C', 'A', 'B'],
-        ...                              ['B', 'A', 'C']],
-        ...                             [[(time(9+n, 5*d), duration)
-        ...                               for n in range(3)]
-        ...                              for d in range(4)])
-        >>> print_day_templates(dt)
-        --- day template None
-        --- day template 0
-        09:00-09:30
-        10:00-10:30
-        11:00-11:30
-        --- day template 1
-        09:05-09:35
-        10:05-10:35
-        11:05-11:35
-        --- day template 2
-        09:10-09:40
-        10:10-10:40
-        11:10-11:40
-        --- day template 3
-        09:15-09:45
-        10:15-10:45
-        11:15-11:45
+        >>> print timetable.time_slots
+        None
+
+        >>> view.createTimeSlots(timetable, 'weekly', day_names, slots)
+        0, Monday: ['09:00-09:50', '12:35-13:25']
+        1, Tuesday: ['10:00-10:50']
+        2, Wednesday: ['11:00-11:50', '14:35-15:25']
+
+        >>> print timetable.time_slots
+        <schooltool.timetable.daytemplates.WeekDayTemplates object ...>
+
+    It can create up to 7 days timeslots.
+
+        >>> view = FinalStepForTest(context, request)
+        >>> timetable = Timetable(None, None, title=u'Default')
+
+        >>> many_slots = slots * 4
+        >>> len(many_slots)
+        12
+
+        >>> view.createTimeSlots(timetable, 'weekly', day_names, many_slots)
+        0, Monday: ['09:00-09:50', '12:35-13:25']
+        1, Tuesday: ['10:00-10:50']
+        2, Wednesday: ['11:00-11:50', '14:35-15:25']
+        3, Thursday: ['09:00-09:50', '12:35-13:25']
+        4, Friday: ['10:00-10:50']
+        5, Saturday: ['11:00-11:50', '14:35-15:25']
+        6, Sunday: ['09:00-09:50', '12:35-13:25']
+
+    Rotating model uses the given day titles.
+
+        >>> view = FinalStepForTest(context, request)
+        >>> timetable = Timetable(None, None, title='Default')
+
+        >>> view.createTimeSlots(timetable, 'rotating', day_names, slots)
+        0, Day one: ['09:00-09:50', '12:35-13:25']
+        1, Day two: ['10:00-10:50']
+        2, Day three: ['11:00-11:50', '14:35-15:25']
+
+        >>> print timetable.time_slots
+        <schooltool.timetable.daytemplates.SchoolDayTemplates object ...>
+
+    We do not support unknown models.
+
+        >>> view.createTimeSlots(timetable, 'this is bogus', day_names, slots)
+        Traceback (most recent call last):
+        ...
+        NotImplementedError
 
     """
 
 
-def doctest_FinalStep_createSchema():
-    r"""Unit test for FinalStep.createSchema
+def doctest_wizard_FinalStep_createPeriods():
+    """Unit test for FinalStep.createPeriods
+
+        >>> from datetime import time, timedelta
+        >>> from schooltool.timetable.timetable import Timetable
+        >>> from schooltool.timetable.browser.ttwizard import FinalStep
+
+        >>> class FinalStepForTest(FinalStep):
+        ...     def addPeriodTemplates(self, schedule, days):
+        ...         for key, title, periods in days:
+        ...             print '%s, %s: %s' % (
+        ...                 key, title,
+        ...                 ['%s %s' % (act_type, period)
+        ...                  for period, act_type in periods])
+
+        >>> day_names = ['Day one', 'Day two', 'Day three']
+        >>> period_names = [
+        ...     ['first', 'second'],
+        ...     ['first'],
+        ...     ['first', 'second', 'third'],
+        ...     ]
+        >>> homeroom_names = [
+        ...     ['second'],
+        ...     [],
+        ...     ['first', 'third'],
+        ...     ]
+
+        >>> context = timetables
+        >>> request = TestRequest()
+
+    Weekly model creates a weekly period template schedule.
+
+        >>> view = FinalStepForTest(context, request)
+        >>> timetable = Timetable(None, None, title=u'Default')
+
+        >>> print timetable.periods
+        None
+
+        >>> view.createPeriods(timetable, 'weekly', day_names,
+        ...                    period_names, homeroom_names)
+        0, Day one: ['lesson first', 'homeroom second']
+        1, Day two: ['lesson first']
+        2, Day three: ['homeroom first', 'lesson second', 'homeroom third']
+
+        >>> print timetable.periods
+        <schooltool.timetable.daytemplates.WeekDayTemplates object ...>
+
+    Weekly model supports up to 7 days.
+
+        >>> view = FinalStepForTest(context, request)
+        >>> timetable = Timetable(None, None, title=u'Default')
+
+        >>> many_days = ['Day %s' % chr(n+ord('A')) for n in range(10)]
+        >>> many_periods = [['X']] * len(many_days)
+
+        >>> view.createPeriods(timetable, 'weekly', many_days,
+        ...                    many_periods, [()]*len(many_periods))
+        0, Day A: ['lesson X']
+        1, Day B: ['lesson X']
+        2, Day C: ['lesson X']
+        3, Day D: ['lesson X']
+        4, Day E: ['lesson X']
+        5, Day F: ['lesson X']
+        6, Day G: ['lesson X']
+
+    Rotating model is also quite simple.
+
+        >>> view = FinalStepForTest(context, request)
+        >>> timetable = Timetable(None, None, title=u'Default')
+
+        >>> print timetable.periods
+        None
+
+        >>> view.createPeriods(timetable, 'rotating', day_names,
+        ...                    period_names, homeroom_names)
+        0, Day one: ['lesson first', 'homeroom second']
+        1, Day two: ['lesson first']
+        2, Day three: ['homeroom first', 'lesson second', 'homeroom third']
+
+        >>> print timetable.periods
+        <schooltool.timetable.daytemplates.SchoolDayTemplates object ...>
+
+    We do not support unknown models.
+
+        >>> view.createPeriods(timetable, 'bogus', day_names,
+        ...                    period_names, homeroom_names)
+        Traceback (most recent call last):
+        ...
+        NotImplementedError
+
+    """
+
+
+def doctest_wizard_FinalStep_createTimetable():
+    """Unit tests for FinalStep.createTimetable
 
         >>> from schooltool.timetable.browser.ttwizard import FinalStep
-        >>> context = schemas
+        >>> context = timetables
+        >>> request = TestRequest()
+        >>> view = FinalStep(context, request)
+
+
+    This method creates a new timetable object.
+
+        >>> data = view.getSessionData()
+        >>> data['title'] = u'Some timetable'
+
+        >>> timetable = view.createTimetable()
+
+        >>> print timetable.title
+        Some timetable
+
+    The timetable's timezone is 'UTC', the app default:
+
+        >>> timetable.timezone
+        'UTC'
+
+    However if we set a school preferred timezone and try again:
+
+        >>> IApplicationPreferences(app).timezone = 'Australia/Canberra'
+
+        >>> timetable = view.createTimetable()
+
+        >>> timetable.timezone
+        'Australia/Canberra'
+
+    """
+
+
+def doctest_wizard_FinalStep_setUpTimetable():
+    r"""Unit test for FinalStep.setUpTimetable
+
+        >>> from schooltool.timetable.browser.ttwizard import FinalStep
+        >>> context = timetables
         >>> request = TestRequest()
         >>> view = FinalStep(context, request)
         >>> data = view.getSessionData()
@@ -1514,39 +1675,61 @@ def doctest_FinalStep_createSchema():
         >>> data['periods_order'] = default_period_names(data['time_slots'])
         >>> data['homeroom'] = False
 
-        >>> ttschema = view.createSchema()
-        >>> ttschema
-        <...TimetableSchema object at ...>
-        >>> print ttschema.title
-        Default
-        >>> print_ttschema(ttschema)
-        Monday       Tuesday      Wednesday    Thursday     Friday
-        09:30-10:25  09:30-10:25  09:30-10:25  09:30-10:25  09:30-10:25
-        10:30-11:25  10:30-11:25  10:30-11:25  10:30-11:25  10:30-11:25
+        >>> timetable = Timetable(None, None, title=u'Default')
+        >>> view.setUpTimetable(timetable)
 
-        >>> ttschema.model
-        <...WeeklyTimetableModel object at ...>
-        >>> print " ".join(ttschema.model.timetableDayIds)
-        Monday Tuesday Wednesday Thursday Friday
-
-    There is a single day template
-
-        >>> print_day_templates(ttschema.model.dayTemplates)
-        --- day template None
-        09:30-10:25
-        10:30-11:25
+        >>> print_timetable(timetable)
+        Timetable 'Default'
+        Periods (WeekDayTemplates)
+        +--------------------+--------------------+--------------------+--------------------+--------------------+
+        | Monday             | Tuesday            | Wednesday          | Thursday           | Friday             |
+        +--------------------+--------------------+--------------------+--------------------+--------------------+
+        | lesson 09:30-10:25 | lesson 09:30-10:25 | lesson 09:30-10:25 | lesson 09:30-10:25 | lesson 09:30-10:25 |
+        | lesson 10:30-11:25 | lesson 10:30-11:25 | lesson 10:30-11:25 | lesson 10:30-11:25 | lesson 10:30-11:25 |
+        +--------------------+--------------------+--------------------+--------------------+--------------------+
+        Time slots (WeekDayTemplates)
+        +-------------+-------------+-------------+-------------+-------------+
+        | Monday      | Tuesday     | Wednesday   | Thursday    | Friday      |
+        +-------------+-------------+-------------+-------------+-------------+
+        | 09:30-10:25 | 09:30-10:25 | 09:30-10:25 | 09:30-10:25 | 09:30-10:25 |
+        | 10:30-11:25 | 10:30-11:25 | 10:30-11:25 | 10:30-11:25 | 10:30-11:25 |
+        +-------------+-------------+-------------+-------------+-------------+
 
     The model can also be rotating.
 
         >>> data['cycle'] = 'rotating'
         >>> data['day_names'] = ['D1', 'D2', 'D3']
-        >>> ttschema = view.createSchema()
-        >>> ttschema.model
-        <...SequentialDayIdBasedTimetableModel object at ...>
-        >>> print_ttschema(ttschema)
-        D1           D2           D3
-        09:30-10:25  09:30-10:25  09:30-10:25
-        10:30-11:25  10:30-11:25  10:30-11:25
+
+        >>> timetable = Timetable(None, None, title=u'Default')
+        >>> view.setUpTimetable(timetable)
+
+        >>> print_timetable(timetable)
+        Timetable 'Default'
+        Periods (SchoolDayTemplates)
+        +--------------------+--------------------+--------------------+
+        | D1                 | D2                 | D3                 |
+        +--------------------+--------------------+--------------------+
+        | lesson 09:30-10:25 | lesson 09:30-10:25 | lesson 09:30-10:25 |
+        | lesson 10:30-11:25 | lesson 10:30-11:25 | lesson 10:30-11:25 |
+        +--------------------+--------------------+--------------------+
+        Time slots (SchoolDayTemplates)
+        +-------------+-------------+-------------+
+        | D1          | D2          | D3          |
+        +-------------+-------------+-------------+
+        | 09:30-10:25 | 09:30-10:25 | 09:30-10:25 |
+        | 10:30-11:25 | 10:30-11:25 | 10:30-11:25 |
+        +-------------+-------------+-------------+
+
+        >>> print_day_templates(ttschema.model.dayTemplates)
+        --- day template 'D1'
+        09:30-10:25
+        10:30-11:25
+        --- day template 'D2'
+        09:30-10:25
+        10:30-11:25
+        --- day template 'D3'
+        09:30-10:25
+        10:30-11:25
 
     The periods can be named rather than be designated by time:
 
@@ -1556,37 +1739,38 @@ def doctest_FinalStep_createSchema():
         >>> data['period_names'] = ['Green', 'Blue']
         >>> data['periods_same'] = True
         >>> data['periods_order'] = [['Green', 'Blue']] * 3
-        >>> ttschema = view.createSchema()
-        >>> ttschema.model
-        <...SequentialDayIdBasedTimetableModel object at ...>
-        >>> print_ttschema(ttschema)
-        D1           D2           D3
-        Green        Green        Green
-        Blue         Blue         Blue
 
-    The ttschema's timezone is 'UTC', the app default:
+        >>> timetable = Timetable(None, None, title=u'Default')
+        >>> view.setUpTimetable(timetable)
 
-        >>> ttschema.timezone
-        'UTC'
-
-    However if we set a school preferred timezone and try again:
-
-        >>> IApplicationPreferences(app).timezone = 'Australia/Canberra'
-        >>> ttschema = view.createSchema()
-        >>> ttschema.timezone
-        'Australia/Canberra'
+        >>> print_timetable(timetable)
+        Timetable 'Default'
+        Periods (SchoolDayTemplates)
+        +--------------+--------------+--------------+
+        | D1           | D2           | D3           |
+        +--------------+--------------+--------------+
+        | lesson Green | lesson Green | lesson Green |
+        | lesson Blue  | lesson Blue  | lesson Blue  |
+        +--------------+--------------+--------------+
+        Time slots (SchoolDayTemplates)
+        +-------------+-------------+-------------+
+        | D1          | D2          | D3          |
+        +-------------+-------------+-------------+
+        | 09:30-10:25 | 09:30-10:25 | 09:30-10:25 |
+        | 10:30-11:25 | 10:30-11:25 | 10:30-11:25 |
+        +-------------+-------------+-------------+
 
     """
 
 
-def doctest_FinalStep_createSchema_different_order_on_different_days_weekly():
-    """Unit test for FinalStep.createSchema
+def doctest_wizard_FinalStep_setUpTimetable_different_order_on_different_days_weekly():
+    """Unit test for FinalStep.setUpTimetable
 
     Weekly cycle, same time slots on each day, different period order in
     each day.
 
         >>> from schooltool.timetable.browser.ttwizard import FinalStep
-        >>> view = FinalStep(schemas, TestRequest())
+        >>> view = FinalStep(timetables, TestRequest())
         >>> data = view.getSessionData()
 
         >>> from datetime import time, timedelta
@@ -1608,36 +1792,42 @@ def doctest_FinalStep_createSchema_different_order_on_different_days_weekly():
         ...                          ['D', 'E', 'F', 'G'],
         ...                          ['E', 'F', 'G', 'H']]
         >>> data['homeroom'] = False
-        >>> ttschema = view.createSchema()
 
-        >>> print_ttschema(ttschema)
-        Monday       Tuesday      Wednesday    Thursday     Friday
-        A            B            C            D            E
-        B            C            D            E            F
-        C            D            E            F            G
-        D            E            F            G            H
+        >>> timetable = Timetable(None, None, title=u'Default')
+        >>> view.setUpTimetable(timetable)
 
-        >>> ttschema.model
-        <...WeeklyTimetableModel object at ...>
-
-        >>> print_day_templates(ttschema.model.dayTemplates)
-        --- day template None
-        08:00-08:45
-        09:00-09:45
-        10:00-10:45
-        11:00-11:45
+        >>> print_timetable(timetable)
+        Timetable 'Default'
+        Periods (WeekDayTemplates)
+        +----------+----------+-----------+----------+----------+
+        | Monday   | Tuesday  | Wednesday | Thursday | Friday   |
+        +----------+----------+-----------+----------+----------+
+        | lesson A | lesson B | lesson C  | lesson D | lesson E |
+        | lesson B | lesson C | lesson D  | lesson E | lesson F |
+        | lesson C | lesson D | lesson E  | lesson F | lesson G |
+        | lesson D | lesson E | lesson F  | lesson G | lesson H |
+        +----------+----------+-----------+----------+----------+
+        Time slots (WeekDayTemplates)
+        +-------------+-------------+-------------+-------------+-------------+
+        | Monday      | Tuesday     | Wednesday   | Thursday    | Friday      |
+        +-------------+-------------+-------------+-------------+-------------+
+        | 08:00-08:45 | 08:00-08:45 | 08:00-08:45 | 08:00-08:45 | 08:00-08:45 |
+        | 09:00-09:45 | 09:00-09:45 | 09:00-09:45 | 09:00-09:45 | 09:00-09:45 |
+        | 10:00-10:45 | 10:00-10:45 | 10:00-10:45 | 10:00-10:45 | 10:00-10:45 |
+        | 11:00-11:45 | 11:00-11:45 | 11:00-11:45 | 11:00-11:45 | 11:00-11:45 |
+        +-------------+-------------+-------------+-------------+-------------+
 
     """
 
 
-def doctest_FinalStep_createSchema_different_order_on_different_days_cyclic():
-    """Unit test for FinalStep.createSchema
+def doctest_wizard_FinalStep_setUpTimetable_different_order_on_different_days_cyclic():
+    """Unit test for FinalStep.setUpTimetable
 
     Rotating cycle, same time slots on each day, different period order in
     each day.
 
         >>> from schooltool.timetable.browser.ttwizard import FinalStep
-        >>> view = FinalStep(schemas, TestRequest())
+        >>> view = FinalStep(timetables, TestRequest())
         >>> data = view.getSessionData()
 
         >>> from datetime import time, timedelta
@@ -1656,46 +1846,42 @@ def doctest_FinalStep_createSchema_different_order_on_different_days_cyclic():
         ...                          ['B', 'C', 'D', 'E'],
         ...                          ['C', 'D', 'E', 'F']]
         >>> data['homeroom'] = False
-        >>> ttschema = view.createSchema()
 
-        >>> print_ttschema(ttschema)
-        Day 1        Day 2        Day 3
-        A            B            C
-        B            C            D
-        C            D            E
-        D            E            F
+        >>> timetable = Timetable(None, None, title=u'Default')
+        >>> view.setUpTimetable(timetable)
 
-        >>> ttschema.model
-        <...SequentialDayIdBasedTimetableModel object at ...>
-
-        >>> print_day_templates(ttschema.model.dayTemplates)
-        --- day template 'Day 1'
-        08:00-08:45
-        09:00-09:45
-        10:00-10:45
-        11:00-11:45
-        --- day template 'Day 2'
-        08:00-08:45
-        09:00-09:45
-        10:00-10:45
-        11:00-11:45
-        --- day template 'Day 3'
-        08:00-08:45
-        09:00-09:45
-        10:00-10:45
-        11:00-11:45
+        >>> print_timetable(timetable)
+        Timetable 'Default'
+        Periods (SchoolDayTemplates)
+        +----------+----------+----------+
+        | Day 1    | Day 2    | Day 3    |
+        +----------+----------+----------+
+        | lesson A | lesson B | lesson C |
+        | lesson B | lesson C | lesson D |
+        | lesson C | lesson D | lesson E |
+        | lesson D | lesson E | lesson F |
+        +----------+----------+----------+
+        Time slots (SchoolDayTemplates)
+        +-------------+-------------+-------------+
+        | Day 1       | Day 2       | Day 3       |
+        +-------------+-------------+-------------+
+        | 08:00-08:45 | 08:00-08:45 | 08:00-08:45 |
+        | 09:00-09:45 | 09:00-09:45 | 09:00-09:45 |
+        | 10:00-10:45 | 10:00-10:45 | 10:00-10:45 |
+        | 11:00-11:45 | 11:00-11:45 | 11:00-11:45 |
+        +-------------+-------------+-------------+
 
     """
 
 
-def doctest_FinalStep_createSchema_different_order_cyclic_weekly():
-    """Unit test for FinalStep.createSchema
+def doctest_wizard_FinalStep_setUpTimetable_different_order_cyclic_weekly():
+    """Unit test for FinalStep.setUpTimetable
 
     Rotating cycle, different time slots on a weekly basis, different period
     order in each day.
 
         >>> from schooltool.timetable.browser.ttwizard import FinalStep
-        >>> view = FinalStep(schemas, TestRequest())
+        >>> view = FinalStep(timetables, TestRequest())
         >>> data = view.getSessionData()
 
         >>> from datetime import time, timedelta
@@ -1716,59 +1902,44 @@ def doctest_FinalStep_createSchema_different_order_cyclic_weekly():
         ...                          ['B', 'C', 'D', 'E', 'F', 'A'],
         ...                          ['C', 'D', 'E', 'F', 'A', 'B']]
         >>> data['homeroom'] = False
-        >>> ttschema = view.createSchema()
 
-        >>> print_ttschema(ttschema)
-        Day 1        Day 2        Day 3
-        A            B            C
-        B            C            D
-        C            D            E
-        D            E            F
-        E            F            A
-        F            A            B
+        >>> timetable = Timetable(None, None, title=u'Default')
+        >>> view.setUpTimetable(timetable)
 
-        >>> ttschema.model
-        <...SequentialDaysTimetableModel object at ...>
-
-        >>> print_day_templates(ttschema.model.dayTemplates)
-        --- day template None
-        --- day template 0
-        08:00-08:45
-        09:00-09:45
-        10:00-10:45
-        11:00-11:45
-        --- day template 1
-        08:05-08:50
-        09:05-09:50
-        10:05-10:50
-        11:05-11:50
-        --- day template 2
-        08:10-08:55
-        09:10-09:55
-        10:10-10:55
-        11:10-11:55
-        --- day template 3
-        08:15-09:00
-        09:15-10:00
-        10:15-11:00
-        11:15-12:00
-        --- day template 4
-        08:20-09:05
-        09:20-10:05
-        10:20-11:05
-        11:20-12:05
+        >>> print_timetable(timetable)
+        Timetable 'Default'
+        Periods (SchoolDayTemplates)
+        +----------+----------+----------+
+        | Day 1    | Day 2    | Day 3    |
+        +----------+----------+----------+
+        | lesson A | lesson B | lesson C |
+        | lesson B | lesson C | lesson D |
+        | lesson C | lesson D | lesson E |
+        | lesson D | lesson E | lesson F |
+        | lesson E | lesson F | lesson A |
+        | lesson F | lesson A | lesson B |
+        +----------+----------+----------+
+        Time slots (WeekDayTemplates)
+        +-------------+-------------+-------------+-------------+-------------+
+        | Monday      | Tuesday     | Wednesday   | Thursday    | Friday      |
+        +-------------+-------------+-------------+-------------+-------------+
+        | 08:00-08:45 | 08:05-08:50 | 08:10-08:55 | 08:15-09:00 | 08:20-09:05 |
+        | 09:00-09:45 | 09:05-09:50 | 09:10-09:55 | 09:15-10:00 | 09:20-10:05 |
+        | 10:00-10:45 | 10:05-10:50 | 10:10-10:55 | 10:15-11:00 | 10:20-11:05 |
+        | 11:00-11:45 | 11:05-11:50 | 11:10-11:55 | 11:15-12:00 | 11:20-12:05 |
+        +-------------+-------------+-------------+-------------+-------------+
 
     """
 
 
-def doctest_FinalStep_createSchema_different_times():
-    """Unit test for FinalStep.createSchema
+def doctest_wizard_FinalStep_setUpTimetable_different_times():
+    """Unit test for FinalStep.setUpTimetable
 
     Weekly cycle, different time slots on each day, different period order in
     each day.
 
         >>> from schooltool.timetable.browser.ttwizard import FinalStep
-        >>> view = FinalStep(schemas, TestRequest())
+        >>> view = FinalStep(timetables, TestRequest())
         >>> data = view.getSessionData()
 
         >>> from datetime import time, timedelta
@@ -1791,62 +1962,42 @@ def doctest_FinalStep_createSchema_different_times():
         ...                          ['D', 'E', 'F', 'G'],
         ...                          ['E', 'F', 'G', 'H']]
         >>> data['homeroom'] = False
-        >>> ttschema = view.createSchema()
 
-        >>> print_ttschema(ttschema)
-        Monday       Tuesday      Wednesday    Thursday     Friday
-        A            B            C            D            E
-        B            C            D            E            F
-        C            D            E            F            G
-        D            E            F            G            H
+        >>> timetable = Timetable(None, None, title=u'Default')
+        >>> view.setUpTimetable(timetable)
 
-        >>> for day_id, day in ttschema.items():
-        ...     if day.homeroom_period_ids:
-        ...         print "Homeroom on %s is %s" % (day_id,
-        ...                                         day.homeroom_period_ids[0])
-
-        >>> ttschema.model
-        <...WeeklyTimetableModel object at ...>
-
-        >>> print_day_templates(ttschema.model.dayTemplates)
-        --- day template None
-        --- day template 0
-        08:00-08:45
-        09:00-09:45
-        10:00-10:45
-        11:00-11:45
-        --- day template 1
-        08:05-08:50
-        09:05-09:50
-        10:05-10:50
-        11:05-11:50
-        --- day template 2
-        08:10-08:55
-        09:10-09:55
-        10:10-10:55
-        11:10-11:55
-        --- day template 3
-        08:15-09:00
-        09:15-10:00
-        10:15-11:00
-        11:15-12:00
-        --- day template 4
-        08:20-09:05
-        09:20-10:05
-        10:20-11:05
-        11:20-12:05
+        >>> print_timetable(timetable)
+        Timetable 'Default'
+        Periods (WeekDayTemplates)
+        +----------+----------+-----------+----------+----------+
+        | Monday   | Tuesday  | Wednesday | Thursday | Friday   |
+        +----------+----------+-----------+----------+----------+
+        | lesson A | lesson B | lesson C  | lesson D | lesson E |
+        | lesson B | lesson C | lesson D  | lesson E | lesson F |
+        | lesson C | lesson D | lesson E  | lesson F | lesson G |
+        | lesson D | lesson E | lesson F  | lesson G | lesson H |
+        +----------+----------+-----------+----------+----------+
+        Time slots (WeekDayTemplates)
+        +-------------+-------------+-------------+-------------+-------------+
+        | Monday      | Tuesday     | Wednesday   | Thursday    | Friday      |
+        +-------------+-------------+-------------+-------------+-------------+
+        | 08:00-08:45 | 08:05-08:50 | 08:10-08:55 | 08:15-09:00 | 08:20-09:05 |
+        | 09:00-09:45 | 09:05-09:50 | 09:10-09:55 | 09:15-10:00 | 09:20-10:05 |
+        | 10:00-10:45 | 10:05-10:50 | 10:10-10:55 | 10:15-11:00 | 10:20-11:05 |
+        | 11:00-11:45 | 11:05-11:50 | 11:10-11:55 | 11:15-12:00 | 11:20-12:05 |
+        +-------------+-------------+-------------+-------------+-------------+
 
     """
 
 
-def doctest_FinalStep_createSchema_with_homeroom():
-    """Unit test for FinalStep.createSchema
+def doctest_wizard_FinalStep_setUpTimetable_with_homeroom():
+    """Unit test for FinalStep.setUpTimetable
 
     Weekly cycle, different time slots on each day, different period order in
     each day, homeroom periods.
 
         >>> from schooltool.timetable.browser.ttwizard import FinalStep
-        >>> view = FinalStep(schemas, TestRequest())
+        >>> view = FinalStep(timetables, TestRequest())
         >>> data = view.getSessionData()
 
         >>> from datetime import time, timedelta
@@ -1870,84 +2021,58 @@ def doctest_FinalStep_createSchema_with_homeroom():
         ...                          ['E', 'F', 'G', 'H']]
         >>> data['homeroom'] = True
         >>> data['homeroom_periods'] = [['A'], ['C'], [], ['F'], ['H']]
-        >>> ttschema = view.createSchema()
 
-        >>> print_ttschema(ttschema)
-        Monday       Tuesday      Wednesday    Thursday     Friday
-        A            B            C            D            E
-        B            C            D            E            F
-        C            D            E            F            G
-        D            E            F            G            H
+        >>> timetable = Timetable(None, None, title=u'Default')
+        >>> view.setUpTimetable(timetable)
 
-        >>> for day_id, day in ttschema.items():
-        ...     if day.homeroom_period_ids:
-        ...         print "Homeroom on %s is %s" % (day_id,
-        ...                                         day.homeroom_period_ids[0])
-        Homeroom on Monday is A
-        Homeroom on Tuesday is C
-        Homeroom on Thursday is F
-        Homeroom on Friday is H
-
-        >>> ttschema.model
-        <...WeeklyTimetableModel object at ...>
-
-        >>> print_day_templates(ttschema.model.dayTemplates)
-        --- day template None
-        --- day template 0
-        08:00-08:45
-        09:00-09:45
-        10:00-10:45
-        11:00-11:45
-        --- day template 1
-        08:05-08:50
-        09:05-09:50
-        10:05-10:50
-        11:05-11:50
-        --- day template 2
-        08:10-08:55
-        09:10-09:55
-        10:10-10:55
-        11:10-11:55
-        --- day template 3
-        08:15-09:00
-        09:15-10:00
-        10:15-11:00
-        11:15-12:00
-        --- day template 4
-        08:20-09:05
-        09:20-10:05
-        10:20-11:05
-        11:20-12:05
+        >>> print_timetable(timetable)
+        Timetable 'Default'
+        Periods (WeekDayTemplates)
+        +------------+------------+-----------+------------+------------+
+        | Monday     | Tuesday    | Wednesday | Thursday   | Friday     |
+        +------------+------------+-----------+------------+------------+
+        | homeroom A | lesson B   | lesson C  | lesson D   | lesson E   |
+        | lesson B   | homeroom C | lesson D  | lesson E   | lesson F   |
+        | lesson C   | lesson D   | lesson E  | homeroom F | lesson G   |
+        | lesson D   | lesson E   | lesson F  | lesson G   | homeroom H |
+        +------------+------------+-----------+------------+------------+
+        Time slots (WeekDayTemplates)
+        +-------------+-------------+-------------+-------------+-------------+
+        | Monday      | Tuesday     | Wednesday   | Thursday    | Friday      |
+        +-------------+-------------+-------------+-------------+-------------+
+        | 08:00-08:45 | 08:05-08:50 | 08:10-08:55 | 08:15-09:00 | 08:20-09:05 |
+        | 09:00-09:45 | 09:05-09:50 | 09:10-09:55 | 09:15-10:00 | 09:20-10:05 |
+        | 10:00-10:45 | 10:05-10:50 | 10:10-10:55 | 10:15-11:00 | 10:20-11:05 |
+        | 11:00-11:45 | 11:05-11:50 | 11:10-11:55 | 11:15-12:00 | 11:20-12:05 |
+        +-------------+-------------+-------------+-------------+-------------+
 
     """
 
 
-def doctest_FinalStep_add():
-    """Unit test for FinalStep.createSchema
+def doctest_wizard_FinalStep_add():
+    """Unit test for FinalStep.setUpTimetable
 
         >>> from schooltool.timetable.browser.ttwizard import FinalStep
-        >>> context = schemas
+        >>> context = timetables
         >>> request = TestRequest()
         >>> view = FinalStep(context, request)
 
-        >>> from schooltool.timetable.schema import TimetableSchema
-        >>> ttschema = TimetableSchema([], title="Timetable Schema")
-        >>> view.add(ttschema)
+        >>> from schooltool.timetable.timetable import Timetable
+        >>> timetable = Timetable(None, None, title='timetable')
+        >>> view.add(timetable)
 
-        >>> context['timetable-schema'] is ttschema
+        >>> context['timetable'] is timetable
         True
 
     """
 
 
-def doctest_TimetableSchemaWizard():
-    """Unit test for TimetableSchemaWizard
+def doctest_wizard_TimetableWizard():
+    """Unit test for TimetableWizard
 
-        >>> from schooltool.timetable.browser.ttwizard import \\
-        ...                                     TimetableSchemaWizard
-        >>> context = schemas
+        >>> context = timetables
         >>> request = TestRequest()
-        >>> view = TimetableSchemaWizard(context, request)
+        >>> view = TimetableWizard(context, request)
 
     We shall stub it heavily.
 
@@ -2002,19 +2127,17 @@ def doctest_TimetableSchemaWizard():
         >>> request.response.getStatus()
         302
         >>> request.response.getHeader('Location')
-        'http://127.0.0.1/ttschemas'
+        'http://127.0.0.1/timetables'
 
     """
 
 
-def doctest_TimetableSchemaWizard_getLastStep():
-    """Unit test for TimetableSchemaWizard.getLastStep
+def doctest_wizard_TimetableWizard_getLastStep():
+    """Unit test for TimetableWizard.getLastStep
 
-        >>> from schooltool.timetable.browser.ttwizard import \\
-        ...                                    TimetableSchemaWizard
-        >>> context = schemas
+        >>> context = timetables
         >>> request = TestRequest()
-        >>> view = TimetableSchemaWizard(context, request)
+        >>> view = TimetableWizard(context, request)
 
     When there is no step saved in the session, getLastStep returns the first
     step.
@@ -2032,14 +2155,12 @@ def doctest_TimetableSchemaWizard_getLastStep():
     """
 
 
-def doctest_TimetableSchemaWizard_rememberLastStep():
-    """Unit test for TimetableSchemaWizard.rememberLastStep
+def doctest_wizard_TimetableWizard_rememberLastStep():
+    """Unit test for TimetableWizard.rememberLastStep
 
-        >>> from schooltool.timetable.browser.ttwizard import \\
-        ...                                     TimetableSchemaWizard
-        >>> context = schemas
+        >>> context = timetables
         >>> request = TestRequest()
-        >>> view = TimetableSchemaWizard(context, request)
+        >>> view = TimetableWizard(context, request)
 
         >>> from schooltool.timetable.browser.ttwizard import CycleStep
         >>> view.rememberLastStep(CycleStep(context, request))

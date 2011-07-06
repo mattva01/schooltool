@@ -72,12 +72,12 @@ def make_relationship_collumn_getter(person=None):
 
 
 def assigned_contacts_columns(person=None):
-    first_name, last_name, address = contact_table_collumns()
+    first_name, last_name = contact_table_collumns()
     relationship = GetterColumn(
         name='relationship',
         title=_(u"Relationship"),
         getter=make_relationship_collumn_getter(person))
-    return [first_name, last_name, relationship, address]
+    return [first_name, last_name, relationship]
 
 
 class ContactManagementView(BrowserView):

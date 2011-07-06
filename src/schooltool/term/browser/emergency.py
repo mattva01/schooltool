@@ -22,23 +22,19 @@ $Id$
 """
 import datetime
 
-from zope.component import adapter
-from zope.interface import implementer
+from zope.event import notify
 from zope.i18n import translate
-from zope.security.proxy import removeSecurityProxy
 from zope.publisher.browser import BrowserView
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.traversing.browser.absoluteurl import absoluteURL
 
-from schooltool.schoolyear.interfaces import ISchoolYear
 from schooltool.common import SchoolToolMessage as _
 from schooltool.app.cal import CalendarEvent
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.calendar.utils import parse_date
 from schooltool.term.interfaces import ITerm
-from schooltool.timetable.interfaces import ITimetableSchemaContainer
-from schooltool.timetable import SchooldayTemplate
+from schooltool.term.term import EmergencyDayEvent
 
 
 class EmergencyDayView(BrowserView):
@@ -106,21 +102,23 @@ class EmergencyDayView(BrowserView):
 
         if self.date and self.replacement:
             if self.context.last < self.replacement:
+                # XXX: I wonder if all places that are dependent on
+                #      term start/end dates are updated properly
                 self.context.last = self.replacement
+
             assert not self.context.isSchoolday(self.replacement)
             assert self.context.isSchoolday(self.date)
             self.context.add(self.replacement)
 
-            # Update all schemas
-            ttschemas = ITimetableSchemaContainer(self.context)
-            for schema in ttschemas.values():
-                model = schema.model
-                exceptionDays = removeSecurityProxy(model.exceptionDays)
-                exceptionDayIds = removeSecurityProxy(model.exceptionDayIds)
-                exceptionDays[self.date] = SchooldayTemplate()
-                day_id = model.getDayId(self.context, self.date)
-                exceptionDayIds[self.replacement] = removeSecurityProxy(day_id)
+            notify(EmergencyDayEvent(self.date, self.replacement))
 
+            # XXX: Following code should be move to the event subscriber, but!
+            #      It wants to store translated messages, and in current default
+            #      case the event description will be stored in the language
+            #      from somebodys browser settings.  Now that's naughty!
+            #      If only we had 'apllication language' separate form 'user
+            #      presentation language' this problem would go away.
+            #
             # Post calendar events to schoolwide calendar
             calendar = ISchoolToolCalendar(ISchoolToolApplication(None))
             dtstart = datetime.datetime.combine(self.date, datetime.time())
@@ -149,7 +147,3 @@ class EmergencyDayView(BrowserView):
         return self.template()
 
 
-@adapter(ITerm)
-@implementer(ITimetableSchemaContainer)
-def getTimetableSchemaContainerForTerm(term):
-    return ITimetableSchemaContainer(ISchoolYear(term))

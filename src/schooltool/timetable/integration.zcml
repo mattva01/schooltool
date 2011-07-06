@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:i18n="http://namespaces.zope.org/i18n"
+           i18n_domain="schooltool">
+
+  <class class=".app.SchoolToolSchedules">
+    <require permission="schooltool.edit"
+             interface="zope.container.interfaces.IWriteContainer" />
+    <require permission="schooltool.view"
+             interface="zope.container.interfaces.IReadContainer"
+             />
+  </class>
+
+  <adapter factory=".app.getScheduleContainer" />
+  <adapter factory=".app.getScheduleOwner" />
+  <adapter factory=".app.getScheduleContainerOwner" />
+  <adapter factory=".app.getTimetableContainer" />
+  <adapter factory=".app.getScheduleTimetableOwner" />
+  <adapter factory=".app.getTimetableContainerOwner" />
+
+  <adapter
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      factory=".app.TimetableStartUp"
+      name="schooltool.timetable.app"
+      />
+
+  <utility
+     factory=".app.activityVocabularyFactory"
+     provides="zope.schema.interfaces.IVocabularyFactory"
+     name="schooltool.timetable.activityvocbulary" />
+
+  <adapter factory=".calendar.ImmutableScheduleCalendar"
+           provides=".interfaces.IImmutableScheduleCalendar" />
+
+  <adapter factory=".calendar.getScheduleCalendar"
+           provides="schooltool.app.interfaces.ISchoolToolCalendar"
+           trusted="true" />
+
+  <adapter factory=".calendar.getScheduleCalendar"
+           provides="schooltool.timetable.interfaces.IScheduleCalendar"
+           trusted="true" />
+
+  <adapter factory=".app.UpdateSelectedPeriodsSchedules" />
+
+  <adapter for="zope.lifecycleevent.interfaces.IObjectAddedEvent
+           schooltool.timetable.interfaces.ISchedule"
+      factory=".calendar.UpdateScheduleCalendar" />
+
+  <adapter
+      for="zope.lifecycleevent.interfaces.IObjectModifiedEvent
+           schooltool.timetable.interfaces.ISchedule"
+      factory=".calendar.UpdateScheduleCalendar" />
+
+  <adapter
+      for="zope.lifecycleevent.interfaces.IObjectRemovedEvent
+           schooltool.timetable.interfaces.ISchedule"
+      factory=".calendar.RemoveScheduleCalendar" />
+
+  <class class=".app.SchooldaysForSchedule">
+    <require permission="schooltool.view"
+             interface="schooltool.timetable.interfaces.ISchooldays" />
+  </class>
+
+  <adapter factory=".app.SchooldaysForSchedule" />
+
+  <adapter factory=".app.SchooldaysForTimetable" />
+
+</configure>

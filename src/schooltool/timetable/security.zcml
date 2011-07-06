@@ -3,11 +3,11 @@
            xmlns:zope="http://namespaces.zope.org/zope">
 
   <allow
-      interface="schooltool.timetable.interfaces.ITimetableSchemaContainer"
+      interface="schooltool.timetable.interfaces.ITimetableContainer"
       crowds="administration everybody"
       permission="schooltool.view" />
   <allow
-      interface="schooltool.timetable.interfaces.ITimetableSchemaContainer"
+      interface="schooltool.timetable.interfaces.ITimetableContainer"
       crowds="administration"
       permission="schooltool.edit" />
 
@@ -18,45 +18,29 @@
   <describe_action
      group="schooltool.timetable" name="list" title="List/Search"
      order="10"
-     interface="schooltool.timetable.interfaces.ITimetableSchemaContainer"
+     interface="schooltool.timetable.interfaces.ITimetableContainer"
      permission="schooltool.view"
   />
 
   <describe_action
      group="schooltool.timetable" name="create_delete" title="Create/Delete"
      order="20"
-     interface="schooltool.timetable.interfaces.ITimetableSchemaContainer"
+     interface="schooltool.timetable.interfaces.ITimetableContainer"
      permission="schooltool.edit"
   />
 
   <describe_action
      group="schooltool.timetable" name="view" title="View"
      order="30"
-     interface="schooltool.timetable.interfaces.ITimetableSchemaContainer"
+     interface="schooltool.timetable.interfaces.ITimetableContainer"
      permission="schooltool.view"
   />
 
   <describe_action
      group="schooltool.timetable" name="modify" title="Modify"
      order="40"
-     interface="schooltool.timetable.interfaces.ITimetableSchemaContainer"
+     interface="schooltool.timetable.interfaces.ITimetableContainer"
      permission="schooltool.edit"
-  />
-
-  <describe_action
-      group="schooltool.course-sections" name="edit_timetables"
-      title="Assign timetables"
-      order="41"
-      interface="schooltool.course.interfaces.ISection"
-      permission="schooltool.edit"
-  />
-
-  <describe_action
-      group="schooltool.course-sections" name="edit_schedule"
-      title="Change schedule"
-      order="42"
-      interface="schooltool.course.interfaces.ISection"
-      permission="schooltool.edit"
   />
 
 </configure>

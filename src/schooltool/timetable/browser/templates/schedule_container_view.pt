@@ -1,0 +1,73 @@
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title" i18n:translate="">
+      Schedule for
+      <span i18n:name="owner"
+            tal:replace="structure view/owner/title" />
+  </title>
+</head>
+<body>
+
+<div metal:fill-slot="content-header">
+
+<h1 i18n:translate="">
+  Schedule for
+  <span i18:name="content"
+        tal:content="structure view/owner/schooltool:content/label"></span>
+</h1>
+
+<p i18n:translate=""
+   tal:define="term view/term;
+               schoolyear view/school_year"
+   tal:condition="term">
+  For more information, see
+  <a tal:attributes="href term/@@absolute_url"
+     i18n:name="school_days" i18n:translate="">school days</a> and
+  <a tal:attributes="href string:${schoolyear/@@absolute_url}/school_timetables"
+     i18n:name="available_timetables" i18n:translate="">available timetables</a>
+  in <tal:block i18n:name="term"
+                tal:content="structure term/schooltool:content/label" />
+</p>
+
+</div>
+
+<metal:block metal:fill-slot="body">
+
+<p tal:condition="not:context"
+   i18n:translate="">Nothing scheduled yet.</p>
+
+<tal:if tal:condition="context">
+
+  <tal:block repeat="schedule context/values">
+    <h2>
+      <tal:block tal:content="structure schedule/schooltool:content/boundaries">
+        Schedule X (date - date)
+      </tal:block>
+      <a tal:attributes="href string:${schedule/@@absolute_url}/edit.html"
+         i18n:translate="">(edit periods)</a>
+    </h2>
+
+    <div tal:content="structure schedule/schooltool:content/view"></div>
+
+    <form method="post"
+          tal:attributes="action string:${context/@@absolute_url}/confirm-delete.html">
+      <input type="hidden" name="schedule" tal:attributes="value schedule/__name__" />
+      <div class="controls">
+        <input type="submit" class="button-cancel" name="DELETE" value="Remove"
+               i18n:attributes="value" />
+      </div>
+    </form>
+
+  </tal:block>
+
+  <div tal:define="exceptions nocall:context/schooltool:content/exceptions|nothing"
+       tal:condition="exceptions">
+    <h2 i18n:translate="">Exception days</h2>
+    <div tal:content="structure exceptions"></div>
+  </div>
+
+</tal:if>
+
+</metal:block>
+</body>
+</html>

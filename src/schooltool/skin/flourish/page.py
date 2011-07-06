@@ -69,8 +69,8 @@ class Page(BrowserPage):
         return result
 
 
-class ExpandedPage(Page):
-    page_template = ViewPageTemplateFile('templates/page_expanded.pt')
+class NoSidebarPage(Page):
+    page_template = ViewPageTemplateFile('templates/page_nosidebar.pt')
 
 
 class ContentViewletManager(ViewletManager):

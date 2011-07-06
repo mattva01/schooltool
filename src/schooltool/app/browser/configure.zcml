@@ -302,6 +302,10 @@
       permission="zope.Public"
       />
 
+  <zope:adapter
+      factory=".cal.getCalendarEventDeleteLink"
+      name="delete_link" />
+
   <configure package="schooltool.skin">
     <navigationViewlet
       name="view-calendar"
@@ -336,17 +340,6 @@
       link="calendar.ics"
       title="Open in iCal"
       order="20"
-      />
-
-    <navigationViewlet
-      name="timetables-csvimport"
-      for="schooltool.course.interfaces.ISectionContainer"
-      manager="schooltool.skin.IActionMenuManager"
-      template="templates/actionsViewlet.pt"
-      permission="schooltool.edit"
-      link="@@timetables-csvimport.html"
-      title="Import Sections"
-      order="50"
       />
 
     <navigationViewlet
@@ -539,17 +532,6 @@
       permission="zope.View"
       />
 
-  <!-- XXX: Mmh, is ISectionContainer the only component using this -->
-  <!--      view class? -->
-  <page
-      name="timetables-csvimport.html"
-      for="schooltool.course.interfaces.ISectionContainer"
-      class="schooltool.app.browser.csvimport.TimetableCSVImportView"
-      template="templates/timetables-csvimport.pt"
-      permission="schooltool.edit"
-      layer="schooltool.skin.ISchoolToolLayer"
-      />
-
   <page
       for="schooltool.app.interfaces.IAsset"
       name="leaders.html"
@@ -737,5 +719,9 @@
       action="@@index.html"
       title="Error List"
       />
+
+  <!-- Timetable support -->
+  <!-- XXX: disable timetable support for refactoring -->
+  <!--include file="timetable-integration.zcml" /-->
 
 </configure>

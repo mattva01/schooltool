@@ -114,10 +114,15 @@ class TableContainerView(Page):
                                              title=u'')]
         return []
 
+    def getColumnsAfter(self):
+        return []
+
     def setUpTableFormatter(self, formatter):
         columns_before = self.getColumnsBefore()
+        columns_after = self.getColumnsAfter()
         formatter.setUp(formatters=[url_cell_formatter],
-                        columns_before=columns_before)
+                        columns_before=columns_before,
+                        columns_after=columns_after)
 
     @property
     def container(self):

@@ -22,7 +22,7 @@ Flourish error views.
 from zope.app.exception.browser.unauthorized import Unauthorized
 
 from schooltool.skin.error import ErrorView
-from schooltool.skin.flourish.page import ExpandedPage
+from schooltool.skin.flourish.page import NoSidebarPage
 
 
 class NotFound(object):
@@ -32,14 +32,14 @@ class NotFound(object):
         return super(NotFound, self).__call__(*args, **kw)
 
 
-class ErrorPage(ExpandedPage, ErrorView):
+class ErrorPage(NoSidebarPage, ErrorView):
 
     def __call__(self, *args, **kw):
         self.request.response.setStatus(500)
-        return ExpandedPage.__call__(self, *args, **kw)
+        return NoSidebarPage.__call__(self, *args, **kw)
 
 
-class UnauthorizedPage(ExpandedPage, Unauthorized):
+class UnauthorizedPage(NoSidebarPage, Unauthorized):
 
     def render(self, *args, **kw):
         return Unauthorized.__call__(self)

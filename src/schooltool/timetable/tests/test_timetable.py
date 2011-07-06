@@ -35,20 +35,24 @@ from zope.component import eventtesting
 from zope.component import provideAdapter
 
 from schooltool.group.interfaces import IGroupContainer
-from schooltool.timetable import SchooldaySlot
-from schooltool.timetable import SchooldayTemplate
-from schooltool.timetable import DuplicateTimetableError
-from schooltool.timetable.model import WeeklyTimetableModel
-from schooltool.timetable.interfaces import ITimetableSchemaContainer
-from schooltool.timetable.interfaces import ITimetables
-from schooltool.timetable.interfaces import ICompositeTimetables
-from schooltool.timetable.interfaces import ITimetable, ITimetableActivity
-from schooltool.timetable.interfaces import IOwnTimetables
 from schooltool.relationship import RelationshipProperty
 from schooltool.app.membership import URIGroup, URIMember, URIMembership
 
 from schooltool.testing.util import NiceDiffsMixin
 from schooltool.testing.util import EqualsSortedMixin
+
+try:
+    from schooltool.timetable import SchooldaySlot
+    from schooltool.timetable import SchooldayTemplate
+    from schooltool.timetable import DuplicateTimetableError
+    from schooltool.timetable.model import WeeklyTimetableModel
+    from schooltool.timetable.interfaces import ITimetableSchemaContainer
+    from schooltool.timetable.interfaces import ITimetables
+    from schooltool.timetable.interfaces import ICompositeTimetables
+    from schooltool.timetable.interfaces import ITimetable, ITimetableActivity
+    from schooltool.timetable.interfaces import IOwnTimetables
+except:
+    pass # XXX: tests not refactored yet
 
 
 def makeTimetableModel():
