@@ -48,7 +48,8 @@ from zope.traversing.browser.interfaces import IAbsoluteURL
 
 from schooltool.app.browser.app import BaseEditView
 from schooltool.app.interfaces import ISchoolToolApplication
-from schooltool.basicperson.browser.demographics import DemographicsView
+from schooltool.basicperson.browser.demographics import (DemographicsView,
+    FlourishDemographicsView, FlourishReorderDemographicsView)
 from schooltool.resource.interfaces import IBookingCalendar
 from schooltool.resource.interfaces import (IBaseResourceContained,
              IResourceContainer, IResourceTypeInformation, IResourceSubTypes,
@@ -325,6 +326,17 @@ class ResourceDemographicsFieldsAbsoluteURLAdapter(BrowserView):
 class ResourceDemographicsView(DemographicsView):
 
     title = _('Resource Demographics Container')
+
+
+class FlourishResourceDemographicsView(FlourishDemographicsView):
+
+    keys = [('resource', _('Res.')),
+            ('location', _('Locat.')),
+            ('equipment', _('Equip.'))]
+
+
+class FlourishReorderResourceDemographicsView(FlourishReorderDemographicsView):
+    pass
 
 
 ##########  Base class of all resource views (uses self.resource_type) #########

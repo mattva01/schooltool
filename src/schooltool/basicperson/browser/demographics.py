@@ -280,32 +280,29 @@ class FlourishDemographicsFieldsActions(flourish.page.RefineLinksViewlet):
 
 class FlourishDemographicsView(flourish.page.Page):
 
+    keys = [('students', _("Stud.")),
+            ('teachers', _("Teach.")),
+            ('administrators', _("Admin."))]
+
     def table(self):
         result = []
         bool_dict = {True: 'x', False: ''}
         for demo in list(self.context.values()):
             classname = demo.__class__.__name__
-            teacher, student, admin = False, False, False
-            limited = bool(demo.limit_keys)
-            for key in demo.limit_keys:
-                if key == 'teachers':
-                    teacher = True
-                if key == 'students':
-                    student = True
-                if key == 'administrators':
-                    admin = True
             result.append({
                'title': demo.title,
                'url': '%s/edit.html' % absoluteURL(demo, self.request),
                'id': demo.name,
                'type': classname[:classname.find('FieldDescription')],
                'required': bool_dict[demo.required],
-               'limited': bool_dict[limited],
-               'teacher': bool_dict[teacher],
-               'student': bool_dict[student],
-               'admin': bool_dict[admin],
+               'limited': bool_dict[bool(demo.limit_keys)],
+               'groups': [bool_dict[key[0] in demo.limit_keys]
+                          for key in self.keys],
                })
         return result
+
+    def groups(self):
+        return [key[1] for key in self.keys]
 
 
 class FlourishReorderDemographicsView(flourish.page.Page, DemographicsView):
