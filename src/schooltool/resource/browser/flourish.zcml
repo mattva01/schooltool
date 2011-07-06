@@ -7,6 +7,9 @@
 
   <!-- ResourceDemographicsFields pages -->
 
+  <zope:adapter
+      factory=".resource.getAddEditViewTitle" />
+
   <configure package="schooltool.basicperson.browser">
     <flourish:page
        name="index.html"

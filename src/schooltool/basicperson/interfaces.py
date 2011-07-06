@@ -170,3 +170,7 @@ class IFieldFilterVocabulary(IVocabularyTokenized):
     to filder demographics fields for the context.
     """
 
+
+class IAddEditViewTitle(Interface):
+    """Demographics field add/edit view title."""
+

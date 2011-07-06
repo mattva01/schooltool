@@ -50,6 +50,7 @@ from schooltool.app.browser.app import BaseEditView
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.basicperson.browser.demographics import (DemographicsView,
     FlourishDemographicsView, FlourishReorderDemographicsView)
+from schooltool.basicperson.interfaces import IAddEditViewTitle
 from schooltool.resource.interfaces import IBookingCalendar
 from schooltool.resource.interfaces import (IBaseResourceContained,
              IResourceContainer, IResourceTypeInformation, IResourceSubTypes,
@@ -337,6 +338,12 @@ class FlourishResourceDemographicsView(FlourishDemographicsView):
 
 class FlourishReorderResourceDemographicsView(FlourishReorderDemographicsView):
     pass
+
+
+@adapter(IResourceDemographicsFields)
+@implementer(IAddEditViewTitle)
+def getAddEditViewTitle(context):
+    return _('Resource attributes')
 
 
 ##########  Base class of all resource views (uses self.resource_type) #########
