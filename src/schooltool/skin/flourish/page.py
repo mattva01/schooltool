@@ -63,8 +63,9 @@ class Page(BrowserPage):
 
     def __call__(self, *args, **kw):
         self.update()
-        if self.request.response.getStatus() in [302, 303]:
-            return ''
+        if self.request.response.getStatus() in [300, 301, 302, 303,
+                                                 304, 305, 307]:
+            return u''
         result = self.render(*args, **kw)
         return result
 
