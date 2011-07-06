@@ -244,6 +244,9 @@
 
   <!-- DemographicsFields pages -->
 
+  <zope:adapter
+      factory=".demographics.getAddEditViewTitle" />
+
   <flourish:page
      name="index.html"
      for="schooltool.basicperson.interfaces.IDemographicsFields"

@@ -18,9 +18,9 @@
 #
 from zope.schema.interfaces import IList
 from zope.interface import Interface
-from zope.interface import implements
-from zope.component import adapts
-from zope.component import getMultiAdapter
+from zope.interface import implements, implementer
+from zope.component import adapts, adapter
+from zope.component import getAdapter, getMultiAdapter
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.publisher.browser import BrowserView
 from zope.traversing.api import getName
@@ -42,6 +42,7 @@ from schooltool.basicperson.interfaces import IEnumFieldDescription
 from schooltool.basicperson.interfaces import IDemographicsFields
 from schooltool.basicperson.interfaces import IFieldDescription
 from schooltool.basicperson.interfaces import EnumValueList
+from schooltool.basicperson.interfaces import IAddEditViewTitle
 from schooltool.skin import flourish
 from schooltool.skin.flourish.interfaces import IViewletManager
 from schooltool.skin.flourish.viewlet import Viewlet, ViewletManager
@@ -343,11 +344,20 @@ class FlourishReorderDemographicsView(flourish.page.Page, DemographicsView):
             self.context.updateOrder(keys)
 
 
+@adapter(IDemographicsFields)
+@implementer(IAddEditViewTitle)
+def getAddEditViewTitle(context):
+    return _('Demographics')
+
+
 class FlourishFieldDescriptionAddView(flourish.page.Page, FieldDescriptionAddView):
 
     label = None
-    title = 'Demographics'
     legend = 'Field Details' 
+
+    @property
+    def title(self):
+        return getAdapter(self.context, IAddEditViewTitle)
 
     def update(self):
         FieldDescriptionAddView.update(self)
@@ -386,8 +396,11 @@ class FlourishEnumFieldDescriptionAddView(FlourishFieldDescriptionAddView, EnumF
 class FlourishFieldDescriptionEditView(flourish.page.Page, FieldDescriptionEditView):
 
     label = None
-    title = 'Demographics'
     legend = 'Field Details' 
+
+    @property
+    def title(self):
+        return getAdapter(self.context.__parent__, IAddEditViewTitle)
 
     @property
     def subtitle(self):
