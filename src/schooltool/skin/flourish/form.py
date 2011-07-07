@@ -36,9 +36,7 @@ class Form(z3c.form.form.Form, flourish.page.Page):
         super(Form, self).updateActions()
 
 
-class DialogForm(Form):
-    dialog_close_actions = ()
-    dialog_submit_actions = ()
+class Dialog(flourish.page.Page):
 
     # Set this to False if you don't want the browser to reload the whole
     # page, but display the redirected result in the dialog instead.
@@ -48,10 +46,10 @@ class DialogForm(Form):
     ajax_settings = None
 
     def __init__(self, *args, **kw):
-        super(DialogForm, self).__init__(*args, **kw)
+        super(Dialog, self).__init__(*args, **kw)
         self.ajax_settings = {}
 
-    def initModalDialog(self):
+    def initDialog(self):
         self.ajax_settings['dialog'] = {
             'autoOpen': True,
             'modal': True,
@@ -61,23 +59,16 @@ class DialogForm(Form):
             'width': 'auto',
             }
 
-    def updateModalDialog(self):
+    def updateDialog(self):
         pass
 
     def update(self):
-        self.initModalDialog()
-        super(Form, self).update()
-        self.updateModalDialog()
-
-    def updateActions(self):
-        super(DialogForm, self).updateActions()
-        for name in self.dialog_submit_actions:
-            self.actions[name].onclick = u'ST.dialogs.submit(this, this)'
-        for name in self.dialog_close_actions:
-            self.actions[name].onclick = u'ST.dialogs.close(this)'
+        self.initDialog()
+        super(Dialog, self).update()
+        self.updateDialog()
 
     def __call__(self, *args, **kw):
-        result = super(DialogForm, self).__call__(*args, **kw)
+        result = super(Dialog, self).__call__(*args, **kw)
 
         self.ajax_settings['html'] = result
 
@@ -94,3 +85,15 @@ class DialogForm(Form):
 
         json = encoder.encode(self.ajax_settings)
         return json
+
+
+class DialogForm(Dialog, Form):
+    dialog_close_actions = ()
+    dialog_submit_actions = ()
+
+    def updateActions(self):
+        super(DialogForm, self).updateActions()
+        for name in self.dialog_submit_actions:
+            self.actions[name].onclick = u'ST.dialogs.submit(this, this)'
+        for name in self.dialog_close_actions:
+            self.actions[name].onclick = u'ST.dialogs.close(this)'

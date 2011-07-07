@@ -34,9 +34,6 @@
     <input type="submit" class="button-ok" name="NEXT" value="Next"
            onclick="ST.dialogs.submit(this, this)"
            i18n:attributes="value" />
-    <input type="submit" class="button-cancel" name="CANCEL" value="Cancel"
-           onclick="ST.dialogs.close(this)"
-           i18n:attributes="value" />
     <input type="hidden" name="viewstate"
            tal:attributes="value json: view/view/json_state" />
   </div>
