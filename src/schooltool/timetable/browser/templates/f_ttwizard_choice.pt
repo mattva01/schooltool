@@ -11,9 +11,6 @@
            onclick="ST.dialogs.submit(this, this)"
            tal:attributes="name string:NEXT.${repeat/choice/index};
                            value python:choice[1]" />
-    <input type="submit" class="button-cancel" name="CANCEL" value="Cancel"
-           onclick="ST.dialogs.close(this)"
-           i18n:attributes="value" />
     <input type="hidden" name="viewstate"
            tal:attributes="value json: view/view/json_state" />
   </div>
