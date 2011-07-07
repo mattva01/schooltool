@@ -1146,7 +1146,7 @@ class FlourishFinalStep(flourish.content.ContentProvider, FinalStep):
         return self.template(*args, **kw)
 
 
-class HackModalWizardLink(flourish.page.ModalFormLinkViewlet):
+class HackModalWizardLink(flourish.page.SimpleModalLinkViewlet):
 
     @property
     def url(self):

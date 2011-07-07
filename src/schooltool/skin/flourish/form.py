@@ -94,6 +94,8 @@ class DialogForm(Dialog, Form):
     def updateActions(self):
         super(DialogForm, self).updateActions()
         for name in self.dialog_submit_actions:
-            self.actions[name].onclick = u'ST.dialogs.submit(this, this)'
+            action = self.actions[name]
+            action.onclick = u'return ST.dialogs.submit(this, this);'
         for name in self.dialog_close_actions:
-            self.actions[name].onclick = u'ST.dialogs.close(this)'
+            action = self.actions[name]
+            action.onclick = u'return ST.dialogs.close(this);'
