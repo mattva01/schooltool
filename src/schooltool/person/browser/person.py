@@ -194,7 +194,7 @@ class FlourishPersonPreferencesView(flourish.form.DialogForm,
         self.ajax_settings['dialog'] = 'close'
         # Also I assume the preferences don't change the parent
         # view content, so let's not reload it now.
-        self.reload_parent = True
+        self.reload_parent = False
 
 
 class FlourishPersonPreferencesLink(flourish.page.ModalFormLinkViewlet):
