@@ -59,20 +59,19 @@ ST.dialogs = function() {
       dialog.empty();
   }
 
-  function modal_form_dialog(form_url, form_sel, title) {
-      before_dialog_load(form_sel);
-      $(form_sel).load(form_url, function(){
-              after_dialog_load(form_sel);
-              $(form_sel).dialog({
-                  autoOpen: true,
-                  modal: true,
-                  resizable: false,
-                  draggable: false,
-                  position: ['center','middle'],
-                  width: 'auto',
-                  title: title
-                  })
-          });
+  function modal_form_dialog(form_url, container_sel, title) {
+      before_dialog_load(container_sel);
+      var container = $(container_sel);
+      var request = $.ajax({
+              type: "GET",
+              url: form_url,
+          }).success(function(result, textStatus, jqXHR){
+                  after_dialog_load(container);
+                  handle_dialog_response(container, result, jqXHR);
+                  if (title) {
+                      container.dialog({title: title});
+                  }
+              });
   }
 
   function find_dialog(selector)
@@ -80,15 +79,53 @@ ST.dialogs = function() {
       return $(selector).closest(".ui-dialog-content");
   }
 
+  function handle_dialog_response(container, data, jqXHR) {
+      var ct = jqXHR.getResponseHeader('content-type')||"";
+      if (ct.indexOf('text/html') > -1) {
+          container.html(data);
+      } else if (ct.indexOf('application/json') > -1) {
+          if (data['html']) {
+              container.html(data['html']);
+              container.hide();
+          };
+          if (data['dialog']) {
+              container.dialog(data['dialog']);
+          }
+          if (data['redirect']) {
+              window.location.replace(data['redirect']);
+          };
+      };
+  }
+
+  function ensure_container(container_id) {
+      var container = $('#'+container_id);
+      if (container.length) {
+          return container;
+      }
+      $('body').append('<div id="'+container_id+'"></div>');
+      container = $('#'+container_id);
+      return container;
+  }
+
   /* "public" */
   return {
 
-    modal_form: function(link_sel, form_url, form_sel, title)
+    open_modal_link: function(link_sel)
+    {
+        var link = $(link_sel);
+        var container_id = link.attr('id') + "-container";
+        var container = ensure_container(container_id);
+        var url = link.attr('href');
+        modal_form_dialog(url, container);
+        return false;
+    },
+
+    modal_form: function(link_sel, form_url, container_sel, title)
     {
         $(link_sel).attr("href", "#");
         $(document).ready(function(){
                 $(link_sel).click(function(e) {
-                        modal_form_dialog(form_url, form_sel, title);
+                        modal_form_dialog(form_url, container_sel, title);
                         e.preventDefault();
                     });
             });
@@ -98,7 +135,7 @@ ST.dialogs = function() {
 
     submit: function(form_sel, button_sel)
     {
-        var dialog = find_dialog(form_sel);
+        var container = find_dialog(form_sel);
         var form = $(form_sel).closest('form');
 
         data = form.serializeArray();
@@ -110,18 +147,17 @@ ST.dialogs = function() {
                 value: button.attr('value')});
         }
 
-        before_dialog_load(dialog);
+        before_dialog_load(container);
 
-        $.ajax({
+        var request = $.ajax({
             type: "POST",
             url: form.attr('action'),
             data: data,
-            success: function(result){
-                after_dialog_load(dialog);
-                dialog.html(result);
-                // XXX: congratulations, we have just screwed up dialog witdth.
-                }
-            });
+            }).success(function(result, textStatus, jqXHR){
+                after_dialog_load(container);
+                handle_dialog_response(container, result, jqXHR);
+                });
+
         return false;
     },
 

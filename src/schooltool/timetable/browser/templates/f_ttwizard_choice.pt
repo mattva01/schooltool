@@ -4,16 +4,13 @@
 
   <div class="buttons">
     <input type="submit" class="button-cancel" name="STEP_BACK" value="Back"
-           onclick="ST.dialogs.submit(this, this)"
+           onclick="return ST.dialogs.submit(this, this);"
            i18n:attributes="value" />
     <input tal:repeat="choice view/choices"
            class="button-ok" type="submit"
-           onclick="ST.dialogs.submit(this, this)"
+           onclick="return ST.dialogs.submit(this, this);"
            tal:attributes="name string:NEXT.${repeat/choice/index};
                            value python:choice[1]" />
-    <input type="submit" class="button-cancel" name="CANCEL" value="Cancel"
-           onclick="ST.dialogs.close(this)"
-           i18n:attributes="value" />
     <input type="hidden" name="viewstate"
            tal:attributes="value json: view/view/json_state" />
   </div>

@@ -137,6 +137,7 @@ from zope.session.interfaces import ISession
 from zope.traversing.browser.absoluteurl import absoluteURL
 
 import schooltool.skin.flourish.page
+import schooltool.skin.flourish.form
 from schooltool.app.browser.cal import day_of_week_names
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
@@ -1006,7 +1007,7 @@ class TimetableWizard(BrowserView):
         return current_step()
 
 
-class FlourishTimetableWizard(flourish.page.Page, TimetableWizard):
+class FlourishTimetableWizard(flourish.form.Dialog, TimetableWizard):
 
     _state = None
     _session = None
@@ -1047,8 +1048,15 @@ class FlourishTimetableWizard(flourish.page.Page, TimetableWizard):
         return flourish.content.queryContentProvider(
             self.context, self.request, self, name)
 
+    def updateDialog(self):
+        # XXX: hacked-in default width
+        self.ajax_settings['dialog']['width'] = 944
+
     def update(self):
-        if 'CANCEL' in self.request:
+        flourish.form.Dialog.update(self)
+
+        if ('CANCEL' in self.request or
+            'DONE' in self.request):
             self.request.response.redirect(
                     absoluteURL(self.context, self.request))
             return
@@ -1138,7 +1146,7 @@ class FlourishFinalStep(flourish.content.ContentProvider, FinalStep):
         return self.template(*args, **kw)
 
 
-class HackModalWizardLink(flourish.page.ModalFormLinkViewlet):
+class HackModalWizardLink(flourish.page.SimpleModalLinkViewlet):
 
     @property
     def url(self):

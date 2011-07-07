@@ -343,6 +343,21 @@ class LinkIdViewlet(LinkViewlet):
         return sanitize_id('-'.join(reversed(name_list)))
 
 
+class SimpleModalLinkViewlet(LinkIdViewlet):
+    template = InlineViewPageTemplate('''
+    <tal:block define="url view/url">
+      <a tal:condition="url"
+         tal:attributes="href view/url;
+                         id view/html_id"
+         onclick="return ST.dialogs.open_modal_link(this);"
+         tal:content="view/title"></a>
+      <span tal:condition="not:url"
+            tal:attributes="id view/html_id"
+            tal:content="view/title"></span>
+    </tal:block>
+    ''')
+
+
 class ModalFormLinkViewlet(LinkIdViewlet):
     template = ViewPageTemplateFile('templates/modal_form_link.pt')
 
