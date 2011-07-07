@@ -1,4 +1,0 @@
-<div>
-  <div metal:use-macro="macro:display" />
-</div>
-

@@ -137,11 +137,10 @@ class IFieldDescription(Interface):
         description = _(u"A unique one word identifier."))
 
     required = Bool(
-        title = _(u"Required"),
-        description = _(u"Whether this Field is required or not"))
+        title = _(u"Required"))
 
     limit_keys = FilterKeyList(
-        title = _(u"Limit keys"),
+        title = _(u"Limit to group(s)"),
         description = _(u"""If you select one or more groups below, this field
                             will only be displayed in forms and reports for
                             members of the selected groups."""),
@@ -160,11 +159,18 @@ class IEnumFieldDescription(IFieldDescription):
     """Enumeration demographics field."""
 
     items = EnumValueList(
-        title = _('List of values'))
+        title = _('Selection list'),
+        description = _(u"""Enter the valid values for the field below.  One
+                            value per line.  These values will be displayed
+                            as a menu in forms."""))
 
 
 class IFieldFilterVocabulary(IVocabularyTokenized):
     """Marker interface for vocabularies that give keys that are used
     to filder demographics fields for the context.
     """
+
+
+class IAddEditViewTitle(Interface):
+    """Demographics field add/edit view title."""
 

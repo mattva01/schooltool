@@ -18,9 +18,9 @@
 #
 from zope.schema.interfaces import IList
 from zope.interface import Interface
-from zope.interface import implements
-from zope.component import adapts
-from zope.component import getMultiAdapter
+from zope.interface import implements, implementer
+from zope.component import adapts, adapter
+from zope.component import getAdapter, getMultiAdapter
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.publisher.browser import BrowserView
 from zope.traversing.api import getName
@@ -42,6 +42,7 @@ from schooltool.basicperson.interfaces import IEnumFieldDescription
 from schooltool.basicperson.interfaces import IDemographicsFields
 from schooltool.basicperson.interfaces import IFieldDescription
 from schooltool.basicperson.interfaces import EnumValueList
+from schooltool.basicperson.interfaces import IAddEditViewTitle
 from schooltool.skin import flourish
 from schooltool.skin.flourish.interfaces import IViewletManager
 from schooltool.skin.flourish.viewlet import Viewlet, ViewletManager
@@ -202,7 +203,8 @@ class BoolFieldDescriptionAddView(FieldDescriptionAddView):
 
 class EnumFieldDescriptionAddView(FieldDescriptionAddView):
 
-    fields = field.Fields(IEnumFieldDescription)
+    fields = field.Fields(IEnumFieldDescription).select('title', 'name',
+        'items', 'required', 'limit_keys')
 
     def create(self, data):
         fd = EnumFieldDescription(data['title'],
@@ -237,7 +239,8 @@ class FieldDescriptionEditView(form.EditForm):
 
 class EnumFieldDescriptionEditView(FieldDescriptionEditView):
 
-    fields = field.Fields(IEnumFieldDescription).omit('name')
+    fields = field.Fields(IEnumFieldDescription).select('title',
+        'items', 'required', 'limit_keys')
 
 
 class FieldDescriptionView(form.DisplayForm):
@@ -278,32 +281,29 @@ class FlourishDemographicsFieldsActions(flourish.page.RefineLinksViewlet):
 
 class FlourishDemographicsView(flourish.page.Page):
 
+    keys = [('students', _("Stud.")),
+            ('teachers', _("Teach.")),
+            ('administrators', _("Admin."))]
+
     def table(self):
         result = []
         bool_dict = {True: 'x', False: ''}
         for demo in list(self.context.values()):
             classname = demo.__class__.__name__
-            teacher, student, admin = False, False, False
-            limited = bool(demo.limit_keys)
-            for key in demo.limit_keys:
-                if key == 'teachers':
-                    teacher = True
-                if key == 'students':
-                    student = True
-                if key == 'administrators':
-                    admin = True
             result.append({
                'title': demo.title,
                'url': '%s/edit.html' % absoluteURL(demo, self.request),
                'id': demo.name,
                'type': classname[:classname.find('FieldDescription')],
                'required': bool_dict[demo.required],
-               'limited': bool_dict[limited],
-               'teacher': bool_dict[teacher],
-               'student': bool_dict[student],
-               'admin': bool_dict[admin],
+               'limited': bool_dict[bool(demo.limit_keys)],
+               'groups': [bool_dict[key[0] in demo.limit_keys]
+                          for key in self.keys],
                })
         return result
+
+    def groups(self):
+        return [key[1] for key in self.keys]
 
 
 class FlourishReorderDemographicsView(flourish.page.Page, DemographicsView):
@@ -344,11 +344,20 @@ class FlourishReorderDemographicsView(flourish.page.Page, DemographicsView):
             self.context.updateOrder(keys)
 
 
+@adapter(IDemographicsFields)
+@implementer(IAddEditViewTitle)
+def getAddEditViewTitle(context):
+    return _('Demographics')
+
+
 class FlourishFieldDescriptionAddView(flourish.page.Page, FieldDescriptionAddView):
 
     label = None
-    title = 'Demographics'
     legend = 'Field Details' 
+
+    @property
+    def title(self):
+        return getAdapter(self.context, IAddEditViewTitle)
 
     def update(self):
         FieldDescriptionAddView.update(self)
@@ -387,8 +396,11 @@ class FlourishEnumFieldDescriptionAddView(FlourishFieldDescriptionAddView, EnumF
 class FlourishFieldDescriptionEditView(flourish.page.Page, FieldDescriptionEditView):
 
     label = None
-    title = 'Demographics'
     legend = 'Field Details' 
+
+    @property
+    def title(self):
+        return getAdapter(self.context.__parent__, IAddEditViewTitle)
 
     @property
     def subtitle(self):
