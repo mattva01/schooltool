@@ -287,7 +287,6 @@ class FlourishDemographicsView(flourish.page.Page):
 
     def table(self):
         result = []
-        bool_dict = {True: 'x', False: ''}
         for demo in list(self.context.values()):
             classname = demo.__class__.__name__
             result.append({
@@ -295,9 +294,9 @@ class FlourishDemographicsView(flourish.page.Page):
                'url': '%s/edit.html' % absoluteURL(demo, self.request),
                'id': demo.name,
                'type': classname[:classname.find('FieldDescription')],
-               'required': bool_dict[demo.required],
-               'limited': bool_dict[bool(demo.limit_keys)],
-               'groups': [bool_dict[key[0] in demo.limit_keys]
+               'required': demo.required,
+               'limited': bool(demo.limit_keys),
+               'groups': [(key[0] in demo.limit_keys)
                           for key in self.keys],
                })
         return result
