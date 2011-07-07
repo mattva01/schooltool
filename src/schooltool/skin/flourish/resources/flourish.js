@@ -61,23 +61,40 @@ ST.dialogs = function() {
 
   function modal_form_dialog(form_url, form_sel, title) {
       before_dialog_load(form_sel);
-      $(form_sel).load(form_url, function(){
-              after_dialog_load(form_sel);
-              $(form_sel).dialog({
-                  autoOpen: true,
-                  modal: true,
-                  resizable: false,
-                  draggable: false,
-                  position: ['center','middle'],
-                  width: 'auto',
-                  title: title
-                  })
-          });
+      var container = $(form_sel);
+      var request = $.ajax({
+              type: "GET",
+              url: form_url,
+          }).success(function(result, textStatus, jqXHR){
+                  after_dialog_load(container);
+                  handle_dialog_response(container, result, jqXHR);
+                  if (title) {
+                      container.dialog({title: title});
+                  }
+              });
   }
 
   function find_dialog(selector)
   {
       return $(selector).closest(".ui-dialog-content");
+  }
+
+  function handle_dialog_response(container, data, jqXHR) {
+      var ct = jqXHR.getResponseHeader('content-type')||"";
+      if (ct.indexOf('text/html') > -1) {
+          container.html(data);
+      } else if (ct.indexOf('application/json') > -1) {
+          if (data['html']) {
+              container.html(data['html']);
+              container.hide();
+          };
+          if (data['dialog']) {
+              container.dialog(data['dialog']);
+          }
+          if (data['redirect']) {
+              window.location.replace(data['redirect']);
+          };
+      };
   }
 
   /* "public" */
@@ -98,7 +115,7 @@ ST.dialogs = function() {
 
     submit: function(form_sel, button_sel)
     {
-        var dialog = find_dialog(form_sel);
+        var container = find_dialog(form_sel);
         var form = $(form_sel).closest('form');
 
         data = form.serializeArray();
@@ -110,18 +127,17 @@ ST.dialogs = function() {
                 value: button.attr('value')});
         }
 
-        before_dialog_load(dialog);
+        before_dialog_load(container);
 
-        $.ajax({
+        var request = $.ajax({
             type: "POST",
             url: form.attr('action'),
             data: data,
-            success: function(result){
-                after_dialog_load(dialog);
-                dialog.html(result);
-                // XXX: congratulations, we have just screwed up dialog witdth.
-                }
-            });
+            }).success(function(result, textStatus, jqXHR){
+                after_dialog_load(container);
+                handle_dialog_response(container, result, jqXHR);
+                });
+
         return false;
     },
 

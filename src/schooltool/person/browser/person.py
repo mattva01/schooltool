@@ -183,8 +183,18 @@ class FlourishPersonPreferencesView(flourish.form.DialogForm,
                                     PersonPreferencesView):
     """View used for editing person preferences."""
 
+    dialog_submit_actions = ('apply',)
     dialog_close_actions = ('cancel',)
     label = None
+
+    @button.handler(PersonPreferencesView.buttons['apply'])
+    def handleAdd(self, action):
+        self.handleApply.func(self, action)
+        # We never have errors, so just close the dialog.
+        self.ajax_settings['dialog'] = 'close'
+        # Also I assume the preferences don't change the parent
+        # view content, so let's not reload it now.
+        self.reload_parent = True
 
 
 class FlourishPersonPreferencesLink(flourish.page.ModalFormLinkViewlet):
