@@ -7,7 +7,7 @@
   </p>
   <div class="buttons">
     <input type="submit" class="button-ok" name="DONE" value="Done"
-           onclick="ST.dialogs.submit(this, this)"
+           onclick="return ST.dialogs.submit(this, this);"
            i18n:attributes="value" />
   </div>
 

@@ -59,9 +59,9 @@ ST.dialogs = function() {
       dialog.empty();
   }
 
-  function modal_form_dialog(form_url, form_sel, title) {
-      before_dialog_load(form_sel);
-      var container = $(form_sel);
+  function modal_form_dialog(form_url, container_sel, title) {
+      before_dialog_load(container_sel);
+      var container = $(container_sel);
       var request = $.ajax({
               type: "GET",
               url: form_url,
@@ -97,15 +97,35 @@ ST.dialogs = function() {
       };
   }
 
+  function ensure_container(container_id) {
+      var container = $('#'+container_id);
+      if (container.length) {
+          return container;
+      }
+      $('body').append('<div id="'+container_id+'"></div>');
+      container = $('#'+container_id);
+      return container;
+  }
+
   /* "public" */
   return {
 
-    modal_form: function(link_sel, form_url, form_sel, title)
+    open_modal_link: function(link_sel)
+    {
+        var link = $(link_sel);
+        var container_id = link.attr('id') + "-container";
+        var container = ensure_container(container_id);
+        var url = link.attr('href');
+        modal_form_dialog(url, container);
+        return false;
+    },
+
+    modal_form: function(link_sel, form_url, container_sel, title)
     {
         $(link_sel).attr("href", "#");
         $(document).ready(function(){
                 $(link_sel).click(function(e) {
-                        modal_form_dialog(form_url, form_sel, title);
+                        modal_form_dialog(form_url, container_sel, title);
                         e.preventDefault();
                     });
             });
