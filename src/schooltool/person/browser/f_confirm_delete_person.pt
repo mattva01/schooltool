@@ -1,2 +1,5 @@
-<h3>Are you sure?</h3>
+<h3>Deleting a person is permanent, irreversible, and destroys all data
+associated with the person, including relationships with other people.
+It is strongly recommended that you only delete people who have been created
+in error or have no data associated with them.</h3>
 <div metal:use-macro="macro:form" />
