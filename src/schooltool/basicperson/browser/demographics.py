@@ -33,6 +33,7 @@ from z3c.form.interfaces import ITextAreaWidget
 from z3c.form import form, field, button
 from z3c.form.converter import BaseDataConverter, FormatterValidationError
 
+import schooltool.skin.flourish.form
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.basicperson.demographics import TextFieldDescription
 from schooltool.basicperson.demographics import DateFieldDescription
@@ -43,6 +44,7 @@ from schooltool.basicperson.interfaces import IDemographicsFields
 from schooltool.basicperson.interfaces import IFieldDescription
 from schooltool.basicperson.interfaces import EnumValueList
 from schooltool.basicperson.interfaces import IAddEditViewTitle
+from schooltool.common.inlinept import InheritTemplate
 from schooltool.skin import flourish
 from schooltool.skin.flourish.interfaces import IViewletManager
 from schooltool.skin.flourish.viewlet import Viewlet, ViewletManager
@@ -349,24 +351,20 @@ def getAddEditViewTitle(context):
     return _('Demographics')
 
 
-class FlourishFieldDescriptionAddView(flourish.page.Page, FieldDescriptionAddView):
+class FlourishFieldDescriptionAddView(flourish.form.AddForm,
+                                      FieldDescriptionAddView):
 
+    template = InheritTemplate(flourish.page.Page.template)
     label = None
-    legend = 'Field Details' 
+    legend = 'Field Details'
 
     @property
     def title(self):
         return getAdapter(self.context, IAddEditViewTitle)
 
-    def update(self):
-        FieldDescriptionAddView.update(self)
-
     @button.buttonAndHandler(_('Submit'), name='add')
     def handleAdd(self, action):
         super(FlourishFieldDescriptionAddView, self).handleAdd.func(self, action)
-        # XXX: hacky sucessful submit check
-        if (self._finishedAdd):
-            self.request.response.redirect(self.nextURL())
 
     @button.buttonAndHandler(_("Cancel"))
     def handle_cancel_action(self, action):
@@ -392,10 +390,12 @@ class FlourishEnumFieldDescriptionAddView(FlourishFieldDescriptionAddView, EnumF
     pass
 
 
-class FlourishFieldDescriptionEditView(flourish.page.Page, FieldDescriptionEditView):
+class FlourishFieldDescriptionEditView(flourish.form.Form,
+                                       FieldDescriptionEditView):
 
+    template = InheritTemplate(flourish.page.Page.template)
     label = None
-    legend = 'Field Details' 
+    legend = 'Field Details'
 
     @property
     def title(self):
@@ -405,9 +405,6 @@ class FlourishFieldDescriptionEditView(flourish.page.Page, FieldDescriptionEditV
     def subtitle(self):
         return _(u'Change information for ${field_title}',
                  mapping={'field_title': self.context.title})
-
-    def update(self):
-        FieldDescriptionEditView.update(self)
 
     @button.buttonAndHandler(_('Submit'), name='apply')
     def handleApply(self, action):
