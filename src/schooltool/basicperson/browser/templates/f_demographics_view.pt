@@ -17,10 +17,15 @@
       </td>
       <td tal:content="row/id" />
       <td tal:content="row/type" />
-      <td tal:content="row/required" />
-      <td tal:content="row/limited" />
-      <td tal:repeat="group row/groups"
-          tal:content="group" />
+      <td>
+        <span tal:condition="row/required" class="ui-icon ui-icon-check ui-icon-center"></span>
+      </td>
+      <td>
+        <span tal:condition="row/limited" class="ui-icon ui-icon-check ui-icon-center"></span>
+      </td>
+      <td tal:repeat="group row/groups">
+        <span tal:condition="group" class="ui-icon ui-icon-check ui-icon-center"></span>
+      </td>
     </tr>
   </table>
   <h3>
