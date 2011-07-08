@@ -1,2 +1,2 @@
-<p>Are you sure?</p>
+<h3>Are you sure?</h3>
 <div metal:use-macro="macro:form" />
