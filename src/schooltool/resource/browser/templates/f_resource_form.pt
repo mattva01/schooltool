@@ -62,7 +62,8 @@
       <div metal:define-slot="main">
         <metal:widget-rows define-macro="widget-rows">
           <tal:loop repeat="fieldset view/fieldsets">
-            <fieldset tal:attributes="id fieldset/id">
+            <fieldset tal:condition="fieldset/rows"
+                      tal:attributes="id fieldset/id">
               <legend>
                 <span tal:content="fieldset/legend">legend</span>
               </legend>
@@ -80,8 +81,7 @@
                                   tal:condition="widget/required">*</span>
                           </label>
                         </div>
-                        <p class="hint" tal:content="widget/field/description"
-			   tal:condition="widget/field/description">Description of this field.</p>
+                        <p class="hint" tal:content="widget/field/description">Description of this field.</p>
                         <div class="widget" tal:content="structure widget/render">
                           <input type="text" size="24" value="" />
                         </div>
@@ -105,9 +105,8 @@
         <metal:groups define-macro="groups">
           <fieldset tal:condition="view/groups|nothing"
                     tal:repeat="view view/groups">
-            <legend tal:condition="view/label">
-              <span tal:content="view/label">Label</span>
-            </legend>
+            <legend tal:condition="view/label"
+                    tal:content="view/label">Label</legend>
             <metal:group-header define-slot="group-header">
               <div class="status"
                    tal:condition="view/widgets/errors">

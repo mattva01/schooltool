@@ -537,6 +537,18 @@ class LeaderView(RelationshipViewBase):
         return ISchoolToolApplication(None)['persons']
 
 
+class FlourishLeaderView(FlourishRelationshipViewBase):
+
+    current_title = _("Current responsible parties")
+    available_title = _("Available responsible parties")
+
+    def getCollection(self):
+        return self.context.leaders
+
+    def getAvailableItemsContainer(self):
+        return ISchoolToolApplication(None)['persons']
+
+
 class ManageView(BrowserView):
     pass
 

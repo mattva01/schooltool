@@ -15,6 +15,9 @@
 body {
     background-color: #ffffff;
     color: #333333;
+}
+
+body, textarea {
     font-family: 'Ubuntubeta', 'Ubuntu', 'Bitstream Vera Sans',
                  'DejaVu Sans', Tahoma, sans-serif;
 }

@@ -41,8 +41,7 @@ class IBaseResource(Interface):
     """Resource."""
 
     title = zope.schema.TextLine(
-        title=_("Title"),
-        description=_("Title of the resource."))
+        title=_("Title"))
 
     type = ResourceSubType(
         title=_("Resource Type"),
@@ -52,8 +51,7 @@ class IBaseResource(Interface):
 
     description = zope.schema.Text(
         title=_("Description"),
-        required=False,
-        description=_("Description of the resource."))
+        required=False)
 
     notes = zope.schema.Text(
         title=_("Notes"),
