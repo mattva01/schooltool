@@ -215,14 +215,18 @@ class FlourishPersonDeleteView(flourish.form.DialogForm, form.EditForm):
     dialog_close_actions = ('cancel',)
     label = None
 
-    @button.buttonAndHandler(_("Apply"))
-    def handleAdd(self, action):
-        #self.handleApply.func(self, action)
+    def updateDialog(self):
+        # XXX: fix the width of dialog content in css
+        self.ajax_settings['dialog']['width'] = 544 + 16
+
+    @button.buttonAndHandler(_("Delete"), name='apply')
+    def handleDelete(self, action):
+        url = '%s/delete.html?delete.%s&CONFIRM' % (
+            absoluteURL(self.context.__parent__, self.request),
+            self.context.username)
+        self.request.response.redirect(url)
         # We never have errors, so just close the dialog.
         self.ajax_settings['dialog'] = 'close'
-        # Also I assume the preferences don't change the parent
-        # view content, so let's not reload it now.
-        self.reload_parent = False
 
     @button.buttonAndHandler(_("Cancel"))
     def handle_cancel_action(self, action):
