@@ -135,6 +135,10 @@ class PersonSettingsLinks(flourish.page.RefineLinksViewlet):
     """Person settings links viewlet."""
 
 
+class PersonActionsLinks(flourish.page.RefineLinksViewlet):
+    """Person actions links viewlet."""
+
+
 class IPersonAddForm(IBasicPerson):
 
     group = Choice(

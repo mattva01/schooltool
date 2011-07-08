@@ -23,6 +23,15 @@
       permission="schooltool.view"
       />
 
+  <flourish:viewlet
+      name="delete.html"
+      for="schooltool.person.interfaces.IPerson"
+      title="Delete"
+      class=".person.FlourishPersonDeleteLink"
+      manager="schooltool.basicperson.browser.person.PersonActionsLinks"
+      permission="schooltool.view"
+      />
+
   <configure package="schooltool.skin.flourish">
     <flourish:page
         name="index.html"
@@ -33,6 +42,15 @@
         subtitle="Edit"
         />
   </configure>
+
+  <flourish:page
+      name="delete.html"
+      for="schooltool.person.interfaces.IPerson"
+      class="schooltool.person.browser.person.FlourishPersonDeleteView"
+      template="f_confirm_delete_person.pt"
+      permission="schooltool.edit"
+      subtitle="Edit"
+      />
 
   <zope:adapter
       for="schooltool.person.interfaces.IPersonContainer
