@@ -61,21 +61,21 @@
       />
 
   <flourish:viewlet
-      name="person-settings-links"
+      name="person-actions-links"
+      before="person-settings-links"
       manager="schooltool.skin.flourish.page.IPageRefineManager"
-      class="schooltool.basicperson.browser.person.PersonSettingsLinks"
-      title="Settings"
+      class="schooltool.basicperson.browser.person.PersonActionsLinks"
+      title="Actions"
       for="schooltool.person.interfaces.IPerson"
       permission="schooltool.view"
       view=".person.FlourishPersonView"
       />
 
   <flourish:viewlet
-      name="person-actions-links"
-      after="person-settings-links"
+      name="person-settings-links"
       manager="schooltool.skin.flourish.page.IPageRefineManager"
-      class="schooltool.basicperson.browser.person.PersonActionsLinks"
-      title="Actions"
+      class="schooltool.basicperson.browser.person.PersonSettingsLinks"
+      title="Settings"
       for="schooltool.person.interfaces.IPerson"
       permission="schooltool.view"
       view=".person.FlourishPersonView"
