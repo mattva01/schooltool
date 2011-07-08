@@ -215,6 +215,10 @@ class FlourishPersonDeleteView(flourish.form.DialogForm, form.EditForm):
     dialog_close_actions = ('cancel',)
     label = None
 
+    def updateDialog(self):
+        # XXX: fix the width of dialog content in css
+        self.ajax_settings['dialog']['width'] = 544
+
     @button.buttonAndHandler(_("Delete"), name='apply')
     def handleDelete(self, action):
         url = '%s/delete.html?delete.%s&CONFIRM' % (
