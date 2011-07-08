@@ -70,6 +70,17 @@
       view=".person.FlourishPersonView"
       />
 
+  <flourish:viewlet
+      name="person-actions-links"
+      after="person-settings-links"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      class="schooltool.basicperson.browser.person.PersonActionsLinks"
+      title="Actions"
+      for="schooltool.person.interfaces.IPerson"
+      permission="schooltool.view"
+      view=".person.FlourishPersonView"
+      />
+
   <flourish:viewletFactory
       name="manage_school_links"
       manager="schooltool.skin.flourish.page.IPageRefineManager"
