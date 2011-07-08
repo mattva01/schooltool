@@ -9,8 +9,8 @@
     <div tal:attributes="id view/form_container_id"></div>
 
     <tal:script tal:replace="structure scriptlocal:
-       link_id string:#${view/html_id};
-       form_id string:#${view/form_container_id};
+       link_id view/html_id;
+       form_id view/form_container_id;
        title;
        url" />
 
