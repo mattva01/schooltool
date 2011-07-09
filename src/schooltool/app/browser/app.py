@@ -212,24 +212,6 @@ class CSSFormatter(FormFullFormatter):
         return ''.join(result)
 
 
-class ActionColumn(Column):
-
-    def __init__(self, prefix, label=None, icon=None, id_getter=None):
-        self.name = 'action'
-        self.title = label
-        self.prefix = prefix
-        self.label = label
-        self.icon = icon
-        if id_getter is None:
-            self.id_getter = stupid_form_key
-        else:
-            self.id_getter = id_getter
-
-    def renderCell(self, item, formatter):
-        form_id = ".".join(filter(None, [self.prefix, self.id_getter(item)]))
-        return '<input type="image" alt="%s" name="%s" src="%s" value="1" title="%s" />' % (self.label, form_id, self.icon, self.label)
-
-
 class FlourishRelationshipViewBase(flourish.page.NoSidebarPage):
 
     content_template = ViewPageTemplateFile('templates/f_edit_relationships.pt')
