@@ -62,6 +62,7 @@ from schooltool.person.interfaces import IPerson
 from schooltool.table.table import CheckboxColumn
 from schooltool.table.table import label_cell_formatter_factory
 from schooltool.table.table import stupid_form_key
+from schooltool.table.table import ImageInputColumn
 from schooltool.table.interfaces import ITableFormatter
 from schooltool.skin.skin import OrderedViewletManager
 from schooltool.skin.breadcrumbs import CustomNameBreadCrumbInfo
@@ -264,18 +265,15 @@ class FlourishRelationshipViewBase(flourish.page.NoSidebarPage):
         raise NotImplementedError("Subclasses should override this method.")
 
     def getColumnsAfter(self, prefix):
-        label = ''
-        icon = ''
-        if prefix == 'add_item':
-            label = _('Add')
-            icon = 'add-icon.png'
-        elif prefix == 'remove_item':
-            label = _('Remove')
-            icon = 'remove-icon.png'
-        icon = traverse(self.context,
-                        '++resource++schooltool.skin.flourish/%s' % icon,
-                        request=self.request)()
-        action = ActionColumn(prefix, label, icon, self.getKey)
+        actions = {
+            'add_item': {'label': _('Add'), 'icon': 'add-icon.png'},
+            'remove_item': {'label': _('Remove'), 'icon': 'remove-icon.png'},
+            }
+        label, icon = actions[prefix]['label'], actions[prefix]['icon']
+        action = ImageInputColumn(
+            prefix, title=label, alt=label,
+            library='schooltool.skin.flourish',
+            image=icon, id_getter=self.getKey)
         return [action]
 
     def createTableFormatter(self, **kwargs):
