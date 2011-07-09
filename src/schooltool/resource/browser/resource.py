@@ -54,6 +54,7 @@ from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.basicperson.browser.demographics import (DemographicsView,
     FlourishDemographicsView, FlourishReorderDemographicsView)
 from schooltool.basicperson.interfaces import IAddEditViewTitle
+from schooltool.common.inlinept import InheritTemplate
 from schooltool.resource.interfaces import IBookingCalendar
 from schooltool.resource.interfaces import (IBaseResourceContained,
              IResourceContainer, IResourceTypeInformation, IResourceSubTypes,
@@ -70,7 +71,7 @@ from schooltool.resource.interfaces import IResourceFactoryUtility
 from schooltool.skin.flourish.containers import TableContainerView
 from schooltool.skin.flourish.page import RefineLinksViewlet, Page
 from schooltool.skin.flourish.page import ModalFormLinkViewlet
-from schooltool.skin.flourish.form import DialogForm
+from schooltool.skin.flourish.form import DialogForm, AddForm
 
 from schooltool.common import SchoolToolMessage as _
 
@@ -630,6 +631,12 @@ class BaseResourceEditView(ErrorMessageBase, form.EditForm,
         self.actions['cancel'].addClass('button-cancel')
 
 
+class BaseFlourishResourceAddForm(AddForm):
+
+    template = InheritTemplate(Page.template)
+    label = None
+
+
 ###############  Resource add/edit views ################
 class BaseResourceForm(object):
 
@@ -654,25 +661,9 @@ class ResourceEditView(BaseResourceForm, BaseResourceEditView):
     label = _('Edit resource')
 
 
-class FlourishResourceAddView(Page, ResourceAddView):
+class FlourishResourceAddView(BaseFlourishResourceAddForm, ResourceAddView):
 
-    label = None
     demo_legend = _('Resource attributes')
-
-    def update(self):
-        ResourceAddView.update(self)
-
-    @button.buttonAndHandler(_('Add'))
-    def handleAdd(self, action):
-        super(FlourishResourceAddView, self).handleAdd.func(self, action)
-        # XXX: hacky sucessful submit check
-        if (self._finishedAdd):
-            self.request.response.redirect(self.nextURL())
-
-    @button.buttonAndHandler(_('Cancel'))
-    def handle_cancel_action(self, action):
-        url = absoluteURL(self.context, self.request)
-        self.request.response.redirect(url)
 
 
 class FlourishResourceEditView(Page, ResourceEditView):
@@ -709,25 +700,9 @@ class LocationEditView(BaseLocationForm, BaseResourceEditView):
     label = _('Edit location')
 
 
-class FlourishLocationAddView(Page, LocationAddView):
+class FlourishLocationAddView(BaseFlourishResourceAddForm, LocationAddView):
 
-    label = None
     demo_legend = _('Location attributes')
-
-    def update(self):
-        LocationAddView.update(self)
-
-    @button.buttonAndHandler(_('Add'))
-    def handleAdd(self, action):
-        super(FlourishLocationAddView, self).handleAdd.func(self, action)
-        # XXX: hacky sucessful submit check
-        if (self._finishedAdd):
-            self.request.response.redirect(self.nextURL())
-
-    @button.buttonAndHandler(_('Cancel'))
-    def handle_cancel_action(self, action):
-        url = absoluteURL(self.context, self.request)
-        self.request.response.redirect(url)
 
 
 class FlourishLocationEditView(Page, LocationEditView):
@@ -764,25 +739,9 @@ class EquipmentEditView(BaseEquipmentForm, BaseResourceEditView):
     label = _('Edit equipment')
 
 
-class FlourishEquipmentAddView(Page, EquipmentAddView):
+class FlourishEquipmentAddView(BaseFlourishResourceAddForm, EquipmentAddView):
 
-    label = None
     demo_legend = _('Equipment attributes')
-
-    def update(self):
-        EquipmentAddView.update(self)
-
-    @button.buttonAndHandler(_('Add'))
-    def handleAdd(self, action):
-        super(FlourishEquipmentAddView, self).handleAdd.func(self, action)
-        # XXX: hacky sucessful submit check
-        if (self._finishedAdd):
-            self.request.response.redirect(self.nextURL())
-
-    @button.buttonAndHandler(_('Cancel'))
-    def handle_cancel_action(self, action):
-        url = absoluteURL(self.context, self.request)
-        self.request.response.redirect(url)
 
 
 class FlourishEquipmentEditView(Page, EquipmentEditView):
