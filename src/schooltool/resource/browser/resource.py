@@ -656,14 +656,14 @@ class ResourceAddView(BaseResourceForm, BaseResourceAddView):
     _factory = Resource
 
 
-class ResourceEditView(BaseResourceForm, BaseResourceEditView):
-
-    label = _('Edit resource')
-
-
 class FlourishResourceAddView(BaseFlourishResourceAddForm, ResourceAddView):
 
     demo_legend = _('Resource attributes')
+
+
+class ResourceEditView(BaseResourceForm, BaseResourceEditView):
+
+    label = _('Edit resource')
 
 
 class FlourishResourceEditView(Page, ResourceEditView):
@@ -695,14 +695,14 @@ class LocationAddView(BaseLocationForm, BaseResourceAddView):
     _factory = Location
 
 
-class LocationEditView(BaseLocationForm, BaseResourceEditView):
-
-    label = _('Edit location')
-
-
 class FlourishLocationAddView(BaseFlourishResourceAddForm, LocationAddView):
 
     demo_legend = _('Location attributes')
+
+
+class LocationEditView(BaseLocationForm, BaseResourceEditView):
+
+    label = _('Edit location')
 
 
 class FlourishLocationEditView(Page, LocationEditView):
@@ -734,14 +734,14 @@ class EquipmentAddView(BaseEquipmentForm, BaseResourceAddView):
     _factory = Equipment
 
 
-class EquipmentEditView(BaseEquipmentForm, BaseResourceEditView):
-
-    label = _('Edit equipment')
-
-
 class FlourishEquipmentAddView(BaseFlourishResourceAddForm, EquipmentAddView):
 
     demo_legend = _('Equipment attributes')
+
+
+class EquipmentEditView(BaseEquipmentForm, BaseResourceEditView):
+
+    label = _('Edit equipment')
 
 
 class FlourishEquipmentEditView(Page, EquipmentEditView):
