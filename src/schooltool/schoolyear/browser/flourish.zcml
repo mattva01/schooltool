@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <configure xmlns="http://namespaces.zope.org/browser"
            xmlns:flourish="http://schooltool.org/flourish"
+           xmlns:zope="http://namespaces.zope.org/zope"
            i18n_domain="schooltool">
 
   <flourish:page
@@ -8,8 +9,12 @@
       for="schooltool.schoolyear.interfaces.ISchoolYearContainer"
       class=".schoolyear.FlourishSchoolYearContainerView"
       title="School Years"
-      content_template="templates/f_schoolyear_container.pt"
       permission="schooltool.view"
       />
+
+  <zope:adapter
+      for="schooltool.schoolyear.interfaces.ISchoolYearContainer
+           schooltool.skin.flourish.interfaces.IFlourishLayer"
+      factory=".schoolyear.FlourishSchoolYearContainerFilterWidget" />
 
 </configure>

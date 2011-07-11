@@ -49,6 +49,7 @@ from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.demographics.browser.table import DateColumn
 from schooltool.table.table import url_cell_formatter
 from schooltool.table.table import DependableCheckboxColumn
+from schooltool.table.table import FilterWidget
 from schooltool.schoolyear.browser.interfaces import ISchoolYearViewMenuViewletManager
 from schooltool.schoolyear.schoolyear import validateScholYearForOverflow
 from schooltool.schoolyear.schoolyear import validateScholYearsForOverlap
@@ -171,7 +172,7 @@ class SchoolYearContainerView(TableContainerView, SchoolYearContainerBaseView):
                     self.request.response.redirect(self.nextURL())
 
 
-class ActiveSchoolYearColumn(column.Column):
+class FlourishActiveSchoolYearColumn(column.Column):
     """Table column that displays whether a schoolyear is the active one.
     """
 
@@ -180,6 +181,10 @@ class ActiveSchoolYearColumn(column.Column):
             return '<span class="ui-icon ui-icon-check ui-icon-center"></span>'
         else:
             return ''
+
+
+class FlourishSchoolYearContainerFilterWidget(FilterWidget):
+    """flourish SchoolYear container filter widget."""
 
 
 class FlourishSchoolYearContainerView(flourish.containers.TableContainerView):
@@ -191,7 +196,7 @@ class FlourishSchoolYearContainerView(flourish.containers.TableContainerView):
                        getter=lambda x, y: x.first),
             DateColumn(title=_("Last Day"),
                        getter=lambda x, y: x.last),
-            ActiveSchoolYearColumn(title=_("Active")),
+            FlourishActiveSchoolYearColumn(title=_("Active")),
             ]
         formatter.setUp(formatters=[url_cell_formatter],
                         columns_after=columns_after)
