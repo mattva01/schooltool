@@ -202,6 +202,14 @@ class FlourishSchoolYearContainerView(flourish.containers.TableContainerView):
                         columns_after=columns_after)
 
 
+class FlourishSchoolYearContainerLinks(flourish.page.RefineLinksViewlet):
+    """SchoolYear container links viewlet."""
+
+
+class FlourishSchoolYearContainerActionLinks(flourish.page.RefineLinksViewlet):
+    """SchoolYear container action links viewlet."""
+
+
 class ISchoolYearAddForm(Interface):
 
     title = TextLine(
