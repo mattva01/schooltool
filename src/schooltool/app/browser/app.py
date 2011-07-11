@@ -62,6 +62,7 @@ from schooltool.person.interfaces import IPerson
 from schooltool.table.table import CheckboxColumn
 from schooltool.table.table import label_cell_formatter_factory
 from schooltool.table.table import stupid_form_key
+from schooltool.table.table import ImageInputColumn
 from schooltool.table.interfaces import ITableFormatter
 from schooltool.skin.skin import OrderedViewletManager
 from schooltool.skin.breadcrumbs import CustomNameBreadCrumbInfo
@@ -211,24 +212,6 @@ class CSSFormatter(FormFullFormatter):
         return ''.join(result)
 
 
-class ActionColumn(Column):
-
-    def __init__(self, prefix, label=None, icon=None, id_getter=None):
-        self.name = 'action'
-        self.title = label
-        self.prefix = prefix
-        self.label = label
-        self.icon = icon
-        if id_getter is None:
-            self.id_getter = stupid_form_key
-        else:
-            self.id_getter = id_getter
-
-    def renderCell(self, item, formatter):
-        form_id = ".".join(filter(None, [self.prefix, self.id_getter(item)]))
-        return '<input type="image" alt="%s" name="%s" src="%s" value="1" title="%s" />' % (self.label, form_id, self.icon, self.label)
-
-
 class FlourishRelationshipViewBase(flourish.page.NoSidebarPage):
 
     content_template = ViewPageTemplateFile('templates/f_edit_relationships.pt')
@@ -264,18 +247,15 @@ class FlourishRelationshipViewBase(flourish.page.NoSidebarPage):
         raise NotImplementedError("Subclasses should override this method.")
 
     def getColumnsAfter(self, prefix):
-        label = ''
-        icon = ''
-        if prefix == 'add_item':
-            label = _('Add')
-            icon = 'add-icon.png'
-        elif prefix == 'remove_item':
-            label = _('Remove')
-            icon = 'remove-icon.png'
-        icon = traverse(self.context,
-                        '++resource++schooltool.skin.flourish/%s' % icon,
-                        request=self.request)()
-        action = ActionColumn(prefix, label, icon, self.getKey)
+        actions = {
+            'add_item': {'label': _('Add'), 'icon': 'add-icon.png'},
+            'remove_item': {'label': _('Remove'), 'icon': 'remove-icon.png'},
+            }
+        label, icon = actions[prefix]['label'], actions[prefix]['icon']
+        action = ImageInputColumn(
+            prefix, title=label, alt=label,
+            library='schooltool.skin.flourish',
+            image=icon, id_getter=self.getKey)
         return [action]
 
     def createTableFormatter(self, **kwargs):
@@ -529,6 +509,18 @@ class LeaderView(RelationshipViewBase):
     title = _("Leaders")
     current_title = _("Current leaders")
     available_title = _("Available leaders")
+
+    def getCollection(self):
+        return self.context.leaders
+
+    def getAvailableItemsContainer(self):
+        return ISchoolToolApplication(None)['persons']
+
+
+class FlourishLeaderView(FlourishRelationshipViewBase):
+
+    current_title = _("Current responsible parties")
+    available_title = _("Available responsible parties")
 
     def getCollection(self):
         return self.context.leaders

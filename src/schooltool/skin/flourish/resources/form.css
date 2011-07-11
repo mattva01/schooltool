@@ -113,6 +113,21 @@ form fieldset .row .widget .select-widget {
     width: 288px;
 }
 
+form fieldset .row .widget .textarea-widget {
+    background-color: #ffffff;
+    border: 1px solid #ccc1c1;
+    color: #333333;
+    font-size: 12px;
+    height: 50px;
+    width: 286px;
+}
+
+form fieldset .row .widget .textarea-widget:focus {
+    border: 2px solid #aa0000;
+    height: 48px;
+    width: 284px;
+}
+
 form fieldset .row .widget .option {
     color: #333333;
     font-size: 12px;

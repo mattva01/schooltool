@@ -248,4 +248,12 @@
       permission="schooltool.view"
       name="label" />
 
+  <flourish:page
+      name="leaders.html"
+      for="schooltool.app.interfaces.IAsset"
+      class=".app.FlourishLeaderView"
+      permission="schooltool.edit"
+      subtitle="Responsible parties"
+      />
+
 </configure>

@@ -36,6 +36,14 @@ class Form(z3c.form.form.Form, flourish.page.Page):
         super(Form, self).updateActions()
 
 
+class AddForm(Form, z3c.form.form.AddForm):
+    def update(self):
+        super(Form, self).update()
+        if self._finishedAdd:
+            self.request.response.redirect(self.nextURL())
+            return ""
+
+
 class Dialog(flourish.page.Page):
 
     # Set this to False if you don't want the browser to reload the whole
@@ -99,3 +107,7 @@ class DialogForm(Dialog, Form):
         for name in self.dialog_close_actions:
             action = self.actions[name]
             action.onclick = u'return ST.dialogs.close(this);'
+
+
+class DialogAddForm(DialogForm, AddForm):
+    pass
