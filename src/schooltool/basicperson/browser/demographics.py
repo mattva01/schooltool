@@ -30,7 +30,7 @@ from zope.container.interfaces import INameChooser
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 
 from z3c.form.interfaces import ITextAreaWidget
-from z3c.form import form, field, button
+from z3c.form import form, field, button, widget
 from z3c.form.converter import BaseDataConverter, FormatterValidationError
 
 import schooltool.skin.flourish.form
@@ -46,6 +46,7 @@ from schooltool.basicperson.interfaces import EnumValueList
 from schooltool.basicperson.interfaces import IAddEditViewTitle
 from schooltool.common.inlinept import InheritTemplate
 from schooltool.skin import flourish
+from schooltool.skin.flourish import IFlourishLayer
 from schooltool.skin.flourish.interfaces import IViewletManager
 from schooltool.skin.flourish.viewlet import Viewlet, ViewletManager
 from schooltool.skin.flourish.content import ContentProvider
@@ -450,4 +451,15 @@ class FlourishEnumFieldDescriptionView(flourish.page.Page, EnumFieldDescriptionV
 
     def update(self):
         EnumFieldDescriptionView.update(self)
+
+
+def myfunc(a):
+    return _('Replace the limit_keys hint with this.')
+
+
+LimitKeysHint = widget.ComputedWidgetAttribute(
+    myfunc,
+    request=IFlourishLayer,
+    view=FlourishFieldDescriptionAddView,
+    field=IFieldDescription['limit_keys'])
 

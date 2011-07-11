@@ -258,6 +258,11 @@
   <zope:adapter
       factory=".demographics.getAddEditViewTitle" />
 
+  <zope:adapter
+      factory=".demographics.LimitKeysHint"
+      name="hint"
+      />
+
   <flourish:page
      name="index.html"
      for="schooltool.basicperson.interfaces.IDemographicsFields"
