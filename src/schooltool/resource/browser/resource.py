@@ -54,6 +54,8 @@ from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.basicperson.browser.demographics import (DemographicsView,
     FlourishDemographicsView, FlourishReorderDemographicsView)
 from schooltool.basicperson.interfaces import IAddEditViewTitle
+from schooltool.basicperson.interfaces import ILimitKeysLabel
+from schooltool.basicperson.interfaces import ILimitKeysHint
 from schooltool.common.inlinept import InheritTemplate
 from schooltool.resource.interfaces import IBookingCalendar
 from schooltool.resource.interfaces import (IBaseResourceContained,
@@ -404,6 +406,20 @@ class FlourishReorderResourceDemographicsView(FlourishReorderDemographicsView):
 @implementer(IAddEditViewTitle)
 def getAddEditViewTitle(context):
     return _('Resource attributes')
+
+
+@adapter(IResourceDemographicsFields)
+@implementer(ILimitKeysLabel)
+def getLimitKeysLabel(context):
+    return _('Limit to resouce type(s)')
+
+
+@adapter(IResourceDemographicsFields)
+@implementer(ILimitKeysHint)
+def getLimitKeysHint(context):
+    return _(u"""If you select one or more resource types below, this field
+                 will only be displayed in forms and reports for
+                 resources of the selected types.""")
 
 
 ##########  Base class of all resource views (uses self.resource_type) #########

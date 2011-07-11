@@ -10,6 +10,12 @@
   <zope:adapter
       factory=".resource.getAddEditViewTitle" />
 
+  <zope:adapter
+      factory=".resource.getLimitKeysLabel" />
+
+  <zope:adapter
+      factory=".resource.getLimitKeysHint" />
+
   <configure package="schooltool.basicperson.browser">
     <flourish:page
        name="index.html"

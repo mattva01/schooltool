@@ -174,3 +174,11 @@ class IFieldFilterVocabulary(IVocabularyTokenized):
 class IAddEditViewTitle(Interface):
     """Demographics field add/edit view title."""
 
+
+class ILimitKeysLabel(Interface):
+    """Demographics field add/edit view limit keys label text."""
+
+
+class ILimitKeysHint(Interface):
+    """Demographics field add/edit view limit keys hint text."""
+

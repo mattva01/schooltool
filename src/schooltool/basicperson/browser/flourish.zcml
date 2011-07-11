@@ -259,9 +259,10 @@
       factory=".demographics.getAddEditViewTitle" />
 
   <zope:adapter
-      factory=".demographics.LimitKeysHint"
-      name="hint"
-      />
+      factory=".demographics.getLimitKeysLabel" />
+
+  <zope:adapter
+      factory=".demographics.getLimitKeysHint" />
 
   <flourish:page
      name="index.html"
