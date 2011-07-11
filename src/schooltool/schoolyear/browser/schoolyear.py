@@ -34,6 +34,7 @@ from zope.container.interfaces import INameChooser
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.proxy import sameProxiedObjects
 from zope.i18n.interfaces.locales import ICollator
+from zope.security.checker import canAccess
 
 from z3c.form import form, field, button
 from z3c.form.util import getSpecification
@@ -546,12 +547,34 @@ class ActiveSchoolYears(ViewletBase):
             return syc.getNextSchoolYear()
 
 
-class FlourishSchoolYearView(flourish.form.DisplayForm):
+class FlourishSchoolYearView(flourish.page.Page):
     """flourish SchoolYear view."""
 
-    fields = field.Fields(ISchoolYearAddForm)
+    fields = field.Fields(ISchoolYearAddForm).omit('title')
 
     @property
-    def subtitle(self):
+    def heading(self):
         return self.context.title
+
+    def makeRow(self, attr, value):
+        if value is None:
+            value = u''
+        return {
+            'label': attr,
+            'value': unicode(value),
+            }
+
+    @property
+    def table(self):
+        rows = []
+        for attr in self.fields:
+            value = getattr(self.context, attr)
+            if value:
+                label = self.fields[attr].field.title
+                rows.append(self.makeRow(label, value))
+        return rows
+
+    @property
+    def canModify(self):
+        return canAccess(self.context.__parent__, '__delitem__')
 

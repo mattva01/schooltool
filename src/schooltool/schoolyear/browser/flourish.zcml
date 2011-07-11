@@ -50,17 +50,13 @@
       permission="schooltool.edit"
       />
 
-  <configure package="schooltool.skin.flourish">
   <flourish:page
       name="index.html"
       for="schooltool.schoolyear.interfaces.ISchoolYear"
-      class="schooltool.schoolyear.browser.schoolyear.FlourishSchoolYearView"
+      class=".schoolyear.FlourishSchoolYearView"
       title="School Year"
-      template="templates/main.pt"
-      content_template="templates/z3c_form_display.pt"
-      render="template"
+      content_template="templates/f_schoolyear.pt"
       permission="schooltool.view"
       />
-  </configure>
 
 </configure>
