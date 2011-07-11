@@ -42,6 +42,9 @@ from z3c.form.validator import WidgetsValidatorDiscriminators
 from z3c.form.validator import InvariantsValidator
 from z3c.form.error import ErrorViewSnippet
 
+from zc.table import column
+
+import schooltool.skin.flourish.containers
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.demographics.browser.table import DateColumn
 from schooltool.table.table import url_cell_formatter
@@ -57,6 +60,7 @@ from schooltool.schoolyear.interfaces import ISchoolYearContainer
 from schooltool.skin.skin import OrderedViewletManager
 from schooltool.skin.containers import ContainerDeleteView
 from schooltool.skin.containers import TableContainerView
+from schooltool.skin import flourish
 from schooltool.common import DateRange
 from schooltool.common import SchoolToolMessage as _
 from schooltool.course.interfaces import ICourseContainer
@@ -165,6 +169,32 @@ class SchoolYearContainerView(TableContainerView, SchoolYearContainerBaseView):
                 if key in self.context:
                     self.context.activateNextSchoolYear(key)
                     self.request.response.redirect(self.nextURL())
+
+
+class ActiveSchoolYearColumn(column.Column):
+    """Table column that displays whether a schoolyear is the active one.
+    """
+
+    def renderCell(self, item, formatter):
+        if item.__parent__.active_id == item.__name__:
+            return '<span class="ui-icon ui-icon-check ui-icon-center"></span>'
+        else:
+            return ''
+
+
+class FlourishSchoolYearContainerView(flourish.containers.TableContainerView):
+    """flourish SchoolYear container view."""
+
+    def setUpTableFormatter(self, formatter):
+        columns_after = [
+            DateColumn(title=_("First Day"),
+                       getter=lambda x, y: x.first),
+            DateColumn(title=_("Last Day"),
+                       getter=lambda x, y: x.last),
+            ActiveSchoolYearColumn(title=_("Active")),
+            ]
+        formatter.setUp(formatters=[url_cell_formatter],
+                        columns_after=columns_after)
 
 
 class ISchoolYearAddForm(Interface):
