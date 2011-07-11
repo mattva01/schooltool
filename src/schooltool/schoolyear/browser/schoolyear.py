@@ -553,7 +553,7 @@ class FlourishSchoolYearView(flourish.page.Page):
     fields = field.Fields(ISchoolYearAddForm).omit('title')
 
     @property
-    def heading(self):
+    def subtitle(self):
         return self.context.title
 
     def makeRow(self, attr, value):
