@@ -9,13 +9,9 @@
       for="schooltool.schoolyear.interfaces.ISchoolYearContainer"
       class=".schoolyear.FlourishSchoolYearContainerView"
       title="School Years"
+      content_template="templates/f_table_container.pt"
       permission="schooltool.view"
       />
-
-  <zope:adapter
-      for="schooltool.schoolyear.interfaces.ISchoolYearContainer
-           schooltool.skin.flourish.interfaces.IFlourishLayer"
-      factory=".schoolyear.FlourishSchoolYearContainerFilterWidget" />
 
   <flourish:viewlet
       name="schoolyear_container"
