@@ -1,0 +1,10 @@
+<div tal:define="canModify view/canModify;
+                 batch view/table/batch">
+  <form method="post"
+        tal:attributes="action request/URL">
+    <tal:block tal:condition="view/table/filter_widget">
+      <tal:block replace="structure view/table/render" tal:condition="batch" />
+    </tal:block>
+  </form>
+  <p tal:condition="not:batch" i18n:translate="">There are none.</p>
+</div>

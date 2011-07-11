@@ -49,7 +49,6 @@ from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.demographics.browser.table import DateColumn
 from schooltool.table.table import url_cell_formatter
 from schooltool.table.table import DependableCheckboxColumn
-from schooltool.table.table import FilterWidget
 from schooltool.schoolyear.browser.interfaces import ISchoolYearViewMenuViewletManager
 from schooltool.schoolyear.schoolyear import validateScholYearForOverflow
 from schooltool.schoolyear.schoolyear import validateScholYearsForOverlap
@@ -181,10 +180,6 @@ class FlourishActiveSchoolYearColumn(column.Column):
             return '<span class="ui-icon ui-icon-check"></span>'
         else:
             return ''
-
-
-class FlourishSchoolYearContainerFilterWidget(FilterWidget):
-    """flourish SchoolYear container filter widget."""
 
 
 class FlourishSchoolYearContainerView(flourish.containers.TableContainerView):
