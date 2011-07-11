@@ -130,6 +130,7 @@ form fieldset .row .widget .textarea-widget:focus {
 
 form fieldset .row .widget .option {
     color: #333333;
+    display: block;
     font-size: 12px;
     line-height: 16px;
 }

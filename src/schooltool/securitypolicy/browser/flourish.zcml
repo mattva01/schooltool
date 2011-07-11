@@ -44,7 +44,7 @@
         name="access_control.html"
         subtitle="Access Control"
         for="schooltool.app.interfaces.ISchoolToolApplication"
-        class=".views.AccessControlView"
+        class=".views.FlourishAccessControlView"
         content_template="templates/f_access_control.pt"
         permission="schooltool.edit"
         />
