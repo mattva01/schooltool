@@ -1,4 +1,5 @@
 <script>
+  // XXX: we need a better way to do this
   $(document).ready(function() {
     $('form fieldset .row .error').prev().children(':first-child').addClass('error');
   });

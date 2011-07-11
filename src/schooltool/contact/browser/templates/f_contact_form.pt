@@ -1,4 +1,6 @@
 <script>
+  // XXX: we need a better way to do this
+  //      can z3c.form set custom classes on error?
   $(document).ready(function() {
     $('form fieldset .row .error').prev().children(':first-child').addClass('error');
   });
@@ -21,13 +23,6 @@
           Form Label
         </h3>
       </metal:label>
-      <metal:info define-slot="info">
-        <div class="required-info"
-             metal:define-macro="required-info">
-          <!--<span class="required">*</span>
-              &ndash; required -->
-        </div>
-      </metal:info>
       <metal:header define-slot="header">
         <div class="status"
              tal:condition="view/status"
@@ -55,6 +50,13 @@
           </ul>
         </div>
       </metal:header>
+      <metal:info define-slot="info">
+        <div class="required-info"
+             metal:define-macro="required-info">
+          <span class="required">*</span>
+          &ndash; signifies a required field
+        </div>
+      </metal:info>
       <div metal:define-slot="extra-info" tal:replace="nothing">
       </div>
       <div metal:define-slot="main">
