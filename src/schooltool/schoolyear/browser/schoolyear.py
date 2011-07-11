@@ -178,7 +178,7 @@ class FlourishActiveSchoolYearColumn(column.Column):
 
     def renderCell(self, item, formatter):
         if item.__parent__.active_id == item.__name__:
-            return '<span class="ui-icon ui-icon-check ui-icon-center"></span>'
+            return '<span class="ui-icon ui-icon-check"></span>'
         else:
             return ''
 
