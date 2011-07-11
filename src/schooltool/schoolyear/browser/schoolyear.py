@@ -544,3 +544,14 @@ class ActiveSchoolYears(ViewletBase):
         syc = ISchoolYearContainer(ISchoolToolApplication(None))
         if checkPermission("schooltool.edit", syc):
             return syc.getNextSchoolYear()
+
+
+class FlourishSchoolYearView(flourish.form.DisplayForm):
+    """flourish SchoolYear view."""
+
+    fields = field.Fields(ISchoolYearAddForm)
+
+    @property
+    def subtitle(self):
+        return self.context.title
+

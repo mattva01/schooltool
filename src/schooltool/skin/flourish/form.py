@@ -56,6 +56,13 @@ class Form(z3c.form.form.Form, flourish.page.Page):
         super(Form, self).updateActions()
 
 
+class DisplayForm(z3c.form.form.DisplayForm, flourish.page.Page):
+    __call__ = flourish.page.Page.__call__
+
+    def update(self):
+        super(DisplayForm, self).update()
+
+
 class AddForm(Form, z3c.form.form.AddForm):
     def update(self):
         super(Form, self).update()
