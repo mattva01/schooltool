@@ -19,11 +19,31 @@
 """
 SchoolTool flourish forms.
 """
+from zope.component import adapts
+from zope.interface import Interface
+from zope.schema.interfaces import IBool
 import z3c.form.form
+from z3c.form.term import BoolTerms
+from z3c.form.interfaces import IRadioWidget
 
 import schooltool.skin.flourish.page
 import schooltool.skin.flourish.tal
 from schooltool.skin import flourish
+from schooltool.skin.flourish.interfaces import IFlourishLayer
+
+from schooltool.common import SchoolToolMessage as _
+
+
+class FlourishRadioBoolTerms(BoolTerms):
+
+    adapts(Interface,
+           IFlourishLayer,
+           Interface,
+           IBool,
+           IRadioWidget)
+
+    trueLabel = _('Yes')
+    falseLabel = _('No')
 
 
 class Form(z3c.form.form.Form, flourish.page.Page):

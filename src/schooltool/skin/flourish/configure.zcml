@@ -143,4 +143,7 @@
   <include file="tal.zcml" />
   <include file="containers.zcml" />
 
+  <!-- XXX: what's the right place for this? -->
+  <zope:adapter factory=".form.FlourishRadioBoolTerms" />
+
 </configure>
