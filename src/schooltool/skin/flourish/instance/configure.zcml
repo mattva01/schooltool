@@ -43,6 +43,7 @@
   <include package="schooltool.report.browser" file="flourish.zcml" />
   <include package="schooltool.resource.browser" file="flourish.zcml" />
   <include package="schooltool.timetable.browser" file="flourish.zcml" />
+  <include package="schooltool.schoolyear.browser" file="flourish.zcml" />
   <include package="schooltool.securitypolicy.browser" file="flourish.zcml" />
 
 </configure>

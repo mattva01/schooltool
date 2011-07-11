@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/browser"
+           xmlns:flourish="http://schooltool.org/flourish"
+           xmlns:zope="http://namespaces.zope.org/zope"
+           i18n_domain="schooltool">
+
+  <flourish:page
+      name="index.html"
+      for="schooltool.schoolyear.interfaces.ISchoolYearContainer"
+      class=".schoolyear.FlourishSchoolYearContainerView"
+      title="School Years"
+      permission="schooltool.view"
+      />
+
+  <zope:adapter
+      for="schooltool.schoolyear.interfaces.ISchoolYearContainer
+           schooltool.skin.flourish.interfaces.IFlourishLayer"
+      factory=".schoolyear.FlourishSchoolYearContainerFilterWidget" />
+
+  <flourish:viewlet
+      name="schoolyear_container"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      class=".schoolyear.FlourishSchoolYearContainerLinks"
+      for="schooltool.schoolyear.interfaces.ISchoolYearContainer"
+      title="Add"
+      permission="schooltool.edit"
+      view=".schoolyear.FlourishSchoolYearContainerView"
+      />
+
+  <flourish:viewlet
+      name="schoolyear_container_actions"
+      after="schoolyear_container"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      class=".schoolyear.FlourishSchoolYearContainerActionLinks"
+      for="schooltool.schoolyear.interfaces.ISchoolYearContainer"
+      title="Actions"
+      permission="schooltool.edit"
+      view=".schoolyear.FlourishSchoolYearContainerView"
+      />
+
+  <flourish:viewlet
+      name="add.html"
+      title="School Year"
+      class="schooltool.skin.flourish.page.LinkViewlet"
+      manager=".schoolyear.FlourishSchoolYearContainerLinks"
+      permission="schooltool.edit"
+      />
+
+  <flourish:viewlet
+      name="activate.html"
+      title="Activate New Year"
+      class="schooltool.skin.flourish.page.LinkViewlet"
+      manager=".schoolyear.FlourishSchoolYearContainerActionLinks"
+      permission="schooltool.edit"
+      />
+
+</configure>
