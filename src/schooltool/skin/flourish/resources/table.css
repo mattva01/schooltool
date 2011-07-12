@@ -72,8 +72,8 @@ table.groups-table th.action {
     width: 20%;
 }
 
-table.persons-table th.last_name,
-table.persons-table th.first_name {
+table.persons-table th.last-name,
+table.persons-table th.first-name {
     width: 40%;
 }
 
@@ -81,8 +81,8 @@ table.persons-table th.action {
     width: 20%;
 }
 
-table.contacts-table th.last_name,
-table.contacts-table th.first_name {
+table.contacts-table th.last-name,
+table.contacts-table th.first-name {
     width: 30%;
 }
 

@@ -214,7 +214,7 @@ class HeaderNavigationManager(ListNavigationContent):
 
 
 class SecondaryNavigationManager(ListNavigationContent):
-    list_class = "secondary_nav"
+    list_class = "second-nav"
 
 
 class PageNavigationManager(ListNavigationContent):
