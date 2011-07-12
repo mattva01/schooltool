@@ -416,7 +416,8 @@ class FlourishSchoolYearAddView(flourish.form.AddForm, SchoolYearAddView):
 
     @button.buttonAndHandler(_("Cancel"))
     def handle_cancel_action(self, action):
-        self.request.response.redirect(self.nextURL())
+        super(FlourishSchoolYearAddView, self).handle_cancel_action.func(self,
+            action)
 
 
 class SchoolYearEditView(form.EditForm):
