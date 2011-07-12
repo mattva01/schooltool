@@ -103,6 +103,10 @@
 
   </div>
 
+  <tal:block content="structure view/providers/tertiary_navigation|nothing">
+    [ | Tertiary | Navigation | Bar | Here | ]
+  </tal:block>
+
   <tal:block content="structure view/page_template|nothing">
 
     [ The page ]
