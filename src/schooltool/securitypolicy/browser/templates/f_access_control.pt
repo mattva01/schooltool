@@ -1,53 +1,58 @@
 <div>
-
-  <form method="post" tal:attributes="action request/URL"
-        class="standalone">
-
-    <h3 i18n:translate="">Access Control</h3>
-
-    <fieldset>
-      <div tal:repeat="setting view/settings"
-           class="row">
-        <tal:block condition="setting/alt_text"
-                   define="input_name  string:setting.${setting/key}">
-            <tal:block define="input_id string:on.${setting/key}">
-              <input tal:attributes="checked setting/getValue;
-                                     name input_name;
-                                     id input_id"
-                     class="choice_field"
-                     type="radio"
-                     value="True" />
-              <label class="choice_field"
-                     tal:content="setting/text"
-                     tal:attributes="for string:on.${setting/key}"/>
-            </tal:block>
-            <tal:block define="input_id string:off.${setting/key}">
-              <input tal:attributes="checked not:setting/getValue;
-                                     name input_name;
-                                     id input_id"
-                     class="choice_field"
-                     value="False"
-                     type="radio"/>
-              <label class="choice_field"
-                     tal:content="setting/alt_text"
-                     tal:attributes="for input_id"/>
-            </tal:block>
-
-        </tal:block>
-        <tal:block condition="not:setting/alt_text">
-          <input type="checkbox"
-                 tal:attributes="checked setting/getValue;
-                                 name string:setting.${setting/key};
-                                 id setting/key" />
-          <label tal:content="setting/text"
-                 tal:attributes="for setting/key"/>
-        </tal:block>
+  <form method="post" tal:attributes="action request/URL">
+    <div class="status" tal:condition="view/status">
+      <div class="summary ui-state-highlight ui-corner-all">
+        <span class="ui-icon ui-icon-info">icon</span>
+        <tal:block content="view/status" />
       </div>
-      <div class="controls">
-        <tal:block metal:use-macro="view/@@standard_macros/apply-button" />
-        <tal:block metal:use-macro="view/@@standard_macros/cancel-button" />
+    </div>
+    <fieldset tal:repeat="fieldset view/fieldsets">
+      <legend>
+        <span tal:content="fieldset/legend" />
+      </legend>
+      <div class="row" tal:define="setting fieldset/setting">
+        <div class="widget">
+          <tal:block condition="setting/alt_text"
+                     define="input_name string:setting.${setting/key}">
+            <span class="option" tal:define="input_id string:on.${setting/key}">
+              <label tal:attributes="for string:on.${setting/key}">
+                <input tal:attributes="checked setting/getValue;
+                                       name input_name;
+                                       id input_id"
+                       class="choice_field"
+                       type="radio"
+                       value="True" />
+                <span class="label" tal:content="setting/text" />
+              </label>
+            </span>
+            <span class="option" tal:define="input_id string:off.${setting/key}">
+              <label tal:attributes="for input_id">
+                <input tal:attributes="checked not:setting/getValue;
+                                       name input_name;
+                                       id input_id"
+                       class="choice_field"
+                       value="False"
+                       type="radio"/>
+                <span class="label" tal:content="setting/alt_text" />
+              </label>
+            </span>
+          </tal:block>
+          <tal:block condition="not:setting/alt_text">
+            <span class="option">
+              <input type="checkbox"
+                     tal:attributes="checked setting/getValue;
+                                     name string:setting.${setting/key};
+                                     id setting/key" />
+              <label tal:content="setting/text"
+                     tal:attributes="for setting/key"/>
+            </span>
+          </tal:block>
+        </div>
       </div>
     </fieldset>
+    <div class="buttons">
+      <tal:block metal:use-macro="view/@@standard_macros/apply-button" />
+      <tal:block metal:use-macro="view/@@standard_macros/cancel-button" />
+    </div>
   </form>
-
 </div>

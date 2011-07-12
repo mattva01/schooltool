@@ -81,6 +81,13 @@
       />
 
   <flourish:viewletManager
+      name="tertiary_navigation"
+      provides=".page.ITertiaryNavigationManager"
+      class=".page.TertiaryNavigationManager"
+      permission="zope.Public"
+      />
+
+  <flourish:viewletManager
       name="page_navigation"
       class=".page.PageNavigationManager"
       provides=".page.IPageNavigationManager"

@@ -130,6 +130,7 @@ form fieldset .row .widget .textarea-widget:focus {
 
 form fieldset .row .widget .option {
     color: #333333;
+    display: block;
     font-size: 12px;
     line-height: 16px;
 }
@@ -187,4 +188,21 @@ form .status > .summary .ui-icon {
 
 form .status > .errors {
     display: none;
+}
+
+form .required-info {
+    color: #ffffff;
+    font-size: 16px;
+    position: absolute;
+    right: 8px;
+    top: 8px;
+    z-index: 1;
+}
+
+.status ~ .required-info {
+    top: 42px;
+}
+
+form span.required {
+    color: #aa0000;
 }

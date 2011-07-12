@@ -206,7 +206,7 @@ class CSSFormatter(FormFullFormatter):
         result = []
         old_css_class = self.cssClasses.get('th')
         for col in self.visible_columns:
-            self.cssClasses['th'] = col.name
+            self.cssClasses['th'] = col.name.replace('_', '-')
             result.append(self.renderHeader(col))
         self.cssClasses['th'] = old_css_class
         return ''.join(result)
@@ -253,7 +253,7 @@ class FlourishRelationshipViewBase(flourish.page.NoSidebarPage):
             }
         label, icon = actions[prefix]['label'], actions[prefix]['icon']
         action = ImageInputColumn(
-            prefix, title=label, alt=label,
+            prefix, name='action', title=label, alt=label,
             library='schooltool.skin.flourish',
             image=icon, id_getter=self.getKey)
         return [action]

@@ -1,3 +1,10 @@
+<script>
+  // XXX: we need a better way to do this
+  //      can z3c.form set custom classes on error?
+  $(document).ready(function() {
+    $('form fieldset .row .error').prev().children(':first-child').addClass('error');
+  });
+</script>
 <form action="." method="post" enctype="multipart/form-data" class="standalone"
       metal:define-macro="form"
       tal:attributes="method view/method;
@@ -16,26 +23,25 @@
           Form Label
         </h3>
       </metal:label>
-      <metal:info define-slot="info">
-        <div class="required-info"
-             metal:define-macro="required-info">
-          <!--<span class="required">*</span>
-              &ndash; required -->
-        </div>
-      </metal:info>
       <metal:header define-slot="header">
         <div class="status"
              tal:condition="view/status"
-             metal:define-macro="form-header">
-          <div class="summary"
-               i18n:translate=""
-               tal:content="view/status">
-            Form status summary
+             metal:define-macro="form-header"
+             tal:define="errors view/errors|view/widgets/errors">
+	  <div class="summary ui-state-highlight ui-corner-all"
+	       tal:condition="not:errors">
+	    <span class="ui-icon ui-icon-info">icon</span>
+            <tal:block content="view/status" />
+          </div>
+          <div class="summary ui-state-error ui-corner-all"
+               tal:condition="errors">
+            <span class="ui-icon ui-icon-alert">icon</span>
+            <tal:block content="view/status" />
           </div>
           <ul class="errors"
-              tal:condition="view/widgets/errors"
+              tal:condition="errors"
               metal:define-macro="form-errors">
-            <li tal:repeat="error view/widgets/errors">
+            <li tal:repeat="error errors">
               <tal:block condition="error/widget">
                 <span tal:replace="error/widget/label" />:
               </tal:block>
@@ -44,6 +50,13 @@
           </ul>
         </div>
       </metal:header>
+      <metal:info define-slot="info">
+        <div class="required-info"
+             metal:define-macro="required-info">
+          <span class="required">*</span>
+          &ndash; signifies a required field
+        </div>
+      </metal:info>
       <div metal:define-slot="extra-info" tal:replace="nothing">
       </div>
       <div metal:define-slot="main">

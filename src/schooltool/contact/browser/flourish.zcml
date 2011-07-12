@@ -98,7 +98,7 @@
       class=".basicperson.FlourishBoundContactEditView"
       content_template="templates/f_contact_form.pt"
       permission="schooltool.edit"
-      subtitle="XXX"
+      subtitle="Contact Information"
       />
 
 </configure>

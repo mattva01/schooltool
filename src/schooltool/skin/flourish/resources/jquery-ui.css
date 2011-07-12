@@ -54,6 +54,10 @@
     background-color: #ffffff;
 }
 
+.ui-dialog .ui-dialog-content form .required-info {
+    display: none;
+}
+
 .ui-dialog .ui-dialog-content .buttons {
     margin-bottom: 0px;
     margin-top: 0px;

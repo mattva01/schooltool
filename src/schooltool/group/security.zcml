@@ -11,19 +11,19 @@
   <setting
       key="everyone_can_view_group_info"
       text="Information about each group is visible to the general public."
-      alt_text="Information about each group is visible to school administration, and members and leaders of the group."
+      alt_text="Information about each group is visible to school administration, and members and responsible parties of the group."
       default="False" />
 
   <setting
       key="everyone_can_view_group_calendar"
       text="Each group calendar is visible to the general public."
-      alt_text="Each group calendar is visible to school administration, and members and leaders of the group."
+      alt_text="Each group calendar is visible to school administration, and members and responsible parties of the group."
       default="False" />
 
   <setting
       key="members_can_edit_group_calendar"
       text="All members of a group and school administration can edit its calendar."
-      alt_text="The leaders of a group and school administration can edit its calendar."
+      alt_text="The responsible parties of a group and school administration can edit its calendar."
       default="False" />
 
   <crowd

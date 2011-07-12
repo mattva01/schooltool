@@ -194,7 +194,7 @@ a.modify img {
     background: #540000;
 }
 
-.header ul.secondary_nav {
+.header ul.second-nav {
     background-color: #f7f7f7;
     height: 40px;
     margin-left: 16px;
@@ -210,18 +210,18 @@ a.modify img {
     box-shadow: 0px 1px 6px #bbbbbb;
 }
 
-.header ul.secondary_nav > li {
+.header ul.second-nav > li {
     background: transparent url(subnav_divider.png) no-repeat scroll right bottom;
     display: inline-block;
     margin-left: -4px;
 }
 
-.header ul.secondary_nav > li:first-child {
+.header ul.second-nav > li:first-child {
     border-left: medium none;
 }
 
-.header ul.secondary_nav > li a,
-.header ul.secondary_nav > li span {
+.header ul.second-nav > li a,
+.header ul.second-nav > li span {
     color: #333333;
     display: block;
     font-size: 12px;
@@ -231,12 +231,12 @@ a.modify img {
     text-decoration: none;
 }
 
-.header ul.secondary_nav > li.active a,
-.header ul.secondary_nav > li a:hover {
+.header ul.second-nav > li.active a,
+.header ul.second-nav > li a:hover {
     background: transparent url(subnav_active_bg.png) repeat left 1px;
 }
 
-.header ul.secondary_nav > li.active a {
+.header ul.second-nav > li.active a {
     color: #aa0000;
 }
 

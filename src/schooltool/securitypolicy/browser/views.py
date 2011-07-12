@@ -28,6 +28,8 @@ from zope.traversing.browser.absoluteurl import absoluteURL
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.securitypolicy.interfaces import IAccessControlCustomisations
 
+from schooltool.common import SchoolToolMessage as _
+
 
 class AccessControlView(BrowserView):
 
@@ -47,3 +49,38 @@ class AccessControlView(BrowserView):
             url = absoluteURL(self.context, self.request)
             self.request.response.redirect(url)
 
+
+class FlourishAccessControlView(AccessControlView):
+
+    fieldset_titles = {
+        'everyone_can_view_section_info': _('Section information'),
+        'everyone_can_view_person_list': _('List of accounts'),
+        'persons_can_set_their_preferences': ('User calendars'),
+        'persons_can_change_their_passwords': _('User passwords'),
+        'everyone_can_view_group_list': _('List of groups'),
+        'everyone_can_view_group_info': _('Group information'),
+        'everyone_can_view_group_calendar': _('View group calendars'),
+        'members_can_edit_group_calendar': _('Edit group calendars'),
+        'everyone_can_view_resource_list': _('List of resources'),
+        'everyone_can_view_resource_info': _('Resource information'),
+        'everyone_can_view_resource_calendar': _('Resource calendars'),
+        'administration_can_grade_students': _('Student grades'),
+        }
+
+    def fieldsets(self):
+        for setting in self.settings():
+            info = {'legend': self.fieldset_titles[setting.key],
+                    'setting': setting}
+            yield info
+
+    def update(self):
+        prefix = 'setting.'
+        self.status = None
+        if 'UPDATE_SUBMIT' in self.request:
+            for setting in self.settings():
+                val = self.request.get(prefix + setting.key, 'False')
+                setting.setValue(bool(val != 'False'))
+            self.status = _('Data successfully updated.')
+        elif 'CANCEL' in self.request:
+            url = absoluteURL(self.context, self.request) + '/settings'
+            self.request.response.redirect(url)

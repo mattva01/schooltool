@@ -374,6 +374,7 @@ class FlourishFieldDescriptionAddView(flourish.form.AddForm,
     template = InheritTemplate(flourish.page.Page.template)
     label = None
     legend = 'Field Details'
+    formErrorsMessage = _('Please correct the marked fields below.')
 
     @property
     def title(self):
