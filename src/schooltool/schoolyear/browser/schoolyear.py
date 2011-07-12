@@ -64,6 +64,7 @@ from schooltool.skin.containers import TableContainerView
 from schooltool.skin import flourish
 from schooltool.common import DateRange
 from schooltool.common import SchoolToolMessage as _
+from schooltool.common.inlinept import InheritTemplate
 from schooltool.course.interfaces import ICourseContainer
 from schooltool.course.course import Course
 from schooltool.group.interfaces import IGroupContainer
@@ -350,7 +351,7 @@ class ImportSchoolYearData(object):
         self.activeSchoolyear = self.context.getActiveSchoolYear()
         if self.shouldImportData():
             self.importAllCourses()
-            self.importAllTimetables()
+            #self.importAllTimetables()
             self.importCustomGroups()
             self.importDefaultGroupsMembers()
 
@@ -403,6 +404,21 @@ class SchoolYearAddView(form.AddForm, ImportSchoolYearData):
         self.request.response.redirect(url)
 
 
+class FlourishSchoolYearAddView(flourish.form.AddForm, SchoolYearAddView):
+
+    template = InheritTemplate(flourish.page.Page.template)
+    label = None
+    legend = 'School Year Details'
+
+    @button.buttonAndHandler(_('Submit'), name='add')
+    def handleAdd(self, action):
+        super(FlourishSchoolYearAddView, self).handleAdd.func(self, action)
+
+    @button.buttonAndHandler(_("Cancel"))
+    def handle_cancel_action(self, action):
+        self.request.response.redirect(self.nextURL())
+
+
 class SchoolYearEditView(form.EditForm):
     """Edit form for basic person."""
     form.extends(form.EditForm)
@@ -424,6 +440,24 @@ class SchoolYearEditView(form.EditForm):
     def label(self):
         return _(u'Change information for ${schoolyear_title}',
                  mapping={'schoolyear_title': self.context.title})
+
+
+class FlourishSchoolYearEditView(flourish.page.Page, SchoolYearEditView):
+    """flourish Edit form for schoolyear."""
+
+    def update(self):
+        SchoolYearEditView.update(self)
+
+    @button.buttonAndHandler(_('Submit'), name='apply')
+    def handleApply(self, action):
+        super(FlourishSchoolYearEditView, self).handleApply.func(self, action)
+        url = absoluteURL(self.context, self.request)
+        self.request.response.redirect(url)
+
+    @button.buttonAndHandler(_("Cancel"))
+    def handle_cancel_action(self, action):
+        url = absoluteURL(self.context, self.request)
+        self.request.response.redirect(url)
 
 
 class AddSchoolYearOverlapValidator(InvariantsValidator):
