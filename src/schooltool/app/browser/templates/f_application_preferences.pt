@@ -1,52 +1,145 @@
-<div>
-  <form action="." method="post" tal:attributes="action request/URL"
-        class="standalone" enctype="multipart/form-data">
-
-    <h3 i18n:translate="">Change site preferences</h3>
-
-    <div class="info" tal:condition="view/message" tal:content="view/message" />
-    <div class="error" tal:condition="view/error" tal:content="view/error" />
-
-    <fieldset>
-      <legend>
-        <span i18n:translate="">General preferences</span>
-      </legend>
-
-      <div class="row" tal:define="widget nocall:view/title_widget">
-        <div metal:use-macro="context/@@form_macros/widget_row" />
+<script>
+  // XXX: we need a better way to do this
+  //      can z3c.form set custom classes on error?
+  $(document).ready(function() {
+    $('form fieldset .row .error').prev().children(':first-child').addClass('error');
+  });
+</script>
+<form action="." method="post" enctype="multipart/form-data" class="standalone"
+      metal:define-macro="form"
+      tal:attributes="method view/method;
+                      enctype view/enctype;
+                      acceptCharset view/acceptCharset;
+                      accept view/accept;
+                      action view/action;
+                      name view/name;
+                      id view/id">
+  <metal:subform define-macro="subform">
+    <div class="viewspace" metal:define-slot="viewspace">
+      <metal:label define-slot="label">
+        <h3 metal:define-macro="form-label"
+            tal:condition="view/label|nothing"
+            tal:content="view/label">
+          Form Label
+        </h3>
+      </metal:label>
+      <metal:header define-slot="header">
+        <div class="status"
+             tal:condition="view/status"
+             metal:define-macro="form-header"
+             tal:define="errors view/errors|view/widgets/errors">
+	  <div class="summary ui-state-highlight ui-corner-all"
+	       tal:condition="not:errors">
+	    <span class="ui-icon ui-icon-info">icon</span>
+            <tal:block content="view/status" />
+          </div>
+          <div class="summary ui-state-error ui-corner-all"
+               tal:condition="errors">
+            <span class="ui-icon ui-icon-alert">icon</span>
+            <tal:block content="view/status" />
+          </div>
+          <ul class="errors"
+              tal:condition="errors"
+              metal:define-macro="form-errors">
+            <li tal:repeat="error errors">
+              <tal:block condition="error/widget">
+                <span tal:replace="error/widget/label" />:
+              </tal:block>
+              <span tal:replace="structure error/render">Error Type</span>
+            </li>
+          </ul>
+        </div>
+      </metal:header>
+      <metal:info define-slot="info">
+        <div class="required-info"
+             metal:define-macro="required-info">
+          <span class="required">*</span>
+          &ndash; signifies a required field
+        </div>
+      </metal:info>
+      <div metal:define-slot="extra-info" tal:replace="nothing">
       </div>
-
-      <div class="row" tal:define="widget nocall:view/frontPageCalendar_widget">
-        <div metal:use-macro="context/@@form_macros/widget_row" />
+      <div metal:define-slot="main">
+        <metal:widget-rows define-macro="widget-rows">
+          <tal:loop repeat="fieldset view/fieldsets">
+            <fieldset tal:attributes="id fieldset/id">
+              <legend>
+                <span tal:content="fieldset/legend">legend</span>
+              </legend>
+              <tal:loop repeat="row fieldset/rows">
+                <tal:block repeat="widget_id row">
+                  <metal:block tal:define="widget python:view.widgets[widget_id]">
+                    <div id="" class="row"
+                         tal:attributes="id string:${widget/id}-row"
+                         tal:condition="python:widget.mode != 'hidden'">
+                      <metal:widget-row define-macro="widget-row">
+                        <div class="label">
+                          <label tal:attributes="for widget/id">
+                            <span tal:content="widget/label">label</span>
+                            <span class="required"
+                                  tal:condition="widget/required">*</span>
+                          </label>
+                        </div>
+                        <p class="hint" tal:content="widget/field/description"
+			   tal:condition="widget/field/description">Description of this field.</p>
+                        <div class="widget" tal:content="structure widget/render">
+                          <input type="text" size="24" value="" />
+                        </div>
+                        <div class="error"
+                             tal:condition="widget/error">
+                          <span tal:replace="structure widget/error/render">error</span>
+                        </div>
+                      </metal:widget-row>
+                    </div>
+                    <input type="hidden" value=""
+                           tal:condition="python:widget.mode == 'hidden'"
+                           tal:replace="structure widget/render" />
+                  </metal:block>
+                </tal:block>
+              </tal:loop>
+              <div metal:define-slot="extra-widgets" tal:replace="nothing">
+              </div>
+            </fieldset>
+          </tal:loop>
+        </metal:widget-rows>
+        <metal:groups define-macro="groups">
+          <fieldset tal:condition="view/groups|nothing"
+                    tal:repeat="view view/groups">
+            <legend tal:condition="view/label">
+              <span tal:content="view/label">Label</span>
+            </legend>
+            <metal:group-header define-slot="group-header">
+              <div class="status"
+                   tal:condition="view/widgets/errors">
+                <div metal:use-macro="template/macros/errors" />
+              </div>
+            </metal:group-header>
+            <metal:group-rows define-slot="group-rows">
+              <div metal:use-macro="template/macros/widget-rows" />
+            </metal:group-rows>
+          </fieldset>
+        </metal:groups>
       </div>
-
-    </fieldset>
-
-    <fieldset>
-      <legend>
-        <span i18n:translate="">Calendar Preferences</span>
-      </legend>
-
-      <div class="row" tal:define="widget nocall:view/timezone_widget">
-        <div metal:use-macro="context/@@form_macros/widget_row" />
-      </div>
-
-      <div class="row" tal:define="widget nocall:view/timeformat_widget">
-        <div metal:use-macro="context/@@form_macros/widget_row" />
-      </div>
-
-      <div class="row" tal:define="widget nocall:view/dateformat_widget">
-        <div metal:use-macro="context/@@form_macros/widget_row" />
-      </div>
-
-      <div class="row" tal:define="widget nocall:view/weekstart_widget">
-        <div metal:use-macro="context/@@form_macros/widget_row" />
-      </div>
-    </fieldset>
-
-    <div class="controls">
-      <tal:block metal:use-macro="view/@@standard_macros/apply-button" />
-      <tal:block metal:use-macro="view/@@standard_macros/cancel-button" />
+      <metal:above-buttons define-slot="above-buttons">
+        <tal:block
+            repeat="form view/subforms"
+            content="structure form/render"
+            condition="view/subforms|nothing" />
+      </metal:above-buttons>
     </div>
-  </form>
-</div>
+    <metal:buttons define-slot="buttons">
+      <div metal:define-macro="form-buttons">
+        <div class="buttons controls"
+             metal:define-slot="bottom-buttons">
+          <tal:block condition="view/actions|nothing">
+            <input tal:repeat="action view/actions/values"
+                   tal:replace="structure action/render"
+                   />
+          </tal:block>
+        </div>
+      </div>
+    </metal:buttons>
+    <metal:bottom define-slot="bottom">
+    </metal:bottom>
+  </metal:subform>
+</form>
