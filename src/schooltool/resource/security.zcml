@@ -13,13 +13,13 @@
   <setting
       key="everyone_can_view_resource_info"
       text="Information about each resource is visible to the general public."
-      alt_text="Information about each resource is visible to school administration and leaders of the resource."
+      alt_text="Information about each resource is visible to school administration and responsible parties of the resource."
       default="False" />
 
   <setting
       key="everyone_can_view_resource_calendar"
       text="Resource calendars are visible to the general public."
-      alt_text="Resource calendars are visible to school administration, teachers, and leaders of the resource."
+      alt_text="Resource calendars are visible to school administration, teachers, and responsible parties of the resource."
       default="False" />
 
   <crowd
