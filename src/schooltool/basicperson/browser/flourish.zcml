@@ -67,7 +67,7 @@
       class="schooltool.basicperson.browser.person.PersonActionsLinks"
       title="Actions"
       for="schooltool.person.interfaces.IPerson"
-      permission="schooltool.view"
+      permission="schooltool.edit"
       view=".person.FlourishPersonView"
       />
 

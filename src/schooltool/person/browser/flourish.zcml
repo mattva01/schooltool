@@ -29,7 +29,7 @@
       title="Delete"
       class=".person.FlourishPersonDeleteLink"
       manager="schooltool.basicperson.browser.person.PersonActionsLinks"
-      permission="schooltool.view"
+      permission="schooltool.edit"
       />
 
   <configure package="schooltool.skin.flourish">
