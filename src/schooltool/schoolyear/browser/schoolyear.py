@@ -33,6 +33,7 @@ from zope.traversing.browser import absoluteURL
 from zope.container.interfaces import INameChooser
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.proxy import sameProxiedObjects
+from zope.i18n import translate
 from zope.i18n.interfaces.locales import ICollator
 from zope.security.checker import canAccess
 
@@ -205,6 +206,50 @@ class FlourishSchoolYearContainerLinks(flourish.page.RefineLinksViewlet):
 
 class FlourishSchoolYearContainerActionLinks(flourish.page.RefineLinksViewlet):
     """SchoolYear container action links viewlet."""
+
+
+class FlourishSchoolYearActionLinks(flourish.page.RefineLinksViewlet):
+    """SchoolYear action links viewlet."""
+
+
+class FlourishSchoolYearDeleteLink(flourish.page.ModalFormLinkViewlet):
+
+    @property
+    def dialog_title(self):
+        title = _(u'Delete ${schoolyear}',
+                  mapping={'schoolyear': self.context.title})
+        return translate(title, context=self.request)
+
+
+class FlourishSchoolYearDeleteView(flourish.form.DialogForm, form.EditForm):
+    """View used for confirming deletion of a schoolyear."""
+
+    dialog_submit_actions = ('apply',)
+    dialog_close_actions = ('cancel',)
+    label = None
+
+    def updateDialog(self):
+        # XXX: fix the width of dialog content in css
+        if self.ajax_settings['dialog'] != 'close':
+            self.ajax_settings['dialog']['width'] = 544 + 16
+
+    @button.buttonAndHandler(_("Delete"), name='apply')
+    def handleDelete(self, action):
+        url = '%s/delete.html?delete.%s&CONFIRM' % (
+            absoluteURL(self.context.__parent__, self.request),
+            self.context.__name__)
+        self.request.response.redirect(url)
+        # We never have errors, so just close the dialog.
+        self.ajax_settings['dialog'] = 'close'
+
+    @button.buttonAndHandler(_("Cancel"))
+    def handle_cancel_action(self, action):
+        pass
+
+    def updateActions(self):
+        super(FlourishSchoolYearDeleteView, self).updateActions()
+        self.actions['apply'].addClass('button-ok')
+        self.actions['cancel'].addClass('button-cancel')
 
 
 class ISchoolYearAddForm(Interface):

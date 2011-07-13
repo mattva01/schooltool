@@ -29,7 +29,7 @@
       title="Delete"
       class=".person.FlourishPersonDeleteLink"
       manager="schooltool.basicperson.browser.person.PersonActionsLinks"
-      permission="schooltool.view"
+      permission="schooltool.edit"
       />
 
   <configure package="schooltool.skin.flourish">
@@ -49,7 +49,6 @@
       class="schooltool.person.browser.person.FlourishPersonDeleteView"
       template="f_confirm_delete_person.pt"
       permission="schooltool.edit"
-      subtitle="Edit"
       />
 
   <zope:adapter
