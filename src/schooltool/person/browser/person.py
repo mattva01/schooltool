@@ -217,7 +217,8 @@ class FlourishPersonDeleteView(flourish.form.DialogForm, form.EditForm):
 
     def updateDialog(self):
         # XXX: fix the width of dialog content in css
-        self.ajax_settings['dialog']['width'] = 544 + 16
+        if self.ajax_settings['dialog'] != 'close':
+            self.ajax_settings['dialog']['width'] = 544 + 16
 
     @button.buttonAndHandler(_("Delete"), name='apply')
     def handleDelete(self, action):

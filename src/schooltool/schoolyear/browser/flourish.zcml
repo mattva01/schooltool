@@ -35,6 +35,16 @@
       />
 
   <flourish:viewlet
+      name="schoolyear_actions"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      class=".schoolyear.FlourishSchoolYearActionLinks"
+      for="schooltool.schoolyear.interfaces.ISchoolYear"
+      title="Actions"
+      permission="schooltool.edit"
+      view=".schoolyear.FlourishSchoolYearView"
+      />
+
+  <flourish:viewlet
       name="add.html"
       title="School Year"
       class="schooltool.skin.flourish.page.LinkViewlet"
@@ -43,10 +53,66 @@
       />
 
   <flourish:viewlet
+      name="delete.html"
+      for="schooltool.schoolyear.interfaces.ISchoolYear"
+      title="Delete"
+      class=".schoolyear.FlourishSchoolYearDeleteLink"
+      manager="schooltool.schoolyear.browser.schoolyear.FlourishSchoolYearActionLinks"
+      permission="schooltool.edit"
+      />
+
+  <flourish:viewlet
       name="activate.html"
       title="Activate New Year"
       class="schooltool.skin.flourish.page.LinkViewlet"
       manager=".schoolyear.FlourishSchoolYearContainerActionLinks"
+      permission="schooltool.edit"
+      />
+
+  <flourish:page
+      name="index.html"
+      for="schooltool.schoolyear.interfaces.ISchoolYear"
+      class=".schoolyear.FlourishSchoolYearView"
+      title="School Year"
+      content_template="templates/f_schoolyear.pt"
+      permission="schooltool.view"
+      />
+
+  <configure package="schooltool.skin.flourish">
+  <flourish:page
+      name="add.html"
+      for="schooltool.schoolyear.interfaces.ISchoolYearContainer"
+      class="schooltool.schoolyear.browser.schoolyear.FlourishSchoolYearAddView"
+      title="School Years"
+      subtitle="New School Year"
+      content_template="templates/z3c_form_edit.pt"
+      permission="schooltool.edit"
+      />
+
+  <flourish:page
+      name="edit.html"
+      for="schooltool.schoolyear.interfaces.ISchoolYear"
+      class="schooltool.schoolyear.browser.schoolyear.FlourishSchoolYearEditView"
+      title="School Year"
+      subtitle="Edit"
+      content_template="templates/z3c_form_edit.pt"
+      permission="schooltool.edit"
+      />
+
+  <flourish:page
+    name="delete.html"
+    for="schooltool.schoolyear.interfaces.ISchoolYearContainer"
+    class="schooltool.skin.flourish.containers.ContainerDeleteView"
+    content_template="templates/container_delete.pt"
+    permission="schooltool.edit"
+    />
+  </configure>
+
+  <flourish:page
+      name="delete.html"
+      for="schooltool.schoolyear.interfaces.ISchoolYear"
+      class="schooltool.schoolyear.browser.schoolyear.FlourishSchoolYearDeleteView"
+      template="templates/f_confirm_delete_schoolyear.pt"
       permission="schooltool.edit"
       />
 

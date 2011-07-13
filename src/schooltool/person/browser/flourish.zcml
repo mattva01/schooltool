@@ -49,7 +49,6 @@
       class="schooltool.person.browser.person.FlourishPersonDeleteView"
       template="f_confirm_delete_person.pt"
       permission="schooltool.edit"
-      subtitle="Edit"
       />
 
   <zope:adapter

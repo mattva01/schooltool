@@ -1,0 +1,5 @@
+<h3>Deleting a school year is permanent, irreversible, and destroys all data
+associated with the school year, including all courses, sections of courses,
+timetables and groups.  It is strongly recommended that you only delete school
+year that has been created in error or has no data associated with it.</h3>
+<div metal:use-macro="macro:form" />
