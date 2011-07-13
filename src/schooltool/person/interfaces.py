@@ -155,18 +155,15 @@ class ICalendarDisplayPreferences(Interface):
 
     timezone = Choice(
         title=_("Time Zone"),
-        description=_("Time Zone used to display your calendar"),
         values=pytz.common_timezones)
 
     timeformat = Choice(
         title=_("Time Format"),
-        description=_("Time Format"),
         vocabulary=vocabulary([("%H:%M", _("HH:MM")),
                                ("%I:%M %p", _("HH:MM am/pm"))]))
 
     dateformat = Choice(
         title=_("Date Format"),
-        description=_("Date Format"),
         vocabulary=vocabulary([("%m/%d/%y", _("MM/DD/YY")),
                                ("%Y-%m-%d", _("YYYY-MM-DD")),
                                ("%d %B, %Y", _("Day Month, Year"))]))
@@ -174,7 +171,6 @@ class ICalendarDisplayPreferences(Interface):
     # SUNDAY and MONDAY are integers, 6 and 0 respectivley
     weekstart = Choice(
         title=_("Week starts on:"),
-        description=_("Start display of weeks on Sunday or Monday"),
         vocabulary=vocabulary([(calendar.SATURDAY, _("Saturday")),
                                (calendar.SUNDAY, _("Sunday")),
                                (calendar.MONDAY, _("Monday"))]))

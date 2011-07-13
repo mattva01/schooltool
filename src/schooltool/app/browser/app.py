@@ -45,7 +45,7 @@ from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.publisher.browser import BrowserPage
 from zope.traversing.browser.absoluteurl import absoluteURL
 from zope.traversing.api import traverse
-
+from z3c.form import form, field, button
 from zc.table.column import Column
 from zc.table.table import FormFullFormatter
 
@@ -67,7 +67,6 @@ from schooltool.table.interfaces import ITableFormatter
 from schooltool.skin.skin import OrderedViewletManager
 from schooltool.skin.breadcrumbs import CustomNameBreadCrumbInfo
 from schooltool.skin import flourish
-import schooltool.skin.flourish.page
 
 from schooltool.common import SchoolToolMessage as _
 
@@ -483,6 +482,63 @@ class ApplicationPreferencesView(BrowserView):
             for field in self.schema:
                 if field in data: # skip non-fields
                     setattr(prefs, field, data[field])
+
+
+class FlourishApplicationPreferencesView(flourish.page.Page, form.EditForm):
+
+    fields = field.Fields(IApplicationPreferences)
+    label = None
+    # XXX: duplicated error message. Create and use a base class
+    formErrorsMessage = _('Please correct the marked fields below.')
+
+    def update(self):
+        # XXX: duplicated fieldset logic. Create and use a base class
+        self.buildFieldsetGroups()
+        form.EditForm.update(self)
+
+    def buildFieldsetGroups(self):
+        self.fieldset_groups = {
+            'general': (
+                _('General preferences'),
+                ['title', 'frontPageCalendar']),
+            'calendar': (
+                _('Calendar preferences'),
+                ['timezone', 'timeformat', 'dateformat', 'weekstart']),
+            }
+        self.fieldset_order = (
+            'general', 'calendar')
+
+    def fieldsets(self):
+        result = []
+        for fieldset_id in self.fieldset_order:
+            legend, fields = self.fieldset_groups[fieldset_id]
+            result.append(self.makeFieldSet(
+                    fieldset_id, legend, list(fields)))
+        return result
+
+    def makeRows(self, fields, cols=1):
+        rows = []
+        while fields:
+            rows.append(fields[:cols])
+            fields = fields[cols:]
+        return rows
+
+    def makeFieldSet(self, fieldset_id, legend, fields, cols=1):
+        result = {
+            'id': fieldset_id,
+            'legend': legend,
+            }
+        result['rows'] = self.makeRows(fields, cols)
+        return result
+
+    @button.buttonAndHandler(_('Apply'))
+    def handle_edit_action(self, action):
+        super(FlourishApplicationPreferencesView, self).handleApply.func(self, action)
+
+    @button.buttonAndHandler(_('Cancel'))
+    def handle_cancel_action(self, action):
+        url = absoluteURL(self.context, self.request) + '/settings'
+        self.request.response.redirect(url)
 
 
 class ProbeParticipation:

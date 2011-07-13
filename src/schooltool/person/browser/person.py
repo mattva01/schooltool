@@ -47,7 +47,7 @@ from zope.catalog.interfaces import ICatalog
 from zope.intid.interfaces import IIntIds
 from zope.traversing.browser.absoluteurl import absoluteURL
 from zope.security.checker import canAccess
-from z3c.form import form, field, button, widget, term
+from z3c.form import form, field, button, widget, term, validator
 from z3c.form.browser.radio import RadioWidget
 from zope.i18n import translate
 
@@ -291,18 +291,17 @@ class GroupsTerms(object):
 class IPasswordEditForm(Interface):
     """Schema for a person's edit form."""
 
+    current = Password(
+        title=_('Current password'),
+        required=False)
+
     password = Password(
-        title=_("Password"),
+        title=_("New password"),
         required=False)
 
     verify_password = Password(
-        title=_("Verify password"),
+        title=_("Verify new password"),
         required=False)
-
-    @invariant
-    def checkPasswordsMatch(obj):
-        if obj.password != obj.verify_password:
-            raise Invalid(_(u"Supplied passwords are not identical"))
 
 
 class PersonPasswordEditView(form.Form):
@@ -341,9 +340,55 @@ class FlourishPersonPasswordEditView(flourish.page.Page,
                                      PersonPasswordEditView):
 
     label = None
+    legend = _('Change password')
+    formErrorsMessage = _('Please correct the marked fields below.')
+
+    @property
+    def fields(self):
+        fields = field.Fields(IPasswordEditForm, ignoreContext=True)
+        person = IPerson(self.request.principal)
+        if person.username is not self.context.username:
+            # Editing someone else's password
+            fields = fields.omit('current')
+        return fields
 
     def update(self):
         PersonPasswordEditView.update(self)
+
+
+class WrongCurrentPassword(ValidationError):
+    __doc__ = _('Wrong password supplied')
+
+
+class PasswordsDontMatch(ValidationError):
+    __doc__ = _('Supplied new passwords are not identical')
+
+
+class CurrentPasswordValidator(validator.SimpleFieldValidator):
+
+    def validate(self, value):
+        if value is not None and not self.context.checkPassword(value):
+            raise WrongCurrentPassword(value)
+
+
+validator.WidgetValidatorDiscriminators(CurrentPasswordValidator,
+                                        view=FlourishPersonPasswordEditView,
+                                        field=IPasswordEditForm['current'])
+
+
+class PasswordsMatchValidator(validator.SimpleFieldValidator):
+
+    def validate(self, value):
+        # XXX: hack to display the validation error next to the widget!
+        name = self.view.widgets['verify_password'].name
+        verify = self.request.get(name)
+        if value is not None and value not in (verify,):
+            raise PasswordsDontMatch(value)
+
+
+validator.WidgetValidatorDiscriminators(PasswordsMatchValidator,
+                                        view=FlourishPersonPasswordEditView,
+                                        field=IPasswordEditForm['password'])
 
 
 class IPersonInfoManager(IViewletManager):
@@ -356,6 +401,13 @@ class PasswordEditMenuItem(ViewletBase):
     def render(self):
         if checkPermission('schooltool.edit', IPasswordWriter(self.context)):
             return super(PasswordEditMenuItem, self).render()
+
+
+class FlourishPasswordLinkViewlet(flourish.page.LinkViewlet):
+
+    def render(self):
+        if checkPermission('schooltool.edit', IPasswordWriter(self.context)):
+            return super(FlourishPasswordLinkViewlet, self).render()
 
 
 class PersonFilterWidget(IndexedFilterWidget):

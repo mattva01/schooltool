@@ -158,16 +158,16 @@
       before="manage_school_links"
       manager="schooltool.skin.flourish.page.IPageRefineManager"
       class="schooltool.app.browser.app.ManageSiteLinks"
-      view="schooltool.app.browser.app.ApplicationPreferencesView"
+      view="schooltool.app.browser.app.FlourishApplicationPreferencesView"
       title="Application"
       permission="schooltool.edit"
       />
 
   <flourish:page
       name="site-preferences.html"
-      subtitle="Edit site preferences"
+      subtitle="Site preferences"
       for="schooltool.app.interfaces.ISchoolToolApplication"
-      class="schooltool.app.browser.app.ApplicationPreferencesView"
+      class="schooltool.app.browser.app.FlourishApplicationPreferencesView"
       content_template="templates/f_application_preferences.pt"
       permission="schooltool.edit"
       />
