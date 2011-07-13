@@ -18,7 +18,7 @@
       name="password_edit.html"
       for="schooltool.person.interfaces.IPerson"
       title="Password"
-      class="schooltool.skin.flourish.page.LinkViewlet"
+      class=".person.FlourishPasswordLinkViewlet"
       manager="schooltool.basicperson.browser.person.PersonSettingsLinks"
       permission="schooltool.view"
       />
@@ -64,8 +64,12 @@
       for="schooltool.person.interfaces.IPerson"
       class=".person.FlourishPersonPasswordEditView"
       content_template="f_password_form.pt"
-      permission="schooltool.edit"
+      permission="schooltool.view"
       subtitle="Password"
       />
+
+  <zope:adapter factory=".person.PasswordsMatchValidator" />
+
+  <zope:adapter factory=".person.CurrentPasswordValidator" />
 
 </configure>
