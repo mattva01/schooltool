@@ -78,17 +78,17 @@
       permission="schooltool.view"
       />
 
-  <configure package="schooltool.skin.flourish">
   <flourish:page
       name="add.html"
       for="schooltool.schoolyear.interfaces.ISchoolYearContainer"
       class="schooltool.schoolyear.browser.schoolyear.FlourishSchoolYearAddView"
       title="School Years"
       subtitle="New School Year"
-      content_template="templates/z3c_form_edit.pt"
+      content_template="templates/f_schoolyear_add.pt"
       permission="schooltool.edit"
       />
 
+  <configure package="schooltool.skin.flourish">
   <flourish:page
       name="edit.html"
       for="schooltool.schoolyear.interfaces.ISchoolYear"

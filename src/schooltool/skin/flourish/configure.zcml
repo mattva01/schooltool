@@ -153,4 +153,20 @@
   <!-- XXX: what's the right place for this? -->
   <zope:adapter factory=".form.FlourishRadioBoolTerms" />
 
+  <zope:adapter
+      factory="schooltool.skin.widgets.CustomDateFieldTextWidget"
+      provides="z3c.form.interfaces.IFieldWidget"
+      for="zope.schema.interfaces.IDate
+           schooltool.skin.flourish.IFlourishLayer"
+      />
+
+  <configure package="schooltool.skin">
+  <z3c:widgetTemplate
+      mode="input"
+      widget=".widgets.IDateTextWidget"
+      layer="schooltool.skin.flourish.IFlourishLayer"
+      template="date-input.pt"
+      />
+  </configure>
+
 </configure>

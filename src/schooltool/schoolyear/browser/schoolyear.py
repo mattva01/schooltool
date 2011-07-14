@@ -285,6 +285,8 @@ class ImportSchoolYearData(object):
         return bool(courses)
 
     def hasTimetableSchemas(self, schoolyear):
+        # XXX: temporary disabling of timetable copy
+        return False
         # XXX: temporary isolation of timetable imports
         from schooltool.timetable.interfaces import ITimetableSchemaContainer
         timetables = ITimetableSchemaContainer(schoolyear)
@@ -396,6 +398,7 @@ class ImportSchoolYearData(object):
         self.activeSchoolyear = self.context.getActiveSchoolYear()
         if self.shouldImportData():
             self.importAllCourses()
+            # XXX: temporary disabling of timetable copy
             #self.importAllTimetables()
             self.importCustomGroups()
             self.importDefaultGroupsMembers()
