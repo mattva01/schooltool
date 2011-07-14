@@ -280,3 +280,10 @@ a.modify img {
 .header ul.breadcrumbs a {
     color: #aa0000;
 }
+
+/* XXX: temporary fix to display the zc.datetimewidget correctly
+        remove when we change to jquery-ui datepicker */
+
+body > .calendar {
+    z-index: 2;
+}
