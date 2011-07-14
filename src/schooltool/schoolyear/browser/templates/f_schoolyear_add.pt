@@ -15,6 +15,7 @@
       });
     });
   </script>
+  <!-- XXX: CSS TODO -->
   <style type="text/css">
     tr.select-all-row td {
       border-bottom: 1px solid #bab5ab;
