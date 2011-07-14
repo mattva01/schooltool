@@ -32,7 +32,7 @@
           <tal:block replace="active/title"
                 i18n:name="active_schoolyear" />
         </span>
-        <legend>
+        </legend>
         <div class="row">
         <table>
           <tr id="all-courses-row" tal:condition="active/hasCourses">
