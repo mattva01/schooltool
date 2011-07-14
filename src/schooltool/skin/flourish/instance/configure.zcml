@@ -38,6 +38,7 @@
   <include package="schooltool.basicperson.browser" file="flourish.zcml" />
   <include package="schooltool.contact.browser" file="flourish.zcml" />
   <include package="schooltool.course.browser" file="flourish.zcml" />
+  <include package="schooltool.email.browser" file="flourish.zcml" />
   <include package="schooltool.group.browser" file="flourish.zcml" />
   <include package="schooltool.person.browser" file="flourish.zcml" />
   <include package="schooltool.report.browser" file="flourish.zcml" />

@@ -86,9 +86,9 @@ form fieldset .row > .error .error {
     background: transparent url(error-icon.png) no-repeat scroll top left;
 }
 
-form fieldset .row .widget .text-widget,
+form fieldset .row .widget input.text-widget,
 form fieldset .row .widget input[type="text"],
-form fieldset .row .widget .password-widget,
+form fieldset .row .widget input.password-widget,
 form fieldset .row .widget input[type="password"] {
     background-color: #ffffff;
     border: 1px solid #ccc1c1;
@@ -98,9 +98,9 @@ form fieldset .row .widget input[type="password"] {
     width: 286px;
 }
 
-form fieldset .row .widget .text-widget:focus,
+form fieldset .row .widget input.text-widget:focus,
 form fieldset .row .widget input[type="text"]:focus,
-form fieldset .row .widget .password-widget:focus,
+form fieldset .row .widget input.password-widget:focus,
 form fieldset .row .widget input[type="password"]:focus,
 form fieldset .row .widget input[type="text"].error,
 form fieldset .row .widget input[type="password"].error {
@@ -109,11 +109,17 @@ form fieldset .row .widget input[type="password"].error {
     width: 284px;
 }
 
-form fieldset .row .widget .select-widget {
+form fieldset .row .widget span.text-widget,
+form fieldset .row .widget span.textarea-widget {
+    font-size: 12px;
+    line-height: 16px;
+}
+
+form fieldset .row .widget select.select-widget {
     width: 288px;
 }
 
-form fieldset .row .widget .textarea-widget {
+form fieldset .row .widget textarea.textarea-widget {
     background-color: #ffffff;
     border: 1px solid #ccc1c1;
     color: #333333;
@@ -122,7 +128,8 @@ form fieldset .row .widget .textarea-widget {
     width: 286px;
 }
 
-form fieldset .row .widget .textarea-widget:focus {
+form fieldset .row .widget textarea.textarea-widget:focus,
+form fieldset .row .widget textarea.error {
     border: 2px solid #aa0000;
     height: 48px;
     width: 284px;
