@@ -33,12 +33,13 @@ from zope.publisher.browser import BrowserView
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.schema import Text, Datetime
 from zope.schema import TextLine, Int, Password, Bool
+from zope.schema.interfaces import ValidationError
 from zope.security.proxy import removeSecurityProxy
 from zope.traversing.browser import absoluteURL
 from zope.traversing.browser.interfaces import IAbsoluteURL
 from zope.viewlet.viewlet import ViewletBase
 
-from z3c.form import form, field, button
+from z3c.form import form, field, button, validator
 from z3c.form.browser.checkbox import SingleCheckBoxFieldWidget
 from zc.table.column import GetterColumn
 from zc.table.interfaces import ISortableColumn
@@ -46,7 +47,10 @@ from zc.table.interfaces import ISortableColumn
 from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.skin.containers import TableContainerView
+from schooltool.skin import flourish
 from schooltool.table.table import SchoolToolTableFormatter
+from schooltool.table.table import ImageInputColumn
+from schooltool.table.table import simple_form_key
 from schooltool.email.interfaces import IEmailContainer, IEmail
 from schooltool.email.interfaces import IEmailUtility
 from schooltool.email.mail import Email, status_messages
@@ -75,7 +79,7 @@ def get_application_preferences():
 
 def set_server_status_message(form, container):
     form.widgets['server_status'].mode = 'display'
-    if container.hostname:
+    if container.enabled:
         info = '%s:%s' % (container.hostname,
                           container.port or '25')
         form.widgets['server_status'].value = _('Enabled on ${info}',
@@ -92,12 +96,10 @@ class IEmailSettingsEditForm(Interface):
 
     server_status = TextLine(
         title=_('Server Status'),
-        description=_('Current status of the SchoolTool email service'),
         required=False)
 
     enabled = Bool(
         title=_('Enable'),
-        description=_('Mark to enable the service.'),
         default=False,
         required=False)
 
@@ -138,16 +140,6 @@ class IEmailSettingsEditForm(Interface):
         description=_('Use TLS connection?'),
         default=False,
         required=False)
-
-    @invariant
-    def checkPasswordConfirmation(obj):
-        if obj.password != obj.password_confirmation:
-            raise Invalid(_("New passwords don't match"))
-
-    @invariant
-    def checkHostname(obj):
-        if obj.enabled and not obj.hostname:
-            raise Invalid(_("Hostname is required for enabling the service"))
 
 
 class EmailSettingsEditFormAdapter(object):
@@ -207,6 +199,57 @@ class EmailSettingsEditView(form.EditForm):
             self.widgets['dummy_password'].value = mask
         else:
             self.widgets['dummy_password'].value = _('Unset')
+
+
+class FlourishEmailSettingsEditView(flourish.page.Page,
+                                    EmailSettingsEditView):
+
+    label = None
+    legend = _('Settings')
+    fields = field.Fields(IEmailSettingsEditForm)
+    formErrorsMessage = _('Please correct the marked fields below.')
+
+    def update(self):
+        EmailSettingsEditView.update(self)
+
+
+class HostnameIsRequired(ValidationError):
+    __doc__ = _('Hostname is required for enabling the service')
+
+
+# XXX: logic very similar to that in 
+#      schooltool.person.browser.person
+class PasswordsDontMatch(ValidationError):
+    __doc__ = _('Supplied new passwords are not identical')
+
+
+class PasswordsMatchValidator(validator.SimpleFieldValidator):
+
+    def validate(self, value):
+        # XXX: hack to display the validation error next to the widget!
+        name = self.view.widgets['password_confirmation'].name
+        verify = self.request.get(name)
+        if value is not None and value not in (verify,):
+            raise PasswordsDontMatch(value)
+
+
+validator.WidgetValidatorDiscriminators(PasswordsMatchValidator,
+                                        view=FlourishEmailSettingsEditView,
+                                        field=IEmailSettingsEditForm['password'])
+
+
+class HostnameValidator(validator.SimpleFieldValidator):
+
+    def validate(self, value):
+        # XXX: hack to display the validation error next to the widget!
+        name = self.view.widgets['enabled'].name
+        enabled = self.request.get(name)
+        if enabled and enabled[0] in ('true',) and not value:
+            raise HostnameIsRequired(value)
+
+validator.WidgetValidatorDiscriminators(HostnameValidator,
+                                        view=FlourishEmailSettingsEditView,
+                                        field=IEmailSettingsEditForm['hostname'])
 
 
 # Email
@@ -331,6 +374,22 @@ class EmailView(form.Form):
             self.widgets['status'].style = u'color: red;'
 
 
+class FlourishEmailView(flourish.page.Page, EmailView):
+
+    label = None
+    legend = _('Email View')
+
+    def update(self):
+        EmailView.update(self)
+
+    def getDeleteURL(self, email):
+        params = [('delete.%s' % (email.__name__.encode('utf-8')), ''),
+                  ('CONFIRM', 'Confirm')]
+        return '%s/%s?%s' % (absoluteURL(email.__parent__, self.request),
+                             'delete.html',
+                             urllib.urlencode(params),)
+
+
 # Email Container View and Table Formatter
 
 def to_addresses_formatter(value, item, formatter):
@@ -391,6 +450,33 @@ class EmailContainerViewTableFormatter(SchoolToolTableFormatter):
         return (('time_created', True),)
 
 
+class FlourishEmailContainerViewTableFormatter(
+    EmailContainerViewTableFormatter):
+
+    def columns(self):
+        from_address = GetterColumn(
+            name='from_address',
+            title=_(u'From'),
+            getter=lambda i, f: i.from_address,
+            subsort=True)
+        time_created = GetterColumn(
+            name='time_created',
+            title=_(u'Created on'),
+            getter=lambda i, f: i.time_created,
+            cell_formatter=datetime_formatter,
+            subsort=True)
+        time_sent = GetterColumn(
+            name='time_sent',
+            title=_(u'Last time tried'),
+            getter=lambda i, f: i.time_sent,
+            cell_formatter=datetime_formatter,
+            subsort=True)
+        directlyProvides(from_address, ISortableColumn)
+        directlyProvides(time_created, ISortableColumn)
+        directlyProvides(time_sent, ISortableColumn)
+        return [from_address, time_created, time_sent]
+
+
 class EmailContainerView(TableContainerView):
 
     template = ViewPageTemplateFile('templates/email_container.pt')
@@ -428,6 +514,43 @@ class EmailContainerView(TableContainerView):
                 if success:
                     del self.context[key]
         return super(EmailContainerView, self).__call__()
+
+
+class FlourishEmailContainerView(flourish.containers.TableContainerView):
+
+    content_template = ViewPageTemplateFile('templates/f_email_container.pt')
+
+    def getColumnsBefore(self):
+        return []
+
+    def getColumnsAfter(self):
+        action = ImageInputColumn(
+            'delete', name='action', title=_('Delete'),
+            library='schooltool.skin.flourish',
+            image='remove-icon.png',
+            id_getter=simple_form_key)
+        return [action]
+
+    @property
+    def status(self):
+        if self.context.enabled:
+            server_info = '%s:%s' % (self.context.hostname,
+                                     self.context.port or '25')
+            return _('Enabled on ${server_info}',
+                     mapping={'server_info': server_info})
+        else:
+            return  _('Disabled')
+
+    def update(self):
+        super(FlourishEmailContainerView, self).update()
+        # XXX: deletion without confirmation is quite dangerous
+        delete = [key for key, item in self.container.items()
+                  if "delete.%s" % simple_form_key(item) in self.request]
+        for key in delete:
+            del self.container[key]
+        if delete:
+            self.request.response.redirect(
+                absoluteURL(self.context, self.request))
 
 
 # URL Adapter
@@ -504,7 +627,7 @@ class SendEmailView(form.Form):
     def handle_send_action(self, action):
         data, errors = self.extractData()
         if errors:
-            self.status = _('There were some errors.')
+            self.status = self.formErrorsMessage
             return
         from_address = data['from_address']
         to_addresses = [address.strip()
@@ -536,3 +659,28 @@ class SendEmailView(form.Form):
 
     def updateDisplayWidgets(self):
         set_server_status_message(self, self.context)
+
+
+class FlourishSendEmailView(flourish.page.Page, SendEmailView):
+
+    label = None
+    legend = _('Email')
+    formErrorsMessage = _('Please correct the marked fields below.')
+
+    def update(self):
+        SendEmailView.update(self)
+
+    def getDeleteURL(self, email):
+        params = [('delete.%s' % (email.__name__.encode('utf-8')), ''),
+                  ('CONFIRM', 'Confirm')]
+        return '%s/%s?%s' % (absoluteURL(email.__parent__, self.request),
+                             'delete.html',
+                             urllib.urlencode(params),)
+
+
+class EmailSettingsLinks(flourish.page.RefineLinksViewlet):
+    """Email settings links viewlet."""
+
+
+class EmailActionsLinks(flourish.page.RefineLinksViewlet):
+    """Email actions links viewlet."""
