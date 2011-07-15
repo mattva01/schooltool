@@ -89,3 +89,7 @@ table.contacts-table th.first-name {
 table.contacts-table th.action {
     width: 15%;
 }
+
+table.email-settings .label {
+    width: 30%;
+}

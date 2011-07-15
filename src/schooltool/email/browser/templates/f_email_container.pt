@@ -21,7 +21,7 @@
       <div metal:define-slot="extra_info" tal:replace="nothing">
       </div>
       <div metal:define-slot="main">
-        <table class="form-fields" metal:define-macro="formtable">
+        <table class="email-settings" metal:define-macro="formtable">
           <tr class="extraTopRow"
               metal:define-slot="extra_top"
               tal:replace="nothing">

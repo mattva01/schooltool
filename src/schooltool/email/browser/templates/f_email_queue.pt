@@ -1,5 +1,4 @@
 <div tal:define="batch view/table/batch" i18n:domain="schooltool">
-  <h3><a tal:attributes="href context/@@absolute_url">Done</a></h3>
   <form method="post"
         tal:attributes="action request/URL"
         tal:condition="batch">
@@ -9,4 +8,5 @@
   <h3 tal:condition="not:batch" i18n:translate="">
     There are no messages queued.
   </h3>
+  <h3><a tal:attributes="href context/@@absolute_url">Done</a></h3>
 </div>
