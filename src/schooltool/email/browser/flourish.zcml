@@ -31,6 +31,16 @@
       name="index.html"
       for="schooltool.email.interfaces.IEmailContainer"
       class="schooltool.email.browser.email.FlourishEmailContainerView"
+      content_template="templates/f_email_container.pt"
+      permission="schooltool.edit"
+      />
+
+  <flourish:page
+      name="queue.html"
+      for="schooltool.email.interfaces.IEmailContainer"
+      class="schooltool.email.browser.email.FlourishEmailQueueView"
+      content_template="templates/f_email_queue.pt"
+      subtitle="Email queue"
       permission="schooltool.edit"
       />
 
@@ -70,18 +80,7 @@
   <!-- Viewlet managers -->
 
   <flourish:viewlet
-      name="email-settings-links"
-      manager="schooltool.skin.flourish.page.IPageRefineManager"
-      class="schooltool.email.browser.email.EmailSettingsLinks"
-      title="Settings"
-      for="schooltool.email.interfaces.IEmailContainer"
-      permission="schooltool.edit"
-      view=".email.FlourishEmailContainerView"
-      />
-
-  <flourish:viewlet
       name="email-actions-links"
-      after="email-settings-links"
       manager="schooltool.skin.flourish.page.IPageRefineManager"
       class="schooltool.email.browser.email.EmailActionsLinks"
       title="Actions"
@@ -93,11 +92,10 @@
   <!-- Viewlets -->
 
   <flourish:viewlet
-      name="settings.html"
+      name="queue.html"
       for="schooltool.email.interfaces.IEmailContainer"
-      title="SMTP Server"
-      class="schooltool.skin.flourish.page.LinkViewlet"
-      manager="schooltool.email.browser.email.EmailSettingsLinks"
+      class=".email.EmailQueueLinkViewlet"
+      manager="schooltool.email.browser.email.EmailActionsLinks"
       permission="schooltool.edit"
       />
 
@@ -105,7 +103,7 @@
       name="send_test.html"
       for="schooltool.email.interfaces.IEmailContainer"
       title="Send Test"
-      class="schooltool.skin.flourish.page.LinkViewlet"
+      class=".email.SendTestLinkViewlet"
       manager="schooltool.email.browser.email.EmailActionsLinks"
       permission="schooltool.edit"
       />
