@@ -167,6 +167,46 @@
       layer="schooltool.skin.flourish.IFlourishLayer"
       template="date-input.pt"
       />
+
+  <zope:view
+      for="datetime.date"
+      type="schooltool.skin.flourish.IFlourishLayer"
+      name="fullDate"
+      factory=".dateformatter.DateFormatterFullView"
+      permission="zope.Public"
+      />
+
+  <zope:view
+      for="datetime.date"
+      type="schooltool.skin.flourish.IFlourishLayer"
+      name="mediumDate"
+      factory=".dateformatter.DateFormatterMediumView"
+      permission="zope.Public"
+      />
+
+  <zope:view
+      for="datetime.date"
+      type="schooltool.skin.flourish.IFlourishLayer"
+      name="shortDate"
+      factory=".dateformatter.DateFormatterShortView"
+      permission="zope.Public"
+      />
+  </configure>
+
+  <configure package="schooltool.app.browser">
+  <page
+      name="title"
+      for="*"
+      layer="schooltool.skin.flourish.IFlourishLayer"
+      class=".app.TitleView"
+      permission="zope.Public" />
+
+  <page
+      name="link"
+      for="*"
+      layer="schooltool.skin.flourish.IFlourishLayer"
+      template="templates/link.pt"
+      permission="zope.Public"/>
   </configure>
 
 </configure>

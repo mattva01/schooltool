@@ -15,6 +15,7 @@
       });
     });
   </script>
+  <!-- XXX: CSS TODO -->
   <style type="text/css">
     tr.select-all-row td {
       border-bottom: 1px solid #bab5ab;
@@ -31,7 +32,7 @@
           <tal:block replace="active/title"
                 i18n:name="active_schoolyear" />
         </span>
-        <legend>
+        </legend>
         <div class="row">
         <table>
           <tr id="all-courses-row" tal:condition="active/hasCourses">

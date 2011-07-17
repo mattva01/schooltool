@@ -24,6 +24,7 @@ from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.component import adapts, getMultiAdapter
 from zope.security import checkPermission
 from zope.schema import Date, TextLine
+from zope.schema.interfaces import ValidationError
 from zope.interface.exceptions import Invalid
 from zope.interface import implements
 from zope.interface import Interface
@@ -42,6 +43,8 @@ from z3c.form.util import getSpecification
 from z3c.form.validator import NoInputData
 from z3c.form.validator import WidgetsValidatorDiscriminators
 from z3c.form.validator import InvariantsValidator
+from z3c.form.validator import WidgetValidatorDiscriminators
+from z3c.form.validator import SimpleFieldValidator
 from z3c.form.error import ErrorViewSnippet
 
 from zc.table import column
@@ -500,8 +503,9 @@ class FlourishSchoolYearEditView(flourish.page.Page, SchoolYearEditView):
     @button.buttonAndHandler(_('Submit'), name='apply')
     def handleApply(self, action):
         super(FlourishSchoolYearEditView, self).handleApply.func(self, action)
-        url = absoluteURL(self.context, self.request)
-        self.request.response.redirect(url)
+        if self.status == self.successMessage:
+            url = absoluteURL(self.context, self.request)
+            self.request.response.redirect(url)
 
     @button.buttonAndHandler(_("Cancel"))
     def handle_cancel_action(self, action):
@@ -552,10 +556,78 @@ class EditSchoolYearValidator(InvariantsValidator):
             return errors
         return errors
 
+
 WidgetsValidatorDiscriminators(
     EditSchoolYearValidator,
     view=SchoolYearEditView,
     schema=getSpecification(ISchoolYearAddForm, force=True))
+
+
+class FlourishInvalidDateRangeError(ValidationError):
+    __doc__ = _('School year must begin before it ends')
+
+
+class FlourishOverlapError(ValidationError):
+    __doc__ = _('Date range overlaps another school year')
+
+
+class FlourishOverflowError(ValidationError):
+    __doc__ = _('Date range too small to contain the currently set up term(s)')
+
+
+class FlourishOverlapValidator(SimpleFieldValidator):
+
+    def validate(self, value):
+        # XXX: hack to display the overlap error next to the widget!
+        rv = super(FlourishOverlapValidator, self).validate(value)
+        last_widget = self.view.widgets['last']
+        last_value = self.request.get(last_widget.name)
+        try:
+            last_value = last_widget._toFieldValue(last_value)
+        except:
+            return
+        try:
+            dr = DateRange(value, last_value)
+        except:
+            raise FlourishInvalidDateRangeError()
+        try:
+            validateScholYearsForOverlap(self.container, dr, self.schoolyear)
+        except SchoolYearOverlapError, e:
+            raise FlourishOverlapError()
+        if self.schoolyear:
+            try:
+                validateScholYearForOverflow(dr, self.schoolyear)
+            except TermOverflowError, e:
+                raise FlourishOverflowError()
+
+
+class FlourishOverlapAddValidator(FlourishOverlapValidator):
+    schoolyear = None
+
+    @property
+    def container(self):
+        return self.context
+
+
+class FlourishOverlapEditValidator(FlourishOverlapValidator):
+
+    @property
+    def schoolyear(self):
+        return self.context
+
+    @property
+    def container(self):
+        return self.context.__parent__
+
+
+WidgetValidatorDiscriminators(FlourishOverlapAddValidator,
+                              view=FlourishSchoolYearAddView,
+                              field=ISchoolYearAddForm['first'])
+
+
+WidgetValidatorDiscriminators(FlourishOverlapEditValidator,
+                              view=FlourishSchoolYearEditView,
+                              field=ISchoolYearAddForm['first'])
 
 
 class OverlapErrorViewSnippet(ErrorViewSnippet):
