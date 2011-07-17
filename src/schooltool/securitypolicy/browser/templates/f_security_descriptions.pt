@@ -1,55 +1,37 @@
 <div>
-
-  <h3 i18n:translate="">Object model and access rights</h3>
-
   <tal:block repeat="item view/groups">
     <p>
-    <a tal:attributes="href string:#group_${item/group/__name__}"
-       tal:content="item/group/title" />
+      <a tal:attributes="href string:#group_${item/group/__name__}"
+         tal:content="item/group/title" />
     </p>
   </tal:block>
-
-  <br />
-  <br />
-
   <tal:block repeat="item view/groups">
     <div class="info-block">
-
-    <a tal:attributes="name string:group_${item/group/__name__}">
-    <h1 tal:content="item/group/title" />
-    </a>
-    <p tal:content="item/group/description"
-       tal:condition="item/group/description"/>
-    <br />
-
-    <tal:block repeat="action item/actions">
-      <h3 tal:content="action/action/title" />
-      <p tal:content="action/action/description"
-         tal:condition="action/action/description" />
-
-      <ul>
-        <tal:block repeat="snippets action/crowds">
-          <li tal:repeat="description snippets"
-              tal:content="structure description"
-              class="item" />
-        </tal:block>
-      </ul>
-
-
-    </tal:block>
-    <a href="#">Back to top</a>
-
+      <h2>
+        <a tal:attributes="name string:group_${item/group/__name__}"
+           tal:content="item/group/title" />
+      </h2>
+      <p tal:content="item/group/description"
+         tal:condition="item/group/description"/>
+      <tal:block repeat="action item/actions">
+        <h3 tal:content="action/action/title" />
+        <p tal:content="action/action/description"
+           tal:condition="action/action/description" />
+        <ul>
+          <tal:block repeat="snippets action/crowds">
+            <li tal:repeat="description snippets"
+                tal:content="structure description"
+                class="item" />
+          </tal:block>
+        </ul>
+      </tal:block>
+      <p>
+        <a href="#">Back to top</a>
+      </p>
     </div>
-  <br />
-  <br />
-
   </tal:block>
-
   <div class="info-block">
-
     <h2 i18n:translate="">Legend</h2>
-    <br />
-
     <tal:block repeat="legend view/legends">
       <a tal:attributes="name legend/href">
         <h3>
@@ -64,5 +46,7 @@
       </ul>
     </tal:block>
   </div>
-
+  <p>
+    <a href="#">Back to top</a>
+  </p>
 </div>
