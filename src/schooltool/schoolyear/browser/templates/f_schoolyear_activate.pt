@@ -3,7 +3,7 @@
     <ul tal:condition="view/message" class="errors">
       <li tal:content="view/message" />
     </ul>
-    <table class="all_terms_table">
+    <table>
       <tr>
         <th i18n:translate="">School Year</th>
       </tr>

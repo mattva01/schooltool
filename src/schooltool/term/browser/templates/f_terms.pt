@@ -1,0 +1,19 @@
+<div i18n:domain="schooltool">
+  <form method="post" tal:attributes="action request/getURL">
+    <table>
+      <tr>
+        <th i18n:translate="">Term</th>
+        <th i18n:translate="">School Year</th>
+      </tr>
+      <tr tal:repeat="term view/terms">
+        <td>
+          <a tal:replace="structure term/obj/@@link" />
+        </td>
+        <td>
+          <a tal:replace="structure term/year/@@link" />
+        </td>
+      </tr>
+    </table>
+  </form>
+</div>
+

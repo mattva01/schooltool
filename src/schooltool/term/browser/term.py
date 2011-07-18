@@ -48,6 +48,8 @@ from schooltool.calendar.utils import next_month, week_start
 from schooltool.term.interfaces import ITerm
 from schooltool.term.term import validateTermsForOverlap
 from schooltool.term.term import Term
+from schooltool.skin import flourish
+from schooltool.schoolyear.interfaces import ISchoolYearContainer
 from schooltool.common import IDateRange
 from schooltool.common import DateRange
 from schooltool.common import SchoolToolMessage as _
@@ -433,3 +435,16 @@ class TermRenderer(object):
             date += datetime.date.resolution
         return {'number': week_no,
                 'days': days}
+
+
+class FlourishTermsView(flourish.page.Page):
+
+    def terms(self):
+        syc = ISchoolYearContainer(self.context)
+        for year in reversed(tuple(syc.values())):
+            for term in reversed(tuple(year.values())):
+                yield {
+                    'obj': term,
+                    'year': year,
+                    }
+

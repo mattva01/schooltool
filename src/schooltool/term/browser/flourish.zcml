@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/browser"
+           xmlns:flourish="http://schooltool.org/flourish"
+           xmlns:zope="http://namespaces.zope.org/zope"
+           i18n_domain="schooltool">
+
+  <flourish:page
+      name="terms"
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      class=".term.FlourishTermsView"
+      title="Terms"
+      content_template="templates/f_terms.pt"
+      permission="schooltool.view"
+      />
+
+</configure>
