@@ -10,7 +10,11 @@
       </thead>
       <tal:block repeat="year view/years" >
         <tr>
-          <th colspan="3" tal:content="year/obj/title" />
+          <th colspan="3">
+            <tal:block content="year/title" />
+            (<tal:block content="year/first/@@mediumDate" /> -
+            <tal:block content="year/last/@@mediumDate" />)
+          </th>
         </tr>
         <tr tal:repeat="term year/terms">
           <td>

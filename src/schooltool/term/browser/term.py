@@ -443,7 +443,9 @@ class FlourishTermsView(flourish.page.Page):
         syc = ISchoolYearContainer(self.context)
         for year in reversed(tuple(syc.values())):
             result = {
-                'obj': year,
+                'title': year.title,
+                'first': year.first,
+                'last': year.last,
                 'terms': [],
                 }
             for term in reversed(tuple(year.values())):
