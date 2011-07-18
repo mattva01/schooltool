@@ -1,12 +1,14 @@
 <div i18n:domain="schooltool">
   <form method="post" tal:attributes="action request/getURL">
     <table>
-      <tr>
-        <th i18n:translate="">Term</th>
-        <th i18n:translate="">First Day</th>
-        <th i18n:translate="">Last Day</th>
-        <th i18n:translate="">School Year</th>
-      </tr>
+      <thead>
+        <tr>
+          <th i18n:translate="">Term</th>
+          <th i18n:translate="">First Day</th>
+          <th i18n:translate="">Last Day</th>
+          <th i18n:translate="">School Year</th>
+        </tr>
+      </thead>
       <tr tal:repeat="term view/terms">
         <td>
           <a tal:replace="structure term/obj/@@link" />
