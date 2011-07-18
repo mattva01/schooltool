@@ -88,6 +88,16 @@
       permission="schooltool.edit"
       />
 
+  <flourish:page
+      name="activate.html"
+      for="schooltool.schoolyear.interfaces.ISchoolYearContainer"
+      class="schooltool.schoolyear.browser.schoolyear.FlourishSchoolYearActivateView"
+      title="School Years"
+      subtitle="Activate New Year"
+      content_template="templates/f_schoolyear_activate.pt"
+      permission="schooltool.edit"
+      />
+
   <configure package="schooltool.skin.flourish">
   <flourish:page
       name="edit.html"
