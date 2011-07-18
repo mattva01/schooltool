@@ -733,3 +733,26 @@ class FlourishSchoolYearView(flourish.page.Page):
     def canModify(self):
         return canAccess(self.context.__parent__, '__delitem__')
 
+
+class FlourishSchoolYearActivateView(flourish.page.Page):
+
+    message = None
+
+    @property
+    def years(self):
+        return tuple(reversed(tuple(self.context.values())))
+
+    def update(self):
+        if 'CANCEL' in self.request:
+            self.request.response.redirect(self.nextURL())
+        if 'SUBMIT' in self.request:
+            if self.request.get('ACTIVATE'):
+                self.context.activateNextSchoolYear(self.request['ACTIVATE'])
+                self.request.response.redirect(self.nextURL())
+            else:
+                self.message = _("""Please select a school year before clicking
+                                   'Submit'.""")
+
+    def nextURL(self):
+        return absoluteURL(self.context, self.request)
+
