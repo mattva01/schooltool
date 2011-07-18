@@ -474,6 +474,8 @@ class FlourishSchoolYearAddView(flourish.form.AddForm, SchoolYearAddView):
     def updateWidgets(self):
         super(FlourishSchoolYearAddView, self).updateWidgets()
         self.widgets['title'].maxlength = 12
+        title_description =  _('Limited to 12 characters or less')
+        self.widgets['title'].field.description = title_description
 
 
 class SchoolYearEditView(form.EditForm):
@@ -522,6 +524,8 @@ class FlourishSchoolYearEditView(flourish.page.Page, SchoolYearEditView):
     def updateWidgets(self):
         super(FlourishSchoolYearEditView, self).updateWidgets()
         self.widgets['title'].maxlength = 12
+        title_description =  _('Limited to 12 characters or less')
+        self.widgets['title'].field.description = title_description
 
     @property
     def legend(self):
