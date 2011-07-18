@@ -439,12 +439,17 @@ class TermRenderer(object):
 
 class FlourishTermsView(flourish.page.Page):
 
-    def terms(self):
+    def years(self):
         syc = ISchoolYearContainer(self.context)
         for year in reversed(tuple(syc.values())):
+            result = {
+                'title': year.title,
+                'first': year.first,
+                'last': year.last,
+                'terms': [],
+                'empty': not bool(tuple(year.values()))
+                }
             for term in reversed(tuple(year.values())):
-                yield {
-                    'obj': term,
-                    'year': year,
-                    }
+                result['terms'].append(term)
+            yield result
 

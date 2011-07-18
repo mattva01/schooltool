@@ -9,9 +9,13 @@
       </tr>
       <tr tal:repeat="year view/years">
         <td>
+          <input type="radio" name="ACTIVATE" checked
+                 tal:condition="year/active"
+                 tal:attributes="value year/obj/__name__" />
           <input type="radio" name="ACTIVATE"
-                 tal:attributes="value year/__name__" />
-          <a tal:replace="structure year/@@link" />
+                 tal:condition="not: year/active"
+                 tal:attributes="value year/obj/__name__" />
+          <a tal:replace="structure year/obj/@@link" />
         </td>
       </tr>
     </table>

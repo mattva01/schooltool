@@ -200,7 +200,8 @@ class FlourishSchoolYearContainerView(flourish.containers.TableContainerView):
             FlourishActiveSchoolYearColumn(title=_("Active")),
             ]
         formatter.setUp(formatters=[url_cell_formatter],
-                        columns_after=columns_after)
+                        columns_after=columns_after,
+                        sort_on=(("title", True),))
 
 
 class FlourishSchoolYearContainerLinks(flourish.page.RefineLinksViewlet):
@@ -470,6 +471,12 @@ class FlourishSchoolYearAddView(flourish.form.AddForm, SchoolYearAddView):
         super(FlourishSchoolYearAddView, self).handle_cancel_action.func(self,
             action)
 
+    def updateWidgets(self):
+        super(FlourishSchoolYearAddView, self).updateWidgets()
+        self.widgets['title'].maxlength = 12
+        title_description =  _('Limited to 12 characters or less')
+        self.widgets['title'].field.description = title_description
+
 
 class SchoolYearEditView(form.EditForm):
     """Edit form for basic person."""
@@ -494,8 +501,11 @@ class SchoolYearEditView(form.EditForm):
                  mapping={'schoolyear_title': self.context.title})
 
 
-class FlourishSchoolYearEditView(flourish.page.Page, SchoolYearEditView):
+class FlourishSchoolYearEditView(flourish.form.Form, SchoolYearEditView):
     """flourish Edit form for schoolyear."""
+
+    template = InheritTemplate(flourish.page.Page.template)
+    label = None
 
     def update(self):
         SchoolYearEditView.update(self)
@@ -511,6 +521,17 @@ class FlourishSchoolYearEditView(flourish.page.Page, SchoolYearEditView):
     def handle_cancel_action(self, action):
         url = absoluteURL(self.context, self.request)
         self.request.response.redirect(url)
+
+    def updateWidgets(self):
+        super(FlourishSchoolYearEditView, self).updateWidgets()
+        self.widgets['title'].maxlength = 12
+        title_description =  _('Limited to 12 characters or less')
+        self.widgets['title'].field.description = title_description
+
+    @property
+    def legend(self):
+        return _(u'Change information for ${schoolyear_title}',
+                 mapping={'schoolyear_title': self.context.title})
 
 
 class AddSchoolYearOverlapValidator(InvariantsValidator):
@@ -738,9 +759,12 @@ class FlourishSchoolYearActivateView(flourish.page.Page):
 
     message = None
 
-    @property
     def years(self):
-        return tuple(reversed(tuple(self.context.values())))
+        for year in reversed(tuple(self.context.values())):
+            yield {
+                'obj': year,
+                'active': year.__name__ == year.__parent__.active_id,
+                }
 
     def update(self):
         if 'CANCEL' in self.request:

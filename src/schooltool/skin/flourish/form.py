@@ -48,6 +48,7 @@ class FlourishRadioBoolTerms(BoolTerms):
 
 class Form(z3c.form.form.Form, flourish.page.Page):
     __call__ = flourish.page.Page.__call__
+    formErrorsMessage = _('Please correct the marked fields below.')
 
     def update(self):
         super(Form, self).update()
@@ -64,6 +65,7 @@ class DisplayForm(z3c.form.form.DisplayForm, flourish.page.Page):
 
 
 class AddForm(Form, z3c.form.form.AddForm):
+
     def update(self):
         super(Form, self).update()
         if self._finishedAdd:

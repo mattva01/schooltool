@@ -1,26 +1,37 @@
 <div i18n:domain="schooltool">
   <form method="post" tal:attributes="action request/getURL">
     <table>
-      <tr>
-        <th i18n:translate="">Term</th>
-        <th i18n:translate="">First Day</th>
-        <th i18n:translate="">Last Day</th>
-        <th i18n:translate="">School Year</th>
-      </tr>
-      <tr tal:repeat="term view/terms">
-        <td>
-          <a tal:replace="structure term/obj/@@link" />
-        </td>
-        <td>
-          <tal:block content="term/obj/first/@@mediumDate" />
-        </td>
-        <td>
-          <tal:block content="term/obj/last/@@mediumDate" />
-        </td>
-        <td>
-          <a tal:replace="structure term/year/@@link" />
-        </td>
-      </tr>
+      <thead>
+        <tr>
+          <th i18n:translate="">Term</th>
+          <th i18n:translate="">First Day</th>
+          <th i18n:translate="">Last Day</th>
+        </tr>
+      </thead>
+      <tal:block repeat="year view/years" >
+        <tr>
+          <th colspan="3">
+            <tal:block content="year/title" />
+            (<tal:block content="year/first/@@mediumDate" /> -
+            <tal:block content="year/last/@@mediumDate" />)
+          </th>
+        </tr>
+        <tr tal:condition="year/empty">
+          <td colspan="3" i18n:translate="">This year has no terms defined.</td>
+        </tr>
+        <tr tal:condition="not: year/empty"
+            tal:repeat="term year/terms">
+          <td>
+            <a tal:replace="structure term/@@link" />
+          </td>
+          <td>
+            <tal:block content="term/first/@@mediumDate" />
+          </td>
+          <td>
+            <tal:block content="term/last/@@mediumDate" />
+          </td>
+        </tr>
+      </tal:block>
     </table>
   </form>
 </div>
