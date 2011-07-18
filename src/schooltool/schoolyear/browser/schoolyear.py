@@ -470,6 +470,10 @@ class FlourishSchoolYearAddView(flourish.form.AddForm, SchoolYearAddView):
         super(FlourishSchoolYearAddView, self).handle_cancel_action.func(self,
             action)
 
+    def updateWidgets(self):
+        super(FlourishSchoolYearAddView, self).updateWidgets()
+        self.widgets['title'].maxlength = 12
+
 
 class SchoolYearEditView(form.EditForm):
     """Edit form for basic person."""
@@ -497,6 +501,8 @@ class SchoolYearEditView(form.EditForm):
 class FlourishSchoolYearEditView(flourish.page.Page, SchoolYearEditView):
     """flourish Edit form for schoolyear."""
 
+    label = None
+
     def update(self):
         SchoolYearEditView.update(self)
 
@@ -511,6 +517,15 @@ class FlourishSchoolYearEditView(flourish.page.Page, SchoolYearEditView):
     def handle_cancel_action(self, action):
         url = absoluteURL(self.context, self.request)
         self.request.response.redirect(url)
+
+    def updateWidgets(self):
+        super(FlourishSchoolYearEditView, self).updateWidgets()
+        self.widgets['title'].maxlength = 12
+
+    @property
+    def legend(self):
+        return _(u'Change information for ${schoolyear_title}',
+                 mapping={'schoolyear_title': self.context.title})
 
 
 class AddSchoolYearOverlapValidator(InvariantsValidator):
