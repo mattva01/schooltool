@@ -447,6 +447,7 @@ class FlourishTermsView(flourish.page.Page):
                 'first': year.first,
                 'last': year.last,
                 'terms': [],
+                'empty': not bool(tuple(year.values()))
                 }
             for term in reversed(tuple(year.values())):
                 result['terms'].append(term)

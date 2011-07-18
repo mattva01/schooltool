@@ -16,7 +16,11 @@
             <tal:block content="year/last/@@mediumDate" />)
           </th>
         </tr>
-        <tr tal:repeat="term year/terms">
+        <tr tal:condition="year/empty">
+          <td colspan="3" i18n:translate="">This year has no terms defined.</td>
+        </tr>
+        <tr tal:condition="not: year/empty"
+            tal:repeat="term year/terms">
           <td>
             <a tal:replace="structure term/@@link" />
           </td>
