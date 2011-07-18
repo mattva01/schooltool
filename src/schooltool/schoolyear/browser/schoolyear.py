@@ -753,9 +753,12 @@ class FlourishSchoolYearActivateView(flourish.page.Page):
 
     message = None
 
-    @property
     def years(self):
-        return tuple(reversed(tuple(self.context.values())))
+        for year in reversed(tuple(self.context.values())):
+            yield {
+                'obj': year,
+                'active': year.__name__ == year.__parent__.active_id,
+                }
 
     def update(self):
         if 'CANCEL' in self.request:
