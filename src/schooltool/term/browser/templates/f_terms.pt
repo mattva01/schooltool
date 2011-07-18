@@ -3,7 +3,8 @@
     <table>
       <tr>
         <th i18n:translate="">Term</th>
-        <th i18n:translate="">Start/End Dates</th>
+        <th i18n:translate="">First Day</th>
+        <th i18n:translate="">Last Day</th>
         <th i18n:translate="">School Year</th>
       </tr>
       <tr tal:repeat="term view/terms">
@@ -11,7 +12,9 @@
           <a tal:replace="structure term/obj/@@link" />
         </td>
         <td>
-          <tal:block content="term/obj/first/@@mediumDate" /> -
+          <tal:block content="term/obj/first/@@mediumDate" />
+        </td>
+        <td>
           <tal:block content="term/obj/last/@@mediumDate" />
         </td>
         <td>
