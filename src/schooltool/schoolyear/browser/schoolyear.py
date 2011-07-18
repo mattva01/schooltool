@@ -200,7 +200,8 @@ class FlourishSchoolYearContainerView(flourish.containers.TableContainerView):
             FlourishActiveSchoolYearColumn(title=_("Active")),
             ]
         formatter.setUp(formatters=[url_cell_formatter],
-                        columns_after=columns_after)
+                        columns_after=columns_after,
+                        sort_on=(("title", True),))
 
 
 class FlourishSchoolYearContainerLinks(flourish.page.RefineLinksViewlet):
