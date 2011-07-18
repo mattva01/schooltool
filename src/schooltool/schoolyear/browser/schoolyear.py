@@ -501,9 +501,10 @@ class SchoolYearEditView(form.EditForm):
                  mapping={'schoolyear_title': self.context.title})
 
 
-class FlourishSchoolYearEditView(flourish.page.Page, SchoolYearEditView):
+class FlourishSchoolYearEditView(flourish.form.Form, SchoolYearEditView):
     """flourish Edit form for schoolyear."""
 
+    template = InheritTemplate(flourish.page.Page.template)
     label = None
 
     def update(self):
