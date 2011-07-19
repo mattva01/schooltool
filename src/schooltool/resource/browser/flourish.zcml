@@ -48,6 +48,17 @@
            schooltool.skin.flourish.interfaces.IFlourishLayer"
       factory=".resource.FlourishResourceContainerTableFormatter " />
 
+  <flourish:activeViewlet
+      name="manage_school"
+      manager="schooltool.skin.flourish.page.IHeaderNavigationManager"
+      for="schooltool.resource.interfaces.IResourceContainer"
+      />
+
+  <flourish:breadcrumb
+      for="schooltool.resource.interfaces.IResourceContainer"
+      title="Resources"
+      />
+
   <flourish:content
       class="schooltool.app.browser.app.ContentTitle"
       permission="schooltool.view"
@@ -55,6 +66,14 @@
       layer="schooltool.skin.flourish.IFlourishLayer"
       title="Resources"
       name="title" />
+
+  <flourish:viewlet
+      name="resources"
+      title="Resources"
+      class="schooltool.skin.flourish.page.LinkViewlet"
+      manager="schooltool.app.browser.app.ManageSchoolLinks"
+      permission="schooltool.view"
+      />
 
   <flourish:viewlet
       name="resource_container"
@@ -125,6 +144,11 @@
       />
 
   <!--Resources -->
+
+  <flourish:breadcrumb
+      for="schooltool.resource.interfaces.IBaseResource"
+      class="schooltool.skin.flourish.breadcrumbs.TitleBreadcrumb"
+      />
 
   <flourish:viewlet
       name="resource-links"

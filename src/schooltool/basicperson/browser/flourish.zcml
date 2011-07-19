@@ -21,7 +21,7 @@
       title="People"
       name="title" />
 
-<!--  <flourish:viewlet
+  <flourish:viewlet
       name="persons"
       title="People"
       class="schooltool.skin.flourish.page.LinkViewlet"
@@ -33,7 +33,7 @@
       name="persons"
       manager="schooltool.app.browser.app.ManageSchoolLinks"
       for="schooltool.person.interfaces.IPersonContainer"
-      /> -->
+      />
 
   <flourish:page
       name="index.html"
@@ -213,14 +213,12 @@
       class="schooltool.basicperson.browser.person.TitleBreadcrumb"
       />
 
-  <configure package="schooltool.skin.flourish">
-    <flourish:page
-        name="index.html"
-        for="schooltool.basicperson.interfaces.IBasicPerson"
-        class="schooltool.basicperson.browser.person.FlourishPersonView"
-        permission="schooltool.view"
-        />
-  </configure>
+  <flourish:page
+      name="index.html"
+      for="schooltool.basicperson.interfaces.IBasicPerson"
+      class="schooltool.basicperson.browser.person.FlourishPersonView"
+      permission="schooltool.view"
+      />
 
   <flourish:viewlet
       name="details"

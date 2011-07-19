@@ -4,6 +4,25 @@
            xmlns:zope="http://namespaces.zope.org/zope"
            i18n_domain="schooltool">
 
+  <flourish:activeViewlet
+      name="manage_school"
+      manager="schooltool.skin.flourish.page.IHeaderNavigationManager"
+      for="schooltool.schoolyear.interfaces.ISchoolYearContainer"
+      />
+
+  <flourish:breadcrumb
+      for="schooltool.schoolyear.interfaces.ISchoolYearContainer"
+      title="School Years"
+      />
+
+  <flourish:viewlet
+      name="schoolyears"
+      title="School Years"
+      class="schooltool.skin.flourish.page.LinkViewlet"
+      manager="schooltool.app.browser.app.ManageSchoolLinks"
+      permission="schooltool.view"
+      />
+
   <flourish:page
       name="index.html"
       for="schooltool.schoolyear.interfaces.ISchoolYearContainer"
