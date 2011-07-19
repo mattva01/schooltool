@@ -1,26 +1,4 @@
 <div i18n:domain="schooltool">
-  <script type="text/javascript">
-    $(document).ready(function() {
-      $('input[type=checkbox].select-all-groups').click(function() {
-        var status = this.checked;
-          $('input[type=checkbox][name=groups]:enabled').each(function () {
-            this.checked = status;
-          });        
-      });
-      $('input[type=checkbox].select-all-members').click(function() {
-        var status = this.checked;
-          $('input[type=checkbox][name=members]:enabled').each(function () {
-            this.checked = status;
-          });        
-      });
-    });
-  </script>
-  <!-- XXX: CSS TODO -->
-  <style type="text/css">
-    tr.select-all-row td {
-      border-bottom: 1px solid #bab5ab;
-    }
-  </style>
   <div metal:use-macro="macro:form">
     <metal:block fill-slot="above-buttons"
                  tal:define="active view/activeSchoolyearInfo"
@@ -35,41 +13,10 @@
         </legend>
         <div class="row">
         <table>
-          <tr id="all-courses-row" tal:condition="active/hasCourses">
-            <td i18n:translate="" class="dr">
-              All Courses
-            </td>
-            <td class="center">
-              <input type="checkbox" value="true" name="importAllCourses"
-                     tal:attributes="checked request/importAllCourses|nothing" />
-            </td>
-            <td></td>
-          </tr>
-          <tr id="all-timetables-row" tal:condition="active/hasTimetables">
-            <td i18n:translate="" class="dr">
-              All Timetable Schemas
-            </td>
-            <td class="center">
-              <input type="checkbox" value="true" name="importAllTimetables"
-                     tal:attributes="checked request/importAllTimetables|nothing" />
-            </td>
-            <td></td>
-          </tr>
           <tr id="group-header-row">
-            <th></th>
-            <th style="width: 6em;" i18n:translate="">Group</th>
-            <th style="width: 10em;" i18n:translate="">Copy members</th>
-          </tr>
-          <tr class="select-all-row">
-            <td class="dr">
-              <strong>Select All</strong>
-            </td>
-            <td class="center">
-              <input type="checkbox" class="select-all-groups" />
-            </td>
-            <td class="center">
-              <input type="checkbox" class="select-all-members" />
-            </td>
+            <th i18n:translate="">Group Name</th>
+            <th i18n:translate="">Copy Group</th>
+            <th i18n:translate="">Copy members</th>
           </tr>
           <tr class="group-row" tal:repeat="group active/groups">
             <td class="dr" tal:content="group/title">
@@ -90,6 +37,26 @@
                      tal:condition="group/hasMembers"
                      tal:attributes="value group/id;
                                      checked group/membersSent" />
+            </td>
+          </tr>
+        </table>
+        <table>
+          <tr id="all-courses-row" tal:condition="active/hasCourses">
+            <td i18n:translate="">
+              Copy courses from active year?
+            </td>
+            <td>
+              <input type="checkbox" value="true" name="importAllCourses"
+                     tal:attributes="checked request/importAllCourses|nothing" />
+            </td>
+          </tr>
+          <tr id="all-timetables-row" tal:condition="active/hasTimetables">
+            <td i18n:translate="">
+              Copy timetable schemas from active year?
+            </td>
+            <td>
+              <input type="checkbox" value="true" name="importAllTimetables"
+                     tal:attributes="checked request/importAllTimetables|nothing" />
             </td>
           </tr>
         </table>
