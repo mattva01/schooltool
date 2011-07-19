@@ -760,10 +760,10 @@ class FlourishSchoolYearActivateView(flourish.page.Page):
     message = None
 
     def years(self):
-        for year in reversed(tuple(self.context.values())):
+        for year in reversed(self.context.values()):
             yield {
                 'obj': year,
-                'active': year.__name__ == year.__parent__.active_id,
+                'active': year.__name__ == self.context.active_id,
                 }
 
     def update(self):

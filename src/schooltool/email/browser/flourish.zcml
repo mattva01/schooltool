@@ -108,4 +108,26 @@
       permission="schooltool.edit"
       />
 
+  <!-- Navigation -->
+
+  <flourish:viewlet
+      name="email"
+      after="site-preferences.html"
+      title="Outgoing Email"
+      class="schooltool.skin.flourish.page.LinkViewlet"
+      manager="schooltool.app.browser.app.ManageSiteLinks"
+      permission="schooltool.edit"
+      />
+
+  <flourish:activeViewlet
+      name="manage_site"
+      manager="schooltool.skin.flourish.page.IHeaderNavigationManager"
+      for="schooltool.email.interfaces.IEmailContainer"
+      />
+
+  <flourish:breadcrumb
+      for="schooltool.email.interfaces.IEmailContainer"
+      title="Outgoing Email"
+      />
+
 </configure>
