@@ -1,0 +1,55 @@
+<form action="." method="post" tal:attributes="action request/URL">
+  <div class="status"
+       tal:condition="view/status"
+       tal:define="errors view/errors">
+    <div class="summary ui-state-highlight ui-corner-all"
+         tal:condition="not:errors">
+      <span class="ui-icon ui-icon-info">icon</span>
+      <tal:block content="view/status" />
+    </div>
+    <div class="summary ui-state-error ui-corner-all"
+         tal:condition="errors">
+      <span class="ui-icon ui-icon-alert">icon</span>
+      <tal:block content="view/status" />
+      <ul tal:condition="errors">
+        <li tal:repeat="error errors" tal:content="error" />
+      </ul>
+    </div>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th i18n:translate="">Utility Name</th>
+        <th i18n:translate="">Database Name</th>
+        <th i18n:translate="">Size</th>
+        <th i18n:translate="">Pack</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr tal:repeat="db view/databases">
+        <td>
+          <span tal:replace="db/utilName"/>
+        </td>
+        <td>
+          <span tal:replace="db/dbName"/>
+        </td>
+        <td>
+          <span tal:replace="db/size"/>
+        </td>
+        <td class="buttons">
+          <button i18n:translate="" type="submit"
+                  class="button-ok"
+                  name="dbs:list"
+                  tal:attributes="value db/utilName">
+            Pack
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</form>
+<h3>
+  <a tal:attributes="href context/@@absolute_url" i18n:translate="">
+    Done
+  </a>
+</h3>

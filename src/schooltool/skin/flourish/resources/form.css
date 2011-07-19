@@ -181,14 +181,14 @@ form .buttons .button-cancel {
     line-height: 20px;
 }
 
-form .status > .summary {
+.status > .summary {
     font-size: 12px;
     line-height: 16px;
     margin-bottom: 8px;
     padding: 4px 8px;
 }
 
-form .status > .summary .ui-icon {
+.status > .summary .ui-icon {
     float: left;
     margin-right: 2px;
 }

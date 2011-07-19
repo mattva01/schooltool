@@ -1,0 +1,43 @@
+<tal:block tal:define="runtime_info view/runtimeInfo">
+  <table class="application-control">
+    <tbody>
+      <tr>
+        <td class="label" i18n:translate="">Uptime</td>
+        <td tal:content="runtime_info/Uptime">Time</td>
+      </tr>
+      <tr>
+        <td class="label" i18n:translate="">System platform</td>
+        <td tal:content="runtime_info/SystemPlatform">Platform</td>
+      </tr>
+      <tr>
+        <td class="label" i18n:translate="">Python version</td>
+        <td tal:content="runtime_info/PythonVersion">Version</td>
+      </tr>
+      <tr>
+        <td class="label" i18n:translate="">Command line</td>
+        <td tal:content="runtime_info/CommandLine">Command line</td>
+      </tr>
+      <tr>
+        <td class="label" i18n:translate="">Preferred encoding</td>
+        <td tal:content="runtime_info/PreferredEncoding">Encoding</td>
+      </tr>
+      <tr>
+        <td class="label" i18n:translate="">FileSystem encoding</td>
+        <td tal:content="runtime_info/FileSystemEncoding">Encoding</td>
+      </tr>
+      <tr>
+        <td class="label" i18n:translate="">Process id</td>
+        <td tal:content="runtime_info/ProcessId">ID</td>
+      </tr>
+      <tr>
+        <td class="label" i18n:translate="">Developer mode</td>
+        <td tal:content="runtime_info/DeveloperMode">ID</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 i18n:translate="">Python path</h3>
+  <ul>
+    <li tal:repeat="path runtime_info/PythonPath" 
+        tal:content="path">path</li>
+  </ul>
+</tal:block>

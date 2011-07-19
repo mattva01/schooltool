@@ -22,6 +22,8 @@ SchoolTool application views.
 $Id$
 """
 
+from ZODB.FileStorage.FileStorage import FileStorageError
+from ZODB.interfaces import IDatabase
 from zope.location.location import LocationProxy
 from zope.interface import implementer
 from zope.interface import implements
@@ -34,6 +36,7 @@ from zope.app.form.browser.add import AddView
 from zope.app.form.browser.editview import EditView
 from zope.app.form.interfaces import IInputWidget
 from zope.app.form.interfaces import WidgetsError
+from zope.app.applicationcontrol.browser.zodbcontrol import ZODBControlView
 from zope.authentication.interfaces import IUnauthenticatedPrincipal
 from zope.publisher.browser import BrowserView
 from zope.component import getMultiAdapter, queryMultiAdapter
@@ -751,3 +754,25 @@ def getAppViewlet(context, request, view, manager, name):
     viewlet = flourish.viewlet.lookupViewlet(
         app, request, view, manager, name=name)
     return viewlet
+
+
+class ApplicationControlLinks(flourish.page.RefineLinksViewlet):
+    """Application Control links viewlet."""
+
+
+class SchoolToolZODBControlView(ZODBControlView):
+
+    def update(self):
+        self.errors = []
+        days = 0
+        dbs = self.request.form.get('dbs', [])
+        for dbName in dbs:
+            db = getUtility(IDatabase, name=dbName)
+            try:
+                db.pack(days=days)
+                self.status = _('ZODB "${name}" successfully packed.',
+                                mapping=dict(name=str(dbName)))
+            except FileStorageError, err:
+                self.status = _('There were errors.')
+                self.errors.append(_('ERROR packing ZODB "${name}": ${err}',
+                                     mapping=dict(name=str(dbName), err=err)))
