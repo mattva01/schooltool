@@ -93,3 +93,7 @@ table.contacts-table th.action {
 table.email-settings .label {
     width: 30%;
 }
+
+table.application-control .label {
+    width: 35%;
+}
