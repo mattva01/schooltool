@@ -13,11 +13,13 @@
         </legend>
         <div class="row">
         <table>
+          <thead>
           <tr id="group-header-row">
             <th i18n:translate="">Group Name</th>
             <th i18n:translate="">Copy Group</th>
             <th i18n:translate="">Copy members</th>
           </tr>
+          </thead>
           <tr class="group-row" tal:repeat="group active/groups">
             <td class="dr" tal:content="group/title">
               Clerks
