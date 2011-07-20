@@ -41,8 +41,8 @@ from z3c.form.validator import SimpleFieldValidator
 from z3c.form.validator import WidgetValidatorDiscriminators
 from z3c.form.validator import InvariantsValidator
 
-from schooltool.schoolyear.interfaces import TermOverlapError
 from schooltool.app.browser.cal import month_names
+from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.calendar.utils import parse_date
 from schooltool.calendar.utils import next_month, week_start
 from schooltool.term.interfaces import ITerm
@@ -50,9 +50,11 @@ from schooltool.term.term import validateTermsForOverlap
 from schooltool.term.term import Term
 from schooltool.skin import flourish
 from schooltool.schoolyear.interfaces import ISchoolYearContainer
+from schooltool.schoolyear.interfaces import TermOverlapError
 from schooltool.common import IDateRange
 from schooltool.common import DateRange
 from schooltool.common import SchoolToolMessage as _
+from schooltool.common.inlinept import InheritTemplate
 
 
 class ITermForm(Interface):
@@ -195,6 +197,32 @@ class TermAddForm(form.AddForm, TermFormBase):
         name = chooser.chooseName("", term)
         self.context[name] = term
         return term
+
+
+class FlourishTermAddView(flourish.form.AddForm, TermAddForm):
+
+    template = InheritTemplate(flourish.page.Page.template)
+    label = None
+    legend = 'Term Details'
+
+    @property
+    def title(self):
+        return self.context.title
+
+    @button.buttonAndHandler(_('Next'), name='next',
+                             condition=lambda form: form.showNext)
+    def next(self, action):
+        super(FlourishTermAddView, self).next.func(self, action)
+
+    @button.buttonAndHandler(_('Add term'), name='add',
+                             condition=lambda form: form.showRefresh)
+    def handleAdd(self, action):
+        super(FlourishTermAddView, self).handleAdd.func(self, action)
+
+    @button.buttonAndHandler(_("Cancel"))
+    def handle_cancel_action(self, action):
+        url = absoluteURL(ISchoolToolApplication(None), self.request) + '/terms'
+        self.request.response.redirect(url)
 
 
 class TermEditForm(form.EditForm, TermFormBase):
@@ -443,13 +471,20 @@ class FlourishTermsView(flourish.page.Page):
         syc = ISchoolYearContainer(self.context)
         for year in reversed(tuple(syc.values())):
             result = {
-                'title': year.title,
+                'obj': year,
                 'first': year.first,
                 'last': year.last,
                 'terms': [],
-                'empty': not bool(tuple(year.values()))
+                'empty': not bool(tuple(year.values())),
+                'add': 'add.' + year.__name__,
+                'addurl': absoluteURL(year, self.request) + '/add.html',
                 }
             for term in reversed(tuple(year.values())):
                 result['terms'].append(term)
             yield result
+
+    def update(self):
+        for year in self.years():
+            if year['add'] in self.request:
+                self.request.response.redirect(year['addurl'])
 

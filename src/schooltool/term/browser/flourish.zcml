@@ -13,4 +13,13 @@
       permission="schooltool.view"
       />
 
+  <flourish:page
+      name="add.html"
+      for="..interfaces.ITermContainer"
+      class=".term.FlourishTermAddView"
+      subtitle="Add New Term"
+      content_template="templates/f_term_add.pt"
+      permission="schooltool.edit"
+      />
+
 </configure>
