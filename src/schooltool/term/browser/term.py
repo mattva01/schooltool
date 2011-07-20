@@ -31,6 +31,7 @@ from zope.schema import ValidationError
 from zope.container.interfaces import INameChooser
 from zope.publisher.browser import BrowserView
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
+from zope.security.checker import canAccess
 from zope.traversing.browser.absoluteurl import absoluteURL
 
 from z3c.form.util import getSpecification
@@ -476,6 +477,7 @@ class FlourishTermsView(flourish.page.Page):
                 'last': year.last,
                 'terms': [],
                 'empty': not bool(tuple(year.values())),
+                'canModify': canAccess(year, '__delitem__'),
                 'add': 'add.' + year.__name__,
                 'addurl': absoluteURL(year, self.request) + '/add.html',
                 }
