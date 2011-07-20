@@ -478,15 +478,11 @@ class FlourishTermsView(flourish.page.Page):
                 'terms': [],
                 'empty': not bool(tuple(year.values())),
                 'canModify': canAccess(year, '__delitem__'),
-                'add': 'add.' + year.__name__,
                 'addurl': absoluteURL(year, self.request) + '/add.html',
+                'alt': _(u'Add a new term to ${year_title}',
+                         mapping={'year_title': year.title}),
                 }
             for term in reversed(tuple(year.values())):
                 result['terms'].append(term)
             yield result
-
-    def update(self):
-        for year in self.years():
-            if year['add'] in self.request:
-                self.request.response.redirect(year['addurl'])
 

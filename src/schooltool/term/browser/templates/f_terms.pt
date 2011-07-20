@@ -9,17 +9,18 @@
           <th i18n:translate="">Add Term</th>
         </tr>
       </thead>
-      <tal:block repeat="year view/years" >
+      <tal:block repeat="year view/years">
         <tr>
           <th tal:content="year/obj/title" />
           <th tal:content="year/first/@@mediumDate" />
           <th tal:content="year/last/@@mediumDate" />
           <th>
-            <input type="image" value="1" title="Add Term"
-                   tal:condition="year/canModify"
-                   tal:attributes="name year/add;
-                                   src context/++resource++schooltool.skin.flourish/add-icon.png"
-                   i18n:attributes="title" />
+            <a tal:condition="year/canModify"
+               tal:attributes="href year/addurl;
+                               title year/alt">
+              <img tal:attributes="src context/++resource++schooltool.skin.flourish/add-icon.png;
+                                   alt year/alt" />
+            </a>
           </th>
         </tr>
         <tr tal:condition="year/empty">
