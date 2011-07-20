@@ -6,15 +6,16 @@
           <th i18n:translate="">Term</th>
           <th i18n:translate="">First Day</th>
           <th i18n:translate="">Last Day</th>
+          <th i18n:translate="">Add Term</th>
         </tr>
       </thead>
       <tal:block repeat="year view/years" >
         <tr>
-          <th colspan="3">
-            <tal:block content="year/obj/title" />
-            (<tal:block content="year/first/@@mediumDate" /> -
-            <tal:block content="year/last/@@mediumDate" />)
-            <input type="image" value="1" title="Add New Term"
+          <th tal:content="year/obj/title" />
+          <th tal:content="year/first/@@mediumDate" />
+          <th tal:content="year/last/@@mediumDate" />
+          <th>
+            <input type="image" value="1" title="Add Term"
                    tal:condition="year/canModify"
                    tal:attributes="name year/add;
                                    src context/++resource++schooltool.skin.flourish/add-icon.png"
@@ -35,6 +36,7 @@
           <td>
             <tal:block content="term/last/@@mediumDate" />
           </td>
+          <td></td>
         </tr>
       </tal:block>
     </table>
