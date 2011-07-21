@@ -72,7 +72,7 @@
       />
 
   <flourish:viewlet
-      name="delete.html"
+      name="delete_year.html"
       for="schooltool.schoolyear.interfaces.ISchoolYear"
       title="Delete"
       class=".schoolyear.FlourishSchoolYearDeleteLink"
@@ -138,7 +138,7 @@
   </configure>
 
   <flourish:page
-      name="delete.html"
+      name="delete_year.html"
       for="schooltool.schoolyear.interfaces.ISchoolYear"
       class="schooltool.schoolyear.browser.schoolyear.FlourishSchoolYearDeleteView"
       template="templates/f_confirm_delete_schoolyear.pt"
