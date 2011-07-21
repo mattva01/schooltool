@@ -1,4 +1,4 @@
-<div i18n:domain="schooltool">
+<metal:block i18n:domain="schooltool">
   <h3 i18n:translate="">
     Server status: <tal:block replace="view/status" i18n:name="status" />
     <a class="modify" href="" title="Change email settings"
@@ -11,17 +11,8 @@
   </h3>
   <metal:block define-macro="subform-display">
     <div class="viewspace" metal:define-slot="viewspace">
-      <metal:block define-slot="label">
-        <h1 metal:define-macro="label"
-            tal:condition="view/label|nothing"
-            tal:content="view/label">
-          Form Label
-        </h1>
-      </metal:block>
-      <div metal:define-slot="extra_info" tal:replace="nothing">
-      </div>
       <div metal:define-slot="main">
-        <table class="email-settings" metal:define-macro="formtable">
+        <table class="form-fields" metal:define-macro="formtable">
           <tr class="extraTopRow"
               metal:define-slot="extra_top"
               tal:replace="nothing">
@@ -79,4 +70,4 @@
     <metal:block define-slot="bottom">
     </metal:block>
   </metal:block>
-</div>
+</metal:block>

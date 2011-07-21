@@ -1,7 +1,7 @@
 <metal:block i18n:domain="schooltool">
   <h3>
-    Contact information
-    <a class="modify" href="" title="Edit this contact"
+    <tal:block replace="context/title" />
+    <a class="modify" href="" title="Edit this course"
        tal:attributes="href string:${context/@@absolute_url}/edit.html"
        i18n:attributes="title"
        tal:condition="view/canModify">
@@ -34,29 +34,6 @@
                 <td class="field" metal:define-macro="widgetcell">
                   <div class="widget" tal:content="structure widget/render">
                     <input type="text" />
-                  </div>
-                </td>
-              </tr>
-            </tal:block>
-            <tal:block define="relationships view/relationships"
-                       condition="relationships">
-              <tr class="row" tal:repeat="info relationships">
-                <td class="label">
-                  <label>
-                    <span tal:condition="info/relationship" i18n:translate="">
-                      <tal:block tal:replace="info/getRelationshipTitle" i18n:name="relationship" />
-                      of
-                    </span>
-                    <span tal:condition="not:info/relationship" i18n:translate="">
-                      Contact of
-                    </span>
-                  </label>
-                </td>
-                <td class="field">
-                  <div class="widget">
-                    <span>
-                      <a tal:replace="structure info/__parent__/schooltool:content/link" />
-                    </span>
                   </div>
                 </td>
               </tr>
@@ -94,4 +71,26 @@
     <metal:block define-slot="bottom">
     </metal:block>
   </metal:block>
+  <metal:block tal:condition="view/canModify">
+    <h3>
+      <metal:block i18n:translate="">Responsible parties</metal:block>
+      <a class="modify" href="" title="Edit responsible parties for this course"
+         tal:attributes="href string:${context/@@absolute_url}/leaders.html"
+         i18n:attributes="title">
+        <img tal:attributes="src context/++resource++schooltool.skin.flourish/edit-icon.png"
+             alt="Edit"
+             i18n:attributes="alt" />
+      </a>
+    </h3>
+    <p i18n:translate="">These users can modify the course.</p>
+    <tal:block tal:replace="structure view/leaders_table/render"
+               tal:condition="view/has_leaders" />
+    <h3 tal:condition="not:view/has_leaders" i18n:translate="">
+  This course has no responsible parties
+    </h3>
+  </metal:block>
+  <h3>
+    <a tal:attributes="href view/done_link"
+       i18n:translate="">Done</a>
+  </h3>
 </metal:block>
