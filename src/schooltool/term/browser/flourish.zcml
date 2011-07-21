@@ -22,4 +22,12 @@
       permission="schooltool.edit"
       />
 
+  <flourish:page
+      name="index.html"
+      for="..interfaces.ITerm"
+      class=".term.FlourishTermView"
+      content_template="templates/f_term.pt"
+      permission="schooltool.view"
+      />
+
 </configure>

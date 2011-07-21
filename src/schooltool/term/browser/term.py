@@ -97,6 +97,18 @@ class TermView(BrowserView):
         return TermRenderer(self.context).calendar()
 
 
+class FlourishTermView(flourish.page.Page, TermView):
+    """flourish view of a term."""
+
+    @property
+    def title(self):
+        return self.context.__parent__.title
+
+    @property
+    def subtitle(self):
+        return self.context.title
+
+
 class TermFormBase(object):
 
     @property
