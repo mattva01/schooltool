@@ -50,6 +50,7 @@ from schooltool.term.interfaces import ITerm
 from schooltool.term.term import validateTermsForOverlap
 from schooltool.term.term import Term
 from schooltool.skin import flourish
+from schooltool.skin.dateformatter import DateFormatterMediumView
 from schooltool.schoolyear.interfaces import ISchoolYearContainer
 from schooltool.schoolyear.interfaces import TermOverlapError
 from schooltool.common import IDateRange
@@ -210,6 +211,11 @@ class FlourishTermAddView(flourish.form.AddForm, TermAddForm):
     def title(self):
         return self.context.title
 
+    @button.buttonAndHandler(_('Refresh'), name='refresh',
+                             condition=lambda form: form.showRefresh)
+    def handleRefresh(self, action):
+        super(FlourishTermAddView, self).handleRefresh.func(self, action)
+
     @button.buttonAndHandler(_('Next'), name='next',
                              condition=lambda form: form.showNext)
     def next(self, action):
@@ -224,6 +230,18 @@ class FlourishTermAddView(flourish.form.AddForm, TermAddForm):
     def handle_cancel_action(self, action):
         url = absoluteURL(ISchoolToolApplication(None), self.request) + '/terms'
         self.request.response.redirect(url)
+
+    def dateString(self, date):
+        return DateFormatterMediumView(date, self.request)()
+
+    def updateWidgets(self):
+        super(FlourishTermAddView, self).updateWidgets()
+        description = _(u'The year starts ${year_start}',
+            mapping={'year_start': self.dateString(self.context.first)})
+        self.widgets['first'].field.description = description
+        description = _(u'The year ends ${year_end}',
+            mapping={'year_end': self.dateString(self.context.last)})
+        self.widgets['last'].field.description = description
 
 
 class TermEditForm(form.EditForm, TermFormBase):
@@ -478,15 +496,11 @@ class FlourishTermsView(flourish.page.Page):
                 'terms': [],
                 'empty': not bool(tuple(year.values())),
                 'canModify': canAccess(year, '__delitem__'),
-                'add': 'add.' + year.__name__,
                 'addurl': absoluteURL(year, self.request) + '/add.html',
+                'alt': _(u'Add a new term to ${year_title}',
+                         mapping={'year_title': year.title}),
                 }
             for term in reversed(tuple(year.values())):
                 result['terms'].append(term)
             yield result
-
-    def update(self):
-        for year in self.years():
-            if year['add'] in self.request:
-                self.request.response.redirect(year['addurl'])
 
