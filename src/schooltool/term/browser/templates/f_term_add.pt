@@ -1,3 +1,20 @@
+<script>
+    function update(idx) {
+        var checkbox = document.getElementById('c' + idx);
+        var cell = document.getElementById('td' + idx);
+        if (checkbox.checked) {
+            cell.className = "holiday";
+        } else {
+            cell.className = "schoolday";
+        }
+    }
+    function toggle(idx) {
+        var checkbox = document.getElementById('c' + idx);
+        checkbox.checked = !checkbox.checked;
+        update(idx);
+    }
+    document.write('\074style\076 input.chk { display: none } \074/style\076');
+</script>
 <div>
   <div metal:use-macro="macro:form">
     <metal:block fill-slot="above-buttons">
@@ -29,7 +46,7 @@
           <p>
             <span i18n:translate="">Toggle the following days of week: </span>
           </p>
-          <p>
+          <p class="buttons">
             <input class="button" type="submit" name="TOGGLE_0" value="Monday"
                    i18n:attributes="value" />
             <input class="button" type="submit" name="TOGGLE_1" value="Tuesday"
