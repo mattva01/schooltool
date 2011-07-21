@@ -11,10 +11,25 @@
       permission="schooltool.edit"
       />
 
+  <flourish:viewlet
+      name="reports"
+      after="calendar"
+      title="Reports"
+      class="schooltool.skin.flourish.page.LinkViewlet"
+      manager="schooltool.group.browser.group.GroupLinks"
+      permission="schooltool.edit"
+      />
+
   <configure package="schooltool.skin.flourish">
     <flourish:page
         name="reports"
         for="schooltool.basicperson.interfaces.IBasicPerson"
+        class="schooltool.report.browser.report.FlourishReportsView"
+        permission="schooltool.edit"
+        />
+    <flourish:page
+        name="reports"
+        for="schooltool.group.interfaces.IGroup"
         class="schooltool.report.browser.report.FlourishReportsView"
         permission="schooltool.edit"
         />

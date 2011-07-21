@@ -37,13 +37,11 @@ class IBaseGroup(Interface):
     """Group."""
 
     title = TextLine(
-        title=_("Title"),
-        description=_("Title of the group."))
+        title=_("Title"))
 
     description = Text(
         title=_("Description"),
-        required=False,
-        description=_("Description of the group."))
+        required=False)
 
     members = Attribute(
         """Members of the group (see IRelationshipProperty)""")
