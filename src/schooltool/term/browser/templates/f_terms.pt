@@ -3,7 +3,7 @@
     <table>
       <thead>
         <tr>
-          <th i18n:translate="">Term</th>
+          <th i18n:translate="">Title</th>
           <th i18n:translate="">First Day</th>
           <th i18n:translate="">Last Day</th>
           <th i18n:translate="">Add Term</th>
@@ -11,7 +11,7 @@
       </thead>
       <tal:block repeat="year view/years">
         <tr>
-          <th tal:content="year/obj/title" />
+          <th tal:content="year/title" />
           <th tal:content="year/first/@@mediumDate" />
           <th tal:content="year/last/@@mediumDate" />
           <th>
