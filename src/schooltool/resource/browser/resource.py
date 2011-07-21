@@ -652,6 +652,20 @@ class BaseFlourishResourceAddForm(AddForm):
     template = InheritTemplate(Page.template)
     label = None
 
+    def createAndAdd(self, data):
+        resource = self._factory()
+        resource.title = data.get('title')
+        chooser = INameChooser(self.context)
+        resource.__name__ = chooser.chooseName('', resource)
+        form.applyChanges(self, resource, data)
+        notify(ObjectCreatedEvent(resource))
+        self.context[resource.__name__] = resource
+        self._resource = resource
+        return resource
+
+    def nextURL(self):
+        return absoluteURL(self._resource, self.request)
+
 
 ###############  Resource add/edit views ################
 class BaseResourceForm(object):

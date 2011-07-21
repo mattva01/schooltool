@@ -90,10 +90,8 @@ table.contacts-table th.action {
     width: 15%;
 }
 
-table.email-settings .label {
-    width: 30%;
-}
+/* XXX: select a better class name for these tables */
 
-table.application-control .label {
+table.form-fields .label {
     width: 35%;
 }

@@ -1,5 +1,5 @@
 <tal:block tal:define="runtime_info view/runtimeInfo">
-  <table class="application-control">
+  <table class="form-fields">
     <tbody>
       <tr>
         <td class="label" i18n:translate="">Uptime</td>

@@ -5,7 +5,76 @@
            xmlns:flourish="http://schooltool.org/flourish"
            i18n_domain="schooltool">
 
+  <!-- adapters -->
+
+  <zope:adapter
+      for="schooltool.course.interfaces.ICourseContainer
+           schooltool.skin.flourish.interfaces.IFlourishLayer"
+      factory=".course.FlourishCourseFilterWidget" />
+
+  <zope:adapter
+      for="schooltool.course.interfaces.ICourseContainer
+           schooltool.skin.flourish.interfaces.IFlourishLayer"
+      factory=".course.FlourishCourseTableFormatter " />
+
+  <!-- viewlet managers -->
+
+  <flourish:viewlet
+      name="courses-add-links"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      class=".course.CoursesAddLinks"
+      title="Add"
+      permission="schooltool.edit"
+      view=".course.FlourishCoursesView"
+      />
+
+  <flourish:viewlet
+      name="course-add-links"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      class=".course.CourseAddLinks"
+      title="Add"
+      permission="schooltool.edit"
+      view=".course.FlourishCourseView"
+      />
+
+  <flourish:viewlet
+      name="course-action-links"
+      after="course-add-links"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      class=".course.CourseActionsLinks"
+      title="Actions"
+      permission="schooltool.edit"
+      view=".course.FlourishCourseView"
+      />
+
   <!-- viewlets -->
+
+  <flourish:viewlet
+      name="course-add"
+      title="Course"
+      view=".course.FlourishCoursesView"
+      class=".course.CourseAddLinkViewlet"
+      manager=".course.CoursesAddLinks"
+      permission="schooltool.edit"
+      />
+
+  <flourish:viewlet
+      name="course-add"
+      title="Course"
+      view=".course.FlourishCourseView"
+      class=".course.CourseAddLinkFromCourseViewlet"
+      manager=".course.CourseAddLinks"
+      permission="schooltool.edit"
+      />
+
+  <flourish:viewlet
+      name="delete.html"
+      view=".course.FlourishCourseView"
+      title="Delete"
+      class=".course.CourseDeleteLink"
+      manager=".course.CourseActionsLinks"
+      permission="schooltool.edit"
+      />
 
   <flourish:viewlet
       name="coursesinfo"
@@ -15,5 +84,66 @@
       permission="schooltool.view"
       />
 
+  <flourish:viewletManager
+      name="tertiary_navigation"
+      provides="schooltool.skin.flourish.page.ITertiaryNavigationManager"
+      class=".course.CoursesTertiaryNavigationManager"
+      view=".course.FlourishCoursesView"
+      permission="zope.Public"
+      />
+
+  <!-- pages -->
+
+  <flourish:page
+      name="courses"
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      class=".course.FlourishCoursesView"
+      permission="schooltool.view"
+      />
+
+  <flourish:page
+      name="addSchoolToolCourse.html"
+      for="schooltool.course.interfaces.ICourseContainer"
+      class="schooltool.course.browser.course.FlourishCourseAddView"
+      content_template="templates/f_course_add.pt"
+      permission="schooltool.edit"
+      subtitle="Add Course"
+      />
+
+  <flourish:page
+      name="index.html"
+      for="schooltool.course.interfaces.ICourse"
+      class=".course.FlourishCourseView"
+      permission="schooltool.view"
+      />
+
+  <flourish:page
+      name="delete.html"
+      for="schooltool.course.interfaces.ICourse"
+      class=".course.FlourishCourseDeleteView"
+      template="templates/f_confirm_delete_course.pt"
+      permission="schooltool.edit"
+      />
+
+  <configure package="schooltool.skin.flourish">
+
+    <flourish:page
+        name="edit.html"
+        for="schooltool.course.interfaces.ICourse"
+        class="schooltool.course.browser.course.FlourishCourseEditView"
+        content_template="templates/z3c-schooltool-form.pt"
+        permission="schooltool.edit"
+        subtitle="Edit"
+        />
+
+    <flourish:page
+        name="delete.html"
+        for="schooltool.course.interfaces.ICourseContainer"
+        class="schooltool.course.browser.course.FlourishCourseContainerDeleteView"
+        content_template="templates/container_delete.pt"
+        permission="schooltool.edit"
+        />
+
+  </configure>
 
 </configure>
