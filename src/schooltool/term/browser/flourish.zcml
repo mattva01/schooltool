@@ -22,4 +22,49 @@
       permission="schooltool.edit"
       />
 
+  <flourish:page
+      name="index.html"
+      for="..interfaces.ITerm"
+      class=".term.FlourishTermView"
+      content_template="templates/f_term.pt"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="term_actions"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      class=".term.FlourishTermActionLinks"
+      for="..interfaces.ITerm"
+      title="Actions"
+      permission="schooltool.edit"
+      view=".term.FlourishTermView"
+      />
+
+  <flourish:viewlet
+      name="delete.html"
+      for="..interfaces.ITerm"
+      title="Delete"
+      class=".term.FlourishTermDeleteLink"
+      manager=".term.FlourishTermActionLinks"
+      permission="schooltool.edit"
+      />
+
+  <flourish:page
+      name="delete.html"
+      for="..interfaces.ITerm"
+      class=".term.FlourishTermDeleteView"
+      template="templates/f_confirm_delete_term.pt"
+      permission="schooltool.edit"
+      />
+
+  <configure package="schooltool.skin.flourish">
+  <flourish:page
+    name="delete.html"
+    for="schooltool.term.interfaces.ITermContainer"
+    class="schooltool.term.browser.term.FlourishTermContainerDeleteView"
+    content_template="templates/container_delete.pt"
+    permission="schooltool.edit"
+    />
+  </configure>
+
 </configure>
