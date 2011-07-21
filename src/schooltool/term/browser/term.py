@@ -211,6 +211,11 @@ class FlourishTermAddView(flourish.form.AddForm, TermAddForm):
     def title(self):
         return self.context.title
 
+    @button.buttonAndHandler(_('Refresh'), name='refresh',
+                             condition=lambda form: form.showRefresh)
+    def handleRefresh(self, action):
+        super(FlourishTermAddView, self).handleRefresh.func(self, action)
+
     @button.buttonAndHandler(_('Next'), name='next',
                              condition=lambda form: form.showNext)
     def next(self, action):

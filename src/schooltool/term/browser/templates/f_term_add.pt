@@ -6,11 +6,13 @@
         <div class="buttons controls" tal:condition="view/actions/refresh">
           <input tal:replace="structure view/actions/refresh/render" />
         </div>
-         <p i18n:translate="">
-          Please specify which days are school days, and which days are holidays.
-        </p>
 
         <fieldset>
+          <legend>
+            <span i18n:translate="">
+              Please specify which days are school days, and which days are holidays.
+            </span>
+          </legend>
           <table id="legend" class="schooldaymodel">
             <tr class="legend">
               <td class="legend" i18n:translate="">Legend:</td>
@@ -26,6 +28,8 @@
 
           <p>
             <span i18n:translate="">Toggle the following days of week: </span>
+          </p>
+          <p>
             <input class="button" type="submit" name="TOGGLE_0" value="Monday"
                    i18n:attributes="value" />
             <input class="button" type="submit" name="TOGGLE_1" value="Tuesday"
