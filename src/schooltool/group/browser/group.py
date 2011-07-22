@@ -78,7 +78,6 @@ from schooltool.skin.flourish.form import AddForm
 from schooltool.skin.flourish.form import DialogForm
 from schooltool.skin.flourish.form import DisplayForm
 from schooltool.skin.flourish.viewlet import ViewletManager
-from schooltool.table.table import url_cell_formatter
 
 
 class GroupContainerAbsoluteURLAdapter(BrowserView):
@@ -271,13 +270,8 @@ class FlourishGroupTableFormatter(SchoolToolTableFormatter):
             title=_(u"Title"),
             getter=lambda i, f: i.title,
             subsort=True)
-        schoolyear = SchoolYearColumn(
-            name='schoolyear',
-            title=_(u'School Year'),
-            subsort=True)
         directlyProvides(title, ISortableColumn)
-        directlyProvides(schoolyear, ISortableColumn)
-        return [title, schoolyear]
+        return [title]
 
     def render(self):
         formatter = self._table_formatter(
@@ -288,9 +282,6 @@ class FlourishGroupTableFormatter(SchoolToolTableFormatter):
             prefix=self.prefix)
         formatter.cssClasses['table'] = 'groups-table relationships-table'
         return formatter()
-
-    def sortOn(self):
-        return (('schoolyear', True), ("title", False))
 
 
 class FlourishGroupListView(FlourishRelationshipViewBase):
@@ -328,14 +319,28 @@ class FlourishGroupListView(FlourishRelationshipViewBase):
     def getCollection(self):
         return self.context.groups
 
+    def getColumnsAfter(self, prefix):
+        columns = super(FlourishGroupListView, self).getColumnsAfter(prefix)
+        schoolyear = SchoolYearColumn(
+            name='schoolyear',
+            title=_(u'School Year'),
+            subsort=True)
+        directlyProvides(schoolyear, ISortableColumn)
+        return [schoolyear] + columns
+
+    def sortOn(self):
+        return (('schoolyear', True), ("title", False))
+
     def setUpTables(self):
         self.available_table = self.createTableFormatter(
             ommit=self.getOmmitedItems(),
             items=self.getAvailableItems(),
+            sort_on=self.sortOn(),
             prefix="add_item")
         self.selected_table = self.createTableFormatter(
             filter=lambda l: l,
             items=self.getSelectedItems(),
+            sort_on=self.sortOn(),
             prefix="remove_item",
             batch_size=0)
 
@@ -504,8 +509,16 @@ class FlourishGroupsView(FlourishTableContainerView):
         schoolyear = self.schoolyear
         return IGroupContainer(schoolyear)
 
-    def setUpTableFormatter(self, formatter):
-        formatter.setUp(formatters=[url_cell_formatter])
+    def getColumnsBefore(self):
+        return []
+
+    def getColumnsAfter(self):
+        description = column.GetterColumn(
+            name='description',
+            title=_('Description'),
+            getter=lambda i, f: i.description or '',
+            )
+        return [description]
 
     def update(self):
         # XXX: maybe this lookup should be done in
