@@ -1,0 +1,7 @@
+<div>
+  <metal:block use-macro="macro:form">
+    <metal:block fill-slot="above-buttons" tal:condition="request/camefrom|nothing">
+      <input type="hidden" name="camefrom" tal:attributes="value request/camefrom" />
+    </metal:block>
+  </metal:block>
+</div>

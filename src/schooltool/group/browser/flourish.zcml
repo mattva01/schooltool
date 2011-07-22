@@ -5,7 +5,85 @@
            xmlns:flourish="http://schooltool.org/flourish"
            i18n_domain="schooltool">
 
+  <!-- adapters -->
+
+  <zope:adapter
+      for="schooltool.group.interfaces.IGroupContainer
+           schooltool.skin.flourish.interfaces.IFlourishLayer"
+      factory=".group.FlourishGroupFilterWidget" />
+
+  <zope:adapter
+      for="schooltool.group.interfaces.IGroupContainer
+           schooltool.skin.flourish.interfaces.IFlourishLayer"
+      factory=".group.FlourishGroupTableFormatter " />
+
+  <!-- viewlet managers -->
+
+  <flourish:viewlet
+      name="groups-add-links"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      class=".group.GroupsAddLinks"
+      title="Add"
+      permission="schooltool.edit"
+      view=".group.FlourishGroupsView"
+      />
+
+  <flourish:viewlet
+      name="group-links"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      class=".group.GroupLinks"
+      permission="schooltool.view"
+      view=".group.FlourishGroupView"
+      />
+
+  <flourish:viewlet
+      name="group-add-links"
+      after="group-links"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      class=".group.GroupAddLinks"
+      title="Add"
+      permission="schooltool.edit"
+      view=".group.FlourishGroupView"
+      />
+
+  <flourish:viewlet
+      name="group-manage-action-links"
+      after="group-add-links"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      class=".group.GroupManageActionsLinks"
+      title="Actions"
+      permission="schooltool.edit"
+      view=".group.FlourishGroupView"
+      />
+
   <!-- viewlets -->
+
+  <flourish:viewlet
+      name="group-add"
+      title="Group"
+      view=".group.FlourishGroupsView"
+      class=".group.GroupAddLinkViewlet"
+      manager=".group.GroupsAddLinks"
+      permission="schooltool.edit"
+      />
+
+  <flourish:viewlet
+      name="group-add"
+      title="Group"
+      view=".group.FlourishGroupView"
+      class=".group.GroupAddLinkFromGroupViewlet"
+      manager=".group.GroupAddLinks"
+      permission="schooltool.edit"
+      />
+
+  <flourish:viewlet
+      name="delete.html"
+      view=".group.FlourishGroupView"
+      title="Delete"
+      class=".group.GroupDeleteLink"
+      manager=".group.GroupManageActionsLinks"
+      permission="schooltool.edit"
+      />
 
   <flourish:viewlet
       name="groupsinfo"
@@ -13,6 +91,14 @@
       manager="schooltool.basicperson.browser.person.IFlourishPersonInfoManager"
       class="schooltool.group.browser.group.FlourishGroupsViewlet"
       permission="schooltool.view"
+      />
+
+  <flourish:viewletManager
+      name="tertiary_navigation"
+      provides="schooltool.skin.flourish.page.ITertiaryNavigationManager"
+      class=".group.GroupsTertiaryNavigationManager"
+      view=".group.FlourishGroupsView"
+      permission="zope.Public"
       />
 
   <!-- views -->
@@ -25,16 +111,64 @@
       subtitle="Groups"
       />
 
-  <!-- others -->
+  <flourish:page
+      name="groups"
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      class=".group.FlourishGroupsView"
+      permission="schooltool.view"
+      />
 
-  <zope:adapter
-      for="schooltool.group.interfaces.IGroupContainer
-           schooltool.skin.flourish.interfaces.IFlourishLayer"
-      factory=".group.FlourishGroupFilterWidget" />
+  <flourish:page
+      name="addSchoolToolGroup.html"
+      for="schooltool.group.interfaces.IGroupContainer"
+      class="schooltool.group.browser.group.FlourishGroupAddView"
+      content_template="templates/f_group_add.pt"
+      permission="schooltool.edit"
+      subtitle="Add Group"
+      />
 
-  <zope:adapter
-      for="schooltool.group.interfaces.IGroupContainer
-           schooltool.skin.flourish.interfaces.IFlourishLayer"
-      factory=".group.FlourishGroupTableFormatter " />
+  <flourish:page
+      name="index.html"
+      for="schooltool.group.interfaces.IGroup"
+      class=".group.FlourishGroupView"
+      permission="schooltool.view"
+      />
+
+  <flourish:page
+      name="delete.html"
+      for="schooltool.group.interfaces.IGroup"
+      class=".group.FlourishGroupDeleteView"
+      template="templates/f_confirm_delete_group.pt"
+      permission="schooltool.edit"
+      />
+
+  <flourish:page
+      name="members_persons.html"
+      for="schooltool.group.interfaces.IBaseGroup"
+      class=".group.FlourishMemberViewPersons"
+      permission="schooltool.edit"
+      subtitle="Members"
+      />
+
+  <configure package="schooltool.skin.flourish">
+
+    <flourish:page
+        name="edit.html"
+        for="schooltool.group.interfaces.IGroup"
+        class="schooltool.group.browser.group.FlourishGroupEditView"
+        content_template="templates/z3c-schooltool-form.pt"
+        permission="schooltool.edit"
+        subtitle="Edit"
+        />
+
+    <flourish:page
+        name="delete.html"
+        for="schooltool.group.interfaces.IGroupContainer"
+        class="schooltool.group.browser.group.FlourishGroupContainerDeleteView"
+        content_template="templates/container_delete.pt"
+        permission="schooltool.edit"
+        />
+
+  </configure>
 
 </configure>
