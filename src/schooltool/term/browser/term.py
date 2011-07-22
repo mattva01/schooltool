@@ -109,6 +109,10 @@ class FlourishTermView(flourish.page.Page, TermView):
     def subtitle(self):
         return self.context.title
 
+    @property
+    def canModify(self):
+        return canAccess(self.context.__parent__, '__delitem__')
+
 
 class FlourishTermActionLinks(flourish.page.RefineLinksViewlet):
     """Term action links viewlet."""
@@ -371,6 +375,38 @@ class TermEditForm(form.EditForm, TermFormBase):
                  mapping={'term_title': self.context.title})
 
 
+class FlourishTermEditView(flourish.form.Form, TermEditForm):
+
+    template = InheritTemplate(flourish.page.Page.template)
+    label = None
+
+    @property
+    def title(self):
+        return self.context.title
+
+    @property
+    def legend(self):
+        return _(u'Change information for ${term_title}',
+                 mapping={'term_title': self.context.title})
+
+    @button.buttonAndHandler(_('Refresh'), name='refresh',
+                             condition=lambda form: form.showRefresh)
+    def handleRefresh(self, action):
+        super(FlourishTermEditView, self).handleRefresh.func(self, action)
+
+    @button.buttonAndHandler(_('Save changes'), name='apply')
+    def handleApply(self, action):
+        super(FlourishTermEditView, self).handleApply.func(self, action)
+        if self.status != self.formErrorsMessage:
+            url = absoluteURL(self.context, self.request)
+            self.request.response.redirect(url)
+
+    @button.buttonAndHandler(_("Cancel"))
+    def handle_cancel_action(self, action):
+        super(FlourishTermEditView, self).handle_cancel_action.func(self,
+            action)
+
+
 class AddTermFormValidator(InvariantsValidator):
 
     def validateObject(self, obj):
@@ -448,6 +484,64 @@ class LastTermBoundsValidator(TermBoundsValidator):
 WidgetValidatorDiscriminators(
     LastTermBoundsValidator,
     field=ITermForm['last'])
+
+
+class FlourishInvalidDateRangeError(ValidationError):
+    __doc__ = _('Term must begin before it ends')
+
+
+class FlourishOverlapError(ValidationError):
+    __doc__ = _('Date range overlaps another term')
+
+
+class FlourishOverlapValidator(SimpleFieldValidator):
+
+    def validate(self, value):
+        # XXX: hack to display the overlap error next to the widget!
+        rv = super(FlourishOverlapValidator, self).validate(value)
+        last_widget = self.view.widgets['last']
+        last_value = self.request.get(last_widget.name)
+        try:
+            last_value = last_widget._toFieldValue(last_value)
+        except:
+            return
+        try:
+            dr = DateRange(value, last_value)
+        except:
+            raise FlourishInvalidDateRangeError()
+        try:
+            validateTermsForOverlap(self.container, dr, self.term)
+        except TermOverlapError, e:
+            raise FlourishOverlapError()
+
+
+class FlourishOverlapAddValidator(FlourishOverlapValidator):
+    term = None
+
+    @property
+    def container(self):
+        return self.context
+
+
+class FlourishOverlapEditValidator(FlourishOverlapValidator):
+
+    @property
+    def term(self):
+        return self.context
+
+    @property
+    def container(self):
+        return self.context.__parent__
+
+
+WidgetValidatorDiscriminators(FlourishOverlapAddValidator,
+                              view=FlourishTermAddView,
+                              field=ITermForm['first'])
+
+
+WidgetValidatorDiscriminators(FlourishOverlapEditValidator,
+                              view=FlourishTermEditView,
+                              field=ITermForm['first'])
 
 
 class TermRenderer(object):

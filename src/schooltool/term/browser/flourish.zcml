@@ -23,6 +23,15 @@
       />
 
   <flourish:page
+      name="edit.html"
+      for="..interfaces.ITerm"
+      class=".term.FlourishTermEditView"
+      subtitle="Edit"
+      content_template="templates/f_term_add.pt"
+      permission="schooltool.edit"
+      />
+
+  <flourish:page
       name="index.html"
       for="..interfaces.ITerm"
       class=".term.FlourishTermView"
@@ -66,5 +75,9 @@
     permission="schooltool.edit"
     />
   </configure>
+
+  <zope:adapter factory=".term.FlourishOverlapAddValidator" />
+
+  <zope:adapter factory=".term.FlourishOverlapEditValidator" />
 
 </configure>
