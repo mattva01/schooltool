@@ -22,7 +22,9 @@ SchoolTool flourish forms.
 from zope.component import adapts
 from zope.interface import Interface
 from zope.schema.interfaces import IBool
+from zope.schema import ValidationError
 import z3c.form.form
+from z3c.form.error import ErrorViewSnippet
 from z3c.form.term import BoolTerms
 from z3c.form.interfaces import IRadioWidget
 
@@ -140,3 +142,12 @@ class DialogForm(Dialog, Form):
 
 class DialogAddForm(DialogForm, AddForm):
     pass
+
+
+class FlourishErrorViewSnippet(ErrorViewSnippet):
+
+    adapts(ValidationError, IFlourishLayer, None, None, None, None)
+
+    def update(self):
+        super(FlourishErrorViewSnippet, self).update()
+        self.widget.addClass('error')
