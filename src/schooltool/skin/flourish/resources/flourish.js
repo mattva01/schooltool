@@ -98,13 +98,18 @@ ST.dialogs = function() {
   }
 
   function ensure_container(container_id) {
-      var container = $('#'+container_id);
+      var container = $(jq_selector(container_id));
       if (container.length) {
           return container;
       }
       $('body').append('<div id="'+container_id+'"></div>');
       container = $('#'+container_id);
       return container;
+  }
+
+  function jq_selector(element_id)
+  {
+      return '#' + element_id.replace(/(:|\.)/g,'\\$1');
   }
 
   /* "public" */
@@ -120,10 +125,12 @@ ST.dialogs = function() {
         return false;
     },
 
-    modal_form: function(link_sel, form_url, container_sel, title)
+    modal_form: function(link_id, form_url, container_id, title)
     {
-        $(link_sel).attr("href", "#");
-        $(document).ready(function(){
+        $(document).ready(function() {
+                var link_sel = jq_selector(link_id);
+                var container_sel = jq_selector(container_id);
+                $(link_sel).attr("href", "#");
                 $(link_sel).click(function(e) {
                         modal_form_dialog(form_url, container_sel, title);
                         e.preventDefault();

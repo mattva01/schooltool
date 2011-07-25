@@ -194,7 +194,7 @@ class FlourishPersonPreferencesView(flourish.form.DialogForm,
         self.ajax_settings['dialog'] = 'close'
         # Also I assume the preferences don't change the parent
         # view content, so let's not reload it now.
-        self.reload_parent = True
+        self.reload_parent = False
 
 
 class FlourishPersonPreferencesLink(flourish.page.ModalFormLinkViewlet):
@@ -203,6 +203,43 @@ class FlourishPersonPreferencesLink(flourish.page.ModalFormLinkViewlet):
     def dialog_title(self):
         person = self.context
         title = _(u'Change preferences for ${person_full_name}',
+                  mapping={'person_full_name': "%s %s" % (person.first_name,
+                                                          person.last_name)})
+        return translate(title, context=self.request)
+
+
+class FlourishPersonDeleteView(flourish.form.DialogForm, form.EditForm):
+    """View used for editing person preferences."""
+
+    dialog_submit_actions = ('apply',)
+    dialog_close_actions = ('cancel',)
+    label = None
+
+    @button.buttonAndHandler(_("Apply"))
+    def handleAdd(self, action):
+        #self.handleApply.func(self, action)
+        # We never have errors, so just close the dialog.
+        self.ajax_settings['dialog'] = 'close'
+        # Also I assume the preferences don't change the parent
+        # view content, so let's not reload it now.
+        self.reload_parent = False
+
+    @button.buttonAndHandler(_("Cancel"))
+    def handle_cancel_action(self, action):
+        pass
+
+    def updateActions(self):
+        super(FlourishPersonDeleteView, self).updateActions()
+        self.actions['apply'].addClass('button-ok')
+        self.actions['cancel'].addClass('button-cancel')
+
+
+class FlourishPersonDeleteLink(flourish.page.ModalFormLinkViewlet):
+
+    @property
+    def dialog_title(self):
+        person = self.context
+        title = _(u'Delete ${person_full_name}',
                   mapping={'person_full_name': "%s %s" % (person.first_name,
                                                           person.last_name)})
         return translate(title, context=self.request)
