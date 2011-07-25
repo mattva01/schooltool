@@ -29,6 +29,15 @@
       permission="schooltool.view"
       />
 
+  <flourish:viewlet
+      name="demographics"
+      after="persons"
+      title="Demographics"
+      class="schooltool.skin.flourish.page.LinkViewlet"
+      manager="schooltool.app.browser.app.ManageSchoolLinks"
+      permission="schooltool.view"
+      />
+
   <flourish:activeViewlet
       name="persons"
       manager="schooltool.app.browser.app.ManageSchoolLinks"

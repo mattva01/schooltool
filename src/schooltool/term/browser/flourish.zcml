@@ -13,6 +13,14 @@
       permission="schooltool.view"
       />
 
+  <flourish:viewlet
+      name="terms"
+      title="Terms"
+      class="schooltool.skin.flourish.page.LinkViewlet"
+      manager="schooltool.app.browser.app.ManageSchoolLinks"
+      permission="schooltool.view"
+      />
+
   <flourish:page
       name="add.html"
       for="..interfaces.ITermContainer"
