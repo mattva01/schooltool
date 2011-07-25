@@ -154,7 +154,10 @@
   <zope:adapter factory=".form.FlourishRadioBoolTerms" />
 
   <zope:adapter
-      factory=".form.FlourishErrorViewSnippet" />
+      factory=".form.FlourishErrorViewSnippet"
+      trusted="True"
+      permission="zope.Public"
+      />
 
   <zope:adapter
       factory="schooltool.skin.widgets.CustomDateFieldTextWidget"

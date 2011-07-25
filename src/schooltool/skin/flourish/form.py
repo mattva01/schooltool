@@ -148,6 +148,6 @@ class FlourishErrorViewSnippet(ErrorViewSnippet):
 
     adapts(ValidationError, IFlourishLayer, None, None, None, None)
 
-    def __init__(self, *args, **kw):
-        super(FlourishErrorViewSnippet, self).__init__(*args, **kw)
+    def update(self):
+        super(FlourishErrorViewSnippet, self).update()
         self.widget.addClass('error')
