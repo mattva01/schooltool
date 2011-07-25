@@ -21,4 +21,5 @@
       </tbody>
     </table>
   </div>
+  <h3><a tal:attributes="href string:/schoolyears">Done</a></h3>
 </div>
