@@ -474,6 +474,39 @@ def doctest_ViewletManager_filter():
     """
 
 
+def doctest_ViewletManager_presort():
+    """Tests for ViewletManager.presort
+
+        >>> context = 'context'
+        >>> request = TestRequest()
+        >>> view = 'view'
+
+        >>> class StubViewlet(object):
+        ...     def __init__(self, name, before=(), after=()):
+        ...         self.__name__ = name
+        ...         self.before = before
+        ...         self.after = after
+
+        >>> manager = ViewletManager(context, request, view)
+
+        >>> viewlets = {
+        ...     'a_last': StubViewlet('', after=('v_a', '*')),
+        ...     'v_a': StubViewlet('v_a', after=('v_c',)),
+        ...     'v_b': StubViewlet('v_b', before=('v_a',)),
+        ...     'z_first': StubViewlet('z_first', before=('*',),
+        ...                                       after=('two',)),
+        ...     'v_c': StubViewlet('v_c', before=('*',), after=('*',)),
+        ...     }
+
+    Default presort returns sorted viewlet names; also '*' before/after
+    dependencies are treated as before/afert "all".
+
+        >>> manager.presort(viewlets)
+        ['z_first', 'v_a', 'v_b', 'a_last', 'v_c']
+
+    """
+
+
 def doctest_ManagerViewlet():
     """Tests for ManagerViewlet.
 

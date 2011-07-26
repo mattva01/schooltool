@@ -1,0 +1,31 @@
+<div i18n:domain="schooltool"
+     tal:condition="view/has_groups">
+
+<table class="relationships-table data">
+  <thead>
+    <tr>
+      <th i18n:translate="">
+        People in year
+        <tal:block i18n:name="year_title"
+                   content="view/schoolyear/@@title" />
+      </th>
+      <th i18n:translate="">Members</th>
+    </tr>
+  </thead>
+
+  <tbody tal:define="groups view/groups">
+    <tr tal:repeat="key view/built_in_groups">
+    <tal:block define="group groups/?key">
+      <td tal:content="structure group/@@link">
+        [link]
+      </td>
+      <td tal:content="python:len(group.members)">
+        [number]
+      </td>
+    </tal:block>
+    </tr>
+  </tbody>
+
+</table>
+
+</div>

@@ -270,4 +270,13 @@
       permission="schooltool.view"
       />
 
+  <flourish:viewlet
+      name="manage-resources-overview"
+      after="manage-people-overview"
+      view="schooltool.app.browser.app.ManageSchool"
+      permission="schooltool.edit"
+      manager="schooltool.skin.flourish.page.IPageContentManager"
+      class=".resource.FlourishManageResourcesOverview"
+      />
+
 </configure>

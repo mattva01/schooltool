@@ -52,7 +52,7 @@ from schooltool.basicperson.interfaces import IBasicPerson
 from schooltool.group.interfaces import IGroupContainer
 from schooltool.person.interfaces import IPerson, IPersonFactory
 from schooltool.person.browser.person import PersonTableFormatter
-from schooltool.schoolyear.interfaces import ISchoolYearContainer
+from schooltool.schoolyear.interfaces import ISchoolYearContainer, ISchoolYear
 from schooltool.skin.containers import TableContainerView
 from schooltool.skin import flourish
 from schooltool.skin.flourish.interfaces import IViewletManager
@@ -1017,3 +1017,26 @@ class BasicPersonTableFormatter(PersonTableFormatter):
             prefix=self.prefix)
         formatter.cssClasses['table'] = 'persons-table relationships-table'
         return formatter()
+
+
+class FlourishManagePeopleOverview(flourish.page.Content):
+
+    body_template = ViewPageTemplateFile('templates/f_manage_people_overview.pt')
+
+    built_in_groups = ('administrators', 'teachers', 'students')
+
+    @property
+    def groups(self):
+        app = ISchoolToolApplication(None)
+        return IGroupContainer(app, None)
+
+    @property
+    def schoolyear(self):
+        groups = self.groups
+        if groups is None:
+            return None
+        return ISchoolYear(groups)
+
+    @property
+    def has_groups(self):
+        return self.groups is not None
