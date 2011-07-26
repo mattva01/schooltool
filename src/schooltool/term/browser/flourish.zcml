@@ -88,4 +88,12 @@
 
   <zope:adapter factory=".term.FlourishOverlapEditValidator" />
 
+  <flourish:viewlet
+      name="manage-years-overview"
+      view="schooltool.app.browser.app.ManageSchool"
+      permission="schooltool.edit"
+      manager="schooltool.skin.flourish.page.IPageContentManager"
+      class=".term.FlourishManageYearsOverview"
+      />
+
 </configure>

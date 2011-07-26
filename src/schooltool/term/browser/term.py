@@ -47,7 +47,7 @@ from schooltool.app.browser.cal import month_names
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.calendar.utils import parse_date
 from schooltool.calendar.utils import next_month, week_start
-from schooltool.term.interfaces import ITerm
+from schooltool.term.interfaces import ITerm, ITermContainer
 from schooltool.term.term import validateTermsForOverlap
 from schooltool.term.term import Term
 from schooltool.skin import flourish
@@ -665,3 +665,24 @@ class FlourishTermsView(flourish.page.Page):
                 result['terms'].append(term)
             yield result
 
+
+class FlourishManageYearsOverview(flourish.page.Content):
+
+    body_template = ViewPageTemplateFile('templates/f_manage_years_overview.pt')
+
+    def __init__(self, context, *args, **kw):
+        super(FlourishManageYearsOverview, self).__init__(
+            self.actual_context, *args, **kw)
+
+    @property
+    def actual_context(self):
+        return ISchoolYearContainer(ISchoolToolApplication(None))
+
+    @property
+    def has_active_year(self):
+        return self.context.getActiveSchoolYear() is not None
+
+    @property
+    def terms(self):
+        year = self.context.getActiveSchoolYear()
+        return ITermContainer(year, None)

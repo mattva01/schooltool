@@ -1,0 +1,76 @@
+<div i18n:domain="schooltool"
+     tal:define="year context/getActiveSchoolYear">
+
+<table class="data"
+       tal:define="terms view/terms">
+  <thead>
+    <tr>
+      <th i18n:translate="">Active School Year</th>
+      <th i18n:translate="">First Day</th>
+      <th i18n:translate="">Last Day</th>
+    </tr>
+  </thead>
+
+  <tal:block condition="not:view/has_active_year">
+    <tr>
+      <td colspan="3">
+        <p i18n:translate="">To add teachers, students or administrators,
+          manage courses, please set up a
+          <a tal:attributes="href string:${context/@@absolute_url}/add.html"
+             i18n:translate="" i18n:name="school_year">
+            school year
+          </a>.
+        </p>
+      </td>
+    </tr>
+  </tal:block>
+
+  <tal:block condition="view/has_active_year">
+
+  <tbody>
+    <tr>
+      <td tal:content="structure year/@@link">
+        [link]
+      </td>
+      <td tal:content="year/first/@@mediumDate"></td>
+      <td tal:content="year/last/@@mediumDate"></td>
+    </tr>
+  </tbody>
+
+
+  <thead>
+    <tr>
+      <th i18n:translate="">Term</th>
+      <th i18n:translate="">First Day</th>
+      <th i18n:translate="">Last Day</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr tal:condition="not: terms">
+      <td colspan="3">
+        <p i18n:translate="">Please set up at least one
+        <a tal:attributes="href string:${context/schooltool:app/@@absolute_url}/terms"
+           i18n:translate="" i18n:name="term">term</a>.
+        </p>
+      </td>
+    </tr>
+    <tr tal:condition="terms"
+        tal:repeat="term terms/values">
+
+      <td tal:content="structure year/@@link">
+        [link]
+      </td>
+      <td>
+        <tal:block content="term/first/@@mediumDate" />
+      </td>
+      <td>
+        <tal:block content="term/last/@@mediumDate" />
+      </td>
+    </tr>
+  </tbody>
+
+  </tal:block>
+
+</table>
+
+</div>
