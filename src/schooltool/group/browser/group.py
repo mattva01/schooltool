@@ -35,7 +35,6 @@ from zope.component import getMultiAdapter
 from zope.security.checker import canAccess
 from zope.i18n.interfaces.locales import ICollator
 from zope.viewlet.viewlet import ViewletBase
-from zope.component import queryMultiAdapter
 from zope.container.interfaces import INameChooser
 from zope.security import checkPermission
 from zope.security.proxy import removeSecurityProxy
@@ -509,9 +508,6 @@ class FlourishGroupsView(FlourishTableContainerView):
         schoolyear = self.schoolyear
         return IGroupContainer(schoolyear)
 
-    def getColumnsBefore(self):
-        return []
-
     def getColumnsAfter(self):
         description = column.GetterColumn(
             name='description',
@@ -519,12 +515,6 @@ class FlourishGroupsView(FlourishTableContainerView):
             getter=lambda i, f: i.description or '',
             )
         return [description]
-
-    def update(self):
-        # XXX: maybe this lookup should be done in
-        #      flourish.containers.TableContainerView, instead of using context?
-        self.table = queryMultiAdapter((self.container, self.request), ITableFormatter)
-        super(FlourishGroupsView, self).update()
 
 
 class FlourishGroupContainerDeleteView(ContainerDeleteView):

@@ -190,11 +190,6 @@ class FlourishResourceContainerView(TableContainerView):
             getter=lambda i, f: i.description or '')
         return [description]
 
-    def setUpTableFormatter(self, formatter):
-        columns_after = self.getColumnsAfter()
-        formatter.setUp(formatters=[url_cell_formatter],
-                        columns_after=columns_after)
-
 
 class BaseTypeFilter(FilterWidget):
     """Base Type Filter"""

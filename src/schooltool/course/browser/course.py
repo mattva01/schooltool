@@ -24,7 +24,6 @@ from zope.interface import implements
 from zope.component import adapts
 from zope.component import getMultiAdapter
 from zope.component import getUtility
-from zope.component import queryMultiAdapter
 from zope.container.interfaces import INameChooser
 from zope.interface import directlyProvides
 from zope.intid.interfaces import IIntIds
@@ -66,7 +65,6 @@ from schooltool.skin.flourish.form import AddForm
 from schooltool.skin.flourish.form import DialogForm
 from schooltool.skin.flourish.form import DisplayForm
 from schooltool.skin.flourish.viewlet import ViewletManager
-from schooltool.table.table import url_cell_formatter
 from schooltool.table.table import SchoolToolTableFormatter
 from schooltool.table.table import FilterWidget
 from schooltool.table.interfaces import ITableFormatter
@@ -413,15 +411,6 @@ class FlourishCoursesView(TableContainerView):
     def container(self):
         schoolyear = self.schoolyear
         return ICourseContainer(schoolyear)
-
-    def setUpTableFormatter(self, formatter):
-        formatter.setUp(formatters=[url_cell_formatter])
-
-    def update(self):
-        # XXX: maybe this lookup should be done in
-        #      flourish.containers.TableContainerView, instead of using context?
-        self.table = queryMultiAdapter((self.container, self.request), ITableFormatter)
-        super(FlourishCoursesView, self).update()
 
 
 class FlourishCourseContainerDeleteView(ContainerDeleteView):

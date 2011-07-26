@@ -1,12 +1,13 @@
-<metal:block tal:define="batch view/available_table/batch;
+<metal:block i18n:domain="schooltool"
+             tal:define="batch view/available_table/batch;
                          items view/getSelectedItems">
   <h2 tal:content="view/current_title" />
   <form method="post" tal:attributes="action request/URL">
     <tal:block replace="structure view/selected_table/render"
                tal:condition="items"/>
-    <p tal:condition="not:items" i18n:translate="">
+    <h3 tal:condition="not:items" i18n:translate="">
       There are none.
-    </p>
+    </h3>
   </form>
   <h3>
     <a tal:attributes="href context/@@absolute_url"
@@ -27,8 +28,8 @@
     <tal:block replace="structure view/available_table/batch/render" />
     <tal:block replace="structure view/available_table/render"
                tal:condition="batch"/>
-    <p tal:condition="not:batch" i18n:translate="">
+    <h3 tal:condition="not:batch" i18n:translate="">
       There are none to add.
-    </p>
+    </h3>
   </form>
 </metal:block>

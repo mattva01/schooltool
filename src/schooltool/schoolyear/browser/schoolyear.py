@@ -54,6 +54,7 @@ from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.demographics.browser.table import DateColumn
 from schooltool.table.table import url_cell_formatter
 from schooltool.table.table import DependableCheckboxColumn
+from schooltool.table.table import SchoolToolTableFormatter
 from schooltool.schoolyear.browser.interfaces import ISchoolYearViewMenuViewletManager
 from schooltool.schoolyear.schoolyear import validateScholYearForOverflow
 from schooltool.schoolyear.schoolyear import validateScholYearsForOverlap
@@ -188,20 +189,25 @@ class FlourishActiveSchoolYearColumn(column.Column):
             return ''
 
 
+class SchoolYearTableFormatter(SchoolToolTableFormatter):
+
+    def sortOn(self):
+        return (('first', True),)
+
+
 class FlourishSchoolYearContainerView(flourish.containers.TableContainerView):
     """flourish SchoolYear container view."""
 
-    def setUpTableFormatter(self, formatter):
-        columns_after = [
+    def getColumnsAfter(self):
+        result = [
             DateColumn(title=_("First Day"),
+                       name='first',
                        getter=lambda x, y: x.first),
             DateColumn(title=_("Last Day"),
                        getter=lambda x, y: x.last),
             FlourishActiveSchoolYearColumn(title=_("Active")),
             ]
-        formatter.setUp(formatters=[url_cell_formatter],
-                        columns_after=columns_after,
-                        sort_on=(("title", True),))
+        return result
 
 
 class FlourishSchoolYearContainerLinks(flourish.page.RefineLinksViewlet):

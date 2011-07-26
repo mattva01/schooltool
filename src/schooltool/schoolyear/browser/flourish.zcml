@@ -149,4 +149,9 @@
 
   <zope:adapter factory=".schoolyear.FlourishOverlapEditValidator" />
 
+  <zope:adapter
+      for="schooltool.schoolyear.interfaces.ISchoolYearContainer
+           schooltool.skin.flourish.interfaces.IFlourishLayer"
+      factory=".schoolyear.SchoolYearTableFormatter" />
+
 </configure>

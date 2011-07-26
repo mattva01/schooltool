@@ -658,8 +658,9 @@ class FlourishTermsView(flourish.page.Page):
 
     def years(self):
         syc = ISchoolYearContainer(self.context)
+        result = []
         for year in reversed(tuple(syc.values())):
-            result = {
+            info = {
                 'title': _(u'School Year: ${year_title}',
                          mapping={'year_title': year.title}),
                 'first': year.first,
@@ -672,8 +673,9 @@ class FlourishTermsView(flourish.page.Page):
                          mapping={'year_title': year.title}),
                 }
             for term in reversed(tuple(year.values())):
-                result['terms'].append(term)
-            yield result
+                info['terms'].append(term)
+            result.append(info)
+        return result
 
 
 class FlourishManageYearsOverview(flourish.page.Content):
