@@ -70,4 +70,11 @@
 
 </table>
 
+<h4>
+  <a tal:attributes="href context/@@absolute_url"
+     i18n:translate="">
+    Manage school years
+  </a>
+</h4>
+
 </div>

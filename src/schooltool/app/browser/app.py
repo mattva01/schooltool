@@ -751,6 +751,10 @@ class ManageSchoolLinks(flourish.page.RefineLinksViewlet):
     """Manage School links viewlet."""
 
 
+class CustomizeSchoolLinks(flourish.page.RefineLinksViewlet):
+    """Customize School links viewlet."""
+
+
 def getAppViewlet(context, request, view, manager, name):
     app = ISchoolToolApplication(None)
     viewlet = flourish.viewlet.lookupViewlet(
