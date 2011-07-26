@@ -21,15 +21,17 @@ group views.
 
 $Id$
 """
+from collections import defaultdict
 
 import z3c.form
 import z3c.form.browser.text
-from z3c.form import form, field, button, subform, validator, widget
-from z3c.form.interfaces import DISPLAY_MODE, HIDDEN_MODE, NO_VALUE, IActionHandler
+from z3c.form import form, field, button, widget
+from z3c.form.interfaces import DISPLAY_MODE, HIDDEN_MODE, NO_VALUE
 from zc.table import table
 from zc.table.column import GetterColumn
 
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
+from zope.cachedescriptors.property import Lazy
 from zope.component import adapter, adapts
 from zope.component import getUtilitiesFor
 from zope.component import queryAdapter
@@ -72,6 +74,7 @@ from schooltool.person.browser.person import PersonFilterWidget
 from schooltool.resource.interfaces import IResourceFactoryUtility
 from schooltool.skin.flourish.containers import TableContainerView
 from schooltool.skin.flourish.page import RefineLinksViewlet, Page
+from schooltool.skin.flourish.page import Content
 from schooltool.skin.flourish.page import ModalFormLinkViewlet
 from schooltool.skin.flourish.form import DialogForm, AddForm
 
@@ -558,7 +561,7 @@ class FlourishEquipmentView(FlourishBaseResourceView, EquipmentView):
 # XXX: move this to a generic form base class
 #      it's also duplicated in basicperson.browser.person.PersonForm
 class ErrorMessageBase(object):
- 
+
     formErrorsMessage = _('Please correct the marked fields below.')
 
 
@@ -848,3 +851,30 @@ class FlourishResourceDeleteLink(ModalFormLinkViewlet):
         title = _(u'Delete ${resource_title}',
                   mapping={'resource_title': self.context.title})
         return translate(title, context=self.request)
+
+
+class FlourishManageResourcesOverview(Content):
+
+    body_template = ViewPageTemplateFile(
+        'templates/f_manage_resources_overview.pt')
+
+    def __init__(self, context, *args, **kw):
+        super(FlourishManageResourcesOverview, self).__init__(
+            self.actual_context, *args, **kw)
+
+    @property
+    def actual_context(self):
+        app = (ISchoolToolApplication(None))
+        return app['resources']
+
+    @Lazy
+    def resource_types(self):
+        types = defaultdict(lambda:dict(amount=0, title=None, id=None))
+        for resource in self.context.values():
+            info = IResourceTypeInformation(resource)
+            if types[info.id]['title'] is None:
+                types[info.id]['title'] = info.title
+            if types[info.id]['id'] is None:
+                types[info.id]['id'] = info.id
+            types[info.id]['amount'] += 1
+        return types

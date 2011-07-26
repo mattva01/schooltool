@@ -1,0 +1,35 @@
+<div i18n:domain="schooltool"
+     tal:define="resource_types view/resource_types;
+                 resource_link string:${context/schooltool:app/@@absolute_url}/resources">
+
+<table class="data relationships-table">
+  <thead>
+    <tr>
+      <th i18n:translate="">School Resources</th>
+      <th i18n:translate="">Total</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr tal:condition="not:resource_types">
+      <td colspan="2" i18n:translate="">
+        There are no
+        <a tal:attributes="href resource_link">school resources</a> set up.
+      </td>
+    </tr>
+    <tr tal:repeat="resource resource_types/values">
+      <td>
+        <a tal:content="resource/title"
+           tal:attributes="href string:${resource_link}/?SEARCH_TYPE=${resource/id}">
+          [link]
+        </a>
+      </td>
+      <td tal:content="resource/amount">
+        [number]
+      </td>
+    </tr>
+  </tbody>
+
+</table>
+
+</div>
