@@ -2,7 +2,6 @@
 <configure xmlns="http://namespaces.zope.org/browser"
            xmlns:z3c="http://namespaces.zope.org/z3c"
            xmlns:zope="http://namespaces.zope.org/zope"
-           xmlns:flourish="http://schooltool.org/flourish"
            i18n_domain="schooltool">
 
   <zope:adapterTraverserPlugin
@@ -67,21 +66,6 @@
       title="New Timetable"
       />
 
-  <flourish:content
-      for="schooltool.timetable.interfaces.IScheduleWithExceptions"
-      layer="schooltool.skin.ISchoolToolLayer"
-      template="templates/schedule_exceptions_content.pt"
-      permission="schooltool.view"
-      name="exceptions" />
-
-  <flourish:content
-      class=".timetable.DayTemplatesTable"
-      for="schooltool.timetable.interfaces.IDayTemplateSchedule"
-      layer="schooltool.skin.ISchoolToolLayer"
-      view=".timetable.IRenderDayTableCells"
-      template="templates/daytemplates_table.pt"
-      permission="schooltool.view"
-      name="table" />
 
   <page
       name="index.html"
@@ -187,47 +171,6 @@
       class=".timetable.SelectedPeriodsScheduleEditView"
       permission="schooltool.edit"
       />
-
-  <flourish:content
-      class=".timetable.SelectedPeriodsContent"
-      for="schooltool.timetable.interfaces.ISelectedPeriodsSchedule"
-      layer="schooltool.skin.ISchoolToolLayer"
-      template="templates/selected_periods_content.pt"
-      permission="schooltool.view"
-      name="view" />
-
-  <flourish:content
-      class=".timetable.SelectedPeriodsContent"
-      for="schooltool.term.interfaces.ITerm"
-      layer="schooltool.skin.ISchoolToolLayer"
-      template="templates/selected_periods_content.pt"
-      display_title="Term"
-      permission="schooltool.view"
-      name="view" />
-
-  <flourish:content
-      for="schooltool.term.interfaces.ITerm"
-      layer="schooltool.skin.ISchoolToolLayer"
-      template="templates/date_boundaries_content.pt"
-      display_title="Term"
-      permission="schooltool.view"
-      name="boundaries" />
-
-  <flourish:content
-      for="schooltool.timetable.interfaces.ISchedule"
-      layer="schooltool.skin.ISchoolToolLayer"
-      template="templates/date_boundaries_content.pt"
-      display_title="Schedule"
-      permission="schooltool.view"
-      name="boundaries" />
-
-  <flourish:content
-      for="schooltool.timetable.interfaces.ITimetable"
-      layer="schooltool.skin.ISchoolToolLayer"
-      template="templates/date_boundaries_content.pt"
-      display_title="Timetable"
-      permission="schooltool.view"
-      name="boundaries" />
 
    <page
       for="schooltool.timetable.interfaces.IScheduleCalendarEvent"

@@ -28,4 +28,11 @@
 
 </table>
 
+<h4>
+  <a tal:attributes="href context/schooltool:app/persons/@@absolute_url"
+     i18n:translate="">
+    Manage all users
+  </a>
+</h4>
+
 </div>

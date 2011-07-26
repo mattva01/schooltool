@@ -241,6 +241,16 @@
       permission="schooltool.edit"
       />
 
+  <flourish:viewlet
+      name="customize_school_links"
+      after="manage_school_links"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      class="schooltool.app.browser.app.CustomizeSchoolLinks"
+      view="schooltool.app.browser.app.ManageSchool"
+      title="Customize"
+      permission="schooltool.edit"
+      />
+
   <!-- Content providers -->
 
   <flourish:content

@@ -52,6 +52,8 @@ from z3c.form import form, field, button
 from zc.table.column import Column
 from zc.table.table import FormFullFormatter
 
+import schooltool.skin.flourish.page
+import schooltool.skin.flourish.viewlet
 from schooltool.calendar.icalendar import convert_calendar_to_ical
 from schooltool.app.browser.interfaces import IManageMenuViewletManager
 from schooltool.app.interfaces import ISchoolToolAuthenticationPlugin
@@ -747,6 +749,10 @@ class ManageSiteLinks(flourish.page.RefineLinksViewlet):
 
 class ManageSchoolLinks(flourish.page.RefineLinksViewlet):
     """Manage School links viewlet."""
+
+
+class CustomizeSchoolLinks(flourish.page.RefineLinksViewlet):
+    """Customize School links viewlet."""
 
 
 def getAppViewlet(context, request, view, manager, name):

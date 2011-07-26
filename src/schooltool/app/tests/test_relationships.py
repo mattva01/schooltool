@@ -26,22 +26,23 @@ import doctest
 from zope.interface import implements
 from zope.component import provideAdapter
 
-from schooltool.app.interfaces import IShowTimetables
+# XXX: disabled by timetable refactoring
+#from schooltool.app.interfaces import IShowTimetables
 
 
-class ShowTimetablesStub(object):
-    implements(IShowTimetables)
-
-    def __init__(self, context):
-        self.context = context
-
-    def _getShowTimetables(self):
-        return getattr(self.context, '_show_timetables', True)
-
-    def _setShowTimetables(self, value):
-        self.context._show_timetables = value
-
-    showTimetables = property(_getShowTimetables, _setShowTimetables)
+##class ShowTimetablesStub(object):
+##    implements(IShowTimetables)
+##
+##    def __init__(self, context):
+##        self.context = context
+##
+##    def _getShowTimetables(self):
+##        return getattr(self.context, '_show_timetables', True)
+##
+##    def _setShowTimetables(self, value):
+##        self.context._show_timetables = value
+##
+##    showTimetables = property(_getShowTimetables, _setShowTimetables)
 
 
 def doctest_Instruction():

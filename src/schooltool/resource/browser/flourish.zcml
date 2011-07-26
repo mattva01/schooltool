@@ -38,10 +38,10 @@
 
   <flourish:viewlet
       name="resource_demographics"
-      after="resources"
+      after="demographics"
       title="Resource Attributes"
       class="schooltool.skin.flourish.page.LinkViewlet"
-      manager="schooltool.app.browser.app.ManageSchoolLinks"
+      manager="schooltool.app.browser.app.CustomizeSchoolLinks"
       permission="schooltool.view"
       />
 

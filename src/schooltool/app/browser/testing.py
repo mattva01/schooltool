@@ -160,14 +160,17 @@ def setUp(test=None):
     # resources
     class ResourceStub:
         def __init__(self, request):
-            pass
+            self.request = request
+        def __getitem__(self, key):
+            return ResourceStub(self.request)
         def __call__(self):
             return "a dummy resource"
 
     for name in ['layout.css', 'schooltool.css', 'schooltool.js',
                  'next.png', 'prev.png', 'favicon.ico',
                  'calwidget-calendar.js', 'calwidget-calendar.css',
-                 'calwidget-icon.gif', 'print.css', 'jquery.js',
+                 'calwidget-icon.gif', 'print.css',
+                 'jquery.js', 'jquery-ui',
                  'zonki-angry.png', 'zonki-pointing.png',
                  'zonki-question.png', 'zonki-reading.png',
                  'zonki-regular.png']:
