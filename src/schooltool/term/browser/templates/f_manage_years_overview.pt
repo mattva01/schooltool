@@ -1,7 +1,7 @@
 <div i18n:domain="schooltool"
      tal:define="year context/getActiveSchoolYear">
 
-<table class="data"
+<table class="data relationships-table"
        tal:define="terms view/terms">
   <thead>
     <tr>
@@ -13,14 +13,13 @@
 
   <tal:block condition="not:view/has_active_year">
     <tr>
-      <td colspan="3">
-        <p i18n:translate="">To add teachers, students or administrators,
-          manage courses, please set up a
-          <a tal:attributes="href string:${context/@@absolute_url}/add.html"
-             i18n:translate="" i18n:name="school_year">
-            school year
-          </a>.
-        </p>
+      <td colspan="3" i18n:translate="">
+        To add teachers, students or administrators,
+        manage courses, please set up a
+        <a tal:attributes="href string:${context/@@absolute_url}/add.html"
+           i18n:translate="" i18n:name="school_year">
+          school year
+        </a>.
       </td>
     </tr>
   </tal:block>
@@ -47,11 +46,9 @@
   </thead>
   <tbody>
     <tr tal:condition="not: terms">
-      <td colspan="3">
-        <p i18n:translate="">Please set up at least one
-        <a tal:attributes="href string:${context/schooltool:app/@@absolute_url}/terms"
-           i18n:translate="" i18n:name="term">term</a>.
-        </p>
+      <td colspan="3" i18n:translate="">
+        Please set up at least one
+        <a tal:attributes="href string:${context/schooltool:app/@@absolute_url}/terms">term</a>.
       </td>
     </tr>
     <tr tal:condition="terms"
