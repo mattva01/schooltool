@@ -44,8 +44,11 @@ from schooltool.basicperson.interfaces import IDemographicsFields
 from schooltool.basicperson.interfaces import IFieldDescription
 from schooltool.basicperson.interfaces import EnumValueList
 from schooltool.basicperson.interfaces import IAddEditViewTitle
+from schooltool.basicperson.interfaces import ILimitKeysLabel
+from schooltool.basicperson.interfaces import ILimitKeysHint
 from schooltool.common.inlinept import InheritTemplate
 from schooltool.skin import flourish
+from schooltool.skin.flourish import IFlourishLayer
 from schooltool.skin.flourish.interfaces import IViewletManager
 from schooltool.skin.flourish.viewlet import Viewlet, ViewletManager
 from schooltool.skin.flourish.content import ContentProvider
@@ -351,12 +354,27 @@ def getAddEditViewTitle(context):
     return _('Demographics')
 
 
+@adapter(IDemographicsFields)
+@implementer(ILimitKeysLabel)
+def getLimitKeysLabel(context):
+    return _('Limit to group(s)')
+
+
+@adapter(IDemographicsFields)
+@implementer(ILimitKeysHint)
+def getLimitKeysHint(context):
+    return _(u"""If you select one or more groups below, this field
+                 will only be displayed in forms and reports for
+                 members of the selected groups.""")
+
+
 class FlourishFieldDescriptionAddView(flourish.form.AddForm,
                                       FieldDescriptionAddView):
 
     template = InheritTemplate(flourish.page.Page.template)
     label = None
     legend = 'Field Details'
+    formErrorsMessage = _('Please correct the marked fields below.')
 
     @property
     def title(self):
@@ -369,6 +387,13 @@ class FlourishFieldDescriptionAddView(flourish.form.AddForm,
     @button.buttonAndHandler(_("Cancel"))
     def handle_cancel_action(self, action):
         self.request.response.redirect(self.nextURL())
+
+    def updateWidgets(self):
+        super(FlourishFieldDescriptionAddView, self).updateWidgets()
+        self.widgets['limit_keys'].label = getAdapter(self.context,
+            ILimitKeysLabel)
+        self.widgets['limit_keys'].field.description = getAdapter(self.context,
+            ILimitKeysHint)
 
     def nextURL(self):
         return absoluteURL(self.context, self.request)
@@ -417,6 +442,13 @@ class FlourishFieldDescriptionEditView(flourish.form.Form,
     @button.buttonAndHandler(_("Cancel"))
     def handle_cancel_action(self, action):
         self.request.response.redirect(self.nextURL())
+
+    def updateWidgets(self):
+        super(FlourishFieldDescriptionEditView, self).updateWidgets()
+        self.widgets['limit_keys'].label = getAdapter(
+            self.context.__parent__, ILimitKeysLabel)
+        self.widgets['limit_keys'].field.description = getAdapter(
+            self.context.__parent__, ILimitKeysHint)
 
     def nextURL(self):
         return absoluteURL(self.context.__parent__, self.request)

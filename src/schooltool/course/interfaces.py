@@ -32,14 +32,11 @@ from schooltool.common import SchoolToolMessage as _
 class ICourse(Interface):
     """Courses are similar to groups, membership is restricted to Sections."""
 
-    title = zope.schema.TextLine(
-        title=_("Title"),
-        description=_("Title of the course."))
+    title = zope.schema.TextLine(title=_("Title"))
 
     description = zope.schema.Text(
         title=_("Description"),
-        required=False,
-        description=_("Description of the course."))
+        required=False)
 
     sections = Attribute(
         """The Sections that implement this course material,
@@ -47,19 +44,17 @@ class ICourse(Interface):
 
     course_id = zope.schema.TextLine(
         title=_("Course ID"),
-        required=False,
-        description=_("Localy used course identifier."))
+        required=False)
 
     government_id = zope.schema.TextLine(
-        title=_("Government ID"),
+        title=_("Alternate ID"),
         required=False,
-        description=_("Course identifier used by the government."))
+        description=_("Additional identifier for outside tracking or other purposes."))
 
     credits = zope.schema.Int(
         title=_("Credits"),
         required=False,
-        description=_("Amount of credits for this course."))
-
+        description=_("This value must be an integer."))
 
 
 class ICourseContainer(IContainer):

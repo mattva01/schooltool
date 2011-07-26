@@ -22,6 +22,8 @@ SchoolTool application views.
 $Id$
 """
 
+from ZODB.FileStorage.FileStorage import FileStorageError
+from ZODB.interfaces import IDatabase
 from zope.location.location import LocationProxy
 from zope.interface import implementer
 from zope.interface import implements
@@ -34,6 +36,7 @@ from zope.app.form.browser.add import AddView
 from zope.app.form.browser.editview import EditView
 from zope.app.form.interfaces import IInputWidget
 from zope.app.form.interfaces import WidgetsError
+from zope.app.applicationcontrol.browser.zodbcontrol import ZODBControlView
 from zope.authentication.interfaces import IUnauthenticatedPrincipal
 from zope.publisher.browser import BrowserView
 from zope.component import getMultiAdapter, queryMultiAdapter
@@ -45,7 +48,7 @@ from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.publisher.browser import BrowserPage
 from zope.traversing.browser.absoluteurl import absoluteURL
 from zope.traversing.api import traverse
-
+from z3c.form import form, field, button
 from zc.table.column import Column
 from zc.table.table import FormFullFormatter
 
@@ -62,11 +65,11 @@ from schooltool.person.interfaces import IPerson
 from schooltool.table.table import CheckboxColumn
 from schooltool.table.table import label_cell_formatter_factory
 from schooltool.table.table import stupid_form_key
+from schooltool.table.table import ImageInputColumn
 from schooltool.table.interfaces import ITableFormatter
 from schooltool.skin.skin import OrderedViewletManager
 from schooltool.skin.breadcrumbs import CustomNameBreadCrumbInfo
 from schooltool.skin import flourish
-import schooltool.skin.flourish.page
 
 from schooltool.common import SchoolToolMessage as _
 
@@ -205,28 +208,10 @@ class CSSFormatter(FormFullFormatter):
         result = []
         old_css_class = self.cssClasses.get('th')
         for col in self.visible_columns:
-            self.cssClasses['th'] = col.name
+            self.cssClasses['th'] = col.name.replace('_', '-')
             result.append(self.renderHeader(col))
         self.cssClasses['th'] = old_css_class
         return ''.join(result)
-
-
-class ActionColumn(Column):
-
-    def __init__(self, prefix, label=None, icon=None, id_getter=None):
-        self.name = 'action'
-        self.title = label
-        self.prefix = prefix
-        self.label = label
-        self.icon = icon
-        if id_getter is None:
-            self.id_getter = stupid_form_key
-        else:
-            self.id_getter = id_getter
-
-    def renderCell(self, item, formatter):
-        form_id = ".".join(filter(None, [self.prefix, self.id_getter(item)]))
-        return '<input type="image" alt="%s" name="%s" src="%s" value="1" title="%s" />' % (self.label, form_id, self.icon, self.label)
 
 
 class FlourishRelationshipViewBase(flourish.page.NoSidebarPage):
@@ -264,18 +249,15 @@ class FlourishRelationshipViewBase(flourish.page.NoSidebarPage):
         raise NotImplementedError("Subclasses should override this method.")
 
     def getColumnsAfter(self, prefix):
-        label = ''
-        icon = ''
-        if prefix == 'add_item':
-            label = _('Add')
-            icon = 'add-icon.png'
-        elif prefix == 'remove_item':
-            label = _('Remove')
-            icon = 'remove-icon.png'
-        icon = traverse(self.context,
-                        '++resource++schooltool.skin.flourish/%s' % icon,
-                        request=self.request)()
-        action = ActionColumn(prefix, label, icon, self.getKey)
+        actions = {
+            'add_item': {'label': _('Add'), 'icon': 'add-icon.png'},
+            'remove_item': {'label': _('Remove'), 'icon': 'remove-icon.png'},
+            }
+        label, icon = actions[prefix]['label'], actions[prefix]['icon']
+        action = ImageInputColumn(
+            prefix, name='action', title=label, alt=label,
+            library='schooltool.skin.flourish',
+            image=icon, id_getter=self.getKey)
         return [action]
 
     def createTableFormatter(self, **kwargs):
@@ -505,6 +487,63 @@ class ApplicationPreferencesView(BrowserView):
                     setattr(prefs, field, data[field])
 
 
+class FlourishApplicationPreferencesView(flourish.page.Page, form.EditForm):
+
+    fields = field.Fields(IApplicationPreferences)
+    label = None
+    # XXX: duplicated error message. Create and use a base class
+    formErrorsMessage = _('Please correct the marked fields below.')
+
+    def update(self):
+        # XXX: duplicated fieldset logic. Create and use a base class
+        self.buildFieldsetGroups()
+        form.EditForm.update(self)
+
+    def buildFieldsetGroups(self):
+        self.fieldset_groups = {
+            'general': (
+                _('General preferences'),
+                ['title', 'frontPageCalendar']),
+            'calendar': (
+                _('Calendar preferences'),
+                ['timezone', 'timeformat', 'dateformat', 'weekstart']),
+            }
+        self.fieldset_order = (
+            'general', 'calendar')
+
+    def fieldsets(self):
+        result = []
+        for fieldset_id in self.fieldset_order:
+            legend, fields = self.fieldset_groups[fieldset_id]
+            result.append(self.makeFieldSet(
+                    fieldset_id, legend, list(fields)))
+        return result
+
+    def makeRows(self, fields, cols=1):
+        rows = []
+        while fields:
+            rows.append(fields[:cols])
+            fields = fields[cols:]
+        return rows
+
+    def makeFieldSet(self, fieldset_id, legend, fields, cols=1):
+        result = {
+            'id': fieldset_id,
+            'legend': legend,
+            }
+        result['rows'] = self.makeRows(fields, cols)
+        return result
+
+    @button.buttonAndHandler(_('Apply'))
+    def handle_edit_action(self, action):
+        super(FlourishApplicationPreferencesView, self).handleApply.func(self, action)
+
+    @button.buttonAndHandler(_('Cancel'))
+    def handle_cancel_action(self, action):
+        url = absoluteURL(self.context, self.request) + '/settings'
+        self.request.response.redirect(url)
+
+
 class ProbeParticipation:
     """A stub participation for use in hasPermissions."""
     implements(IParticipation)
@@ -529,6 +568,18 @@ class LeaderView(RelationshipViewBase):
     title = _("Leaders")
     current_title = _("Current leaders")
     available_title = _("Available leaders")
+
+    def getCollection(self):
+        return self.context.leaders
+
+    def getAvailableItemsContainer(self):
+        return ISchoolToolApplication(None)['persons']
+
+
+class FlourishLeaderView(FlourishRelationshipViewBase):
+
+    current_title = _("Current responsible parties")
+    available_title = _("Available responsible parties")
 
     def getCollection(self):
         return self.context.leaders
@@ -703,3 +754,25 @@ def getAppViewlet(context, request, view, manager, name):
     viewlet = flourish.viewlet.lookupViewlet(
         app, request, view, manager, name=name)
     return viewlet
+
+
+class ApplicationControlLinks(flourish.page.RefineLinksViewlet):
+    """Application Control links viewlet."""
+
+
+class SchoolToolZODBControlView(ZODBControlView):
+
+    def update(self):
+        self.errors = []
+        days = 0
+        dbs = self.request.form.get('dbs', [])
+        for dbName in dbs:
+            db = getUtility(IDatabase, name=dbName)
+            try:
+                db.pack(days=days)
+                self.status = _('ZODB "${name}" successfully packed.',
+                                mapping=dict(name=str(dbName)))
+            except FileStorageError, err:
+                self.status = _('There were errors.')
+                self.errors.append(_('ERROR packing ZODB "${name}": ${err}',
+                                     mapping=dict(name=str(dbName), err=err)))

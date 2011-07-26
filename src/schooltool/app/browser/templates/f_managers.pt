@@ -1,0 +1,50 @@
+<form tal:attributes="action request/URL"
+      tal:define="status view/evolve">
+  <p tal:condition="status">
+    <span tal:condition="status/to"
+          i18n:translate="">
+      The database was updated to generation
+      <span i18n:name="generation"
+            tal:content="status/to">2</span>
+      for
+      <span i18n:name="application"
+            tal:content="status/app">foo.bar</span>.
+    </span>
+    <span tal:condition="not: status/to" i18n:translate="">
+      The database is up to date for
+      <span i18n:name="application"
+            tal:content="status/app">foo.bar</span>.
+    </span>
+  </p>
+  <table>
+    <thead>
+      <tr>
+        <th i18n:translate="">Application</th>
+        <th i18n:translate="">Minimum Generation</th>
+        <th i18n:translate="">Maximum Generation</th>
+        <th i18n:translate="">Current Database Generation</th>
+        <th i18n:translate="">Evolve?</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr tal:repeat="app view/applications">
+        <td tal:content="app/id">id</td>
+        <td tal:content="app/min">1</td>
+        <td tal:content="app/max">10</td>
+        <td tal:content="app/generation">2</td>
+        <td>
+          <input type="submit" value=" evolve " name="evolve"
+                 tal:condition="app/evolve"
+                 tal:attributes="name app/evolve" />
+            <span tal:condition="not: app/evolve"
+                  i18n:translate="">No, up to date</span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</form>
+<h3>
+  <a tal:attributes="href context/@@absolute_url" i18n:translate="">
+    Done
+  </a>
+</h3>

@@ -19,15 +19,38 @@
 """
 SchoolTool flourish forms.
 """
+from zope.component import adapts
+from zope.interface import Interface
+from zope.schema.interfaces import IBool
+from zope.schema import ValidationError
 import z3c.form.form
+from z3c.form.error import ErrorViewSnippet
+from z3c.form.term import BoolTerms
+from z3c.form.interfaces import IRadioWidget
 
 import schooltool.skin.flourish.page
 import schooltool.skin.flourish.tal
 from schooltool.skin import flourish
+from schooltool.skin.flourish.interfaces import IFlourishLayer
+
+from schooltool.common import SchoolToolMessage as _
+
+
+class FlourishRadioBoolTerms(BoolTerms):
+
+    adapts(Interface,
+           IFlourishLayer,
+           Interface,
+           IBool,
+           IRadioWidget)
+
+    trueLabel = _('Yes')
+    falseLabel = _('No')
 
 
 class Form(z3c.form.form.Form, flourish.page.Page):
     __call__ = flourish.page.Page.__call__
+    formErrorsMessage = _('Please correct the marked fields below.')
 
     def update(self):
         super(Form, self).update()
@@ -36,7 +59,15 @@ class Form(z3c.form.form.Form, flourish.page.Page):
         super(Form, self).updateActions()
 
 
+class DisplayForm(z3c.form.form.DisplayForm, flourish.page.Page):
+    __call__ = flourish.page.Page.__call__
+
+    def update(self):
+        super(DisplayForm, self).update()
+
+
 class AddForm(Form, z3c.form.form.AddForm):
+
     def update(self):
         super(Form, self).update()
         if self._finishedAdd:
@@ -111,3 +142,12 @@ class DialogForm(Dialog, Form):
 
 class DialogAddForm(DialogForm, AddForm):
     pass
+
+
+class FlourishErrorViewSnippet(ErrorViewSnippet):
+
+    adapts(ValidationError, IFlourishLayer, None, None, None, None)
+
+    def update(self):
+        super(FlourishErrorViewSnippet, self).update()
+        self.widget.addClass('error')

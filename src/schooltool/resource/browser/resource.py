@@ -27,6 +27,7 @@ import z3c.form.browser.text
 from z3c.form import form, field, button, subform, validator, widget
 from z3c.form.interfaces import DISPLAY_MODE, HIDDEN_MODE, NO_VALUE, IActionHandler
 from zc.table import table
+from zc.table.column import GetterColumn
 
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import adapter, adapts
@@ -38,10 +39,12 @@ from zope.component import getMultiAdapter
 from zope.container.interfaces import INameChooser
 from zope.event import notify
 from zope.formlib import form as oldform
+from zope.i18n import translate
 from zope.interface import implementer, implements, implementsOnly
 from zope.lifecycleevent import ObjectCreatedEvent
 from zope.publisher.browser import BrowserView
 from zope.publisher.interfaces.browser import IBrowserRequest
+from zope.security.checker import canAccess
 from zope.session.interfaces import ISession
 from zope.traversing.browser.absoluteurl import absoluteURL
 from zope.traversing.browser.interfaces import IAbsoluteURL
@@ -51,17 +54,26 @@ from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.basicperson.browser.demographics import (DemographicsView,
     FlourishDemographicsView, FlourishReorderDemographicsView)
 from schooltool.basicperson.interfaces import IAddEditViewTitle
+from schooltool.basicperson.interfaces import ILimitKeysLabel
+from schooltool.basicperson.interfaces import ILimitKeysHint
+from schooltool.common.inlinept import InheritTemplate
 from schooltool.resource.interfaces import IBookingCalendar
 from schooltool.resource.interfaces import (IBaseResourceContained,
              IResourceContainer, IResourceTypeInformation, IResourceSubTypes,
              IResource, IEquipment, ILocation, IResourceDemographicsFields)
 from schooltool.resource.resource import Resource, Location, Equipment
 from schooltool.table.interfaces import IFilterWidget
+from schooltool.table.interfaces import ITableFormatter
 from schooltool.table.table import url_cell_formatter
 from schooltool.table.table import CheckboxColumn
 from schooltool.table.table import FilterWidget
+from schooltool.table.table import SchoolToolTableFormatter
 from schooltool.person.browser.person import PersonFilterWidget
 from schooltool.resource.interfaces import IResourceFactoryUtility
+from schooltool.skin.flourish.containers import TableContainerView
+from schooltool.skin.flourish.page import RefineLinksViewlet, Page
+from schooltool.skin.flourish.page import ModalFormLinkViewlet
+from schooltool.skin.flourish.form import DialogForm, AddForm
 
 from schooltool.common import SchoolToolMessage as _
 
@@ -164,6 +176,22 @@ class ResourceContainerView(oldform.FormBase):
             prefix="available")
         formatter.cssClasses['table'] = 'data'
         return formatter()
+
+
+class FlourishResourceContainerView(TableContainerView):
+
+    def getColumnsAfter(self):
+        description = GetterColumn(
+            name='description',
+            title=_(u'Description'),
+            getter=lambda i, f: i.description or '')
+        return [description]
+
+    def setUpTableFormatter(self, formatter):
+        columns_after = self.getColumnsAfter()
+        formatter.setUp(formatters=[url_cell_formatter],
+                        columns_after=columns_after)
+
 
 class BaseTypeFilter(FilterWidget):
     """Base Type Filter"""
@@ -311,6 +339,40 @@ class ResourceContainerFilterWidget(PersonFilterWidget):
         return results
 
 
+class FlourishResourceContainerFilterWidget(ResourceContainerFilterWidget):
+
+    template = ViewPageTemplateFile('templates/f_resource_filter.pt')
+
+    def types(self):
+        options = [
+            {'id': 'equipment',
+             'title': _('Equipment')},
+            {'id': 'location',
+             'title': _('Location')},
+            {'id': 'resource',
+             'title': _('Resource')},
+            ]
+        return options
+
+    def filter(self, results):
+        if 'SEARCH_TITLE' in self.request:
+            searchstr = self.request['SEARCH_TITLE'].lower()
+            results = [item for item in results
+                       if searchstr in item.title.lower() or
+                       (item.description and searchstr in item.description.lower())]
+        if 'SEARCH_TYPE' in self.request:
+            type = self.request['SEARCH_TYPE']
+            if not type:
+                return results
+            results = [resource for resource in results
+                       if IResourceTypeInformation(resource).id == type]
+        return results
+
+
+class ResourceContainerLinks(RefineLinksViewlet):
+    """Resource container links viewlet."""
+
+
 class ResourceDemographicsFieldsAbsoluteURLAdapter(BrowserView):
 
     adapts(IResourceDemographicsFields, IBrowserRequest)
@@ -344,6 +406,20 @@ class FlourishReorderResourceDemographicsView(FlourishReorderDemographicsView):
 @implementer(IAddEditViewTitle)
 def getAddEditViewTitle(context):
     return _('Resource attributes')
+
+
+@adapter(IResourceDemographicsFields)
+@implementer(ILimitKeysLabel)
+def getLimitKeysLabel(context):
+    return _('Limit to resouce type(s)')
+
+
+@adapter(IResourceDemographicsFields)
+@implementer(ILimitKeysHint)
+def getLimitKeysHint(context):
+    return _(u"""If you select one or more resource types below, this field
+                 will only be displayed in forms and reports for
+                 resources of the selected types.""")
 
 
 ##########  Base class of all resource views (uses self.resource_type) #########
@@ -410,6 +486,29 @@ class BaseResourceView(form.Form, ResourceFieldGenerator):
                 self.widgets[widget].mode = HIDDEN_MODE
 
 
+class FlourishBaseResourceView(Page, BaseResourceView):
+
+    def update(self):
+        BaseResourceView.update(self)
+
+    @property
+    def canModify(self):
+        return canAccess(self.context.__parent__, '__delitem__')
+
+    @property
+    def leaders_table(self):
+        return self.getTable(list(self.context.leaders))
+
+    def getTable(self, items):
+        persons = ISchoolToolApplication(None)['persons']
+        result = getMultiAdapter((persons, self.request), ITableFormatter)
+        result.setUp(table_formatter=table.StandaloneFullFormatter, items=items)
+        return result
+
+    def has_leaders(self):
+        return bool(list(self.context.leaders))
+
+
 class ResourceView(BaseResourceView):
     """A location info view."""
 
@@ -417,6 +516,12 @@ class ResourceView(BaseResourceView):
 
     def getBaseFields(self):
         return field.Fields(IResource)
+
+
+class FlourishResourceView(FlourishBaseResourceView, ResourceView):
+
+    def getBaseFields(self):
+        return field.Fields(IResource).select('title', 'description')
 
 
 class LocationView(BaseResourceView):
@@ -428,6 +533,12 @@ class LocationView(BaseResourceView):
         return field.Fields(ILocation)
 
 
+class FlourishLocationView(FlourishBaseResourceView, LocationView):
+
+    def getBaseFields(self):
+        return field.Fields(ILocation).select('title', 'description')
+
+
 class EquipmentView(BaseResourceView):
     """A equipment info view."""
 
@@ -437,8 +548,22 @@ class EquipmentView(BaseResourceView):
         return field.Fields(IEquipment)
 
 
+class FlourishEquipmentView(FlourishBaseResourceView, EquipmentView):
+
+    def getBaseFields(self):
+        return field.Fields(IEquipment).select('title', 'description')
+
+
 ###############  Base classes of all resource add/edit views ################
-class BaseResourceAddView(form.AddForm, ResourceFieldGenerator):
+# XXX: move this to a generic form base class
+#      it's also duplicated in basicperson.browser.person.PersonForm
+class ErrorMessageBase(object):
+ 
+    formErrorsMessage = _('Please correct the marked fields below.')
+
+
+class BaseResourceAddView(ErrorMessageBase, form.AddForm,
+                          ResourceFieldGenerator):
 
     id = 'resource-form'
     template = ViewPageTemplateFile('templates/resource_form.pt')
@@ -485,7 +610,8 @@ class BaseResourceAddView(form.AddForm, ResourceFieldGenerator):
         return absoluteURL(self.context, self.request)
 
 
-class BaseResourceEditView(form.EditForm, ResourceFieldGenerator):
+class BaseResourceEditView(ErrorMessageBase, form.EditForm,
+                           ResourceFieldGenerator):
 
     id = 'resource-form'
     template = ViewPageTemplateFile('templates/resource_form.pt')
@@ -521,6 +647,26 @@ class BaseResourceEditView(form.EditForm, ResourceFieldGenerator):
         self.actions['cancel'].addClass('button-cancel')
 
 
+class BaseFlourishResourceAddForm(AddForm):
+
+    template = InheritTemplate(Page.template)
+    label = None
+
+    def createAndAdd(self, data):
+        resource = self._factory()
+        resource.title = data.get('title')
+        chooser = INameChooser(self.context)
+        resource.__name__ = chooser.chooseName('', resource)
+        form.applyChanges(self, resource, data)
+        notify(ObjectCreatedEvent(resource))
+        self.context[resource.__name__] = resource
+        self._resource = resource
+        return resource
+
+    def nextURL(self):
+        return absoluteURL(self._resource, self.request)
+
+
 ###############  Resource add/edit views ################
 class BaseResourceForm(object):
 
@@ -531,7 +677,7 @@ class BaseResourceForm(object):
     demo_legend = _('Resource demographics')
 
     def getBaseFields(self):
-        return field.Fields(IResource).omit('type')
+        return field.Fields(IResource).omit('type', 'notes')
 
 
 class ResourceAddView(BaseResourceForm, BaseResourceAddView):
@@ -540,9 +686,23 @@ class ResourceAddView(BaseResourceForm, BaseResourceAddView):
     _factory = Resource
 
 
+class FlourishResourceAddView(BaseFlourishResourceAddForm, ResourceAddView):
+
+    demo_legend = _('Resource attributes')
+
+
 class ResourceEditView(BaseResourceForm, BaseResourceEditView):
 
     label = _('Edit resource')
+
+
+class FlourishResourceEditView(Page, ResourceEditView):
+
+    label = None
+    demo_legend = _('Resource attributes')
+
+    def update(self):
+        ResourceEditView.update(self)
 
 
 ###############  Location add/edit views ################
@@ -555,8 +715,7 @@ class BaseLocationForm(object):
     demo_legend = _('Location demographics')
 
     def getBaseFields(self):
-        fields = field.Fields(ILocation).select('title', 'type', 'description',
-            'capacity', 'notes')
+        fields = field.Fields(ILocation).select('title', 'description')
         return fields
 
 
@@ -566,9 +725,23 @@ class LocationAddView(BaseLocationForm, BaseResourceAddView):
     _factory = Location
 
 
+class FlourishLocationAddView(BaseFlourishResourceAddForm, LocationAddView):
+
+    demo_legend = _('Location attributes')
+
+
 class LocationEditView(BaseLocationForm, BaseResourceEditView):
 
     label = _('Edit location')
+
+
+class FlourishLocationEditView(Page, LocationEditView):
+
+    label = None
+    demo_legend = _('Location attributes')
+
+    def update(self):
+        LocationEditView.update(self)
 
 
 ###############  Equipment add/edit views ################
@@ -581,8 +754,7 @@ class BaseEquipmentForm(object):
     demo_legend = _('Equipment demographics')
 
     def getBaseFields(self):
-        fields = field.Fields(IEquipment).select('title', 'type', 'description',
-            'manufacturer', 'model', 'serialNumber', 'purchaseDate', 'notes')
+        fields = field.Fields(IEquipment).select('title', 'description')
         return fields
 
 
@@ -592,7 +764,87 @@ class EquipmentAddView(BaseEquipmentForm, BaseResourceAddView):
     _factory = Equipment
 
 
+class FlourishEquipmentAddView(BaseFlourishResourceAddForm, EquipmentAddView):
+
+    demo_legend = _('Equipment attributes')
+
+
 class EquipmentEditView(BaseEquipmentForm, BaseResourceEditView):
 
     label = _('Edit equipment')
 
+
+class FlourishEquipmentEditView(Page, EquipmentEditView):
+
+    label = None
+    demo_legend = _('Equipment attributes')
+
+    def update(self):
+        EquipmentEditView.update(self)
+
+
+class FlourishResourceContainerTableFormatter(SchoolToolTableFormatter):
+
+    # XXX: hack to customize the table class
+    def render(self):
+        formatter = self._table_formatter(
+            self.context, self.request, self._items,
+            columns=self._columns,
+            batch_start=self.batch.start, batch_size=self.batch.size,
+            sort_on=self._sort_on,
+            prefix=self.prefix)
+        formatter.cssClasses['table'] = 'resources-table'
+        return formatter()
+
+
+class ResourceLinks(RefineLinksViewlet):
+
+    @property
+    def title(self):
+        return _("${resource_title}'s",
+                 mapping={'resource_title': self.context.title})
+
+
+class ResourceActions(RefineLinksViewlet): pass
+
+
+class FlourishBookResourceView(BrowserView):
+
+    def __call__(self):
+        sessionWrapper = ISession(self.request)
+        session = sessionWrapper['schooltool.resource']
+        session['bookingSelection'] = [self.context.__name__]
+        url = absoluteURL(IBookingCalendar(self.context), self.request)
+        self.request.response.redirect(url)
+
+
+class FlourishResourceDeleteView(DialogForm, form.Form):
+
+    dialog_submit_actions = ('delete',)
+    dialog_close_actions = ('cancel',)
+    label = None
+
+    @button.buttonAndHandler(_('Delete'))
+    def handle_delete_action(self, action):
+        parent = self.context.__parent__
+        url = absoluteURL(parent, self.request)
+        url += '/delete.html?delete.%s&CONFIRM' % self.context.__name__
+        self.request.response.redirect(url)
+
+    @button.buttonAndHandler(_('Cancel'))
+    def handle_cancel_action(self, action):
+        pass
+
+    def updateActions(self):
+        super(FlourishResourceDeleteView, self).updateActions()
+        self.actions['delete'].addClass('button-ok')
+        self.actions['cancel'].addClass('button-cancel')
+
+
+class FlourishResourceDeleteLink(ModalFormLinkViewlet):
+
+    @property
+    def dialog_title(self):
+        title = _(u'Delete ${resource_title}',
+                  mapping={'resource_title': self.context.title})
+        return translate(title, context=self.request)

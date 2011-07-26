@@ -1,0 +1,5 @@
+<h3>Deleting a group is permanent, irreversible, and destroys all
+data associated with the group. It is strongly recommended that you
+only delete a group that has been created in error or has no data
+associated with it.</h3>
+<div metal:use-macro="macro:form" />

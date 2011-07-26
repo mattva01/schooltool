@@ -1,0 +1,30 @@
+<div i18n:domain="schooltool">
+  <form method="post" tal:attributes="action request/getURL">
+    <ul tal:condition="view/message" class="errors">
+      <li tal:content="view/message" />
+    </ul>
+    <table>
+      <tr>
+        <th i18n:translate="">School Year</th>
+      </tr>
+      <tr tal:repeat="year view/years">
+        <td>
+          <input type="radio" name="ACTIVATE" checked
+                 tal:condition="year/active"
+                 tal:attributes="value year/obj/__name__" />
+          <input type="radio" name="ACTIVATE"
+                 tal:condition="not: year/active"
+                 tal:attributes="value year/obj/__name__" />
+          <a tal:replace="structure year/obj/@@link" />
+        </td>
+      </tr>
+    </table>
+    <div class="buttons controls">
+      <input type="submit" class="submit-widget button-cancel" name="SUBMIT" value="Submit"
+             i18n:attributes="value" />
+      <input type="submit" class="submit-widget button-cancel" name="CANCEL" value="Cancel"
+             i18n:attributes="value cancel-button" />
+    </div>
+  </form>
+</div>
+

@@ -1,0 +1,46 @@
+<div i18n:domain="schooltool">
+  <form method="post" tal:attributes="action request/getURL">
+    <table>
+      <thead>
+        <tr>
+          <th i18n:translate="">Title</th>
+          <th i18n:translate="">First Day</th>
+          <th i18n:translate="">Last Day</th>
+          <th i18n:translate="">Add Term</th>
+        </tr>
+      </thead>
+      <tal:block repeat="year view/years">
+        <tr>
+          <th tal:content="year/title" />
+          <th tal:content="year/first/@@mediumDate" />
+          <th tal:content="year/last/@@mediumDate" />
+          <th>
+            <a tal:condition="year/canModify"
+               tal:attributes="href year/addurl;
+                               title year/alt">
+              <img tal:attributes="src context/++resource++schooltool.skin.flourish/add-icon.png;
+                                   alt year/alt" />
+            </a>
+          </th>
+        </tr>
+        <tr tal:condition="year/empty">
+          <td colspan="3" i18n:translate="">This year has no terms defined.</td>
+        </tr>
+        <tr tal:condition="not: year/empty"
+            tal:repeat="term year/terms">
+          <td>
+            <a tal:replace="structure term/@@link" />
+          </td>
+          <td>
+            <tal:block content="term/first/@@mediumDate" />
+          </td>
+          <td>
+            <tal:block content="term/last/@@mediumDate" />
+          </td>
+          <td></td>
+        </tr>
+      </tal:block>
+    </table>
+  </form>
+</div>
+

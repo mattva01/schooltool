@@ -1,0 +1,69 @@
+<div i18n:domain="schooltool">
+  <div metal:use-macro="macro:form">
+    <metal:block fill-slot="above-buttons"
+                 tal:define="active view/activeSchoolyearInfo"
+                 tal:condition="active">
+      <fieldset>
+        <legend>
+        <span i18n:translate="">
+          Copy data from active school year:
+          <tal:block replace="active/title"
+                i18n:name="active_schoolyear" />
+        </span>
+        </legend>
+        <div class="row">
+        <table>
+          <thead>
+          <tr id="group-header-row">
+            <th i18n:translate="">Group Name</th>
+            <th i18n:translate="">Copy Group</th>
+            <th i18n:translate="">Copy members</th>
+          </tr>
+          </thead>
+          <tr class="group-row" tal:repeat="group active/groups">
+            <td class="dr" tal:content="group/title">
+              Clerks
+            </td>
+            <td class="center">
+              <input type="checkbox" name="groups"
+                     tal:attributes="value group/id;
+                                     checked group/sent"
+                     tal:condition="not:group/isDefault" />
+              <input type="checkbox" name="defaultGroups"
+                     checked="checked" disabled="disabled"
+                     tal:attributes="value group/id"
+                     tal:condition="group/isDefault" />
+            </td>
+            <td class="center">
+              <input type="checkbox" name="members"
+                     tal:condition="group/hasMembers"
+                     tal:attributes="value group/id;
+                                     checked group/membersSent" />
+            </td>
+          </tr>
+        </table>
+        <table>
+          <tr id="all-courses-row" tal:condition="active/hasCourses">
+            <td i18n:translate="">
+              Copy courses from active year?
+            </td>
+            <td>
+              <input type="checkbox" value="true" name="importAllCourses"
+                     tal:attributes="checked request/importAllCourses|nothing" />
+            </td>
+          </tr>
+          <tr id="all-timetables-row" tal:condition="active/hasTimetables">
+            <td i18n:translate="">
+              Copy timetable schemas from active year?
+            </td>
+            <td>
+              <input type="checkbox" value="true" name="importAllTimetables"
+                     tal:attributes="checked request/importAllTimetables|nothing" />
+            </td>
+          </tr>
+        </table>
+        </div>
+      </fieldset>
+    </metal:block>
+  </div>
+</div>

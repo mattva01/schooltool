@@ -28,17 +28,17 @@ from zope.component import getMultiAdapter
 from zope.component import getUtility
 from zope.i18n import translate
 from zope.interface import implements, Interface, directlyProvides
-from zope.interface import invariant, Invalid
 from zope.publisher.browser import BrowserView
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.schema import Text, Datetime
 from zope.schema import TextLine, Int, Password, Bool
+from zope.schema.interfaces import ValidationError
 from zope.security.proxy import removeSecurityProxy
 from zope.traversing.browser import absoluteURL
 from zope.traversing.browser.interfaces import IAbsoluteURL
 from zope.viewlet.viewlet import ViewletBase
 
-from z3c.form import form, field, button
+from z3c.form import form, field, button, validator
 from z3c.form.browser.checkbox import SingleCheckBoxFieldWidget
 from zc.table.column import GetterColumn
 from zc.table.interfaces import ISortableColumn
@@ -46,7 +46,10 @@ from zc.table.interfaces import ISortableColumn
 from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.skin.containers import TableContainerView
+from schooltool.skin import flourish
 from schooltool.table.table import SchoolToolTableFormatter
+from schooltool.table.table import ImageInputColumn
+from schooltool.table.table import simple_form_key
 from schooltool.email.interfaces import IEmailContainer, IEmail
 from schooltool.email.interfaces import IEmailUtility
 from schooltool.email.mail import Email, status_messages
@@ -75,7 +78,7 @@ def get_application_preferences():
 
 def set_server_status_message(form, container):
     form.widgets['server_status'].mode = 'display'
-    if container.hostname:
+    if container.enabled:
         info = '%s:%s' % (container.hostname,
                           container.port or '25')
         form.widgets['server_status'].value = _('Enabled on ${info}',
@@ -92,12 +95,10 @@ class IEmailSettingsEditForm(Interface):
 
     server_status = TextLine(
         title=_('Server Status'),
-        description=_('Current status of the SchoolTool email service'),
         required=False)
 
     enabled = Bool(
         title=_('Enable'),
-        description=_('Mark to enable the service.'),
         default=False,
         required=False)
 
@@ -119,7 +120,7 @@ class IEmailSettingsEditForm(Interface):
         required=False)
 
     dummy_password = TextLine(
-        title=_('Current Password'),
+        title=_('Password'),
         description=_('Current password to authenticate to the SMTP server.'),
         required=False)
     
@@ -130,7 +131,6 @@ class IEmailSettingsEditForm(Interface):
 
     password_confirmation = Password(
         title=_('Confirm New Password'),
-        description=_('Verification for the new password.'),
         required=False)
 
     tls = Bool(
@@ -138,16 +138,6 @@ class IEmailSettingsEditForm(Interface):
         description=_('Use TLS connection?'),
         default=False,
         required=False)
-
-    @invariant
-    def checkPasswordConfirmation(obj):
-        if obj.password != obj.password_confirmation:
-            raise Invalid(_("New passwords don't match"))
-
-    @invariant
-    def checkHostname(obj):
-        if obj.enabled and not obj.hostname:
-            raise Invalid(_("Hostname is required for enabling the service"))
 
 
 class EmailSettingsEditFormAdapter(object):
@@ -205,8 +195,78 @@ class EmailSettingsEditView(form.EditForm):
         if self.context.password:
             mask = '*'*len(self.context.password)
             self.widgets['dummy_password'].value = mask
-        else:
-            self.widgets['dummy_password'].value = _('Unset')
+
+
+class FlourishEmailSettingsEditView(flourish.page.Page, form.EditForm):
+
+    label = None
+    legend = _('Settings')
+    fields = field.Fields(IEmailSettingsEditForm)
+    fields = fields.omit('server_status', 'dummy_password')
+    formErrorsMessage = _('Please correct the marked fields below.')
+
+    def update(self):
+        form.EditForm.update(self)
+
+    @button.buttonAndHandler(_('Apply'))
+    def handle_apply_action(self, action):
+        super(FlourishEmailSettingsEditView,
+              self).handleApply.func(self, action)
+        # XXX: hacky sucessful submit check
+        if (self.status == self.successMessage or
+            self.status == self.noChangesMessage):
+            self.request.response.redirect(self.nextURL())
+
+    @button.buttonAndHandler(_('Cancel'))
+    def handle_cancel_action(self, action):
+        self.request.response.redirect(self.nextURL())
+
+    def updateActions(self):
+        super(FlourishEmailSettingsEditView, self).updateActions()
+        self.actions['apply'].addClass('button-ok')
+        self.actions['cancel'].addClass('button-cancel')
+
+    def nextURL(self):
+        return absoluteURL(self.context, self.request)
+
+
+class HostnameIsRequired(ValidationError):
+    __doc__ = _('Hostname is required for enabling the service')
+
+
+# XXX: logic very similar to that in 
+#      schooltool.person.browser.person
+class PasswordsDontMatch(ValidationError):
+    __doc__ = _('Supplied new passwords are not identical')
+
+
+class PasswordsMatchValidator(validator.SimpleFieldValidator):
+
+    def validate(self, value):
+        # XXX: hack to display the validation error next to the widget!
+        name = self.view.widgets['password_confirmation'].name
+        verify = self.request.get(name)
+        if value is not None and value not in (verify,):
+            raise PasswordsDontMatch(value)
+
+
+validator.WidgetValidatorDiscriminators(PasswordsMatchValidator,
+                                        view=FlourishEmailSettingsEditView,
+                                        field=IEmailSettingsEditForm['password'])
+
+
+class HostnameValidator(validator.SimpleFieldValidator):
+
+    def validate(self, value):
+        # XXX: hack to display the validation error next to the widget!
+        name = self.view.widgets['enabled'].name
+        enabled = self.request.get(name)
+        if enabled and enabled[0] in ('true',) and not value:
+            raise HostnameIsRequired(value)
+
+validator.WidgetValidatorDiscriminators(HostnameValidator,
+                                        view=FlourishEmailSettingsEditView,
+                                        field=IEmailSettingsEditForm['hostname'])
 
 
 # Email
@@ -235,17 +295,14 @@ class IEmailDisplayForm(Interface):
 
     subject = TextLine(
         title=_(u'Subject'),
-        description=_(u'Subject of the message'),
         required=False)
 
     body = Text(
         title=_(u'Body'),
-        description=_(u'Body of the message'),
         required=False)
 
     status = TextLine(
         title=_(u'Email Status'),
-        description=_(u'Status of the message'),
         required=False)
 
     time_sent = Datetime(
@@ -331,6 +388,58 @@ class EmailView(form.Form):
             self.widgets['status'].style = u'color: red;'
 
 
+class FlourishEmailView(flourish.page.Page, EmailView):
+
+    label = None
+    legend = _('Email View')
+    fields = field.Fields(IEmailDisplayForm).omit('server_status')
+
+    def update(self):
+        EmailView.update(self)
+
+    def getDeleteURL(self, email):
+        params = [('delete.%s' % (email.__name__.encode('utf-8')), ''),
+                  ('CONFIRM', 'Confirm')]
+        return '%s/%s?%s' % (absoluteURL(email.__parent__, self.request),
+                             'queue.html',
+                             urllib.urlencode(params),)
+
+    @button.buttonAndHandler(_('Retry'))
+    def handle_retry_action(self, action):
+        utility = getUtility(IEmailUtility)
+        email = removeSecurityProxy(self.context)
+        success = utility.send(email)
+        if success:
+            url = self.getDeleteURL(email)
+        else:
+            url = '%s/queue.html' % absoluteURL(self.context.__parent__,
+                                                self.request)
+        self.request.response.redirect(url)
+
+    @button.buttonAndHandler(_('Cancel'))
+    def handle_cancel_action(self, action):
+        url = '%s/queue.html' % absoluteURL(self.context.__parent__,
+                                            self.request)
+        self.request.response.redirect(url)
+
+    def updateActions(self):
+        form.Form.updateActions(self)
+        if mail_enabled():
+            self.actions['retry'].addClass('button-ok')
+        else:
+            self.actions['retry'].mode = 'display'
+        self.actions['cancel'].addClass('button-cancel')
+
+    def updateDisplayWidgets(self):
+        if self.context.status_code is not None:
+            status_text = translate(
+                format_message(
+                    status_messages[self.context.status_code],
+                    mapping=self.context.status_parameters),
+                context=self.request)
+            self.widgets['status'].value = status_text
+
+
 # Email Container View and Table Formatter
 
 def to_addresses_formatter(value, item, formatter):
@@ -391,6 +500,33 @@ class EmailContainerViewTableFormatter(SchoolToolTableFormatter):
         return (('time_created', True),)
 
 
+class FlourishEmailContainerViewTableFormatter(
+    EmailContainerViewTableFormatter):
+
+    def columns(self):
+        from_address = GetterColumn(
+            name='from_address',
+            title=_(u'From'),
+            getter=lambda i, f: i.from_address,
+            subsort=True)
+        time_created = GetterColumn(
+            name='time_created',
+            title=_(u'Created on'),
+            getter=lambda i, f: i.time_created,
+            cell_formatter=datetime_formatter,
+            subsort=True)
+        time_sent = GetterColumn(
+            name='time_sent',
+            title=_(u'Last time tried'),
+            getter=lambda i, f: i.time_sent,
+            cell_formatter=datetime_formatter,
+            subsort=True)
+        directlyProvides(from_address, ISortableColumn)
+        directlyProvides(time_created, ISortableColumn)
+        directlyProvides(time_sent, ISortableColumn)
+        return [from_address, time_created, time_sent]
+
+
 class EmailContainerView(TableContainerView):
 
     template = ViewPageTemplateFile('templates/email_container.pt')
@@ -428,6 +564,58 @@ class EmailContainerView(TableContainerView):
                 if success:
                     del self.context[key]
         return super(EmailContainerView, self).__call__()
+
+
+class FlourishEmailContainerView(flourish.page.Page,
+                                 form.DisplayForm):
+
+    fields = field.Fields(IEmailSettingsEditForm)
+    fields = fields.omit('server_status',
+                         'enabled',
+                         'password',
+                         'password_confirmation')
+
+    def __call__(self):
+        form.DisplayForm.update(self)
+        return self.render()
+
+    @property
+    def status(self):
+        if self.context.enabled:
+            return _('Enabled')
+        else:
+            return  _('Disabled')
+
+    def updateWidgets(self):
+        super(FlourishEmailContainerView, self).updateWidgets()
+        if self.context.password:
+            mask = '*'*len(self.context.password)
+            self.widgets['dummy_password'].value = mask
+
+
+class FlourishEmailQueueView(flourish.containers.TableContainerView):
+
+    def getColumnsBefore(self):
+        return []
+
+    def getColumnsAfter(self):
+        action = ImageInputColumn(
+            'delete', name='action', title=_('Delete'),
+            library='schooltool.skin.flourish',
+            image='remove-icon.png',
+            id_getter=simple_form_key)
+        return [action]
+
+    def update(self):
+        super(FlourishEmailQueueView, self).update()
+        # XXX: deletion without confirmation is quite dangerous
+        delete = [key for key, item in self.container.items()
+                  if "delete.%s" % simple_form_key(item) in self.request]
+        for key in delete:
+            del self.container[key]
+        if delete:
+            url = absoluteURL(self.context, self.request) + '/queue.html'
+            self.request.response.redirect(url)
 
 
 # URL Adapter
@@ -504,7 +692,7 @@ class SendEmailView(form.Form):
     def handle_send_action(self, action):
         data, errors = self.extractData()
         if errors:
-            self.status = _('There were some errors.')
+            self.status = self.formErrorsMessage
             return
         from_address = data['from_address']
         to_addresses = [address.strip()
@@ -536,3 +724,61 @@ class SendEmailView(form.Form):
 
     def updateDisplayWidgets(self):
         set_server_status_message(self, self.context)
+
+
+class FlourishSendEmailView(flourish.page.Page, SendEmailView):
+
+    label = None
+    legend = _('Email')
+    formErrorsMessage = _('Please correct the marked fields below.')
+    fields = field.Fields(ISendEmailForm).omit('server_status')
+
+    def update(self):
+        form.Form.update(self)
+
+    @button.buttonAndHandler(_('Send'))
+    def handle_send_action(self, action):
+        data, errors = self.extractData()
+        if errors:
+            self.status = self.formErrorsMessage
+            return
+        from_address = data['from_address']
+        to_addresses = [address.strip()
+                        for address in data['to_addresses'].split(',')]
+        body = data['body']
+        subject = data['subject']
+        email = Email(from_address, to_addresses, body, subject)
+        utility = getUtility(IEmailUtility)
+        success = utility.send(email)
+        if success:
+            url = absoluteURL(self.context, self.request)
+        else:
+            url = '%s/queue.html' % absoluteURL(self.context, self.request)
+        self.request.response.redirect(url)
+
+    @button.buttonAndHandler(_('Cancel'))
+    def handle_cancel_action(self, action):
+        url = absoluteURL(self.context, self.request)
+        self.request.response.redirect(url)
+
+
+class EmailActionsLinks(flourish.page.RefineLinksViewlet):
+    """Email actions links viewlet."""
+
+
+class SendTestLinkViewlet(flourish.page.LinkViewlet):
+
+    def render(self):
+        if self.context.enabled:
+            return super(SendTestLinkViewlet, self).render()
+
+
+class EmailQueueLinkViewlet(flourish.page.LinkViewlet):
+
+    @property
+    def title(self):
+        count = len(self.context)
+        if count:
+            return _('Email queue (${count})', mapping={'count': count})
+        else:
+            return _('Email queue')

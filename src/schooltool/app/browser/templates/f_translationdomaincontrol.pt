@@ -1,0 +1,41 @@
+<div class="status"
+     tal:define="status view/reloadCatalogs"
+     tal:condition="status">
+  <div class="summary ui-state-highlight ui-corner-all">
+    <span class="ui-icon ui-icon-info">icon</span>
+    <tal:block content="status" />
+  </div>
+</div>
+<tal:block repeat="domainInfo view/getCatalogsInfo">
+  <h3 i18n:translate="">
+    Domain
+    <tal:block i18n:name="domain" tal:content="domainInfo/domain" />
+  </h3>
+  <table>
+    <thead>
+      <tr>
+        <th i18n:translate="">Language</th>
+        <th i18n:translate="">Files</th>
+        <th>&nbsp;</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr tal:repeat="catalogInfo domainInfo/languagesInfo">
+        <td tal:content="catalogInfo/language"></td>
+        <td>
+          <div tal:repeat="fileName catalogInfo/fileNames"
+               tal:content="fileName"></div>
+        </td>
+        <td>
+          <a tal:attributes="href string:?RELOAD=&domain=${domainInfo/domain}&language=${catalogInfo/language}"
+             i18n:translate="reload-button">Reload</a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</tal:block>
+<h3>
+  <a tal:attributes="href context/@@absolute_url" i18n:translate="">
+    Done
+  </a>
+</h3>

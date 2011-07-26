@@ -214,7 +214,20 @@ class HeaderNavigationManager(ListNavigationContent):
 
 
 class SecondaryNavigationManager(ListNavigationContent):
-    list_class = "secondary_nav"
+    list_class = "second-nav"
+
+
+class TertiaryNavigationManager(ListNavigationContent):
+    template = InlineViewPageTemplate("""
+        <ul tal:attributes="class view/list_class"
+            tal:condition="view/items">
+          <li tal:repeat="item view/items"
+              tal:attributes="class item/class"
+              tal:content="structure item/viewlet">
+          </li>
+        </ul>
+    """)
+    list_class = 'third-nav'
 
 
 class PageNavigationManager(ListNavigationContent):
@@ -240,6 +253,10 @@ class IHeaderNavigationManager(interfaces.IViewletManager):
 
 
 class ISecondaryNavigationManager(interfaces.IViewletManager):
+    pass
+
+
+class ITertiaryNavigationManager(interfaces.IViewletManager):
     pass
 
 

@@ -193,9 +193,9 @@ class LocaleAwareGetterColumn(GetterColumn):
 
 class ImageInputColumn(column.Column):
 
-    def __init__(self, prefix, title=None,
+    def __init__(self, prefix, title=None, name=None,
                  alt=None, library=None, image=None, id_getter=None):
-        super(ImageInputColumn, self).__init__(title=title)
+        super(ImageInputColumn, self).__init__(title=title, name=name)
         self.prefix = prefix
         self.alt = alt
         self.library = library

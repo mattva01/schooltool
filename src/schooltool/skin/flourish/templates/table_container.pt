@@ -1,3 +1,5 @@
+<!-- XXX: any reason why canModify is called here?
+          it prevents public views on containers, right? -->
 <div tal:define="canModify view/canModify;
                  batch view/table/batch">
   <form method="post"

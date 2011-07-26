@@ -103,6 +103,10 @@
 
   </div>
 
+  <tal:block content="structure view/providers/tertiary_navigation|nothing">
+    [ | Tertiary | Navigation | Bar | Here | ]
+  </tal:block>
+
   <tal:block content="structure view/page_template|nothing">
 
     [ The page ]
@@ -122,10 +126,10 @@
 
   <p i18n:translate="" class="copyright">
 
-    &copy; 2003 - 2011 the
+    &copy; 2003 - 2011
     <a i18n:name="link_swf" href="http://www.shuttleworthfoundation.org">
       Shuttleworth Foundation
-      </a>: We support exceptional people to change the world in extraordinary ways.
+      </a>: Supporting exceptional people to change the world.
   </p>
 
 </div>

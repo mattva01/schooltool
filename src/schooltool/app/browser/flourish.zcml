@@ -34,6 +34,16 @@
       permission="schooltool.view"
       />
 
+  <flourish:viewlet
+      name="calendar"
+      for="schooltool.app.interfaces.IHaveCalendar"
+      title="Calendar"
+      before="reports"
+      class="schooltool.skin.flourish.page.LinkViewlet"
+      manager="schooltool.group.browser.group.GroupLinks"
+      permission="schooltool.view"
+      />
+
   <!-- Authentication adapter traverser and views -->
 
   <flourish:page
@@ -158,16 +168,16 @@
       before="manage_school_links"
       manager="schooltool.skin.flourish.page.IPageRefineManager"
       class="schooltool.app.browser.app.ManageSiteLinks"
-      view="schooltool.app.browser.app.ApplicationPreferencesView"
+      view="schooltool.app.browser.app.FlourishApplicationPreferencesView"
       title="Application"
       permission="schooltool.edit"
       />
 
   <flourish:page
       name="site-preferences.html"
-      subtitle="Edit site preferences"
+      subtitle="Site preferences"
       for="schooltool.app.interfaces.ISchoolToolApplication"
-      class="schooltool.app.browser.app.ApplicationPreferencesView"
+      class="schooltool.app.browser.app.FlourishApplicationPreferencesView"
       content_template="templates/f_application_preferences.pt"
       permission="schooltool.edit"
       />
@@ -222,14 +232,14 @@
       view="schooltool.app.browser.app.ManageSchool"
       />
 
-<!--  <flourish:viewlet
+  <flourish:viewlet
       name="manage_school_links"
       manager="schooltool.skin.flourish.page.IPageRefineManager"
       class="schooltool.app.browser.app.ManageSchoolLinks"
-      for="schooltool.app.interfaces.ISchoolToolApplication"
+      view="schooltool.app.browser.app.ManageSchool"
       title="School"
       permission="schooltool.edit"
-      /> -->
+      />
 
   <!-- Content providers -->
 
@@ -247,5 +257,92 @@
       class=".app.ContentLabel"
       permission="schooltool.view"
       name="label" />
+
+  <flourish:page
+      name="leaders.html"
+      for="schooltool.app.interfaces.IAsset"
+      class=".app.FlourishLeaderView"
+      permission="schooltool.edit"
+      subtitle="Responsible parties"
+      />
+
+  <flourish:content
+      class="schooltool.app.browser.app.ContentTitle"
+      permission="schooltool.view"
+      for="zope.app.applicationcontrol.interfaces.IApplicationControl"
+      layer="schooltool.skin.flourish.IFlourishLayer"
+      title="Application Control"
+      name="title" />
+
+  <flourish:viewlet
+      name="application_control_links"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      class=".app.ApplicationControlLinks"
+      for="zope.app.applicationcontrol.interfaces.IApplicationControl"
+      view="zope.app.applicationcontrol.browser.runtimeinfo.RuntimeInfoView"
+      title="Actions"
+      permission="schooltool.edit"
+      />
+
+  <flourish:viewlet
+      name="ZODBControl.html"
+      title="ZODB Control"
+      class="schooltool.skin.flourish.page.LinkViewlet"
+      manager=".app.ApplicationControlLinks"
+      permission="schooltool.edit"
+      />
+
+  <flourish:viewlet
+      name="TranslationDomain.html"
+      title="Translation Domains"
+      after="ZODBControl.html"
+      class="schooltool.skin.flourish.page.LinkViewlet"
+      manager=".app.ApplicationControlLinks"
+      permission="schooltool.edit"
+      />
+
+  <flourish:viewlet
+      name="generations.html"
+      title="Generations"
+      after="TranslationDomain.html"
+      class="schooltool.skin.flourish.page.LinkViewlet"
+      manager=".app.ApplicationControlLinks"
+      permission="schooltool.edit"
+      />
+
+  <flourish:page
+      for="zope.app.applicationcontrol.interfaces.IApplicationControl"
+      name="index.html"
+      content_template="templates/f_runtimeinfo.pt"
+      class="zope.app.applicationcontrol.browser.runtimeinfo.RuntimeInfoView"
+      permission="schooltool.edit"
+      />
+
+  <flourish:page
+      for="zope.app.applicationcontrol.interfaces.IApplicationControl"
+      name="ZODBControl.html"
+      content_template="templates/f_zodbcontrol.pt"
+      class=".app.SchoolToolZODBControlView"
+      permission="schooltool.edit"
+      subtitle="ZODB Control"
+      />
+
+  <flourish:page
+      for="zope.app.applicationcontrol.interfaces.IApplicationControl"
+      name="TranslationDomain.html"
+      content_template="templates/f_translationdomaincontrol.pt"
+      class="zope.app.applicationcontrol.browser.translationdomaincontrol.TranslationDomainControlView"
+      permission="schooltool.edit"
+      subtitle="Translation Domains"
+      />
+
+  <flourish:page
+      for="zope.app.applicationcontrol.interfaces.IApplicationControl"
+      name="generations.html"
+      content_template="templates/f_managers.pt"
+      class="zope.app.generations.browser.managers.Managers"
+      permission="schooltool.edit"
+      subtitle="Database generations"
+      />
 
 </configure>

@@ -1,104 +1,97 @@
-<h3>
-  Contact information
-  <a class="modify" href="" title="Edit this contact"
-     tal:attributes="href string:${context/@@absolute_url}/edit.html"
-     i18n:attributes="title"
-     tal:condition="view/canModify">
-    <img tal:attributes="src context/++resource++schooltool.skin.flourish/edit-icon.png"
-         alt="Edit"
-         i18n:attributes="alt" />
-  </a>
-</h3>
-<metal:block define-macro="subform-display">
-  <div class="viewspace" metal:define-slot="viewspace">
-    <metal:block define-slot="label">
-      <h1 metal:define-macro="label"
-          tal:condition="view/label|nothing"
-          tal:content="view/label">
-        Form Label
-      </h1>
-    </metal:block>
-    <div metal:define-slot="extra_info" tal:replace="nothing">
-    </div>
-    <div metal:define-slot="main">
-      <table class="form-fields" metal:define-macro="formtable">
-        <tr class="extraTopRow"
-            metal:define-slot="extra_top"
-            tal:replace="nothing">
-          <td class="label"> Extra top </td>
-          <td class="field"><input type="text" />
-          </td>
-        </tr>
-        <tbody metal:define-slot="formbody" tal:omit-tag="">
-          <tal:block omit-tag="" repeat="widget view/widgets/values">
-            <tr metal:define-macro="formrow" class="row"
-                tal:condition="python:widget.mode != 'hidden'">
-              <td class="label" metal:define-macro="labelcell">
-                <label tal:attributes="for widget/id">
-                  <span i18n:translate=""
-                        tal:content="widget/label"> label </span>
-                </label>
-              </td>
-              <td class="field" metal:define-macro="widgetcell">
-                <div class="widget" tal:content="structure widget/render">
-                  <input type="text" />
-                </div>
-              </td>
-            </tr>
-          </tal:block>
-          <tal:block define="relationships view/relationships"
-                     condition="relationships">
-            <tr class="row" tal:repeat="info relationships">
-              <td class="label">
-                <label>
-                  <span tal:condition="info/relationship" i18n:translate="">
-                    <tal:block tal:replace="info/getRelationshipTitle" i18n:name="relationship" />
-                    of
-                  </span>
-                  <span tal:condition="not:info/relationship" i18n:translate="">
-                    Contact of
-                  </span>
-                </label>
-              </td>
-              <td class="field">
-                <div class="widget">
-                  <span>
-                    <a tal:replace="structure info/__parent__/schooltool:content/link" />
-                  </span>
-                </div>
-              </td>
-            </tr>
-          </tal:block>
-        </tbody>
-        <tr class="extraBottomRow"
-            metal:define-slot="extra_bottom"
-            tal:replace="nothing">
-          <td class="label"> Extra bottom </td>
-          <td class="label"><input type="text" />
-          </td>
-        </tr>
-      </table>
-      <metal:block define-macro="groups">
-        <fieldset tal:condition="view/groups|nothing"
+<metal:block i18n:domain="schooltool">
+  <h3>
+    Contact information
+    <a class="modify" href="" title="Edit this contact"
+       tal:attributes="href string:${context/@@absolute_url}/edit.html"
+       i18n:attributes="title"
+       tal:condition="view/canModify">
+      <img tal:attributes="src context/++resource++schooltool.skin.flourish/edit-icon.png"
+           alt="Edit"
+           i18n:attributes="alt" />
+    </a>
+  </h3>
+  <metal:block define-macro="subform-display">
+    <div class="viewspace" metal:define-slot="viewspace">
+      <div metal:define-slot="main">
+        <table class="form-fields" metal:define-macro="formtable">
+          <tr class="extraTopRow"
+              metal:define-slot="extra_top"
+              tal:replace="nothing">
+            <td class="label"> Extra top </td>
+            <td class="field"><input type="text" />
+            </td>
+          </tr>
+          <tbody metal:define-slot="formbody" tal:omit-tag="">
+            <tal:block omit-tag="" repeat="widget view/widgets/values">
+              <tr metal:define-macro="formrow" class="row"
+                  tal:condition="python:widget.mode != 'hidden'">
+                <td class="label" metal:define-macro="labelcell">
+                  <label tal:attributes="for widget/id">
+                    <span i18n:translate=""
+                          tal:content="widget/label"> label </span>
+                  </label>
+                </td>
+                <td class="field" metal:define-macro="widgetcell">
+                  <div class="widget" tal:content="structure widget/render">
+                    <input type="text" />
+                  </div>
+                </td>
+              </tr>
+            </tal:block>
+            <tal:block define="relationships view/relationships"
+                       condition="relationships">
+              <tr class="row" tal:repeat="info relationships">
+                <td class="label">
+                  <label>
+                    <span tal:condition="info/relationship" i18n:translate="">
+                      <tal:block tal:replace="info/getRelationshipTitle" i18n:name="relationship" />
+                      of
+                    </span>
+                    <span tal:condition="not:info/relationship" i18n:translate="">
+                      Contact of
+                    </span>
+                  </label>
+                </td>
+                <td class="field">
+                  <div class="widget">
+                    <span>
+                      <a tal:replace="structure info/__parent__/schooltool:content/link" />
+                    </span>
+                  </div>
+                </td>
+              </tr>
+            </tal:block>
+          </tbody>
+          <tr class="extraBottomRow"
+              metal:define-slot="extra_bottom"
+              tal:replace="nothing">
+            <td class="label"> Extra bottom </td>
+            <td class="label"><input type="text" />
+            </td>
+          </tr>
+        </table>
+        <metal:block define-macro="groups">
+          <fieldset tal:condition="view/groups|nothing"
                     tal:repeat="view view/groups">
-          <legend tal:condition="view/label"
-                  tal:content="view/label">Label</legend>
-          <metal:block define-slot="group-header">
-          </metal:block>
-          <metal:block define-slot="group-rows">
-            <div metal:use-macro="macro:form-table" />
-          </metal:block>
-        </fieldset>
+            <legend tal:condition="view/label"
+                    tal:content="view/label">Label</legend>
+            <metal:block define-slot="group-header">
+            </metal:block>
+            <metal:block define-slot="group-rows">
+              <div metal:use-macro="macro:form-table" />
+            </metal:block>
+          </fieldset>
+        </metal:block>
+        <tal:block repeat="widget view/widgets/values"
+                   ><input type="hidden" value=""
+                   tal:condition="python:widget.mode == 'hidden'"
+                   tal:replace="structure widget/render"
+                   /></tal:block>
+      </div>
+      <metal:block define-slot="above-buttons">
       </metal:block>
-      <tal:block repeat="widget view/widgets/values"
-	    ><input type="hidden" value=""
-                    tal:condition="python:widget.mode == 'hidden'"
-                    tal:replace="structure widget/render"
-      /></tal:block>
     </div>
-    <metal:block define-slot="above-buttons">
+    <metal:block define-slot="bottom">
     </metal:block>
-  </div>
-  <metal:block define-slot="bottom">
   </metal:block>
 </metal:block>

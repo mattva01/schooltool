@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/browser"
+           xmlns:flourish="http://schooltool.org/flourish"
+           xmlns:zope="http://namespaces.zope.org/zope"
+           i18n_domain="schooltool">
+
+  <flourish:page
+      name="terms"
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      class=".term.FlourishTermsView"
+      title="Terms"
+      content_template="templates/f_terms.pt"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="terms"
+      title="Terms"
+      class="schooltool.skin.flourish.page.LinkViewlet"
+      manager="schooltool.app.browser.app.ManageSchoolLinks"
+      permission="schooltool.view"
+      />
+
+  <flourish:page
+      name="add.html"
+      for="..interfaces.ITermContainer"
+      class=".term.FlourishTermAddView"
+      subtitle="Add Term"
+      content_template="templates/f_term_add.pt"
+      permission="schooltool.edit"
+      />
+
+  <flourish:page
+      name="edit.html"
+      for="..interfaces.ITerm"
+      class=".term.FlourishTermEditView"
+      subtitle="Edit"
+      content_template="templates/f_term_add.pt"
+      permission="schooltool.edit"
+      />
+
+  <flourish:page
+      name="index.html"
+      for="..interfaces.ITerm"
+      class=".term.FlourishTermView"
+      content_template="templates/f_term.pt"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="term_actions"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      class=".term.FlourishTermActionLinks"
+      for="..interfaces.ITerm"
+      title="Actions"
+      permission="schooltool.edit"
+      view=".term.FlourishTermView"
+      />
+
+  <flourish:viewlet
+      name="delete.html"
+      for="..interfaces.ITerm"
+      title="Delete"
+      class=".term.FlourishTermDeleteLink"
+      manager=".term.FlourishTermActionLinks"
+      permission="schooltool.edit"
+      />
+
+  <flourish:page
+      name="delete.html"
+      for="..interfaces.ITerm"
+      class=".term.FlourishTermDeleteView"
+      template="templates/f_confirm_delete_term.pt"
+      permission="schooltool.edit"
+      />
+
+  <configure package="schooltool.skin.flourish">
+  <flourish:page
+    name="delete.html"
+    for="schooltool.term.interfaces.ITermContainer"
+    class="schooltool.term.browser.term.FlourishTermContainerDeleteView"
+    content_template="templates/container_delete.pt"
+    permission="schooltool.edit"
+    />
+  </configure>
+
+  <zope:adapter factory=".term.FlourishOverlapAddValidator" />
+
+  <zope:adapter factory=".term.FlourishOverlapEditValidator" />
+
+</configure>

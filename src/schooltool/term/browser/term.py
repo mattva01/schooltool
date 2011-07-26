@@ -29,8 +29,10 @@ from zope.interface import Interface
 from zope.schema import TextLine, Date
 from zope.schema import ValidationError
 from zope.container.interfaces import INameChooser
+from zope.i18n import translate
 from zope.publisher.browser import BrowserView
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
+from zope.security.checker import canAccess
 from zope.traversing.browser.absoluteurl import absoluteURL
 
 from z3c.form.util import getSpecification
@@ -41,16 +43,21 @@ from z3c.form.validator import SimpleFieldValidator
 from z3c.form.validator import WidgetValidatorDiscriminators
 from z3c.form.validator import InvariantsValidator
 
-from schooltool.schoolyear.interfaces import TermOverlapError
 from schooltool.app.browser.cal import month_names
+from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.calendar.utils import parse_date
 from schooltool.calendar.utils import next_month, week_start
 from schooltool.term.interfaces import ITerm
 from schooltool.term.term import validateTermsForOverlap
 from schooltool.term.term import Term
+from schooltool.skin import flourish
+from schooltool.skin.dateformatter import DateFormatterMediumView
+from schooltool.schoolyear.interfaces import ISchoolYearContainer
+from schooltool.schoolyear.interfaces import TermOverlapError
 from schooltool.common import IDateRange
 from schooltool.common import DateRange
 from schooltool.common import SchoolToolMessage as _
+from schooltool.common.inlinept import InheritTemplate
 
 
 class ITermForm(Interface):
@@ -89,6 +96,75 @@ class TermView(BrowserView):
         for more details.
         """
         return TermRenderer(self.context).calendar()
+
+
+class FlourishTermView(flourish.page.Page, TermView):
+    """flourish view of a term."""
+
+    @property
+    def title(self):
+        return self.context.__parent__.title
+
+    @property
+    def subtitle(self):
+        return self.context.title
+
+    @property
+    def canModify(self):
+        return canAccess(self.context.__parent__, '__delitem__')
+
+
+class FlourishTermActionLinks(flourish.page.RefineLinksViewlet):
+    """Term action links viewlet."""
+
+
+class FlourishTermDeleteLink(flourish.page.ModalFormLinkViewlet):
+
+    @property
+    def dialog_title(self):
+        title = _(u'Delete ${term}',
+                  mapping={'term': self.context.title})
+        return translate(title, context=self.request)
+
+
+class FlourishTermDeleteView(flourish.form.DialogForm, form.EditForm):
+    """View used for confirming deletion of a schoolyear."""
+
+    dialog_submit_actions = ('apply',)
+    dialog_close_actions = ('cancel',)
+    label = None
+
+    def updateDialog(self):
+        # XXX: fix the width of dialog content in css
+        if self.ajax_settings['dialog'] != 'close':
+            self.ajax_settings['dialog']['width'] = 544 + 16
+
+    @button.buttonAndHandler(_("Delete"), name='apply')
+    def handleDelete(self, action):
+        url = '%s/delete.html?delete.%s&CONFIRM' % (
+            absoluteURL(self.context.__parent__, self.request),
+            self.context.__name__)
+        self.request.response.redirect(url)
+        # We never have errors, so just close the dialog.
+        self.ajax_settings['dialog'] = 'close'
+
+    @button.buttonAndHandler(_("Cancel"))
+    def handle_cancel_action(self, action):
+        pass
+
+    def updateActions(self):
+        super(FlourishTermDeleteView, self).updateActions()
+        self.actions['apply'].addClass('button-ok')
+        self.actions['cancel'].addClass('button-cancel')
+
+
+class FlourishTermContainerDeleteView(flourish.containers.ContainerDeleteView):
+
+    def nextURL(self):
+        if 'CONFIRM' in self.request:
+            app = ISchoolToolApplication(None)
+            return absoluteURL(app, self.request) + '/terms'
+        return ContainerDeleteView.nextURL(self)
 
 
 class TermFormBase(object):
@@ -195,6 +271,49 @@ class TermAddForm(form.AddForm, TermFormBase):
         return term
 
 
+class FlourishTermAddView(flourish.form.AddForm, TermAddForm):
+
+    template = InheritTemplate(flourish.page.Page.template)
+    label = None
+    legend = 'Term Details'
+
+    @property
+    def title(self):
+        return self.context.title
+
+    @button.buttonAndHandler(_('Refresh'), name='refresh',
+                             condition=lambda form: form.showRefresh)
+    def handleRefresh(self, action):
+        super(FlourishTermAddView, self).handleRefresh.func(self, action)
+
+    @button.buttonAndHandler(_('Next'), name='next',
+                             condition=lambda form: form.showNext)
+    def next(self, action):
+        super(FlourishTermAddView, self).next.func(self, action)
+
+    @button.buttonAndHandler(_('Add term'), name='add',
+                             condition=lambda form: form.showRefresh)
+    def handleAdd(self, action):
+        super(FlourishTermAddView, self).handleAdd.func(self, action)
+
+    @button.buttonAndHandler(_("Cancel"))
+    def handle_cancel_action(self, action):
+        url = absoluteURL(ISchoolToolApplication(None), self.request) + '/terms'
+        self.request.response.redirect(url)
+
+    def dateString(self, date):
+        return DateFormatterMediumView(date, self.request)()
+
+    def updateWidgets(self):
+        super(FlourishTermAddView, self).updateWidgets()
+        description = _(u'The year starts ${year_start}',
+            mapping={'year_start': self.dateString(self.context.first)})
+        self.widgets['first'].field.description = description
+        description = _(u'The year ends ${year_end}',
+            mapping={'year_end': self.dateString(self.context.last)})
+        self.widgets['last'].field.description = description
+
+
 class TermEditForm(form.EditForm, TermFormBase):
     """Edit form for basic person."""
     template = ViewPageTemplateFile('templates/term_add.pt')
@@ -254,6 +373,38 @@ class TermEditForm(form.EditForm, TermFormBase):
     def label(self):
         return _(u'Change information for ${term_title}',
                  mapping={'term_title': self.context.title})
+
+
+class FlourishTermEditView(flourish.form.Form, TermEditForm):
+
+    template = InheritTemplate(flourish.page.Page.template)
+    label = None
+
+    @property
+    def title(self):
+        return self.context.title
+
+    @property
+    def legend(self):
+        return _(u'Change information for ${term_title}',
+                 mapping={'term_title': self.context.title})
+
+    @button.buttonAndHandler(_('Refresh'), name='refresh',
+                             condition=lambda form: form.showRefresh)
+    def handleRefresh(self, action):
+        super(FlourishTermEditView, self).handleRefresh.func(self, action)
+
+    @button.buttonAndHandler(_('Save changes'), name='apply')
+    def handleApply(self, action):
+        super(FlourishTermEditView, self).handleApply.func(self, action)
+        if self.status != self.formErrorsMessage:
+            url = absoluteURL(self.context, self.request)
+            self.request.response.redirect(url)
+
+    @button.buttonAndHandler(_("Cancel"))
+    def handle_cancel_action(self, action):
+        super(FlourishTermEditView, self).handle_cancel_action.func(self,
+            action)
 
 
 class AddTermFormValidator(InvariantsValidator):
@@ -333,6 +484,64 @@ class LastTermBoundsValidator(TermBoundsValidator):
 WidgetValidatorDiscriminators(
     LastTermBoundsValidator,
     field=ITermForm['last'])
+
+
+class FlourishInvalidDateRangeError(ValidationError):
+    __doc__ = _('Term must begin before it ends')
+
+
+class FlourishOverlapError(ValidationError):
+    __doc__ = _('Date range overlaps another term')
+
+
+class FlourishOverlapValidator(SimpleFieldValidator):
+
+    def validate(self, value):
+        # XXX: hack to display the overlap error next to the widget!
+        rv = super(FlourishOverlapValidator, self).validate(value)
+        last_widget = self.view.widgets['last']
+        last_value = self.request.get(last_widget.name)
+        try:
+            last_value = last_widget._toFieldValue(last_value)
+        except:
+            return
+        try:
+            dr = DateRange(value, last_value)
+        except:
+            raise FlourishInvalidDateRangeError()
+        try:
+            validateTermsForOverlap(self.container, dr, self.term)
+        except TermOverlapError, e:
+            raise FlourishOverlapError()
+
+
+class FlourishOverlapAddValidator(FlourishOverlapValidator):
+    term = None
+
+    @property
+    def container(self):
+        return self.context
+
+
+class FlourishOverlapEditValidator(FlourishOverlapValidator):
+
+    @property
+    def term(self):
+        return self.context
+
+    @property
+    def container(self):
+        return self.context.__parent__
+
+
+WidgetValidatorDiscriminators(FlourishOverlapAddValidator,
+                              view=FlourishTermAddView,
+                              field=ITermForm['first'])
+
+
+WidgetValidatorDiscriminators(FlourishOverlapEditValidator,
+                              view=FlourishTermEditView,
+                              field=ITermForm['first'])
 
 
 class TermRenderer(object):
@@ -433,3 +642,26 @@ class TermRenderer(object):
             date += datetime.date.resolution
         return {'number': week_no,
                 'days': days}
+
+
+class FlourishTermsView(flourish.page.Page):
+
+    def years(self):
+        syc = ISchoolYearContainer(self.context)
+        for year in reversed(tuple(syc.values())):
+            result = {
+                'title': _(u'School Year: ${year_title}',
+                         mapping={'year_title': year.title}),
+                'first': year.first,
+                'last': year.last,
+                'terms': [],
+                'empty': not bool(tuple(year.values())),
+                'canModify': canAccess(year, '__delitem__'),
+                'addurl': absoluteURL(year, self.request) + '/add.html',
+                'alt': _(u'Add a new term to ${year_title}',
+                         mapping={'year_title': year.title}),
+                }
+            for term in reversed(tuple(year.values())):
+                result['terms'].append(term)
+            yield result
+
