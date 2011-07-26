@@ -417,7 +417,7 @@ class GroupManageActionsLinks(RefineLinksViewlet):
     """)
 
     # We don't want this manager rendered at all
-    # if there are no renderable viewlets 
+    # if there are no renderable viewlets
     @property
     def renderable_items(self):
         result = []
