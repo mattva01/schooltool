@@ -114,9 +114,6 @@ class TimetableContainerTableFormatter(SchoolToolTableFormatter):
 
 class FlourishTimetableContainerView(flourish.containers.TableContainerView):
 
-    def getColumnsBefore(self):
-        return []
-
     def getColumnsAfter(self):
         delete = ImageInputColumn(
             'delete', title=_('Delete'),

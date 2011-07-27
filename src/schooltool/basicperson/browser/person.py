@@ -62,7 +62,6 @@ from schooltool.table.interfaces import ITableFormatter
 from schooltool.table.table import DependableCheckboxColumn
 from schooltool.table.catalog import IndexedLocaleAwareGetterColumn
 from schooltool.table.interfaces import IIndexedColumn
-from schooltool.table.table import url_cell_formatter
 
 from schooltool.common import SchoolToolMessage as _
 
@@ -110,11 +109,6 @@ class FlourishBasicPersonContainerView(flourish.containers.TableContainerView):
             getter=lambda i, f: i.__name__,
             subsort=True)
         return [username]
-
-    def setUpTableFormatter(self, formatter):
-        columns_after = self.getColumnsAfter()
-        formatter.setUp(formatters=[url_cell_formatter],
-                        columns_after=columns_after)
 
 
 class PersonContainerLinks(flourish.page.RefineLinksViewlet):

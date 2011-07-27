@@ -1,5 +1,6 @@
-<div i18n:domain="schooltool">
-  <form method="post" tal:attributes="action request/getURL">
+<div i18n:domain="schooltool" tal:define="years view/years">
+  <form method="post" tal:attributes="action request/getURL"
+        tal:condition="years">
     <table>
       <thead>
         <tr>
@@ -9,7 +10,7 @@
           <th i18n:translate="">Add Term</th>
         </tr>
       </thead>
-      <tal:block repeat="year view/years">
+      <tal:block repeat="year years">
         <tr>
           <th tal:content="year/title" />
           <th tal:content="year/first/@@mediumDate" />
@@ -42,5 +43,6 @@
       </tal:block>
     </table>
   </form>
+  <h3 tal:condition="not:years" i18n:translate="">There are none.</h3>
 </div>
 

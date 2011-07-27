@@ -71,7 +71,7 @@ def doctest_CourseView():
         >>> course.credits = 1
         >>> [sorted(detail.items()) for detail in view.details]
         [[('title', u'Course ID'),    ('value', u'Course1')],
-         [('title', u'Government ID'), ('value', u'GovC1')],
+         [('title', u'Alternate ID'), ('value', u'GovC1')],
          [('title', u'Credits'),      ('value', 1)]]
 
     Empty values are hidden.

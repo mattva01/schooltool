@@ -595,9 +595,6 @@ class FlourishEmailContainerView(flourish.page.Page,
 
 class FlourishEmailQueueView(flourish.containers.TableContainerView):
 
-    def getColumnsBefore(self):
-        return []
-
     def getColumnsAfter(self):
         action = ImageInputColumn(
             'delete', name='action', title=_('Delete'),
