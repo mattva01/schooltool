@@ -1,0 +1,24 @@
+<div tal:define="batch view/table/batch" i18n:domain="schooltool">
+  <form method="post"
+        tal:attributes="action request/URL">
+    <input type="hidden" name="schoolyear_id"
+           tal:define="schoolyear_id request/schoolyear_id|nothing"
+           tal:condition="schoolyear_id"
+           tal:attributes="value schoolyear_id" />
+    <tal:block tal:condition="view/table/filter_widget">
+      <tal:if condition="batch">
+        <div class="count" i18n:translate="">
+          Showing
+          <span i18n:name="count" tal:content="view/table/batch/length"/>
+          of
+          <span i18n:name="total" tal:content="view/table/batch/full_size"/>
+          items
+        </div>
+      </tal:if>
+      <tal:block tal:replace="structure view/table/filter_widget/render" />
+      <tal:block replace="structure batch/render" />
+      <tal:block replace="structure view/table/render" tal:condition="batch" />
+    </tal:block>
+  </form>
+  <h3 tal:condition="not:batch" tal:content="view/empty_message" />
+</div>

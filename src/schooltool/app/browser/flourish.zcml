@@ -44,6 +44,16 @@
       permission="schooltool.view"
       />
 
+  <flourish:viewlet
+      name="calendar"
+      for="schooltool.app.interfaces.IHaveCalendar"
+      title="Calendar"
+      before="reports"
+      class="schooltool.skin.flourish.page.LinkViewlet"
+      manager="schooltool.course.browser.section.SectionLinks"
+      permission="schooltool.view"
+      />
+
   <!-- Authentication adapter traverser and views -->
 
   <flourish:page

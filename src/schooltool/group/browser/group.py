@@ -569,7 +569,7 @@ class FlourishGroupView(DisplayForm):
     #      should we do the same here?
     @property
     def members_table(self):
-        return self.getTable(list(self.context.members))
+        return self.getTable(list(self.context.members), 'members')
 
     def has_members(self):
         return bool(list(self.context.members))
@@ -578,12 +578,13 @@ class FlourishGroupView(DisplayForm):
 
     @property
     def leaders_table(self):
-        return self.getTable(list(self.context.leaders))
+        return self.getTable(list(self.context.leaders), 'leaders')
 
-    def getTable(self, items):
+    def getTable(self, items, prefix):
         persons = ISchoolToolApplication(None)['persons']
         result = getMultiAdapter((persons, self.request), ITableFormatter)
-        result.setUp(table_formatter=table.StandaloneFullFormatter, items=items)
+        result.setUp(table_formatter=table.StandaloneFullFormatter, items=items,
+                     prefix=prefix)
         return result
 
     def has_leaders(self):
