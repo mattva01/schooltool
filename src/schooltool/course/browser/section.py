@@ -644,7 +644,7 @@ class ExtendTermView(BrowserView):
             return self.template()
 
     def nextURL(self):
-        return absoluteURL(self.context, self.request) + '/section_linkage.html' 
+        return absoluteURL(self.context, self.request) + '/section_linkage.html'
 
 
 class LinkExistingView(BrowserView):
@@ -747,7 +747,7 @@ class LinkExistingView(BrowserView):
             return self.template()
 
     def nextURL(self):
-        return absoluteURL(self.context, self.request) + '/section_linkage.html' 
+        return absoluteURL(self.context, self.request) + '/section_linkage.html'
 
 
 class UnlinkSectionView(BrowserView):
@@ -787,7 +787,7 @@ class UnlinkSectionView(BrowserView):
             return self.template()
 
     def nextURL(self):
-        return absoluteURL(self.context, self.request) + '/section_linkage.html' 
+        return absoluteURL(self.context, self.request) + '/section_linkage.html'
 
 
 class SectionsTertiaryNavigationManager(ViewletManager):
@@ -852,7 +852,7 @@ class SectionActionsLinks(RefineLinksViewlet):
     """)
 
     # We don't want this manager rendered at all
-    # if there are no renderable viewlets 
+    # if there are no renderable viewlets
     @property
     def renderable_items(self):
         result = []
@@ -1045,7 +1045,7 @@ class FlourishSectionView(DisplayForm):
              'current': section is self.context,
              }
             for section in sections]
-    
+
     @property
     def canModify(self):
         return canAccess(self.context.__parent__, '__delitem__')
