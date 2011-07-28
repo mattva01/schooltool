@@ -373,6 +373,7 @@ class CourseAddLinkViewlet(LinkViewlet):
         return '%s/%s' % (absoluteURL(courses, self.request),
                           'addSchoolToolCourse.html')
 
+
 class CourseAddLinkFromCourseViewlet(CourseAddLinkViewlet):
 
     @property

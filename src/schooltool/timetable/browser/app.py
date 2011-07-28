@@ -20,6 +20,7 @@
 Timetabling app integration.
 """
 
+from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.interface import implements, directlyProvides
 from zope.intid.interfaces import IIntIds
 from zope.component import adapts, queryAdapter, getUtility, getMultiAdapter
@@ -31,9 +32,12 @@ from zope.traversing.browser.absoluteurl import absoluteURL
 from zc.table.interfaces import ISortableColumn
 
 import schooltool.skin.flourish.page
+import schooltool.skin.flourish.containers
+import schooltool.skin.flourish.content
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.utils import TitledContainerItemVocabulary
-from schooltool.schoolyear.interfaces import ISchoolYear
+from schooltool.common.inlinept import InlineViewPageTemplate
+from schooltool.schoolyear.interfaces import ISchoolYear, ISchoolYearContainer
 from schooltool.skin.containers import ContainerView
 from schooltool.skin import flourish
 from schooltool.table.table import SchoolToolTableFormatter
@@ -42,6 +46,7 @@ from schooltool.table.table import ImageInputColumn
 from schooltool.table.table import simple_form_key
 from schooltool.term.interfaces import ITerm
 from schooltool.timetable.interfaces import IHaveSchedule
+from schooltool.timetable.interfaces import IHaveTimetables
 from schooltool.timetable.interfaces import IScheduleContainer
 from schooltool.timetable.interfaces import ITimetableContainer
 
@@ -156,3 +161,100 @@ class TimetableVocabulary(TitledContainerItemVocabulary):
 
 def timetableVocabularyFactory():
     return TimetableVocabulary
+
+
+class SchoolTimetablesTertiaryNavigation(flourish.page.Content):
+
+    template = InlineViewPageTemplate("""
+        <ul tal:attributes="class view/list_class">
+          <li tal:repeat="item view/items"
+              tal:attributes="class item/class">
+              <a tal:attributes="href item/url"
+                 tal:content="item/schoolyear/@@title" />
+          </li>
+        </ul>
+    """)
+
+    list_class = 'third-nav'
+
+    @property
+    def items(self):
+        result = []
+        schoolyears = ISchoolYearContainer(self.context)
+        active = schoolyears.getActiveSchoolYear()
+        if 'schoolyear_id' in self.request:
+            schoolyear_id = self.request['schoolyear_id']
+            active = schoolyears.get(schoolyear_id, active)
+        for schoolyear in schoolyears.values():
+            url = '%s/%s?schoolyear_id=%s' % (
+                absoluteURL(self.context, self.request),
+                'timetables',
+                schoolyear.__name__)
+            result.append({
+                    'class': schoolyear.first == active.first and 'active' or None,
+                    'url': url,
+                    'schoolyear': schoolyear,
+                    })
+        return result
+
+
+class FlourishTimetablesView(flourish.containers.TableContainerView):
+
+    content_template = ViewPageTemplateFile('templates/f_timetables.pt')
+
+    @property
+    def title(self):
+        schoolyear = self.schoolyear
+        return _('Timetables for ${schoolyear}',
+                 mapping={'schoolyear': schoolyear.title})
+
+    @property
+    def schoolyear(self):
+        schoolyears = ISchoolYearContainer(self.context)
+        result = schoolyears.getActiveSchoolYear()
+        if 'schoolyear_id' in self.request:
+            schoolyear_id = self.request['schoolyear_id']
+            result = schoolyears.get(schoolyear_id, result)
+        return result
+
+    @property
+    def container(self):
+        return ITimetableContainer(self.schoolyear)
+
+
+class TimetableAddLinks(flourish.page.RefineLinksViewlet):
+    """Manager for Add links in FlourishTimetablesView"""
+
+
+class ModalTimetablesLinkViewlet(flourish.page.LinkViewlet):
+
+    def __init__(self, context, request, *args, **kw):
+        super(ModalTimetablesLinkViewlet, self).__init__(
+            self.actualContext(context, request), request, *args, **kw)
+
+    def actualContext(self, context, request):
+        schoolyears = ISchoolYearContainer(context)
+        year = schoolyears.getActiveSchoolYear()
+        if 'schoolyear_id' in request:
+            schoolyear_id = request['schoolyear_id']
+            year = schoolyears.get(schoolyear_id, year)
+        return ITimetableContainer(year)
+
+
+class TimetableDoneLink(object):
+    template = InlineViewPageTemplate('''
+       <a tal:attributes="href view/url"
+          tal:content="view/title" />
+    ''')
+
+    title = _('Done')
+
+    @property
+    def url(self):
+        container = ITimetableContainer(self.context)
+        schoolyear = ISchoolYear(IHaveTimetables(container))
+        url = '%s/%s?schoolyear_id=%s' % (
+            absoluteURL(ISchoolToolApplication(None), self.request),
+            'timetables',
+            schoolyear.__name__)
+        return url

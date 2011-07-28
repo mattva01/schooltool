@@ -71,6 +71,7 @@
       name="index.html"
       for="schooltool.timetable.interfaces.ITimetable"
       class=".timetable.TimetableView"
+      layer="schooltool.skin.ISchoolToolLayer"
       permission="schooltool.view"
       />
 

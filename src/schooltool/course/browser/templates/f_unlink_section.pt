@@ -1,0 +1,48 @@
+<metal:block i18n:domain="schooltool">
+  <table class="form-fields">
+    <tbody>
+      <tr>
+        <td class="label" i18n:translate="">Section</td>
+        <td><a tal:replace="structure context/@@link" /></td>
+      </tr>
+      <tr>
+        <td class="label" i18n:translate="">Course</td>
+        <td>
+          <tal:loop tal:repeat="course context/courses">
+            <a tal:replace="structure course/@@link" />
+          </tal:loop>
+        </td>
+      </tr>
+      <tr>
+        <td class="label" i18n:translate="">Term</td>
+        <td><a tal:replace="structure view/term/@@link" /></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 i18n:translate="">Click 'Unlink' if you would like to remove the link
+  this section has to the following section(s):</h3>
+  <table>
+    <thead>
+      <tr>
+        <th i18n:translate="">Section</th>
+        <th i18n:translate="">Term</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr tal:repeat="section view/sections">
+        <td><a tal:replace="structure section/section/@@link" /></td>
+        <td><a tal:replace="structure section/term/@@link" /></td>
+      </tr>
+    </tbody>
+  </table>
+  <form method="post" tal:attributes="action request/URL">
+    <div class="buttons">
+      <input type="submit" class="button-ok" name="UNLINK"
+             onclick="return ST.dialogs.submit(this, this);"
+             value="Unlink" i18n:attributes="value unlink-section-button" />
+      <input type="submit" class="button-cancel" name="CANCEL"
+             onclick="return ST.dialogs.close(this);"
+             value="Cancel" i18n:attributes="value cancel-button" />
+    </div>
+  </form>
+</metal:block>

@@ -88,6 +88,12 @@ def getScheduleOwner(schedule):
     return interfaces.IHaveSchedule(container, None)
 
 
+@implementer(interfaces.ITimetableContainer)
+@adapter(interfaces.ITimetable)
+def getTimetableParent(timetable):
+    return timetable.__parent__
+
+
 @adapter(interfaces.IHaveTimetables)
 @implementer(interfaces.ITimetableContainer)
 def getTimetableContainer(obj):
