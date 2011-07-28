@@ -1,0 +1,126 @@
+<metal:block i18n:domain="schooltool">
+  <table class="form-fields">
+    <tbody>
+      <tr>
+        <td i18n:translate="" class="label">Course</td>
+        <td>
+          <tal:loop tal:repeat="course context/courses">
+            <a tal:replace="structure course/@@link" />
+          </tal:loop>
+        </td>
+      </tr>
+      <tr>
+        <td i18n:translate="" class="label">Year</td>
+        <td>
+          <a tal:replace="structure view/year/@@link" />
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <table tal:repeat="column view/columns">
+    <thead>
+      <tr>
+        <th colspan="2">
+          <metal:block tal:content="column/term/title" />
+          <metal:block tal:condition="column/current" i18n:translate="">
+            (currently viewing)
+          </metal:block>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tal:block condition="column/section">
+        <tr tal:define="link_id column/link_id;
+                        form_id column/form_id;
+                        form_url column/unlink_form_url;
+                        dialog_title column/unlink_dialog_title;">
+          <td colspan="2">
+            <metal:block tal:condition="column/current"
+                         tal:replace="column/section/title" />
+            <a tal:replace="structure column/section/@@link"
+               tal:condition="not:column/current" />
+            <metal:block tal:condition="view/linked">
+              (<a tal:attributes="id link_id;
+                                  href form_url"
+                  i18n:translate="">Unlink</a>)
+              <script>ST.state.push()</script>
+              <tal:script
+                  tal:replace="structure scriptlocal:
+                               link_id;
+                               form_url;
+                               form_id;
+                               dialog_title" />
+              <script>
+                ST.dialogs.modal_form(ST.local.link_id,
+                                      ST.local.form_url,
+                                      ST.local.form_id,
+                                      ST.local.dialog_title);
+              </script>
+              <script>ST.state.pop()</script>
+              <div tal:attributes="id form_id">
+              </div>
+            </metal:block>
+          </td>
+        </tr>
+        <tr>
+          <th i18n:translate="">Instructors</th>
+          <th i18n:translate="">Students</th>
+        </tr>
+        <tr>
+          <td>
+            <ul>
+              <li tal:repeat="teacher column/section/instructors">
+                <a tal:replace="structure teacher/@@link" />
+              </li>
+            </ul>
+          </td>
+          <td>
+            <ul>
+              <li tal:repeat="student column/section/members">
+                <a tal:replace="structure student/@@link" />
+              </li>
+            </ul>
+          </td>
+        </tr>
+      </tal:block>
+      <tal:block condition="not:column/section">
+        <tr tal:define="link_id column/link_id;
+                        form_id column/form_id;
+                        form_url column/extend_form_url;
+                        dialog_title column/extend_dialog_title;">
+          <td colspan="2">
+            <a tal:attributes="id link_id;
+                               href form_url;"
+               i18n:translate="">Extend to This Term</a>
+            <script>ST.state.push()</script>
+            <tal:script
+                tal:replace="structure scriptlocal:
+                             link_id;
+                             form_url;
+                             form_id;
+                             dialog_title" />
+            <script>
+              ST.dialogs.modal_form(ST.local.link_id,
+                                    ST.local.form_url,
+                                    ST.local.form_id,
+                                    ST.local.dialog_title);
+            </script>
+            <script>ST.state.pop()</script>
+            <div tal:attributes="id form_id">
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <a tal:attributes="href column/link_form_url"
+               i18n:translate="">Link an Existing Section</a>
+          </td>
+        </tr>
+      </tal:block>
+    </tbody>
+  </table>
+  <h3>
+    <a tal:attributes="href view/done_link"
+       i18n:translate="">Done</a>
+  </h3>
+</metal:block>

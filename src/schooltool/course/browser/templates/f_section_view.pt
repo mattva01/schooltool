@@ -95,11 +95,12 @@
              i18n:attributes="alt" />
       </a>
     </h3>
-    <table>
+    <table class="section-terms">
       <tbody>
         <tr tal:repeat="info view/linked_terms">
-          <td class="active" tal:condition="info/current" i18n:translate="">
-            <metal:block i18n:name="term" tal:replace="info/term/title" />
+          <td tal:condition="info/current" i18n:translate="">
+            <span class="active-term" i18n:name="term"
+                  tal:content="info/term/title" />
             (currently viewing)
           </td>
           <td tal:condition="not:info/current">
