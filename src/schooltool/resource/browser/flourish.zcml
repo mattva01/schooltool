@@ -272,7 +272,7 @@
 
   <flourish:viewlet
       name="manage-resources-overview"
-      after="manage-people-overview"
+      after="manage-years-overview"
       view="schooltool.app.browser.app.ManageSchool"
       permission="schooltool.edit"
       manager="schooltool.skin.flourish.page.IPageContentManager"

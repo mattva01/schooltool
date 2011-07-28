@@ -682,19 +682,22 @@ class FlourishManageYearsOverview(flourish.page.Content):
 
     body_template = ViewPageTemplateFile('templates/f_manage_years_overview.pt')
 
-    def __init__(self, context, *args, **kw):
-        super(FlourishManageYearsOverview, self).__init__(
-            self.actual_context, *args, **kw)
-
     @property
-    def actual_context(self):
-        return ISchoolYearContainer(ISchoolToolApplication(None))
+    def schoolyear(self):
+        schoolyears = ISchoolYearContainer(self.context)
+        result = schoolyears.getActiveSchoolYear()
+        if 'schoolyear_id' in self.request:
+            schoolyear_id = self.request['schoolyear_id']
+            result = schoolyears.get(schoolyear_id, result)
+        return result
 
     @property
     def has_active_year(self):
-        return self.context.getActiveSchoolYear() is not None
+        return self.schoolyear is not None
 
     @property
     def terms(self):
-        year = self.context.getActiveSchoolYear()
-        return ITermContainer(year, None)
+        year = self.schoolyear
+        terms = ITermContainer(year, None)
+        if terms is not None:
+            return sorted(terms.values(), key=lambda t:t.first, reverse=True)

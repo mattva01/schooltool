@@ -1,11 +1,25 @@
 <div i18n:domain="schooltool"
-     tal:define="year context/getActiveSchoolYear">
+     tal:define="year view/schoolyear">
+
+<h3>
+  <metal:block i18n:translate="">
+    School Years
+  </metal:block>
+  <a class="modify" href="" title="Manage school years"
+     tal:attributes="href string:${context/@@absolute_url}/schoolyears"
+     i18n:attributes="title"
+     i18n:translate="">
+    <img tal:attributes="src context/++resource++schooltool.skin.flourish/edit-icon.png"
+         alt="Edit"
+         i18n:attributes="alt" />
+  </a>
+</h3>
 
 <table class="data relationships-table"
        tal:define="terms view/terms">
   <thead>
     <tr>
-      <th i18n:translate="">Active School Year</th>
+      <th i18n:translate="">School Year</th>
       <th i18n:translate="">First Day</th>
       <th i18n:translate="">Last Day</th>
     </tr>
@@ -52,9 +66,9 @@
       </td>
     </tr>
     <tr tal:condition="terms"
-        tal:repeat="term terms/values">
+        tal:repeat="term terms">
 
-      <td tal:content="structure year/@@link">
+      <td tal:content="structure term/@@link">
         [link]
       </td>
       <td>
@@ -69,12 +83,5 @@
   </tal:block>
 
 </table>
-
-<h4>
-  <a tal:attributes="href context/@@absolute_url"
-     i18n:translate="">
-    Manage school years
-  </a>
-</h4>
 
 </div>

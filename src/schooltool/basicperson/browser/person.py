@@ -1020,16 +1020,17 @@ class FlourishManagePeopleOverview(flourish.page.Content):
     built_in_groups = ('administrators', 'teachers', 'students')
 
     @property
-    def groups(self):
-        app = ISchoolToolApplication(None)
-        return IGroupContainer(app, None)
+    def schoolyear(self):
+        schoolyears = ISchoolYearContainer(self.context)
+        result = schoolyears.getActiveSchoolYear()
+        if 'schoolyear_id' in self.request:
+            schoolyear_id = self.request['schoolyear_id']
+            result = schoolyears.get(schoolyear_id, result)
+        return result
 
     @property
-    def schoolyear(self):
-        groups = self.groups
-        if groups is None:
-            return None
-        return ISchoolYear(groups)
+    def groups(self):
+        return IGroupContainer(self.schoolyear, None)
 
     @property
     def has_groups(self):
