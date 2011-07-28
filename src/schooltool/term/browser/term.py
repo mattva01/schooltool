@@ -296,6 +296,16 @@ class FlourishTermAddView(flourish.form.AddForm, TermAddForm):
     def handleAdd(self, action):
         super(FlourishTermAddView, self).handleAdd.func(self, action)
 
+    def create(self, data):
+        term = Term(data['title'], data['first'], data['last'])
+        form.applyChanges(self, term, data)
+        self.setHolidays(term)
+        self._term = term
+        return term
+
+    def nextURL(self):
+        return absoluteURL(self._term, self.request)
+
     @button.buttonAndHandler(_("Cancel"))
     def handle_cancel_action(self, action):
         url = absoluteURL(ISchoolToolApplication(None), self.request) + '/terms'
@@ -494,11 +504,11 @@ class FlourishOverlapError(ValidationError):
     __doc__ = _('Date range overlaps another term')
 
 
-class FlourishOverlapValidator(SimpleFieldValidator):
+class FlourishOverlapValidator(TermBoundsValidator):
 
     def validate(self, value):
         # XXX: hack to display the overlap error next to the widget!
-        rv = super(FlourishOverlapValidator, self).validate(value)
+        super(FlourishOverlapValidator, self).validate(value)
         last_widget = self.view.widgets['last']
         last_value = self.request.get(last_widget.name)
         try:
@@ -648,8 +658,9 @@ class FlourishTermsView(flourish.page.Page):
 
     def years(self):
         syc = ISchoolYearContainer(self.context)
+        result = []
         for year in reversed(tuple(syc.values())):
-            result = {
+            info = {
                 'title': _(u'School Year: ${year_title}',
                          mapping={'year_title': year.title}),
                 'first': year.first,
@@ -662,8 +673,9 @@ class FlourishTermsView(flourish.page.Page):
                          mapping={'year_title': year.title}),
                 }
             for term in reversed(tuple(year.values())):
-                result['terms'].append(term)
-            yield result
+                info['terms'].append(term)
+            result.append(info)
+        return result
 
 
 class FlourishManageYearsOverview(flourish.page.Content):

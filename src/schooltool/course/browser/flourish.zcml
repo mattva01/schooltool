@@ -47,6 +47,43 @@
       view=".course.FlourishCourseView"
       />
 
+  <flourish:viewlet
+      name="sections-add-links"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      class=".section.SectionsAddLinks"
+      title="Add"
+      permission="schooltool.edit"
+      view=".section.FlourishSectionsView"
+      />
+
+  <flourish:viewlet
+      name="section-links"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      class=".section.SectionLinks"
+      permission="schooltool.view"
+      view=".section.FlourishSectionView"
+      />
+
+  <flourish:viewlet
+      name="section-add-links"
+      after="section-links"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      class=".section.SectionAddLinks"
+      title="Add"
+      permission="schooltool.edit"
+      view=".section.FlourishSectionView"
+      />
+
+  <flourish:viewlet
+      name="section-actions-links"
+      after="section-add-links"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      class=".section.SectionActionsLinks"
+      title="Actions"
+      permission="schooltool.edit"
+      view=".section.FlourishSectionView"
+      />
+
   <!-- viewlets -->
 
   <flourish:viewlet
@@ -89,6 +126,38 @@
       provides="schooltool.skin.flourish.page.ITertiaryNavigationManager"
       class=".course.CoursesTertiaryNavigationManager"
       view=".course.FlourishCoursesView"
+      permission="zope.Public"
+      />
+
+  <flourish:viewlet
+      name="section-add"
+      title="Section"
+      class=".section.SectionAddLinkViewlet"
+      manager=".section.SectionsAddLinks"
+      permission="schooltool.edit"
+      />
+
+   <flourish:viewlet
+       name="section-add"
+       title="Section"
+       class=".section.SectionAddLinkFromSectionViewlet"
+       manager=".section.SectionAddLinks"
+       permission="schooltool.edit"
+       />
+
+   <flourish:viewlet
+       name="delete.html"
+       title="Delete"
+       class=".section.SectionDeleteLink"
+       manager=".section.SectionActionsLinks"
+       permission="schooltool.edit"
+       />
+
+  <flourish:viewletManager
+      name="tertiary_navigation"
+      provides="schooltool.skin.flourish.page.ITertiaryNavigationManager"
+      class=".section.SectionsTertiaryNavigationManager"
+      view=".section.FlourishSectionsView"
       permission="zope.Public"
       />
 
@@ -144,6 +213,70 @@
         permission="schooltool.edit"
         />
 
+    <flourish:page
+        name="delete.html"
+        for="schooltool.course.interfaces.ISectionContainer"
+        class="schooltool.course.browser.section.FlourishSectionContainerDeleteView"
+        content_template="templates/container_delete.pt"
+        permission="schooltool.edit"
+        />
+
   </configure>
+
+  <flourish:page
+      name="sections"
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      class=".section.FlourishSectionsView"
+      permission="schooltool.view"
+      />
+
+  <flourish:page
+      name="addSection.html"
+      for="schooltool.schoolyear.interfaces.ISchoolYear"
+      class="schooltool.course.browser.section.FlourishSectionAddView"
+      content_template="templates/f_section_add.pt"
+      permission="schooltool.edit"
+      subtitle="Add Section"
+      />
+
+  <flourish:page
+      name="index.html"
+      for="schooltool.course.interfaces.ISection"
+      class=".section.FlourishSectionView"
+      permission="schooltool.view"
+      />
+
+  <flourish:page
+      name="edit.html"
+      for="schooltool.course.interfaces.ISection"
+      class="schooltool.course.browser.section.FlourishSectionEditView"
+      content_template="templates/f_section_edit.pt"
+      permission="schooltool.edit"
+      subtitle="Edit"
+      />
+
+  <flourish:page
+      name="delete.html"
+      for="schooltool.course.interfaces.ISection"
+      class=".section.FlourishSectionDeleteView"
+      template="templates/f_confirm_delete_section.pt"
+      permission="schooltool.edit"
+      />
+
+  <flourish:page
+      name="instructors.html"
+      for="schooltool.course.interfaces.ISection"
+      class=".section.FlourishSectionInstructorView"
+      permission="schooltool.edit"
+      subtitle="Instructors"
+      />
+
+  <flourish:page
+      name="learners.html"
+      for="schooltool.course.interfaces.ISection"
+      class=".section.FlourishSectionLearnerView"
+      permission="schooltool.edit"
+      subtitle="Students"
+      />
 
 </configure>

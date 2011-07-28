@@ -1,7 +1,4 @@
-<!-- XXX: any reason why canModify is called here?
-          it prevents public views on containers, right? -->
-<div tal:define="canModify view/canModify;
-                 batch view/table/batch">
+<div tal:define="batch view/table/batch" i18n:domain="schooltool">
   <form method="post"
         tal:attributes="action request/URL">
     <tal:block tal:condition="view/table/filter_widget">
@@ -19,5 +16,5 @@
       <tal:block replace="structure view/table/render" tal:condition="batch" />
     </tal:block>
   </form>
-  <p tal:condition="not:batch" i18n:translate="">There are none.</p>
+  <h3 tal:condition="not:batch" tal:content="view/empty_message" />
 </div>

@@ -107,6 +107,14 @@
     padding: 16px 192px 16px 16px;
 }
 
+.page > .body > .widecontainer {
+    display: block;
+    float: right;
+    width: 720px;
+    background-color: #f7f7f7;
+    padding: 16px 16px 16px 16px;
+}
+
 /* Refine */
 
 .page > .body > .refine > .content {

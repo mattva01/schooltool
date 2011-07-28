@@ -20,5 +20,5 @@
       <tal:block replace="structure view/table/render" tal:condition="batch" />
     </tal:block>
   </form>
-  <p tal:condition="not:batch" i18n:translate="">There are none.</p>
+  <h3 tal:condition="not:batch" tal:content="view/empty_message" />
 </div>

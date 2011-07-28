@@ -20,6 +20,15 @@
       permission="schooltool.edit"
       />
 
+  <flourish:viewlet
+      name="reports"
+      after="calendar"
+      title="Reports"
+      class="schooltool.skin.flourish.page.LinkViewlet"
+      manager="schooltool.course.browser.section.SectionLinks"
+      permission="schooltool.edit"
+      />
+
   <configure package="schooltool.skin.flourish">
     <flourish:page
         name="reports"
@@ -30,6 +39,12 @@
     <flourish:page
         name="reports"
         for="schooltool.group.interfaces.IGroup"
+        class="schooltool.report.browser.report.FlourishReportsView"
+        permission="schooltool.edit"
+        />
+    <flourish:page
+        name="reports"
+        for="schooltool.course.interfaces.ISection"
         class="schooltool.report.browser.report.FlourishReportsView"
         permission="schooltool.edit"
         />

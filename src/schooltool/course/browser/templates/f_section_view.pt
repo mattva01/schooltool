@@ -1,0 +1,147 @@
+<metal:block i18n:domain="schooltool">
+  <h3>
+    <tal:block replace="context/title" />
+    <a class="modify" href="" title="Edit this section"
+       tal:attributes="href string:${context/@@absolute_url}/edit.html"
+       i18n:attributes="title"
+       tal:condition="view/canModify">
+      <img tal:attributes="src context/++resource++schooltool.skin.flourish/edit-icon.png"
+           alt="Edit"
+           i18n:attributes="alt" />
+    </a>
+  </h3>
+  <metal:block define-macro="subform-display">
+    <div class="viewspace" metal:define-slot="viewspace">
+      <div metal:define-slot="main">
+        <table class="form-fields" metal:define-macro="formtable">
+          <tr class="extraTopRow"
+              metal:define-slot="extra_top"
+              tal:replace="nothing">
+            <td class="label"> Extra top </td>
+            <td class="field"><input type="text" />
+            </td>
+          </tr>
+          <tbody metal:define-slot="formbody" tal:omit-tag="">
+            <tal:block omit-tag="" repeat="widget view/widgets/values">
+              <tr metal:define-macro="formrow" class="row"
+                  tal:condition="python:widget.mode != 'hidden'">
+                <td class="label" metal:define-macro="labelcell">
+                  <label tal:attributes="for widget/id">
+                    <span i18n:translate=""
+                          tal:content="widget/label"> label </span>
+                  </label>
+                </td>
+                <td class="field" metal:define-macro="widgetcell">
+                  <div class="widget" tal:content="structure widget/render">
+                    <input type="text" />
+                  </div>
+                </td>
+              </tr>
+            </tal:block>
+          </tbody>
+          <tr class="extraBottomRow"
+              metal:define-slot="extra_bottom"
+              tal:replace="nothing">
+            <td class="label"> Extra bottom </td>
+            <td class="label"><input type="text" />
+            </td>
+          </tr>
+        </table>
+        <metal:block define-macro="groups">
+          <fieldset tal:condition="view/groups|nothing"
+                    tal:repeat="view view/groups">
+            <legend tal:condition="view/label"
+                    tal:content="view/label">Label</legend>
+            <metal:block define-slot="group-header">
+            </metal:block>
+            <metal:block define-slot="group-rows">
+              <div metal:use-macro="macro:form-table" />
+            </metal:block>
+          </fieldset>
+        </metal:block>
+        <tal:block repeat="widget view/widgets/values"
+                   ><input type="hidden" value=""
+                   tal:condition="python:widget.mode == 'hidden'"
+                   tal:replace="structure widget/render"
+                   /></tal:block>
+      </div>
+      <metal:block define-slot="above-buttons">
+      </metal:block>
+    </div>
+    <metal:block define-slot="bottom">
+    </metal:block>
+  </metal:block>
+  <metal:block tal:condition="view/canModify">
+    <h3>Courses</h3>
+    <tal:block define="courses view/courses">
+      <table tal:condition="courses">
+        <tbody>
+          <tr tal:repeat="course courses">
+            <td tal:content="course/title" />
+          </tr>
+        </tbody>
+      </table>
+      <h3 tal:condition="not:courses" i18n:translate="">
+        This section has no courses
+      </h3>
+    </tal:block>
+    <h3>
+      <metal:block i18n:translate="">Terms</metal:block>
+      <a class="modify" href="" title="Edit terms for this section"
+         tal:attributes="href string:${context/@@absolute_url}/section_linkage.html"
+         i18n:attributes="title">
+        <img tal:attributes="src context/++resource++schooltool.skin.flourish/edit-icon.png"
+             alt="Edit"
+             i18n:attributes="alt" />
+      </a>
+    </h3>
+    <table>
+      <tbody>
+        <tr tal:repeat="info view/linked_terms">
+          <td class="active" tal:condition="info/current" i18n:translate="">
+            <metal:block i18n:name="term" tal:replace="info/term/title" />
+            (currently viewing)
+          </td>
+          <td tal:condition="not:info/current">
+            <a tal:attributes="href info/section/@@absolute_url"
+               tal:content="info/term/title" />
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h3>
+      <metal:block i18n:translate="">Instructors</metal:block>
+      <a class="modify" href="" title="Edit instructors for this section"
+         tal:attributes="href string:${context/@@absolute_url}/instructors.html"
+         i18n:attributes="title">
+        <img tal:attributes="src context/++resource++schooltool.skin.flourish/edit-icon.png"
+             alt="Edit"
+             i18n:attributes="alt" />
+      </a>
+    </h3>
+    <tal:block tal:replace="structure view/instructors_table/render"
+               tal:condition="view/has_instructors" />
+    <h3 tal:condition="not:view/has_instructors" i18n:translate="">
+      This section has no instructors
+    </h3>
+    <h3>
+      <metal:block i18n:translate="">Students</metal:block>
+      <a class="modify" href="" title="Edit students for this section"
+         tal:attributes="href string:${context/@@absolute_url}/learners.html"
+         i18n:attributes="title">
+        <img tal:attributes="src context/++resource++schooltool.skin.flourish/edit-icon.png"
+             alt="Edit"
+             i18n:attributes="alt" />
+      </a>
+    </h3>
+    <tal:block tal:replace="structure view/learners_table/render"
+               tal:condition="view/has_learners" />
+    <h3 tal:condition="not:view/has_learners" i18n:translate="">
+      This section has no students
+    </h3>
+  </metal:block>
+  <h3>
+    <a tal:attributes="href view/done_link"
+       i18n:translate="">Done</a>
+  </h3>
+</metal:block>

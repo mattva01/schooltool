@@ -87,13 +87,11 @@ class ISection(IGroup):
 
     title = zope.schema.TextLine(
         title=_("Title"),
-        required=True,
-        description=_("Title for the section."))
+        required=True)
 
     description = zope.schema.Text(
         title=_("Description"),
-        required=False,
-        description=_("Description of the section."))
+        required=False)
 
     instructors = Attribute(
         """A list of Person objects in the role of instructor""")

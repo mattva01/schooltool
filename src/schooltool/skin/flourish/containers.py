@@ -29,10 +29,10 @@ from zope.security.checker import canAccess
 from zope.traversing.browser.absoluteurl import absoluteURL
 
 from schooltool.table.batch import IterableBatch
-from schooltool.table.table import DependableCheckboxColumn
 from schooltool.table.table import url_cell_formatter
 from schooltool.table.interfaces import ITableFormatter
 from schooltool.skin.flourish.page import Page
+from schooltool.common import SchoolToolMessage as _
 
 
 class ContainerView(Page):
@@ -100,18 +100,14 @@ class ContainerDeleteView(Page):
 class TableContainerView(Page):
     """A base view for containers that use zc.table to display items."""
 
+    empty_message = _('There are none.')
     content_template = ViewPageTemplateFile('templates/table_container.pt')
 
     def __init__(self, context, request):
         self.request = request
         self.context = context
-        self.table = queryMultiAdapter((context, request), ITableFormatter)
 
     def getColumnsBefore(self):
-        if self.canModify():
-            return [DependableCheckboxColumn(prefix="delete",
-                                             name='delete_checkbox',
-                                             title=u'')]
         return []
 
     def getColumnsAfter(self):
@@ -129,6 +125,8 @@ class TableContainerView(Page):
         return self.context
 
     def update(self):
+        self.table = queryMultiAdapter((self.container, self.request),
+                                       ITableFormatter)
         self.setUpTableFormatter(self.table)
 
     @property
