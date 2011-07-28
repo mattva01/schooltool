@@ -74,6 +74,10 @@ class NoSidebarPage(Page):
     page_template = ViewPageTemplateFile('templates/page_nosidebar.pt')
 
 
+class WideContainerPage(Page):
+    page_template = ViewPageTemplateFile('templates/page_widecontainer.pt')
+
+
 class ContentViewletManager(ViewletManager):
     template = InlineViewPageTemplate("""
         <div class="content"
