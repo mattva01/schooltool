@@ -136,8 +136,9 @@ from zope.publisher.browser import BrowserView
 from zope.session.interfaces import ISession
 from zope.traversing.browser.absoluteurl import absoluteURL
 
-import schooltool.skin.flourish.page
+import schooltool.skin.flourish.content
 import schooltool.skin.flourish.form
+import schooltool.skin.flourish.page
 from schooltool.app.browser.cal import day_of_week_names
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
@@ -1007,7 +1008,7 @@ class TimetableWizard(BrowserView):
         return current_step()
 
 
-class FlourishTimetableWizard(flourish.form.Dialog, TimetableWizard):
+class FlourishTimetableWizard(flourish.page.Page, TimetableWizard):
 
     _state = None
     _session = None
@@ -1048,17 +1049,18 @@ class FlourishTimetableWizard(flourish.form.Dialog, TimetableWizard):
         return flourish.content.queryContentProvider(
             self.context, self.request, self, name)
 
-    def updateDialog(self):
-        # XXX: hacked-in default width
-        self.ajax_settings['dialog']['width'] = 944
+    def nextURL(self):
+        link = flourish.content.queryContentProvider(
+            self.context, self.request, self, 'done_link')
+        if link is not None:
+            return link.url
+        return absoluteURL(self.context, self.request)
 
     def update(self):
-        flourish.form.Dialog.update(self)
+        flourish.page.Page.update(self)
 
-        if ('CANCEL' in self.request or
-            'DONE' in self.request):
-            self.request.response.redirect(
-                    absoluteURL(self.context, self.request))
+        if 'CANCEL' in self.request:
+            self.request.response.redirect(self.nextURL())
             return
 
         steps = self.state['steps']
@@ -1133,7 +1135,6 @@ FlourishHomeroomPeriodsStep = flourishStep(HomeroomPeriodsStep)
 
 
 class FlourishFinalStep(flourish.content.ContentProvider, FinalStep):
-    template = ViewPageTemplateFile("templates/f_ttwizard_last.pt")
     timetable = None
 
     getSessionData = lambda self: self.view.state
@@ -1143,17 +1144,6 @@ class FlourishFinalStep(flourish.content.ContentProvider, FinalStep):
         # XXX: risky:
         if self.timetable is None:
             self.timetable = self.createAndAdd()
-        return self.template(*args, **kw)
-
-
-class HackModalWizardLink(flourish.page.SimpleModalLinkViewlet):
-
-    @property
-    def url(self):
-        app = ISchoolToolApplication(None)
-        syc = ISchoolYearContainer(app)
-        sy = syc.getActiveSchoolYear()
-        if sy is None:
-            return None
-        base_url = absoluteURL(sy, self.request)
-        return '%s/timetables/add.html' % base_url
+        self.request.response.redirect(
+            absoluteURL(self.timetable, self.request))
+        return ''

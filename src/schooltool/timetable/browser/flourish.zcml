@@ -49,6 +49,14 @@
       permission="schooltool.view"
       />
 
+  <flourish:content
+      name="done_link"
+      render="template"
+      view=".ttwizard.FlourishTimetableWizard"
+      class=".app.TimetableDoneLink"
+      permission="schooltool.view"
+      />
+
   <!-- timetable wizard -->
 
   <flourish:content
@@ -184,17 +192,8 @@
       for="schooltool.timetable.interfaces.ITimetableContainer"
       class="schooltool.timetable.browser.ttwizard.FlourishTimetableWizard"
       permission="schooltool.edit"
-      template="templates/f_ttwizard.pt"
+      content_template="templates/f_ttwizard.pt"
       render="template"
-      />
-
-  <flourish:viewlet
-      name="add_timetable"
-      title="School Timetable"
-      dialog_title="New timetable"
-      class="schooltool.timetable.browser.ttwizard.HackModalWizardLink"
-      manager="schooltool.timetable.browser.app.FlourishTimetableContainerLinks"
-      permission="schooltool.edit"
       />
 
 <!-- Misplaced content adapters -->
