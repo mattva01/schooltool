@@ -36,6 +36,8 @@ from z3c.form import form, field, button, widget, validator
 from z3c.form.util import getSpecification
 from z3c.form.browser.checkbox import SingleCheckBoxFieldWidget
 
+import schooltool.skin.flourish.page
+from schooltool.skin import flourish
 from schooltool.skin.flourish.content import ContentProvider
 from schooltool.common import format_time_range
 from schooltool.table.table import simple_form_key
@@ -118,6 +120,9 @@ class TimetableView(BrowserView):
     def __call__(self):
         return self.template()
 
+
+class FlourishTimetableView(flourish.page.Page, TimetableView):
+    pass
 
 
 #class SimpleTimetableSchemaAdd(BrowserView):

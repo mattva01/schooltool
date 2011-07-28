@@ -45,6 +45,7 @@ from schooltool.table.table import ImageInputColumn
 from schooltool.table.table import simple_form_key
 from schooltool.term.interfaces import ITerm
 from schooltool.timetable.interfaces import IHaveSchedule
+from schooltool.timetable.interfaces import IHaveTimetables
 from schooltool.timetable.interfaces import IScheduleContainer
 from schooltool.timetable.interfaces import ITimetableContainer
 
@@ -237,3 +238,21 @@ class ModalTimetablesLinkViewlet(flourish.page.SimpleModalLinkViewlet):
             schoolyear_id = request['schoolyear_id']
             year = schoolyears.get(schoolyear_id, year)
         return ITimetableContainer(year)
+
+
+class TimetableDoneLink(object):
+    template = InlineViewPageTemplate('''
+       <a tal:attributes="href view/url"
+          tal:content="view/title" />
+    ''')
+
+    title = _('Done')
+
+    def url(self):
+        container = ITimetableContainer(self.context)
+        schoolyear = ISchoolYear(IHaveTimetables(container))
+        url = '%s/%s?schoolyear_id=%s' % (
+            absoluteURL(ISchoolToolApplication(None), self.request),
+            'timetables',
+            schoolyear.__name__)
+        return url

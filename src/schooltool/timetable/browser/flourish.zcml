@@ -31,6 +31,24 @@
       permission="schooltool.view"
       />
 
+  <!-- timetables -->
+
+  <flourish:page
+      name="index.html"
+      for="schooltool.timetable.interfaces.ITimetable"
+      class=".timetable.FlourishTimetableView"
+      content_template="templates/f_timetable.pt"
+      permission="schooltool.view"
+      />
+
+  <flourish:content
+      name="done_link"
+      render="template"
+      view=".timetable.FlourishTimetableView"
+      class=".app.TimetableDoneLink"
+      permission="schooltool.view"
+      />
+
   <!-- timetable wizard -->
 
   <flourish:content
@@ -183,7 +201,7 @@
 
   <flourish:content
       for="schooltool.timetable.interfaces.IScheduleWithExceptions"
-      layer="schooltool.skin.ISchoolToolLayer"
+      layer="zope.publisher.interfaces.browser.IBrowserRequest"
       template="templates/schedule_exceptions_content.pt"
       permission="schooltool.view"
       name="exceptions" />
@@ -191,7 +209,7 @@
   <flourish:content
       class=".timetable.DayTemplatesTable"
       for="schooltool.timetable.interfaces.IDayTemplateSchedule"
-      layer="schooltool.skin.ISchoolToolLayer"
+      layer="zope.publisher.interfaces.browser.IBrowserRequest"
       view=".timetable.IRenderDayTableCells"
       template="templates/daytemplates_table.pt"
       permission="schooltool.view"
@@ -200,7 +218,7 @@
   <flourish:content
       class=".timetable.SelectedPeriodsContent"
       for="schooltool.timetable.interfaces.ISelectedPeriodsSchedule"
-      layer="schooltool.skin.ISchoolToolLayer"
+      layer="zope.publisher.interfaces.browser.IBrowserRequest"
       template="templates/selected_periods_content.pt"
       permission="schooltool.view"
       name="view" />
@@ -208,7 +226,7 @@
   <flourish:content
       class=".timetable.SelectedPeriodsContent"
       for="schooltool.term.interfaces.ITerm"
-      layer="schooltool.skin.ISchoolToolLayer"
+      layer="zope.publisher.interfaces.browser.IBrowserRequest"
       template="templates/selected_periods_content.pt"
       display_title="Term"
       permission="schooltool.view"
@@ -216,7 +234,7 @@
 
   <flourish:content
       for="schooltool.term.interfaces.ITerm"
-      layer="schooltool.skin.ISchoolToolLayer"
+      layer="zope.publisher.interfaces.browser.IBrowserRequest"
       template="templates/date_boundaries_content.pt"
       display_title="Term"
       permission="schooltool.view"
@@ -224,7 +242,7 @@
 
   <flourish:content
       for="schooltool.timetable.interfaces.ISchedule"
-      layer="schooltool.skin.ISchoolToolLayer"
+      layer="zope.publisher.interfaces.browser.IBrowserRequest"
       template="templates/date_boundaries_content.pt"
       display_title="Schedule"
       permission="schooltool.view"
@@ -232,7 +250,7 @@
 
   <flourish:content
       for="schooltool.timetable.interfaces.ITimetable"
-      layer="schooltool.skin.ISchoolToolLayer"
+      layer="zope.publisher.interfaces.browser.IBrowserRequest"
       template="templates/date_boundaries_content.pt"
       display_title="Timetable"
       permission="schooltool.view"
