@@ -37,6 +37,7 @@ from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.schema import Choice
 from zope.security.checker import canAccess
 from zope.security.proxy import removeSecurityProxy
+from zope.proxy import sameProxiedObjects
 from zope.traversing.browser.absoluteurl import absoluteURL
 from zope.traversing.browser.interfaces import IAbsoluteURL
 from z3c.form import form, subform, field, datamanager, button
@@ -65,6 +66,7 @@ from schooltool.schoolyear.interfaces import ISchoolYearContainer
 from schooltool.skin.containers import ContainerView
 from schooltool.skin.flourish.containers import ContainerDeleteView
 from schooltool.skin.flourish.containers import TableContainerView as FlourishTableContainerView
+from schooltool.skin.flourish.form import Dialog
 from schooltool.skin.flourish.form import DialogForm
 from schooltool.skin.flourish.form import DisplayForm
 from schooltool.skin.flourish.form import Form
@@ -1231,20 +1233,7 @@ class FlourishSectionEditView(Form, form.EditForm):
     def title(self):
         return self.context.title
 
-    def getTerm(self, section):
-        return ITerm(section)
-
     def update(self):
-        if 'UNLINK_NEXT' in self.request:
-            section = removeSecurityProxy(self.context)
-            section.next = None
-            self.request.response.redirect(self.request.getURL())
-            return
-        elif 'UNLINK_PREVIOUS' in self.request:
-            section = removeSecurityProxy(self.context)
-            section.previous = None
-            self.request.response.redirect(self.request.getURL())
-            return
         return form.EditForm.update(self)
 
     @button.buttonAndHandler(_('Submit'), name='apply')
@@ -1260,14 +1249,6 @@ class FlourishSectionEditView(Form, form.EditForm):
     def handle_cancel_action(self, action):
         url = absoluteURL(self.context, self.request)
         self.request.response.redirect(url)
-
-    @property
-    def next_term(self):
-        return getNextTerm(ITerm(self.context))
-
-    @property
-    def previous_term(self):
-        return getPreviousTerm(ITerm(self.context))
 
 
 class FlourishSectionDeleteView(DialogForm, form.EditForm):
@@ -1339,3 +1320,116 @@ class FlourishSectionLearnerView(FlourishRelationshipViewBase):
 
     def getCollection(self):
         return self.context.members
+
+
+class FlourishSectionLinkageView(Page, SectionLinkageView):
+
+    @property
+    def columns(self):
+        linked_sections = dict([(ITerm(section), section)
+                                 for section in self.context.linked_sections])
+        columns = []
+        for term in sorted(self.year.values(), key=lambda t: t.first):
+            section = linked_sections.get(term)
+            current = sameProxiedObjects(section, self.context)
+            info = {
+                'term': term,
+                'section': section,
+                'current': current,
+                'link_id': term.__name__.replace('.', '_'),
+                'form_id': term.__name__.replace('.', '_') + '_container',
+                }
+            if section is not None:
+                unlink_form_url = '%s/unlink_section.html' % (
+                    absoluteURL(self.context, self.request))
+                info['unlink_form_url'] = unlink_form_url
+                info['unlink_dialog_title'] = self.unlink_dialog_title(term)
+            else:
+                extend_form_url = '%s/extend_term.html?term=%s' % (
+                    absoluteURL(self.context, self.request),
+                    term.__name__)
+                info['extend_form_url'] = extend_form_url
+                info['extend_dialog_title'] = self.extend_dialog_title(term)
+                link_form_url = '%s/link_existing.html?term=%s' % (
+                    absoluteURL(self.context, self.request),
+                    term.__name__)
+                info['link_form_url'] = link_form_url
+            columns.append(info)
+        return columns
+
+    @property
+    def done_link(self):
+        return absoluteURL(self.context, self.request)
+
+    def extend_dialog_title(self, term):
+        title = _('Extend ${section} to ${term}',
+                  mapping={'section': self.context.title,
+                           'term': term.title})
+        return translate(title, context=self.request)
+
+    def unlink_dialog_title(self, term):
+        title = _('Remove links of ${section}',
+                  mapping={'section': self.context.title})
+        return translate(title, context=self.request)
+
+
+class FlourishExtendTermView(Dialog, ExtendTermView):
+
+    def updateDialog(self):
+        # XXX: fix the width of dialog content in css
+        if self.ajax_settings['dialog'] != 'close':
+            self.ajax_settings['dialog']['width'] = 544 + 16
+
+    def update(self):
+        Dialog.update(self)
+
+        section = removeSecurityProxy(self.context)
+        year = ISchoolYear(section)
+        linked_names = [ITerm(s).__name__ for s in section.linked_sections]
+        key = self.request['term']
+
+        if key not in year or key in linked_names or 'CANCEL' in self.request:
+            self.request.response.redirect(self.nextURL())
+
+        elif 'EXTEND' in self.request:
+            this_term = ITerm(self.context)
+            extend_term = year[key]
+            if extend_term.first < this_term.first:
+                current = section.linked_sections[0]
+                target_term = getPreviousTerm(ITerm(current))
+            else:
+                current = section.linked_sections[-1]
+                target_term = getNextTerm(ITerm(current))
+            while ITerm(current).first != extend_term.first:
+                new_section = copySection(current, target_term)
+                if extend_term.first < this_term.first:
+                    new_section.next = current
+                    target_term = getPreviousTerm(target_term)
+                else:
+                    new_section.previous = current
+                    target_term = getNextTerm(target_term)
+                current = new_section
+            self.request.response.redirect(self.nextURL())
+
+
+class FlourishUnlinkSectionView(Dialog, UnlinkSectionView):
+
+    def updateDialog(self):
+        # XXX: fix the width of dialog content in css
+        if self.ajax_settings['dialog'] != 'close':
+            self.ajax_settings['dialog']['width'] = 544 + 16
+
+    def update(self):
+        Dialog.update(self)
+
+        section = removeSecurityProxy(self.context)
+
+        if not self.sections or 'CANCEL' in self.request:
+            self.request.response.redirect(self.nextURL())
+
+        elif 'UNLINK' in self.request:
+            if section.previous:
+                section.previous = None
+            if section.next:
+                section.next = None
+            self.request.response.redirect(self.nextURL())

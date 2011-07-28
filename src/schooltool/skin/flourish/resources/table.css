@@ -90,6 +90,10 @@ table.contacts-table th.action {
     width: 15%;
 }
 
+table.section-terms .active-term {
+    font-weight: bold;
+}
+
 /* XXX: select a better class name for these tables */
 
 table.form-fields .label {
