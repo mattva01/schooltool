@@ -317,5 +317,14 @@
       permission="schooltool.edit"
       />
 
+  <flourish:viewlet
+      name="timetables"
+      after="terms"
+      title="Timetables"
+      class="schooltool.skin.flourish.page.LinkViewlet"
+      manager="schooltool.app.browser.app.ManageSchoolLinks"
+      permission="schooltool.view"
+      />
+
 
 </configure>
