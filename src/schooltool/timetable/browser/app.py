@@ -33,6 +33,7 @@ from zc.table.interfaces import ISortableColumn
 
 import schooltool.skin.flourish.page
 import schooltool.skin.flourish.containers
+import schooltool.skin.flourish.content
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.utils import TitledContainerItemVocabulary
 from schooltool.common.inlinept import InlineViewPageTemplate

@@ -44,7 +44,7 @@
   <flourish:content
       name="done_link"
       render="template"
-      view=".timetable.FlourishTimetableView"
+      for="schooltool.timetable.interfaces.ITimetable"
       class=".app.TimetableDoneLink"
       permission="schooltool.view"
       />
@@ -55,6 +55,33 @@
       view=".ttwizard.FlourishTimetableWizard"
       class=".app.TimetableDoneLink"
       permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="timetable-action-links"
+      after="timetable-add-links"
+      for="schooltool.timetable.interfaces.ITimetable"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      class=".timetable.TimetableActionsLinks"
+      title="Actions"
+      permission="schooltool.edit"
+      />
+
+  <flourish:viewlet
+      name="delete.html"
+      for="schooltool.timetable.interfaces.ITimetable"
+      title="Delete"
+      class=".timetable.TimetableDeleteLink"
+      manager=".timetable.TimetableActionsLinks"
+      permission="schooltool.edit"
+      />
+
+  <flourish:page
+      name="delete.html"
+      for="schooltool.timetable.interfaces.ITimetable"
+      class=".timetable.FlourishTimetableDeleteView"
+      template="templates/f_confirm_delete_timetable.pt"
+      permission="schooltool.edit"
       />
 
   <!-- timetable wizard -->

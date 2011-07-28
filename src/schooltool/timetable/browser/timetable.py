@@ -27,6 +27,7 @@ from zope.component import getMultiAdapter
 from zope.component import adapts
 from zope.container.interfaces import INameChooser
 from zope.interface import Interface, implements
+from zope.i18n import translate
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.publisher.browser import BrowserView
 from zope.publisher.interfaces.browser import IBrowserRequest
@@ -41,7 +42,7 @@ from schooltool.skin import flourish
 from schooltool.skin.flourish.content import ContentProvider
 from schooltool.common import format_time_range
 from schooltool.table.table import simple_form_key
-from schooltool.timetable.interfaces import ITimetable
+from schooltool.timetable.interfaces import ITimetable, ITimetableContainer
 from schooltool.timetable.interfaces import ISelectedPeriodsSchedule
 from schooltool.timetable.interfaces import IHaveSchedule
 from schooltool.timetable.browser.app import getActivityVocabulary
@@ -590,3 +591,53 @@ validator.WidgetsValidatorDiscriminators(
     SelectedPeriodsFormValidator,
     view=SelectedPeriodsScheduleEditView,
     schema=getSpecification(ITimetable, force=True))
+
+
+class TimetableActionsLinks(flourish.page.RefineLinksViewlet):
+    """Manager for Action links in timetable views."""
+
+
+class TimetableDeleteLink(flourish.page.ModalFormLinkViewlet):
+
+    @property
+    def dialog_title(self):
+        title = _(u'Delete ${timetable}',
+                  mapping={'timetable': self.context.title})
+        return translate(title, context=self.request)
+
+
+class FlourishTimetableDeleteView(flourish.form.DialogForm, form.EditForm):
+    """View used for confirming deletion of a timetable."""
+
+    dialog_submit_actions = ('apply',)
+    dialog_close_actions = ('cancel',)
+    label = None
+
+    def updateDialog(self):
+        # XXX: fix the width of dialog content in css
+        if self.ajax_settings['dialog'] != 'close':
+            self.ajax_settings['dialog']['width'] = 544 + 16
+
+    def nextURL(self):
+        link = flourish.content.queryContentProvider(
+            self.context, self.request, self, 'done_link')
+        if link is not None:
+            return link.url
+        return absoluteURL(self.context.__parent__, self.request)
+
+    @button.buttonAndHandler(_("Delete"), name='apply')
+    def handleDelete(self, action):
+        next_url = self.nextURL()
+        container = ITimetableContainer(self.context)
+        del container[self.context.__name__]
+        self.request.response.redirect(next_url)
+        self.ajax_settings['dialog'] = 'close'
+
+    @button.buttonAndHandler(_("Cancel"))
+    def handle_cancel_action(self, action):
+        pass
+
+    def updateActions(self):
+        super(FlourishTimetableDeleteView, self).updateActions()
+        self.actions['apply'].addClass('button-ok')
+        self.actions['cancel'].addClass('button-cancel')

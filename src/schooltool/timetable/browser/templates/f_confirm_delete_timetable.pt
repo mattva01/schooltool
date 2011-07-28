@@ -1,0 +1,6 @@
+<h3 i18n:translate="">Deleting a timetable is permanent, irreversable
+and destroys all schedules associated with the timetable.
+It is strongly recommended that you
+only delete a timetable that has been created in error or
+has no data associated with it.</h3>
+<div metal:use-macro="macro:form" />
