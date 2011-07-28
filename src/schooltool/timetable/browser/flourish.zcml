@@ -235,9 +235,18 @@
   <flourish:content
       class=".timetable.DayTemplatesTable"
       for="schooltool.timetable.interfaces.IDayTemplateSchedule"
-      layer="zope.publisher.interfaces.browser.IBrowserRequest"
+      layer="schooltool.skin.ISchoolToolLayer"
       view=".timetable.IRenderDayTableCells"
       template="templates/daytemplates_table.pt"
+      permission="schooltool.view"
+      name="table" />
+
+  <flourish:content
+      class=".timetable.DayTemplatesTable"
+      for="schooltool.timetable.interfaces.IDayTemplateSchedule"
+      layer="schooltool.skin.flourish.IFlourishLayer"
+      view=".timetable.IRenderDayTableCells"
+      template="templates/f_daytemplates_table.pt"
       permission="schooltool.view"
       name="table" />
 
