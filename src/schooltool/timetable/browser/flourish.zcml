@@ -238,5 +238,40 @@
       permission="schooltool.view"
       name="boundaries" />
 
+  <!-- Timetables overview -->
+
+  <flourish:page
+      name="timetables"
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      class=".app.FlourishTimetablesView"
+      permission="schooltool.view"
+      />
+
+  <flourish:content
+      name="tertiary_navigation"
+      class=".app.SchoolTimetablesTertiaryNavigation"
+      view=".app.FlourishTimetablesView"
+      permission="zope.Public"
+      />
+
+  <flourish:viewlet
+      name="timetable-add-links"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      class=".app.TimetableAddLinks"
+      title="Add"
+      permission="schooltool.edit"
+      view=".app.FlourishTimetablesView"
+      />
+
+  <flourish:viewlet
+      name="timetable-wizard"
+      title="Timetable"
+      link="add.html"
+      view=".app.FlourishTimetablesView"
+      class=".app.ModalTimetablesLinkViewlet"
+      manager=".app.TimetableAddLinks"
+      permission="schooltool.edit"
+      />
+
 
 </configure>
