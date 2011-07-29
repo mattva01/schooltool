@@ -283,7 +283,8 @@ class ScheduleContainerView(BrowserView):
         return self.template()
 
 
-class FlourishScheduleContainerView(flourish.page.Page, ScheduleContainerView):
+class FlourishScheduleContainerView(flourish.page.WideContainerPage,
+                                    ScheduleContainerView):
     pass
 
 
