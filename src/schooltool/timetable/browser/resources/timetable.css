@@ -15,10 +15,14 @@ table.timetable tbody td {
     border-right: 1px dotted #cccccc;
 }
 
-table.timetable .period,
-table.timetable .activity {
+table.timetable td .period,
+table.timetable td .activity {
     word-break: normal;
     white-space: nowrap;
+}
+
+table.timetable td .inactive {
+    color: #aaa;
 }
 
 }

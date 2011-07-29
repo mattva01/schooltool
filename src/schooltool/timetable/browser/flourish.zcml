@@ -362,6 +362,14 @@
       content_template="templates/f_schedule_container_view.pt"
       permission="schooltool.edit" />
 
+  <flourish:content
+      class=".timetable.DayTemplatesTable"
+      for="schooltool.timetable.interfaces.IDayTemplateSchedule"
+      layer="schooltool.skin.flourish.IFlourishLayer"
+      view=".timetable.SelectedPeriodsContent"
+      template="templates/f_daytemplates_selected_table.pt"
+      permission="schooltool.view"
+      name="table" />
 
   <!-- resources -->
 
