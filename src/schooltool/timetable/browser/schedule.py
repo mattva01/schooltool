@@ -34,8 +34,10 @@ from zope.publisher.browser import BrowserView
 from zope.security.proxy import removeSecurityProxy
 from zope.traversing.browser.absoluteurl import absoluteURL
 
+import schooltool.skin.flourish.page
 from schooltool.calendar.utils import parse_date, parse_time
 from schooltool.schoolyear.interfaces import ISchoolYear
+from schooltool.skin import flourish
 from schooltool.term.interfaces import ITerm
 from schooltool.term.term import getTermForDate
 from schooltool.timetable.schedule import MeetingException
@@ -281,6 +283,10 @@ class ScheduleContainerView(BrowserView):
         return self.template()
 
 
+class FlourishScheduleContainerView(flourish.page.Page, ScheduleContainerView):
+    pass
+
+
 class ScheduleDeleteView(BrowserView):
     template = ViewPageTemplateFile('templates/confirm_schedule_delete.pt')
 
@@ -306,3 +312,9 @@ class ScheduleDeleteView(BrowserView):
                 return self.template()
         else:
             self.request.response.redirect(self.nextURL())
+
+
+def scheduleTitle(context, request, view, name):
+    owner = IHaveSchedule(context)
+    return flourish.content.queryContentProvider(
+        owner, request, view, 'title')

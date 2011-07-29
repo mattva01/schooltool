@@ -335,6 +335,34 @@
       class=".app.FlourishManageTimetablesOverview"
       />
 
+  <!-- misplaced integration -->
+
+  <flourish:viewlet
+      name="schedule"
+      after="calendar"
+      title="Schedule"
+      link="schedule"
+      class="schooltool.skin.flourish.page.LinkViewlet"
+      manager="schooltool.course.browser.section.SectionLinks"
+      permission="schooltool.view"
+      />
+
+  <!-- schedule -->
+
+  <flourish:contentFactory
+      factory=".schedule.scheduleTitle"
+      for="schooltool.timetable.interfaces.IScheduleContainer"
+      name="title" />
+
+  <flourish:page
+      name="index.html"
+      subtitle="Schedule"
+      for="schooltool.timetable.interfaces.IScheduleContainer"
+      class=".schedule.FlourishScheduleContainerView"
+      content_template="templates/f_schedule_container_view.pt"
+      permission="schooltool.edit" />
+
+
   <!-- resources -->
 
   <zope:resourceLibrary
