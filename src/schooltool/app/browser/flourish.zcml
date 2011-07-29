@@ -256,16 +256,19 @@
 
   <flourish:content
       class=".app.ContentTitle"
+      view="zope.publisher.interfaces.browser.IBrowserPage"
       permission="schooltool.view"
       name="title" />
 
   <flourish:content
       class=".app.ContentLink"
+      view="zope.publisher.interfaces.browser.IBrowserPage"
       permission="schooltool.view"
       name="link" />
 
   <flourish:content
       class=".app.ContentLabel"
+      view="zope.publisher.interfaces.browser.IBrowserPage"
       permission="schooltool.view"
       name="label" />
 

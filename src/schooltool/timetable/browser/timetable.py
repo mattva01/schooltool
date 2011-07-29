@@ -46,6 +46,7 @@ from schooltool.timetable.interfaces import ITimetable, ITimetableContainer
 from schooltool.timetable.interfaces import ISelectedPeriodsSchedule
 from schooltool.timetable.interfaces import IHaveSchedule
 from schooltool.timetable.browser.app import getActivityVocabulary
+from schooltool.timetable.browser.schedule import FlourishConfirmDeleteView
 from schooltool.timetable.timetable import SelectedPeriodsSchedule
 from schooltool.term.interfaces import ITerm
 
@@ -122,7 +123,7 @@ class TimetableView(BrowserView):
         return self.template()
 
 
-class FlourishTimetableView(flourish.page.Page, TimetableView):
+class FlourishTimetableView(flourish.page.WideContainerPage, TimetableView):
     pass
 
 
@@ -397,6 +398,12 @@ TimetableAdd_default_last = widget.ComputedWidgetAttribute(
     )
 
 
+class FlourishSelectedPeriodsAddView(flourish.form.AddForm,
+                                     SelectedPeriodsAddView):
+
+    legend = _("Schedule a school timetable")
+
+
 class SelectedPeriodsFormValidator(validator.InvariantsValidator):
 
     def _formatTitle(self, object):
@@ -503,11 +510,6 @@ class SelectedPeriodsScheduleEditView(form.EditForm):
         'consecutive_periods_as_one')
     fields['consecutive_periods_as_one'].widgetFactory = SingleCheckBoxFieldWidget
 
-    def __init__(self, *args, **kw):
-        form.EditForm.__init__(self, *args, **kw)
-        self.owner = IHaveSchedule(self.context)
-        self.activity_vocabulary = getActivityVocabulary(self.context)
-
     def getPeriodKey(self, day, period):
         return 'period.%s.%s' % (simple_form_key(day),
                                  simple_form_key(period))
@@ -538,6 +540,11 @@ class SelectedPeriodsScheduleEditView(form.EditForm):
             return (format_time_range(slot.tstart, slot.duration),
                     self.activityTitle(slot.activity_type) or '')
         return None
+
+    def update(self):
+        self.owner = IHaveSchedule(self.context)
+        self.activity_vocabulary = getActivityVocabulary(self.context)
+        super(SelectedPeriodsScheduleEditView, self).update()
 
     def updateActions(self):
         super(SelectedPeriodsScheduleEditView, self).updateActions()
@@ -593,51 +600,43 @@ validator.WidgetsValidatorDiscriminators(
     schema=getSpecification(ITimetable, force=True))
 
 
+class FlourishSelectedPeriodsScheduleEditView(flourish.page.WideContainerPage,
+                                              SelectedPeriodsScheduleEditView):
+    __init__ = SelectedPeriodsScheduleEditView.__init__
+    update = SelectedPeriodsScheduleEditView.update
+
+
+class FlourishSelectedScheduleDeleteView(FlourishConfirmDeleteView):
+
+    def initDialog(self):
+        super(FlourishSelectedScheduleDeleteView, self).initDialog()
+        title = _(u'Unschedule timetable ${timetable}',
+                  mapping={'timetable': self.context.timetable.title})
+        self.ajax_settings['dialog']['title'] = translate(
+            title, context=self.request)
+
+    def delete(self):
+        container = self.context.__parent__
+        del container[self.context.__name__]
+
+    @property
+    def owner(self):
+        return IHaveSchedule(self.context)
+
+
 class TimetableActionsLinks(flourish.page.RefineLinksViewlet):
     """Manager for Action links in timetable views."""
 
 
-class TimetableDeleteLink(flourish.page.ModalFormLinkViewlet):
+class FlourishTimetableDeleteView(FlourishConfirmDeleteView):
 
-    @property
-    def dialog_title(self):
+    def initDialog(self):
+        super(FlourishTimetableDeleteView, self).initDialog()
         title = _(u'Delete ${timetable}',
                   mapping={'timetable': self.context.title})
-        return translate(title, context=self.request)
+        self.ajax_settings['dialog']['title'] = translate(
+            title, context=self.request)
 
-
-class FlourishTimetableDeleteView(flourish.form.DialogForm, form.EditForm):
-    """View used for confirming deletion of a timetable."""
-
-    dialog_submit_actions = ('apply',)
-    dialog_close_actions = ('cancel',)
-    label = None
-
-    def updateDialog(self):
-        # XXX: fix the width of dialog content in css
-        if self.ajax_settings['dialog'] != 'close':
-            self.ajax_settings['dialog']['width'] = 544 + 16
-
-    def nextURL(self):
-        link = flourish.content.queryContentProvider(
-            self.context, self.request, self, 'done_link')
-        if link is not None:
-            return link.url
-        return absoluteURL(self.context.__parent__, self.request)
-
-    @button.buttonAndHandler(_("Delete"), name='apply')
-    def handleDelete(self, action):
-        next_url = self.nextURL()
+    def delete(self):
         container = ITimetableContainer(self.context)
         del container[self.context.__name__]
-        self.request.response.redirect(next_url)
-        self.ajax_settings['dialog'] = 'close'
-
-    @button.buttonAndHandler(_("Cancel"))
-    def handle_cancel_action(self, action):
-        pass
-
-    def updateActions(self):
-        super(FlourishTimetableDeleteView, self).updateActions()
-        self.actions['apply'].addClass('button-ok')
-        self.actions['cancel'].addClass('button-cancel')

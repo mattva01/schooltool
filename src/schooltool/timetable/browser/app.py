@@ -226,7 +226,7 @@ class TimetableAddLinks(flourish.page.RefineLinksViewlet):
     """Manager for Add links in FlourishTimetablesView"""
 
 
-class ModalTimetablesLinkViewlet(flourish.page.LinkViewlet):
+class TimetablesLinkViewlet(flourish.page.LinkViewlet):
 
     def __init__(self, context, request, *args, **kw):
         super(ModalTimetablesLinkViewlet, self).__init__(

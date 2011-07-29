@@ -20,7 +20,11 @@
         <tal:block condition="col">
           <td tal:attributes="width table/col_width">
             <span tal:content="structure col/title"
+                  tal:condition="col/value"
                   class="period">[period]</span>
+            <span tal:content="structure col/title"
+                  tal:condition="not:col/value"
+                  class="period inactive">[period]</span>
             <span tal:content='structure col/value'
                   class="activity">[activity]</span>
           </td>
