@@ -44,7 +44,6 @@ from schooltool.term.interfaces import ITerm
 from schooltool.term.term import getTermForDate
 from schooltool.timetable.schedule import MeetingException
 from schooltool.timetable.interfaces import IHaveSchedule
-from schooltool.timetable.interfaces import IScheduleContainer
 
 from schooltool.common import SchoolToolMessage as _
 
@@ -365,14 +364,3 @@ class FlourishConfirmDeleteView(flourish.form.DialogForm, form.EditForm):
         super(FlourishConfirmDeleteView, self).updateActions()
         self.actions['apply'].addClass('button-ok')
         self.actions['cancel'].addClass('button-cancel')
-
-
-class FlourishSelectedScheduleDeleteView(FlourishConfirmDeleteView):
-
-    def delete(self):
-        container = self.context.__parent__
-        del container[self.context.__name__]
-
-    @property
-    def owner(self):
-        return IHaveSchedule(self.context)

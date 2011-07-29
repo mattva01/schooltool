@@ -600,29 +600,36 @@ class FlourishSelectedPeriodsScheduleEditView(flourish.page.WideContainerPage,
     update = SelectedPeriodsScheduleEditView.update
 
 
-class SelectedScheduleDeleteLink(flourish.page.ModalFormLinkViewlet):
+class FlourishSelectedScheduleDeleteView(FlourishConfirmDeleteView):
 
-    @property
-    def dialog_title(self):
+    def initDialog(self):
+        super(FlourishSelectedScheduleDeleteView, self).initDialog()
         title = _(u'Unschedule timetable ${timetable}',
                   mapping={'timetable': self.context.timetable.title})
-        return translate(title, context=self.request)
+        self.ajax_settings['dialog']['title'] = translate(
+            title, context=self.request)
+
+    def delete(self):
+        container = self.context.__parent__
+        del container[self.context.__name__]
+
+    @property
+    def owner(self):
+        return IHaveSchedule(self.context)
 
 
 class TimetableActionsLinks(flourish.page.RefineLinksViewlet):
     """Manager for Action links in timetable views."""
 
 
-class TimetableDeleteLink(flourish.page.ModalFormLinkViewlet):
+class FlourishTimetableDeleteView(FlourishConfirmDeleteView):
 
-    @property
-    def dialog_title(self):
+    def initDialog(self):
+        super(FlourishTimetableDeleteView, self).initDialog()
         title = _(u'Delete ${timetable}',
                   mapping={'timetable': self.context.title})
-        return translate(title, context=self.request)
-
-
-class FlourishTimetableDeleteView(FlourishConfirmDeleteView):
+        self.ajax_settings['dialog']['title'] = translate(
+            title, context=self.request)
 
     def delete(self):
         container = ITimetableContainer(self.context)

@@ -71,7 +71,7 @@
       name="delete.html"
       for="schooltool.timetable.interfaces.ITimetable"
       title="Delete"
-      class=".timetable.TimetableDeleteLink"
+      class="schooltool.skin.flourish.page.ModalFormLinkViewlet"
       manager=".timetable.TimetableActionsLinks"
       permission="schooltool.edit"
       />
@@ -383,7 +383,7 @@
   <flourish:viewlet
       name="schedule-action-links"
       after="schedule-add-links"
-      for="schooltool.timetable.interfaces.ISchedule"
+      for="schooltool.timetable.interfaces.ISelectedPeriodsSchedule"
       manager="schooltool.skin.flourish.page.IPageRefineManager"
       class=".schedule.ScheduleActionsLinks"
       title="Actions"
@@ -393,8 +393,8 @@
   <flourish:viewlet
       name="delete.html"
       for="schooltool.timetable.interfaces.ISelectedPeriodsSchedule"
-      title="Unschedule"
-      class=".timetable.SelectedScheduleDeleteLink"
+      title="Delete"
+      class="schooltool.skin.flourish.page.ModalFormLinkViewlet"
       manager=".schedule.ScheduleActionsLinks"
       permission="schooltool.edit"
       />
@@ -402,7 +402,7 @@
   <flourish:page
       name="delete.html"
       for="schooltool.timetable.interfaces.ISelectedPeriodsSchedule"
-      class=".schedule.FlourishSelectedScheduleDeleteView"
+      class=".timetable.FlourishSelectedScheduleDeleteView"
       template="templates/f_confirm_delete_selected_schedule.pt"
       permission="schooltool.edit"
       />
