@@ -291,7 +291,7 @@ body > .calendar {
 /* XXX: make generic for all <p>s that need to align to
         table contents in */
 
-p.group-count {
+.manage-view p {
     padding-left: 8px;
     padding-right: 8px;
 }

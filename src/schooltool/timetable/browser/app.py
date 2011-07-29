@@ -226,7 +226,7 @@ class TimetableAddLinks(flourish.page.RefineLinksViewlet):
     """Manager for Add links in FlourishTimetablesView"""
 
 
-class ModalTimetablesLinkViewlet(flourish.page.LinkViewlet):
+class TimetablesLinkViewlet(flourish.page.LinkViewlet):
 
     def __init__(self, context, request, *args, **kw):
         super(ModalTimetablesLinkViewlet, self).__init__(
@@ -258,3 +258,28 @@ class TimetableDoneLink(object):
             'timetables',
             schoolyear.__name__)
         return url
+
+
+class FlourishManageTimetablesOverview(flourish.page.Content):
+
+    body_template = ViewPageTemplateFile('templates/f_manage_timetables_overview.pt')
+
+    @property
+    def schoolyear(self):
+        schoolyears = ISchoolYearContainer(self.context)
+        result = schoolyears.getActiveSchoolYear()
+        if 'schoolyear_id' in self.request:
+            schoolyear_id = self.request['schoolyear_id']
+            result = schoolyears.get(schoolyear_id, result)
+        return result
+
+    @property
+    def has_schoolyear(self):
+        return self.schoolyear is not None
+
+    @property
+    def timetables(self):
+        timetables = ITimetableContainer(self.schoolyear, None)
+        if timetables is not None:
+            return sorted(timetables.values(), key=lambda t:t.first,
+                          reverse=True)

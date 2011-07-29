@@ -30,6 +30,7 @@ from z3c.form.interfaces import IRadioWidget
 
 import schooltool.skin.flourish.page
 import schooltool.skin.flourish.tal
+from schooltool.common.inlinept import InheritTemplate
 from schooltool.skin import flourish
 from schooltool.skin.flourish.interfaces import IFlourishLayer
 
@@ -51,6 +52,7 @@ class FlourishRadioBoolTerms(BoolTerms):
 class Form(z3c.form.form.Form, flourish.page.Page):
     __call__ = flourish.page.Page.__call__
     formErrorsMessage = _('Please correct the marked fields below.')
+    template = InheritTemplate(flourish.page.Page.template)
 
     def update(self):
         super(Form, self).update()

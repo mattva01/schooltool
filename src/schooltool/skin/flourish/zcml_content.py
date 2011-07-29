@@ -57,6 +57,41 @@ class IContentDirective(ITemplatedContentProvider):
 IContentDirective.setTaggedValue('keyword_arguments', True)
 
 
+class IContentFactoryDirective(zope.component.zcml.IAdapterDirective):
+
+    for_ = zope.configuration.fields.GlobalObject(
+        title=u"The interface or class this view is for.",
+        required=False,
+        default=Interface,
+        )
+
+    factory = zope.configuration.fields.GlobalObject(
+        title=u"The adapter factory.",
+        required=True,
+        )
+
+    provides = zope.configuration.fields.GlobalInterface(
+        title=u"Interface the component provides",
+        required=False,
+        default=interfaces.IContentProvider,
+        )
+
+    view = zope.configuration.fields.GlobalObject(
+        title=u"The view the content provider is registered for.",
+        description=(u"The view can either be an interface or a class. By "
+                     "default the provider is registered for all views, "
+                     "the most common case."),
+        required=False,
+        default=interfaces.IPage,
+        )
+
+    layer = zope.configuration.fields.GlobalInterface(
+        title=(u"The layer the view is in."),
+        required=False,
+        default=interfaces.IFlourishLayer,
+        )
+
+
 def handle_security(class_, permission, interfaces, attributes):
     required = set(attributes)
     for ifc in interfaces:
@@ -136,3 +171,19 @@ def contentDirective(
               name,
               _context.info),
         )
+
+
+def contentFactory(
+    _context, factory, name='', permission=None,
+    for_=Interface, layer=interfaces.IFlourishLayer, view=interfaces.IPage,
+    provides=interfaces.IContentProvider,
+    trusted=True, locate=False):
+
+    wrapper = lambda c, r, v: factory(c, r, v, name)
+    objects = [for_, layer, view]
+    zope.component.zcml.adapter(
+        _context, [wrapper],
+        provides=provides,
+        for_=objects, permission=permission,
+        name=name,
+        trusted=trusted, locate=locate)

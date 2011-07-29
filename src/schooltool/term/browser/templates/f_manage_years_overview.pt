@@ -1,87 +1,52 @@
-<div i18n:domain="schooltool"
+<div class="manage-view" i18n:domain="schooltool"
+     tal:condition="view/has_schoolyear"
      tal:define="year view/schoolyear">
-
-<h3>
-  <metal:block i18n:translate="">
-    School Years
-  </metal:block>
-  <a class="modify" href="" title="Manage school years"
-     tal:attributes="href string:${context/@@absolute_url}/schoolyears"
-     i18n:attributes="title"
-     i18n:translate="">
-    <img tal:attributes="src context/++resource++schooltool.skin.flourish/edit-icon.png"
-         alt="Edit"
-         i18n:attributes="alt" />
-  </a>
-</h3>
-
-<table class="data relationships-table"
-       tal:define="terms view/terms">
-  <thead>
-    <tr>
-      <th i18n:translate="">School Year</th>
-      <th i18n:translate="">First Day</th>
-      <th i18n:translate="">Last Day</th>
-    </tr>
-  </thead>
-
-  <tal:block condition="not:view/has_active_year">
-    <tr>
-      <td colspan="3" i18n:translate="">
-        To add teachers, students or administrators,
-        manage courses, please set up a
-        <a tal:attributes="href string:${context/@@absolute_url}/add.html"
-           i18n:translate="" i18n:name="school_year">
-          school year
-        </a>.
-      </td>
-    </tr>
-  </tal:block>
-
-  <tal:block condition="view/has_active_year">
-
-  <tbody>
-    <tr>
-      <td tal:content="structure year/@@link">
-        [link]
-      </td>
-      <td tal:content="year/first/@@mediumDate"></td>
-      <td tal:content="year/last/@@mediumDate"></td>
-    </tr>
-  </tbody>
-
-
-  <thead>
-    <tr>
-      <th i18n:translate="">Term</th>
-      <th i18n:translate="">First Day</th>
-      <th i18n:translate="">Last Day</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr tal:condition="not: terms">
-      <td colspan="3" i18n:translate="">
-        Please set up at least one
-        <a tal:attributes="href string:${context/schooltool:app/@@absolute_url}/terms">term</a>.
-      </td>
-    </tr>
-    <tr tal:condition="terms"
-        tal:repeat="term terms">
-
-      <td tal:content="structure term/@@link">
-        [link]
-      </td>
-      <td>
-        <tal:block content="term/first/@@mediumDate" />
-      </td>
-      <td>
-        <tal:block content="term/last/@@mediumDate" />
-      </td>
-    </tr>
-  </tbody>
-
-  </tal:block>
-
-</table>
-
+  <h3>
+    <metal:block i18n:translate="">
+      Terms
+    </metal:block>
+    <a class="modify" href="" title="Manage terms"
+       tal:attributes="href string:${context/@@absolute_url}/terms"
+       i18n:attributes="title"
+       i18n:translate="">
+      <img tal:attributes="src context/++resource++schooltool.skin.flourish/edit-icon.png"
+           alt="Edit"
+           i18n:attributes="alt" />
+    </a>
+  </h3>
+  <table tal:define="terms view/terms">
+    <thead>
+      <tr>
+        <th i18n:translate="">School Year</th>
+        <th i18n:translate="">First Day</th>
+        <th i18n:translate="">Last Day</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td tal:content="structure year/@@link">
+          [link]
+        </td>
+        <td tal:content="year/first/@@mediumDate"></td>
+        <td tal:content="year/last/@@mediumDate"></td>
+      </tr>
+      <tr>
+        <th i18n:translate="">Term</th>
+        <th i18n:translate="">First Day</th>
+        <th i18n:translate="">Last Day</th>
+      </tr>
+      <tr tal:condition="terms"
+          tal:repeat="term terms">
+        <td tal:content="structure term/@@link" />
+        <td tal:content="term/first/@@mediumDate" />
+        <td tal:content="term/last/@@mediumDate" />
+      </tr>
+      <tr tal:condition="not:terms">
+        <td colspan="3" i18n:translate="">
+          Please set up at least one
+          <a tal:attributes="href string:${context/schooltool:app/@@absolute_url}/terms">term</a>.
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </div>

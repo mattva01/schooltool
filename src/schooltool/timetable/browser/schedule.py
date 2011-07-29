@@ -33,9 +33,13 @@ from zope.intid.interfaces import IIntIds
 from zope.publisher.browser import BrowserView
 from zope.security.proxy import removeSecurityProxy
 from zope.traversing.browser.absoluteurl import absoluteURL
+from z3c.form import form, button
 
+import schooltool.skin.flourish.page
+import schooltool.skin.flourish.form
 from schooltool.calendar.utils import parse_date, parse_time
 from schooltool.schoolyear.interfaces import ISchoolYear
+from schooltool.skin import flourish
 from schooltool.term.interfaces import ITerm
 from schooltool.term.term import getTermForDate
 from schooltool.timetable.schedule import MeetingException
@@ -281,6 +285,11 @@ class ScheduleContainerView(BrowserView):
         return self.template()
 
 
+class FlourishScheduleContainerView(flourish.page.WideContainerPage,
+                                    ScheduleContainerView):
+    pass
+
+
 class ScheduleDeleteView(BrowserView):
     template = ViewPageTemplateFile('templates/confirm_schedule_delete.pt')
 
@@ -306,3 +315,56 @@ class ScheduleDeleteView(BrowserView):
                 return self.template()
         else:
             self.request.response.redirect(self.nextURL())
+
+
+def scheduleTitle(context, request, view, name):
+    owner = IHaveSchedule(context)
+    return flourish.content.queryContentProvider(
+        owner, request, view, 'title')
+
+
+class ScheduleActionsLinks(flourish.page.RefineLinksViewlet):
+    """Manager for Action links in scheduling views."""
+
+
+class FlourishConfirmDeleteView(flourish.form.DialogForm, form.EditForm):
+    """View used for confirming deletion of a timetable."""
+
+    dialog_submit_actions = ('apply',)
+    dialog_close_actions = ('cancel',)
+    label = None
+
+    def updateDialog(self):
+        # XXX: fix the width of dialog content in css
+        if self.ajax_settings['dialog'] != 'close':
+            self.ajax_settings['dialog']['width'] = 544 + 16
+
+    def nextURL(self):
+        link = flourish.content.queryContentProvider(
+            self.context, self.request, self, 'done_link')
+        if link is not None:
+            return link.url
+        return absoluteURL(self.context.__parent__, self.request)
+
+    def delete(self):
+        pass
+
+    @button.buttonAndHandler(_("Delete"), name='apply')
+    def handleDelete(self, action):
+        next_url = self.nextURL()
+        self.delete()
+        self.request.response.redirect(next_url)
+        self.ajax_settings['dialog'] = 'close'
+
+    @button.buttonAndHandler(_("Cancel"))
+    def handle_cancel_action(self, action):
+        pass
+
+    def updateActions(self):
+        super(FlourishConfirmDeleteView, self).updateActions()
+        self.actions['apply'].addClass('button-ok')
+        self.actions['cancel'].addClass('button-cancel')
+
+
+class ScheduleAddLinks(flourish.page.RefineLinksViewlet):
+    """Manager for schedule Add links."""

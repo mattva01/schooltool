@@ -1,0 +1,37 @@
+<div i18n:domain="schooltool">
+
+<p tal:condition="not:context"
+   i18n:translate="">Nothing scheduled yet.</p>
+
+<tal:if tal:condition="context">
+
+  <tal:block repeat="schedule context/values">
+    <h3>
+      <tal:block tal:content="structure schedule/schooltool:content/boundaries">
+        Schedule X (date - date)
+      </tal:block>
+
+      <a class="modify" href="" title="Select periods"
+         tal:attributes="href string:${schedule/@@absolute_url}/edit.html"
+         i18n:attributes="title"
+         tal:condition="context/schooltool:can_edit">
+        <img tal:attributes="src context/++resource++schooltool.skin.flourish/edit-icon.png"
+             alt="Edit"
+             i18n:attributes="alt" />
+      </a>
+
+    </h3>
+
+    <div tal:content="structure schedule/schooltool:content/view"></div>
+
+  </tal:block>
+
+  <div tal:define="exceptions nocall:context/schooltool:content/exceptions|nothing"
+       tal:condition="exceptions">
+    <h3 i18n:translate="">Exception days</h3>
+    <div tal:content="structure exceptions"></div>
+  </div>
+
+</tal:if>
+
+</div>

@@ -747,10 +747,6 @@ class ManageSiteLinks(flourish.page.RefineLinksViewlet):
     """Manage Site links viewlet."""
 
 
-class ManageSchoolLinks(flourish.page.RefineLinksViewlet):
-    """Manage School links viewlet."""
-
-
 class CustomizeSchoolLinks(flourish.page.RefineLinksViewlet):
     """Customize School links viewlet."""
 

@@ -1,0 +1,11 @@
+<div i18n:domain="schooltool">
+
+  <div tal:define="term view/term"
+       tal:condition="term"
+       tal:content="structure term/schooltool:content/boundaries">
+  </div>
+
+  <div metal:use-macro="macro:form">
+  </div>
+
+</div>

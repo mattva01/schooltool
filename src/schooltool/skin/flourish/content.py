@@ -27,10 +27,11 @@ from zope.contentprovider.interfaces import ContentProviderLookupError
 from zope.contentprovider.tales import addTALNamespaceData
 from zope.contentprovider.provider import ContentProviderBase
 from zope.event import notify
-from zope.location.interfaces import ILocation
+from zope.location import ILocation
 from zope.proxy.decorator import SpecificationDecoratorBase
 from zope.publisher.interfaces import NotFound
 from zope.publisher.browser import BrowserPage
+from zope.security.proxy import removeSecurityProxy
 from zope.tales.interfaces import ITALESFunctionNamespace
 
 from schooltool.skin.flourish import interfaces
@@ -118,7 +119,8 @@ class ContentProviders(object):
                 provider = interfaces.IContentProvider(provider, None)
         if (provider is not None and
             ILocation.providedBy(provider)):
-            provider.__name__ = name
+            unproxied = removeSecurityProxy(provider)
+            unproxied.__name__ = name
         return provider
 
     def get_providers(self, direct=True, adapted=True):
@@ -147,7 +149,7 @@ class ContentProviders(object):
     def traverse(self, name, furtherPath):
         provider = self.get(name, None)
         if provider is None:
-            raise ContentProviderLookupError(name)
+            raise ContentProviderLookupError(self.context, name)
         return provider
 
 
@@ -162,7 +164,8 @@ class TALESAwareContentProviders(ContentProviders):
     def traverse(self, name, furtherPath):
         provider = ContentProviders.traverse(self, name, furtherPath)
         if self.engine is not None:
-            addTALNamespaceData(provider, self.engine)
+            unproxied = removeSecurityProxy(provider)
+            addTALNamespaceData(unproxied, self.engine)
         return provider
 
 
