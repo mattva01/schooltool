@@ -1,0 +1,19 @@
+<h3 i18n:domain="schooltool" i18n:translate="">
+  Click "Extend" to create a linked section in term
+  "<tal:block i18n:name="from_term_title" content="view/extend_term/@@title" />"
+  containing the students and instructors from section
+  "<tal:block i18n:name="section_title" content="context/@@title" />"
+  in term
+  "<tal:block i18n:name="to_term_title" content="view/term/@@title" />".
+</h3>
+<form method="post" tal:attributes="action request/URL">
+  <input type="hidden" name="term" tal:attributes="value request/term" />
+  <div class="buttons">
+    <input type="submit" class="button-ok" name="EXTEND"
+           onclick="return ST.dialogs.submit(this, this);"
+           value="Extend" i18n:attributes="value" />
+    <input type="submit" class="button-cancel" name="CANCEL"
+           onclick="return ST.dialogs.close(this);"
+           value="Cancel"  i18n:attributes="value" />
+  </div>
+</form>

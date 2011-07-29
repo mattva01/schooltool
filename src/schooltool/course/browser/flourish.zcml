@@ -214,6 +214,15 @@
         />
 
     <flourish:page
+        name="edit.html"
+        for="schooltool.course.interfaces.ISection"
+        class="schooltool.course.browser.section.FlourishSectionEditView"
+        content_template="templates/z3c-schooltool-form.pt"
+        permission="schooltool.edit"
+        subtitle="Edit"
+        />
+
+    <flourish:page
         name="delete.html"
         for="schooltool.course.interfaces.ISectionContainer"
         class="schooltool.course.browser.section.FlourishSectionContainerDeleteView"
@@ -247,15 +256,6 @@
       />
 
   <flourish:page
-      name="edit.html"
-      for="schooltool.course.interfaces.ISection"
-      class="schooltool.course.browser.section.FlourishSectionEditView"
-      content_template="templates/f_section_edit.pt"
-      permission="schooltool.edit"
-      subtitle="Edit"
-      />
-
-  <flourish:page
       name="delete.html"
       for="schooltool.course.interfaces.ISection"
       class=".section.FlourishSectionDeleteView"
@@ -277,6 +277,40 @@
       class=".section.FlourishSectionLearnerView"
       permission="schooltool.edit"
       subtitle="Students"
+      />
+
+  <flourish:page
+      name="section_linkage.html"
+      for="schooltool.course.interfaces.ISection"
+      class=".section.FlourishSectionLinkageView"
+      content_template="templates/f_section_linkage.pt"
+      permission="schooltool.edit"
+      subtitle="Terms"
+      />
+
+  <flourish:page
+      name="extend_term.html"
+      for="schooltool.course.interfaces.ISection"
+      class=".section.FlourishExtendTermView"
+      template="templates/f_extend_term.pt"
+      permission="schooltool.edit"
+      />
+
+  <flourish:page
+      name="unlink_section.html"
+      for="schooltool.course.interfaces.ISection"
+      class=".section.FlourishUnlinkSectionView"
+      template="templates/f_unlink_section.pt"
+      permission="schooltool.edit"
+      />
+
+  <flourish:viewlet
+      name="manage-courses-overview"
+      after="manage-people-overview"
+      view="schooltool.app.browser.app.ManageSchool"
+      permission="schooltool.edit"
+      manager="schooltool.skin.flourish.page.IPageContentManager"
+      class=".course.FlourishManageCoursesOverview"
       />
 
 </configure>

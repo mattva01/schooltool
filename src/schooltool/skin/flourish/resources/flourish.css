@@ -41,13 +41,6 @@ h3 {
     margin-top: 16px;
 }
 
-h4 {
-    font-size: 16px;
-    line-height: 20px;
-    margin-bottom: 8px;
-    margin-top: 8px;
-}
-
 a, a:link, a:visited, a:active {
     color: #aa0000;
     text-decoration: none;
@@ -293,4 +286,12 @@ a.modify img {
 
 body > .calendar {
     z-index: 2;
+}
+
+/* XXX: make generic for all <p>s that need to align to
+        table contents in */
+
+.manage-view p {
+    padding-left: 8px;
+    padding-right: 8px;
 }

@@ -73,7 +73,7 @@
     background: transparent url(subnav_active_bg.png) repeat left 1px;
 }
 
-.page .third-nav > li:first-child a:hover {
+.page .third-nav > li:first-child a {
     -moz-border-radius: 4px 0px 0px 0px;
     border-radius: 4px 0px 0px 0px;
 }
@@ -110,9 +110,9 @@
 .page > .body > .widecontainer {
     display: block;
     float: right;
-    width: 720px;
+    width: 736px;
     background-color: #f7f7f7;
-    padding: 16px 16px 16px 16px;
+    padding: 8px;
 }
 
 /* Refine */

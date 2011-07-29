@@ -22,25 +22,11 @@
       name="title" />
 
   <flourish:viewlet
-      name="persons"
-      title="People"
-      class="schooltool.skin.flourish.page.LinkViewlet"
-      manager="schooltool.app.browser.app.ManageSchoolLinks"
-      permission="schooltool.view"
-      />
-
-  <flourish:viewlet
       name="demographics"
       title="Demographics"
       class="schooltool.skin.flourish.page.LinkViewlet"
       manager="schooltool.app.browser.app.CustomizeSchoolLinks"
       permission="schooltool.view"
-      />
-
-  <flourish:activeViewlet
-      name="persons"
-      manager="schooltool.app.browser.app.ManageSchoolLinks"
-      for="schooltool.person.interfaces.IPersonContainer"
       />
 
   <flourish:page
@@ -542,7 +528,6 @@
 
   <flourish:viewlet
       name="manage-people-overview"
-      after="manage-years-overview"
       view="schooltool.app.browser.app.ManageSchool"
       permission="schooltool.edit"
       manager="schooltool.skin.flourish.page.IPageContentManager"

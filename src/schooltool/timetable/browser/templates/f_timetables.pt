@@ -20,7 +20,7 @@
       <tal:block replace="structure view/table/render" tal:condition="batch" />
     </tal:block>
     <tal:block tal:condition="not:view/table/filter_widget">
-      <tal:block replace="structure view/table/render" />
+      <tal:block replace="structure view/table/render" tal:condition="batch" />
     </tal:block>
   </form>
   <h3 tal:condition="not:batch" tal:content="view/empty_message" />

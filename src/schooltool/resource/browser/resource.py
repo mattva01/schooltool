@@ -72,6 +72,7 @@ from schooltool.table.table import FilterWidget
 from schooltool.table.table import SchoolToolTableFormatter
 from schooltool.person.browser.person import PersonFilterWidget
 from schooltool.resource.interfaces import IResourceFactoryUtility
+from schooltool.schoolyear.interfaces import ISchoolYearContainer
 from schooltool.skin.flourish.containers import TableContainerView
 from schooltool.skin.flourish.page import RefineLinksViewlet, Page
 from schooltool.skin.flourish.page import Content
@@ -853,19 +854,27 @@ class FlourishManageResourcesOverview(Content):
     body_template = ViewPageTemplateFile(
         'templates/f_manage_resources_overview.pt')
 
-    def __init__(self, context, *args, **kw):
-        super(FlourishManageResourcesOverview, self).__init__(
-            self.actual_context, *args, **kw)
+    @property
+    def schoolyear(self):
+        schoolyears = ISchoolYearContainer(self.context)
+        result = schoolyears.getActiveSchoolYear()
+        if 'schoolyear_id' in self.request:
+            schoolyear_id = self.request['schoolyear_id']
+            result = schoolyears.get(schoolyear_id, result)
+        return result
 
     @property
-    def actual_context(self):
-        app = (ISchoolToolApplication(None))
-        return app['resources']
+    def has_schoolyear(self):
+        return self.schoolyear is not None
+
+    @property
+    def resources(self):
+        return self.context['resources']
 
     @Lazy
     def resource_types(self):
         types = defaultdict(lambda:dict(amount=0, title=None, id=None))
-        for resource in self.context.values():
+        for resource in self.resources.values():
             info = IResourceTypeInformation(resource)
             if types[info.id]['title'] is None:
                 types[info.id]['title'] = info.title
