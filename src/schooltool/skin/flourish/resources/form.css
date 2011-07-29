@@ -48,6 +48,10 @@ form fieldset > legend > span {
     width: 528px;
 }
 
+.widecontainer form fieldset > legend > span {
+    width: 720px;
+}
+
 form fieldset .row {
     padding: 8px 8px 0px 8px;
 }

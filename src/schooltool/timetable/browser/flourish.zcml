@@ -371,6 +371,42 @@
       permission="schooltool.view"
       name="table" />
 
+  <flourish:page
+      name="edit.html"
+      subtitle="Schedule"
+      for="schooltool.timetable.interfaces.ISelectedPeriodsSchedule"
+      class=".timetable.FlourishSelectedPeriodsScheduleEditView"
+      content_template="templates/f_selected_periods_edit.pt"
+      permission="schooltool.edit"
+      />
+
+  <flourish:viewlet
+      name="schedule-action-links"
+      after="schedule-add-links"
+      for="schooltool.timetable.interfaces.ISchedule"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      class=".schedule.ScheduleActionsLinks"
+      title="Actions"
+      permission="schooltool.edit"
+      />
+
+  <flourish:viewlet
+      name="delete.html"
+      for="schooltool.timetable.interfaces.ISelectedPeriodsSchedule"
+      title="Unschedule"
+      class=".timetable.SelectedScheduleDeleteLink"
+      manager=".schedule.ScheduleActionsLinks"
+      permission="schooltool.edit"
+      />
+
+  <flourish:page
+      name="delete.html"
+      for="schooltool.timetable.interfaces.ISelectedPeriodsSchedule"
+      class=".schedule.FlourishSelectedScheduleDeleteView"
+      template="templates/f_confirm_delete_selected_schedule.pt"
+      permission="schooltool.edit"
+      />
+
   <!-- resources -->
 
   <zope:resourceLibrary

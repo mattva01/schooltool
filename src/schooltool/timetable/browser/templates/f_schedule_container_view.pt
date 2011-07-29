@@ -12,7 +12,7 @@
       </tal:block>
 
       <a class="modify" href="" title="Select periods"
-         tal:attributes="href string:${context/@@absolute_url}/edit.html"
+         tal:attributes="href string:${schedule/@@absolute_url}/edit.html"
          i18n:attributes="title"
          tal:condition="context/schooltool:can_edit">
         <img tal:attributes="src context/++resource++schooltool.skin.flourish/edit-icon.png"
