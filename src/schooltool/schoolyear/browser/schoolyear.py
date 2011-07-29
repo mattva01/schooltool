@@ -791,7 +791,8 @@ class FlourishSchoolYearActivateView(flourish.page.Page):
 class ManageSchoolTertiaryNavigation(flourish.page.Content):
 
     template = InlineViewPageTemplate("""
-        <ul tal:attributes="class view/list_class">
+        <ul tal:attributes="class view/list_class"
+            tal:condition="view/items">
           <li tal:repeat="item view/items"
               tal:attributes="class item/class">
               <a tal:attributes="href item/url"
@@ -815,8 +816,9 @@ class ManageSchoolTertiaryNavigation(flourish.page.Content):
                 absoluteURL(self.context, self.request),
                 'manage',
                 schoolyear.__name__)
+            css_class = schoolyear.first == active.first and 'active' or None
             result.append({
-                    'class': schoolyear.first == active.first and 'active' or None,
+                    'class': css_class,
                     'url': url,
                     'schoolyear': schoolyear,
                     })

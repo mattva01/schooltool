@@ -304,4 +304,13 @@
       permission="schooltool.edit"
       />
 
+  <flourish:viewlet
+      name="manage-courses-overview"
+      after="manage-people-overview"
+      view="schooltool.app.browser.app.ManageSchool"
+      permission="schooltool.edit"
+      manager="schooltool.skin.flourish.page.IPageContentManager"
+      class=".course.FlourishManageCoursesOverview"
+      />
+
 </configure>

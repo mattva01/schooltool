@@ -77,14 +77,6 @@
       name="title" />
 
   <flourish:viewlet
-      name="resources"
-      title="Resources"
-      class="schooltool.skin.flourish.page.LinkViewlet"
-      manager="schooltool.app.browser.app.ManageSchoolLinks"
-      permission="schooltool.view"
-      />
-
-  <flourish:viewlet
       name="resource_container"
       manager="schooltool.skin.flourish.page.IPageRefineManager"
       class="schooltool.resource.browser.resource.ResourceContainerLinks"
@@ -272,7 +264,7 @@
 
   <flourish:viewlet
       name="manage-resources-overview"
-      after="manage-years-overview"
+      after="manage-timetables-overview"
       view="schooltool.app.browser.app.ManageSchool"
       permission="schooltool.edit"
       manager="schooltool.skin.flourish.page.IPageContentManager"

@@ -44,6 +44,7 @@ import schooltool.skin.flourish.breadcrumbs
 from schooltool.app.browser.app import RelationshipViewBase
 from schooltool.app.browser.app import FlourishRelationshipViewBase
 from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.common.inlinept import InlineViewPageTemplate
 from schooltool.common.inlinept import InheritTemplate
 from schooltool.basicperson.interfaces import IDemographics
@@ -1015,7 +1016,8 @@ class BasicPersonTableFormatter(PersonTableFormatter):
 
 class FlourishManagePeopleOverview(flourish.page.Content):
 
-    body_template = ViewPageTemplateFile('templates/f_manage_people_overview.pt')
+    body_template = ViewPageTemplateFile(
+        'templates/f_manage_people_overview.pt')
 
     built_in_groups = ('administrators', 'teachers', 'students')
 
@@ -1029,9 +1031,18 @@ class FlourishManagePeopleOverview(flourish.page.Content):
         return result
 
     @property
+    def has_schoolyear(self):
+        return self.schoolyear is not None
+
+    @property
     def groups(self):
         return IGroupContainer(self.schoolyear, None)
 
     @property
-    def has_groups(self):
-        return self.groups is not None
+    def persons(self):
+        return self.context['persons']
+
+    @property
+    def school_name(self):
+        preferences = IApplicationPreferences(self.context)
+        return preferences.title

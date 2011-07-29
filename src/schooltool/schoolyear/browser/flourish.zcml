@@ -15,14 +15,6 @@
       title="School Years"
       />
 
-  <flourish:viewlet
-      name="schoolyears"
-      title="School Years"
-      class="schooltool.skin.flourish.page.LinkViewlet"
-      manager="schooltool.app.browser.app.ManageSchoolLinks"
-      permission="schooltool.view"
-      />
-
   <flourish:page
       name="index.html"
       for="schooltool.schoolyear.interfaces.ISchoolYearContainer"

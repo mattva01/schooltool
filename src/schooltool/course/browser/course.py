@@ -51,6 +51,7 @@ from schooltool.schoolyear.interfaces import ISchoolYear
 from schooltool.schoolyear.interfaces import ISchoolYearContainer
 from schooltool.skin.containers import ContainerView
 from schooltool.course.interfaces import ICourse, ICourseContainer
+from schooltool.course.interfaces import ISectionContainer
 from schooltool.course.interfaces import ILearner, IInstructor
 from schooltool.course.course import Course
 from schooltool.skin.flourish.viewlet import Viewlet
@@ -59,6 +60,7 @@ from schooltool.skin.flourish.containers import ContainerDeleteView
 from schooltool.skin.flourish.page import RefineLinksViewlet
 from schooltool.skin.flourish.page import LinkViewlet
 from schooltool.skin.flourish.page import Page
+from schooltool.skin.flourish.page import Content
 from schooltool.skin.flourish.page import ModalFormLinkViewlet
 from schooltool.skin.flourish.form import Form
 from schooltool.skin.flourish.form import AddForm
@@ -620,3 +622,30 @@ class FlourishCourseTableFormatter(SchoolToolTableFormatter):
         directlyProvides(title, ISortableColumn)
         directlyProvides(course_id, ISortableColumn)
         return [title, course_id]
+
+
+class FlourishManageCoursesOverview(Content):
+
+    body_template = ViewPageTemplateFile(
+        'templates/f_manage_courses_overview.pt')
+
+    @property
+    def schoolyear(self):
+        schoolyears = ISchoolYearContainer(self.context)
+        result = schoolyears.getActiveSchoolYear()
+        if 'schoolyear_id' in self.request:
+            schoolyear_id = self.request['schoolyear_id']
+            result = schoolyears.get(schoolyear_id, result)
+        return result
+
+    @property
+    def has_schoolyear(self):
+        return self.schoolyear is not None
+
+    @property
+    def courses(self):
+        return ICourseContainer(self.schoolyear, None)
+
+    @property
+    def sections(self):
+        return ISectionContainer(self.schoolyear, None)

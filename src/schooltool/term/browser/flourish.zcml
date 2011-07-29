@@ -13,14 +13,6 @@
       permission="schooltool.view"
       />
 
-  <flourish:viewlet
-      name="terms"
-      title="Terms"
-      class="schooltool.skin.flourish.page.LinkViewlet"
-      manager="schooltool.app.browser.app.ManageSchoolLinks"
-      permission="schooltool.view"
-      />
-
   <flourish:page
       name="add.html"
       for="..interfaces.ITermContainer"
@@ -90,7 +82,7 @@
 
   <flourish:viewlet
       name="manage-years-overview"
-      after="manage-people-overview"
+      after="manage-courses-overview"
       view="schooltool.app.browser.app.ManageSchool"
       permission="schooltool.edit"
       manager="schooltool.skin.flourish.page.IPageContentManager"

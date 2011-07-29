@@ -73,7 +73,7 @@
     background: transparent url(subnav_active_bg.png) repeat left 1px;
 }
 
-.page .third-nav > li:first-child a:hover {
+.page .third-nav > li:first-child a {
     -moz-border-radius: 4px 0px 0px 0px;
     border-radius: 4px 0px 0px 0px;
 }
