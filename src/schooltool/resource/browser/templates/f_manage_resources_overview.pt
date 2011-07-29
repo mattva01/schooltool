@@ -2,6 +2,21 @@
      tal:define="resource_types view/resource_types;
                  resource_link string:${context/schooltool:app/@@absolute_url}/resources">
 
+
+<h3>
+  <metal:block i18n:translate="">
+    Resources
+  </metal:block>
+  <a class="modify" href="" title="Manage resources"
+     tal:attributes="href context/schooltool:app/resources/@@absolute_url"
+     i18n:attributes="title"
+     i18n:translate="">
+    <img tal:attributes="src context/++resource++schooltool.skin.flourish/edit-icon.png"
+         alt="Edit"
+         i18n:attributes="alt" />
+  </a>
+</h3>
+
 <table class="data relationships-table">
   <thead>
     <tr>
@@ -29,14 +44,6 @@
       </td>
     </tr>
   </tbody>
-
 </table>
-
-<h4>
-  <a tal:attributes="href context/schooltool:app/resources/@@absolute_url"
-     i18n:translate="">
-    Manage resources
-  </a>
-</h4>
 
 </div>

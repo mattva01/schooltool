@@ -70,6 +70,7 @@ from schooltool.skin import flourish
 from schooltool.common import DateRange
 from schooltool.common import SchoolToolMessage as _
 from schooltool.common.inlinept import InheritTemplate
+from schooltool.common.inlinept import InlineViewPageTemplate
 from schooltool.course.interfaces import ICourseContainer
 from schooltool.course.course import Course
 from schooltool.group.interfaces import IGroupContainer
@@ -786,3 +787,37 @@ class FlourishSchoolYearActivateView(flourish.page.Page):
     def nextURL(self):
         return absoluteURL(self.context, self.request)
 
+
+class ManageSchoolTertiaryNavigation(flourish.page.Content):
+
+    template = InlineViewPageTemplate("""
+        <ul tal:attributes="class view/list_class">
+          <li tal:repeat="item view/items"
+              tal:attributes="class item/class">
+              <a tal:attributes="href item/url"
+                 tal:content="item/schoolyear/@@title" />
+          </li>
+        </ul>
+    """)
+
+    list_class = 'third-nav'
+
+    @property
+    def items(self):
+        result = []
+        schoolyears = ISchoolYearContainer(self.context)
+        active = schoolyears.getActiveSchoolYear()
+        if 'schoolyear_id' in self.request:
+            schoolyear_id = self.request['schoolyear_id']
+            active = schoolyears.get(schoolyear_id, active)
+        for schoolyear in schoolyears.values():
+            url = '%s/%s?schoolyear_id=%s' % (
+                absoluteURL(self.context, self.request),
+                'manage',
+                schoolyear.__name__)
+            result.append({
+                    'class': schoolyear.first == active.first and 'active' or None,
+                    'url': url,
+                    'schoolyear': schoolyear,
+                    })
+        return result

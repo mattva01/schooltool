@@ -90,6 +90,7 @@
 
   <flourish:viewlet
       name="manage-years-overview"
+      after="manage-people-overview"
       view="schooltool.app.browser.app.ManageSchool"
       permission="schooltool.edit"
       manager="schooltool.skin.flourish.page.IPageContentManager"

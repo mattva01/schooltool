@@ -1,6 +1,20 @@
 <div i18n:domain="schooltool"
      tal:condition="view/has_groups">
 
+<h3>
+  <metal:block i18n:translate="">
+    People
+  </metal:block>
+  <a class="modify" href="" title="Manage people"
+     tal:attributes="href context/schooltool:app/persons/@@absolute_url"
+     i18n:attributes="title"
+     i18n:translate="">
+    <img tal:attributes="src context/++resource++schooltool.skin.flourish/edit-icon.png"
+         alt="Edit"
+         i18n:attributes="alt" />
+  </a>
+</h3>
+
 <table class="relationships-table data">
   <thead>
     <tr>
@@ -28,11 +42,22 @@
 
 </table>
 
-<h4>
-  <a tal:attributes="href context/schooltool:app/persons/@@absolute_url"
+<h3>
+  <metal:block i18n:translate="">
+    Groups
+  </metal:block>
+  <a class="modify" href="" title="Manage groups"
+     tal:attributes="href string:${context/@@absolute_url}/groups"
+     i18n:attributes="title"
      i18n:translate="">
-    Manage all users
+    <img tal:attributes="src context/++resource++schooltool.skin.flourish/edit-icon.png"
+         alt="Edit"
+         i18n:attributes="alt" />
   </a>
-</h4>
+</h3>
+
+<p i18n:translate="" class="group-count">
+  There are <metal:block tal:replace="python:len(view.groups)" i18n:name="count"/> groups defined for <metal:block tal:replace="view/schoolyear/title" i18n:name="schoolyear"/>.
+</p>
 
 </div>

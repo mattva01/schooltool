@@ -154,4 +154,11 @@
            schooltool.skin.flourish.interfaces.IFlourishLayer"
       factory=".schoolyear.SchoolYearTableFormatter" />
 
+  <flourish:content
+      name="tertiary_navigation"
+      class=".schoolyear.ManageSchoolTertiaryNavigation"
+      view="schooltool.app.browser.app.ManageSchool"
+      permission="zope.Public"
+      />
+
 </configure>
