@@ -335,4 +335,16 @@
       class=".app.FlourishManageTimetablesOverview"
       />
 
+  <!-- resources -->
+
+  <zope:resourceLibrary
+      name="schooltool.timetable"
+      require=""
+      layer="schooltool.skin.flourish.IFlourishLayer">
+    <directory
+        source="resources"
+        include="timetable.css"
+        />
+  </zope:resourceLibrary>
+
 </configure>

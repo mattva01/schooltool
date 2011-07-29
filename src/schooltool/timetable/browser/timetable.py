@@ -122,7 +122,7 @@ class TimetableView(BrowserView):
         return self.template()
 
 
-class FlourishTimetableView(flourish.page.Page, TimetableView):
+class FlourishTimetableView(flourish.page.WideContainerPage, TimetableView):
     pass
 
 

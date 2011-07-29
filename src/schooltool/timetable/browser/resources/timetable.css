@@ -1,0 +1,24 @@
+/*
+
+  Timetabling CSS.
+
+*/
+
+@media all {
+
+div.timetable-table {
+    overflow: auto;
+}
+
+table.timetable tbody td {
+    border-left: 1px dotted #cccccc;
+    border-right: 1px dotted #cccccc;
+}
+
+table.timetable .period,
+table.timetable .activity {
+    word-break: normal;
+    white-space: nowrap;
+}
+
+}

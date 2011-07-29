@@ -1,4 +1,5 @@
 <div i18n:domain="schooltool">
+  <tal:block replace="resource_library:schooltool.timetable" />
 
   <h3>
     <tal:block replace="context/title" />
@@ -16,18 +17,18 @@
      tal:content="string:Timezone: ${view/context/timezone}"/>
 
   <div>
-    <h2 i18n:translate="">Periods</h2>
+    <h3 i18n:translate="">Periods</h3>
     <div tal:content="structure context/periods/schooltool:content/table"></div>
   </div>
 
   <div>
-    <h2 i18n:translate="">Time schedule</h2>
+    <h3 i18n:translate="">Time schedule</h3>
     <div tal:content="structure context/time_slots/schooltool:content/table"></div>
   </div>
 
   <div tal:define="exceptions nocall:context/schooltool:content/exceptions|nothing"
        tal:condition="exceptions">
-    <h2 i18n:translate="">Exception days</h2>
+    <h3 i18n:translate="">Exception days</h3>
     <div tal:content="structure exceptions"></div>
   </div>
 

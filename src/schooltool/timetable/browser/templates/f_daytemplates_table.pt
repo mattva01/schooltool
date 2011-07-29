@@ -1,33 +1,37 @@
-<table class="timetable"
+<div class="timetable-table"
     xmlns:tal="http://xml.zope.org/namespaces/tal"
     xmlns:metal="http://xml.zope.org/namespaces/metal"
     xmlns:i18n="http://xml.zope.org/namespaces/i18n"
     tal:define="table view/makeTable">
+<table class="timetable">
 
-  <tr>
-    <th tal:repeat="title table/header" tal:content="title"
-        tal:attributes="width table/col_width"
-        colspan="2" class="day">Day N</th>
-  </tr>
+  <tal:block replace="resource_library:schooltool.timetable" />
 
-  <tr tal:repeat="row table/rows">
-  <tal:block repeat="col row">
-    <tal:block condition="col">
-      <td tal:attributes="width table/th_width"
-          tal:content="structure col/title"
-          class="period"
-          >1</td>
-      <td tal:attributes="width table/td_width"
-          tal:content='structure col/value'
-          class="activity">
-      </td>
-    </tal:block>
-    <tal:block tal:condition="not: col">
-      <td tal:attributes="width table/col_width"
-          class="activity" colspan="2"></td>
-    </tal:block>
-  </tal:block>
-  </tr>
+  <thead>
+    <tr>
+      <th tal:repeat="title table/header" tal:content="title"
+          colspan="1" class="day">Day N</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr tal:repeat="row table/rows">
+      <tal:block repeat="col row">
+        <tal:block condition="col">
+          <td tal:attributes="width table/col_width">
+            <span tal:content="structure col/title"
+                  class="period">[period]</span>
+            <span tal:content='structure col/value'
+                  class="activity">[activity]</span>
+          </td>
+        </tal:block>
+        <tal:block tal:condition="not: col">
+          <td tal:attributes="width table/col_width"></td>
+        </tal:block>
+      </tal:block>
+    </tr>
+  </tbody>
 
 </table>
 
+</div>
