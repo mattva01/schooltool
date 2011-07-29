@@ -110,9 +110,9 @@
 .page > .body > .widecontainer {
     display: block;
     float: right;
-    width: 720px;
+    width: 736px;
     background-color: #f7f7f7;
-    padding: 16px 16px 16px 16px;
+    padding: 8px;
 }
 
 /* Refine */
