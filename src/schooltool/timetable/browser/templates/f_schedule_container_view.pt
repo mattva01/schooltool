@@ -24,15 +24,6 @@
 
     <div tal:content="structure schedule/schooltool:content/view"></div>
 
-    <form method="post"
-          tal:attributes="action string:${context/@@absolute_url}/confirm-delete.html">
-      <input type="hidden" name="schedule" tal:attributes="value schedule/__name__" />
-      <div class="buttons">
-        <input type="submit" class="button-cancel" name="DELETE" value="Remove"
-               i18n:attributes="value" />
-      </div>
-    </form>
-
   </tal:block>
 
   <div tal:define="exceptions nocall:context/schooltool:content/exceptions|nothing"

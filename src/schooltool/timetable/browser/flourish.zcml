@@ -321,7 +321,7 @@
       title="Timetable"
       link="add.html"
       view=".app.FlourishTimetablesView"
-      class=".app.ModalTimetablesLinkViewlet"
+      class=".app.TimetablesLinkViewlet"
       manager=".app.TimetableAddLinks"
       permission="schooltool.edit"
       />
@@ -404,6 +404,33 @@
       for="schooltool.timetable.interfaces.ISelectedPeriodsSchedule"
       class=".timetable.FlourishSelectedScheduleDeleteView"
       template="templates/f_confirm_delete_selected_schedule.pt"
+      permission="schooltool.edit"
+      />
+
+  <flourish:viewlet
+      name="schedule-add-links"
+      for="schooltool.timetable.interfaces.IScheduleContainer"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      class=".schedule.ScheduleAddLinks"
+      title="Add Schedule"
+      permission="schooltool.edit"
+      />
+
+  <flourish:page
+      name="addTimetable.html"
+      for="schooltool.timetable.interfaces.IScheduleContainer"
+      class=".timetable.FlourishSelectedPeriodsAddView"
+      content_template="templates/f_selected_periods_add.pt"
+      permission="schooltool.edit"
+      />
+
+  <flourish:viewlet
+      name="schedule-timetable"
+      title="School Timetable"
+      link="addTimetable.html"
+      class="schooltool.skin.flourish.page.LinkViewlet"
+      view=".schedule.FlourishScheduleContainerView"
+      manager=".schedule.ScheduleAddLinks"
       permission="schooltool.edit"
       />
 

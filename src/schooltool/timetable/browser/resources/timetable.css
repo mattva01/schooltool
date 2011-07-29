@@ -10,6 +10,14 @@ div.timetable-table {
     overflow: auto;
 }
 
+.body > .container div.timetable-table {
+    width: 544px;
+}
+
+.body > .widecontainer div.timetable-table {
+    width: 736px;
+}
+
 table.timetable tbody td {
     border-left: 1px dotted #cccccc;
     border-right: 1px dotted #cccccc;

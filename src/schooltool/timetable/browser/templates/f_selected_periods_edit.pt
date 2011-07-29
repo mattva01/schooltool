@@ -45,7 +45,7 @@
     <span i18n:translate="">Scheduled periods</span>
   </legend>
 
-  <div tal:content="structure context/timetable/periods/schooltool:content/table"></div>
+  <div tal:replace="structure context/timetable/periods/schooltool:content/table"></div>
 </fieldset>
 
   <div metal:use-macro="macro:form-buttons">

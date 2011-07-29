@@ -364,3 +364,7 @@ class FlourishConfirmDeleteView(flourish.form.DialogForm, form.EditForm):
         super(FlourishConfirmDeleteView, self).updateActions()
         self.actions['apply'].addClass('button-ok')
         self.actions['cancel'].addClass('button-cancel')
+
+
+class ScheduleAddLinks(flourish.page.RefineLinksViewlet):
+    """Manager for schedule Add links."""

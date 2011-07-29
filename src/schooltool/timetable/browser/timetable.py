@@ -398,6 +398,12 @@ TimetableAdd_default_last = widget.ComputedWidgetAttribute(
     )
 
 
+class FlourishSelectedPeriodsAddView(flourish.form.AddForm,
+                                     SelectedPeriodsAddView):
+
+    legend = _("Schedule a school timetable")
+
+
 class SelectedPeriodsFormValidator(validator.InvariantsValidator):
 
     def _formatTitle(self, object):
