@@ -648,4 +648,9 @@ class FlourishManageCoursesOverview(Content):
 
     @property
     def sections(self):
-        return ISectionContainer(self.schoolyear, None)
+        if self.has_schoolyear:
+            result = []
+            for term in self.schoolyear.values():
+                sections = ISectionContainer(term)
+                result.extend(list(sections.values()))
+            return result
