@@ -1,6 +1,6 @@
 #
 # SchoolTool - common information systems platform for school administration
-# Copyright (c) 2005 Shuttleworth Foundation
+# Copyright (c) 2011 Shuttleworth Foundation
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,8 +18,6 @@
 #
 r"""
 Browser views for schooltool.calendar.
-
-$Id$
 
 iCalendar views
 ---------------
@@ -142,4 +140,3 @@ class CalendarVfbView(object):
             request.response.setHeader('Content-Length', len(data))
 
         return data
-

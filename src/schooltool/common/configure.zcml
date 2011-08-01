@@ -70,7 +70,7 @@
       <include package="zope.app.file" />
       <include package="zope.app.onlinehelp" file="meta.zcml" />
       <include package="zope.app.onlinehelp" />
-      
+
       <!-- apidoc -->
       <include package="zope.app.apidoc" file="meta.zcml" />
       <include package="zope.app.preference" file="meta.zcml" />
@@ -106,6 +106,7 @@
   <include package="schooltool.traverser" />
 
   <include package="schooltool.skin" />
+  <include package="schooltool.calendar" />
   <include package="schooltool.relationship" />
   <include package="schooltool.app" />
   <include package="schooltool.course" />
