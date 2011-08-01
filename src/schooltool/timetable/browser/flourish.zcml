@@ -350,8 +350,14 @@
   <!-- schedule -->
 
   <flourish:contentFactory
-      factory=".schedule.scheduleTitle"
+      factory=".schedule.scheduleOwnerTitle"
       for="schooltool.timetable.interfaces.IScheduleContainer"
+      name="title" />
+
+  <flourish:contentFactory
+      factory=".schedule.scheduleOwnerTitle"
+      view=".timetable.FlourishSelectedPeriodsScheduleEditView"
+      for="schooltool.timetable.interfaces.ISelectedPeriodsSchedule"
       name="title" />
 
   <flourish:page
@@ -373,7 +379,7 @@
 
   <flourish:page
       name="edit.html"
-      subtitle="Schedule"
+      subtitle="Edit Schedule"
       for="schooltool.timetable.interfaces.ISelectedPeriodsSchedule"
       class=".timetable.FlourishSelectedPeriodsScheduleEditView"
       content_template="templates/f_selected_periods_edit.pt"
