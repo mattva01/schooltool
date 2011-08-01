@@ -45,8 +45,13 @@ form fieldset div.timetable-table {
     padding-right: 8px;
 }
 
-form fieldset table.timetable td {
+form fieldset table.timetable {
     background-color: #f7f7f7;
+}
+
+form fieldset table.timetable td.error {
+    padding-left: 24px;
+    background: transparent url(error-icon.png) no-repeat scroll 8px 10px;
 }
 
 }
