@@ -38,6 +38,7 @@ from z3c.form import form, button
 import schooltool.skin.flourish.page
 import schooltool.skin.flourish.form
 from schooltool.calendar.utils import parse_date, parse_time
+from schooltool.common.inlinept import InheritTemplate
 from schooltool.schoolyear.interfaces import ISchoolYear
 from schooltool.skin import flourish
 from schooltool.term.interfaces import ITerm
@@ -60,6 +61,8 @@ class SpecialDayView(BrowserView):
 
     error = None
     field_errors = None
+    field_error_message = _('Some values were invalid.'
+                            '  They are highlighted in red.')
     date = None
     term = None
 
@@ -228,8 +231,7 @@ class SpecialDayView(BrowserView):
         if self.date and 'SUBMIT' in self.request:
             replacements = self.extractMeetings()
             if self.field_errors:
-                self.error = _('Some values were invalid.'
-                               '  They are highlighted in red.')
+                self.error = self.field_error_message
             else:
                 self.updateExceptions(replacements)
                 self.request.response.redirect(
@@ -255,6 +257,19 @@ class SpecialDayView(BrowserView):
     def __call__(self):
         self.update()
         return self.template()
+
+
+class FlourishSpecialDayView(flourish.page.WideContainerPage, SpecialDayView):
+    select_template = ViewPageTemplateFile('templates/f_specialday_select.pt')
+    form_template = ViewPageTemplateFile('templates/f_specialday_change.pt')
+    flourish_template = InheritTemplate(flourish.page.Page.template)
+
+    field_error_message = _('Please correct the marked fields below.')
+
+    def update(self):
+        SpecialDayView.update(self)
+        self.content_template = self.template
+        self.template = self.flourish_template
 
 
 class ScheduleContainerView(BrowserView):
@@ -317,7 +332,7 @@ class ScheduleDeleteView(BrowserView):
             self.request.response.redirect(self.nextURL())
 
 
-def scheduleTitle(context, request, view, name):
+def scheduleOwnerTitle(context, request, view, name):
     owner = IHaveSchedule(context)
     return flourish.content.queryContentProvider(
         owner, request, view, 'title')

@@ -51,10 +51,6 @@
   <div metal:use-macro="macro:form-buttons">
   </div>
 
-  <h3 i18n:translate="">Time schedule</h3>
-  <div tal:content="structure context/timetable/time_slots/schooltool:content/table"></div>
-
-
 </form>
 
 </div>

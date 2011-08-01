@@ -350,8 +350,20 @@
   <!-- schedule -->
 
   <flourish:contentFactory
-      factory=".schedule.scheduleTitle"
+      factory=".schedule.scheduleOwnerTitle"
       for="schooltool.timetable.interfaces.IScheduleContainer"
+      name="title" />
+
+  <flourish:contentFactory
+      factory=".schedule.scheduleOwnerTitle"
+      view=".timetable.FlourishSelectedPeriodsScheduleEditView"
+      for="schooltool.timetable.interfaces.ISelectedPeriodsSchedule"
+      name="title" />
+
+  <flourish:contentFactory
+      factory=".schedule.scheduleOwnerTitle"
+      view=".schedule.FlourishSpecialDayView"
+      for="schooltool.timetable.interfaces.ISelectedPeriodsSchedule"
       name="title" />
 
   <flourish:page
@@ -373,7 +385,7 @@
 
   <flourish:page
       name="edit.html"
-      subtitle="Schedule"
+      subtitle="Edit Schedule"
       for="schooltool.timetable.interfaces.ISelectedPeriodsSchedule"
       class=".timetable.FlourishSelectedPeriodsScheduleEditView"
       content_template="templates/f_selected_periods_edit.pt"
@@ -431,6 +443,14 @@
       class="schooltool.skin.flourish.page.LinkViewlet"
       view=".schedule.FlourishScheduleContainerView"
       manager=".schedule.ScheduleAddLinks"
+      permission="schooltool.edit"
+      />
+
+  <flourish:page
+      name="special.html"
+      subtitle="Exception Days"
+      for="schooltool.timetable.interfaces.IScheduleWithExceptions"
+      class=".schedule.FlourishSpecialDayView"
       permission="schooltool.edit"
       />
 
