@@ -229,7 +229,7 @@ class TimetableAddLinks(flourish.page.RefineLinksViewlet):
 class TimetablesLinkViewlet(flourish.page.LinkViewlet):
 
     def __init__(self, context, request, *args, **kw):
-        super(ModalTimetablesLinkViewlet, self).__init__(
+        super(TimetablesLinkViewlet, self).__init__(
             self.actualContext(context, request), request, *args, **kw)
 
     def actualContext(self, context, request):
