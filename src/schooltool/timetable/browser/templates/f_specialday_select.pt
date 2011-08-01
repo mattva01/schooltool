@@ -1,0 +1,61 @@
+<div i18n:domain="schooltool">
+
+<p i18n:translate="">
+This form allows you to change the start and end times for periods on
+a certain date, or to cancel some periods altogether.
+</p>
+
+
+<form class="plain" method="POST" tal:attributes="action request/URL">
+
+  <div class="status">
+
+    <div class="summary ui-state-error ui-corner-all"
+         tal:condition="view/error">
+      <span class="ui-icon ui-icon-alert">icon</span>
+      <tal:block content="view/error" />
+    </div>
+
+  </div>
+
+  <fieldset>
+    <legend>
+      <span i18n:translate="">Schedule exception</span>
+    </legend>
+
+  <p i18n:translate="">
+    Please enter the date when the periods need to be changed below.
+  </p>
+
+  <div class="row">
+    <label for="date" i18n:translate="">Date</label>
+    <input type="text" name="date" id="date"
+           tal:attributes="value request/date|nothing"/>
+
+    <!-- XXX: hacked-in calendar widget -->
+    <tal:block replace="resource_library:zc.datetimewidget" />
+    <input type="button" value="..." id="date_trigger" />
+    <script type="text/javascript">
+      Calendar.setup({
+      inputField: 'date',
+      button: 'date_trigger',
+      ifFormat: '%Y-%m-%d'
+      });
+    </script>
+
+    <div id="dateDiv"
+         style="background: #fff; position: absolute; display: none;"/>
+  </div>
+
+  </fieldset>
+
+  <div class="buttons">
+    <input type="submit" class="button-ok" name="CHOOSE" value="Proceed"
+           i18n:attributes="value" />
+    <input type="submit" class="button-cancel" name="CANCEL" value="Cancel"
+           i18n:attributes="value cancel-button" />
+  </div>
+
+</form>
+
+</div>

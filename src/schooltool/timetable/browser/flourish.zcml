@@ -360,6 +360,12 @@
       for="schooltool.timetable.interfaces.ISelectedPeriodsSchedule"
       name="title" />
 
+  <flourish:contentFactory
+      factory=".schedule.scheduleOwnerTitle"
+      view=".schedule.FlourishSpecialDayView"
+      for="schooltool.timetable.interfaces.ISelectedPeriodsSchedule"
+      name="title" />
+
   <flourish:page
       name="index.html"
       subtitle="Schedule"
@@ -437,6 +443,14 @@
       class="schooltool.skin.flourish.page.LinkViewlet"
       view=".schedule.FlourishScheduleContainerView"
       manager=".schedule.ScheduleAddLinks"
+      permission="schooltool.edit"
+      />
+
+  <flourish:page
+      name="special.html"
+      subtitle="Exception Days"
+      for="schooltool.timetable.interfaces.IScheduleWithExceptions"
+      class=".schedule.FlourishSpecialDayView"
       permission="schooltool.edit"
       />
 

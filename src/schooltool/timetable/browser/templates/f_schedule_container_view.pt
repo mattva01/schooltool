@@ -28,7 +28,16 @@
 
   <div tal:define="exceptions nocall:context/schooltool:content/exceptions|nothing"
        tal:condition="exceptions">
-    <h3 i18n:translate="">Exception days</h3>
+    <h3 i18n:translate="">Exception days
+      <a class="modify" href="" title="Edit exception days"
+         tal:attributes="href string:${exceptions/context/@@absolute_url}/special.html"
+         i18n:attributes="title">
+        <img tal:attributes="src context/++resource++schooltool.skin.flourish/edit-icon.png"
+             alt="Edit"
+             i18n:attributes="alt" />
+      </a>
+
+    </h3>
     <div tal:content="structure exceptions"></div>
   </div>
 
