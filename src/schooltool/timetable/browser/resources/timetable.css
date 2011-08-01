@@ -23,14 +23,30 @@ table.timetable tbody td {
     border-right: 1px dotted #cccccc;
 }
 
-table.timetable td .period,
-table.timetable td .activity {
+table.timetable td .period {
     word-break: normal;
     white-space: nowrap;
 }
 
 table.timetable td .inactive {
     color: #aaa;
+}
+
+.body > .container form fieldset div.timetable-table {
+    width: 528px;
+}
+
+.body > .widecontainer form fieldset div.timetable-table {
+    width: 720px;
+}
+
+form fieldset div.timetable-table {
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+form fieldset table.timetable td {
+    background-color: #f7f7f7;
 }
 
 }

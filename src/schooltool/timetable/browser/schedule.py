@@ -317,7 +317,7 @@ class ScheduleDeleteView(BrowserView):
             self.request.response.redirect(self.nextURL())
 
 
-def scheduleTitle(context, request, view, name):
+def scheduleOwnerTitle(context, request, view, name):
     owner = IHaveSchedule(context)
     return flourish.content.queryContentProvider(
         owner, request, view, 'title')
