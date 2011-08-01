@@ -1,0 +1,84 @@
+<div i18n:domain="schooltool">
+
+  <tal:block replace="resource_library:schooltool.timetable" />
+
+<p i18n:translate="">
+  You can adjust the start and end times of periods for
+  <span i18n:name="date" tal:replace="view/date"/> in the form below.  In order to
+  remove a period from the day, just delete the period's start and end
+  times.
+</p>
+
+<form method="POST" tal:attributes="action request/URL">
+
+
+  <div class="status">
+
+    <div class="summary ui-state-error ui-corner-all"
+         tal:condition="view/error">
+      <span class="ui-icon ui-icon-alert">icon</span>
+      <tal:block content="view/error" />
+    </div>
+
+  </div>
+
+  <fieldset>
+    <legend>
+      <span i18n:translate="">Schedule exception on
+      <tal:block i18n:name="date" content="view/date/@@mediumDate" /></span>
+    </legend>
+
+  <input type="hidden" name="date" tal:attributes="value view/date"/>
+
+  <div class="timetable-table">
+   <table class="timetable">
+     <thead>
+       <tr>
+         <th i18n:translate="">Period title</th>
+         <th i18n:translate="">Original start</th>
+         <th i18n:translate="">Original end</th>
+         <th i18n:translate="">New start</th>
+         <th i18n:translate="">New end</th>
+       </tr>
+     </thead>
+     <tbody>
+     <tr tal:repeat="info view/getMeetings">
+       <td tal:condition="info/meeting/period"
+           tal:content="info/meeting/period/title" />
+       <td tal:condition="not:info/meeting/period"></td>
+
+       <td tal:content="info/orig_start_time" />
+       <td tal:content="info/orig_end_time" />
+
+       <td tal:define="name string:${info/form_key}_start"
+           tal:attributes="
+             class python: name in view.field_errors and 'error' or None">
+         <input type="text"
+                tal:attributes="name name;
+                                value info/start_time" />
+
+       </td>
+       <td tal:define="name string:${info/form_key}_end"
+           tal:attributes="
+             class python: name in view.field_errors and 'error' or None">
+         <input type="text"
+                tal:attributes="name name;
+                                value info/end_time"/>
+       </td>
+     </tr>
+     </tbody>
+   </table>
+  </div>
+
+  </fieldset>
+
+  <div class="buttons">
+    <input type="submit" class="button-ok" name="SUBMIT" value="Modify"
+           i18n:attributes="value" />
+    <input type="submit" class="button-cancel" name="CANCEL" value="Cancel"
+           i18n:attributes="value cancel-button" />
+  </div>
+
+</form>
+
+</div>
