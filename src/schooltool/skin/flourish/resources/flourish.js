@@ -37,6 +37,12 @@ ST.state = function() {
   }
 }();
 
+ST.redirect = function(destination) {
+    if (destination) {
+        window.location.replace(destination);
+    }
+}
+
 
 /* ST common jquery dialogs */
 
@@ -92,7 +98,7 @@ ST.dialogs = function() {
               container.dialog(data['dialog']);
           }
           if (data['redirect']) {
-              window.location.replace(data['redirect']);
+              ST.redirect(data['redirect']);
           };
       };
   }

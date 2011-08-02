@@ -466,4 +466,15 @@
         />
   </zope:resourceLibrary>
 
+  <!-- Calendar -->
+
+  <page
+      for="schooltool.app.interfaces.ISchoolToolCalendar"
+      name="daily_calendar_rows"
+      layer="schooltool.skin.flourish.IFlourishLayer"
+      class=".calendar.ScheduleDailyCalendarRowsView"
+      permission="zope.View"
+      />
+
+
 </configure>

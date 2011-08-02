@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/zope"
+           i18n_domain="schooltool">
+
+  <!-- Placeholder for calendar refactoring -->
+  <include package=".browser" />
+
+</configure>

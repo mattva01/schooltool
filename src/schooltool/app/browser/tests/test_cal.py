@@ -185,7 +185,7 @@ def doctest_CalendarTraverser():
 
     CalendarTraverser allows you to traverse directly various calendar views:
 
-        >>> from schooltool.app.browser.cal import CalendarTraverser
+        >>> from schooltool.calendar.browser.calendar import CalendarTraverser
         >>> cal = Calendar(None)
         >>> request = TestRequest()
         >>> traverser = CalendarTraverser(cal, request)
