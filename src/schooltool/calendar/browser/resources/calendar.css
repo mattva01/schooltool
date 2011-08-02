@@ -460,12 +460,11 @@
 }
 
 .page .refine .calendar-jump-to FORM {
-    border-bottom: 1px #aaa dashed;
     padding: 4px;
     margin: auto;
 }
 
-.page .refine .calendar-jump-to form select{
+.page .refine .calendar-jump-to form select {
     width: 136px;
 }
 
