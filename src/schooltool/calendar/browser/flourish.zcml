@@ -58,5 +58,26 @@
       permission="zope.Public"
       />
 
+  <!-- XXX: probably wrong security -->
+  <flourish:viewlet
+      name="calendar-jump-to"
+      after="calendar-overlay"
+      view=".calendar.CalendarViewBase"
+      class=".calendar.CalendarJumpTo"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      permission="zope.Public"
+      />
+
+  <!-- resources -->
+
+  <zope:resourceLibrary
+      name="schooltool.calendar"
+      require=""
+      layer="schooltool.skin.flourish.IFlourishLayer">
+    <directory
+        source="resources"
+        include="calendar.css"
+        />
+  </zope:resourceLibrary>
 
 </configure>

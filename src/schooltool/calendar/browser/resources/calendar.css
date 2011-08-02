@@ -419,7 +419,7 @@
 
 .page .refine .calendar-overlay table {
     margin: 0;
-    width: 146px;
+    width: 140px;
 }
 
 .page .refine .calendar-overlay table tbody {
@@ -457,6 +457,16 @@
     width: 1em;
     height: 1em;
     text-decoration: none;
+}
+
+.page .refine .calendar-jump-to FORM {
+    border-bottom: 1px #aaa dashed;
+    padding: 4px;
+    margin: auto;
+}
+
+.page .refine .calendar-jump-to form select{
+    width: 136px;
 }
 
 }

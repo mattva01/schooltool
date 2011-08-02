@@ -20,18 +20,21 @@
 SchoolTool calendar views.
 """
 import base64
+import datetime
 
+from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import adapts, queryMultiAdapter
 from zope.interface import implements
 from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.publisher.interfaces import NotFound
 
 import schooltool.skin.flourish.page
-import schooltool.skin.flourish.viewlet
 from schooltool.app.browser.cal import DailyCalendarView
 from schooltool.app.browser.cal import WeeklyCalendarView
 from schooltool.app.browser.cal import MonthlyCalendarView
 from schooltool.app.browser.cal import YearlyCalendarView
+from schooltool.app.browser.cal import CalendarViewBase
+from schooltool.app.browser.cal import month_names
 from schooltool.calendar.interfaces import ICalendar
 from schooltool.calendar.utils import weeknum_bounds
 from schooltool.common.inlinept import InheritTemplate
@@ -162,3 +165,26 @@ class FlourishMonthlyCalendarView(flourish.page.WideContainerPage,
 class FlourishYearlyCalendarView(flourish.page.WideContainerPage,
                                  YearlyCalendarView):
     update = YearlyCalendarView.update
+
+
+class CalendarJumpTo(flourish.page.Refine):
+
+    title = _('Jump To')
+    body_template = ViewPageTemplateFile('templates/calendar_jump_to.pt')
+
+    def getJumpToYears(self):
+        """Return jump targets for five years centered on the current year."""
+        this_year = self.view.today.year
+        return [{'selected': year == this_year,
+                 'label': year,
+                 'href': self.view.calURL('yearly',
+                                          datetime.date(year, 1, 1))}
+                for year in range(this_year - 2, this_year + 3)]
+
+    def getJumpToMonths(self):
+        """Return a list of months for the drop down in the jump portlet."""
+        year = self.view.cursor.year
+        return [{'label': v,
+                 'href': self.view.calURL('monthly',
+                                          datetime.date(year, k, 1))}
+                for k, v in month_names.items()]
