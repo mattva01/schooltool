@@ -8,7 +8,7 @@
   <flourish:page
       name="daily.html"
       subtitle="Calendar"
-      for="schooltool.app.interfaces.ISchoolToolCalendar"
+      for="schooltool.calendar.interfaces.ISchoolToolCalendar"
       class=".calendar.FlourishDailyCalendarView"
       content_template="templates/calendar_daily.pt"
       permission="schooltool.view"
@@ -25,7 +25,7 @@
   <flourish:page
       name="weekly.html"
       subtitle="Calendar"
-      for="schooltool.app.interfaces.ISchoolToolCalendar"
+      for="schooltool.calendar.interfaces.ISchoolToolCalendar"
       class=".calendar.FlourishWeeklyCalendarView"
       content_template="templates/calendar_weekly.pt"
       permission="schooltool.view"
@@ -34,7 +34,7 @@
   <flourish:page
       name="monthly.html"
       subtitle="Calendar"
-      for="schooltool.app.interfaces.ISchoolToolCalendar"
+      for="schooltool.calendar.interfaces.ISchoolToolCalendar"
       class=".calendar.FlourishMonthlyCalendarView"
       content_template="templates/calendar_monthly.pt"
       permission="schooltool.view"
@@ -43,10 +43,20 @@
   <flourish:page
       name="yearly.html"
       subtitle="Calendar"
-      for="schooltool.app.interfaces.ISchoolToolCalendar"
+      for="schooltool.calendar.interfaces.ISchoolToolCalendar"
       class=".calendar.FlourishYearlyCalendarView"
       content_template="templates/calendar_yearly.pt"
       permission="schooltool.view"
       />
+
+  <!-- XXX: probably wrong security -->
+  <flourish:viewlet
+      name="calendar-overlay"
+      view=".interfaces.IHaveEventLegend"
+      class=".overlay.CalendarOverlayView"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      permission="zope.Public"
+      />
+
 
 </configure>

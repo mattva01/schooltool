@@ -1,0 +1,38 @@
+<div class="calendar-overlay"
+     i18n:domain="schooltool"
+     tal:condition="view/show_overlay">
+
+  <tal:block replace="resource_library:schooltool.calendar" />
+
+  <form method="post" action="" tal:attributes="action request/URL">
+
+    <table class="overlays">
+
+      <tr style="background: #9db8d2">
+        <td><input type="checkbox" checked="checked" disabled="disabled" /></td>
+        <td class="overlay-title" i18n:translate="">My Calendar</td>
+        <td class="overlay-go"></td>
+      </tr>
+
+      <tr tal:repeat="item view/items"
+          tal:attributes="style string:background: ${item/color1}">
+        <td><input type="checkbox" name="overlay:list"
+            tal:attributes="value item/id; checked item/checked" /></td>
+        <td class="overlay-title" tal:content="item/title">Title</td>
+        <td class="overlay-go"><a
+            tal:attributes="href item/calendar/@@absolute_url;
+            style string:background: ${item/color2};;
+            color: ${item/color2}"
+            >&nbsp;</a></td>
+    </tr>
+    </table>
+
+    <div class="buttons">
+      <input class="button-ok" name="OVERLAY_APPLY" type="submit" value="Select"
+            i18n:attributes="value"/>
+      <input class="button-ok" name="OVERLAY_MORE" type="submit" value="More..."
+            i18n:attributes="value"/>
+    </div>
+
+  </form>
+</div>

@@ -21,7 +21,7 @@
 #calendar-view-week TABLE TR,
 #calendar-view-month TABLE TR,
 #calendar-view-year TABLE TR {
-    border-bottom: none;
+    border-bottom: 0 none;
 }
 
 #calendar-view-year TABLE.month,
@@ -238,7 +238,7 @@
 */
 #calendar-view-day {
     border: #aaaaaa 1px solid;
-    border-top: none;
+    border-top: 0 none;
     position: relative;
     padding-top: 2px;
 }
@@ -415,6 +415,48 @@
 #calendar-view-day .hour SPAN.event-new {
     font-weight: bold;
     padding: 0.5ex;
+}
+
+.page .refine .calendar-overlay table {
+    margin: 0;
+    width: 146px;
+}
+
+.page .refine .calendar-overlay table tbody {
+    border: 0 none;
+}
+
+.page .refine .calendar-overlay table td {
+    padding: 2px 0;
+}
+
+.page .refine .calendar-overlay table td.overlay-title {
+    width: 100%;
+}
+
+.page .refine .calendar-overlay FORM {
+    margin: 2px;
+}
+
+.page .refine .calendar-overlay FORM .buttons {
+    margin-top: 0px;
+}
+
+.page .refine .calendar-overlay FORM .buttons {
+    margin-top: 4px;
+}
+
+.page .refine .calendar-overlay table.overlays INPUT {
+    margin-left: 0.5em;
+}
+
+.page .refine .calendar-overlay td.overlay-go A {
+    float: right;
+    margin-right: 4px;
+    font-size: 12px;
+    width: 1em;
+    height: 1em;
+    text-decoration: none;
 }
 
 }

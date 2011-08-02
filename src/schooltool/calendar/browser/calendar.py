@@ -27,12 +27,14 @@ from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.publisher.interfaces import NotFound
 
 import schooltool.skin.flourish.page
+import schooltool.skin.flourish.viewlet
 from schooltool.app.browser.cal import DailyCalendarView
 from schooltool.app.browser.cal import WeeklyCalendarView
 from schooltool.app.browser.cal import MonthlyCalendarView
 from schooltool.app.browser.cal import YearlyCalendarView
 from schooltool.calendar.interfaces import ICalendar
 from schooltool.calendar.utils import weeknum_bounds
+from schooltool.common.inlinept import InheritTemplate
 from schooltool.skin import flourish
 
 from schooltool.common import SchoolToolMessage as _
