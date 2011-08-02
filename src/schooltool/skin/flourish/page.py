@@ -44,6 +44,7 @@ class Page(BrowserPage):
     title = None
     subtitle = None
     has_header = True
+    page_class = 'page'
 
     template = ViewPageTemplateFile('templates/main.pt')
     page_template = ViewPageTemplateFile('templates/page.pt')
