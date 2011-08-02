@@ -103,8 +103,6 @@ from schooltool.resource.interfaces import IBaseResource
 from schooltool.resource.interfaces import IBookingCalendar
 from schooltool.resource.interfaces import IResourceTypeInformation
 
-from schooltool.calendar.browser.calendar import CalendarTraverser
-
 #
 # Calendar names
 #
