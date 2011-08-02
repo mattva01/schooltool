@@ -36,7 +36,7 @@ from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.person.interfaces import IPerson
 
 
-class CalendarOverlayView(ViewletBase):
+class CalendarOverlayBase(object):
     """View for the calendar overlay portlet.
 
     This view can be used with any context, but it gets rendered to an empty
@@ -141,6 +141,10 @@ class CalendarOverlayView(ViewletBase):
                 item.show = getPath(item.calendar.__parent__) in selected
             url = str(self.request.URL)
             self.request.response.redirect(url)
+
+
+class CalendarOverlayView(CalendarOverlayBase, ViewletBase):
+    pass
 
 
 class CalendarSelectionView(BrowserView):

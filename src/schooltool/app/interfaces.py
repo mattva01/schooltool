@@ -28,12 +28,18 @@ from zope.container.interfaces import IReadContainer
 from zope.container.constraints import contains
 from zope.interface import implements
 from zope.interface import Interface, Attribute
-from zope.location.interfaces import ILocation, IContained
+from zope.location.interfaces import IContained
 from zope.authentication.interfaces import IAuthentication, ILogout
 
 from schooltool.common import SchoolToolMessage as _
-from schooltool.calendar.interfaces import IEditCalendar, ICalendarEvent
 from schooltool.person.interfaces import ICalendarDisplayPreferences
+
+# XXX: misplaced calendar integration
+from schooltool.calendar.interfaces import ICalendarEvent
+from schooltool.calendar.interfaces import ISchoolToolCalendarEvent
+from schooltool.calendar.interfaces import ISchoolToolCalendar
+from schooltool.calendar.interfaces import IWriteCalendar
+from schooltool.calendar.interfaces import IHaveCalendar
 
 import zope.formlib.textwidgets
 zope.formlib.textwidgets._ = _
@@ -94,41 +100,6 @@ class CatalogStartUpEvent(ObjectEvent):
     implements(ICatalogStartUpEvent)
 
 
-class ISchoolToolCalendar(IEditCalendar, ILocation):
-    """A SchoolTool calendar.
-
-    Calendars stored within all provide ISchoolToolCalendarEvent.
-    """
-
-    title = zope.schema.TextLine(
-        title=u"Title",
-        description=u"Title of the calendar.")
-
-
-class IHaveCalendar(Interface):
-    """Marker interface for components that can have calendars.
-
-    Components providing this interface are adaptable to
-    ``ISchoolToolCalendar``.
-    """
-
-
-class ISchoolToolCalendarEvent(ICalendarEvent, IContained):
-    """An event that is contained in a SchoolTool calendar."""
-
-    resources = Attribute(
-        """Resources that are booked by this event""")
-
-    owner = Attribute(
-        """Object which this event belongs to.""")
-
-    def bookResource(resource):
-        """Book a resource."""
-
-    def unbookResource(resource):
-        """Book a resource."""
-
-
 class ISchoolToolApplication(IReadContainer):
     """The main SchoolTool application object.
 
@@ -166,13 +137,6 @@ class IApplicationPreferences(ICalendarDisplayPreferences):
             site."""),
         required=False,
         default=True)
-
-
-class IWriteCalendar(Interface):
-
-    def write(data, charset='UTF-8'):
-        """Update the calendar data
-        """
 
 
 class ISchoolToolAuthentication(IAuthentication, ILogout):

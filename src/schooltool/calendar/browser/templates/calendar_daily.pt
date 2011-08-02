@@ -1,0 +1,129 @@
+<div i18n:domain="schooltool">
+
+<tal:block replace="resource_library:schooltool.calendar" />
+
+<div id="events-allday">
+  <tal:loop repeat="event view/getAllDayEvents">
+    <div class="event-allday"
+         tal:attributes="style string:border: 1px ${event/color2} solid;;
+                         background: ${event/color1};;">
+      <h6>
+        <a tal:attributes="href event/linkAllowed"
+           tal:omit-tag="not:event/linkAllowed"
+           tal:content="event/title">(title)</a>
+      </h6>
+      <metal:block use-macro="template/macros/event-delete-button" />
+
+      <p tal:condition="event/description"
+         tal:content="structure event/description">
+        (description)
+      </p>
+    </div>
+  </tal:loop>
+</div>
+
+<div id="calendar-view-day"
+     tal:define="hours python:list(view.getHours());
+                 dayheight python: sum(h['height'] for h in hours);"
+     tal:attributes="style string:height: ${dayheight}em">
+
+<!-- Day grid -->
+<tal:each_row repeat="hour hours">
+    <div class="hour"
+         tal:condition="view/canAddEvents"
+         tal:define="active python: hour['active'] and ' active' or '';
+                     url python:view.eventAddLink(hour)"
+         tal:attributes="onclick string:parent.location='${url}';
+                         style string:top: ${hour/top}em;; height: ${hour/height}em;; cursor: pointer;
+                         class string:hour ${repeat/hour/parity}${active}">
+      <a class="event-new" style="width:100%; height:100%;"
+         tal:attributes="href url;
+                         title hour/full_title"
+         tal:content="hour/title">HH:MM</a>
+    </div>
+    <div class="hour"
+         tal:condition="not:view/canAddEvents"
+         tal:attributes="style string:top: ${hour/top}em;; height: ${hour/height}em;
+                         class string:hour ${repeat/hour/parity}">
+      <span class="event-new" style="width:100%; height:100%;"
+         tal:content="hour/title">HH:MM</span>
+    </div>
+</tal:each_row>
+
+<!-- Events -->
+<div class="events" tal:define="compress python:view.getColumns() > 2">
+  <tal:each_row repeat="hour hours">
+    <tal:each_column repeat="event hour/cols">
+      <tal:if_have_an_event condition="event">
+        <div class="event contracted"
+             onmouseover="this.className='event expanded'"
+             onmouseout="this.className='event contracted'"
+             tal:define="num repeat/event/index;
+                         unit python:compress and '%' or 'em';
+                         indent python:compress and 15 or 20.5;
+                         left python:num * indent;
+                         top python:view.eventTop(event);
+                         height python:view.eventHeight(event)"
+             tal:attributes="style string:background: ${event/color1};;
+                             min-height: ${height}em;;
+                             height: ${height}em;;
+                             margin-left: $left$unit;;
+                             top: ${top}em">
+          <metal:block use-macro="template/macros/event-title-bar" />
+          <metal:block use-macro="template/macros/event-delete-button" />
+          <div class="event-body">
+            <tal:block replace="structure provider:schooltool.CalendarEvent" />
+          </div>
+        </div>
+      </tal:if_have_an_event>
+    </tal:each_column>
+  </tal:each_row>
+</div>
+
+</div>
+
+</div>
+
+<tal:hide-macro-definitions-from-browser condition="nothing">
+
+<!-- Macro for the title bar of an event box.
+     Expects to find an EventForDisplay instance named 'event'
+  -->
+<metal:block define-macro="event-title-bar">
+  <h6 tal:attributes="style string:background: ${event/color2}">
+    <a tal:attributes="href event/linkAllowed; title event/title"
+       tal:omit-tag="not:event/linkAllowed">
+      <span tal:replace="event/shortTitle">(shortened title)</span>
+      <span class="start-end"
+            tal:define="start python:event.dtstarttz.strftime(view.time_fmt);
+                        end python:event.dtendtz.strftime(view.time_fmt)">
+        (<span tal:content="start">HH:MM</span>
+          - <span tal:content="end">HH:MM</span>)
+      </span>
+    </a>
+  </h6>
+</metal:block>
+
+<!-- Macro for the delete button in an event box.
+     Expects to find an EventForDisplay instance named 'event'
+
+     XXX mg: I suspect that
+               i18n:attributes="title"
+               tal:attributes="title string:Delete $foo"
+             will not work, as it might try to translate all the real titles
+             (such as "Delete Meeting With Friend"), which will never be
+             defined in the '.po' file.
+  -->
+<metal:block define-macro="event-delete-button">
+  <tal:if_can_remove_events condition="view/canRemoveEvents">
+    <a class="delete"
+       tal:condition="event/deleteLink"
+       tal:attributes="href event/deleteLink;
+                       title string:Delete ${event/title}"
+       i18n:attributes="title"
+      ><img alt="[X]" tal:attributes="src context/++resource++delete.png"
+            /></a>
+  </tal:if_can_remove_events>
+</metal:block>
+
+</tal:hide-macro-definitions-from-browser>

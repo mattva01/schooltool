@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/browser"
+           xmlns:zope="http://namespaces.zope.org/zope"
+           i18n_domain="schooltool">
+
+  <zope:adapterTraverserPlugin
+      for="schooltool.app.interfaces.IHaveCalendar"
+      layer="zope.publisher.interfaces.browser.IBrowserRequest"
+      name="calendar"
+      adapter="schooltool.app.interfaces.ISchoolToolCalendar"
+      />
+
+  <zope:view
+      for="schooltool.calendar.interfaces.ICalendar"
+      type="zope.publisher.interfaces.browser.IBrowserRequest"
+      provides="zope.publisher.interfaces.browser.IBrowserPublisher"
+      factory=".calendar.CalendarTraverser"
+      permission="zope.Public"
+      />
+
+  <zope:view
+      for="schooltool.app.interfaces.ISchoolToolCalendar"
+      type="zope.publisher.interfaces.browser.IBrowserRequest"
+      provides="zope.publisher.interfaces.browser.IBrowserPublisher"
+      factory=".calendar.CalendarTraverser"
+      permission="zope.Public"
+      />
+
+</configure>

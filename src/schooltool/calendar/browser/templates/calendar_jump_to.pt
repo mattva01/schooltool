@@ -1,0 +1,29 @@
+<div class="calendar-jump-to"
+     i18n:domain="schooltool">
+  <form class="center" action="">
+    <div>
+      <select name="jump" onChange="ST.redirect($(this).context.value);">
+        <option value="" i18n:translate="">Month</option>
+        <tal:loop repeat="month view/getJumpToMonths">
+          <option
+              tal:attributes="value month/href"
+              tal:content="month/label" />
+        </tal:loop>
+      </select>
+    </div>
+  </form>
+
+  <form class="center" action="">
+    <div>
+      <select name="jump" onChange="ST.redirect($(this).context.value);">
+        <option value='' i18n:translate="">Year</option>
+        <tal:loop repeat="year view/getJumpToYears">
+          <option value=""
+                  tal:attributes="value year/href;
+                                  selected year/selected"
+                  tal:content="year/label" />
+        </tal:loop>
+      </select>
+    </div>
+  </form>
+</div>

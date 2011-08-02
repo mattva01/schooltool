@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/browser"
+           xmlns:z3c="http://namespaces.zope.org/z3c"
+           xmlns:zope="http://namespaces.zope.org/zope"
+           xmlns:flourish="http://schooltool.org/flourish"
+           i18n_domain="schooltool">
+
+  <flourish:page
+      name="daily.html"
+      subtitle="Calendar"
+      for="schooltool.calendar.interfaces.ISchoolToolCalendar"
+      class=".calendar.FlourishDailyCalendarView"
+      content_template="templates/calendar_daily.pt"
+      permission="schooltool.view"
+      />
+
+  <page
+      for="schooltool.calendar.interfaces.ICalendar"
+      name="daily_calendar_rows"
+      layer="schooltool.skin.flourish.IFlourishLayer"
+      class="schooltool.app.browser.cal.DailyCalendarRowsView"
+      permission="zope.View"
+      />
+
+  <flourish:page
+      name="weekly.html"
+      subtitle="Calendar"
+      for="schooltool.calendar.interfaces.ISchoolToolCalendar"
+      class=".calendar.FlourishWeeklyCalendarView"
+      content_template="templates/calendar_weekly.pt"
+      permission="schooltool.view"
+      />
+
+  <flourish:page
+      name="monthly.html"
+      subtitle="Calendar"
+      for="schooltool.calendar.interfaces.ISchoolToolCalendar"
+      class=".calendar.FlourishMonthlyCalendarView"
+      content_template="templates/calendar_monthly.pt"
+      permission="schooltool.view"
+      />
+
+  <flourish:page
+      name="yearly.html"
+      subtitle="Calendar"
+      for="schooltool.calendar.interfaces.ISchoolToolCalendar"
+      class=".calendar.FlourishYearlyCalendarView"
+      content_template="templates/calendar_yearly.pt"
+      permission="schooltool.view"
+      />
+
+  <!-- XXX: probably wrong security -->
+  <flourish:viewlet
+      name="calendar-overlay"
+      view=".interfaces.IHaveEventLegend"
+      class=".overlay.CalendarOverlayView"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      permission="zope.Public"
+      />
+
+  <!-- XXX: probably wrong security -->
+  <flourish:viewlet
+      name="calendar-jump-to"
+      after="calendar-overlay"
+      view=".calendar.CalendarViewBase"
+      class=".calendar.CalendarJumpTo"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      permission="zope.Public"
+      />
+
+  <!-- resources -->
+
+  <zope:resourceLibrary
+      name="schooltool.calendar"
+      require=""
+      layer="schooltool.skin.flourish.IFlourishLayer">
+    <directory
+        source="resources"
+        include="calendar.css"
+        />
+  </zope:resourceLibrary>
+
+</configure>

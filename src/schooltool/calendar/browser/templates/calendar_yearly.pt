@@ -1,0 +1,36 @@
+<div i18n:domain="schooltool">
+
+  <tal:block replace="resource_library:schooltool.calendar" />
+
+  <table id="calendar-view-year"
+         cellpadding="0" cellspacing="0"
+         tal:define="quarters python:view.getYear(view.cursor)">
+
+      <tr tal:repeat="quarter quarters">
+        <td class="month" valign="top"
+            tal:repeat="month quarter">
+          <table class="month" cellpadding="0" cellspacing="0">
+            <tr>
+              <th colspan="7" class="month-title"
+                  tal:define="mtit python:view.monthTitle(month[1][0].date)">
+                <a tal:content="mtit"
+                   tal:attributes="href python:view.calURL('monthly',
+                                   month[1][0].date);
+                                   title mtit"/>
+              </th>
+            </tr>
+            <tr>
+              <th class="month-weekday"
+                  width="14%"
+                  tal:repeat="weekday python:month[0]"
+                  tal:content="python:view.shortDayOfWeek(weekday.date)" />
+            </tr>
+            <tr tal:repeat="week month">
+              <td tal:replace="structure
+                  python:view.renderRow(week, month[1][0].date.month)" />
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+</div>

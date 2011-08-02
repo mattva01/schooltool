@@ -35,6 +35,7 @@
 
   <include file="skin.zcml" />
   <include package="schooltool.app.browser" file="flourish.zcml" />
+  <include package="schooltool.calendar.browser" file="flourish.zcml" />
   <include package="schooltool.basicperson.browser" file="flourish.zcml" />
   <include package="schooltool.contact.browser" file="flourish.zcml" />
   <include package="schooltool.course.browser" file="flourish.zcml" />
