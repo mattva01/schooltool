@@ -62,7 +62,7 @@
                 </div>
               </tal:block>
             </div>
-          </div>                       
+          </div>
         </td>
       </tr>
     </tal:loop>

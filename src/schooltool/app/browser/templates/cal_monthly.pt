@@ -1,5 +1,5 @@
 <tal:defs define="status view/update"/>
-<html metal:use-macro="view/@@schooltool_macros/calendar/page" 
+<html metal:use-macro="view/@@schooltool_macros/calendar/page"
       i18n:domain="schooltool">
   <metal:block metal:fill-slot="calendar-body">
     <table id="calendar-view-month" cellpadding="0" cellspacing="0"
@@ -13,7 +13,7 @@
         <tr tal:repeat="week weeks">
           <td class="weekno" width="30">
             <a tal:content="python:week[0].date.isocalendar()[1]"
-                tal:attributes="href 
+                tal:attributes="href
                     python: view.calURL('weekly', week[0].date)"/>
           </td>
           <tal:block tal:repeat="day week">
