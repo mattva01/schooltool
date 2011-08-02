@@ -1,0 +1,73 @@
+<div i18n:domain="schooltool">
+
+  <tal:block replace="resource_library:schooltool.calendar" />
+
+  <table id="calendar-view-week" cellpadding="0" cellspacing="0" width="99%"
+         tal:define="days view/getCurrentWeek">
+    <tr>
+      <tal:loop repeat="day days">
+        <th class="day-title"
+            tal:define="start repeat/day/start"
+            tal:attributes="class python:' '.join(filter(None, ['day-title',
+                                                   start and 'first' or '',
+                                                   day.today()]))">
+          <a tal:content="day/date/@@fullDate"
+             tal:attributes="href python:view.calURL('daily', day.date)" />
+        </th>
+      </tal:loop>
+    </tr>
+    <tal:loop repeat="period view/getCurrentWeekNonTimetableEvents">
+      <tr tal:condition="period">
+        <td valign="top" tal:repeat="block period">
+          <div tal:repeat="event block">
+            <div tal:condition="event"
+                 tal:attributes="style string:background: ${event/color1};;
+                                 border-color: ${event/color2};;">
+              <a tal:attributes="title event/title;
+                                 href event/linkAllowed">
+                <span tal:content="event/shortTitle"/>
+                <tal:if condition="not:event/allday">
+                  <span>
+                  (<tal:block tal:content="
+                               python: event.dtstart.astimezone(
+                                       view.timezone).strftime(view.time_fmt)"
+                  />-<tal:block tal:content="
+                               python:event.dtend.astimezone(
+                               view.timezone).strftime(view.time_fmt)"/>)
+                  </span>
+                </tal:if>
+                <tal:if condition="event/allday">
+                  (<span i18n:translate="">All day</span>)
+                </tal:if>
+              </a>
+              <tal:block define="resources event/getBookedResources;
+                                 booker event/getBooker"
+                         tal:condition="resources">
+                <div class="booked-resources"
+                     i18n:domain="schooltool"
+                     tal:condition="resources">
+                  <h6 class="booked-resource-header"
+                      tal:attributes="style string:background: ${event/color2};;">
+                  <a tal:attributes="href event/bookingLink" style="font-weight: bold; color: #000;">Booked resources</a></h6>
+                  <tal:block tal:repeat="resource resources">
+                    <a tal:attributes="href resource/@@absolute_url"
+                       tal:content="resource/title">(A Pond)</a>
+                  </tal:block>
+                </div>
+                <div class="booked-resources"
+                     tal:condition="booker">
+                  <h6 class="booked-resource-header"
+                      tal:attributes="style string:background: ${event/color2};;">
+                  <a tal:attributes="href event/bookingLink" style="font-weight: bold; color: #000;">Booked by</a></h6>
+                  <a tal:attributes="href booker/@@absolute_url"
+                     tal:content="booker/title">(A Dude)</a>
+                </div>
+              </tal:block>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </tal:loop>
+  </table>
+
+</div>

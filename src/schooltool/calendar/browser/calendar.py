@@ -26,8 +26,16 @@ from zope.interface import implements
 from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.publisher.interfaces import NotFound
 
+import schooltool.skin.flourish.page
+from schooltool.app.browser.cal import DailyCalendarView
+from schooltool.app.browser.cal import WeeklyCalendarView
+from schooltool.app.browser.cal import MonthlyCalendarView
+from schooltool.app.browser.cal import YearlyCalendarView
 from schooltool.calendar.interfaces import ICalendar
 from schooltool.calendar.utils import weeknum_bounds
+from schooltool.skin import flourish
+
+from schooltool.common import SchoolToolMessage as _
 
 
 class CalendarTraverser(object):
@@ -133,3 +141,22 @@ class CalendarTraverser(object):
         """
         return weeknum_bounds(year, week)[0]
 
+
+class FlourishDailyCalendarView(flourish.page.WideContainerPage,
+                                DailyCalendarView):
+    update = DailyCalendarView.update
+
+
+class FlourishWeeklyCalendarView(flourish.page.WideContainerPage,
+                                 WeeklyCalendarView):
+    update = WeeklyCalendarView.update
+
+
+class FlourishMonthlyCalendarView(flourish.page.WideContainerPage,
+                                  MonthlyCalendarView):
+    update = MonthlyCalendarView.update
+
+
+class FlourishYearlyCalendarView(flourish.page.WideContainerPage,
+                                 YearlyCalendarView):
+    update = YearlyCalendarView.update

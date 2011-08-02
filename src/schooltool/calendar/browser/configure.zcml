@@ -26,4 +26,16 @@
       permission="zope.Public"
       />
 
+  <!-- resources -->
+
+  <zope:resourceLibrary
+      name="schooltool.calendar"
+      require=""
+      layer="schooltool.skin.flourish.IFlourishLayer">
+    <directory
+        source="resources"
+        include="calendar.css"
+        />
+  </zope:resourceLibrary>
+
 </configure>

@@ -5,5 +5,48 @@
            xmlns:flourish="http://schooltool.org/flourish"
            i18n_domain="schooltool">
 
+  <flourish:page
+      name="daily.html"
+      subtitle="Calendar"
+      for="schooltool.app.interfaces.ISchoolToolCalendar"
+      class=".calendar.FlourishDailyCalendarView"
+      content_template="templates/calendar_daily.pt"
+      permission="schooltool.view"
+      />
+
+  <page
+      for="schooltool.calendar.interfaces.ICalendar"
+      name="daily_calendar_rows"
+      layer="schooltool.skin.flourish.IFlourishLayer"
+      class="schooltool.app.browser.cal.DailyCalendarRowsView"
+      permission="zope.View"
+      />
+
+  <flourish:page
+      name="weekly.html"
+      subtitle="Calendar"
+      for="schooltool.app.interfaces.ISchoolToolCalendar"
+      class=".calendar.FlourishWeeklyCalendarView"
+      content_template="templates/calendar_weekly.pt"
+      permission="schooltool.view"
+      />
+
+  <flourish:page
+      name="monthly.html"
+      subtitle="Calendar"
+      for="schooltool.app.interfaces.ISchoolToolCalendar"
+      class=".calendar.FlourishMonthlyCalendarView"
+      content_template="templates/calendar_monthly.pt"
+      permission="schooltool.view"
+      />
+
+  <flourish:page
+      name="yearly.html"
+      subtitle="Calendar"
+      for="schooltool.app.interfaces.ISchoolToolCalendar"
+      class=".calendar.FlourishYearlyCalendarView"
+      content_template="templates/calendar_yearly.pt"
+      permission="schooltool.view"
+      />
 
 </configure>
