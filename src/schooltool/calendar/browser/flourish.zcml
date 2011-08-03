@@ -91,6 +91,15 @@
       permission="schooltool.view"
       />
 
+  <flourish:viewlet
+      before="calendar-overlay"
+      name="calendar-tomorrow-events"
+      view=".calendar.CalendarViewBase"
+      class=".calendar.CalendarTomorrowEvents"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      permission="schooltool.view"
+      />
+
   <!-- resources -->
 
   <zope:resourceLibrary

@@ -492,4 +492,8 @@
     width: 136px;
 }
 
+.page .refine .calendar-tomorrow-events ul.events {
+    width: 140px;
+}
+
 }

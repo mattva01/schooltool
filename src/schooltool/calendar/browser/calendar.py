@@ -245,3 +245,32 @@ class CalendarNextMonthViewlet(CalendarMonthViewlet):
     @Lazy
     def cursor(self):
         return next_month(self.view.cursor)
+
+
+class CalendarTomorrowEvents(flourish.page.Refine):
+
+    body_template = ViewPageTemplateFile('templates/calendar_tomorrow_events.pt')
+
+    title = _("Tomorrow's Events")
+
+    @property
+    def cursor(self):
+        today = self.view.today
+        tomorrow = today + today.resolution
+        return tomorrow
+
+    @Lazy
+    def events(self):
+        cursor = self.cursor
+        all_events = self.view.dayEvents(cursor)
+        timezone = self.view.timezone
+        get_time = lambda t: t.astimezone(timezone).strftime('%H:%M')
+        result = [{'event': e, 'time': get_time(e.dtstart)}
+                  for e in all_events
+                  if e.dtstart.date() == cursor]
+        return result
+
+    def render(self, *args, **kw):
+        if not self.events:
+            return ''
+        return flourish.page.Refine.render(self, *args, **kw)
