@@ -148,7 +148,11 @@ class CalendarTraverser(object):
         return weeknum_bounds(year, week)[0]
 
 
-class FlourishDailyCalendarView(flourish.page.WideContainerPage,
+class FlourishCalendarView(flourish.page.WideContainerPage):
+    pass
+
+
+class FlourishDailyCalendarView(FlourishCalendarView,
                                 DailyCalendarView):
     update = DailyCalendarView.update
 
@@ -157,7 +161,7 @@ class FlourishDailyCalendarView(flourish.page.WideContainerPage,
         return DailyCalendarView.title(self)
 
 
-class FlourishWeeklyCalendarView(flourish.page.WideContainerPage,
+class FlourishWeeklyCalendarView(FlourishCalendarView,
                                  WeeklyCalendarView):
     update = WeeklyCalendarView.update
 
@@ -166,7 +170,7 @@ class FlourishWeeklyCalendarView(flourish.page.WideContainerPage,
         return WeeklyCalendarView.title(self)
 
 
-class FlourishMonthlyCalendarView(flourish.page.WideContainerPage,
+class FlourishMonthlyCalendarView(FlourishCalendarView,
                                   MonthlyCalendarView):
     update = MonthlyCalendarView.update
 
@@ -175,7 +179,7 @@ class FlourishMonthlyCalendarView(flourish.page.WideContainerPage,
         return MonthlyCalendarView.title(self)
 
 
-class FlourishYearlyCalendarView(flourish.page.WideContainerPage,
+class FlourishYearlyCalendarView(FlourishCalendarView,
                                  YearlyCalendarView):
     update = YearlyCalendarView.update
 
@@ -274,3 +278,28 @@ class CalendarTomorrowEvents(flourish.page.Refine):
         if not self.events:
             return ''
         return flourish.page.Refine.render(self, *args, **kw)
+
+
+class CalendarTertiaryNavigation(flourish.page.Content):
+    template = ViewPageTemplateFile('templates/calendar_tertiary_nav.pt')
+
+    mode_types = (
+        ('daily', _('Daily')),
+        ('weekly', _('Weekly')),
+        ('monthly', _('Monthly')),
+        ('yearly', _('Yearly')),
+        )
+
+    @property
+    def modes(self):
+        result = []
+        for mode, title in self.mode_types:
+            cls = "calendar-type"
+            if mode == self.view.cal_type:
+                cls += " active"
+            result.append({
+                    'title': title,
+                    'url': self.view.calURL(mode),
+                    'class': cls,
+                    })
+        return result

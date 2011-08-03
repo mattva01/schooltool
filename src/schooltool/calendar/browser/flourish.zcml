@@ -57,7 +57,7 @@
   <flourish:viewlet
       name="calendar-jump-to"
       after="calendar-overlay"
-      view=".calendar.CalendarViewBase"
+      view=".calendar.FlourishCalendarView"
       class=".calendar.CalendarJumpTo"
       manager="schooltool.skin.flourish.page.IPageRefineManager"
       permission="schooltool.view"
@@ -67,7 +67,7 @@
       name="calendar-previous-month"
       before="calendar-current-month"
       after="calendar-jump-to"
-      view=".calendar.CalendarViewBase"
+      view=".calendar.FlourishCalendarView"
       class=".calendar.CalendarPrevMonthViewlet"
       manager="schooltool.skin.flourish.page.IPageRefineManager"
       permission="schooltool.view"
@@ -76,7 +76,7 @@
   <flourish:viewlet
       name="calendar-current-month"
       after="calendar-jump-to"
-      view=".calendar.CalendarViewBase"
+      view=".calendar.FlourishCalendarView"
       class=".calendar.CalendarMonthViewlet"
       manager="schooltool.skin.flourish.page.IPageRefineManager"
       permission="schooltool.view"
@@ -85,7 +85,7 @@
   <flourish:viewlet
       name="calendar-next-month"
       after="calendar-jump-to calendar-current-month"
-      view=".calendar.CalendarViewBase"
+      view=".calendar.FlourishCalendarView"
       class=".calendar.CalendarNextMonthViewlet"
       manager="schooltool.skin.flourish.page.IPageRefineManager"
       permission="schooltool.view"
@@ -94,10 +94,17 @@
   <flourish:viewlet
       before="calendar-overlay"
       name="calendar-tomorrow-events"
-      view=".calendar.CalendarViewBase"
+      view=".calendar.FlourishCalendarView"
       class=".calendar.CalendarTomorrowEvents"
       manager="schooltool.skin.flourish.page.IPageRefineManager"
       permission="schooltool.view"
+      />
+
+  <flourish:content
+      name="tertiary_navigation"
+      class=".calendar.CalendarTertiaryNavigation"
+      view=".calendar.FlourishCalendarView"
+      permission="zope.Public"
       />
 
   <!-- resources -->

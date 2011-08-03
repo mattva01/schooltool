@@ -1,0 +1,34 @@
+<ul class="third-nav" i18n:domain="schooltool">
+
+  <tal:block replace="resource_library:schooltool.calendar" />
+
+    <li>
+    <a tal:attributes="href view/view/prev;
+                       title view/view/go_to_prev_title">
+      &#x25C0;
+    </a>
+    </li>
+
+    <li>
+    <a tal:attributes="href view/view/next;
+                     title view/view/go_to_next_title">
+      &#x25B6;
+    </a>
+    </li>
+
+    <li>
+    <a
+       tal:attributes="href view/view/current;
+                       title view/view/go_to_current_title">
+      <span tal:replace="view/view/current_title">Current</span>
+    </a>
+    </li>
+
+    <tal:block repeat="mode view/modes">
+      <li tal:attributes="class mode/class">
+        <a tal:attributes="href mode/url"
+           tal:content="mode/title">Daily</a>
+      </li>
+    </tal:block>
+
+</ul>

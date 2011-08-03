@@ -496,4 +496,8 @@
     width: 140px;
 }
 
+.page > .third-nav li.calendar-type {
+    float: right;
+}
+
 }
