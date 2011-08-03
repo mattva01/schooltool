@@ -447,9 +447,6 @@
     padding: 2px 0;
 }
 
-.page .refine .calendar-overlay table td.overlay-title {
-    width: 100%;
-}
 
 .page .refine .calendar-overlay FORM {
     margin: 2px;
@@ -463,8 +460,18 @@
     margin-top: 4px;
 }
 
+.page .refine .calendar-overlay table.overlays {
+    max-width: 140px;
+}
+
 .page .refine .calendar-overlay table.overlays INPUT {
     margin-left: 0.5em;
+}
+
+.page .refine .calendar-overlay td.overlay-title {
+    overflow: hidden;
+    word-break: break-all;
+    max-width: 100px;
 }
 
 .page .refine .calendar-overlay td.overlay-go A {

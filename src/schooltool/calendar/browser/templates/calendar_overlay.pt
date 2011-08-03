@@ -17,11 +17,16 @@
           tal:attributes="style string:background: ${item/color1}">
         <td><input type="checkbox" name="overlay:list"
             tal:attributes="value item/id; checked item/checked" /></td>
-        <td class="overlay-title" tal:content="item/title">Title</td>
+        <td class="overlay-title">
+          <span tal:content="item/title"
+                tal:attributes="title item/title">Title</span>
+        </td>
         <td class="overlay-go"><a
             tal:attributes="href item/calendar/@@absolute_url;
             style string:background: ${item/color2};;
             color: ${item/color2}"
+            i18n:attributes="title"
+            title="Calendar"
             >&nbsp;</a></td>
     </tr>
     </table>
