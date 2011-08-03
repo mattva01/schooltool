@@ -37,7 +37,7 @@ from schooltool.app.browser.cal import YearlyCalendarView
 from schooltool.app.browser.cal import CalendarViewBase
 from schooltool.app.browser.cal import month_names
 from schooltool.calendar.interfaces import ICalendar
-from schooltool.calendar.utils import weeknum_bounds
+from schooltool.calendar.utils import weeknum_bounds, prev_month, next_month
 from schooltool.common.inlinept import InheritTemplate
 from schooltool.skin import flourish
 
@@ -205,3 +205,43 @@ class CalendarJumpTo(flourish.page.Refine):
                  'href': self.view.calURL('monthly',
                                           datetime.date(year, k, 1))}
                 for k, v in month_names.items()]
+
+
+class CalendarMonthViewlet(flourish.page.Refine):
+
+    body_template = ViewPageTemplateFile('templates/calendar_month_viewlet.pt')
+
+    @property
+    def cursor(self):
+        return self.view.cursor
+
+    @property
+    def month_title(self):
+        return month_names[self.cursor.month]
+
+    @property
+    def cal_url(self):
+        return self.view.calURL('monthly', self.cursor)
+
+    @property
+    def rows(self):
+        result = []
+        cursor = self.cursor
+        month = self.view.getMonth(cursor)
+        for week in month:
+            result.append(self.view.renderRow(week, cursor.month))
+        return result
+
+
+class CalendarPrevMonthViewlet(CalendarMonthViewlet):
+
+    @Lazy
+    def cursor(self):
+        return prev_month(self.view.cursor)
+
+
+class CalendarNextMonthViewlet(CalendarMonthViewlet):
+
+    @Lazy
+    def cursor(self):
+        return next_month(self.view.cursor)
