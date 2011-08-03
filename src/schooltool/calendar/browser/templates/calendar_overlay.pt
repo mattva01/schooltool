@@ -1,6 +1,5 @@
 <div class="calendar-overlay"
-     i18n:domain="schooltool"
-     tal:condition="view/show_overlay">
+     i18n:domain="schooltool">
 
   <tal:block replace="resource_library:schooltool.calendar" />
 
