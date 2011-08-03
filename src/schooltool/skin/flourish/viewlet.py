@@ -127,8 +127,13 @@ class ViewletManager(ContentProvider):
     implements(IViewletManager)
 
     template = InlineViewPageTemplate("""
-        <tal:block repeat="viewlet view/viewlets"
-                   content="structure viewlet" />
+        <tal:block repeat="viewlet view/viewlets">
+          <tal:block define="rendered viewlet;
+                             stripped rendered/strip|nothing"
+                     condition="stripped"
+                     content="structure stripped">
+          </tal:block>
+        </tal:block>
     """)
 
     render = lambda self, *args, **kw: self.template(*args, **kw)
