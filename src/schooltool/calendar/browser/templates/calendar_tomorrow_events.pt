@@ -1,0 +1,19 @@
+<div class="portlet calendar-tomorrow-events"
+     i18n:domain="schooltool">
+
+  <tal:block replace="resource_library:schooltool.calendar" />
+
+  <ul class="events">
+    <tal:block repeat="item view/events">
+      <li tal:define="event item/event">
+        <a tal:attributes="title event/title;
+
+                           href event/context/@@absolute_url">
+          <strong tal:content="item/time" />
+          <span tal:replace="event/shortTitle">Event</span>
+        </a>
+      </li>
+    </tal:block>
+  </ul>
+
+</div>

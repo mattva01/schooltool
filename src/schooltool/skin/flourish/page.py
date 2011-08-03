@@ -82,10 +82,14 @@ class WideContainerPage(Page):
 
 class ContentViewletManager(ViewletManager):
     template = InlineViewPageTemplate("""
-        <div class="content"
-             tal:repeat="viewlet view/viewlets"
-             tal:content="structure viewlet">
-        </div>
+        <tal:block repeat="viewlet view/viewlets">
+          <div class="content"
+               tal:define="rendered viewlet;
+                           stripped rendered/strip|nothing"
+               tal:condition="stripped"
+               tal:content="structure stripped">
+          </div>
+        </tal:block>
     """)
 
     def render(self, *args, **kw):
@@ -165,7 +169,8 @@ def getParentActiveViewletName(context, request, view, manager):
 
 class ListNavigationBase(object):
     template = InlineViewPageTemplate("""
-        <ul tal:attributes="class view/list_class">
+        <ul tal:attributes="class view/list_class"
+            tal:condition="view/items">
           <li tal:repeat="item view/items"
               tal:attributes="class item/class"
               tal:content="structure item/viewlet">
@@ -174,8 +179,8 @@ class ListNavigationBase(object):
     """)
     list_class = None
 
-    @property
-    def items(self):
+    @Lazy
+    def all_items(self):
         result = []
         active = self.active_viewlet
         for viewlet in self.viewlets:
@@ -188,7 +193,14 @@ class ListNavigationBase(object):
             result.append({
                 'class': ' '.join(html_classes) or None,
                 'viewlet': viewlet,
+                'content': viewlet(),
                 })
+        return result
+
+    @Lazy
+    def items(self):
+        result = [item for item in self.all_items
+                  if item['content'] and item['content'].strip()]
         return result
 
     @Lazy

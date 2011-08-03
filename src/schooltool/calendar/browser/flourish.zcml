@@ -7,7 +7,6 @@
 
   <flourish:page
       name="daily.html"
-      subtitle="Calendar"
       for="schooltool.calendar.interfaces.ISchoolToolCalendar"
       class=".calendar.FlourishDailyCalendarView"
       content_template="templates/calendar_daily.pt"
@@ -24,7 +23,6 @@
 
   <flourish:page
       name="weekly.html"
-      subtitle="Calendar"
       for="schooltool.calendar.interfaces.ISchoolToolCalendar"
       class=".calendar.FlourishWeeklyCalendarView"
       content_template="templates/calendar_weekly.pt"
@@ -33,7 +31,6 @@
 
   <flourish:page
       name="monthly.html"
-      subtitle="Calendar"
       for="schooltool.calendar.interfaces.ISchoolToolCalendar"
       class=".calendar.FlourishMonthlyCalendarView"
       content_template="templates/calendar_monthly.pt"
@@ -42,7 +39,6 @@
 
   <flourish:page
       name="yearly.html"
-      subtitle="Calendar"
       for="schooltool.calendar.interfaces.ISchoolToolCalendar"
       class=".calendar.FlourishYearlyCalendarView"
       content_template="templates/calendar_yearly.pt"
@@ -58,14 +54,50 @@
       permission="zope.Public"
       />
 
-  <!-- XXX: probably wrong security -->
   <flourish:viewlet
       name="calendar-jump-to"
       after="calendar-overlay"
       view=".calendar.CalendarViewBase"
       class=".calendar.CalendarJumpTo"
       manager="schooltool.skin.flourish.page.IPageRefineManager"
-      permission="zope.Public"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="calendar-previous-month"
+      before="calendar-current-month"
+      after="calendar-jump-to"
+      view=".calendar.CalendarViewBase"
+      class=".calendar.CalendarPrevMonthViewlet"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="calendar-current-month"
+      after="calendar-jump-to"
+      view=".calendar.CalendarViewBase"
+      class=".calendar.CalendarMonthViewlet"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="calendar-next-month"
+      after="calendar-jump-to calendar-current-month"
+      view=".calendar.CalendarViewBase"
+      class=".calendar.CalendarNextMonthViewlet"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      before="calendar-overlay"
+      name="calendar-tomorrow-events"
+      view=".calendar.CalendarViewBase"
+      class=".calendar.CalendarTomorrowEvents"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      permission="schooltool.view"
       />
 
   <!-- resources -->

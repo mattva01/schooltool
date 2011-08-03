@@ -1,5 +1,8 @@
 <div class="calendar-jump-to"
      i18n:domain="schooltool">
+
+  <tal:block replace="resource_library:schooltool.calendar" />
+
   <form class="center" action="">
     <div>
       <select name="jump" onChange="ST.redirect($(this).context.value);">
