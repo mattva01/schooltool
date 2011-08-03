@@ -7,7 +7,6 @@
 
   <flourish:page
       name="daily.html"
-      subtitle="Calendar"
       for="schooltool.calendar.interfaces.ISchoolToolCalendar"
       class=".calendar.FlourishDailyCalendarView"
       content_template="templates/calendar_daily.pt"
@@ -24,7 +23,6 @@
 
   <flourish:page
       name="weekly.html"
-      subtitle="Calendar"
       for="schooltool.calendar.interfaces.ISchoolToolCalendar"
       class=".calendar.FlourishWeeklyCalendarView"
       content_template="templates/calendar_weekly.pt"
@@ -33,7 +31,6 @@
 
   <flourish:page
       name="monthly.html"
-      subtitle="Calendar"
       for="schooltool.calendar.interfaces.ISchoolToolCalendar"
       class=".calendar.FlourishMonthlyCalendarView"
       content_template="templates/calendar_monthly.pt"
@@ -42,7 +39,6 @@
 
   <flourish:page
       name="yearly.html"
-      subtitle="Calendar"
       for="schooltool.calendar.interfaces.ISchoolToolCalendar"
       class=".calendar.FlourishYearlyCalendarView"
       content_template="templates/calendar_yearly.pt"

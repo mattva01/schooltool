@@ -23,6 +23,7 @@ import base64
 import datetime
 
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
+from zope.cachedescriptors.property import Lazy
 from zope.component import adapts, queryMultiAdapter
 from zope.interface import implements
 from zope.publisher.interfaces.browser import IBrowserPublisher
@@ -151,20 +152,36 @@ class FlourishDailyCalendarView(flourish.page.WideContainerPage,
                                 DailyCalendarView):
     update = DailyCalendarView.update
 
+    @property
+    def subtitle(self):
+        return DailyCalendarView.title(self)
+
 
 class FlourishWeeklyCalendarView(flourish.page.WideContainerPage,
                                  WeeklyCalendarView):
     update = WeeklyCalendarView.update
+
+    @property
+    def subtitle(self):
+        return WeeklyCalendarView.title(self)
 
 
 class FlourishMonthlyCalendarView(flourish.page.WideContainerPage,
                                   MonthlyCalendarView):
     update = MonthlyCalendarView.update
 
+    @property
+    def subtitle(self):
+        return MonthlyCalendarView.title(self)
+
 
 class FlourishYearlyCalendarView(flourish.page.WideContainerPage,
                                  YearlyCalendarView):
     update = YearlyCalendarView.update
+
+    @property
+    def subtitle(self):
+        return YearlyCalendarView.title(self)
 
 
 class CalendarJumpTo(flourish.page.Refine):
