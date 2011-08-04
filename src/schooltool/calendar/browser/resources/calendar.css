@@ -25,10 +25,25 @@
 }
 
 #calendar-view-year TABLE.month,
-#portlet-calendar-view-month TABLE.month,
+.page .refine .calendar-month TABLE.month,
 #calendar-view-month {
     background: #eae8e3;
     border: 1px #4B6983 solid;
+}
+
+.page .refine .calendar-month TABLE.month {
+    border-collapse: separate;
+    width: 140px;
+}
+
+.page .refine .calendar-month TABLE.month tbody,
+.page .refine .calendar-month TABLE.month thead {
+    border-collapse: collapse;
+}
+
+.page .refine .calendar-month table td,
+.page .refine .calendar-month table th {
+    text-align: center;
 }
 
 #calendar-view-month {
@@ -42,10 +57,11 @@
 }
 
 #calendar-view-year TABLE.month TH,
-#portlet-calendar-view-month TABLE.month TH,
+.page .refine .calendar-month TABLE.month TH,
 #calendar-view-month TH,
 #calendar-view-month TD.weekno {
     background: #9DB8D2;
+    padding: 0;
 }
 
 #calendar-view-month TD.weekno {
@@ -95,7 +111,7 @@
     padding: 1px;
 }
 
-#portlet-calendar-view-month TABLE.month TD A {
+.page .refine .calendar-month TABLE.month TD A {
     text-decoration: none;
     display: block;
     font-weight: normal;
@@ -109,7 +125,7 @@
 
 #calendar-view-year TABLE.month TD A:hover,
 #calendar-view-month TD A:hover,
-#portlet-calendar-view-month TABLE.month TD A:hover,
+.page .refine .calendar-month TABLE.month TD A:hover,
 #calendar-view-week TH A:hover {
     color: #f0f0f0;
     background: #314e6c;
@@ -119,9 +135,10 @@
 }
 
 #calendar-view-month TD.day,
-#portlet-calendar-view-month TABLE.month TD {
+.page .refine .calendar-month TABLE.month TD {
     border-right: 1px #bab5ab solid;
     border-bottom: 1px #bab5ab solid;
+    padding: 0;
 }
 
 #calendar-view-month TD.day A,
@@ -430,9 +447,6 @@
     padding: 2px 0;
 }
 
-.page .refine .calendar-overlay table td.overlay-title {
-    width: 100%;
-}
 
 .page .refine .calendar-overlay FORM {
     margin: 2px;
@@ -446,8 +460,18 @@
     margin-top: 4px;
 }
 
+.page .refine .calendar-overlay table.overlays {
+    max-width: 140px;
+}
+
 .page .refine .calendar-overlay table.overlays INPUT {
     margin-left: 0.5em;
+}
+
+.page .refine .calendar-overlay td.overlay-title {
+    overflow: hidden;
+    word-break: break-all;
+    max-width: 100px;
 }
 
 .page .refine .calendar-overlay td.overlay-go A {
@@ -466,6 +490,14 @@
 
 .page .refine .calendar-jump-to form select {
     width: 136px;
+}
+
+.page .refine .calendar-tomorrow-events ul.events {
+    width: 140px;
+}
+
+.page > .third-nav li.calendar-type {
+    float: right;
 }
 
 }

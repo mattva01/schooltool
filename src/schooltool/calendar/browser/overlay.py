@@ -33,3 +33,8 @@ class CalendarOverlayView(flourish.page.Refine, CalendarOverlayBase):
     title = _('Show')
     body_template = ViewPageTemplateFile('templates/calendar_overlay.pt')
     update = CalendarOverlayBase.update
+
+    def render(self, *args, **kw):
+        if not self.show_overlay():
+            return ''
+        return flourish.page.Refine.render(self, *args, **kw)

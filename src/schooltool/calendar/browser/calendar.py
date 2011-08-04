@@ -23,6 +23,7 @@ import base64
 import datetime
 
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
+from zope.cachedescriptors.property import Lazy
 from zope.component import adapts, queryMultiAdapter
 from zope.interface import implements
 from zope.publisher.interfaces.browser import IBrowserPublisher
@@ -36,7 +37,7 @@ from schooltool.app.browser.cal import YearlyCalendarView
 from schooltool.app.browser.cal import CalendarViewBase
 from schooltool.app.browser.cal import month_names
 from schooltool.calendar.interfaces import ICalendar
-from schooltool.calendar.utils import weeknum_bounds
+from schooltool.calendar.utils import weeknum_bounds, prev_month, next_month
 from schooltool.common.inlinept import InheritTemplate
 from schooltool.skin import flourish
 
@@ -147,24 +148,44 @@ class CalendarTraverser(object):
         return weeknum_bounds(year, week)[0]
 
 
-class FlourishDailyCalendarView(flourish.page.WideContainerPage,
+class FlourishCalendarView(flourish.page.WideContainerPage):
+    pass
+
+
+class FlourishDailyCalendarView(FlourishCalendarView,
                                 DailyCalendarView):
     update = DailyCalendarView.update
 
+    @property
+    def subtitle(self):
+        return DailyCalendarView.title(self)
 
-class FlourishWeeklyCalendarView(flourish.page.WideContainerPage,
+
+class FlourishWeeklyCalendarView(FlourishCalendarView,
                                  WeeklyCalendarView):
     update = WeeklyCalendarView.update
 
+    @property
+    def subtitle(self):
+        return WeeklyCalendarView.title(self)
 
-class FlourishMonthlyCalendarView(flourish.page.WideContainerPage,
+
+class FlourishMonthlyCalendarView(FlourishCalendarView,
                                   MonthlyCalendarView):
     update = MonthlyCalendarView.update
 
+    @property
+    def subtitle(self):
+        return MonthlyCalendarView.title(self)
 
-class FlourishYearlyCalendarView(flourish.page.WideContainerPage,
+
+class FlourishYearlyCalendarView(FlourishCalendarView,
                                  YearlyCalendarView):
     update = YearlyCalendarView.update
+
+    @property
+    def subtitle(self):
+        return YearlyCalendarView.title(self)
 
 
 class CalendarJumpTo(flourish.page.Refine):
@@ -188,3 +209,97 @@ class CalendarJumpTo(flourish.page.Refine):
                  'href': self.view.calURL('monthly',
                                           datetime.date(year, k, 1))}
                 for k, v in month_names.items()]
+
+
+class CalendarMonthViewlet(flourish.page.Refine):
+
+    body_template = ViewPageTemplateFile('templates/calendar_month_viewlet.pt')
+
+    @property
+    def cursor(self):
+        return self.view.cursor
+
+    @property
+    def month_title(self):
+        return month_names[self.cursor.month]
+
+    @property
+    def cal_url(self):
+        return self.view.calURL('monthly', self.cursor)
+
+    @property
+    def rows(self):
+        result = []
+        cursor = self.cursor
+        month = self.view.getMonth(cursor)
+        for week in month:
+            result.append(self.view.renderRow(week, cursor.month))
+        return result
+
+
+class CalendarPrevMonthViewlet(CalendarMonthViewlet):
+
+    @Lazy
+    def cursor(self):
+        return prev_month(self.view.cursor)
+
+
+class CalendarNextMonthViewlet(CalendarMonthViewlet):
+
+    @Lazy
+    def cursor(self):
+        return next_month(self.view.cursor)
+
+
+class CalendarTomorrowEvents(flourish.page.Refine):
+
+    body_template = ViewPageTemplateFile('templates/calendar_tomorrow_events.pt')
+
+    title = _("Tomorrow's Events")
+
+    @property
+    def cursor(self):
+        today = self.view.today
+        tomorrow = today + today.resolution
+        return tomorrow
+
+    @Lazy
+    def events(self):
+        cursor = self.cursor
+        all_events = self.view.dayEvents(cursor)
+        timezone = self.view.timezone
+        get_time = lambda t: t.astimezone(timezone).strftime('%H:%M')
+        result = [{'event': e, 'time': get_time(e.dtstart)}
+                  for e in all_events
+                  if e.dtstart.date() == cursor]
+        return result
+
+    def render(self, *args, **kw):
+        if not self.events:
+            return ''
+        return flourish.page.Refine.render(self, *args, **kw)
+
+
+class CalendarTertiaryNavigation(flourish.page.Content):
+    template = ViewPageTemplateFile('templates/calendar_tertiary_nav.pt')
+
+    mode_types = (
+        ('daily', _('Daily')),
+        ('weekly', _('Weekly')),
+        ('monthly', _('Monthly')),
+        ('yearly', _('Yearly')),
+        )
+
+    @property
+    def modes(self):
+        result = []
+        for mode, title in self.mode_types:
+            cls = "calendar-type"
+            if mode == self.view.cal_type:
+                cls += " active"
+            result.append({
+                    'title': title,
+                    'url': self.view.calURL(mode),
+                    'class': cls,
+                    })
+        return result
