@@ -107,6 +107,40 @@
       permission="zope.Public"
       />
 
+  <!-- event -->
+
+  <flourish:page
+      name="index.html"
+      for="schooltool.calendar.interfaces.ICalendarEvent"
+      class=".event.FlourishCalendarEventView"
+      content_template="templates/event.pt"
+      permission="zope.View"
+      />
+
+  <flourish:page
+      name="edit.html"
+      for="schooltool.calendar.interfaces.ISchoolToolCalendarEvent"
+      class=".event.FlourishCalendarEventEditView"
+      permission="schooltool.edit"
+      content_template="templates/event_edit.pt"
+      />
+
+  <flourish:page
+      name="add.html"
+      for="schooltool.calendar.interfaces.ISchoolToolCalendar"
+      class=".event.FlourishCalendarEventAddView"
+      permission="schooltool.edit"
+      content_template="templates/event_edit.pt"
+      />
+
+  <flourish:page
+      name="booking.html"
+      for="schooltool.calendar.interfaces.ISchoolToolCalendarEvent"
+      class=".event.FlourishCalendarEventBookingView"
+      permission="schooltool.view"
+      content_template="templates/event_booking.pt"
+      />
+
   <!-- resources -->
 
   <zope:resourceLibrary

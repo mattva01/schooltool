@@ -121,7 +121,7 @@
        tal:attributes="href event/deleteLink;
                        title string:Delete ${event/title}"
        i18n:attributes="title"
-      ><img alt="[X]" tal:attributes="src context/++resource++delete.png"
+      ><img alt="[X]" tal:attributes="src context/++resource++schooltool.calendar/delete.png"
             /></a>
   </tal:if_can_remove_events>
 </metal:block>

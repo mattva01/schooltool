@@ -1,0 +1,61 @@
+<div i18n:domain="schooltool"
+     tal:define="batch view/batch">
+
+<form tal:attributes="action request/URL" method="post" class="standalone booking_form">
+
+  <fieldset>
+    <div>
+      <strong i18n:translate="">Title:</strong>
+      <span tal:replace="context/title">not_doe</span>
+    </div>
+    <div>
+      <strong i18n:translate="">Starts:</strong>
+      <span tal:replace="view/start"/>
+    </div>
+    <div>
+      <strong i18n:translate="">Ends:</strong>
+      <span tal:replace="view/end"/>
+    </div>
+    <div tal:condition="context/recurrence">
+      <strong i18n:translate="">This is a recurring event!</strong>
+    </div>
+  </fieldset>
+
+  <input type="hidden" tal:condition="request/date|nothing"
+         name="date" tal:attributes="value request/date" />
+
+    <fieldset tal:condition="view/hasBookedItems">
+      <legend i18n:translate="">Booked resources</legend>
+
+      <tal:block replace="structure view/renderBookedTable" />
+        <div class="buttons">
+          <input type="submit" class="button-ok" name="UNBOOK"
+                 value="UnBook"
+                 title="Shortcut: Alt-A" accesskey="A"
+                 i18n:attributes="value; accesskey" />
+        </div>
+
+    </fieldset>
+
+    <fieldset>
+      <legend i18n:translate="">Available resources</legend>
+      <div class="item_list">
+        <tal:block replace="structure batch/render" />
+        <tal:block replace="structure view/filter_widget/render" />
+        <tal:block replace="structure view/renderAvailableTable" />
+        <div class="buttons">
+          <input type="submit" class="button-ok" name="BOOK"
+                 value="Book" tal:condition="batch"
+                 title="Shortcut: Alt-A" accesskey="A"
+                 i18n:attributes="value; accesskey" />
+          <tal:block metal:use-macro="view/@@standard_macros/cancel-button" />
+        </div>
+        <p tal:condition="not:batch" i18n:translate="">
+          There are none to add.
+        </p>
+      </div>
+    </fieldset>
+
+</form>
+
+</div>
