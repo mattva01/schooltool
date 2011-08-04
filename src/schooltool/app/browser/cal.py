@@ -2600,6 +2600,7 @@ class CalendarEventBreadcrumbInfo(GenericBreadcrumbInfo):
             (self.context.__parent__, self.request), IBreadcrumbInfo)
         return '%s/%s/edit.html' %(parent_info.url, name)
 
+
 CalendarBreadcrumbInfo = CustomNameBreadCrumbInfo(_('Calendar'))
 
 
@@ -2616,6 +2617,7 @@ class CalendarMenuViewletCrowd(Crowd):
                              ICrowd,
                              name="schooltool.view")
         return crowd.contains(principal)
+
 
 class ICalendarPortletViewletManager(IViewletManager):
     """ Interface for the Calendar Portlet Viewlet Manager """
