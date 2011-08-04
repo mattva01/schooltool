@@ -5,7 +5,7 @@
   <tal:block content="structure refine" />
 </div>
 
-<div class="container">
+<div tal:attributes="class view/container_class">
   <div class="main"
        tal:define="main_content view/content_template|nothing"
        tal:condition="main_content">
