@@ -136,6 +136,15 @@
 
   <!-- Site control page -->
 
+  <flourish:viewlet
+      name="server-settings-overview"
+      after="email-settings-overview"
+      view="schooltool.app.browser.app.ManageSite"
+      permission="schooltool.edit"
+      manager="schooltool.skin.flourish.page.IPageContentManager"
+      class=".app.FlourishServerSettingsOverview"
+      />
+
   <flourish:page
       name="settings"
       for="schooltool.app.interfaces.ISchoolToolApplication"
@@ -166,6 +175,16 @@
       view="schooltool.app.browser.app.ManageSite"
       title="Settings"
       permission="schooltool.edit"
+      />
+
+  <flourish:viewlet
+      name="server-actions-links"
+      after="manage_site_links"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      class="schooltool.app.browser.app.ServerActionsLinks"
+      title="Actions"
+      permission="schooltool.edit"
+      view="schooltool.app.browser.app.ManageSite"
       />
 
   <flourish:activeViewlet
@@ -280,7 +299,7 @@
       permission="schooltool.view"
       for="zope.app.applicationcontrol.interfaces.IApplicationControl"
       layer="schooltool.skin.flourish.IFlourishLayer"
-      title="Application Control"
+      title="Server"
       name="title" />
 
   <flourish:viewlet
@@ -288,23 +307,14 @@
       manager="schooltool.skin.flourish.page.IPageRefineManager"
       class=".app.ApplicationControlLinks"
       for="zope.app.applicationcontrol.interfaces.IApplicationControl"
-      view="zope.app.applicationcontrol.browser.runtimeinfo.RuntimeInfoView"
+      view=".app.FlourishRuntimeInfoView"
       title="Actions"
-      permission="schooltool.edit"
-      />
-
-  <flourish:viewlet
-      name="ZODBControl.html"
-      title="ZODB Control"
-      class="schooltool.skin.flourish.page.LinkViewlet"
-      manager=".app.ApplicationControlLinks"
       permission="schooltool.edit"
       />
 
   <flourish:viewlet
       name="TranslationDomain.html"
       title="Translation Domains"
-      after="ZODBControl.html"
       class="schooltool.skin.flourish.page.LinkViewlet"
       manager=".app.ApplicationControlLinks"
       permission="schooltool.edit"
@@ -323,17 +333,9 @@
       for="zope.app.applicationcontrol.interfaces.IApplicationControl"
       name="index.html"
       content_template="templates/f_runtimeinfo.pt"
-      class="zope.app.applicationcontrol.browser.runtimeinfo.RuntimeInfoView"
+      class=".app.FlourishRuntimeInfoView"
       permission="schooltool.edit"
-      />
-
-  <flourish:page
-      for="zope.app.applicationcontrol.interfaces.IApplicationControl"
-      name="ZODBControl.html"
-      content_template="templates/f_zodbcontrol.pt"
-      class=".app.SchoolToolZODBControlView"
-      permission="schooltool.edit"
-      subtitle="ZODB Control"
+      subtitle="Information"
       />
 
   <flourish:page
@@ -352,6 +354,22 @@
       class="zope.app.generations.browser.managers.Managers"
       permission="schooltool.edit"
       subtitle="Database generations"
+      />
+
+  <flourish:viewlet
+      name="packDatabase.html"
+      title="Pack Database"
+      class=".app.PackDatabaseLink"
+      manager=".app.ServerActionsLinks"
+      permission="schooltool.edit"
+      />
+
+  <flourish:page
+      name="packDatabase.html"
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      class=".app.PackDatabaseView"
+      template="templates/f_pack_database.pt"
+      permission="schooltool.edit"
       />
 
 </configure>

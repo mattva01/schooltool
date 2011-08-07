@@ -36,8 +36,12 @@ from zope.app.form.browser.add import AddView
 from zope.app.form.browser.editview import EditView
 from zope.app.form.interfaces import IInputWidget
 from zope.app.form.interfaces import WidgetsError
+from zope.app.applicationcontrol.browser.runtimeinfo import RuntimeInfoView
 from zope.app.applicationcontrol.browser.zodbcontrol import ZODBControlView
+from zope.app.applicationcontrol.interfaces import IApplicationControl
+from zope.app.applicationcontrol.interfaces import IRuntimeInfo
 from zope.authentication.interfaces import IUnauthenticatedPrincipal
+from zope.i18n import translate
 from zope.publisher.browser import BrowserView
 from zope.component import getMultiAdapter, queryMultiAdapter
 from zope.component import getUtility
@@ -73,6 +77,7 @@ from schooltool.skin.skin import OrderedViewletManager
 from schooltool.skin.breadcrumbs import CustomNameBreadCrumbInfo
 from schooltool.skin import flourish
 from schooltool.skin.flourish.form import Form
+from schooltool.skin.flourish.form import Dialog
 
 from schooltool.common import SchoolToolMessage as _
 
@@ -713,6 +718,10 @@ class ManageSchoolNavLink(flourish.page.LinkViewlet):
 class ManageSite(flourish.page.Page):
     pass
 
+ 
+class ServerActionsLinks(flourish.page.RefineLinksViewlet):
+    """Server actions links viewlet."""
+
 
 class ManageSchool(flourish.page.Page):
     pass
@@ -737,19 +746,81 @@ class ApplicationControlLinks(flourish.page.RefineLinksViewlet):
     """Application Control links viewlet."""
 
 
-class SchoolToolZODBControlView(ZODBControlView):
+class FlourishRuntimeInfoView(RuntimeInfoView, ZODBControlView):
+
+    def dbSettings(self):
+        result = {}
+        database_settings = self.databases[0]
+        result['dbSize'] = database_settings['size']
+        result['dbName'] = database_settings['dbName']
+        return result
 
     def update(self):
-        self.errors = []
+        pass
+
+
+class FlourishServerSettingsOverview(flourish.page.Content,
+                                     ZODBControlView,
+                                     RuntimeInfoView):
+
+    body_template = ViewPageTemplateFile(
+        'templates/f_server_settings_overview.pt')
+
+    @property
+    def settings(self):
+        result = {}
+        database_settings = self.databases[0]
+        result['dbSize'] = database_settings['size']
+        result['dbName'] = database_settings['dbName']
+        control_settings = (
+            'Uptime',
+            'SystemPlatform',
+            'PythonVersion',
+            'CommandLine',
+            )
+        runtimeInfo = self.runtimeInfo()
+        for setting in control_settings:
+            result[setting] = runtimeInfo.get(setting)
+        return result
+
+    def runtimeInfo(self):
+        application_control = IApplicationControl(self.context)
+        try:
+            ri = IRuntimeInfo(application_control)
+        except TypeError:
+            formatted = dict.fromkeys(self._fields, self._unavailable)
+            formatted["Uptime"] = self._unavailable
+        else:
+            formatted = self._getInfo(ri)
+        return formatted
+
+
+class PackDatabaseLink(flourish.page.ModalFormLinkViewlet):
+
+    @property
+    def dialog_title(self):
+        title = _(u'Pack Database')
+        return translate(title, context=self.request)
+
+
+class PackDatabaseView(Dialog):
+
+    def updateDialog(self):
+        # XXX: fix the width of dialog content in css
+        if self.ajax_settings['dialog'] != 'close':
+            self.ajax_settings['dialog']['width'] = 544 + 16
+
+    def update(self):
+        Dialog.update(self)
+        if 'DONE' in self.request:
+            url = absoluteURL(self.context, self.request) + '/settings'
+            self.request.response.redirect(url)
+            return
         days = 0
-        dbs = self.request.form.get('dbs', [])
-        for dbName in dbs:
-            db = getUtility(IDatabase, name=dbName)
-            try:
-                db.pack(days=days)
-                self.status = _('ZODB "${name}" successfully packed.',
-                                mapping=dict(name=str(dbName)))
-            except FileStorageError, err:
-                self.status = _('There were errors.')
-                self.errors.append(_('ERROR packing ZODB "${name}": ${err}',
-                                     mapping=dict(name=str(dbName), err=err)))
+        db = getUtility(IDatabase, name='')
+        try:
+            db.pack(days=days)
+            self.status = _('Database successfully packed.')
+        except FileStorageError, err:
+            self.status = _('There were errors while packing the database: ${error}',
+                            mapping={'error': err})
