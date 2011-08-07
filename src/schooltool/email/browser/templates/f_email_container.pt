@@ -70,4 +70,9 @@
     <metal:block define-slot="bottom">
     </metal:block>
   </metal:block>
+  <h3>
+    <a tal:attributes="href view/done_link" i18n:translate="">
+      Done
+    </a>
+  </h3>
 </metal:block>

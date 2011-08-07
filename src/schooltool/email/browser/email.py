@@ -47,6 +47,7 @@ from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.skin.containers import TableContainerView
 from schooltool.skin import flourish
+from schooltool.skin.flourish.form import Form
 from schooltool.table.table import SchoolToolTableFormatter
 from schooltool.table.table import ImageInputColumn
 from schooltool.table.table import simple_form_key
@@ -197,13 +198,12 @@ class EmailSettingsEditView(form.EditForm):
             self.widgets['dummy_password'].value = mask
 
 
-class FlourishEmailSettingsEditView(flourish.page.Page, form.EditForm):
+class FlourishEmailSettingsEditView(Form, form.EditForm):
 
     label = None
     legend = _('Settings')
     fields = field.Fields(IEmailSettingsEditForm)
     fields = fields.omit('server_status', 'dummy_password')
-    formErrorsMessage = _('Please correct the marked fields below.')
 
     def update(self):
         form.EditForm.update(self)
@@ -391,7 +391,7 @@ class EmailView(form.Form):
 class FlourishEmailView(flourish.page.Page, EmailView):
 
     label = None
-    legend = _('Email View')
+    legend = _('Email Details')
     fields = field.Fields(IEmailDisplayForm).omit('server_status')
 
     def update(self):
@@ -592,6 +592,10 @@ class FlourishEmailContainerView(flourish.page.Page,
             mask = '*'*len(self.context.password)
             self.widgets['dummy_password'].value = mask
 
+    def done_link(self):
+        app = ISchoolToolApplication(None)
+        return '%s/settings' % absoluteURL(app, self.request)
+
 
 class FlourishEmailQueueView(flourish.containers.TableContainerView):
 
@@ -723,11 +727,10 @@ class SendEmailView(form.Form):
         set_server_status_message(self, self.context)
 
 
-class FlourishSendEmailView(flourish.page.Page, SendEmailView):
+class FlourishSendEmailView(Form, SendEmailView):
 
     label = None
     legend = _('Email')
-    formErrorsMessage = _('Please correct the marked fields below.')
     fields = field.Fields(ISendEmailForm).omit('server_status')
 
     def update(self):
@@ -776,6 +779,20 @@ class EmailQueueLinkViewlet(flourish.page.LinkViewlet):
     def title(self):
         count = len(self.context)
         if count:
-            return _('Email queue (${count})', mapping={'count': count})
+            return _('Email Queue (${count})', mapping={'count': count})
         else:
-            return _('Email queue')
+            return _('Email Queue')
+
+
+class FlourishEmailSettingsOverview(flourish.page.Content):
+
+    body_template = ViewPageTemplateFile(
+        'templates/f_email_settings_overview.pt')
+
+    @property
+    def email_status(self):
+        email = IEmailContainer(self.context)
+        if email.enabled:
+            return _('Enabled')
+        else:
+            return  _('Disabled')
