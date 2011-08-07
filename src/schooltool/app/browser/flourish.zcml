@@ -173,28 +173,23 @@
       manager="schooltool.skin.flourish.page.RefineLinksViewlet"
       />
 
-  <flourish:viewlet
-      name="manage_site_links"
-      before="manage_school_links"
-      manager="schooltool.skin.flourish.page.IPageRefineManager"
-      class="schooltool.app.browser.app.ManageSiteLinks"
-      view="schooltool.app.browser.app.FlourishApplicationPreferencesView"
-      title="Application"
-      permission="schooltool.edit"
-      />
+  <configure package="schooltool.skin.flourish">
 
-  <flourish:page
-      name="site-preferences.html"
-      subtitle="Site preferences"
-      for="schooltool.app.interfaces.ISchoolToolApplication"
-      class="schooltool.app.browser.app.FlourishApplicationPreferencesView"
-      content_template="templates/f_application_preferences.pt"
-      permission="schooltool.edit"
-      />
+    <flourish:page
+        name="site-preferences.html"
+        title="Server"
+        subtitle="Calendar Settings"
+        for="schooltool.app.interfaces.ISchoolToolApplication"
+        class="schooltool.app.browser.app.FlourishApplicationPreferencesView"
+        content_template="templates/z3c-schooltool-form.pt"
+        permission="schooltool.edit"
+        />
+
+  </configure>
 
   <flourish:viewlet
       name="site-preferences.html"
-      title="Site Preferences"
+      title="Calendar"
       class="schooltool.skin.flourish.page.LinkViewlet"
       manager="schooltool.app.browser.app.ManageSiteLinks"
       permission="schooltool.edit"
