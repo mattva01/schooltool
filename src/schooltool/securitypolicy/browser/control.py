@@ -23,6 +23,7 @@ Security description views for SchoolTool security policy.
 from zope.publisher.browser import BrowserView
 from zope.component import queryMultiAdapter
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
+from zope.traversing.browser import absoluteURL
 
 from schooltool.securitypolicy.metaconfigure import getCrowdsUtility
 from schooltool.securitypolicy.metaconfigure import getDescriptionUtility
@@ -112,6 +113,9 @@ class AdministrationSnippets(CrowdDescriptionSnippetBase):
 
 
 class SecurityDescriptions(BrowserView):
+
+    def done_link(self):
+        return '%s/settings' % absoluteURL(self.context, self.request)
 
     def legends(self):
         # XXX: hacky legend builder (for eye-candy)

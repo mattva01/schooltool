@@ -9,7 +9,8 @@
 
     <flourish:page
         name="security.html"
-        subtitle="Access Rights"
+        title="Server"
+        subtitle="Security"
         for="schooltool.app.interfaces.ISchoolToolApplication"
         class=".control.SecurityDescriptions"
         content_template="templates/f_security_descriptions.pt"
@@ -23,18 +24,8 @@
         />
 
     <flourish:viewlet
-        name="manage_site_links"
-        before="manage_school_links"
-        manager="schooltool.skin.flourish.page.IPageRefineManager"
-        class="schooltool.app.browser.app.ManageSiteLinks"
-        view=".control.SecurityDescriptions"
-        title="Application"
-        permission="schooltool.edit"
-        />
-
-    <flourish:viewlet
         name="security.html"
-        title="Access Rights"
+        title="Security"
         class="schooltool.skin.flourish.page.LinkViewlet"
         manager="schooltool.app.browser.app.ManageSiteLinks"
         permission="schooltool.edit"
@@ -42,7 +33,8 @@
 
     <flourish:page
         name="access_control.html"
-        subtitle="Access Control"
+        title="Server"
+        subtitle="Access Rights"
         for="schooltool.app.interfaces.ISchoolToolApplication"
         class=".views.FlourishAccessControlView"
         content_template="templates/f_access_control.pt"
@@ -53,24 +45,6 @@
         name="manage_site"
         manager="schooltool.skin.flourish.page.IHeaderNavigationManager"
         view=".views.AccessControlView"
-        />
-
-    <flourish:viewlet
-        name="manage_site_links"
-        before="manage_school_links"
-        manager="schooltool.skin.flourish.page.IPageRefineManager"
-        class="schooltool.app.browser.app.ManageSiteLinks"
-        view=".views.AccessControlView"
-        title="Application"
-        permission="schooltool.edit"
-        />
-
-    <flourish:viewlet
-        name="access_control.html"
-        title="Access Control"
-        class="schooltool.skin.flourish.page.LinkViewlet"
-        manager="schooltool.app.browser.app.ManageSiteLinks"
-        permission="schooltool.edit"
         />
 
   </configure>

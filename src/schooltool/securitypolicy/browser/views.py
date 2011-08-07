@@ -80,7 +80,8 @@ class FlourishAccessControlView(AccessControlView):
             for setting in self.settings():
                 val = self.request.get(prefix + setting.key, 'False')
                 setting.setValue(bool(val != 'False'))
-            self.status = _('Data successfully updated.')
+            url = absoluteURL(self.context, self.request) + '/security.html'
+            self.request.response.redirect(url)
         elif 'CANCEL' in self.request:
-            url = absoluteURL(self.context, self.request) + '/settings'
+            url = absoluteURL(self.context, self.request) + '/security.html'
             self.request.response.redirect(url)

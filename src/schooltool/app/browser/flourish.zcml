@@ -139,7 +139,7 @@
   <flourish:page
       name="settings"
       for="schooltool.app.interfaces.ISchoolToolApplication"
-      subtitle="Site Settings"
+      title="Server"
       class="schooltool.app.browser.app.ManageSite"
       permission="schooltool.edit"
       />
@@ -148,7 +148,7 @@
       name="manage_site"
       manager="schooltool.skin.flourish.page.IHeaderNavigationManager"
       class="schooltool.app.browser.app.ManageSiteNavLink"
-      title="Application"
+      title="Server"
       permission="schooltool.edit"
       />
 
@@ -164,7 +164,7 @@
       manager="schooltool.skin.flourish.page.IPageRefineManager"
       class="schooltool.app.browser.app.ManageSiteLinks"
       view="schooltool.app.browser.app.ManageSite"
-      title="Application"
+      title="Settings"
       permission="schooltool.edit"
       />
 
