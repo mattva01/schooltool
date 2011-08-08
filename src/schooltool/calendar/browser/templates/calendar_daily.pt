@@ -120,6 +120,7 @@
        tal:condition="event/deleteLink"
        tal:attributes="href event/deleteLink;
                        title string:Delete ${event/title}"
+       onclick="return ST.dialogs.open_modal_link(this, 'daily-calendar-delete-event-container');"
        i18n:attributes="title"
       ><img alt="[X]" tal:attributes="src context/++resource++schooltool.calendar/delete.png"
             /></a>

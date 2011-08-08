@@ -1,0 +1,24 @@
+<div>
+  <h3 i18n:translate="">
+    Deleting an event on
+    <tal:block content="view/day_title"
+               i18n:name="day" />.
+  </h3>
+
+  <p tal:condition="view/event/allday" i18n:translate="">
+    This is an all day event.
+  </p>
+
+  <p i18n:translate="" tal:condition="view/recurrent">
+    You are deleting a repeating event.
+  </p>
+
+<div metal:use-macro="macro:form">
+  <div metal:fill-slot="extra-widgets">
+    <input type="hidden" name="event_id"
+           tal:attributes="value request/event_id" />
+    <input type="hidden" name="date"
+           tal:attributes="value request/date" />
+  </div>
+</div>
+</div>

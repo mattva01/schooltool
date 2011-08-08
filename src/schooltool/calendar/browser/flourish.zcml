@@ -142,11 +142,19 @@
       content_template="templates/event_booking.pt"
       />
 
+  <flourish:page
+      name="delete.html"
+      for="schooltool.calendar.interfaces.ISchoolToolCalendar"
+      class=".event.DeleteEventDialog"
+      template="templates/event_delete_dialog.pt"
+      permission="schooltool.edit"
+      />
+
   <!-- resources -->
 
   <zope:resourceLibrary
       name="schooltool.calendar"
-      require=""
+      require="schooltool.skin.flourish"
       layer="schooltool.skin.flourish.IFlourishLayer">
     <directory
         source="resources"

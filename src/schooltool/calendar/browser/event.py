@@ -20,20 +20,35 @@
 SchoolTool calendar event views.
 """
 
+import datetime
+
 import zope.formlib.interfaces
 import zope.formlib.widget
 from zope import formlib
+from zope.i18n import translate
+from zope.interface import Interface
+from zope.cachedescriptors.property import Lazy
 from zope.component import getMultiAdapter
+from zope.security.proxy import removeSecurityProxy
+from zope.traversing.browser.absoluteurl import absoluteURL
+
 import zc.table.table
+import z3c.form.browser.radio
+from z3c.form import form, field, button, widget, validator
 
 import schooltool.skin.flourish.page
-from schooltool.calendar.app import CalendarEvent
+import schooltool.skin.flourish.form
+from schooltool.app.browser import ViewPreferences
 from schooltool.app.browser.cal import CalendarEventView
 from schooltool.app.browser.cal import ICalendarEventAddForm
 from schooltool.app.browser.cal import CalendarEventAddView
 from schooltool.app.browser.cal import ICalendarEventEditForm
 from schooltool.app.browser.cal import CalendarEventEditView
 from schooltool.app.browser.cal import CalendarEventBookingView
+from schooltool.app.utils import vocabulary
+from schooltool.calendar.app import CalendarEvent
+from schooltool.calendar.interfaces import ICalendar
+from schooltool.calendar.utils import parse_date
 from schooltool.skin import flourish
 from schooltool.table.table import ImageInputColumn
 from schooltool.table.table import label_cell_formatter_factory
@@ -158,3 +173,129 @@ class FlourishCalendarEventBookingView(flourish.page.Page,
 
 
         return formatter()
+
+
+class IDeleteRecurringEventForm(Interface):
+
+    delete = zope.schema.Choice(
+        title=_("Delete"),
+        vocabulary=vocabulary([
+                ("all", _("All occurances of this event")),
+                ("current", _("Only current occurance")),
+                ("future", _("This and all future occurances"))]),
+        default="current",
+        required=True,
+        )
+
+
+class DeleteEventDialog(flourish.form.DialogForm):
+    """A view for deleting events."""
+
+    dialog_submit_actions = ('delete',)
+    dialog_close_actions = ('cancel',)
+    label = None
+    data = None
+
+    @Lazy
+    def event(self):
+        event_id = self.request.get('event_id', None)
+        if event_id is None:
+            return None
+        try:
+            return self.context.find(event_id)
+        except KeyError:
+            return None
+
+    @Lazy
+    def date(self):
+        event_date = self.request.get('date', None)
+        if event_date is None:
+            return None
+        return parse_date(event_date)
+
+    def initDialog(self):
+        super(DeleteEventDialog, self).initDialog()
+        title = _(u'Delete event ${event}',
+                  mapping={'event': self.event.title})
+        self.ajax_settings['dialog']['title'] = translate(
+            title, context=self.request)
+        self.ajax_settings['dialog']['width'] = 544 + 16
+
+    def nextURL(self):
+        return (self.request.get('back_url') or
+                absoluteURL(self.context, self.request))
+
+    @Lazy
+    def recurrent(self):
+        return self.event.recurrence is not None
+
+    @Lazy
+    def day_title(self):
+        preferences = ViewPreferences(self.request)
+        dayformat = '%A, ' + preferences.dateformat
+        return unicode(self.event.dtstart.strftime(dayformat))
+
+    def modifyRecurrence(self, event, **kwargs):
+        """Modify the recurrence rule of an event.
+
+        If the event does not have any recurrences afterwards, it is removed
+        from the parent calendar
+        """
+        rrule = event.recurrence
+        new_rrule = rrule.replace(**kwargs)
+        # This view requires the modifyEvent permission.
+        event.recurrence = removeSecurityProxy(new_rrule)
+        if not event.hasOccurrences():
+            ICalendar(event).removeEvent(removeSecurityProxy(event))
+
+    def deleteCurrent(self):
+        exceptions = self.event.recurrence.exceptions + (self.date, )
+        self.modifyRecurrence(self.event, exceptions=exceptions)
+
+    def deleteFuture(self):
+        self.modifyRecurrence(
+            self.event, until=(self.date - datetime.timedelta(1)),
+            count=None)
+
+    def deleteAll(self):
+        self.context.removeEvent(removeSecurityProxy(self.event))
+
+    delete_handlers = {
+        'all': deleteAll,
+        'current': deleteCurrent,
+        'future': deleteFuture,
+        }
+
+    def updateActions(self):
+        super(DeleteEventDialog, self).updateActions()
+        self.actions['delete'].addClass('button-ok')
+        self.actions['cancel'].addClass('button-cancel')
+
+    def update(self):
+        self.data = {}
+        if self.recurrent:
+            self.fields = field.Fields(IDeleteRecurringEventForm)
+            radio_widget = z3c.form.browser.radio.RadioFieldWidget
+            self.fields['delete'].widgetFactory = radio_widget
+        super(DeleteEventDialog, self).update()
+
+    def getContent(self):
+        return self.data
+
+    @button.buttonAndHandler(_("Delete"), name='delete')
+    def handleDelete(self, action):
+        data, errors = self.extractData()
+        if self.recurrent:
+            handler = self.delete_handlers.get(data['delete'], None)
+        else:
+            handler = self.delete_handlers['all']
+
+        if handler is not None:
+            next_url = self.nextURL()
+            handler(self)
+            self.request.response.redirect(next_url)
+            self.ajax_settings['dialog'] = 'close'
+
+    @button.buttonAndHandler(_("Cancel"))
+    def handle_cancel_action(self, action):
+        pass
