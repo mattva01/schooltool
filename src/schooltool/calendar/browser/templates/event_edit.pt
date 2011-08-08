@@ -1,5 +1,7 @@
-<div i18n:domain="schooltool">
+<div i18n:domain="schooltool"
+     class="calendar-event">
 
+  <tal:block replace="resource_library:schooltool.calendar" />
 
   <script type="text/javascript">
     function recurrence_changed() {
@@ -130,13 +132,22 @@
 
   <form id="form" class="standalone" method="post" enctype="multipart/form-data"
         tal:attributes="action request/URL">
-    <h3 i18n:translate="">Event information</h3>
+
+    <div class="status"
+         tal:condition="view/errors">
+      <div class="summary ui-state-error ui-corner-all">
+        <span class="ui-icon ui-icon-alert">icon</span>
+        <tal:block i18n:translate="">
+          Please correct the marked fields below.
+        </tal:block>
+      </div>
+    </div>
 
     <div class="error" tal:condition="view/error" tal:content="view/error" />
     <input type="hidden" tal:condition="request/date|nothing"
            name="date" tal:attributes="value request/date" />
     <fieldset>
-      <legend i18n:translate="">Event details</legend>
+      <legend i18n:translate=""><span>Event details</span></legend>
 
       <div class="row" tal:define="widget nocall:view/title_widget">
         <div metal:use-macro="context/@@form_macros/widget_row" />
@@ -186,7 +197,7 @@
       </div>
 
       <div class="row" tal:condition="view/show_book_checkbox">
-        <div class="field">
+        <div class="widget">
           <input class="hiddenType" id="field.book.used" name="field.book.used" type="hidden" value="" />
           <input class="checkboxType" id="field.book" name="field.book" type="checkbox" value="on"
                  tal:attributes="checked request/field.book|nothing" />
@@ -199,7 +210,7 @@
       </div>
 
       <div id="recurrence_box">
-        <div class="controls" id="update_box">
+        <div class="buttons" id="update_box">
           <input class="button-ok" name="UPDATE" type="submit"
             value="Update form" i18n:attributes="value" />
         </div>
@@ -228,7 +239,7 @@
         </div>
         <!-- weekly box -->
         <fieldset id="weekly_row">
-          <legend i18n:translate="">Weekly</legend>
+          <legend i18n:translate=""><span>Weekly</span></legend>
           <p id="weekly_par" i18n:translate="">
             This section only applies when weekly recurrence is selected.
           </p>
@@ -249,7 +260,7 @@
         <!-- monthly box -->
         <fieldset id="monthly_box" class=""
                   tal:define="monthly_value python:view.monthly_widget._getFormValue()">
-          <legend i18n:translate="">Monthly</legend>
+          <legend i18n:translate=""><span>Monthly</span></legend>
           <p id="monthly_par" i18n:translate="">
             This section only applies when the monthly recurrence is selected.
           </p>
@@ -370,7 +381,7 @@ function calOnSelect(cal) {
 
     <div class="resources" tal:condition="view/show_book_link">
       <fieldset>
-        <legend i18n:translate="">Booked Resources</legend>
+        <legend i18n:translate=""><span>Booked Resources</span></legend>
         <table width="100%" condition="context/resources">
           <tr>
             <th align="left">Title</th>
@@ -396,7 +407,7 @@ function calOnSelect(cal) {
       </fieldset>
     </div>
 
-    <div class="controls">
+    <div class="buttons">
       <input type="submit" class="button-ok" name="UPDATE_SUBMIT"
              tal:attributes="value view/submit_button_title"
              i18n:attributes="title" title="Shortcut: Alt-A" accesskey="A" />
