@@ -1,61 +1,94 @@
-<div i18n:domain="schooltool"
-     tal:define="batch view/batch">
+<div i18n:domain="schooltool">
 
-<form tal:attributes="action request/URL" method="post" class="standalone booking_form">
+  <tal:block replace="resource_library:schooltool.calendar" />
 
-  <fieldset>
-    <div>
-      <strong i18n:translate="">Title:</strong>
-      <span tal:replace="context/title">not_doe</span>
+  <h2 i18n:translate="">Event Details</h2>
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <span i18n:translate="">Title</span>
+        </td>
+        <td>
+          <span tal:content="context/title">[event title]</span>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <span i18n:translate="">Starts</span>
+        </td>
+        <td>
+          <span tal:content="view/start">[start time]</span>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <span i18n:translate="">Ends</span>
+        </td>
+        <td>
+          <span tal:content="view/end">[end time]</span>
+        </td>
+      </tr>
+      <tr tal:condition="context/recurrence">
+        <td colspan="2">
+          <span i18n:translate="">This is a recurring event!</span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+<tal:block define="booked view/getBookedItems">
+  <h2 i18n:translate="">Reserved Resources</h2>
+
+  <p tal:condition="not:booked" i18n:translate="">
+    There are none.
+  </p>
+
+  <form tal:attributes="action request/URL"
+        tal:condition="booked"
+        method="post"
+        class="standalone booking_form">
+
+    <tal:block replace="structure view/renderBookedTable" />
+
+    <input type="hidden" tal:condition="request/date|nothing"
+           name="date" tal:attributes="value request/date" />
+    <input type="hidden" name="UNBOOK" value="dummy" />
+
+  </form>
+
+</tal:block>
+
+<h3>
+  <a tal:attributes="href string:${context/@@absolute_url}/edit.html"
+     i18n:translate="">Done</a>
+</h3>
+
+
+<tal:block define="available view/getAvailableItems">
+  <h2 i18n:translate="">Available Resources</h2>
+
+  <p tal:condition="not:available" i18n:translate="">
+    There are none to add.
+  </p>
+
+  <form tal:attributes="action request/URL"
+        tal:condition="available"
+        method="post"
+      class="standalone booking_form">
+
+    <input type="hidden" tal:condition="request/date|nothing"
+           name="date" tal:attributes="value request/date" />
+
+    <div class="item_list"
+         tal:define="batch view/batch">
+      <tal:block replace="structure batch/render" />
+      <tal:block replace="structure view/filter_widget/render" />
+      <tal:block replace="structure view/renderAvailableTable" />
+      <input type="hidden" name="BOOK" value="dummy" />
     </div>
-    <div>
-      <strong i18n:translate="">Starts:</strong>
-      <span tal:replace="view/start"/>
-    </div>
-    <div>
-      <strong i18n:translate="">Ends:</strong>
-      <span tal:replace="view/end"/>
-    </div>
-    <div tal:condition="context/recurrence">
-      <strong i18n:translate="">This is a recurring event!</strong>
-    </div>
-  </fieldset>
 
-  <input type="hidden" tal:condition="request/date|nothing"
-         name="date" tal:attributes="value request/date" />
-
-    <fieldset tal:condition="view/hasBookedItems">
-      <legend i18n:translate="">Booked resources</legend>
-
-      <tal:block replace="structure view/renderBookedTable" />
-        <div class="buttons">
-          <input type="submit" class="button-ok" name="UNBOOK"
-                 value="UnBook"
-                 title="Shortcut: Alt-A" accesskey="A"
-                 i18n:attributes="value; accesskey" />
-        </div>
-
-    </fieldset>
-
-    <fieldset>
-      <legend i18n:translate="">Available resources</legend>
-      <div class="item_list">
-        <tal:block replace="structure batch/render" />
-        <tal:block replace="structure view/filter_widget/render" />
-        <tal:block replace="structure view/renderAvailableTable" />
-        <div class="buttons">
-          <input type="submit" class="button-ok" name="BOOK"
-                 value="Book" tal:condition="batch"
-                 title="Shortcut: Alt-A" accesskey="A"
-                 i18n:attributes="value; accesskey" />
-          <tal:block metal:use-macro="view/@@standard_macros/cancel-button" />
-        </div>
-        <p tal:condition="not:batch" i18n:translate="">
-          There are none to add.
-        </p>
-      </div>
-    </fieldset>
-
-</form>
+  </form>
+</tal:block>
 
 </div>

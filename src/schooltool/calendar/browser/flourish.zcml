@@ -135,6 +135,7 @@
 
   <flourish:page
       name="booking.html"
+      subtitle="Reserve resources"
       for="schooltool.calendar.interfaces.ISchoolToolCalendarEvent"
       class=".event.FlourishCalendarEventBookingView"
       permission="schooltool.view"

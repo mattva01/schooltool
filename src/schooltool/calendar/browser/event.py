@@ -24,6 +24,7 @@ import zope.formlib.interfaces
 import zope.formlib.widget
 from zope import formlib
 from zope.component import getMultiAdapter
+import zc.table.table
 
 import schooltool.skin.flourish.page
 from schooltool.calendar.app import CalendarEvent
@@ -34,6 +35,8 @@ from schooltool.app.browser.cal import ICalendarEventEditForm
 from schooltool.app.browser.cal import CalendarEventEditView
 from schooltool.app.browser.cal import CalendarEventBookingView
 from schooltool.skin import flourish
+from schooltool.table.table import ImageInputColumn
+from schooltool.table.table import label_cell_formatter_factory
 
 from schooltool.common import SchoolToolMessage as _
 
@@ -100,7 +103,58 @@ class FlourishCalendarEventBookingView(flourish.page.Page,
 
     update = CalendarEventBookingView.update
 
-    @property
-    def subtitle(self):
-        return _('Resource booking for ($title)',
-                 mapping={'title': self.context.title})
+    def renderBookedTable(self):
+        prefix = "remove_item"
+        available_columns = self.columns()
+        available_columns[0].cell_formatter = label_cell_formatter_factory(prefix)
+        available_columns[2].title = _('Reserved by others')
+        columns = list(available_columns)
+
+        title=_('Release resource')
+        # XXX: this getter is just plain wrong
+        getter = lambda r: r.__name__
+
+        remove_column = ImageInputColumn(
+            prefix, name='action',
+            title=title, alt=title,
+            library='schooltool.skin.flourish',
+            image='remove-icon.png', id_getter=getter)
+        columns.append(remove_column)
+
+        formatter = zc.table.table.FormFullFormatter(
+            self.context, self.request, self.getBookedItems(),
+            columns=columns,
+            sort_on=self.sortOn(),
+            prefix="booked")
+        formatter.cssClasses['table'] = 'data'
+
+        return formatter()
+
+    def renderAvailableTable(self):
+        prefix = "add_item"
+        available_columns = self.columns()
+        available_columns[0].cell_formatter = label_cell_formatter_factory(prefix)
+        available_columns[2].title = _('Reserved by others')
+        columns = list(available_columns)
+
+        title=_('Reserve resource')
+        # XXX: this getter is just plain wrong
+        getter = lambda r: r.__name__
+
+        add_column = ImageInputColumn(
+            prefix, name='action',
+            title=title, alt=title,
+            library='schooltool.skin.flourish',
+            image='add-icon.png', id_getter=getter)
+        columns.append(add_column)
+
+        formatter = zc.table.table.FormFullFormatter(
+            self.context, self.request, self.filter(self.availableResources),
+            columns=columns,
+            batch_start=self.batch.start, batch_size=self.batch.size,
+            sort_on=self.sortOn(),
+            prefix="available")
+        formatter.cssClasses['table'] = 'data'
+
+
+        return formatter()
