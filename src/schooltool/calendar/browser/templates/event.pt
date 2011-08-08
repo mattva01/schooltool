@@ -5,50 +5,62 @@
     <span tal:replace="context/title" />
     -
     <span tal:replace="view/day" />
-  </h3>
-  <tal:if condition="context/allday">
-    <div><strong i18n:translate="">All day event</strong></div>
-  </tal:if>
-  <p style="width:62%; font-size:85%" tal:content="structure context/description|nothing" />
-  <p tal:condition="context/recurrence">
-    <em i18n:translate="">
-      This is a recurring event.
-    </em>
-  </p>
-
-  <div class="info-block">
-    <h5 i18n:translate="">Details</h5>
-    <table class="person-details">
-      <tal:if condition="not:context/allday">
-        <tr tal:condition="view/start">
-          <td class="dr" i18n:translate="">Starts</td>
-          <td>:&nbsp;</td>
-          <td class="dl" tal:content="view/start" />
-        </tr>
-        <tr tal:condition="view/end">
-          <td class="dr" i18n:translate="">Ends</td>
-          <td>:&nbsp;</td>
-          <td class="dl" tal:content="view/end" />
-        </tr>
-      </tal:if>
-      <tr tal:condition="context/location|nothing">
-        <td class="dr" i18n:translate="">Location</td>
-        <td>:&nbsp;</td>
-        <td class="dl" tal:content="context/location" />
-      </tr>
-    </table>
     <a class="modify" href=""
        title="Change the details of this event"
        tal:attributes="href string:${context/@@absolute_url}/edit.html"
        i18n:attributes="title"
        i18n:translate="">
-       edit event
+      <img tal:attributes="src context/++resource++schooltool.skin.flourish/edit-icon.png"
+           alt="Edit"
+           i18n:attributes="alt" />
     </a>
+  </h3>
+  <tal:if condition="context/allday">
+    <div><strong i18n:translate="">All day event</strong></div>
+  </tal:if>
+  <p style="width:62%; font-size:85%" tal:content="structure context/description|nothing" />
+
+  <div class="info-block">
+    <h3 i18n:translate="">Details</h3>
+    <table class="person-details">
+      <tal:if condition="not:context/allday">
+        <tr tal:condition="view/start">
+          <td class="dr" i18n:translate="">Starts</td>
+          <td class="dl" tal:content="view/start" />
+        </tr>
+        <tr tal:condition="view/end">
+          <td class="dr" i18n:translate="">Ends</td>
+          <td class="dl" tal:content="view/end" />
+        </tr>
+        <tr tal:condition="context/recurrence">
+          <td colspan="2" class="dl" i18n:translate="">
+            This is a recurring event.
+          </td>
+        </tr>
+      </tal:if>
+      <tr tal:condition="context/location|nothing">
+        <td class="dr" i18n:translate="">Location</td>
+        <td class="dl" tal:content="context/location" />
+      </tr>
+    </table>
   </div>
 
   <div class="info-block"
        tal:define="resources view/display/getBookedResources">
-    <h5 i18n:translate="">Scheduled resources</h5>
+
+    <h3>
+      <tal:block i18n:translate="">Reserved resources</tal:block>
+
+      <a class="modify" href=""
+         title="Change the resources reserved for this event"
+         i18n:translate=""
+         tal:attributes="href string:${context/@@absolute_url}/booking.html?date=${evdate}">
+        <img tal:attributes="src context/++resource++schooltool.skin.flourish/edit-icon.png"
+             alt="Edit"
+             i18n:attributes="alt" />
+      </a>
+    </h3>
+
     <ul tal:condition="resources">
       <li tal:repeat="resource resources">
         <a href=""
@@ -56,19 +68,9 @@
            tal:content="resource/title" />
       </li>
     </ul>
-    <a class="modify" href=""
-      title="Change the resources scheduled for this event"
-      i18n:translate=""
-      tal:attributes="href string:${context/@@absolute_url}/booking.html?date=${evdate}">
-      edit resources
-    </a>
+    <p tal:condition="not:resources" i18n:translate="">
+      There are none.
+    </p>
   </div>
-
-  <a href="" class="modify destructive" title="Delete this event"
-    i18n:translate=""
-    tal:attributes="href string:${context/__parent__/@@absolute_url}/delete.html?event_id=${context/unique_id}&date=${evdate}">
-    delete event
-  </a>
-
 
 </div>
