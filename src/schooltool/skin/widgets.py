@@ -30,6 +30,7 @@ from zope.component import adapts, adapter
 from zope.interface import implements, implementsOnly, implementer
 from zope.interface import Interface
 from zope.html.field import IHtmlFragmentField
+from zope.publisher.interfaces.browser import IBrowserRequest
 import zope.html.widget
 
 import zc.resourcelibrary
@@ -242,7 +243,7 @@ def FckeditorFieldWidget(field, request):
 # The default configuration for FckeditorZ3CFormWidget
 Fckeditor_config = ComputedWidgetAttribute(
     lambda a: FCKConfig(),
-    request=ISchoolToolLayer,
+    request=IBrowserRequest,
     widget=IFckeditorWidget,
     )
 
@@ -255,7 +256,7 @@ Fckeditor_config = ComputedWidgetAttribute(
 Fckeditor_addform_config = ComputedWidgetAttribute(
     lambda a: FCKConfig(306, 200),
     context=None,
-    request=ISchoolToolLayer,
+    request=IBrowserRequest,
     view=z3c.form.interfaces.IAddForm,
     field=IHtmlFragmentField,
     widget=IFckeditorWidget,
@@ -264,7 +265,7 @@ Fckeditor_addform_config = ComputedWidgetAttribute(
 Fckeditor_editform_config = ComputedWidgetAttribute(
     lambda a: FCKConfig(306, 200),
     context=None,
-    request=ISchoolToolLayer,
+    request=IBrowserRequest,
     view=z3c.form.interfaces.IEditForm,
     field=IHtmlFragmentField,
     widget=IFckeditorWidget,

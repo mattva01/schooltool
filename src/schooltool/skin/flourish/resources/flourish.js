@@ -121,10 +121,15 @@ ST.dialogs = function() {
   /* "public" */
   return {
 
-    open_modal_link: function(link_sel)
+    open_modal_link: function(link_sel, dialog_container_id)
     {
         var link = $(link_sel);
-        var container_id = link.attr('id') + "-container";
+        var container_id = 'default-modal-dialog-container';
+        if (dialog_container_id) {
+            container_id = dialog_container_id;
+        } else if (link.attr('id')) {
+            container_id = link.attr('id') + "-container";
+        }
         var container = ensure_container(container_id);
         var url = link.attr('href');
         modal_form_dialog(url, container);
