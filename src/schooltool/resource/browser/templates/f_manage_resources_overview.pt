@@ -3,16 +3,11 @@
      tal:define="resource_types view/resource_types;
                  resources_link string:${context/@@absolute_url}/resources">
   <h3>
-    <metal:block i18n:translate="">
-      Resources
-    </metal:block>
-    <a class="modify" href="" title="Manage resources"
+    <a title="Manage resources"
        tal:attributes="href resources_link"
        i18n:attributes="title"
        i18n:translate="">
-      <img tal:attributes="src context/++resource++schooltool.skin.flourish/edit-icon.png"
-           alt="Edit"
-           i18n:attributes="alt" />
+      Resources
     </a>
   </h3>
   <table>

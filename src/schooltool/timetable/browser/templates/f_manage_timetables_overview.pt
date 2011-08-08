@@ -3,16 +3,11 @@
      tal:define="timetables_link string:${context/@@absolute_url}/timetables;
                  timetables view/timetables">
   <h3>
-    <metal:block i18n:translate="">
-      Timetables
-    </metal:block>
-    <a class="modify" href="" title="Manage timetables"
+    <a title="Manage timetables"
        tal:attributes="href timetables_link"
        i18n:attributes="title"
        i18n:translate="">
-      <img tal:attributes="src context/++resource++schooltool.skin.flourish/edit-icon.png"
-           alt="Edit"
-           i18n:attributes="alt" />
+      Timetables
     </a>
   </h3>
   <table>

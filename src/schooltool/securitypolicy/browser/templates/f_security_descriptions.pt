@@ -1,10 +1,24 @@
-<div>
-  <tal:block repeat="item view/groups">
-    <p>
-      <a tal:attributes="href string:#group_${item/group/__name__}"
-         tal:content="item/group/title" />
-    </p>
-  </tal:block>
+<div i18n:domain="schooltool">
+  <h2>
+    <metal:block i18n:translate="">Access Rights</metal:block>
+    <a class="modify" href="" title="Edit the access rights"
+       tal:attributes="href string:${context/@@absolute_url}/access_control.html"
+       i18n:attributes="title">
+      <img tal:attributes="src context/++resource++schooltool.skin.flourish/edit-icon.png"
+           alt="Edit"
+           i18n:attributes="alt" />
+    </a>
+  </h2>
+  <table>
+    <tbody>
+      <tr tal:repeat="item view/groups">
+        <td>
+          <a tal:attributes="href string:#group_${item/group/__name__}"
+             tal:content="item/group/title" />
+        </td>
+      </tr>
+    </tbody>
+  </table>
   <tal:block repeat="item view/groups">
     <div class="info-block">
       <h2>
@@ -49,4 +63,9 @@
   <p>
     <a href="#">Back to top</a>
   </p>
+  <h3>
+    <a tal:attributes="href view/done_link" i18n:translate="">
+      Done
+    </a>
+  </h3>
 </div>
