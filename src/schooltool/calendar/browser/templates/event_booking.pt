@@ -1,0 +1,94 @@
+<div i18n:domain="schooltool">
+
+  <tal:block replace="resource_library:schooltool.calendar" />
+
+  <h2 i18n:translate="">Event Details</h2>
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <span i18n:translate="">Title</span>
+        </td>
+        <td>
+          <span tal:content="context/title">[event title]</span>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <span i18n:translate="">Starts</span>
+        </td>
+        <td>
+          <span tal:content="view/start">[start time]</span>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <span i18n:translate="">Ends</span>
+        </td>
+        <td>
+          <span tal:content="view/end">[end time]</span>
+        </td>
+      </tr>
+      <tr tal:condition="context/recurrence">
+        <td colspan="2">
+          <span i18n:translate="">This is a recurring event!</span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+<tal:block define="booked view/getBookedItems">
+  <h2 i18n:translate="">Reserved Resources</h2>
+
+  <p tal:condition="not:booked" i18n:translate="">
+    There are none.
+  </p>
+
+  <form tal:attributes="action request/URL"
+        tal:condition="booked"
+        method="post"
+        class="standalone booking_form">
+
+    <tal:block replace="structure view/renderBookedTable" />
+
+    <input type="hidden" tal:condition="request/date|nothing"
+           name="date" tal:attributes="value request/date" />
+    <input type="hidden" name="UNBOOK" value="dummy" />
+
+  </form>
+
+</tal:block>
+
+<h3>
+  <a tal:attributes="href string:${context/@@absolute_url}/edit.html"
+     i18n:translate="">Done</a>
+</h3>
+
+
+<tal:block define="available view/getAvailableItems">
+  <h2 i18n:translate="">Available Resources</h2>
+
+  <p tal:condition="not:available" i18n:translate="">
+    There are none to add.
+  </p>
+
+  <form tal:attributes="action request/URL"
+        tal:condition="available"
+        method="post"
+      class="standalone booking_form">
+
+    <input type="hidden" tal:condition="request/date|nothing"
+           name="date" tal:attributes="value request/date" />
+
+    <div class="item_list"
+         tal:define="batch view/batch">
+      <tal:block replace="structure batch/render" />
+      <tal:block replace="structure view/filter_widget/render" />
+      <tal:block replace="structure view/renderAvailableTable" />
+      <input type="hidden" name="BOOK" value="dummy" />
+    </div>
+
+  </form>
+</tal:block>
+
+</div>

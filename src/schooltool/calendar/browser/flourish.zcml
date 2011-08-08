@@ -107,11 +107,73 @@
       permission="zope.Public"
       />
 
+  <!-- event -->
+
+  <flourish:page
+      name="index.html"
+      for="schooltool.calendar.interfaces.ICalendarEvent"
+      class=".event.FlourishCalendarEventView"
+      content_template="templates/event.pt"
+      permission="zope.View"
+      />
+
+  <flourish:page
+      name="edit.html"
+      for="schooltool.calendar.interfaces.ISchoolToolCalendarEvent"
+      class=".event.FlourishCalendarEventEditView"
+      permission="schooltool.edit"
+      content_template="templates/event_edit.pt"
+      />
+
+  <flourish:page
+      name="add.html"
+      for="schooltool.calendar.interfaces.ISchoolToolCalendar"
+      class=".event.FlourishCalendarEventAddView"
+      permission="schooltool.edit"
+      content_template="templates/event_edit.pt"
+      />
+
+  <flourish:page
+      name="booking.html"
+      subtitle="Reserve resources"
+      for="schooltool.calendar.interfaces.ISchoolToolCalendarEvent"
+      class=".event.FlourishCalendarEventBookingView"
+      permission="schooltool.view"
+      content_template="templates/event_booking.pt"
+      />
+
+  <flourish:page
+      name="delete.html"
+      for="schooltool.calendar.interfaces.ISchoolToolCalendar"
+      class=".event.DeleteEventDialog"
+      template="templates/event_delete_dialog.pt"
+      permission="schooltool.edit"
+      />
+
+  <flourish:viewlet
+      name="event-links"
+      after="event-links"
+      for="schooltool.calendar.interfaces.ISchoolToolCalendarEvent"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      class=".event.EventLinks"
+      title="Actions"
+      permission="schooltool.edit"
+      />
+
+  <flourish:viewlet
+      name="delete.html"
+      for="schooltool.calendar.interfaces.ISchoolToolCalendarEvent"
+      title="Delete"
+      class=".event.DeleteEventLinkViewlet"
+      manager=".event.EventLinks"
+      permission="schooltool.edit"
+      />
+
   <!-- resources -->
 
   <zope:resourceLibrary
       name="schooltool.calendar"
-      require=""
+      require="schooltool.skin.flourish"
       layer="schooltool.skin.flourish.IFlourishLayer">
     <directory
         source="resources"

@@ -119,14 +119,6 @@
       />
 
   <page
-      name="widget_macros"
-      for="*"
-      permission="zope.View"
-      template="templates/widget_macros.pt"
-      layer="schooltool.skin.flourish.IFlourishLayer"
-      />
-
-  <page
       name="formlib_macros"
       for="*"
       permission="zope.View"
@@ -134,6 +126,17 @@
       layer="schooltool.skin.flourish.IFlourishLayer"
       />
 
+  </configure>
+
+
+  <configure package="schooltool.skin.flourish">
+    <page
+        name="widget_macros"
+        for="*"
+        permission="zope.View"
+        template="templates/f_widget_macros.pt"
+        layer="schooltool.skin.flourish.IFlourishLayer"
+        />
   </configure>
 
   <include file="z3cform.zcml" />
