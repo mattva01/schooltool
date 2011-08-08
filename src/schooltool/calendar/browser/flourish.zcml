@@ -150,6 +150,25 @@
       permission="schooltool.edit"
       />
 
+  <flourish:viewlet
+      name="event-links"
+      after="event-links"
+      for="schooltool.calendar.interfaces.ISchoolToolCalendarEvent"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      class=".event.EventLinks"
+      title="Actions"
+      permission="schooltool.edit"
+      />
+
+  <flourish:viewlet
+      name="delete.html"
+      for="schooltool.calendar.interfaces.ISchoolToolCalendarEvent"
+      title="Delete"
+      class=".event.DeleteEventLinkViewlet"
+      manager=".event.EventLinks"
+      permission="schooltool.edit"
+      />
+
   <!-- resources -->
 
   <zope:resourceLibrary

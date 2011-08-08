@@ -299,3 +299,30 @@ class DeleteEventDialog(flourish.form.DialogForm):
     @button.buttonAndHandler(_("Cancel"))
     def handle_cancel_action(self, action):
         pass
+
+
+class EventLinks(flourish.page.RefineLinksViewlet):
+    """Manager for Action links in event views."""
+
+
+class DeleteEventLinkViewlet(flourish.page.ModalFormLinkViewlet):
+
+    @property
+    def calendar(self):
+        return ICalendar(self.event)
+
+    @property
+    def event(self):
+        return self.context
+
+    @property
+    def url(self):
+        preferences = ViewPreferences(self.request)
+        event = self.event
+        start = event.dtstart.astimezone(preferences.timezone)
+        url = '%s/delete.html?event_id=%s&date=%s' % (
+            absoluteURL(self.calendar, self.request),
+            event.unique_id,
+            start.strftime('%Y-%m-%d'))
+        return url
+
