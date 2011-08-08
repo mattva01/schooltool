@@ -204,6 +204,16 @@
         permission="schooltool.edit"
         />
 
+    <flourish:page
+        name="schoolName.html"
+        title="School Name"
+        subtitle="Edit"
+        for="schooltool.app.interfaces.ISchoolToolApplication"
+        class="schooltool.app.browser.app.FlourishSchoolNameEditView"
+        content_template="templates/z3c-schooltool-form.pt"
+        permission="schooltool.edit"
+        />
+
   </configure>
 
   <flourish:viewlet
@@ -369,6 +379,15 @@
       for="schooltool.app.interfaces.ISchoolToolApplication"
       class=".app.PackDatabaseView"
       template="templates/f_pack_database.pt"
+      permission="schooltool.edit"
+      />
+
+  <flourish:viewlet
+      name="schoolName.html"
+      after="resource_demographics"
+      title="School Name"
+      class="schooltool.skin.flourish.page.LinkViewlet"
+      manager="schooltool.app.browser.app.CustomizeSchoolLinks"
       permission="schooltool.edit"
       />
 

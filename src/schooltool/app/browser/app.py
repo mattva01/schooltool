@@ -526,6 +526,20 @@ class FlourishApplicationPreferencesView(Form, form.EditForm):
         return url
 
 
+class FlourishSchoolNameEditView(FlourishApplicationPreferencesView):
+
+    fields = field.Fields(IApplicationPreferences).select('title')
+    legend = _('School Name')
+
+    def updateWidgets(self):
+        super(FlourishSchoolNameEditView, self).updateWidgets()
+        self.widgets['title'].label = _('Name')
+
+    def nextURL(self):
+        url = absoluteURL(self.context, self.request) + '/manage'
+        return url
+
+
 class ProbeParticipation:
     """A stub participation for use in hasPermissions."""
     implements(IParticipation)
