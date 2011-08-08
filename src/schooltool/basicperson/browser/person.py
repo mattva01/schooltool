@@ -1019,7 +1019,8 @@ class FlourishManagePeopleOverview(flourish.page.Content):
     body_template = ViewPageTemplateFile(
         'templates/f_manage_people_overview.pt')
 
-    built_in_groups = ('administrators', 'teachers', 'students')
+    built_in_groups = ('administrators', 'clerks', 'manager', 'teachers',
+                       'students')
 
     @property
     def schoolyear(self):
