@@ -303,3 +303,13 @@ class CalendarTertiaryNavigation(flourish.page.Content):
                     'class': cls,
                     })
         return result
+
+
+class CalendarAddLinks(flourish.page.RefineLinksViewlet):
+    """Manager for adding links in calendar views."""
+
+
+class AddEventLink(flourish.page.LinkViewlet):
+    @property
+    def link(self):
+        return "add.html?field.start_date=%s" % self.view.cursor.isoformat()

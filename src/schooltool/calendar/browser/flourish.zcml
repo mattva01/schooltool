@@ -64,6 +64,25 @@
       />
 
   <flourish:viewlet
+      name="calendar-add-links"
+      after="calendar-jump-to"
+      for="schooltool.calendar.interfaces.ISchoolToolCalendar"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      class=".calendar.CalendarAddLinks"
+      title="Add"
+      permission="schooltool.edit"
+      />
+
+  <flourish:viewlet
+      name="event-add"
+      title="Event"
+      class=".calendar.AddEventLink"
+      view=".calendar.FlourishCalendarView"
+      manager=".calendar.CalendarAddLinks"
+      permission="schooltool.edit"
+      />
+
+  <flourish:viewlet
       name="calendar-previous-month"
       before="calendar-current-month"
       after="calendar-jump-to"
