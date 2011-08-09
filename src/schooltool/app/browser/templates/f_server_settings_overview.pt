@@ -1,0 +1,37 @@
+<div i18n:domain="schooltool">
+  <h3>
+    <a tal:attributes="href string:${context/@@absolute_url}/control"
+       i18n:translate="">
+      Server Information
+    </a>
+  </h3>
+  <table class="form-fields"
+         tal:define="runtime_info view/settings">
+    <tbody>
+      <tr>
+        <td class="label" i18n:translate="">Database</td>
+        <td tal:content="runtime_info/dbName">Name</td>
+      </tr>
+      <tr>
+        <td class="label" i18n:translate="">Database Size</td>
+        <td tal:content="runtime_info/dbSize">Size</td>
+      </tr>
+      <tr>
+        <td class="label" i18n:translate="">Uptime</td>
+        <td tal:content="runtime_info/Uptime">Time</td>
+      </tr>
+      <tr>
+        <td class="label" i18n:translate="">System platform</td>
+        <td tal:content="runtime_info/SystemPlatform">Platform</td>
+      </tr>
+      <tr>
+        <td class="label" i18n:translate="">Python version</td>
+        <td tal:content="runtime_info/PythonVersion">Version</td>
+      </tr>
+      <tr>
+        <td class="label" i18n:translate="">Command line</td>
+        <td tal:content="runtime_info/CommandLine">Command line</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

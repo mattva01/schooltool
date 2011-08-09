@@ -15,22 +15,14 @@
 
   <zope:adapter factory=".email.HostnameValidator" />
 
-  <!-- Content -->
-
-  <flourish:content
-      class="schooltool.app.browser.app.ContentTitle"
-      permission="schooltool.view"
-      for="schooltool.email.interfaces.IEmailContainer"
-      layer="schooltool.skin.flourish.IFlourishLayer"
-      title="Outgoing Email"
-      name="title" />
-
   <!-- Pages -->
 
   <flourish:page
       name="index.html"
       for="schooltool.email.interfaces.IEmailContainer"
       class="schooltool.email.browser.email.FlourishEmailContainerView"
+      title="Server"
+      subtitle="Outgoing Email"
       content_template="templates/f_email_container.pt"
       permission="schooltool.edit"
       />
@@ -40,7 +32,8 @@
       for="schooltool.email.interfaces.IEmailContainer"
       class="schooltool.email.browser.email.FlourishEmailQueueView"
       content_template="templates/f_email_queue.pt"
-      subtitle="Email queue"
+      title="Server"
+      subtitle="Outgoing Email Queue"
       permission="schooltool.edit"
       />
 
@@ -53,7 +46,8 @@
         content_template="templates/z3c-schooltool-form.pt"
         permission="schooltool.edit"
         layer="schooltool.skin.flourish.IFlourishLayer"
-        subtitle="Settings"
+        title="Server"
+        subtitle="Outgoing Email Settings"
         />
 
     <flourish:page
@@ -63,7 +57,8 @@
         content_template="templates/z3c-schooltool-form.pt"
         permission="schooltool.edit"
         layer="schooltool.skin.flourish.IFlourishLayer"
-        subtitle="Send Test"
+        title="Server"
+        subtitle="Send Test Email"
         />
 
     <flourish:page
@@ -72,6 +67,8 @@
         class="schooltool.email.browser.email.FlourishEmailView"
         content_template="templates/z3c-schooltool-form.pt"
         permission="schooltool.edit"
+        title="Server"
+        subtitle="Email View"
         layer="schooltool.skin.flourish.IFlourishLayer"
         />
 
@@ -102,22 +99,21 @@
   <flourish:viewlet
       name="send_test.html"
       for="schooltool.email.interfaces.IEmailContainer"
-      title="Send Test"
+      title="Send Test Email"
       class=".email.SendTestLinkViewlet"
       manager="schooltool.email.browser.email.EmailActionsLinks"
       permission="schooltool.edit"
       />
 
-  <!-- Navigation -->
-
   <flourish:viewlet
-      name="email"
-      after="site-preferences.html"
-      title="Outgoing Email"
-      class="schooltool.skin.flourish.page.LinkViewlet"
-      manager="schooltool.app.browser.app.ManageSiteLinks"
+      name="email-settings-overview"
+      view="schooltool.app.browser.app.ManageSite"
       permission="schooltool.edit"
+      manager="schooltool.skin.flourish.page.IPageContentManager"
+      class=".email.FlourishEmailSettingsOverview"
       />
+
+  <!-- Navigation -->
 
   <flourish:activeViewlet
       name="manage_site"

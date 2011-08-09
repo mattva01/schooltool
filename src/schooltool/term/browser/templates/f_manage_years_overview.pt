@@ -2,16 +2,11 @@
      tal:condition="view/has_schoolyear"
      tal:define="year view/schoolyear">
   <h3>
-    <metal:block i18n:translate="">
-      Terms
-    </metal:block>
-    <a class="modify" href="" title="Manage terms"
+    <a title="Manage terms"
        tal:attributes="href string:${context/@@absolute_url}/terms"
        i18n:attributes="title"
        i18n:translate="">
-      <img tal:attributes="src context/++resource++schooltool.skin.flourish/edit-icon.png"
-           alt="Edit"
-           i18n:attributes="alt" />
+      Terms
     </a>
   </h3>
   <table tal:define="terms view/terms">

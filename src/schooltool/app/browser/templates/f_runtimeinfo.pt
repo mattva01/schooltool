@@ -1,6 +1,15 @@
-<tal:block tal:define="runtime_info view/runtimeInfo">
+<tal:block tal:define="runtime_info view/runtimeInfo;
+                       dbSettings view/dbSettings">
   <table class="form-fields">
     <tbody>
+      <tr>
+        <td class="label" i18n:translate="">Database</td>
+        <td tal:content="dbSettings/dbName">Name</td>
+      </tr>
+      <tr>
+        <td class="label" i18n:translate="">Database Size</td>
+        <td tal:content="dbSettings/dbSize">Size</td>
+      </tr>
       <tr>
         <td class="label" i18n:translate="">Uptime</td>
         <td tal:content="runtime_info/Uptime">Time</td>

@@ -136,10 +136,19 @@
 
   <!-- Site control page -->
 
+  <flourish:viewlet
+      name="server-settings-overview"
+      after="email-settings-overview"
+      view="schooltool.app.browser.app.ManageSite"
+      permission="schooltool.edit"
+      manager="schooltool.skin.flourish.page.IPageContentManager"
+      class=".app.FlourishServerSettingsOverview"
+      />
+
   <flourish:page
       name="settings"
       for="schooltool.app.interfaces.ISchoolToolApplication"
-      subtitle="Site Settings"
+      title="Server"
       class="schooltool.app.browser.app.ManageSite"
       permission="schooltool.edit"
       />
@@ -148,7 +157,7 @@
       name="manage_site"
       manager="schooltool.skin.flourish.page.IHeaderNavigationManager"
       class="schooltool.app.browser.app.ManageSiteNavLink"
-      title="Application"
+      title="Server"
       permission="schooltool.edit"
       />
 
@@ -164,8 +173,18 @@
       manager="schooltool.skin.flourish.page.IPageRefineManager"
       class="schooltool.app.browser.app.ManageSiteLinks"
       view="schooltool.app.browser.app.ManageSite"
-      title="Application"
+      title="Settings"
       permission="schooltool.edit"
+      />
+
+  <flourish:viewlet
+      name="server-actions-links"
+      after="manage_site_links"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      class="schooltool.app.browser.app.ServerActionsLinks"
+      title="Actions"
+      permission="schooltool.edit"
+      view="schooltool.app.browser.app.ManageSite"
       />
 
   <flourish:activeViewlet
@@ -173,28 +192,33 @@
       manager="schooltool.skin.flourish.page.RefineLinksViewlet"
       />
 
-  <flourish:viewlet
-      name="manage_site_links"
-      before="manage_school_links"
-      manager="schooltool.skin.flourish.page.IPageRefineManager"
-      class="schooltool.app.browser.app.ManageSiteLinks"
-      view="schooltool.app.browser.app.FlourishApplicationPreferencesView"
-      title="Application"
-      permission="schooltool.edit"
-      />
+  <configure package="schooltool.skin.flourish">
 
-  <flourish:page
-      name="site-preferences.html"
-      subtitle="Site preferences"
-      for="schooltool.app.interfaces.ISchoolToolApplication"
-      class="schooltool.app.browser.app.FlourishApplicationPreferencesView"
-      content_template="templates/f_application_preferences.pt"
-      permission="schooltool.edit"
-      />
+    <flourish:page
+        name="site-preferences.html"
+        title="Server"
+        subtitle="Calendar Settings"
+        for="schooltool.app.interfaces.ISchoolToolApplication"
+        class="schooltool.app.browser.app.FlourishApplicationPreferencesView"
+        content_template="templates/z3c-schooltool-form.pt"
+        permission="schooltool.edit"
+        />
+
+    <flourish:page
+        name="schoolName.html"
+        title="School Name"
+        subtitle="Edit"
+        for="schooltool.app.interfaces.ISchoolToolApplication"
+        class="schooltool.app.browser.app.FlourishSchoolNameEditView"
+        content_template="templates/z3c-schooltool-form.pt"
+        permission="schooltool.edit"
+        />
+
+  </configure>
 
   <flourish:viewlet
       name="site-preferences.html"
-      title="Site Preferences"
+      title="Calendar"
       class="schooltool.skin.flourish.page.LinkViewlet"
       manager="schooltool.app.browser.app.ManageSiteLinks"
       permission="schooltool.edit"
@@ -285,7 +309,7 @@
       permission="schooltool.view"
       for="zope.app.applicationcontrol.interfaces.IApplicationControl"
       layer="schooltool.skin.flourish.IFlourishLayer"
-      title="Application Control"
+      title="Server"
       name="title" />
 
   <flourish:viewlet
@@ -293,23 +317,14 @@
       manager="schooltool.skin.flourish.page.IPageRefineManager"
       class=".app.ApplicationControlLinks"
       for="zope.app.applicationcontrol.interfaces.IApplicationControl"
-      view="zope.app.applicationcontrol.browser.runtimeinfo.RuntimeInfoView"
+      view=".app.FlourishRuntimeInfoView"
       title="Actions"
-      permission="schooltool.edit"
-      />
-
-  <flourish:viewlet
-      name="ZODBControl.html"
-      title="ZODB Control"
-      class="schooltool.skin.flourish.page.LinkViewlet"
-      manager=".app.ApplicationControlLinks"
       permission="schooltool.edit"
       />
 
   <flourish:viewlet
       name="TranslationDomain.html"
       title="Translation Domains"
-      after="ZODBControl.html"
       class="schooltool.skin.flourish.page.LinkViewlet"
       manager=".app.ApplicationControlLinks"
       permission="schooltool.edit"
@@ -328,17 +343,9 @@
       for="zope.app.applicationcontrol.interfaces.IApplicationControl"
       name="index.html"
       content_template="templates/f_runtimeinfo.pt"
-      class="zope.app.applicationcontrol.browser.runtimeinfo.RuntimeInfoView"
+      class=".app.FlourishRuntimeInfoView"
       permission="schooltool.edit"
-      />
-
-  <flourish:page
-      for="zope.app.applicationcontrol.interfaces.IApplicationControl"
-      name="ZODBControl.html"
-      content_template="templates/f_zodbcontrol.pt"
-      class=".app.SchoolToolZODBControlView"
-      permission="schooltool.edit"
-      subtitle="ZODB Control"
+      subtitle="Information"
       />
 
   <flourish:page
@@ -357,6 +364,31 @@
       class="zope.app.generations.browser.managers.Managers"
       permission="schooltool.edit"
       subtitle="Database generations"
+      />
+
+  <flourish:viewlet
+      name="packDatabase.html"
+      title="Pack Database"
+      class=".app.PackDatabaseLink"
+      manager=".app.ServerActionsLinks"
+      permission="schooltool.edit"
+      />
+
+  <flourish:page
+      name="packDatabase.html"
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      class=".app.PackDatabaseView"
+      template="templates/f_pack_database.pt"
+      permission="schooltool.edit"
+      />
+
+  <flourish:viewlet
+      name="schoolName.html"
+      after="resource_demographics"
+      title="School Name"
+      class="schooltool.skin.flourish.page.LinkViewlet"
+      manager="schooltool.app.browser.app.CustomizeSchoolLinks"
+      permission="schooltool.edit"
       />
 
 </configure>

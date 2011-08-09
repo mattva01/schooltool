@@ -43,6 +43,9 @@ class Page(BrowserPage):
 
     title = None
     subtitle = None
+    has_header = True
+    page_class = 'page'
+    container_class = 'container'
 
     template = ViewPageTemplateFile('templates/main.pt')
     page_template = ViewPageTemplateFile('templates/page.pt')
@@ -75,7 +78,7 @@ class NoSidebarPage(Page):
 
 
 class WideContainerPage(Page):
-    page_template = ViewPageTemplateFile('templates/page_widecontainer.pt')
+    container_class = 'widecontainer'
 
 
 class ContentViewletManager(ViewletManager):

@@ -73,9 +73,10 @@
 </div>
 
 
-<div class="page">
+<div tal:attributes="class view/page_class">
 
   <div class="header"
+     tal:condition="view/has_header"
      tal:define="navigation providers/page_navigation|nothing">
 
 
