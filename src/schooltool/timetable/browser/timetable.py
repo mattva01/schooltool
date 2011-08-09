@@ -32,6 +32,7 @@ from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.publisher.browser import BrowserView
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.publisher.interfaces.browser import IBrowserView
+from zope.security.proxy import removeSecurityProxy
 from zope.traversing.browser.absoluteurl import absoluteURL
 from z3c.form import form, field, button, widget, validator
 from z3c.form.util import getSpecification
@@ -640,3 +641,27 @@ class FlourishTimetableDeleteView(FlourishConfirmDeleteView):
     def delete(self):
         container = ITimetableContainer(self.context)
         del container[self.context.__name__]
+
+
+class FlourishTimetableMakeDefaultView(flourish.form.DialogForm, form.EditForm):
+    dialog_submit_actions = ('apply',)
+    dialog_close_actions = ('cancel',)
+    label = None
+
+    def initDialog(self):
+        super(FlourishTimetableMakeDefaultView, self).initDialog()
+        title = _(u'Make ${timetable} default',
+                  mapping={'timetable': self.context.title})
+        self.ajax_settings['dialog']['title'] = translate(
+            title, context=self.request)
+        self.ajax_settings['dialog']['width'] = 544 + 16
+
+    @button.buttonAndHandler(_("Apply"), name='apply')
+    def handleApply(self, action):
+        container = ITimetableContainer(self.context)
+        container.default = removeSecurityProxy(self.context)
+        self.ajax_settings['dialog'] = 'close'
+
+    @button.buttonAndHandler(_("Cancel"))
+    def handleCancel(self, action):
+        pass
