@@ -41,6 +41,7 @@ from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.common import format_time_range
 from schooltool.testing import setup
 from schooltool.timetable.interfaces import ITimetableContainer
+from schooltool.timetable.interfaces import IHaveTimetables
 from schooltool.timetable.daytemplates import TimeSlot
 from schooltool.timetable.schedule import Period
 from schooltool.timetable.timetable import Timetable
@@ -48,6 +49,11 @@ from schooltool.timetable.timetable import TimetableContainer
 from schooltool.timetable.browser.ttwizard import TimetableWizard
 from schooltool.testing.util import format_table
 
+
+class SchoolYearStub(object):
+    def __init__(self, first, last):
+        self.first = first
+        self.last = last
 
 
 def setUp(test):
@@ -67,9 +73,19 @@ def setUp(test):
                    (ISchoolToolApplication,), IApplicationPreferences)
     provideAdapter(getSchoolToolApplication, (None,), ISchoolToolApplication)
 
-    test.globs['app'] = setup.setUpSchoolToolSite()
-    test.globs['timetables'] = TimetableContainer()
-    locate(test.globs['timetables'], test.globs['app'], 'timetables')
+
+    app = test.globs['app'] = setup.setUpSchoolToolSite()
+
+    schoolyear = app['schoolyear'] = SchoolYearStub(
+        datetime.date(2010, 07, 01),
+        datetime.date(2011, 06, 15))
+    locate(schoolyear, app, 'schoolyear')
+    timetables =test.globs['timetables'] = TimetableContainer()
+    locate(timetables, app['schoolyear'], 'timetables')
+
+    provideAdapter(lambda container: schoolyear,
+                   (ITimetableContainer, ),
+                   IHaveTimetables)
 
 
 def tearDown(test):
@@ -742,7 +758,7 @@ def doctest_wizard_NamedPeriodsStep():
 
         >>> view.getSessionData()['named_periods'] = True
         >>> view.next()
-        <schooltool.timetable.browser.ttwizard.PeriodNamesStep...>
+        <class 'schooltool.timetable.browser.ttwizard.PeriodNamesStep'>
 
     If periods are not named, go straight to the homeroom step, and compute
     the default period names:
@@ -840,7 +856,7 @@ def doctest_wizard_PeriodNamesStep():
     The next page is HomeroomStep.
 
         >>> view.next()
-        <schooltool.timetable.browser.ttwizard.PeriodSequenceSameStep ...>
+        <class 'schooltool.timetable.browser.ttwizard.PeriodSequenceSameStep'>
 
     """
 
@@ -858,13 +874,13 @@ def doctest_wizard_PeriodSequenceSameStep():
 
         >>> view.getSessionData()['periods_same'] = True
         >>> view.next()
-        <schooltool.timetable.browser.ttwizard.PeriodOrderSimple...>
+        <class 'schooltool.timetable.browser.ttwizard.PeriodOrderSimple'>
 
     The next step is PeriodOrderComplex if periods are not the same:
 
         >>> view.getSessionData()['periods_same'] = False
         >>> view.next()
-        <schooltool.timetable.browser.ttwizard.PeriodOrderComplex...>
+        <class 'schooltool.timetable.browser.ttwizard.PeriodOrderComplex'>
 
     """
 
@@ -948,7 +964,7 @@ def doctest_wizard_PeriodOrderSimple():
     The next step is always the homeroom step:
 
         >>> view.next()
-        <...ttwizard.HomeroomStep ...>
+        <class 'schooltool.timetable.browser.ttwizard.HomeroomStep'>
 
     If not all periods are in the request, update fails and the user
     gets an error.  This is unlikely in real life as the dropdowns
@@ -1130,7 +1146,7 @@ def doctest_wizard_PeriodOrderComplex():
     The next step is always the homeroom step:
 
         >>> view.next()
-        <...ttwizard.HomeroomStep ...>
+        <class 'schooltool.timetable.browser.ttwizard.HomeroomStep'>
 
     If not all periods are in the request, update fails and the user
     gets an error.  This is unlikely in real life as the dropdowns
@@ -1387,7 +1403,7 @@ def doctest_wizard_HomeroomPeriodsStep():
     The next step is always the final step:
 
         >>> view.next()
-        <...ttwizard.FinalStep ...>
+        <class 'schooltool.timetable.browser.ttwizard.FinalStep'>
 
     """
 
@@ -1429,7 +1445,7 @@ def doctest_wizard_FinalStep():
         >>> request.response.getStatus()
         302
         >>> request.response.getHeader('Location')
-        'http://127.0.0.1/timetables'
+        'http://127.0.0.1/schoolyear/timetables'
 
     The cycle of steps loops here
 
@@ -1720,16 +1736,21 @@ def doctest_wizard_FinalStep_setUpTimetable():
         | 10:30-11:25 | 10:30-11:25 | 10:30-11:25 |
         +-------------+-------------+-------------+
 
-        >>> print_day_templates(ttschema.model.dayTemplates)
-        --- day template 'D1'
-        09:30-10:25
-        10:30-11:25
-        --- day template 'D2'
-        09:30-10:25
-        10:30-11:25
-        --- day template 'D3'
-        09:30-10:25
-        10:30-11:25
+        >>> print_day_templates(timetable.periods.templates)
+        +--------------------+--------------------+--------------------+
+        | D1                 | D2                 | D3                 |
+        +--------------------+--------------------+--------------------+
+        | lesson 09:30-10:25 | lesson 09:30-10:25 | lesson 09:30-10:25 |
+        | lesson 10:30-11:25 | lesson 10:30-11:25 | lesson 10:30-11:25 |
+        +--------------------+--------------------+--------------------+
+
+        >>> print_day_templates(timetable.time_slots.templates)
+        +-------------+-------------+-------------+
+        | D1          | D2          | D3          |
+        +-------------+-------------+-------------+
+        | 09:30-10:25 | 09:30-10:25 | 09:30-10:25 |
+        | 10:30-11:25 | 10:30-11:25 | 10:30-11:25 |
+        +-------------+-------------+-------------+
 
     The periods can be named rather than be designated by time:
 
@@ -2078,6 +2099,8 @@ def doctest_wizard_TimetableWizard():
 
         >>> class StepStub:
         ...     update_succeeds = False
+        ...     def __init__(self, context, request):
+        ...         pass
         ...     def __repr__(self):
         ...         return '<same step>'
         ...     def update(self):
@@ -2086,15 +2109,17 @@ def doctest_wizard_TimetableWizard():
         ...     def __call__(self):
         ...         return 'Rendered step'
         ...     def next(self):
-        ...         return NextStepStub()
+        ...         return NextStepStub
 
-        >>> class NextStepStub:
+        >>> class NextStepStub(object):
+        ...     def __init__(self, context, request):
+        ...         pass
         ...     def __repr__(self):
         ...         return '<next step>'
         ...     def __call__(self):
         ...         return 'Rendered next step'
 
-        >>> view.getLastStep = StepStub
+        >>> view.getLastStep = lambda: StepStub(None, None)
 
         >>> def rememberLastStep(step):
         ...     print 'Remembering step: %s' % step
@@ -2127,7 +2152,7 @@ def doctest_wizard_TimetableWizard():
         >>> request.response.getStatus()
         302
         >>> request.response.getHeader('Location')
-        'http://127.0.0.1/timetables'
+        'http://127.0.0.1/schoolyear/timetables'
 
     """
 
