@@ -54,7 +54,7 @@ The section should not be in the section list of the manager user anymore:
        <h5>Details</h5>
     </div>
     <div class="info-block clearfix">
-      <h5>Sections Taught</h5>
+      <h3>Sections Taught</h3>
       <div class="tree_list">
         <ul><li>
           <a href="http://localhost/schoolyears/2005-2006" title="2005-2006">2005-2006</a>

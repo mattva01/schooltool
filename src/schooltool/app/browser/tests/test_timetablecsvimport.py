@@ -42,8 +42,13 @@ from schooltool.app.browser.csvimport import InvalidCSVError
 from schooltool.course.interfaces import ICourseContainer
 from schooltool.course.course import Course
 from schooltool.course.section import Section
-from schooltool.timetable.interfaces import ITimetableSchemaContainer
-from schooltool.timetable.interfaces import ITimetables
+
+try:
+    from schooltool.timetable.interfaces import ITimetableSchemaContainer
+    from schooltool.timetable.interfaces import ITimetables
+    __run_tests__ = True
+except:
+    __run_tests__ = False
 
 __metaclass__ = type
 
@@ -699,10 +704,11 @@ class TestTimetableCSVImporter(unittest.TestCase):
 
 def test_suite():
     suite = unittest.TestSuite()
-    suite.addTest(makeLayeredSuite(TestTimetableCSVImportView,
-                                   app_functional_layer))
-    suite.addTest(makeLayeredSuite(TestTimetableCSVImporter,
-                                   app_functional_layer))
+    if __run_tests__:
+        suite.addTest(makeLayeredSuite(TestTimetableCSVImportView,
+                                       app_functional_layer))
+        suite.addTest(makeLayeredSuite(TestTimetableCSVImporter,
+                                       app_functional_layer))
     suite.addTest(doctest.DocTestSuite(
         setUp=setUp, tearDown=tearDown,
         optionflags=doctest.ELLIPSIS|doctest.REPORT_NDIFF))

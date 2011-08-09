@@ -1,0 +1,2 @@
+<h3 i18n:translate="">This will adjust rows displayed in all daily calendar views to reflect the timetable.</h3>
+<div metal:use-macro="macro:form" />

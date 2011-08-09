@@ -26,24 +26,6 @@ import doctest
 from zope.interface import implements
 from zope.component import provideAdapter
 
-# XXX: disabled by timetable refactoring
-#from schooltool.app.interfaces import IShowTimetables
-
-
-##class ShowTimetablesStub(object):
-##    implements(IShowTimetables)
-##
-##    def __init__(self, context):
-##        self.context = context
-##
-##    def _getShowTimetables(self):
-##        return getattr(self.context, '_show_timetables', True)
-##
-##    def _setShowTimetables(self, value):
-##        self.context._show_timetables = value
-##
-##    showTimetables = property(_getShowTimetables, _setShowTimetables)
-
 
 def doctest_Instruction():
     r"""Tests for Instruction URIs and methods
@@ -194,8 +176,6 @@ def doctest_updateInstructorCalendars():
         ...                provides=ISchoolToolCalendar)
 
         >>> from schooltool.app.overlay import ICalendarOverlayInfo
-        >>> provideAdapter(ShowTimetablesStub,
-        ...                (ICalendarOverlayInfo,), IShowTimetables)
 
         >>> class AddEventStub(dict):
         ...     rel_type = URIInstruction
@@ -224,12 +204,10 @@ def doctest_updateInstructorCalendars():
         >>> [cal.calendar.title for cal in person.overlaid_calendars]
         ['SectionA']
 
-    The calendar of the section is visible by default, but the timetable is
-    hidden.
+    The calendar of the section is visible.
 
-        >>> [(cal.show, IShowTimetables(cal).showTimetables) for cal in
-        ...  person.overlaid_calendars]
-        [(True, False)]
+        >>> [cal.show for cal in person.overlaid_calendars]
+        [True]
 
     The calendar is removed when the instructor is no longer in the section:
 
@@ -307,9 +285,6 @@ def doctest_updateStudentCalendars():
         ...                provides=ISchoolToolCalendar)
 
         >>> from schooltool.app.overlay import ICalendarOverlayInfo
-        >>> provideAdapter(ShowTimetablesStub,
-        ...                (ICalendarOverlayInfo,), IShowTimetables)
-
 
         >>> class AddEventStub(dict):
         ...     rel_type = URIMembership
@@ -338,12 +313,10 @@ def doctest_updateStudentCalendars():
         >>> [cal.calendar.title for cal in person.overlaid_calendars]
         ['SectionA']
 
-    The calendar of the section is visible by default, but the timetable is
-    hidden.
+    The calendar of the section is visible.
 
-        >>> [(cal.show, IShowTimetables(cal).showTimetables) for cal in
-        ...  person.overlaid_calendars]
-        [(True, False)]
+        >>> [cal.show for cal in person.overlaid_calendars]
+        [True]
 
     The calendar is removed when the person is no longer in the section:
 
@@ -424,9 +397,8 @@ def doctest_updateStudentCalendars():
         >>> [cal.calendar.title for cal in student.overlaid_calendars]
         ['Freshmen Math']
 
-        >>> [(cal.show, IShowTimetables(cal).showTimetables) for cal in
-        ...  student.overlaid_calendars]
-        [(True, False)]
+        >>> [cal.show for cal in student.overlaid_calendars]
+        [True]
 
         >>> remove = RemoveEventStub()
         >>> remove[URIMember] = freshmen

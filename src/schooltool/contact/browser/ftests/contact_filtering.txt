@@ -26,27 +26,27 @@ They should be visible in the contact list now:
     >>> browser.getLink('Manage').click()
     >>> browser.getLink('Contacts').click()
     >>> browser.printQuery("id('content-body')/form/table/tbody//tr/td[2]/a")
-    <a href="http://localhost/contacts/Contact">Logan 0</a>
-    <a href="http://localhost/contacts/Contact-2">Logan 1</a>
-    <a href="http://localhost/contacts/Contact-11">Logan 10</a>
-    <a href="http://localhost/contacts/Contact-12">Logan 11</a>
-    <a href="http://localhost/contacts/Contact-13">Logan 12</a>
-    <a href="http://localhost/contacts/Contact-14">Logan 13</a>
-    <a href="http://localhost/contacts/Contact-15">Logan 14</a>
-    <a href="http://localhost/contacts/Contact-16">Logan 15</a>
-    <a href="http://localhost/contacts/Contact-17">Logan 16</a>
-    <a href="http://localhost/contacts/Contact-18">Logan 17</a>
-    <a href="http://localhost/contacts/Contact-19">Logan 18</a>
-    <a href="http://localhost/contacts/Contact-20">Logan 19</a>
-    <a href="http://localhost/contacts/Contact-3">Logan 2</a>
-    <a href="http://localhost/contacts/Contact-4">Logan 3</a>
-    <a href="http://localhost/contacts/Contact-5">Logan 4</a>
-    <a href="http://localhost/contacts/Contact-6">Logan 5</a>
-    <a href="http://localhost/contacts/Contact-7">Logan 6</a>
-    <a href="http://localhost/contacts/Contact-8">Logan 7</a>
-    <a href="http://localhost/contacts/Contact-9">Logan 8</a>
-    <a href="http://localhost/contacts/Contact-10">Logan 9</a>
-    <a href="http://localhost/persons/manager/contact">Pedro</a>
+    <a href="http://localhost/contacts/Contact">Brown 0</a>
+    <a href="http://localhost/contacts/Contact-2">Brown 1</a>
+    <a href="http://localhost/contacts/Contact-11">Brown 10</a>
+    <a href="http://localhost/contacts/Contact-12">Brown 11</a>
+    <a href="http://localhost/contacts/Contact-13">Brown 12</a>
+    <a href="http://localhost/contacts/Contact-14">Brown 13</a>
+    <a href="http://localhost/contacts/Contact-15">Brown 14</a>
+    <a href="http://localhost/contacts/Contact-16">Brown 15</a>
+    <a href="http://localhost/contacts/Contact-17">Brown 16</a>
+    <a href="http://localhost/contacts/Contact-18">Brown 17</a>
+    <a href="http://localhost/contacts/Contact-19">Brown 18</a>
+    <a href="http://localhost/contacts/Contact-20">Brown 19</a>
+    <a href="http://localhost/contacts/Contact-3">Brown 2</a>
+    <a href="http://localhost/contacts/Contact-4">Brown 3</a>
+    <a href="http://localhost/contacts/Contact-5">Brown 4</a>
+    <a href="http://localhost/contacts/Contact-6">Brown 5</a>
+    <a href="http://localhost/contacts/Contact-7">Brown 6</a>
+    <a href="http://localhost/contacts/Contact-8">Brown 7</a>
+    <a href="http://localhost/contacts/Contact-9">Brown 8</a>
+    <a href="http://localhost/contacts/Contact-10">Brown 9</a>
+    <a href="http://localhost/persons/manager/contact">P&#195;&#169;rez</a>
 
 Let's filter out all the contacts whose names contain "Logan 1":
 
@@ -56,24 +56,24 @@ Let's filter out all the contacts whose names contain "Logan 1":
 Only persons that match are in the list now:
 
     >>> browser.printQuery("id('content-body')/form/table/tbody//tr/td[2]/a")
-    <a href="http://localhost/contacts/Contact-2">Logan 1</a>
-    <a href="http://localhost/contacts/Contact-11">Logan 10</a>
-    <a href="http://localhost/contacts/Contact-12">Logan 11</a>
-    <a href="http://localhost/contacts/Contact-13">Logan 12</a>
-    <a href="http://localhost/contacts/Contact-14">Logan 13</a>
-    <a href="http://localhost/contacts/Contact-15">Logan 14</a>
-    <a href="http://localhost/contacts/Contact-16">Logan 15</a>
-    <a href="http://localhost/contacts/Contact-17">Logan 16</a>
-    <a href="http://localhost/contacts/Contact-18">Logan 17</a>
-    <a href="http://localhost/contacts/Contact-19">Logan 18</a>
-    <a href="http://localhost/contacts/Contact-20">Logan 19</a>
+    <a href="http://localhost/contacts/Contact-2">Brown 1</a>
+    <a href="http://localhost/contacts/Contact-11">Brown 10</a>
+    <a href="http://localhost/contacts/Contact-12">Brown 11</a>
+    <a href="http://localhost/contacts/Contact-13">Brown 12</a>
+    <a href="http://localhost/contacts/Contact-14">Brown 13</a>
+    <a href="http://localhost/contacts/Contact-15">Brown 14</a>
+    <a href="http://localhost/contacts/Contact-16">Brown 15</a>
+    <a href="http://localhost/contacts/Contact-17">Brown 16</a>
+    <a href="http://localhost/contacts/Contact-18">Brown 17</a>
+    <a href="http://localhost/contacts/Contact-19">Brown 18</a>
+    <a href="http://localhost/contacts/Contact-20">Brown 19</a>
 
 We can filter by last name too:
 
     >>> browser.getControl(name='SEARCH_LAST_NAME').value = "Brown 19"
     >>> browser.getControl('Find Now').click()
     >>> browser.printQuery("id('content-body')/form/table/tbody//tr/td[2]/a")
-    <a href="http://localhost/contacts/Contact-20">Logan 19</a>
+    <a href="http://localhost/contacts/Contact-20">Brown 19</a>
 
 The same search form has appeared in the contact management page, but
 the LAST_NAME input field should contain the last name of the user in

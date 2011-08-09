@@ -149,7 +149,7 @@ Let's try making some fields required, and maybe even changing them:
     >>> manager.getLink('Edit').click()
     >>> print manager.getControl(name='form.widgets.limit_keys:list').value
     []
-    >>> print manager.getControl('List of values').value
+    >>> print manager.getControl('Selection list').value
     American Indian or Alaska Native
     Asian
     Black or African American
@@ -160,8 +160,8 @@ Let's make the field required, and add Martians to it.  Also, we'll put limit
 keys into the empty list so that we can test that they get saved:
 
     >>> manager.getControl(name='form.widgets.limit_keys:list').value = ['students', 'teachers']
-    >>> values = manager.getControl('List of values').value.splitlines()
-    >>> manager.getControl('List of values').value = "\n".join(values + ['Martians'])
+    >>> values = manager.getControl('Selection list').value.splitlines()
+    >>> manager.getControl('Selection list').value = "\n".join(values + ['Martians'])
     >>> manager.getControl('yes').click()
     >>> manager.getControl('Apply').click()
 
@@ -173,7 +173,7 @@ Calling the edit form back up, we see that our changes took:
     >>> manager.getLink('Edit').click()
     >>> print manager.getControl(name='form.widgets.limit_keys:list').value
     ['students', 'teachers']
-    >>> print manager.getControl('List of values').value
+    >>> print manager.getControl('Selection list').value
     American Indian or Alaska Native
     Asian
     Black or African American
@@ -254,8 +254,8 @@ We can use unicode in select boxes too:
     >>> manager.getLink('ethnicity').click()
     >>> manager.getLink('Edit').click()
 
-    >>> values = manager.getControl('List of values').value.splitlines()
-    >>> manager.getControl('List of values').value = "\n".join(values + ['N\xc3\xb6rds'])
+    >>> values = manager.getControl('Selection list').value.splitlines()
+    >>> manager.getControl('Selection list').value = "\n".join(values + ['N\xc3\xb6rds'])
     >>> manager.getControl('Apply').click()
 
     >>> manager.getLink('Manage').click()

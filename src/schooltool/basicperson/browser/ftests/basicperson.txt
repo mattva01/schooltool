@@ -345,7 +345,7 @@ But we cannot assign non-ascii usernames:
     >>> manager.getControl('Add').click()
     >>> manager.printQuery('//div[@class="status"]')
     <div class="status">
-      <div class="summary">There were some errors.</div>
+      <div class="summary">Please correct the marked fields below.</div>
         <ul class="errors"><li>
             Username:
             <div class="error">Usernames cannot contain non-ascii characters</div>
@@ -402,9 +402,9 @@ this flaw is somewhat acceptable.
     >>> manager.reload()
     >>> analyze.printQuery('//form//div[@class="status"]', manager.contents)
     <div class="status">
-      <div class="summary">There were some errors.</div>
+      <div class="summary">Please correct the marked fields below.</div>
         <ul class="errors"><li>
           Username:
-          <div class="error">This username is already in use!</div>
+          <div class="error">This username is already in use</div>
         </li>
     </ul></div>

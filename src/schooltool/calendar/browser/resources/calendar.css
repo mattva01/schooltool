@@ -28,7 +28,7 @@
 .page .refine .calendar-month TABLE.month,
 #calendar-view-month {
     background: #eae8e3;
-    border: 1px #4B6983 solid;
+    border: 1px #000000 solid;
 }
 
 .page .refine .calendar-month TABLE.month {
@@ -56,17 +56,31 @@
     padding: 0;
 }
 
-#calendar-view-year TABLE.month TH,
 .page .refine .calendar-month TABLE.month TH,
 #calendar-view-month TH,
 #calendar-view-month TD.weekno {
-    background: #9DB8D2;
+    color: #ffffff;
+    background: #aea79f;
     padding: 0;
 }
 
+#calendar-view-year TABLE.month TH month-weekday{
+    color: #ffffff;
+    background: #dfdcd9;
+    padding: 0;
+}
+
+.page .refine .calendar-month TABLE.month TH A {
+    color: #ffffff;
+    text-decoration: none;
+    height: 100%;
+    width: 100%;
+    display: block;
+}
+
 #calendar-view-month TD.weekno {
-    border-right: 2px #4B6983 solid;
-    border-bottom: 1px #4b6983 solid;
+    border-right: 2px #000000 solid;
+    border-bottom: 1px #000000 solid;
     font-family: cursive, serif;
     font-size: x-large;
     font-style: italic;
@@ -76,27 +90,24 @@
 #calendar-view-month TH.weekday {
     font-weight: normal;
     padding: 2px;
-    border-bottom: 1px #4B6983 solid;
+    border-bottom: 1px #000000 solid;
 }
 
-.cal_yearly_day_busy {
-    background: #9DB8D2;
-    color: #9C0000;
+a.cal_yearly_day_busy {
+    background: #aea79f;
+    color: #ffffff;
 }
 
 #calendar-view-year TABLE.month TH.month-title A {
     display: block;
     width: 100%;
     height: 100%;
+    font-weight: bold;
     text-decoration: none;
     color: #f0f0f0;
-    background: #4B6983;
+    background: #aea79f;
     padding-top: 3px;
     padding-bottom: 1px;
-}
-
-#calendar-view-year TABLE.month TH.month-title A:hover {
-    background: #314e6c;
 }
 
 #calendar-view-year TABLE.month TH,
@@ -120,18 +131,20 @@
 
 #calendar-view-month TH.month-title {
     color: #f0f0f0;
-    background: #4B6983;
+    background: #000000;
 }
+
 
 #calendar-view-year TABLE.month TD A:hover,
-#calendar-view-month TD A:hover,
-.page .refine .calendar-month TABLE.month TD A:hover,
-#calendar-view-week TH A:hover {
-    color: #f0f0f0;
-    background: #314e6c;
+.page .refine .calendar-month TABLE.month TD A:hover {
+    color: #ffffff;
+    background: #000000;
 }
 
-#calendar-view-month TD.weekno {
+#calendar-view-month TD.day A:hover,
+#calendar-view-month TD.day-other A:hover {
+    color: #ffffff;
+    background: #aea79f;
 }
 
 #calendar-view-month TD.day,
@@ -147,15 +160,16 @@
     margin: auto;
     display: block;
     height: 100%;
+    width: 100%;
     min-height: 80px;
 }
 
 #calendar-view-month TD.weekno A {
     height: 100%;
     width: 100%;
-    color: #7590AE;
-    padding-left: 0.5ex;
-    padding-right: 0.5ex;
+    color: #ffffff;
+    padding-left: 0.125em;
+    padding-right: 0.125em;
 }
 
 #calendar-view-month TD.day-other {
@@ -182,7 +196,7 @@
 }
 
 #calendar-view-month .event {
-    background: #9db8d2;
+    background: #DFDCD9;
 }
 
 #calendar-view-month .comp_event {
@@ -190,7 +204,7 @@
 }
 
 #calendar-view-week {
-    border-top: 2px #4B6983 solid;
+    border-top: 2px #000000 solid;
 }
 
 #calendar-view-week TD {
@@ -200,21 +214,26 @@
     font-size: smaller;
 }
 #calendar-view-week TH {
-    border-right: 1px #4B6983 solid;
+    border-right: 1px #000000 solid;
+    padding: 0;
+    margin: 0px;
 }
 
 #calendar-view-week TH.first {
-    border-left: 1px #4B6983 solid;
+    border-left: 1px #000000 solid;
 }
 
 #calendar-view-week TH.day-title {
-    background: #9DB8D2;
-    border-bottom: 1px #4B6983 solid;
+    background: #aea79f;
+    border-bottom: 1px #000000 solid;
 }
 
 #calendar-view-week TH A {
     display: block;
-    width: 100%;
+    padding: 8px;
+    color: #ffffff;
+    font-weight: bold;
+    height: 100%;
     text-align: center;
     text-decoration: none;
 }
@@ -245,8 +264,6 @@
 }
 
 #calendar-view-week TD A:hover {
-    color: #f0f0f0;
-    background: #314e6c;
 }
 
 /* Day View
@@ -337,8 +354,8 @@
     margin-left: 5em;
     width: 20em;
     min-width: 20em;
-    border: 1px #4b6983 solid;
-    background: #9db8d2;
+    border: 1px #000000 solid;
+    background: #DFDCD9;
     opacity: 0.85;
 }
 

@@ -2518,6 +2518,7 @@ def enableICalendarUpload(ical_view):
     So, to hook up iCalendar uploads, the simplest way is to register an
     adapter for CalendarICalendarView that provides IWriteFile.
 
+        >>> from zope.component import provideAdapter
         >>> from zope.app.testing import setup
         >>> setup.placelessSetUp()
 
@@ -2556,6 +2557,9 @@ def enableICalendarUpload(ical_view):
 
 class CalendarEventBreadcrumbInfo(GenericBreadcrumbInfo):
     """Calendar Event Breadcrumb Info
+
+      >>> from zope.component import provideAdapter
+      >>> from zope.interface import directlyProvides
 
     First, set up a parent:
 

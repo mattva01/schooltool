@@ -114,11 +114,13 @@ def setUp(test=None):
 
 
 def setUpTimetabling():
-    # XXX: broken timetable test integration
-    from schooltool.timetable import TimetablesAdapter
-    from schooltool.timetable import CompositeTimetables
-    provideAdapter(TimetablesAdapter)
-    provideAdapter(CompositeTimetables)
+    from schooltool.timetable.app import getTimetableContainer
+    from schooltool.timetable.app import getScheduleContainer
+
+    provideAdapter(getTimetableContainer)
+    provideAdapter(getScheduleContainer)
+
+    from schooltool.testing import registry
     registry.setupTimetablesComponents()
 
 
@@ -3852,16 +3854,16 @@ class TestDailyCalendarView(unittest.TestCase):
         view = createView()
         result = list(view.getHours())
         self.assertEquals(clearMisc(result),
-                          [{'title': '0:00', 'cols': (ev4, None, None)},
-                           {'title': '1:00', 'cols': ('', None, None)},
-                           {'title': '2:00', 'cols': ('', None, None)},
-                           {'title': '3:00', 'cols': ('', None, None)},
-                           {'title': '4:00', 'cols': ('', None, None)},
-                           {'title': '5:00', 'cols': ('', None, None)},
-                           {'title': '6:00', 'cols': ('', None, None)},
-                           {'title': '7:00', 'cols': ('', None, None)},
-                           {'title': '8:00', 'cols': ('', None, None)},
-                           {'title': '9:00', 'cols': ('', None, None)},
+                          [{'title': '00:00', 'cols': (ev4, None, None)},
+                           {'title': '01:00', 'cols': ('', None, None)},
+                           {'title': '02:00', 'cols': ('', None, None)},
+                           {'title': '03:00', 'cols': ('', None, None)},
+                           {'title': '04:00', 'cols': ('', None, None)},
+                           {'title': '05:00', 'cols': ('', None, None)},
+                           {'title': '06:00', 'cols': ('', None, None)},
+                           {'title': '07:00', 'cols': ('', None, None)},
+                           {'title': '08:00', 'cols': ('', None, None)},
+                           {'title': '09:00', 'cols': ('', None, None)},
                            {'title': '10:00', 'cols': ('', None, None)},
                            {'title': '11:00', 'cols': ('', None, None)},
                            {'title': '12:00', 'cols': ('', ev1, None)},
@@ -3951,7 +3953,7 @@ class TestDailyCalendarView(unittest.TestCase):
             start = today + timedelta(hours=view.starthour)
             for end in row_ends:
                 duration = end - start
-                yield (rows_view.rowTitle(start.hour, start.minute),
+                yield (rows_view.rowTitle(start, duration),
                        start, duration)
                 start = end
 

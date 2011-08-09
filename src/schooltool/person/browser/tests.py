@@ -362,48 +362,6 @@ def doctest_PersonAddView():
     """
 
 
-def doctest_PersonPreferencesView():
-    """
-
-        >>> from schooltool.person.browser.person import PersonPreferencesView
-        >>> from schooltool.person.person import Person
-        >>> from schooltool.person.preference import PersonPreferences
-        >>> from zope.traversing.interfaces import IContainmentRoot
-
-        >>> person = Person()
-        >>> directlyProvides(person, IContainmentRoot)
-        >>> prefs = PersonPreferences()
-        >>> prefs.__parent__ = person
-        >>> request = TestRequest()
-
-        >>> view = PersonPreferencesView(prefs, request)
-        >>> view.update()
-
-    Cancel a change: (TODO: set view.message)
-
-        >>> request = TestRequest(form={'CANCEL': 'Cancel'})
-        >>> view = PersonPreferencesView(prefs, request)
-        >>> view.update()
-
-        >>> request.response.getStatus()
-        302
-        >>> request.response.getHeader('Location')
-        'http://127.0.0.1'
-
-    Let's see if posting works properly:
-
-        >>> request = TestRequest(form={'UPDATE_SUBMIT': 'Update',
-        ...                             'field.cal_periods': 'off',
-        ...                             'field.cal_public': 'on'})
-        >>> view = PersonPreferencesView(prefs, request)
-
-        >>> view.update()
-
-        >>> print prefs.cal_public, prefs.cal_periods
-        True False
-    """
-
-
 def doctest_PersonCSVImporter():
     r"""Tests for PersonCSVImporter.
 

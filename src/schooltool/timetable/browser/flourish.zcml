@@ -76,11 +76,29 @@
       permission="schooltool.edit"
       />
 
+  <flourish:viewlet
+      name="make_default.html"
+      before="delete.html"
+      for="schooltool.timetable.interfaces.ITimetable"
+      title="Make Default"
+      class="schooltool.skin.flourish.page.ModalFormLinkViewlet"
+      manager=".timetable.TimetableActionsLinks"
+      permission="schooltool.edit"
+      />
+
   <flourish:page
       name="delete.html"
       for="schooltool.timetable.interfaces.ITimetable"
       class=".timetable.FlourishTimetableDeleteView"
       template="templates/f_confirm_delete_timetable.pt"
+      permission="schooltool.edit"
+      />
+
+  <flourish:page
+      name="make_default.html"
+      for="schooltool.timetable.interfaces.ITimetable"
+      class=".timetable.FlourishTimetableMakeDefaultView"
+      template="templates/f_confirm_make_default.pt"
       permission="schooltool.edit"
       />
 
