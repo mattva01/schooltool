@@ -210,7 +210,7 @@ def doctest_ContentProviders_traversal():
         >>> providers.traverse('info', ())
         Traceback (most recent call last):
         ...
-        ContentProviderLookupError: info
+        ContentProviderLookupError: (<...SomeContext ...>, 'info')
 
     It is possible to traverse to zope's content providers.
 
@@ -229,7 +229,7 @@ def doctest_ContentProviders_traversal():
         >>> providers.traverse('info', ())
         Traceback (most recent call last):
         ...
-        ContentProviderLookupError: info
+        ContentProviderLookupError: (<...SomeContext ...>, 'info')
 
     But they need to be adaptable to IContentProvider.
     Also, content providers cache the looked up providers, so we need to reset
@@ -240,7 +240,7 @@ def doctest_ContentProviders_traversal():
         >>> info = providers.traverse('info', ())
         Traceback (most recent call last):
         ...
-        ContentProviderLookupError: info
+        ContentProviderLookupError: (<...SomeContext ...>, 'info')
 
         >>> providers = adapt(SomeContext(), 'request', 'view')
 
@@ -268,7 +268,7 @@ def doctest_ContentProviders_traversal():
         >>> providers.traverse('dummy', ())
         Traceback (most recent call last):
         ...
-        ContentProviderLookupError: dummy
+        ContentProviderLookupError: (<...OtherContext ...>, 'dummy')
 
     """
 

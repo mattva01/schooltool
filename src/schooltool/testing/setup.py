@@ -79,8 +79,10 @@ def setUpSchoolToolSite():
 from schooltool.app.interfaces import IHaveCalendar
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.app.cal import getCalendar
+from schooltool.app.browser.cal import getCalendarEventDeleteLink
 def setUpCalendaring():
     provideAdapter(getCalendar, (IHaveCalendar,), ISchoolToolCalendar)
+    provideAdapter(getCalendarEventDeleteLink, name="delete_link")
     registry.setupCalendarComponents()
 
 
