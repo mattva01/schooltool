@@ -29,7 +29,7 @@ from schooltool.testing.setup import ZCMLWrapper
 def setUp(test=None):
     testing.setUp(test=test)
     zcml = ZCMLWrapper()
-    zcml.include('zope.app.zcmlfiles')
+    zcml.include('schooltool.common', file="zcmlfiles.zcml")
     zcml.include('schooltool.traverser', file='meta.zcml')
     zcml.include('schooltool.traverser')
     test.globs['zcml'] = zcml
