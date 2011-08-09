@@ -19,6 +19,9 @@
 """
 Views for school years and school year container implementation
 """
+import cPickle
+from StringIO import StringIO
+
 from zope.viewlet.viewlet import ViewletBase
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.component import adapts, getMultiAdapter
@@ -28,6 +31,7 @@ from zope.schema.interfaces import ValidationError
 from zope.interface.exceptions import Invalid
 from zope.interface import implements
 from zope.interface import Interface
+from zope.location.pickling import CopyPersistent
 from zope.traversing.browser.absoluteurl import AbsoluteURL
 from zope.traversing.browser.interfaces import IAbsoluteURL
 from zope.traversing.browser import absoluteURL
@@ -67,6 +71,7 @@ from schooltool.skin.skin import OrderedViewletManager
 from schooltool.skin.containers import ContainerDeleteView
 from schooltool.skin.containers import TableContainerView
 from schooltool.skin import flourish
+from schooltool.timetable.interfaces import ITimetableContainer
 from schooltool.common import DateRange
 from schooltool.common import SchoolToolMessage as _
 from schooltool.common.inlinept import InheritTemplate
@@ -296,11 +301,7 @@ class ImportSchoolYearData(object):
         return bool(courses)
 
     def hasTimetableSchemas(self, schoolyear):
-        # XXX: temporary disabling of timetable copy
-        return False
-        # XXX: temporary isolation of timetable imports
-        from schooltool.timetable.interfaces import ITimetableSchemaContainer
-        timetables = ITimetableSchemaContainer(schoolyear)
+        timetables = ITimetableContainer(schoolyear)
         return bool(timetables)
 
     def activeSchoolyearInfo(self):
@@ -335,20 +336,38 @@ class ImportSchoolYearData(object):
         for id, course in oldCourses.items():
             newCourses[course.__name__] = Course(course.title, course.description)
 
-    def importAllTimetables(self):
-        # XXX: temporary isolation of timetable imports
-        from schooltool.timetable.interfaces import ITimetableSchemaContainer
-        # XXX: would be nice to replace with something else
-        from schooltool.timetable.schema import locationCopy
+    def copyTimetable(self, timetable):
+        # XXX: copy-pasted old hack, would be nice
+        #      to replace with something decent!
 
+        tmp = StringIO()
+        persistent = CopyPersistent(timetable)
+
+        # Pickle the object to a temporary file
+        pickler = cPickle.Pickler(tmp, 2)
+        pickler.persistent_id = persistent.id
+        pickler.dump(timetable)
+
+        # Now load it back
+        tmp.seek(0)
+        unpickler = cPickle.Unpickler(tmp)
+        unpickler.persistent_load = persistent.load
+        new_tt = unpickler.load()
+        return new_tt
+
+    def importAllTimetables(self):
         if not self.shouldImportAllTimetables():
             return
-        oldTimetables = ITimetableSchemaContainer(self.activeSchoolyear)
-        newTimetables = ITimetableSchemaContainer(self.newSchoolyear)
+        oldTimetables = ITimetableContainer(self.activeSchoolyear)
+        newTimetables = ITimetableContainer(self.newSchoolyear)
         for schooltt in oldTimetables.values():
-            newSchooltt = locationCopy(schooltt)
+            newSchooltt = self.copyTimetable(schooltt)
+            newSchooltt.exceptions.clear()
             newSchooltt.__parent__ = None
             newTimetables[newSchooltt.__name__] = newSchooltt
+            if (oldTimetables.default is not None and
+                sameProxiedObjects(oldTimetables.default, schooltt)):
+                newTimetables.default = newSchooltt
 
     def importGroupMembers(self, sourceGroup, targetGroup):
         for member in sourceGroup.members:
@@ -409,8 +428,7 @@ class ImportSchoolYearData(object):
         self.activeSchoolyear = self.context.getActiveSchoolYear()
         if self.shouldImportData():
             self.importAllCourses()
-            # XXX: temporary disabling of timetable copy
-            #self.importAllTimetables()
+            self.importAllTimetables()
             self.importCustomGroups()
             self.importDefaultGroupsMembers()
 
