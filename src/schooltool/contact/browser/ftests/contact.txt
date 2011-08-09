@@ -39,36 +39,29 @@ information.  Contacts of existing users have no deletion checkboxes.
     <tr class="odd"><td>
         </td>
         <td>
-          <a href="http://localhost/persons/student/contact">Bill</a>
-        </td>
-        <td>
           <a href="http://localhost/persons/student/contact">Student</a>
         </td>
         <td>
+          <a href="http://localhost/persons/student/contact">Bill</a>
         </td>
       </tr>
     <tr class="even"><td>
           <input type="checkbox" name="delete.contacts.Contact-..."
                                  id="delete.contacts.Contact-..." /></td>
         <td>
-          <a href="http://localhost/contacts/Contact">John</a>
-        </td>
-        <td>
           <a href="http://localhost/contacts/Contact">Administrator</a>
         </td>
         <td>
-          Frog lane 13, Toadtown, Arizona, USA, 556677
+          <a href="http://localhost/contacts/Contact">John</a>
         </td>
     </tr>
     <tr class="odd"><td>
         </td>
         <td>
-          <a href="http://localhost/persons/manager/contact">SchoolTool</a>
-        </td>
-        <td>
           <a href="http://localhost/persons/manager/contact">Administrator</a>
         </td>
         <td>
+          <a href="http://localhost/persons/manager/contact">SchoolTool</a>
         </td>
       </tr>
 
@@ -127,7 +120,8 @@ And attach existing contact entries to a person as well:
     button-neutral
     button-neutral
     button-neutral
-    >>> browser.getControl('John').click()
+
+    >>> browser.getControl('Administrator').click()
     >>> browser.getControl('Assign').click()
 
 Both contacts should be assigned now:
@@ -135,39 +129,32 @@ Both contacts should be assigned now:
     >>> browser.printQuery("id('content-body')/form/fieldset[1]//thead//th")
     <th>
     </th>
-    <th> <span ...> First Name</span> <img ... alt="(descending)" /></th>
     <th> <span ...> Last Name</span> <img ... alt="(sortable)" /></th>
+    <th> <span ...> First Name</span> <img ... alt="(descending)" /></th>
     <th> Relationship </th>
-    <th> Address </th>
 
     >>> browser.printQuery("id('content-body')/form/fieldset[1]//tbody//tr")
     <tr class="odd"><td>
           <input type="checkbox" name="remove_item.contacts.Contact-..." id="remove_item.contacts.Contact-..." /></td>
         <td>
-          <label for="remove_item.contacts.Contact-...">John</label>
+          <label for="remove_item.contacts.Contact-...">Administrator</label>
         </td>
         <td>
-          <a href="http://localhost/contacts/Contact">Administrator</a>
+          <a href="http://localhost/contacts/Contact">John</a>
         </td>
         <td>
-        </td>
-        <td>
-          Frog lane 13, Toadtown, Arizona, USA, 556677
         </td>
     </tr>
     <tr class="even"><td>
           <input type="checkbox" name="remove_item.contacts.Contact-2-..." id="remove_item.contacts.Contact-2-..." /></td>
         <td>
-          <label for="remove_item.contacts.Contact-2-...">Peter</label>
+          <label for="remove_item.contacts.Contact-2-...">Peterson</label>
         </td>
         <td>
-          <a href="http://localhost/contacts/Contact-2">Peterson</a>
+          <a href="http://localhost/contacts/Contact-2">Peter</a>
         </td>
         <td>
           Parent
-        </td>
-        <td>
-          Frog lane 14, Toadtown
         </td>
     </tr>
 
@@ -231,7 +218,8 @@ Contacts can be assigned to multiple persons.
     >>> browser.getLink('Manage Contacts').click()
 
     >>> browser.getControl('Clear').click()
-    >>> browser.getControl('John').click()
+
+    >>> browser.getControl('Administrator', index=0).click()
     >>> browser.getControl('Assign').click()
 
 Now we can see two persons when we navigate to contact's view.
@@ -333,36 +321,29 @@ Confirm deletion of Peter Peterson.
     <tr class="odd"><td>
         </td>
         <td>
-          <a href="http://localhost/persons/student/contact">Bill</a>
-        </td>
-        <td>
           <a href="http://localhost/persons/student/contact">Student</a>
         </td>
         <td>
+          <a href="http://localhost/persons/student/contact">Bill</a>
         </td>
       </tr>
     <tr class="even"><td>
           <input type="checkbox" name="delete.contacts.Contact-..."
                                  id="delete.contacts.Contact-..." /></td>
         <td>
-          <a href="http://localhost/contacts/Contact">John</a>
-        </td>
-        <td>
           <a href="http://localhost/contacts/Contact">Administrator</a>
         </td>
         <td>
-          Frog lane 13, Toadtown, Arizona, USA, 556677
+          <a href="http://localhost/contacts/Contact">John</a>
         </td>
     </tr>
     <tr class="odd"><td>
         </td>
         <td>
-          <a href="http://localhost/persons/manager/contact">SchoolTool</a>
-        </td>
-        <td>
           <a href="http://localhost/persons/manager/contact">Administrator</a>
         </td>
         <td>
+          <a href="http://localhost/persons/manager/contact">SchoolTool</a>
         </td>
       </tr>
 
@@ -409,7 +390,7 @@ And assign SchoolTool Administrator user as contact of a student.
     >>> browser.getLink('Manage Contacts').click()
 
     >>> browser.getControl('Clear').click()
-    >>> browser.getControl('SchoolTool').click()
+    >>> browser.getControl('Administrator', index=1).click()
     >>> browser.getControl('Assign').click()
 
     >>> browser.getLink('Contacts').click()
