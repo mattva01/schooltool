@@ -68,7 +68,7 @@ And now let's add a couple of courses:
     >>> manager.getControl('Title').value = "English"
     >>> manager.getControl('Description').value = "English course description"
     >>> manager.getControl('Course ID').value = "english"
-    >>> manager.getControl('Government ID').value = "english101"
+    >>> manager.getControl('Alternate ID').value = "english101"
     >>> manager.getControl('Credits').value = "4"
     >>> manager.getControl('Add').click()
 
@@ -87,7 +87,7 @@ Now let's add some sections for our courses:
       english
     </p>
     <p>
-      Government ID:
+      Alternate ID:
       english101
     </p>
     <p>
