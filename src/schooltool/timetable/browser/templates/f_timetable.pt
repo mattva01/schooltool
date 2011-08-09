@@ -3,14 +3,6 @@
 
   <h3>
     <tal:block replace="context/title" />
-    <a class="modify" href="" title="Edit this timetable"
-       tal:attributes="href string:${context/@@absolute_url}/edit.html"
-       i18n:attributes="title"
-       tal:condition="context/schooltool:can_edit">
-      <img tal:attributes="src context/++resource++schooltool.skin.flourish/edit-icon.png"
-           alt="Edit"
-           i18n:attributes="alt" />
-    </a>
   </h3>
 
   <p tal:condition="view/context/timezone"
@@ -28,7 +20,17 @@
 
   <div tal:define="exceptions nocall:context/schooltool:content/exceptions|nothing"
        tal:condition="exceptions">
-    <h3 i18n:translate="">Exception days</h3>
+    <h3>
+      <tal:block i18n:translate="">Exception days</tal:block>
+      <a class="modify" href="" title="Edit exception days"
+       tal:attributes="href string:${context/@@absolute_url}/special.html"
+       i18n:attributes="title"
+       tal:condition="context/schooltool:can_edit">
+        <img tal:attributes="src context/++resource++schooltool.skin.flourish/edit-icon.png"
+             alt="Edit"
+             i18n:attributes="alt" />
+      </a>
+    </h3>
     <div tal:content="structure exceptions"></div>
   </div>
 

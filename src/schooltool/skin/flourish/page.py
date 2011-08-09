@@ -262,6 +262,11 @@ class RefineLinksViewlet(Refine, ListNavigationViewlet):
     list_class = "filter"
     body_template = InheritTemplate(ListNavigationBase.template)
 
+    def render(self, *args, **kw):
+        if not self.items:
+            return ''
+        return Refine.render(self, *args, **kw)
+
 
 class IHTMLHeadManager(interfaces.IViewletManager):
     pass
