@@ -1,0 +1,21 @@
+<div class="manage-view" i18n:domain="schooltool"
+     tal:condition="not:view/schoolyears">
+  <h3>
+    <a tal:attributes="href string:${view/schoolyears/@@absolute_url}/add.html"
+       title="Add a school year" i18n:attributes="title"
+       i18n:translate="">
+      School Years
+    </a>
+  </h3>
+  <p i18n:translate="">
+    There are no school years set up yet.
+  </p>
+  <p i18n:translate="">
+    To continue setting up you school
+    <a tal:attributes="href string:${view/schoolyears/@@absolute_url}/add.html"
+       title="Add a school year" i18n:attributes="title"
+       i18n:translate="">
+      please add a schoolyear
+    </a>.
+  </p>
+</div>

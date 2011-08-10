@@ -24,6 +24,7 @@ from StringIO import StringIO
 
 from zope.viewlet.viewlet import ViewletBase
 from zope.publisher.interfaces.browser import IBrowserRequest
+from zope.cachedescriptors.property import Lazy
 from zope.component import adapts, getMultiAdapter
 from zope.security import checkPermission
 from zope.schema import Date, TextLine
@@ -841,3 +842,14 @@ class ManageSchoolTertiaryNavigation(flourish.page.Content):
                     'schoolyear': schoolyear,
                     })
         return result
+
+
+class FlourishSchoolYearsOverview(flourish.page.Content):
+
+    body_template = ViewPageTemplateFile(
+        'templates/f_manage_schoolyears_overview.pt')
+
+    @Lazy
+    def schoolyears(self):
+        syc = ISchoolYearContainer(self.context)
+        return syc
