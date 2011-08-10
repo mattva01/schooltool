@@ -60,6 +60,14 @@ p {
     margin-bottom: 8px;
 }
 
+strong {
+    font-weight: bold;
+}
+
+em {
+    font-style: italic;
+}
+
 li {
     font-size: 12px;
     line-height: 16px;

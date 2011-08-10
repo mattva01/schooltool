@@ -29,6 +29,7 @@ from z3c.form.term import BoolTerms
 from z3c.form.interfaces import IRadioWidget
 
 import schooltool.skin.flourish.page
+import schooltool.skin.flourish.viewlet
 import schooltool.skin.flourish.tal
 from schooltool.common.inlinept import InheritTemplate
 from schooltool.skin import flourish
@@ -153,3 +154,13 @@ class FlourishErrorViewSnippet(ErrorViewSnippet):
     def update(self):
         super(FlourishErrorViewSnippet, self).update()
         self.widget.addClass('error')
+
+
+class FormViewlet(flourish.viewlet.Viewlet, z3c.form.form.Form):
+
+    def update(self):
+        z3c.form.form.Form.update(self)
+        flourish.viewlet.Viewlet.update(self)
+
+    def render(self, *args, **kw):
+        return z3c.form.form.Form.render(self)
