@@ -35,6 +35,7 @@ from zope.app.form.browser.interfaces import ITerms
 from zope.app.form.interfaces import IInputWidget
 from zope.app.form.interfaces import WidgetsError
 from zope.app.form.utility import getWidgetsData, setUpWidgets
+from zope.app.dependable.interfaces import IDependable
 from zope.publisher.browser import BrowserView
 from zope.viewlet.interfaces import IViewletManager
 from zope.component import getUtility
@@ -248,6 +249,12 @@ class FlourishPersonDeleteLink(flourish.page.ModalFormLinkViewlet):
                   mapping={'person_full_name': "%s %s" % (person.first_name,
                                                           person.last_name)})
         return translate(title, context=self.request)
+
+    def render(self, *args, **kw):
+        dep = IDependable(removeSecurityProxy(self.context), None)
+        if (dep is not None and dep.dependents()):
+            return ''
+        return flourish.page.ModalFormLinkViewlet.render(self, *args, **kw)
 
 
 # Should this be moved to a interface.py file ?
