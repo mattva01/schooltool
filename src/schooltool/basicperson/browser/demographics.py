@@ -36,6 +36,7 @@ from z3c.form.converter import BaseDataConverter, FormatterValidationError
 import schooltool.skin.flourish.form
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.basicperson.demographics import TextFieldDescription
+from schooltool.basicperson.demographics import DescriptionFieldDescription
 from schooltool.basicperson.demographics import DateFieldDescription
 from schooltool.basicperson.demographics import BoolFieldDescription
 from schooltool.basicperson.demographics import EnumFieldDescription
@@ -184,6 +185,17 @@ class TextFieldDescriptionAddView(FieldDescriptionAddView):
         return fd
 
 
+class DescriptionFieldDescriptionAddView(FieldDescriptionAddView):
+
+    def create(self, data):
+        fd = DescriptionFieldDescription(data['title'],
+                                         str(data['name']),
+                                         data['required'])
+        form.applyChanges(self, fd, data)
+        self._fd = fd
+        return fd
+
+
 class DateFieldDescriptionAddView(FieldDescriptionAddView):
 
     def create(self, data):
@@ -260,6 +272,10 @@ class FieldDescriptionView(form.DisplayForm):
 
 class TextFieldDescriptionView(FieldDescriptionView):
     """Display form for a text field description."""
+
+
+class DescriptionFieldDescriptionView(FieldDescriptionView):
+    """Display form for a description field description."""
 
 
 class DateFieldDescriptionView(FieldDescriptionView):
@@ -399,19 +415,28 @@ class FlourishFieldDescriptionAddView(flourish.form.AddForm,
         return absoluteURL(self.context, self.request)
 
 
-class FlourishTextFieldDescriptionAddView(FlourishFieldDescriptionAddView, TextFieldDescriptionAddView):
+class FlourishTextFieldDescriptionAddView(FlourishFieldDescriptionAddView,
+                                          TextFieldDescriptionAddView):
     pass
 
 
-class FlourishDateFieldDescriptionAddView(FlourishFieldDescriptionAddView, DateFieldDescriptionAddView):
+class FlourishDescriptionFieldDescriptionAddView(FlourishFieldDescriptionAddView,
+                                                 DescriptionFieldDescriptionAddView):
     pass
 
 
-class FlourishBoolFieldDescriptionAddView(FlourishFieldDescriptionAddView, BoolFieldDescriptionAddView):
+class FlourishDateFieldDescriptionAddView(FlourishFieldDescriptionAddView,
+                                          DateFieldDescriptionAddView):
     pass
 
 
-class FlourishEnumFieldDescriptionAddView(FlourishFieldDescriptionAddView, EnumFieldDescriptionAddView):
+class FlourishBoolFieldDescriptionAddView(FlourishFieldDescriptionAddView,
+                                          BoolFieldDescriptionAddView):
+    pass
+
+
+class FlourishEnumFieldDescriptionAddView(FlourishFieldDescriptionAddView,
+                                          EnumFieldDescriptionAddView):
     pass
 
 
@@ -464,6 +489,13 @@ class FlourishTextFieldDescriptionView(flourish.page.Page, TextFieldDescriptionV
 
     def update(self):
         TextFieldDescriptionView.update(self)
+
+
+class FlourishDescriptionFieldDescriptionView(flourish.page.Page,
+                                              DescriptionFieldDescriptionView):
+
+    def update(self):
+        DescriptionFieldDescriptionView.update(self)
 
 
 class FlourishDateFieldDescriptionView(flourish.page.Page, DateFieldDescriptionView):

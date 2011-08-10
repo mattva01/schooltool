@@ -1,0 +1,8 @@
+<input
+    id="" name=""
+    value=""
+    class="hidden-widget"
+    type="hidden"
+    tal:attributes="id view/id;
+                    name view/name;
+                    value view/value" />

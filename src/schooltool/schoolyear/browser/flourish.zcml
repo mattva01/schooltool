@@ -153,4 +153,14 @@
       permission="zope.Public"
       />
 
+  <flourish:viewlet
+      before="*"
+      name="flourish-schoolyears-overview"
+      view="schooltool.app.browser.app.ManageSchool"
+      permission="schooltool.edit"
+      manager="schooltool.skin.flourish.page.IPageContentManager"
+      class=".schoolyear.FlourishSchoolYearsOverview"
+      />
+
+
 </configure>

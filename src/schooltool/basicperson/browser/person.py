@@ -26,6 +26,7 @@ from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import adapts
 from zope.component import getUtility, queryMultiAdapter, getMultiAdapter
 from z3c.form import form, field, button, validator
+from z3c.form.interfaces import DISPLAY_MODE
 from zope.interface import invariant, Invalid
 from zope.schema import Password, TextLine, Choice, List, Object
 from zope.schema import ValidationError
@@ -57,6 +58,7 @@ from schooltool.schoolyear.interfaces import ISchoolYearContainer, ISchoolYear
 from schooltool.skin.containers import TableContainerView
 from schooltool.skin import flourish
 from schooltool.skin.flourish.interfaces import IViewletManager
+from schooltool.skin.flourish.form import FormViewlet
 from schooltool.skin.flourish.viewlet import Viewlet, ViewletManager
 from schooltool.skin.flourish.content import ContentProvider
 from schooltool.table.interfaces import ITableFormatter
@@ -751,36 +753,30 @@ class FlourishGeneralViewlet(Viewlet):
         return canAccess(self.context.__parent__, '__delitem__')
 
 
-class FlourishDemographicsViewlet(Viewlet):
+class FlourishDemographicsViewlet(FormViewlet):
     """A viewlet showing the demographics of a person."""
 
     template = ViewPageTemplateFile('templates/f_demographicsViewlet.pt')
     body_template = None
+    mode = DISPLAY_MODE
 
-    def makeRow(self, attr, value):
-        if value is None:
-            value = u''
-        return {
-            'label': attr,
-            'value': unicode(value),
-            }
-
-    @property
-    def table(self):
+    def getFields(self):
         field_descriptions = IDemographicsFields(ISchoolToolApplication(None))
         fields = field.Fields()
         limit_keys = [group.__name__ for group in self.context.groups]
         for field_desc in field_descriptions.filter_keys(limit_keys):
             fields += field_desc.makeField()
+        return fields
 
-        rows = []
-        demographics = IDemographics(self.context)
-        for attr in fields:
-            value = demographics[attr]
-            if value:
-                label = fields[attr].field.title
-                rows.append(self.makeRow(label, value))
-        return rows
+    @property
+    def filtered_widgets(self):
+        result = [widget for widget in self.widgets.values()
+                  if widget.value]
+        return result
+
+    def update(self):
+        self.fields = self.getFields()
+        super(FlourishDemographicsViewlet, self).update()
 
     @property
     def canModify(self):

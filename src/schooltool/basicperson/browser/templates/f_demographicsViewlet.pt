@@ -13,12 +13,13 @@
              i18n:attributes="alt" />
       </a>
     </h3>
-    <table class="person-view-demographics" tal:define="rows view/table"
-           tal:condition="rows">
+    <table class="person-view-demographics"
+           tal:define="widgets view/filtered_widgets"
+           tal:condition="widgets">
       <tbody>
-        <tr tal:repeat="row rows">
-          <td tal:content="row/label" class="label" />
-          <td tal:content="row/value" />
+        <tr tal:repeat="widget widgets">
+          <td tal:content="widget/label" class="label" />
+          <td tal:content="structure widget/render" />
         </tr>
       </tbody>
     </table>

@@ -260,6 +260,7 @@ class SchoolToolTableFormatter(object):
 
     filter_widget = None
     batch = None
+    css_classes = None
 
     def __init__(self, context, request):
         self.context, self.request = context, request
@@ -293,7 +294,7 @@ class SchoolToolTableFormatter(object):
     def setUp(self, items=None, ommit=[], filter=None, columns=None,
               columns_before=[], columns_after=[], sort_on=None, prefix="",
               formatters=[], table_formatter=table.FormFullFormatter,
-              batch_size=25):
+              batch_size=25, css_classes=None):
 
         self.filter_widget = queryMultiAdapter((self.context, self.request),
                                                IFilterWidget)
@@ -326,6 +327,11 @@ class SchoolToolTableFormatter(object):
 
         self._sort_on = sort_on or self.sortOn()
 
+        if css_classes:
+            self.css_classes = css_classes
+        else:
+            self.css_classes = {'table': 'data'}
+
     def extra_url(self):
         extra_url = ""
         if self.filter_widget:
@@ -343,6 +349,6 @@ class SchoolToolTableFormatter(object):
             batch_start=self.batch.start, batch_size=self.batch.size,
             sort_on=self._sort_on,
             prefix=self.prefix)
-        formatter.cssClasses['table'] = 'data'
+        formatter.cssClasses.update(self.css_classes)
         return formatter()
 

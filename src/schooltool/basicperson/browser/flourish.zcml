@@ -306,6 +306,15 @@
         />
 
     <flourish:viewlet
+        name="addDescription.html"
+        after="addText.html"
+        title="Description Field"
+        class="schooltool.skin.flourish.page.LinkViewlet"
+        manager="schooltool.basicperson.browser.demographics.FlourishDemographicsFieldsLinks"
+        permission="schooltool.edit"
+        />
+
+    <flourish:viewlet
         name="addDate.html"
         before="addBool.html"
         title="Date Field"
@@ -349,6 +358,15 @@
        />
 
     <flourish:page
+       name="addDescription.html"
+       for="schooltool.basicperson.interfaces.IDemographicsFields"
+       class="schooltool.basicperson.browser.demographics.FlourishDescriptionFieldDescriptionAddView"
+       content_template="templates/z3c_form_edit.pt"
+       permission="schooltool.edit"
+       subtitle="New Description Field"
+       />
+
+    <flourish:page
        name="addDate.html"
        for="schooltool.basicperson.interfaces.IDemographicsFields"
        class="schooltool.basicperson.browser.demographics.FlourishDateFieldDescriptionAddView"
@@ -385,6 +403,14 @@
 
     <flourish:page
        name="edit.html"
+       for="schooltool.basicperson.demographics.DescriptionFieldDescription"
+       class="schooltool.basicperson.browser.demographics.FlourishFieldDescriptionEditView"
+       content_template="templates/z3c_form_edit.pt"
+       permission="schooltool.edit"
+       />
+
+    <flourish:page
+       name="edit.html"
        for="schooltool.basicperson.demographics.DateFieldDescription"
        class="schooltool.basicperson.browser.demographics.FlourishFieldDescriptionEditView"
        content_template="templates/z3c_form_edit.pt"
@@ -411,6 +437,15 @@
        name="index.html"
        for="schooltool.basicperson.demographics.TextFieldDescription"
        class="schooltool.basicperson.browser.demographics.FlourishTextFieldDescriptionView"
+       content_template="templates/z3c_form_display.pt"
+       permission="schooltool.view"
+       title="View"
+       />
+
+    <flourish:page
+       name="index.html"
+       for="schooltool.basicperson.demographics.DescriptionFieldDescription"
+       class="schooltool.basicperson.browser.demographics.FlourishDescriptionFieldDescriptionView"
        content_template="templates/z3c_form_display.pt"
        permission="schooltool.view"
        title="View"
