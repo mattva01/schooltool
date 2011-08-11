@@ -4,15 +4,7 @@
            xmlns:flourish="http://schooltool.org/flourish"
            i18n_domain="schooltool">
 
-  <flourish:viewlet
-      name="contacts-accordion"
-      before="demographics"
-      for="schooltool.basicperson.interfaces.IBasicPerson"
-      manager="schooltool.basicperson.browser.person.IFlourishPersonInfoManager"
-      class=".contact.FlourishContactsViewlet"
-      render="template"
-      permission="schooltool.view"
-      />
+  <!-- contacts -->
 
   <zope:adapter
       for="schooltool.contact.interfaces.IContactContainer
@@ -59,24 +51,6 @@
       class=".contact.FlourishManageContactsOverview"
       />
 
-  <flourish:page
-      name="manage_contacts.html"
-      for="schooltool.basicperson.interfaces.IBasicPerson"
-      class=".relationship.FlourishContactManagementView"
-      permission="schooltool.edit"
-      subtitle="Contacts"
-      />
-
-  <flourish:viewlet
-      name="contacts-links"
-      manager="schooltool.skin.flourish.page.IPageRefineManager"
-      class="schooltool.contact.browser.contact.ContactsLinks"
-      for="schooltool.person.interfaces.IPerson"
-      view=".relationship.FlourishContactManagementView"
-      permission="schooltool.view"
-      title="Add"
-      />
-
   <flourish:viewlet
       name="contacts-links"
       manager="schooltool.skin.flourish.page.IPageRefineManager"
@@ -84,16 +58,6 @@
       for="schooltool.contact.interfaces.IContactContainer"
       permission="schooltool.view"
       title="Add"
-      />
-
-  <flourish:viewlet
-      name="add-contact"
-      link="add_contact.html"
-      for="schooltool.person.interfaces.IPerson"
-      title="New Contact"
-      class="schooltool.skin.flourish.page.LinkIdViewlet"
-      manager="schooltool.contact.browser.contact.ContactsLinks"
-      permission="schooltool.view"
       />
 
   <flourish:viewlet
@@ -106,22 +70,31 @@
       permission="schooltool.view"
       />
 
-  <flourish:viewlet
-      name="person-as-contact"
-      link="contact/edit.html"
-      for="schooltool.person.interfaces.IPerson"
-      class="schooltool.contact.browser.contact.PersonAsContactLinkViewlet"
-      manager="schooltool.contact.browser.contact.ContactsLinks"
+  <flourish:content
+      class="schooltool.basicperson.browser.person.PersonTitle"
+      for="schooltool.contact.interfaces.IContact"
       permission="schooltool.view"
+      name="title" />
+
+  <flourish:breadcrumb
+      for="schooltool.contact.interfaces.IContact"
+      class="schooltool.skin.flourish.breadcrumbs.Breadcrumbs"
       />
 
   <flourish:page
-      name="add_contact.html"
-      for="schooltool.basicperson.interfaces.IBasicPerson"
-      class="schooltool.contact.browser.contact.FlourishPersonContactAddView"
-      content_template="templates/f_contact_form.pt"
+      name="index.html"
+      for="schooltool.contact.interfaces.IContact"
+      class=".contact.FlourishContactView"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="contact-actions-links"
+      title="Actions"
+      for="schooltool.contact.interfaces.IContact"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      class="schooltool.contact.browser.contact.ContactActionsLinks"
       permission="schooltool.edit"
-      subtitle="New Contact"
       />
 
   <flourish:page
@@ -142,15 +115,40 @@
       subtitle="Edit"
       />
 
-  <flourish:content
-      class="schooltool.basicperson.browser.person.PersonTitle"
+  <flourish:viewlet
+      name="delete.html"
+      title="Delete"
       for="schooltool.contact.interfaces.IContact"
-      permission="schooltool.view"
-      name="title" />
+      manager="schooltool.contact.browser.contact.ContactActionsLinks"
+      class="schooltool.skin.flourish.page.ModalFormLinkViewlet"
+      permission="schooltool.edit"
+      />
 
-  <flourish:breadcrumb
+  <flourish:viewlet
+      name="delete.html"
+      title="Delete"
+      for="schooltool.contact.basicperson.IBoundContact"
+      manager="schooltool.contact.browser.contact.ContactActionsLinks"
+      class="schooltool.skin.flourish.page.DisabledViewlet"
+      permission="schooltool.edit"
+      />
+
+  <flourish:page
+      name="delete.html"
       for="schooltool.contact.interfaces.IContact"
-      class="schooltool.skin.flourish.breadcrumbs.Breadcrumbs"
+      class="schooltool.contact.browser.contact.FlourishContactDeleteView"
+      template="templates/f_confirm_delete_contact.pt"
+      permission="schooltool.edit"
+      />
+
+  <!-- bound contacts -->
+
+  <flourish:page
+      name="index.html"
+      subtitle="Contact Information"
+      for="schooltool.contact.basicperson.IBoundContact"
+      class=".basicperson.FlourishBoundContactView"
+      permission="schooltool.view"
       />
 
   <flourish:breadcrumb
@@ -159,18 +157,41 @@
       class="schooltool.skin.flourish.breadcrumbs.Breadcrumbs"
       />
 
-  <flourish:page
-      name="index.html"
-      for="schooltool.contact.interfaces.IContact"
-      class=".contact.FlourishContactView"
+  <flourish:viewlet
+      name="contacts-links"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      class="schooltool.contact.browser.contact.ContactsLinks"
+      for="schooltool.person.interfaces.IPerson"
+      view=".relationship.FlourishContactManagementView"
+      permission="schooltool.view"
+      title="Add"
+      />
+
+  <flourish:viewlet
+      name="add-contact"
+      link="add_contact.html"
+      for="schooltool.person.interfaces.IPerson"
+      title="New Contact"
+      class="schooltool.skin.flourish.page.LinkIdViewlet"
+      manager="schooltool.contact.browser.contact.ContactsLinks"
       permission="schooltool.view"
       />
 
   <flourish:page
-      name="index.html"
-      subtitle="Contact Information"
-      for="schooltool.contact.basicperson.IBoundContact"
-      class=".basicperson.FlourishBoundContactView"
+      name="add_contact.html"
+      for="schooltool.basicperson.interfaces.IBasicPerson"
+      class="schooltool.contact.browser.contact.FlourishPersonContactAddView"
+      content_template="templates/f_contact_form.pt"
+      permission="schooltool.edit"
+      subtitle="New Contact"
+      />
+
+  <flourish:viewlet
+      name="person-as-contact"
+      link="contact/edit.html"
+      for="schooltool.person.interfaces.IPerson"
+      class="schooltool.contact.browser.contact.PersonAsContactLinkViewlet"
+      manager="schooltool.contact.browser.contact.ContactsLinks"
       permission="schooltool.view"
       />
 
@@ -181,6 +202,24 @@
       content_template="templates/f_contact_form.pt"
       permission="schooltool.edit"
       subtitle="Edit Contact Information"
+      />
+
+  <flourish:viewlet
+      name="contacts-accordion"
+      before="demographics"
+      for="schooltool.basicperson.interfaces.IBasicPerson"
+      manager="schooltool.basicperson.browser.person.IFlourishPersonInfoManager"
+      class=".contact.FlourishContactsViewlet"
+      render="template"
+      permission="schooltool.view"
+      />
+
+  <flourish:page
+      name="manage_contacts.html"
+      for="schooltool.basicperson.interfaces.IBasicPerson"
+      class=".relationship.FlourishContactManagementView"
+      permission="schooltool.edit"
+      subtitle="Contacts"
       />
 
 </configure>

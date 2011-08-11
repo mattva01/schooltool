@@ -38,6 +38,7 @@ from zope.container.interfaces import INameChooser
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.catalog.interfaces import ICatalog
 from zope.intid.interfaces import IIntIds
+from zope.i18n import translate
 
 from zc.table.column import GetterColumn
 from z3c.form import form, subform, field, button
@@ -404,8 +405,7 @@ class ContactView(form.DisplayForm):
         return self.render()
 
 
-class FlourishContactView(flourish.page.NoSidebarPage,
-                          form.DisplayForm):
+class FlourishContactView(flourish.page.Page, form.DisplayForm):
 
     content_template = ViewPageTemplateFile('templates/f_contact_view.pt')
     fields = field.Fields(IContact)
@@ -831,3 +831,45 @@ class FlourishManageContactsOverview(flourish.page.Content):
     def school_name(self):
         preferences = IApplicationPreferences(self.context)
         return preferences.title
+
+
+class ContactActionsLinks(flourish.page.RefineLinksViewlet):
+    """Contact actions links viewlet."""
+
+
+class FlourishContactDeleteView(flourish.form.DialogForm, form.EditForm):
+    """View used for deleting a contact."""
+
+    dialog_submit_actions = ('apply',)
+    dialog_close_actions = ('cancel',)
+    label = None
+
+    def initDialog(self):
+        super(FlourishContactDeleteView, self).initDialog()
+        # XXX: fix the width of dialog content in css
+        self.ajax_settings['dialog']['width'] = 544 + 16
+        contact = self.context
+        self.ajax_settings['dialog']['title'] = translate(
+            _(u'Delete ${contact_full_name}', mapping={
+                    'contact_full_name': "%s %s" % (contact.first_name,
+                                                    contact.last_name)}),
+              context=self.request)
+
+
+    @button.buttonAndHandler(_("Delete"), name='apply')
+    def handleDelete(self, action):
+        url = '%s/delete.html?delete.%s&CONFIRM' % (
+            absoluteURL(self.context.__parent__, self.request),
+            self.context.__name__)
+        self.request.response.redirect(url)
+        # We never have errors, so just close the dialog.
+        self.ajax_settings['dialog'] = 'close'
+
+    @button.buttonAndHandler(_("Cancel"))
+    def handleCancel(self, action):
+        pass
+
+    def updateActions(self):
+        super(FlourishContactDeleteView, self).updateActions()
+        self.actions['apply'].addClass('button-ok')
+        self.actions['cancel'].addClass('button-cancel')
