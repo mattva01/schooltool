@@ -138,6 +138,61 @@ class ContactAddView(form.AddForm):
         self.request.response.redirect(self.nextURL())
 
 
+class FlourishContactAddView(flourish.page.NoSidebarPage, ContactAddView):
+    label = None
+
+    def update(self):
+        self.buildFieldsetGroups()
+        ContactAddView.update(self)
+
+    def render(self):
+        if self._finishedAdd:
+            self.request.response.redirect(self.nextURL())
+            return ""
+        return super(FlourishContactAddView, self).render()
+
+    def makeRows(self, fields, cols=1):
+        rows = []
+        while fields:
+            rows.append(fields[:cols])
+            fields = fields[cols:]
+        return rows
+
+    def makeFieldSet(self, fieldset_id, legend, fields, cols=1):
+        result = {
+            'id': fieldset_id,
+            'legend': legend,
+            }
+        result['rows'] = self.makeRows(fields, cols)
+        return result
+
+    def fieldsets(self):
+        result = []
+        for fieldset_id in self.fieldset_order:
+            legend, fields = self.fieldset_groups[fieldset_id]
+            result.append(self.makeFieldSet(
+                    fieldset_id, legend, list(fields)))
+        return result
+
+    def buildFieldsetGroups(self):
+        self.fieldset_groups = {
+            'full_name': (
+                _('Full Name'),
+                ['prefix', 'first_name', 'middle_name', 'last_name',
+                 'suffix']),
+            'address': (
+                _('Address'),
+                ['address_line_1', 'address_line_2', 'city', 'state',
+                 'country', 'postal_code']),
+            'contact_information': (
+                _('Contact Information'),
+                ['home_phone', 'work_phone', 'mobile_phone', 'email',
+                 'language']),
+            }
+        self.fieldset_order = (
+            'full_name', 'address', 'contact_information')
+
+
 class ContactPersonInfoSubForm(subform.EditSubForm):
     """Form for editing additional person's contact information."""
 
@@ -201,20 +256,16 @@ class PersonContactAddView(ContactAddView):
         return contact
 
 
-class FlourishPersonContactAddView(flourish.page.NoSidebarPage,
+class FlourishPersonContactAddView(FlourishContactAddView,
                                    PersonContactAddView):
 
     label = None
 
+    add = PersonContactAddView.add
+
     def update(self):
         self.buildFieldsetGroups()
         PersonContactAddView.update(self)
-
-    def render(self):
-        if self._finishedAdd:
-            self.request.response.redirect(self.nextURL())
-            return ""
-        return super(FlourishPersonContactAddView, self).render()
 
     def nextURL(self):
         base_url = absoluteURL(self.context, self.request)
@@ -222,47 +273,6 @@ class FlourishPersonContactAddView(flourish.page.NoSidebarPage,
             base_url,
             urllib.urlencode([('SEARCH_TITLE',
                                self.context.last_name.encode("utf-8"))]))
-
-    def makeRows(self, fields, cols=1):
-        rows = []
-        while fields:
-            rows.append(fields[:cols])
-            fields = fields[cols:]
-        return rows
-
-    def makeFieldSet(self, fieldset_id, legend, fields, cols=1):
-        result = {
-            'id': fieldset_id,
-            'legend': legend,
-            }
-        result['rows'] = self.makeRows(fields, cols)
-        return result
-
-    def buildFieldsetGroups(self):
-        self.fieldset_groups = {
-            'full_name': (
-                _('Full Name'),
-                ['prefix', 'first_name', 'middle_name', 'last_name',
-                 'suffix']),
-            'address': (
-                _('Address'),
-                ['address_line_1', 'address_line_2', 'city', 'state',
-                 'country', 'postal_code']),
-            'contact_information': (
-                _('Contact Information'),
-                ['home_phone', 'work_phone', 'mobile_phone', 'email',
-                 'language']),
-            }
-        self.fieldset_order = (
-            'full_name', 'address', 'contact_information')
-
-    def fieldsets(self):
-        result = []
-        for fieldset_id in self.fieldset_order:
-            legend, fields = self.fieldset_groups[fieldset_id]
-            result.append(self.makeFieldSet(
-                    fieldset_id, legend, list(fields)))
-        return result
 
 
 class ContactEditView(form.EditForm):
@@ -781,7 +791,7 @@ class FlourishContactsViewlet(flourish.viewlet.Viewlet):
                                self.context.last_name.encode("utf-8"))]))
 
 
-class PersonManageContactsLinks(flourish.page.RefineLinksViewlet):
+class ContactsLinks(flourish.page.RefineLinksViewlet):
     """Links for manage contact page"""
 
 
