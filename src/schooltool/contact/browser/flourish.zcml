@@ -29,6 +29,12 @@
       title="Contacts"
       />
 
+  <flourish:activeViewlet
+      name="manage_school"
+      manager="schooltool.skin.flourish.page.IHeaderNavigationManager"
+      for="schooltool.contact.interfaces.IContactContainer"
+      />
+
   <flourish:content
       class="schooltool.app.browser.app.ContentTitle"
       permission="schooltool.view"
@@ -89,7 +95,7 @@
       manager="schooltool.contact.browser.contact.PersonManageContactsLinks"
       permission="schooltool.view"
       />
-  
+
   <flourish:page
       name="add_contact.html"
       for="schooltool.basicperson.interfaces.IBasicPerson"
@@ -114,10 +120,29 @@
       permission="schooltool.view"
       name="title" />
 
+  <flourish:breadcrumb
+      for="schooltool.contact.interfaces.IContact"
+      class="schooltool.skin.flourish.breadcrumbs.Breadcrumbs"
+      />
+
+  <flourish:breadcrumb
+      title=""
+      for="schooltool.contact.basicperson.IBoundContact"
+      class="schooltool.skin.flourish.breadcrumbs.Breadcrumbs"
+      />
+
   <flourish:page
       name="index.html"
       for="schooltool.contact.interfaces.IContact"
       class=".contact.FlourishContactView"
+      permission="schooltool.view"
+      />
+
+  <flourish:page
+      name="index.html"
+      subtitle="Contact Information"
+      for="schooltool.contact.basicperson.IBoundContact"
+      class=".basicperson.FlourishBoundContactView"
       permission="schooltool.view"
       />
 
@@ -127,7 +152,7 @@
       class=".basicperson.FlourishBoundContactEditView"
       content_template="templates/f_contact_form.pt"
       permission="schooltool.edit"
-      subtitle="Contact Information"
+      subtitle="Edit Contact Information"
       />
 
 </configure>

@@ -82,8 +82,8 @@ class Breadcrumbs(ContentProvider):
             interfaces.IContentProvider, 'title')
         if title_content is None:
             return None
-
-        return title_content()
+        title = getattr(title_content, 'title', None)
+        return title
 
     @property
     def link(self):
