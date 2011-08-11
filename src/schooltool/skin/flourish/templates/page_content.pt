@@ -1,11 +1,13 @@
-<div>
+<tal:block define="actions context/schooltool:content/actions;
+                   body view/body_template">
+<div tal:condition="python: actions.strip() or body.strip()">
   <div class="header"
-       tal:define="actions context/schooltool:content/actions"
        tal:condition="actions"
        tal:content="structure actions">
     [action] [buttons]
   </div>
-  <div class="body" tal:content="structure view/body_template">
+  <div class="body" tal:content="structure body">
     [ The content itself ]
   </div>
 </div>
+</tal:block>

@@ -99,6 +99,12 @@ class ContentViewletManager(ViewletManager):
         return ViewletManager.render(self, *args, **kw)
 
 
+class DisabledViewlet(Viewlet):
+
+    def render(self, *args, **kw):
+        return ''
+
+
 class Refine(Viewlet):
 
     template = InlineViewPageTemplate('''

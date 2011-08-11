@@ -1,0 +1,21 @@
+<div class="manage-view" i18n:domain="schooltool"
+     tal:condition="view/has_schoolyear">
+  <h3>
+    <a tal:attributes="href view/contacts/@@absolute_url"
+       title="Manage contacts" i18n:attributes="title"
+       i18n:translate="">
+      Contacts
+    </a>
+  </h3>
+  <p i18n:translate="">
+    There are
+    <metal:block tal:replace="python:len(view.contacts)" i18n:name="count"/>
+    external contact persons defined in
+    <metal:block tal:replace="view/school_name" i18n:name="school" />.
+  </p>
+  <p i18n:translate="">
+    The school has a total of
+    <metal:block tal:replace="view/total" i18n:name="total"/>
+    contact persons.
+  </p>
+</div>

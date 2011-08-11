@@ -27,6 +27,7 @@ from zope.schema._field import Date
 from zope.schema import TextLine, Bool
 from zope.location.location import Location
 from zope.location.location import locate
+from zope.html.field import HtmlFragment
 from zope.interface import Interface
 from zope.interface import implements
 from zope.interface import implementer
@@ -229,4 +230,10 @@ class BoolFieldDescription(FieldDescription):
 
     def makeField(self):
         return self.setUpField(Bool(title=unicode(self.title)))
+
+
+class DescriptionFieldDescription(FieldDescription):
+
+    def makeField(self):
+        return self.setUpField(HtmlFragment(title=unicode(self.title)))
 
