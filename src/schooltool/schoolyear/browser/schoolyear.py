@@ -55,6 +55,7 @@ from z3c.form.error import ErrorViewSnippet
 from zc.table import column
 
 import schooltool.skin.flourish.containers
+import schooltool.skin.flourish.breadcrumbs
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.demographics.browser.table import DateColumn
 from schooltool.table.table import url_cell_formatter
@@ -842,6 +843,32 @@ class ManageSchoolTertiaryNavigation(flourish.page.Content):
                     'schoolyear': schoolyear,
                     })
         return result
+
+
+class ShoolyearNavBreadcrumbs(flourish.breadcrumbs.Breadcrumbs):
+
+    traversal_name = u''
+
+    @property
+    def schoolyear_id(self):
+        sy = ISchoolYear(self.context, None)
+        if sy is None:
+            return u''
+        return sy.__name__
+
+    @property
+    def crumb_parent(self):
+        return ISchoolToolApplication(None)
+
+    @property
+    def link(self):
+        app = ISchoolToolApplication(None)
+        app_url = absoluteURL(app, self.request)
+        link = '%s/%s' % (app_url, self.traversal_name)
+        sy_id = self.schoolyear_id
+        if sy_id:
+            link += '?schoolyear_id=%s' % sy_id
+        return link
 
 
 class FlourishSchoolYearsOverview(flourish.page.Content):
