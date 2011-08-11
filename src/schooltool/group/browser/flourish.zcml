@@ -134,6 +134,26 @@
       permission="schooltool.view"
       />
 
+  <flourish:breadcrumb
+      for="schooltool.group.interfaces.IGroupContainer"
+      title="Groups"
+      traversal_name="groups"
+      class="schooltool.schoolyear.browser.schoolyear.SchoolyearNavBreadcrumbs"
+      />
+
+  <flourish:breadcrumb
+      for="schooltool.group.interfaces.IGroup"
+      class="schooltool.skin.flourish.breadcrumbs.Breadcrumbs"
+      />
+
+  <flourish:content
+      name="breadcrumbs"
+      class="schooltool.skin.flourish.breadcrumbs.Breadcrumbs"
+      for="schooltool.group.interfaces.IGroup"
+      view=".group.FlourishGroupView"
+      permission="zope.Public"
+      />
+
   <flourish:page
       name="delete.html"
       for="schooltool.group.interfaces.IGroup"

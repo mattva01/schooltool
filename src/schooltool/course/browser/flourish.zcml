@@ -313,4 +313,55 @@
       class=".course.FlourishManageCoursesOverview"
       />
 
+  <!-- breadcrumbs -->
+
+  <flourish:breadcrumb
+      for="schooltool.course.interfaces.ICourseContainer"
+      title="Courses"
+      traversal_name="courses"
+      class="schooltool.schoolyear.browser.schoolyear.SchoolyearNavBreadcrumbs"
+      />
+
+  <flourish:breadcrumb
+      for="schooltool.course.interfaces.ICourse"
+      class="schooltool.skin.flourish.breadcrumbs.Breadcrumbs"
+      />
+
+  <flourish:content
+      name="breadcrumbs"
+      class="schooltool.skin.flourish.breadcrumbs.Breadcrumbs"
+      for="schooltool.course.interfaces.ICourse"
+      view=".course.FlourishCourseView"
+      permission="zope.Public"
+      />
+
+  <flourish:breadcrumb
+      for="schooltool.course.interfaces.ISectionContainer"
+      title="Sections"
+      traversal_name="sections"
+      class="schooltool.schoolyear.browser.schoolyear.SchoolyearNavBreadcrumbs"
+      />
+
+  <flourish:breadcrumb
+      for="schooltool.course.interfaces.ISection"
+      class="schooltool.skin.flourish.breadcrumbs.Breadcrumbs"
+      />
+
+  <flourish:content
+      name="breadcrumbs"
+      class=".section.AddSectionPageBreadcrumbs"
+      for="schooltool.schoolyear.interfaces.ISchoolYear"
+      view="schooltool.course.browser.section.FlourishSectionAddView"
+      permission="zope.Public"
+      />
+
+  <flourish:content
+      name="breadcrumbs"
+      class="schooltool.skin.flourish.breadcrumbs.Breadcrumbs"
+      for="schooltool.course.interfaces.ISection"
+      view=".section.FlourishSectionView"
+      permission="zope.Public"
+      />
+
+
 </configure>

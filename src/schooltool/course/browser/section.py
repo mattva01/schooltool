@@ -63,6 +63,7 @@ from schooltool.course.section import copySection
 from schooltool.person.interfaces import IPerson
 from schooltool.schoolyear.interfaces import ISchoolYear
 from schooltool.schoolyear.interfaces import ISchoolYearContainer
+from schooltool.schoolyear.browser.schoolyear import SchoolyearNavBreadcrumbs
 from schooltool.skin.containers import ContainerView
 from schooltool.skin.flourish.containers import ContainerDeleteView
 from schooltool.skin.flourish.containers import TableContainerView as FlourishTableContainerView
@@ -74,6 +75,7 @@ from schooltool.skin.flourish.page import LinkViewlet
 from schooltool.skin.flourish.page import ModalFormLinkViewlet
 from schooltool.skin.flourish.page import Page
 from schooltool.skin.flourish.page import RefineLinksViewlet
+from schooltool.skin.flourish.breadcrumbs import PageBreadcrumbs
 from schooltool.skin.flourish.viewlet import ViewletManager
 from schooltool.table.interfaces import ITableFormatter
 from schooltool.table.table import FilterWidget
@@ -1433,3 +1435,18 @@ class FlourishUnlinkSectionView(Dialog, UnlinkSectionView):
             if section.next:
                 section.next = None
             self.request.response.redirect(self.nextURL())
+
+
+class SectionsYearNaveBreadcrumbs(SchoolyearNavBreadcrumbs):
+
+    traversal_name = u'sections'
+    title = _('Sections')
+
+
+class AddSectionPageBreadcrumbs(PageBreadcrumbs):
+
+    @property
+    def follow_crumb(self):
+        crumb = SectionsYearNaveBreadcrumbs(
+            self.context, self.request, self.view)
+        return crumb
