@@ -845,7 +845,7 @@ class ManageSchoolTertiaryNavigation(flourish.page.Content):
         return result
 
 
-class ShoolyearNavBreadcrumbs(flourish.breadcrumbs.Breadcrumbs):
+class SchoolyearNavBreadcrumbs(flourish.breadcrumbs.Breadcrumbs):
 
     traversal_name = u''
 

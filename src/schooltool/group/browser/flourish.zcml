@@ -138,7 +138,7 @@
       for="schooltool.group.interfaces.IGroupContainer"
       title="Groups"
       traversal_name="groups"
-      class="schooltool.schoolyear.browser.schoolyear.ShoolyearNavBreadcrumbs"
+      class="schooltool.schoolyear.browser.schoolyear.SchoolyearNavBreadcrumbs"
       />
 
   <flourish:breadcrumb

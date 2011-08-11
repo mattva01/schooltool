@@ -63,7 +63,7 @@ from schooltool.course.section import copySection
 from schooltool.person.interfaces import IPerson
 from schooltool.schoolyear.interfaces import ISchoolYear
 from schooltool.schoolyear.interfaces import ISchoolYearContainer
-from schooltool.schoolyear.browser.schoolyear import ShoolyearNavBreadcrumbs
+from schooltool.schoolyear.browser.schoolyear import SchoolyearNavBreadcrumbs
 from schooltool.skin.containers import ContainerView
 from schooltool.skin.flourish.containers import ContainerDeleteView
 from schooltool.skin.flourish.containers import TableContainerView as FlourishTableContainerView
@@ -1437,7 +1437,7 @@ class FlourishUnlinkSectionView(Dialog, UnlinkSectionView):
             self.request.response.redirect(self.nextURL())
 
 
-class SectionsYearNaveBreadcrumbs(ShoolyearNavBreadcrumbs):
+class SectionsYearNaveBreadcrumbs(SchoolyearNavBreadcrumbs):
 
     traversal_name = u'sections'
     title = _('Sections')

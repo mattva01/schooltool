@@ -319,7 +319,7 @@
       for="schooltool.course.interfaces.ICourseContainer"
       title="Courses"
       traversal_name="courses"
-      class="schooltool.schoolyear.browser.schoolyear.ShoolyearNavBreadcrumbs"
+      class="schooltool.schoolyear.browser.schoolyear.SchoolyearNavBreadcrumbs"
       />
 
   <flourish:breadcrumb
@@ -339,7 +339,7 @@
       for="schooltool.course.interfaces.ISectionContainer"
       title="Sections"
       traversal_name="sections"
-      class="schooltool.schoolyear.browser.schoolyear.ShoolyearNavBreadcrumbs"
+      class="schooltool.schoolyear.browser.schoolyear.SchoolyearNavBreadcrumbs"
       />
 
   <flourish:breadcrumb
