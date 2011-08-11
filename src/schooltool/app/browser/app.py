@@ -687,6 +687,7 @@ class ContentTitle(ContentProvider):
         <span tal:content="view/title"></span>
     '''.strip())
 
+    @property
     def title(self):
         __not_set = object()
         title = getattr(self.context, 'title', __not_set)

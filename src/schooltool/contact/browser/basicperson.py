@@ -26,6 +26,7 @@ import urllib
 
 from zope.schema import getFieldsInOrder
 from zope.security.proxy import removeSecurityProxy
+from zope.security import checkPermission
 from zope.publisher.browser import BrowserView
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.traversing.browser.absoluteurl import absoluteURL
@@ -41,6 +42,7 @@ from schooltool.contact.interfaces import IContactPerson
 from schooltool.contact.interfaces import IAddress, IEmails, IPhones, ILanguages
 from schooltool.contact.browser.contact import ContactEditView
 from schooltool.contact.browser.contact import FlourishContactEditView
+from schooltool.contact.browser.contact import FlourishContactView
 from schooltool.contact.browser.relationship import get_relationship_title
 from schooltool.common import SchoolToolMessage as _
 
@@ -97,6 +99,12 @@ class ContactOverviewView(BrowserView):
 class BoundContactEditView(ContactEditView):
     """Edit form for a bound contact."""
     fields = field.Fields(IContactInformation)
+
+
+class FlourishBoundContactView(FlourishContactView):
+
+    def canModify(self):
+        return checkPermission("schooltool.edit", self.context)
 
 
 class FlourishBoundContactEditView(FlourishContactEditView):

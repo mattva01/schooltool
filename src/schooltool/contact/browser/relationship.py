@@ -252,7 +252,7 @@ class FlourishContactManagementView(FlourishRelationshipViewBase):
         for param in self.request.form:
             if param.startswith(add_item_prefix):
                 add_item_submitted = True
-            elif param.startswith(remove_item_prefix):  
+            elif param.startswith(remove_item_prefix):
                 remove_item_submitted = True
         if add_item_submitted:
             for intid in self.getAvailableItemIds():

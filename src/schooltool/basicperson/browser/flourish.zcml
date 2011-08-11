@@ -204,7 +204,7 @@
 
   <flourish:breadcrumb
       for="schooltool.basicperson.interfaces.IBasicPerson"
-      class="schooltool.basicperson.browser.person.TitleBreadcrumb"
+      class="schooltool.skin.flourish.breadcrumbs.Breadcrumbs"
       />
 
   <flourish:page

@@ -24,6 +24,7 @@ import urllib
 from zope.security.checker import canAccess
 from zope.schema import getFieldsInOrder
 from zope.interface import implements, Interface
+from zope.catalog.interfaces import ICatalog
 from zope.component import getMultiAdapter
 from zope.component import adapts
 from zope.component import getUtility
@@ -37,10 +38,13 @@ from zope.container.interfaces import INameChooser
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.catalog.interfaces import ICatalog
 from zope.intid.interfaces import IIntIds
+from zope.i18n import translate
 
 from zc.table.column import GetterColumn
 from z3c.form import form, subform, field, button
 
+import schooltool.skin.flourish.viewlet
+import schooltool.skin.flourish.page
 from schooltool.table.table import url_cell_formatter
 from schooltool.table.table import DependableCheckboxColumn
 from schooltool.table.catalog import FilterWidget
@@ -49,6 +53,7 @@ from schooltool.table.catalog import IndexedLocaleAwareGetterColumn
 from schooltool.table.interfaces import IIndexedColumn
 from schooltool.skin.containers import TableContainerView
 from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.contact.interfaces import IContactable
 from schooltool.contact.interfaces import IContactContainer
 from schooltool.contact.interfaces import IContactPersonInfo
@@ -60,14 +65,13 @@ from schooltool.contact.contact import Contact
 from schooltool.person.interfaces import IPerson
 from schooltool.email.interfaces import IEmailUtility
 from schooltool.email.mail import Email
-from schooltool.skin.flourish.viewlet import Viewlet
-from schooltool.skin.flourish.page import RefineLinksViewlet, NoSidebarPage
-from schooltool.skin.flourish.page import LinkIdViewlet
+from schooltool.skin import flourish
 from schooltool.relationship.relationship import IRelationshipLinks
 from schooltool.contact.contact import URIPerson, URIContact
 from schooltool.contact.contact import URIContactRelationship
 from schooltool.contact.interfaces import IContactPerson
 from schooltool.contact.interfaces import IEmails, IPhones, ILanguages
+from schooltool.schoolyear.interfaces import ISchoolYearContainer
 
 from schooltool.common import SchoolToolMessage as _
 
@@ -135,6 +139,61 @@ class ContactAddView(form.AddForm):
         self.request.response.redirect(self.nextURL())
 
 
+class FlourishContactAddView(flourish.page.NoSidebarPage, ContactAddView):
+    label = None
+
+    def update(self):
+        self.buildFieldsetGroups()
+        ContactAddView.update(self)
+
+    def render(self):
+        if self._finishedAdd:
+            self.request.response.redirect(self.nextURL())
+            return ""
+        return super(FlourishContactAddView, self).render()
+
+    def makeRows(self, fields, cols=1):
+        rows = []
+        while fields:
+            rows.append(fields[:cols])
+            fields = fields[cols:]
+        return rows
+
+    def makeFieldSet(self, fieldset_id, legend, fields, cols=1):
+        result = {
+            'id': fieldset_id,
+            'legend': legend,
+            }
+        result['rows'] = self.makeRows(fields, cols)
+        return result
+
+    def fieldsets(self):
+        result = []
+        for fieldset_id in self.fieldset_order:
+            legend, fields = self.fieldset_groups[fieldset_id]
+            result.append(self.makeFieldSet(
+                    fieldset_id, legend, list(fields)))
+        return result
+
+    def buildFieldsetGroups(self):
+        self.fieldset_groups = {
+            'full_name': (
+                _('Full Name'),
+                ['prefix', 'first_name', 'middle_name', 'last_name',
+                 'suffix']),
+            'address': (
+                _('Address'),
+                ['address_line_1', 'address_line_2', 'city', 'state',
+                 'country', 'postal_code']),
+            'contact_information': (
+                _('Contact Information'),
+                ['home_phone', 'work_phone', 'mobile_phone', 'email',
+                 'language']),
+            }
+        self.fieldset_order = (
+            'full_name', 'address', 'contact_information')
+
+
 class ContactPersonInfoSubForm(subform.EditSubForm):
     """Form for editing additional person's contact information."""
 
@@ -198,19 +257,16 @@ class PersonContactAddView(ContactAddView):
         return contact
 
 
-class FlourishPersonContactAddView(NoSidebarPage, PersonContactAddView):
+class FlourishPersonContactAddView(FlourishContactAddView,
+                                   PersonContactAddView):
 
     label = None
+
+    add = PersonContactAddView.add
 
     def update(self):
         self.buildFieldsetGroups()
         PersonContactAddView.update(self)
-
-    def render(self):
-        if self._finishedAdd:
-            self.request.response.redirect(self.nextURL())
-            return ""
-        return super(FlourishPersonContactAddView, self).render()
 
     def nextURL(self):
         base_url = absoluteURL(self.context, self.request)
@@ -218,47 +274,6 @@ class FlourishPersonContactAddView(NoSidebarPage, PersonContactAddView):
             base_url,
             urllib.urlencode([('SEARCH_TITLE',
                                self.context.last_name.encode("utf-8"))]))
-
-    def makeRows(self, fields, cols=1):
-        rows = []
-        while fields:
-            rows.append(fields[:cols])
-            fields = fields[cols:]
-        return rows
-
-    def makeFieldSet(self, fieldset_id, legend, fields, cols=1):
-        result = {
-            'id': fieldset_id,
-            'legend': legend,
-            }
-        result['rows'] = self.makeRows(fields, cols)
-        return result
-
-    def buildFieldsetGroups(self):
-        self.fieldset_groups = {
-            'full_name': (
-                _('Full Name'),
-                ['prefix', 'first_name', 'middle_name', 'last_name',
-                 'suffix']),
-            'address': (
-                _('Address'),
-                ['address_line_1', 'address_line_2', 'city', 'state',
-                 'country', 'postal_code']),
-            'contact_information': (
-                _('Contact Information'),
-                ['home_phone', 'work_phone', 'mobile_phone', 'email',
-                 'language']),
-            }
-        self.fieldset_order = (
-            'full_name', 'address', 'contact_information')
-
-    def fieldsets(self):
-        result = []
-        for fieldset_id in self.fieldset_order:
-            legend, fields = self.fieldset_groups[fieldset_id]
-            result.append(self.makeFieldSet(
-                    fieldset_id, legend, list(fields)))
-        return result
 
 
 class ContactEditView(form.EditForm):
@@ -301,7 +316,8 @@ class ContactEditView(form.EditForm):
                           'last_name': self.context.last_name})
 
 
-class FlourishContactEditView(NoSidebarPage, ContactEditView):
+class FlourishContactEditView(flourish.page.NoSidebarPage,
+                              ContactEditView):
 
     form.extends(ContactEditView)
 
@@ -389,7 +405,7 @@ class ContactView(form.DisplayForm):
         return self.render()
 
 
-class FlourishContactView(NoSidebarPage, form.DisplayForm):
+class FlourishContactView(flourish.page.Page, form.DisplayForm):
 
     content_template = ViewPageTemplateFile('templates/f_contact_view.pt')
     fields = field.Fields(IContact)
@@ -421,16 +437,19 @@ class ContactContainerView(TableContainerView):
             TableContainerView._listItemsForDeletion(self),
             key=lambda obj: '%s %s' % (obj.last_name, obj.first_name))
 
-    def setUpTableFormatter(self, formatter):
-        columns_before = []
+    def columnsBefore(self):
         if self.canModify():
-            columns_before = [
+            return [
                 DependableCheckboxColumn(
                     prefix="delete",
                     name='delete_checkbox',
                     title=u'',
                     id_getter=IUniqueFormKey,
                     show_disabled=False)]
+        return []
+
+    def setUpTableFormatter(self, formatter):
+        columns_before = self.columnsBefore()
         formatter.setUp(columns_before=columns_before)
 
     def listIdsForDeletion(self):
@@ -693,7 +712,7 @@ class BoundContactPersonActionViewlet(object):
         return IPerson(self.context)
 
 
-class FlourishContactsViewlet(Viewlet):
+class FlourishContactsViewlet(flourish.viewlet.Viewlet):
     """A viewlet showing contacts of a person"""
 
     template = ViewPageTemplateFile('templates/f_contactsViewlet.pt')
@@ -749,7 +768,7 @@ class FlourishContactsViewlet(Viewlet):
         rows = []
         fields = field.Fields(IAddress, IEmails, IPhones, ILanguages)
         for attr in fields:
-            value = getattr(contact, attr) 
+            value = getattr(contact, attr)
             if value:
                 label = fields[attr].field.title
                 rows.append(self.makeRow(label, value))
@@ -772,11 +791,11 @@ class FlourishContactsViewlet(Viewlet):
                                self.context.last_name.encode("utf-8"))]))
 
 
-class PersonManageContactsLinks(RefineLinksViewlet):
+class ContactsLinks(flourish.page.RefineLinksViewlet):
     """Links for manage contact page"""
 
 
-class PersonAsContactLinkViewlet(LinkIdViewlet):
+class PersonAsContactLinkViewlet(flourish.page.LinkIdViewlet):
 
     @property
     def title(self):
@@ -784,3 +803,73 @@ class PersonAsContactLinkViewlet(LinkIdViewlet):
         return _('${person_full_name} as Contact',
                  mapping={'person_full_name': '%s %s' % (person.first_name,
                                                          person.last_name)})
+
+
+class FlourishManageContactsOverview(flourish.page.Content):
+
+    body_template = ViewPageTemplateFile(
+        'templates/f_manage_contacts_overview.pt')
+
+    @property
+    def has_schoolyear(self):
+        schoolyears = ISchoolYearContainer(self.context)
+        schoolyear = schoolyears.getActiveSchoolYear()
+        return schoolyear is not None
+
+    @property
+    def contacts(self):
+        app = ISchoolToolApplication(None)
+        contacts = IContactContainer(app)
+        return contacts
+
+    @property
+    def total(self):
+        catalog = ICatalog(self.contacts)
+        return len(catalog.extent)
+
+    @property
+    def school_name(self):
+        preferences = IApplicationPreferences(self.context)
+        return preferences.title
+
+
+class ContactActionsLinks(flourish.page.RefineLinksViewlet):
+    """Contact actions links viewlet."""
+
+
+class FlourishContactDeleteView(flourish.form.DialogForm, form.EditForm):
+    """View used for deleting a contact."""
+
+    dialog_submit_actions = ('apply',)
+    dialog_close_actions = ('cancel',)
+    label = None
+
+    def initDialog(self):
+        super(FlourishContactDeleteView, self).initDialog()
+        # XXX: fix the width of dialog content in css
+        self.ajax_settings['dialog']['width'] = 544 + 16
+        contact = self.context
+        self.ajax_settings['dialog']['title'] = translate(
+            _(u'Delete ${contact_full_name}', mapping={
+                    'contact_full_name': "%s %s" % (contact.first_name,
+                                                    contact.last_name)}),
+              context=self.request)
+
+
+    @button.buttonAndHandler(_("Delete"), name='apply')
+    def handleDelete(self, action):
+        url = '%s/delete.html?delete.%s&CONFIRM' % (
+            absoluteURL(self.context.__parent__, self.request),
+            self.context.__name__)
+        self.request.response.redirect(url)
+        # We never have errors, so just close the dialog.
+        self.ajax_settings['dialog'] = 'close'
+
+    @button.buttonAndHandler(_("Cancel"))
+    def handleCancel(self, action):
+        pass
+
+    def updateActions(self):
+        super(FlourishContactDeleteView, self).updateActions()
+        self.actions['apply'].addClass('button-ok')
+        self.actions['cancel'].addClass('button-cancel')

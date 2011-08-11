@@ -974,14 +974,6 @@ class AddPersonViewlet(object):
         return sy is not None
 
 
-class TitleBreadcrumb(flourish.breadcrumbs.Breadcrumbs):
-
-    @property
-    def title(self):
-        person = self.context
-        return "%s %s" % (person.first_name, person.last_name)
-
-
 class PersonTitle(ContentProvider):
     render = InlineViewPageTemplate('''
         <span tal:content="view/title"></span>
