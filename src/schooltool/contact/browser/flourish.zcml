@@ -24,6 +24,35 @@
            schooltool.skin.flourish.interfaces.IFlourishLayer"
       factory=".contact.FlourishContactFilterWidget" />
 
+  <flourish:breadcrumb
+      for="schooltool.contact.interfaces.IContactContainer"
+      title="Contacts"
+      />
+
+  <flourish:content
+      class="schooltool.app.browser.app.ContentTitle"
+      permission="schooltool.view"
+      for="schooltool.contact.interfaces.IContactContainer"
+      layer="schooltool.skin.flourish.IFlourishLayer"
+      title="Contacts"
+      name="title" />
+
+  <flourish:page
+      name="index.html"
+      for="schooltool.contact.interfaces.IContactContainer"
+      class="schooltool.skin.flourish.containers.TableContainerView"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="manage-contacts-overview"
+      after="manage-people-overview"
+      view="schooltool.app.browser.app.ManageSchool"
+      permission="schooltool.edit"
+      manager="schooltool.skin.flourish.page.IPageContentManager"
+      class=".contact.FlourishManageContactsOverview"
+      />
+
   <flourish:page
       name="manage_contacts.html"
       for="schooltool.basicperson.interfaces.IBasicPerson"

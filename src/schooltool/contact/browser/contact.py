@@ -24,6 +24,7 @@ import urllib
 from zope.security.checker import canAccess
 from zope.schema import getFieldsInOrder
 from zope.interface import implements, Interface
+from zope.catalog.interfaces import ICatalog
 from zope.component import getMultiAdapter
 from zope.component import adapts
 from zope.component import getUtility
@@ -41,6 +42,8 @@ from zope.intid.interfaces import IIntIds
 from zc.table.column import GetterColumn
 from z3c.form import form, subform, field, button
 
+import schooltool.skin.flourish.viewlet
+import schooltool.skin.flourish.page
 from schooltool.table.table import url_cell_formatter
 from schooltool.table.table import DependableCheckboxColumn
 from schooltool.table.catalog import FilterWidget
@@ -49,6 +52,7 @@ from schooltool.table.catalog import IndexedLocaleAwareGetterColumn
 from schooltool.table.interfaces import IIndexedColumn
 from schooltool.skin.containers import TableContainerView
 from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.contact.interfaces import IContactable
 from schooltool.contact.interfaces import IContactContainer
 from schooltool.contact.interfaces import IContactPersonInfo
@@ -60,14 +64,13 @@ from schooltool.contact.contact import Contact
 from schooltool.person.interfaces import IPerson
 from schooltool.email.interfaces import IEmailUtility
 from schooltool.email.mail import Email
-from schooltool.skin.flourish.viewlet import Viewlet
-from schooltool.skin.flourish.page import RefineLinksViewlet, NoSidebarPage
-from schooltool.skin.flourish.page import LinkIdViewlet
+from schooltool.skin import flourish
 from schooltool.relationship.relationship import IRelationshipLinks
 from schooltool.contact.contact import URIPerson, URIContact
 from schooltool.contact.contact import URIContactRelationship
 from schooltool.contact.interfaces import IContactPerson
 from schooltool.contact.interfaces import IEmails, IPhones, ILanguages
+from schooltool.schoolyear.interfaces import ISchoolYearContainer
 
 from schooltool.common import SchoolToolMessage as _
 
@@ -198,7 +201,8 @@ class PersonContactAddView(ContactAddView):
         return contact
 
 
-class FlourishPersonContactAddView(NoSidebarPage, PersonContactAddView):
+class FlourishPersonContactAddView(flourish.page.NoSidebarPage,
+                                   PersonContactAddView):
 
     label = None
 
@@ -301,7 +305,8 @@ class ContactEditView(form.EditForm):
                           'last_name': self.context.last_name})
 
 
-class FlourishContactEditView(NoSidebarPage, ContactEditView):
+class FlourishContactEditView(flourish.page.NoSidebarPage,
+                              ContactEditView):
 
     form.extends(ContactEditView)
 
@@ -389,7 +394,8 @@ class ContactView(form.DisplayForm):
         return self.render()
 
 
-class FlourishContactView(NoSidebarPage, form.DisplayForm):
+class FlourishContactView(flourish.page.NoSidebarPage,
+                          form.DisplayForm):
 
     content_template = ViewPageTemplateFile('templates/f_contact_view.pt')
     fields = field.Fields(IContact)
@@ -421,16 +427,19 @@ class ContactContainerView(TableContainerView):
             TableContainerView._listItemsForDeletion(self),
             key=lambda obj: '%s %s' % (obj.last_name, obj.first_name))
 
-    def setUpTableFormatter(self, formatter):
-        columns_before = []
+    def columnsBefore(self):
         if self.canModify():
-            columns_before = [
+            return [
                 DependableCheckboxColumn(
                     prefix="delete",
                     name='delete_checkbox',
                     title=u'',
                     id_getter=IUniqueFormKey,
                     show_disabled=False)]
+        return []
+
+    def setUpTableFormatter(self, formatter):
+        columns_before = self.columnsBefore()
         formatter.setUp(columns_before=columns_before)
 
     def listIdsForDeletion(self):
@@ -693,7 +702,7 @@ class BoundContactPersonActionViewlet(object):
         return IPerson(self.context)
 
 
-class FlourishContactsViewlet(Viewlet):
+class FlourishContactsViewlet(flourish.viewlet.Viewlet):
     """A viewlet showing contacts of a person"""
 
     template = ViewPageTemplateFile('templates/f_contactsViewlet.pt')
@@ -749,7 +758,7 @@ class FlourishContactsViewlet(Viewlet):
         rows = []
         fields = field.Fields(IAddress, IEmails, IPhones, ILanguages)
         for attr in fields:
-            value = getattr(contact, attr) 
+            value = getattr(contact, attr)
             if value:
                 label = fields[attr].field.title
                 rows.append(self.makeRow(label, value))
@@ -772,11 +781,11 @@ class FlourishContactsViewlet(Viewlet):
                                self.context.last_name.encode("utf-8"))]))
 
 
-class PersonManageContactsLinks(RefineLinksViewlet):
+class PersonManageContactsLinks(flourish.page.RefineLinksViewlet):
     """Links for manage contact page"""
 
 
-class PersonAsContactLinkViewlet(LinkIdViewlet):
+class PersonAsContactLinkViewlet(flourish.page.LinkIdViewlet):
 
     @property
     def title(self):
@@ -784,3 +793,31 @@ class PersonAsContactLinkViewlet(LinkIdViewlet):
         return _('${person_full_name} as Contact',
                  mapping={'person_full_name': '%s %s' % (person.first_name,
                                                          person.last_name)})
+
+
+class FlourishManageContactsOverview(flourish.page.Content):
+
+    body_template = ViewPageTemplateFile(
+        'templates/f_manage_contacts_overview.pt')
+
+    @property
+    def has_schoolyear(self):
+        schoolyears = ISchoolYearContainer(self.context)
+        schoolyear = schoolyears.getActiveSchoolYear()
+        return schoolyear is not None
+
+    @property
+    def contacts(self):
+        app = ISchoolToolApplication(None)
+        contacts = IContactContainer(app)
+        return contacts
+
+    @property
+    def total(self):
+        catalog = ICatalog(self.contacts)
+        return len(catalog.extent)
+
+    @property
+    def school_name(self):
+        preferences = IApplicationPreferences(self.context)
+        return preferences.title
