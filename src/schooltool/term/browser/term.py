@@ -43,6 +43,7 @@ from z3c.form.validator import SimpleFieldValidator
 from z3c.form.validator import WidgetValidatorDiscriminators
 from z3c.form.validator import InvariantsValidator
 
+import schooltool.skin.flourish.breadcrumbs
 from schooltool.app.browser.cal import month_names
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.calendar.utils import parse_date
@@ -701,3 +702,26 @@ class FlourishManageYearsOverview(flourish.page.Content):
         terms = ITermContainer(self.schoolyear, None)
         if terms is not None:
             return sorted(terms.values(), key=lambda t:t.first, reverse=True)
+
+
+class TermContainerBreadcrumb(flourish.breadcrumbs.Breadcrumbs):
+
+    title = _('Terms')
+
+    @property
+    def link(self):
+        base_url = absoluteURL(self.crumb_parent, self.request)
+        return '%s/terms' % base_url
+
+    @property
+    def crumb_parent(self):
+        return ISchoolToolApplication(None)
+
+
+class TermBreadcrumb(flourish.breadcrumbs.Breadcrumbs):
+
+    @property
+    def follow_crumb(self):
+        return TermContainerBreadcrumb(
+            self.__parent__, self.request, self.view)
+
