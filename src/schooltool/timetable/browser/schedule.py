@@ -35,8 +35,10 @@ from zope.security.proxy import removeSecurityProxy
 from zope.traversing.browser.absoluteurl import absoluteURL
 from z3c.form import form, button
 
-import schooltool.skin.flourish.page
+import schooltool.skin.flourish.breadcrumbs
+import schooltool.skin.flourish.interfaces
 import schooltool.skin.flourish.form
+import schooltool.skin.flourish.page
 from schooltool.calendar.utils import parse_date, parse_time
 from schooltool.common.inlinept import InheritTemplate
 from schooltool.schoolyear.interfaces import ISchoolYear
@@ -383,3 +385,15 @@ class FlourishConfirmDeleteView(flourish.form.DialogForm, form.EditForm):
 
 class ScheduleAddLinks(flourish.page.RefineLinksViewlet):
     """Manager for schedule Add links."""
+
+
+class ScheduleContainerBreadcrumbs(flourish.breadcrumbs.Breadcrumbs):
+
+    @property
+    def crumb_parent(self):
+        return IHaveSchedule(self.context)
+
+    @property
+    def link(self):
+        base_url = absoluteURL(self.crumb_parent, self.request)
+        return '%s/schedule' % base_url

@@ -1,0 +1,14 @@
+<tal:block xmlns:tal="http://xml.zope.org/namespaces/tal"
+           xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+           i18n:translate="">
+  Timetable
+  <strong i18n:name="title"
+          tal:content="structure context/timetable/schooltool:content/title" />
+  <tal:block condition="context/first">
+    <tal:block condition="context/last" i18n:translate="">
+      (scheduled
+      <tal:block i18n:name="starts" content="context/first/@@mediumDate" /> -
+      <tal:block i18n:name="ends" content="context/last/@@mediumDate" />)
+    </tal:block>
+  </tal:block>
+</tal:block>

@@ -314,6 +314,13 @@
       name="boundaries" />
 
   <flourish:content
+      for="schooltool.timetable.interfaces.ISelectedPeriodsSchedule"
+      layer="zope.publisher.interfaces.browser.IBrowserRequest"
+      template="templates/selected_period_date_boundaries.pt"
+      permission="schooltool.view"
+      name="boundaries" />
+
+  <flourish:content
       for="schooltool.timetable.interfaces.ITimetable"
       layer="zope.publisher.interfaces.browser.IBrowserRequest"
       template="templates/date_boundaries_content.pt"
@@ -396,6 +403,21 @@
       for="schooltool.timetable.interfaces.ISelectedPeriodsSchedule"
       name="title" />
 
+  <flourish:breadcrumb
+      title="Schedule"
+      for="schooltool.timetable.interfaces.IScheduleContainer"
+      class=".schedule.ScheduleContainerBreadcrumbs"
+      />
+
+  <flourish:content
+      name="breadcrumbs"
+      title="Schedule"
+      for="schooltool.timetable.interfaces.IScheduleContainer"
+      class=".schedule.ScheduleContainerBreadcrumbs"
+      view=".schedule.FlourishScheduleContainerView"
+      permission="zope.Public"
+      />
+
   <flourish:page
       name="index.html"
       subtitle="Schedule"
@@ -412,6 +434,11 @@
       template="templates/f_daytemplates_selected_table.pt"
       permission="schooltool.view"
       name="table" />
+
+  <flourish:breadcrumb
+      for="schooltool.timetable.interfaces.ISelectedPeriodsSchedule"
+      class="schooltool.skin.flourish.breadcrumbs.Breadcrumbs"
+      />
 
   <flourish:page
       name="edit.html"
@@ -460,6 +487,7 @@
 
   <flourish:page
       name="addTimetable.html"
+      subtitle="Schedule Timetable"
       for="schooltool.timetable.interfaces.IScheduleContainer"
       class=".timetable.FlourishSelectedPeriodsAddView"
       content_template="templates/f_selected_periods_add.pt"
