@@ -406,15 +406,15 @@
       title="Schedule"
       for="schooltool.timetable.interfaces.IScheduleContainer"
       class=".schedule.ScheduleContainerBreadcrumbs"
+      crumb_parent="schooltool.timetable.interfaces.IHaveSchedule"
       />
 
-  <flourish:content
-      name="breadcrumbs"
+  <flourish:page_breadcrumbs
       title="Schedule"
       for="schooltool.timetable.interfaces.IScheduleContainer"
       class=".schedule.ScheduleContainerBreadcrumbs"
+      crumb_parent="schooltool.timetable.interfaces.IHaveSchedule"
       view=".schedule.FlourishScheduleContainerView"
-      permission="zope.Public"
       />
 
   <flourish:page

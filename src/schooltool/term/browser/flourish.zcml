@@ -24,15 +24,14 @@
 
   <flourish:breadcrumb
       for="schooltool.term.interfaces.ITerm"
-      class=".term.TermBreadcrumb"
+      follow_crumb=".term.TermContainerBreadcrumb"
       />
 
-  <flourish:content
-      name="breadcrumbs"
-      class=".term.TermBreadcrumb"
+  <flourish:page_breadcrumbs
+      show_page_title="false"
       for="schooltool.term.interfaces.ITerm"
       view=".term.FlourishTermView"
-      permission="zope.Public"
+      follow_crumb=".term.TermContainerBreadcrumb"
       />
 
   <flourish:page

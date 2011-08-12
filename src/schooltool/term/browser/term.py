@@ -716,12 +716,3 @@ class TermContainerBreadcrumb(flourish.breadcrumbs.Breadcrumbs):
     @property
     def crumb_parent(self):
         return ISchoolToolApplication(None)
-
-
-class TermBreadcrumb(flourish.breadcrumbs.Breadcrumbs):
-
-    @property
-    def follow_crumb(self):
-        return TermContainerBreadcrumb(
-            self.__parent__, self.request, self.view)
-
