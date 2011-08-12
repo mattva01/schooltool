@@ -160,6 +160,12 @@
       permission="schooltool.edit"
       />
 
+  <flourish:page_breadcrumbs
+      show_page_title="false"
+      view="schooltool.app.browser.app.ManageSite"
+      class="schooltool.app.browser.app.ManageSiteBreadcrumb"
+      />
+
   <flourish:viewlet
       name="manage_site"
       manager="schooltool.skin.flourish.page.IHeaderNavigationManager"
@@ -389,5 +395,10 @@
       manager="schooltool.app.browser.app.CustomizeSchoolLinks"
       permission="schooltool.edit"
       />
+
+    <flourish:page_breadcrumbs
+        for="zope.app.applicationcontrol.interfaces.IApplicationControl"
+        follow_crumb="schooltool.app.browser.app.ManageSiteBreadcrumb"
+        />
 
 </configure>
