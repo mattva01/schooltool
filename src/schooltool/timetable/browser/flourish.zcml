@@ -7,6 +7,13 @@
 
   <!-- timetable container -->
 
+  <flourish:breadcrumb
+      for="schooltool.timetable.interfaces.ITimetableContainer"
+      title="Timetables"
+      traversal_name="timetables"
+      class="schooltool.schoolyear.browser.schoolyear.SchoolyearNavBreadcrumbs"
+      />
+
   <flourish:page
       name="index.html"
       title="School Timetables"
@@ -32,6 +39,11 @@
       />
 
   <!-- timetables -->
+
+  <flourish:breadcrumb
+      for="schooltool.timetable.interfaces.ITimetable"
+      class="schooltool.skin.flourish.breadcrumbs.Breadcrumbs"
+      />
 
   <flourish:page
       name="index.html"
