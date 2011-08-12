@@ -810,6 +810,28 @@ class FlourishServerSettingsOverview(flourish.page.Content,
         return formatted
 
 
+class FlourishCalendarSettingsOverview(flourish.page.Content):
+
+    body_template = ViewPageTemplateFile(
+        'templates/f_calendar_settings_overview.pt')
+
+    @property
+    def settings(self):
+        result = {}
+        preferences = IApplicationPreferences(self.context)
+        if preferences.frontPageCalendar:
+            result['frontPageCalendar'] = _('Yes')
+        else:
+            result['frontPageCalendar'] = _('No')
+        result['timezone'] = preferences.timezone
+        for setting in ('timeformat', 'dateformat', 'weekstart'):
+            preference = getattr(preferences, setting)
+            field = IApplicationPreferences[setting]
+            vocabulary = field.vocabulary
+            result[setting] = vocabulary.getTerm(preference).title
+        return result
+
+
 class PackDatabaseLink(flourish.page.ModalFormLinkViewlet):
 
     @property
