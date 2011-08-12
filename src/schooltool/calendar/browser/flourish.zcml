@@ -8,7 +8,6 @@
   <flourish:breadcrumb
       for="schooltool.calendar.interfaces.ICalendar"
       title="Calendar"
-      class="schooltool.skin.flourish.breadcrumbs.Breadcrumbs"
       />
 
   <flourish:page
@@ -136,7 +135,6 @@
 
   <flourish:breadcrumb
       for="schooltool.calendar.interfaces.ICalendarEvent"
-      class="schooltool.skin.flourish.breadcrumbs.Breadcrumbs"
       />
 
   <flourish:page

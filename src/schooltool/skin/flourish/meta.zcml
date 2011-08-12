@@ -50,6 +50,12 @@
         handler=".zcml_breadcrumb.breadcrumbDirective"
         />
 
+    <directive
+        name="page_breadcrumbs"
+        schema=".zcml_breadcrumb.IPageBreadcrumbsDirective"
+        handler=".zcml_breadcrumb.pageBreadcrumbsDirective"
+        />
+
   </directives>
 
 </configure>

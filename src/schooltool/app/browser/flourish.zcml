@@ -127,11 +127,9 @@
       permission="zope.Public"
       /> -->
 
-  <flourish:content
-      name="breadcrumbs"
+  <flourish:page_breadcrumbs
       class="schooltool.skin.flourish.Empty"
       view="schooltool.app.browser.app.LoginView"
-      permission="zope.Public"
       />
 
   <flourish:viewlet
@@ -160,6 +158,12 @@
       title="Server"
       class="schooltool.app.browser.app.ManageSite"
       permission="schooltool.edit"
+      />
+
+  <flourish:page_breadcrumbs
+      show_page_title="false"
+      view="schooltool.app.browser.app.ManageSite"
+      class="schooltool.app.browser.app.ManageSiteBreadcrumb"
       />
 
   <flourish:viewlet
@@ -391,5 +395,10 @@
       manager="schooltool.app.browser.app.CustomizeSchoolLinks"
       permission="schooltool.edit"
       />
+
+    <flourish:page_breadcrumbs
+        for="zope.app.applicationcontrol.interfaces.IApplicationControl"
+        follow_crumb="schooltool.app.browser.app.ManageSiteBreadcrumb"
+        />
 
 </configure>

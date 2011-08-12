@@ -7,6 +7,11 @@
 
   <configure package="schooltool.securitypolicy.browser">
 
+    <flourish:page_breadcrumbs
+        view=".control.SecurityDescriptions"
+        follow_crumb="schooltool.app.browser.app.ManageSiteBreadcrumb"
+        />
+
     <flourish:page
         name="security.html"
         title="Server"
@@ -29,6 +34,11 @@
         class="schooltool.skin.flourish.page.LinkViewlet"
         manager="schooltool.app.browser.app.ManageSiteLinks"
         permission="schooltool.edit"
+        />
+
+    <flourish:page_breadcrumbs
+        view=".views.FlourishAccessControlView"
+        follow_crumb="schooltool.app.browser.app.ManageSiteBreadcrumb"
         />
 
     <flourish:page

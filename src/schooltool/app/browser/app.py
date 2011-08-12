@@ -56,6 +56,7 @@ from z3c.form import form, field, button
 from zc.table.column import Column
 from zc.table.table import FormFullFormatter
 
+import schooltool.skin.flourish.breadcrumbs
 import schooltool.skin.flourish.page
 import schooltool.skin.flourish.viewlet
 from schooltool.calendar.icalendar import convert_calendar_to_ical
@@ -303,7 +304,7 @@ class FlourishRelationshipViewBase(flourish.page.NoSidebarPage):
         for param in self.request.form:
             if param.startswith(add_item_prefix):
                 add_item_submitted = True
-            elif param.startswith(remove_item_prefix):  
+            elif param.startswith(remove_item_prefix):
                 remove_item_submitted = True
         if add_item_submitted:
             for item in self.getAvailableItems():
@@ -722,6 +723,18 @@ class ManageSiteNavLink(flourish.page.LinkViewlet):
         return '%s/settings' % app_url
 
 
+class ManageSiteBreadcrumb(flourish.breadcrumbs.Breadcrumbs):
+
+    follow_crumb = None
+    title = _('Server')
+
+    @property
+    def link(self):
+        app = ISchoolToolApplication(None)
+        app_url = absoluteURL(app, self.request)
+        return '%s/settings' % app_url
+
+
 class ManageSchoolNavLink(flourish.page.LinkViewlet):
     @property
     def url(self):
@@ -733,7 +746,7 @@ class ManageSchoolNavLink(flourish.page.LinkViewlet):
 class ManageSite(flourish.page.Page):
     pass
 
- 
+
 class ServerActionsLinks(flourish.page.RefineLinksViewlet):
     """Server actions links viewlet."""
 

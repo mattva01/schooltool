@@ -1437,16 +1437,7 @@ class FlourishUnlinkSectionView(Dialog, UnlinkSectionView):
             self.request.response.redirect(self.nextURL())
 
 
-class SectionsYearNaveBreadcrumbs(SchoolyearNavBreadcrumbs):
+class SectionsYearNavBreadcrumbs(SchoolyearNavBreadcrumbs):
 
     traversal_name = u'sections'
     title = _('Sections')
-
-
-class AddSectionPageBreadcrumbs(PageBreadcrumbs):
-
-    @property
-    def follow_crumb(self):
-        crumb = SectionsYearNaveBreadcrumbs(
-            self.context, self.request, self.view)
-        return crumb

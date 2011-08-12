@@ -324,15 +324,12 @@
 
   <flourish:breadcrumb
       for="schooltool.course.interfaces.ICourse"
-      class="schooltool.skin.flourish.breadcrumbs.Breadcrumbs"
       />
 
-  <flourish:content
-      name="breadcrumbs"
-      class="schooltool.skin.flourish.breadcrumbs.Breadcrumbs"
+  <flourish:page_breadcrumbs
+      show_page_title="false"
       for="schooltool.course.interfaces.ICourse"
       view=".course.FlourishCourseView"
-      permission="zope.Public"
       />
 
   <flourish:breadcrumb
@@ -344,24 +341,19 @@
 
   <flourish:breadcrumb
       for="schooltool.course.interfaces.ISection"
-      class="schooltool.skin.flourish.breadcrumbs.Breadcrumbs"
       />
 
-  <flourish:content
-      name="breadcrumbs"
-      class=".section.AddSectionPageBreadcrumbs"
+  <flourish:page_breadcrumbs
       for="schooltool.schoolyear.interfaces.ISchoolYear"
       view="schooltool.course.browser.section.FlourishSectionAddView"
-      permission="zope.Public"
+      crumb_parent="schooltool.schoolyear.interfaces.ISchoolYear"
+      follow_crumb=".section.SectionsYearNavBreadcrumbs"
       />
 
-  <flourish:content
-      name="breadcrumbs"
-      class="schooltool.skin.flourish.breadcrumbs.Breadcrumbs"
+  <flourish:page_breadcrumbs
+      show_page_title="false"
       for="schooltool.course.interfaces.ISection"
       view=".section.FlourishSectionView"
-      permission="zope.Public"
       />
-
 
 </configure>

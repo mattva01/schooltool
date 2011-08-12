@@ -143,15 +143,12 @@
 
   <flourish:breadcrumb
       for="schooltool.group.interfaces.IGroup"
-      class="schooltool.skin.flourish.breadcrumbs.Breadcrumbs"
       />
 
-  <flourish:content
-      name="breadcrumbs"
-      class="schooltool.skin.flourish.breadcrumbs.Breadcrumbs"
+  <flourish:page_breadcrumbs
+      show_page_title="false"
       for="schooltool.group.interfaces.IGroup"
       view=".group.FlourishGroupView"
-      permission="zope.Public"
       />
 
   <flourish:page

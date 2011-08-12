@@ -22,13 +22,16 @@
       permission="schooltool.edit"
       />
 
-  <flourish:page
-      name="edit.html"
-      for="..interfaces.ITerm"
-      class=".term.FlourishTermEditView"
-      subtitle="Edit"
-      content_template="templates/f_term_add.pt"
-      permission="schooltool.edit"
+  <flourish:breadcrumb
+      for="schooltool.term.interfaces.ITerm"
+      follow_crumb=".term.TermContainerBreadcrumb"
+      />
+
+  <flourish:page_breadcrumbs
+      show_page_title="false"
+      for="schooltool.term.interfaces.ITerm"
+      view=".term.FlourishTermView"
+      follow_crumb=".term.TermContainerBreadcrumb"
       />
 
   <flourish:page
@@ -37,6 +40,15 @@
       class=".term.FlourishTermView"
       content_template="templates/f_term.pt"
       permission="schooltool.view"
+      />
+
+  <flourish:page
+      name="edit.html"
+      for="..interfaces.ITerm"
+      class=".term.FlourishTermEditView"
+      subtitle="Edit"
+      content_template="templates/f_term_add.pt"
+      permission="schooltool.edit"
       />
 
   <flourish:viewlet
