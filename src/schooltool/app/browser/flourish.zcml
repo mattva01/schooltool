@@ -134,6 +134,15 @@
       permission="zope.Public"
       />
 
+  <flourish:viewlet
+      name="calendar-settings-overview"
+      before="email-settings-overview"
+      view="schooltool.app.browser.app.ManageSite"
+      permission="schooltool.edit"
+      manager="schooltool.skin.flourish.page.IPageContentManager"
+      class=".app.FlourishCalendarSettingsOverview"
+      />
+
   <!-- Site control page -->
 
   <flourish:viewlet
@@ -215,14 +224,6 @@
         />
 
   </configure>
-
-  <flourish:viewlet
-      name="site-preferences.html"
-      title="Calendar"
-      class="schooltool.skin.flourish.page.LinkViewlet"
-      manager="schooltool.app.browser.app.ManageSiteLinks"
-      permission="schooltool.edit"
-      />
 
   <flourish:activeViewlet
       factory="schooltool.skin.flourish.page.getViewletViewName"
