@@ -324,7 +324,6 @@
 
   <flourish:breadcrumb
       for="schooltool.course.interfaces.ICourse"
-      class="schooltool.skin.flourish.breadcrumbs.Breadcrumbs"
       />
 
   <flourish:content
@@ -344,7 +343,6 @@
 
   <flourish:breadcrumb
       for="schooltool.course.interfaces.ISection"
-      class="schooltool.skin.flourish.breadcrumbs.Breadcrumbs"
       />
 
   <flourish:content

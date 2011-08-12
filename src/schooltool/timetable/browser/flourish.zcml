@@ -42,7 +42,6 @@
 
   <flourish:breadcrumb
       for="schooltool.timetable.interfaces.ITimetable"
-      class="schooltool.skin.flourish.breadcrumbs.Breadcrumbs"
       />
 
   <flourish:page
@@ -437,7 +436,6 @@
 
   <flourish:breadcrumb
       for="schooltool.timetable.interfaces.ISelectedPeriodsSchedule"
-      class="schooltool.skin.flourish.breadcrumbs.Breadcrumbs"
       />
 
   <flourish:page

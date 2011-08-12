@@ -143,7 +143,6 @@
 
   <flourish:breadcrumb
       for="schooltool.group.interfaces.IGroup"
-      class="schooltool.skin.flourish.breadcrumbs.Breadcrumbs"
       />
 
   <flourish:content

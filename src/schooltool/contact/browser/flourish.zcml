@@ -78,7 +78,6 @@
 
   <flourish:breadcrumb
       for="schooltool.contact.interfaces.IContact"
-      class="schooltool.skin.flourish.breadcrumbs.Breadcrumbs"
       />
 
   <flourish:page
@@ -154,7 +153,6 @@
   <flourish:breadcrumb
       title=""
       for="schooltool.contact.basicperson.IBoundContact"
-      class="schooltool.skin.flourish.breadcrumbs.Breadcrumbs"
       />
 
   <flourish:viewlet
