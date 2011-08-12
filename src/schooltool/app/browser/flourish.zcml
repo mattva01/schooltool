@@ -127,11 +127,9 @@
       permission="zope.Public"
       /> -->
 
-  <flourish:content
-      name="breadcrumbs"
+  <flourish:page_breadcrumbs
       class="schooltool.skin.flourish.Empty"
       view="schooltool.app.browser.app.LoginView"
-      permission="zope.Public"
       />
 
   <flourish:viewlet
