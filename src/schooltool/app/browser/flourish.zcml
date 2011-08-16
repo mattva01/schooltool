@@ -413,6 +413,11 @@
            schooltool.skin.flourish.interfaces.IFlourishLayer"
       factory=".overlay.OverlayCalendarsFormatter" />
 
+  <zope:adapter
+      for=".overlay.IOverlayCalendarsContainer
+           schooltool.skin.flourish.interfaces.IFlourishLayer"
+      factory=".overlay.OverlayCalendarsFilterWidget" />
+
   <flourish:page
       for="schooltool.person.interfaces.IPerson"
       name="calendar_selection.html"

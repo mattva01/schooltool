@@ -22,6 +22,7 @@ Calendar overlay views for the SchoolTool application.
 
 import urllib
 
+from zope.browserpage import ViewPageTemplateFile
 from zope.cachedescriptors.property import Lazy
 from zope.interface import implements, Interface
 from zope.publisher.browser import BrowserView
@@ -41,6 +42,7 @@ from schooltool.app.browser.app import FlourishRelationshipViewBase
 from schooltool.resource.interfaces import IResourceTypeInformation
 from schooltool.person.interfaces import IPerson
 from schooltool.table.table import SchoolToolTableFormatter
+from schooltool.table.table import FilterWidget
 
 
 class CalendarOverlayBase(object):
@@ -273,6 +275,10 @@ class OverlayCalendarsFormatter(SchoolToolTableFormatter):
             getter=lambda i, f: i.cal_type,
             subsort=True)
         return [title, type]
+
+
+class OverlayCalendarsFilterWidget(FilterWidget):
+    template = ViewPageTemplateFile('templates/f_overlay_filter_widget.pt')
 
 
 class FlourishCalendarSelectionView(FlourishRelationshipViewBase):
