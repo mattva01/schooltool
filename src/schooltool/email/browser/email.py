@@ -796,3 +796,8 @@ class FlourishEmailSettingsOverview(flourish.page.Content):
             return _('Enabled')
         else:
             return  _('Disabled')
+
+    @property
+    def hostname(self):
+        email = IEmailContainer(self.context)
+        return email.hostname or ''

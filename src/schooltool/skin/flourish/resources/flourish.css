@@ -17,7 +17,7 @@ body {
     color: #333333;
 }
 
-body, textarea {
+body, textarea, select {
     font-family: 'Ubuntubeta', 'Ubuntu', 'Bitstream Vera Sans',
                  'DejaVu Sans', Tahoma, sans-serif;
 }
@@ -302,4 +302,11 @@ body > .calendar {
 .manage-view p {
     padding-left: 8px;
     padding-right: 8px;
+}
+
+/* XXX: errors views related styles */
+
+.entry-traceback, .request-traceback {
+    font-size: 12px;
+    line-height: 16px;
 }

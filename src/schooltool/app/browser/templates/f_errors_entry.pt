@@ -1,0 +1,56 @@
+<div i18n:domain="schooltool" tal:define="entry view/entry">
+  <h3 i18n:translate="">Exception traceback</h3>
+  <em tal:condition="not:entry" i18n:translate="">
+    The specified log entry was not found.  It may have expired.
+  </em>
+  <metal:block tal:condition="entry">
+    <table class="form-fields">
+      <tbody>
+        <tr>
+          <td class="label" i18n:translate="">Time</td>
+          <td tal:content="entry/time" />
+        </tr>
+        <tr>
+          <td class="label" i18n:translate="">User</td>
+          <td tal:content="entry/username" />
+        </tr>
+        <tr>
+          <td class="label" i18n:translate="">Request URL</td>
+          <td tal:content="entry/url" />
+        </tr>
+        <tr>
+          <td class="label" i18n:translate="">Exception Type</td>
+          <td tal:content="entry/type" />
+        </tr>
+        <tr>
+          <td class="label" i18n:translate="">Exception Value</td>
+          <td tal:content="entry/value" />
+        </tr>
+      </tbody>
+    </table>
+    <h3 i18n:translate="">Traceback</h3>
+    <div class="entry-traceback"
+         tal:condition="entry/tb_html" tal:content="structure entry/tb_html">
+      Traceback (HTML)
+    </div>
+    <pre tal:condition="not:entry/tb_html" tal:content="entry/tb_text">
+      Traceback (text)
+    </pre>
+    <h3 tal:condition="entry/tb_text">
+      <a href="" 
+         tal:attributes="href string:showTextTBEntry.html?id=${entry/id}" 
+         i18n:translate="">Display traceback as text</a>
+    </h3>
+    <metal:block tal:condition="entry/req_html">
+      <h3 i18n:translate="">Request</h3>
+      <div class="request-traceback"
+           tal:content="structure entry/req_html" />
+    </metal:block>
+  </metal:block>
+  <h3>
+    <a tal:attributes="href string:${context/@@absolute_url}/errors"
+       i18n:translate="">
+      Done
+    </a>
+  </h3>
+</div>

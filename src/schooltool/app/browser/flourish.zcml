@@ -134,7 +134,7 @@
 
   <flourish:viewlet
       name="calendar-settings-overview"
-      before="email-settings-overview"
+      after="email-settings-overview"
       view="schooltool.app.browser.app.ManageSite"
       permission="schooltool.edit"
       manager="schooltool.skin.flourish.page.IPageContentManager"
@@ -145,7 +145,6 @@
 
   <flourish:viewlet
       name="server-settings-overview"
-      after="email-settings-overview"
       view="schooltool.app.browser.app.ManageSite"
       permission="schooltool.edit"
       manager="schooltool.skin.flourish.page.IPageContentManager"
@@ -244,6 +243,58 @@
       manager="schooltool.skin.flourish.page.IHeaderNavigationManager"
       view="schooltool.app.browser.app.ApplicationPreferencesView"
       />
+
+  <flourish:viewlet
+      name="errors"
+      after="security.html"
+      title="Errors"
+      class="schooltool.skin.flourish.page.LinkViewlet"
+      manager="schooltool.app.browser.app.ManageSiteLinks"
+      permission="schooltool.edit"
+      />
+
+  <flourish:page
+      name="errors"
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      class=".app.FlourishErrorsView"
+      title="Server"
+      subtitle="Errors"
+      content_template="templates/f_errors.pt"
+      permission="schooltool.edit"
+      />
+
+  <zope:adapter factory=".app.ErrorsSettingsAdapter" />
+
+  <flourish:page
+      name="showEntry.html"
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      class=".app.FlourishErrorEntryView"
+      title="Server"
+      subtitle="Error"
+      content_template="templates/f_errors_entry.pt"
+      permission="schooltool.edit"
+      />
+
+  <flourish:page
+      name="showTextTBEntry.html"
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      class=".app.FlourishErrorEntryView"
+      template="templates/f_errors_entry_text.pt"
+      permission="schooltool.edit"
+      />
+
+  <configure package="schooltool.skin.flourish">
+
+    <flourish:page
+        name="errors-configure.html"
+        class="schooltool.app.browser.app.FlourishErrorsConfigureView"
+        title="Server"
+        subtitle="Errors Settings"
+        content_template="templates/z3c-schooltool-form.pt"
+        permission="schooltool.edit"
+        />
+
+  </configure>
 
   <!-- Manage School page -->
 
@@ -401,10 +452,26 @@
       permission="schooltool.edit"
       />
 
-    <flourish:page_breadcrumbs
-        for="zope.app.applicationcontrol.interfaces.IApplicationControl"
-        follow_crumb="schooltool.app.browser.app.ManageSiteBreadcrumb"
-        />
+  <flourish:page_breadcrumbs
+      for="zope.app.applicationcontrol.interfaces.IApplicationControl"
+      follow_crumb="schooltool.app.browser.app.ManageSiteBreadcrumb"
+      />
+
+  <flourish:page_breadcrumbs
+      view="schooltool.app.browser.app.FlourishErrorsView"
+      class="schooltool.app.browser.app.ErrorsBreadcrumb"
+      follow_crumb="schooltool.app.browser.app.ManageSiteBreadcrumb"
+      />
+
+  <flourish:page_breadcrumbs
+      view="schooltool.app.browser.app.FlourishErrorsConfigureView"
+      follow_crumb="schooltool.app.browser.app.ErrorsBreadcrumb"
+      />
+
+  <flourish:page_breadcrumbs
+      view="schooltool.app.browser.app.FlourishErrorEntryView"
+      follow_crumb="schooltool.app.browser.app.ErrorsBreadcrumb"
+      />
 
   <!-- Misplaced calendar overlay selection -->
 
