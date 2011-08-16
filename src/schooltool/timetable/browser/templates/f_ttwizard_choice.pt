@@ -1,6 +1,11 @@
 <form class="plain" method="POST" tal:attributes="action request/URL">
 
-  <p tal:content="view/question">(Question)</p>
+  <fieldset>
+  <legend><span tal:content="view/label">[title]</span></legend>
+  <div class="row">
+    <p tal:content="view/question">(Question)</p>
+  </div>
+  </fieldset>
 
   <div class="buttons">
     <input type="submit" class="button-cancel" name="STEP_BACK" value="Back"

@@ -1,15 +1,31 @@
 <form class="plain" method="POST" tal:attributes="action request/URL">
 
-  <p tal:condition="view/description"
-     tal:content="view/description">(informative text)</p>
 
-  <div tal:condition="view/error" tal:content="view/error"
-       class="error">(error message)</div>
+  <div class="status"  tal:condition="view/error">
+    <div class="summary ui-state-error ui-corner-all">
+      <span class="ui-icon ui-icon-alert">icon</span>
+      <tal:block content="view/error">
+        [error message]
+      </tal:block>
+    </div>
+  </div>
 
-  <table>
+  <fieldset>
+    <legend><span tal:content="view/label">[title]</span></legend>
+
+    <div class="row">
+      <p tal:condition="view/description"
+         tal:content="view/description">[informative text]</p>
+    </div>
+
+    <div class="timetable-table">
+  <table class="timetable">
+    <thead>
     <tr>
       <th tal:repeat="day view/days" tal:content="day" />
     </tr>
+    </thead>
+    <tbody>
     <tr tal:repeat="slotnr python: range(max(numslots))"
         tal:define="numslots view/numSlots">
       <td tal:define="slot python:view.periods()[slotnr]"
@@ -25,7 +41,11 @@
         </select>
       </td>
     </tr>
+    </tbody>
   </table>
+  </div>
+
+  </fieldset>
 
   <div class="buttons">
     <input type="submit" class="button-cancel" name="STEP_BACK" value="Back"

@@ -182,6 +182,13 @@ class Step(BrowserView):
     """
     getSessionData = getSessionData
 
+    @property
+    def label(self):
+        session = self.getSessionData()
+        return _("Timetable $title",
+                 mapping={'title': session['title']})
+
+
 
 class ChoiceStep(Step):
     """A step that requires the user to make a choice.
@@ -244,6 +251,8 @@ class FirstStep(FormStep):
     __name__ = 'first_step'
 
     __call__ = ViewPageTemplateFile("templates/ttwizard.pt")
+
+    label = _('A new timetable')
 
     class schema(Interface):
         title = TextLine(title=_("Title"), default=u"default")
@@ -1008,7 +1017,7 @@ class TimetableWizard(BrowserView):
         return current_step()
 
 
-class FlourishTimetableWizard(flourish.page.Page, TimetableWizard):
+class FlourishTimetableWizard(flourish.page.WideContainerPage, TimetableWizard):
 
     _state = None
     _session = None
@@ -1057,7 +1066,7 @@ class FlourishTimetableWizard(flourish.page.Page, TimetableWizard):
         return absoluteURL(self.context, self.request)
 
     def update(self):
-        flourish.page.Page.update(self)
+        flourish.page.WideContainerPage.update(self)
 
         if 'CANCEL' in self.request:
             self.request.response.redirect(self.nextURL())
