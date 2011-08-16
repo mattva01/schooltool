@@ -1,3 +1,4 @@
-<div>
+<div class="timetable-wizard">
+  <tal:block replace="resource_library:schooltool.timetable" />
   <tal:block content="structure view/current_step/render" />
 </div>
