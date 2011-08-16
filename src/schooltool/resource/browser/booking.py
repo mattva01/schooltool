@@ -136,3 +136,9 @@ class CalendarEventBookOneResourceView(BrowserView):
             back_url,
             urllib.quote(cancel_url))
         return url
+
+    def render(self, *args, **kw):
+        return ''
+
+    def update(self):
+        self.__call__()
