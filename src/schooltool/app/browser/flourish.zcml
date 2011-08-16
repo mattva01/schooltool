@@ -460,7 +460,6 @@
   <flourish:page_breadcrumbs
       view="schooltool.app.browser.app.FlourishErrorsView"
       class="schooltool.app.browser.app.ErrorsBreadcrumb"
-      follow_crumb="schooltool.app.browser.app.ManageSiteBreadcrumb"
       />
 
   <flourish:page_breadcrumbs
