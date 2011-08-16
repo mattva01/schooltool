@@ -1,0 +1,86 @@
+<div i18n:domain="schooltool">
+  <h3>
+    <metal:block i18n:translate="">Settings</metal:block>
+    <a class="modify" href="" title="Manage error settings"
+       tal:attributes="href string:${context/@@absolute_url}/errors-configure.html"
+       i18n:attributes="title">
+      <img tal:attributes="src context/++resource++schooltool.skin.flourish/edit-icon.png"
+           alt="Edit"
+           i18n:attributes="alt" />
+    </a>
+  </h3>
+  <table class="errors-settings" tal:define="settings view/settings">
+    <tbody>
+      <tr>
+        <td class="label" i18n:translate="">
+          Number of exceptions to show
+        </td>
+        <td tal:content="settings/keep_entries" />
+      </tr>
+      <tr>
+        <td class="label" i18n:translate="">
+          Copy exceptions to the event log
+        </td>
+        <td tal:content="settings/copy_to_zlog" />
+      </tr>
+      <tr>
+        <td class="label" i18n:translate="">
+          Ignored exception types
+        </td>
+        <td tal:define="ignored_exceptions settings/ignored_exceptions">
+          <ul tal:condition="ignored_exceptions">
+            <li tal:repeat="exception ignored_exceptions"
+                tal:content="exception" />
+          </ul>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <table class="exceptions">
+    <thead>
+      <tr>
+        <th i18n:translate="">Time</th>
+        <th i18n:translate="">User</th>
+        <th i18n:translate="">Exception</th>
+      </tr>
+    </thead>
+    <tbody tal:define="entries view/getLogEntries">
+      <tr tal:condition="not:entries">
+        <td colspan="3" i18n:translate="">
+          No exceptions logged.
+        </td>
+      </tr>
+      <tr tal:repeat="entry entries">
+        <td class="time">
+          <span tal:content="entry/time">Time</span>
+        </td>
+        <td class="username">
+          <span tal:content="entry/username">joe</span>
+        </td>
+        <td class="exception-link">
+          <div>
+            <a tal:attributes="href string:showEntry.html?id=${entry/id}">
+              <span tal:content="entry/type">AttributeError</span>:
+              <span tal:define="value entry/value"
+                    tal:content="python:view.formatEntryValue(value)">
+                Application object has no attribute "zzope"
+              </span>
+            </a>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <form tal:attributes="action request/URL" method="post">
+    <div class="buttons">
+      <input type="submit" name="submit" class="button-ok" value="Refresh" 
+             i18n:attributes="value refresh-button" />
+    </div>
+  </form>
+  <h3>
+    <a tal:attributes="href string:${context/@@absolute_url}/settings"
+       i18n:translate="">
+      Done
+    </a>
+  </h3>
+</div>

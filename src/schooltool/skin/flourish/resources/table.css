@@ -94,6 +94,23 @@ table.section-terms .active-term {
     font-weight: bold;
 }
 
+table.errors-settings .label {
+    width: 45%;
+}
+
+table.exceptions .time {
+    width: 20%;
+}
+
+table.exceptions .username {
+    width: 20%;
+}
+
+table.exceptions .exception-link div {
+    width: 290px;
+    overflow: hidden;
+}
+
 /* XXX: select a better class name for these tables */
 
 table.form-fields .label {
