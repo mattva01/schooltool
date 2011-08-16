@@ -22,6 +22,8 @@ Calendar overlay views for the SchoolTool application.
 
 import urllib
 
+from zope.cachedescriptors.property import Lazy
+from zope.interface import implements, Interface
 from zope.publisher.browser import BrowserView
 from zope.traversing.api import getPath
 from zope.traversing.browser.absoluteurl import absoluteURL
@@ -29,11 +31,16 @@ from zope.location.interfaces import ILocation
 from zope.security.proxy import removeSecurityProxy
 from zope.security.checker import canAccess
 from zope.viewlet.viewlet import ViewletBase
+from zc.table.column import GetterColumn
+
 
 from schooltool.common import SchoolToolMessage as _
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.app.browser.app import FlourishRelationshipViewBase
+from schooltool.resource.interfaces import IResourceTypeInformation
 from schooltool.person.interfaces import IPerson
+from schooltool.table.table import SchoolToolTableFormatter
 
 
 class CalendarOverlayBase(object):
@@ -227,3 +234,127 @@ class CalendarSelectionView(BrowserView):
             elif ('application' not in self.request and
                     appcal in user.overlaid_calendars):
                 user.overlaid_calendars.remove(appcal)
+
+
+class IOverlayCalendarsContainer(Interface):
+    pass
+
+
+class OverlayCalendarsInfo(object):
+    __name__ = None
+    def __init__(self, calendar, title, cal_type):
+        self.calendar = calendar
+        self.title = title
+        self.cal_type = cal_type
+
+class OverlayCalendarsContainer(dict):
+    implements(IOverlayCalendarsContainer)
+
+    def __init__(self):
+        self.by_calendar = {}
+
+    def __setitem__(self, key, info):
+        dict.__setitem__(self, key, info)
+        info.__name__ = key
+        self.by_calendar[info.calendar] = info
+
+
+class OverlayCalendarsFormatter(SchoolToolTableFormatter):
+
+    def columns(self):
+        title = GetterColumn(
+            name='title',
+            title=_(u"Title"),
+            getter=lambda i, f: i.title,
+            subsort=True)
+        type = GetterColumn(
+            name='type',
+            title=_(u"Type"),
+            getter=lambda i, f: i.cal_type,
+            subsort=True)
+        return [title, type]
+
+
+class FlourishCalendarSelectionView(FlourishRelationshipViewBase):
+
+    current_title = _('Selected calendars')
+    available_title = _('Available calendars')
+
+    @Lazy
+    def user(self):
+        return IPerson(self.request.principal, None)
+
+    def getCollection(self):
+        if self.user is None:
+            return []
+        return self.user.overlaid_calendars
+
+    def getResourceCalendars(self):
+        if self.user is None:
+            return []
+        app = ISchoolToolApplication(None)
+        result = []
+        for obj in app['resources'].values():
+            calendar = ISchoolToolCalendar(obj)
+            if canAccess(calendar, '__iter__'):
+                result.append(calendar)
+        return result
+
+    def getApplicationCalendar(self):
+        if self.user is None:
+            return None
+        app = ISchoolToolApplication(None)
+        calendar = ISchoolToolCalendar(app)
+        if not canAccess(calendar, '__iter__'):
+            return None
+        return calendar
+
+    @Lazy
+    def overlay_container(self):
+        container = OverlayCalendarsContainer()
+        cal = self.getApplicationCalendar()
+        if cal is not None:
+            key = 'app.school'
+            container[key] = OverlayCalendarsInfo(
+                removeSecurityProxy(cal),
+                cal.__parent__.title, _('School Calendar'))
+        for cal in self.getResourceCalendars():
+            resource = cal.__parent__
+            key = 'resource.%s' % resource.__name__
+            res_info = IResourceTypeInformation(resource)
+            container[key] = OverlayCalendarsInfo(
+                removeSecurityProxy(cal),
+                resource.title, res_info.title)
+        return container
+
+    def getAvailableItemsContainer(self):
+        return self.overlay_container
+
+    def add(self, item):
+        super(FlourishCalendarSelectionView, self).add(item.calendar)
+
+    def remove(self, item):
+        super(FlourishCalendarSelectionView, self).remove(item.calendar)
+
+    def getAvailableItems(self):
+        available = self.getAvailableItemsContainer()
+        selected = set([removeSecurityProxy(p.calendar)
+                        for p in self.getCollection()])
+        return [info
+                for cal, info in available.by_calendar.items()
+                if cal not in selected]
+
+    def getSelectedItems(self):
+        available = self.getAvailableItemsContainer()
+        selected = set([removeSecurityProxy(p.calendar)
+                        for p in self.getCollection()])
+        return [available.by_calendar[calendar]
+                for calendar in selected
+                if calendar in available.by_calendar]
+
+    def nextURL(self):
+        url = self.request.get('nexturl')
+        if url is None:
+            cal = ISchoolToolCalendar(self.context)
+            url = absoluteURL(cal, self.request)
+        return url
