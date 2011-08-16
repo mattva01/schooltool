@@ -207,6 +207,11 @@
 
   <configure package="schooltool.skin.flourish">
 
+    <flourish:page_breadcrumbs
+        view="schooltool.app.browser.app.FlourishApplicationPreferencesView"
+        follow_crumb="schooltool.app.browser.app.ManageSiteBreadcrumb"
+        />
+
     <flourish:page
         name="site-preferences.html"
         title="Server"
