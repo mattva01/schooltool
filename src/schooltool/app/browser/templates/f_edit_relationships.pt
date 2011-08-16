@@ -8,9 +8,11 @@
     <h3 tal:condition="not:items" i18n:translate="">
       There are none.
     </h3>
+    <input type="hidden" id="nexturl" name="nexturl"
+           tal:attributes="value view/nextURL" />
   </form>
   <h3>
-    <a tal:attributes="href context/@@absolute_url"
+    <a tal:attributes="href view/nextURL"
        i18n:translate="">Done</a>
   </h3>
   <h2 tal:content="view/available_title" />
@@ -31,5 +33,7 @@
     <h3 tal:condition="not:batch" i18n:translate="">
       There are none to add.
     </h3>
+    <input type="hidden" id="nexturl" name="nexturl"
+           tal:attributes="value view/nextURL" />
   </form>
 </metal:block>

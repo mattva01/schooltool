@@ -1,0 +1,20 @@
+<fieldset i18n:domain="schooltool">
+  <legend><span i18n:translate="">Search</span></legend>
+  <div class="row">
+    <div class="label">
+      <label for="SEARCH">
+        <span>Calendar title</span>
+      </label>
+    </div>
+    <div class="widget">
+      <input type="text" name="SEARCH"
+             id="SEARCH_TITLE" class="text-widget"
+             tal:attributes="value request/SEARCH|nothing"
+             />
+    </div>
+  </div>
+</fieldset>
+<div class="buttons controls">
+  <input type="submit" name="SEARCH_BUTTON" value="Search"
+         class="submit-widget" i18n:attributes="value" />
+</div>

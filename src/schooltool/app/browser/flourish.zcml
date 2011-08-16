@@ -406,4 +406,29 @@
         follow_crumb="schooltool.app.browser.app.ManageSiteBreadcrumb"
         />
 
+  <!-- Misplaced calendar overlay selection -->
+
+  <zope:adapter
+      for=".overlay.IOverlayCalendarsContainer
+           schooltool.skin.flourish.interfaces.IFlourishLayer"
+      factory=".overlay.OverlayCalendarsFormatter" />
+
+  <zope:adapter
+      for=".overlay.IOverlayCalendarsContainer
+           schooltool.skin.flourish.interfaces.IFlourishLayer"
+      factory=".overlay.OverlayCalendarsFilterWidget" />
+
+  <flourish:page
+      for="schooltool.person.interfaces.IPerson"
+      name="calendar_selection.html"
+      class=".overlay.FlourishCalendarSelectionView"
+      permission="schooltool.editCalendarOverlays"
+      subtitle="Shown Calendars"
+      />
+
+  <flourish:page_breadcrumbs
+      crumb_parent="schooltool.calendar.interfaces.ISchoolToolCalendar"
+      view=".overlay.FlourishCalendarSelectionView"
+      />
+
 </configure>

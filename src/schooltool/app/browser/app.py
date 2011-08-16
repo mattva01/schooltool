@@ -21,6 +21,7 @@ SchoolTool application views.
 
 $Id$
 """
+import urllib
 
 from ZODB.FileStorage.FileStorage import FileStorageError
 from ZODB.interfaces import IDatabase
@@ -253,6 +254,12 @@ class FlourishRelationshipViewBase(flourish.page.NoSidebarPage):
         return [p for p in container.values()
                 if p not in selected_items]
 
+    def nextURL(self):
+        url = self.request.get('nexturl')
+        if url is None:
+            url = absoluteURL(self.context, self.request)
+        return url
+
     def getAvailableItemsContainer(self):
         """Returns the backend storage for available items."""
         raise NotImplementedError("Subclasses should override this method.")
@@ -321,7 +328,9 @@ class FlourishRelationshipViewBase(flourish.page.NoSidebarPage):
     def update(self):
         changes = self.applyFormChanges()
         if changes:
-            self.request.response.redirect(self.request.getURL())
+            this_url = '%s?nexturl=%s' % (str(self.request.URL),
+                                          urllib.quote(self.nextURL()))
+            self.request.response.redirect(this_url)
             return
         self.setUpTables()
 
