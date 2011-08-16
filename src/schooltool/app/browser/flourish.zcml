@@ -127,18 +127,24 @@
       permission="zope.Public"
       /> -->
 
-  <flourish:content
-      name="breadcrumbs"
+  <flourish:page_breadcrumbs
       class="schooltool.skin.flourish.Empty"
       view="schooltool.app.browser.app.LoginView"
-      permission="zope.Public"
+      />
+
+  <flourish:viewlet
+      name="calendar-settings-overview"
+      after="email-settings-overview"
+      view="schooltool.app.browser.app.ManageSite"
+      permission="schooltool.edit"
+      manager="schooltool.skin.flourish.page.IPageContentManager"
+      class=".app.FlourishCalendarSettingsOverview"
       />
 
   <!-- Site control page -->
 
   <flourish:viewlet
       name="server-settings-overview"
-      after="email-settings-overview"
       view="schooltool.app.browser.app.ManageSite"
       permission="schooltool.edit"
       manager="schooltool.skin.flourish.page.IPageContentManager"
@@ -151,6 +157,12 @@
       title="Server"
       class="schooltool.app.browser.app.ManageSite"
       permission="schooltool.edit"
+      />
+
+  <flourish:page_breadcrumbs
+      show_page_title="false"
+      view="schooltool.app.browser.app.ManageSite"
+      class="schooltool.app.browser.app.ManageSiteBreadcrumb"
       />
 
   <flourish:viewlet
@@ -194,6 +206,11 @@
 
   <configure package="schooltool.skin.flourish">
 
+    <flourish:page_breadcrumbs
+        view="schooltool.app.browser.app.FlourishApplicationPreferencesView"
+        follow_crumb="schooltool.app.browser.app.ManageSiteBreadcrumb"
+        />
+
     <flourish:page
         name="site-preferences.html"
         title="Server"
@@ -216,14 +233,6 @@
 
   </configure>
 
-  <flourish:viewlet
-      name="site-preferences.html"
-      title="Calendar"
-      class="schooltool.skin.flourish.page.LinkViewlet"
-      manager="schooltool.app.browser.app.ManageSiteLinks"
-      permission="schooltool.edit"
-      />
-
   <flourish:activeViewlet
       factory="schooltool.skin.flourish.page.getViewletViewName"
       manager="schooltool.app.browser.app.ManageSiteLinks"
@@ -234,6 +243,58 @@
       manager="schooltool.skin.flourish.page.IHeaderNavigationManager"
       view="schooltool.app.browser.app.ApplicationPreferencesView"
       />
+
+  <flourish:viewlet
+      name="errors"
+      after="security.html"
+      title="Errors"
+      class="schooltool.skin.flourish.page.LinkViewlet"
+      manager="schooltool.app.browser.app.ManageSiteLinks"
+      permission="schooltool.edit"
+      />
+
+  <flourish:page
+      name="errors"
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      class=".app.FlourishErrorsView"
+      title="Server"
+      subtitle="Errors"
+      content_template="templates/f_errors.pt"
+      permission="schooltool.edit"
+      />
+
+  <zope:adapter factory=".app.ErrorsSettingsAdapter" />
+
+  <flourish:page
+      name="showEntry.html"
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      class=".app.FlourishErrorEntryView"
+      title="Server"
+      subtitle="Error"
+      content_template="templates/f_errors_entry.pt"
+      permission="schooltool.edit"
+      />
+
+  <flourish:page
+      name="showTextTBEntry.html"
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      class=".app.FlourishErrorEntryView"
+      template="templates/f_errors_entry_text.pt"
+      permission="schooltool.edit"
+      />
+
+  <configure package="schooltool.skin.flourish">
+
+    <flourish:page
+        name="errors-configure.html"
+        class="schooltool.app.browser.app.FlourishErrorsConfigureView"
+        title="Server"
+        subtitle="Errors Settings"
+        content_template="templates/z3c-schooltool-form.pt"
+        permission="schooltool.edit"
+        />
+
+  </configure>
 
   <!-- Manage School page -->
 
@@ -389,6 +450,52 @@
       class="schooltool.skin.flourish.page.LinkViewlet"
       manager="schooltool.app.browser.app.CustomizeSchoolLinks"
       permission="schooltool.edit"
+      />
+
+  <flourish:page_breadcrumbs
+      for="zope.app.applicationcontrol.interfaces.IApplicationControl"
+      follow_crumb="schooltool.app.browser.app.ManageSiteBreadcrumb"
+      />
+
+  <flourish:page_breadcrumbs
+      view="schooltool.app.browser.app.FlourishErrorsView"
+      class="schooltool.app.browser.app.ErrorsBreadcrumb"
+      follow_crumb="schooltool.app.browser.app.ManageSiteBreadcrumb"
+      />
+
+  <flourish:page_breadcrumbs
+      view="schooltool.app.browser.app.FlourishErrorsConfigureView"
+      follow_crumb="schooltool.app.browser.app.ErrorsBreadcrumb"
+      />
+
+  <flourish:page_breadcrumbs
+      view="schooltool.app.browser.app.FlourishErrorEntryView"
+      follow_crumb="schooltool.app.browser.app.ErrorsBreadcrumb"
+      />
+
+  <!-- Misplaced calendar overlay selection -->
+
+  <zope:adapter
+      for=".overlay.IOverlayCalendarsContainer
+           schooltool.skin.flourish.interfaces.IFlourishLayer"
+      factory=".overlay.OverlayCalendarsFormatter" />
+
+  <zope:adapter
+      for=".overlay.IOverlayCalendarsContainer
+           schooltool.skin.flourish.interfaces.IFlourishLayer"
+      factory=".overlay.OverlayCalendarsFilterWidget" />
+
+  <flourish:page
+      for="schooltool.person.interfaces.IPerson"
+      name="calendar_selection.html"
+      class=".overlay.FlourishCalendarSelectionView"
+      permission="schooltool.editCalendarOverlays"
+      subtitle="Shown Calendars"
+      />
+
+  <flourish:page_breadcrumbs
+      crumb_parent="schooltool.calendar.interfaces.ISchoolToolCalendar"
+      view=".overlay.FlourishCalendarSelectionView"
       />
 
 </configure>

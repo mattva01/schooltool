@@ -8,13 +8,7 @@
     </a>
   </h3>
   <p i18n:translate="">
-    There are
-    <metal:block tal:replace="python:len(view.contacts)" i18n:name="count"/>
-    external contact persons defined in
-    <metal:block tal:replace="view/school_name" i18n:name="school" />.
-  </p>
-  <p i18n:translate="">
-    The school has a total of
+    The school has
     <metal:block tal:replace="view/total" i18n:name="total"/>
     contact persons.
   </p>

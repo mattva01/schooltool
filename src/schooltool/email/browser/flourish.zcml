@@ -17,6 +17,13 @@
 
   <!-- Pages -->
 
+  <flourish:page_breadcrumbs
+      title="Outgoing Email"
+      show_page_title="false"
+      view="schooltool.email.browser.email.FlourishEmailContainerView"
+      follow_crumb="schooltool.app.browser.app.ManageSiteBreadcrumb"
+      />
+
   <flourish:page
       name="index.html"
       for="schooltool.email.interfaces.IEmailContainer"
@@ -107,6 +114,7 @@
 
   <flourish:viewlet
       name="email-settings-overview"
+      after="server-setttings-overview"
       view="schooltool.app.browser.app.ManageSite"
       permission="schooltool.edit"
       manager="schooltool.skin.flourish.page.IPageContentManager"
@@ -122,8 +130,9 @@
       />
 
   <flourish:breadcrumb
-      for="schooltool.email.interfaces.IEmailContainer"
       title="Outgoing Email"
+      for="schooltool.email.interfaces.IEmailContainer"
+      follow_crumb="schooltool.app.browser.app.ManageSiteBreadcrumb"
       />
 
 </configure>

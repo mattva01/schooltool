@@ -21,6 +21,7 @@ SchoolTool application views.
 
 $Id$
 """
+import urllib
 
 from ZODB.FileStorage.FileStorage import FileStorageError
 from ZODB.interfaces import IDatabase
@@ -41,21 +42,25 @@ from zope.app.applicationcontrol.browser.zodbcontrol import ZODBControlView
 from zope.app.applicationcontrol.interfaces import IApplicationControl
 from zope.app.applicationcontrol.interfaces import IRuntimeInfo
 from zope.authentication.interfaces import IUnauthenticatedPrincipal
+from zope.error.interfaces import IErrorReportingUtility
 from zope.i18n import translate
 from zope.publisher.browser import BrowserView
 from zope.component import getMultiAdapter, queryMultiAdapter
 from zope.component import getUtility
-from zope.component import adapter
+from zope.component import adapter, adapts
 from zope.component import getAdapter
 from zope.authentication.interfaces import IAuthentication
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.publisher.browser import BrowserPage
 from zope.traversing.browser.absoluteurl import absoluteURL
 from zope.traversing.api import traverse
+from zope.schema import Int, Bool, Tuple, Choice
 from z3c.form import form, field, button
+from z3c.form.browser.checkbox import CheckBoxFieldWidget
 from zc.table.column import Column
 from zc.table.table import FormFullFormatter
 
+import schooltool.skin.flourish.breadcrumbs
 import schooltool.skin.flourish.page
 import schooltool.skin.flourish.viewlet
 from schooltool.calendar.icalendar import convert_calendar_to_ical
@@ -65,6 +70,7 @@ from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.app.interfaces import IAsset
+from schooltool.app.utils import vocabulary
 from schooltool.skin.flourish.content import ContentProvider
 from schooltool.common.inlinept import InlineViewPageTemplate
 from schooltool.person.interfaces import IPerson
@@ -252,6 +258,12 @@ class FlourishRelationshipViewBase(flourish.page.NoSidebarPage):
         return [p for p in container.values()
                 if p not in selected_items]
 
+    def nextURL(self):
+        url = self.request.get('nexturl')
+        if url is None:
+            url = absoluteURL(self.context, self.request)
+        return url
+
     def getAvailableItemsContainer(self):
         """Returns the backend storage for available items."""
         raise NotImplementedError("Subclasses should override this method.")
@@ -303,7 +315,7 @@ class FlourishRelationshipViewBase(flourish.page.NoSidebarPage):
         for param in self.request.form:
             if param.startswith(add_item_prefix):
                 add_item_submitted = True
-            elif param.startswith(remove_item_prefix):  
+            elif param.startswith(remove_item_prefix):
                 remove_item_submitted = True
         if add_item_submitted:
             for item in self.getAvailableItems():
@@ -320,7 +332,9 @@ class FlourishRelationshipViewBase(flourish.page.NoSidebarPage):
     def update(self):
         changes = self.applyFormChanges()
         if changes:
-            self.request.response.redirect(self.request.getURL())
+            this_url = '%s?nexturl=%s' % (str(self.request.URL),
+                                          urllib.quote(self.nextURL()))
+            self.request.response.redirect(this_url)
             return
         self.setUpTables()
 
@@ -722,6 +736,18 @@ class ManageSiteNavLink(flourish.page.LinkViewlet):
         return '%s/settings' % app_url
 
 
+class ManageSiteBreadcrumb(flourish.breadcrumbs.Breadcrumbs):
+
+    follow_crumb = None
+    title = _('Server')
+
+    @property
+    def link(self):
+        app = ISchoolToolApplication(None)
+        app_url = absoluteURL(app, self.request)
+        return '%s/settings' % app_url
+
+
 class ManageSchoolNavLink(flourish.page.LinkViewlet):
     @property
     def url(self):
@@ -733,7 +759,7 @@ class ManageSchoolNavLink(flourish.page.LinkViewlet):
 class ManageSite(flourish.page.Page):
     pass
 
- 
+
 class ServerActionsLinks(flourish.page.RefineLinksViewlet):
     """Server actions links viewlet."""
 
@@ -810,6 +836,28 @@ class FlourishServerSettingsOverview(flourish.page.Content,
         return formatted
 
 
+class FlourishCalendarSettingsOverview(flourish.page.Content):
+
+    body_template = ViewPageTemplateFile(
+        'templates/f_calendar_settings_overview.pt')
+
+    @property
+    def settings(self):
+        result = {}
+        preferences = IApplicationPreferences(self.context)
+        if preferences.frontPageCalendar:
+            result['frontPageCalendar'] = _('Yes')
+        else:
+            result['frontPageCalendar'] = _('No')
+        result['timezone'] = preferences.timezone
+        for setting in ('timeformat', 'dateformat', 'weekstart'):
+            preference = getattr(preferences, setting)
+            field = IApplicationPreferences[setting]
+            vocabulary = field.vocabulary
+            result[setting] = vocabulary.getTerm(preference).title
+        return result
+
+
 class PackDatabaseLink(flourish.page.ModalFormLinkViewlet):
 
     @property
@@ -839,3 +887,122 @@ class PackDatabaseView(Dialog):
         except FileStorageError, err:
             self.status = _('There were errors while packing the database: ${error}',
                             mapping={'error': err})
+
+
+class FlourishErrorsViewBase(flourish.page.Page):
+
+    @property
+    def error_utility(self):
+        default_site = self.context.getSiteManager().get('default')
+        return getUtility(IErrorReportingUtility, context=default_site)
+
+
+class FlourishErrorsView(FlourishErrorsViewBase):
+        
+    def formatEntryValue(self, value):
+        return len(value) < 70 and value or value[:70] + '...'
+
+    def getLogEntries(self):
+        return self.error_utility.getLogEntries()
+
+    def settings(self):
+        result = {}
+        properties = self.error_utility.getProperties()
+        for setting in ('keep_entries', 'ignored_exceptions'):
+            result[setting] = properties[setting]
+        if properties['copy_to_zlog']:
+            result['copy_to_zlog'] = _('Yes')
+        else:
+            result['copy_to_zlog'] = _('No')
+        return result
+
+
+class FlourishErrorEntryView(FlourishErrorsViewBase):
+
+    def update(self):
+        entryId = self.request.get('id')
+        if not entryId:
+            self.request.response.redirect(self.nextURL())
+            return
+        self.entry = self.error_utility.getLogEntryById(entryId)
+        if self.entry is not None:
+            error_type = self.entry['type']
+            self.subtitle = _('${type} Error', mapping={'type': error_type})
+
+    def nextURL(self):
+        return absoluteURL(self.context, self.request) + '/errors'
+
+
+class IErrorsSettings(Interface):
+
+    keep_entries = Int(
+        title=_('Number of exceptions to show'))
+
+    copy_to_zlog = Bool(
+        title=_('Copy exceptions to the event log'),
+        default=False)
+
+    ignored_exceptions = Tuple(
+        title=_('Ignored exception types'),
+        value_type=Choice(vocabulary=vocabulary([
+                    ('Unauthorized', _('Unauthorized')),
+                    ('NotFound', _('NotFound'))])),
+        required=False)
+
+
+class ErrorsSettingsAdapter(object):
+
+    adapts(IErrorReportingUtility)
+    implements(IErrorsSettings)
+
+    def __init__(self, context):
+        self.__dict__['context'] = context
+
+    def __getattr__(self, name):
+        if name == 'ignored_exceptions':
+            return getattr(self.context, '_ignored_exceptions')
+        return getattr(self.context, name)
+
+    def __setattr__(self, name, value):
+        if name == 'ignored_exceptions':
+            self.context._ignored_exceptions = value
+            return
+        setattr(self.context, name, value)
+
+
+class FlourishErrorsConfigureView(Form, FlourishErrorsViewBase):
+
+    legend = _('Errors Settings')
+    fields = field.Fields(IErrorsSettings)
+    fields['ignored_exceptions'].widgetFactory = CheckBoxFieldWidget
+
+    def getContent(self):
+        return self.error_utility
+
+    @button.buttonAndHandler(_('Submit'))
+    def handle_submit_action(self, action):
+        data, errors = self.extractData()
+        if errors:
+            self.status = self.formErrorsMessage
+            return
+        form.applyChanges(self, self.getContent(), data)
+        self.request.response.redirect(self.nextURL())
+
+    @button.buttonAndHandler(_('Cancel'))
+    def handle_cancel_action(self, action):
+        self.request.response.redirect(self.nextURL())
+
+    def nextURL(self):
+        url = absoluteURL(self.context, self.request) + '/errors'
+        return url
+
+
+class ErrorsBreadcrumb(flourish.breadcrumbs.Breadcrumbs):
+
+    title = _('Errors')
+
+    @property
+    def link(self):
+        app = ISchoolToolApplication(None)
+        app_url = absoluteURL(app, self.request)
+        return '%s/errors' % app_url

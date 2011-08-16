@@ -313,4 +313,47 @@
       class=".course.FlourishManageCoursesOverview"
       />
 
+  <!-- breadcrumbs -->
+
+  <flourish:breadcrumb
+      for="schooltool.course.interfaces.ICourseContainer"
+      title="Courses"
+      traversal_name="courses"
+      class="schooltool.schoolyear.browser.schoolyear.SchoolyearNavBreadcrumbs"
+      />
+
+  <flourish:breadcrumb
+      for="schooltool.course.interfaces.ICourse"
+      />
+
+  <flourish:page_breadcrumbs
+      show_page_title="false"
+      for="schooltool.course.interfaces.ICourse"
+      view=".course.FlourishCourseView"
+      />
+
+  <flourish:breadcrumb
+      for="schooltool.course.interfaces.ISectionContainer"
+      title="Sections"
+      traversal_name="sections"
+      class="schooltool.schoolyear.browser.schoolyear.SchoolyearNavBreadcrumbs"
+      />
+
+  <flourish:breadcrumb
+      for="schooltool.course.interfaces.ISection"
+      />
+
+  <flourish:page_breadcrumbs
+      for="schooltool.schoolyear.interfaces.ISchoolYear"
+      view="schooltool.course.browser.section.FlourishSectionAddView"
+      crumb_parent="schooltool.schoolyear.interfaces.ISchoolYear"
+      follow_crumb=".section.SectionsYearNavBreadcrumbs"
+      />
+
+  <flourish:page_breadcrumbs
+      show_page_title="false"
+      for="schooltool.course.interfaces.ISection"
+      view=".section.FlourishSectionView"
+      />
+
 </configure>

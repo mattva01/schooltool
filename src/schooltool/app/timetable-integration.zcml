@@ -6,9 +6,21 @@
     <implements interface="schooltool.timetable.interfaces.IHaveTimetables" />
   </class>
 
+  <adapter
+      for="schooltool.timetable.interfaces.ITimetableContainer"
+      provides="schooltool.schoolyear.interfaces.ISchoolYear"
+      factory="schooltool.timetable.app.getTimetableContainerOwner"
+    />
+
   <class class="schooltool.course.section.Section">
     <implements interface="schooltool.timetable.interfaces.IHaveSchedule" />
   </class>
+
+  <adapter
+      for="schooltool.timetable.interfaces.IScheduleContainer"
+      provides="schooltool.course.interfaces.ISection"
+      factory="schooltool.timetable.app.getScheduleContainerOwner"
+    />
 
   <adapter factory=".timetable.EmergencyDayTimetableSubscriber"
            name="update-timetables-on-emergency" />

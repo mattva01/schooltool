@@ -80,6 +80,10 @@
       permission="schooltool.edit"
       />
 
+  <flourish:breadcrumb
+      for="schooltool.schoolyear.interfaces.ISchoolYear"
+      />
+
   <flourish:page
       name="index.html"
       for="schooltool.schoolyear.interfaces.ISchoolYear"

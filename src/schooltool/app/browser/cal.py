@@ -35,6 +35,7 @@ from zope.interface import implements, implementer, Interface
 from zope.i18n import translate
 from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.publisher.interfaces import NotFound
+from zope.security import checkPermission
 from zope.security.interfaces import ForbiddenAttribute, Unauthorized
 from zope.security.proxy import removeSecurityProxy
 from zope.security.checker import canAccess, canWrite
@@ -151,6 +152,8 @@ short_day_of_week_names = dict(weekday_names)
 @adapter(IEventForDisplay, IBrowserRequest, IEditCalendar)
 @implementer(Interface)
 def getCalendarEventDeleteLink(event, request, calendar):
+    if not checkPermission("schooltool.edit", event.source_calendar):
+        return None
     url = '%s/delete.html?event_id=%s&date=%s' % (
         absoluteURL(calendar, request),
         event.unique_id,

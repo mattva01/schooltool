@@ -271,4 +271,12 @@
       class=".resource.FlourishManageResourcesOverview"
       />
 
+  <flourish:page
+      for="schooltool.resource.interfaces.IBookingCalendar"
+      name="book_one_resource.html"
+      layer="schooltool.skin.flourish.IFlourishLayer"
+      class=".booking.CalendarEventBookOneResourceView"
+      permission="zope.View"
+      />
+
 </configure>

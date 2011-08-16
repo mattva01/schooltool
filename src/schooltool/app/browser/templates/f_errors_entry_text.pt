@@ -1,0 +1,12 @@
+<html i18n:domain="schooltool">
+  <body>
+    <div tal:define="entry view/entry">
+      <pre tal:content="entry/tb_text" tal:condition="entry">
+        Traceback (text)
+      </pre>
+      <pre tal:condition="not:entry" i18n:translate="">
+        The specified log entry was not found.  It may have expired.
+      </pre>
+    </div>
+  </body>
+</html>

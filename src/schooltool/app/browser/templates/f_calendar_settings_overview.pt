@@ -1,0 +1,33 @@
+<div i18n:domain="schooltool">
+  <h3>
+    <a tal:attributes="href string:${context/@@absolute_url}/site-preferences.html"
+       i18n:translate="">
+      Calendar
+    </a>
+  </h3>
+  <table class="form-fields"
+         tal:define="settings view/settings">
+    <tbody>
+      <tr>
+        <td class="label" i18n:translate="">Front Page Calendar</td>
+        <td tal:content="settings/frontPageCalendar">Name</td>
+      </tr>
+      <tr>
+        <td class="label" i18n:translate="">Time Zone</td>
+        <td tal:content="settings/timezone">Name</td>
+      </tr>
+      <tr>
+        <td class="label" i18n:translate="">Time Format</td>
+        <td tal:content="settings/timeformat">Name</td>
+      </tr>
+      <tr>
+        <td class="label" i18n:translate="">Date Format</td>
+        <td tal:content="settings/dateformat">Name</td>
+      </tr>
+      <tr>
+        <td class="label" i18n:translate="">Week starts on</td>
+        <td tal:content="settings/weekstart">Name</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
