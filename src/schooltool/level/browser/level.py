@@ -33,10 +33,10 @@ from zope.traversing.browser.absoluteurl import absoluteURL
 
 from z3c.form import form, subform, field, button
 
+from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.table.table import simple_form_key
 from schooltool.level.interfaces import ILevel, ILevelContainer
 from schooltool.level.level import Level
-from schooltool.schoolyear.interfaces import ISchoolYear
 
 from schooltool.common import SchoolToolMessage as _
 
@@ -106,10 +106,6 @@ class LevelContainerView(BrowserView):
         url = absoluteURL(self.context, self.request)
         self.request.response.redirect(url)
 
-    @property
-    def school_year(self):
-        return ISchoolYear(self.context)
-
     def levels(self):
         levels = self.context.values()
         result = []
@@ -164,10 +160,8 @@ class LevelContainerAbsoluteURLAdapter(BrowserView):
     implements(IAbsoluteURL)
 
     def __str__(self):
-        container_id = int(self.context.__name__)
-        int_ids = getUtility(IIntIds)
-        container = int_ids.getObject(container_id)
-        url = str(getMultiAdapter((container, self.request), name='absolute_url'))
+        app = ISchoolToolApplication(None)
+        url = absoluteURL(app, self.request)
         return url + '/levels'
 
     __call__ = __str__

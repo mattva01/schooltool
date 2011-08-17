@@ -7,15 +7,15 @@
   <navigationViewlet
       name="levels"
       for="*"
-      manager="schooltool.schoolyear.browser.interfaces.ISchoolYearViewMenuViewletManager"
+      manager="schooltool.app.browser.interfaces.IManageMenuViewletManager"
       template="templates/link_to_levels.pt"
       permission="schooltool.edit"
       title="Levels"
-      order="50"
+      order="250"
       />
 
   <zope:adapterTraverserPlugin
-      for="schooltool.schoolyear.interfaces.ISchoolYear"
+      for="schooltool.app.interfaces.ISchoolToolApplication"
       layer="zope.publisher.interfaces.browser.IBrowserRequest"
       name="levels"
       adapter="schooltool.level.interfaces.ILevelContainer"
