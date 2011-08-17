@@ -19,7 +19,7 @@
 """
 SchoolTool calendar event views.
 """
-
+import urllib
 import datetime
 
 import zope.formlib.interfaces
@@ -320,9 +320,10 @@ class DeleteEventLinkViewlet(flourish.page.ModalFormLinkViewlet):
         preferences = ViewPreferences(self.request)
         event = self.event
         start = event.dtstart.astimezone(preferences.timezone)
-        url = '%s/delete.html?event_id=%s&date=%s' % (
+        url = '%s/delete.html?event_id=%s&date=%s&back_url=%s' % (
             absoluteURL(self.calendar, self.request),
             event.unique_id,
-            start.strftime('%Y-%m-%d'))
+            start.strftime('%Y-%m-%d'),
+            urllib.quote(self.view.nextURL()))
         return url
 
