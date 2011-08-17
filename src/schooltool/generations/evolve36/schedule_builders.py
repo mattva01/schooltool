@@ -21,6 +21,7 @@ from zope.annotation.interfaces import IAnnotatable, IAnnotations
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
 
+from schooltool.course.interfaces import ISection
 from schooltool.generations.evolve36.helper import assert_not_broken
 from schooltool.generations.evolve36.helper import BuildContext
 from schooltool.generations.evolve36.timetable_builders import (
@@ -106,11 +107,13 @@ class SchedulesBuilder(object):
             del annotations[TIMETABLE_DICT_KEY]
 
     def build(self, schedule_root, context):
+        result = BuildContext(schedule_map={})
+        if not ISection.providedBy(self.owner):
+            return result(schedules=None)
+
         owner_int_id = getUtility(IIntIds).getId(self.owner)
         key = unicode(owner_int_id)
         container = schedule_root[key] = ScheduleContainer()
-
-        result = BuildContext(schedule_map={})
 
         for builder in self.builders:
             built = builder.build(

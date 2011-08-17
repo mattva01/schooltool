@@ -23,15 +23,28 @@ from zope.intid.interfaces import IIntIds
 
 from schooltool.app.overlay import URICalendarSubscriber
 from schooltool.app.overlay import CalendarOverlayInfo
+from schooltool.course.interfaces import ISection
 from schooltool.generations.evolve36.helper import assert_not_broken
 from schooltool.generations.evolve36.helper import BuildContext
 from schooltool.generations.evolve36.model import ITimetableCalendarEvent
 from schooltool.relationship import relate, unrelate
 from schooltool.relationship.interfaces import IRelationshipLinks
-from schooltool.timetable.calendar import getScheduleCalendar
-
+from schooltool.timetable.calendar import ScheduleCalendar
 
 ST_CALENDAR_KEY = 'schooltool.app.calendar.Calendar'
+SCHEDULE_CALENDAR_KEY = 'schooltool.timetable.app.ScheduleCalendar'
+
+
+def getScheduleCalendar(owner):
+    if not ISection.providedBy(owner):
+        return None
+    annotations = IAnnotations(owner)
+    try:
+        return annotations[SCHEDULE_CALENDAR_KEY]
+    except KeyError:
+        calendar = ScheduleCalendar(owner)
+        annotations[SCHEDULE_CALENDAR_KEY] = calendar
+        return calendar
 
 
 class CalendarBuilder(object):
@@ -95,16 +108,24 @@ class CalendarBuilder(object):
     def build(self, context):
         int_ids = getUtility(IIntIds)
         schedule_calendars = set()
-        schedule_calendars.add(getScheduleCalendar(self.calendar.__parent__))
+        calendar = getScheduleCalendar(self.calendar.__parent__)
+        if calendar is None:
+            return
+
+        schedule_calendars.add(calendar)
 
         for event in self.events:
-            schedule = context.shared.schedule_map[event['timetable_key']]
+            schedule = context.shared.schedule_map.get(event['timetable_key'])
+            if schedule is None:
+                continue
+
             period = context.shared.period_map[event['period_key']]
             owner_int_id = int(schedule.__parent__.__name__)
             owner = int_ids.getObject(owner_int_id)
 
-            # XXX: this method should be reimplemented here
             calendar = getScheduleCalendar(owner)
+            if calendar is None:
+                continue
 
             if calendar not in schedule_calendars:
                 schedule_calendars.add(calendar)
