@@ -6,5 +6,16 @@
       Outgoing Email
     </a>
   </h3>
-  <p tal:content="view/email_status" />
+  <table class="form-fields">
+    <tbody>
+      <tr>
+        <td class="label" i18n:translate="">Status</td>
+        <td tal:content="view/email_status" />
+      </tr>
+      <tr>
+        <td class="label" i18n:translate="">Hostname</td>
+        <td tal:content="view/hostname" />
+      </tr>
+    </tbody>
+  </table>
 </div>
