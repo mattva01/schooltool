@@ -288,4 +288,16 @@
       permission="schooltool.edit"
       />
 
+    <flourish:breadcrumb
+        for="schooltool.resource.interfaces.IResourceDemographicsFields"
+        view="schooltool.basicperson.browser.demographics.FlourishFieldDescriptionEditView"
+        title="Resource Attributes"
+        />
+
+    <flourish:breadcrumb
+        for="schooltool.resource.interfaces.IResourceDemographicsFields"
+        view="schooltool.basicperson.browser.demographics.FlourishFieldDescriptionAddView"
+        title="Resource Attributes"
+        />
+
 </configure>
