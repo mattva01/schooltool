@@ -33,10 +33,14 @@ from zope.traversing.browser.absoluteurl import absoluteURL
 
 from z3c.form import form, subform, field, button
 
+import schooltool.skin.flourish.page
+import schooltool.skin.flourish.form
+import schooltool.skin.flourish.content
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.table.table import simple_form_key
 from schooltool.level.interfaces import ILevel, ILevelContainer
 from schooltool.level.level import Level
+from schooltool.skin import flourish
 
 from schooltool.common import SchoolToolMessage as _
 
@@ -66,6 +70,10 @@ class LevelAddForm(form.AddForm):
         container = self.getContent()
         name = INameChooser(container).chooseName('', level)
         container[name] = level
+
+    @button.buttonAndHandler(_("Cancel"), name='cancel')
+    def handle_cancel_action(self, action):
+        self.request.response.redirect(self.nextURL())
 
     def nextURL(self):
         return absoluteURL(self.context, self.request)
@@ -165,3 +173,45 @@ class LevelContainerAbsoluteURLAdapter(BrowserView):
         return url + '/levels'
 
     __call__ = __str__
+
+
+def appTitleContentFactory(context, request, view, name):
+    app = ISchoolToolApplication(None)
+    return flourish.content.queryContentProvider(
+        app, request, view, 'title')
+
+
+class FlourishLevelsView(flourish.page.Page):
+
+    @property
+    def title(self):
+        app = ISchoolToolApplication(None)
+        title = flourish.content.queryContentProvider(
+            app, self.request, self, 'title')
+        return title.title
+
+    def table(self):
+        result = []
+        for level in list(self.context.values()):
+            result.append({
+               'level': level,
+               })
+        return result
+
+
+class FlourishLevelAddView(flourish.form.AddForm, LevelAddForm):
+    label = None
+    legend = _('Level information')
+
+
+class FlourishLevelEditView(flourish.form.Form, LevelEditView):
+    label = None
+    legend = _('Level information')
+
+
+class LevelsAddLinks(flourish.page.RefineLinksViewlet):
+    """Manager for Add links."""
+
+
+class LevelsActionsLinks(flourish.page.RefineLinksViewlet):
+    """Manager for Actions links."""

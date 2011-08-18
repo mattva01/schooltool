@@ -1,0 +1,30 @@
+<div i18n:domain="schooltool">
+  <table>
+    <thead>
+      <tr>
+        <th i18n:translate="">Title</th>
+      </tr>
+    </thead>
+    <tr tal:repeat="row view/table">
+      <td>
+        <span tal:content="row/level/title" />
+
+        <a class="modify" href=""
+           title="Edit this level"
+           tal:condition="row/level/schooltool:can_edit"
+           tal:attributes="href string:${row/level/@@absolute_url}/edit.html"
+           i18n:attributes="title"
+           i18n:translate="">
+          <img tal:attributes="src context/++resource++schooltool.skin.flourish/edit-icon.png"
+               alt="Edit"
+               i18n:attributes="alt" />
+        </a>
+      </td>
+    </tr>
+  </table>
+  <h3>
+    <a tal:attributes="href string:${context/schooltool:app/@@absolute_url}/manage"
+       i18n:translate="">Done</a>
+  </h3>
+</div>
+

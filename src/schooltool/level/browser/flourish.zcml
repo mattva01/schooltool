@@ -1,0 +1,95 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/browser"
+           xmlns:z3c="http://namespaces.zope.org/z3c"
+           xmlns:zope="http://namespaces.zope.org/zope"
+           xmlns:flourish="http://schooltool.org/flourish"
+           i18n_domain="schooltool">
+
+  <flourish:contentFactory
+      factory=".level.appTitleContentFactory"
+      for="schooltool.level.interfaces.ILevelContainer"
+      name="title" />
+
+  <flourish:breadcrumb
+      for="schooltool.level.interfaces.ILevelContainer"
+      title="Teaching Levels"
+      />
+
+  <flourish:breadcrumb
+      for="schooltool.level.interfaces.ILevel"
+      />
+
+  <flourish:page_breadcrumbs
+      show_page_title="false"
+      title="Teaching Levels"
+      view=".level.FlourishLevelsView"
+      />
+
+  <flourish:page
+     name="index.html"
+     for="schooltool.level.interfaces.ILevelContainer"
+     class=".level.FlourishLevelsView"
+     content_template="templates/f_levels_view.pt"
+     permission="schooltool.edit"
+     subtitle="Teching Levels"
+     />
+
+  <flourish:viewlet
+      name="levels-add-links"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      class=".level.LevelsAddLinks"
+      title="Add"
+      permission="schooltool.edit"
+      view=".level.FlourishLevelsView"
+      />
+
+  <flourish:viewlet
+      name="levels-actions-links"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      class=".level.LevelsActionsLinks"
+      title="Actions"
+      permission="schooltool.edit"
+      view=".level.FlourishLevelsView"
+      />
+
+  <flourish:viewlet
+      name="level-add"
+      link="add.html"
+      title="New Level"
+      view=".level.FlourishLevelsView"
+      class="schooltool.skin.flourish.page.LinkViewlet"
+      manager=".level.LevelsAddLinks"
+      permission="schooltool.edit"
+      />
+
+  <configure package="schooltool.skin.flourish">
+    <flourish:page
+        name="add.html"
+        title="Teaching Levels"
+        subtitle="Add new level"
+        for="schooltool.level.interfaces.ILevelContainer"
+        class="schooltool.level.browser.level.FlourishLevelAddView"
+        permission="schooltool.edit"
+        content_template="templates/z3c-schooltool-form.pt"
+        />
+
+    <flourish:page
+        name="edit.html"
+        title="Teaching Levels"
+        subtitle="Edit level"
+        for="schooltool.level.interfaces.ILevel"
+        class="schooltool.level.browser.level.FlourishLevelEditView"
+        permission="schooltool.edit"
+        content_template="templates/z3c-schooltool-form.pt"
+        />
+
+  </configure>
+
+  <flourish:breadcrumb
+      for="schooltool.level.interfaces.ILevel"
+      view="schooltool.level.browser.level.FlourishLevelEditView"
+      title=""
+      />
+
+
+</configure>

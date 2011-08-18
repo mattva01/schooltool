@@ -48,5 +48,6 @@
   <include package="schooltool.schoolyear.browser" file="flourish.zcml" />
   <include package="schooltool.securitypolicy.browser" file="flourish.zcml" />
   <include package="schooltool.term.browser" file="flourish.zcml" />
+  <include package="schooltool.level.browser" file="flourish.zcml" />
 
 </configure>
