@@ -237,3 +237,14 @@ class LevelsAddLinks(flourish.page.RefineLinksViewlet):
 
 class LevelsActionsLinks(flourish.page.RefineLinksViewlet):
     """Manager for Actions links."""
+
+
+class FlourishManageLevelsOverview(flourish.page.Content):
+
+    body_template = ViewPageTemplateFile(
+        'templates/f_manage_levels_overview.pt')
+
+    @property
+    def levels(self):
+        app = ISchoolToolApplication(None)
+        return ILevelContainer(app)

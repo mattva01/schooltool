@@ -45,6 +45,7 @@
 
   <flourish:viewlet
       name="levels-actions-links"
+      after="levels-add-links"
       manager="schooltool.skin.flourish.page.IPageRefineManager"
       class=".level.LevelsActionsLinks"
       title="Actions"
@@ -109,6 +110,15 @@
       class="schooltool.skin.flourish.page.LinkViewlet"
       manager=".level.LevelsActionsLinks"
       permission="schooltool.edit"
+      />
+
+  <flourish:viewlet
+      name="manage-levels-overview"
+      after="manage-courses-overview"
+      view="schooltool.app.browser.app.ManageSchool"
+      permission="schooltool.edit"
+      manager="schooltool.skin.flourish.page.IPageContentManager"
+      class=".level.FlourishManageLevelsOverview"
       />
 
 </configure>
