@@ -91,5 +91,24 @@
       title=""
       />
 
+  <flourish:page
+      name="reorder.html"
+      title="Teaching Levels"
+      subtitle="Change Order"
+      for="schooltool.level.interfaces.ILevelContainer"
+      class="schooltool.level.browser.level.FlourishReorderLevelsView"
+      permission="schooltool.edit"
+      content_template="templates/f_levels_reorder.pt"
+      />
+
+  <flourish:viewlet
+      name="levels-reorder"
+      link="reorder.html"
+      title="Reorder or Delete Levels"
+      view=".level.FlourishLevelsView"
+      class="schooltool.skin.flourish.page.LinkViewlet"
+      manager=".level.LevelsActionsLinks"
+      permission="schooltool.edit"
+      />
 
 </configure>

@@ -163,6 +163,28 @@ class LevelContainerView(BrowserView):
         return self.template()
 
 
+class FlourishReorderLevelsView(flourish.page.Page, LevelContainerView):
+
+    deleted = False
+
+    def handleDelete(self):
+        form_items = dict(
+            [(simple_form_key(level), level.__name__)
+             for level in self.context.values()])
+        for form_key, name in form_items.items():
+            if 'delete.%s' % form_key in self.request:
+                del self.context[name]
+                self.deleted = True
+
+    def update(self):
+        self.handleDelete()
+        if self.deleted:
+            self.request.response.redirect(self.request.URL)
+        elif 'form-submitted' in self.request:
+            self.handleApply()
+            self.request.response.redirect(self.request.URL)
+
+
 class LevelContainerAbsoluteURLAdapter(BrowserView):
     adapts(ILevelContainer, IBrowserRequest)
     implements(IAbsoluteURL)
