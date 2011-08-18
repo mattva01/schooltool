@@ -72,7 +72,7 @@ class DisplayForm(z3c.form.form.DisplayForm, flourish.page.Page):
 class AddForm(Form, z3c.form.form.AddForm):
 
     def update(self):
-        super(Form, self).update()
+        super(AddForm, self).update()
         if self._finishedAdd:
             self.request.response.redirect(self.nextURL())
             return ""

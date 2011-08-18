@@ -1,0 +1,23 @@
+<div class="manage-view" i18n:domain="schooltool"
+     tal:define="levels view/levels">
+  <h3>
+    <a title="Manage levels"
+       tal:attributes="href levels/@@absolute_url"
+       i18n:attributes="title"
+       i18n:translate="">
+      Teaching levels
+    </a>
+  </h3>
+  <p i18n:translate="" tal:condition="levels">
+    There are
+    <metal:block tal:replace="python:len(view.levels)" i18n:name="count"/>
+    teaching levels defined for
+    <metal:block tal:replace="context/schooltool:app/@@title"
+                 i18n:name="school_name"/>.
+  </p>
+  <p i18n:translate="" tal:condition="not:levels">
+    There are no teaching levels defined for
+    <metal:block tal:replace="context/schooltool:app/@@title"
+                 i18n:name="school_name"/>.
+  </p>
+</div>

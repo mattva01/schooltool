@@ -24,28 +24,18 @@ Schooltool teaching levels.
 from persistent import Persistent
 
 import zope.schema
-from zope.schema.vocabulary import SimpleTerm
 from zope.interface import implements, implementer
-from zope.component import adapts, adapter
-from zope.component import getUtility
+from zope.component import adapter
 from zope.container.btree import BTreeContainer
 from zope.container.ordered import OrderedContainer
 from zope.container.contained import Contained
 from zope.annotation.interfaces import IAttributeAnnotatable
-from zope.intid import addIntIdSubscriber
-from zope.intid.interfaces import IIntIds
-from zope.lifecycleevent.interfaces import IObjectRemovedEvent
-from zope.lifecycleevent import ObjectAddedEvent
-from zope.proxy import sameProxiedObjects
 
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.app import InitBase, StartUpBase
 from schooltool.app.utils import TitledContainerItemVocabulary
-from schooltool.schoolyear.interfaces import ISchoolYearContainer, ISchoolYear
-from schooltool.schoolyear.subscriber import ObjectEventAdapterSubscriber
 from schooltool.relationship import URIObject, RelationshipSchema
 from schooltool.relationship import RelationshipProperty
-from schooltool.table.table import simple_form_key
 from schooltool.level import interfaces
 
 
@@ -73,11 +63,9 @@ LevelCourses = RelationshipSchema(URILevelCourses,
 LEVELS_APP_KEY = 'schooltool.level.level'
 
 
+# BBB: for evolution
 class LevelContainerContainer(BTreeContainer):
     """Container of level containers."""
-
-    implements(interfaces.ILevelContainerContainer,
-               IAttributeAnnotatable)
 
 
 class LevelContainer(OrderedContainer):
@@ -99,82 +87,35 @@ class Level(Persistent, Contained):
         self.title = title
 
 
-class VivifyLevelContainerContainer(object):
+class VivifyLevelContainer(object):
 
     def __call__(self):
         if LEVELS_APP_KEY not in self.app:
-            self.app[LEVELS_APP_KEY] = LevelContainerContainer()
+            self.app[LEVELS_APP_KEY] = LevelContainer()
 
 
-class LevelInit(VivifyLevelContainerContainer, InitBase):
+class LevelInit(VivifyLevelContainer, InitBase):
     pass
 
 
-class LevelStartUp(VivifyLevelContainerContainer, StartUpBase):
+class LevelStartUp(VivifyLevelContainer, StartUpBase):
     pass
-
-
-@adapter(ISchoolYear)
-@implementer(interfaces.ILevelContainer)
-def getLevelContainer(sy):
-    addIntIdSubscriber(sy, ObjectAddedEvent(sy))
-    int_ids = getUtility(IIntIds)
-    sy_id = str(int_ids.getId(sy))
-    app = ISchoolToolApplication(None)
-    lc = app[LEVELS_APP_KEY].get(sy_id, None)
-    if lc is None:
-        lc = app[LEVELS_APP_KEY][sy_id] = LevelContainer()
-    return lc
 
 
 @adapter(ISchoolToolApplication)
 @implementer(interfaces.ILevelContainer)
-def getLevelContainerForApp(app):
-    syc = ISchoolYearContainer(app, None)
-    sy = syc.getActiveSchoolYear()
-    if sy is None:
-        return None
-    return interfaces.ILevelContainer(sy)
-
-
-@adapter(interfaces.ILevelContainer)
-@implementer(ISchoolYear)
-def getSchoolYearForLevelContainer(level_container):
-    container_id = int(level_container.__name__)
-    int_ids = getUtility(IIntIds)
-    container = int_ids.getObject(container_id)
-    return container
-
-
-@adapter(interfaces.ILevel)
-@implementer(ISchoolYear)
-def getSchoolYearForLevel(level):
-    level_container = level.__parent__
-    return ISchoolYear(level_container)
-
-
-class RemoveLevelsWhenSchoolYearIsDeleted(ObjectEventAdapterSubscriber):
-    adapts(IObjectRemovedEvent, ISchoolYear)
-
-    def __call__(self):
-        level_container = interfaces.ILevelContainer(self.object)
-        for level_id, level in list(level_container.items()):
-            del level_container[level_id]
-        app = ISchoolToolApplication(self.object)
-        top_level_container = app[LEVELS_APP_KEY]
-        del top_level_container[level_container.__name__]
+def getLevelContainer(app):
+    return app[LEVELS_APP_KEY]
 
 
 class LevelVocabulary(TitledContainerItemVocabulary):
-    """Vocabulary of levels for contexts adaptable to ISchoolYear"""
+    """Vocabulary of levels."""
     implements(zope.schema.interfaces.IIterableVocabulary)
 
     @property
     def container(self):
-        schoolyear = ISchoolYear(self.context, None)
-        if schoolyear is None:
-            return {}
-        return interfaces.ILevelContainer(schoolyear)
+        app = ISchoolToolApplication(None)
+        return interfaces.ILevelContainer(app)
 
 
 def levelVocabularyFactory():

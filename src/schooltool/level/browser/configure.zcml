@@ -7,40 +7,40 @@
   <navigationViewlet
       name="levels"
       for="*"
-      manager="schooltool.schoolyear.browser.interfaces.ISchoolYearViewMenuViewletManager"
+      manager="schooltool.app.browser.interfaces.IManageMenuViewletManager"
       template="templates/link_to_levels.pt"
       permission="schooltool.edit"
       title="Levels"
-      order="50"
+      order="250"
       />
 
   <zope:adapterTraverserPlugin
-      for="schooltool.schoolyear.interfaces.ISchoolYear"
+      for="schooltool.app.interfaces.ISchoolToolApplication"
       layer="zope.publisher.interfaces.browser.IBrowserRequest"
       name="levels"
       adapter="schooltool.level.interfaces.ILevelContainer"
       />
 
   <zope:adapter
-      factory=".browser.LevelContainerAbsoluteURLAdapter"
+      factory=".level.LevelContainerAbsoluteURLAdapter"
       provides="zope.traversing.browser.interfaces.IAbsoluteURL" />
 
   <zope:adapter
-      factory=".browser.LevelContainerAbsoluteURLAdapter"
+      factory=".level.LevelContainerAbsoluteURLAdapter"
       provides="zope.interface.Interface"
       name="absolute_url"/>
 
   <page
       name="index.html"
       for="schooltool.level.interfaces.ILevelContainer"
-      class="schooltool.level.browser.LevelContainerView"
+      class="schooltool.level.browser.level.LevelContainerView"
       permission="schooltool.edit"
       />
 
   <page
       name="edit.html"
       for="schooltool.level.interfaces.ILevel"
-      class=".browser.LevelEditView"
+      class=".level.LevelEditView"
       permission="schooltool.edit"
       menu="schooltool_actions"
       title="Edit"
