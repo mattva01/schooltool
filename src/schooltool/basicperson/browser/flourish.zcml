@@ -255,6 +255,11 @@
   <zope:adapter
       factory=".demographics.getLimitKeysHint" />
 
+  <flourish:breadcrumb
+      for="schooltool.basicperson.interfaces.IDemographicsFields"
+      title=""
+      />
+
   <flourish:page
      name="index.html"
      for="schooltool.basicperson.interfaces.IDemographicsFields"
@@ -391,6 +396,24 @@
        permission="schooltool.edit"
        subtitle="New Selection List Field"
        />
+
+    <flourish:breadcrumb
+        for="schooltool.basicperson.interfaces.IDemographicsFields"
+        view="schooltool.basicperson.browser.demographics.FlourishFieldDescriptionEditView"
+        title="Demographics"
+        />
+
+    <flourish:breadcrumb
+        for="schooltool.basicperson.interfaces.IFieldDescription"
+        view="schooltool.basicperson.browser.demographics.FlourishFieldDescriptionEditView"
+        title=""
+        />
+
+    <flourish:breadcrumb
+        for="schooltool.basicperson.interfaces.IDemographicsFields"
+        view="schooltool.basicperson.browser.demographics.FlourishFieldDescriptionAddView"
+        title="Demographics"
+        />
 
     <flourish:page
        name="edit.html"
