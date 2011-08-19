@@ -23,6 +23,7 @@ import re
 import os
 import sys
 
+import zope.formlib.widgets
 from zope.component import getUtility
 from zope.i18n.interfaces import INegotiator
 
@@ -68,3 +69,7 @@ class JQueryI18nLibrary(ResourceLibrary):
         if lang in self.locales:
             return (self.locales[lang], )
         return ()
+
+
+class FormlibDateWidget(zope.formlib.widgets.DateWidget):
+    cssClass="textWidget date-field"

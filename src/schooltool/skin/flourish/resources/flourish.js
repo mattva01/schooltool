@@ -189,3 +189,11 @@ ST.dialogs = function() {
   }
 
 }();
+
+
+/* Temporary jQuery UI datepicker integration */
+
+$(document).ready(function() {
+        $('.date-field').datepicker({dateFormat: 'yy-mm-dd'});
+    });
+
