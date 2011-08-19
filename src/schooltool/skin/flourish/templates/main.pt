@@ -8,14 +8,6 @@
 
   <link rel="icon" type="image/png" href="favicon.ico"
         tal:attributes="href context/++resource++favicon.ico"/>
-  <script type="text/javascript" src="jquery.js"
-          tal:attributes="src context/++resource++jquery.js">
-  </script>
-  <link rel="stylesheet" type="text/css" media="screen"
-        tal:attributes="href context/++resource++jquery-ui/theme/jquery-ui.css" />
-  <script type="text/javascript" src="jquery-ui/jquery.ui.js"
-          tal:attributes="src context/++resource++jquery-ui/jquery.ui.js">
-  </script>
 
   <!-- zc.resourcelibrary -->
 

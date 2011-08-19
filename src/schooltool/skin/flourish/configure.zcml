@@ -7,21 +7,33 @@
 
   <!-- Common resources -->
 
-  <configure package="schooltool.skin">
-    <zope:resourceLibrary
-        name="schooltool.skin.flourish-jquery"
-        require=""
-        layer="schooltool.skin.flourish.IFlourishLayer">
-      <directory
-            source="resources"
-            include="jquery.min.js"
-            />
-    </zope:resourceLibrary>
-  </configure>
+  <zope:resourceLibrary
+      name="schooltool.skin.flourish-jquery-theme"
+      require=""
+      layer="schooltool.skin.flourish.IFlourishLayer">
+    <directory
+        source="resources/jquery/css/schooltool"
+        include="jquery-ui.css
+                 jquery-ui-overrides.css
+                 "
+        />
+  </zope:resourceLibrary>
+
+  <zope:resourceLibrary
+      name="schooltool.skin.flourish-jquery"
+      require="schooltool.skin.flourish-jquery-theme"
+      layer="schooltool.skin.flourish.IFlourishLayer">
+    <directory
+        source="resources/jquery/js"
+        include="jquery-1.5.1.min.js
+                 jquery-ui-1.8.15.custom.min.js
+                 "
+        />
+  </zope:resourceLibrary>
 
   <zope:resourceLibrary
       name="schooltool.skin.flourish-scripts"
-      require=""
+      require="schooltool.skin.flourish-jquery"
       layer="schooltool.skin.flourish.IFlourishLayer">
     <directory
       source="resources"
@@ -41,7 +53,7 @@
                form.css
                table.css
                batch.css
-               jquery-ui.css"
+               "
       />
   </zope:resourceLibrary>
 
