@@ -31,9 +31,23 @@
         />
   </zope:resourceLibrary>
 
+  <flourish:resourceLibrary
+      name="schooltool.skin.flourish-jquery-i18n"
+      require=""
+      layer="schooltool.skin.flourish.IFlourishLayer">
+    <directory
+        source="resources/jquery/development-bundle/ui/i18n"
+        />
+    <library
+        class=".widgets.JQueryI18nLibrary"
+        source="resources/jquery/development-bundle/ui/i18n"
+        />
+  </flourish:resourceLibrary>
+
   <zope:resourceLibrary
       name="schooltool.skin.flourish-scripts"
-      require="schooltool.skin.flourish-jquery"
+      require="schooltool.skin.flourish-jquery
+               schooltool.skin.flourish-jquery-i18n"
       layer="schooltool.skin.flourish.IFlourishLayer">
     <directory
       source="resources"

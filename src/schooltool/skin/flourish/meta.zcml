@@ -2,6 +2,24 @@
 
   <directives namespace="http://schooltool.org/flourish">
 
+    <complexDirective
+        name="resourceLibrary"
+        schema="zc.resourcelibrary.zcml.IResourceLibraryDirective"
+        handler=".zcml_resource.ResourceLibrary"
+        >
+
+      <subdirective
+          name="directory"
+          schema="zc.resourcelibrary.zcml.IDirectoryDirective"
+          />
+
+      <subdirective
+          name="library"
+          schema=".zcml_resource.IDynamicLibraryDirective"
+          />
+
+    </complexDirective>
+
     <directive
         name="content"
         schema=".zcml_content.IContentDirective"
