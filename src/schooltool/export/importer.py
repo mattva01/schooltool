@@ -1077,6 +1077,10 @@ class MegaImporter(BrowserView):
 
         wb = self.getWorkbook()
 
+        if wb is None:
+            return
+
+
         sp = transaction.savepoint(optimistic=True)
 
         importers = [SchoolYearImporter,
