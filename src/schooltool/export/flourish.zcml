@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/browser"
+           xmlns:z3c="http://namespaces.zope.org/z3c"
+           xmlns:zope="http://namespaces.zope.org/zope"
+           xmlns:flourish="http://schooltool.org/flourish"
+           i18n_domain="schooltool">
+
+  <flourish:viewlet
+      name="import_school_links"
+      after="customize_school_links"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      class="schooltool.export.app.ImportSchoolLinks"
+      view="schooltool.app.browser.app.ManageSchool"
+      title="Data Import"
+      permission="schooltool.edit"
+      />
+
+  <flourish:viewlet
+      name="export.xls"
+      title="Export as XLS"
+      class="schooltool.skin.flourish.page.LinkViewlet"
+      manager="schooltool.export.app.ImportSchoolLinks"
+      permission="schooltool.edit"
+      />
+
+  <flourish:page
+     name="export.xls"
+     for="schooltool.app.interfaces.ISchoolToolApplication"
+     class=".export.MegaExporter"
+     permission="schooltool.edit" />
+
+</configure>
