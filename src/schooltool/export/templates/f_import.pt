@@ -59,4 +59,5 @@
              value="Submit" i18n:attributes="value submit-button" />
     </div>
   </form>
+  <h3><a tal:attributes="href string:${context/schooltool:app/@@absolute_url}/manage">Done</a></h3>
 </div>
