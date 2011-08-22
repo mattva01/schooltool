@@ -79,7 +79,8 @@ class FlourishCalendarEventEditView(flourish.page.Page,
     def setCustomWidget(self, name, **kw):
         factory = lambda field, request: getMultiAdapter(
             (field, self.request), formlib.interfaces.IInputWidget)
-        custom_factory = formlib.widget.CustomWidgetFactory(factory, **kw)
+        custom_factory = formlib.widget.CustomWidgetFactory(
+            factory, cssClass="date-field", **kw)
         setattr(self, str(name+'_widget'), custom_factory)
 
     def _setUpWidgets(self):
