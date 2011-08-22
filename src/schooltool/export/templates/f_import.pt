@@ -4,11 +4,6 @@
   </div>
   <form method="POST" enctype="multipart/form-data" class="standalone"
         tal:attributes="action request/URL">
-    <h3 i18n:translate="">
-      Import Data
-    </h3>
-    <p class="error" tal:condition="view/errors"
-       tal:repeat="err view/displayErrors" tal:content="err" />
 
     <p i18n:translate="">
       In addition to entering data through SchoolTool's web interface, you
@@ -40,6 +35,18 @@
       data, we highly recommend downloading the sample spreadsheet as a
       reference.
     </p>
+
+  <div class="status"
+       tal:condition="view/errors"
+       tal:repeat="error view/displayErrors">
+    <div class="summary ui-state-error ui-corner-all">
+      <span class="ui-icon ui-icon-alert">icon</span>
+      <tal:block content="error">
+        [error message]
+      </tal:block>
+    </div>
+  </div>
+
     <fieldset>
       <legend><span i18n:translate="">Upload XLS File</span></legend>
       <div class="row">
