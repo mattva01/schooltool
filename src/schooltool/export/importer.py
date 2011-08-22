@@ -23,11 +23,14 @@ import xlrd
 import transaction
 import datetime
 
+from zope.container.contained import containedEvent
 from zope.container.interfaces import INameChooser
+from zope.event import notify
 from zope.component import queryUtility
 from zope.security.proxy import removeSecurityProxy
 from zope.publisher.browser import BrowserView
 
+import schooltool.skin.flourish.page
 from schooltool.basicperson.interfaces import IDemographicsFields
 from schooltool.basicperson.interfaces import IDemographics
 from schooltool.basicperson.demographics import DateFieldDescription
@@ -44,12 +47,22 @@ from schooltool.app.app import SimpleNameChooser
 from schooltool.schoolyear.schoolyear import SchoolYear
 from schooltool.schoolyear.interfaces import ISchoolYear
 from schooltool.schoolyear.interfaces import ISchoolYearContainer
-
+from schooltool.skin import flourish
 from schooltool.course.section import Section
 from schooltool.course.interfaces import ISectionContainer
 from schooltool.course.interfaces import ICourseContainer
 from schooltool.course.course import Course
 from schooltool.common import DateRange
+from schooltool.common import parse_time_range
+from schooltool.timetable.daytemplates import CalendarDayTemplates
+from schooltool.timetable.daytemplates import WeekDayTemplates
+from schooltool.timetable.daytemplates import SchoolDayTemplates
+from schooltool.timetable.daytemplates import DayTemplate
+from schooltool.timetable.daytemplates import TimeSlot
+from schooltool.timetable.interfaces import ITimetableContainer
+from schooltool.timetable.interfaces import IScheduleContainer
+from schooltool.timetable.schedule import Period
+from schooltool.timetable.timetable import Timetable
 
 from schooltool.common import format_message
 from schooltool.common import SchoolToolMessage as _
@@ -365,129 +378,203 @@ class SchoolTimetableImporter(ImporterBase):
     dows = ['Monday', 'Tuesday', 'Wednesday', 'Thursday',
             'Friday', 'Saturday', 'Sunday']
 
-
-    def setUpSchemaDays(self, timetable, days):
-        # XXX: temporary isolation of timetable imports
-        from schooltool.timetable.schema import TimetableSchemaDay
-
-        for day in days:
-            day_id = day['id']
-            timetable[day_id] = TimetableSchemaDay(day['periods'],
-                                                   day['homeroom_periods'])
+    day_templates = (
+        ('calendar_days', CalendarDayTemplates),
+        ('week_days', WeekDayTemplates),
+        ('school_days', SchoolDayTemplates),
+        )
 
     def createSchoolTimetable(self, data):
-        # XXX: temporary isolation of timetable imports
-        from schooltool.timetable.interfaces import ITimetableModelFactory
-        from schooltool.timetable import SchooldayTemplate
-        from schooltool.timetable.schema import TimetableSchema
-        from schooltool.timetable import SchooldaySlot
-
-        title = data['title']
-        factory = queryUtility(ITimetableModelFactory, data['model'])
-        day_ids = [day['id'] for day in data['days']]
-
-        template_dict = {}
-
-        for template in data['templates']:
-            used = template['id']
-
-            # parse SchoolDayPeriods
-            day = SchooldayTemplate()
-            for tstart, duration in template['periods']:
-                slot = SchooldaySlot(tstart, duration)
-                day.add(slot)
-
-            if used == 'default':
-                template_dict[None] = day
-            elif used in day_ids:
-                template_dict[used] = day
-            else:
-                try:
-                    template_dict[self.dows.index(used)] = day
-                except ValueError:
-                    self.errors.append("Unrecognised day id %s" % used)
-
-        model = factory(day_ids, template_dict)
-
-        # create and set up the timetable
-        timetable = TimetableSchema(day_ids, title=title, model=model)
-        self.setUpSchemaDays(timetable, data['days'])
-        timetable.__name__ = data['__name__']
-        return timetable
-
-    def addSchoolTimetable(self, school_timetable, data):
-        # XXX: temporary isolation of timetable imports
-        from schooltool.timetable.interfaces import ITimetableSchemaContainer
-
         syc = ISchoolYearContainer(self.context)
-        sy = syc[data['school_year']]
-        sc = ITimetableSchemaContainer(sy)
-        if school_timetable.__name__ is None:
-            school_timetable.__name__ = SimpleNameChooser(sc).chooseName('', school_timetable)
+        schoolyear = syc[data['school_year']]
 
-        if school_timetable.__name__ not in sc:
-            sc[school_timetable.__name__] = school_timetable
+        timetable = Timetable(schoolyear.first, schoolyear.last,
+                              title=data['title'])
+
+        factories = dict(self.day_templates)
+
+        container = ITimetableContainer(schoolyear)
+        timetable.__name__ = data['__name__']
+
+        container[timetable.__name__] = timetable
+
+        timetable.periods, event = containedEvent(
+                factories[data['period_templates']](), timetable, 'periods')
+        notify(event)
+        timetable.periods.initTemplates()
+
+        timetable.time_slots, event = containedEvent(
+                factories[data['time_templates']](), timetable, 'time_slots')
+        notify(event)
+        timetable.time_slots.initTemplates()
+
+        name_chooser = INameChooser(timetable.periods.templates)
+        for entry in data['periods']:
+            day_id = entry['id']
+            day_title = day_id
+            if data['period_templates'] == 'week_days':
+                day_title = self.dows[int(day_id)]
+            day = DayTemplate(day_title)
+            if data['period_templates'] == 'week_days':
+                name = day_id
+            else:
+                name = name_chooser.chooseName('', day)
+            timetable.periods.templates[name] = day
+            p_chooser = INameChooser(day)
+            for period_entry in entry['periods']:
+                period = Period(title=period_entry['title'],
+                                activity_type=period_entry['activity'] or None)
+                p_name = p_chooser.chooseName('', period)
+                day[p_name] = period
+
+        name_chooser = INameChooser(timetable.time_slots.templates)
+        for entry in data['time_slots']:
+            day_id = entry['id']
+            day_title = day_id
+            if data['time_templates'] == 'week_days':
+                day_title = self.dows[int(day_id)]
+            day = DayTemplate(day_title)
+            if data['time_templates'] == 'week_days':
+                name = day_id
+            else:
+                name = name_chooser.chooseName('', day)
+            timetable.time_slots.templates[name] = day
+            ts_chooser = INameChooser(day)
+            for ts_entry in entry['time_slots']:
+                time_slot = TimeSlot(
+                    ts_entry['starts'], ts_entry['duration'],
+                    activity_type=ts_entry['activity'] or None)
+                ts_name = ts_chooser.chooseName('', time_slot)
+                day[ts_name] = time_slot
 
     def getWeeklyDayId(self, sh, row, col):
-        if sh.cell_value(rowx=row, colx=col) == 'default':
-            day_id = 'default'
+        value, found = self.getCellAndFound(sh, row, col)
+        if not found:
+            self.error(row, col, ERROR_WEEKLY_DAY_ID)
+            return None
+
+        if isinstance(value, float):
+            if int(value) == value:
+                value = int(value)
         else:
-            day_id, found, valid = self.getIntFoundValid(sh, row, col)
-            if valid and day_id not in range(7):
-                self.error(row, col, ERROR_WEEKLY_DAY_ID)
-        return day_id
+            try:
+                value = self.dows.index(value)
+            except ValueError:
+                self.errors.append("Unrecognised day id %s" % value)
+
+            if isinstance(value, float):
+                if int(value) != value:
+                    self.error(row, col, ERROR_NOT_INT)
+                else:
+                    value = int(value)
+        return unicode(value)
 
     def import_school_timetable(self, sh, row):
-        # XXX: temporary isolation of timetable imports
-        from schooltool.timetable.interfaces import ITimetableModelFactory
-        from schooltool.common import parse_time_range
-
         num_errors = len(self.errors)
         data = {}
         data['title'] = self.getRequiredTextFromCell(sh, row, 1)
         data['__name__'] = self.getRequiredTextFromCell(sh, row+1, 1)
         data['school_year'] = self.getRequiredTextFromCell(sh, row+2, 1)
-        data['model'] = self.getRequiredTextFromCell(sh, row+3, 1)
+        data['period_templates'] = self.getRequiredTextFromCell(sh, row+3, 1)
+        data['time_templates'] = self.getRequiredTextFromCell(sh, row+4, 1)
         if num_errors < len(self.errors):
             return
 
         num_errors = len(self.errors)
         if data['school_year'] not in ISchoolYearContainer(self.context):
             self.error(row + 2, 1, ERROR_INVALID_SCHOOL_YEAR)
-        if queryUtility(ITimetableModelFactory, data['model']) is None:
+
+        factories = dict(self.day_templates)
+        if data['period_templates'] not in factories:
             self.error(row + 3, 1, ERROR_TIMETABLE_MODEL)
+        if data['time_templates'] not in factories:
+            self.error(row + 4, 1, ERROR_TIMETABLE_MODEL)
+
         if num_errors < len(self.errors):
             return
 
         num_errors = len(self.errors)
         row += 5
-        if self.getCellValue(sh, row, 0, '') == 'Day Templates':
-            data['templates'] = []
+
+        row += 1
+        if self.getCellValue(sh, row, 0, '').lower() == 'days':
+            data['periods'] = []
             row += 1
-            for row in range(row, sh.nrows):
+
+            while row < sh.nrows:
                 if sh.cell_value(rowx=row, colx=0) == '':
                     break
 
-                if data['model'] == 'WeeklyTimetableModel':
+                if data['period_templates'] == 'week_days':
                     day_id = self.getWeeklyDayId(sh, row, 0)
                 else:
                     day_id = self.getRequiredTextFromCell(sh, row, 0)
 
-                if day_id in [day['id'] for day in data['templates']]:
+                if day_id in [day['id'] for day in data['periods']]:
                     self.error(row, 0, ERROR_DUPLICATE_DAY_ID)
 
                 periods = []
-                for col in range(1, sh.ncols):
-                    cell = sh.cell_value(rowx=row, colx=col)
+                col = 1
+                while True:
+                    cell = self.getCellValue(sh, row, col, default='')
+                    if cell == '':
+                        break
+                    activity = sh.cell_value(rowx=row+1, colx=col)
+                    if cell in periods:
+                        self.error(row, col, ERROR_DUPLICATE_PERIOD)
+                    else:
+                        periods.append({'title': cell,
+                                        'activity': activity})
+                    col += 1
+                row += 2
+
+                data['periods'].append({
+                        'id': day_id,
+                        'periods': periods,
+                        })
+        else:
+            self.errors.append(format_message(
+                ERROR_HAS_NO_DAYS,
+                mapping={'title': data['title'], 'row': row + 1}
+                ))
+
+        row += 1
+        if self.getCellValue(sh, row, 0, '').lower() == 'time schedule':
+            data['time_slots'] = []
+            row += 1
+
+            while row < sh.nrows:
+                if sh.cell_value(rowx=row, colx=0) == '':
+                    break
+
+                if data['time_templates'] == 'week_days':
+                    day_id = self.getWeeklyDayId(sh, row, 0)
+                else:
+                    day_id = self.getRequiredTextFromCell(sh, row, 0)
+
+                if day_id in [day['id'] for day in data['time_slots']]:
+                    self.error(row, 0, ERROR_DUPLICATE_DAY_ID)
+
+                time_slots = []
+                col = 1
+                while True:
+                    cell = self.getCellValue(sh, row, col, default='')
                     if cell == '':
                         break
                     try:
-                        time_range = parse_time_range(cell)
+                        starts, duration = parse_time_range(cell)
                     except:
                         self.error(row, col, ERROR_TIME_RANGE)
                         continue
-                    periods.append(time_range)
-                data['templates'].append({'id': day_id, 'periods': periods})
+                    activity = self.getCellValue(sh, row+1, col, default='')
+                    time_slots.append({
+                            'starts': starts,
+                            'duration': duration,
+                            'activity': activity,
+                            })
+                    col += 1
+                data['time_slots'].append({'id': day_id, 'time_slots': time_slots})
+                row += 2
         else:
             self.errors.append(format_message(
                 ERROR_HAS_NO_DAY_TEMPLATES,
@@ -496,59 +583,8 @@ class SchoolTimetableImporter(ImporterBase):
         if num_errors < len(self.errors):
             return
 
-        row += 1
-        if self.getCellValue(sh, row, 0, '') == 'Days':
-            data['days'] = []
-            homeroom_start = sh.ncols
-            for col in range(2, sh.ncols):
-                if sh.cell_value(rowx=row, colx=col) == 'Homeroom periods':
-                    homeroom_start = col
-                    break
-            row += 1
-            for row in range(row, sh.nrows):
-                if sh.cell_value(rowx=row, colx=0) == '':
-                    break
-
-                if data['model'] == 'WeeklyTimetableModel':
-                    day_id = self.getWeeklyDayId(sh, row, 0)
-                else:
-                    day_id = self.getRequiredTextFromCell(sh, row, 0)
-
-                if day_id in [day['id'] for day in data['days']]:
-                    self.error(row, 0, ERROR_DUPLICATE_DAY_ID)
-                if day_id not in [day['id'] for day in data['templates']]:
-                    self.error(row, 0, ERROR_UNKNOWN_DAY_ID)
-
-                periods = []
-                for col in range(1, homeroom_start):
-                    cell = sh.cell_value(rowx=row, colx=col)
-                    if cell == '':
-                        break
-                    if cell in periods:
-                        self.error(row, col, ERROR_DUPLICATE_PERIOD)
-                    else:
-                        periods.append(cell)
-                homeroom_periods = []
-                for col in range(homeroom_start, sh.ncols):
-                    cell = sh.cell_value(rowx=row, colx=col)
-                    if cell == '':
-                        break
-                    if cell in homeroom_periods:
-                        self.error(row, col, ERROR_DUPLICATE_HOMEROOM_PERIOD)
-                    else:
-                        homeroom_periods.append(cell)
-                data['days'].append({'id': day_id,
-                                     'periods': periods,
-                                     'homeroom_periods': homeroom_periods})
-        else:
-            self.errors.append(format_message(
-                ERROR_HAS_NO_DAYS,
-                mapping={'title': data['title'], 'row': row + 1}
-                ))
-
         if not self.errors:
-            school_timetable = self.createSchoolTimetable(data)
-            self.addSchoolTimetable(school_timetable, data)
+            self.createSchoolTimetable(data)
 
     def process(self):
         sh = self.sheet
@@ -764,6 +800,7 @@ class SectionImporter(ImporterBase):
                     next_sections[section.__name__].previous = section
 
     def import_timetable(self, sh, row, section):
+        return
         # XXX: temporary isolation of timetable imports
         from schooltool.timetable.interfaces import ITimetableSchemaContainer
         from schooltool.timetable.interfaces import ITimetables
@@ -1051,3 +1088,8 @@ class MegaImporter(BrowserView):
     def displayErrors(self):
         return self.errors[:25]
 
+
+
+class FlourishMegaImporter(flourish.page.Page, MegaImporter):
+    __init__ = MegaImporter.__init__
+    update = MegaImporter.update

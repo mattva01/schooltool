@@ -29,4 +29,20 @@
      class=".export.MegaExporter"
      permission="schooltool.edit" />
 
+  <flourish:viewlet
+      name="import.html"
+      title="Import XLS"
+      class="schooltool.skin.flourish.page.LinkViewlet"
+      manager="schooltool.export.app.ImportSchoolLinks"
+      permission="schooltool.edit"
+      />
+
+  <flourish:page
+     name="import.html"
+     for="schooltool.app.interfaces.ISchoolToolApplication"
+     content_template="templates/f_import.pt"
+     class=".importer.FlourishMegaImporter"
+     permission="schooltool.edit" />
+
+
 </configure>
