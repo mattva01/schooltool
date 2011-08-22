@@ -29,6 +29,7 @@ from zope.event import notify
 from zope.component import queryUtility
 from zope.security.proxy import removeSecurityProxy
 from zope.publisher.browser import BrowserView
+from zope.traversing.browser.absoluteurl import absoluteURL
 
 import schooltool.skin.flourish.page
 from schooltool.basicperson.interfaces import IDemographicsFields
@@ -1099,6 +1100,11 @@ class MegaImporter(BrowserView):
 
         if self.errors:
             sp.rollback()
+        else:
+            self.request.response.redirect(self.nextURL())
+
+    def nextURL(self):
+        return self.request.URL
 
     def displayErrors(self):
         return self.errors[:25]
@@ -1108,3 +1114,7 @@ class MegaImporter(BrowserView):
 class FlourishMegaImporter(flourish.page.Page, MegaImporter):
     __init__ = MegaImporter.__init__
     update = MegaImporter.update
+
+    def nextURL(self):
+        url = absoluteURL(self.context, self.request)
+        return '%s/manage' % url
