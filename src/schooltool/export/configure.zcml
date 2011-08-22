@@ -40,12 +40,12 @@
 
   <resource
       name="sample_data.xls" file="sample_data.xls"
-      layer="schooltool.skin.skin.ISchoolToolLayer"
+      layer="zope.publisher.interfaces.browser.IBrowserRequest"
       />
 
   <resource
       name="empty_data.xls" file="empty_data.xls"
-      layer="schooltool.skin.skin.ISchoolToolLayer"
+      layer="zope.publisher.interfaces.browser.IBrowserRequest"
       />
 
 </configure>
