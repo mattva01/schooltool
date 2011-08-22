@@ -63,6 +63,7 @@ from schooltool.timetable.interfaces import ITimetableContainer
 from schooltool.timetable.interfaces import IScheduleContainer
 from schooltool.timetable.schedule import Period
 from schooltool.timetable.timetable import Timetable
+from schooltool.timetable.timetable import SelectedPeriodsSchedule
 
 from schooltool.common import format_message
 from schooltool.common import SchoolToolMessage as _
@@ -94,8 +95,8 @@ ERROR_INVALID_TERM_ID = _('is not a valid term in the given school year')
 ERROR_INVALID_COURSE_ID = _('is not a valid course in the given school year')
 ERROR_HAS_NO_COURSES = _('${title} has no courses in A${row}')
 ERROR_INVALID_PERSON_ID = _('is not a valid username')
-ERROR_INVALID_SCHEMA_ID = _('is not a valid schema in the given school year')
-ERROR_INVALID_DAY_ID = _('is not a valid day id for the given schema')
+ERROR_INVALID_SCHEMA_ID = _('is not a valid timetable in the given school year')
+ERROR_INVALID_DAY_ID = _('is not a valid day id for the given timetable')
 ERROR_INVALID_PERIOD_ID = _('is not a valid period id for the given day')
 ERROR_INVALID_RESOURCE_ID = _('is not a valid resource id')
 ERROR_UNICODE_CONVERSION = _(
@@ -800,63 +801,73 @@ class SectionImporter(ImporterBase):
                     next_sections[section.__name__].previous = section
 
     def import_timetable(self, sh, row, section):
-        return
-        # XXX: temporary isolation of timetable imports
-        from schooltool.timetable.interfaces import ITimetableSchemaContainer
-        from schooltool.timetable.interfaces import ITimetables
-        from schooltool.timetable import TimetableActivity
-        from schooltool.timetable.interfaces import ITimetableCalendarEvent
+        timetables = ITimetableContainer(ISchoolYear(section))
 
-        schemas = ITimetableSchemaContainer(ISchoolYear(section))
-        schema_id = self.getRequiredTextFromCell(sh, row, 1)
-        if schema_id not in schemas:
+        timetable_id = self.getRequiredTextFromCell(sh, row, 1)
+        if timetable_id not in timetables:
             self.error(row, 0, ERROR_INVALID_SCHEMA_ID)
-            return
-        schema = schemas[schema_id]
-        timetable = schema.createTimetable(ITerm(section))
-        timetables = ITimetables(section).timetables
-        timetables[schema_id] = timetable
+            return row
+        timetable = timetables[timetable_id]
+
+        schedules = IScheduleContainer(section)
+
+        term = ITerm(section)
+        schedule = SelectedPeriodsSchedule(
+            timetable, term.first, term.last, title=timetable.title)
+        row += 1
+
+        collapse_periods = self.getTextFromCell(sh, row, 1, 'no')
+        schedule.consecutive_periods_as_one = bool(
+            collapse_periods.lower() == 'yes')
 
         row += 1
-        course = list(section.courses)[0]
-        rc = self.context['resources']
-        resources = {}
-        for row in range(row + 1, sh.nrows):
+
+        s_chooser = INameChooser(schedules)
+        name = s_chooser.chooseName('', schedule)
+        schedules[name] = schedule
+
+        row += 1
+        while row < sh.nrows:
             if sh.cell_value(rowx=row, colx=0) == '':
                 break
-
             num_errors = len(self.errors)
-            day_id = self.getRequiredTextFromCell(sh, row, 0)
-            period_id = self.getRequiredTextFromCell(sh, row, 1)
-            resource_id = self.getTextFromCell(sh, row, 2)
+            day_title = self.getRequiredTextFromCell(sh, row, 0)
+            period_title = self.getRequiredTextFromCell(sh, row, 1)
             if num_errors < len(self.errors):
                 continue
 
-            if day_id not in schema.day_ids:
+            day = None
+            for tt_day in timetable.periods.templates.values():
+                if tt_day.title == day_title:
+                    day = tt_day
+                    break
+            if day is None:
                 self.error(row, 0, ERROR_INVALID_DAY_ID)
-            elif period_id not in schema[day_id].periods:
+                continue
+
+            period = None
+            for tt_period in day.values():
+                if tt_period.title == period_title:
+                    period = tt_period
+            if period is None:
                 self.error(row, 1, ERROR_INVALID_PERIOD_ID)
-            if resource_id and resource_id not in rc:
-                self.error(row, 2, ERROR_INVALID_RESOURCE_ID)
+                continue
+
+            schedule.addPeriod(period)
+
+            row += 1
             if num_errors < len(self.errors):
                 continue
 
-            resources[day_id, period_id] = resource_id
-            act = TimetableActivity(title=course.title, owner=section)
-            timetable[day_id].add(period_id, act)
-
-        for event in ISchoolToolCalendar(section):
-            if ITimetableCalendarEvent.providedBy(event):
-                resource_id = resources[event.day_id, event.period_id]
-                resource = rc[resource_id]
-                event.bookResource(removeSecurityProxy(resource))
+        return row
 
     def import_timetables(self, sh, row, section):
-        for row in range(row, sh.nrows):
-            if sh.cell_value(rowx=row, colx=0) == 'School Timetable':
-                self.import_timetable(sh, row, section)
+        while row < sh.nrows:
             if sh.cell_value(rowx=row, colx=0) == '':
                 break
+            if sh.cell_value(rowx=row, colx=0) == 'School Timetable':
+                row = self.import_timetable(sh, row, section)
+            row += 1
         return row
 
     def import_section(self, sh, row, year, term):
