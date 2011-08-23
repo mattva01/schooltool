@@ -22,9 +22,18 @@ csv importing.
 $Id$
 """
 from zope.security.proxy import removeSecurityProxy
+from zope.traversing.browser.absoluteurl import absoluteURL
+
+import schooltool.skin.flourish.page
 from schooltool.app.interfaces import ISchoolToolApplication
-from schooltool.app.browser.csvimport import BaseCSVImporter, BaseCSVImportView
+from schooltool.app.browser.csvimport import BaseCSVImporter
+from schooltool.app.browser.csvimport import BaseCSVImportView
+from schooltool.app.browser.csvimport import FlourishBaseCSVImportView
+from schooltool.group.interfaces import IGroupContainer
 from schooltool.group.group import Group
+from schooltool.group.browser.group import GroupsActiveTabMixin
+from schooltool.schoolyear.interfaces import ISchoolYear
+from schooltool.skin import flourish
 
 from schooltool.common import SchoolToolMessage as _
 
@@ -62,6 +71,32 @@ class GroupCSVImportView(BaseCSVImportView):
     importer_class = GroupCSVImporter
 
 
+class FlourishGroupCSVImportView(FlourishBaseCSVImportView):
+
+    importer_class = GroupCSVImporter
+
+    def nextURL(self):
+        schoolyear = ISchoolYear(self.context)
+        url = '%s/%s?schoolyear_id=%s' % (
+            absoluteURL(ISchoolToolApplication(None), self.request),
+            'groups',
+            schoolyear.__name__)
+        return url
+
+
+class ImportGroupsLinkViewlet(flourish.page.LinkViewlet,
+                              GroupsActiveTabMixin):
+
+    @property
+    def url(self):
+        link = self.link
+        if not link:
+            return None
+        courses = IGroupContainer(self.schoolyear)
+        return "%s/%s" % (absoluteURL(courses, self.request),
+                          self.link)
+
+
 class GroupMemberCSVImporter(BaseCSVImporter):
     """Group Member CSV Importer"""
 
@@ -94,3 +129,5 @@ class GroupMemberCSVImportView(BaseCSVImportView):
     """View for Group Member CSV importer."""
 
     importer_class = GroupMemberCSVImporter
+
+
