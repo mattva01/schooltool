@@ -22,9 +22,18 @@ csv importing.
 $Id$
 """
 from zope.security.proxy import removeSecurityProxy
+from zope.traversing.browser.absoluteurl import absoluteURL
+
+import schooltool.skin.flourish.page
 from schooltool.app.interfaces import ISchoolToolApplication
-from schooltool.app.browser.csvimport import BaseCSVImporter, BaseCSVImportView
+from schooltool.app.browser.csvimport import BaseCSVImporter
+from schooltool.app.browser.csvimport import BaseCSVImportView
+from schooltool.app.browser.csvimport import FlourishBaseCSVImportView
+from schooltool.course.browser.course import CoursesActiveTabMixin
 from schooltool.course.course import Course
+from schooltool.course.interfaces import ICourseContainer
+from schooltool.schoolyear.interfaces import ISchoolYear
+from schooltool.skin import flourish
 
 from schooltool.common import SchoolToolMessage as _
 
@@ -114,6 +123,31 @@ class CourseCSVImportView(BaseCSVImportView):
     """View for Course CSV importer."""
 
     importer_class = CourseCSVImporter
+
+
+class FlourishCourseCSVImportView(FlourishBaseCSVImportView):
+
+    importer_class = CourseCSVImporter
+
+    def nextURL(self):
+        schoolyear = ISchoolYear(self.context)
+        url = '%s/%s?schoolyear_id=%s' % (
+            absoluteURL(ISchoolToolApplication(None), self.request),
+            'courses',
+            schoolyear.__name__)
+        return url
+
+
+class ImportCoursesLinkViewlet(flourish.page.LinkViewlet, CoursesActiveTabMixin):
+
+    @property
+    def url(self):
+        link = self.link
+        if not link:
+            return None
+        courses = ICourseContainer(self.schoolyear)
+        return "%s/%s" % (absoluteURL(courses, self.request),
+                          self.link)
 
 
 class SectionMemberCSVImporter(BaseCSVImporter):

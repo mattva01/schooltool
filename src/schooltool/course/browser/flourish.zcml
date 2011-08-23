@@ -5,6 +5,15 @@
            xmlns:flourish="http://schooltool.org/flourish"
            i18n_domain="schooltool">
 
+  <!-- content -->
+
+  <flourish:content
+      name="title"
+      for="schooltool.course.interfaces.ICourseContainer"
+      class="schooltool.course.browser.course.CourseContainerTitle"
+      permission="schooltool.view"
+      />
+
   <!-- adapters -->
 
   <zope:adapter
@@ -355,5 +364,34 @@
       for="schooltool.course.interfaces.ISection"
       view=".section.FlourishSectionView"
       />
+
+  <!-- Import -->
+
+  <flourish:viewlet
+      after="courses-add-links"
+      name="course-import-links"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      class="schooltool.course.browser.course.CoursesImportLinks"
+      view=".course.FlourishCoursesView"
+      title="Import"
+      permission="schooltool.edit"
+      />
+
+  <flourish:viewlet
+      name="csvimport.html"
+      title="Import CSV"
+      manager="schooltool.course.browser.course.CoursesImportLinks"
+      class="schooltool.course.browser.csvimport.ImportCoursesLinkViewlet"
+      permission="schooltool.edit"
+      />
+
+  <flourish:page
+     name="csvimport.html"
+     subtitle="Import"
+     for="schooltool.course.interfaces.ICourseContainer"
+     content_template="templates/f_course_csvimport.pt"
+     class=".csvimport.FlourishCourseCSVImportView"
+     permission="schooltool.edit"
+     />
 
 </configure>
