@@ -300,4 +300,41 @@
         title="Resource Attributes"
         />
 
+  <!-- Import -->
+
+  <flourish:viewlet
+      after="resources_container"
+      name="resource-import-links"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      class="schooltool.resource.browser.resource.ResourceImportLinks"
+      view=".resource.FlourishResourceContainerView"
+      title="Import"
+      permission="schooltool.edit"
+      />
+
+  <flourish:viewlet
+      name="csvimport.html"
+      title="Import CSV"
+      for="schooltool.resource.interfaces.IResourceContainer"
+      manager="schooltool.resource.browser.resource.ResourceImportLinks"
+      class="schooltool.skin.flourish.page.LinkViewlet"
+      permission="schooltool.edit"
+      />
+
+  <flourish:page
+      name="csvimport.html"
+      subtitle="Import"
+      for="schooltool.resource.interfaces.IResourceContainer"
+      class=".csvimport.FlourishResourceCSVImportView"
+      permission="schooltool.edit"
+     />
+
+  <flourish:content
+      name="import-description"
+      view=".csvimport.FlourishResourceCSVImportView"
+      template="templates/f_resource_csvimport_description.pt"
+      permission="zope.Public"
+      />
+
+
 </configure>

@@ -372,6 +372,10 @@ class ResourceContainerLinks(RefineLinksViewlet):
     """Resource container links viewlet."""
 
 
+class ResourceImportLinks(RefineLinksViewlet):
+    """Resource import links viewlet."""
+
+
 class ResourceDemographicsFieldsAbsoluteURLAdapter(BrowserView):
 
     adapts(IResourceDemographicsFields, IBrowserRequest)
