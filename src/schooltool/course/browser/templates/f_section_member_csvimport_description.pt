@@ -1,0 +1,17 @@
+<div>
+
+  <p i18n:translate="">
+    CSV data should contain a SchoolTool username in each line.
+  </p>
+  <p i18n:translate="">Example:</p>
+
+<pre class="csv-text" i18n:translate="">
+john_b
+peter_j
+</pre>
+
+  <p i18n:translate="">
+    The above example will add users 'john_b' and 'peter_j' as students of this section.
+  </p>
+
+</div>

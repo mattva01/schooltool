@@ -27,6 +27,7 @@ class ModulesSnapshot(object):
     def __init__(self):
         self.originals = dict(sys.modules)
         self.faked_attrs = {}
+        self.imported = set()
 
     def mock(self, values):
         """Usage:
@@ -66,6 +67,7 @@ class ModulesSnapshot(object):
         if parent_name:
             self.mock_attr(parent_name, this_name, fake)
         sys.modules[modulename] = fake
+        self.imported.add(modulename)
 
     def get_module(self, modulename):
         try:
@@ -86,9 +88,9 @@ class ModulesSnapshot(object):
                 setattr(module, name, old_value)
 
         for name in list(sys.modules):
-            if name not in self.originals:
+            if name in self.imported:
                 del sys.modules[name]
-            else:
+            elif name in self.originals:
                 sys.modules[name] = self.originals[name]
 
 

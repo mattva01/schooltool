@@ -19,6 +19,7 @@
 """
 Upgrade SchoolTool to generation 36.
 """
+import transaction
 
 from schooltool.testing.mock import ModulesSnapshot
 from schooltool.generations.evolve36.helper import BuildContext
@@ -30,11 +31,11 @@ from schooltool.generations.evolve36.calendar_builders import \
     AppTimetableCalendarBuilder
 
 
-# XXX: This holds references to substitute classes
-#      so that they can be pickled afterwards.
-from schooltool.generations.evolve36 import model
-
 def evolveTimetables(app):
+    # This import holds references to substitute classes
+    # so that they can be pickled after modules are restored.
+    from schooltool.generations.evolve36 import model
+
     modules = ModulesSnapshot()
 
     modules.mock_module('schooltool.timetable')
@@ -59,3 +60,5 @@ def evolveTimetables(app):
         built = builder.build(app, BuildContext(shared=result))
         result.update(built)
 
+    # Pickle stuff
+    transaction.savepoint()

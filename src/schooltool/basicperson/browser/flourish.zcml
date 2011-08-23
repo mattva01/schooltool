@@ -40,6 +40,7 @@
       name="person_container"
       manager="schooltool.skin.flourish.page.IPageRefineManager"
       class="schooltool.basicperson.browser.person.PersonContainerLinks"
+      view=".person.FlourishBasicPersonContainerView"
       for="schooltool.person.interfaces.IPersonContainer"
       title="Add"
       permission="schooltool.view"
@@ -255,6 +256,11 @@
   <zope:adapter
       factory=".demographics.getLimitKeysHint" />
 
+  <flourish:breadcrumb
+      for="schooltool.basicperson.interfaces.IDemographicsFields"
+      title=""
+      />
+
   <flourish:page
      name="index.html"
      for="schooltool.basicperson.interfaces.IDemographicsFields"
@@ -391,6 +397,24 @@
        permission="schooltool.edit"
        subtitle="New Selection List Field"
        />
+
+    <flourish:breadcrumb
+        for="schooltool.basicperson.interfaces.IDemographicsFields"
+        view="schooltool.basicperson.browser.demographics.FlourishFieldDescriptionEditView"
+        title="Demographics"
+        />
+
+    <flourish:breadcrumb
+        for="schooltool.basicperson.interfaces.IFieldDescription"
+        view="schooltool.basicperson.browser.demographics.FlourishFieldDescriptionEditView"
+        title=""
+        />
+
+    <flourish:breadcrumb
+        for="schooltool.basicperson.interfaces.IDemographicsFields"
+        view="schooltool.basicperson.browser.demographics.FlourishFieldDescriptionAddView"
+        title="Demographics"
+        />
 
     <flourish:page
        name="edit.html"
@@ -566,6 +590,42 @@
       permission="schooltool.edit"
       manager="schooltool.skin.flourish.page.IPageContentManager"
       class=".person.FlourishManagePeopleOverview"
+      />
+
+  <!-- Import -->
+
+  <flourish:viewlet
+      after="person_container"
+      name="person-import-links"
+      for="schooltool.person.interfaces.IPersonContainer"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      class="schooltool.basicperson.browser.person.PersonImportLinks"
+      view=".person.FlourishBasicPersonContainerView"
+      title="Import"
+      permission="schooltool.edit"
+      />
+
+  <flourish:viewlet
+      name="csvimport.html"
+      title="Import CSV"
+      manager="schooltool.basicperson.browser.person.PersonImportLinks"
+      class="schooltool.skin.flourish.page.LinkViewlet"
+      permission="schooltool.edit"
+      />
+
+  <flourish:page
+     name="csvimport.html"
+     subtitle="Import"
+     for="schooltool.person.interfaces.IPersonContainer"
+     class=".csvimport.FlourishBasicPersonCSVImportView"
+     permission="schooltool.edit"
+     />
+
+  <flourish:content
+      name="import-description"
+      view=".csvimport.FlourishBasicPersonCSVImportView"
+      template="templates/f_csvimport_description.pt"
+      permission="zope.Public"
       />
 
 </configure>

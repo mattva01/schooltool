@@ -1006,3 +1006,7 @@ class ErrorsBreadcrumb(flourish.breadcrumbs.Breadcrumbs):
         app = ISchoolToolApplication(None)
         app_url = absoluteURL(app, self.request)
         return '%s/errors' % app_url
+
+    @property
+    def follow_crumb(self):
+        return ManageSiteBreadcrumb(self.context, self.request, self.view)

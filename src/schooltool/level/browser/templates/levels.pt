@@ -8,7 +8,7 @@
 <metal:block metal:fill-slot="body">
 
   <p i18n:translate="">Levels (student learning years) taught in
-    <tal:block i18n:name="schoolyear" tal:replace="structure view/school_year/@@title" /></p>
+    <tal:block i18n:name="school_name" tal:replace="structure context/schooltool:app/@@title" /></p>
 
   <tal:block condition="view/levels">
     <form method="post" action=".">

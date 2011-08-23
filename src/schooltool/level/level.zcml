@@ -56,15 +56,9 @@
       factory=".level.LevelStartUp"
       name="schooltool.level.level" />
 
-  <adapter factory=".level.RemoveLevelsWhenSchoolYearIsDeleted"
-           name="schooltool.level.level" />
-
   <!-- Content adapters -->
 
   <adapter factory=".level.getLevelContainer" />
-  <adapter factory=".level.getLevelContainerForApp" />
-  <adapter factory=".level.getSchoolYearForLevelContainer" />
-  <adapter factory=".level.getSchoolYearForLevel" />
 
   <adapter
       for=".interfaces.ILevelContainer"

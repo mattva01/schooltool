@@ -21,7 +21,11 @@ csv importing.
 
 $Id$
 """
-from schooltool.app.browser.csvimport import BaseCSVImporter, BaseCSVImportView
+from zope.traversing.browser.absoluteurl import absoluteURL
+
+from schooltool.app.browser.csvimport import BaseCSVImporter
+from schooltool.app.browser.csvimport import BaseCSVImportView
+from schooltool.app.browser.csvimport import FlourishBaseCSVImportView
 from schooltool.resource.resource import Resource, Location
 
 from schooltool.common import SchoolToolMessage as _
@@ -69,3 +73,11 @@ class ResourceCSVImportView(BaseCSVImportView):
     """View for Resource CSV importer."""
 
     importer_class = ResourceCSVImporter
+
+
+class FlourishResourceCSVImportView(FlourishBaseCSVImportView):
+
+    importer_class = ResourceCSVImporter
+
+    def nextURL(self):
+        return absoluteURL(self.context, self.request)

@@ -83,10 +83,8 @@
         var range_u = document.getElementById('field.range_u');
         var count = document.getElementById('field.count');
         var until = document.getElementById('field.until');
-        var until_trigger = document.getElementById('field.until_trigger');
         count.disabled = !range_c.checked;
         until.disabled = !range_u.checked;
-        until_trigger.disabled = !range_u.checked;
     }
     function onloadhook() {
         if (!document.getElementById('recurrence_box'))
@@ -337,33 +335,20 @@
       <div class="row" tal:define="widget nocall:view/exceptions_widget">
         <div metal:use-macro="context/@@form_macros/widget_row">
           <div metal:fill-slot="extra">
-<input type="button" id="field.exceptions_trigger" value="...">
+<input type="button"
+       id="field.exceptions_trigger"
+       name="field.exceptions_trigger"
+       value="...">
+<!-- XXX: extra special just-beat-it-until-it-works style script -->
 <script type="text/javascript">
-function calOnSelect(cal) {
-   var p = cal.params;
-   var update = (cal.dateClicked || p.electric);
-   if (update && p.inputField) {
-       p.inputField.value = (p.inputField.value+'\n'+cal.date.print(p.ifFormat)+'\n').replace(/\s+/g, "\n").replace(/(^\s+)|(\s+$)/g,"")+'\n';
-       if (typeof p.inputField.onchange == "function")
-           p.inputField.onchange();
-       }
-   if (update && p.displayArea)
-       p.displayArea.innerHTML = cal.date.print(p.daFormat);
-       if (update && typeof p.onUpdate == "function")
-           p.onUpdate(cal);
-       if (update && p.flat) {
-           if (typeof p.flatCallback == "function")
-               p.flatCallback(cal);
-       }
-    if (update && p.singleClick && cal.dateClicked)
-        cal.callCloseHandler();
-};
-
- Calendar.setup({
- onSelect: calOnSelect,
- inputField: 'field.exceptions',
- button: 'field.exceptions_trigger',
- ifFormat: '%Y-%m-%d'
+$(document).ready(function() {
+    $('#field\\.exceptions_trigger').datepicker({
+      onSelect: function(dateText, inst) {
+        var p = $('#field\\.exceptions');
+        p['0'].value = (p['0'].value+'\n'+dateText+'\n').replace(/\s+/g, "\n").replace(/(^\s+)|(\s+$)/g,"")+'\n';
+       $('#field\\.exceptions_trigger')[0].value="...";
+      }
+    });
 });
 </script>
           </div>

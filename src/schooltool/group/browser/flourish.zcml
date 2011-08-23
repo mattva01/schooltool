@@ -5,6 +5,15 @@
            xmlns:flourish="http://schooltool.org/flourish"
            i18n_domain="schooltool">
 
+  <!-- content -->
+
+  <flourish:content
+      name="title"
+      for="schooltool.group.interfaces.IGroupContainer"
+      class="schooltool.group.browser.group.GroupContainerTitle"
+      permission="schooltool.view"
+      />
+
   <!-- adapters -->
 
   <zope:adapter
@@ -134,23 +143,6 @@
       permission="schooltool.view"
       />
 
-  <flourish:breadcrumb
-      for="schooltool.group.interfaces.IGroupContainer"
-      title="Groups"
-      traversal_name="groups"
-      class="schooltool.schoolyear.browser.schoolyear.SchoolyearNavBreadcrumbs"
-      />
-
-  <flourish:breadcrumb
-      for="schooltool.group.interfaces.IGroup"
-      />
-
-  <flourish:page_breadcrumbs
-      show_page_title="false"
-      for="schooltool.group.interfaces.IGroup"
-      view=".group.FlourishGroupView"
-      />
-
   <flourish:page
       name="delete.html"
       for="schooltool.group.interfaces.IGroup"
@@ -187,5 +179,107 @@
         />
 
   </configure>
+
+  <!-- breadcrumbs -->
+
+  <flourish:activeViewlet
+      name="manage_school"
+      manager="schooltool.skin.flourish.page.IHeaderNavigationManager"
+      for="schooltool.group.interfaces.IGroupContainer"
+      />
+
+  <flourish:activeViewlet
+      name="manage_school"
+      manager="schooltool.skin.flourish.page.IHeaderNavigationManager"
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      view=".group.FlourishGroupsView"
+      />
+
+  <flourish:breadcrumb
+      for="schooltool.group.interfaces.IGroupContainer"
+      title="Groups"
+      traversal_name="groups"
+      class="schooltool.schoolyear.browser.schoolyear.SchoolyearNavBreadcrumbs"
+      />
+
+  <flourish:breadcrumb
+      for="schooltool.group.interfaces.IGroup"
+      />
+
+  <flourish:page_breadcrumbs
+      show_page_title="false"
+      for="schooltool.group.interfaces.IGroup"
+      view=".group.FlourishGroupView"
+      />
+
+  <!-- Import -->
+
+  <flourish:viewlet
+      after="groups-add-links"
+      name="group-import-links"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      class="schooltool.group.browser.group.GroupImportLinks"
+      view=".group.FlourishGroupsView"
+      title="Import"
+      permission="schooltool.edit"
+      />
+
+  <flourish:viewlet
+      name="csvimport.html"
+      title="Import CSV"
+      manager="schooltool.group.browser.group.GroupImportLinks"
+      class="schooltool.group.browser.csvimport.ImportGroupsLinkViewlet"
+      view=".group.FlourishGroupsView"
+      permission="schooltool.edit"
+      />
+
+  <flourish:page
+      name="csvimport.html"
+      subtitle="Import"
+      for="schooltool.group.interfaces.IGroupContainer"
+      class=".csvimport.FlourishGroupCSVImportView"
+      permission="schooltool.edit"
+     />
+
+  <flourish:content
+      name="import-description"
+      view=".csvimport.FlourishGroupCSVImportView"
+      template="templates/f_group_csvimport_description.pt"
+      permission="zope.Public"
+      />
+
+  <flourish:viewlet
+      after="group-add-links"
+      name="group-import-links"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      class="schooltool.group.browser.group.GroupImportLinks"
+      view=".group.FlourishGroupView"
+      title="Import"
+      permission="schooltool.edit"
+      />
+
+  <flourish:viewlet
+      name="csvimport.html"
+      title="Import Members CSV"
+      for="schooltool.group.interfaces.IGroup"
+      manager="schooltool.group.browser.group.GroupImportLinks"
+      class="schooltool.skin.flourish.page.LinkViewlet"
+      permission="schooltool.edit"
+      />
+
+  <flourish:page
+      name="csvimport.html"
+      subtitle="Import"
+      for="schooltool.group.interfaces.IGroup"
+      class=".csvimport.FlourishGroupMemberCSVImportView"
+      permission="schooltool.edit"
+     />
+
+  <flourish:content
+      name="import-description"
+      view=".csvimport.FlourishGroupMemberCSVImportView"
+      template="templates/f_group_member_csvimport_description.pt"
+      permission="zope.Public"
+      />
 
 </configure>

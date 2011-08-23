@@ -17,6 +17,9 @@
   <div metal:fill-slot="extra-widgets">
     <input type="hidden" name="event_id"
            tal:attributes="value request/event_id" />
+    <input type="hidden" name="back_url"
+           tal:condition="request/back_url|nothing"
+           tal:attributes="value request/back_url" />
     <input type="hidden" name="date"
            tal:attributes="value request/date" />
   </div>

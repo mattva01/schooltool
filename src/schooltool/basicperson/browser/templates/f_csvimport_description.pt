@@ -1,0 +1,22 @@
+<div>
+
+  <p i18n:translate="">
+    CSV data <strong>must</strong> contain a user name a first name and a last name.
+    An optional password <strong >may</strong> be included as well.
+  </p>
+  <p i18n:translate="">Example:</p>
+
+<pre class="csv-text" i18n:translate="">
+jjones, Jimmy, Jones
+jbjones, Jim Bob, Jones, r2m45J
+howard, Howard, Jobs
+</pre>
+
+  <p i18n:translate="">
+    The above example will create three users, 'jjones', 'jbjones' and
+    'howard'.  Of the three, only 'jbjones' has a password ('r2m45J') and
+    will be able to login to the system.  Note that passwords must be
+    sent in plain text.
+  </p>
+
+</div>

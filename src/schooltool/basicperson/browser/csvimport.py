@@ -23,8 +23,11 @@ $Id$
 """
 from zope.component import getUtility
 from zope.container.interfaces import INameChooser
+from zope.traversing.browser.absoluteurl import absoluteURL
 
-from schooltool.app.browser.csvimport import BaseCSVImporter, BaseCSVImportView
+from schooltool.app.browser.csvimport import BaseCSVImporter
+from schooltool.app.browser.csvimport import BaseCSVImportView
+from schooltool.app.browser.csvimport import FlourishBaseCSVImportView
 from schooltool.person.interfaces import IPersonFactory
 
 from schooltool.common import SchoolToolMessage as _
@@ -86,7 +89,7 @@ class BasicPersonCSVImporter(BaseCSVImporter):
             self.errors.fields.append(error_msg)
             return
 
-        obj = self.personFactory(data[0], data[1], data[2])
+        obj = self.personFactory(username, first_name, last_name)
 
         if password:
             obj.setPassword(password)
@@ -106,3 +109,11 @@ class BasicPersonCSVImportView(BaseCSVImportView):
     """View for Person CSV importer."""
 
     importer_class = BasicPersonCSVImporter
+
+
+class FlourishBasicPersonCSVImportView(FlourishBaseCSVImportView):
+
+    importer_class = BasicPersonCSVImporter
+
+    def nextURL(self):
+        return absoluteURL(self.context, self.request)

@@ -193,7 +193,7 @@
       manager="schooltool.resource.browser.resource.ResourceActions"
       permission="schooltool.view"
       title="Reserve"
-      class="schooltool.skin.flourish.page.LinkViewlet"
+      class=".booking.BookResourceLink"
       />
 
   <flourish:page
@@ -275,8 +275,66 @@
       for="schooltool.resource.interfaces.IBookingCalendar"
       name="book_one_resource.html"
       layer="schooltool.skin.flourish.IFlourishLayer"
-      class=".booking.CalendarEventBookOneResourceView"
+      class=".booking.FlourishCalendarEventBookOneResourceView"
       permission="zope.View"
       />
+
+  <!-- XXX: hacky event deletion view for event booking -->
+
+  <flourish:page
+      name="delete-temp.html"
+      for="schooltool.app.interfaces.ISchoolToolCalendar"
+      class="schooltool.app.browser.cal.EventDeleteView"
+      permission="schooltool.edit"
+      />
+
+    <flourish:breadcrumb
+        for="schooltool.resource.interfaces.IResourceDemographicsFields"
+        view="schooltool.basicperson.browser.demographics.FlourishFieldDescriptionEditView"
+        title="Resource Attributes"
+        />
+
+    <flourish:breadcrumb
+        for="schooltool.resource.interfaces.IResourceDemographicsFields"
+        view="schooltool.basicperson.browser.demographics.FlourishFieldDescriptionAddView"
+        title="Resource Attributes"
+        />
+
+  <!-- Import -->
+
+  <flourish:viewlet
+      after="resources_container"
+      name="resource-import-links"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      class="schooltool.resource.browser.resource.ResourceImportLinks"
+      view=".resource.FlourishResourceContainerView"
+      title="Import"
+      permission="schooltool.edit"
+      />
+
+  <flourish:viewlet
+      name="csvimport.html"
+      title="Import CSV"
+      for="schooltool.resource.interfaces.IResourceContainer"
+      manager="schooltool.resource.browser.resource.ResourceImportLinks"
+      class="schooltool.skin.flourish.page.LinkViewlet"
+      permission="schooltool.edit"
+      />
+
+  <flourish:page
+      name="csvimport.html"
+      subtitle="Import"
+      for="schooltool.resource.interfaces.IResourceContainer"
+      class=".csvimport.FlourishResourceCSVImportView"
+      permission="schooltool.edit"
+     />
+
+  <flourish:content
+      name="import-description"
+      view=".csvimport.FlourishResourceCSVImportView"
+      template="templates/f_resource_csvimport_description.pt"
+      permission="zope.Public"
+      />
+
 
 </configure>
