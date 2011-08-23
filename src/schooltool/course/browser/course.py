@@ -44,6 +44,7 @@ from z3c.form import field, button, form
 from z3c.form.interfaces import HIDDEN_MODE
 
 from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.app.browser.app import ContentTitle
 from schooltool.common.inlinept import InheritTemplate
 from schooltool.common.inlinept import InlineViewPageTemplate
 from schooltool.term.interfaces import ITerm
@@ -329,6 +330,10 @@ class CoursesAddLinks(RefineLinksViewlet):
     """Manager for Add links in CoursesView"""
 
 
+class CoursesImportLinks(RefineLinksViewlet):
+    """Course import links viewlet."""
+
+
 class CourseAddLinks(RefineLinksViewlet):
     """Manager for Add links in CourseView"""
 
@@ -358,7 +363,7 @@ class CourseDeleteLink(ModalFormLinkViewlet):
         return translate(title, context=self.request)
 
 
-class CourseAddLinkViewlet(LinkViewlet):
+class CoursesActiveTabMixin(object):
 
     @property
     def schoolyear(self):
@@ -368,6 +373,9 @@ class CourseAddLinkViewlet(LinkViewlet):
             schoolyear_id = self.request['schoolyear_id']
             result = schoolyears.get(schoolyear_id, result)
         return result
+
+
+class CourseAddLinkViewlet(LinkViewlet, CoursesActiveTabMixin):
 
     @property
     def url(self):
@@ -391,7 +399,7 @@ class CourseAddLinkFromCourseViewlet(CourseAddLinkViewlet):
             absoluteURL(self.context, self.request))
 
 
-class FlourishCoursesView(TableContainerView):
+class FlourishCoursesView(TableContainerView, CoursesActiveTabMixin):
 
     content_template = ViewPageTemplateFile('templates/f_courses.pt')
 
@@ -402,18 +410,18 @@ class FlourishCoursesView(TableContainerView):
                  mapping={'schoolyear': schoolyear.title})
 
     @property
-    def schoolyear(self):
-        schoolyears = ISchoolYearContainer(self.context)
-        result = schoolyears.getActiveSchoolYear()
-        if 'schoolyear_id' in self.request:
-            schoolyear_id = self.request['schoolyear_id']
-            result = schoolyears.get(schoolyear_id, result)
-        return result
-
-    @property
     def container(self):
         schoolyear = self.schoolyear
         return ICourseContainer(schoolyear)
+
+
+class CourseContainerTitle(ContentTitle):
+
+    @property
+    def title(self):
+        schoolyear = ISchoolYear(self.context)
+        return _('Courses for ${schoolyear}',
+                 mapping={'schoolyear': schoolyear.title})
 
 
 class FlourishCourseContainerDeleteView(ContainerDeleteView):
@@ -624,19 +632,10 @@ class FlourishCourseTableFormatter(SchoolToolTableFormatter):
         return [title, course_id]
 
 
-class FlourishManageCoursesOverview(Content):
+class FlourishManageCoursesOverview(Content, CoursesActiveTabMixin):
 
     body_template = ViewPageTemplateFile(
         'templates/f_manage_courses_overview.pt')
-
-    @property
-    def schoolyear(self):
-        schoolyears = ISchoolYearContainer(self.context)
-        result = schoolyears.getActiveSchoolYear()
-        if 'schoolyear_id' in self.request:
-            schoolyear_id = self.request['schoolyear_id']
-            result = schoolyears.get(schoolyear_id, result)
-        return result
 
     @property
     def has_schoolyear(self):

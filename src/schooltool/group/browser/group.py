@@ -49,6 +49,7 @@ from schooltool.common import SchoolToolMessage as _
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.skin.containers import TableContainerView
 from schooltool.app.browser.app import BaseAddView, BaseEditView
+from schooltool.app.browser.app import ContentTitle
 from schooltool.person.interfaces import IPerson
 from schooltool.course.interfaces import ISection
 from schooltool.table.interfaces import ITableFormatter
@@ -385,6 +386,10 @@ class GroupsAddLinks(RefineLinksViewlet):
     """Manager for Add links in GroupsView"""
 
 
+class GroupImportLinks(RefineLinksViewlet):
+    """Manager for group import links."""
+
+
 class GroupLinks(RefineLinksViewlet):
     """Manager for public links in GroupView"""
 
@@ -452,7 +457,7 @@ class GroupDeleteLink(ModalFormLinkViewlet):
             return super(GroupDeleteLink, self).render(*args, **kw)
 
 
-class GroupAddLinkViewlet(LinkViewlet):
+class GroupsActiveTabMixin(object):
 
     @property
     def schoolyear(self):
@@ -462,6 +467,9 @@ class GroupAddLinkViewlet(LinkViewlet):
             schoolyear_id = self.request['schoolyear_id']
             result = schoolyears.get(schoolyear_id, result)
         return result
+
+
+class GroupAddLinkViewlet(LinkViewlet, GroupsActiveTabMixin):
 
     @property
     def url(self):
@@ -484,7 +492,17 @@ class GroupAddLinkFromGroupViewlet(GroupAddLinkViewlet):
             absoluteURL(self.context, self.request))
 
 
-class FlourishGroupsView(FlourishTableContainerView):
+class GroupContainerTitle(ContentTitle):
+
+    @property
+    def title(self):
+        schoolyear = ISchoolYear(self.context)
+        return _('Groups for ${schoolyear}',
+                 mapping={'schoolyear': schoolyear.title})
+
+
+class FlourishGroupsView(FlourishTableContainerView,
+                         GroupsActiveTabMixin):
 
     content_template = ViewPageTemplateFile('templates/f_groups.pt')
 
@@ -493,15 +511,6 @@ class FlourishGroupsView(FlourishTableContainerView):
         schoolyear = self.schoolyear
         return _('Groups for ${schoolyear}',
                  mapping={'schoolyear': schoolyear.title})
-
-    @property
-    def schoolyear(self):
-        schoolyears = ISchoolYearContainer(self.context)
-        result = schoolyears.getActiveSchoolYear()
-        if 'schoolyear_id' in self.request:
-            schoolyear_id = self.request['schoolyear_id']
-            result = schoolyears.get(schoolyear_id, result)
-        return result
 
     @property
     def container(self):

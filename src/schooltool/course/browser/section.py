@@ -831,6 +831,10 @@ class SectionsAddLinks(RefineLinksViewlet):
     """Manager for Add links in SectionsView"""
 
 
+class SectionImportLinks(RefineLinksViewlet):
+    """Section import links viewlet."""
+
+
 class SectionLinks(RefineLinksViewlet):
     """Manager for public links in SectionView"""
 

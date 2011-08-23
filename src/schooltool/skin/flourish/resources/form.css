@@ -217,3 +217,10 @@ form .required-info {
 form span.required {
     color: #aa0000;
 }
+
+form pre.csv-text {
+    line-height: 20px;
+    padding: 4px 0px 4px 7px;
+    border-left: 1px dotted #888;
+    margin-bottom: 8px;
+}

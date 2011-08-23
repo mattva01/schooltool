@@ -5,6 +5,15 @@
            xmlns:flourish="http://schooltool.org/flourish"
            i18n_domain="schooltool">
 
+  <!-- content -->
+
+  <flourish:content
+      name="title"
+      for="schooltool.group.interfaces.IGroupContainer"
+      class="schooltool.group.browser.group.GroupContainerTitle"
+      permission="schooltool.view"
+      />
+
   <!-- adapters -->
 
   <zope:adapter
@@ -187,5 +196,40 @@
         />
 
   </configure>
+
+  <!-- Import -->
+
+  <flourish:viewlet
+      after="groups-add-links"
+      name="group-import-links"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      class="schooltool.group.browser.group.GroupImportLinks"
+      view=".group.FlourishGroupsView"
+      title="Import"
+      permission="schooltool.edit"
+      />
+
+  <flourish:viewlet
+      name="csvimport.html"
+      title="Import CSV"
+      manager="schooltool.group.browser.group.GroupImportLinks"
+      class="schooltool.group.browser.csvimport.ImportGroupsLinkViewlet"
+      permission="schooltool.edit"
+      />
+
+  <flourish:page
+      name="csvimport.html"
+      subtitle="Import"
+      for="schooltool.group.interfaces.IGroupContainer"
+      class=".csvimport.FlourishGroupCSVImportView"
+      permission="schooltool.edit"
+     />
+
+  <flourish:content
+      name="import-description"
+      view=".csvimport.FlourishGroupCSVImportView"
+      template="templates/f_group_csvimport_description.pt"
+      permission="zope.Public"
+      />
 
 </configure>

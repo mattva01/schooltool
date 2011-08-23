@@ -5,6 +5,15 @@
            xmlns:flourish="http://schooltool.org/flourish"
            i18n_domain="schooltool">
 
+  <!-- content -->
+
+  <flourish:content
+      name="title"
+      for="schooltool.course.interfaces.ICourseContainer"
+      class="schooltool.course.browser.course.CourseContainerTitle"
+      permission="schooltool.view"
+      />
+
   <!-- adapters -->
 
   <zope:adapter
@@ -315,6 +324,19 @@
 
   <!-- breadcrumbs -->
 
+  <flourish:activeViewlet
+      name="manage_school"
+      manager="schooltool.skin.flourish.page.IHeaderNavigationManager"
+      for="schooltool.course.interfaces.ICourseContainer"
+      />
+
+  <flourish:activeViewlet
+      name="manage_school"
+      manager="schooltool.skin.flourish.page.IHeaderNavigationManager"
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      view=".course.FlourishCoursesView"
+      />
+
   <flourish:breadcrumb
       for="schooltool.course.interfaces.ICourseContainer"
       title="Courses"
@@ -330,6 +352,19 @@
       show_page_title="false"
       for="schooltool.course.interfaces.ICourse"
       view=".course.FlourishCourseView"
+      />
+
+  <flourish:activeViewlet
+      name="manage_school"
+      manager="schooltool.skin.flourish.page.IHeaderNavigationManager"
+      for="schooltool.course.interfaces.ISectionContainer"
+      />
+
+  <flourish:activeViewlet
+      name="manage_school"
+      manager="schooltool.skin.flourish.page.IHeaderNavigationManager"
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      view=".section.FlourishSectionsView"
       />
 
   <flourish:breadcrumb
@@ -354,6 +389,75 @@
       show_page_title="false"
       for="schooltool.course.interfaces.ISection"
       view=".section.FlourishSectionView"
+      />
+
+  <!-- Import -->
+
+  <flourish:viewlet
+      after="courses-add-links"
+      name="course-import-links"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      class="schooltool.course.browser.course.CoursesImportLinks"
+      view=".course.FlourishCoursesView"
+      title="Import"
+      permission="schooltool.edit"
+      />
+
+  <flourish:viewlet
+      name="csvimport.html"
+      title="Import CSV"
+      manager="schooltool.course.browser.course.CoursesImportLinks"
+      class="schooltool.course.browser.csvimport.ImportCoursesLinkViewlet"
+      permission="schooltool.edit"
+      />
+
+  <flourish:page
+      name="csvimport.html"
+      subtitle="Import"
+      for="schooltool.course.interfaces.ICourseContainer"
+      class=".csvimport.FlourishCourseCSVImportView"
+      permission="schooltool.edit"
+     />
+
+  <flourish:content
+      name="import-description"
+      view=".csvimport.FlourishCourseCSVImportView"
+      template="templates/f_course_csvimport_description.pt"
+      permission="zope.Public"
+      />
+
+  <flourish:viewlet
+      after="section-add-links"
+      name="section-import-links"
+      for="schooltool.course.interfaces.ISection"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      class="schooltool.course.browser.section.SectionImportLinks"
+      view=".section.FlourishSectionView"
+      title="Import"
+      permission="schooltool.edit"
+      />
+
+  <flourish:viewlet
+      name="csvimport.html"
+      title="Import Students CSV"
+      manager="schooltool.course.browser.section.SectionImportLinks"
+      class="schooltool.skin.flourish.page.LinkViewlet"
+      permission="schooltool.edit"
+      />
+
+  <flourish:page
+      name="csvimport.html"
+      subtitle="Import Students"
+      for="schooltool.course.interfaces.ISection"
+      class=".csvimport.FlourishSectionMemberCSVImportView"
+      permission="schooltool.edit"
+     />
+
+  <flourish:content
+      name="import-description"
+      view=".csvimport.FlourishSectionMemberCSVImportView"
+      template="templates/f_section_member_csvimport_description.pt"
+      permission="zope.Public"
       />
 
 </configure>
