@@ -324,6 +324,19 @@
 
   <!-- breadcrumbs -->
 
+  <flourish:activeViewlet
+      name="manage_school"
+      manager="schooltool.skin.flourish.page.IHeaderNavigationManager"
+      for="schooltool.course.interfaces.ICourseContainer"
+      />
+
+  <flourish:activeViewlet
+      name="manage_school"
+      manager="schooltool.skin.flourish.page.IHeaderNavigationManager"
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      view=".course.FlourishCoursesView"
+      />
+
   <flourish:breadcrumb
       for="schooltool.course.interfaces.ICourseContainer"
       title="Courses"
