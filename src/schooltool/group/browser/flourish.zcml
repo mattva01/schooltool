@@ -229,6 +229,7 @@
       title="Import CSV"
       manager="schooltool.group.browser.group.GroupImportLinks"
       class="schooltool.group.browser.csvimport.ImportGroupsLinkViewlet"
+      view=".group.FlourishGroupsView"
       permission="schooltool.edit"
       />
 
@@ -244,6 +245,40 @@
       name="import-description"
       view=".csvimport.FlourishGroupCSVImportView"
       template="templates/f_group_csvimport_description.pt"
+      permission="zope.Public"
+      />
+
+  <flourish:viewlet
+      after="group-add-links"
+      name="group-import-links"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      class="schooltool.group.browser.group.GroupImportLinks"
+      view=".group.FlourishGroupView"
+      title="Import"
+      permission="schooltool.edit"
+      />
+
+  <flourish:viewlet
+      name="csvimport.html"
+      title="Import Members CSV"
+      for="schooltool.group.interfaces.IGroup"
+      manager="schooltool.group.browser.group.GroupImportLinks"
+      class="schooltool.skin.flourish.page.LinkViewlet"
+      permission="schooltool.edit"
+      />
+
+  <flourish:page
+      name="csvimport.html"
+      subtitle="Import"
+      for="schooltool.group.interfaces.IGroup"
+      class=".csvimport.FlourishGroupMemberCSVImportView"
+      permission="schooltool.edit"
+     />
+
+  <flourish:content
+      name="import-description"
+      view=".csvimport.FlourishGroupMemberCSVImportView"
+      template="templates/f_group_member_csvimport_description.pt"
       permission="zope.Public"
       />
 

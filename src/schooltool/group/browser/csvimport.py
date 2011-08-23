@@ -131,3 +131,9 @@ class GroupMemberCSVImportView(BaseCSVImportView):
     importer_class = GroupMemberCSVImporter
 
 
+class FlourishGroupMemberCSVImportView(FlourishBaseCSVImportView):
+
+    importer_class = GroupMemberCSVImporter
+
+    def nextURL(self):
+        return absoluteURL(self.context, self.request)
