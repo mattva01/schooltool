@@ -23,9 +23,11 @@ import csv
 
 from zope.publisher.browser import BrowserView
 
+import schooltool.skin.flourish.page
 from schooltool.common import SchoolToolMessage as _
 from schooltool.app.app import SimpleNameChooser
 from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.skin import flourish
 
 
 class ImportErrorCollection(object):
@@ -59,6 +61,18 @@ class BaseCSVImportView(BrowserView):
         self.errors = []
         self.success = []
 
+    def nextURL(self):
+        return None
+
+    @property
+    def mode(self):
+        mode = self.request.get('csv-input-mode')
+        if (not mode and
+            not self.request.get('csvfile') and
+            self.request.get('csvtext')):
+            return 'text'
+        return mode or 'upload'
+
     def update(self):
         if "UPDATE_SUBMIT" not in self.request:
             return
@@ -71,13 +85,16 @@ class BaseCSVImportView(BrowserView):
         if csvfile:
             csvfile = csvfile.read()
 
-        csvtext = self.request.get('csvtext', '')
+        csvtext = self.request.get('csvtext', '').strip()
 
-        if not csvfile and not csvtext:
+        mode = self.mode
+
+        if (mode == 'upload' and not csvfile or
+            mode == 'text' and not csvtext):
             self.errors.append(_('No data provided'))
             return
 
-        if csvfile:
+        if mode == 'upload' and csvfile:
             try:
                 unicode(csvfile, charset)
             except UnicodeError:
@@ -87,16 +104,15 @@ class BaseCSVImportView(BrowserView):
 
         self.importer = self.importer_class(self.context, charset)
         ok = True
-        if csvfile:
+
+        if mode == 'upload':
             ok = self.importer.importFromCSV(csvfile)
             if ok:
                 self.success.append(_("CSV file imported successfully."))
             else:
                 self.errors.append(_("Failed to import CSV file"))
                 self._presentErrors(self.importer.errors)
-
-        ok = True
-        if csvtext:
+        elif mode == 'text':
             self.csvtext = csvtext
             default_charset = "utf-8"
             self.importer.charset = default_charset
@@ -106,6 +122,11 @@ class BaseCSVImportView(BrowserView):
             else:
                 self.errors.append(_("Failed to import CSV text"))
                 self._presentErrors(self.importer.errors)
+
+        if self.success:
+            next_url = self.nextURL()
+            if next_url:
+                self.request.response.redirect(next_url)
 
     def _presentErrors(self, err):
         """Add any errors in our ErrorCollection to the view errors.
@@ -134,6 +155,11 @@ class BaseCSVImportView(BrowserView):
             self.errors.append(_("Unknown charset"))
             return
         return charset
+
+
+class FlourishBaseCSVImportView(flourish.page.Page, BaseCSVImportView):
+    __init__ = BaseCSVImportView.__init__
+    update = BaseCSVImportView.update
 
 
 class BaseCSVImporter(object):

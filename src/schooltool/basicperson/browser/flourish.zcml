@@ -40,6 +40,7 @@
       name="person_container"
       manager="schooltool.skin.flourish.page.IPageRefineManager"
       class="schooltool.basicperson.browser.person.PersonContainerLinks"
+      view=".person.FlourishBasicPersonContainerView"
       for="schooltool.person.interfaces.IPersonContainer"
       title="Add"
       permission="schooltool.view"
@@ -590,5 +591,33 @@
       manager="schooltool.skin.flourish.page.IPageContentManager"
       class=".person.FlourishManagePeopleOverview"
       />
+
+  <flourish:viewlet
+      after="person_container"
+      name="person-import-links"
+      for="schooltool.person.interfaces.IPersonContainer"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      class="schooltool.basicperson.browser.person.PersonImportLinks"
+      view=".person.FlourishBasicPersonContainerView"
+      title="Import"
+      permission="schooltool.edit"
+      />
+
+  <flourish:viewlet
+      name="csvimport.html"
+      title="Import CSV"
+      manager="schooltool.basicperson.browser.person.PersonImportLinks"
+      class="schooltool.skin.flourish.page.LinkViewlet"
+      permission="schooltool.edit"
+      />
+
+  <flourish:page
+     name="csvimport.html"
+     subtitle="Import"
+     for="schooltool.person.interfaces.IPersonContainer"
+     class=".csvimport.FlourishBasicPersonCSVImportView"
+     content_template="templates/f_csvimport.pt"
+     permission="schooltool.edit"
+     />
 
 </configure>

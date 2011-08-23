@@ -128,6 +128,10 @@ class PersonLinks(flourish.page.RefineLinksViewlet):
                                                          self.context.last_name)})
 
 
+class PersonImportLinks(flourish.page.RefineLinksViewlet):
+    """Person container import links viewlet."""
+
+
 class PersonSettingsLinks(flourish.page.RefineLinksViewlet):
     """Person settings links viewlet."""
 
