@@ -618,8 +618,14 @@
      subtitle="Import"
      for="schooltool.person.interfaces.IPersonContainer"
      class=".csvimport.FlourishBasicPersonCSVImportView"
-     content_template="templates/f_csvimport.pt"
      permission="schooltool.edit"
      />
+
+  <flourish:content
+      name="import-description"
+      view=".csvimport.FlourishBasicPersonCSVImportView"
+      template="templates/f_csvimport_description.pt"
+      permission="zope.Public"
+      />
 
 </configure>

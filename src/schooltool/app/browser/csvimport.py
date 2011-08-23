@@ -21,6 +21,7 @@ SchoolTool application views.
 """
 import csv
 
+from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.publisher.browser import BrowserView
 
 import schooltool.skin.flourish.page
@@ -158,6 +159,7 @@ class BaseCSVImportView(BrowserView):
 
 
 class FlourishBaseCSVImportView(flourish.page.Page, BaseCSVImportView):
+    content_template = ViewPageTemplateFile('templates/f_csvimport.pt')
     __init__ = BaseCSVImportView.__init__
     update = BaseCSVImportView.update
 

@@ -3,24 +3,7 @@
 <form method="POST" enctype="multipart/form-data" class="standalone"
       tal:attributes="action request/URL">
 
-  <p i18n:translate="">
-    CSV data <strong>must</strong> contain a user name a first name and a last name.
-    An optional password <strong >may</strong> be included as well.
-  </p>
-  <p i18n:translate="">Example:</p>
-
-<pre class="csv-text" i18n:translate="">
-jjones, Jimmy, Jones
-jbjones, Jim Bob, Jones, r2m45J
-howard, Howard, Jobs
-</pre>
-
-  <p i18n:translate="">
-    The above example will create three users, 'jjones', 'jbjones' and
-    'howard'.  Of the three, only 'jbjones' has a password ('r2m45J') and
-    will be able to login to the system.  Note that passwords must be
-    sent in plain text.
-  </p>
+  <tal:block content="structure context/schooltool:content/import-description" />
 
   <fieldset name="select-mode">
 
@@ -85,7 +68,7 @@ howard, Howard, Jobs
         <input id="csvfile" type="file" name="csvfile"/>
       </div>
     </div>
-    
+
     <div class="row">
       <div class="label">
         <label for="charset">
@@ -113,7 +96,6 @@ howard, Howard, Jobs
       </div>
     </div>
   </fieldset>
-  
   <fieldset name="csv-mode-text">
     <legend><span i18n:translate="">Import CSV</span></legend>
     <div class="row">

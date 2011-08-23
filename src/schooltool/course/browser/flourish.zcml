@@ -386,12 +386,18 @@
       />
 
   <flourish:page
-     name="csvimport.html"
-     subtitle="Import"
-     for="schooltool.course.interfaces.ICourseContainer"
-     content_template="templates/f_course_csvimport.pt"
-     class=".csvimport.FlourishCourseCSVImportView"
-     permission="schooltool.edit"
+      name="csvimport.html"
+      subtitle="Import"
+      for="schooltool.course.interfaces.ICourseContainer"
+      class=".csvimport.FlourishCourseCSVImportView"
+      permission="schooltool.edit"
      />
+
+  <flourish:content
+      name="import-description"
+      view=".csvimport.FlourishCourseCSVImportView"
+      template="templates/f_course_csvimport_description.pt"
+      permission="zope.Public"
+      />
 
 </configure>
