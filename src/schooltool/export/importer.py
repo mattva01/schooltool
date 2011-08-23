@@ -814,20 +814,16 @@ class SectionImporter(ImporterBase):
 
         term = ITerm(section)
         schedule = SelectedPeriodsSchedule(
-            timetable, term.first, term.last, title=timetable.title)
+            timetable, term.first, term.last,
+            title=timetable.title, timezone=timetable.timezone)
         row += 1
 
         collapse_periods = self.getTextFromCell(sh, row, 1, 'no')
         schedule.consecutive_periods_as_one = bool(
             collapse_periods.lower() == 'yes')
 
-        row += 1
+        row += 2
 
-        s_chooser = INameChooser(schedules)
-        name = s_chooser.chooseName('', schedule)
-        schedules[name] = schedule
-
-        row += 1
         while row < sh.nrows:
             if sh.cell_value(rowx=row, colx=0) == '':
                 break
@@ -859,6 +855,10 @@ class SectionImporter(ImporterBase):
             row += 1
             if num_errors < len(self.errors):
                 continue
+
+        s_chooser = INameChooser(schedules)
+        name = s_chooser.chooseName('', schedule)
+        schedules[name] = schedule
 
         return row
 
@@ -1030,7 +1030,7 @@ class GroupImporter(ImporterBase):
 
         row += 5
         pc = self.context['persons']
-        if sh.cell_value(rowx=row, colx=0) == 'Members':
+        if self.getCellValue(sh, row, 0, default='') == 'Members':
             row += 1
             for row in range(row, sh.nrows):
                 if sh.cell_value(rowx=row, colx=0) == '':
