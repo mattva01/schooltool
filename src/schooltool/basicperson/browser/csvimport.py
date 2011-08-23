@@ -111,10 +111,9 @@ class BasicPersonCSVImportView(BaseCSVImportView):
     importer_class = BasicPersonCSVImporter
 
 
-class FlourishBasicPersonCSVImportView(FlourishBaseCSVImportView,
-                                       BasicPersonCSVImportView):
+class FlourishBasicPersonCSVImportView(FlourishBaseCSVImportView):
 
-    update = BasicPersonCSVImportView.update
+    importer_class = BasicPersonCSVImporter
 
     def nextURL(self):
         return absoluteURL(self.context, self.request)
