@@ -173,3 +173,37 @@ class SectionReportLinksURL(ReportLinksURL):
             return ISchoolToolApplication(None)
         return ISectionContainer(current_term)
 
+
+class FlourishSchoolReportLinksURL(ReportLinksURL):
+
+    def __str__(self):
+        app = ISchoolToolApplication(None)
+        return absoluteURL(app, self.request) + '/manage'
+
+
+class FlourishGroupReportLinksURL(GroupReportLinksURL):
+
+    def __str__(self):
+        app = ISchoolToolApplication(None)
+        return absoluteURL(app, self.request) + '/groups'
+
+
+class FlourishSchoolYearReportLinksURL(SchoolYearReportLinksURL):
+
+    def __str__(self):
+        app = ISchoolToolApplication(None)
+        return absoluteURL(app, self.request) + '/schoolyears'
+
+
+class FlourishTermReportLinksURL(TermReportLinksURL):
+
+    def __str__(self):
+        app = ISchoolToolApplication(None)
+        return absoluteURL(app, self.request) + '/terms'
+
+
+class FlourishSectionReportLinksURL(SectionReportLinksURL):
+
+    def __str__(self):
+        app = ISchoolToolApplication(None)
+        return absoluteURL(app, self.request) + '/sections'

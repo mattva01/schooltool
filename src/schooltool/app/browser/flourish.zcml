@@ -199,6 +199,16 @@
       view="schooltool.app.browser.app.ManageSite"
       />
 
+  <flourish:viewlet
+      name="school-actions-links"
+      after="customize_school_links"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      class="schooltool.app.browser.app.SchoolActionsLinks"
+      title="Actions"
+      permission="schooltool.edit"
+      view="schooltool.app.browser.app.ManageSchool"
+      />
+
   <flourish:activeViewlet
       factory="schooltool.skin.flourish.page.getViewParentActiveViewletName"
       manager="schooltool.skin.flourish.page.RefineLinksViewlet"

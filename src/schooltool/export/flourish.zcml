@@ -2,26 +2,9 @@
 <configure xmlns="http://namespaces.zope.org/browser"
            xmlns:z3c="http://namespaces.zope.org/z3c"
            xmlns:zope="http://namespaces.zope.org/zope"
+           xmlns:report="http://namespaces.schooltool.org/report"
            xmlns:flourish="http://schooltool.org/flourish"
            i18n_domain="schooltool">
-
-  <flourish:viewlet
-      name="import_school_links"
-      after="customize_school_links"
-      manager="schooltool.skin.flourish.page.IPageRefineManager"
-      class="schooltool.export.app.ImportSchoolLinks"
-      view="schooltool.app.browser.app.ManageSchool"
-      title="Data Import"
-      permission="schooltool.edit"
-      />
-
-  <flourish:viewlet
-      name="export.xls"
-      title="Export as XLS"
-      class="schooltool.skin.flourish.page.LinkViewlet"
-      manager="schooltool.export.app.ImportSchoolLinks"
-      permission="schooltool.edit"
-      />
 
   <flourish:page
      name="export.xls"
@@ -33,7 +16,7 @@
       name="import.html"
       title="Import XLS"
       class="schooltool.skin.flourish.page.LinkViewlet"
-      manager="schooltool.export.app.ImportSchoolLinks"
+      manager="schooltool.app.browser.app.SchoolActionsLinks"
       permission="schooltool.edit"
       />
 
@@ -45,5 +28,17 @@
      class=".importer.FlourishMegaImporter"
      permission="schooltool.edit" />
 
+  <!-- Reports -->
+
+  <report:reportLink
+       name="export.xls"
+       for="schooltool.app.interfaces.ISchoolToolApplication"
+       permission="schooltool.edit"
+       group="School"
+       description="XXX XXX XXX"
+       title="Export as XLS"
+       file_type="xls"
+       link="export.xls"
+       />
 
 </configure>

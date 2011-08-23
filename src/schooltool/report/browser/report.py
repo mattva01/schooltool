@@ -25,11 +25,17 @@ from zope.component import queryMultiAdapter
 from zope.i18n import translate
 from zope.i18n.interfaces.locales import ICollator
 from zope.publisher.browser import BrowserView
+from zope.traversing.browser.absoluteurl import absoluteURL
+from zope.interface import implements
 
 from schooltool.report.interfaces import IReportLinksURL
+from schooltool.report.report import IFlourishReportLinkViewletManager
 from schooltool.report.report import getReportRegistrationUtility
 from schooltool.report.report import ReportLinkViewletManager
 from schooltool.skin import flourish
+from schooltool.skin.flourish.page import WideContainerPage
+from schooltool.skin.flourish.page import RefineLinksViewlet
+from schooltool.common.inlinept import InlineViewPageTemplate
 
 from schooltool.common import SchoolToolMessage as _
 
@@ -109,3 +115,64 @@ class ReportReferenceView(BrowserView):
 
         return [row for group, title, row in sorted(rows)]
 
+
+class FlourishReportReferenceView(WideContainerPage, ReportReferenceView):
+
+    def done_link(self):
+        return absoluteURL(self.context, self.request) + '/manage'
+
+
+    def rows(self):
+        collator = ICollator(self.request.locale)
+        utility = getReportRegistrationUtility()
+        app = self.context
+
+        rows = []
+        for group_key, group_reports in utility.reports_by_group.items():
+            reference_url = reportLinksURL(app, self.request, name=group_key)
+            for report in group_reports:
+                row = {
+                    'url': reference_url,
+                    'group': report['group'],
+                    'title': report['title'],
+                    'file_type': report['file_type'].upper(),
+                    'description': report['description'],
+                    }
+                rows.append([collator.key(report['group']),
+                             collator.key(report['title']),
+                             row])
+
+        return [row for group, title, row in sorted(rows)]
+
+
+class ReportsLinks(RefineLinksViewlet):
+    """Reports links viewlet."""
+
+    implements(IFlourishReportLinkViewletManager)
+
+    body_template = InlineViewPageTemplate("""
+        <ul tal:attributes="class view/list_class">
+          <li tal:repeat="item view/renderable_items"
+              tal:attributes="class item/class"
+              tal:content="structure item/viewlet">
+          </li>
+        </ul>
+    """)
+
+    # We don't want this manager rendered at all
+    # if there are no renderable viewlets
+    @property
+    def renderable_items(self):
+        result = []
+        for item in self.items:
+            render_result = item['viewlet']()
+            if render_result and render_result.strip():
+                result.append({
+                        'class': item['class'],
+                        'viewlet': render_result,
+                        })
+        return result
+
+    def render(self):
+        if self.renderable_items:
+            return super(ReportsLinks, self).render()
