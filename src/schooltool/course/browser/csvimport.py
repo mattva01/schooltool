@@ -182,3 +182,11 @@ class SectionMemberCSVImportView(BaseCSVImportView):
     """View for Section Member CSV importer."""
 
     importer_class = SectionMemberCSVImporter
+
+
+class FlourishSectionMemberCSVImportView(FlourishBaseCSVImportView):
+
+    importer_class = SectionMemberCSVImporter
+
+    def nextURL(self):
+        return absoluteURL(self.context, self.request)
