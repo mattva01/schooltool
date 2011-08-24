@@ -563,7 +563,7 @@
        permission="schooltool.edit"
        group="Student"
        description="Contains an XML representation of the person."
-       title="Export Person as XML"
+       title="Export as XML"
        file_type="xml"
        link="person_export.xml"
        />

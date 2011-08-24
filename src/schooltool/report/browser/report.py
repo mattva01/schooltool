@@ -36,6 +36,7 @@ from schooltool.report.report import ReportLinkViewletManager
 from schooltool.skin import flourish
 from schooltool.skin.flourish.page import WideContainerPage
 from schooltool.skin.flourish.page import RefineLinksViewlet
+from schooltool.skin.flourish import IFlourishLayer
 
 from schooltool.common import SchoolToolMessage as _
 
@@ -123,26 +124,30 @@ class FlourishReportReferenceView(WideContainerPage, ReportReferenceView):
 
 
     def rows(self):
-        collator = ICollator(self.request.locale)
+        self.collator = ICollator(self.request.locale)
         utility = getReportRegistrationUtility()
         app = self.context
-
-        rows = []
+        rows = {}
         for group_key, group_reports in utility.reports_by_group.items():
             reference_url = reportLinksURL(app, self.request, name=group_key)
             for report in group_reports:
+                group = report['group']
+                name = report['name']
                 row = {
                     'url': reference_url,
-                    'group': report['group'],
+                    'group': group,
                     'title': report['title'],
                     'file_type': report['file_type'].upper(),
                     'description': report['description'],
                     }
-                rows.append([collator.key(report['group']),
-                             collator.key(report['title']),
-                             row])
+                # XXX: this check is needed to override old skin
+                #      report links with flourish ones
+                if (group, name) not in rows or report['layer'] is IFlourishLayer:
+                    rows[group, name] = row
+        return sorted(rows.values(), key=self.sortKey)
 
-        return [row for group, title, row in sorted(rows)]
+    def sortKey(self, row):
+        return self.collator.key(row['group']), self.collator.key(row['title'])
 
 
 class ReportsLinks(RefineLinksViewlet):

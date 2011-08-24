@@ -91,7 +91,7 @@ class RegisteredReportsUtility(object):
     def __init__(self):
         self.reports_by_group = {}
 
-    def registerReport(self, group, title, description, file_type):
+    def registerReport(self, group, title, description, file_type, name, layer):
         # make a non-translatable group key
         group_key = unicode(group)
 
@@ -102,6 +102,8 @@ class RegisteredReportsUtility(object):
             'title': title,
             'description': description,
             'file_type': file_type,
+            'name': name,
+            'layer': layer,
             })
 
 
