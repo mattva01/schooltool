@@ -28,6 +28,7 @@ from zope.publisher.browser import BrowserView
 from zope.traversing.browser.absoluteurl import absoluteURL
 from zope.interface import implements
 from zope.cachedescriptors.property import Lazy
+from z3c.form import button
 
 from schooltool.report.interfaces import IReportLinksURL
 from schooltool.report.report import IFlourishReportLinkViewletManager
@@ -37,6 +38,7 @@ from schooltool.skin import flourish
 from schooltool.skin.flourish.page import WideContainerPage
 from schooltool.skin.flourish.page import RefineLinksViewlet
 from schooltool.skin.flourish import IFlourishLayer
+from schooltool.skin.flourish.form import DialogForm
 
 from schooltool.common import SchoolToolMessage as _
 
@@ -173,3 +175,39 @@ class ReportsLinks(RefineLinksViewlet):
                     'title': translate(viewlet.title, context=self.request),
                     })
         return result
+
+
+class RequestReportDownloadDialog(DialogForm):
+
+    template = ViewPageTemplateFile('templates/f_request_report_download.pt')
+
+    dialog_submit_actions = ('download',)
+    dialog_close_actions = ('cancel',)
+    label = None
+
+    def initDialog(self):
+        super(RequestReportDownloadDialog, self).initDialog()
+        self.ajax_settings['dialog']['height'] = '100'
+
+    def updateDialog(self):
+        # XXX: fix the width of dialog content in css
+        if self.ajax_settings['dialog'] != 'close':
+            self.ajax_settings['dialog']['width'] = 544 + 16
+
+    @button.buttonAndHandler(_("Download"), name='download')
+    def handleDownload(self, action):
+        self.request.response.redirect(self.nextURL())
+        # We never have errors, so just close the dialog.
+        self.ajax_settings['dialog'] = 'close'
+
+    @button.buttonAndHandler(_("Cancel"))
+    def handle_cancel_action(self, action):
+        pass
+
+    def updateActions(self):
+        super(RequestReportDownloadDialog, self).updateActions()
+        self.actions['download'].addClass('button-ok')
+        self.actions['cancel'].addClass('button-cancel')
+
+    def nextURL(self):
+        raise NotImplementedError("nextURL must redirect to a 'downloadable' view")

@@ -28,6 +28,13 @@
      class=".importer.FlourishMegaImporter"
      permission="schooltool.edit" />
 
+  <flourish:page
+      name="request_export_xls.html"
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      class="schooltool.export.app.FlourishRequestXLSExportView"
+      permission="schooltool.edit"
+      />
+
   <!-- Reports -->
 
   <report:reportLink
@@ -35,10 +42,10 @@
        for="schooltool.app.interfaces.ISchoolToolApplication"
        permission="schooltool.edit"
        group="School"
-       description="XXX XXX XXX"
+       description="A single .xls spreadsheet containing the basic structure of the school, including students, years, terms, courses, groups and timetables.  Can be modified and re-imported."
        title="Export as XLS"
        file_type="xls"
-       link="export.xls"
+       link="request_export_xls.html"
        />
 
 </configure>

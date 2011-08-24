@@ -1,11 +1,11 @@
 <div i18n:domain="schooltool">
-  <table>
+  <table class="report-reference">
     <thead>
       <tr>
-        <th i18n:translate="">Category</th>
-        <th i18n:translate="">Title</th>
-        <th i18n:translate="">File Type</th>
-        <th i18n:translate="">Description</th>
+        <th i18n:translate="" class="category">Category</th>
+        <th i18n:translate="" class="title">Title</th>
+        <th i18n:translate="" class="file-type">File Type</th>
+        <th i18n:translate="" class="description">Description</th>
       </tr>
     </thead>
     <tbody>
