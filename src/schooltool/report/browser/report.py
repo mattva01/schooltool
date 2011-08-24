@@ -27,6 +27,7 @@ from zope.i18n.interfaces.locales import ICollator
 from zope.publisher.browser import BrowserView
 from zope.traversing.browser.absoluteurl import absoluteURL
 from zope.interface import implements
+from zope.cachedescriptors.property import Lazy
 
 from schooltool.report.interfaces import IReportLinksURL
 from schooltool.report.report import IFlourishReportLinkViewletManager
@@ -35,7 +36,6 @@ from schooltool.report.report import ReportLinkViewletManager
 from schooltool.skin import flourish
 from schooltool.skin.flourish.page import WideContainerPage
 from schooltool.skin.flourish.page import RefineLinksViewlet
-from schooltool.common.inlinept import InlineViewPageTemplate
 
 from schooltool.common import SchoolToolMessage as _
 
@@ -150,29 +150,21 @@ class ReportsLinks(RefineLinksViewlet):
 
     implements(IFlourishReportLinkViewletManager)
 
-    body_template = InlineViewPageTemplate("""
-        <ul tal:attributes="class view/list_class">
-          <li tal:repeat="item view/renderable_items"
-              tal:attributes="class item/class"
-              tal:content="structure item/viewlet">
-          </li>
-        </ul>
-    """)
+    body_template = ViewPageTemplateFile('templates/f_report_links_body.pt')
 
-    # We don't want this manager rendered at all
-    # if there are no renderable viewlets
-    @property
-    def renderable_items(self):
+    @Lazy
+    def items(self):
+        items = super(ReportsLinks, self).items
         result = []
-        for item in self.items:
-            render_result = item['viewlet']()
-            if render_result and render_result.strip():
-                result.append({
-                        'class': item['class'],
-                        'viewlet': render_result,
-                        })
+        for item in items:
+            viewlet = item['viewlet']
+            result.append({
+                    'class': item['class'],
+                    'viewlet': viewlet,
+                    'content': item['content'],
+                    'is_report_link': hasattr(viewlet, 'file_type'),
+                    'link_id': viewlet.link.replace('.', '_'),
+                    'form_id': viewlet.link.replace('.', '_') + '_form',
+                    'title': translate(viewlet.title, context=self.request),
+                    })
         return result
-
-    def render(self):
-        if self.renderable_items:
-            return super(ReportsLinks, self).render()
