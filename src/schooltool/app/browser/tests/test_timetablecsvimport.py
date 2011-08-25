@@ -28,6 +28,7 @@ from zope.app.testing import setup as zope_setup
 from zope.interface import Interface
 from zope.component import provideAdapter, provideUtility, provideHandler
 from zope.component.hooks import getSite, setSite
+from zope.i18n import translate
 from zope.intid import IntIds
 from zope.intid import addIntIdSubscriber
 from zope.intid.interfaces import IIntIds
@@ -47,6 +48,7 @@ from schooltool.course.section import getSectionContainer
 from schooltool.course.section import getTermForSection
 from schooltool.course.section import getTermForSectionContainer
 from schooltool.course.interfaces import ISectionContainer
+from schooltool.course.browser.section import SectionNameChooser
 from schooltool.schoolyear.interfaces import ISchoolYearContainer
 from schooltool.schoolyear.schoolyear import SchoolYear
 from schooltool.schoolyear.schoolyear import getSchoolYearContainer
@@ -229,17 +231,20 @@ def doctest_TimetableCSVImporter():
 
         >>> tryImport(simple_csv)
 
+        >>> def sectionName(term, section):
+        ...    return '%s in %s' % (
+        ...        translate(section.label), term.title)
 
         >>> for term in listTerms(schoolyear):
         ...    sections = ISectionContainer(term)
         ...    for s_name in sorted(sections):
         ...        print '*' * 50
         ...        section = sections[s_name]
-        ...        print term.title, section.title
-        ...        next = section.next
-        ...        if next is not None:
-        ...            n_term = ITerm(next)
-        ...            print '  next:', next.title, 'in', n_term.title
+        ...        print sectionName(term, section)
+        ...        s_next = section.next
+        ...        if s_next is not None:
+        ...            n_term = ITerm(s_next)
+        ...            print '  next:', sectionName(n_term, s_next)
         ...        print '  students:'
         ...        for member in sorted(section.members, key=lambda m:m.__name__):
         ...            print '   ', member.title
@@ -247,8 +252,8 @@ def doctest_TimetableCSVImporter():
         ...        for key in sorted(schedules):
         ...            print_schedule(schedules[key])
         **************************************************
-        Fall Philosophy - Lorch, Heinrich
-          next: Philosophy - Lorch, Heinrich in Winter
+        Lorch, Heinrich -- Philosophy (1) in Fall
+          next: Lorch, Heinrich -- Philosophy (1) in Winter
           students:
             Cook, Pete
             Lewis, Daniel
@@ -262,8 +267,8 @@ def doctest_TimetableCSVImporter():
         |       |       | C     |
         +-------+-------+-------+
         **************************************************
-        Fall Literature - Guzman, Andreas
-          next: Literature - Guzman, Andreas in Winter
+        Guzman, Andreas -- Literature (2) in Fall
+          next: Guzman, Andreas -- Literature (2) in Winter
           students:
             Black, John
             Cook, Pete
@@ -286,13 +291,13 @@ def doctest_TimetableCSVImporter():
         |        |         |           |          |        |          |        |
         +--------+---------+-----------+----------+--------+----------+--------+
         **************************************************
-        Fall Math - Burton, Alan
-          next: Math - Burton, Alan in Winter
+        Burton, Alan -- Math (3) in Fall
+          next: Burton, Alan -- Math (3) in Winter
           students:
             Lewis, Daniel
         **************************************************
-        Winter Philosophy - Lorch, Heinrich
-          next: Philosophy - Lorch, Heinrich in Spring
+        Lorch, Heinrich -- Philosophy (1) in Winter
+          next: Lorch, Heinrich -- Philosophy (1) in Spring
           students:
             Cook, Pete
             Lewis, Daniel
@@ -306,8 +311,8 @@ def doctest_TimetableCSVImporter():
         |       |       | C     |
         +-------+-------+-------+
         **************************************************
-        Winter Literature - Guzman, Andreas
-          next: Literature - Guzman, Andreas in Spring
+        Guzman, Andreas -- Literature (2) in Winter
+          next: Guzman, Andreas -- Literature (2) in Spring
           students:
             Black, John
             Cook, Pete
@@ -330,12 +335,12 @@ def doctest_TimetableCSVImporter():
         |        |         |           |          |        |          |        |
         +--------+---------+-----------+----------+--------+----------+--------+
         **************************************************
-        Winter Math - Burton, Alan
-          next: Math - Burton, Alan in Spring
+        Burton, Alan -- Math (3) in Winter
+          next: Burton, Alan -- Math (3) in Spring
           students:
             Lewis, Daniel
         **************************************************
-        Spring Philosophy - Lorch, Heinrich
+        Lorch, Heinrich -- Philosophy (1) in Spring
           students:
             Cook, Pete
             Lewis, Daniel
@@ -349,7 +354,7 @@ def doctest_TimetableCSVImporter():
         |       |       | C     |
         +-------+-------+-------+
         **************************************************
-        Spring Literature - Guzman, Andreas
+        Guzman, Andreas -- Literature (2) in Spring
           students:
             Black, John
             Cook, Pete
@@ -372,9 +377,10 @@ def doctest_TimetableCSVImporter():
         |        |         |           |          |        |          |        |
         +--------+---------+-----------+----------+--------+----------+--------+
         **************************************************
-        Spring Math - Burton, Alan
+        Burton, Alan -- Math (3) in Spring
           students:
             Lewis, Daniel
+
 
     """
 
@@ -406,6 +412,8 @@ def docSetUp(test=None):
     provideAdapter(getTimetableContainer)
     provideAdapter(getScheduleContainer)
     setUpIntIds()
+
+    provideAdapter(SectionNameChooser, (ISectionContainer,))
 
     transaction.begin()
 

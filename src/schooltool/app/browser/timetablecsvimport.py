@@ -309,7 +309,7 @@ class TimetableCSVImporter(object):
         section = Section()
         chooser = INameChooser(sections)
         section_name = chooser.chooseName('', section)
-        section.title = u"%s (%s)" % (course.title, section.__name__)
+        section.title = u"%s (%s)" % (course.title, section_name)
         sections[section_name] = section
 
         # Establish links to course and to teacher
