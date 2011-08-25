@@ -886,6 +886,7 @@ class FlourishPersonAddView(PersonAddViewBase):
     def update(self):
         self.buildFieldsetGroups()
         PersonAddViewBase.update(self)
+        self.widgets['birth_date'].addClass('birth-date-field')
 
     def getBaseFields(self):
         if self.group_id:
