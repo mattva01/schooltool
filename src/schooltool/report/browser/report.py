@@ -20,6 +20,7 @@
 Report browser views.
 
 """
+from urllib import urlencode, unquote_plus
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import queryMultiAdapter
 from zope.i18n import translate
@@ -33,7 +34,6 @@ from z3c.form import button
 from schooltool.report.interfaces import IReportLinksURL
 from schooltool.report.report import IFlourishReportLinkViewletManager
 from schooltool.report.report import getReportRegistrationUtility
-from schooltool.report.report import ReportLinkViewletManager
 from schooltool.skin import flourish
 from schooltool.skin.flourish.page import WideContainerPage
 from schooltool.skin.flourish.page import RefineLinksViewlet
@@ -144,7 +144,8 @@ class FlourishReportReferenceView(WideContainerPage, ReportReferenceView):
                     }
                 # XXX: this check is needed to override old skin
                 #      report links with flourish ones
-                if (group, name) not in rows or report['layer'] is IFlourishLayer:
+                if (group, name) not in rows or \
+                   report['layer'] is IFlourishLayer:
                     rows[group, name] = row
         return sorted(rows.values(), key=self.sortKey)
 
@@ -165,6 +166,16 @@ class ReportsLinks(RefineLinksViewlet):
         result = []
         for item in items:
             viewlet = item['viewlet']
+            url = viewlet.link
+            if hasattr(viewlet, 'file_type'):
+                file_type = translate(viewlet.file_type,
+                                      context=self.request)
+                description = translate(viewlet.description,
+                                        context=self.request)
+                querystring = urlencode({
+                        'file_type': file_type.encode('utf-8').upper(),
+                        'description': description.encode('utf-8')})
+                url = '%s?%s' % (viewlet.link, querystring)
             result.append({
                     'class': item['class'],
                     'viewlet': viewlet,
@@ -173,6 +184,7 @@ class ReportsLinks(RefineLinksViewlet):
                     'link_id': viewlet.link.replace('.', '_'),
                     'form_id': viewlet.link.replace('.', '_') + '_form',
                     'title': translate(viewlet.title, context=self.request),
+                    'url': url,
                     })
         return result
 
@@ -184,10 +196,6 @@ class RequestReportDownloadDialog(DialogForm):
     dialog_submit_actions = ('download',)
     dialog_close_actions = ('cancel',)
     label = None
-
-    def initDialog(self):
-        super(RequestReportDownloadDialog, self).initDialog()
-        self.ajax_settings['dialog']['height'] = '100'
 
     def updateDialog(self):
         # XXX: fix the width of dialog content in css
@@ -211,3 +219,13 @@ class RequestReportDownloadDialog(DialogForm):
 
     def nextURL(self):
         raise NotImplementedError("nextURL must redirect to a 'downloadable' view")
+
+    @property
+    def file_type(self):
+        if 'file_type' in self.request:
+            return unquote_plus(self.request['file_type'])
+
+    @property
+    def description(self):
+        if 'description' in self.request:
+            return unquote_plus(self.request['description'])

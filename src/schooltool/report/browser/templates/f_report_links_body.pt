@@ -2,7 +2,7 @@
   <li tal:repeat="item view/items"
       tal:attributes="class item/class">
     <metal:block tal:condition="item/is_report_link"
-                 tal:define="url item/viewlet/link;
+                 tal:define="url item/url;
                              link_id item/link_id;
                              title item/title;
                              form_id item/form_id;">

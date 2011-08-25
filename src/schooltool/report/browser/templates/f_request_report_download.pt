@@ -1,3 +1,19 @@
 <div i18n:domain="schooltool">
+  <table>
+    <tbody>
+      <tr>
+        <td i18n:translate="">
+          Description
+        </td>
+        <td tal:content="view/description" />
+      </tr>
+      <tr>
+        <td i18n:translate="">
+          File Type
+        </td>
+        <td tal:content="view/file_type" />
+      </tr>
+    </tbody>
+  </table>
   <metal:block use-macro="macro:form" />
 </div>
