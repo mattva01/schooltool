@@ -57,4 +57,4 @@ def reportLinkDirective(_context, name, permission, for_=Interface,
 
     # and register the report for reference
     utility = getReportRegistrationUtility()
-    utility.registerReport(group, title, description, file_type)
+    utility.registerReport(group, title, description, file_type, name, layer)
