@@ -6,7 +6,7 @@
 
   <describe_group name="schooltool.level"
       title="Levels"
-      description="The teaching levels (student learning years)."
+      description="The grade levels (student learning years)."
   />
 
   <describe_action

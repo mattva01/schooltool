@@ -18,7 +18,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Schooltool teaching levels.
+Schooltool grade levels.
 """
 
 from persistent import Persistent
@@ -75,7 +75,7 @@ class LevelContainer(OrderedContainer):
 
 
 class Level(Persistent, Contained):
-    """A teaching level."""
+    """A grade level."""
 
     implements(interfaces.ILevel, interfaces.ILevelContained,
                IAttributeAnnotatable)

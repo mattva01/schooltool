@@ -1,9 +1,9 @@
 <html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
 <head>
-  <title metal:fill-slot="title" i18n:translate="">Teaching Levels</title>
+  <title metal:fill-slot="title" i18n:translate="">Grade Levels</title>
 </head>
 <body>
-<h1 metal:fill-slot="content-header" i18n:translate="">Teaching Levels</h1>
+<h1 metal:fill-slot="content-header" i18n:translate="">Grade Levels</h1>
 
 <metal:block metal:fill-slot="body">
 

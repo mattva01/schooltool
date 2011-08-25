@@ -12,7 +12,7 @@
 
   <flourish:breadcrumb
       for="schooltool.level.interfaces.ILevelContainer"
-      title="Teaching Levels"
+      title="Grade Levels"
       />
 
   <flourish:breadcrumb
@@ -21,7 +21,7 @@
 
   <flourish:page_breadcrumbs
       show_page_title="false"
-      title="Teaching Levels"
+      title="Grade Levels"
       view=".level.FlourishLevelsView"
       />
 
@@ -66,7 +66,7 @@
   <configure package="schooltool.skin.flourish">
     <flourish:page
         name="add.html"
-        title="Teaching Levels"
+        title="Grade Levels"
         subtitle="Add new level"
         for="schooltool.level.interfaces.ILevelContainer"
         class="schooltool.level.browser.level.FlourishLevelAddView"
@@ -76,7 +76,7 @@
 
     <flourish:page
         name="edit.html"
-        title="Teaching Levels"
+        title="Grade Levels"
         subtitle="Edit level"
         for="schooltool.level.interfaces.ILevel"
         class="schooltool.level.browser.level.FlourishLevelEditView"
@@ -94,7 +94,7 @@
 
   <flourish:page
       name="reorder.html"
-      title="Teaching Levels"
+      title="Grade Levels"
       subtitle="Change Order"
       for="schooltool.level.interfaces.ILevelContainer"
       class="schooltool.level.browser.level.FlourishReorderLevelsView"

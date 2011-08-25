@@ -18,7 +18,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Schooltool teaching level views.
+Schooltool grade level views.
 """
 
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile

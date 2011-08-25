@@ -33,8 +33,7 @@ class ILevel(Interface):
     """A level of learing (basically Nth year of courses)."""
 
     title = zope.schema.TextLine(
-        title=_("Title"),
-        description=_("Title of the level."))
+        title=_("Title"))
 
     courses = Attribute(
         """Courses available for this level.
