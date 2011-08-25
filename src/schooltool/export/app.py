@@ -20,9 +20,12 @@
 SchoolTool exporter generic views.
 """
 
-import schooltool.skin.flourish.page
-from  schooltool.skin import flourish
+from zope.traversing.browser.absoluteurl import absoluteURL
+
+from schooltool.report.browser.report import RequestReportDownloadDialog
 
 
-class ImportSchoolLinks(flourish.page.RefineLinksViewlet):
-    """Customize School links viewlet."""
+class FlourishRequestXLSExportView(RequestReportDownloadDialog):
+
+    def nextURL(self):
+        return absoluteURL(self.context, self.request) + '/export.xls'

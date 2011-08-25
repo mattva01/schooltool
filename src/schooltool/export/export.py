@@ -58,7 +58,7 @@ class ExcelExportView(BrowserView):
     def setUpHeaders(self, data):
         """Set up HTTP headers to serve data as excel spreadsheet."""
         response = self.request.response
-        response.setHeader('Content-Type', 'application/excel')
+        response.setHeader('Content-Type', 'application/vnd.ms-excel')
         response.setHeader('Content-Length', len(data))
 
     def listIds(self, header, items, ws, offset, last=False):

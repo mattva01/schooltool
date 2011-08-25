@@ -563,10 +563,24 @@
        permission="schooltool.edit"
        group="Student"
        description="Contains an XML representation of the person."
-       title="Export Person as XML"
+       title="Export as XML"
        file_type="xml"
-       link="person_export.xml"
+       link="request_person_export_xml.html"
        />
+
+  <flourish:page
+      name="person_export.xml"
+      for="schooltool.person.interfaces.IPerson"
+      class=".xml.FlourishPersonXMLExportView"
+      permission="schooltool.edit"
+      />
+
+  <flourish:page
+      name="request_person_export_xml.html"
+      for="schooltool.person.interfaces.IPerson"
+      class=".person.FlourishRequestPersonXMLExportView"
+      permission="schooltool.edit"
+      />
 
   <flourish:page
       name="advisors.html"

@@ -111,6 +111,18 @@ table.exceptions .exception-link div {
     overflow: hidden;
 }
 
+table.report-reference .category {
+    width: 13%;
+}
+
+table.report-reference .title {
+    width: 22%;
+}
+
+table.report-reference .file-type {
+    width: 8%
+}
+
 /* XXX: select a better class name for these tables */
 
 table.form-fields .label {
