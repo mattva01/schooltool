@@ -93,12 +93,15 @@ def tearDown(test):
     schooltool_setup.tearDown(test)
 
 
-def print_day_templates(templates):
+def print_day_templates(templates, filter=None):
     cols = []
     for day in templates.values():
         col = [day.title]
         for item in day.values():
-            if isinstance(item, Period):
+            if (filter is not None and
+                not filter(item)):
+                col.append('')
+            elif isinstance(item, Period):
                 cell = item.title or ''
                 if item.activity_type is not None:
                     cell = '%s %s' % (item.activity_type, cell)

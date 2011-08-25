@@ -22,20 +22,28 @@ SchoolTool timetable csv import.
 XXX: This should be in the schooltool.timetable package.
 """
 import csv
+import pprint
 
-from zope.security.proxy import removeSecurityProxy
 from zope.container.interfaces import INameChooser
+from zope.proxy import sameProxiedObjects
+from zope.security.proxy import removeSecurityProxy
+from zope.traversing.browser.absoluteurl import absoluteURL
 
+import schooltool.skin.flourish.page
 from schooltool.app.interfaces import ISchoolToolApplication
-from schooltool.app.browser.csvimport import BaseCSVImportView, InvalidCSVError
+from schooltool.app.browser.csvimport import BaseCSVImportView
 from schooltool.course.interfaces import ICourseContainer
 from schooltool.course.interfaces import ISectionContainer
 from schooltool.course.section import Section
+from schooltool.app.browser.csvimport import FlourishBaseCSVImportView
 from schooltool.schoolyear.interfaces import ISchoolYear
-from schooltool.term.interfaces import ITerm
-from schooltool.timetable import TimetableActivity
-from schooltool.timetable.interfaces import ITimetableSchemaContainer
-from schooltool.timetable.interfaces import ITimetables
+from schooltool.term.interfaces import ITerm, ITermContainer
+from schooltool.term.term import getNextTerm
+from schooltool.timetable.interfaces import ITimetableContainer
+from schooltool.timetable.interfaces import IScheduleContainer
+from schooltool.timetable.timetable import SelectedPeriodsSchedule
+from schooltool.course.browser.section import SectionsActiveTabMixin
+from schooltool.skin import flourish
 
 from schooltool.common import SchoolToolMessage as _
 
@@ -56,6 +64,11 @@ class TimetableImportErrorCollection(object):
                     or self.persons or self.courses or self.sections
                     or self.records)
 
+    def __str__(self):
+        return '%s:\n%s' % (
+            self.__class__.__name__,
+            pprint.pformat(self.__dict__))
+
     def __repr__(self):
         return "<%s %r>" % (self.__class__.__name__, self.__dict__)
 
@@ -70,27 +83,40 @@ class TimetableCSVImporter(object):
     in one sweep and present them to the user at once.
     """
 
-    def __init__(self, container, charset=None):
+    app = None
+    schoolyear = None
+    persons = None
+    errors = None
+    charset = None
+
+    terms = None
+
+    def __init__(self, schoolyear, charset=None):
         # XXX It appears that our security declarations are inadequate,
         #     because things break without this removeSecurityProxy.
         self.app = ISchoolToolApplication(None)
-        self.sections = removeSecurityProxy(container)
+        self.schoolyear = schoolyear
         self.persons = self.app['persons']
         self.errors = TimetableImportErrorCollection()
         self.charset = charset
 
-    def importSections(self, sections_csv): # TODO: see importFromCSV
+    def importFromCSV(self, sections_csv):
         """Import sections from CSV data.
 
         At the top of the file there should be a header row:
 
-        timetable_schema_id
+        term
+        -or-
+        first term, last term
 
         Then an empty line should follow, and the remaining CSV data should
         consist of chunks like this:
 
         course_id, instructor_id
+        timetable_id
         day_id, period_id
+        day_id, period_id
+        timetable_id
         day_id, period_id
         ...
         ***
@@ -101,26 +127,26 @@ class TimetableCSVImporter(object):
         """
         if '\n' not in sections_csv:
             self.errors.generic.append(_("No data provided"))
-            raise InvalidCSVError()
+            return False
 
         rows = self.parseCSVRows(sections_csv.splitlines())
 
         if rows[1]:
             self.errors.generic.append(_("Row 2 is not empty"))
-            raise InvalidCSVError()
+            return False
 
         self.importHeader(rows[0])
         if self.errors.anyErrors():
-            raise InvalidCSVError()
+            return False
 
         self.importChunks(rows[2:], dry_run=True)
         if self.errors.anyErrors():
-            raise InvalidCSVError()
+            return False
 
         self.importChunks(rows[2:], dry_run=False)
         if self.errors.anyErrors():
-            raise AssertionError('something bad happened while importing CSV'
-                                 ' data, aborting transaction.')
+            return False
+        return True
 
     def importChunks(self, rows, dry_run=True):
         """Import chunks separated by empty lines."""
@@ -133,6 +159,16 @@ class TimetableCSVImporter(object):
                 chunk_start = i + 1
         if rows and rows[-1]:
             self.importChunk(rows[chunk_start:], chunk_start + 3, dry_run)
+
+    def listTerms(self):
+        first, last = self.terms
+        result = [first]
+        next = getNextTerm(first)
+        while (next is not None and
+               not sameProxiedObjects(result[-1], next)):
+            result.append(next)
+            next = getNextTerm(next)
+        return result
 
     def importChunk(self, rows, line, dry_run=True):
         """Import a chunk of data that describes a section.
@@ -149,7 +185,7 @@ class TimetableCSVImporter(object):
             return
         course_id, instructor_id = row[:2]
 
-        course = ICourseContainer(self.sections).get(course_id, None)
+        course = ICourseContainer(self.schoolyear).get(course_id, None)
         if course is None:
             self.errors.courses.append(course_id)
 
@@ -158,37 +194,75 @@ class TimetableCSVImporter(object):
             self.errors.persons.append(instructor_id)
 
         line_ofs = 1
-        periods = []
         finished = False
+
+        timetables = ITimetableContainer(self.schoolyear)
+        timetable = None
+        periods = {}
+
         for row in rows[1:]:
             line_ofs += 1
             if row == ['***']:
                 finished = True
                 break
+
+            if len(row) == 1:
+                tt = timetables.get(row[0])
+                if tt is None:
+                    err_msg = _("Malformed line ${line_no}"
+                                " (it should contain either a timetable id or"
+                                " day id and a period id)",
+                                mapping={'line_no': line + line_ofs - 1})
+                    self.errors.generic.append(err_msg)
+                    continue
+                timetable = tt
+                continue
             elif len(row) == 2:
                 day_id, period_id = row
             else:
-                err_msg = _('Malformed line ${line_no} (it should contain a'
-                            ' day id and a period id)',
+                err_msg = _("Malformed line ${line_no}"
+                            " (it should contain either a timetable id or"
+                            " day id and a period id)",
                             mapping={'line_no': line + line_ofs - 1})
                 self.errors.generic.append(err_msg)
                 continue
 
-            # check day_id
-            try:
-                ttday = self.ttschema[day_id]
-            except KeyError:
-                if day_id not in self.errors.day_ids:
-                    self.errors.day_ids.append(day_id)
+            if timetable is None:
+                err_msg = _("Timetable id must be specified before"
+                            " day id and a period id"
+                            " at at line ${line_no}",
+                            mapping={'line_no': line + line_ofs - 1})
                 continue
+
+            # check day_id
+            ttday = None
+            for day in timetable.periods.templates.values():
+                if day.title == day_id:
+                    ttday = day
+                    break
+
+            if ttday is None:
+                errkey = (timetable.__name__, day_id)
+                if errkey not in self.errors.day_ids:
+                    self.errors.day_ids.append(errkey)
+                continue
+
+            ttperiod = None
+            for period in ttday.values():
+                if period.title == period_id:
+                    ttperiod = period
+                    break
 
             # check period_id
-            if (period_id not in ttday.periods
-                and period_id not in self.errors.periods):
-                self.errors.periods.append(period_id)
-                continue
+            if ttperiod is None:
+                errkey = (timetable.__name__, day_id, period_id)
+                if period_id not in self.errors.periods:
+                    self.errors.periods.append(errkey)
+                    continue
 
-            periods.append((day_id, period_id))
+            if timetable.__name__ not in periods:
+                periods[timetable.__name__] = []
+            periods[timetable.__name__].append(period)
 
         if not finished:
             err_msg = _("Incomplete section description on line ${line}",
@@ -201,11 +275,22 @@ class TimetableCSVImporter(object):
             self.errors.generic.append(err_msg)
             return
 
-        section = self.createSection(course, instructor, periods,
-                                     dry_run=dry_run)
-        self.importPersons(rows[line_ofs:], section, dry_run=dry_run)
 
-    def createSection(self, course, instructor, periods, dry_run=True):
+        terms = self.listTerms()
+        sections = []
+        for term in terms:
+            section = self.createSection(
+                term, course, instructor, periods,
+                dry_run=dry_run)
+            self.importPersons(rows[line_ofs:], section, dry_run=dry_run)
+            if section is not None:
+                sections.append(section)
+        if not self.errors.anyErrors():
+            for n, section in enumerate(sections[:-1]):
+                section.next = sections[n+1]
+
+
+    def createSection(self, term, course, instructor, periods, dry_run=True):
         """Create a section.
 
         `periods` is a list of tuples (day_id, period_id).
@@ -219,19 +304,13 @@ class TimetableCSVImporter(object):
         if dry_run:
             return None
 
-        # Create or pick a section.
-        section_title = '%s - %s' % (course.title, instructor.title)
-        for sctn in self.sections.values():
-            # Look for an existing section with the same title.
-            if sctn.title == section_title:
-                section = sctn
-                break
-        else:
-            # No existing sections with this title found, create a new one.
-            section = Section(title=section_title)
-            chooser = INameChooser(self.sections)
-            section_name = chooser.chooseName('', section)
-            self.sections[section_name] = section
+        sections = ISectionContainer(term)
+
+        section = Section()
+        chooser = INameChooser(sections)
+        section_name = chooser.chooseName('', section)
+        section.title = u"%s (%s)" % (course.title, section.__name__)
+        sections[section_name] = section
 
         # Establish links to course and to teacher
         if course not in section.courses:
@@ -239,20 +318,18 @@ class TimetableCSVImporter(object):
         if instructor not in section.instructors:
             section.instructors.add(instructor)
 
-        # Create a timetable
-        timetables = ITimetables(section).timetables
-        tt = ITimetables(section).lookup(self.term, self.ttschema)
-        if tt is None:
-            chooser = INameChooser(timetables)
-            tt = self.ttschema.createTimetable(self.term)
-            timetables[chooser.chooseName("", tt)] = tt
-
-        # Add timetable activities.
-        for day_id, period_id in periods:
-            # XXX no resource booking in here, the form is not used
-            # anyway though
-            act = TimetableActivity(title=course.title, owner=section)
-            tt[day_id].add(period_id, act)
+        timetable_container = ITimetableContainer(self.schoolyear)
+        timetables = [timetable_container[ttid]
+                      for ttid in sorted(periods)]
+        schedules = IScheduleContainer(section)
+        for timetable in timetables:
+            selected = periods[timetable.__name__]
+            schedule = SelectedPeriodsSchedule(
+                timetable, term.first, term.last,
+                title=timetable.title, timezone=timetable.timezone)
+            for period in selected:
+                schedule.addPeriod(period)
+            schedules[timetable.__name__] = schedule
 
         return section
 
@@ -270,27 +347,52 @@ class TimetableCSVImporter(object):
                     if person not in section.members:
                         section.members.add(person)
 
+    def findTerm(self, title):
+        terms = ITermContainer(self.schoolyear)
+        for term in terms.values():
+            if term.title == title:
+                return term
+        return None
+
     def importHeader(self, row):
         """Read the header row of the CSV file.
 
-        Sets self.term and self.ttschema.
+        Sets self.terms
         """
-        if len(row) != 1:
+        if len(row) < 1 or len(row) > 2:
             self.errors.generic.append(
                     _("The first row of the CSV file must contain"
-                      " the timetable schema id."))
+                      " the term or first and last terms for sections."))
             return
 
-        ttschema_id = row[0]
+        first = self.findTerm(row[0])
 
-        self.term = ITerm(self.sections)
-
-        try:
-            self.ttschema = ITimetableSchemaContainer(ISchoolYear(self.sections))[ttschema_id]
-        except KeyError:
-            error_msg = _("The timetable schema ${schema} does not exist.",
-                          mapping={'schema': ttschema_id})
+        if first is None:
+            error_msg = _("The term ${term} does not exist.",
+                          mapping={'term': row[0]})
             self.errors.generic.append(error_msg)
+            return
+
+        if len(row) == 1:
+            last = first
+        else:
+            last = self.findTerm(row[1])
+            if last is None:
+                error_msg = _("The term ${term} does not exist.",
+                              mapping={'term': row[1]})
+                self.errors.generic.append(error_msg)
+                return
+
+        if first.first >= last.last:
+                error_msg = _("First term ${first} starts after"
+                              " last term ${last}.",
+                              mapping={'first': row[0],
+                                       'last': row[1]})
+                self.errors.generic.append(error_msg)
+                return
+
+        self.terms = (first, last)
+
 
     def parseCSVRows(self, rows):
         """Parse rows (a list of strings) in CSV format.
@@ -301,7 +403,7 @@ class TimetableCSVImporter(object):
         TimetableCSVImportView; the returned values are in unicode.
 
         If the provided data is invalid, self.errors.generic will be updated
-        and InvalidCSVError will be returned.
+        and None will be returned.
         """
         result = []
         reader = csv.reader(rows)
@@ -322,28 +424,12 @@ class TimetableCSVImporter(object):
             error_msg = _("Error in timetable CSV data, line ${line_no}",
                           mapping={'line_no': line})
             self.errors.generic.append(error_msg)
-            raise InvalidCSVError()
+            return
         except UnicodeError:
             error_msg = _("Conversion to unicode failed in line ${line_no}",
                           mapping={'line_no': line})
             self.errors.generic.append(error_msg)
-            raise InvalidCSVError()
-
-    def importFromCSV(self, csvdata):
-        """Invoke importSections while playing with BaseCSVImportView nicely.
-
-        Currently sb.BaseCSVImportView expects ImporterClass.importFromCSV
-        return True on success, False on error.  It would be nicer if it
-        caught InvalidCSVErrors instead.  When this refactoring is performed,
-        this method may be removed and importSections can be renamed to
-        importFromCSV.
-        """
-        try:
-            self.importSections(csvdata)
-        except InvalidCSVError:
-            return False
-        else:
-            return True
+            return
 
 
 class TimetableCSVImportView(BaseCSVImportView):
@@ -357,7 +443,6 @@ class TimetableCSVImportView(BaseCSVImportView):
         if err.generic:
             self.errors.extend(err.generic)
 
-        # XXX: Shrug, this seems not very extensible.
         for key, msg in [
             ('day_ids', _("Day ids not defined in selected schema: ${args}.")),
             ('periods', _("Periods not defined in selected days: ${args}.")),
@@ -370,3 +455,30 @@ class TimetableCSVImportView(BaseCSVImportView):
                 values = ', '.join([unicode(st) for st in v])
                 msg = _(msg, mapping={'args': values})
                 self.errors.append(msg)
+
+
+class FlourishTimetableCSVImportView(FlourishBaseCSVImportView,
+                                     TimetableCSVImportView):
+    __init__ = TimetableCSVImportView.__init__
+    update = TimetableCSVImportView.update
+
+    def nextURL(self):
+        url = absoluteURL(ISchoolToolApplication(None), self.request)
+        return '%s/sections' % url
+
+    @property
+    def title(self):
+        schoolyear = ISchoolYear(self.context)
+        return _('Sections for ${schoolyear}',
+                 mapping={'schoolyear': schoolyear.title})
+
+
+class ImportSectionsLinkViewlet(flourish.page.LinkViewlet, SectionsActiveTabMixin):
+
+    @property
+    def url(self):
+        link = self.link
+        if not link:
+            return None
+        return "%s/%s" % (absoluteURL(self.schoolyear, self.request),
+                          self.link)

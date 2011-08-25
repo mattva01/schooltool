@@ -60,6 +60,7 @@ from schooltool.course.interfaces import ICourse, ICourseContainer
 from schooltool.course.interfaces import ISection, ISectionContainer
 from schooltool.course.section import Section
 from schooltool.course.section import copySection
+from schooltool.course.browser.course import CoursesActiveTabMixin as SectionsActiveTabMixin
 from schooltool.person.interfaces import IPerson
 from schooltool.schoolyear.interfaces import ISchoolYear
 from schooltool.schoolyear.interfaces import ISchoolYearContainer
@@ -878,16 +879,7 @@ class SectionActionsLinks(RefineLinksViewlet):
             return super(SectionActionsLinks, self).render()
 
 
-class SectionAddLinkViewlet(LinkViewlet):
-
-    @property
-    def schoolyear(self):
-        schoolyears = ISchoolYearContainer(self.context)
-        result = schoolyears.getActiveSchoolYear()
-        if 'schoolyear_id' in self.request:
-            schoolyear_id = self.request['schoolyear_id']
-            result = schoolyears.get(schoolyear_id, result)
-        return result
+class SectionAddLinkViewlet(LinkViewlet, SectionsActiveTabMixin):
 
     @property
     def url(self):
@@ -943,7 +935,7 @@ def get_courses_titles(section, formatter):
     return ', '.join([course.title for course in section.courses])
 
 
-class FlourishSectionsView(FlourishTableContainerView):
+class FlourishSectionsView(FlourishTableContainerView, SectionsActiveTabMixin):
 
     content_template = ViewPageTemplateFile('templates/f_sections.pt')
 
@@ -952,15 +944,6 @@ class FlourishSectionsView(FlourishTableContainerView):
         schoolyear = self.schoolyear
         return _('Sections for ${schoolyear}',
                  mapping={'schoolyear': schoolyear.title})
-
-    @property
-    def schoolyear(self):
-        schoolyears = ISchoolYearContainer(self.context)
-        result = schoolyears.getActiveSchoolYear()
-        if 'schoolyear_id' in self.request:
-            schoolyear_id = self.request['schoolyear_id']
-            result = schoolyears.get(schoolyear_id, result)
-        return result
 
     @property
     def container(self):
@@ -1155,7 +1138,7 @@ class FlourishSectionAddView(Form, SectionAddView):
         section.courses.add(removeSecurityProxy(course))
 
         # overwrite section title.
-        section.title = "%s (%s)" % (course.title, section.__name__)
+        section.title = u"%s (%s)" % (course.title, section.__name__)
 
         # copy and link section in other selected terms
         for term in terms[1:]:

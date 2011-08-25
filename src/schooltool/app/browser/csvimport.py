@@ -20,6 +20,7 @@
 SchoolTool application views.
 """
 import csv
+import transaction
 
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.publisher.browser import BrowserView
@@ -47,10 +48,6 @@ class ImportErrorCollection(object):
 
     def __repr__(self):
         return "<%s %r>" % (self.__class__.__name__, self.__dict__)
-
-
-class InvalidCSVError(Exception):
-    pass
 
 
 class BaseCSVImportView(BrowserView):
@@ -224,11 +221,12 @@ class BaseCSVImporter(object):
             return False
 
         for dry_run in [True, False]:
-
+            savepoint = transaction.savepoint()
             for rowdata in rows:
                 self.createAndAdd(rowdata, dry_run)
 
             if self.errors.anyErrors():
+                savepoint.rollback()
                 return False
 
         return True
