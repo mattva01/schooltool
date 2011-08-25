@@ -1,4 +1,4 @@
-<div>
+<div i18n:domain="schooltool">
   <h3>
     <tal:block replace="context/title" />
     <a class="modify" title="Edit this term's information"
@@ -10,16 +10,12 @@
            i18n:attributes="alt" />
     </a>
   </h3>
-  <table id="legend" class="schooldaymodel">
-    <tr class="legend">
+  <table class="schoolday-legend">
+    <tr>
       <td class="legend" i18n:translate="">Legend:</td>
-      <td width="12%" class="schoolday" i18n:translate="">Schoolday</td>
-      <td width="12%" class="holiday" i18n:translate="">Holiday</td>
-      <td width="12%"></td>
-      <td width="12%"></td>
-      <td width="12%"></td>
-      <td width="12%"></td>
-      <td width="12%"></td>
+      <td class="schoolday" i18n:translate="">In Session</td>
+      <td class="holiday" i18n:translate="">Not In Session</td>
+      <td>&nbsp;</td>
     </tr>
   </table>
 

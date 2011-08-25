@@ -310,3 +310,9 @@ body > .calendar {
     font-size: 12px;
     line-height: 16px;
 }
+
+/* XXX: temporarily needed to by bypass negative margin issue */
+
+form p.schoolday-buttons {
+    margin-top: 0px;
+}
