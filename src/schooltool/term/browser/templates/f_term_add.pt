@@ -94,5 +94,14 @@
         </table>
       </tal:block>
     </metal:block>
+    <div class="buttons controls"
+         metal:fill-slot="bottom-buttons">
+      <tal:block condition="view/actions|nothing">
+        <tal:loop tal:repeat="action view/actions/values">
+          <input tal:replace="structure action/render"
+                 tal:condition="python: action is not view.actions.get('refresh')"/>
+        </tal:loop>
+      </tal:block>
+    </div>
   </div>
 </div>
