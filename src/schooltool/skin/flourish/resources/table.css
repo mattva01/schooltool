@@ -111,6 +111,46 @@ table.exceptions .exception-link div {
     overflow: hidden;
 }
 
+table.report-reference .category {
+    width: 13%;
+}
+
+table.report-reference .title {
+    width: 22%;
+}
+
+table.report-reference .file-type {
+    width: 8%
+}
+
+table.schooldaymodel tbody th {
+    background: none;
+}
+
+table.schooldaymodel tbody th.month {
+    background: #dfdcd9;
+}
+
+table.schooldaymodel tbody td.schoolday {
+    font-weight: bold;
+    background: #efefef;
+}
+
+table.schoolday-legend td.schoolday {
+    font-weight: bold;
+    background: #efefef;
+}
+
+table.schoolday-legend td.legend {
+    width: 15%;
+}
+
+table.schoolday-legend td.schoolday,
+table.schoolday-legend td.holiday {
+    width: 20%;
+    text-align: center;
+}
+
 /* XXX: select a better class name for these tables */
 
 table.form-fields .label {

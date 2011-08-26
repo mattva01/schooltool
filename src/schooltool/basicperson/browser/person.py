@@ -65,6 +65,7 @@ from schooltool.table.interfaces import ITableFormatter
 from schooltool.table.table import DependableCheckboxColumn
 from schooltool.table.catalog import IndexedLocaleAwareGetterColumn
 from schooltool.table.interfaces import IIndexedColumn
+from schooltool.report.browser.report import RequestReportDownloadDialog
 
 from schooltool.common import SchoolToolMessage as _
 
@@ -938,6 +939,10 @@ class FlourishPersonAddView(PersonAddViewBase):
         url = absoluteURL(self.context, self.request)
         self.request.response.redirect(url)
 
+    def updateActions(self):
+        super(FlourishPersonAddView, self).updateActions()
+        self.actions['submitadd'].addClass('button-ok')
+
 
 ###############  Group-aware add views ################
 class TeacherAddView(PersonAddViewBase):
@@ -1040,3 +1045,9 @@ class FlourishManagePeopleOverview(flourish.page.Content):
     def school_name(self):
         preferences = IApplicationPreferences(self.context)
         return preferences.title
+
+
+class FlourishRequestPersonXMLExportView(RequestReportDownloadDialog):
+
+    def nextURL(self):
+        return absoluteURL(self.context, self.request) + '/person_export.xml'

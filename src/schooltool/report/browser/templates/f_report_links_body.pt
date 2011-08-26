@@ -1,0 +1,31 @@
+<ul tal:attributes="class view/list_class">
+  <li tal:repeat="item view/items"
+      tal:attributes="class item/class">
+    <metal:block tal:condition="item/is_report_link"
+                 tal:define="url item/url;
+                             link_id item/link_id;
+                             title item/title;
+                             form_id item/form_id;">
+      <a tal:attributes="href url;
+                         id link_id"
+         tal:content="title" />
+      <div tal:attributes="id form_id">
+      </div>
+      <script>ST.state.push()</script>
+      <tal:script tal:replace="structure scriptlocal:
+                               link_id;
+                               url;
+                               form_id;
+                               title;" />
+      <script>
+        ST.dialogs.modal_form(ST.local.link_id,
+                              ST.local.url,
+                              ST.local.form_id,
+                              ST.local.title);
+      </script>
+      <script>ST.state.pop()</script>
+    </metal:block>
+    <metal:block tal:condition="not:item/is_report_link"
+                 tal:replace="structure item/content" />
+  </li>
+</ul>

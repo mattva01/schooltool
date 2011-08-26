@@ -1,0 +1,23 @@
+<div i18n:domain="schooltool">
+  <table class="report-reference">
+    <thead>
+      <tr>
+        <th i18n:translate="" class="category">Category</th>
+        <th i18n:translate="" class="title">Title</th>
+        <th i18n:translate="" class="file-type">File Type</th>
+        <th i18n:translate="" class="description">Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr tal:repeat="row view/rows">
+        <td><a tal:attributes="href row/url" tal:content="row/group" /></td>
+        <td><a tal:attributes="href row/url" tal:content="row/title" /></td>
+        <td tal:content="row/file_type" />
+        <td tal:content="row/description" />
+      </tr>
+    </tbody>
+  </table>
+  <h3>
+    <a tal:attributes="href view/done_link" i18n:translate="">Done</a>
+  </h3>
+</div>

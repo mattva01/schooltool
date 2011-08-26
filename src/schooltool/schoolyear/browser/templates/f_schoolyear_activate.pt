@@ -19,10 +19,10 @@
         </td>
       </tr>
     </table>
-    <div class="buttons controls">
-      <input type="submit" class="submit-widget button-cancel" name="SUBMIT" value="Submit"
+    <div class="buttons">
+      <input type="submit" class="button-ok" name="SUBMIT" value="Submit"
              i18n:attributes="value" />
-      <input type="submit" class="submit-widget button-cancel" name="CANCEL" value="Cancel"
+      <input type="submit" class="button-cancel" name="CANCEL" value="Cancel"
              i18n:attributes="value cancel-button" />
     </div>
   </form>

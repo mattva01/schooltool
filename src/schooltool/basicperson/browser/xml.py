@@ -99,3 +99,16 @@ class PersonXMLExportView(PersonContainerXMLExportView):
 
     def persons(self):
         return [self.context]
+
+
+class FlourishPersonXMLExportView(PersonXMLExportView):
+
+    def __call__(self):
+        self.setResponseHeaders()
+        return PersonXMLExportView.__call__(self)
+
+    def setResponseHeaders(self):
+        response = self.request.response
+        response.setHeader('Content-Type', 'text/xml')
+        disposition = 'attachment; filename="person_export.xml"'
+        response.setHeader('Content-Disposition', disposition)

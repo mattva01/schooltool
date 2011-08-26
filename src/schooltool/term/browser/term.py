@@ -292,7 +292,7 @@ class FlourishTermAddView(flourish.form.AddForm, TermAddForm):
     def next(self, action):
         super(FlourishTermAddView, self).next.func(self, action)
 
-    @button.buttonAndHandler(_('Add term'), name='add',
+    @button.buttonAndHandler(_('Submit'), name='add',
                              condition=lambda form: form.showRefresh)
     def handleAdd(self, action):
         super(FlourishTermAddView, self).handleAdd.func(self, action)
@@ -405,7 +405,7 @@ class FlourishTermEditView(flourish.form.Form, TermEditForm):
     def handleRefresh(self, action):
         super(FlourishTermEditView, self).handleRefresh.func(self, action)
 
-    @button.buttonAndHandler(_('Save changes'), name='apply')
+    @button.buttonAndHandler(_('Submit'), name='apply')
     def handleApply(self, action):
         super(FlourishTermEditView, self).handleApply.func(self, action)
         if self.status != self.formErrorsMessage:
