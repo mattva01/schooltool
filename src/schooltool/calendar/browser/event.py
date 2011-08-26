@@ -220,7 +220,6 @@ class DeleteEventDialog(flourish.form.DialogForm):
                   mapping={'event': self.event.title})
         self.ajax_settings['dialog']['title'] = translate(
             title, context=self.request)
-        self.ajax_settings['dialog']['width'] = 544 + 16
 
     def nextURL(self):
         return (self.request.get('back_url') or

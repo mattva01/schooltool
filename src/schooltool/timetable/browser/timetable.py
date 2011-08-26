@@ -654,7 +654,6 @@ class FlourishTimetableMakeDefaultView(flourish.form.DialogForm, form.EditForm):
                   mapping={'timetable': self.context.title})
         self.ajax_settings['dialog']['title'] = translate(
             title, context=self.request)
-        self.ajax_settings['dialog']['width'] = 544 + 16
 
     @button.buttonAndHandler(_("Apply"), name='apply')
     def handleApply(self, action):

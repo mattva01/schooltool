@@ -197,11 +197,6 @@ class RequestReportDownloadDialog(DialogForm):
     dialog_close_actions = ('cancel',)
     label = None
 
-    def updateDialog(self):
-        # XXX: fix the width of dialog content in css
-        if self.ajax_settings['dialog'] != 'close':
-            self.ajax_settings['dialog']['width'] = 544 + 16
-
     @button.buttonAndHandler(_("Download"), name='download')
     def handleDownload(self, action):
         self.request.response.redirect(self.nextURL())

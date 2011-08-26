@@ -351,11 +351,6 @@ class FlourishConfirmDeleteView(flourish.form.DialogForm, form.EditForm):
     dialog_close_actions = ('cancel',)
     label = None
 
-    def updateDialog(self):
-        # XXX: fix the width of dialog content in css
-        if self.ajax_settings['dialog'] != 'close':
-            self.ajax_settings['dialog']['width'] = 544 + 16
-
     def nextURL(self):
         link = flourish.content.queryContentProvider(
             self.context, self.request, self, 'done_link')

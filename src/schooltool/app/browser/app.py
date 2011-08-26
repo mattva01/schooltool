@@ -872,11 +872,6 @@ class PackDatabaseLink(flourish.page.ModalFormLinkViewlet):
 
 class PackDatabaseView(Dialog):
 
-    def updateDialog(self):
-        # XXX: fix the width of dialog content in css
-        if self.ajax_settings['dialog'] != 'close':
-            self.ajax_settings['dialog']['width'] = 544 + 16
-
     def update(self):
         Dialog.update(self)
         if 'DONE' in self.request:
