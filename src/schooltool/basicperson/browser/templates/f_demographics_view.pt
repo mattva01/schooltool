@@ -1,5 +1,5 @@
-<div i18n:domain="schooltool">
-  <table>
+<div i18n:domain="schooltool" tal:define="rows view/table">
+  <table tal:condition="rows">
     <thead>
       <tr>
         <th i18n:translate="">Title</th>
@@ -11,7 +11,7 @@
             tal:content="group" />
       </tr>
     </thead>
-    <tr tal:repeat="row view/table">
+    <tr tal:repeat="row rows">
       <td>
         <a tal:content="row/title" tal:attributes="href row/url" />
       </td>
@@ -28,8 +28,9 @@
       </td>
     </tr>
   </table>
+  <h3 i18n:translate="" tal:condition="not:rows">There are none.</h3>
   <h3>
-    <a tal:attributes="href  string:${context/schooltool:app/@@absolute_url}/settings"
+    <a tal:attributes="href  string:${context/schooltool:app/@@absolute_url}/manage"
        i18n:translate="">Done</a>
   </h3>
 </div>

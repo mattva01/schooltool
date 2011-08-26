@@ -330,11 +330,14 @@ class FlourishReorderDemographicsView(flourish.page.Page, DemographicsView):
 
     def demographics(self):
         pos = 0
+        result = []
         for demo in self.context.values():
             pos += 1
-            yield {'name': demo.__name__,
+            result.append({
+                    'name': demo.__name__,
                    'title': demo.title,
-                   'pos': pos}
+                   'pos': pos,
+                    })
 
     def update(self):
         if 'DONE' in self.request:

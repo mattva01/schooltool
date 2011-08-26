@@ -37,7 +37,7 @@
      class=".level.FlourishLevelsView"
      content_template="templates/f_levels_view.pt"
      permission="schooltool.edit"
-     subtitle="Teching Levels"
+     title="Grade Levels"
      />
 
   <flourish:viewlet
@@ -119,12 +119,12 @@
       />
 
   <flourish:viewlet
-      name="manage-levels-overview"
-      after="manage-courses-overview"
-      view="schooltool.app.browser.app.ManageSchool"
+      name="levels"
+      after="scoresystems"
+      title="Grade Levels"
+      class="schooltool.skin.flourish.page.LinkViewlet"
+      manager="schooltool.app.browser.app.CustomizeSchoolLinks"
       permission="schooltool.edit"
-      manager="schooltool.skin.flourish.page.IPageContentManager"
-      class=".level.FlourishManageLevelsOverview"
       />
 
 </configure>
