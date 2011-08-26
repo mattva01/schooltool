@@ -20,16 +20,12 @@
     <metal:block fill-slot="above-buttons">
       <tal:block tal:define="calendar view/preview_term"
                  tal:condition="calendar">
-        <div class="buttons controls" tal:condition="view/actions/refresh">
+        <div class="buttons" tal:condition="view/actions/refresh">
           <input tal:replace="structure view/actions/refresh/render" />
         </div>
-        <fieldset>
-          <legend>
-            <span i18n:translate="">
-              Please specify which days school is in session.
-            </span>
-          </legend>
-        </fieldset>
+        <p class="fieldset-legend" i18n:translate="">
+          Please specify which days school is in session.
+        </p>
         <h3 i18n:translate="">
           Click on a day to toggle its state. You can also toggle
           the days of a week:
@@ -42,7 +38,7 @@
             <td>&nbsp;</td>
           </tr>
         </table>
-        <p class="buttons schoolday-buttons">
+        <p class="buttons">
           <input class="button-neutral" type="submit" name="TOGGLE_0" value="Monday"
                  i18n:attributes="value" />
           <input class="button-neutral" type="submit" name="TOGGLE_1" value="Tuesday"
@@ -94,7 +90,7 @@
         </table>
       </tal:block>
     </metal:block>
-    <div class="buttons controls"
+    <div class="buttons"
          metal:fill-slot="bottom-buttons">
       <tal:block condition="view/actions|nothing">
         <tal:loop tal:repeat="action view/actions/values">

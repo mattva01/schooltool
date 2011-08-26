@@ -939,6 +939,10 @@ class FlourishPersonAddView(PersonAddViewBase):
         url = absoluteURL(self.context, self.request)
         self.request.response.redirect(url)
 
+    def updateActions(self):
+        super(FlourishPersonAddView, self).updateActions()
+        self.actions['submitadd'].addClass('button-ok')
+
 
 ###############  Group-aware add views ################
 class TeacherAddView(PersonAddViewBase):
