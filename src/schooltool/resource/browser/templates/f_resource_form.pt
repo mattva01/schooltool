@@ -121,7 +121,7 @@
     </div>
     <metal:buttons define-slot="buttons">
       <div metal:define-macro="form-buttons">
-        <div class="buttons controls"
+        <div class="buttons"
              metal:define-slot="bottom-buttons">
           <tal:block condition="view/actions|nothing">
             <input tal:repeat="action view/actions/values"

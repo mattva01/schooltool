@@ -19,7 +19,7 @@
   </div>
 
   <div metal:fill-slot="buttons">
-    <div class="buttons controls">
+    <div class="buttons">
       <tal:block condition="view/addform/actions|nothing">
         <input tal:repeat="action view/addform/actions/values"
                tal:replace="structure action/render"

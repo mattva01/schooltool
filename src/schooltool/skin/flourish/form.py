@@ -98,7 +98,7 @@ class Dialog(flourish.page.Page):
             'resizable': False,
             'draggable': False,
             'position': ['center','middle'],
-            'width': 'auto',
+            'width': '560',
             }
 
     def updateDialog(self):

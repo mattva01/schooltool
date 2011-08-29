@@ -1,0 +1,73 @@
+<div>
+
+  <p i18n:translate="">
+    You can create the CSV file in a spreadsheet and export it in CSV
+    (Comma-Separated Values) format.  The structure of the table is
+    described below.
+  </p>
+
+
+  <p i18n:translate="">
+    The first row of the file must contain two cells terms in this schoolyear.
+    Sections will be created in terms from first to last.
+  </p>
+
+  <p i18n:translate="">
+    The second row must be empty.  After that,
+    several section descriptions may follow.  They are separated by
+    an extra carriage return (i.e., a blank line).
+  </p>
+
+  <p i18n:translate="">
+    Each section description's first row contains the <strong>course
+    id</strong> and the <strong>instructor username</strong> for the new
+    section.
+  </p>
+
+  <p i18n:translate="">
+    Then a number of rows specifying the section schedule
+   <strong>may</strong> follow.
+   First there's a row containing the <strong>timetable id</strong>.
+   Then, several rows containing a <strong>day title</strong> and a
+   <strong>period title</strong>, follows.
+
+   Section schedule description is terminated by three asterisks
+   ('***') in the first column.
+  </p>
+  <p i18n:translate="">
+    After the terminator, any number of <strong>person
+    user names</strong> may follow, the denoted persons will be added to the
+    section as learners.
+  </p>
+
+  <p i18n:translate="">Example:</p>
+
+<pre class="csv-text" i18n:translate="">
+"Fall", "Spring"
+"","",""
+"philosophy","lorch"
+"weekly-timetable"
+"Monday","A"
+"Monday","B"
+"Tuesday","B"
+"***"
+"johnny"
+"billy"
+""
+"literature","guzman"
+"***"
+"johnny"
+"pete"
+</pre>
+
+  <p i18n:translate="">
+    The above example will create sections for philosophy and literature
+    lectures.  Sections will be taught from fall term to spring term.
+    The section for the philosophy lecture will have persons
+    with user names 'johnny' and 'billy' as learners.  It will also
+    be scheduled on Monday (two lessons, periods 'A' and 'B') and Tuesday.
+    The literature section will be processed in a similar fashion, but
+    will have no defined schedule.
+  </p>
+
+</div>

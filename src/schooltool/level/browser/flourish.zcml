@@ -5,6 +5,12 @@
            xmlns:flourish="http://schooltool.org/flourish"
            i18n_domain="schooltool">
 
+  <flourish:activeViewlet
+      name="manage_school"
+      manager="schooltool.skin.flourish.page.IHeaderNavigationManager"
+      for="schooltool.level.interfaces.ILevelContainer"
+      />
+
   <flourish:contentFactory
       factory=".level.appTitleContentFactory"
       for="schooltool.level.interfaces.ILevelContainer"
@@ -12,7 +18,7 @@
 
   <flourish:breadcrumb
       for="schooltool.level.interfaces.ILevelContainer"
-      title="Teaching Levels"
+      title="Grade Levels"
       />
 
   <flourish:breadcrumb
@@ -21,7 +27,7 @@
 
   <flourish:page_breadcrumbs
       show_page_title="false"
-      title="Teaching Levels"
+      title="Grade Levels"
       view=".level.FlourishLevelsView"
       />
 
@@ -31,7 +37,7 @@
      class=".level.FlourishLevelsView"
      content_template="templates/f_levels_view.pt"
      permission="schooltool.edit"
-     subtitle="Teching Levels"
+     title="Grade Levels"
      />
 
   <flourish:viewlet
@@ -66,7 +72,7 @@
   <configure package="schooltool.skin.flourish">
     <flourish:page
         name="add.html"
-        title="Teaching Levels"
+        title="Grade Levels"
         subtitle="Add new level"
         for="schooltool.level.interfaces.ILevelContainer"
         class="schooltool.level.browser.level.FlourishLevelAddView"
@@ -76,7 +82,7 @@
 
     <flourish:page
         name="edit.html"
-        title="Teaching Levels"
+        title="Grade Levels"
         subtitle="Edit level"
         for="schooltool.level.interfaces.ILevel"
         class="schooltool.level.browser.level.FlourishLevelEditView"
@@ -94,7 +100,7 @@
 
   <flourish:page
       name="reorder.html"
-      title="Teaching Levels"
+      title="Grade Levels"
       subtitle="Change Order"
       for="schooltool.level.interfaces.ILevelContainer"
       class="schooltool.level.browser.level.FlourishReorderLevelsView"
@@ -113,12 +119,12 @@
       />
 
   <flourish:viewlet
-      name="manage-levels-overview"
-      after="manage-courses-overview"
-      view="schooltool.app.browser.app.ManageSchool"
+      name="levels"
+      after="scoresystems"
+      title="Grade Levels"
+      class="schooltool.skin.flourish.page.LinkViewlet"
+      manager="schooltool.app.browser.app.CustomizeSchoolLinks"
       permission="schooltool.edit"
-      manager="schooltool.skin.flourish.page.IPageContentManager"
-      class=".level.FlourishManageLevelsOverview"
       />
 
 </configure>

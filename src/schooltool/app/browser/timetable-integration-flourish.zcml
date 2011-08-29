@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/browser"
+           xmlns:z3c="http://namespaces.zope.org/z3c"
+           xmlns:zope="http://namespaces.zope.org/zope"
+           xmlns:flourish="http://schooltool.org/flourish"
+           i18n_domain="schooltool">
+
+  <flourish:viewlet
+      after="sections-add-links"
+      name="section-import-links"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      class="schooltool.course.browser.section.SectionImportLinks"
+      view="schooltool.course.browser.section.FlourishSectionsView"
+      title="Import"
+      permission="schooltool.edit"
+      />
+
+  <flourish:viewlet
+      name="section-csvimport.html"
+      title="Import CSV"
+      manager="schooltool.course.browser.section.SectionImportLinks"
+      class="schooltool.app.browser.timetablecsvimport.ImportSectionsLinkViewlet"
+      view="schooltool.course.browser.section.FlourishSectionsView"
+      permission="schooltool.edit"
+      />
+
+
+  <flourish:page
+      name="section-csvimport.html"
+      subtitle="Import"
+      for="schooltool.schoolyear.interfaces.ISchoolYear"
+      class="schooltool.app.browser.timetablecsvimport.FlourishTimetableCSVImportView"
+      permission="schooltool.edit"
+     />
+
+  <flourish:content
+      name="import-description"
+      view="schooltool.app.browser.timetablecsvimport.FlourishTimetableCSVImportView"
+      template="templates/f_section_csvimport_description.pt"
+      permission="zope.Public"
+      />
+
+  <flourish:page_breadcrumbs
+      class="schooltool.course.browser.section.SectionsYearNavBreadcrumbs"
+      view="schooltool.app.browser.timetablecsvimport.FlourishTimetableCSVImportView"
+      />
+
+
+</configure>
+

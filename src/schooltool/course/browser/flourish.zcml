@@ -440,6 +440,7 @@
   <flourish:viewlet
       name="csvimport.html"
       title="Import Students CSV"
+      for="schooltool.course.interfaces.ISection"
       manager="schooltool.course.browser.section.SectionImportLinks"
       class="schooltool.skin.flourish.page.LinkViewlet"
       permission="schooltool.edit"
@@ -459,5 +460,8 @@
       template="templates/f_section_member_csvimport_description.pt"
       permission="zope.Public"
       />
+
+  <include package="schooltool.app.browser"
+           file="timetable-integration-flourish.zcml" />
 
 </configure>

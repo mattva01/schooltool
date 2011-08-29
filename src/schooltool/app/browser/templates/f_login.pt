@@ -68,7 +68,7 @@
       </div>
     </fieldset>
 
-    <div class="buttons controls">
+    <div class="buttons">
       <input class="button-ok" type="submit" value="Log in" accesskey="L"
              tabindex="3" i18n:attributes="value; accesskey" name="LOGIN" />
     </div>

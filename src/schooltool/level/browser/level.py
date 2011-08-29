@@ -18,7 +18,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Schooltool teaching level views.
+Schooltool grade level views.
 """
 
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
@@ -225,6 +225,9 @@ class FlourishLevelAddView(flourish.form.AddForm, LevelAddForm):
     label = None
     legend = _('Level information')
 
+    def updateActions(self):
+        super(FlourishLevelAddView, self).updateActions()
+        self.actions['cancel'].addClass('button-cancel')
 
 class FlourishLevelEditView(flourish.form.Form, LevelEditView):
     label = None
@@ -237,14 +240,3 @@ class LevelsAddLinks(flourish.page.RefineLinksViewlet):
 
 class LevelsActionsLinks(flourish.page.RefineLinksViewlet):
     """Manager for Actions links."""
-
-
-class FlourishManageLevelsOverview(flourish.page.Content):
-
-    body_template = ViewPageTemplateFile(
-        'templates/f_manage_levels_overview.pt')
-
-    @property
-    def levels(self):
-        app = ISchoolToolApplication(None)
-        return ILevelContainer(app)

@@ -1,4 +1,4 @@
-Teaching levels
+Grade levels
 ===============
 
 A simple implementation to define a set of courses taught to

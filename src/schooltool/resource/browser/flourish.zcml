@@ -23,7 +23,7 @@
        class="schooltool.resource.browser.resource.FlourishResourceDemographicsView"
        content_template="templates/f_demographics_view.pt"
        permission="schooltool.edit"
-       title="Resource attributes"
+       title="Resource Attributes"
        />
 
     <flourish:page
@@ -32,7 +32,7 @@
        class="schooltool.resource.browser.resource.FlourishReorderResourceDemographicsView"
        content_template="templates/f_demographics_reorder.pt"
        permission="schooltool.edit"
-       title="Resource attributes"
+       title="Resource Attributes"
        />
   </configure>
 

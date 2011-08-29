@@ -887,6 +887,7 @@ class FlourishPersonAddView(PersonAddViewBase):
     def update(self):
         self.buildFieldsetGroups()
         PersonAddViewBase.update(self)
+        self.widgets['birth_date'].addClass('birth-date-field')
 
     def getBaseFields(self):
         if self.group_id:
@@ -937,6 +938,10 @@ class FlourishPersonAddView(PersonAddViewBase):
     def handle_cancel_action(self, action):
         url = absoluteURL(self.context, self.request)
         self.request.response.redirect(url)
+
+    def updateActions(self):
+        super(FlourishPersonAddView, self).updateActions()
+        self.actions['submitadd'].addClass('button-ok')
 
 
 ###############  Group-aware add views ################
