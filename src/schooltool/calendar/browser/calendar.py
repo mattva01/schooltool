@@ -280,7 +280,8 @@ class CalendarTomorrowEvents(flourish.page.Refine):
         return flourish.page.Refine.render(self, *args, **kw)
 
 
-class CalendarTertiaryNavigation(flourish.page.Content):
+class CalendarTertiaryNavigation(flourish.page.Content,
+                                 flourish.page.TertiaryNavigationManager):
     template = ViewPageTemplateFile('templates/calendar_tertiary_nav.pt')
 
     mode_types = (

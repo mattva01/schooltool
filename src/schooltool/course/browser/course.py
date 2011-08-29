@@ -67,7 +67,7 @@ from schooltool.skin.flourish.form import Form
 from schooltool.skin.flourish.form import AddForm
 from schooltool.skin.flourish.form import DialogForm
 from schooltool.skin.flourish.form import DisplayForm
-from schooltool.skin.flourish.viewlet import ViewletManager
+from schooltool.skin.flourish.page import TertiaryNavigationManager
 from schooltool.table.table import SchoolToolTableFormatter
 from schooltool.table.table import FilterWidget
 from schooltool.table.interfaces import ITableFormatter
@@ -293,7 +293,7 @@ class FlourishCoursesViewlet(Viewlet):
         return self.collator.cmp(this['course'], other['course'])
 
 
-class CoursesTertiaryNavigationManager(ViewletManager):
+class CoursesTertiaryNavigationManager(TertiaryNavigationManager):
 
     template = InlineViewPageTemplate("""
         <ul tal:attributes="class view/list_class">
@@ -303,8 +303,6 @@ class CoursesTertiaryNavigationManager(ViewletManager):
           </li>
         </ul>
     """)
-
-    list_class = 'third-nav'
 
     @property
     def items(self):
