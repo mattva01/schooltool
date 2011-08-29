@@ -110,6 +110,15 @@
       permission="zope.Public"
       />
 
+  <flourish:viewlet
+      name="manage-groups-overview"
+      after="manage-contacts-overview"
+      view="schooltool.app.browser.app.ManageSchool"
+      permission="schooltool.edit"
+      manager="schooltool.skin.flourish.page.IPageContentManager"
+      class=".group.FlourishManageGroupsOverview"
+      />
+
   <!-- views -->
 
   <flourish:page

@@ -1,0 +1,12 @@
+<metal:block i18n:domain="schooltool">
+  <div class="header" i18n:translate="">
+    What is This?
+  </div>
+  <div class="body">
+    <p i18n:translate="">
+      SchoolTool can track customized attributes for resources,
+      locations and equipment, such as serial numbers, seating
+      capacity or date of purchase.
+    </p>
+  </div>
+</metal:block>

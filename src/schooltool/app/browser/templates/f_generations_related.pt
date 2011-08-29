@@ -1,0 +1,11 @@
+<metal:block i18n:domain="schooltool">
+  <div class="header" i18n:translate="">
+    What is This?
+  </div>
+  <div class="body">
+    <p i18n:translate="">
+      Database generations update the structure of your database to be
+      compatible with new versions of SchoolTool.
+    </p>
+  </div>
+</metal:block>

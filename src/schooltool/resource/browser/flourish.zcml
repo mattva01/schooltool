@@ -45,6 +45,24 @@
       permission="schooltool.view"
       />
 
+  <flourish:viewlet
+      name="what-is-this"
+      class="schooltool.skin.flourish.page.Related"
+      template="templates/f_resource_demographics_related.pt"
+      view="schooltool.resource.browser.resource.FlourishResourceDemographicsView"
+      manager="schooltool.skin.flourish.page.IPageRelatedManager"
+      permission="schooltool.edit"
+      />
+
+  <flourish:viewlet
+      name="what-is-this"
+      class="schooltool.skin.flourish.page.Related"
+      template="templates/f_resource_container_related.pt"
+      view=".resource.FlourishResourceContainerView"
+      manager="schooltool.skin.flourish.page.IPageRelatedManager"
+      permission="schooltool.edit"
+      />
+
   <!-- Resource containers -->
 
   <zope:adapter

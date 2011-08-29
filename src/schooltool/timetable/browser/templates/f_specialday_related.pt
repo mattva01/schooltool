@@ -1,0 +1,11 @@
+<metal:block i18n:domain="schooltool">
+  <div class="header" i18n:translate="">
+    What is This?
+  </div>
+  <div class="body">
+    <p i18n:translate="">
+      Exception days allow you to change start and end times or cancel
+      periods on a certain date.
+    </p>
+  </div>
+</metal:block>

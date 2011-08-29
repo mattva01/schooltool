@@ -1,0 +1,15 @@
+<metal:block i18n:domain="schooltool">
+  <div class="header" i18n:translate="">
+    What is This?
+  </div>
+  <div class="body">
+    <p i18n:translate="">
+      A timetable defines a recurring pattern for section meeting
+      times during a term over a specified range of dates.
+    </p>
+    <p i18n:translate="">
+      When you create a new timetable you will be asked a sequence of
+      questions about your school's schedule.
+    </p>
+  </div>
+</metal:block>

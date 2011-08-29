@@ -1,0 +1,11 @@
+<metal:block i18n:domain="schooltool">
+  <div class="header" i18n:translate="">
+    What is This?
+  </div>
+  <div class="body">
+    <p i18n:translate="">
+      A term is a unit of time that defines the beginning and end of
+      sections on the calendar.  For example, a semester or trimester.
+    </p>
+  </div>
+</metal:block>

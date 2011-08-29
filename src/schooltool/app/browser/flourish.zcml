@@ -339,11 +339,20 @@
 
   <flourish:viewlet
       name="customize_school_links"
-      after="manage_school_links"
+      after="school_add_links"
       manager="schooltool.skin.flourish.page.IPageRefineManager"
       class="schooltool.app.browser.app.CustomizeSchoolLinks"
       view="schooltool.app.browser.app.ManageSchool"
       title="Customize"
+      permission="schooltool.edit"
+      />
+
+  <flourish:viewlet
+      name="school_add_links"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      class="schooltool.app.browser.app.SchoolAddLinks"
+      view="schooltool.app.browser.app.ManageSchool"
+      title="Add"
       permission="schooltool.edit"
       />
 
@@ -435,6 +444,15 @@
       class="zope.app.generations.browser.managers.Managers"
       permission="schooltool.edit"
       subtitle="Database generations"
+      />
+
+  <flourish:viewlet
+      name="what-is-this"
+      class="schooltool.skin.flourish.page.Related"
+      template="templates/f_generations_related.pt"
+      view="zope.app.generations.browser.managers.Managers"
+      manager="schooltool.skin.flourish.page.IPageRelatedManager"
+      permission="schooltool.edit"
       />
 
   <flourish:viewlet

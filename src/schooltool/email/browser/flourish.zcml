@@ -121,6 +121,15 @@
       class=".email.FlourishEmailSettingsOverview"
       />
 
+  <flourish:viewlet
+      name="what-is-this"
+      class="schooltool.skin.flourish.page.Related"
+      template="templates/f_email_container_related.pt"
+      view="schooltool.email.browser.email.FlourishEmailContainerView"
+      manager="schooltool.skin.flourish.page.IPageRelatedManager"
+      permission="schooltool.edit"
+      />
+
   <!-- Navigation -->
 
   <flourish:activeViewlet

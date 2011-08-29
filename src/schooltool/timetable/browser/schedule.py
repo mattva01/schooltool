@@ -261,7 +261,7 @@ class SpecialDayView(BrowserView):
         return self.template()
 
 
-class FlourishSpecialDayView(flourish.page.WideContainerPage, SpecialDayView):
+class FlourishSpecialDayView(flourish.page.Page, SpecialDayView):
     select_template = ViewPageTemplateFile('templates/f_specialday_select.pt')
     form_template = ViewPageTemplateFile('templates/f_specialday_change.pt')
     flourish_template = InheritTemplate(flourish.page.Page.template)

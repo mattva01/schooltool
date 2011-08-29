@@ -35,6 +35,15 @@
       permission="schooltool.edit"
       />
 
+  <flourish:viewlet
+      name="what-is-this"
+      class="schooltool.skin.flourish.page.Related"
+      template="templates/f_import_related.pt"
+      view=".importer.FlourishMegaImporter"
+      manager="schooltool.skin.flourish.page.IPageRelatedManager"
+      permission="schooltool.edit"
+      />
+
   <!-- Reports -->
 
   <report:reportLink
