@@ -875,3 +875,11 @@ class FlourishSchoolYearsOverview(flourish.page.Content):
     def schoolyears(self):
         syc = ISchoolYearContainer(self.context)
         return syc
+
+
+class SchoolYearAddLink(flourish.page.LinkViewlet):
+
+    @property
+    def url(self):
+        schoolyears = ISchoolYearContainer(self.context)
+        return absoluteURL(schoolyears, self.request) + '/add.html'

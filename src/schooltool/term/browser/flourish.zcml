@@ -70,6 +70,15 @@
       permission="schooltool.edit"
       />
 
+  <flourish:viewlet
+      name="what-is-this"
+      class="schooltool.skin.flourish.page.Related"
+      template="templates/f_terms_related.pt"
+      view=".term.FlourishTermsView"
+      manager="schooltool.skin.flourish.page.IPageRelatedManager"
+      permission="schooltool.edit"
+      />
+
   <flourish:page
       name="delete.html"
       for="..interfaces.ITerm"

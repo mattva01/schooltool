@@ -1,8 +1,13 @@
 <div class="body">
 
-<div class="refine" tal:define="refine view/providers/page_refine|nothing"
+<div class="sidebar refine" tal:define="refine view/providers/page_refine|nothing"
      tal:condition="refine">
   <tal:block content="structure refine" />
+</div>
+
+<div class="sidebar related" tal:define="related view/providers/page_related|nothing"
+     tal:condition="related">
+  <tal:block tal:content="structure related" />
 </div>
 
 <div tal:attributes="class view/container_class">

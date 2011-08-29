@@ -73,6 +73,7 @@ from schooltool.skin.flourish.page import RefineLinksViewlet
 from schooltool.skin.flourish.page import LinkViewlet
 from schooltool.skin.flourish.page import Page
 from schooltool.skin.flourish.page import ModalFormLinkViewlet
+from schooltool.skin.flourish.page import Content
 from schooltool.skin.flourish.form import Form
 from schooltool.skin.flourish.form import AddForm
 from schooltool.skin.flourish.form import DialogForm
@@ -727,3 +728,26 @@ class FlourishMemberViewPersons(FlourishRelationshipViewBase):
 
     def getCollection(self):
         return self.context.members
+
+
+class FlourishManageGroupsOverview(Content):
+
+    body_template = ViewPageTemplateFile(
+        'templates/f_manage_groups_overview.pt')
+
+    @property
+    def schoolyear(self):
+        schoolyears = ISchoolYearContainer(self.context)
+        result = schoolyears.getActiveSchoolYear()
+        if 'schoolyear_id' in self.request:
+            schoolyear_id = self.request['schoolyear_id']
+            result = schoolyears.get(schoolyear_id, result)
+        return result
+
+    @property
+    def has_schoolyear(self):
+        return self.schoolyear is not None
+
+    @property
+    def groups(self):
+        return IGroupContainer(self.schoolyear, None)

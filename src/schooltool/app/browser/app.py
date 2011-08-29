@@ -776,6 +776,10 @@ class CustomizeSchoolLinks(flourish.page.RefineLinksViewlet):
     """Customize School links viewlet."""
 
 
+class SchoolAddLinks(flourish.page.RefineLinksViewlet):
+    """School add links viewlet."""
+
+
 class SchoolActionsLinks(flourish.page.RefineLinksViewlet):
     """School actions links viewlet."""
 

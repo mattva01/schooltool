@@ -78,7 +78,7 @@ class NoSidebarPage(Page):
 
 
 class WideContainerPage(Page):
-    container_class = 'widecontainer'
+    container_class = 'container widecontainer'
 
 
 class ContentViewletManager(ViewletManager):

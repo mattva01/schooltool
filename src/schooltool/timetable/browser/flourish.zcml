@@ -50,6 +50,15 @@
       permission="schooltool.view"
       />
 
+  <flourish:viewlet
+      name="what-is-this"
+      class="schooltool.skin.flourish.page.Related"
+      template="templates/f_timetable_container_related.pt"
+      view="schooltool.timetable.browser.app.FlourishTimetablesView"
+      manager="schooltool.skin.flourish.page.IPageRelatedManager"
+      permission="schooltool.edit"
+      />
+
   <!-- timetables -->
 
   <flourish:breadcrumb
@@ -519,6 +528,15 @@
       subtitle="Exception Days"
       for="schooltool.timetable.interfaces.IScheduleWithExceptions"
       class=".schedule.FlourishSpecialDayView"
+      permission="schooltool.edit"
+      />
+
+  <flourish:viewlet
+      name="what-is-this"
+      class="schooltool.skin.flourish.page.Related"
+      template="templates/f_specialday_related.pt"
+      view=".schedule.FlourishSpecialDayView"
+      manager="schooltool.skin.flourish.page.IPageRelatedManager"
       permission="schooltool.edit"
       />
 
