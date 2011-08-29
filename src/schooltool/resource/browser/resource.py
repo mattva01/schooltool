@@ -396,6 +396,8 @@ class ResourceDemographicsView(DemographicsView):
 
 class FlourishResourceDemographicsView(FlourishDemographicsView):
 
+    container_class = 'container'
+
     keys = [('resource', _('Res.')),
             ('location', _('Locat.')),
             ('equipment', _('Equip.'))]
