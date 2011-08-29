@@ -646,3 +646,10 @@ class FlourishManageCoursesOverview(Content, CoursesActiveTabMixin):
                 sections = ISectionContainer(term)
                 result.extend(list(sections.values()))
             return result
+
+    @property
+    def render_sections_link(self):
+        return self.schoolyear is not None and \
+               self.schoolyear and \
+               self.courses is not None and \
+               self.courses
