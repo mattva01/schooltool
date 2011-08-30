@@ -163,7 +163,8 @@ def timetableVocabularyFactory():
     return TimetableVocabulary
 
 
-class SchoolTimetablesTertiaryNavigation(flourish.page.Content):
+class SchoolTimetablesTertiaryNavigation(flourish.page.Content,
+                                         flourish.page.TertiaryNavigationManager):
 
     template = InlineViewPageTemplate("""
         <ul tal:attributes="class view/list_class">
@@ -174,8 +175,6 @@ class SchoolTimetablesTertiaryNavigation(flourish.page.Content):
           </li>
         </ul>
     """)
-
-    list_class = 'third-nav'
 
     @property
     def items(self):

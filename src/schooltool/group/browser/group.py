@@ -78,7 +78,7 @@ from schooltool.skin.flourish.form import Form
 from schooltool.skin.flourish.form import AddForm
 from schooltool.skin.flourish.form import DialogForm
 from schooltool.skin.flourish.form import DisplayForm
-from schooltool.skin.flourish.viewlet import ViewletManager
+from schooltool.skin.flourish.page import TertiaryNavigationManager
 
 
 class GroupContainerAbsoluteURLAdapter(BrowserView):
@@ -350,7 +350,7 @@ class FlourishGroupListView(FlourishRelationshipViewBase):
         return "%s.%s" % (schoolyear.__name__, item.__name__)
 
 
-class GroupsTertiaryNavigationManager(ViewletManager):
+class GroupsTertiaryNavigationManager(TertiaryNavigationManager):
 
     template = InlineViewPageTemplate("""
         <ul tal:attributes="class view/list_class">
@@ -360,8 +360,6 @@ class GroupsTertiaryNavigationManager(ViewletManager):
           </li>
         </ul>
     """)
-
-    list_class = 'third-nav'
 
     @property
     def items(self):

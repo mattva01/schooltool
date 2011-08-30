@@ -49,6 +49,11 @@
     border-radius: 4px 4px 0px 0px;
 }
 
+.page > .third-nav-narrow {
+    margin-right: 208px;
+    width: 560px;
+}
+
 .page .third-nav > li {
     background: transparent url(subnav_divider.png) no-repeat scroll right bottom;
     display: inline-block;

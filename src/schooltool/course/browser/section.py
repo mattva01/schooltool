@@ -77,7 +77,7 @@ from schooltool.skin.flourish.page import ModalFormLinkViewlet
 from schooltool.skin.flourish.page import Page
 from schooltool.skin.flourish.page import RefineLinksViewlet
 from schooltool.skin.flourish.breadcrumbs import PageBreadcrumbs
-from schooltool.skin.flourish.viewlet import ViewletManager
+from schooltool.skin.flourish.page import TertiaryNavigationManager
 from schooltool.table.interfaces import ITableFormatter
 from schooltool.table.table import FilterWidget
 from schooltool.table.table import LocaleAwareGetterColumn
@@ -795,7 +795,7 @@ class UnlinkSectionView(BrowserView):
         return absoluteURL(self.context, self.request) + '/section_linkage.html'
 
 
-class SectionsTertiaryNavigationManager(ViewletManager):
+class SectionsTertiaryNavigationManager(TertiaryNavigationManager):
 
     template = InlineViewPageTemplate("""
         <ul tal:attributes="class view/list_class">
@@ -805,8 +805,6 @@ class SectionsTertiaryNavigationManager(ViewletManager):
           </li>
         </ul>
     """)
-
-    list_class = 'third-nav'
 
     @property
     def items(self):

@@ -300,7 +300,7 @@ class FlourishDemographicsFieldsActions(flourish.page.RefineLinksViewlet):
     """demographics fields action links viewlet."""
 
 
-class FlourishDemographicsView(flourish.page.Page):
+class FlourishDemographicsView(flourish.page.WideContainerPage):
 
     keys = [('students', _("Stud.")),
             ('teachers', _("Teach.")),
@@ -338,6 +338,7 @@ class FlourishReorderDemographicsView(flourish.page.Page, DemographicsView):
                    'title': demo.title,
                    'pos': pos,
                     })
+        return result
 
     def update(self):
         if 'DONE' in self.request:

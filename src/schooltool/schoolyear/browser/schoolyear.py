@@ -803,7 +803,8 @@ class FlourishSchoolYearActivateView(flourish.page.Page):
         return absoluteURL(self.context, self.request)
 
 
-class ManageSchoolTertiaryNavigation(flourish.page.Content):
+class ManageSchoolTertiaryNavigation(flourish.page.Content,
+                                     flourish.page.TertiaryNavigationManager):
 
     template = InlineViewPageTemplate("""
         <ul tal:attributes="class view/list_class"
@@ -815,8 +816,6 @@ class ManageSchoolTertiaryNavigation(flourish.page.Content):
           </li>
         </ul>
     """)
-
-    list_class = 'third-nav'
 
     @property
     def items(self):
