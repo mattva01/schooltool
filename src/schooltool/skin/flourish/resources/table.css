@@ -59,7 +59,8 @@ table.relationships-table input[type="image"] {
     vertical-align: middle;
 }
 
-table.relationships-table tbody tr:hover {
+table.relationships-table tbody tr:hover,
+table.highlight-rows tbody tr:hover {
     background-color: #DFDCD9;
 }
 

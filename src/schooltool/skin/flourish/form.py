@@ -28,11 +28,8 @@ from z3c.form.error import ErrorViewSnippet
 from z3c.form.term import BoolTerms
 from z3c.form.interfaces import IRadioWidget
 
-import schooltool.skin.flourish.page
-import schooltool.skin.flourish.viewlet
-import schooltool.skin.flourish.tal
+from schooltool.skin.flourish import page, viewlet, tal
 from schooltool.common.inlinept import InheritTemplate
-from schooltool.skin import flourish
 from schooltool.skin.flourish.interfaces import IFlourishLayer
 
 from schooltool.common import SchoolToolMessage as _
@@ -50,10 +47,10 @@ class FlourishRadioBoolTerms(BoolTerms):
     falseLabel = _('No')
 
 
-class Form(z3c.form.form.Form, flourish.page.Page):
-    __call__ = flourish.page.Page.__call__
+class Form(z3c.form.form.Form, page.Page):
+    __call__ = page.Page.__call__
     formErrorsMessage = _('Please correct the marked fields below.')
-    template = InheritTemplate(flourish.page.Page.template)
+    template = InheritTemplate(page.Page.template)
 
     def update(self):
         super(Form, self).update()
@@ -62,8 +59,8 @@ class Form(z3c.form.form.Form, flourish.page.Page):
         super(Form, self).updateActions()
 
 
-class DisplayForm(z3c.form.form.DisplayForm, flourish.page.Page):
-    __call__ = flourish.page.Page.__call__
+class DisplayForm(z3c.form.form.DisplayForm, page.Page):
+    __call__ = page.Page.__call__
 
     def update(self):
         super(DisplayForm, self).update()
@@ -77,8 +74,12 @@ class AddForm(Form, z3c.form.form.AddForm):
             self.request.response.redirect(self.nextURL())
             return ""
 
+    @z3c.form.button.buttonAndHandler(_('Cancel'), name='cancel')
+    def handleCancel(self, action):
+        self.request.response.redirect(self.nextURL())
 
-class Dialog(flourish.page.Page):
+
+class Dialog(page.Page):
 
     # Set this to False if you don't want the browser to reload the whole
     # page, but display the redirected result in the dialog instead.
@@ -123,7 +124,7 @@ class Dialog(flourish.page.Page):
 
         response.reset()
         response.setHeader('Content-Type', 'application/json')
-        encoder = flourish.tal.JSONEncoder()
+        encoder = tal.JSONEncoder()
 
         json = encoder.encode(self.ajax_settings)
         return json
@@ -156,11 +157,11 @@ class FlourishErrorViewSnippet(ErrorViewSnippet):
         self.widget.addClass('error')
 
 
-class FormViewlet(flourish.viewlet.Viewlet, z3c.form.form.Form):
+class FormViewlet(viewlet.Viewlet, z3c.form.form.Form):
 
     def update(self):
         z3c.form.form.Form.update(self)
-        flourish.viewlet.Viewlet.update(self)
+        viewlet.Viewlet.update(self)
 
     def render(self, *args, **kw):
         return z3c.form.form.Form.render(self)

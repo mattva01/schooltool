@@ -19,6 +19,18 @@
 """
 SchoolTool flourish skin.
 """
+import breadcrumbs
+import containers
+import content
+import error
+import form
+import interfaces
+import page
+import resource
+import sorting
+import tal
+import viewlet
+import widgets
 
 from schooltool.skin.flourish.interfaces import IFlourishLayer
 
