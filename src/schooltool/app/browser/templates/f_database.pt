@@ -1,0 +1,38 @@
+<div i18n:domain="schooltool">
+  <div class="status">
+    <div class="summary ui-state-highlight ui-corner-all">
+      <img tal:attributes="src context/++resource++schooltool.skin.flourish/spinner.gif" />
+      <span i18n:translate="">Please wait for confirmation that the database has been packed.</span>
+    </div>
+  </div>
+  <script>
+    $(document).ready(function() {
+      $('.status').hide()
+      .ajaxStart(function() {
+        $(this).slideDown();
+      });
+    });
+  </script>
+  <table>
+    <thead>
+      <tr>
+        <th i18n:translate="">Description</th>
+        <th i18n:translate="">Path</th>
+        <th i18n:translate="">Size</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr tal:repeat="row view/table">
+        <td tal:content="row/description" />
+        <td tal:content="row/path" />
+        <td tal:content="row/size" />
+      </tr>
+    </tbody>
+  </table>
+  <h3>
+    <a i18n:translate=""
+       tal:attributes="href string:${context/schooltool:app/@@absolute_url}/settings">
+      Done
+    </a>
+  </h3>
+</div>
