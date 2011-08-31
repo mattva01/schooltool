@@ -71,6 +71,17 @@
       />
   </zope:resourceLibrary>
 
+  <zope:resourceLibrary
+      name="schooltool.skin.flourish-gradebook"
+      require=""
+      layer="schooltool.skin.flourish.IFlourishLayer">
+    <directory
+      source="resources"
+      include="gradebook.css
+               gradebook.js"
+      />
+  </zope:resourceLibrary>
+
   <!-- Content provider machinery -->
 
   <zope:adapter

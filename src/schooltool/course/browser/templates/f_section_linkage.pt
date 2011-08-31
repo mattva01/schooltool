@@ -110,10 +110,31 @@
             </div>
           </td>
         </tr>
-        <tr>
+        <tr tal:define="link_id column/link_existing_link_id;
+                        form_id column/link_existing_form_id;
+                        form_url column/link_existing_form_url;
+                        dialog_title column/link_existing_dialog_title;">
+
           <td colspan="2">
-            <a tal:attributes="href column/link_form_url"
+            <a tal:attributes="id link_id;
+                               href form_url"
                i18n:translate="">Link an Existing Section</a>
+            <script>ST.state.push()</script>
+            <tal:script
+                tal:replace="structure scriptlocal:
+                             link_id;
+                             form_url;
+                             form_id;
+                             dialog_title" />
+            <script>
+              ST.dialogs.modal_form(ST.local.link_id,
+                                    ST.local.form_url,
+                                    ST.local.form_id,
+                                    ST.local.dialog_title);
+            </script>
+            <script>ST.state.pop()</script>
+            <div tal:attributes="id form_id">
+            </div>
           </td>
         </tr>
       </tal:block>
