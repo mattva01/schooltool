@@ -271,7 +271,7 @@ class FlourishTermAddView(flourish.form.AddForm, TermAddForm):
 
     template = InheritTemplate(flourish.page.Page.template)
     label = None
-    legend = 'Term Details'
+    legend = _('Term Details')
 
     @property
     def title(self):

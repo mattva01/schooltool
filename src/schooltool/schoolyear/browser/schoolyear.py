@@ -482,7 +482,7 @@ class FlourishSchoolYearAddView(flourish.form.AddForm, SchoolYearAddView):
 
     template = InheritTemplate(flourish.page.Page.template)
     label = None
-    legend = 'School Year Details'
+    legend = _('School Year Details')
 
     @button.buttonAndHandler(_('Submit'), name='add')
     def handleAdd(self, action):
