@@ -306,15 +306,25 @@ class FlourishDemographicsView(flourish.page.WideContainerPage):
             ('teachers', _("Teach.")),
             ('administrators', _("Admin."))]
 
+    types = {
+        'Enum': _('Selection'),
+        'Date': _('Date'),
+        'Text': _('Text'),
+        'Bool': _('Yes/No'),
+        'Description': _('Description'),
+        }
+
     def table(self):
         result = []
         for demo in list(self.context.values()):
             classname = demo.__class__.__name__
+            class_key = classname[:classname.find('FieldDescription')]
+            field_type = self.types.get(class_key, '')
             result.append({
                'title': demo.title,
                'url': '%s/edit.html' % absoluteURL(demo, self.request),
                'id': demo.name,
-               'type': classname[:classname.find('FieldDescription')],
+               'type': field_type,
                'required': demo.required,
                'limited': bool(demo.limit_keys),
                'groups': [(key[0] in demo.limit_keys)
