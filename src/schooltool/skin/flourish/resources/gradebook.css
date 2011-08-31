@@ -209,39 +209,3 @@ th.activity-title {
 .navigator {
     width: 140px;
 }
-
-/* Score systems */
-
-table.scoresystem-scores tbody tr {
-    border-bottom: 0px;
-}
-
-table.scoresystem-scores tbody td {
-    padding: 0px;
-    vertical-align: middle;
-    width: 106px;
-}
-
-table.scoresystem-scores tbody td.buttons {
-    width: 104px;
-}
-
-table.scoresystem-scores tbody td.buttons input[type="submit"] {
-    height: 24px;
-    width: 100%;
-}
-
-table.scoresystem-scores tbody input[type="text"] {
-    background-color: #ffffff;
-    border: 1px solid #ccc1c1;
-    color: #333333;
-    font-size: 12px;
-    height: 20px;
-    width: 106px;
-}
-
-table.scoresystem-scores tbody input[type="text"]:focus {
-    border: 2px solid #aa0000;
-    height: 18px;
-    width: 104px;
-}
