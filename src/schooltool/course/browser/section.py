@@ -1330,12 +1330,20 @@ class FlourishSectionLinkageView(Page, SectionLinkageView):
                 extend_form_url = '%s/extend_term.html?term=%s' % (
                     absoluteURL(self.context, self.request),
                     term.__name__)
-                info['extend_form_url'] = extend_form_url
-                info['extend_dialog_title'] = self.extend_dialog_title(term)
-                link_form_url = '%s/link_existing.html?term=%s' % (
+                link_existing_form_url = '%s/link_existing.html?term=%s' % (
                     absoluteURL(self.context, self.request),
                     term.__name__)
-                info['link_form_url'] = link_form_url
+                link_existing_link_id = 'existing_' + info['link_id']
+                link_existing_form_id = link_existing_link_id + '_container'
+                link_existing_dialog_title = self.link_existing_dialog_title()
+                info.update(
+                    {'extend_form_url': extend_form_url,
+                     'extend_dialog_title': self.extend_dialog_title(term),
+                     'link_existing_form_url': link_existing_form_url,
+                     'link_existing_link_id': link_existing_link_id,
+                     'link_existing_form_id': link_existing_form_id,
+                     'link_existing_dialog_title': link_existing_dialog_title,
+                     })
             columns.append(info)
         return columns
 
@@ -1351,6 +1359,11 @@ class FlourishSectionLinkageView(Page, SectionLinkageView):
 
     def unlink_dialog_title(self, term):
         title = _('Remove links of ${section}',
+                  mapping={'section': self.context.title})
+        return translate(title, context=self.request)
+
+    def link_existing_dialog_title(self):
+        title = _('Link ${section} to Section in Other Term',
                   mapping={'section': self.context.title})
         return translate(title, context=self.request)
 
@@ -1404,6 +1417,52 @@ class FlourishUnlinkSectionView(Dialog, UnlinkSectionView):
                 section.previous = None
             if section.next:
                 section.next = None
+            self.request.response.redirect(self.nextURL())
+
+
+class FlourishLinkExistingView(Dialog, LinkExistingView):
+
+    reload_parent = False
+
+    def update(self):
+        Dialog.update(self)
+
+        section = removeSecurityProxy(self.context)
+        term = self.term
+        link_term = self.link_term
+
+        if link_term is None or 'CANCEL' in self.request:
+            self.reload_parent = True
+            self.request.response.redirect(self.nextURL())
+
+        elif 'LINK' in self.request:
+            target_section = self.selected_section
+            if target_section is None:
+                return
+
+            if link_term.first < term.first:
+                current = section.linked_sections[0]
+                target_term = getPreviousTerm(ITerm(current))
+            else:
+                current = section.linked_sections[-1]
+                target_term = getNextTerm(ITerm(current))
+
+            while target_term.first != link_term.first:
+                new_section = copySection(current, target_term)
+                if link_term.first < term.first:
+                    new_section.next = current
+                    target_term = getPreviousTerm(target_term)
+                else:
+                    new_section.previous = current
+                    target_term = getNextTerm(target_term)
+                current = new_section
+
+            if link_term.first < term.first:
+                target_section.next = current
+            else:
+                target_section.previous = current
+
+            self.reload_parent = True
             self.request.response.redirect(self.nextURL())
 
 
