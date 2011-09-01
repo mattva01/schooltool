@@ -27,6 +27,14 @@ Bugfixes
   the required paste.ini file.
   NOTE: run ``make-schooltool-instance instance`` to fix ``instance`` if it does
   not start.
+- Allowed non-integer values for course credits (https://bugs.launchpad.net/bugs/488376)
+- Add School Year copies all course attributes (https://bugs.launchpad.net/bugs/785994)
+- Fixed XLS import crashes:
+
+  + Username is a number (https://launchpad.net/bugs/801870)
+  + No file selected for import
+  + Section timetables without resources
+  + Empty sections or groups (https://launchpad.net/bugs/382566)
 
 
 1.6.0 (2011-04-25)

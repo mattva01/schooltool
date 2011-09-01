@@ -235,7 +235,10 @@ class ImportSchoolYearData(object):
         oldCourses = ICourseContainer(self.activeSchoolyear)
         newCourses = ICourseContainer(self.newSchoolyear)
         for id, course in oldCourses.items():
-            newCourses[course.__name__] = Course(course.title, course.description)
+            newCourses[course.__name__] = new_course = Course(course.title, course.description)
+            new_course.course_id = course.course_id
+            new_course.government_id = course.government_id
+            new_course.credits = course.credits
 
     def importAllTimetables(self):
         if not self.shouldImportAllTimetables():

@@ -121,6 +121,8 @@ This file has examples of bad data for the Persons sheet:
     <p class="error">Persons O2 not unicode or ascii string</p>
     <p class="error">Persons C3 not unicode or ascii string</p>
     <p class="error">Persons E3 not unicode or ascii string</p>
+    <p class="error">Persons A4 Username cannot contain non-ascii characters: gr...ta</p>
+    <p class="error">Persons A6 not unicode or ascii string</p>
 
 This file has examples of bad data for the Courses sheet:
 
