@@ -385,6 +385,6 @@ class ScheduleAddLinks(flourish.page.RefineLinksViewlet):
 class ScheduleContainerBreadcrumbs(flourish.breadcrumbs.Breadcrumbs):
 
     @property
-    def link(self):
+    def url(self):
         base_url = absoluteURL(self.crumb_parent, self.request)
         return '%s/schedule' % base_url

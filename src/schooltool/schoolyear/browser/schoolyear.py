@@ -855,7 +855,7 @@ class SchoolyearNavBreadcrumbs(flourish.breadcrumbs.Breadcrumbs):
         return ISchoolToolApplication(None)
 
     @property
-    def link(self):
+    def url(self):
         app = ISchoolToolApplication(None)
         app_url = absoluteURL(app, self.request)
         link = '%s/%s' % (app_url, self.traversal_name)

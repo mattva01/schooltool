@@ -85,9 +85,15 @@ class Breadcrumbs(ContentProvider):
         title = getattr(title_content, 'title', None)
         return title
 
+    link = None
+
     @property
-    def link(self):
-        return absoluteURL(self.context, self.request)
+    def url(self):
+        url = absoluteURL(self.context, self.request)
+        link = self.link
+        if link:
+            url = '%s/%s' % (url, link)
+        return url
 
     @property
     def crumb_parent(self):
@@ -114,7 +120,7 @@ class Breadcrumbs(ContentProvider):
         """List of breadcrumbs.
         root > child > child > this.
         """
-        breadcrumbs = [BreadCrumbInfo(self.title, self.link)]
+        breadcrumbs = [BreadCrumbInfo(self.title, self.url)]
         follow = self.follow_crumb
         if follow is not None:
             breadcrumbs = follow.breadcrumbs + breadcrumbs
@@ -133,9 +139,7 @@ class PageBreadcrumbs(Breadcrumbs):
         title = title or getattr(self.view, 'title', None)
         return title
 
-    @property
-    def link(self):
-        return None
+    url = None
 
     @property
     def crumb_parent(self):
