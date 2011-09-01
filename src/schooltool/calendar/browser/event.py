@@ -318,6 +318,12 @@ class DeleteEventLinkViewlet(flourish.page.ModalFormLinkViewlet):
     def event(self):
         return self.context
 
+    def nextURL(self):
+        try:
+            return self.view.nextURL()
+        except AttributeError:
+            return absoluteURL(self.calendar, self.request)
+
     @property
     def url(self):
         preferences = ViewPreferences(self.request)
@@ -327,6 +333,6 @@ class DeleteEventLinkViewlet(flourish.page.ModalFormLinkViewlet):
             absoluteURL(self.calendar, self.request),
             event.unique_id,
             start.strftime('%Y-%m-%d'),
-            urllib.quote(self.view.nextURL()))
+            urllib.quote(self.nextURL()))
         return url
 

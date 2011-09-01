@@ -49,6 +49,7 @@ from schooltool.app.relationships import URISection, URIInstruction
 from schooltool.calendar.browser.event import FlourishCalendarEventAddView
 from schooltool.relationship import getRelatedObjects
 from schooltool.schoolyear.interfaces import ISchoolYear
+from schooltool.skin import flourish
 from schooltool.timetable import interfaces
 from schooltool.timetable.calendar import ScheduleCalendarEvent
 from schooltool.timetable.schedule import iterMeetingsInTimezone
@@ -98,6 +99,18 @@ class ScheduleEventEditView(CalendarEventView, form.Form):
     @form.action(_("Cancel"), condition=form.haveInputWidgets)
     def handle_cancel_action(self, action, data):
         return self.redirect_to_parent()
+
+
+class FlourishScheduleEventEditView(flourish.page.Page,
+                                    ScheduleEventEditView):
+    __init__ = ScheduleEventEditView.__init__
+    update = ScheduleEventEditView.update
+
+    legend = _("Meeting Details")
+
+    def nextURL(self):
+        return (self.request.get('back_url') or
+                absoluteURL(self.context, self.request))
 
 
 class IScheduleEventAddForm(Interface):

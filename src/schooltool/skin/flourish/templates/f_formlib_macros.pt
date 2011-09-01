@@ -1,0 +1,82 @@
+<tal:block i18n:domain="schooltool">
+<metal:block define-macro="edit">
+  <form action="." method="post"
+        tal:attributes="action request/URL"
+        enctype="multipart/form-data">
+
+    <div class="viewspace">
+      <metal:label define-slot="label">
+        <h3 metal:define-macro="form-label"
+            tal:condition="view/label|nothing"
+            tal:content="view/label">
+          Form Label
+        </h3>
+      </metal:label>
+
+      <metal:header define-slot="header">
+        <div class="status"
+             tal:condition="view/status"
+             metal:define-macro="form-header"
+             tal:define="errors view/errors|nothing">
+	  <div class="summary ui-state-highlight ui-corner-all">
+	    <span class="ui-icon ui-icon-info">icon</span>
+            <tal:block content="view/status" />
+          </div>
+          <ul class="errors"
+              tal:condition="errors"
+              metal:define-macro="form-errors">
+            <li tal:repeat="error errors">
+              <tal:block condition="error/widget">
+                <span tal:replace="error/widget/label" />:
+              </tal:block>
+              <span tal:replace="structure error/render">Error Type</span>
+            </li>
+          </ul>
+        </div>
+      </metal:header>
+      <metal:info define-slot="info">
+        <div class="required-info"
+             metal:define-macro="required-info">
+          <span class="required">*</span>
+          &ndash; signifies a required field
+        </div>
+      </metal:info>
+
+      <div metal:define-slot="extra-info" tal:replace="nothing">
+      </div>
+
+      <fieldset>
+        <legend tal:condition="view/legend|nothing">
+          <span tal:content="view/legend">Legend</span>
+        </legend>
+
+        <div metal:use-macro="context/@@form_macros/widget_rows" />
+      </fieldset>
+
+      <div class="buttons">
+        <metal:block define-slot="controls">
+          <tal:block metal:use-macro="view/@@standard_macros/apply-button-formlib" />
+          <tal:block metal:use-macro="view/@@standard_macros/cancel-button-formlib" />
+        </metal:block>
+      </div>
+    </div>
+  </form>
+</metal:block>
+
+<metal:block define-macro="display">
+  <fieldset>
+    <legend tal:condition="view/legend|nothing">
+      <span tal:content="view/legend">Legend</span>
+    </legend>
+    <div class="row" tal:repeat="widget view/widgets">
+      <div class="label" tal:content="widget/label"/>
+      <tal:block condition="repeat/widget/even">
+        <div class="field-even"><tal:block replace="structure widget" />&nbsp;</div>
+      </tal:block>
+      <tal:block condition="not: repeat/widget/even">
+        <div class="field-odd"><tal:block replace="structure widget" />&nbsp;</div>
+      </tal:block>
+    </div>
+  </fieldset>
+</metal:block>
+</tal:block>

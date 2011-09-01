@@ -571,4 +571,13 @@
       content_template="templates/f_schedule_event_add.pt"
       />
 
+  <flourish:page
+      name="edit.html"
+      subtitle="Edit Meeting"
+      for="schooltool.timetable.interfaces.IScheduleCalendarEvent"
+      class=".calendar.FlourishScheduleEventEditView"
+      permission="schooltool.edit"
+      content_template="templates/f_schedule_event_edit.pt"
+      />
+
 </configure>
