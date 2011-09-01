@@ -32,11 +32,15 @@ Now let's add a couple of courses to it:
     >>> manager.getLink('New Course').click()
     >>> manager.getControl('Title').value = 'History 5'
     >>> manager.getControl('Description').value = 'History course for fifth-graders'
+    >>> manager.getControl('Course ID').value = 'history-local'
+    >>> manager.getControl('Government ID').value = 'history-gov'
+    >>> manager.getControl('Credits').value = '5'
     >>> manager.getControl('Add').click()
 
     >>> manager.getLink('New Course').click()
     >>> manager.getControl('Title').value = 'English 6'
-    >>> manager.getControl('Description').value = 'History course for sixth-graders'
+    >>> manager.getControl('Description').value = 'English course for sixth-graders'
+    >>> manager.getControl('Credits').value = '0.5'
     >>> manager.getControl('Add').click()
 
 The couses are there now:
@@ -73,3 +77,33 @@ Now this school year should have all the same courses copied:
     <div class="course">
       <input type="checkbox" name="delete.history-5" /><a href="http://localhost/schoolyears/2006-2007/courses/history-5">History 5</a>
     </div>
+
+Let's check that all the course attributes were copied:
+
+    >>> manager.getLink('History 5').click()
+    >>> manager.printQuery('id("course-view")/p[@class="description"]/text()')
+    History course for fifth-graders
+    >>> manager.printQuery('id("course-view")/div[@class="info-block"][1]/p')
+    <p>
+      Course ID:
+      history-local
+    </p>
+    <p>
+      Government ID:
+      history-gov
+    </p>
+    <p>
+      Credits:
+      5
+    </p>
+
+    >>> manager.getLink('2006-2007').click()
+    >>> manager.getLink('Courses').click()
+    >>> manager.getLink('English 6').click()
+    >>> manager.printQuery('id("course-view")/p[@class="description"]/text()')
+    English course for sixth-graders
+    >>> manager.printQuery('id("course-view")/div[@class="info-block"][1]/p')
+    <p>
+      Credits:
+      0.5
+    </p>
