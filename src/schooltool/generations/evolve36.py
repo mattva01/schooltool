@@ -1,6 +1,6 @@
 #
 # SchoolTool - common information systems platform for school administration
-# Copyright (c) 2005 Shuttleworth Foundation
+# Copyright (c) 2011 Shuttleworth Foundation
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,14 +17,23 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Generations for database version upgrades.
+Upgrade SchoolTool to generation 36.
 
-$Id$
+Changes course credits attribute from integer to decimal values.
 """
 
-from zope.app.generations.generations import SchemaManager
+from decimal import Decimal
 
-schemaManager = SchemaManager(
-    minimum_generation=36,
-    generation=36,
-    package_name='schooltool.generations')
+from zope.app.generations.utility import findObjectsProviding
+from zope.app.publication.zopepublication import ZopePublication
+
+from schooltool.course.interfaces import ICourse
+
+
+def evolve(context):
+    root = context.connection.root().get(ZopePublication.root_name, None)
+
+    courses = findObjectsProviding(root, ICourse)
+    for course in courses:
+        if getattr(course, 'credits', None) is not None:
+            course.credits = Decimal(course.credits)

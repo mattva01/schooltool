@@ -5,7 +5,8 @@ CHANGES
 1.5.4 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Allowed non-integer values for course credits (https://bugs.launchpad.net/bugs/488376)
+- Add School Year copies all course attributes (https://bugs.launchpad.net/bugs/785994)
 
 
 1.5.3 (2010-11-24)
