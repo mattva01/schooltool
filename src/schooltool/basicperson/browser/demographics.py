@@ -300,21 +300,31 @@ class FlourishDemographicsFieldsActions(flourish.page.RefineLinksViewlet):
     """demographics fields action links viewlet."""
 
 
-class FlourishDemographicsView(flourish.page.Page):
+class FlourishDemographicsView(flourish.page.WideContainerPage):
 
     keys = [('students', _("Stud.")),
             ('teachers', _("Teach.")),
             ('administrators', _("Admin."))]
 
+    types = {
+        'Enum': _('Selection'),
+        'Date': _('Date'),
+        'Text': _('Text'),
+        'Bool': _('Yes/No'),
+        'Description': _('Description'),
+        }
+
     def table(self):
         result = []
         for demo in list(self.context.values()):
             classname = demo.__class__.__name__
+            class_key = classname[:classname.find('FieldDescription')]
+            field_type = self.types.get(class_key, '')
             result.append({
                'title': demo.title,
                'url': '%s/edit.html' % absoluteURL(demo, self.request),
                'id': demo.name,
-               'type': classname[:classname.find('FieldDescription')],
+               'type': field_type,
                'required': demo.required,
                'limited': bool(demo.limit_keys),
                'groups': [(key[0] in demo.limit_keys)
@@ -330,11 +340,15 @@ class FlourishReorderDemographicsView(flourish.page.Page, DemographicsView):
 
     def demographics(self):
         pos = 0
+        result = []
         for demo in self.context.values():
             pos += 1
-            yield {'name': demo.__name__,
+            result.append({
+                    'name': demo.__name__,
                    'title': demo.title,
-                   'pos': pos}
+                   'pos': pos,
+                    })
+        return result
 
     def update(self):
         if 'DONE' in self.request:
@@ -389,7 +403,7 @@ class FlourishFieldDescriptionAddView(flourish.form.AddForm,
 
     template = InheritTemplate(flourish.page.Page.template)
     label = None
-    legend = 'Field Details'
+    legend = _('Field Details')
     formErrorsMessage = _('Please correct the marked fields below.')
 
     @property
@@ -445,7 +459,7 @@ class FlourishFieldDescriptionEditView(flourish.form.Form,
 
     template = InheritTemplate(flourish.page.Page.template)
     label = None
-    legend = 'Field Details'
+    legend = _('Field Details')
 
     @property
     def title(self):

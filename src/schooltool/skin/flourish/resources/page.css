@@ -3,7 +3,7 @@
   Page CSS:
 
   - header (title)
-  - refine, container and related content columns
+  - sidebars (refine and related) and content container columns
 
 */
 
@@ -49,6 +49,11 @@
     border-radius: 4px 4px 0px 0px;
 }
 
+.page > .third-nav-narrow {
+    margin-right: 208px;
+    width: 560px;
+}
+
 .page .third-nav > li {
     background: transparent url(subnav_divider.png) no-repeat scroll right bottom;
     display: inline-block;
@@ -91,37 +96,46 @@
     width: 944px;
 }
 
-.page > .body > .refine {
-    display: block;
-    float: left;
-    width: 144px;
+.page > .body > .sidebar {
     background-color: #f7f7f7;
+    display: block;
     padding: 32px 16px 0px 16px;
+    width: 144px;
+}
+
+.page > .body > .refine {
+    float: left;
+}
+
+.page > .body > .related {
+    float: right;
+    margin-left: 16px;
 }
 
 .page > .body > .container {
+    background-color: #f7f7f7;
     display: block;
     float: right;
-    width: 544px;
-    background-color: #f7f7f7;
-    padding: 16px 192px 16px 16px;
+    padding: 16px 208px 16px 16px;
+    width: 528px;
+}
+
+.page > .body > .related ~ .container {
+    padding: 16px;
 }
 
 .page > .body > .widecontainer {
-    display: block;
-    float: right;
-    width: 736px;
-    background-color: #f7f7f7;
-    padding: 8px;
+    width: 720px;
+    padding: 16px;
 }
 
-/* Refine */
+/* Sidebar */
 
-.page > .body > .refine > .content {
+.page > .body > .sidebar > .content {
     margin-bottom: 16px;
 }
 
-.page > .body > .refine > .content > .header {
+.page > .body > .sidebar > .content > .header {
     color: #333333;
     border-bottom: 1px dotted #aa0000;
     font-size: 14px;
@@ -130,24 +144,24 @@
     margin-bottom: 8px;
 }
 
-.page > .body > .refine > .content > .body > ul.filter {
+.page > .body > .sidebar > .content > .body > ul.filter {
     margin-left: 8px;
 }
 
-.page > .body > .refine > .content > .body > ul.filter > li {
+.page > .body > .sidebar > .content > .body > ul.filter > li {
     padding-bottom: 2px;
 }
 
-.page > .body > .refine > .content > .body > ul.filter > li.active {
+.page > .body > .sidebar > .content > .body > ul.filter > li.active {
     font-size: 12px;
     line-height: 16px;
 }
 
-.page > .body > .refine > .content > .body > ul.filter > li > a {
+.page > .body > .sidebar > .content > .body > ul.filter > li > a {
     font-size: 12px;
     line-height: 16px;
 }
 
-.page > .body > .refine > .content > .body > ul.filter > li.active > a {
+.page > .body > .sidebar > .content > .body > ul.filter > li.active > a {
     color: #aa0000;
 }

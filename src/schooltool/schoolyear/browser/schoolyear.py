@@ -246,11 +246,6 @@ class FlourishSchoolYearDeleteView(flourish.form.DialogForm, form.EditForm):
     dialog_close_actions = ('cancel',)
     label = None
 
-    def updateDialog(self):
-        # XXX: fix the width of dialog content in css
-        if self.ajax_settings['dialog'] != 'close':
-            self.ajax_settings['dialog']['width'] = 544 + 16
-
     @button.buttonAndHandler(_("Delete"), name='apply')
     def handleDelete(self, action):
         url = '%s/delete.html?delete.%s&CONFIRM' % (
@@ -487,7 +482,7 @@ class FlourishSchoolYearAddView(flourish.form.AddForm, SchoolYearAddView):
 
     template = InheritTemplate(flourish.page.Page.template)
     label = None
-    legend = 'School Year Details'
+    legend = _('School Year Details')
 
     @button.buttonAndHandler(_('Submit'), name='add')
     def handleAdd(self, action):
@@ -808,7 +803,8 @@ class FlourishSchoolYearActivateView(flourish.page.Page):
         return absoluteURL(self.context, self.request)
 
 
-class ManageSchoolTertiaryNavigation(flourish.page.Content):
+class ManageSchoolTertiaryNavigation(flourish.page.Content,
+                                     flourish.page.TertiaryNavigationManager):
 
     template = InlineViewPageTemplate("""
         <ul tal:attributes="class view/list_class"
@@ -820,8 +816,6 @@ class ManageSchoolTertiaryNavigation(flourish.page.Content):
           </li>
         </ul>
     """)
-
-    list_class = 'third-nav'
 
     @property
     def items(self):
@@ -880,3 +874,11 @@ class FlourishSchoolYearsOverview(flourish.page.Content):
     def schoolyears(self):
         syc = ISchoolYearContainer(self.context)
         return syc
+
+
+class SchoolYearAddLink(flourish.page.LinkViewlet):
+
+    @property
+    def url(self):
+        schoolyears = ISchoolYearContainer(self.context)
+        return absoluteURL(schoolyears, self.request) + '/add.html'

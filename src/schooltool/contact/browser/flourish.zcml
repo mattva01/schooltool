@@ -140,6 +140,16 @@
       permission="schooltool.edit"
       />
 
+  <flourish:viewlet
+      name="what-is-this"
+      class="schooltool.skin.flourish.page.Related"
+      template="templates/f_contacts_related.pt"
+      for="schooltool.contact.interfaces.IContactContainer"
+      view="schooltool.skin.flourish.containers.TableContainerView"
+      manager="schooltool.skin.flourish.page.IPageRelatedManager"
+      permission="schooltool.view"
+      />
+
   <!-- bound contacts -->
 
   <flourish:page

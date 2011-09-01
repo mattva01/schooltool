@@ -1,5 +1,6 @@
-<div>
-  <form method="post" tal:attributes="action request/getURL">
+<div i18n:domain="schooltool" tal:define="demographics view/demographics">
+  <form method="post" tal:attributes="action request/getURL"
+        tal:condition="demographics">
     <input type="hidden" name="form-submitted" value="yes" />
     <table>
       <thead>
@@ -10,7 +11,7 @@
           <th i18n:translate="">Delete</th>
         </tr>
       </thead>
-      <tr tal:repeat="demo view/demographics">
+      <tr tal:repeat="demo demographics">
         <td>
           <select name=""
                   onchange="this.form.submit()"
@@ -37,11 +38,11 @@
         </td>
       </tr>
     </table>
-    <h3>
-      <a tal:attributes="href context/@@absolute_url"
-         i18n:translate="">Done</a>
-    </h3>
   </form>
-
+  <h3 i18n:translate="" tal:condition="not:demographics">There are none.</h3>
+  <h3>
+    <a tal:attributes="href context/@@absolute_url"
+       i18n:translate="">Done</a>
+  </h3>
 </div>
 

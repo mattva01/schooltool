@@ -88,6 +88,6 @@
     <h3 tal:condition="not:view/has_leaders" i18n:translate="">
       This resource has no responsible parties
     </h3>
-    <h3><a tal:attributes="href string:/resources">Done</a></h3>
+    <h3><a tal:attributes="href string:${context/schooltool:app/@@absolute_url}/resources">Done</a></h3>
   </metal:block>
 </metal:block>

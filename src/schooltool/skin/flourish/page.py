@@ -78,7 +78,7 @@ class NoSidebarPage(Page):
 
 
 class WideContainerPage(Page):
-    container_class = 'widecontainer'
+    container_class = 'container widecontainer'
 
 
 class ContentViewletManager(ViewletManager):
@@ -252,7 +252,17 @@ class TertiaryNavigationManager(ListNavigationContent):
           </li>
         </ul>
     """)
-    list_class = 'third-nav'
+
+    @property
+    def list_class(self):
+        related_manager = queryMultiAdapter(
+            (self.context, self.request, self.view),
+            interfaces.IContentProvider,
+            'page_related')
+        # XXX: this check of viewlets might not be safe
+        if related_manager is not None and related_manager.viewlets:
+            return 'third-nav third-nav-narrow'
+        return 'third-nav'
 
 
 class PageNavigationManager(ListNavigationContent):

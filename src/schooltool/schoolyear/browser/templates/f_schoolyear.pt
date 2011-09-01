@@ -21,5 +21,5 @@
       </tbody>
     </table>
   </div>
-  <h3><a tal:attributes="href string:/schoolyears">Done</a></h3>
+  <h3><a tal:attributes="href string:${context/schooltool:app/@@absolute_url}/schoolyears">Done</a></h3>
 </div>

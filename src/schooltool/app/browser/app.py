@@ -21,6 +21,7 @@ SchoolTool application views.
 
 $Id$
 """
+import os
 import urllib
 
 from ZODB.FileStorage.FileStorage import FileStorageError
@@ -54,6 +55,7 @@ from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.publisher.browser import BrowserPage
 from zope.traversing.browser.absoluteurl import absoluteURL
 from zope.traversing.api import traverse
+from zope.size import byteDisplay
 from zope.schema import Int, Bool, Tuple, Choice
 from z3c.form import form, field, button
 from z3c.form.browser.checkbox import CheckBoxFieldWidget
@@ -760,8 +762,8 @@ class ManageSite(flourish.page.Page):
     pass
 
 
-class ServerActionsLinks(flourish.page.RefineLinksViewlet):
-    """Server actions links viewlet."""
+class DatabaseActionsLinks(flourish.page.RefineLinksViewlet):
+    """Database actions links viewlet."""
 
 
 class ManageSchool(flourish.page.Page):
@@ -774,6 +776,10 @@ class ManageSiteLinks(flourish.page.RefineLinksViewlet):
 
 class CustomizeSchoolLinks(flourish.page.RefineLinksViewlet):
     """Customize School links viewlet."""
+
+
+class SchoolAddLinks(flourish.page.RefineLinksViewlet):
+    """School add links viewlet."""
 
 
 class SchoolActionsLinks(flourish.page.RefineLinksViewlet):
@@ -870,17 +876,37 @@ class PackDatabaseLink(flourish.page.ModalFormLinkViewlet):
         return translate(title, context=self.request)
 
 
-class PackDatabaseView(Dialog):
+class DatabaseView(flourish.page.Page, ZODBControlView):
 
-    def updateDialog(self):
-        # XXX: fix the width of dialog content in css
-        if self.ajax_settings['dialog'] != 'close':
-            self.ajax_settings['dialog']['width'] = 544 + 16
+    def table(self):
+        database_settings = self.databases[0]
+        result = [{
+                'description': _('Live'),
+                'path': database_settings['dbName'],
+                'size': database_settings['size'],
+                }]
+        backup_path = database_settings['dbName'] + '.old'
+        if os.path.exists(backup_path):
+            try:
+                size = os.path.getsize(backup_path)
+                backup_size = byteDisplay(size)
+            except (os.error,):
+                backup_size = _('Unknown')
+            backup_info = {
+                'description': _('Backup'),
+                'path': backup_path,
+                'size': backup_size,
+                }
+            result.append(backup_info)
+        return result
+
+
+class PackDatabaseView(Dialog):
 
     def update(self):
         Dialog.update(self)
         if 'DONE' in self.request:
-            url = absoluteURL(self.context, self.request) + '/settings'
+            url = absoluteURL(self.context, self.request) + '/database.html'
             self.request.response.redirect(url)
             return
         days = 0

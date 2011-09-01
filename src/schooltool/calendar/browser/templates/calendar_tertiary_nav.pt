@@ -1,4 +1,4 @@
-<ul class="third-nav" i18n:domain="schooltool">
+<ul tal:attributes="class view/list_class" i18n:domain="schooltool">
 
   <tal:block replace="resource_library:schooltool.calendar" />
 

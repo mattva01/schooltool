@@ -846,8 +846,6 @@ class FlourishContactDeleteView(flourish.form.DialogForm, form.EditForm):
 
     def initDialog(self):
         super(FlourishContactDeleteView, self).initDialog()
-        # XXX: fix the width of dialog content in css
-        self.ajax_settings['dialog']['width'] = 544 + 16
         contact = self.context
         self.ajax_settings['dialog']['title'] = translate(
             _(u'Delete ${contact_full_name}', mapping={

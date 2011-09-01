@@ -1,0 +1,106 @@
+<metal:block i18n:domain="schooltool">
+  <table class="form-fields">
+    <tbody>
+      <tr>
+        <td class="label" i18n:translate="">Section</td>
+        <td><a tal:replace="structure context/@@link" /></td>
+      </tr>
+      <tr>
+        <td i18n:translate="">Course</td>
+        <td>
+          <tal:loop tal:repeat="course context/courses">
+            <a tal:replace="structure course/@@link" />
+          </tal:loop>
+        </td>
+      </tr>
+      <tr>
+        <td i18n:translate="">Term</td>
+        <td><a tal:replace="structure view/term/@@link" /></td>
+      </tr>
+      <tr>
+        <td i18n:translate="">Target Term</td>
+        <td><a tal:replace="structure view/link_term/@@link" /></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 i18n:translate="">
+    Select a section and click 'Link' if you would like
+    to copy and link this section to the target section.
+  </h3>
+  <form tal:attributes="action request/URL">
+    <table>
+      <thead>
+        <th i18n:translate="">Instructor</th>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="label" i18n:translate="">
+            You may provide part of an instructor's name or username
+            and click 'Filter' to limit the list of sections to those
+            taught by a matching instructor.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <input type="text" name="teacher" id="teacher"
+                   tal:attributes="value request/teacher|nothing" />
+          </td>
+        </tr>
+        <tr>
+          <td class="buttons">
+            <input type="submit" class="button-ok" name="FILTER"
+                   onclick="return ST.dialogs.submit(this, this);"
+                   value="Filter" i18n:attributes="value" />
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="status" tal:condition="view/error">
+      <div class="summary ui-state-error ui-corner-all">
+        <span class="ui-icon ui-icon-alert">icon</span>
+        <tal:block i18n:translate="">
+          You must select a section before clicking 'Link'.
+        </tal:block>
+      </div>
+    </div>
+    <input type="hidden" name="term" tal:attributes="value request/term" />
+    <metal:block tal:define="sections view/sections">
+    <table>
+      <thead>
+        <tr>
+          <th i18n:translate="">Section</th>
+          <th i18n:translate="">Instructors</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr tal:repeat="section sections">
+          <td>
+            <input type="radio" name="LINK_SECTION"
+                   tal:attributes="value string:section_${section/__name__}" />
+            <a tal:replace="structure section/@@link" />
+          </td>
+          <td>
+            <tal:loop tal:repeat="teacher section/instructors">
+              <a tal:replace="structure teacher/@@link" />
+            </tal:loop>
+          </td>
+        </tr>
+        <tr tal:condition="not:sections">
+          <td colspan="2" i18n:translate="">
+            There are none.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="buttons">
+      <input type="submit" class="button-ok" name="LINK"
+             onclick="return ST.dialogs.submit(this, this);"
+             value="Link" i18n:attributes="value link-section-button"
+             tal:condition="sections" />
+      <input type="submit" class="button-cancel" name="CANCEL"
+             onclick="return ST.dialogs.close(this);"
+             value="Cancel" i18n:attributes="value cancel-button" />
+    </div>
+    </metal:block>
+  </form>
+</metal:block>

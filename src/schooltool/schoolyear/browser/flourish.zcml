@@ -166,5 +166,12 @@
       class=".schoolyear.FlourishSchoolYearsOverview"
       />
 
+  <flourish:viewlet
+      name="add-schoolyear"
+      manager="schooltool.app.browser.app.SchoolAddLinks"
+      permission="schooltool.edit"
+      title="School Year"
+      class=".schoolyear.SchoolYearAddLink"
+      />
 
 </configure>

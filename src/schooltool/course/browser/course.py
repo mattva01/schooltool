@@ -67,7 +67,7 @@ from schooltool.skin.flourish.form import Form
 from schooltool.skin.flourish.form import AddForm
 from schooltool.skin.flourish.form import DialogForm
 from schooltool.skin.flourish.form import DisplayForm
-from schooltool.skin.flourish.viewlet import ViewletManager
+from schooltool.skin.flourish.page import TertiaryNavigationManager
 from schooltool.table.table import SchoolToolTableFormatter
 from schooltool.table.table import FilterWidget
 from schooltool.table.interfaces import ITableFormatter
@@ -293,7 +293,7 @@ class FlourishCoursesViewlet(Viewlet):
         return self.collator.cmp(this['course'], other['course'])
 
 
-class CoursesTertiaryNavigationManager(ViewletManager):
+class CoursesTertiaryNavigationManager(TertiaryNavigationManager):
 
     template = InlineViewPageTemplate("""
         <ul tal:attributes="class view/list_class">
@@ -303,8 +303,6 @@ class CoursesTertiaryNavigationManager(ViewletManager):
           </li>
         </ul>
     """)
-
-    list_class = 'third-nav'
 
     @property
     def items(self):
@@ -577,11 +575,6 @@ class FlourishCourseDeleteView(DialogForm, form.EditForm):
     dialog_close_actions = ('cancel',)
     label = None
 
-    def updateDialog(self):
-        # XXX: fix the width of dialog content in css
-        if self.ajax_settings['dialog'] != 'close':
-            self.ajax_settings['dialog']['width'] = 544 + 16
-
     @button.buttonAndHandler(_("Delete"), name='apply')
     def handleDelete(self, action):
         url = '%s/delete.html?delete.%s&CONFIRM' % (
@@ -653,3 +646,10 @@ class FlourishManageCoursesOverview(Content, CoursesActiveTabMixin):
                 sections = ISectionContainer(term)
                 result.extend(list(sections.values()))
             return result
+
+    @property
+    def render_sections_link(self):
+        return self.schoolyear is not None and \
+               self.schoolyear and \
+               self.courses is not None and \
+               self.courses

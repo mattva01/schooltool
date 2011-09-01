@@ -23,7 +23,7 @@
        class="schooltool.resource.browser.resource.FlourishResourceDemographicsView"
        content_template="templates/f_demographics_view.pt"
        permission="schooltool.edit"
-       title="Resource attributes"
+       title="Resource Attributes"
        />
 
     <flourish:page
@@ -32,7 +32,7 @@
        class="schooltool.resource.browser.resource.FlourishReorderResourceDemographicsView"
        content_template="templates/f_demographics_reorder.pt"
        permission="schooltool.edit"
-       title="Resource attributes"
+       title="Resource Attributes"
        />
   </configure>
 
@@ -43,6 +43,24 @@
       class="schooltool.skin.flourish.page.LinkViewlet"
       manager="schooltool.app.browser.app.CustomizeSchoolLinks"
       permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="what-is-this"
+      class="schooltool.skin.flourish.page.Related"
+      template="templates/f_resource_demographics_related.pt"
+      view="schooltool.resource.browser.resource.FlourishResourceDemographicsView"
+      manager="schooltool.skin.flourish.page.IPageRelatedManager"
+      permission="schooltool.edit"
+      />
+
+  <flourish:viewlet
+      name="what-is-this"
+      class="schooltool.skin.flourish.page.Related"
+      template="templates/f_resource_container_related.pt"
+      view=".resource.FlourishResourceContainerView"
+      manager="schooltool.skin.flourish.page.IPageRelatedManager"
+      permission="schooltool.edit"
       />
 
   <!-- Resource containers -->

@@ -1,0 +1,15 @@
+<metal:block i18n:domain="schooltool">
+  <div class="header" i18n:translate="">
+    What is This?
+  </div>
+  <div class="body">
+    <p i18n:translate="">
+      A course in SchoolTool describes the curriculum taught in a
+      section.
+    </p>
+    <p i18n:translate="">
+      For example, Algebra I, American History, 3rd Grade Reading, and
+      Advanced Physics are all courses.
+    </p>
+  </div>
+</metal:block>

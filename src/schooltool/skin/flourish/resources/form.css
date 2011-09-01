@@ -53,11 +53,11 @@ form fieldset > legend > span {
 }
 
 form fieldset > legend > span {
-    width: 528px;
+    width: 512px;
 }
 
 .widecontainer form fieldset > legend > span {
-    width: 720px;
+    width: 704px;
 }
 
 form fieldset .row ~ .row {
@@ -66,9 +66,6 @@ form fieldset .row ~ .row {
 
 form fieldset .row .label {
     margin-bottom: 4px;
-}
-
-form fieldset .row .label span {
     font-size: 12px;
 }
 

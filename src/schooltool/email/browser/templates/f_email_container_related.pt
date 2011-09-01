@@ -1,0 +1,19 @@
+<metal:block i18n:domain="schooltool">
+  <div class="header" i18n:translate="">
+    What is This?
+  </div>
+  <div class="body">
+    <p i18n:translate="">
+      SchoolTool can send emails through your school email server or
+      another SMTP server. That is, SchoolTool is not an email server,
+      it sends mail as an email client, like a desktop application
+      such as Evolution or Outlook.
+    </p>
+    <p i18n:translate="">
+      To enable SchoolTool to send emails, you will need the
+      instructions from your school’s server, your ISP, or your
+      webmail provider to configure a mail client to send mail via the
+      provider’s SMTP service.
+    </p>
+  </div>
+</metal:block>

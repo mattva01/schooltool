@@ -170,6 +170,24 @@
       permission="zope.Public"
       />
 
+  <flourish:viewlet
+      name="what-is-this"
+      class="schooltool.skin.flourish.page.Related"
+      template="templates/f_courses_related.pt"
+      view=".course.FlourishCoursesView"
+      manager="schooltool.skin.flourish.page.IPageRelatedManager"
+      permission="schooltool.edit"
+      />
+
+  <flourish:viewlet
+      name="what-is-this"
+      class="schooltool.skin.flourish.page.Related"
+      template="templates/f_sections_related.pt"
+      view=".section.FlourishSectionsView"
+      manager="schooltool.skin.flourish.page.IPageRelatedManager"
+      permission="schooltool.edit"
+      />
+
   <!-- pages -->
 
   <flourish:page
@@ -310,6 +328,14 @@
       for="schooltool.course.interfaces.ISection"
       class=".section.FlourishUnlinkSectionView"
       template="templates/f_unlink_section.pt"
+      permission="schooltool.edit"
+      />
+
+  <flourish:page
+      name="link_existing.html"
+      for="schooltool.course.interfaces.ISection"
+      class=".section.FlourishLinkExistingView"
+      template="templates/f_link_existing.pt"
       permission="schooltool.edit"
       />
 

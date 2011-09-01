@@ -261,7 +261,7 @@ class SpecialDayView(BrowserView):
         return self.template()
 
 
-class FlourishSpecialDayView(flourish.page.WideContainerPage, SpecialDayView):
+class FlourishSpecialDayView(flourish.page.Page, SpecialDayView):
     select_template = ViewPageTemplateFile('templates/f_specialday_select.pt')
     form_template = ViewPageTemplateFile('templates/f_specialday_change.pt')
     flourish_template = InheritTemplate(flourish.page.Page.template)
@@ -350,11 +350,6 @@ class FlourishConfirmDeleteView(flourish.form.DialogForm, form.EditForm):
     dialog_submit_actions = ('apply',)
     dialog_close_actions = ('cancel',)
     label = None
-
-    def updateDialog(self):
-        # XXX: fix the width of dialog content in css
-        if self.ajax_settings['dialog'] != 'close':
-            self.ajax_settings['dialog']['width'] = 544 + 16
 
     def nextURL(self):
         link = flourish.content.queryContentProvider(

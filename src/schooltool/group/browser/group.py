@@ -73,11 +73,12 @@ from schooltool.skin.flourish.page import RefineLinksViewlet
 from schooltool.skin.flourish.page import LinkViewlet
 from schooltool.skin.flourish.page import Page
 from schooltool.skin.flourish.page import ModalFormLinkViewlet
+from schooltool.skin.flourish.page import Content
 from schooltool.skin.flourish.form import Form
 from schooltool.skin.flourish.form import AddForm
 from schooltool.skin.flourish.form import DialogForm
 from schooltool.skin.flourish.form import DisplayForm
-from schooltool.skin.flourish.viewlet import ViewletManager
+from schooltool.skin.flourish.page import TertiaryNavigationManager
 
 
 class GroupContainerAbsoluteURLAdapter(BrowserView):
@@ -349,7 +350,7 @@ class FlourishGroupListView(FlourishRelationshipViewBase):
         return "%s.%s" % (schoolyear.__name__, item.__name__)
 
 
-class GroupsTertiaryNavigationManager(ViewletManager):
+class GroupsTertiaryNavigationManager(TertiaryNavigationManager):
 
     template = InlineViewPageTemplate("""
         <ul tal:attributes="class view/list_class">
@@ -359,8 +360,6 @@ class GroupsTertiaryNavigationManager(ViewletManager):
           </li>
         </ul>
     """)
-
-    list_class = 'third-nav'
 
     @property
     def items(self):
@@ -689,11 +688,6 @@ class FlourishGroupDeleteView(DialogForm, form.EditForm):
     dialog_close_actions = ('cancel',)
     label = None
 
-    def updateDialog(self):
-        # XXX: fix the width of dialog content in css
-        if self.ajax_settings['dialog'] != 'close':
-            self.ajax_settings['dialog']['width'] = 544 + 16
-
     @button.buttonAndHandler(_("Delete"), name='apply')
     def handleDelete(self, action):
         url = '%s/delete.html?delete.%s&CONFIRM' % (
@@ -732,3 +726,26 @@ class FlourishMemberViewPersons(FlourishRelationshipViewBase):
 
     def getCollection(self):
         return self.context.members
+
+
+class FlourishManageGroupsOverview(Content):
+
+    body_template = ViewPageTemplateFile(
+        'templates/f_manage_groups_overview.pt')
+
+    @property
+    def schoolyear(self):
+        schoolyears = ISchoolYearContainer(self.context)
+        result = schoolyears.getActiveSchoolYear()
+        if 'schoolyear_id' in self.request:
+            schoolyear_id = self.request['schoolyear_id']
+            result = schoolyears.get(schoolyear_id, result)
+        return result
+
+    @property
+    def has_schoolyear(self):
+        return self.schoolyear is not None
+
+    @property
+    def groups(self):
+        return IGroupContainer(self.schoolyear, None)
