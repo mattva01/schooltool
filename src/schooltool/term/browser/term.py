@@ -704,7 +704,7 @@ class TermContainerBreadcrumb(flourish.breadcrumbs.Breadcrumbs):
     title = _('Terms')
 
     @property
-    def link(self):
+    def url(self):
         base_url = absoluteURL(self.crumb_parent, self.request)
         return '%s/terms' % base_url
 

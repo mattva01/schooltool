@@ -553,6 +553,11 @@ class FlourishCourseEditView(Form, form.EditForm):
     def update(self):
         return form.EditForm.update(self)
 
+    def updateActions(self):
+        super(FlourishCourseEditView, self).updateActions()
+        self.actions['apply'].addClass('button-ok')
+        self.actions['cancel'].addClass('button-cancel')
+
     @button.buttonAndHandler(_('Submit'), name='apply')
     def handleApply(self, action):
         super(FlourishCourseEditView, self).handleApply.func(self, action)

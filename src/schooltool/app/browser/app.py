@@ -547,6 +547,11 @@ class FlourishSchoolNameEditView(FlourishApplicationPreferencesView):
     fields = field.Fields(IApplicationPreferences).select('title')
     legend = _('School Name')
 
+    def updateActions(self):
+        super(FlourishSchoolNameEditView, self).updateActions()
+        self.actions['apply'].addClass('button-ok')
+        self.actions['cancel'].addClass('button-cancel')
+
     def updateWidgets(self):
         super(FlourishSchoolNameEditView, self).updateWidgets()
         self.widgets['title'].label = _('Name')
@@ -744,7 +749,7 @@ class ManageSiteBreadcrumb(flourish.breadcrumbs.Breadcrumbs):
     title = _('Server')
 
     @property
-    def link(self):
+    def url(self):
         app = ISchoolToolApplication(None)
         app_url = absoluteURL(app, self.request)
         return '%s/settings' % app_url
@@ -1032,7 +1037,7 @@ class ErrorsBreadcrumb(flourish.breadcrumbs.Breadcrumbs):
     title = _('Errors')
 
     @property
-    def link(self):
+    def url(self):
         app = ISchoolToolApplication(None)
         app_url = absoluteURL(app, self.request)
         return '%s/errors' % app_url

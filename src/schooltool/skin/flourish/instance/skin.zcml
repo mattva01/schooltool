@@ -118,14 +118,6 @@
       layer="schooltool.skin.flourish.IFlourishLayer"
       />
 
-  <page
-      name="formlib_macros"
-      for="*"
-      permission="zope.View"
-      template="templates/formlib_macros.pt"
-      layer="schooltool.skin.flourish.IFlourishLayer"
-      />
-
   </configure>
 
 
@@ -135,6 +127,13 @@
         for="*"
         permission="zope.View"
         template="templates/f_widget_macros.pt"
+        layer="schooltool.skin.flourish.IFlourishLayer"
+        />
+    <page
+        name="formlib_macros"
+        for="*"
+        permission="zope.View"
+        template="templates/f_formlib_macros.pt"
         layer="schooltool.skin.flourish.IFlourishLayer"
         />
   </configure>

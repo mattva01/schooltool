@@ -312,5 +312,5 @@ class CalendarAddLinks(flourish.page.RefineLinksViewlet):
 
 class AddEventLink(flourish.page.LinkViewlet):
     @property
-    def link(self):
+    def url(self):
         return "add.html?field.start_date=%s" % self.view.cursor.isoformat()
