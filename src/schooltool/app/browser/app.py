@@ -731,7 +731,7 @@ class ContentLabel(ContentLink):
         __not_set = object()
         label = getattr(self.context, 'label', __not_set)
         if label is __not_set:
-            return ContentLink.title(self)
+            return super(ContentLabel, self).title
         return label
 
 
