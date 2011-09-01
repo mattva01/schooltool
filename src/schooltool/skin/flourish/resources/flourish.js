@@ -194,7 +194,7 @@ ST.dialogs = function() {
 /* Temporary jQuery UI datepicker integration */
 
 $(document).ready(function() {
-        $('.date-field').datepicker({
+        $('input.date-field').datepicker({
                 dateFormat: 'yy-mm-dd',
                 changeMonth: true,
                 changeYear: true,
@@ -202,6 +202,6 @@ $(document).ready(function() {
     });
 
 $(document).ready(function() {
-    $(".birth-date-field").datepicker("option", "yearRange", 'c-20:c+10' );
+    $("input.birth-date-field").datepicker("option", "yearRange", 'c-20:c+10' );
     });
 
