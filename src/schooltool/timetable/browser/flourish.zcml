@@ -562,5 +562,13 @@
       permission="zope.View"
       />
 
+  <flourish:page
+      name="add.html"
+      subtitle="New Meeting"
+      for="schooltool.timetable.interfaces.IScheduleCalendar"
+      class=".calendar.FlourishScheduleEventAddView"
+      permission="schooltool.edit"
+      content_template="templates/f_schedule_event_add.pt"
+      />
 
 </configure>

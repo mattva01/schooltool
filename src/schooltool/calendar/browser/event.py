@@ -108,9 +108,12 @@ class FlourishCalendarEventAddView(flourish.page.Page,
         custom_factory = formlib.widget.CustomWidgetFactory(factory, **kw)
         setattr(self, str(name+'_widget'), custom_factory)
 
-    def _setUpWidgets(self):
+    def setUpCustomWidgets(self):
         self.setCustomWidget('description', height=5)
         self.setCustomWidget('exceptions', width=20, height=5)
+
+    def _setUpWidgets(self):
+        self.setUpCustomWidgets()
         super(FlourishCalendarEventAddView, self)._setUpWidgets()
 
 
