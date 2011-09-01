@@ -547,6 +547,11 @@ class FlourishSchoolNameEditView(FlourishApplicationPreferencesView):
     fields = field.Fields(IApplicationPreferences).select('title')
     legend = _('School Name')
 
+    def updateActions(self):
+        super(FlourishSchoolNameEditView, self).updateActions()
+        self.actions['apply'].addClass('button-ok')
+        self.actions['cancel'].addClass('button-cancel')
+
     def updateWidgets(self):
         super(FlourishSchoolNameEditView, self).updateWidgets()
         self.widgets['title'].label = _('Name')
