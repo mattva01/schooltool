@@ -735,14 +735,6 @@ class ContentLabel(ContentLink):
         return label
 
 
-class ManageSiteNavLink(flourish.page.LinkViewlet):
-    @property
-    def url(self):
-        app = ISchoolToolApplication(None)
-        app_url = absoluteURL(app, self.request)
-        return '%s/settings' % app_url
-
-
 class ManageSiteBreadcrumb(flourish.breadcrumbs.Breadcrumbs):
 
     follow_crumb = None
@@ -753,14 +745,6 @@ class ManageSiteBreadcrumb(flourish.breadcrumbs.Breadcrumbs):
         app = ISchoolToolApplication(None)
         app_url = absoluteURL(app, self.request)
         return '%s/settings' % app_url
-
-
-class ManageSchoolNavLink(flourish.page.LinkViewlet):
-    @property
-    def url(self):
-        app = ISchoolToolApplication(None)
-        app_url = absoluteURL(app, self.request)
-        return '%s/manage' % app_url
 
 
 class ManageSite(flourish.page.Page):

@@ -20,8 +20,8 @@
 Schooltool content providers.
 """
 
-from zope.component import adapts, queryMultiAdapter
-from zope.interface import implements
+from zope.component import adapts, adapter, queryMultiAdapter, getAdapter
+from zope.interface import implements, implementer
 import zope.contentprovider.interfaces
 from zope.contentprovider.interfaces import ContentProviderLookupError
 from zope.contentprovider.tales import addTALNamespaceData
@@ -35,6 +35,7 @@ from zope.security.proxy import removeSecurityProxy
 from zope.tales.interfaces import ITALESFunctionNamespace
 
 from schooltool.skin.flourish import interfaces
+from schooltool.securitypolicy.interfaces import ICrowd
 
 
 class ContentProvider(ContentProviderBase, BrowserPage):
@@ -185,3 +186,21 @@ def queryContentProvider(context, request, view, name):
         return None
     provider = interfaces.IContentProvider(provider, None)
     return provider
+
+
+@adapter(interfaces.IContentProvider)
+@implementer(ICrowd)
+def providerViewCrowd(provider):
+    return getAdapter(provider.context, ICrowd, name="schooltool.view")
+
+
+@adapter(interfaces.IContentProvider)
+@implementer(ICrowd)
+def providerEditCrowd(provider):
+    return getAdapter(provider.context, ICrowd, name="schooltool.edit")
+
+
+@adapter(interfaces.IContentProvider)
+@implementer(ICrowd)
+def providerManageAppCrowd(provider):
+    return getAdapter(provider.context, ICrowd, name="zope.ManageApplication")

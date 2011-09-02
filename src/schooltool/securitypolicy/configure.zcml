@@ -62,7 +62,7 @@
       crowds="everybody"
       permission="zope.View" />
   <security:allow
-      crowds="administration"
+      crowds="managers"
       permission="zope.ManageApplication" />
   <security:allow
       crowds="administration"
