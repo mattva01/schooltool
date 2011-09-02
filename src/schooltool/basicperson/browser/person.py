@@ -1051,3 +1051,22 @@ class FlourishRequestPersonXMLExportView(RequestReportDownloadDialog):
 
     def nextURL(self):
         return absoluteURL(self.context, self.request) + '/person_export.xml'
+
+
+def getUserViewlet(context, request, view, manager, name):
+    principal = request.principal
+    user = IPerson(principal, None)
+    if user is None:
+        return None
+    viewlet = flourish.viewlet.lookupViewlet(
+        user, request, view, manager, name=name)
+    return viewlet
+
+
+def getPersonActiveViewlet(person, request, view, manager):
+    user = IPerson(request.principal, None)
+    if (user is not None and
+        user.__name__ == person.__name__):
+        return u"home"
+    return flourish.page.getParentActiveViewletName(
+        person, request, view, manager)
