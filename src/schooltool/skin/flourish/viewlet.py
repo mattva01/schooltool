@@ -162,8 +162,8 @@ class ViewletManager(ContentProvider):
                 del result[name]
 
         for name, viewlet in result.items():
-            if viewlet.__name__ != name:
-                unproxied = zope.security.proxy.removeSecurityProxy(viewlet)
+            unproxied = zope.security.proxy.removeSecurityProxy(viewlet)
+            if unproxied.__name__ != name:
                 unproxied.__name__ = name
 
         result = dict(self.filter(result.items()))

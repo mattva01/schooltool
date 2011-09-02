@@ -235,6 +235,14 @@ class ListNavigationViewlet(ListNavigationBase, ManagerViewlet):
 
 
 class HeaderNavigationManager(ListNavigationContent):
+    template = InlineViewPageTemplate("""
+        <ul tal:attributes="class view/list_class">
+          <li tal:repeat="item view/items"
+              tal:attributes="class item/class"
+              tal:content="structure item/viewlet">
+          </li>
+        </ul>
+    """)
     list_class = "navigation"
 
 
