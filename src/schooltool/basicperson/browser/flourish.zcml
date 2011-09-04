@@ -642,4 +642,28 @@
       permission="zope.Public"
       />
 
+  <flourish:viewletFactory
+      name="home"
+      manager="schooltool.skin.flourish.page.IHeaderNavigationManager"
+      for="*"
+      factory="schooltool.basicperson.browser.person.getUserViewlet"
+      />
+
+  <flourish:viewlet
+      name="home"
+      before="*"
+      for="schooltool.basicperson.interfaces.IBasicPerson"
+      manager="schooltool.skin.flourish.page.IHeaderNavigationManager"
+      class="schooltool.skin.flourish.page.LinkViewlet"
+      title="Home"
+      link="index.html"
+      permission="schooltool.view"
+      />
+
+  <flourish:activeViewlet
+      factory=".person.getPersonActiveViewlet"
+      manager="schooltool.skin.flourish.page.IHeaderNavigationManager"
+      for="schooltool.basicperson.interfaces.IBasicPerson"
+      />
+
 </configure>

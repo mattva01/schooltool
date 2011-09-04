@@ -227,4 +227,25 @@
       permission="zope.Public"/>
   </configure>
 
+  <zope:adapter
+      factory=".content.providerViewCrowd"
+      name="schooltool.view"
+      permission="zope.Public"
+      trusted="true"
+      />
+
+  <zope:adapter
+      factory=".content.providerEditCrowd"
+      name="schooltool.edit"
+      permission="zope.Public"
+      trusted="true"
+      />
+
+  <zope:adapter
+      factory=".content.providerManageAppCrowd"
+      name="zope.ManageApplication"
+      permission="zope.Public"
+      trusted="true"
+      />
+
 </configure>

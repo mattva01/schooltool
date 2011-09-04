@@ -46,15 +46,24 @@ from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.app.membership import URIMembership, URIGroup
 from schooltool.app.utils import vocabulary
 from schooltool.app.relationships import URISection, URIInstruction
+from schooltool.calendar.browser.event import FlourishCalendarEventAddView
 from schooltool.relationship import getRelatedObjects
 from schooltool.schoolyear.interfaces import ISchoolYear
+from schooltool.skin import flourish
 from schooltool.timetable import interfaces
+from schooltool.timetable.calendar import ScheduleCalendarEvent
 from schooltool.timetable.schedule import iterMeetingsInTimezone
 from schooltool.timetable.interfaces import IHaveSchedule
 from schooltool.term.interfaces import IDateManager, ITermContainer
 from schooltool.term.term import getTermForDate
 
 from schooltool.common import SchoolToolMessage as _
+
+
+scheduleCalendarFieldNames = (
+    "title", "description", "start_date", "start_time",
+    "duration", "duration_type", "allday", "location",
+    )
 
 
 class ScheduleEventEditView(CalendarEventView, form.Form):
@@ -90,6 +99,18 @@ class ScheduleEventEditView(CalendarEventView, form.Form):
     @form.action(_("Cancel"), condition=form.haveInputWidgets)
     def handle_cancel_action(self, action, data):
         return self.redirect_to_parent()
+
+
+class FlourishScheduleEventEditView(flourish.page.Page,
+                                    ScheduleEventEditView):
+    __init__ = ScheduleEventEditView.__init__
+    update = ScheduleEventEditView.update
+
+    legend = _("Meeting Details")
+
+    def nextURL(self):
+        return (self.request.get('back_url') or
+                absoluteURL(self.context, self.request))
 
 
 class IScheduleEventAddForm(Interface):
@@ -191,6 +212,34 @@ class ScheduleEventAddView(CalendarEventViewMixin, AddView):
             return '%s/%s/booking.html' % (url, self._event_name)
         else:
             return absoluteURL(self.context, self.request)
+
+
+class FlourishScheduleEventAddView(FlourishCalendarEventAddView):
+
+    fieldNames = scheduleCalendarFieldNames
+    schema = IScheduleEventAddForm
+
+    _keyword_arguments = scheduleCalendarFieldNames
+    _factory = ScheduleCalendarEvent
+
+    def create(self, **kwargs):
+        data = self.processRequest(kwargs)
+        event = self._factory(data['start'], data['duration'], data['title'],
+                              location=data['location'],
+                              allday=data['allday'],
+                              description=data['description'])
+        # XXX: also meeting id! Don't forget the meeting id.
+        return event
+
+    def setUpCustomWidgets(self):
+        self.setCustomWidget('description', height=5)
+
+    def update(self):
+        if ("field.title" not in self.request):
+            calendar = ISchoolToolCalendar(self.context)
+            owner = IHaveSchedule(calendar.__parent__)
+            self.request.form["field.title"] = owner.title
+        super(FlourishScheduleEventAddView, self).update()
 
 
 class TermLegendViewlet(object):

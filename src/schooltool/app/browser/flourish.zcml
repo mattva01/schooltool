@@ -5,11 +5,6 @@
            xmlns:flourish="http://schooltool.org/flourish"
            i18n_domain="schooltool">
 
-  <flourish:breadcrumb
-      for="schooltool.app.interfaces.ISchoolToolApplication"
-      title="School"
-      />
-
   <!-- SchoolTool app pages -->
 
   <flourish:page
@@ -165,12 +160,21 @@
       class="schooltool.app.browser.app.ManageSiteBreadcrumb"
       />
 
-  <flourish:viewlet
+  <flourish:viewletFactory
       name="manage_site"
       manager="schooltool.skin.flourish.page.IHeaderNavigationManager"
-      class="schooltool.app.browser.app.ManageSiteNavLink"
+      for="*"
+      factory="schooltool.app.browser.app.getAppViewlet"
+      />
+
+  <flourish:viewlet
+      name="manage_site"
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      manager="schooltool.skin.flourish.page.IHeaderNavigationManager"
+      class="schooltool.skin.flourish.page.LinkViewlet"
       title="Server"
-      permission="schooltool.edit"
+      link="settings"
+      permission="zope.ManageApplication"
       />
 
   <flourish:activeViewlet
@@ -312,13 +316,22 @@
       permission="schooltool.edit"
       />
 
+  <flourish:viewletFactory
+      name="manage_school"
+      manager="schooltool.skin.flourish.page.IHeaderNavigationManager"
+      for="*"
+      factory="schooltool.app.browser.app.getAppViewlet"
+      />
+
   <flourish:viewlet
       name="manage_school"
       after="manage_site"
+      for="schooltool.app.interfaces.ISchoolToolApplication"
       manager="schooltool.skin.flourish.page.IHeaderNavigationManager"
-      class="schooltool.app.browser.app.ManageSchoolNavLink"
+      class="schooltool.skin.flourish.page.LinkViewlet"
       title="School"
-      permission="zope.Public"
+      link="manage"
+      permission="schooltool.edit"
       />
 
   <flourish:activeViewlet
@@ -474,6 +487,8 @@
       name="database.html"
       for="schooltool.app.interfaces.ISchoolToolApplication"
       class=".app.DatabaseView"
+      title="Server"
+      subtitle="Database"
       content_template="templates/f_database.pt"
       permission="schooltool.edit"
       />

@@ -15,6 +15,13 @@
       title="School Years"
       />
 
+  <flourish:page_breadcrumbs
+      show_page_title="false"
+      title="School Years"
+      for="schooltool.schoolyear.interfaces.ISchoolYearContainer"
+      view=".schoolyear.FlourishSchoolYearContainerView"
+      />
+
   <flourish:page
       name="index.html"
       for="schooltool.schoolyear.interfaces.ISchoolYearContainer"
@@ -82,6 +89,12 @@
 
   <flourish:breadcrumb
       for="schooltool.schoolyear.interfaces.ISchoolYear"
+      />
+
+  <flourish:page_breadcrumbs
+      show_page_title="false"
+      for="schooltool.schoolyear.interfaces.ISchoolYear"
+      view=".schoolyear.FlourishSchoolYearView"
       />
 
   <flourish:page

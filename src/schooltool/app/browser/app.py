@@ -547,6 +547,11 @@ class FlourishSchoolNameEditView(FlourishApplicationPreferencesView):
     fields = field.Fields(IApplicationPreferences).select('title')
     legend = _('School Name')
 
+    def updateActions(self):
+        super(FlourishSchoolNameEditView, self).updateActions()
+        self.actions['apply'].addClass('button-ok')
+        self.actions['cancel'].addClass('button-cancel')
+
     def updateWidgets(self):
         super(FlourishSchoolNameEditView, self).updateWidgets()
         self.widgets['title'].label = _('Name')
@@ -726,16 +731,8 @@ class ContentLabel(ContentLink):
         __not_set = object()
         label = getattr(self.context, 'label', __not_set)
         if label is __not_set:
-            return ContentLink.title(self)
+            return super(ContentLabel, self).title
         return label
-
-
-class ManageSiteNavLink(flourish.page.LinkViewlet):
-    @property
-    def url(self):
-        app = ISchoolToolApplication(None)
-        app_url = absoluteURL(app, self.request)
-        return '%s/settings' % app_url
 
 
 class ManageSiteBreadcrumb(flourish.breadcrumbs.Breadcrumbs):
@@ -744,18 +741,10 @@ class ManageSiteBreadcrumb(flourish.breadcrumbs.Breadcrumbs):
     title = _('Server')
 
     @property
-    def link(self):
-        app = ISchoolToolApplication(None)
-        app_url = absoluteURL(app, self.request)
-        return '%s/settings' % app_url
-
-
-class ManageSchoolNavLink(flourish.page.LinkViewlet):
-    @property
     def url(self):
         app = ISchoolToolApplication(None)
         app_url = absoluteURL(app, self.request)
-        return '%s/manage' % app_url
+        return '%s/settings' % app_url
 
 
 class ManageSite(flourish.page.Page):
@@ -1032,7 +1021,7 @@ class ErrorsBreadcrumb(flourish.breadcrumbs.Breadcrumbs):
     title = _('Errors')
 
     @property
-    def link(self):
+    def url(self):
         app = ISchoolToolApplication(None)
         app_url = absoluteURL(app, self.request)
         return '%s/errors' % app_url

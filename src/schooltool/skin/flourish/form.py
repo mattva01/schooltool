@@ -74,6 +74,10 @@ class AddForm(Form, z3c.form.form.AddForm):
             self.request.response.redirect(self.nextURL())
             return ""
 
+    @z3c.form.button.buttonAndHandler(_('Add'), name='add')
+    def handleAdd(self, action):
+        return z3c.form.form.AddForm.handleAdd.func(self, action)
+
     @z3c.form.button.buttonAndHandler(_('Cancel'), name='cancel')
     def handleCancel(self, action):
         self.request.response.redirect(self.nextURL())
