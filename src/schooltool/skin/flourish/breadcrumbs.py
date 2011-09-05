@@ -76,7 +76,7 @@ class Breadcrumbs(ContentProvider):
 
     template = ViewPageTemplateFile('templates/breadcrumbs.pt')
 
-    context_permission = "schooltool.view"
+    permission = "schooltool.view"
 
     @property
     def title(self):
@@ -90,13 +90,18 @@ class Breadcrumbs(ContentProvider):
 
     link = None
 
+    def checkPermission(self):
+        permission = self.permission
+        if permission:
+            if not checkPermission(permission, self.context):
+                return False
+        return True
+
     @property
     def url(self):
+        if not self.checkPermission():
+            return None
         context = self.context
-        permission = self.context_permission
-        if permission:
-            if not checkPermission(permission, context):
-                return None
         url = absoluteURL(context, self.request)
         link = self.link
         if link:
