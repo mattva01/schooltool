@@ -24,6 +24,7 @@ import zope.schema
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import queryMultiAdapter
 from zope.interface import implements, Interface, Attribute
+from zope.security import checkPermission
 from zope.traversing.api import getParent
 from zope.traversing.interfaces import IContainmentRoot
 from zope.traversing.browser.absoluteurl import absoluteURL
@@ -75,6 +76,8 @@ class Breadcrumbs(ContentProvider):
 
     template = ViewPageTemplateFile('templates/breadcrumbs.pt')
 
+    context_permission = "schooltool.view"
+
     @property
     def title(self):
         title_content = queryMultiAdapter(
@@ -89,7 +92,12 @@ class Breadcrumbs(ContentProvider):
 
     @property
     def url(self):
-        url = absoluteURL(self.context, self.request)
+        context = self.context
+        permission = self.context_permission
+        if permission:
+            if not checkPermission(permission, context):
+                return None
+        url = absoluteURL(context, self.request)
         link = self.link
         if link:
             url = '%s/%s' % (url, link)
