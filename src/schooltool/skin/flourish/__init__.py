@@ -19,6 +19,10 @@
 """
 SchoolTool flourish skin.
 """
+
+import zope.security
+import zope.container.interfaces
+
 import breadcrumbs
 import containers
 import content
@@ -48,3 +52,24 @@ class Empty(object):
 
     def __call__(self, *args, **kw):
         return ''
+
+
+def canView(context):
+    return zope.security.checkPermission('schooltool.view', context)
+
+
+def canEdit(context):
+    return zope.security.checkPermission('schooltool.edit', context)
+
+
+def canDelete(context):
+    container = context.__parent__
+    if not zope.container.interfaces.IWriteContainer.providedBy(container):
+        raise NotImplementedError()
+    # XXX: if context has dependents, deletion may be prevented
+    return zope.security.canAccess(container, '__delitem__')
+
+
+def hasPermission(context, permission):
+    return zope.security.checkPermission(permission, context)
+
