@@ -364,3 +364,18 @@ class IHaveSchedule(IAttributeAnnotatable, IHaveCalendar):
 
 class IHaveTimetables(IAttributeAnnotatable):
     """Marker interface for objects that have timetables."""
+
+
+#
+#  Security
+#
+
+
+class IScheduleParentCrowd(Interface):
+    """A crowd object that is used on a schedule's parent.
+
+    This is just a marker interface.
+    """
+
+    def contains(principal):
+        """Return True if principal is in the crowd."""
