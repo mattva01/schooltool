@@ -141,6 +141,13 @@ class FlourishCourseCSVImportView(FlourishBaseCSVImportView):
 class ImportCoursesLinkViewlet(flourish.page.LinkViewlet, CoursesActiveTabMixin):
 
     @property
+    def enabled(self):
+        courses = ICourseContainer(self.schoolyear)
+        if not flourish.canEdit(courses):
+            return False
+        return super(ImportCoursesLinkViewlet, self).enabled
+
+    @property
     def url(self):
         link = self.link
         if not link:

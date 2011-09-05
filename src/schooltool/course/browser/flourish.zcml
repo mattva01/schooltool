@@ -396,6 +396,7 @@
   <flourish:breadcrumb
       for="schooltool.course.interfaces.ISectionContainer"
       title="Sections"
+      permission="schooltool.edit"
       traversal_name="sections"
       class="schooltool.schoolyear.browser.schoolyear.SchoolyearNavBreadcrumbs"
       />
