@@ -23,7 +23,7 @@ import zope.lifecycleevent
 import zope.lifecycleevent.interfaces
 from zope.proxy import sameProxiedObjects
 from zope.interface import implements, implementer
-from zope.component import adapts, adapter, getUtility
+from zope.component import adapts, adapter, getUtility, queryAdapter
 from zope.annotation.interfaces import IAttributeAnnotatable
 from zope.container.interfaces import IContainer
 from zope.container.btree import BTreeContainer
@@ -32,8 +32,12 @@ from zope.intid.interfaces import IIntIds
 from schooltool.app.app import StartUpBase
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.common import DateRange
+from schooltool.course.section import InstructorsCrowd, LearnersCrowd
+from schooltool.course.interfaces import ISection
 from schooltool.schoolyear.subscriber import ObjectEventAdapterSubscriber
 from schooltool.schoolyear.interfaces import ISchoolYear
+from schooltool.securitypolicy.crowds import Crowd
+from schooltool.securitypolicy.crowds import AggregateCrowd
 from schooltool.timetable import interfaces
 from schooltool.timetable.schedule import ScheduleContainer
 from schooltool.timetable.timetable import TimetableContainer
@@ -181,3 +185,33 @@ class SchooldaysForTimetable(SchooldaysForSchedule):
         owner = interfaces.IHaveTimetables(self.schedule)
         return ISchoolYear(owner)
 
+
+class AdaptingParentCrowdTemplate(Crowd):
+    """A crowd that contains principals who are allowed to access the context."""
+
+    adapter = None
+    interface = None
+    permission = ''
+
+    def contains(self, principal):
+        adapted = self.adapter(self.context)
+        pcrowd = queryAdapter(adapted, self.interface, self.permission,
+                              default=None)
+        if pcrowd is not None:
+            return pcrowd.contains(principal)
+        else:
+            return False
+
+
+class ScheduleViewersCrowd(AdaptingParentCrowdTemplate):
+    adapter = interfaces.IHaveSchedule
+    interface = interfaces.IScheduleParentCrowd
+    permission = "schooltool.view"
+
+
+class SectionScheduleViewers(AggregateCrowd):
+    """Crowd of those who can see the section schedule."""
+    adapts(ISection)
+
+    def crowdFactories(self):
+        return [InstructorsCrowd, LearnersCrowd]

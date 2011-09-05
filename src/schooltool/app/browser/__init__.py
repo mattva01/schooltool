@@ -26,6 +26,7 @@ import itertools
 
 from zope.interface import implements
 from zope.component import adapts, queryMultiAdapter
+from zope.container.interfaces import IWriteContainer
 from zope.size.interfaces import ISized
 from zope.traversing.interfaces import IPathAdapter, ITraversable
 from zope.security import checkPermission
@@ -184,6 +185,11 @@ class SchoolToolAPI(object):
     def can_edit(self):
         return checkPermission("schooltool.edit", self.context)
 
+    def can_delete(self):
+        container = self.context.__parent__
+        if not IWriteContainer.providedBy(container):
+            raise NotImplementedError()
+        return canAccess(container, '__delitem__')
 
 
 class PathAdapterUtil(object):
