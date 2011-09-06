@@ -155,7 +155,7 @@
       permission="schooltool.edit"
   />
 
-  <!-- Parent crowds -->>
+  <!-- Parent crowds -->
 
   <zope:adapter
       trusted="yes"

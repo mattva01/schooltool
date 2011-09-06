@@ -55,6 +55,7 @@ from schooltool.course.interfaces import ICourse, ICourseContainer
 from schooltool.course.interfaces import ISectionContainer
 from schooltool.course.interfaces import ILearner, IInstructor
 from schooltool.course.course import Course
+from schooltool.skin import flourish
 from schooltool.skin.flourish.viewlet import Viewlet
 from schooltool.skin.flourish.containers import TableContainerView
 from schooltool.skin.flourish.containers import ContainerDeleteView
@@ -353,6 +354,12 @@ class CourseActionsLinks(RefineLinksViewlet):
 
 
 class CourseDeleteLink(ModalFormLinkViewlet):
+
+    @property
+    def enabled(self):
+        if not flourish.canDelete(self.context):
+            return False
+        return super(CourseDeleteLink, self).enabled
 
     @property
     def dialog_title(self):

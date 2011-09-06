@@ -705,6 +705,8 @@ class TermContainerBreadcrumb(flourish.breadcrumbs.Breadcrumbs):
 
     @property
     def url(self):
+        if not self.checkPermission():
+            return None
         base_url = absoluteURL(self.crumb_parent, self.request)
         return '%s/terms' % base_url
 

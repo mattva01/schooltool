@@ -66,6 +66,7 @@ from schooltool.schoolyear.interfaces import ISchoolYear
 from schooltool.schoolyear.interfaces import ISchoolYearContainer
 from schooltool.schoolyear.browser.schoolyear import SchoolyearNavBreadcrumbs
 from schooltool.skin.containers import ContainerView
+from schooltool.skin import flourish
 from schooltool.skin.flourish.containers import ContainerDeleteView
 from schooltool.skin.flourish.containers import TableContainerView as FlourishTableContainerView
 from schooltool.skin.flourish.form import Dialog
@@ -880,11 +881,25 @@ class SectionActionsLinks(RefineLinksViewlet):
 class SectionAddLinkViewlet(LinkViewlet, SectionsActiveTabMixin):
 
     @property
+    def enabled(self):
+        if not flourish.canEdit(self.context):
+            return False
+        return super(SectionAddLinkViewlet, self).enabled
+
+    @property
     def url(self):
         return '%s/%s' % (absoluteURL(self.schoolyear, self.request),
                           'addSection.html')
 
+
 class SectionAddLinkFromSectionViewlet(SectionAddLinkViewlet):
+
+    @property
+    def enabled(self):
+        container = self.context.__parent__
+        if not flourish.canEdit(container):
+            return False
+        return super(SectionAddLinkViewlet, self).enabled
 
     @property
     def schoolyear(self):
@@ -899,6 +914,12 @@ class SectionAddLinkFromSectionViewlet(SectionAddLinkViewlet):
 
 
 class SectionDeleteLink(ModalFormLinkViewlet):
+
+    @property
+    def enabled(self):
+        if not flourish.canDelete(self.context):
+            return False
+        return super(SectionDeleteLink, self).enabled
 
     @property
     def dialog_title(self):
@@ -1034,10 +1055,6 @@ class FlourishSectionView(DisplayForm):
              'current': section is self.context,
              }
             for section in sections]
-
-    @property
-    def canModify(self):
-        return canAccess(self.context.__parent__, '__delitem__')
 
     @property
     def title(self):

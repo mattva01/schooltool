@@ -4,7 +4,7 @@
     <a class="modify" href="" title="Edit this section"
        tal:attributes="href string:${context/@@absolute_url}/edit.html"
        i18n:attributes="title"
-       tal:condition="view/canModify">
+       tal:condition="context/schooltool:can_edit">
       <img tal:attributes="src context/++resource++schooltool.skin.flourish/edit-icon.png"
            alt="Edit"
            i18n:attributes="alt" />
@@ -71,7 +71,7 @@
     <metal:block define-slot="bottom">
     </metal:block>
   </metal:block>
-  <metal:block tal:condition="view/canModify">
+  <metal:block tal:condition="context/schooltool:can_edit">
     <h3>Courses</h3>
     <tal:block define="courses view/courses">
       <table tal:condition="courses">

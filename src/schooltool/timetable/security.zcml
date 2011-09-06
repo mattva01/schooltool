@@ -11,6 +11,26 @@
       crowds="administration"
       permission="schooltool.edit" />
 
+  <crowd
+      name="schedule_viewers"
+      factory=".app.ScheduleViewersCrowd" />
+
+  <zope:adapter
+      trusted="yes"
+      factory=".app.SectionScheduleViewers"
+      provides="schooltool.timetable.interfaces.IScheduleParentCrowd"
+      name="schooltool.view" />
+
+  <allow
+      interface="schooltool.timetable.interfaces.IScheduleContainer"
+      crowds="administration schedule_viewers"
+      permission="schooltool.view" />
+
+  <allow
+      interface="schooltool.timetable.interfaces.IScheduleContainer"
+      crowds="administration"
+      permission="schooltool.edit" />
+
   <!-- Security descriptions -->
 
   <describe_group name="schooltool.timetable" title="School timetables" />
