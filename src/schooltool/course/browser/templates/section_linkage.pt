@@ -10,9 +10,9 @@
 <h1 metal:fill-slot="content-header"
     i18n:translate="">
   <span i18n:name="course">
-        <tal:loop tal:repeat="course context/courses">
-          <a tal:replace="structure course/@@link" />
-        </tal:loop>
+    <tal:loop tal:repeat="course context/courses">
+      <a tal:replace="structure course/@@link" />
+    </tal:loop>
   </span> course for
   <a tal:replace="structure view/year/@@link" i18n:name="schoolyear" />
 </h1>
