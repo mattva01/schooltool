@@ -228,6 +228,25 @@ validator.WidgetValidatorDiscriminators(UsernameValidator,
                                         field=IPersonAddForm['username'])
 
 
+class PasswordsDontMatch(ValidationError):
+    __doc__ = _(u"Passwords do not match")
+
+
+class PasswordValidator(SimpleFieldValidator):
+
+    def validate(self, value):
+        # XXX: hack to display the password error next to the widget!
+        super(PasswordValidator, self).validate(value)
+        confirm_widget = self.view.widgets['confirm']
+        confirm_value = self.request.get(confirm_widget.name)
+        if value != confirm_value:
+            raise PasswordsDontMatch()
+
+
+validator.WidgetValidatorDiscriminators(PasswordValidator,
+                                        field=IPersonAddForm['password'])
+
+
 class PersonForm(object):
 
     formErrorsMessage = _('Please correct the marked fields below.')

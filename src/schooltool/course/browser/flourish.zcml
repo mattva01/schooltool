@@ -491,4 +491,6 @@
   <include package="schooltool.app.browser"
            file="timetable-integration-flourish.zcml" />
 
+  <zope:adapter factory=".section.SectionTermsValidator" />
+
 </configure>
