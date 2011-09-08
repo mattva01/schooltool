@@ -53,13 +53,13 @@ We'll create a course and a Term1 section for it.
     ...     instructors=["Teacher1", "Teacher2"],
     ...     members=['Student1', 'Student2'])
 
-We'll navigate to the section and hit the All Terms link.
+We'll navigate to the section and hit the Linked sections link.
 
     >>> manager.getLink("2005-2006").click()
     >>> manager.getLink("Courses").click()
     >>> manager.getLink("History").click()
     >>> manager.getLink("History (1)").click()
-    >>> manager.getLink("All Terms").click()
+    >>> manager.getLink("Linked sections").click()
 
 We'll extend the section all the way to Term4.  This leaves the section with
 the two teachers and the two students in each term.
@@ -122,7 +122,7 @@ the section.
 
 We see that only the Term4 section's roster has changed.
 
-    >>> manager.getLink("All Terms").click()
+    >>> manager.getLink("Linked sections").click()
 
     >>> printRoster(1)
     Teacher1, Teacher1
@@ -183,7 +183,7 @@ note that the changes that were already mode to Term4, adding Teacher3 and
 removing Student1, were ignored while propagating to Term4, causing no program
 exception.
 
-    >>> manager.getLink("All Terms").click()
+    >>> manager.getLink("Linked sections").click()
 
     >>> printRoster(1)
     Teacher1, Teacher1

@@ -7,22 +7,15 @@
 </head>
 <body>
 
-<metal:block metal:fill-slot="content-header">
-  <table class="all_terms_header">
-    <tr>
-      <td><h2>
-        <span i18n:translate="">Course:</span>
-        <tal:loop tal:repeat="course context/courses">
-          <a tal:replace="structure course/@@link" />
-        </tal:loop>
-      </h2></td>
-      <td><h2>
-        <span i18n:translate="">Year:</span>
-        <a tal:replace="structure view/year/@@link" />
-      </h2></td>
-    </tr>
-  </table>
-</metal:block>
+<h1 metal:fill-slot="content-header"
+    i18n:translate="">
+  <span i18n:name="course">
+    <tal:loop tal:repeat="course context/courses">
+      <a tal:replace="structure course/@@link" />
+    </tal:loop>
+  </span> course for
+  <a tal:replace="structure view/year/@@link" i18n:name="schoolyear" />
+</h1>
 
 <metal:block metal:fill-slot="body">
   <table class="all_terms_table">

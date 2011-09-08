@@ -17,7 +17,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
-"POT-Creation-Date: 2011-06-08 18:36+0300\n"
+"POT-Creation-Date: 2011-09-08 08:08+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Schooltool Development Team <schooltool-dev@schooltool.org>\n"
@@ -2993,28 +2993,22 @@ msgid "Link Section to Section in Other Term"
 msgstr ""
 
 #: /src/schooltool/course/browser/templates/link_existing.pt:13
-#: /src/schooltool/course/browser/templates/section.pt:19
+#: /src/schooltool/course/browser/templates/link_existing.pt:52
+#: /src/schooltool/course/browser/templates/section_container.pt:39
 #: /src/schooltool/course/browser/templates/unlink_section.pt:13
 #: /src/schooltool/course/browser/templates/unlink_section.pt:28
-msgid "Section:"
-msgstr ""
-
-#: /src/schooltool/course/browser/templates/link_existing.pt:15
-#: /src/schooltool/course/browser/templates/section.pt:23
-#: /src/schooltool/course/browser/templates/section_linkage.pt:14
-#: /src/schooltool/course/browser/templates/unlink_section.pt:14
-msgid "Course:"
+msgid "Section"
 msgstr ""
 
 #: /src/schooltool/course/browser/templates/link_existing.pt:20
-#: /src/schooltool/course/browser/templates/section.pt:37
 #: /src/schooltool/course/browser/templates/unlink_section.pt:19
 #: /src/schooltool/course/browser/templates/unlink_section.pt:29
-msgid "Term:"
+#: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:24
+msgid "Term"
 msgstr ""
 
 #: /src/schooltool/course/browser/templates/link_existing.pt:21
-msgid "Target Term:"
+msgid "Target Term"
 msgstr ""
 
 #: /src/schooltool/course/browser/templates/link_existing.pt:26
@@ -3033,11 +3027,6 @@ msgstr ""
 msgid "Filter"
 msgstr ""
 
-#: /src/schooltool/course/browser/templates/link_existing.pt:52
-#: /src/schooltool/course/browser/templates/section_container.pt:39
-msgid "Section"
-msgstr ""
-
 #: /src/schooltool/course/browser/templates/link_existing.pt:71
 #: /src/schooltool/course/browser/templates/link_section.pt:130
 #. Default: "Link"
@@ -3052,24 +3041,26 @@ msgstr ""
 msgid "There is no valid term in ${schoolyear} to pick a section from."
 msgstr ""
 
-#: /src/schooltool/course/browser/templates/section.pt:31
-#: /src/schooltool/course/browser/templates/section_linkage.pt:20
-msgid "Year:"
-msgstr ""
-
-#: /src/schooltool/course/browser/templates/section.pt:45
-msgid "All Terms"
-msgstr ""
-
-#: /src/schooltool/course/browser/templates/section.pt:59
+#: /src/schooltool/course/browser/templates/section.pt:35
 msgid "Change the name or description of this section."
 msgstr ""
 
-#: /src/schooltool/course/browser/templates/section.pt:58
+#: /src/schooltool/course/browser/templates/section.pt:35
 msgid "edit info"
 msgstr ""
 
-#: /src/schooltool/course/browser/templates/section.pt:87
+#: /src/schooltool/course/browser/templates/section.pt:46
+#: /src/schooltool/course/browser/templates/section_edit.pt:60
+msgid "Linked sections"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/section.pt:52
+#: /src/schooltool/course/browser/templates/section_edit.pt:72
+#: /src/schooltool/course/browser/templates/section_edit.pt:106
+msgid "${section_title} for ${term}"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/section.pt:65
 msgid "Change the instructors for this section."
 msgstr ""
 
@@ -3090,10 +3081,6 @@ msgstr ""
 msgid "Section list for ${term} of ${schoolyear}"
 msgstr ""
 
-#: /src/schooltool/course/browser/templates/section_edit.pt:60
-msgid "Linked sections"
-msgstr ""
-
 #: /src/schooltool/course/browser/templates/section_edit.pt:63
 msgid "Previous"
 msgstr ""
@@ -3102,13 +3089,9 @@ msgstr ""
 msgid "Section in the previous term."
 msgstr ""
 
-#: /src/schooltool/course/browser/templates/section_edit.pt:72
-#: /src/schooltool/course/browser/templates/section_edit.pt:106
-msgid "${section_title} for ${term}"
-msgstr ""
-
 #: /src/schooltool/course/browser/templates/section_edit.pt:75
 #: /src/schooltool/course/browser/templates/section_edit.pt:109
+#: /src/schooltool/course/browser/templates/unlink_section.pt:37
 #. Default: "Unlink"
 msgid "unlink-section-button"
 msgstr ""
@@ -5662,10 +5645,6 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:22
 msgid "Timetable"
-msgstr ""
-
-#: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:24
-msgid "Term"
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:34
