@@ -17,7 +17,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
-"POT-Creation-Date: 2011-06-08 18:36+0300\n"
+"POT-Creation-Date: 2011-09-08 14:13+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Schooltool Development Team <schooltool-dev@schooltool.org>\n"
@@ -654,14 +654,6 @@ msgstr ""
 
 #: /src/schooltool/app/browser/configure.zcml:645
 msgid "Generations"
-msgstr ""
-
-#: /src/schooltool/app/browser/configure.zcml:666
-msgid "Browser UI"
-msgstr ""
-
-#: /src/schooltool/app/browser/configure.zcml:651
-msgid "Templates"
 msgstr ""
 
 #: /src/schooltool/app/browser/configure.zcml:714
@@ -1677,14 +1669,6 @@ msgstr ""
 #: /src/schooltool/resource/browser/resource-csvimport.pt:72
 #. Default: "Submit"
 msgid "submit-button"
-msgstr ""
-
-#: /src/schooltool/app/configure.zcml:340
-msgid "Security (General)"
-msgstr ""
-
-#: /src/schooltool/app/configure.zcml:355
-msgid "Booking Resources"
 msgstr ""
 
 #: /src/schooltool/app/interfaces.py:44
@@ -3582,16 +3566,7 @@ msgstr ""
 msgid "Surname"
 msgstr ""
 
-#: /src/schooltool/devmode/configure.zcml:27
-msgid "Introspect"
-msgstr ""
-
-#: /src/schooltool/devmode/configure.zcml:38
-#: /src/schooltool/devmode/devmode.pt:19
-msgid "API Docs"
-msgstr ""
-
-#: /src/schooltool/devmode/configure.zcml:50
+#: /src/schooltool/devmode/configure.zcml:52
 #: /src/schooltool/devmode/devmode.pt:20
 msgid "Sample data"
 msgstr ""
@@ -3602,6 +3577,10 @@ msgstr ""
 
 #: /src/schooltool/devmode/devmode.pt:18
 msgid "Introspector"
+msgstr ""
+
+#: /src/schooltool/devmode/devmode.pt:19
+msgid "API Docs"
 msgstr ""
 
 #: /src/schooltool/email/browser/configure.zcml:54
@@ -4514,16 +4493,12 @@ msgstr ""
 msgid "Everybody, if the calendar is made public in user preferences."
 msgstr ""
 
-#: /src/schooltool/relationship/configure.zcml:13
-msgid "Relationships"
-msgstr ""
-
 #: /src/schooltool/report/browser/configure.zcml:8
-#: /src/schooltool/report/browser/configure.zcml:22
-#: /src/schooltool/report/browser/configure.zcml:33
-#: /src/schooltool/report/browser/configure.zcml:44
-#: /src/schooltool/report/browser/configure.zcml:55
-#: /src/schooltool/report/browser/configure.zcml:66
+#: /src/schooltool/report/browser/configure.zcml:23
+#: /src/schooltool/report/browser/configure.zcml:34
+#: /src/schooltool/report/browser/configure.zcml:45
+#: /src/schooltool/report/browser/configure.zcml:56
+#: /src/schooltool/report/browser/configure.zcml:67
 msgid "Reports"
 msgstr ""
 
