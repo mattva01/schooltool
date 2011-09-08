@@ -1,7 +1,7 @@
 Tests for linking sections between multiple terms
 =================================================
 
-When we click the All Terms link in the section view, we get to a view that
+When we click the Linked sections link in the section view, we get to a view that
 has a table with one column per term.  The section that is the context will
 appear in the column for its term with a section title link and a listing of
 the teachers and students of that section.  Any section in other terms which
@@ -49,13 +49,13 @@ We'll create a course and a Term1 section for it.
     >>> setup.addSection("History", "2005-2006", "Term1",
     ...     instructors=["Teacher1"], members=['Student1', 'Student2'])
 
-We'll navigate to the section and hit the All Terms link.
+We'll navigate to the section and hit the Linked sections link.
 
     >>> manager.getLink("2005-2006").click()
     >>> manager.getLink("Courses").click()
     >>> manager.getLink("History").click()
     >>> manager.getLink("History (1)").click()
-    >>> manager.getLink("All Terms").click()
+    >>> manager.getLink("Linked sections").click()
 
 We see that there is a header with links to the section's course and year.
 Additionally, there is a table of terms with only Term1 having a roster.
@@ -234,13 +234,13 @@ of a new course.
     >>> setup.addSection("English", "2005-2006", "Term4",
     ...     instructors=["Teacher1"], members=['Student1', 'Student2'])
 
-We'll navigate to the section and hit the All Terms link.
+We'll navigate to the section and hit the Linked sections link.
 
     >>> manager.getLink("2005-2006").click()
     >>> manager.getLink("Courses").click()
     >>> manager.getLink("English").click()
     >>> manager.getLink("English (2)").click()
-    >>> manager.getLink("All Terms").click()
+    >>> manager.getLink("Linked sections").click()
 
 We see that the section is only found in Term4.
 
@@ -284,13 +284,13 @@ We'll create another course and two sections, one in Term1, and one in Term4.
     >>> setup.addSection("Math", "2005-2006", "Term4",
     ...     instructors=["Teacher1"], members=['Student1'])
 
-We'll navigate to the Term1 section and hit the All Terms link.
+We'll navigate to the Term1 section and hit the Linked sections link.
 
     >>> manager.getLink("2005-2006").click()
     >>> manager.getLink("Courses").click()
     >>> manager.getLink("Math").click()
     >>> manager.getLink("Math (3)", index=0).click()
-    >>> manager.getLink("All Terms").click()
+    >>> manager.getLink("Linked sections").click()
 
 We see that only the Term1 column is filled in because the Term4 section is
 not linked to it.
@@ -442,14 +442,14 @@ Term4 of a new course.
     >>> setup.addSection("Health", "2005-2006", "Term4",
     ...     instructors=["Teacher1"], members=['Student1'])
 
-We'll navigate to the Term4 section and hit the All Terms link.  As we would
+We'll navigate to the Term4 section and hit the Linked sections link.  As we would
 expect, only the Term4 column is filled in.
 
     >>> manager.getLink("2005-2006").click()
     >>> manager.getLink("Courses").click()
     >>> manager.getLink("Health").click()
     >>> manager.getLink("Health (5)").click()
-    >>> manager.getLink("All Terms").click()
+    >>> manager.getLink("Linked sections").click()
 
     >>> filled_terms()
     [4]
@@ -557,7 +557,7 @@ We see that it is still linked to sections in Term3 and Term2.
     >>> manager.getLink("Term4").click()
     >>> manager.getLink("Sections").click()
     >>> manager.getLink("Health (5)").click()
-    >>> manager.getLink("All Terms").click()
+    >>> manager.getLink("Linked sections").click()
 
     >>> filled_terms()
     [2, 3, 4]
@@ -590,7 +590,7 @@ Term3, the links having been separated from Term1 and Term4.
     >>> manager.getLink("Term2").click()
     >>> manager.getLink("Sections").click()
     >>> manager.getLink("Health (5)").click()
-    >>> manager.getLink("All Terms").click()
+    >>> manager.getLink("Linked sections").click()
 
     >>> filled_terms()
     [2, 3]
@@ -603,7 +603,7 @@ that it is linked to sections in all the terms.
     >>> manager.getLink("Term2").click()
     >>> manager.getLink("Sections").click()
     >>> manager.getLink("English (2)").click()
-    >>> manager.getLink("All Terms").click()
+    >>> manager.getLink("Linked sections").click()
 
     >>> filled_terms()
     [1, 2, 3, 4]
@@ -639,7 +639,7 @@ sections remain linked.
     >>> manager.getLink("Term1").click()
     >>> manager.getLink("Sections").click()
     >>> manager.getLink("English (2)").click()
-    >>> manager.getLink("All Terms").click()
+    >>> manager.getLink("Linked sections").click()
 
     >>> filled_terms()
     [1]
@@ -648,7 +648,7 @@ sections remain linked.
     >>> manager.getLink("Term3").click()
     >>> manager.getLink("Sections").click()
     >>> manager.getLink("English (2)").click()
-    >>> manager.getLink("All Terms").click()
+    >>> manager.getLink("Linked sections").click()
 
     >>> filled_terms()
     [3, 4]
