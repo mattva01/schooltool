@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2011-04-17 23:49+0300\n"
-"PO-Revision-Date: 2011-04-18 08:47+0000\n"
-"Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
+"PO-Revision-Date: 2011-05-27 20:45+0000\n"
+"Last-Translator: vulpecula <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-04-19 04:32+0000\n"
-"X-Generator: Launchpad (build 12758)\n"
+"X-Launchpad-Export-Date: 2011-05-28 04:30+0000\n"
+"X-Generator: Launchpad (build 12959)\n"
 "X-Rosetta-Version: 0.1\n"
 
 #: /src/schooltool/app/app.py:197
@@ -2608,7 +2608,7 @@ msgstr "Neues Datumsfeld"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:174
 msgid "New Yes/No Field"
-msgstr ""
+msgstr "Neues Ja/Nein Feld"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:181
 msgid "New Selection List Field"
@@ -2764,13 +2764,13 @@ msgstr "Schüler hinzufügen"
 msgid "Advisees of ${person}"
 msgstr "Schüler von ${person}"
 
-#: /src/schooltool/basicperson/browser/person.py:576
+#: /src/schooltool/basicperson/browser/person.py:579
 msgid "Teacher identification"
-msgstr ""
+msgstr "Lehreridentifikation"
 
 #: /src/schooltool/basicperson/browser/person.py:581
 msgid "Teacher demographics"
-msgstr ""
+msgstr "Lehrerstatistik"
 
 #: /src/schooltool/basicperson/browser/person.py:582
 msgid "Add new teacher"
@@ -2778,11 +2778,11 @@ msgstr "Neuen Lehrer hinzufügen"
 
 #: /src/schooltool/basicperson/browser/person.py:589
 msgid "Student identification"
-msgstr ""
+msgstr "Schüleridentifikation"
 
 #: /src/schooltool/basicperson/browser/person.py:591
 msgid "Student demographics"
-msgstr ""
+msgstr "Schülerstatistik"
 
 #: /src/schooltool/basicperson/browser/person.py:592
 msgid "Add new student"
@@ -2790,11 +2790,11 @@ msgstr "Neuen Schüler hinzufügen"
 
 #: /src/schooltool/basicperson/browser/person.py:599
 msgid "Administrator identification"
-msgstr ""
+msgstr "Administratoridentifikation"
 
 #: /src/schooltool/basicperson/browser/person.py:601
 msgid "Administrator demographics"
-msgstr ""
+msgstr "Administratorstatistik"
 
 #: /src/schooltool/basicperson/browser/person.py:602
 msgid "Add new administrator"
@@ -3017,11 +3017,11 @@ msgstr "Ob dieses Feld ein Pflichtfeld ist oder nicht"
 
 #: /src/schooltool/basicperson/interfaces.py:145
 msgid "Limit keys"
-msgstr ""
+msgstr "Schlüsselbeschränkung"
 
 #: /src/schooltool/basicperson/interfaces.py:146
 msgid "An optional list of limit keys for this field"
-msgstr ""
+msgstr "Eine optionale Liste von Schlüsselbeschränkungen für dieses Feld"
 
 #: /src/schooltool/basicperson/interfaces.py:161
 msgid "List of values"
@@ -5506,7 +5506,7 @@ msgstr "Bereichsberichte"
 #: /src/schooltool/report/browser/templates/report_reference.pt:3
 #: /src/schooltool/report/browser/templates/report_reference.pt:7
 msgid "Report Reference"
-msgstr ""
+msgstr "Referenz melden"
 
 #: /src/schooltool/report/browser/templates/report_reference.pt:13
 msgid "Category"
@@ -5514,7 +5514,7 @@ msgstr "Kategorie"
 
 #: /src/schooltool/resource/browser/configure.zcml:96
 msgid "Resource Demographics"
-msgstr ""
+msgstr "Ressourcenstatistik"
 
 #: /src/schooltool/resource/browser/configure.zcml:143
 #: /src/schooltool/resource/browser/resource-csvimport.pt:21
@@ -5580,31 +5580,31 @@ msgstr "Ressourcenverzeichnis"
 
 #: /src/schooltool/resource/browser/resource.py:327
 msgid "Resource Demographics Container"
-msgstr ""
+msgstr "Ressourcenstatistik-Container"
 
 #: /src/schooltool/resource/browser/resource.py:512
 msgid "Resource identification"
-msgstr ""
+msgstr "Ressourcenidentifikation"
 
 #: /src/schooltool/resource/browser/resource.py:514
 msgid "Resource demographics"
-msgstr ""
+msgstr "Ressourcenstatistik"
 
 #: /src/schooltool/resource/browser/resource.py:522
 msgid "Add new resource"
-msgstr ""
+msgstr "Neue Betriebsmittel hinzufügen"
 
 #: /src/schooltool/resource/browser/resource.py:528
 msgid "Edit resource"
-msgstr ""
+msgstr "Betriebsmittel bearbeiten"
 
 #: /src/schooltool/resource/browser/resource.py:536
 msgid "Location identification"
-msgstr ""
+msgstr "Ortsidentifikation"
 
 #: /src/schooltool/resource/browser/resource.py:538
 msgid "Location demographics"
-msgstr ""
+msgstr "Standortstatistik"
 
 #: /src/schooltool/resource/browser/resource.py:548
 msgid "Add new location"
@@ -5616,15 +5616,15 @@ msgstr "Standort bearbeiten"
 
 #: /src/schooltool/resource/browser/resource.py:562
 msgid "Equipment identification"
-msgstr ""
+msgstr "Ausrüstungsidentifikation"
 
 #: /src/schooltool/resource/browser/resource.py:564
 msgid "Equipment demographics"
-msgstr ""
+msgstr "Ausrüstungsstatistik"
 
 #: /src/schooltool/resource/browser/resource.py:574
 msgid "Add new equipment"
-msgstr ""
+msgstr "Neues Gerät hinzufügen"
 
 #: /src/schooltool/resource/browser/resource.py:580
 msgid "Edit equipment"
@@ -7165,17 +7165,26 @@ msgstr "Stundenplan ändern"
 msgid "Supplied passwords are not identical"
 msgstr "Angegebene Passworte stimmen nicht überein"
 
-#~ msgid "Add a Section"
-#~ msgstr "Unterteilung hinzufügen"
+#~ msgid "Everyone can view group calendars."
+#~ msgstr "Jeder kann den Gruppenkalender sehen"
 
-#~ msgid "Required input is missing."
-#~ msgstr "Erforderliche Eingabe fehlt."
+#~ msgid "Everyone can view group information."
+#~ msgstr "Jeder kann die Gruppeninformationen sehen"
 
-#~ msgid "Booked resources: %s"
-#~ msgstr "Gebuchte Ressourcen"
+#~ msgid "Everyone can view group lists."
+#~ msgstr "Jeder kann Gruppenlisten betrachten"
 
-#~ msgid "Change the resources for this section."
-#~ msgstr "Hilfsmittel dieses Abschnitts ändern"
+#~ msgid "Persons can change their own passwords"
+#~ msgstr "Personen können ihr eigenes Passwort ändern"
+
+#~ msgid "Persons can set their own preferences"
+#~ msgstr "Personen können ihre eigenen Einstellungen bearbeiten"
+
+#~ msgid "Everyone can view info of persons"
+#~ msgstr "Jeder kann Personeninformationen einsehen"
+
+#~ msgid "Everyone can view the list of persons"
+#~ msgstr "Jeder kann die Personenliste einsehen"
 
 #~ msgid "Edit Resource Information"
 #~ msgstr "Informationen zu einer Ressource verändern"
@@ -7197,3 +7206,18 @@ msgstr "Angegebene Passworte stimmen nicht überein"
 
 #~ msgid "Edit Location Information"
 #~ msgstr "Standortinformation bearbeiten"
+
+#~ msgid "Add an Equipment"
+#~ msgstr "Gerät hinzufügen"
+
+#~ msgid "Everyone can view section information and calendars"
+#~ msgstr "Jeder kann Unterrichtsinformationen und Kalender einsehen"
+
+#~ msgid "Group members can edit group calendars."
+#~ msgstr "Gruppenteilnehmer können den Gruppenkalender bearbeiten."
+
+#~ msgid "Report a bug on Launchpad."
+#~ msgstr "Bug auf Launchpad melden."
+
+#~ msgid "Access setting: ${setting} (${status})"
+#~ msgstr "Zugriffseinstellungen: ${setting} (${status})"

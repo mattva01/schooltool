@@ -6814,12 +6814,6 @@ msgstr ""
 msgid "Supplied passwords are not identical"
 msgstr "Las contraseñas provistas no son idénticas"
 
-#~ msgid "Add a Section"
-#~ msgstr "Agregar una sección"
-
-#~ msgid "Required input is missing."
-#~ msgstr "Ingreso requerido no se encuentra."
-
 #~ msgid "Everyone can view resource calendars."
 #~ msgstr "Todos pueden ver los calendarios de recursos"
 

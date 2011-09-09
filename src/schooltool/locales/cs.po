@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2011-04-17 23:49+0300\n"
-"PO-Revision-Date: 2011-04-01 18:50+0000\n"
+"PO-Revision-Date: 2011-04-18 08:41+0000\n"
 "Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
 "Language-Team: Czech <debian-l10n-czech@lists.debian.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-04-08 04:31+0000\n"
-"X-Generator: Launchpad (build 12735)\n"
+"X-Launchpad-Export-Date: 2011-05-27 04:31+0000\n"
+"X-Generator: Launchpad (build 12959)\n"
 "X-Rosetta-Version: 0.1\n"
 
 #: /src/schooltool/app/app.py:197
@@ -6696,3 +6696,57 @@ msgstr ""
 #: /src/schooltool/widget/password.py:55
 msgid "Supplied passwords are not identical"
 msgstr "Poskytnutá hesla nejsou identická"
+
+#~ msgid "Everyone can view the application calendar."
+#~ msgstr "Kdokoliv může vidět kalendář aplikace."
+
+#~ msgid "Everyone can view group information."
+#~ msgstr "Kdokoliv může prohlížet informace o skupině."
+
+#~ msgid "Group members can edit group calendars."
+#~ msgstr "Členové skupiny mohou upravovat kalendáře skupiny."
+
+#~ msgid "Everyone can view group calendars."
+#~ msgstr "Kdokoliv může prohlížet kalendáře skupiny."
+
+#~ msgid "Everyone can view group lists."
+#~ msgstr "Kdokoliv může prohlížet seznamy skupiny."
+
+#~ msgid "Everyone can view info of persons"
+#~ msgstr "Kdokoliv může prohlížet informace o osobách"
+
+#~ msgid "Persons can set their own preferences"
+#~ msgstr "Osoby mohou nastavit své vlastní předvolby"
+
+#~ msgid "Persons can change their own passwords"
+#~ msgstr "Osoby mohou měnit svá hesla"
+
+#~ msgid "Everyone can view the list of persons"
+#~ msgstr "Kdokoliv může prohlížet seznam osob"
+
+#~ msgid "Add an Equipment"
+#~ msgstr "Přidat vybavení"
+
+#~ msgid "Edit Equipment Information"
+#~ msgstr "Upravit informace o vybavení"
+
+#~ msgid "Add a Resource"
+#~ msgstr "Přidat prostředek"
+
+#~ msgid "Edit Resource Information"
+#~ msgstr "Upravit informace o prostředku"
+
+#~ msgid "Add a Location"
+#~ msgstr "Přidat umístění"
+
+#~ msgid "Everyone can view resource information."
+#~ msgstr "Kdokoliv může prohlížet informace o prostředku."
+
+#~ msgid "Everyone can view resource calendars."
+#~ msgstr "Kdokoliv může prohlížet kalendáře prostředku."
+
+#~ msgid "Everyone can view resource lists."
+#~ msgstr "Kdokoliv může prohlížet seznamy prostředků."
+
+#~ msgid "Edit Location Information"
+#~ msgstr "Upravit informace o poloze"

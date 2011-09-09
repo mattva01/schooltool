@@ -12,14 +12,14 @@ msgstr ""
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2011-04-17 23:49+0300\n"
 "PO-Revision-Date: 2011-04-01 18:53+0000\n"
-"Last-Translator: Krishna Giri <Unknown>\n"
+"Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
 "Language-Team: OLENepal\n"
 "Language: ne\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-04-08 04:36+0000\n"
-"X-Generator: Launchpad (build 12735)\n"
+"X-Launchpad-Export-Date: 2011-05-27 04:36+0000\n"
+"X-Generator: Launchpad (build 12959)\n"
 
 #: /src/schooltool/app/app.py:197
 msgid "Your School"
@@ -1894,15 +1894,12 @@ msgstr ""
 
 #: /src/schooltool/app/help/event_add.pt:19
 #: /src/schooltool/app/help/event_edit.pt:17
-#, fuzzy
 msgid ""
 "The <code>Location</code> field allows you to enter a description of the "
 "location of the event, but this is not connected to the reservation system. "
 "If your school uses SchoolTool to manage room reservations you need to check "
 "the <code>Book Resources</code> checkbox at the bottom of the form."
 msgstr ""
-"<code>स्थान</code> क्षेत्रले तपाईँलाई स्थानको क्षेत्र वर्णन गर्न अनुमति दिन्छ, तर यो आरक्षण "
-"प्रणाली सँग सम्बन्धित छैन।<code>बुक भएका संशाधन</code> चेकबक्स आकृतिको अन्तिममा छ।"
 
 #: /src/schooltool/app/help/event_add.pt:24
 #: /src/schooltool/app/help/event_edit.pt:22
@@ -3210,9 +3207,8 @@ msgstr "प्रयोगकर्ता आफैँ"
 
 #: /src/schooltool/contact/security.zcml:86
 #: /src/schooltool/person/security.zcml:152
-#, fuzzy
 msgid "User"
-msgstr "प्रयोगकर्ताहरु"
+msgstr ""
 
 #: /src/schooltool/course/browser/configure.zcml:10
 msgid "Add a Course"
@@ -4351,9 +4347,8 @@ msgid "Recipient address"
 msgstr "पाउनेको ठेगाना"
 
 #: /src/schooltool/email/interfaces.py:58
-#, fuzzy
 msgid "Status"
-msgstr "राज्य"
+msgstr ""
 
 #: /src/schooltool/email/interfaces.py:59
 msgid "Code for the status of the message"
@@ -6733,6 +6728,18 @@ msgstr "तालिका बदल्नुहोस्"
 msgid "Supplied passwords are not identical"
 msgstr "प्रदान गरिएको पासवर्ड पहिचानयोग्य छैन"
 
+#~ msgid "Edit Resource Information"
+#~ msgstr "संशाधनको जानकारि सम्पादन"
+
+#~ msgid "Using timetable:"
+#~ msgstr "समयतालिका प्रयोग गर्दै:"
+
+#~ msgid "Everyone can view section information and calendars"
+#~ msgstr "सबैले सेक्सनको  सूचना र भित्तेपात्रोहरु हेर्न  सक्छन"
+
+#~ msgid "Everyone can view group calendars."
+#~ msgstr "सबैले समूहको भित्तेपात्रोहरु हेर्न  सक्छन ।"
+
 #~ msgid "Persons can set their own preferences"
 #~ msgstr "ब्यक्तिहरुले तिनिहरुको आफ्नो प्राथमिकिकरणहरु सेट गर्न सक्छन"
 
@@ -6768,3 +6775,24 @@ msgstr "प्रदान गरिएको पासवर्ड पहिच
 
 #~ msgid "Everyone can view resource calendars."
 #~ msgstr "सबैले शंसाधनको भित्तेपात्रोहरु  हेर्न सक्छन्"
+
+#~ msgid "Add a Location"
+#~ msgstr "ठाउँ थप्नुहोस्"
+
+#~ msgid "Edit Location Information"
+#~ msgstr "ठाउँको बारेमा सुचना सम्पादन गर्नुहोस्"
+
+#~ msgid "Add an Equipment"
+#~ msgstr "सामग्री थप्नुहोस्"
+
+#~ msgid "Edit Equipment Information"
+#~ msgstr "सामग्रीको बारेमा सूचना सम्पादन गर्नुहोस्"
+
+#~ msgid "Access setting: ${setting} (${status})"
+#~ msgstr "पहुँच सेटिङ: ${setting} (${status})"
+
+#~ msgid "Report a bug on Launchpad."
+#~ msgstr "प्रक्षेपणडबली मा त्रुटी रिपोर्ट गर्नुहोस्।"
+
+#~ msgid "For term:"
+#~ msgstr "अवधिको लागि"
