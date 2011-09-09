@@ -1,0 +1,81 @@
+<html metal:use-macro="view/@@standard_macros/page"
+      i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title" i18n:translate="">
+    Link Section to Section in Other Term
+  </title>
+</head>
+<body>
+
+<metal:block metal:fill-slot="content-header">
+  <table class="all_terms_header">
+    <tr>
+      <td><h2><span i18n:translate="">Section</span>: <a tal:replace="structure context/@@link" /></h2></td>
+      <td>
+        <h2><span i18n:translate="">Course</span>:
+        <tal:loop tal:repeat="course context/courses">
+          <a tal:replace="structure course/@@link" />
+        </tal:loop></h2>
+      <td>
+      <td><h2><span i18n:translate="">Term</span>: <a tal:replace="structure view/term/@@link" /></h2></td>
+      <td><h2><span i18n:translate="">Target Term</span>: <a tal:replace="structure view/link_term/@@link" /></h2></td>
+    </tr>
+  </table>
+  <table class="link_help">
+    <tr>
+      <td i18n:translate="">Select a section and click 'Link' if you would like
+      to copy and link this section to the target section.</td>
+    </tr>
+    <tr>
+      <td i18n:translate="">You may provide part of an instructor's name or username
+      and click 'Filter' to limit the list of sections to those taught by a matching
+      instructor.</td>
+    </tr>
+    <tr class="link_error" tal:condition="view/error">
+      <td i18n:translate="">You must select a section before clicking 'Link'.</td>
+    </tr>
+  </table>
+</metal:block>
+
+<metal:block metal:fill-slot="body">
+  <form method="post" tal:attributes="action request/URL">
+    <div>
+      <label for="teacher">Instructor</label>
+      <input type="text" name="teacher" id="teacher"
+             tal:attributes="value request/teacher|nothing" />
+      <input type="submit" class="button-ok" name="FILTER"
+             value="Filter" i18n:attributes="value" />
+    </div>
+    <br />
+    <table class="all_terms_table">
+      <tr>
+        <th i18n:translate="">Section</th>
+        <th i18n:translate="">Instructors</th>
+      </tr>
+      <tr tal:repeat="section view/sections">
+        <td>
+          <input type="radio" name="LINK_SECTION"
+                 tal:attributes="value string:section_${section/__name__}" />
+          <a tal:replace="structure section/@@link" />
+        </td>
+        <td>
+          <tal:loop tal:repeat="teacher section/instructors">
+            <a tal:replace="structure teacher/@@link" />
+          </tal:loop>
+        </td>
+      </tr>
+    </table>
+    <br />
+    <input type="hidden" name="term" tal:attributes="value request/term">
+    <div class="controls">
+      <input type="submit" class="button-ok" name="LINK"
+             value="Link" i18n:attributes="value link-section-button" />
+      <input type="submit" class="button-cancel" name="CANCEL"
+             value="Cancel" i18n:attributes="value cancel-button" />
+    </div>
+  </form>
+</metal:block>
+
+</body>
+</html>
+

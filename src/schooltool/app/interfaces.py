@@ -23,7 +23,7 @@ SchoolTool application interfaces
 import zope.schema
 
 from zope.component.interfaces import ObjectEvent, IObjectEvent
-from zope.container.interfaces import IContainer, IContained
+from zope.container.interfaces import IContainer
 from zope.container.interfaces import IReadContainer
 from zope.container.constraints import contains
 from zope.interface import implements
@@ -35,8 +35,8 @@ from schooltool.common import SchoolToolMessage as _
 from schooltool.calendar.interfaces import IEditCalendar, ICalendarEvent
 from schooltool.person.interfaces import ICalendarDisplayPreferences
 
-import zope.app.form.browser.textwidgets
-zope.app.form.browser.textwidgets._ = _
+import zope.formlib.textwidgets
+zope.formlib.textwidgets._ = _
 # Here we do a particulary evil thing: we override the translation (_) function
 # in the textwidgets module.  This means that all the messages in that module
 # are now in the 'schooltool' domain.  This is the list of the messages

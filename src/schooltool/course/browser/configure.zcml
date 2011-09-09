@@ -141,6 +141,39 @@
       layer="schooltool.skin.ISchoolToolLayer"
       />
 
+  <page
+      name="section_linkage.html"
+      for="..interfaces.ISection"
+      class=".section.SectionLinkageView"
+      template="templates/section_linkage.pt"
+      permission="schooltool.edit"
+      layer="schooltool.skin.ISchoolToolLayer"
+      />
+
+  <page
+      name="extend_term.html"
+      for="..interfaces.ISection"
+      class=".section.ExtendTermView"
+      permission="schooltool.edit"
+      layer="schooltool.skin.ISchoolToolLayer"
+      />
+
+  <page
+      name="link_existing.html"
+      for="..interfaces.ISection"
+      class=".section.LinkExistingView"
+      permission="schooltool.edit"
+      layer="schooltool.skin.ISchoolToolLayer"
+      />
+
+  <page
+      name="unlink_section.html"
+      for="..interfaces.ISection"
+      class=".section.UnlinkSectionView"
+      permission="schooltool.edit"
+      layer="schooltool.skin.ISchoolToolLayer"
+      />
+
   <containerViews
       for="..interfaces.ISectionContainer"
       contents="schooltool.view"

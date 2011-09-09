@@ -1,0 +1,37 @@
+<html metal:use-macro="view/@@standard_macros/page"
+      i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title" i18n:translate="">
+    Extend Section to Term
+  </title>
+</head>
+<body>
+
+<metal:block metal:fill-slot="content-header">
+  <table class="link_help"><tr>
+    <td i18n:translate="">
+      Click "Extend" to create a linked section in term
+      "<tal:block i18n:name="from_term_title" content="view/extend_term/@@title" />"
+      containing the students and instructors from section
+      "<tal:block i18n:name="section_title" content="context/@@title" />"
+      in term
+      "<tal:block i18n:name="to_term_title" content="view/term/@@title" />".
+    </td>
+  </tr></table>
+</metal:block>
+
+<metal:block metal:fill-slot="body">
+  <form method="post" tal:attributes="action request/URL">
+    <input type="hidden" name="term" tal:attributes="value request/term">
+    <div class="controls">
+      <input type="submit" class="button-ok" name="EXTEND"
+             value="Extend" i18n:attributes="value" />
+      <input type="submit" class="button-cancel" name="CANCEL"
+             value="Cancel"  i18n:attributes="value" />
+    </div>
+  </form>
+</metal:block>
+
+</body>
+</html>
+

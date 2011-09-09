@@ -3,9 +3,10 @@
            xmlns:i18n="http://namespaces.zope.org/i18n"
            i18n_domain="schooltool">
 
-  <include package="zope.app.zcmlfiles" />
-  <include package="zope.login" />
+  <include file="zcmlfiles.zcml" />
+
   <include package="zope.password" />
+  <include package="zope.login" />
   <include package="zope.viewlet" file="meta.zcml" />
   <include package="zope.mimetype" file="meta.zcml"/>
   <include package="zc.resourcelibrary" file="meta.zcml"/>
@@ -57,26 +58,28 @@
   <!-- set up custom security policy -->
   <include package="schooltool.securitypolicy"/>
 
-  <!-- Support Online Help -->
-
-  <include package="zope.app.renderer" />
-  <include package="zope.app.file" />
-  <include package="zope.app.onlinehelp" file="meta.zcml" />
-  <include package="zope.app.onlinehelp" />
-
   <!-- Load devmode-specific Zope and SchoolTool packages -->
 
   <configure
       xmlns:zcml="http://namespaces.zope.org/zcml"
       zcml:condition="have devmode">
-    <include package="zope.app.apidoc" file="meta.zcml" />
-    <include package="zope.app.preference" file="meta.zcml" />
-    <include package="zope.app.apidoc" />
-    <include package="zope.app.preference" />
-    <include package="zope.app.renderer" />
-    <include package="zope.app.tree" />
+
+    <configure zcml:condition="installed zope.app.apidoc">
+      <!-- onlinehelp -->
+      <include package="zope.app.renderer" />
+      <include package="zope.app.file" />
+      <include package="zope.app.onlinehelp" file="meta.zcml" />
+      <include package="zope.app.onlinehelp" />
+      
+      <!-- apidoc -->
+      <include package="zope.app.apidoc" file="meta.zcml" />
+      <include package="zope.app.preference" file="meta.zcml" />
+      <include package="zope.app.apidoc" />
+      <include package="zope.app.preference" />
+      <include package="zope.app.tree" />
+    </configure>
+
     <include package="schooltool.sampledata" />
-    <include package="schooltool.setupdata" />
   </configure>
 
   <!-- Translations -->

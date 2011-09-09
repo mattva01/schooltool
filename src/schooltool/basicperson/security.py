@@ -17,19 +17,13 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Lyceum specific security code.
-
-$Id$
-
+BasicPerson specific security code.
 """
-from zope.traversing.api import getParent
 
-from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.basicperson.interfaces import IBasicPerson
 from schooltool.common import SchoolToolMessage as _
-from schooltool.group.interfaces import IGroupContainer
 from schooltool.person.interfaces import IPerson
-from schooltool.securitypolicy.crowds import Crowd, ConfigurableCrowd
+from schooltool.securitypolicy.crowds import Crowd
 
 
 class PersonAdvisorsCrowd(Crowd):

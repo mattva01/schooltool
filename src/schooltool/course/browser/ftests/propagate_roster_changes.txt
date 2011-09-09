@@ -1,0 +1,210 @@
+Propagating roster changes to linked sections
+=============================================
+
+When the user has already set up a series of linked sections and filled up the
+roster in each section, we should make it easy for them to change the roster in
+all the sections with one action.  As such we propagate any change to the
+teachers or students to all linked sections that come after the section in time.
+
+We'll use a helper method that prints the roster efficiently for ease of
+testing.
+
+    >>> def printRoster(term):
+    ...     query = "id('content-body')//table[@class='all_terms_table']/tbody/tr/td[%s]//a/text()" % term
+    ...     results = manager.queryHTML(query)
+    ...     if results[0] != 'Extend to This Term':
+    ...         for result in results[2:]:
+    ...             print result
+
+We log in as the manager user.
+
+    >>> manager = Browser('manager', 'schooltool')
+
+We need some teachers and some students.
+
+    >>> from schooltool.basicperson.browser.ftests.setup import addPerson
+    >>> addPerson('Teacher1', 'Teacher1', 'teacher1', 'pwd')
+    >>> addPerson('Teacher2', 'Teacher2', 'teacher2', 'pwd')
+    >>> addPerson('Teacher3', 'Teacher3', 'teacher3', 'pwd')
+    >>> addPerson('Student1', 'Student1', 'student1', 'pwd')
+    >>> addPerson('Student2', 'Student2', 'student2', 'pwd')
+    >>> addPerson('Student3', 'Student3', 'student3', 'pwd')
+
+We'll create a school year with four terms.
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('School Years').click()
+    >>> manager.getLink('New School Year').click()
+    >>> manager.getControl('Title').value = '2005-2006'
+    >>> manager.getControl('First day').value = '2005-09-01'
+    >>> manager.getControl('Last day').value = '2006-07-15'
+    >>> manager.getControl('Add').click()
+
+    >>> from schooltool.app.browser.ftests import setup
+    >>> setup.addTerm('Term1', '2005-09-01', '2005-12-31', '2005-2006')
+    >>> setup.addTerm('Term2', '2006-01-01', '2006-03-15', '2005-2006')
+    >>> setup.addTerm('Term3', '2006-03-16', '2006-05-31', '2005-2006')
+    >>> setup.addTerm('Term4', '2006-06-01', '2006-07-15', '2005-2006')
+
+We'll create a course and a Term1 section for it.
+
+    >>> setup.addCourse("History", "2005-2006")
+    >>> setup.addSection("History", "2005-2006", "Term1",
+    ...     instructors=["Teacher1", "Teacher2"],
+    ...     members=['Student1', 'Student2'])
+
+We'll navigate to the section and hit the Linked sections link.
+
+    >>> manager.getLink("2005-2006").click()
+    >>> manager.getLink("Courses").click()
+    >>> manager.getLink("History").click()
+    >>> manager.getLink("History (1)").click()
+    >>> manager.getLink("Linked sections").click()
+
+We'll extend the section all the way to Term4.  This leaves the section with
+the two teachers and the two students in each term.
+
+    >>> manager.getLink("Extend to This Term", index=2).click()
+    >>> manager.getControl("Extend").click()
+
+    >>> printRoster(1)
+    Teacher1, Teacher1
+    Teacher2, Teacher2
+    Student1, Student1
+    Student2, Student2
+
+    >>> printRoster(2)
+    Teacher1, Teacher1
+    Teacher2, Teacher2
+    Student1, Student1
+    Student2, Student2
+
+    >>> printRoster(3)
+    Teacher1, Teacher1
+    Teacher2, Teacher2
+    Student1, Student1
+    Student2, Student2
+
+    >>> printRoster(4)
+    Teacher1, Teacher1
+    Teacher2, Teacher2
+    Student1, Student1
+    Student2, Student2
+
+First we'll show that changing the Term4 section does nothing becuase there
+is no term that follows it.  We'll add and remove teachers and students from
+the section.
+
+    >>> manager.getLink("2005-2006").click()
+    >>> manager.getLink("Term4").click()
+    >>> manager.getLink("Sections").click()
+    >>> manager.getLink("History (1)").click()
+
+    >>> manager.getLink('edit instructors').click()
+    >>> manager.getControl('Teacher3').click()
+    >>> manager.getControl('Add').click()
+    >>> manager.getControl('OK').click()
+
+    >>> manager.getLink('edit instructors').click()
+    >>> manager.getControl('Teacher1').click()
+    >>> manager.getControl('Remove').click()
+    >>> manager.getControl('OK').click()
+
+    >>> manager.getLink('edit individuals').click()
+    >>> manager.getControl('Student3').click()
+    >>> manager.getControl('Add').click()
+    >>> manager.getControl('OK').click()
+
+    >>> manager.getLink('edit individuals').click()
+    >>> manager.getControl('Student1').click()
+    >>> manager.getControl('Remove').click()
+    >>> manager.getControl('OK').click()
+
+We see that only the Term4 section's roster has changed.
+
+    >>> manager.getLink("Linked sections").click()
+
+    >>> printRoster(1)
+    Teacher1, Teacher1
+    Teacher2, Teacher2
+    Student1, Student1
+    Student2, Student2
+
+    >>> printRoster(2)
+    Teacher1, Teacher1
+    Teacher2, Teacher2
+    Student1, Student1
+    Student2, Student2
+
+    >>> printRoster(3)
+    Teacher1, Teacher1
+    Teacher2, Teacher2
+    Student1, Student1
+    Student2, Student2
+
+    >>> printRoster(4)
+    Teacher2, Teacher2
+    Teacher3, Teacher3
+    Student2, Student2
+    Student3, Student3
+
+Now we'll do the same for the Term2 section, adding and removing teachers and
+students.
+
+    >>> manager.getLink("2005-2006").click()
+    >>> manager.getLink("Term2").click()
+    >>> manager.getLink("Sections").click()
+    >>> manager.getLink("History (1)").click()
+
+    >>> manager.getLink('edit instructors').click()
+    >>> manager.getControl('Teacher3').click()
+    >>> manager.getControl('Add').click()
+    >>> manager.getControl('OK').click()
+
+    >>> manager.getLink('edit instructors').click()
+    >>> manager.getControl('Teacher2').click()
+    >>> manager.getControl('Remove').click()
+    >>> manager.getControl('OK').click()
+
+    >>> manager.getLink('edit individuals').click()
+    >>> manager.getControl('Student3').click()
+    >>> manager.getControl('Add').click()
+    >>> manager.getControl('OK').click()
+
+    >>> manager.getLink('edit individuals').click()
+    >>> manager.getControl('Student1').click()
+    >>> manager.getControl('Remove').click()
+    >>> manager.getControl('OK').click()
+
+We see that the changes made to the Term2 section were automatically made
+(propagated) to the Term3 and Term4 sections which come after Term2 in time.
+Since Term1 comes before Term2, nothing changes in the Term1 section.  Also,
+note that the changes that were already mode to Term4, adding Teacher3 and
+removing Student1, were ignored while propagating to Term4, causing no program
+exception.
+
+    >>> manager.getLink("Linked sections").click()
+
+    >>> printRoster(1)
+    Teacher1, Teacher1
+    Teacher2, Teacher2
+    Student1, Student1
+    Student2, Student2
+
+    >>> printRoster(2)
+    Teacher1, Teacher1
+    Teacher3, Teacher3
+    Student2, Student2
+    Student3, Student3
+
+    >>> printRoster(3)
+    Teacher1, Teacher1
+    Teacher3, Teacher3
+    Student2, Student2
+    Student3, Student3
+
+    >>> printRoster(4)
+    Teacher3, Teacher3
+    Student2, Student2
+    Student3, Student3
+

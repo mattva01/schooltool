@@ -49,9 +49,9 @@ from schooltool.schoolyear.subscriber import ObjectEventAdapterSubscriber
 from schooltool.schoolyear.interfaces import ISubscriber
 from schooltool.schoolyear.interfaces import ISchoolYear
 from schooltool.securitypolicy.crowds import Crowd, AggregateCrowd
+from schooltool.securitypolicy.crowds import ConfigurableCrowd
 from schooltool.course.interfaces import ICourseContainer
 from schooltool.course.interfaces import ISection
-from schooltool.app.security import ConfigurableCrowd
 from schooltool.relationship.relationship import getRelatedObjects
 from schooltool.course.interfaces import ILearner, IInstructor
 from schooltool.term.term import getNextTerm
@@ -401,6 +401,53 @@ class SectionLinkContinuinityValidationSubscriber(EventAdapterSubscriber):
         if not sameProxiedObjects(getNextTerm(first_term), second_term):
             raise InvalidSectionLinkException(
                 _("Sections must be in consecutive terms"))
+
+
+def getSectionRosterEventParticipants(event, rel_type):
+    if rel_type != event.rel_type:
+        return None, None
+    if ISection.providedBy(event.participant1):
+        return event.participant1, event.participant2
+    elif ISection.providedBy(event.participant2):
+        return event.participant2, event.participant1
+    else:
+        return None, None
+
+
+def propagateSectionInstructorAdded(event):
+    section, teacher = getSectionRosterEventParticipants(event, 
+        relationships.URIInstruction)
+    if section is None:
+        return
+    if section.next and teacher not in section.next.instructors:
+        section.next.instructors.add(teacher)
+
+
+def propagateSectionInstructorRemoved(event):
+    section, teacher = getSectionRosterEventParticipants(event, 
+        relationships.URIInstruction)
+    if section is None:
+        return
+    if section.next and teacher in section.next.instructors:
+        section.next.instructors.remove(teacher)
+
+
+def propagateSectionStudentAdded(event):
+    section, student = getSectionRosterEventParticipants(event, 
+        relationships.URIMembership)
+    if section is None:
+        return
+    if section.next and student not in section.next.members:
+        section.next.members.add(student)
+
+
+def propagateSectionStudentRemoved(event):
+    section, student = getSectionRosterEventParticipants(event, 
+        relationships.URIMembership)
+    if section is None:
+        return
+    if section.next and student in section.next.members:
+        section.next.members.remove(student)
 
 
 def copySection(section, target_term):

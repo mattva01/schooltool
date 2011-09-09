@@ -22,7 +22,6 @@ Sources and vocabularies for form fields.
 from zope.interface import implements
 from zope.interface import implementer
 from zope.component import adapter
-from zope.schema.interfaces import ITitledTokenizedTerm
 
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.utils import vocabulary
@@ -39,17 +38,6 @@ from schooltool.basicperson.interfaces import IFieldDescription
 from schooltool.basicperson.interfaces import IFieldFilterVocabulary
 
 from schooltool.common import SchoolToolMessage as _
-
-
-class Term(object):
-    """Simplistic term that uses value as token.
-    """
-    implements(ITitledTokenizedTerm)
-
-    def __init__(self, value):
-        self.title = value
-        self.token = value
-        self.value = value
 
 
 class GroupVocabulary(object):
@@ -139,7 +127,7 @@ def getLimitKeyVocabularyForFieldDescription(field_description):
 @adapter(IDemographicsFields)
 @implementer(IFieldFilterVocabulary)
 def getLimitKeyVocabularyForPersonFields(person_field_description_container):
-     return vocabulary([
+    return vocabulary([
         ('students', _('Students')),
         ('teachers', _('Teachers')),
         ('administrators', _('Administrators')),

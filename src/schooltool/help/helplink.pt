@@ -1,8 +1,0 @@
-|
-<a id="tools-help" href="#"
-   tal:define="url string:'${request/URL}/++help++/@@contexthelp.html'"
-   tal:attributes="href python:'javascript:popUp('+ url + ')';
-                   title view/title"
-   i18n:translate=""
-   i18n:domain="schooltool"
-   >Help</a>

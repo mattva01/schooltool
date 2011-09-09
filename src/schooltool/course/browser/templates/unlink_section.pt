@@ -1,0 +1,47 @@
+<html metal:use-macro="view/@@standard_macros/page"
+      i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title" i18n:translate="">
+    Unlink Section
+  </title>
+</head>
+<body>
+
+<metal:block metal:fill-slot="content-header">
+  <table class="all_terms_header">
+    <tr>
+      <td><h2><span i18n:translate="">Section</span>: <a tal:replace="structure context/@@link" /></h2></td>
+      <td><h2><span i18n:translate="">Course</span>:
+        <tal:loop tal:repeat="course context/courses">
+          <a tal:replace="structure course/@@link" />
+        </tal:loop></h2>
+      </td>
+      <td><h2><span i18n:translate="">Term</span>: <a tal:replace="structure view/term/@@link" /></h2></td>
+    </tr>
+  </table>
+  <table><tr>
+    <td i18n:translate="">Click 'Unlink' if you would like to remove the link
+    this section has to the following section(s):</td>
+  </tr></table>
+  <table class="all_terms_header">
+    <tr tal:repeat="section view/sections">
+      <td><span i18n:translate="">Section</span>: <a tal:replace="structure section/section/@@link" /></td>
+      <td><span i18n:translate="">Term</span>: <a tal:replace="structure section/term/@@link" /></td>
+    </tr>
+  </table>
+</metal:block>
+
+<metal:block metal:fill-slot="body">
+  <form method="post" tal:attributes="action request/URL">
+    <div class="controls">
+      <input type="submit" class="button-ok" name="UNLINK"
+             value="Unlink" i18n:attributes="value unlink-section-button" />
+      <input type="submit" class="button-cancel" name="CANCEL"
+             value="Cancel" i18n:attributes="value cancel-button" />
+    </div>
+  </form>
+</metal:block>
+
+</body>
+</html>
+

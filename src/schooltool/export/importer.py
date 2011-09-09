@@ -48,7 +48,7 @@ from schooltool.timetable.interfaces import ITimetableModelFactory
 from schooltool.timetable.schema import TimetableSchema
 from schooltool.timetable.schema import TimetableSchemaDay
 from schooltool.term.interfaces import ITerm
-from schooltool.term.term import Term
+from schooltool.term.term import Term, getNextTerm, getPreviousTerm
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.app.app import SimpleNameChooser
@@ -650,7 +650,7 @@ class PersonImporter(ImporterBase):
             # XXX: this has to be fixed
             # XXX: SchoolTool should handle UTF-8
             try:
-                data['__name__'].encode('ascii')
+                str(data['__name__'])
             except UnicodeEncodeError:
                 self.error(
                     row, 0,
@@ -746,6 +746,18 @@ class SectionImporter(ImporterBase):
         if section.__name__ not in sc:
             sc[section.__name__] = section
 
+        if data['link']:
+            previous_term = getPreviousTerm(term)
+            if previous_term is not None:
+                previous_sections = ISectionContainer(previous_term)
+                if section.__name__ in previous_sections:
+                    previous_sections[section.__name__].next = section
+            next_term = getNextTerm(term)
+            if next_term is not None:
+                next_sections = ISectionContainer(next_term)
+                if section.__name__ in next_sections:
+                    next_sections[section.__name__].previous = section
+
     def import_timetable(self, sh, row, section):
         schemas = ITimetableSchemaContainer(ISchoolYear(section))
         schema_id = self.getRequiredTextFromCell(sh, row, 1)
@@ -781,21 +793,23 @@ class SectionImporter(ImporterBase):
             if num_errors < len(self.errors):
                 continue
 
-            resources[day_id, period_id] = resource_id
+            if resource_id:
+                resources[day_id, period_id] = resource_id
             act = TimetableActivity(title=course.title, owner=section)
             timetable[day_id].add(period_id, act)
 
         for event in ISchoolToolCalendar(section):
             if ITimetableCalendarEvent.providedBy(event):
-                resource_id = resources[event.day_id, event.period_id]
-                resource = rc[resource_id]
-                event.bookResource(removeSecurityProxy(resource))
+                resource_id = resources.get((event.day_id, event.period_id))
+                if resource_id:
+                    resource = rc[resource_id]
+                    event.bookResource(removeSecurityProxy(resource))
 
     def import_timetables(self, sh, row, section):
         for row in range(row, sh.nrows):
             if sh.cell_value(rowx=row, colx=0) == 'School Timetable':
                 self.import_timetable(sh, row, section)
-            if sh.cell_value(rowx=row, colx=0) == '':
+            elif sh.cell_value(rowx=row, colx=0) == '':
                 break
         return row
 
@@ -803,6 +817,8 @@ class SectionImporter(ImporterBase):
         data = {}
         data['title'] = self.getRequiredTextFromCell(sh, row, 1)
         data['__name__'] = self.getRequiredTextFromCell(sh, row+1, 1)
+        link = self.getTextFromCell(sh, row+1, 3)
+        data['link'] = link.lower() in ['y', 'yes']
         data['description'] = self.getTextFromCell(sh, row+2, 1)
 
         section = self.createSection(data, year, term)
@@ -810,7 +826,7 @@ class SectionImporter(ImporterBase):
         courses = ICourseContainer(section)
 
         row += 4
-        if sh.cell_value(rowx=row, colx=0) == 'Courses':
+        if self.getCellValue(sh, row, 0, '') == 'Courses':
             row += 1
             for row in range(row, sh.nrows):
                 if sh.cell_value(rowx=row, colx=0) == '':
@@ -836,7 +852,7 @@ class SectionImporter(ImporterBase):
             return
 
         persons = self.context['persons']
-        if sh.cell_value(rowx=row, colx=0) == 'Students':
+        if self.getCellValue(sh, row, 0, '') == 'Students':
             row += 1
             for row in range(row, sh.nrows):
                 if sh.cell_value(rowx=row, colx=0) == '':
@@ -855,7 +871,7 @@ class SectionImporter(ImporterBase):
                     section.members.add(removeSecurityProxy(member))
             row += 1
 
-        if sh.cell_value(rowx=row, colx=0) == 'Instructors':
+        if self.getCellValue(sh, row, 0, '') == 'Instructors':
             row += 1
             for row in range(row, sh.nrows):
                 if sh.cell_value(rowx=row, colx=0) == '':
@@ -874,7 +890,7 @@ class SectionImporter(ImporterBase):
                     section.instructors.add(removeSecurityProxy(instructor))
             row += 1
 
-        if sh.cell_value(rowx=row, colx=0) == 'School Timetable':
+        if self.getCellValue(sh, row, 0, '') == 'School Timetable':
             self.import_timetables(sh, row, section)
 
     def process(self):
@@ -956,7 +972,7 @@ class GroupImporter(ImporterBase):
 
         row += 5
         pc = self.context['persons']
-        if sh.cell_value(rowx=row, colx=0) == 'Members':
+        if self.getCellValue(sh, row, 0, '') == 'Members':
             row += 1
             for row in range(row, sh.nrows):
                 if sh.cell_value(rowx=row, colx=0) == '':
@@ -986,23 +1002,16 @@ class MegaImporter(BrowserView):
         self.errors = []
         self.success = []
 
-    def getWorkbook(self):
-        xlsfile = self.request.get('xlsfile', '')
-        if xlsfile:
-            xlsfile = xlsfile.read()
-
-        if not xlsfile:
-            self.errors.append(_('No data provided'))
-            return
-
-        book = xlrd.open_workbook(file_contents=xlsfile)
-        return book
-
     def update(self):
         if "UPDATE_SUBMIT" not in self.request:
             return
 
-        wb = self.getWorkbook()
+        xlsfile = self.request.get('xlsfile', '')
+        if not xlsfile:
+            self.errors.append(_('No data provided'))
+            return
+
+        wb = xlrd.open_workbook(file_contents=xlsfile.read())
 
         sp = transaction.savepoint(optimistic=True)
 

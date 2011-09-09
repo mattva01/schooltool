@@ -18,7 +18,6 @@
       <a href="@@introspector.html" i18n:translate="">Introspector</a>
       <a href="/++apidoc++/@@index.html" i18n:translate="">API Docs</a>
       <a href="/@@sampledata.html" i18n:translate="">Sample data</a>
-      <a href="/@@setupdata.html" i18n:translate="">Setup data</a>
     </div>
   </div>
 
