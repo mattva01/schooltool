@@ -112,9 +112,12 @@
   <p class="server-info">
     <strong tal:replace="context/schooltool:preferences/title"/>
     -
-    <span i18n:translate="">server running SchoolTool</span>
-    <span tal:content="modules/schooltool/common/get_version"/>
-
+    <span i18n:translate="">server running</span>
+    <a i18n:translate=""
+       tal:attributes="href string:${context/schooltool:app/@@absolute_url}/about.html">
+      SchoolTool
+      <span tal:content="modules/schooltool/common/get_version" i18n:name="version"/>
+    </a>
   </p>
 
   <p i18n:translate="" class="copyright">

@@ -1,0 +1,38 @@
+<div i18n:domain="schooltool">
+  <p i18n:translate="">
+    SchoolTool is free administrative software for schools around the
+    world.  The goals of the project are to create a simple turnkey
+    student information system or managment information system for
+    primary and secondary schools, as well as a framework for building
+    customized applications and configurations for individual schools
+    or states.
+  </p>
+  <p i18n:translate="">
+    SchoolTool is built on a 100% open source software stack, written
+    in <a href="http://python.org" i18n:name="python"
+    i18n:translate="">Python</a> using the <a href="http://zope.org"
+    i18n:name="zope3" i18n:translate="">Zope 3</a> framework.
+  </p>
+  <p i18n:translate="">
+    SchoolTool is licensed under the <a
+    href="http://www.gnu.org/licenses/gpl-2.0.html" i18n:name="gpl"
+    i18n:translate="">GNU General Public License, Version 2</a>.
+  </p>
+  <p>
+    <strong i18n:translate="">Founder and funder:</strong>
+    <a href="http://markshuttleworth.com">Mark Shuttleworth</a>
+  </p>
+  <p>
+    <strong i18n:translate="">Project Manager:</strong> Tom Hoffman
+    (<a href="mailto:hoffman@schooltool.org"
+    i18n:translate="">email</a>)
+  </p>
+  <p>
+    <strong i18n:translate="">Lead Developer:</strong>
+    Justas Sadzevičius
+  </p>
+  <p>
+    <strong i18n:translate="">Release Manager:</strong>
+    Gediminas Paulauskas
+  </p>
+</div>

@@ -300,6 +300,73 @@
 
   </configure>
 
+  <flourish:page
+      name="about.html"
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      class="schooltool.app.browser.app.FlourishAboutView"
+      title="SchoolTool"
+      subtitle="About"
+      content_template="templates/f_about.pt"
+      permission="zope.Public"
+      />
+
+  <flourish:viewlet
+      name="about-links"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      class="schooltool.app.browser.app.AboutLinks"
+      title="More Information"
+      permission="zope.Public"
+      view="schooltool.app.browser.app.FlourishAboutView"
+      />
+
+  <flourish:viewlet
+      name="website"
+      class="schooltool.skin.flourish.page.LinkViewlet"
+      manager="schooltool.app.browser.app.AboutLinks"
+      title="Website"
+      url="http://www.schooltool.org"
+      permission="zope.Public"
+      />
+
+  <flourish:viewlet
+      name="launchpad"
+      after="website"
+      class="schooltool.skin.flourish.page.LinkViewlet"
+      manager="schooltool.app.browser.app.AboutLinks"
+      title="Launchpad project page"
+      url="https://launchpad.net/schooltool-project"
+      permission="zope.Public"
+      />
+
+  <flourish:viewlet
+      name="mailing-list"
+      after="launchpad"
+      class="schooltool.skin.flourish.page.LinkViewlet"
+      manager="schooltool.app.browser.app.AboutLinks"
+      title="Mailing list"
+      url="https://launchpad.net/~schooltoolers"
+      permission="zope.Public"
+      />
+
+  <flourish:viewlet
+      name="irc-channel"
+      after="mailing-list"
+      class="schooltool.skin.flourish.page.LinkViewlet"
+      manager="schooltool.app.browser.app.AboutLinks"
+      title="IRC channel"
+      url="http://webchat.freenode.net/?channels=schooltool"
+      permission="zope.Public"
+      />
+
+  <flourish:viewlet
+      name="about-related"
+      class="schooltool.skin.flourish.page.Related"
+      template="templates/f_about_related.pt"
+      view="schooltool.app.browser.app.FlourishAboutView"
+      manager="schooltool.skin.flourish.page.IPageRelatedManager"
+      permission="zope.Public"
+      />
+
   <!-- Manage School page -->
 
   <flourish:page

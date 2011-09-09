@@ -310,3 +310,10 @@ body > .calendar {
     font-size: 12px;
     line-height: 16px;
 }
+
+/* XXX: used in about.html */
+
+ul.contributors {
+    list-style-type: disc;
+    margin-left: 16px;
+}
