@@ -36,6 +36,8 @@ Bugfixes
   + Section timetables without resources
   + Empty sections or groups (https://launchpad.net/bugs/382566)
 
+- Updated translations
+
 
 1.6.0 (2011-04-25)
 ------------------

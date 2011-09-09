@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-04-17 23:49+0300\n"
-"PO-Revision-Date: 2011-04-01 18:25+0000\n"
+"POT-Creation-Date: 2011-09-08 14:13+0300\n"
+"PO-Revision-Date: 2011-04-18 08:27+0000\n"
 "Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
 "Language-Team: Finnish <fi@li.org>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-04-08 04:32+0000\n"
-"X-Generator: Launchpad (build 12735)\n"
+"X-Launchpad-Export-Date: 2011-05-27 04:32+0000\n"
+"X-Generator: Launchpad (build 12959)\n"
 "X-Rosetta-Version: 0.1\n"
 
 #: /src/schooltool/app/app.py:197
@@ -644,35 +644,12 @@ msgstr "Käännösalueet"
 msgid "Generations"
 msgstr "Sukupolvet"
 
-#: /src/schooltool/app/browser/configure.zcml:666
-msgid "Browser UI"
-msgstr "Selaimen käyttöliittymä"
-
-#: /src/schooltool/app/browser/configure.zcml:672
-#: /src/schooltool/app/browser/templates/login.pt:3
-#: /src/schooltool/app/browser/templates/menu_view.pt:3
-msgid "Login"
-msgstr "Sisäänkirjautuminen"
-
-#: /src/schooltool/app/browser/configure.zcml:678
-#: /src/schooltool/app/browser/configure.zcml:765
+#: /src/schooltool/app/browser/configure.zcml:714
 #: /src/schooltool/devmode/devmode.pt:17
 msgid "Errors"
 msgstr "Virheet"
 
-#: /src/schooltool/app/browser/configure.zcml:690
-msgid "Application"
-msgstr "Sovellus"
-
-#: /src/schooltool/app/browser/configure.zcml:696
-msgid "Calendar Widget"
-msgstr "Kalenteri-vempain"
-
-#: /src/schooltool/app/browser/configure.zcml:702
-msgid "Templates"
-msgstr "Mallit"
-
-#: /src/schooltool/app/browser/configure.zcml:781
+#: /src/schooltool/app/browser/configure.zcml:730
 msgid "Configure"
 msgstr "Muokkaa asetuksia"
 
@@ -1384,6 +1361,11 @@ msgstr "Ryhmät"
 msgid "Levels"
 msgstr "Tasot"
 
+#: /src/schooltool/app/browser/templates/login.pt:3
+#: /src/schooltool/app/browser/templates/menu_view.pt:3
+msgid "Login"
+msgstr "Sisäänkirjautuminen"
+
 #: /src/schooltool/app/browser/templates/login.pt:8
 msgid "Your session has expired."
 msgstr "Istuntosi on vanhentunut."
@@ -1766,498 +1748,6 @@ msgstr "CSV-tiedot"
 msgid "submit-button"
 msgstr "Hyväksy"
 
-#: /src/schooltool/app/configure.zcml:340
-msgid "Security (General)"
-msgstr "Turvallisuus (Yleinen)"
-
-#: /src/schooltool/app/configure.zcml:355
-msgid "Booking Resources"
-msgstr "Varataan resursseja"
-
-#: /src/schooltool/app/help/admin.pt:6
-msgid "SchoolTool Administration"
-msgstr "ScoolToolin ylläpito"
-
-#: /src/schooltool/app/help/admin.pt:8
-msgid ""
-"<h1>SchoolTool Administration</h1> <p>Schools have complex structures, "
-"spanning the organization of people, pedagogy, time and physical resources. "
-"Unfortunately, this means that an application that seeks to model these "
-"processes, like SchoolTool, is also complex, and the process of setting up "
-"an individual school in SchoolTool is necessarily an involved one.</p> "
-"<p>This branch of the help tree contains items relevant to administrators "
-"configuring SchoolTool, but not end users.</p>"
-msgstr ""
-"<h1>SchoolTool Hallinta</h1> <p>Kouluilla on monimutkainen rakenne, joka "
-"sisältää mm. hallinnollisen organisaation, pedagogiaa, aikaa sekä fyysisiä "
-"resursseja. Ikävä kyllä, tämä tarkoittaa, että ohjelma joka yrittää "
-"mallintaa näitä prosesseja, kuten SchoolTool, on myös monimutkainen ja  "
-"yksittäisen koulun sisällyttäminen tällaiseen ohjelmaan on prosessi, johonka "
-"tulisi paneutua huolella.</p> <p>Tämä osio ohjejärjestelmästä sisältää "
-"hallinnolle välttämättömät asiat, joita tarvitaan SchoolToolin muokkaamiseen."
-"</p>"
-
-#: /src/schooltool/app/help/calendar_selection.pt:6
-#: /src/schooltool/app/help/configure.zcml:97
-msgid "Calendar Selection"
-msgstr "Kalenterin valinta"
-
-#: /src/schooltool/app/help/calendar_selection.pt:8
-msgid ""
-"<h1>Calendar Selection</h1> <p>You can add color-coded events from multiple "
-"calendars to your personal calendar view. You can add events from course "
-"sections you attend, groups, other people, or even resources like classrooms "
-"or projectors.</p> <p>Some calendars are private or limited to certain "
-"groups.</p> <p>On the calendar selection form you are given lists of all the "
-"calendars available to you. This might be a long list.</p> <p>The "
-"\"SchoolTool site-wide calendar\" is intended to be used as the official "
-"public calendar of the school.</p> <h3>How do I...</h3> <ul> "
-"<li><strong>Select or unselect several individual calendars of one type:</"
-"strong> If you press the <code>Ctrl</code> button on your keyboard while you "
-"select calendars from a list with your mouse, you can select multiple "
-"calendars.</li> <li><strong>Select a range of calendars of one type:</"
-"strong> If you press the <code>Shift</code> key while clicking on calendars, "
-"you can select a range.</li> </ul>"
-msgstr ""
-"<h1>Kalenterin valinta</p> <p>Voit lisätä värimerkittyjä tapahtumia useista "
-"eri kalentereista henkilökohtaiseen kalenteriisi. Voit lisätä tapahtumia "
-"kursseista, joihin olet osallistunut, ryhmiä, muita ihmisiä, tai jopa "
-"resursseja, kuten luokkahuoneita tai projektoreita.</p> <p>Jotkin kalenterit "
-"ovat yksityisiä tai rajattuja tiettyyn ryhmään.</p> "
-"<p>Kalenterinvalintakaavakkeessa esitetään lista kaikista sinulle tarjolla "
-"olevista kalentereista. Tämä saattaa olla todella pitkä lista.</p> <p>"
-"\"SchoolTool sivustonlaajuinen kalenteri\" on tarkoitettu käytettäväksi "
-"koulun virallisena yleiskalenterina.</p> <h3>Kuinka teen...</h> .</h3> <ul> "
-"<li><strong>Valitse tai poista usean yksittäisen kalenterityypin valinta:</"
-"strong> Jos painat <code>Ctrl</code> -näppäintä valitessasi kalentereita "
-"listasta, voit valita useita kalentereita yksitellen.</li> "
-"<li><strong>Valitse useita yhden tyypin kalentereita</strong> Jos painat "
-"<code>Shift</code> -näppäintä painamalla voit kalentereita valitessasi "
-"valita useita kalentereita samalla kertaa.</li> </ul>"
-
-#: /src/schooltool/app/help/calendaring.pt:6
-msgid "Calendaring in SchoolTool"
-msgstr "Kalenterit SchoolToolissa"
-
-#: /src/schooltool/app/help/calendaring.pt:8
-msgid ""
-"<h1>Calendaring in SchoolTool</h1> <p>SchoolTool includes a full-featured "
-"calendaring system, similar to Apple iCal or Google Calendar, but capable of "
-"representing complex school timetables, including rotating schedules. "
-"SchoolTool is also useful for simple resource scheduling, allowing you to "
-"manage room assignments, and booking shared resources like computers or "
-"projectors. Each person, group, course section or resource has its own "
-"calendar. You may integrate multiple calendars into your personal calendar "
-"views.</p> <h3>Parts of the standard calendar views</h3> <ul> "
-"<li><strong>Calendar table:</strong> fills the main (lower-right) part of "
-"the page. This represents the calendar for one day, week, month or year, "
-"depending on the view..</li> <li><strong>Calendar navigation bar:</strong> "
-"immediately above the calendar table. Allows you to navigate forward or "
-"backward in time, or to return to the current time.</li> "
-"<li><strong>Calendar title:</strong> immediately above the calendar "
-"navigation bar, lists the owner of this calendar and the date for this \"page"
-"\" of the calendar.</li> <li><strong>Left sidebar:</strong> for all "
-"calendars, this contains a <code>Jump to...</code> section containing menus "
-"and links to allow you to quickly navigate to a specific month, year or "
-"date. <br /> If you are logged in and viewing your own calendar, you will "
-"also see a <code>Calendars</code> section at the top of the sidebar which "
-"allows you to \"overlay\" events from other calendars in this view. You may "
-"see calendars for classes you teach or attend listed here already.</li> "
-"<li><strong>Day/week/month/year buttons:</strong> These buttons allow you to "
-"switch between daily, weekly, monthly and annual views.</li> </ul>"
-msgstr ""
-"<h1>Kalenterit SchoolToolissa</h1> <p>SchoolTool sisältää monipuolisen "
-"kalenterijärjestelmän, kuten Apple iCal tai Google Calendar, mutta pystyy "
-"myös näyttämään monimutkaisia kouluaikatauluja, kuten vuoropohjaiset "
-"lukukaudet. SchoolTool on myös monipuolinen resurssimanageri, joka "
-"mahdollistaa huoneiden ja resurssien, kuten tietokoneiden, projektorien jne, "
-"hallinnoinnin. Jokaisella henkilöllä, ryhmällä, kurssilla ja resurssilla on "
-"oma kalenteri ja voit omassa kalenterinäkymässäsi tutkia monta kalenteria "
-"yhtä aikaa.</p> <h3>Kalenterin standardinäkymän osat</h3> <ul> "
-"<li><strong>Kalenteritaulukko:</strong>täyttää sivun pääosat. Tämä näyttää "
-"kalenterit päivän, viikon, kuukauden tai vuoden mukaan, riippuen mitä halaut "
-"katsoa. </li> <li><strong>Kalenterinavigointipalkki:</strong> sijaitsee "
-"kalenteritaulukon yläpuolella. Mahdollistaa kalenterien selauksen eteen- ja "
-"taaksepäin ajassa, sekä palaamisen nykyaikaan. </li> "
-"<li><strong>Kalenteriotsikko:</strong> sijaitsee kalenterinavigointipalkin "
-"yläpuolella ja luetteloi tällä hetkellä tutkittavan kalenterin omistajan ja "
-"päivämäärän.</li> <li><strong>Vasen sivupalkki:</strong>sisältää kaikilla "
-"kalentereilla <code>Siirry...</code> -osion, jonka valikot ja linkit "
-"mahdollistavat nopeaan selaamisen päivämäärän, kuukauden tai vuoden mukaan. "
-"<br /> Jos olet sisäänkirjautuneena ja tarkastelet omaa kalenteriasi, näet "
-"sivupalkin ylänurkassa myös <code>Kalenterit</code>-osion, jonka avulla voit "
-"laittaa katsomasi kalenterit päällekkäin, kuten kurssit joilla olet "
-"opettajana tai oppilaana.</li> <li><strong>Päivä/viikko/kuukausi/vuosi -"
-"painikkeet:</strong> Nämä painikkeet mahdollistavat näkymän vaihtamisen "
-"päivän, viikon, kuukauden tai vuoden mukaan.</li></ul>"
-
-#: /src/schooltool/app/help/configure.zcml:13
-msgid "Administration"
-msgstr "Ylläpito"
-
-#: /src/schooltool/app/help/configure.zcml:21
-msgid "Organization"
-msgstr "Organisaatio"
-
-#: /src/schooltool/app/help/configure.zcml:29
-msgid "Calendaring"
-msgstr "Kalenterointi"
-
-#: /src/schooltool/app/help/configure.zcml:37
-#: /src/schooltool/app/help/daily_calendar.pt:6
-msgid "Daily Calendar"
-msgstr "Päivittäinen kalenteri"
-
-#: /src/schooltool/app/help/configure.zcml:47
-#: /src/schooltool/app/help/weekly_calendar.pt:6
-msgid "Weekly Calendar"
-msgstr "Viikottainen kalenteri"
-
-#: /src/schooltool/app/help/configure.zcml:57
-#: /src/schooltool/app/help/monthly_calendar.pt:6
-msgid "Monthly Calendar"
-msgstr "Kuukausittainen kalenteri"
-
-#: /src/schooltool/app/help/configure.zcml:67
-#: /src/schooltool/app/help/yearly_calendar.pt:6
-msgid "Yearly Calendar"
-msgstr "Vuosittainen kalenteri"
-
-#: /src/schooltool/app/help/daily_calendar.pt:8
-msgid ""
-"<h1>Daily Calendar</h1> <p>This is the daily view of a calendar. It might be "
-"your calendar, or it might be the calendar of another person, group or "
-"resource in your school. <a href=\"/++help++/schooltool/calendaring\">More "
-"calendaring help...</a></p> <h3>How do I...</h3> <ul> <li><strong>Create an "
-"event:</strong> click in the calendar table at the start time for the event. "
-"Or select <code>New Event</code> from the <code>Actions</code> menu.</li> "
-"<li><strong>Book a resource:</strong> create an event starting at the time "
-"you want to reserve the resource. Select <code>Book Resource</code> in the "
-"Event Information form.</li> <li><strong>Show or hide events in one of the "
-"calendars listed under <code>Calendars</code>:</strong> check or uncheck the "
-"box under <code>Cal</code> and click <code>Apply</code>.</li> "
-"<li><strong>Adding or removing calendars to the <code>Calendars</code> list:"
-"</strong> click on the <code>More...</code> button.</li> <li><strong>access "
-"a iCal format version of the calendar:</strong>: Select <code>Open in iCal</"
-"code> from the Action menu.</li> <li><strong>Access an Atom feed version of "
-"the calendar: </strong> append <code>/atom.xml</code> to the calendar's URL."
-"</li> </ul>"
-msgstr ""
-"<h1>Päivittäinen kalenteri</h1> <p>Tämä on kalenterin päivänäkymä. Se voi "
-"olla sinun, jonkun muun henkilön, ryhmän tai resurssin kalenteri koulullasi."
-"</p> <a href=\"/++help++/schooltool/calendaring\">Lisää ohjeita "
-"kalentereihin...</a></p> <h3>Kuinka minä...</h3> <ul> <li><strong>Teen "
-"tapahtuman:</strong> Klikkaa kalenteritaulukosta tapahtuman "
-"aloitusajankohtaa tai valitse <code>Uusi tapahtuma</code> <code>Toiminnot</"
-"code> -valikosta.</li> <li><strong>Varaa resurssit:</strong>Luo tapahtuma "
-"alkaen ajasta, josta haluat varata resurssin. Valitse <code>Varaa resurssit</"
-"code> Tapahtumatiedot -kaavakkeesta.</li> <li><strong>Näytä tai piilota "
-"tapahtumia jossakin kalenterissa, joka on luetteloitu kohtaan "
-"<code>Kalenterit</code>:</strong> Valitse tai poista valinta laatikosta "
-"<code>Kalenteri</code> ja paina <code>Hyväksy</code>.</li> "
-"<li><strong>Kalentereiden lisääminen tai poistaminen <code>Kalenterit</code> "
-"luettelossa:</strong> Klikkaa <code>Lisää...</code> -painiketta.</li> "
-"<li><strong></strong>Tarkastele kalenteria iCal -formaatissa:</strong>: "
-"Valitse <code> Avaa iCal -muodossa</code> Toiminnot -valikosta.</li> "
-"<li><strong>Katso kalenteria Atom -syötteenä: </strong> Lisää <code>/atom."
-"xml</code> kalenterin verkko-osoitteen loppuun.</li> </ul>"
-
-#: /src/schooltool/app/help/event_add.pt:10
-#: /src/schooltool/app/help/event_edit.pt:10
-msgid "This form has a few issues:"
-msgstr "Tässä kaavakkeessa on muutama ongelma:"
-
-#: /src/schooltool/app/help/event_add.pt:12
-msgid ""
-"If you need to reserve a resource, such as a room or a projector, tracked by "
-"SchoolTool at your school, you should create an event for the necessary time "
-"and check the <code>Book Resources</code> checkbox at the bottom of the page."
-msgstr ""
-"Jos sinun täytyy varata resursseja, kuten luokka tai projektori, jota "
-"seurataan koulullasi SchoolToolin avulla, sinun täytyy tehdä tapahtuma "
-"tarvittavalle ajankohdalle ja valittava <code>Varaa resurssit</code> sivun "
-"alalaidasta."
-
-#: /src/schooltool/app/help/event_add.pt:16
-#: /src/schooltool/app/help/event_edit.pt:14
-msgid ""
-"The form ignores your preferences for time and date format. You must enter "
-"the event's start time in 24-hour or \"military\" time, and the date is "
-"displayed in year-month-day format."
-msgstr ""
-"Tämä kaavake ohittaa asetuksesi ajan ja päiväyksen muodossa. Sinun täytyy "
-"syöttää tapahtuman alkuaika 24-tuntisena ja päiväys tulee ilmoittaa vuosi-"
-"kuukausi-päivä muodossa."
-
-#: /src/schooltool/app/help/event_add.pt:19
-#: /src/schooltool/app/help/event_edit.pt:17
-msgid ""
-"The <code>Location</code> field allows you to enter a description of the "
-"location of the event, but this is not connected to the reservation system. "
-"If your school uses SchoolTool to manage room reservations you need to check "
-"the <code>Book Resources</code> checkbox at the bottom of the form."
-msgstr ""
-"<code>Sijainti</code> kenttä antaa sinun syöttää tapahtuman paikan, mutta se "
-"ei ole yhteydessä varausjärjestelmään. Jos koulusi käyttää SchoolToolia "
-"hallitakseen luokkien varauksia, sinun täytyy valita <code>Varaa resurssit</"
-"code> valintaruutu sivun pohjalla."
-
-#: /src/schooltool/app/help/event_add.pt:24
-#: /src/schooltool/app/help/event_edit.pt:22
-msgid ""
-"If your event repeats in some pattern, check the <code>Recurring</code> box "
-"and fill out the new fields that appear. In certain circumstances (like if "
-"you change the original day of a weekly recurring event) you may need to "
-"click the <code>Update form</code> button to update the recurrence fields."
-msgstr ""
-"Jos jokin tapahtuma toistuu tietyn kaavan mukaan, valitse <code> Toistuva</"
-"code> laatikko ja täytä ilmestyneet kentät. Joissakin tilanteissa "
-"(esimerkiksi jos haluat vaihtaa viikottaisen tapahtuman päivää) sinun täytyy "
-"klikata  <code>Päivitä kaavake</code> -painiketta päivittääksesi Toistuva -"
-"kaavakkeen kohdat."
-
-#: /src/schooltool/app/help/event_add.pt:29
-#: /src/schooltool/app/help/event_edit.pt:27
-msgid ""
-"An \"all day\" event does not show up as a 24 hour event. It indicates that "
-"the day as a whole has some significance, like a birthday or holiday."
-msgstr ""
-"\"Kokopäiväinen\" tapahtuma ei näy 24-tuntisena tapahtumana. Se osoittaa, "
-"että päivällä on yleisesti jokin tietty merkitys, kuten syntymäpäivä tai "
-"lomapäivä."
-
-#: /src/schooltool/app/help/event_add.pt:32
-#: /src/schooltool/app/help/event_edit.pt:30
-msgid ""
-"\"Exception dates\" are specific dates a repeating event skips, such as "
-"holidays."
-msgstr ""
-"\"Poikkeuspäivämäärät\" ovat erityisiä päivämääriä, kuten lomapäivät, jotka "
-"hyppäävät toistuvien tapahtumien yli."
-
-#: /src/schooltool/app/help/event_edit.pt:12
-msgid ""
-"If you need to edit a resource reservation, click the <code>Book resources</"
-"code> link at the bottom of the form."
-msgstr ""
-"Jos sinun täytyy muokata resurssin varausta, klikkaa <code>Varaa resurssit</"
-"code> linkki kaavakkeen pohjalla."
-
-#: /src/schooltool/app/help/monthly_calendar.pt:8
-msgid ""
-"<h1>Monthly Calendar</h1> <p>This is the monthly view of a calendar. It "
-"might be your calendar, or it might be the calendar of another person, group "
-"or resource in your school. <a href=\"/++help++/schooltool/calendaring"
-"\">More calendaring help...</a></p> <h3>How do I...</h3> <ul> "
-"<li><strong>View an individual day or event in more detail:</strong> click "
-"on the appropriate day on the calendar.</li> <li><strong>View an individual "
-"week:</strong> Click on the appropriate week number in blue in the leftmost "
-"column of the calendar.</li> <li><strong>Create an event:</strong> select "
-"<code>New Event</code> from the <code>Actions</code> menu.</li> "
-"<li><strong>Show or hide events in one of the calendars listed under "
-"<code>Calendars</code>:</strong> check or uncheck the box under <code>Cal</"
-"code> and click <code>Apply</code>.</li> <li><strong>Adding or removing "
-"calendars to the <code>Calendars</code> list:</strong> click on the "
-"<code>More...</code> button.</li> <li><strong>Make weeks start on the "
-"correct day:</strong> the first day of the week varies in different parts of "
-"the world. If SchoolTool isn't set up correctly for you, click on your name "
-"in the red bar at the top of the page. Then click on the <code>Actions</"
-"code> menu and select <code>Change Preferences</code>. Pick the correct "
-"\"Week starts on\" day and hit <code>Apply</code>.</li> <li><strong>Access a "
-"iCal format version of the calendar:</strong>: select <code>Open in iCal</"
-"code> from the Action menu.</li> </ul>"
-msgstr ""
-"<h1>Kuukausittainen kalenteri</h1> <p>Tämä on kalenterin kuukausinäkymä. Se "
-"voi olla sinun, jonkun muun henkilön, ryhmän tai resurssin kalenteri "
-"koulullasi.</p> <a href=\"/++help++/schooltool/calendaring\">Lisää ohjeita "
-"kalentereihin...</a></p><h3>Kuinka minä...</h3> <ul> <li><strong>Katson "
-"yksittäistä päivää tai tapahtumaa tarkemmin:</strong> Klikkaa haluttua päivä "
-"kalenterista. </li> <li><strong>Katson yksittäistä viikkoa:</strong> Valitse "
-"haluttu viikon numero sinisenä kalenterin vasemmanpuoleisesta palkista.</li> "
-"<li>Luo tapahtuma:</strong> Valitse <code>Uusi tapahtuma</code> "
-"<code>Toiminnot</code> -valikosta. </li> <li><strong>Näytä tai piilota "
-"tapahtumat yhdestä kalenterista, jotka on luetteloitu kohdassa "
-"<code>Kalenterit</code>:</strong> klikkaa <code>Lisää...</code> -painiketta."
-"</li> <li><strong>Laita viikot alkamaan oikeasta päivästä:</strong> viikon "
-"ensimmäinen päivä vaihtelee eri upolilla maailmaa. Jos SchoolTool ei ole "
-"asetettu oikein oman maanosasi mukaan, klikkaa omaa nimeäsi sivun ylälaidan "
-"punaisesta palkista. Sen jälkeen klikkaa <code>Toiminnot</code> -valikko ja "
-"valitse <code>Muokkaa asetuksia</code>. Vallitse oikea viikon alkamispäivä "
-"ja paina <code>Hyväksy</code>.</li> <li><strong>Tarkastele kalenteria iCal -"
-"formaatissa:</strong> Valitse <code> Avaa iCal -muodossa</code> Toiminnot -"
-"valikosta.</li></ul>"
-
-#: /src/schooltool/app/help/org.pt:6
-msgid "SchoolTool Organization"
-msgstr "SchoolToolin organisaatio"
-
-#: /src/schooltool/app/help/org.pt:8
-msgid ""
-"<h1>SchoolTool Organization</h1> <p>This branch of the help tree contains "
-"items explaining the basic organization of SchoolTool.</p>"
-msgstr ""
-"<h1>SchoolToolin organisaatio</h1> <p>Tämä osio ohjejärjestelmästä selittää "
-"SchoolToolin organisaation perusasiat.</p>"
-
-#: /src/schooltool/app/help/schooltool.pt:8
-msgid ""
-"<h1>SchoolTool</h1> <p>SchoolTool is a free/libre administrative system for "
-"schools around the world, funded by The Shuttleworth Foundation.</p> "
-"<h2>Standard User Interface Conventions in SchoolTool</h2> <ul> "
-"<li><strong>Red top bar</strong></li> <ul> <li><strong>Breadcrumbs:</strong> "
-"the links at the left hand side of the red bar show you where you are in "
-"SchoolTool's object hierarchy. Note that this doesn't necessarily lead you "
-"back to where you came from, but is handy for taking you from more specific "
-"to more general parts of the application.</li> <li><strong>Your name</"
-"strong> (if you're logged in): clicking on your name takes you to a simple "
-"dashboard of relevant links. From this page you can also use the "
-"<code>Actions</code> menu to change preferences and other personal settings."
-"</li> <li><strong>Log in/out:</strong> this logs you in or out. It is a good "
-"idea to log out when you aren't using SchoolTool.</li> <li><strong>Help:</"
-"strong> if there is a help file for the page you're looking at, you'll see "
-"this link.</li> </ul> <li><strong>Menus</strong></li> <ul> "
-"<li><strong>Navigation:</strong> this menu gives you some basic options for "
-"accessing different parts of SchoolTool, such as the index of persons or "
-"courses. What you see here depends on your permissions in the system.</li> "
-"<li><strong>Action:</strong> this menu contains a variety of things that you "
-"can do on the current page. The entries in this menu change considerably "
-"based on what page you're viewing and what permissions you have.</li> </ul> "
-"<li><strong>Above the red bar</strong></li> <ul> <li><strong>Logo & School "
-"Name:</strong> clicking in this area will take you to the top of the "
-"school's site, usually the calendar for the school.</li> "
-"<li><strong>Calendar day/week/month/year views:</strong> if you are viewing "
-"a calendar, you will find icons in the upper right hand corner that will "
-"allow you to switch between calendar views.</li> <li><strong>Devmode menu:</"
-"strong> if you are a site administrator and you've enabled \"devmode\" in "
-"schooltool.conf, you will see a special menu in the upper right hand corner "
-"of the site. You should disable devmode in any production server.</li> </ul> "
-"</ul>"
-msgstr ""
-"<h1>SchoolTool</h1> <p>Schooltool on ilmainen, maailman kaikkien koulujen "
-"käyttöön suunniteltu, hallintojärjestelmä. Ohjelmistoa rahoittaa "
-"Shuttleworth Foundation.</p> <h2>SchoolTool käyttää perinteistä "
-"standardikäyttöliittymää</h2> <ul> <li><strong>Punainen yläpalkki</strong></"
-"li> <ul> <li><strong>Leivänmuruset:</strong> Punaisen palkin vasemmalla "
-"puolella olevat linkit näyttävät missä olet SchoolToolin "
-"ohjelmistohierarkiassa. Huomaa kuitenkin, että linkit eivät välttämättä vie "
-"sinua takaisin sinne mistä tulit, mutta linkit ovat käteviä kun haluaa "
-"siirtyä ohjelmiston tarkemmista osista takaisin yleisempiin osiin.</li> "
-"<li><strong>Nimesi</strong> (jos olet sisäänkirjautuneena): Nimesi "
-"klikkaaminen vie sinut yksinkertaiselle linkkien kojelaudalle, jolta voi mm. "
-"<code>Toiminnot</code> -valikkoa käyttämällä muokata henkilökohtaisia "
-"asetuksia, sekä muita tietojasi</li> <li><strong>Kirjaudu sisään/ulos:</"
-"strong> Tämä kirjaa sinut sisälle tai ulos ohjelmasta. Kun SchoolToolia ei "
-"käytetä, siitä kannattaa kirjautua ulos.</li> <li><strong>Ohje:</strong> Jos "
-"selaamallesi sivulle on aputiedosto, näet tämän linkin.</li> </ul> "
-"<li><strong>Valikot</strong></li> <ul> <li><strong>Navigointi:</strong> Tämä "
-"valikko antaa sinulle muutaman perusvaihtoehdon, jolla pääset SchoolToolin "
-"eri osiin, kuten henkilöindeksin tai kurssiluettelon. Se mitä näet tässä "
-"riippuu järjestelmän käyttöoikeuksistasi.</li> <li><strong>Toiminnot:</"
-"strong> tämä valikko sisältää listan vaihtoehdoista mitä voit tehdä "
-"kyseisellä sivulla. Käyttöoikeutesi ja kyseinen sivu vaikuttaa suuresti "
-"tämän valikon sisältöön.</li> </ul> <li><strong>Punaisen palkin yläpuolella</"
-"strong></li> <ul> <li><strong>Koulun nimi ja logo:</strong> kun klikkaat "
-"tätä, pääset suoraan järjestelmän alkusivulle, joka on yleensä koulun "
-"yleiskalenteri.</li> <li><strong>Kalenterin päivä/viikko/kuukausi/"
-"vuosinäkymä:</strong> Jos olet katsomassa kalenteria, näet ylänurkassa "
-"ikonit päiville, viikoille, kuukausille sekä vuosille ja näitä klikkaamalla "
-"pääset kalenterinäkymää .</li> <li><strong>Devmode -valikko:</strong> Jos "
-"olet sivuston ylläpitäjä ja olet mahdollistanut \"devmode\" -toiminnon "
-"schooltool.conf -tiedostossa, näet erityisen valikon sivuston oikeassa "
-"ylänurkassa. Devmode tulisi olla poissa päältä kaikilla tuotantoservereillä."
-"</li> </ul> </ul>"
-
-#: /src/schooltool/app/help/weekly_calendar.pt:8
-msgid ""
-"<h1>Weekly Calendar</h1> <p>This is the weekly view of a calendar. It might "
-"be your calendar, or it might be the calendar of another person, group or "
-"resource in your school. <a href=\"/++help++/schooltool/calendaring\">More "
-"calendaring help...</a></p> <h3>How do I...</h3> <ul> <li><strong>View an "
-"individual day in more detail:</strong> click on the appropriate day in the "
-"blue row of the calendar table.</li> <li><strong>View details about an event "
-"or edit it:</strong> click on the event. If you have the correct permissions "
-"for the event you can edit it.</li> <li><strong>Create an event:</strong> "
-"select the day the event starts and create the event in the daily view.</li> "
-"<li><strong>Show or hide events in one of the calendars listed under "
-"<code>Calendars</code>:</strong> check or uncheck the box under <code>Cal</"
-"code> and click <code>Apply</code>.</li> <li><strong>Adding or removing "
-"calendars to the <code>Calendars</code> list:</strong> click on the "
-"<code>More...</code> button.</li> <li><strong>Make the calendar start on the "
-"correct day:</strong> the first day of the week varies in different parts of "
-"the world. If SchoolTool isn't set up correctly for you, click on your name "
-"in the red bar at the top of the page. Then click on the <code>Actions</"
-"code> menu and select <code>Change Preferences</code>. Pick the correct "
-"\"Week starts on\" day and hit <code>Apply</code>.</li> <li><strong>Access a "
-"iCal format version of the calendar:</strong>: select <code>Open in iCal</"
-"code> from the Action menu.</li> </ul>"
-msgstr ""
-"<h1>Viikkokalenteri</h1> <p>Tämä on kalenterin viikkonäkymä. Se voi olla "
-"sinun, jonkun muun henkilön, ryhmän tai resurssin kalenteri koulullasi.</p> "
-"<a href=\"/++help++/schooltool/calendaring\">Lisää ohjeita kalentereihin...</"
-"a></p><h3>Kuinka minä...</h3> <ul> <li><strong>Katson yksittäistä päivää "
-"tarkemmin:</strong> Klikkaa haluttua päivää sinisessä rivistössä "
-"kalenteritaulukossa. </li> <li><strong>Katson tai muokkaan  yksityiskohtia "
-"tapahtumasta:</strong> Valitse haluttu tapahtuma. Jos sinulla on tarvittava "
-"käyttöoikeus tapahtumaan, voit muokata sitä</li> <li>Luon tapahtuman:</"
-"strong> valitse haluttu päivä ja luo uusi tapahtuma päivänäkymässä. </li> "
-"<li><strong>Näytä tai piilota tapahtumat yhdestä kalenterista, jotka on "
-"luetteloitu kohdassa <code>Kalenterit</code>:</strong> klikkaa <code>Lisää..."
-"</code> -painiketta.</li> <li><strong>Laita viikot alkamaan oikeasta "
-"päivästä:</strong> viikon ensimmäinen päivä vaihtelee eri upolilla maailmaa. "
-"Jos SchoolTool ei ole asetettu oikein oman maanosasi mukaan, klikkaa omaa "
-"nimeäsi sivun ylälaidan punaisesta palkista. Sen jälkeen klikkaa "
-"<code>Toiminnot</code> -valikko ja valitse <code>Muokkaa asetuksia</code>. "
-"Vallitse oikea viikon alkamispäivä ja paina <code>Hyväksy</code>.</li> "
-"<li><strong>Tarkastele kalenteria iCal -formaatissa:</strong> Valitse <code> "
-"Avaa iCal -muodossa</code> Toiminnot -valikosta.</li></ul>"
-
-#: /src/schooltool/app/help/yearly_calendar.pt:8
-msgid ""
-"<h1>Yearly Calendar</h1> <p>This is the year view of a calendar. It might be "
-"your calendar, or it might be the calendar of another person, group or "
-"resource in your school. <a href=\"/++help++/schooltool/calendaring\">More "
-"calendaring help...</a></p> <h3>How do I...</h3> <ul> <li><strong>Know which "
-"days contain events: if the day has a blue background, there is at least one "
-"event that day.</strong></li> <li><strong>View an individual day in more "
-"detail:</strong> click on the day.</li> <li><strong>View an individual month:"
-"</strong> click on the name of the month.</li> <li><strong>Create an event:</"
-"strong> select the day the event starts and create the event in the daily "
-"view.</li> <li><strong>Show or hide events in one of the calendars listed "
-"under <code>Calendars</code>:</strong> check or uncheck the box under "
-"<code>Cal</code> and click <code>Apply</code>.</li> <li><strong>Adding or "
-"removing calendars to the <code>Calendars</code> list:</strong> click on the "
-"<code>More...</code> button.</li> <li><strong>Make the calendar start on the "
-"correct day:</strong> the first day of the week varies in different parts of "
-"the world. If SchoolTool isn't set up correctly for you, click on your name "
-"in the red bar at the top of the page. Then click on the <code>Actions</"
-"code> menu and select <code>Change Preferences</code>. Pick the correct "
-"\"Week starts on\" day and hit <code>Apply</code>.</li> <li><strong>Access a "
-"iCal format version of the calendar:</strong>: select <code>Open in iCal</"
-"code> from the Action menu.</li> </ul>"
-msgstr ""
-"<h1>Vuosikalenteri</h1> <p>Tämä on kalenterin vuosinäkymä. Se voi olla "
-"sinun, jonkun muun henkilön, ryhmän tai resurssin kalenteri koulullasi.</p> "
-"<a href=\"/++help++/schooltool/calendaring\">Lisää ohjeita kalentereihin...</"
-"a></p><h3>Kuinka minä...</h3> <ul> <li><strong>Tiedän minä päivinä on "
-"tapahtumia: jos päivällä on sininen tausta, sillä päivällä on vähintään yksi "
-"tapahtuma.</strong></li> <li><strong>Katson tiettyä päivää tarkemmin:</"
-"strong> klikkaa päivää</li> <li>Katson tiettyä kuukautta:</strong> klikkaa "
-"kuukauden nimeä. </li> <li><strong>Luon tapahtuman:</strong> valitse haluttu "
-"päivä ja luo uusi tapahtuma päivänäkymässä.</li><strong>Näytän tai piilotan "
-"tapahtumat kalenterista, jotka on luetteloitu kohdassa <code>Kalenterit</"
-"code>:</strong> valitse tai poista valinta laatikosta, joka on kohdan "
-"<code>Kalenteri</code> alla ja klikkaa <code>Vahvista</code> -painiketta</"
-"li> <li><strong>Lisään tai poistan kalentereita <code>Kalenterit</code> -"
-"luettelosta:</strong> klikkaa <code>Lisää...</code> painiketta.</li> "
-"<li><strong>Laitan viikot alkamaan oikeasta päivästä:</strong> viikon "
-"ensimmäinen päivä vaihtelee eri upolilla maailmaa. Jos SchoolTool ei ole "
-"asetettu oikein oman maanosasi mukaan, klikkaa omaa nimeäsi sivun ylälaidan "
-"punaisesta palkista. Sen jälkeen klikkaa <code>Toiminnot</code> -valikko ja "
-"valitse <code>Muokkaa asetuksia</code>. Vallitse oikea viikon alkamispäivä "
-"ja paina <code>Hyväksy</code>.</li> <li><strong>Tarkastele kalenteria iCal -"
-"formaatissa:</strong> Valitse <code> Avaa iCal -muodossa</code> Toiminnot -"
-"valikosta.</li></ul>"
-
 #: /src/schooltool/app/interfaces.py:44
 msgid "Form input is not a file object"
 msgstr "Kaavakesyöttö ei ole tiedosto."
@@ -2355,7 +1845,27 @@ msgstr ""
 "  --hallintokäytössä pystyy tekemään vain hallintotöitä, älä käynnistä "
 "palvelinta\n"
 
-#: /src/schooltool/app/main.py:110
+#: /src/schooltool/app/main.py:327
+msgid "Going to background, daemon pid %d"
+msgstr "Siirtyy taustaan, daemon pid %d"
+
+#: /src/schooltool/app/main.py:382
+msgid "Cannot resolve plugin action order:\n"
+msgstr ""
+
+#: /src/schooltool/app/main.py:528
+msgid "Run %s -h for help."
+msgstr "Suorita %s -h ohjetiedoston käynnistämiseksi."
+
+#: /src/schooltool/app/main.py:549
+msgid "%s: daemon mode not supported on your operating system."
+msgstr "%s: käyttöjärjestelmäsi ei tue daemon-tilaa"
+
+#: /src/schooltool/app/main.py:575
+msgid "Reading configuration from %s"
+msgstr "Lukee asetuksia kohteesta %s"
+
+#: /src/schooltool/app/main.py:574
 msgid ""
 "\n"
 "No storage defined in the configuration file.\n"
@@ -2369,37 +1879,11 @@ msgstr ""
 "Jos käytät oletusasetustiedostoa, muokkaa sitä\n"
 "ja poista kommentti yhdestä ZODB-säilytysosiosta.\n"
 
-#: /src/schooltool/app/main.py:335
-msgid "Going to background, daemon pid %d"
-msgstr "Siirtyy taustaan, daemon pid %d"
-
-#: /src/schooltool/app/main.py:382
-msgid "Cannot resolve plugin action order:\n"
-msgstr ""
-
-#: /src/schooltool/app/main.py:536 /src/schooltool/app/main.py:580
-#: /src/schooltool/app/main.py:583
-msgid "%s: %s"
-msgstr "%s: %s"
-
-#: /src/schooltool/app/main.py:537
-msgid "Run %s -h for help."
-msgstr "Suorita %s -h ohjetiedoston käynnistämiseksi."
-
-#: /src/schooltool/app/main.py:549
-msgid "%s: daemon mode not supported on your operating system."
-msgstr "%s: käyttöjärjestelmäsi ei tue daemon-tilaa"
-
-#: /src/schooltool/app/main.py:575
-msgid "Reading configuration from %s"
-msgstr "Lukee asetuksia kohteesta %s"
-
-#: /src/schooltool/app/main.py:671
+#: /src/schooltool/app/main.py:666
 msgid "Startup time: %.3f sec real, %.3f sec CPU"
 msgstr "Aloitusaika: %.3f sek oikeaa, %.3f sec CPU"
 
-#. Default: ""
-#: /src/schooltool/app/main.py:705
+#: /src/schooltool/app/main.py:700
 msgid ""
 "Could not initialize the database:\n"
 "%s"
@@ -3635,6 +3119,69 @@ msgstr ""
 "Kurssin ${course} osio -- ${section_title} lukukaudelle ${term} lukuvuonna "
 "${schoolyear}"
 
+#: /src/schooltool/course/browser/templates/extend_term.pt:4
+msgid "Extend Section to Term"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/extend_term.pt:18
+msgid ""
+"Click \"Extend\" to create a linked section in term \"${from_term_title}\" "
+"containing the students and instructors from section \"${section_title}\" in "
+"term \"${to_term_title}\"."
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/extend_term.pt:27
+msgid "Extend"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/link_existing.pt:4
+msgid "Link Section to Section in Other Term"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/link_existing.pt:13
+#: /src/schooltool/course/browser/templates/link_existing.pt:52
+#: /src/schooltool/course/browser/templates/section_container.pt:39
+#: /src/schooltool/course/browser/templates/unlink_section.pt:13
+#: /src/schooltool/course/browser/templates/unlink_section.pt:28
+msgid "Section"
+msgstr "Osio"
+
+#: /src/schooltool/course/browser/templates/link_existing.pt:20
+#: /src/schooltool/course/browser/templates/unlink_section.pt:19
+#: /src/schooltool/course/browser/templates/unlink_section.pt:29
+#: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:24
+msgid "Term"
+msgstr "Lukukausi"
+
+#: /src/schooltool/course/browser/templates/link_existing.pt:21
+msgid "Target Term"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/link_existing.pt:26
+msgid ""
+"Select a section and click 'Link' if you would like to copy and link this "
+"section to the target section."
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/link_existing.pt:30
+msgid ""
+"You may provide part of an instructor's name or username and click 'Filter' "
+"to limit the list of sections to those taught by a matching instructor."
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/link_existing.pt:35
+msgid "You must select a section before clicking 'Link'."
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/link_existing.pt:46
+msgid "Filter"
+msgstr ""
+
+#. Default: "Link"
+#: /src/schooltool/course/browser/templates/link_section.pt:130
+msgid "link-section-button"
+msgstr "Linkitä osio"
+
 #: /src/schooltool/course/browser/templates/link_section.pt:24
 msgid "Link ${section}, ${term} with a section in ${target_term}"
 msgstr ""
@@ -3643,20 +3190,7 @@ msgstr ""
 msgid "There is no valid term in ${schoolyear} to pick a section from."
 msgstr ""
 
-#. Default: "Link"
-#: /src/schooltool/course/browser/templates/link_section.pt:130
-msgid "link-section-button"
-msgstr "Linkitä osio"
-
-#: /src/schooltool/course/browser/templates/section.pt:36
-msgid "Previous: ${course} -- ${section_title} for ${term}"
-msgstr "Edellinen: ${course} -- osio ${section_title} lukukaudelle ${term}"
-
-#: /src/schooltool/course/browser/templates/section.pt:47
-msgid "Next: ${course} -- ${section_title} for ${term}"
-msgstr "Seuraava: ${course} -- osio ${section_title} lukukaudelle ${term}"
-
-#: /src/schooltool/course/browser/templates/section.pt:58
+#: /src/schooltool/course/browser/templates/section.pt:35
 msgid "Change the name or description of this section."
 msgstr "Muuta osion nimeä tai kuvausta."
 
@@ -3664,7 +3198,18 @@ msgstr "Muuta osion nimeä tai kuvausta."
 msgid "edit info"
 msgstr "muokkaa tietoa"
 
-#: /src/schooltool/course/browser/templates/section.pt:87
+#: /src/schooltool/course/browser/templates/section.pt:46
+#: /src/schooltool/course/browser/templates/section_edit.pt:60
+msgid "Linked sections"
+msgstr "Linkitetyt osiot"
+
+#: /src/schooltool/course/browser/templates/section.pt:52
+#: /src/schooltool/course/browser/templates/section_edit.pt:72
+#: /src/schooltool/course/browser/templates/section_edit.pt:106
+msgid "${section_title} for ${term}"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/section.pt:65
 msgid "Change the instructors for this section."
 msgstr "Muuta tämän osion opettajaa"
 
@@ -3685,14 +3230,6 @@ msgstr "muokkaa yksilöitä"
 msgid "Section list for ${term} of ${schoolyear}"
 msgstr "Osioluettelo lukukaudelle ${term} lukuvuonna ${schoolyear}"
 
-#: /src/schooltool/course/browser/templates/section_container.pt:39
-msgid "Section"
-msgstr "Osio"
-
-#: /src/schooltool/course/browser/templates/section_edit.pt:60
-msgid "Linked sections"
-msgstr "Linkitetyt osiot"
-
 #: /src/schooltool/course/browser/templates/section_edit.pt:63
 msgid "Previous"
 msgstr "Edellinen"
@@ -3700,11 +3237,6 @@ msgstr "Edellinen"
 #: /src/schooltool/course/browser/templates/section_edit.pt:64
 msgid "Section in the previous term."
 msgstr "Osio edelliseltä lukukaudelta."
-
-#: /src/schooltool/course/browser/templates/section_edit.pt:72
-#: /src/schooltool/course/browser/templates/section_edit.pt:106
-msgid "${section_title} for ${term}"
-msgstr ""
 
 #. Default: "Unlink"
 #: /src/schooltool/course/browser/templates/section_edit.pt:75
@@ -3737,37 +3269,31 @@ msgstr "Seuraava"
 msgid "Section in the next term."
 msgstr "Osio seuraavalta lukukaudelta."
 
-#: /src/schooltool/course/help/course_container.pt:10
-msgid ""
-"<h1>Courses</h1> <p>Use this page to organize courses listed in the system.</"
-"p> <h3>How do I...</h3> <ul> <li><strong>Look for for a course:</strong> Use "
-"the search box to the left of the <code>Find Now</code> button to look "
-"through the entire list of courses for the search criterion. The "
-"<code>Clear</code> button empties the search box of current entries.</li> "
-"<li><strong>Show a list of the different sections of a course:</strong> "
-"click on the name of the course.</li> <li><strong>Show the lists of students "
-"in a particular class:</strong> Click on the <code>teacher -- course</code> "
-"link. The number of students is also listed next to the teacher and the "
-"course.</li> <li><strong>Navigate through the courses:</strong> Separate "
-"<q>batches</q> of the Course list can be accessed through the <code>Next 10</"
-"code> (and <code>Previous</code>) and links in the blue bar. A <code>Show "
-"All</code> button is also there to show all of the courses on a single page."
-"</li> </ul>"
+#: /src/schooltool/course/browser/templates/section_linkage.pt:4
+msgid "All Terms for Section"
 msgstr ""
-"<h1>Kurssit</h1> <p>Käytä tätä sivua järjestelmään luetteloitujen kurssien "
-"organisoitiin</p> <h3>Kuinka minä...</h3> <ul> <li><strong>Etsin kurssia:</"
-"strong> Käytä Etsi -laatikkoa, joka sijaitsee <code>Etsi nyt</code> -"
-"painikkeen vasemmalla puolella, selataksesi kaikki hakukriteerit täyttävät "
-"kurssit. <code>Tyhjää</code> -painike tyhjentää Etsi -laatikon tämän "
-"hetkisen sisällön.</li> <li><strong>Näytä luettelo eri kurssien osioista:</"
-"strong> klikkaa kurssin nimeä.</li> <li><strong>Näytä opiskelijaluettelot "
-"titylle luokalle</strong> klikkaa <code>opettaja -- kurssi</code> linkkiä. "
-"Opiskelijoiden lukumäärä on ilmoitettu myös opettajan ja kurssin nimen "
-"vieressä</li> <li><strong>Selaa kurssien läpi</strong> Kurssin eri "
-"<q>osioita</q> voia selata <code>Seuraavat 10</code> (ja <code>Edelliset</"
-"code>) -painikkeella ja sinisessä palkissa olevien linkkien avulla. "
-"<code>Näytä kaikki</code> -painikkeella kaikki kurssit luetteloidaan yhteen "
-"sivuun.</li> </ul>"
+
+#: /src/schooltool/course/browser/templates/section_linkage.pt:42
+msgid "Unlink this Section"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/section_linkage.pt:62
+msgid "Extend to This Term"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/section_linkage.pt:66
+msgid "Link an Existing Section"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/unlink_section.pt:4
+msgid "Unlink Section"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/unlink_section.pt:23
+msgid ""
+"Click 'Unlink' if you would like to remove the link this section has to the "
+"following section(s):"
+msgstr ""
 
 #: /src/schooltool/course/interfaces.py:37
 msgid "Title of the course."
@@ -4290,24 +3816,10 @@ msgstr "Haku"
 msgid "Surname"
 msgstr "Sukunimi"
 
-#: /src/schooltool/devmode/configure.zcml:27
-msgid "Introspect"
-msgstr ""
-
-#: /src/schooltool/devmode/configure.zcml:38
-#: /src/schooltool/devmode/devmode.pt:19
-msgid "API Docs"
-msgstr "API-dokumentit"
-
-#: /src/schooltool/devmode/configure.zcml:50
+#: /src/schooltool/devmode/configure.zcml:52
 #: /src/schooltool/devmode/devmode.pt:20
 msgid "Sample data"
 msgstr "Näytetieto"
-
-#: /src/schooltool/devmode/configure.zcml:62
-#: /src/schooltool/devmode/devmode.pt:21
-msgid "Setup data"
-msgstr "Asennustiedot"
 
 #: /src/schooltool/devmode/devmode.pt:11
 msgid "Developer Tools"
@@ -4316,6 +3828,10 @@ msgstr "Kehitystyökalut"
 #: /src/schooltool/devmode/devmode.pt:18
 msgid "Introspector"
 msgstr "Itsehavainnoija"
+
+#: /src/schooltool/devmode/devmode.pt:19
+msgid "API Docs"
+msgstr "API-dokumentit"
 
 #: /src/schooltool/email/browser/configure.zcml:54
 msgid "Outgoing Email"
@@ -4914,44 +4430,8 @@ msgstr "Hallinnoi tämän henkilön jäsenyyksiä"
 msgid "edit groups"
 msgstr "muokkaa ryhmiä"
 
-#: /src/schooltool/group/help/group_container.pt:8
-msgid ""
-"<h1>Groups</h1> <p>Use this page to keep track of <b>groups</b> of Persons.</"
-"p> <p><b>Groups</b> that have been added are not part of the essential "
-"groups (<b>Teachers</b>, <b>Students</b>, <b>Site Managers</b>, <b>School "
-"Administrators</b>, or <b>Clerks</b>). They can be selected by the checkbox "
-"next to them and removed by pressing the <b>Delete</b> button at the bottom "
-"of the page.</p> <h3>How do I...</h3> <ul> <li><b>Look for for a group:</b> "
-"Use the search box to the left of the <code>Find Now</code> button to look "
-"through the entire list of groups for the search criterion. The <code>Clear</"
-"code> button empties the search box of current entries.</li> <li><b>View the "
-"persons in a certain group:</b> Click on the name of the group.</li> "
-"<li><b>Sort the list:</b> Click on the <code>Title</code> header to change "
-"the order of groups from descending to ascending order, and vice versa.</li> "
-"<li><strong>Browse for a group:</strong> Use the <code>Next 10</code> (and "
-"<code>Previous</code>) and links in the blue bar.</li> <li><strong>Show all "
-"groups:</strong> Click <code>Show All</code> in the blue bar.</li> </ul>"
-msgstr ""
-"<h1>Ryhmät</h1> <p>Käytä tätä sivua seurataksesi henkilöiden jäsenyyksiä.</"
-"p> <p> Nämä kyseiset <b>Ryhmät</b> eivät ole välttämättömiä ryhmiä, kuten "
-"esim. <b>Opettajat</b>, <b>Oppilaat</b>, <b>Valvojat</b>, "
-"<b>Hallintohenkilöstö</b> tai <b>Virkailijat</b>, vaan ne voidaan valita, "
-"käyttämällä valintalaatikkoa ryhmien vieressä, ja poistaa,  painamalla "
-"<b>Poista</b> -painiketta sivun alalaidassa.</p> <h3>Kuinka minä...</h3> "
-"<ul> <li><b>Etsin tiettyä ryhmää:</b> Käytä hakulaatikkoa <code>Etsi nyt</"
-"code> -painikkeen vasemmalla puolella katsoaksesi kaikkia ryhmiä, jotka "
-"vastaavat hakukriteerejäsi. <code>Tyhjennä</code> -painike  tyhjentää "
-"hakulatikon sisällön. </li> <li><b>Katson henkilöitä tietyssä ryhmässä:</b> "
-"Klikkaa ryhmän nimeä.</li> <li><b>järjestän luetteloa:</b> Klikkaa "
-"<code>Nimi</code> -ylätunnistetta vaihtaaksesi ryhmien järjestystä "
-"laskevasta nousevaan muotoon ja päin vastoin. </li> <li><strong>Selaan "
-"ryhmiä</strong> Käytä <code>Seuraavat 10</code> -painiketta (ja "
-"<code>Edelliset</code> -painiketta) sekä linkkejä sinisessä palkissa.</li> "
-"<li><strong>Näytän kaikki ryhmät:</strong> Klikkaa <code>Näytä kaikki</code> "
-"-painiketta sinisessä palkissa.</li> </ul>"
-
 #: /src/schooltool/group/interfaces.py:41
-#: /src/schooltool/securitypolicy/interfaces.py:109
+#: /src/schooltool/securitypolicy/interfaces.py:111
 msgid "Title of the group."
 msgstr "Ryhmän nimike"
 
@@ -4999,14 +4479,6 @@ msgstr ""
 msgid "Groups are essentially sets of users."
 msgstr ""
 
-#: /src/schooltool/help/configure.zcml:47
-msgid "Contextual Help"
-msgstr "Asiayhteysohjeet"
-
-#: /src/schooltool/help/helplink.pt:2
-msgid "Help"
-msgstr "Ohje"
-
 #: /src/schooltool/level/browser.py:47
 msgid "Add a level"
 msgstr ""
@@ -5043,10 +4515,6 @@ msgstr ""
 #: /src/schooltool/note/configure.zcml:68
 msgid "New Note"
 msgstr "Uusi muistiinpano"
-
-#: /src/schooltool/note/configure.zcml:100
-msgid "Notes (Rest)"
-msgstr "Muistiinpanot (Muut)"
 
 #: /src/schooltool/note/interfaces.py:43
 msgid "Title of the note."
@@ -5211,31 +4679,6 @@ msgstr "Muokkaa henkilön asetuksia"
 msgid "Change preferences for ${user}"
 msgstr "Muokkaa käyttäjän ${user} asetuksia"
 
-#: /src/schooltool/person/help/person_container.pt:8
-msgid ""
-"<h1>Persons</h1> <p>Use this page to browse and find individual persons.</p> "
-"<h3>How do I...</h3> <ul> <li><strong>Sort the list:</strong> Click on "
-"<code>First Name</code> or <code>Last Name</code> to sort.</li> "
-"<li><strong>Search for a user:</strong> Use the search field at the top of "
-"the page to look through all of the people in the system. If you want to "
-"filter by group, select the group in the adjacent drop-down list.</li> "
-"<li><strong>View the details of a person:</strong> Click on the name.</li> "
-"<li><strong>Browse for a person:</strong> Use the <code>Next 10</code> (and "
-"<code>Previous</code>) and links in the blue bar.</li> <li><strong>Show all "
-"students:</strong> Click <code>Show All</code> in the blue bar.</li> </ul>"
-msgstr ""
-"<h1>Henkilöt</h1> <p>Käytä tätä sivua selataksesi ja etsiäksesi yksittäisiä "
-"henkilöitä.</p> <h3> Kuinka minä</h3> <ul> <li><strong>Lajittelen luetteloa:"
-"</strong> Klikkaa <code>Etunimi</code> tai <code>Sukunimi</code> "
-"lajitellaksesi luetteloa. </li> <li><strong>Etsin käyttäjää:</strong> käytä "
-"hakukenttää sivun ylälaidassa etsiäksesi jotakin järjestelmän henkilöä. Jos "
-"haluat suodattaa hakua ryhmän perusteella, valitse ryhmä pudotusvalikosta.</"
-"li> <li><strong>Katson henkilön tietoja:</strong> Klikkaa nimeä.</li> "
-"<li><strong>Selaan henkilöitä:</strong> Käytä <code>Seuraavat 10</code> ja "
-"<code>Edelliset</code> -painikkeita ja sinisessä palkissa sijaitsevia "
-"linkkejä.</li> <li><strong>Näytän kaikki oppillaat:</strong> Klikkaa "
-"<code>Näytä kaikki</code> -painikietta sinisessä palkissa.</li> </ul>"
-
 #: /src/schooltool/person/interfaces.py:157
 msgid "Time Zone"
 msgstr "Aikavyöhyke"
@@ -5355,16 +4798,12 @@ msgstr "Kalenteri on julkinen"
 msgid "Everybody, if the calendar is made public in user preferences."
 msgstr "Kaikki, jos kalenteri on määritelty julkiseksi käyttäjän asetuksissa."
 
-#: /src/schooltool/relationship/configure.zcml:13
-msgid "Relationships"
-msgstr "Suhteet"
-
 #: /src/schooltool/report/browser/configure.zcml:8
-#: /src/schooltool/report/browser/configure.zcml:22
-#: /src/schooltool/report/browser/configure.zcml:33
-#: /src/schooltool/report/browser/configure.zcml:44
-#: /src/schooltool/report/browser/configure.zcml:55
-#: /src/schooltool/report/browser/configure.zcml:66
+#: /src/schooltool/report/browser/configure.zcml:23
+#: /src/schooltool/report/browser/configure.zcml:34
+#: /src/schooltool/report/browser/configure.zcml:45
+#: /src/schooltool/report/browser/configure.zcml:56
+#: /src/schooltool/report/browser/configure.zcml:67
 msgid "Reports"
 msgstr "Raportit"
 
@@ -5514,11 +4953,7 @@ msgstr ""
 msgid "Edit equipment"
 msgstr ""
 
-#: /src/schooltool/resource/help/resource_help.pt:6
-msgid "Resource Help"
-msgstr "Resurssien ohjeet"
-
-#: /src/schooltool/resource/interfaces.py:38
+#: /src/schooltool/resource/interfaces.py:45
 msgid "Title of the resource."
 msgstr "Resurssin nimike."
 
@@ -5908,22 +5343,6 @@ msgstr "Pääkäyttäjä"
 msgid "The super user - owner of this SchoolTool application."
 msgstr "Pääkäyttäjä - tämän SchoolTool-sovelluksen hallinnoija."
 
-#: /src/schooltool/setupdata/setupdata.pt:3
-#: /src/schooltool/setupdata/setupdata.pt:9
-msgid "Initial School Setup Scripts"
-msgstr "Koulun asetuksen alkukomennot"
-
-#: /src/schooltool/setupdata/setupdata.pt:14
-msgid ""
-"Warning: proceeding will populate the database with data generated from "
-"scripts installed on the filesystem of this server. Do not do this if you "
-"have any valuable data in this SchoolTool instance or don't already "
-"understand what this is for."
-msgstr ""
-"Varoitus: prosessin jatkaminen täyttää tietokannan satunnaisesti kehitetyllä "
-"tiedolla. Älä suorita toimenpidettä, jos sinulla on mitään arvokasta tietoa "
-"SchoolTool-järjestelmässä tai ellet ymmärrä mitä varten tämä on."
-
 #: /src/schooltool/skin/breadcrumbs.py:76
 msgid "top"
 msgstr "ylin"
@@ -5979,10 +5398,6 @@ msgstr "Tarkista osoitteen oikeinkirjoitus"
 #: /src/schooltool/skin/templates/notfound.pt:22
 msgid "You might be trying to access a non-existing page"
 msgstr "Sivua ei välttämättä ole olemassa"
-
-#: /src/schooltool/skin/templates/onlinehelp_macros.pt:55
-msgid "SchoolTool Onlinehelp"
-msgstr "SchoolToolin online-tuki"
 
 #: /src/schooltool/skin/templates/view_macros.pt:45
 msgid "Log In"
@@ -6259,53 +5674,6 @@ msgstr "Muuta lukukauden ${term_title} tietoja"
 #: /src/schooltool/term/browser/term.py:291
 msgid "Term must begin before it ends."
 msgstr "Lukukauden pitää alkaa ennen sen loppumista."
-
-#: /src/schooltool/term/help/configure.zcml:8
-msgid "Add a term"
-msgstr "Lisää lukukausi"
-
-#: /src/schooltool/term/help/term_add.pt:6
-msgid "Term Search Help"
-msgstr "Lukukausihaun ohjeet"
-
-#: /src/schooltool/term/help/term_container.pt:6
-msgid "Terms in SchoolTool"
-msgstr "Lukukaudet SchoolToolissa"
-
-#: /src/schooltool/term/help/term_container.pt:8
-msgid ""
-"<h1>Terms in SchoolTool</h1> <p>SchoolTool supports definition of basic "
-"academic terms, that is, a period of time which defines when sections begin "
-"and end, and when they are evaluated. The current implementation does not "
-"support a hierarchy of terms, for example, a year, which contains two "
-"semesters, which contain two marking periods. You can create several terms, "
-"which may overlap, for example, both semesters and trimesters in the same "
-"school, but you cannot express a relationship between terms.</p> <h3>How do "
-"I...</h3> <ul> <li><strong>Add a term:</strong> Select <code>New Term</code> "
-"from the <code>Actions</code> menu.</li> <li><strong>Edit a term:</strong> "
-"Click on the term. Then select <code>Edit</code> from the <code>Actions</"
-"code> menu.</li> <li><strong>Delete a term:</strong> Check the box next to "
-"the name of the term and click <code>Delete</code>. Only delete terms if you "
-"have made a mistake while creating them but you have not used them yet. You "
-"should <strong>not</strong> delete terms simply because they are over, or "
-"you will lose important data.</li> </ul>"
-msgstr ""
-"<h1>Lukukaudet SchoolToolissa</h1> <p>SchoolTool tukee akateemisen "
-"lukukauden perusmääritelmiä, eli aikaa, joka määrittelee kurssien alun ja "
-"lopun, sekä sen, että ne on arvioitava. Nykyinen toteutus ei tue "
-"hierarkkisia lukukausia, kuten vuotta, joka sisältää kaksi jaksoa, jotka "
-"taasen sisältävät kaksi arvosteluajankohtaa. Voit luoda useita lukukausia, "
-"jotka voivat olla päällekkäin, kuten kahden ja kolmen kuukauden jaksot "
-"samassa koulussa, mutta et voi määrittää niiden välistä suhdetta.</p> "
-"<h3>Kuinka minä...</h3> <ul> <li><strong>Lisään lukukauden:</strong> Valitse "
-"<code>Uusi lukukausi</code> <code>Toiminnot</code> -valikosta.</li> "
-"<li><strong>Muokkaan lukukautta:</strong> Klikkaa lukukautta, sitten valitse "
-"<code>Muokkaa</code> <code>Toiminnot</code> -valikosta.</li> "
-"<li><strong>Poistan lukukauden:</strong> Klikkaa laatikkoa lukukauden nimen "
-"vieressä ja klikkaa <code>Poista</code>. Poista lukukausi vain jos olet "
-"tehnyt virheen luodessasi lukukautta ja et ole käyttänyt sitä. <strong>Älä</"
-"strong> poista lukukautta vain siksi, että lukukausi loppui, sillä voit "
-"menettää tärkeää tietoa.</li> </ul>"
 
 #: /src/schooltool/term/term.py:306
 msgid "Term date is not in the school year."
@@ -6584,10 +5952,6 @@ msgstr "Yhtäkään lukukautta tai aikataulukaaviota ei ole määritelty."
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:22
 msgid "Timetable"
 msgstr "Aikataulu"
-
-#: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:24
-msgid "Term"
-msgstr "Lukukausi"
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:34
 msgid "Schema"
@@ -6999,20 +6363,662 @@ msgstr "Aikataulun muutokset"
 msgid "Supplied passwords are not identical"
 msgstr "Salasanat eivät täsmää"
 
-#~ msgid "Required input is missing."
-#~ msgstr "Vaadittu syöte puuttuu."
+#~ msgid "Browser UI"
+#~ msgstr "Selaimen käyttöliittymä"
 
-#~ msgid "Change the resources for this section."
-#~ msgstr "Muuta tämän osion resursseja."
+#~ msgid "Application"
+#~ msgstr "Sovellus"
 
-#~ msgid "Change the students in this section by groups"
-#~ msgstr "Muuta tämän osion opiskelijoita ryhmittäin"
+#~ msgid "Calendar Widget"
+#~ msgstr "Kalenteri-vempain"
 
-#~ msgid "Add a Section"
-#~ msgstr "Lisää osio"
+#~ msgid "Templates"
+#~ msgstr "Mallit"
 
-#~ msgid "No such course."
-#~ msgstr "Kurssia ei löytynyt."
+#~ msgid "Security (General)"
+#~ msgstr "Turvallisuus (Yleinen)"
+
+#~ msgid "Booking Resources"
+#~ msgstr "Varataan resursseja"
+
+#~ msgid "SchoolTool Administration"
+#~ msgstr "ScoolToolin ylläpito"
+
+#~ msgid ""
+#~ "<h1>SchoolTool Administration</h1> <p>Schools have complex structures, "
+#~ "spanning the organization of people, pedagogy, time and physical "
+#~ "resources. Unfortunately, this means that an application that seeks to "
+#~ "model these processes, like SchoolTool, is also complex, and the process "
+#~ "of setting up an individual school in SchoolTool is necessarily an "
+#~ "involved one.</p> <p>This branch of the help tree contains items relevant "
+#~ "to administrators configuring SchoolTool, but not end users.</p>"
+#~ msgstr ""
+#~ "<h1>SchoolTool Hallinta</h1> <p>Kouluilla on monimutkainen rakenne, joka "
+#~ "sisältää mm. hallinnollisen organisaation, pedagogiaa, aikaa sekä "
+#~ "fyysisiä resursseja. Ikävä kyllä, tämä tarkoittaa, että ohjelma joka "
+#~ "yrittää mallintaa näitä prosesseja, kuten SchoolTool, on myös "
+#~ "monimutkainen ja  yksittäisen koulun sisällyttäminen tällaiseen ohjelmaan "
+#~ "on prosessi, johonka tulisi paneutua huolella.</p> <p>Tämä osio "
+#~ "ohjejärjestelmästä sisältää hallinnolle välttämättömät asiat, joita "
+#~ "tarvitaan SchoolToolin muokkaamiseen.</p>"
+
+#~ msgid "Calendar Selection"
+#~ msgstr "Kalenterin valinta"
+
+#~ msgid ""
+#~ "<h1>Calendar Selection</h1> <p>You can add color-coded events from "
+#~ "multiple calendars to your personal calendar view. You can add events "
+#~ "from course sections you attend, groups, other people, or even resources "
+#~ "like classrooms or projectors.</p> <p>Some calendars are private or "
+#~ "limited to certain groups.</p> <p>On the calendar selection form you are "
+#~ "given lists of all the calendars available to you. This might be a long "
+#~ "list.</p> <p>The \"SchoolTool site-wide calendar\" is intended to be used "
+#~ "as the official public calendar of the school.</p> <h3>How do I...</h3> "
+#~ "<ul> <li><strong>Select or unselect several individual calendars of one "
+#~ "type:</strong> If you press the <code>Ctrl</code> button on your keyboard "
+#~ "while you select calendars from a list with your mouse, you can select "
+#~ "multiple calendars.</li> <li><strong>Select a range of calendars of one "
+#~ "type:</strong> If you press the <code>Shift</code> key while clicking on "
+#~ "calendars, you can select a range.</li> </ul>"
+#~ msgstr ""
+#~ "<h1>Kalenterin valinta</p> <p>Voit lisätä värimerkittyjä tapahtumia "
+#~ "useista eri kalentereista henkilökohtaiseen kalenteriisi. Voit lisätä "
+#~ "tapahtumia kursseista, joihin olet osallistunut, ryhmiä, muita ihmisiä, "
+#~ "tai jopa resursseja, kuten luokkahuoneita tai projektoreita.</p> "
+#~ "<p>Jotkin kalenterit ovat yksityisiä tai rajattuja tiettyyn ryhmään.</p> "
+#~ "<p>Kalenterinvalintakaavakkeessa esitetään lista kaikista sinulle "
+#~ "tarjolla olevista kalentereista. Tämä saattaa olla todella pitkä lista.</"
+#~ "p> <p>\"SchoolTool sivustonlaajuinen kalenteri\" on tarkoitettu "
+#~ "käytettäväksi koulun virallisena yleiskalenterina.</p> <h3>Kuinka teen..."
+#~ "</h> .</h3> <ul> <li><strong>Valitse tai poista usean yksittäisen "
+#~ "kalenterityypin valinta:</strong> Jos painat <code>Ctrl</code> -näppäintä "
+#~ "valitessasi kalentereita listasta, voit valita useita kalentereita "
+#~ "yksitellen.</li> <li><strong>Valitse useita yhden tyypin kalentereita</"
+#~ "strong> Jos painat <code>Shift</code> -näppäintä painamalla voit "
+#~ "kalentereita valitessasi valita useita kalentereita samalla kertaa.</li> "
+#~ "</ul>"
+
+#~ msgid "Calendaring in SchoolTool"
+#~ msgstr "Kalenterit SchoolToolissa"
+
+#~ msgid ""
+#~ "<h1>Calendaring in SchoolTool</h1> <p>SchoolTool includes a full-featured "
+#~ "calendaring system, similar to Apple iCal or Google Calendar, but capable "
+#~ "of representing complex school timetables, including rotating schedules. "
+#~ "SchoolTool is also useful for simple resource scheduling, allowing you to "
+#~ "manage room assignments, and booking shared resources like computers or "
+#~ "projectors. Each person, group, course section or resource has its own "
+#~ "calendar. You may integrate multiple calendars into your personal "
+#~ "calendar views.</p> <h3>Parts of the standard calendar views</h3> <ul> "
+#~ "<li><strong>Calendar table:</strong> fills the main (lower-right) part of "
+#~ "the page. This represents the calendar for one day, week, month or year, "
+#~ "depending on the view..</li> <li><strong>Calendar navigation bar:</"
+#~ "strong> immediately above the calendar table. Allows you to navigate "
+#~ "forward or backward in time, or to return to the current time.</li> "
+#~ "<li><strong>Calendar title:</strong> immediately above the calendar "
+#~ "navigation bar, lists the owner of this calendar and the date for this "
+#~ "\"page\" of the calendar.</li> <li><strong>Left sidebar:</strong> for all "
+#~ "calendars, this contains a <code>Jump to...</code> section containing "
+#~ "menus and links to allow you to quickly navigate to a specific month, "
+#~ "year or date. <br /> If you are logged in and viewing your own calendar, "
+#~ "you will also see a <code>Calendars</code> section at the top of the "
+#~ "sidebar which allows you to \"overlay\" events from other calendars in "
+#~ "this view. You may see calendars for classes you teach or attend listed "
+#~ "here already.</li> <li><strong>Day/week/month/year buttons:</strong> "
+#~ "These buttons allow you to switch between daily, weekly, monthly and "
+#~ "annual views.</li> </ul>"
+#~ msgstr ""
+#~ "<h1>Kalenterit SchoolToolissa</h1> <p>SchoolTool sisältää monipuolisen "
+#~ "kalenterijärjestelmän, kuten Apple iCal tai Google Calendar, mutta pystyy "
+#~ "myös näyttämään monimutkaisia kouluaikatauluja, kuten vuoropohjaiset "
+#~ "lukukaudet. SchoolTool on myös monipuolinen resurssimanageri, joka "
+#~ "mahdollistaa huoneiden ja resurssien, kuten tietokoneiden, projektorien "
+#~ "jne, hallinnoinnin. Jokaisella henkilöllä, ryhmällä, kurssilla ja "
+#~ "resurssilla on oma kalenteri ja voit omassa kalenterinäkymässäsi tutkia "
+#~ "monta kalenteria yhtä aikaa.</p> <h3>Kalenterin standardinäkymän osat</"
+#~ "h3> <ul> <li><strong>Kalenteritaulukko:</strong>täyttää sivun pääosat. "
+#~ "Tämä näyttää kalenterit päivän, viikon, kuukauden tai vuoden mukaan, "
+#~ "riippuen mitä halaut katsoa. </li> <li><strong>Kalenterinavigointipalkki:"
+#~ "</strong> sijaitsee kalenteritaulukon yläpuolella. Mahdollistaa "
+#~ "kalenterien selauksen eteen- ja taaksepäin ajassa, sekä palaamisen "
+#~ "nykyaikaan. </li> <li><strong>Kalenteriotsikko:</strong> sijaitsee "
+#~ "kalenterinavigointipalkin yläpuolella ja luetteloi tällä hetkellä "
+#~ "tutkittavan kalenterin omistajan ja päivämäärän.</li> <li><strong>Vasen "
+#~ "sivupalkki:</strong>sisältää kaikilla kalentereilla <code>Siirry...</"
+#~ "code> -osion, jonka valikot ja linkit mahdollistavat nopeaan selaamisen "
+#~ "päivämäärän, kuukauden tai vuoden mukaan. <br /> Jos olet "
+#~ "sisäänkirjautuneena ja tarkastelet omaa kalenteriasi, näet sivupalkin "
+#~ "ylänurkassa myös <code>Kalenterit</code>-osion, jonka avulla voit laittaa "
+#~ "katsomasi kalenterit päällekkäin, kuten kurssit joilla olet opettajana "
+#~ "tai oppilaana.</li> <li><strong>Päivä/viikko/kuukausi/vuosi -painikkeet:</"
+#~ "strong> Nämä painikkeet mahdollistavat näkymän vaihtamisen päivän, "
+#~ "viikon, kuukauden tai vuoden mukaan.</li></ul>"
+
+#~ msgid "Administration"
+#~ msgstr "Ylläpito"
+
+#~ msgid "Organization"
+#~ msgstr "Organisaatio"
+
+#~ msgid "Calendaring"
+#~ msgstr "Kalenterointi"
+
+#~ msgid "Daily Calendar"
+#~ msgstr "Päivittäinen kalenteri"
+
+#~ msgid "Weekly Calendar"
+#~ msgstr "Viikottainen kalenteri"
+
+#~ msgid "Monthly Calendar"
+#~ msgstr "Kuukausittainen kalenteri"
+
+#~ msgid "Yearly Calendar"
+#~ msgstr "Vuosittainen kalenteri"
+
+#~ msgid ""
+#~ "<h1>Daily Calendar</h1> <p>This is the daily view of a calendar. It might "
+#~ "be your calendar, or it might be the calendar of another person, group or "
+#~ "resource in your school. <a href=\"/++help++/schooltool/calendaring"
+#~ "\">More calendaring help...</a></p> <h3>How do I...</h3> <ul> "
+#~ "<li><strong>Create an event:</strong> click in the calendar table at the "
+#~ "start time for the event. Or select <code>New Event</code> from the "
+#~ "<code>Actions</code> menu.</li> <li><strong>Book a resource:</strong> "
+#~ "create an event starting at the time you want to reserve the resource. "
+#~ "Select <code>Book Resource</code> in the Event Information form.</li> "
+#~ "<li><strong>Show or hide events in one of the calendars listed under "
+#~ "<code>Calendars</code>:</strong> check or uncheck the box under "
+#~ "<code>Cal</code> and click <code>Apply</code>.</li> <li><strong>Adding or "
+#~ "removing calendars to the <code>Calendars</code> list:</strong> click on "
+#~ "the <code>More...</code> button.</li> <li><strong>access a iCal format "
+#~ "version of the calendar:</strong>: Select <code>Open in iCal</code> from "
+#~ "the Action menu.</li> <li><strong>Access an Atom feed version of the "
+#~ "calendar: </strong> append <code>/atom.xml</code> to the calendar's URL.</"
+#~ "li> </ul>"
+#~ msgstr ""
+#~ "<h1>Päivittäinen kalenteri</h1> <p>Tämä on kalenterin päivänäkymä. Se voi "
+#~ "olla sinun, jonkun muun henkilön, ryhmän tai resurssin kalenteri "
+#~ "koulullasi.</p> <a href=\"/++help++/schooltool/calendaring\">Lisää "
+#~ "ohjeita kalentereihin...</a></p> <h3>Kuinka minä...</h3> <ul> "
+#~ "<li><strong>Teen tapahtuman:</strong> Klikkaa kalenteritaulukosta "
+#~ "tapahtuman aloitusajankohtaa tai valitse <code>Uusi tapahtuma</code> "
+#~ "<code>Toiminnot</code> -valikosta.</li> <li><strong>Varaa resurssit:</"
+#~ "strong>Luo tapahtuma alkaen ajasta, josta haluat varata resurssin. "
+#~ "Valitse <code>Varaa resurssit</code> Tapahtumatiedot -kaavakkeesta.</li> "
+#~ "<li><strong>Näytä tai piilota tapahtumia jossakin kalenterissa, joka on "
+#~ "luetteloitu kohtaan <code>Kalenterit</code>:</strong> Valitse tai poista "
+#~ "valinta laatikosta <code>Kalenteri</code> ja paina <code>Hyväksy</code>.</"
+#~ "li> <li><strong>Kalentereiden lisääminen tai poistaminen "
+#~ "<code>Kalenterit</code> luettelossa:</strong> Klikkaa <code>Lisää...</"
+#~ "code> -painiketta.</li> <li><strong></strong>Tarkastele kalenteria iCal -"
+#~ "formaatissa:</strong>: Valitse <code> Avaa iCal -muodossa</code> "
+#~ "Toiminnot -valikosta.</li> <li><strong>Katso kalenteria Atom -syötteenä: "
+#~ "</strong> Lisää <code>/atom.xml</code> kalenterin verkko-osoitteen "
+#~ "loppuun.</li> </ul>"
+
+#~ msgid "This form has a few issues:"
+#~ msgstr "Tässä kaavakkeessa on muutama ongelma:"
+
+#~ msgid ""
+#~ "If you need to reserve a resource, such as a room or a projector, tracked "
+#~ "by SchoolTool at your school, you should create an event for the "
+#~ "necessary time and check the <code>Book Resources</code> checkbox at the "
+#~ "bottom of the page."
+#~ msgstr ""
+#~ "Jos sinun täytyy varata resursseja, kuten luokka tai projektori, jota "
+#~ "seurataan koulullasi SchoolToolin avulla, sinun täytyy tehdä tapahtuma "
+#~ "tarvittavalle ajankohdalle ja valittava <code>Varaa resurssit</code> "
+#~ "sivun alalaidasta."
+
+#~ msgid ""
+#~ "The form ignores your preferences for time and date format. You must "
+#~ "enter the event's start time in 24-hour or \"military\" time, and the "
+#~ "date is displayed in year-month-day format."
+#~ msgstr ""
+#~ "Tämä kaavake ohittaa asetuksesi ajan ja päiväyksen muodossa. Sinun täytyy "
+#~ "syöttää tapahtuman alkuaika 24-tuntisena ja päiväys tulee ilmoittaa vuosi-"
+#~ "kuukausi-päivä muodossa."
+
+#~ msgid ""
+#~ "The <code>Location</code> field allows you to enter a description of the "
+#~ "location of the event, but this is not connected to the reservation "
+#~ "system. If your school uses SchoolTool to manage room reservations you "
+#~ "need to check the <code>Book Resources</code> checkbox at the bottom of "
+#~ "the form."
+#~ msgstr ""
+#~ "<code>Sijainti</code> kenttä antaa sinun syöttää tapahtuman paikan, mutta "
+#~ "se ei ole yhteydessä varausjärjestelmään. Jos koulusi käyttää "
+#~ "SchoolToolia hallitakseen luokkien varauksia, sinun täytyy valita "
+#~ "<code>Varaa resurssit</code> valintaruutu sivun pohjalla."
+
+#~ msgid ""
+#~ "If your event repeats in some pattern, check the <code>Recurring</code> "
+#~ "box and fill out the new fields that appear. In certain circumstances "
+#~ "(like if you change the original day of a weekly recurring event) you may "
+#~ "need to click the <code>Update form</code> button to update the "
+#~ "recurrence fields."
+#~ msgstr ""
+#~ "Jos jokin tapahtuma toistuu tietyn kaavan mukaan, valitse <code> "
+#~ "Toistuva</code> laatikko ja täytä ilmestyneet kentät. Joissakin "
+#~ "tilanteissa (esimerkiksi jos haluat vaihtaa viikottaisen tapahtuman "
+#~ "päivää) sinun täytyy klikata  <code>Päivitä kaavake</code> -painiketta "
+#~ "päivittääksesi Toistuva -kaavakkeen kohdat."
+
+#~ msgid ""
+#~ "An \"all day\" event does not show up as a 24 hour event. It indicates "
+#~ "that the day as a whole has some significance, like a birthday or holiday."
+#~ msgstr ""
+#~ "\"Kokopäiväinen\" tapahtuma ei näy 24-tuntisena tapahtumana. Se osoittaa, "
+#~ "että päivällä on yleisesti jokin tietty merkitys, kuten syntymäpäivä tai "
+#~ "lomapäivä."
+
+#~ msgid ""
+#~ "\"Exception dates\" are specific dates a repeating event skips, such as "
+#~ "holidays."
+#~ msgstr ""
+#~ "\"Poikkeuspäivämäärät\" ovat erityisiä päivämääriä, kuten lomapäivät, "
+#~ "jotka hyppäävät toistuvien tapahtumien yli."
+
+#~ msgid ""
+#~ "If you need to edit a resource reservation, click the <code>Book "
+#~ "resources</code> link at the bottom of the form."
+#~ msgstr ""
+#~ "Jos sinun täytyy muokata resurssin varausta, klikkaa <code>Varaa "
+#~ "resurssit</code> linkki kaavakkeen pohjalla."
+
+#~ msgid ""
+#~ "<h1>Monthly Calendar</h1> <p>This is the monthly view of a calendar. It "
+#~ "might be your calendar, or it might be the calendar of another person, "
+#~ "group or resource in your school. <a href=\"/++help++/schooltool/"
+#~ "calendaring\">More calendaring help...</a></p> <h3>How do I...</h3> <ul> "
+#~ "<li><strong>View an individual day or event in more detail:</strong> "
+#~ "click on the appropriate day on the calendar.</li> <li><strong>View an "
+#~ "individual week:</strong> Click on the appropriate week number in blue in "
+#~ "the leftmost column of the calendar.</li> <li><strong>Create an event:</"
+#~ "strong> select <code>New Event</code> from the <code>Actions</code> menu."
+#~ "</li> <li><strong>Show or hide events in one of the calendars listed "
+#~ "under <code>Calendars</code>:</strong> check or uncheck the box under "
+#~ "<code>Cal</code> and click <code>Apply</code>.</li> <li><strong>Adding or "
+#~ "removing calendars to the <code>Calendars</code> list:</strong> click on "
+#~ "the <code>More...</code> button.</li> <li><strong>Make weeks start on the "
+#~ "correct day:</strong> the first day of the week varies in different parts "
+#~ "of the world. If SchoolTool isn't set up correctly for you, click on your "
+#~ "name in the red bar at the top of the page. Then click on the "
+#~ "<code>Actions</code> menu and select <code>Change Preferences</code>. "
+#~ "Pick the correct \"Week starts on\" day and hit <code>Apply</code>.</li> "
+#~ "<li><strong>Access a iCal format version of the calendar:</strong>: "
+#~ "select <code>Open in iCal</code> from the Action menu.</li> </ul>"
+#~ msgstr ""
+#~ "<h1>Kuukausittainen kalenteri</h1> <p>Tämä on kalenterin kuukausinäkymä. "
+#~ "Se voi olla sinun, jonkun muun henkilön, ryhmän tai resurssin kalenteri "
+#~ "koulullasi.</p> <a href=\"/++help++/schooltool/calendaring\">Lisää "
+#~ "ohjeita kalentereihin...</a></p><h3>Kuinka minä...</h3> <ul> "
+#~ "<li><strong>Katson yksittäistä päivää tai tapahtumaa tarkemmin:</strong> "
+#~ "Klikkaa haluttua päivä kalenterista. </li> <li><strong>Katson yksittäistä "
+#~ "viikkoa:</strong> Valitse haluttu viikon numero sinisenä kalenterin "
+#~ "vasemmanpuoleisesta palkista.</li> <li>Luo tapahtuma:</strong> Valitse "
+#~ "<code>Uusi tapahtuma</code> <code>Toiminnot</code> -valikosta. </li> "
+#~ "<li><strong>Näytä tai piilota tapahtumat yhdestä kalenterista, jotka on "
+#~ "luetteloitu kohdassa <code>Kalenterit</code>:</strong> klikkaa "
+#~ "<code>Lisää...</code> -painiketta.</li> <li><strong>Laita viikot alkamaan "
+#~ "oikeasta päivästä:</strong> viikon ensimmäinen päivä vaihtelee eri "
+#~ "upolilla maailmaa. Jos SchoolTool ei ole asetettu oikein oman maanosasi "
+#~ "mukaan, klikkaa omaa nimeäsi sivun ylälaidan punaisesta palkista. Sen "
+#~ "jälkeen klikkaa <code>Toiminnot</code> -valikko ja valitse <code>Muokkaa "
+#~ "asetuksia</code>. Vallitse oikea viikon alkamispäivä ja paina "
+#~ "<code>Hyväksy</code>.</li> <li><strong>Tarkastele kalenteria iCal -"
+#~ "formaatissa:</strong> Valitse <code> Avaa iCal -muodossa</code> Toiminnot "
+#~ "-valikosta.</li></ul>"
+
+#~ msgid "SchoolTool Organization"
+#~ msgstr "SchoolToolin organisaatio"
+
+#~ msgid ""
+#~ "<h1>SchoolTool Organization</h1> <p>This branch of the help tree contains "
+#~ "items explaining the basic organization of SchoolTool.</p>"
+#~ msgstr ""
+#~ "<h1>SchoolToolin organisaatio</h1> <p>Tämä osio ohjejärjestelmästä "
+#~ "selittää SchoolToolin organisaation perusasiat.</p>"
+
+#~ msgid ""
+#~ "<h1>SchoolTool</h1> <p>SchoolTool is a free/libre administrative system "
+#~ "for schools around the world, funded by The Shuttleworth Foundation.</p> "
+#~ "<h2>Standard User Interface Conventions in SchoolTool</h2> <ul> "
+#~ "<li><strong>Red top bar</strong></li> <ul> <li><strong>Breadcrumbs:</"
+#~ "strong> the links at the left hand side of the red bar show you where you "
+#~ "are in SchoolTool's object hierarchy. Note that this doesn't necessarily "
+#~ "lead you back to where you came from, but is handy for taking you from "
+#~ "more specific to more general parts of the application.</li> "
+#~ "<li><strong>Your name</strong> (if you're logged in): clicking on your "
+#~ "name takes you to a simple dashboard of relevant links. From this page "
+#~ "you can also use the <code>Actions</code> menu to change preferences and "
+#~ "other personal settings.</li> <li><strong>Log in/out:</strong> this logs "
+#~ "you in or out. It is a good idea to log out when you aren't using "
+#~ "SchoolTool.</li> <li><strong>Help:</strong> if there is a help file for "
+#~ "the page you're looking at, you'll see this link.</li> </ul> "
+#~ "<li><strong>Menus</strong></li> <ul> <li><strong>Navigation:</strong> "
+#~ "this menu gives you some basic options for accessing different parts of "
+#~ "SchoolTool, such as the index of persons or courses. What you see here "
+#~ "depends on your permissions in the system.</li> <li><strong>Action:</"
+#~ "strong> this menu contains a variety of things that you can do on the "
+#~ "current page. The entries in this menu change considerably based on what "
+#~ "page you're viewing and what permissions you have.</li> </ul> "
+#~ "<li><strong>Above the red bar</strong></li> <ul> <li><strong>Logo & "
+#~ "School Name:</strong> clicking in this area will take you to the top of "
+#~ "the school's site, usually the calendar for the school.</li> "
+#~ "<li><strong>Calendar day/week/month/year views:</strong> if you are "
+#~ "viewing a calendar, you will find icons in the upper right hand corner "
+#~ "that will allow you to switch between calendar views.</li> "
+#~ "<li><strong>Devmode menu:</strong> if you are a site administrator and "
+#~ "you've enabled \"devmode\" in schooltool.conf, you will see a special "
+#~ "menu in the upper right hand corner of the site. You should disable "
+#~ "devmode in any production server.</li> </ul> </ul>"
+#~ msgstr ""
+#~ "<h1>SchoolTool</h1> <p>Schooltool on ilmainen, maailman kaikkien koulujen "
+#~ "käyttöön suunniteltu, hallintojärjestelmä. Ohjelmistoa rahoittaa "
+#~ "Shuttleworth Foundation.</p> <h2>SchoolTool käyttää perinteistä "
+#~ "standardikäyttöliittymää</h2> <ul> <li><strong>Punainen yläpalkki</"
+#~ "strong></li> <ul> <li><strong>Leivänmuruset:</strong> Punaisen palkin "
+#~ "vasemmalla puolella olevat linkit näyttävät missä olet SchoolToolin "
+#~ "ohjelmistohierarkiassa. Huomaa kuitenkin, että linkit eivät välttämättä "
+#~ "vie sinua takaisin sinne mistä tulit, mutta linkit ovat käteviä kun "
+#~ "haluaa siirtyä ohjelmiston tarkemmista osista takaisin yleisempiin osiin."
+#~ "</li> <li><strong>Nimesi</strong> (jos olet sisäänkirjautuneena): Nimesi "
+#~ "klikkaaminen vie sinut yksinkertaiselle linkkien kojelaudalle, jolta voi "
+#~ "mm. <code>Toiminnot</code> -valikkoa käyttämällä muokata henkilökohtaisia "
+#~ "asetuksia, sekä muita tietojasi</li> <li><strong>Kirjaudu sisään/ulos:</"
+#~ "strong> Tämä kirjaa sinut sisälle tai ulos ohjelmasta. Kun SchoolToolia "
+#~ "ei käytetä, siitä kannattaa kirjautua ulos.</li> <li><strong>Ohje:</"
+#~ "strong> Jos selaamallesi sivulle on aputiedosto, näet tämän linkin.</li> "
+#~ "</ul> <li><strong>Valikot</strong></li> <ul> <li><strong>Navigointi:</"
+#~ "strong> Tämä valikko antaa sinulle muutaman perusvaihtoehdon, jolla "
+#~ "pääset SchoolToolin eri osiin, kuten henkilöindeksin tai kurssiluettelon. "
+#~ "Se mitä näet tässä riippuu järjestelmän käyttöoikeuksistasi.</li> "
+#~ "<li><strong>Toiminnot:</strong> tämä valikko sisältää listan "
+#~ "vaihtoehdoista mitä voit tehdä kyseisellä sivulla. Käyttöoikeutesi ja "
+#~ "kyseinen sivu vaikuttaa suuresti tämän valikon sisältöön.</li> </ul> "
+#~ "<li><strong>Punaisen palkin yläpuolella</strong></li> <ul> "
+#~ "<li><strong>Koulun nimi ja logo:</strong> kun klikkaat tätä, pääset "
+#~ "suoraan järjestelmän alkusivulle, joka on yleensä koulun yleiskalenteri.</"
+#~ "li> <li><strong>Kalenterin päivä/viikko/kuukausi/vuosinäkymä:</strong> "
+#~ "Jos olet katsomassa kalenteria, näet ylänurkassa ikonit päiville, "
+#~ "viikoille, kuukausille sekä vuosille ja näitä klikkaamalla pääset "
+#~ "kalenterinäkymää .</li> <li><strong>Devmode -valikko:</strong> Jos olet "
+#~ "sivuston ylläpitäjä ja olet mahdollistanut \"devmode\" -toiminnon "
+#~ "schooltool.conf -tiedostossa, näet erityisen valikon sivuston oikeassa "
+#~ "ylänurkassa. Devmode tulisi olla poissa päältä kaikilla "
+#~ "tuotantoservereillä.</li> </ul> </ul>"
+
+#~ msgid ""
+#~ "<h1>Weekly Calendar</h1> <p>This is the weekly view of a calendar. It "
+#~ "might be your calendar, or it might be the calendar of another person, "
+#~ "group or resource in your school. <a href=\"/++help++/schooltool/"
+#~ "calendaring\">More calendaring help...</a></p> <h3>How do I...</h3> <ul> "
+#~ "<li><strong>View an individual day in more detail:</strong> click on the "
+#~ "appropriate day in the blue row of the calendar table.</li> "
+#~ "<li><strong>View details about an event or edit it:</strong> click on the "
+#~ "event. If you have the correct permissions for the event you can edit it."
+#~ "</li> <li><strong>Create an event:</strong> select the day the event "
+#~ "starts and create the event in the daily view.</li> <li><strong>Show or "
+#~ "hide events in one of the calendars listed under <code>Calendars</code>:</"
+#~ "strong> check or uncheck the box under <code>Cal</code> and click "
+#~ "<code>Apply</code>.</li> <li><strong>Adding or removing calendars to the "
+#~ "<code>Calendars</code> list:</strong> click on the <code>More...</code> "
+#~ "button.</li> <li><strong>Make the calendar start on the correct day:</"
+#~ "strong> the first day of the week varies in different parts of the world. "
+#~ "If SchoolTool isn't set up correctly for you, click on your name in the "
+#~ "red bar at the top of the page. Then click on the <code>Actions</code> "
+#~ "menu and select <code>Change Preferences</code>. Pick the correct \"Week "
+#~ "starts on\" day and hit <code>Apply</code>.</li> <li><strong>Access a "
+#~ "iCal format version of the calendar:</strong>: select <code>Open in iCal</"
+#~ "code> from the Action menu.</li> </ul>"
+#~ msgstr ""
+#~ "<h1>Viikkokalenteri</h1> <p>Tämä on kalenterin viikkonäkymä. Se voi olla "
+#~ "sinun, jonkun muun henkilön, ryhmän tai resurssin kalenteri koulullasi.</"
+#~ "p> <a href=\"/++help++/schooltool/calendaring\">Lisää ohjeita "
+#~ "kalentereihin...</a></p><h3>Kuinka minä...</h3> <ul> <li><strong>Katson "
+#~ "yksittäistä päivää tarkemmin:</strong> Klikkaa haluttua päivää sinisessä "
+#~ "rivistössä kalenteritaulukossa. </li> <li><strong>Katson tai muokkaan  "
+#~ "yksityiskohtia tapahtumasta:</strong> Valitse haluttu tapahtuma. Jos "
+#~ "sinulla on tarvittava käyttöoikeus tapahtumaan, voit muokata sitä</li> "
+#~ "<li>Luon tapahtuman:</strong> valitse haluttu päivä ja luo uusi tapahtuma "
+#~ "päivänäkymässä. </li> <li><strong>Näytä tai piilota tapahtumat yhdestä "
+#~ "kalenterista, jotka on luetteloitu kohdassa <code>Kalenterit</code>:</"
+#~ "strong> klikkaa <code>Lisää...</code> -painiketta.</li> <li><strong>Laita "
+#~ "viikot alkamaan oikeasta päivästä:</strong> viikon ensimmäinen päivä "
+#~ "vaihtelee eri upolilla maailmaa. Jos SchoolTool ei ole asetettu oikein "
+#~ "oman maanosasi mukaan, klikkaa omaa nimeäsi sivun ylälaidan punaisesta "
+#~ "palkista. Sen jälkeen klikkaa <code>Toiminnot</code> -valikko ja valitse "
+#~ "<code>Muokkaa asetuksia</code>. Vallitse oikea viikon alkamispäivä ja "
+#~ "paina <code>Hyväksy</code>.</li> <li><strong>Tarkastele kalenteria iCal -"
+#~ "formaatissa:</strong> Valitse <code> Avaa iCal -muodossa</code> Toiminnot "
+#~ "-valikosta.</li></ul>"
+
+#~ msgid ""
+#~ "<h1>Yearly Calendar</h1> <p>This is the year view of a calendar. It might "
+#~ "be your calendar, or it might be the calendar of another person, group or "
+#~ "resource in your school. <a href=\"/++help++/schooltool/calendaring"
+#~ "\">More calendaring help...</a></p> <h3>How do I...</h3> <ul> "
+#~ "<li><strong>Know which days contain events: if the day has a blue "
+#~ "background, there is at least one event that day.</strong></li> "
+#~ "<li><strong>View an individual day in more detail:</strong> click on the "
+#~ "day.</li> <li><strong>View an individual month:</strong> click on the "
+#~ "name of the month.</li> <li><strong>Create an event:</strong> select the "
+#~ "day the event starts and create the event in the daily view.</li> "
+#~ "<li><strong>Show or hide events in one of the calendars listed under "
+#~ "<code>Calendars</code>:</strong> check or uncheck the box under "
+#~ "<code>Cal</code> and click <code>Apply</code>.</li> <li><strong>Adding or "
+#~ "removing calendars to the <code>Calendars</code> list:</strong> click on "
+#~ "the <code>More...</code> button.</li> <li><strong>Make the calendar start "
+#~ "on the correct day:</strong> the first day of the week varies in "
+#~ "different parts of the world. If SchoolTool isn't set up correctly for "
+#~ "you, click on your name in the red bar at the top of the page. Then click "
+#~ "on the <code>Actions</code> menu and select <code>Change Preferences</"
+#~ "code>. Pick the correct \"Week starts on\" day and hit <code>Apply</code>."
+#~ "</li> <li><strong>Access a iCal format version of the calendar:</strong>: "
+#~ "select <code>Open in iCal</code> from the Action menu.</li> </ul>"
+#~ msgstr ""
+#~ "<h1>Vuosikalenteri</h1> <p>Tämä on kalenterin vuosinäkymä. Se voi olla "
+#~ "sinun, jonkun muun henkilön, ryhmän tai resurssin kalenteri koulullasi.</"
+#~ "p> <a href=\"/++help++/schooltool/calendaring\">Lisää ohjeita "
+#~ "kalentereihin...</a></p><h3>Kuinka minä...</h3> <ul> <li><strong>Tiedän "
+#~ "minä päivinä on tapahtumia: jos päivällä on sininen tausta, sillä "
+#~ "päivällä on vähintään yksi tapahtuma.</strong></li> <li><strong>Katson "
+#~ "tiettyä päivää tarkemmin:</strong> klikkaa päivää</li> <li>Katson tiettyä "
+#~ "kuukautta:</strong> klikkaa kuukauden nimeä. </li> <li><strong>Luon "
+#~ "tapahtuman:</strong> valitse haluttu päivä ja luo uusi tapahtuma "
+#~ "päivänäkymässä.</li><strong>Näytän tai piilotan tapahtumat kalenterista, "
+#~ "jotka on luetteloitu kohdassa <code>Kalenterit</code>:</strong> valitse "
+#~ "tai poista valinta laatikosta, joka on kohdan <code>Kalenteri</code> alla "
+#~ "ja klikkaa <code>Vahvista</code> -painiketta</li> <li><strong>Lisään tai "
+#~ "poistan kalentereita <code>Kalenterit</code> -luettelosta:</strong> "
+#~ "klikkaa <code>Lisää...</code> painiketta.</li> <li><strong>Laitan viikot "
+#~ "alkamaan oikeasta päivästä:</strong> viikon ensimmäinen päivä vaihtelee "
+#~ "eri upolilla maailmaa. Jos SchoolTool ei ole asetettu oikein oman "
+#~ "maanosasi mukaan, klikkaa omaa nimeäsi sivun ylälaidan punaisesta "
+#~ "palkista. Sen jälkeen klikkaa <code>Toiminnot</code> -valikko ja valitse "
+#~ "<code>Muokkaa asetuksia</code>. Vallitse oikea viikon alkamispäivä ja "
+#~ "paina <code>Hyväksy</code>.</li> <li><strong>Tarkastele kalenteria iCal -"
+#~ "formaatissa:</strong> Valitse <code> Avaa iCal -muodossa</code> Toiminnot "
+#~ "-valikosta.</li></ul>"
+
+#~ msgid "Previous: ${course} -- ${section_title} for ${term}"
+#~ msgstr "Edellinen: ${course} -- osio ${section_title} lukukaudelle ${term}"
+
+#~ msgid "Next: ${course} -- ${section_title} for ${term}"
+#~ msgstr "Seuraava: ${course} -- osio ${section_title} lukukaudelle ${term}"
+
+#~ msgid ""
+#~ "<h1>Courses</h1> <p>Use this page to organize courses listed in the "
+#~ "system.</p> <h3>How do I...</h3> <ul> <li><strong>Look for for a course:</"
+#~ "strong> Use the search box to the left of the <code>Find Now</code> "
+#~ "button to look through the entire list of courses for the search "
+#~ "criterion. The <code>Clear</code> button empties the search box of "
+#~ "current entries.</li> <li><strong>Show a list of the different sections "
+#~ "of a course:</strong> click on the name of the course.</li> "
+#~ "<li><strong>Show the lists of students in a particular class:</strong> "
+#~ "Click on the <code>teacher -- course</code> link. The number of students "
+#~ "is also listed next to the teacher and the course.</li> "
+#~ "<li><strong>Navigate through the courses:</strong> Separate <q>batches</"
+#~ "q> of the Course list can be accessed through the <code>Next 10</code> "
+#~ "(and <code>Previous</code>) and links in the blue bar. A <code>Show All</"
+#~ "code> button is also there to show all of the courses on a single page.</"
+#~ "li> </ul>"
+#~ msgstr ""
+#~ "<h1>Kurssit</h1> <p>Käytä tätä sivua järjestelmään luetteloitujen "
+#~ "kurssien organisoitiin</p> <h3>Kuinka minä...</h3> <ul> <li><strong>Etsin "
+#~ "kurssia:</strong> Käytä Etsi -laatikkoa, joka sijaitsee <code>Etsi nyt</"
+#~ "code> -painikkeen vasemmalla puolella, selataksesi kaikki hakukriteerit "
+#~ "täyttävät kurssit. <code>Tyhjää</code> -painike tyhjentää Etsi -laatikon "
+#~ "tämän hetkisen sisällön.</li> <li><strong>Näytä luettelo eri kurssien "
+#~ "osioista:</strong> klikkaa kurssin nimeä.</li> <li><strong>Näytä "
+#~ "opiskelijaluettelot titylle luokalle</strong> klikkaa <code>opettaja -- "
+#~ "kurssi</code> linkkiä. Opiskelijoiden lukumäärä on ilmoitettu myös "
+#~ "opettajan ja kurssin nimen vieressä</li> <li><strong>Selaa kurssien läpi</"
+#~ "strong> Kurssin eri <q>osioita</q> voia selata <code>Seuraavat 10</code> "
+#~ "(ja <code>Edelliset</code>) -painikkeella ja sinisessä palkissa olevien "
+#~ "linkkien avulla. <code>Näytä kaikki</code> -painikkeella kaikki kurssit "
+#~ "luetteloidaan yhteen sivuun.</li> </ul>"
+
+#~ msgid "Setup data"
+#~ msgstr "Asennustiedot"
+
+#~ msgid ""
+#~ "<h1>Groups</h1> <p>Use this page to keep track of <b>groups</b> of "
+#~ "Persons.</p> <p><b>Groups</b> that have been added are not part of the "
+#~ "essential groups (<b>Teachers</b>, <b>Students</b>, <b>Site Managers</b>, "
+#~ "<b>School Administrators</b>, or <b>Clerks</b>). They can be selected by "
+#~ "the checkbox next to them and removed by pressing the <b>Delete</b> "
+#~ "button at the bottom of the page.</p> <h3>How do I...</h3> <ul> "
+#~ "<li><b>Look for for a group:</b> Use the search box to the left of the "
+#~ "<code>Find Now</code> button to look through the entire list of groups "
+#~ "for the search criterion. The <code>Clear</code> button empties the "
+#~ "search box of current entries.</li> <li><b>View the persons in a certain "
+#~ "group:</b> Click on the name of the group.</li> <li><b>Sort the list:</b> "
+#~ "Click on the <code>Title</code> header to change the order of groups from "
+#~ "descending to ascending order, and vice versa.</li> <li><strong>Browse "
+#~ "for a group:</strong> Use the <code>Next 10</code> (and <code>Previous</"
+#~ "code>) and links in the blue bar.</li> <li><strong>Show all groups:</"
+#~ "strong> Click <code>Show All</code> in the blue bar.</li> </ul>"
+#~ msgstr ""
+#~ "<h1>Ryhmät</h1> <p>Käytä tätä sivua seurataksesi henkilöiden jäsenyyksiä."
+#~ "</p> <p> Nämä kyseiset <b>Ryhmät</b> eivät ole välttämättömiä ryhmiä, "
+#~ "kuten esim. <b>Opettajat</b>, <b>Oppilaat</b>, <b>Valvojat</b>, "
+#~ "<b>Hallintohenkilöstö</b> tai <b>Virkailijat</b>, vaan ne voidaan valita, "
+#~ "käyttämällä valintalaatikkoa ryhmien vieressä, ja poistaa,  painamalla "
+#~ "<b>Poista</b> -painiketta sivun alalaidassa.</p> <h3>Kuinka minä...</h3> "
+#~ "<ul> <li><b>Etsin tiettyä ryhmää:</b> Käytä hakulaatikkoa <code>Etsi nyt</"
+#~ "code> -painikkeen vasemmalla puolella katsoaksesi kaikkia ryhmiä, jotka "
+#~ "vastaavat hakukriteerejäsi. <code>Tyhjennä</code> -painike  tyhjentää "
+#~ "hakulatikon sisällön. </li> <li><b>Katson henkilöitä tietyssä ryhmässä:</"
+#~ "b> Klikkaa ryhmän nimeä.</li> <li><b>järjestän luetteloa:</b> Klikkaa "
+#~ "<code>Nimi</code> -ylätunnistetta vaihtaaksesi ryhmien järjestystä "
+#~ "laskevasta nousevaan muotoon ja päin vastoin. </li> <li><strong>Selaan "
+#~ "ryhmiä</strong> Käytä <code>Seuraavat 10</code> -painiketta (ja "
+#~ "<code>Edelliset</code> -painiketta) sekä linkkejä sinisessä palkissa.</"
+#~ "li> <li><strong>Näytän kaikki ryhmät:</strong> Klikkaa <code>Näytä "
+#~ "kaikki</code> -painiketta sinisessä palkissa.</li> </ul>"
+
+#~ msgid "Contextual Help"
+#~ msgstr "Asiayhteysohjeet"
+
+#~ msgid "Help"
+#~ msgstr "Ohje"
+
+#~ msgid "Notes (Rest)"
+#~ msgstr "Muistiinpanot (Muut)"
+
+#~ msgid ""
+#~ "<h1>Persons</h1> <p>Use this page to browse and find individual persons.</"
+#~ "p> <h3>How do I...</h3> <ul> <li><strong>Sort the list:</strong> Click on "
+#~ "<code>First Name</code> or <code>Last Name</code> to sort.</li> "
+#~ "<li><strong>Search for a user:</strong> Use the search field at the top "
+#~ "of the page to look through all of the people in the system. If you want "
+#~ "to filter by group, select the group in the adjacent drop-down list.</li> "
+#~ "<li><strong>View the details of a person:</strong> Click on the name.</"
+#~ "li> <li><strong>Browse for a person:</strong> Use the <code>Next 10</"
+#~ "code> (and <code>Previous</code>) and links in the blue bar.</li> "
+#~ "<li><strong>Show all students:</strong> Click <code>Show All</code> in "
+#~ "the blue bar.</li> </ul>"
+#~ msgstr ""
+#~ "<h1>Henkilöt</h1> <p>Käytä tätä sivua selataksesi ja etsiäksesi "
+#~ "yksittäisiä henkilöitä.</p> <h3> Kuinka minä</h3> <ul> "
+#~ "<li><strong>Lajittelen luetteloa:</strong> Klikkaa <code>Etunimi</code> "
+#~ "tai <code>Sukunimi</code> lajitellaksesi luetteloa. </li> "
+#~ "<li><strong>Etsin käyttäjää:</strong> käytä hakukenttää sivun ylälaidassa "
+#~ "etsiäksesi jotakin järjestelmän henkilöä. Jos haluat suodattaa hakua "
+#~ "ryhmän perusteella, valitse ryhmä pudotusvalikosta.</li> "
+#~ "<li><strong>Katson henkilön tietoja:</strong> Klikkaa nimeä.</li> "
+#~ "<li><strong>Selaan henkilöitä:</strong> Käytä <code>Seuraavat 10</code> "
+#~ "ja <code>Edelliset</code> -painikkeita ja sinisessä palkissa sijaitsevia "
+#~ "linkkejä.</li> <li><strong>Näytän kaikki oppillaat:</strong> Klikkaa "
+#~ "<code>Näytä kaikki</code> -painikietta sinisessä palkissa.</li> </ul>"
+
+#~ msgid "Relationships"
+#~ msgstr "Suhteet"
+
+#~ msgid "Resource Help"
+#~ msgstr "Resurssien ohjeet"
+
+#~ msgid "Initial School Setup Scripts"
+#~ msgstr "Koulun asetuksen alkukomennot"
+
+#~ msgid ""
+#~ "Warning: proceeding will populate the database with data generated from "
+#~ "scripts installed on the filesystem of this server. Do not do this if you "
+#~ "have any valuable data in this SchoolTool instance or don't already "
+#~ "understand what this is for."
+#~ msgstr ""
+#~ "Varoitus: prosessin jatkaminen täyttää tietokannan satunnaisesti "
+#~ "kehitetyllä tiedolla. Älä suorita toimenpidettä, jos sinulla on mitään "
+#~ "arvokasta tietoa SchoolTool-järjestelmässä tai ellet ymmärrä mitä varten "
+#~ "tämä on."
+
+#~ msgid "SchoolTool Onlinehelp"
+#~ msgstr "SchoolToolin online-tuki"
+
+#~ msgid "Add a term"
+#~ msgstr "Lisää lukukausi"
+
+#~ msgid "Term Search Help"
+#~ msgstr "Lukukausihaun ohjeet"
+
+#~ msgid "Terms in SchoolTool"
+#~ msgstr "Lukukaudet SchoolToolissa"
+
+#~ msgid ""
+#~ "<h1>Terms in SchoolTool</h1> <p>SchoolTool supports definition of basic "
+#~ "academic terms, that is, a period of time which defines when sections "
+#~ "begin and end, and when they are evaluated. The current implementation "
+#~ "does not support a hierarchy of terms, for example, a year, which "
+#~ "contains two semesters, which contain two marking periods. You can create "
+#~ "several terms, which may overlap, for example, both semesters and "
+#~ "trimesters in the same school, but you cannot express a relationship "
+#~ "between terms.</p> <h3>How do I...</h3> <ul> <li><strong>Add a term:</"
+#~ "strong> Select <code>New Term</code> from the <code>Actions</code> menu.</"
+#~ "li> <li><strong>Edit a term:</strong> Click on the term. Then select "
+#~ "<code>Edit</code> from the <code>Actions</code> menu.</li> "
+#~ "<li><strong>Delete a term:</strong> Check the box next to the name of the "
+#~ "term and click <code>Delete</code>. Only delete terms if you have made a "
+#~ "mistake while creating them but you have not used them yet. You should "
+#~ "<strong>not</strong> delete terms simply because they are over, or you "
+#~ "will lose important data.</li> </ul>"
+#~ msgstr ""
+#~ "<h1>Lukukaudet SchoolToolissa</h1> <p>SchoolTool tukee akateemisen "
+#~ "lukukauden perusmääritelmiä, eli aikaa, joka määrittelee kurssien alun ja "
+#~ "lopun, sekä sen, että ne on arvioitava. Nykyinen toteutus ei tue "
+#~ "hierarkkisia lukukausia, kuten vuotta, joka sisältää kaksi jaksoa, jotka "
+#~ "taasen sisältävät kaksi arvosteluajankohtaa. Voit luoda useita "
+#~ "lukukausia, jotka voivat olla päällekkäin, kuten kahden ja kolmen "
+#~ "kuukauden jaksot samassa koulussa, mutta et voi määrittää niiden välistä "
+#~ "suhdetta.</p> <h3>Kuinka minä...</h3> <ul> <li><strong>Lisään lukukauden:"
+#~ "</strong> Valitse <code>Uusi lukukausi</code> <code>Toiminnot</code> -"
+#~ "valikosta.</li> <li><strong>Muokkaan lukukautta:</strong> Klikkaa "
+#~ "lukukautta, sitten valitse <code>Muokkaa</code> <code>Toiminnot</code> -"
+#~ "valikosta.</li> <li><strong>Poistan lukukauden:</strong> Klikkaa "
+#~ "laatikkoa lukukauden nimen vieressä ja klikkaa <code>Poista</code>. "
+#~ "Poista lukukausi vain jos olet tehnyt virheen luodessasi lukukautta ja et "
+#~ "ole käyttänyt sitä. <strong>Älä</strong> poista lukukautta vain siksi, "
+#~ "että lukukausi loppui, sillä voit menettää tärkeää tietoa.</li> </ul>"
 
 #~ msgid "Everyone can view group lists."
 #~ msgstr "Kaikki voivat katsoa ryhmäluetteloita."
@@ -7062,8 +7068,32 @@ msgstr "Salasanat eivät täsmää"
 #~ msgid "Everyone can view resource lists."
 #~ msgstr "Kaikki voivat tarkastella resurssiluetteloa."
 
+#~ msgid "Using timetable:"
+#~ msgstr "Käyttää aikataulua:"
+
+#~ msgid "Everyone can view group calendars."
+#~ msgstr "Kaikki voivat katsoa ryhmän kalentereita."
+
 #~ msgid "Everyone can view the application calendar."
 #~ msgstr "Kaikki voivat katsoa ohjelmistokalenteria"
 
 #~ msgid "Everyone can view section information and calendars"
 #~ msgstr "Kaikki voivat katsoa osion tietoja ja kalentereita"
+
+#~ msgid ""
+#~ "<a href=\"http://www.schooltool.org\">SchoolTool</a>&trade; is a "
+#~ "Trademark of The <a href=\"http://www.shuttleworthfoundation.org"
+#~ "\">Shuttleworth Foundation</a>."
+#~ msgstr ""
+#~ "<a href=\"http://www.schooltool.org\">SchoolTool</a>&trade; on <a href="
+#~ "\"http://www.shuttleworthfoundation.org\">Shuttleworth Foundationin</a> "
+#~ "rekisteröimä tavaramerkki."
+
+#~ msgid "Report a bug on Launchpad."
+#~ msgstr "Tee vikailmoitus Launchpad-palvelussa."
+
+#~ msgid "For term:"
+#~ msgstr "Lukukaudelle:"
+
+#~ msgid "Access setting: ${setting} (${status})"
+#~ msgstr "Käyttöoikeusasetus: ${setting} (${status})"

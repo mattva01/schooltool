@@ -9,20 +9,22 @@ msgid ""
 msgstr ""
 "Project-Id-Version: el-1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-17 23:49+0300\n"
-"PO-Revision-Date: 2010-12-31 12:03+0000\n"
-"Last-Translator: Yannis Kaskamanidis <ttnfy17@yahoo.gr>\n"
-"Language-Team: Greek <team@gnome.gr>\n"
+"POT-Creation-Date: 2011-09-08 14:13+0300\n"
+"PO-Revision-Date: 2011-06-24 01:23+0000\n"
+"Last-Translator: Christos Prassas <Unknown>\n"
+"Language-Team: Greek <prassaschr@gmail.com>\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-04-08 04:33+0000\n"
-"X-Generator: Launchpad (build 12735)\n"
+"X-Launchpad-Export-Date: 2011-06-25 04:30+0000\n"
+"X-Generator: Launchpad (build 13168)\n"
+"X-Poedit-Country: GREECE\n"
+"X-Poedit-Language: Greek\n"
 
 #: /src/schooltool/app/app.py:197
 msgid "Your School"
-msgstr "Το Σχολείο σας"
+msgstr "Η Σχολή σας"
 
 #: /src/schooltool/app/browser/__init__.py:256
 #: /src/schooltool/app/browser/templates/index.pt:11
@@ -306,7 +308,7 @@ msgstr "Σήμερα"
 
 #: /src/schooltool/app/browser/cal.py:1290
 msgid "The previous day"
-msgstr "Η πρωηγούμενη ημέρα"
+msgstr "Η προηγούμενη ημέρα"
 
 #: /src/schooltool/app/browser/cal.py:1292
 msgid "Go to the next day"
@@ -645,35 +647,12 @@ msgstr "Μετάφραση τομέων"
 msgid "Generations"
 msgstr "Γενεές"
 
-#: /src/schooltool/app/browser/configure.zcml:666
-msgid "Browser UI"
-msgstr "Γραφικό Περιβάλλον Φυλλομετρητή"
-
-#: /src/schooltool/app/browser/configure.zcml:672
-#: /src/schooltool/app/browser/templates/login.pt:3
-#: /src/schooltool/app/browser/templates/menu_view.pt:3
-msgid "Login"
-msgstr "Σύνδεση"
-
-#: /src/schooltool/app/browser/configure.zcml:678
-#: /src/schooltool/app/browser/configure.zcml:765
+#: /src/schooltool/app/browser/configure.zcml:714
 #: /src/schooltool/devmode/devmode.pt:17
 msgid "Errors"
 msgstr "Σφάλματα"
 
-#: /src/schooltool/app/browser/configure.zcml:690
-msgid "Application"
-msgstr "Εφαρμογή"
-
-#: /src/schooltool/app/browser/configure.zcml:696
-msgid "Calendar Widget"
-msgstr "Γραφικό αντικείμενο Ημερολογίου"
-
-#: /src/schooltool/app/browser/configure.zcml:702
-msgid "Templates"
-msgstr "Πρότυπα"
-
-#: /src/schooltool/app/browser/configure.zcml:781
+#: /src/schooltool/app/browser/configure.zcml:730
 msgid "Configure"
 msgstr "Παραμετροποίηση"
 
@@ -1246,6 +1225,8 @@ msgstr "έτος"
 #: /src/schooltool/app/browser/templates/event_add.pt:236
 msgid "This section only applies when weekly recurrence is selected."
 msgstr ""
+"Αυτό το τμήμα εφαρμόζεται μόνον όταν είναι επιλεγμένη η εβδομαδιαία "
+"επανάληψη."
 
 #: /src/schooltool/app/browser/templates/event_add.pt:257
 msgid "This section only applies when the monthly recurrence is selected."
@@ -1281,7 +1262,7 @@ msgstr "Αδιάκοπη επανάληψη"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:348
 msgid "Booked Resources"
-msgstr ""
+msgstr "Κρατήσεις Πόρων"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:369
 msgid "Book resources"
@@ -1351,7 +1332,7 @@ msgstr "Καταχωρημένοι πόροι"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:42
 msgid "UnBook"
-msgstr ""
+msgstr "Ακύρωση Κράτησης"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:51
 msgid "Available resources"
@@ -1394,7 +1375,12 @@ msgstr "Ομάδες"
 #: /src/schooltool/dashboard/school.pt:4 /src/schooltool/level/browser.zcml:7
 #: /src/schooltool/level/security.zcml:7
 msgid "Levels"
-msgstr ""
+msgstr "Επίπεδα"
+
+#: /src/schooltool/app/browser/templates/login.pt:3
+#: /src/schooltool/app/browser/templates/menu_view.pt:3
+msgid "Login"
+msgstr "Σύνδεση"
 
 #: /src/schooltool/app/browser/templates/login.pt:8
 msgid "Your session has expired."
@@ -1746,333 +1732,13 @@ msgstr "CSV δεδομένα"
 msgid "submit-button"
 msgstr "κουμπή-υποβολής"
 
-#: /src/schooltool/app/configure.zcml:340
-msgid "Security (General)"
-msgstr "Ασφάλεια (Γενικά)"
-
-#: /src/schooltool/app/configure.zcml:355
-msgid "Booking Resources"
-msgstr ""
-
-#: /src/schooltool/app/help/admin.pt:6
-msgid "SchoolTool Administration"
-msgstr "Διαχείριση του SchoolTool"
-
-#: /src/schooltool/app/help/admin.pt:8
-msgid ""
-"<h1>SchoolTool Administration</h1> <p>Schools have complex structures, "
-"spanning the organization of people, pedagogy, time and physical resources. "
-"Unfortunately, this means that an application that seeks to model these "
-"processes, like SchoolTool, is also complex, and the process of setting up "
-"an individual school in SchoolTool is necessarily an involved one.</p> "
-"<p>This branch of the help tree contains items relevant to administrators "
-"configuring SchoolTool, but not end users.</p>"
-msgstr ""
-"<h1>Διαχείριση του SchoolTool</h1> <p> Τα σχολεία διαθέτουν σύνθετες δομές "
-"που εκτείνονται από την οργάνωση του προσωπικού και τους διδακτικού έργου "
-"μέχρι τη διαχείριση του χρόνου και των φυσικών πόρων. Δυστυχώς, αυτό "
-"σημαίνει ότι μια εφαρμογή που αποσκοπεί στη μοντελοποίηση αυτών των "
-"διαδικασιών, όπως το SchoolTool, είναι επίσης περίπλοκη, όπως και η "
-"διαδικασία διαχείρισης ενός σχολείου μέσω του SchoolTool. </p> <p>Αυτός ο "
-"κλάδος της βοήθειας περιέχει κείμενα συναφή με τη διαμόρφωση του SchoolTool "
-"από τους διαχειριστές, όχι όμως για τους τελικούς χρήστες.</p>"
-
-#: /src/schooltool/app/help/calendar_selection.pt:6
-#: /src/schooltool/app/help/configure.zcml:97
-msgid "Calendar Selection"
-msgstr "Επιλογή Ημερολογίου"
-
-#: /src/schooltool/app/help/calendar_selection.pt:8
-msgid ""
-"<h1>Calendar Selection</h1> <p>You can add color-coded events from multiple "
-"calendars to your personal calendar view. You can add events from course "
-"sections you attend, groups, other people, or even resources like classrooms "
-"or projectors.</p> <p>Some calendars are private or limited to certain "
-"groups.</p> <p>On the calendar selection form you are given lists of all the "
-"calendars available to you. This might be a long list.</p> <p>The "
-"\"SchoolTool site-wide calendar\" is intended to be used as the official "
-"public calendar of the school.</p> <h3>How do I...</h3> <ul> "
-"<li><strong>Select or unselect several individual calendars of one type:</"
-"strong> If you press the <code>Ctrl</code> button on your keyboard while you "
-"select calendars from a list with your mouse, you can select multiple "
-"calendars.</li> <li><strong>Select a range of calendars of one type:</"
-"strong> If you press the <code>Shift</code> key while clicking on calendars, "
-"you can select a range.</li> </ul>"
-msgstr ""
-
-#: /src/schooltool/app/help/calendaring.pt:6
-msgid "Calendaring in SchoolTool"
-msgstr "Χρονοδιάγραμμα στο SchoolTool"
-
-#: /src/schooltool/app/help/calendaring.pt:8
-msgid ""
-"<h1>Calendaring in SchoolTool</h1> <p>SchoolTool includes a full-featured "
-"calendaring system, similar to Apple iCal or Google Calendar, but capable of "
-"representing complex school timetables, including rotating schedules. "
-"SchoolTool is also useful for simple resource scheduling, allowing you to "
-"manage room assignments, and booking shared resources like computers or "
-"projectors. Each person, group, course section or resource has its own "
-"calendar. You may integrate multiple calendars into your personal calendar "
-"views.</p> <h3>Parts of the standard calendar views</h3> <ul> "
-"<li><strong>Calendar table:</strong> fills the main (lower-right) part of "
-"the page. This represents the calendar for one day, week, month or year, "
-"depending on the view..</li> <li><strong>Calendar navigation bar:</strong> "
-"immediately above the calendar table. Allows you to navigate forward or "
-"backward in time, or to return to the current time.</li> "
-"<li><strong>Calendar title:</strong> immediately above the calendar "
-"navigation bar, lists the owner of this calendar and the date for this \"page"
-"\" of the calendar.</li> <li><strong>Left sidebar:</strong> for all "
-"calendars, this contains a <code>Jump to...</code> section containing menus "
-"and links to allow you to quickly navigate to a specific month, year or "
-"date. <br /> If you are logged in and viewing your own calendar, you will "
-"also see a <code>Calendars</code> section at the top of the sidebar which "
-"allows you to \"overlay\" events from other calendars in this view. You may "
-"see calendars for classes you teach or attend listed here already.</li> "
-"<li><strong>Day/week/month/year buttons:</strong> These buttons allow you to "
-"switch between daily, weekly, monthly and annual views.</li> </ul>"
-msgstr ""
-
-#: /src/schooltool/app/help/configure.zcml:13
-msgid "Administration"
-msgstr "Διαχείριση"
-
-#: /src/schooltool/app/help/configure.zcml:21
-msgid "Organization"
-msgstr "Φορέας"
-
-#: /src/schooltool/app/help/configure.zcml:29
-msgid "Calendaring"
-msgstr "Χρονοδιάγραμμα"
-
-#: /src/schooltool/app/help/configure.zcml:37
-#: /src/schooltool/app/help/daily_calendar.pt:6
-msgid "Daily Calendar"
-msgstr "Ημερήσιο Ημερολόγιο"
-
-#: /src/schooltool/app/help/configure.zcml:47
-#: /src/schooltool/app/help/weekly_calendar.pt:6
-msgid "Weekly Calendar"
-msgstr "Εβδομαδιαίο Ημερολόγιο"
-
-#: /src/schooltool/app/help/configure.zcml:57
-#: /src/schooltool/app/help/monthly_calendar.pt:6
-msgid "Monthly Calendar"
-msgstr "Μηνιαίο Ημερολόγιο"
-
-#: /src/schooltool/app/help/configure.zcml:67
-#: /src/schooltool/app/help/yearly_calendar.pt:6
-msgid "Yearly Calendar"
-msgstr "Ετήσιο Ημερολόγιο"
-
-#: /src/schooltool/app/help/daily_calendar.pt:8
-msgid ""
-"<h1>Daily Calendar</h1> <p>This is the daily view of a calendar. It might be "
-"your calendar, or it might be the calendar of another person, group or "
-"resource in your school. <a href=\"/++help++/schooltool/calendaring\">More "
-"calendaring help...</a></p> <h3>How do I...</h3> <ul> <li><strong>Create an "
-"event:</strong> click in the calendar table at the start time for the event. "
-"Or select <code>New Event</code> from the <code>Actions</code> menu.</li> "
-"<li><strong>Book a resource:</strong> create an event starting at the time "
-"you want to reserve the resource. Select <code>Book Resource</code> in the "
-"Event Information form.</li> <li><strong>Show or hide events in one of the "
-"calendars listed under <code>Calendars</code>:</strong> check or uncheck the "
-"box under <code>Cal</code> and click <code>Apply</code>.</li> "
-"<li><strong>Adding or removing calendars to the <code>Calendars</code> list:"
-"</strong> click on the <code>More...</code> button.</li> <li><strong>access "
-"a iCal format version of the calendar:</strong>: Select <code>Open in iCal</"
-"code> from the Action menu.</li> <li><strong>Access an Atom feed version of "
-"the calendar: </strong> append <code>/atom.xml</code> to the calendar's URL."
-"</li> </ul>"
-msgstr ""
-
-#: /src/schooltool/app/help/event_add.pt:10
-#: /src/schooltool/app/help/event_edit.pt:10
-msgid "This form has a few issues:"
-msgstr ""
-
-#: /src/schooltool/app/help/event_add.pt:12
-msgid ""
-"If you need to reserve a resource, such as a room or a projector, tracked by "
-"SchoolTool at your school, you should create an event for the necessary time "
-"and check the <code>Book Resources</code> checkbox at the bottom of the page."
-msgstr ""
-"Αν θέλετε να χρησιμοποιήσετε υλικό ή αίθουσα στο σχολείο σας, πρέπει να "
-"δημιουργήσετε ένα γεγονός με καθορισμένη ώρα γι αυτή τη χρήση. Επιλέξτε το "
-"πλαίσιο ελέγχου <code>Book Resources</code> στο τέλος της σελίδας."
-
-#: /src/schooltool/app/help/event_add.pt:16
-#: /src/schooltool/app/help/event_edit.pt:14
-msgid ""
-"The form ignores your preferences for time and date format. You must enter "
-"the event's start time in 24-hour or \"military\" time, and the date is "
-"displayed in year-month-day format."
-msgstr ""
-
-#: /src/schooltool/app/help/event_add.pt:19
-#: /src/schooltool/app/help/event_edit.pt:17
-msgid ""
-"The <code>Location</code> field allows you to enter a description of the "
-"location of the event, but this is not connected to the reservation system. "
-"If your school uses SchoolTool to manage room reservations you need to check "
-"the <code>Book Resources</code> checkbox at the bottom of the form."
-msgstr ""
-
-#: /src/schooltool/app/help/event_add.pt:24
-#: /src/schooltool/app/help/event_edit.pt:22
-msgid ""
-"If your event repeats in some pattern, check the <code>Recurring</code> box "
-"and fill out the new fields that appear. In certain circumstances (like if "
-"you change the original day of a weekly recurring event) you may need to "
-"click the <code>Update form</code> button to update the recurrence fields."
-msgstr ""
-
-#: /src/schooltool/app/help/event_add.pt:29
-#: /src/schooltool/app/help/event_edit.pt:27
-msgid ""
-"An \"all day\" event does not show up as a 24 hour event. It indicates that "
-"the day as a whole has some significance, like a birthday or holiday."
-msgstr ""
-
-#: /src/schooltool/app/help/event_add.pt:32
-#: /src/schooltool/app/help/event_edit.pt:30
-msgid ""
-"\"Exception dates\" are specific dates a repeating event skips, such as "
-"holidays."
-msgstr ""
-
-#: /src/schooltool/app/help/event_edit.pt:12
-msgid ""
-"If you need to edit a resource reservation, click the <code>Book resources</"
-"code> link at the bottom of the form."
-msgstr ""
-
-#: /src/schooltool/app/help/monthly_calendar.pt:8
-msgid ""
-"<h1>Monthly Calendar</h1> <p>This is the monthly view of a calendar. It "
-"might be your calendar, or it might be the calendar of another person, group "
-"or resource in your school. <a href=\"/++help++/schooltool/calendaring"
-"\">More calendaring help...</a></p> <h3>How do I...</h3> <ul> "
-"<li><strong>View an individual day or event in more detail:</strong> click "
-"on the appropriate day on the calendar.</li> <li><strong>View an individual "
-"week:</strong> Click on the appropriate week number in blue in the leftmost "
-"column of the calendar.</li> <li><strong>Create an event:</strong> select "
-"<code>New Event</code> from the <code>Actions</code> menu.</li> "
-"<li><strong>Show or hide events in one of the calendars listed under "
-"<code>Calendars</code>:</strong> check or uncheck the box under <code>Cal</"
-"code> and click <code>Apply</code>.</li> <li><strong>Adding or removing "
-"calendars to the <code>Calendars</code> list:</strong> click on the "
-"<code>More...</code> button.</li> <li><strong>Make weeks start on the "
-"correct day:</strong> the first day of the week varies in different parts of "
-"the world. If SchoolTool isn't set up correctly for you, click on your name "
-"in the red bar at the top of the page. Then click on the <code>Actions</"
-"code> menu and select <code>Change Preferences</code>. Pick the correct "
-"\"Week starts on\" day and hit <code>Apply</code>.</li> <li><strong>Access a "
-"iCal format version of the calendar:</strong>: select <code>Open in iCal</"
-"code> from the Action menu.</li> </ul>"
-msgstr ""
-
-#: /src/schooltool/app/help/org.pt:6
-msgid "SchoolTool Organization"
-msgstr ""
-
-#: /src/schooltool/app/help/org.pt:8
-msgid ""
-"<h1>SchoolTool Organization</h1> <p>This branch of the help tree contains "
-"items explaining the basic organization of SchoolTool.</p>"
-msgstr ""
-
-#: /src/schooltool/app/help/schooltool.pt:8
-msgid ""
-"<h1>SchoolTool</h1> <p>SchoolTool is a free/libre administrative system for "
-"schools around the world, funded by The Shuttleworth Foundation.</p> "
-"<h2>Standard User Interface Conventions in SchoolTool</h2> <ul> "
-"<li><strong>Red top bar</strong></li> <ul> <li><strong>Breadcrumbs:</strong> "
-"the links at the left hand side of the red bar show you where you are in "
-"SchoolTool's object hierarchy. Note that this doesn't necessarily lead you "
-"back to where you came from, but is handy for taking you from more specific "
-"to more general parts of the application.</li> <li><strong>Your name</"
-"strong> (if you're logged in): clicking on your name takes you to a simple "
-"dashboard of relevant links. From this page you can also use the "
-"<code>Actions</code> menu to change preferences and other personal settings."
-"</li> <li><strong>Log in/out:</strong> this logs you in or out. It is a good "
-"idea to log out when you aren't using SchoolTool.</li> <li><strong>Help:</"
-"strong> if there is a help file for the page you're looking at, you'll see "
-"this link.</li> </ul> <li><strong>Menus</strong></li> <ul> "
-"<li><strong>Navigation:</strong> this menu gives you some basic options for "
-"accessing different parts of SchoolTool, such as the index of persons or "
-"courses. What you see here depends on your permissions in the system.</li> "
-"<li><strong>Action:</strong> this menu contains a variety of things that you "
-"can do on the current page. The entries in this menu change considerably "
-"based on what page you're viewing and what permissions you have.</li> </ul> "
-"<li><strong>Above the red bar</strong></li> <ul> <li><strong>Logo & School "
-"Name:</strong> clicking in this area will take you to the top of the "
-"school's site, usually the calendar for the school.</li> "
-"<li><strong>Calendar day/week/month/year views:</strong> if you are viewing "
-"a calendar, you will find icons in the upper right hand corner that will "
-"allow you to switch between calendar views.</li> <li><strong>Devmode menu:</"
-"strong> if you are a site administrator and you've enabled \"devmode\" in "
-"schooltool.conf, you will see a special menu in the upper right hand corner "
-"of the site. You should disable devmode in any production server.</li> </ul> "
-"</ul>"
-msgstr ""
-
-#: /src/schooltool/app/help/weekly_calendar.pt:8
-msgid ""
-"<h1>Weekly Calendar</h1> <p>This is the weekly view of a calendar. It might "
-"be your calendar, or it might be the calendar of another person, group or "
-"resource in your school. <a href=\"/++help++/schooltool/calendaring\">More "
-"calendaring help...</a></p> <h3>How do I...</h3> <ul> <li><strong>View an "
-"individual day in more detail:</strong> click on the appropriate day in the "
-"blue row of the calendar table.</li> <li><strong>View details about an event "
-"or edit it:</strong> click on the event. If you have the correct permissions "
-"for the event you can edit it.</li> <li><strong>Create an event:</strong> "
-"select the day the event starts and create the event in the daily view.</li> "
-"<li><strong>Show or hide events in one of the calendars listed under "
-"<code>Calendars</code>:</strong> check or uncheck the box under <code>Cal</"
-"code> and click <code>Apply</code>.</li> <li><strong>Adding or removing "
-"calendars to the <code>Calendars</code> list:</strong> click on the "
-"<code>More...</code> button.</li> <li><strong>Make the calendar start on the "
-"correct day:</strong> the first day of the week varies in different parts of "
-"the world. If SchoolTool isn't set up correctly for you, click on your name "
-"in the red bar at the top of the page. Then click on the <code>Actions</"
-"code> menu and select <code>Change Preferences</code>. Pick the correct "
-"\"Week starts on\" day and hit <code>Apply</code>.</li> <li><strong>Access a "
-"iCal format version of the calendar:</strong>: select <code>Open in iCal</"
-"code> from the Action menu.</li> </ul>"
-msgstr ""
-
-#: /src/schooltool/app/help/yearly_calendar.pt:8
-msgid ""
-"<h1>Yearly Calendar</h1> <p>This is the year view of a calendar. It might be "
-"your calendar, or it might be the calendar of another person, group or "
-"resource in your school. <a href=\"/++help++/schooltool/calendaring\">More "
-"calendaring help...</a></p> <h3>How do I...</h3> <ul> <li><strong>Know which "
-"days contain events: if the day has a blue background, there is at least one "
-"event that day.</strong></li> <li><strong>View an individual day in more "
-"detail:</strong> click on the day.</li> <li><strong>View an individual month:"
-"</strong> click on the name of the month.</li> <li><strong>Create an event:</"
-"strong> select the day the event starts and create the event in the daily "
-"view.</li> <li><strong>Show or hide events in one of the calendars listed "
-"under <code>Calendars</code>:</strong> check or uncheck the box under "
-"<code>Cal</code> and click <code>Apply</code>.</li> <li><strong>Adding or "
-"removing calendars to the <code>Calendars</code> list:</strong> click on the "
-"<code>More...</code> button.</li> <li><strong>Make the calendar start on the "
-"correct day:</strong> the first day of the week varies in different parts of "
-"the world. If SchoolTool isn't set up correctly for you, click on your name "
-"in the red bar at the top of the page. Then click on the <code>Actions</"
-"code> menu and select <code>Change Preferences</code>. Pick the correct "
-"\"Week starts on\" day and hit <code>Apply</code>.</li> <li><strong>Access a "
-"iCal format version of the calendar:</strong>: select <code>Open in iCal</"
-"code> from the Action menu.</li> </ul>"
-msgstr ""
-
 #: /src/schooltool/app/interfaces.py:44
 msgid "Form input is not a file object"
 msgstr ""
 
 #: /src/schooltool/app/interfaces.py:45 /src/schooltool/app/interfaces.py:49
 msgid "Invalid integer data"
-msgstr ""
+msgstr "Λάθος ακέραια τιμή"
 
 #: /src/schooltool/app/interfaces.py:46
 msgid "Invalid text data"
@@ -2084,7 +1750,7 @@ msgstr "Μη έγκυρα κειμενικά δεδομένα"
 
 #: /src/schooltool/app/interfaces.py:48
 msgid "Invalid unicode data"
-msgstr ""
+msgstr "Λάθος τύπος δεδομένων (encode)"
 
 #: /src/schooltool/app/interfaces.py:50
 msgid "Invalid floating point data"
@@ -2092,7 +1758,7 @@ msgstr ""
 
 #: /src/schooltool/app/interfaces.py:51
 msgid "Invalid datetime data"
-msgstr ""
+msgstr "Λάθος δεδομένα Ημέρας/Ώρας"
 
 #: /src/schooltool/app/interfaces.py:148 /src/schooltool/app/interfaces.py:159
 msgid ""
@@ -2145,16 +1811,7 @@ msgid ""
 "  --manage               only do management tasks, don't run the server\n"
 msgstr ""
 
-#: /src/schooltool/app/main.py:110
-msgid ""
-"\n"
-"No storage defined in the configuration file.\n"
-"\n"
-"If you're using the default configuration file, please edit it now and\n"
-"uncomment one of the ZODB storage sections.\n"
-msgstr ""
-
-#: /src/schooltool/app/main.py:335
+#: /src/schooltool/app/main.py:327
 msgid "Going to background, daemon pid %d"
 msgstr ""
 
@@ -2162,12 +1819,7 @@ msgstr ""
 msgid "Cannot resolve plugin action order:\n"
 msgstr ""
 
-#: /src/schooltool/app/main.py:536 /src/schooltool/app/main.py:580
-#: /src/schooltool/app/main.py:583
-msgid "%s: %s"
-msgstr ""
-
-#: /src/schooltool/app/main.py:537
+#: /src/schooltool/app/main.py:528
 msgid "Run %s -h for help."
 msgstr ""
 
@@ -2179,12 +1831,20 @@ msgstr ""
 msgid "Reading configuration from %s"
 msgstr ""
 
-#: /src/schooltool/app/main.py:671
+#: /src/schooltool/app/main.py:574
+msgid ""
+"\n"
+"No storage defined in the configuration file.\n"
+"\n"
+"If you're using the default configuration file, please edit it now and\n"
+"uncomment one of the ZODB storage sections.\n"
+msgstr ""
+
+#: /src/schooltool/app/main.py:666
 msgid "Startup time: %.3f sec real, %.3f sec CPU"
 msgstr ""
 
-#. Default: ""
-#: /src/schooltool/app/main.py:705
+#: /src/schooltool/app/main.py:700
 msgid ""
 "Could not initialize the database:\n"
 "%s"
@@ -2217,11 +1877,11 @@ msgstr ""
 #: /src/schooltool/app/membership.py:261
 #: /src/schooltool/group/browser/group.pt:16
 msgid "Members"
-msgstr ""
+msgstr "Μέλη"
 
 #: /src/schooltool/app/membership.py:262
 msgid "Members of the group."
-msgstr ""
+msgstr "Μέλη του γκρουπ"
 
 #: /src/schooltool/app/security.py:309
 msgid "Assigned leaders."
@@ -2243,25 +1903,25 @@ msgstr ""
 
 #: /src/schooltool/app/security.zcml:80
 msgid "Access"
-msgstr ""
+msgstr "Πρόσβαση"
 
 #: /src/schooltool/app/security.zcml:87
 msgid "Manage school settings and configuration"
-msgstr ""
+msgstr "Διαχείριση ρυθμίσεων σχολείου"
 
 #: /src/schooltool/app/security.zcml:95
 #: /src/schooltool/course/security.zcml:141
 #: /src/schooltool/group/security.zcml:86
 #: /src/schooltool/person/security.zcml:128
 msgid "View calendar"
-msgstr ""
+msgstr "Προβολή Ημερολογίου"
 
 #: /src/schooltool/app/security.zcml:103
 #: /src/schooltool/course/security.zcml:149
 #: /src/schooltool/group/security.zcml:94
 #: /src/schooltool/person/security.zcml:136
 msgid "Change calendar"
-msgstr ""
+msgstr "Αλλαγή ημερολογίου"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:14
 #: /src/schooltool/basicperson/browser/configure.zcml:216
@@ -2300,15 +1960,15 @@ msgstr "Προβολή"
 #: /src/schooltool/schoolyear/browser/configure.zcml:94
 #: /src/schooltool/term/browser/configure.zcml:23
 msgid "Edit"
-msgstr ""
+msgstr "Επεξεργασία"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:24
 msgid "Export Persons as XML"
-msgstr ""
+msgstr "Εξαγωγή Ατόμων σε αρχείο XML"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:33
 msgid "Export"
-msgstr ""
+msgstr "Εξαγωγή"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:42
 #: /src/schooltool/basicperson/security.py:65
@@ -2327,25 +1987,25 @@ msgstr "Νέο άτομο"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:107
 msgid "Add Multiple Persons"
-msgstr ""
+msgstr "Μαζική εισαγωγή ατόμων"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:129
 #: /src/schooltool/basicperson/security.zcml:22
 #: /src/schooltool/demographics/browser/personform.py:180
 msgid "Demographics"
-msgstr ""
+msgstr "Δημογραφικά"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:143
 msgid "New Text Field"
-msgstr ""
+msgstr "Νέο Πεδίο Κειμένου"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:150
 msgid "New Date Field"
-msgstr ""
+msgstr "Νέο Πεδίο Ημερομηνίας"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:174
 msgid "New Yes/No Field"
-msgstr ""
+msgstr "Νέο πεδίο Ναι/Όχι"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:181
 msgid "New Selection List Field"
@@ -2353,15 +2013,15 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/configure.zcml:291
 msgid "Add Teacher"
-msgstr ""
+msgstr "Εισαγωγή Δασκάλου"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:301
 msgid "Add Student"
-msgstr ""
+msgstr "Εισαγωγή Μαθητή"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:311
 msgid "Add Administrator"
-msgstr ""
+msgstr "Εισαγωγή Διαχειριστή"
 
 #: /src/schooltool/basicperson/browser/csvimport.py:44
 #: /src/schooltool/course/browser/csvimport.py:45
@@ -2380,11 +2040,11 @@ msgstr "Το όνομα χρήστη δεν μπορεί να μένει κεν�
 
 #: /src/schooltool/basicperson/browser/csvimport.py:52
 msgid "first name may not be empty"
-msgstr ""
+msgstr "το όνομα δεν μπορεί να είναι κενό"
 
 #: /src/schooltool/basicperson/browser/csvimport.py:56
 msgid "last name may not be empty"
-msgstr ""
+msgstr "το επώνυμο δεν μπορεί να είναι κενό"
 
 #. Default: ""
 #: /src/schooltool/basicperson/browser/csvimport.py:68
@@ -2418,10 +2078,10 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/demographics.py:140
 msgid "Add new Field"
-msgstr ""
+msgstr "Εισαγωγή νέου πεδίου"
 
 #. Default: ""
-#: /src/schooltool/basicperson/browser/demographics.py:212
+#: /src/schooltool/basicperson/browser/demographics.py:230
 msgid "Change information for ${field_title}"
 msgstr ""
 
@@ -2433,7 +2093,7 @@ msgstr ""
 #: /src/schooltool/basicperson/browser/person.py:73
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_add.pt:61
 msgid "Group"
-msgstr ""
+msgstr "Ομάδα"
 
 #: /src/schooltool/basicperson/browser/person.py:54
 #: /src/schooltool/demographics/interfaces.py:209
@@ -2447,35 +2107,34 @@ msgstr "Επιβεβαίωση κωδικού πρόσβασης"
 
 #: /src/schooltool/basicperson/browser/person.py:76
 msgid "Passwords do not match"
-msgstr ""
+msgstr "Τα συνθηματικά δεν συμπίπτουν"
 
 #: /src/schooltool/basicperson/browser/person.py:152
 msgid "This username is already in use!"
-msgstr ""
+msgstr "Το όνομα χρήστη χρησιμοποιείται"
 
-#: /src/schooltool/basicperson/browser/person.py:263
+#: /src/schooltool/basicperson/browser/person.py:149
 msgid "Add new person"
-msgstr ""
+msgstr "Εισαγωγή νέου ατόμου"
 
 #: /src/schooltool/basicperson/browser/person.py:283
 msgid "Usernames"
-msgstr ""
+msgstr "Όνομα χρήστη"
 
 #: /src/schooltool/basicperson/browser/person.py:300
 msgid "Add multiple persons"
-msgstr ""
+msgstr "Μαζική εισαγωγή ατόμων"
 
-#: /src/schooltool/basicperson/browser/person.py:330
+#: /src/schooltool/basicperson/browser/person.py:357
 msgid "Done"
 msgstr ""
 
 #. Default: ""
-#: /src/schooltool/basicperson/browser/person.py:375
-#: /src/schooltool/resource/browser/resource.py:496
+#: /src/schooltool/basicperson/browser/person.py:402
 msgid "Change information for ${fullname}"
-msgstr ""
+msgstr "Αλλαγή πληροφοριών για ${fullname}"
 
-#: /src/schooltool/basicperson/browser/person.py:445
+#: /src/schooltool/basicperson/browser/person.py:304
 msgid "Current Advisors"
 msgstr ""
 
@@ -2511,7 +2170,7 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/person.py:582
 msgid "Add new teacher"
-msgstr ""
+msgstr "Εισαγωγή νέου καθηγητή"
 
 #: /src/schooltool/basicperson/browser/person.py:589
 msgid "Student identification"
@@ -2523,7 +2182,7 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/person.py:592
 msgid "Add new student"
-msgstr ""
+msgstr "Εισαγωγή νέου μαθητή"
 
 #: /src/schooltool/basicperson/browser/person.py:599
 msgid "Administrator identification"
@@ -2535,7 +2194,7 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/person.py:602
 msgid "Add new administrator"
-msgstr ""
+msgstr "Εισαγωγή νέου διαχειριστή"
 
 #: /src/schooltool/basicperson/browser/templates/container.pt:23
 msgid ""
@@ -2544,7 +2203,7 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/templates/container.pt:23
 msgid "school year"
-msgstr ""
+msgstr "ακαδημαϊκή χρονιά"
 
 #: /src/schooltool/basicperson/browser/templates/container.pt:37
 #: /src/schooltool/course/browser/templates/course_container.pt:28
@@ -2609,7 +2268,7 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/templates/person_add_subform.pt:2
 msgid "New person"
-msgstr ""
+msgstr "Νέο άτομο"
 
 #: /src/schooltool/basicperson/browser/templates/person_container_delete.pt:15
 #: /src/schooltool/contact/browser/templates/contacts_delete.pt:15
@@ -2617,7 +2276,7 @@ msgstr ""
 #: /src/schooltool/resource/browser/container_delete.pt:10
 #: /src/schooltool/skin/templates/container_delete.pt:15
 msgid "Are you sure you want to delete selected items?"
-msgstr ""
+msgstr "Είστε σίγουροι ότι θέλετε να διαγράψετε τα επιλεγμένα αντικείμενα;"
 
 #: /src/schooltool/basicperson/browser/templates/person_container_delete.pt:21
 #: /src/schooltool/contact/browser/templates/contacts_delete.pt:21
@@ -2649,7 +2308,7 @@ msgstr ""
 #: /src/schooltool/timetable/browser/templates/schooltt-delete.pt:29
 #: /src/schooltool/timetable/browser/templates/timetable-container-delete.pt:27
 msgid "Confirm"
-msgstr ""
+msgstr "Επιβεβαίωση"
 
 #: /src/schooltool/basicperson/browser/templates/person_view.pt:13
 #: /src/schooltool/person/browser/home.pt:13
@@ -2668,7 +2327,7 @@ msgstr ""
 #: /src/schooltool/contact/interfaces.py:42
 #: /src/schooltool/demographics/interfaces.py:50
 msgid "First name"
-msgstr ""
+msgstr "Όνομα"
 
 #: /src/schooltool/basicperson/interfaces.py:48
 #: /src/schooltool/contact/interfaces.py:44
@@ -2681,7 +2340,7 @@ msgstr ""
 #: /src/schooltool/contact/interfaces.py:46
 #: /src/schooltool/demographics/interfaces.py:60
 msgid "Last name"
-msgstr ""
+msgstr "Επώνυμο"
 
 #: /src/schooltool/basicperson/interfaces.py:58
 #: /src/schooltool/contact/interfaces.py:48
@@ -2697,22 +2356,22 @@ msgstr ""
 #: /src/schooltool/basicperson/interfaces.py:68
 #: /src/schooltool/demographics/interfaces.py:123
 msgid "Gender"
-msgstr ""
+msgstr "Φύλο"
 
 #: /src/schooltool/basicperson/interfaces.py:69
 #: /src/schooltool/demographics/interfaces.py:124
 msgid "female"
-msgstr ""
+msgstr "θήλυ"
 
 #: /src/schooltool/basicperson/interfaces.py:69
 #: /src/schooltool/demographics/interfaces.py:124
 msgid "male"
-msgstr ""
+msgstr "άρρεν"
 
 #: /src/schooltool/basicperson/interfaces.py:74
 #: /src/schooltool/demographics/interfaces.py:129
 msgid "Birth date"
-msgstr ""
+msgstr "Ημερομηνία γέννησης"
 
 #: /src/schooltool/basicperson/interfaces.py:75
 msgid "(yyyy-mm-dd)"
@@ -2733,7 +2392,7 @@ msgstr ""
 
 #: /src/schooltool/basicperson/interfaces.py:129
 msgid "Required"
-msgstr ""
+msgstr "Απαιτούμενο"
 
 #: /src/schooltool/basicperson/interfaces.py:130
 msgid "Whether this Field is required or not"
@@ -2754,12 +2413,12 @@ msgstr ""
 #: /src/schooltool/basicperson/person.py:76
 #: /src/schooltool/contact/browser/contact.py:299
 msgid "First Name"
-msgstr ""
+msgstr "Όνομα"
 
 #: /src/schooltool/basicperson/person.py:83
 #: /src/schooltool/contact/browser/contact.py:306
 msgid "Last Name"
-msgstr ""
+msgstr "Επώνυμο"
 
 #: /src/schooltool/basicperson/security.py:66
 msgid "Advisors of a person."
@@ -2771,7 +2430,7 @@ msgstr ""
 
 #: /src/schooltool/basicperson/security.zcml:35
 msgid "Edit fields"
-msgstr ""
+msgstr "Επεξεργασία πεδίων"
 
 #: /src/schooltool/basicperson/security.zcml:43
 msgid "View user demographics"
@@ -2801,11 +2460,11 @@ msgstr "Μαθητές"
 
 #: /src/schooltool/basicperson/vocabularies.py:144
 msgid "Teachers"
-msgstr ""
+msgstr "Καθηγητές"
 
 #: /src/schooltool/basicperson/vocabularies.py:145
 msgid "Administrators"
-msgstr ""
+msgstr "Διαχειριστές"
 
 #: /src/schooltool/common/configure.zcml:89
 #: /src/schooltool/course/browser/configure.zcml:25
@@ -2815,11 +2474,11 @@ msgstr ""
 #: /src/schooltool/resource/browser/configure.zcml:257
 #: /src/schooltool/resource/browser/configure.zcml:271
 msgid "Edit Info"
-msgstr ""
+msgstr "Επεξεργασία Πληροφοριών"
 
 #: /src/schooltool/common/configure.zcml:89
 msgid "Add Info"
-msgstr ""
+msgstr "Εισαγωγή Πληροφοριών"
 
 #: /src/schooltool/common/configure.zcml:90
 msgid "Edit Calendar Overlays"
@@ -2827,47 +2486,47 @@ msgstr ""
 
 #: /src/schooltool/contact/browser/configure.zcml:41
 msgid "View Person"
-msgstr ""
+msgstr "Προβολή Ατόμου"
 
 #: /src/schooltool/contact/browser/configure.zcml:61
 msgid "New Contact"
-msgstr ""
+msgstr "Νέα Επαφή"
 
 #: /src/schooltool/contact/browser/configure.zcml:64
 #: /src/schooltool/contact/browser/configure.zcml:76
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:59
 #: /src/schooltool/contact/contact.py:71
 msgid "Contacts"
-msgstr ""
+msgstr "Επαφές"
 
 #: /src/schooltool/contact/browser/configure.zcml:100
 msgid "Manage Contacts"
-msgstr ""
+msgstr "Διαχείριση Επαφών"
 
 #: /src/schooltool/contact/browser/configure.zcml:111
 #: /src/schooltool/contact/browser/configure.zcml:123
 msgid "Other Contacts"
-msgstr ""
+msgstr "Άλλες Επαφές"
 
 #: /src/schooltool/contact/browser/configure.zcml:168
 #: /src/schooltool/contact/browser/contact.py:402
 #: /src/schooltool/email/browser/email.py:500
 msgid "Send Email"
-msgstr ""
+msgstr "Αποστολή Email"
 
 #: /src/schooltool/contact/browser/contact.py:79
 msgid "Add new contact"
-msgstr ""
+msgstr "Εισαγωγή νέας επαφής"
 
 #. Default: ""
 #: /src/schooltool/contact/browser/contact.py:162
 msgid "Add new contact for ${person}"
-msgstr ""
+msgstr "Εισαγωγή νέας επαφής για ${person}"
 
 #. Default: ""
 #: /src/schooltool/contact/browser/contact.py:222
 msgid "Change contact information for ${first_name} ${last_name}"
-msgstr ""
+msgstr "Αλλαγή πληροφοριών επαφής για ${first_name} ${last_name"
 
 #: /src/schooltool/contact/browser/contact.py:247
 msgid "Contact index"
@@ -2876,7 +2535,7 @@ msgstr ""
 #: /src/schooltool/contact/browser/contact.py:310
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:31
 msgid "Address"
-msgstr ""
+msgstr "Διεύθυνση"
 
 #: /src/schooltool/contact/browser/contact.py:384
 #: /src/schooltool/email/browser/email.py:222
@@ -2884,7 +2543,7 @@ msgstr ""
 #: /src/schooltool/email/browser/email.py:471
 #: /src/schooltool/email/interfaces.py:39
 msgid "From"
-msgstr ""
+msgstr "Από"
 
 #: /src/schooltool/contact/browser/contact.py:385
 #: /src/schooltool/email/browser/email.py:227
@@ -2892,7 +2551,7 @@ msgstr ""
 #: /src/schooltool/email/browser/email.py:475
 #: /src/schooltool/email/interfaces.py:43
 msgid "To"
-msgstr ""
+msgstr "Προς"
 
 #: /src/schooltool/contact/browser/contact.py:386
 #: /src/schooltool/email/browser/email.py:237
@@ -2900,7 +2559,7 @@ msgstr ""
 #: /src/schooltool/email/browser/email.py:479
 #: /src/schooltool/email/interfaces.py:53
 msgid "Subject"
-msgstr ""
+msgstr "Θέμα"
 
 #: /src/schooltool/contact/browser/contact.py:387
 #: /src/schooltool/email/browser/email.py:242
@@ -2908,17 +2567,17 @@ msgstr ""
 #: /src/schooltool/email/interfaces.py:49
 #: /src/schooltool/note/interfaces.py:46
 msgid "Body"
-msgstr ""
+msgstr "Κείμενο"
 
 #: /src/schooltool/contact/browser/contact.py:405
 #: /src/schooltool/email/browser/email.py:503
 msgid "Send"
-msgstr ""
+msgstr "Αποστολή"
 
 #: /src/schooltool/contact/browser/contact.py:409
 #: /src/schooltool/email/browser/email.py:507
 msgid "There were some errors."
-msgstr ""
+msgstr "Υπήρξαν κάποια λάθη"
 
 #: /src/schooltool/contact/browser/relationship.py:75
 #: /src/schooltool/contact/interfaces.py:101
@@ -2973,11 +2632,11 @@ msgstr ""
 
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:43
 msgid "Create contact"
-msgstr ""
+msgstr "Δημιουργία επαφής"
 
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:45
 msgid "Create new contact"
-msgstr ""
+msgstr "Δημιουργία νέας επαφής"
 
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:58
 msgid "Assign"
@@ -3000,7 +2659,7 @@ msgstr ""
 
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:41
 msgid "Phones"
-msgstr ""
+msgstr "Τηλέφωνα"
 
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:50
 msgid "Spoken Languages"
@@ -3008,7 +2667,7 @@ msgstr ""
 
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:73
 msgid "(View Details)"
-msgstr ""
+msgstr "(Προβολή Λεπτομερειών)"
 
 #: /src/schooltool/contact/contact.py:73
 msgid ""
@@ -3040,16 +2699,16 @@ msgstr ""
 
 #: /src/schooltool/contact/interfaces.py:53
 msgid "Address line 1"
-msgstr ""
+msgstr "Διεύθυνση 1"
 
 #: /src/schooltool/contact/interfaces.py:55
 msgid "Address line 2"
-msgstr ""
+msgstr "Διεύθυνση 2"
 
 #: /src/schooltool/contact/interfaces.py:57
 #: /src/schooltool/demographics/interfaces.py:258
 msgid "City"
-msgstr ""
+msgstr "Πόλη"
 
 #: /src/schooltool/contact/interfaces.py:59
 #: /src/schooltool/demographics/interfaces.py:263
@@ -3058,30 +2717,30 @@ msgstr ""
 
 #: /src/schooltool/contact/interfaces.py:61
 msgid "Country"
-msgstr ""
+msgstr "Χώρα"
 
 #: /src/schooltool/contact/interfaces.py:63
 #: /src/schooltool/demographics/interfaces.py:268
 msgid "Postal code"
-msgstr ""
+msgstr "Ταχυδρομικός κώδικας"
 
 #: /src/schooltool/contact/interfaces.py:73
 #: /src/schooltool/demographics/interfaces.py:273
 msgid "Home phone"
-msgstr ""
+msgstr "Τηλέφωνο κατοικίας"
 
 #: /src/schooltool/contact/interfaces.py:75
 #: /src/schooltool/demographics/interfaces.py:278
 msgid "Work phone"
-msgstr ""
+msgstr "Τηλέφωνο εργασίας"
 
 #: /src/schooltool/contact/interfaces.py:77
 msgid "Mobile phone"
-msgstr ""
+msgstr "Κινητό τηλέφωνο"
 
 #: /src/schooltool/contact/interfaces.py:82
 msgid "Language"
-msgstr ""
+msgstr "Γλώσσα"
 
 #: /src/schooltool/contact/interfaces.py:102
 msgid "Contact's relationship with the person"
@@ -3121,7 +2780,7 @@ msgstr ""
 
 #: /src/schooltool/contact/security.zcml:36
 msgid "Manage user's contacts"
-msgstr ""
+msgstr "Διαχείριση επαφών χρήστη"
 
 #: /src/schooltool/contact/security.zcml:46
 msgid "Create/Delete an external contact"
@@ -3151,7 +2810,7 @@ msgstr ""
 #: /src/schooltool/contact/security.zcml:86
 #: /src/schooltool/person/security.zcml:152
 msgid "User"
-msgstr ""
+msgstr "Χρήστης"
 
 #: /src/schooltool/course/browser/configure.zcml:10
 msgid "Add a Course"
@@ -3261,7 +2920,7 @@ msgstr ""
 
 #: /src/schooltool/course/browser/section.py:524
 msgid "Available Instructors"
-msgstr ""
+msgstr "Διαθέσιμοι Καθηγητές"
 
 #: /src/schooltool/course/browser/section.py:535
 msgid "Current Students"
@@ -3269,7 +2928,7 @@ msgstr ""
 
 #: /src/schooltool/course/browser/section.py:540
 msgid "Available Students"
-msgstr ""
+msgstr "Διαθέσιμοι Μαθητές"
 
 #: /src/schooltool/course/browser/templates/copy_sections.pt:9
 #: /src/schooltool/course/browser/templates/link_section.pt:9
@@ -3366,7 +3025,7 @@ msgstr ""
 #: /src/schooltool/person/browser/home.pt:20
 #: /src/schooltool/person/browser/person.pt:11
 msgid "photo"
-msgstr ""
+msgstr "Φωτό"
 
 #: /src/schooltool/course/browser/templates/course.pt:71
 msgid "students"
@@ -3394,6 +3053,69 @@ msgstr ""
 msgid "Section of ${course} -- ${section_title} for ${term} of ${schoolyear}"
 msgstr ""
 
+#: /src/schooltool/course/browser/templates/extend_term.pt:4
+msgid "Extend Section to Term"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/extend_term.pt:18
+msgid ""
+"Click \"Extend\" to create a linked section in term \"${from_term_title}\" "
+"containing the students and instructors from section \"${section_title}\" in "
+"term \"${to_term_title}\"."
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/extend_term.pt:27
+msgid "Extend"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/link_existing.pt:4
+msgid "Link Section to Section in Other Term"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/link_existing.pt:13
+#: /src/schooltool/course/browser/templates/link_existing.pt:52
+#: /src/schooltool/course/browser/templates/section_container.pt:39
+#: /src/schooltool/course/browser/templates/unlink_section.pt:13
+#: /src/schooltool/course/browser/templates/unlink_section.pt:28
+msgid "Section"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/link_existing.pt:20
+#: /src/schooltool/course/browser/templates/unlink_section.pt:19
+#: /src/schooltool/course/browser/templates/unlink_section.pt:29
+#: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:24
+msgid "Term"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/link_existing.pt:21
+msgid "Target Term"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/link_existing.pt:26
+msgid ""
+"Select a section and click 'Link' if you would like to copy and link this "
+"section to the target section."
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/link_existing.pt:30
+msgid ""
+"You may provide part of an instructor's name or username and click 'Filter' "
+"to limit the list of sections to those taught by a matching instructor."
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/link_existing.pt:35
+msgid "You must select a section before clicking 'Link'."
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/link_existing.pt:46
+msgid "Filter"
+msgstr ""
+
+#. Default: "Link"
+#: /src/schooltool/course/browser/templates/link_section.pt:130
+msgid "link-section-button"
+msgstr ""
+
 #: /src/schooltool/course/browser/templates/link_section.pt:24
 msgid "Link ${section}, ${term} with a section in ${target_term}"
 msgstr ""
@@ -3402,34 +3124,32 @@ msgstr ""
 msgid "There is no valid term in ${schoolyear} to pick a section from."
 msgstr ""
 
-#. Default: "Link"
-#: /src/schooltool/course/browser/templates/link_section.pt:130
-msgid "link-section-button"
-msgstr ""
-
-#: /src/schooltool/course/browser/templates/section.pt:36
-msgid "Previous: ${course} -- ${section_title} for ${term}"
-msgstr ""
-
-#: /src/schooltool/course/browser/templates/section.pt:47
-msgid "Next: ${course} -- ${section_title} for ${term}"
-msgstr ""
-
-#: /src/schooltool/course/browser/templates/section.pt:58
+#: /src/schooltool/course/browser/templates/section.pt:35
 msgid "Change the name or description of this section."
 msgstr ""
 
 #: /src/schooltool/course/browser/templates/section.pt:58
 msgid "edit info"
+msgstr "επεξεργασία πληροφοριών"
+
+#: /src/schooltool/course/browser/templates/section.pt:46
+#: /src/schooltool/course/browser/templates/section_edit.pt:60
+msgid "Linked sections"
 msgstr ""
 
-#: /src/schooltool/course/browser/templates/section.pt:87
+#: /src/schooltool/course/browser/templates/section.pt:52
+#: /src/schooltool/course/browser/templates/section_edit.pt:72
+#: /src/schooltool/course/browser/templates/section_edit.pt:106
+msgid "${section_title} for ${term}"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/section.pt:65
 msgid "Change the instructors for this section."
 msgstr ""
 
 #: /src/schooltool/course/browser/templates/section.pt:87
 msgid "edit instructors"
-msgstr ""
+msgstr "επεξεργασία καθηγητών"
 
 #: /src/schooltool/course/browser/templates/section.pt:102
 msgid "Change the students in this section individually"
@@ -3444,25 +3164,12 @@ msgstr ""
 msgid "Section list for ${term} of ${schoolyear}"
 msgstr ""
 
-#: /src/schooltool/course/browser/templates/section_container.pt:39
-msgid "Section"
-msgstr ""
-
-#: /src/schooltool/course/browser/templates/section_edit.pt:60
-msgid "Linked sections"
-msgstr ""
-
 #: /src/schooltool/course/browser/templates/section_edit.pt:63
 msgid "Previous"
-msgstr ""
+msgstr "Προηγούμενο"
 
 #: /src/schooltool/course/browser/templates/section_edit.pt:64
 msgid "Section in the previous term."
-msgstr ""
-
-#: /src/schooltool/course/browser/templates/section_edit.pt:72
-#: /src/schooltool/course/browser/templates/section_edit.pt:106
-msgid "${section_title} for ${term}"
 msgstr ""
 
 #. Default: "Unlink"
@@ -3496,22 +3203,30 @@ msgstr "Επόμενο"
 msgid "Section in the next term."
 msgstr ""
 
-#: /src/schooltool/course/help/course_container.pt:10
+#: /src/schooltool/course/browser/templates/section_linkage.pt:4
+msgid "All Terms for Section"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/section_linkage.pt:42
+msgid "Unlink this Section"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/section_linkage.pt:62
+msgid "Extend to This Term"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/section_linkage.pt:66
+msgid "Link an Existing Section"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/unlink_section.pt:4
+msgid "Unlink Section"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/unlink_section.pt:23
 msgid ""
-"<h1>Courses</h1> <p>Use this page to organize courses listed in the system.</"
-"p> <h3>How do I...</h3> <ul> <li><strong>Look for for a course:</strong> Use "
-"the search box to the left of the <code>Find Now</code> button to look "
-"through the entire list of courses for the search criterion. The "
-"<code>Clear</code> button empties the search box of current entries.</li> "
-"<li><strong>Show a list of the different sections of a course:</strong> "
-"click on the name of the course.</li> <li><strong>Show the lists of students "
-"in a particular class:</strong> Click on the <code>teacher -- course</code> "
-"link. The number of students is also listed next to the teacher and the "
-"course.</li> <li><strong>Navigate through the courses:</strong> Separate "
-"<q>batches</q> of the Course list can be accessed through the <code>Next 10</"
-"code> (and <code>Previous</code>) and links in the blue bar. A <code>Show "
-"All</code> button is also there to show all of the courses on a single page."
-"</li> </ul>"
+"Click 'Unlink' if you would like to remove the link this section has to the "
+"following section(s):"
 msgstr ""
 
 #: /src/schooltool/course/interfaces.py:37
@@ -3639,7 +3354,7 @@ msgstr ""
 #: /src/schooltool/term/security.zcml:28
 #: /src/schooltool/timetable/security.zcml:25
 msgid "Create/Delete"
-msgstr ""
+msgstr "Δημιουργία/Διαγραφή"
 
 #: /src/schooltool/course/security.zcml:100
 #: /src/schooltool/course/security.zcml:134
@@ -3684,7 +3399,7 @@ msgstr ""
 #: /src/schooltool/timetable/browser/schema.py:236
 #: /src/schooltool/timetable/browser/templates/link_to_school_timetables.pt:1
 msgid "School Timetables"
-msgstr ""
+msgstr "Προγράμματα Σχολής"
 
 #: /src/schooltool/dashboard/term.pt:16
 #: /src/schooltool/term/help/configure.zcml:18
@@ -4028,23 +3743,9 @@ msgstr ""
 msgid "Surname"
 msgstr ""
 
-#: /src/schooltool/devmode/configure.zcml:27
-msgid "Introspect"
-msgstr ""
-
-#: /src/schooltool/devmode/configure.zcml:38
-#: /src/schooltool/devmode/devmode.pt:19
-msgid "API Docs"
-msgstr ""
-
-#: /src/schooltool/devmode/configure.zcml:50
+#: /src/schooltool/devmode/configure.zcml:52
 #: /src/schooltool/devmode/devmode.pt:20
 msgid "Sample data"
-msgstr ""
-
-#: /src/schooltool/devmode/configure.zcml:62
-#: /src/schooltool/devmode/devmode.pt:21
-msgid "Setup data"
 msgstr ""
 
 #: /src/schooltool/devmode/devmode.pt:11
@@ -4053,6 +3754,10 @@ msgstr ""
 
 #: /src/schooltool/devmode/devmode.pt:18
 msgid "Introspector"
+msgstr ""
+
+#: /src/schooltool/devmode/devmode.pt:19
+msgid "API Docs"
 msgstr ""
 
 #: /src/schooltool/email/browser/configure.zcml:54
@@ -4084,13 +3789,13 @@ msgstr ""
 #: /src/schooltool/email/browser/email.py:466
 #: /src/schooltool/email/browser/templates/email_container.pt:20
 msgid "Server Status"
-msgstr ""
+msgstr "Κατάσταση Server"
 
 #: /src/schooltool/email/browser/email.py:95
 #: /src/schooltool/email/browser/email.py:218
 #: /src/schooltool/email/browser/email.py:467
 msgid "Current status of the SchoolTool email service"
-msgstr ""
+msgstr "Τρέχουσα κατάσταση της υπηρεσίας email του SchoolTool"
 
 #: /src/schooltool/email/browser/email.py:99
 #: /src/schooltool/email/interfaces.py:87
@@ -4173,7 +3878,7 @@ msgstr ""
 
 #: /src/schooltool/email/browser/email.py:184
 msgid "Change Email Settings"
-msgstr ""
+msgstr "Αλλαγή Ρυθμίσεων Email"
 
 #: /src/schooltool/email/browser/email.py:209
 msgid "Unset"
@@ -4183,12 +3888,12 @@ msgstr ""
 #: /src/schooltool/email/browser/email.py:472
 #: /src/schooltool/email/interfaces.py:40
 msgid "The sender address"
-msgstr ""
+msgstr "Η διεύθυνση αποστολέα"
 
 #: /src/schooltool/email/browser/email.py:228
 #: /src/schooltool/email/browser/email.py:476
 msgid "Recipient addresses comma separated"
-msgstr ""
+msgstr "Οι διευθύνσεις παραληπτών διαχωρισμένες με (,)"
 
 #: /src/schooltool/email/browser/email.py:232
 #: /src/schooltool/email/browser/email.py:372
@@ -4199,27 +3904,27 @@ msgstr ""
 #: /src/schooltool/email/browser/email.py:233
 #: /src/schooltool/email/interfaces.py:71
 msgid "Date and time when the message was created"
-msgstr ""
+msgstr "Ημερομηνία και ώρα δημιουργίας μηνύματος"
 
 #: /src/schooltool/email/browser/email.py:238
 #: /src/schooltool/email/browser/email.py:480
 #: /src/schooltool/email/interfaces.py:54
 msgid "Subject of the message"
-msgstr ""
+msgstr "Θέμα του μηνύματος"
 
 #: /src/schooltool/email/browser/email.py:243
 #: /src/schooltool/email/browser/email.py:485
 #: /src/schooltool/email/interfaces.py:50
 msgid "Body of the message"
-msgstr ""
+msgstr "Κείμενο μηνύματος"
 
 #: /src/schooltool/email/browser/email.py:247
 msgid "Email Status"
-msgstr ""
+msgstr "Κατάσταση Email"
 
 #: /src/schooltool/email/browser/email.py:248
 msgid "Status of the message"
-msgstr ""
+msgstr "Κατάσταση μηνύματος"
 
 #: /src/schooltool/email/browser/email.py:252
 #: /src/schooltool/email/browser/email.py:378
@@ -4281,7 +3986,7 @@ msgstr ""
 
 #: /src/schooltool/email/interfaces.py:58
 msgid "Status"
-msgstr ""
+msgstr "Κατάσταση"
 
 #: /src/schooltool/email/interfaces.py:59
 msgid "Code for the status of the message"
@@ -4342,11 +4047,11 @@ msgstr ""
 
 #: /src/schooltool/export/configure.zcml:6
 msgid "XLS Import"
-msgstr ""
+msgstr "Εισαγωγή XLS"
 
 #: /src/schooltool/export/configure.zcml:21
 msgid "XLS Export"
-msgstr ""
+msgstr "Εξαγωγή XLS"
 
 #: /src/schooltool/export/importer.py:68
 msgid "${sheet_name} ${column}${row} ${message}"
@@ -4478,11 +4183,11 @@ msgstr ""
 
 #: /src/schooltool/export/templates/import.pt:4
 msgid "Upload SchoolTool as XLS"
-msgstr ""
+msgstr "Φόρτωση SchoolTool με XLS"
 
 #: /src/schooltool/export/templates/import.pt:22
 msgid "Import Data"
-msgstr ""
+msgstr "Εισαγωγή Δεδομένων"
 
 #: /src/schooltool/export/templates/import.pt:31
 msgid ""
@@ -4520,11 +4225,11 @@ msgstr ""
 
 #: /src/schooltool/export/templates/import.pt:59
 msgid "Upload XLS File"
-msgstr ""
+msgstr "Φόρτωση αρχείου XLS"
 
 #: /src/schooltool/export/templates/import.pt:61
 msgid "XLS File"
-msgstr ""
+msgstr "Αρχείο XLS"
 
 #: /src/schooltool/group/browser/configure.zcml:25
 msgid "Add a Group"
@@ -4634,27 +4339,8 @@ msgstr ""
 msgid "edit groups"
 msgstr "επεξεργασία ομάδων"
 
-#: /src/schooltool/group/help/group_container.pt:8
-msgid ""
-"<h1>Groups</h1> <p>Use this page to keep track of <b>groups</b> of Persons.</"
-"p> <p><b>Groups</b> that have been added are not part of the essential "
-"groups (<b>Teachers</b>, <b>Students</b>, <b>Site Managers</b>, <b>School "
-"Administrators</b>, or <b>Clerks</b>). They can be selected by the checkbox "
-"next to them and removed by pressing the <b>Delete</b> button at the bottom "
-"of the page.</p> <h3>How do I...</h3> <ul> <li><b>Look for for a group:</b> "
-"Use the search box to the left of the <code>Find Now</code> button to look "
-"through the entire list of groups for the search criterion. The <code>Clear</"
-"code> button empties the search box of current entries.</li> <li><b>View the "
-"persons in a certain group:</b> Click on the name of the group.</li> "
-"<li><b>Sort the list:</b> Click on the <code>Title</code> header to change "
-"the order of groups from descending to ascending order, and vice versa.</li> "
-"<li><strong>Browse for a group:</strong> Use the <code>Next 10</code> (and "
-"<code>Previous</code>) and links in the blue bar.</li> <li><strong>Show all "
-"groups:</strong> Click <code>Show All</code> in the blue bar.</li> </ul>"
-msgstr ""
-
 #: /src/schooltool/group/interfaces.py:41
-#: /src/schooltool/securitypolicy/interfaces.py:109
+#: /src/schooltool/securitypolicy/interfaces.py:111
 msgid "Title of the group."
 msgstr "Όνομα ομάδας"
 
@@ -4702,14 +4388,6 @@ msgstr ""
 msgid "Groups are essentially sets of users."
 msgstr ""
 
-#: /src/schooltool/help/configure.zcml:47
-msgid "Contextual Help"
-msgstr ""
-
-#: /src/schooltool/help/helplink.pt:2
-msgid "Help"
-msgstr ""
-
 #: /src/schooltool/level/browser.py:47
 msgid "Add a level"
 msgstr ""
@@ -4741,15 +4419,11 @@ msgstr ""
 
 #: /src/schooltool/level/templates/link_to_levels.pt:1
 msgid "Teaching levels"
-msgstr ""
+msgstr "Επίπεδα διδασκαλίας"
 
 #: /src/schooltool/note/configure.zcml:68
 msgid "New Note"
-msgstr ""
-
-#: /src/schooltool/note/configure.zcml:100
-msgid "Notes (Rest)"
-msgstr ""
+msgstr "Νέα Σημείωση"
 
 #: /src/schooltool/note/interfaces.py:43
 msgid "Title of the note."
@@ -4761,15 +4435,15 @@ msgstr ""
 
 #: /src/schooltool/note/interfaces.py:50 /src/schooltool/note/note_add.pt:24
 msgid "Privacy"
-msgstr ""
+msgstr "Ιδιωτικότητα"
 
 #: /src/schooltool/note/note_add.pt:4
 msgid "Add note"
-msgstr ""
+msgstr "Εισαγωγή σημείωσης"
 
 #: /src/schooltool/note/note_add.pt:13
 msgid "Note"
-msgstr ""
+msgstr "Σημείωση"
 
 #: /src/schooltool/note/note_add.pt:24
 msgid "Who can view the note"
@@ -4777,11 +4451,11 @@ msgstr ""
 
 #: /src/schooltool/note/note_add.pt:30
 msgid "Private"
-msgstr ""
+msgstr "Ιδιωτικό"
 
 #: /src/schooltool/note/note_add.pt:31
 msgid "Public"
-msgstr ""
+msgstr "Δημόσιο"
 
 #: /src/schooltool/note/notes.pt:8
 msgid "( p )"
@@ -4789,11 +4463,11 @@ msgstr ""
 
 #: /src/schooltool/person/browser/configure.zcml:91
 msgid "Edit Preferences"
-msgstr ""
+msgstr "Επεξεργασία ιδιοτήτων"
 
 #: /src/schooltool/person/browser/configure.zcml:103
 msgid "Change Password"
-msgstr ""
+msgstr "Αλλαγή Κωδικού Πρόσβασης"
 
 #: /src/schooltool/person/browser/csvimport.py:51
 msgid "fullname may not be empty"
@@ -4816,7 +4490,7 @@ msgstr "Επεξεργασία Ονόματος"
 
 #: /src/schooltool/person/browser/home_tab_viewlet.pt:3
 msgid "Home"
-msgstr ""
+msgstr "Αρχική"
 
 #: /src/schooltool/person/browser/person-csvimport.pt:29
 msgid ""
@@ -4835,7 +4509,7 @@ msgstr ""
 
 #: /src/schooltool/person/browser/person.py:169
 msgid "Edit password"
-msgstr ""
+msgstr "Επεξεργασία κωδικού πρόσβασης"
 
 #: /src/schooltool/person/browser/person.py:174
 msgid "No new password was supplied so original password is unchanged"
@@ -4862,7 +4536,7 @@ msgstr "Οι κωδικοί δεν είναι ίδιοι"
 
 #: /src/schooltool/person/browser/person.py:376
 msgid "New photo"
-msgstr ""
+msgstr "Νέα φωτογραφία"
 
 #: /src/schooltool/person/browser/person.py:378
 msgid "A small picture (about 48x48 pixels in JPEG format)"
@@ -4890,7 +4564,7 @@ msgstr "Ο κωδικός άλλαξε επιτυχώς"
 
 #: /src/schooltool/person/browser/person_edit.pt:4
 msgid "Edit person"
-msgstr ""
+msgstr "Επεξεργασία ατόμου"
 
 #: /src/schooltool/person/browser/person_edit.pt:20
 msgid "Change info for ${user}"
@@ -4906,20 +4580,6 @@ msgstr "Επεξεργασία προτιμήσεων"
 
 #: /src/schooltool/person/browser/person_preferences.pt:20
 msgid "Change preferences for ${user}"
-msgstr ""
-
-#: /src/schooltool/person/help/person_container.pt:8
-msgid ""
-"<h1>Persons</h1> <p>Use this page to browse and find individual persons.</p> "
-"<h3>How do I...</h3> <ul> <li><strong>Sort the list:</strong> Click on "
-"<code>First Name</code> or <code>Last Name</code> to sort.</li> "
-"<li><strong>Search for a user:</strong> Use the search field at the top of "
-"the page to look through all of the people in the system. If you want to "
-"filter by group, select the group in the adjacent drop-down list.</li> "
-"<li><strong>View the details of a person:</strong> Click on the name.</li> "
-"<li><strong>Browse for a person:</strong> Use the <code>Next 10</code> (and "
-"<code>Previous</code>) and links in the blue bar.</li> <li><strong>Show all "
-"students:</strong> Click <code>Show All</code> in the blue bar.</li> </ul>"
 msgstr ""
 
 #: /src/schooltool/person/interfaces.py:157
@@ -5011,15 +4671,15 @@ msgstr ""
 
 #: /src/schooltool/person/security.zcml:71
 msgid "Users"
-msgstr ""
+msgstr "Χρήστες"
 
 #: /src/schooltool/person/security.zcml:107
 msgid "Change password"
-msgstr ""
+msgstr "Αλλαγή κωδικού πρόσβασης"
 
 #: /src/schooltool/person/security.zcml:114
 msgid "View preferences"
-msgstr ""
+msgstr "Προβολή ιδιοτήτων"
 
 #: /src/schooltool/person/security.zcml:121
 msgid "Change preferences"
@@ -5035,28 +4695,24 @@ msgstr ""
 
 #: /src/schooltool/person/security.zcml:172
 msgid "Calendar is public"
-msgstr ""
+msgstr "Το Ημερολόγιο είναι δημόσιο"
 
 #: /src/schooltool/person/security.zcml:172
 msgid "Everybody, if the calendar is made public in user preferences."
 msgstr ""
 
-#: /src/schooltool/relationship/configure.zcml:13
-msgid "Relationships"
-msgstr "Σχέσεις"
-
 #: /src/schooltool/report/browser/configure.zcml:8
-#: /src/schooltool/report/browser/configure.zcml:22
-#: /src/schooltool/report/browser/configure.zcml:33
-#: /src/schooltool/report/browser/configure.zcml:44
-#: /src/schooltool/report/browser/configure.zcml:55
-#: /src/schooltool/report/browser/configure.zcml:66
+#: /src/schooltool/report/browser/configure.zcml:23
+#: /src/schooltool/report/browser/configure.zcml:34
+#: /src/schooltool/report/browser/configure.zcml:45
+#: /src/schooltool/report/browser/configure.zcml:56
+#: /src/schooltool/report/browser/configure.zcml:67
 msgid "Reports"
-msgstr ""
+msgstr "Αναφορές"
 
 #: /src/schooltool/report/browser/report.py:44
 msgid "Student Reports"
-msgstr ""
+msgstr "Αναφορές Μαθητών"
 
 #: /src/schooltool/report/browser/report.py:49
 msgid "Group Reports"
@@ -5096,13 +4752,13 @@ msgstr "Εισαγωγή Πόρων"
 msgid "New Resource"
 msgstr ""
 
-#: /src/schooltool/resource/browser/configure.zcml:300
+#: /src/schooltool/resource/browser/configure.zcml:197
 msgid "New Location"
-msgstr ""
+msgstr "Νέα τοποθεσία"
 
-#: /src/schooltool/resource/browser/configure.zcml:314
+#: /src/schooltool/resource/browser/configure.zcml:204
 msgid "New Equipment"
-msgstr ""
+msgstr "Νέος Εξοπλισμός"
 
 #: /src/schooltool/resource/browser/resource-csvimport.pt:4
 msgid "Upload schooltool resources as CSV"
@@ -5167,15 +4823,15 @@ msgstr ""
 
 #: /src/schooltool/resource/browser/resource.py:548
 msgid "Add new location"
-msgstr ""
+msgstr "Εισαγωγή τοποθεσίας"
 
 #: /src/schooltool/resource/browser/resource.py:554
 msgid "Edit location"
-msgstr ""
+msgstr "Επεξεργασία τοποθεσίας"
 
 #: /src/schooltool/resource/browser/resource.py:562
 msgid "Equipment identification"
-msgstr ""
+msgstr "Αναγνωριστικό εξοπλισμού"
 
 #: /src/schooltool/resource/browser/resource.py:564
 msgid "Equipment demographics"
@@ -5183,17 +4839,13 @@ msgstr ""
 
 #: /src/schooltool/resource/browser/resource.py:574
 msgid "Add new equipment"
-msgstr ""
+msgstr "Εισαγωγή νέου εξοπλισμού"
 
 #: /src/schooltool/resource/browser/resource.py:580
 msgid "Edit equipment"
-msgstr ""
+msgstr "Επεξεργασία εξοπλισμού"
 
-#: /src/schooltool/resource/help/resource_help.pt:6
-msgid "Resource Help"
-msgstr ""
-
-#: /src/schooltool/resource/interfaces.py:38
+#: /src/schooltool/resource/interfaces.py:45
 msgid "Title of the resource."
 msgstr ""
 
@@ -5219,60 +4871,60 @@ msgstr ""
 
 #: /src/schooltool/resource/interfaces.py:78
 msgid "Type of location (i.e. computer lab, class room, etc.)"
-msgstr ""
+msgstr "Τύπος χώρου (π.χ. εργαστήριο Η/Υ, αίθουσα, κ.α.)"
 
 #: /src/schooltool/resource/interfaces.py:83
 #: /src/schooltool/resource/types.py:83
 msgid "Capacity"
-msgstr ""
+msgstr "Χωρητικότητα"
 
 #: /src/schooltool/resource/interfaces.py:84
 msgid "Capacity of the room"
-msgstr ""
+msgstr "Χωρητικότητα αίθουσας"
 
 #: /src/schooltool/resource/interfaces.py:92
 msgid "Equipment Type"
-msgstr ""
+msgstr "Τύπος Εξοπλισμού"
 
 #: /src/schooltool/resource/interfaces.py:93
 msgid "Type of equipment (i.e. camcorder, computer, etc.)"
-msgstr ""
+msgstr "Τύπος εξοπλισμού (π.χ. H/Y, projector)"
 
 #: /src/schooltool/resource/interfaces.py:97
 #: /src/schooltool/resource/types.py:113
 msgid "Manufacturer"
-msgstr ""
+msgstr "Κατασκευαστής"
 
 #: /src/schooltool/resource/interfaces.py:98
 msgid "Manufacturer of Equipment"
-msgstr ""
+msgstr "Κατασκευαστής Εξοπλισμού"
 
 #: /src/schooltool/resource/interfaces.py:102
 #: /src/schooltool/resource/types.py:119
 msgid "Model"
-msgstr ""
+msgstr "Μοντέλο"
 
 #: /src/schooltool/resource/interfaces.py:103
 msgid "Model of Equipment"
-msgstr ""
+msgstr "Μοντέλο Εξοπλισμού"
 
 #: /src/schooltool/resource/interfaces.py:107
 #: /src/schooltool/resource/types.py:125
 msgid "Serial Number"
-msgstr ""
+msgstr "Σειριακός αριθμός"
 
 #: /src/schooltool/resource/interfaces.py:108
 msgid "Serial Number of Equipment"
-msgstr ""
+msgstr "Σειριακός Αριθμός Εξοπλισμού"
 
 #: /src/schooltool/resource/interfaces.py:112
 #: /src/schooltool/resource/types.py:131
 msgid "Purchase Date"
-msgstr ""
+msgstr "Ημερομηνία Αγοράς"
 
 #: /src/schooltool/resource/interfaces.py:113
 msgid "Purchase Date of Equipment"
-msgstr ""
+msgstr "Ημερομηνία Αγοράς Εξοπλισμού"
 
 #: /src/schooltool/resource/interfaces.py:120
 msgid "Id of the resource type."
@@ -5305,7 +4957,7 @@ msgstr ""
 #: /src/schooltool/resource/resource.py:232
 #: /src/schooltool/resource/types.py:93
 msgid "Equipment"
-msgstr ""
+msgstr "Εξοπλισμός"
 
 #: /src/schooltool/resource/security.zcml:7
 msgid "Only school administration can view the list of resources."
@@ -5414,11 +5066,11 @@ msgstr ""
 #: /src/schooltool/schoolyear/browser/schoolyear.py:119
 #: /src/schooltool/schoolyear/security.zcml:7
 msgid "School Years"
-msgstr ""
+msgstr "Ακαδημαϊκά Έτη"
 
 #: /src/schooltool/schoolyear/browser/configure.zcml:87
 msgid "New School Year"
-msgstr ""
+msgstr "Νέο Ακαδημαϊκό Έτος"
 
 #: /src/schooltool/schoolyear/browser/schoolyear.py:141
 msgid ""
@@ -5428,15 +5080,15 @@ msgstr ""
 
 #: /src/schooltool/schoolyear/browser/schoolyear.py:160
 msgid "First day"
-msgstr ""
+msgstr "Πρώτη ημέρα εβδομάδας"
 
 #: /src/schooltool/schoolyear/browser/schoolyear.py:163
 msgid "Last day"
-msgstr ""
+msgstr "Τελευταία ημέρα εβδομάδας"
 
 #: /src/schooltool/schoolyear/browser/schoolyear.py:298
 msgid "Add new school year"
-msgstr ""
+msgstr "Εισαγωγή νέας ακαδημαϊκής χρονιάς"
 
 #. Default: ""
 #: /src/schooltool/schoolyear/browser/schoolyear.py:363
@@ -5450,7 +5102,7 @@ msgstr ""
 
 #: /src/schooltool/schoolyear/browser/schoolyear.py:449
 msgid "School Year"
-msgstr ""
+msgstr "Ακαδημαϊκό Έτος"
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear.pt:21
 msgid "${schoolyear_title} (${start_date} &mdash; ${end_date})"
@@ -5470,7 +5122,7 @@ msgstr ""
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_add.pt:40
 msgid "All Courses"
-msgstr ""
+msgstr "Όλα τα Μαθήματα"
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_add.pt:50
 msgid "All Timetable Schemas"
@@ -5478,7 +5130,7 @@ msgstr ""
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_add.pt:62
 msgid "Copy members"
-msgstr ""
+msgstr "Αντιγραφή μελών"
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:27
 msgid "The active school year is ${year} (${start_date} - ${end_date})"
@@ -5503,7 +5155,7 @@ msgstr ""
 
 #: /src/schooltool/schoolyear/security.zcml:23
 msgid "Activate current school year"
-msgstr ""
+msgstr "Ενεργοποίηση τρέχον ακαδημαϊκού έτους"
 
 #: /src/schooltool/securitypolicy/browser/configure.zcml:7
 msgid "View Access Rights"
@@ -5572,19 +5224,6 @@ msgstr ""
 msgid "The super user - owner of this SchoolTool application."
 msgstr ""
 
-#: /src/schooltool/setupdata/setupdata.pt:3
-#: /src/schooltool/setupdata/setupdata.pt:9
-msgid "Initial School Setup Scripts"
-msgstr ""
-
-#: /src/schooltool/setupdata/setupdata.pt:14
-msgid ""
-"Warning: proceeding will populate the database with data generated from "
-"scripts installed on the filesystem of this server. Do not do this if you "
-"have any valuable data in this SchoolTool instance or don't already "
-"understand what this is for."
-msgstr ""
-
 #: /src/schooltool/skin/breadcrumbs.py:76
 msgid "top"
 msgstr "επάνω"
@@ -5638,10 +5277,6 @@ msgstr ""
 msgid "You might be trying to access a non-existing page"
 msgstr ""
 
-#: /src/schooltool/skin/templates/onlinehelp_macros.pt:55
-msgid "SchoolTool Onlinehelp"
-msgstr ""
-
 #: /src/schooltool/skin/templates/view_macros.pt:45
 msgid "Log In"
 msgstr "Είσοδος"
@@ -5656,7 +5291,7 @@ msgstr "Αποσύνδεση"
 
 #: /src/schooltool/skin/templates/view_macros.pt:82
 msgid "free administration software for"
-msgstr ""
+msgstr "δωρεάν διαχειριστικό λογισμικό για"
 
 #: /src/schooltool/skin/templates/view_macros.pt:124
 msgid ""
@@ -5760,7 +5395,7 @@ msgstr ""
 
 #: /src/schooltool/table/templates/batch.pt:21
 msgid "Show All"
-msgstr ""
+msgstr "Προβολή Όλων"
 
 #: /src/schooltool/table/templates/batch.pt:29
 #: /src/schooltool/table/templates/batch.pt:35
@@ -5914,37 +5549,6 @@ msgstr ""
 msgid "Term must begin before it ends."
 msgstr ""
 
-#: /src/schooltool/term/help/configure.zcml:8
-msgid "Add a term"
-msgstr ""
-
-#: /src/schooltool/term/help/term_add.pt:6
-msgid "Term Search Help"
-msgstr ""
-
-#: /src/schooltool/term/help/term_container.pt:6
-msgid "Terms in SchoolTool"
-msgstr ""
-
-#: /src/schooltool/term/help/term_container.pt:8
-msgid ""
-"<h1>Terms in SchoolTool</h1> <p>SchoolTool supports definition of basic "
-"academic terms, that is, a period of time which defines when sections begin "
-"and end, and when they are evaluated. The current implementation does not "
-"support a hierarchy of terms, for example, a year, which contains two "
-"semesters, which contain two marking periods. You can create several terms, "
-"which may overlap, for example, both semesters and trimesters in the same "
-"school, but you cannot express a relationship between terms.</p> <h3>How do "
-"I...</h3> <ul> <li><strong>Add a term:</strong> Select <code>New Term</code> "
-"from the <code>Actions</code> menu.</li> <li><strong>Edit a term:</strong> "
-"Click on the term. Then select <code>Edit</code> from the <code>Actions</"
-"code> menu.</li> <li><strong>Delete a term:</strong> Check the box next to "
-"the name of the term and click <code>Delete</code>. Only delete terms if you "
-"have made a mistake while creating them but you have not used them yet. You "
-"should <strong>not</strong> delete terms simply because they are over, or "
-"you will lose important data.</li> </ul>"
-msgstr ""
-
 #: /src/schooltool/term/term.py:306
 msgid "Term date is not in the school year."
 msgstr ""
@@ -6034,11 +5638,11 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/schema.py:215
 msgid "You must specify at least one period."
-msgstr ""
+msgstr "Πρέπει να ορίσετε τουλάχιστον μια περίοδο."
 
 #: /src/schooltool/timetable/browser/schema.py:269
 msgid "Duration in minutes"
-msgstr ""
+msgstr "Διάρκεια σε λεπτά"
 
 #: /src/schooltool/timetable/browser/schema.py:316
 msgid "Please select a value"
@@ -6112,7 +5716,7 @@ msgstr "Προσθήκη ημέρας"
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:87
 msgid "Add period"
-msgstr ""
+msgstr "Εισαγωγή περιόδου"
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:94
 msgid "Second, select the way timetable days are aligned with calendar days."
@@ -6209,10 +5813,6 @@ msgstr ""
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:22
 msgid "Timetable"
 msgstr "Ωρολόγιο πρόγραμμα"
-
-#: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:24
-msgid "Term"
-msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:34
 msgid "Schema"
@@ -6601,3 +6201,82 @@ msgstr ""
 #: /src/schooltool/widget/password.py:55
 msgid "Supplied passwords are not identical"
 msgstr "Οι παρεχόμενοι κωδικοί πρόσβασης δεν είναι όμοιοι"
+
+#~ msgid "Browser UI"
+#~ msgstr "Γραφικό Περιβάλλον Φυλλομετρητή"
+
+#~ msgid "Application"
+#~ msgstr "Εφαρμογή"
+
+#~ msgid "Calendar Widget"
+#~ msgstr "Γραφικό αντικείμενο Ημερολογίου"
+
+#~ msgid "Templates"
+#~ msgstr "Πρότυπα"
+
+#~ msgid "Security (General)"
+#~ msgstr "Ασφάλεια (Γενικά)"
+
+#~ msgid "SchoolTool Administration"
+#~ msgstr "Διαχείριση του SchoolTool"
+
+#~ msgid ""
+#~ "<h1>SchoolTool Administration</h1> <p>Schools have complex structures, "
+#~ "spanning the organization of people, pedagogy, time and physical "
+#~ "resources. Unfortunately, this means that an application that seeks to "
+#~ "model these processes, like SchoolTool, is also complex, and the process "
+#~ "of setting up an individual school in SchoolTool is necessarily an "
+#~ "involved one.</p> <p>This branch of the help tree contains items relevant "
+#~ "to administrators configuring SchoolTool, but not end users.</p>"
+#~ msgstr ""
+#~ "<h1>Διαχείριση του SchoolTool</h1> <p> Τα σχολεία διαθέτουν σύνθετες "
+#~ "δομές που εκτείνονται από την οργάνωση του προσωπικού και τους διδακτικού "
+#~ "έργου μέχρι τη διαχείριση του χρόνου και των φυσικών πόρων. Δυστυχώς, "
+#~ "αυτό σημαίνει ότι μια εφαρμογή που αποσκοπεί στη μοντελοποίηση αυτών των "
+#~ "διαδικασιών, όπως το SchoolTool, είναι επίσης περίπλοκη, όπως και η "
+#~ "διαδικασία διαχείρισης ενός σχολείου μέσω του SchoolTool. </p> <p>Αυτός ο "
+#~ "κλάδος της βοήθειας περιέχει κείμενα συναφή με τη διαμόρφωση του "
+#~ "SchoolTool από τους διαχειριστές, όχι όμως για τους τελικούς χρήστες.</p>"
+
+#~ msgid "Calendar Selection"
+#~ msgstr "Επιλογή Ημερολογίου"
+
+#~ msgid "Calendaring in SchoolTool"
+#~ msgstr "Χρονοδιάγραμμα στο SchoolTool"
+
+#~ msgid "Administration"
+#~ msgstr "Διαχείριση"
+
+#~ msgid "Organization"
+#~ msgstr "Φορέας"
+
+#~ msgid "Calendaring"
+#~ msgstr "Χρονοδιάγραμμα"
+
+#~ msgid "Daily Calendar"
+#~ msgstr "Ημερήσιο Ημερολόγιο"
+
+#~ msgid "Weekly Calendar"
+#~ msgstr "Εβδομαδιαίο Ημερολόγιο"
+
+#~ msgid "Monthly Calendar"
+#~ msgstr "Μηνιαίο Ημερολόγιο"
+
+#~ msgid "Yearly Calendar"
+#~ msgstr "Ετήσιο Ημερολόγιο"
+
+#~ msgid ""
+#~ "If you need to reserve a resource, such as a room or a projector, tracked "
+#~ "by SchoolTool at your school, you should create an event for the "
+#~ "necessary time and check the <code>Book Resources</code> checkbox at the "
+#~ "bottom of the page."
+#~ msgstr ""
+#~ "Αν θέλετε να χρησιμοποιήσετε υλικό ή αίθουσα στο σχολείο σας, πρέπει να "
+#~ "δημιουργήσετε ένα γεγονός με καθορισμένη ώρα γι αυτή τη χρήση. Επιλέξτε "
+#~ "το πλαίσιο ελέγχου <code>Book Resources</code> στο τέλος της σελίδας."
+
+#~ msgid "Help"
+#~ msgstr "Βοήθεια"
+
+#~ msgid "Relationships"
+#~ msgstr "Σχέσεις"
