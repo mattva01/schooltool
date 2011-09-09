@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: Giancarlo Gaifas <lallo@artiemestieri.tn.it>\n"
 "POT-Creation-Date: 2011-04-17 23:49+0300\n"
-"PO-Revision-Date: 2011-04-01 18:53+0000\n"
+"PO-Revision-Date: 2011-04-18 08:34+0000\n"
 "Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
 "Language-Team: Italian <it@li.org>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-04-08 04:34+0000\n"
-"X-Generator: Launchpad (build 12735)\n"
+"X-Launchpad-Export-Date: 2011-05-27 04:34+0000\n"
+"X-Generator: Launchpad (build 12959)\n"
 "X-Rosetta-Version: 0.1\n"
 
 #: /src/schooltool/app/app.py:197
@@ -7128,8 +7128,8 @@ msgstr "Cambia piano"
 msgid "Supplied passwords are not identical"
 msgstr "Le password fornite non sono identiche"
 
-#~ msgid "Required input is missing."
-#~ msgstr "È stato omesso un valore obbligatorio"
+#~ msgid "Using timetable:"
+#~ msgstr "Orario utilizzato:"
 
 #~ msgid "Everyone can view the application calendar."
 #~ msgstr "Chiunque può vedere il calendario dell'applicazione."
@@ -7145,12 +7145,6 @@ msgstr "Le password fornite non sono identiche"
 
 #~ msgid "Everyone can view resource lists."
 #~ msgstr "Chiunque può visualizzare le liste delle risorse."
-
-#~ msgid "Change the resources for this section."
-#~ msgstr "Cambia le risorse per questa sezione"
-
-#~ msgid "Modification Date"
-#~ msgstr "Data di modifica"
 
 #~ msgid "Everyone can view group information."
 #~ msgstr "Tutti possono vedere le informazioni del gruppo."
@@ -7193,3 +7187,29 @@ msgstr "Le password fornite non sono identiche"
 
 #~ msgid "Add an Equipment"
 #~ msgstr "Aggiungi equipaggiamento"
+
+#~ msgid "Report a bug on Launchpad."
+#~ msgstr "Riporta un bug su Launchpad."
+
+#~ msgid "For term:"
+#~ msgstr "Per il termine:"
+
+#~ msgid "Access setting: ${setting} (${status})"
+#~ msgstr "Impostazione di accesso: ${setting} (${status})"
+
+#~ msgid ""
+#~ "<a href=\"http://www.schooltool.org\">SchoolTool</a>&trade; is a "
+#~ "Trademark of The <a href=\"http://www.shuttleworthfoundation.org"
+#~ "\">Shuttleworth Foundation</a>."
+#~ msgstr ""
+#~ "<a href=\"http://www.schooltool.org\">SchoolTool</a>&trade; è un marchio "
+#~ "registrato della <a href=\"http://www.shuttleworthfoundation.org"
+#~ "\">Fondazione Shuttleworth</a>."
+
+#~ msgid ""
+#~ "&copy; The <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth "
+#~ "Foundation</a> 2003 - <span>2010</span>: Supporting Social Innovation."
+#~ msgstr ""
+#~ "&copy; La <a href=\"http://www.shuttleworthfoundation.org\">Fondazione "
+#~ "Shuttleworth</a> 2003 - <span>2010</span>: Supporto All'Innovazione "
+#~ "Sociale."

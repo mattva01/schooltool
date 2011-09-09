@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2011-04-17 23:49+0300\n"
-"PO-Revision-Date: 2011-04-18 08:49+0000\n"
-"Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
+"PO-Revision-Date: 2011-04-24 21:36+0000\n"
+"Last-Translator: Nkolay Parukhin <parukhin@gmail.com>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-04-19 04:33+0000\n"
-"X-Generator: Launchpad (build 12758)\n"
+"X-Launchpad-Export-Date: 2011-05-27 04:37+0000\n"
+"X-Generator: Launchpad (build 12959)\n"
 "X-Rosetta-Version: 0.1\n"
 
 #: /src/schooltool/app/app.py:197
@@ -2589,7 +2589,7 @@ msgstr "Новое поле данных"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:174
 msgid "New Yes/No Field"
-msgstr ""
+msgstr "Новое поле Да/Нет"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:181
 msgid "New Selection List Field"
@@ -2597,15 +2597,15 @@ msgstr "Новый Выбор Список Поле"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:291
 msgid "Add Teacher"
-msgstr ""
+msgstr "Добавить преподавателя"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:301
 msgid "Add Student"
-msgstr ""
+msgstr "Добавить студента"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:311
 msgid "Add Administrator"
-msgstr ""
+msgstr "Добавить адмиинстратора"
 
 #: /src/schooltool/basicperson/browser/csvimport.py:44
 #: /src/schooltool/course/browser/csvimport.py:45
@@ -2745,25 +2745,25 @@ msgstr "Добавить обучаемых"
 msgid "Advisees of ${person}"
 msgstr "Обучаемый ${person}"
 
-#: /src/schooltool/basicperson/browser/person.py:576
+#: /src/schooltool/basicperson/browser/person.py:579
 msgid "Teacher identification"
-msgstr ""
+msgstr "Идентификация преподавателя"
 
 #: /src/schooltool/basicperson/browser/person.py:581
 msgid "Teacher demographics"
-msgstr ""
+msgstr "Демография преподавателя"
 
 #: /src/schooltool/basicperson/browser/person.py:582
 msgid "Add new teacher"
-msgstr ""
+msgstr "Добавить нового преподавателя"
 
 #: /src/schooltool/basicperson/browser/person.py:589
 msgid "Student identification"
-msgstr ""
+msgstr "Идентификация студента"
 
 #: /src/schooltool/basicperson/browser/person.py:591
 msgid "Student demographics"
-msgstr ""
+msgstr "Демография студента"
 
 #: /src/schooltool/basicperson/browser/person.py:592
 msgid "Add new student"
@@ -2771,11 +2771,11 @@ msgstr "Добавить нового учащегося"
 
 #: /src/schooltool/basicperson/browser/person.py:599
 msgid "Administrator identification"
-msgstr ""
+msgstr "Идентификация адмиинстратора"
 
 #: /src/schooltool/basicperson/browser/person.py:601
 msgid "Administrator demographics"
-msgstr ""
+msgstr "Демография администратора"
 
 #: /src/schooltool/basicperson/browser/person.py:602
 msgid "Add new administrator"
@@ -2785,10 +2785,12 @@ msgstr "Добавить нового администратора"
 msgid ""
 "To add teachers, students or administrators, please set up a ${school_year}."
 msgstr ""
+"Чтобы добавить преподавателей, студентов или администраторов, пожалуйста, "
+"задайте ${school_year}."
 
 #: /src/schooltool/basicperson/browser/templates/container.pt:23
 msgid "school year"
-msgstr ""
+msgstr "учебный год"
 
 #: /src/schooltool/basicperson/browser/templates/container.pt:37
 #: /src/schooltool/course/browser/templates/course_container.pt:28
@@ -2994,11 +2996,11 @@ msgstr "Если это поле не требуется или"
 
 #: /src/schooltool/basicperson/interfaces.py:145
 msgid "Limit keys"
-msgstr ""
+msgstr "Ограничение Ключей"
 
 #: /src/schooltool/basicperson/interfaces.py:146
 msgid "An optional list of limit keys for this field"
-msgstr ""
+msgstr "Опциональный список ключей для этого поля."
 
 #: /src/schooltool/basicperson/interfaces.py:161
 msgid "List of values"
@@ -3054,11 +3056,11 @@ msgstr "Студенты"
 
 #: /src/schooltool/basicperson/vocabularies.py:144
 msgid "Teachers"
-msgstr ""
+msgstr "Преподаватели"
 
 #: /src/schooltool/basicperson/vocabularies.py:145
 msgid "Administrators"
-msgstr ""
+msgstr "Администраторы"
 
 #: /src/schooltool/common/configure.zcml:89
 #: /src/schooltool/course/browser/configure.zcml:25
@@ -3222,7 +3224,7 @@ msgstr "Очистить"
 
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:27
 msgid "Shortcut: Alt-R"
-msgstr ""
+msgstr "Быстрая клавиша: Alt-R"
 
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:43
 msgid "Create contact"
@@ -3930,6 +3932,8 @@ msgid ""
 "Basic information about sections, including rosters, is visible to the "
 "general public."
 msgstr ""
+"Основная информация о разделах, в том числе списках, которая видна широкой "
+"общественности."
 
 #: /src/schooltool/course/security.zcml:74
 msgid ""
@@ -4727,7 +4731,7 @@ msgstr "${title} не имеет дней в${row}"
 
 #: /src/schooltool/export/importer.py:82
 msgid "${title} has no day templates in A${row}"
-msgstr ""
+msgstr "У ${title} нет шаблона дня в A${row}"
 
 #: /src/schooltool/export/importer.py:83
 msgid "is not a valid time range"
@@ -4739,15 +4743,15 @@ msgstr "не правильное расписание"
 
 #: /src/schooltool/export/importer.py:85
 msgid "is the same day id as another in this timetable"
-msgstr ""
+msgstr "это такая же id дня, что и другая в этом расписании"
 
 #: /src/schooltool/export/importer.py:86
 msgid "is not defined in the 'Day Templates' section"
-msgstr ""
+msgstr "не определён в разделе \"Шаблоны дня\""
 
 #: /src/schooltool/export/importer.py:87
 msgid "is the same period id as another in this day"
-msgstr ""
+msgstr "это такая же id периода, что и другая в этот день"
 
 #: /src/schooltool/export/importer.py:88
 msgid "is the same homeroom period id as another in this day"
@@ -4765,9 +4769,9 @@ msgstr "недопустимый срок в этом учебном году"
 msgid "is not a valid course in the given school year"
 msgstr "недопустимый курс в этом учебном году"
 
-#: /src/schooltool/export/importer.py:93
+#: /src/schooltool/export/importer.py:92
 msgid "${title} has no courses in A${row}"
-msgstr ""
+msgstr "${title} не имеет предметов в A${row}"
 
 #: /src/schooltool/export/importer.py:93
 msgid "is not a valid username"
@@ -4779,17 +4783,17 @@ msgstr "не правильная схема учебного года"
 
 #: /src/schooltool/export/importer.py:95
 msgid "is not a valid day id for the given schema"
-msgstr ""
+msgstr "это не верная id дня для данной схемы"
 
 #: /src/schooltool/export/importer.py:96
 msgid "is not a valid period id for the given day"
-msgstr ""
+msgstr "это не верная id периода для данного дня"
 
 #: /src/schooltool/export/importer.py:97
 msgid "is not a valid resource id"
-msgstr ""
+msgstr "это не верная id ресурса"
 
-#: /src/schooltool/export/importer.py:99
+#: /src/schooltool/export/importer.py:98
 msgid "Username cannot contain non-ascii characters: ${string}"
 msgstr "Имя пользователя не может содержать не-ascii символы: ${string}"
 
@@ -5044,7 +5048,7 @@ msgstr ""
 
 #: /src/schooltool/group/security.zcml:11
 msgid "Information about each group is visible to the general public."
-msgstr ""
+msgstr "Информация о каждой группе, доступная всем посетителям."
 
 #: /src/schooltool/group/security.zcml:17
 msgid ""
@@ -5054,7 +5058,7 @@ msgstr "каждый календарь групп видет администр
 
 #: /src/schooltool/group/security.zcml:17
 msgid "Each group calendar is visible to the general public."
-msgstr ""
+msgstr "Календарь каждой группы, доступный всем посетителям."
 
 #: /src/schooltool/group/security.zcml:23
 msgid "All members of a group and school administration can edit its calendar."
@@ -5375,6 +5379,7 @@ msgid ""
 "The list of people with accounts in the system is visible to the general "
 "public."
 msgstr ""
+"Список людей с учетными записями в системе, видимый широкой общественности."
 
 #: /src/schooltool/person/security.zcml:11
 msgid "Users can make their own calendars public."
@@ -5410,7 +5415,7 @@ msgstr "Изменить параметры"
 
 #: /src/schooltool/person/security.zcml:138
 msgid "Change the list of calendars overlayed on the user's calendar"
-msgstr ""
+msgstr "Изменение списка календарей пересекающихся с календарем пользователя"
 
 #: /src/schooltool/person/security.zcml:138
 msgid "Manage visible calendars"
@@ -5439,28 +5444,28 @@ msgstr "Отчёты"
 
 #: /src/schooltool/report/browser/report.py:44
 msgid "Student Reports"
-msgstr ""
+msgstr "Отчеты по ученикам"
 
 #: /src/schooltool/report/browser/report.py:49
 msgid "Group Reports"
-msgstr ""
+msgstr "Отчеты по классам"
 
 #: /src/schooltool/report/browser/report.py:54
 msgid "School Year Reports"
-msgstr ""
+msgstr "Школьные годовые отчеты"
 
 #: /src/schooltool/report/browser/report.py:59
 msgid "Term Reports"
-msgstr ""
+msgstr "Периодические отчеты"
 
 #: /src/schooltool/report/browser/report.py:64
 msgid "Section Reports"
-msgstr ""
+msgstr "Отчеты по секциям"
 
 #: /src/schooltool/report/browser/templates/report_reference.pt:3
 #: /src/schooltool/report/browser/templates/report_reference.pt:7
 msgid "Report Reference"
-msgstr ""
+msgstr "Справочник отчетов"
 
 #: /src/schooltool/report/browser/templates/report_reference.pt:13
 msgid "Category"
@@ -5468,7 +5473,7 @@ msgstr "Категория"
 
 #: /src/schooltool/resource/browser/configure.zcml:96
 msgid "Resource Demographics"
-msgstr ""
+msgstr "Демография ресурса"
 
 #: /src/schooltool/resource/browser/configure.zcml:143
 #: /src/schooltool/resource/browser/resource-csvimport.pt:21
@@ -5533,55 +5538,55 @@ msgstr "Указатель ресурсов"
 
 #: /src/schooltool/resource/browser/resource.py:327
 msgid "Resource Demographics Container"
-msgstr ""
+msgstr "Контейнер демографии ресурса"
 
 #: /src/schooltool/resource/browser/resource.py:512
 msgid "Resource identification"
-msgstr ""
+msgstr "Идентификация ресурса"
 
 #: /src/schooltool/resource/browser/resource.py:514
 msgid "Resource demographics"
-msgstr ""
+msgstr "Демография ресурса"
 
 #: /src/schooltool/resource/browser/resource.py:522
 msgid "Add new resource"
-msgstr ""
+msgstr "Добавить новый ресурс"
 
 #: /src/schooltool/resource/browser/resource.py:528
 msgid "Edit resource"
-msgstr ""
+msgstr "Изменить ресурс"
 
 #: /src/schooltool/resource/browser/resource.py:536
 msgid "Location identification"
-msgstr ""
+msgstr "Идентификация расположения"
 
 #: /src/schooltool/resource/browser/resource.py:538
 msgid "Location demographics"
-msgstr ""
+msgstr "Демография расположения"
 
 #: /src/schooltool/resource/browser/resource.py:548
 msgid "Add new location"
-msgstr ""
+msgstr "Добавить новое расположение"
 
 #: /src/schooltool/resource/browser/resource.py:554
 msgid "Edit location"
-msgstr ""
+msgstr "Изменить расположение"
 
 #: /src/schooltool/resource/browser/resource.py:562
 msgid "Equipment identification"
-msgstr ""
+msgstr "Идентификация оборудования"
 
 #: /src/schooltool/resource/browser/resource.py:564
 msgid "Equipment demographics"
-msgstr ""
+msgstr "Демография оснощения"
 
 #: /src/schooltool/resource/browser/resource.py:574
 msgid "Add new equipment"
-msgstr ""
+msgstr "Добавить новое оборудование"
 
 #: /src/schooltool/resource/browser/resource.py:580
 msgid "Edit equipment"
-msgstr ""
+msgstr "Изменить оборудование"
 
 #: /src/schooltool/resource/help/resource_help.pt:6
 msgid "Resource Help"
@@ -5717,20 +5722,24 @@ msgid ""
 "Information about each resource is visible to school administration and "
 "leaders of the resource."
 msgstr ""
+"Информация о каждом ресурсе доступна администрации школы и руководителям "
+"ресурсов."
 
 #: /src/schooltool/resource/security.zcml:13
 msgid "Information about each resource is visible to the general public."
-msgstr ""
+msgstr "Информация о каждом ресурсе доступна всем посетителям."
 
 #: /src/schooltool/resource/security.zcml:19
 msgid ""
 "Resource calendars are visible to school administration, teachers, and "
 "leaders of the resource."
 msgstr ""
+"Календари ресурсов доступны администрации школы, преподавателям и "
+"руководителям ресурсов."
 
 #: /src/schooltool/resource/security.zcml:19
 msgid "Resource calendars are visible to the general public."
-msgstr ""
+msgstr "Календари ресурсов доступны всем посетителям."
 
 #: /src/schooltool/resource/security.zcml:53
 msgid "Reservations"
@@ -5893,7 +5902,7 @@ msgstr "Копировать пользователей"
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:27
 msgid "The active school year is ${year} (${start_date} - ${end_date})"
-msgstr ""
+msgstr "Текущий учебный год ${year} (${start_date} - ${end_date})"
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:52
 msgid "Activate selected school year"
@@ -6077,8 +6086,10 @@ msgid ""
 "&copy; The <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth "
 "Foundation</a> 2003 - 2011: Supporting Social Innovation."
 msgstr ""
+"&copy; <a href=\"http://www.shuttleworthfoundation.org\">Фонд Шаттлворта</a> "
+"2003 - 2011: Поддержка социальных инноваций."
 
-#: /src/schooltool/skin/templates/view_macros.pt:132
+#: /src/schooltool/skin/templates/view_macros.pt:129
 msgid ""
 "<a href=\"http://www.schooltool.org\">SchoolTool</a>&trade; is a Trademark "
 "of the <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth "
@@ -6094,7 +6105,7 @@ msgstr "Быстрая клавиша: Alt-U"
 
 #: /src/schooltool/skin/templates/view_macros.pt:155
 msgid "U"
-msgstr ""
+msgstr "U"
 
 #. Default: "Update"
 #: /src/schooltool/skin/templates/view_macros.pt:155
@@ -6116,7 +6127,7 @@ msgstr "Добавить"
 
 #: /src/schooltool/skin/templates/view_macros.pt:194
 msgid "D"
-msgstr ""
+msgstr "D"
 
 #: /src/schooltool/skin/templates/view_macros.pt:194
 msgid "Shortcut: Alt-D"
@@ -6152,7 +6163,7 @@ msgstr "Название используемой конфигурации па�
 
 #: /src/schooltool/skin/widgets.py:110
 msgid "Relative configuration path"
-msgstr ""
+msgstr "Относительный путь конфигурации"
 
 #: /src/schooltool/skin/widgets.py:111
 msgid "Path to the FCKconfiguration javascript file."
@@ -6401,7 +6412,7 @@ msgstr "Разобрать расписание"
 
 #: /src/schooltool/timetable/browser/__init__.py:513
 msgid "Show consecutive periods as one period in journal"
-msgstr ""
+msgstr "Показывать в журнале последовательные периоды как один"
 
 #: /src/schooltool/timetable/browser/__init__.py:614
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:107
@@ -6427,11 +6438,11 @@ msgstr "Расписание конфликтует с другим:"
 
 #: /src/schooltool/timetable/browser/__init__.py:802
 msgid "Timetable does not fit in term"
-msgstr ""
+msgstr "Расписание не укладывается в семестр"
 
 #: /src/schooltool/timetable/browser/__init__.py:805
 msgid "Timetable must begin before it ends."
-msgstr ""
+msgstr "Расписание должно начинаться раньше его окончания."
 
 #: /src/schooltool/timetable/browser/__init__.py:910
 msgid "Invalid date. Please use YYYY-MM-DD format."
@@ -6547,7 +6558,7 @@ msgstr "Удалить день"
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:58
 msgid "X"
-msgstr ""
+msgstr "X"
 
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:84
 msgid "Add day"
@@ -6711,7 +6722,7 @@ msgstr "График для ${section}"
 #: /src/schooltool/timetable/browser/templates/section-timetable-add.pt:25
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:31
 msgid "For term: ${term_title} (from ${starts} to ${ends})"
-msgstr ""
+msgstr "Для семестра: ${term_title} (с ${starts} до ${ends})"
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:17
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:19
@@ -6724,7 +6735,7 @@ msgstr "Выберите школьное расписание"
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:17
 msgid "Time table schedule of ${courses} ${section}."
-msgstr ""
+msgstr "Расписание ${courses} ${section}."
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:25
 msgid "school days"
@@ -6732,25 +6743,27 @@ msgstr "Учебные дни"
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:27
 msgid "available timetables"
-msgstr ""
+msgstr "доступные расписания"
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:31
 msgid ""
 "For more information, see ${school_days} and ${available_timetables} in "
 "${term} of ${schoolyear}"
 msgstr ""
+"Для получения дополнительной информации смотрите ${school_days} и "
+"${available_timetables} в ${term} ${schoolyear}"
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:39
 msgid "There are no timetables assigned."
-msgstr ""
+msgstr "Расписания не назначены."
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:49
 msgid "(edit periods)"
-msgstr ""
+msgstr "(изменить период)"
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:91
 msgid "Consecutive periods are treated as a single meeting."
-msgstr ""
+msgstr "Последовательных периодов, рассматриваемых как одна встреча."
 
 #: /src/schooltool/timetable/browser/templates/simpletts.pt:11
 msgid ""
@@ -6766,6 +6779,9 @@ msgid ""
 "schema creation wizard</a>, or a <a href=\"complexadd.html\">complex "
 "timetable schema set up form</a>."
 msgstr ""
+"Если вам нужно больше гибкости, вы можете использовать <a href=\"add.html"
+"\">мастер создания схемы расписания</a> или <a href=\"complexadd.html"
+"\">форму настройки комплексной схемы расписания</a>."
 
 #: /src/schooltool/timetable/browser/templates/simpletts.pt:36
 msgid "Period title (optional)"
@@ -6796,6 +6812,9 @@ msgid ""
 "below. In order to remove a period from the day, just delete the period's "
 "start and end times."
 msgstr ""
+"Вы можете регулировать время начала и окончания периода на ${date} в форме "
+"ниже. Для удаления периода из дня, просто удалите время начала и окончания "
+"периода."
 
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:28
 msgid "Period title"
@@ -6845,11 +6864,11 @@ msgstr "Используемое расписание: ${schema_titles}"
 
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:97
 msgid "Apply from:"
-msgstr ""
+msgstr "Применить с:"
 
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:111
 msgid "Apply until:"
-msgstr ""
+msgstr "Применить до:"
 
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:40
 msgid "Default Timetable Schema:"
@@ -6899,7 +6918,7 @@ msgstr "Чередующееся расписание"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:286
 msgid "Enter names of days in cycle, one per line."
-msgstr ""
+msgstr "Введите названия дней в цикле, по одному в строке."
 
 #: /src/schooltool/timetable/browser/ttwizard.py:298
 msgid "Please enter at least one day name."
@@ -7059,8 +7078,11 @@ msgstr "Изменить задачу"
 msgid "Supplied passwords are not identical"
 msgstr "Введённые пароли не совпадают"
 
-#~ msgid "Add a Section"
-#~ msgstr "Добавить раздел"
+#~ msgid "Everyone can view the application calendar."
+#~ msgstr "Все могут просматривать календарь."
+
+#~ msgid "Everyone can view section information and calendars"
+#~ msgstr "Просмотр раздела и календарей разрешен всем"
 
 #~ msgid "Everyone can view group calendars."
 #~ msgstr "Календари группы доступны всем."
@@ -7068,8 +7090,14 @@ msgstr "Введённые пароли не совпадают"
 #~ msgid "Everyone can view group information."
 #~ msgstr "Информация о группе доступна всем."
 
-#~ msgid "Change the resources for this section."
-#~ msgstr "Изменить ресурсы для этого раздела"
+#~ msgid "Everyone can view group lists."
+#~ msgstr "Все могут просмотреть список группы"
+
+#~ msgid "Group members can edit group calendars."
+#~ msgstr "Участник группы может изменять календари группы"
+
+#~ msgid "Add a Location"
+#~ msgstr "Добавить расположение"
 
 #~ msgid "Persons can change their own passwords"
 #~ msgstr "Человек может изменить свой пароль"
@@ -7079,6 +7107,12 @@ msgstr "Введённые пароли не совпадают"
 
 #~ msgid "Edit Location Information"
 #~ msgstr "Редактировать информацию о местоположении"
+
+#~ msgid "Report a bug on Launchpad."
+#~ msgstr "Соббщить об ошибке в Launchpad"
+
+#~ msgid "Everyone can view info of persons"
+#~ msgstr "Любой может просмотреть информацию о человеке"
 
 #~ msgid "Edit Resource Information"
 #~ msgstr "Редактировать ресурс"
@@ -7104,5 +7138,20 @@ msgstr "Введённые пароли не совпадают"
 #~ msgid "Everyone can view resource lists."
 #~ msgstr "Все могут просматривать список ресурсов."
 
-#~ msgid "Copy Sections"
-#~ msgstr "Копировать разделы"
+#~ msgid "Access setting: ${setting} (${status})"
+#~ msgstr "Параметр доступа: ${setting} (${status})"
+
+#~ msgid ""
+#~ "<a href=\"http://www.schooltool.org\">SchoolTool</a>&trade; is a "
+#~ "Trademark of The <a href=\"http://www.shuttleworthfoundation.org"
+#~ "\">Shuttleworth Foundation</a>."
+#~ msgstr ""
+#~ "<a href=\"http://www.schooltool.org\">SchoolTool</a>&trade; является "
+#~ "торговой маркой<a href=\"http://www.shuttleworthfoundation.org"
+#~ "\">Shuttleworth Foundation</a>."
+
+#~ msgid "Using timetable:"
+#~ msgstr "Используемое расписание:"
+
+#~ msgid "For term:"
+#~ msgstr "Для семестра:"

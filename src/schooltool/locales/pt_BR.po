@@ -15,8 +15,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-04-11 04:30+0000\n"
-"X-Generator: Launchpad (build 12735)\n"
+"X-Launchpad-Export-Date: 2011-05-27 04:40+0000\n"
+"X-Generator: Launchpad (build 12959)\n"
 "X-Rosetta-Version: 0.1\n"
 
 #: /src/schooltool/app/app.py:197
@@ -7130,8 +7130,17 @@ msgstr "Mude o agendamento"
 msgid "Supplied passwords are not identical"
 msgstr "As senhas não são idênticas"
 
-#~ msgid "Add a Section"
-#~ msgstr "Adicionar Sessão"
+#~ msgid "Using timetable:"
+#~ msgstr "Usando tabela e horários:"
+
+#~ msgid "Everyone can view the application calendar."
+#~ msgstr "Todos podem ver o aplicativo de calendário."
+
+#~ msgid "Everyone can view section information and calendars"
+#~ msgstr "Todos podem visualizar informações e calendários nesta seção"
+
+#~ msgid "Everyone can view group lists."
+#~ msgstr "Qualquer um pode vizualisar este grupo"
 
 #~ msgid "Group members can edit group calendars."
 #~ msgstr "Membros do grupo podem alterar os calendários do grupo"
@@ -7169,9 +7178,6 @@ msgstr "As senhas não são idênticas"
 #~ msgid "Edit Location Information"
 #~ msgstr "Editar Informaçõa de Localização"
 
-#~ msgid "Requirement index"
-#~ msgstr "Índice de Requisitos"
-
 #~ msgid "Everyone can view the list of persons"
 #~ msgstr "Qualquer um pode examinar a lista de pessoas"
 
@@ -7184,5 +7190,27 @@ msgstr "As senhas não são idênticas"
 #~ msgid "Persons can change their own passwords"
 #~ msgstr "Pessoas podem alterar suas senhas"
 
-#~ msgid "Copy Sections"
-#~ msgstr "Copiar secções"
+#~ msgid "Report a bug on Launchpad."
+#~ msgstr "Reporte um defeito no Launchpad."
+
+#~ msgid "For term:"
+#~ msgstr "Para o período:"
+
+#~ msgid ""
+#~ "<a href=\"http://www.schooltool.org\">SchoolTool</a>&trade; is a "
+#~ "Trademark of The <a href=\"http://www.shuttleworthfoundation.org"
+#~ "\">Shuttleworth Foundation</a>."
+#~ msgstr ""
+#~ "<a href=\"http://www.schooltool.org\">SchoolTool</a>&trade; é uma marca "
+#~ "da <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth "
+#~ "Foundation</a>."
+
+#~ msgid "Access setting: ${setting} (${status})"
+#~ msgstr "Acesso: ${setting} (${status})"
+
+#~ msgid ""
+#~ "&copy; The <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth "
+#~ "Foundation</a> 2003 - <span>2010</span>: Supporting Social Innovation."
+#~ msgstr ""
+#~ "&copy; A <a href=\"http://www.shuttleworthfoundation.org\">Fundação "
+#~ "Shuttleworth</a> 2003 - <span>2010</span>: Apoia a inovação Social"

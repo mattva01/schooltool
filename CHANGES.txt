@@ -15,8 +15,10 @@ CHANGES
 
   + Username is a number (https://launchpad.net/bugs/801870)
   + No file selected for import
-  + Section timetables without resources
+  + Section timetables without resources (https://launchpad.net/bugs/839031)
   + Empty sections or groups (https://launchpad.net/bugs/382566)
+
+- Update translations.
 
 
 1.6.0 (2011-04-25)

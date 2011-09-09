@@ -7,15 +7,15 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-04-17 23:49+0300\n"
-"PO-Revision-Date: 2011-03-26 05:58+0000\n"
-"Last-Translator: Cristian Gomez <gmz.crstn@gmail.com>\n"
+"PO-Revision-Date: 2011-05-21 00:14+0000\n"
+"Last-Translator: gh05t2k <Unknown>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-04-08 04:38+0000\n"
-"X-Generator: Launchpad (build 12735)\n"
+"X-Launchpad-Export-Date: 2011-05-27 04:38+0000\n"
+"X-Generator: Launchpad (build 12959)\n"
 
 #: /src/schooltool/app/app.py:197
 msgid "Your School"
@@ -3011,11 +3011,11 @@ msgstr "Si el campo es requerido o no"
 
 #: /src/schooltool/basicperson/interfaces.py:145
 msgid "Limit keys"
-msgstr ""
+msgstr "Claves límite"
 
 #: /src/schooltool/basicperson/interfaces.py:146
 msgid "An optional list of limit keys for this field"
-msgstr ""
+msgstr "Una lista opcional de claves límite  para este campo"
 
 #: /src/schooltool/basicperson/interfaces.py:161
 msgid "List of values"
@@ -5502,7 +5502,7 @@ msgstr "Informes de Sección"
 #: /src/schooltool/report/browser/templates/report_reference.pt:3
 #: /src/schooltool/report/browser/templates/report_reference.pt:7
 msgid "Report Reference"
-msgstr ""
+msgstr "Reporte de referencia"
 
 #: /src/schooltool/report/browser/templates/report_reference.pt:13
 msgid "Category"
@@ -7143,17 +7143,14 @@ msgstr "Cambiar horario"
 msgid "Supplied passwords are not identical"
 msgstr "Las contraseñas proporcionadas no son idénticas."
 
-#~ msgid "Required input is missing."
-#~ msgstr "Falta una entrada requerida"
+#~ msgid "Using timetable:"
+#~ msgstr "Usando horario:"
 
 #~ msgid "Everyone can view the application calendar."
 #~ msgstr "Todo el mundo puede ver el calendario de la aplicación"
 
 #~ msgid "Everyone can view section information and calendars"
 #~ msgstr "Todo el mundo puede ver la información y los calendarios"
-
-#~ msgid "Change the resources for this section."
-#~ msgstr "Cambiar los recursos de esta sección"
 
 #~ msgid "Everyone can view group lists."
 #~ msgstr "Todos pueden ver las listas de grupo."
@@ -7200,14 +7197,17 @@ msgstr "Las contraseñas proporcionadas no son idénticas."
 #~ msgid "Edit Resource Information"
 #~ msgstr "Editar la información de recurso"
 
-#~ msgid "The name of this Field Description"
-#~ msgstr "El nombre de este Campo de Descripción"
+#~ msgid "Report a bug on Launchpad."
+#~ msgstr "Informar de un error en Launchpad."
 
-#~ msgid "Please select a term."
-#~ msgstr "Por favor seleccione un período."
+#~ msgid "For term:"
+#~ msgstr "Para el período:"
 
 #~ msgid "Persons can set their own preferences"
 #~ msgstr "Las personas pueden establecer sus propias preferencias"
 
 #~ msgid "Add a Location"
 #~ msgstr "Añadir una Ubicación"
+
+#~ msgid "Access setting: ${setting} (${status})"
+#~ msgstr "Configuración de acceso: ${setting} (${status})"

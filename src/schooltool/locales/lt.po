@@ -6678,3 +6678,39 @@ msgstr ""
 #: /src/schooltool/widget/password.py:55
 msgid "Supplied passwords are not identical"
 msgstr "Pateikti slaptažodžiai nėra identiški"
+
+#~ msgid "Using timetable:"
+#~ msgstr "Naudoja tvarkaraštį:"
+
+#~ msgid "Everyone can view group lists."
+#~ msgstr "Visiems leidžiama matyti grupių sąrašą"
+
+#~ msgid "Group members can edit group calendars."
+#~ msgstr "Grupių nariai gali keisti grupių kalendorius"
+
+#~ msgid "Everyone can view group calendars."
+#~ msgstr "Visiems leidžiama matyti grupių kalendorius"
+
+#~ msgid "Everyone can view group information."
+#~ msgstr "Visiems leidžiama matyti grupių informaciją"
+
+#~ msgid "Everyone can view section information and calendars"
+#~ msgstr "Visi gali matyti kursų informaciją ir kalendorius"
+
+#~ msgid "Everyone can view the list of persons"
+#~ msgstr "Visiems leidžiama matyti asmenų sąrašą"
+
+#~ msgid "Persons can set their own preferences"
+#~ msgstr "Naudotojams leidžiama keisti savo nustatymus"
+
+#~ msgid "Persons can change their own passwords"
+#~ msgstr "Naudotojams leidžiama keisti savo slaptažodžius"
+
+#~ msgid "Add a Resource"
+#~ msgstr "Pridėti resursą"
+
+#~ msgid "Edit Resource Information"
+#~ msgstr "Keisti resurso duomenis"
+
+#~ msgid "Everyone can view the application calendar."
+#~ msgstr "Visi gali matyti programos kalendorių."

@@ -7,15 +7,15 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-04-17 23:49+0300\n"
-"PO-Revision-Date: 2011-04-07 17:40+0000\n"
+"PO-Revision-Date: 2011-07-27 04:44+0000\n"
 "Last-Translator: Douglas Cerna <douglascerna@yahoo.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-04-08 04:39+0000\n"
-"X-Generator: Launchpad (build 12735)\n"
+"X-Launchpad-Export-Date: 2011-07-28 04:30+0000\n"
+"X-Generator: Launchpad (build 13405)\n"
 
 #: /src/schooltool/app/app.py:197
 msgid "Your School"
@@ -2769,7 +2769,7 @@ msgstr "Demografía del maestro"
 
 #: /src/schooltool/basicperson/browser/person.py:582
 msgid "Add new teacher"
-msgstr ""
+msgstr "Añadir nuevo docente"
 
 #: /src/schooltool/basicperson/browser/person.py:589
 msgid "Student identification"
@@ -2804,7 +2804,7 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/templates/container.pt:23
 msgid "school year"
-msgstr ""
+msgstr "año escolar"
 
 #: /src/schooltool/basicperson/browser/templates/container.pt:37
 #: /src/schooltool/course/browser/templates/course_container.pt:28
@@ -3011,11 +3011,11 @@ msgstr "Si el campo es requerido o no"
 
 #: /src/schooltool/basicperson/interfaces.py:145
 msgid "Limit keys"
-msgstr ""
+msgstr "Claves límite"
 
 #: /src/schooltool/basicperson/interfaces.py:146
 msgid "An optional list of limit keys for this field"
-msgstr ""
+msgstr "Una lista opcional de claves límite  para este campo"
 
 #: /src/schooltool/basicperson/interfaces.py:161
 msgid "List of values"
@@ -3071,11 +3071,11 @@ msgstr "Estudiantes"
 
 #: /src/schooltool/basicperson/vocabularies.py:144
 msgid "Teachers"
-msgstr ""
+msgstr "Docentes"
 
 #: /src/schooltool/basicperson/vocabularies.py:145
 msgid "Administrators"
-msgstr ""
+msgstr "Administradores"
 
 #: /src/schooltool/common/configure.zcml:89
 #: /src/schooltool/course/browser/configure.zcml:25
@@ -3239,7 +3239,7 @@ msgstr "Limpiar"
 
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:27
 msgid "Shortcut: Alt-R"
-msgstr ""
+msgstr "Tecla Rápida: Alt-R"
 
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:43
 msgid "Create contact"
@@ -5484,24 +5484,24 @@ msgstr "Reportes del Estudiante"
 
 #: /src/schooltool/report/browser/report.py:49
 msgid "Group Reports"
-msgstr "Reportes de Grupo"
+msgstr "Reportes del Grupo"
 
 #: /src/schooltool/report/browser/report.py:54
 msgid "School Year Reports"
-msgstr "Reportes de Año Escolar"
+msgstr "Reportes del Año Escolar"
 
 #: /src/schooltool/report/browser/report.py:59
 msgid "Term Reports"
-msgstr "Reportes de Período"
+msgstr "Reportes del Período"
 
 #: /src/schooltool/report/browser/report.py:64
 msgid "Section Reports"
-msgstr "Reportes de Sección"
+msgstr "Reportes de la Sección"
 
 #: /src/schooltool/report/browser/templates/report_reference.pt:3
 #: /src/schooltool/report/browser/templates/report_reference.pt:7
 msgid "Report Reference"
-msgstr ""
+msgstr "Referencia de Reportes"
 
 #: /src/schooltool/report/browser/templates/report_reference.pt:13
 msgid "Category"
@@ -5509,7 +5509,7 @@ msgstr "Categoría"
 
 #: /src/schooltool/resource/browser/configure.zcml:96
 msgid "Resource Demographics"
-msgstr ""
+msgstr "Atributos de Recursos"
 
 #: /src/schooltool/resource/browser/configure.zcml:143
 #: /src/schooltool/resource/browser/resource-csvimport.pt:21
@@ -5575,55 +5575,55 @@ msgstr "Índice de recursos"
 
 #: /src/schooltool/resource/browser/resource.py:327
 msgid "Resource Demographics Container"
-msgstr ""
+msgstr "Contenedor de Atributos de Recursos"
 
 #: /src/schooltool/resource/browser/resource.py:512
 msgid "Resource identification"
-msgstr ""
+msgstr "Identificacion del Recurso"
 
 #: /src/schooltool/resource/browser/resource.py:514
 msgid "Resource demographics"
-msgstr ""
+msgstr "Atributos del recurso"
 
 #: /src/schooltool/resource/browser/resource.py:522
 msgid "Add new resource"
-msgstr ""
+msgstr "Añadir nuevo recurso"
 
 #: /src/schooltool/resource/browser/resource.py:528
 msgid "Edit resource"
-msgstr ""
+msgstr "Editar recurso"
 
 #: /src/schooltool/resource/browser/resource.py:536
 msgid "Location identification"
-msgstr ""
+msgstr "Identificación de la ubicación"
 
 #: /src/schooltool/resource/browser/resource.py:538
 msgid "Location demographics"
-msgstr ""
+msgstr "Atributos de la ubicación"
 
 #: /src/schooltool/resource/browser/resource.py:548
 msgid "Add new location"
-msgstr ""
+msgstr "Añadir nueva ubicación"
 
 #: /src/schooltool/resource/browser/resource.py:554
 msgid "Edit location"
-msgstr ""
+msgstr "Editar ubicación"
 
 #: /src/schooltool/resource/browser/resource.py:562
 msgid "Equipment identification"
-msgstr ""
+msgstr "Identificación del equipo"
 
 #: /src/schooltool/resource/browser/resource.py:564
 msgid "Equipment demographics"
-msgstr ""
+msgstr "Atributos del equipo"
 
 #: /src/schooltool/resource/browser/resource.py:574
 msgid "Add new equipment"
-msgstr ""
+msgstr "Añadir nuevo equipo"
 
 #: /src/schooltool/resource/browser/resource.py:580
 msgid "Edit equipment"
-msgstr ""
+msgstr "Editar equipo"
 
 #: /src/schooltool/resource/help/resource_help.pt:6
 msgid "Resource Help"
@@ -6127,6 +6127,8 @@ msgid ""
 "&copy; The <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth "
 "Foundation</a> 2003 - 2011: Supporting Social Innovation."
 msgstr ""
+"&copy; <a href=\"http://www.shuttleworthfoundation.org\">Fundación "
+"Shuttleworth</a> 2003 - 2011: Apoyando la innovación social."
 
 #: /src/schooltool/skin/templates/view_macros.pt:129
 msgid ""
@@ -6134,6 +6136,9 @@ msgid ""
 "of the <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth "
 "Foundation</a>."
 msgstr ""
+"<a href=\"http://www.schooltool.org\">SchoolTool</a>&trade; es una marca "
+"registrada de la <a href=\"http://www.shuttleworthfoundation.org\">Fundación "
+"Shuttleworth</a>."
 
 #: /src/schooltool/skin/templates/view_macros.pt:155
 msgid "Shortcut: Alt-U"
@@ -7188,20 +7193,33 @@ msgstr "Las contraseñas proporcionadas no son idénticas."
 #~ msgid "Everyone can view resource calendars."
 #~ msgstr "Todo el mundo puede ver los calendarios de recursos"
 
-#~ msgid "Copy Sections"
-#~ msgstr "Copiar secciones"
+#~ msgid "Report a bug on Launchpad."
+#~ msgstr "Informar de un error en Launchpad."
 
-#~ msgid "View Next"
-#~ msgstr "Ver siguiente"
+#~ msgid "For term:"
+#~ msgstr "Para el período:"
 
-#~ msgid "View Previous"
-#~ msgstr "Ver precedente"
+#~ msgid "Using timetable:"
+#~ msgstr "Usando horario:"
 
-#~ msgid "SMTP server hostname. Leave empty to disable email."
-#~ msgstr "Nombre de host SMTP. Deje en blanco para desactivar."
+#~ msgid "Access setting: ${setting} (${status})"
+#~ msgstr "Configuración de acceso: ${setting} (${status})"
 
-#~ msgid "Configuration path"
-#~ msgstr "Ruta de configuración."
+#~ msgid ""
+#~ "<a href=\"http://www.schooltool.org\">SchoolTool</a>&trade; is a "
+#~ "Trademark of The <a href=\"http://www.shuttleworthfoundation.org"
+#~ "\">Shuttleworth Foundation</a>."
+#~ msgstr ""
+#~ "<a href=\"http://www.schooltool.org\">SchoolTool</a>&trade; es una marca "
+#~ "registrada de la <a href=\"http://www.shuttleworthfoundation.org"
+#~ "\">Fundación Shuttleworth</a>."
+
+#~ msgid ""
+#~ "&copy; The <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth "
+#~ "Foundation</a> 2003 - <span>2010</span>: Supporting Social Innovation."
+#~ msgstr ""
+#~ "&copy; <a href=\"http://www.shuttleworthfoundation.org\">Fundación "
+#~ "Shuttleworth</a> 2003 - <span>2010</span>: Apoyando la innovación social."
 
 #~ msgid "Everyone can view the list of persons"
 #~ msgstr "Todos pueden ver la lista de personas"

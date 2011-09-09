@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2011-04-17 23:49+0300\n"
-"PO-Revision-Date: 2011-04-20 10:44+0000\n"
-"Last-Translator: issyl0 <isabell121@gmail.com>\n"
+"PO-Revision-Date: 2011-04-25 05:03+0000\n"
+"Last-Translator: Isabell Long <isabell121@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-04-21 04:33+0000\n"
-"X-Generator: Launchpad (build 12758)\n"
+"X-Launchpad-Export-Date: 2011-05-27 04:32+0000\n"
+"X-Generator: Launchpad (build 12959)\n"
 "X-Rosetta-Version: 0.1\n"
 
 #: /src/schooltool/app/app.py:197
@@ -7144,12 +7144,6 @@ msgstr "Modifier les horaires"
 msgid "Supplied passwords are not identical"
 msgstr "Les mots de passe fournis ne sont pas identiques"
 
-#~ msgid "Add a Section"
-#~ msgstr "Ajouter une section"
-
-#~ msgid "Change the students in this section by groups"
-#~ msgstr "Changer les étudiants de cette classe par groupe"
-
 #~ msgid "Everyone can view the application calendar."
 #~ msgstr "Tout le monde peut voir l'application calendrier."
 
@@ -7161,6 +7155,13 @@ msgstr "Les mots de passe fournis ne sont pas identiques"
 
 #~ msgid "Everyone can view resource lists."
 #~ msgstr "Tout le monde peut visualiser les listes de la ressource."
+
+#~ msgid "Everyone can view section information and calendars"
+#~ msgstr ""
+#~ "Tout le monde peut voir les informations de la section et les calendriers"
+
+#~ msgid "Everyone can view group information."
+#~ msgstr "Tout le monde peut voir les informations du groupe."
 
 #~ msgid "Edit Resource Information"
 #~ msgstr "Éditer les informations de la ressource"
@@ -7195,11 +7196,36 @@ msgstr "Les mots de passe fournis ne sont pas identiques"
 #~ msgid "Persons can change their own passwords"
 #~ msgstr "Les personnes peuvent choisir leur propre mot de passe"
 
+#~ msgid "Persons can set their own preferences"
+#~ msgstr "Les personnes peuvent choisir leurs propres préférences"
+
 #~ msgid "Everyone can view info of persons"
 #~ msgstr "Tout le monde peut acceder à l'information sur des personnes"
 
-#~ msgid "Required input is missing."
-#~ msgstr "L'entrée requise est manquante"
+#~ msgid "Using timetable:"
+#~ msgstr "Utilise l'emploi du temps :"
 
-#~ msgid "The name of this Field Description"
-#~ msgstr "Le nom de cette Description de Champ"
+#~ msgid "Report a bug on Launchpad."
+#~ msgstr "Soumettre un rapport d'anomalie"
+
+#~ msgid "For term:"
+#~ msgstr "Pour le terme :"
+
+#~ msgid "Access setting: ${setting} (${status})"
+#~ msgstr "Réglage d'accès : ${setting} (${status})"
+
+#~ msgid ""
+#~ "<a href=\"http://www.schooltool.org\">SchoolTool</a>&trade; is a "
+#~ "Trademark of The <a href=\"http://www.shuttleworthfoundation.org"
+#~ "\">Shuttleworth Foundation</a>."
+#~ msgstr ""
+#~ "<a href=\"http://www.schooltool.org\">SchoolTool</a>&trade; est une "
+#~ "marque de commerce de la <a href=\"http://www.shuttleworthfoundation.org"
+#~ "\">Shuttleworth Foundation</a>."
+
+#~ msgid ""
+#~ "&copy; The <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth "
+#~ "Foundation</a> 2003 - <span>2010</span>: Supporting Social Innovation."
+#~ msgstr ""
+#~ "&copy; The <a href=\"http://www.shuttleworthfoundation.org\">Fondation "
+#~ "Shuttleworth</a> 2003 - <span>2010</span>: Soutient l'Innovation Sociale."
