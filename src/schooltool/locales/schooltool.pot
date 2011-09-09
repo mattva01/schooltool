@@ -3129,10 +3129,6 @@ msgstr ""
 msgid "Click 'Unlink' if you would like to remove the link this section has to the following section(s):"
 msgstr ""
 
-#: /src/schooltool/course/help/course_container.pt:10
-msgid "<h1>Courses</h1> <p>Use this page to organize courses listed in the system.</p> <h3>How do I...</h3> <ul> <li><strong>Look for for a course:</strong> Use the search box to the left of the <code>Find Now</code> button to look through the entire list of courses for the search criterion. The <code>Clear</code> button empties the search box of current entries.</li> <li><strong>Show a list of the different sections of a course:</strong> click on the name of the course.</li> <li><strong>Show the lists of students in a particular class:</strong> Click on the <code>teacher -- course</code> link. The number of students is also listed next to the teacher and the course.</li> <li><strong>Navigate through the courses:</strong> Separate <q>batches</q> of the Course list can be accessed through the <code>Next 10</code> (and <code>Previous</code>) and links in the blue bar. A <code>Show All</code> button is also there to show all of the courses on a single page.</li> </ul>"
-msgstr ""
-
 #: /src/schooltool/course/interfaces.py:37
 msgid "Title of the course."
 msgstr ""
