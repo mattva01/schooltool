@@ -8,9 +8,16 @@
       name="terms"
       for="schooltool.app.interfaces.ISchoolToolApplication"
       class=".term.FlourishTermsView"
-      title="Terms"
       content_template="templates/f_terms.pt"
       permission="schooltool.view"
+      />
+
+  <flourish:viewletManager
+      name="tertiary_navigation"
+      provides="schooltool.skin.flourish.page.ITertiaryNavigationManager"
+      class=".term.TermsTertiaryNavigationManager"
+      view=".term.FlourishTermsView"
+      permission="zope.Public"
       />
 
   <flourish:page
