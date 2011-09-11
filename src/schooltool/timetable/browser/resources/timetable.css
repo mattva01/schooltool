@@ -11,11 +11,11 @@ div.timetable-table {
 }
 
 .body > .container div.timetable-table {
-    width: 544px;
+    width: 528px;
 }
 
 .body > .widecontainer div.timetable-table {
-    width: 736px;
+    width: 720px;
 }
 
 table.timetable tbody td {
@@ -33,16 +33,11 @@ table.timetable td .inactive {
 }
 
 .body > .container form fieldset div.timetable-table {
-    width: 528px;
+    width: 512px;
 }
 
 .body > .widecontainer form fieldset div.timetable-table {
-    width: 720px;
-}
-
-form fieldset div.timetable-table {
-    padding-left: 8px;
-    padding-right: 8px;
+    width: 704px;
 }
 
 form fieldset table.timetable {

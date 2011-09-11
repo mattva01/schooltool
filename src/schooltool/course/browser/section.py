@@ -35,6 +35,7 @@ from zope.intid.interfaces import IIntIds
 from zope.publisher.browser import BrowserView
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.schema import Choice
+from zope.schema import ValidationError
 from zope.security.checker import canAccess
 from zope.security.proxy import removeSecurityProxy
 from zope.proxy import sameProxiedObjects
@@ -44,6 +45,8 @@ from z3c.form import form, subform, field, datamanager, button
 from z3c.form.action import ActionErrorOccurred
 from z3c.form.interfaces import ActionExecutionError
 from z3c.form.interfaces import HIDDEN_MODE
+from z3c.form.validator import SimpleFieldValidator
+from z3c.form.validator import WidgetValidatorDiscriminators
 from zc.table import table
 from zc.table.column import GetterColumn
 from zc.table.interfaces import ISortableColumn
@@ -1197,18 +1200,28 @@ class FlourishNewSectionTermsSubform(NewSectionTermsSubform):
         if self.errors:
             return
         changed = form.applyChanges(self, self.getContent(), data)
-        starts = self.span['starts']
-        ends = self.span['ends']
-        if starts.first > ends.first:
-            # XXX: this is a workaround for a bug in z3c.form: subforms do
-            #      not handle action execution errors properly.
-            #      The bug is fixed in z3c.form 2.0, as far as I know.
-            widget_name = '%s.widgets.ends:list' % self.prefix
-            error = ActionExecutionError(Invalid(
-                _('Starting term ($starts_in) is later than ending term ($ends_in)',
-                  mapping={'starts_in': starts.title,
-                           'ends_in': ends.title})))
-            notify(ActionErrorOccurred(action, error))
+
+
+class FlourishSectionTermError(ValidationError):
+    __doc__ = _('Starting term is later than ending term')
+
+
+class SectionTermsValidator(SimpleFieldValidator):
+
+    def validate(self, value):
+        # XXX: hack to display the term error next to the widget!
+        if self.widget.__name__ == 'starts':
+            starts_term = value
+            super(SectionTermsValidator, self).validate(starts_term)
+            ends_widget = self.view.widgets['ends']
+            ends_value = self.request.get(ends_widget.name)[0]
+            ends_term = ends_widget.terms.getTermByToken(ends_value).value
+            if starts_term.first > ends_term.first:
+                raise FlourishSectionTermError()
+
+
+WidgetValidatorDiscriminators(SectionTermsValidator,
+                              view=FlourishNewSectionTermsSubform)
 
 
 class FlourishNewSectionCoursesSubform(NewSectionCoursesSubform):

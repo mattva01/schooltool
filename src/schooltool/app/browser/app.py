@@ -775,6 +775,10 @@ class SchoolActionsLinks(flourish.page.RefineLinksViewlet):
     """School actions links viewlet."""
 
 
+class AboutLinks(flourish.page.RefineLinksViewlet):
+    """About links viewlet."""
+
+
 def getAppViewlet(context, request, view, manager, name):
     app = ISchoolToolApplication(None)
     viewlet = flourish.viewlet.lookupViewlet(
@@ -1029,3 +1033,8 @@ class ErrorsBreadcrumb(flourish.breadcrumbs.Breadcrumbs):
     @property
     def follow_crumb(self):
         return ManageSiteBreadcrumb(self.context, self.request, self.view)
+
+
+class FlourishAboutView(flourish.page.Page):
+
+    pass

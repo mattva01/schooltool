@@ -1,0 +1,28 @@
+<metal:block i18n:domain="schooltool">
+  <div class="header" i18n:translate="">
+    Contributors
+  </div>
+  <div class="body">
+    <ul class="contributors">
+      <li>Albertas Agejevas</li>
+      <li>Steve Alexander</li>
+      <li>Paul Carduner</li>
+      <li>Chris Carey</li>
+      <li>Douglas Cerna</li>
+      <li>Alan Elkner</li>
+      <li>Martijn Faassen</li>
+      <li>Marius Gedminas</li>
+      <li>William Johnston</li>
+      <li>Ignas Mikalajūnas</li>
+      <li>Gintautas Miliauskas</li>
+      <li>Eldar Omuraliev</li>
+      <li>Stephan Richter</li>
+      <li>Jean-François Roche</li>
+      <li>Andrew Rodriguez</li>
+      <li>Brian Skahan</li>
+      <li>Filip Sufitchi</li>
+      <li>Brian Sutherland</li>
+      <li>Tom von Schwerdtner</li>
+    </ul>
+  </div>
+</metal:block>
