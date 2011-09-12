@@ -11,7 +11,7 @@
 
 .ui-accordion-header {
     background-image: none;
-    background-color: #AA0000;
+    background-color: #00ABB3;
     color: #ffffff;
     font-weight: bold;
     text-align: left;
@@ -19,16 +19,16 @@
     padding-left: 26px;
     font-size: 12px;
     line-height: 16px;
-    border: 1px solid #aa0000;
+    border: 1px solid #00abb3;
 }
 
 .ui-state-hover {
-    border: 1px solid #540000;
-    background-color: #540000;
+    border: 1px solid #005355;
+    background-color: #005355;
 }
 
 .ui-state-active {
-    background-color: #540000;
+    background-color: #005355;
     border: none;
 }
 
@@ -64,7 +64,7 @@
 }
 
 .ui-dialog .ui-dialog-titlebar {
-    background: #aa0000;
+    background: #00abb3;
     padding-left: 8px;
 }
 

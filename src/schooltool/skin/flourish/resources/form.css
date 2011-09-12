@@ -89,7 +89,7 @@ form fieldset .row > .error {
 }
 
 form fieldset .row > .error .error {
-    color: #AA0000;
+    color: #00ABB3;
     font-size: 12px;
     padding-left: 16px;
     background: transparent url(error-icon.png) no-repeat scroll top left;
@@ -113,7 +113,7 @@ form fieldset .row .widget input.password-widget:focus,
 form fieldset .row .widget input[type="password"]:focus,
 form fieldset .row .widget input[type="text"].error,
 form fieldset .row .widget input[type="password"].error {
-    border: 2px solid #aa0000;
+    border: 2px solid #00abb3;
     height: 18px;
     width: 284px;
 }
@@ -139,7 +139,7 @@ form fieldset .row .widget textarea.textarea-widget {
 
 form fieldset .row .widget textarea.textarea-widget:focus,
 form fieldset .row .widget textarea.error {
-    border: 2px solid #aa0000;
+    border: 2px solid #00abb3;
     height: 48px;
     width: 284px;
 }
@@ -161,13 +161,13 @@ form .buttons {
 form .buttons .button-ok:hover,
 form .buttons .button-neutral:hover,
 form .buttons .button-cancel:hover {
-    background-color: #aa0000;
+    background-color: #00abb3;
 }
 
 form .buttons .button-ok:active,
 form .buttons .button-neutral:active,
 form .buttons .button-cancel:active {
-    background-color: #540000;
+    background-color: #005355;
 }
 
 form .buttons .button-ok,
@@ -211,7 +211,7 @@ form .required-info {
 }
 
 form span.required {
-    color: #aa0000;
+    color: #00abb3;
 }
 
 form pre.csv-text {

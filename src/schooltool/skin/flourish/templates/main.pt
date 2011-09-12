@@ -46,9 +46,26 @@
 
 <div class="schooltool">
 
+<div class="super">
+  <tal:block replace="structure view/providers/secondary_navigation|nothing">
+    [ | Secondary | Navigation | Bar | Here | ]
+  </tal:block>
+
+</div>
+
 <div class="header">
 
-  <h1 class="brand">SchoolTool</h1>
+  <h1 class="brand brand-rev">
+    <img class="large" tal:attributes="src context/++resource++schooltool.skin.flourish/logo.png" />
+    <span style="color: #3c4342">school</span><span style="color: #00abb3">tool</span>
+  </h1>
+
+
+  <h1 class="brand">
+    <span style="color: #3c4342">school</span><span style="color: #00abb3">tool</span>
+    <img class="small" tal:attributes="src context/++resource++schooltool.skin.flourish/logo-small.png" />
+  </h1>
+
 
   <tal:block replace="structure view/providers/header_navigation">
     [ | Header | Navigation | Bar | Here | ]
@@ -58,9 +75,12 @@
     [ Breadcrumbs >> go >> here ]
   </tal:block>
 
+<!--
   <tal:block replace="structure view/providers/secondary_navigation|nothing">
     [ | Secondary | Navigation | Bar | Here | ]
   </tal:block>
+-->
+   <ul class="second-nav"></ul>
 
 </div>
 
@@ -133,5 +153,16 @@
 </div>
 
 </body>
+
+<script>
+  $(document).ready(function(){
+  $('.header .brand').click(
+    function() {
+       $('.header').toggleClass('header-rev');
+    }
+  );
+  }
+  );
+</script>
 
 </html>

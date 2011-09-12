@@ -84,7 +84,7 @@
 }
 
 .page ul.third-nav > li.active a {
-    color: #aa0000;
+    color: #00abb3;
 }
 
 /* Page layout */
@@ -137,7 +137,7 @@
 
 .page > .body > .sidebar > .content > .header {
     color: #333333;
-    border-bottom: 1px dotted #aa0000;
+    border-bottom: 1px dotted #00abb3;
     font-size: 14px;
     line-height: 16px;
     padding-bottom: 4px;
@@ -163,5 +163,5 @@
 }
 
 .page > .body > .sidebar > .content > .body > ul.filter > li.active > a {
-    color: #aa0000;
+    color: #00abb3;
 }

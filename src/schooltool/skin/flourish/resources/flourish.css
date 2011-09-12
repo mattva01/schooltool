@@ -42,7 +42,7 @@ h3 {
 }
 
 a, a:link, a:visited, a:active {
-    color: #aa0000;
+    color: #00abb3;
     text-decoration: none;
 }
 
@@ -93,6 +93,7 @@ a.modify img {
 
 /* Layout */
 
+.schooltool > .super,
 .schooltool > .header,
 .schooltool > .page,
 .schooltool > .footer {
@@ -100,6 +101,43 @@ a.modify img {
     position: relative;
     width: 976px;
 }
+
+.schooltool > .super {
+    background-color: white;
+    padding: 4px;
+    height: 16px;
+    z-index: 5;
+}
+
+.super ul.second-nav {
+    font-size: 12px;
+    line-height: 12px;
+    height: 16px;
+    list-style-type: none;
+    right: 16px;
+    position: absolute;
+    z-index: 1;
+}
+
+.super ul.second-nav li {
+    background: none;
+    color: black;
+    display: inline;
+    padding: 0px 2px;
+}
+
+.super ul.second-nav li span {
+    font-weight: bold;
+}
+
+.super ul.second-nav li:after {
+    content: "";
+}
+
+.super ul.second-nav li.last:after {
+    content: "";
+}
+
 
 .schooltool > .header {
     -moz-box-shadow: 0px -3px 4px #bbbbbb;
@@ -154,6 +192,14 @@ a.modify img {
 
 /* Header - main navigation, second navigation, headinfo, breadcrumbs*/
 
+.header > h1.brand img.large {
+    vertical-align: middle;
+}
+.header > h1.brand img.small {
+    left: -12px;
+    vertical-align: top;
+}
+
 .header > h1.brand {
     color: #ffffff;
     font-size: 36px;
@@ -165,10 +211,30 @@ a.modify img {
     z-index: 1;
 }
 
+.header-rev > h1.brand {
+    left: 16px;
+}
+
+.header > h1.brand {
+    display:  block;
+}
+
+.header-rev > h1.brand {
+    display: none;
+}
+.header > h1.brand-rev {
+    display: none;
+}
+
+.header-rev > h1.brand-rev {
+    display: block;
+}
+
+
 .header ul.navigation {
-    background-color: #aa0000;
+    background-color: #e7e4e2;
     height: 64px;
-    padding-left: 16px;
+    padding-left: 15px;
     position: relative;
 
     -moz-border-radius: 0px 0px 4px 4px;
@@ -185,8 +251,15 @@ a.modify img {
     padding: 0 1px;
 }
 
+.header-rev ul.navigation {
+    padding-right: 15px;
+}
+.header-rev ul.navigation li {
+    float: right;
+}
+
 .header ul.navigation li a {
-    color: #ffffff;
+    color: #3c4342;
     display: block;
     font-size: 14px;
     line-height: 16px;
@@ -194,17 +267,19 @@ a.modify img {
 }
 
 .header ul.navigation li a:hover {
-    background: #540000;
+    color: #ffffff;
+    background: #3c4342;
     text-decoration: none;
 }
 
 .header ul.navigation li.active a {
-    background: #540000;
+    color: #ffffff;
+    background: #3c4342;
 }
 
 .header ul.second-nav {
-    background-color: #f7f7f7;
-    height: 40px;
+    background-color: #3c4342;
+    height: 24px;
     margin-left: 16px;
     margin-right: 16px;
     text-align: right;
@@ -245,7 +320,7 @@ a.modify img {
 }
 
 .header ul.second-nav > li.active a {
-    color: #aa0000;
+    color: #00abb3;
 }
 
 .header ul.breadcrumbs {
@@ -263,7 +338,7 @@ a.modify img {
 
 .header ul.breadcrumbs li {
     background: none;
-    color: black;
+    color: #ffffff;
     display: inline-block;
     padding: 0px 2px;
 }
@@ -276,17 +351,21 @@ a.modify img {
     content: "";
 }
 
+.header ul.breadcrumbs li.last {
+    font-weight: bold;
+}
+
 .header ul.breadcrumbs a,
 .header ul.breadcrumbs span {
     display: inline-block;
     font-size: 12px;
     line-height: 16px;
     margin-left: -4px;
-    padding: 12px 2px;
+    padding: 4px 2px;
 }
 
 .header ul.breadcrumbs a {
-    color: #aa0000;
+    color: #ffffff;
 }
 
 /* XXX: temporary fix to display the zc.datetimewidget correctly
