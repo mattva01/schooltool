@@ -55,7 +55,7 @@ not adjacent.
     >>> browser.getLink('Fall').click()
     >>> browser.getLink('Sections').click()
     >>> browser.getLink('Art_1').click()
-    >>> browser.getLink('All Terms').click()
+    >>> browser.getLink('Linked sections').click()
 
     >>> browser.printQuery('id("content-body")//tbody/tr/td//div[1]/a/@href')
     http://localhost/schoolyears/2006-2007/fall/sections/Art_1
@@ -66,7 +66,7 @@ not adjacent.
     >>> browser.getLink('Fall').click()
     >>> browser.getLink('Sections').click()
     >>> browser.getLink('Art_2').click()
-    >>> browser.getLink('All Terms').click()
+    >>> browser.getLink('Linked sections').click()
 
     >>> browser.printQuery('id("content-body")//tbody/tr/td//div[1]/a/@href')
     http://localhost/schoolyears/2006-2007/fall/sections/Art_2
@@ -76,7 +76,7 @@ not adjacent.
     >>> browser.getLink('Fall').click()
     >>> browser.getLink('Sections').click()
     >>> browser.getLink('Art_4').click()
-    >>> browser.getLink('All Terms').click()
+    >>> browser.getLink('Linked sections').click()
 
     >>> browser.printQuery('id("content-body")//tbody/tr/td//div[1]/a/@href')
     http://localhost/schoolyears/2006-2007/fall/sections/Art_4
@@ -87,7 +87,7 @@ Now we'll do the same for the Winter sections.
     >>> browser.getLink('Winter').click()
     >>> browser.getLink('Sections').click()
     >>> browser.getLink('Art_1').click()
-    >>> browser.getLink('All Terms').click()
+    >>> browser.getLink('Linked sections').click()
 
     >>> browser.printQuery('id("content-body")//tbody/tr/td//div[1]/a/@href')
     http://localhost/schoolyears/2006-2007/fall/sections/Art_1
@@ -98,7 +98,7 @@ Now we'll do the same for the Winter sections.
     >>> browser.getLink('Winter').click()
     >>> browser.getLink('Sections').click()
     >>> browser.getLink('Art_2').click()
-    >>> browser.getLink('All Terms').click()
+    >>> browser.getLink('Linked sections').click()
 
     >>> browser.printQuery('id("content-body")//tbody/tr/td//div[1]/a/@href')
     http://localhost/schoolyears/2006-2007/fall/sections/Art_2
@@ -108,7 +108,7 @@ Now we'll do the same for the Winter sections.
     >>> browser.getLink('Winter').click()
     >>> browser.getLink('Sections').click()
     >>> browser.getLink('Art_3').click()
-    >>> browser.getLink('All Terms').click()
+    >>> browser.getLink('Linked sections').click()
 
     >>> browser.printQuery('id("content-body")//tbody/tr/td//div[1]/a/@href')
     http://localhost/schoolyears/2006-2007/winter/sections/Art_3
@@ -119,7 +119,7 @@ Finally the same for the Spring sections.
     >>> browser.getLink('Spring').click()
     >>> browser.getLink('Sections').click()
     >>> browser.getLink('Art_1').click()
-    >>> browser.getLink('All Terms').click()
+    >>> browser.getLink('Linked sections').click()
 
     >>> browser.printQuery('id("content-body")//tbody/tr/td//div[1]/a/@href')
     http://localhost/schoolyears/2006-2007/fall/sections/Art_1
@@ -130,7 +130,7 @@ Finally the same for the Spring sections.
     >>> browser.getLink('Spring').click()
     >>> browser.getLink('Sections').click()
     >>> browser.getLink('Art_3').click()
-    >>> browser.getLink('All Terms').click()
+    >>> browser.getLink('Linked sections').click()
 
     >>> browser.printQuery('id("content-body")//tbody/tr/td//div[1]/a/@href')
     http://localhost/schoolyears/2006-2007/spring/sections/Art_3
@@ -139,7 +139,7 @@ Finally the same for the Spring sections.
     >>> browser.getLink('Spring').click()
     >>> browser.getLink('Sections').click()
     >>> browser.getLink('Art_4').click()
-    >>> browser.getLink('All Terms').click()
+    >>> browser.getLink('Linked sections').click()
 
     >>> browser.printQuery('id("content-body")//tbody/tr/td//div[1]/a/@href')
     http://localhost/schoolyears/2006-2007/spring/sections/Art_4
@@ -188,7 +188,7 @@ Just to be sure, we'll make sure the first one is linked to the other terms.
     >>> browser.getLink('Fall').click()
     >>> browser.getLink('Sections').click()
     >>> browser.getLink('Art_1').click()
-    >>> browser.getLink('All Terms').click()
+    >>> browser.getLink('Linked sections').click()
 
     >>> browser.printQuery('id("content-body")//tbody/tr/td//div[1]/a/@href')
     http://localhost/schoolyears/2006-2007/fall/sections/Art_1
