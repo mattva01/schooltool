@@ -115,7 +115,7 @@ class LevelVocabulary(TitledContainerItemVocabulary):
     @property
     def container(self):
         app = ISchoolToolApplication(None)
-        return interfaces.ILevelContainer(app)
+        return interfaces.ILevelContainer(app, {})
 
 
 def levelVocabularyFactory():

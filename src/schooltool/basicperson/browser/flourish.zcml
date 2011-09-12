@@ -666,4 +666,6 @@
       for="schooltool.basicperson.interfaces.IBasicPerson"
       />
 
+  <zope:adapter factory=".person.PasswordValidator" />
+
 </configure>

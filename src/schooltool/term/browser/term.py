@@ -48,6 +48,7 @@ from schooltool.app.browser.cal import month_names
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.calendar.utils import parse_date
 from schooltool.calendar.utils import next_month, week_start
+from schooltool.common.inlinept import InlineViewPageTemplate
 from schooltool.term.interfaces import ITerm, ITermContainer
 from schooltool.term.term import validateTermsForOverlap
 from schooltool.term.term import Term
@@ -652,25 +653,80 @@ class TermRenderer(object):
 
 class FlourishTermsView(flourish.page.Page):
 
-    def years(self):
-        syc = ISchoolYearContainer(self.context)
-        result = []
-        for year in reversed(tuple(syc.values())):
-            info = {
+    @property
+    def title(self):
+        year = self.schoolyear
+        if year is not None:
+            return _('Terms for ${schoolyear}',
+                     mapping={'schoolyear': year.title})
+
+    @property
+    def has_schoolyear(self):
+        return self.schoolyear is not None
+
+    @property
+    def schoolyear(self):
+        schoolyears = ISchoolYearContainer(self.context)
+        result = schoolyears.getActiveSchoolYear()
+        if 'schoolyear_id' in self.request:
+            schoolyear_id = self.request['schoolyear_id']
+            result = schoolyears.get(schoolyear_id, result)
+        return result
+
+    def year(self):
+        year = self.schoolyear
+        if year is not None:
+            return {
                 'title': _(u'School Year: ${year_title}',
                          mapping={'year_title': year.title}),
                 'first': year.first,
                 'last': year.last,
-                'terms': [],
                 'empty': not bool(tuple(year.values())),
                 'canModify': canAccess(year, '__delitem__'),
                 'addurl': absoluteURL(year, self.request) + '/add.html',
                 'alt': _(u'Add a new term to ${year_title}',
                          mapping={'year_title': year.title}),
                 }
+
+    def terms(self):
+        year = self.schoolyear
+        if year is not None:
             for term in reversed(tuple(year.values())):
-                info['terms'].append(term)
-            result.append(info)
+                yield {
+                    'obj': term,
+                    'first': term.first,
+                    'last': term.last,
+                    }
+
+
+class TermsTertiaryNavigationManager(
+    flourish.page.TertiaryNavigationManager):
+
+    template = InlineViewPageTemplate("""
+        <ul tal:attributes="class view/list_class">
+          <li tal:repeat="item view/items"
+              tal:attributes="class item/class"
+              tal:content="structure item/viewlet">
+          </li>
+        </ul>
+    """)
+
+    @property
+    def items(self):
+        result = []
+        schoolyears = ISchoolYearContainer(self.context)
+        active = schoolyears.getActiveSchoolYear()
+        if 'schoolyear_id' in self.request:
+            schoolyear_id = self.request['schoolyear_id']
+            active = schoolyears.get(schoolyear_id, active)
+        for schoolyear in schoolyears.values():
+            url = '%s/terms?schoolyear_id=%s' % (
+                absoluteURL(self.context, self.request),
+                schoolyear.__name__)
+            result.append({
+                    'class': schoolyear.first == active.first and 'active' or None,
+                    'viewlet': u'<a href="%s">%s</a>' % (url, schoolyear.title),
+                    })
         return result
 
 

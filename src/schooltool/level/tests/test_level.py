@@ -60,26 +60,6 @@ def provideApplicationStub():
     return app
 
 
-def doctest_LevelContainerContainer():
-    """Tests for LevelContainerContainer.
-
-    This is a simple container for different level configurations
-    in each schoolyear.
-
-        >>> from schooltool.level.interfaces import ILevelContainerContainer
-        >>> from schooltool.level.level import LevelContainerContainer
-
-        >>> root_level_container = LevelContainerContainer()
-        >>> verifyObject(ILevelContainerContainer, root_level_container)
-        True
-
-        >>> root_level_container[u'2009'] = u'School year 2009 levels'
-        >>> sorted(root_level_container.items())
-        [(u'2009', u'School year 2009 levels')]
-
-    """
-
-
 def doctest_LevelContainer():
     """Tests for LevelContainer.
 
@@ -147,53 +127,10 @@ def doctest_Level():
     """
 
 
-def doctest_VivifyLevelContainerContainer():
-    """Tests for VivifyLevelContainerContainer.
-
-    This is a simple mixin to ensure the top level container is created.
-
-        >>> from schooltool.level.level import VivifyLevelContainerContainer
-
-        >>> app = ISchoolToolApplication(None)
-        >>> mixin = VivifyLevelContainerContainer()
-
-    As a mixin, it expects child classes to set the app attribute.
-
-        >>> mixin.app = app
-
-    Let's check if container is created.
-
-        >>> app.keys()
-        []
-
-        >>> mixin()
-        >>> app.keys()
-        ['schooltool.level.level']
-
-        >>> level_key = app.keys()[0]
-
-        >>> from schooltool.level.interfaces import ILevelContainerContainer
-        >>> verifyObject(ILevelContainerContainer, app[level_key])
-        True
-
-    Once the container is created, it is not replaced.
-
-        >>> app[level_key]['1'] = u'One'
-
-        >>> mixin = VivifyLevelContainerContainer()
-        >>> mixin.app = app
-        >>> mixin()
-
-        >>> list(app[level_key].items())
-        [(u'1', u'One')]
-
-    """
-
-
 def doctest_LevelVocabulary():
     """Tests for LevelVocabulary.
 
-    Vocabulary of levels for contexts that can be adapted to ISchoolYear.
+    Vocabulary of levels:
 
         >>> from zope.schema.interfaces import IVocabularyTokenized
         >>> from schooltool.level.level import Level
@@ -207,7 +144,8 @@ def doctest_LevelVocabulary():
         >>> verifyObject(IVocabularyTokenized, vocabulary)
         True
 
-    When the context cannot be adapted to ISchoolYear, the vocabulary is empty.
+    If the ISchoolToolApplication object cannot be adapted to
+    ILevelContainer, the vocabulary is empty:
 
         >>> vocabulary.container
         {}
@@ -236,18 +174,6 @@ def doctest_LevelVocabulary():
 
     Let's provide the needed adapters.
 
-        >>> from datetime import date
-        >>> from schooltool.schoolyear.interfaces import ISchoolYear
-        >>> from schooltool.schoolyear.schoolyear import SchoolYear
-
-        >>> schoolyear = SchoolYear(
-        ...     "2005", date(2005, 9, 1), date(2005, 12, 30))
-
-        >>> provideAdapter(
-        ...     lambda ignored: schoolyear,
-        ...     adapts=(ContextStub, ),
-        ...     provides=ISchoolYear)
-
         >>> from schooltool.level.interfaces import ILevelContainer
         >>> from schooltool.level.level import LevelContainer
 
@@ -257,7 +183,7 @@ def doctest_LevelVocabulary():
 
         >>> provideAdapter(
         ...     lambda ignored: levels,
-        ...     adapts=(ISchoolYear, ),
+        ...     adapts=(ISchoolToolApplication, ),
         ...     provides=ILevelContainer)
 
     Now we can use the vocabulary.
@@ -284,14 +210,6 @@ def doctest_LevelVocabulary():
 
         >>> expand_term(vocabulary.getTermByToken('basic-'))
         ('basic-', <schooltool.level.level.Level ...>, u'Basic')
-
-    Note that levels from other schoolyears and so on are not considered
-    part of the vocabulary.
-
-        >>> other_level = Level(levels['basic'].title)
-        >>> other_level.__name__ = 'basic'
-        >>> other_level in vocabulary
-        False
 
     """
 
