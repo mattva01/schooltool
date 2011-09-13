@@ -2,6 +2,19 @@
 CHANGES
 =======
 
+1.9.0 (unreleased)
+------------------
+
+New, much improved look for SchoolTool.
+
+API changes
++++++++++++
+
+- Timetables rewrite
+- Pluggable traverser refactoring, traversers lost redundant request parameter
+- Developer: enhanced ST tal API with schooltool:content
+
+
 1.7.0 (unreleased)
 ------------------
 
@@ -27,12 +40,6 @@ Bugfixes
   the required paste.ini file.
   NOTE: run ``make-schooltool-instance instance`` to fix ``instance`` if it does
   not start.
-
-ST API changes
-++++++++++++++
-
-- Pluggable traverser refactoring, traversers lost redundant request parameter
-- Developer: enhanced ST tal API with schooltool:content
 
 
 1.6.0 (2011-04-25)
