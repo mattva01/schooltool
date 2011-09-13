@@ -12,6 +12,9 @@
         </div>
       </tal:if>
       <tal:block tal:replace="structure view/table/filter_widget/render" />
+      <h3 tal:condition="view/done_link">
+        <a tal:attributes="href view/done_link" i18n:translate="">Done</a>
+      </h3>
       <tal:block replace="structure batch/render" />
       <tal:block replace="structure view/table/render" tal:condition="batch" />
     </tal:block>

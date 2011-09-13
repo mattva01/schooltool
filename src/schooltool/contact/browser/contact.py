@@ -89,6 +89,15 @@ class ContactContainerAbsoluteURLAdapter(BrowserView):
     __call__ = __str__
 
 
+class FlourishContactContainerView(flourish.containers.TableContainerView):
+    """A flourish Contact Container view."""
+
+    @property
+    def done_link(self):
+        app = ISchoolToolApplication(None)
+        return absoluteURL(app, self.request) + '/manage'
+
+
 class ContactAddView(form.AddForm):
     """Contact add form for basic contact."""
 
