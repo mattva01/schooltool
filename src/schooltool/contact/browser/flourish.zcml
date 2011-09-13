@@ -38,7 +38,7 @@
   <flourish:page
       name="index.html"
       for="schooltool.contact.interfaces.IContactContainer"
-      class="schooltool.skin.flourish.containers.TableContainerView"
+      class=".contact.FlourishContactContainerView"
       permission="schooltool.view"
       />
 

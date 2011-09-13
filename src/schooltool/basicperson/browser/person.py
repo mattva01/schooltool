@@ -105,6 +105,11 @@ class DeletePersonCheckboxColumn(DependableCheckboxColumn):
 class FlourishBasicPersonContainerView(flourish.containers.TableContainerView):
     """A Person Container view."""
 
+    @property
+    def done_link(self):
+        app = ISchoolToolApplication(None)
+        return absoluteURL(app, self.request) + '/manage'
+
     def getColumnsAfter(self):
         username = IndexedLocaleAwareGetterColumn(
             index='__name__',
