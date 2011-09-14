@@ -4,7 +4,6 @@
            i18n_domain="schooltool">
 
   <include package="schooltool.common" />
-  <include package="schooltool.skin" file="datetimewidget.zcml" />
 
   <include package="z3c.autoinclude" file="meta.zcml" />
   <includePlugins package="schooltool" file="meta.zcml" />

@@ -244,7 +244,7 @@ class PasswordValidator(SimpleFieldValidator):
         super(PasswordValidator, self).validate(value)
         confirm_widget = self.view.widgets['confirm']
         confirm_value = self.request.get(confirm_widget.name)
-        if value != confirm_value:
+        if value is not None and value != confirm_value:
             raise PasswordsDontMatch()
 
 
