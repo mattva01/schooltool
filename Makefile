@@ -27,7 +27,7 @@ update:
 	bzr up
 	$(MAKE) buildout BUILDOUT_FLAGS=-n
 
-instance:
+instance: | build
 	bin/make-schooltool-instance instance instance_type=$(INSTANCE_TYPE)
 
 .PHONY: run
@@ -44,7 +44,7 @@ clean:
 	rm -rf bin develop-eggs parts .installed.cfg
 	rm -rf build
 	rm -f ID TAGS tags
-	rm -rf coverage
+	rm -rf coverage ftest-coverage
 	find . -name '*.py[co]' -delete
 	find . -name '*.mo' -delete
 	find . -name 'LC_MESSAGES' -exec rmdir -p --ignore-fail-on-non-empty {} +
