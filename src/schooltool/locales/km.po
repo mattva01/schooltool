@@ -4,16 +4,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: src_schooltool_locales_schooltool-km\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-17 23:49+0300\n"
-"PO-Revision-Date: 2011-04-01 18:32+0000\n"
+"POT-Creation-Date: 2011-09-08 14:13+0300\n"
+"PO-Revision-Date: 2011-04-18 08:52+0000\n"
 "Last-Translator: Khoem Sokhem <khoemsokhem@khmeros.info>\n"
 "Language-Team: Khmer <support@khmeros.info>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-04-08 04:34+0000\n"
-"X-Generator: Launchpad (build 12735)\n"
+"X-Launchpad-Export-Date: 2011-05-27 04:34+0000\n"
+"X-Generator: Launchpad (build 12959)\n"
 "X-Language: km_KH\n"
 "Generated-By: i18nextract.py\n"
 
@@ -640,35 +640,12 @@ msgstr "ដែន​ការ​បកប្រែ"
 msgid "Generations"
 msgstr "ការ​បង្កើត"
 
-#: /src/schooltool/app/browser/configure.zcml:673
-msgid "Browser UI"
-msgstr "កម្មវិធី​រុក​រក​ចំណុច​ប្រទាក់​អ្នក​ប្រើ"
-
-#: /src/schooltool/app/browser/configure.zcml:679
-#: /src/schooltool/app/browser/templates/login.pt:3
-#: /src/schooltool/app/browser/templates/menu_view.pt:3
-msgid "Login"
-msgstr "ចូល"
-
-#: /src/schooltool/app/browser/configure.zcml:678
-#: /src/schooltool/app/browser/configure.zcml:765
+#: /src/schooltool/app/browser/configure.zcml:714
 #: /src/schooltool/devmode/devmode.pt:17
 msgid "Errors"
 msgstr "កំហុស"
 
-#: /src/schooltool/app/browser/configure.zcml:690
-msgid "Application"
-msgstr "កម្មវិធី"
-
-#: /src/schooltool/app/browser/configure.zcml:696
-msgid "Calendar Widget"
-msgstr "ធាតុ​ក្រាហ្វិក​ប្រតិទិន"
-
-#: /src/schooltool/app/browser/configure.zcml:702
-msgid "Templates"
-msgstr "ពុម្ព"
-
-#: /src/schooltool/app/browser/configure.zcml:781
+#: /src/schooltool/app/browser/configure.zcml:730
 msgid "Configure"
 msgstr "កំណត់​រចនា​សម្ព័ន្ធ"
 
@@ -1382,6 +1359,11 @@ msgstr "ក្រុម"
 msgid "Levels"
 msgstr "កម្រិត"
 
+#: /src/schooltool/app/browser/templates/login.pt:3
+#: /src/schooltool/app/browser/templates/menu_view.pt:3
+msgid "Login"
+msgstr "ចូល"
+
 #: /src/schooltool/app/browser/templates/login.pt:8
 msgid "Your session has expired."
 msgstr "សម័យ​របស់​អ្នក​បាន​ផុត​កំណត់ ។"
@@ -1761,457 +1743,6 @@ msgstr "ទិន្នន័យ CSV"
 msgid "submit-button"
 msgstr "ប៊ូតុង​ដាក់​ស្នើ"
 
-#: /src/schooltool/app/configure.zcml:340
-msgid "Security (General)"
-msgstr "សុវត្ថិភាព (ទូទៅ)"
-
-#: /src/schooltool/app/configure.zcml:355
-msgid "Booking Resources"
-msgstr "ធនធាន​សៀវភៅ"
-
-#: /src/schooltool/app/help/admin.pt:6
-msgid "SchoolTool Administration"
-msgstr "គណៈ​គ្រប់គ្រង​ SchoolTool"
-
-#: /src/schooltool/app/help/admin.pt:8
-msgid ""
-"<h1>SchoolTool Administration</h1> <p>Schools have complex structures, "
-"spanning the organization of people, pedagogy, time and physical resources. "
-"Unfortunately, this means that an application that seeks to model these "
-"processes, like SchoolTool, is also complex, and the process of setting up "
-"an individual school in SchoolTool is necessarily an involved one.</p> "
-"<p>This branch of the help tree contains items relevant to administrators "
-"configuring SchoolTool, but not end users.</p>"
-msgstr ""
-"<h1>គណៈ​គ្រប់គ្រង​ SchoolTool​</h1> <p>សាលា​មាន​រចនាសម្ព័ន្ធ​ស្មុគស្មាញ ពង្រីក​វិសាល​ភាព​ការ​គ្រប់គ្រង​"
-"មនុស្ស គរុកោសល្យ ពេលវេលា និង​ធនធាន​មនុស្ស ។ ជា​ភាព​លំបាក នេះ​មាន​ន័យ​ថា​កម្មវិធី​ដែល​រកមើល​ម៉ូដែល​"
-"ដំណើរការ​ទាំងអស់​នេះ ដូចជា SchoolTool ក៏​មាន​លក្ខណៈ​ស្មុគស្មាញ​ដែរ ហើយ​ដំណើរការ​នៃ ការ​រៀបចំ​នៅ​"
-"ក្នុង SchoolTool ចាំបាច់​កម្មវិធី​ដែល​ពាក់ព័ន្ធ​មួយ ។</p> <p>ផ្នែក​នៃ​មែកធាង​ជំនួយ​នេះ​មាន​ធាតុ​ដែល​"
-"ទាក់ទង​នឹង​ SchoolTool កំណត់​រចនាសម្ព័ន្ធ​របស់​​គណៈ​​គ្រប់គ្រង ប៉ុន្តែ​មិន​សម្រាប់​អ្នក​ប្រើ​ទេ ។</p>"
-
-#: /src/schooltool/app/help/calendar_selection.pt:6
-#: /src/schooltool/app/help/configure.zcml:97
-msgid "Calendar Selection"
-msgstr "ការ​ជ្រើស​ប្រតិទិន"
-
-#: /src/schooltool/app/help/calendar_selection.pt:8
-msgid ""
-"<h1>Calendar Selection</h1> <p>You can add color-coded events from multiple "
-"calendars to your personal calendar view. You can add events from course "
-"sections you attend, groups, other people, or even resources like classrooms "
-"or projectors.</p> <p>Some calendars are private or limited to certain "
-"groups.</p> <p>On the calendar selection form you are given lists of all the "
-"calendars available to you. This might be a long list.</p> <p>The "
-"\"SchoolTool site-wide calendar\" is intended to be used as the official "
-"public calendar of the school.</p> <h3>How do I...</h3> <ul> "
-"<li><strong>Select or unselect several individual calendars of one type:</"
-"strong> If you press the <code>Ctrl</code> button on your keyboard while you "
-"select calendars from a list with your mouse, you can select multiple "
-"calendars.</li> <li><strong>Select a range of calendars of one type:</"
-"strong> If you press the <code>Shift</code> key while clicking on calendars, "
-"you can select a range.</li> </ul>"
-msgstr ""
-"<h1>ការ​ជ្រើស​ប្រតិទិន</h1> <p>អ្នក​អាច​បន្ថែម​ព្រឹត្តិការណ៍​កូដ​ដែល​មាន​ពណ៌​ពី​ប្រតិទិន​ជា​ច្រើន​ទៅកាន់​ទិដ្ឋភាព​"
-"ប្រតិទិន​ផ្ទាល់​ខ្លួន​របស់​អ្នក ។ អ្នក​អាច​បន្ថែម​ព្រឹត្តិការណ៍​ពី​ការ​ជ្រើស​រើស​វគ្គសិក្សា​ដែល​អ្នក​​ចូលរួម ក្រុម មនុស្ស​"
-"ផ្សេងៗ​ទៀត ឬ​ធនធាន​ព្រឹត្តិការណ៍​ដូចជា​ថ្នាក់​រៀន​ ឬ​អ្នក​ធ្វើគម្រោង ។</p> <p>ប្រតិទិន​មួយ​ចំនួន​គឺ​ជា​លក្ខណៈ​"
-"ឯកជន ឬ​មាន​ដែន​កំណត់​ទៅ​ក្រុម​ជាក់លាក់ ។</p> <p>នៅ​លើ​សំណុំ​បែបបទ​​ជម្រើស​ប្រតិទិន​ដែល​អ្នក​ត្រូវ​បាន​ផ្ដល់​ឲ្យ​​បញ្ជី​"
-"ប្រតិទិន​ដែល​អ្នក​អាច​ប្រើ​បានទាំងអស់ ។ វា​អាច​ជា​បញ្ជី​វែង ។</p> <p> \"SchoolTool site-wide "
-"calendar\" ត្រូវ​បាន​​បម្រុង​ទុក​ប្រើ​ជា​ប្រតិទិន​ផ្លូវការ​ជា​សាធារណៈ​របស់​សាលារៀន ។</p> <h3>តើ​ខ្ញុំ​"
-"គួរ...</h3> <ul> <li><strong>ជ្រើស ឬ​មិន​ជ្រើស​ប្រតិទិន​នីមួយៗ​នៃ​ប្រភេទ​មួយ ៖</strong> ប្រសិនបើ​"
-"អ្នក​ចុច​​គ្រាប់ចុច <code>Ctrl</code> នៅ​លើ​ក្ដារចុច​របស់​អ្នក​ខណៈ​ពេល​អ្នក​ជ្រើស​ប្រតិទិន​ពី​បញ្ជី​​ដោយ​ប្រើ​"
-"កណ្ដុរ​របស់​អ្នក អ្នក​អាច​ជ្រើស​ប្រតិទិន ។</li> <li><strong>ជ្រើស​ជួរ​ប្រតិទិន​របស់​ប្រភេទ​មួយ ៖</"
-"strong> ប្រសិនបើ​អ្នក​ចុច​គ្រាប់ចុច​ <code>ប្ដូរ(Shift)</code> ខណៈ​ពេល​ដែល​ចុច​លើ​ប្រតិទិន អ្នក​អាច​"
-"ជ្រើសជួរ ។</li> </ul>"
-
-#: /src/schooltool/app/help/calendaring.pt:6
-msgid "Calendaring in SchoolTool"
-msgstr "ប្រតិទិន​ក្នុង SchoolTool"
-
-#: /src/schooltool/app/help/calendaring.pt:8
-msgid ""
-"<h1>Calendaring in SchoolTool</h1> <p>SchoolTool includes a full-featured "
-"calendaring system, similar to Apple iCal or Google Calendar, but capable of "
-"representing complex school timetables, including rotating schedules. "
-"SchoolTool is also useful for simple resource scheduling, allowing you to "
-"manage room assignments, and booking shared resources like computers or "
-"projectors. Each person, group, course section or resource has its own "
-"calendar. You may integrate multiple calendars into your personal calendar "
-"views.</p> <h3>Parts of the standard calendar views</h3> <ul> "
-"<li><strong>Calendar table:</strong> fills the main (lower-right) part of "
-"the page. This represents the calendar for one day, week, month or year, "
-"depending on the view..</li> <li><strong>Calendar navigation bar:</strong> "
-"immediately above the calendar table. Allows you to navigate forward or "
-"backward in time, or to return to the current time.</li> "
-"<li><strong>Calendar title:</strong> immediately above the calendar "
-"navigation bar, lists the owner of this calendar and the date for this \"page"
-"\" of the calendar.</li> <li><strong>Left sidebar:</strong> for all "
-"calendars, this contains a <code>Jump to...</code> section containing menus "
-"and links to allow you to quickly navigate to a specific month, year or "
-"date. <br /> If you are logged in and viewing your own calendar, you will "
-"also see a <code>Calendars</code> section at the top of the sidebar which "
-"allows you to \"overlay\" events from other calendars in this view. You may "
-"see calendars for classes you teach or attend listed here already.</li> "
-"<li><strong>Day/week/month/year buttons:</strong> These buttons allow you to "
-"switch between daily, weekly, monthly and annual views.</li> </ul>"
-msgstr ""
-"<h1>បង្កើត​ប្រតិទិន​នៅ​ក្នុង SchoolTool​</h1> <p>SchoolTool រួម​មាន​ប្រព័ន្ធ​បង្កើត​ប្រតិទិន​ដែល​មាន​"
-"លក្ខណៈ​សម្បត្តិ​ពេញលេញ ដូច​ទៅ​នឹង Apple iCal ឬ​ប្រតិទិន Google ប៉ុន្តែ​អាច​តំណាង​កាលវិភាគ​សាលា​"
-"ស្មុគស្មាញ រួម​មាន​ផ្លាស់ប្ដូរ​កាលវិភាគ ។ SchoolTool ក៏​មាន​ប្រយោជន៍​ផង​ដែរ​សម្រាប់​ការ​កំណត់​ពេលវេលា​"
-"ធនធាន​ធម្មតា ដោយ​អនុញ្ញាត​ឲ្យ​អ្នក​គ្រប់គ្រង​ការ​ផ្ដល់​បន្ទប់ និង​កក់​ធនធាន​រួម​ដូចជា កុំព្យូទ័រ ឬ​ឧបករណ៍​បញ្ចាំង​"
-"ស្លាយ ។ មនុស្ស​ ក្រុម ឬ​ផ្នែក​នៃ​វគ្គសិក្សា​នីមួយៗ​ ឬ​ធនធាន​មាន​ប្រតិទិន​ផ្ទាល់​របស់​វា ។ អ្នក​អាច​រួម​បញ្ចូល​"
-"ប្រតិទិន​ក្នុង​ទិដ្ឋភាព​ប្រតិទិន​ផ្ទាល់​ខ្លួន​របស់​អ្នក ។</p> <h3>ផ្នែក​របស់​ទិដ្ឋភាព​ប្រតិទិន​ស្តង់ដារ</h3> "
-"<ul> <li><strong>តារាង​ប្រតិទិន ៖</strong> បំពេញ​ផ្នែក (ខាង​ក្រោម-ខាង​ស្ដាំ) នៃ​ទំព័រ ។ វា​"
-"តំណាង​ឲ្យ​ប្រតិទិន​សម្រាប់​មួយ​ថ្ងៃ មួយ​សប្ដាហ៍ មួយ​ខែ ឬ​មួយ​ឆ្នាំ​ ដោយ​អាស្រ័យ​លើ​ទិដ្ឋភាព ។</li> "
-"<li><strong>របារ​រុករក​ប្រតិទិន ៖</strong> នៅ​​ខាង​លើ​តារាង​ប្រតិទិន ។ អនុញ្ញាត​ឲ្យ​អ្នក​រុករក​ទៅ​មុខ "
-"ឬ​ថយក្រោយ​ក្នុង​ពេលវេលា ឬ​ត្រឡប់​ទៅ​ពេលវេលា​បច្ចុប្បន្ន ។</li> <li><strong>ចំណង​ជើង​ប្រតិទិន ៖</"
-"strong> ​នៅ​​ខាង​លើ​របារ​រុករក​ប្រតិទិន រាយ​ម្ចាស់​​ប្រតិទិន​នេះ និង​កាលបរិច្ឆេទ​សម្រាប់ \"ទំព័រ\" នៃ​"
-"ប្រតិទិន ។</li> <li><strong>របារ​ចំហៀង​ខាង​ឆ្វេង ៖</strong> សម្រាប់​ប្រតិទិន វា​មាន​ផ្នែក "
-"<code>លោត​ទៅ...</code> មាន​ម៉ឺនុយ និង​តំណ​ដើម្បី​អនុញ្ញាត​ឲ្យ​រក​ខែ ឆ្នាំ ឬ​កាលបរិច្ឆេទ​ជាក់លាក់​យ៉ាង​រហ័ស "
-"។ <br /> ប្រសិនបើ​អ្នក​ត្រូវ​បាន​ចូល​ក្នុង​ ហើយ​មើល​ប្រតិទិន​ផ្ទាល់​របស់​អ្នក អ្នក​នឹង​ឃើញ​​ផ្នែក<code>ប្រតិទិន</"
-"code> នៅ​កំពូល​នៃ​របារ​ចំហៀង​ដែល​អនុញ្ញាត​ឲ្យ​អ្នក​មាន​ព្រឹត្តិការណ៍ \"ត្រួត​គ្នា\" ពី​ប្រតិទិន​ផ្សេង​នៅ​ក្នុង​"
-"ទិដ្ឋភាព​នេះ ។ អ្នក​អាច​មើល​ប្រតិទិន​ស្រាប់​ថ្នាក់​ដែល​អ្នក​បង្រៀន ឬ​ចូល​រួម​ដែល​បាន​រាយ​នៅ​ទីនេះ ។</li> "
-"<li><strong>ប៊ូតុង​ថ្ងៃ/សប្ដាហ៍/ឆ្នាំ ៖</strong> ប៊ូតុង​ទាំង​នេះ​អនុញ្ញាត​ឲ្យ​អ្នក​ប្ដូរ​រវាង​ទិដ្ឋភាព​ប្រចាំ​"
-"ថ្ងៃ ខែ និង​ឆ្នាំ ។</li> </ul>"
-
-#: /src/schooltool/app/help/configure.zcml:13
-msgid "Administration"
-msgstr "គណៈ​គ្រប់គ្រង"
-
-#: /src/schooltool/app/help/configure.zcml:21
-msgid "Organization"
-msgstr "ការចាត់ចែង"
-
-#: /src/schooltool/app/help/configure.zcml:29
-msgid "Calendaring"
-msgstr "ប្រក្រតីទិន"
-
-#: /src/schooltool/app/help/configure.zcml:37
-#: /src/schooltool/app/help/daily_calendar.pt:6
-msgid "Daily Calendar"
-msgstr "ប្រតិទិន​ប្រចាំ​ថ្ងៃ"
-
-#: /src/schooltool/app/help/configure.zcml:47
-#: /src/schooltool/app/help/weekly_calendar.pt:6
-msgid "Weekly Calendar"
-msgstr "ប្រតិទិន​ប្រចាំ​សប្ដាហ៍"
-
-#: /src/schooltool/app/help/configure.zcml:57
-#: /src/schooltool/app/help/monthly_calendar.pt:6
-msgid "Monthly Calendar"
-msgstr "ប្រតិទិន​ប្រចាំ​ខែ"
-
-#: /src/schooltool/app/help/configure.zcml:67
-#: /src/schooltool/app/help/yearly_calendar.pt:6
-msgid "Yearly Calendar"
-msgstr "ប្រតិទិន​ប្រចាំ​ឆ្នាំ"
-
-#: /src/schooltool/app/help/daily_calendar.pt:8
-msgid ""
-"<h1>Daily Calendar</h1> <p>This is the daily view of a calendar. It might be "
-"your calendar, or it might be the calendar of another person, group or "
-"resource in your school. <a href=\"/++help++/schooltool/calendaring\">More "
-"calendaring help...</a></p> <h3>How do I...</h3> <ul> <li><strong>Create an "
-"event:</strong> click in the calendar table at the start time for the event. "
-"Or select <code>New Event</code> from the <code>Actions</code> menu.</li> "
-"<li><strong>Book a resource:</strong> create an event starting at the time "
-"you want to reserve the resource. Select <code>Book Resource</code> in the "
-"Event Information form.</li> <li><strong>Show or hide events in one of the "
-"calendars listed under <code>Calendars</code>:</strong> check or uncheck the "
-"box under <code>Cal</code> and click <code>Apply</code>.</li> "
-"<li><strong>Adding or removing calendars to the <code>Calendars</code> list:"
-"</strong> click on the <code>More...</code> button.</li> <li><strong>access "
-"a iCal format version of the calendar:</strong>: Select <code>Open in iCal</"
-"code> from the Action menu.</li> <li><strong>Access an Atom feed version of "
-"the calendar: </strong> append <code>/atom.xml</code> to the calendar's URL."
-"</li> </ul>"
-msgstr ""
-"<h1>ប្រតិទិន​ប្រចាំ​ថ្ងៃ</h1> <p>នេះ​ជា​ទិដ្ឋភាព​ប្រចាំថ្ងៃ​នៃ​ប្រតិទិន ។ វា​អាច​ជា​ប្រតិទិន​របស់​អ្នក ឬ​វា​"
-"អាច​ជា​ប្រតិទិន​របស់​អ្នក​ផ្សេង ក្រុម ឬ​ធនធាន​ផ្សេង​នៅ​ក្នុង​សាលា​របស់​អ្នក ។ <a href=\"/++help++/"
-"schooltool/calendaring\">ជំនួយ​បង្កើត​ប្រតិទិន​បន្ថែម...</a></p> <h3>តើ​ខ្ញុំ​គួរ...</h3> "
-"<ul> <li><strong>បង្កើត​ព្រឹត្តិការណ៍​មួយ ៖</strong> ចុច​ក្នុង​តារាង​ប្រតិទិន​នៅ​ពេល​ចាប់ផ្ដើម​"
-"ព្រឹត្តិការណ៍ ។ ឬ​ជ្រើស <code>ព្រឹត្តិការណ៍​ថ្មី</code> ពី​ម៉ឺនុយ​ <code>សកម្មភាព</code> ។</li> "
-"<li><strong>កក់​ធនធាន ៖</strong> បង្កើត​ព្រឹត្តិការណ៍​ចាប់ផ្ដើម​នៅ​ពេល​អ្នក​ចង់​បម្រុង​ទុក​​ធនធាន ។ "
-"ជ្រើស <code>កក់​ធនធាន</code> នៅ​ក្នុង​សំណុំ​ព័ត៌មាន​ព្រឹត្តិការណ៍ ។</li> <li><strong>បង្ហាញ ឬ​លាក់​"
-"ព្រឹត្តិការណ៍​ក្នុង​ប្រតិទិន​មួយ​ក្នុង​ចំណោម​ប្រតិទិន​ជា​ច្រើន​ដែល​បាន​រាយ​នៅ​ក្រោម <code>ប្រតិទិន</code> ៖</"
-"strong> គូស​ធីក ឬ​មិន​គូស​ធីក​ប្រអប់​នៅ​ក្រោម <code>Cal</code> ហើយ​​ចុច <code>អនុវត្ត</code> ។</"
-"li> <li><strong>បន្ថែម ឬ​យកចេញ​ពី/ទៅ​បញ្ជី <code>ប្រតិទិន</code> ៖</strong> ចុច​ប៊ូតុង "
-"<code>ផ្សេង​ទៀត...</code> ។</li> <li><strong>ចូល​កំណែ​ទ្រង់ទ្រាយ​របស់ iCal នៃ​ប្រតិទិន​ ៖</"
-"strong>៖ ជ្រើស <code>បើក​ក្នុង iCal​</code> ពី​ម៉ឺនុយ​សកម្មភាព ។</li> <li><strong>ចូល​"
-"ដំណើរការ​កំណែ​មតិ​ព័ត៌មាន​ Atom របស់​ប្រតិទិន ៖ </strong> បន្ថែម <code>/atom.xml</code> ទៅ​ "
-"URL របស់​ប្រតិទិន ។</li> </ul>"
-
-#: /src/schooltool/app/help/event_add.pt:10
-#: /src/schooltool/app/help/event_edit.pt:10
-msgid "This form has a few issues:"
-msgstr "សំណុំ​បែបបទ​នេះ​មាន​បញ្ហា​មួយ​ចំនួន ៖"
-
-#: /src/schooltool/app/help/event_add.pt:12
-msgid ""
-"If you need to reserve a resource, such as a room or a projector, tracked by "
-"SchoolTool at your school, you should create an event for the necessary time "
-"and check the <code>Book Resources</code> checkbox at the bottom of the page."
-msgstr ""
-"ប្រសិនបើ​អ្នក​ត្រូវ​បម្រុង​ទុក​ធនធាន ដូចជា​បន្ទប់ ឬ​​ឧបករណ៍​បញ្ចាំង​ស្លាយ បាន​តាមដាន​ដោយ SchoolTool នៅ​"
-"សាលា​របស់​អ្នក អ្នក​គួរ​បង្កើត​ព្រឹត្តិការណ៍​សម្រាប់​ពេលវេលា​ចាំបាច់ និង​គូស​ធីក​ប្រអប់ <code>ធនធាន​សៀវភៅ</"
-"code> នៅ​បាត​ទំព័រ ។"
-
-#: /src/schooltool/app/help/event_add.pt:16
-#: /src/schooltool/app/help/event_edit.pt:14
-msgid ""
-"The form ignores your preferences for time and date format. You must enter "
-"the event's start time in 24-hour or \"military\" time, and the date is "
-"displayed in year-month-day format."
-msgstr ""
-"សំណុំ​បែបបទ​មិន​អើពើ​ចំណូល​​ចិត្ត​របស់​អ្នក​សម្រាប់​ទ្រង់ទ្រាយ​ពេលវេលា និង​កាលបរិច្ឆេទ ។ អ្នក​ត្រូវ​តែ​បញ្ចូល​"
-"ពេលវេលា​ចាប់ផ្ដើម​របស់​ព្រឹត្តិការណ៍ ២៤ ម៉ោង ឬពេលវេលា​\"ទាហាន\" ហើយ​កាលបរិច្ឆេទ​ត្រូវ​បាន​បង្ហាញ​ក្នុង​"
-"ទ្រង់ទ្រាយ​ថ្ងៃ ខែ ឆ្នាំ ។"
-
-#: /src/schooltool/app/help/event_add.pt:19
-#: /src/schooltool/app/help/event_edit.pt:17
-msgid ""
-"The <code>Location</code> field allows you to enter a description of the "
-"location of the event, but this is not connected to the reservation system. "
-"If your school uses SchoolTool to manage room reservations you need to check "
-"the <code>Book Resources</code> checkbox at the bottom of the form."
-msgstr ""
-"វាល<code>ទីតាំង</code> អនុញ្ញាត​ឲ្យ​អ្នក​បញ្ចូល​សេចក្ដី​ពិពណ៌នា​នៃ​ទីតាំង​របស់​ព្រឹត្តិការណ៍ ប៉ុន្តែ​វា​មិន​ត្រូវ​"
-"បាន​តភ្ជាប់​ទៅ​កាន់​ប្រព័ន្ធ​បម្រុង​ទុក​ទេ ។ ប្រសិនបើ​​សាលា​របស់​អ្នក​ប្រើ SchoolTool ដើម្បី​គ្រប់គ្រង​ការ​បម្រុង​"
-"ទុក​បន្ទប់​ អ្នក​ត្រូវតែ​គូស​ធីក​ប្រអប់ <code>ធនធាន​សៀវភៅ</code> នៅ​បាត​នៃ​សំណុំ​បែបបទ ។"
-
-#: /src/schooltool/app/help/event_add.pt:24
-#: /src/schooltool/app/help/event_edit.pt:22
-msgid ""
-"If your event repeats in some pattern, check the <code>Recurring</code> box "
-"and fill out the new fields that appear. In certain circumstances (like if "
-"you change the original day of a weekly recurring event) you may need to "
-"click the <code>Update form</code> button to update the recurrence fields."
-msgstr ""
-"ប្រសិនបើ​អ្នក​ព្រឹត្តិការណ៍​កើតឡើង​នៅ​ក្នុង​លំនាំ​ខ្លះ គូស​ធីក <code>កើត​ឡើង</code> ហើយ​បំពេញ​វាល​ថ្មី​ដែល​"
-"លេច​​ឡើង ។ នៅ​ក្នុង​កាលៈទេសៈ​ជាក់ស្ដែង (ដូចជា ប្រសិនបើ​អ្នក​ផ្លាស់ប្ដូរ​ថ្ងៃ​ដើម​នៃ​ព្រឹត្តិការណ៍​កើតឡើង​"
-"ប្រចាំ​សប្ដាហ៍) ដែល​អ្នក​អាច​ចុច​ប៊ូតុង <code>ធ្វើ​ឲ្យ​សំណុំ​បែបបទ​ទាន់សម័យ</code> ដើម្បី​ធ្វើ​ឲ្យ​វាល​កើតឡើង​"
-"ទាន់សម័យ ។"
-
-#: /src/schooltool/app/help/event_add.pt:29
-#: /src/schooltool/app/help/event_edit.pt:27
-msgid ""
-"An \"all day\" event does not show up as a 24 hour event. It indicates that "
-"the day as a whole has some significance, like a birthday or holiday."
-msgstr ""
-"ព្រឹត្តិការណ៍ \"ពេញ​មួយ​ថ្ងៃ\" មិន​បង្ហាញ​ជា​ព្រឹត្តិការណ៍ ២៤ ម៉ោង ទេ ។ វា​ចង្អុល​ប្រាប់​ថា ថ្ងៃ​ទាំងមូល​មាន​"
-"ចំណុច​សំខាន់​ដូច​ជា ថ្ងៃ​កំណើត ឬ​ថ្ងៃ​ឈប់​សម្រាក ។"
-
-#: /src/schooltool/app/help/event_add.pt:32
-#: /src/schooltool/app/help/event_edit.pt:30
-msgid ""
-"\"Exception dates\" are specific dates a repeating event skips, such as "
-"holidays."
-msgstr ""
-"\"កាល​បរិច្ឆេទ​លើក​លែង\" គឺ​ជា​កាល​បរិច្ឆេទ​ជាក់លាក់​ដែល​ព្រឹត្តិការណ៍​ធ្វើ​ដដែល​ៗ រំលង ដូច​ជា ថ្ងៃ​ឈប់​"
-"សម្រាក ។"
-
-#: /src/schooltool/app/help/event_edit.pt:12
-msgid ""
-"If you need to edit a resource reservation, click the <code>Book resources</"
-"code> link at the bottom of the form."
-msgstr ""
-"ប្រសិនបើ​អ្នក​ត្រូវការ​កែសម្រួល​ការ​បម្រុង​ទុក​ធនធាន ចុច​តំណ <code>ធនធាន​សៀវភៅ​</code> នៅ​បាត​របស់​សំណុំ​"
-"បែបបទ ។"
-
-#: /src/schooltool/app/help/monthly_calendar.pt:8
-msgid ""
-"<h1>Monthly Calendar</h1> <p>This is the monthly view of a calendar. It "
-"might be your calendar, or it might be the calendar of another person, group "
-"or resource in your school. <a href=\"/++help++/schooltool/calendaring"
-"\">More calendaring help...</a></p> <h3>How do I...</h3> <ul> "
-"<li><strong>View an individual day or event in more detail:</strong> click "
-"on the appropriate day on the calendar.</li> <li><strong>View an individual "
-"week:</strong> Click on the appropriate week number in blue in the leftmost "
-"column of the calendar.</li> <li><strong>Create an event:</strong> select "
-"<code>New Event</code> from the <code>Actions</code> menu.</li> "
-"<li><strong>Show or hide events in one of the calendars listed under "
-"<code>Calendars</code>:</strong> check or uncheck the box under <code>Cal</"
-"code> and click <code>Apply</code>.</li> <li><strong>Adding or removing "
-"calendars to the <code>Calendars</code> list:</strong> click on the "
-"<code>More...</code> button.</li> <li><strong>Make weeks start on the "
-"correct day:</strong> the first day of the week varies in different parts of "
-"the world. If SchoolTool isn't set up correctly for you, click on your name "
-"in the red bar at the top of the page. Then click on the <code>Actions</"
-"code> menu and select <code>Change Preferences</code>. Pick the correct "
-"\"Week starts on\" day and hit <code>Apply</code>.</li> <li><strong>Access a "
-"iCal format version of the calendar:</strong>: select <code>Open in iCal</"
-"code> from the Action menu.</li> </ul>"
-msgstr ""
-"<h1>ប្រតិទិន​ប្រចាំ​ខែ</h1> <p>នេះ​គឺ​ជា​ទិដ្ឋភាព​ប្រចាំ​ខែ​នៃ​ប្រតិទិន ។ វា​អាច​ជា​ប្រតិទិន​របស់​អ្នក ឬ​វា​អាច​"
-"ជា​ប្រតិទិន​របស់​អ្នក​ផ្សេង​ ក្រុម ឬ​ធនធាន​ផ្សេង​នៅ​ក្នុង​សាលា​របស់​អ្នក ។ <a href=\"/++help++/"
-"schooltool/calendaring\">ជំនួយ​បង្កើត​ប្រតិទិន​បន្ថែម...</a></p> <h3>តើ​ខ្ញុំ​គួរ...</h3> "
-"<ul> <li><strong>មើល​ថ្ងៃ​នីមួយៗ​ ឬ​ព្រឹត្តិការណ៍​នៅ​ក្នុង​សេចក្ដី​លម្អិត ៖</strong> ចុច​លើ​ថ្ងៃ​សមរម្យ​នៅ​"
-"ក្នុង​ប្រតិទិន ។</li> <li><strong>មើល​សប្ដាហ៍​នីមួយៗ ៖</strong> ចុច​លើ​លេខ​សប្ដាហ៍​ដែល​សមរ្យ​នៅ​ក្នុង​"
-"ជួរឈរ​ពណ៌​ខៀវ​ខាង​​ឆ្វេង​បំផុត​របស់​ប្រតិទិន ។</li> <li><strong>បង្កើត​ព្រឹត្តិការណ៍ ៖</strong> ជ្រើស "
-"<code>ព្រឹត្តិការណ៍​ថ្មី</code> ពី​ម៉ឺនុយ <code>សកម្មភាព</code> ។</li> <li><strong>បង្ហាញ​ ឬ​"
-"លាក់​ព្រឹត្តិការណ៍​​នៅក្នុង​ប្រតិទិន​មួយ​​ក្នុង​ចំណោម​ប្រតិទិនជា​ច្រើន​ដែលបាន​រាយ​ក្រោម <code>ប្រតិទិន</code> ៖</"
-"strong> គូស​ធីក ឬ​មិនគូស​ធីក​ប្រអប់​ក្រោម <code>Cal</code> ហើយ​ចុច <code>អនុវត្ត</code> ។</"
-"li> <li><strong>បន្ថែម ឬ​យក​ប្រតិទិន​ចេញ​ពី/ទៅ​បញ្ជី <code>ប្រតិទិន</code> ៖</strong> ចុច​លើ​"
-"ប៊ូតុង <code>ផ្សេង​ទៀត...</code> ។</li> <li><strong>បង្កើត​សប្ដាហ៍​ចាប់ផ្ដើម​នៅ​ថ្ងៃ​បច្ចុប្បន្ន​"
-" ៖ បង្កើត​សប្ដាហ៍​ចាប់ផ្ដើម​នៅ​ថ្ងៃ​ត្រឹមត្រូវ ៖</strong> ថ្ងៃ​ដំបូង​របស់​សប្ដាហ៍​ខុសគ្នា​​ក្នុង​ផ្នែក​ផ្សេង​នៃ​"
-"ពិភព​លោក ។ ប្រសិនបើ SchoolTool មិន​ត្រូវ​បាន​រៀបចំ​ត្រឹមត្រូវ​សម្រាប់​អ្នក​ទេ ចុច​ឈ្មោះ​របស់​អ្នក​នៅ​ក្នុង​របារ​"
-"ពណ៌​ក្រហម​នៅ​ផ្នែក​ខាង​លើ​នៃ​ទំព័រ ។ បន្ទាប់​មក​ចុច​លើ​ម៉ឺនុយ <code>សកម្មភាព</code> ហើយ​ជ្រើស "
-"<code>ផ្លាស់ប្ដូរ​ចំណូល​ចិត្ត</code> ។ ជ្រើស​ \"សប្ដាហ៍​ចាប់ផ្ដើម​ចំ​ថ្ងៃ\" ថ្ងៃ​ដែល​ត្រឹមត្រូវ​ ហើយ​ចុច "
-"<code>អនុវត្ត</code> ។</li> <li><strong>ចូល​​កំណែ​ទ្រង់ទ្រាយ iCal របស់​ប្រតិទិន ៖</strong>៖ "
-"ជ្រើស <code>បើក​​ក្នុង iCal​</code> ពី​ម៉ឺនុយ​សកម្មភាព ។</li> </ul>"
-
-#: /src/schooltool/app/help/org.pt:6
-msgid "SchoolTool Organization"
-msgstr "ការ​រៀបចំ SchoolTool"
-
-#: /src/schooltool/app/help/org.pt:8
-msgid ""
-"<h1>SchoolTool Organization</h1> <p>This branch of the help tree contains "
-"items explaining the basic organization of SchoolTool.</p>"
-msgstr ""
-"<h1>ការ​រៀបចំ SchoolTool​</h1> <p>ផ្នែក​នៃ​មែកធាង​ជំនួយ​នេះ​មាន​ធាតុ​ដែល​ពន្យល់​អំពី​ការ​រៀបចំ​ជា​"
-"មូលដ្ឋាន​របស់ SchoolTool ។</p>"
-
-#: /src/schooltool/app/help/schooltool.pt:8
-msgid ""
-"<h1>SchoolTool</h1> <p>SchoolTool is a free/libre administrative system for "
-"schools around the world, funded by The Shuttleworth Foundation.</p> "
-"<h2>Standard User Interface Conventions in SchoolTool</h2> <ul> "
-"<li><strong>Red top bar</strong></li> <ul> <li><strong>Breadcrumbs:</strong> "
-"the links at the left hand side of the red bar show you where you are in "
-"SchoolTool's object hierarchy. Note that this doesn't necessarily lead you "
-"back to where you came from, but is handy for taking you from more specific "
-"to more general parts of the application.</li> <li><strong>Your name</"
-"strong> (if you're logged in): clicking on your name takes you to a simple "
-"dashboard of relevant links. From this page you can also use the "
-"<code>Actions</code> menu to change preferences and other personal settings."
-"</li> <li><strong>Log in/out:</strong> this logs you in or out. It is a good "
-"idea to log out when you aren't using SchoolTool.</li> <li><strong>Help:</"
-"strong> if there is a help file for the page you're looking at, you'll see "
-"this link.</li> </ul> <li><strong>Menus</strong></li> <ul> "
-"<li><strong>Navigation:</strong> this menu gives you some basic options for "
-"accessing different parts of SchoolTool, such as the index of persons or "
-"courses. What you see here depends on your permissions in the system.</li> "
-"<li><strong>Action:</strong> this menu contains a variety of things that you "
-"can do on the current page. The entries in this menu change considerably "
-"based on what page you're viewing and what permissions you have.</li> </ul> "
-"<li><strong>Above the red bar</strong></li> <ul> <li><strong>Logo & School "
-"Name:</strong> clicking in this area will take you to the top of the "
-"school's site, usually the calendar for the school.</li> "
-"<li><strong>Calendar day/week/month/year views:</strong> if you are viewing "
-"a calendar, you will find icons in the upper right hand corner that will "
-"allow you to switch between calendar views.</li> <li><strong>Devmode menu:</"
-"strong> if you are a site administrator and you've enabled \"devmode\" in "
-"schooltool.conf, you will see a special menu in the upper right hand corner "
-"of the site. You should disable devmode in any production server.</li> </ul> "
-"</ul>"
-msgstr ""
-"<h1>SchoolTool</h1> <p>SchoolTool គឺ​ជា​ប្រព័ន្ធ​គ្រប់គ្រង​ប្រើ​ដោយ​សេរី​សម្រាប់​សាលា​ជុំវិញ​ពិភព​លោក "
-"ដែល​បាន​ឧបត្ថម្ភ​ដោយ​មូលនិធិ Shuttleworth ។​</p> <h2>ការ​បង្កើត​ចំណុច​ប្រទាក់​អ្នក​ប្រើ​ស្តង់ដារ​នៅ​ក្នុង "
-"SchoolTool​</h2> <ul> <li><strong>របារ​ខាង​លើ​ពណ៌​ក្រហម</strong></li> <ul> "
-"<li><strong>Breadcrumbs ៖</strong> តំណ​នៅ​ខាង​ឆ្វេង​ដៃ​នៃ​របារ​ពណ៌​ក្រហម​បង្ហាញ​អ្នក​កន្លែង​ដែល​"
-"អ្នក​ស្ថិត​ក្នុង​ថានានុក្រម​វត្ថុ​របស់ SchoolTool ។ ចំណាំ​ថា​វា​មិន​ចាំបាច់​នាំ​អ្នក​ទៅ​កន្លែង​ដែល​អ្នក​មក​នោះ​ទេ "
-"ប៉ុន្តែ​មាន​ប្រយោជន៍​សម្រាប់​នាំ​អ្នក​ពី​​ផ្នែក​ទូទៅ​ជាក់លាក់​នៃ​កម្មវិធី ។</li> <li><strong>ឈ្មោះ​របស់​អ្នក</"
-"strong> (ប្រសិន​បើ​អ្នក​ចូល)​៖ ចុច​លើ​ឈ្មោះ​របស់​អ្នក​នាំ​អ្នក​ទៅ​ផ្ទាំង​ធម្មតា​នៃ​តំណ​ដែល​ទាក់ទង ។ ពី​ទំព័រ​នេះ​"
-"អ្នក​អាច​ប្រើ​ម៉ឺនុយ <code>សកម្មភាព</code> ដើម្បី​ផ្លាស់ប្ដូរ​ចំណូល​ចិត្ត និង​ការ​កំណត់​ផ្ទាល់​ខ្លួន ។</li> "
-"<li><strong>ចូល/ចេញ ៖</strong> វា​ធ្វើ​ឲ្យ​ចូល ឬ​ចេញ ។ ជា​គំនិត​ដ៏​ល្អ​ដើម្បី​ចេញ​នៅ​ពេល​អ្នក​មិន​ប្រើ​ "
-"SchoolTool ។</li> <li><strong>ជំនួយ ៖</strong> ប្រសិនបើ​​មាន​ឯកសារ​ជំនួយ​សម្រាប់​ទំព័រ​ដែល​អ្នក​"
-"កំពុង​មើល អ្នកនឹង​ឃើញ​តំណ​នេះ ។</li> </ul> <li><strong>ម៉ឺនុយ</strong></li> <ul> "
-"<li><strong>រុករក ៖</strong> ម៉ឺនុយ​នេះ​ផ្ដល់​ឲ្យ​អ្នក​នូវ​ជម្រើស​មូលដ្ឋាន​ដើម្បីចូល​ផ្នែក​ផ្សេង​របស់ "
-"SchoolTool ដូច​ជា​លិបិក្រម​មនុស្ស ឬ​វគ្គសិក្សា ។ អ្វី​ដែល​អ្នក​ឃើញ​នៅ​ទីនេះ​ អាស្រ័យ​លើ​សិទ្ធិ​របស់​អ្នក​នៅ​ក្នុង​"
-"ប្រព័ន្ធ ។</li> <li><strong>សកម្មភាព ៖</strong> ម៉ឺនុយ​នេះ មាន​ធាតុ​ផ្សេងៗ​ដែល​អ្នក​អាច​ធ្វើ​នៅ​"
-"លើ​ទំព័រ​នេះ ។ ធាតុ​នៅ​ក្នុង​ម៉ឺនុយ​នេះ​ផ្លាស់ប្ដូរ​ដោយ​អាស្រ័យ​លើ​ទំព័រ​ដែល​អ្នក​កំពុង​មើល​ និង​សិទ្ធិ​ដែល​អ្នក​មាន ។</"
-"li> </ul> <li><strong>ខាង​លើ​របារ​ពណ៌​ក្រហម</strong></li> <ul> <li><strong>រូប​សញ្ញា "
-"និង​ឈ្មោះ​សាលា ៖</strong> ចុច​នៅ​ក្នុង​ផ្ទៃ​នេះ​នឹង​នាំ​អ្នក​ទៅ​កំពូល​នៃ​តំបន់​បណ្ដាញ​របស់​សាលា តាម​ធម្មតា​"
-"ប្រតិទិន​សម្រាប់​សាលា ។</li> <li><strong>ទិដ្ឋភាព​ប្រតិទិន​ថ្ងៃ/ខែ/ឆ្នាំ ៖</strong> ប្រសិនបើ​អ្នក​"
-"កំពុង​មើល​ប្រតិទិន អ្នក​នឹង​ឃើញ​រូប​តំណាង​នៅ​ក្នុង​​ជ្រុង​ខាង​ស្ដាំ​ ដែល​​នឹង​អនុញ្ញាត​ឲ្យ​ប្ដូរ​ទិដ្ឋភាព​ប្រតិទិន ។</li> "
-"<li><strong>ម៉ឺនុយ Devmode ៖</strong> ប្រសិនបើ​អ្នកជា​ អ្នក​គ្រប់គ្រង​តំបន់​បណ្ដាញ​ ហើយ​អ្នក​បាន​"
-"បើក \"devmode\" នៅ​ក្នុង schooltool.conf អ្នក​ឃើញ​ម៉ឺនុយ​ពិសេស​នៅ​ក្នុង​ជ្រុង​ខាង​ស្ដាំ ខាង​លើ​នៃ​តំបន់​"
-"បណ្ដាញ ។ អ្នក​គួរ​តែ​បិទ​ devmode នៅ​ក្នុង​ម៉ាស៊ីន​បម្រើ​ផលិតកម្ម ។</li> </ul> </ul>"
-
-#: /src/schooltool/app/help/weekly_calendar.pt:8
-msgid ""
-"<h1>Weekly Calendar</h1> <p>This is the weekly view of a calendar. It might "
-"be your calendar, or it might be the calendar of another person, group or "
-"resource in your school. <a href=\"/++help++/schooltool/calendaring\">More "
-"calendaring help...</a></p> <h3>How do I...</h3> <ul> <li><strong>View an "
-"individual day in more detail:</strong> click on the appropriate day in the "
-"blue row of the calendar table.</li> <li><strong>View details about an event "
-"or edit it:</strong> click on the event. If you have the correct permissions "
-"for the event you can edit it.</li> <li><strong>Create an event:</strong> "
-"select the day the event starts and create the event in the daily view.</li> "
-"<li><strong>Show or hide events in one of the calendars listed under "
-"<code>Calendars</code>:</strong> check or uncheck the box under <code>Cal</"
-"code> and click <code>Apply</code>.</li> <li><strong>Adding or removing "
-"calendars to the <code>Calendars</code> list:</strong> click on the "
-"<code>More...</code> button.</li> <li><strong>Make the calendar start on the "
-"correct day:</strong> the first day of the week varies in different parts of "
-"the world. If SchoolTool isn't set up correctly for you, click on your name "
-"in the red bar at the top of the page. Then click on the <code>Actions</"
-"code> menu and select <code>Change Preferences</code>. Pick the correct "
-"\"Week starts on\" day and hit <code>Apply</code>.</li> <li><strong>Access a "
-"iCal format version of the calendar:</strong>: select <code>Open in iCal</"
-"code> from the Action menu.</li> </ul>"
-msgstr ""
-"<h1>ប្រតិទិន​ប្រចាំ​សប្ដាហ៍</h1> <p>នេះ​ជា​​ទិដ្ឋភាព​ប្រចាំ​សប្ដាហ៍​របស់​ប្រតិទិន ។ វា​អាច​ជា​ប្រតិទិន​របស់​អ្នក "
-"ឬ​អាច​ជា​ប្រតិទិន​របស់​អ្នក​ផ្សេង ក្រុម ឬ​ធនធាន​ផ្សេង​នៅ​ក្នុង​សាលា​របស់​​អ្នក ។ <a href=\"/++help++/"
-"schooltool/calendaring\">ជំនួយ​បង្កើត​ប្រតិទិន​ផ្សេង​ទៀត...</a></p> <h3>តើ​ខ្ញុំ​គួរ...</h3> "
-"<ul> <li><strong>មើល​ថ្ងៃ​នីមួយៗ​នៅ​ក្នុង​សេចក្ដី​លម្អិត ៖ </strong> ចុច​លើ​ថ្ងៃ​សមរម្យ​នៅ​ក្នុង​ជួរដេក​"
-"ពណ៌​ខៀវ​របស់​តារាង​ប្រតិទិន ។</li> <li><strong>មើល​​ទិដ្ឋភាព​លម្អិត​អំពី​ព្រឹត្តិការណ៍ ឬ​កែសម្រួល​វា ៖</"
-"strong> ចុច​លើ​ព្រឹត្តិការណ៍ ។ ប្រសិនបើ​អ្នក​បាន​សិទ្ធិ​ត្រឹមត្រូវ​សម្រាប់​ព្រឹត្តិការណ៍​ដែល​អ្នក​អាច​កែសម្រួល​បាន ។"
-"</li> <li><strong>បង្កើត​ព្រឹត្តិការណ៍ ៖</strong> ជ្រើស​ថ្ងៃ​ដែល​ព្រឹត្តិការណ៍​ចាប់ផ្ដើម និង​បង្កើត​"
-"ព្រឹត្តិការណ៍​នៅ​ក្នុង​ទិដ្ឋភាព​ប្រចាំ​ថ្ងៃ ។</li> <li><strong>បង្ហាញ​ ឬ​លាក់​ព្រឹត្តិការណ៍​នៅ​ក្នុង​ប្រតិទិន​មួយ​"
-"ក្នុង​ចំណោម​ប្រតិទិន​ដែល​បាន​រាយ​នៅ​ក្រោម <code>ប្រតិទិន</code> ៖</strong> គូស​ធីក ឬ​មិន​គូស​ធីក​ប្រអប់​នៅ​"
-"ក្រោម<code>Cal</code> ហើយ​ចុច <code>អនុវត្ត</code> ។</li> <li><strong>បន្ថែម ឬ​យក​"
-"ប្រតិទិន​ចេញ​ពី/ទៅ​បញ្ជី <code>ប្រតិទិន</code> ៖</strong> ចុច​លើ​ប៊ូតុង <code>ផ្សេង​ទៀត...</"
-"code> ។</li> <li><strong>បង្កើត​ប្រតិទិន​ដែល​ចាប់ផ្ដើម​នៅ​ថ្ងៃ​ត្រឹមត្រូវ ៖</strong> ថ្ងៃ​ទី​មួយ​នៃ​"
-"សប្ដាហ៍​ខុស​គ្នា​នៅ​ក្នុង​ផ្នែក​ផ្សេងៗ​នៃ​ពិភព​លោក ។ ប្រសិនបើ SchoolTool មិន​កំណត់​ត្រឹមត្រូវ​សម្រាប់​អ្នក​ទេ ចុច​"
-"លើ​ឈ្មោះ​នៅ​ក្នុង​របារ​ពណ៌​ក្រហម​នៅ​ផ្នែក​ខាង​លើ​នៃ​ទំព័រ ។ បន្ទាប់​មក​ចុច​លើ​ម៉ឺនុយ <code>សកម្មភាព</code> "
-"ហើយ​ជ្រើស​ <code>ផ្លាស់ប្ដូរ​ចំណូល​ចិត្ត</code> ។ ជ្រើស​ \"សប្ដាហ៍​ចាប់ផ្ដើម​នៅ\" ថ្ងៃ​ត្រឹមត្រូវ ហើយ​ចុច "
-"<code>អនុវត្ត</code> ។</li> <li><strong>ចូល​កំណែ​ទ្រង់ទ្រាយ iCal របស់​ប្រតិទិន ៖</strong> "
-"៖ ជ្រើស <code>បើក​ក្នុង iCal​</code> ពី​ម៉ឺនុយ​សកម្មភាព ។</li> </ul>"
-
-#: /src/schooltool/app/help/yearly_calendar.pt:8
-msgid ""
-"<h1>Yearly Calendar</h1> <p>This is the year view of a calendar. It might be "
-"your calendar, or it might be the calendar of another person, group or "
-"resource in your school. <a href=\"/++help++/schooltool/calendaring\">More "
-"calendaring help...</a></p> <h3>How do I...</h3> <ul> <li><strong>Know which "
-"days contain events: if the day has a blue background, there is at least one "
-"event that day.</strong></li> <li><strong>View an individual day in more "
-"detail:</strong> click on the day.</li> <li><strong>View an individual month:"
-"</strong> click on the name of the month.</li> <li><strong>Create an event:</"
-"strong> select the day the event starts and create the event in the daily "
-"view.</li> <li><strong>Show or hide events in one of the calendars listed "
-"under <code>Calendars</code>:</strong> check or uncheck the box under "
-"<code>Cal</code> and click <code>Apply</code>.</li> <li><strong>Adding or "
-"removing calendars to the <code>Calendars</code> list:</strong> click on the "
-"<code>More...</code> button.</li> <li><strong>Make the calendar start on the "
-"correct day:</strong> the first day of the week varies in different parts of "
-"the world. If SchoolTool isn't set up correctly for you, click on your name "
-"in the red bar at the top of the page. Then click on the <code>Actions</"
-"code> menu and select <code>Change Preferences</code>. Pick the correct "
-"\"Week starts on\" day and hit <code>Apply</code>.</li> <li><strong>Access a "
-"iCal format version of the calendar:</strong>: select <code>Open in iCal</"
-"code> from the Action menu.</li> </ul>"
-msgstr ""
-"<h1>ប្រតិទិន​ប្រចាំ​ឆ្នាំ</h1> <p>នេះ​ជា​ទិដ្ឋភាព​ឆ្នាំ​របស់​ប្រតិទិន ។ វា​អាច​ជា​ប្រតិទិន​របស់​អ្នក ឬ​វា​អាច​ជា​"
-"ប្រតិទិន​របស់​អ្នក​ផ្សេង ក្រុម​ ឬ​ធនធាន​នៅ​ក្នុង​សាលា​របស់​អ្នក ។ <a href=\"/++help++/schooltool/"
-"calendaring\">ជំនួយ​បង្កើត​ប្រតិទិន​ផ្សេង​ទៀត...</a></p> <h3>តើ​ខ្ញុំ​គួរ...</h3> <ul> "
-"<li><strong>ដឹង​ថា​ថ្ងៃ​ណា​មាន​ព្រឹត្តិការណ៍ ៖ ប្រសិនបើ​ថ្ងៃ​មាន​ផ្ទៃ​ពណ៌​ខៀវ មាន​ព្រឹត្តិការណ៍​យ៉ាង​ហោច​ណាស់​"
-"មួយ​ ។</strong></li> <li><strong>មើល​ថ្ងៃ​នីមួយៗ​នៅ​ក្នុង​សេចក្ដី​លម្អិត ៖</strong> ចុច​លើ​ថ្ងៃ​"
-"នោះ ។</li> <li><strong>មើល​ខែ​នីមួយៗ ៖</strong> ចុច​លើ​ឈ្មោះ​ខែ ។</li> "
-"<li><strong>បង្កើត​ព្រឹត្តិការណ៍ ៖</strong> ជ្រើស​ព្រឹត្តិការណ៍​ថ្ងៃ​ដែល​ចាប់ផ្ដើម និង​បង្កើត​"
-"ព្រឹត្តិការណ៍​នៅ​ទិដ្ឋភាព​ប្រចាំ​ថ្ងៃ ។</li> <li><strong>បង្ហាញ ឬ​​លាក់​ព្រឹត្តិការណ៍​នៅ​ក្នុង​ប្រតិទិន​មួយ​ក្នុង​"
-"ចំណោម​ប្រតិទិន​ដែល​បាន​រាយ​នៅ​ក្រោម <code>ប្រតិទិន</code>៖</strong> គូស​ធីក ឬ​មិន​គូស​ធីក​នៅ​ក្រោម "
-"<code>Cal</code> ហើយ​ចុច <code>អនុវត្ត</code> ។</li> <li><strong>បន្ថែម ឬ​យក​ប្រតិទិន​"
-"ទៅ/ពី​បញ្ជី <code>ប្រតិទិន</code> ៖</strong> ចុច​លើ​ប៊ូតុង​ <code>ច្រើន​ទៀត...</code> ។</li> "
-"<li><strong>បង្កើត​ប្រតិទិន​ចាប់ផ្ដើម​នៅ​ថ្ងៃ​ត្រឹមត្រូវ ៖</strong> ថ្ងៃ​ដំបូង​នៃ​សប្ដាហ៍​ខុសគ្នា​​ក្នុង​ផ្នែក​"
-"ផ្សេងៗ​នៃ​ពិភព​លោក ។ ប្រសិនបើ SchoolTool មិន​ត្រូវ​បាន​កំណត់​ត្រឹមត្រូវ​សម្រាប់​អ្នក​ទេ ចុច​លើ​ឈ្មោះ​របស់​អ្នក​"
-"នៅ​ក្នុង​របារ​ពណ៌​ក្រហម​នៅ​​ផ្នែក​ខាង​លើ​នៃ​ទំព័រ ។ បន្ទាប់​មក​ចុច​លើ​ម៉ឺនុយ​ <code>សកម្មភាព</code> ហើយ​"
-"ជ្រើស <code>ផ្លាស់ប្ដូរ​​ចំណូល​ចិត្ត​</code> ។ ជ្រើស​ \"សប្ដាហ៍​ចាប់ផ្ដើម​នៅ​\" ថ្ងៃ ហើយ​ចុច "
-"<code>អនុវត្ត</code> ។</li> <li><strong>ចូល​​​កំណែ​ទ្រង់ទ្រាយ iCal នៃ​ប្រតិទិន ៖</strong> ៖ "
-"ជ្រើស <code>បើក​ក្នុង iCal​</code> ពី​ម៉ឺនុយ​សកម្មភាព ។</li> </ul>"
-
 #: /src/schooltool/app/interfaces.py:44
 msgid "Form input is not a file object"
 msgstr "ការ​បញ្ចូល​សំណុំ​បែបបទ​មិន​មែន​ជា​វត្ថុ​ឯកសារ​ទេ"
@@ -2308,7 +1839,27 @@ msgstr ""
 "                         ជា '-')\n"
 "  --manage               ធ្វើ​តែ​កិច្ចការ​គ្រប់គ្រង កុំ​រត់​ម៉ា​ស៊ីន​​បម្រើ\n"
 
-#: /src/schooltool/app/main.py:110
+#: /src/schooltool/app/main.py:327
+msgid "Going to background, daemon pid %d"
+msgstr "ទៅកាន់​ផ្ទៃ​ខាង​ក្រោយ ដេមិន %d"
+
+#: /src/schooltool/app/main.py:382
+msgid "Cannot resolve plugin action order:\n"
+msgstr "មិន​​អាច​ដោះស្រាយ​លំដាប់​សកម្មភាព​កម្មវិធី​ជំនួយ​បានទេ ៖\n"
+
+#: /src/schooltool/app/main.py:528
+msgid "Run %s -h for help."
+msgstr "រត់ %s -h សម្រាប់​ជំនួយ ។"
+
+#: /src/schooltool/app/main.py:549
+msgid "%s: daemon mode not supported on your operating system."
+msgstr "%s ៖ មិន​គាំទ្រ​របៀប​ដេមិន​នៅ​លើ​ប្រព័ន្ធ​ប្រតិបត្តិការ​របស់​អ្នក​ទេ ។"
+
+#: /src/schooltool/app/main.py:575
+msgid "Reading configuration from %s"
+msgstr "កំពុង​អាន​ការ​កំណត់​រចនាសម្ព័ន្ធ​ពី %s"
+
+#: /src/schooltool/app/main.py:574
 msgid ""
 "\n"
 "No storage defined in the configuration file.\n"
@@ -2322,37 +1873,11 @@ msgstr ""
 "ប្រសើរ​បើ​អ្នក​កំពុង​ប្រើ​ឯកសារ​កំណត់​រចនាសម្ព័ន្ធ​លំនាំដើម សូម​កែសម្រួល​វា​ឥឡូវ ហើយ\n"
 "មិន​ផ្ដល់​មតិ​យោបល់​របស់​ភាគ​នៃ​ឧបករណ៍​ផ្ទុក ZODB ។\n"
 
-#: /src/schooltool/app/main.py:335
-msgid "Going to background, daemon pid %d"
-msgstr "ទៅកាន់​ផ្ទៃ​ខាង​ក្រោយ ដេមិន %d"
-
-#: /src/schooltool/app/main.py:382
-msgid "Cannot resolve plugin action order:\n"
-msgstr "មិន​​អាច​ដោះស្រាយ​លំដាប់​សកម្មភាព​កម្មវិធី​ជំនួយ​បានទេ ៖\n"
-
-#: /src/schooltool/app/main.py:536 /src/schooltool/app/main.py:580
-#: /src/schooltool/app/main.py:583
-msgid "%s: %s"
-msgstr "%s: %s"
-
-#: /src/schooltool/app/main.py:537
-msgid "Run %s -h for help."
-msgstr "រត់ %s -h សម្រាប់​ជំនួយ ។"
-
-#: /src/schooltool/app/main.py:549
-msgid "%s: daemon mode not supported on your operating system."
-msgstr "%s ៖ មិន​គាំទ្រ​របៀប​ដេមិន​នៅ​លើ​ប្រព័ន្ធ​ប្រតិបត្តិការ​របស់​អ្នក​ទេ ។"
-
-#: /src/schooltool/app/main.py:575
-msgid "Reading configuration from %s"
-msgstr "កំពុង​អាន​ការ​កំណត់​រចនាសម្ព័ន្ធ​ពី %s"
-
-#: /src/schooltool/app/main.py:671
+#: /src/schooltool/app/main.py:666
 msgid "Startup time: %.3f sec real, %.3f sec CPU"
 msgstr "ពេល​វេលា​ចាប់ផ្ដើម ៖ %.3f វិនាទី ពិត​ប្រាកដ %.3f វិនាទី CPU"
 
-#. Default: ""
-#: /src/schooltool/app/main.py:705
+#: /src/schooltool/app/main.py:700
 msgid ""
 "Could not initialize the database:\n"
 "%s"
@@ -3613,6 +3138,70 @@ msgstr "ផ្នែក​ដែល​បង្រៀន"
 msgid "Section of ${course} -- ${section_title} for ${term} of ${schoolyear}"
 msgstr "ផ្នែក​នៃ ${course} -- ${section_title} សម្រាប់ ${term} នៃ ${schoolyear}"
 
+#: /src/schooltool/course/browser/templates/extend_term.pt:4
+msgid "Extend Section to Term"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/extend_term.pt:18
+msgid ""
+"Click \"Extend\" to create a linked section in term \"${from_term_title}\" "
+"containing the students and instructors from section \"${section_title}\" in "
+"term \"${to_term_title}\"."
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/extend_term.pt:27
+msgid "Extend"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/link_existing.pt:4
+msgid "Link Section to Section in Other Term"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/link_existing.pt:13
+#: /src/schooltool/course/browser/templates/link_existing.pt:52
+#: /src/schooltool/course/browser/templates/section_container.pt:39
+#: /src/schooltool/course/browser/templates/unlink_section.pt:13
+#: /src/schooltool/course/browser/templates/unlink_section.pt:28
+msgid "Section"
+msgstr "ផ្នែក"
+
+#: /src/schooltool/course/browser/templates/link_existing.pt:20
+#: /src/schooltool/course/browser/templates/unlink_section.pt:19
+#: /src/schooltool/course/browser/templates/unlink_section.pt:29
+#: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:24
+msgid "Term"
+msgstr "វគ្គ​សិក្សា"
+
+#: /src/schooltool/course/browser/templates/link_existing.pt:21
+msgid "Target Term"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/link_existing.pt:26
+msgid ""
+"Select a section and click 'Link' if you would like to copy and link this "
+"section to the target section."
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/link_existing.pt:30
+msgid ""
+"You may provide part of an instructor's name or username and click 'Filter' "
+"to limit the list of sections to those taught by a matching instructor."
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/link_existing.pt:35
+msgid "You must select a section before clicking 'Link'."
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/link_existing.pt:46
+msgid "Filter"
+msgstr ""
+
+#. Default: "Link"
+#: /src/schooltool/course/browser/templates/link_existing.pt:71
+#: /src/schooltool/course/browser/templates/link_section.pt:130
+msgid "link-section-button"
+msgstr "ប៊ូតុង​តភ្ជាប់​ផ្នែក"
+
 #: /src/schooltool/course/browser/templates/link_section.pt:24
 msgid "Link ${section}, ${term} with a section in ${target_term}"
 msgstr "តភ្ជាប់ ${section} ${term} ដែល​មាន​ផ្នែក​ក្នុង ${target_term}"
@@ -3621,20 +3210,7 @@ msgstr "តភ្ជាប់ ${section} ${term} ដែល​មាន​ផ្�
 msgid "There is no valid term in ${schoolyear} to pick a section from."
 msgstr "មិន​មាន​វគ្គ​ត្រឹមត្រូវ​ក្នុង ${schoolyear} ដើម្បី​រើស​ផ្នែក​ទេ ។"
 
-#. Default: "Link"
-#: /src/schooltool/course/browser/templates/link_section.pt:130
-msgid "link-section-button"
-msgstr "ប៊ូតុង​តភ្ជាប់​ផ្នែក"
-
-#: /src/schooltool/course/browser/templates/section.pt:36
-msgid "Previous: ${course} -- ${section_title} for ${term}"
-msgstr "មុន ៖ ${course} -- ${section_title} សម្រាប់ ${term}"
-
-#: /src/schooltool/course/browser/templates/section.pt:47
-msgid "Next: ${course} -- ${section_title} for ${term}"
-msgstr "បន្ទាប់ ៖ ${course} -- ${section_title} សម្រាប់ ${term}"
-
-#: /src/schooltool/course/browser/templates/section.pt:58
+#: /src/schooltool/course/browser/templates/section.pt:35
 msgid "Change the name or description of this section."
 msgstr "ផ្លាស់ប្ដូរ​ឈ្មោះ ឬ​ការ​ពិពណ៌នា​របស់​ផ្នែក​នេះ ។"
 
@@ -3642,7 +3218,18 @@ msgstr "ផ្លាស់ប្ដូរ​ឈ្មោះ ឬ​ការ​�
 msgid "edit info"
 msgstr "កែ​សម្រួល​ព័ត៌មាន"
 
-#: /src/schooltool/course/browser/templates/section.pt:87
+#: /src/schooltool/course/browser/templates/section.pt:46
+#: /src/schooltool/course/browser/templates/section_edit.pt:60
+msgid "Linked sections"
+msgstr "ផ្នែក​ដែល​តភ្ជាប់"
+
+#: /src/schooltool/course/browser/templates/section.pt:52
+#: /src/schooltool/course/browser/templates/section_edit.pt:72
+#: /src/schooltool/course/browser/templates/section_edit.pt:106
+msgid "${section_title} for ${term}"
+msgstr "${section_title} សម្រាប់ ${term}"
+
+#: /src/schooltool/course/browser/templates/section.pt:65
 msgid "Change the instructors for this section."
 msgstr "ផ្លាស់ប្ដូរ​គ្រូ​សម្រាប់​ផ្នែក​នេះ ។"
 
@@ -3663,14 +3250,6 @@ msgstr "កែ​សម្រួល​នីមួយៗ"
 msgid "Section list for ${term} of ${schoolyear}"
 msgstr "បញ្ជី​ផ្នែក​សម្រាប់ ${term} នៃ ${schoolyear}"
 
-#: /src/schooltool/course/browser/templates/section_container.pt:39
-msgid "Section"
-msgstr "ផ្នែក"
-
-#: /src/schooltool/course/browser/templates/section_edit.pt:60
-msgid "Linked sections"
-msgstr "ផ្នែក​ដែល​តភ្ជាប់"
-
 #: /src/schooltool/course/browser/templates/section_edit.pt:63
 msgid "Previous"
 msgstr "មុន"
@@ -3678,11 +3257,6 @@ msgstr "មុន"
 #: /src/schooltool/course/browser/templates/section_edit.pt:64
 msgid "Section in the previous term."
 msgstr "ផ្នែក​នៅ​ក្នុង​វគ្គ​មុន ។"
-
-#: /src/schooltool/course/browser/templates/section_edit.pt:72
-#: /src/schooltool/course/browser/templates/section_edit.pt:106
-msgid "${section_title} for ${term}"
-msgstr "${section_title} សម្រាប់ ${term}"
 
 #. Default: "Unlink"
 #: /src/schooltool/course/browser/templates/section_edit.pt:75
@@ -3715,33 +3289,31 @@ msgstr "បន្ទាប់"
 msgid "Section in the next term."
 msgstr "ផ្នែក​នៅ​ក្នុង​វគ្គ​បន្ទាប់ ។"
 
-#: /src/schooltool/course/help/course_container.pt:10
-msgid ""
-"<h1>Courses</h1> <p>Use this page to organize courses listed in the system.</"
-"p> <h3>How do I...</h3> <ul> <li><strong>Look for for a course:</strong> Use "
-"the search box to the left of the <code>Find Now</code> button to look "
-"through the entire list of courses for the search criterion. The "
-"<code>Clear</code> button empties the search box of current entries.</li> "
-"<li><strong>Show a list of the different sections of a course:</strong> "
-"click on the name of the course.</li> <li><strong>Show the lists of students "
-"in a particular class:</strong> Click on the <code>teacher -- course</code> "
-"link. The number of students is also listed next to the teacher and the "
-"course.</li> <li><strong>Navigate through the courses:</strong> Separate "
-"<q>batches</q> of the Course list can be accessed through the <code>Next 10</"
-"code> (and <code>Previous</code>) and links in the blue bar. A <code>Show "
-"All</code> button is also there to show all of the courses on a single page."
-"</li> </ul>"
+#: /src/schooltool/course/browser/templates/section_linkage.pt:4
+msgid "All Terms for Section"
 msgstr ""
-"<h1>វគ្គសិក្សា</h1> <p>ប្រើ​ទំព័រ​នេះ​ដើម្បី​រៀបចំ​វគ្គសិក្សា​ដែល​បាន​រាយ​នៅ​ក្នុង​ប្រព័ន្ធ ។</p> <h3>តើ​"
-"ខ្ញុំ​គួរ...</h3> <ul> <li><strong>រក​មើល​វគ្គសិក្សា ៖</strong> ប្រើ​ប្រអប់​ស្វែងរក​នៅ​ខាង​ឆ្វេង​"
-"ប៊ូតុង <code>រក​ឥឡូវ</code> ដើម្បី​រកមើល​បញ្ជី​វគ្គសិក្សា​ទាំង​មូល​សម្រាប់​លក្ខខ័ណ្ឌ​​ស្វែងរក ។ ប៊ូតុង​ "
-"<code>ជម្រះ</code> ជម្រះ​ប្រអប់​ស្វែងរក​នៃ​ធាតុ​បច្ចុប្បន្ន ។</li> <li><strong>បង្ហាញ​បញ្ជី​នៃ​"
-"ផ្នែក​ផ្សេងៗ​របស់​វគ្គសិក្សា ៖</strong> ចុច​លើ​ឈ្មោះវគ្គសិក្សា ។</li> <li><strong>បង្ហាញ​បញ្ជី​សិស្ស​"
-"នៅ​ក្នុង​ថ្នាក់​ជាក់លាក់ ៖</strong> ចុច​លើ​តំណ <code>គ្រូ -- វគ្គសិក្សា</code> ។ ចំនួន​សិស្ស​ក៏​ត្រូវ​បាន​"
-"រាយ​នៅ​ជាប់នឹង​គ្រូ ព្រម​ទាំង​វគ្គសិក្សា ។</li> <li><strong>រកមើល​វគ្គសិក្សា ៖</strong> បំបែក "
-"<q>ក្រុម</q> របស់​បញ្ជី​វគ្គសិក្សា​អាច​ត្រូវ​បាន​ចូល​តាម​រយៈ <code>បន្ទាប់​ទៀត ១០</code> (និង "
-"<code>មុន</code>) ហើយ​តំណ​នៅ​ក្នុង​របារ​ពណ៌​ខៀវ ។ ប៊ូតុង <code>បង្ហាញ​ទាំងអស់</code> ក៏​មាន​នៅ​ទីនោះ​"
-"ដែរ ដើម្បី​បង្ហាញ​វគ្គសិក្សា​ទាំងអស់​នៅ​ក្នុង​ទំព័រ​តែ​មួយ ។</li> </ul>"
+
+#: /src/schooltool/course/browser/templates/section_linkage.pt:42
+msgid "Unlink this Section"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/section_linkage.pt:62
+msgid "Extend to This Term"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/section_linkage.pt:66
+msgid "Link an Existing Section"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/unlink_section.pt:4
+msgid "Unlink Section"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/unlink_section.pt:23
+msgid ""
+"Click 'Unlink' if you would like to remove the link this section has to the "
+"following section(s):"
+msgstr ""
 
 #: /src/schooltool/course/interfaces.py:37
 msgid "Title of the course."
@@ -4262,24 +3834,10 @@ msgstr "ស្វែងរក"
 msgid "Surname"
 msgstr "នាម​ត្រកូល"
 
-#: /src/schooltool/devmode/configure.zcml:27
-msgid "Introspect"
-msgstr "ត្រួត​ពិនិត្យ"
-
-#: /src/schooltool/devmode/configure.zcml:38
-#: /src/schooltool/devmode/devmode.pt:19
-msgid "API Docs"
-msgstr "ឯកសារ API"
-
-#: /src/schooltool/devmode/configure.zcml:50
+#: /src/schooltool/devmode/configure.zcml:52
 #: /src/schooltool/devmode/devmode.pt:20
 msgid "Sample data"
 msgstr "ទិន្នន័យ​គំរូ"
-
-#: /src/schooltool/devmode/configure.zcml:62
-#: /src/schooltool/devmode/devmode.pt:21
-msgid "Setup data"
-msgstr "រៀបចំ​ទិន្នន័យ"
 
 #: /src/schooltool/devmode/devmode.pt:11
 msgid "Developer Tools"
@@ -4288,6 +3846,10 @@ msgstr "ឧបករណ៍​របស់​អ្នកអ​ភិវឌ្ឍ
 #: /src/schooltool/devmode/devmode.pt:18
 msgid "Introspector"
 msgstr "អ្នក​​ត្រួតពិនិត្យ"
+
+#: /src/schooltool/devmode/devmode.pt:19
+msgid "API Docs"
+msgstr "ឯកសារ API"
 
 #: /src/schooltool/email/browser/configure.zcml:54
 msgid "Outgoing Email"
@@ -4888,36 +4450,6 @@ msgstr "គ្រប់គ្រង​សមាជិក​ភាព​របស
 msgid "edit groups"
 msgstr "កែ​សម្រួល​ក្រុម"
 
-#: /src/schooltool/group/help/group_container.pt:8
-msgid ""
-"<h1>Groups</h1> <p>Use this page to keep track of <b>groups</b> of Persons.</"
-"p> <p><b>Groups</b> that have been added are not part of the essential "
-"groups (<b>Teachers</b>, <b>Students</b>, <b>Site Managers</b>, <b>School "
-"Administrators</b>, or <b>Clerks</b>). They can be selected by the checkbox "
-"next to them and removed by pressing the <b>Delete</b> button at the bottom "
-"of the page.</p> <h3>How do I...</h3> <ul> <li><b>Look for for a group:</b> "
-"Use the search box to the left of the <code>Find Now</code> button to look "
-"through the entire list of groups for the search criterion. The <code>Clear</"
-"code> button empties the search box of current entries.</li> <li><b>View the "
-"persons in a certain group:</b> Click on the name of the group.</li> "
-"<li><b>Sort the list:</b> Click on the <code>Title</code> header to change "
-"the order of groups from descending to ascending order, and vice versa.</li> "
-"<li><strong>Browse for a group:</strong> Use the <code>Next 10</code> (and "
-"<code>Previous</code>) and links in the blue bar.</li> <li><strong>Show all "
-"groups:</strong> Click <code>Show All</code> in the blue bar.</li> </ul>"
-msgstr ""
-"<h1>ក្រុម</h1> <p>ប្រើ​ទំព័រ​នេះ​ដើម្បី​​តាមដាន​ <b>ក្រុម</b> មនុស្ស ។</p> <p><b>ក្រុម</b> ដែល​"
-"ត្រូវ​បាន​បន្ថែម​មិនមែន​ជា​ផ្នែក​របស់​ក្រុម​សំខាន់​ទេ (<b>គ្រូ</b> <b>សិស្ស</b> <b>អ្នក​គ្រប់គ្រង​តំបន់</b> "
-"<b>គណៈ​គ្រប់គ្រង​សាលា</b> ឬ<b>ស្មៀន</b>) ។ ពួកគេ​អាច​ត្រូវ​បាន​ជ្រើស​ដោយ​ប្រអប់​គូស​ធីក​នៅ​ជាប់​នឹង​ពួកវា "
-"និង​បាន​យកចេញ​ដោយ​ចុច​ប៊ូតុង <b>លុប</b> នៅ​ផ្នែក​ខាងក្រោម​ទំព័រ ។</p> <h3>តើ​ខ្ញុំ​គួរ​...</h3> <ul> "
-"<li><b>រកមើល​ក្រុម ៖</b> ប្រើ​ប្រអប់​ស្វែងរក​នៅ​ខាង​ឆ្វេង​ប៊ូតុង <code>រក​ឥឡូវ</code> ដើម្បី​មើល​បញ្ជី​"
-"ក្រុម​ទាំង​មូល​សម្រាប់​លក្ខខ័ណ្ឌ​ស្វែងរក ។ ប៊ូតុង<code>ជម្រះ</code> ជម្រះ​ប្រអប់​ស្វែងរក​ធាតុ​បច្ចុប្បន្ន ។</"
-"li> <li><b>មើល​មនុស្ស​នៅ​ក្នុង​ក្រុម​ពិតប្រាកដ ៖</b> ចុច​លើ​ឈ្មោះ​ក្រុម ។</li> <li><b>តម្រៀប​បញ្ជី ៖"
-"</b> ចុច​នៅ​លើ​ក្បាល <code>ចំណង​ជើង</code> ដើម្បី​ផ្លាស់ប្ដូរ​លំដាប់​ក្រុម​ពី​​លំដាប់​ចុះ​ទៅ​លំដាប់​ឡើង និង​ផ្ទុយ​"
-"មក​វិញ ។</li> <li><strong>រក​មើល​ក្រុម ៖</strong> ប្រើ <code>បន្ទាប់​ទៀត ១០</code> "
-"(និង<code>មុន</code>) និង​តំណ​នៅ​ក្នុង​របារ​ពណ៌​ខៀវ ។</li> <li><strong>បង្ហាញ​ក្រុម​ទាំងអស់ ៖</"
-"strong> ចុច <code>បង្ហាញ​ទាំងអស់</code> នៅ​ក្នុង​របារ​ពណ៌​ខៀវ ។</li> </ul>"
-
 #: /src/schooltool/group/interfaces.py:41
 #: /src/schooltool/securitypolicy/interfaces.py:111
 msgid "Title of the group."
@@ -4967,14 +4499,6 @@ msgstr "អ្នក​ដឹក​នាំ​ក្រុម​ និង​�
 msgid "Groups are essentially sets of users."
 msgstr "ក្រុម​គឺ​មាន​សារៈសំខាន់​នៃ​ក្រុម​អ្នក​ប្រើ ។"
 
-#: /src/schooltool/help/configure.zcml:47
-msgid "Contextual Help"
-msgstr "ជំនួយ​បរិបទ"
-
-#: /src/schooltool/help/helplink.pt:2
-msgid "Help"
-msgstr "ជំនួយ"
-
 #: /src/schooltool/level/browser.py:47
 msgid "Add a level"
 msgstr "បន្ថែម​កម្រិត"
@@ -5011,10 +4535,6 @@ msgstr "កម្រិត​អប់រំ"
 #: /src/schooltool/note/configure.zcml:68
 msgid "New Note"
 msgstr "ចំណាំ​ថ្មី"
-
-#: /src/schooltool/note/configure.zcml:100
-msgid "Notes (Rest)"
-msgstr "ចំណាំ (នៅ​សល់)"
 
 #: /src/schooltool/note/interfaces.py:43
 msgid "Title of the note."
@@ -5179,28 +4699,6 @@ msgstr "កែ​សម្រួល​ចំណូល​ចិត្ត​អ្
 msgid "Change preferences for ${user}"
 msgstr "ផ្លាស់ប្ដូរ​ចំណូល​ចិត្ត​សម្រាប់ ${user}"
 
-#: /src/schooltool/person/help/person_container.pt:8
-msgid ""
-"<h1>Persons</h1> <p>Use this page to browse and find individual persons.</p> "
-"<h3>How do I...</h3> <ul> <li><strong>Sort the list:</strong> Click on "
-"<code>First Name</code> or <code>Last Name</code> to sort.</li> "
-"<li><strong>Search for a user:</strong> Use the search field at the top of "
-"the page to look through all of the people in the system. If you want to "
-"filter by group, select the group in the adjacent drop-down list.</li> "
-"<li><strong>View the details of a person:</strong> Click on the name.</li> "
-"<li><strong>Browse for a person:</strong> Use the <code>Next 10</code> (and "
-"<code>Previous</code>) and links in the blue bar.</li> <li><strong>Show all "
-"students:</strong> Click <code>Show All</code> in the blue bar.</li> </ul>"
-msgstr ""
-"<h1>អ្នក​ប្រើ</h1> <p>ប្រើ​ទំព័រ​នេះ​ដើម្បី​រកមើល​អ្នកប្រើ​ម្នាក់ៗ ។</p> <h3>តើ​ខ្ញុំ​គួរ...</h3> "
-"<ul> <li><strong>តម្រៀប​បញ្ជី ៖</strong> ចុច​លើ <code>នាម​ខ្លួន</code> ឬ <code>នាម​"
-"ត្រកូល</code> ដើម្បី​តម្រៀប ។</li> <li><strong>ស្វែងរក​អ្នក​ប្រើ ៖</strong> ប្រើ​វាល​ស្វែងរក​"
-"នៅ​កំពូល​ទំព័រ​ដើម្បី​រក​មើល​មនុស្ស​ទាំងអស់​នៅ​ក្នុង​ប្រព័ន្ធ ។ ប្រសិន​បើ​អ្នក​ចង់​ត្រង​តាម​ក្រុម ជ្រើស​ក្រុម​នៅ​​​ជាប់នឹង​បញ្ជី​"
-"ទម្លាក់​ចុះ ។</li> <li><strong>មើល​សេចក្ដី​លម្អិត​របស់​អ្នកប្រើ ៖ </strong> ចុច​លើ​ឈ្មោះ ។</li> "
-"<li><strong>រកមើល​អ្នកប្រើ ៖</strong> ប្រើ <code>បន្ទាប់​ទៀត ១០</code> (និង "
-"<code>មុន</code>) ហើយ​តំណ​នៅ​ក្នុង​របារ​ពណ៌​ខៀវ ។</li> <li><strong>បង្ហាញ​សិស្ស​ទាំងអស់ ៖</"
-"strong> ចុច <code>បង្ហាញ​ទាំងអស់</code> នៅ​ក្នុង​របារ​ពណ៌​ខៀវ ។</li> </ul>"
-
 #: /src/schooltool/person/interfaces.py:157
 msgid "Time Zone"
 msgstr "តំបន់​ពេល​វេលា"
@@ -5320,16 +4818,12 @@ msgstr "ប្រតិទិន​ជា​សាធារណៈ"
 msgid "Everybody, if the calendar is made public in user preferences."
 msgstr "អ្នក​គ្រប់គ្នា​ បើ​ប្រតិទិន​ត្រូវ​បាន​បង្កើត​​ជា​សាធារណៈ​នៅ​ក្នុង​ចំណូល​ចិត្ត​របស់​​អ្នក​ប្រើ ។"
 
-#: /src/schooltool/relationship/configure.zcml:13
-msgid "Relationships"
-msgstr "ទំនាក់ទំនង"
-
 #: /src/schooltool/report/browser/configure.zcml:8
-#: /src/schooltool/report/browser/configure.zcml:22
-#: /src/schooltool/report/browser/configure.zcml:33
-#: /src/schooltool/report/browser/configure.zcml:44
-#: /src/schooltool/report/browser/configure.zcml:55
-#: /src/schooltool/report/browser/configure.zcml:66
+#: /src/schooltool/report/browser/configure.zcml:23
+#: /src/schooltool/report/browser/configure.zcml:34
+#: /src/schooltool/report/browser/configure.zcml:45
+#: /src/schooltool/report/browser/configure.zcml:56
+#: /src/schooltool/report/browser/configure.zcml:67
 msgid "Reports"
 msgstr "របារការណ៍"
 
@@ -5478,11 +4972,7 @@ msgstr ""
 msgid "Edit equipment"
 msgstr ""
 
-#: /src/schooltool/resource/help/resource_help.pt:6
-msgid "Resource Help"
-msgstr "ជំនួយ​ធនធាន"
-
-#: /src/schooltool/resource/interfaces.py:38
+#: /src/schooltool/resource/interfaces.py:45
 msgid "Title of the resource."
 msgstr "ចំណង​ជើង​ធនធាន ។"
 
@@ -5869,22 +5359,6 @@ msgstr "អ្នក​ប្រើ​ជាន់​ខ្ពស់"
 msgid "The super user - owner of this SchoolTool application."
 msgstr "ម្ចាស់​កម្មសិទ្ធិ​អ្នក​ប្រើ​ជាន់​ខ្ពស់​​នៃ​កម្មវិធី SchoolTool នេះ ។"
 
-#: /src/schooltool/setupdata/setupdata.pt:3
-#: /src/schooltool/setupdata/setupdata.pt:9
-msgid "Initial School Setup Scripts"
-msgstr "ស្គ្រីប​រៀបចំ​សាលា​លើ​ដំបូង"
-
-#: /src/schooltool/setupdata/setupdata.pt:14
-msgid ""
-"Warning: proceeding will populate the database with data generated from "
-"scripts installed on the filesystem of this server. Do not do this if you "
-"have any valuable data in this SchoolTool instance or don't already "
-"understand what this is for."
-msgstr ""
-"ការ​ព្រមាន ៖ កា​រ​ធ្វើ​បន្ត​នឹង​គណនា​មូលដ្ឋាន​ទិន្នន័យ​​ដែល​បាន​បង្កើត​ពី​ស្គ្រីប ដែល​បាន​ដំឡើង​ក្នុង​ប្រព័ន្ធ​ឯកសារ​"
-"នៃ​ម៉ាស៊ីន​បម្រើ​នេះ ។ កុំ​ធ្វើ​វា ប្រសិនបើ​អ្នក​មាន​ទិន្នន័យ​ដែល​មាន​ទិន្នន័យ​មាន​តម្លៃ​​នៅ​ក្នុង​ធាតុ "
-"SchoolTool នេះ ឬ​មិន​យល់​នេះ​ជា​អ្វី ។"
-
 #: /src/schooltool/skin/breadcrumbs.py:76
 msgid "top"
 msgstr "ផ្នែក​ខាង​លើ"
@@ -5939,10 +5413,6 @@ msgstr "អ្នក​អាច​ប្រកប​ខុស​ url"
 #: /src/schooltool/skin/templates/notfound.pt:22
 msgid "You might be trying to access a non-existing page"
 msgstr "អ្នក​អាច​ព្យាយាម​ចូល​ដំណើរការ​​ទំព័រ​ដែល​មិនទាន់​មាន"
-
-#: /src/schooltool/skin/templates/onlinehelp_macros.pt:55
-msgid "SchoolTool Onlinehelp"
-msgstr "ជំនួយ​លើ​បណ្ដាញ​ SchoolTool"
 
 #: /src/schooltool/skin/templates/view_macros.pt:45
 msgid "Log In"
@@ -6220,49 +5690,6 @@ msgstr "ផ្លាស់ប្ដូរ​ព័ត៌មាន​សម្រ
 msgid "Term must begin before it ends."
 msgstr "វគ្គ​ត្រូវ​តែ​ចាប់ផ្ដើម​មុន​វា​បញ្ចប់ ។"
 
-#: /src/schooltool/term/help/configure.zcml:8
-msgid "Add a term"
-msgstr "បន្ថែម​វគ្គ"
-
-#: /src/schooltool/term/help/term_add.pt:6
-msgid "Term Search Help"
-msgstr "ជំនួយ​ស្វែងរក​វគ្គ"
-
-#: /src/schooltool/term/help/term_container.pt:6
-msgid "Terms in SchoolTool"
-msgstr "វគ្គសិក្សា​ក្នុង SchoolTool"
-
-#: /src/schooltool/term/help/term_container.pt:8
-msgid ""
-"<h1>Terms in SchoolTool</h1> <p>SchoolTool supports definition of basic "
-"academic terms, that is, a period of time which defines when sections begin "
-"and end, and when they are evaluated. The current implementation does not "
-"support a hierarchy of terms, for example, a year, which contains two "
-"semesters, which contain two marking periods. You can create several terms, "
-"which may overlap, for example, both semesters and trimesters in the same "
-"school, but you cannot express a relationship between terms.</p> <h3>How do "
-"I...</h3> <ul> <li><strong>Add a term:</strong> Select <code>New Term</code> "
-"from the <code>Actions</code> menu.</li> <li><strong>Edit a term:</strong> "
-"Click on the term. Then select <code>Edit</code> from the <code>Actions</"
-"code> menu.</li> <li><strong>Delete a term:</strong> Check the box next to "
-"the name of the term and click <code>Delete</code>. Only delete terms if you "
-"have made a mistake while creating them but you have not used them yet. You "
-"should <strong>not</strong> delete terms simply because they are over, or "
-"you will lose important data.</li> </ul>"
-msgstr ""
-"<h1>វគ្គសិក្សា​នៅ​ក្នុង SchoolTool​</h1> <p>SchoolTool គាំទ្រ​កា​រ​កំណត់​វគ្គសិក្សា​មូលដ្ឋាន​​​ដែល​កំណត់​​​"
-"ពេល​វេលា​ចាប់ផ្ដើម និង​បញ្ចប់ ​​ហើយ​នៅ​ពេល​ដែល​ពួកវា​ត្រូវ​បាន​វាយតម្លៃ ។ ការ​អនុវត្ត​បច្ចុប្បន្ន​មិន​គាំទ្រ​ថា​"
-"ឋានានុក្រម​នៃ​វគ្គ​សិក្សា​ទេ ឧទាហរណ៍ ឆ្នាំ ដែល​មាន​ពីរ​ឆមាស មាន​រយៈពេល​សម្គាល់​ពីរ ។ អ្នក​អាច​បង្កើត​"
-"វគ្គសិក្សា​ជា​ច្រើន ដែល​អាច​ជាន់​គ្នា ឧទាហរណ៍ ពីរ​ឆមាស​ និង​បី​ឆមាស​នៅ​ក្នុង​សាលា​តែ​មួយ ប៉ុន្តែ​អ្នក​មិន​អាច​"
-"បញ្ជាក់​ទំនាក់ទំនង​រវាង​វគ្គសិក្សា​បានទេ ។</p> <h3>តើ​ខ្ញុំ​គួរ...</h3> <ul> <li><strong>បន្ថែម​"
-"វគ្គសិក្សា ៖</strong> ជ្រើស <code>វគ្គសិក្សា​ថ្មី</code> ពី​ម៉ឺនុយ <code>សកម្មភាព</code> ។</"
-"li> <li><strong>កែសម្រួល​​​វគ្គសិក្សា ៖</strong> ចុច​លើ​វគ្គសិក្សា ។ បន្ទាប់​មក​ជ្រើស "
-"<code>កែសម្រួល</code> ពី​ម៉ឺនុយ <code>សកម្មភាព</code> ។</li> <li><strong>លុប​វគ្គសិក្សា ៖"
-"</strong> គូស​ធីក​ប្រអប់​នៅ​ជាប់​នឹង​ឈ្មោះ​វគ្គសិក្សា ហើយ​ចុច <code>លុប</code> ។ លុប​តែ​វគ្គសិក្សា​ "
-"ប្រសិនបើ​អ្នក​មាន​កំហុស​នៅ​ពេល​បង្កើត​ពួកវា ប៉ុន្តែ​អ្នក​មិន​បាន​ប្រើ​ពួកវា​ទេ ។ អ្នក​ <strong>មិន​គួរ</"
-"strong> លុប​វគ្គសិក្សា​ដោយ​ធម្មតា​ទេ ពីព្រោះ​ពួកវា​ចប់​ហើយ បើ​មិន​ដូច្នេះ​ទេ​ អ្នក​នឹង​បាត់បង់​ទិន្នន័យ​សំខាន់ ។"
-"</li> </ul>"
-
 #: /src/schooltool/term/term.py:306
 msgid "Term date is not in the school year."
 msgstr "កាល​បរិច្ឆេទ​វគ្គ​មិន​នៅ​ក្នុង​ឆ្នាំ​សិក្សា​ទេ ។"
@@ -6537,10 +5964,6 @@ msgstr "មិន​មាន​វគ្គ ឬ​​គម្រោង​ក�
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:22
 msgid "Timetable"
 msgstr "កាល​វិភាគ"
-
-#: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:24
-msgid "Term"
-msgstr "វគ្គ​សិក្សា"
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:34
 msgid "Schema"
@@ -6951,6 +6374,606 @@ msgstr "ផ្លាស់ប្តូរ ការចែកពេល"
 msgid "Supplied passwords are not identical"
 msgstr "ពាក្យ​សម្ងាត់​ដែល​បាន​ផ្ដល់​មិន​ដូច​គ្នា"
 
+#~ msgid "Browser UI"
+#~ msgstr "កម្មវិធី​រុក​រក​ចំណុច​ប្រទាក់​អ្នក​ប្រើ"
+
+#~ msgid "Application"
+#~ msgstr "កម្មវិធី"
+
+#~ msgid "Calendar Widget"
+#~ msgstr "ធាតុ​ក្រាហ្វិក​ប្រតិទិន"
+
+#~ msgid "Templates"
+#~ msgstr "ពុម្ព"
+
+#~ msgid "Security (General)"
+#~ msgstr "សុវត្ថិភាព (ទូទៅ)"
+
+#~ msgid "Booking Resources"
+#~ msgstr "ធនធាន​សៀវភៅ"
+
+#~ msgid "SchoolTool Administration"
+#~ msgstr "គណៈ​គ្រប់គ្រង​ SchoolTool"
+
+#~ msgid ""
+#~ "<h1>SchoolTool Administration</h1> <p>Schools have complex structures, "
+#~ "spanning the organization of people, pedagogy, time and physical "
+#~ "resources. Unfortunately, this means that an application that seeks to "
+#~ "model these processes, like SchoolTool, is also complex, and the process "
+#~ "of setting up an individual school in SchoolTool is necessarily an "
+#~ "involved one.</p> <p>This branch of the help tree contains items relevant "
+#~ "to administrators configuring SchoolTool, but not end users.</p>"
+#~ msgstr ""
+#~ "<h1>គណៈ​គ្រប់គ្រង​ SchoolTool​</h1> <p>សាលា​មាន​រចនាសម្ព័ន្ធ​ស្មុគស្មាញ ពង្រីក​វិសាល​ភាព​ការ​"
+#~ "គ្រប់គ្រង​មនុស្ស គរុកោសល្យ ពេលវេលា និង​ធនធាន​មនុស្ស ។ ជា​ភាព​លំបាក នេះ​មាន​ន័យ​ថា​កម្មវិធី​ដែល​រកមើល​"
+#~ "ម៉ូដែល​ដំណើរការ​ទាំងអស់​នេះ ដូចជា SchoolTool ក៏​មាន​លក្ខណៈ​ស្មុគស្មាញ​ដែរ ហើយ​ដំណើរការ​នៃ ការ​"
+#~ "រៀបចំ​នៅ​ក្នុង SchoolTool ចាំបាច់​កម្មវិធី​ដែល​ពាក់ព័ន្ធ​មួយ ។</p> <p>ផ្នែក​នៃ​មែកធាង​ជំនួយ​នេះ​មាន​"
+#~ "ធាតុ​ដែល​ទាក់ទង​នឹង​ SchoolTool កំណត់​រចនាសម្ព័ន្ធ​របស់​​គណៈ​​គ្រប់គ្រង ប៉ុន្តែ​មិន​សម្រាប់​អ្នក​ប្រើ​ទេ ។</"
+#~ "p>"
+
+#~ msgid "Calendar Selection"
+#~ msgstr "ការ​ជ្រើស​ប្រតិទិន"
+
+#~ msgid ""
+#~ "<h1>Calendar Selection</h1> <p>You can add color-coded events from "
+#~ "multiple calendars to your personal calendar view. You can add events "
+#~ "from course sections you attend, groups, other people, or even resources "
+#~ "like classrooms or projectors.</p> <p>Some calendars are private or "
+#~ "limited to certain groups.</p> <p>On the calendar selection form you are "
+#~ "given lists of all the calendars available to you. This might be a long "
+#~ "list.</p> <p>The \"SchoolTool site-wide calendar\" is intended to be used "
+#~ "as the official public calendar of the school.</p> <h3>How do I...</h3> "
+#~ "<ul> <li><strong>Select or unselect several individual calendars of one "
+#~ "type:</strong> If you press the <code>Ctrl</code> button on your keyboard "
+#~ "while you select calendars from a list with your mouse, you can select "
+#~ "multiple calendars.</li> <li><strong>Select a range of calendars of one "
+#~ "type:</strong> If you press the <code>Shift</code> key while clicking on "
+#~ "calendars, you can select a range.</li> </ul>"
+#~ msgstr ""
+#~ "<h1>ការ​ជ្រើស​ប្រតិទិន</h1> <p>អ្នក​អាច​បន្ថែម​ព្រឹត្តិការណ៍​កូដ​ដែល​មាន​ពណ៌​ពី​ប្រតិទិន​ជា​ច្រើន​ទៅកាន់​"
+#~ "ទិដ្ឋភាព​ប្រតិទិន​ផ្ទាល់​ខ្លួន​របស់​អ្នក ។ អ្នក​អាច​បន្ថែម​ព្រឹត្តិការណ៍​ពី​ការ​ជ្រើស​រើស​វគ្គសិក្សា​ដែល​អ្នក​​"
+#~ "ចូលរួម ក្រុម មនុស្ស​ផ្សេងៗ​ទៀត ឬ​ធនធាន​ព្រឹត្តិការណ៍​ដូចជា​ថ្នាក់​រៀន​ ឬ​អ្នក​ធ្វើគម្រោង ។</p> "
+#~ "<p>ប្រតិទិន​មួយ​ចំនួន​គឺ​ជា​លក្ខណៈ​ឯកជន ឬ​មាន​ដែន​កំណត់​ទៅ​ក្រុម​ជាក់លាក់ ។</p> <p>នៅ​លើ​សំណុំ​បែបបទ​​ជម្រើស​"
+#~ "ប្រតិទិន​ដែល​អ្នក​ត្រូវ​បាន​ផ្ដល់​ឲ្យ​​បញ្ជី​ប្រតិទិន​ដែល​អ្នក​អាច​ប្រើ​បានទាំងអស់ ។ វា​អាច​ជា​បញ្ជី​វែង ។</p> "
+#~ "<p> \"SchoolTool site-wide calendar\" ត្រូវ​បាន​​បម្រុង​ទុក​ប្រើ​ជា​ប្រតិទិន​ផ្លូវការ​ជា​"
+#~ "សាធារណៈ​របស់​សាលារៀន ។</p> <h3>តើ​ខ្ញុំ​គួរ...</h3> <ul> <li><strong>ជ្រើស ឬ​មិន​ជ្រើស​"
+#~ "ប្រតិទិន​នីមួយៗ​នៃ​ប្រភេទ​មួយ ៖</strong> ប្រសិនបើ​អ្នក​ចុច​​គ្រាប់ចុច <code>Ctrl</code> នៅ​លើ​"
+#~ "ក្ដារចុច​របស់​អ្នក​ខណៈ​ពេល​អ្នក​ជ្រើស​ប្រតិទិន​ពី​បញ្ជី​​ដោយ​ប្រើ​កណ្ដុរ​របស់​អ្នក អ្នក​អាច​ជ្រើស​ប្រតិទិន ។</li> "
+#~ "<li><strong>ជ្រើស​ជួរ​ប្រតិទិន​របស់​ប្រភេទ​មួយ ៖</strong> ប្រសិនបើ​អ្នក​ចុច​គ្រាប់ចុច​ <code>ប្ដូរ"
+#~ "(Shift)</code> ខណៈ​ពេល​ដែល​ចុច​លើ​ប្រតិទិន អ្នក​អាច​ជ្រើសជួរ ។</li> </ul>"
+
+#~ msgid "Calendaring in SchoolTool"
+#~ msgstr "ប្រតិទិន​ក្នុង SchoolTool"
+
+#~ msgid ""
+#~ "<h1>Calendaring in SchoolTool</h1> <p>SchoolTool includes a full-featured "
+#~ "calendaring system, similar to Apple iCal or Google Calendar, but capable "
+#~ "of representing complex school timetables, including rotating schedules. "
+#~ "SchoolTool is also useful for simple resource scheduling, allowing you to "
+#~ "manage room assignments, and booking shared resources like computers or "
+#~ "projectors. Each person, group, course section or resource has its own "
+#~ "calendar. You may integrate multiple calendars into your personal "
+#~ "calendar views.</p> <h3>Parts of the standard calendar views</h3> <ul> "
+#~ "<li><strong>Calendar table:</strong> fills the main (lower-right) part of "
+#~ "the page. This represents the calendar for one day, week, month or year, "
+#~ "depending on the view..</li> <li><strong>Calendar navigation bar:</"
+#~ "strong> immediately above the calendar table. Allows you to navigate "
+#~ "forward or backward in time, or to return to the current time.</li> "
+#~ "<li><strong>Calendar title:</strong> immediately above the calendar "
+#~ "navigation bar, lists the owner of this calendar and the date for this "
+#~ "\"page\" of the calendar.</li> <li><strong>Left sidebar:</strong> for all "
+#~ "calendars, this contains a <code>Jump to...</code> section containing "
+#~ "menus and links to allow you to quickly navigate to a specific month, "
+#~ "year or date. <br /> If you are logged in and viewing your own calendar, "
+#~ "you will also see a <code>Calendars</code> section at the top of the "
+#~ "sidebar which allows you to \"overlay\" events from other calendars in "
+#~ "this view. You may see calendars for classes you teach or attend listed "
+#~ "here already.</li> <li><strong>Day/week/month/year buttons:</strong> "
+#~ "These buttons allow you to switch between daily, weekly, monthly and "
+#~ "annual views.</li> </ul>"
+#~ msgstr ""
+#~ "<h1>បង្កើត​ប្រតិទិន​នៅ​ក្នុង SchoolTool​</h1> <p>SchoolTool រួម​មាន​ប្រព័ន្ធ​បង្កើត​ប្រតិទិន​ដែល​"
+#~ "មាន​លក្ខណៈ​សម្បត្តិ​ពេញលេញ ដូច​ទៅ​នឹង Apple iCal ឬ​ប្រតិទិន Google ប៉ុន្តែ​អាច​តំណាង​កាលវិភាគ​សាលា​"
+#~ "ស្មុគស្មាញ រួម​មាន​ផ្លាស់ប្ដូរ​កាលវិភាគ ។ SchoolTool ក៏​មាន​ប្រយោជន៍​ផង​ដែរ​សម្រាប់​ការ​កំណត់​ពេលវេលា​"
+#~ "ធនធាន​ធម្មតា ដោយ​អនុញ្ញាត​ឲ្យ​អ្នក​គ្រប់គ្រង​ការ​ផ្ដល់​បន្ទប់ និង​កក់​ធនធាន​រួម​ដូចជា កុំព្យូទ័រ ឬ​ឧបករណ៍​"
+#~ "បញ្ចាំង​ស្លាយ ។ មនុស្ស​ ក្រុម ឬ​ផ្នែក​នៃ​វគ្គសិក្សា​នីមួយៗ​ ឬ​ធនធាន​មាន​ប្រតិទិន​ផ្ទាល់​របស់​វា ។ អ្នក​អាច​រួម​"
+#~ "បញ្ចូល​ប្រតិទិន​ក្នុង​ទិដ្ឋភាព​ប្រតិទិន​ផ្ទាល់​ខ្លួន​របស់​អ្នក ។</p> <h3>ផ្នែក​របស់​ទិដ្ឋភាព​ប្រតិទិន​ស្តង់ដារ</"
+#~ "h3> <ul> <li><strong>តារាង​ប្រតិទិន ៖</strong> បំពេញ​ផ្នែក (ខាង​ក្រោម-ខាង​ស្ដាំ) នៃ​"
+#~ "ទំព័រ ។ វា​តំណាង​ឲ្យ​ប្រតិទិន​សម្រាប់​មួយ​ថ្ងៃ មួយ​សប្ដាហ៍ មួយ​ខែ ឬ​មួយ​ឆ្នាំ​ ដោយ​អាស្រ័យ​លើ​ទិដ្ឋភាព ។</li> "
+#~ "<li><strong>របារ​រុករក​ប្រតិទិន ៖</strong> នៅ​​ខាង​លើ​តារាង​ប្រតិទិន ។ អនុញ្ញាត​ឲ្យ​អ្នក​រុករក​ទៅ​"
+#~ "មុខ ឬ​ថយក្រោយ​ក្នុង​ពេលវេលា ឬ​ត្រឡប់​ទៅ​ពេលវេលា​បច្ចុប្បន្ន ។</li> <li><strong>ចំណង​ជើង​ប្រតិទិន "
+#~ "៖</strong> ​នៅ​​ខាង​លើ​របារ​រុករក​ប្រតិទិន រាយ​ម្ចាស់​​ប្រតិទិន​នេះ និង​កាលបរិច្ឆេទ​សម្រាប់ \"ទំព័រ\" "
+#~ "នៃ​ប្រតិទិន ។</li> <li><strong>របារ​ចំហៀង​ខាង​ឆ្វេង ៖</strong> សម្រាប់​ប្រតិទិន វា​មាន​"
+#~ "ផ្នែក <code>លោត​ទៅ...</code> មាន​ម៉ឺនុយ និង​តំណ​ដើម្បី​អនុញ្ញាត​ឲ្យ​រក​ខែ ឆ្នាំ ឬ​កាលបរិច្ឆេទ​"
+#~ "ជាក់លាក់​យ៉ាង​រហ័ស ។ <br /> ប្រសិនបើ​អ្នក​ត្រូវ​បាន​ចូល​ក្នុង​ ហើយ​មើល​ប្រតិទិន​ផ្ទាល់​របស់​អ្នក អ្នក​នឹង​ឃើញ​​"
+#~ "ផ្នែក<code>ប្រតិទិន</code> នៅ​កំពូល​នៃ​របារ​ចំហៀង​ដែល​អនុញ្ញាត​ឲ្យ​អ្នក​មាន​ព្រឹត្តិការណ៍ \"ត្រួត​គ្នា"
+#~ "\" ពី​ប្រតិទិន​ផ្សេង​នៅ​ក្នុង​ទិដ្ឋភាព​នេះ ។ អ្នក​អាច​មើល​ប្រតិទិន​ស្រាប់​ថ្នាក់​ដែល​អ្នក​បង្រៀន ឬ​ចូល​រួម​ដែល​"
+#~ "បាន​រាយ​នៅ​ទីនេះ ។</li> <li><strong>ប៊ូតុង​ថ្ងៃ/សប្ដាហ៍/ឆ្នាំ ៖</strong> ប៊ូតុង​ទាំង​នេះ​"
+#~ "អនុញ្ញាត​ឲ្យ​អ្នក​ប្ដូរ​រវាង​ទិដ្ឋភាព​ប្រចាំ​ថ្ងៃ ខែ និង​ឆ្នាំ ។</li> </ul>"
+
+#~ msgid "Administration"
+#~ msgstr "គណៈ​គ្រប់គ្រង"
+
+#~ msgid "Organization"
+#~ msgstr "ការចាត់ចែង"
+
+#~ msgid "Calendaring"
+#~ msgstr "ប្រក្រតីទិន"
+
+#~ msgid "Daily Calendar"
+#~ msgstr "ប្រតិទិន​ប្រចាំ​ថ្ងៃ"
+
+#~ msgid "Weekly Calendar"
+#~ msgstr "ប្រតិទិន​ប្រចាំ​សប្ដាហ៍"
+
+#~ msgid "Monthly Calendar"
+#~ msgstr "ប្រតិទិន​ប្រចាំ​ខែ"
+
+#~ msgid "Yearly Calendar"
+#~ msgstr "ប្រតិទិន​ប្រចាំ​ឆ្នាំ"
+
+#~ msgid ""
+#~ "<h1>Daily Calendar</h1> <p>This is the daily view of a calendar. It might "
+#~ "be your calendar, or it might be the calendar of another person, group or "
+#~ "resource in your school. <a href=\"/++help++/schooltool/calendaring"
+#~ "\">More calendaring help...</a></p> <h3>How do I...</h3> <ul> "
+#~ "<li><strong>Create an event:</strong> click in the calendar table at the "
+#~ "start time for the event. Or select <code>New Event</code> from the "
+#~ "<code>Actions</code> menu.</li> <li><strong>Book a resource:</strong> "
+#~ "create an event starting at the time you want to reserve the resource. "
+#~ "Select <code>Book Resource</code> in the Event Information form.</li> "
+#~ "<li><strong>Show or hide events in one of the calendars listed under "
+#~ "<code>Calendars</code>:</strong> check or uncheck the box under "
+#~ "<code>Cal</code> and click <code>Apply</code>.</li> <li><strong>Adding or "
+#~ "removing calendars to the <code>Calendars</code> list:</strong> click on "
+#~ "the <code>More...</code> button.</li> <li><strong>access a iCal format "
+#~ "version of the calendar:</strong>: Select <code>Open in iCal</code> from "
+#~ "the Action menu.</li> <li><strong>Access an Atom feed version of the "
+#~ "calendar: </strong> append <code>/atom.xml</code> to the calendar's URL.</"
+#~ "li> </ul>"
+#~ msgstr ""
+#~ "<h1>ប្រតិទិន​ប្រចាំ​ថ្ងៃ</h1> <p>នេះ​ជា​ទិដ្ឋភាព​ប្រចាំថ្ងៃ​នៃ​ប្រតិទិន ។ វា​អាច​ជា​ប្រតិទិន​របស់​អ្នក ឬ​"
+#~ "វា​អាច​ជា​ប្រតិទិន​របស់​អ្នក​ផ្សេង ក្រុម ឬ​ធនធាន​ផ្សេង​នៅ​ក្នុង​សាលា​របស់​អ្នក ។ <a href=\"/++help+"
+#~ "+/schooltool/calendaring\">ជំនួយ​បង្កើត​ប្រតិទិន​បន្ថែម...</a></p> <h3>តើ​ខ្ញុំ​គួរ...</"
+#~ "h3> <ul> <li><strong>បង្កើត​ព្រឹត្តិការណ៍​មួយ ៖</strong> ចុច​ក្នុង​តារាង​ប្រតិទិន​នៅ​ពេល​"
+#~ "ចាប់ផ្ដើម​ព្រឹត្តិការណ៍ ។ ឬ​ជ្រើស <code>ព្រឹត្តិការណ៍​ថ្មី</code> ពី​ម៉ឺនុយ​ <code>សកម្មភាព</code> "
+#~ "។</li> <li><strong>កក់​ធនធាន ៖</strong> បង្កើត​ព្រឹត្តិការណ៍​ចាប់ផ្ដើម​នៅ​ពេល​អ្នក​ចង់​បម្រុង​ទុក​​"
+#~ "ធនធាន ។ ជ្រើស <code>កក់​ធនធាន</code> នៅ​ក្នុង​សំណុំ​ព័ត៌មាន​ព្រឹត្តិការណ៍ ។</li> "
+#~ "<li><strong>បង្ហាញ ឬ​លាក់​ព្រឹត្តិការណ៍​ក្នុង​ប្រតិទិន​មួយ​ក្នុង​ចំណោម​ប្រតិទិន​ជា​ច្រើន​ដែល​បាន​រាយ​នៅ​ក្រោម "
+#~ "<code>ប្រតិទិន</code> ៖</strong> គូស​ធីក ឬ​មិន​គូស​ធីក​ប្រអប់​នៅ​ក្រោម <code>Cal</code> ហើយ​​"
+#~ "ចុច <code>អនុវត្ត</code> ។</li> <li><strong>បន្ថែម ឬ​យកចេញ​ពី/ទៅ​បញ្ជី <code>ប្រតិទិន</"
+#~ "code> ៖</strong> ចុច​ប៊ូតុង <code>ផ្សេង​ទៀត...</code> ។</li> <li><strong>ចូល​កំណែ​"
+#~ "ទ្រង់ទ្រាយ​របស់ iCal នៃ​ប្រតិទិន​ ៖</strong>៖ ជ្រើស <code>បើក​ក្នុង iCal​</code> ពី​ម៉ឺនុយ​"
+#~ "សកម្មភាព ។</li> <li><strong>ចូល​ដំណើរការ​កំណែ​មតិ​ព័ត៌មាន​ Atom របស់​ប្រតិទិន ៖ </strong> "
+#~ "បន្ថែម <code>/atom.xml</code> ទៅ​ URL របស់​ប្រតិទិន ។</li> </ul>"
+
+#~ msgid "This form has a few issues:"
+#~ msgstr "សំណុំ​បែបបទ​នេះ​មាន​បញ្ហា​មួយ​ចំនួន ៖"
+
+#~ msgid ""
+#~ "If you need to reserve a resource, such as a room or a projector, tracked "
+#~ "by SchoolTool at your school, you should create an event for the "
+#~ "necessary time and check the <code>Book Resources</code> checkbox at the "
+#~ "bottom of the page."
+#~ msgstr ""
+#~ "ប្រសិនបើ​អ្នក​ត្រូវ​បម្រុង​ទុក​ធនធាន ដូចជា​បន្ទប់ ឬ​​ឧបករណ៍​បញ្ចាំង​ស្លាយ បាន​តាមដាន​ដោយ SchoolTool "
+#~ "នៅ​សាលា​របស់​អ្នក អ្នក​គួរ​បង្កើត​ព្រឹត្តិការណ៍​សម្រាប់​ពេលវេលា​ចាំបាច់ និង​គូស​ធីក​ប្រអប់ <code>ធនធាន​"
+#~ "សៀវភៅ</code> នៅ​បាត​ទំព័រ ។"
+
+#~ msgid ""
+#~ "The form ignores your preferences for time and date format. You must "
+#~ "enter the event's start time in 24-hour or \"military\" time, and the "
+#~ "date is displayed in year-month-day format."
+#~ msgstr ""
+#~ "សំណុំ​បែបបទ​មិន​អើពើ​ចំណូល​​ចិត្ត​របស់​អ្នក​សម្រាប់​ទ្រង់ទ្រាយ​ពេលវេលា និង​កាលបរិច្ឆេទ ។ អ្នក​ត្រូវ​តែ​បញ្ចូល​"
+#~ "ពេលវេលា​ចាប់ផ្ដើម​របស់​ព្រឹត្តិការណ៍ ២៤ ម៉ោង ឬពេលវេលា​\"ទាហាន\" ហើយ​កាលបរិច្ឆេទ​ត្រូវ​បាន​បង្ហាញ​"
+#~ "ក្នុង​ទ្រង់ទ្រាយ​ថ្ងៃ ខែ ឆ្នាំ ។"
+
+#~ msgid ""
+#~ "The <code>Location</code> field allows you to enter a description of the "
+#~ "location of the event, but this is not connected to the reservation "
+#~ "system. If your school uses SchoolTool to manage room reservations you "
+#~ "need to check the <code>Book Resources</code> checkbox at the bottom of "
+#~ "the form."
+#~ msgstr ""
+#~ "វាល<code>ទីតាំង</code> អនុញ្ញាត​ឲ្យ​អ្នក​បញ្ចូល​សេចក្ដី​ពិពណ៌នា​នៃ​ទីតាំង​របស់​ព្រឹត្តិការណ៍ ប៉ុន្តែ​វា​មិន​"
+#~ "ត្រូវ​បាន​តភ្ជាប់​ទៅ​កាន់​ប្រព័ន្ធ​បម្រុង​ទុក​ទេ ។ ប្រសិនបើ​​សាលា​របស់​អ្នក​ប្រើ SchoolTool ដើម្បី​គ្រប់គ្រង​"
+#~ "ការ​បម្រុង​ទុក​បន្ទប់​ អ្នក​ត្រូវតែ​គូស​ធីក​ប្រអប់ <code>ធនធាន​សៀវភៅ</code> នៅ​បាត​នៃ​សំណុំ​បែបបទ ។"
+
+#~ msgid ""
+#~ "If your event repeats in some pattern, check the <code>Recurring</code> "
+#~ "box and fill out the new fields that appear. In certain circumstances "
+#~ "(like if you change the original day of a weekly recurring event) you may "
+#~ "need to click the <code>Update form</code> button to update the "
+#~ "recurrence fields."
+#~ msgstr ""
+#~ "ប្រសិនបើ​អ្នក​ព្រឹត្តិការណ៍​កើតឡើង​នៅ​ក្នុង​លំនាំ​ខ្លះ គូស​ធីក <code>កើត​ឡើង</code> ហើយ​បំពេញ​វាល​ថ្មី​"
+#~ "ដែល​លេច​​ឡើង ។ នៅ​ក្នុង​កាលៈទេសៈ​ជាក់ស្ដែង (ដូចជា ប្រសិនបើ​អ្នក​ផ្លាស់ប្ដូរ​ថ្ងៃ​ដើម​នៃ​ព្រឹត្តិការណ៍​"
+#~ "កើតឡើង​ប្រចាំ​សប្ដាហ៍) ដែល​អ្នក​អាច​ចុច​ប៊ូតុង <code>ធ្វើ​ឲ្យ​សំណុំ​បែបបទ​ទាន់សម័យ</code> ដើម្បី​ធ្វើ​ឲ្យ​"
+#~ "វាល​កើតឡើង​ទាន់សម័យ ។"
+
+#~ msgid ""
+#~ "An \"all day\" event does not show up as a 24 hour event. It indicates "
+#~ "that the day as a whole has some significance, like a birthday or holiday."
+#~ msgstr ""
+#~ "ព្រឹត្តិការណ៍ \"ពេញ​មួយ​ថ្ងៃ\" មិន​បង្ហាញ​ជា​ព្រឹត្តិការណ៍ ២៤ ម៉ោង ទេ ។ វា​ចង្អុល​ប្រាប់​ថា ថ្ងៃ​ទាំងមូល​"
+#~ "មាន​ចំណុច​សំខាន់​ដូច​ជា ថ្ងៃ​កំណើត ឬ​ថ្ងៃ​ឈប់​សម្រាក ។"
+
+#~ msgid ""
+#~ "\"Exception dates\" are specific dates a repeating event skips, such as "
+#~ "holidays."
+#~ msgstr ""
+#~ "\"កាល​បរិច្ឆេទ​លើក​លែង\" គឺ​ជា​កាល​បរិច្ឆេទ​ជាក់លាក់​ដែល​ព្រឹត្តិការណ៍​ធ្វើ​ដដែល​ៗ រំលង ដូច​ជា ថ្ងៃ​ឈប់​"
+#~ "សម្រាក ។"
+
+#~ msgid ""
+#~ "If you need to edit a resource reservation, click the <code>Book "
+#~ "resources</code> link at the bottom of the form."
+#~ msgstr ""
+#~ "ប្រសិនបើ​អ្នក​ត្រូវការ​កែសម្រួល​ការ​បម្រុង​ទុក​ធនធាន ចុច​តំណ <code>ធនធាន​សៀវភៅ​</code> នៅ​បាត​របស់​"
+#~ "សំណុំ​បែបបទ ។"
+
+#~ msgid ""
+#~ "<h1>Monthly Calendar</h1> <p>This is the monthly view of a calendar. It "
+#~ "might be your calendar, or it might be the calendar of another person, "
+#~ "group or resource in your school. <a href=\"/++help++/schooltool/"
+#~ "calendaring\">More calendaring help...</a></p> <h3>How do I...</h3> <ul> "
+#~ "<li><strong>View an individual day or event in more detail:</strong> "
+#~ "click on the appropriate day on the calendar.</li> <li><strong>View an "
+#~ "individual week:</strong> Click on the appropriate week number in blue in "
+#~ "the leftmost column of the calendar.</li> <li><strong>Create an event:</"
+#~ "strong> select <code>New Event</code> from the <code>Actions</code> menu."
+#~ "</li> <li><strong>Show or hide events in one of the calendars listed "
+#~ "under <code>Calendars</code>:</strong> check or uncheck the box under "
+#~ "<code>Cal</code> and click <code>Apply</code>.</li> <li><strong>Adding or "
+#~ "removing calendars to the <code>Calendars</code> list:</strong> click on "
+#~ "the <code>More...</code> button.</li> <li><strong>Make weeks start on the "
+#~ "correct day:</strong> the first day of the week varies in different parts "
+#~ "of the world. If SchoolTool isn't set up correctly for you, click on your "
+#~ "name in the red bar at the top of the page. Then click on the "
+#~ "<code>Actions</code> menu and select <code>Change Preferences</code>. "
+#~ "Pick the correct \"Week starts on\" day and hit <code>Apply</code>.</li> "
+#~ "<li><strong>Access a iCal format version of the calendar:</strong>: "
+#~ "select <code>Open in iCal</code> from the Action menu.</li> </ul>"
+#~ msgstr ""
+#~ "<h1>ប្រតិទិន​ប្រចាំ​ខែ</h1> <p>នេះ​គឺ​ជា​ទិដ្ឋភាព​ប្រចាំ​ខែ​នៃ​ប្រតិទិន ។ វា​អាច​ជា​ប្រតិទិន​របស់​អ្នក ឬ​វា​"
+#~ "អាច​ជា​ប្រតិទិន​របស់​អ្នក​ផ្សេង​ ក្រុម ឬ​ធនធាន​ផ្សេង​នៅ​ក្នុង​សាលា​របស់​អ្នក ។ <a href=\"/++help++/"
+#~ "schooltool/calendaring\">ជំនួយ​បង្កើត​ប្រតិទិន​បន្ថែម...</a></p> <h3>តើ​ខ្ញុំ​គួរ...</h3> "
+#~ "<ul> <li><strong>មើល​ថ្ងៃ​នីមួយៗ​ ឬ​ព្រឹត្តិការណ៍​នៅ​ក្នុង​សេចក្ដី​លម្អិត ៖</strong> ចុច​លើ​ថ្ងៃ​"
+#~ "សមរម្យ​នៅ​ក្នុង​ប្រតិទិន ។</li> <li><strong>មើល​សប្ដាហ៍​នីមួយៗ ៖</strong> ចុច​លើ​លេខ​សប្ដាហ៍​ដែល​"
+#~ "សមរ្យ​នៅ​ក្នុង​ជួរឈរ​ពណ៌​ខៀវ​ខាង​​ឆ្វេង​បំផុត​របស់​ប្រតិទិន ។</li> <li><strong>បង្កើត​ព្រឹត្តិការណ៍ ៖</"
+#~ "strong> ជ្រើស <code>ព្រឹត្តិការណ៍​ថ្មី</code> ពី​ម៉ឺនុយ <code>សកម្មភាព</code> ។</li> "
+#~ "<li><strong>បង្ហាញ​ ឬ​លាក់​ព្រឹត្តិការណ៍​​នៅក្នុង​ប្រតិទិន​មួយ​​ក្នុង​ចំណោម​ប្រតិទិនជា​ច្រើន​ដែលបាន​រាយ​ក្រោម "
+#~ "<code>ប្រតិទិន</code> ៖</strong> គូស​ធីក ឬ​មិនគូស​ធីក​ប្រអប់​ក្រោម <code>Cal</code> ហើយ​ចុច "
+#~ "<code>អនុវត្ត</code> ។</li> <li><strong>បន្ថែម ឬ​យក​ប្រតិទិន​ចេញ​ពី/ទៅ​បញ្ជី "
+#~ "<code>ប្រតិទិន</code> ៖</strong> ចុច​លើ​ប៊ូតុង <code>ផ្សេង​ទៀត...</code> ។</li> "
+#~ "<li><strong>បង្កើត​សប្ដាហ៍​ចាប់ផ្ដើម​នៅ​ថ្ងៃ​បច្ចុប្បន្ន​ ៖ បង្កើត​សប្ដាហ៍​ចាប់ផ្ដើម​នៅ​ថ្ងៃ​ត្រឹមត្រូវ ៖"
+#~ "</strong> ថ្ងៃ​ដំបូង​របស់​សប្ដាហ៍​ខុសគ្នា​​ក្នុង​ផ្នែក​ផ្សេង​នៃ​ពិភព​លោក ។ ប្រសិនបើ SchoolTool មិន​ត្រូវ​"
+#~ "បាន​រៀបចំ​ត្រឹមត្រូវ​សម្រាប់​អ្នក​ទេ ចុច​ឈ្មោះ​របស់​អ្នក​នៅ​ក្នុង​របារ​ពណ៌​ក្រហម​នៅ​ផ្នែក​ខាង​លើ​នៃ​ទំព័រ ។ "
+#~ "បន្ទាប់​មក​ចុច​លើ​ម៉ឺនុយ <code>សកម្មភាព</code> ហើយ​ជ្រើស <code>ផ្លាស់ប្ដូរ​ចំណូល​ចិត្ត</code> ។ "
+#~ "ជ្រើស​ \"សប្ដាហ៍​ចាប់ផ្ដើម​ចំ​ថ្ងៃ\" ថ្ងៃ​ដែល​ត្រឹមត្រូវ​ ហើយ​ចុច <code>អនុវត្ត</code> ។</li> "
+#~ "<li><strong>ចូល​​កំណែ​ទ្រង់ទ្រាយ iCal របស់​ប្រតិទិន ៖</strong>៖ ជ្រើស <code>បើក​​ក្នុង iCal​"
+#~ "</code> ពី​ម៉ឺនុយ​សកម្មភាព ។</li> </ul>"
+
+#~ msgid "SchoolTool Organization"
+#~ msgstr "ការ​រៀបចំ SchoolTool"
+
+#~ msgid ""
+#~ "<h1>SchoolTool Organization</h1> <p>This branch of the help tree contains "
+#~ "items explaining the basic organization of SchoolTool.</p>"
+#~ msgstr ""
+#~ "<h1>ការ​រៀបចំ SchoolTool​</h1> <p>ផ្នែក​នៃ​មែកធាង​ជំនួយ​នេះ​មាន​ធាតុ​ដែល​ពន្យល់​អំពី​ការ​រៀបចំ​ជា​"
+#~ "មូលដ្ឋាន​របស់ SchoolTool ។</p>"
+
+#~ msgid ""
+#~ "<h1>SchoolTool</h1> <p>SchoolTool is a free/libre administrative system "
+#~ "for schools around the world, funded by The Shuttleworth Foundation.</p> "
+#~ "<h2>Standard User Interface Conventions in SchoolTool</h2> <ul> "
+#~ "<li><strong>Red top bar</strong></li> <ul> <li><strong>Breadcrumbs:</"
+#~ "strong> the links at the left hand side of the red bar show you where you "
+#~ "are in SchoolTool's object hierarchy. Note that this doesn't necessarily "
+#~ "lead you back to where you came from, but is handy for taking you from "
+#~ "more specific to more general parts of the application.</li> "
+#~ "<li><strong>Your name</strong> (if you're logged in): clicking on your "
+#~ "name takes you to a simple dashboard of relevant links. From this page "
+#~ "you can also use the <code>Actions</code> menu to change preferences and "
+#~ "other personal settings.</li> <li><strong>Log in/out:</strong> this logs "
+#~ "you in or out. It is a good idea to log out when you aren't using "
+#~ "SchoolTool.</li> <li><strong>Help:</strong> if there is a help file for "
+#~ "the page you're looking at, you'll see this link.</li> </ul> "
+#~ "<li><strong>Menus</strong></li> <ul> <li><strong>Navigation:</strong> "
+#~ "this menu gives you some basic options for accessing different parts of "
+#~ "SchoolTool, such as the index of persons or courses. What you see here "
+#~ "depends on your permissions in the system.</li> <li><strong>Action:</"
+#~ "strong> this menu contains a variety of things that you can do on the "
+#~ "current page. The entries in this menu change considerably based on what "
+#~ "page you're viewing and what permissions you have.</li> </ul> "
+#~ "<li><strong>Above the red bar</strong></li> <ul> <li><strong>Logo & "
+#~ "School Name:</strong> clicking in this area will take you to the top of "
+#~ "the school's site, usually the calendar for the school.</li> "
+#~ "<li><strong>Calendar day/week/month/year views:</strong> if you are "
+#~ "viewing a calendar, you will find icons in the upper right hand corner "
+#~ "that will allow you to switch between calendar views.</li> "
+#~ "<li><strong>Devmode menu:</strong> if you are a site administrator and "
+#~ "you've enabled \"devmode\" in schooltool.conf, you will see a special "
+#~ "menu in the upper right hand corner of the site. You should disable "
+#~ "devmode in any production server.</li> </ul> </ul>"
+#~ msgstr ""
+#~ "<h1>SchoolTool</h1> <p>SchoolTool គឺ​ជា​ប្រព័ន្ធ​គ្រប់គ្រង​ប្រើ​ដោយ​សេរី​សម្រាប់​សាលា​ជុំវិញ​ពិភព​"
+#~ "លោក ដែល​បាន​ឧបត្ថម្ភ​ដោយ​មូលនិធិ Shuttleworth ។​</p> <h2>ការ​បង្កើត​ចំណុច​ប្រទាក់​អ្នក​ប្រើ​"
+#~ "ស្តង់ដារ​នៅ​ក្នុង SchoolTool​</h2> <ul> <li><strong>របារ​ខាង​លើ​ពណ៌​ក្រហម</strong></"
+#~ "li> <ul> <li><strong>Breadcrumbs ៖</strong> តំណ​នៅ​ខាង​ឆ្វេង​ដៃ​នៃ​របារ​ពណ៌​ក្រហម​បង្ហាញ​"
+#~ "អ្នក​កន្លែង​ដែល​អ្នក​ស្ថិត​ក្នុង​ថានានុក្រម​វត្ថុ​របស់ SchoolTool ។ ចំណាំ​ថា​វា​មិន​ចាំបាច់​នាំ​អ្នក​ទៅ​កន្លែង​"
+#~ "ដែល​អ្នក​មក​នោះ​ទេ ប៉ុន្តែ​មាន​ប្រយោជន៍​សម្រាប់​នាំ​អ្នក​ពី​​ផ្នែក​ទូទៅ​ជាក់លាក់​នៃ​កម្មវិធី ។</li> "
+#~ "<li><strong>ឈ្មោះ​របស់​អ្នក</strong> (ប្រសិន​បើ​អ្នក​ចូល)​៖ ចុច​លើ​ឈ្មោះ​របស់​អ្នក​នាំ​អ្នក​ទៅ​ផ្ទាំង​"
+#~ "ធម្មតា​នៃ​តំណ​ដែល​ទាក់ទង ។ ពី​ទំព័រ​នេះ​អ្នក​អាច​ប្រើ​ម៉ឺនុយ <code>សកម្មភាព</code> ដើម្បី​ផ្លាស់ប្ដូរ​"
+#~ "ចំណូល​ចិត្ត និង​ការ​កំណត់​ផ្ទាល់​ខ្លួន ។</li> <li><strong>ចូល/ចេញ ៖</strong> វា​ធ្វើ​ឲ្យ​ចូល ឬ​"
+#~ "ចេញ ។ ជា​គំនិត​ដ៏​ល្អ​ដើម្បី​ចេញ​នៅ​ពេល​អ្នក​មិន​ប្រើ​ SchoolTool ។</li> <li><strong>ជំនួយ ៖</"
+#~ "strong> ប្រសិនបើ​​មាន​ឯកសារ​ជំនួយ​សម្រាប់​ទំព័រ​ដែល​អ្នក​កំពុង​មើល អ្នកនឹង​ឃើញ​តំណ​នេះ ។</li> </ul> "
+#~ "<li><strong>ម៉ឺនុយ</strong></li> <ul> <li><strong>រុករក ៖</strong> ម៉ឺនុយ​នេះ​ផ្ដល់​ឲ្យ​"
+#~ "អ្នក​នូវ​ជម្រើស​មូលដ្ឋាន​ដើម្បីចូល​ផ្នែក​ផ្សេង​របស់ SchoolTool ដូច​ជា​លិបិក្រម​មនុស្ស ឬ​វគ្គសិក្សា ។ អ្វី​"
+#~ "ដែល​អ្នក​ឃើញ​នៅ​ទីនេះ​ អាស្រ័យ​លើ​សិទ្ធិ​របស់​អ្នក​នៅ​ក្នុង​ប្រព័ន្ធ ។</li> <li><strong>សកម្មភាព ៖</"
+#~ "strong> ម៉ឺនុយ​នេះ មាន​ធាតុ​ផ្សេងៗ​ដែល​អ្នក​អាច​ធ្វើ​នៅ​លើ​ទំព័រ​នេះ ។ ធាតុ​នៅ​ក្នុង​ម៉ឺនុយ​នេះ​ផ្លាស់ប្ដូរ​"
+#~ "ដោយ​អាស្រ័យ​លើ​ទំព័រ​ដែល​អ្នក​កំពុង​មើល​ និង​សិទ្ធិ​ដែល​អ្នក​មាន ។</li> </ul> <li><strong>ខាង​លើ​"
+#~ "របារ​ពណ៌​ក្រហម</strong></li> <ul> <li><strong>រូប​សញ្ញា និង​ឈ្មោះ​សាលា ៖</strong> ចុច​"
+#~ "នៅ​ក្នុង​ផ្ទៃ​នេះ​នឹង​នាំ​អ្នក​ទៅ​កំពូល​នៃ​តំបន់​បណ្ដាញ​របស់​សាលា តាម​ធម្មតា​ប្រតិទិន​សម្រាប់​សាលា ។</li> "
+#~ "<li><strong>ទិដ្ឋភាព​ប្រតិទិន​ថ្ងៃ/ខែ/ឆ្នាំ ៖</strong> ប្រសិនបើ​អ្នក​កំពុង​មើល​ប្រតិទិន អ្នក​នឹង​ឃើញ​"
+#~ "រូប​តំណាង​នៅ​ក្នុង​​ជ្រុង​ខាង​ស្ដាំ​ ដែល​​នឹង​អនុញ្ញាត​ឲ្យ​ប្ដូរ​ទិដ្ឋភាព​ប្រតិទិន ។</li> <li><strong>ម៉ឺនុយ "
+#~ "Devmode ៖</strong> ប្រសិនបើ​អ្នកជា​ អ្នក​គ្រប់គ្រង​តំបន់​បណ្ដាញ​ ហើយ​អ្នក​បាន​បើក \"devmode\" "
+#~ "នៅ​ក្នុង schooltool.conf អ្នក​ឃើញ​ម៉ឺនុយ​ពិសេស​នៅ​ក្នុង​ជ្រុង​ខាង​ស្ដាំ ខាង​លើ​នៃ​តំបន់​បណ្ដាញ ។ អ្នក​គួរ​"
+#~ "តែ​បិទ​ devmode នៅ​ក្នុង​ម៉ាស៊ីន​បម្រើ​ផលិតកម្ម ។</li> </ul> </ul>"
+
+#~ msgid ""
+#~ "<h1>Weekly Calendar</h1> <p>This is the weekly view of a calendar. It "
+#~ "might be your calendar, or it might be the calendar of another person, "
+#~ "group or resource in your school. <a href=\"/++help++/schooltool/"
+#~ "calendaring\">More calendaring help...</a></p> <h3>How do I...</h3> <ul> "
+#~ "<li><strong>View an individual day in more detail:</strong> click on the "
+#~ "appropriate day in the blue row of the calendar table.</li> "
+#~ "<li><strong>View details about an event or edit it:</strong> click on the "
+#~ "event. If you have the correct permissions for the event you can edit it."
+#~ "</li> <li><strong>Create an event:</strong> select the day the event "
+#~ "starts and create the event in the daily view.</li> <li><strong>Show or "
+#~ "hide events in one of the calendars listed under <code>Calendars</code>:</"
+#~ "strong> check or uncheck the box under <code>Cal</code> and click "
+#~ "<code>Apply</code>.</li> <li><strong>Adding or removing calendars to the "
+#~ "<code>Calendars</code> list:</strong> click on the <code>More...</code> "
+#~ "button.</li> <li><strong>Make the calendar start on the correct day:</"
+#~ "strong> the first day of the week varies in different parts of the world. "
+#~ "If SchoolTool isn't set up correctly for you, click on your name in the "
+#~ "red bar at the top of the page. Then click on the <code>Actions</code> "
+#~ "menu and select <code>Change Preferences</code>. Pick the correct \"Week "
+#~ "starts on\" day and hit <code>Apply</code>.</li> <li><strong>Access a "
+#~ "iCal format version of the calendar:</strong>: select <code>Open in iCal</"
+#~ "code> from the Action menu.</li> </ul>"
+#~ msgstr ""
+#~ "<h1>ប្រតិទិន​ប្រចាំ​សប្ដាហ៍</h1> <p>នេះ​ជា​​ទិដ្ឋភាព​ប្រចាំ​សប្ដាហ៍​របស់​ប្រតិទិន ។ វា​អាច​ជា​ប្រតិទិន​របស់​"
+#~ "អ្នក ឬ​អាច​ជា​ប្រតិទិន​របស់​អ្នក​ផ្សេង ក្រុម ឬ​ធនធាន​ផ្សេង​នៅ​ក្នុង​សាលា​របស់​​អ្នក ។ <a href=\"/+"
+#~ "+help++/schooltool/calendaring\">ជំនួយ​បង្កើត​ប្រតិទិន​ផ្សេង​ទៀត...</a></p> <h3>តើ​ខ្ញុំ​"
+#~ "គួរ...</h3> <ul> <li><strong>មើល​ថ្ងៃ​នីមួយៗ​នៅ​ក្នុង​សេចក្ដី​លម្អិត ៖ </strong> ចុច​លើ​ថ្ងៃ​"
+#~ "សមរម្យ​នៅ​ក្នុង​ជួរដេក​ពណ៌​ខៀវ​របស់​តារាង​ប្រតិទិន ។</li> <li><strong>មើល​​ទិដ្ឋភាព​លម្អិត​អំពី​"
+#~ "ព្រឹត្តិការណ៍ ឬ​កែសម្រួល​វា ៖</strong> ចុច​លើ​ព្រឹត្តិការណ៍ ។ ប្រសិនបើ​អ្នក​បាន​សិទ្ធិ​ត្រឹមត្រូវ​សម្រាប់​"
+#~ "ព្រឹត្តិការណ៍​ដែល​អ្នក​អាច​កែសម្រួល​បាន ។</li> <li><strong>បង្កើត​ព្រឹត្តិការណ៍ ៖</strong> "
+#~ "ជ្រើស​ថ្ងៃ​ដែល​ព្រឹត្តិការណ៍​ចាប់ផ្ដើម និង​បង្កើត​ព្រឹត្តិការណ៍​នៅ​ក្នុង​ទិដ្ឋភាព​ប្រចាំ​ថ្ងៃ ។</li> "
+#~ "<li><strong>បង្ហាញ​ ឬ​លាក់​ព្រឹត្តិការណ៍​នៅ​ក្នុង​ប្រតិទិន​មួយ​ក្នុង​ចំណោម​ប្រតិទិន​ដែល​បាន​រាយ​នៅ​ក្រោម "
+#~ "<code>ប្រតិទិន</code> ៖</strong> គូស​ធីក ឬ​មិន​គូស​ធីក​ប្រអប់​នៅ​ក្រោម<code>Cal</code> ហើយ​"
+#~ "ចុច <code>អនុវត្ត</code> ។</li> <li><strong>បន្ថែម ឬ​យក​ប្រតិទិន​ចេញ​ពី/ទៅ​បញ្ជី "
+#~ "<code>ប្រតិទិន</code> ៖</strong> ចុច​លើ​ប៊ូតុង <code>ផ្សេង​ទៀត...</code> ។</li> "
+#~ "<li><strong>បង្កើត​ប្រតិទិន​ដែល​ចាប់ផ្ដើម​នៅ​ថ្ងៃ​ត្រឹមត្រូវ ៖</strong> ថ្ងៃ​ទី​មួយ​នៃ​សប្ដាហ៍​ខុស​គ្នា​"
+#~ "នៅ​ក្នុង​ផ្នែក​ផ្សេងៗ​នៃ​ពិភព​លោក ។ ប្រសិនបើ SchoolTool មិន​កំណត់​ត្រឹមត្រូវ​សម្រាប់​អ្នក​ទេ ចុច​លើ​ឈ្មោះ​"
+#~ "នៅ​ក្នុង​របារ​ពណ៌​ក្រហម​នៅ​ផ្នែក​ខាង​លើ​នៃ​ទំព័រ ។ បន្ទាប់​មក​ចុច​លើ​ម៉ឺនុយ <code>សកម្មភាព</code> ហើយ​"
+#~ "ជ្រើស​ <code>ផ្លាស់ប្ដូរ​ចំណូល​ចិត្ត</code> ។ ជ្រើស​ \"សប្ដាហ៍​ចាប់ផ្ដើម​នៅ\" ថ្ងៃ​ត្រឹមត្រូវ ហើយ​ចុច "
+#~ "<code>អនុវត្ត</code> ។</li> <li><strong>ចូល​កំណែ​ទ្រង់ទ្រាយ iCal របស់​ប្រតិទិន ៖</"
+#~ "strong> ៖ ជ្រើស <code>បើក​ក្នុង iCal​</code> ពី​ម៉ឺនុយ​សកម្មភាព ។</li> </ul>"
+
+#~ msgid ""
+#~ "<h1>Yearly Calendar</h1> <p>This is the year view of a calendar. It might "
+#~ "be your calendar, or it might be the calendar of another person, group or "
+#~ "resource in your school. <a href=\"/++help++/schooltool/calendaring"
+#~ "\">More calendaring help...</a></p> <h3>How do I...</h3> <ul> "
+#~ "<li><strong>Know which days contain events: if the day has a blue "
+#~ "background, there is at least one event that day.</strong></li> "
+#~ "<li><strong>View an individual day in more detail:</strong> click on the "
+#~ "day.</li> <li><strong>View an individual month:</strong> click on the "
+#~ "name of the month.</li> <li><strong>Create an event:</strong> select the "
+#~ "day the event starts and create the event in the daily view.</li> "
+#~ "<li><strong>Show or hide events in one of the calendars listed under "
+#~ "<code>Calendars</code>:</strong> check or uncheck the box under "
+#~ "<code>Cal</code> and click <code>Apply</code>.</li> <li><strong>Adding or "
+#~ "removing calendars to the <code>Calendars</code> list:</strong> click on "
+#~ "the <code>More...</code> button.</li> <li><strong>Make the calendar start "
+#~ "on the correct day:</strong> the first day of the week varies in "
+#~ "different parts of the world. If SchoolTool isn't set up correctly for "
+#~ "you, click on your name in the red bar at the top of the page. Then click "
+#~ "on the <code>Actions</code> menu and select <code>Change Preferences</"
+#~ "code>. Pick the correct \"Week starts on\" day and hit <code>Apply</code>."
+#~ "</li> <li><strong>Access a iCal format version of the calendar:</strong>: "
+#~ "select <code>Open in iCal</code> from the Action menu.</li> </ul>"
+#~ msgstr ""
+#~ "<h1>ប្រតិទិន​ប្រចាំ​ឆ្នាំ</h1> <p>នេះ​ជា​ទិដ្ឋភាព​ឆ្នាំ​របស់​ប្រតិទិន ។ វា​អាច​ជា​ប្រតិទិន​របស់​អ្នក ឬ​វា​"
+#~ "អាច​ជា​ប្រតិទិន​របស់​អ្នក​ផ្សេង ក្រុម​ ឬ​ធនធាន​នៅ​ក្នុង​សាលា​របស់​អ្នក ។ <a href=\"/++help++/"
+#~ "schooltool/calendaring\">ជំនួយ​បង្កើត​ប្រតិទិន​ផ្សេង​ទៀត...</a></p> <h3>តើ​ខ្ញុំ​គួរ...</"
+#~ "h3> <ul> <li><strong>ដឹង​ថា​ថ្ងៃ​ណា​មាន​ព្រឹត្តិការណ៍ ៖ ប្រសិនបើ​ថ្ងៃ​មាន​ផ្ទៃ​ពណ៌​ខៀវ មាន​"
+#~ "ព្រឹត្តិការណ៍​យ៉ាង​ហោច​ណាស់​មួយ​ ។</strong></li> <li><strong>មើល​ថ្ងៃ​នីមួយៗ​នៅ​ក្នុង​សេចក្ដី​លម្អិត ៖"
+#~ "</strong> ចុច​លើ​ថ្ងៃ​នោះ ។</li> <li><strong>មើល​ខែ​នីមួយៗ ៖</strong> ចុច​លើ​ឈ្មោះ​ខែ ។"
+#~ "</li> <li><strong>បង្កើត​ព្រឹត្តិការណ៍ ៖</strong> ជ្រើស​ព្រឹត្តិការណ៍​ថ្ងៃ​ដែល​ចាប់ផ្ដើម និង​"
+#~ "បង្កើត​ព្រឹត្តិការណ៍​នៅ​ទិដ្ឋភាព​ប្រចាំ​ថ្ងៃ ។</li> <li><strong>បង្ហាញ ឬ​​លាក់​ព្រឹត្តិការណ៍​នៅ​ក្នុង​"
+#~ "ប្រតិទិន​មួយ​ក្នុង​ចំណោម​ប្រតិទិន​ដែល​បាន​រាយ​នៅ​ក្រោម <code>ប្រតិទិន</code>៖</strong> គូស​ធីក ឬ​មិន​គូស​"
+#~ "ធីក​នៅ​ក្រោម <code>Cal</code> ហើយ​ចុច <code>អនុវត្ត</code> ។</li> "
+#~ "<li><strong>បន្ថែម ឬ​យក​ប្រតិទិន​ទៅ/ពី​បញ្ជី <code>ប្រតិទិន</code> ៖</strong> ចុច​លើ​ប៊ូតុង​ "
+#~ "<code>ច្រើន​ទៀត...</code> ។</li> <li><strong>បង្កើត​ប្រតិទិន​ចាប់ផ្ដើម​នៅ​ថ្ងៃ​ត្រឹមត្រូវ ៖"
+#~ "</strong> ថ្ងៃ​ដំបូង​នៃ​សប្ដាហ៍​ខុសគ្នា​​ក្នុង​ផ្នែក​ផ្សេងៗ​នៃ​ពិភព​លោក ។ ប្រសិនបើ SchoolTool មិន​ត្រូវ​"
+#~ "បាន​កំណត់​ត្រឹមត្រូវ​សម្រាប់​អ្នក​ទេ ចុច​លើ​ឈ្មោះ​របស់​អ្នក​នៅ​ក្នុង​របារ​ពណ៌​ក្រហម​នៅ​​ផ្នែក​ខាង​លើ​នៃ​ទំព័រ ។ "
+#~ "បន្ទាប់​មក​ចុច​លើ​ម៉ឺនុយ​ <code>សកម្មភាព</code> ហើយ​ជ្រើស <code>ផ្លាស់ប្ដូរ​​ចំណូល​ចិត្ត​</code> ។ "
+#~ "ជ្រើស​ \"សប្ដាហ៍​ចាប់ផ្ដើម​នៅ​\" ថ្ងៃ ហើយ​ចុច <code>អនុវត្ត</code> ។</li> <li><strong>ចូល​​​"
+#~ "កំណែ​ទ្រង់ទ្រាយ iCal នៃ​ប្រតិទិន ៖</strong> ៖ ជ្រើស <code>បើក​ក្នុង iCal​</code> ពី​ម៉ឺនុយ​"
+#~ "សកម្មភាព ។</li> </ul>"
+
+#~ msgid "Previous: ${course} -- ${section_title} for ${term}"
+#~ msgstr "មុន ៖ ${course} -- ${section_title} សម្រាប់ ${term}"
+
+#~ msgid "Next: ${course} -- ${section_title} for ${term}"
+#~ msgstr "បន្ទាប់ ៖ ${course} -- ${section_title} សម្រាប់ ${term}"
+
+#~ msgid ""
+#~ "<h1>Courses</h1> <p>Use this page to organize courses listed in the "
+#~ "system.</p> <h3>How do I...</h3> <ul> <li><strong>Look for for a course:</"
+#~ "strong> Use the search box to the left of the <code>Find Now</code> "
+#~ "button to look through the entire list of courses for the search "
+#~ "criterion. The <code>Clear</code> button empties the search box of "
+#~ "current entries.</li> <li><strong>Show a list of the different sections "
+#~ "of a course:</strong> click on the name of the course.</li> "
+#~ "<li><strong>Show the lists of students in a particular class:</strong> "
+#~ "Click on the <code>teacher -- course</code> link. The number of students "
+#~ "is also listed next to the teacher and the course.</li> "
+#~ "<li><strong>Navigate through the courses:</strong> Separate <q>batches</"
+#~ "q> of the Course list can be accessed through the <code>Next 10</code> "
+#~ "(and <code>Previous</code>) and links in the blue bar. A <code>Show All</"
+#~ "code> button is also there to show all of the courses on a single page.</"
+#~ "li> </ul>"
+#~ msgstr ""
+#~ "<h1>វគ្គសិក្សា</h1> <p>ប្រើ​ទំព័រ​នេះ​ដើម្បី​រៀបចំ​វគ្គសិក្សា​ដែល​បាន​រាយ​នៅ​ក្នុង​ប្រព័ន្ធ ។</p> "
+#~ "<h3>តើ​ខ្ញុំ​គួរ...</h3> <ul> <li><strong>រក​មើល​វគ្គសិក្សា ៖</strong> ប្រើ​ប្រអប់​ស្វែងរក​"
+#~ "នៅ​ខាង​ឆ្វេង​ប៊ូតុង <code>រក​ឥឡូវ</code> ដើម្បី​រកមើល​បញ្ជី​វគ្គសិក្សា​ទាំង​មូល​សម្រាប់​លក្ខខ័ណ្ឌ​​ស្វែងរក "
+#~ "។ ប៊ូតុង​ <code>ជម្រះ</code> ជម្រះ​ប្រអប់​ស្វែងរក​នៃ​ធាតុ​បច្ចុប្បន្ន ។</li> "
+#~ "<li><strong>បង្ហាញ​បញ្ជី​នៃ​ផ្នែក​ផ្សេងៗ​របស់​វគ្គសិក្សា ៖</strong> ចុច​លើ​ឈ្មោះវគ្គសិក្សា ។</"
+#~ "li> <li><strong>បង្ហាញ​បញ្ជី​សិស្ស​នៅ​ក្នុង​ថ្នាក់​ជាក់លាក់ ៖</strong> ចុច​លើ​តំណ <code>គ្រូ -- "
+#~ "វគ្គសិក្សា</code> ។ ចំនួន​សិស្ស​ក៏​ត្រូវ​បាន​រាយ​នៅ​ជាប់នឹង​គ្រូ ព្រម​ទាំង​វគ្គសិក្សា ។</li> "
+#~ "<li><strong>រកមើល​វគ្គសិក្សា ៖</strong> បំបែក <q>ក្រុម</q> របស់​បញ្ជី​វគ្គសិក្សា​អាច​ត្រូវ​បាន​"
+#~ "ចូល​តាម​រយៈ <code>បន្ទាប់​ទៀត ១០</code> (និង <code>មុន</code>) ហើយ​តំណ​នៅ​ក្នុង​របារ​ពណ៌​"
+#~ "ខៀវ ។ ប៊ូតុង <code>បង្ហាញ​ទាំងអស់</code> ក៏​មាន​នៅ​ទីនោះ​ដែរ ដើម្បី​បង្ហាញ​វគ្គសិក្សា​ទាំងអស់​នៅ​ក្នុង​"
+#~ "ទំព័រ​តែ​មួយ ។</li> </ul>"
+
+#~ msgid "Introspect"
+#~ msgstr "ត្រួត​ពិនិត្យ"
+
+#~ msgid "Setup data"
+#~ msgstr "រៀបចំ​ទិន្នន័យ"
+
+#~ msgid ""
+#~ "<h1>Groups</h1> <p>Use this page to keep track of <b>groups</b> of "
+#~ "Persons.</p> <p><b>Groups</b> that have been added are not part of the "
+#~ "essential groups (<b>Teachers</b>, <b>Students</b>, <b>Site Managers</b>, "
+#~ "<b>School Administrators</b>, or <b>Clerks</b>). They can be selected by "
+#~ "the checkbox next to them and removed by pressing the <b>Delete</b> "
+#~ "button at the bottom of the page.</p> <h3>How do I...</h3> <ul> "
+#~ "<li><b>Look for for a group:</b> Use the search box to the left of the "
+#~ "<code>Find Now</code> button to look through the entire list of groups "
+#~ "for the search criterion. The <code>Clear</code> button empties the "
+#~ "search box of current entries.</li> <li><b>View the persons in a certain "
+#~ "group:</b> Click on the name of the group.</li> <li><b>Sort the list:</b> "
+#~ "Click on the <code>Title</code> header to change the order of groups from "
+#~ "descending to ascending order, and vice versa.</li> <li><strong>Browse "
+#~ "for a group:</strong> Use the <code>Next 10</code> (and <code>Previous</"
+#~ "code>) and links in the blue bar.</li> <li><strong>Show all groups:</"
+#~ "strong> Click <code>Show All</code> in the blue bar.</li> </ul>"
+#~ msgstr ""
+#~ "<h1>ក្រុម</h1> <p>ប្រើ​ទំព័រ​នេះ​ដើម្បី​​តាមដាន​ <b>ក្រុម</b> មនុស្ស ។</p> <p><b>ក្រុម</b> "
+#~ "ដែល​ត្រូវ​បាន​បន្ថែម​មិនមែន​ជា​ផ្នែក​របស់​ក្រុម​សំខាន់​ទេ (<b>គ្រូ</b> <b>សិស្ស</b> <b>អ្នក​គ្រប់គ្រង​"
+#~ "តំបន់</b> <b>គណៈ​គ្រប់គ្រង​សាលា</b> ឬ<b>ស្មៀន</b>) ។ ពួកគេ​អាច​ត្រូវ​បាន​ជ្រើស​ដោយ​ប្រអប់​គូស​ធីក​"
+#~ "នៅ​ជាប់​នឹង​ពួកវា និង​បាន​យកចេញ​ដោយ​ចុច​ប៊ូតុង <b>លុប</b> នៅ​ផ្នែក​ខាងក្រោម​ទំព័រ ។</p> <h3>តើ​ខ្ញុំ​គួរ​"
+#~ "...</h3> <ul> <li><b>រកមើល​ក្រុម ៖</b> ប្រើ​ប្រអប់​ស្វែងរក​នៅ​ខាង​ឆ្វេង​ប៊ូតុង <code>រក​"
+#~ "ឥឡូវ</code> ដើម្បី​មើល​បញ្ជី​ក្រុម​ទាំង​មូល​សម្រាប់​លក្ខខ័ណ្ឌ​ស្វែងរក ។ ប៊ូតុង<code>ជម្រះ</code> ជម្រះ​"
+#~ "ប្រអប់​ស្វែងរក​ធាតុ​បច្ចុប្បន្ន ។</li> <li><b>មើល​មនុស្ស​នៅ​ក្នុង​ក្រុម​ពិតប្រាកដ ៖</b> ចុច​លើ​ឈ្មោះ​"
+#~ "ក្រុម ។</li> <li><b>តម្រៀប​បញ្ជី ៖</b> ចុច​នៅ​លើ​ក្បាល <code>ចំណង​ជើង</code> ដើម្បី​"
+#~ "ផ្លាស់ប្ដូរ​លំដាប់​ក្រុម​ពី​​លំដាប់​ចុះ​ទៅ​លំដាប់​ឡើង និង​ផ្ទុយ​មក​វិញ ។</li> <li><strong>រក​មើល​ក្រុម ៖</"
+#~ "strong> ប្រើ <code>បន្ទាប់​ទៀត ១០</code> (និង<code>មុន</code>) និង​តំណ​នៅ​ក្នុង​របារ​ពណ៌​"
+#~ "ខៀវ ។</li> <li><strong>បង្ហាញ​ក្រុម​ទាំងអស់ ៖</strong> ចុច <code>បង្ហាញ​ទាំងអស់</"
+#~ "code> នៅ​ក្នុង​របារ​ពណ៌​ខៀវ ។</li> </ul>"
+
+#~ msgid "Contextual Help"
+#~ msgstr "ជំនួយ​បរិបទ"
+
+#~ msgid "Help"
+#~ msgstr "ជំនួយ"
+
+#~ msgid "Notes (Rest)"
+#~ msgstr "ចំណាំ (នៅ​សល់)"
+
+#~ msgid ""
+#~ "<h1>Persons</h1> <p>Use this page to browse and find individual persons.</"
+#~ "p> <h3>How do I...</h3> <ul> <li><strong>Sort the list:</strong> Click on "
+#~ "<code>First Name</code> or <code>Last Name</code> to sort.</li> "
+#~ "<li><strong>Search for a user:</strong> Use the search field at the top "
+#~ "of the page to look through all of the people in the system. If you want "
+#~ "to filter by group, select the group in the adjacent drop-down list.</li> "
+#~ "<li><strong>View the details of a person:</strong> Click on the name.</"
+#~ "li> <li><strong>Browse for a person:</strong> Use the <code>Next 10</"
+#~ "code> (and <code>Previous</code>) and links in the blue bar.</li> "
+#~ "<li><strong>Show all students:</strong> Click <code>Show All</code> in "
+#~ "the blue bar.</li> </ul>"
+#~ msgstr ""
+#~ "<h1>អ្នក​ប្រើ</h1> <p>ប្រើ​ទំព័រ​នេះ​ដើម្បី​រកមើល​អ្នកប្រើ​ម្នាក់ៗ ។</p> <h3>តើ​ខ្ញុំ​គួរ...</h3> "
+#~ "<ul> <li><strong>តម្រៀប​បញ្ជី ៖</strong> ចុច​លើ <code>នាម​ខ្លួន</code> ឬ <code>នាម​"
+#~ "ត្រកូល</code> ដើម្បី​តម្រៀប ។</li> <li><strong>ស្វែងរក​អ្នក​ប្រើ ៖</strong> ប្រើ​វាល​"
+#~ "ស្វែងរក​នៅ​កំពូល​ទំព័រ​ដើម្បី​រក​មើល​មនុស្ស​ទាំងអស់​នៅ​ក្នុង​ប្រព័ន្ធ ។ ប្រសិន​បើ​អ្នក​ចង់​ត្រង​តាម​ក្រុម ជ្រើស​ក្រុម​"
+#~ "នៅ​​​ជាប់នឹង​បញ្ជី​ទម្លាក់​ចុះ ។</li> <li><strong>មើល​សេចក្ដី​លម្អិត​របស់​អ្នកប្រើ ៖ </strong> ចុច​"
+#~ "លើ​ឈ្មោះ ។</li> <li><strong>រកមើល​អ្នកប្រើ ៖</strong> ប្រើ <code>បន្ទាប់​ទៀត ១០</"
+#~ "code> (និង <code>មុន</code>) ហើយ​តំណ​នៅ​ក្នុង​របារ​ពណ៌​ខៀវ ។</li> <li><strong>បង្ហាញ​សិស្ស​"
+#~ "ទាំងអស់ ៖</strong> ចុច <code>បង្ហាញ​ទាំងអស់</code> នៅ​ក្នុង​របារ​ពណ៌​ខៀវ ។</li> </ul>"
+
+#~ msgid "Relationships"
+#~ msgstr "ទំនាក់ទំនង"
+
+#~ msgid "Resource Help"
+#~ msgstr "ជំនួយ​ធនធាន"
+
+#~ msgid "Initial School Setup Scripts"
+#~ msgstr "ស្គ្រីប​រៀបចំ​សាលា​លើ​ដំបូង"
+
+#~ msgid ""
+#~ "Warning: proceeding will populate the database with data generated from "
+#~ "scripts installed on the filesystem of this server. Do not do this if you "
+#~ "have any valuable data in this SchoolTool instance or don't already "
+#~ "understand what this is for."
+#~ msgstr ""
+#~ "ការ​ព្រមាន ៖ កា​រ​ធ្វើ​បន្ត​នឹង​គណនា​មូលដ្ឋាន​ទិន្នន័យ​​ដែល​បាន​បង្កើត​ពី​ស្គ្រីប ដែល​បាន​ដំឡើង​ក្នុង​ប្រព័ន្ធ​"
+#~ "ឯកសារ​នៃ​ម៉ាស៊ីន​បម្រើ​នេះ ។ កុំ​ធ្វើ​វា ប្រសិនបើ​អ្នក​មាន​ទិន្នន័យ​ដែល​មាន​ទិន្នន័យ​មាន​តម្លៃ​​នៅ​ក្នុង​ធាតុ "
+#~ "SchoolTool នេះ ឬ​មិន​យល់​នេះ​ជា​អ្វី ។"
+
+#~ msgid "SchoolTool Onlinehelp"
+#~ msgstr "ជំនួយ​លើ​បណ្ដាញ​ SchoolTool"
+
+#~ msgid "Add a term"
+#~ msgstr "បន្ថែម​វគ្គ"
+
+#~ msgid "Term Search Help"
+#~ msgstr "ជំនួយ​ស្វែងរក​វគ្គ"
+
+#~ msgid "Terms in SchoolTool"
+#~ msgstr "វគ្គសិក្សា​ក្នុង SchoolTool"
+
+#~ msgid ""
+#~ "<h1>Terms in SchoolTool</h1> <p>SchoolTool supports definition of basic "
+#~ "academic terms, that is, a period of time which defines when sections "
+#~ "begin and end, and when they are evaluated. The current implementation "
+#~ "does not support a hierarchy of terms, for example, a year, which "
+#~ "contains two semesters, which contain two marking periods. You can create "
+#~ "several terms, which may overlap, for example, both semesters and "
+#~ "trimesters in the same school, but you cannot express a relationship "
+#~ "between terms.</p> <h3>How do I...</h3> <ul> <li><strong>Add a term:</"
+#~ "strong> Select <code>New Term</code> from the <code>Actions</code> menu.</"
+#~ "li> <li><strong>Edit a term:</strong> Click on the term. Then select "
+#~ "<code>Edit</code> from the <code>Actions</code> menu.</li> "
+#~ "<li><strong>Delete a term:</strong> Check the box next to the name of the "
+#~ "term and click <code>Delete</code>. Only delete terms if you have made a "
+#~ "mistake while creating them but you have not used them yet. You should "
+#~ "<strong>not</strong> delete terms simply because they are over, or you "
+#~ "will lose important data.</li> </ul>"
+#~ msgstr ""
+#~ "<h1>វគ្គសិក្សា​នៅ​ក្នុង SchoolTool​</h1> <p>SchoolTool គាំទ្រ​កា​រ​កំណត់​វគ្គសិក្សា​មូលដ្ឋាន​​​ដែល​"
+#~ "កំណត់​​​ពេល​វេលា​ចាប់ផ្ដើម និង​បញ្ចប់ ​​ហើយ​នៅ​ពេល​ដែល​ពួកវា​ត្រូវ​បាន​វាយតម្លៃ ។ ការ​អនុវត្ត​បច្ចុប្បន្ន​មិន​"
+#~ "គាំទ្រ​ថា​ឋានានុក្រម​នៃ​វគ្គ​សិក្សា​ទេ ឧទាហរណ៍ ឆ្នាំ ដែល​មាន​ពីរ​ឆមាស មាន​រយៈពេល​សម្គាល់​ពីរ ។ អ្នក​"
+#~ "អាច​បង្កើត​វគ្គសិក្សា​ជា​ច្រើន ដែល​អាច​ជាន់​គ្នា ឧទាហរណ៍ ពីរ​ឆមាស​ និង​បី​ឆមាស​នៅ​ក្នុង​សាលា​តែ​មួយ ប៉ុន្តែ​"
+#~ "អ្នក​មិន​អាច​បញ្ជាក់​ទំនាក់ទំនង​រវាង​វគ្គសិក្សា​បានទេ ។</p> <h3>តើ​ខ្ញុំ​គួរ...</h3> <ul> "
+#~ "<li><strong>បន្ថែម​វគ្គសិក្សា ៖</strong> ជ្រើស <code>វគ្គសិក្សា​ថ្មី</code> ពី​ម៉ឺនុយ "
+#~ "<code>សកម្មភាព</code> ។</li> <li><strong>កែសម្រួល​​​វគ្គសិក្សា ៖</strong> ចុច​លើ​"
+#~ "វគ្គសិក្សា ។ បន្ទាប់​មក​ជ្រើស <code>កែសម្រួល</code> ពី​ម៉ឺនុយ <code>សកម្មភាព</code> ។</"
+#~ "li> <li><strong>លុប​វគ្គសិក្សា ៖</strong> គូស​ធីក​ប្រអប់​នៅ​ជាប់​នឹង​ឈ្មោះ​វគ្គសិក្សា ហើយ​ចុច "
+#~ "<code>លុប</code> ។ លុប​តែ​វគ្គសិក្សា​ ប្រសិនបើ​អ្នក​មាន​កំហុស​នៅ​ពេល​បង្កើត​ពួកវា ប៉ុន្តែ​អ្នក​មិន​បាន​"
+#~ "ប្រើ​ពួកវា​ទេ ។ អ្នក​ <strong>មិន​គួរ</strong> លុប​វគ្គសិក្សា​ដោយ​ធម្មតា​ទេ ពីព្រោះ​ពួកវា​ចប់​ហើយ "
+#~ "បើ​មិន​ដូច្នេះ​ទេ​ អ្នក​នឹង​បាត់បង់​ទិន្នន័យ​សំខាន់ ។</li> </ul>"
+
 #~ msgid "Everyone can view the application calendar."
 #~ msgstr "អ្នក​ទាំងអស់​អាច​មើល​ប្រតិទិន​កម្មវិធី ។"
 
@@ -7002,8 +7025,36 @@ msgstr "ពាក្យ​សម្ងាត់​ដែល​បាន​ផ្
 #~ msgid "Everyone can view resource lists."
 #~ msgstr "អ្នក​ទាំងអស់​គ្នា​​អាច​មើល​បញ្ជី​ធនធាន ។"
 
+#~ msgid "Report a bug on Launchpad."
+#~ msgstr "រាយការណ៍​កំហុស​នៅ​លើ Launchpad ។"
+
+#~ msgid "For term:"
+#~ msgstr "សម្រាប់​វគ្គ ៖"
+
+#~ msgid "Using timetable:"
+#~ msgstr "ប្រើ​កាល​វិភាគ ៖"
+
 #~ msgid "Add an Equipment"
 #~ msgstr "បន្ថែម​​បរិក្ខារ"
 
 #~ msgid "Edit Equipment Information"
 #~ msgstr "កែសម្រួល​ព័ត៌មាន​បរិក្ខារ"
+
+#~ msgid ""
+#~ "&copy; The <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth "
+#~ "Foundation</a> 2003 - <span>2010</span>: Supporting Social Innovation."
+#~ msgstr ""
+#~ "&copy;  <a href=\"http://www.shuttleworthfoundation.org\">មូលនិធិ "
+#~ "Shuttleworth </a> ២០០៣ - <span>២០១០</span> ៖ ​គាំទ្រ​​ធ្វើ​ឲ្យ​​សង្គម​រីក​ចម្រើន​​ ។"
+
+#~ msgid ""
+#~ "<a href=\"http://www.schooltool.org\">SchoolTool</a>&trade; is a "
+#~ "Trademark of The <a href=\"http://www.shuttleworthfoundation.org"
+#~ "\">Shuttleworth Foundation</a>."
+#~ msgstr ""
+#~ "<a href=\"http://www.schooltool.org\">SchoolTool</a>&trade; គឺ​ជា​​និក្ខិត្តិ​សញ្ញា​"
+#~ "របស់ <a href=\"http://www.shuttleworthfoundation.org\">មូលនិធិ Shuttleworth</"
+#~ "a> ។"
+
+#~ msgid "Access setting: ${setting} (${status})"
+#~ msgstr "ការ​កំណត់​ចូល​ដំណើរការ: ${setting} (${status})"

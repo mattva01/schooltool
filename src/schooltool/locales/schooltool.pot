@@ -17,7 +17,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
-"POT-Creation-Date: 2011-06-08 18:36+0300\n"
+"POT-Creation-Date: 2011-09-08 14:13+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Schooltool Development Team <schooltool-dev@schooltool.org>\n"
@@ -654,14 +654,6 @@ msgstr ""
 
 #: /src/schooltool/app/browser/configure.zcml:645
 msgid "Generations"
-msgstr ""
-
-#: /src/schooltool/app/browser/configure.zcml:666
-msgid "Browser UI"
-msgstr ""
-
-#: /src/schooltool/app/browser/configure.zcml:651
-msgid "Templates"
 msgstr ""
 
 #: /src/schooltool/app/browser/configure.zcml:714
@@ -1677,14 +1669,6 @@ msgstr ""
 #: /src/schooltool/resource/browser/resource-csvimport.pt:72
 #. Default: "Submit"
 msgid "submit-button"
-msgstr ""
-
-#: /src/schooltool/app/configure.zcml:340
-msgid "Security (General)"
-msgstr ""
-
-#: /src/schooltool/app/configure.zcml:355
-msgid "Booking Resources"
 msgstr ""
 
 #: /src/schooltool/app/interfaces.py:44
@@ -2993,28 +2977,22 @@ msgid "Link Section to Section in Other Term"
 msgstr ""
 
 #: /src/schooltool/course/browser/templates/link_existing.pt:13
-#: /src/schooltool/course/browser/templates/section.pt:19
+#: /src/schooltool/course/browser/templates/link_existing.pt:52
+#: /src/schooltool/course/browser/templates/section_container.pt:39
 #: /src/schooltool/course/browser/templates/unlink_section.pt:13
 #: /src/schooltool/course/browser/templates/unlink_section.pt:28
-msgid "Section:"
-msgstr ""
-
-#: /src/schooltool/course/browser/templates/link_existing.pt:15
-#: /src/schooltool/course/browser/templates/section.pt:23
-#: /src/schooltool/course/browser/templates/section_linkage.pt:14
-#: /src/schooltool/course/browser/templates/unlink_section.pt:14
-msgid "Course:"
+msgid "Section"
 msgstr ""
 
 #: /src/schooltool/course/browser/templates/link_existing.pt:20
-#: /src/schooltool/course/browser/templates/section.pt:37
 #: /src/schooltool/course/browser/templates/unlink_section.pt:19
 #: /src/schooltool/course/browser/templates/unlink_section.pt:29
-msgid "Term:"
+#: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:24
+msgid "Term"
 msgstr ""
 
 #: /src/schooltool/course/browser/templates/link_existing.pt:21
-msgid "Target Term:"
+msgid "Target Term"
 msgstr ""
 
 #: /src/schooltool/course/browser/templates/link_existing.pt:26
@@ -3033,11 +3011,6 @@ msgstr ""
 msgid "Filter"
 msgstr ""
 
-#: /src/schooltool/course/browser/templates/link_existing.pt:52
-#: /src/schooltool/course/browser/templates/section_container.pt:39
-msgid "Section"
-msgstr ""
-
 #: /src/schooltool/course/browser/templates/link_existing.pt:71
 #: /src/schooltool/course/browser/templates/link_section.pt:130
 #. Default: "Link"
@@ -3052,24 +3025,26 @@ msgstr ""
 msgid "There is no valid term in ${schoolyear} to pick a section from."
 msgstr ""
 
-#: /src/schooltool/course/browser/templates/section.pt:31
-#: /src/schooltool/course/browser/templates/section_linkage.pt:20
-msgid "Year:"
-msgstr ""
-
-#: /src/schooltool/course/browser/templates/section.pt:45
-msgid "All Terms"
-msgstr ""
-
-#: /src/schooltool/course/browser/templates/section.pt:59
+#: /src/schooltool/course/browser/templates/section.pt:35
 msgid "Change the name or description of this section."
 msgstr ""
 
-#: /src/schooltool/course/browser/templates/section.pt:58
+#: /src/schooltool/course/browser/templates/section.pt:35
 msgid "edit info"
 msgstr ""
 
-#: /src/schooltool/course/browser/templates/section.pt:87
+#: /src/schooltool/course/browser/templates/section.pt:46
+#: /src/schooltool/course/browser/templates/section_edit.pt:60
+msgid "Linked sections"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/section.pt:52
+#: /src/schooltool/course/browser/templates/section_edit.pt:72
+#: /src/schooltool/course/browser/templates/section_edit.pt:106
+msgid "${section_title} for ${term}"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/section.pt:65
 msgid "Change the instructors for this section."
 msgstr ""
 
@@ -3090,10 +3065,6 @@ msgstr ""
 msgid "Section list for ${term} of ${schoolyear}"
 msgstr ""
 
-#: /src/schooltool/course/browser/templates/section_edit.pt:60
-msgid "Linked sections"
-msgstr ""
-
 #: /src/schooltool/course/browser/templates/section_edit.pt:63
 msgid "Previous"
 msgstr ""
@@ -3102,13 +3073,9 @@ msgstr ""
 msgid "Section in the previous term."
 msgstr ""
 
-#: /src/schooltool/course/browser/templates/section_edit.pt:72
-#: /src/schooltool/course/browser/templates/section_edit.pt:106
-msgid "${section_title} for ${term}"
-msgstr ""
-
 #: /src/schooltool/course/browser/templates/section_edit.pt:75
 #: /src/schooltool/course/browser/templates/section_edit.pt:109
+#: /src/schooltool/course/browser/templates/unlink_section.pt:37
 #. Default: "Unlink"
 msgid "unlink-section-button"
 msgstr ""
@@ -3160,10 +3127,6 @@ msgstr ""
 
 #: /src/schooltool/course/browser/templates/unlink_section.pt:23
 msgid "Click 'Unlink' if you would like to remove the link this section has to the following section(s):"
-msgstr ""
-
-#: /src/schooltool/course/help/course_container.pt:10
-msgid "<h1>Courses</h1> <p>Use this page to organize courses listed in the system.</p> <h3>How do I...</h3> <ul> <li><strong>Look for for a course:</strong> Use the search box to the left of the <code>Find Now</code> button to look through the entire list of courses for the search criterion. The <code>Clear</code> button empties the search box of current entries.</li> <li><strong>Show a list of the different sections of a course:</strong> click on the name of the course.</li> <li><strong>Show the lists of students in a particular class:</strong> Click on the <code>teacher -- course</code> link. The number of students is also listed next to the teacher and the course.</li> <li><strong>Navigate through the courses:</strong> Separate <q>batches</q> of the Course list can be accessed through the <code>Next 10</code> (and <code>Previous</code>) and links in the blue bar. A <code>Show All</code> button is also there to show all of the courses on a single page.</li> </ul>"
 msgstr ""
 
 #: /src/schooltool/course/interfaces.py:37
@@ -3670,16 +3633,7 @@ msgstr ""
 msgid "Surname"
 msgstr ""
 
-#: /src/schooltool/devmode/configure.zcml:27
-msgid "Introspect"
-msgstr ""
-
-#: /src/schooltool/devmode/configure.zcml:38
-#: /src/schooltool/devmode/devmode.pt:19
-msgid "API Docs"
-msgstr ""
-
-#: /src/schooltool/devmode/configure.zcml:50
+#: /src/schooltool/devmode/configure.zcml:52
 #: /src/schooltool/devmode/devmode.pt:20
 msgid "Sample data"
 msgstr ""
@@ -3690,6 +3644,10 @@ msgstr ""
 
 #: /src/schooltool/devmode/devmode.pt:18
 msgid "Introspector"
+msgstr ""
+
+#: /src/schooltool/devmode/devmode.pt:19
+msgid "API Docs"
 msgstr ""
 
 #: /src/schooltool/email/browser/configure.zcml:54
@@ -4602,16 +4560,12 @@ msgstr ""
 msgid "Everybody, if the calendar is made public in user preferences."
 msgstr ""
 
-#: /src/schooltool/relationship/configure.zcml:13
-msgid "Relationships"
-msgstr ""
-
 #: /src/schooltool/report/browser/configure.zcml:8
-#: /src/schooltool/report/browser/configure.zcml:22
-#: /src/schooltool/report/browser/configure.zcml:33
-#: /src/schooltool/report/browser/configure.zcml:44
-#: /src/schooltool/report/browser/configure.zcml:55
-#: /src/schooltool/report/browser/configure.zcml:66
+#: /src/schooltool/report/browser/configure.zcml:23
+#: /src/schooltool/report/browser/configure.zcml:34
+#: /src/schooltool/report/browser/configure.zcml:45
+#: /src/schooltool/report/browser/configure.zcml:56
+#: /src/schooltool/report/browser/configure.zcml:67
 msgid "Reports"
 msgstr ""
 
@@ -5662,10 +5616,6 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:22
 msgid "Timetable"
-msgstr ""
-
-#: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:24
-msgid "Term"
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:34
