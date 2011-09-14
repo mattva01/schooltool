@@ -2,13 +2,13 @@
 CHANGES
 =======
 
-1.7.0 (unreleased)
+1.7.0 (2011-09-15)
 ------------------
 
 New features
 ++++++++++++
 
-- All terms view for a section, allowing to extend a section to another term
+- Linked sections view for a section, allowing to extend a section to another term
   or link an existing section (https://launchpad.net/bugs/424498)
 - XLS importer now automatically links sections with same ID that are marked to link
 
@@ -16,9 +16,12 @@ Cleanup
 +++++++
 
 - Removed help (https://launchpad.net/bugs/789157)
-- Made ``zope.app.apidoc`` dependency optional, it is only useful for
-  developers.
 - Removed school setup data framework (https://launchpad.net/bugs/307237)
+- Made ``zope.app.apidoc`` dependency optional, it is only useful for
+  developers. Add ``schooltool [apidoc]`` to package:eggs in buildout.cfg
+  if you want API Docs.
+- Remove dependency on ``zope.app.zcmlfiles`` and many others implied by it.
+
 
 1.6.1 (2011-09-14)
 ------------------
