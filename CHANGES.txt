@@ -2,12 +2,12 @@
 CHANGES
 =======
 
-1.6.1 (unreleased)
+1.6.1 (2011-09-14)
 ------------------
 
 - Add paste.ini_tmpl to .tar.gz to fix start-schooltool-instance not creating
   the required paste.ini file.
-  NOTE: run ``make-schooltool-instance instance`` to fix ``instance`` if it does
+  NOTE: run ``make-schooltool-instance instance`` to fix `instance` if it does
   not start.
 - Allowed non-integer values for course credits (https://bugs.launchpad.net/bugs/488376)
 - Add School Year copies all course attributes (https://bugs.launchpad.net/bugs/785994)
