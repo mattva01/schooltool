@@ -6,16 +6,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-17 23:49+0300\n"
-"PO-Revision-Date: 2011-03-26 05:58+0000\n"
-"Last-Translator: Cristian Gomez <gmz.crstn@gmail.com>\n"
+"POT-Creation-Date: 2011-09-08 14:13+0300\n"
+"PO-Revision-Date: 2011-05-21 00:14+0000\n"
+"Last-Translator: gh05t2k <Unknown>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-04-08 04:38+0000\n"
-"X-Generator: Launchpad (build 12735)\n"
+"X-Launchpad-Export-Date: 2011-05-27 04:38+0000\n"
+"X-Generator: Launchpad (build 12959)\n"
 
 #: /src/schooltool/app/app.py:197
 msgid "Your School"
@@ -640,35 +640,12 @@ msgstr "Dominios de traducción"
 msgid "Generations"
 msgstr "Generaciones"
 
-#: /src/schooltool/app/browser/configure.zcml:666
-msgid "Browser UI"
-msgstr "Interfaz del Navegador"
-
-#: /src/schooltool/app/browser/configure.zcml:672
-#: /src/schooltool/app/browser/templates/login.pt:3
-#: /src/schooltool/app/browser/templates/menu_view.pt:3
-msgid "Login"
-msgstr "Ingresar"
-
-#: /src/schooltool/app/browser/configure.zcml:678
-#: /src/schooltool/app/browser/configure.zcml:765
+#: /src/schooltool/app/browser/configure.zcml:714
 #: /src/schooltool/devmode/devmode.pt:17
 msgid "Errors"
 msgstr "Errores"
 
-#: /src/schooltool/app/browser/configure.zcml:690
-msgid "Application"
-msgstr "Aplicación"
-
-#: /src/schooltool/app/browser/configure.zcml:696
-msgid "Calendar Widget"
-msgstr "Herramienta para el calendario"
-
-#: /src/schooltool/app/browser/configure.zcml:702
-msgid "Templates"
-msgstr "Plantillas"
-
-#: /src/schooltool/app/browser/configure.zcml:781
+#: /src/schooltool/app/browser/configure.zcml:730
 msgid "Configure"
 msgstr "Configuración"
 
@@ -1395,6 +1372,11 @@ msgstr "Grupos"
 msgid "Levels"
 msgstr "Niveles"
 
+#: /src/schooltool/app/browser/templates/login.pt:3
+#: /src/schooltool/app/browser/templates/menu_view.pt:3
+msgid "Login"
+msgstr "Ingresar"
+
 #: /src/schooltool/app/browser/templates/login.pt:8
 msgid "Your session has expired."
 msgstr "Su sesión ha expirado."
@@ -1786,510 +1768,6 @@ msgstr "Datos CSV"
 msgid "submit-button"
 msgstr "Enviar"
 
-#: /src/schooltool/app/configure.zcml:340
-msgid "Security (General)"
-msgstr "Seguridad (General)"
-
-#: /src/schooltool/app/configure.zcml:355
-msgid "Booking Resources"
-msgstr "Reservar Recursos"
-
-#: /src/schooltool/app/help/admin.pt:6
-msgid "SchoolTool Administration"
-msgstr "Administración de SchoolTool"
-
-#: /src/schooltool/app/help/admin.pt:8
-msgid ""
-"<h1>SchoolTool Administration</h1> <p>Schools have complex structures, "
-"spanning the organization of people, pedagogy, time and physical resources. "
-"Unfortunately, this means that an application that seeks to model these "
-"processes, like SchoolTool, is also complex, and the process of setting up "
-"an individual school in SchoolTool is necessarily an involved one.</p> "
-"<p>This branch of the help tree contains items relevant to administrators "
-"configuring SchoolTool, but not end users.</p>"
-msgstr ""
-"<h1>Administración de SchoolTool</h1> <p>Las escuelas tienen estructuras "
-"complejas, que abarcan la organización de las personas, la pedagogía, el "
-"tiempo y los recursos físicos. Lamentablemente, esto significa que una "
-"aplicación que trata de modelar estos procesos, como SchoolTool, es también "
-"compleja y el proceso de aprendizaje de un individuo en SchoolTool esta "
-"necesariamente ligado.</p> Esta rama del árbol de ayuda contiene artículos "
-"de interés para la configuración de administradores en SchoolTool, pero no "
-"para los usuarios finales</p>."
-
-#: /src/schooltool/app/help/calendar_selection.pt:6
-#: /src/schooltool/app/help/configure.zcml:97
-msgid "Calendar Selection"
-msgstr "Selección de Calendario"
-
-#: /src/schooltool/app/help/calendar_selection.pt:8
-msgid ""
-"<h1>Calendar Selection</h1> <p>You can add color-coded events from multiple "
-"calendars to your personal calendar view. You can add events from course "
-"sections you attend, groups, other people, or even resources like classrooms "
-"or projectors.</p> <p>Some calendars are private or limited to certain "
-"groups.</p> <p>On the calendar selection form you are given lists of all the "
-"calendars available to you. This might be a long list.</p> <p>The "
-"\"SchoolTool site-wide calendar\" is intended to be used as the official "
-"public calendar of the school.</p> <h3>How do I...</h3> <ul> "
-"<li><strong>Select or unselect several individual calendars of one type:</"
-"strong> If you press the <code>Ctrl</code> button on your keyboard while you "
-"select calendars from a list with your mouse, you can select multiple "
-"calendars.</li> <li><strong>Select a range of calendars of one type:</"
-"strong> If you press the <code>Shift</code> key while clicking on calendars, "
-"you can select a range.</li> </ul>"
-msgstr ""
-"<h1>Selección de calendario</h1> <p>Puede añadir un código-color a partir de "
-"eventos de múltiples calendarios desde su vista de calendario personal. "
-"Puede agregar eventos desde las secciones de curso asistidas, grupos, otras "
-"personas, o incluso de recursos como aulas o proyectores.</p> Algunos "
-"calendarios son privados o limitados a ciertos grupos.</p> En la selección "
-"de calendario son dados listas de todos los calendarios disponibles. Puede "
-"ser una lista larga.</p> El \"amplio-sitio de SchoolTool en el calendario\" "
-"está destinado a ser utilizado como el calendario público oficial de la "
-"escuela.</p>. <h3> ¿Cómo hago...? </h3> <ul> <li> <strong> Seleccionar o "
-"deseleccionar varios calendarios individuales de un tipo:</strong> Si "
-"presionas el botón <code>Ctrl</code> en el teclado mientras seleccionas "
-"calendarios desde una lista con tu ratón, seleccionaras múltiples "
-"calendarios.</li> <li> <strong> Seleccione un rango de calendarios de un "
-"tipo: </strong> Si presionas la tecla clave <code>Shift</code> mientras "
-"clickeas en los calendarios, puedes seleccionar un rango.</li></ul>"
-
-#: /src/schooltool/app/help/calendaring.pt:6
-msgid "Calendaring in SchoolTool"
-msgstr "Calendarios en SchoolTool"
-
-#: /src/schooltool/app/help/calendaring.pt:8
-msgid ""
-"<h1>Calendaring in SchoolTool</h1> <p>SchoolTool includes a full-featured "
-"calendaring system, similar to Apple iCal or Google Calendar, but capable of "
-"representing complex school timetables, including rotating schedules. "
-"SchoolTool is also useful for simple resource scheduling, allowing you to "
-"manage room assignments, and booking shared resources like computers or "
-"projectors. Each person, group, course section or resource has its own "
-"calendar. You may integrate multiple calendars into your personal calendar "
-"views.</p> <h3>Parts of the standard calendar views</h3> <ul> "
-"<li><strong>Calendar table:</strong> fills the main (lower-right) part of "
-"the page. This represents the calendar for one day, week, month or year, "
-"depending on the view..</li> <li><strong>Calendar navigation bar:</strong> "
-"immediately above the calendar table. Allows you to navigate forward or "
-"backward in time, or to return to the current time.</li> "
-"<li><strong>Calendar title:</strong> immediately above the calendar "
-"navigation bar, lists the owner of this calendar and the date for this \"page"
-"\" of the calendar.</li> <li><strong>Left sidebar:</strong> for all "
-"calendars, this contains a <code>Jump to...</code> section containing menus "
-"and links to allow you to quickly navigate to a specific month, year or "
-"date. <br /> If you are logged in and viewing your own calendar, you will "
-"also see a <code>Calendars</code> section at the top of the sidebar which "
-"allows you to \"overlay\" events from other calendars in this view. You may "
-"see calendars for classes you teach or attend listed here already.</li> "
-"<li><strong>Day/week/month/year buttons:</strong> These buttons allow you to "
-"switch between daily, weekly, monthly and annual views.</li> </ul>"
-msgstr ""
-"<h1>Agendando en SchoolTool</h1> <p>SchoolTool incluye un sistema completo "
-"de agendado, similar a Apple iCal o Google Calendar, pero capaz de "
-"representar complejos horarios escolares, incluyendo calendarios rotativos. "
-"SchoolTool también es útil para agendado simple de recursos, permitiéndole "
-"administrar asignaciones de aulas, y registrar recursos compartidos como "
-"computadores y proyectores. Cada persona, grupo, sección de curso o recurso "
-"tiene su propio calendario. Puede integrar múltiples calendarios en su vista "
-"personal de calendario.</p> <h3>Partes de las vistas de calendario estándar</"
-"h3> <ul> <li><strong>Tabla del calendario:</strong> Llena la parte principal "
-"(abajo a la derecha)  de la página. Esto representa al calendario de un día, "
-"semana, mes o año, dependendo de la vista..</li> <li><strong>Barra de "
-"navegación del calendario:</strong> immediatamente arriba de la tabla de "
-"calendario. Le permite navegar hacia adelante o hacia atrás en el tiempo, o "
-"regresar al tiempo actual.</li> <li><strong>Título del calendario:</strong> "
-"immediatamente arriba de la barra de navegación del calendario, lista el "
-"dueño de este calendario y la fecha de esta \"página\" del calendario.</li> "
-"<li><strong>Barra lateral izquierda:</strong> Para todos los calendarios, "
-"esta contiene una sección <code>Ir a...</code> que contiene menus y enlaces "
-"que para permitirle rápidamente navegar  un mes, año o fecha específica. "
-"<br /> Si usted está registrado y viendo su propio calendario, también verá "
-"una sección  <code>Calendarios</code> arriba de la barra lateral, lo que le "
-"permite \"sobreponer\" eventos desde otros calendarios en esta vista. Usted "
-"podrá ver calendarios de clases que usted enseñe o asista, listados ya aquí."
-"</li> <li><strong>Botones día/semana/mes/año:</strong> Estos botones le "
-"permiten cambiar entre vistas diarias, semanales, mensuales y anuales.</li> "
-"</ul>"
-
-#: /src/schooltool/app/help/configure.zcml:13
-msgid "Administration"
-msgstr "Administración"
-
-#: /src/schooltool/app/help/configure.zcml:21
-msgid "Organization"
-msgstr "Organización"
-
-#: /src/schooltool/app/help/configure.zcml:29
-msgid "Calendaring"
-msgstr "Calendarios"
-
-#: /src/schooltool/app/help/configure.zcml:37
-#: /src/schooltool/app/help/daily_calendar.pt:6
-msgid "Daily Calendar"
-msgstr "Calendario Diario"
-
-#: /src/schooltool/app/help/configure.zcml:47
-#: /src/schooltool/app/help/weekly_calendar.pt:6
-msgid "Weekly Calendar"
-msgstr "Calendario Semanal"
-
-#: /src/schooltool/app/help/configure.zcml:57
-#: /src/schooltool/app/help/monthly_calendar.pt:6
-msgid "Monthly Calendar"
-msgstr "Calendario Mensual"
-
-#: /src/schooltool/app/help/configure.zcml:67
-#: /src/schooltool/app/help/yearly_calendar.pt:6
-msgid "Yearly Calendar"
-msgstr "Calendario Anual"
-
-#: /src/schooltool/app/help/daily_calendar.pt:8
-msgid ""
-"<h1>Daily Calendar</h1> <p>This is the daily view of a calendar. It might be "
-"your calendar, or it might be the calendar of another person, group or "
-"resource in your school. <a href=\"/++help++/schooltool/calendaring\">More "
-"calendaring help...</a></p> <h3>How do I...</h3> <ul> <li><strong>Create an "
-"event:</strong> click in the calendar table at the start time for the event. "
-"Or select <code>New Event</code> from the <code>Actions</code> menu.</li> "
-"<li><strong>Book a resource:</strong> create an event starting at the time "
-"you want to reserve the resource. Select <code>Book Resource</code> in the "
-"Event Information form.</li> <li><strong>Show or hide events in one of the "
-"calendars listed under <code>Calendars</code>:</strong> check or uncheck the "
-"box under <code>Cal</code> and click <code>Apply</code>.</li> "
-"<li><strong>Adding or removing calendars to the <code>Calendars</code> list:"
-"</strong> click on the <code>More...</code> button.</li> <li><strong>access "
-"a iCal format version of the calendar:</strong>: Select <code>Open in iCal</"
-"code> from the Action menu.</li> <li><strong>Access an Atom feed version of "
-"the calendar: </strong> append <code>/atom.xml</code> to the calendar's URL."
-"</li> </ul>"
-msgstr ""
-"<h1>Calendario diario</h1> <p> Esta es la vista diaria de un calendario. "
-"Puede ser tu calendario o puede ser el calendario de otra presona, grupo o "
-"recurso en tu escuela. <a href=\"/++help++/schooltool/calendaring\">Mas "
-"ayuda de calendario...</a></p> <h3>¿Cómo hago...?</h3> <ul> "
-"<li><strong>Crear un evento:</strong> cliquear en la tabla de calendarios al "
-"principio del evento.O seleccionar <code>nuevo evento</code> desde el menú "
-"de <code>acciones</code>.</li> <li><strong>Libro de recursos:</strong> crea "
-"un evento al empezar la reserva de teimpo que quieres para el recurso. "
-"Selecciona <code>libro de recursos</code> en el formulario de información de "
-"eventos.</li> <li><strong>Mostrar o esconder eventos en un de los "
-"calendarios listados bajo <code>calendarios</code>:</strong> Comprobar o "
-"descomprobar la casilla bajo <code>Cal</code> y cliquear <code>aplicar</"
-"code>.</li> <li><strong>Añadiendo o eliminando calendarios de la lista de "
-"<code>calendarios</code>:</strong> cliquear en el botón <code>mas...</code> "
-"button.</li> <li><strong>acceso a una versión formateada de iCal del "
-"calendario:</strong>: Seleccionar <code>abierto en iCal</code> desde el menu "
-"de acciones.</li> <li><strong>Acceso a un alimentador de Atom del "
-"calendario: </strong>añadir<code>/atom.xml</code> al la URL del calendario.</"
-"li> </ul>"
-
-#: /src/schooltool/app/help/event_add.pt:10
-#: /src/schooltool/app/help/event_edit.pt:10
-msgid "This form has a few issues:"
-msgstr "Este nuevo formulario tiene algunos asuntos"
-
-#: /src/schooltool/app/help/event_add.pt:12
-msgid ""
-"If you need to reserve a resource, such as a room or a projector, tracked by "
-"SchoolTool at your school, you should create an event for the necessary time "
-"and check the <code>Book Resources</code> checkbox at the bottom of the page."
-msgstr ""
-"Si necesitas reservas un recurso, como una habitación o un proyector "
-"rastreados por SchoolTool en tu escuela, deberías crear un evento para el "
-"tiempo necesario y comprobar la casilla del <code>libro de recursos</code> "
-"en la parte inferior de la página."
-
-#: /src/schooltool/app/help/event_add.pt:16
-#: /src/schooltool/app/help/event_edit.pt:14
-msgid ""
-"The form ignores your preferences for time and date format. You must enter "
-"the event's start time in 24-hour or \"military\" time, and the date is "
-"displayed in year-month-day format."
-msgstr ""
-"El formulario ignora tus preferencias de formato de tiempo y fecha. Debe "
-"introducir la hora de comienzo del evento en timepo 24 horas o \"militar\", "
-"y la fecha se muestra en formato año-mes-día."
-
-#: /src/schooltool/app/help/event_add.pt:19
-#: /src/schooltool/app/help/event_edit.pt:17
-msgid ""
-"The <code>Location</code> field allows you to enter a description of the "
-"location of the event, but this is not connected to the reservation system. "
-"If your school uses SchoolTool to manage room reservations you need to check "
-"the <code>Book Resources</code> checkbox at the bottom of the form."
-msgstr ""
-"La <code>localización</code> le permite ingresar una descripción de la "
-"ubicación del evento, pero esto no está conectado al sistema de reservas. Si "
-"su escuela usa SchoolTool para gestionar reservas de habitación necesita "
-"verificar la casilla de <code>libro de recursos</code> en la parte inferior "
-"del formulario"
-
-#: /src/schooltool/app/help/event_add.pt:24
-#: /src/schooltool/app/help/event_edit.pt:22
-msgid ""
-"If your event repeats in some pattern, check the <code>Recurring</code> box "
-"and fill out the new fields that appear. In certain circumstances (like if "
-"you change the original day of a weekly recurring event) you may need to "
-"click the <code>Update form</code> button to update the recurrence fields."
-msgstr ""
-"Si su caso se repite en algún patrón, marque la casilla <code>repetición</"
-"code> y rellene los campos que aparecen. En determinadas circunstancias "
-"(como si cambia el día original de un evento de repetición semanal) es "
-"posible que tenga cliquear el botón de <code>formulario de actualización</"
-"code> para actualizar los campos que se repitan."
-
-#: /src/schooltool/app/help/event_add.pt:29
-#: /src/schooltool/app/help/event_edit.pt:27
-msgid ""
-"An \"all day\" event does not show up as a 24 hour event. It indicates that "
-"the day as a whole has some significance, like a birthday or holiday."
-msgstr ""
-"Un evento de \"todo el día\" no es un evento que dure 24 horas. Indica que "
-"el día como una sola cosa tiene alguna importancia, como un cumpleaños o "
-"vacaciones."
-
-#: /src/schooltool/app/help/event_add.pt:32
-#: /src/schooltool/app/help/event_edit.pt:30
-msgid ""
-"\"Exception dates\" are specific dates a repeating event skips, such as "
-"holidays."
-msgstr ""
-"Las \"Fechas de excepción\" son fechas especificas en las que se evita un "
-"evento constante, como las vacaciones."
-
-#: /src/schooltool/app/help/event_edit.pt:12
-msgid ""
-"If you need to edit a resource reservation, click the <code>Book resources</"
-"code> link at the bottom of the form."
-msgstr ""
-"Si necesita editar una reserva de recurso, haga click en el enlace "
-"<code>Reservar Recursos</code> al final del formulario."
-
-#: /src/schooltool/app/help/monthly_calendar.pt:8
-msgid ""
-"<h1>Monthly Calendar</h1> <p>This is the monthly view of a calendar. It "
-"might be your calendar, or it might be the calendar of another person, group "
-"or resource in your school. <a href=\"/++help++/schooltool/calendaring"
-"\">More calendaring help...</a></p> <h3>How do I...</h3> <ul> "
-"<li><strong>View an individual day or event in more detail:</strong> click "
-"on the appropriate day on the calendar.</li> <li><strong>View an individual "
-"week:</strong> Click on the appropriate week number in blue in the leftmost "
-"column of the calendar.</li> <li><strong>Create an event:</strong> select "
-"<code>New Event</code> from the <code>Actions</code> menu.</li> "
-"<li><strong>Show or hide events in one of the calendars listed under "
-"<code>Calendars</code>:</strong> check or uncheck the box under <code>Cal</"
-"code> and click <code>Apply</code>.</li> <li><strong>Adding or removing "
-"calendars to the <code>Calendars</code> list:</strong> click on the "
-"<code>More...</code> button.</li> <li><strong>Make weeks start on the "
-"correct day:</strong> the first day of the week varies in different parts of "
-"the world. If SchoolTool isn't set up correctly for you, click on your name "
-"in the red bar at the top of the page. Then click on the <code>Actions</"
-"code> menu and select <code>Change Preferences</code>. Pick the correct "
-"\"Week starts on\" day and hit <code>Apply</code>.</li> <li><strong>Access a "
-"iCal format version of the calendar:</strong>: select <code>Open in iCal</"
-"code> from the Action menu.</li> </ul>"
-msgstr ""
-"<h1>Monthly Calendar</h1> <p>Este es la vista mensual de un calendario. "
-"Podría ser tu propio calendario, o el calendario de alguna otra persona, "
-"grupo o recurso en tu escuela. <a href=\"/++help++/schooltool/calendaring"
-"\">More calendaring help...</a></p> <h3>How do I...</h3> <ul> "
-"<li><strong>Para ver individualmente un día o evento con mas detalle:</"
-"strong> Presiona en el dia apropiado del calendario.</li> <li><strong>Para "
-"ver individualmente una semana:</strong> Presiona en el numero de la semana "
-"apropiada un la barra izquierda de el calendario.</li> <li><strong>Crear un "
-"evento:</strong> selecciona <code>New Event</code> del<code>Menu</code> de "
-"Acciones.</li> <li><strong>Mostrar u ocultar eventos enlistados en el "
-"calendario <code>Calendars</code>:</strong> Selecciona o deselecciona la "
-"caja apropiada bajo el <code>Calendario</code> y presiona <code>Aplicar</"
-"code>.</li> <li><strong>Añadir o remover calendarios de la lista "
-"de<code>Calendarios</code>:</strong> Presiona en el boton de <code>Mas...</"
-"code></li> <li><strong>Hacer que las semanas inicien en el dia correcto:</"
-"strong> el primer dia de la semana varia en distintas partes del mundo. Si "
-"SchoolTool no esta ajustada correctamente para usted, presione en su nombre "
-"en la barra roja al principio de la pagina. Entonce presiones en el menu "
-"<code>Acioness</code> y selecciona <code>Cambiar Preferencias</code>. Elige "
-"el dia correcto de inicio de la semana y presiona <code>Aplicar</code>.</li> "
-"<li><strong>Para acceder a un formato del calendario de la version iCal:</"
-"strong>: Selecciona <code>Abrir en iCal</code> del menu Accion.</li> </ul>"
-
-#: /src/schooltool/app/help/org.pt:6
-msgid "SchoolTool Organization"
-msgstr "Organización de SchoolTool"
-
-#: /src/schooltool/app/help/org.pt:8
-msgid ""
-"<h1>SchoolTool Organization</h1> <p>This branch of the help tree contains "
-"items explaining the basic organization of SchoolTool.</p>"
-msgstr ""
-"<h1>Organización de SchoolTool </h1> <p>Esta rama del arbol de ayuda "
-"contiene elementos explicando la organización básica de SchoolTool.</p>"
-
-#: /src/schooltool/app/help/schooltool.pt:8
-msgid ""
-"<h1>SchoolTool</h1> <p>SchoolTool is a free/libre administrative system for "
-"schools around the world, funded by The Shuttleworth Foundation.</p> "
-"<h2>Standard User Interface Conventions in SchoolTool</h2> <ul> "
-"<li><strong>Red top bar</strong></li> <ul> <li><strong>Breadcrumbs:</strong> "
-"the links at the left hand side of the red bar show you where you are in "
-"SchoolTool's object hierarchy. Note that this doesn't necessarily lead you "
-"back to where you came from, but is handy for taking you from more specific "
-"to more general parts of the application.</li> <li><strong>Your name</"
-"strong> (if you're logged in): clicking on your name takes you to a simple "
-"dashboard of relevant links. From this page you can also use the "
-"<code>Actions</code> menu to change preferences and other personal settings."
-"</li> <li><strong>Log in/out:</strong> this logs you in or out. It is a good "
-"idea to log out when you aren't using SchoolTool.</li> <li><strong>Help:</"
-"strong> if there is a help file for the page you're looking at, you'll see "
-"this link.</li> </ul> <li><strong>Menus</strong></li> <ul> "
-"<li><strong>Navigation:</strong> this menu gives you some basic options for "
-"accessing different parts of SchoolTool, such as the index of persons or "
-"courses. What you see here depends on your permissions in the system.</li> "
-"<li><strong>Action:</strong> this menu contains a variety of things that you "
-"can do on the current page. The entries in this menu change considerably "
-"based on what page you're viewing and what permissions you have.</li> </ul> "
-"<li><strong>Above the red bar</strong></li> <ul> <li><strong>Logo & School "
-"Name:</strong> clicking in this area will take you to the top of the "
-"school's site, usually the calendar for the school.</li> "
-"<li><strong>Calendar day/week/month/year views:</strong> if you are viewing "
-"a calendar, you will find icons in the upper right hand corner that will "
-"allow you to switch between calendar views.</li> <li><strong>Devmode menu:</"
-"strong> if you are a site administrator and you've enabled \"devmode\" in "
-"schooltool.conf, you will see a special menu in the upper right hand corner "
-"of the site. You should disable devmode in any production server.</li> </ul> "
-"</ul>"
-msgstr ""
-"<h1>SchoolTool</h1> <p>SchoolTool es un sistema administrativo free/libre "
-"para escuelas alrededor del mundo, fundada por la Fundación Shuttleworth.</"
-"p> <h2>Convenciones de Interfaz Gráfica de Usuario en SchoolTool</h2> <ul> "
-"<li><strong>Barra superior roja</strong></li> <ul> <li><strong>Migas de pan:"
-"</strong> los enlaces al lado izquierdo de la barra roja le muestran donde "
-"se encuentra en la jerarquía de objetos de SchoolTool. Note que esto no "
-"necesariamente lo regresa a donde usted vino, pero es útil para llevarlo "
-"desde partes mas específicas a partes mas generales en la aplicación.</li> "
-"<li><strong>Su nombre</strong> (si está registrado): haciendo click en su "
-"nombre lo lleva a un  panel simple de elnaces relevantes. Desde esta página "
-"puede también usar el menú <code>Acciones</code>  para cambiar als "
-"preferencias y otras configuraciones personales.</li> <li><strong>Ingresar/"
-"salir:</strong> Esto le deja ingresar o salir. Es uan buena idea salir "
-"cuando no está usando SchoolTool.</li> <li><strong>Ayuda:</strong> Si existe "
-"un arhcivo de ayuda para la página que está buscando, verá este enlace.</li> "
-"</ul> <li><strong>Menus</strong></li> <ul> <li><strong>Navegación:</strong> "
-"este menú le entrega algunas opciones básicas para acceder a diferentes "
-"partes de SchoolTool, como el índice de personas por cursos. Lo que vea aquí "
-"depende de sus permisos en el sistema.</li> <li><strong>Acción:</strong> "
-"este menú contiene una variedad de cosas que usted puede hacer en la página "
-"actual. Las entradas en este menú cambian considerablemente basadas en las "
-"páginas que usted está viendo y los permisos que tiene.</li> </ul> "
-"<li><strong>Arriba de la barra roja</strong></li> <ul> <li><strong>Logo & "
-"Nombre de Escuela:</strong> hacer click en esta área le llevará a la parte "
-"superior del sitio de la escuela, usualmente al calendario de la escuela.</"
-"li> <li><strong>Vistas diarias/semanal/mensual/anual del calendario:</"
-"strong> si está viendo un calendario, encontrará íconos en la esquina "
-"superior derecha que le permitirá cambiar entre las vistas de calendario.</"
-"li> <li><strong>Menú modo de Desarrollo:</strong> si usted es un "
-"administrador del sitio y ha habilidato \"devmode\" en schooltool.conf, verá "
-"un menú especial en la esquina superior derecha del sitio. Usted debería "
-"deshabilitar el modo de desarrollo en cualquier servidor de producción.</li> "
-"</ul> </ul>"
-
-#: /src/schooltool/app/help/weekly_calendar.pt:8
-msgid ""
-"<h1>Weekly Calendar</h1> <p>This is the weekly view of a calendar. It might "
-"be your calendar, or it might be the calendar of another person, group or "
-"resource in your school. <a href=\"/++help++/schooltool/calendaring\">More "
-"calendaring help...</a></p> <h3>How do I...</h3> <ul> <li><strong>View an "
-"individual day in more detail:</strong> click on the appropriate day in the "
-"blue row of the calendar table.</li> <li><strong>View details about an event "
-"or edit it:</strong> click on the event. If you have the correct permissions "
-"for the event you can edit it.</li> <li><strong>Create an event:</strong> "
-"select the day the event starts and create the event in the daily view.</li> "
-"<li><strong>Show or hide events in one of the calendars listed under "
-"<code>Calendars</code>:</strong> check or uncheck the box under <code>Cal</"
-"code> and click <code>Apply</code>.</li> <li><strong>Adding or removing "
-"calendars to the <code>Calendars</code> list:</strong> click on the "
-"<code>More...</code> button.</li> <li><strong>Make the calendar start on the "
-"correct day:</strong> the first day of the week varies in different parts of "
-"the world. If SchoolTool isn't set up correctly for you, click on your name "
-"in the red bar at the top of the page. Then click on the <code>Actions</"
-"code> menu and select <code>Change Preferences</code>. Pick the correct "
-"\"Week starts on\" day and hit <code>Apply</code>.</li> <li><strong>Access a "
-"iCal format version of the calendar:</strong>: select <code>Open in iCal</"
-"code> from the Action menu.</li> </ul>"
-msgstr ""
-"<h1>Calendario Semanal</h1> <p>Esta es la vista semanal de un calendario. "
-"Puede ser su calendario, o puede ser el calendario de otra persona, grupo o "
-"recurso en su escuela. <a href=\"/++help++/schooltool/calendaring\">Más "
-"ayuda de calendario...</a></p> <h3>¿Cómo puedo...?</h3> <ul> <li><strong>Ver "
-"un día individual con más detalle:</strong> haz click en el día apropiado en "
-"la fila azul de la tabla del calendario.</li> <li><strong>Ver detalles sobre "
-"un evento o editarlo:</strong> haga click en el evento. Si tiene los "
-"permisos necesarios para el evento, lo podrá editar.</li> <li><strong>Crear "
-"un evento:</strong> seleccione el día en que comienza el evento y cree el "
-"evento en la vista diaria.</li> <li><strong>Muestro u oculto eventos en uno "
-"de los calendarios listados bajo <code>Calendarios</code>:</strong> marque o "
-"desmarque la caja bajo <code>Cal</code> y haga click en <code>Aplicar</code>."
-"</li> <li><strong>Agrego o eliminao calendarios a la lista de "
-"<code>Calendarios</code> :</strong> haga click en el botón <code>Más...</"
-"code>.</li> <li><strong>Pon el comienzo del calendario en el día correcto:</"
-"strong> el primer día de la semana es distinto en diferentes partes del "
-"mundo. Si SchoolTool no está correctamente configurado para usted, haga "
-"click en su nombre en la barra roja en la parte superior de la página. "
-"Después haga click en el menú <code>Acciones</code> y seleccione "
-"<code>Cambiar Preferencias</code>. Escoga el día correcto en la opción \"La "
-"semana comienza el\" y pulse <code>Aplicar</code>.</li> <li><strong>Accedo a "
-"una versión del formato iCal del calendario:</strong>: seleccione "
-"<code>Abrir en iCal</code> del menú Acción.</li> </ul>"
-
-#: /src/schooltool/app/help/yearly_calendar.pt:8
-msgid ""
-"<h1>Yearly Calendar</h1> <p>This is the year view of a calendar. It might be "
-"your calendar, or it might be the calendar of another person, group or "
-"resource in your school. <a href=\"/++help++/schooltool/calendaring\">More "
-"calendaring help...</a></p> <h3>How do I...</h3> <ul> <li><strong>Know which "
-"days contain events: if the day has a blue background, there is at least one "
-"event that day.</strong></li> <li><strong>View an individual day in more "
-"detail:</strong> click on the day.</li> <li><strong>View an individual month:"
-"</strong> click on the name of the month.</li> <li><strong>Create an event:</"
-"strong> select the day the event starts and create the event in the daily "
-"view.</li> <li><strong>Show or hide events in one of the calendars listed "
-"under <code>Calendars</code>:</strong> check or uncheck the box under "
-"<code>Cal</code> and click <code>Apply</code>.</li> <li><strong>Adding or "
-"removing calendars to the <code>Calendars</code> list:</strong> click on the "
-"<code>More...</code> button.</li> <li><strong>Make the calendar start on the "
-"correct day:</strong> the first day of the week varies in different parts of "
-"the world. If SchoolTool isn't set up correctly for you, click on your name "
-"in the red bar at the top of the page. Then click on the <code>Actions</"
-"code> menu and select <code>Change Preferences</code>. Pick the correct "
-"\"Week starts on\" day and hit <code>Apply</code>.</li> <li><strong>Access a "
-"iCal format version of the calendar:</strong>: select <code>Open in iCal</"
-"code> from the Action menu.</li> </ul>"
-msgstr ""
-"<h1>Calendario Anual</h1> <p>Esta es la vista anual de un calendario. Podría "
-"ser su calendario, o podría ser el calendario de otra persona, grupo o "
-"recurso en su escuela. <a href=\"/++help++/schooltool/calendaring\">Más "
-"ayuda del calendario...</a></p> <h3>Cómo yo...</h3> <ul> <li><strong>Sé qué "
-"días contienen eventos: si el día tiene un fondo azul, existe al menos un "
-"evento ese día.</strong></li> <li><strong>Véo un día individual en mayor "
-"detalle:</strong> haga click en el día.</li> <li><strong>Véo un mes "
-"individual:</strong> haga click en el nombre del mes.</li> <li><strong>Créo "
-"un evento:</strong> seleccione el día en que el evento comienza y cree el "
-"evento en la vista diaria.</li> <li><strong>Muestro o escondo eventos en uno "
-"de los calendarios mostrados bajo <code>Calendarios</code>:</strong> marque "
-"o desmarque la caja abajo de <code>Cal</code> y haga click en<code>Aplicar</"
-"code>.</li> <li><strong>Agrego o remuevo calendarios en la lista "
-"<code>Calendarios</code> :</strong> haga click en el botón <code>Más...</"
-"code>.</li> <li><strong>Hago que el calendario empiece en el día correcto:</"
-"strong> el primer día de la semana varía en diferentes partes del mundo. Si "
-"SchoolTool no está configurado correctamente para usted, haga click en su "
-"nombre en la barra roja en la parte superior de la página. Luego haga click "
-"en el menú <code>Acciones</code> y seleccione <code>Cambiar Preferencias</"
-"code>. Elija el día correcto para \"Semana empieza en\" y dele "
-"<code>Aplicar</code>.</li> <li><strong>Acceso a la versión de formato iCal "
-"del calendario:</strong>: seleccione <code>Abrir en iCal</code> desde el "
-"menú Acción.</li> </ul>"
-
 #: /src/schooltool/app/interfaces.py:44
 msgid "Form input is not a file object"
 msgstr "La entrada del formulario no es un archivo objeto"
@@ -2388,7 +1866,27 @@ msgstr ""
 "                         es \"-\")\n"
 "  --manage solo hacer tareas de mantenimiento, no correr el servidor\n"
 
-#: /src/schooltool/app/main.py:110
+#: /src/schooltool/app/main.py:327
+msgid "Going to background, daemon pid %d"
+msgstr "Enviado al fondo, PID del demonio: %d"
+
+#: /src/schooltool/app/main.py:382
+msgid "Cannot resolve plugin action order:\n"
+msgstr "No se puede llevar a cabo la acción del plugin:\n"
+
+#: /src/schooltool/app/main.py:528
+msgid "Run %s -h for help."
+msgstr "Ejecute %s -h para obtener ayuda."
+
+#: /src/schooltool/app/main.py:549
+msgid "%s: daemon mode not supported on your operating system."
+msgstr "%s: el modo demonio no esta soportado en su sistema operativo"
+
+#: /src/schooltool/app/main.py:575
+msgid "Reading configuration from %s"
+msgstr "Leyendo configuración de %s"
+
+#: /src/schooltool/app/main.py:574
 msgid ""
 "\n"
 "No storage defined in the configuration file.\n"
@@ -2402,37 +1900,11 @@ msgstr ""
 "Si esta usando el archivo de configuración por defecto, por favor edítelo\n"
 "ahora y descomente una de las secciones ZODB de almacenamiento.\n"
 
-#: /src/schooltool/app/main.py:335
-msgid "Going to background, daemon pid %d"
-msgstr "Enviado al fondo, PID del demonio: %d"
-
-#: /src/schooltool/app/main.py:382
-msgid "Cannot resolve plugin action order:\n"
-msgstr "No se puede llevar a cabo la acción del plugin:\n"
-
-#: /src/schooltool/app/main.py:536 /src/schooltool/app/main.py:580
-#: /src/schooltool/app/main.py:583
-msgid "%s: %s"
-msgstr "%s: %s"
-
-#: /src/schooltool/app/main.py:537
-msgid "Run %s -h for help."
-msgstr "Ejecute %s -h para obtener ayuda."
-
-#: /src/schooltool/app/main.py:549
-msgid "%s: daemon mode not supported on your operating system."
-msgstr "%s: el modo demonio no esta soportado en su sistema operativo"
-
-#: /src/schooltool/app/main.py:575
-msgid "Reading configuration from %s"
-msgstr "Leyendo configuración de %s"
-
-#: /src/schooltool/app/main.py:671
+#: /src/schooltool/app/main.py:666
 msgid "Startup time: %.3f sec real, %.3f sec CPU"
 msgstr "Tiempo de arranque: %.3f seg reales, %.3f seg de CPU"
 
-#. Default: ""
-#: /src/schooltool/app/main.py:705
+#: /src/schooltool/app/main.py:700
 msgid ""
 "Could not initialize the database:\n"
 "%s"
@@ -3011,11 +2483,11 @@ msgstr "Si el campo es requerido o no"
 
 #: /src/schooltool/basicperson/interfaces.py:145
 msgid "Limit keys"
-msgstr ""
+msgstr "Claves límite"
 
 #: /src/schooltool/basicperson/interfaces.py:146
 msgid "An optional list of limit keys for this field"
-msgstr ""
+msgstr "Una lista opcional de claves límite  para este campo"
 
 #: /src/schooltool/basicperson/interfaces.py:161
 msgid "List of values"
@@ -3705,6 +3177,70 @@ msgstr "Secciones Mostradas"
 msgid "Section of ${course} -- ${section_title} for ${term} of ${schoolyear}"
 msgstr "Sección de ${course} -- ${section_title} para ${term} de ${schoolyear}"
 
+#: /src/schooltool/course/browser/templates/extend_term.pt:4
+msgid "Extend Section to Term"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/extend_term.pt:18
+msgid ""
+"Click \"Extend\" to create a linked section in term \"${from_term_title}\" "
+"containing the students and instructors from section \"${section_title}\" in "
+"term \"${to_term_title}\"."
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/extend_term.pt:27
+msgid "Extend"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/link_existing.pt:4
+msgid "Link Section to Section in Other Term"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/link_existing.pt:13
+#: /src/schooltool/course/browser/templates/link_existing.pt:52
+#: /src/schooltool/course/browser/templates/section_container.pt:39
+#: /src/schooltool/course/browser/templates/unlink_section.pt:13
+#: /src/schooltool/course/browser/templates/unlink_section.pt:28
+msgid "Section"
+msgstr "Sección"
+
+#: /src/schooltool/course/browser/templates/link_existing.pt:20
+#: /src/schooltool/course/browser/templates/unlink_section.pt:19
+#: /src/schooltool/course/browser/templates/unlink_section.pt:29
+#: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:24
+msgid "Term"
+msgstr "Período"
+
+#: /src/schooltool/course/browser/templates/link_existing.pt:21
+msgid "Target Term"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/link_existing.pt:26
+msgid ""
+"Select a section and click 'Link' if you would like to copy and link this "
+"section to the target section."
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/link_existing.pt:30
+msgid ""
+"You may provide part of an instructor's name or username and click 'Filter' "
+"to limit the list of sections to those taught by a matching instructor."
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/link_existing.pt:35
+msgid "You must select a section before clicking 'Link'."
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/link_existing.pt:46
+msgid "Filter"
+msgstr ""
+
+#. Default: "Link"
+#: /src/schooltool/course/browser/templates/link_existing.pt:71
+#: /src/schooltool/course/browser/templates/link_section.pt:130
+msgid "link-section-button"
+msgstr "Vincular"
+
 #: /src/schooltool/course/browser/templates/link_section.pt:24
 msgid "Link ${section}, ${term} with a section in ${target_term}"
 msgstr "Vincular ${section}, ${term} con una sección en ${target_term}"
@@ -3714,20 +3250,7 @@ msgid "There is no valid term in ${schoolyear} to pick a section from."
 msgstr ""
 "No hay un período válido en ${schoolyear} del cual seleccionar una sección."
 
-#. Default: "Link"
-#: /src/schooltool/course/browser/templates/link_section.pt:130
-msgid "link-section-button"
-msgstr "Vincular"
-
-#: /src/schooltool/course/browser/templates/section.pt:36
-msgid "Previous: ${course} -- ${section_title} for ${term}"
-msgstr "Anterior: ${course} -- ${section_title} para ${term}"
-
-#: /src/schooltool/course/browser/templates/section.pt:47
-msgid "Next: ${course} -- ${section_title} for ${term}"
-msgstr "Siguiente: ${course} -- ${section_title} para ${term}"
-
-#: /src/schooltool/course/browser/templates/section.pt:58
+#: /src/schooltool/course/browser/templates/section.pt:35
 msgid "Change the name or description of this section."
 msgstr "Cambiar el nombre o la descripción de esta sección."
 
@@ -3735,7 +3258,18 @@ msgstr "Cambiar el nombre o la descripción de esta sección."
 msgid "edit info"
 msgstr "editar información"
 
-#: /src/schooltool/course/browser/templates/section.pt:87
+#: /src/schooltool/course/browser/templates/section.pt:46
+#: /src/schooltool/course/browser/templates/section_edit.pt:60
+msgid "Linked sections"
+msgstr "Secciones vinculadas"
+
+#: /src/schooltool/course/browser/templates/section.pt:52
+#: /src/schooltool/course/browser/templates/section_edit.pt:72
+#: /src/schooltool/course/browser/templates/section_edit.pt:106
+msgid "${section_title} for ${term}"
+msgstr "${section_title} para ${term}"
+
+#: /src/schooltool/course/browser/templates/section.pt:65
 msgid "Change the instructors for this section."
 msgstr "Cambiar los instructores de esta sección."
 
@@ -3756,14 +3290,6 @@ msgstr "editar individuos"
 msgid "Section list for ${term} of ${schoolyear}"
 msgstr "Listado de secciones para ${term} de ${schoolyear}"
 
-#: /src/schooltool/course/browser/templates/section_container.pt:39
-msgid "Section"
-msgstr "Sección"
-
-#: /src/schooltool/course/browser/templates/section_edit.pt:60
-msgid "Linked sections"
-msgstr "Secciones vinculadas"
-
 #: /src/schooltool/course/browser/templates/section_edit.pt:63
 msgid "Previous"
 msgstr "Anterior"
@@ -3771,11 +3297,6 @@ msgstr "Anterior"
 #: /src/schooltool/course/browser/templates/section_edit.pt:64
 msgid "Section in the previous term."
 msgstr "Sección en el período anterior."
-
-#: /src/schooltool/course/browser/templates/section_edit.pt:72
-#: /src/schooltool/course/browser/templates/section_edit.pt:106
-msgid "${section_title} for ${term}"
-msgstr "${section_title} para ${term}"
 
 #. Default: "Unlink"
 #: /src/schooltool/course/browser/templates/section_edit.pt:75
@@ -3808,38 +3329,31 @@ msgstr "Siguiente"
 msgid "Section in the next term."
 msgstr "Sección en el período siguiente."
 
-#: /src/schooltool/course/help/course_container.pt:10
-msgid ""
-"<h1>Courses</h1> <p>Use this page to organize courses listed in the system.</"
-"p> <h3>How do I...</h3> <ul> <li><strong>Look for for a course:</strong> Use "
-"the search box to the left of the <code>Find Now</code> button to look "
-"through the entire list of courses for the search criterion. The "
-"<code>Clear</code> button empties the search box of current entries.</li> "
-"<li><strong>Show a list of the different sections of a course:</strong> "
-"click on the name of the course.</li> <li><strong>Show the lists of students "
-"in a particular class:</strong> Click on the <code>teacher -- course</code> "
-"link. The number of students is also listed next to the teacher and the "
-"course.</li> <li><strong>Navigate through the courses:</strong> Separate "
-"<q>batches</q> of the Course list can be accessed through the <code>Next 10</"
-"code> (and <code>Previous</code>) and links in the blue bar. A <code>Show "
-"All</code> button is also there to show all of the courses on a single page."
-"</li> </ul>"
+#: /src/schooltool/course/browser/templates/section_linkage.pt:4
+msgid "All Terms for Section"
 msgstr ""
-"<h1>Cursos</h1> <p>Use esta página para organizar los cursos listados en el "
-"sistema.</p> <h3>Cómo yo...</h3> <ul> <li><strong>Busco un curso:</strong> "
-"Use el cuadro de búsqueda a la izquierda del botón <code>Encontrar Ahora</"
-"code> para buscar a través de la lista entera de cursos para el criterio de "
-"búsqueda. El botón  <code>Limpiar</code> vacía el cuadro de búsqueda de las "
-"entradas actuales.</li> <li><strong>Muestro una lista de las diferentes "
-"secciones de un curso:</strong> haga click en el nombre del curso.</li> "
-"<li><strong>Muestro las listas de alumnos en una clase en particular:</"
-"strong> Haga click en el enlace<code>profesor -- curso</code>. El número de "
-"alumnos es también listado al lado del profesor y el curso.</li> "
-"<li><strong>Navigo por los cursos:</strong> <q>Lotes</q> separados de la "
-"lista de Cursos pueden ser accesados por medio de <code>Siguientes 10</code> "
-"(y <code>Anteriores</code>) y los enlaces en la barra azul. Un botón "
-"<code>Mostrar Todos</code> está también ahí para mostrar todos los cursos en "
-"una única página.</li> </ul>"
+
+#: /src/schooltool/course/browser/templates/section_linkage.pt:42
+msgid "Unlink this Section"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/section_linkage.pt:62
+msgid "Extend to This Term"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/section_linkage.pt:66
+msgid "Link an Existing Section"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/unlink_section.pt:4
+msgid "Unlink Section"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/unlink_section.pt:23
+msgid ""
+"Click 'Unlink' if you would like to remove the link this section has to the "
+"following section(s):"
+msgstr ""
 
 #: /src/schooltool/course/interfaces.py:37
 msgid "Title of the course."
@@ -4368,24 +3882,10 @@ msgstr "Buscar"
 msgid "Surname"
 msgstr "Nombre"
 
-#: /src/schooltool/devmode/configure.zcml:27
-msgid "Introspect"
-msgstr "Introspección"
-
-#: /src/schooltool/devmode/configure.zcml:38
-#: /src/schooltool/devmode/devmode.pt:19
-msgid "API Docs"
-msgstr "Documentación de la API"
-
-#: /src/schooltool/devmode/configure.zcml:50
+#: /src/schooltool/devmode/configure.zcml:52
 #: /src/schooltool/devmode/devmode.pt:20
 msgid "Sample data"
 msgstr "Datos de ejemplo"
-
-#: /src/schooltool/devmode/configure.zcml:62
-#: /src/schooltool/devmode/devmode.pt:21
-msgid "Setup data"
-msgstr "Datos de configuración"
 
 #: /src/schooltool/devmode/devmode.pt:11
 msgid "Developer Tools"
@@ -4394,6 +3894,10 @@ msgstr "Herramienta para desarrolladores"
 #: /src/schooltool/devmode/devmode.pt:18
 msgid "Introspector"
 msgstr "Inspector"
+
+#: /src/schooltool/devmode/devmode.pt:19
+msgid "API Docs"
+msgstr "Documentación de la API"
 
 #: /src/schooltool/email/browser/configure.zcml:54
 msgid "Outgoing Email"
@@ -5006,44 +4510,8 @@ msgstr "Administrar esta asociación de personas"
 msgid "edit groups"
 msgstr "editar grupos"
 
-#: /src/schooltool/group/help/group_container.pt:8
-msgid ""
-"<h1>Groups</h1> <p>Use this page to keep track of <b>groups</b> of Persons.</"
-"p> <p><b>Groups</b> that have been added are not part of the essential "
-"groups (<b>Teachers</b>, <b>Students</b>, <b>Site Managers</b>, <b>School "
-"Administrators</b>, or <b>Clerks</b>). They can be selected by the checkbox "
-"next to them and removed by pressing the <b>Delete</b> button at the bottom "
-"of the page.</p> <h3>How do I...</h3> <ul> <li><b>Look for for a group:</b> "
-"Use the search box to the left of the <code>Find Now</code> button to look "
-"through the entire list of groups for the search criterion. The <code>Clear</"
-"code> button empties the search box of current entries.</li> <li><b>View the "
-"persons in a certain group:</b> Click on the name of the group.</li> "
-"<li><b>Sort the list:</b> Click on the <code>Title</code> header to change "
-"the order of groups from descending to ascending order, and vice versa.</li> "
-"<li><strong>Browse for a group:</strong> Use the <code>Next 10</code> (and "
-"<code>Previous</code>) and links in the blue bar.</li> <li><strong>Show all "
-"groups:</strong> Click <code>Show All</code> in the blue bar.</li> </ul>"
-msgstr ""
-"<h1>Grups</h1> <p>Use esta página para mantener registro de los <b>grupos</"
-"b> de Personas.</p> <p><b>Grupos</b> que han sido agregados no son parte de "
-"los grupos esenciales (<b>Profesores</b>, <b>Alumnos</b>, <b>Administrador "
-"del Sitio</b>, <b> Administradores de la Escuela</b>, o <b>Empleados</b>). "
-"Ellos pueden ser seleccionados con el checkbox al lado de ellos y removidos "
-"presionando el botón <b>Eliminar</b> en la parte inferior de la página.</p> "
-"<h3>Cómo yo...</h3> <ul> <li><b>Busco un grupo:</b> Use el cuadro de "
-"búsqueda a la izquierda del botón <code>Encontrar Ahora</code> para buscar a "
-"trabés de la lista entera de grupos para el criterio de búsqueda. El botón "
-"<code>Limpiar</code> vacía el cuadro de búsqueda de las entradas actuales.</"
-"li> <li><b>Véo la persona en cierto grupo:</b> Haga click en el nombre del "
-"grupo.</li> <li><b>Ordeno la lista:</b> Haga click en la cabecera "
-"<code>Título</code> para cambiar el orden de los grupos de descendente a "
-"ascendente, y viceversa.</li> <li><strong>Navego por un grupo:</strong> Use "
-"<code>Siguientes 10</code> (y <code>Anteriores</code>) y los enlaces en la "
-"barra azul.</li> <li><strong>Muestro todos los grupos:</strong> Haga click "
-"en <code>Mostrar Todos</code> en la barra azul.</li> </ul>"
-
 #: /src/schooltool/group/interfaces.py:41
-#: /src/schooltool/securitypolicy/interfaces.py:109
+#: /src/schooltool/securitypolicy/interfaces.py:111
 msgid "Title of the group."
 msgstr "Nombre del grupo."
 
@@ -5100,14 +4568,6 @@ msgstr ""
 msgid "Groups are essentially sets of users."
 msgstr "Los grupos son esencialmente conjuntos de usuarios."
 
-#: /src/schooltool/help/configure.zcml:47
-msgid "Contextual Help"
-msgstr "Ayuda Contextual"
-
-#: /src/schooltool/help/helplink.pt:2
-msgid "Help"
-msgstr "Ayuda"
-
 #: /src/schooltool/level/browser.py:47
 msgid "Add a level"
 msgstr "Agregar un nivel"
@@ -5145,10 +4605,6 @@ msgstr "Niveles de enseñanza"
 #: /src/schooltool/note/configure.zcml:68
 msgid "New Note"
 msgstr "Nueva nota"
-
-#: /src/schooltool/note/configure.zcml:100
-msgid "Notes (Rest)"
-msgstr "Notas"
 
 #: /src/schooltool/note/interfaces.py:43
 msgid "Title of the note."
@@ -5316,32 +4772,6 @@ msgstr "Editar las preferencias de la persona"
 msgid "Change preferences for ${user}"
 msgstr "Cambiar las preferencias de ${user}"
 
-#: /src/schooltool/person/help/person_container.pt:8
-msgid ""
-"<h1>Persons</h1> <p>Use this page to browse and find individual persons.</p> "
-"<h3>How do I...</h3> <ul> <li><strong>Sort the list:</strong> Click on "
-"<code>First Name</code> or <code>Last Name</code> to sort.</li> "
-"<li><strong>Search for a user:</strong> Use the search field at the top of "
-"the page to look through all of the people in the system. If you want to "
-"filter by group, select the group in the adjacent drop-down list.</li> "
-"<li><strong>View the details of a person:</strong> Click on the name.</li> "
-"<li><strong>Browse for a person:</strong> Use the <code>Next 10</code> (and "
-"<code>Previous</code>) and links in the blue bar.</li> <li><strong>Show all "
-"students:</strong> Click <code>Show All</code> in the blue bar.</li> </ul>"
-msgstr ""
-"<h1>Personas</h1> <p>Use esta página para navegar y encontrar personas "
-"individuales.</p> <h3>Cómo yo...</h3> <ul> <li><strong>Ordeno la lista:</"
-"strong> Haga click en <code>Primer nombre</code> o <code>Apellido</code> "
-"para ordenar.</li> <li><strong>Busco un usuario:</strong> Use el campo de "
-"búsqueda en la parte superior de la página para revisar a través de todas "
-"las personas en el sistema. Si desea filtrarlas por grupo, seleccione el "
-"grupo en la lista desplegable adyacente.</li> <li><strong>Véo los detalles "
-"de una persona:</strong> Haga click en el nombre.</li> <li><strong>Navego "
-"por una persona:</strong> Use <code>Siguientes 10</code> (ay <code>Anterior</"
-"code>) y los enlaces en la barra azul.</li> <li><strong>Muestro todos los "
-"alumnos:</strong> Haga click en <code>Mostrar Todos</code> en la barra azul."
-"</li> </ul>"
-
 #: /src/schooltool/person/interfaces.py:157
 msgid "Time Zone"
 msgstr "Zona Horaria"
@@ -5466,16 +4896,12 @@ msgstr "El Calendario es publico"
 msgid "Everybody, if the calendar is made public in user preferences."
 msgstr "Todos, si el calendario es publico en las preferencias del usuario."
 
-#: /src/schooltool/relationship/configure.zcml:13
-msgid "Relationships"
-msgstr "Relaciones"
-
 #: /src/schooltool/report/browser/configure.zcml:8
-#: /src/schooltool/report/browser/configure.zcml:22
-#: /src/schooltool/report/browser/configure.zcml:33
-#: /src/schooltool/report/browser/configure.zcml:44
-#: /src/schooltool/report/browser/configure.zcml:55
-#: /src/schooltool/report/browser/configure.zcml:66
+#: /src/schooltool/report/browser/configure.zcml:23
+#: /src/schooltool/report/browser/configure.zcml:34
+#: /src/schooltool/report/browser/configure.zcml:45
+#: /src/schooltool/report/browser/configure.zcml:56
+#: /src/schooltool/report/browser/configure.zcml:67
 msgid "Reports"
 msgstr "Informes"
 
@@ -5502,7 +4928,7 @@ msgstr "Informes de Sección"
 #: /src/schooltool/report/browser/templates/report_reference.pt:3
 #: /src/schooltool/report/browser/templates/report_reference.pt:7
 msgid "Report Reference"
-msgstr ""
+msgstr "Reporte de referencia"
 
 #: /src/schooltool/report/browser/templates/report_reference.pt:13
 msgid "Category"
@@ -5626,11 +5052,7 @@ msgstr "Agregar Nuevo Equipo"
 msgid "Edit equipment"
 msgstr "Editar Equipo"
 
-#: /src/schooltool/resource/help/resource_help.pt:6
-msgid "Resource Help"
-msgstr "Ayuda de recursos"
-
-#: /src/schooltool/resource/interfaces.py:38
+#: /src/schooltool/resource/interfaces.py:45
 msgid "Title of the resource."
 msgstr "Nombre del recurso."
 
@@ -6030,23 +5452,6 @@ msgstr "Super usuario"
 msgid "The super user - owner of this SchoolTool application."
 msgstr "El super usuario - propietario de esta aplicación SchoolTool"
 
-#: /src/schooltool/setupdata/setupdata.pt:3
-#: /src/schooltool/setupdata/setupdata.pt:9
-msgid "Initial School Setup Scripts"
-msgstr "Guiones iniciales de configuración de la escuela"
-
-#: /src/schooltool/setupdata/setupdata.pt:14
-msgid ""
-"Warning: proceeding will populate the database with data generated from "
-"scripts installed on the filesystem of this server. Do not do this if you "
-"have any valuable data in this SchoolTool instance or don't already "
-"understand what this is for."
-msgstr ""
-"Advertencia: proceder llenará la base de datos con datos generados desde los "
-"scripts instalados en el sistema de archivos de este servidor. No lo haga si "
-"posee algunos datos de valor en esta instancia de SchoolTool o no comprende "
-"ya para qué es esto."
-
 #: /src/schooltool/skin/breadcrumbs.py:76
 msgid "top"
 msgstr "top"
@@ -6102,10 +5507,6 @@ msgstr "Puede que haya escrito mal la url"
 #: /src/schooltool/skin/templates/notfound.pt:22
 msgid "You might be trying to access a non-existing page"
 msgstr "Puede que esté tratando de acceder a una página inexistente."
-
-#: /src/schooltool/skin/templates/onlinehelp_macros.pt:55
-msgid "SchoolTool Onlinehelp"
-msgstr "Ayuda online de SchoolTool"
 
 #: /src/schooltool/skin/templates/view_macros.pt:45
 msgid "Log In"
@@ -6390,53 +5791,6 @@ msgstr "Cambiar la información para ${term_title}"
 msgid "Term must begin before it ends."
 msgstr "El período debe iniciar antes que finalice."
 
-#: /src/schooltool/term/help/configure.zcml:8
-msgid "Add a term"
-msgstr "Añadir un período"
-
-#: /src/schooltool/term/help/term_add.pt:6
-msgid "Term Search Help"
-msgstr "Ayuda para la Búsqueda de Períodos"
-
-#: /src/schooltool/term/help/term_container.pt:6
-msgid "Terms in SchoolTool"
-msgstr "Períodos en SchoolTool"
-
-#: /src/schooltool/term/help/term_container.pt:8
-msgid ""
-"<h1>Terms in SchoolTool</h1> <p>SchoolTool supports definition of basic "
-"academic terms, that is, a period of time which defines when sections begin "
-"and end, and when they are evaluated. The current implementation does not "
-"support a hierarchy of terms, for example, a year, which contains two "
-"semesters, which contain two marking periods. You can create several terms, "
-"which may overlap, for example, both semesters and trimesters in the same "
-"school, but you cannot express a relationship between terms.</p> <h3>How do "
-"I...</h3> <ul> <li><strong>Add a term:</strong> Select <code>New Term</code> "
-"from the <code>Actions</code> menu.</li> <li><strong>Edit a term:</strong> "
-"Click on the term. Then select <code>Edit</code> from the <code>Actions</"
-"code> menu.</li> <li><strong>Delete a term:</strong> Check the box next to "
-"the name of the term and click <code>Delete</code>. Only delete terms if you "
-"have made a mistake while creating them but you have not used them yet. You "
-"should <strong>not</strong> delete terms simply because they are over, or "
-"you will lose important data.</li> </ul>"
-msgstr ""
-"<h1>Períodos en SchoolTool</h1> <p>SchoolTool soporta la definición de "
-"períodos académicos básicos, es decir, un período que define el inicio y fin "
-"de secciones, y cuándo éstas son evaluadas. La implementación actual no "
-"soporta una jerarquía de períodos, por ejemplo, un año, que contiene dos "
-"semestres, que contienen dos períodos de evaluación. Usted puede crear "
-"varios períodos, que podrían sobreponerse, por ejemplo, ambos semestres y "
-"trimestres en la misma escuela, pero usted no puede expresar una relación "
-"entre períodos.</p> <h3>Cómo yo...</h3> <ul> <li><strong>Agrego un período:</"
-"strong> Seleccione <code>Nuevo Período</code> desde el menú <code>Acciones</"
-"code>.</li> <li><strong>Edito un período:</strong> Haga clic en el período. "
-"Luego seleccione <code>Editar</code> desde el menú <code>Acciones</code>.</"
-"li> <li><strong>Elimino un período:</strong> Marque la caja al lado del "
-"nombre del período y haga click en <code>Eliminar</code>. Solamente elimine "
-"períodos si ha cometido un error al crearlos y no los ha utilizado aún. "
-"Usted <strong>no</strong> debería eliminarlos simplemente porque hayan "
-"terminado, o perderá datos importantes.</li> </ul>"
-
 #: /src/schooltool/term/term.py:306
 msgid "Term date is not in the school year."
 msgstr "La fecha del período no están en el año escolar."
@@ -6718,10 +6072,6 @@ msgstr "No hay períodos o esquemas de horario definidos."
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:22
 msgid "Timetable"
 msgstr "Horario"
-
-#: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:24
-msgid "Term"
-msgstr "Período"
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:34
 msgid "Schema"
@@ -7143,17 +6493,689 @@ msgstr "Cambiar horario"
 msgid "Supplied passwords are not identical"
 msgstr "Las contraseñas proporcionadas no son idénticas."
 
-#~ msgid "Required input is missing."
-#~ msgstr "Falta una entrada requerida"
+#~ msgid "Browser UI"
+#~ msgstr "Interfaz del Navegador"
+
+#~ msgid "Application"
+#~ msgstr "Aplicación"
+
+#~ msgid "Calendar Widget"
+#~ msgstr "Herramienta para el calendario"
+
+#~ msgid "Templates"
+#~ msgstr "Plantillas"
+
+#~ msgid "Security (General)"
+#~ msgstr "Seguridad (General)"
+
+#~ msgid "Booking Resources"
+#~ msgstr "Reservar Recursos"
+
+#~ msgid "SchoolTool Administration"
+#~ msgstr "Administración de SchoolTool"
+
+#~ msgid ""
+#~ "<h1>SchoolTool Administration</h1> <p>Schools have complex structures, "
+#~ "spanning the organization of people, pedagogy, time and physical "
+#~ "resources. Unfortunately, this means that an application that seeks to "
+#~ "model these processes, like SchoolTool, is also complex, and the process "
+#~ "of setting up an individual school in SchoolTool is necessarily an "
+#~ "involved one.</p> <p>This branch of the help tree contains items relevant "
+#~ "to administrators configuring SchoolTool, but not end users.</p>"
+#~ msgstr ""
+#~ "<h1>Administración de SchoolTool</h1> <p>Las escuelas tienen estructuras "
+#~ "complejas, que abarcan la organización de las personas, la pedagogía, el "
+#~ "tiempo y los recursos físicos. Lamentablemente, esto significa que una "
+#~ "aplicación que trata de modelar estos procesos, como SchoolTool, es "
+#~ "también compleja y el proceso de aprendizaje de un individuo en "
+#~ "SchoolTool esta necesariamente ligado.</p> Esta rama del árbol de ayuda "
+#~ "contiene artículos de interés para la configuración de administradores en "
+#~ "SchoolTool, pero no para los usuarios finales</p>."
+
+#~ msgid "Calendar Selection"
+#~ msgstr "Selección de Calendario"
+
+#~ msgid ""
+#~ "<h1>Calendar Selection</h1> <p>You can add color-coded events from "
+#~ "multiple calendars to your personal calendar view. You can add events "
+#~ "from course sections you attend, groups, other people, or even resources "
+#~ "like classrooms or projectors.</p> <p>Some calendars are private or "
+#~ "limited to certain groups.</p> <p>On the calendar selection form you are "
+#~ "given lists of all the calendars available to you. This might be a long "
+#~ "list.</p> <p>The \"SchoolTool site-wide calendar\" is intended to be used "
+#~ "as the official public calendar of the school.</p> <h3>How do I...</h3> "
+#~ "<ul> <li><strong>Select or unselect several individual calendars of one "
+#~ "type:</strong> If you press the <code>Ctrl</code> button on your keyboard "
+#~ "while you select calendars from a list with your mouse, you can select "
+#~ "multiple calendars.</li> <li><strong>Select a range of calendars of one "
+#~ "type:</strong> If you press the <code>Shift</code> key while clicking on "
+#~ "calendars, you can select a range.</li> </ul>"
+#~ msgstr ""
+#~ "<h1>Selección de calendario</h1> <p>Puede añadir un código-color a partir "
+#~ "de eventos de múltiples calendarios desde su vista de calendario "
+#~ "personal. Puede agregar eventos desde las secciones de curso asistidas, "
+#~ "grupos, otras personas, o incluso de recursos como aulas o proyectores.</"
+#~ "p> Algunos calendarios son privados o limitados a ciertos grupos.</p> En "
+#~ "la selección de calendario son dados listas de todos los calendarios "
+#~ "disponibles. Puede ser una lista larga.</p> El \"amplio-sitio de "
+#~ "SchoolTool en el calendario\" está destinado a ser utilizado como el "
+#~ "calendario público oficial de la escuela.</p>. <h3> ¿Cómo hago...? </h3> "
+#~ "<ul> <li> <strong> Seleccionar o deseleccionar varios calendarios "
+#~ "individuales de un tipo:</strong> Si presionas el botón <code>Ctrl</code> "
+#~ "en el teclado mientras seleccionas calendarios desde una lista con tu "
+#~ "ratón, seleccionaras múltiples calendarios.</li> <li> <strong> Seleccione "
+#~ "un rango de calendarios de un tipo: </strong> Si presionas la tecla clave "
+#~ "<code>Shift</code> mientras clickeas en los calendarios, puedes "
+#~ "seleccionar un rango.</li></ul>"
+
+#~ msgid "Calendaring in SchoolTool"
+#~ msgstr "Calendarios en SchoolTool"
+
+#~ msgid ""
+#~ "<h1>Calendaring in SchoolTool</h1> <p>SchoolTool includes a full-featured "
+#~ "calendaring system, similar to Apple iCal or Google Calendar, but capable "
+#~ "of representing complex school timetables, including rotating schedules. "
+#~ "SchoolTool is also useful for simple resource scheduling, allowing you to "
+#~ "manage room assignments, and booking shared resources like computers or "
+#~ "projectors. Each person, group, course section or resource has its own "
+#~ "calendar. You may integrate multiple calendars into your personal "
+#~ "calendar views.</p> <h3>Parts of the standard calendar views</h3> <ul> "
+#~ "<li><strong>Calendar table:</strong> fills the main (lower-right) part of "
+#~ "the page. This represents the calendar for one day, week, month or year, "
+#~ "depending on the view..</li> <li><strong>Calendar navigation bar:</"
+#~ "strong> immediately above the calendar table. Allows you to navigate "
+#~ "forward or backward in time, or to return to the current time.</li> "
+#~ "<li><strong>Calendar title:</strong> immediately above the calendar "
+#~ "navigation bar, lists the owner of this calendar and the date for this "
+#~ "\"page\" of the calendar.</li> <li><strong>Left sidebar:</strong> for all "
+#~ "calendars, this contains a <code>Jump to...</code> section containing "
+#~ "menus and links to allow you to quickly navigate to a specific month, "
+#~ "year or date. <br /> If you are logged in and viewing your own calendar, "
+#~ "you will also see a <code>Calendars</code> section at the top of the "
+#~ "sidebar which allows you to \"overlay\" events from other calendars in "
+#~ "this view. You may see calendars for classes you teach or attend listed "
+#~ "here already.</li> <li><strong>Day/week/month/year buttons:</strong> "
+#~ "These buttons allow you to switch between daily, weekly, monthly and "
+#~ "annual views.</li> </ul>"
+#~ msgstr ""
+#~ "<h1>Agendando en SchoolTool</h1> <p>SchoolTool incluye un sistema "
+#~ "completo de agendado, similar a Apple iCal o Google Calendar, pero capaz "
+#~ "de representar complejos horarios escolares, incluyendo calendarios "
+#~ "rotativos. SchoolTool también es útil para agendado simple de recursos, "
+#~ "permitiéndole administrar asignaciones de aulas, y registrar recursos "
+#~ "compartidos como computadores y proyectores. Cada persona, grupo, sección "
+#~ "de curso o recurso tiene su propio calendario. Puede integrar múltiples "
+#~ "calendarios en su vista personal de calendario.</p> <h3>Partes de las "
+#~ "vistas de calendario estándar</h3> <ul> <li><strong>Tabla del calendario:"
+#~ "</strong> Llena la parte principal (abajo a la derecha)  de la página. "
+#~ "Esto representa al calendario de un día, semana, mes o año, dependendo de "
+#~ "la vista..</li> <li><strong>Barra de navegación del calendario:</strong> "
+#~ "immediatamente arriba de la tabla de calendario. Le permite navegar hacia "
+#~ "adelante o hacia atrás en el tiempo, o regresar al tiempo actual.</li> "
+#~ "<li><strong>Título del calendario:</strong> immediatamente arriba de la "
+#~ "barra de navegación del calendario, lista el dueño de este calendario y "
+#~ "la fecha de esta \"página\" del calendario.</li> <li><strong>Barra "
+#~ "lateral izquierda:</strong> Para todos los calendarios, esta contiene una "
+#~ "sección <code>Ir a...</code> que contiene menus y enlaces que para "
+#~ "permitirle rápidamente navegar  un mes, año o fecha específica. <br /> Si "
+#~ "usted está registrado y viendo su propio calendario, también verá una "
+#~ "sección  <code>Calendarios</code> arriba de la barra lateral, lo que le "
+#~ "permite \"sobreponer\" eventos desde otros calendarios en esta vista. "
+#~ "Usted podrá ver calendarios de clases que usted enseñe o asista, listados "
+#~ "ya aquí.</li> <li><strong>Botones día/semana/mes/año:</strong> Estos "
+#~ "botones le permiten cambiar entre vistas diarias, semanales, mensuales y "
+#~ "anuales.</li> </ul>"
+
+#~ msgid "Administration"
+#~ msgstr "Administración"
+
+#~ msgid "Organization"
+#~ msgstr "Organización"
+
+#~ msgid "Calendaring"
+#~ msgstr "Calendarios"
+
+#~ msgid "Daily Calendar"
+#~ msgstr "Calendario Diario"
+
+#~ msgid "Weekly Calendar"
+#~ msgstr "Calendario Semanal"
+
+#~ msgid "Monthly Calendar"
+#~ msgstr "Calendario Mensual"
+
+#~ msgid "Yearly Calendar"
+#~ msgstr "Calendario Anual"
+
+#~ msgid ""
+#~ "<h1>Daily Calendar</h1> <p>This is the daily view of a calendar. It might "
+#~ "be your calendar, or it might be the calendar of another person, group or "
+#~ "resource in your school. <a href=\"/++help++/schooltool/calendaring"
+#~ "\">More calendaring help...</a></p> <h3>How do I...</h3> <ul> "
+#~ "<li><strong>Create an event:</strong> click in the calendar table at the "
+#~ "start time for the event. Or select <code>New Event</code> from the "
+#~ "<code>Actions</code> menu.</li> <li><strong>Book a resource:</strong> "
+#~ "create an event starting at the time you want to reserve the resource. "
+#~ "Select <code>Book Resource</code> in the Event Information form.</li> "
+#~ "<li><strong>Show or hide events in one of the calendars listed under "
+#~ "<code>Calendars</code>:</strong> check or uncheck the box under "
+#~ "<code>Cal</code> and click <code>Apply</code>.</li> <li><strong>Adding or "
+#~ "removing calendars to the <code>Calendars</code> list:</strong> click on "
+#~ "the <code>More...</code> button.</li> <li><strong>access a iCal format "
+#~ "version of the calendar:</strong>: Select <code>Open in iCal</code> from "
+#~ "the Action menu.</li> <li><strong>Access an Atom feed version of the "
+#~ "calendar: </strong> append <code>/atom.xml</code> to the calendar's URL.</"
+#~ "li> </ul>"
+#~ msgstr ""
+#~ "<h1>Calendario diario</h1> <p> Esta es la vista diaria de un calendario. "
+#~ "Puede ser tu calendario o puede ser el calendario de otra presona, grupo "
+#~ "o recurso en tu escuela. <a href=\"/++help++/schooltool/calendaring\">Mas "
+#~ "ayuda de calendario...</a></p> <h3>¿Cómo hago...?</h3> <ul> "
+#~ "<li><strong>Crear un evento:</strong> cliquear en la tabla de calendarios "
+#~ "al principio del evento.O seleccionar <code>nuevo evento</code> desde el "
+#~ "menú de <code>acciones</code>.</li> <li><strong>Libro de recursos:</"
+#~ "strong> crea un evento al empezar la reserva de teimpo que quieres para "
+#~ "el recurso. Selecciona <code>libro de recursos</code> en el formulario de "
+#~ "información de eventos.</li> <li><strong>Mostrar o esconder eventos en un "
+#~ "de los calendarios listados bajo <code>calendarios</code>:</strong> "
+#~ "Comprobar o descomprobar la casilla bajo <code>Cal</code> y cliquear "
+#~ "<code>aplicar</code>.</li> <li><strong>Añadiendo o eliminando calendarios "
+#~ "de la lista de <code>calendarios</code>:</strong> cliquear en el botón "
+#~ "<code>mas...</code> button.</li> <li><strong>acceso a una versión "
+#~ "formateada de iCal del calendario:</strong>: Seleccionar <code>abierto en "
+#~ "iCal</code> desde el menu de acciones.</li> <li><strong>Acceso a un "
+#~ "alimentador de Atom del calendario: </strong>añadir<code>/atom.xml</code> "
+#~ "al la URL del calendario.</li> </ul>"
+
+#~ msgid "This form has a few issues:"
+#~ msgstr "Este nuevo formulario tiene algunos asuntos"
+
+#~ msgid ""
+#~ "If you need to reserve a resource, such as a room or a projector, tracked "
+#~ "by SchoolTool at your school, you should create an event for the "
+#~ "necessary time and check the <code>Book Resources</code> checkbox at the "
+#~ "bottom of the page."
+#~ msgstr ""
+#~ "Si necesitas reservas un recurso, como una habitación o un proyector "
+#~ "rastreados por SchoolTool en tu escuela, deberías crear un evento para el "
+#~ "tiempo necesario y comprobar la casilla del <code>libro de recursos</"
+#~ "code> en la parte inferior de la página."
+
+#~ msgid ""
+#~ "The form ignores your preferences for time and date format. You must "
+#~ "enter the event's start time in 24-hour or \"military\" time, and the "
+#~ "date is displayed in year-month-day format."
+#~ msgstr ""
+#~ "El formulario ignora tus preferencias de formato de tiempo y fecha. Debe "
+#~ "introducir la hora de comienzo del evento en timepo 24 horas o \"militar"
+#~ "\", y la fecha se muestra en formato año-mes-día."
+
+#~ msgid ""
+#~ "The <code>Location</code> field allows you to enter a description of the "
+#~ "location of the event, but this is not connected to the reservation "
+#~ "system. If your school uses SchoolTool to manage room reservations you "
+#~ "need to check the <code>Book Resources</code> checkbox at the bottom of "
+#~ "the form."
+#~ msgstr ""
+#~ "La <code>localización</code> le permite ingresar una descripción de la "
+#~ "ubicación del evento, pero esto no está conectado al sistema de reservas. "
+#~ "Si su escuela usa SchoolTool para gestionar reservas de habitación "
+#~ "necesita verificar la casilla de <code>libro de recursos</code> en la "
+#~ "parte inferior del formulario"
+
+#~ msgid ""
+#~ "If your event repeats in some pattern, check the <code>Recurring</code> "
+#~ "box and fill out the new fields that appear. In certain circumstances "
+#~ "(like if you change the original day of a weekly recurring event) you may "
+#~ "need to click the <code>Update form</code> button to update the "
+#~ "recurrence fields."
+#~ msgstr ""
+#~ "Si su caso se repite en algún patrón, marque la casilla <code>repetición</"
+#~ "code> y rellene los campos que aparecen. En determinadas circunstancias "
+#~ "(como si cambia el día original de un evento de repetición semanal) es "
+#~ "posible que tenga cliquear el botón de <code>formulario de actualización</"
+#~ "code> para actualizar los campos que se repitan."
+
+#~ msgid ""
+#~ "An \"all day\" event does not show up as a 24 hour event. It indicates "
+#~ "that the day as a whole has some significance, like a birthday or holiday."
+#~ msgstr ""
+#~ "Un evento de \"todo el día\" no es un evento que dure 24 horas. Indica "
+#~ "que el día como una sola cosa tiene alguna importancia, como un "
+#~ "cumpleaños o vacaciones."
+
+#~ msgid ""
+#~ "\"Exception dates\" are specific dates a repeating event skips, such as "
+#~ "holidays."
+#~ msgstr ""
+#~ "Las \"Fechas de excepción\" son fechas especificas en las que se evita un "
+#~ "evento constante, como las vacaciones."
+
+#~ msgid ""
+#~ "If you need to edit a resource reservation, click the <code>Book "
+#~ "resources</code> link at the bottom of the form."
+#~ msgstr ""
+#~ "Si necesita editar una reserva de recurso, haga click en el enlace "
+#~ "<code>Reservar Recursos</code> al final del formulario."
+
+#~ msgid ""
+#~ "<h1>Monthly Calendar</h1> <p>This is the monthly view of a calendar. It "
+#~ "might be your calendar, or it might be the calendar of another person, "
+#~ "group or resource in your school. <a href=\"/++help++/schooltool/"
+#~ "calendaring\">More calendaring help...</a></p> <h3>How do I...</h3> <ul> "
+#~ "<li><strong>View an individual day or event in more detail:</strong> "
+#~ "click on the appropriate day on the calendar.</li> <li><strong>View an "
+#~ "individual week:</strong> Click on the appropriate week number in blue in "
+#~ "the leftmost column of the calendar.</li> <li><strong>Create an event:</"
+#~ "strong> select <code>New Event</code> from the <code>Actions</code> menu."
+#~ "</li> <li><strong>Show or hide events in one of the calendars listed "
+#~ "under <code>Calendars</code>:</strong> check or uncheck the box under "
+#~ "<code>Cal</code> and click <code>Apply</code>.</li> <li><strong>Adding or "
+#~ "removing calendars to the <code>Calendars</code> list:</strong> click on "
+#~ "the <code>More...</code> button.</li> <li><strong>Make weeks start on the "
+#~ "correct day:</strong> the first day of the week varies in different parts "
+#~ "of the world. If SchoolTool isn't set up correctly for you, click on your "
+#~ "name in the red bar at the top of the page. Then click on the "
+#~ "<code>Actions</code> menu and select <code>Change Preferences</code>. "
+#~ "Pick the correct \"Week starts on\" day and hit <code>Apply</code>.</li> "
+#~ "<li><strong>Access a iCal format version of the calendar:</strong>: "
+#~ "select <code>Open in iCal</code> from the Action menu.</li> </ul>"
+#~ msgstr ""
+#~ "<h1>Monthly Calendar</h1> <p>Este es la vista mensual de un calendario. "
+#~ "Podría ser tu propio calendario, o el calendario de alguna otra persona, "
+#~ "grupo o recurso en tu escuela. <a href=\"/++help++/schooltool/calendaring"
+#~ "\">More calendaring help...</a></p> <h3>How do I...</h3> <ul> "
+#~ "<li><strong>Para ver individualmente un día o evento con mas detalle:</"
+#~ "strong> Presiona en el dia apropiado del calendario.</li> "
+#~ "<li><strong>Para ver individualmente una semana:</strong> Presiona en el "
+#~ "numero de la semana apropiada un la barra izquierda de el calendario.</"
+#~ "li> <li><strong>Crear un evento:</strong> selecciona <code>New Event</"
+#~ "code> del<code>Menu</code> de Acciones.</li> <li><strong>Mostrar u "
+#~ "ocultar eventos enlistados en el calendario <code>Calendars</code>:</"
+#~ "strong> Selecciona o deselecciona la caja apropiada bajo el "
+#~ "<code>Calendario</code> y presiona <code>Aplicar</code>.</li> "
+#~ "<li><strong>Añadir o remover calendarios de la lista de<code>Calendarios</"
+#~ "code>:</strong> Presiona en el boton de <code>Mas...</code></li> "
+#~ "<li><strong>Hacer que las semanas inicien en el dia correcto:</strong> el "
+#~ "primer dia de la semana varia en distintas partes del mundo. Si "
+#~ "SchoolTool no esta ajustada correctamente para usted, presione en su "
+#~ "nombre en la barra roja al principio de la pagina. Entonce presiones en "
+#~ "el menu <code>Acioness</code> y selecciona <code>Cambiar Preferencias</"
+#~ "code>. Elige el dia correcto de inicio de la semana y presiona "
+#~ "<code>Aplicar</code>.</li> <li><strong>Para acceder a un formato del "
+#~ "calendario de la version iCal:</strong>: Selecciona <code>Abrir en iCal</"
+#~ "code> del menu Accion.</li> </ul>"
+
+#~ msgid "SchoolTool Organization"
+#~ msgstr "Organización de SchoolTool"
+
+#~ msgid ""
+#~ "<h1>SchoolTool Organization</h1> <p>This branch of the help tree contains "
+#~ "items explaining the basic organization of SchoolTool.</p>"
+#~ msgstr ""
+#~ "<h1>Organización de SchoolTool </h1> <p>Esta rama del arbol de ayuda "
+#~ "contiene elementos explicando la organización básica de SchoolTool.</p>"
+
+#~ msgid ""
+#~ "<h1>SchoolTool</h1> <p>SchoolTool is a free/libre administrative system "
+#~ "for schools around the world, funded by The Shuttleworth Foundation.</p> "
+#~ "<h2>Standard User Interface Conventions in SchoolTool</h2> <ul> "
+#~ "<li><strong>Red top bar</strong></li> <ul> <li><strong>Breadcrumbs:</"
+#~ "strong> the links at the left hand side of the red bar show you where you "
+#~ "are in SchoolTool's object hierarchy. Note that this doesn't necessarily "
+#~ "lead you back to where you came from, but is handy for taking you from "
+#~ "more specific to more general parts of the application.</li> "
+#~ "<li><strong>Your name</strong> (if you're logged in): clicking on your "
+#~ "name takes you to a simple dashboard of relevant links. From this page "
+#~ "you can also use the <code>Actions</code> menu to change preferences and "
+#~ "other personal settings.</li> <li><strong>Log in/out:</strong> this logs "
+#~ "you in or out. It is a good idea to log out when you aren't using "
+#~ "SchoolTool.</li> <li><strong>Help:</strong> if there is a help file for "
+#~ "the page you're looking at, you'll see this link.</li> </ul> "
+#~ "<li><strong>Menus</strong></li> <ul> <li><strong>Navigation:</strong> "
+#~ "this menu gives you some basic options for accessing different parts of "
+#~ "SchoolTool, such as the index of persons or courses. What you see here "
+#~ "depends on your permissions in the system.</li> <li><strong>Action:</"
+#~ "strong> this menu contains a variety of things that you can do on the "
+#~ "current page. The entries in this menu change considerably based on what "
+#~ "page you're viewing and what permissions you have.</li> </ul> "
+#~ "<li><strong>Above the red bar</strong></li> <ul> <li><strong>Logo & "
+#~ "School Name:</strong> clicking in this area will take you to the top of "
+#~ "the school's site, usually the calendar for the school.</li> "
+#~ "<li><strong>Calendar day/week/month/year views:</strong> if you are "
+#~ "viewing a calendar, you will find icons in the upper right hand corner "
+#~ "that will allow you to switch between calendar views.</li> "
+#~ "<li><strong>Devmode menu:</strong> if you are a site administrator and "
+#~ "you've enabled \"devmode\" in schooltool.conf, you will see a special "
+#~ "menu in the upper right hand corner of the site. You should disable "
+#~ "devmode in any production server.</li> </ul> </ul>"
+#~ msgstr ""
+#~ "<h1>SchoolTool</h1> <p>SchoolTool es un sistema administrativo free/libre "
+#~ "para escuelas alrededor del mundo, fundada por la Fundación Shuttleworth."
+#~ "</p> <h2>Convenciones de Interfaz Gráfica de Usuario en SchoolTool</h2> "
+#~ "<ul> <li><strong>Barra superior roja</strong></li> <ul> <li><strong>Migas "
+#~ "de pan:</strong> los enlaces al lado izquierdo de la barra roja le "
+#~ "muestran donde se encuentra en la jerarquía de objetos de SchoolTool. "
+#~ "Note que esto no necesariamente lo regresa a donde usted vino, pero es "
+#~ "útil para llevarlo desde partes mas específicas a partes mas generales en "
+#~ "la aplicación.</li> <li><strong>Su nombre</strong> (si está registrado): "
+#~ "haciendo click en su nombre lo lleva a un  panel simple de elnaces "
+#~ "relevantes. Desde esta página puede también usar el menú <code>Acciones</"
+#~ "code>  para cambiar als preferencias y otras configuraciones personales.</"
+#~ "li> <li><strong>Ingresar/salir:</strong> Esto le deja ingresar o salir. "
+#~ "Es uan buena idea salir cuando no está usando SchoolTool.</li> "
+#~ "<li><strong>Ayuda:</strong> Si existe un arhcivo de ayuda para la página "
+#~ "que está buscando, verá este enlace.</li> </ul> <li><strong>Menus</"
+#~ "strong></li> <ul> <li><strong>Navegación:</strong> este menú le entrega "
+#~ "algunas opciones básicas para acceder a diferentes partes de SchoolTool, "
+#~ "como el índice de personas por cursos. Lo que vea aquí depende de sus "
+#~ "permisos en el sistema.</li> <li><strong>Acción:</strong> este menú "
+#~ "contiene una variedad de cosas que usted puede hacer en la página actual. "
+#~ "Las entradas en este menú cambian considerablemente basadas en las "
+#~ "páginas que usted está viendo y los permisos que tiene.</li> </ul> "
+#~ "<li><strong>Arriba de la barra roja</strong></li> <ul> <li><strong>Logo & "
+#~ "Nombre de Escuela:</strong> hacer click en esta área le llevará a la "
+#~ "parte superior del sitio de la escuela, usualmente al calendario de la "
+#~ "escuela.</li> <li><strong>Vistas diarias/semanal/mensual/anual del "
+#~ "calendario:</strong> si está viendo un calendario, encontrará íconos en "
+#~ "la esquina superior derecha que le permitirá cambiar entre las vistas de "
+#~ "calendario.</li> <li><strong>Menú modo de Desarrollo:</strong> si usted "
+#~ "es un administrador del sitio y ha habilidato \"devmode\" en schooltool."
+#~ "conf, verá un menú especial en la esquina superior derecha del sitio. "
+#~ "Usted debería deshabilitar el modo de desarrollo en cualquier servidor de "
+#~ "producción.</li> </ul> </ul>"
+
+#~ msgid ""
+#~ "<h1>Weekly Calendar</h1> <p>This is the weekly view of a calendar. It "
+#~ "might be your calendar, or it might be the calendar of another person, "
+#~ "group or resource in your school. <a href=\"/++help++/schooltool/"
+#~ "calendaring\">More calendaring help...</a></p> <h3>How do I...</h3> <ul> "
+#~ "<li><strong>View an individual day in more detail:</strong> click on the "
+#~ "appropriate day in the blue row of the calendar table.</li> "
+#~ "<li><strong>View details about an event or edit it:</strong> click on the "
+#~ "event. If you have the correct permissions for the event you can edit it."
+#~ "</li> <li><strong>Create an event:</strong> select the day the event "
+#~ "starts and create the event in the daily view.</li> <li><strong>Show or "
+#~ "hide events in one of the calendars listed under <code>Calendars</code>:</"
+#~ "strong> check or uncheck the box under <code>Cal</code> and click "
+#~ "<code>Apply</code>.</li> <li><strong>Adding or removing calendars to the "
+#~ "<code>Calendars</code> list:</strong> click on the <code>More...</code> "
+#~ "button.</li> <li><strong>Make the calendar start on the correct day:</"
+#~ "strong> the first day of the week varies in different parts of the world. "
+#~ "If SchoolTool isn't set up correctly for you, click on your name in the "
+#~ "red bar at the top of the page. Then click on the <code>Actions</code> "
+#~ "menu and select <code>Change Preferences</code>. Pick the correct \"Week "
+#~ "starts on\" day and hit <code>Apply</code>.</li> <li><strong>Access a "
+#~ "iCal format version of the calendar:</strong>: select <code>Open in iCal</"
+#~ "code> from the Action menu.</li> </ul>"
+#~ msgstr ""
+#~ "<h1>Calendario Semanal</h1> <p>Esta es la vista semanal de un calendario. "
+#~ "Puede ser su calendario, o puede ser el calendario de otra persona, grupo "
+#~ "o recurso en su escuela. <a href=\"/++help++/schooltool/calendaring\">Más "
+#~ "ayuda de calendario...</a></p> <h3>¿Cómo puedo...?</h3> <ul> "
+#~ "<li><strong>Ver un día individual con más detalle:</strong> haz click en "
+#~ "el día apropiado en la fila azul de la tabla del calendario.</li> "
+#~ "<li><strong>Ver detalles sobre un evento o editarlo:</strong> haga click "
+#~ "en el evento. Si tiene los permisos necesarios para el evento, lo podrá "
+#~ "editar.</li> <li><strong>Crear un evento:</strong> seleccione el día en "
+#~ "que comienza el evento y cree el evento en la vista diaria.</li> "
+#~ "<li><strong>Muestro u oculto eventos en uno de los calendarios listados "
+#~ "bajo <code>Calendarios</code>:</strong> marque o desmarque la caja bajo "
+#~ "<code>Cal</code> y haga click en <code>Aplicar</code>.</li> "
+#~ "<li><strong>Agrego o eliminao calendarios a la lista de "
+#~ "<code>Calendarios</code> :</strong> haga click en el botón <code>Más...</"
+#~ "code>.</li> <li><strong>Pon el comienzo del calendario en el día correcto:"
+#~ "</strong> el primer día de la semana es distinto en diferentes partes del "
+#~ "mundo. Si SchoolTool no está correctamente configurado para usted, haga "
+#~ "click en su nombre en la barra roja en la parte superior de la página. "
+#~ "Después haga click en el menú <code>Acciones</code> y seleccione "
+#~ "<code>Cambiar Preferencias</code>. Escoga el día correcto en la opción "
+#~ "\"La semana comienza el\" y pulse <code>Aplicar</code>.</li> "
+#~ "<li><strong>Accedo a una versión del formato iCal del calendario:</"
+#~ "strong>: seleccione <code>Abrir en iCal</code> del menú Acción.</li> </ul>"
+
+#~ msgid ""
+#~ "<h1>Yearly Calendar</h1> <p>This is the year view of a calendar. It might "
+#~ "be your calendar, or it might be the calendar of another person, group or "
+#~ "resource in your school. <a href=\"/++help++/schooltool/calendaring"
+#~ "\">More calendaring help...</a></p> <h3>How do I...</h3> <ul> "
+#~ "<li><strong>Know which days contain events: if the day has a blue "
+#~ "background, there is at least one event that day.</strong></li> "
+#~ "<li><strong>View an individual day in more detail:</strong> click on the "
+#~ "day.</li> <li><strong>View an individual month:</strong> click on the "
+#~ "name of the month.</li> <li><strong>Create an event:</strong> select the "
+#~ "day the event starts and create the event in the daily view.</li> "
+#~ "<li><strong>Show or hide events in one of the calendars listed under "
+#~ "<code>Calendars</code>:</strong> check or uncheck the box under "
+#~ "<code>Cal</code> and click <code>Apply</code>.</li> <li><strong>Adding or "
+#~ "removing calendars to the <code>Calendars</code> list:</strong> click on "
+#~ "the <code>More...</code> button.</li> <li><strong>Make the calendar start "
+#~ "on the correct day:</strong> the first day of the week varies in "
+#~ "different parts of the world. If SchoolTool isn't set up correctly for "
+#~ "you, click on your name in the red bar at the top of the page. Then click "
+#~ "on the <code>Actions</code> menu and select <code>Change Preferences</"
+#~ "code>. Pick the correct \"Week starts on\" day and hit <code>Apply</code>."
+#~ "</li> <li><strong>Access a iCal format version of the calendar:</strong>: "
+#~ "select <code>Open in iCal</code> from the Action menu.</li> </ul>"
+#~ msgstr ""
+#~ "<h1>Calendario Anual</h1> <p>Esta es la vista anual de un calendario. "
+#~ "Podría ser su calendario, o podría ser el calendario de otra persona, "
+#~ "grupo o recurso en su escuela. <a href=\"/++help++/schooltool/calendaring"
+#~ "\">Más ayuda del calendario...</a></p> <h3>Cómo yo...</h3> <ul> "
+#~ "<li><strong>Sé qué días contienen eventos: si el día tiene un fondo azul, "
+#~ "existe al menos un evento ese día.</strong></li> <li><strong>Véo un día "
+#~ "individual en mayor detalle:</strong> haga click en el día.</li> "
+#~ "<li><strong>Véo un mes individual:</strong> haga click en el nombre del "
+#~ "mes.</li> <li><strong>Créo un evento:</strong> seleccione el día en que "
+#~ "el evento comienza y cree el evento en la vista diaria.</li> "
+#~ "<li><strong>Muestro o escondo eventos en uno de los calendarios mostrados "
+#~ "bajo <code>Calendarios</code>:</strong> marque o desmarque la caja abajo "
+#~ "de <code>Cal</code> y haga click en<code>Aplicar</code>.</li> "
+#~ "<li><strong>Agrego o remuevo calendarios en la lista <code>Calendarios</"
+#~ "code> :</strong> haga click en el botón <code>Más...</code>.</li> "
+#~ "<li><strong>Hago que el calendario empiece en el día correcto:</strong> "
+#~ "el primer día de la semana varía en diferentes partes del mundo. Si "
+#~ "SchoolTool no está configurado correctamente para usted, haga click en su "
+#~ "nombre en la barra roja en la parte superior de la página. Luego haga "
+#~ "click en el menú <code>Acciones</code> y seleccione <code>Cambiar "
+#~ "Preferencias</code>. Elija el día correcto para \"Semana empieza en\" y "
+#~ "dele <code>Aplicar</code>.</li> <li><strong>Acceso a la versión de "
+#~ "formato iCal del calendario:</strong>: seleccione <code>Abrir en iCal</"
+#~ "code> desde el menú Acción.</li> </ul>"
+
+#~ msgid "Previous: ${course} -- ${section_title} for ${term}"
+#~ msgstr "Anterior: ${course} -- ${section_title} para ${term}"
+
+#~ msgid "Next: ${course} -- ${section_title} for ${term}"
+#~ msgstr "Siguiente: ${course} -- ${section_title} para ${term}"
+
+#~ msgid ""
+#~ "<h1>Courses</h1> <p>Use this page to organize courses listed in the "
+#~ "system.</p> <h3>How do I...</h3> <ul> <li><strong>Look for for a course:</"
+#~ "strong> Use the search box to the left of the <code>Find Now</code> "
+#~ "button to look through the entire list of courses for the search "
+#~ "criterion. The <code>Clear</code> button empties the search box of "
+#~ "current entries.</li> <li><strong>Show a list of the different sections "
+#~ "of a course:</strong> click on the name of the course.</li> "
+#~ "<li><strong>Show the lists of students in a particular class:</strong> "
+#~ "Click on the <code>teacher -- course</code> link. The number of students "
+#~ "is also listed next to the teacher and the course.</li> "
+#~ "<li><strong>Navigate through the courses:</strong> Separate <q>batches</"
+#~ "q> of the Course list can be accessed through the <code>Next 10</code> "
+#~ "(and <code>Previous</code>) and links in the blue bar. A <code>Show All</"
+#~ "code> button is also there to show all of the courses on a single page.</"
+#~ "li> </ul>"
+#~ msgstr ""
+#~ "<h1>Cursos</h1> <p>Use esta página para organizar los cursos listados en "
+#~ "el sistema.</p> <h3>Cómo yo...</h3> <ul> <li><strong>Busco un curso:</"
+#~ "strong> Use el cuadro de búsqueda a la izquierda del botón "
+#~ "<code>Encontrar Ahora</code> para buscar a través de la lista entera de "
+#~ "cursos para el criterio de búsqueda. El botón  <code>Limpiar</code> vacía "
+#~ "el cuadro de búsqueda de las entradas actuales.</li> <li><strong>Muestro "
+#~ "una lista de las diferentes secciones de un curso:</strong> haga click en "
+#~ "el nombre del curso.</li> <li><strong>Muestro las listas de alumnos en "
+#~ "una clase en particular:</strong> Haga click en el enlace<code>profesor "
+#~ "-- curso</code>. El número de alumnos es también listado al lado del "
+#~ "profesor y el curso.</li> <li><strong>Navigo por los cursos:</strong> "
+#~ "<q>Lotes</q> separados de la lista de Cursos pueden ser accesados por "
+#~ "medio de <code>Siguientes 10</code> (y <code>Anteriores</code>) y los "
+#~ "enlaces en la barra azul. Un botón <code>Mostrar Todos</code> está "
+#~ "también ahí para mostrar todos los cursos en una única página.</li> </ul>"
+
+#~ msgid "Introspect"
+#~ msgstr "Introspección"
+
+#~ msgid "Setup data"
+#~ msgstr "Datos de configuración"
+
+#~ msgid ""
+#~ "<h1>Groups</h1> <p>Use this page to keep track of <b>groups</b> of "
+#~ "Persons.</p> <p><b>Groups</b> that have been added are not part of the "
+#~ "essential groups (<b>Teachers</b>, <b>Students</b>, <b>Site Managers</b>, "
+#~ "<b>School Administrators</b>, or <b>Clerks</b>). They can be selected by "
+#~ "the checkbox next to them and removed by pressing the <b>Delete</b> "
+#~ "button at the bottom of the page.</p> <h3>How do I...</h3> <ul> "
+#~ "<li><b>Look for for a group:</b> Use the search box to the left of the "
+#~ "<code>Find Now</code> button to look through the entire list of groups "
+#~ "for the search criterion. The <code>Clear</code> button empties the "
+#~ "search box of current entries.</li> <li><b>View the persons in a certain "
+#~ "group:</b> Click on the name of the group.</li> <li><b>Sort the list:</b> "
+#~ "Click on the <code>Title</code> header to change the order of groups from "
+#~ "descending to ascending order, and vice versa.</li> <li><strong>Browse "
+#~ "for a group:</strong> Use the <code>Next 10</code> (and <code>Previous</"
+#~ "code>) and links in the blue bar.</li> <li><strong>Show all groups:</"
+#~ "strong> Click <code>Show All</code> in the blue bar.</li> </ul>"
+#~ msgstr ""
+#~ "<h1>Grups</h1> <p>Use esta página para mantener registro de los "
+#~ "<b>grupos</b> de Personas.</p> <p><b>Grupos</b> que han sido agregados no "
+#~ "son parte de los grupos esenciales (<b>Profesores</b>, <b>Alumnos</b>, "
+#~ "<b>Administrador del Sitio</b>, <b> Administradores de la Escuela</b>, o "
+#~ "<b>Empleados</b>). Ellos pueden ser seleccionados con el checkbox al lado "
+#~ "de ellos y removidos presionando el botón <b>Eliminar</b> en la parte "
+#~ "inferior de la página.</p> <h3>Cómo yo...</h3> <ul> <li><b>Busco un grupo:"
+#~ "</b> Use el cuadro de búsqueda a la izquierda del botón <code>Encontrar "
+#~ "Ahora</code> para buscar a trabés de la lista entera de grupos para el "
+#~ "criterio de búsqueda. El botón <code>Limpiar</code> vacía el cuadro de "
+#~ "búsqueda de las entradas actuales.</li> <li><b>Véo la persona en cierto "
+#~ "grupo:</b> Haga click en el nombre del grupo.</li> <li><b>Ordeno la lista:"
+#~ "</b> Haga click en la cabecera <code>Título</code> para cambiar el orden "
+#~ "de los grupos de descendente a ascendente, y viceversa.</li> "
+#~ "<li><strong>Navego por un grupo:</strong> Use <code>Siguientes 10</code> "
+#~ "(y <code>Anteriores</code>) y los enlaces en la barra azul.</li> "
+#~ "<li><strong>Muestro todos los grupos:</strong> Haga click en "
+#~ "<code>Mostrar Todos</code> en la barra azul.</li> </ul>"
+
+#~ msgid "Contextual Help"
+#~ msgstr "Ayuda Contextual"
+
+#~ msgid "Help"
+#~ msgstr "Ayuda"
+
+#~ msgid "Notes (Rest)"
+#~ msgstr "Notas"
+
+#~ msgid ""
+#~ "<h1>Persons</h1> <p>Use this page to browse and find individual persons.</"
+#~ "p> <h3>How do I...</h3> <ul> <li><strong>Sort the list:</strong> Click on "
+#~ "<code>First Name</code> or <code>Last Name</code> to sort.</li> "
+#~ "<li><strong>Search for a user:</strong> Use the search field at the top "
+#~ "of the page to look through all of the people in the system. If you want "
+#~ "to filter by group, select the group in the adjacent drop-down list.</li> "
+#~ "<li><strong>View the details of a person:</strong> Click on the name.</"
+#~ "li> <li><strong>Browse for a person:</strong> Use the <code>Next 10</"
+#~ "code> (and <code>Previous</code>) and links in the blue bar.</li> "
+#~ "<li><strong>Show all students:</strong> Click <code>Show All</code> in "
+#~ "the blue bar.</li> </ul>"
+#~ msgstr ""
+#~ "<h1>Personas</h1> <p>Use esta página para navegar y encontrar personas "
+#~ "individuales.</p> <h3>Cómo yo...</h3> <ul> <li><strong>Ordeno la lista:</"
+#~ "strong> Haga click en <code>Primer nombre</code> o <code>Apellido</code> "
+#~ "para ordenar.</li> <li><strong>Busco un usuario:</strong> Use el campo de "
+#~ "búsqueda en la parte superior de la página para revisar a través de todas "
+#~ "las personas en el sistema. Si desea filtrarlas por grupo, seleccione el "
+#~ "grupo en la lista desplegable adyacente.</li> <li><strong>Véo los "
+#~ "detalles de una persona:</strong> Haga click en el nombre.</li> "
+#~ "<li><strong>Navego por una persona:</strong> Use <code>Siguientes 10</"
+#~ "code> (ay <code>Anterior</code>) y los enlaces en la barra azul.</li> "
+#~ "<li><strong>Muestro todos los alumnos:</strong> Haga click en "
+#~ "<code>Mostrar Todos</code> en la barra azul.</li> </ul>"
+
+#~ msgid "Relationships"
+#~ msgstr "Relaciones"
+
+#~ msgid "Resource Help"
+#~ msgstr "Ayuda de recursos"
+
+#~ msgid "Initial School Setup Scripts"
+#~ msgstr "Guiones iniciales de configuración de la escuela"
+
+#~ msgid ""
+#~ "Warning: proceeding will populate the database with data generated from "
+#~ "scripts installed on the filesystem of this server. Do not do this if you "
+#~ "have any valuable data in this SchoolTool instance or don't already "
+#~ "understand what this is for."
+#~ msgstr ""
+#~ "Advertencia: proceder llenará la base de datos con datos generados desde "
+#~ "los scripts instalados en el sistema de archivos de este servidor. No lo "
+#~ "haga si posee algunos datos de valor en esta instancia de SchoolTool o no "
+#~ "comprende ya para qué es esto."
+
+#~ msgid "SchoolTool Onlinehelp"
+#~ msgstr "Ayuda online de SchoolTool"
+
+#~ msgid "Add a term"
+#~ msgstr "Añadir un período"
+
+#~ msgid "Term Search Help"
+#~ msgstr "Ayuda para la Búsqueda de Períodos"
+
+#~ msgid "Terms in SchoolTool"
+#~ msgstr "Períodos en SchoolTool"
+
+#~ msgid ""
+#~ "<h1>Terms in SchoolTool</h1> <p>SchoolTool supports definition of basic "
+#~ "academic terms, that is, a period of time which defines when sections "
+#~ "begin and end, and when they are evaluated. The current implementation "
+#~ "does not support a hierarchy of terms, for example, a year, which "
+#~ "contains two semesters, which contain two marking periods. You can create "
+#~ "several terms, which may overlap, for example, both semesters and "
+#~ "trimesters in the same school, but you cannot express a relationship "
+#~ "between terms.</p> <h3>How do I...</h3> <ul> <li><strong>Add a term:</"
+#~ "strong> Select <code>New Term</code> from the <code>Actions</code> menu.</"
+#~ "li> <li><strong>Edit a term:</strong> Click on the term. Then select "
+#~ "<code>Edit</code> from the <code>Actions</code> menu.</li> "
+#~ "<li><strong>Delete a term:</strong> Check the box next to the name of the "
+#~ "term and click <code>Delete</code>. Only delete terms if you have made a "
+#~ "mistake while creating them but you have not used them yet. You should "
+#~ "<strong>not</strong> delete terms simply because they are over, or you "
+#~ "will lose important data.</li> </ul>"
+#~ msgstr ""
+#~ "<h1>Períodos en SchoolTool</h1> <p>SchoolTool soporta la definición de "
+#~ "períodos académicos básicos, es decir, un período que define el inicio y "
+#~ "fin de secciones, y cuándo éstas son evaluadas. La implementación actual "
+#~ "no soporta una jerarquía de períodos, por ejemplo, un año, que contiene "
+#~ "dos semestres, que contienen dos períodos de evaluación. Usted puede "
+#~ "crear varios períodos, que podrían sobreponerse, por ejemplo, ambos "
+#~ "semestres y trimestres en la misma escuela, pero usted no puede expresar "
+#~ "una relación entre períodos.</p> <h3>Cómo yo...</h3> <ul> "
+#~ "<li><strong>Agrego un período:</strong> Seleccione <code>Nuevo Período</"
+#~ "code> desde el menú <code>Acciones</code>.</li> <li><strong>Edito un "
+#~ "período:</strong> Haga clic en el período. Luego seleccione <code>Editar</"
+#~ "code> desde el menú <code>Acciones</code>.</li> <li><strong>Elimino un "
+#~ "período:</strong> Marque la caja al lado del nombre del período y haga "
+#~ "click en <code>Eliminar</code>. Solamente elimine períodos si ha cometido "
+#~ "un error al crearlos y no los ha utilizado aún. Usted <strong>no</strong> "
+#~ "debería eliminarlos simplemente porque hayan terminado, o perderá datos "
+#~ "importantes.</li> </ul>"
+
+#~ msgid "Using timetable:"
+#~ msgstr "Usando horario:"
 
 #~ msgid "Everyone can view the application calendar."
 #~ msgstr "Todo el mundo puede ver el calendario de la aplicación"
 
 #~ msgid "Everyone can view section information and calendars"
 #~ msgstr "Todo el mundo puede ver la información y los calendarios"
-
-#~ msgid "Change the resources for this section."
-#~ msgstr "Cambiar los recursos de esta sección"
 
 #~ msgid "Everyone can view group lists."
 #~ msgstr "Todos pueden ver las listas de grupo."
@@ -7200,14 +7222,17 @@ msgstr "Las contraseñas proporcionadas no son idénticas."
 #~ msgid "Edit Resource Information"
 #~ msgstr "Editar la información de recurso"
 
-#~ msgid "The name of this Field Description"
-#~ msgstr "El nombre de este Campo de Descripción"
+#~ msgid "Report a bug on Launchpad."
+#~ msgstr "Informar de un error en Launchpad."
 
-#~ msgid "Please select a term."
-#~ msgstr "Por favor seleccione un período."
+#~ msgid "For term:"
+#~ msgstr "Para el período:"
 
 #~ msgid "Persons can set their own preferences"
 #~ msgstr "Las personas pueden establecer sus propias preferencias"
 
 #~ msgid "Add a Location"
 #~ msgstr "Añadir una Ubicación"
+
+#~ msgid "Access setting: ${setting} (${status})"
+#~ msgstr "Configuración de acceso: ${setting} (${status})"

@@ -10,15 +10,15 @@
 <metal:block metal:fill-slot="content-header">
   <table class="all_terms_header">
     <tr>
-      <td><h2><span i18n:translate="">Section:</span> <a tal:replace="structure context/@@link" /></h2></td>
+      <td><h2><span i18n:translate="">Section</span>: <a tal:replace="structure context/@@link" /></h2></td>
       <td>
-        <h2><span i18n:translate="">Course:</span>
+        <h2><span i18n:translate="">Course</span>:
         <tal:loop tal:repeat="course context/courses">
           <a tal:replace="structure course/@@link" />
         </tal:loop></h2>
       <td>
-      <td><h2><span i18n:translate="">Term:</span> <a tal:replace="structure view/term/@@link" /></h2></td>
-      <td><h2><span i18n:translate="">Target Term:</span> <a tal:replace="structure view/link_term/@@link" /></h2></td>
+      <td><h2><span i18n:translate="">Term</span>: <a tal:replace="structure view/term/@@link" /></h2></td>
+      <td><h2><span i18n:translate="">Target Term</span>: <a tal:replace="structure view/link_term/@@link" /></h2></td>
     </tr>
   </table>
   <table class="link_help">

@@ -2,8 +2,11 @@
 <configure xmlns="http://namespaces.zope.org/browser"
            xmlns:z3c="http://namespaces.zope.org/z3c"
            xmlns:zope="http://namespaces.zope.org/zope"
+           xmlns:meta="http://namespaces.zope.org/meta"
            xmlns:flourish="http://schooltool.org/flourish"
            i18n_domain="schooltool">
+
+  <meta:provides feature="schooltool.skin.flourish" />
 
   <!-- Common resources -->
 

@@ -444,11 +444,6 @@ td.error_bg { background-color: #f66; }
 td.warning_bg { background-color: yellow; }
 div.warning_bg { background-color: yellow; }
 
-/* section display */
-div.linked_terms {
-    padding-left: 0.25em;
-}
-
 /* section_linkage view */
 table.all_terms_header td {
     padding-right: 40px;
