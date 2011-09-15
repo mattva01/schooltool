@@ -58,7 +58,7 @@ Let's check whether our POST data preservation facilities work:
 
 Now let's enter some data:
 
-    >>> anonymous.getControl('Make calendar public').click()
+    >>> anonymous.getControl('public').click()
     >>> anonymous.getControl('Apply').click()
 
 We get a log in form:
@@ -73,7 +73,7 @@ We visit the user's preferences again:
 
 And the option we have clicked on is set:
 
-    >>> anonymous.getControl('Make calendar public').selected
+    >>> anonymous.getControl('public').selected
     True
 
 Now we can log out:
