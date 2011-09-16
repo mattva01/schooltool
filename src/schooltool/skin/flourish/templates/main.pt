@@ -3,135 +3,100 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xml:lang="en"
       i18n:domain="schooltool">
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-
-  <link rel="icon" type="image/png" href="favicon.ico"
-        tal:attributes="href context/++resource++favicon.ico"/>
-
-  <!-- zc.resourcelibrary -->
-
-  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu:regular,bold&subset=Latin">
-
-  <tal:block content="structure view/providers/html_head|nothing" />
-
-  <!--
-
-  <title i18n:translate="">
-    SchoolTool -
-    <tal:block i18n:name="title"
-               content="view/title"
-               condition="view/title">
-      Title
-    </tal:block>
-    <tal:block i18n:name="alternative_title"
-               content="context/@@title"
-               condition="not:view/title">
-      Title
-    </tal:block>
-    <tal:block i18n:name="subtitle"
-               content="view/subtitle"
-               condition="view/subtitle">
-      Subtitle
-    </tal:block>
-  </title>
-
-  -->
-
-</head>
-
-<body>
-
-<tal:block replace="resource_library:schooltool.skin.flourish" />
-
-<div class="schooltool">
-
-<div class="header">
-
-  <h1 class="brand">SchoolTool</h1>
-
-  <tal:block replace="structure view/providers/header_navigation">
-    [ | Header | Navigation | Bar | Here | ]
-  </tal:block>
-
-  <tal:block replace="structure view/providers/breadcrumbs|nothing">
-    [ Breadcrumbs >> go >> here ]
-  </tal:block>
-
-  <tal:block replace="structure view/providers/secondary_navigation|nothing">
-    [ | Secondary | Navigation | Bar | Here | ]
-  </tal:block>
-
-</div>
-
-
-<div tal:attributes="class view/page_class">
-
-  <div class="header"
-     tal:condition="view/has_header"
-     tal:define="navigation providers/page_navigation|nothing">
-
-
-    <h1 tal:condition="view/title"
-        tal:content="view/title">
-      Title
-    </h1>
-
-    <h1 tal:condition="not:view/title"
-        tal:content="structure context/schooltool:content/title">
-      Alternative title
-    </h1>
-
-    <div tal:condition="navigation">
-         tal:replace="structure navigation">
-      [Context] [navigation] [links]
-    </div>
-
-    <tal:block condition="not:navigation">
-      <h2 tal:condition="view/subtitle"
-          tal:content="view/subtitle">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="icon" type="image/png" href="favicon.ico"
+          tal:attributes="href context/++resource++schooltool.skin.flourish/favicon.ico"/>
+    <!-- zc.resourcelibrary -->
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu:regular,bold&subset=Latin" />
+    <tal:block content="structure view/providers/html_head|nothing" />
+    <!--
+    <title i18n:translate="">
+      SchoolTool -
+      <tal:block i18n:name="title"
+                 content="view/title"
+                 condition="view/title">
+        Title
+      </tal:block>
+      <tal:block i18n:name="alternative_title"
+                 content="context/@@title"
+                 condition="not:view/title">
+        Title
+      </tal:block>
+      <tal:block i18n:name="subtitle"
+                 content="view/subtitle"
+                 condition="view/subtitle">
         Subtitle
-      </h2>
-    </tal:block>
-
-  </div>
-
-  <tal:block content="structure view/providers/tertiary_navigation|nothing">
-    [ | Tertiary | Navigation | Bar | Here | ]
-  </tal:block>
-
-  <tal:block content="structure view/page_template|nothing">
-
-    [ The page ]
-
-  </tal:block>
-
-</div>
-
-<div class="footer">
-  <p class="server-info">
-    <strong tal:replace="context/schooltool:preferences/title"/>
-    -
-    <span i18n:translate="">server running</span>
-    <a i18n:translate=""
-       tal:attributes="href string:${context/schooltool:app/@@absolute_url}/about.html">
-      SchoolTool
-      <span tal:content="modules/schooltool/common/get_version" i18n:name="version"/>
-    </a>
-  </p>
-
-  <p i18n:translate="" class="copyright">
-
-    &copy; 2003 - 2011
-    <a i18n:name="link_swf" href="http://www.shuttleworthfoundation.org">
-      Shuttleworth Foundation
-      </a>: Supporting exceptional people to change the world.
-  </p>
-
-</div>
-
-</div>
-
-</body>
-
+      </tal:block>
+    </title>
+    -->
+  </head>
+  <body>
+    <tal:block replace="resource_library:schooltool.skin.flourish" />
+    <div class="schooltool">
+      <div class="header">
+        <h1 class="brand">
+          <span class="school">school</span><span class="tool">tool</span>
+          <img class="small" tal:attributes="src context/++resource++schooltool.skin.flourish/logo-small.png" />
+        </h1>
+        <tal:block replace="structure view/providers/header_navigation">
+          [ | Header | Navigation | Bar | Here | ]
+        </tal:block>
+        <tal:block replace="structure view/providers/breadcrumbs|nothing">
+          [ Breadcrumbs >> go >> here ]
+        </tal:block>
+        <tal:block replace="structure view/providers/secondary_navigation|nothing">
+          [ | Secondary | Navigation | Bar | Here | ]
+        </tal:block>
+      </div>
+      <div tal:attributes="class view/page_class">
+        <div class="header"
+             tal:condition="view/has_header"
+             tal:define="navigation providers/page_navigation|nothing">
+          <h1 tal:condition="view/title"
+              tal:content="view/title">
+            Title
+          </h1>
+          <h1 tal:condition="not:view/title"
+              tal:content="structure context/schooltool:content/title">
+            Alternative title
+          </h1>
+          <div tal:condition="navigation">
+            tal:replace="structure navigation">
+            [Context] [navigation] [links]
+          </div>
+          <tal:block condition="not:navigation">
+            <h2 tal:condition="view/subtitle"
+                tal:content="view/subtitle">
+              Subtitle
+            </h2>
+          </tal:block>
+        </div>
+        <tal:block content="structure view/providers/tertiary_navigation|nothing">
+          [ | Tertiary | Navigation | Bar | Here | ]
+        </tal:block>
+        <tal:block content="structure view/page_template|nothing">
+          [ The page ]
+        </tal:block>
+      </div>
+      <div class="footer">
+        <p class="server-info">
+          <strong tal:replace="context/schooltool:preferences/title"/>
+          -
+          <span i18n:translate="">server running</span>
+          <a i18n:translate=""
+             tal:attributes="href string:${context/schooltool:app/@@absolute_url}/about.html">
+            SchoolTool
+            <span tal:content="modules/schooltool/common/get_version" i18n:name="version"/>
+          </a>
+        </p>
+        <p i18n:translate="" class="copyright">
+          &copy; 2003 - 2011
+          <a i18n:name="link_swf" href="http://www.shuttleworthfoundation.org" i18n:translate="">
+            Shuttleworth Foundation
+          </a>: Supporting exceptional people to change the world.
+        </p>
+      </div>
+    </div>
+  </body>
 </html>
