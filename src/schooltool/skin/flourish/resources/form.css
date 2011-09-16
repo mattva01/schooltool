@@ -13,7 +13,6 @@ form {
 }
 
 form > .count {
-    color: #ffffff;
     font-size: 12px;
     line-height: 16px;
     position: absolute;
@@ -23,7 +22,6 @@ form > .count {
 }
 
 form fieldset {
-    background-color: #dfdcd9;
     margin-bottom: 8px;
     padding: 40px 8px 8px 8px;
     position: relative;
@@ -39,8 +37,6 @@ form fieldset > legend {
 
 form fieldset > legend > span,
 .fieldset-legend {
-    background-color: #aea79f;
-    color: #ffffff;
     font-size: 16px;
     line-height: 16px;
     padding: 8px;
@@ -70,7 +66,6 @@ form fieldset .row .label {
 }
 
 form fieldset .row .hint {
-    color: #333333;
     font-size: 10px;
     line-height: 14px;
     margin-bottom: 0px;
@@ -89,19 +84,14 @@ form fieldset .row > .error {
 }
 
 form fieldset .row > .error .error {
-    color: #00ABB3;
     font-size: 12px;
     padding-left: 16px;
-    background: transparent url(error-icon.png) no-repeat scroll top left;
 }
 
 form fieldset .row .widget input.text-widget,
 form fieldset .row .widget input[type="text"],
 form fieldset .row .widget input.password-widget,
 form fieldset .row .widget input[type="password"] {
-    background-color: #ffffff;
-    border: 1px solid #ccc1c1;
-    color: #333333;
     font-size: 12px;
     height: 20px;
     width: 286px;
@@ -113,7 +103,6 @@ form fieldset .row .widget input.password-widget:focus,
 form fieldset .row .widget input[type="password"]:focus,
 form fieldset .row .widget input[type="text"].error,
 form fieldset .row .widget input[type="password"].error {
-    border: 2px solid #00abb3;
     height: 18px;
     width: 284px;
 }
@@ -129,9 +118,6 @@ form fieldset .row .widget select.select-widget {
 }
 
 form fieldset .row .widget textarea.textarea-widget {
-    background-color: #ffffff;
-    border: 1px solid #ccc1c1;
-    color: #333333;
     font-size: 12px;
     height: 50px;
     width: 286px;
@@ -139,42 +125,23 @@ form fieldset .row .widget textarea.textarea-widget {
 
 form fieldset .row .widget textarea.textarea-widget:focus,
 form fieldset .row .widget textarea.error {
-    border: 2px solid #00abb3;
     height: 48px;
     width: 284px;
 }
 
 form fieldset .row .widget .option {
-    color: #333333;
     display: block;
     font-size: 12px;
     line-height: 16px;
-}
-
-form fieldset .row .widget .option label {
 }
 
 form .buttons {
     margin-bottom: 16px;
 }
 
-form .buttons .button-ok:hover,
-form .buttons .button-neutral:hover,
-form .buttons .button-cancel:hover {
-    background-color: #00abb3;
-}
-
-form .buttons .button-ok:active,
-form .buttons .button-neutral:active,
-form .buttons .button-cancel:active {
-    background-color: #005355;
-}
-
 form .buttons .button-ok,
 form .buttons .button-neutral,
 form .buttons .button-cancel {
-    background-color: #aea79f;
-    color: #ffffff;
     font-size: 14px;
     line-height: 20px;
 }
@@ -196,7 +163,6 @@ form .status > .errors {
 }
 
 form .required-info {
-    color: #ffffff;
     font-size: 16px;
     position: absolute;
     right: 8px;
@@ -210,13 +176,8 @@ form .required-info {
     top: 42px;
 }
 
-form span.required {
-    color: #00abb3;
-}
-
 form pre.csv-text {
     line-height: 20px;
     padding: 4px 0px 4px 7px;
-    border-left: 1px dotted #888;
     margin-bottom: 8px;
 }

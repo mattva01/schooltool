@@ -67,6 +67,7 @@
                form.css
                table.css
                batch.css
+               colors.css
                "
       />
   </zope:resourceLibrary>

@@ -24,7 +24,7 @@
 }
 
 .grid > .body > .widecontainer {
-    margin-top: 40px;
+    margin-top: 32px;
     padding: 0px;
     width: 752px;
 }
@@ -48,7 +48,6 @@
 
 .grid-form th {
     font-weight: normal;
-    color: #333333;
 }
 
 .grid-form th, .grid-form td, input[type="text"] {
@@ -73,20 +72,12 @@
     width: auto;
 }
 
-.gradebook-part thead {
-    background-color: #dfdcd9;
-}
-
 .gradebook-part thead tr {
     height: 1.6em;
 }
 
 .gradebook-part tbody tr {
     height: 2.2em;
-}
-
-.gradebook-part tbody tr.odd {
-    background-color: #dfdcd9;
 }
 
 .students {
@@ -97,7 +88,6 @@
 }
 
 .students th, .students td {
-    border-right: 1px solid #cccccc;
     overflow: hidden;
     padding-left: 0.4em;
     padding-right: 0.4em;
@@ -125,20 +115,13 @@
     overflow: auto;
 }
 
-.grades th, .grades td {
-    border-left: 1px solid #cccccc;
-    border-right: 1px solid #cccccc;
-}
-
 .grades input[type="text"] {
     border: 0px;
-    background: transparent;
     height: 1.2em;
     width: 4em;
 }
 
 .grades input[type="text"]:focus {
-    border: 1px solid #cccccc;
     width: 3.8em;
 }
 
@@ -155,7 +138,6 @@
 }
 
 .totals th, .totals td {
-    border-left: 1px solid #cccccc;
     max-width: 4em;
     min-width: 4em;
     overflow: hidden;
@@ -164,10 +146,6 @@
 
 .totals th > div {
     text-align: center;
-}
-
-th.activity-title {
-    border-bottom: 1px solid #cccccc;
 }
 
 /* Controls */
@@ -194,8 +172,6 @@ th.activity-title {
 }
 
 .popup_menu li {
-    border-bottom: solid 1px #808080;
-    background-color: #EEEEEE;
     padding: 3px 10px 3px 10px;
     display: block;
 }

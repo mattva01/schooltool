@@ -12,11 +12,6 @@
 
 /* General elements */
 
-body {
-    background-color: #ffffff;
-    color: #333333;
-}
-
 body, textarea, select {
     font-family: 'Ubuntubeta', 'Ubuntu', 'Bitstream Vera Sans',
                  'DejaVu Sans', Tahoma, sans-serif;
@@ -42,7 +37,6 @@ h3 {
 }
 
 a, a:link, a:visited, a:active {
-    color: #00abb3;
     text-decoration: none;
 }
 
@@ -93,7 +87,6 @@ a.modify img {
 
 /* Layout */
 
-.schooltool > .super,
 .schooltool > .header,
 .schooltool > .page,
 .schooltool > .footer {
@@ -101,43 +94,6 @@ a.modify img {
     position: relative;
     width: 976px;
 }
-
-.schooltool > .super {
-    background-color: white;
-    padding: 4px;
-    height: 16px;
-    z-index: 5;
-}
-
-.super ul.second-nav {
-    font-size: 12px;
-    line-height: 12px;
-    height: 16px;
-    list-style-type: none;
-    right: 16px;
-    position: absolute;
-    z-index: 1;
-}
-
-.super ul.second-nav li {
-    background: none;
-    color: black;
-    display: inline;
-    padding: 0px 2px;
-}
-
-.super ul.second-nav li span {
-    font-weight: bold;
-}
-
-.super ul.second-nav li:after {
-    content: "";
-}
-
-.super ul.second-nav li.last:after {
-    content: "";
-}
-
 
 .schooltool > .header {
     -moz-box-shadow: 0px -3px 4px #bbbbbb;
@@ -158,12 +114,10 @@ a.modify img {
 }
 
 .schooltool > .header {
-    background-color: #ffffff;
     z-index: 2;
 }
 
 .schooltool > .page {
-    background-color: #ffffff;
     padding-bottom: 64px;
     z-index: 1;
 }
@@ -174,7 +128,6 @@ a.modify img {
 }
 
 .schooltool > .footer > p {
-    color: #aea79f;
     font-size: 10px;
     line-height: 14px;
     padding: 0px 16px 2px 16px;
@@ -192,16 +145,11 @@ a.modify img {
 
 /* Header - main navigation, second navigation, headinfo, breadcrumbs*/
 
-.header > h1.brand img.large {
-    vertical-align: middle;
-}
 .header > h1.brand img.small {
-    left: -12px;
     vertical-align: top;
 }
 
 .header > h1.brand {
-    color: #ffffff;
     font-size: 36px;
     line-height: 40px;
     margin-top: 0px;
@@ -222,17 +170,8 @@ a.modify img {
 .header-rev > h1.brand {
     display: none;
 }
-.header > h1.brand-rev {
-    display: none;
-}
-
-.header-rev > h1.brand-rev {
-    display: block;
-}
-
 
 .header ul.navigation {
-    background-color: #e7e4e2;
     height: 64px;
     padding-left: 15px;
     position: relative;
@@ -259,7 +198,6 @@ a.modify img {
 }
 
 .header ul.navigation li a {
-    color: #3c4342;
     display: block;
     font-size: 14px;
     line-height: 16px;
@@ -267,18 +205,10 @@ a.modify img {
 }
 
 .header ul.navigation li a:hover {
-    color: #ffffff;
-    background: #3c4342;
     text-decoration: none;
 }
 
-.header ul.navigation li.active a {
-    color: #ffffff;
-    background: #3c4342;
-}
-
 .header ul.second-nav {
-    background-color: #3c4342;
     height: 24px;
     margin-left: 16px;
     margin-right: 16px;
@@ -294,9 +224,8 @@ a.modify img {
 }
 
 .header ul.second-nav > li {
-    background: transparent url(subnav_divider.png) no-repeat scroll right bottom;
     display: inline-block;
-    margin-left: -4px;
+    padding: 0px 2px;
 }
 
 .header ul.second-nav > li:first-child {
@@ -305,40 +234,27 @@ a.modify img {
 
 .header ul.second-nav > li a,
 .header ul.second-nav > li span {
-    color: #333333;
-    display: block;
+    display: inline-block;
     font-size: 12px;
     line-height: 16px;
     margin-left: -1px;
-    padding: 12px 8px;
-    text-decoration: none;
+    padding: 4px 8px;
 }
 
-.header ul.second-nav > li.active a,
-.header ul.second-nav > li a:hover {
-    background: transparent url(subnav_active_bg.png) repeat left 1px;
-}
-
-.header ul.second-nav > li.active a {
-    color: #00abb3;
+.header ul.second-nav > li span {
+    font-weight: bold;
 }
 
 .header ul.breadcrumbs {
     font-size: 12px;
-    height: 40px;
+    height: 24px;
     list-style-type: none;
     margin-left: 32px;
     position: absolute;
     z-index: 1;
 }
 
-.header ul.breadcrumbs > li a:hover {
-    background: none;
-}
-
 .header ul.breadcrumbs li {
-    background: none;
-    color: #ffffff;
     display: inline-block;
     padding: 0px 2px;
 }
@@ -362,10 +278,6 @@ a.modify img {
     line-height: 16px;
     margin-left: -4px;
     padding: 4px 2px;
-}
-
-.header ul.breadcrumbs a {
-    color: #ffffff;
 }
 
 /* XXX: temporary fix to display the zc.datetimewidget correctly
