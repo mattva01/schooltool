@@ -51,9 +51,6 @@ Some sections:
         <a href="http://localhost/persons/teacher010">Walsh, Isabel</a>
     </td>
     <td>
-        <a href="http://localhost/schoolyears/2006-2008/2006-fall/sections/art_a_2006-fall_teacher010_000/timetables/simple">2006-fall.simple</a>
-    </td>
-    <td>
       <span class="hint">
         (44 <span>Students</span>)
       </span>

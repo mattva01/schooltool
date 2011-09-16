@@ -17,5 +17,7 @@ usernames with non-ascii characters:
 We should get an error:
 
     >>> browser.printQuery('//p[@class="error"]')
+    <p class="error">School Timetables B5 missing required text</p>
     <p class="error">Persons A3 Username cannot contain non-ascii characters: student00...</p>
     <p class="error">Persons A13 Username cannot contain non-ascii characters: student01...</p>
+    ...
