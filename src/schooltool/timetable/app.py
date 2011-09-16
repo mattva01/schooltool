@@ -29,7 +29,7 @@ from zope.container.interfaces import IContainer
 from zope.container.btree import BTreeContainer
 from zope.intid.interfaces import IIntIds
 
-from schooltool.app.app import StartUpBase
+from schooltool.app.app import InitBase, StartUpBase
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.common import DateRange
 from schooltool.course.section import InstructorsCrowd, LearnersCrowd
@@ -55,7 +55,12 @@ class SchoolToolSchedules(BTreeContainer):
                IAttributeAnnotatable)
 
 
-# XXX: TimetableAppInit missing ?
+class TimetableInit(InitBase):
+    def __call__(self):
+        self.app[SCHEDULES_KEY] = SchoolToolSchedules()
+        self.app[TIMETABLES_KEY] = SchoolToolSchedules()
+
+
 class TimetableStartUp(StartUpBase):
     def __call__(self):
         if SCHEDULES_KEY not in self.app:

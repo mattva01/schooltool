@@ -12,11 +12,6 @@
 
 /* General elements */
 
-body {
-    background-color: #ffffff;
-    color: #333333;
-}
-
 body, textarea, select {
     font-family: 'Ubuntubeta', 'Ubuntu', 'Bitstream Vera Sans',
                  'DejaVu Sans', Tahoma, sans-serif;
@@ -42,7 +37,6 @@ h3 {
 }
 
 a, a:link, a:visited, a:active {
-    color: #aa0000;
     text-decoration: none;
 }
 
@@ -120,12 +114,10 @@ a.modify img {
 }
 
 .schooltool > .header {
-    background-color: #ffffff;
     z-index: 2;
 }
 
 .schooltool > .page {
-    background-color: #ffffff;
     padding-bottom: 64px;
     z-index: 1;
 }
@@ -136,7 +128,6 @@ a.modify img {
 }
 
 .schooltool > .footer > p {
-    color: #aea79f;
     font-size: 10px;
     line-height: 14px;
     padding: 0px 16px 2px 16px;
@@ -154,8 +145,11 @@ a.modify img {
 
 /* Header - main navigation, second navigation, headinfo, breadcrumbs*/
 
+.header > h1.brand img.small {
+    vertical-align: top;
+}
+
 .header > h1.brand {
-    color: #ffffff;
     font-size: 36px;
     line-height: 40px;
     margin-top: 0px;
@@ -165,10 +159,21 @@ a.modify img {
     z-index: 1;
 }
 
+.header-rev > h1.brand {
+    left: 16px;
+}
+
+.header > h1.brand {
+    display:  block;
+}
+
+.header-rev > h1.brand {
+    display: none;
+}
+
 .header ul.navigation {
-    background-color: #aa0000;
     height: 64px;
-    padding-left: 16px;
+    padding-left: 15px;
     position: relative;
 
     -moz-border-radius: 0px 0px 4px 4px;
@@ -185,8 +190,14 @@ a.modify img {
     padding: 0 1px;
 }
 
+.header-rev ul.navigation {
+    padding-right: 15px;
+}
+.header-rev ul.navigation li {
+    float: right;
+}
+
 .header ul.navigation li a {
-    color: #ffffff;
     display: block;
     font-size: 14px;
     line-height: 16px;
@@ -194,17 +205,11 @@ a.modify img {
 }
 
 .header ul.navigation li a:hover {
-    background: #540000;
     text-decoration: none;
 }
 
-.header ul.navigation li.active a {
-    background: #540000;
-}
-
 .header ul.second-nav {
-    background-color: #f7f7f7;
-    height: 40px;
+    height: 24px;
     margin-left: 16px;
     margin-right: 16px;
     text-align: right;
@@ -219,9 +224,8 @@ a.modify img {
 }
 
 .header ul.second-nav > li {
-    background: transparent url(subnav_divider.png) no-repeat scroll right bottom;
     display: inline-block;
-    margin-left: -4px;
+    padding: 0px 2px;
 }
 
 .header ul.second-nav > li:first-child {
@@ -230,40 +234,27 @@ a.modify img {
 
 .header ul.second-nav > li a,
 .header ul.second-nav > li span {
-    color: #333333;
-    display: block;
+    display: inline-block;
     font-size: 12px;
     line-height: 16px;
     margin-left: -1px;
-    padding: 12px 8px;
-    text-decoration: none;
+    padding: 4px 8px;
 }
 
-.header ul.second-nav > li.active a,
-.header ul.second-nav > li a:hover {
-    background: transparent url(subnav_active_bg.png) repeat left 1px;
-}
-
-.header ul.second-nav > li.active a {
-    color: #aa0000;
+.header ul.second-nav > li span {
+    font-weight: bold;
 }
 
 .header ul.breadcrumbs {
     font-size: 12px;
-    height: 40px;
+    height: 24px;
     list-style-type: none;
     margin-left: 32px;
     position: absolute;
     z-index: 1;
 }
 
-.header ul.breadcrumbs > li a:hover {
-    background: none;
-}
-
 .header ul.breadcrumbs li {
-    background: none;
-    color: black;
     display: inline-block;
     padding: 0px 2px;
 }
@@ -276,17 +267,17 @@ a.modify img {
     content: "";
 }
 
+.header ul.breadcrumbs li.last {
+    font-weight: bold;
+}
+
 .header ul.breadcrumbs a,
 .header ul.breadcrumbs span {
     display: inline-block;
     font-size: 12px;
     line-height: 16px;
     margin-left: -4px;
-    padding: 12px 2px;
-}
-
-.header ul.breadcrumbs a {
-    color: #aa0000;
+    padding: 4px 2px;
 }
 
 /* XXX: temporary fix to display the zc.datetimewidget correctly

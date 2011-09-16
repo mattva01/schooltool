@@ -10,30 +10,15 @@
 }
 
 .ui-accordion-header {
-    background-image: none;
-    background-color: #AA0000;
-    color: #ffffff;
     font-weight: bold;
     text-align: left;
     padding: 4px 8px;
     padding-left: 26px;
     font-size: 12px;
     line-height: 16px;
-    border: 1px solid #aa0000;
-}
-
-.ui-state-hover {
-    border: 1px solid #540000;
-    background-color: #540000;
-}
-
-.ui-state-active {
-    background-color: #540000;
-    border: none;
 }
 
 .ui-accordion .ui-accordion-content {
-    background: none;
     padding-right: 8px;
     padding-left: 8px;
     padding-top: 4px;
@@ -51,7 +36,6 @@
 .ui-dialog .ui-dialog-content form fieldset {
     padding-top: 0px;
     margin-bottom: 0px;
-    background-color: #ffffff;
 }
 
 .ui-dialog .ui-dialog-content form .required-info {
@@ -64,14 +48,12 @@
 }
 
 .ui-dialog .ui-dialog-titlebar {
-    background: #aa0000;
     padding-left: 8px;
 }
 
 .ui-dialog .ui-dialog-titlebar .ui-dialog-title {
     line-height: 20px;
     font-size: 16px;
-    color: #ffffff;
 }
 
 .ui-icon-center {
