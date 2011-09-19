@@ -756,10 +756,10 @@ class ContactPersonImporter(ImporterBase):
         contact.state = data['state']
         contact.country = data['country']
         contact.postal_code = data['postal_code']
-        contact.email = data['email']
         contact.home_phone = data['home_phone']
         contact.work_phone = data['work_phone']
         contact.mobile_phone = data['mobile_phone']
+        contact.email = data['email']
         contact.language = data['language']
 
     def establishContact(self, data):
@@ -805,10 +805,10 @@ class ContactPersonImporter(ImporterBase):
             data['state'] = self.getTextFromCell(sh, row, 9)
             data['country'] = self.getTextFromCell(sh, row, 10)
             data['postal_code'] = self.getTextFromCell(sh, row, 11)
-            data['email'] = self.getTextFromCell(sh, row, 12)
-            data['home_phone'] = self.getTextFromCell(sh, row, 13)
-            data['work_phone'] = self.getTextFromCell(sh, row, 14)
-            data['mobile_phone'] = self.getTextFromCell(sh, row, 15)
+            data['home_phone'] = self.getTextFromCell(sh, row, 12)
+            data['work_phone'] = self.getTextFromCell(sh, row, 13)
+            data['mobile_phone'] = self.getTextFromCell(sh, row, 14)
+            data['email'] = self.getTextFromCell(sh, row, 15)
             data['language'] = self.getTextFromCell(sh, row, 16)
 
             if num_errors == len(self.errors):
