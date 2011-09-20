@@ -3,15 +3,15 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: schooltool-developers@lists.launchpad.net\n"
 "POT-Creation-Date: 2011-09-08 14:13+0300\n"
-"PO-Revision-Date: 2011-04-01 19:13+0800\n"
-"Last-Translator: Kent Tong <kent@cpttm.org.mo>\n"
+"PO-Revision-Date: 2011-03-30 10:14+0000\n"
+"Last-Translator: Kent Tong <Unknown>\n"
 "Language-Team: Traditional Chinese <zh_TW@li.org>\n"
 "Language: zh\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-03-31 06:42+0000\n"
-"X-Generator: Launchpad (build 12696)\n"
+"X-Launchpad-Export-Date: 2011-09-10 04:39+0000\n"
+"X-Generator: Launchpad (build 13900)\n"
 
 #: /src/schooltool/app/app.py:197
 msgid "Your School"
@@ -27,25 +27,24 @@ msgstr "人員"
 
 #: /src/schooltool/app/browser/__init__.py:261
 msgid "1 person"
-msgstr "1 位用戶"
+msgstr "單人"
 
 #. Default: ""
 #: /src/schooltool/app/browser/__init__.py:263
 msgid "${number} persons"
-msgstr "${number} 個人員"
+msgstr "${number} 人"
 
 #: /src/schooltool/app/browser/app.py:226
 msgid "Username or password is incorrect"
-msgstr "用戶名或密碼錯誤"
+msgstr "帳號或密碼錯誤"
 
-#: /src/schooltool/app/browser/app.py:322
-#: /src/schooltool/app/security.py:308
+#: /src/schooltool/app/browser/app.py:322 /src/schooltool/app/security.py:308
 msgid "Leaders"
-msgstr "領導"
+msgstr "領導者"
 
 #: /src/schooltool/app/browser/app.py:323
 msgid "Current leaders"
-msgstr "現任領導"
+msgstr "目前的主導者"
 
 #: /src/schooltool/app/browser/app.py:324
 msgid "Available leaders"
@@ -169,47 +168,53 @@ msgstr "星期日"
 
 #: /src/schooltool/app/browser/cal.py:138
 msgid "Mon"
-msgstr "一"
+msgstr "週一"
 
-#: /src/schooltool/app/browser/cal.py:139
+#: /src/schooltool/app/browser/cal.py:123
+#: /src/schooltool/app/browser/cal.py:1810
 msgid "Tue"
-msgstr "二"
+msgstr "週二"
 
-#: /src/schooltool/app/browser/cal.py:140
+#: /src/schooltool/app/browser/cal.py:123
+#: /src/schooltool/app/browser/cal.py:1811
 msgid "Wed"
-msgstr "三"
+msgstr "週三"
 
-#: /src/schooltool/app/browser/cal.py:141
+#: /src/schooltool/app/browser/cal.py:123
+#: /src/schooltool/app/browser/cal.py:1812
 msgid "Thu"
-msgstr "四"
+msgstr "週四"
 
-#: /src/schooltool/app/browser/cal.py:142
+#: /src/schooltool/app/browser/cal.py:124
+#: /src/schooltool/app/browser/cal.py:1813
 msgid "Fri"
-msgstr "五"
+msgstr "週五"
 
-#: /src/schooltool/app/browser/cal.py:143
+#: /src/schooltool/app/browser/cal.py:124
+#: /src/schooltool/app/browser/cal.py:1814
 msgid "Sat"
-msgstr "六"
+msgstr "週六"
 
-#: /src/schooltool/app/browser/cal.py:144
+#: /src/schooltool/app/browser/cal.py:124
+#: /src/schooltool/app/browser/cal.py:1815
 msgid "Sun"
-msgstr "日"
+msgstr "週日"
 
-#: /src/schooltool/app/browser/cal.py:505
+#: /src/schooltool/app/browser/cal.py:484
 msgid "Unnamed Event"
-msgstr "未命名事件"
+msgstr "未命名的事件"
 
 #: /src/schooltool/app/browser/cal.py:923
 msgid "Next week"
-msgstr "下一周"
+msgstr "下週"
 
 #: /src/schooltool/app/browser/cal.py:924
 msgid "Current week"
-msgstr "本周"
+msgstr "本週"
 
 #: /src/schooltool/app/browser/cal.py:925
 msgid "Previous week"
-msgstr "上一周"
+msgstr "上週"
 
 #: /src/schooltool/app/browser/cal.py:927
 msgid "Go to next week"
@@ -226,11 +231,11 @@ msgstr "轉到上周"
 #. Default: ""
 #: /src/schooltool/app/browser/cal.py:950
 msgid "${month}, ${year} (week ${week})"
-msgstr "${month}, ${year} (week ${week})"
+msgstr "${month}, ${year} (第 ${week} 週)"
 
 #: /src/schooltool/app/browser/cal.py:1164
 msgid "Next month"
-msgstr "下一月"
+msgstr "下個月"
 
 #: /src/schooltool/app/browser/cal.py:1165
 msgid "Current month"
@@ -238,7 +243,7 @@ msgstr "本月"
 
 #: /src/schooltool/app/browser/cal.py:1166
 msgid "Previous month"
-msgstr "上一月"
+msgstr "上個月"
 
 #: /src/schooltool/app/browser/cal.py:1168
 msgid "Go to next month"
@@ -260,11 +265,11 @@ msgstr "${month}, ${year}"
 #. Default: ""
 #: /src/schooltool/app/browser/cal.py:1200
 msgid "Week ${week_no}"
-msgstr "${week_no} 星期"
+msgstr "第 ${week_no} 週"
 
 #: /src/schooltool/app/browser/cal.py:1216
 msgid "Next year"
-msgstr "下一年"
+msgstr "明年"
 
 #: /src/schooltool/app/browser/cal.py:1217
 msgid "Current year"
@@ -272,7 +277,7 @@ msgstr "今年"
 
 #: /src/schooltool/app/browser/cal.py:1218
 msgid "Previous year"
-msgstr "上一年"
+msgstr "去年"
 
 #: /src/schooltool/app/browser/cal.py:1220
 msgid "Go to next year"
@@ -288,15 +293,15 @@ msgstr "轉到去年"
 
 #: /src/schooltool/app/browser/cal.py:1288
 msgid "The next day"
-msgstr "下一日"
+msgstr "明天"
 
 #: /src/schooltool/app/browser/cal.py:1289
 msgid "Today"
-msgstr "今日"
+msgstr "今天"
 
 #: /src/schooltool/app/browser/cal.py:1290
 msgid "The previous day"
-msgstr "前一天"
+msgstr "昨天"
 
 #: /src/schooltool/app/browser/cal.py:1292
 msgid "Go to the next day"
@@ -349,7 +354,7 @@ msgstr "標題"
 #: /src/schooltool/app/browser/templates/cal_weekly_timetable.pt:97
 #: /src/schooltool/app/browser/templates/cal_weekly_timetable.pt:127
 msgid "All day"
-msgstr "全天"
+msgstr "整天"
 
 #: /src/schooltool/app/browser/cal.py:1741
 #: /src/schooltool/term/browser/templates/emergency_select.pt:28
@@ -368,7 +373,7 @@ msgstr "開始時間 （24小時）"
 #: /src/schooltool/app/browser/cal.py:1749
 #: /src/schooltool/timetable/browser/schema.py:269
 msgid "Duration"
-msgstr "時間長短"
+msgstr "持續時間"
 
 #: /src/schooltool/app/browser/cal.py:1754
 msgid "Duration Type"
@@ -377,12 +382,12 @@ msgstr "時期類別"
 #: /src/schooltool/app/browser/cal.py:1757
 #: /src/schooltool/app/browser/templates/event_add.pt:168
 msgid "Minutes"
-msgstr "分"
+msgstr "分鐘"
 
 #: /src/schooltool/app/browser/cal.py:1758
 #: /src/schooltool/app/browser/templates/event_add.pt:171
 msgid "Hours"
-msgstr "時"
+msgstr "小時"
 
 #: /src/schooltool/app/browser/cal.py:1759
 #: /src/schooltool/app/browser/templates/event_add.pt:175
@@ -394,7 +399,7 @@ msgstr "天"
 #: /src/schooltool/resource/types.py:69
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:49
 msgid "Location"
-msgstr "場地"
+msgstr "位置"
 
 #: /src/schooltool/app/browser/cal.py:1766
 #: /src/schooltool/course/interfaces.py:40
@@ -408,19 +413,19 @@ msgstr "說明"
 
 #: /src/schooltool/app/browser/cal.py:1771
 msgid "Recurring"
-msgstr "重複發生"
+msgstr "重覆發生"
 
 #: /src/schooltool/app/browser/cal.py:1775
 msgid "Recurs every"
-msgstr "重複週期"
+msgstr "重覆於"
 
 #: /src/schooltool/app/browser/cal.py:1778
 msgid "Day"
-msgstr "日"
+msgstr "天"
 
 #: /src/schooltool/app/browser/cal.py:1779
 msgid "Week"
-msgstr "周"
+msgstr "週"
 
 #: /src/schooltool/app/browser/cal.py:1780
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:119
@@ -434,7 +439,7 @@ msgstr "年"
 
 #: /src/schooltool/app/browser/cal.py:1784
 msgid "Repeat every"
-msgstr "重複所有"
+msgstr "重覆於"
 
 #: /src/schooltool/app/browser/cal.py:1789
 msgid "Range"
@@ -442,7 +447,7 @@ msgstr "範圍"
 
 #: /src/schooltool/app/browser/cal.py:1792
 msgid "Count"
-msgstr "數目"
+msgstr "計數"
 
 #: /src/schooltool/app/browser/cal.py:1793
 msgid "Until"
@@ -454,20 +459,20 @@ msgstr "永遠"
 
 #: /src/schooltool/app/browser/cal.py:1797
 msgid "Number of events"
-msgstr "事件編號"
+msgstr "事件的次數"
 
 #: /src/schooltool/app/browser/cal.py:1801
 #: /src/schooltool/app/browser/templates/event_add.pt:303
 msgid "Repeat until"
-msgstr "重複直到"
+msgstr "重覆直到"
 
 #: /src/schooltool/app/browser/cal.py:1805
 msgid "Weekdays"
-msgstr "周"
+msgstr "上班日"
 
 #: /src/schooltool/app/browser/cal.py:1808
 msgid "Weekday"
-msgstr "工作日"
+msgstr "上班日"
 
 #: /src/schooltool/app/browser/cal.py:1818
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:36
@@ -477,7 +482,7 @@ msgstr "每月"
 
 #: /src/schooltool/app/browser/cal.py:1826
 msgid "Exception dates"
-msgstr "例外日期"
+msgstr "排除的日期"
 
 #: /src/schooltool/app/browser/cal.py:1912
 msgid "same weekday"
@@ -515,23 +520,23 @@ msgstr "最后 ${weekday} 周"
 #: /src/schooltool/app/browser/cal.py:1965
 #: /src/schooltool/app/browser/cal.py:2274
 msgid "An error occurred."
-msgstr "發生錯誤"
+msgstr "發生了一個錯誤。"
 
 #: /src/schooltool/app/browser/cal.py:1998
 msgid "Invalid time"
-msgstr "無效時間"
+msgstr "無效的時間"
 
 #: /src/schooltool/app/browser/cal.py:2019
 msgid "End date is earlier than start date"
-msgstr "終止日期比開始日期還早"
+msgstr "結束日期比開始日期還早"
 
 #: /src/schooltool/app/browser/cal.py:2028
 msgid "Invalid date.  Please specify YYYY-MM-DD, one per line."
-msgstr "無效的日期。請按 “年年年年-月月-日日” 格式填寫，每行一個。"
+msgstr "無效的日期,格式為 \"年-月-日\","
 
 #: /src/schooltool/app/browser/cal.py:2076
 msgid "Add event"
-msgstr "添加事件"
+msgstr "新增事件"
 
 #: /src/schooltool/app/browser/cal.py:2077
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:48
@@ -544,7 +549,7 @@ msgstr "添加事件"
 #: /src/schooltool/timetable/browser/__init__.py:704
 #: /src/schooltool/timetable/browser/templates/timetable-add.pt:25
 msgid "Add"
-msgstr "添加"
+msgstr "新增"
 
 #: /src/schooltool/app/browser/cal.py:2148
 msgid "Edit event"
@@ -559,10 +564,9 @@ msgid "Update"
 msgstr "更新"
 
 #. Default: ""
-#: /src/schooltool/app/browser/cal.py:2280
-#: /src/schooltool/skin/form.py:76
+#: /src/schooltool/app/browser/cal.py:2280 /src/schooltool/skin/form.py:76
 msgid "Updated on ${date_time}"
-msgstr "更新于 ${date_time}"
+msgstr "於 ${date_time} 更新"
 
 #: /src/schooltool/app/browser/cal.py:2715
 #: /src/schooltool/app/browser/configure.zcml:597
@@ -574,11 +578,11 @@ msgstr "行事曆"
 
 #: /src/schooltool/app/browser/configure.zcml:166
 msgid "Actions"
-msgstr "作業"
+msgstr "操作命令"
 
 #: /src/schooltool/app/browser/configure.zcml:311
 msgid "View Calendar"
-msgstr "行事曆檢視"
+msgstr "顯示行事曆"
 
 #: /src/schooltool/app/browser/configure.zcml:322
 msgid "New Event"
@@ -586,7 +590,7 @@ msgstr "新事件"
 
 #: /src/schooltool/app/browser/configure.zcml:333
 msgid "Open in iCal"
-msgstr "在iCal中開啟"
+msgstr "在 iCal 開啟"
 
 #: /src/schooltool/app/browser/configure.zcml:345
 msgid "Import Sections"
@@ -605,7 +609,7 @@ msgstr "變更網站參數"
 #: /src/schooltool/app/help/event_add.pt:6
 #: /src/schooltool/app/help/event_add.pt:9
 msgid "Add Event"
-msgstr "增加事件"
+msgstr "新增事件"
 
 #: /src/schooltool/app/browser/configure.zcml:534
 #: /src/schooltool/app/help/configure.zcml:87
@@ -630,7 +634,7 @@ msgstr "程式控制"
 
 #: /src/schooltool/app/browser/configure.zcml:634
 msgid "Translation Domains"
-msgstr "翻譯域名"
+msgstr "翻譯領域"
 
 #: /src/schooltool/app/browser/configure.zcml:645
 msgid "Generations"
@@ -653,50 +657,50 @@ msgstr "錯誤清單"
 #: /src/schooltool/app/browser/csvimport.py:289
 #: /src/schooltool/export/importer.py:994
 msgid "No data provided"
-msgstr "沒有資料提供"
+msgstr "沒有提供資料"
 
 #: /src/schooltool/app/browser/csvimport.py:114
 msgid "Could not convert data to Unicode (incorrect charset?)."
-msgstr "無法轉換資料編碼（錯誤字集）"
+msgstr "無法轉換資料至Unicode編碼(文字編碼charset不正確)"
 
 #: /src/schooltool/app/browser/csvimport.py:123
 msgid "CSV file imported successfully."
-msgstr "導入 CSV 檔案成功"
+msgstr "CSV檔匯入成功."
 
 #: /src/schooltool/app/browser/csvimport.py:125
 msgid "Failed to import CSV file"
-msgstr "導入 CSV 檔案失敗"
+msgstr "CSV檔匯入失敗."
 
 #: /src/schooltool/app/browser/csvimport.py:135
 msgid "CSV text imported successfully."
-msgstr "導入 CSV 字檔成功"
+msgstr "CSV文件匯入成功."
 
 #: /src/schooltool/app/browser/csvimport.py:137
 msgid "Failed to import CSV text"
-msgstr "導入 CSV 字檔失敗"
+msgstr "CSV文件匯入失敗."
 
 #: /src/schooltool/app/browser/csvimport.py:159
 msgid "No charset specified"
-msgstr "未指定字集"
+msgstr "文字編碼(charset)沒有指定"
 
 #: /src/schooltool/app/browser/csvimport.py:164
 msgid "Unknown charset"
-msgstr "未知字集"
+msgstr "文字編碼(charset)無法辦視"
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:208
 msgid "Error in CSV data, line ${line_no}"
-msgstr "CSV 資料的第 ${line_no} 行錯誤"
+msgstr "在CVS檔第 ${line_no} 行發生錯誤."
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:212
 #: /src/schooltool/app/browser/csvimport.py:513
 msgid "Conversion to unicode failed in line ${line_no}"
-msgstr "在 ${line_no} 行轉換編碼失敗"
+msgstr "轉換 ${line_no} 行成unicode時發生錯誤"
 
 #: /src/schooltool/app/browser/csvimport.py:295
 msgid "Row 2 is not empty"
-msgstr "第 2 行非空"
+msgstr "第二行不是空白"
 
 #. Default: ""
 #: /src/schooltool/app/browser/csvimport.py:331
@@ -760,7 +764,7 @@ msgstr "無效記錄：${args}。"
 
 #: /src/schooltool/app/browser/overlay.py:205
 msgid "Saved changes."
-msgstr "變更已儲存"
+msgstr "儲存變更。"
 
 #: /src/schooltool/app/browser/pdfcal.py:52
 msgid "Daily calendar for %s"
@@ -954,7 +958,7 @@ msgstr "檢視每周行事曆"
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:30
 #: /src/schooltool/app/browser/templates/event_add.pt:235
 msgid "Weekly"
-msgstr "周"
+msgstr "每週"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:36
 msgid "View monthly calendar"
@@ -971,11 +975,11 @@ msgstr "每年"
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:55
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:91
 msgid "Calendar for ${title} - ${calendar_title}"
-msgstr "${title} 的行事曆 － ${calendar_title}"
+msgstr "行事曆 ${title} - ${calendar_title}"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:115
 msgid "Jump To ..."
-msgstr "轉到..."
+msgstr "跳至 ..."
 
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:4
 #: /src/schooltool/timetable/browser/templates/calendar_overlay.pt:4
@@ -1017,7 +1021,7 @@ msgstr "按下 Ctrl 或者 Shift 以選取多個行事曆"
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:32
 msgid "Public Calendar"
-msgstr "公用行事曆"
+msgstr "公開行事曆"
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:37
 msgid "site-wide calendar"
@@ -1127,13 +1131,13 @@ msgstr "這是一個重複發生的事件。"
 #: /src/schooltool/person/browser/person.pt:34
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:34
 msgid "Details"
-msgstr "詳情"
+msgstr "詳細資料"
 
 #: /src/schooltool/app/browser/templates/event.pt:37
 #: /src/schooltool/schoolyear/browser/schoolyear.py:128
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:38
 msgid "Starts"
-msgstr "起始"
+msgstr "開始"
 
 #: /src/schooltool/app/browser/templates/event.pt:42
 #: /src/schooltool/schoolyear/browser/schoolyear.py:130
@@ -1164,7 +1168,7 @@ msgstr "編輯資源"
 #: /src/schooltool/app/browser/templates/event.pt:80
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:81
 msgid "delete event"
-msgstr "移除事件"
+msgstr "刪除事件"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:137
 msgid "Event information"
@@ -1172,7 +1176,7 @@ msgstr "事件資訊"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:143
 msgid "Event details"
-msgstr "事件細節"
+msgstr "事件描述"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:197
 msgid "Book Resources"
@@ -1180,15 +1184,15 @@ msgstr "預訂資源"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:207
 msgid "Update form"
-msgstr "更新方式"
+msgstr "更新表單"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:224
 msgid "day"
-msgstr "天"
+msgstr "日"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:225
 msgid "week"
-msgstr "周"
+msgstr "週"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:226
 msgid "month"
@@ -1217,11 +1221,11 @@ msgstr "每月的周${weekday}"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:288
 msgid "Repeat"
-msgstr "重複"
+msgstr "重覆"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:291
 msgid "times"
-msgstr "次數"
+msgstr "次"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:306
 #: /src/schooltool/term/browser/templates/emergency_select.pt:31
@@ -1231,7 +1235,7 @@ msgstr "即現式行事曆"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:324
 msgid "Repeat forever"
-msgstr "永遠重複"
+msgstr "持續重複"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:348
 msgid "Booked Resources"
@@ -1313,7 +1317,7 @@ msgstr "可用資源"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:57
 msgid "Book"
-msgstr "圖書"
+msgstr "書籍"
 
 #: /src/schooltool/app/browser/templates/event_info_viewlet.pt:12
 msgid "Location: ${location}"
@@ -1358,7 +1362,7 @@ msgstr "登入"
 
 #: /src/schooltool/app/browser/templates/login.pt:8
 msgid "Your session has expired."
-msgstr "您的階段作業到期"
+msgstr "認證資訊超過有效期限。"
 
 #: /src/schooltool/app/browser/templates/login.pt:13
 msgid ""
@@ -1373,7 +1377,7 @@ msgstr "請登入"
 
 #: /src/schooltool/app/browser/templates/login.pt:35
 msgid "User Information"
-msgstr "用戶資訊"
+msgstr "使用者資訊"
 
 #: /src/schooltool/app/browser/templates/login.pt:38
 #: /src/schooltool/basicperson/browser/person.py:59
@@ -1420,11 +1424,11 @@ msgstr "您正嘗試移除一個重複的事件"
 
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:41
 msgid "Current"
-msgstr "目前"
+msgstr "目前的"
 
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:43
 msgid "Future"
-msgstr "將來"
+msgstr "未來"
 
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:45
 msgid "All"
@@ -1624,7 +1628,7 @@ msgstr "CSV 檔案"
 #: /src/schooltool/person/browser/person-csvimport.pt:55
 #: /src/schooltool/resource/browser/resource-csvimport.pt:52
 msgid "Charset:"
-msgstr "字集："
+msgstr "字元集："
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:103
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:57
@@ -1635,7 +1639,7 @@ msgstr "字集："
 #: /src/schooltool/person/browser/person-csvimport.pt:57
 #: /src/schooltool/resource/browser/resource-csvimport.pt:54
 msgid "Unicode (UTF-8)"
-msgstr "Unicode (UTF-8)"
+msgstr "統一碼 (UTF-8)"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:104
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:58
@@ -1646,7 +1650,7 @@ msgstr "Unicode (UTF-8)"
 #: /src/schooltool/person/browser/person-csvimport.pt:58
 #: /src/schooltool/resource/browser/resource-csvimport.pt:55
 msgid "Western (ISO-8859-1)"
-msgstr "西方 (ISO-8859-1)"
+msgstr "西歐語系 (ISO-8859-1)"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:105
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:59
@@ -1657,7 +1661,7 @@ msgstr "西方 (ISO-8859-1)"
 #: /src/schooltool/person/browser/person-csvimport.pt:59
 #: /src/schooltool/resource/browser/resource-csvimport.pt:56
 msgid "Western (ISO-8859-15)"
-msgstr "西方 (ISO-8859-15)"
+msgstr "西歐語系 (ISO-8859-15)"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:106
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:60
@@ -1668,7 +1672,7 @@ msgstr "西方 (ISO-8859-15)"
 #: /src/schooltool/person/browser/person-csvimport.pt:60
 #: /src/schooltool/resource/browser/resource-csvimport.pt:57
 msgid "Western (Windows-1252)"
-msgstr "西方 (Windows-1252)"
+msgstr "西歐語系 (Windows-1252)"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:107
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:61
@@ -1729,32 +1733,31 @@ msgstr "確認"
 
 #: /src/schooltool/app/interfaces.py:44
 msgid "Form input is not a file object"
-msgstr "表單的輸入不是一個檔案物件"
+msgstr "表單輸入的不是檔案物件"
 
-#: /src/schooltool/app/interfaces.py:45
-#: /src/schooltool/app/interfaces.py:49
+#: /src/schooltool/app/interfaces.py:45 /src/schooltool/app/interfaces.py:49
 msgid "Invalid integer data"
-msgstr "無效的整型資料"
+msgstr "無效的整數資料"
 
 #: /src/schooltool/app/interfaces.py:46
 msgid "Invalid text data"
-msgstr "無效字檔資料"
+msgstr "無效的文字資料"
 
 #: /src/schooltool/app/interfaces.py:47
 msgid "Invalid textual data"
-msgstr "無效原文資料"
+msgstr "無效的文字資料"
 
 #: /src/schooltool/app/interfaces.py:48
 msgid "Invalid unicode data"
-msgstr "無效 unicode 資料"
+msgstr "無效的萬國碼資料"
 
 #: /src/schooltool/app/interfaces.py:50
 msgid "Invalid floating point data"
-msgstr "無效的浮點資料"
+msgstr "無效的浮點數資料"
 
 #: /src/schooltool/app/interfaces.py:51
 msgid "Invalid datetime data"
-msgstr "無效日期時間資料"
+msgstr "無效的日期時間資料"
 
 #: /src/schooltool/app/interfaces.py:148 /src/schooltool/app/interfaces.py:159
 msgid ""
@@ -4011,7 +4014,7 @@ msgstr "重試"
 #: /src/schooltool/timetable/browser/configure.zcml:62
 #: /src/schooltool/timetable/browser/templates/timetable_list.pt:28
 msgid "Delete"
-msgstr "移除"
+msgstr "刪除"
 
 #: /src/schooltool/email/browser/email.py:398
 msgid "Email Queue"
@@ -5882,7 +5885,7 @@ msgstr "建立學校時間表"
 
 #: /src/schooltool/timetable/browser/templates/calendar_overlay.pt:14
 msgid "Cal"
-msgstr "約會"
+msgstr "計算"
 
 #: /src/schooltool/timetable/browser/templates/calendar_overlay.pt:14
 msgid "Personal calendar"
@@ -5997,7 +6000,7 @@ msgstr "選擇使用哪一個學校時間表"
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:17
 msgid "Time table schedule of ${courses} ${section}."
-msgstr " ${courses}的${section}的時間表編排"
+msgstr "${courses}的${section}的時間表編排"
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:25
 msgid "school days"

@@ -15,8 +15,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-04-11 04:30+0000\n"
-"X-Generator: Launchpad (build 12735)\n"
+"X-Launchpad-Export-Date: 2011-09-10 04:33+0000\n"
+"X-Generator: Launchpad (build 13900)\n"
 "X-Rosetta-Version: 0.1\n"
 
 #: /src/schooltool/app/app.py:197
@@ -318,7 +318,7 @@ msgstr "Ir ao día anterior"
 #. Default: ""
 #: /src/schooltool/app/browser/cal.py:1446
 msgid "Add new event starting at ${title}"
-msgstr ""
+msgstr "Engadir un novo evento que empece por ${title}"
 
 #: /src/schooltool/app/browser/cal.py:1735
 #: /src/schooltool/app/interfaces.py:146 /src/schooltool/app/interfaces.py:157
@@ -1518,12 +1518,19 @@ msgid ""
 "timetable schema can be found by going to its view page under School "
 "Timetables for the school year."
 msgstr ""
+"A primeira columna do arquivo debe conter a id do <strong>esquema de "
+"calendario</strong> este será usado para os novos calendarios. O id dun "
+"esquema de calendario se pode atopar o irés a sua páxgina de vista nos "
+"horarios escolares para o ano escolar."
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:37
 msgid ""
 "The second row should be empty. After that, several section descriptions may "
 "follow. They are separated by an extra carriage return (i.e., a blank line)."
 msgstr ""
+"A segunda fila debe estar vacia. Despóis diso, varias seccións de "
+"descripcións poden seguir. Están separados por un retorno de carro extra(i."
+"e., unha liña en branco)."
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:43
 msgid ""

@@ -15,8 +15,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-03-19 04:48+0000\n"
-"X-Generator: Launchpad (build 12559)\n"
+"X-Launchpad-Export-Date: 2011-09-10 04:34+0000\n"
+"X-Generator: Launchpad (build 13900)\n"
 "X-Rosetta-Version: 0.1\n"
 
 #: /src/schooltool/app/app.py:197
@@ -557,7 +557,7 @@ msgstr "Pridėti"
 
 #: /src/schooltool/app/browser/cal.py:2148
 msgid "Edit event"
-msgstr "Keisti įvykį"
+msgstr "Redaguoti įvykį"
 
 #: /src/schooltool/app/browser/cal.py:2149
 #: /src/schooltool/timetable/browser/templates/advancedtts.pt:29
@@ -5064,7 +5064,7 @@ msgstr ""
 
 #: /src/schooltool/resource/types.py:107
 msgid "Type"
-msgstr "Tipas"
+msgstr ""
 
 #: /src/schooltool/sampledata/sampledata.pt:3
 #: /src/schooltool/sampledata/sampledata.pt:9
@@ -5195,7 +5195,7 @@ msgstr ""
 
 #: /src/schooltool/schoolyear/security.zcml:23
 msgid "Activate current school year"
-msgstr "Aktyvuoti esamus mokslo metus "
+msgstr "Aktyvuoti esamus mokslo metus"
 
 #: /src/schooltool/securitypolicy/browser/configure.zcml:7
 msgid "View Access Rights"

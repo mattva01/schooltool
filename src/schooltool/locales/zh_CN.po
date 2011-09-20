@@ -16,8 +16,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-05-27 04:40+0000\n"
-"X-Generator: Launchpad (build 12959)\n"
+"X-Launchpad-Export-Date: 2011-09-10 04:39+0000\n"
+"X-Generator: Launchpad (build 13900)\n"
 
 #: /src/schooltool/app/app.py:197
 msgid "Your School"
@@ -3249,7 +3249,7 @@ msgstr "下一步"
 
 #: /src/schooltool/course/browser/templates/section_edit.pt:98
 msgid "Section in the next term."
-msgstr ""
+msgstr "下学期的小组"
 
 #: /src/schooltool/course/browser/templates/section_linkage.pt:4
 msgid "All Terms for Section"
@@ -3336,15 +3336,15 @@ msgstr ""
 
 #: /src/schooltool/course/section.py:124
 msgid "Cannot assign section as previous to itself"
-msgstr ""
+msgstr "阶段不能被指定为自己的前一阶段"
 
 #: /src/schooltool/course/section.py:151
 msgid "Cannot assign section as next to itself"
-msgstr ""
+msgstr "阶段不能被指定为自己的下一阶段"
 
 #: /src/schooltool/course/section.py:282
 msgid "Instructors of the section."
-msgstr ""
+msgstr "该小组的老师。"
 
 #: /src/schooltool/course/section.py:292
 msgid "Instructors of a person in any of his sections."
@@ -3356,7 +3356,7 @@ msgstr ""
 
 #: /src/schooltool/course/section.py:316
 msgid "Students of the section."
-msgstr ""
+msgstr "该小组的学生。"
 
 #: /src/schooltool/course/section.py:394
 msgid "Cannot link sections in same term"
@@ -3380,7 +3380,7 @@ msgstr ""
 msgid ""
 "Basic information about sections, including rosters, is visible to the "
 "general public."
-msgstr ""
+msgstr "小组的基本信息，包括名册，对公众开放。"
 
 #: /src/schooltool/course/security.zcml:74
 msgid ""
@@ -3421,7 +3421,7 @@ msgstr "修改"
 msgid ""
 "A section is a set of one or more learners                    who meet "
 "during a term."
-msgstr ""
+msgstr "小组是一位以上同期共同上课的学生组成的。"
 
 #: /src/schooltool/dashboard/configure.zcml:41
 msgid "My Sections"
