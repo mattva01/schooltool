@@ -18,18 +18,14 @@ div.timetable-table {
     width: 720px;
 }
 
-table.timetable tbody td {
-    border-left: 1px dotted #cccccc;
-    border-right: 1px dotted #cccccc;
-}
-
 table.timetable td .period {
     word-break: normal;
     white-space: nowrap;
 }
 
-table.timetable td .inactive {
-    color: #aaa;
+.timetable-wizard textarea {
+    font-size: 12px;
+    line-height: 16px;
 }
 
 .body > .container form fieldset div.timetable-table {
@@ -40,13 +36,8 @@ table.timetable td .inactive {
     width: 704px;
 }
 
-form fieldset table.timetable {
-    background-color: #f7f7f7;
-}
-
 form fieldset table.timetable td.error {
     padding-left: 24px;
-    background: transparent url(error-icon.png) no-repeat scroll 8px 10px;
 }
 
 }

@@ -55,7 +55,8 @@
       <div metal:define-slot="main">
         <metal:widget-rows define-macro="widget-rows">
           <tal:loop repeat="fieldset view/fieldsets">
-            <fieldset tal:attributes="id fieldset/id">
+            <fieldset tal:condition="fieldset/rows"
+                      tal:attributes="id fieldset/id">
               <legend>
                 <span tal:content="fieldset/legend">legend</span>
               </legend>
