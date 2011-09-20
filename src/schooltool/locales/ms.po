@@ -15,8 +15,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-06-28 04:30+0000\n"
-"X-Generator: Launchpad (build 13168)\n"
+"X-Launchpad-Export-Date: 2011-09-10 04:35+0000\n"
+"X-Generator: Launchpad (build 13900)\n"
 
 #: /src/schooltool/app/app.py:197
 msgid "Your School"
@@ -4000,11 +4000,11 @@ msgstr "Gunakan sambungan TLS?"
 
 #: /src/schooltool/email/browser/email.py:145
 msgid "New passwords don't match"
-msgstr ""
+msgstr "Kata laluan baru tidak sepadan"
 
 #: /src/schooltool/email/browser/email.py:150
 msgid "Hostname is required for enabling the service"
-msgstr ""
+msgstr "Nama hos diperlukan untuk benarkan perkhidmatan"
 
 #: /src/schooltool/email/browser/email.py:184
 msgid "Change Email Settings"
@@ -4185,39 +4185,39 @@ msgstr "Eksport XLS"
 
 #: /src/schooltool/export/importer.py:68
 msgid "${sheet_name} ${column}${row} ${message}"
-msgstr ""
+msgstr "${sheet_name} ${column}${row} ${message}"
 
 #: /src/schooltool/export/importer.py:69
 msgid "is not a valid integer"
-msgstr ""
+msgstr "bukan integer yang sah"
 
 #: /src/schooltool/export/importer.py:70
 msgid "not unicode or ascii string"
-msgstr ""
+msgstr "bukan rentetan unikod atau ascii"
 
 #: /src/schooltool/export/importer.py:71
 msgid "missing required text"
-msgstr ""
+msgstr "kehilangan teks yang diperlukan"
 
 #: /src/schooltool/export/importer.py:72
 msgid "has no date in it"
-msgstr ""
+msgstr "tiada tarikh didalamnya"
 
 #: /src/schooltool/export/importer.py:73
 msgid "end date cannot be before start date"
-msgstr ""
+msgstr "tarikh akhir tidak boleh sebelum tarikh mula"
 
 #: /src/schooltool/export/importer.py:74
 msgid "start date overlaps another year"
-msgstr ""
+msgstr "tarikh mula bertindih tahun lain"
 
 #: /src/schooltool/export/importer.py:75
 msgid "end date overlaps another year"
-msgstr ""
+msgstr "tarikh akhir bertindih tahun lain"
 
 #: /src/schooltool/export/importer.py:76
 msgid "invalid school year"
-msgstr ""
+msgstr "tahun persekolahan tidak sah"
 
 #: /src/schooltool/export/importer.py:77
 msgid "start date before start of school year"
@@ -4229,15 +4229,15 @@ msgstr ""
 
 #: /src/schooltool/export/importer.py:79
 msgid "start date overlaps another term"
-msgstr ""
+msgstr "tarikh mula bertindih semester lain"
 
 #: /src/schooltool/export/importer.py:80
 msgid "end date overlaps another term"
-msgstr ""
+msgstr "tarikh akhir bertindih semester lain"
 
 #: /src/schooltool/export/importer.py:81
 msgid "${title} has no days in A${row}"
-msgstr ""
+msgstr "${title} tiada hari didalam A${row}"
 
 #: /src/schooltool/export/importer.py:82
 msgid "${title} has no day templates in A${row}"
@@ -6113,21 +6113,23 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:25
 msgid "school days"
-msgstr ""
+msgstr "hari persekolahan"
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:27
 msgid "available timetables"
-msgstr ""
+msgstr "jadual waktu yang ada"
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:31
 msgid ""
 "For more information, see ${school_days} and ${available_timetables} in "
 "${term} of ${schoolyear}"
 msgstr ""
+"Untuk maklumat lanjut, rujuk ${school_days} dan ${available_timetables} "
+"dalam ${term} pada ${schoolyear}"
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:39
 msgid "There are no timetables assigned."
-msgstr ""
+msgstr "Tiada jadual waktu ditugaskan."
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:49
 msgid "(edit periods)"
@@ -6239,11 +6241,11 @@ msgstr "Menggunakan jadual: ${schema_titles}"
 
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:97
 msgid "Apply from:"
-msgstr ""
+msgstr "Laksana dari:"
 
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:111
 msgid "Apply until:"
-msgstr ""
+msgstr "Laksana sehingga:"
 
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:40
 msgid "Default Timetable Schema:"
