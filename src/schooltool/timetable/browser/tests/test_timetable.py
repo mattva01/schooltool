@@ -1397,6 +1397,7 @@ def test_suite():
     suite = unittest.TestSuite()
     optionflags = (doctest.ELLIPSIS | doctest.REPORT_NDIFF |
                    doctest.NORMALIZE_WHITESPACE)
+    # XXX: tests not refactored yet
     #suite.addTest(doctest.DocTestSuite(setUp=setUp, tearDown=tearDown,
     #                                   optionflags=optionflags))
     #suite.addTest(unittest.makeSuite(TestAdvancedTimetableSchemaAdd))
