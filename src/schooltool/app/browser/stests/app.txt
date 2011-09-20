@@ -5,17 +5,13 @@ Experimental selenium doctest for SchoolTool
 
     >>> browsers.manager.get(browsers.localhost)
 
-    >>> browsers.manager.implicitly_wait(10)
+    >>> browsers.manager.implicitly_wait(100)
 
     >>> browsers.manager.find_element_by_link_text('Log In').click()
 
     >>> browsers.manager.find_element_by_name('username').send_keys('manager')
-
-    >>> actions = ActionChains(browsers.manager)
-    >>> actions = actions.click(browsers.manager.find_element_by_name('password'))
-    >>> actions = actions.send_keys("schooltool")
-    >>> actions = actions.click(browsers.manager.find_element_by_xpath('//form//input[@value="Log in"]'))
-    >>> actions.perform()
+    >>> browsers.manager.find_element_by_name('password').send_keys('schooltool')
+    >>> browsers.manager.find_element_by_xpath('//form//input[@value="Log in"]').click()
 
     >>> title = browsers.manager.find_element_by_xpath('//body//div[@class="calcontent"]//h1')
 
@@ -37,13 +33,14 @@ Experimental selenium doctest for SchoolTool
     >>> fill = fill.send_keys_to_element(form['form.widgets.username'], 'bob_m')
     >>> fill = fill.send_keys_to_element(form['form.widgets.password'], 'schooltool')
     >>> fill = fill.send_keys_to_element(form['form.widgets.confirm'], 'schooltool')
-    >>> fill = fill.click(form['form.buttons.add'])
-    >>> fill.perform()
 
+    >>> fill = fill.click(form['form.buttons.add'])
+
+    >>> fill.perform()
 
     >>> browsers.bob.get(browsers.localhost)
 
-    >>> browsers.bob.implicitly_wait(10)
+    >>> browsers.bob.implicitly_wait(100)
 
     >>> browsers.bob.find_element_by_link_text('Log In').click()
     >>> browsers.bob.find_element_by_name('username').send_keys('bob_m')
