@@ -1,0 +1,54 @@
+Experimental selenium doctest for SchoolTool
+============================================
+
+    >>> from selenium.webdriver.common.action_chains import ActionChains
+
+    >>> browsers.manager.get(browsers.localhost)
+
+    >>> browsers.manager.implicitly_wait(10)
+
+    >>> browsers.manager.find_element_by_link_text('Log In').click()
+
+    >>> browsers.manager.find_element_by_name('username').send_keys('manager')
+
+    >>> actions = ActionChains(browsers.manager)
+    >>> actions = actions.click(browsers.manager.find_element_by_name('password'))
+    >>> actions = actions.send_keys("schooltool")
+    >>> actions = actions.click(browsers.manager.find_element_by_xpath('//form//input[@value="Log in"]'))
+    >>> actions.perform()
+
+    >>> title = browsers.manager.find_element_by_xpath('//body//div[@class="calcontent"]//h1')
+
+    >>> print title.text
+    Calendar for Administrator, SchoolTool - Tuesday, February 1, 2005
+
+    >>> browsers.manager.find_element_by_link_text('Manage').click()
+
+    >>> browsers.manager.find_element_by_link_text('Persons').click()
+
+    >>> browsers.manager.find_element_by_link_text('New Person').click()
+
+    >>> elements = browsers.manager.find_elements_by_xpath('//form//input')
+
+    >>> form = dict([(e.get_attribute('name'), e) for e in elements])
+    >>> fill = ActionChains(browsers.manager)
+    >>> fill = fill.send_keys_to_element(form['form.widgets.first_name'], 'Bob')
+    >>> fill = fill.send_keys_to_element(form['form.widgets.last_name'], 'Marley')
+    >>> fill = fill.send_keys_to_element(form['form.widgets.username'], 'bob_m')
+    >>> fill = fill.send_keys_to_element(form['form.widgets.password'], 'schooltool')
+    >>> fill = fill.send_keys_to_element(form['form.widgets.confirm'], 'schooltool')
+    >>> fill = fill.click(form['form.buttons.add'])
+    >>> fill.perform()
+
+
+    >>> browsers.bob.get(browsers.localhost)
+
+    >>> browsers.bob.implicitly_wait(10)
+
+    >>> browsers.bob.find_element_by_link_text('Log In').click()
+    >>> browsers.bob.find_element_by_name('username').send_keys('bob_m')
+    >>> browsers.bob.find_element_by_name('password').send_keys('schooltool')
+    >>> browsers.bob.find_element_by_xpath('//form//input[@value="Log in"]').click()
+
+    >>> print browsers.bob.find_element_by_xpath('//body//div[@class="calcontent"]//h1').text
+    Calendar for Marley, Bob - Tuesday, February 1, 2005
