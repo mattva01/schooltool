@@ -837,19 +837,21 @@ class ContactRelationshipImporter(ImporterBase):
             if num_errors == len(self.errors):
                 if data['__name__'] not in persons:
                     self.error(row, 0, ERROR_INVALID_PERSON_ID)
-            person = persons[data['__name__']]
+                else:
+                    person = persons[data['__name__']]
 
+            current_errors = len(self.errors)
             data['contact_name'] = self.getRequiredTextFromCell(sh, row, 1)
             name = data['contact_name']
-            current_errors = len(self.errors)
-            self.validateUnicode(name, row, 1)
+            if current_errors == len(self.errors):
+                self.validateUnicode(name, row, 1)
             if current_errors == len(self.errors):
                 if name in persons:
                     contact = IContact(persons[name])
                 elif name in contacts:
                     contact = contacts[name]
                 else:
-                    self.error(row, 0, ERROR_INVALID_CONTACT_ID)
+                    self.error(row, 1, ERROR_INVALID_CONTACT_ID)
 
             data['relationship'] = self.getTextFromCell(sh, row, 2)
             relationship = data['relationship']
