@@ -184,6 +184,11 @@ class ResourceContainerView(oldform.FormBase):
 
 class FlourishResourceContainerView(TableContainerView):
 
+    @property
+    def done_link(self):
+        app = ISchoolToolApplication(None)
+        return absoluteURL(app, self.request) + '/manage'
+
     def getColumnsAfter(self):
         description = GetterColumn(
             name='description',

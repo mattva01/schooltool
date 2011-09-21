@@ -69,7 +69,7 @@ And now let's add a couple of courses:
     >>> manager.getControl('Description').value = "English course description"
     >>> manager.getControl('Course ID').value = "english"
     >>> manager.getControl('Alternate ID').value = "english101"
-    >>> manager.getControl('Credits').value = "4"
+    >>> manager.getControl('Credits').value = "4.5"
     >>> manager.getControl('Add').click()
 
 Now let's add some sections for our courses:
@@ -92,7 +92,7 @@ Now let's add some sections for our courses:
     </p>
     <p>
       Credits:
-      4
+      4.5
     </p>
 
     >>> manager.getLink('New Section').click()
@@ -220,24 +220,39 @@ We can now see that the section spans both terms.
     </a>
 
     >>> manager.getLink('History (2)', index=0).click()
-    >>> manager.printQuery("id('content-header')//tr[1]/td[2]")
-    <td>History (2)</td>
-    >>> manager.printQuery("id('content-header')//a")
-    <a href="http://localhost/schoolyears/2005-2006/courses/history">History</a>
-    <a href="http://localhost/schoolyears/2005-2006">2005-2006</a>
-    <a href="http://localhost/schoolyears/2005-2006/fall">Fall</a>
-    <a href="http://localhost/schoolyears/2005-2006/fall/sections/2/section_linkage.html">All Terms</a>
-    <a href="http://localhost/schoolyears/2005-2006/spring/sections/2">Spring</a>
+    >>> manager.printQuery("id('content-header')/h1")
+    <h1>
+      Section of
+      <a href="http://localhost/schoolyears/2005-2006/courses/history">History</a>
+      -- History (2)
+      for
+      <a href="http://localhost/schoolyears/2005-2006/fall">Fall</a> of
+      <a href="http://localhost/schoolyears/2005-2006">2005-2006</a>
+    </h1>
+
+    >>> manager.printQuery("id('content-body')//div[@class='info-block'][1]/ul/li")
+    <li>
+      <a href="http://localhost/schoolyears/2005-2006/spring/sections/2">History (2)</a>
+      for
+      <a href="http://localhost/schoolyears/2005-2006/spring">Spring</a>
+    </li>
 
 Sections are linked, so can navigate to the next section.
 
-    >>> manager.getLink('Spring').click()
-    >>> manager.printQuery("id('content-header')//tr[1]/td[2]")
-    <td>History (2)</td>
-    >>> manager.printQuery("id('content-header')//a")
-    <a href="http://localhost/schoolyears/2005-2006/courses/history">History</a>
-    <a href="http://localhost/schoolyears/2005-2006">2005-2006</a>
-    <a href="http://localhost/schoolyears/2005-2006/spring">Spring</a>
-    <a href="http://localhost/schoolyears/2005-2006/spring/sections/2/section_linkage.html">All Terms</a>
-    <a href="http://localhost/schoolyears/2005-2006/fall/sections/2">Fall</a>
+    >>> manager.getLink('History (2)').click()
+    >>> manager.printQuery("id('content-header')/h1")
+    <h1>
+      Section of
+      <a href="http://localhost/schoolyears/2005-2006/courses/history">History</a>
+      -- History (2)
+      for
+      <a href="http://localhost/schoolyears/2005-2006/spring">Spring</a> of
+      <a href="http://localhost/schoolyears/2005-2006">2005-2006</a>
+    </h1>
 
+    >>> manager.printQuery("id('content-body')//div[@class='info-block'][1]/ul/li")
+    <li>
+      <a href="http://localhost/schoolyears/2005-2006/fall/sections/2">History (2)</a>
+      for
+      <a href="http://localhost/schoolyears/2005-2006/fall">Fall</a>
+    </li>

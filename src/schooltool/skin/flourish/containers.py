@@ -102,6 +102,7 @@ class TableContainerView(Page):
 
     empty_message = _('There are none.')
     content_template = ViewPageTemplateFile('templates/table_container.pt')
+    done_link = ''
 
     def __init__(self, context, request):
         self.request = request

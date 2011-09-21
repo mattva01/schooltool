@@ -16,10 +16,18 @@
         </div>
       </tal:if>
       <tal:block tal:replace="structure view/table/filter_widget/render" />
+      <h3>
+        <a tal:attributes="href string:${context/schooltool:app/@@absolute_url}/manage"
+           i18n:translate="">Done</a>
+      </h3>
       <tal:block replace="structure batch/render" />
       <tal:block replace="structure view/table/render" tal:condition="batch" />
     </tal:block>
     <tal:block tal:condition="not:view/table/filter_widget">
+      <h3>
+        <a tal:attributes="href string:${context/schooltool:app/@@absolute_url}/manage"
+           i18n:translate="">Done</a>
+      </h3>
       <tal:block replace="structure view/table/render" tal:condition="batch" />
     </tal:block>
   </form>
