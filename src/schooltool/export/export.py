@@ -433,20 +433,22 @@ class MegaExporter(SchoolTimetableExportView):
         self.print_table(self.format_persons(), ws)
 
     def format_contact_persons(self):
-        def contact_id_getter(attribute):
+        def contact_getter(attribute):
             def getter(contact):
                 person = IBasicPerson(contact.__parent__, None)
                 if person is None:
-                    return contact.__name__
-                return person.username
+                    return getattr(contact, attribute)
+                if attribute == '__name__':
+                    return person.username
+                return ''
             return getter
 
-        fields = [('ID', Text, contact_id_getter('__name__')),
-                  ('Prefix', Text, attrgetter('prefix')),
-                  ('First Name', Text, attrgetter('first_name')),
-                  ('Middle Name', Text, attrgetter('middle_name')),
-                  ('Last Name', Text, attrgetter('last_name')),
-                  ('Suffix', Text, attrgetter('suffix')),
+        fields = [('ID', Text, contact_getter('__name__')),
+                  ('Prefix', Text, contact_getter('prefix')),
+                  ('First Name', Text, contact_getter('first_name')),
+                  ('Middle Name', Text, contact_getter('middle_name')),
+                  ('Last Name', Text, contact_getter('last_name')),
+                  ('Suffix', Text, contact_getter('suffix')),
                   ('Address line 1', Text, attrgetter('address_line_1')),
                   ('Address line 2', Text, attrgetter('address_line_2')),
                   ('City', Date, attrgetter('city')),
