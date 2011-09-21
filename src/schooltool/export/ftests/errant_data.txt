@@ -198,6 +198,11 @@ Relationships sheets:
     <p class="error">Contact Persons A2 Username cannot contain non-ascii characters: student00&#195;&#179;</p>
     <p class="error">Contact Persons C3 missing required text</p>
     <p class="error">Contact Persons E3 missing required text</p>
+    <p class="error">Contact Persons B4 must be empty when ID is a user id</p>
+    <p class="error">Contact Persons C4 must be empty when ID is a user id</p>
+    <p class="error">Contact Persons D4 must be empty when ID is a user id</p>
+    <p class="error">Contact Persons E4 must be empty when ID is a user id</p>
+    <p class="error">Contact Persons F4 must be empty when ID is a user id</p>
     <p class="error">Contact Relationships B2 missing required text</p>
     <p class="error">Contact Relationships A3 Username cannot contain non-ascii characters: student00&#195;&#179;</p>
     <p class="error">Contact Relationships B3 Username cannot contain non-ascii characters: student00&#195;&#179;</p>
