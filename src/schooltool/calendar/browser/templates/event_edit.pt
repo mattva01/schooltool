@@ -145,7 +145,7 @@
     <input type="hidden" tal:condition="request/date|nothing"
            name="date" tal:attributes="value request/date" />
     <fieldset>
-      <legend i18n:translate=""><span>Event details</span></legend>
+      <legend><span i18n:translate="">Event details</span></legend>
 
       <div class="row" tal:define="widget nocall:view/title_widget">
         <div metal:use-macro="context/@@form_macros/widget_row" />
@@ -237,7 +237,7 @@
         </div>
         <!-- weekly box -->
         <fieldset id="weekly_row">
-          <legend i18n:translate=""><span>Weekly</span></legend>
+          <legend><span i18n:translate="">Weekly</span></legend>
           <p id="weekly_par" i18n:translate="">
             This section only applies when weekly recurrence is selected.
           </p>
@@ -258,7 +258,7 @@
         <!-- monthly box -->
         <fieldset id="monthly_box" class=""
                   tal:define="monthly_value python:view.monthly_widget._getFormValue()">
-          <legend i18n:translate=""><span>Monthly</span></legend>
+          <legend><span i18n:translate="">Monthly</span></legend>
           <p id="monthly_par" i18n:translate="">
             This section only applies when the monthly recurrence is selected.
           </p>
@@ -366,7 +366,7 @@ $(document).ready(function() {
 
     <div class="resources" tal:condition="view/show_book_link">
       <fieldset>
-        <legend i18n:translate=""><span>Reserved Resources</span></legend>
+        <legend><span i18n:translate="">Reserved Resources</span></legend>
         <table width="100%" condition="context/resources">
           <tr>
             <th align="left">Title</th>

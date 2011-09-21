@@ -799,8 +799,8 @@ class FlourishSchoolYearActivateView(flourish.page.Page):
                 self.context.activateNextSchoolYear(self.request['ACTIVATE'])
                 self.request.response.redirect(self.nextURL())
             else:
-                self.message = _("""Please select a school year before clicking
-                                   'Submit'.""")
+                self.message = _("Please select a school year before clicking "
+                                 "'Submit'.")
 
     def nextURL(self):
         return absoluteURL(self.context, self.request)

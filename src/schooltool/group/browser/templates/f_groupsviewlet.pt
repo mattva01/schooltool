@@ -1,8 +1,8 @@
 <div i18n:domain="schooltool">
   <h2 i18n:translate="">Groups</h2>
   <div>
-    <h3 i18n:translate="">
-      Group memberships
+    <h3>
+      <tal:block i18n:translate="">Group memberships</tal:block>
       <a class="modify" href="" title="Manage this person's memberships"
          tal:attributes="href string:${context/@@absolute_url}/@@groups.html"
          i18n:attributes="title"

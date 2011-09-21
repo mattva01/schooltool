@@ -8,15 +8,14 @@
     or states.
   </p>
   <p i18n:translate="">
-    SchoolTool is built on a 100% open source software stack, written
-    in <a href="http://python.org" i18n:name="python"
-    i18n:translate="">Python</a> using the <a href="http://zope.org"
-    i18n:name="zope3" i18n:translate="">Zope 3</a> framework.
+    SchoolTool is built on a 100% open source software stack,
+    written in <a href="http://python.org">Python</a> using the 
+    <a href="http://zope.org">Zope 3</a> framework.
   </p>
   <p i18n:translate="">
-    SchoolTool is licensed under the <a
-    href="http://www.gnu.org/licenses/gpl-2.0.html" i18n:name="gpl"
-    i18n:translate="">GNU General Public License, Version 2</a>.
+    SchoolTool is licensed under the
+    <a href="http://www.gnu.org/licenses/gpl-2.0.html">GNU General Public
+    License, Version 2</a>.
   </p>
   <p>
     <strong i18n:translate="">Founder and funder:</strong>
@@ -24,8 +23,7 @@
   </p>
   <p>
     <strong i18n:translate="">Project Manager:</strong> Tom Hoffman
-    (<a href="mailto:hoffman@schooltool.org"
-    i18n:translate="">email</a>)
+    (<a href="mailto:hoffman@schooltool.org">email</a>)
   </p>
   <p>
     <strong i18n:translate="">Lead Developer:</strong>

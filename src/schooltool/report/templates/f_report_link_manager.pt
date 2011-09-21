@@ -9,7 +9,9 @@
     </thead>
     <tal:block repeat="group view/table">
       <tr>
-        <th colspan="2" i18n:translate="" tal:content="string: ${group/file_type} Reports" />
+        <th colspan="2" i18n:translate="">
+          <span tal:content="${group/file_type}" i18n:name="file_type" /> Reports
+        </th>
       </tr>
       <tr tal:repeat="row group/rows">
         <td>
