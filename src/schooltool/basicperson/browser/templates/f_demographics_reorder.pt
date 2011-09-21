@@ -18,13 +18,13 @@
                   tal:attributes="name string:pos.${demo/name}">
             <tal:block repeat="num view/positions">
               <option value="1"
-	  	              tal:condition="python:num != demo['pos']"
-		              tal:attributes="value num"
-    		          tal:content="num" />
+                      tal:condition="python:num != demo['pos']"
+                      tal:attributes="value num"
+                      tal:content="num" />
               <option value="1" selected="selected"
-	    	          tal:condition="python:num == demo['pos']"
-		              tal:attributes="value num"
-		              tal:content="num" />
+                      tal:condition="python:num == demo['pos']"
+                      tal:attributes="value num"
+                      tal:content="num" />
             </tal:block>
           </select>
         </td>
@@ -34,7 +34,7 @@
           <input type="image" alt="Delete" value="1" title="Delete"
                  tal:attributes="name string:delete.${demo/name};
                                  src context/++resource++schooltool.skin.flourish/remove-icon.png"
-                 i18n:attributes="alt title" />
+                 i18n:attributes="alt; title" />
         </td>
       </tr>
     </table>

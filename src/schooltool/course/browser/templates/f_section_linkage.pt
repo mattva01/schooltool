@@ -1,4 +1,4 @@
-<metal:block i18n:domain="schooltool">
+<tal:block i18n:domain="schooltool">
   <table class="form-fields">
     <tbody>
       <tr>
@@ -21,10 +21,10 @@
     <thead>
       <tr>
         <th colspan="2">
-          <metal:block tal:content="column/term/title" />
-          <metal:block tal:condition="column/current" i18n:translate="">
+          <tal:block tal:content="column/term/title" />
+          <tal:block tal:condition="column/current" i18n:translate="">
             (currently viewing)
-          </metal:block>
+          </tal:block>
         </th>
       </tr>
     </thead>
@@ -35,11 +35,11 @@
                         form_url column/unlink_form_url;
                         dialog_title column/unlink_dialog_title;">
           <td colspan="2">
-            <metal:block tal:condition="column/current"
+            <tal:block tal:condition="column/current"
                          tal:replace="column/section/title" />
             <a tal:replace="structure column/section/@@link"
                tal:condition="not:column/current" />
-            <metal:block tal:condition="view/linked">
+            <tal:block tal:condition="view/linked">
               (<a tal:attributes="id link_id;
                                   href form_url"
                   i18n:translate="">Unlink</a>)
@@ -59,7 +59,7 @@
               <script>ST.state.pop()</script>
               <div tal:attributes="id form_id">
               </div>
-            </metal:block>
+            </tal:block>
           </td>
         </tr>
         <tr>
@@ -144,4 +144,4 @@
     <a tal:attributes="href view/done_link"
        i18n:translate="">Done</a>
   </h3>
-</metal:block>
+</tal:block>

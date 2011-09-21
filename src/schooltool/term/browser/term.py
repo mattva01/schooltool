@@ -494,11 +494,11 @@ WidgetValidatorDiscriminators(
 
 
 class FlourishInvalidDateRangeError(ValidationError):
-    __doc__ = _('Term must begin before it ends')
+    __doc__ = _('Term must begin before it ends.')
 
 
 class FlourishOverlapError(ValidationError):
-    __doc__ = _('Date range overlaps another term')
+    __doc__ = _('Date range overlaps another term.')
 
 
 class FlourishOverlapValidator(TermBoundsValidator):

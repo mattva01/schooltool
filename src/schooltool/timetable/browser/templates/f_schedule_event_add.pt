@@ -89,7 +89,7 @@
     <input type="hidden" tal:condition="request/date|nothing"
            name="date" tal:attributes="value request/date" />
     <fieldset>
-      <legend i18n:translate=""><span>Event details</span></legend>
+      <legend><span i18n:translate="">Event details</span></legend>
 
       <div class="row" tal:define="widget nocall:view/title_widget">
         <div metal:use-macro="context/@@form_macros/widget_row" />
@@ -157,7 +157,7 @@
 
     <div class="resources" tal:condition="view/show_book_link">
       <fieldset>
-        <legend i18n:translate=""><span>Reserved Resources</span></legend>
+        <legend><span i18n:translate="">Reserved Resources</span></legend>
         <table width="100%" condition="context/resources">
           <tr>
             <th align="left">Title</th>

@@ -22,7 +22,7 @@
       <tr tal:condition="not:timetables">
         <td colspan="3" i18n:translate="">
           There are no
-          <a tal:attributes="href timetables_link">timetables</a> set up.
+          <a tal:attributes="href timetables_link" i18n:name="timetables">timetables</a> set up.
         </td>
       </tr>
       <tr tal:repeat="timetable view/timetables"

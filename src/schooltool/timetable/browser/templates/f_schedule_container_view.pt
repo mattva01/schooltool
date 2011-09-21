@@ -28,7 +28,8 @@
 
   <div tal:define="exceptions nocall:context/schooltool:content/exceptions|nothing"
        tal:condition="exceptions">
-    <h3 i18n:translate="">Exception days
+    <h3>
+      <tal:block i18n:translate="">Exception days</tal:block>
       <a class="modify" href="" title="Edit exception days"
          tal:attributes="href string:${exceptions/context/@@absolute_url}/special.html"
          tal:condition="context/schooltool:can_edit"

@@ -6,8 +6,11 @@
   <h1 metal:fill-slot="content-header" i18n:translate="">New timetable</h1>
 <metal:block metal:fill-slot="body">
 
-<p i18n:translate="">This wizard presents you with a series of questions.  You may alternatively
-create a <a href="simpleadd.html">simple weekly timetable</a>.</p>
+<p i18n:translate="">
+  This wizard presents you with a series of questions.  You
+  may alternatively create a <a href="simpleadd.html"
+  i18n:name="timetable" i18n:translate="">simple weekly timetable</a>.
+</p>
 
 <form class="plain" method="POST" tal:attributes="action request/URL">
 

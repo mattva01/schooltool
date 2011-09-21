@@ -62,13 +62,13 @@ class IViewletOrder(Interface):
     """Attributes to specify viewlet display order."""
 
     after = Attribute(
-        _("Display this viewlet after the given list of viewlets."))
+        u"Display this viewlet after the given list of viewlets.")
 
     before = Attribute(
-        _("Display this viewlet before the given list of viewlets."))
+        u"Display this viewlet before the given list of viewlets.")
 
     requires = Attribute(
-        _("Display only if all specified viewlets are available."))
+        u"Display only if all specified viewlets are available.")
 
 
 class IViewlet(IContentProvider,
@@ -102,21 +102,21 @@ class IActiveViewletName(Interface):
 
 class IPage(IBrowserPage, ILocation):
     title = zope.schema.TextLine(
-        title=_("Page title"), required=False)
+        title=u"Page title", required=False)
 
     subtitle = zope.schema.TextLine(
-        title=_("Page subtitle"), required=False)
+        title=u"Page subtitle", required=False)
 
     template = Attribute(
-        _("""Main page template, renders the whole browser page,
+        """Main page template, renders the whole browser page,
         including header and footer.
-        """))
+        """)
 
     page_template = Attribute(
-        _("Template that renders all contents between header and footer."))
+        u"Template that renders all contents between header and footer.")
 
     content_template = Attribute(
-        _("Template that renders the main content."))
+        u"Template that renders the main content.")
 
     def update(self):
         pass

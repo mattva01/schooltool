@@ -393,9 +393,9 @@ def getLimitKeysLabel(context):
 @adapter(IDemographicsFields)
 @implementer(ILimitKeysHint)
 def getLimitKeysHint(context):
-    return _(u"""If you select one or more groups below, this field
-                 will only be displayed in forms and reports for
-                 members of the selected groups.""")
+    return _(u"If you select one or more groups below, this field "
+              "will only be displayed in forms and reports for "
+              "members of the selected groups.")
 
 
 class FlourishFieldDescriptionAddView(flourish.form.AddForm,
