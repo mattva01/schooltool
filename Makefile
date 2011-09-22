@@ -2,7 +2,7 @@
 
 PACKAGE=schooltool
 
-DIST=/home/ftp/pub/schooltool/trunk
+DIST=/home/ftp/pub/schooltool/flourish
 BOOTSTRAP_PYTHON=python2.6
 
 INSTANCE_TYPE=schooltool
