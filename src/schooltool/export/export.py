@@ -464,11 +464,8 @@ class MegaExporter(SchoolTimetableExportView):
         items = []
         for person in self.context['persons'].values():
             items.append(IContact(person))
-            for contact in IContactable(person).contacts:
-                items.append(contact)
         for contact in IContactContainer(self.context).values():
-            if contact not in items:
-                items.append(contact)
+            items.append(contact)
 
         return self.format_table(fields, items)
 
@@ -487,8 +484,13 @@ class MegaExporter(SchoolTimetableExportView):
                         URIPerson, contact, URIContact, URIContactRelationship)
                 except ValueError:
                     continue
+                target_person = IBasicPerson(contact.__parent__, None)
+                if target_person is None:
+                    name = contact.__name__
+                else:
+                    name = target_person.username
                 item = ContactRelationship(person.username,
-                    link.target.__name__, link.extra_info.relationship)
+                    name, link.extra_info.relationship)
                 items.append(item)
 
         return self.format_table(fields, items)
