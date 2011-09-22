@@ -12,7 +12,7 @@
 
 <h1 i18n:translate="">
   Schedule for
-  <span i18:name="content"
+  <span i18n:name="owner"
         tal:content="structure view/owner/schooltool:content/label"></span>
 </h1>
 

@@ -1,4 +1,4 @@
-<metal:block i18n:domain="schooltool">
+<tal:block i18n:domain="schooltool">
   <h3>
     <tal:block replace="context/title" />
     <a class="modify" href="" title="Edit this section"
@@ -27,8 +27,7 @@
                   tal:condition="python:widget.mode != 'hidden'">
                 <td class="label" metal:define-macro="labelcell">
                   <label tal:attributes="for widget/id">
-                    <span i18n:translate=""
-                          tal:content="widget/label"> label </span>
+                    <span tal:content="widget/label"> label </span>
                   </label>
                 </td>
                 <td class="field" metal:define-macro="widgetcell">
@@ -71,7 +70,7 @@
     <metal:block define-slot="bottom">
     </metal:block>
   </metal:block>
-  <metal:block tal:condition="context/schooltool:can_edit">
+  <tal:block tal:condition="context/schooltool:can_edit">
     <h3>Courses</h3>
     <tal:block define="courses view/courses">
       <table tal:condition="courses">
@@ -86,7 +85,7 @@
       </h3>
     </tal:block>
     <h3>
-      <metal:block i18n:translate="">Terms</metal:block>
+      <tal:block i18n:translate="">Terms</tal:block>
       <a class="modify" href="" title="Edit terms for this section"
          tal:attributes="href string:${context/@@absolute_url}/section_linkage.html"
          i18n:attributes="title">
@@ -98,10 +97,11 @@
     <table class="section-terms">
       <tbody>
         <tr tal:repeat="info view/linked_terms">
-          <td tal:condition="info/current" i18n:translate="">
-            <span class="active-term" i18n:name="term"
-                  tal:content="info/term/title" />
-            (currently viewing)
+          <td tal:condition="info/current">
+            <span class="active-term" tal:content="info/term/title" />
+            <tal:block i18n:translate="">
+              (currently viewing)
+            </tal:block>
           </td>
           <td tal:condition="not:info/current">
             <a tal:attributes="href info/section/@@absolute_url"
@@ -111,7 +111,7 @@
       </tbody>
     </table>
     <h3>
-      <metal:block i18n:translate="">Instructors</metal:block>
+      <tal:block i18n:translate="">Instructors</tal:block>
       <a class="modify" href="" title="Edit instructors for this section"
          tal:attributes="href string:${context/@@absolute_url}/instructors.html"
          i18n:attributes="title">
@@ -126,7 +126,7 @@
       This section has no instructors
     </h3>
     <h3>
-      <metal:block i18n:translate="">Students</metal:block>
+      <tal:block i18n:translate="">Students</tal:block>
       <a class="modify" href="" title="Edit students for this section"
          tal:attributes="href string:${context/@@absolute_url}/learners.html"
          i18n:attributes="title">
@@ -140,9 +140,9 @@
     <h3 tal:condition="not:view/has_learners" i18n:translate="">
       This section has no students
     </h3>
-  </metal:block>
+  </tal:block>
   <h3>
     <a tal:attributes="href view/done_link"
        i18n:translate="">Done</a>
   </h3>
-</metal:block>
+</tal:block>

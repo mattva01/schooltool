@@ -2,17 +2,34 @@
 CHANGES
 =======
 
-1.9.0 (unreleased)
+1.9.1 (unreleased)
 ------------------
 
-New, much improved look for SchoolTool.
+- Nothing changed yet.
+
+
+1.9.0 (2011-09-21)
+------------------
+
+This is a first release from "flourish" branch that was being worked on
+tirelessly since June. 
+
+It features a new, much improved look and navigation, a total redesign.
+
+There are too many changes to list.
+
+New features
+++++++++++++
+
+- XLS import/export of contacts (https://launchpad.net/bugs/608873)
 
 API changes
 +++++++++++
 
 - Timetables rewrite
 - Pluggable traverser refactoring, traversers lost redundant request parameter
-- Developer: enhanced ST tal API with schooltool:content
+- New `flourish` content, viewlet, page, breadcrumbs, resourceLibrary and
+  ZCML directives for them.
 
 
 1.7.0 (2011-09-15)

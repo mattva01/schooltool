@@ -968,8 +968,8 @@ class IErrorsSettings(Interface):
     ignored_exceptions = Tuple(
         title=_('Ignored exception types'),
         value_type=Choice(vocabulary=vocabulary([
-                    ('Unauthorized', _('Unauthorized')),
-                    ('NotFound', _('NotFound'))])),
+                    ('Unauthorized', 'Unauthorized'),
+                    ('NotFound', 'NotFound')])),
         required=False)
 
 

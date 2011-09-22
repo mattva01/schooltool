@@ -15,8 +15,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-05-28 04:30+0000\n"
-"X-Generator: Launchpad (build 12959)\n"
+"X-Launchpad-Export-Date: 2011-09-10 04:32+0000\n"
+"X-Generator: Launchpad (build 13900)\n"
 "X-Rosetta-Version: 0.1\n"
 
 #: /src/schooltool/app/app.py:197
@@ -5537,8 +5537,10 @@ msgid ""
 "&copy; The <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth "
 "Foundation</a> 2003 - 2011: Supporting Social Innovation."
 msgstr ""
+"&copy; Die <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth "
+"Foundation</a> 2003 - 2011: Supporting Social Innovation."
 
-#: /src/schooltool/skin/templates/view_macros.pt:132
+#: /src/schooltool/skin/templates/view_macros.pt:129
 msgid ""
 "<a href=\"http://www.schooltool.org\">SchoolTool</a>&trade; is a Trademark "
 "of the <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth "
@@ -7010,12 +7012,6 @@ msgstr "Angegebene Passworte stimmen nicht überein"
 #~ "Kalender:</strong> wähle <code>In iCal öffnen</code> aus dem Aktionen "
 #~ "Menü.</li> </ul>"
 
-#~ msgid "Previous: ${course} -- ${section_title} for ${term}"
-#~ msgstr "Vorgänger: ${course} -- ${section_title} für ${term}"
-
-#~ msgid "Next: ${course} -- ${section_title} for ${term}"
-#~ msgstr "Weiter: ${course} -- ${section_title} für ${term}"
-
 #~ msgid ""
 #~ "<h1>Courses</h1> <p>Use this page to organize courses listed in the "
 #~ "system.</p> <h3>How do I...</h3> <ul> <li><strong>Look for for a course:</"
@@ -7048,9 +7044,6 @@ msgstr "Angegebene Passworte stimmen nicht überein"
 #~ "<code>Next 10</code> (and <code>Previous</code>) und die Links in der "
 #~ "blauen Leiste. Eine <code>Show All</code> -Schaltfläche zur Anzeige aller "
 #~ "Kurse auf einer einzelnen Seite ist ebenfalls vorhanden.</li> </ul>"
-
-#~ msgid "Introspect"
-#~ msgstr "prüfen"
 
 #~ msgid "Setup data"
 #~ msgstr "Einrichtungs-Daten"
@@ -7190,6 +7183,12 @@ msgstr "Angegebene Passworte stimmen nicht überein"
 #~ "löschen. Man sollte Schuljahresabschnitte <strong>nicht</strong> wegen "
 #~ "Zeitablauf löschen, um signifikanten Datenverlust zu verhindern</li> </ul>"
 
+#~ msgid "Using timetable:"
+#~ msgstr "Benutze Stundenplan:"
+
+#~ msgid "Everyone can view the application calendar."
+#~ msgstr "Jeder kann den Anwendungskalender einsehen."
+
 #~ msgid "Everyone can view group calendars."
 #~ msgstr "Jeder kann den Gruppenkalender sehen"
 
@@ -7235,14 +7234,46 @@ msgstr "Angegebene Passworte stimmen nicht überein"
 #~ msgid "Add an Equipment"
 #~ msgstr "Gerät hinzufügen"
 
+#~ msgid "Edit Equipment Information"
+#~ msgstr "Informationen zur Ausstattung bearbeiten"
+
 #~ msgid "Everyone can view section information and calendars"
 #~ msgstr "Jeder kann Unterrichtsinformationen und Kalender einsehen"
 
 #~ msgid "Group members can edit group calendars."
 #~ msgstr "Gruppenteilnehmer können den Gruppenkalender bearbeiten."
 
+#~ msgid "Introspect"
+#~ msgstr "prüfen"
+
 #~ msgid "Report a bug on Launchpad."
 #~ msgstr "Bug auf Launchpad melden."
 
+#~ msgid "Next: ${course} -- ${section_title} for ${term}"
+#~ msgstr "Weiter: ${course} -- ${section_title} für ${term}"
+
+#~ msgid "For term:"
+#~ msgstr "Für Schuljahresabschnitt:"
+
+#~ msgid "Previous: ${course} -- ${section_title} for ${term}"
+#~ msgstr "Vorgänger: ${course} -- ${section_title} für ${term}"
+
 #~ msgid "Access setting: ${setting} (${status})"
 #~ msgstr "Zugriffseinstellungen: ${setting} (${status})"
+
+#~ msgid ""
+#~ "<a href=\"http://www.schooltool.org\">SchoolTool</a>&trade; is a "
+#~ "Trademark of The <a href=\"http://www.shuttleworthfoundation.org"
+#~ "\">Shuttleworth Foundation</a>."
+#~ msgstr ""
+#~ "<a href=\"http://www.schooltool.org\">SchoolTool</a>&trade; ist ein "
+#~ "eingetragenes Warenzeichen der <a href=\"http://www."
+#~ "shuttleworthfoundation.org\">Shuttleworth Foundation</a>."
+
+#~ msgid ""
+#~ "&copy; The <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth "
+#~ "Foundation</a> 2003 - <span>2010</span>: Supporting Social Innovation."
+#~ msgstr ""
+#~ "&copy; <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth "
+#~ "Foundation</a> 2003 – <span>2010</span>: Gesellschaftliche Innovationen "
+#~ "fördern."

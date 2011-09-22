@@ -74,7 +74,7 @@
   <form tal:attributes="action request/URL" method="post">
     <div class="buttons">
       <input type="submit" name="submit" class="button-ok" value="Refresh" 
-             i18n:attributes="value refresh-button" />
+             i18n:attributes="value" />
     </div>
   </form>
   <h3>

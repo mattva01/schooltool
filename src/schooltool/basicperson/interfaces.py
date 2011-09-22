@@ -141,9 +141,9 @@ class IFieldDescription(Interface):
 
     limit_keys = FilterKeyList(
         title = _(u"Limit to group(s)"),
-        description = _(u"""If you select one or more groups below, this field
-                            will only be displayed in forms and reports for
-                            members of the selected groups."""),
+        description = _(u"If you select one or more groups below, this field "
+                         "will only be displayed in forms and reports for "
+                         "members of the selected groups."),
         value_type=Choice(
             source="schooltool.basicperson.limit_keys_vocabulary",
             required=True,
@@ -160,9 +160,9 @@ class IEnumFieldDescription(IFieldDescription):
 
     items = EnumValueList(
         title = _('Selection list'),
-        description = _(u"""Enter the valid values for the field below.  One
-                            value per line.  These values will be displayed
-                            as a menu in forms."""))
+        description = _(u"Enter the valid values for the field below.  One "
+                         "value per line.  These values will be displayed "
+                         "as a menu in forms."))
 
 
 class IFieldFilterVocabulary(IVocabularyTokenized):
