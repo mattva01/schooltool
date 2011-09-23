@@ -10,6 +10,7 @@
   <includePlugins package="schooltool" file="plugin.zcml" />
 
   <include package="schooltool.timetable" />
+  <include package="schooltool.timetable.browser" file="configure-oldskin.zcml" />
   <include package="schooltool.basicperson" />
   <includeOverrides package="schooltool.basicperson" file="overrides.zcml" />
 
