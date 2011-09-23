@@ -9,6 +9,7 @@
   <include package="schooltool.schoolyear" />
   <include package="schooltool.term" file="time_machine.zcml" />
   <include package="schooltool.timetable" />
+  <include package="schooltool.timetable.browser" file="configure-oldskin.zcml" />
 
   <include package="schooltool.app.browser.ftests" file="brokenview-ftesting.zcml" />
 

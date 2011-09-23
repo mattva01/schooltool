@@ -109,10 +109,17 @@ class TestBrowser(Browser):
     def queryHTML(self, query):
         return queryHTML(query, self.contents)
 
-    def printQuery(self, query):
+    def printQuery(self, query, skip_inner_blank=False):
         for item in queryHTML(query, self.contents):
             if item.strip():
-                print item.strip()
+                if skip_inner_blank:
+                    result = str(item.strip()).splitlines()
+                    for line in result:
+                        line = line.strip()
+                        if line:
+                            print line
+                else:
+                    print item.strip()
 
 
 def collect_ftests(package=None, level=None, layer=None, filenames=None):

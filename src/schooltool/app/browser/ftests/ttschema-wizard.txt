@@ -36,7 +36,7 @@ Let's go to the `new timetable schema` wizard:
     >>> manager.getLink('2005-2006').click()
     >>> manager.getLink('School Timetables').click()
     >>> manager.getLink('New Timetable').click()
-    >>> '<h1>New timetable schema</h1>' in manager.contents
+    >>> '<h1>New timetable</h1>' in manager.contents
     True
 
 We enter a title and press `Next` button:
@@ -74,76 +74,141 @@ Do we use a homeroom period?  Let's say no:
 
     >>> manager.getControl('No').click()
 
-The timetable schema gets created. Now we see the newly created timetable
+The timetable gets created. Now we see the newly created timetable
 schema in the list.
 
     >>> manager.getLink('Default')
-    <Link text='Default' url='http://localhost/schoolyears/2005-2006/school_timetables/default'>
+    <Link text='Default' url='http://localhost/schoolyears/2005-2006/timetables/Timetable'>
 
 We can examine its composition more easily by looking at it's xml export view.
 
-    >>> print http(r"""
-    ... GET /schoolyears/2005-2006/school_timetables/default/export.xml HTTP/1.1
-    ... Authorization: Basic manager:schooltool
-    ... """, handle_errors=False)
-    HTTP/1.1 200 Ok
-    Cache-Control: no-cache="Set-Cookie,Set-Cookie2"
-    Content-Length: ...
-    Content-Type: text/xml;charset=UTF-8
-    Expires: ...
-    Pragma: no-cache
-    Set-Cookie: ...
-    <BLANKLINE>
-    <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
-      <title>Default</title>
-      <timezone name="UTC"/>
-      <model factory="WeeklyTimetableModel">
-        <daytemplate>
-          <used when="Friday Monday Thursday Tuesday Wednesday"/>
-          <period duration="55" tstart="09:30"/>
-          <period duration="55" tstart="10:30"/>
-          <period duration="55" tstart="11:30"/>
-          <period duration="55" tstart="12:30"/>
-        </daytemplate>
-        <daytemplate>
-          <used when="Saturday Sunday default"/>
-        </daytemplate>
-      </model>
-      <day id="Monday">
-        <period id="09:30-10:25"/>
-        <period id="10:30-11:25"/>
-        <period id="11:30-12:25"/>
-        <period id="12:30-13:25"/>
-      </day>
-      <day id="Tuesday">
-        <period id="09:30-10:25"/>
-        <period id="10:30-11:25"/>
-        <period id="11:30-12:25"/>
-        <period id="12:30-13:25"/>
-      </day>
-      <day id="Wednesday">
-        <period id="09:30-10:25"/>
-        <period id="10:30-11:25"/>
-        <period id="11:30-12:25"/>
-        <period id="12:30-13:25"/>
-      </day>
-      <day id="Thursday">
-        <period id="09:30-10:25"/>
-        <period id="10:30-11:25"/>
-        <period id="11:30-12:25"/>
-        <period id="12:30-13:25"/>
-      </day>
-      <day id="Friday">
-        <period id="09:30-10:25"/>
-        <period id="10:30-11:25"/>
-        <period id="11:30-12:25"/>
-        <period id="12:30-13:25"/>
-      </day>
-      <day id="Saturday">
-      </day>
-      <day id="Sunday">
-      </day>
-    </timetable>
+    >>> manager.getLink('Default').click()
+
+    >>> manager.printQuery('//table[@class="timetable"]', skip_inner_blank=True)
+    <table class="timetable">
+    <tr><th colspan="2" class="day" width="14%">Monday</th>
+    <th colspan="2" class="day" width="14%">Tuesday</th>
+    <th colspan="2" class="day" width="14%">Wednesday</th>
+    <th colspan="2" class="day" width="14%">Thursday</th>
+    <th colspan="2" class="day" width="14%">Friday</th>
+    <th colspan="2" class="day" width="14%">Saturday</th>
+    <th colspan="2" class="day" width="14%">Sunday</th>
+    </tr>
+    <tr><th class="period" width="1%">09:30-10:25</th>
+    <td class="activity" width="12%">Lesson</td>
+    <th class="period" width="1%">09:30-10:25</th>
+    <td class="activity" width="12%">Lesson</td>
+    <th class="period" width="1%">09:30-10:25</th>
+    <td class="activity" width="12%">Lesson</td>
+    <th class="period" width="1%">09:30-10:25</th>
+    <td class="activity" width="12%">Lesson</td>
+    <th class="period" width="1%">09:30-10:25</th>
+    <td class="activity" width="12%">Lesson</td>
+    <td class="activity" colspan="2" width="14%"></td>
+    <td class="activity" colspan="2" width="14%"></td>
+    </tr>
+    <tr><th class="period" width="1%">10:30-11:25</th>
+    <td class="activity" width="12%">Lesson</td>
+    <th class="period" width="1%">10:30-11:25</th>
+    <td class="activity" width="12%">Lesson</td>
+    <th class="period" width="1%">10:30-11:25</th>
+    <td class="activity" width="12%">Lesson</td>
+    <th class="period" width="1%">10:30-11:25</th>
+    <td class="activity" width="12%">Lesson</td>
+    <th class="period" width="1%">10:30-11:25</th>
+    <td class="activity" width="12%">Lesson</td>
+    <td class="activity" colspan="2" width="14%"></td>
+    <td class="activity" colspan="2" width="14%"></td>
+    </tr>
+    <tr><th class="period" width="1%">11:30-12:25</th>
+    <td class="activity" width="12%">Lesson</td>
+    <th class="period" width="1%">11:30-12:25</th>
+    <td class="activity" width="12%">Lesson</td>
+    <th class="period" width="1%">11:30-12:25</th>
+    <td class="activity" width="12%">Lesson</td>
+    <th class="period" width="1%">11:30-12:25</th>
+    <td class="activity" width="12%">Lesson</td>
+    <th class="period" width="1%">11:30-12:25</th>
+    <td class="activity" width="12%">Lesson</td>
+    <td class="activity" colspan="2" width="14%"></td>
+    <td class="activity" colspan="2" width="14%"></td>
+    </tr>
+    <tr><th class="period" width="1%">12:30-13:25</th>
+    <td class="activity" width="12%">Lesson</td>
+    <th class="period" width="1%">12:30-13:25</th>
+    <td class="activity" width="12%">Lesson</td>
+    <th class="period" width="1%">12:30-13:25</th>
+    <td class="activity" width="12%">Lesson</td>
+    <th class="period" width="1%">12:30-13:25</th>
+    <td class="activity" width="12%">Lesson</td>
+    <th class="period" width="1%">12:30-13:25</th>
+    <td class="activity" width="12%">Lesson</td>
+    <td class="activity" colspan="2" width="14%"></td>
+    <td class="activity" colspan="2" width="14%"></td>
+    </tr>
+    </table>
+    <table class="timetable">
+    <tr><th colspan="2" class="day" width="14%">Monday</th>
+    <th colspan="2" class="day" width="14%">Tuesday</th>
+    <th colspan="2" class="day" width="14%">Wednesday</th>
+    <th colspan="2" class="day" width="14%">Thursday</th>
+    <th colspan="2" class="day" width="14%">Friday</th>
+    <th colspan="2" class="day" width="14%">Saturday</th>
+    <th colspan="2" class="day" width="14%">Sunday</th>
+    </tr>
+    <tr><th class="period" width="1%">09:30-10:25</th>
+    <td class="activity" width="12%"></td>
+    <th class="period" width="1%">09:30-10:25</th>
+    <td class="activity" width="12%"></td>
+    <th class="period" width="1%">09:30-10:25</th>
+    <td class="activity" width="12%"></td>
+    <th class="period" width="1%">09:30-10:25</th>
+    <td class="activity" width="12%"></td>
+    <th class="period" width="1%">09:30-10:25</th>
+    <td class="activity" width="12%"></td>
+    <td class="activity" colspan="2" width="14%"></td>
+    <td class="activity" colspan="2" width="14%"></td>
+    </tr>
+    <tr><th class="period" width="1%">10:30-11:25</th>
+    <td class="activity" width="12%"></td>
+    <th class="period" width="1%">10:30-11:25</th>
+    <td class="activity" width="12%"></td>
+    <th class="period" width="1%">10:30-11:25</th>
+    <td class="activity" width="12%"></td>
+    <th class="period" width="1%">10:30-11:25</th>
+    <td class="activity" width="12%"></td>
+    <th class="period" width="1%">10:30-11:25</th>
+    <td class="activity" width="12%"></td>
+    <td class="activity" colspan="2" width="14%"></td>
+    <td class="activity" colspan="2" width="14%"></td>
+    </tr>
+    <tr><th class="period" width="1%">11:30-12:25</th>
+    <td class="activity" width="12%"></td>
+    <th class="period" width="1%">11:30-12:25</th>
+    <td class="activity" width="12%"></td>
+    <th class="period" width="1%">11:30-12:25</th>
+    <td class="activity" width="12%"></td>
+    <th class="period" width="1%">11:30-12:25</th>
+    <td class="activity" width="12%"></td>
+    <th class="period" width="1%">11:30-12:25</th>
+    <td class="activity" width="12%"></td>
+    <td class="activity" colspan="2" width="14%"></td>
+    <td class="activity" colspan="2" width="14%"></td>
+    </tr>
+    <tr><th class="period" width="1%">12:30-13:25</th>
+    <td class="activity" width="12%"></td>
+    <th class="period" width="1%">12:30-13:25</th>
+    <td class="activity" width="12%"></td>
+    <th class="period" width="1%">12:30-13:25</th>
+    <td class="activity" width="12%"></td>
+    <th class="period" width="1%">12:30-13:25</th>
+    <td class="activity" width="12%"></td>
+    <th class="period" width="1%">12:30-13:25</th>
+    <td class="activity" width="12%"></td>
+    <td class="activity" colspan="2" width="14%"></td>
+    <td class="activity" colspan="2" width="14%"></td>
+    </tr>
+    </table>
 
 
 Rotating timetable
@@ -233,49 +298,81 @@ Period_B, while day C skips attendance.
 Now we see the newly created timetable schema in the list.
 
     >>> manager.getLink('Rotating')
-    <Link text='Rotating' url='http://localhost/schoolyears/2005-2006/school_timetables/rotating'>
+    <Link text='Rotating' url='http://localhost/schoolyears/2005-2006/timetables/Timetable-2'>
 
 We can examine its composition more easily by looking at it's xml export view.
 
-    >>> print http(r"""
-    ... GET /schoolyears/2005-2006/school_timetables/rotating/export.xml HTTP/1.1
-    ... Authorization: Basic manager:schooltool
-    ... """, handle_errors=False)
-    HTTP/1.1 200 Ok
-    Content-Length: ...
-    Content-Type: text/xml;charset=UTF-8
-    <BLANKLINE>
-    <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
-      <title>Rotating</title>
-      <timezone name="UTC"/>
-      <model factory="SequentialDayIdBasedTimetableModel">
-        <daytemplate>
-          <used when="A B C"/>
-          <period duration="55" tstart="09:30"/>
-          <period duration="55" tstart="10:30"/>
-          <period duration="55" tstart="11:30"/>
-          <period duration="55" tstart="12:30"/>
-        </daytemplate>
-      </model>
-      <day id="A">
-        <period homeroom="" id="Period_A"/>
-        <period id="Period_C"/>
-        <period id="Period_B"/>
-        <period id="Period_D"/>
-      </day>
-      <day id="B">
-        <period id="Period_A"/>
-        <period homeroom="" id="Period_C"/>
-        <period id="Period_B"/>
-        <period homeroom="" id="Period_D"/>
-      </day>
-      <day id="C">
-        <period id="Period_A"/>
-        <period id="Period_C"/>
-        <period id="Period_B"/>
-        <period id="Period_D"/>
-      </day>
-    </timetable>
+    >>> manager.getLink('Rotating').click()
+
+    >>> manager.printQuery('//table[@class="timetable"]', skip_inner_blank=True)
+    <table class="timetable">
+    <tr><th colspan="2" class="day" width="33%">A</th>
+    <th colspan="2" class="day" width="33%">B</th>
+    <th colspan="2" class="day" width="33%">C</th>
+    </tr>
+    <tr><th class="period" width="3%">Period_A</th>
+    <td class="activity" width="30%">Homeroom</td>
+    <th class="period" width="3%">Period_A</th>
+    <td class="activity" width="30%">Lesson</td>
+    <th class="period" width="3%">Period_A</th>
+    <td class="activity" width="30%">Lesson</td>
+    </tr>
+    <tr><th class="period" width="3%">Period_C</th>
+    <td class="activity" width="30%">Lesson</td>
+    <th class="period" width="3%">Period_C</th>
+    <td class="activity" width="30%">Homeroom</td>
+    <th class="period" width="3%">Period_C</th>
+    <td class="activity" width="30%">Lesson</td>
+    </tr>
+    <tr><th class="period" width="3%">Period_B</th>
+    <td class="activity" width="30%">Lesson</td>
+    <th class="period" width="3%">Period_B</th>
+    <td class="activity" width="30%">Lesson</td>
+    <th class="period" width="3%">Period_B</th>
+    <td class="activity" width="30%">Lesson</td>
+    </tr>
+    <tr><th class="period" width="3%">Period_D</th>
+    <td class="activity" width="30%">Lesson</td>
+    <th class="period" width="3%">Period_D</th>
+    <td class="activity" width="30%">Homeroom</td>
+    <th class="period" width="3%">Period_D</th>
+    <td class="activity" width="30%">Lesson</td>
+    </tr>
+    </table>
+    <table class="timetable">
+    <tr><th colspan="2" class="day" width="33%">A</th>
+    <th colspan="2" class="day" width="33%">B</th>
+    <th colspan="2" class="day" width="33%">C</th>
+    </tr>
+    <tr><th class="period" width="3%">09:30-10:25</th>
+    <td class="activity" width="30%"></td>
+    <th class="period" width="3%">09:30-10:25</th>
+    <td class="activity" width="30%"></td>
+    <th class="period" width="3%">09:30-10:25</th>
+    <td class="activity" width="30%"></td>
+    </tr>
+    <tr><th class="period" width="3%">10:30-11:25</th>
+    <td class="activity" width="30%"></td>
+    <th class="period" width="3%">10:30-11:25</th>
+    <td class="activity" width="30%"></td>
+    <th class="period" width="3%">10:30-11:25</th>
+    <td class="activity" width="30%"></td>
+    </tr>
+    <tr><th class="period" width="3%">11:30-12:25</th>
+    <td class="activity" width="30%"></td>
+    <th class="period" width="3%">11:30-12:25</th>
+    <td class="activity" width="30%"></td>
+    <th class="period" width="3%">11:30-12:25</th>
+    <td class="activity" width="30%"></td>
+    </tr>
+    <tr><th class="period" width="3%">12:30-13:25</th>
+    <td class="activity" width="30%"></td>
+    <th class="period" width="3%">12:30-13:25</th>
+    <td class="activity" width="30%"></td>
+    <th class="period" width="3%">12:30-13:25</th>
+    <td class="activity" width="30%"></td>
+    </tr>
+    </table>
 
 
 Rotating timetable, different daily period order
@@ -368,45 +465,77 @@ Do we use a homeroom period?  Let's say no:
 
 The schema is now created:
 
-    >>> print http(r"""
-    ... GET /schoolyears/2005-2006/school_timetables/rotating-2/export.xml HTTP/1.1
-    ... Authorization: Basic manager:schooltool
-    ... """, handle_errors=False)
-    HTTP/1.1 200 Ok
-    Content-Length: ...
-    Content-Type: text/xml;charset=UTF-8
-    <BLANKLINE>
-    <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
-      <title>Rotating 2</title>
-      <timezone name="UTC"/>
-      <model factory="SequentialDayIdBasedTimetableModel">
-        <daytemplate>
-          <used when="A B C"/>
-          <period duration="55" tstart="09:30"/>
-          <period duration="55" tstart="10:30"/>
-          <period duration="55" tstart="11:30"/>
-          <period duration="55" tstart="12:30"/>
-        </daytemplate>
-      </model>
-      <day id="A">
-        <period id="Period_A"/>
-        <period id="Period_C"/>
-        <period id="Period_B"/>
-        <period id="Period_D"/>
-      </day>
-      <day id="B">
-        <period id="Period_D"/>
-        <period id="Period_B"/>
-        <period id="Period_C"/>
-        <period id="Period_A"/>
-      </day>
-      <day id="C">
-        <period id="Period_A"/>
-        <period id="Period_B"/>
-        <period id="Period_C"/>
-        <period id="Period_D"/>
-      </day>
-    </timetable>
+    >>> manager.getLink('Rotating 2').click()
+
+    >>> manager.printQuery('//table[@class="timetable"]', skip_inner_blank=True)
+    <table class="timetable">
+    <tr><th colspan="2" class="day" width="33%">A</th>
+    <th colspan="2" class="day" width="33%">B</th>
+    <th colspan="2" class="day" width="33%">C</th>
+    </tr>
+    <tr><th class="period" width="3%">Period_A</th>
+    <td class="activity" width="30%">Lesson</td>
+    <th class="period" width="3%">Period_D</th>
+    <td class="activity" width="30%">Lesson</td>
+    <th class="period" width="3%">Period_A</th>
+    <td class="activity" width="30%">Lesson</td>
+    </tr>
+    <tr><th class="period" width="3%">Period_C</th>
+    <td class="activity" width="30%">Lesson</td>
+    <th class="period" width="3%">Period_B</th>
+    <td class="activity" width="30%">Lesson</td>
+    <th class="period" width="3%">Period_B</th>
+    <td class="activity" width="30%">Lesson</td>
+    </tr>
+    <tr><th class="period" width="3%">Period_B</th>
+    <td class="activity" width="30%">Lesson</td>
+    <th class="period" width="3%">Period_C</th>
+    <td class="activity" width="30%">Lesson</td>
+    <th class="period" width="3%">Period_C</th>
+    <td class="activity" width="30%">Lesson</td>
+    </tr>
+    <tr><th class="period" width="3%">Period_D</th>
+    <td class="activity" width="30%">Lesson</td>
+    <th class="period" width="3%">Period_A</th>
+    <td class="activity" width="30%">Lesson</td>
+    <th class="period" width="3%">Period_D</th>
+    <td class="activity" width="30%">Lesson</td>
+    </tr>
+    </table>
+    <table class="timetable">
+    <tr><th colspan="2" class="day" width="33%">A</th>
+    <th colspan="2" class="day" width="33%">B</th>
+    <th colspan="2" class="day" width="33%">C</th>
+    </tr>
+    <tr><th class="period" width="3%">09:30-10:25</th>
+    <td class="activity" width="30%"></td>
+    <th class="period" width="3%">09:30-10:25</th>
+    <td class="activity" width="30%"></td>
+    <th class="period" width="3%">09:30-10:25</th>
+    <td class="activity" width="30%"></td>
+    </tr>
+    <tr><th class="period" width="3%">10:30-11:25</th>
+    <td class="activity" width="30%"></td>
+    <th class="period" width="3%">10:30-11:25</th>
+    <td class="activity" width="30%"></td>
+    <th class="period" width="3%">10:30-11:25</th>
+    <td class="activity" width="30%"></td>
+    </tr>
+    <tr><th class="period" width="3%">11:30-12:25</th>
+    <td class="activity" width="30%"></td>
+    <th class="period" width="3%">11:30-12:25</th>
+    <td class="activity" width="30%"></td>
+    <th class="period" width="3%">11:30-12:25</th>
+    <td class="activity" width="30%"></td>
+    </tr>
+    <tr><th class="period" width="3%">12:30-13:25</th>
+    <td class="activity" width="30%"></td>
+    <th class="period" width="3%">12:30-13:25</th>
+    <td class="activity" width="30%"></td>
+    <th class="period" width="3%">12:30-13:25</th>
+    <td class="activity" width="30%"></td>
+    </tr>
+    </table>
 
 
 Weekly timetable, named periods
@@ -533,69 +662,132 @@ Do we use a homeroom period?  Let's say no:
 
 The schema is now created:
 
-    >>> print http(r"""
-    ... GET /schoolyears/2005-2006/school_timetables/weekly-2/export.xml HTTP/1.1
-    ... Authorization: Basic manager:schooltool
-    ... """, handle_errors=False)
-    HTTP/1.1 200 Ok
-    Content-Length: ...
-    Content-Type: text/xml;charset=UTF-8
-    <BLANKLINE>
-    <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
-      <title>Weekly 2</title>
-      <timezone name="UTC"/>
-      <model factory="WeeklyTimetableModel">
-        <daytemplate>
-          <used when="Friday"/>
-          <period duration="50" tstart="09:30"/>
-          <period duration="50" tstart="10:25"/>
-          <period duration="50" tstart="11:20"/>
-        </daytemplate>
-        <daytemplate>
-          <used when="Monday Thursday Tuesday Wednesday"/>
-          <period duration="55" tstart="09:30"/>
-          <period duration="55" tstart="10:30"/>
-          <period duration="55" tstart="11:30"/>
-          <period duration="55" tstart="12:30"/>
-        </daytemplate>
-        <daytemplate>
-          <used when="Saturday Sunday default"/>
-        </daytemplate>
-      </model>
-      <day id="Monday">
-        <period id="A"/>
-        <period id="B"/>
-        <period id="C"/>
-        <period id="D"/>
-      </day>
-      <day id="Tuesday">
-        <period id="B"/>
-        <period id="C"/>
-        <period id="D"/>
-        <period id="E"/>
-      </day>
-      <day id="Wednesday">
-        <period id="C"/>
-        <period id="D"/>
-        <period id="E"/>
-        <period id="F"/>
-      </day>
-      <day id="Thursday">
-        <period id="D"/>
-        <period id="E"/>
-        <period id="F"/>
-        <period id="A"/>
-      </day>
-      <day id="Friday">
-        <period id="C"/>
-        <period id="D"/>
-        <period id="E"/>
-      </day>
-      <day id="Saturday">
-      </day>
-      <day id="Sunday">
-      </day>
-    </timetable>
+    >>> manager.getLink('Weekly 2').click()
+
+    >>> manager.printQuery('//table[@class="timetable"]', skip_inner_blank=True)
+    <table class="timetable">
+    <tr><th colspan="2" class="day" width="14%">Monday</th>
+    <th colspan="2" class="day" width="14%">Tuesday</th>
+    <th colspan="2" class="day" width="14%">Wednesday</th>
+    <th colspan="2" class="day" width="14%">Thursday</th>
+    <th colspan="2" class="day" width="14%">Friday</th>
+    <th colspan="2" class="day" width="14%">Saturday</th>
+    <th colspan="2" class="day" width="14%">Sunday</th>
+    </tr>
+    <tr><th class="period" width="1%">A</th>
+    <td class="activity" width="12%">Lesson</td>
+    <th class="period" width="1%">B</th>
+    <td class="activity" width="12%">Lesson</td>
+    <th class="period" width="1%">C</th>
+    <td class="activity" width="12%">Lesson</td>
+    <th class="period" width="1%">D</th>
+    <td class="activity" width="12%">Lesson</td>
+    <th class="period" width="1%">C</th>
+    <td class="activity" width="12%">Lesson</td>
+    <td class="activity" colspan="2" width="14%"></td>
+    <td class="activity" colspan="2" width="14%"></td>
+    </tr>
+    <tr><th class="period" width="1%">B</th>
+    <td class="activity" width="12%">Lesson</td>
+    <th class="period" width="1%">C</th>
+    <td class="activity" width="12%">Lesson</td>
+    <th class="period" width="1%">D</th>
+    <td class="activity" width="12%">Lesson</td>
+    <th class="period" width="1%">E</th>
+    <td class="activity" width="12%">Lesson</td>
+    <th class="period" width="1%">D</th>
+    <td class="activity" width="12%">Lesson</td>
+    <td class="activity" colspan="2" width="14%"></td>
+    <td class="activity" colspan="2" width="14%"></td>
+    </tr>
+    <tr><th class="period" width="1%">C</th>
+    <td class="activity" width="12%">Lesson</td>
+    <th class="period" width="1%">D</th>
+    <td class="activity" width="12%">Lesson</td>
+    <th class="period" width="1%">E</th>
+    <td class="activity" width="12%">Lesson</td>
+    <th class="period" width="1%">F</th>
+    <td class="activity" width="12%">Lesson</td>
+    <th class="period" width="1%">E</th>
+    <td class="activity" width="12%">Lesson</td>
+    <td class="activity" colspan="2" width="14%"></td>
+    <td class="activity" colspan="2" width="14%"></td>
+    </tr>
+    <tr><th class="period" width="1%">D</th>
+    <td class="activity" width="12%">Lesson</td>
+    <th class="period" width="1%">E</th>
+    <td class="activity" width="12%">Lesson</td>
+    <th class="period" width="1%">F</th>
+    <td class="activity" width="12%">Lesson</td>
+    <th class="period" width="1%">A</th>
+    <td class="activity" width="12%">Lesson</td>
+    <td class="activity" colspan="2" width="14%"></td>
+    <td class="activity" colspan="2" width="14%"></td>
+    <td class="activity" colspan="2" width="14%"></td>
+    </tr>
+    </table>
+    <table class="timetable">
+    <tr><th colspan="2" class="day" width="14%">Monday</th>
+    <th colspan="2" class="day" width="14%">Tuesday</th>
+    <th colspan="2" class="day" width="14%">Wednesday</th>
+    <th colspan="2" class="day" width="14%">Thursday</th>
+    <th colspan="2" class="day" width="14%">Friday</th>
+    <th colspan="2" class="day" width="14%">Saturday</th>
+    <th colspan="2" class="day" width="14%">Sunday</th>
+    </tr>
+    <tr><th class="period" width="1%">09:30-10:25</th>
+    <td class="activity" width="12%"></td>
+    <th class="period" width="1%">09:30-10:25</th>
+    <td class="activity" width="12%"></td>
+    <th class="period" width="1%">09:30-10:25</th>
+    <td class="activity" width="12%"></td>
+    <th class="period" width="1%">09:30-10:25</th>
+    <td class="activity" width="12%"></td>
+    <th class="period" width="1%">09:30-10:20</th>
+    <td class="activity" width="12%"></td>
+    <td class="activity" colspan="2" width="14%"></td>
+    <td class="activity" colspan="2" width="14%"></td>
+    </tr>
+    <tr><th class="period" width="1%">10:30-11:25</th>
+    <td class="activity" width="12%"></td>
+    <th class="period" width="1%">10:30-11:25</th>
+    <td class="activity" width="12%"></td>
+    <th class="period" width="1%">10:30-11:25</th>
+    <td class="activity" width="12%"></td>
+    <th class="period" width="1%">10:30-11:25</th>
+    <td class="activity" width="12%"></td>
+    <th class="period" width="1%">10:25-11:15</th>
+    <td class="activity" width="12%"></td>
+    <td class="activity" colspan="2" width="14%"></td>
+    <td class="activity" colspan="2" width="14%"></td>
+    </tr>
+    <tr><th class="period" width="1%">11:30-12:25</th>
+    <td class="activity" width="12%"></td>
+    <th class="period" width="1%">11:30-12:25</th>
+    <td class="activity" width="12%"></td>
+    <th class="period" width="1%">11:30-12:25</th>
+    <td class="activity" width="12%"></td>
+    <th class="period" width="1%">11:30-12:25</th>
+    <td class="activity" width="12%"></td>
+    <th class="period" width="1%">11:20-12:10</th>
+    <td class="activity" width="12%"></td>
+    <td class="activity" colspan="2" width="14%"></td>
+    <td class="activity" colspan="2" width="14%"></td>
+    </tr>
+    <tr><th class="period" width="1%">12:30-13:25</th>
+    <td class="activity" width="12%"></td>
+    <th class="period" width="1%">12:30-13:25</th>
+    <td class="activity" width="12%"></td>
+    <th class="period" width="1%">12:30-13:25</th>
+    <td class="activity" width="12%"></td>
+    <th class="period" width="1%">12:30-13:25</th>
+    <td class="activity" width="12%"></td>
+    <td class="activity" colspan="2" width="14%"></td>
+    <td class="activity" colspan="2" width="14%"></td>
+    <td class="activity" colspan="2" width="14%"></td>
+    </tr>
+    </table>
+
 
 
 Weekly timetable, lessons on saturday
@@ -649,68 +841,141 @@ Do we use a homeroom period?  Let's say no:
 
 The schema is now created:
 
-    >>> print http(r"""
-    ... GET /schoolyears/2005-2006/school_timetables/weekly-3/export.xml HTTP/1.1
-    ... Authorization: Basic manager:schooltool
-    ... """, handle_errors=False)
-    HTTP/1.1 200 Ok
-    Content-Length: ...
-    Content-Type: text/xml;charset=UTF-8
-    <BLANKLINE>
-    <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
-      <title>Weekly 3</title>
-      <timezone name="UTC"/>
-      <model factory="WeeklyTimetableModel">
-        <daytemplate>
-          <used when="Friday Monday Saturday Thursday Tuesday Wednesday"/>
-          <period duration="55" tstart="09:30"/>
-          <period duration="55" tstart="10:30"/>
-          <period duration="55" tstart="11:30"/>
-          <period duration="55" tstart="12:30"/>
-        </daytemplate>
-        <daytemplate>
-          <used when="Sunday default"/>
-        </daytemplate>
-      </model>
-      <day id="Monday">
-        <period id="09:30-10:25"/>
-        <period id="10:30-11:25"/>
-        <period id="11:30-12:25"/>
-        <period id="12:30-13:25"/>
-      </day>
-      <day id="Tuesday">
-        <period id="09:30-10:25"/>
-        <period id="10:30-11:25"/>
-        <period id="11:30-12:25"/>
-        <period id="12:30-13:25"/>
-      </day>
-      <day id="Wednesday">
-        <period id="09:30-10:25"/>
-        <period id="10:30-11:25"/>
-        <period id="11:30-12:25"/>
-        <period id="12:30-13:25"/>
-      </day>
-      <day id="Thursday">
-        <period id="09:30-10:25"/>
-        <period id="10:30-11:25"/>
-        <period id="11:30-12:25"/>
-        <period id="12:30-13:25"/>
-      </day>
-      <day id="Friday">
-        <period id="09:30-10:25"/>
-        <period id="10:30-11:25"/>
-        <period id="11:30-12:25"/>
-        <period id="12:30-13:25"/>
-      </day>
-      <day id="Saturday">
-        <period id="09:30-10:25"/>
-        <period id="10:30-11:25"/>
-        <period id="11:30-12:25"/>
-        <period id="12:30-13:25"/>
-      </day>
-      <day id="Sunday">
-      </day>
-    </timetable>
+    >>> manager.getLink('Weekly 3').click()
+
+    >>> manager.printQuery('//table[@class="timetable"]', skip_inner_blank=True)
+    <table class="timetable">
+    <tr><th colspan="2" class="day" width="14%">Monday</th>
+    <th colspan="2" class="day" width="14%">Tuesday</th>
+    <th colspan="2" class="day" width="14%">Wednesday</th>
+    <th colspan="2" class="day" width="14%">Thursday</th>
+    <th colspan="2" class="day" width="14%">Friday</th>
+    <th colspan="2" class="day" width="14%">Saturday</th>
+    <th colspan="2" class="day" width="14%">Sunday</th>
+    </tr>
+    <tr><th class="period" width="1%">09:30-10:25</th>
+    <td class="activity" width="12%">Lesson</td>
+    <th class="period" width="1%">09:30-10:25</th>
+    <td class="activity" width="12%">Lesson</td>
+    <th class="period" width="1%">09:30-10:25</th>
+    <td class="activity" width="12%">Lesson</td>
+    <th class="period" width="1%">09:30-10:25</th>
+    <td class="activity" width="12%">Lesson</td>
+    <th class="period" width="1%">09:30-10:25</th>
+    <td class="activity" width="12%">Lesson</td>
+    <th class="period" width="1%">09:30-10:25</th>
+    <td class="activity" width="12%">Lesson</td>
+    <td class="activity" colspan="2" width="14%"></td>
+    </tr>
+    <tr><th class="period" width="1%">10:30-11:25</th>
+    <td class="activity" width="12%">Lesson</td>
+    <th class="period" width="1%">10:30-11:25</th>
+    <td class="activity" width="12%">Lesson</td>
+    <th class="period" width="1%">10:30-11:25</th>
+    <td class="activity" width="12%">Lesson</td>
+    <th class="period" width="1%">10:30-11:25</th>
+    <td class="activity" width="12%">Lesson</td>
+    <th class="period" width="1%">10:30-11:25</th>
+    <td class="activity" width="12%">Lesson</td>
+    <th class="period" width="1%">10:30-11:25</th>
+    <td class="activity" width="12%">Lesson</td>
+    <td class="activity" colspan="2" width="14%"></td>
+    </tr>
+    <tr><th class="period" width="1%">11:30-12:25</th>
+    <td class="activity" width="12%">Lesson</td>
+    <th class="period" width="1%">11:30-12:25</th>
+    <td class="activity" width="12%">Lesson</td>
+    <th class="period" width="1%">11:30-12:25</th>
+    <td class="activity" width="12%">Lesson</td>
+    <th class="period" width="1%">11:30-12:25</th>
+    <td class="activity" width="12%">Lesson</td>
+    <th class="period" width="1%">11:30-12:25</th>
+    <td class="activity" width="12%">Lesson</td>
+    <th class="period" width="1%">11:30-12:25</th>
+    <td class="activity" width="12%">Lesson</td>
+    <td class="activity" colspan="2" width="14%"></td>
+    </tr>
+    <tr><th class="period" width="1%">12:30-13:25</th>
+    <td class="activity" width="12%">Lesson</td>
+    <th class="period" width="1%">12:30-13:25</th>
+    <td class="activity" width="12%">Lesson</td>
+    <th class="period" width="1%">12:30-13:25</th>
+    <td class="activity" width="12%">Lesson</td>
+    <th class="period" width="1%">12:30-13:25</th>
+    <td class="activity" width="12%">Lesson</td>
+    <th class="period" width="1%">12:30-13:25</th>
+    <td class="activity" width="12%">Lesson</td>
+    <th class="period" width="1%">12:30-13:25</th>
+    <td class="activity" width="12%">Lesson</td>
+    <td class="activity" colspan="2" width="14%"></td>
+    </tr>
+    </table>
+    <table class="timetable">
+    <tr><th colspan="2" class="day" width="14%">Monday</th>
+    <th colspan="2" class="day" width="14%">Tuesday</th>
+    <th colspan="2" class="day" width="14%">Wednesday</th>
+    <th colspan="2" class="day" width="14%">Thursday</th>
+    <th colspan="2" class="day" width="14%">Friday</th>
+    <th colspan="2" class="day" width="14%">Saturday</th>
+    <th colspan="2" class="day" width="14%">Sunday</th>
+    </tr>
+    <tr><th class="period" width="1%">09:30-10:25</th>
+    <td class="activity" width="12%"></td>
+    <th class="period" width="1%">09:30-10:25</th>
+    <td class="activity" width="12%"></td>
+    <th class="period" width="1%">09:30-10:25</th>
+    <td class="activity" width="12%"></td>
+    <th class="period" width="1%">09:30-10:25</th>
+    <td class="activity" width="12%"></td>
+    <th class="period" width="1%">09:30-10:25</th>
+    <td class="activity" width="12%"></td>
+    <th class="period" width="1%">09:30-10:25</th>
+    <td class="activity" width="12%"></td>
+    <td class="activity" colspan="2" width="14%"></td>
+    </tr>
+    <tr><th class="period" width="1%">10:30-11:25</th>
+    <td class="activity" width="12%"></td>
+    <th class="period" width="1%">10:30-11:25</th>
+    <td class="activity" width="12%"></td>
+    <th class="period" width="1%">10:30-11:25</th>
+    <td class="activity" width="12%"></td>
+    <th class="period" width="1%">10:30-11:25</th>
+    <td class="activity" width="12%"></td>
+    <th class="period" width="1%">10:30-11:25</th>
+    <td class="activity" width="12%"></td>
+    <th class="period" width="1%">10:30-11:25</th>
+    <td class="activity" width="12%"></td>
+    <td class="activity" colspan="2" width="14%"></td>
+    </tr>
+    <tr><th class="period" width="1%">11:30-12:25</th>
+    <td class="activity" width="12%"></td>
+    <th class="period" width="1%">11:30-12:25</th>
+    <td class="activity" width="12%"></td>
+    <th class="period" width="1%">11:30-12:25</th>
+    <td class="activity" width="12%"></td>
+    <th class="period" width="1%">11:30-12:25</th>
+    <td class="activity" width="12%"></td>
+    <th class="period" width="1%">11:30-12:25</th>
+    <td class="activity" width="12%"></td>
+    <th class="period" width="1%">11:30-12:25</th>
+    <td class="activity" width="12%"></td>
+    <td class="activity" colspan="2" width="14%"></td>
+    </tr>
+    <tr><th class="period" width="1%">12:30-13:25</th>
+    <td class="activity" width="12%"></td>
+    <th class="period" width="1%">12:30-13:25</th>
+    <td class="activity" width="12%"></td>
+    <th class="period" width="1%">12:30-13:25</th>
+    <td class="activity" width="12%"></td>
+    <th class="period" width="1%">12:30-13:25</th>
+    <td class="activity" width="12%"></td>
+    <th class="period" width="1%">12:30-13:25</th>
+    <td class="activity" width="12%"></td>
+    <th class="period" width="1%">12:30-13:25</th>
+    <td class="activity" width="12%"></td>
+    <td class="activity" colspan="2" width="14%"></td>
+    </tr>
+    </table>
 
 
 Rotating timetable, different period times (per weekday)
@@ -815,55 +1080,105 @@ Do we use a homeroom period?  Let's say no:
 
 The schema is now created:
 
-    >>> print http(r"""
-    ... GET /schoolyears/2005-2006/school_timetables/rotating-3/export.xml HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... """, handle_errors=False)
-    HTTP/1.1 200 Ok
-    Content-Length: ...
-    Content-Type: text/xml;charset=UTF-8
-    <BLANKLINE>
-    <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
-      <title>Rotating 3</title>
-      <timezone name="UTC"/>
-      <model factory="SequentialDaysTimetableModel">
-        <daytemplate>
-          <used when="Friday"/>
-          <period duration="50" tstart="09:30"/>
-          <period duration="50" tstart="10:25"/>
-          <period duration="50" tstart="11:20"/>
-          <period duration="50" tstart="12:15"/>
-        </daytemplate>
-        <daytemplate>
-          <used when="Monday Thursday Tuesday Wednesday"/>
-          <period duration="55" tstart="09:30"/>
-          <period duration="55" tstart="10:30"/>
-          <period duration="55" tstart="11:30"/>
-          <period duration="55" tstart="12:30"/>
-        </daytemplate>
-        <daytemplate>
-          <used when="Saturday Sunday default"/>
-        </daytemplate>
-      </model>
-      <day id="A">
-        <period id="Period_A"/>
-        <period id="Period_C"/>
-        <period id="Period_B"/>
-        <period id="Period_D"/>
-      </day>
-      <day id="B">
-        <period id="Period_D"/>
-        <period id="Period_B"/>
-        <period id="Period_C"/>
-        <period id="Period_A"/>
-      </day>
-      <day id="C">
-        <period id="Period_A"/>
-        <period id="Period_B"/>
-        <period id="Period_C"/>
-        <period id="Period_D"/>
-      </day>
-    </timetable>
+    >>> manager.getLink('Rotating 3').click()
+
+    >>> manager.printQuery('//table[@class="timetable"]', skip_inner_blank=True)
+    <table class="timetable">
+    <tr><th colspan="2" class="day" width="33%">A</th>
+    <th colspan="2" class="day" width="33%">B</th>
+    <th colspan="2" class="day" width="33%">C</th>
+    </tr>
+    <tr><th class="period" width="3%">Period_A</th>
+    <td class="activity" width="30%">Lesson</td>
+    <th class="period" width="3%">Period_D</th>
+    <td class="activity" width="30%">Lesson</td>
+    <th class="period" width="3%">Period_A</th>
+    <td class="activity" width="30%">Lesson</td>
+    </tr>
+    <tr><th class="period" width="3%">Period_C</th>
+    <td class="activity" width="30%">Lesson</td>
+    <th class="period" width="3%">Period_B</th>
+    <td class="activity" width="30%">Lesson</td>
+    <th class="period" width="3%">Period_B</th>
+    <td class="activity" width="30%">Lesson</td>
+    </tr>
+    <tr><th class="period" width="3%">Period_B</th>
+    <td class="activity" width="30%">Lesson</td>
+    <th class="period" width="3%">Period_C</th>
+    <td class="activity" width="30%">Lesson</td>
+    <th class="period" width="3%">Period_C</th>
+    <td class="activity" width="30%">Lesson</td>
+    </tr>
+    <tr><th class="period" width="3%">Period_D</th>
+    <td class="activity" width="30%">Lesson</td>
+    <th class="period" width="3%">Period_A</th>
+    <td class="activity" width="30%">Lesson</td>
+    <th class="period" width="3%">Period_D</th>
+    <td class="activity" width="30%">Lesson</td>
+    </tr>
+    </table>
+    <table class="timetable">
+    <tr><th colspan="2" class="day" width="14%">Monday</th>
+    <th colspan="2" class="day" width="14%">Tuesday</th>
+    <th colspan="2" class="day" width="14%">Wednesday</th>
+    <th colspan="2" class="day" width="14%">Thursday</th>
+    <th colspan="2" class="day" width="14%">Friday</th>
+    <th colspan="2" class="day" width="14%">Saturday</th>
+    <th colspan="2" class="day" width="14%">Sunday</th>
+    </tr>
+    <tr><th class="period" width="1%">09:30-10:25</th>
+    <td class="activity" width="12%"></td>
+    <th class="period" width="1%">09:30-10:25</th>
+    <td class="activity" width="12%"></td>
+    <th class="period" width="1%">09:30-10:25</th>
+    <td class="activity" width="12%"></td>
+    <th class="period" width="1%">09:30-10:25</th>
+    <td class="activity" width="12%"></td>
+    <th class="period" width="1%">09:30-10:20</th>
+    <td class="activity" width="12%"></td>
+    <td class="activity" colspan="2" width="14%"></td>
+    <td class="activity" colspan="2" width="14%"></td>
+    </tr>
+    <tr><th class="period" width="1%">10:30-11:25</th>
+    <td class="activity" width="12%"></td>
+    <th class="period" width="1%">10:30-11:25</th>
+    <td class="activity" width="12%"></td>
+    <th class="period" width="1%">10:30-11:25</th>
+    <td class="activity" width="12%"></td>
+    <th class="period" width="1%">10:30-11:25</th>
+    <td class="activity" width="12%"></td>
+    <th class="period" width="1%">10:25-11:15</th>
+    <td class="activity" width="12%"></td>
+    <td class="activity" colspan="2" width="14%"></td>
+    <td class="activity" colspan="2" width="14%"></td>
+    </tr>
+    <tr><th class="period" width="1%">11:30-12:25</th>
+    <td class="activity" width="12%"></td>
+    <th class="period" width="1%">11:30-12:25</th>
+    <td class="activity" width="12%"></td>
+    <th class="period" width="1%">11:30-12:25</th>
+    <td class="activity" width="12%"></td>
+    <th class="period" width="1%">11:30-12:25</th>
+    <td class="activity" width="12%"></td>
+    <th class="period" width="1%">11:20-12:10</th>
+    <td class="activity" width="12%"></td>
+    <td class="activity" colspan="2" width="14%"></td>
+    <td class="activity" colspan="2" width="14%"></td>
+    </tr>
+    <tr><th class="period" width="1%">12:30-13:25</th>
+    <td class="activity" width="12%"></td>
+    <th class="period" width="1%">12:30-13:25</th>
+    <td class="activity" width="12%"></td>
+    <th class="period" width="1%">12:30-13:25</th>
+    <td class="activity" width="12%"></td>
+    <th class="period" width="1%">12:30-13:25</th>
+    <td class="activity" width="12%"></td>
+    <th class="period" width="1%">12:15-13:05</th>
+    <td class="activity" width="12%"></td>
+    <td class="activity" colspan="2" width="14%"></td>
+    <td class="activity" colspan="2" width="14%"></td>
+    </tr>
+    </table>
 
 
 Rotating timetable, different period times (rotating day)
@@ -980,54 +1295,87 @@ Do we use a homeroom period?  Let's say no:
 
 The schema is now created:
 
-    >>> print http(r"""
-    ... GET /schoolyears/2005-2006/school_timetables/rotating-4/export.xml HTTP/1.1
-    ... Authorization: Basic manager:schooltool
-    ... """, handle_errors=False)
-    HTTP/1.1 200 Ok
-    Content-Length: ...
-    Content-Type: text/xml;charset=UTF-8
-    <BLANKLINE>
-    <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
-      <title>Rotating 4</title>
-      <timezone name="UTC"/>
-      <model factory="SequentialDayIdBasedTimetableModel">
-        <daytemplate>
-          <used when="C Day Day A"/>
-          <period duration="55" tstart="09:30"/>
-          <period duration="55" tstart="10:30"/>
-          <period duration="55" tstart="11:30"/>
-          <period duration="55" tstart="12:30"/>
-        </daytemplate>
-        <daytemplate>
-          <used when="Day B"/>
-          <period duration="55" tstart="09:00"/>
-          <period duration="55" tstart="10:00"/>
-          <period duration="55" tstart="11:00"/>
-          <period duration="55" tstart="12:00"/>
-          <period duration="55" tstart="13:00"/>
-        </daytemplate>
-      </model>
-      <day id="Day A">
-        <period id="A"/>
-        <period id="B"/>
-        <period id="C"/>
-        <period id="D"/>
-      </day>
-      <day id="Day B">
-        <period id="B"/>
-        <period id="C"/>
-        <period id="D"/>
-        <period id="E"/>
-        <period id="F"/>
-      </day>
-      <day id="Day C">
-        <period id="C"/>
-        <period id="D"/>
-        <period id="E"/>
-        <period id="F"/>
-      </day>
-    </timetable>
+    >>> manager.getLink('Rotating 4').click()
+
+    >>> manager.printQuery('//table[@class="timetable"]', skip_inner_blank=True)
+    <table class="timetable">
+    <tr><th colspan="2" class="day" width="33%">Day A</th>
+    <th colspan="2" class="day" width="33%">Day B</th>
+    <th colspan="2" class="day" width="33%">Day C</th>
+    </tr>
+    <tr><th class="period" width="3%">A</th>
+    <td class="activity" width="30%">Lesson</td>
+    <th class="period" width="3%">B</th>
+    <td class="activity" width="30%">Lesson</td>
+    <th class="period" width="3%">C</th>
+    <td class="activity" width="30%">Lesson</td>
+    </tr>
+    <tr><th class="period" width="3%">B</th>
+    <td class="activity" width="30%">Lesson</td>
+    <th class="period" width="3%">C</th>
+    <td class="activity" width="30%">Lesson</td>
+    <th class="period" width="3%">D</th>
+    <td class="activity" width="30%">Lesson</td>
+    </tr>
+    <tr><th class="period" width="3%">C</th>
+    <td class="activity" width="30%">Lesson</td>
+    <th class="period" width="3%">D</th>
+    <td class="activity" width="30%">Lesson</td>
+    <th class="period" width="3%">E</th>
+    <td class="activity" width="30%">Lesson</td>
+    </tr>
+    <tr><th class="period" width="3%">D</th>
+    <td class="activity" width="30%">Lesson</td>
+    <th class="period" width="3%">E</th>
+    <td class="activity" width="30%">Lesson</td>
+    <th class="period" width="3%">F</th>
+    <td class="activity" width="30%">Lesson</td>
+    </tr>
+    <tr><td class="activity" colspan="2" width="33%"></td>
+    <th class="period" width="3%">F</th>
+    <td class="activity" width="30%">Lesson</td>
+    <td class="activity" colspan="2" width="33%"></td>
+    </tr>
+    </table>
+    <table class="timetable">
+    <tr><th colspan="2" class="day" width="33%">Day A</th>
+    <th colspan="2" class="day" width="33%">Day B</th>
+    <th colspan="2" class="day" width="33%">Day C</th>
+    </tr>
+    <tr><th class="period" width="3%">09:30-10:25</th>
+    <td class="activity" width="30%"></td>
+    <th class="period" width="3%">09:00-09:55</th>
+    <td class="activity" width="30%"></td>
+    <th class="period" width="3%">09:30-10:25</th>
+    <td class="activity" width="30%"></td>
+    </tr>
+    <tr><th class="period" width="3%">10:30-11:25</th>
+    <td class="activity" width="30%"></td>
+    <th class="period" width="3%">10:00-10:55</th>
+    <td class="activity" width="30%"></td>
+    <th class="period" width="3%">10:30-11:25</th>
+    <td class="activity" width="30%"></td>
+    </tr>
+    <tr><th class="period" width="3%">11:30-12:25</th>
+    <td class="activity" width="30%"></td>
+    <th class="period" width="3%">11:00-11:55</th>
+    <td class="activity" width="30%"></td>
+    <th class="period" width="3%">11:30-12:25</th>
+    <td class="activity" width="30%"></td>
+    </tr>
+    <tr><th class="period" width="3%">12:30-13:25</th>
+    <td class="activity" width="30%"></td>
+    <th class="period" width="3%">12:00-12:55</th>
+    <td class="activity" width="30%"></td>
+    <th class="period" width="3%">12:30-13:25</th>
+    <td class="activity" width="30%"></td>
+    </tr>
+    <tr><td class="activity" colspan="2" width="33%"></td>
+    <th class="period" width="3%">13:00-13:55</th>
+    <td class="activity" width="30%"></td>
+    <td class="activity" colspan="2" width="33%"></td>
+    </tr>
+    </table>
 
 
 The Cancel button
@@ -1060,7 +1408,7 @@ However we can press the Cancel button and go back to the beginning
 
     >>> manager.getControl('Cancel').click()
     >>> manager.url
-    'http://localhost/schoolyears/2005-2006/school_timetables'
+    'http://localhost/schoolyears/2005-2006/timetables'
 
 If we now click on the New Timetable button, we'll see the first page
 again.
