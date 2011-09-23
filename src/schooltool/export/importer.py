@@ -103,6 +103,7 @@ ERROR_INVALID_SCHEMA_ID = _('is not a valid timetable in the given school year')
 ERROR_INVALID_DAY_ID = _('is not a valid day id for the given timetable')
 ERROR_INVALID_PERIOD_ID = _('is not a valid period id for the given day')
 ERROR_INVALID_CONTACT_ID = _('is not a valid username or contact id')
+ERROR_UNWANTED_CONTACT_DATA = _('must be empty when ID is a user id')
 ERROR_INVALID_RESOURCE_ID = _('is not a valid resource id')
 ERROR_UNICODE_CONVERSION = _(
     "Username cannot contain non-ascii characters: ${string}")
@@ -798,6 +799,12 @@ class ContactPersonImporter(ImporterBase):
                     data['middle_name'] = self.getTextFromCell(sh, row, 3)
                     data['last_name'] = self.getRequiredTextFromCell(sh, row, 4)
                     data['suffix'] = self.getTextFromCell(sh, row, 5)
+                else:
+                    for index in range(5):
+                        value, found = self.getCellAndFound(sh, row, index + 1)
+                        if value:
+                            self.error(row, index + 1,
+                                       ERROR_UNWANTED_CONTACT_DATA)
 
             data['address_line_1'] = self.getTextFromCell(sh, row, 6)
             data['address_line_2'] = self.getTextFromCell(sh, row, 7)

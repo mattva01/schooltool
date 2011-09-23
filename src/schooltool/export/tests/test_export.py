@@ -31,6 +31,9 @@ from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.testing import format_table
 from schooltool.term.term import Term
 from schooltool.common import DateRange
+from schooltool.contact.contact import Contact, ContactPersonInfo
+from schooltool.contact.interfaces import IContact, IContactable
+from schooltool.contact.interfaces import IContactContainer
 from schooltool.course.course import Course
 from schooltool.course.section import Section
 from schooltool.course.interfaces import ICourseContainer
@@ -57,6 +60,38 @@ def setUpSchool(app):
     teacher = pc['teacher'] = BasicPerson("teacher", "Mister", "T")
     s1 = pc['john'] = BasicPerson("john", "John", "Peterson")
     s2 = pc['pete'] = BasicPerson("pete", "Pete", "Johnson")
+
+    contacts = IContactContainer(app)
+    contact = Contact()
+    contact.__name__ = 'pete_parent'
+    contact.prefix = 'Ms.'
+    contact.first_name = 'Susan'
+    contact.middle_name = 'T.'
+    contact.last_name = 'Johnson'
+    contact.suffix = 'Jr.'
+    contact.address_line_1 = '1 First St.'
+    contact.address_line_2 = 'Apt. 1'
+    contact.city = 'NY'
+    contact.state = 'NY'
+    contact.country = 'USA'
+    contact.postal_code = '00000'
+    contact.email = 'davejohnson@gmail.com'
+    contact.home_phone = '000-0000'
+    contact.work_phone = '111-1111'
+    contact.mobile_phone = '222-2222'
+    contact.language = 'English'
+    contacts['pete_parent'] = contact
+
+    info = ContactPersonInfo()
+    info.__parent__ = s2
+    info.relationship = 'parent'
+    IContactable(s2).contacts.add(contact, info)
+
+    info = ContactPersonInfo()
+    info.__parent__ = s2
+    info.relationship = 'parent'
+    IContactable(s2).contacts.add(IContact(teacher), info)
+
     d1 = IDemographics(s1)
     d1['ID'] = "112323"
     d1['ethnicity'] = u'Asian'
@@ -75,20 +110,17 @@ def setUpSchool(app):
 
 def doctest_format_school_years():
     """
-
         >>> app = ISchoolToolApplication(None)
         >>> setUpSchool(app)
         >>> exporter = MegaExporter(app, None)
         >>> for row in exporter.format_school_years(): print row
         [Header('ID'), Header('Title'), Header('Start'), Header('End')]
         [Text(u'2005'), Text('2005'), Date(datetime.date(2005, 1, 1)), Date(datetime.date(2005, 1, 30))]
-
     """
 
 
 def doctest_format_terms():
     """
-
         >>> app = ISchoolToolApplication(None)
         >>> setUpSchool(app)
         >>> exporter = MegaExporter(app, None)
@@ -138,26 +170,22 @@ def doctest_format_terms():
         [Header('Working weekends')]
         [Date(datetime.date(2005, 1, 8))]
         [Date(datetime.date(2005, 1, 9))]
-
     """
 
 
 def doctest_format_courses():
     """
-
         >>> app = ISchoolToolApplication(None)
         >>> setUpSchool(app)
         >>> exporter = MegaExporter(app, None)
         >>> for row in exporter.format_courses(): print row
         [Header('School Year'), Header('ID'), Header('Title'), Header('Description')]
         [Text(u'2005'), Text(u'c1'), Text('History'), Date(None)]
-
     """
 
 
 def doctest_format_persons():
     """
-
         >>> app = ISchoolToolApplication(None)
         >>> setUpSchool(app)
         >>> exporter = MegaExporter(app, None)
@@ -238,7 +266,131 @@ def doctest_format_persons():
          Text(None),
          Text(None),
          Text(None)]
+    """
 
+
+def doctest_format_contact_persons():
+    """
+        >>> app = ISchoolToolApplication(None)
+        >>> setUpSchool(app)
+        >>> exporter = MegaExporter(app, None)
+        >>> from pprint import pprint
+        >>> for row in exporter.format_contact_persons(): pprint(row)
+        [Header('ID'),
+         Header('Prefix'),
+         Header('First Name'),
+         Header('Middle Name'),
+         Header('Last Name'),
+         Header('Suffix'),
+         Header('Address line 1'),
+         Header('Address line 2'),
+         Header('City'),
+         Header('State'),
+         Header('Country'),
+         Header('Postal code'),
+         Header('Home phone'),
+         Header('Work phone'),
+         Header('Mobile phone'),
+         Header('Email'),
+         Header('Language')]
+        [Text('john'),
+         Text(''),
+         Text(''),
+         Text(''),
+         Text(''),
+         Text(''),
+         Text(None),
+         Text(None),
+         Date(None),
+         Date(None),
+         Date(None),
+         Date(None),
+         Text(None),
+         Text(None),
+         Text(None),
+         Text(None),
+         Text(None)]
+        [Text('manager'),
+         Text(''),
+         Text(''),
+         Text(''),
+         Text(''),
+         Text(''),
+         Text(None),
+         Text(None),
+         Date(None),
+         Date(None),
+         Date(None),
+         Date(None),
+         Text(None),
+         Text(None),
+         Text(None),
+         Text(None),
+         Text(None)]
+        [Text('pete'),
+         Text(''),
+         Text(''),
+         Text(''),
+         Text(''),
+         Text(''),
+         Text(None),
+         Text(None),
+         Date(None),
+         Date(None),
+         Date(None),
+         Date(None),
+         Text(None),
+         Text(None),
+         Text(None),
+         Text(None),
+         Text(None)]
+        [Text(u'pete_parent'),
+         Text('Ms.'),
+         Text('Susan'),
+         Text('T.'),
+         Text('Johnson'),
+         Text('Jr.'),
+         Text('1 First St.'),
+         Text('Apt. 1'),
+         Date('NY'),
+         Date('NY'),
+         Date('USA'),
+         Date('00000'),
+         Text('000-0000'),
+         Text('111-1111'),
+         Text('222-2222'),
+         Text('davejohnson@gmail.com'),
+         Text('English')]
+        [Text('teacher'),
+         Text(''),
+         Text(''),
+         Text(''),
+         Text(''),
+         Text(''),
+         Text(None),
+         Text(None),
+         Date(None),
+         Date(None),
+         Date(None),
+         Date(None),
+         Text(None),
+         Text(None),
+         Text(None),
+         Text(None),
+         Text(None)]
+    """
+
+
+def doctest_format_contact_relationships():
+    """
+        >>> app = ISchoolToolApplication(None)
+        >>> setUpSchool(app)
+        >>> exporter = MegaExporter(app, None)
+        >>> from pprint import pprint
+        >>> for row in exporter.format_contact_relationships(): pprint(row)
+        [Header('Person ID'), Header('Contact ID'), Header('Relationship')]
+        [Text('pete'), Text(u'pete_parent'), Text('parent')]
+        [Text('pete'), Text('teacher'), Text('parent')]
     """
 
 

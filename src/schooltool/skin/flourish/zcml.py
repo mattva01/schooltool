@@ -37,7 +37,6 @@ from schooltool.skin.flourish.zcml_content import handle_security
 from schooltool.skin.flourish import interfaces
 from schooltool.skin.flourish.page import Page
 from schooltool.skin.flourish.viewlet import Viewlet, ViewletManager
-from schooltool.common import SchoolToolMessage as _
 
 
 class IRenderOverrides(Interface):
@@ -56,14 +55,14 @@ class IRenderOverrides(Interface):
 class IViewletOrder(Interface):
 
     after = zope.configuration.fields.Tokens(
-        title=_("Display this viewlet after the specified viewlets."),
+        title=u"Display this viewlet after the specified viewlets.",
         value_type=zope.schema.TextLine(
             title=u"Names of viewlets",
             required=True),
         required=False)
 
     before = zope.configuration.fields.Tokens(
-        title=_("Display this viewlet before the specified viewlets."),
+        title=u"Display this viewlet before the specified viewlets.",
         value_type=zope.schema.TextLine(
             title=u"Names of viewlets",
             required=True),
@@ -76,46 +75,47 @@ class IViewletDirective(zope.viewlet.metadirectives.IViewletDirective,
     """A viewlet directive."""
 
     manager = zope.configuration.fields.GlobalObject(
-        title=_("The viewlet Manager"),
+        title=u"The viewlet Manager",
         required=True)
 
 
 class IViewletFactoryDirective(zope.component.zcml.IAdapterDirective):
 
     for_ = zope.configuration.fields.GlobalObject(
-        title=u"The interface or class this view is for.",
+        title=u"The interface or class this view is for",
         required=False,
         default=Interface,
         )
 
     factory = zope.configuration.fields.GlobalObject(
-        title=u"The adapter factory.",
+        title=u"The adapter factory",
         required=False,
         )
 
     provides = zope.configuration.fields.GlobalInterface(
-        title=_("Interface the component provides"),
+        title=u"Interface the component provides",
         required=False,
         default=interfaces.IViewlet,
         )
 
     view = zope.configuration.fields.GlobalObject(
-        title=_("The view the content provider is registered for."),
-        description=_("The view can either be an interface or a class. By "
-                      "default the provider is registered for all views, "
-                      "the most common case."),
+        title=u"The view the content provider is registered for.",
+        description=u"""
+        The view can either be an interface or a class. By
+        default the provider is registered for all views,
+        the most common case.""",
         required=False,
         default=IBrowserView,
         )
 
     layer = zope.configuration.fields.GlobalInterface(
-        title=_("The layer the view is in."),
+        title=u"The layer the view is in",
         required=False,
         default=interfaces.IFlourishLayer,
         )
 
     manager = zope.configuration.fields.GlobalObject(
-        title=_("The viewlet manager this viewlet is in."),
+        title=u"The viewlet manager this viewlet is in",
         required=False,
         default=interfaces.IViewletManager,
         )
@@ -150,13 +150,13 @@ class IPageDirective(zope.browserpage.metadirectives.IPagesDirective,
     subtitle = zope.configuration.fields.MessageID(
         title=u"Subitle of this page",
         description=u"""
-            A very short description of this page.
+        A very short description of this page.
         """,
         required=False,
         )
 
     template = zope.configuration.fields.Path(
-        title=u"Main template.",
+        title=u"Main template",
         description=u"""
         Change the main template that renders everything.
         """,
@@ -164,7 +164,7 @@ class IPageDirective(zope.browserpage.metadirectives.IPagesDirective,
         )
 
     page_template = zope.configuration.fields.Path(
-        title=u"Template for the page.",
+        title=u"Template for the page",
         description=u"""
         Change template that renders the page part between the header
         and the footer.
@@ -188,17 +188,17 @@ IPageDirective.setTaggedValue('keyword_arguments', True)
 class IContentOrientedDirective(Interface):
 
     for_ = zope.configuration.fields.GlobalObject(
-        title=u"The interface or class this viewlet is active in.",
+        title=u"The interface or class this viewlet is active in",
         required=False,
         )
 
     layer = zope.configuration.fields.GlobalInterface(
-        title=_("The layer."),
+        title=u"The layer",
         required=False,
         )
 
     view = zope.configuration.fields.GlobalObject(
-        title=_("The view."),
+        title=u"The view",
         required=False,
         )
 
@@ -206,17 +206,17 @@ class IContentOrientedDirective(Interface):
 class IActiveViewletDirective(IContentOrientedDirective):
 
     name = zope.schema.TextLine(
-        title=u"The name of the active viewlet.",
+        title=u"The name of the active viewlet",
         required=False,
         )
 
     factory = zope.configuration.fields.GlobalObject(
-        title=u"The adapter name of the active viewlet.",
+        title=u"The adapter name of the active viewlet",
         required=False,
         )
 
     manager = zope.configuration.fields.GlobalObject(
-        title=_("The viewlet manager."),
+        title=u"The viewlet manager",
         required=True,
         )
 

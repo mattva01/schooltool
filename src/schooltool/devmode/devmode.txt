@@ -42,8 +42,6 @@ event log and what exceptions can be ignored:
     >>> keep_entries.value = '30'
 
     >>> copy_to_zlog = browser.getControl(name='copy_to_zlog')
-    >>> copy_to_zlog.value
-    False
     >>> copy_to_zlog.value = True
 
     >>> ignored_exceptions = browser.getControl(name='ignored_exceptions:lines')

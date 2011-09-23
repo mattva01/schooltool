@@ -2,8 +2,8 @@
   <h2 i18n:translate="">Advisory</h2>
   <div>
     <div>
-      <h3 i18n:translate="">
-        Advisors
+      <h3>
+        <tal:block i18n:translate="">Advisors</tal:block>
         <a class="modify" href="" title="Manage this person's advisors"
            tal:attributes="href string:${context/@@absolute_url}/@@advisors.html"
            i18n:attributes="title"
@@ -21,8 +21,8 @@
       </h3>
     </div>
     <div>
-      <h3 i18n:translate="">
-        Advisees
+      <h3>
+        <tal:block i18n:translate="">Advisees</tal:block>
         <a class="modify" href="" title="Manage this person's advisees"
            tal:attributes="href string:${context/@@absolute_url}/@@advisees.html"
            i18n:attributes="title"

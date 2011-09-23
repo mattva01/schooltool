@@ -27,8 +27,7 @@
                   tal:condition="python:widget.mode != 'hidden'">
                 <td class="label" metal:define-macro="labelcell">
                   <label tal:attributes="for widget/id">
-                    <span i18n:translate=""
-                          tal:content="widget/label"> label </span>
+                    <span tal:content="widget/label"> label </span>
                   </label>
                 </td>
                 <td class="field" metal:define-macro="widgetcell">
@@ -86,7 +85,7 @@
     <tal:block tal:replace="structure view/leaders_table/render"
                tal:condition="view/has_leaders" />
     <h3 tal:condition="not:view/has_leaders" i18n:translate="">
-  This course has no responsible parties
+      This course has no responsible parties
     </h3>
   </metal:block>
   <h3>

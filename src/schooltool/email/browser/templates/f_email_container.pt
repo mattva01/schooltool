@@ -1,6 +1,8 @@
-<metal:block i18n:domain="schooltool">
-  <h3 i18n:translate="">
-    Server status: <tal:block replace="view/status" i18n:name="status" />
+<tal:block i18n:domain="schooltool">
+  <h3>
+    <tal:block i18n:translate="">
+      Server status: <span tal:replace="view/status" i18n:name="status" />
+    </tal:block>
     <a class="modify" href="" title="Change email settings"
        tal:attributes="href string:${context/@@absolute_url}/settings.html"
        i18n:attributes="title">
@@ -26,8 +28,7 @@
                   tal:condition="python:widget.mode != 'hidden'">
                 <td class="label" metal:define-macro="labelcell">
                   <label tal:attributes="for widget/id">
-                    <span i18n:translate=""
-                          tal:content="widget/label"> label </span>
+                    <span tal:content="widget/label"> label </span>
                   </label>
                 </td>
                 <td class="field" metal:define-macro="widgetcell">
@@ -75,4 +76,4 @@
       Done
     </a>
   </h3>
-</metal:block>
+</tal:block>

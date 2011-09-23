@@ -15,12 +15,12 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-04-08 04:31+0000\n"
-"X-Generator: Launchpad (build 12735)\n"
+"X-Launchpad-Export-Date: 2011-09-10 04:31+0000\n"
+"X-Generator: Launchpad (build 13900)\n"
 
 #: /src/schooltool/app/app.py:197
 msgid "Your School"
-msgstr "La escuela"
+msgstr "El to colexu"
 
 #: /src/schooltool/app/browser/__init__.py:256
 #: /src/schooltool/app/browser/templates/index.pt:11
@@ -41,7 +41,7 @@ msgstr "${number} persones"
 
 #: /src/schooltool/app/browser/app.py:226
 msgid "Username or password is incorrect"
-msgstr "Nome d'usuariu o contraseña incorreutos"
+msgstr "Nome d'usuariu o conseña incorreutos"
 
 #: /src/schooltool/app/browser/app.py:322 /src/schooltool/app/security.py:308
 msgid "Leaders"
@@ -57,7 +57,7 @@ msgstr "Cabezaleros disponibles"
 
 #: /src/schooltool/app/browser/app.py:347
 msgid "school"
-msgstr "escuela"
+msgstr "colexu"
 
 #: /src/schooltool/app/browser/cal.py:115
 msgid "January"

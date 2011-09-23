@@ -17,7 +17,7 @@
           <tal:block repeat="number level/positions">
             <option tal:attributes="value number/value;
                                     selected number/selected"
-          	  tal:content="number/value" />
+                    tal:content="number/value" />
           </tal:block>
         </select>
         </td>
@@ -26,7 +26,7 @@
           <input type="image" alt="Delete" value="1" title="Delete"
                  tal:attributes="name string:delete.${level/form_key};
                                  src context/++resource++schooltool.skin.flourish/remove-icon.png"
-                 i18n:attributes="alt title" />
+                 i18n:attributes="alt; title" />
         </td>
       </tr>
     </table>
