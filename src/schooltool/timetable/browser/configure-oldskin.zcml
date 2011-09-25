@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/browser"
+           xmlns:z3c="http://namespaces.zope.org/z3c"
+           xmlns:zope="http://namespaces.zope.org/zope"
+           xmlns:flourish="http://schooltool.org/flourish"
+           i18n_domain="schooltool">
+
+<!-- Misplaced content adapters -->
+
+  <include package="schooltool.skin.flourish" file="meta.zcml" />
+
+  <zope:adapter
+      for="*
+           schooltool.skin.ISchoolToolLayer
+           *"
+      provides="schooltool.skin.flourish.interfaces.IContentProviders"
+      factory="schooltool.skin.flourish.content.TALESAwareContentProviders" />
+
+  <flourish:content
+      for="schooltool.timetable.interfaces.IScheduleWithExceptions"
+      layer="zope.publisher.interfaces.browser.IBrowserRequest"
+      template="templates/schedule_exceptions_content.pt"
+      permission="schooltool.view"
+      name="exceptions" />
+
+  <flourish:content
+      class=".timetable.DayTemplatesTable"
+      for="schooltool.timetable.interfaces.IDayTemplateSchedule"
+      layer="zope.publisher.interfaces.browser.IBrowserRequest"
+      view=".timetable.IRenderDayTableCells"
+      template="templates/daytemplates_table.pt"
+      permission="schooltool.view"
+      name="table" />
+
+  <flourish:content
+      class=".timetable.SelectedPeriodsContent"
+      for="schooltool.timetable.interfaces.ISelectedPeriodsSchedule"
+      layer="zope.publisher.interfaces.browser.IBrowserRequest"
+      template="templates/selected_periods_content.pt"
+      permission="schooltool.view"
+      name="view" />
+
+  <flourish:content
+      class=".timetable.SelectedPeriodsContent"
+      for="schooltool.term.interfaces.ITerm"
+      layer="zope.publisher.interfaces.browser.IBrowserRequest"
+      template="templates/selected_periods_content.pt"
+      display_title="Term"
+      permission="schooltool.view"
+      name="view" />
+
+  <flourish:content
+      for="schooltool.term.interfaces.ITerm"
+      layer="zope.publisher.interfaces.browser.IBrowserRequest"
+      template="templates/date_boundaries_content.pt"
+      display_title="Term"
+      permission="schooltool.view"
+      name="boundaries" />
+
+  <flourish:content
+      for="schooltool.timetable.interfaces.ISchedule"
+      layer="zope.publisher.interfaces.browser.IBrowserRequest"
+      template="templates/date_boundaries_content.pt"
+      display_title="Schedule"
+      permission="schooltool.view"
+      name="boundaries" />
+
+  <flourish:content
+      for="schooltool.timetable.interfaces.ISelectedPeriodsSchedule"
+      layer="zope.publisher.interfaces.browser.IBrowserRequest"
+      template="templates/selected_period_date_boundaries.pt"
+      permission="schooltool.view"
+      name="boundaries" />
+
+  <flourish:content
+      for="schooltool.timetable.interfaces.ITimetable"
+      layer="zope.publisher.interfaces.browser.IBrowserRequest"
+      template="templates/date_boundaries_content.pt"
+      display_title="Timetable"
+      permission="schooltool.view"
+      name="boundaries" />
+
+</configure>
