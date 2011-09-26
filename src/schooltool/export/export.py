@@ -30,6 +30,7 @@ from zope.publisher.browser import BrowserView
 from schooltool.basicperson.demographics import DateFieldDescription
 from schooltool.basicperson.interfaces import IDemographics, IBasicPerson
 from schooltool.basicperson.interfaces import IDemographicsFields
+from schooltool.common import SchoolToolMessage as _
 from schooltool.group.interfaces import IGroupContainer
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolCalendar
@@ -107,6 +108,8 @@ class ExcelExportView(BrowserView):
             borders = []
         if data is None:
             data = ""
+        if type(data) == type(True):
+            data = str(data)
         key = (bold, color, format_str, tuple(borders))
         style = self._style_cache.get(key, None)
         if style is None:
