@@ -3,20 +3,20 @@ Experimental selenium doctest for SchoolTool
 
     >>> from selenium.webdriver.common.action_chains import ActionChains
 
-    >>> browsers.manager.get(browsers.localhost)
+    >>> browsers.manager.open('http://localhost')
 
-    >>> login = browsers.manager.find_element_by_link_text('Log In')
+    >>> login = browsers.manager.driver.find_element_by_link_text('Log In')
 
     >>> browsers.manager.printHTML(login)
     <a id="tools-login" href="http://localhost/auth/@@login.html">Log In</a>
 
     >>> login.click()
 
-    >>> browsers.manager.find_element_by_name('username').send_keys('manager')
-    >>> browsers.manager.find_element_by_name('password').send_keys('schooltool')
-    >>> browsers.manager.find_element_by_xpath('//form//input[@value="Log in"]').click()
+    >>> browsers.manager.driver.find_element_by_name('username').send_keys('manager')
+    >>> browsers.manager.driver.find_element_by_name('password').send_keys('schooltool')
+    >>> browsers.manager.driver.find_element_by_xpath('//form//input[@value="Log in"]').click()
 
-    >>> title = browsers.manager.find_element_by_xpath('//body//div[@class="calcontent"]//h1')
+    >>> title = browsers.manager.driver.find_element_by_xpath('//body//div[@class="calcontent"]//h1')
 
     >>> browsers.manager.printHTML(title)
     <h1>
@@ -26,13 +26,13 @@ Experimental selenium doctest for SchoolTool
     >>> print title.text
     Calendar for Administrator, SchoolTool - Tuesday, February 1, 2005
 
-    >>> browsers.manager.find_element_by_link_text('Manage').click()
+    >>> browsers.manager.driver.find_element_by_link_text('Manage').click()
 
-    >>> browsers.manager.find_element_by_link_text('Persons').click()
+    >>> browsers.manager.driver.find_element_by_link_text('Persons').click()
 
-    >>> browsers.manager.find_element_by_link_text('New Person').click()
+    >>> browsers.manager.driver.find_element_by_link_text('New Person').click()
 
-    >>> elements = browsers.manager.find_elements_by_xpath('//form//input')
+    >>> elements = browsers.manager.driver.find_elements_by_xpath('//form//input')
 
     >>> form = dict([(e.get_attribute('name'), e) for e in elements])
     >>> fill = ActionChains(browsers.manager.driver)
@@ -46,12 +46,12 @@ Experimental selenium doctest for SchoolTool
 
     >>> fill.perform()
 
-    >>> browsers.bob.get(browsers.localhost)
+    >>> browsers.bob.open()
 
-    >>> browsers.bob.find_element_by_link_text('Log In').click()
-    >>> browsers.bob.find_element_by_name('username').send_keys('bob_m')
-    >>> browsers.bob.find_element_by_name('password').send_keys('schooltool')
-    >>> browsers.bob.find_element_by_xpath('//form//input[@value="Log in"]').click()
+    >>> browsers.bob.driver.find_element_by_link_text('Log In').click()
+    >>> browsers.bob.driver.find_element_by_name('username').send_keys('bob_m')
+    >>> browsers.bob.driver.find_element_by_name('password').send_keys('schooltool')
+    >>> browsers.bob.driver.find_element_by_xpath('//form//input[@value="Log in"]').click()
 
-    >>> print browsers.bob.find_element_by_xpath('//body//div[@class="calcontent"]//h1').text
+    >>> print browsers.bob.driver.find_element_by_xpath('//body//div[@class="calcontent"]//h1').text
     Calendar for Marley, Bob - Tuesday, February 1, 2005

@@ -121,15 +121,28 @@ class Browser(object):
     driver = None
     execute = None
 
-    def __init__(self, driver):
+    def __init__(self, pool, driver):
+        self.pool = pool
         self.driver = driver
         self.execute = CommandExecutor(self.driver)
         self.execute.extractDriverCommands()
 
+    def open(self, url="http://localhost/"):
+        """Open an URL."""
+        server_url = self.pool.localhost[:-1]
+        url = url.replace('http://localhost', server_url)
+        return self.driver.get(url)
+
+    def close(self):
+        """Close the browser."""
+        return self.driver.quit()
+
     def printHTML(self, web_element):
+        """Print HTML of WebElement or a list of WebElement."""
         print self.getHTML(web_element)
 
     def getHTML(self, web_element):
+        """Get HTML of WebElement or a list of WebElement."""
         snippets = []
         if isinstance(web_element, list):
             for el in web_element:
@@ -143,10 +156,6 @@ class Browser(object):
         html = '\n'.join(snippets)
         # XXX: format output nicely here -- or in the output checker
         return html
-
-    def __getattr__(self, name):
-        # XXX: temp proxy of driver methods
-        return getattr(self.driver, name)
 
 
 class BrowserPool(object):
@@ -167,11 +176,11 @@ class BrowserPool(object):
         if name in self.browsers:
             self.quit(name)
         driver = _browser_factory()
-        self.browsers[name] = Browser(driver)
+        self.browsers[name] = Browser(self, driver)
         return self.browsers[name]
 
     def quit(self, name):
-        self.browsers[name].quit()
+        self.browsers[name].close()
         del self.browsers[name]
 
     def reset(self):
