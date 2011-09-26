@@ -62,7 +62,6 @@ except ImportError:
     pass
 
 
-
 def extractJSONWireParams(cmd):
     t = string.Template(cmd)
     return [named
@@ -325,7 +324,6 @@ class SeleniumOutputChecker(doctest.OutputChecker):
     def output_difference(self, example, got, optionflags):
         return doctest.OutputChecker.output_difference(
             self, example, self._unify_got(got), optionflags)
-
 
 
 class SeleniumDocFileCase(doctest.DocFileCase):
