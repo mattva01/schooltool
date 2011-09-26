@@ -252,7 +252,13 @@ class SeleniumLayer(ZCMLLayer):
 
 
 class SkippyDocTestRunner(doctest.DocTestRunner):
-    """Mr. Skippy Runner"""
+    """Mr. Skippy Runner.
+
+    When REPORT_ONLY_FIRST_FAILURE is specified, Mr. Skippy skips
+    the rest of each test when an error is encountered.  Needless to say,
+    tests that have cleanup at the end should *never* have
+    REPORT_ONLY_FIRST_FAILURE set.
+    """
 
     def run(self, test, compileflags=None, out=None, clear_globs=True):
         result = None
@@ -286,7 +292,7 @@ class SkippyDocTestRunner(doctest.DocTestRunner):
 
 
 class RepeatyDebugRunner(doctest.DebugRunner):
-    """Mr. Repeaty Debugger"""
+    """Mr. Repeaty Debugger."""
 
     # XXX: plug point for custom debug runner behaviour
 
