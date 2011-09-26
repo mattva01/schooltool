@@ -5,8 +5,12 @@ Experimental selenium doctest for SchoolTool
 
     >>> browsers.manager.get(browsers.localhost)
 
-    >>> browsers.manager.find_element_by_link_text('Log In').click()
+    >>> login = browsers.manager.find_element_by_link_text('Log In')
 
+    >>> browsers.manager.printHTML(login)
+    <a id="tools-login" href="http://localhost/auth/@@login.html">Log In</a>
+
+    >>> login.click()
 
     >>> browsers.manager.find_element_by_name('username').send_keys('manager')
     >>> browsers.manager.find_element_by_name('password').send_keys('schooltool')

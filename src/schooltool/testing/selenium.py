@@ -291,6 +291,28 @@ class RepeatyDebugRunner(doctest.DebugRunner):
     # XXX: plug point for custom debug runner behaviour
 
 
+class SeleniumOutputChecker(doctest.OutputChecker):
+
+    def __init__(self, layer, *args, **kw):
+        self.layer = layer
+
+    def _unify_got(self, got):
+        if (isinstance(got, unicode) or
+            isinstance(got, str)):
+            localhost = self.layer.browsers.localhost
+            got = got.replace(localhost, 'http://localhost/')
+        return got
+
+    def check_output(self, want, got, optionflags):
+        return doctest.OutputChecker.check_output(
+            self, want, self._unify_got(got), optionflags)
+
+    def output_difference(self, example, got, optionflags):
+        return doctest.OutputChecker.output_difference(
+            self, example, self._unify_got(got), optionflags)
+
+
+
 class SeleniumDocFileCase(doctest.DocFileCase):
 
     def __init__(self, test,
@@ -337,6 +359,7 @@ class SeleniumDocFileCase(doctest.DocFileCase):
 def SeleniumFileTest(path, module_relative=True, package=None,
                 globs=None, parser=doctest.DocTestParser(),
                 encoding=None, test_case_factory=SeleniumDocFileCase,
+                checker=None,
                 **options):
     globs = globs and globs.copy() or {}
     if package and not module_relative:
@@ -354,7 +377,7 @@ def SeleniumFileTest(path, module_relative=True, package=None,
         doc = doc.decode(encoding)
 
     test = parser.get_doctest(doc, globs, test_name, path, 0)
-    return test_case_factory(test, **options)
+    return test_case_factory(test, checker=checker, **options)
 
 
 def SeleniumDocFileSuite(layer, *paths, **kw):
@@ -365,7 +388,8 @@ def SeleniumDocFileSuite(layer, *paths, **kw):
                              doctest.REPORT_ONLY_FIRST_FAILURE)
     suite = unittest.TestSuite()
     for path in paths:
-        suite.addTest(SeleniumFileTest(path, **kw))
+        suite.addTest(SeleniumFileTest(
+                path, checker=SeleniumOutputChecker(layer), **kw))
     suite.layer = layer
     return suite
 
