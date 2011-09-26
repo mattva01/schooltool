@@ -95,9 +95,6 @@ class CommandExecutor(object):
         """Add a method to this instance that executes corresponding
         command in the web driver."""
         def command(**keywords):
-            if ('sessionId' in params and
-                'sessionId' not in keywords):
-                keywords['sessionId'] = self.driver.session_id
             return self.driver.execute(name, keywords)
         command.__doc__ = \
             '''%s(%s, ...)''' % (
