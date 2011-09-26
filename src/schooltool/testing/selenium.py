@@ -126,6 +126,9 @@ class Browser(object):
         self.execute = CommandExecutor(self.driver)
         self.execute.extractDriverCommands()
 
+    def printHTML(self, web_element):
+        print self.getHTML(web_element)
+
     def getHTML(self, web_element):
         snippets = []
         if isinstance(web_element, list):
@@ -133,8 +136,12 @@ class Browser(object):
                 snippets.append(self.getHTML(el))
         else:
             snippets.append(self.driver.execute_script(
-                'return arguments[0].innerHTML;', web_element))
+                'return document.createElement("div")'
+                '.appendChild(arguments[0].cloneNode(true))'
+                '.parentNode.innerHTML',
+                web_element))
         html = '\n'.join(snippets)
+        # XXX: format output nicely here -- or in the output checker
         return html
 
     def __getattr__(self, name):
