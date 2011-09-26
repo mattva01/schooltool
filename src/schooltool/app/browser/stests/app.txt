@@ -5,15 +5,19 @@ Experimental selenium doctest for SchoolTool
 
     >>> browsers.manager.get(browsers.localhost)
 
-    >>> browsers.manager.implicitly_wait(100)
-
     >>> browsers.manager.find_element_by_link_text('Log In').click()
+
 
     >>> browsers.manager.find_element_by_name('username').send_keys('manager')
     >>> browsers.manager.find_element_by_name('password').send_keys('schooltool')
     >>> browsers.manager.find_element_by_xpath('//form//input[@value="Log in"]').click()
 
     >>> title = browsers.manager.find_element_by_xpath('//body//div[@class="calcontent"]//h1')
+
+    >>> browsers.manager.printHTML(title)
+    <h1>
+      Calendar for Administrator, SchoolTool - Tuesday, February 1, 2005
+    </h1>
 
     >>> print title.text
     Calendar for Administrator, SchoolTool - Tuesday, February 1, 2005
@@ -27,7 +31,7 @@ Experimental selenium doctest for SchoolTool
     >>> elements = browsers.manager.find_elements_by_xpath('//form//input')
 
     >>> form = dict([(e.get_attribute('name'), e) for e in elements])
-    >>> fill = ActionChains(browsers.manager)
+    >>> fill = ActionChains(browsers.manager.driver)
     >>> fill = fill.send_keys_to_element(form['form.widgets.first_name'], 'Bob')
     >>> fill = fill.send_keys_to_element(form['form.widgets.last_name'], 'Marley')
     >>> fill = fill.send_keys_to_element(form['form.widgets.username'], 'bob_m')
@@ -39,8 +43,6 @@ Experimental selenium doctest for SchoolTool
     >>> fill.perform()
 
     >>> browsers.bob.get(browsers.localhost)
-
-    >>> browsers.bob.implicitly_wait(100)
 
     >>> browsers.bob.find_element_by_link_text('Log In').click()
     >>> browsers.bob.find_element_by_name('username').send_keys('bob_m')
