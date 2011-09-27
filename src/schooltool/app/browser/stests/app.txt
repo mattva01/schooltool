@@ -3,36 +3,80 @@ Experimental selenium doctest for SchoolTool
 
     >>> from selenium.webdriver.common.action_chains import ActionChains
 
+  Open a new browser:
+
     >>> browsers.manager.open('http://localhost')
 
-    >>> login = browsers.manager.driver.find_element_by_link_text('Log In')
+  Log in:
+
+    >>> login = browsers.manager.query.link('Log In')
 
     >>> browsers.manager.printHTML(login)
     <a id="tools-login" href="http://localhost/auth/@@login.html">Log In</a>
 
     >>> login.click()
 
-    >>> browsers.manager.driver.find_element_by_name('username').send_keys('manager')
-    >>> browsers.manager.driver.find_element_by_name('password').send_keys('schooltool')
-    >>> browsers.manager.driver.find_element_by_xpath('//form//input[@value="Log in"]').click()
+    >>> browsers.manager.query.name('username').type('manager')
+    >>> browsers.manager.query.name('password').type('schooltool')
+    >>> browsers.manager.query.button('Log in').click()
 
-    >>> title = browsers.manager.driver.find_element_by_xpath('//body//div[@class="calcontent"]//h1')
+  Let's look at the links in header:
 
-    >>> browsers.manager.printHTML(title)
+    >>> header = browsers.manager.query.id('header')
+
+    >>> print header.query_all.tag('a')
+    <a class="navigation_header" href="http://localhost/persons/manager/home.html">Home</a>
+    <a class="navigation_header" href="http://localhost/persons/manager/calendar">Calendar</a>
+    <a class="navigation_header" href="http://localhost/manage.html">Manage</a>
+    <a id="login-name" href=" http://localhost/persons/manager/home.html">Administrator, SchoolTool</a>
+    <a id="login-logout" href="http://localhost/auth/@@logout.html">Log Out</a>
+    <a id="about-link" href="http://localhost/@@about.html"> SchoolTool</a>
+
+  Do an xpath query:
+
+    >>> print browsers.manager.query.xpath(
+    ...     '//body//div[@class="calcontent"]//h1')
     <h1>
       Calendar for Administrator, SchoolTool - Tuesday, February 1, 2005
     </h1>
 
-    >>> print title.text
-    Calendar for Administrator, SchoolTool - Tuesday, February 1, 2005
+  Current URL and page contents:
 
-    >>> browsers.manager.driver.find_element_by_link_text('Manage').click()
+    >>> print browsers.manager.url
+    http://localhost/persons/manager/calendar
 
-    >>> browsers.manager.driver.find_element_by_link_text('Persons').click()
+    >>> print browsers.manager.contents
+    <BLANKLINE>
+    ...
+    <div id="header">
+      <span>
+        <a class="navigation_header" href="http://localhost/persons/manager/home.html">
+          Home
+        </a>
+      </span>
+      <span>
+        <span>
+          <a class="navigation_header" href="http://localhost/persons/manager/calendar">
+            Calendar
+          </a>
+        </span>
+      </span>
+      <span>
+        <a class="navigation_header" href="http://localhost/manage.html">
+          Manage
+        </a>
+      </span>
+    ...
 
-    >>> browsers.manager.driver.find_element_by_link_text('New Person').click()
+  Add a person:
 
-    >>> elements = browsers.manager.driver.find_elements_by_xpath('//form//input')
+    >>> browsers.manager.query.link('Manage').click()
+
+    >>> browsers.manager.query.link('Persons').click()
+
+    >>> browsers.manager.query.link('New Person').click()
+
+    >>> elements = browsers.manager.query_all.xpath('//form//input')
 
     >>> form = dict([(e.get_attribute('name'), e) for e in elements])
     >>> fill = ActionChains(browsers.manager.driver)
@@ -46,12 +90,14 @@ Experimental selenium doctest for SchoolTool
 
     >>> fill.perform()
 
+  Log in as the new person:
+
     >>> browsers.bob.open()
 
-    >>> browsers.bob.driver.find_element_by_link_text('Log In').click()
-    >>> browsers.bob.driver.find_element_by_name('username').send_keys('bob_m')
-    >>> browsers.bob.driver.find_element_by_name('password').send_keys('schooltool')
-    >>> browsers.bob.driver.find_element_by_xpath('//form//input[@value="Log in"]').click()
+    >>> browsers.bob.query.link('Log In').click()
+    >>> browsers.bob.query.name('username').type('bob_m')
+    >>> browsers.bob.query.name('password').type('schooltool')
+    >>> browsers.bob.query.button('Log in').click()
 
-    >>> print browsers.bob.driver.find_element_by_xpath('//body//div[@class="calcontent"]//h1').text
+    >>> print browsers.bob.query.xpath('//body//div[@class="calcontent"]//h1').text
     Calendar for Marley, Bob - Tuesday, February 1, 2005

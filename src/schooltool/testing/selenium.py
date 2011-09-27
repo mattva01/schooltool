@@ -19,6 +19,7 @@
 """
 Selenium testing.
 """
+from __future__ import absolute_import
 import asyncore
 import doctest
 import os
@@ -28,6 +29,7 @@ import threading
 import unittest
 from StringIO import StringIO
 
+import selenium.webdriver.remote.webelement
 from zope.app.wsgi import WSGIPublisherApplication
 from zope.app.server.wsgi import ServerType
 from zope.server.taskthreads import ThreadedTaskDispatcher
@@ -112,16 +114,147 @@ class CommandExecutor(object):
             print self._commands[name].__doc__
 
 
+class WebElementList(list):
+
+    def __unicode__(self):
+        return '\n'.join([unicode(el) for el in self])
+
+    __str__ = lambda self: unicode(self).encode('utf-8')
+
+
+def getWebElementHTML(driver, web_elements):
+    """Get HTML of WebElement or a list of WebElement."""
+    if isinstance(web_elements, list):
+        snippets = []
+        for el in web_elements:
+            snippets.append(getWebElementHTML)
+        html = u'\n'.join(snippets)
+    else:
+        html = driver.execute_script(
+            'return document.createElement("div")'
+            '.appendChild(arguments[0].cloneNode(true))'
+            '.parentNode.innerHTML',
+            web_elements)
+    return html
+
+
+class WebElement(selenium.webdriver.remote.webelement.WebElement):
+
+    query = None
+    query_all = None
+
+    def __init__(self, *args):
+        if len(args) == 1:
+            web_element = args[0]
+            assert isinstance(
+                web_element, selenium.webdriver.remote.webelement.WebElement)
+            parent, id_ = web_element.parent, web_element.id
+        elif len(args) == 2:
+            parent, id_ = args
+        else:
+            raise TypeError(
+                "__init__() takes 1 (web_element) or 2 (parent, id) arguments"
+                "(%d given)" % len(args))
+        selenium.webdriver.remote.webelement.WebElement.__init__(
+            self, parent, id_)
+        self.query = WebElementQuery(self, single=True)
+        self.query_all = WebElementQuery(self, single=False)
+
+    def type(self, *value):
+        return self.send_keys(*value)
+
+    def getHTML(self):
+        """Get HTML of WebElement."""
+        return getWebElementHTML(self.parent, self)
+
+    def __unicode__(self):
+        return self.getHTML()
+
+    __str__ = lambda self: unicode(self).encode('utf-8')
+
+
+def proxy_find_element(name):
+    def find_element(self, param):
+        if self._single:
+            method = getattr(self._target, "find_element_by_%s" % name)
+        else:
+            method = getattr(self._target, "find_elements_by_%s" % name)
+        return self._wrap(method(param))
+    return find_element
+
+
+class WebElementQuery(object):
+
+    _single = False
+    _target = None
+
+    def __init__(self, target, single=False):
+        self._target = target
+        self._single = single
+
+    def _wrap(self, web_element):
+        if isinstance(web_element, WebElement):
+            return web_element # already wrapped
+        elif isinstance(
+            web_element, selenium.webdriver.remote.webelement.WebElement):
+            return WebElement(web_element)
+        elif isinstance(web_element, dict):
+            return dict([(key, self._wrap(val))
+                         for key, val in web_element.items()])
+        elif isinstance(web_element, list):
+            return WebElementList([self._wrap(el) for el in web_element])
+        else:
+            return web_element
+
+    _link_text = proxy_find_element("link_text")
+    _partial_link_text = proxy_find_element("partial_link_text")
+
+    name = proxy_find_element("name")
+    id = proxy_find_element("id")
+    css = proxy_find_element("css_selector")
+    tag = proxy_find_element("tag_name")
+    xpath = proxy_find_element("xpath")
+
+    def link(self, text=None, url=None, partial=False):
+        if not ((url is not None) ^ (text is not None)):
+            raise Exception("Must specify either url or link text")
+        if partial:
+            if url is not None:
+                return self.xpath('//a[@href~="%s"]' % url)
+            return self._partial_link_text(text)
+        else:
+            if url is not None:
+                return self.xpath('//a[@href="%s"]' % url)
+            return self._link_text(text)
+
+    def button(self, text=None, name=None):
+        if not ((text is not None) ^ (name is not None)):
+            raise Exception("Must specify either button text or value")
+        if name is not None:
+            return self.xpath(
+                '//input[@type="submit" and @name="%s"]' % name)
+        return self.xpath(
+            '//input[@type="submit" and contains(@value, "%s")]' % text)
+
+    def form(self, some_selectors=None):
+        # XXX: return home-made wrapped form filler(s)
+        raise NotImplemented()
+
+
 class Browser(object):
 
     driver = None
     execute = None
+    query = None
+    query_all = None
 
     def __init__(self, pool, driver):
         self.pool = pool
         self.driver = driver
         self.execute = CommandExecutor(self.driver)
         self.execute.extractDriverCommands()
+        self.query = WebElementQuery(self.driver, single=True)
+        self.query_all = WebElementQuery(self.driver, single=False)
 
     def open(self, url="http://localhost/"):
         """Open an URL."""
@@ -133,25 +266,35 @@ class Browser(object):
         """Close the browser."""
         return self.driver.quit()
 
+    def execute_script(self, script, *args, **kw):
+        async = kw.get('async', False)
+        # XXX: missing:
+        raise NotImplemented()
+
+    # XXX: missing:
+    #  - screenshots
+    #  -
+    #  - window handles, and more
+
+    @property
+    def url(self):
+        return self.driver.current_url
+
+    @property
+    def title(self):
+        return self.driver.title
+
+    @property
+    def contents(self):
+        return self.driver.page_source
+
     def printHTML(self, web_element):
         """Print HTML of WebElement or a list of WebElement."""
         print self.getHTML(web_element)
 
     def getHTML(self, web_element):
         """Get HTML of WebElement or a list of WebElement."""
-        snippets = []
-        if isinstance(web_element, list):
-            for el in web_element:
-                snippets.append(self.getHTML(el))
-        else:
-            snippets.append(self.driver.execute_script(
-                'return document.createElement("div")'
-                '.appendChild(arguments[0].cloneNode(true))'
-                '.parentNode.innerHTML',
-                web_element))
-        html = '\n'.join(snippets)
-        # XXX: format output nicely here -- or in the output checker
-        return html
+        return getWebElementHTML(self.driver, web_element)
 
 
 class BrowserPool(object):
@@ -229,7 +372,8 @@ class SeleniumLayer(ZCMLLayer):
         self.thread = threading.Thread(target=self.poll_server)
         self.thread.setDaemon(True)
         self.thread.start()
-        print 'serving at', repr("%s:%s" % self.server.socket.getsockname())
+        print 'serving at http://%s:%s/' % (
+            self.server.socket.getsockname())
 
     def tearDown(self):
         self.serving = False
