@@ -53,6 +53,11 @@ class IBreadcrumbDirective(IContentOrientedDirective,
                            IBreadcrumbDirectiveBase):
     """Define the SchoolTool content provider."""
 
+    title = zope.configuration.fields.MessageID(
+        title=u"Title",
+        required=False,
+        )
+
     class_ = zope.configuration.fields.GlobalObject(
         title=u"Class",
         description=u"The breadcrumb view class.",
