@@ -29,6 +29,8 @@ import threading
 import unittest
 from StringIO import StringIO
 
+import selenium.webdriver.common.keys
+import selenium.webdriver.remote.webdriver
 import selenium.webdriver.remote.webelement
 from zope.app.wsgi import WSGIPublisherApplication
 from zope.app.server.wsgi import ServerType
@@ -236,6 +238,18 @@ class WebElementQuery(object):
         return self.xpath(
             '//input[@type="submit" and contains(@value, "%s")]' % text)
 
+    @property
+    def active(self):
+        """Return an active element."""
+        target = self._target
+        while not isinstance(
+            target, selenium.webdriver.remote.webdriver.WebDriver):
+            target = target.parent
+        active = target.switch_to_active_element()
+        if not self._single:
+            active = [active]
+        return self._wrap(active)
+
     def form(self, some_selectors=None):
         # XXX: return home-made wrapped form filler(s)
         raise NotImplemented()
@@ -248,6 +262,9 @@ class Browser(object):
     query = None
     query_all = None
 
+    # helpers
+    keys = None
+
     def __init__(self, pool, driver):
         self.pool = pool
         self.driver = driver
@@ -255,6 +272,7 @@ class Browser(object):
         self.execute.extractDriverCommands()
         self.query = WebElementQuery(self.driver, single=True)
         self.query_all = WebElementQuery(self.driver, single=False)
+        self.keys = selenium.webdriver.common.keys.Keys()
 
     def open(self, url="http://localhost/"):
         """Open an URL."""
@@ -265,6 +283,10 @@ class Browser(object):
     def close(self):
         """Close the browser."""
         return self.driver.quit()
+
+    def type(self, *keys):
+        el = self.driver.switch_to_active_element()
+        return el.send_keys(*keys)
 
     def execute_script(self, script, *args, **kw):
         async = kw.get('async', False)
