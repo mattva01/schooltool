@@ -35,6 +35,7 @@ import schooltool.skin.flourish.page
 from schooltool.basicperson.interfaces import IDemographicsFields
 from schooltool.basicperson.interfaces import IDemographics
 from schooltool.basicperson.demographics import DateFieldDescription
+from schooltool.basicperson.demographics import BoolFieldDescription
 from schooltool.basicperson.person import BasicPerson
 from schooltool.contact.contact import Contact, ContactPersonInfo
 from schooltool.contact.interfaces import IContact, IContactContainer
@@ -109,6 +110,7 @@ ERROR_UNICODE_CONVERSION = _(
     "Username cannot contain non-ascii characters: ${string}")
 ERROR_WEEKLY_DAY_ID = _('is not a valid weekday number (0-6)')
 ERROR_CONTACT_RELATIONSHIP = _("is not a valid contact relationship")
+ERROR_NOT_BOOLEAN = _("must be either True or False")
 
 
 no_date = object()
@@ -196,15 +198,45 @@ class ImporterBase(object):
         return value
 
     def getDateFromCell(self, sheet, row, col, default=no_date):
-        try:
-            dt = xlrd.xldate_as_tuple(sheet.cell_value(rowx=row, colx=col), self.wb.datemode)
-        except:
-            if default is not no_date:
-                return default
-            else:
+        value, found = self.getCellAndFound(sheet, row, col)
+        if not found or value == '':
+            if default is no_date:
                 self.error(row, col, ERROR_NO_DATE)
                 return None
+            else:
+                return default
+        try:
+            dt = xlrd.xldate_as_tuple(value, self.wb.datemode)
+        except:
+            self.error(row, col, ERROR_NO_DATE)
+            return None
         return datetime.datetime(*dt).date()
+
+    def getBoolFromCell(self, sheet, row, col):
+        value, found = self.getCellAndFound(sheet, row, col)
+        if not found:
+            return None
+        if type(value) == type(True):
+            return value
+        if type(value) == type(0):
+            return bool(value)
+        value, found, valid = self.getTextFoundValid(sheet, row, col)
+        if not valid or not value:
+            return None
+        if value.upper() == 'TRUE':
+            return True
+        elif value.upper() == 'FALSE':
+            return False
+        else:
+            self.error(row, col, ERROR_NOT_BOOLEAN)
+            return None
+
+    def getRequiredBoolFromCell(self, sheet, row, col):
+        value, found = self.getCellAndFound(sheet, row, col)
+        if not found or value == '':
+            self.error(row, col, ERROR_MISSING_REQUIRED_TEXT)
+            return None
+        return self.getBoolFromCell(sheet, row, col)
 
     def validateUnicode(self, value, row, col):
         # XXX: this has to be fixed
@@ -728,12 +760,23 @@ class PersonImporter(ImporterBase):
 
             demographics = IDemographics(person)
             for n, field in enumerate(fields.values()):
-                if isinstance(field, DateFieldDescription):
-                    value = self.getDateFromCell(sh, row, n + 10, default=None)
+                if field.required:
+                    if isinstance(field, DateFieldDescription):
+                        value = self.getDateFromCell(sh, row, n + 10)
+                    elif isinstance(field, BoolFieldDescription):
+                        value = self.getRequiredBoolFromCell(sh, row, n + 10)
+                    else:
+                        value = self.getRequiredTextFromCell(sh, row, n + 10)
                 else:
-                    value = self.getTextFromCell(sh, row, n + 10)
-                if value == '':
-                    value = None
+                    if isinstance(field, DateFieldDescription):
+                        value = self.getDateFromCell(sh, row, n + 10,
+                                                     default=None)
+                    elif isinstance(field, BoolFieldDescription):
+                        value = self.getBoolFromCell(sh, row, n + 10)
+                    else:
+                        value = self.getTextFromCell(sh, row, n + 10)
+                    if value == '':
+                        value = None
                 demographics[field.name] = value
 
             if num_errors == len(self.errors):
