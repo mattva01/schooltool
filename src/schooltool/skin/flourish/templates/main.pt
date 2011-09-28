@@ -10,26 +10,22 @@
     <!-- zc.resourcelibrary -->
     <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu:regular,bold&subset=Latin" />
     <tal:block content="structure view/providers/html_head|nothing" />
-    <!--
-    <title i18n:translate="">
-      SchoolTool -
-      <tal:block i18n:name="title"
-                 content="view/title"
+    <title>
+      <tal:block content="view/title"
                  condition="view/title">
         Title
       </tal:block>
-      <tal:block i18n:name="alternative_title"
-                 content="context/@@title"
+      <tal:block content="context/schooltool:content/title"
                  condition="not:view/title">
-        Title
+        Alternative Title
       </tal:block>
-      <tal:block i18n:name="subtitle"
-                 content="view/subtitle"
-                 condition="view/subtitle">
-        Subtitle
+      <tal:block condition="view/subtitle">
+        »
+        <span tal:replace="view/subtitle">
+          Subtitle
+        </span>
       </tal:block>
     </title>
-    -->
   </head>
   <body>
     <tal:block replace="resource_library:schooltool.skin.flourish" />
@@ -43,7 +39,7 @@
           [ | Header | Navigation | Bar | Here | ]
         </tal:block>
         <tal:block replace="structure view/providers/breadcrumbs|nothing">
-          [ Breadcrumbs >> go >> here ]
+          [ Breadcrumbs » go » here ]
         </tal:block>
         <tal:block replace="structure view/providers/secondary_navigation|nothing">
           [ | Secondary | Navigation | Bar | Here | ]
