@@ -15,7 +15,7 @@ site-definition ${abspath}/site.zcml
 #
 # event-logging on|off
 #
-#   Enables or disables global event logging to /utils/eventlog
+#   Enables or disables global event logging
 #
 # Default:
 #   event-logging off

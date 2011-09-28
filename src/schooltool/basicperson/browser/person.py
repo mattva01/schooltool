@@ -1010,7 +1010,7 @@ class AddPersonViewlet(object):
 
 class PersonTitle(ContentProvider):
     render = InlineViewPageTemplate('''
-        <span tal:content="view/title"></span>
+        <span tal:replace="view/title"></span>
     '''.strip())
 
     def title(self):

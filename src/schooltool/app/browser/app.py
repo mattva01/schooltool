@@ -705,7 +705,7 @@ class TitleView(BrowserView):
 
 class ContentTitle(ContentProvider):
     render = InlineViewPageTemplate('''
-        <span tal:content="view/title"></span>
+        <span tal:replace="structure view/title"></span>
     '''.strip())
 
     @property

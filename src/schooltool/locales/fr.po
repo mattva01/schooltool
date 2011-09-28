@@ -15,8 +15,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-05-27 04:32+0000\n"
-"X-Generator: Launchpad (build 12959)\n"
+"X-Launchpad-Export-Date: 2011-09-10 04:32+0000\n"
+"X-Generator: Launchpad (build 13900)\n"
 "X-Rosetta-Version: 0.1\n"
 
 #: /src/schooltool/app/app.py:197
@@ -4932,7 +4932,7 @@ msgstr "Section rapports"
 #: /src/schooltool/report/browser/templates/report_reference.pt:3
 #: /src/schooltool/report/browser/templates/report_reference.pt:7
 msgid "Report Reference"
-msgstr ""
+msgstr "Référence du rapport"
 
 #: /src/schooltool/report/browser/templates/report_reference.pt:13
 msgid "Category"
@@ -4940,7 +4940,7 @@ msgstr "Catégorie"
 
 #: /src/schooltool/resource/browser/configure.zcml:96
 msgid "Resource Demographics"
-msgstr ""
+msgstr "Ressources démographiques"
 
 #: /src/schooltool/resource/browser/configure.zcml:143
 #: /src/schooltool/resource/browser/resource-csvimport.pt:21
@@ -5808,7 +5808,7 @@ msgstr "Emplois du temps hors champ."
 
 #: /src/schooltool/timetable/browser/__init__.py:513
 msgid "Show consecutive periods as one period in journal"
-msgstr ""
+msgstr "Afficher les périodes consécutives en une période dans le journal"
 
 #: /src/schooltool/timetable/browser/__init__.py:614
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:107
@@ -5822,11 +5822,11 @@ msgstr "Emploi du temps de l'école"
 
 #: /src/schooltool/timetable/browser/__init__.py:691
 msgid "Apply from"
-msgstr ""
+msgstr "Appliquer depuis"
 
 #: /src/schooltool/timetable/browser/__init__.py:693
 msgid "Apply until"
-msgstr ""
+msgstr "Appliquer Jusqu'à"
 
 #: /src/schooltool/timetable/browser/__init__.py:794
 msgid "Timetable conflicts with another:"
@@ -5834,7 +5834,7 @@ msgstr "Emploi du temps en conflit avec un autre :"
 
 #: /src/schooltool/timetable/browser/__init__.py:802
 msgid "Timetable does not fit in term"
-msgstr ""
+msgstr "L'emploi du temps ne doit pas dépasser le terme"
 
 #: /src/schooltool/timetable/browser/__init__.py:805
 msgid "Timetable must begin before it ends."
@@ -6049,7 +6049,7 @@ msgstr "Gérer..."
 
 #: /src/schooltool/timetable/browser/templates/confirm-timetable-delete.pt:15
 msgid "Are you sure you want to unschedule this timetable?"
-msgstr ""
+msgstr "Etes vous sûre de vouloir supprimer cet emploi du temps ?"
 
 #: /src/schooltool/timetable/browser/templates/confirm-timetable-delete.pt:27
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:48
@@ -6064,7 +6064,7 @@ msgstr "Aucune période n'est sélectionnée"
 #: /src/schooltool/timetable/browser/templates/confirm-timetable-delete.pt:67
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:89
 msgid "Scheduled from ${from} until ${until}"
-msgstr ""
+msgstr "Programmé depuis ${from} jusqu'à ${until}"
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:4
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:10
@@ -6134,7 +6134,7 @@ msgstr "Programmé pour ${section}"
 #: /src/schooltool/timetable/browser/templates/section-timetable-add.pt:25
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:31
 msgid "For term: ${term_title} (from ${starts} to ${ends})"
-msgstr ""
+msgstr "Pour le terme : ${term_title} (du ${starts} au ${ends})"
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-setup.pt:17
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:19
@@ -6147,7 +6147,7 @@ msgstr "Choisisez l'emploi du temps scolaire à utiliser"
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:17
 msgid "Time table schedule of ${courses} ${section}."
-msgstr ""
+msgstr "Emploi du temps prévu pour ${courses} ${section}."
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:25
 msgid "school days"
@@ -6175,7 +6175,7 @@ msgstr "(éditer les périodes)"
 
 #: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:91
 msgid "Consecutive periods are treated as a single meeting."
-msgstr ""
+msgstr "Des périodes consécutives sont traitées comme une seule réunion"
 
 #: /src/schooltool/timetable/browser/templates/simpletts.pt:11
 msgid ""
@@ -6281,11 +6281,11 @@ msgstr "Utilise l'emploi du temps : ${schema_titles}"
 
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:97
 msgid "Apply from:"
-msgstr ""
+msgstr "s'applique depuis"
 
 #: /src/schooltool/timetable/browser/templates/timetable-edit.pt:111
 msgid "Apply until:"
-msgstr ""
+msgstr "S'applique jusqu'à"
 
 #: /src/schooltool/timetable/browser/templates/timetable-schema-container.pt:40
 msgid "Default Timetable Schema:"

@@ -30,6 +30,7 @@ from zope.publisher.browser import BrowserView
 from schooltool.basicperson.demographics import DateFieldDescription
 from schooltool.basicperson.interfaces import IDemographics, IBasicPerson
 from schooltool.basicperson.interfaces import IDemographicsFields
+from schooltool.common import SchoolToolMessage as _
 from schooltool.group.interfaces import IGroupContainer
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolCalendar
@@ -107,6 +108,8 @@ class ExcelExportView(BrowserView):
             borders = []
         if data is None:
             data = ""
+        if type(data) == type(True):
+            data = str(data)
         key = (bold, color, format_str, tuple(borders))
         style = self._style_cache.get(key, None)
         if style is None:
@@ -464,11 +467,8 @@ class MegaExporter(SchoolTimetableExportView):
         items = []
         for person in self.context['persons'].values():
             items.append(IContact(person))
-            for contact in IContactable(person).contacts:
-                items.append(contact)
         for contact in IContactContainer(self.context).values():
-            if contact not in items:
-                items.append(contact)
+            items.append(contact)
 
         return self.format_table(fields, items)
 
@@ -487,8 +487,13 @@ class MegaExporter(SchoolTimetableExportView):
                         URIPerson, contact, URIContact, URIContactRelationship)
                 except ValueError:
                     continue
+                target_person = IBasicPerson(contact.__parent__, None)
+                if target_person is None:
+                    name = contact.__name__
+                else:
+                    name = target_person.username
                 item = ContactRelationship(person.username,
-                    link.target.__name__, link.extra_info.relationship)
+                    name, link.extra_info.relationship)
                 items.append(item)
 
         return self.format_table(fields, items)

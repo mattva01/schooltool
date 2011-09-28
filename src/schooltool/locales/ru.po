@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2011-09-08 14:13+0300\n"
-"PO-Revision-Date: 2011-04-24 21:36+0000\n"
-"Last-Translator: Nkolay Parukhin <parukhin@gmail.com>\n"
+"PO-Revision-Date: 2011-09-15 05:30+0000\n"
+"Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-05-27 04:37+0000\n"
-"X-Generator: Launchpad (build 12959)\n"
+"X-Launchpad-Export-Date: 2011-09-16 04:30+0000\n"
+"X-Generator: Launchpad (build 13955)\n"
 "X-Rosetta-Version: 0.1\n"
 
 #: /src/schooltool/app/app.py:197
@@ -54,7 +54,7 @@ msgstr "Текущие руководители"
 
 #: /src/schooltool/app/browser/app.py:324
 msgid "Available leaders"
-msgstr "Имеющиеся руководители"
+msgstr "Доступные руководители"
 
 #: /src/schooltool/app/browser/app.py:347
 msgid "school"
@@ -346,7 +346,7 @@ msgstr "Добавить новое мероприятие, начинающее
 #: /src/schooltool/timetable/browser/schema.py:268
 #: /src/schooltool/timetable/browser/ttwizard.py:239
 msgid "Title"
-msgstr "Заголовок"
+msgstr "Название"
 
 #: /src/schooltool/app/browser/cal.py:1738
 #: /src/schooltool/app/browser/templates/cal_monthly.pt:38
