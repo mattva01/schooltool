@@ -8,16 +8,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-17 23:49+0300\n"
-"PO-Revision-Date: 2011-04-01 18:34+0000\n"
-"Last-Translator: Dick Chen <Unknown>\n"
+"POT-Creation-Date: 2011-09-08 14:13+0300\n"
+"PO-Revision-Date: 2011-05-12 06:37+0000\n"
+"Last-Translator: Elvisqin <qinyi1234@gmail.com>\n"
 "Language-Team: Chinese (China) <i18n-zh@googlegroups.com>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-04-08 04:40+0000\n"
-"X-Generator: Launchpad (build 12735)\n"
+"X-Launchpad-Export-Date: 2011-09-10 04:39+0000\n"
+"X-Generator: Launchpad (build 13900)\n"
 
 #: /src/schooltool/app/app.py:197
 msgid "Your School"
@@ -642,35 +642,12 @@ msgstr "翻译域名"
 msgid "Generations"
 msgstr "版本"
 
-#: /src/schooltool/app/browser/configure.zcml:666
-msgid "Browser UI"
-msgstr "浏览界面"
-
-#: /src/schooltool/app/browser/configure.zcml:672
-#: /src/schooltool/app/browser/templates/login.pt:3
-#: /src/schooltool/app/browser/templates/menu_view.pt:3
-msgid "Login"
-msgstr "登录"
-
-#: /src/schooltool/app/browser/configure.zcml:678
-#: /src/schooltool/app/browser/configure.zcml:765
+#: /src/schooltool/app/browser/configure.zcml:714
 #: /src/schooltool/devmode/devmode.pt:17
 msgid "Errors"
 msgstr "错误"
 
-#: /src/schooltool/app/browser/configure.zcml:690
-msgid "Application"
-msgstr "应用"
-
-#: /src/schooltool/app/browser/configure.zcml:696
-msgid "Calendar Widget"
-msgstr "日历"
-
-#: /src/schooltool/app/browser/configure.zcml:702
-msgid "Templates"
-msgstr "模板"
-
-#: /src/schooltool/app/browser/configure.zcml:781
+#: /src/schooltool/app/browser/configure.zcml:730
 msgid "Configure"
 msgstr "配置"
 
@@ -1379,6 +1356,11 @@ msgstr "组群"
 msgid "Levels"
 msgstr "级别"
 
+#: /src/schooltool/app/browser/templates/login.pt:3
+#: /src/schooltool/app/browser/templates/menu_view.pt:3
+msgid "Login"
+msgstr "登录"
+
 #: /src/schooltool/app/browser/templates/login.pt:8
 msgid "Your session has expired."
 msgstr "你的会话到期"
@@ -1749,383 +1731,6 @@ msgstr "CSV 数据"
 msgid "submit-button"
 msgstr "确认"
 
-#: /src/schooltool/app/configure.zcml:340
-msgid "Security (General)"
-msgstr "安全性（一般）"
-
-#: /src/schooltool/app/configure.zcml:355
-msgid "Booking Resources"
-msgstr "预定资源"
-
-#: /src/schooltool/app/help/admin.pt:6
-msgid "SchoolTool Administration"
-msgstr "SchooTool 管理员"
-
-#: /src/schooltool/app/help/admin.pt:8
-msgid ""
-"<h1>SchoolTool Administration</h1> <p>Schools have complex structures, "
-"spanning the organization of people, pedagogy, time and physical resources. "
-"Unfortunately, this means that an application that seeks to model these "
-"processes, like SchoolTool, is also complex, and the process of setting up "
-"an individual school in SchoolTool is necessarily an involved one.</p> "
-"<p>This branch of the help tree contains items relevant to administrators "
-"configuring SchoolTool, but not end users.</p>"
-msgstr ""
-"<h1>SchoolTool 管理</h1> <p>学校具有复杂的结构，包括人、教学工作、时间和物资"
-"的组织。不幸的是，这意味着像 SchoolTool 这样的为这些过程创建模型的应用会很复"
-"杂，在 SchoolTool 中创立一个学校也必然不简单。 </p> <p>此帮助分支包括与 "
-"SchoolTool 管理相关的内容，与终端用户无关。</p>"
-
-#: /src/schooltool/app/help/calendar_selection.pt:6
-#: /src/schooltool/app/help/configure.zcml:97
-msgid "Calendar Selection"
-msgstr "日历选择"
-
-#: /src/schooltool/app/help/calendar_selection.pt:8
-msgid ""
-"<h1>Calendar Selection</h1> <p>You can add color-coded events from multiple "
-"calendars to your personal calendar view. You can add events from course "
-"sections you attend, groups, other people, or even resources like classrooms "
-"or projectors.</p> <p>Some calendars are private or limited to certain "
-"groups.</p> <p>On the calendar selection form you are given lists of all the "
-"calendars available to you. This might be a long list.</p> <p>The "
-"\"SchoolTool site-wide calendar\" is intended to be used as the official "
-"public calendar of the school.</p> <h3>How do I...</h3> <ul> "
-"<li><strong>Select or unselect several individual calendars of one type:</"
-"strong> If you press the <code>Ctrl</code> button on your keyboard while you "
-"select calendars from a list with your mouse, you can select multiple "
-"calendars.</li> <li><strong>Select a range of calendars of one type:</"
-"strong> If you press the <code>Shift</code> key while clicking on calendars, "
-"you can select a range.</li> </ul>"
-msgstr ""
-"<h1>日历选择</h1> <p>你可以添加颜色代码到多个日历及你的个人日历视图。你可以添"
-"加事件到你所关注的课程阶段、团体、其他人，以及教室或投影机等资源。</p> <p>有"
-"些日历是私人的或受限于某些团体。</p> <p>在日历上以你所选择的形式给出你的全部"
-"可用日历列表。这可能是一个很长的列表。</p> <p>该“SchoolTool 站点日历”的目的是"
-"作为学校官方的公共日历。</p> <h3>如何操作...</h3> <ul> <li><strong>选择或取消"
-"选择某种类型的一些个别日历：</strong>如果你在按住键盘上的<code>Ctrl</code>键"
-"的同时，用鼠标从列表中选择日历，你可以选择多个日历。</li> <li><strong>连续选"
-"择某种类型日历：</strong>如果你在按住<code>Shift</code>键的同时单击日历，你可"
-"以选择一个范围。</li> </ul>"
-
-#: /src/schooltool/app/help/calendaring.pt:6
-msgid "Calendaring in SchoolTool"
-msgstr "SchoolTool中的日历"
-
-#: /src/schooltool/app/help/calendaring.pt:8
-msgid ""
-"<h1>Calendaring in SchoolTool</h1> <p>SchoolTool includes a full-featured "
-"calendaring system, similar to Apple iCal or Google Calendar, but capable of "
-"representing complex school timetables, including rotating schedules. "
-"SchoolTool is also useful for simple resource scheduling, allowing you to "
-"manage room assignments, and booking shared resources like computers or "
-"projectors. Each person, group, course section or resource has its own "
-"calendar. You may integrate multiple calendars into your personal calendar "
-"views.</p> <h3>Parts of the standard calendar views</h3> <ul> "
-"<li><strong>Calendar table:</strong> fills the main (lower-right) part of "
-"the page. This represents the calendar for one day, week, month or year, "
-"depending on the view..</li> <li><strong>Calendar navigation bar:</strong> "
-"immediately above the calendar table. Allows you to navigate forward or "
-"backward in time, or to return to the current time.</li> "
-"<li><strong>Calendar title:</strong> immediately above the calendar "
-"navigation bar, lists the owner of this calendar and the date for this \"page"
-"\" of the calendar.</li> <li><strong>Left sidebar:</strong> for all "
-"calendars, this contains a <code>Jump to...</code> section containing menus "
-"and links to allow you to quickly navigate to a specific month, year or "
-"date. <br /> If you are logged in and viewing your own calendar, you will "
-"also see a <code>Calendars</code> section at the top of the sidebar which "
-"allows you to \"overlay\" events from other calendars in this view. You may "
-"see calendars for classes you teach or attend listed here already.</li> "
-"<li><strong>Day/week/month/year buttons:</strong> These buttons allow you to "
-"switch between daily, weekly, monthly and annual views.</li> </ul>"
-msgstr ""
-"<h1>SchoolTool 的日程系统</h1> <p>SchoolTool 包含了一个全功能的日程系统，类似"
-"于 Apple iCal 及 Google 日历，但有能力处理学校的复杂事务，例如循环时间表。 "
-"SchoolTool 也可用做简单的资源安排，允许您管理宿舍分配或共享资源（例如电脑，投"
-"影仪之类）。每个人、组、课程或资源都有自己的日历。您可以将多个日历整合成您自"
-"己的日历。</p> <h3>标准日历视图的部分</h3> <ul> <li><strong>日历表：</"
-"strong> 在页面的主要部分（右下部）是一天，一月或一年之内的日历（取决于您的视"
-"图）。</li> <li><strong>日历导航栏：</strong> 在日历表的上方。允许您查看当前"
-"时间或之前之后的日历。</li> <li><strong>日历标题:</strong>在日历导航栏上，显"
-"示日历的所有者及当前“页”的日期。</li> <li><strong>左侧边栏：</strong> 所有的"
-"日历都有一个 <code>跳至...</code> 以便您能够快速地跳至一个指定的日，月或年。"
-"<br />如果您登录后正在查看您自己的日历，您还会看到在侧边栏的上部有一个 <code>"
-"日历</code> 来允许您从视图中其他日历来“覆盖”该日历中的事件。您可能会看到日历"
-"上有您已经教或参加的课程。</li> <li><strong>天/周/月/年按钮：</strong>这些按"
-"钮允许您在天/周/月/年视图中切换。</li> </ul>"
-
-#: /src/schooltool/app/help/configure.zcml:13
-msgid "Administration"
-msgstr "管理员"
-
-#: /src/schooltool/app/help/configure.zcml:21
-msgid "Organization"
-msgstr "组织"
-
-#: /src/schooltool/app/help/configure.zcml:29
-msgid "Calendaring"
-msgstr "日程安排"
-
-#: /src/schooltool/app/help/configure.zcml:37
-#: /src/schooltool/app/help/daily_calendar.pt:6
-msgid "Daily Calendar"
-msgstr "日日历"
-
-#: /src/schooltool/app/help/configure.zcml:47
-#: /src/schooltool/app/help/weekly_calendar.pt:6
-msgid "Weekly Calendar"
-msgstr "周日历"
-
-#: /src/schooltool/app/help/configure.zcml:57
-#: /src/schooltool/app/help/monthly_calendar.pt:6
-msgid "Monthly Calendar"
-msgstr "月日历"
-
-#: /src/schooltool/app/help/configure.zcml:67
-#: /src/schooltool/app/help/yearly_calendar.pt:6
-msgid "Yearly Calendar"
-msgstr "年日历"
-
-#: /src/schooltool/app/help/daily_calendar.pt:8
-msgid ""
-"<h1>Daily Calendar</h1> <p>This is the daily view of a calendar. It might be "
-"your calendar, or it might be the calendar of another person, group or "
-"resource in your school. <a href=\"/++help++/schooltool/calendaring\">More "
-"calendaring help...</a></p> <h3>How do I...</h3> <ul> <li><strong>Create an "
-"event:</strong> click in the calendar table at the start time for the event. "
-"Or select <code>New Event</code> from the <code>Actions</code> menu.</li> "
-"<li><strong>Book a resource:</strong> create an event starting at the time "
-"you want to reserve the resource. Select <code>Book Resource</code> in the "
-"Event Information form.</li> <li><strong>Show or hide events in one of the "
-"calendars listed under <code>Calendars</code>:</strong> check or uncheck the "
-"box under <code>Cal</code> and click <code>Apply</code>.</li> "
-"<li><strong>Adding or removing calendars to the <code>Calendars</code> list:"
-"</strong> click on the <code>More...</code> button.</li> <li><strong>access "
-"a iCal format version of the calendar:</strong>: Select <code>Open in iCal</"
-"code> from the Action menu.</li> <li><strong>Access an Atom feed version of "
-"the calendar: </strong> append <code>/atom.xml</code> to the calendar's URL."
-"</li> </ul>"
-msgstr ""
-"<h1>单天日历</h1> <p>这是日历的单天视图。它可能是你的日历，或者是学校其他人、"
-"团体或资源的日历。<a href=\"/++help++/schooltool/calendaring\">更多日历帮"
-"助...</a></p> <h3>如何操作...</h3> <ul> <li><strong>创建一个活动：</strong>单"
-"击日历表中的活动开始时间，或从<code>动作</code>菜单选择 <code>新建活动</"
-"code>。</li> <li><strong>预订资源：</strong>创建活动开始时要准备资源。在活动"
-"信息表单里选中<code>预订资源</code>。</li> <li><strong>显示或隐藏在<code>日历"
-"</code>下列出的日历活动：</strong> 复选或取消复选<code>日历</code>下的小方"
-"框，并单击<code>应用</code>。</li> <li><strong> 在<code>日历</code> 列表中添"
-"加或删除日历：</strong>单击 <code>更多...</code>按钮。</li> <li><strong>访问"
-"iCal格式版本的日历：</strong>从动作菜单选择<code>在 iCal 中打开</code>。</"
-"li> <li><strong>访问 Atom 馈送版本的日历：</strong> 附加 <code>/atom.xml</"
-"code> 到日历网址。</li> </ul>"
-
-#: /src/schooltool/app/help/event_add.pt:10
-#: /src/schooltool/app/help/event_edit.pt:10
-msgid "This form has a few issues:"
-msgstr "这个表单存在一些问题:"
-
-#: /src/schooltool/app/help/event_add.pt:12
-msgid ""
-"If you need to reserve a resource, such as a room or a projector, tracked by "
-"SchoolTool at your school, you should create an event for the necessary time "
-"and check the <code>Book Resources</code> checkbox at the bottom of the page."
-msgstr ""
-"如果您需要保留一项学校的资源，例如一间教室或一个投影仪，同时这些资源是被 "
-"SchoolTool 管理着的，您应该创建一个有必要时间的事件，同时够选这页底部的 "
-"<code>资源预订</code> 选择框。"
-
-#: /src/schooltool/app/help/event_add.pt:16
-#: /src/schooltool/app/help/event_edit.pt:14
-msgid ""
-"The form ignores your preferences for time and date format. You must enter "
-"the event's start time in 24-hour or \"military\" time, and the date is "
-"displayed in year-month-day format."
-msgstr ""
-"由于您输入的日期和时间格式有误，此表单忽略了您的设置。请您将事件开始时间更正"
-"为24小时制格式或者“军事”时间格式(例如1500代表15点整)，同时日期将被以年－月－"
-"日格式显示。"
-
-#: /src/schooltool/app/help/event_add.pt:19
-#: /src/schooltool/app/help/event_edit.pt:17
-msgid ""
-"The <code>Location</code> field allows you to enter a description of the "
-"location of the event, but this is not connected to the reservation system. "
-"If your school uses SchoolTool to manage room reservations you need to check "
-"the <code>Book Resources</code> checkbox at the bottom of the form."
-msgstr ""
-"<code>位置</code>字段使您能够加入一个关于时间位置的描述，但这与预定系统无"
-"关。 如果你们学校使用 SchoolTool 管理房间预定， 那您需要勾选表格底部的<code>"
-"预定资源</code> 复选框。"
-
-#: /src/schooltool/app/help/event_add.pt:24
-#: /src/schooltool/app/help/event_edit.pt:22
-msgid ""
-"If your event repeats in some pattern, check the <code>Recurring</code> box "
-"and fill out the new fields that appear. In certain circumstances (like if "
-"you change the original day of a weekly recurring event) you may need to "
-"click the <code>Update form</code> button to update the recurrence fields."
-msgstr ""
-"如果事件以一定模式重复，选中<code>循环</code>框并填写显示的相应字段。特定情况"
-"下（比如您更改了一个周循环事件的起始日期）您应点击<code>更新表单</code>按钮来"
-"更新循环字段。"
-
-#: /src/schooltool/app/help/event_add.pt:29
-#: /src/schooltool/app/help/event_edit.pt:27
-msgid ""
-"An \"all day\" event does not show up as a 24 hour event. It indicates that "
-"the day as a whole has some significance, like a birthday or holiday."
-msgstr ""
-"“全天”事件将不会被显示为24小时事件。这样的事件将按照生日或假日形式显示。"
-
-#: /src/schooltool/app/help/event_add.pt:32
-#: /src/schooltool/app/help/event_edit.pt:30
-msgid ""
-"\"Exception dates\" are specific dates a repeating event skips, such as "
-"holidays."
-msgstr "“排除日期”是为了一些重复性时间设置的跳过的日期，例如节假日。"
-
-#: /src/schooltool/app/help/event_edit.pt:12
-msgid ""
-"If you need to edit a resource reservation, click the <code>Book resources</"
-"code> link at the bottom of the form."
-msgstr "如果您需要编辑一项资源预订，请点击表单底部的<code>资源预订</code>链接"
-
-#: /src/schooltool/app/help/monthly_calendar.pt:8
-msgid ""
-"<h1>Monthly Calendar</h1> <p>This is the monthly view of a calendar. It "
-"might be your calendar, or it might be the calendar of another person, group "
-"or resource in your school. <a href=\"/++help++/schooltool/calendaring"
-"\">More calendaring help...</a></p> <h3>How do I...</h3> <ul> "
-"<li><strong>View an individual day or event in more detail:</strong> click "
-"on the appropriate day on the calendar.</li> <li><strong>View an individual "
-"week:</strong> Click on the appropriate week number in blue in the leftmost "
-"column of the calendar.</li> <li><strong>Create an event:</strong> select "
-"<code>New Event</code> from the <code>Actions</code> menu.</li> "
-"<li><strong>Show or hide events in one of the calendars listed under "
-"<code>Calendars</code>:</strong> check or uncheck the box under <code>Cal</"
-"code> and click <code>Apply</code>.</li> <li><strong>Adding or removing "
-"calendars to the <code>Calendars</code> list:</strong> click on the "
-"<code>More...</code> button.</li> <li><strong>Make weeks start on the "
-"correct day:</strong> the first day of the week varies in different parts of "
-"the world. If SchoolTool isn't set up correctly for you, click on your name "
-"in the red bar at the top of the page. Then click on the <code>Actions</"
-"code> menu and select <code>Change Preferences</code>. Pick the correct "
-"\"Week starts on\" day and hit <code>Apply</code>.</li> <li><strong>Access a "
-"iCal format version of the calendar:</strong>: select <code>Open in iCal</"
-"code> from the Action menu.</li> </ul>"
-msgstr ""
-"<h1>月际日程表</h1> <p>这是日程表的月际视图。这可能是您的日程表，也可能是学校"
-"另一个人、组或资源的。<a href=\"/++help++/schooltool/calendaring\">更多日程表"
-"帮助...</a></p> <h3>如何...</h3> <ul> <li><strong>更详细地察看某一天或事件："
-"</strong>单击日程表上的某一天。</li> <li><strong>察看某一星期：</strong>单击"
-"日程表最左边一列上蓝色的周数。</li> <li><strong>创建事件：</strong>在<code>动"
-"作</code>菜单中选择<code>新事件</code>。</li> <li><strong>显示或删除列于"
-"<code>日程表</code>内日程表中的事件：</strong>点击<code>日程</code>下的复选框"
-"并单击<code>应用</code>。</li> <li><strong>添加或删除<code>日程表</code>列表"
-"中的日程表：</strong>单击<code>更多</code>按钮。</li> <li><strong>使星期起始"
-"于正确的一天：</strong>星期中的第一天在世界各地各有不同。若 SchoolTool 当前的"
-"配置对您不正确，单击页面顶部红色栏上您的名字。单击<code>动作</code>目录并选择"
-"<code>更改首选项</code>。选中正确的“星期起始于”并单击 <code>应用</code>。</"
-"li> <li><strong>访问日程表的 iCal 版本：</strong>在动作菜单中选择<code>在 "
-"iCal 中打开</code>。</li> </ul>"
-
-#: /src/schooltool/app/help/org.pt:6
-msgid "SchoolTool Organization"
-msgstr "SchoolTool组织"
-
-#: /src/schooltool/app/help/org.pt:8
-msgid ""
-"<h1>SchoolTool Organization</h1> <p>This branch of the help tree contains "
-"items explaining the basic organization of SchoolTool.</p>"
-msgstr ""
-"<h1>SchoolTool 组织</h1> <p>该目录分支包含解释 SchoolTool 基本组织的条目。</"
-"p>"
-
-#: /src/schooltool/app/help/schooltool.pt:8
-msgid ""
-"<h1>SchoolTool</h1> <p>SchoolTool is a free/libre administrative system for "
-"schools around the world, funded by The Shuttleworth Foundation.</p> "
-"<h2>Standard User Interface Conventions in SchoolTool</h2> <ul> "
-"<li><strong>Red top bar</strong></li> <ul> <li><strong>Breadcrumbs:</strong> "
-"the links at the left hand side of the red bar show you where you are in "
-"SchoolTool's object hierarchy. Note that this doesn't necessarily lead you "
-"back to where you came from, but is handy for taking you from more specific "
-"to more general parts of the application.</li> <li><strong>Your name</"
-"strong> (if you're logged in): clicking on your name takes you to a simple "
-"dashboard of relevant links. From this page you can also use the "
-"<code>Actions</code> menu to change preferences and other personal settings."
-"</li> <li><strong>Log in/out:</strong> this logs you in or out. It is a good "
-"idea to log out when you aren't using SchoolTool.</li> <li><strong>Help:</"
-"strong> if there is a help file for the page you're looking at, you'll see "
-"this link.</li> </ul> <li><strong>Menus</strong></li> <ul> "
-"<li><strong>Navigation:</strong> this menu gives you some basic options for "
-"accessing different parts of SchoolTool, such as the index of persons or "
-"courses. What you see here depends on your permissions in the system.</li> "
-"<li><strong>Action:</strong> this menu contains a variety of things that you "
-"can do on the current page. The entries in this menu change considerably "
-"based on what page you're viewing and what permissions you have.</li> </ul> "
-"<li><strong>Above the red bar</strong></li> <ul> <li><strong>Logo & School "
-"Name:</strong> clicking in this area will take you to the top of the "
-"school's site, usually the calendar for the school.</li> "
-"<li><strong>Calendar day/week/month/year views:</strong> if you are viewing "
-"a calendar, you will find icons in the upper right hand corner that will "
-"allow you to switch between calendar views.</li> <li><strong>Devmode menu:</"
-"strong> if you are a site administrator and you've enabled \"devmode\" in "
-"schooltool.conf, you will see a special menu in the upper right hand corner "
-"of the site. You should disable devmode in any production server.</li> </ul> "
-"</ul>"
-msgstr ""
-
-#: /src/schooltool/app/help/weekly_calendar.pt:8
-msgid ""
-"<h1>Weekly Calendar</h1> <p>This is the weekly view of a calendar. It might "
-"be your calendar, or it might be the calendar of another person, group or "
-"resource in your school. <a href=\"/++help++/schooltool/calendaring\">More "
-"calendaring help...</a></p> <h3>How do I...</h3> <ul> <li><strong>View an "
-"individual day in more detail:</strong> click on the appropriate day in the "
-"blue row of the calendar table.</li> <li><strong>View details about an event "
-"or edit it:</strong> click on the event. If you have the correct permissions "
-"for the event you can edit it.</li> <li><strong>Create an event:</strong> "
-"select the day the event starts and create the event in the daily view.</li> "
-"<li><strong>Show or hide events in one of the calendars listed under "
-"<code>Calendars</code>:</strong> check or uncheck the box under <code>Cal</"
-"code> and click <code>Apply</code>.</li> <li><strong>Adding or removing "
-"calendars to the <code>Calendars</code> list:</strong> click on the "
-"<code>More...</code> button.</li> <li><strong>Make the calendar start on the "
-"correct day:</strong> the first day of the week varies in different parts of "
-"the world. If SchoolTool isn't set up correctly for you, click on your name "
-"in the red bar at the top of the page. Then click on the <code>Actions</"
-"code> menu and select <code>Change Preferences</code>. Pick the correct "
-"\"Week starts on\" day and hit <code>Apply</code>.</li> <li><strong>Access a "
-"iCal format version of the calendar:</strong>: select <code>Open in iCal</"
-"code> from the Action menu.</li> </ul>"
-msgstr ""
-
-#: /src/schooltool/app/help/yearly_calendar.pt:8
-msgid ""
-"<h1>Yearly Calendar</h1> <p>This is the year view of a calendar. It might be "
-"your calendar, or it might be the calendar of another person, group or "
-"resource in your school. <a href=\"/++help++/schooltool/calendaring\">More "
-"calendaring help...</a></p> <h3>How do I...</h3> <ul> <li><strong>Know which "
-"days contain events: if the day has a blue background, there is at least one "
-"event that day.</strong></li> <li><strong>View an individual day in more "
-"detail:</strong> click on the day.</li> <li><strong>View an individual month:"
-"</strong> click on the name of the month.</li> <li><strong>Create an event:</"
-"strong> select the day the event starts and create the event in the daily "
-"view.</li> <li><strong>Show or hide events in one of the calendars listed "
-"under <code>Calendars</code>:</strong> check or uncheck the box under "
-"<code>Cal</code> and click <code>Apply</code>.</li> <li><strong>Adding or "
-"removing calendars to the <code>Calendars</code> list:</strong> click on the "
-"<code>More...</code> button.</li> <li><strong>Make the calendar start on the "
-"correct day:</strong> the first day of the week varies in different parts of "
-"the world. If SchoolTool isn't set up correctly for you, click on your name "
-"in the red bar at the top of the page. Then click on the <code>Actions</"
-"code> menu and select <code>Change Preferences</code>. Pick the correct "
-"\"Week starts on\" day and hit <code>Apply</code>.</li> <li><strong>Access a "
-"iCal format version of the calendar:</strong>: select <code>Open in iCal</"
-"code> from the Action menu.</li> </ul>"
-msgstr ""
-
 #: /src/schooltool/app/interfaces.py:44
 msgid "Form input is not a file object"
 msgstr "表单输入不是一个文件对象"
@@ -2225,7 +1830,27 @@ msgstr ""
 "                         是 '-')\n"
 "  --manage               只进行管理任务，不运行服务\n"
 
-#: /src/schooltool/app/main.py:110
+#: /src/schooltool/app/main.py:327
+msgid "Going to background, daemon pid %d"
+msgstr "后台处理，后台程序 pid %d"
+
+#: /src/schooltool/app/main.py:382
+msgid "Cannot resolve plugin action order:\n"
+msgstr "无法解决插件动作请求：\n"
+
+#: /src/schooltool/app/main.py:528
+msgid "Run %s -h for help."
+msgstr "运行 %s -h 得到帮助"
+
+#: /src/schooltool/app/main.py:549
+msgid "%s: daemon mode not supported on your operating system."
+msgstr "%s:你的操作系统不支持后台运行"
+
+#: /src/schooltool/app/main.py:575
+msgid "Reading configuration from %s"
+msgstr "从 %s 读入配置"
+
+#: /src/schooltool/app/main.py:574
 msgid ""
 "\n"
 "No storage defined in the configuration file.\n"
@@ -2239,37 +1864,11 @@ msgstr ""
 "如果您正在使用默认配置文件，清现在编辑它\n"
 "并选择 ZODB 储存选项。\n"
 
-#: /src/schooltool/app/main.py:335
-msgid "Going to background, daemon pid %d"
-msgstr "后台处理，后台程序 pid %d"
-
-#: /src/schooltool/app/main.py:382
-msgid "Cannot resolve plugin action order:\n"
-msgstr "无法解决插件动作请求：\n"
-
-#: /src/schooltool/app/main.py:536 /src/schooltool/app/main.py:580
-#: /src/schooltool/app/main.py:583
-msgid "%s: %s"
-msgstr "%s: %s"
-
-#: /src/schooltool/app/main.py:537
-msgid "Run %s -h for help."
-msgstr "运行 %s -h 得到帮助"
-
-#: /src/schooltool/app/main.py:549
-msgid "%s: daemon mode not supported on your operating system."
-msgstr "%s:你的操作系统不支持后台运行"
-
-#: /src/schooltool/app/main.py:575
-msgid "Reading configuration from %s"
-msgstr "从 %s 读入配置"
-
-#: /src/schooltool/app/main.py:671
+#: /src/schooltool/app/main.py:666
 msgid "Startup time: %.3f sec real, %.3f sec CPU"
 msgstr "启动时间: %.3f sec real, %.3f sec CPU"
 
-#. Default: ""
-#: /src/schooltool/app/main.py:705
+#: /src/schooltool/app/main.py:700
 msgid ""
 "Could not initialize the database:\n"
 "%s"
@@ -2320,7 +1919,7 @@ msgstr "本组成员"
 
 #: /src/schooltool/app/security.py:309
 msgid "Assigned leaders."
-msgstr ""
+msgstr "指定的领导者"
 
 #. Default: ""
 #: /src/schooltool/app/security.py:353
@@ -2422,7 +2021,7 @@ msgstr "新增人员"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:107
 msgid "Add Multiple Persons"
-msgstr ""
+msgstr "添加多位用户"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:129
 #: /src/schooltool/basicperson/security.zcml:22
@@ -2501,7 +2100,7 @@ msgstr "用户名不能包含非ASCII以外的字符."
 
 #: /src/schooltool/basicperson/browser/demographics.py:85
 msgid "Duplicate entry \"${value}\""
-msgstr ""
+msgstr "重复的条目 \"${value}\""
 
 #: /src/schooltool/basicperson/browser/demographics.py:90
 msgid "Value too long \"${value}\""
@@ -2832,7 +2431,7 @@ msgstr "ID"
 
 #: /src/schooltool/basicperson/interfaces.py:126
 msgid "Unique ID of this Field Description"
-msgstr ""
+msgstr "此字段描述的唯一ID"
 
 #: /src/schooltool/basicperson/interfaces.py:129
 msgid "Required"
@@ -2840,15 +2439,15 @@ msgstr "必需的"
 
 #: /src/schooltool/basicperson/interfaces.py:130
 msgid "Whether this Field is required or not"
-msgstr ""
+msgstr "是否需要这个字段"
 
 #: /src/schooltool/basicperson/interfaces.py:145
 msgid "Limit keys"
-msgstr ""
+msgstr "限制密钥"
 
 #: /src/schooltool/basicperson/interfaces.py:146
 msgid "An optional list of limit keys for this field"
-msgstr ""
+msgstr "该字段的限制密钥可选列表"
 
 #: /src/schooltool/basicperson/interfaces.py:161
 msgid "List of values"
@@ -3502,6 +3101,69 @@ msgstr "已教章节"
 msgid "Section of ${course} -- ${section_title} for ${term} of ${schoolyear}"
 msgstr ""
 
+#: /src/schooltool/course/browser/templates/extend_term.pt:4
+msgid "Extend Section to Term"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/extend_term.pt:18
+msgid ""
+"Click \"Extend\" to create a linked section in term \"${from_term_title}\" "
+"containing the students and instructors from section \"${section_title}\" in "
+"term \"${to_term_title}\"."
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/extend_term.pt:27
+msgid "Extend"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/link_existing.pt:4
+msgid "Link Section to Section in Other Term"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/link_existing.pt:13
+#: /src/schooltool/course/browser/templates/link_existing.pt:52
+#: /src/schooltool/course/browser/templates/section_container.pt:39
+#: /src/schooltool/course/browser/templates/unlink_section.pt:13
+#: /src/schooltool/course/browser/templates/unlink_section.pt:28
+msgid "Section"
+msgstr "节"
+
+#: /src/schooltool/course/browser/templates/link_existing.pt:20
+#: /src/schooltool/course/browser/templates/unlink_section.pt:19
+#: /src/schooltool/course/browser/templates/unlink_section.pt:29
+#: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:24
+msgid "Term"
+msgstr "学期"
+
+#: /src/schooltool/course/browser/templates/link_existing.pt:21
+msgid "Target Term"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/link_existing.pt:26
+msgid ""
+"Select a section and click 'Link' if you would like to copy and link this "
+"section to the target section."
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/link_existing.pt:30
+msgid ""
+"You may provide part of an instructor's name or username and click 'Filter' "
+"to limit the list of sections to those taught by a matching instructor."
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/link_existing.pt:35
+msgid "You must select a section before clicking 'Link'."
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/link_existing.pt:46
+msgid "Filter"
+msgstr ""
+
+#. Default: "Link"
+#: /src/schooltool/course/browser/templates/link_section.pt:130
+msgid "link-section-button"
+msgstr ""
+
 #: /src/schooltool/course/browser/templates/link_section.pt:24
 msgid "Link ${section}, ${term} with a section in ${target_term}"
 msgstr ""
@@ -3510,20 +3172,7 @@ msgstr ""
 msgid "There is no valid term in ${schoolyear} to pick a section from."
 msgstr ""
 
-#. Default: "Link"
-#: /src/schooltool/course/browser/templates/link_section.pt:130
-msgid "link-section-button"
-msgstr ""
-
-#: /src/schooltool/course/browser/templates/section.pt:36
-msgid "Previous: ${course} -- ${section_title} for ${term}"
-msgstr ""
-
-#: /src/schooltool/course/browser/templates/section.pt:47
-msgid "Next: ${course} -- ${section_title} for ${term}"
-msgstr ""
-
-#: /src/schooltool/course/browser/templates/section.pt:58
+#: /src/schooltool/course/browser/templates/section.pt:35
 msgid "Change the name or description of this section."
 msgstr "请改变这个区域的姓名和注释"
 
@@ -3531,7 +3180,18 @@ msgstr "请改变这个区域的姓名和注释"
 msgid "edit info"
 msgstr "编辑信息"
 
-#: /src/schooltool/course/browser/templates/section.pt:87
+#: /src/schooltool/course/browser/templates/section.pt:46
+#: /src/schooltool/course/browser/templates/section_edit.pt:60
+msgid "Linked sections"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/section.pt:52
+#: /src/schooltool/course/browser/templates/section_edit.pt:72
+#: /src/schooltool/course/browser/templates/section_edit.pt:106
+msgid "${section_title} for ${term}"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/section.pt:65
 msgid "Change the instructors for this section."
 msgstr "更改该章节的讲师"
 
@@ -3552,25 +3212,12 @@ msgstr "编辑讲师"
 msgid "Section list for ${term} of ${schoolyear}"
 msgstr ""
 
-#: /src/schooltool/course/browser/templates/section_container.pt:39
-msgid "Section"
-msgstr "节"
-
-#: /src/schooltool/course/browser/templates/section_edit.pt:60
-msgid "Linked sections"
-msgstr ""
-
 #: /src/schooltool/course/browser/templates/section_edit.pt:63
 msgid "Previous"
 msgstr "上一个"
 
 #: /src/schooltool/course/browser/templates/section_edit.pt:64
 msgid "Section in the previous term."
-msgstr ""
-
-#: /src/schooltool/course/browser/templates/section_edit.pt:72
-#: /src/schooltool/course/browser/templates/section_edit.pt:106
-msgid "${section_title} for ${term}"
 msgstr ""
 
 #. Default: "Unlink"
@@ -3602,24 +3249,32 @@ msgstr "下一步"
 
 #: /src/schooltool/course/browser/templates/section_edit.pt:98
 msgid "Section in the next term."
+msgstr "下学期的小组"
+
+#: /src/schooltool/course/browser/templates/section_linkage.pt:4
+msgid "All Terms for Section"
 msgstr ""
 
-#: /src/schooltool/course/help/course_container.pt:10
+#: /src/schooltool/course/browser/templates/section_linkage.pt:42
+msgid "Unlink this Section"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/section_linkage.pt:62
+msgid "Extend to This Term"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/section_linkage.pt:66
+msgid "Link an Existing Section"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/unlink_section.pt:4
+msgid "Unlink Section"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/unlink_section.pt:23
 msgid ""
-"<h1>Courses</h1> <p>Use this page to organize courses listed in the system.</"
-"p> <h3>How do I...</h3> <ul> <li><strong>Look for for a course:</strong> Use "
-"the search box to the left of the <code>Find Now</code> button to look "
-"through the entire list of courses for the search criterion. The "
-"<code>Clear</code> button empties the search box of current entries.</li> "
-"<li><strong>Show a list of the different sections of a course:</strong> "
-"click on the name of the course.</li> <li><strong>Show the lists of students "
-"in a particular class:</strong> Click on the <code>teacher -- course</code> "
-"link. The number of students is also listed next to the teacher and the "
-"course.</li> <li><strong>Navigate through the courses:</strong> Separate "
-"<q>batches</q> of the Course list can be accessed through the <code>Next 10</"
-"code> (and <code>Previous</code>) and links in the blue bar. A <code>Show "
-"All</code> button is also there to show all of the courses on a single page."
-"</li> </ul>"
+"Click 'Unlink' if you would like to remove the link this section has to the "
+"following section(s):"
 msgstr ""
 
 #: /src/schooltool/course/interfaces.py:37
@@ -3681,15 +3336,15 @@ msgstr ""
 
 #: /src/schooltool/course/section.py:124
 msgid "Cannot assign section as previous to itself"
-msgstr ""
+msgstr "阶段不能被指定为自己的前一阶段"
 
 #: /src/schooltool/course/section.py:151
 msgid "Cannot assign section as next to itself"
-msgstr ""
+msgstr "阶段不能被指定为自己的下一阶段"
 
 #: /src/schooltool/course/section.py:282
 msgid "Instructors of the section."
-msgstr ""
+msgstr "该小组的老师。"
 
 #: /src/schooltool/course/section.py:292
 msgid "Instructors of a person in any of his sections."
@@ -3701,7 +3356,7 @@ msgstr ""
 
 #: /src/schooltool/course/section.py:316
 msgid "Students of the section."
-msgstr ""
+msgstr "该小组的学生。"
 
 #: /src/schooltool/course/section.py:394
 msgid "Cannot link sections in same term"
@@ -3725,7 +3380,7 @@ msgstr ""
 msgid ""
 "Basic information about sections, including rosters, is visible to the "
 "general public."
-msgstr ""
+msgstr "小组的基本信息，包括名册，对公众开放。"
 
 #: /src/schooltool/course/security.zcml:74
 msgid ""
@@ -3766,7 +3421,7 @@ msgstr "修改"
 msgid ""
 "A section is a set of one or more learners                    who meet "
 "during a term."
-msgstr ""
+msgstr "小组是一位以上同期共同上课的学生组成的。"
 
 #: /src/schooltool/dashboard/configure.zcml:41
 msgid "My Sections"
@@ -4138,24 +3793,10 @@ msgstr "搜索"
 msgid "Surname"
 msgstr "姓"
 
-#: /src/schooltool/devmode/configure.zcml:27
-msgid "Introspect"
-msgstr ""
-
-#: /src/schooltool/devmode/configure.zcml:38
-#: /src/schooltool/devmode/devmode.pt:19
-msgid "API Docs"
-msgstr "API 文档"
-
-#: /src/schooltool/devmode/configure.zcml:50
+#: /src/schooltool/devmode/configure.zcml:52
 #: /src/schooltool/devmode/devmode.pt:20
 msgid "Sample data"
 msgstr "示例数据"
-
-#: /src/schooltool/devmode/configure.zcml:62
-#: /src/schooltool/devmode/devmode.pt:21
-msgid "Setup data"
-msgstr "设置数据"
 
 #: /src/schooltool/devmode/devmode.pt:11
 msgid "Developer Tools"
@@ -4164,6 +3805,10 @@ msgstr "开发工具"
 #: /src/schooltool/devmode/devmode.pt:18
 msgid "Introspector"
 msgstr ""
+
+#: /src/schooltool/devmode/devmode.pt:19
+msgid "API Docs"
+msgstr "API 文档"
 
 #: /src/schooltool/email/browser/configure.zcml:54
 msgid "Outgoing Email"
@@ -4757,27 +4402,8 @@ msgstr "管理该人员的组群属性"
 msgid "edit groups"
 msgstr "编辑组群"
 
-#: /src/schooltool/group/help/group_container.pt:8
-msgid ""
-"<h1>Groups</h1> <p>Use this page to keep track of <b>groups</b> of Persons.</"
-"p> <p><b>Groups</b> that have been added are not part of the essential "
-"groups (<b>Teachers</b>, <b>Students</b>, <b>Site Managers</b>, <b>School "
-"Administrators</b>, or <b>Clerks</b>). They can be selected by the checkbox "
-"next to them and removed by pressing the <b>Delete</b> button at the bottom "
-"of the page.</p> <h3>How do I...</h3> <ul> <li><b>Look for for a group:</b> "
-"Use the search box to the left of the <code>Find Now</code> button to look "
-"through the entire list of groups for the search criterion. The <code>Clear</"
-"code> button empties the search box of current entries.</li> <li><b>View the "
-"persons in a certain group:</b> Click on the name of the group.</li> "
-"<li><b>Sort the list:</b> Click on the <code>Title</code> header to change "
-"the order of groups from descending to ascending order, and vice versa.</li> "
-"<li><strong>Browse for a group:</strong> Use the <code>Next 10</code> (and "
-"<code>Previous</code>) and links in the blue bar.</li> <li><strong>Show all "
-"groups:</strong> Click <code>Show All</code> in the blue bar.</li> </ul>"
-msgstr ""
-
 #: /src/schooltool/group/interfaces.py:41
-#: /src/schooltool/securitypolicy/interfaces.py:109
+#: /src/schooltool/securitypolicy/interfaces.py:111
 msgid "Title of the group."
 msgstr "组群标题"
 
@@ -4825,14 +4451,6 @@ msgstr ""
 msgid "Groups are essentially sets of users."
 msgstr ""
 
-#: /src/schooltool/help/configure.zcml:47
-msgid "Contextual Help"
-msgstr "上下文帮助"
-
-#: /src/schooltool/help/helplink.pt:2
-msgid "Help"
-msgstr "帮助"
-
 #: /src/schooltool/level/browser.py:47
 msgid "Add a level"
 msgstr ""
@@ -4869,10 +4487,6 @@ msgstr ""
 #: /src/schooltool/note/configure.zcml:68
 msgid "New Note"
 msgstr "新建注解"
-
-#: /src/schooltool/note/configure.zcml:100
-msgid "Notes (Rest)"
-msgstr "通知(休息)"
 
 #: /src/schooltool/note/interfaces.py:43
 msgid "Title of the note."
@@ -5039,20 +4653,6 @@ msgstr "编辑人员参数"
 msgid "Change preferences for ${user}"
 msgstr "更改 ${user} 参数"
 
-#: /src/schooltool/person/help/person_container.pt:8
-msgid ""
-"<h1>Persons</h1> <p>Use this page to browse and find individual persons.</p> "
-"<h3>How do I...</h3> <ul> <li><strong>Sort the list:</strong> Click on "
-"<code>First Name</code> or <code>Last Name</code> to sort.</li> "
-"<li><strong>Search for a user:</strong> Use the search field at the top of "
-"the page to look through all of the people in the system. If you want to "
-"filter by group, select the group in the adjacent drop-down list.</li> "
-"<li><strong>View the details of a person:</strong> Click on the name.</li> "
-"<li><strong>Browse for a person:</strong> Use the <code>Next 10</code> (and "
-"<code>Previous</code>) and links in the blue bar.</li> <li><strong>Show all "
-"students:</strong> Click <code>Show All</code> in the blue bar.</li> </ul>"
-msgstr ""
-
 #: /src/schooltool/person/interfaces.py:157
 msgid "Time Zone"
 msgstr "时区"
@@ -5172,16 +4772,12 @@ msgstr ""
 msgid "Everybody, if the calendar is made public in user preferences."
 msgstr ""
 
-#: /src/schooltool/relationship/configure.zcml:13
-msgid "Relationships"
-msgstr "关系"
-
 #: /src/schooltool/report/browser/configure.zcml:8
-#: /src/schooltool/report/browser/configure.zcml:22
-#: /src/schooltool/report/browser/configure.zcml:33
-#: /src/schooltool/report/browser/configure.zcml:44
-#: /src/schooltool/report/browser/configure.zcml:55
-#: /src/schooltool/report/browser/configure.zcml:66
+#: /src/schooltool/report/browser/configure.zcml:23
+#: /src/schooltool/report/browser/configure.zcml:34
+#: /src/schooltool/report/browser/configure.zcml:45
+#: /src/schooltool/report/browser/configure.zcml:56
+#: /src/schooltool/report/browser/configure.zcml:67
 msgid "Reports"
 msgstr "汇报"
 
@@ -5322,11 +4918,7 @@ msgstr ""
 msgid "Edit equipment"
 msgstr ""
 
-#: /src/schooltool/resource/help/resource_help.pt:6
-msgid "Resource Help"
-msgstr "资源帮助"
-
-#: /src/schooltool/resource/interfaces.py:38
+#: /src/schooltool/resource/interfaces.py:45
 msgid "Title of the resource."
 msgstr "资源标题"
 
@@ -5705,19 +5297,6 @@ msgstr ""
 msgid "The super user - owner of this SchoolTool application."
 msgstr ""
 
-#: /src/schooltool/setupdata/setupdata.pt:3
-#: /src/schooltool/setupdata/setupdata.pt:9
-msgid "Initial School Setup Scripts"
-msgstr ""
-
-#: /src/schooltool/setupdata/setupdata.pt:14
-msgid ""
-"Warning: proceeding will populate the database with data generated from "
-"scripts installed on the filesystem of this server. Do not do this if you "
-"have any valuable data in this SchoolTool instance or don't already "
-"understand what this is for."
-msgstr ""
-
 #: /src/schooltool/skin/breadcrumbs.py:76
 msgid "top"
 msgstr "顶部"
@@ -5772,10 +5351,6 @@ msgstr "您可能写错了url"
 #: /src/schooltool/skin/templates/notfound.pt:22
 msgid "You might be trying to access a non-existing page"
 msgstr "您可能试图访问一个不存在的页面"
-
-#: /src/schooltool/skin/templates/onlinehelp_macros.pt:55
-msgid "SchoolTool Onlinehelp"
-msgstr "SchoolTool 在线帮助"
 
 #: /src/schooltool/skin/templates/view_macros.pt:45
 msgid "Log In"
@@ -6047,37 +5622,6 @@ msgstr "为  ${term_title} 更改信息"
 #: /src/schooltool/term/browser/term.py:291
 msgid "Term must begin before it ends."
 msgstr "学期必须在它结束前开始。"
-
-#: /src/schooltool/term/help/configure.zcml:8
-msgid "Add a term"
-msgstr "添加一个学期"
-
-#: /src/schooltool/term/help/term_add.pt:6
-msgid "Term Search Help"
-msgstr "学期搜索帮助"
-
-#: /src/schooltool/term/help/term_container.pt:6
-msgid "Terms in SchoolTool"
-msgstr "SchoolTool 的项目"
-
-#: /src/schooltool/term/help/term_container.pt:8
-msgid ""
-"<h1>Terms in SchoolTool</h1> <p>SchoolTool supports definition of basic "
-"academic terms, that is, a period of time which defines when sections begin "
-"and end, and when they are evaluated. The current implementation does not "
-"support a hierarchy of terms, for example, a year, which contains two "
-"semesters, which contain two marking periods. You can create several terms, "
-"which may overlap, for example, both semesters and trimesters in the same "
-"school, but you cannot express a relationship between terms.</p> <h3>How do "
-"I...</h3> <ul> <li><strong>Add a term:</strong> Select <code>New Term</code> "
-"from the <code>Actions</code> menu.</li> <li><strong>Edit a term:</strong> "
-"Click on the term. Then select <code>Edit</code> from the <code>Actions</"
-"code> menu.</li> <li><strong>Delete a term:</strong> Check the box next to "
-"the name of the term and click <code>Delete</code>. Only delete terms if you "
-"have made a mistake while creating them but you have not used them yet. You "
-"should <strong>not</strong> delete terms simply because they are over, or "
-"you will lose important data.</li> </ul>"
-msgstr ""
 
 #: /src/schooltool/term/term.py:306
 msgid "Term date is not in the school year."
@@ -6352,10 +5896,6 @@ msgstr "没有定义学期或者课程表。"
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:22
 msgid "Timetable"
 msgstr "时间表"
-
-#: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:24
-msgid "Term"
-msgstr "学期"
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:34
 msgid "Schema"
@@ -6751,26 +6291,311 @@ msgstr "改变计划"
 msgid "Supplied passwords are not identical"
 msgstr "输入的密码不相同"
 
-#~ msgid "Location: %s"
-#~ msgstr "位置：%s"
+#~ msgid "Browser UI"
+#~ msgstr "浏览界面"
 
-#~ msgid "Required input is missing."
-#~ msgstr "缺少必需的输入"
+#~ msgid "Application"
+#~ msgstr "应用"
 
-#~ msgid "Access control"
-#~ msgstr "访问控制"
+#~ msgid "Calendar Widget"
+#~ msgstr "日历"
 
-#~ msgid "Add a Section"
-#~ msgstr "添加章节"
+#~ msgid "Templates"
+#~ msgstr "模板"
 
-#~ msgid "Booked resources: %s"
+#~ msgid "Security (General)"
+#~ msgstr "安全性（一般）"
+
+#~ msgid "Booking Resources"
 #~ msgstr "预定资源"
 
-#~ msgid "Calendar for %s"
-#~ msgstr "%s 的日程表"
+#~ msgid "SchoolTool Administration"
+#~ msgstr "SchooTool 管理员"
 
-#~ msgid "Change the resources for this section."
-#~ msgstr "改变这个区域的资源"
+#~ msgid ""
+#~ "<h1>SchoolTool Administration</h1> <p>Schools have complex structures, "
+#~ "spanning the organization of people, pedagogy, time and physical "
+#~ "resources. Unfortunately, this means that an application that seeks to "
+#~ "model these processes, like SchoolTool, is also complex, and the process "
+#~ "of setting up an individual school in SchoolTool is necessarily an "
+#~ "involved one.</p> <p>This branch of the help tree contains items relevant "
+#~ "to administrators configuring SchoolTool, but not end users.</p>"
+#~ msgstr ""
+#~ "<h1>SchoolTool 管理</h1> <p>学校具有复杂的结构，包括人、教学工作、时间和物"
+#~ "资的组织。不幸的是，这意味着像 SchoolTool 这样的为这些过程创建模型的应用会"
+#~ "很复杂，在 SchoolTool 中创立一个学校也必然不简单。 </p> <p>此帮助分支包括"
+#~ "与 SchoolTool 管理相关的内容，与终端用户无关。</p>"
+
+#~ msgid "Calendar Selection"
+#~ msgstr "日历选择"
+
+#~ msgid ""
+#~ "<h1>Calendar Selection</h1> <p>You can add color-coded events from "
+#~ "multiple calendars to your personal calendar view. You can add events "
+#~ "from course sections you attend, groups, other people, or even resources "
+#~ "like classrooms or projectors.</p> <p>Some calendars are private or "
+#~ "limited to certain groups.</p> <p>On the calendar selection form you are "
+#~ "given lists of all the calendars available to you. This might be a long "
+#~ "list.</p> <p>The \"SchoolTool site-wide calendar\" is intended to be used "
+#~ "as the official public calendar of the school.</p> <h3>How do I...</h3> "
+#~ "<ul> <li><strong>Select or unselect several individual calendars of one "
+#~ "type:</strong> If you press the <code>Ctrl</code> button on your keyboard "
+#~ "while you select calendars from a list with your mouse, you can select "
+#~ "multiple calendars.</li> <li><strong>Select a range of calendars of one "
+#~ "type:</strong> If you press the <code>Shift</code> key while clicking on "
+#~ "calendars, you can select a range.</li> </ul>"
+#~ msgstr ""
+#~ "<h1>日历选择</h1> <p>你可以添加颜色代码到多个日历及你的个人日历视图。你可"
+#~ "以添加事件到你所关注的课程阶段、团体、其他人，以及教室或投影机等资源。</"
+#~ "p> <p>有些日历是私人的或受限于某些团体。</p> <p>在日历上以你所选择的形式给"
+#~ "出你的全部可用日历列表。这可能是一个很长的列表。</p> <p>该“SchoolTool 站点"
+#~ "日历”的目的是作为学校官方的公共日历。</p> <h3>如何操作...</h3> <ul> "
+#~ "<li><strong>选择或取消选择某种类型的一些个别日历：</strong>如果你在按住键"
+#~ "盘上的<code>Ctrl</code>键的同时，用鼠标从列表中选择日历，你可以选择多个日"
+#~ "历。</li> <li><strong>连续选择某种类型日历：</strong>如果你在按住"
+#~ "<code>Shift</code>键的同时单击日历，你可以选择一个范围。</li> </ul>"
+
+#~ msgid "Calendaring in SchoolTool"
+#~ msgstr "SchoolTool中的日历"
+
+#~ msgid ""
+#~ "<h1>Calendaring in SchoolTool</h1> <p>SchoolTool includes a full-featured "
+#~ "calendaring system, similar to Apple iCal or Google Calendar, but capable "
+#~ "of representing complex school timetables, including rotating schedules. "
+#~ "SchoolTool is also useful for simple resource scheduling, allowing you to "
+#~ "manage room assignments, and booking shared resources like computers or "
+#~ "projectors. Each person, group, course section or resource has its own "
+#~ "calendar. You may integrate multiple calendars into your personal "
+#~ "calendar views.</p> <h3>Parts of the standard calendar views</h3> <ul> "
+#~ "<li><strong>Calendar table:</strong> fills the main (lower-right) part of "
+#~ "the page. This represents the calendar for one day, week, month or year, "
+#~ "depending on the view..</li> <li><strong>Calendar navigation bar:</"
+#~ "strong> immediately above the calendar table. Allows you to navigate "
+#~ "forward or backward in time, or to return to the current time.</li> "
+#~ "<li><strong>Calendar title:</strong> immediately above the calendar "
+#~ "navigation bar, lists the owner of this calendar and the date for this "
+#~ "\"page\" of the calendar.</li> <li><strong>Left sidebar:</strong> for all "
+#~ "calendars, this contains a <code>Jump to...</code> section containing "
+#~ "menus and links to allow you to quickly navigate to a specific month, "
+#~ "year or date. <br /> If you are logged in and viewing your own calendar, "
+#~ "you will also see a <code>Calendars</code> section at the top of the "
+#~ "sidebar which allows you to \"overlay\" events from other calendars in "
+#~ "this view. You may see calendars for classes you teach or attend listed "
+#~ "here already.</li> <li><strong>Day/week/month/year buttons:</strong> "
+#~ "These buttons allow you to switch between daily, weekly, monthly and "
+#~ "annual views.</li> </ul>"
+#~ msgstr ""
+#~ "<h1>SchoolTool 的日程系统</h1> <p>SchoolTool 包含了一个全功能的日程系统，"
+#~ "类似于 Apple iCal 及 Google 日历，但有能力处理学校的复杂事务，例如循环时间"
+#~ "表。 SchoolTool 也可用做简单的资源安排，允许您管理宿舍分配或共享资源（例如"
+#~ "电脑，投影仪之类）。每个人、组、课程或资源都有自己的日历。您可以将多个日历"
+#~ "整合成您自己的日历。</p> <h3>标准日历视图的部分</h3> <ul> <li><strong>日历"
+#~ "表：</strong> 在页面的主要部分（右下部）是一天，一月或一年之内的日历（取决"
+#~ "于您的视图）。</li> <li><strong>日历导航栏：</strong> 在日历表的上方。允许"
+#~ "您查看当前时间或之前之后的日历。</li> <li><strong>日历标题:</strong>在日历"
+#~ "导航栏上，显示日历的所有者及当前“页”的日期。</li> <li><strong>左侧边栏：</"
+#~ "strong> 所有的日历都有一个 <code>跳至...</code> 以便您能够快速地跳至一个指"
+#~ "定的日，月或年。<br />如果您登录后正在查看您自己的日历，您还会看到在侧边栏"
+#~ "的上部有一个 <code>日历</code> 来允许您从视图中其他日历来“覆盖”该日历中的"
+#~ "事件。您可能会看到日历上有您已经教或参加的课程。</li> <li><strong>天/周/"
+#~ "月/年按钮：</strong>这些按钮允许您在天/周/月/年视图中切换。</li> </ul>"
+
+#~ msgid "Administration"
+#~ msgstr "管理员"
+
+#~ msgid "Organization"
+#~ msgstr "组织"
+
+#~ msgid "Calendaring"
+#~ msgstr "日程安排"
+
+#~ msgid "Daily Calendar"
+#~ msgstr "日日历"
+
+#~ msgid "Weekly Calendar"
+#~ msgstr "周日历"
+
+#~ msgid "Monthly Calendar"
+#~ msgstr "月日历"
+
+#~ msgid "Yearly Calendar"
+#~ msgstr "年日历"
+
+#~ msgid ""
+#~ "<h1>Daily Calendar</h1> <p>This is the daily view of a calendar. It might "
+#~ "be your calendar, or it might be the calendar of another person, group or "
+#~ "resource in your school. <a href=\"/++help++/schooltool/calendaring"
+#~ "\">More calendaring help...</a></p> <h3>How do I...</h3> <ul> "
+#~ "<li><strong>Create an event:</strong> click in the calendar table at the "
+#~ "start time for the event. Or select <code>New Event</code> from the "
+#~ "<code>Actions</code> menu.</li> <li><strong>Book a resource:</strong> "
+#~ "create an event starting at the time you want to reserve the resource. "
+#~ "Select <code>Book Resource</code> in the Event Information form.</li> "
+#~ "<li><strong>Show or hide events in one of the calendars listed under "
+#~ "<code>Calendars</code>:</strong> check or uncheck the box under "
+#~ "<code>Cal</code> and click <code>Apply</code>.</li> <li><strong>Adding or "
+#~ "removing calendars to the <code>Calendars</code> list:</strong> click on "
+#~ "the <code>More...</code> button.</li> <li><strong>access a iCal format "
+#~ "version of the calendar:</strong>: Select <code>Open in iCal</code> from "
+#~ "the Action menu.</li> <li><strong>Access an Atom feed version of the "
+#~ "calendar: </strong> append <code>/atom.xml</code> to the calendar's URL.</"
+#~ "li> </ul>"
+#~ msgstr ""
+#~ "<h1>单天日历</h1> <p>这是日历的单天视图。它可能是你的日历，或者是学校其他"
+#~ "人、团体或资源的日历。<a href=\"/++help++/schooltool/calendaring\">更多日"
+#~ "历帮助...</a></p> <h3>如何操作...</h3> <ul> <li><strong>创建一个活动：</"
+#~ "strong>单击日历表中的活动开始时间，或从<code>动作</code>菜单选择 <code>新"
+#~ "建活动</code>。</li> <li><strong>预订资源：</strong>创建活动开始时要准备资"
+#~ "源。在活动信息表单里选中<code>预订资源</code>。</li> <li><strong>显示或隐"
+#~ "藏在<code>日历</code>下列出的日历活动：</strong> 复选或取消复选<code>日历"
+#~ "</code>下的小方框，并单击<code>应用</code>。</li> <li><strong> 在<code>日"
+#~ "历</code> 列表中添加或删除日历：</strong>单击 <code>更多...</code>按钮。</"
+#~ "li> <li><strong>访问iCal格式版本的日历：</strong>从动作菜单选择<code>在 "
+#~ "iCal 中打开</code>。</li> <li><strong>访问 Atom 馈送版本的日历：</strong> "
+#~ "附加 <code>/atom.xml</code> 到日历网址。</li> </ul>"
+
+#~ msgid "This form has a few issues:"
+#~ msgstr "这个表单存在一些问题:"
+
+#~ msgid ""
+#~ "If you need to reserve a resource, such as a room or a projector, tracked "
+#~ "by SchoolTool at your school, you should create an event for the "
+#~ "necessary time and check the <code>Book Resources</code> checkbox at the "
+#~ "bottom of the page."
+#~ msgstr ""
+#~ "如果您需要保留一项学校的资源，例如一间教室或一个投影仪，同时这些资源是被 "
+#~ "SchoolTool 管理着的，您应该创建一个有必要时间的事件，同时够选这页底部的 "
+#~ "<code>资源预订</code> 选择框。"
+
+#~ msgid ""
+#~ "The form ignores your preferences for time and date format. You must "
+#~ "enter the event's start time in 24-hour or \"military\" time, and the "
+#~ "date is displayed in year-month-day format."
+#~ msgstr ""
+#~ "由于您输入的日期和时间格式有误，此表单忽略了您的设置。请您将事件开始时间更"
+#~ "正为24小时制格式或者“军事”时间格式(例如1500代表15点整)，同时日期将被以年－"
+#~ "月－日格式显示。"
+
+#~ msgid ""
+#~ "The <code>Location</code> field allows you to enter a description of the "
+#~ "location of the event, but this is not connected to the reservation "
+#~ "system. If your school uses SchoolTool to manage room reservations you "
+#~ "need to check the <code>Book Resources</code> checkbox at the bottom of "
+#~ "the form."
+#~ msgstr ""
+#~ "<code>位置</code>字段使您能够加入一个关于时间位置的描述，但这与预定系统无"
+#~ "关。 如果你们学校使用 SchoolTool 管理房间预定， 那您需要勾选表格底部的"
+#~ "<code>预定资源</code> 复选框。"
+
+#~ msgid ""
+#~ "If your event repeats in some pattern, check the <code>Recurring</code> "
+#~ "box and fill out the new fields that appear. In certain circumstances "
+#~ "(like if you change the original day of a weekly recurring event) you may "
+#~ "need to click the <code>Update form</code> button to update the "
+#~ "recurrence fields."
+#~ msgstr ""
+#~ "如果事件以一定模式重复，选中<code>循环</code>框并填写显示的相应字段。特定"
+#~ "情况下（比如您更改了一个周循环事件的起始日期）您应点击<code>更新表单</"
+#~ "code>按钮来更新循环字段。"
+
+#~ msgid ""
+#~ "An \"all day\" event does not show up as a 24 hour event. It indicates "
+#~ "that the day as a whole has some significance, like a birthday or holiday."
+#~ msgstr ""
+#~ "“全天”事件将不会被显示为24小时事件。这样的事件将按照生日或假日形式显示。"
+
+#~ msgid ""
+#~ "\"Exception dates\" are specific dates a repeating event skips, such as "
+#~ "holidays."
+#~ msgstr "“排除日期”是为了一些重复性时间设置的跳过的日期，例如节假日。"
+
+#~ msgid ""
+#~ "If you need to edit a resource reservation, click the <code>Book "
+#~ "resources</code> link at the bottom of the form."
+#~ msgstr ""
+#~ "如果您需要编辑一项资源预订，请点击表单底部的<code>资源预订</code>链接"
+
+#~ msgid ""
+#~ "<h1>Monthly Calendar</h1> <p>This is the monthly view of a calendar. It "
+#~ "might be your calendar, or it might be the calendar of another person, "
+#~ "group or resource in your school. <a href=\"/++help++/schooltool/"
+#~ "calendaring\">More calendaring help...</a></p> <h3>How do I...</h3> <ul> "
+#~ "<li><strong>View an individual day or event in more detail:</strong> "
+#~ "click on the appropriate day on the calendar.</li> <li><strong>View an "
+#~ "individual week:</strong> Click on the appropriate week number in blue in "
+#~ "the leftmost column of the calendar.</li> <li><strong>Create an event:</"
+#~ "strong> select <code>New Event</code> from the <code>Actions</code> menu."
+#~ "</li> <li><strong>Show or hide events in one of the calendars listed "
+#~ "under <code>Calendars</code>:</strong> check or uncheck the box under "
+#~ "<code>Cal</code> and click <code>Apply</code>.</li> <li><strong>Adding or "
+#~ "removing calendars to the <code>Calendars</code> list:</strong> click on "
+#~ "the <code>More...</code> button.</li> <li><strong>Make weeks start on the "
+#~ "correct day:</strong> the first day of the week varies in different parts "
+#~ "of the world. If SchoolTool isn't set up correctly for you, click on your "
+#~ "name in the red bar at the top of the page. Then click on the "
+#~ "<code>Actions</code> menu and select <code>Change Preferences</code>. "
+#~ "Pick the correct \"Week starts on\" day and hit <code>Apply</code>.</li> "
+#~ "<li><strong>Access a iCal format version of the calendar:</strong>: "
+#~ "select <code>Open in iCal</code> from the Action menu.</li> </ul>"
+#~ msgstr ""
+#~ "<h1>月际日程表</h1> <p>这是日程表的月际视图。这可能是您的日程表，也可能是"
+#~ "学校另一个人、组或资源的。<a href=\"/++help++/schooltool/calendaring\">更"
+#~ "多日程表帮助...</a></p> <h3>如何...</h3> <ul> <li><strong>更详细地察看某一"
+#~ "天或事件：</strong>单击日程表上的某一天。</li> <li><strong>察看某一星期："
+#~ "</strong>单击日程表最左边一列上蓝色的周数。</li> <li><strong>创建事件：</"
+#~ "strong>在<code>动作</code>菜单中选择<code>新事件</code>。</li> "
+#~ "<li><strong>显示或删除列于<code>日程表</code>内日程表中的事件：</strong>点"
+#~ "击<code>日程</code>下的复选框并单击<code>应用</code>。</li> <li><strong>添"
+#~ "加或删除<code>日程表</code>列表中的日程表：</strong>单击<code>更多</code>"
+#~ "按钮。</li> <li><strong>使星期起始于正确的一天：</strong>星期中的第一天在"
+#~ "世界各地各有不同。若 SchoolTool 当前的配置对您不正确，单击页面顶部红色栏上"
+#~ "您的名字。单击<code>动作</code>目录并选择<code>更改首选项</code>。选中正确"
+#~ "的“星期起始于”并单击 <code>应用</code>。</li> <li><strong>访问日程表的 "
+#~ "iCal 版本：</strong>在动作菜单中选择<code>在 iCal 中打开</code>。</li> </"
+#~ "ul>"
+
+#~ msgid "SchoolTool Organization"
+#~ msgstr "SchoolTool组织"
+
+#~ msgid ""
+#~ "<h1>SchoolTool Organization</h1> <p>This branch of the help tree contains "
+#~ "items explaining the basic organization of SchoolTool.</p>"
+#~ msgstr ""
+#~ "<h1>SchoolTool 组织</h1> <p>该目录分支包含解释 SchoolTool 基本组织的条目。"
+#~ "</p>"
+
+#~ msgid "Setup data"
+#~ msgstr "设置数据"
+
+#~ msgid "Contextual Help"
+#~ msgstr "上下文帮助"
+
+#~ msgid "Help"
+#~ msgstr "帮助"
+
+#~ msgid "Notes (Rest)"
+#~ msgstr "通知(休息)"
+
+#~ msgid "Relationships"
+#~ msgstr "关系"
+
+#~ msgid "Resource Help"
+#~ msgstr "资源帮助"
+
+#~ msgid "SchoolTool Onlinehelp"
+#~ msgstr "SchoolTool 在线帮助"
+
+#~ msgid "Add a term"
+#~ msgstr "添加一个学期"
+
+#~ msgid "Term Search Help"
+#~ msgstr "学期搜索帮助"
+
+#~ msgid "Terms in SchoolTool"
+#~ msgstr "SchoolTool 的项目"
+
+#~ msgid "Using timetable:"
+#~ msgstr "使用课程表："
 
 #~ msgid "Edit Equipment Information"
 #~ msgstr "编辑设备信息"
@@ -6811,11 +6636,23 @@ msgstr "输入的密码不相同"
 #~ msgid "Everyone can view resource lists."
 #~ msgstr "每个人都可以查看资源列表。"
 
+#~ msgid "Group members can edit group calendars."
+#~ msgstr "组群成员可以编辑组群日历"
+
+#~ msgid "Persons can set their own preferences"
+#~ msgstr "人员可以设定他们自己的参数"
+
 #~ msgid "Everyone can view the application calendar."
 #~ msgstr "每个人都可以看到这个应用的日历。"
+
+#~ msgid "Persons can change their own passwords"
+#~ msgstr "人员可以更改他们自己的密码"
 
 #~ msgid "Add a Resource"
 #~ msgstr "添加资源"
 
 #~ msgid "Edit Resource Information"
 #~ msgstr "编辑资源信息"
+
+#~ msgid "Report a bug on Launchpad."
+#~ msgstr "在 Launchpad 上报告一个 Bug。"

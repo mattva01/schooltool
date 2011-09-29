@@ -2,7 +2,7 @@
 
 PACKAGE=schooltool
 
-DIST=/home/ftp/pub/schooltool/trunk
+DIST=/home/ftp/pub/schooltool/flourish
 BOOTSTRAP_PYTHON=python2.6
 
 INSTANCE_TYPE=schooltool
@@ -137,14 +137,28 @@ docs: build
 # Release
 
 .PHONY: release
-release: bin/buildout compile-translations
+release: compile-translations
 	grep -qv 'dev' version.txt.in || echo -n `cat version.txt.in`-r`bzr revno` > version.txt
-	bin/buildout setup setup.py sdist
+	python setup.py sdist
 	rm -f version.txt
 
 .PHONY: move-release
-move-release:
-	mv -v dist/$(PACKAGE)-*.tar.gz $(DIST)/dev
+move-release: upload
+	rm -v dist/$(PACKAGE)-*dev-r*.tar.gz
+
+.PHONY: upload
+upload:
+	@VERSION=`cat version.txt.in` ;\
+	DIST=$(DIST) ;\
+	grep -qv 'dev' version.txt.in || VERSION=`cat version.txt.in`-r`bzr revno` ;\
+	grep -qv 'dev' version.txt.in || DIST=$(DIST)/dev ;\
+	if [ -w $${DIST} ] ; then \
+	    echo cp dist/$(PACKAGE)-$${VERSION}.tar.gz $${DIST} ;\
+	    cp dist/$(PACKAGE)-$${VERSION}.tar.gz $${DIST} ;\
+	else \
+	    echo scp dist/$(PACKAGE)-$${VERSION}.tar.gz schooltool.org:$${DIST} ;\
+	    scp dist/$(PACKAGE)-$${VERSION}.tar.gz schooltool.org:$${DIST} ;\
+	fi
 
 # Helpers
 

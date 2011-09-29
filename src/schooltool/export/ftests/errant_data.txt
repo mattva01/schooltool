@@ -62,23 +62,17 @@ This file has examples of bad data for the School Timetables sheet:
     <p class="error">School Timetables B2 missing required text</p>
     <p class="error">School Timetables B3 missing required text</p>
     <p class="error">School Timetables B4 missing required text</p>
+    <p class="error">School Timetables B5 missing required text</p>
     <p class="error">School Timetables B6 not unicode or ascii string</p>
     <p class="error">School Timetables B7 not unicode or ascii string</p>
     <p class="error">School Timetables B8 not unicode or ascii string</p>
     <p class="error">School Timetables B9 not unicode or ascii string</p>
-    <p class="error">School Timetables B13 invalid school year</p>
-    <p class="error">School Timetables B14 is not a valid timetable model</p>
-    <p class="error">Schema has no day templates in A21</p>
-    <p class="error">School Timetables A27 not unicode or ascii string</p>
-    <p class="error">School Timetables B27 is not a valid time range</p>
-    <p class="error">School Timetables A29 is the same day id as another in this timetable</p>
-    <p class="error">School Timetables A40 is not defined in the 'Day Templates' section</p>
-    <p class="error">School Timetables A42 is the same day id as another in this timetable</p>
-    <p class="error">School Timetables E42 is the same period id as another in this day</p>
-    <p class="error">School Timetables I42 is the same homeroom period id as another in this day</p>
-    <p class="error">School Timetables A50 is not a valid integer</p>
-    <p class="error">School Timetables A51 is not a valid integer</p>
-    <p class="error">School Timetables A52 is not a valid weekday number (0-6)</p>
+    <p class="error">School Timetables B10 missing required text</p>
+    <p class="error">School Timetables B15 missing required text</p>
+    <p class="error">School Timetables B20 missing required text</p>
+    <p class="error">School Timetables B25 missing required text</p>
+    <p class="error">School Timetables B35 missing required text</p>
+    <p class="error">School Timetables B48 missing required text</p>
 
 This file has examples of bad data for the Resouces sheet:
 
@@ -112,6 +106,7 @@ This file has examples of bad data for the Persons sheet:
     <p class="error">Persons E2 missing required text</p>
     <p class="error">Persons F2 not unicode or ascii string</p>
     <p class="error">Persons G2 not unicode or ascii string</p>
+    <p class="error">Persons H2 has no date in it</p>
     <p class="error">Persons I2 not unicode or ascii string</p>
     <p class="error">Persons J2 not unicode or ascii string</p>
     <p class="error">Persons K2 not unicode or ascii string</p>
@@ -121,6 +116,8 @@ This file has examples of bad data for the Persons sheet:
     <p class="error">Persons O2 not unicode or ascii string</p>
     <p class="error">Persons C3 not unicode or ascii string</p>
     <p class="error">Persons E3 not unicode or ascii string</p>
+    <p class="error">Persons A4 Username cannot contain non-ascii characters: gr...ta</p>
+    <p class="error">Persons A6 not unicode or ascii string</p>
 
 This file has examples of bad data for the Courses sheet:
 
@@ -152,6 +149,7 @@ This file has examples of bad data for the Sections sheet:
     ...     'sample_data.xls')
     >>> browser.getControl('Submit').click()
     >>> browser.printQuery("//p[@class='error']")
+    <p class="error">School Timetables B5 missing required text</p>
     <p class="error">Sections 1 B1 missing required text</p>
     <p class="error">Sections 1 D1 missing required text</p>
     <p class="error">Sections_2 B1 not unicode or ascii string</p>
@@ -162,12 +160,7 @@ This file has examples of bad data for the Sections sheet:
     <p class="error">Sections_5 A12 is not a valid username</p>
     <p class="error">Sections_5 A16 not unicode or ascii string</p>
     <p class="error">Sections_5 A17 is not a valid username</p>
-    <p class="error">Sections_5 A22 not unicode or ascii string</p>
-    <p class="error">Sections_5 B22 not unicode or ascii string</p>
-    <p class="error">Sections_5 C22 not unicode or ascii string</p>
-    <p class="error">Sections_5 A23 is not a valid day id for the given schema</p>
-    <p class="error">Sections_5 C23 is not a valid resource id</p>
-    <p class="error">Sections_5 B24 is not a valid period id for the given day</p>
+    <p class="error">Sections_5 A20 is not a valid timetable in the given school year</p>
 
 This file has examples of bad data for the Groups sheet:
 
@@ -190,4 +183,31 @@ This file has examples of bad data for the Groups sheet:
     <p class="error">Groups A11 invalid school year</p>
     <p class="error">Groups A22 not unicode or ascii string</p>
     <p class="error">Groups A23 is not a valid username</p>
+
+This file has examples of bad data for the Contact Persons and Contact
+Relationships sheets:
+
+    >>> browser.getLink('Manage').click()
+    >>> browser.getLink('XLS Import').click()
+    >>> import pkg_resources
+    >>> browser.getControl('XLS File').add_file(
+    ...     pkg_resources.resource_stream('schooltool.export.ftests', 'errant_contacts.xls'),
+    ...     'application/excel',
+    ...     'sample_data.xls')
+    >>> browser.getControl('Submit').click()
+    >>> browser.printQuery("//p[@class='error']")
+    <p class="error">Contact Persons A2 Username cannot contain non-ascii characters: student00&#195;&#179;</p>
+    <p class="error">Contact Persons C3 missing required text</p>
+    <p class="error">Contact Persons E3 missing required text</p>
+    <p class="error">Contact Persons B4 must be empty when ID is a user id</p>
+    <p class="error">Contact Persons C4 must be empty when ID is a user id</p>
+    <p class="error">Contact Persons D4 must be empty when ID is a user id</p>
+    <p class="error">Contact Persons E4 must be empty when ID is a user id</p>
+    <p class="error">Contact Persons F4 must be empty when ID is a user id</p>
+    <p class="error">Contact Relationships B2 missing required text</p>
+    <p class="error">Contact Relationships A3 Username cannot contain non-ascii characters: student00&#195;&#179;</p>
+    <p class="error">Contact Relationships B3 Username cannot contain non-ascii characters: student00&#195;&#179;</p>
+    <p class="error">Contact Relationships A4 is not a valid username</p>
+    <p class="error">Contact Relationships B4 is not a valid username or contact id</p>
+    <p class="error">Contact Relationships C4 is not a valid contact relationship</p>
 

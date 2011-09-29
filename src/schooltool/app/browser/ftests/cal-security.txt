@@ -48,7 +48,7 @@ Let's make Frog's calendar public:
 
     >>> frog.getLink('Frog').click()
     >>> frog.getLink('Edit Preferences').click()
-    >>> frog.getControl('Make calendar public').click()
+    >>> frog.getControl('public').click()
     >>> frog.getControl('Apply').click()
 
 Toad should still not even see the new event links (but span tags instead):

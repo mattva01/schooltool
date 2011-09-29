@@ -1,7 +1,7 @@
 <tal:defs define="update view/update" />
 <html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
   <head>
-    <title i18n:translate="">
+    <title metal:fill-slot="title" i18n:translate="">
       Section of
       <tal:loop tal:repeat="course context/courses" i18n:name="course">
         <a tal:replace="structure course/@@title" />

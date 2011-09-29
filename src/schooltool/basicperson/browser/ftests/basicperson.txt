@@ -220,10 +220,7 @@ using this kind of person:
     >>> analyze.printQuery("id('csvtext')", manager.contents)
     <textarea name="csvtext" id="csvtext" cols="50" rows="10">@@index.html, Steve, Smith, secret
     pete, Pete, Marley
-    chowa, Chowa, Do...a
-    <BLANKLINE>
-    <BLANKLINE>
-    </textarea>
+    chowa, Chowa, Do...a</textarea>
     >>> csvtext = "steve, Steve, Smith, secret\npete/marley, Pete, Marley\nchowa, Chowa, Doña\n\n\n"
     >>> manager.getControl(name='csvtext').value = csvtext
     >>> manager.getControl(name='charset').value = ['UTF-8']
@@ -234,10 +231,7 @@ using this kind of person:
     >>> analyze.printQuery("id('csvtext')", manager.contents)
     <textarea name="csvtext" id="csvtext" cols="50" rows="10">steve, Steve, Smith, secret
     pete/marley, Pete, Marley
-    chowa, Chowa, Do...a
-    <BLANKLINE>
-    <BLANKLINE>
-    </textarea>
+    chowa, Chowa, Do...a</textarea>
     >>> # XXX: this has to be fixed
     >>> # XXX: SchoolTool should handle UTF-8
     >>> csvtext = "steve, Steve, Smith, secret\npete, Pete, Marley\nconcepción, Concepción, Doña\n\n\n"
@@ -250,10 +244,7 @@ using this kind of person:
     >>> analyze.printQuery("id('csvtext')", manager.contents)
     <textarea name="csvtext" id="csvtext" cols="50" rows="10">steve, Steve, Smith, secret
     pete, Pete, Marley
-    concepci...n, Concepci...n, Do...a
-    <BLANKLINE>
-    <BLANKLINE>
-    </textarea>
+    concepci...n, Concepci...n, Do...a</textarea>
     >>> csvtext = "steve, Steve, Smith, secret\npete, Pete, Marley\nchowa, Chowa, Doña\n\n\n"
     >>> manager.getControl(name='csvtext').value = csvtext
     >>> manager.getControl(name='charset').value = ['UTF-8']

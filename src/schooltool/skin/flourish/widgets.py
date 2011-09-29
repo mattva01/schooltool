@@ -72,4 +72,4 @@ class JQueryI18nLibrary(ResourceLibrary):
 
 
 class FormlibDateWidget(zope.formlib.widgets.DateWidget):
-    cssClass="textWidget date-field"
+    cssClass="date-field"

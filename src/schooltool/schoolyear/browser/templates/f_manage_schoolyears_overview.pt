@@ -11,10 +11,10 @@
     There are no school years configured.
   </p>
   <p i18n:translate="">
-    To continue setting up your school
+    To continue setting up your school please
     <a tal:attributes="href string:${view/schoolyears/@@absolute_url}/add.html"
-       title="Add a school year" i18n:attributes="title"
-       i18n:translate="">
-      please add a school year</a>.
+       i18n:translate=""
+       i18n:name="add_schoolyear">
+      Add a school year</a>.
   </p>
 </div>

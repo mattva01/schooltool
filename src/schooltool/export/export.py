@@ -28,18 +28,24 @@ from zope.security.proxy import removeSecurityProxy
 from zope.publisher.browser import BrowserView
 
 from schooltool.basicperson.demographics import DateFieldDescription
-from schooltool.basicperson.interfaces import IDemographics
+from schooltool.basicperson.interfaces import IDemographics, IBasicPerson
 from schooltool.basicperson.interfaces import IDemographicsFields
+from schooltool.common import SchoolToolMessage as _
 from schooltool.group.interfaces import IGroupContainer
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.app.interfaces import IAsset
 from schooltool.schoolyear.interfaces import ISchoolYear
 from schooltool.common import format_time_range
+from schooltool.contact.contact import URIPerson, URIContact
+from schooltool.contact.contact import URIContactRelationship
+from schooltool.contact.interfaces import IContact, IContactContainer
+from schooltool.contact.interfaces import IContactable
 from schooltool.schoolyear.interfaces import ISchoolYearContainer
 from schooltool.term.interfaces import ITermContainer
 from schooltool.course.interfaces import ICourseContainer
 from schooltool.course.interfaces import ISectionContainer
+from schooltool.relationship.relationship import IRelationshipLinks
 from schooltool.timetable.interfaces import ITimetableContainer
 from schooltool.timetable.interfaces import IScheduleContainer
 from schooltool.timetable.interfaces import IHaveTimetables
@@ -102,6 +108,8 @@ class ExcelExportView(BrowserView):
             borders = []
         if data is None:
             data = ""
+        if type(data) == type(True):
+            data = str(data)
         key = (bold, color, format_str, tuple(borders))
         style = self._style_cache.get(key, None)
         if style is None:
@@ -248,6 +256,14 @@ class Date(Text):
 
     def __repr__(self):
         return 'Date(%r)' % self.data
+
+
+class ContactRelationship(object):
+
+    def __init__(self, person, contact, relationship):
+        self.person = person
+        self.contact = contact
+        self.relationship = relationship
 
 
 class MegaExporter(SchoolTimetableExportView):
@@ -419,6 +435,75 @@ class MegaExporter(SchoolTimetableExportView):
         ws = wb.add_sheet("Persons")
         self.print_table(self.format_persons(), ws)
 
+    def format_contact_persons(self):
+        def contact_getter(attribute):
+            def getter(contact):
+                person = IBasicPerson(contact.__parent__, None)
+                if person is None:
+                    return getattr(contact, attribute)
+                if attribute == '__name__':
+                    return person.username
+                return ''
+            return getter
+
+        fields = [('ID', Text, contact_getter('__name__')),
+                  ('Prefix', Text, contact_getter('prefix')),
+                  ('First Name', Text, contact_getter('first_name')),
+                  ('Middle Name', Text, contact_getter('middle_name')),
+                  ('Last Name', Text, contact_getter('last_name')),
+                  ('Suffix', Text, contact_getter('suffix')),
+                  ('Address line 1', Text, attrgetter('address_line_1')),
+                  ('Address line 2', Text, attrgetter('address_line_2')),
+                  ('City', Date, attrgetter('city')),
+                  ('State', Date, attrgetter('state')),
+                  ('Country', Date, attrgetter('country')),
+                  ('Postal code', Date, attrgetter('postal_code')),
+                  ('Home phone', Text, attrgetter('home_phone')),
+                  ('Work phone', Text, attrgetter('work_phone')),
+                  ('Mobile phone', Text, attrgetter('mobile_phone')),
+                  ('Email', Text, attrgetter('email')),
+                  ('Language', Text, attrgetter('language'))]
+
+        items = []
+        for person in self.context['persons'].values():
+            items.append(IContact(person))
+        for contact in IContactContainer(self.context).values():
+            items.append(contact)
+
+        return self.format_table(fields, items)
+
+    def format_contact_relationships(self):
+        fields = [('Person ID', Text, attrgetter('person')),
+                  ('Contact ID', Text, attrgetter('contact')),
+                  ('Relationship', Text, attrgetter('relationship'))]
+
+        items = []
+        for person in self.context['persons'].values():
+            person = removeSecurityProxy(person)
+            for contact in IContactable(person).contacts:
+                try:
+                    links = IRelationshipLinks(person)
+                    link = links.find(
+                        URIPerson, contact, URIContact, URIContactRelationship)
+                except ValueError:
+                    continue
+                target_person = IBasicPerson(contact.__parent__, None)
+                if target_person is None:
+                    name = contact.__name__
+                else:
+                    name = target_person.username
+                item = ContactRelationship(person.username,
+                    name, link.extra_info.relationship)
+                items.append(item)
+
+        return self.format_table(fields, items)
+
+    def export_contacts(self, wb):
+        ws = wb.add_sheet("Contact Persons")
+        self.print_table(self.format_contact_persons(), ws)
+        ws = wb.add_sheet("Contact Relationships")
+        self.print_table(self.format_contact_relationships(), ws)
+
     def format_resources(self):
         fields = [('ID', Text, attrgetter('__name__')),
                   ('Type', Text, lambda r: r.__class__.__name__),
@@ -541,6 +626,7 @@ class MegaExporter(SchoolTimetableExportView):
         self.export_school_timetables(wb)
         self.export_resources(wb)
         self.export_persons(wb)
+        self.export_contacts(wb)
         self.export_courses(wb)
         self.export_sections(wb)
         self.export_groups(wb)

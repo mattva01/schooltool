@@ -82,8 +82,8 @@
 
     <div class="item_list"
          tal:define="batch view/batch">
-      <tal:block replace="structure batch/render" />
       <tal:block replace="structure view/filter_widget/render" />
+      <tal:block replace="structure batch/render" />
       <tal:block replace="structure view/renderAvailableTable" />
       <input type="hidden" name="BOOK" value="dummy" />
     </div>

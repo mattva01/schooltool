@@ -27,8 +27,7 @@
                   tal:condition="python:widget.mode != 'hidden'">
                 <td class="label" metal:define-macro="labelcell">
                   <label tal:attributes="for widget/id">
-                    <span i18n:translate=""
-                          tal:content="widget/label"> label </span>
+                    <span tal:content="widget/label"> label </span>
                   </label>
                 </td>
                 <td class="field" metal:define-macro="widgetcell">

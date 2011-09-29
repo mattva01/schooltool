@@ -256,8 +256,8 @@ class SectionView(BrowserView):
             current = current.next
         for section in sections:
             yield {
-                'url': absoluteURL(section, self.request),
-                'title': ITerm(section).title,
+                'section': section,
+                'term': ITerm(section),
                 }
 
     def renderPersonTable(self):

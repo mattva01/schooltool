@@ -705,7 +705,7 @@ class TitleView(BrowserView):
 
 class ContentTitle(ContentProvider):
     render = InlineViewPageTemplate('''
-        <span tal:content="view/title"></span>
+        <span tal:replace="structure view/title"></span>
     '''.strip())
 
     @property
@@ -968,8 +968,8 @@ class IErrorsSettings(Interface):
     ignored_exceptions = Tuple(
         title=_('Ignored exception types'),
         value_type=Choice(vocabulary=vocabulary([
-                    ('Unauthorized', _('Unauthorized')),
-                    ('NotFound', _('NotFound'))])),
+                    ('Unauthorized', 'Unauthorized'),
+                    ('NotFound', 'NotFound')])),
         required=False)
 
 

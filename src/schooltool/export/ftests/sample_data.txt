@@ -1,11 +1,39 @@
 Test for sample data import
 ---------------------------
 
-Let's import a subset of the sample data:
-
     >>> browser = Browser('manager', 'schooltool')
+
+We'll add some demo fields to test importing demos.
+
+    >>> browser.getLink('Manage').click()
+    >>> browser.getLink('Demographics').click()
+    >>> browser.getLink('New Date Field').click()
+    >>> browser.getControl("Title").value = 'Date Demo'
+    >>> browser.getControl("ID").value = 'date_demo'
+    >>> browser.getControl(name="form.widgets.required:list").value = ["false"]
+    >>> browser.getControl('Add').click()
+
+    >>> browser.getLink('Manage').click()
+    >>> browser.getLink('Demographics').click()
+    >>> browser.getLink('New Yes/No Field').click()
+    >>> browser.getControl("Title").value = 'Bool Demo'
+    >>> browser.getControl("ID").value = 'bool_demo'
+    >>> browser.getControl(name="form.widgets.required:list").value = ["false"]
+    >>> browser.getControl('Add').click()
+
+Now we'll go ahead with the import.
+
     >>> browser.getLink('Manage').click()
     >>> browser.getLink('XLS Import').click()
+
+Click the submit button without selecting a file:
+
+    >>> browser.getControl('Submit').click()
+    >>> browser.printQuery("//p[@class='error']")
+    <p class="error">No data provided</p>
+
+Let's import a subset of the sample data:
+
     >>> import pkg_resources
     >>> browser.getControl('XLS File').add_file(
     ...     pkg_resources.resource_stream('schooltool.export.ftests', 'test_data.xls'),
@@ -13,7 +41,169 @@ Let's import a subset of the sample data:
     ...     'sample_data.xls')
     >>> browser.getControl('Submit').click()
 
-Let's check the data. We have 4 terms:
+There should be no errors:
+
+    >>> browser.printQuery("//p[@class='error']")
+
+Let's check the data. We have 2 students that have contacts:
+
+    >>> browser.getLink('Manage').click()
+    >>> browser.getLink('Persons').click()
+    >>> browser.getControl(name="SEARCH_TITLE").value = 'student000'
+    >>> browser.getControl('Find Now').click()
+    >>> browser.getLink('Florian').click()
+    >>> browser.getLink('Contacts').click()
+    >>> print browser.queryHTML("//div[@class='info-block']")[0]
+    <div class="info-block">
+      <h4>Address</h4>
+      <p>1 First Street, Line 2, NY, NY, NY, 10101</p>
+      <h4>Email</h4>
+      <p>email</p>
+      <h4>Phones</h4>
+      <p>
+        <span>home (Home phone)</span>,&#160;
+        <span>work (Work phone)</span>,&#160;
+        <span>111-111 (Mobile phone)</span>
+      </p>
+      <h4>Spoken Languages</h4>
+      <p>english</p>
+    </div>
+    >>> browser.printQuery("//div[@class='person-info']/fieldset")
+    <fieldset><div class="person-info">
+        <h2> Parent, Parent One </h2>
+        <a href="http://localhost/contacts/student000_parent1">(View Details)</a>
+        <div class="info-block">
+          <h4>Address</h4>
+          <p>1 First Street, Line 2, NY, NY, NY, 10101</p>
+          <h4>Email</h4>
+          <p>email</p>
+          <h4>Phones</h4>
+          <p>
+            <span>home (Home phone)</span>,&#160;
+            <span>work (Work phone)</span>,&#160;
+            <span>333-3333 (Mobile phone)</span>
+          </p>
+          <h4>Spoken Languages</h4>
+          <p>english</p>
+        </div>
+    </div>
+    </fieldset>
+    <fieldset><div class="person-info">
+        <h2> Parent, Parent Two </h2>
+        <a href="http://localhost/contacts/student000_parent2">(View Details)</a>
+        <div class="info-block">
+          <h4>Address</h4>
+          <p>1 First Street</p>
+          <h4>Phones</h4>
+          <p>
+            <span>444-4444 (Mobile phone)</span>
+          </p>
+        </div>
+    </div>
+    </fieldset>
+    <fieldset><div class="person-info">
+        <h2> Sibling, Sibling One </h2>
+        <a href="http://localhost/contacts/student000_sibling">(View Details)</a>
+        <div class="info-block">
+          <h4>Address</h4>
+          <p>1 First Street</p>
+          <h4>Phones</h4>
+          <p>
+            <span>555-5555 (Mobile phone)</span>
+          </p>
+        </div>
+    </div>
+    </fieldset>
+
+    >>> browser.getLink('Manage').click()
+    >>> browser.getLink('Persons').click()
+    >>> browser.getControl(name="SEARCH_TITLE").value = 'student001'
+    >>> browser.getControl('Find Now').click()
+    >>> browser.getLink('Peg').click()
+    >>> browser.getLink('Contacts').click()
+    >>> print browser.queryHTML("//div[@class='info-block']")[0]
+    <div class="info-block">
+      <h4>Address</h4>
+      <p>1 First Street</p>
+      <h4>Phones</h4>
+      <p>
+        <span>222-2222 (Mobile phone)</span>
+      </p>
+    </div>
+    >>> browser.printQuery("//div[@class='person-info']/fieldset")
+    <fieldset><div class="person-info">
+      <h2> Guardian, Guardian One </h2>
+      <a href="http://localhost/contacts/student001_guardian">(View Details)</a>
+      <div class="info-block">
+        <h4>Address</h4>
+        <p>2 Second Street</p>
+        <h4>Phones</h4>
+        <p>
+          <span>666-6666 (Mobile phone)</span>
+        </p>
+      </div>
+    </div>
+    </fieldset>
+
+Let's confirm the demo imports worked.  We just have one date for the manager
+user and the four possible booleans, two actual booleans in the xls document
+and two represented as strings but still valid.  We'll test a fifth person
+whose boolean demo is not at all set to show that missing boolean demos that
+are not required will keep the object's value for that field as None.
+
+    >>> browser.getLink('Manage').click()
+    >>> browser.getLink('Persons').click()
+    >>> browser.getControl(name="SEARCH_TITLE").value = 'manager'
+    >>> browser.getControl('Find Now').click()
+    >>> browser.getLink('Administrator').click()
+    >>> browser.getLink('Edit').click()
+    >>> browser.queryHTML('//input[@name="form.widgets.date_demo"]/@value')
+    ['2001-01-01']
+    >>> browser.printQuery('//input[@name="form.widgets.bool_demo:list"]')
+    <input id="form-widgets-bool_demo-0" name="form.widgets.bool_demo:list" class="radio-widget bool-field" value="true" checked="checked" type="radio" />
+    <input id="form-widgets-bool_demo-1" name="form.widgets.bool_demo:list" class="radio-widget bool-field" value="false" type="radio" />
+
+    >>> browser.getLink('Manage').click()
+    >>> browser.getLink('Persons').click()
+    >>> browser.getControl(name="SEARCH_TITLE").value = 'student000'
+    >>> browser.getControl('Find Now').click()
+    >>> browser.getLink('Florian').click()
+    >>> browser.getLink('Edit').click()
+    >>> browser.printQuery('//input[@name="form.widgets.bool_demo:list"]')
+    <input id="form-widgets-bool_demo-0" name="form.widgets.bool_demo:list" class="radio-widget bool-field" value="true" checked="checked" type="radio" />
+    <input id="form-widgets-bool_demo-1" name="form.widgets.bool_demo:list" class="radio-widget bool-field" value="false" type="radio" />
+
+    >>> browser.getLink('Manage').click()
+    >>> browser.getLink('Persons').click()
+    >>> browser.getControl(name="SEARCH_TITLE").value = 'student001'
+    >>> browser.getControl('Find Now').click()
+    >>> browser.getLink('Peg').click()
+    >>> browser.getLink('Edit').click()
+    >>> browser.printQuery('//input[@name="form.widgets.bool_demo:list"]')
+    <input id="form-widgets-bool_demo-0" name="form.widgets.bool_demo:list" class="radio-widget bool-field" value="true" type="radio" />
+    <input id="form-widgets-bool_demo-1" name="form.widgets.bool_demo:list" class="radio-widget bool-field" value="false" checked="checked" type="radio" />
+
+    >>> browser.getLink('Manage').click()
+    >>> browser.getLink('Persons').click()
+    >>> browser.getControl(name="SEARCH_TITLE").value = 'student002'
+    >>> browser.getControl('Find Now').click()
+    >>> browser.getLink('Sherm').click()
+    >>> browser.getLink('Edit').click()
+    >>> browser.printQuery('//input[@name="form.widgets.bool_demo:list"]')
+    <input id="form-widgets-bool_demo-0" name="form.widgets.bool_demo:list" class="radio-widget bool-field" value="true" type="radio" />
+    <input id="form-widgets-bool_demo-1" name="form.widgets.bool_demo:list" class="radio-widget bool-field" value="false" checked="checked" type="radio" />
+
+    >>> browser.getLink('Manage').click()
+    >>> browser.getLink('Persons').click()
+    >>> browser.getControl(name="SEARCH_TITLE").value = 'student003'
+    >>> browser.getControl('Find Now').click()
+    >>> browser.getLink('Piotr').click()
+    >>> browser.getLink('Edit').click()
+    >>> browser.printQuery('//input[@name="form.widgets.bool_demo:list"]')
+    <input id="form-widgets-bool_demo-0" name="form.widgets.bool_demo:list" class="radio-widget bool-field" value="true" type="radio" />
+    <input id="form-widgets-bool_demo-1" name="form.widgets.bool_demo:list" class="radio-widget bool-field" value="false" type="radio" />
+
+We have 4 terms:
 
     >>> browser.getLink('2006-2008').click()
     >>> browser.printQuery("id('content-body')/form//div/a")
@@ -49,9 +239,6 @@ Some sections:
     </td>
     <td>
         <a href="http://localhost/persons/teacher010">Walsh, Isabel</a>
-    </td>
-    <td>
-        <a href="http://localhost/schoolyears/2006-2008/2006-fall/sections/art_a_2006-fall_teacher010_000/timetables/simple">2006-fall.simple</a>
     </td>
     <td>
       <span class="hint">

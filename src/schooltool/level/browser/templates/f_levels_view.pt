@@ -13,8 +13,7 @@
            title="Edit this level"
            tal:condition="row/level/schooltool:can_edit"
            tal:attributes="href string:${row/level/@@absolute_url}/edit.html"
-           i18n:attributes="title"
-           i18n:translate="">
+           i18n:attributes="title">
           <img tal:attributes="src context/++resource++schooltool.skin.flourish/edit-icon.png"
                alt="Edit"
                i18n:attributes="alt" />

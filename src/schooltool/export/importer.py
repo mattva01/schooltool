@@ -35,7 +35,11 @@ import schooltool.skin.flourish.page
 from schooltool.basicperson.interfaces import IDemographicsFields
 from schooltool.basicperson.interfaces import IDemographics
 from schooltool.basicperson.demographics import DateFieldDescription
+from schooltool.basicperson.demographics import BoolFieldDescription
 from schooltool.basicperson.person import BasicPerson
+from schooltool.contact.contact import Contact, ContactPersonInfo
+from schooltool.contact.interfaces import IContact, IContactContainer
+from schooltool.contact.interfaces import IContactPersonInfo, IContactable
 from schooltool.resource.resource import Resource
 from schooltool.resource.resource import Location
 from schooltool.group.group import Group
@@ -99,10 +103,14 @@ ERROR_INVALID_PERSON_ID = _('is not a valid username')
 ERROR_INVALID_SCHEMA_ID = _('is not a valid timetable in the given school year')
 ERROR_INVALID_DAY_ID = _('is not a valid day id for the given timetable')
 ERROR_INVALID_PERIOD_ID = _('is not a valid period id for the given day')
+ERROR_INVALID_CONTACT_ID = _('is not a valid username or contact id')
+ERROR_UNWANTED_CONTACT_DATA = _('must be empty when ID is a user id')
 ERROR_INVALID_RESOURCE_ID = _('is not a valid resource id')
 ERROR_UNICODE_CONVERSION = _(
     "Username cannot contain non-ascii characters: ${string}")
 ERROR_WEEKLY_DAY_ID = _('is not a valid weekday number (0-6)')
+ERROR_CONTACT_RELATIONSHIP = _("is not a valid contact relationship")
+ERROR_NOT_BOOLEAN = _("must be either True or False")
 
 
 no_date = object()
@@ -190,15 +198,58 @@ class ImporterBase(object):
         return value
 
     def getDateFromCell(self, sheet, row, col, default=no_date):
-        try:
-            dt = xlrd.xldate_as_tuple(sheet.cell_value(rowx=row, colx=col), self.wb.datemode)
-        except:
-            if default is not no_date:
-                return default
-            else:
+        value, found = self.getCellAndFound(sheet, row, col)
+        if not found or value == '':
+            if default is no_date:
                 self.error(row, col, ERROR_NO_DATE)
                 return None
+            else:
+                return default
+        try:
+            dt = xlrd.xldate_as_tuple(value, self.wb.datemode)
+        except:
+            self.error(row, col, ERROR_NO_DATE)
+            return None
         return datetime.datetime(*dt).date()
+
+    def getBoolFromCell(self, sheet, row, col):
+        value, found = self.getCellAndFound(sheet, row, col)
+        if not found:
+            return None
+        if type(value) == type(True):
+            return value
+        if type(value) == type(0):
+            return bool(value)
+        value, found, valid = self.getTextFoundValid(sheet, row, col)
+        if not valid or not value:
+            return None
+        if value.upper() == 'TRUE':
+            return True
+        elif value.upper() == 'FALSE':
+            return False
+        else:
+            self.error(row, col, ERROR_NOT_BOOLEAN)
+            return None
+
+    def getRequiredBoolFromCell(self, sheet, row, col):
+        value, found = self.getCellAndFound(sheet, row, col)
+        if not found or value == '':
+            self.error(row, col, ERROR_MISSING_REQUIRED_TEXT)
+            return None
+        return self.getBoolFromCell(sheet, row, col)
+
+    def validateUnicode(self, value, row, col):
+        # XXX: this has to be fixed
+        # XXX: SchoolTool should handle UTF-8
+        try:
+            value.encode('ascii')
+        except UnicodeEncodeError:
+            self.error(
+                row, col,
+                format_message(
+                    ERROR_UNICODE_CONVERSION,
+                    mapping={'string': value})
+                )
 
     @property
     def sheet(self):
@@ -693,7 +744,7 @@ class PersonImporter(ImporterBase):
             # XXX: this has to be fixed
             # XXX: SchoolTool should handle UTF-8
             try:
-                data['__name__'].encode('ascii')
+                str(data['__name__'])
             except UnicodeEncodeError:
                 self.error(
                     row, 0,
@@ -709,16 +760,160 @@ class PersonImporter(ImporterBase):
 
             demographics = IDemographics(person)
             for n, field in enumerate(fields.values()):
-                if isinstance(field, DateFieldDescription):
-                    value = self.getDateFromCell(sh, row, n + 10, default=None)
+                if field.required:
+                    if isinstance(field, DateFieldDescription):
+                        value = self.getDateFromCell(sh, row, n + 10)
+                    elif isinstance(field, BoolFieldDescription):
+                        value = self.getRequiredBoolFromCell(sh, row, n + 10)
+                    else:
+                        value = self.getRequiredTextFromCell(sh, row, n + 10)
                 else:
-                    value = self.getTextFromCell(sh, row, n + 10)
-                if value == '':
-                    value = None
+                    if isinstance(field, DateFieldDescription):
+                        value = self.getDateFromCell(sh, row, n + 10,
+                                                     default=None)
+                    elif isinstance(field, BoolFieldDescription):
+                        value = self.getBoolFromCell(sh, row, n + 10)
+                    else:
+                        value = self.getTextFromCell(sh, row, n + 10)
+                    if value == '':
+                        value = None
                 demographics[field.name] = value
 
             if num_errors == len(self.errors):
                 self.addPerson(person, data)
+
+
+class ContactPersonImporter(ImporterBase):
+
+    sheet_name = 'Contact Persons'
+
+    def applyData(self, contact, data):
+        if data['__name__'] not in ISchoolToolApplication(None)['persons']:
+            contact.prefix = data['prefix']
+            contact.first_name = data['first_name']
+            contact.middle_name = data['middle_name']
+            contact.last_name = data['last_name']
+            contact.suffix = data['suffix']
+        contact.address_line_1 = data['address_line_1']
+        contact.address_line_2 = data['address_line_2']
+        contact.city = data['city']
+        contact.state = data['state']
+        contact.country = data['country']
+        contact.postal_code = data['postal_code']
+        contact.home_phone = data['home_phone']
+        contact.work_phone = data['work_phone']
+        contact.mobile_phone = data['mobile_phone']
+        contact.email = data['email']
+        contact.language = data['language']
+
+    def establishContact(self, data):
+        app = ISchoolToolApplication(None)
+        persons = app['persons']
+        contacts = IContactContainer(app)
+        name = data['__name__']
+        if name in persons:
+            person = persons[name]
+            contact = IContact(person)
+            self.applyData(contact, data)
+        elif name in contacts:
+            contact = contacts[name]
+            self.applyData(contact, data)
+        else:
+            contact = Contact()
+            self.applyData(contact, data)
+            contacts[name] = contact
+
+    def process(self):
+        sh = self.sheet
+        persons = ISchoolToolApplication(None)['persons']
+        for row in range(1, sh.nrows):
+            if sh.cell_value(rowx=row, colx=0) == '':
+                break
+
+            num_errors = len(self.errors)
+            data = {}
+
+            data['__name__'] = self.getRequiredTextFromCell(sh, row, 0)
+            self.validateUnicode(data['__name__'], row, 0)
+            if num_errors == len(self.errors):
+                if data['__name__'] not in persons:
+                    data['prefix'] = self.getTextFromCell(sh, row, 1)
+                    data['first_name'] = self.getRequiredTextFromCell(sh, row, 2)
+                    data['middle_name'] = self.getTextFromCell(sh, row, 3)
+                    data['last_name'] = self.getRequiredTextFromCell(sh, row, 4)
+                    data['suffix'] = self.getTextFromCell(sh, row, 5)
+                else:
+                    for index in range(5):
+                        value, found = self.getCellAndFound(sh, row, index + 1)
+                        if value:
+                            self.error(row, index + 1,
+                                       ERROR_UNWANTED_CONTACT_DATA)
+
+            data['address_line_1'] = self.getTextFromCell(sh, row, 6)
+            data['address_line_2'] = self.getTextFromCell(sh, row, 7)
+            data['city'] = self.getTextFromCell(sh, row, 8)
+            data['state'] = self.getTextFromCell(sh, row, 9)
+            data['country'] = self.getTextFromCell(sh, row, 10)
+            data['postal_code'] = self.getTextFromCell(sh, row, 11)
+            data['home_phone'] = self.getTextFromCell(sh, row, 12)
+            data['work_phone'] = self.getTextFromCell(sh, row, 13)
+            data['mobile_phone'] = self.getTextFromCell(sh, row, 14)
+            data['email'] = self.getTextFromCell(sh, row, 15)
+            data['language'] = self.getTextFromCell(sh, row, 16)
+
+            if num_errors == len(self.errors):
+                self.establishContact(data)
+
+
+class ContactRelationshipImporter(ImporterBase):
+
+    sheet_name = 'Contact Relationships'
+
+    def process(self):
+        sh = self.sheet
+        app = ISchoolToolApplication(None)
+        persons = app['persons']
+        contacts = IContactContainer(app)
+        vocab = IContactPersonInfo['relationship'].vocabulary
+        for row in range(1, sh.nrows):
+            if sh.cell_value(rowx=row, colx=0) == '':
+                break
+
+            num_errors = len(self.errors)
+            data = {}
+
+            data['__name__'] = self.getRequiredTextFromCell(sh, row, 0)
+            self.validateUnicode(data['__name__'], row, 0)
+            if num_errors == len(self.errors):
+                if data['__name__'] not in persons:
+                    self.error(row, 0, ERROR_INVALID_PERSON_ID)
+                else:
+                    person = persons[data['__name__']]
+
+            current_errors = len(self.errors)
+            data['contact_name'] = self.getRequiredTextFromCell(sh, row, 1)
+            name = data['contact_name']
+            if current_errors == len(self.errors):
+                self.validateUnicode(name, row, 1)
+            if current_errors == len(self.errors):
+                if name in persons:
+                    contact = IContact(persons[name])
+                elif name in contacts:
+                    contact = contacts[name]
+                else:
+                    self.error(row, 1, ERROR_INVALID_CONTACT_ID)
+
+            data['relationship'] = self.getTextFromCell(sh, row, 2)
+            relationship = data['relationship']
+            if relationship and relationship not in vocab:
+                self.error(row, 2, ERROR_CONTACT_RELATIONSHIP)
+
+            if num_errors == len(self.errors):
+                info = ContactPersonInfo()
+                info.__parent__ = person
+                if relationship:
+                    info.relationship = relationship
+                IContactable(person).contacts.add(contact, info)
 
 
 class CourseImporter(ImporterBase):
@@ -863,12 +1058,11 @@ class SectionImporter(ImporterBase):
         return row
 
     def import_timetables(self, sh, row, section):
-        while row < sh.nrows:
-            if sh.cell_value(rowx=row, colx=0) == '':
-                break
+        for row in range(row, sh.nrows):
             if sh.cell_value(rowx=row, colx=0) == 'School Timetable':
-                row = self.import_timetable(sh, row, section)
-            row += 1
+                self.import_timetable(sh, row, section)
+            elif sh.cell_value(rowx=row, colx=0) == '':
+                break
         return row
 
     def import_section(self, sh, row, year, term):
@@ -884,7 +1078,7 @@ class SectionImporter(ImporterBase):
         courses = ICourseContainer(section)
 
         row += 4
-        if sh.cell_value(rowx=row, colx=0) == 'Courses':
+        if self.getCellValue(sh, row, 0, '') == 'Courses':
             row += 1
             for row in range(row, sh.nrows):
                 if sh.cell_value(rowx=row, colx=0) == '':
@@ -910,7 +1104,7 @@ class SectionImporter(ImporterBase):
             return
 
         persons = self.context['persons']
-        if sh.cell_value(rowx=row, colx=0) == 'Students':
+        if self.getCellValue(sh, row, 0, '') == 'Students':
             row += 1
             for row in range(row, sh.nrows):
                 if sh.cell_value(rowx=row, colx=0) == '':
@@ -929,7 +1123,7 @@ class SectionImporter(ImporterBase):
                     section.members.add(removeSecurityProxy(member))
             row += 1
 
-        if sh.cell_value(rowx=row, colx=0) == 'Instructors':
+        if self.getCellValue(sh, row, 0, '') == 'Instructors':
             row += 1
             for row in range(row, sh.nrows):
                 if sh.cell_value(rowx=row, colx=0) == '':
@@ -948,7 +1142,7 @@ class SectionImporter(ImporterBase):
                     section.instructors.add(removeSecurityProxy(instructor))
             row += 1
 
-        if sh.cell_value(rowx=row, colx=0) == 'School Timetable':
+        if self.getCellValue(sh, row, 0, '') == 'School Timetable':
             self.import_timetables(sh, row, section)
 
     def process(self):
@@ -1030,7 +1224,7 @@ class GroupImporter(ImporterBase):
 
         row += 5
         pc = self.context['persons']
-        if self.getCellValue(sh, row, 0, default='') == 'Members':
+        if self.getCellValue(sh, row, 0, '') == 'Members':
             row += 1
             for row in range(row, sh.nrows):
                 if sh.cell_value(rowx=row, colx=0) == '':
@@ -1060,23 +1254,16 @@ class MegaImporter(BrowserView):
         self.errors = []
         self.success = []
 
-    def getWorkbook(self):
-        xlsfile = self.request.get('xlsfile', '')
-        if xlsfile:
-            xlsfile = xlsfile.read()
-
-        if not xlsfile:
-            self.errors.append(_('No data provided'))
-            return
-
-        book = xlrd.open_workbook(file_contents=xlsfile)
-        return book
-
     def update(self):
         if "UPDATE_SUBMIT" not in self.request:
             return
 
-        wb = self.getWorkbook()
+        xlsfile = self.request.get('xlsfile', '')
+        if not xlsfile:
+            self.errors.append(_('No data provided'))
+            return
+
+        wb = xlrd.open_workbook(file_contents=xlsfile.read())
 
         if wb is None:
             return
@@ -1089,6 +1276,8 @@ class MegaImporter(BrowserView):
                      SchoolTimetableImporter,
                      ResourceImporter,
                      PersonImporter,
+                     ContactPersonImporter,
+                     ContactRelationshipImporter,
                      CourseImporter,
                      SectionImporter,
                      GroupImporter]

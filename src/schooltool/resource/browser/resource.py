@@ -421,15 +421,15 @@ def getAddEditViewTitle(context):
 @adapter(IResourceDemographicsFields)
 @implementer(ILimitKeysLabel)
 def getLimitKeysLabel(context):
-    return _('Limit to resouce type(s)')
+    return _('Limit to resource type(s)')
 
 
 @adapter(IResourceDemographicsFields)
 @implementer(ILimitKeysHint)
 def getLimitKeysHint(context):
-    return _(u"""If you select one or more resource types below, this field
-                 will only be displayed in forms and reports for
-                 resources of the selected types.""")
+    return _(u"If you select one or more resource types below, this field "
+              "will only be displayed in forms and reports for "
+              "resources of the selected types.")
 
 
 ##########  Base class of all resource views (uses self.resource_type) #########

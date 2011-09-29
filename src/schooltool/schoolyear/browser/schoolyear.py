@@ -331,7 +331,10 @@ class ImportSchoolYearData(object):
         oldCourses = ICourseContainer(self.activeSchoolyear)
         newCourses = ICourseContainer(self.newSchoolyear)
         for id, course in oldCourses.items():
-            newCourses[course.__name__] = Course(course.title, course.description)
+            newCourses[course.__name__] = new_course = Course(course.title, course.description)
+            new_course.course_id = course.course_id
+            new_course.government_id = course.government_id
+            new_course.credits = course.credits
 
     def copyTimetable(self, timetable):
         # XXX: copy-pasted old hack, would be nice
@@ -796,8 +799,8 @@ class FlourishSchoolYearActivateView(flourish.page.Page):
                 self.context.activateNextSchoolYear(self.request['ACTIVATE'])
                 self.request.response.redirect(self.nextURL())
             else:
-                self.message = _("""Please select a school year before clicking
-                                   'Submit'.""")
+                self.message = _("Please select a school year before clicking "
+                                 "'Submit'.")
 
     def nextURL(self):
         return absoluteURL(self.context, self.request)

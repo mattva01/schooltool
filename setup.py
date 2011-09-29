@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
 # SchoolTool - common information systems platform for school administration
-# Copyright (c) 2003-2010 Shuttleworth Foundation
+# Copyright (c) 2003-2011 Shuttleworth Foundation
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -13,9 +13,9 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 #
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 """
 SchoolTool setup script.
@@ -168,6 +168,8 @@ Javascript will be usable, although perhaps not very nice or convenient.""",
     schooltool_deploy = schooltool.paste.templates:SchoolToolDeploy
 
     [schooltool.instance_type]
+    standard = schooltool.standard
+    flourish = schooltool.skin.flourish.instance
     schooltool = schooltool.skin.flourish.instance
 
     """,

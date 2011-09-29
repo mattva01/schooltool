@@ -21,7 +21,8 @@
       <tr tal:condition="not:resource_types">
         <td colspan="2" i18n:translate="">
           There are no
-          <a tal:attributes="href resources_link">school resources</a> set up.
+          <a tal:attributes="href resources_link"
+            i18n:name="resources" i18n:translate="">school resources</a> set up.
         </td>
       </tr>
       <tr tal:repeat="resource resource_types/values">

@@ -97,20 +97,20 @@ class ISchedule(Interface):
     """A schedule of meetings."""
 
     title = zope.schema.TextLine(
-        title=u"Title of the timetalbe.",
+        title=u"Title of the timetable",
         required=True)
 
     first = zope.schema.Date(
-        title=u"First scheduled day.",
+        title=_("First scheduled day"),
         required=True)
 
     last = zope.schema.Date(
-        title=u"Last scheduled day.",
+        title=_("Last scheduled day"),
         required=True)
 
     timezone = zope.schema.Choice(
-        title=_("Time Zone"),
-        description=_("Meetings time zone."),
+        title=u"Time Zone",
+        description=u"Meetings time zone",
         values=pytz.common_timezones,
         required=True)
 
@@ -155,11 +155,11 @@ class IScheduleContainer(IContainer, IScheduleWithExceptions):
     contains(ISchedule)
 
     first = zope.schema.Date(
-        title=u"First scheduled day.",
+        title=u"First scheduled day",
         required=False)
 
     last = zope.schema.Date(
-        title=u"Last scheduled day.",
+        title=u"Last scheduled day",
         required=False)
 
 
@@ -169,7 +169,7 @@ class IScheduleContainer(IContainer, IScheduleWithExceptions):
 
 class IDayTemplate(IOrderedContainer):
     title = zope.schema.TextLine(
-        title=u"Title of the day.",
+        title=u"Title of the day",
         required=False)
 
 
@@ -262,12 +262,12 @@ class ITimetable(IScheduleWithExceptions):
     """The schedule of meetings built from day templates."""
 
     periods = zope.schema.Object(
-        title=u"Periods.",
+        title=u"Periods",
         schema=IDayTemplateSchedule,
         required=True)
 
     time_slots = zope.schema.Object(
-        title=u"Time slots.",
+        title=u"Time slots",
         schema=IDayTemplateSchedule,
         required=True)
 
@@ -275,7 +275,7 @@ class ITimetable(IScheduleWithExceptions):
 class ITimetableContainerBase(Interface):
 
     default = zope.schema.Object(
-        title=u"The default timetable.",
+        title=u"The default timetable",
         schema=ITimetable,
         required=False)
 
@@ -288,7 +288,7 @@ class ITimetableContainer(IContainer, ITimetableContainerBase):
 class ISelectedPeriodsScheduleRead(ISchedule):
 
     timetable = zope.schema.Object(
-        title=u"Timetable to filter meetings from.",
+        title=u"Timetable to filter meetings from",
         schema=ITimetable,
         required=False)
 
@@ -296,7 +296,7 @@ class ISelectedPeriodsScheduleRead(ISchedule):
         """Iterate only over meetings for these periods.""")
 
     consecutive_periods_as_one = zope.schema.Bool(
-        title=u"Treat consecutive periods as one meeting.",
+        title=_("Treat consecutive periods as one meeting"),
         default=False,
         required=False)
 

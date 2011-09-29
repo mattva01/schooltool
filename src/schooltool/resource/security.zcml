@@ -32,7 +32,7 @@
 
   <allow
       interface="schooltool.resource.interfaces.IResourceContainer"
-      crowds="administration resource_list_viewers authenticated"
+      crowds="administration resource_list_viewers"
       permission="schooltool.view" />
   <allow
       interface="schooltool.resource.interfaces.IResourceContainer"
@@ -41,7 +41,7 @@
 
   <allow
       interface="schooltool.resource.interfaces.IBaseResource"
-      crowds="administration leaders resource_viewers authenticated"
+      crowds="administration leaders resource_viewers"
       permission="schooltool.view" />
   <allow
       interface="schooltool.resource.interfaces.IBaseResource"

@@ -14,20 +14,23 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+# atorrell <Unknown>, 2011.
+# Albert Torrell <atorrell@gmail.com>, 2011.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: SchoolTool Version 0.11.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-17 23:49+0300\n"
-"PO-Revision-Date: 2011-04-01 18:51+0000\n"
-"Last-Translator: Guiu Rocafort <neandertalspeople@gmail.com>\n"
-"Language-Team: Schooltool Development Team <schooltool-dev@schooltool.org>\n"
+"POT-Creation-Date: 2011-09-08 14:13+0300\n"
+"PO-Revision-Date: 2011-07-08 18:25+0000\n"
+"Last-Translator: atorrell <Unknown>\n"
+"Language-Team: atorrell@gmail.com <atorrell@gmail.com>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-04-08 04:31+0000\n"
-"X-Generator: Launchpad (build 12735)\n"
+"X-Launchpad-Export-Date: 2011-09-10 04:31+0000\n"
+"X-Generator: Launchpad (build 13900)\n"
 "Generated-By: setup.py\n"
 
 #: /src/schooltool/app/app.py:197
@@ -233,15 +236,15 @@ msgstr "Setmana anterior"
 
 #: /src/schooltool/app/browser/cal.py:927
 msgid "Go to next week"
-msgstr "Anar a la següent semana"
+msgstr "Anar a la següent setmana"
 
 #: /src/schooltool/app/browser/cal.py:928
 msgid "Go to current week"
-msgstr "Ves a la setmana actual"
+msgstr "Anar a la setmana actual"
 
 #: /src/schooltool/app/browser/cal.py:929
 msgid "Go to previous week"
-msgstr "Anar a la semana anterior"
+msgstr "Anara a la setmana anterior"
 
 #. Default: ""
 #: /src/schooltool/app/browser/cal.py:950
@@ -266,7 +269,7 @@ msgstr "Anar al següent mes"
 
 #: /src/schooltool/app/browser/cal.py:1169
 msgid "Go to current month"
-msgstr "Ves al mes actual"
+msgstr "Anar al mes actual"
 
 #: /src/schooltool/app/browser/cal.py:1170
 msgid "Go to previous month"
@@ -300,7 +303,7 @@ msgstr "Anar al següent any"
 
 #: /src/schooltool/app/browser/cal.py:1221
 msgid "Go to current year"
-msgstr "Ves al any actual"
+msgstr "Anar a l'any actual"
 
 #: /src/schooltool/app/browser/cal.py:1222
 msgid "Go to previous year"
@@ -324,7 +327,7 @@ msgstr "Anar al dia següent"
 
 #: /src/schooltool/app/browser/cal.py:1293
 msgid "Go to today"
-msgstr "Anar a hui"
+msgstr "Anar a avui"
 
 #: /src/schooltool/app/browser/cal.py:1294
 msgid "Go to the previous day"
@@ -639,7 +642,7 @@ msgstr "Control ZODB"
 #: /src/schooltool/app/browser/templates/manage_menu.pt:3
 #: /src/schooltool/basicperson/security.zcml:26
 msgid "Manage"
-msgstr "Gestiona"
+msgstr "Gestionar"
 
 #: /src/schooltool/app/browser/configure.zcml:622
 msgid "Application Control"
@@ -653,41 +656,18 @@ msgstr "Dominis de Traducció"
 msgid "Generations"
 msgstr "Generacions"
 
-#: /src/schooltool/app/browser/configure.zcml:666
-msgid "Browser UI"
-msgstr "URL navegador"
-
-#: /src/schooltool/app/browser/configure.zcml:672
-#: /src/schooltool/app/browser/templates/login.pt:3
-#: /src/schooltool/app/browser/templates/menu_view.pt:3
-msgid "Login"
-msgstr "Inici de sessió"
-
-#: /src/schooltool/app/browser/configure.zcml:678
-#: /src/schooltool/app/browser/configure.zcml:765
+#: /src/schooltool/app/browser/configure.zcml:714
 #: /src/schooltool/devmode/devmode.pt:17
 msgid "Errors"
 msgstr "Errors"
 
-#: /src/schooltool/app/browser/configure.zcml:690
-msgid "Application"
-msgstr "Aplicació"
-
-#: /src/schooltool/app/browser/configure.zcml:696
-msgid "Calendar Widget"
-msgstr "Widget de Calendari"
-
-#: /src/schooltool/app/browser/configure.zcml:702
-msgid "Templates"
-msgstr "Plantilles"
-
-#: /src/schooltool/app/browser/configure.zcml:781
+#: /src/schooltool/app/browser/configure.zcml:730
 msgid "Configure"
 msgstr "Configurar"
 
 #: /src/schooltool/app/browser/configure.zcml:788
 msgid "Error List"
-msgstr "Llistat de Errors"
+msgstr "Llistat d'errors"
 
 #: /src/schooltool/app/browser/csvimport.py:107
 #: /src/schooltool/app/browser/csvimport.py:289
@@ -767,7 +747,7 @@ msgstr "No hi ha estudiants en la secció (línia ${line})"
 #: /src/schooltool/app/browser/csvimport.py:466
 msgid "The first row of the CSV file must contain the timetable schema id."
 msgstr ""
-"La primera fila del fitxer CSV hauria de contenir la id del schema de "
+"La primera fila del fitxer CSV hauria de contenir la id de l'esquema de "
 "l'horari."
 
 #. Default: ""
@@ -855,11 +835,10 @@ msgid ""
 "well as a framework for building customized applications and configurations "
 "for individual schools or states."
 msgstr ""
-"SchollTool és software lliure administratiu per a les escoles de tot el món. "
-"La finalitat del projecte és crear un sistema d'informació estudiantil o "
-"d'administració per a escoles de primaria y secundaria, aixins com un marc "
-"de treball per a construir aplicacions y configuracions personalizades per a "
-"les escoles o estats particulars."
+"SchollTool és software lliure per administrar escoles de tot el món. La "
+"finalitat del projecte és crear un sistema de dades d'alumnes o administrar "
+"escoles de primària i secundaria, i també com un marc de treball per a "
+"desenvolupar aplicacions i configuracions personalitzades per a escoles."
 
 #: /src/schooltool/app/browser/templates/about.pt:16
 msgid ""
@@ -867,8 +846,8 @@ msgid ""
 "\"http://python.org\">Python</a> using the <a href=\"http://zope.org\">Zope "
 "3</a> framework."
 msgstr ""
-"SchoolTool es construit al 100% en software de codi obert, escrit en <a href="
-"\"http://python.org\">Python</a> usant el marc de <a href=\"http://zope.org"
+"SchoolTool és un software 100% de codi obert, escrit en <a href=\"http://"
+"python.org\">Python</a> utilitzant el marc de <a href=\"http://zope.org"
 "\">Zope 3</a>"
 
 #: /src/schooltool/app/browser/templates/about.pt:20
@@ -876,7 +855,7 @@ msgid ""
 "SchoolTool is licensed under the <a href=\"http://www.gnu.org/licenses/"
 "gpl-2.0.html\">GNU General Public License, Version 2</a>."
 msgstr ""
-"SchoolTool esta sota la llicensia de <a href=\"http://www.gnu.org/licenses/"
+"SchoolTool està sota la llicencia de <a href=\"http://www.gnu.org/licenses/"
 "gpl-2.0.html\">GNU General Public License, Version 2</a>."
 
 #: /src/schooltool/app/browser/templates/about.pt:24
@@ -897,7 +876,7 @@ msgstr "Llista de correu"
 
 #: /src/schooltool/app/browser/templates/about.pt:30
 msgid "IRC channel: #schooltool on freenode.net"
-msgstr "Canal d'IRC: #schooltool on freenode.net"
+msgstr "Canal d'IRC: #schooltool a freenode.net"
 
 #: /src/schooltool/app/browser/templates/about.pt:35
 msgid "Founder and funder:"
@@ -909,15 +888,15 @@ msgstr "Administrador del projecte:"
 
 #: /src/schooltool/app/browser/templates/about.pt:41
 msgid "Lead Developer:"
-msgstr "Dessarrollador Jefe:"
+msgstr "Cap de desnvolupament:"
 
 #: /src/schooltool/app/browser/templates/about.pt:44
 msgid "Release Manager:"
-msgstr ""
+msgstr "Administrador de la versió:"
 
 #: /src/schooltool/app/browser/templates/about.pt:47
 msgid "Contributors:"
-msgstr "Han Contribuit:"
+msgstr "Col·laboradors:"
 
 #: /src/schooltool/app/browser/templates/application_preferences.pt:4
 msgid "Edit site preferences"
@@ -966,17 +945,17 @@ msgstr "SchoolTool"
 
 #: /src/schooltool/app/browser/templates/cal_atom.pt:21
 msgid "Events for"
-msgstr "Eventes per"
+msgstr "Esdeveniments del"
 
 #. Default: "This is an Atom formatted XML site feed. It is intended to be viewed in a Newsreader or syndicated to another site. Please visit"
 #: /src/schooltool/app/browser/templates/cal_atom.pt:42
 msgid "atom_description"
-msgstr "Descripció"
+msgstr ""
 
 #. Default: "Atom Enabled"
 #: /src/schooltool/app/browser/templates/cal_atom.pt:46
 msgid "atom_enabled"
-msgstr "Activat"
+msgstr ""
 
 #. Default: "for more info."
 #: /src/schooltool/app/browser/templates/cal_atom.pt:49
@@ -997,11 +976,11 @@ msgstr "Diariament"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:24
 msgid "View daily calendar"
-msgstr "Veure el calendari diari"
+msgstr "Vista diària del calendari"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:30
 msgid "View weekly calendar"
-msgstr "Mirà el calendari setmanal"
+msgstr "Vista setmanal del calendari"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:30
 #: /src/schooltool/app/browser/templates/event_add.pt:235
@@ -1010,11 +989,11 @@ msgstr "Setmanal"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:36
 msgid "View monthly calendar"
-msgstr "Mirà el calendari mensual"
+msgstr "Vista mensual del calendari"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:42
 msgid "View yearly calendar"
-msgstr "Mirà el calendari anual"
+msgstr "Vista anual del calendari"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:42
 msgid "Yearly"
@@ -1057,23 +1036,24 @@ msgstr "Més..."
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:4
 msgid "Select calendars to display"
-msgstr "Sel·leccionar calendaris per mostrar"
+msgstr "Sel·leccionar calendaris a mostrar"
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:15
 msgid "Select additional calendars to display"
-msgstr "Selecciona calendaris addicionals per mostrar"
+msgstr "Seleccionar calendaris addicionals a mostrar"
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:27
 msgid "Hold down Ctrl or Shift to select multiple calendars."
-msgstr "Mantengui pulsat Ctrl o Shift per a seleccionar multiples calendaris"
+msgstr ""
+"Mantingueu pitjades Ctrl o Shift per la selecció múltiple de calendaris"
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:32
 msgid "Public Calendar"
-msgstr "Calendari Públic"
+msgstr "Calendari públic"
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:37
 msgid "site-wide calendar"
-msgstr ""
+msgstr "calendari de tot el lloc"
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:42
 #: /src/schooltool/app/browser/templates/index.pt:14
@@ -1085,7 +1065,7 @@ msgstr "Recursos"
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:43
 msgid "There are no resources with calendars accessible to you."
-msgstr "No hi ha recursos amb calendaris als que hi puguis accedir."
+msgstr "No hi ha recursos als calendaris als que hi podeu accedir."
 
 #: /src/schooltool/app/browser/templates/default_report_template.pt:23
 msgid "Created with SchoolTool"
@@ -1170,7 +1150,7 @@ msgstr "Tot el dia"
 #: /src/schooltool/app/browser/templates/event.pt:20
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:21
 msgid "This is a recurring event."
-msgstr "Aquest esdeveniment és recorrent."
+msgstr "Aquest esdeveniment es repeteix."
 
 #: /src/schooltool/app/browser/templates/event.pt:33
 #: /src/schooltool/basicperson/browser/templates/person_view.pt:29
@@ -1191,22 +1171,22 @@ msgstr "Comença"
 #: /src/schooltool/schoolyear/browser/schoolyear.py:130
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:43
 msgid "Ends"
-msgstr "Finalitza"
+msgstr "Acaba"
 
 #: /src/schooltool/app/browser/templates/event.pt:53
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:54
 msgid "Change the details of this event"
-msgstr "Canvia els detalls d'aquest event"
+msgstr "Canvia els detalls d'aquest esdeveniment"
 
 #: /src/schooltool/app/browser/templates/event.pt:53
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:54
 msgid "edit event"
-msgstr "edita event"
+msgstr "editar esdeveniment"
 
 #: /src/schooltool/app/browser/templates/event.pt:64
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:65
 msgid "Scheduled resources"
-msgstr ""
+msgstr "Recursos programats"
 
 #: /src/schooltool/app/browser/templates/event.pt:72
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:73
@@ -1216,11 +1196,11 @@ msgstr "editar recursos"
 #: /src/schooltool/app/browser/templates/event.pt:80
 #: /src/schooltool/timetable/browser/templates/timetable_event_edit.pt:81
 msgid "delete event"
-msgstr "Esborra l'event"
+msgstr "esborrar esdeveniment"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:137
 msgid "Event information"
-msgstr "Informació de l'esdeveniment"
+msgstr "Dades de l'esdeveniment"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:143
 msgid "Event details"
@@ -1228,11 +1208,11 @@ msgstr "Detalls de l'esdeveniment"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:197
 msgid "Book Resources"
-msgstr "Llibre de Recursos"
+msgstr "Llibre de recursos"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:207
 msgid "Update form"
-msgstr "Actualitza des de"
+msgstr "Actualitzar des de"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:224
 msgid "day"
@@ -1253,25 +1233,25 @@ msgstr "any"
 #: /src/schooltool/app/browser/templates/event_add.pt:236
 msgid "This section only applies when weekly recurrence is selected."
 msgstr ""
-"Aquesta secció tan sols és vàlida si s'ha seleccionat recorrència setmanal."
+"Aquesta secció només és vàlida si s'ha seleccionat una repetició setmanal."
 
 #: /src/schooltool/app/browser/templates/event_add.pt:257
 msgid "This section only applies when the monthly recurrence is selected."
 msgstr ""
-"Aquesta secció tan sols és vàlida si s'ha seleccionat recorrència mensual."
+"Aquesta secció només és vàlida si s'ha seleccionat una repetició mensual."
 
 #: /src/schooltool/app/browser/templates/event_add.pt:264
 msgid "Day ${monthday} of every month"
-msgstr "Dia ${monthday} de tot el mesos"
+msgstr "El dia ${monthday} de tots el mesos"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:271
 #: /src/schooltool/app/browser/templates/event_add.pt:278
 msgid "${weekday} of every month"
-msgstr "dia ${weekday} de cada mes"
+msgstr "els ${weekday} de cada mes"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:288
 msgid "Repeat"
-msgstr "Repeteix"
+msgstr "Repetir"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:291
 msgid "times"
@@ -1281,11 +1261,11 @@ msgstr "vegades"
 #: /src/schooltool/term/browser/templates/emergency_select.pt:31
 #: /src/schooltool/timetable/browser/templates/specialday_select.pt:31
 msgid "[popup calendar]"
-msgstr ""
+msgstr "Calendari emergent"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:324
 msgid "Repeat forever"
-msgstr "Repeteix per sempre"
+msgstr "Repetir per sempre"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:348
 msgid "Booked Resources"
@@ -1343,15 +1323,15 @@ msgstr "Títol:"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:22
 msgid "Starts:"
-msgstr "Inicia:"
+msgstr "Inici:"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:26
 msgid "Ends:"
-msgstr "Finalitza:"
+msgstr "Final:"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:30
 msgid "This is a recurring event!"
-msgstr "Aquest esdeveniment és recorrent!"
+msgstr "Aquest esdeveniment es repeteix periòdicament!"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:38
 msgid "Booked resources"
@@ -1359,7 +1339,7 @@ msgstr "Recursos reservats"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:42
 msgid "UnBook"
-msgstr "Esborrar reservació"
+msgstr "Eliminar reserva"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:51
 msgid "Available resources"
@@ -1404,6 +1384,11 @@ msgstr "Grups"
 msgid "Levels"
 msgstr "Nivells"
 
+#: /src/schooltool/app/browser/templates/login.pt:3
+#: /src/schooltool/app/browser/templates/menu_view.pt:3
+msgid "Login"
+msgstr "Inici de sessió"
+
 #: /src/schooltool/app/browser/templates/login.pt:8
 msgid "Your session has expired."
 msgstr "La vostra sessió ha caducat"
@@ -1413,16 +1398,16 @@ msgid ""
 "You are not allowed to access this page. You can click on the back button in "
 "your browser to go back, or ask a more privileged user to log in."
 msgstr ""
-"No tens permís per accedir a aquesta pàgina. Pots tornar enrere o provar "
-"d'accedir com un usuari amb més privilegis."
+"No teniu permís per accedir a aquesta pàgina. Podeu tornar enrere o provar "
+"d'accedir com a usuari amb més privilegis."
 
 #: /src/schooltool/app/browser/templates/login.pt:23
 msgid "Please log in"
-msgstr "Si us plau, entra"
+msgstr "Si us plau, entreu"
 
 #: /src/schooltool/app/browser/templates/login.pt:35
 msgid "User Information"
-msgstr "Informació de l'usuari/a"
+msgstr "Dades de l'usuari"
 
 #: /src/schooltool/app/browser/templates/login.pt:38
 #: /src/schooltool/basicperson/browser/person.py:59
@@ -1456,16 +1441,16 @@ msgstr "Entrar"
 
 #: /src/schooltool/app/browser/templates/portlet_tomorrow_events.pt:5
 msgid "Tomorrow's Events"
-msgstr "Events de demà"
+msgstr "Esdeveniments de demà"
 
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:4
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:14
 msgid "Deleting a repeating event (${event_title})"
-msgstr "Esborrant esdeveniment recorrent (${event_title})"
+msgstr "Esborrant esdeveniment que es repeteix (${event_title})"
 
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:19
 msgid "You are trying to delete a repeating event."
-msgstr "Vostè esta intentan suprimir un esdeveniment repetit"
+msgstr "Esteu intentant suprimir un esdeveniment que es repeteix"
 
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:41
 msgid "Current"
@@ -1762,323 +1747,6 @@ msgstr "Les dades s'han d'introduir en format CSV."
 msgid "submit-button"
 msgstr "Envia"
 
-#: /src/schooltool/app/configure.zcml:340
-msgid "Security (General)"
-msgstr "Seguretat (General)"
-
-#: /src/schooltool/app/configure.zcml:355
-msgid "Booking Resources"
-msgstr "Reservant recursos"
-
-#: /src/schooltool/app/help/admin.pt:6
-msgid "SchoolTool Administration"
-msgstr "Administració de SchoolTool"
-
-#: /src/schooltool/app/help/admin.pt:8
-msgid ""
-"<h1>SchoolTool Administration</h1> <p>Schools have complex structures, "
-"spanning the organization of people, pedagogy, time and physical resources. "
-"Unfortunately, this means that an application that seeks to model these "
-"processes, like SchoolTool, is also complex, and the process of setting up "
-"an individual school in SchoolTool is necessarily an involved one.</p> "
-"<p>This branch of the help tree contains items relevant to administrators "
-"configuring SchoolTool, but not end users.</p>"
-msgstr ""
-
-#: /src/schooltool/app/help/calendar_selection.pt:6
-#: /src/schooltool/app/help/configure.zcml:97
-msgid "Calendar Selection"
-msgstr "Selecció de Calendari"
-
-#: /src/schooltool/app/help/calendar_selection.pt:8
-msgid ""
-"<h1>Calendar Selection</h1> <p>You can add color-coded events from multiple "
-"calendars to your personal calendar view. You can add events from course "
-"sections you attend, groups, other people, or even resources like classrooms "
-"or projectors.</p> <p>Some calendars are private or limited to certain "
-"groups.</p> <p>On the calendar selection form you are given lists of all the "
-"calendars available to you. This might be a long list.</p> <p>The "
-"\"SchoolTool site-wide calendar\" is intended to be used as the official "
-"public calendar of the school.</p> <h3>How do I...</h3> <ul> "
-"<li><strong>Select or unselect several individual calendars of one type:</"
-"strong> If you press the <code>Ctrl</code> button on your keyboard while you "
-"select calendars from a list with your mouse, you can select multiple "
-"calendars.</li> <li><strong>Select a range of calendars of one type:</"
-"strong> If you press the <code>Shift</code> key while clicking on calendars, "
-"you can select a range.</li> </ul>"
-msgstr ""
-
-#: /src/schooltool/app/help/calendaring.pt:6
-msgid "Calendaring in SchoolTool"
-msgstr "Crear calendaris amb SchoolTool"
-
-#: /src/schooltool/app/help/calendaring.pt:8
-msgid ""
-"<h1>Calendaring in SchoolTool</h1> <p>SchoolTool includes a full-featured "
-"calendaring system, similar to Apple iCal or Google Calendar, but capable of "
-"representing complex school timetables, including rotating schedules. "
-"SchoolTool is also useful for simple resource scheduling, allowing you to "
-"manage room assignments, and booking shared resources like computers or "
-"projectors. Each person, group, course section or resource has its own "
-"calendar. You may integrate multiple calendars into your personal calendar "
-"views.</p> <h3>Parts of the standard calendar views</h3> <ul> "
-"<li><strong>Calendar table:</strong> fills the main (lower-right) part of "
-"the page. This represents the calendar for one day, week, month or year, "
-"depending on the view..</li> <li><strong>Calendar navigation bar:</strong> "
-"immediately above the calendar table. Allows you to navigate forward or "
-"backward in time, or to return to the current time.</li> "
-"<li><strong>Calendar title:</strong> immediately above the calendar "
-"navigation bar, lists the owner of this calendar and the date for this \"page"
-"\" of the calendar.</li> <li><strong>Left sidebar:</strong> for all "
-"calendars, this contains a <code>Jump to...</code> section containing menus "
-"and links to allow you to quickly navigate to a specific month, year or "
-"date. <br /> If you are logged in and viewing your own calendar, you will "
-"also see a <code>Calendars</code> section at the top of the sidebar which "
-"allows you to \"overlay\" events from other calendars in this view. You may "
-"see calendars for classes you teach or attend listed here already.</li> "
-"<li><strong>Day/week/month/year buttons:</strong> These buttons allow you to "
-"switch between daily, weekly, monthly and annual views.</li> </ul>"
-msgstr ""
-
-#: /src/schooltool/app/help/configure.zcml:13
-msgid "Administration"
-msgstr "Administració"
-
-#: /src/schooltool/app/help/configure.zcml:21
-msgid "Organization"
-msgstr "Organització"
-
-#: /src/schooltool/app/help/configure.zcml:29
-msgid "Calendaring"
-msgstr "Crear calendaris"
-
-#: /src/schooltool/app/help/configure.zcml:37
-#: /src/schooltool/app/help/daily_calendar.pt:6
-msgid "Daily Calendar"
-msgstr "Calendari diari"
-
-#: /src/schooltool/app/help/configure.zcml:47
-#: /src/schooltool/app/help/weekly_calendar.pt:6
-msgid "Weekly Calendar"
-msgstr "Calendari setmanal"
-
-#: /src/schooltool/app/help/configure.zcml:57
-#: /src/schooltool/app/help/monthly_calendar.pt:6
-msgid "Monthly Calendar"
-msgstr "Calendari mensual"
-
-#: /src/schooltool/app/help/configure.zcml:67
-#: /src/schooltool/app/help/yearly_calendar.pt:6
-msgid "Yearly Calendar"
-msgstr "Calendari anual"
-
-#: /src/schooltool/app/help/daily_calendar.pt:8
-msgid ""
-"<h1>Daily Calendar</h1> <p>This is the daily view of a calendar. It might be "
-"your calendar, or it might be the calendar of another person, group or "
-"resource in your school. <a href=\"/++help++/schooltool/calendaring\">More "
-"calendaring help...</a></p> <h3>How do I...</h3> <ul> <li><strong>Create an "
-"event:</strong> click in the calendar table at the start time for the event. "
-"Or select <code>New Event</code> from the <code>Actions</code> menu.</li> "
-"<li><strong>Book a resource:</strong> create an event starting at the time "
-"you want to reserve the resource. Select <code>Book Resource</code> in the "
-"Event Information form.</li> <li><strong>Show or hide events in one of the "
-"calendars listed under <code>Calendars</code>:</strong> check or uncheck the "
-"box under <code>Cal</code> and click <code>Apply</code>.</li> "
-"<li><strong>Adding or removing calendars to the <code>Calendars</code> list:"
-"</strong> click on the <code>More...</code> button.</li> <li><strong>access "
-"a iCal format version of the calendar:</strong>: Select <code>Open in iCal</"
-"code> from the Action menu.</li> <li><strong>Access an Atom feed version of "
-"the calendar: </strong> append <code>/atom.xml</code> to the calendar's URL."
-"</li> </ul>"
-msgstr ""
-
-#: /src/schooltool/app/help/event_add.pt:10
-#: /src/schooltool/app/help/event_edit.pt:10
-msgid "This form has a few issues:"
-msgstr "Aquerst formulari té alguns problemes:"
-
-#: /src/schooltool/app/help/event_add.pt:12
-msgid ""
-"If you need to reserve a resource, such as a room or a projector, tracked by "
-"SchoolTool at your school, you should create an event for the necessary time "
-"and check the <code>Book Resources</code> checkbox at the bottom of the page."
-msgstr ""
-"Si necessites reservar un recurs com una aula o un projector del que "
-"Schooltool fa el seguiment, hauries de crear un esdeveniment per la durada "
-"necessària i clicar sobre el quadrat <code>Reservar recursos</code> a baix "
-"de la pàgina."
-
-#: /src/schooltool/app/help/event_add.pt:16
-#: /src/schooltool/app/help/event_edit.pt:14
-msgid ""
-"The form ignores your preferences for time and date format. You must enter "
-"the event's start time in 24-hour or \"military\" time, and the date is "
-"displayed in year-month-day format."
-msgstr ""
-
-#: /src/schooltool/app/help/event_add.pt:19
-#: /src/schooltool/app/help/event_edit.pt:17
-msgid ""
-"The <code>Location</code> field allows you to enter a description of the "
-"location of the event, but this is not connected to the reservation system. "
-"If your school uses SchoolTool to manage room reservations you need to check "
-"the <code>Book Resources</code> checkbox at the bottom of the form."
-msgstr ""
-
-#: /src/schooltool/app/help/event_add.pt:24
-#: /src/schooltool/app/help/event_edit.pt:22
-msgid ""
-"If your event repeats in some pattern, check the <code>Recurring</code> box "
-"and fill out the new fields that appear. In certain circumstances (like if "
-"you change the original day of a weekly recurring event) you may need to "
-"click the <code>Update form</code> button to update the recurrence fields."
-msgstr ""
-
-#: /src/schooltool/app/help/event_add.pt:29
-#: /src/schooltool/app/help/event_edit.pt:27
-msgid ""
-"An \"all day\" event does not show up as a 24 hour event. It indicates that "
-"the day as a whole has some significance, like a birthday or holiday."
-msgstr ""
-
-#: /src/schooltool/app/help/event_add.pt:32
-#: /src/schooltool/app/help/event_edit.pt:30
-msgid ""
-"\"Exception dates\" are specific dates a repeating event skips, such as "
-"holidays."
-msgstr ""
-
-#: /src/schooltool/app/help/event_edit.pt:12
-msgid ""
-"If you need to edit a resource reservation, click the <code>Book resources</"
-"code> link at the bottom of the form."
-msgstr ""
-"Si necessites modificar la reserva d'un recurs, clica sobre l'enllaç "
-"<code>Reservar recursos</code> a baix del formulari."
-
-#: /src/schooltool/app/help/monthly_calendar.pt:8
-msgid ""
-"<h1>Monthly Calendar</h1> <p>This is the monthly view of a calendar. It "
-"might be your calendar, or it might be the calendar of another person, group "
-"or resource in your school. <a href=\"/++help++/schooltool/calendaring"
-"\">More calendaring help...</a></p> <h3>How do I...</h3> <ul> "
-"<li><strong>View an individual day or event in more detail:</strong> click "
-"on the appropriate day on the calendar.</li> <li><strong>View an individual "
-"week:</strong> Click on the appropriate week number in blue in the leftmost "
-"column of the calendar.</li> <li><strong>Create an event:</strong> select "
-"<code>New Event</code> from the <code>Actions</code> menu.</li> "
-"<li><strong>Show or hide events in one of the calendars listed under "
-"<code>Calendars</code>:</strong> check or uncheck the box under <code>Cal</"
-"code> and click <code>Apply</code>.</li> <li><strong>Adding or removing "
-"calendars to the <code>Calendars</code> list:</strong> click on the "
-"<code>More...</code> button.</li> <li><strong>Make weeks start on the "
-"correct day:</strong> the first day of the week varies in different parts of "
-"the world. If SchoolTool isn't set up correctly for you, click on your name "
-"in the red bar at the top of the page. Then click on the <code>Actions</"
-"code> menu and select <code>Change Preferences</code>. Pick the correct "
-"\"Week starts on\" day and hit <code>Apply</code>.</li> <li><strong>Access a "
-"iCal format version of the calendar:</strong>: select <code>Open in iCal</"
-"code> from the Action menu.</li> </ul>"
-msgstr ""
-
-#: /src/schooltool/app/help/org.pt:6
-msgid "SchoolTool Organization"
-msgstr "Organització de SchoolTool"
-
-#: /src/schooltool/app/help/org.pt:8
-msgid ""
-"<h1>SchoolTool Organization</h1> <p>This branch of the help tree contains "
-"items explaining the basic organization of SchoolTool.</p>"
-msgstr ""
-"<h1>Organització de SchoolTool</h1> <p>Aquesta branca de l'ajuda conté "
-"explicacions sobre l'organització bàsica de SchoolTool.</p>"
-
-#: /src/schooltool/app/help/schooltool.pt:8
-msgid ""
-"<h1>SchoolTool</h1> <p>SchoolTool is a free/libre administrative system for "
-"schools around the world, funded by The Shuttleworth Foundation.</p> "
-"<h2>Standard User Interface Conventions in SchoolTool</h2> <ul> "
-"<li><strong>Red top bar</strong></li> <ul> <li><strong>Breadcrumbs:</strong> "
-"the links at the left hand side of the red bar show you where you are in "
-"SchoolTool's object hierarchy. Note that this doesn't necessarily lead you "
-"back to where you came from, but is handy for taking you from more specific "
-"to more general parts of the application.</li> <li><strong>Your name</"
-"strong> (if you're logged in): clicking on your name takes you to a simple "
-"dashboard of relevant links. From this page you can also use the "
-"<code>Actions</code> menu to change preferences and other personal settings."
-"</li> <li><strong>Log in/out:</strong> this logs you in or out. It is a good "
-"idea to log out when you aren't using SchoolTool.</li> <li><strong>Help:</"
-"strong> if there is a help file for the page you're looking at, you'll see "
-"this link.</li> </ul> <li><strong>Menus</strong></li> <ul> "
-"<li><strong>Navigation:</strong> this menu gives you some basic options for "
-"accessing different parts of SchoolTool, such as the index of persons or "
-"courses. What you see here depends on your permissions in the system.</li> "
-"<li><strong>Action:</strong> this menu contains a variety of things that you "
-"can do on the current page. The entries in this menu change considerably "
-"based on what page you're viewing and what permissions you have.</li> </ul> "
-"<li><strong>Above the red bar</strong></li> <ul> <li><strong>Logo & School "
-"Name:</strong> clicking in this area will take you to the top of the "
-"school's site, usually the calendar for the school.</li> "
-"<li><strong>Calendar day/week/month/year views:</strong> if you are viewing "
-"a calendar, you will find icons in the upper right hand corner that will "
-"allow you to switch between calendar views.</li> <li><strong>Devmode menu:</"
-"strong> if you are a site administrator and you've enabled \"devmode\" in "
-"schooltool.conf, you will see a special menu in the upper right hand corner "
-"of the site. You should disable devmode in any production server.</li> </ul> "
-"</ul>"
-msgstr ""
-
-#: /src/schooltool/app/help/weekly_calendar.pt:8
-msgid ""
-"<h1>Weekly Calendar</h1> <p>This is the weekly view of a calendar. It might "
-"be your calendar, or it might be the calendar of another person, group or "
-"resource in your school. <a href=\"/++help++/schooltool/calendaring\">More "
-"calendaring help...</a></p> <h3>How do I...</h3> <ul> <li><strong>View an "
-"individual day in more detail:</strong> click on the appropriate day in the "
-"blue row of the calendar table.</li> <li><strong>View details about an event "
-"or edit it:</strong> click on the event. If you have the correct permissions "
-"for the event you can edit it.</li> <li><strong>Create an event:</strong> "
-"select the day the event starts and create the event in the daily view.</li> "
-"<li><strong>Show or hide events in one of the calendars listed under "
-"<code>Calendars</code>:</strong> check or uncheck the box under <code>Cal</"
-"code> and click <code>Apply</code>.</li> <li><strong>Adding or removing "
-"calendars to the <code>Calendars</code> list:</strong> click on the "
-"<code>More...</code> button.</li> <li><strong>Make the calendar start on the "
-"correct day:</strong> the first day of the week varies in different parts of "
-"the world. If SchoolTool isn't set up correctly for you, click on your name "
-"in the red bar at the top of the page. Then click on the <code>Actions</"
-"code> menu and select <code>Change Preferences</code>. Pick the correct "
-"\"Week starts on\" day and hit <code>Apply</code>.</li> <li><strong>Access a "
-"iCal format version of the calendar:</strong>: select <code>Open in iCal</"
-"code> from the Action menu.</li> </ul>"
-msgstr ""
-
-#: /src/schooltool/app/help/yearly_calendar.pt:8
-msgid ""
-"<h1>Yearly Calendar</h1> <p>This is the year view of a calendar. It might be "
-"your calendar, or it might be the calendar of another person, group or "
-"resource in your school. <a href=\"/++help++/schooltool/calendaring\">More "
-"calendaring help...</a></p> <h3>How do I...</h3> <ul> <li><strong>Know which "
-"days contain events: if the day has a blue background, there is at least one "
-"event that day.</strong></li> <li><strong>View an individual day in more "
-"detail:</strong> click on the day.</li> <li><strong>View an individual month:"
-"</strong> click on the name of the month.</li> <li><strong>Create an event:</"
-"strong> select the day the event starts and create the event in the daily "
-"view.</li> <li><strong>Show or hide events in one of the calendars listed "
-"under <code>Calendars</code>:</strong> check or uncheck the box under "
-"<code>Cal</code> and click <code>Apply</code>.</li> <li><strong>Adding or "
-"removing calendars to the <code>Calendars</code> list:</strong> click on the "
-"<code>More...</code> button.</li> <li><strong>Make the calendar start on the "
-"correct day:</strong> the first day of the week varies in different parts of "
-"the world. If SchoolTool isn't set up correctly for you, click on your name "
-"in the red bar at the top of the page. Then click on the <code>Actions</"
-"code> menu and select <code>Change Preferences</code>. Pick the correct "
-"\"Week starts on\" day and hit <code>Apply</code>.</li> <li><strong>Access a "
-"iCal format version of the calendar:</strong>: select <code>Open in iCal</"
-"code> from the Action menu.</li> </ul>"
-msgstr ""
-
 #: /src/schooltool/app/interfaces.py:44
 msgid "Form input is not a file object"
 msgstr "L'entrada del formulari no és un fitxer"
@@ -2158,7 +1826,27 @@ msgid ""
 "  --manage               only do management tasks, don't run the server\n"
 msgstr ""
 
-#: /src/schooltool/app/main.py:110
+#: /src/schooltool/app/main.py:327
+msgid "Going to background, daemon pid %d"
+msgstr "Passant a segon pla, el pid del procés és %d"
+
+#: /src/schooltool/app/main.py:382
+msgid "Cannot resolve plugin action order:\n"
+msgstr "No puc resoldre l'ordre d'activació dels plugin:\n"
+
+#: /src/schooltool/app/main.py:528
+msgid "Run %s -h for help."
+msgstr "Executeu %s -h per accedir a l'ajuda"
+
+#: /src/schooltool/app/main.py:549
+msgid "%s: daemon mode not supported on your operating system."
+msgstr "%s:el vostre sistema operatiu no soporta el mode daemon."
+
+#: /src/schooltool/app/main.py:575
+msgid "Reading configuration from %s"
+msgstr "S'està llegint la configuració des de %s"
+
+#: /src/schooltool/app/main.py:574
 msgid ""
 "\n"
 "No storage defined in the configuration file.\n"
@@ -2173,37 +1861,11 @@ msgstr ""
 "If you're using the default configuration file, please edit it now and\n"
 "uncomment one of the ZODB storage sections.\n"
 
-#: /src/schooltool/app/main.py:335
-msgid "Going to background, daemon pid %d"
-msgstr "Passant a segon pla, el pid del procés és %d"
-
-#: /src/schooltool/app/main.py:382
-msgid "Cannot resolve plugin action order:\n"
-msgstr "No puc resoldre l'ordre d'activació dels plugin:\n"
-
-#: /src/schooltool/app/main.py:536 /src/schooltool/app/main.py:580
-#: /src/schooltool/app/main.py:583
-msgid "%s: %s"
-msgstr "%s: %s"
-
-#: /src/schooltool/app/main.py:537
-msgid "Run %s -h for help."
-msgstr "Executeu %s -h per accedir a l'ajuda"
-
-#: /src/schooltool/app/main.py:549
-msgid "%s: daemon mode not supported on your operating system."
-msgstr "%s:el vostre sistema operatiu no soporta el mode daemon."
-
-#: /src/schooltool/app/main.py:575
-msgid "Reading configuration from %s"
-msgstr "S'està llegint la configuració des de %s"
-
-#: /src/schooltool/app/main.py:671
+#: /src/schooltool/app/main.py:666
 msgid "Startup time: %.3f sec real, %.3f sec CPU"
 msgstr "Temps d'inicialització: %.3f sec real, %.3f sec CPU"
 
-#. Default: ""
-#: /src/schooltool/app/main.py:705
+#: /src/schooltool/app/main.py:700
 msgid ""
 "Could not initialize the database:\n"
 "%s"
@@ -2740,7 +2402,7 @@ msgstr ""
 #: /src/schooltool/basicperson/interfaces.py:69
 #: /src/schooltool/demographics/interfaces.py:124
 msgid "male"
-msgstr ""
+msgstr "home"
 
 #: /src/schooltool/basicperson/interfaces.py:74
 #: /src/schooltool/demographics/interfaces.py:129
@@ -3056,6 +2718,19 @@ msgid ""
 "    or the school as a whole.\n"
 "    "
 msgstr ""
+"\n"
+"    Copy text \t\n"
+"\n"
+"\n"
+"    Tots els usuaris de SchoolTool disposen de dades de contacte, que "
+"inclouen l'adreça particular,\n"
+"    número de telèfon, adreça email, etc.\n"
+"\n"
+"    Es poden crear \"Contactes externs\" - persones que no són usuaris de "
+"SchoolTool,\n"
+"    però que poden rebre missatges i dades sobre l'alumne\n"
+"    o l'escola.\n"
+"    "
 
 #: /src/schooltool/contact/contact.py:198
 #: /src/schooltool/course/browser/section.py:522
@@ -3101,7 +2776,7 @@ msgstr ""
 #: /src/schooltool/contact/interfaces.py:73
 #: /src/schooltool/demographics/interfaces.py:273
 msgid "Home phone"
-msgstr ""
+msgstr "Telèfon del domicili"
 
 #: /src/schooltool/contact/interfaces.py:75
 #: /src/schooltool/demographics/interfaces.py:278
@@ -3427,6 +3102,69 @@ msgstr "Assignatures assignades"
 msgid "Section of ${course} -- ${section_title} for ${term} of ${schoolyear}"
 msgstr ""
 
+#: /src/schooltool/course/browser/templates/extend_term.pt:4
+msgid "Extend Section to Term"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/extend_term.pt:18
+msgid ""
+"Click \"Extend\" to create a linked section in term \"${from_term_title}\" "
+"containing the students and instructors from section \"${section_title}\" in "
+"term \"${to_term_title}\"."
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/extend_term.pt:27
+msgid "Extend"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/link_existing.pt:4
+msgid "Link Section to Section in Other Term"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/link_existing.pt:13
+#: /src/schooltool/course/browser/templates/link_existing.pt:52
+#: /src/schooltool/course/browser/templates/section_container.pt:39
+#: /src/schooltool/course/browser/templates/unlink_section.pt:13
+#: /src/schooltool/course/browser/templates/unlink_section.pt:28
+msgid "Section"
+msgstr "Assignatura"
+
+#: /src/schooltool/course/browser/templates/link_existing.pt:20
+#: /src/schooltool/course/browser/templates/unlink_section.pt:19
+#: /src/schooltool/course/browser/templates/unlink_section.pt:29
+#: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:24
+msgid "Term"
+msgstr "Trimestre"
+
+#: /src/schooltool/course/browser/templates/link_existing.pt:21
+msgid "Target Term"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/link_existing.pt:26
+msgid ""
+"Select a section and click 'Link' if you would like to copy and link this "
+"section to the target section."
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/link_existing.pt:30
+msgid ""
+"You may provide part of an instructor's name or username and click 'Filter' "
+"to limit the list of sections to those taught by a matching instructor."
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/link_existing.pt:35
+msgid "You must select a section before clicking 'Link'."
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/link_existing.pt:46
+msgid "Filter"
+msgstr ""
+
+#. Default: "Link"
+#: /src/schooltool/course/browser/templates/link_section.pt:130
+msgid "link-section-button"
+msgstr ""
+
 #: /src/schooltool/course/browser/templates/link_section.pt:24
 msgid "Link ${section}, ${term} with a section in ${target_term}"
 msgstr ""
@@ -3435,20 +3173,7 @@ msgstr ""
 msgid "There is no valid term in ${schoolyear} to pick a section from."
 msgstr ""
 
-#. Default: "Link"
-#: /src/schooltool/course/browser/templates/link_section.pt:130
-msgid "link-section-button"
-msgstr ""
-
-#: /src/schooltool/course/browser/templates/section.pt:36
-msgid "Previous: ${course} -- ${section_title} for ${term}"
-msgstr ""
-
-#: /src/schooltool/course/browser/templates/section.pt:47
-msgid "Next: ${course} -- ${section_title} for ${term}"
-msgstr ""
-
-#: /src/schooltool/course/browser/templates/section.pt:58
+#: /src/schooltool/course/browser/templates/section.pt:35
 msgid "Change the name or description of this section."
 msgstr ""
 
@@ -3456,7 +3181,18 @@ msgstr ""
 msgid "edit info"
 msgstr ""
 
-#: /src/schooltool/course/browser/templates/section.pt:87
+#: /src/schooltool/course/browser/templates/section.pt:46
+#: /src/schooltool/course/browser/templates/section_edit.pt:60
+msgid "Linked sections"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/section.pt:52
+#: /src/schooltool/course/browser/templates/section_edit.pt:72
+#: /src/schooltool/course/browser/templates/section_edit.pt:106
+msgid "${section_title} for ${term}"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/section.pt:65
 msgid "Change the instructors for this section."
 msgstr "Canvia els professors d'aquesta assignatura"
 
@@ -3477,25 +3213,12 @@ msgstr "Edita individualment"
 msgid "Section list for ${term} of ${schoolyear}"
 msgstr ""
 
-#: /src/schooltool/course/browser/templates/section_container.pt:39
-msgid "Section"
-msgstr "Assignatura"
-
-#: /src/schooltool/course/browser/templates/section_edit.pt:60
-msgid "Linked sections"
-msgstr ""
-
 #: /src/schooltool/course/browser/templates/section_edit.pt:63
 msgid "Previous"
 msgstr "Anterior"
 
 #: /src/schooltool/course/browser/templates/section_edit.pt:64
 msgid "Section in the previous term."
-msgstr ""
-
-#: /src/schooltool/course/browser/templates/section_edit.pt:72
-#: /src/schooltool/course/browser/templates/section_edit.pt:106
-msgid "${section_title} for ${term}"
 msgstr ""
 
 #. Default: "Unlink"
@@ -3529,22 +3252,30 @@ msgstr "Següent"
 msgid "Section in the next term."
 msgstr ""
 
-#: /src/schooltool/course/help/course_container.pt:10
+#: /src/schooltool/course/browser/templates/section_linkage.pt:4
+msgid "All Terms for Section"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/section_linkage.pt:42
+msgid "Unlink this Section"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/section_linkage.pt:62
+msgid "Extend to This Term"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/section_linkage.pt:66
+msgid "Link an Existing Section"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/unlink_section.pt:4
+msgid "Unlink Section"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/unlink_section.pt:23
 msgid ""
-"<h1>Courses</h1> <p>Use this page to organize courses listed in the system.</"
-"p> <h3>How do I...</h3> <ul> <li><strong>Look for for a course:</strong> Use "
-"the search box to the left of the <code>Find Now</code> button to look "
-"through the entire list of courses for the search criterion. The "
-"<code>Clear</code> button empties the search box of current entries.</li> "
-"<li><strong>Show a list of the different sections of a course:</strong> "
-"click on the name of the course.</li> <li><strong>Show the lists of students "
-"in a particular class:</strong> Click on the <code>teacher -- course</code> "
-"link. The number of students is also listed next to the teacher and the "
-"course.</li> <li><strong>Navigate through the courses:</strong> Separate "
-"<q>batches</q> of the Course list can be accessed through the <code>Next 10</"
-"code> (and <code>Previous</code>) and links in the blue bar. A <code>Show "
-"All</code> button is also there to show all of the courses on a single page."
-"</li> </ul>"
+"Click 'Unlink' if you would like to remove the link this section has to the "
+"following section(s):"
 msgstr ""
 
 #: /src/schooltool/course/interfaces.py:37
@@ -4063,23 +3794,9 @@ msgstr ""
 msgid "Surname"
 msgstr ""
 
-#: /src/schooltool/devmode/configure.zcml:27
-msgid "Introspect"
-msgstr ""
-
-#: /src/schooltool/devmode/configure.zcml:38
-#: /src/schooltool/devmode/devmode.pt:19
-msgid "API Docs"
-msgstr ""
-
-#: /src/schooltool/devmode/configure.zcml:50
+#: /src/schooltool/devmode/configure.zcml:52
 #: /src/schooltool/devmode/devmode.pt:20
 msgid "Sample data"
-msgstr ""
-
-#: /src/schooltool/devmode/configure.zcml:62
-#: /src/schooltool/devmode/devmode.pt:21
-msgid "Setup data"
 msgstr ""
 
 #: /src/schooltool/devmode/devmode.pt:11
@@ -4088,6 +3805,10 @@ msgstr ""
 
 #: /src/schooltool/devmode/devmode.pt:18
 msgid "Introspector"
+msgstr ""
+
+#: /src/schooltool/devmode/devmode.pt:19
+msgid "API Docs"
 msgstr ""
 
 #: /src/schooltool/email/browser/configure.zcml:54
@@ -4681,27 +4402,8 @@ msgstr "Gestiona la pertinença d'aquests usuaris"
 msgid "edit groups"
 msgstr "edita els grups"
 
-#: /src/schooltool/group/help/group_container.pt:8
-msgid ""
-"<h1>Groups</h1> <p>Use this page to keep track of <b>groups</b> of Persons.</"
-"p> <p><b>Groups</b> that have been added are not part of the essential "
-"groups (<b>Teachers</b>, <b>Students</b>, <b>Site Managers</b>, <b>School "
-"Administrators</b>, or <b>Clerks</b>). They can be selected by the checkbox "
-"next to them and removed by pressing the <b>Delete</b> button at the bottom "
-"of the page.</p> <h3>How do I...</h3> <ul> <li><b>Look for for a group:</b> "
-"Use the search box to the left of the <code>Find Now</code> button to look "
-"through the entire list of groups for the search criterion. The <code>Clear</"
-"code> button empties the search box of current entries.</li> <li><b>View the "
-"persons in a certain group:</b> Click on the name of the group.</li> "
-"<li><b>Sort the list:</b> Click on the <code>Title</code> header to change "
-"the order of groups from descending to ascending order, and vice versa.</li> "
-"<li><strong>Browse for a group:</strong> Use the <code>Next 10</code> (and "
-"<code>Previous</code>) and links in the blue bar.</li> <li><strong>Show all "
-"groups:</strong> Click <code>Show All</code> in the blue bar.</li> </ul>"
-msgstr ""
-
 #: /src/schooltool/group/interfaces.py:41
-#: /src/schooltool/securitypolicy/interfaces.py:109
+#: /src/schooltool/securitypolicy/interfaces.py:111
 msgid "Title of the group."
 msgstr "Nom del grup"
 
@@ -4749,14 +4451,6 @@ msgstr ""
 msgid "Groups are essentially sets of users."
 msgstr ""
 
-#: /src/schooltool/help/configure.zcml:47
-msgid "Contextual Help"
-msgstr ""
-
-#: /src/schooltool/help/helplink.pt:2
-msgid "Help"
-msgstr ""
-
 #: /src/schooltool/level/browser.py:47
 msgid "Add a level"
 msgstr ""
@@ -4792,10 +4486,6 @@ msgstr ""
 
 #: /src/schooltool/note/configure.zcml:68
 msgid "New Note"
-msgstr ""
-
-#: /src/schooltool/note/configure.zcml:100
-msgid "Notes (Rest)"
 msgstr ""
 
 #: /src/schooltool/note/interfaces.py:43
@@ -4863,7 +4553,7 @@ msgstr "edita el nom"
 
 #: /src/schooltool/person/browser/home_tab_viewlet.pt:3
 msgid "Home"
-msgstr ""
+msgstr "Inici"
 
 #: /src/schooltool/person/browser/person-csvimport.pt:29
 msgid ""
@@ -4961,20 +4651,6 @@ msgstr "Edita les preferències de l'usuari"
 #: /src/schooltool/person/browser/person_preferences.pt:20
 msgid "Change preferences for ${user}"
 msgstr "Canvia les preferències (${user})"
-
-#: /src/schooltool/person/help/person_container.pt:8
-msgid ""
-"<h1>Persons</h1> <p>Use this page to browse and find individual persons.</p> "
-"<h3>How do I...</h3> <ul> <li><strong>Sort the list:</strong> Click on "
-"<code>First Name</code> or <code>Last Name</code> to sort.</li> "
-"<li><strong>Search for a user:</strong> Use the search field at the top of "
-"the page to look through all of the people in the system. If you want to "
-"filter by group, select the group in the adjacent drop-down list.</li> "
-"<li><strong>View the details of a person:</strong> Click on the name.</li> "
-"<li><strong>Browse for a person:</strong> Use the <code>Next 10</code> (and "
-"<code>Previous</code>) and links in the blue bar.</li> <li><strong>Show all "
-"students:</strong> Click <code>Show All</code> in the blue bar.</li> </ul>"
-msgstr ""
 
 #: /src/schooltool/person/interfaces.py:157
 msgid "Time Zone"
@@ -5095,16 +4771,12 @@ msgstr ""
 msgid "Everybody, if the calendar is made public in user preferences."
 msgstr ""
 
-#: /src/schooltool/relationship/configure.zcml:13
-msgid "Relationships"
-msgstr "Relacions"
-
 #: /src/schooltool/report/browser/configure.zcml:8
-#: /src/schooltool/report/browser/configure.zcml:22
-#: /src/schooltool/report/browser/configure.zcml:33
-#: /src/schooltool/report/browser/configure.zcml:44
-#: /src/schooltool/report/browser/configure.zcml:55
-#: /src/schooltool/report/browser/configure.zcml:66
+#: /src/schooltool/report/browser/configure.zcml:23
+#: /src/schooltool/report/browser/configure.zcml:34
+#: /src/schooltool/report/browser/configure.zcml:45
+#: /src/schooltool/report/browser/configure.zcml:56
+#: /src/schooltool/report/browser/configure.zcml:67
 msgid "Reports"
 msgstr "Informes"
 
@@ -5246,11 +4918,7 @@ msgstr ""
 msgid "Edit equipment"
 msgstr ""
 
-#: /src/schooltool/resource/help/resource_help.pt:6
-msgid "Resource Help"
-msgstr ""
-
-#: /src/schooltool/resource/interfaces.py:38
+#: /src/schooltool/resource/interfaces.py:45
 msgid "Title of the resource."
 msgstr "Nom del recurs"
 
@@ -5629,19 +5297,6 @@ msgstr ""
 msgid "The super user - owner of this SchoolTool application."
 msgstr ""
 
-#: /src/schooltool/setupdata/setupdata.pt:3
-#: /src/schooltool/setupdata/setupdata.pt:9
-msgid "Initial School Setup Scripts"
-msgstr ""
-
-#: /src/schooltool/setupdata/setupdata.pt:14
-msgid ""
-"Warning: proceeding will populate the database with data generated from "
-"scripts installed on the filesystem of this server. Do not do this if you "
-"have any valuable data in this SchoolTool instance or don't already "
-"understand what this is for."
-msgstr ""
-
 #: /src/schooltool/skin/breadcrumbs.py:76
 msgid "top"
 msgstr "inici"
@@ -5693,10 +5348,6 @@ msgstr ""
 
 #: /src/schooltool/skin/templates/notfound.pt:22
 msgid "You might be trying to access a non-existing page"
-msgstr ""
-
-#: /src/schooltool/skin/templates/onlinehelp_macros.pt:55
-msgid "SchoolTool Onlinehelp"
 msgstr ""
 
 #: /src/schooltool/skin/templates/view_macros.pt:45
@@ -5974,37 +5625,6 @@ msgstr ""
 #: /src/schooltool/term/browser/term.py:268
 #: /src/schooltool/term/browser/term.py:291
 msgid "Term must begin before it ends."
-msgstr ""
-
-#: /src/schooltool/term/help/configure.zcml:8
-msgid "Add a term"
-msgstr ""
-
-#: /src/schooltool/term/help/term_add.pt:6
-msgid "Term Search Help"
-msgstr ""
-
-#: /src/schooltool/term/help/term_container.pt:6
-msgid "Terms in SchoolTool"
-msgstr ""
-
-#: /src/schooltool/term/help/term_container.pt:8
-msgid ""
-"<h1>Terms in SchoolTool</h1> <p>SchoolTool supports definition of basic "
-"academic terms, that is, a period of time which defines when sections begin "
-"and end, and when they are evaluated. The current implementation does not "
-"support a hierarchy of terms, for example, a year, which contains two "
-"semesters, which contain two marking periods. You can create several terms, "
-"which may overlap, for example, both semesters and trimesters in the same "
-"school, but you cannot express a relationship between terms.</p> <h3>How do "
-"I...</h3> <ul> <li><strong>Add a term:</strong> Select <code>New Term</code> "
-"from the <code>Actions</code> menu.</li> <li><strong>Edit a term:</strong> "
-"Click on the term. Then select <code>Edit</code> from the <code>Actions</"
-"code> menu.</li> <li><strong>Delete a term:</strong> Check the box next to "
-"the name of the term and click <code>Delete</code>. Only delete terms if you "
-"have made a mistake while creating them but you have not used them yet. You "
-"should <strong>not</strong> delete terms simply because they are over, or "
-"you will lose important data.</li> </ul>"
 msgstr ""
 
 #: /src/schooltool/term/term.py:306
@@ -6286,10 +5906,6 @@ msgstr "No hi ha trimestres o horaris definits."
 msgid "Timetable"
 msgstr "Horari"
 
-#: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:24
-msgid "Term"
-msgstr "Trimestre"
-
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:34
 msgid "Schema"
 msgstr "Esquema"
@@ -6509,7 +6125,7 @@ msgstr "Horaris de ${object}"
 
 #: /src/schooltool/timetable/browser/templates/timetableschema.pt:33
 msgid "Homeroom"
-msgstr ""
+msgstr "Aula d'acollida"
 
 #: /src/schooltool/timetable/browser/templates/ttwizard.pt:9
 msgid ""
@@ -6541,7 +6157,7 @@ msgstr "Introduïu almenys un dia."
 
 #: /src/schooltool/timetable/browser/ttwizard.py:304
 msgid "Please make sure the day names are unique."
-msgstr "Assegureu-vos que els noms de les hores són únics."
+msgstr "Assegureu-vos que els noms dels dies són únics."
 
 #: /src/schooltool/timetable/browser/ttwizard.py:320
 msgid ""
@@ -6562,6 +6178,8 @@ msgid ""
 "Do start and end times vary based on the day of the week (Monday - Friday) "
 "or the day in the cycle?"
 msgstr ""
+"Les hores d'inici i final de classe varien segons el dia de la setmana "
+"(Dilluns - Divendres) o el dia del cicle?"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:346
 msgid "Day of week"
@@ -6569,7 +6187,7 @@ msgstr "Dia de la setmana"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:347
 msgid "Day in cycle"
-msgstr ""
+msgstr "Dia del cicle"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:412
 msgid ""
@@ -6635,7 +6253,7 @@ msgstr "Diferent"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:629
 msgid "Please put the periods in order:"
-msgstr "Ordeneu les classes:"
+msgstr "Ordeneu les hores de classe"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:645
 #: /src/schooltool/timetable/browser/ttwizard.py:699
@@ -6646,26 +6264,26 @@ msgstr "Introduïu totes les hores de classe"
 #: /src/schooltool/timetable/browser/ttwizard.py:658
 #: /src/schooltool/timetable/browser/ttwizard.py:716
 msgid "The following periods were selected more than once: $periods"
-msgstr "Heu seleccionat les segënts hores més d'un cop: $periods"
+msgstr "Heu seleccionat les següents hores més d'un cop: $periods"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:676
 msgid "Please put the periods in order for each day:"
-msgstr "Ordeneu les classes de cada dia:"
+msgstr "Ordeneu les hores de classe de cada dia:"
 
 #. Default: ""
 #: /src/schooltool/timetable/browser/ttwizard.py:712
 msgid "$period on day $day"
-msgstr "$period on day $day"
+msgstr "$period els $day"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:733
 msgid ""
 "Do you check student attendance for the day in a homeroom period or "
 "equivalent?"
-msgstr ""
+msgstr "Controleu l'assistència diària a una aula d'acollida?"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:736
 msgid "Yes"
-msgstr "Sí"
+msgstr "Si"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:737
 msgid "No"
@@ -6673,20 +6291,108 @@ msgstr "No"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:752
 msgid "Please indicate the homeroom period(s) for each day:"
-msgstr ""
+msgstr "Indiqueu les hores d'acollida de cada dia:"
 
 #: /src/schooltool/timetable/security.zcml:16
 msgid "School timetables"
-msgstr ""
+msgstr "Horaris de l'escola"
 
 #: /src/schooltool/timetable/security.zcml:46
 msgid "Assign timetables"
-msgstr ""
+msgstr "Assignar horaris"
 
 #: /src/schooltool/timetable/security.zcml:54
 msgid "Change schedule"
-msgstr "Cambiar horari"
+msgstr "Canviar horari"
 
 #: /src/schooltool/widget/password.py:55
 msgid "Supplied passwords are not identical"
-msgstr "Contrasenyes subministrades no són idèntiques"
+msgstr "Les contrasenyes introduïdes no coincideixen"
+
+#~ msgid "Application"
+#~ msgstr "Aplicació"
+
+#~ msgid "Calendar Widget"
+#~ msgstr "Widget de Calendari"
+
+#~ msgid "Templates"
+#~ msgstr "Plantilles"
+
+#~ msgid "Relationships"
+#~ msgstr "Relacions"
+
+#~ msgid "Using timetable:"
+#~ msgstr "Utilitza l'horari:"
+
+#~ msgid "Everyone can view the application calendar."
+#~ msgstr "Tothom pot veure el calendari de l'aplicació"
+
+#~ msgid "Browser UI"
+#~ msgstr "Navegador URL"
+
+#~ msgid "Security (General)"
+#~ msgstr "Seguretat (General)"
+
+#~ msgid "Booking Resources"
+#~ msgstr "Reservant recursos"
+
+#~ msgid "SchoolTool Administration"
+#~ msgstr "Administració de SchoolTool"
+
+#~ msgid "Calendar Selection"
+#~ msgstr "Selecció de Calendari"
+
+#~ msgid "Calendaring in SchoolTool"
+#~ msgstr "Crear calendaris amb SchoolTool"
+
+#~ msgid "Administration"
+#~ msgstr "Administració"
+
+#~ msgid "Organization"
+#~ msgstr "Organització"
+
+#~ msgid "Calendaring"
+#~ msgstr "Crear calendaris"
+
+#~ msgid "Daily Calendar"
+#~ msgstr "Calendari diari"
+
+#~ msgid "Weekly Calendar"
+#~ msgstr "Calendari setmanal"
+
+#~ msgid "Monthly Calendar"
+#~ msgstr "Calendari mensual"
+
+#~ msgid "Yearly Calendar"
+#~ msgstr "Calendari anual"
+
+#~ msgid "This form has a few issues:"
+#~ msgstr "Aquerst formulari té alguns problemes:"
+
+#~ msgid ""
+#~ "If you need to reserve a resource, such as a room or a projector, tracked "
+#~ "by SchoolTool at your school, you should create an event for the "
+#~ "necessary time and check the <code>Book Resources</code> checkbox at the "
+#~ "bottom of the page."
+#~ msgstr ""
+#~ "Si necessites reservar un recurs com una aula o un projector del que "
+#~ "Schooltool fa el seguiment, hauries de crear un esdeveniment per la "
+#~ "durada necessària i clicar sobre el quadrat <code>Reservar recursos</"
+#~ "code> a baix de la pàgina."
+
+#~ msgid ""
+#~ "If you need to edit a resource reservation, click the <code>Book "
+#~ "resources</code> link at the bottom of the form."
+#~ msgstr ""
+#~ "Si necessites modificar la reserva d'un recurs, clica sobre l'enllaç "
+#~ "<code>Reservar recursos</code> a baix del formulari."
+
+#~ msgid "SchoolTool Organization"
+#~ msgstr "Organització de SchoolTool"
+
+#~ msgid ""
+#~ "<h1>SchoolTool Organization</h1> <p>This branch of the help tree contains "
+#~ "items explaining the basic organization of SchoolTool.</p>"
+#~ msgstr ""
+#~ "<h1>Organització de SchoolTool</h1> <p>Aquesta branca de l'ajuda conté "
+#~ "explicacions sobre l'organització bàsica de SchoolTool.</p>"

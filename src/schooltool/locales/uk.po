@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-04-17 23:49+0300\n"
-"PO-Revision-Date: 2011-04-01 18:38+0000\n"
+"POT-Creation-Date: 2011-09-08 14:13+0300\n"
+"PO-Revision-Date: 2011-04-18 08:49+0000\n"
 "Last-Translator: Kenji <kenji@3g.ua>\n"
 "Language-Team: Ukrainian <uk@li.org>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-04-08 04:39+0000\n"
-"X-Generator: Launchpad (build 12735)\n"
+"X-Launchpad-Export-Date: 2011-09-10 04:38+0000\n"
+"X-Generator: Launchpad (build 13900)\n"
 "X-Rosetta-Version: 0.1\n"
 
 #: /src/schooltool/app/app.py:197
@@ -642,35 +642,12 @@ msgstr "Область перекладів"
 msgid "Generations"
 msgstr "Покоління"
 
-#: /src/schooltool/app/browser/configure.zcml:666
-msgid "Browser UI"
-msgstr "Інтерфейс Оглядача"
-
-#: /src/schooltool/app/browser/configure.zcml:672
-#: /src/schooltool/app/browser/templates/login.pt:3
-#: /src/schooltool/app/browser/templates/menu_view.pt:3
-msgid "Login"
-msgstr "Ім’я користувача"
-
-#: /src/schooltool/app/browser/configure.zcml:678
-#: /src/schooltool/app/browser/configure.zcml:765
+#: /src/schooltool/app/browser/configure.zcml:714
 #: /src/schooltool/devmode/devmode.pt:17
 msgid "Errors"
 msgstr "Помилки"
 
-#: /src/schooltool/app/browser/configure.zcml:690
-msgid "Application"
-msgstr "Застосунок"
-
-#: /src/schooltool/app/browser/configure.zcml:696
-msgid "Calendar Widget"
-msgstr "Елемент інтерфейса - Календар"
-
-#: /src/schooltool/app/browser/configure.zcml:702
-msgid "Templates"
-msgstr "Шаблони"
-
-#: /src/schooltool/app/browser/configure.zcml:781
+#: /src/schooltool/app/browser/configure.zcml:730
 msgid "Configure"
 msgstr "Налаштувати"
 
@@ -1388,6 +1365,11 @@ msgstr "Групи"
 msgid "Levels"
 msgstr "Рівні"
 
+#: /src/schooltool/app/browser/templates/login.pt:3
+#: /src/schooltool/app/browser/templates/menu_view.pt:3
+msgid "Login"
+msgstr "Ім’я користувача"
+
 #: /src/schooltool/app/browser/templates/login.pt:8
 msgid "Your session has expired."
 msgstr "Час сеансу вичерпаний."
@@ -1773,497 +1755,6 @@ msgstr "CSV дані"
 msgid "submit-button"
 msgstr "Застосувати"
 
-#: /src/schooltool/app/configure.zcml:340
-msgid "Security (General)"
-msgstr "Безпека (Загальна)"
-
-#: /src/schooltool/app/configure.zcml:355
-msgid "Booking Resources"
-msgstr "Резервування ресурсів"
-
-#: /src/schooltool/app/help/admin.pt:6
-msgid "SchoolTool Administration"
-msgstr "Керування SchoolTool"
-
-#: /src/schooltool/app/help/admin.pt:8
-msgid ""
-"<h1>SchoolTool Administration</h1> <p>Schools have complex structures, "
-"spanning the organization of people, pedagogy, time and physical resources. "
-"Unfortunately, this means that an application that seeks to model these "
-"processes, like SchoolTool, is also complex, and the process of setting up "
-"an individual school in SchoolTool is necessarily an involved one.</p> "
-"<p>This branch of the help tree contains items relevant to administrators "
-"configuring SchoolTool, but not end users.</p>"
-msgstr ""
-"<h1>Адміністрування SchoolTool</h1><p>Школи являють собою складні "
-"організаційні структури, в роботі яких присутня велика кількість процесів "
-"керування: людьми, часом, предметами, фізичними ресурсами. На жаль, це  "
-"значить, що застосунок, що моделює усі ці процеси (такий як SchoolTool) буде "
-"таким же складним, та процес індивідуального налаштування для кожної школи "
-"потрібен для правильної роботи SchoolTool.</p><p>Цей розділ довідки містить "
-"опис налаштування SchoolTool адміністраторами, а не кінцевими користувачами."
-"</p>"
-
-#: /src/schooltool/app/help/calendar_selection.pt:6
-#: /src/schooltool/app/help/configure.zcml:97
-msgid "Calendar Selection"
-msgstr "Календар"
-
-#: /src/schooltool/app/help/calendar_selection.pt:8
-msgid ""
-"<h1>Calendar Selection</h1> <p>You can add color-coded events from multiple "
-"calendars to your personal calendar view. You can add events from course "
-"sections you attend, groups, other people, or even resources like classrooms "
-"or projectors.</p> <p>Some calendars are private or limited to certain "
-"groups.</p> <p>On the calendar selection form you are given lists of all the "
-"calendars available to you. This might be a long list.</p> <p>The "
-"\"SchoolTool site-wide calendar\" is intended to be used as the official "
-"public calendar of the school.</p> <h3>How do I...</h3> <ul> "
-"<li><strong>Select or unselect several individual calendars of one type:</"
-"strong> If you press the <code>Ctrl</code> button on your keyboard while you "
-"select calendars from a list with your mouse, you can select multiple "
-"calendars.</li> <li><strong>Select a range of calendars of one type:</"
-"strong> If you press the <code>Shift</code> key while clicking on calendars, "
-"you can select a range.</li> </ul>"
-msgstr ""
-"<h1>Вибір календарів</h1> <p>Ви можете додавати події, позначені кольором, з "
-"різноманітних календарів у ваш особистий календар. Можна додавати події з "
-"предметів, які ви відвідуєте, груп, інших людей або навіть ресурсів, "
-"наприклад, класних кімнат або проекторів.</p> <p>Деякі календарі є "
-"особистими або доступними тільки для певних груп.</p> <p>У формі вибору "
-"календарів присутній перелік всіх календарів, що вам доступні. Це може бути "
-"довгий перелік.</p> <p> «Загальний календар SchoolTool» — офіційний "
-"публічний календар школи.</p> <h3>Як мені …</h3> <ul> <li><strong>Вибрати "
-"або зняти виділення з кількох календарів одного типу:</strong> Якщо "
-"натиснути клавішу <code>Ctrl</code> на клавіатурі та вибирати календарі за "
-"допомогою миші, можливо вибирати одразу кілька календарів.</li> "
-"<li><strong>Вибрати діапазон календарів одного типу:</strong> Якщо натиснути "
-"клавішу <code>Shift</code> на клавіатурі та вибирати календарі за допомогою "
-"миші, можна вибирати діапазон календарів.</li> </ul>"
-
-#: /src/schooltool/app/help/calendaring.pt:6
-msgid "Calendaring in SchoolTool"
-msgstr "Календарі у SchoolTool"
-
-#: /src/schooltool/app/help/calendaring.pt:8
-msgid ""
-"<h1>Calendaring in SchoolTool</h1> <p>SchoolTool includes a full-featured "
-"calendaring system, similar to Apple iCal or Google Calendar, but capable of "
-"representing complex school timetables, including rotating schedules. "
-"SchoolTool is also useful for simple resource scheduling, allowing you to "
-"manage room assignments, and booking shared resources like computers or "
-"projectors. Each person, group, course section or resource has its own "
-"calendar. You may integrate multiple calendars into your personal calendar "
-"views.</p> <h3>Parts of the standard calendar views</h3> <ul> "
-"<li><strong>Calendar table:</strong> fills the main (lower-right) part of "
-"the page. This represents the calendar for one day, week, month or year, "
-"depending on the view..</li> <li><strong>Calendar navigation bar:</strong> "
-"immediately above the calendar table. Allows you to navigate forward or "
-"backward in time, or to return to the current time.</li> "
-"<li><strong>Calendar title:</strong> immediately above the calendar "
-"navigation bar, lists the owner of this calendar and the date for this \"page"
-"\" of the calendar.</li> <li><strong>Left sidebar:</strong> for all "
-"calendars, this contains a <code>Jump to...</code> section containing menus "
-"and links to allow you to quickly navigate to a specific month, year or "
-"date. <br /> If you are logged in and viewing your own calendar, you will "
-"also see a <code>Calendars</code> section at the top of the sidebar which "
-"allows you to \"overlay\" events from other calendars in this view. You may "
-"see calendars for classes you teach or attend listed here already.</li> "
-"<li><strong>Day/week/month/year buttons:</strong> These buttons allow you to "
-"switch between daily, weekly, monthly and annual views.</li> </ul>"
-msgstr ""
-"<h1>Календарі в SchoolTool</h1> <p>До складу SchoolTool включена потужна "
-"систему календарів з багатьма можливостями, схожа с Apple iCal або Google "
-"Calendar, але вона дає змогу представляти складні шкільні розклади, "
-"включаючи повторювані задачі. SchoolTool також годиться для простого "
-"керування ресурсами, що дозволяє відстежувати використання класів, та "
-"резервувати спільні ресурси, такі як комп'ютери або проектори. Кожна особа, "
-"група, предмет чи ресурс мають власний календар. Можливо інтегрувати різні "
-"календарі до свого персонального календаря.</p> <h3>Розділи стандартних "
-"календарів</h3> <ul> <li><strong>Таблиця календаря:</strong> заповнює "
-"основну (нижню-праву) частину сторінки. Вона показує календар на один день, "
-"тиждень, місяць або рік, в залежності від обраного вигляду.</li> "
-"<li><strong>Панель навігації календаря:</strong> знаходиться безпосередньо "
-"над таблицею календаря. Дозволяє здійснювати навігацію у часі або "
-"повернутись у поточний час.</li> <li><strong>Заголовок календаря:</strong> "
-"безпосередньо над панеллю навігації, показує список власників і дату "
-"поточної сторінки календаря.</li> <li><strong>Ліва бокова панель:</strong> "
-"для всіх календарів містить розділ<code>Перейти до…</code>, яка дозволяє "
-"здійснити швидкий стрибок до певного місяця, року або дати. <br /> Якщо ви "
-"авторизовані в системі та переглядаєте власний календар, вам також доступний "
-"розділ <code>Календарі</code> у верхній частині бокової панелі, яка дозволяє "
-"нашаровувати події з інших календарів у поточне вигляд. Ви можете побачити "
-"календарі ваших занять, які вже показуються тут.</li> <li><strong>Кнопки "
-"день/тиждень/місяць/рік:</strong> Ці кнопки дозволяють перемикати відповідні "
-"режими перегляду календаря.</li> </ul>"
-
-#: /src/schooltool/app/help/configure.zcml:13
-msgid "Administration"
-msgstr "Керування"
-
-#: /src/schooltool/app/help/configure.zcml:21
-msgid "Organization"
-msgstr "Установа"
-
-#: /src/schooltool/app/help/configure.zcml:29
-msgid "Calendaring"
-msgstr "Календарі"
-
-#: /src/schooltool/app/help/configure.zcml:37
-#: /src/schooltool/app/help/daily_calendar.pt:6
-msgid "Daily Calendar"
-msgstr "Щоденний календар"
-
-#: /src/schooltool/app/help/configure.zcml:47
-#: /src/schooltool/app/help/weekly_calendar.pt:6
-msgid "Weekly Calendar"
-msgstr "Щотижневий календар"
-
-#: /src/schooltool/app/help/configure.zcml:57
-#: /src/schooltool/app/help/monthly_calendar.pt:6
-msgid "Monthly Calendar"
-msgstr "Щомісячний календар"
-
-#: /src/schooltool/app/help/configure.zcml:67
-#: /src/schooltool/app/help/yearly_calendar.pt:6
-msgid "Yearly Calendar"
-msgstr "Річний календар"
-
-#: /src/schooltool/app/help/daily_calendar.pt:8
-msgid ""
-"<h1>Daily Calendar</h1> <p>This is the daily view of a calendar. It might be "
-"your calendar, or it might be the calendar of another person, group or "
-"resource in your school. <a href=\"/++help++/schooltool/calendaring\">More "
-"calendaring help...</a></p> <h3>How do I...</h3> <ul> <li><strong>Create an "
-"event:</strong> click in the calendar table at the start time for the event. "
-"Or select <code>New Event</code> from the <code>Actions</code> menu.</li> "
-"<li><strong>Book a resource:</strong> create an event starting at the time "
-"you want to reserve the resource. Select <code>Book Resource</code> in the "
-"Event Information form.</li> <li><strong>Show or hide events in one of the "
-"calendars listed under <code>Calendars</code>:</strong> check or uncheck the "
-"box under <code>Cal</code> and click <code>Apply</code>.</li> "
-"<li><strong>Adding or removing calendars to the <code>Calendars</code> list:"
-"</strong> click on the <code>More...</code> button.</li> <li><strong>access "
-"a iCal format version of the calendar:</strong>: Select <code>Open in iCal</"
-"code> from the Action menu.</li> <li><strong>Access an Atom feed version of "
-"the calendar: </strong> append <code>/atom.xml</code> to the calendar's URL."
-"</li> </ul>"
-msgstr ""
-"<h1>Щоденний календар</h1> <h1>Це вигляд календаря на день. Це може бути ваш "
-"календар, чи може календар іншої особи, групи або ресурсів вашої школи. <a "
-"href=\"/++help++/schooltool/calendaring\">Докладна допомога по календарях…</"
-"a></p> <h3>Як мені…</h3> <ul> <li><strong>Створити подію:</strong> клацніть "
-"на таблицю календаря на початковий час для вашої події. Або виберіть "
-"<code>Нова подія</code> з меню <code>Дії</code>.</li> "
-"<li><strong>Зарезервувати ресурси:</strong> створіть подію, що починається у "
-"потрібний вам час. Виберіть <code>Зарезервувати ресурс</code> у формі "
-"Інформація про події.</li> <li><strong>Показати або приховати події в одному "
-"з календарів,  перелічених у розділі <code>Календарі</code>:</strong> "
-"Установіть або зніміть позначку у <code>Кал</code> та клацніть "
-"<code>Застосувати</code>.</li> <li><strong>Додавання або вилучення "
-"календарів до переліку <code>Календарі</code>:</strong> клацніть на кнопку "
-"<code>Ще…</code>.</li> <li><strong>Отримати доступ до календаря в форматі "
-"iCal:</strong> Виберіть <code>Відкрити як iCal</code> з меню <code>Дії</"
-"code>.</li> <li><strong> Доступ до календаря у вигляді стрічки Atom:</"
-"strong> додайте <code>/atom.xml</code> до URL календаря.</li> </ul>"
-
-#: /src/schooltool/app/help/event_add.pt:10
-#: /src/schooltool/app/help/event_edit.pt:10
-msgid "This form has a few issues:"
-msgstr "Форма містить наступні помилки:"
-
-#: /src/schooltool/app/help/event_add.pt:12
-msgid ""
-"If you need to reserve a resource, such as a room or a projector, tracked by "
-"SchoolTool at your school, you should create an event for the necessary time "
-"and check the <code>Book Resources</code> checkbox at the bottom of the page."
-msgstr ""
-"Якщо вам потрібно зарезервувати ресурс, наприклад кімнату або проектор, "
-"облік якого ведеться в SchoolTool, вам треба створити подію із зазначенням "
-"потрібного часу і поставити галочку навпроти <code>Зарезервувати Ресурс</"
-"code> внизу сторінки."
-
-#: /src/schooltool/app/help/event_add.pt:16
-#: /src/schooltool/app/help/event_edit.pt:14
-msgid ""
-"The form ignores your preferences for time and date format. You must enter "
-"the event's start time in 24-hour or \"military\" time, and the date is "
-"displayed in year-month-day format."
-msgstr ""
-"Форма ігнорує ваші налаштування дати і часу. Ви повинні ввести час події в "
-"24-годинному форматі і дату в форматі рррр-мм-дд."
-
-#: /src/schooltool/app/help/event_add.pt:19
-#: /src/schooltool/app/help/event_edit.pt:17
-msgid ""
-"The <code>Location</code> field allows you to enter a description of the "
-"location of the event, but this is not connected to the reservation system. "
-"If your school uses SchoolTool to manage room reservations you need to check "
-"the <code>Book Resources</code> checkbox at the bottom of the form."
-msgstr ""
-"Поле <code>Місце</code> дозволяє вам додати опис місця проведення події, але "
-"воно не пов'язане з системою резервування. Якщо ваша школа користується  "
-"SchoolTool для керування розподілом приміщень, вам треба відмітити поле  "
-"<code>Резервувати ресурси</code> внизу форми."
-
-#: /src/schooltool/app/help/event_add.pt:24
-#: /src/schooltool/app/help/event_edit.pt:22
-msgid ""
-"If your event repeats in some pattern, check the <code>Recurring</code> box "
-"and fill out the new fields that appear. In certain circumstances (like if "
-"you change the original day of a weekly recurring event) you may need to "
-"click the <code>Update form</code> button to update the recurrence fields."
-msgstr ""
-"Якщо подія повторюється у кількох шаблонах, позначте поле <code>Повторна</"
-"code> та заповніть нові поля, що з’являються. У певних обставин (наприклад, "
-"якщо ви змінили початковий день подій, які повторюються щотижня), вам, "
-"можливо, знадобиться натиснути кнопку \"Оновити\" для оновлення полів "
-"повторення ."
-
-#: /src/schooltool/app/help/event_add.pt:29
-#: /src/schooltool/app/help/event_edit.pt:27
-msgid ""
-"An \"all day\" event does not show up as a 24 hour event. It indicates that "
-"the day as a whole has some significance, like a birthday or holiday."
-msgstr ""
-"Подія на \"цілий день\" не виглядає як подія тривалістю 24 години. \"Цілий "
-"день\" означає, що цей день чимось примітний, наприклад як свято або день "
-"народження."
-
-#: /src/schooltool/app/help/event_add.pt:32
-#: /src/schooltool/app/help/event_edit.pt:30
-msgid ""
-"\"Exception dates\" are specific dates a repeating event skips, such as "
-"holidays."
-msgstr ""
-"\"Дні винятку\" — особливі дати, в які повторюванні події не відбуваються "
-"(наприклад, на свята)."
-
-#: /src/schooltool/app/help/event_edit.pt:12
-msgid ""
-"If you need to edit a resource reservation, click the <code>Book resources</"
-"code> link at the bottom of the form."
-msgstr ""
-"Якщо вам необхідно змінити резервування ресурсу клацніть <code>Забронювати "
-"Ресурс</code> внизу форми."
-
-#: /src/schooltool/app/help/monthly_calendar.pt:8
-msgid ""
-"<h1>Monthly Calendar</h1> <p>This is the monthly view of a calendar. It "
-"might be your calendar, or it might be the calendar of another person, group "
-"or resource in your school. <a href=\"/++help++/schooltool/calendaring"
-"\">More calendaring help...</a></p> <h3>How do I...</h3> <ul> "
-"<li><strong>View an individual day or event in more detail:</strong> click "
-"on the appropriate day on the calendar.</li> <li><strong>View an individual "
-"week:</strong> Click on the appropriate week number in blue in the leftmost "
-"column of the calendar.</li> <li><strong>Create an event:</strong> select "
-"<code>New Event</code> from the <code>Actions</code> menu.</li> "
-"<li><strong>Show or hide events in one of the calendars listed under "
-"<code>Calendars</code>:</strong> check or uncheck the box under <code>Cal</"
-"code> and click <code>Apply</code>.</li> <li><strong>Adding or removing "
-"calendars to the <code>Calendars</code> list:</strong> click on the "
-"<code>More...</code> button.</li> <li><strong>Make weeks start on the "
-"correct day:</strong> the first day of the week varies in different parts of "
-"the world. If SchoolTool isn't set up correctly for you, click on your name "
-"in the red bar at the top of the page. Then click on the <code>Actions</"
-"code> menu and select <code>Change Preferences</code>. Pick the correct "
-"\"Week starts on\" day and hit <code>Apply</code>.</li> <li><strong>Access a "
-"iCal format version of the calendar:</strong>: select <code>Open in iCal</"
-"code> from the Action menu.</li> </ul>"
-msgstr ""
-"<h1>Щомісячний календар</h1> <p> Це помісячний вигляд календарю. Це може "
-"бути ваш календар або календар іншої особи, групи або ресурсів вашої школи. "
-"<a href=\"/++help++/schooltool/calendaring\">Докладніше про календарі…</a></"
-"p> <h3>Як ….</h3> <ul> <li><strong>Переглянути окремий день чи подію "
-"докладніше:</strong> клацніть на потрібний день в календарі.</li> "
-"<li><strong>Переглянути окремий тиждень:</strong> Клацніть на потрібний "
-"номер тижня у синім лівім стовпчику календарю.</li> <li><strong>Створити "
-"подію:</strong> оберіть <code>Нова подія</code> з меню <code>Дії</code>..</"
-"li> <li><strong>Показати або приховати події одного з календарів, "
-"перерахованих в <code>Календарях</code>: позначте або зніміть позначку "
-"<code>Кал</code> та клацніть <code>Застосувати</code>.</li> "
-"<li><strong>Додати або вилучити календар з переліку <code>Календарів</code>:"
-"</strong> клацніть на кнопку <code>Ще…</code>.</li> <li><strong>Зазначити "
-"вірний початок тижня:</strong> у різних частинах світу тиждень починається у "
-"різні дні. Якщо SchoolTool має не вірні для вас налаштування, клацніть на "
-"своє ім’я у червоній панелі у верхній частині сторінки. Потім оберіть з меню "
-"<code>Дії</code> <code>Змінити налаштування</code>. Вкажіть потрібний день "
-"\"Початку тижня\" та натисніть <code>Застосувати</code>.</li> "
-"<li><strong>Доступ до календарю в форматі iCal:</strong> оберіть "
-"<code>Відкрити як iCal</code> з меню <code>Дії</code>.</li> </ul>"
-
-#: /src/schooltool/app/help/org.pt:6
-msgid "SchoolTool Organization"
-msgstr "Принципи роботи SchoolTool"
-
-#: /src/schooltool/app/help/org.pt:8
-msgid ""
-"<h1>SchoolTool Organization</h1> <p>This branch of the help tree contains "
-"items explaining the basic organization of SchoolTool.</p>"
-msgstr ""
-"<h1>Принципи роботи SchoolTool</h1> <p>Ця гілка дерева допомоги містить "
-"розділи, що пояснюють основні принципи роботи SchoolTool.</p>"
-
-#: /src/schooltool/app/help/schooltool.pt:8
-msgid ""
-"<h1>SchoolTool</h1> <p>SchoolTool is a free/libre administrative system for "
-"schools around the world, funded by The Shuttleworth Foundation.</p> "
-"<h2>Standard User Interface Conventions in SchoolTool</h2> <ul> "
-"<li><strong>Red top bar</strong></li> <ul> <li><strong>Breadcrumbs:</strong> "
-"the links at the left hand side of the red bar show you where you are in "
-"SchoolTool's object hierarchy. Note that this doesn't necessarily lead you "
-"back to where you came from, but is handy for taking you from more specific "
-"to more general parts of the application.</li> <li><strong>Your name</"
-"strong> (if you're logged in): clicking on your name takes you to a simple "
-"dashboard of relevant links. From this page you can also use the "
-"<code>Actions</code> menu to change preferences and other personal settings."
-"</li> <li><strong>Log in/out:</strong> this logs you in or out. It is a good "
-"idea to log out when you aren't using SchoolTool.</li> <li><strong>Help:</"
-"strong> if there is a help file for the page you're looking at, you'll see "
-"this link.</li> </ul> <li><strong>Menus</strong></li> <ul> "
-"<li><strong>Navigation:</strong> this menu gives you some basic options for "
-"accessing different parts of SchoolTool, such as the index of persons or "
-"courses. What you see here depends on your permissions in the system.</li> "
-"<li><strong>Action:</strong> this menu contains a variety of things that you "
-"can do on the current page. The entries in this menu change considerably "
-"based on what page you're viewing and what permissions you have.</li> </ul> "
-"<li><strong>Above the red bar</strong></li> <ul> <li><strong>Logo & School "
-"Name:</strong> clicking in this area will take you to the top of the "
-"school's site, usually the calendar for the school.</li> "
-"<li><strong>Calendar day/week/month/year views:</strong> if you are viewing "
-"a calendar, you will find icons in the upper right hand corner that will "
-"allow you to switch between calendar views.</li> <li><strong>Devmode menu:</"
-"strong> if you are a site administrator and you've enabled \"devmode\" in "
-"schooltool.conf, you will see a special menu in the upper right hand corner "
-"of the site. You should disable devmode in any production server.</li> </ul> "
-"</ul>"
-msgstr ""
-"<h1>SchoolTool</h1> <p>SchoolTool — вільна система для адміністрування "
-"навчальних закладів по усьому світу, заснована Shuttleworth Foundation.</p> "
-"<h2>Домовленості про інтерфейс користувача</h2> <ul> <li><strong>Червона "
-"стрічка згори</strong></li> <ul> <li><strong>Стежка:</strong> посилання у "
-"лівій частини червоної стрічки покаже вам де ви перебуваєте в ієрархії "
-"об'єктів SchoolTool. Зауважимо, що вона не обов'язково приведе вас назад до "
-"місця з якого ви почали, однак воно є зручним для того щоб дістатись з "
-"деяких особливих до більш загальних частин застосунку.</li> <li><strong>Ваше "
-"ім'я</strong> (якщо ви увійшли в систему): клацнувши на нього ви потрапите "
-"до панелі керування з відповідними посиланнями. З цієї сторінки  ви також "
-"можете викликати меню <code>Дії</code>, щоб змінити налаштування та особисті "
-"уподобання.</li> <li><strong>Вхід/Віхід:</strong> призначений для входу та "
-"виходу до/з системи. Гарним тоном є  закінчувати свою роботу із SchoolTool "
-"виходом із системи.</li> <li><strong>Допомога:</strong> якщо існує довідка "
-"для сторінки яку ви переглядаєте, тут з'явитися посилання на неї.</li> </ul> "
-"<li><strong>Меню</strong></li> <ul> <li><strong>Навігація:</strong> це меню "
-"надає вам кілька основних опцій для доступу до різних частин SchoolTool, "
-"таких як перелік осіб та занять. Те що вибачите тут залежить від вашого "
-"рівня доступу в системі.</li> <li><strong>Дії:</strong> Це меню містить усі "
-"можливі варіанти дій для поточної сторінки. Вміст цього меню змінюється "
-"відповідно до того, яку сторінку ви переглядаєте та від вашого рівня доступу "
-"в системі.</li> </ul> <li><strong>Над червоною стрічкою</strong></li> <ul> "
-"<li><strong>Емблема та назва школи:</strong> клацнувши на них ви попадете на "
-"початкову сторінку шкільного сайту, зазвичай це шкільний календар. /li> "
-"<li><strong>Щоденний/тижневий/місячний/річний календар:</strong> при "
-"перегляді календаря ви знайдете значки в правому верхньому куті екрану, що "
-"дозволяють перемикатися між режимами календаря.</li> <li><strong>Меню для "
-"розробників:</strong> якщо ви є адміністратором сайту та ви увімкнули режим "
-"\"devmode\" у schooltool.conf, ви побачите спеціальне меню у верхньому "
-"правому куті сайту. Вам треба відключити цей режим на будь-якому сервері, що "
-"обслуговує реальні завдання.</li> </ul> </ul>"
-
-#: /src/schooltool/app/help/weekly_calendar.pt:8
-msgid ""
-"<h1>Weekly Calendar</h1> <p>This is the weekly view of a calendar. It might "
-"be your calendar, or it might be the calendar of another person, group or "
-"resource in your school. <a href=\"/++help++/schooltool/calendaring\">More "
-"calendaring help...</a></p> <h3>How do I...</h3> <ul> <li><strong>View an "
-"individual day in more detail:</strong> click on the appropriate day in the "
-"blue row of the calendar table.</li> <li><strong>View details about an event "
-"or edit it:</strong> click on the event. If you have the correct permissions "
-"for the event you can edit it.</li> <li><strong>Create an event:</strong> "
-"select the day the event starts and create the event in the daily view.</li> "
-"<li><strong>Show or hide events in one of the calendars listed under "
-"<code>Calendars</code>:</strong> check or uncheck the box under <code>Cal</"
-"code> and click <code>Apply</code>.</li> <li><strong>Adding or removing "
-"calendars to the <code>Calendars</code> list:</strong> click on the "
-"<code>More...</code> button.</li> <li><strong>Make the calendar start on the "
-"correct day:</strong> the first day of the week varies in different parts of "
-"the world. If SchoolTool isn't set up correctly for you, click on your name "
-"in the red bar at the top of the page. Then click on the <code>Actions</"
-"code> menu and select <code>Change Preferences</code>. Pick the correct "
-"\"Week starts on\" day and hit <code>Apply</code>.</li> <li><strong>Access a "
-"iCal format version of the calendar:</strong>: select <code>Open in iCal</"
-"code> from the Action menu.</li> </ul>"
-msgstr ""
-"<h1>Тижневий календар</h1> <p>Це може бути ваш календар або календар іншої "
-"особи, групи або ресурсу вашої школи.<a href=\"/++help++/schooltool/"
-"calendaring\">Календар. Докладна довідка …</a></p><h3>Як мені …</h3> <ul> "
-"<li><strong>Переглянути окремий день більш докладно:</strong> клацніть на "
-"відповідний день у синьому рядку календаря.</li> <li><strong>Переглянути "
-"детальну інформацію про подію або відредагувати її:</strong> клацніть на "
-"подію і, якщо у вас є достатньо прав, ви зможете відредагувати її.</li> "
-"<li><strong>Створити подію:</strong> виберіть день, коли захід починається і "
-"створіть подію у щоденному режимі календаря.</li> <li><strong>Показати або "
-"приховати події в одному з календарів, з розділу <code>Календарі</code>:</"
-"strong> встановіть або зніміть позначку в стовпчику <code>Кал</code> та "
-"клацніть <code>Застосувати</code>.</li> <li><strong>Додати або вилучити "
-"календарі із списку <code>Календарі</code>:</strong> клацніть на кнопку "
-"<code>Ще…</code>.</li> <li><strong>Вибрати перший день початку тижня:</"
-"strong> перший день тижня, варіюється в різних частинах світу, тому якщо "
-"SchoolTool не налаштований правильно для вас, натисніть на ваше ім'я в "
-"червоній стрічці у верхній частині сторінки. Потім клацніть на меню  та "
-"виберіть <code>Змінити налаштування</code>.  Виберіть правильний \"День "
-"початку тижня\" та натисніть <code>Застосувати</code>.</li> "
-"<li><strong>Отримати доступ до календаря в форматі iCal:</strong> виберіть "
-"<code>Відкрити як iCal</code> з меню <code>Дії</code>.</li> </ul>"
-
-#: /src/schooltool/app/help/yearly_calendar.pt:8
-msgid ""
-"<h1>Yearly Calendar</h1> <p>This is the year view of a calendar. It might be "
-"your calendar, or it might be the calendar of another person, group or "
-"resource in your school. <a href=\"/++help++/schooltool/calendaring\">More "
-"calendaring help...</a></p> <h3>How do I...</h3> <ul> <li><strong>Know which "
-"days contain events: if the day has a blue background, there is at least one "
-"event that day.</strong></li> <li><strong>View an individual day in more "
-"detail:</strong> click on the day.</li> <li><strong>View an individual month:"
-"</strong> click on the name of the month.</li> <li><strong>Create an event:</"
-"strong> select the day the event starts and create the event in the daily "
-"view.</li> <li><strong>Show or hide events in one of the calendars listed "
-"under <code>Calendars</code>:</strong> check or uncheck the box under "
-"<code>Cal</code> and click <code>Apply</code>.</li> <li><strong>Adding or "
-"removing calendars to the <code>Calendars</code> list:</strong> click on the "
-"<code>More...</code> button.</li> <li><strong>Make the calendar start on the "
-"correct day:</strong> the first day of the week varies in different parts of "
-"the world. If SchoolTool isn't set up correctly for you, click on your name "
-"in the red bar at the top of the page. Then click on the <code>Actions</"
-"code> menu and select <code>Change Preferences</code>. Pick the correct "
-"\"Week starts on\" day and hit <code>Apply</code>.</li> <li><strong>Access a "
-"iCal format version of the calendar:</strong>: select <code>Open in iCal</"
-"code> from the Action menu.</li> </ul>"
-msgstr ""
-"<h1>Річний календар</h1><p>Це річне подання календаря. Це може бути ваш "
-"календар, або календар іншої людини, групи або ресурсу у вашій школі.<a href="
-"\"/++help++/schooltool/calendaring\">Докладна довідка за календарем...</a></"
-"p><h3>Як я можу...</h3><ul><li><strong>Дізнатися які дні містять події: якщо "
-"день має синій фон то є хоча б одна подія в цей день.</strong></"
-"li><li><strong>Переглянути детальну інформацію у визначений день:</"
-"strong>клацніть з цього дню.</li><li><strong>Перегляд певного місяця:</"
-"strong>клацніть за назвою місяця.</li><li><strong>Створити подію: </"
-"strong>виберіть день, в який починається подія і створіть подію в щоденному "
-"поданні календаря. </li><li><strong>Показати або сховати події в одному з "
-"календарів, присутніх в списку <code>Календарі</code>:</strong>поставте або "
-"зніміть галочку навпроти відповідного<code>календаря</code>та "
-"натисніть<code>Застосувати</code>.</li><li><strong> Додати або видалити "
-"календарі зі списку <code>Календарі</code>:</strong>натисніть на кнопку "
-"<code>Додатково...</code>.</li><li><strong>Встановити початок календаря в "
-"коректний день: </strong>перший день тижня розрізняється в різних країнах. "
-"Якщо SchoolTool не правильно встановив цей параметр, клацніть на ваше ім'я в "
-"червоному рядку у верхній частині сторінки. Після чого клацніть по меню "
-"<code>Дії</code>та виберіть<code>Змінити параметри</code>. Виберіть "
-"правильний день у полі \"Тиждень починається з\" та натисніть кнопку "
-"<code>Застосувати</code>. </li><li><strong>Отримати доступ до календаря у "
-"форматі iCal: </strong>:Виберіть<code>Відкрити у iCal</code>з меню "
-"<code>Дії</code>.</li></ul>"
-
 #: /src/schooltool/app/interfaces.py:44
 msgid "Form input is not a file object"
 msgstr "Дані форми повинні бути файловим об'єктом"
@@ -2363,7 +1854,27 @@ msgstr ""
 "                         є '-')\n"
 "  --manage               only do management tasks, don't run the server\n"
 
-#: /src/schooltool/app/main.py:110
+#: /src/schooltool/app/main.py:327
+msgid "Going to background, daemon pid %d"
+msgstr "Перехід до фонової роботи (процес %d)"
+
+#: /src/schooltool/app/main.py:382
+msgid "Cannot resolve plugin action order:\n"
+msgstr "Не можливо визначити порядок дій плагіна:\n"
+
+#: /src/schooltool/app/main.py:528
+msgid "Run %s -h for help."
+msgstr "%s -h для допомоги"
+
+#: /src/schooltool/app/main.py:549
+msgid "%s: daemon mode not supported on your operating system."
+msgstr "%s: фоновий режим роботи не підтримується вашою операційною системою."
+
+#: /src/schooltool/app/main.py:575
+msgid "Reading configuration from %s"
+msgstr "Зчитуються налаштування з %s"
+
+#: /src/schooltool/app/main.py:574
 msgid ""
 "\n"
 "No storage defined in the configuration file.\n"
@@ -2377,37 +1888,11 @@ msgstr ""
 "Якщо ви використовуєте стандартний файл налаштувань, виправте його і\n"
 "розкоментуйте один з розділів сховища ZODB.\n"
 
-#: /src/schooltool/app/main.py:335
-msgid "Going to background, daemon pid %d"
-msgstr "Перехід до фонової роботи (процес %d)"
-
-#: /src/schooltool/app/main.py:382
-msgid "Cannot resolve plugin action order:\n"
-msgstr "Не можливо визначити порядок дій плагіна:\n"
-
-#: /src/schooltool/app/main.py:536 /src/schooltool/app/main.py:580
-#: /src/schooltool/app/main.py:583
-msgid "%s: %s"
-msgstr "%s: %s"
-
-#: /src/schooltool/app/main.py:537
-msgid "Run %s -h for help."
-msgstr "%s -h для допомоги"
-
-#: /src/schooltool/app/main.py:549
-msgid "%s: daemon mode not supported on your operating system."
-msgstr "%s: фоновий режим роботи не підтримується вашою операційною системою."
-
-#: /src/schooltool/app/main.py:575
-msgid "Reading configuration from %s"
-msgstr "Зчитуються налаштування з %s"
-
-#: /src/schooltool/app/main.py:671
+#: /src/schooltool/app/main.py:666
 msgid "Startup time: %.3f sec real, %.3f sec CPU"
 msgstr "Час запуску:%.3f с реальний,%.3f с ЦПУ"
 
-#. Default: ""
-#: /src/schooltool/app/main.py:705
+#: /src/schooltool/app/main.py:700
 msgid ""
 "Could not initialize the database:\n"
 "%s"
@@ -2560,7 +2045,7 @@ msgstr "Нова особа"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:107
 msgid "Add Multiple Persons"
-msgstr ""
+msgstr "Додати кілька осіб"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:129
 #: /src/schooltool/basicperson/security.zcml:22
@@ -2578,7 +2063,7 @@ msgstr "Нове поле дати"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:174
 msgid "New Yes/No Field"
-msgstr ""
+msgstr "Нове поле Так/Ні"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:181
 msgid "New Selection List Field"
@@ -2586,15 +2071,15 @@ msgstr "Нове поле списку вибору"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:291
 msgid "Add Teacher"
-msgstr ""
+msgstr "Додати викладача"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:301
 msgid "Add Student"
-msgstr ""
+msgstr "Додати учня"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:311
 msgid "Add Administrator"
-msgstr ""
+msgstr "Додати адміністратора"
 
 #: /src/schooltool/basicperson/browser/csvimport.py:44
 #: /src/schooltool/course/browser/csvimport.py:45
@@ -2690,15 +2175,15 @@ msgstr "Це ім'я користувача вже використовуєть�
 msgid "Add new person"
 msgstr "Додати нову особу"
 
-#: /src/schooltool/basicperson/browser/person.py:256
+#: /src/schooltool/basicperson/browser/person.py:283
 msgid "Usernames"
-msgstr ""
+msgstr "Користувачі"
 
 #: /src/schooltool/basicperson/browser/person.py:300
 msgid "Add multiple persons"
-msgstr ""
+msgstr "Додати кілька осіб"
 
-#: /src/schooltool/basicperson/browser/person.py:330
+#: /src/schooltool/basicperson/browser/person.py:357
 msgid "Done"
 msgstr "Готово"
 
@@ -2734,50 +2219,52 @@ msgstr "Додати консультацію"
 msgid "Advisees of ${person}"
 msgstr "Консультації ${person}"
 
-#: /src/schooltool/basicperson/browser/person.py:576
+#: /src/schooltool/basicperson/browser/person.py:579
 msgid "Teacher identification"
-msgstr ""
+msgstr "Ідентифікація викладача"
 
 #: /src/schooltool/basicperson/browser/person.py:581
 msgid "Teacher demographics"
-msgstr ""
+msgstr "Демографія викладача"
 
 #: /src/schooltool/basicperson/browser/person.py:582
 msgid "Add new teacher"
-msgstr ""
+msgstr "Додати нового викладача"
 
 #: /src/schooltool/basicperson/browser/person.py:589
 msgid "Student identification"
-msgstr ""
+msgstr "Ідентифікація учня"
 
 #: /src/schooltool/basicperson/browser/person.py:591
 msgid "Student demographics"
-msgstr ""
+msgstr "Демографія учня"
 
 #: /src/schooltool/basicperson/browser/person.py:592
 msgid "Add new student"
-msgstr ""
+msgstr "Додати нового учня"
 
 #: /src/schooltool/basicperson/browser/person.py:599
 msgid "Administrator identification"
-msgstr ""
+msgstr "Ідентифікація адміністратора"
 
 #: /src/schooltool/basicperson/browser/person.py:601
 msgid "Administrator demographics"
-msgstr ""
+msgstr "Демографія адміністратора"
 
 #: /src/schooltool/basicperson/browser/person.py:602
 msgid "Add new administrator"
-msgstr ""
+msgstr "Додати нового адміністратора"
 
 #: /src/schooltool/basicperson/browser/templates/container.pt:23
 msgid ""
 "To add teachers, students or administrators, please set up a ${school_year}."
 msgstr ""
+"Для того, щоб додати вчителя, учня чи адміністратора, будь ласка, встановіть "
+"${school_year}."
 
 #: /src/schooltool/basicperson/browser/templates/container.pt:23
 msgid "school year"
-msgstr ""
+msgstr "навчальний рік"
 
 #: /src/schooltool/basicperson/browser/templates/container.pt:37
 #: /src/schooltool/course/browser/templates/course_container.pt:28
@@ -2851,7 +2338,7 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/templates/person_add_subform.pt:2
 msgid "New person"
-msgstr ""
+msgstr "Нова особа"
 
 #: /src/schooltool/basicperson/browser/templates/person_container_delete.pt:15
 #: /src/schooltool/contact/browser/templates/contacts_delete.pt:15
@@ -3672,6 +3159,70 @@ msgstr "Пройдений розділи"
 msgid "Section of ${course} -- ${section_title} for ${term} of ${schoolyear}"
 msgstr "Розділ ${course} — ${section_title} на ${term} ${schoolyear}"
 
+#: /src/schooltool/course/browser/templates/extend_term.pt:4
+msgid "Extend Section to Term"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/extend_term.pt:18
+msgid ""
+"Click \"Extend\" to create a linked section in term \"${from_term_title}\" "
+"containing the students and instructors from section \"${section_title}\" in "
+"term \"${to_term_title}\"."
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/extend_term.pt:27
+msgid "Extend"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/link_existing.pt:4
+msgid "Link Section to Section in Other Term"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/link_existing.pt:13
+#: /src/schooltool/course/browser/templates/link_existing.pt:52
+#: /src/schooltool/course/browser/templates/section_container.pt:39
+#: /src/schooltool/course/browser/templates/unlink_section.pt:13
+#: /src/schooltool/course/browser/templates/unlink_section.pt:28
+msgid "Section"
+msgstr "Розділ"
+
+#: /src/schooltool/course/browser/templates/link_existing.pt:20
+#: /src/schooltool/course/browser/templates/unlink_section.pt:19
+#: /src/schooltool/course/browser/templates/unlink_section.pt:29
+#: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:24
+msgid "Term"
+msgstr "Семестр"
+
+#: /src/schooltool/course/browser/templates/link_existing.pt:21
+msgid "Target Term"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/link_existing.pt:26
+msgid ""
+"Select a section and click 'Link' if you would like to copy and link this "
+"section to the target section."
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/link_existing.pt:30
+msgid ""
+"You may provide part of an instructor's name or username and click 'Filter' "
+"to limit the list of sections to those taught by a matching instructor."
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/link_existing.pt:35
+msgid "You must select a section before clicking 'Link'."
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/link_existing.pt:46
+msgid "Filter"
+msgstr ""
+
+#. Default: "Link"
+#: /src/schooltool/course/browser/templates/link_existing.pt:71
+#: /src/schooltool/course/browser/templates/link_section.pt:130
+msgid "link-section-button"
+msgstr "Посилання"
+
 #: /src/schooltool/course/browser/templates/link_section.pt:24
 msgid "Link ${section}, ${term} with a section in ${target_term}"
 msgstr "Посилання ${section}, ${term} у розділі ${target_term}"
@@ -3680,20 +3231,7 @@ msgstr "Посилання ${section}, ${term} у розділі ${target_term}"
 msgid "There is no valid term in ${schoolyear} to pick a section from."
 msgstr "Відсутні відповідні семестри у розділах ${schoolyear}."
 
-#. Default: "Link"
-#: /src/schooltool/course/browser/templates/link_section.pt:130
-msgid "link-section-button"
-msgstr "Посилання"
-
-#: /src/schooltool/course/browser/templates/section.pt:36
-msgid "Previous: ${course} -- ${section_title} for ${term}"
-msgstr "Назад: ${course} — ${section_title} для ${term}"
-
-#: /src/schooltool/course/browser/templates/section.pt:47
-msgid "Next: ${course} -- ${section_title} for ${term}"
-msgstr "Далі: ${course} — ${section_title} для ${term}"
-
-#: /src/schooltool/course/browser/templates/section.pt:58
+#: /src/schooltool/course/browser/templates/section.pt:35
 msgid "Change the name or description of this section."
 msgstr "Змінити назву або опис даного розділу."
 
@@ -3701,7 +3239,18 @@ msgstr "Змінити назву або опис даного розділу."
 msgid "edit info"
 msgstr "змінити інформацію"
 
-#: /src/schooltool/course/browser/templates/section.pt:87
+#: /src/schooltool/course/browser/templates/section.pt:46
+#: /src/schooltool/course/browser/templates/section_edit.pt:60
+msgid "Linked sections"
+msgstr "Пов'язані розділи"
+
+#: /src/schooltool/course/browser/templates/section.pt:52
+#: /src/schooltool/course/browser/templates/section_edit.pt:72
+#: /src/schooltool/course/browser/templates/section_edit.pt:106
+msgid "${section_title} for ${term}"
+msgstr "${section_title} для ${term}"
+
+#: /src/schooltool/course/browser/templates/section.pt:65
 msgid "Change the instructors for this section."
 msgstr "Змінити інструктора для цього розділу."
 
@@ -3722,14 +3271,6 @@ msgstr "Редагування осіб"
 msgid "Section list for ${term} of ${schoolyear}"
 msgstr "Розділ списку для ${term} з ${schoolyear}"
 
-#: /src/schooltool/course/browser/templates/section_container.pt:39
-msgid "Section"
-msgstr "Розділ"
-
-#: /src/schooltool/course/browser/templates/section_edit.pt:60
-msgid "Linked sections"
-msgstr "Пов'язані розділи"
-
 #: /src/schooltool/course/browser/templates/section_edit.pt:63
 msgid "Previous"
 msgstr "Назад"
@@ -3737,11 +3278,6 @@ msgstr "Назад"
 #: /src/schooltool/course/browser/templates/section_edit.pt:64
 msgid "Section in the previous term."
 msgstr "Розділи з попереднього семестру."
-
-#: /src/schooltool/course/browser/templates/section_edit.pt:72
-#: /src/schooltool/course/browser/templates/section_edit.pt:106
-msgid "${section_title} for ${term}"
-msgstr "${section_title} для ${term}"
 
 #. Default: "Unlink"
 #: /src/schooltool/course/browser/templates/section_edit.pt:75
@@ -3774,35 +3310,31 @@ msgstr "Далі"
 msgid "Section in the next term."
 msgstr "Розділ з наступного семестру."
 
-#: /src/schooltool/course/help/course_container.pt:10
-msgid ""
-"<h1>Courses</h1> <p>Use this page to organize courses listed in the system.</"
-"p> <h3>How do I...</h3> <ul> <li><strong>Look for for a course:</strong> Use "
-"the search box to the left of the <code>Find Now</code> button to look "
-"through the entire list of courses for the search criterion. The "
-"<code>Clear</code> button empties the search box of current entries.</li> "
-"<li><strong>Show a list of the different sections of a course:</strong> "
-"click on the name of the course.</li> <li><strong>Show the lists of students "
-"in a particular class:</strong> Click on the <code>teacher -- course</code> "
-"link. The number of students is also listed next to the teacher and the "
-"course.</li> <li><strong>Navigate through the courses:</strong> Separate "
-"<q>batches</q> of the Course list can be accessed through the <code>Next 10</"
-"code> (and <code>Previous</code>) and links in the blue bar. A <code>Show "
-"All</code> button is also there to show all of the courses on a single page."
-"</li> </ul>"
+#: /src/schooltool/course/browser/templates/section_linkage.pt:4
+msgid "All Terms for Section"
 msgstr ""
-"<h1>Курси </h1><p> На цій сторінці можна організувати курси, перелічені в "
-"системі. </P><h3> Як я можу... </h3><ul><li><strong>Найти курс: </STRONG> "
-"скористатися вікном пошуку зліва від <code>Знайти</Code>, щоб переглянути "
-"весь список курсів за критерієм пошуку. <code>Очистити</Code> кнопка очищає "
-"вікно пошуку від поточного запису. </LI><li><strong>Показати список з різних "
-"розділів курсу: </STRONG>натиснути на назву курсу. </LI><li><strong>дивитися "
-"списки учнів певного класу: </STRONG>Натисніть на <code>Вчитель - курс</"
-"Code> посилання. Кількість студентів також перерахована поруч з учителем і "
-"курсом. </LI><li><strong> Орієнтуватися по курсах: </STRONG>Окремі <q>гілки</"
-"Q>зі списку курсів можуть бути доступні через <code>Наступні 10</ Code> (і "
-"<code>Попередні</Code>) і посилання в рядку синього кольору. <code>Показати "
-"всі</Code> кнопка також, щоб показати всі курси на одній сторінці. </LI></UL>"
+
+#: /src/schooltool/course/browser/templates/section_linkage.pt:42
+msgid "Unlink this Section"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/section_linkage.pt:62
+msgid "Extend to This Term"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/section_linkage.pt:66
+msgid "Link an Existing Section"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/unlink_section.pt:4
+msgid "Unlink Section"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/unlink_section.pt:23
+msgid ""
+"Click 'Unlink' if you would like to remove the link this section has to the "
+"following section(s):"
+msgstr ""
 
 #: /src/schooltool/course/interfaces.py:37
 msgid "Title of the course."
@@ -4326,24 +3858,10 @@ msgstr "Пошук"
 msgid "Surname"
 msgstr "Прізвище"
 
-#: /src/schooltool/devmode/configure.zcml:27
-msgid "Introspect"
-msgstr "Самоаналіз"
-
-#: /src/schooltool/devmode/configure.zcml:38
-#: /src/schooltool/devmode/devmode.pt:19
-msgid "API Docs"
-msgstr "Документація з API"
-
-#: /src/schooltool/devmode/configure.zcml:50
+#: /src/schooltool/devmode/configure.zcml:52
 #: /src/schooltool/devmode/devmode.pt:20
 msgid "Sample data"
 msgstr "Зразки даних"
-
-#: /src/schooltool/devmode/configure.zcml:62
-#: /src/schooltool/devmode/devmode.pt:21
-msgid "Setup data"
-msgstr "Встановлювальні дані"
 
 #: /src/schooltool/devmode/devmode.pt:11
 msgid "Developer Tools"
@@ -4352,6 +3870,10 @@ msgstr "Інструменти розробника"
 #: /src/schooltool/devmode/devmode.pt:18
 msgid "Introspector"
 msgstr "Самодіагностика"
+
+#: /src/schooltool/devmode/devmode.pt:19
+msgid "API Docs"
+msgstr "Документація з API"
 
 #: /src/schooltool/email/browser/configure.zcml:54
 msgid "Outgoing Email"
@@ -4958,27 +4480,8 @@ msgstr "Керувати членством цієї особи"
 msgid "edit groups"
 msgstr "редагувати групи"
 
-#: /src/schooltool/group/help/group_container.pt:8
-msgid ""
-"<h1>Groups</h1> <p>Use this page to keep track of <b>groups</b> of Persons.</"
-"p> <p><b>Groups</b> that have been added are not part of the essential "
-"groups (<b>Teachers</b>, <b>Students</b>, <b>Site Managers</b>, <b>School "
-"Administrators</b>, or <b>Clerks</b>). They can be selected by the checkbox "
-"next to them and removed by pressing the <b>Delete</b> button at the bottom "
-"of the page.</p> <h3>How do I...</h3> <ul> <li><b>Look for for a group:</b> "
-"Use the search box to the left of the <code>Find Now</code> button to look "
-"through the entire list of groups for the search criterion. The <code>Clear</"
-"code> button empties the search box of current entries.</li> <li><b>View the "
-"persons in a certain group:</b> Click on the name of the group.</li> "
-"<li><b>Sort the list:</b> Click on the <code>Title</code> header to change "
-"the order of groups from descending to ascending order, and vice versa.</li> "
-"<li><strong>Browse for a group:</strong> Use the <code>Next 10</code> (and "
-"<code>Previous</code>) and links in the blue bar.</li> <li><strong>Show all "
-"groups:</strong> Click <code>Show All</code> in the blue bar.</li> </ul>"
-msgstr ""
-
 #: /src/schooltool/group/interfaces.py:41
-#: /src/schooltool/securitypolicy/interfaces.py:109
+#: /src/schooltool/securitypolicy/interfaces.py:111
 msgid "Title of the group."
 msgstr "Назва групи."
 
@@ -5026,14 +4529,6 @@ msgstr ""
 msgid "Groups are essentially sets of users."
 msgstr "Групи - це просто набір користувачів."
 
-#: /src/schooltool/help/configure.zcml:47
-msgid "Contextual Help"
-msgstr "Контекстна довідка"
-
-#: /src/schooltool/help/helplink.pt:2
-msgid "Help"
-msgstr "Довідка"
-
 #: /src/schooltool/level/browser.py:47
 msgid "Add a level"
 msgstr ""
@@ -5070,10 +4565,6 @@ msgstr ""
 #: /src/schooltool/note/configure.zcml:68
 msgid "New Note"
 msgstr "Нова нотатка"
-
-#: /src/schooltool/note/configure.zcml:100
-msgid "Notes (Rest)"
-msgstr "Нотатки (що лишились)"
 
 #: /src/schooltool/note/interfaces.py:43
 msgid "Title of the note."
@@ -5238,20 +4729,6 @@ msgstr "Редактировать настройки пользователя"
 msgid "Change preferences for ${user}"
 msgstr "Змінити налаштування для ${user}"
 
-#: /src/schooltool/person/help/person_container.pt:8
-msgid ""
-"<h1>Persons</h1> <p>Use this page to browse and find individual persons.</p> "
-"<h3>How do I...</h3> <ul> <li><strong>Sort the list:</strong> Click on "
-"<code>First Name</code> or <code>Last Name</code> to sort.</li> "
-"<li><strong>Search for a user:</strong> Use the search field at the top of "
-"the page to look through all of the people in the system. If you want to "
-"filter by group, select the group in the adjacent drop-down list.</li> "
-"<li><strong>View the details of a person:</strong> Click on the name.</li> "
-"<li><strong>Browse for a person:</strong> Use the <code>Next 10</code> (and "
-"<code>Previous</code>) and links in the blue bar.</li> <li><strong>Show all "
-"students:</strong> Click <code>Show All</code> in the blue bar.</li> </ul>"
-msgstr ""
-
 #: /src/schooltool/person/interfaces.py:157
 msgid "Time Zone"
 msgstr "Часовий пояс"
@@ -5372,16 +4849,12 @@ msgid "Everybody, if the calendar is made public in user preferences."
 msgstr ""
 "Будь-хто, якщо календар зроблено публічним в користувацьких налаштуваннях."
 
-#: /src/schooltool/relationship/configure.zcml:13
-msgid "Relationships"
-msgstr "Відносини"
-
 #: /src/schooltool/report/browser/configure.zcml:8
-#: /src/schooltool/report/browser/configure.zcml:22
-#: /src/schooltool/report/browser/configure.zcml:33
-#: /src/schooltool/report/browser/configure.zcml:44
-#: /src/schooltool/report/browser/configure.zcml:55
-#: /src/schooltool/report/browser/configure.zcml:66
+#: /src/schooltool/report/browser/configure.zcml:23
+#: /src/schooltool/report/browser/configure.zcml:34
+#: /src/schooltool/report/browser/configure.zcml:45
+#: /src/schooltool/report/browser/configure.zcml:56
+#: /src/schooltool/report/browser/configure.zcml:67
 msgid "Reports"
 msgstr "Звіти"
 
@@ -5531,11 +5004,7 @@ msgstr ""
 msgid "Edit equipment"
 msgstr ""
 
-#: /src/schooltool/resource/help/resource_help.pt:6
-msgid "Resource Help"
-msgstr "Довідка (про Ресурси)"
-
-#: /src/schooltool/resource/interfaces.py:38
+#: /src/schooltool/resource/interfaces.py:45
 msgid "Title of the resource."
 msgstr "Назва ресурсу."
 
@@ -5930,22 +5399,6 @@ msgstr "Суперкористувач"
 msgid "The super user - owner of this SchoolTool application."
 msgstr "Суперкористувач володар програми SchoolTool."
 
-#: /src/schooltool/setupdata/setupdata.pt:3
-#: /src/schooltool/setupdata/setupdata.pt:9
-msgid "Initial School Setup Scripts"
-msgstr "Сценарії початкової установки для школи"
-
-#: /src/schooltool/setupdata/setupdata.pt:14
-msgid ""
-"Warning: proceeding will populate the database with data generated from "
-"scripts installed on the filesystem of this server. Do not do this if you "
-"have any valuable data in this SchoolTool instance or don't already "
-"understand what this is for."
-msgstr ""
-"Попередження: подальші дії заповнять базу даними, за допомогою сценаріїв, "
-"встановлених на файлової системі сервера. Не робіть цього, якщо у вас є будь-"
-"які цінні дані у вашій системі SchoolTool або якщо ви не розумієте навіщо це."
-
 #: /src/schooltool/skin/breadcrumbs.py:76
 msgid "top"
 msgstr "вгору"
@@ -6001,10 +5454,6 @@ msgstr "Вы могли неверно набрать URL"
 #: /src/schooltool/skin/templates/notfound.pt:22
 msgid "You might be trying to access a non-existing page"
 msgstr "Ви могли запросити сторінку, щоне існує"
-
-#: /src/schooltool/skin/templates/onlinehelp_macros.pt:55
-msgid "SchoolTool Onlinehelp"
-msgstr "Інтерактивна довідка SchoolTool"
 
 #: /src/schooltool/skin/templates/view_macros.pt:45
 msgid "Log In"
@@ -6284,37 +5733,6 @@ msgstr "Змінити інформацію для ${term_title}"
 msgid "Term must begin before it ends."
 msgstr "Семестр повинен починатися до його закінчення."
 
-#: /src/schooltool/term/help/configure.zcml:8
-msgid "Add a term"
-msgstr "Додати семестр"
-
-#: /src/schooltool/term/help/term_add.pt:6
-msgid "Term Search Help"
-msgstr "Довідка по пошуку семестрів"
-
-#: /src/schooltool/term/help/term_container.pt:6
-msgid "Terms in SchoolTool"
-msgstr "Семестри у SchoolTool"
-
-#: /src/schooltool/term/help/term_container.pt:8
-msgid ""
-"<h1>Terms in SchoolTool</h1> <p>SchoolTool supports definition of basic "
-"academic terms, that is, a period of time which defines when sections begin "
-"and end, and when they are evaluated. The current implementation does not "
-"support a hierarchy of terms, for example, a year, which contains two "
-"semesters, which contain two marking periods. You can create several terms, "
-"which may overlap, for example, both semesters and trimesters in the same "
-"school, but you cannot express a relationship between terms.</p> <h3>How do "
-"I...</h3> <ul> <li><strong>Add a term:</strong> Select <code>New Term</code> "
-"from the <code>Actions</code> menu.</li> <li><strong>Edit a term:</strong> "
-"Click on the term. Then select <code>Edit</code> from the <code>Actions</"
-"code> menu.</li> <li><strong>Delete a term:</strong> Check the box next to "
-"the name of the term and click <code>Delete</code>. Only delete terms if you "
-"have made a mistake while creating them but you have not used them yet. You "
-"should <strong>not</strong> delete terms simply because they are over, or "
-"you will lose important data.</li> </ul>"
-msgstr ""
-
 #: /src/schooltool/term/term.py:306
 msgid "Term date is not in the school year."
 msgstr "Дата семестра по за навчальним роком."
@@ -6583,10 +6001,6 @@ msgstr "Не визначені семестри або схеми розкла�
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:22
 msgid "Timetable"
 msgstr "Розклад"
-
-#: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:24
-msgid "Term"
-msgstr "Семестр"
 
 #: /src/schooltool/timetable/browser/templates/person-timetable-setup.pt:34
 msgid "Schema"
@@ -7003,8 +6417,567 @@ msgstr "Змінити розклад"
 msgid "Supplied passwords are not identical"
 msgstr "Введені паролі не співпадають"
 
-#~ msgid "Add a Section"
-#~ msgstr "Додати розділ"
+#~ msgid "Browser UI"
+#~ msgstr "Інтерфейс Оглядача"
+
+#~ msgid "Application"
+#~ msgstr "Застосунок"
+
+#~ msgid "Calendar Widget"
+#~ msgstr "Елемент інтерфейса - Календар"
+
+#~ msgid "Templates"
+#~ msgstr "Шаблони"
+
+#~ msgid "Security (General)"
+#~ msgstr "Безпека (Загальна)"
+
+#~ msgid "Booking Resources"
+#~ msgstr "Резервування ресурсів"
+
+#~ msgid "SchoolTool Administration"
+#~ msgstr "Керування SchoolTool"
+
+#~ msgid ""
+#~ "<h1>SchoolTool Administration</h1> <p>Schools have complex structures, "
+#~ "spanning the organization of people, pedagogy, time and physical "
+#~ "resources. Unfortunately, this means that an application that seeks to "
+#~ "model these processes, like SchoolTool, is also complex, and the process "
+#~ "of setting up an individual school in SchoolTool is necessarily an "
+#~ "involved one.</p> <p>This branch of the help tree contains items relevant "
+#~ "to administrators configuring SchoolTool, but not end users.</p>"
+#~ msgstr ""
+#~ "<h1>Адміністрування SchoolTool</h1><p>Школи являють собою складні "
+#~ "організаційні структури, в роботі яких присутня велика кількість процесів "
+#~ "керування: людьми, часом, предметами, фізичними ресурсами. На жаль, це  "
+#~ "значить, що застосунок, що моделює усі ці процеси (такий як SchoolTool) "
+#~ "буде таким же складним, та процес індивідуального налаштування для кожної "
+#~ "школи потрібен для правильної роботи SchoolTool.</p><p>Цей розділ довідки "
+#~ "містить опис налаштування SchoolTool адміністраторами, а не кінцевими "
+#~ "користувачами.</p>"
+
+#~ msgid "Calendar Selection"
+#~ msgstr "Календар"
+
+#~ msgid ""
+#~ "<h1>Calendar Selection</h1> <p>You can add color-coded events from "
+#~ "multiple calendars to your personal calendar view. You can add events "
+#~ "from course sections you attend, groups, other people, or even resources "
+#~ "like classrooms or projectors.</p> <p>Some calendars are private or "
+#~ "limited to certain groups.</p> <p>On the calendar selection form you are "
+#~ "given lists of all the calendars available to you. This might be a long "
+#~ "list.</p> <p>The \"SchoolTool site-wide calendar\" is intended to be used "
+#~ "as the official public calendar of the school.</p> <h3>How do I...</h3> "
+#~ "<ul> <li><strong>Select or unselect several individual calendars of one "
+#~ "type:</strong> If you press the <code>Ctrl</code> button on your keyboard "
+#~ "while you select calendars from a list with your mouse, you can select "
+#~ "multiple calendars.</li> <li><strong>Select a range of calendars of one "
+#~ "type:</strong> If you press the <code>Shift</code> key while clicking on "
+#~ "calendars, you can select a range.</li> </ul>"
+#~ msgstr ""
+#~ "<h1>Вибір календарів</h1> <p>Ви можете додавати події, позначені "
+#~ "кольором, з різноманітних календарів у ваш особистий календар. Можна "
+#~ "додавати події з предметів, які ви відвідуєте, груп, інших людей або "
+#~ "навіть ресурсів, наприклад, класних кімнат або проекторів.</p> <p>Деякі "
+#~ "календарі є особистими або доступними тільки для певних груп.</p> <p>У "
+#~ "формі вибору календарів присутній перелік всіх календарів, що вам "
+#~ "доступні. Це може бути довгий перелік.</p> <p> «Загальний календар "
+#~ "SchoolTool» — офіційний публічний календар школи.</p> <h3>Як мені …</h3> "
+#~ "<ul> <li><strong>Вибрати або зняти виділення з кількох календарів одного "
+#~ "типу:</strong> Якщо натиснути клавішу <code>Ctrl</code> на клавіатурі та "
+#~ "вибирати календарі за допомогою миші, можливо вибирати одразу кілька "
+#~ "календарів.</li> <li><strong>Вибрати діапазон календарів одного типу:</"
+#~ "strong> Якщо натиснути клавішу <code>Shift</code> на клавіатурі та "
+#~ "вибирати календарі за допомогою миші, можна вибирати діапазон календарів."
+#~ "</li> </ul>"
+
+#~ msgid "Calendaring in SchoolTool"
+#~ msgstr "Календарі у SchoolTool"
+
+#~ msgid ""
+#~ "<h1>Calendaring in SchoolTool</h1> <p>SchoolTool includes a full-featured "
+#~ "calendaring system, similar to Apple iCal or Google Calendar, but capable "
+#~ "of representing complex school timetables, including rotating schedules. "
+#~ "SchoolTool is also useful for simple resource scheduling, allowing you to "
+#~ "manage room assignments, and booking shared resources like computers or "
+#~ "projectors. Each person, group, course section or resource has its own "
+#~ "calendar. You may integrate multiple calendars into your personal "
+#~ "calendar views.</p> <h3>Parts of the standard calendar views</h3> <ul> "
+#~ "<li><strong>Calendar table:</strong> fills the main (lower-right) part of "
+#~ "the page. This represents the calendar for one day, week, month or year, "
+#~ "depending on the view..</li> <li><strong>Calendar navigation bar:</"
+#~ "strong> immediately above the calendar table. Allows you to navigate "
+#~ "forward or backward in time, or to return to the current time.</li> "
+#~ "<li><strong>Calendar title:</strong> immediately above the calendar "
+#~ "navigation bar, lists the owner of this calendar and the date for this "
+#~ "\"page\" of the calendar.</li> <li><strong>Left sidebar:</strong> for all "
+#~ "calendars, this contains a <code>Jump to...</code> section containing "
+#~ "menus and links to allow you to quickly navigate to a specific month, "
+#~ "year or date. <br /> If you are logged in and viewing your own calendar, "
+#~ "you will also see a <code>Calendars</code> section at the top of the "
+#~ "sidebar which allows you to \"overlay\" events from other calendars in "
+#~ "this view. You may see calendars for classes you teach or attend listed "
+#~ "here already.</li> <li><strong>Day/week/month/year buttons:</strong> "
+#~ "These buttons allow you to switch between daily, weekly, monthly and "
+#~ "annual views.</li> </ul>"
+#~ msgstr ""
+#~ "<h1>Календарі в SchoolTool</h1> <p>До складу SchoolTool включена потужна "
+#~ "систему календарів з багатьма можливостями, схожа с Apple iCal або Google "
+#~ "Calendar, але вона дає змогу представляти складні шкільні розклади, "
+#~ "включаючи повторювані задачі. SchoolTool також годиться для простого "
+#~ "керування ресурсами, що дозволяє відстежувати використання класів, та "
+#~ "резервувати спільні ресурси, такі як комп'ютери або проектори. Кожна "
+#~ "особа, група, предмет чи ресурс мають власний календар. Можливо "
+#~ "інтегрувати різні календарі до свого персонального календаря.</p> "
+#~ "<h3>Розділи стандартних календарів</h3> <ul> <li><strong>Таблиця "
+#~ "календаря:</strong> заповнює основну (нижню-праву) частину сторінки. Вона "
+#~ "показує календар на один день, тиждень, місяць або рік, в залежності від "
+#~ "обраного вигляду.</li> <li><strong>Панель навігації календаря:</strong> "
+#~ "знаходиться безпосередньо над таблицею календаря. Дозволяє здійснювати "
+#~ "навігацію у часі або повернутись у поточний час.</li> "
+#~ "<li><strong>Заголовок календаря:</strong> безпосередньо над панеллю "
+#~ "навігації, показує список власників і дату поточної сторінки календаря.</"
+#~ "li> <li><strong>Ліва бокова панель:</strong> для всіх календарів містить "
+#~ "розділ<code>Перейти до…</code>, яка дозволяє здійснити швидкий стрибок до "
+#~ "певного місяця, року або дати. <br /> Якщо ви авторизовані в системі та "
+#~ "переглядаєте власний календар, вам також доступний розділ "
+#~ "<code>Календарі</code> у верхній частині бокової панелі, яка дозволяє "
+#~ "нашаровувати події з інших календарів у поточне вигляд. Ви можете "
+#~ "побачити календарі ваших занять, які вже показуються тут.</li> "
+#~ "<li><strong>Кнопки день/тиждень/місяць/рік:</strong> Ці кнопки дозволяють "
+#~ "перемикати відповідні режими перегляду календаря.</li> </ul>"
+
+#~ msgid "Administration"
+#~ msgstr "Керування"
+
+#~ msgid "Organization"
+#~ msgstr "Установа"
+
+#~ msgid "Calendaring"
+#~ msgstr "Календарі"
+
+#~ msgid "Daily Calendar"
+#~ msgstr "Щоденний календар"
+
+#~ msgid "Weekly Calendar"
+#~ msgstr "Щотижневий календар"
+
+#~ msgid "Monthly Calendar"
+#~ msgstr "Щомісячний календар"
+
+#~ msgid "Yearly Calendar"
+#~ msgstr "Річний календар"
+
+#~ msgid ""
+#~ "<h1>Daily Calendar</h1> <p>This is the daily view of a calendar. It might "
+#~ "be your calendar, or it might be the calendar of another person, group or "
+#~ "resource in your school. <a href=\"/++help++/schooltool/calendaring"
+#~ "\">More calendaring help...</a></p> <h3>How do I...</h3> <ul> "
+#~ "<li><strong>Create an event:</strong> click in the calendar table at the "
+#~ "start time for the event. Or select <code>New Event</code> from the "
+#~ "<code>Actions</code> menu.</li> <li><strong>Book a resource:</strong> "
+#~ "create an event starting at the time you want to reserve the resource. "
+#~ "Select <code>Book Resource</code> in the Event Information form.</li> "
+#~ "<li><strong>Show or hide events in one of the calendars listed under "
+#~ "<code>Calendars</code>:</strong> check or uncheck the box under "
+#~ "<code>Cal</code> and click <code>Apply</code>.</li> <li><strong>Adding or "
+#~ "removing calendars to the <code>Calendars</code> list:</strong> click on "
+#~ "the <code>More...</code> button.</li> <li><strong>access a iCal format "
+#~ "version of the calendar:</strong>: Select <code>Open in iCal</code> from "
+#~ "the Action menu.</li> <li><strong>Access an Atom feed version of the "
+#~ "calendar: </strong> append <code>/atom.xml</code> to the calendar's URL.</"
+#~ "li> </ul>"
+#~ msgstr ""
+#~ "<h1>Щоденний календар</h1> <h1>Це вигляд календаря на день. Це може бути "
+#~ "ваш календар, чи може календар іншої особи, групи або ресурсів вашої "
+#~ "школи. <a href=\"/++help++/schooltool/calendaring\">Докладна допомога по "
+#~ "календарях…</a></p> <h3>Як мені…</h3> <ul> <li><strong>Створити подію:</"
+#~ "strong> клацніть на таблицю календаря на початковий час для вашої події. "
+#~ "Або виберіть <code>Нова подія</code> з меню <code>Дії</code>.</li> "
+#~ "<li><strong>Зарезервувати ресурси:</strong> створіть подію, що "
+#~ "починається у потрібний вам час. Виберіть <code>Зарезервувати ресурс</"
+#~ "code> у формі Інформація про події.</li> <li><strong>Показати або "
+#~ "приховати події в одному з календарів,  перелічених у розділі "
+#~ "<code>Календарі</code>:</strong> Установіть або зніміть позначку у "
+#~ "<code>Кал</code> та клацніть <code>Застосувати</code>.</li> "
+#~ "<li><strong>Додавання або вилучення календарів до переліку "
+#~ "<code>Календарі</code>:</strong> клацніть на кнопку <code>Ще…</code>.</"
+#~ "li> <li><strong>Отримати доступ до календаря в форматі iCal:</strong> "
+#~ "Виберіть <code>Відкрити як iCal</code> з меню <code>Дії</code>.</li> "
+#~ "<li><strong> Доступ до календаря у вигляді стрічки Atom:</strong> додайте "
+#~ "<code>/atom.xml</code> до URL календаря.</li> </ul>"
+
+#~ msgid "This form has a few issues:"
+#~ msgstr "Форма містить наступні помилки:"
+
+#~ msgid ""
+#~ "If you need to reserve a resource, such as a room or a projector, tracked "
+#~ "by SchoolTool at your school, you should create an event for the "
+#~ "necessary time and check the <code>Book Resources</code> checkbox at the "
+#~ "bottom of the page."
+#~ msgstr ""
+#~ "Якщо вам потрібно зарезервувати ресурс, наприклад кімнату або проектор, "
+#~ "облік якого ведеться в SchoolTool, вам треба створити подію із "
+#~ "зазначенням потрібного часу і поставити галочку навпроти "
+#~ "<code>Зарезервувати Ресурс</code> внизу сторінки."
+
+#~ msgid ""
+#~ "The form ignores your preferences for time and date format. You must "
+#~ "enter the event's start time in 24-hour or \"military\" time, and the "
+#~ "date is displayed in year-month-day format."
+#~ msgstr ""
+#~ "Форма ігнорує ваші налаштування дати і часу. Ви повинні ввести час події "
+#~ "в 24-годинному форматі і дату в форматі рррр-мм-дд."
+
+#~ msgid ""
+#~ "The <code>Location</code> field allows you to enter a description of the "
+#~ "location of the event, but this is not connected to the reservation "
+#~ "system. If your school uses SchoolTool to manage room reservations you "
+#~ "need to check the <code>Book Resources</code> checkbox at the bottom of "
+#~ "the form."
+#~ msgstr ""
+#~ "Поле <code>Місце</code> дозволяє вам додати опис місця проведення події, "
+#~ "але воно не пов'язане з системою резервування. Якщо ваша школа "
+#~ "користується  SchoolTool для керування розподілом приміщень, вам треба "
+#~ "відмітити поле  <code>Резервувати ресурси</code> внизу форми."
+
+#~ msgid ""
+#~ "If your event repeats in some pattern, check the <code>Recurring</code> "
+#~ "box and fill out the new fields that appear. In certain circumstances "
+#~ "(like if you change the original day of a weekly recurring event) you may "
+#~ "need to click the <code>Update form</code> button to update the "
+#~ "recurrence fields."
+#~ msgstr ""
+#~ "Якщо подія повторюється у кількох шаблонах, позначте поле <code>Повторна</"
+#~ "code> та заповніть нові поля, що з’являються. У певних обставин "
+#~ "(наприклад, якщо ви змінили початковий день подій, які повторюються "
+#~ "щотижня), вам, можливо, знадобиться натиснути кнопку \"Оновити\" для "
+#~ "оновлення полів повторення ."
+
+#~ msgid ""
+#~ "An \"all day\" event does not show up as a 24 hour event. It indicates "
+#~ "that the day as a whole has some significance, like a birthday or holiday."
+#~ msgstr ""
+#~ "Подія на \"цілий день\" не виглядає як подія тривалістю 24 години. "
+#~ "\"Цілий день\" означає, що цей день чимось примітний, наприклад як свято "
+#~ "або день народження."
+
+#~ msgid ""
+#~ "\"Exception dates\" are specific dates a repeating event skips, such as "
+#~ "holidays."
+#~ msgstr ""
+#~ "\"Дні винятку\" — особливі дати, в які повторюванні події не відбуваються "
+#~ "(наприклад, на свята)."
+
+#~ msgid ""
+#~ "If you need to edit a resource reservation, click the <code>Book "
+#~ "resources</code> link at the bottom of the form."
+#~ msgstr ""
+#~ "Якщо вам необхідно змінити резервування ресурсу клацніть "
+#~ "<code>Забронювати Ресурс</code> внизу форми."
+
+#~ msgid ""
+#~ "<h1>Monthly Calendar</h1> <p>This is the monthly view of a calendar. It "
+#~ "might be your calendar, or it might be the calendar of another person, "
+#~ "group or resource in your school. <a href=\"/++help++/schooltool/"
+#~ "calendaring\">More calendaring help...</a></p> <h3>How do I...</h3> <ul> "
+#~ "<li><strong>View an individual day or event in more detail:</strong> "
+#~ "click on the appropriate day on the calendar.</li> <li><strong>View an "
+#~ "individual week:</strong> Click on the appropriate week number in blue in "
+#~ "the leftmost column of the calendar.</li> <li><strong>Create an event:</"
+#~ "strong> select <code>New Event</code> from the <code>Actions</code> menu."
+#~ "</li> <li><strong>Show or hide events in one of the calendars listed "
+#~ "under <code>Calendars</code>:</strong> check or uncheck the box under "
+#~ "<code>Cal</code> and click <code>Apply</code>.</li> <li><strong>Adding or "
+#~ "removing calendars to the <code>Calendars</code> list:</strong> click on "
+#~ "the <code>More...</code> button.</li> <li><strong>Make weeks start on the "
+#~ "correct day:</strong> the first day of the week varies in different parts "
+#~ "of the world. If SchoolTool isn't set up correctly for you, click on your "
+#~ "name in the red bar at the top of the page. Then click on the "
+#~ "<code>Actions</code> menu and select <code>Change Preferences</code>. "
+#~ "Pick the correct \"Week starts on\" day and hit <code>Apply</code>.</li> "
+#~ "<li><strong>Access a iCal format version of the calendar:</strong>: "
+#~ "select <code>Open in iCal</code> from the Action menu.</li> </ul>"
+#~ msgstr ""
+#~ "<h1>Щомісячний календар</h1> <p> Це помісячний вигляд календарю. Це може "
+#~ "бути ваш календар або календар іншої особи, групи або ресурсів вашої "
+#~ "школи. <a href=\"/++help++/schooltool/calendaring\">Докладніше про "
+#~ "календарі…</a></p> <h3>Як ….</h3> <ul> <li><strong>Переглянути окремий "
+#~ "день чи подію докладніше:</strong> клацніть на потрібний день в календарі."
+#~ "</li> <li><strong>Переглянути окремий тиждень:</strong> Клацніть на "
+#~ "потрібний номер тижня у синім лівім стовпчику календарю.</li> "
+#~ "<li><strong>Створити подію:</strong> оберіть <code>Нова подія</code> з "
+#~ "меню <code>Дії</code>..</li> <li><strong>Показати або приховати події "
+#~ "одного з календарів, перерахованих в <code>Календарях</code>: позначте "
+#~ "або зніміть позначку <code>Кал</code> та клацніть <code>Застосувати</"
+#~ "code>.</li> <li><strong>Додати або вилучити календар з переліку "
+#~ "<code>Календарів</code>:</strong> клацніть на кнопку <code>Ще…</code>.</"
+#~ "li> <li><strong>Зазначити вірний початок тижня:</strong> у різних "
+#~ "частинах світу тиждень починається у різні дні. Якщо SchoolTool має не "
+#~ "вірні для вас налаштування, клацніть на своє ім’я у червоній панелі у "
+#~ "верхній частині сторінки. Потім оберіть з меню <code>Дії</code> "
+#~ "<code>Змінити налаштування</code>. Вкажіть потрібний день \"Початку тижня"
+#~ "\" та натисніть <code>Застосувати</code>.</li> <li><strong>Доступ до "
+#~ "календарю в форматі iCal:</strong> оберіть <code>Відкрити як iCal</code> "
+#~ "з меню <code>Дії</code>.</li> </ul>"
+
+#~ msgid "SchoolTool Organization"
+#~ msgstr "Принципи роботи SchoolTool"
+
+#~ msgid ""
+#~ "<h1>SchoolTool Organization</h1> <p>This branch of the help tree contains "
+#~ "items explaining the basic organization of SchoolTool.</p>"
+#~ msgstr ""
+#~ "<h1>Принципи роботи SchoolTool</h1> <p>Ця гілка дерева допомоги містить "
+#~ "розділи, що пояснюють основні принципи роботи SchoolTool.</p>"
+
+#~ msgid ""
+#~ "<h1>SchoolTool</h1> <p>SchoolTool is a free/libre administrative system "
+#~ "for schools around the world, funded by The Shuttleworth Foundation.</p> "
+#~ "<h2>Standard User Interface Conventions in SchoolTool</h2> <ul> "
+#~ "<li><strong>Red top bar</strong></li> <ul> <li><strong>Breadcrumbs:</"
+#~ "strong> the links at the left hand side of the red bar show you where you "
+#~ "are in SchoolTool's object hierarchy. Note that this doesn't necessarily "
+#~ "lead you back to where you came from, but is handy for taking you from "
+#~ "more specific to more general parts of the application.</li> "
+#~ "<li><strong>Your name</strong> (if you're logged in): clicking on your "
+#~ "name takes you to a simple dashboard of relevant links. From this page "
+#~ "you can also use the <code>Actions</code> menu to change preferences and "
+#~ "other personal settings.</li> <li><strong>Log in/out:</strong> this logs "
+#~ "you in or out. It is a good idea to log out when you aren't using "
+#~ "SchoolTool.</li> <li><strong>Help:</strong> if there is a help file for "
+#~ "the page you're looking at, you'll see this link.</li> </ul> "
+#~ "<li><strong>Menus</strong></li> <ul> <li><strong>Navigation:</strong> "
+#~ "this menu gives you some basic options for accessing different parts of "
+#~ "SchoolTool, such as the index of persons or courses. What you see here "
+#~ "depends on your permissions in the system.</li> <li><strong>Action:</"
+#~ "strong> this menu contains a variety of things that you can do on the "
+#~ "current page. The entries in this menu change considerably based on what "
+#~ "page you're viewing and what permissions you have.</li> </ul> "
+#~ "<li><strong>Above the red bar</strong></li> <ul> <li><strong>Logo & "
+#~ "School Name:</strong> clicking in this area will take you to the top of "
+#~ "the school's site, usually the calendar for the school.</li> "
+#~ "<li><strong>Calendar day/week/month/year views:</strong> if you are "
+#~ "viewing a calendar, you will find icons in the upper right hand corner "
+#~ "that will allow you to switch between calendar views.</li> "
+#~ "<li><strong>Devmode menu:</strong> if you are a site administrator and "
+#~ "you've enabled \"devmode\" in schooltool.conf, you will see a special "
+#~ "menu in the upper right hand corner of the site. You should disable "
+#~ "devmode in any production server.</li> </ul> </ul>"
+#~ msgstr ""
+#~ "<h1>SchoolTool</h1> <p>SchoolTool — вільна система для адміністрування "
+#~ "навчальних закладів по усьому світу, заснована Shuttleworth Foundation.</"
+#~ "p> <h2>Домовленості про інтерфейс користувача</h2> <ul> "
+#~ "<li><strong>Червона стрічка згори</strong></li> <ul> <li><strong>Стежка:</"
+#~ "strong> посилання у лівій частини червоної стрічки покаже вам де ви "
+#~ "перебуваєте в ієрархії об'єктів SchoolTool. Зауважимо, що вона не "
+#~ "обов'язково приведе вас назад до місця з якого ви почали, однак воно є "
+#~ "зручним для того щоб дістатись з деяких особливих до більш загальних "
+#~ "частин застосунку.</li> <li><strong>Ваше ім'я</strong> (якщо ви увійшли в "
+#~ "систему): клацнувши на нього ви потрапите до панелі керування з "
+#~ "відповідними посиланнями. З цієї сторінки  ви також можете викликати меню "
+#~ "<code>Дії</code>, щоб змінити налаштування та особисті уподобання.</li> "
+#~ "<li><strong>Вхід/Віхід:</strong> призначений для входу та виходу до/з "
+#~ "системи. Гарним тоном є  закінчувати свою роботу із SchoolTool виходом із "
+#~ "системи.</li> <li><strong>Допомога:</strong> якщо існує довідка для "
+#~ "сторінки яку ви переглядаєте, тут з'явитися посилання на неї.</li> </ul> "
+#~ "<li><strong>Меню</strong></li> <ul> <li><strong>Навігація:</strong> це "
+#~ "меню надає вам кілька основних опцій для доступу до різних частин "
+#~ "SchoolTool, таких як перелік осіб та занять. Те що вибачите тут залежить "
+#~ "від вашого рівня доступу в системі.</li> <li><strong>Дії:</strong> Це "
+#~ "меню містить усі можливі варіанти дій для поточної сторінки. Вміст цього "
+#~ "меню змінюється відповідно до того, яку сторінку ви переглядаєте та від "
+#~ "вашого рівня доступу в системі.</li> </ul> <li><strong>Над червоною "
+#~ "стрічкою</strong></li> <ul> <li><strong>Емблема та назва школи:</strong> "
+#~ "клацнувши на них ви попадете на початкову сторінку шкільного сайту, "
+#~ "зазвичай це шкільний календар. /li> <li><strong>Щоденний/тижневий/"
+#~ "місячний/річний календар:</strong> при перегляді календаря ви знайдете "
+#~ "значки в правому верхньому куті екрану, що дозволяють перемикатися між "
+#~ "режимами календаря.</li> <li><strong>Меню для розробників:</strong> якщо "
+#~ "ви є адміністратором сайту та ви увімкнули режим \"devmode\" у schooltool."
+#~ "conf, ви побачите спеціальне меню у верхньому правому куті сайту. Вам "
+#~ "треба відключити цей режим на будь-якому сервері, що обслуговує реальні "
+#~ "завдання.</li> </ul> </ul>"
+
+#~ msgid ""
+#~ "<h1>Weekly Calendar</h1> <p>This is the weekly view of a calendar. It "
+#~ "might be your calendar, or it might be the calendar of another person, "
+#~ "group or resource in your school. <a href=\"/++help++/schooltool/"
+#~ "calendaring\">More calendaring help...</a></p> <h3>How do I...</h3> <ul> "
+#~ "<li><strong>View an individual day in more detail:</strong> click on the "
+#~ "appropriate day in the blue row of the calendar table.</li> "
+#~ "<li><strong>View details about an event or edit it:</strong> click on the "
+#~ "event. If you have the correct permissions for the event you can edit it."
+#~ "</li> <li><strong>Create an event:</strong> select the day the event "
+#~ "starts and create the event in the daily view.</li> <li><strong>Show or "
+#~ "hide events in one of the calendars listed under <code>Calendars</code>:</"
+#~ "strong> check or uncheck the box under <code>Cal</code> and click "
+#~ "<code>Apply</code>.</li> <li><strong>Adding or removing calendars to the "
+#~ "<code>Calendars</code> list:</strong> click on the <code>More...</code> "
+#~ "button.</li> <li><strong>Make the calendar start on the correct day:</"
+#~ "strong> the first day of the week varies in different parts of the world. "
+#~ "If SchoolTool isn't set up correctly for you, click on your name in the "
+#~ "red bar at the top of the page. Then click on the <code>Actions</code> "
+#~ "menu and select <code>Change Preferences</code>. Pick the correct \"Week "
+#~ "starts on\" day and hit <code>Apply</code>.</li> <li><strong>Access a "
+#~ "iCal format version of the calendar:</strong>: select <code>Open in iCal</"
+#~ "code> from the Action menu.</li> </ul>"
+#~ msgstr ""
+#~ "<h1>Тижневий календар</h1> <p>Це може бути ваш календар або календар "
+#~ "іншої особи, групи або ресурсу вашої школи.<a href=\"/++help++/schooltool/"
+#~ "calendaring\">Календар. Докладна довідка …</a></p><h3>Як мені …</h3> <ul> "
+#~ "<li><strong>Переглянути окремий день більш докладно:</strong> клацніть на "
+#~ "відповідний день у синьому рядку календаря.</li> <li><strong>Переглянути "
+#~ "детальну інформацію про подію або відредагувати її:</strong> клацніть на "
+#~ "подію і, якщо у вас є достатньо прав, ви зможете відредагувати її.</li> "
+#~ "<li><strong>Створити подію:</strong> виберіть день, коли захід "
+#~ "починається і створіть подію у щоденному режимі календаря.</li> "
+#~ "<li><strong>Показати або приховати події в одному з календарів, з розділу "
+#~ "<code>Календарі</code>:</strong> встановіть або зніміть позначку в "
+#~ "стовпчику <code>Кал</code> та клацніть <code>Застосувати</code>.</li> "
+#~ "<li><strong>Додати або вилучити календарі із списку <code>Календарі</"
+#~ "code>:</strong> клацніть на кнопку <code>Ще…</code>.</li> "
+#~ "<li><strong>Вибрати перший день початку тижня:</strong> перший день "
+#~ "тижня, варіюється в різних частинах світу, тому якщо SchoolTool не "
+#~ "налаштований правильно для вас, натисніть на ваше ім'я в червоній стрічці "
+#~ "у верхній частині сторінки. Потім клацніть на меню  та виберіть "
+#~ "<code>Змінити налаштування</code>.  Виберіть правильний \"День початку "
+#~ "тижня\" та натисніть <code>Застосувати</code>.</li> <li><strong>Отримати "
+#~ "доступ до календаря в форматі iCal:</strong> виберіть <code>Відкрити як "
+#~ "iCal</code> з меню <code>Дії</code>.</li> </ul>"
+
+#~ msgid ""
+#~ "<h1>Yearly Calendar</h1> <p>This is the year view of a calendar. It might "
+#~ "be your calendar, or it might be the calendar of another person, group or "
+#~ "resource in your school. <a href=\"/++help++/schooltool/calendaring"
+#~ "\">More calendaring help...</a></p> <h3>How do I...</h3> <ul> "
+#~ "<li><strong>Know which days contain events: if the day has a blue "
+#~ "background, there is at least one event that day.</strong></li> "
+#~ "<li><strong>View an individual day in more detail:</strong> click on the "
+#~ "day.</li> <li><strong>View an individual month:</strong> click on the "
+#~ "name of the month.</li> <li><strong>Create an event:</strong> select the "
+#~ "day the event starts and create the event in the daily view.</li> "
+#~ "<li><strong>Show or hide events in one of the calendars listed under "
+#~ "<code>Calendars</code>:</strong> check or uncheck the box under "
+#~ "<code>Cal</code> and click <code>Apply</code>.</li> <li><strong>Adding or "
+#~ "removing calendars to the <code>Calendars</code> list:</strong> click on "
+#~ "the <code>More...</code> button.</li> <li><strong>Make the calendar start "
+#~ "on the correct day:</strong> the first day of the week varies in "
+#~ "different parts of the world. If SchoolTool isn't set up correctly for "
+#~ "you, click on your name in the red bar at the top of the page. Then click "
+#~ "on the <code>Actions</code> menu and select <code>Change Preferences</"
+#~ "code>. Pick the correct \"Week starts on\" day and hit <code>Apply</code>."
+#~ "</li> <li><strong>Access a iCal format version of the calendar:</strong>: "
+#~ "select <code>Open in iCal</code> from the Action menu.</li> </ul>"
+#~ msgstr ""
+#~ "<h1>Річний календар</h1><p>Це річне подання календаря. Це може бути ваш "
+#~ "календар, або календар іншої людини, групи або ресурсу у вашій школі.<a "
+#~ "href=\"/++help++/schooltool/calendaring\">Докладна довідка за "
+#~ "календарем...</a></p><h3>Як я можу...</h3><ul><li><strong>Дізнатися які "
+#~ "дні містять події: якщо день має синій фон то є хоча б одна подія в цей "
+#~ "день.</strong></li><li><strong>Переглянути детальну інформацію у "
+#~ "визначений день:</strong>клацніть з цього дню.</li><li><strong>Перегляд "
+#~ "певного місяця:</strong>клацніть за назвою місяця.</"
+#~ "li><li><strong>Створити подію: </strong>виберіть день, в який починається "
+#~ "подія і створіть подію в щоденному поданні календаря. </"
+#~ "li><li><strong>Показати або сховати події в одному з календарів, "
+#~ "присутніх в списку <code>Календарі</code>:</strong>поставте або зніміть "
+#~ "галочку навпроти відповідного<code>календаря</code>та "
+#~ "натисніть<code>Застосувати</code>.</li><li><strong> Додати або видалити "
+#~ "календарі зі списку <code>Календарі</code>:</strong>натисніть на кнопку "
+#~ "<code>Додатково...</code>.</li><li><strong>Встановити початок календаря в "
+#~ "коректний день: </strong>перший день тижня розрізняється в різних "
+#~ "країнах. Якщо SchoolTool не правильно встановив цей параметр, клацніть на "
+#~ "ваше ім'я в червоному рядку у верхній частині сторінки. Після чого "
+#~ "клацніть по меню <code>Дії</code>та виберіть<code>Змінити параметри</"
+#~ "code>. Виберіть правильний день у полі \"Тиждень починається з\" та "
+#~ "натисніть кнопку <code>Застосувати</code>. </li><li><strong>Отримати "
+#~ "доступ до календаря у форматі iCal: </strong>:Виберіть<code>Відкрити у "
+#~ "iCal</code>з меню <code>Дії</code>.</li></ul>"
+
+#~ msgid "Previous: ${course} -- ${section_title} for ${term}"
+#~ msgstr "Назад: ${course} — ${section_title} для ${term}"
+
+#~ msgid "Next: ${course} -- ${section_title} for ${term}"
+#~ msgstr "Далі: ${course} — ${section_title} для ${term}"
+
+#~ msgid ""
+#~ "<h1>Courses</h1> <p>Use this page to organize courses listed in the "
+#~ "system.</p> <h3>How do I...</h3> <ul> <li><strong>Look for for a course:</"
+#~ "strong> Use the search box to the left of the <code>Find Now</code> "
+#~ "button to look through the entire list of courses for the search "
+#~ "criterion. The <code>Clear</code> button empties the search box of "
+#~ "current entries.</li> <li><strong>Show a list of the different sections "
+#~ "of a course:</strong> click on the name of the course.</li> "
+#~ "<li><strong>Show the lists of students in a particular class:</strong> "
+#~ "Click on the <code>teacher -- course</code> link. The number of students "
+#~ "is also listed next to the teacher and the course.</li> "
+#~ "<li><strong>Navigate through the courses:</strong> Separate <q>batches</"
+#~ "q> of the Course list can be accessed through the <code>Next 10</code> "
+#~ "(and <code>Previous</code>) and links in the blue bar. A <code>Show All</"
+#~ "code> button is also there to show all of the courses on a single page.</"
+#~ "li> </ul>"
+#~ msgstr ""
+#~ "<h1>Курси </h1><p> На цій сторінці можна організувати курси, перелічені в "
+#~ "системі. </P><h3> Як я можу... </h3><ul><li><strong>Найти курс: </STRONG> "
+#~ "скористатися вікном пошуку зліва від <code>Знайти</Code>, щоб переглянути "
+#~ "весь список курсів за критерієм пошуку. <code>Очистити</Code> кнопка "
+#~ "очищає вікно пошуку від поточного запису. </LI><li><strong>Показати "
+#~ "список з різних розділів курсу: </STRONG>натиснути на назву курсу. </"
+#~ "LI><li><strong>дивитися списки учнів певного класу: </STRONG>Натисніть на "
+#~ "<code>Вчитель - курс</Code> посилання. Кількість студентів також "
+#~ "перерахована поруч з учителем і курсом. </LI><li><strong> Орієнтуватися "
+#~ "по курсах: </STRONG>Окремі <q>гілки</Q>зі списку курсів можуть бути "
+#~ "доступні через <code>Наступні 10</ Code> (і <code>Попередні</Code>) і "
+#~ "посилання в рядку синього кольору. <code>Показати всі</Code> кнопка "
+#~ "також, щоб показати всі курси на одній сторінці. </LI></UL>"
+
+#~ msgid "Introspect"
+#~ msgstr "Самоаналіз"
+
+#~ msgid "Setup data"
+#~ msgstr "Встановлювальні дані"
+
+#~ msgid "Contextual Help"
+#~ msgstr "Контекстна довідка"
+
+#~ msgid "Help"
+#~ msgstr "Довідка"
+
+#~ msgid "Notes (Rest)"
+#~ msgstr "Нотатки (що лишились)"
+
+#~ msgid "Relationships"
+#~ msgstr "Відносини"
+
+#~ msgid "Resource Help"
+#~ msgstr "Довідка (про Ресурси)"
+
+#~ msgid "Initial School Setup Scripts"
+#~ msgstr "Сценарії початкової установки для школи"
+
+#~ msgid ""
+#~ "Warning: proceeding will populate the database with data generated from "
+#~ "scripts installed on the filesystem of this server. Do not do this if you "
+#~ "have any valuable data in this SchoolTool instance or don't already "
+#~ "understand what this is for."
+#~ msgstr ""
+#~ "Попередження: подальші дії заповнять базу даними, за допомогою сценаріїв, "
+#~ "встановлених на файлової системі сервера. Не робіть цього, якщо у вас є "
+#~ "будь-які цінні дані у вашій системі SchoolTool або якщо ви не розумієте "
+#~ "навіщо це."
+
+#~ msgid "SchoolTool Onlinehelp"
+#~ msgstr "Інтерактивна довідка SchoolTool"
+
+#~ msgid "Add a term"
+#~ msgstr "Додати семестр"
+
+#~ msgid "Term Search Help"
+#~ msgstr "Довідка по пошуку семестрів"
+
+#~ msgid "Terms in SchoolTool"
+#~ msgstr "Семестри у SchoolTool"
 
 #~ msgid "Everyone can view section information and calendars"
 #~ msgstr "Будь-хто може переглянути інформацію розділу та календарю"
@@ -7021,6 +6994,12 @@ msgstr "Введені паролі не співпадають"
 #~ msgid "Everyone can view group information."
 #~ msgstr "Будь-хто може переглянути інформацію про групу."
 
+#~ msgid "Everyone can view info of persons"
+#~ msgstr "Будь-хто може переглянути інформацію про особу"
+
+#~ msgid "Persons can change their own passwords"
+#~ msgstr "Особи, які можуть змінювати свої паролі"
+
 #~ msgid "Add an Equipment"
 #~ msgstr "Додати обладнання"
 
@@ -7030,11 +7009,17 @@ msgstr "Введені паролі не співпадають"
 #~ msgid "Everyone can view resource information."
 #~ msgstr "Будь-хто може переглядати інформацію про ресурси."
 
+#~ msgid "Report a bug on Launchpad."
+#~ msgstr "Сповістити про помилку до Launchpad."
+
 #~ msgid "Everyone can view the application calendar."
 #~ msgstr "Будь-хто може переглядати календарь."
 
 #~ msgid "Everyone can view the list of persons"
 #~ msgstr "Будь-хто може переглянути список осіб"
+
+#~ msgid "Persons can set their own preferences"
+#~ msgstr "Особи мають змогу встановити власні налаштування"
 
 #~ msgid "Edit Resource Information"
 #~ msgstr "Редагування інформації про ресурс"
@@ -7054,5 +7039,20 @@ msgstr "Введені паролі не співпадають"
 #~ msgid "Everyone can view resource calendars."
 #~ msgstr "Будь-хто може переглядати календар ресурсів."
 
-#~ msgid "Copy Sections"
-#~ msgstr "Копіювати Розділ"
+#~ msgid "Using timetable:"
+#~ msgstr "Використовуючи розклад:"
+
+#~ msgid "For term:"
+#~ msgstr "Для семестру:"
+
+#~ msgid ""
+#~ "<a href=\"http://www.schooltool.org\">SchoolTool</a>&trade; is a "
+#~ "Trademark of The <a href=\"http://www.shuttleworthfoundation.org"
+#~ "\">Shuttleworth Foundation</a>."
+#~ msgstr ""
+#~ "<a href=\"http://www.schooltool.org\">SchoolTool</a>&trade; це торгова "
+#~ "марка <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth "
+#~ "Foundation</a>."
+
+#~ msgid "Access setting: ${setting} (${status})"
+#~ msgstr "Налаштування прав доступу: ${setting} (${status})"

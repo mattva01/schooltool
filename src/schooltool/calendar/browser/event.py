@@ -184,9 +184,9 @@ class IDeleteRecurringEventForm(Interface):
     delete = zope.schema.Choice(
         title=_("Delete"),
         vocabulary=vocabulary([
-                ("all", _("All occurances of this event")),
-                ("current", _("Only current occurance")),
-                ("future", _("This and all future occurances"))]),
+                ("all", _("All occurrences of this event")),
+                ("current", _("Only current occurrence")),
+                ("future", _("This and all future occurrences"))]),
         default="current",
         required=True,
         )

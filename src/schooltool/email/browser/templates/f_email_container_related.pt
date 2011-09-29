@@ -11,9 +11,9 @@
     </p>
     <p i18n:translate="">
       To enable SchoolTool to send emails, you will need the
-      instructions from your school’s server, your ISP, or your
+      instructions from your school's server, your ISP, or your
       webmail provider to configure a mail client to send mail via the
-      provider’s SMTP service.
+      provider's SMTP service.
     </p>
   </div>
 </metal:block>
