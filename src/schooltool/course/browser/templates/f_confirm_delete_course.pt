@@ -1,4 +1,5 @@
-<h3>Deleting a course is permanent, irreversible, and destroys all
+<h3 i18n:domain="schooltool" i18n:translate="">
+Deleting a course is permanent, irreversible, and destroys all
 data associated with the course. It is strongly recommended that you
 only delete a course that has been created in error or has no data
 associated with it.</h3>

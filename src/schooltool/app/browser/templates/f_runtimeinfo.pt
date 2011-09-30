@@ -1,5 +1,6 @@
 <tal:block tal:define="runtime_info view/runtimeInfo;
-                       dbSettings view/dbSettings">
+                       dbSettings view/dbSettings"
+           i18n:domain="schooltool">
   <table class="form-fields">
     <tbody>
       <tr>
@@ -31,7 +32,7 @@
         <td tal:content="runtime_info/PreferredEncoding">Encoding</td>
       </tr>
       <tr>
-        <td class="label" i18n:translate="">FileSystem encoding</td>
+        <td class="label" i18n:translate="">File system encoding</td>
         <td tal:content="runtime_info/FileSystemEncoding">Encoding</td>
       </tr>
       <tr>

@@ -714,8 +714,8 @@ class FlourishMemberViewPersons(FlourishRelationshipViewBase):
     def title(self):
         return self.context.title
 
-    current_title = _("Current members")
-    available_title = _("Add members")
+    current_title = _("Current Members")
+    available_title = _("Add Members")
 
     def getSelectedItems(self):
         """Return a list of current group memebers."""

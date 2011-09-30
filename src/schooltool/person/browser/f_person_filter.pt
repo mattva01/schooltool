@@ -1,9 +1,10 @@
+<tal:block i18n:domain="schooltool">
 <fieldset i18n:domain="schooltool">
   <legend><span i18n:translate="">Search</span></legend>
   <div class="row">
     <div class="label">
       <label for="SEARCH_TITLE">
-        <span>First name, last name or username</span>
+        <span i18n:translate="">First name, last name or username</span>
       </label>
     </div>
     <div class="widget">
@@ -16,7 +17,7 @@
   <div class="row">
     <div class="label">
       <label for="SEARCH_GROUP">
-        <span>Filter by...</span>
+        <span i18n:translate="">Filter by...</span>
       </label>
     </div>
     <div class="widget">
@@ -35,3 +36,4 @@
   <input type="submit" name="SEARCH_BUTTON" value="Search"
          class="button-ok" i18n:attributes="value" />
 </div>
+</tal:block>

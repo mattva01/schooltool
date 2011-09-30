@@ -1,7 +1,4 @@
-<tal:block xmlns:tal="http://xml.zope.org/namespaces/tal"
-           xmlns:i18n="http://xml.zope.org/namespaces/i18n"
-           define="exceptions context/exceptions"
-           i18n:translate="">
+<tal:block define="exceptions context/exceptions" i18n:domain="schooltool">
 
   <tal:block repeat="date exceptions"
              condition="not:context/schooltool:can_edit">

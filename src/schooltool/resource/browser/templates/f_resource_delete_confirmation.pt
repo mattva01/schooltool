@@ -1,2 +1,3 @@
-<h3 i18n:translate="">Are you sure you want to delete this resource?</h3>
+<h3 i18n:domain="schooltool" i18n:translate="">
+Are you sure you want to delete this resource?</h3>
 <div metal:use-macro="macro:form" />

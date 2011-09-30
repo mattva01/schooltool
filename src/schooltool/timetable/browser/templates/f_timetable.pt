@@ -5,8 +5,10 @@
     <tal:block replace="context/title" />
   </h3>
 
-  <p tal:condition="view/context/timezone"
-     tal:content="string:Timezone: ${view/context/timezone}"/>
+  <p tal:condition="view/context/timezone">
+    <span i18n:translate="">Timezone:</span>
+    <span tal:content="view/context/timezone" />
+  </p>
 
   <div>
     <h3 i18n:translate="">Periods</h3>

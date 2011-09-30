@@ -9,7 +9,7 @@
     <div class="required-info"
          metal:define-macro="required-info">
       <span class="required">*</span>
-      &ndash; signifies a required field
+      &ndash; <span i18n:translate="">signifies a required field</span>
     </div>
     <fieldset>
       <legend>

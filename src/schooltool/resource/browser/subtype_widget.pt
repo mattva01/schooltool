@@ -1,6 +1,4 @@
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:tal="http://xml.zope.org/namespaces/tal"
-      tal:omit-tag="">
+<tal:block i18n:domain="schooltool">
 <input type="text"
        tal:attributes="id string:${view/name}.newSubType;
 		       name string:${view/name}.newSubType;
@@ -13,4 +11,4 @@
                           selected python:type==view.value and 'selected' or None"
 	  tal:content="type">subtype</option>
 </select>
-</html>
+</tal:block>

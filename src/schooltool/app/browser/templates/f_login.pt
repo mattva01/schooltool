@@ -1,4 +1,4 @@
-<div>
+<div i18n:domain="schooltool">
   <form action="." method="post"
     tal:attributes="action string:${context/@@absolute_url}/@@login.html">
 

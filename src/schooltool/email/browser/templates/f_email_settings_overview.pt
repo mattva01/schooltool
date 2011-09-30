@@ -2,7 +2,8 @@
   <h3>
     <a title="Edit email settings"
        tal:attributes="href string:${context/@@absolute_url}/email"
-       i18n:attributes="title">
+       i18n:attributes="title"
+       i18n:translate="">
       Outgoing Email
     </a>
   </h3>

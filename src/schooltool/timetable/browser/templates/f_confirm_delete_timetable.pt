@@ -1,4 +1,5 @@
-<h3 i18n:translate="">Deleting a timetable is permanent, irreversable
+<h3 i18n:domain="schooltool" i18n:translate="">
+Deleting a timetable is permanent, irreversable
 and destroys all schedules associated with the timetable.
 It is strongly recommended that you
 only delete a timetable that has been created in error or

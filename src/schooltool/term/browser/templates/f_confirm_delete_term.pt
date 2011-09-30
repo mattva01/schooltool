@@ -1,4 +1,5 @@
-<h3>Deleting a term is permanent, irreversible, and destroys all data
+<h3 i18n:domain="schooltool" i18n:translate="">
+Deleting a term is permanent, irreversible, and destroys all data
 associated with the term, including all sections of courses.  It is strongly
 recommended that you only delete a term that has been created in error or has
 no data associated with it.</h3>
