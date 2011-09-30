@@ -1,4 +1,4 @@
-<metal:block i18n:domain="schooltool">
+<tal:block i18n:domain="schooltool">
   <div class="header" i18n:translate="">
     What is This?
   </div>
@@ -9,4 +9,4 @@
       capacity or date of purchase.
     </p>
   </div>
-</metal:block>
+</tal:block>

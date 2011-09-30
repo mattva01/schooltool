@@ -1,5 +1,5 @@
-<form class="plain" method="POST" tal:attributes="action request/URL">
-
+<form class="plain" method="POST" tal:attributes="action request/URL"
+      i18n:domain="schooltool">
 
   <div class="status"  tal:condition="view/error">
     <div class="summary ui-state-error ui-corner-all">

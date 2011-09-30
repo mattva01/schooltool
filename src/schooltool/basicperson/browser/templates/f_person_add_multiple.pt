@@ -1,4 +1,4 @@
-<div metal:use-macro="macro:form">
+<div metal:use-macro="macro:form" i18n:domain="schooltool">
 
   <div metal:fill-slot="main">
     <tal:block repeat="widget view/widgets/values">

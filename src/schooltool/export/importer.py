@@ -47,7 +47,6 @@ from schooltool.group.interfaces import IGroupContainer
 from schooltool.term.interfaces import ITerm
 from schooltool.term.term import Term, getNextTerm, getPreviousTerm
 from schooltool.app.interfaces import ISchoolToolApplication
-from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.app.app import SimpleNameChooser
 from schooltool.schoolyear.schoolyear import SchoolYear
 from schooltool.schoolyear.interfaces import ISchoolYear

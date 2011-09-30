@@ -367,13 +367,15 @@ $(document).ready(function() {
     <div class="resources" tal:condition="view/show_book_link">
       <fieldset>
         <legend><span i18n:translate="">Reserved Resources</span></legend>
-        <table width="100%" condition="context/resources">
-          <tr>
-            <th align="left">Title</th>
-            <th align="left">Type</th>
-          </tr>
-          <tal:loop repeat="resource context/resources">
+        <table width="100%" tal:condition="context/resources">
+          <thead>
             <tr>
+              <th align="left" i18n:translate="">Title</th>
+              <th align="left" i18n:translate="">Type</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr tal:repeat="resource context/resources">
               <td>
                 <p tal:replace="structure resource/@@link">resource title</p>
               </td>
@@ -381,7 +383,7 @@ $(document).ready(function() {
                 <p tal:replace="resource/type">resource type</p>
               </td>
             </tr>
-          </tal:loop>
+          </tbody>
         </table>
 
         <p tal:condition="not:context/resources">No resources reserved</p>

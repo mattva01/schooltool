@@ -374,9 +374,9 @@ class CalendarViewBase(BrowserView):
             booking_calendar = IBookingCalendar(rc)
             url = absoluteURL(booking_calendar, self.request)
             url = "%s/book_one_resource.html?resource_id=%s" % (url, item.__name__)
-            url = "%s&start_date=%s&start_time=%s:00&title=%s&duration=%s" % (
-                url, self.cursor, hour['time'],
-                _("Unnamed Event"), hour['duration']*60)
+            url = "%s&start_date=%s&start_time=%s&duration=%s&title=%s" % (
+                url, self.cursor, hour['time'], hour['duration']*60,
+                translate(_("Unnamed Event"), context=self.request))
         else:
             url = "%s/add.html?field.start_date=%s&field.start_time=%s&field.duration=%s"
             url = url % (absoluteURL(self.context, self.request),
@@ -2273,14 +2273,14 @@ class CalendarEventBookingView(CalendarEventView):
             else:
                 return 'Free'
         return [GetterColumn(name='title',
-                             title=u"Title",
+                             title=_("Title"),
                              getter=lambda i, f: i.title,
                              subsort=True),
                 GetterColumn(name='type',
-                             title=u"Type",
+                             title=_("Type"),
                              getter=lambda i, f: IResourceTypeInformation(i).title,
                              subsort=True),
-                GetterColumn(title="Booked by others",
+                GetterColumn(title=_("Booked by others"),
                              cell_formatter=statusFormatter,
                              getter=self.bookingStatus
                              )]

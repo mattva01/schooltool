@@ -1,5 +1,6 @@
 <form action="." method="post" enctype="multipart/form-data" class="standalone"
       metal:define-macro="form"
+      i18n:domain="schooltool"
       tal:attributes="method view/method;
                       enctype view/enctype;
                       acceptCharset view/acceptCharset;
@@ -47,7 +48,7 @@
         <div class="required-info"
              metal:define-macro="required-info">
           <span class="required">*</span>
-          &ndash; signifies a required field
+          &ndash; <span i18n:translate="">signifies a required field</span>
         </div>
       </metal:info>
       <div metal:define-slot="extra-info" tal:replace="nothing">
@@ -65,8 +66,7 @@
                 <metal:widget-row define-macro="widget-row">
                   <div class="label">
                     <label tal:attributes="for widget/id">
-                      <span i18n:translate=""
-                            tal:content="widget/label">label</span>
+                      <span tal:content="widget/label">label</span>
                       <span class="required"
                             tal:condition="widget/required">*</span>
                     </label>

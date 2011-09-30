@@ -1,4 +1,4 @@
-<div>
+<div i18n:domain="schooltool">
 
   <p i18n:translate="">
     CSV data <strong>must</strong> contain a user name a first name and a last name.

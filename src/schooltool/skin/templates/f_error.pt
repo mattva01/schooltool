@@ -1,4 +1,4 @@
-<div>
+<div i18n:domain="schooltool">
   <p i18n:translate="">
     An internal server error has occurred.
     This most likely means that you have found a bug in SchoolTool.
