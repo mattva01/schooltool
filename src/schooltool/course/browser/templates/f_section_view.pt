@@ -76,7 +76,9 @@
       <table tal:condition="courses">
         <tbody>
           <tr tal:repeat="course courses">
-            <td tal:content="course/title" />
+            <td>
+              <a tal:replace="structure course/@@link" />
+            </td>
           </tr>
         </tbody>
       </table>
