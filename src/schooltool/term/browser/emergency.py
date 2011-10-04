@@ -106,6 +106,7 @@ class EmergencyDayView(BrowserView):
                 #      term start/end dates are updated properly
                 self.context.last = self.replacement
 
+            # XXX: assert?!
             assert not self.context.isSchoolday(self.replacement)
             assert self.context.isSchoolday(self.date)
             self.context.add(self.replacement)
