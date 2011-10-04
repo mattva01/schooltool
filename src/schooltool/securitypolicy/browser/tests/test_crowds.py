@@ -117,6 +117,16 @@ def doctest_described_interfaces():
         -  SchoolTool application / Access
         -  School Years / View
         -
+        =================================
+        schooltool.basicperson.interfaces
+        =================================
+        - IFieldDescription, schooltool.edit
+        - ----------------------------------
+        -  Demographics / Edit fields
+        -
+        ==============================
+        schooltool.calendar.interfaces
+        ==============================
         - ISchoolToolCalendar, schooltool.edit
         - ------------------------------------
         -  SchoolTool application / Change calendar
@@ -132,13 +142,6 @@ def doctest_described_interfaces():
         -  Groups / View calendar
         -  Users / View calendar
         -  Reservations / View reservation calendar
-        -
-        =================================
-        schooltool.basicperson.interfaces
-        =================================
-        - IFieldDescription, schooltool.edit
-        - ----------------------------------
-        -  Demographics / Edit fields
         -
         ==============================
         schooltool.contact.basicperson
@@ -288,13 +291,13 @@ def doctest_described_interfaces():
         ===============================
         schooltool.timetable.interfaces
         ===============================
-        - ITimetableSchemaContainer, schooltool.edit
-        - ------------------------------------------
+        - ITimetableContainer, schooltool.edit
+        - ------------------------------------
         -  School timetables / Create/Delete
         -  School timetables / Modify
         -
-        - ITimetableSchemaContainer, schooltool.view
-        - ------------------------------------------
+        - ITimetableContainer, schooltool.view
+        - ------------------------------------
         -  School timetables / List/Search
         -  School timetables / View
         -

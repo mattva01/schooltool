@@ -145,7 +145,7 @@ Let's add some courses:
     Math
     Programming
 
-We don't get timetable schemas either:
+We don't get school timetables either:
 
     >>> manager.getLink('2009').click()
     >>> manager.getLink('School Timetables').click()
@@ -158,7 +158,7 @@ We don't get timetable schemas either:
       <p>There are none.</p>
     </div>
 
-Let's add a couple of timetable schemas:
+Let's add a couple of school timetables:
 
     >>> manager.getLink('New Timetable').click()
     >>> manager.getControl('Title').value = 'default'
@@ -171,29 +171,23 @@ Let's add a couple of timetable schemas:
     >>> manager.getControl('No').click()
 
     >>> manager.getLink('New Timetable').click()
-    >>> manager.getLink('advanced adding form').click()
     >>> manager.getControl('Title').value = 'other_schema'
-    >>> manager.getControl('Add day').click()
-    >>> manager.getControl('Add period').click()
-    >>> manager.getControl(name='day1.period1').value = 'A'
-    >>> manager.getControl(name='day1.period2').value = 'B'
-    >>> manager.getControl(name='day2.period1').value = 'C'
-    >>> manager.getControl(name='day2.period2').value = 'D'
-    >>> manager.getControl('Timetable day always coincides with the day of week'
-    ...                    ' (i.e. on Mondays the first timetable day is used, on'
-    ...                    ' Tuesdays the second, and so on).').click()
-    >>> manager.getControl(name='time1.day0').value = '9:00'
-    >>> manager.getControl(name='time2.day0').value = '10:00'
-    >>> manager.getControl(name='time1.day1').value = '9:00'
-    >>> manager.getControl(name='time2.day1').value = '10:00'
-    >>> manager.getControl(name='time1.day2').value = '9:00'
-    >>> manager.getControl(name='time2.day2').value = '10:00'
-    >>> manager.getControl(name='time1.day3').value = '8:00'
-    >>> manager.getControl(name='time2.day3').value = '11:00'
-    >>> manager.getControl(name='time1.day4').value = '8:00'
-    >>> manager.getControl(name='time2.day4').value = '11:00'
-    >>> manager.getControl('Duration').value = '60'
-    >>> manager.getControl('Create timetable schema').click()
+    >>> manager.getControl('Next').click()
+    >>> manager.getControl('Days of the week').click()
+    >>> manager.getControl('Different times').click()
+    >>> manager.getControl(name='times.0').value = '9:00\n10:00'
+    >>> manager.getControl(name='times.1').value = '9:00\n10:00'
+    >>> manager.getControl(name='times.2').value = '9:00\n10:00'
+    >>> manager.getControl(name='times.3').value = '8:00\n11:00'
+    >>> manager.getControl(name='times.4').value = '8:00\n11:00'
+    >>> manager.getControl('Next').click()
+    >>> manager.printQuery('//form')
+    >>> manager.getControl('Have names').click()
+    >>> manager.getControl(name='field.perions').value = 'A\nB\nC\nD'
+    >>> manager.getControl('Next').click()
+    >>> manager.getControl('Same').click()
+    >>> manager.getControl('Next').click()
+    >>> manager.getControl('No').click()
     >>> manager.getLink('2009').click()
     >>> manager.getLink('School Timetables').click()
     >>> manager.printQuery('id("content-body")/form/div/a/text()')
@@ -253,7 +247,7 @@ Again, no courses either:
       <p>There are none.</p>
     </div>
 
-And no timetables schemas:
+And no school timetables:
 
     >>> manager.getLink('2010').click()
     >>> manager.getLink('School Timetables').click()
@@ -288,7 +282,7 @@ all:
     >>> manager.printQuery('id("all-courses-row")/td[1]/text()')
     All Courses
 
-If the active school year has timetable schemas, we also get the
+If the active school year has school timetables, we also get the
 option to copy them:
 
     >>> manager.printQuery('id("all-timetables-row")/td[1]/text()')
