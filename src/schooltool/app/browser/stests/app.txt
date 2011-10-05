@@ -7,17 +7,27 @@ Experimental selenium doctest for SchoolTool
 
     >>> browsers.manager.open('http://localhost')
 
-  Log in:
+  Query the log-in link:
 
     >>> login = browsers.manager.query.link('Log In')
 
     >>> browsers.manager.printHTML(login)
-    <a id="tools-login" href="http://localhost/auth/@@login.html">Log In</a>
+    <a href="http://localhost/auth/@@login.html" id="tools-login">
+      Log In
+    </a>
 
     >>> login.click()
 
+  Fill in the log-in info and submit:
+
     >>> browsers.manager.query.name('username').type('manager')
-    >>> browsers.manager.query.name('password').type('schooltool')
+    >>> browsers.manager.query.name('password').click()
+
+    >>> print browsers.manager.query.active
+    <input id="password" name="password" tabindex="2" type="password" />
+
+    >>> browsers.manager.type('schooltool')
+
     >>> browsers.manager.query.button('Log in').click()
 
   Let's look at the links in header:
@@ -25,12 +35,24 @@ Experimental selenium doctest for SchoolTool
     >>> header = browsers.manager.query.id('header')
 
     >>> print header.query_all.tag('a')
-    <a class="navigation_header" href="http://localhost/persons/manager/home.html">Home</a>
-    <a class="navigation_header" href="http://localhost/persons/manager/calendar">Calendar</a>
-    <a class="navigation_header" href="http://localhost/manage.html">Manage</a>
-    <a id="login-name" href=" http://localhost/persons/manager/home.html">Administrator, SchoolTool</a>
-    <a id="login-logout" href="http://localhost/auth/@@logout.html">Log Out</a>
-    <a id="about-link" href="http://localhost/@@about.html"> SchoolTool</a>
+    <a class="navigation_header" href="http://localhost/persons/manager/home.html">
+      Home
+    </a>
+    <a class="navigation_header" href="http://localhost/persons/manager/calendar">
+      Calendar
+    </a>
+    <a class="navigation_header" href="http://localhost/manage.html">
+      Manage
+    </a>
+    <a href=...localhost/persons/manager/home.html" id="login-name">
+      Administrator, SchoolTool
+    </a>
+    <a href="http://localhost/auth/@@logout.html" id="login-logout">
+      Log Out
+    </a>
+    <a href="http://localhost/@@about.html" id="about-link">
+      SchoolTool
+    </a>
 
   Do an xpath query:
 
@@ -48,24 +70,9 @@ Experimental selenium doctest for SchoolTool
     >>> print browsers.manager.contents
     <BLANKLINE>
     ...
-    <div id="header">
-      <span>
-        <a class="navigation_header" href="http://localhost/persons/manager/home.html">
-          Home
-        </a>
-      </span>
-      <span>
-        <span>
-          <a class="navigation_header" href="http://localhost/persons/manager/calendar">
-            Calendar
-          </a>
-        </span>
-      </span>
-      <span>
-        <a class="navigation_header" href="http://localhost/manage.html">
-          Manage
-        </a>
-      </span>
+    <title>
+        Calendar for Administrator, SchoolTool - Tuesday, February 1, 2005
+    </title>
     ...
 
   Add a person:
@@ -76,28 +83,34 @@ Experimental selenium doctest for SchoolTool
 
     >>> browsers.manager.query.link('New Person').click()
 
-    >>> elements = browsers.manager.query_all.xpath('//form//input')
+    >>> form = browsers.manager.query.id('form')
 
-    >>> form = dict([(e.get_attribute('name'), e) for e in elements])
+    >>> field_elements = form.query_all.xpath('//input')
+    >>> fields = dict([(e.get_attribute('name'), e) for e in field_elements])
+
     >>> fill = ActionChains(browsers.manager.driver)
-    >>> fill = fill.send_keys_to_element(form['form.widgets.first_name'], 'Bob')
-    >>> fill = fill.send_keys_to_element(form['form.widgets.last_name'], 'Marley')
-    >>> fill = fill.send_keys_to_element(form['form.widgets.username'], 'bob_m')
-    >>> fill = fill.send_keys_to_element(form['form.widgets.password'], 'schooltool')
-    >>> fill = fill.send_keys_to_element(form['form.widgets.confirm'], 'schooltool')
+    >>> fill = fill.send_keys_to_element(fields['form.widgets.first_name'], 'Bob')
+    >>> fill = fill.send_keys_to_element(fields['form.widgets.last_name'], 'Marley')
+    >>> fill = fill.send_keys_to_element(fields['form.widgets.username'], 'bob_m')
+    >>> fill = fill.send_keys_to_element(fields['form.widgets.password'], 'schooltool')
+    >>> fill = fill.send_keys_to_element(fields['form.widgets.confirm'], 'schooltool')
 
-    >>> fill = fill.click(form['form.buttons.add'])
+    >>> fill = fill.click(fields['form.buttons.add'])
 
     >>> fill.perform()
 
-  Log in as the new person:
+  Let's log in as the new person.
 
-    >>> browsers.bob.open()
+    >>> bob = browsers.bob
+    >>> bob.open()
 
-    >>> browsers.bob.query.link('Log In').click()
-    >>> browsers.bob.query.name('username').type('bob_m')
-    >>> browsers.bob.query.name('password').type('schooltool')
-    >>> browsers.bob.query.button('Log in').click()
+    >>> bob.query.link('Log In').click()
+
+    >>> bob.query.name('username').type('bob_m')
+    >>> bob.query.name('password').type('schooltool')
+    >>> bob.query.button('Log in').click()
+
+  We've logged in:
 
     >>> print browsers.bob.query.xpath('//body//div[@class="calcontent"]//h1').text
     Calendar for Marley, Bob - Tuesday, February 1, 2005

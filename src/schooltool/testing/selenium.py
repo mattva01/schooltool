@@ -21,6 +21,7 @@ Selenium testing.
 """
 from __future__ import absolute_import
 import asyncore
+import cgi
 import doctest
 import os
 import string
@@ -28,7 +29,11 @@ import sys
 import threading
 import unittest
 from StringIO import StringIO
+from UserDict import DictMixin
 
+import lxml.html
+import lxml.doctestcompare
+import lxml.etree
 import selenium.webdriver.common.keys
 import selenium.webdriver.remote.webdriver
 import selenium.webdriver.remote.webelement
@@ -116,12 +121,220 @@ class CommandExecutor(object):
             print self._commands[name].__doc__
 
 
+class SortedDict(DictMixin):
+
+    def __init__(self, dict):
+        self.dict = dict
+
+    def __getitem__(self, k):
+        return self.dict.__getitem__(k)
+
+    def __setitem__(self, k, v):
+        return self.dict.__setitem__(k)
+
+    def __delitem__(self, k):
+        return self.dict.__delitem__(k)
+
+    def keys(self):
+        return sorted(self.dict)
+
+
+class DocTestHtmlElement(object):
+
+    @property
+    def attrib(self):
+        return SortedDict(super(DocTestHtmlElement, self).attrib)
+
+    def keys(self):
+        u"""keys(self)
+
+        Gets a list of attribute names.  The names are returned in an
+        arbitrary order (just like for an ordinary Python dictionary).
+        """
+        return sorted(super(DocTestHtmlElement, self).keys())
+
+    def values(self):
+        u"""values(self)
+
+        Gets element attribute values as a sequence of strings.  The
+        attributes are returned in an arbitrary order.
+        """
+        return sorted(super(DocTestHtmlElement, self).values())
+
+    def items(self):
+        u"""items(self)
+        Gets element attributes, as a sequence. The attributes are returned in
+        an arbitrary order.
+        """
+        return sorted(super(DocTestHtmlElement, self).items())
+
+
+class HtmlElement(DocTestHtmlElement, lxml.html.HtmlElement):
+    pass
+
+
+class DocTestHtmlElementClassLookup(lxml.html.HtmlElementClassLookup):
+
+    def lookup(self, node_type, document, namespace, name):
+        if node_type == 'element':
+            return self._element_classes.get(name.lower(), HtmlElement)
+        return lxml.html.HtmlElementClassLookup.lookup(
+            self, node_type, document, namespace, name)
+
+
+class DocTestHTMLParser(lxml.etree.XMLParser):
+    def __init__(self, **kwargs):
+        super(DocTestHTMLParser, self).__init__(**kwargs)
+        self.set_element_class_lookup(
+            DocTestHtmlElementClassLookup(
+                mixins=[('*', DocTestHtmlElement)],
+                ))
+
+
+shared_xhtml_parser = DocTestHTMLParser(
+    recover=True, remove_blank_text=False)
+
+
+class HTMLSerializer(object):
+
+    container_node = None
+
+    empty_tags = (
+        'param', 'img', 'area', 'br', 'basefont', 'input',
+        'base', 'meta', 'link', 'col')
+
+    def __init__(self, doc=None, parser=shared_xhtml_parser):
+        self.parser = parser
+        if isinstance(doc, basestring):
+            self.doc = self.parse(doc)
+        elif isinstance(doc, lxml.etree.ElementBase):
+            self.doc = doc
+        else:
+            raise NotImplemented('doc must be html string or lxml element,'
+                                 ' got: %r' % doc)
+
+    def _fix_ns(self, text):
+        # Do some guesswork to remove the namespace for now.
+        # XXX: regex or something would be better
+        if isinstance(text, basestring):
+            if text[0] == '{':
+                return text.split('}')[-1]
+        return text
+
+    def parse(self, html, **kw):
+        self.container_node = None
+        start = html[:200].lstrip().lower()
+        inject_html = bool(not '<html>' in start)
+        inject_body = bool(not '<body>' in start)
+        template = '%s'
+        if inject_body:
+            template = '<body>' + template + '</body>'
+        if inject_html:
+            template = '<html>' + template + '</html>'
+        if template != '%s':
+            html = template % html
+        doc = lxml.etree.fromstring(html, parser=self.parser, **kw)
+
+        if inject_body:
+            bodies = doc.xpath('//body')
+            assert len(bodies) == 1, bodies
+            self.container_node = bodies[0]
+        elif inject_html:
+            htmls = doc.xpath('//html')
+            assert len(htmls) == 1, htmls
+            self.container_node = htmls[0]
+
+    def format_doc(self, indent=0):
+        stream = StringIO()
+        self.print_doc(stream=stream, indent=indent)
+        return stream.getvalue()
+
+    def print_doc(self, stream=sys.stdout, indent=0):
+        if self.container_node is None:
+            self.print_node(self.doc, stream=stream, indent=indent)
+        else:
+            for node in self.container_node:
+                self.print_node(node, stream=stream, indent=indent)
+
+    def print_node(self, node, stream=sys.stdout, indent=0):
+        for base, method in self.formatters:
+            if isinstance(node, base):
+                return method(self, node, stream=stream, indent=indent)
+        raise NotImplemented(repr(node))
+
+    def print_text(self, text, stream=sys.stdout, indent=0):
+        if text is None:
+            return
+        text = text.strip()
+        if not text:
+            return
+        text = (indent*' ' + '\n').join(text.splitlines())
+        stream.write(indent*' '+cgi.escape(text, True)+'\n')
+
+    def print_comment(self, node, stream=sys.stdout, indent=0):
+        stream.write(indent*' ' + '<!--\n')
+        self.print_text(node.text, stream=stream, indent=indent+2)
+        stream.write(indent*' ' + '-->\n')
+
+    def print_tag(self, node, stream=sys.stdout, indent=0):
+        has_contents = bool(len(node) or node.text)
+        # Only auto-close node if it correctly has no children or text
+        if (self._fix_ns(node.tag).lower() in self.empty_tags and
+            not has_contents):
+            self.auto_tag(node, stream=stream, indent=indent)
+        else:
+            self.open_tag(node, stream=stream, indent=indent)
+            self.print_text(node.text, stream=stream, indent=indent+2)
+            for child in node:
+                self.print_node(child, stream=stream, indent=indent+2)
+            self.close_tag(node, stream=stream, indent=indent)
+            self.print_text(node.tail, stream=stream, indent=indent)
+
+    def print_attribs(self, node, stream=sys.stdout):
+        process = lambda t: t and cgi.escape(unicode(t), True) or ""
+        stream.write(' ' .join(['%s="%s"' % (self._fix_ns(n), process(v))
+                                for n, v in node.attrib.items()]))
+
+    def auto_tag(self, node, stream=sys.stdout, indent=0):
+        stream.write(indent*' ' + '<'+self._fix_ns(node.tag))
+        if node.attrib:
+            stream.write(' ')
+            self.print_attribs(node, stream=stream)
+        stream.write(' />\n')
+
+    def open_tag(self, node, stream=sys.stdout, indent=0):
+        stream.write(indent*' ' + '<'+self._fix_ns(node.tag))
+        if node.attrib:
+            stream.write(' ')
+            self.print_attribs(node, stream=stream)
+        stream.write('>\n')
+
+    def close_tag(self, node, stream=sys.stdout, indent=0):
+        stream.write(indent*' ' + '</' + self._fix_ns(node.tag) + '>\n')
+
+    def skip(self, *args, **kw):
+        pass
+
+    formatters = (
+            (lxml.etree.CommentBase, print_comment),
+            (lxml.etree.ElementBase, print_tag),
+            (lxml.etree.PIBase, skip),
+            )
+
+
 class WebElementList(list):
 
     def __unicode__(self):
-        return '\n'.join([unicode(el) for el in self])
+        return '\n'.join([unicode(el).rstrip() for el in self])
 
     __str__ = lambda self: unicode(self).encode('utf-8')
+
+
+def sanitizeHTML(html):
+    if html.strip():
+        serializer = HTMLSerializer(html)
+        return serializer.format_doc()
+    return html
 
 
 def getWebElementHTML(driver, web_elements):
@@ -129,7 +342,7 @@ def getWebElementHTML(driver, web_elements):
     if isinstance(web_elements, list):
         snippets = []
         for el in web_elements:
-            snippets.append(getWebElementHTML)
+            snippets.append(getWebElementHTML(el))
         html = u'\n'.join(snippets)
     else:
         html = driver.execute_script(
@@ -137,6 +350,8 @@ def getWebElementHTML(driver, web_elements):
             '.appendChild(arguments[0].cloneNode(true))'
             '.parentNode.innerHTML',
             web_elements)
+    if html:
+        html = sanitizeHTML(html)
     return html
 
 
@@ -308,7 +523,7 @@ class Browser(object):
 
     @property
     def contents(self):
-        return self.driver.page_source
+        return sanitizeHTML(self.driver.page_source)
 
     def printHTML(self, web_element):
         """Print HTML of WebElement or a list of WebElement."""
@@ -462,10 +677,17 @@ class SkippyDocTestRunner(doctest.DocTestRunner):
         return result
 
 
-class RepeatyDebugRunner(doctest.DebugRunner):
+class RepeatyDebugRunner(doctest.DebugRunner, SkippyDocTestRunner):
     """Mr. Repeaty Debugger."""
 
-    # XXX: plug point for custom debug runner behaviour
+    #def report_unexpected_exception(self, out, test, example, exc_info):
+    #    raise UnexpectedException(test, example, exc_info)
+
+    #def report_failure(self, out, test, example, got):
+    #    raise DocTestFailure(test, example, got)
+
+    def report_failure(self, out, test, example, got):
+        return doctest.DebugRunner.report_failure(self, out, test, example, got)
 
 
 class SeleniumOutputChecker(doctest.OutputChecker):
