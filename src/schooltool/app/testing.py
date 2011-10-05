@@ -21,12 +21,17 @@ import os
 from schooltool.testing.util import format_table
 from schooltool.testing.analyze import queryHTML
 from schooltool.testing.functional import ZCMLLayer
+from schooltool.testing.selenium import SeleniumLayer
 
 here = os.path.dirname(__file__)
 
 app_functional_layer = ZCMLLayer(os.path.join(here, 'ftesting.zcml'),
                                  __name__,
                                  'app_functional_layer')
+
+app_selenium_layer = SeleniumLayer(os.path.join(here, 'ftesting.zcml'),
+                                   __name__,
+                                   'app_functional_layer')
 
 
 def format_weekly_calendar(contents):

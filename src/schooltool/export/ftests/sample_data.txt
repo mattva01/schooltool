@@ -2,6 +2,27 @@ Test for sample data import
 ---------------------------
 
     >>> browser = Browser('manager', 'schooltool')
+
+We'll add some demo fields to test importing demos.
+
+    >>> browser.getLink('Manage').click()
+    >>> browser.getLink('Demographics').click()
+    >>> browser.getLink('New Date Field').click()
+    >>> browser.getControl("Title").value = 'Date Demo'
+    >>> browser.getControl("ID").value = 'date_demo'
+    >>> browser.getControl(name="form.widgets.required:list").value = ["false"]
+    >>> browser.getControl('Add').click()
+
+    >>> browser.getLink('Manage').click()
+    >>> browser.getLink('Demographics').click()
+    >>> browser.getLink('New Yes/No Field').click()
+    >>> browser.getControl("Title").value = 'Bool Demo'
+    >>> browser.getControl("ID").value = 'bool_demo'
+    >>> browser.getControl(name="form.widgets.required:list").value = ["false"]
+    >>> browser.getControl('Add').click()
+
+Now we'll go ahead with the import.
+
     >>> browser.getLink('Manage').click()
     >>> browser.getLink('XLS Import').click()
 
@@ -123,6 +144,64 @@ Let's check the data. We have 2 students that have contacts:
       </div>
     </div>
     </fieldset>
+
+Let's confirm the demo imports worked.  We just have one date for the manager
+user and the four possible booleans, two actual booleans in the xls document
+and two represented as strings but still valid.  We'll test a fifth person
+whose boolean demo is not at all set to show that missing boolean demos that
+are not required will keep the object's value for that field as None.
+
+    >>> browser.getLink('Manage').click()
+    >>> browser.getLink('Persons').click()
+    >>> browser.getControl(name="SEARCH_TITLE").value = 'manager'
+    >>> browser.getControl('Find Now').click()
+    >>> browser.getLink('Administrator').click()
+    >>> browser.getLink('Edit').click()
+    >>> browser.queryHTML('//input[@name="form.widgets.date_demo"]/@value')
+    ['2001-01-01']
+    >>> browser.printQuery('//input[@name="form.widgets.bool_demo:list"]')
+    <input id="form-widgets-bool_demo-0" name="form.widgets.bool_demo:list" class="radio-widget bool-field" value="true" checked="checked" type="radio" />
+    <input id="form-widgets-bool_demo-1" name="form.widgets.bool_demo:list" class="radio-widget bool-field" value="false" type="radio" />
+
+    >>> browser.getLink('Manage').click()
+    >>> browser.getLink('Persons').click()
+    >>> browser.getControl(name="SEARCH_TITLE").value = 'student000'
+    >>> browser.getControl('Find Now').click()
+    >>> browser.getLink('Florian').click()
+    >>> browser.getLink('Edit').click()
+    >>> browser.printQuery('//input[@name="form.widgets.bool_demo:list"]')
+    <input id="form-widgets-bool_demo-0" name="form.widgets.bool_demo:list" class="radio-widget bool-field" value="true" checked="checked" type="radio" />
+    <input id="form-widgets-bool_demo-1" name="form.widgets.bool_demo:list" class="radio-widget bool-field" value="false" type="radio" />
+
+    >>> browser.getLink('Manage').click()
+    >>> browser.getLink('Persons').click()
+    >>> browser.getControl(name="SEARCH_TITLE").value = 'student001'
+    >>> browser.getControl('Find Now').click()
+    >>> browser.getLink('Peg').click()
+    >>> browser.getLink('Edit').click()
+    >>> browser.printQuery('//input[@name="form.widgets.bool_demo:list"]')
+    <input id="form-widgets-bool_demo-0" name="form.widgets.bool_demo:list" class="radio-widget bool-field" value="true" type="radio" />
+    <input id="form-widgets-bool_demo-1" name="form.widgets.bool_demo:list" class="radio-widget bool-field" value="false" checked="checked" type="radio" />
+
+    >>> browser.getLink('Manage').click()
+    >>> browser.getLink('Persons').click()
+    >>> browser.getControl(name="SEARCH_TITLE").value = 'student002'
+    >>> browser.getControl('Find Now').click()
+    >>> browser.getLink('Sherm').click()
+    >>> browser.getLink('Edit').click()
+    >>> browser.printQuery('//input[@name="form.widgets.bool_demo:list"]')
+    <input id="form-widgets-bool_demo-0" name="form.widgets.bool_demo:list" class="radio-widget bool-field" value="true" type="radio" />
+    <input id="form-widgets-bool_demo-1" name="form.widgets.bool_demo:list" class="radio-widget bool-field" value="false" checked="checked" type="radio" />
+
+    >>> browser.getLink('Manage').click()
+    >>> browser.getLink('Persons').click()
+    >>> browser.getControl(name="SEARCH_TITLE").value = 'student003'
+    >>> browser.getControl('Find Now').click()
+    >>> browser.getLink('Piotr').click()
+    >>> browser.getLink('Edit').click()
+    >>> browser.printQuery('//input[@name="form.widgets.bool_demo:list"]')
+    <input id="form-widgets-bool_demo-0" name="form.widgets.bool_demo:list" class="radio-widget bool-field" value="true" type="radio" />
+    <input id="form-widgets-bool_demo-1" name="form.widgets.bool_demo:list" class="radio-widget bool-field" value="false" type="radio" />
 
 We have 4 terms:
 
