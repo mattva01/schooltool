@@ -322,12 +322,56 @@ class HTMLSerializer(object):
             )
 
 
-class WebElementList(list):
+class PrintablesList(list):
 
     def __unicode__(self):
         return '\n'.join([unicode(el).rstrip() for el in self])
 
     __str__ = lambda self: unicode(self).encode('utf-8')
+
+
+class ForwardingMethodsList(PrintablesList):
+
+    fwd_methods = ()
+    fwd_attrs = ()
+
+    def __getattr__(self, name):
+        if (name in self.fwd_methods or
+            name in self.fwd_attrs):
+            attrs = []
+            for web_el in self:
+                method = getattr(web_el, name, None)
+                if method is None:
+                    attrs.append(None)
+                    continue
+                if hasattr(method, '__call__'):
+                    attrs.append(method)
+                else:
+                    attrs.append(method)
+            if name in self.fwd_attrs:
+                return PrintablesList(attrs)
+            def multi_element_method(*args, **kw):
+                results = []
+                for attr in attrs:
+                    if hasattr(method, '__call__'):
+                        results.append(attr(*args, **kw))
+                    else:
+                        results.append(attr)
+                return PrintablesList(results)
+            return multi_element_method
+        return PrintablesList.__getattr__(self, name)
+
+
+class WebElementList(ForwardingMethodsList):
+
+    fwd_methods = (
+        'get_attribute', 'is_selected', 'is_enabled',
+        'value_of_css_property',
+        )
+
+    fwd_attrs = (
+        'tag_name', 'text', 'size', 'location',
+        )
 
 
 def sanitizeHTML(html):

@@ -54,6 +54,32 @@ Experimental selenium doctest for SchoolTool
       SchoolTool
     </a>
 
+    >>> print header.query_all.tag('a').text
+    Home
+    Calendar
+    Manage
+    Administrator, SchoolTool
+    Log Out
+    SchoolTool
+
+    >>> print header.query_all.tag('a').get_attribute('href')
+    http://localhost/persons/manager/home.html
+    http://localhost/persons/manager/calendar
+    http://localhost/manage.html
+    http://localhost/persons/manager/home.html
+    http://localhost/auth/@@logout.html
+    http://localhost/@@about.html
+
+    >>> print zip(header.query_all.tag('a').text,
+    ...           header.query_all.tag('a').get_attribute('href'))
+    [(u'Home', u'http://localhost/persons/manager/home.html'),
+     (u'Calendar', u'http://localhost/persons/manager/calendar'),
+     (u'Manage', u'http://localhost/manage.html'),
+     (u'Administrator, SchoolTool',
+      u'http://localhost/persons/manager/home.html'),
+     (u'Log Out', u'http://localhost/auth/@@logout.html'),
+     (u'SchoolTool', u'http://localhost/@@about.html')]
+
   Do an xpath query:
 
     >>> print browsers.manager.query.xpath(
