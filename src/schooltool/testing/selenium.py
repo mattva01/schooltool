@@ -34,9 +34,6 @@ from UserDict import DictMixin
 import lxml.html
 import lxml.doctestcompare
 import lxml.etree
-import selenium.webdriver.common.keys
-import selenium.webdriver.remote.webdriver
-import selenium.webdriver.remote.webelement
 from zope.app.wsgi import WSGIPublisherApplication
 from zope.app.server.wsgi import ServerType
 from zope.server.taskthreads import ThreadedTaskDispatcher
@@ -61,14 +58,18 @@ except ImportError:
 
 
 try:
+    # selenium on python2.5 throws a SyntaxError
+    from selenium.webdriver.remote.webelement import WebElement \
+            as SimpleWebElement
+
     if _browser_factory is None:
         import selenium.webdriver.firefox.webdriver
         def _browser_factory(factory_name='firefox'):
             assert factory_name == 'firefox'
             return selenium.webdriver.firefox.webdriver.WebDriver()
         selenium_enabled = True
-except ImportError:
-    pass
+except (ImportError, SyntaxError):
+    SimpleWebElement = object
 
 
 def extractJSONWireParams(cmd):
@@ -399,7 +400,7 @@ def getWebElementHTML(driver, web_elements):
     return html
 
 
-class WebElement(selenium.webdriver.remote.webelement.WebElement):
+class WebElement(SimpleWebElement):
 
     query = None
     query_all = None
@@ -407,8 +408,7 @@ class WebElement(selenium.webdriver.remote.webelement.WebElement):
     def __init__(self, *args):
         if len(args) == 1:
             web_element = args[0]
-            assert isinstance(
-                web_element, selenium.webdriver.remote.webelement.WebElement)
+            assert isinstance(web_element, SimpleWebElement)
             parent, id_ = web_element.parent, web_element.id
         elif len(args) == 2:
             parent, id_ = args
@@ -416,8 +416,7 @@ class WebElement(selenium.webdriver.remote.webelement.WebElement):
             raise TypeError(
                 "__init__() takes 1 (web_element) or 2 (parent, id) arguments"
                 "(%d given)" % len(args))
-        selenium.webdriver.remote.webelement.WebElement.__init__(
-            self, parent, id_)
+        SimpleWebElement.__init__(self, parent, id_)
         self.query = WebElementQuery(self, single=True)
         self.query_all = WebElementQuery(self, single=False)
 
@@ -456,8 +455,7 @@ class WebElementQuery(object):
     def _wrap(self, web_element):
         if isinstance(web_element, WebElement):
             return web_element # already wrapped
-        elif isinstance(
-            web_element, selenium.webdriver.remote.webelement.WebElement):
+        elif isinstance(web_element, SimpleWebElement):
             return WebElement(web_element)
         elif isinstance(web_element, dict):
             return dict([(key, self._wrap(val))
@@ -500,6 +498,7 @@ class WebElementQuery(object):
     @property
     def active(self):
         """Return an active element."""
+        import selenium.webdriver.remote.webdriver
         target = self._target
         while not isinstance(
             target, selenium.webdriver.remote.webdriver.WebDriver):
@@ -531,6 +530,7 @@ class Browser(object):
         self.execute.extractDriverCommands()
         self.query = WebElementQuery(self.driver, single=True)
         self.query_all = WebElementQuery(self.driver, single=False)
+        import selenium.webdriver.common.keys
         self.keys = selenium.webdriver.common.keys.Keys()
 
     def open(self, url="http://localhost/"):
@@ -852,7 +852,7 @@ def collect_ftests(package=None, level=None, layer=None, filenames=None,
                                suite_factory=make_suite)
     if not selenium_enabled:
         # XXX: should log that tests are skipped somewhere better
-        print 'Selenium not configured, skipping', suite
+        print >> sys.stderr, 'Selenium not configured, skipping', suite
         return unittest.TestSuite()
     return suite
 
