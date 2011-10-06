@@ -67,6 +67,7 @@ Javascript will be usable, although perhaps not very nice or convenient.""",
                       'pytz',
                       'reportlab',
                       'rwproperty',
+                      'simplejson', # for python << 2.6
                       'setuptools',
                       'xlrd',
                       'xlwt',
