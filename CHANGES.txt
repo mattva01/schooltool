@@ -5,6 +5,10 @@ CHANGES
 1.9.1 (unreleased)
 ------------------
 
+- Fully translatable.
+- Experimental implementation of Selenium testing API.
+- Added small sample data xls.
+- Fixed or disabled some tests.
 - Fixed export of booleans bug (https://bugs.launchpad.net/bugs/796791)
 
 
