@@ -28,7 +28,6 @@
              tal:condition="view/status"
              metal:define-macro="form-header">
           <div class="summary"
-               i18n:translate=""
                tal:content="view/status">
             Form status summary
           </div>
@@ -56,8 +55,7 @@
                 <metal:widget-row define-macro="widget-row">
                   <div class="label">
                     <label tal:attributes="for widget/id">
-                      <span i18n:translate=""
-                            tal:content="widget/label">label</span>
+                      <span tal:content="widget/label">label</span>
                       <span class="required"
                             tal:condition="widget/required">*</span>
                     </label>

@@ -1,5 +1,6 @@
 <form tal:attributes="action request/URL"
-      tal:define="status view/evolve">
+      tal:define="status view/evolve"
+      i18n:domain="schooltool">
   <p tal:condition="status">
     <span tal:condition="status/to"
           i18n:translate="">

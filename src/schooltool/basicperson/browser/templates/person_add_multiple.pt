@@ -10,7 +10,7 @@
           </tal:block>
 
           <fieldset tal:condition="view/addedPersons">
-            <legend>Added persons</legend>
+            <legend i18n:translate="">Added persons</legend>
             <p tal:repeat="person view/addedPersons">
               <span tal:content="person/username" />
               <a tal:replace="structure person/@@link" />

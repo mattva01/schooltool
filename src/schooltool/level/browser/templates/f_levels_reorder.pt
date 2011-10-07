@@ -23,10 +23,12 @@
         </td>
         <td tal:content="level/level/title" />
         <td>
-          <input type="image" alt="Delete" value="1" title="Delete"
-                 tal:attributes="name string:delete.${level/form_key};
-                                 src context/++resource++schooltool.skin.flourish/remove-icon.png"
-                 i18n:attributes="alt; title" />
+          <button class="image" type="submit" title="Delete" value="1"
+                  tal:attributes="name string:delete.${level/form_key};"
+                  i18n:attributes="title">
+            <img alt="Delete" i18n:attributes="alt"
+                 tal:attributes="src context/++resource++schooltool.skin.flourish/remove-icon.png" />
+          </button>
         </td>
       </tr>
     </table>

@@ -2,9 +2,26 @@
 CHANGES
 =======
 
-1.9.1 (unreleased)
+1.9.2 (unreleased)
 ------------------
 
+- Nothing changed yet.
+
+
+1.9.1 (2011-10-07)
+------------------
+
+- Fully translatable.
+- Experimental implementation of Selenium testing API.
+- Fixed or disabled some tests.
+- Page title.
+- Updated translations.
+
+Export
+++++++
+
+- Added small sample data xls.
+- Added boolean and date demo field support to xls import.
 - Fixed export of booleans bug (https://bugs.launchpad.net/bugs/796791)
 
 
@@ -18,8 +35,8 @@ It features a new, much improved look and navigation, a total redesign.
 
 There are too many changes to list.
 
-New features
-++++++++++++
+Export
+++++++
 
 - XLS import/export of contacts (https://launchpad.net/bugs/608873)
 

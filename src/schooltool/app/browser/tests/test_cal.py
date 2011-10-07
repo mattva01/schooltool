@@ -1063,7 +1063,7 @@ class TestCalendarViewBase(unittest.TestCase):
 
             >>> vb.cursor = date(2005, 1, 1)
             >>> vb.eventAddLink({'time': '5:00', 'duration': 45})
-            u'http://127.0.0.1/resources/booking/book_one_resource.html?resource_id=chair&start_date=2005-01-01&start_time=5:00:00&title=Unnamed Event&duration=2700'
+            u'http://127.0.0.1/resources/booking/book_one_resource.html?resource_id=chair&start_date=2005-01-01&start_time=5:00&duration=2700&title=Unnamed Event'
 
         """
 

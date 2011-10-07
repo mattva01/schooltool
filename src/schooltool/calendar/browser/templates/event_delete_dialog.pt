@@ -1,4 +1,4 @@
-<div>
+<div i18n:domain="schooltool">
   <h3 i18n:translate="">
     Deleting an event on
     <tal:block content="view/day_title"

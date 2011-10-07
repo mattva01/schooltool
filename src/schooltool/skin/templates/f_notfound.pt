@@ -1,4 +1,4 @@
-<div>
+<div i18n:domain="schooltool">
 
 <h3 i18n:translate="">
   The page that you are trying to access is not available

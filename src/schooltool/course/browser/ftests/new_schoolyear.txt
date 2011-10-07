@@ -33,7 +33,7 @@ Now let's add a couple of courses to it:
     >>> manager.getControl('Title').value = 'History 5'
     >>> manager.getControl('Description').value = 'History course for fifth-graders'
     >>> manager.getControl('Course ID').value = 'history-local'
-    >>> manager.getControl('Government ID').value = 'history-gov'
+    >>> manager.getControl('Alternate ID').value = 'history-gov'
     >>> manager.getControl('Credits').value = '5'
     >>> manager.getControl('Add').click()
 
@@ -89,7 +89,7 @@ Let's check that all the course attributes were copied:
       history-local
     </p>
     <p>
-      Government ID:
+      Alternate ID:
       history-gov
     </p>
     <p>

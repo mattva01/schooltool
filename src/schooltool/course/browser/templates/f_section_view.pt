@@ -71,12 +71,14 @@
     </metal:block>
   </metal:block>
   <tal:block tal:condition="context/schooltool:can_edit">
-    <h3>Courses</h3>
+    <h3 i18n:translate="">Courses</h3>
     <tal:block define="courses view/courses">
       <table tal:condition="courses">
         <tbody>
           <tr tal:repeat="course courses">
-            <td tal:content="course/title" />
+            <td>
+              <a tal:replace="structure course/@@link" />
+            </td>
           </tr>
         </tbody>
       </table>

@@ -1,4 +1,5 @@
-<div class="error" i18n:translate="">Date range you have selected overlaps with following terms:
+<div class="error" i18n:domain="schooltool" i18n:translate="">
+Date range you have selected overlaps with the following term(s):
 <tal:block i18n:name="terms">
   <div tal:repeat="sy view/terms">
     <tal:block content="structure sy/@@link" /> (<tal:block content="sy/first/@@shortDate" /> &mdash; <tal:block content="sy/last/@@shortDate" />)
