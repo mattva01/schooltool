@@ -111,7 +111,8 @@ def doctest_TermAddForm_overlap():
      We should get an error message
 
         >>> for error in view.widgets.errors: print error.render()
-        <div class="error">Date range you have selected overlaps with following terms:
+        <div class="error">
+        Date range you have selected overlaps with the following term(s):
         <div> <a href="http://127.0.0.1/schoolyears/2005-2006/fall">Fall</a> (2005-09-01 &mdash; 2006-07-16) </div>
         </div>
 
@@ -201,7 +202,8 @@ def doctest_TermEditForm_overlap():
     We should get an error
 
         >>> for error in view.widgets.errors: print error.render()
-        <div class="error">Date range you have selected overlaps with following terms:
+        <div class="error">
+        Date range you have selected overlaps with the following term(s):
         <div> <a href="http://127.0.0.1/schoolyears/2005-2006/fall">Fall</a> (2005-09-01 &mdash; 2006-01-01) </div>
         </div>
 

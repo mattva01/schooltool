@@ -1,4 +1,4 @@
-<fieldset>
+<fieldset i18n:domain="schooltool">
   <legend tal:condition="view/person">
     <span i18n:translate="">
     Contact of <span tal:replace="view/person/title" i18n:name="person" />

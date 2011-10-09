@@ -1,4 +1,4 @@
-<div>
+<div i18n:domain="schooltool">
   <p i18n:translate="">
     CSV data <strong>must</strong> include a resource title and
     <strong>may</strong> include an optional resource description.  Any

@@ -11,6 +11,20 @@
         </tal:block>
       </div>
     </div>
+    <div class="status spinner">
+      <div class="summary ui-state-highlight ui-corner-all">
+        <img tal:attributes="src context/++resource++schooltool.skin.flourish/spinner.gif" />
+        <span i18n:translate="">Please wait while the data is being imported.</span>
+      </div>
+    </div>
+    <script>
+      $(document).ready(function() {
+        $('.spinner').hide();
+        $('input[type="submit"]').click(function() {
+          $('.spinner').slideDown();
+        });
+      });
+    </script>
     <div class="status"
          tal:condition="view/success">
       <div class="summary ui-state-highlight ui-corner-all">

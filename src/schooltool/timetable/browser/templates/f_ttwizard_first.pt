@@ -1,4 +1,5 @@
-<form class="standalone" method="POST" tal:attributes="action request/URL">
+<form class="standalone" method="POST" tal:attributes="action request/URL"
+      i18n:domain="schooltool">
 
   <fieldset>
     <legend><span tal:content="view/label">[title]</span></legend>

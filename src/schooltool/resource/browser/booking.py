@@ -30,7 +30,7 @@ from zope.traversing.browser.absoluteurl import absoluteURL
 from zope.security.interfaces import Unauthorized
 from zope.security.checker import canAccess
 from zope.component import getUtility
-
+from zope.i18n import translate
 
 import schooltool.skin.flourish.page
 from schooltool.app.browser.cal import CalendarViewBase
@@ -106,7 +106,7 @@ class CalendarEventBookOneResourceView(BrowserView):
             title = self.request.get('title')
             start_datetime = "%s %s" % (start_date, start_time)
             start_datetime = datetime(*strptime(start_datetime,
-                                                "%Y-%m-%d %H:%M:%S")[0:6])
+                                                "%Y-%m-%d %H:%M")[0:6])
             duration = timedelta(seconds=int(self.request.get('duration')))
             event = CalendarEvent(dtstart = start_datetime,
                                   duration = duration,
@@ -190,8 +190,8 @@ class BookResourceLink(flourish.page.LinkViewlet):
         today = getUtility(IDateManager).today
         hour = utcnow().hour
         duration = 3600
-        url = "%s&start_date=%s&start_time=%s:00:00&title=%s&duration=%s" % (
-            url, today.isoformat(), hour,
-            _("Unnamed Event"), duration)
+        url = "%s&start_date=%s&start_time=%s:00&duration=%s&title=%s" % (
+            url, today.isoformat(), hour, duration,
+            translate(_("Unnamed Event"), context=self.request))
         url = "%s&next_url=%s" % (url, self.nextURL())
         return url

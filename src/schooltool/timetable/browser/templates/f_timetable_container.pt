@@ -1,5 +1,6 @@
 <div tal:define="objects context/values;
-                 canModify view/canModify">
+     canModify view/canModify"
+     i18n:domain="schooltool">
 
   <h3 tal:condition="not:objects" i18n:translate="">There are none.</h3>
   <tal:block tal:condition="objects"

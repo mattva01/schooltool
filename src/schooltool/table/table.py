@@ -17,14 +17,13 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """Base code for table rendering and filtering.
-
-$Id$
 """
 import urllib
 
 from zope.interface import implements
 from zope.interface import directlyProvides
 from zope.i18n.interfaces.locales import ICollator
+from zope.i18n import translate
 from zope.browserpage import ViewPageTemplateFile
 from zope.component import queryAdapter, queryMultiAdapter
 from zope.security.proxy import removeSecurityProxy
@@ -223,8 +222,8 @@ class ImageInputColumn(column.Column):
             return None
         form_id = ".".join(filter(None, [self.prefix, self.id_getter(item)]))
         return {
-            'title': self.title or '',
-            'alt': self.alt or '',
+            'title': translate(self.title, context=formatter.request) or '',
+            'alt': translate(self.alt, context=formatter.request) or '',
             'name': form_id,
             'src': image_url,
             }
@@ -233,10 +232,14 @@ class ImageInputColumn(column.Column):
         params = self.params(item, formatter)
         if not params:
             return ''
-        param_str = ' '.join(['%s="%s"' % (name, p)
-                              for name, p in sorted(params.items())])
+        return self.template() % params
 
-        return '<input type="image" value="1" %s />' % param_str
+    def template(self):
+        return '\n'.join([
+                '<button class="image" type="submit" name="%(name)s" title="%(title)s" value="1">',
+                '<img src="%(src)s" alt="%(alt)s" />',
+                '</button>'
+                ])
 
 
 class NullTableFormatter(object):

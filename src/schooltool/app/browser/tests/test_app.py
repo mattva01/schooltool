@@ -453,7 +453,7 @@ def doctest_ContentTitle():
 
         >>> provider = ContentTitle(ContentStub(), TestRequest(), None)
         >>> print provider()
-        <span>Foo</span>
+        Foo
 
     """
 

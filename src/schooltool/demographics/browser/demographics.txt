@@ -9,22 +9,22 @@ We can add a person:
 
   >>> browser = Browser('manager', 'schooltool')
   >>> browser.open('http://localhost/persons/@@add.html')
-  >>> browser.getControl(name='form.prefix').value = 'Mr'
-  >>> browser.getControl(name='form.full_name').value = 'foobar'
-  >>> browser.getControl(name='form.username').value = 'foobar'
-  >>> browser.getControl(name='form.last_name').value = 'barson'
-  >>> browser.getControl(name="form.password").value = "barfoo"
-  >>> browser.getControl(name="form.password.confirm").value = "barfoo"
+  >>> browser.getControl(name='form.widgets.prefix').value = 'Mr'
+  >>> browser.getControl(name='form.widgets.full_name').value = 'foobar'
+  >>> browser.getControl(name='form.widgets.username').value = 'foobar'
+  >>> browser.getControl(name='form.widgets.last_name').value = 'barson'
+  >>> browser.getControl(name="form.widgets.password").value = "barfoo"
+  >>> browser.getControl(name="form.widgets.confirm").value = "barfoo"
   >>> browser.getControl('Add').click()
 
 We expect the data to be there:
 
   >>> browser.open('http://localhost/persons/foobar/nameinfo/@@edit.html')
-  >>> browser.getControl(name='form.prefix').value
+  >>> browser.getControl(name='form.widgets.prefix').value
   'Mr'
-  >>> browser.getControl(name='form.full_name').value
+  >>> browser.getControl(name='form.widgets.full_name').value
   'foobar'
-  >>> browser.getControl(name='form.last_name').value
+  >>> browser.getControl(name='form.widgets.last_name').value
   'barson'
 
 We expect no photo to be there yet as we didn't upload one:
@@ -44,12 +44,12 @@ And we can edit its name info (also adding a photo):
 
   >>> from StringIO import StringIO
   >>> browser.open('http://localhost/persons/foobar/nameinfo/@@edit.html')
-  >>> browser.getControl(name='form.full_name').value = 'Someone Schooltool'
-  >>> browser.getControl(name='form.photo').add_file(StringIO('my_photo'),
+  >>> browser.getControl(name='form.widgets.full_name').value = 'Someone Schooltool'
+  >>> browser.getControl(name='form.widgets.photo').add_file(StringIO('my_photo'),
   ...     'binary/octet-stream', 'test.jpg')
-  >>> browser.getControl(name='form.actions.apply').click()
+  >>> browser.getControl(name='form.buttons.add').click()
   >>> browser.open('http://localhost/persons/foobar/nameinfo/@@edit.html')
-  >>> browser.getControl(name='form.full_name').value
+  >>> browser.getControl(name='form.widgets.full_name').value
   'Someone Schooltool'
 
 We also expect the photo to be there:
@@ -62,8 +62,8 @@ Editing the name info again without supplying a photo will not change
 the photo:
 
   >>> browser.open('http://localhost/persons/foobar/nameinfo/@@edit.html')
-  >>> browser.getControl(name='form.prefix').value = 'Mrs'
-  >>> browser.getControl(name='form.actions.apply').click()
+  >>> browser.getControl(name='form.widgets.prefix').value = 'Mrs'
+  >>> browser.getControl(name='form.buttons.apply').click()
   >>> browser.open('http://localhost/persons/foobar/nameinfo')
   >>> 'photo.jpg' in browser.contents
   True
@@ -90,7 +90,7 @@ We can edit its demographics:
   >>> browser.open('http://localhost/persons/foobar/demographics/@@edit.html')
   >>> previous_school = browser.getControl(name='form.previous_school')
   >>> previous_school.value = 'Some text'
-  >>> browser.getControl(name='form.actions.apply').click()
+  >>> browser.getControl(name='form.buttons.apply').click()
 
 and view it:
 
@@ -103,7 +103,7 @@ and its school data:
   >>> browser.open('http://localhost/persons/foobar/schooldata/@@edit.html')
   >>> id = browser.getControl(name='form.id')
   >>> id.value = 'ABC'
-  >>> browser.getControl(name='form.actions.apply').click()
+  >>> browser.getControl(name='form.buttons.apply').click()
   >>> browser.open('http://localhost/persons/foobar/schooldata')
   >>> 'ABC' in browser.contents
   True
@@ -112,7 +112,7 @@ and various parent and emergency contact screens:
 
   >>> browser.open('http://localhost/persons/foobar/parent1/@@edit.html')
   >>> name = browser.getControl(name='form.name').value = 'Zorro'
-  >>> browser.getControl(name='form.actions.apply').click()
+  >>> browser.getControl(name='form.buttons.apply').click()
 
   >>> browser.open('http://localhost/persons/foobar/parent2/@@edit.html')
   >>> browser.open('http://localhost/persons/foobar/emergency1/@@edit.html')

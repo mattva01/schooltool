@@ -25,6 +25,7 @@
        group="Student"
        description="Just a mock student report."
        title="Mock Student Report"
+       file_type="wtf"
        link="request_student_report.html"
        />
   <report:reportLink
@@ -34,6 +35,7 @@
        group="Group"
        description="Just a mock group report."
        title="Mock Group Report"
+       file_type="wtf"
        link="request_group_report.html"
        />
   <report:reportLink
@@ -43,6 +45,7 @@
        group="School Year"
        description="Just a mock schoolyear report."
        title="Mock SchoolYear Report"
+       file_type="wtf"
        link="request_schoolyear_report.html"
        />
   <report:reportLink
@@ -52,6 +55,7 @@
        group="Term"
        description="Just a mock term report."
        title="Mock Term Report"
+       file_type="wtf"
        link="request_term_report.html"
        />
   <report:reportLink
@@ -61,6 +65,7 @@
        group="Section"
        description="Just a mock section report."
        title="Mock Section Report"
+       file_type="wtf"
        link="request_section_report.html"
        />
 

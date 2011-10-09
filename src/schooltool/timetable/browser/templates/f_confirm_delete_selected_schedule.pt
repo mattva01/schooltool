@@ -1,5 +1,5 @@
-<h3 i18n:translate="">Removing this schedule will also remove
-generated calendar events for
+<h3 i18n:domain="schooltool" i18n:translate="">
+Removing this schedule will also remove generated calendar events for
 <tal:block i18n:name="title"
            tal:content="structure view/owner/schooltool:content/title" />
 and all other related data.
