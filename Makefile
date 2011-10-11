@@ -1,11 +1,13 @@
 #!/usr/bin/make
 
 PACKAGE=schooltool
+LOCALES=src/schooltool/locales
+TRANSLATIONS_ZCML=schooltool/common/translations.zcml
+INSTANCE_TYPE=schooltool
 
 DIST=/home/ftp/pub/schooltool/trunk
-BOOTSTRAP_PYTHON=python2.6
 
-INSTANCE_TYPE=schooltool
+BOOTSTRAP_PYTHON=python2.6
 BUILDOUT_FLAGS=
 
 .PHONY: all
@@ -108,24 +110,20 @@ ftest-coverage-reports-html ftest-coverage/reports: ftest-coverage
 extract-translations: build
 	bin/i18nextract --egg $(PACKAGE) \
 	                --domain $(PACKAGE) \
-	                --zcml schooltool/common/translations.zcml \
-	                --output-file src/schooltool/locales/schooltool.pot
+	                --zcml $(TRANSLATIONS_ZCML) \
+	                --output-file $(LOCALES)/$(PACKAGE).pot
 
 .PHONY: compile-translations
 compile-translations:
-	set -e; \
-	locales=src/schooltool/locales; \
-	for f in $${locales}/*.po; do \
+	for f in $(LOCALES)/*.po; do \
 	    mkdir -p $${f%.po}/LC_MESSAGES; \
 	    msgfmt -o $${f%.po}/LC_MESSAGES/$(PACKAGE).mo $$f;\
 	done
 
 .PHONY: update-translations
 update-translations:
-	set -e; \
-	locales=src/schooltool/locales; \
-	for f in $${locales}/*.po; do \
-	    msgmerge -qUN $$f $${locales}/$(PACKAGE).pot ;\
+	for f in $(LOCALES)/*.po; do \
+	    msgmerge -qUN $$f $(LOCALES)/$(PACKAGE).pot ;\
 	done
 	$(MAKE) compile-translations
 
@@ -156,8 +154,8 @@ upload:
 	    echo cp dist/$(PACKAGE)-$${VERSION}.tar.gz $${DIST} ;\
 	    cp dist/$(PACKAGE)-$${VERSION}.tar.gz $${DIST} ;\
 	else \
-	    echo scp dist/$(PACKAGE)-$${VERSION}.tar.gz schooltool.org:$${DIST} ;\
-	    scp dist/$(PACKAGE)-$${VERSION}.tar.gz schooltool.org:$${DIST} ;\
+	    echo scp dist/$(PACKAGE)-$${VERSION}.tar.gz* schooltool.org:$${DIST} ;\
+	    scp dist/$(PACKAGE)-$${VERSION}.tar.gz* schooltool.org:$${DIST} ;\
 	fi
 
 # Helpers
