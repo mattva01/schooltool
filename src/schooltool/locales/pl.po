@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2011-04-17 23:49+0300\n"
-"PO-Revision-Date: 2011-04-01 18:46+0000\n"
+"PO-Revision-Date: 2011-04-18 08:44+0000\n"
 "Last-Translator: smugas <smugasek@o2.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-04-08 04:36+0000\n"
-"X-Generator: Launchpad (build 12735)\n"
+"X-Launchpad-Export-Date: 2011-05-27 04:36+0000\n"
+"X-Generator: Launchpad (build 12959)\n"
 "X-Rosetta-Version: 0.1\n"
 
 #: /src/schooltool/app/app.py:197
@@ -6813,6 +6813,9 @@ msgstr "Zmień harmonogram"
 msgid "Supplied passwords are not identical"
 msgstr "Podane hasła nie są identyczne"
 
+#~ msgid "Everyone can view the application calendar."
+#~ msgstr "Każdy może przeglądać kalendarz aplikacji."
+
 #~ msgid "Group members can edit group calendars."
 #~ msgstr "Członkowie grupy mogą edytować kalendarze."
 
@@ -6828,8 +6831,8 @@ msgstr "Podane hasła nie są identyczne"
 #~ msgid "Add a Location"
 #~ msgstr "Dodaj położenie"
 
-#~ msgid "Copy Sections"
-#~ msgstr "Kopiuj sekcje"
+#~ msgid "Report a bug on Launchpad."
+#~ msgstr "Zawiadom o błędzie w Launchpadzie."
 
 #~ msgid "Everyone can view the list of persons"
 #~ msgstr "Każdy może przeglądać listę osób"
@@ -6843,5 +6846,23 @@ msgstr "Podane hasła nie są identyczne"
 #~ msgid "Everyone can view resource calendars."
 #~ msgstr "Każdy może przeglądać kalendarze zasobu"
 
+#~ msgid "Access setting: ${setting} (${status})"
+#~ msgstr "Dostęp do opcji: ${setting} (${status})"
+
+#~ msgid "Using timetable:"
+#~ msgstr "Wykorzystuje hamonogram:"
+
+#~ msgid "For term:"
+#~ msgstr "Dla okresu:"
+
 #~ msgid "Add an Equipment"
 #~ msgstr "Dodaj Sprzęt"
+
+#~ msgid ""
+#~ "<a href=\"http://www.schooltool.org\">SchoolTool</a>&trade; is a "
+#~ "Trademark of The <a href=\"http://www.shuttleworthfoundation.org"
+#~ "\">Shuttleworth Foundation</a>."
+#~ msgstr ""
+#~ "<a href=\"http://www.schooltool.org\">SchoolTool</a>&trade; jest "
+#~ "zastrzeżonym znakiem towarowym <a href=\"http://www."
+#~ "shuttleworthfoundation.org\">Shuttleworth Foundation</a>."

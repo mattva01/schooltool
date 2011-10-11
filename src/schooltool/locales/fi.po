@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2011-04-17 23:49+0300\n"
-"PO-Revision-Date: 2011-04-01 18:25+0000\n"
+"PO-Revision-Date: 2011-04-18 08:27+0000\n"
 "Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
 "Language-Team: Finnish <fi@li.org>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-04-08 04:32+0000\n"
-"X-Generator: Launchpad (build 12735)\n"
+"X-Launchpad-Export-Date: 2011-05-27 04:32+0000\n"
+"X-Generator: Launchpad (build 12959)\n"
 "X-Rosetta-Version: 0.1\n"
 
 #: /src/schooltool/app/app.py:197
@@ -6999,21 +6999,6 @@ msgstr "Aikataulun muutokset"
 msgid "Supplied passwords are not identical"
 msgstr "Salasanat eivät täsmää"
 
-#~ msgid "Required input is missing."
-#~ msgstr "Vaadittu syöte puuttuu."
-
-#~ msgid "Change the resources for this section."
-#~ msgstr "Muuta tämän osion resursseja."
-
-#~ msgid "Change the students in this section by groups"
-#~ msgstr "Muuta tämän osion opiskelijoita ryhmittäin"
-
-#~ msgid "Add a Section"
-#~ msgstr "Lisää osio"
-
-#~ msgid "No such course."
-#~ msgstr "Kurssia ei löytynyt."
-
 #~ msgid "Everyone can view group lists."
 #~ msgstr "Kaikki voivat katsoa ryhmäluetteloita."
 
@@ -7062,8 +7047,32 @@ msgstr "Salasanat eivät täsmää"
 #~ msgid "Everyone can view resource lists."
 #~ msgstr "Kaikki voivat tarkastella resurssiluetteloa."
 
+#~ msgid "Using timetable:"
+#~ msgstr "Käyttää aikataulua:"
+
+#~ msgid "Everyone can view group calendars."
+#~ msgstr "Kaikki voivat katsoa ryhmän kalentereita."
+
 #~ msgid "Everyone can view the application calendar."
 #~ msgstr "Kaikki voivat katsoa ohjelmistokalenteria"
 
 #~ msgid "Everyone can view section information and calendars"
 #~ msgstr "Kaikki voivat katsoa osion tietoja ja kalentereita"
+
+#~ msgid ""
+#~ "<a href=\"http://www.schooltool.org\">SchoolTool</a>&trade; is a "
+#~ "Trademark of The <a href=\"http://www.shuttleworthfoundation.org"
+#~ "\">Shuttleworth Foundation</a>."
+#~ msgstr ""
+#~ "<a href=\"http://www.schooltool.org\">SchoolTool</a>&trade; on <a href="
+#~ "\"http://www.shuttleworthfoundation.org\">Shuttleworth Foundationin</a> "
+#~ "rekisteröimä tavaramerkki."
+
+#~ msgid "Report a bug on Launchpad."
+#~ msgstr "Tee vikailmoitus Launchpad-palvelussa."
+
+#~ msgid "For term:"
+#~ msgstr "Lukukaudelle:"
+
+#~ msgid "Access setting: ${setting} (${status})"
+#~ msgstr "Käyttöoikeusasetus: ${setting} (${status})"

@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2011-04-17 23:49+0300\n"
-"PO-Revision-Date: 2011-04-01 18:24+0000\n"
-"Last-Translator: Fakhrul Rijal <frijal@gmail.com>\n"
+"PO-Revision-Date: 2011-05-11 09:57+0000\n"
+"Last-Translator: Prihantoosa <pht854@gmail.com>\n"
 "Language-Team: Indonesian <id@li.org>\n"
 "Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-04-08 04:34+0000\n"
-"X-Generator: Launchpad (build 12735)\n"
+"X-Launchpad-Export-Date: 2011-05-27 04:34+0000\n"
+"X-Generator: Launchpad (build 12959)\n"
 "X-Rosetta-Version: 0.1\n"
 
 #: /src/schooltool/app/app.py:197
@@ -2471,7 +2471,7 @@ msgstr "Kolom tanggal baru"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:174
 msgid "New Yes/No Field"
-msgstr ""
+msgstr "Baru Ya/Tidak Field"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:181
 msgid "New Selection List Field"
@@ -2479,15 +2479,15 @@ msgstr "Kolom daftar pilihan baru"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:291
 msgid "Add Teacher"
-msgstr ""
+msgstr "Tambah Guru"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:301
 msgid "Add Student"
-msgstr ""
+msgstr "Tambah Siswa"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:311
 msgid "Add Administrator"
-msgstr ""
+msgstr "Tambah Administrator"
 
 #: /src/schooltool/basicperson/browser/csvimport.py:44
 #: /src/schooltool/course/browser/csvimport.py:45
@@ -2627,50 +2627,52 @@ msgstr "Tambahkan Nasehat"
 msgid "Advisees of ${person}"
 msgstr "Nasehat dari ${person}"
 
-#: /src/schooltool/basicperson/browser/person.py:576
+#: /src/schooltool/basicperson/browser/person.py:579
 msgid "Teacher identification"
-msgstr ""
+msgstr "Identifikasi Guru"
 
 #: /src/schooltool/basicperson/browser/person.py:581
 msgid "Teacher demographics"
-msgstr ""
+msgstr "Demografi Guru"
 
 #: /src/schooltool/basicperson/browser/person.py:582
 msgid "Add new teacher"
-msgstr ""
+msgstr "Tambah Guru Baru"
 
 #: /src/schooltool/basicperson/browser/person.py:589
 msgid "Student identification"
-msgstr ""
+msgstr "Identifikasi Siswa"
 
 #: /src/schooltool/basicperson/browser/person.py:591
 msgid "Student demographics"
-msgstr ""
+msgstr "Demografi Siswa"
 
 #: /src/schooltool/basicperson/browser/person.py:592
 msgid "Add new student"
-msgstr ""
+msgstr "Tambah Siswa Baru"
 
 #: /src/schooltool/basicperson/browser/person.py:599
 msgid "Administrator identification"
-msgstr ""
+msgstr "Identifikasi Administrator"
 
 #: /src/schooltool/basicperson/browser/person.py:601
 msgid "Administrator demographics"
-msgstr ""
+msgstr "Demografi Administrator"
 
 #: /src/schooltool/basicperson/browser/person.py:602
 msgid "Add new administrator"
-msgstr ""
+msgstr "Tambah Administrator Baru"
 
 #: /src/schooltool/basicperson/browser/templates/container.pt:23
 msgid ""
 "To add teachers, students or administrators, please set up a ${school_year}."
 msgstr ""
+"Untuk menambah guru, siswa atau administrator, silahkan tentukan sebuah "
+"${school_year}."
 
 #: /src/schooltool/basicperson/browser/templates/container.pt:23
 msgid "school year"
-msgstr ""
+msgstr "Tahun Ajaran Sekolah"
 
 #: /src/schooltool/basicperson/browser/templates/container.pt:37
 #: /src/schooltool/course/browser/templates/course_container.pt:28
@@ -6851,12 +6853,6 @@ msgstr "Ubah Jadwal"
 msgid "Supplied passwords are not identical"
 msgstr "Kata kunci yang diberikan tidak sama"
 
-#~ msgid "Required input is missing."
-#~ msgstr "Input yang diperlukan tidak ada."
-
-#~ msgid "Change the resources for this section."
-#~ msgstr "Ubah sumber daya untuk bagian ini."
-
 #~ msgid "Everyone can view group lists."
 #~ msgstr "Setiap orang dapat melihat daftar grup."
 
@@ -6871,9 +6867,6 @@ msgstr "Kata kunci yang diberikan tidak sama"
 
 #~ msgid "Everyone can view section information and calendars"
 #~ msgstr "Setiap orang dapat melihat bagian informasi dan kalender"
-
-#~ msgid "Change the students in this section by groups"
-#~ msgstr "Mengubah data siswa di seksi ini berdasarkan grup"
 
 #~ msgid "Everyone can view the list of persons"
 #~ msgstr "Setiap orang dapat melihat daftar orang-orang"
@@ -6913,3 +6906,9 @@ msgstr "Kata kunci yang diberikan tidak sama"
 
 #~ msgid "Everyone can view resource lists."
 #~ msgstr "Setiap orang dapat melihat daftar sumber daya."
+
+#~ msgid "Using timetable:"
+#~ msgstr "Menggunakan jadwal:"
+
+#~ msgid "Everyone can view the application calendar."
+#~ msgstr "Semua orang dapat melihat aplikasi kalender."

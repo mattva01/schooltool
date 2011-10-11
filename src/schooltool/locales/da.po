@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2011-04-17 23:49+0300\n"
-"PO-Revision-Date: 2011-04-01 18:26+0000\n"
+"PO-Revision-Date: 2011-04-18 08:07+0000\n"
 "Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
 "Language-Team: Danish <da@li.org>\n"
 "Language: da\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-04-08 04:32+0000\n"
-"X-Generator: Launchpad (build 12735)\n"
+"X-Launchpad-Export-Date: 2011-05-27 04:31+0000\n"
+"X-Generator: Launchpad (build 12959)\n"
 
 #: /src/schooltool/app/app.py:197
 msgid "Your School"
@@ -6668,9 +6668,6 @@ msgstr "Ændre skema"
 msgid "Supplied passwords are not identical"
 msgstr "De angivne adgangskoder er ikke ens"
 
-#~ msgid "Required input is missing."
-#~ msgstr "Nødvendigt input mangler."
-
 #~ msgid "Everyone can view the application calendar."
 #~ msgstr "Alle kan se applikationskalenderen."
 
@@ -6710,5 +6707,20 @@ msgstr "De angivne adgangskoder er ikke ens"
 #~ msgid "Everyone can view resource lists."
 #~ msgstr "Alle kan se ressourcelister."
 
-#~ msgid "Add a Section"
-#~ msgstr "Tilføj en sektion"
+#~ msgid "Everyone can view group lists."
+#~ msgstr "Alle kan se gruppelister."
+
+#~ msgid "Group members can edit group calendars."
+#~ msgstr "Gruppemedlemmer kan redigere gruppekalendere."
+
+#~ msgid "Everyone can view group calendars."
+#~ msgstr "Alle kan se gruppekalendere."
+
+#~ msgid "Everyone can view group information."
+#~ msgstr "Alle kan se gruppe information."
+
+#~ msgid "Everyone can view section information and calendars"
+#~ msgstr "Alle kan se information om sektion og kalendere"
+
+#~ msgid "Report a bug on Launchpad."
+#~ msgstr "Rapporter en fejl på Launchpad."

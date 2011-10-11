@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2011-04-17 23:49+0300\n"
-"PO-Revision-Date: 2011-04-01 18:24+0000\n"
-"Last-Translator: Caner GÜRAL <cgural@gmail.com>\n"
+"PO-Revision-Date: 2011-05-19 06:45+0000\n"
+"Last-Translator: Kaya Zeren <Unknown>\n"
 "Language-Team: Turkish <tr@li.org>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-04-08 04:38+0000\n"
-"X-Generator: Launchpad (build 12735)\n"
+"X-Launchpad-Export-Date: 2011-05-27 04:39+0000\n"
+"X-Generator: Launchpad (build 12959)\n"
 "X-Rosetta-Version: 0.1\n"
 
 #: /src/schooltool/app/app.py:197
@@ -5440,28 +5440,28 @@ msgstr "Raporlar"
 
 #: /src/schooltool/report/browser/report.py:44
 msgid "Student Reports"
-msgstr ""
+msgstr "Öğrenci Raporları"
 
 #: /src/schooltool/report/browser/report.py:49
 msgid "Group Reports"
-msgstr ""
+msgstr "Grup Raporları"
 
 #: /src/schooltool/report/browser/report.py:54
 msgid "School Year Reports"
-msgstr ""
+msgstr "Okul Yılı Raporları"
 
 #: /src/schooltool/report/browser/report.py:59
 msgid "Term Reports"
-msgstr ""
+msgstr "Dönem Raporları"
 
 #: /src/schooltool/report/browser/report.py:64
 msgid "Section Reports"
-msgstr ""
+msgstr "Bölüm Raporları"
 
 #: /src/schooltool/report/browser/templates/report_reference.pt:3
 #: /src/schooltool/report/browser/templates/report_reference.pt:7
 msgid "Report Reference"
-msgstr ""
+msgstr "Rapor Referansı"
 
 #: /src/schooltool/report/browser/templates/report_reference.pt:13
 msgid "Category"
@@ -7093,6 +7093,9 @@ msgstr "Programı değiştir"
 msgid "Supplied passwords are not identical"
 msgstr "Yazılan parolalar aynı değil"
 
+#~ msgid "Everyone can view the application calendar."
+#~ msgstr "Uygulama takvimini herkes görebilir."
+
 #~ msgid "Everyone can view section information and calendars"
 #~ msgstr "Herkes bölüm bilgisini ve takvimleri görüntüleyebilir."
 
@@ -7111,6 +7114,15 @@ msgstr "Yazılan parolalar aynı değil"
 #~ msgid "Everyone can view the list of persons"
 #~ msgstr "Herkes kişiler listesini görüntüleyebilir"
 
+#~ msgid "Persons can change their own passwords"
+#~ msgstr "Kişiler kendi parolalarını değiştirebililer"
+
+#~ msgid "Persons can set their own preferences"
+#~ msgstr "Kişiler kendi terciklerini kurabilirler."
+
+#~ msgid "Everyone can view info of persons"
+#~ msgstr "Herkes kişilerin bilgisini görüntüleyebilir"
+
 #~ msgid "Edit Resource Information"
 #~ msgstr "Kaynak Bilgisini Düzenle"
 
@@ -7123,8 +7135,23 @@ msgstr "Yazılan parolalar aynı değil"
 #~ msgid "Everyone can view resource lists."
 #~ msgstr "Herkes kaynak listelerini görüntüleyebilir."
 
-#~ msgid "Copy Sections"
-#~ msgstr "Bölümleri Kopyala"
+#~ msgid "Using timetable:"
+#~ msgstr "Kullanılan zaman çizelgesi :"
+
+#~ msgid "For term:"
+#~ msgstr "Dönem için:"
+
+#~ msgid "Access setting: ${setting} (${status})"
+#~ msgstr "Erişim ayarları: ${setting} (${status})"
+
+#~ msgid ""
+#~ "<a href=\"http://www.schooltool.org\">SchoolTool</a>&trade; is a "
+#~ "Trademark of The <a href=\"http://www.shuttleworthfoundation.org"
+#~ "\">Shuttleworth Foundation</a>."
+#~ msgstr ""
+#~ "<a href=\"http://www.schooltool.org\">SchoolTool</a>&trade; <a href="
+#~ "\"http://www.shuttleworthfoundation.org\">Shuttleworth Vakfı</a>'nın "
+#~ "ticari markasıdır."
 
 #~ msgid "Add a Resource"
 #~ msgstr "Kaynak Ekle"
@@ -7140,3 +7167,13 @@ msgstr "Yazılan parolalar aynı değil"
 
 #~ msgid "Edit Equipment Information"
 #~ msgstr "Ekipman Bilgisini Düzenle"
+
+#~ msgid "Report a bug on Launchpad."
+#~ msgstr "Launchpad üzerinden bir hata bildir."
+
+#~ msgid ""
+#~ "&copy; The <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth "
+#~ "Foundation</a> 2003 - <span>2010</span>: Supporting Social Innovation."
+#~ msgstr ""
+#~ "&copy; The <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth "
+#~ "Vakfı</a> 2003 - <span>2010</span>: Sosyal Gelişimi Destekler."

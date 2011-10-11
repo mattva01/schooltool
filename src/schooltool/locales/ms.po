@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2011-04-17 23:49+0300\n"
-"PO-Revision-Date: 2011-04-01 18:49+0000\n"
-"Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
+"PO-Revision-Date: 2011-06-27 05:22+0000\n"
+"Last-Translator: abuyop <Unknown>\n"
 "Language-Team: Malay <ms@li.org>\n"
 "Language: ms\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-04-08 04:35+0000\n"
-"X-Generator: Launchpad (build 12735)\n"
+"X-Launchpad-Export-Date: 2011-06-28 04:30+0000\n"
+"X-Generator: Launchpad (build 13168)\n"
 
 #: /src/schooltool/app/app.py:197
 msgid "Your School"
@@ -2609,7 +2609,7 @@ msgstr "Ruang Tarikh Baru"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:174
 msgid "New Yes/No Field"
-msgstr ""
+msgstr "Medan Ya/Tidak Baru"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:181
 msgid "New Selection List Field"
@@ -2617,15 +2617,15 @@ msgstr "Ruang Senarai Pemilihan Baru"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:291
 msgid "Add Teacher"
-msgstr ""
+msgstr "Tambah Guru"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:301
 msgid "Add Student"
-msgstr ""
+msgstr "Tambah Pelajar"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:311
 msgid "Add Administrator"
-msgstr ""
+msgstr "Tambah Pentadbir"
 
 #: /src/schooltool/basicperson/browser/csvimport.py:44
 #: /src/schooltool/course/browser/csvimport.py:45
@@ -2670,11 +2670,11 @@ msgstr "Nama Pengguna tidak boleh mempunyai karekter yang bukan ascii"
 
 #: /src/schooltool/basicperson/browser/demographics.py:85
 msgid "Duplicate entry \"${value}\""
-msgstr ""
+msgstr "Duplikasi masukan \"${value}\""
 
 #: /src/schooltool/basicperson/browser/demographics.py:90
 msgid "Value too long \"${value}\""
-msgstr ""
+msgstr "Nilai terlalu panjang \"${value}\""
 
 #: /src/schooltool/basicperson/browser/demographics.py:100
 msgid "Demographics Container"
@@ -2765,50 +2765,51 @@ msgstr "Tambah orang yang dinasihat"
 msgid "Advisees of ${person}"
 msgstr "Orang yang dinasihat ${person}"
 
-#: /src/schooltool/basicperson/browser/person.py:576
+#: /src/schooltool/basicperson/browser/person.py:579
 msgid "Teacher identification"
-msgstr ""
+msgstr "Maklumat guru"
 
 #: /src/schooltool/basicperson/browser/person.py:581
 msgid "Teacher demographics"
-msgstr ""
+msgstr "Demografik Guru"
 
 #: /src/schooltool/basicperson/browser/person.py:582
 msgid "Add new teacher"
-msgstr ""
+msgstr "Tambah guru baru"
 
 #: /src/schooltool/basicperson/browser/person.py:589
 msgid "Student identification"
-msgstr ""
+msgstr "Maklumat pelajar"
 
 #: /src/schooltool/basicperson/browser/person.py:591
 msgid "Student demographics"
-msgstr ""
+msgstr "Demografik pelajar"
 
 #: /src/schooltool/basicperson/browser/person.py:592
 msgid "Add new student"
-msgstr ""
+msgstr "Tambah pelajar baru"
 
 #: /src/schooltool/basicperson/browser/person.py:599
 msgid "Administrator identification"
-msgstr ""
+msgstr "Maklumat pentadbir"
 
 #: /src/schooltool/basicperson/browser/person.py:601
 msgid "Administrator demographics"
-msgstr ""
+msgstr "Demografik pentadbir"
 
 #: /src/schooltool/basicperson/browser/person.py:602
 msgid "Add new administrator"
-msgstr ""
+msgstr "Tambah pentadbir baru"
 
 #: /src/schooltool/basicperson/browser/templates/container.pt:23
 msgid ""
 "To add teachers, students or administrators, please set up a ${school_year}."
 msgstr ""
+"Untuk menambah guru, pelajar atau pentadbir, sila tetapkan ${school_year}."
 
 #: /src/schooltool/basicperson/browser/templates/container.pt:23
 msgid "school year"
-msgstr ""
+msgstr "tahun persekolahan"
 
 #: /src/schooltool/basicperson/browser/templates/container.pt:37
 #: /src/schooltool/course/browser/templates/course_container.pt:28
@@ -3015,11 +3016,11 @@ msgstr "Samada Ruang ini diperlukan atau tidak"
 
 #: /src/schooltool/basicperson/interfaces.py:145
 msgid "Limit keys"
-msgstr ""
+msgstr "kekunci had"
 
 #: /src/schooltool/basicperson/interfaces.py:146
 msgid "An optional list of limit keys for this field"
-msgstr ""
+msgstr "Senarai pilihan bagi kekunci had untuk medan ini"
 
 #: /src/schooltool/basicperson/interfaces.py:161
 msgid "List of values"
@@ -3075,11 +3076,11 @@ msgstr "Pelajar"
 
 #: /src/schooltool/basicperson/vocabularies.py:144
 msgid "Teachers"
-msgstr ""
+msgstr "Guru"
 
 #: /src/schooltool/basicperson/vocabularies.py:145
 msgid "Administrators"
-msgstr ""
+msgstr "Pentadbir"
 
 #: /src/schooltool/common/configure.zcml:89
 #: /src/schooltool/course/browser/configure.zcml:25
@@ -3101,7 +3102,7 @@ msgstr "Ubah Susunan Kalendar"
 
 #: /src/schooltool/contact/browser/configure.zcml:41
 msgid "View Person"
-msgstr ""
+msgstr "Lihat Individu"
 
 #: /src/schooltool/contact/browser/configure.zcml:61
 msgid "New Contact"
@@ -3243,7 +3244,7 @@ msgstr "Kosongkan"
 
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:27
 msgid "Shortcut: Alt-R"
-msgstr ""
+msgstr "Pintasan: Alt-R"
 
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:43
 msgid "Create contact"
@@ -3262,6 +3263,8 @@ msgid ""
 "You don't have an email address set. Ask your administrator to set your "
 "email address in your contact information."
 msgstr ""
+"Anda tidak mempunyai alamat emel yang ditetapkan. Tanya pentadbir anda untuk "
+"tetapkan emel anda didalam maklumat kenalan anda."
 
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:8
 msgid "Contact information for ${person}"
@@ -4438,12 +4441,12 @@ msgstr "Status terkini servis e-mel SchoolTool"
 #: /src/schooltool/email/browser/email.py:99
 #: /src/schooltool/email/interfaces.py:87
 msgid "Enable"
-msgstr ""
+msgstr "Dibenarkan"
 
 #: /src/schooltool/email/browser/email.py:100
 #: /src/schooltool/email/interfaces.py:88
 msgid "Mark to enable the service."
-msgstr ""
+msgstr "Tanda untuk benarkan perkhidmatan."
 
 #: /src/schooltool/email/browser/email.py:105
 #: /src/schooltool/email/interfaces.py:92
@@ -7132,9 +7135,6 @@ msgstr "Kata laluan yang diberi tidak sepadan"
 #~ msgid "Everyone can view section information and calendars"
 #~ msgstr "Semua boleh melihat keterangan seksyen dan kalendar-kalendar"
 
-#~ msgid "SMTP server hostname. Leave empty to disable email."
-#~ msgstr "Nama host pelayan SMTP. Biarkan kosong untuk menyahaktifkan e-mel."
-
 #~ msgid "Everyone can view group lists."
 #~ msgstr "Semua orang boleh melihat senarai kumpulan."
 
@@ -7185,3 +7185,31 @@ msgstr "Kata laluan yang diberi tidak sepadan"
 
 #~ msgid "Everyone can view resource information."
 #~ msgstr "Semua pengguna boleh melihat maklumat sumber."
+
+#~ msgid "Access setting: ${setting} (${status})"
+#~ msgstr "Penetapan Akses: ${setting} (${status})"
+
+#~ msgid "Report a bug on Launchpad."
+#~ msgstr "Laporkan bug ke Launchpad."
+
+#~ msgid ""
+#~ "<a href=\"http://www.schooltool.org\">SchoolTool</a>&trade; is a "
+#~ "Trademark of The <a href=\"http://www.shuttleworthfoundation.org"
+#~ "\">Shuttleworth Foundation</a>."
+#~ msgstr ""
+#~ "<a href=\"http://www.schooltool.org\">SchoolTool</a>&trade; is a "
+#~ "Trademark of The <a href=\"http://www.shuttleworthfoundation.org"
+#~ "\">Shuttleworth Foundation</a>."
+
+#~ msgid "For term:"
+#~ msgstr "Untuk penggal:"
+
+#~ msgid "Using timetable:"
+#~ msgstr "Menggunakan jadual:"
+
+#~ msgid ""
+#~ "&copy; The <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth "
+#~ "Foundation</a> 2003 - <span>2010</span>: Supporting Social Innovation."
+#~ msgstr ""
+#~ "&copy; The <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth "
+#~ "Foundation</a> 2003 - <span>2010</span>: Menyokong Inovasi Sosial"
