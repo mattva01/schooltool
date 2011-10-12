@@ -25,6 +25,7 @@ from zope.app.form.browser.interfaces import ITerms
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import adapts
 from zope.component import getUtility, queryMultiAdapter, getMultiAdapter
+from zope.i18n import translate
 from z3c.form import form, field, button, validator
 from z3c.form.interfaces import DISPLAY_MODE
 from zope.interface import invariant, Invalid
@@ -774,6 +775,10 @@ class FlourishGeneralViewlet(Viewlet):
             value = getattr(self.context, attr)
             if value:
                 label = fields[attr].field.title
+                if attr == 'gender':
+                    vocabulary = IBasicPerson[attr].vocabulary
+                    message = vocabulary.getTermByToken(value).title
+                    value = translate(message, context=self.request)
                 rows.append(self.makeRow(label, value))
         return rows
 

@@ -1,0 +1,13 @@
+<div tal:condition="view/languages"
+     id="language-selector">
+  [<tal:block repeat="lang view/languages">
+    <tal:if condition="python:lang == view.selected_lang()">
+      <span tal:content="lang" id="selected-language">EN</span>
+    </tal:if>
+    <tal:if condition="python:lang != view.selected_lang()">
+      <a tal:attributes="href request/URL;
+                         onclick string:document.cookie='schooltool.lang=${lang};;path=/'"
+         tal:content="lang">EN</a>
+    </tal:if>
+  </tal:block>]
+</div>
