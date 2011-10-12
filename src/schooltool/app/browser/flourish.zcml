@@ -108,6 +108,17 @@
       permission="zope.Public"
       />
 
+  <flourish:viewlet
+      name="language_selector"
+      after="logged-in-name"
+      before="login"
+      for="*"
+      manager="schooltool.skin.flourish.page.ISecondaryNavigationManager"
+      template="templates/f_language_selector.pt"
+      permission="schooltool.view"
+      class="schooltool.skin.skin.LanguageSelectorViewlet"
+      />
+
   <flourish:activeViewlet
       name="login"
       manager="schooltool.skin.flourish.page.ISecondaryNavigationManager"
