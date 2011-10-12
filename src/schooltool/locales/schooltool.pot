@@ -17,7 +17,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
-"POT-Creation-Date: 2011-09-08 14:13+0300\n"
+"POT-Creation-Date: 2011-10-12 19:53+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Schooltool Development Team <schooltool-dev@schooltool.org>\n"
@@ -3232,54 +3232,6 @@ msgstr ""
 msgid "Terms"
 msgstr ""
 
-#: /src/schooltool/demographics/browser/configure.zcml:156
-msgid "Schooltool Person Menu"
-msgstr ""
-
-#: /src/schooltool/demographics/browser/configure.zcml:167
-#: /src/schooltool/demographics/browser/configure.zcml:228
-msgid "name info"
-msgstr ""
-
-#: /src/schooltool/demographics/browser/configure.zcml:173
-#: /src/schooltool/demographics/browser/configure.zcml:234
-msgid "demographics"
-msgstr ""
-
-#: /src/schooltool/demographics/browser/configure.zcml:179
-#: /src/schooltool/demographics/browser/configure.zcml:240
-msgid "schooldata"
-msgstr ""
-
-#: /src/schooltool/demographics/browser/configure.zcml:185
-#: /src/schooltool/demographics/browser/configure.zcml:246
-msgid "parent1"
-msgstr ""
-
-#: /src/schooltool/demographics/browser/configure.zcml:191
-#: /src/schooltool/demographics/browser/configure.zcml:252
-msgid "parent2"
-msgstr ""
-
-#: /src/schooltool/demographics/browser/configure.zcml:197
-#: /src/schooltool/demographics/browser/configure.zcml:258
-msgid "emergency1"
-msgstr ""
-
-#: /src/schooltool/demographics/browser/configure.zcml:203
-#: /src/schooltool/demographics/browser/configure.zcml:264
-msgid "emergency2"
-msgstr ""
-
-#: /src/schooltool/demographics/browser/configure.zcml:209
-#: /src/schooltool/demographics/browser/configure.zcml:270
-msgid "emergency3"
-msgstr ""
-
-#: /src/schooltool/demographics/browser/configure.zcml:217
-msgid "Schooltool Person Display Menu"
-msgstr ""
-
 #: /src/schooltool/demographics/browser/demographics_macros.pt:4
 #: /src/schooltool/demographics/browser/personform.py:96
 msgid "Apply and Next"
@@ -3558,11 +3510,7 @@ msgstr ""
 msgid "Student ID"
 msgstr ""
 
-#: /src/schooltool/demographics/overrides.zcml:22
-msgid "Search"
-msgstr ""
-
-#: /src/schooltool/demographics/utility.py:96
+#: /src/schooltool/demographics/utility.py:92
 msgid "Surname"
 msgstr ""
 
