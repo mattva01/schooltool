@@ -183,7 +183,7 @@ class DocTestHtmlElementClassLookup(lxml.html.HtmlElementClassLookup):
             self, node_type, document, namespace, name)
 
 
-class DocTestHTMLParser(lxml.etree.XMLParser):
+class DocTestHTMLParser(lxml.etree.HTMLParser):
     def __init__(self, **kwargs):
         super(DocTestHTMLParser, self).__init__(**kwargs)
         self.set_element_class_lookup(
@@ -191,6 +191,18 @@ class DocTestHTMLParser(lxml.etree.XMLParser):
                 mixins=[('*', DocTestHtmlElement)],
                 ))
 
+
+class DocTestXHTMLParser(lxml.etree.XMLParser):
+    def __init__(self, **kwargs):
+        super(DocTestHTMLParser, self).__init__(**kwargs)
+        self.set_element_class_lookup(
+            DocTestHtmlElementClassLookup(
+                mixins=[('*', DocTestHtmlElement)],
+                ))
+
+
+shared_html_parser = DocTestHTMLParser(
+    recover=True, remove_blank_text=False)
 
 shared_xhtml_parser = DocTestHTMLParser(
     recover=True, remove_blank_text=False)
@@ -204,7 +216,7 @@ class HTMLSerializer(object):
         'param', 'img', 'area', 'br', 'basefont', 'input',
         'base', 'meta', 'link', 'col')
 
-    def __init__(self, doc=None, parser=shared_xhtml_parser):
+    def __init__(self, doc=None, parser=shared_html_parser):
         self.parser = parser
         if isinstance(doc, basestring):
             self.doc = self.parse(doc)
@@ -297,21 +309,21 @@ class HTMLSerializer(object):
                                 for n, v in node.attrib.items()]))
 
     def auto_tag(self, node, stream=sys.stdout, indent=0):
-        stream.write(indent*' ' + '<'+self._fix_ns(node.tag))
+        stream.write(indent*' ' + '<'+self._fix_ns(node.tag).lower())
         if node.attrib:
             stream.write(' ')
             self.print_attribs(node, stream=stream)
         stream.write(' />\n')
 
     def open_tag(self, node, stream=sys.stdout, indent=0):
-        stream.write(indent*' ' + '<'+self._fix_ns(node.tag))
+        stream.write(indent*' ' + '<'+self._fix_ns(node.tag).lower())
         if node.attrib:
             stream.write(' ')
             self.print_attribs(node, stream=stream)
         stream.write('>\n')
 
     def close_tag(self, node, stream=sys.stdout, indent=0):
-        stream.write(indent*' ' + '</' + self._fix_ns(node.tag) + '>\n')
+        stream.write(indent*' ' + '</' + self._fix_ns(node.tag).lower() + '>\n')
 
     def skip(self, *args, **kw):
         pass
