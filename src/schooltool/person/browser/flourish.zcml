@@ -67,8 +67,4 @@
       subtitle="Password"
       />
 
-  <zope:adapter factory=".person.PasswordsMatchValidator" />
-
-  <zope:adapter factory=".person.CurrentPasswordValidator" />
-
 </configure>
