@@ -17,7 +17,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
-"POT-Creation-Date: 2011-09-30 20:35+0300\n"
+"POT-Creation-Date: 2011-10-01 14:51-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Schooltool Development Team <schooltool-dev@schooltool.org>\n"
@@ -47,21 +47,38 @@ msgstr ""
 
 #: /src/schooltool/app/browser/app.py:275
 #: /src/schooltool/app/browser/cal.py:1970
+#: /src/schooltool/app/browser/flourish.zcml:420
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:48
+#: /src/schooltool/basicperson/browser/flourish.zcml:39
+#: /src/schooltool/basicperson/browser/flourish.zcml:282
 #: /src/schooltool/basicperson/browser/person.py:309
 #: /src/schooltool/basicperson/browser/person.py:354
 #: /src/schooltool/basicperson/browser/person.py:862
+#: /src/schooltool/calendar/browser/flourish.zcml:71
 #: /src/schooltool/contact/browser/contact.py:118
+#: /src/schooltool/contact/browser/flourish.zcml:54
+#: /src/schooltool/contact/browser/flourish.zcml:168
 #: /src/schooltool/course/browser/course.py:509
+#: /src/schooltool/course/browser/flourish.zcml:31
+#: /src/schooltool/course/browser/flourish.zcml:40
+#: /src/schooltool/course/browser/flourish.zcml:59
+#: /src/schooltool/course/browser/flourish.zcml:76
 #: /src/schooltool/course/browser/section.py:364
 #: /src/schooltool/course/browser/section.py:1171
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:67
+#: /src/schooltool/group/browser/flourish.zcml:31
+#: /src/schooltool/group/browser/flourish.zcml:48
 #: /src/schooltool/group/browser/group.py:615
+#: /src/schooltool/level/browser/flourish.zcml:43
 #: /src/schooltool/level/browser/level.py:59
+#: /src/schooltool/resource/browser/flourish.zcml:97
 #: /src/schooltool/resource/browser/resource.py:589
+#: /src/schooltool/schoolyear/browser/flourish.zcml:34
 #: /src/schooltool/schoolyear/browser/schoolyear.py:448
 #: /src/schooltool/skin/flourish/form.py:77
 #: /src/schooltool/timetable/browser/calendar.py:161
+#: /src/schooltool/timetable/browser/flourish.zcml:43
+#: /src/schooltool/timetable/browser/flourish.zcml:367
 #: /src/schooltool/timetable/browser/timetable.py:342
 msgid "Add"
 msgstr ""
@@ -79,6 +96,8 @@ msgid "Username or password is incorrect"
 msgstr ""
 
 #: /src/schooltool/app/browser/app.py:434
+#: /src/schooltool/app/browser/flourish.zcml:54
+#: /src/schooltool/app/browser/flourish.zcml:63
 #: /src/schooltool/app/browser/templates/f_login.pt:72
 #: /src/schooltool/app/browser/templates/login.pt:57
 msgid "Log in"
@@ -184,6 +203,8 @@ msgid "Cancel"
 msgstr ""
 
 #: /src/schooltool/app/browser/app.py:548
+#: /src/schooltool/app/browser/flourish.zcml:228
+#: /src/schooltool/app/browser/flourish.zcml:580
 msgid "School Name"
 msgstr ""
 
@@ -219,6 +240,21 @@ msgid "school"
 msgstr ""
 
 #: /src/schooltool/app/browser/app.py:741
+#: /src/schooltool/app/browser/flourish.zcml:149
+#: /src/schooltool/app/browser/flourish.zcml:170
+#: /src/schooltool/app/browser/flourish.zcml:218
+#: /src/schooltool/app/browser/flourish.zcml:260
+#: /src/schooltool/app/browser/flourish.zcml:272
+#: /src/schooltool/app/browser/flourish.zcml:292
+#: /src/schooltool/app/browser/flourish.zcml:457
+#: /src/schooltool/app/browser/flourish.zcml:553
+#: /src/schooltool/email/browser/flourish.zcml:27
+#: /src/schooltool/email/browser/flourish.zcml:37
+#: /src/schooltool/email/browser/flourish.zcml:49
+#: /src/schooltool/email/browser/flourish.zcml:60
+#: /src/schooltool/email/browser/flourish.zcml:71
+#: /src/schooltool/securitypolicy/browser/flourish.zcml:15
+#: /src/schooltool/securitypolicy/browser/flourish.zcml:44
 msgid "Server"
 msgstr ""
 
@@ -237,6 +273,7 @@ msgid "No"
 msgstr ""
 
 #: /src/schooltool/app/browser/app.py:868
+#: /src/schooltool/app/browser/flourish.zcml:545
 msgid "Pack Database"
 msgstr ""
 
@@ -282,6 +319,7 @@ msgid "Ignored exception types"
 msgstr ""
 
 #: /src/schooltool/app/browser/app.py:998
+#: /src/schooltool/app/browser/flourish.zcml:292
 msgid "Errors Settings"
 msgstr ""
 
@@ -302,6 +340,8 @@ msgstr ""
 
 #: /src/schooltool/app/browser/app.py:1025
 #: /src/schooltool/app/browser/configure.zcml:670
+#: /src/schooltool/app/browser/flourish.zcml:251
+#: /src/schooltool/app/browser/flourish.zcml:260
 #: /src/schooltool/devmode/devmode.pt:17
 msgid "Errors"
 msgstr ""
@@ -608,7 +648,7 @@ msgstr ""
 #: /src/schooltool/schoolyear/interfaces.py:41
 #: /src/schooltool/securitypolicy/interfaces.py:110
 #: /src/schooltool/table/catalog.py:141
-#: /src/schooltool/table/table.py:269
+#: /src/schooltool/table/table.py:273
 #: /src/schooltool/term/browser/templates/f_terms.pt:8
 #: /src/schooltool/term/browser/term.py:68
 #: /src/schooltool/term/interfaces.py:40
@@ -692,6 +732,7 @@ msgstr ""
 #: /src/schooltool/app/browser/cal.py:1668
 #: /src/schooltool/app/browser/templates/event.pt:48
 #: /src/schooltool/calendar/browser/templates/event.pt:42
+#: /src/schooltool/resource/browser/flourish.zcml:115
 #: /src/schooltool/resource/browser/resource.py:355
 #: /src/schooltool/resource/resource.py:205
 #: /src/schooltool/resource/resource.py:231
@@ -882,13 +923,36 @@ msgstr ""
 
 #: /src/schooltool/app/browser/cal.py:2611
 #: /src/schooltool/app/browser/configure.zcml:532
+#: /src/schooltool/app/browser/flourish.zcml:22
+#: /src/schooltool/app/browser/flourish.zcml:32
+#: /src/schooltool/app/browser/flourish.zcml:42
 #: /src/schooltool/app/browser/templates/calendar_tab_viewlet.pt:3
 #: /src/schooltool/app/browser/templates/f_calendar_settings_overview.pt:3
+#: /src/schooltool/calendar/browser/flourish.zcml:8
 #: /src/schooltool/calendar/browser/templates/calendar_overlay.pt:24
+#: /src/schooltool/resource/browser/flourish.zcml:192
 msgid "Calendar"
 msgstr ""
 
 #: /src/schooltool/app/browser/configure.zcml:173
+#: /src/schooltool/app/browser/flourish.zcml:196
+#: /src/schooltool/app/browser/flourish.zcml:465
+#: /src/schooltool/app/browser/flourish.zcml:536
+#: /src/schooltool/basicperson/browser/flourish.zcml:58
+#: /src/schooltool/basicperson/browser/flourish.zcml:293
+#: /src/schooltool/calendar/browser/flourish.zcml:183
+#: /src/schooltool/contact/browser/flourish.zcml:90
+#: /src/schooltool/course/browser/flourish.zcml:49
+#: /src/schooltool/course/browser/flourish.zcml:86
+#: /src/schooltool/email/browser/flourish.zcml:86
+#: /src/schooltool/group/browser/flourish.zcml:58
+#: /src/schooltool/level/browser/flourish.zcml:52
+#: /src/schooltool/resource/browser/flourish.zcml:181
+#: /src/schooltool/schoolyear/browser/flourish.zcml:44
+#: /src/schooltool/schoolyear/browser/flourish.zcml:55
+#: /src/schooltool/term/browser/flourish.zcml:61
+#: /src/schooltool/timetable/browser/flourish.zcml:92
+#: /src/schooltool/timetable/browser/flourish.zcml:471
 msgid "Actions"
 msgstr ""
 
@@ -897,6 +961,7 @@ msgid "View Calendar"
 msgstr ""
 
 #: /src/schooltool/app/browser/configure.zcml:299
+#: /src/schooltool/calendar/browser/flourish.zcml:157
 msgid "New Event"
 msgstr ""
 
@@ -935,10 +1000,13 @@ msgid "Application Control"
 msgstr ""
 
 #: /src/schooltool/app/browser/configure.zcml:569
+#: /src/schooltool/app/browser/flourish.zcml:475
+#: /src/schooltool/app/browser/flourish.zcml:501
 msgid "Translation Domains"
 msgstr ""
 
 #: /src/schooltool/app/browser/configure.zcml:580
+#: /src/schooltool/app/browser/flourish.zcml:483
 msgid "Generations"
 msgstr ""
 
@@ -993,6 +1061,173 @@ msgstr ""
 #: /src/schooltool/app/browser/timetablecsvimport.py:429
 #. Default: ""
 msgid "Conversion to unicode failed in line ${line_no}"
+msgstr ""
+
+#: /src/schooltool/app/browser/flourish.zcml:10
+#: /src/schooltool/app/browser/flourish.zcml:303
+#: /src/schooltool/app/browser/templates/cal_atom.pt:14
+#: /src/schooltool/basicperson/browser/templates/container.pt:11
+#: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:11
+#: /src/schooltool/basicperson/browser/templates/person_container_delete.pt:11
+#: /src/schooltool/contact/browser/templates/contacts_delete.pt:11
+#: /src/schooltool/email/browser/templates/email_container.pt:11
+#: /src/schooltool/email/browser/templates/email_delete.pt:11
+#: /src/schooltool/export/templates/import.pt:11
+#: /src/schooltool/person/browser/person-csvimport.pt:11
+#: /src/schooltool/person/browser/person_container_delete.pt:11
+#: /src/schooltool/person/browser/person_edit.pt:9
+#: /src/schooltool/schoolyear/browser/templates/schoolyear.pt:11
+#: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:11
+#: /src/schooltool/skin/templates/container.pt:11
+#: /src/schooltool/skin/templates/container_delete.pt:11
+#: /src/schooltool/skin/templates/edit_form.pt:4
+#: /src/schooltool/skin/templates/error.pt:8
+#: /src/schooltool/skin/templates/generic_macros.pt:8
+#: /src/schooltool/skin/templates/notfound.pt:7
+#: /src/schooltool/skin/templates/simple_add.pt:5
+#: /src/schooltool/skin/templates/simple_edit.pt:7
+#: /src/schooltool/skin/templates/table_container.pt:11
+#: /src/schooltool/timetable/browser/templates/confirm_schedule_delete.pt:10
+msgid "SchoolTool"
+msgstr ""
+
+#: /src/schooltool/app/browser/flourish.zcml:186
+#: /src/schooltool/app/browser/templates/f_errors.pt:3
+#: /src/schooltool/basicperson/browser/flourish.zcml:69
+#: /src/schooltool/email/browser/configure.zcml:76
+#: /src/schooltool/email/browser/email.py:204
+msgid "Settings"
+msgstr ""
+
+#: /src/schooltool/app/browser/flourish.zcml:218
+msgid "Calendar Settings"
+msgstr ""
+
+#: /src/schooltool/app/browser/flourish.zcml:228
+#: /src/schooltool/app/browser/templates/f_errors.pt:7
+#: /src/schooltool/basicperson/browser/configure.zcml:24
+#: /src/schooltool/basicperson/browser/configure.zcml:189
+#: /src/schooltool/basicperson/browser/configure.zcml:196
+#: /src/schooltool/basicperson/browser/configure.zcml:203
+#: /src/schooltool/basicperson/browser/configure.zcml:210
+#: /src/schooltool/basicperson/browser/flourish.zcml:227
+#: /src/schooltool/basicperson/browser/flourish.zcml:236
+#: /src/schooltool/basicperson/browser/templates/f_advisoryViewlet.pt:11
+#: /src/schooltool/basicperson/browser/templates/f_advisoryViewlet.pt:30
+#: /src/schooltool/basicperson/browser/templates/f_demographicsViewlet.pt:10
+#: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:10
+#: /src/schooltool/calendar/browser/flourish.zcml:148
+#: /src/schooltool/calendar/browser/templates/event.pt:13
+#: /src/schooltool/calendar/browser/templates/event.pt:59
+#: /src/schooltool/contact/browser/configure.zcml:22
+#: /src/schooltool/contact/browser/configure.zcml:52
+#: /src/schooltool/contact/browser/flourish.zcml:108
+#: /src/schooltool/contact/browser/templates/f_contact_view.pt:8
+#: /src/schooltool/contact/browser/templates/f_contactsViewlet.pt:13
+#: /src/schooltool/course/browser/flourish.zcml:226
+#: /src/schooltool/course/browser/flourish.zcml:243
+#: /src/schooltool/course/browser/templates/f_course_view.pt:8
+#: /src/schooltool/course/browser/templates/f_course_view.pt:79
+#: /src/schooltool/course/browser/templates/f_section_view.pt:8
+#: /src/schooltool/course/browser/templates/f_section_view.pt:92
+#: /src/schooltool/course/browser/templates/f_section_view.pt:118
+#: /src/schooltool/course/browser/templates/f_section_view.pt:133
+#: /src/schooltool/demographics/browser/configure.zcml:22
+#: /src/schooltool/demographics/browser/table.py:100
+#: /src/schooltool/demographics/browser/table.py:196
+#: /src/schooltool/email/browser/templates/f_email_container.pt:9
+#: /src/schooltool/group/browser/flourish.zcml:173
+#: /src/schooltool/group/browser/templates/f_group_view.pt:8
+#: /src/schooltool/group/browser/templates/f_group_view.pt:79
+#: /src/schooltool/group/browser/templates/f_group_view.pt:94
+#: /src/schooltool/group/browser/templates/f_groupsviewlet.pt:10
+#: /src/schooltool/level/browser/configure.zcml:40
+#: /src/schooltool/level/browser/templates/f_levels_view.pt:17
+#: /src/schooltool/person/browser/configure.zcml:193
+#: /src/schooltool/person/browser/flourish.zcml:36
+#: /src/schooltool/resource/browser/flourish.zcml:241
+#: /src/schooltool/resource/browser/flourish.zcml:250
+#: /src/schooltool/resource/browser/flourish.zcml:259
+#: /src/schooltool/resource/browser/templates/f_resource_view.pt:8
+#: /src/schooltool/resource/browser/templates/f_resource_view.pt:79
+#: /src/schooltool/schoolyear/browser/configure.zcml:94
+#: /src/schooltool/schoolyear/browser/flourish.zcml:130
+#: /src/schooltool/schoolyear/browser/templates/f_schoolyear.pt:9
+#: /src/schooltool/securitypolicy/browser/templates/f_security_descriptions.pt:7
+#: /src/schooltool/term/browser/configure.zcml:22
+#: /src/schooltool/term/browser/flourish.zcml:52
+#: /src/schooltool/term/browser/templates/f_term.pt:8
+#: /src/schooltool/timetable/browser/templates/f_schedule_container_view.pt:18
+#: /src/schooltool/timetable/browser/templates/f_schedule_container_view.pt:37
+#: /src/schooltool/timetable/browser/templates/f_schedule_event_edit.pt:60
+#: /src/schooltool/timetable/browser/templates/f_timetable.pt:31
+msgid "Edit"
+msgstr ""
+
+#: /src/schooltool/app/browser/flourish.zcml:272
+msgid "Error"
+msgstr ""
+
+#: /src/schooltool/app/browser/flourish.zcml:303
+msgid "About"
+msgstr ""
+
+#: /src/schooltool/app/browser/flourish.zcml:313
+msgid "More Information"
+msgstr ""
+
+#: /src/schooltool/app/browser/flourish.zcml:322
+#: /src/schooltool/app/browser/templates/about.pt:27
+msgid "Website"
+msgstr ""
+
+#: /src/schooltool/app/browser/flourish.zcml:331
+#: /src/schooltool/app/browser/templates/about.pt:28
+msgid "Launchpad project page"
+msgstr ""
+
+#: /src/schooltool/app/browser/flourish.zcml:341
+#: /src/schooltool/app/browser/templates/about.pt:29
+msgid "Mailing list"
+msgstr ""
+
+#: /src/schooltool/app/browser/flourish.zcml:351
+msgid "IRC channel"
+msgstr ""
+
+#: /src/schooltool/app/browser/flourish.zcml:393
+#: /src/schooltool/export/flourish.zcml:49
+msgid "School"
+msgstr ""
+
+#: /src/schooltool/app/browser/flourish.zcml:410
+msgid "Customize"
+msgstr ""
+
+#: /src/schooltool/app/browser/flourish.zcml:449
+#: /src/schooltool/course/browser/templates/f_course_view.pt:75
+#: /src/schooltool/group/browser/templates/f_group_view.pt:90
+#: /src/schooltool/resource/browser/templates/f_resource_view.pt:75
+msgid "Responsible parties"
+msgstr ""
+
+#: /src/schooltool/app/browser/flourish.zcml:492
+msgid "Information"
+msgstr ""
+
+#: /src/schooltool/app/browser/flourish.zcml:510
+msgid "Database generations"
+msgstr ""
+
+#: /src/schooltool/app/browser/flourish.zcml:528
+#: /src/schooltool/app/browser/flourish.zcml:553
+#: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:7
+#: /src/schooltool/app/browser/templates/f_server_settings_overview.pt:12
+msgid "Database"
+msgstr ""
+
+#: /src/schooltool/app/browser/flourish.zcml:621
+msgid "Shown Calendars"
 msgstr ""
 
 #: /src/schooltool/app/browser/overlay.py:217
@@ -1067,18 +1302,6 @@ msgstr ""
 msgid "For more information:"
 msgstr ""
 
-#: /src/schooltool/app/browser/templates/about.pt:27
-msgid "Website"
-msgstr ""
-
-#: /src/schooltool/app/browser/templates/about.pt:28
-msgid "Launchpad project page"
-msgstr ""
-
-#: /src/schooltool/app/browser/templates/about.pt:29
-msgid "Mailing list"
-msgstr ""
-
 #: /src/schooltool/app/browser/templates/about.pt:30
 msgid "IRC channel: #schooltool on freenode.net"
 msgstr ""
@@ -1121,32 +1344,6 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/application_preferences.pt:34
 msgid "Calendar Preferences"
-msgstr ""
-
-#: /src/schooltool/app/browser/templates/cal_atom.pt:14
-#: /src/schooltool/basicperson/browser/templates/container.pt:11
-#: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:11
-#: /src/schooltool/basicperson/browser/templates/person_container_delete.pt:11
-#: /src/schooltool/contact/browser/templates/contacts_delete.pt:11
-#: /src/schooltool/email/browser/templates/email_container.pt:11
-#: /src/schooltool/email/browser/templates/email_delete.pt:11
-#: /src/schooltool/export/templates/import.pt:11
-#: /src/schooltool/person/browser/person-csvimport.pt:11
-#: /src/schooltool/person/browser/person_container_delete.pt:11
-#: /src/schooltool/person/browser/person_edit.pt:9
-#: /src/schooltool/schoolyear/browser/templates/schoolyear.pt:11
-#: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:11
-#: /src/schooltool/skin/templates/container.pt:11
-#: /src/schooltool/skin/templates/container_delete.pt:11
-#: /src/schooltool/skin/templates/edit_form.pt:4
-#: /src/schooltool/skin/templates/error.pt:8
-#: /src/schooltool/skin/templates/generic_macros.pt:8
-#: /src/schooltool/skin/templates/notfound.pt:7
-#: /src/schooltool/skin/templates/simple_add.pt:5
-#: /src/schooltool/skin/templates/simple_edit.pt:7
-#: /src/schooltool/skin/templates/table_container.pt:11
-#: /src/schooltool/timetable/browser/templates/confirm_schedule_delete.pt:10
-msgid "SchoolTool"
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/cal_atom.pt:21
@@ -1257,6 +1454,8 @@ msgstr ""
 #: /src/schooltool/course/browser/templates/section.pt:91
 #: /src/schooltool/dashboard/school.pt:22
 #: /src/schooltool/resource/browser/configure.zcml:84
+#: /src/schooltool/resource/browser/flourish.zcml:84
+#: /src/schooltool/resource/browser/flourish.zcml:89
 #: /src/schooltool/resource/browser/templates/f_manage_resources_overview.pt:6
 msgid "Resources"
 msgstr ""
@@ -1292,7 +1491,7 @@ msgstr ""
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:37
 #: /src/schooltool/app/browser/templates/f_edit_relationships.pt:8
 #: /src/schooltool/basicperson/browser/templates/container.pt:48
-#: /src/schooltool/basicperson/browser/templates/f_demographics_reorder.pt:42
+#: /src/schooltool/basicperson/browser/templates/f_demographics_reorder.pt:44
 #: /src/schooltool/basicperson/browser/templates/f_demographics_view.pt:31
 #: /src/schooltool/calendar/browser/templates/event.pt:72
 #: /src/schooltool/calendar/browser/templates/event_booking.pt:43
@@ -1304,7 +1503,7 @@ msgstr ""
 #: /src/schooltool/course/browser/templates/link_section.pt:49
 #: /src/schooltool/course/browser/templates/section_container.pt:29
 #: /src/schooltool/demographics/browser/table.pt:34
-#: /src/schooltool/level/browser/templates/f_levels_reorder.pt:34
+#: /src/schooltool/level/browser/templates/f_levels_reorder.pt:36
 #: /src/schooltool/level/browser/templates/f_levels_view.pt:24
 #: /src/schooltool/schoolyear/browser/templates/f_table_container.pt:8
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:61
@@ -1654,6 +1853,11 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:60
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:100
+#: /src/schooltool/app/browser/timetable-integration-flourish.zcml:18
+#: /src/schooltool/basicperson/browser/flourish.zcml:622
+#: /src/schooltool/course/browser/flourish.zcml:433
+#: /src/schooltool/group/browser/flourish.zcml:236
+#: /src/schooltool/resource/browser/flourish.zcml:333
 msgid "Import CSV"
 msgstr ""
 
@@ -1730,7 +1934,7 @@ msgstr ""
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:75
 #: /src/schooltool/course/browser/section-member-csvimport.pt:52
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:86
-#: /src/schooltool/export/templates/f_import.pt:35
+#: /src/schooltool/export/templates/f_import.pt:49
 #: /src/schooltool/export/templates/import.pt:66
 #: /src/schooltool/group/browser/templates/group-csvimport.pt:72
 #: /src/schooltool/group/browser/templates/group-member-csvimport.pt:52
@@ -1748,7 +1952,7 @@ msgstr ""
 #: /src/schooltool/app/browser/templates/f_pack_database.pt:5
 #: /src/schooltool/app/browser/templates/f_translationdomaincontrol.pt:39
 #: /src/schooltool/basicperson/browser/person.py:440
-#: /src/schooltool/basicperson/browser/templates/f_demographics_reorder.pt:44
+#: /src/schooltool/basicperson/browser/templates/f_demographics_reorder.pt:46
 #: /src/schooltool/basicperson/browser/templates/f_demographics_view.pt:33
 #: /src/schooltool/basicperson/browser/templates/f_person_view_details.pt:4
 #: /src/schooltool/calendar/browser/templates/event_booking.pt:63
@@ -1759,7 +1963,7 @@ msgstr ""
 #: /src/schooltool/course/browser/templates/f_sections.pt:20
 #: /src/schooltool/email/browser/templates/f_email_container.pt:75
 #: /src/schooltool/group/browser/templates/f_group_view.pt:107
-#: /src/schooltool/level/browser/templates/f_levels_reorder.pt:36
+#: /src/schooltool/level/browser/templates/f_levels_reorder.pt:38
 #: /src/schooltool/level/browser/templates/f_levels_view.pt:26
 #: /src/schooltool/report/browser/templates/f_report_reference.pt:21
 #: /src/schooltool/resource/browser/templates/f_resource_view.pt:91
@@ -1832,61 +2036,8 @@ msgstr ""
 msgid "Showing ${count} of ${total} items"
 msgstr ""
 
-#: /src/schooltool/app/browser/templates/f_errors.pt:3
-#: /src/schooltool/email/browser/configure.zcml:76
-#: /src/schooltool/email/browser/email.py:204
-msgid "Settings"
-msgstr ""
-
 #: /src/schooltool/app/browser/templates/f_errors.pt:4
 msgid "Manage error settings"
-msgstr ""
-
-#: /src/schooltool/app/browser/templates/f_errors.pt:7
-#: /src/schooltool/basicperson/browser/configure.zcml:24
-#: /src/schooltool/basicperson/browser/configure.zcml:189
-#: /src/schooltool/basicperson/browser/configure.zcml:196
-#: /src/schooltool/basicperson/browser/configure.zcml:203
-#: /src/schooltool/basicperson/browser/configure.zcml:210
-#: /src/schooltool/basicperson/browser/templates/f_advisoryViewlet.pt:11
-#: /src/schooltool/basicperson/browser/templates/f_advisoryViewlet.pt:30
-#: /src/schooltool/basicperson/browser/templates/f_demographicsViewlet.pt:10
-#: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:10
-#: /src/schooltool/calendar/browser/templates/event.pt:13
-#: /src/schooltool/calendar/browser/templates/event.pt:59
-#: /src/schooltool/contact/browser/configure.zcml:22
-#: /src/schooltool/contact/browser/configure.zcml:52
-#: /src/schooltool/contact/browser/templates/f_contact_view.pt:8
-#: /src/schooltool/contact/browser/templates/f_contactsViewlet.pt:13
-#: /src/schooltool/course/browser/templates/f_course_view.pt:8
-#: /src/schooltool/course/browser/templates/f_course_view.pt:79
-#: /src/schooltool/course/browser/templates/f_section_view.pt:8
-#: /src/schooltool/course/browser/templates/f_section_view.pt:92
-#: /src/schooltool/course/browser/templates/f_section_view.pt:118
-#: /src/schooltool/course/browser/templates/f_section_view.pt:133
-#: /src/schooltool/demographics/browser/configure.zcml:22
-#: /src/schooltool/demographics/browser/table.py:100
-#: /src/schooltool/demographics/browser/table.py:196
-#: /src/schooltool/email/browser/templates/f_email_container.pt:9
-#: /src/schooltool/group/browser/templates/f_group_view.pt:8
-#: /src/schooltool/group/browser/templates/f_group_view.pt:79
-#: /src/schooltool/group/browser/templates/f_group_view.pt:94
-#: /src/schooltool/group/browser/templates/f_groupsviewlet.pt:10
-#: /src/schooltool/level/browser/configure.zcml:40
-#: /src/schooltool/level/browser/templates/f_levels_view.pt:17
-#: /src/schooltool/person/browser/configure.zcml:193
-#: /src/schooltool/resource/browser/templates/f_resource_view.pt:8
-#: /src/schooltool/resource/browser/templates/f_resource_view.pt:79
-#: /src/schooltool/schoolyear/browser/configure.zcml:94
-#: /src/schooltool/schoolyear/browser/templates/f_schoolyear.pt:9
-#: /src/schooltool/securitypolicy/browser/templates/f_security_descriptions.pt:7
-#: /src/schooltool/term/browser/configure.zcml:22
-#: /src/schooltool/term/browser/templates/f_term.pt:8
-#: /src/schooltool/timetable/browser/templates/f_schedule_container_view.pt:18
-#: /src/schooltool/timetable/browser/templates/f_schedule_container_view.pt:37
-#: /src/schooltool/timetable/browser/templates/f_schedule_event_edit.pt:60
-#: /src/schooltool/timetable/browser/templates/f_timetable.pt:31
-msgid "Edit"
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_errors.pt:43
@@ -2004,6 +2155,8 @@ msgstr ""
 #: /src/schooltool/basicperson/browser/person.py:168
 #: /src/schooltool/demographics/browser/personform.py:258
 #: /src/schooltool/email/browser/email.py:124
+#: /src/schooltool/person/browser/flourish.zcml:17
+#: /src/schooltool/person/browser/flourish.zcml:61
 #: /src/schooltool/person/browser/person.py:505
 msgid "Password"
 msgstr ""
@@ -2056,11 +2209,6 @@ msgstr ""
 #: /src/schooltool/resource/browser/templates/f_resource_filter.pt:3
 #: /src/schooltool/resource/browser/templates/f_resource_filter.pt:36
 msgid "Search"
-msgstr ""
-
-#: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:7
-#: /src/schooltool/app/browser/templates/f_server_settings_overview.pt:12
-msgid "Database"
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:11
@@ -2200,6 +2348,7 @@ msgid "Welcome to SchoolTool"
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/index.pt:12
+#: /src/schooltool/course/browser/flourish.zcml:366
 #: /src/schooltool/course/browser/section.py:990
 #: /src/schooltool/course/browser/templates/copy_sections.pt:86
 #: /src/schooltool/course/browser/templates/f_manage_courses_overview.pt:6
@@ -2214,6 +2363,8 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/index.pt:13
 #: /src/schooltool/group/browser/configure.zcml:61
+#: /src/schooltool/group/browser/flourish.zcml:124
+#: /src/schooltool/group/browser/flourish.zcml:207
 #: /src/schooltool/group/browser/templates/f_groupsviewlet.pt:2
 #: /src/schooltool/group/browser/templates/f_manage_groups_overview.pt:4
 #: /src/schooltool/group/browser/templates/groupsviewlet.pt:3
@@ -2387,6 +2538,22 @@ msgstr ""
 #: /src/schooltool/person/browser/person-csvimport.pt:70
 #: /src/schooltool/resource/browser/resource-csvimport.pt:67
 msgid "CSV Data"
+msgstr ""
+
+#: /src/schooltool/app/browser/timetable-integration-flourish.zcml:8
+#: /src/schooltool/app/browser/timetable-integration-flourish.zcml:28
+#: /src/schooltool/basicperson/browser/flourish.zcml:611
+#: /src/schooltool/basicperson/browser/flourish.zcml:630
+#: /src/schooltool/course/browser/flourish.zcml:423
+#: /src/schooltool/course/browser/flourish.zcml:441
+#: /src/schooltool/course/browser/flourish.zcml:456
+#: /src/schooltool/group/browser/flourish.zcml:226
+#: /src/schooltool/group/browser/flourish.zcml:245
+#: /src/schooltool/group/browser/flourish.zcml:260
+#: /src/schooltool/group/browser/flourish.zcml:279
+#: /src/schooltool/resource/browser/flourish.zcml:323
+#: /src/schooltool/resource/browser/flourish.zcml:342
+msgid "Import"
 msgstr ""
 
 #: /src/schooltool/app/browser/timetablecsvimport.py:135
@@ -2595,6 +2762,7 @@ msgstr ""
 
 #: /src/schooltool/app/membership.py:261
 #: /src/schooltool/basicperson/browser/templates/f_manage_people_overview.pt:20
+#: /src/schooltool/group/browser/flourish.zcml:163
 #: /src/schooltool/group/browser/templates/f_group_view.pt:75
 #: /src/schooltool/group/browser/templates/group.pt:16
 msgid "Members"
@@ -2657,6 +2825,11 @@ msgstr ""
 #: /src/schooltool/basicperson/browser/configure.zcml:224
 #: /src/schooltool/basicperson/browser/configure.zcml:231
 #: /src/schooltool/basicperson/browser/configure.zcml:238
+#: /src/schooltool/basicperson/browser/flourish.zcml:459
+#: /src/schooltool/basicperson/browser/flourish.zcml:468
+#: /src/schooltool/basicperson/browser/flourish.zcml:477
+#: /src/schooltool/basicperson/browser/flourish.zcml:486
+#: /src/schooltool/basicperson/browser/flourish.zcml:495
 #: /src/schooltool/common/configure.zcml:91
 #: /src/schooltool/contact/browser/configure.zcml:6
 #: /src/schooltool/contact/browser/configure.zcml:31
@@ -2683,12 +2856,14 @@ msgid "Export"
 msgstr ""
 
 #: /src/schooltool/basicperson/browser/configure.zcml:51
+#: /src/schooltool/basicperson/browser/flourish.zcml:585
 #: /src/schooltool/basicperson/browser/templates/f_advisoryViewlet.pt:6
 #: /src/schooltool/basicperson/security.py:32
 msgid "Advisors"
 msgstr ""
 
 #: /src/schooltool/basicperson/browser/configure.zcml:60
+#: /src/schooltool/basicperson/browser/flourish.zcml:593
 #: /src/schooltool/basicperson/browser/templates/f_advisoryViewlet.pt:25
 msgid "Advisees"
 msgstr ""
@@ -2706,6 +2881,9 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/configure.zcml:131
 #: /src/schooltool/basicperson/browser/demographics.py:384
+#: /src/schooltool/basicperson/browser/flourish.zcml:24
+#: /src/schooltool/basicperson/browser/flourish.zcml:401
+#: /src/schooltool/basicperson/browser/flourish.zcml:413
 #: /src/schooltool/basicperson/browser/person.py:551
 #: /src/schooltool/basicperson/browser/person.py:933
 #: /src/schooltool/basicperson/security.zcml:22
@@ -2714,18 +2892,22 @@ msgid "Demographics"
 msgstr ""
 
 #: /src/schooltool/basicperson/browser/configure.zcml:161
+#: /src/schooltool/basicperson/browser/flourish.zcml:356
 msgid "New Text Field"
 msgstr ""
 
 #: /src/schooltool/basicperson/browser/configure.zcml:168
+#: /src/schooltool/basicperson/browser/flourish.zcml:374
 msgid "New Date Field"
 msgstr ""
 
 #: /src/schooltool/basicperson/browser/configure.zcml:175
+#: /src/schooltool/basicperson/browser/flourish.zcml:383
 msgid "New Yes/No Field"
 msgstr ""
 
 #: /src/schooltool/basicperson/browser/configure.zcml:182
+#: /src/schooltool/basicperson/browser/flourish.zcml:392
 msgid "New Selection List Field"
 msgstr ""
 
@@ -2844,6 +3026,103 @@ msgstr ""
 msgid "Field Details"
 msgstr ""
 
+#: /src/schooltool/basicperson/browser/flourish.zcml:11
+#: /src/schooltool/basicperson/browser/flourish.zcml:16
+#: /src/schooltool/basicperson/browser/templates/f_manage_people_overview.pt:4
+msgid "People"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/flourish.zcml:94
+msgid "Add new persons"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/flourish.zcml:112
+#: /src/schooltool/basicperson/browser/person.py:346
+msgid "Add new person"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/flourish.zcml:121
+#: /src/schooltool/basicperson/browser/person.py:979
+msgid "Add new teacher"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/flourish.zcml:131
+#: /src/schooltool/basicperson/browser/person.py:989
+msgid "Add new student"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/flourish.zcml:141
+#: /src/schooltool/basicperson/browser/person.py:999
+msgid "Add new administrator"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/flourish.zcml:153
+msgid "Person"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/flourish.zcml:161
+msgid "Add Person"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/flourish.zcml:173
+msgid "Teacher"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/flourish.zcml:181
+#: /src/schooltool/basicperson/browser/flourish.zcml:560
+msgid "Student"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/flourish.zcml:189
+msgid "Administrator"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/flourish.zcml:264
+#: /src/schooltool/basicperson/browser/flourish.zcml:273
+msgid "Demographics and Personal Information"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/flourish.zcml:304
+msgid "Text Field"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/flourish.zcml:313
+msgid "Description Field"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/flourish.zcml:322
+msgid "Date Field"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/flourish.zcml:331
+msgid "Yes/No Field"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/flourish.zcml:340
+msgid "Selection List Field"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/flourish.zcml:348
+msgid "Reorder or Delete Fields"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/flourish.zcml:365
+msgid "New Description Field"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/flourish.zcml:560
+msgid "Contains an XML representation of the person."
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/flourish.zcml:560
+msgid "Export as XML"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/flourish.zcml:652
+#: /src/schooltool/person/browser/home_tab_viewlet.pt:3
+msgid "Home"
+msgstr ""
+
 #: /src/schooltool/basicperson/browser/person.py:79
 #: /src/schooltool/person/browser/person.py:661
 msgid "Person index"
@@ -2856,6 +3135,8 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/person.py:152
 #: /src/schooltool/basicperson/browser/templates/f_manage_people_overview.pt:19
+#: /src/schooltool/group/browser/flourish.zcml:70
+#: /src/schooltool/group/browser/flourish.zcml:79
 #: /src/schooltool/group/browser/templates/f_groupsviewlet.pt:18
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_add.pt:61
 msgid "Group"
@@ -2890,10 +3171,6 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/person.py:202
 msgid "This username is already in use"
-msgstr ""
-
-#: /src/schooltool/basicperson/browser/person.py:346
-msgid "Add new person"
 msgstr ""
 
 #: /src/schooltool/basicperson/browser/person.py:366
@@ -2975,10 +3252,6 @@ msgstr ""
 msgid "Teacher demographics"
 msgstr ""
 
-#: /src/schooltool/basicperson/browser/person.py:979
-msgid "Add new teacher"
-msgstr ""
-
 #: /src/schooltool/basicperson/browser/person.py:986
 msgid "Student identification"
 msgstr ""
@@ -2987,20 +3260,12 @@ msgstr ""
 msgid "Student demographics"
 msgstr ""
 
-#: /src/schooltool/basicperson/browser/person.py:989
-msgid "Add new student"
-msgstr ""
-
 #: /src/schooltool/basicperson/browser/person.py:996
 msgid "Administrator identification"
 msgstr ""
 
 #: /src/schooltool/basicperson/browser/person.py:998
 msgid "Administrator demographics"
-msgstr ""
-
-#: /src/schooltool/basicperson/browser/person.py:999
-msgid "Add new administrator"
 msgstr ""
 
 #: /src/schooltool/basicperson/browser/templates/container.pt:23
@@ -3094,22 +3359,36 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/templates/f_demographics_reorder.pt:11
 #: /src/schooltool/basicperson/browser/templates/f_demographics_reorder.pt:34
+#: /src/schooltool/basicperson/browser/templates/f_demographics_reorder.pt:37
 #: /src/schooltool/calendar/browser/event.py:185
 #: /src/schooltool/calendar/browser/event.py:288
+#: /src/schooltool/calendar/browser/flourish.zcml:193
 #: /src/schooltool/contact/browser/contact.py:866
+#: /src/schooltool/contact/browser/flourish.zcml:117
+#: /src/schooltool/contact/browser/flourish.zcml:126
 #: /src/schooltool/course/browser/course.py:590
+#: /src/schooltool/course/browser/flourish.zcml:116
+#: /src/schooltool/course/browser/flourish.zcml:157
 #: /src/schooltool/course/browser/section.py:1283
 #: /src/schooltool/email/browser/email.py:356
 #: /src/schooltool/email/browser/email.py:604
+#: /src/schooltool/group/browser/flourish.zcml:88
 #: /src/schooltool/group/browser/group.py:691
 #: /src/schooltool/level/browser/templates/f_levels_reorder.pt:10
 #: /src/schooltool/level/browser/templates/f_levels_reorder.pt:26
+#: /src/schooltool/level/browser/templates/f_levels_reorder.pt:29
 #: /src/schooltool/note/notes.pt:17
+#: /src/schooltool/person/browser/flourish.zcml:26
 #: /src/schooltool/person/browser/person.py:219
+#: /src/schooltool/resource/browser/flourish.zcml:200
 #: /src/schooltool/resource/browser/resource.py:837
+#: /src/schooltool/schoolyear/browser/flourish.zcml:73
 #: /src/schooltool/schoolyear/browser/schoolyear.py:249
+#: /src/schooltool/term/browser/flourish.zcml:71
 #: /src/schooltool/term/browser/term.py:139
 #: /src/schooltool/timetable/browser/app.py:124
+#: /src/schooltool/timetable/browser/flourish.zcml:102
+#: /src/schooltool/timetable/browser/flourish.zcml:481
 #: /src/schooltool/timetable/browser/schedule.py:364
 msgid "Delete"
 msgstr ""
@@ -3129,10 +3408,6 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/templates/f_manage_people_overview.pt:4
 msgid "Manage people"
-msgstr ""
-
-#: /src/schooltool/basicperson/browser/templates/f_manage_people_overview.pt:4
-msgid "People"
 msgstr ""
 
 #: /src/schooltool/basicperson/browser/templates/f_manage_people_overview.pt:14
@@ -3331,6 +3606,7 @@ msgid "Modify user's demographics information."
 msgstr ""
 
 #: /src/schooltool/basicperson/vocabularies.py:131
+#: /src/schooltool/course/browser/flourish.zcml:301
 #: /src/schooltool/course/browser/section.py:571
 #: /src/schooltool/course/browser/templates/copy_sections.pt:135
 #: /src/schooltool/course/browser/templates/course_container.pt:57
@@ -3385,6 +3661,16 @@ msgstr ""
 msgid "Delete event ${event}"
 msgstr ""
 
+#: /src/schooltool/calendar/browser/flourish.zcml:81
+msgid "Event"
+msgstr ""
+
+#: /src/schooltool/calendar/browser/flourish.zcml:166
+#: /src/schooltool/calendar/browser/templates/event_edit.pt:392
+#: /src/schooltool/timetable/browser/templates/f_schedule_event_add.pt:181
+msgid "Reserve resources"
+msgstr ""
+
 #: /src/schooltool/calendar/browser/overlay.py:33
 msgid "Show"
 msgstr ""
@@ -3434,11 +3720,6 @@ msgstr ""
 msgid "Reserve Resources"
 msgstr ""
 
-#: /src/schooltool/calendar/browser/templates/event_edit.pt:392
-#: /src/schooltool/timetable/browser/templates/f_schedule_event_add.pt:181
-msgid "Reserve resources"
-msgstr ""
-
 #: /src/schooltool/common/configure.zcml:92
 #: /src/schooltool/course/browser/configure.zcml:25
 #: /src/schooltool/course/browser/configure.zcml:203
@@ -3467,6 +3748,7 @@ msgstr ""
 #: /src/schooltool/contact/browser/basicperson.py:121
 #: /src/schooltool/contact/browser/contact.py:198
 #: /src/schooltool/contact/browser/contact.py:387
+#: /src/schooltool/contact/browser/flourish.zcml:155
 msgid "Contact Information"
 msgstr ""
 
@@ -3475,11 +3757,18 @@ msgid "View Person"
 msgstr ""
 
 #: /src/schooltool/contact/browser/configure.zcml:61
+#: /src/schooltool/contact/browser/flourish.zcml:63
+#: /src/schooltool/contact/browser/flourish.zcml:99
+#: /src/schooltool/contact/browser/flourish.zcml:178
+#: /src/schooltool/contact/browser/flourish.zcml:188
 msgid "New Contact"
 msgstr ""
 
 #: /src/schooltool/contact/browser/configure.zcml:76
 #: /src/schooltool/contact/browser/configure.zcml:88
+#: /src/schooltool/contact/browser/flourish.zcml:19
+#: /src/schooltool/contact/browser/flourish.zcml:30
+#: /src/schooltool/contact/browser/flourish.zcml:225
 #: /src/schooltool/contact/browser/templates/f_contactsViewlet.pt:2
 #: /src/schooltool/contact/browser/templates/f_manage_contacts_overview.pt:4
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:59
@@ -3571,6 +3860,10 @@ msgstr ""
 #: /src/schooltool/contact/browser/contact.py:860
 #. Default: ""
 msgid "Delete ${contact_full_name}"
+msgstr ""
+
+#: /src/schooltool/contact/browser/flourish.zcml:206
+msgid "Edit Contact Information"
 msgstr ""
 
 #: /src/schooltool/contact/browser/relationship.py:78
@@ -3725,6 +4018,7 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/contact/contact.py:202
+#: /src/schooltool/course/browser/flourish.zcml:293
 #: /src/schooltool/course/browser/section.py:555
 #: /src/schooltool/course/browser/templates/copy_sections.pt:93
 #: /src/schooltool/course/browser/templates/f_link_existing.pt:72
@@ -3880,6 +4174,7 @@ msgid "Import Section Members"
 msgstr ""
 
 #: /src/schooltool/course/browser/configure.zcml:288
+#: /src/schooltool/course/browser/flourish.zcml:396
 #: /src/schooltool/course/browser/section.py:1507
 #: /src/schooltool/course/browser/templates/course.pt:33
 #: /src/schooltool/course/browser/templates/f_coursesviewlet.pt:2
@@ -3948,6 +4243,58 @@ msgstr ""
 msgid "\"${username}\" is not a valid username."
 msgstr ""
 
+#: /src/schooltool/course/browser/flourish.zcml:98
+#: /src/schooltool/course/browser/flourish.zcml:107
+#: /src/schooltool/course/browser/section.py:471
+#: /src/schooltool/course/browser/templates/f_link_existing.pt:9
+#: /src/schooltool/course/browser/templates/f_section_linkage.pt:5
+#: /src/schooltool/course/browser/templates/f_unlink_section.pt:9
+#: /src/schooltool/course/browser/templates/link_existing.pt:15
+#: /src/schooltool/course/browser/templates/unlink_section.pt:14
+msgid "Course"
+msgstr ""
+
+#: /src/schooltool/course/browser/flourish.zcml:141
+#: /src/schooltool/course/browser/flourish.zcml:149
+#: /src/schooltool/course/browser/templates/f_coursesviewlet.pt:10
+#: /src/schooltool/course/browser/templates/f_coursesviewlet.pt:47
+#: /src/schooltool/course/browser/templates/f_link_existing.pt:5
+#: /src/schooltool/course/browser/templates/f_link_existing.pt:71
+#: /src/schooltool/course/browser/templates/f_unlink_section.pt:5
+#: /src/schooltool/course/browser/templates/f_unlink_section.pt:27
+#: /src/schooltool/course/browser/templates/link_existing.pt:13
+#: /src/schooltool/course/browser/templates/link_existing.pt:52
+#: /src/schooltool/course/browser/templates/section_container.pt:39
+#: /src/schooltool/course/browser/templates/unlink_section.pt:13
+#: /src/schooltool/course/browser/templates/unlink_section.pt:28
+msgid "Section"
+msgstr ""
+
+#: /src/schooltool/course/browser/flourish.zcml:200
+msgid "Add Course"
+msgstr ""
+
+#: /src/schooltool/course/browser/flourish.zcml:269
+msgid "Add Section"
+msgstr ""
+
+#: /src/schooltool/course/browser/flourish.zcml:309
+#: /src/schooltool/course/browser/templates/f_section_view.pt:88
+#: /src/schooltool/dashboard/term.pt:16
+#: /src/schooltool/term/browser/templates/f_manage_years_overview.pt:5
+#: /src/schooltool/term/browser/term.py:760
+#: /src/schooltool/term/security.zcml:19
+msgid "Terms"
+msgstr ""
+
+#: /src/schooltool/course/browser/flourish.zcml:467
+msgid "Import Students CSV"
+msgstr ""
+
+#: /src/schooltool/course/browser/flourish.zcml:476
+msgid "Import Students"
+msgstr ""
+
 #: /src/schooltool/course/browser/section-member-csvimport.pt:4
 msgid "Upload SchoolTool section members as CSV"
 msgstr ""
@@ -3967,15 +4314,6 @@ msgstr ""
 #: /src/schooltool/course/browser/section.py:447
 #. Default: ""
 msgid "Starting term ($starts_in) is later than ending term ($ends_in)"
-msgstr ""
-
-#: /src/schooltool/course/browser/section.py:471
-#: /src/schooltool/course/browser/templates/f_link_existing.pt:9
-#: /src/schooltool/course/browser/templates/f_section_linkage.pt:5
-#: /src/schooltool/course/browser/templates/f_unlink_section.pt:9
-#: /src/schooltool/course/browser/templates/link_existing.pt:15
-#: /src/schooltool/course/browser/templates/unlink_section.pt:14
-msgid "Course"
 msgstr ""
 
 #: /src/schooltool/course/browser/section.py:556
@@ -4193,12 +4531,6 @@ msgstr ""
 msgid "Edit this course"
 msgstr ""
 
-#: /src/schooltool/course/browser/templates/f_course_view.pt:75
-#: /src/schooltool/group/browser/templates/f_group_view.pt:90
-#: /src/schooltool/resource/browser/templates/f_resource_view.pt:75
-msgid "Responsible parties"
-msgstr ""
-
 #: /src/schooltool/course/browser/templates/f_course_view.pt:76
 msgid "Edit responsible parties for this course"
 msgstr ""
@@ -4223,24 +4555,14 @@ msgstr ""
 msgid "Sections taught"
 msgstr ""
 
-#: /src/schooltool/course/browser/templates/f_coursesviewlet.pt:10
-#: /src/schooltool/course/browser/templates/f_coursesviewlet.pt:47
-#: /src/schooltool/course/browser/templates/f_link_existing.pt:5
-#: /src/schooltool/course/browser/templates/f_link_existing.pt:71
-#: /src/schooltool/course/browser/templates/f_unlink_section.pt:5
-#: /src/schooltool/course/browser/templates/f_unlink_section.pt:27
-#: /src/schooltool/course/browser/templates/link_existing.pt:13
-#: /src/schooltool/course/browser/templates/link_existing.pt:52
-#: /src/schooltool/course/browser/templates/section_container.pt:39
-#: /src/schooltool/course/browser/templates/unlink_section.pt:13
-#: /src/schooltool/course/browser/templates/unlink_section.pt:28
-msgid "Section"
-msgstr ""
-
 #: /src/schooltool/course/browser/templates/f_coursesviewlet.pt:12
 #: /src/schooltool/course/browser/templates/f_coursesviewlet.pt:49
 #: /src/schooltool/group/browser/group.py:327
 #: /src/schooltool/group/browser/templates/f_groupsviewlet.pt:19
+#: /src/schooltool/schoolyear/browser/flourish.zcml:65
+#: /src/schooltool/schoolyear/browser/flourish.zcml:100
+#: /src/schooltool/schoolyear/browser/flourish.zcml:130
+#: /src/schooltool/schoolyear/browser/flourish.zcml:182
 #: /src/schooltool/schoolyear/browser/schoolyear.py:712
 #: /src/schooltool/schoolyear/browser/templates/f_schoolyear_activate.pt:8
 #: /src/schooltool/term/browser/templates/f_manage_years_overview.pt:15
@@ -4357,14 +4679,6 @@ msgstr ""
 
 #: /src/schooltool/course/browser/templates/f_section_view.pt:83
 msgid "This section has no courses"
-msgstr ""
-
-#: /src/schooltool/course/browser/templates/f_section_view.pt:88
-#: /src/schooltool/dashboard/term.pt:16
-#: /src/schooltool/term/browser/templates/f_manage_years_overview.pt:5
-#: /src/schooltool/term/browser/term.py:760
-#: /src/schooltool/term/security.zcml:19
-msgid "Terms"
 msgstr ""
 
 #: /src/schooltool/course/browser/templates/f_section_view.pt:89
@@ -4645,6 +4959,7 @@ msgstr ""
 
 #: /src/schooltool/dashboard/school.pt:16
 #: /src/schooltool/timetable/browser/app.py:84
+#: /src/schooltool/timetable/browser/flourish.zcml:29
 #: /src/schooltool/timetable/browser/templates/link_to_school_timetables.pt:1
 msgid "School Timetables"
 msgstr ""
@@ -4987,6 +5302,9 @@ msgid "API Docs"
 msgstr ""
 
 #: /src/schooltool/email/browser/configure.zcml:54
+#: /src/schooltool/email/browser/flourish.zcml:20
+#: /src/schooltool/email/browser/flourish.zcml:27
+#: /src/schooltool/email/browser/flourish.zcml:141
 #: /src/schooltool/email/browser/templates/f_email_settings_overview.pt:3
 msgid "Outgoing Email"
 msgstr ""
@@ -5131,6 +5449,7 @@ msgid "Date and time when the message was last tried"
 msgstr ""
 
 #: /src/schooltool/email/browser/email.py:335
+#: /src/schooltool/email/browser/flourish.zcml:71
 msgid "Email View"
 msgstr ""
 
@@ -5176,6 +5495,19 @@ msgstr ""
 #: /src/schooltool/email/browser/email.py:782
 #. Default: ""
 msgid "Email Queue (${count})"
+msgstr ""
+
+#: /src/schooltool/email/browser/flourish.zcml:37
+msgid "Outgoing Email Queue"
+msgstr ""
+
+#: /src/schooltool/email/browser/flourish.zcml:49
+msgid "Outgoing Email Settings"
+msgstr ""
+
+#: /src/schooltool/email/browser/flourish.zcml:60
+#: /src/schooltool/email/browser/flourish.zcml:106
+msgid "Send Test Email"
 msgstr ""
 
 #: /src/schooltool/email/browser/templates/email_container.pt:39
@@ -5292,6 +5624,23 @@ msgstr ""
 
 #: /src/schooltool/export/configure.zcml:30
 msgid "XLS Export"
+msgstr ""
+
+#: /src/schooltool/export/flourish.zcml:15
+msgid "Import XLS"
+msgstr ""
+
+#: /src/schooltool/export/flourish.zcml:23
+#: /src/schooltool/export/templates/import.pt:22
+msgid "Import Data"
+msgstr ""
+
+#: /src/schooltool/export/flourish.zcml:49
+msgid "A single .xls spreadsheet containing the basic structure of the school, including students, contacts, years, terms, courses, groups and timetables.  Can be modified and re-imported."
+msgstr ""
+
+#: /src/schooltool/export/flourish.zcml:49
+msgid "Export as XLS"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:76
@@ -5438,12 +5787,16 @@ msgstr ""
 msgid "must be either True or False"
 msgstr ""
 
-#: /src/schooltool/export/templates/f_import.pt:22
+#: /src/schooltool/export/templates/f_import.pt:17
+msgid "Please wait while the data is being imported."
+msgstr ""
+
+#: /src/schooltool/export/templates/f_import.pt:36
 #: /src/schooltool/export/templates/import.pt:59
 msgid "Upload XLS File"
 msgstr ""
 
-#: /src/schooltool/export/templates/f_import.pt:26
+#: /src/schooltool/export/templates/f_import.pt:40
 #: /src/schooltool/export/templates/import.pt:61
 msgid "XLS File"
 msgstr ""
@@ -5463,17 +5816,17 @@ msgstr ""
 msgid "For people interested in testing and exploring SchoolTool, we provide a set of sample data: ${link-to-sample-data-file}."
 msgstr ""
 
-#: /src/schooltool/export/templates/f_import_related.pt:22
+#: /src/schooltool/export/templates/f_import_related.pt:24
+msgid "We also provide a large data set: ${link-to-sample-data-file} -- 1000 students over multiple years -- for performance testing. This set can take a very long time to be imported and may fail on systems with inadequate memory."
+msgstr ""
+
+#: /src/schooltool/export/templates/f_import_related.pt:33
 #: /src/schooltool/export/templates/import.pt:53
 msgid "If you are importing your own data, we highly recommend downloading the sample spreadsheet as a reference."
 msgstr ""
 
 #: /src/schooltool/export/templates/import.pt:4
 msgid "Upload SchoolTool as XLS"
-msgstr ""
-
-#: /src/schooltool/export/templates/import.pt:22
-msgid "Import Data"
 msgstr ""
 
 #: /src/schooltool/export/templates/import.pt:38
@@ -5503,6 +5856,14 @@ msgstr ""
 
 #: /src/schooltool/group/browser/configure.zcml:110
 msgid "Import Groups Members"
+msgstr ""
+
+#: /src/schooltool/group/browser/flourish.zcml:139
+msgid "Add Group"
+msgstr ""
+
+#: /src/schooltool/group/browser/flourish.zcml:270
+msgid "Import Members CSV"
 msgstr ""
 
 #: /src/schooltool/group/browser/group.py:104
@@ -5697,6 +6058,38 @@ msgstr ""
 msgid "Groups are essentially sets of users."
 msgstr ""
 
+#: /src/schooltool/level/browser/flourish.zcml:19
+#: /src/schooltool/level/browser/flourish.zcml:28
+#: /src/schooltool/level/browser/flourish.zcml:34
+#: /src/schooltool/level/browser/flourish.zcml:82
+#: /src/schooltool/level/browser/flourish.zcml:92
+#: /src/schooltool/level/browser/flourish.zcml:110
+#: /src/schooltool/level/browser/flourish.zcml:130
+#: /src/schooltool/level/browser/templates/levels.pt:3
+#: /src/schooltool/level/browser/templates/levels.pt:6
+msgid "Grade Levels"
+msgstr ""
+
+#: /src/schooltool/level/browser/flourish.zcml:62
+msgid "New Level"
+msgstr ""
+
+#: /src/schooltool/level/browser/flourish.zcml:82
+msgid "Add new level"
+msgstr ""
+
+#: /src/schooltool/level/browser/flourish.zcml:92
+msgid "Edit level"
+msgstr ""
+
+#: /src/schooltool/level/browser/flourish.zcml:110
+msgid "Change Order"
+msgstr ""
+
+#: /src/schooltool/level/browser/flourish.zcml:120
+msgid "Reorder or Delete Levels"
+msgstr ""
+
 #: /src/schooltool/level/browser/level.py:51
 msgid "Add a level"
 msgstr ""
@@ -5716,11 +6109,6 @@ msgstr ""
 
 #: /src/schooltool/level/browser/templates/f_levels_view.pt:12
 msgid "Edit this level"
-msgstr ""
-
-#: /src/schooltool/level/browser/templates/levels.pt:3
-#: /src/schooltool/level/browser/templates/levels.pt:6
-msgid "Grade Levels"
 msgstr ""
 
 #: /src/schooltool/level/browser/templates/levels.pt:11
@@ -5810,6 +6198,10 @@ msgstr ""
 msgid "All groups"
 msgstr ""
 
+#: /src/schooltool/person/browser/flourish.zcml:7
+msgid "Preferences"
+msgstr ""
+
 #: /src/schooltool/person/browser/home.pt:24
 #: /src/schooltool/person/browser/person.pt:15
 msgid "Username:"
@@ -5823,10 +6215,6 @@ msgstr ""
 #: /src/schooltool/person/browser/home.pt:27
 #: /src/schooltool/person/browser/person.pt:18
 msgid "edit name"
-msgstr ""
-
-#: /src/schooltool/person/browser/home_tab_viewlet.pt:3
-msgid "Home"
 msgstr ""
 
 #: /src/schooltool/person/browser/person-csvimport.pt:29
@@ -6050,8 +6438,22 @@ msgstr ""
 #: /src/schooltool/report/browser/configure.zcml:45
 #: /src/schooltool/report/browser/configure.zcml:56
 #: /src/schooltool/report/browser/configure.zcml:67
+#: /src/schooltool/report/browser/flourish.zcml:15
+#: /src/schooltool/report/browser/flourish.zcml:35
+#: /src/schooltool/report/browser/flourish.zcml:45
+#: /src/schooltool/report/browser/flourish.zcml:55
+#: /src/schooltool/report/browser/flourish.zcml:65
+#: /src/schooltool/report/browser/flourish.zcml:75
 #: /src/schooltool/report/browser/report.py:82
 msgid "Reports"
+msgstr ""
+
+#: /src/schooltool/report/browser/flourish.zcml:25
+msgid "Overview"
+msgstr ""
+
+#: /src/schooltool/report/browser/flourish.zcml:85
+msgid "Report Overview"
 msgstr ""
 
 #: /src/schooltool/report/browser/report.py:56
@@ -6118,6 +6520,47 @@ msgstr ""
 msgid "New Equipment"
 msgstr ""
 
+#: /src/schooltool/resource/browser/flourish.zcml:20
+#: /src/schooltool/resource/browser/flourish.zcml:29
+#: /src/schooltool/resource/browser/flourish.zcml:39
+#: /src/schooltool/resource/browser/flourish.zcml:309
+#: /src/schooltool/resource/browser/flourish.zcml:315
+msgid "Resource Attributes"
+msgstr ""
+
+#: /src/schooltool/resource/browser/flourish.zcml:107
+#: /src/schooltool/resource/browser/resource.py:353
+#: /src/schooltool/resource/resource.py:206
+#: /src/schooltool/resource/resource.py:232
+#: /src/schooltool/resource/types.py:93
+msgid "Equipment"
+msgstr ""
+
+#: /src/schooltool/resource/browser/flourish.zcml:123
+#: /src/schooltool/resource/browser/resource.py:357
+#: /src/schooltool/resource/resource.py:74
+#: /src/schooltool/resource/resource.py:204
+#: /src/schooltool/resource/resource.py:230
+#: /src/schooltool/resource/types.py:55
+msgid "Resource"
+msgstr ""
+
+#: /src/schooltool/resource/browser/flourish.zcml:138
+msgid "Add Resource"
+msgstr ""
+
+#: /src/schooltool/resource/browser/flourish.zcml:147
+msgid "Add Location"
+msgstr ""
+
+#: /src/schooltool/resource/browser/flourish.zcml:156
+msgid "Add Equipment"
+msgstr ""
+
+#: /src/schooltool/resource/browser/flourish.zcml:208
+msgid "Reserve"
+msgstr ""
+
 #: /src/schooltool/resource/browser/resource-csvimport.pt:4
 msgid "Upload schooltool resources as CSV"
 msgstr ""
@@ -6144,21 +6587,6 @@ msgstr ""
 
 #: /src/schooltool/resource/browser/resource.py:90
 msgid "Resource index"
-msgstr ""
-
-#: /src/schooltool/resource/browser/resource.py:353
-#: /src/schooltool/resource/resource.py:206
-#: /src/schooltool/resource/resource.py:232
-#: /src/schooltool/resource/types.py:93
-msgid "Equipment"
-msgstr ""
-
-#: /src/schooltool/resource/browser/resource.py:357
-#: /src/schooltool/resource/resource.py:74
-#: /src/schooltool/resource/resource.py:204
-#: /src/schooltool/resource/resource.py:230
-#: /src/schooltool/resource/types.py:55
-msgid "Resource"
 msgstr ""
 
 #: /src/schooltool/resource/browser/resource.py:399
@@ -6500,6 +6928,11 @@ msgid "Generate"
 msgstr ""
 
 #: /src/schooltool/schoolyear/browser/configure.zcml:26
+#: /src/schooltool/schoolyear/browser/flourish.zcml:13
+#: /src/schooltool/schoolyear/browser/flourish.zcml:18
+#: /src/schooltool/schoolyear/browser/flourish.zcml:25
+#: /src/schooltool/schoolyear/browser/flourish.zcml:109
+#: /src/schooltool/schoolyear/browser/flourish.zcml:119
 #: /src/schooltool/schoolyear/browser/schoolyear.py:136
 #: /src/schooltool/schoolyear/browser/templates/f_manage_schoolyears_overview.pt:4
 #: /src/schooltool/schoolyear/security.zcml:7
@@ -6507,7 +6940,13 @@ msgid "School Years"
 msgstr ""
 
 #: /src/schooltool/schoolyear/browser/configure.zcml:87
+#: /src/schooltool/schoolyear/browser/flourish.zcml:109
 msgid "New School Year"
+msgstr ""
+
+#: /src/schooltool/schoolyear/browser/flourish.zcml:82
+#: /src/schooltool/schoolyear/browser/flourish.zcml:119
+msgid "Activate New Year"
 msgstr ""
 
 #: /src/schooltool/schoolyear/browser/schoolyear.py:170
@@ -6700,13 +7139,19 @@ msgstr ""
 msgid "School administration"
 msgstr ""
 
-#: /src/schooltool/securitypolicy/browser/templates/access_setting_snippet.pt:2
-msgid "Access setting"
+#: /src/schooltool/securitypolicy/browser/flourish.zcml:15
+#: /src/schooltool/securitypolicy/browser/flourish.zcml:31
+msgid "Security"
 msgstr ""
 
+#: /src/schooltool/securitypolicy/browser/flourish.zcml:44
 #: /src/schooltool/securitypolicy/browser/templates/f_security_descriptions.pt:3
 #: /src/schooltool/securitypolicy/browser/templates/security_descriptions.pt:4
 msgid "Access Rights"
+msgstr ""
+
+#: /src/schooltool/securitypolicy/browser/templates/access_setting_snippet.pt:2
+msgid "Access setting"
 msgstr ""
 
 #: /src/schooltool/securitypolicy/browser/templates/f_security_descriptions.pt:4
@@ -6806,6 +7251,22 @@ msgstr ""
 msgid "top"
 msgstr ""
 
+#: /src/schooltool/skin/flourish/instance/skin.zcml:50
+#: /src/schooltool/skin/templates/error.pt:3
+#: /src/schooltool/skin/templates/error.pt:12
+msgid "Server Error"
+msgstr ""
+
+#: /src/schooltool/skin/flourish/instance/skin.zcml:59
+#: /src/schooltool/skin/templates/notfound.pt:3
+#: /src/schooltool/skin/templates/notfound.pt:11
+msgid "Not Found"
+msgstr ""
+
+#: /src/schooltool/skin/flourish/instance/skin.zcml:68
+msgid "Unauthorized"
+msgstr ""
+
 #: /src/schooltool/skin/flourish/templates/main.pt:82
 msgid "server running"
 msgstr ""
@@ -6816,11 +7277,6 @@ msgstr ""
 
 #: /src/schooltool/skin/form.py:64
 msgid "No changes"
-msgstr ""
-
-#: /src/schooltool/skin/templates/error.pt:3
-#: /src/schooltool/skin/templates/error.pt:12
-msgid "Server Error"
 msgstr ""
 
 #: /src/schooltool/skin/templates/error.pt:15
@@ -6854,11 +7310,6 @@ msgstr ""
 
 #: /src/schooltool/skin/templates/generic_macros.pt:12
 msgid "Server Running SchoolTool"
-msgstr ""
-
-#: /src/schooltool/skin/templates/notfound.pt:3
-#: /src/schooltool/skin/templates/notfound.pt:11
-msgid "Not Found"
 msgstr ""
 
 #: /src/schooltool/skin/templates/view_macros.pt:50
@@ -7011,6 +7462,11 @@ msgstr ""
 msgid "Replacement day for emergency day $emergency."
 msgstr ""
 
+#: /src/schooltool/term/browser/flourish.zcml:23
+#: /src/schooltool/term/browser/templates/f_terms.pt:11
+msgid "Add Term"
+msgstr ""
+
 #: /src/schooltool/term/browser/templates/emergency2.pt:3
 #: /src/schooltool/term/browser/templates/emergency_select.pt:3
 #: /src/schooltool/term/browser/templates/emergency_select.pt:6
@@ -7105,10 +7561,6 @@ msgstr ""
 
 #: /src/schooltool/term/browser/templates/f_term_add.pt:29
 msgid "Click on a day to toggle its state. You can also toggle the days of a week:"
-msgstr ""
-
-#: /src/schooltool/term/browser/templates/f_terms.pt:11
-msgid "Add Term"
 msgstr ""
 
 #: /src/schooltool/term/browser/templates/f_terms.pt:29
@@ -7241,10 +7693,15 @@ msgid "Add meeting"
 msgstr ""
 
 #: /src/schooltool/timetable/browser/configure.zcml:60
+#: /src/schooltool/timetable/browser/flourish.zcml:266
 msgid "New Timetable"
 msgstr ""
 
 #: /src/schooltool/timetable/browser/configure.zcml:84
+#: /src/schooltool/timetable/browser/flourish.zcml:397
+#: /src/schooltool/timetable/browser/flourish.zcml:426
+#: /src/schooltool/timetable/browser/flourish.zcml:433
+#: /src/schooltool/timetable/browser/flourish.zcml:441
 #: /src/schooltool/timetable/browser/templates/f_selected_periods_edit.pt:38
 msgid "Schedule"
 msgstr ""
@@ -7263,6 +7720,48 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/configure.zcml:184
 msgid "Add Meeting"
+msgstr ""
+
+#: /src/schooltool/timetable/browser/flourish.zcml:10
+#: /src/schooltool/timetable/browser/templates/f_manage_timetables_overview.pt:6
+msgid "Timetables"
+msgstr ""
+
+#: /src/schooltool/timetable/browser/flourish.zcml:111
+msgid "Make Default"
+msgstr ""
+
+#: /src/schooltool/timetable/browser/flourish.zcml:376
+#: /src/schooltool/timetable/browser/templates/f_manage_timetables_overview.pt:16
+msgid "Timetable"
+msgstr ""
+
+#: /src/schooltool/timetable/browser/flourish.zcml:462
+msgid "Edit Schedule"
+msgstr ""
+
+#: /src/schooltool/timetable/browser/flourish.zcml:498
+msgid "Add Schedule"
+msgstr ""
+
+#: /src/schooltool/timetable/browser/flourish.zcml:507
+msgid "Schedule Timetable"
+msgstr ""
+
+#: /src/schooltool/timetable/browser/flourish.zcml:516
+msgid "School Timetable"
+msgstr ""
+
+#: /src/schooltool/timetable/browser/flourish.zcml:526
+msgid "Exception Days"
+msgstr ""
+
+#: /src/schooltool/timetable/browser/flourish.zcml:565
+msgid "New Meeting"
+msgstr ""
+
+#: /src/schooltool/timetable/browser/flourish.zcml:574
+msgid "Edit Meeting"
 msgstr ""
 
 #: /src/schooltool/timetable/browser/schedule.py:66
@@ -7295,14 +7794,6 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/f_manage_timetables_overview.pt:6
 msgid "Manage timetables"
-msgstr ""
-
-#: /src/schooltool/timetable/browser/templates/f_manage_timetables_overview.pt:6
-msgid "Timetables"
-msgstr ""
-
-#: /src/schooltool/timetable/browser/templates/f_manage_timetables_overview.pt:16
-msgid "Timetable"
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/f_manage_timetables_overview.pt:25

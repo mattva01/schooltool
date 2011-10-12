@@ -135,7 +135,8 @@ def doctest_SchoolYearAddView_overlap():
     An error message should be displayed:
 
         >>> for error in view.widgets.errors: print error.render()
-        <div class="error">Date range you have selected overlaps with following school years:
+        <div class="error">
+        Date range you have selected overlaps with the following school years:
         <div> <a href="http://127.0.0.1/schoolyears/2005-2006">2005-2006</a> (2005-09-01 &mdash; 2006-07-16) </div>
         </div>
 
@@ -243,7 +244,8 @@ def doctest_SchoolYearEditView_shrink():
     And get the error message displayed
 
         >>> for error in view.widgets.errors: print error.render()
-        <div class="error">Date range you have selected is too small to contain following term(s):
+        <div class="error">
+        Date range you have selected is too small to contain the following term(s):
         <div> <a href="http://127.0.0.1/schoolyears/2005-2006/spring">Spring</a> (2006-01-14 &mdash; 2006-07-16) </div>
         </div>
 
@@ -290,7 +292,8 @@ def doctest_SchoolYearEditView_overlap():
     An error message will get displayed
 
         >>> for error in view.widgets.errors: print error.render()
-        <div class="error">Date range you have selected overlaps with following school years:
+        <div class="error">
+        Date range you have selected overlaps with the following school years:
         <div> <a href="http://127.0.0.1/schoolyears/2005-2006">2005-2006</a> (2005-09-01 &mdash; 2006-07-16) </div>
         </div>
 

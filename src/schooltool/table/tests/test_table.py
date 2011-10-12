@@ -267,10 +267,10 @@ def doctest_ImageInputColumn():
     Now we can render our image directly.
 
         >>> print column.renderCell(ItemStub(), FormatterStub())
-        <input type="image" value="1" alt="alt"
-               name="prefix.itemStub"
-               src="http://localhost/@@/image.png"
-               title="title" />
+        <button class="image" type="submit" name="prefix.itemStub"
+                title="title" value="1">
+          <img src="http://localhost/@@/image.png" alt="alt" />
+        </button>
 
     Or have a column that renders an image from a library.
 
@@ -279,10 +279,10 @@ def doctest_ImageInputColumn():
         ...                           image="hello.png")
 
         >>> print column.renderCell(ItemStub('otherItem'), FormatterStub())
-        <input type="image" value="1" alt="alt"
-               name="prefix.otherItem"
-               src="http://localhost/@@/images/hello.png"
-               title="title" />
+        <button class="image" type="submit" name="prefix.otherItem"
+                title="title" value="1">
+          <img src="http://localhost/@@/images/hello.png" alt="alt" />
+        </button>
 
     """
 

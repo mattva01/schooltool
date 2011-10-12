@@ -20,6 +20,17 @@
          tal:attributes="href context/++resource++sample_data.xls">sample_data.xls</a>.
     </p>
     <p i18n:translate="">
+      We also provide a large data set:
+      <a i18n:name="link-to-sample-data-file" href="large_sample_data.xls"
+         tal:attributes="href context/++resource++large_sample_data.xls">
+        large_sample_data.xls
+      </a>
+      -- 1000 students over multiple years -- for performance testing.
+      This set can take a very long time to be imported and may fail
+      on systems with inadequate memory.
+    </p>
+
+    <p i18n:translate="">
       If you are importing your own
       data, we highly recommend downloading the sample spreadsheet as a
       reference.

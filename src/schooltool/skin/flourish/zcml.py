@@ -78,6 +78,11 @@ class IViewletDirective(zope.viewlet.metadirectives.IViewletDirective,
         title=u"The viewlet Manager",
         required=True)
 
+    title = zope.configuration.fields.MessageID(
+        title=u"Title of this viewlet",
+        required=False,
+        )
+
 
 class IViewletFactoryDirective(zope.component.zcml.IAdapterDirective):
 

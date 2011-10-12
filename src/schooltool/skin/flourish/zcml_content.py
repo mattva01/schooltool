@@ -53,6 +53,11 @@ class IContentDirective(ITemplatedContentProvider):
         default=interfaces.IContentProvider,
         )
 
+    title = zope.configuration.fields.MessageID(
+        title=u"Title of this page",
+        required=False,
+        )
+
 
 IContentDirective.setTaggedValue('keyword_arguments', True)
 

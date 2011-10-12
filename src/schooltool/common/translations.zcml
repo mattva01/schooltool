@@ -15,5 +15,8 @@
   <!-- Provide local overrides of standard configurations-->
   <includeOverrides package="schooltool.demographics" file="overrides.zcml" />
 
+  <!-- Extract flourish strings -->
+  <include package="schooltool.skin.flourish.instance" />
+
 </configure>
 

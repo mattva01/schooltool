@@ -39,12 +39,17 @@
   </zope:configure>
 
   <resource
-      name="sample_data.xls" file="sample_data.xls"
+      name="large_sample_data.xls" file="sample_data.xls"
       layer="zope.publisher.interfaces.browser.IBrowserRequest"
       />
 
   <resource
       name="empty_data.xls" file="empty_data.xls"
+      layer="zope.publisher.interfaces.browser.IBrowserRequest"
+      />
+
+  <resource
+      name="sample_data.xls" file="sample_data_small.xls"
       layer="zope.publisher.interfaces.browser.IBrowserRequest"
       />
 

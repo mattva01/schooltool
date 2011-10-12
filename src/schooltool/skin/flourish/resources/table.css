@@ -39,7 +39,14 @@ table.person-view-demographics .label {
 
 /* Styles used in tables in relationship views */
 
-table.relationships-table input[type="image"] {
+table button.image {
+    background: none;
+    border: 0;
+    cursor: pointer;
+    padding: 0;
+}
+
+table.relationships-table button.image {
     vertical-align: middle;
 }
 

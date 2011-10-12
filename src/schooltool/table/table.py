@@ -232,10 +232,14 @@ class ImageInputColumn(column.Column):
         params = self.params(item, formatter)
         if not params:
             return ''
-        param_str = ' '.join(['%s="%s"' % (name, p)
-                              for name, p in sorted(params.items())])
+        return self.template() % params
 
-        return '<input type="image" value="1" %s />' % param_str
+    def template(self):
+        return '\n'.join([
+                '<button class="image" type="submit" name="%(name)s" title="%(title)s" value="1">',
+                '<img src="%(src)s" alt="%(alt)s" />',
+                '</button>'
+                ])
 
 
 class NullTableFormatter(object):
