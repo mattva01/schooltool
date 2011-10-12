@@ -59,7 +59,7 @@ Let's make sure new values got set:
     +----------------+---------------+
     | First name     | John          |
     | Last name      | Petterson     |
-    | Gender         | male          |
+    | Gender         | Male          |
     | Birth date     | 1980-01-01    |
     | ID             | 001122        |
     | Ethnicity      | Asian         |
