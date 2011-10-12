@@ -29,6 +29,7 @@ from zope.container.contained import Contained
 from zope.container.btree import BTreeContainer
 from zope.intid.interfaces import IIntIds
 from zope.interface import implements
+from zope.proxy import sameProxiedObjects
 
 from schooltool.common import DateRange
 from schooltool.timetable import interfaces
@@ -190,6 +191,10 @@ class ScheduleContainer(BTreeContainer):
             until_date = date
         meetings = []
         for schedule in self.values():
+            if not sameProxiedObjects(schedule.__parent__, self):
+                # We are likely in the process of deleting/moving
+                # this schedule.  Ignore.
+                continue
             tt_meetings = iterMeetingsInTimezone(
                 schedule, self.timezone, date, until_date=until_date)
             meetings.extend(list(tt_meetings))
