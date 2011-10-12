@@ -89,6 +89,32 @@ This file has examples of bad data for the Resouces sheet:
     <p class="error">Resources C2 missing required text</p>
     <p class="error">Resources B3 must be either 'Location' or 'Resource'</p>
 
+We'll add some demo fields to test importing demos.
+
+    >>> browser.getLink('Manage').click()
+    >>> browser.getLink('Demographics').click()
+    >>> browser.getLink('New Text Field').click()
+    >>> browser.getControl("Title").value = 'Text Demo'
+    >>> browser.getControl("ID").value = 'text_demo'
+    >>> browser.getControl(name="form.widgets.required:list").value = ["true"]
+    >>> browser.getControl('Add').click()
+
+    >>> browser.getLink('Manage').click()
+    >>> browser.getLink('Demographics').click()
+    >>> browser.getLink('New Date Field').click()
+    >>> browser.getControl("Title").value = 'Date Demo'
+    >>> browser.getControl("ID").value = 'date_demo'
+    >>> browser.getControl(name="form.widgets.required:list").value = ["true"]
+    >>> browser.getControl('Add').click()
+
+    >>> browser.getLink('Manage').click()
+    >>> browser.getLink('Demographics').click()
+    >>> browser.getLink('New Yes/No Field').click()
+    >>> browser.getControl("Title").value = 'Bool Demo'
+    >>> browser.getControl("ID").value = 'bool_demo'
+    >>> browser.getControl(name="form.widgets.required:list").value = ["true"]
+    >>> browser.getControl('Add').click()
+
 This file has examples of bad data for the Persons sheet:
 
     >>> browser.getLink('Manage').click()
@@ -114,10 +140,22 @@ This file has examples of bad data for the Persons sheet:
     <p class="error">Persons M2 not unicode or ascii string</p>
     <p class="error">Persons N2 not unicode or ascii string</p>
     <p class="error">Persons O2 not unicode or ascii string</p>
+    <p class="error">Persons P2 missing required text</p>
+    <p class="error">Persons Q2 has no date in it</p>
+    <p class="error">Persons R2 missing required text</p>
     <p class="error">Persons C3 not unicode or ascii string</p>
     <p class="error">Persons E3 not unicode or ascii string</p>
+    <p class="error">Persons Q3 has no date in it</p>
+    <p class="error">Persons R3 must be either True or False</p>
     <p class="error">Persons A4 Username cannot contain non-ascii characters: gr...ta</p>
-    <p class="error">Persons A6 not unicode or ascii string</p>
+    <p class="error">Persons A5 not unicode or ascii string</p>
+
+We'll remove the demo fields to not break future tests.
+
+    >>> browser.getLink('Manage').click()
+    >>> browser.getLink('Demographics').click()
+    >>> browser.getControl(name='delete:list').value = ['text_demo', 'date_demo', 'bool_demo']
+    >>> browser.getControl('Delete').click()
 
 This file has examples of bad data for the Courses sheet:
 

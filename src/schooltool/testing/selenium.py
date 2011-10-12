@@ -387,7 +387,7 @@ def getWebElementHTML(driver, web_elements):
     if isinstance(web_elements, list):
         snippets = []
         for el in web_elements:
-            snippets.append(getWebElementHTML(el))
+            snippets.append(getWebElementHTML(driver, el))
         html = u'\n'.join(snippets)
     else:
         html = driver.execute_script(
