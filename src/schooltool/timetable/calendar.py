@@ -192,5 +192,5 @@ class RemoveScheduleCalendar(ObjectEventAdapterSubscriber):
         container = interfaces.IScheduleContainer(owner, None)
         if container is None:
             return
-        calendar.updateSchedule(container)
+        calendar.removeSchedule(self.object)
 

@@ -295,7 +295,7 @@ class IPasswordEditForm(Interface):
 
     current = Password(
         title=_('Current password'),
-        required=False)
+        required=True)
 
     password = Password(
         title=_("New password"),
@@ -309,8 +309,16 @@ class IPasswordEditForm(Interface):
 class PersonPasswordEditView(form.Form):
 
     label = _("Edit password")
-    fields = field.Fields(IPasswordEditForm, ignoreContext=True)
     template = ViewPageTemplateFile('password_form.pt')
+
+    @property
+    def fields(self):
+        fields = field.Fields(IPasswordEditForm, ignoreContext=True)
+        person = IPerson(self.request.principal)
+        if person.username is not self.context.username:
+            # Editing someone else's password
+            fields = fields.omit('current')
+        return fields
 
     @button.buttonAndHandler(_("Apply"))
     def handle_edit_action(self, action):
@@ -324,7 +332,13 @@ class PersonPasswordEditView(form.Form):
             return
         writer = IPasswordWriter(self.context)
         writer.setPassword(data['password'])
-        self.status = _('Changed password')
+        person = IPerson(self.request.principal)
+        if person.username is self.context.username:
+            self.status = _("Password changed successfully. "
+                            "Next, you will be required to authenticate "
+                            "with your new credentials")
+        else:
+            self.status = _('Password changed successfully')
 
     @button.buttonAndHandler(_("Cancel"))
     def handle_cancel_action(self, action):
@@ -345,15 +359,6 @@ class FlourishPersonPasswordEditView(flourish.page.Page,
     legend = _('Change password')
     formErrorsMessage = _('Please correct the marked fields below.')
 
-    @property
-    def fields(self):
-        fields = field.Fields(IPasswordEditForm, ignoreContext=True)
-        person = IPerson(self.request.principal)
-        if person.username is not self.context.username:
-            # Editing someone else's password
-            fields = fields.omit('current')
-        return fields
-
     def update(self):
         PersonPasswordEditView.update(self)
 
@@ -369,12 +374,12 @@ class PasswordsDontMatch(ValidationError):
 class CurrentPasswordValidator(validator.SimpleFieldValidator):
 
     def validate(self, value):
+        super(CurrentPasswordValidator, self).validate(value)
         if value is not None and not self.context.checkPassword(value):
             raise WrongCurrentPassword(value)
 
 
 validator.WidgetValidatorDiscriminators(CurrentPasswordValidator,
-                                        view=FlourishPersonPasswordEditView,
                                         field=IPasswordEditForm['current'])
 
 
@@ -389,7 +394,6 @@ class PasswordsMatchValidator(validator.SimpleFieldValidator):
 
 
 validator.WidgetValidatorDiscriminators(PasswordsMatchValidator,
-                                        view=FlourishPersonPasswordEditView,
                                         field=IPasswordEditForm['password'])
 
 

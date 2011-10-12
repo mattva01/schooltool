@@ -156,8 +156,8 @@ upload:
 	    echo cp dist/$(PACKAGE)-$${VERSION}.tar.gz $${DIST} ;\
 	    cp dist/$(PACKAGE)-$${VERSION}.tar.gz $${DIST} ;\
 	else \
-	    echo scp dist/$(PACKAGE)-$${VERSION}.tar.gz schooltool.org:$${DIST} ;\
-	    scp dist/$(PACKAGE)-$${VERSION}.tar.gz schooltool.org:$${DIST} ;\
+	    echo scp dist/$(PACKAGE)-$${VERSION}.tar.gz* schooltool.org:$${DIST} ;\
+	    scp dist/$(PACKAGE)-$${VERSION}.tar.gz* schooltool.org:$${DIST} ;\
 	fi
 
 # Helpers

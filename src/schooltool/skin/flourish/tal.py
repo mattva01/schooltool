@@ -20,8 +20,11 @@
 SchoolTool flourish tal expressoins.
 """
 import re
-import json
 import types
+try:
+    import json
+except ImportError:
+    import simplejson as json
 
 import zc.resourcelibrary
 import zope.tal.taldefs
