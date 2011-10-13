@@ -1,9 +1,11 @@
 #!/usr/bin/make
 
 PACKAGE=schooltool
+LOCALES=src/schooltool/locales
+TRANSLATIONS_ZCML=schooltool/common/translations.zcml
 
 DIST=/home/ftp/pub/schooltool/trunk
-BOOTSTRAP_PYTHON=python2.6
+PYTHON=python
 
 INSTANCE_TYPE=schooltool
 BUILDOUT_FLAGS=
@@ -14,9 +16,13 @@ all: build
 .PHONY: build
 build: .installed.cfg
 
+python:
+	rm -rf python
+	virtualenv --no-site-packages -p $(PYTHON) python
+
 .PHONY: bootstrap
-bootstrap bin/buildout python:
-	$(BOOTSTRAP_PYTHON) bootstrap.py
+bootstrap bin/buildout: python
+	python/bin/python bootstrap.py
 
 .PHONY: buildout
 buildout .installed.cfg: python bin/buildout buildout.cfg base.cfg setup.py
@@ -108,24 +114,20 @@ ftest-coverage-reports-html ftest-coverage/reports: ftest-coverage
 extract-translations: build
 	bin/i18nextract --egg $(PACKAGE) \
 	                --domain $(PACKAGE) \
-	                --zcml schooltool/common/translations.zcml \
-	                --output-file src/schooltool/locales/schooltool.pot
+	                --zcml $(TRANSLATIONS_ZCML) \
+	                --output-file $(LOCALES)/$(PACKAGE).pot
 
 .PHONY: compile-translations
 compile-translations:
-	set -e; \
-	locales=src/schooltool/locales; \
-	for f in $${locales}/*.po; do \
+	for f in $(LOCALES)/*.po; do \
 	    mkdir -p $${f%.po}/LC_MESSAGES; \
 	    msgfmt -o $${f%.po}/LC_MESSAGES/$(PACKAGE).mo $$f;\
 	done
 
 .PHONY: update-translations
 update-translations:
-	set -e; \
-	locales=src/schooltool/locales; \
-	for f in $${locales}/*.po; do \
-	    msgmerge -qUN $$f $${locales}/$(PACKAGE).pot ;\
+	for f in $(LOCALES)/*.po; do \
+	    msgmerge -qUN $$f $(LOCALES)/$(PACKAGE).pot ;\
 	done
 	$(MAKE) compile-translations
 
@@ -156,8 +158,8 @@ upload:
 	    echo cp dist/$(PACKAGE)-$${VERSION}.tar.gz $${DIST} ;\
 	    cp dist/$(PACKAGE)-$${VERSION}.tar.gz $${DIST} ;\
 	else \
-	    echo scp dist/$(PACKAGE)-$${VERSION}.tar.gz schooltool.org:$${DIST} ;\
-	    scp dist/$(PACKAGE)-$${VERSION}.tar.gz schooltool.org:$${DIST} ;\
+	    echo scp dist/$(PACKAGE)-$${VERSION}.tar.gz* schooltool.org:$${DIST} ;\
+	    scp dist/$(PACKAGE)-$${VERSION}.tar.gz* schooltool.org:$${DIST} ;\
 	fi
 
 # Helpers
@@ -165,5 +167,6 @@ upload:
 .PHONY: ubuntu-environment
 ubuntu-environment:
 	sudo apt-get install bzr build-essential gettext enscript ttf-liberation \
-	    python-all-dev libc6-dev libicu-dev libxslt1-dev libfreetype6-dev libjpeg62-dev 
+	    python-all-dev python-virtualenv \
+	    libicu-dev libxslt1-dev libfreetype6-dev libjpeg62-dev
 
