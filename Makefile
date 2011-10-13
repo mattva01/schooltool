@@ -3,11 +3,11 @@
 PACKAGE=schooltool
 LOCALES=src/schooltool/locales
 TRANSLATIONS_ZCML=schooltool/common/translations.zcml
-INSTANCE_TYPE=schooltool
 
 DIST=/home/ftp/pub/schooltool/trunk
-
 PYTHON=python
+
+INSTANCE_TYPE=schooltool
 BUILDOUT_FLAGS=
 
 .PHONY: all
