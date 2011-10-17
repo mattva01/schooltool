@@ -89,7 +89,7 @@ class ImmutableScheduleCalendar(ImmutableCalendar):
         for meeting in meetings:
             # We need to convert dtstart to UTC, because calendar
             # events insist on storing UTC time.
-            dtstart = meeting.dtstart.astimezone(pytz.utc)
+            dtstart = meeting.dtstart.astimezone(pytz.UTC)
             guid = self.makeGUID(dtstart.date(), meeting.period,
                                  int_ids=int_ids)
 
@@ -137,7 +137,6 @@ class ScheduleCalendar(Calendar):
         old_set = set(old_events)
         new_set = set(new_events)
 
-        # XXX: check if enough events are fired.
         for uid in sorted(old_set - new_set):
             self.removeEvent(old_events[uid])
 

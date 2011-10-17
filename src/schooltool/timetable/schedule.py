@@ -64,6 +64,15 @@ class Meeting(object):
         return self.__class__(dtstart, duration,
                               period=period, meeting_id=meeting_id)
 
+    def __repr__(self):
+        parts = []
+        if self.period is not None and self.period.title:
+            parts.append(self.period.title)
+        if self.dtstart is not None:
+            parts.append('on %s' % self.dtstart.strftime('%Y-%m-%d %H:%M %Z'))
+        return '<%s%s>' % (
+            self.__class__.__name__, parts and ' '+' '.join(parts) or '')
+
 
 class MeetingException(Persistent, Meeting):
     implements(interfaces.IMeetingException)
@@ -106,18 +115,17 @@ class Schedule(Contained):
         return iter([])
 
 
-def date_timespan(date, tzinfo=None):
+def date_timespan(date, tzinfo=pytz.UTC):
     starts = datetime.datetime.combine(date, datetime.time.min)
-    starts = starts.replace(tzinfo=tzinfo)
+    starts = tzinfo.localize(starts)
     ends = datetime.datetime.combine(date, datetime.time.max)
-    ends = ends.replace(tzinfo=tzinfo)
+    ends = tzinfo.localize(ends)
     return starts, ends
 
 
 def iterMeetingsInTimezone(schedule, other_timezone, date, until_date=None):
     if until_date == None:
         until_date = date
-    # XXX: what to do with obsolete timezones???
     other_timezone = pytz.timezone(other_timezone)
     schedule_timezone = pytz.timezone(schedule.timezone)
 
@@ -131,7 +139,7 @@ def iterMeetingsInTimezone(schedule, other_timezone, date, until_date=None):
 
     meetings = schedule.iterMeetings(tt_start_date, until_date=tt_end_date)
     for meeting in meetings:
-        if (meeting.dtstart >= start_time or
+        if (meeting.dtstart >= start_time and
             meeting.dtstart <= end_time):
             yield meeting
 
