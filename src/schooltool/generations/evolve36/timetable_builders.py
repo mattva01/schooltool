@@ -93,11 +93,20 @@ class PeriodsBuilder(object):
 
 
 class WeekDayPeriodsBuilder(PeriodsBuilder):
-    weekday_keys = ["Monday", "Tuesday", "Wednesday",
-                    "Thursday", "Friday", "Saturday", "Sunday"]
+    weekday_keys = ("Monday", "Tuesday", "Wednesday",
+                    "Thursday", "Friday", "Saturday", "Sunday")
+    timetable_day_keys = ()
+
+    def read(self, schema, context):
+        PeriodsBuilder.read(self, schema, context)
+        if schema.model.timetableDayIds:
+            self.timetable_day_keys = tuple(schema.model.timetableDayIds)
 
     def getDay(self, weekday):
-        key = self.weekday_keys[weekday]
+        try:
+            key = self.timetable_day_keys[weekday]
+        except IndexError:
+            key = self.weekday_keys[weekday]
         days = dict([(day['title'], day) for day in self.days])
         if key in days:
             return days[key]
