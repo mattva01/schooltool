@@ -72,7 +72,7 @@ class Timetable(Persistent, Schedule):
             for period, time_slot in day:
                 tstart = time_slot.tstart
                 dtstart = datetime.datetime.combine(day_date, tstart)
-                dtstart = dtstart.replace(tzinfo=timezone)
+                dtstart = timezone.localize(dtstart)
                 meeting_id = self.uniqueMeetingId(day_date, period, int_ids)
                 meeting = Meeting(
                     dtstart, time_slot.duration,
