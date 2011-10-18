@@ -647,6 +647,8 @@ class CalendarViewBase(BrowserView):
             #               dtend.date()           otherwise
             dtend = event.dtend
             if event.allday:
+                # XXX: I do dislike that allday events happen in different
+                #      timezone (UTC) than local events (view prefs).
                 first_day = event.dtstart.date()
                 last_day = max(first_day, (dtend - dtend.resolution).date())
             else:
@@ -1933,6 +1935,8 @@ class CalendarEventViewMixin(object):
             # from normal events, because they have a date as their
             # dtstart not a datetime
             duration_type = "days"
+            # XXX: I do dislike that allday events happen in different
+            #      timezone (UTC) than local events (view prefs).
             start_time = time(0, 0, tzinfo=utc)
             start = datetime.combine(start_date, start_time)
         else:
