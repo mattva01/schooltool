@@ -21,10 +21,14 @@ SchoolTool calendar overlay views.
 """
 
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
+from zope.component import getUtility
+from zope.security.proxy import removeSecurityProxy
 
 import schooltool.skin.flourish.page
 from schooltool.app.browser.overlay import CalendarOverlayBase
 from schooltool.skin import flourish
+from schooltool.term.interfaces import IDateManager
+from schooltool.term.interfaces import ITerm
 
 from schooltool.common import SchoolToolMessage as _
 
@@ -38,3 +42,38 @@ class CalendarOverlayView(flourish.page.Refine, CalendarOverlayBase):
         if not self.show_overlay():
             return ''
         return flourish.page.Refine.render(self, *args, **kw)
+
+    def grouped_items(self):
+        # XXX: this introduces dependency on terms.  A generic grouping
+        #      would be more appropriate.
+        items = super(CalendarOverlayView, self).items()
+        non_term_items = []
+        by_term = {}
+        current_term = removeSecurityProxy(
+            getUtility(IDateManager).current_term)
+        for item in items:
+            term = ITerm(item['calendar'].__parent__, None)
+            unsecure_term = removeSecurityProxy(term)
+            if unsecure_term is None:
+                non_term_items.append(item)
+            else:
+                if unsecure_term not in by_term:
+                    by_term[unsecure_term] = {
+                        'group': term,
+                        'items': [],
+                        'expanded': unsecure_term is current_term,
+                        }
+                by_term[unsecure_term]['items'].append(item)
+
+        order = sorted(by_term, key=lambda t: t.last, reverse=True)
+        result = []
+        if non_term_items:
+            result.append({
+                    'group': None,
+                    'items': non_term_items,
+                    'expanded': True,
+                    })
+        for term in order:
+            result.append(by_term[term])
+        return result
+

@@ -392,4 +392,43 @@
     margin-left: 8px;
 }
 
+
+.calendar-overlay .overlays-dropdown table.expanded {
+}
+
+.calendar-overlay .overlays-dropdown table.overlays thead {
+    background-color: transparent;
+    overflow: hidden;
+}
+
+.calendar-overlay .overlays-dropdown table.overlays thead a.title:before {
+    content: "\25B6 \0020";
+}
+
+.calendar-overlay .overlays-dropdown table.overlays thead td {
+    width: 100%;
+}
+
+.calendar-overlay .overlays-dropdown table.overlays thead a.title:hover {
+    text-decoration: none;
+}
+
+.calendar-overlay .overlays-dropdown table.overlays thead a.title {
+    cursor: pointer;
+    display: block;
+    width: 140px;
+}
+
+.calendar-overlay .overlays-dropdown table.overlays tbody {
+    display: none;
+}
+
+.calendar-overlay .overlays-dropdown table.expanded thead a.title:before {
+    content: "\25BC \0020";
+}
+
+.calendar-overlay .overlays-dropdown table.expanded tbody {
+    display: table-row-group;
+}
+
 }
