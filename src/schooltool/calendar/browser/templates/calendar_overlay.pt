@@ -13,23 +13,48 @@
         <td class="overlay-go"></td>
       </tr>
 
-      <tr tal:repeat="item view/items"
-          tal:attributes="style string:background: ${item/color1}">
-        <td><input type="checkbox" name="overlay:list"
-            tal:attributes="value item/id; checked item/checked" /></td>
-        <td class="overlay-title">
-          <span tal:content="item/title"
-                tal:attributes="title item/title">Title</span>
-        </td>
-        <td class="overlay-go"><a
-            tal:attributes="href item/calendar/@@absolute_url;
-            style string:background: ${item/color2};;
-            color: ${item/color2}"
-            i18n:attributes="title"
-            title="Calendar"
-            >&nbsp;</a></td>
-    </tr>
     </table>
+
+    <div class="overlays-dropdown">
+
+      <tal:block repeat="group view/grouped_items">
+
+        <table class="overlays"
+               tal:attributes="class python: group['expanded'] and 'overlays expanded' or 'overlays'">
+
+          <thead tal:condition="python: group['group'] is not None">
+            <tr>
+              <td colspan="3">
+                <a onclick="$($(event.target).parents('table')[0]).toggleClass('expanded').find('tbody'); return false;"
+                   tal:content="group/group/schooltool:content/title" class="title" />
+              </td>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr tal:repeat="item group/items"
+                tal:attributes="style string:background: ${item/color1}">
+              <td><input type="checkbox" name="overlay:list"
+                tal:attributes="value item/id; checked item/checked" /></td>
+              <td class="overlay-title">
+                <span tal:content="item/title"
+                      tal:attributes="title item/title">Title</span>
+              </td>
+              <td class="overlay-go"><a
+                tal:attributes="href item/calendar/@@absolute_url;
+                                style string:background: ${item/color2};;
+                                color: ${item/color2}"
+                i18n:attributes="title"
+                title="Calendar"
+                >&nbsp;</a></td>
+            </tr>
+
+          </tbody>
+        </table>
+
+      </tal:block>
+
+    </div>
 
     <div class="buttons">
       <input class="button-ok" name="OVERLAY_APPLY" type="submit" value="Select"
