@@ -74,6 +74,8 @@ class Page(BrowserPage):
 
 
 class NoSidebarPage(Page):
+    container_class = 'container expand_container'
+
     page_template = ViewPageTemplateFile('templates/page_nosidebar.pt')
 
 

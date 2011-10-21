@@ -317,3 +317,7 @@ ul.contributors {
     list-style-type: disc;
     margin-left: 16px;
 }
+
+pre.traceback {
+    padding: 4px 0px;
+}

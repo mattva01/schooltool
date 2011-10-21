@@ -120,6 +120,7 @@ class FlourishBoundContactEditView(FlourishContactEditView):
             'contact_information': (
                 _('Contact Information'),
                 ['home_phone', 'work_phone', 'mobile_phone', 'email',
+                 'other_1', 'other_2',
                  'language']),
             }
         self.fieldset_order = (
