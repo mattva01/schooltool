@@ -25,6 +25,7 @@ from zope.component import adapter, queryUtility, getUtility
 from zope.container import btree
 from zope.container.contained import Contained
 from zope.lifecycleevent import IObjectModifiedEvent
+from zope.security.proxy import removeSecurityProxy
 
 from zc.catalog import extentcatalog
 from zc.catalog import catalogindex
@@ -176,7 +177,7 @@ def indexDocSubscriber(event):
     app = ISchoolToolApplication(None, None)
     if app is None:
         return
-    obj = event.object
+    obj = removeSecurityProxy(event.object)
     util = getUtility(IIntIds, context=app)
     obj_id = util.getId(obj)
     catalogs = ICatalogs(app)
@@ -189,7 +190,7 @@ def reindexDocSubscriber(event):
     app = ISchoolToolApplication(None, None)
     if app is None:
         return
-    obj = event.object
+    obj = removeSecurityProxy(event.object)
     util = queryUtility(IIntIds, context=app)
     if util is None:
         return
@@ -206,7 +207,7 @@ def unindexDocSubscriber(event):
     app = ISchoolToolApplication(None, None)
     if app is None:
         return
-    obj = event.object
+    obj = removeSecurityProxy(event.object)
     util = getUtility(IIntIds, context=app)
     obj_id = util.queryId(obj)
     if obj_id is None:
