@@ -106,6 +106,8 @@ class Contact(Persistent, Contained):
     home_phone = None
     work_phone = None
     mobile_phone = None
+    other_1 = None
+    other_2 = None
     language = None
 
     persons = RelationshipProperty(URIContactRelationship,
@@ -184,7 +186,7 @@ def getContactFormKey(contact):
 
 
 class ContactCatalog(AttributeCatalog):
-    version = '2 - indexed contact titles'
+    version = '3 - update missing titles because of wrong security'
     interface = IContact
     attributes = ('first_name', 'last_name', 'title')
 

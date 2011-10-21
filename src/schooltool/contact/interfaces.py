@@ -77,12 +77,19 @@ class IPhones(Interface):
     mobile_phone = TextLine(title=_(u"Mobile phone"), required=False)
 
 
+class IOther(Interface):
+
+    other_1 = TextLine(title=_(u"Other"), required=False)
+
+    other_2 = TextLine(title=_(u"Other"), required=False)
+
+
 class ILanguages(Interface):
 
     language = TextLine(title=_(u"Language"), required=False)
 
 
-class IContactInformation(IAddress, IEmails, IPhones, ILanguages):
+class IContactInformation(IAddress, IEmails, IPhones, IOther, ILanguages):
     """Collection of parts that define the contact information."""
 
 
