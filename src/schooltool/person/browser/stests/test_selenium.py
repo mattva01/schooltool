@@ -1,6 +1,6 @@
 #
 # SchoolTool - common information systems platform for school administration
-# Copyright (c) 2011 Shuttleworth Foundation
+# Copyright (c) 2010 Shuttleworth Foundation
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,30 +17,17 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Flourish error views.
+Functional tests for schooltool.person
 """
-from zope.app.exception.browser.unauthorized import Unauthorized
+import unittest
 
-from schooltool.skin.error import ErrorView
-from schooltool.skin.flourish.page import NoSidebarPage
-
-
-class NotFound(object):
-
-    def __call__(self, *args, **kw):
-        self.request.response.setStatus(404)
-        return super(NotFound, self).__call__(*args, **kw)
+from schooltool.testing.selenium import collect_ftests
+from schooltool.person.stesting import person_selenium_layer
 
 
-class ErrorPage(NoSidebarPage, ErrorView):
-    container_class = 'container extra-wide-container'
-
-    def __call__(self, *args, **kw):
-        self.request.response.setStatus(500)
-        return NoSidebarPage.__call__(self, *args, **kw)
+def test_suite():
+    return collect_ftests(layer=person_selenium_layer)
 
 
-class UnauthorizedPage(NoSidebarPage, Unauthorized):
-
-    def render(self, *args, **kw):
-        return Unauthorized.__call__(self)
+if __name__ == '__main__':
+    unittest.main(defaultTest='test_suite')

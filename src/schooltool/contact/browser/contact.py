@@ -197,6 +197,7 @@ class FlourishContactAddView(flourish.page.NoSidebarPage, ContactAddView):
             'contact_information': (
                 _('Contact Information'),
                 ['home_phone', 'work_phone', 'mobile_phone', 'email',
+                 'other_1', 'other_2',
                  'language']),
             }
         self.fieldset_order = (
@@ -386,6 +387,7 @@ class FlourishContactEditView(flourish.page.NoSidebarPage,
             'contact_information': (
                 _('Contact Information'),
                 ['home_phone', 'work_phone', 'mobile_phone', 'email',
+                 'other_1', 'other_2',
                  'language']),
             }
         self.fieldset_order = (
@@ -583,8 +585,13 @@ class FlourishContactFilterWidget(ContactFilterWidget):
     def match(self, item, idx, search_terms):
         matches = []
         for term in search_terms:
-            if term in idx.documents_to_values[item['id']].lower():
-               matches.append(term)
+            try:
+                if term in idx.documents_to_values[item['id']].lower():
+                    matches.append(term)
+            except:
+                import pdb; pdb.set_trace()
+                if term in idx.documents_to_values[item['id']].lower():
+                    matches.append(term)
         return len(matches) == len(search_terms)
 
     def filter(self, items):

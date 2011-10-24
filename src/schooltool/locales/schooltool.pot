@@ -17,7 +17,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
-"POT-Creation-Date: 2011-10-01 14:51-0600\n"
+"POT-Creation-Date: 2011-10-12 18:58+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Schooltool Development Team <schooltool-dev@schooltool.org>\n"
@@ -6284,11 +6284,15 @@ msgstr ""
 msgid "No new password was supplied so original password is unchanged"
 msgstr ""
 
-#: /src/schooltool/person/browser/person.py:327
-msgid "Changed password"
+#: /src/schooltool/person/browser/person.py:337
+msgid "Password changed successfully. Next, you will be required to authenticate with your new credentials"
 msgstr ""
 
-#: /src/schooltool/person/browser/person.py:345
+#: /src/schooltool/person/browser/person.py:341
+msgid "Password changed successfully"
+msgstr ""
+
+#: /src/schooltool/person/browser/person.py:359
 #: /src/schooltool/person/security.zcml:101
 msgid "Change password"
 msgstr ""

@@ -6,6 +6,7 @@ CHANGES
 ------------------
 
 - XLS import of boolean or required demo fields (https://bugs.launchpad.net/bugs/859424)
+- Make sandbox with virtualenv. Fixes bootstrap with Python 2.7.
 
 
 1.9.1 (2011-10-07)

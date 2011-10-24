@@ -22,6 +22,7 @@ Group Timetable caledar views.
 $Id$
 """
 import urllib
+import pytz
 from datetime import datetime, timedelta
 from time import strptime
 
@@ -47,6 +48,7 @@ from schooltool.skin import flourish
 from schooltool.person.interfaces import IPerson
 from schooltool.app.cal import CalendarEvent
 from schooltool.term.interfaces import IDateManager
+from schooltool.app.browser import ViewPreferences
 
 from schooltool.common import SchoolToolMessage as _
 
@@ -92,6 +94,11 @@ class YearlyBookingCalendarView(YearlyCalendarView, BookingCalendarViewBase):
 class CalendarEventBookOneResourceView(BrowserView):
     """A view to book a resource to an event."""
 
+    @property
+    def timezone(self):
+        prefs = ViewPreferences(self.request)
+        return prefs.timezone
+
     def __call__(self):
         app = ISchoolToolApplication(None)
         person = IPerson(self.request.principal, None)
@@ -107,6 +114,8 @@ class CalendarEventBookOneResourceView(BrowserView):
             start_datetime = "%s %s" % (start_date, start_time)
             start_datetime = datetime(*strptime(start_datetime,
                                                 "%Y-%m-%d %H:%M")[0:6])
+            start_datetime = self.timezone.localize(start_datetime)
+            start_datetime = start_datetime.astimezone(pytz.UTC)
             duration = timedelta(seconds=int(self.request.get('duration')))
             event = CalendarEvent(dtstart = start_datetime,
                                   duration = duration,

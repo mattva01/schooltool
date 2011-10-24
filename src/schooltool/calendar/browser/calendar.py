@@ -263,13 +263,19 @@ class CalendarTomorrowEvents(flourish.page.Refine):
         tomorrow = today + today.resolution
         return tomorrow
 
+    def get_start_time(self, event, timezone):
+        if event.allday:
+            # We could make it clearer that this is an all day event
+            return ""
+        else:
+            return event.dtstart.astimezone(timezone).strftime('%H:%M')
+
     @Lazy
     def events(self):
         cursor = self.cursor
         all_events = self.view.dayEvents(cursor)
         timezone = self.view.timezone
-        get_time = lambda t: t.astimezone(timezone).strftime('%H:%M')
-        result = [{'event': e, 'time': get_time(e.dtstart)}
+        result = [{'event': e, 'time': self.get_start_time(e, timezone)}
                   for e in all_events
                   if e.dtstart.date() == cursor]
         return result

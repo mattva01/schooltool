@@ -153,6 +153,21 @@ class UpdateSelectedPeriodsSchedules(ObjectEventAdapterSubscriber):
                 zope.lifecycleevent.modified(container)
 
 
+class RemoveRelatedSelectedPeriodsSchedules(ObjectEventAdapterSubscriber):
+    adapts(zope.lifecycleevent.interfaces.IObjectRemovedEvent,
+           interfaces.ITimetable)
+
+    def __call__(self):
+        app = ISchoolToolApplication(None)
+        # XXX: extremely nasty loop through all schedules.
+        schedule_containers = app[SCHEDULES_KEY]
+        for container in schedule_containers.values():
+            for schedule in container.values():
+                if (interfaces.ISelectedPeriodsSchedule.providedBy(schedule) and
+                    sameProxiedObjects(schedule.timetable, self.object)):
+                    del container[schedule.__name__]
+
+
 class SchooldaysForSchedule(object):
     adapts(interfaces.ISchedule)
     implements(interfaces.ISchooldays)

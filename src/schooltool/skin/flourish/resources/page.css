@@ -113,6 +113,11 @@
     padding: 16px;
 }
 
+.page > .body > .extra-wide-container {
+    width: 912px;
+    padding: 16px;
+}
+
 /* Sidebar */
 
 .page > .body > .sidebar > .content {
