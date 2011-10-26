@@ -7,6 +7,7 @@ CHANGES
 
 - XLS import of boolean or required demo fields (https://bugs.launchpad.net/bugs/859424)
 - Make sandbox with virtualenv. Fixes bootstrap with Python 2.7.
+- Terms are listed upside down (https://bugs.launchpad.net/bugs/872240)
 
 
 1.9.1 (2011-10-07)

@@ -752,7 +752,7 @@ class FlourishManageYearsOverview(flourish.page.Content):
     def terms(self):
         terms = ITermContainer(self.schoolyear, None)
         if terms is not None:
-            return sorted(terms.values(), key=lambda t:t.first, reverse=True)
+            return sorted(terms.values(), key=lambda t:t.first)
 
 
 class TermContainerBreadcrumb(flourish.breadcrumbs.Breadcrumbs):
