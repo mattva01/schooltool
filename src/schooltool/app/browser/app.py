@@ -459,7 +459,7 @@ class LoggedInNameViewlet(LoginNavigationViewlet):
             'title')
         if title_content is None:
             return ''
-        return title_content.title
+        return '%s (%s)' % (title_content.title(), person.username)
 
 
 class BreadcrumbViewlet(flourish.viewlet.Viewlet):

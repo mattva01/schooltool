@@ -290,6 +290,11 @@ class PersonView(PersonForm, form.DisplayForm):
 class FlourishPersonView(flourish.page.Page):
     """Person index.html view."""
 
+    @property
+    def title(self):
+        return "%s %s (%s)" % (self.context.first_name, self.context.last_name,
+                               self.context.username)
+
 
 class FlourishPersonInfo(flourish.page.Content):
     body_template = ViewPageTemplateFile('templates/f_person_view_details.pt')
@@ -770,7 +775,8 @@ class FlourishGeneralViewlet(Viewlet):
     @property
     def table(self):
         rows = []
-        fields = field.Fields(IBasicPerson)
+        fields = field.Fields(IPerson).select('username')
+        fields += field.Fields(IBasicPerson)
         for attr in fields:
             value = getattr(self.context, attr)
             if value:
