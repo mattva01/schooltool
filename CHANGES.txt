@@ -10,6 +10,7 @@ CHANGES
 - Terms are listed upside down (https://bugs.launchpad.net/bugs/872240)
 - User information doesn't show username (https://bugs.launchpad.net/bugs/545767)
 - moved Attributes accordion contents into General Information accordion
+- username in login bar should go to user home (https://bugs.launchpad.net/bugs/868394)
 
 
 1.9.1 (2011-10-07)
