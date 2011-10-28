@@ -517,6 +517,7 @@
 
   <flourish:viewlet
       name="advisory"
+      after="contacts-accordion"
       for="schooltool.basicperson.interfaces.IBasicPerson"
       manager="schooltool.basicperson.browser.person.IFlourishPersonInfoManager"
       class="schooltool.basicperson.browser.person.FlourishAdvisoryViewlet"
@@ -529,15 +530,6 @@
       for="schooltool.basicperson.interfaces.IBasicPerson"
       manager="schooltool.basicperson.browser.person.IFlourishPersonInfoManager"
       class="schooltool.basicperson.browser.person.FlourishGeneralViewlet"
-      render="template"
-      permission="schooltool.view"
-      />
-  <flourish:viewlet
-      name="demographics"
-      before="advisory"
-      for="schooltool.basicperson.interfaces.IBasicPerson"
-      manager="schooltool.basicperson.browser.person.IFlourishPersonInfoManager"
-      class="schooltool.basicperson.browser.person.FlourishDemographicsViewlet"
       render="template"
       permission="schooltool.view"
       />

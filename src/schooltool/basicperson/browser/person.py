@@ -290,11 +290,6 @@ class PersonView(PersonForm, form.DisplayForm):
 class FlourishPersonView(flourish.page.Page):
     """Person index.html view."""
 
-    @property
-    def title(self):
-        return "%s %s (%s)" % (self.context.first_name, self.context.last_name,
-                               self.context.username)
-
 
 class FlourishPersonInfo(flourish.page.Content):
     body_template = ViewPageTemplateFile('templates/f_person_view_details.pt')
@@ -748,11 +743,26 @@ class FlourishAdvisoryViewlet(Viewlet):
         return canAccess(self.context.__parent__, '__delitem__')
 
 
-class FlourishGeneralViewlet(Viewlet):
+class FlourishGeneralViewlet(FormViewlet):
     """A viewlet showing the core attributes of a person."""
 
     template = ViewPageTemplateFile('templates/f_generalViewlet.pt')
     body_template = None
+    mode = DISPLAY_MODE
+
+    def getFields(self):
+        field_descriptions = IDemographicsFields(ISchoolToolApplication(None))
+        fields = field.Fields()
+        limit_keys = [group.__name__ for group in self.context.groups]
+        for field_desc in field_descriptions.filter_keys(limit_keys):
+            fields += field_desc.makeField()
+        return fields
+
+    @property
+    def filtered_widgets(self):
+        result = [widget for widget in self.widgets.values()
+                  if widget.value]
+        return result
 
     @property
     def heading(self):
@@ -775,8 +785,8 @@ class FlourishGeneralViewlet(Viewlet):
     @property
     def table(self):
         rows = []
-        fields = field.Fields(IPerson).select('username')
-        fields += field.Fields(IBasicPerson)
+        fields = field.Fields(IBasicPerson)
+        fields += field.Fields(IPerson).select('username')
         for attr in fields:
             value = getattr(self.context, attr)
             if value:
@@ -792,35 +802,9 @@ class FlourishGeneralViewlet(Viewlet):
     def canModify(self):
         return canAccess(self.context.__parent__, '__delitem__')
 
-
-class FlourishDemographicsViewlet(FormViewlet):
-    """A viewlet showing the demographics of a person."""
-
-    template = ViewPageTemplateFile('templates/f_demographicsViewlet.pt')
-    body_template = None
-    mode = DISPLAY_MODE
-
-    def getFields(self):
-        field_descriptions = IDemographicsFields(ISchoolToolApplication(None))
-        fields = field.Fields()
-        limit_keys = [group.__name__ for group in self.context.groups]
-        for field_desc in field_descriptions.filter_keys(limit_keys):
-            fields += field_desc.makeField()
-        return fields
-
-    @property
-    def filtered_widgets(self):
-        result = [widget for widget in self.widgets.values()
-                  if widget.value]
-        return result
-
     def update(self):
         self.fields = self.getFields()
-        super(FlourishDemographicsViewlet, self).update()
-
-    @property
-    def canModify(self):
-        return canAccess(self.context.__parent__, '__delitem__')
+        super(FlourishGeneralViewlet, self).update()
 
 
 ###############  Base class of all group-aware add views ################

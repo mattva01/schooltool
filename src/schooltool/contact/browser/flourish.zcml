@@ -214,7 +214,7 @@
 
   <flourish:viewlet
       name="contacts-accordion"
-      before="demographics"
+      before="advisory"
       for="schooltool.basicperson.interfaces.IBasicPerson"
       manager="schooltool.basicperson.browser.person.IFlourishPersonInfoManager"
       class=".contact.FlourishContactsViewlet"
