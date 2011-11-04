@@ -175,15 +175,14 @@ Let's add a couple of school timetables:
     >>> manager.getControl('Next').click()
     >>> manager.getControl('Days of the week').click()
     >>> manager.getControl('Different times').click()
-    >>> manager.getControl(name='times.0').value = '9:00\n10:00'
-    >>> manager.getControl(name='times.1').value = '9:00\n10:00'
-    >>> manager.getControl(name='times.2').value = '9:00\n10:00'
-    >>> manager.getControl(name='times.3').value = '8:00\n11:00'
-    >>> manager.getControl(name='times.4').value = '8:00\n11:00'
+    >>> manager.getControl(name='times.0').value = '9:00-10:00\n10:00-11:00'
+    >>> manager.getControl(name='times.1').value = '9:00-10:00\n10:00-11:00'
+    >>> manager.getControl(name='times.2').value = '9:00-10:00\n10:00-11:00'
+    >>> manager.getControl(name='times.3').value = '8:00-9:00\n11:00-12:00'
+    >>> manager.getControl(name='times.4').value = '8:00-9:00\n11:00-12:00'
     >>> manager.getControl('Next').click()
-    >>> manager.printQuery('//form')
     >>> manager.getControl('Have names').click()
-    >>> manager.getControl(name='field.perions').value = 'A\nB\nC\nD'
+    >>> manager.getControl(name='field.periods').value = 'A\nB\nC\nD'
     >>> manager.getControl('Next').click()
     >>> manager.getControl('Same').click()
     >>> manager.getControl('Next').click()

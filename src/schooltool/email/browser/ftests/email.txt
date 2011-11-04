@@ -109,7 +109,8 @@ required:
     <div id="message">
       <div class="summary">There were some errors.</div>
       <ul class="errors"><li>
-          <div class="error">Hostname is required for enabling the service</div>
+        Hostname:
+        <div class="error">Hostname is required for enabling the service</div>
         </li>
       </ul></div>
 
@@ -515,22 +516,24 @@ Now, let's go to our Settings and test the password functionality:
     >>> # CURRENT PASSWORD
     >>> manager.printQuery('id("form-widgets-dummy_password-row")//label')
     <label for="form-widgets-dummy_password">
-      <span>Current Password</span>
+      <span>Password</span>
     </label>
+
     >>> manager.printQuery('id("form-widgets-dummy_password-row")/'
     ...                    'div[@class="widget"]/span')
-    <span id="form-widgets-dummy_password" class="...">Unset</span>
+    <span id="form-widgets-dummy_password" class="..."></span>
 
 The password confirmation:
 
-    >>> manager.getControl('New Password', index=1).value = 'secret'
+    >>> manager.getControl('New Password', index=0).value = 'secret'
     >>> manager.getControl('Confirm New Password').value = 'public'
     >>> manager.getControl('Apply').click()
     >>> manager.printQuery('id("message")')
     <div id="message">
       <div class="summary">There were some errors.</div>
       <ul class="errors"><li>
-          <div class="error">New passwords don't match</div>
+        New Password:
+        <div class="error">Supplied new passwords are not identical</div>
         </li>
       </ul></div>
 

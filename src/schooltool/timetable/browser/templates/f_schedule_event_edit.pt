@@ -51,7 +51,6 @@
 
     <h3>
       <tal:block i18n:translate="">Reserved resources</tal:block>
-
       <a class="modify" href=""
          tal:condition="context/schooltool:can_edit"
          title="Change the resources reserved for this event"
@@ -65,9 +64,14 @@
 
     <ul tal:condition="resources">
       <li tal:repeat="resource resources">
-        <a href=""
-           tal:attributes="href string:${resource/@@absolute_url}"
-           tal:content="resource/title" />
+        <tal:block condition="resource/schooltool:can_view">
+          <a href=""
+             tal:attributes="href string:${resource/@@absolute_url}"
+             tal:content="resource/title" />
+        </tal:block>
+        <tal:block condition="not:resource/schooltool:can_view">
+          <span tal:content="resource/title" />
+        </tal:block>
       </li>
     </ul>
     <p tal:condition="not:resources" i18n:translate="">

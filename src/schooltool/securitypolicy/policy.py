@@ -68,3 +68,87 @@ class SchoolToolSecurityPolicy(ParanoidSecurityPolicy):
                 if crowd.contains(participation.principal):
                     return True
         return False
+
+
+class CachingSecurityPolicy(ParanoidSecurityPolicy):
+    """Crowd-based caching security policy."""
+
+    def cacheKey(self, permission, obj):
+        return (permission, id(obj))
+
+    def checkCache(self, permission, obj):
+        key = self.cacheKey(permission, obj)
+        if key is None:
+            return None # uncacheable
+        result = None
+        for participation in self.participations:
+            cache = getattr(participation, '_st_perm_cache', None)
+            if cache is not None:
+                perm = cache['perm'].get(key, None)
+                result = max(result, perm)
+        return result
+
+    def cache(self, participation, permission, obj, value):
+        key = self.cacheKey(permission, obj)
+        if key is None:
+            return # uncacheable
+        cache = getattr(participation, '_st_perm_cache', None)
+        if cache is None:
+            cache = {'perm': {}}
+            try:
+                participation._perm_cache = cache
+            except AttributeError:
+                return
+        cache['perm'][key] = value
+
+    def checkPermission(self, permission, obj):
+        """Return True if principal has permission on object."""
+
+        perm = self.checkCache(permission, obj)
+        if perm is not None:
+            return perm
+
+        perm = self.checkPermissionCrowds(permission, obj)
+        if perm is not None:
+            return perm
+
+        perm = self.checkByAdaptation(permission, obj)
+        return perm
+
+    def checkByAdaptation(self, permission, obj):
+        crowd = queryAdapter(obj, ICrowd, name=permission, default=None)
+        # If there is no crowd that has the given permission on this
+        # object, try to look up a crowd that includes the parent.
+        objects = [obj]
+        while crowd is None and obj is not None:
+            obj = getParent(obj)
+            objects.append(obj)
+            crowd = queryAdapter(obj, ICrowd, name=permission, default=None)
+        if crowd is None: # no crowds found
+            raise AssertionError('no crowd found for', obj, permission)
+
+        for participation in self.participations:
+            if crowd.contains(participation.principal):
+                for o in objects:
+                    self.cache(participation, permission, o, True)
+                return True
+            else:
+                for o in objects:
+                    self.cache(participation, permission, o, False)
+        else:
+            return False
+
+    def checkPermissionCrowds(self, permission, obj):
+        """Check object-independent crowds."""
+        factories = getCrowdsUtility().getFactories(permission, None)
+        if not factories:
+            return None
+
+        for participation in self.participations:
+            for factory in factories:
+                crowd = factory(obj)
+                if crowd.contains(participation.principal):
+                    self.cache(participation, permission, obj, True)
+                    return True
+            self.cache(participation, permission, obj, False)
+        return False
