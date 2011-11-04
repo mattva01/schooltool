@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-01 14:51-0600\n"
-"PO-Revision-Date: 2011-10-03 15:54+0000\n"
+"POT-Creation-Date: 2011-10-12 18:58+0300\n"
+"PO-Revision-Date: 2011-10-26 17:21+0000\n"
 "Last-Translator: Douglas Cerna <douglascerna@yahoo.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-10-06 05:03+0000\n"
-"X-Generator: Launchpad (build 14085)\n"
+"X-Launchpad-Export-Date: 2011-10-27 05:45+0000\n"
+"X-Generator: Launchpad (build 14197)\n"
 "Language: es\n"
 
 #: /src/schooltool/app/app.py:193
@@ -6267,9 +6267,9 @@ msgid ""
 "students over multiple years -- for performance testing. This set can take a "
 "very long time to be imported and may fail on systems with inadequate memory."
 msgstr ""
-"También proporcionamos un conjunto grande de datos: ${link-to-sample-data} --"
-" 1000 estudiantes en múltiples años -- para pruebas de desempeño. Este "
-"conjunto puede tomar mucho tiempo para ser importado y puede fallar en "
+"También proporcionamos un conjunto grande de datos: ${link-to-sample-data-"
+"file} -- 1000 estudiantes en múltiples años -- para pruebas de desempeño. "
+"Este conjunto puede tomar mucho tiempo para ser importado y puede fallar en "
 "sistemas con memoria inadecuada."
 
 #: /src/schooltool/export/templates/f_import_related.pt:33
@@ -6804,11 +6804,19 @@ msgstr ""
 "No ha escrito una nueva contraseña, así que la contraseña original no ha "
 "sido modificada"
 
-#: /src/schooltool/person/browser/person.py:327
-msgid "Changed password"
-msgstr "Cambiar contraseña"
+#: /src/schooltool/person/browser/person.py:337
+msgid ""
+"Password changed successfully. Next, you will be required to authenticate "
+"with your new credentials"
+msgstr ""
+"La contraseña se cambió exitosamente. A continuación, se le pedirá que "
+"ingrese con sus nuevas credenciales."
 
-#: /src/schooltool/person/browser/person.py:345
+#: /src/schooltool/person/browser/person.py:341
+msgid "Password changed successfully"
+msgstr "La contraseña se cambió exitosamente"
+
+#: /src/schooltool/person/browser/person.py:359
 #: /src/schooltool/person/security.zcml:101
 msgid "Change password"
 msgstr "Cambiar contraseña"
@@ -9034,3 +9042,6 @@ msgstr "Horarios de clases"
 #: /src/schooltool/widget/password.py:55
 msgid "Supplied passwords are not identical"
 msgstr "Las contraseñas proporcionadas no son idénticas."
+
+#~ msgid "Changed password"
+#~ msgstr "Cambiar contraseña"
