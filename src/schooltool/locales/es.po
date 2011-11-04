@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-01 14:51-0600\n"
-"PO-Revision-Date: 2011-10-03 15:10+0000\n"
-"Last-Translator: gh05t2k <Unknown>\n"
+"POT-Creation-Date: 2011-10-12 18:58+0300\n"
+"PO-Revision-Date: 2011-10-31 21:35+0000\n"
+"Last-Translator: Morgus <Unknown>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-10-06 05:01+0000\n"
-"X-Generator: Launchpad (build 14085)\n"
+"X-Launchpad-Export-Date: 2011-11-01 05:37+0000\n"
+"X-Generator: Launchpad (build 14197)\n"
 "Language: es\n"
 
 #: /src/schooltool/app/app.py:193
@@ -96,11 +96,11 @@ msgstr "Identificarse"
 
 #: /src/schooltool/app/browser/app.py:435
 msgid "Log out"
-msgstr ""
+msgstr "Cerrar Sesión"
 
 #: /src/schooltool/app/browser/app.py:523
 msgid "Calendar settings"
-msgstr ""
+msgstr "Configuración de calendario"
 
 #: /src/schooltool/app/browser/app.py:528
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:31
@@ -197,7 +197,7 @@ msgstr "Cancelar"
 #: /src/schooltool/app/browser/flourish.zcml:228
 #: /src/schooltool/app/browser/flourish.zcml:580
 msgid "School Name"
-msgstr ""
+msgstr "Nombre de la escuela"
 
 #: /src/schooltool/app/browser/app.py:557
 #: /src/schooltool/demographics/interfaces.py:245
@@ -247,7 +247,7 @@ msgstr "escuela"
 #: /src/schooltool/securitypolicy/browser/flourish.zcml:15
 #: /src/schooltool/securitypolicy/browser/flourish.zcml:44
 msgid "Server"
-msgstr ""
+msgstr "Servidor"
 
 #: /src/schooltool/app/browser/app.py:852
 #: /src/schooltool/app/browser/app.py:937
@@ -270,15 +270,15 @@ msgstr ""
 
 #: /src/schooltool/app/browser/app.py:877
 msgid "Live"
-msgstr ""
+msgstr "En vivo"
 
 #: /src/schooltool/app/browser/app.py:887
 msgid "Unknown"
-msgstr ""
+msgstr "Deconocido"
 
 #: /src/schooltool/app/browser/app.py:889
 msgid "Backup"
-msgstr ""
+msgstr "Copia de seguridad"
 
 #: /src/schooltool/app/browser/app.py:909
 msgid "Database successfully packed."
@@ -312,7 +312,22 @@ msgstr ""
 #: /src/schooltool/app/browser/app.py:998
 #: /src/schooltool/app/browser/flourish.zcml:292
 msgid "Errors Settings"
-msgstr ""
+msgstr "Ajustes erróneos"
+
+#: /src/schooltool/app/browser/app.py:1005
+#: /src/schooltool/basicperson/browser/demographics.py:413
+#: /src/schooltool/basicperson/browser/demographics.py:473
+#: /src/schooltool/basicperson/browser/person.py:951
+#: /src/schooltool/course/browser/course.py:568
+#: /src/schooltool/course/browser/section.py:1261
+#: /src/schooltool/group/browser/group.py:669
+#: /src/schooltool/schoolyear/browser/schoolyear.py:490
+#: /src/schooltool/schoolyear/browser/schoolyear.py:538
+#: /src/schooltool/schoolyear/browser/templates/f_schoolyear_activate.pt:23
+#: /src/schooltool/term/browser/term.py:291
+#: /src/schooltool/term/browser/term.py:404
+msgid "Submit"
+msgstr "Enviar"
 
 #: /src/schooltool/app/browser/app.py:1025
 #: /src/schooltool/app/browser/configure.zcml:670
@@ -895,7 +910,7 @@ msgstr "Tipo"
 
 #: /src/schooltool/app/browser/cal.py:2283
 msgid "Booked by others"
-msgstr ""
+msgstr "Reservado por otros"
 
 #: /src/schooltool/app/browser/cal.py:2611
 #: /src/schooltool/app/browser/configure.zcml:532
@@ -1078,7 +1093,7 @@ msgstr "Configuración"
 
 #: /src/schooltool/app/browser/flourish.zcml:218
 msgid "Calendar Settings"
-msgstr ""
+msgstr "Configuración del calendario"
 
 #: /src/schooltool/app/browser/flourish.zcml:228
 #: /src/schooltool/app/browser/templates/f_errors.pt:7
@@ -1143,15 +1158,15 @@ msgstr "Editar"
 
 #: /src/schooltool/app/browser/flourish.zcml:272
 msgid "Error"
-msgstr ""
+msgstr "Error"
 
 #: /src/schooltool/app/browser/flourish.zcml:303
 msgid "About"
-msgstr ""
+msgstr "Acerca de"
 
 #: /src/schooltool/app/browser/flourish.zcml:313
 msgid "More Information"
-msgstr ""
+msgstr "Más información"
 
 #: /src/schooltool/app/browser/flourish.zcml:322
 #: /src/schooltool/app/browser/templates/about.pt:27
@@ -1170,27 +1185,27 @@ msgstr "Lista de correo"
 
 #: /src/schooltool/app/browser/flourish.zcml:351
 msgid "IRC channel"
-msgstr ""
+msgstr "Canal IRC"
 
 #: /src/schooltool/app/browser/flourish.zcml:393
 #: /src/schooltool/export/flourish.zcml:49
 msgid "School"
-msgstr ""
+msgstr "Escuela"
 
 #: /src/schooltool/app/browser/flourish.zcml:410
 msgid "Customize"
-msgstr ""
+msgstr "Personalizar"
 
 #: /src/schooltool/app/browser/flourish.zcml:449
 #: /src/schooltool/course/browser/templates/f_course_view.pt:75
 #: /src/schooltool/group/browser/templates/f_group_view.pt:90
 #: /src/schooltool/resource/browser/templates/f_resource_view.pt:75
 msgid "Responsible parties"
-msgstr ""
+msgstr "Partes responsables"
 
 #: /src/schooltool/app/browser/flourish.zcml:492
 msgid "Information"
-msgstr ""
+msgstr "Información"
 
 #: /src/schooltool/app/browser/flourish.zcml:510
 msgid "Database generations"
@@ -1201,7 +1216,7 @@ msgstr ""
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:7
 #: /src/schooltool/app/browser/templates/f_server_settings_overview.pt:12
 msgid "Database"
-msgstr ""
+msgstr "Base de datos"
 
 #: /src/schooltool/app/browser/flourish.zcml:621
 msgid "Shown Calendars"
@@ -6653,11 +6668,17 @@ msgstr ""
 "No ha escrito una nueva contraseña, así que la contraseña original no ha "
 "sido modificada"
 
-#: /src/schooltool/person/browser/person.py:327
-msgid "Changed password"
-msgstr "Cambiar contraseña"
+#: /src/schooltool/person/browser/person.py:337
+msgid ""
+"Password changed successfully. Next, you will be required to authenticate "
+"with your new credentials"
+msgstr ""
 
-#: /src/schooltool/person/browser/person.py:345
+#: /src/schooltool/person/browser/person.py:341
+msgid "Password changed successfully"
+msgstr ""
+
+#: /src/schooltool/person/browser/person.py:359
 #: /src/schooltool/person/security.zcml:101
 msgid "Change password"
 msgstr "Cambiar contraseña"
@@ -8547,7 +8568,7 @@ msgstr "No seleccionado"
 
 #: /src/schooltool/timetable/browser/templates/timetable_container.pt:68
 msgid "Change"
-msgstr ""
+msgstr "Cambiar"
 
 #: /src/schooltool/timetable/browser/templates/timetable_container_delete.pt:10
 msgid "Are you sure you want to delete the selected timetables?"
@@ -8772,7 +8793,7 @@ msgstr "Por favor, indique los periodos de control para cada día."
 
 #: /src/schooltool/timetable/interfaces.py:46
 msgid "Lesson"
-msgstr ""
+msgstr "Lección"
 
 #: /src/schooltool/timetable/interfaces.py:47
 msgid "Homeroom"
@@ -8784,47 +8805,47 @@ msgstr ""
 
 #: /src/schooltool/timetable/interfaces.py:49
 msgid "Lunch"
-msgstr ""
+msgstr "Almuerzo"
 
 #: /src/schooltool/timetable/interfaces.py:61
 msgid "Activity type."
-msgstr ""
+msgstr "Tipo de actividad."
 
 #: /src/schooltool/timetable/interfaces.py:104
 msgid "First scheduled day"
-msgstr ""
+msgstr "Primer día programado"
 
 #: /src/schooltool/timetable/interfaces.py:108
 msgid "Last scheduled day"
-msgstr ""
+msgstr "Último día programado"
 
 #: /src/schooltool/timetable/interfaces.py:130
 msgid "Exceptions"
-msgstr ""
+msgstr "Excepciones"
 
 #: /src/schooltool/timetable/interfaces.py:131
 msgid "Exceptions by date."
-msgstr ""
+msgstr "Excepciones por fecha."
 
 #: /src/schooltool/timetable/interfaces.py:133
 msgid "Exception date"
-msgstr ""
+msgstr "Fecha de excepción"
 
 #: /src/schooltool/timetable/interfaces.py:135
 msgid "Meetings"
-msgstr ""
+msgstr "Reuniones"
 
 #: /src/schooltool/timetable/interfaces.py:137
 msgid "Meeting"
-msgstr ""
+msgstr "Reunión"
 
 #: /src/schooltool/timetable/interfaces.py:193
 msgid "Activity type"
-msgstr ""
+msgstr "Tipo de actividad"
 
 #: /src/schooltool/timetable/interfaces.py:299
 msgid "Treat consecutive periods as one meeting"
-msgstr ""
+msgstr "Tratar períodos consecutivos como una reunión."
 
 #: /src/schooltool/timetable/security.zcml:36
 msgid "School timetables"
@@ -8833,3 +8854,6 @@ msgstr "Horarios de clases"
 #: /src/schooltool/widget/password.py:55
 msgid "Supplied passwords are not identical"
 msgstr "Las contraseñas proporcionadas no son idénticas."
+
+#~ msgid "Changed password"
+#~ msgstr "Cambiar contraseña"
