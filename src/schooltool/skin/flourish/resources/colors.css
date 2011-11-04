@@ -461,8 +461,28 @@ th.activity-title {
 }
 
 .popup_menu li {
-    background-color: #EEEEEE;
-    border-bottom: solid 1px #808080;
+    background-color: #6c7b7c;
+}
+
+.popup_menu > li > span {
+    background-color: #485454;
+}
+
+.popup_menu li span {
+    color: #ffffff;
+}
+
+.popup_menu li a {
+    color: #ffffff;
+}
+
+.popup_menu li a:hover {
+    background-color: #026B6E;
+}
+
+.popup_menu span.hover_link {
+    font-weight: bold;
+    background-color: #6c7b7c;
 }
 
 /*

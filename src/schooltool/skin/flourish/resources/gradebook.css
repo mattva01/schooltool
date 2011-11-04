@@ -172,12 +172,29 @@
 }
 
 .popup_menu li {
+    display: block;
+}
+
+.popup_menu > li > span {
+    font-weight: bold;
+}
+
+.popup_menu a,
+.popup_menu span {
     padding: 3px 10px 3px 10px;
     display: block;
 }
 
-.popup_menu a {
-    display: block;
+.popup_menu .hover_menu span:before {
+    content: "\00BB \0020";
+}
+
+.popup_menu span.hover_link {
+    font-weight: bold;
+}
+
+.popup_menu .hover_menu a {
+    padding-left: 20px;
 }
 
 /* Section/Term/Year navigation */
