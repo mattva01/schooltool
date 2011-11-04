@@ -346,12 +346,12 @@
     <div class="resources" tal:condition="view/show_book_link">
       <fieldset>
         <legend i18n:translate="">Booked Resources</legend>
-        <table width="100%" condition="context/resources">
+        <table width="100%" condition="view/resources">
           <tr>
             <th align="left">Title</th>
             <th align="left">Type</th>
           </tr>
-          <tal:loop repeat="resource context/resources">
+          <tal:loop repeat="resource view/resources">
             <tr>
               <td>
                 <p tal:replace="resource/title">resource title</p>
@@ -363,7 +363,7 @@
           </tal:loop>
         </table>
 
-        <p tal:condition="not:context/resources">No Resources Booked</p>
+        <p tal:condition="not:view/resources">No Resources Booked</p>
         <br />
 
         <a tal:attributes="href string:${context/@@absolute_url}/booking.html"

@@ -26,6 +26,7 @@ from datetime import datetime, date, time, timedelta
 
 import transaction
 from pytz import utc
+from zope.cachedescriptors.property import Lazy
 from zope.component import getUtility
 from zope.component import queryMultiAdapter, getMultiAdapter
 from zope.component import adapts, adapter
@@ -39,6 +40,7 @@ from zope.security import checkPermission
 from zope.security.interfaces import ForbiddenAttribute, Unauthorized
 from zope.security.proxy import removeSecurityProxy
 from zope.security.checker import canAccess, canWrite
+from zope.security import checkPermission
 from zope.schema import Date, TextLine, Choice, Int, Bool, List, Text
 from zope.schema.interfaces import RequiredMissing, ConstraintNotSatisfied
 from zope.lifecycleevent import ObjectModifiedEvent
@@ -1962,6 +1964,26 @@ class CalendarEventViewMixin(object):
                 'start': start,
                 'duration': duration,
                 'rrule': rrule}
+
+    @Lazy
+    def resources(self):
+        result = []
+        if not checkPermission('schooltool.view', self.context):
+            return result
+
+        for resource in self.context.resources:
+            insecure_resource = removeSecurityProxy(resource)
+            if checkPermission('schooltool.view', resource):
+                url = absoluteURL(insecure_resource, self.request)
+            else:
+                url = ''
+            result.append({
+                'title': insecure_resource.title,
+                'type': insecure_resource.type,
+                'url': url,
+                })
+
+        return result
 
 
 class CalendarEventAddView(CalendarEventViewMixin, AddView):

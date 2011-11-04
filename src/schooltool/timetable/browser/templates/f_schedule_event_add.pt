@@ -158,24 +158,30 @@
     <div class="resources" tal:condition="view/show_book_link">
       <fieldset>
         <legend><span i18n:translate="">Reserved Resources</span></legend>
-        <table width="100%" condition="context/resources">
+        <table width="100%" condition="view/resources">
           <tr>
             <th align="left">Title</th>
             <th align="left">Type</th>
           </tr>
-          <tal:loop repeat="resource context/resources">
+          <tal:loop repeat="resource view/resources">
             <tr>
               <td>
-                <p tal:replace="structure resource/@@link">resource title</p>
+                <tal:block condition="resource/url">
+                  <a tal:content="structure resource/title"
+                     tal:attributes="href resource/url">resource title</a>
+                </tal:block>
+                <tal:block condition="not:resource/url">
+                  <span tal:content="structure resource/title">resource title</span>
+                </tal:block>
               </td>
               <td>
-                <p tal:replace="resource/type">resource type</p>
+                <span tal:content="resource/type">resource type</span>
               </td>
             </tr>
           </tal:loop>
         </table>
 
-        <p tal:condition="not:context/resources">No resources reserved</p>
+        <p tal:condition="not:view/resources">No resources reserved</p>
         <br />
 
         <a tal:attributes="href string:${context/@@absolute_url}/booking.html"
