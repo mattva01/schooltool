@@ -48,7 +48,7 @@ Helpers for printing sections and groups trees:
     >>> def print_sections_tree(response):
     ...     tree = response[0]
     ...     result = []
-    ...     result.append(queryXML('//h5/text()', tree)[0])
+    ...     result.append(queryXML('//h3/text()', tree)[0])
     ...     for year in queryXML('//div[@class="tree_list"]/ul/li', tree):
     ...         result.append('+ %s' % (queryXML('/li/a/text()', year)[0]))
     ...         for term in queryXML('/li/ul/li', year):
@@ -56,6 +56,11 @@ Helpers for printing sections and groups trees:
     ...             for section in queryXML('//a[@class="leaf_url"]/text()', term):
     ...                 result.append('     |- %s' % (section,))
     ...     print "\n".join(result)
+
+    >>> def print_sections_trees(response):
+    ...     root = response[0]
+    ...     for node in queryXML('//div[contains(@class,"info-block")]', root):
+    ...         print_sections_tree([node])
 
     >>> def print_groups_tree(response):
     ...     tree = response[0]
@@ -138,17 +143,16 @@ Check Tom's person info blocks:
     >>> manager.getLink('Persons').click()
     >>> manager.getLink('Tom').click()
 
-    >>> manager.printQuery('//div[@class="person-info"]/'
-    ...                    'div[contains(@class, "info-block")]/h5/text()')
+    >>> manager.printQuery('//div[@class="person-info"]/div/h5/text()')
     Details
-    Sections Taught
+    Sections
     Groups
+
 
 Sections taught by Tom:
 
-    >>> info_block = manager.queryHTML('//div[@class="person-info"]/'
-    ...                                'div[contains(@class, "info-block")][2]')
-    >>> print_sections_tree(info_block)
+    >>> info_block = manager.queryHTML('//div[@class="person-info"]/div[2]')
+    >>> print_sections_trees(info_block)
     Sections Taught
     + 2010
       |+ Q1
@@ -168,8 +172,7 @@ Sections taught by Tom:
 
 Tom's groups:
 
-    >>> info_block = manager.queryHTML('//div[@class="person-info"]/'
-    ...                               'div[contains(@class, "info-block")][3]')
+    >>> info_block = manager.queryHTML('//div[@class="person-info"]/div[3]')
     >>> print_groups_tree(info_block)
     Groups
     + 2010
@@ -183,18 +186,15 @@ Check Jeffrey's person info blocks:
     >>> manager.getLink('Persons').click()
     >>> manager.getLink('Jeffrey').click()
 
-    >>> manager.printQuery('//div[@class="person-info"]/'
-    ...                    'div[contains(@class, "info-block")]/h5/text()')
+    >>> manager.printQuery('//div[@class="person-info"]/div/h5/text()')
     Details
-    Sections Taught
     Sections
     Groups
 
 Sections taught by Jeffrey:
 
-    >>> info_block = manager.queryHTML('//div[@class="person-info"]/'
-    ...                                'div[contains(@class, "info-block")][2]')
-    >>> print_sections_tree(info_block)
+    >>> info_block = manager.queryHTML('//div[@class="person-info"]/div[2]')
+    >>> print_sections_trees(info_block)
     Sections Taught
     + 2011
       |+ Year
@@ -205,13 +205,7 @@ Sections taught by Jeffrey:
          |- Programming -- Z
       |+ Final
          |- Programming -- A
-
-Sections attended by Jeffrey:
-
-    >>> info_block = manager.queryHTML('//div[@class="person-info"]/'
-    ...                                'div[contains(@class, "info-block")][3]')
-    >>> print_sections_tree(info_block)
-    Sections
+    Sections Attended
     + 2009
       |+ Initial
          |- Math -- First
@@ -222,7 +216,7 @@ Sections attended by Jeffrey:
 Jeffrey's groups:
 
     >>> info_block = manager.queryHTML('//div[@class="person-info"]/'
-    ...                               'div[contains(@class, "info-block")][4]')
+    ...                               'div[contains(@class, "info-block")][2]')
     >>> print_groups_tree(info_block)
     Groups
     + 2011
@@ -239,18 +233,16 @@ Check Ariana's person info blocks:
     >>> manager.getLink('Persons').click()
     >>> manager.getLink('Ariana').click()
 
-    >>> manager.printQuery('//div[@class="person-info"]/'
-    ...                    'div[contains(@class, "info-block")]/h5/text()')
+    >>> manager.printQuery('//div[@class="person-info"]/div/h5/text()')
     Details
     Sections
     Groups
 
 Sections attended by Ariana:
 
-    >>> info_block = manager.queryHTML('//div[@class="person-info"]/'
-    ...                                'div[contains(@class, "info-block")][2]')
-    >>> print_sections_tree(info_block)
-    Sections
+    >>> info_block = manager.queryHTML('//div[@class="person-info"]/div[2]')
+    >>> print_sections_trees(info_block)
+    Sections Attended
     + 2011
       |+ Year
          |- Pop -- Pop101
@@ -272,7 +264,7 @@ Sections attended by Ariana:
 Ariana's groups:
 
     >>> info_block = manager.queryHTML('//div[@class="person-info"]/'
-    ...                               'div[contains(@class, "info-block")][3]')
+    ...                               'div[contains(@class, "info-block")][2]')
     >>> print_groups_tree(info_block)
     Groups
     + 2011
@@ -289,18 +281,16 @@ Check Mario's person info blocks:
     >>> manager.getLink('Persons').click()
     >>> manager.getLink('Mario').click()
 
-    >>> manager.printQuery('//div[@class="person-info"]/'
-    ...                    'div[contains(@class, "info-block")]/h5/text()')
+    >>> manager.printQuery('//div[@class="person-info"]/div/h5/text()')
     Details
     Sections
     Groups
 
 Sections attended by Mario:
 
-    >>> info_block = manager.queryHTML('//div[@class="person-info"]/'
-    ...                                'div[contains(@class, "info-block")][2]')
-    >>> print_sections_tree(info_block)
-    Sections
+    >>> info_block = manager.queryHTML('//div[@class="person-info"]/div[2]')
+    >>> print_sections_trees(info_block)
+    Sections Attended
     + 2011
       |+ Year
          |- Classic -- This is classic music
@@ -325,7 +315,7 @@ Sections attended by Mario:
 Mario's groups:
 
     >>> info_block = manager.queryHTML('//div[@class="person-info"]/'
-    ...                               'div[contains(@class, "info-block")][3]')
+    ...                               'div[contains(@class, "info-block")][2]')
     >>> print_groups_tree(info_block)
     Groups
 
@@ -347,18 +337,16 @@ But Ariana can't:
 
 Check Ariana's person info blocks:
 
-    >>> ariana.printQuery('//div[@class="person-info"]/'
-    ...                   'div[contains(@class, "info-block")]/h5/text()')
+    >>> ariana.printQuery('//div[@class="person-info"]/div/h5/text()')
     Details
     Sections
     Groups
 
 Sections attended by Ariana:
 
-    >>> info_block = ariana.queryHTML('//div[@class="person-info"]/'
-    ...                               'div[contains(@class, "info-block")][2]')
-    >>> print_sections_tree(info_block)
-    Sections
+    >>> info_block = ariana.queryHTML('//div[@class="person-info"]/div[2]')
+    >>> print_sections_trees(info_block)
+    Sections Attended
     + 2011
       |+ Year
          |- Pop -- Pop101
@@ -380,7 +368,7 @@ Sections attended by Ariana:
 Ariana's groups:
 
     >>> info_block = ariana.queryHTML('//div[@class="person-info"]/'
-    ...                               'div[contains(@class, "info-block")][3]')
+    ...                               'div[contains(@class, "info-block")][2]')
     >>> print_groups_tree(info_block)
     Groups
     + 2011
