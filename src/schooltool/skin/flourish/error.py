@@ -33,6 +33,7 @@ class NotFound(object):
 
 
 class ErrorPage(NoSidebarPage, ErrorView):
+    container_class = 'container extra-wide-container'
 
     def __call__(self, *args, **kw):
         self.request.response.setStatus(500)

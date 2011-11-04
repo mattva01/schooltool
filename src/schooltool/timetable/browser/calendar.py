@@ -320,7 +320,6 @@ class ScheduleDailyCalendarRowsView(DailyCalendarRowsView):
         default_schedule = timetable_container.default
         if default_schedule is None:
             return []
-        # XXX: this back-and-forth zone name to zone conversion is annoying
         meetings = list(iterMeetingsInTimezone(
                 default_schedule, timezone, date))
         return meetings
@@ -338,18 +337,20 @@ class ScheduleDailyCalendarRowsView(DailyCalendarRowsView):
             (self.meetingTitle(meeting), meeting.dtstart, meeting.duration)
             for meeting in meetings]
 
-        if meeting_rows:
-            starthour = min(starthour, meeting_rows[0][1].hour)
-            endhour = max(endhour, meeting_rows[-1][1].hour)
-
         daystart = tz.localize(datetime.combine(cursor, time()))
 
         rows = []
 
-        row_start = daystart + timedelta(hours=starthour)
-        rows_end = daystart + timedelta(hours=endhour+1)
+        row_start = tz.localize(datetime.combine(cursor, time(starthour, 0)))
+        rows_end = tz.localize(datetime.combine(cursor, time(endhour, 0)))
+        rows_end = tz.normalize(rows_end + timedelta(hours=1))
 
-        while row_start <= rows_end:
+        if meeting_rows:
+            row_start = min(row_start, meeting_rows[0][1].astimezone(tz))
+            meet_end = meeting_rows[-1][1] + meeting_rows[-1][2]
+            rows_end = max(rows_end, meet_end.astimezone(tz))
+
+        while row_start < rows_end:
             row = None
             if meeting_rows:
                 time_until_meeting = meeting_rows[0][1] - row_start
@@ -361,15 +362,16 @@ class ScheduleDailyCalendarRowsView(DailyCalendarRowsView):
                            row_start, time_until_meeting)
 
             if row is None:
-                delta = (daystart +
-                         timedelta(hours=row_start.hour+1) -
-                         row_start)
+                hstart = tz.normalize(row_start + timedelta(hours=1))
+                hstart = hstart.replace(minute=0, second=0, microsecond=0)
+                delta = hstart - row_start
                 if delta < timedelta(minutes=15):
                     delta += timedelta(hours=1)
                 row = (self.rowTitle(row_start.time(), delta), row_start, delta)
 
-            rows.append(row)
-            row_start = row_start + row[2]
+            if row[1].astimezone(tz).date() == daystart.date():
+                rows.append(row)
+            row_start = tz.normalize(row_start + row[2])
         return rows
 
 

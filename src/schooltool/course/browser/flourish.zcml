@@ -124,6 +124,7 @@
 
   <flourish:viewlet
       name="coursesinfo"
+      after="advisory"
       for="schooltool.basicperson.interfaces.IBasicPerson"
       manager="schooltool.basicperson.browser.person.IFlourishPersonInfoManager"
       class="schooltool.course.browser.course.FlourishCoursesViewlet"

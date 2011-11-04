@@ -113,7 +113,7 @@ a, a:link, a:visited, a:active {
 }
 
 .header ul.second-nav {
-    background-color: #6c7b7c;
+    background-color: #485454;
 }
 
 .header ul.second-nav > li {
@@ -217,17 +217,21 @@ form > .count {
 }
 
 form fieldset {
-    background-color: #dfdcd9;
+    background-color: #e6e5e5;
 }
 
 form fieldset > legend > span,
 .fieldset-legend {
-    background-color: #aea79f;
+    background-color: #485454;
     color: #ffffff;
 }
 
+form fieldset .row .label {
+    color: #000000;
+}
+
 form fieldset .row .hint {
-    color: #333333;
+    color: #000000;
 }
 
 form fieldset .row > .error .error {
@@ -377,10 +381,10 @@ table.schoolday-legend td.schoolday {
 */
 
 .ui-accordion-header {
-    background-color: #6c7b7c;
+    background-color: #485454;
     background-image: none;
     color: #ffffff;
-    border: 1px solid #6c7b7c;
+    border: 1px solid #485454;
 }
 
 .ui-state-hover {

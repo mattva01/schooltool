@@ -58,13 +58,13 @@
               <tal:span i18n:translate="">Logged in as:</tal:span>
 
               <tal:if condition="not:person">
-                <span id="tools-zmi-principal"
+                <span id="login-name"
                       tal:content="user/title">ZMI Principal</span>
               </tal:if>
 
               <tal:if condition="person">
                 <a id="login-name" tal:attributes="href string: ${person/@@absolute_url}/home.html"
-                   tal:content="user/title">Schoolbell Person</a>
+                   tal:content="user/title">Person</a>
 
                 <tal:block replace="structure provider:schooltool.Header" />
 

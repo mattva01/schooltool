@@ -74,7 +74,11 @@ web-access-log-file ${abspath}/log/web-access.log
 #
 #   Specifies the locale of the messages to be used on the server.
 #
-#   If 'auto' is set, the language is chosen according to the user's
+#   You can specify more than one locale, separated by commas.  Then a language
+#   selector will appear in the top bar, allowing the user to switch the
+#   language.
+#
+#   If set to 'auto', the language is chosen according to the user's
 #   preference specified in the web browser configuration.
 #
 # Default:
@@ -83,7 +87,7 @@ web-access-log-file ${abspath}/log/web-access.log
 # Examples:
 #   lang en-gb
 #   lang es-sv
-#   lang fr
+#   lang fr,en-ca
 
 #
 # <zodb>

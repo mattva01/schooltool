@@ -126,14 +126,14 @@ form div.oneline-form * {
   white-space: nowrap;
 }
 
-#header #language_selector {
+#header #language-selector {
   display: inline;
   color: white;
+  font-weight: normal;
 }
 
-#header #language_selector a {
+#header #language-selector a {
   color: white;
-  font-weight: normal;
  }
 
 #selected-language {

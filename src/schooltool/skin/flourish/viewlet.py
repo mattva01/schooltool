@@ -19,6 +19,8 @@
 """
 SchoolTool flourish viewlets and viewlet managers.
 """
+import rwproperty
+
 import zope.contentprovider.interfaces
 import zope.event
 import zope.security
@@ -40,7 +42,6 @@ from schooltool.skin.flourish.sorting import dependency_sort
 class Viewlet(BrowserPage):
     implements(IViewlet)
 
-    manager = None
     _updated = False
 
     after = ()
@@ -53,11 +54,11 @@ class Viewlet(BrowserPage):
             self.manager = manager
         self.view = view
 
-    @property
+    @rwproperty.getproperty
     def manager(self):
         return self.__parent__
 
-    @manager.setter
+    @rwproperty.setproperty
     def manager(self, value):
         self.__parent__ = value
 
@@ -90,21 +91,21 @@ class ViewletProxy(SpecificationDecoratorBase):
         self._updated = False
         super(ViewletProxy, self).__init__(*args, **kw)
 
-    @property
+    @rwproperty.getproperty
     def view(self):
         unproxied = zope.proxy.getProxiedObject(self)
         return unproxied.__parent__
 
-    @view.setter
+    @rwproperty.setproperty
     def view(self, value):
         unproxied = zope.proxy.getProxiedObject(self)
         unproxied.__parent__ = value
 
-    @property
+    @rwproperty.getproperty
     def __parent__(self):
         return self.manager
 
-    @__parent__.setter
+    @rwproperty.setproperty
     def __parent__(self, value):
         self.manager = value
 

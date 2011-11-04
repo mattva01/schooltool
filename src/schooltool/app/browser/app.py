@@ -446,7 +446,12 @@ class LoginNavigationViewlet(flourish.page.LinkViewlet):
 
 class LoggedInNameViewlet(LoginNavigationViewlet):
 
-    url = None
+    @property
+    def url(self):
+        person = self.authenticated_person
+        if not person:
+            return None
+        return absoluteURL(person, self.request)
 
     @property
     def title(self):

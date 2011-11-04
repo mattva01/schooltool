@@ -1,0 +1,142 @@
+Experimental selenium doctest for SchoolTool
+============================================
+
+    >>> from selenium.webdriver.common.action_chains import ActionChains
+
+  Open a new browser:
+
+    >>> browsers.manager.open('http://localhost')
+
+  Query the log-in link:
+
+    >>> login = browsers.manager.query.link('Log In')
+
+    >>> browsers.manager.printHTML(login)
+    <a href="http://localhost/auth/@@login.html" id="tools-login">
+      Log In
+    </a>
+
+    >>> login.click()
+
+  Fill in the log-in info and submit:
+
+    >>> browsers.manager.query.name('username').type('manager')
+    >>> browsers.manager.query.name('password').click()
+
+    >>> print browsers.manager.query.active
+    <input id="password" name="password" tabindex="2" type="password" />
+
+    >>> browsers.manager.type('schooltool')
+
+    >>> browsers.manager.query.button('Log in').click()
+
+  Let's look at the links in header:
+
+    >>> header = browsers.manager.query.id('header')
+
+    >>> print header.query_all.tag('a')
+    <a class="navigation_header" href="http://localhost/persons/manager/home.html">
+      Home
+    </a>
+    <a class="navigation_header" href="http://localhost/persons/manager/calendar">
+      Calendar
+    </a>
+    <a class="navigation_header" href="http://localhost/manage.html">
+      Manage
+    </a>
+    <a href=...localhost/persons/manager/home.html" id="login-name">
+      Administrator, SchoolTool
+    </a>
+    <a href="http://localhost/auth/@@logout.html" id="login-logout">
+      Log Out
+    </a>
+    <a href="http://localhost/@@about.html" id="about-link">
+      SchoolTool
+    </a>
+
+    >>> print header.query_all.tag('a').text
+    Home
+    Calendar
+    Manage
+    Administrator, SchoolTool
+    Log Out
+    SchoolTool
+
+    >>> print header.query_all.tag('a').get_attribute('href')
+    http://localhost/persons/manager/home.html
+    http://localhost/persons/manager/calendar
+    http://localhost/manage.html
+    http://localhost/persons/manager/home.html
+    http://localhost/auth/@@logout.html
+    http://localhost/@@about.html
+
+    >>> print zip(header.query_all.tag('a').text,
+    ...           header.query_all.tag('a').get_attribute('href'))
+    [(u'Home', u'http://localhost/persons/manager/home.html'),
+     (u'Calendar', u'http://localhost/persons/manager/calendar'),
+     (u'Manage', u'http://localhost/manage.html'),
+     (u'Administrator, SchoolTool',
+      u'http://localhost/persons/manager/home.html'),
+     (u'Log Out', u'http://localhost/auth/@@logout.html'),
+     (u'SchoolTool', u'http://localhost/@@about.html')]
+
+  Do an xpath query:
+
+    >>> print browsers.manager.query.xpath(
+    ...     '//body//div[@class="calcontent"]//h1')
+    <h1>
+      Calendar for Administrator, SchoolTool - Tuesday, February 1, 2005
+    </h1>
+
+  Current URL and page contents:
+
+    >>> print browsers.manager.url
+    http://localhost/persons/manager/calendar
+
+    >>> print browsers.manager.contents
+    <BLANKLINE>
+    ...
+    <title>
+        Calendar for Administrator, SchoolTool - Tuesday, February 1, 2005
+    </title>
+    ...
+
+  Add a person:
+
+    >>> browsers.manager.query.link('Manage').click()
+
+    >>> browsers.manager.query.link('Persons').click()
+
+    >>> browsers.manager.query.link('New Person').click()
+
+    >>> form = browsers.manager.query.id('form')
+
+    >>> field_elements = form.query_all.xpath('//input')
+    >>> fields = dict([(e.get_attribute('name'), e) for e in field_elements])
+
+    >>> fill = ActionChains(browsers.manager.driver)
+    >>> fill = fill.send_keys_to_element(fields['form.widgets.first_name'], 'Bob')
+    >>> fill = fill.send_keys_to_element(fields['form.widgets.last_name'], 'Marley')
+    >>> fill = fill.send_keys_to_element(fields['form.widgets.username'], 'bob_m')
+    >>> fill = fill.send_keys_to_element(fields['form.widgets.password'], 'schooltool')
+    >>> fill = fill.send_keys_to_element(fields['form.widgets.confirm'], 'schooltool')
+
+    >>> fill = fill.click(fields['form.buttons.add'])
+
+    >>> fill.perform()
+
+  Let's log in as the new person.
+
+    >>> bob = browsers.bob
+    >>> bob.open()
+
+    >>> bob.query.link('Log In').click()
+
+    >>> bob.query.name('username').type('bob_m')
+    >>> bob.query.name('password').type('schooltool')
+    >>> bob.query.button('Log in').click()
+
+  We've logged in:
+
+    >>> print browsers.bob.query.xpath('//body//div[@class="calcontent"]//h1').text
+    Calendar for Marley, Bob - Tuesday, February 1, 2005

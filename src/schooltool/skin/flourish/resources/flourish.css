@@ -245,6 +245,15 @@ a.modify img {
     font-weight: bold;
 }
 
+.header ul.second-nav #language-selector {
+    color: #ffffff;
+}
+
+.header ul.second-nav #language-selector span,
+.header ul.second-nav #language-selector a {
+    padding: 4px 2px;
+}
+
 .header ul.breadcrumbs {
     font-size: 12px;
     height: 24px;
@@ -307,4 +316,8 @@ body > .calendar {
 ul.contributors {
     list-style-type: disc;
     margin-left: 16px;
+}
+
+pre.traceback {
+    padding: 4px 0px;
 }

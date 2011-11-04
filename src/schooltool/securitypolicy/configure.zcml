@@ -5,7 +5,7 @@
 
   <!-- Basically a copy of zope.securitypolicy/securitypolicy.zcml  -->
   <securityPolicy
-    component=".policy.SchoolToolSecurityPolicy" />
+    component=".policy.CachingSecurityPolicy" />
 
   <adapter
       for="schooltool.app.interfaces.ISchoolToolApplication"
