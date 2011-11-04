@@ -250,7 +250,16 @@ class PasswordsMatchValidator(validator.SimpleFieldValidator):
             raise PasswordsDontMatch(value)
 
 
+class FlourishPasswordsMatchValidator(validator.SimpleFieldValidator):
+    pass
+
+
 validator.WidgetValidatorDiscriminators(PasswordsMatchValidator,
+                                        view=EmailSettingsEditView,
+                                        field=IEmailSettingsEditForm['password'])
+
+
+validator.WidgetValidatorDiscriminators(FlourishPasswordsMatchValidator,
                                         view=FlourishEmailSettingsEditView,
                                         field=IEmailSettingsEditForm['password'])
 
@@ -261,10 +270,20 @@ class HostnameValidator(validator.SimpleFieldValidator):
         # XXX: hack to display the validation error next to the widget!
         name = self.view.widgets['enabled'].name
         enabled = self.request.get(name)
-        if enabled and enabled[0] in ('true',) and not value:
+        if enabled and enabled[0] in ('true', 'selected') and not value:
             raise HostnameIsRequired(value)
 
+
+class FlourishHostnameValidator(HostnameValidator):
+    pass
+
+
 validator.WidgetValidatorDiscriminators(HostnameValidator,
+                                        view=EmailSettingsEditView,
+                                        field=IEmailSettingsEditForm['hostname'])
+
+
+validator.WidgetValidatorDiscriminators(FlourishHostnameValidator,
                                         view=FlourishEmailSettingsEditView,
                                         field=IEmailSettingsEditForm['hostname'])
 

@@ -11,9 +11,9 @@
            schooltool.skin.flourish.IFlourishLayer"
       factory=".email.FlourishEmailContainerViewTableFormatter" />
 
-  <zope:adapter factory=".email.PasswordsMatchValidator" />
+  <zope:adapter factory=".email.FlourishPasswordsMatchValidator" />
 
-  <zope:adapter factory=".email.HostnameValidator" />
+  <zope:adapter factory=".email.FlourishHostnameValidator" />
 
   <!-- Pages -->
 

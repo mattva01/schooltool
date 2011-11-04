@@ -47,6 +47,10 @@
   <zope:adapter
       factory="schooltool.email.browser.email.SendEmailFormAdapter" />
 
+  <zope:adapter factory=".email.PasswordsMatchValidator" />
+
+  <zope:adapter factory=".email.HostnameValidator" />
+
   <!-- Viewlets -->
 
   <configure package="schooltool.skin">
