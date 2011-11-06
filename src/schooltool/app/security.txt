@@ -4,7 +4,7 @@ SchoolTool security infrastructure
 
 The security system of SchoolTool consists of:
 
- * SchoolToolAuthenticationUtility
+ * ``SchoolToolAuthenticationUtility``
  * views for login/logout
  * a custom security policy
 
@@ -26,14 +26,14 @@ SchoolTool authentication utility
     >>> from schooltool.relationship.tests import setUpRelationships
     >>> setUpRelationships()
 
-    Global auth utility:
+Global auth utility::
 
     >>> from zope.principalregistry.principalregistry import principalRegistry
     >>> from zope.authentication.interfaces import IAuthentication
     >>> from zope.component import provideUtility
     >>> provideUtility(principalRegistry, IAuthentication)
 
-    Session setup:
+Session setup::
 
     >>> from zope.component import provideAdapter
     >>> from zope.publisher.interfaces import IRequest
@@ -51,7 +51,7 @@ SchoolTool authentication utility
     >>> provideUtility(sdc, ISessionDataContainer, 'schooltool.auth')
 
 
-SchoolTool is a possible site:
+SchoolTool is a possible site::
 
     >>> from zope.interface.verify import verifyObject
     >>> from zope.component.interfaces import ISite, IPossibleSite
@@ -70,8 +70,8 @@ SchoolTool is a possible site:
     >>> from schooltool.app.app import getSchoolToolApplication
     >>> provideAdapter(getSchoolToolApplication)
 
-The SchoolToolAuthenticationUtility is an IAuthentication utility that
-lives in that site:
+The ``SchoolToolAuthenticationUtility`` is an ``IAuthentication`` utility that
+lives in that site::
 
     >>> from schooltool.app.security import SchoolToolAuthenticationUtility
     >>> from schooltool.app.interfaces import ISchoolToolAuthentication
@@ -81,7 +81,7 @@ lives in that site:
     >>> verifyObject(ISchoolToolAuthentication, auth)
     True
 
-Let's provide the location of auth:
+Let's provide the location of auth::
 
     >>> root['frogpond'] = app
     >>> from schooltool.app.security import setUpLocalAuth
@@ -95,7 +95,7 @@ Let's provide the location of auth:
     >>> from zope.component.hooks import setSite
     >>> setSite(app)
 
-Now, we get our local authentication service:
+Now, we get our local authentication service::
 
     >>> from zope.component import getUtility
     >>> getUtility(IAuthentication, context=app) is auth
@@ -103,10 +103,11 @@ Now, we get our local authentication service:
     >>> verifyObject(ISite, app)
     True
 
+
 getPrincipal
 ------------
 
-The utility knows about the users of the application:
+The utility knows about the users of the application::
 
     >>> from schooltool.person.person import Person, PersonContainer
     >>> from zope.security.interfaces import IPrincipal
@@ -121,7 +122,7 @@ The utility knows about the users of the application:
     'Frog'
 
 The utility delegates to the next service if the principal is not
-found:
+found::
 
     >>> p = principalRegistry.definePrincipal('zope.manager', 'Mgmt', '',
     ...                                       'gandalf', '123')
@@ -132,15 +133,13 @@ found:
     >>> p.title
     'Mgmt'
 
-
 If the principal we are looking up does not exist, an exception is
-raised:
+raised::
 
     >>> auth.getPrincipal('sb.person.nonexistent')
     Traceback (most recent call last):
     ...
     PrincipalLookupError: sb.person.nonexistent
-
 
 Let's add a group:
 
@@ -151,7 +150,7 @@ Let's add a group:
     >>> group.members.add(person)
 
 And the user principal has a list ids of group principals he belongs
-to.  This list is used by the security policy:
+to.  This list is used by the security policy::
 
     >>> from zope.security.interfaces import IGroupAwarePrincipal
     >>> p = auth.getPrincipal('sb.person.frog')
@@ -160,8 +159,8 @@ to.  This list is used by the security policy:
     >>> p.groups
     ['sb.group.management']
 
-If the global principals like IEveryoneGroup, IAuthenticatedGroup are
-defined, they are added to the list of groups of a principal, too:
+If the global principals like ``IEveryoneGroup``, ``IAuthenticatedGroup`` are
+defined, they are added to the list of groups of a principal, too::
 
     >>> from zope.authentication.interfaces import IAuthenticatedGroup
     >>> from zope.authentication.interfaces import IEveryoneGroup
@@ -192,7 +191,7 @@ Suppose, the user 'frog' has a password:
     >>> app['persons']['frog'].setPassword('pond')
 
 The frog has authenticated itself in the login form and the
-credentials are stored in the session:
+credentials are stored in the session::
 
     >>> auth.setCredentials(request, 'frog', 'shmond')
     Traceback (most recent call last):
@@ -212,7 +211,7 @@ Now, it is authenticated by our utility:
     >>> principal.id
     'sb.person.frog'
 
-Our principal is adaptable to IPerson:
+Our principal is adaptable to ``IPerson``:
 
     >>> from schooltool.person.interfaces import IPerson
     >>> from zope.security.proxy import removeSecurityProxy
@@ -229,7 +228,7 @@ If there are no credentials set, clearing does not fail:
     >>> auth.clearCredentials(request)
 
 Also, if cookie based authentication fails, we support HTTP basic
-authentication (by trying to adapt the request to ILoginPassword):
+authentication (by trying to adapt the request to ``ILoginPassword``)::
 
     >>> from zope.interface import Interface, directlyProvides, implements
     >>> from zope.authentication.interfaces import ILoginPassword
@@ -322,6 +321,6 @@ authentication challenge.
     401
 
 
-Clean up:
+.. Tear down::
 
     >>> setup.placefulTearDown()

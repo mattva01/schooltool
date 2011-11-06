@@ -1,19 +1,19 @@
 Rendering ordered lists in page templates
 =========================================
 
-schooltool.app defines a TALES path adapter ("thingy" for short) that lets
+``schooltool.app`` defines a TALES path adapter ("thingy" for short) that lets
 you sort lists of objects directly in a page template by writing, for example,
-the following:
+the following::
 
     <tr tal:repeat="item context/values/sortby:title">
       <td tal:content="item/title" />
     </tr>
 
-Boring (or interesting, depending on your perspective) implementation details
------------------------------------------------------------------------------
+Implementation details
+----------------------
 
 We register a path adapter 'sortby' and it becomes available in TALES
-path expressions.
+path expressions. ::
 
     >>> from zope.app.testing import setup
     >>> setup.placelessSetUp()
@@ -32,7 +32,7 @@ Suppose we have a sequence of dicts that have a 'title' key.
     ...           {'id': 11, 'title': 'The ultimate answer: 6 * 9'},
     ...           {'id': 33, 'title': 'Alphabet for beginners'}]
 
-We can sort the list by title with TALES:
+We can sort the list by title with TALES::
 
     >>> from zope.pagetemplate.engine import Engine
     >>> from zope.tales.tales import Context
@@ -48,6 +48,8 @@ We can sort the list by title with TALES:
 You can also sort lists of objects by attribute.  You can sort arbitrary
 iterables.  See the implementation and tests of `SortBy` for exhaustive
 examples.
+
+.. Tear down::
 
     >>> setup.placelessTearDown()
 

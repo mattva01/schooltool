@@ -11,7 +11,7 @@ are not implemented yet, so levels are pretty useless at this point.
 Level data model
 ----------------
 
-There is a root container, initialized on application startup.
+There is a root container, initialized on application startup::
 
     >>> from schooltool.app.interfaces import ISchoolToolApplication
     >>> from schooltool.app.interfaces import ApplicationInitializationEvent
@@ -27,14 +27,14 @@ There is a root container, initialized on application startup.
     <schooltool.level.level.LevelContainerContainer ...>
 
 Sets of levels are stored in it for every school year.  Levels do
-not work without active school year.
+not work without active school year. ::
 
     >>> from schooltool.level.interfaces import ILevelContainer
     >>> print ILevelContainer(app, None)
     None
 
 When application has an active schoolyear, you can adapt it to
-ILevelContainer to get the relevant levels.
+ILevelContainer to get the relevant levels::
 
     >>> from schooltool.schoolyear.interfaces import ISchoolYearContainer
     >>> schoolyears = ISchoolYearContainer(app)
@@ -50,7 +50,7 @@ ILevelContainer to get the relevant levels.
     >>> print ILevelContainer(app, None)
     <schooltool.level.level.LevelContainer ...>
 
-Of course, you can obtain the level container directly from a school year.
+Of course, you can obtain the level container directly from a school year::
 
     >>> schoolyears['2006'] = SchoolYear(
     ...     "2006", date(2006, 9, 1), date(2006, 12, 30))
@@ -62,7 +62,7 @@ Of course, you can obtain the level container directly from a school year.
     ...      ILevelContainer(schoolyears['2006']))
     False
 
-Levels themselves are simple objects with a title.
+Levels themselves are simple objects with a title::
 
     >>> from schooltool.level.level import Level
     >>> levels_2005 = ILevelContainer(schoolyears['2005'])
@@ -80,7 +80,7 @@ Levels themselves are simple objects with a title.
     ...  for level in ILevelContainer(schoolyears['2006']).values()]
     [u'First-years 2006']
 
-Level containers are ordered.
+Level containers are ordered::
 
     >>> ILevelContainer(schoolyears['2005']).updateOrder(['1', '2'])
     >>> [level.title
@@ -92,7 +92,7 @@ Linking levels to courses
 -------------------------
 
 Levels are linked to courses via schooltool.relationship.  There
-is a helper attribute to manage the relationships.
+is a helper attribute to manage the relationships::
 
     >>> math = CourseStub('Math')
 
@@ -110,7 +110,7 @@ is a helper attribute to manage the relationships.
 
 It is important to note that when a school year is deleted, the
 corresponding level container is also deleted and all level
-relationships are lost.
+relationships are lost. ::
 
     >>> top_level_container = ILevelContainer(schoolyears['2005']).__parent__
     >>> len(top_level_container)
@@ -137,7 +137,7 @@ level vocabulary.
     ...    title=u"Levels",
     ...    vocabulary='schooltool.level.level.levelvocabulary')
 
-It works with contexts adaptable to ISchoolYear.
+It works with contexts adaptable to ISchoolYear::
 
     >>> context = schoolyears['2005']
     >>> levels = levels_field.bind(context)

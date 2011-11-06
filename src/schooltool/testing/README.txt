@@ -25,14 +25,14 @@ You register the function as follows in the `SampleFill` setup registry:
 
     >>> registry.register('SampleFill', addOne)
 
-Now you execute the setup using the ``setup()`` method:
+Now you execute the setup using the ``setup()`` method::
 
     >>> result = []
     >>> registry.setup('SampleFill')
     >>> result
     [1]
 
-Now we can register more complex functions as well, of course:
+Now we can register more complex functions::
 
     >>> def addTwo(number):
     ...     result.append(number)
@@ -46,7 +46,7 @@ Now we can register more complex functions as well, of course:
     ...     result.append(number1+number2)
     >>> registry.register('SampleFill', addFour, 3, number2=1)
 
-And here is the result:
+And here is the result::
 
     >>> result = []
     >>> registry.setup('SampleFill')
@@ -61,7 +61,7 @@ not recommended to rely on the order of the setup steps.
 While this functionality in itself is alsready pretty powerful, it does not
 cover all of our required use cases. Oftentimes we want to be able to
 "decorate" an object using several setup steps. Let's say, we have the
-following containerish object:
+following containerish object::
 
     >>> class Container(object):
     ...
@@ -75,7 +75,7 @@ We now want our setup functions to fill this container with some initial
 values. Clearly, the above method does not work here anymore, since we do not
 have the container instance available when creating and registering the setup
 step function. Here are a couple of functions that we would like to help with
-the setup:
+the setup::
 
     >>> def addOneToContainer(container):
     ...     container.add(1)
@@ -88,7 +88,7 @@ the setup:
 But how do we pass in the container? The ``setup()`` method allows you to
 specify additional positional and keyword arguments. The positional arguments
 passed via the ``setup()`` are *appended* to the original ones. The additional
-keyword arguments are merged (updated) into the original keyword arguments.
+keyword arguments are merged (updated) into the original keyword arguments. ::
 
     >>> container = Container()
     >>> registry.setup('ContainerValues', container)
@@ -105,7 +105,7 @@ semantics and functions of a particular registry often have the same or
 similar signatures.
 
 As syntactic sugar, a setup function will be registered for all registries of
-the form ``setup<registry name``:
+the form ``setup<registry name>``::
 
     >>> container = Container()
     >>> registry.setupContainerValues(container)
@@ -116,7 +116,7 @@ the form ``setup<registry name``:
 HTML Analyzation Tools
 ----------------------
 
-There is a set (currently one ;-) of helpful analyzation tools available.
+There is a set of helpful analyzation tools available.
 
     >>> from schooltool.testing import analyze
 
@@ -127,9 +127,9 @@ Pick an Element using an XPath expression
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Often you are only interested in a particular element or text. The
-``queryHTML()`` method allows you to specify an XPath query to pick out a
+``queryHTML`` method allows you to specify an XPath query to pick out a
 particular note. A list of all found nodes will be returned. The nodes will be
-returned as a serialized string.
+returned as serialized strings::
 
     >>> html = '''
     ... <html>
@@ -145,7 +145,7 @@ returned as a serialized string.
     >>> print analyze.queryHTML('/html/body/h1', html)[0]
     <h1>This is my page!</h1>
 
-It works also with XHTML compliant documents.
+It works also with XHTML compliant documents::
 
     >>> html = '''
     ... <html xmlns="http://www.w3.org/1999/xhtml">
@@ -161,6 +161,44 @@ It works also with XHTML compliant documents.
     >>> print analyze.queryHTML('/html/body/h1', html)[0]
     <h1>This is my page!</h1>
 
+``printQuery`` makes this even easier, by printing all nodes::
+
+    >>> analyze.printQuery('/html/body/h1', html)
+    <h1>This is my page!</h1>
+
+    >>> html = '''
+    ... <html>
+    ...   <body>
+    ...     <ul>
+    ...       <li>One</li>
+    ...       <li>Two</li>
+    ...     </ul>
+    ...   </body>
+    ... </html>
+    ... '''
+
+    >>> analyze.printQuery('//li', html)
+    <li>One</li>
+    <li>Two</li>
+
+``printQuery`` skips empty matches::
+
+    >>> html = '''
+    ... <ul>
+    ...   <li>One</li>
+    ...   <li>Two</li>
+    ...   <li>
+    ...     <b>Three</b>
+    ...   </li>
+    ...   <li>Four</li>
+    ... </ul>
+    ... '''
+
+    >>> analyze.printQuery('//li/text()', html)
+    One
+    Two
+    Four
+
 
 Reportlab PDF story testing
 ---------------------------
@@ -168,7 +206,7 @@ Reportlab PDF story testing
 Schooltool PDF reports utilize Reportlab platypus module.  A report is
 built from a list of platypus flowables known as as 'story'.
 
-Let's build a short pdf story.
+Let's build a short pdf story::
 
     >>> from reportlab.lib.styles import ParagraphStyle
     >>> from reportlab.platypus.paragraph import Paragraph
@@ -186,7 +224,7 @@ There are several helpers for testing the stories.
     >>> from schooltool.testing.pdf import StoryXML
 
 The tool aims to build a human readable XML representation of the
-story.  There is a helper which prints the formatted XML:
+story.  There is a helper which prints the formatted XML::
 
     >>> StoryXML(story).printXML()
     <story>
@@ -195,7 +233,7 @@ story.  There is a helper which prints the formatted XML:
     <Paragraph>A new page</Paragraph>
     </story>
 
-As with HTML analyzation tools, there are helpers for XPath queries:
+As with HTML analyzation tools, there are helpers for XPath queries::
 
     >>> parser = StoryXML(story)
 
@@ -207,7 +245,7 @@ As with HTML analyzation tools, there are helpers for XPath queries:
     ['<Paragraph>Hello world</Paragraph>',
      '<Paragraph>A new page</Paragraph>']
 
-If these helpers are not sufficient, we can use XML document directly.
+If these helpers are not sufficient, we can use XML document directly::
 
     >>> parser.document
     <...ElementTree object ...>
@@ -218,7 +256,7 @@ If these helpers are not sufficient, we can use XML document directly.
     Hello world
     A new page
 
-StoryXML helpers also work on single platypus flowables.
+``StoryXML`` helpers also work on single platypus flowables::
 
     >>> flowable = Paragraph('Some text', style)
 
@@ -231,18 +269,17 @@ StoryXML helpers also work on single platypus flowables.
 ZCML execution wrapper
 ----------------------
 
-This is a simple tool for convenient execution of ZCML in your tests.
+`ZCMLWrapper` is a simple tool for convenient execution of ZCML in your tests.
 
     >>> from schooltool.testing.setup import ZCMLWrapper
-
     >>> zcml = ZCMLWrapper()
 
-Let's include a ZCML file that defines a new directive.
+Let's include a ZCML file that defines a new directive::
 
     >>> zcml.include('schooltool.testing.tests',
     ...              file='echodirective.zcml')
 
-The new directive is under a namespace, so we cannot access it directly.
+The new directive is under a namespace, so we cannot access it directly::
 
     >>> zcml.string('<echo message="Boo" />')
     Traceback (most recent call last):
@@ -251,16 +288,16 @@ The new directive is under a namespace, so we cannot access it directly.
         ConfigurationError: ('Unknown directive', None, u'echo')
 
 Note that line number is a bit off in string execution, this happens
-because the string is wrapped in <configure>...</configure>.
+because the string is wrapped in ``<configure>...</configure>``.
 
-So, lets set the default namespace and execute again
+So, lets set the default namespace and execute again::
 
     >>> zcml.setUp(namespaces={'': 'http://schooltool.org/testing/tests'})
 
     >>> zcml.string('<echo message="Boo" />')
     Executing echo: Boo
 
-You can use prefixed namespaces like this:
+You can use prefixed namespaces like this::
 
     >>> zcml.setUp(namespaces={
     ...     '': 'http://schooltool.org/testing/tests',
@@ -270,7 +307,7 @@ You can use prefixed namespaces like this:
     Executing echo: Boo
 
 And you can even postpone ZCML action execution, if it's convenient
-for your tests.
+for your tests::
 
     >>> zcml.auto_execute = False
 
@@ -284,7 +321,7 @@ for your tests.
     Executing echo: First
     Executing echo: Second
 
-Finally, each instance of the wrapper has it's own ConfigurationMachine.
+Finally, each instance of the wrapper has it's own ``ConfigurationMachine``::
 
     >>> zcml.context
     <zope.configuration.config.ConfigurationMachine ...>
@@ -298,7 +335,7 @@ Finally, each instance of the wrapper has it's own ConfigurationMachine.
         ConfigurationError: ('Unknown directive', ..., u'echo')
 
 Let's include the directive again, but this time also show that we can also
-pass module instead of it's dotted name.
+pass module instead of it's dotted name::
 
     >>> import schooltool.testing.tests as the_tests
     >>> other.include(the_tests, file='echodirective.zcml')

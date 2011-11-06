@@ -51,6 +51,7 @@ clean:
 	rm -rf build
 	rm -f ID TAGS tags
 	rm -rf coverage ftest-coverage
+	rm -rf docs
 	find . -name '*.py[co]' -delete
 	find . -name '*.mo' -delete
 	find . -name 'LC_MESSAGES' -exec rmdir -p --ignore-fail-on-non-empty {} +

@@ -2,7 +2,7 @@ Functional doctest for SchoolTool
 =================================
 
 This is a functional doctest for schooltool.  To find out more about
-functional doctests, read Zope3/src/zope/app/ftests/doctest.txt
+functional doctests, read http://docs.zope.org/zope.testbrowser/
 
     >>> manager = Browser('manager', 'schooltool')
 

@@ -16,7 +16,6 @@ Contents:
    app/security
    securitypolicy/README
    securitypolicy/security_descriptions
-   term/README
    demographics/README
    relationship/README
    level/tests/level-integration
