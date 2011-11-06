@@ -56,18 +56,18 @@ def registerTTFont(fontname, filename):
 
 # 'Arial' is predefined in ReportLab, so we use 'Arial_Normal'
 
-font_map = {'Arial_Normal': 'arial.ttf',
-            'Arial_Bold': 'arialbd.ttf',
-            'Arial_Italic': 'ariali.ttf',
-            'Arial_Bold_Italic': 'arialbi.ttf',
-            'Times_New_Roman': 'times.ttf',
-            'Times_New_Roman_Bold': 'timesbd.ttf',
-            'Times_New_Roman_Italic': 'timesi.ttf',
-            'Times_New_Roman_Bold_Italic': 'timesbi.ttf'}
+font_map = {'Arial_Normal': 'LiberationSans-Regular.ttf',
+            'Arial_Bold': 'LiberationSans-Bold.ttf',
+            'Arial_Italic': 'LiberationSans-Italic.ttf',
+            'Arial_Bold_Italic': 'LiberationSans-BoldItalic.ttf',
+            'Times_New_Roman': 'LiberationSerif-Regular.ttf',
+            'Times_New_Roman_Bold': 'LiberationSerif-Bold.ttf',
+            'Times_New_Roman_Italic': 'LiberationSerif-Italic.ttf',
+            'Times_New_Roman_Bold_Italic': 'LiberationSerif-BoldItalic.ttf'}
 
 
-def setUpMSTTCoreFonts(directory):
-    """Set up ReportGen to use MSTTCoreFonts."""
+def setUpLiberationFonts(directory):
+    """Set up ReportGen to use Liberation Fonts."""
     import reportlab.rl_config
     from reportlab.lib.fonts import addMapping
 

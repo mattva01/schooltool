@@ -1,0 +1,38 @@
+The SchoolTool Application
+==========================
+
+A manager logs in
+
+    >>> from zope.testbrowser.testing import Browser
+    >>> manager = Browser()
+    >>> manager.addHeader('Authorization', 'Basic manager:schooltool')
+    >>> manager.handleErrors = False
+    >>> manager.open('http://localhost/')
+
+Create a Basic Person
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('Persons').click()
+    >>> manager.getLink('New Person').click()
+    >>> manager.getControl('First name').value = "John"
+    >>> manager.getControl('Last name').value = "Petterson"
+    >>> manager.getControl('Gender').value = ['male']
+    >>> manager.getControl('Birth date').value = '1980-01-01'
+
+    >>> manager.getControl('Username').value = "john"
+    >>> manager.getControl('Password').value = "pwd"
+    >>> manager.getControl('Confirm').value = "pwd"
+    >>> manager.getControl('Add').click()
+
+Go to the person list:
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('Persons').click()
+
+Both of our users are in there:
+
+    >>> manager.getLink('John')
+    <Link text='John' url='http://localhost/persons/john'>
+
+    >>> manager.getLink('Administrator', index=1)
+    <Link text='Administrator' url='http://localhost/persons/manager'>

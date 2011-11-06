@@ -18,8 +18,6 @@
         for="schooltool.group.interfaces.IGroupContainer"
         class="schooltool.group.browser.group.GroupContainerView"
         permission="schooltool.view"
-        menu="zmi_views"
-        title="View"
         />
 
     <addform
@@ -88,8 +86,6 @@
       class=".group.GroupView"
       template="group.pt"
       permission="schooltool.view"
-      menu="zmi_views"
-      title="View"
       />
 
   <page

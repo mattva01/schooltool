@@ -1,0 +1,26 @@
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title" i18n:translate="">Report Reference</title>
+</head>
+<body>
+
+<h1 metal:fill-slot="content-header"
+    i18n:translate="">Report Reference</h1>
+
+<metal:block metal:fill-slot="body">
+  <table class="container">
+    <tr class="header">
+      <th i18n:translate="">Category</th>
+      <th i18n:translate="">Title</th>
+      <th i18n:translate="">Description</th>
+    </tr>
+    <tr tal:repeat="row view/rows">
+      <td><a tal:attributes="href row/url" tal:content="row/group" /></td>
+      <td><a tal:attributes="href row/url" tal:content="row/title" /></td>
+      <td tal:content="row/description" />
+    </tr>
+  </table>
+</metal:block>
+
+</body>
+</html>

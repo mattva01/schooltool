@@ -1,0 +1,2 @@
+<a tal:attributes="href view/report_link" tal:content="view/title">Report title</a>
+

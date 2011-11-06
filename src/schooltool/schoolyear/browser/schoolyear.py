@@ -119,6 +119,18 @@ class SchoolYearContainerView(TableContainerView, SchoolYearContainerBaseView):
     index_title = _("School Years")
     error = None
 
+    @property
+    def first(self):
+        year = self.context.getActiveSchoolYear()
+        if year is not None:
+            return year.first
+
+    @property
+    def last(self):
+        year = self.context.getActiveSchoolYear()
+        if year is not None:
+            return year.last
+
     def setUpTableFormatter(self, formatter):
         columns_before = []
         if self.canModify():
@@ -223,7 +235,10 @@ class ImportSchoolYearData(object):
         oldCourses = ICourseContainer(self.activeSchoolyear)
         newCourses = ICourseContainer(self.newSchoolyear)
         for id, course in oldCourses.items():
-            newCourses[course.__name__] = Course(course.title, course.description)
+            newCourses[course.__name__] = new_course = Course(course.title, course.description)
+            new_course.course_id = course.course_id
+            new_course.government_id = course.government_id
+            new_course.credits = course.credits
 
     def importAllTimetables(self):
         if not self.shouldImportAllTimetables():
@@ -457,6 +472,14 @@ class SchoolYearView(TableContainerView):
     @property
     def sorted_terms(self):
         return sorted(self.context.values(), key=lambda t: t.last)
+
+    @property
+    def first(self):
+        return self.context.first
+
+    @property
+    def last(self):
+        return self.context.last
 
     def update(self):
         if 'CONFIRM' in self.request:

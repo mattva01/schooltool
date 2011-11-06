@@ -1,0 +1,14 @@
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title" tal:content="view/title" />
+</head>
+<body>
+
+<h1 metal:fill-slot="content-header" tal:content="view/title" />
+
+<metal:block metal:fill-slot="body">
+  <tal:block replace="structure provider:schooltool.ReportLinks" />
+</metal:block>
+
+</body>
+</html>

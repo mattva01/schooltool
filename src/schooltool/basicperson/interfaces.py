@@ -21,11 +21,10 @@ SchoolTool basic person interfaces.
 """
 from zope.container.interfaces import IContainer
 from zope.container.interfaces import IOrderedContainer
-from zope.schema import Date, Choice, TextLine, Bool
+from zope.schema import Date, Choice, TextLine, Bool, List
 from zope.configuration.fields import PythonIdentifier
 from zope.interface import Interface, Attribute
 
-from zope.schema import List
 from zope.schema.interfaces import IVocabularyTokenized
 
 from schooltool.common import SchoolToolMessage as _
@@ -113,6 +112,18 @@ class IDemographics(IContainer):
 class IDemographicsFields(IOrderedContainer):
     """Demographics field storage."""
 
+    def filter_key(key):
+        """Return the subset of fields whose limited_keys list is either
+           empty, or it contains the key passed"""
+
+    def filter_keys(keys):
+        """Return the subset of fields whose limited_keys list is either
+           empty, or it contains one of the keys passed"""
+
+
+class FilterKeyList(List):
+    """Marker field to pin widgets on."""
+
 
 class IFieldDescription(Interface):
     """Demographics field."""
@@ -129,9 +140,29 @@ class IFieldDescription(Interface):
         title = _(u"Required"),
         description = _(u"Whether this Field is required or not"))
 
+    limit_keys = FilterKeyList(
+        title = _(u"Limit keys"),
+        description = _(u"An optional list of limit keys for this field"),
+        value_type=Choice(
+            source="schooltool.basicperson.limit_keys_vocabulary",
+            required=True,
+            ),
+        required=False)
+
+
+class EnumValueList(List):
+    """Marker field to pin custom validation on."""
+
 
 class IEnumFieldDescription(IFieldDescription):
     """Enumeration demographics field."""
 
-    items = List(
+    items = EnumValueList(
         title = _('List of values'))
+
+
+class IFieldFilterVocabulary(IVocabularyTokenized):
+    """Marker interface for vocabularies that give keys that are used
+    to filder demographics fields for the context.
+    """
+

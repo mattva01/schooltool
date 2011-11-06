@@ -25,10 +25,10 @@ import sys
 import unittest
 import doctest
 
-from schooltool.app.pdf import setUpMSTTCoreFonts
+from schooltool.app.pdf import setUpLiberationFonts
 
 
-def doctest_setUpMSTTCoreFonts():
+def doctest_setUpLiberationFonts():
     r"""TrueType font setup tests.
 
         >>> from schooltool.app import pdf
@@ -100,14 +100,14 @@ def doctest_setUpMSTTCoreFonts():
         ('arial_normal', 1, 1)
 
 # XXX This part fails on Windows, I don't yet know why.
-#    If the fonts can not be found, setUpMSTTCoreFonts() will
+#    If the fonts can not be found, setUpLiberationFonts() will
 #    raise an exception:
 #
 #        >>> import reportlab.rl_config
 #        >>> real_path = reportlab.rl_config.TTFSearchPath[-1]
 #        >>> del reportlab.rl_config.TTFSearchPath[-1]
 #
-#        >>> pdf.setUpMSTTCoreFonts('/definitely/nonexistent')
+#        >>> pdf.setUpLiberationFonts('/definitely/nonexistent')
 #        Traceback (most recent call last):
 #          ...
 #        TTFError: Can't open file "....ttf"
@@ -127,7 +127,7 @@ def tryToSetUpReportLab():
     Tries to guess the location of fonts.  Returns True on success,
     False if reportlab is not available or fonts could not be found.
 
-    If something breaks during setUpMSTTCoreFonts, the exception
+    If something breaks during setUpLiberationFonts, the exception
     will be propagated up.
     """
     try:
@@ -140,13 +140,12 @@ def tryToSetUpReportLab():
         return True # Assume that reportlab has been configured already.
 
     # Heuristic to try and find the TrueType fonts.
-    font_dirs = ['/usr/share/fonts/truetype/msttcorefonts', # Debian
-	         '/usr/share/fonts/corefonts', # SuSE
-                 '/usr/X11R6/lib/X11/fonts/drakfont/ttf/', # Mandrake
+    font_dirs = ['/usr/share/fonts/truetype/ttf-liberation', # Debian
+                 '/usr/share/fonts/truetype/liberation', # Fedora
                  r'C:\WINDOWS\Fonts']
     for font_dir in font_dirs:
-        if os.path.exists(os.path.join(font_dir, 'arial.ttf')):
-            setUpMSTTCoreFonts(font_dir)
+        if os.path.exists(os.path.join(font_dir, 'LiberationSans-Regular.ttf')):
+            setUpLiberationFonts(font_dir)
             return True
     else:
         return False

@@ -24,7 +24,7 @@ from persistent import Persistent
 
 from zope.schema._field import Choice
 from zope.schema._field import Date
-from zope.schema import TextLine
+from zope.schema import TextLine, Bool
 from zope.location.location import Location
 from zope.location.location import locate
 from zope.interface import Interface
@@ -113,6 +113,25 @@ class DemographicsFormAdapter(object):
 class DemographicsFields(OrderedContainer):
     implements(IDemographicsFields)
 
+    def filter_key(self, key):
+        """Return the subset of fields whose limited_keys list is either
+           empty, or it contains the key passed."""
+        result = []
+        for field in self.values():
+            if not field.limit_keys or key in field.limit_keys:
+                result.append(field)
+        return result
+
+    def filter_keys(self, keys):
+        """Return the subset of fields whose limited_keys list is either
+           empty, or it contains one of the keys passed."""
+        result = []
+        for field in self.values():
+            limit_keys = field.limit_keys
+            if not limit_keys or [key for key in keys if key in limit_keys]:
+                result.append(field)
+        return result
+
 
 def setUpDefaultDemographics(app):
     dfs = DemographicsFields()
@@ -152,9 +171,11 @@ def getDemographicsFields(app):
 
 class FieldDescription(Persistent, Location):
     implements(IFieldDescription)
+    limit_keys = []
 
-    def __init__(self, name, title, required=False):
-        self.name, self.title,self.required = name, title, required
+    def __init__(self, name, title, required=False, limit_keys=[]):
+        self.name, self.title, self.required, self.limit_keys = (name,
+            title, required, limit_keys)
 
     def setUpField(self, form_field):
         form_field.required = self.required
@@ -202,3 +223,10 @@ class TextFieldDescription(FieldDescription):
 
     def makeField(self):
         return self.setUpField(TextLine(title=unicode(self.title)))
+
+
+class BoolFieldDescription(FieldDescription):
+
+    def makeField(self):
+        return self.setUpField(Bool(title=unicode(self.title)))
+

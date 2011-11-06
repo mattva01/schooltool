@@ -29,41 +29,28 @@ from zope.traversing.browser.absoluteurl import absoluteURL
 from zope.container.interfaces import INameChooser
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 
-from z3c.form.browser.textarea import TextAreaWidget
 from z3c.form.interfaces import ITextAreaWidget
 from z3c.form import form, field, button
 from z3c.form.converter import BaseDataConverter, FormatterValidationError
-from z3c.form.widget import FieldWidget
 
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.basicperson.demographics import TextFieldDescription
 from schooltool.basicperson.demographics import DateFieldDescription
+from schooltool.basicperson.demographics import BoolFieldDescription
 from schooltool.basicperson.demographics import EnumFieldDescription
 from schooltool.basicperson.interfaces import IEnumFieldDescription
 from schooltool.basicperson.interfaces import IDemographicsFields
 from schooltool.basicperson.interfaces import IFieldDescription
+from schooltool.basicperson.interfaces import EnumValueList
 
 from schooltool.common import format_message
 from schooltool.common import SchoolToolMessage as _
 
 
-class IEnumTextWidget(ITextAreaWidget):
-    """Marker interface for custom enum widget."""
-
-
-class CustomEnumTextWidget(TextAreaWidget):
-    implements(IEnumTextWidget)
-
-
-def CustomEnumFieldTextWidget(field, request):
-    """IFieldWidget factory for CustomEnumTextWidget."""
-    return FieldWidget(field, CustomEnumTextWidget(request))
-
-
 class CustomEnumDataConverter(BaseDataConverter):
     """A special data converter for iso enums."""
 
-    adapts(IList, CustomEnumTextWidget)
+    adapts(EnumValueList, ITextAreaWidget)
 
     def toWidgetValue(self, value):
         """See interfaces.IDataConverter"""
@@ -109,6 +96,8 @@ class DemographicsFieldsAbsoluteURLAdapter(BrowserView):
 
 class DemographicsView(BrowserView):
     """A Demographics List view."""
+
+    title = _('Demographics Container')
 
     def demographics(self):
         pos = 0
@@ -195,10 +184,21 @@ class DateFieldDescriptionAddView(FieldDescriptionAddView):
         self._fd = fd
         return fd
 
+
+class BoolFieldDescriptionAddView(FieldDescriptionAddView):
+
+    def create(self, data):
+        fd = BoolFieldDescription(data['title'],
+                                  str(data['name']),
+                                  data['required'])
+        form.applyChanges(self, fd, data)
+        self._fd = fd
+        return fd
+
+
 class EnumFieldDescriptionAddView(FieldDescriptionAddView):
 
     fields = field.Fields(IEnumFieldDescription)
-    fields['items'].widgetFactory = CustomEnumFieldTextWidget
 
     def create(self, data):
         fd = EnumFieldDescription(data['title'],
@@ -234,7 +234,6 @@ class FieldDescriptionEditView(form.EditForm):
 class EnumFieldDescriptionEditView(FieldDescriptionEditView):
 
     fields = field.Fields(IEnumFieldDescription).omit('name')
-    fields['items'].widgetFactory = CustomEnumFieldTextWidget
 
 
 class FieldDescriptionView(form.DisplayForm):
@@ -255,8 +254,12 @@ class DateFieldDescriptionView(FieldDescriptionView):
     """Display form for a date field description."""
 
 
+class BoolFieldDescriptionView(FieldDescriptionView):
+    """Display form for a bool field description."""
+
+
 class EnumFieldDescriptionView(FieldDescriptionView):
     """Display form for an enum field description."""
 
     fields = field.Fields(IEnumFieldDescription)
-    fields['items'].widgetFactory = CustomEnumFieldTextWidget
+

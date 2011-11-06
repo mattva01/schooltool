@@ -20,9 +20,12 @@
 Sources and vocabularies for form fields.
 """
 from zope.interface import implements
+from zope.interface import implementer
+from zope.component import adapter
 from zope.schema.interfaces import ITitledTokenizedTerm
 
 from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.app.utils import vocabulary
 from schooltool.person.interfaces import IPerson
 from schooltool.group.interfaces import IGroupContainer
 from schooltool.group.interfaces import IGroup
@@ -31,6 +34,11 @@ from schooltool.basicperson.browser.person import PersonTerm
 from schooltool.basicperson.browser.person import GroupTerm
 from schooltool.basicperson.interfaces import IGroupVocabulary
 from schooltool.basicperson.interfaces import IBasicPersonVocabulary
+from schooltool.basicperson.interfaces import IDemographicsFields
+from schooltool.basicperson.interfaces import IFieldDescription
+from schooltool.basicperson.interfaces import IFieldFilterVocabulary
+
+from schooltool.common import SchoolToolMessage as _
 
 
 class Term(object):
@@ -115,3 +123,25 @@ class AdvisorVocabulary(object):
 
 def advisorVocabularyFactory():
     return AdvisorVocabulary
+
+
+def LimitKeyVocabFactory():
+    return IFieldFilterVocabulary
+
+
+@adapter(IFieldDescription)
+@implementer(IFieldFilterVocabulary)
+def getLimitKeyVocabularyForFieldDescription(field_description):
+    field_container = field_description.__parent__
+    return IFieldFilterVocabulary(field_container)
+
+
+@adapter(IDemographicsFields)
+@implementer(IFieldFilterVocabulary)
+def getLimitKeyVocabularyForPersonFields(person_field_description_container):
+     return vocabulary([
+        ('students', _('Students')),
+        ('teachers', _('Teachers')),
+        ('administrators', _('Administrators')),
+        ])
+

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
 # SchoolTool - common information systems platform for school administration
-# Copyright (c) 2003-2010 Shuttleworth Foundation
+# Copyright (c) 2003-2011 Shuttleworth Foundation
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -13,9 +13,9 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 #
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 """
 SchoolTool setup script.
@@ -51,6 +51,9 @@ Javascript will be usable, although perhaps not very nice or convenient.""",
     "License :: OSI Approved :: GNU General Public License (GPL)",
     "Operating System :: OS Independent",
     "Programming Language :: Python",
+    "Programming Language :: Python :: 2.5",
+    "Programming Language :: Python :: 2.6",
+    "Programming Language :: Python :: 2.7",
     "Programming Language :: Zope",
     "Topic :: Education",
     "Topic :: Office/Business :: Scheduling"],
@@ -60,7 +63,7 @@ Javascript will be usable, although perhaps not very nice or convenient.""",
     install_requires=['hurry.query',
                       'PasteDeploy',
                       'PasteScript',
-                      'PILwoTk',
+                      'PIL',
                       'pytz',
                       'reportlab',
                       'rwproperty',
@@ -77,24 +80,22 @@ Javascript will be usable, although perhaps not very nice or convenient.""",
                       'zc.datetimewidget',
                       'zc.resourcelibrary',
                       'zc.table',
+                      'ZODB3',
                       'zope.annotation',
                       'zope.authentication',
                       'zope.app.apidoc',
                       'zope.app.applicationcontrol',
                       'zope.app.appsetup',
                       'zope.app.basicskin',
-                      'zope.app.catalog', # BBB
                       'zope.app.content',
                       'zope.app.dependable',
                       'zope.app.exception',
                       'zope.app.file',
                       'zope.app.form',
                       'zope.app.generations>=3.5',
-                      'zope.app.intid', # BBB
                       'zope.app.onlinehelp',
                       'zope.app.publication',
                       'zope.app.server',
-                      'zope.app.session', # BBB
                       'zope.app.tree',
                       'zope.app.wsgi',
                       'zope.app.zcmlfiles',
@@ -107,7 +108,7 @@ Javascript will be usable, although perhaps not very nice or convenient.""",
                       'zope.configuration',
                       'zope.container>=3.7.2',
                       'zope.contentprovider',
-                      'zope.dublincore>=3.6.3',
+                      'zope.dublincore>=3.7',
                       'zope.event',
                       'zope.filerepresentation',
                       'zope.formlib>=4.0',
@@ -125,7 +126,6 @@ Javascript will be usable, although perhaps not very nice or convenient.""",
                       'zope.password',
                       'zope.proxy',
                       'zope.publisher>=3.6',
-                      'zope.login',
                       'zope.schema',
                       'zope.security',
                       'zope.securitypolicy',
@@ -161,9 +161,7 @@ Javascript will be usable, although perhaps not very nice or convenient.""",
     schooltool_deploy = schooltool.paste.templates:SchoolToolDeploy
 
     [schooltool.instance_type]
-    stapp2005 = schooltool.stapp2005
-    stapp2007 = schooltool.stapp2007
-    schooltool = schooltool.stapp2007
+    schooltool = schooltool.standard
 
     """,
     )

@@ -1,35 +1,7 @@
-# Sample SchoolTool HTTP server configuration file
+# Sample SchoolTool server configuration file
 
 # identify the component configuration used to define the site:
-site-definition ${abspath}/school.zcml
-
-#
-# path /path/to/add
-# path /another/path/to/add
-#
-#  Specifies a path to add to the beginning of Python's module search path
-#  There can be zero or more 'path' directives
-#
-
-#
-# module dotted.module.name
-# module another.dotted.module.name
-#
-#  Lists modules to be set up when the server is started. The modules must
-#  provide IModuleSetup. The module 'schooltool.main' is implicitly listed
-#  first.
-#
-# Example:
-#   module school.example
-#
-
-#
-# ssl_certificate certificate
-#
-#   Specifies a certificate in PEM format which contains a certificate and
-#   private key for use in SSL connections.
-#   This is required to use web_ssl
-#
+site-definition ${abspath}/site.zcml
 
 #
 # thread-pool-size n
@@ -43,7 +15,7 @@ site-definition ${abspath}/school.zcml
 #
 # event-logging on|off
 #
-#   Enables or disables global event logging to /utils/eventlog
+#   Enables or disables global event logging
 #
 # Default:
 #   event-logging off
@@ -56,7 +28,7 @@ site-definition ${abspath}/school.zcml
 #
 # Default: no pidfile
 #
-pid-file var/schooltool.pid
+pid-file ${abspath}/var/schooltool.pid
 
 #
 # error-log-file
@@ -98,30 +70,15 @@ error-log-file STDERR
 web-access-log-file ${abspath}/log/web-access.log
 
 #
-# attendance-log-file
-#
-#   Specifies the path of a log file used for attendance
-#   logging. Special values STDERR and STDOUT mean standard error and
-#   standard output respectively.
-#
-#   You can specify more than one log file.  All messages will be duplicated
-#   to all the log files.
-#
-# Default:
-#    attendance-log-file var/attendance.log
-#
-# Examples:
-#    attendance-log-file /var/log/schooltool/attendance.log
-#    attendance-log-file STDOUT
-#
-attendance-log-file ${abspath}/log/attendance.log
-
-#
 # lang
 #
 #   Specifies the locale of the messages to be used on the server.
 #
-#   If 'auto' is set, the language is chosen according to the user's
+#   You can specify more than one locale, separated by commas.  Then a language
+#   selector will appear in the top bar, allowing the user to switch the
+#   language.
+#
+#   If set to 'auto', the language is chosen according to the user's
 #   preference specified in the web browser configuration.
 #
 # Default:
@@ -130,18 +87,7 @@ attendance-log-file ${abspath}/log/attendance.log
 # Examples:
 #   lang en-gb
 #   lang es-sv
-#   lang fr
-
-#
-# domain
-#
-#   Specifies the name of the message catalog to be used on the server.
-#
-# Default:
-#   domain schooltool
-#
-# Examples:
-#   domain schoolbell
+#   lang fr,en-ca
 
 #
 # <zodb>
@@ -167,14 +113,6 @@ attendance-log-file ${abspath}/log/attendance.log
   #   name storage-name		default: Mapping Storage
   # </mappingstorage>
 
-  # <fullstorage>		BerkeleyDB based storage
-  #   ...			XXX
-  # </fullstorage>
-
-  # <minimalstorage>		BerkeleyDB based storage, stripped down
-  #   ...			see <fullstorage>
-  # </minimalstorage>
-
   # <zeoclient>
   #   server address		one or more; required
   #   cache-size n		default: 20000000 (bytes)
@@ -188,12 +126,6 @@ attendance-log-file ${abspath}/log/attendance.log
   #   read-only-fallback yes|no	default: no
   #   realm name		authentication realm
   # </zeoclient>
-
-  # <demostorage>		currently broken
-  #   name			default: Demo Storage
-  #   quota			XXX
-  #   ...			another section describing base storage
-  # </demostorage>
 
   # cache-size n
   #
@@ -210,16 +142,15 @@ attendance-log-file ${abspath}/log/attendance.log
 #
 # reportlab_fontdir
 #
-#   Specifies the path to TrueType fonts (Arial and Times New Roman)
+#   Specifies the path to TrueType fonts (Liberation)
 #   for ReportLab.
 #
 #   Comment out or set to empty string to disable reportlab.
 #
 # Examples:
-#    reportlab_fontdir /usr/share/fonts/truetype/msttcorefonts
+#    reportlab_fontdir /usr/share/fonts/truetype/ttf-liberation
 #
-# Uncomment the following and update the path to enable PDF generation:
-#reportlab_fontdir /usr/share/fonts/truetype/msttcorefonts
+reportlab_fontdir /usr/share/fonts/truetype/ttf-liberation
 
 # devmode
 #

@@ -1,13 +1,16 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      tal:omit-tag="">
 <input type="text"
        tal:attributes="id string:${view/name}.newSubType;
 		       name string:${view/name}.newSubType;
-		       value: view/_getFormValue"
-       />
-
+                       value view/freeTextValue" />
 <select tal:attributes="id string:${view/name};
 			name string:${view/name}">
-  <option value="">Choose One</option>
+  <option value="" i18n:translate="">Choose One</option>
   <option tal:repeat="type view/subTypes"
-	  tal:attributes="value type"
+          tal:attributes="value type;
+                          selected python:type==view.value and 'selected' or None"
 	  tal:content="type">subtype</option>
 </select>
+</html>

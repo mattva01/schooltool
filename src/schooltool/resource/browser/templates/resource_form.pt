@@ -1,0 +1,136 @@
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+  <body>
+    <metal:nothing metal:fill-slot="content-header" />
+    <metal:block metal:fill-slot="body">
+      <form action="." method="post" enctype="multipart/form-data" class="standalone"
+            metal:define-macro="form"
+            tal:attributes="method view/method;
+                            enctype view/enctype;
+                            acceptCharset view/acceptCharset;
+                            accept view/accept;
+                            action view/action;
+                            name view/name;
+                            id view/id">
+        <metal:subform define-macro="subform">
+          <div class="viewspace" metal:define-slot="viewspace">
+            <metal:label define-slot="label">
+              <h3 metal:define-macro="form-label"
+                  tal:condition="view/label|nothing"
+                  tal:content="view/label">
+                Form Label
+              </h3>
+            </metal:label>
+            <metal:info define-slot="info">
+              <div class="required-info"
+                   metal:define-macro="required-info">
+                <!--<span class="required">*</span>
+                    &ndash; required -->
+              </div>
+            </metal:info>
+            <metal:header define-slot="header">
+              <div class="status"
+                   tal:condition="view/status"
+                   metal:define-macro="form-header">
+                <div class="summary"
+                     tal:content="view/status">
+                  Form status summary
+                </div>
+                <ul class="errors"
+                    tal:define="errors view/errors|view/widgets/errors"
+                    tal:condition="errors"
+                    metal:define-macro="form-errors">
+                  <li tal:repeat="error errors">
+                    <tal:block condition="error/widget">
+                      <span tal:replace="error/widget/label" />:
+                    </tal:block>
+                    <span tal:replace="structure error/render">Error Type</span>
+                  </li>
+                </ul>
+              </div>
+            </metal:header>
+            <div metal:define-slot="extra-info" tal:replace="nothing">
+            </div>
+            <div metal:define-slot="main">
+              <metal:widget-rows define-macro="widget-rows">
+                <tal:loop repeat="fieldset view/fieldsets">
+                  <fieldset tal:condition="fieldset/rows"
+                            tal:attributes="id fieldset/id">
+                    <legend tal:content="fieldset/legend">legend</legend>
+                    <tal:loop repeat="row fieldset/rows">
+                      <tal:block repeat="widget_id row">
+                        <metal:block tal:define="widget python:view.widgets[widget_id]">
+                          <div id="" class="row"
+                               tal:attributes="id string:${widget/id}-row"
+                               tal:condition="python:widget.mode != 'hidden'">
+                            <metal:widget-row define-macro="widget-row">
+                              <div class="label">
+                                <label tal:attributes="for widget/id">
+                                  <span tal:content="widget/label">label</span>
+                                  <span class="required"
+                                        tal:condition="widget/required">*</span>
+                                </label>
+                              </div>
+                              <p class="hint" tal:content="widget/field/description">Description of this field.</p>
+                              <div class="widget" tal:content="structure widget/render">
+                                <input type="text" size="24" value="" />
+                              </div>
+                              <div class="error"
+                                   tal:condition="widget/error">
+                                <span tal:replace="structure widget/error/render">error</span>
+                              </div>
+                            </metal:widget-row>
+                          </div>
+                          <input type="hidden" value=""
+                                 tal:condition="python:widget.mode == 'hidden'"
+                                 tal:replace="structure widget/render" />
+                        </metal:block>
+                      </tal:block>
+                    </tal:loop>
+                    <div metal:define-slot="extra-widgets" tal:replace="nothing">
+                    </div>
+                  </fieldset>
+                </tal:loop>
+              </metal:widget-rows>
+              <metal:groups define-macro="groups">
+                <fieldset tal:condition="view/groups|nothing"
+                          tal:repeat="view view/groups">
+                  <legend tal:condition="view/label"
+                          tal:content="view/label">Label</legend>
+                  <metal:group-header define-slot="group-header">
+                    <div class="status"
+                         tal:condition="view/widgets/errors">
+                      <div metal:use-macro="template/macros/errors" />
+                    </div>
+                  </metal:group-header>
+                  <metal:group-rows define-slot="group-rows">
+                    <div metal:use-macro="template/macros/widget-rows" />
+                  </metal:group-rows>
+                </fieldset>
+              </metal:groups>
+            </div>
+            <metal:above-buttons define-slot="above-buttons">
+              <tal:block
+                  repeat="form view/subforms"
+                  content="structure form/render"
+                  condition="view/subforms|nothing" />
+            </metal:above-buttons>
+          </div>
+          <metal:buttons define-slot="buttons">
+            <div metal:define-macro="form-buttons">
+              <div class="buttons controls"
+                   metal:define-slot="bottom-buttons">
+                <tal:block condition="view/actions|nothing">
+                  <input tal:repeat="action view/actions/values"
+                         tal:replace="structure action/render"
+                         />
+                </tal:block>
+              </div>
+            </div>
+          </metal:buttons>
+          <metal:bottom define-slot="bottom">
+          </metal:bottom>
+        </metal:subform>
+      </form>
+    </metal:block>
+  </body>
+</html>

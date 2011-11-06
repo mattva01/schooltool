@@ -1,0 +1,55 @@
+Adding terms named first or last
+================================
+
+Originally, when the schoolyear index.html view was coded, if the user
+chose either 'First' or 'Last' (any case) for the name of a term, the
+schoolyear view would no longer work, crashing becuase it traversed to
+the term (first or last) before applying the @@mediumDate adapter.  To
+fix this, the view class now has first and last properties that return
+the actual attributes rather than traversing to the term.  To test this,
+we will add two terms to a schoolyear, one named 'First' and one named
+'Last'.
+
+A manager logs in
+
+    >>> manager = Browser('manager', 'schooltool')
+
+And create a new school year:
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('School Years').click()
+    >>> manager.getLink('New School Year').click()
+    >>> manager.getControl('Title').value = '2010'
+    >>> manager.getControl('First day').value = '2010-01-01'
+    >>> manager.getControl('Last day').value = '2010-12-31'
+    >>> manager.getControl('Add').click()
+
+Now we'll add the two woefully-titled terms to see that it doesn't crash.
+
+    >>> manager.getLink('Add a new term').click()
+    >>> manager.getControl('Title').value = 'First'
+    >>> manager.getControl('Start date').value = '2010-01-01'
+    >>> manager.getControl('End date').value = '2010-06-30'
+    >>> manager.getControl('Next').click()
+    >>> manager.getControl('Add term').click()
+
+    >>> manager.getLink('Add a new term').click()
+    >>> manager.getControl('Title').value = 'Last'
+    >>> manager.getControl('Start date').value = '2010-07-01'
+    >>> manager.getControl('End date').value = '2010-12-31'
+    >>> manager.getControl('Next').click()
+    >>> manager.getControl('Add term').click()
+
+Also, we see that the terms are in fact there.
+
+    >>> manager.printQuery("id('content-body')//input[@type='checkbox']")
+    <input type="checkbox" name="delete.first" id="delete.first" />
+    <input type="checkbox" name="delete.last" id="delete.last" />
+
+The School Years view also needs to not crash.
+
+    >>> manager.getLink('Manage').click()
+    >>> manager.getLink('School Years').click()
+    >>> manager.printQuery("id('content-body')/p[1]/text()")
+    The active school year is (... - ...)
+

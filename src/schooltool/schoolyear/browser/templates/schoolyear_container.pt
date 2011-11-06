@@ -22,9 +22,9 @@
     <p i18n:translate="">
       The active school year is
       <strong tal:content="active_year/@@title" i18n:name="year" />
-      (<tal:block content="active_year/first/@@mediumDate"
+      (<tal:block content="view/first/@@mediumDate"
                   i18n:name="start_date"/> -
-       <tal:block content="active_year/last/@@mediumDate"
+       <tal:block content="view/last/@@mediumDate"
                   i18n:name="end_date"/>)
     </p>
   </tal:block>

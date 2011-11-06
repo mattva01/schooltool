@@ -239,30 +239,26 @@ table.container {
     border-collapse: collapse;
     width: 99%;
     border-left: 1px solid #bab5ab;
-}
-
-table.container tr.header th {
-    border-right: 1px solid #bab5ab;
-    border-top: 1px solid #bab5ab;
-    border-bottom: 1px solid #bab5ab;
-    padding: 0 10px;
-}
-
-table.container tr.even {
-    background: #d6d6d6;
-}
-
-table.container tr {
-}
-
-table.container td {
-    text-align: center;
-    border-right: 1px solid #bab5ab;
-    border-bottom: 1px solid #bab5ab;
+    margin-top: 1ex;
 }
 
 table.container th {
     text-align: left;
+    border-right: 1px solid #bab5ab;
+    border-top: 1px solid #bab5ab;
+    border-bottom: 1px solid #bab5ab;
+    padding: 2px 0.5em;
+}
+
+table.container td {
+    text-align: left;
+    border-right: 1px solid #bab5ab;
+    border-bottom: 1px solid #bab5ab;
+    padding: 2px 0.5em;
+}
+
+.header {
+    background-color: #DDD;
 }
 
 /* Styles for the zc tables */

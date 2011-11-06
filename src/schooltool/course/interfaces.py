@@ -55,7 +55,7 @@ class ICourse(Interface):
         required=False,
         description=_("Course identifier used by the government."))
 
-    credits = zope.schema.Int(
+    credits = zope.schema.Decimal(
         title=_("Credits"),
         required=False,
         description=_("Amount of credits for this course."))
