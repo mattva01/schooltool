@@ -1,0 +1,20 @@
+<div i18n:domain="schooltool">
+
+<p i18n:translate="">You are not authorized</p>
+
+<a tal:condition="view/next_url"
+   tal:attributes="href view/next_url"
+   i18n:translate>Proceed to login page</a>
+
+<h2 i18n:translate="">Permission checks</h2>
+
+<p i18n:translate="">Most recent checks last.  Red indicates insufficient permissions.  "=>" indicates relayed checks, usually to parent object.</p>
+
+<pre class="traceback">
+<ul><li tal:repeat="check view/security_checks"
+      tal:attributes="style python:(not check['value']) and 'color:red'"><tal:block content="python: '\n'*(check['level']==1)+'='*(check['level']-1)+'> '*(check['level']>1)" /><tal:block content="check/permission" /> <span tal:content="check/repr/strip|nothing" />
+  <span tal:condition="check/name" tal:content="check/name/strip" />
+</li></ul>
+</pre>
+
+</div>

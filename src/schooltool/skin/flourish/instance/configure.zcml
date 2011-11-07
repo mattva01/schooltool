@@ -30,7 +30,10 @@
   <configure xmlns:zcml="http://namespaces.zope.org/zcml"
              zcml:condition="have devmode">
     <include package="schooltool.devmode" />
+    <include package="schooltool.devmode" file="flourish.zcml" />
     <includeOverrides package="schooltool.devmode" file="overrides.zcml" />
+    <includeOverrides package="schooltool.devmode"
+                      file="flourish-overrides.zcml" />
   </configure>
 
   <include file="skin.zcml" />
