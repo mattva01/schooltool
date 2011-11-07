@@ -15,7 +15,7 @@ implementation.
 
     >>> from schooltool.traverser.traverser import PluggableTraverser
 
-Let's say that we have an object
+Let's say that we have an object::
 
     >>> from zope.interface import Interface, implements
     >>> class IContent(Interface):
@@ -34,7 +34,7 @@ they are implemented as views and must thus be initiated using a request:
     >>> request = TestRequest('')
     >>> traverser = PluggableTraverser(content, request)
 
-We can now try to lookup the variable:
+We can now try to lookup the variable::
 
     >>> traverser.publishTraverse(request, 'var')
     Traceback (most recent call last):
@@ -43,7 +43,7 @@ We can now try to lookup the variable:
 
 But it failed. Why? Because we have not registered a plugin traverser yet that
 knows how to lookup attributes. This package provides such a traverser
-already, so we just have to register it:
+already, so we just have to register it::
 
     >>> from zope.component import provideAdapter
     >>> from zope.publisher.interfaces import IPublisherRequest
@@ -66,7 +66,7 @@ However, an incorrect variable name will still return a ``NotFound`` error:
 
 Every traverser should also make sure that the passed in name is not a
 view. (This allows us to not specify the ``@@`` in front of a view.) So let's
-register one:
+register one::
 
     >>> class View(object):
     ...     def __init__(self, context, request):
@@ -79,7 +79,7 @@ register one:
     ...                provides=Interface,
     ...                name='view.html')
 
-Now we can lookup the view as well:
+Now we can lookup the view as well::
 
     >>> traverser.publishTraverse(request, 'view.html')
     <View object at ...>
@@ -91,7 +91,7 @@ Advanced Uses
 A more interesting case to consider is a traverser for a container. If you
 really dislike the Zope 3 traversal namespace notation ``++namespace++`` and
 you can control the names in the container, then the pluggable traverser will
-also provide a viable solution. Let's say we have a container
+also provide a viable solution. Let's say we have a container::
 
     >>> from zope.container.interfaces import IContainer
     >>> class IMyContainer(IContainer):
@@ -109,21 +109,23 @@ also provide a viable solution. Let's say we have a container
 and we would like to be able to traverse
 
   * all items of the container, as well as
+    ::
 
-    >>> from schooltool.traverser.traverser import ContainerTraverserPlugin
-    >>> from schooltool.traverser.interfaces import ITraverserPlugin
+        >>> from schooltool.traverser.traverser import ContainerTraverserPlugin
+        >>> from schooltool.traverser.interfaces import ITraverserPlugin
 
-    >>> provideAdapter(ContainerTraverserPlugin,
-    ...                (IMyContainer, IPublisherRequest),
-    ...                ITraverserPlugin)
+        >>> provideAdapter(ContainerTraverserPlugin,
+        ...                (IMyContainer, IPublisherRequest),
+        ...                ITraverserPlugin)
 
   * the ``foo`` attribute. Luckily we also have a predeveloped traverser for
-    this:
+    this
+    ::
 
-    >>> from schooltool.traverser.traverser import \
-    ...     SingleAttributeTraverserPlugin
-    >>> provideAdapter(SingleAttributeTraverserPlugin('foo'),
-    ...                (IMyContainer, IPublisherRequest), name="foo")
+        >>> from schooltool.traverser.traverser import \
+        ...     SingleAttributeTraverserPlugin
+        >>> provideAdapter(SingleAttributeTraverserPlugin('foo'),
+        ...                (IMyContainer, IPublisherRequest), name="foo")
 
 We can now use the pluggable traverser
 
@@ -140,7 +142,7 @@ and the ``foo`` attribute:
     True
 
 However, we cannot lookup the ``bar`` attribute or any other non-existent
-item:
+item::
 
     >>> traverser.publishTraverse(request, 'bar')
     Traceback (most recent call last):
@@ -153,7 +155,7 @@ item:
     NotFound: Object: <MyContainer object at ...>, name: 'bad'
 
 You can also add traversers that return an adapted object. For example, let's
-take the following adapter:
+take the following adapter::
 
     >>> class ISomeAdapter(Interface):
     ...     pass
@@ -176,7 +178,7 @@ Now we register this adapter under the traversal name ``some``:
     ...     AdapterTraverserPlugin('some', ISomeAdapter),
     ...     (IMyContainer, IPublisherRequest), name="some")
 
-So here is the result:
+So here is the result::
 
     >>> traverser.publishTraverse(request, 'some')
     <SomeAdapter object at ...>
@@ -188,7 +190,7 @@ Traverser Plugins
 The `traverser` package comes with several default traverser plugins; three of
 them were already introduced above: `SingleAttributeTraverserPlugin`,
 `AdapterTraverserPlugin`, and `ContainerTraverserPlugin`. Another plugin is
-the the `NullTraverserPlugin`, which always just returns the object itself:
+the the `NullTraverserPlugin`, which always just returns the object itself::
 
     >>> from schooltool.traverser.traverser import NullTraverserPlugin
     >>> SomethingPlugin = NullTraverserPlugin('something')
@@ -218,7 +220,7 @@ traversed name:
 As you can see realized name traversers must implement the ``_traverse()``
 method, which is only responsible for returning the result. Of course it can
 also raise the `NotFound` error if something goes wrong during the
-computation. LEt's check it out:
+computation. LEt's check it out::
 
     >>> plugin = TrueTraverserPlugin(content, request)
     >>> plugin.publishTraverse(request, 'true')
@@ -230,8 +232,8 @@ computation. LEt's check it out:
     NotFound: Object: <Content object at ...>, name: 'false'
 
 A final traverser that is offered by the package is the
-`AttributeTraverserPlugin``, which simply allows one to traverse all
-accessible attributes of an object:
+`AttributeTraverserPlugin`, which simply allows one to traverse all
+accessible attributes of an object::
 
     >>> from schooltool.traverser.traverser import AttributeTraverserPlugin
 
