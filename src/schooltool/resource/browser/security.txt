@@ -4,8 +4,6 @@ Functional doctest for Security
 This test verifies the security checking for booked resources and
 events that book them.
 
-XXX: Review with David Welsh for accuracy.
-
 Setup / Create Manager
 ----------------------
 
@@ -34,21 +32,14 @@ Create new Browsers for 'Teacher' & 'Leader' and log them in
     >>> teacher = Browser('teacher', 'pwd')
     >>> leader = Browser('leader', 'pwd')
 
-Our users are neither in the teacher group, nor leaders of
-the resource, but they should still be able to see the resource
-to know when it is in use because they are logged in.
+Simple users cannot list the resources:
 
     >>> teacher.open('http://localhost/resources')
-    >>> teacher.getLink("Resource").click()
-    >>> teacher.getLink('Classroom').click()
-    >>> teacher.url
-    'http://localhost/resources/classroom'
+    Traceback (most recent call last):
+    ...
+    Unauthorized: ...
 
-The teacher should be able to view the calendar for a resource.
-
-    >>> teacher.getLink('View Calendar').click()
-
-But he should not be able to add the events (even if he can guess the url):
+Simple users should not be able to add the events (even if he can guess the url):
 
     >>> teacher.open('http://localhost/resources/classroom/calendar/add.html')
     Traceback (most recent call last):
@@ -64,37 +55,13 @@ Now we will put these people into the teacher group
     >>> manager.getControl('Teacher').click()
     >>> manager.getControl('Add').click()
 
-Now the teacher should be able to schedule a new event
-
-    >>> teacher.open("http://localhost/resources")
-    >>> teacher.getLink('Resource').click()
-    >>> teacher.getLink('Classroom').click()
-    >>> teacher.getLink('View Calendar').click()
-    >>> teacher.getLink('New Event').click()
-    >>> teacher.getControl('Title').value = 'Classroom Event'
-    >>> teacher.getControl('Time').value = '08:00'
-    >>> teacher.getControl('Add').click()
-    >>> 'Classroom Event' in teacher.contents
-    True
-
-The teacher should be able to edit the event that they created.
-
-    >>> teacher.getLink('Classroom Event').click()
-    >>> teacher.getControl('Time').value = '09:00'
-    >>> teacher.getControl('Update', index=1).click()
-
 The leader should not be able to edit this event (yet) because the
 leader is not yet a member of the resource's leader list.
 
-    >>> leader.open('http://localhost/resources')
-    >>> leader.getLink('Resource').click()
-    >>> leader.getLink('Classroom').click()
-    >>> leader.getLink('View Calendar').click()
-    >>> leader.getLink('Classroom Event').click()
-    >>> leader.getLink('edit event').click()
+    >>> leader.open('http://localhost/resources/classroom')
     Traceback (most recent call last):
     ...
-    Unauthorized: (<...>, 'browserDefault', 'schooltool.edit')
+    Unauthorized: (<...>, 'browserDefault', 'schooltool.view')
 
 So now we will make this leader the leader of the resource.
 
@@ -103,44 +70,47 @@ So now we will make this leader the leader of the resource.
     >>> manager.getControl('Leader').click()
     >>> manager.getControl('Add').click()
 
-Now 'Leader' is the leader of the resource and should be able to edit it.
+Now the leader should be able to schedule a new event
 
-    >>> leader.goBack()
-    >>> leader.getLink('edit event').click()
-    >>> leader.getControl('Time').value = '10:00'
+    >>> leader.open('http://localhost/resources/classroom')
+    >>> leader.getLink('View Calendar').click()
+    >>> leader.getLink('New Event').click()
+    >>> leader.getControl('Title').value = 'Classroom Event'
+    >>> leader.getControl('Time').value = '08:00'
+    >>> leader.getControl('Add').click()
+    >>> 'Classroom Event' in leader.contents
+    True
+
+The leader should be able to edit the event that they created.
+
+    >>> leader.getLink('Classroom Event').click()
+    >>> leader.getControl('Time').value = '09:00'
     >>> leader.getControl('Update', index=1).click()
 
-The teacher should still be able to delete the event.
-
-    >>> teacher.getLink('[X]').click()
-    >>> teacher.getControl('Delete').click()
-    >>> 'Classroom Event' in teacher.contents
-    False
-
-The teacher should also be able to schedule a new event from their
+The leader should also be able to schedule a new event from their
 personal calendar.
 
-    >>> teacher.getLink('Calendar').click()
-    >>> teacher.getLink('New Event').click()
-    >>> teacher.getControl('Title').value = 'Classroom Event'
-    >>> teacher.getControl('Time').value = '09:00'
-    >>> teacher.getControl('Book Resources').click()
-    >>> teacher.getControl('Add').click()
-    >>> teacher.getControl('Classroom').click()
-    >>> teacher.getControl('Book').click()
-    >>> teacher.getLink('Calendar').click()
-    >>> 'Classroom Event' in teacher.contents
+    >>> leader.getLink('Calendar').click()
+    >>> leader.getLink('New Event').click()
+    >>> leader.getControl('Title').value = 'Classroom Event'
+    >>> leader.getControl('Time').value = '11:00'
+    >>> leader.getControl('Book Resources').click()
+    >>> leader.getControl('Add').click()
+    >>> leader.getControl('Classroom').click()
+    >>> leader.getControl('Book').click()
+    >>> leader.getLink('Calendar').click()
+    >>> 'Classroom Event' in leader.contents
     True
 
 Check to see that the classroom is booked as well.
 
-    >>> print teacher.contents
+    >>> print leader.contents
     <BLANKLINE>
     ...
       <h6 class="booked-resource-header"
           style="background: #7590ae">
         <a style="color: #000;"
-           href="http://localhost/persons/teacher/calendar/.../booking.html?date=...">Booked resources</a></h6>
+           href="http://localhost/persons/leader/calendar/.../booking.html?date=...">Booked resources</a></h6>
     <BLANKLINE>
         <a href="http://localhost/resources/classroom">Classroom</a>
     ...
@@ -155,26 +125,10 @@ Create another Resource.
     >>> manager.getLink("Resource", index=2).click()
     >>> manager.getLink('Classroom').click()
 
-Have Teacher book 'Lobby'
-
-    >>> teacher.open("http://localhost/resources")
-    >>> teacher.getLink('Resource').click()
-    >>> teacher.getLink('Lobby').click()
-    >>> teacher.getLink('View Calendar').click()
-    >>> teacher.getLink('New Event').click()
-    >>> teacher.getControl('Title').value = 'Lobby Event'
-    >>> teacher.getControl('Time').value = '08:00'
-    >>> teacher.getControl('Add').click()
-    >>> 'Lobby Event' in teacher.contents
-    True
-
 The Leader is not the leader of 'Lobby' but is of 'Classroom', make sure that
 Leader cannot edit an event in 'Lobby'.
 
     >>> leader.open('http://localhost/resources/lobby')
-    >>> leader.getLink('View Calendar').click()
-    >>> leader.getLink('Lobby Event').click()
-    >>> leader.getLink('edit event').click()
     Traceback (most recent call last):
     ...
-    Unauthorized: (<...>, 'browserDefault', 'schooltool.edit')
+    Unauthorized: (<...>, 'browserDefault', 'schooltool.view')
