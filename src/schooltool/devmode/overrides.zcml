@@ -1,5 +1,6 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
+    xmlns:security="http://schooltool.org/securitypolicy"
     xmlns:browser="http://namespaces.zope.org/browser">
 
   <subscriber
@@ -24,5 +25,16 @@
       />
 
   </configure>
+
+  <browser:page
+      for="zope.security.interfaces.IUnauthorized"
+      name="index.html"
+      layer="schooltool.skin.ISchoolToolLayer"
+      class="schooltool.devmode.devmode.DebugUnauthorized"
+      permission="zope.Public"
+      />
+
+  <securityPolicy
+      component=".devmode.DebugSecurityPolicy" />
 
 </configure>

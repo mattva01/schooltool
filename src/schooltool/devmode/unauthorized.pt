@@ -1,0 +1,29 @@
+<html metal:use-macro="context/@@standard_macros/page"
+    i18n:domain="zope">
+<body i18n:domain="zope">
+
+<div metal:fill-slot="body">
+
+<h1 i18n:translate="">Unauthorized</h1>
+
+<p i18n:translate="">You are not authorized</p>
+
+<a tal:condition="view/next_url"
+   tal:attributes="href view/next_url"
+   i18n:translate>Proceed to login page</a>
+
+<ul>
+  <li tal:repeat="check view/security_checks"
+      tal:attributes="style python:(not check['value']) and 'color:red'">
+    <span tal:content="python: ''+'-'*check['level']+'>'" />
+    <span tal:content="check/value" />
+    <span tal:content="check/permission" />
+    <span tal:content="check/repr" />
+    <span tal:condition="check/name"
+          tal:content="check/name" />
+  </li>
+</ul>
+
+</div>
+</body>
+</html>
