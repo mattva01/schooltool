@@ -74,8 +74,6 @@ class CachingSecurityPolicy(ParanoidSecurityPolicy):
     """Crowd-based caching security policy."""
 
     def cachingKey(self, permission, obj):
-        if isinstance(obj, Persistent):
-            return (permission, obj._p_oid, obj._p_jar)
         return (permission, id(obj))
 
     @classmethod
