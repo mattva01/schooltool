@@ -1024,6 +1024,11 @@ class FlourishErrorsConfigureView(Form, FlourishErrorsViewBase):
         url = absoluteURL(self.context, self.request) + '/errors'
         return url
 
+    def updateActions(self):
+        super(FlourishErrorsConfigureView, self).updateActions()
+        self.actions['submit'].addClass('button-ok')
+        self.actions['cancel'].addClass('button-cancel')
+
 
 class ErrorsBreadcrumb(flourish.breadcrumbs.Breadcrumbs):
 
