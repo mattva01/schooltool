@@ -13,6 +13,10 @@
                             title month_title"/>
       </th>
     </tr>
+    <tr>
+      <td tal:repeat="weekday view/weekdays"
+          tal:content="weekday" />
+    </tr>
     </thead>
     <tbody>
     <tr tal:repeat="row view/rows">

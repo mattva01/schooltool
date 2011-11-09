@@ -25,6 +25,7 @@ import datetime
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.cachedescriptors.property import Lazy
 from zope.component import adapts, queryMultiAdapter
+from zope.i18n import translate
 from zope.interface import implements
 from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.publisher.interfaces import NotFound
@@ -36,6 +37,7 @@ from schooltool.app.browser.cal import MonthlyCalendarView
 from schooltool.app.browser.cal import YearlyCalendarView
 from schooltool.app.browser.cal import CalendarViewBase
 from schooltool.app.browser.cal import month_names
+from schooltool.app.browser.cal import short_day_of_week_names
 from schooltool.calendar.interfaces import ICalendar
 from schooltool.calendar.utils import weeknum_bounds, prev_month, next_month
 from schooltool.common.inlinept import InheritTemplate
@@ -236,6 +238,16 @@ class CalendarMonthViewlet(flourish.page.Refine):
             result.append(self.view.renderRow(week, cursor.month))
         return result
 
+    def weekdays(self):
+        result = []
+        cursor = self.cursor
+        month = self.view.getMonth(cursor)
+        week = month[0]
+        for day in week:
+            name = short_day_of_week_names[day.date.weekday()]
+            result.append(translate(name, context=self.request)[:1])
+        return result
+        
 
 class CalendarPrevMonthViewlet(CalendarMonthViewlet):
 

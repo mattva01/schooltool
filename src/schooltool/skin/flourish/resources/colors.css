@@ -796,6 +796,12 @@ form fieldset table.timetable td.error {
     background: #009499;
 }
 
+.page .refine .calendar-month table.month thead td {
+    background: #ffffff;
+    color: #4B5554;
+    border-bottom: 1px solid #dfdfdf;
+}
+
 .page .refine .calendar-month TABLE.month tbody {
     border-top: 1px solid #000000;
 }
