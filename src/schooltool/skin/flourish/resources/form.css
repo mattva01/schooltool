@@ -144,6 +144,9 @@ form .buttons .button-neutral,
 form .buttons .button-cancel {
     font-size: 14px;
     line-height: 20px;
+
+    -moz-border-radius: 4px 4px 4px 4px;
+    border-radius: 4px 4px 4px 4px;
 }
 
 .status > .summary {

@@ -122,7 +122,7 @@
 }
 
 .grades input[type="text"]:focus {
-    width: 3.8em;
+    width: 4em;
 }
 
 .grades .placeholder {
