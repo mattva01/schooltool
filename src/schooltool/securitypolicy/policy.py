@@ -24,6 +24,7 @@ $Id$
 """
 from persistent import Persistent
 from zope.security.simplepolicies import ParanoidSecurityPolicy
+from zope.security.proxy import removeSecurityProxy
 from zope.component import queryAdapter
 from zope.traversing.api import getParent
 from schooltool.securitypolicy.crowds import ICrowd
@@ -74,7 +75,7 @@ class CachingSecurityPolicy(ParanoidSecurityPolicy):
     """Crowd-based caching security policy."""
 
     def cachingKey(self, permission, obj):
-        return (permission, id(obj))
+        return (permission, id(removeSecurityProxy(obj)))
 
     @classmethod
     def getCache(cls, participation):
