@@ -802,6 +802,10 @@ form fieldset table.timetable td.error {
     border-bottom: 1px solid #dfdfdf;
 }
 
+.page .refine .calendar-month table.month thead td:nth-child(even) {
+    background: #f0f0f0;
+}
+
 .page .refine .calendar-month TABLE.month tbody {
     border-top: 1px solid #000000;
 }

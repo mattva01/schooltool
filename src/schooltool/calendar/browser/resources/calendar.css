@@ -29,6 +29,7 @@
 .page .refine .calendar-month TABLE.month {
     border-collapse: separate;
     width: 140px;
+    margin-top: 0px;
 }
 
 .page .refine .calendar-month TABLE.month tbody,
