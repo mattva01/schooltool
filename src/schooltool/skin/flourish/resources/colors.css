@@ -490,10 +490,6 @@ table.schoolday-legend td.schoolday {
     color: #ffffff;
 }
 
-.ui-datepicker-calendar a.ui-state-highlight {
-    color: #ef4444;
-}
-
 .ui-datepicker-calendar a.ui-state-active {
     color: #009499;
 }
