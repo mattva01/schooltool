@@ -96,9 +96,6 @@ a.modify img {
 }
 
 .schooltool > .header {
-    -moz-box-shadow: 0px -3px 4px #bbbbbb;
-    -webkit-box-shadow: 0px -3px 4px #bbbbbb;
-    box-shadow: 0px -3px 4px #bbbbbb;
 }
 
 .schooltool > .page {
@@ -107,10 +104,6 @@ a.modify img {
 
     -moz-border-radius: 0px 0px 4px 4px;
     border-radius: 0px 0px 4px 4px;
-
-    -moz-box-shadow: 0px 1px 4px #bbbbbb;
-    -webkit-box-shadow: 0px 1px 4px #bbbbbb;
-    box-shadow: 0px 1px 4px #bbbbbb;
 }
 
 .schooltool > .header {
@@ -178,10 +171,6 @@ a.modify img {
 
     -moz-border-radius: 0px 0px 4px 4px;
     border-radius: 0px 0px 4px 4px;
-
-    -moz-box-shadow: 0px 1px 6px #bbbbbb;
-    -webkit-box-shadow: 0px 1px 6px #bbbbbb;
-    box-shadow: 0px 1px 6px #bbbbbb;
 }
 
 .header ul.navigation li {
@@ -217,10 +206,6 @@ a.modify img {
 
     -moz-border-radius: 0px 0px 4px 4px;
     border-radius: 0px 0px 4px 4px;
-
-    -moz-box-shadow: 0px 1px 6px #bbbbbb;
-    -webkit-box-shadow: 0px 1px 6px #bbbbbb;
-    box-shadow: 0px 1px 6px #bbbbbb;
 }
 
 .header ul.second-nav > li {
@@ -243,6 +228,11 @@ a.modify img {
 
 .header ul.second-nav > li span {
     font-weight: bold;
+}
+
+.header ul.second-nav #language-selector span,
+.header ul.second-nav #language-selector a {
+    padding: 4px 2px;
 }
 
 .header ul.breadcrumbs {

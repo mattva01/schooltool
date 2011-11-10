@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-10-01 14:51-0600\n"
-"PO-Revision-Date: 2011-10-03 16:08+0000\n"
-"Last-Translator: Anton Golubkov <Unknown>\n"
+"POT-Creation-Date: 2011-10-12 18:58+0300\n"
+"PO-Revision-Date: 2011-10-21 18:06+0000\n"
+"Last-Translator: solnechnii <Unknown>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-10-06 05:01+0000\n"
-"X-Generator: Launchpad (build 14085)\n"
+"X-Launchpad-Export-Date: 2011-10-22 05:31+0000\n"
+"X-Generator: Launchpad (build 14170)\n"
 "Language: ru\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -98,7 +98,7 @@ msgstr "Войти"
 
 #: /src/schooltool/app/browser/app.py:435
 msgid "Log out"
-msgstr ""
+msgstr "Выйти из системы"
 
 #: /src/schooltool/app/browser/app.py:523
 msgid "Calendar settings"
@@ -249,7 +249,7 @@ msgstr "школа"
 #: /src/schooltool/securitypolicy/browser/flourish.zcml:15
 #: /src/schooltool/securitypolicy/browser/flourish.zcml:44
 msgid "Server"
-msgstr ""
+msgstr "Сервер"
 
 #: /src/schooltool/app/browser/app.py:852
 #: /src/schooltool/app/browser/app.py:937
@@ -276,11 +276,11 @@ msgstr ""
 
 #: /src/schooltool/app/browser/app.py:887
 msgid "Unknown"
-msgstr ""
+msgstr "Неизвестно"
 
 #: /src/schooltool/app/browser/app.py:889
 msgid "Backup"
-msgstr ""
+msgstr "Резервная копия"
 
 #: /src/schooltool/app/browser/app.py:909
 msgid "Database successfully packed."
@@ -315,6 +315,21 @@ msgstr ""
 #: /src/schooltool/app/browser/flourish.zcml:292
 msgid "Errors Settings"
 msgstr ""
+
+#: /src/schooltool/app/browser/app.py:1005
+#: /src/schooltool/basicperson/browser/demographics.py:413
+#: /src/schooltool/basicperson/browser/demographics.py:473
+#: /src/schooltool/basicperson/browser/person.py:951
+#: /src/schooltool/course/browser/course.py:568
+#: /src/schooltool/course/browser/section.py:1261
+#: /src/schooltool/group/browser/group.py:669
+#: /src/schooltool/schoolyear/browser/schoolyear.py:490
+#: /src/schooltool/schoolyear/browser/schoolyear.py:538
+#: /src/schooltool/schoolyear/browser/templates/f_schoolyear_activate.pt:23
+#: /src/schooltool/term/browser/term.py:291
+#: /src/schooltool/term/browser/term.py:404
+msgid "Submit"
+msgstr "Подтвердить"
 
 #: /src/schooltool/app/browser/app.py:1025
 #: /src/schooltool/app/browser/configure.zcml:670
@@ -1081,7 +1096,7 @@ msgstr "Настройки"
 
 #: /src/schooltool/app/browser/flourish.zcml:218
 msgid "Calendar Settings"
-msgstr ""
+msgstr "Настройки календаря"
 
 #: /src/schooltool/app/browser/flourish.zcml:228
 #: /src/schooltool/app/browser/templates/f_errors.pt:7
@@ -6634,11 +6649,17 @@ msgstr "Редактировать пароль"
 msgid "No new password was supplied so original password is unchanged"
 msgstr "Новый пароль не был принят. Старый пароль не изменен"
 
-#: /src/schooltool/person/browser/person.py:327
-msgid "Changed password"
-msgstr "Изменённый пароль"
+#: /src/schooltool/person/browser/person.py:337
+msgid ""
+"Password changed successfully. Next, you will be required to authenticate "
+"with your new credentials"
+msgstr ""
 
-#: /src/schooltool/person/browser/person.py:345
+#: /src/schooltool/person/browser/person.py:341
+msgid "Password changed successfully"
+msgstr ""
+
+#: /src/schooltool/person/browser/person.py:359
 #: /src/schooltool/person/security.zcml:101
 msgid "Change password"
 msgstr "Изменить пароль"
@@ -8805,3 +8826,6 @@ msgstr "Расписания школы"
 #: /src/schooltool/widget/password.py:55
 msgid "Supplied passwords are not identical"
 msgstr "Введённые пароли не совпадают"
+
+#~ msgid "Changed password"
+#~ msgstr "Изменённый пароль"

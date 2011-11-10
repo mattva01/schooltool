@@ -27,6 +27,7 @@ from zope.interface import Interface, Attribute
 
 from zope.schema.interfaces import IVocabularyTokenized
 
+from schooltool.app.utils import vocabulary
 from schooltool.common import SchoolToolMessage as _
 
 
@@ -65,7 +66,7 @@ class IBasicPerson(Interface):
 
     gender = Choice(
         title=_(u"Gender"),
-        values=[_('male'), _('female')],
+        vocabulary=vocabulary([('male', _('male')), ('female', _('female')),]),
         required=False,
         )
 
