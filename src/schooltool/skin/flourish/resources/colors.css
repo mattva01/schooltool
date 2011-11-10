@@ -455,6 +455,11 @@ table.schoolday-legend td.schoolday {
     color: #ffffff;
 }
 
+.ui-datepicker {
+    border: 2px solid #00abb3;
+    border-top-width: 1px;
+}
+
 .ui-datepicker .ui-widget-header {
     background: #4B5554;
     border: 1px solid #4B5554;
