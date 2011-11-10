@@ -455,6 +455,58 @@ table.schoolday-legend td.schoolday {
     color: #ffffff;
 }
 
+.ui-datepicker .ui-widget-header {
+    background: #4B5554;
+    border: 1px solid #4B5554;
+}
+
+.ui-datepicker-header a.ui-state-hover {
+    background: none;
+    border: 1px solid #dfdfdf;
+}
+
+.ui-datepicker-calendar thead {
+    background: none;
+    border-bottom: 1px solid #dfdfdf;
+}
+
+.ui-datepicker-calendar thead th {
+    color: #4B5554;
+}
+
+.ui-datepicker-calendar a.ui-state-default {
+    background: none;
+    border: 0;
+    color: #4B5554;
+}
+
+.ui-datepicker-calendar a.ui-state-default:hover {
+    background: #009499;
+    color: #ffffff;
+}
+
+.ui-datepicker-calendar a.ui-state-highlight {
+    color: #ef4444;
+}
+
+.ui-datepicker-calendar a.ui-state-active {
+    color: #009499;
+}
+
+.ui-datepicker-calendar tr {
+    border-bottom: none;
+}
+
+.ui-datepicker-calendar .ui-datepicker-other-month {
+    background: none;
+    opacity: 1;
+}
+
+.ui-datepicker-calendar tr th:nth-child(even),
+.ui-datepicker-calendar tr td:nth-child(even) {
+    background: #f0f0f0;
+}
+
 /*
 
   Gradebook:
