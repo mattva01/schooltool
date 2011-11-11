@@ -23,6 +23,7 @@ $Id$
 
 """
 from persistent import Persistent
+import zope.keyreference.interfaces
 from zope.security.simplepolicies import ParanoidSecurityPolicy
 from zope.security.proxy import removeSecurityProxy
 from zope.component import queryAdapter
@@ -75,7 +76,13 @@ class CachingSecurityPolicy(ParanoidSecurityPolicy):
     """Crowd-based caching security policy."""
 
     def cachingKey(self, permission, obj):
-        return (permission, id(removeSecurityProxy(obj)))
+        try:
+            ref = zope.keyreference.interfaces.IKeyReference(obj, None)
+            if ref is None:
+                return None
+        except zope.keyreference.interfaces.NotYet:
+            return None
+        return (permission, ref)
 
     @classmethod
     def getCache(cls, participation):
