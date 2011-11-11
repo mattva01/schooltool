@@ -47,6 +47,7 @@ from schooltool.group.interfaces import IGroupContainer
 from schooltool.term.interfaces import ITerm
 from schooltool.term.term import Term, getNextTerm, getPreviousTerm
 from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.app.app import SimpleNameChooser
 from schooltool.schoolyear.schoolyear import SchoolYear
 from schooltool.schoolyear.interfaces import ISchoolYear
@@ -440,12 +441,17 @@ class SchoolTimetableImporter(ImporterBase):
         syc = ISchoolYearContainer(self.context)
         schoolyear = syc[data['school_year']]
 
+        app = ISchoolToolApplication(None)
+        tzname = IApplicationPreferences(app).timezone
         timetable = Timetable(schoolyear.first, schoolyear.last,
-                              title=data['title'])
+                              title=data['title'], timezone=tzname)
 
         factories = dict(self.day_templates)
 
         container = ITimetableContainer(schoolyear)
+
+        if data['__name__'] in container:
+            del container[data['__name__']]
         timetable.__name__ = data['__name__']
 
         container[timetable.__name__] = timetable
@@ -1018,7 +1024,8 @@ class SectionImporter(ImporterBase):
 
         row += 2
 
-        while row < sh.nrows:
+        for row in range(row, sh.nrows):
+
             if sh.cell_value(rowx=row, colx=0) == '':
                 break
             num_errors = len(self.errors)
@@ -1046,7 +1053,6 @@ class SectionImporter(ImporterBase):
 
             schedule.addPeriod(period)
 
-            row += 1
             if num_errors < len(self.errors):
                 continue
 

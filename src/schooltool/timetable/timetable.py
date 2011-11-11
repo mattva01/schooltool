@@ -21,6 +21,7 @@ Timetables are meeting schedules created from scheduled day templates.
 """
 import pytz
 import datetime
+import urllib
 
 from persistent import Persistent
 from persistent.list import PersistentList
@@ -49,17 +50,21 @@ class Timetable(Persistent, Schedule):
         Schedule.__init__(self, *args, **kw)
         self.exceptions = PersistentDict()
 
-    def uniqueMeetingId(self, date, period, int_ids):
+    def periodMeetingId(self, date, period, meeting_n):
         date_id = date.isoformat()
-        period_id = int_ids.getId(period)
-        uid = '%s.%s' % (date_id, period_id)
+        title = unicode(meeting_n)
+        if (period is not None and
+            period.title and
+            period.title.strip()):
+            title = unicode(period.title.strip())
+            title = urllib.quote(title.encode('punycode'))
+        uid = '%s.%s' % (date_id, title)
         return uid
 
     def iterOriginalMeetings(self, from_date, until_date=None):
         if until_date is None:
             until_date = from_date
         timezone = pytz.timezone(self.timezone)
-        int_ids = getUtility(IIntIds)
 
         dates = DateRange(from_date, until_date)
         days = zip(dates,
@@ -69,11 +74,12 @@ class Timetable(Persistent, Schedule):
             if not day_periods:
                 continue
             day = combineTemplates(day_periods, day_time_slots)
-            for period, time_slot in day:
+            for n, (period, time_slot) in enumerate(day):
                 tstart = time_slot.tstart
                 dtstart = datetime.datetime.combine(day_date, tstart)
                 dtstart = timezone.localize(dtstart)
-                meeting_id = self.uniqueMeetingId(day_date, period, int_ids)
+                # Note we're using dates in timetable's timezone here
+                meeting_id = self.periodMeetingId(day_date, period, n+1)
                 meeting = Meeting(
                     dtstart, time_slot.duration,
                     period=period,
