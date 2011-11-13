@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-10-01 14:51-0600\n"
-"PO-Revision-Date: 2011-10-03 15:10+0000\n"
-"Last-Translator: Bundo <bundo@bundo.biz>\n"
+"POT-Creation-Date: 2011-10-12 18:58+0300\n"
+"PO-Revision-Date: 2011-11-01 10:29+0000\n"
+"Last-Translator: MinSik CHO <Unknown>\n"
 "Language-Team: Korean <ko@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-10-06 04:59+0000\n"
-"X-Generator: Launchpad (build 14085)\n"
+"X-Launchpad-Export-Date: 2011-11-02 05:26+0000\n"
+"X-Generator: Launchpad (build 14214)\n"
 "Language: ko\n"
 
 #: /src/schooltool/app/app.py:193
@@ -97,11 +97,11 @@ msgstr "로그인"
 
 #: /src/schooltool/app/browser/app.py:435
 msgid "Log out"
-msgstr ""
+msgstr "로그 아웃"
 
 #: /src/schooltool/app/browser/app.py:523
 msgid "Calendar settings"
-msgstr ""
+msgstr "캘린더 설정"
 
 #: /src/schooltool/app/browser/app.py:528
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:31
@@ -198,13 +198,13 @@ msgstr "취소"
 #: /src/schooltool/app/browser/flourish.zcml:228
 #: /src/schooltool/app/browser/flourish.zcml:580
 msgid "School Name"
-msgstr ""
+msgstr "학교 이름"
 
 #: /src/schooltool/app/browser/app.py:557
 #: /src/schooltool/demographics/interfaces.py:245
 #: /src/schooltool/demographics/utility.py:88
 msgid "Name"
-msgstr ""
+msgstr "이름"
 
 #: /src/schooltool/app/browser/app.py:585
 #: /src/schooltool/app/security.py:304
@@ -248,7 +248,7 @@ msgstr "학교"
 #: /src/schooltool/securitypolicy/browser/flourish.zcml:15
 #: /src/schooltool/securitypolicy/browser/flourish.zcml:44
 msgid "Server"
-msgstr ""
+msgstr "서버"
 
 #: /src/schooltool/app/browser/app.py:852
 #: /src/schooltool/app/browser/app.py:937
@@ -271,7 +271,7 @@ msgstr ""
 
 #: /src/schooltool/app/browser/app.py:877
 msgid "Live"
-msgstr ""
+msgstr "라이브"
 
 #: /src/schooltool/app/browser/app.py:887
 msgid "Unknown"
@@ -6474,11 +6474,17 @@ msgstr ""
 msgid "No new password was supplied so original password is unchanged"
 msgstr ""
 
-#: /src/schooltool/person/browser/person.py:327
-msgid "Changed password"
+#: /src/schooltool/person/browser/person.py:337
+msgid ""
+"Password changed successfully. Next, you will be required to authenticate "
+"with your new credentials"
 msgstr ""
 
-#: /src/schooltool/person/browser/person.py:345
+#: /src/schooltool/person/browser/person.py:341
+msgid "Password changed successfully"
+msgstr ""
+
+#: /src/schooltool/person/browser/person.py:359
 #: /src/schooltool/person/security.zcml:101
 msgid "Change password"
 msgstr ""

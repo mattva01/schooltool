@@ -56,6 +56,23 @@
     font-size: 16px;
 }
 
+.ui-datepicker {
+    width: 280px;
+    padding: 2px;
+}
+
+.ui-datepicker-calendar thead th {
+    font-weight: normal;
+}
+
+.ui-datepicker-calendar a.ui-state-highlight {
+    font-weight: bold;
+}
+
+.ui-datepicker-calendar a.ui-state-active {
+    font-weight: bold;
+}
+
 .ui-icon-center {
     margin: 0 auto;
 }

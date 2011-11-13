@@ -48,8 +48,10 @@ Duplicate usernames are not imported, the error is noted to the user.
     >>> browser.getControl(name='charset').value = ['UTF-8']
     >>> browser.getControl(name='UPDATE_SUBMIT').click()
 
+
     >>> sorted([person for person in container])
-    [u'another', u'aperson', u'chowa', u'manager', u'student1', u'student2']
+    [u'another', u'aperson', u'chowa', u'manager']
+
     >>> analyze.printQuery("//div[@class='error']", browser.contents)
     <div class="error">Failed to import CSV text</div>
     <div class="error">Duplicate username: student1, Student 100</div>
@@ -71,10 +73,8 @@ characters either:
     <div class="error">Names cannot begin with '+' or '@' or contain '/'</div>
     >>> analyze.printQuery("id('csvtext')", browser.contents)
     <textarea name="csvtext" id="csvtext" cols="50" rows="10">@@index.html, Steve, Smith, secret
-    peter, Pete, Marley
-    <BLANKLINE>
-    <BLANKLINE>
-    </textarea>
+    peter, Pete, Marley</textarea>
+
     >>> csvtext = "steven, Steven, Smith, secret\npete/marley, Pete, Marley\n\n\n"
     >>> browser.getControl(name='csvtext').value = csvtext
     >>> browser.getControl(name='charset').value = ['UTF-8']
@@ -84,7 +84,4 @@ characters either:
     <div class="error">Names cannot begin with '+' or '@' or contain '/'</div>
     >>> analyze.printQuery("id('csvtext')", browser.contents)
     <textarea name="csvtext" id="csvtext" cols="50" rows="10">steven, Steven, Smith, secret
-    pete/marley, Pete, Marley
-    <BLANKLINE>
-    <BLANKLINE>
-    </textarea>
+    pete/marley, Pete, Marley</textarea>

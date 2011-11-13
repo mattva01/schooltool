@@ -664,3 +664,8 @@ class FlourishTimetableMakeDefaultView(flourish.form.DialogForm, form.EditForm):
     @button.buttonAndHandler(_("Cancel"))
     def handleCancel(self, action):
         pass
+
+    def updateActions(self):
+        super(FlourishTimetableMakeDefaultView, self).updateActions()
+        self.actions['apply'].addClass('button-ok')
+        self.actions['cancel'].addClass('button-cancel')

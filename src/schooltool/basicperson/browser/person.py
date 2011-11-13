@@ -960,7 +960,7 @@ class FlourishPersonAddView(PersonAddViewBase):
 
     def updateActions(self):
         super(FlourishPersonAddView, self).updateActions()
-        self.actions['submitadd'].addClass('button-ok')
+        self.actions['submitadd'].addClass('button-neutral')
 
 
 ###############  Group-aware add views ################

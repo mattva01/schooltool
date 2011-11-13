@@ -115,7 +115,7 @@ resource:
 
 Frog should see the mud and the fish now:
 
-    >>> frog.reload()
+    >>> frog.open(frog.url)
     >>> print frog.contents
     <BLANKLINE>
     ...

@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-10-01 14:51-0600\n"
-"PO-Revision-Date: 2011-10-03 15:10+0000\n"
-"Last-Translator: Francois Thunus <Unknown>\n"
+"POT-Creation-Date: 2011-10-12 18:58+0300\n"
+"PO-Revision-Date: 2011-11-02 14:16+0000\n"
+"Last-Translator: evolvedlight <steve@evolvedlight.co.uk>\n"
 "Language-Team: English (United Kingdom) <en_GB@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-10-06 05:03+0000\n"
-"X-Generator: Launchpad (build 14085)\n"
+"X-Launchpad-Export-Date: 2011-11-03 06:05+0000\n"
+"X-Generator: Launchpad (build 14214)\n"
 "Language: \n"
 
 #: /src/schooltool/app/app.py:193
@@ -2704,7 +2704,7 @@ msgstr ""
 #: /src/schooltool/app/browser/timetablecsvimport.py:371
 #: /src/schooltool/app/browser/timetablecsvimport.py:381
 msgid "The term ${term} does not exist."
-msgstr ""
+msgstr "The term ${term} does not exist."
 
 #. Default: ""
 #: /src/schooltool/app/browser/timetablecsvimport.py:387
@@ -6633,11 +6633,17 @@ msgstr "Edit password"
 msgid "No new password was supplied so original password is unchanged"
 msgstr "No new password was supplied so original password is unchanged"
 
-#: /src/schooltool/person/browser/person.py:327
-msgid "Changed password"
-msgstr "Changed password"
+#: /src/schooltool/person/browser/person.py:337
+msgid ""
+"Password changed successfully. Next, you will be required to authenticate "
+"with your new credentials"
+msgstr ""
 
-#: /src/schooltool/person/browser/person.py:345
+#: /src/schooltool/person/browser/person.py:341
+msgid "Password changed successfully"
+msgstr ""
+
+#: /src/schooltool/person/browser/person.py:359
 #: /src/schooltool/person/security.zcml:101
 msgid "Change password"
 msgstr "Change password"
@@ -8801,3 +8807,6 @@ msgstr "School timetables"
 #: /src/schooltool/widget/password.py:55
 msgid "Supplied passwords are not identical"
 msgstr "Supplied passwords are not identical"
+
+#~ msgid "Changed password"
+#~ msgstr "Changed password"

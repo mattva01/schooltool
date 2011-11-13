@@ -24,14 +24,19 @@ We can create generic resources
     >>> 'Book' in manager.contents
     True
 
-We can create Location resources, which also have a capacity option
+We can create Location resources, the form is currently identical to
+other resources.
 
     >>> manager.getLink('New Location').click()
     >>> manager.getControl('Title').value = 'Room 101'
-    >>> manager.getControl(name='form.widgets.type.newSubType').value = 'class room'
-    >>> manager.getControl('Capacity').value = '10'
     >>> manager.getControl('Add').click()
-    >>> manager.getLink('class room').click()
+
+    >>> urls = manager.queryHTML('//form//a/@href')
+    >>> print '\n'.join(urls)
+    ?SEARCH_TYPE=location|Resource
+    ?SEARCH_TYPE=resource|Resource
+
+    >>> manager.open(urls[0])
     >>> 'Room 101' in manager.contents
     True
 
@@ -39,31 +44,16 @@ We can create Equipment resources also:
 
     >>> manager.getLink('New Equipment').click()
     >>> manager.getControl('Title').value = 'Projector 1'
-    >>> manager.getControl(name='form.widgets.type.newSubType').value = 'Projector'
-    >>> manager.getControl('Manufacturer').value = 'Sony'
-    >>> manager.getControl('Model').value = 'RS-1'
-    >>> manager.getControl('Serial Number').value = 'ABC123-987'
-    >>> manager.getControl('Purchase Date') != None
-    True
     >>> manager.getControl('Add').click()
-    >>> manager.getLink('Projector').click()
+
+    >>> urls = manager.queryHTML('//form//a/@href')
+    >>> print '\n'.join(urls)
+    ?SEARCH_TYPE=equipment|
+    ?SEARCH_TYPE=location|Resource
+    ?SEARCH_TYPE=resource|Resource
+
+    >>> manager.open(urls[0])
     >>> 'Projector 1' in manager.contents
-    True
-
-If we go back and add more resources that have type fields, then we
-can choose an existing type from a drop down box.
-
-    >>> manager.getLink('New Equipment').click()
-    >>> manager.getControl('Title').value = 'Projector 2'
-    >>> manager.getControl(name='form.widgets.type').value = ['Projector']
-    >>> manager.getControl('Manufacturer').value = 'Sony'
-    >>> manager.getControl('Model').value = 'RS-1'
-    >>> manager.getControl('Serial Number').value = 'ABC123-9876'
-    >>> manager.getControl('Purchase Date') != None
-    True
-    >>> manager.getControl('Add').click()
-    >>> manager.getLink('Projector').click()
-    >>> 'Projector 2' in manager.contents
     True
 
 If we click Cancel in any of the forms, we get back to resources index.

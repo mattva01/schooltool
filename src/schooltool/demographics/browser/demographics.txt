@@ -9,23 +9,18 @@ We can add a person:
 
   >>> browser = Browser('manager', 'schooltool')
   >>> browser.open('http://localhost/persons/@@add.html')
-  >>> browser.getControl(name='form.widgets.prefix').value = 'Mr'
-  >>> browser.getControl(name='form.widgets.full_name').value = 'foobar'
-  >>> browser.getControl(name='form.widgets.username').value = 'foobar'
-  >>> browser.getControl(name='form.widgets.last_name').value = 'barson'
-  >>> browser.getControl(name="form.widgets.password").value = "barfoo"
-  >>> browser.getControl(name="form.widgets.confirm").value = "barfoo"
+
+  >>> browser.getControl('Full name').value = 'Foobar Barson'
+  >>> browser.getControl('Username').value = 'foobar'
+  >>> browser.getControl('Password').value = "barfoo"
+  >>> browser.getControl('Verify password').value = "barfoo"
   >>> browser.getControl('Add').click()
 
 We expect the data to be there:
 
   >>> browser.open('http://localhost/persons/foobar/nameinfo/@@edit.html')
-  >>> browser.getControl(name='form.widgets.prefix').value
-  'Mr'
-  >>> browser.getControl(name='form.widgets.full_name').value
-  'foobar'
-  >>> browser.getControl(name='form.widgets.last_name').value
-  'barson'
+  >>> browser.getControl('Full name').value
+  'Foobar Barson'
 
 We expect no photo to be there yet as we didn't upload one:
 
@@ -44,12 +39,13 @@ And we can edit its name info (also adding a photo):
 
   >>> from StringIO import StringIO
   >>> browser.open('http://localhost/persons/foobar/nameinfo/@@edit.html')
-  >>> browser.getControl(name='form.widgets.full_name').value = 'Someone Schooltool'
-  >>> browser.getControl(name='form.widgets.photo').add_file(StringIO('my_photo'),
+  >>> browser.getControl('First name').value = 'Someone Schooltool'
+  >>> browser.getControl('Photo').add_file(StringIO('my_photo'),
   ...     'binary/octet-stream', 'test.jpg')
-  >>> browser.getControl(name='form.buttons.add').click()
+  >>> browser.getControl('Apply', index=0).click()
+
   >>> browser.open('http://localhost/persons/foobar/nameinfo/@@edit.html')
-  >>> browser.getControl(name='form.widgets.full_name').value
+  >>> browser.getControl('First name').value
   'Someone Schooltool'
 
 We also expect the photo to be there:
@@ -62,8 +58,8 @@ Editing the name info again without supplying a photo will not change
 the photo:
 
   >>> browser.open('http://localhost/persons/foobar/nameinfo/@@edit.html')
-  >>> browser.getControl(name='form.widgets.prefix').value = 'Mrs'
-  >>> browser.getControl(name='form.buttons.apply').click()
+  >>> browser.getControl('Apply', index=0).click()
+
   >>> browser.open('http://localhost/persons/foobar/nameinfo')
   >>> 'photo.jpg' in browser.contents
   True
@@ -71,9 +67,8 @@ the photo:
 We can also go there by browsing the table:
 
   >>> browser.open('http://localhost/persons')
+
   >>> browser.getLink('Someone Schooltool').click()
-  >>> 'Prefix' in browser.contents
-  True
   >>> 'Full name' in browser.contents
   True
   >>> 'Someone Schooltool' in browser.contents
@@ -90,7 +85,7 @@ We can edit its demographics:
   >>> browser.open('http://localhost/persons/foobar/demographics/@@edit.html')
   >>> previous_school = browser.getControl(name='form.previous_school')
   >>> previous_school.value = 'Some text'
-  >>> browser.getControl(name='form.buttons.apply').click()
+  >>> browser.getControl('Apply', index=0).click()
 
 and view it:
 
@@ -103,7 +98,7 @@ and its school data:
   >>> browser.open('http://localhost/persons/foobar/schooldata/@@edit.html')
   >>> id = browser.getControl(name='form.id')
   >>> id.value = 'ABC'
-  >>> browser.getControl(name='form.buttons.apply').click()
+  >>> browser.getControl('Apply', index=0).click()
   >>> browser.open('http://localhost/persons/foobar/schooldata')
   >>> 'ABC' in browser.contents
   True
@@ -112,7 +107,7 @@ and various parent and emergency contact screens:
 
   >>> browser.open('http://localhost/persons/foobar/parent1/@@edit.html')
   >>> name = browser.getControl(name='form.name').value = 'Zorro'
-  >>> browser.getControl(name='form.buttons.apply').click()
+  >>> browser.getControl('Apply', index=0).click()
 
   >>> browser.open('http://localhost/persons/foobar/parent2/@@edit.html')
   >>> browser.open('http://localhost/persons/foobar/emergency1/@@edit.html')
@@ -123,7 +118,6 @@ It's possible to submit screen by screen by using the Apply and Next
 button:
 
   >>> browser.open('http://localhost/persons/foobar/@@edit.html')
-  >>> browser.getControl('Prefix').value = 'Mrs'
   >>> browser.getControl('Apply and Next').click()
   >>> browser.getControl('Gender').value = ['female']
   >>> browser.getControl('Apply and Next').click()
@@ -145,8 +139,6 @@ name info::
 
   >>> browser.url
   'http://localhost/persons/foobar/nameinfo'
-  >>> 'Mrs' in browser.contents
-  True
 
 We can also add people as CSV data:
 
@@ -227,9 +219,10 @@ But not delta or omega:
 There's a quick search form in the table view:
 
   >>> browser.open('http://localhost/persons')
-  >>> sb = browser.getControl(name="form.fulltext")
-  >>> sb.value = 'del*'
-  >>> browser.getControl(name="form.actions.submit").click()
+
+  >>> sb = browser.getControl(name="SEARCH_TITLE")
+  >>> sb.value = 'del'
+  >>> browser.getControl("Find Now").click()
   >>> 'delta' in browser.contents
   True
   >>> 'foobar' in browser.contents
@@ -237,8 +230,8 @@ There's a quick search form in the table view:
 
 The form is not reset so your query stays visible:
 
-  >>> sb.value
-  'del*'
+  >>> browser.getControl(name="SEARCH_TITLE").value
+  'del'
 
 Allow normal users to view the table of persons:
 
