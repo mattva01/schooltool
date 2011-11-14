@@ -918,7 +918,8 @@ class ContactRelationshipImporter(ImporterBase):
                 info.__parent__ = person
                 if relationship:
                     info.relationship = relationship
-                IContactable(person).contacts.add(contact, info)
+                if contact not in IContactable(person).contacts:
+                    IContactable(person).contacts.add(contact, info)
 
 
 class CourseImporter(ImporterBase):
