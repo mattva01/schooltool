@@ -454,8 +454,14 @@ class CalendarViewBase(BrowserView):
         """
         session = ISession(self.request)['calendar']
         dt = session.get('last_visited_day')
+        visited_on = session.get('visited_on')
 
         if 'date' not in self.request:
+            if (visited_on and
+                visited_on != self.today):
+                # Special case: only restore last visited calendar days
+                #               that user looked at today
+                dt = None
             self.cursor = dt or self.today
         else:
             # TODO: It would be nice not to b0rk when the date is invalid but
@@ -465,6 +471,8 @@ class CalendarViewBase(BrowserView):
 
         if not (dt and self.inCurrentPeriod(dt)):
             session['last_visited_day'] = self.cursor
+            if not visited_on or visited_on != self.today:
+                session['visited_on'] = self.today
 
         self._initDaysCache()
 

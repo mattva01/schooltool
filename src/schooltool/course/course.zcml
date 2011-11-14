@@ -35,8 +35,10 @@
       />
 
   <class class=".course.Course">
+    <require permission="zope.Public"
+             attributes="__name__" />
     <require permission="schooltool.view"
-             attributes="__name__ title description sections leaders
+             attributes="title description sections leaders
                          course_id government_id credits __cmp__" />
     <require permission="schooltool.edit"
              set_schema=".interfaces.ICourse" />
