@@ -20,8 +20,15 @@
 
   <p i18n:translate="">
     Each section description's first row contains the <strong>course
-    id</strong> and the <strong>instructor username</strong> for the new
+    SchoolTool ID</strong> and the <strong>instructor username</strong> for the new
     section.
+  </p>
+
+  <p i18n:translate="">
+    If you want to update the sections instead, in section description's first
+    row you should specify: <strong>course SchoolTool ID</strong>, <strong>instructor username</strong> and then <strong>section SchoolTool ID</strong> for corresponding sections in each term.  <strong>Note:</strong> if your school has, say, 5 consecutive
+    terms and you specify terms "2", "4" in the top of csv, you will need to provide
+    3 section ids, for terms "2", "3" and "4" respectively.
   </p>
 
   <p i18n:translate="">
@@ -54,7 +61,7 @@
 "johnny"
 "billy"
 ""
-"literature","guzman"
+"literature","guzman","literature-f","literature-s"
 "***"
 "johnny"
 "pete"
@@ -67,7 +74,8 @@
     with user names 'johnny' and 'billy' as learners.  It will also
     be scheduled on Monday (two lessons, periods 'A' and 'B') and Tuesday.
     The literature section will be processed in a similar fashion, but
-    will have no defined schedule.
+    will have no defined schedule.  The literature SchoolTool IDs will be
+    set to literature-f in Fall and literature-s in Spring.
   </p>
 
 </div>
