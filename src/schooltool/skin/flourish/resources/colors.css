@@ -278,7 +278,7 @@ form fieldset .row .widget input[type="password"]:focus {
 form fieldset .row .widget input[type="text"].error,
 form fieldset .row .widget input[type="password"].error {
     background-color: #feeee9;
-    border: 2px solid #fdded4;
+    border: 2px solid #ef4444;
 }
 
 form fieldset .row .widget textarea.textarea-widget {
