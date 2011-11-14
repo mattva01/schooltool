@@ -95,6 +95,7 @@ from schooltool.calendar.interfaces import IWeeklyRecurrenceRule
 from schooltool.calendar.utils import parse_date, parse_datetimetz
 from schooltool.calendar.utils import parse_time
 from schooltool.calendar.utils import week_start, prev_month, next_month
+from schooltool.common import DateRange
 from schooltool.app.utils import vocabulary
 from schooltool.person.interfaces import IPerson
 from schooltool.term.interfaces import IDateManager
@@ -354,6 +355,9 @@ class CalendarViewBase(BrowserView):
 
     # Which day is considered to be the first day of the week (0 = Monday,
     # 6 = Sunday).  Based on authenticated user preference, defaults to Monday
+
+    cursor = None
+    cursor_range = None
 
     def __init__(self, context, request):
         self.context = context
@@ -843,6 +847,18 @@ class WeeklyCalendarView(CalendarViewBase):
         # XXX wrong if week starts on Sunday.
         return dt.isocalendar()[:2] == self.cursor.isocalendar()[:2]
 
+    @property
+    def cursor_range(self):
+        cursor = self.cursor
+        if cursor is None:
+            return None
+        first = date(cursor.year, cursor.month, cursor.day)
+        while first.isoweekday() > 1:
+            first -= timedelta(days=1)
+        last = first + timedelta(weeks=1) - timedelta(days=1)
+        cursor_range = DateRange(first, last)
+        return cursor_range
+
     def title(self):
         month_name_msgid = month_names[self.cursor.month]
         month_name = translate(month_name_msgid, context=self.request)
@@ -1071,6 +1087,20 @@ class MonthlyCalendarView(CalendarViewBase):
     def inCurrentPeriod(self, dt):
         return (dt.year, dt.month) == (self.cursor.year, self.cursor.month)
 
+    @property
+    def cursor_range(self):
+        cursor = self.cursor
+        if cursor is None:
+            return None
+        first = date(cursor.year, cursor.month, 1)
+        if first.month == 12:
+            last = date(first.year+1, 1, 1)
+        else:
+            last = date(first.year, first.month+1, 1)
+        last -= timedelta(days=1)
+        cursor_range = DateRange(first, last)
+        return cursor_range
+
     def title(self):
         month_name_msgid = month_names[self.cursor.month]
         month_name = translate(month_name_msgid, context=self.request)
@@ -1125,6 +1155,17 @@ class YearlyCalendarView(CalendarViewBase):
 
     def inCurrentPeriod(self, dt):
         return dt.year == self.cursor.year
+
+    @property
+    def cursor_range(self):
+        cursor = self.cursor
+        if cursor is None:
+            return None
+        first = date(cursor.year, 1, 1)
+        last = date(cursor.year+1, 1, 1)
+        last -= timedelta(days=1)
+        cursor_range = DateRange(first, last)
+        return cursor_range
 
     def title(self):
         return unicode(self.cursor.year)
@@ -1194,6 +1235,13 @@ class DailyCalendarView(CalendarViewBase):
 
     def inCurrentPeriod(self, dt):
         return dt == self.cursor
+
+    @property
+    def cursor_range(self):
+        cursor = self.cursor
+        if cursor is None:
+            return None
+        return DateRange(cursor, cursor)
 
     def title(self):
         return self.dayTitle(self.cursor)

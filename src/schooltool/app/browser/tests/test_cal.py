@@ -40,6 +40,7 @@ from zope.annotation.interfaces import IAttributeAnnotatable
 
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.common import parse_datetime
+from schooltool.common import DateRange
 from schooltool.term.interfaces import ITermContainer
 from schooltool.term.tests import setUpDateManagerStub
 from schooltool.testing.util import NiceDiffsMixin
@@ -138,6 +139,10 @@ class EventStub(object):
         self.resources = resources
         self.unique_id = unique_id
         self.__name__ = unique_id[::-1]
+
+
+def print_range(date_range):
+    print date_range.first, '-', date_range.last
 
 
 def createEvent(dtstart, duration, title, **kw):
@@ -4296,6 +4301,15 @@ def doctest_DailyCalendarView():
         >>> view.inCurrentPeriod(date(2004, 8, 17))
         False
 
+    cursor_range spans cursor's day only:
+
+        >>> print_range(view.cursor_range)
+        2004-08-18 - 2004-08-18
+
+        >>> view.cursor = date(2004, 12, 31)
+        >>> print_range(view.cursor_range)
+        2004-12-31 - 2004-12-31
+
     """
 
 
@@ -4344,6 +4358,39 @@ def doctest_WeeklyCalendarView():
         False
         >>> view.inCurrentPeriod(date(2004, 8, 15))
         False
+
+    overlapsCurrentPeriod returns True for the same week only:
+
+        >>> dows = ['Monday', 'Tuesday', 'Wednesday', 'Thursday',
+        ...         'Friday', 'Saturday', 'Sunday']
+
+        >>> def print_weekdays(date_range):
+        ...     print_range(date_range)
+        ...     print dows[date_range.first.weekday()], '-', dows[date_range.last.weekday()]
+
+    cursor_range spans cursor's week:
+
+        >>> view.cursor = date(2004, 8, 18)
+
+        >>> print_weekdays(view.cursor_range)
+        2004-08-16 - 2004-08-22
+        Monday - Sunday
+
+        >>> view.cursor = date(2004, 12, 31)
+
+        >>> print_weekdays(view.cursor_range)
+        2004-12-27 - 2005-01-02
+        Monday - Sunday
+
+        >>> view.cursor = date(2004, 12, 27)
+        >>> print_weekdays(view.cursor_range)
+        2004-12-27 - 2005-01-02
+        Monday - Sunday
+
+        >>> view.cursor = date(2005, 1, 2)
+        >>> print_weekdays(view.cursor_range)
+        2004-12-27 - 2005-01-02
+        Monday - Sunday
 
     """
 
@@ -4561,6 +4608,31 @@ def doctest_MonthlyCalendarView():
         >>> view.inCurrentPeriod(date(2003, 8, 18))
         False
 
+    cursor_range spans cursor's month:
+
+        >>> print_range(view.cursor_range)
+        2004-08-01 - 2004-08-31
+
+        >>> view.cursor = date(2004, 12, 1)
+        >>> print_range(view.cursor_range)
+        2004-12-01 - 2004-12-31
+
+        >>> view.cursor = date(2004, 12, 31)
+        >>> print_range(view.cursor_range)
+        2004-12-01 - 2004-12-31
+
+        >>> view.cursor = date(2004, 2, 29)
+        >>> print_range(view.cursor_range)
+        2004-02-01 - 2004-02-29
+
+        >>> view.cursor = date(2005, 2, 28)
+        >>> print_range(view.cursor_range)
+        2005-02-01 - 2005-02-28
+
+        >>> view.cursor = date(2004, 3, 1)
+        >>> print_range(view.cursor_range)
+        2004-03-01 - 2004-03-31
+
     """
 
 
@@ -4639,6 +4711,15 @@ def doctest_YearlyCalendarView():
         False
         >>> view.inCurrentPeriod(date(2005, 1, 1))
         False
+
+    cursor_range spans cursor's year:
+
+        >>> print_range(view.cursor_range)
+        2004-01-01 - 2004-12-31
+
+        >>> view.cursor = date(2005, 12, 31)
+        >>> print_range(view.cursor_range)
+        2005-01-01 - 2005-12-31
 
     pdfURL always returns None because yearly PDF calendars are not available.
 
@@ -5322,8 +5403,7 @@ def test_suite():
     suite.addTest(doctest.DocTestSuite(
         setUp=setUp, tearDown=tearDown,
         optionflags=doctest.ELLIPSIS|doctest.REPORT_NDIFF|
-                    doctest.NORMALIZE_WHITESPACE|
-                    doctest.REPORT_ONLY_FIRST_FAILURE))
+                    doctest.NORMALIZE_WHITESPACE))
     suite.addTest(doctest.DocTestSuite('schooltool.app.browser.cal'))
     return suite
 
