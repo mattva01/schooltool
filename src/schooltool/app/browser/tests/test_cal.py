@@ -29,6 +29,7 @@ from zope.i18n import translate
 from zope.interface import Interface
 from zope.interface import directlyProvides, implements
 from zope.component import provideAdapter, provideSubscriptionAdapter
+from zope.component import getUtility
 from zope.interface.verify import verifyObject
 from zope.publisher.browser import TestRequest
 from zope.app.testing import setup
@@ -42,6 +43,7 @@ from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.common import parse_datetime
 from schooltool.common import DateRange
 from schooltool.term.interfaces import ITermContainer
+from schooltool.term.interfaces import IDateManager
 from schooltool.term.tests import setUpDateManagerStub
 from schooltool.testing.util import NiceDiffsMixin
 from schooltool.app.interfaces import ISchoolToolCalendarEvent
@@ -4237,11 +4239,15 @@ def doctest_CalendarViewBase():
         >>> view.cursor
         datetime.date(2005, 1, 2)
 
-    update() stores the last visited day in the session:
+    update() stores the last visited calendar day in the session and
+    the day it was visited:
 
         >>> from zope.session.interfaces import ISession
         >>> ISession(view.request)['calendar']['last_visited_day']
         datetime.date(2005, 1, 2)
+
+        >>> ISession(view.request)['calendar']['visited_on']
+        datetime.date(2005, 3, 13)
 
     If not given a date, update() will try the last visited one from the
     session:
@@ -4254,11 +4260,41 @@ def doctest_CalendarViewBase():
 
     It will not update the session data if inCurrentPeriod() returns True:
 
+        >>> old_inCurrentPeriod = view.inCurrentPeriod
         >>> view.inCurrentPeriod = lambda dt: True
         >>> request.form['date'] = '2005-01-01'
         >>> view.update()
         >>> ISession(view.request)['calendar']['last_visited_day']
         datetime.date(2005, 1, 2)
+
+        >>> ISession(view.request)['calendar']['visited_on']
+        datetime.date(2005, 3, 13)
+
+    If user looks at the calendar tomorrow, last visited day is updated:
+
+        >>> dm = getUtility(IDateManager)
+
+        >>> dm.today
+        datetime.date(2005, 3, 13)
+
+        >>> dm.today += timedelta(days=1)
+
+        >>> request = TestRequest()
+        >>> view = CalendarViewBase(calendar, request)
+        >>> view.inCurrentPeriod = lambda dt: dt == dm.today
+
+        >>> view.update()
+        >>> view.today
+        datetime.date(2005, 3, 14)
+
+        >>> view.cursor
+        datetime.date(2005, 3, 14)
+
+        >>> ISession(view.request)['calendar']['last_visited_day']
+        datetime.date(2005, 3, 14)
+
+        >>> ISession(view.request)['calendar']['visited_on']
+        datetime.date(2005, 3, 14)
 
     canAddEvents checks to see if the current user has addEvent permission on
     the context:
