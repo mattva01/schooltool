@@ -83,14 +83,8 @@ class ICourseContained(ICourse, IContained):
     containers(ICourseContainer)
 
 
-class ISection(IGroup):
+class ISectionBase(IGroup):
     """Sections are groups of users in a particular meeting of a Course."""
-
-    __name__ = zope.schema.TextLine(
-        title=_("SchoolTool ID"),
-        description=_(
-            """An internal identifier of this section."""),
-        required=True)
 
     label = zope.schema.TextLine(
         title=_("Label"),
@@ -127,6 +121,15 @@ class ISection(IGroup):
 
     linked_sections = Attribute(
         """Chain of sections linked by previous/next with this one.""")
+
+
+class ISection(ISectionBase):
+
+    __name__ = zope.schema.TextLine(
+        title=_("SchoolTool ID"),
+        description=_(
+            """An internal identifier of this section."""),
+        required=True)
 
 
 class ISectionContainer(IContainer):
