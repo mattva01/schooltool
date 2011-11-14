@@ -90,11 +90,13 @@
     <implements interface="schooltool.app.interfaces.IHaveCalendar" />
 
     <require permission="schooltool.view"
-             interface=".interfaces.ISection" />
+             interface=".interfaces.ISectionBase" />
     <require permission="schooltool.view"
              interface="schooltool.resource.interfaces.IBookResources" />
     <require permission="schooltool.view"
              attributes="__cmp__" />
+    <require permission="zope.Public"
+             attributes="__name__" />
     <require permission="schooltool.edit"
              set_schema=".interfaces.ISection" />
   </class>
