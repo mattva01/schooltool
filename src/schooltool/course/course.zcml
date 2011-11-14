@@ -36,7 +36,7 @@
 
   <class class=".course.Course">
     <require permission="schooltool.view"
-             attributes="title description sections leaders
+             attributes="__name__ title description sections leaders
                          course_id government_id credits __cmp__" />
     <require permission="schooltool.edit"
              set_schema=".interfaces.ICourse" />
