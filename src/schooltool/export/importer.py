@@ -176,13 +176,9 @@ class ImporterBase(object):
         value, found = self.getCellAndFound(sheet, row, col, default)
         valid = True
         if found:
-            if isinstance(value, str):
-                try:
-                    value = unicode(value)
-                except UnicodeError:
-                    self.error(row, col, ERROR_NOT_UNICODE_OR_ASCII)
-                    valid = False
-            elif not isinstance(value, unicode):
+            try:
+                value = unicode(value)
+            except UnicodeError:
                 self.error(row, col, ERROR_NOT_UNICODE_OR_ASCII)
                 valid = False
         return value, found, valid

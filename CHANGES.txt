@@ -8,6 +8,7 @@ CHANGES
 - server error when opening demographic container (https://launchpad.net/bugs/887662)
 - Import of Contact Relationships fails with DuplicateRelationship error
   (https://launchpad.net/bugs/882482)
+- xls importer needs to handle integer data (https://launchpad.net/bugs/362014)
 
 
 1.9.2 (2011-11-04)
