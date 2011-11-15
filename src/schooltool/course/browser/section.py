@@ -300,7 +300,7 @@ class SectionAddView(form.AddForm):
     # Note that we also omit the title field, it will be auto-generated
     # See concerns raised in https://bugs.launchpad.net/schooltool/+bug/389283
     fields = field.Fields(ISection).omit(
-        'title',
+        '__name__', 'title',
         'label', 'instructors', 'members', 'courses', 'size',
         'previous', 'next', 'linked_sections')
 
@@ -1033,7 +1033,7 @@ class FlourishSectionView(DisplayForm):
     template = InheritTemplate(Page.template)
     content_template = ViewPageTemplateFile('templates/f_section_view.pt')
     fields = field.Fields(ISection)
-    fields = fields.select('title', 'description')
+    fields = fields.select('__name__', 'title', 'description')
 
     @property
     def courses(self):

@@ -26,6 +26,7 @@ from zope.security.proxy import removeSecurityProxy
 
 import schooltool.skin.flourish.page
 from schooltool.app.browser.overlay import CalendarOverlayBase
+from schooltool.common import DateRange
 from schooltool.skin import flourish
 from schooltool.term.interfaces import IDateManager
 from schooltool.term.interfaces import ITerm
@@ -51,12 +52,16 @@ class CalendarOverlayView(flourish.page.Refine, CalendarOverlayBase):
         by_term = {}
         current_term = removeSecurityProxy(
             getUtility(IDateManager).current_term)
+
         for item in items:
             term = ITerm(item['calendar'].__parent__, None)
             unsecure_term = removeSecurityProxy(term)
             if unsecure_term is None:
                 non_term_items.append(item)
-            else:
+                continue
+            term_range = DateRange(term.first, term.last)
+            view_range = self.view.cursor_range
+            if term_range.overlaps(view_range):
                 if unsecure_term not in by_term:
                     by_term[unsecure_term] = {
                         'group': term,

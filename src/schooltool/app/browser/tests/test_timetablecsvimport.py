@@ -175,6 +175,7 @@ person_names = (
 'John Black',
 'Pete Cook',
 'Daniel Lewis',
+'Glen Miller',
 'Alan Burton',
 'Heinrich Lorch',
 'Andreas Guzman',
@@ -211,6 +212,30 @@ simple_csv = """
 """.strip()
 
 
+def printYearSections(schoolyear, with_ids=False):
+    def sectionName(term, section):
+        return '%s in %s' % (
+            translate(section.label), term.title)
+    for term in listTerms(schoolyear):
+        sections = ISectionContainer(term)
+        for s_name in sorted(sections):
+            print '*' * 50
+            section = sections[s_name]
+            print sectionName(term, section)
+            if with_ids:
+                print '  ID:', section.__name__
+            s_next = section.next
+            if s_next is not None:
+                n_term = ITerm(s_next)
+                print '  next:', sectionName(n_term, s_next)
+            print '  students:'
+            for member in sorted(section.members, key=lambda m:m.__name__):
+                print '   ', member.title
+            schedules = IScheduleContainer(section)
+            for key in sorted(schedules):
+                print_schedule(schedules[key])
+
+
 def doctest_TimetableCSVImporter():
     """
         >>> setUpYear()
@@ -231,26 +256,7 @@ def doctest_TimetableCSVImporter():
 
         >>> tryImport(simple_csv)
 
-        >>> def sectionName(term, section):
-        ...    return '%s in %s' % (
-        ...        translate(section.label), term.title)
-
-        >>> for term in listTerms(schoolyear):
-        ...    sections = ISectionContainer(term)
-        ...    for s_name in sorted(sections):
-        ...        print '*' * 50
-        ...        section = sections[s_name]
-        ...        print sectionName(term, section)
-        ...        s_next = section.next
-        ...        if s_next is not None:
-        ...            n_term = ITerm(s_next)
-        ...            print '  next:', sectionName(n_term, s_next)
-        ...        print '  students:'
-        ...        for member in sorted(section.members, key=lambda m:m.__name__):
-        ...            print '   ', member.title
-        ...        schedules = IScheduleContainer(section)
-        ...        for key in sorted(schedules):
-        ...            print_schedule(schedules[key])
+        >>> printYearSections(schoolyear)
         **************************************************
         Lorch, Heinrich -- Philosophy (1) in Fall
           next: Lorch, Heinrich -- Philosophy (1) in Winter
@@ -385,14 +391,212 @@ def doctest_TimetableCSVImporter():
     """
 
 
+reimport_csv_1 = """
+"Winter","Spring"
+""
+"philosophy","lorch","p-lorch-winter","p-lorch-spring"
+"rotating"
+"Day 1","A"
+"Day 1","B"
+"Day 3","C"
+"***"
+"cook"
+"lewis"
+""
+"math","burton"
+"***"
+"lewis"
+""
+""".strip()
+
+
+reimport_csv_2 = """
+"Fall","Spring"
+""
+"philosophy","lorch","p-lorch-fall","p-lorch-winter","p-lorch-spring"
+"rotating"
+"Day 1","A"
+"Day 2","B"
+"Day 3","A"
+"***"
+"cook"
+"miller"
+""
+"math","burton"
+"***"
+"lewis"
+""
+""".strip()
+
+
+def doctest_TimetableCSVImporter_reimport():
+    """
+        >>> setUpYear()
+        >>> setUpPersons(person_names)
+        >>> setUpCourses(course_names)
+        >>> setUpTimetables()
+
+        >>> app = ISchoolToolApplication(None)
+        >>> syc = ISchoolYearContainer(app)
+        >>> schoolyear = syc.getActiveSchoolYear()
+
+        >>> importer = TimetableCSVImporter(schoolyear)
+
+        >>> def tryImport(csv):
+        ...    result = importer.importFromCSV(csv)
+        ...    if not result:
+        ...        print importer.errors
+
+        >>> tryImport(reimport_csv_1)
+
+    Let's do an initial import, filling only winter and spring terms.
+
+        >>> printYearSections(schoolyear, with_ids=True)
+        **************************************************
+        Burton, Alan -- Math (1) in Winter
+          ID: 1
+          next: Burton, Alan -- Math (1) in Spring
+          students:
+            Lewis, Daniel
+        **************************************************
+        Lorch, Heinrich -- Philosophy (1) in Winter
+          ID: p-lorch-winter
+          next: Lorch, Heinrich -- Philosophy (1) in Spring
+          students:
+            Cook, Pete
+            Lewis, Daniel
+        Schedule 'Rotating'
+        Periods (list)
+        +-------+-------+-------+
+        | Day 1 | Day 2 | Day 3 |
+        +-------+-------+-------+
+        | A     |       |       |
+        | B     |       |       |
+        |       |       | C     |
+        +-------+-------+-------+
+        **************************************************
+        Burton, Alan -- Math (1) in Spring
+          ID: 1
+          students:
+            Lewis, Daniel
+        **************************************************
+        Lorch, Heinrich -- Philosophy (1) in Spring
+          ID: p-lorch-spring
+          students:
+            Cook, Pete
+            Lewis, Daniel
+        Schedule 'Rotating'
+        Periods (list)
+        +-------+-------+-------+
+        | Day 1 | Day 2 | Day 3 |
+        +-------+-------+-------+
+        | A     |       |       |
+        | B     |       |       |
+        |       |       | C     |
+        +-------+-------+-------+
+
+    Let's reimport from an updated csv:
+
+        >>> tryImport(reimport_csv_2)
+
+    And look at what happened:
+    - Fall term got new sections.
+    - Math lessons taught by Burton got duplicated,
+      because no section ids were specified.
+    - Philosophy schedule was updated for existing sections.
+    - A new student was added to philosophy lessons.
+    - No students were removed: reimport only adds new students!
+      (seems safer this way)
+
+        >>> printYearSections(schoolyear, with_ids=True)
+        **************************************************
+        Burton, Alan -- Math (1) in Fall
+          ID: 1
+          next: Burton, Alan -- Math (2) in Winter
+          students:
+            Lewis, Daniel
+        **************************************************
+        Lorch, Heinrich -- Philosophy (1) in Fall
+          ID: p-lorch-fall
+          next: Lorch, Heinrich -- Philosophy (1) in Winter
+          students:
+            Cook, Pete
+            Miller, Glen
+        Schedule 'Rotating'
+        Periods (list)
+        +-------+-------+-------+
+        | Day 1 | Day 2 | Day 3 |
+        +-------+-------+-------+
+        | A     |       | A     |
+        |       | B     |       |
+        |       |       |       |
+        +-------+-------+-------+
+        **************************************************
+        Burton, Alan -- Math (1) in Winter
+          ID: 1
+          next: Burton, Alan -- Math (1) in Spring
+          students:
+            Lewis, Daniel
+        **************************************************
+        Burton, Alan -- Math (2) in Winter
+          ID: 2
+          next: Burton, Alan -- Math (2) in Spring
+          students:
+            Lewis, Daniel
+        **************************************************
+        Lorch, Heinrich -- Philosophy (1) in Winter
+          ID: p-lorch-winter
+          next: Lorch, Heinrich -- Philosophy (1) in Spring
+          students:
+            Cook, Pete
+            Lewis, Daniel
+            Miller, Glen
+        Schedule 'Rotating'
+        Periods (list)
+        +-------+-------+-------+
+        | Day 1 | Day 2 | Day 3 |
+        +-------+-------+-------+
+        | A     |       | A     |
+        |       | B     |       |
+        |       |       |       |
+        +-------+-------+-------+
+        **************************************************
+        Burton, Alan -- Math (1) in Spring
+          ID: 1
+          students:
+            Lewis, Daniel
+        **************************************************
+        Burton, Alan -- Math (2) in Spring
+          ID: 2
+          students:
+            Lewis, Daniel
+        **************************************************
+        Lorch, Heinrich -- Philosophy (1) in Spring
+          ID: p-lorch-spring
+          students:
+            Cook, Pete
+            Lewis, Daniel
+            Miller, Glen
+        Schedule 'Rotating'
+        Periods (list)
+        +-------+-------+-------+
+        | Day 1 | Day 2 | Day 3 |
+        +-------+-------+-------+
+        | A     |       | A     |
+        |       | B     |       |
+        |       |       |       |
+        +-------+-------+-------+
+
+    """
+
+
 def setUpIntIds():
     provideAdapter(KeyReferenceStub)
     provideHandler(addIntIdSubscriber,
                    [ILocation, IObjectAddedEvent])
     provideUtility(IntIds(), IIntIds)
-
-
     testing_registry.setupTimetablesComponents()
+
 
 def docSetUp(test=None):
     zope_setup.placefulSetUp()
