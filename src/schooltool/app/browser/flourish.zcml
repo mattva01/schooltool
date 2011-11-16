@@ -54,7 +54,7 @@
   <flourish:page
       for="schooltool.app.interfaces.ISchoolToolAuthenticationPlugin"
       name="login.html"
-      title="Log in"
+      title="Log In"
       content_template="templates/f_login.pt"
       class="schooltool.app.browser.app.LoginView"
       permission="zope.Public"
@@ -63,7 +63,7 @@
   <flourish:page
       for="schooltool.app.interfaces.ISchoolToolApplication"
       name="login.html"
-      title="Log in"
+      title="Log In"
       content_template="templates/f_login.pt"
       class="schooltool.app.browser.app.LoginView"
       permission="zope.Public"
