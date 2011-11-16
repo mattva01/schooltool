@@ -242,7 +242,7 @@ Some sections:
     </td>
     <td>
       <span class="hint">
-        (44 <span>Students</span>)
+        (45 <span>Students</span>)
       </span>
     </td>
 
@@ -284,6 +284,7 @@ And some students:
     <a href="http://localhost/persons/student336">Kayleigh</a>
     <a href="http://localhost/persons/student067">Jose</a>
     <a href="http://localhost/persons/student684">Rob</a>
+    <a href="http://localhost/persons/1">One</a>
     <a href="http://localhost/persons/student185">Carolina</a>
     <a href="http://localhost/persons/student675">Georgina</a>
     <a href="http://localhost/persons/student752">Lisa</a>
@@ -501,7 +502,7 @@ Some sections:
     </td>
     <td>
       <span class="hint">
-        (44 <span>Students</span>)
+        (45 <span>Students</span>)
       </span>
     </td>
 
@@ -543,6 +544,7 @@ And some students:
     <a href="http://localhost/persons/student336">Kayleigh</a>
     <a href="http://localhost/persons/student067">Jose</a>
     <a href="http://localhost/persons/student684">Rob</a>
+    <a href="http://localhost/persons/1">One</a>
     <a href="http://localhost/persons/student185">Carolina</a>
     <a href="http://localhost/persons/student675">Georgina</a>
     <a href="http://localhost/persons/student752">Lisa</a>

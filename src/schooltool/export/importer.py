@@ -176,6 +176,9 @@ class ImporterBase(object):
         value, found = self.getCellAndFound(sheet, row, col, default)
         valid = True
         if found:
+            if isinstance(value, float):
+                if int(value) == value:
+                    value = int(value)
             try:
                 value = unicode(value)
             except UnicodeError:
