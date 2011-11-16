@@ -39,6 +39,7 @@ from zope.publisher.interfaces import NotFound
 from zope.security import checkPermission
 from zope.security.interfaces import ForbiddenAttribute, Unauthorized
 from zope.security.proxy import removeSecurityProxy
+from zope.proxy import sameProxiedObjects
 from zope.security.checker import canAccess, canWrite
 from zope.security import checkPermission
 from zope.schema import Date, TextLine, Choice, Int, Bool, List, Text
@@ -609,6 +610,22 @@ class CalendarViewBase(BrowserView):
                                       calendar, self.timezone,
                                       parent_view_link=view_link)
 
+    def collapseEvents(self, events):
+        """Collapse events that come from multiple calendars."""
+        events = sorted(events, key=lambda e:e.unique_id)
+        by_uid = {}
+        for event in events:
+            uid = (event.context.unique_id, event.context.dtstart)
+            if uid in by_uid:
+                known = by_uid[uid]
+                if (sameProxiedObjects(known.source_calendar,
+                                       known.context.__parent__) or
+                    not sameProxiedObjects(event.source_calendar,
+                                           event.context.__parent__)):
+                    continue
+            by_uid[uid] = event
+        return by_uid.values()
+
     def getDays(self, start, end):
         """Get a list of CalendarDay objects for a selected period of time.
 
@@ -643,7 +660,7 @@ class CalendarViewBase(BrowserView):
         # We have date objects, but ICalendar.expand needs datetime objects
         start_dt = self.timezone.localize(datetime.combine(start, time()))
         end_dt = self.timezone.localize(datetime.combine(end, time()))
-        for event in self.getEvents(start_dt, end_dt):
+        for event in self.collapseEvents(self.getEvents(start_dt, end_dt)):
             #  day1  day2  day3  day4  day5
             # |.....|.....|.....|.....|.....|
             # |     |  [-- event --)  |     |
