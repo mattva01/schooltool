@@ -109,7 +109,7 @@ ST.dialogs = function() {
           return container;
       }
       $('body').append('<div id="'+container_id+'"></div>');
-      container = $('#'+container_id);
+      container = $(jq_selector(container_id));
       return container;
   }
 
@@ -133,6 +133,17 @@ ST.dialogs = function() {
         var container = ensure_container(container_id);
         var url = link.attr('href');
         modal_form_dialog(url, container);
+        return false;
+    },
+
+    open_modal_form: function(url, dialog_container_id, title)
+    {
+        var container_id = 'default-modal-dialog-container';
+        if (dialog_container_id) {
+            container_id = dialog_container_id;
+        };
+        var container = ensure_container(container_id);
+        modal_form_dialog(url, container, title);
         return false;
     },
 
