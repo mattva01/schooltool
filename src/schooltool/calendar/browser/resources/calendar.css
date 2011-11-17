@@ -406,6 +406,20 @@
     width: 140px;
 }
 
+.page > .third-nav li.calendar-nav {
+    float: left;
+}
+
+.page > .third-nav li.calendar-current {
+    text-align: center;
+    float: none;
+    display: block;
+}
+
+.page > .third-nav li.calendar-current span {
+    font-weight: bold;
+}
+
 .page > .third-nav li.calendar-type {
     float: right;
 }

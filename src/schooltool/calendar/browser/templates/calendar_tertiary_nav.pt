@@ -2,25 +2,25 @@
 
   <tal:block replace="resource_library:schooltool.calendar" />
 
-    <li>
+    <li class="calendar-nav">
+    <a
+       tal:attributes="href view/view/current;
+                       title view/view/go_to_current_title">
+      <span tal:replace="view/view/current_title">Current</span>
+    </a>
+    </li>
+
+    <li class="calendar-nav">
     <a tal:attributes="href view/view/prev;
                        title view/view/go_to_prev_title">
       &#x25C0;
     </a>
     </li>
 
-    <li>
+    <li class="calendar-nav">
     <a tal:attributes="href view/view/next;
                      title view/view/go_to_next_title">
       &#x25B6;
-    </a>
-    </li>
-
-    <li>
-    <a
-       tal:attributes="href view/view/current;
-                       title view/view/go_to_current_title">
-      <span tal:replace="view/view/current_title">Current</span>
     </a>
     </li>
 
@@ -30,5 +30,10 @@
            tal:content="mode/title">Daily</a>
       </li>
     </tal:block>
+
+    <li class="calendar-current">
+      <span tal:content="view/view/date_title">Current</span>
+    </li>
+
 
 </ul>

@@ -10,6 +10,13 @@
       title="Calendar"
       />
 
+  <flourish:page_breadcrumbs
+      show_page_title="false"
+      for="schooltool.calendar.interfaces.ICalendar"
+      view=".calendar.FlourishCalendarView"
+      title="Calendar"
+      />
+
   <flourish:page
       name="daily.html"
       for="schooltool.calendar.interfaces.ISchoolToolCalendar"
