@@ -42,6 +42,7 @@ from schooltool.contact.interfaces import IContact, IContactContainer
 from schooltool.contact.interfaces import IContactPersonInfo, IContactable
 from schooltool.resource.resource import Resource
 from schooltool.resource.resource import Location
+from schooltool.resource.resource import Equipment
 from schooltool.group.group import Group
 from schooltool.group.interfaces import IGroupContainer
 from schooltool.term.interfaces import ITerm
@@ -95,7 +96,7 @@ ERROR_DUPLICATE_DAY_ID = _("is the same day id as another in this timetable")
 ERROR_UNKNOWN_DAY_ID = _("is not defined in the 'Day Templates' section")
 ERROR_DUPLICATE_PERIOD = _("is the same period id as another in this day")
 ERROR_DUPLICATE_HOMEROOM_PERIOD = _("is the same homeroom period id as another in this day")
-ERROR_RESOURCE_TYPE = _("must be either 'Location' or 'Resource'")
+ERROR_RESOURCE_TYPE = _("must be either 'Location', 'Equipment' or 'Resource'")
 ERROR_INVALID_TERM_ID = _('is not a valid term in the given school year')
 ERROR_INVALID_COURSE_ID = _('is not a valid course in the given school year')
 ERROR_HAS_NO_COURSES = _('${title} has no courses in A${row}')
@@ -652,8 +653,11 @@ class ResourceImporter(ImporterBase):
     sheet_name = 'Resources'
 
     def createResource(self, data):
-        res_types = {'Location': Location,
-                     'Resource': Resource}
+        res_types = {
+            'Location': Location,
+            'Equipment': Equipment,
+            'Resource': Resource,
+            }
         res_factory = res_types[data['type']]
         resource = res_factory(data['title'])
         resource.__name__ = data['__name__']
@@ -681,7 +685,7 @@ class ResourceImporter(ImporterBase):
             data['title'] = self.getRequiredTextFromCell(sh, row, 2)
             if num_errors < len(self.errors):
                 continue
-            if data['type'] not in ['Location', 'Resource']:
+            if data['type'] not in ['Location', 'Equipment', 'Resource']:
                 self.error(row, 1, ERROR_RESOURCE_TYPE)
                 continue
             resource = self.createResource(data)
