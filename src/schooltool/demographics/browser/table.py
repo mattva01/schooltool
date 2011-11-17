@@ -36,6 +36,7 @@ from zope.traversing.browser.absoluteurl import absoluteURL
 from schooltool.app.browser import ViewPreferences
 from schooltool.person.browser.person import PersonContainerView
 from schooltool.table.table import DependableCheckboxColumn
+from schooltool.table.table import DateColumn   # BBB
 from schooltool.demographics import interfaces
 from schooltool.common import SchoolToolMessage as _
 
@@ -237,22 +238,3 @@ class ModifiedColumn(column.GetterColumn):
             self._renderDatetime = ViewPreferences(
                 formatter.request).renderDatetime
         return self._renderDatetime(value)
-
-
-class DateColumn(column.GetterColumn):
-    """Table column that displays dates.
-
-    Sortable even when None values are around.
-    """
-
-    def getSortKey(self, item, formatter):
-        if self.getter(item, formatter) is None:
-            return date.min
-        else:
-            return self.getter(item, formatter)
-
-    def cell_formatter(self, maybe_date, item, formatter):
-        view = queryMultiAdapter((maybe_date, formatter.request),
-                                 name='mediumDate',
-                                 default=lambda: '')
-        return view()

@@ -43,7 +43,7 @@ from z3c.form.validator import InvariantsValidator
 from z3c.form.error import ErrorViewSnippet
 
 from schooltool.app.interfaces import ISchoolToolApplication
-from schooltool.demographics.browser.table import DateColumn
+from schooltool.table.table import DateColumn
 from schooltool.table.table import url_cell_formatter
 from schooltool.table.table import DependableCheckboxColumn
 from schooltool.schoolyear.browser.interfaces import ISchoolYearViewMenuViewletManager
