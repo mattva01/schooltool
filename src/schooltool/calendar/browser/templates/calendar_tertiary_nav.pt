@@ -2,9 +2,8 @@
 
   <tal:block replace="resource_library:schooltool.calendar" />
 
-    <li class="calendar-nav">
-    <a
-       tal:attributes="href view/view/current;
+    <li tal:attributes="class view/nav_today_class">
+    <a tal:attributes="href view/view/current;
                        title view/view/go_to_current_title">
       <span tal:replace="view/view/current_title">Current</span>
     </a>

@@ -351,6 +351,14 @@ class CalendarTertiaryNavigation(flourish.page.Content,
         )
 
     @property
+    def nav_today_class(self):
+        is_today = self.view.inCurrentPeriod(self.view.today)
+        cls = 'calendar-nav'
+        if is_today:
+            cls += ' active'
+        return cls
+
+    @property
     def modes(self):
         result = []
         for mode, title in self.mode_types:
