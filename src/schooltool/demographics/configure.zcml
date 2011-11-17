@@ -96,18 +96,6 @@
        />
   </class>
 
-  <!-- sample data -->
-  <configure
-      xmlns:zcml="http://namespaces.zope.org/zcml"
-      zcml:condition="have devmode">
-
-    <utility
-        factory=".sampledata.SamplePersonalEvents"
-        provides="schooltool.sampledata.interfaces.ISampleDataPlugin"
-        name="personal_events"
-        />
-  </configure>
-
   <include package=".browser" />
 
 </configure>

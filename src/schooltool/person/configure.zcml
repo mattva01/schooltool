@@ -118,6 +118,12 @@
         name="teachers"
         />
 
+    <utility
+        factory=".sampledata.SamplePersonalEvents"
+        provides="schooltool.sampledata.interfaces.ISampleDataPlugin"
+        name="personal_events"
+        />
+
   </configure>
 
   <include package=".browser" />
