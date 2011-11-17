@@ -112,7 +112,7 @@ class SamplePersonalEvents(object):
     name = 'personal_events'
     dependencies = ('students', 'teachers', 'terms')
 
-    probability = 10 # probability of having an event on any day
+    probability = 2     # probability of having an event on any day
 
     def _readLines(self, filename):
         """Read in lines from file

@@ -153,7 +153,7 @@ def doctest_SamplePersonalEvents():
     Probability of person having event on any day in percents:
 
         >>> plugin.probability
-        10
+        2
 
         >>> plugin.probability = 50
 
