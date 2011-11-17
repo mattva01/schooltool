@@ -29,8 +29,8 @@ from zope.i18n import translate
 from zope.interface import implements
 from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.publisher.interfaces import NotFound
+from zope.traversing.api import getParent
 
-import schooltool.skin.flourish.page
 from schooltool.app.browser.cal import DailyCalendarView
 from schooltool.app.browser.cal import WeeklyCalendarView
 from schooltool.app.browser.cal import MonthlyCalendarView
@@ -332,3 +332,16 @@ class AddEventLink(flourish.page.LinkViewlet):
     @property
     def url(self):
         return "add.html?field.start_date=%s" % self.view.cursor.isoformat()
+
+
+def getParentTitleContent(context, request, view):
+    parent = getParent(context)
+    if parent is None:
+        return None
+    providers = queryMultiAdapter(
+        (parent, request, view),
+        flourish.interfaces.IContentProviders)
+    if providers is None:
+        return None
+    content = providers.get("title")
+    return content

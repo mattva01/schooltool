@@ -51,6 +51,7 @@ from zope.security.checker import canAccess
 from z3c.form import form, field, button, widget, term, validator
 from z3c.form.browser.radio import RadioWidget
 from zope.i18n import translate
+from zope.i18n.interfaces.locales import ICollator
 
 import schooltool.skin.flourish.page
 import schooltool.skin.flourish.form
@@ -432,7 +433,12 @@ class PersonFilterWidget(IndexedFilterWidget):
 
     def groups(self):
         groups = []
-        for id, group in self.groupContainer().items():
+        container = self.groupContainer()
+        collator = ICollator(self.request.locale)
+        group_items = sorted(container.items(),
+                             cmp=collator.cmp,
+                             key=lambda (gid, g): g.title)
+        for id, group in group_items:
             if len(group.members) > 0:
                 groups.append({'id': id,
                                'title': "%s (%s)" % (group.title, len(group.members))})

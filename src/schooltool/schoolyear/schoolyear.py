@@ -20,6 +20,7 @@
 School year implementation
 """
 import rwproperty
+import datetime
 
 from zope.proxy import sameProxiedObjects
 from zope.event import notify
@@ -115,12 +116,28 @@ class SchoolYearContainer(BTreeContainer):
                 year_id = next.__name__
         self._set_active_id(year_id)
 
+    def getLastSchoolYearForDate(self, date):
+        before, after = [], []
+        for year in self.sorted_schoolyears:
+            if date in IDateRange(year):
+                return year
+            if date > year.last:
+                before.append((year.last, year))
+            if date < year.first:
+                after.append((year.first, year))
+        if before:
+            return max(before)[1]
+        if after:
+            return min(after)[1]
+        return None
+
     def getSchoolYearForToday(self):
         dtm = queryUtility(IDateManager)
         today = dtm.today
         for year in self.sorted_schoolyears:
-            if today in year:
+            if today in IDateRange(year):
                 return year
+        return None
 
     def getNextSchoolYear(self):
         if self.getActiveSchoolYear() is None:
@@ -277,3 +294,15 @@ class SchoolYearTermOverflowValidationSubscriber(EventAdapterSubscriber):
         sy = self.event.schoolyear
         dr = DateRange(*self.event.new_dates)
         validateScholYearForOverflow(dr, sy)
+
+
+@adapter(datetime.date)
+@implementer(ITermContainer)
+def getTermContainerForDate(date):
+    app = ISchoolToolApplication(None)
+    syc = ISchoolYearContainer(app)
+    year = syc.getLastSchoolYearForDate(date)
+    term_container = ITermContainer(year, None)
+    return term_container
+
+

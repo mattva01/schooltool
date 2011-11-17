@@ -44,4 +44,6 @@
 
   <adapter factory=".subscriber.ObjectEventAdapterSubscriberDispatcher" />
 
+  <adapter factory=".schoolyear.getTermContainerForDate" />
+
 </configure>

@@ -426,6 +426,9 @@ class NewSectionTermsSubform(subform.EditSubForm):
         if self.errors:
             return []
         terms = listTerms(self.context)
+        if (self.span['starts'] is None or
+            self.span['ends'] is None):
+            return []
         return [term for term in terms
                 if (term.first >= self.span['starts'].first and
                     term.last <= self.span['ends'].last)]
