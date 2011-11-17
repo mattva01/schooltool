@@ -266,7 +266,7 @@ class ScheduleYearlyCalendarView(YearlyCalendarView):
     def legend(self):
         numterms = 1
         legend = {}
-        terms = ITermContainer(None, {})
+        terms = ITermContainer(self.cursor, {})
         for quarter in self.getYear(self.cursor):
             for month in quarter:
                 for week in month:
@@ -283,7 +283,7 @@ class ScheduleYearlyCalendarView(YearlyCalendarView):
     def renderRow(self, week, month):
         result = []
 
-        terms = ITermContainer(None, {})
+        terms = ITermContainer(self.cursor, {})
 
         for day in week:
             term = None
