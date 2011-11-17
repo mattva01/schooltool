@@ -31,6 +31,7 @@ from zope.component import adapter, getUtility
 from zope.formlib import form
 from zope.html.field import HtmlFragment
 from zope.session.interfaces import ISession
+from zope.proxy import sameProxiedObjects
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.traversing.browser.absoluteurl import absoluteURL
 from zope.viewlet.interfaces import IViewlet
@@ -47,6 +48,7 @@ from schooltool.app.membership import URIMembership, URIGroup
 from schooltool.app.utils import vocabulary
 from schooltool.app.relationships import URISection, URIInstruction
 from schooltool.calendar.browser.event import FlourishCalendarEventAddView
+from schooltool.person.interfaces import IPerson
 from schooltool.relationship import getRelatedObjects
 from schooltool.schoolyear.interfaces import ISchoolYear
 from schooltool.skin import flourish
@@ -264,7 +266,7 @@ class ScheduleYearlyCalendarView(YearlyCalendarView):
     def legend(self):
         numterms = 1
         legend = {}
-        terms = ITermContainer(None, {})
+        terms = ITermContainer(self.cursor, {})
         for quarter in self.getYear(self.cursor):
             for month in quarter:
                 for week in month:
@@ -281,7 +283,7 @@ class ScheduleYearlyCalendarView(YearlyCalendarView):
     def renderRow(self, week, month):
         result = []
 
-        terms = ITermContainer(None, {})
+        terms = ITermContainer(self.cursor, {})
 
         for day in week:
             term = None
@@ -396,7 +398,13 @@ class TimetableCalendarListSubscriber(object):
 
         Yields tuples (calendar, color1, color2).
         """
+
         owner = self.context.__parent__
+
+        user = IPerson(self.request.principal, None)
+        if (user is not None and
+            sameProxiedObjects(user, owner)):
+            return
 
         instructs = list(getRelatedObjects(
                 owner, URISection, rel_type=URIInstruction))

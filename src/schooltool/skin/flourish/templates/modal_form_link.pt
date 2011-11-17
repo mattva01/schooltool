@@ -3,8 +3,7 @@
 <tal:block define="url view/url; title view/dialog_title|nothing">
   <tal:block condition="url">
     <a href="#"
-       tal:attributes="href url;
-                       id view/html_id"
+       tal:attributes="id view/html_id"
        tal:content="view/title"></a>
     <div tal:attributes="id view/form_container_id"></div>
 

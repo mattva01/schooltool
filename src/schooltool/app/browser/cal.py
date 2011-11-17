@@ -39,6 +39,7 @@ from zope.publisher.interfaces import NotFound
 from zope.security import checkPermission
 from zope.security.interfaces import ForbiddenAttribute, Unauthorized
 from zope.security.proxy import removeSecurityProxy
+from zope.proxy import sameProxiedObjects
 from zope.security.checker import canAccess, canWrite
 from zope.security import checkPermission
 from zope.schema import Date, TextLine, Choice, Int, Bool, List, Text
@@ -95,6 +96,7 @@ from schooltool.calendar.interfaces import IWeeklyRecurrenceRule
 from schooltool.calendar.utils import parse_date, parse_datetimetz
 from schooltool.calendar.utils import parse_time
 from schooltool.calendar.utils import week_start, prev_month, next_month
+from schooltool.common import DateRange
 from schooltool.app.utils import vocabulary
 from schooltool.person.interfaces import IPerson
 from schooltool.term.interfaces import IDateManager
@@ -355,6 +357,9 @@ class CalendarViewBase(BrowserView):
     # Which day is considered to be the first day of the week (0 = Monday,
     # 6 = Sunday).  Based on authenticated user preference, defaults to Monday
 
+    cursor = None
+    cursor_range = None
+
     def __init__(self, context, request):
         self.context = context
         self.request = request
@@ -450,8 +455,14 @@ class CalendarViewBase(BrowserView):
         """
         session = ISession(self.request)['calendar']
         dt = session.get('last_visited_day')
+        visited_on = session.get('visited_on')
 
         if 'date' not in self.request:
+            if (visited_on and
+                visited_on != self.today):
+                # Special case: only restore last visited calendar days
+                #               that user looked at today
+                dt = None
             self.cursor = dt or self.today
         else:
             # TODO: It would be nice not to b0rk when the date is invalid but
@@ -461,6 +472,8 @@ class CalendarViewBase(BrowserView):
 
         if not (dt and self.inCurrentPeriod(dt)):
             session['last_visited_day'] = self.cursor
+            if not visited_on or visited_on != self.today:
+                session['visited_on'] = self.today
 
         self._initDaysCache()
 
@@ -597,6 +610,22 @@ class CalendarViewBase(BrowserView):
                                       calendar, self.timezone,
                                       parent_view_link=view_link)
 
+    def collapseEvents(self, events):
+        """Collapse events that come from multiple calendars."""
+        events = sorted(events, key=lambda e:e.unique_id)
+        by_uid = {}
+        for event in events:
+            uid = (event.context.unique_id, event.context.dtstart)
+            if uid in by_uid:
+                known = by_uid[uid]
+                if (sameProxiedObjects(known.source_calendar,
+                                       known.context.__parent__) or
+                    not sameProxiedObjects(event.source_calendar,
+                                           event.context.__parent__)):
+                    continue
+            by_uid[uid] = event
+        return by_uid.values()
+
     def getDays(self, start, end):
         """Get a list of CalendarDay objects for a selected period of time.
 
@@ -631,7 +660,7 @@ class CalendarViewBase(BrowserView):
         # We have date objects, but ICalendar.expand needs datetime objects
         start_dt = self.timezone.localize(datetime.combine(start, time()))
         end_dt = self.timezone.localize(datetime.combine(end, time()))
-        for event in self.getEvents(start_dt, end_dt):
+        for event in self.collapseEvents(self.getEvents(start_dt, end_dt)):
             #  day1  day2  day3  day4  day5
             # |.....|.....|.....|.....|.....|
             # |     |  [-- event --)  |     |
@@ -842,6 +871,18 @@ class WeeklyCalendarView(CalendarViewBase):
     def inCurrentPeriod(self, dt):
         # XXX wrong if week starts on Sunday.
         return dt.isocalendar()[:2] == self.cursor.isocalendar()[:2]
+
+    @property
+    def cursor_range(self):
+        cursor = self.cursor
+        if cursor is None:
+            return None
+        first = date(cursor.year, cursor.month, cursor.day)
+        while first.isoweekday() > 1:
+            first -= timedelta(days=1)
+        last = first + timedelta(weeks=1) - timedelta(days=1)
+        cursor_range = DateRange(first, last)
+        return cursor_range
 
     def title(self):
         month_name_msgid = month_names[self.cursor.month]
@@ -1071,6 +1112,20 @@ class MonthlyCalendarView(CalendarViewBase):
     def inCurrentPeriod(self, dt):
         return (dt.year, dt.month) == (self.cursor.year, self.cursor.month)
 
+    @property
+    def cursor_range(self):
+        cursor = self.cursor
+        if cursor is None:
+            return None
+        first = date(cursor.year, cursor.month, 1)
+        if first.month == 12:
+            last = date(first.year+1, 1, 1)
+        else:
+            last = date(first.year, first.month+1, 1)
+        last -= timedelta(days=1)
+        cursor_range = DateRange(first, last)
+        return cursor_range
+
     def title(self):
         month_name_msgid = month_names[self.cursor.month]
         month_name = translate(month_name_msgid, context=self.request)
@@ -1125,6 +1180,17 @@ class YearlyCalendarView(CalendarViewBase):
 
     def inCurrentPeriod(self, dt):
         return dt.year == self.cursor.year
+
+    @property
+    def cursor_range(self):
+        cursor = self.cursor
+        if cursor is None:
+            return None
+        first = date(cursor.year, 1, 1)
+        last = date(cursor.year+1, 1, 1)
+        last -= timedelta(days=1)
+        cursor_range = DateRange(first, last)
+        return cursor_range
 
     def title(self):
         return unicode(self.cursor.year)
@@ -1194,6 +1260,13 @@ class DailyCalendarView(CalendarViewBase):
 
     def inCurrentPeriod(self, dt):
         return dt == self.cursor
+
+    @property
+    def cursor_range(self):
+        cursor = self.cursor
+        if cursor is None:
+            return None
+        return DateRange(cursor, cursor)
 
     def title(self):
         return self.dayTitle(self.cursor)

@@ -177,7 +177,7 @@ def getTermForDate(date):
 
     Returns None if `date` falls outside all terms.
     """
-    terms = interfaces.ITermContainer(None, {})
+    terms = interfaces.ITermContainer(date, {})
     for term in terms.values():
         if date in term:
             return term
@@ -194,7 +194,7 @@ def getNextTermForDate(date):
 
     Returns None if there are no terms.
     """
-    terms = interfaces.ITermContainer(None, {})
+    terms = interfaces.ITermContainer(date, {})
     before, after = [], []
     for term in terms.values():
         if date in term:
