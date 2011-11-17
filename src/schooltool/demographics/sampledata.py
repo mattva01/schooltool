@@ -18,8 +18,6 @@
 #
 """
 Person sample data generation
-
-$Id$
 """
 
 import datetime
@@ -27,36 +25,20 @@ import os
 
 from pytz import utc
 from zope.interface import implements
-from zope.security.proxy import removeSecurityProxy
 
-from schooltool.group.interfaces import IGroupContainer
 from schooltool.term.interfaces import ITermContainer
 from schooltool.sampledata import PortableRandom
 from schooltool.sampledata.interfaces import ISampleDataPlugin
-from schooltool.sampledata.name import NameGenerator
+from schooltool.person.sampledata import SampleStudents
+from schooltool.person.sampledata import SampleTeachers
+
 from schooltool.demographics.person import Person
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.app.cal import CalendarEvent
 from schooltool.common import DateRange
 
-class ChoiceGenerator(object):
-    def __init__(self, seed, choices):
-        self.random = PortableRandom(seed)
-        self.choices = choices
 
-    def generate(self):
-        return self.random.choice(self.choices)
-
-
-class SampleStudents(object):
-
-    implements(ISampleDataPlugin)
-
-    name = 'students'
-    dependencies = ('terms', )
-
-    # Number of persons to generate
-    power = 1000
+class SampleStudents(SampleStudents):
 
     def personFactory(self, namegen, prefixgen, gendergen, count):
         first_name, last_name, full_name = namegen.generate()
@@ -72,28 +54,8 @@ class SampleStudents(object):
         person.parent2.name = namegen.generate()[2]
         return person
 
-    def generate(self, app, seed=None):
-        namegen = NameGenerator(str(seed) + self.name)
-        prefixgen = ChoiceGenerator(str(seed), ['Mr', 'Mrs', 'Miss', ''])
-        gendergen = ChoiceGenerator(str(seed), ['male', 'female'])
 
-        students = IGroupContainer(app)['students']
-        for count in range(self.power):
-            person = self.personFactory(namegen, prefixgen, gendergen, count)
-            # Without removeSecurityProxy we can't add members a
-            # group.
-            removeSecurityProxy(students.members).add(person)
-            app['persons'][person.__name__] = person
-
-
-class SampleTeachers(object):
-    implements(ISampleDataPlugin)
-
-    name = 'teachers'
-    dependencies = ('terms', )
-
-    # Number of teachers to generate
-    power = 48
+class SampleTeachers(SampleTeachers):
 
     def personFactory(self, namegen, count):
         first_name, last_name, full_name = namegen.generate()
@@ -103,16 +65,6 @@ class SampleTeachers(object):
         person.nameinfo.last_name = last_name
         person.setPassword(person_id)
         return person
-
-    def generate(self, app, seed=None):
-        namegen = NameGenerator(str(seed) + self.name)
-        teachers = IGroupContainer(app)['teachers']
-        for count in range(self.power):
-            person = self.personFactory(namegen, count)
-            # Without removeSecurityProxy we can't add members a
-            # group.
-            removeSecurityProxy(teachers.members).add(person)
-            app['persons'][person.__name__] = person
 
 
 class SamplePersonalEvents(object):
