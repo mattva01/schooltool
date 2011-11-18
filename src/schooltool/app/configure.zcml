@@ -325,40 +325,6 @@
 
   <!-- Documentation -->
 
-  <configure
-      xmlns:zcml="http://namespaces.zope.org/zcml"
-      xmlns:apidoc="http://namespaces.zope.org/apidoc"
-      zcml:condition="have apidoc">
-
-    <apidoc:bookchapter
-        id="schooltool"
-        title="SchoolTool"
-        doc_path="README.txt" />
-
-    <!-- Security -->
-    <apidoc:bookchapter
-        id="security"
-        title="Security (General)"
-        parent="schooltool"
-        doc_path="security.txt" />
-
-    <!-- Calendar -->
-    <configure package="schooltool.calendar">
-      <apidoc:bookchapter
-          id="calendar"
-          title="Calendar"
-          parent="schooltool"
-          doc_path="README.txt" />
-    </configure>
-
-    <apidoc:bookchapter
-        id="booking"
-        title="Booking Resources"
-        parent="schooltool/calendar"
-        doc_path="booking.txt" />
-
-  </configure>
-
   <utility
       xmlns:zcml="http://namespaces.zope.org/zcml"
       zcml:condition="not-have authentication"

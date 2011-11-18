@@ -635,27 +635,6 @@
 
   </configure>
 
-  <!-- Documentation -->
-
-  <configure
-      xmlns:zcml="http://namespaces.zope.org/zcml"
-      xmlns:apidoc="http://namespaces.zope.org/apidoc"
-      zcml:condition="have apidoc">
-
-    <apidoc:bookchapter
-        id="browser"
-        title="Browser UI"
-        parent="schooltool"
-        doc_path="ftests/README.txt" />
-
-    <apidoc:bookchapter
-        id="templates"
-        title="Templates"
-        parent="schooltool/browser"
-        doc_path="templates.txt" />
-
-  </configure>
-
   <!-- Calendar provider subscriber  -->
 
   <zope:subscriber
