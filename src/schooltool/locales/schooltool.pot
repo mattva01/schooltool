@@ -17,7 +17,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
-"POT-Creation-Date: 2011-10-12 19:53+0300\n"
+"POT-Creation-Date: 2011-11-18 19:52+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Schooltool Development Team <schooltool-dev@schooltool.org>\n"
@@ -394,7 +394,51 @@ msgstr ""
 msgid "December"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:128
+#: /src/schooltool/app/browser/cal.py:132
+msgid "Jan"
+msgstr ""
+
+#: /src/schooltool/app/browser/cal.py:133
+msgid "Feb"
+msgstr ""
+
+#: /src/schooltool/app/browser/cal.py:134
+msgid "Mar"
+msgstr ""
+
+#: /src/schooltool/app/browser/cal.py:135
+msgid "Apr"
+msgstr ""
+
+#: /src/schooltool/app/browser/cal.py:137
+msgid "Jun"
+msgstr ""
+
+#: /src/schooltool/app/browser/cal.py:138
+msgid "Jul"
+msgstr ""
+
+#: /src/schooltool/app/browser/cal.py:139
+msgid "Aug"
+msgstr ""
+
+#: /src/schooltool/app/browser/cal.py:140
+msgid "Sep"
+msgstr ""
+
+#: /src/schooltool/app/browser/cal.py:141
+msgid "Oct"
+msgstr ""
+
+#: /src/schooltool/app/browser/cal.py:142
+msgid "Nov"
+msgstr ""
+
+#: /src/schooltool/app/browser/cal.py:143
+msgid "Dec"
+msgstr ""
+
+#: /src/schooltool/app/browser/cal.py:146
 #: /src/schooltool/person/interfaces.py:176
 #: /src/schooltool/term/browser/templates/f_term.pt:30
 #: /src/schooltool/term/browser/templates/f_term_add.pt:42
@@ -1091,10 +1135,16 @@ msgstr ""
 msgid "SchoolTool"
 msgstr ""
 
-#: /src/schooltool/app/browser/flourish.zcml:186
+#: /src/schooltool/app/browser/flourish.zcml:54
+#: /src/schooltool/app/browser/flourish.zcml:63
+#: /src/schooltool/skin/templates/view_macros.pt:50
+msgid "Log In"
+msgstr ""
+
+#: /src/schooltool/app/browser/flourish.zcml:197
 #: /src/schooltool/app/browser/templates/f_errors.pt:3
 #: /src/schooltool/basicperson/browser/flourish.zcml:69
-#: /src/schooltool/email/browser/configure.zcml:76
+#: /src/schooltool/email/browser/configure.zcml:80
 #: /src/schooltool/email/browser/email.py:204
 msgid "Settings"
 msgstr ""
@@ -2270,10 +2320,14 @@ msgid "The second row must be empty. After that, several section descriptions ma
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_section_csvimport_description.pt:21
-msgid "Each section description's first row contains the <strong>course id</strong> and the <strong>instructor username</strong> for the new section."
+msgid "Each section description's first row contains the <strong>course SchoolTool ID</strong> and the <strong>instructor username</strong> for the new section."
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_section_csvimport_description.pt:27
+msgid "If you want to update the sections instead, in section description's first row you should specify: <strong>course SchoolTool ID</strong>, <strong>instructor username</strong> and then <strong>section SchoolTool ID</strong> for corresponding sections in each term. <strong>Note:</strong> if your school has, say, 5 consecutive terms and you specify terms \"2\", \"4\" in the top of csv, you will need to provide 3 section ids, for terms \"2\", \"3\" and \"4\" respectively."
+msgstr ""
+
+#: /src/schooltool/app/browser/templates/f_section_csvimport_description.pt:34
 msgid "Then a number of rows specifying the section schedule <strong>may</strong> follow. First there's a row containing the <strong>timetable id</strong>. Then, several rows containing a <strong>day title</strong> and a <strong>period title</strong>, follows. Section schedule description is terminated by three asterisks ('***') in the first column."
 msgstr ""
 
@@ -2297,8 +2351,8 @@ msgstr ""
 msgid "Example:"
 msgstr ""
 
-#: /src/schooltool/app/browser/templates/f_section_csvimport_description.pt:45
-#. Default: "\"Fall\", \"Spring\" \"\",\"\",\"\" \"philosophy\",\"lorch\" \"weekly-timetable\" \"Monday\",\"A\" \"Monday\",\"B\" \"Tuesday\",\"B\" \"***\" \"johnny\" \"billy\" \"\" \"literature\",\"guzman\" \"***\" \"johnny\" \"pete\""
+#: /src/schooltool/app/browser/templates/f_section_csvimport_description.pt:52
+#. Default: "\"Fall\", \"Spring\" \"\",\"\",\"\" \"philosophy\",\"lorch\" \"weekly-timetable\" \"Monday\",\"A\" \"Monday\",\"B\" \"Tuesday\",\"B\" \"***\" \"johnny\" \"billy\" \"\" \"literature\",\"guzman\",\"literature-f\",\"literature-s\" \"***\" \"johnny\" \"pete\""
 msgid ""
 "\n"
 "\"Fall\", \"Spring\"\n"
@@ -2312,14 +2366,14 @@ msgid ""
 "\"johnny\"\n"
 "\"billy\"\n"
 "\"\"\n"
-"\"literature\",\"guzman\"\n"
+"\"literature\",\"guzman\",\"literature-f\",\"literature-s\"\n"
 "\"***\"\n"
 "\"johnny\"\n"
 "\"pete\"\n"
 msgstr ""
 
-#: /src/schooltool/app/browser/templates/f_section_csvimport_description.pt:63
-msgid "The above example will create sections for philosophy and literature lectures. Sections will be taught from fall term to spring term. The section for the philosophy lecture will have persons with user names 'johnny' and 'billy' as learners. It will also be scheduled on Monday (two lessons, periods 'A' and 'B') and Tuesday. The literature section will be processed in a similar fashion, but will have no defined schedule."
+#: /src/schooltool/app/browser/templates/f_section_csvimport_description.pt:70
+msgid "The above example will create sections for philosophy and literature lectures. Sections will be taught from fall term to spring term. The section for the philosophy lecture will have persons with user names 'johnny' and 'billy' as learners. It will also be scheduled on Monday (two lessons, periods 'A' and 'B') and Tuesday. The literature section will be processed in a similar fashion, but will have no defined schedule. The literature SchoolTool IDs will be set to literature-f in Fall and literature-s in Spring."
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_server_settings_overview.pt:3
@@ -2560,13 +2614,13 @@ msgstr ""
 msgid "Row 2 is not empty"
 msgstr ""
 
-#: /src/schooltool/app/browser/timetablecsvimport.py:181
+#: /src/schooltool/app/browser/timetablecsvimport.py:182
 #. Default: ""
-msgid "Wrong section header on line ${line_no} (it should contain a course id and an instructor id)"
+msgid "Wrong section header on line ${line_no} (it should contain a course id, an instructor id and optional SchoolTool section IDs for each of the terms)"
 msgstr ""
 
-#: /src/schooltool/app/browser/timetablecsvimport.py:212
-#: /src/schooltool/app/browser/timetablecsvimport.py:223
+#: /src/schooltool/app/browser/timetablecsvimport.py:220
+#: /src/schooltool/app/browser/timetablecsvimport.py:231
 #. Default: ""
 msgid "Malformed line ${line_no} (it should contain either a timetable id or day id and a period id)"
 msgstr ""
@@ -3333,19 +3387,6 @@ msgstr ""
 msgid "The above example will create three users, 'jjones', 'jbjones' and 'howard'. Of the three, only 'jbjones' has a password ('r2m45J') and will be able to login to the system. Note that passwords must be sent in plain text."
 msgstr ""
 
-#: /src/schooltool/basicperson/browser/templates/f_demographicsViewlet.pt:2
-msgid "Attributes"
-msgstr ""
-
-#: /src/schooltool/basicperson/browser/templates/f_demographicsViewlet.pt:5
-msgid "Demographics and other personal data"
-msgstr ""
-
-#: /src/schooltool/basicperson/browser/templates/f_demographicsViewlet.pt:6
-#: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:6
-msgid "Edit this person's information"
-msgstr ""
-
 #: /src/schooltool/basicperson/browser/templates/f_demographics_reorder.pt:8
 msgid "Order"
 msgstr ""
@@ -3404,6 +3445,15 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:2
 msgid "General Information"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:6
+#: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:25
+msgid "Edit this person's information"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:24
+msgid "Demographics and other personal data"
 msgstr ""
 
 #: /src/schooltool/basicperson/browser/templates/f_manage_people_overview.pt:4
@@ -3627,7 +3677,27 @@ msgstr ""
 msgid "Administrators"
 msgstr ""
 
-#: /src/schooltool/calendar/browser/calendar.py:193
+#: /src/schooltool/calendar/browser/calendar.py:173
+msgid "Tomorrow"
+msgstr ""
+
+#: /src/schooltool/calendar/browser/calendar.py:175
+msgid "Yesterday"
+msgstr ""
+
+#: /src/schooltool/calendar/browser/calendar.py:195
+msgid "This Week"
+msgstr ""
+
+#: /src/schooltool/calendar/browser/calendar.py:197
+msgid "Last Week"
+msgstr ""
+
+#: /src/schooltool/calendar/browser/calendar.py:199
+msgid "Next Week"
+msgstr ""
+
+#: /src/schooltool/calendar/browser/calendar.py:236
 msgid "Jump To"
 msgstr ""
 
@@ -4079,7 +4149,12 @@ msgstr ""
 msgid "Mobile phone"
 msgstr ""
 
-#: /src/schooltool/contact/interfaces.py:102
+#: /src/schooltool/contact/interfaces.py:82
+#: /src/schooltool/contact/interfaces.py:84
+msgid "Other"
+msgstr ""
+
+#: /src/schooltool/contact/interfaces.py:109
 msgid "Contact's relationship with the person"
 msgstr ""
 
@@ -4822,7 +4897,20 @@ msgstr ""
 msgid "Unlink Section"
 msgstr ""
 
-#: /src/schooltool/course/interfaces.py:50
+#: /src/schooltool/course/interfaces.py:36
+#: /src/schooltool/course/interfaces.py:129
+msgid "SchoolTool ID"
+msgstr ""
+
+#: /src/schooltool/course/interfaces.py:37
+msgid "An internal identifier of this course."
+msgstr ""
+
+#: /src/schooltool/course/interfaces.py:53
+msgid "School identifier of this course."
+msgstr ""
+
+#: /src/schooltool/course/interfaces.py:58
 msgid "Alternate ID"
 msgstr ""
 
@@ -4846,6 +4934,10 @@ msgstr ""
 msgid ""
 "An identifier for a section, made up of instructor\n"
 "            names, courses, and meeting time."
+msgstr ""
+
+#: /src/schooltool/course/interfaces.py:130
+msgid "An internal identifier of this section."
 msgstr ""
 
 #: /src/schooltool/course/section.py:89
@@ -5253,7 +5345,25 @@ msgstr ""
 msgid "API Docs"
 msgstr ""
 
-#: /src/schooltool/email/browser/configure.zcml:54
+#: /src/schooltool/devmode/f_unauthorized.pt:3
+#: /src/schooltool/skin/templates/f_unauthorized.pt:3
+msgid "You are not authorized"
+msgstr ""
+
+#: /src/schooltool/devmode/f_unauthorized.pt:9
+msgid "Permission checks"
+msgstr ""
+
+#: /src/schooltool/devmode/f_unauthorized.pt:11
+msgid "Most recent checks last. Red indicates insufficient permissions. \"=>\" indicates relayed checks, usually to parent object."
+msgstr ""
+
+#: /src/schooltool/devmode/flourish-overrides.zcml:8
+#: /src/schooltool/skin/flourish/instance/skin.zcml:68
+msgid "Unauthorized"
+msgstr ""
+
+#: /src/schooltool/email/browser/configure.zcml:58
 #: /src/schooltool/email/browser/flourish.zcml:20
 #: /src/schooltool/email/browser/flourish.zcml:27
 #: /src/schooltool/email/browser/flourish.zcml:141
@@ -5679,11 +5789,11 @@ msgstr ""
 msgid "is the same homeroom period id as another in this day"
 msgstr ""
 
-#: /src/schooltool/export/importer.py:97
-msgid "must be either 'Location' or 'Resource'"
+#: /src/schooltool/export/importer.py:99
+msgid "must be either 'Location', 'Equipment' or 'Resource'"
 msgstr ""
 
-#: /src/schooltool/export/importer.py:98
+#: /src/schooltool/export/importer.py:100
 msgid "is not a valid term in the given school year"
 msgstr ""
 
@@ -7219,10 +7329,6 @@ msgstr ""
 msgid "Not Found"
 msgstr ""
 
-#: /src/schooltool/skin/flourish/instance/skin.zcml:68
-msgid "Unauthorized"
-msgstr ""
-
 #: /src/schooltool/skin/flourish/templates/main.pt:82
 msgid "server running"
 msgstr ""
@@ -7260,16 +7366,8 @@ msgstr ""
 msgid "You might be trying to access a non-existing page"
 msgstr ""
 
-#: /src/schooltool/skin/templates/f_unauthorized.pt:3
-msgid "You are not authorized"
-msgstr ""
-
 #: /src/schooltool/skin/templates/generic_macros.pt:12
 msgid "Server Running SchoolTool"
-msgstr ""
-
-#: /src/schooltool/skin/templates/view_macros.pt:50
-msgid "Log In"
 msgstr ""
 
 #: /src/schooltool/skin/templates/view_macros.pt:58
