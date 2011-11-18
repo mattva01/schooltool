@@ -9,6 +9,7 @@ CHANGES
 - Import of Contact Relationships fails with DuplicateRelationship error
   (https://launchpad.net/bugs/882482)
 - xls importer needs to handle integer data (https://launchpad.net/bugs/362014)
+- Updated translations.
 
 
 1.9.2 (2011-11-04)
