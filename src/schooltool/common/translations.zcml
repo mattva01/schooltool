@@ -12,8 +12,5 @@
   <include package="schooltool.timetable" />
   <include package="schooltool.basicperson" />
 
-  <!-- Provide local overrides of standard configurations-->
-  <includeOverrides package="schooltool.demographics" file="overrides.zcml" />
-
 </configure>
 

@@ -18,11 +18,9 @@
 #
 """
 Basic person sample data generation
-
-$Id$
 """
-from schooltool.demographics.sampledata import SampleStudents
-from schooltool.demographics.sampledata import SampleTeachers
+from schooltool.person.sampledata import SampleStudents
+from schooltool.person.sampledata import SampleTeachers
 from schooltool.basicperson.person import BasicPerson
 
 

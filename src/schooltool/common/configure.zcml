@@ -109,7 +109,6 @@
   <include package="schooltool.course" />
   <include package="schooltool.person" />
   <include package="schooltool.contact" />
-  <include package="schooltool.demographics" />
   <include package="schooltool.group" />
   <include package="schooltool.resource" />
   <include package="schooltool.term" />
