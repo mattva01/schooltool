@@ -17,7 +17,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
-"POT-Creation-Date: 2011-10-12 19:53+0300\n"
+"POT-Creation-Date: 2011-11-18 02:37+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Schooltool Development Team <schooltool-dev@schooltool.org>\n"
@@ -33,8 +33,6 @@ msgstr ""
 #: /src/schooltool/app/browser/__init__.py:256
 #: /src/schooltool/app/browser/templates/index.pt:11
 #: /src/schooltool/person/browser/configure.zcml:26
-#: /src/schooltool/person/help/configure.zcml:8
-#: /src/schooltool/person/help/person_container.pt:6
 msgid "Persons"
 msgstr ""
 
@@ -621,16 +619,10 @@ msgid "Change Site Preferences"
 msgstr ""
 
 #: /src/schooltool/app/browser/configure.zcml:494
-#: /src/schooltool/app/help/configure.zcml:77
-#: /src/schooltool/app/help/event_add.pt:6
-#: /src/schooltool/app/help/event_add.pt:9
 msgid "Add Event"
 msgstr ""
 
 #: /src/schooltool/app/browser/configure.zcml:534
-#: /src/schooltool/app/help/configure.zcml:87
-#: /src/schooltool/app/help/event_edit.pt:6
-#: /src/schooltool/app/help/event_edit.pt:9
 msgid "Edit Event"
 msgstr ""
 
@@ -888,8 +880,6 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/cal_atom.pt:14
 #: /src/schooltool/app/configure.zcml:334
-#: /src/schooltool/app/help/configure.zcml:6
-#: /src/schooltool/app/help/schooltool.pt:6
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:11
 #: /src/schooltool/contact/browser/templates/contacts_delete.pt:11
 #: /src/schooltool/email/browser/templates/email_container.pt:11
@@ -990,8 +980,6 @@ msgid "My Calendar"
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:31
-#: /src/schooltool/demographics/browser/personform.py:92
-#: /src/schooltool/demographics/browser/personform.py:270
 #: /src/schooltool/level/browser.py:82
 #: /src/schooltool/person/browser/person.py:171
 #: /src/schooltool/skin/form.py:55
@@ -1076,7 +1064,6 @@ msgstr ""
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:56
 #: /src/schooltool/course/browser/templates/link_section.pt:49
 #: /src/schooltool/course/browser/templates/section_container.pt:29
-#: /src/schooltool/demographics/browser/table.pt:34
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:45
 #: /src/schooltool/skin/templates/container.pt:53
 #: /src/schooltool/skin/templates/table_container.pt:39
@@ -1330,8 +1317,6 @@ msgstr ""
 #: /src/schooltool/course/browser/templates/link_section.pt:62
 #: /src/schooltool/course/browser/templates/link_to_courses.pt:1
 #: /src/schooltool/course/browser/templates/section_container.pt:36
-#: /src/schooltool/course/help/configure.zcml:8
-#: /src/schooltool/course/help/course_container.pt:7
 #: /src/schooltool/course/security.zcml:73
 #: /src/schooltool/dashboard/term.pt:4
 msgid "Courses"
@@ -1341,8 +1326,6 @@ msgstr ""
 #: /src/schooltool/group/browser/configure.zcml:63
 #: /src/schooltool/group/browser/groupsviewlet.pt:3
 #: /src/schooltool/group/browser/link_to_groups.pt:1
-#: /src/schooltool/group/help/configure.zcml:8
-#: /src/schooltool/group/help/group_container.pt:6
 #: /src/schooltool/group/security.zcml:53
 msgid "Groups"
 msgstr ""
@@ -1378,9 +1361,6 @@ msgstr ""
 #: /src/schooltool/app/browser/templates/login.pt:38
 #: /src/schooltool/basicperson/browser/person.py:59
 #: /src/schooltool/basicperson/browser/person.py:60
-#: /src/schooltool/demographics/browser/personform.py:253
-#: /src/schooltool/demographics/browser/personform.py:254
-#: /src/schooltool/demographics/browser/table.py:67
 #: /src/schooltool/email/browser/email.py:117
 #: /src/schooltool/email/interfaces.py:104
 #: /src/schooltool/person/browser/person.py:287
@@ -1391,7 +1371,6 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/login.pt:44
 #: /src/schooltool/basicperson/browser/person.py:64
-#: /src/schooltool/demographics/browser/personform.py:258
 #: /src/schooltool/person/browser/person.py:160
 #: /src/schooltool/person/browser/person.py:291
 msgid "Password"
@@ -1439,8 +1418,6 @@ msgstr ""
 #: /src/schooltool/contact/browser/contact.py:195
 #: /src/schooltool/contact/browser/contact.py:419
 #: /src/schooltool/course/browser/section.py:341
-#: /src/schooltool/demographics/browser/personform.py:107
-#: /src/schooltool/demographics/browser/personform.py:301
 #: /src/schooltool/email/browser/email.py:188
 #: /src/schooltool/email/browser/email.py:304
 #: /src/schooltool/email/browser/email.py:520
@@ -1870,7 +1847,6 @@ msgstr ""
 #: /src/schooltool/course/browser/configure.zcml:69
 #: /src/schooltool/course/security.zcml:94
 #: /src/schooltool/course/security.zcml:128
-#: /src/schooltool/demographics/browser/configure.zcml:13
 #: /src/schooltool/group/security.zcml:76
 #: /src/schooltool/person/browser/configure.zcml:197
 #: /src/schooltool/person/security.zcml:87
@@ -1887,9 +1863,6 @@ msgstr ""
 #: /src/schooltool/basicperson/browser/configure.zcml:209
 #: /src/schooltool/contact/browser/configure.zcml:22
 #: /src/schooltool/contact/browser/configure.zcml:52
-#: /src/schooltool/demographics/browser/configure.zcml:22
-#: /src/schooltool/demographics/browser/table.py:100
-#: /src/schooltool/demographics/browser/table.py:196
 #: /src/schooltool/level/browser.zcml:40
 #: /src/schooltool/person/browser/configure.zcml:177
 #: /src/schooltool/schoolyear/browser/configure.zcml:94
@@ -1915,7 +1888,6 @@ msgid "Advisees"
 msgstr ""
 
 #: /src/schooltool/basicperson/browser/configure.zcml:92
-#: /src/schooltool/demographics/overrides.zcml:7
 #: /src/schooltool/person/browser/configure.zcml:169
 msgid "New Person"
 msgstr ""
@@ -1926,7 +1898,6 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/configure.zcml:129
 #: /src/schooltool/basicperson/security.zcml:22
-#: /src/schooltool/demographics/browser/personform.py:180
 msgid "Demographics"
 msgstr ""
 
@@ -1989,7 +1960,6 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/csvimport.py:76
 #: /src/schooltool/basicperson/browser/person.py:108
-#: /src/schooltool/demographics/browser/personform.py:280
 #: /src/schooltool/person/browser/csvimport.py:70
 msgid "Names cannot begin with '+' or '@' or contain '/'"
 msgstr ""
@@ -2031,7 +2001,6 @@ msgid "Group"
 msgstr ""
 
 #: /src/schooltool/basicperson/browser/person.py:54
-#: /src/schooltool/demographics/interfaces.py:209
 msgid "Advisor"
 msgstr ""
 
@@ -2141,8 +2110,6 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/templates/container.pt:37
 #: /src/schooltool/course/browser/templates/course_container.pt:28
-#: /src/schooltool/demographics/browser/search.pt:30
-#: /src/schooltool/demographics/browser/table.pt:23
 #: /src/schooltool/email/browser/templates/email_container.pt:33
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:43
 #: /src/schooltool/skin/templates/container.pt:28
@@ -2153,8 +2120,6 @@ msgstr ""
 #: /src/schooltool/basicperson/browser/templates/container.pt:42
 #: /src/schooltool/course/browser/templates/course_container.pt:40
 #: /src/schooltool/course/browser/templates/section_container.pt:93
-#: /src/schooltool/demographics/browser/search.pt:35
-#: /src/schooltool/demographics/browser/table.pt:28
 #: /src/schooltool/email/browser/templates/email_container.pt:48
 #: /src/schooltool/schoolyear/browser/templates/schoolyear.pt:42
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:48
@@ -2245,60 +2210,92 @@ msgstr ""
 msgid "Person info: ${title}"
 msgstr ""
 
-#: /src/schooltool/basicperson/interfaces.py:38
+#: /src/schooltool/basicperson/demographics.py:141
+#: /src/schooltool/basicperson/interfaces.py:136
+msgid "ID"
+msgstr ""
+
+#: /src/schooltool/basicperson/demographics.py:142
+msgid "Ethnicity"
+msgstr ""
+
+#: /src/schooltool/basicperson/demographics.py:143
+msgid "American Indian or Alaska Native"
+msgstr ""
+
+#: /src/schooltool/basicperson/demographics.py:144
+msgid "Asian"
+msgstr ""
+
+#: /src/schooltool/basicperson/demographics.py:145
+msgid "Black or African American"
+msgstr ""
+
+#: /src/schooltool/basicperson/demographics.py:146
+msgid "Native Hawaiian or Other Pacific Islander"
+msgstr ""
+
+#: /src/schooltool/basicperson/demographics.py:147
+msgid "White"
+msgstr ""
+
+#: /src/schooltool/basicperson/demographics.py:148
+#: /src/schooltool/contact/interfaces.py:82
+msgid "Language"
+msgstr ""
+
+#: /src/schooltool/basicperson/demographics.py:149
+msgid "Place of birth"
+msgstr ""
+
+#: /src/schooltool/basicperson/demographics.py:150
+msgid "Citizenship"
+msgstr ""
+
+#: /src/schooltool/basicperson/interfaces.py:37
 #: /src/schooltool/contact/interfaces.py:40
-#: /src/schooltool/demographics/interfaces.py:44
 msgid "Prefix"
 msgstr ""
 
 #: /src/schooltool/basicperson/interfaces.py:43
 #: /src/schooltool/contact/browser/templates/filter.pt:5
 #: /src/schooltool/contact/interfaces.py:42
-#: /src/schooltool/demographics/interfaces.py:50
 msgid "First name"
 msgstr ""
 
 #: /src/schooltool/basicperson/interfaces.py:48
 #: /src/schooltool/contact/interfaces.py:44
-#: /src/schooltool/demographics/interfaces.py:55
 msgid "Middle name"
 msgstr ""
 
 #: /src/schooltool/basicperson/interfaces.py:53
 #: /src/schooltool/contact/browser/templates/filter.pt:12
 #: /src/schooltool/contact/interfaces.py:46
-#: /src/schooltool/demographics/interfaces.py:60
 msgid "Last name"
 msgstr ""
 
 #: /src/schooltool/basicperson/interfaces.py:58
 #: /src/schooltool/contact/interfaces.py:48
-#: /src/schooltool/demographics/interfaces.py:65
 msgid "Suffix"
 msgstr ""
 
 #: /src/schooltool/basicperson/interfaces.py:63
-#: /src/schooltool/demographics/interfaces.py:70
 msgid "Preferred name"
 msgstr ""
 
 #: /src/schooltool/basicperson/interfaces.py:68
-#: /src/schooltool/demographics/interfaces.py:123
 msgid "Gender"
 msgstr ""
 
 #: /src/schooltool/basicperson/interfaces.py:69
-#: /src/schooltool/demographics/interfaces.py:124
 msgid "female"
 msgstr ""
 
 #: /src/schooltool/basicperson/interfaces.py:69
-#: /src/schooltool/demographics/interfaces.py:124
 msgid "male"
 msgstr ""
 
 #: /src/schooltool/basicperson/interfaces.py:74
-#: /src/schooltool/demographics/interfaces.py:129
 msgid "Birth date"
 msgstr ""
 
@@ -2310,12 +2307,7 @@ msgstr ""
 msgid "The title of this Field Description"
 msgstr ""
 
-#: /src/schooltool/basicperson/interfaces.py:125
-#: /src/schooltool/demographics/interfaces.py:194
-msgid "ID"
-msgstr ""
-
-#: /src/schooltool/basicperson/interfaces.py:126
+#: /src/schooltool/basicperson/interfaces.py:137
 msgid "Unique ID of this Field Description"
 msgstr ""
 
@@ -2632,12 +2624,10 @@ msgid "Address line 2"
 msgstr ""
 
 #: /src/schooltool/contact/interfaces.py:57
-#: /src/schooltool/demographics/interfaces.py:258
 msgid "City"
 msgstr ""
 
 #: /src/schooltool/contact/interfaces.py:59
-#: /src/schooltool/demographics/interfaces.py:263
 msgid "State"
 msgstr ""
 
@@ -2646,26 +2636,19 @@ msgid "Country"
 msgstr ""
 
 #: /src/schooltool/contact/interfaces.py:63
-#: /src/schooltool/demographics/interfaces.py:268
 msgid "Postal code"
 msgstr ""
 
 #: /src/schooltool/contact/interfaces.py:73
-#: /src/schooltool/demographics/interfaces.py:273
 msgid "Home phone"
 msgstr ""
 
 #: /src/schooltool/contact/interfaces.py:75
-#: /src/schooltool/demographics/interfaces.py:278
 msgid "Work phone"
 msgstr ""
 
 #: /src/schooltool/contact/interfaces.py:77
 msgid "Mobile phone"
-msgstr ""
-
-#: /src/schooltool/contact/interfaces.py:82
-msgid "Language"
 msgstr ""
 
 #: /src/schooltool/contact/interfaces.py:102
@@ -2928,7 +2911,6 @@ msgid "${course} course for ${schoolyear}"
 msgstr ""
 
 #: /src/schooltool/course/browser/templates/course.pt:52
-#: /src/schooltool/demographics/browser/nameinfo_view.pt:11
 #: /src/schooltool/person/browser/home.pt:20
 #: /src/schooltool/person/browser/person.pt:11
 msgid "photo"
@@ -3294,291 +3276,8 @@ msgid "School Timetables"
 msgstr ""
 
 #: /src/schooltool/dashboard/term.pt:16
-#: /src/schooltool/term/help/configure.zcml:18
 #: /src/schooltool/term/security.zcml:19
 msgid "Terms"
-msgstr ""
-
-#: /src/schooltool/demographics/browser/demographics_macros.pt:4
-#: /src/schooltool/demographics/browser/personform.py:96
-msgid "Apply and Next"
-msgstr ""
-
-#: /src/schooltool/demographics/browser/demographics_macros.pt:4
-msgid "N"
-msgstr ""
-
-#: /src/schooltool/demographics/browser/demographics_macros.pt:4
-msgid "Shortcut: Alt-N"
-msgstr ""
-
-#: /src/schooltool/demographics/browser/display_form.pt:3
-#: /src/schooltool/demographics/browser/nameinfo_view.pt:3
-#: /src/schooltool/demographics/browser/schooldata_view.pt:3
-#: /src/schooltool/demographics/browser/table.py:101
-#: /src/schooltool/demographics/browser/table.py:205
-msgid "Display"
-msgstr ""
-
-#: /src/schooltool/demographics/browser/personform.py:148
-#. Default: ""
-msgid "Change name information for ${fullname}"
-msgstr ""
-
-#: /src/schooltool/demographics/browser/personform.py:164
-msgid "Change name"
-msgstr ""
-
-#: /src/schooltool/demographics/browser/personform.py:172
-#. Default: ""
-msgid "Change demographics for ${fullname}"
-msgstr ""
-
-#: /src/schooltool/demographics/browser/personform.py:188
-#. Default: ""
-msgid "Change school data for ${fullname}"
-msgstr ""
-
-#: /src/schooltool/demographics/browser/personform.py:198
-msgid "School data"
-msgstr ""
-
-#: /src/schooltool/demographics/browser/personform.py:209
-#. Default: ""
-msgid "Change contact information for ${fullname}"
-msgstr ""
-
-#: /src/schooltool/demographics/browser/personform.py:217
-msgid "Contact information"
-msgstr ""
-
-#: /src/schooltool/demographics/browser/personform.py:273
-#: /src/schooltool/person/browser/person.py:325
-msgid "This username is already used!"
-msgstr ""
-
-#: /src/schooltool/demographics/browser/personform.py:333
-msgid "Invalid teacher. Possible causes: deleted or renamed."
-msgstr ""
-
-#: /src/schooltool/demographics/browser/personform.py:365
-msgid "Invalid group. Possible causes: deleted or renamed."
-msgstr ""
-
-#: /src/schooltool/demographics/browser/search.pt:6
-msgid "Search for persons here. Note that in fulltext fields you can use wildcard characters such as *. For example, to search for everyone with John in their name, use <em>*john*</em>."
-msgstr ""
-
-#: /src/schooltool/demographics/browser/search.pt:42
-msgid "There were no results."
-msgstr ""
-
-#: /src/schooltool/demographics/browser/table.py:73
-#: /src/schooltool/demographics/interfaces.py:76
-#: /src/schooltool/person/browser/person.py:283
-#: /src/schooltool/person/browser/person.py:372
-#: /src/schooltool/person/interfaces.py:51
-msgid "Full name"
-msgstr ""
-
-#: /src/schooltool/demographics/browser/table.py:78
-msgid "Birth"
-msgstr ""
-
-#: /src/schooltool/demographics/browser/table.py:84
-msgid "Enrollment"
-msgstr ""
-
-#: /src/schooltool/demographics/browser/table.py:90
-msgid "Modified"
-msgstr ""
-
-#: /src/schooltool/demographics/interfaces.py:45
-msgid "Prefix such as Mr., Mrs."
-msgstr ""
-
-#: /src/schooltool/demographics/interfaces.py:71
-msgid "Name by which the student prefers to be called"
-msgstr ""
-
-#: /src/schooltool/demographics/interfaces.py:81
-#: /src/schooltool/person/browser/person.py:299
-#: /src/schooltool/person/interfaces.py:55
-msgid "Photo"
-msgstr ""
-
-#: /src/schooltool/demographics/interfaces.py:83
-#: /src/schooltool/person/browser/person.py:301
-#: /src/schooltool/person/interfaces.py:57
-msgid "Photo (in JPEG format)"
-msgstr ""
-
-#: /src/schooltool/demographics/interfaces.py:96
-msgid "American Indian or Alaska Native"
-msgstr ""
-
-#: /src/schooltool/demographics/interfaces.py:97
-msgid "Asian"
-msgstr ""
-
-#: /src/schooltool/demographics/interfaces.py:98
-msgid "Black or African American"
-msgstr ""
-
-#: /src/schooltool/demographics/interfaces.py:99
-msgid "Native Hawaiian or Other Pacific Islander"
-msgstr ""
-
-#: /src/schooltool/demographics/interfaces.py:100
-msgid "White"
-msgstr ""
-
-#: /src/schooltool/demographics/interfaces.py:104
-msgid "English"
-msgstr ""
-
-#: /src/schooltool/demographics/interfaces.py:105
-msgid "Spanish"
-msgstr ""
-
-#: /src/schooltool/demographics/interfaces.py:106
-msgid "Chinese"
-msgstr ""
-
-#: /src/schooltool/demographics/interfaces.py:107
-msgid "German"
-msgstr ""
-
-#: /src/schooltool/demographics/interfaces.py:108
-msgid "Tagalog"
-msgstr ""
-
-#: /src/schooltool/demographics/interfaces.py:109
-msgid "Vietnamese"
-msgstr ""
-
-#: /src/schooltool/demographics/interfaces.py:110
-msgid "Italian"
-msgstr ""
-
-#: /src/schooltool/demographics/interfaces.py:111
-msgid "Korean"
-msgstr ""
-
-#: /src/schooltool/demographics/interfaces.py:112
-msgid "Russian"
-msgstr ""
-
-#: /src/schooltool/demographics/interfaces.py:113
-msgid "Polish"
-msgstr ""
-
-#: /src/schooltool/demographics/interfaces.py:114
-msgid "Arabic"
-msgstr ""
-
-#: /src/schooltool/demographics/interfaces.py:134
-msgid "Ethnicity"
-msgstr ""
-
-#: /src/schooltool/demographics/interfaces.py:140
-msgid "Primary language"
-msgstr ""
-
-#: /src/schooltool/demographics/interfaces.py:146
-msgid "Special education"
-msgstr ""
-
-#: /src/schooltool/demographics/interfaces.py:151
-msgid "Previous school"
-msgstr ""
-
-#: /src/schooltool/demographics/interfaces.py:199
-msgid "Enrollment date"
-msgstr ""
-
-#: /src/schooltool/demographics/interfaces.py:204
-msgid "Projected graduation year"
-msgstr ""
-
-#: /src/schooltool/demographics/interfaces.py:215
-msgid "Team"
-msgstr ""
-
-#: /src/schooltool/demographics/interfaces.py:221
-msgid "Health information"
-msgstr ""
-
-#: /src/schooltool/demographics/interfaces.py:227
-msgid "parent"
-msgstr ""
-
-#: /src/schooltool/demographics/interfaces.py:228
-msgid "guardian"
-msgstr ""
-
-#: /src/schooltool/demographics/interfaces.py:229
-msgid "grandparent"
-msgstr ""
-
-#: /src/schooltool/demographics/interfaces.py:230
-msgid "step-parent"
-msgstr ""
-
-#: /src/schooltool/demographics/interfaces.py:231
-msgid "friend of family"
-msgstr ""
-
-#: /src/schooltool/demographics/interfaces.py:232
-msgid "other"
-msgstr ""
-
-#: /src/schooltool/demographics/interfaces.py:242
-#: /src/schooltool/demographics/utility.py:88
-msgid "Name"
-msgstr ""
-
-#: /src/schooltool/demographics/interfaces.py:247
-msgid "Relationship to student"
-msgstr ""
-
-#: /src/schooltool/demographics/interfaces.py:253
-msgid "Street"
-msgstr ""
-
-#: /src/schooltool/demographics/interfaces.py:283
-msgid "Cell phone"
-msgstr ""
-
-#: /src/schooltool/demographics/interfaces.py:288
-#: /src/schooltool/note/configure.zcml:94
-#: /src/schooltool/note/notes.pt:2
-#: /src/schooltool/resource/interfaces.py:52
-msgid "Notes"
-msgstr ""
-
-#: /src/schooltool/demographics/interfaces.py:298
-msgid "Text"
-msgstr ""
-
-#: /src/schooltool/demographics/interfaces.py:299
-msgid "Full text search in name"
-msgstr ""
-
-#: /src/schooltool/demographics/interfaces.py:304
-msgid "Name of parent"
-msgstr ""
-
-#: /src/schooltool/demographics/interfaces.py:305
-msgid "Full text search in parent names"
-msgstr ""
-
-#: /src/schooltool/demographics/interfaces.py:310
-msgid "Student ID"
-msgstr ""
-
-#: /src/schooltool/demographics/utility.py:92
-msgid "Surname"
 msgstr ""
 
 #: /src/schooltool/devmode/configure.zcml:52
@@ -4270,6 +3969,11 @@ msgstr ""
 msgid "Public"
 msgstr ""
 
+#: /src/schooltool/note/notes.pt:2
+#: /src/schooltool/resource/interfaces.py:59
+msgid "Notes"
+msgstr ""
+
 #: /src/schooltool/note/notes.pt:8
 msgid "( p )"
 msgstr ""
@@ -4330,8 +4034,14 @@ msgstr ""
 msgid "Changed password"
 msgstr ""
 
-#: /src/schooltool/person/browser/person.py:284
-#: /src/schooltool/person/browser/person.py:373
+#: /src/schooltool/person/browser/person.py:285
+#: /src/schooltool/person/browser/person.py:374
+#: /src/schooltool/person/interfaces.py:51
+msgid "Full name"
+msgstr ""
+
+#: /src/schooltool/person/browser/person.py:286
+#: /src/schooltool/person/browser/person.py:375
 #: /src/schooltool/person/interfaces.py:52
 msgid "Name that should be displayed"
 msgstr ""
@@ -4341,15 +4051,29 @@ msgstr ""
 msgid "Verify password"
 msgstr ""
 
-#: /src/schooltool/person/browser/person.py:322
+#: /src/schooltool/person/browser/person.py:301
+#: /src/schooltool/person/interfaces.py:55
+msgid "Photo"
+msgstr ""
+
+#: /src/schooltool/person/browser/person.py:303
+#: /src/schooltool/person/interfaces.py:57
+msgid "Photo (in JPEG format)"
+msgstr ""
+
+#: /src/schooltool/person/browser/person.py:324
 msgid "Passwords do not match!"
 msgstr ""
 
-#: /src/schooltool/person/browser/person.py:376
-msgid "New photo"
+#: /src/schooltool/person/browser/person.py:327
+msgid "This username is already used!"
 msgstr ""
 
 #: /src/schooltool/person/browser/person.py:378
+msgid "New photo"
+msgstr ""
+
+#: /src/schooltool/person/browser/person.py:380
 msgid "A small picture (about 48x48 pixels in JPEG format)"
 msgstr ""
 
