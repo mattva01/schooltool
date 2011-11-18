@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-10-01 14:51-0600\n"
-"PO-Revision-Date: 2011-10-03 15:10+0000\n"
-"Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
+"POT-Creation-Date: 2011-10-12 18:58+0300\n"
+"PO-Revision-Date: 2011-11-13 02:45+0000\n"
+"Last-Translator: Jógvan Olsen <jeggy@jebster.net>\n"
 "Language-Team: Føroyabólkurin\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-10-06 04:58+0000\n"
-"X-Generator: Launchpad (build 14085)\n"
+"X-Launchpad-Export-Date: 2011-11-14 05:58+0000\n"
+"X-Generator: Launchpad (build 14277)\n"
 "Language: fo\n"
 
 #: /src/schooltool/app/app.py:193
@@ -97,7 +97,7 @@ msgstr "Innrita"
 
 #: /src/schooltool/app/browser/app.py:435
 msgid "Log out"
-msgstr ""
+msgstr "Útrita"
 
 #: /src/schooltool/app/browser/app.py:523
 msgid "Calendar settings"
@@ -340,7 +340,7 @@ msgstr "Villur"
 
 #: /src/schooltool/app/browser/cal.py:114
 msgid "January"
-msgstr "Január"
+msgstr "Januar"
 
 #: /src/schooltool/app/browser/cal.py:115
 msgid "February"

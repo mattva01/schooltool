@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2011-10-12 18:58+0300\n"
-"PO-Revision-Date: 2011-11-01 10:29+0000\n"
-"Last-Translator: MinSik CHO <Unknown>\n"
+"PO-Revision-Date: 2011-11-05 00:20+0000\n"
+"Last-Translator: Lyuso <Lutinaroa@gmail.com>\n"
 "Language-Team: Korean <ko@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-11-02 05:26+0000\n"
-"X-Generator: Launchpad (build 14214)\n"
+"X-Launchpad-Export-Date: 2011-11-05 06:25+0000\n"
+"X-Generator: Launchpad (build 14231)\n"
 "Language: ko\n"
 
 #: /src/schooltool/app/app.py:193
@@ -217,15 +217,15 @@ msgstr "현재 지도자"
 
 #: /src/schooltool/app/browser/app.py:587
 msgid "Available leaders"
-msgstr ""
+msgstr "남은 지휘자"
 
 #: /src/schooltool/app/browser/app.py:598
 msgid "Current responsible parties"
-msgstr ""
+msgstr "현제 응답하는 모임"
 
 #: /src/schooltool/app/browser/app.py:599
 msgid "Available responsible parties"
-msgstr ""
+msgstr "응답 가능한 모임"
 
 #: /src/schooltool/app/browser/app.py:622
 msgid "school"
@@ -267,7 +267,7 @@ msgstr "아니요"
 #: /src/schooltool/app/browser/app.py:868
 #: /src/schooltool/app/browser/flourish.zcml:545
 msgid "Pack Database"
-msgstr ""
+msgstr "묶음 데이터베이스"
 
 #: /src/schooltool/app/browser/app.py:877
 msgid "Live"
@@ -279,41 +279,41 @@ msgstr ""
 
 #: /src/schooltool/app/browser/app.py:889
 msgid "Backup"
-msgstr ""
+msgstr "백업"
 
 #: /src/schooltool/app/browser/app.py:909
 msgid "Database successfully packed."
-msgstr ""
+msgstr "데이터베이스가 성공적으로 묶어졌습니다."
 
 #. Default: ""
 #: /src/schooltool/app/browser/app.py:911
 msgid "There were errors while packing the database: ${error}"
-msgstr ""
+msgstr "데이터베이스를 묶는 데 오류가 발생: ${error}"
 
 #. Default: ""
 #: /src/schooltool/app/browser/app.py:953
 msgid "${type} Error"
-msgstr ""
+msgstr "${type} 오류"
 
 #: /src/schooltool/app/browser/app.py:962
 #: /src/schooltool/app/browser/templates/f_errors.pt:15
 msgid "Number of exceptions to show"
-msgstr ""
+msgstr "보여질 예외들의 수"
 
 #: /src/schooltool/app/browser/app.py:965
 #: /src/schooltool/app/browser/templates/f_errors.pt:21
 msgid "Copy exceptions to the event log"
-msgstr ""
+msgstr "예외를 사건 기록에 복사"
 
 #: /src/schooltool/app/browser/app.py:969
 #: /src/schooltool/app/browser/templates/f_errors.pt:27
 msgid "Ignored exception types"
-msgstr ""
+msgstr "거부된 예외 형식"
 
 #: /src/schooltool/app/browser/app.py:998
 #: /src/schooltool/app/browser/flourish.zcml:292
 msgid "Errors Settings"
-msgstr ""
+msgstr "오류 설정"
 
 #: /src/schooltool/app/browser/app.py:1005
 #: /src/schooltool/basicperson/browser/demographics.py:413
@@ -328,7 +328,7 @@ msgstr ""
 #: /src/schooltool/term/browser/term.py:291
 #: /src/schooltool/term/browser/term.py:404
 msgid "Submit"
-msgstr ""
+msgstr "제출"
 
 #: /src/schooltool/app/browser/app.py:1025
 #: /src/schooltool/app/browser/configure.zcml:670
@@ -835,7 +835,7 @@ msgstr "예외 날짜"
 
 #: /src/schooltool/app/browser/cal.py:1805
 msgid "same weekday"
-msgstr ""
+msgstr "같은 주"
 
 #: /src/schooltool/app/browser/cal.py:1810
 msgid "1st"
@@ -911,7 +911,7 @@ msgstr "유형"
 
 #: /src/schooltool/app/browser/cal.py:2283
 msgid "Booked by others"
-msgstr ""
+msgstr "다른이에 의해 예약됨"
 
 #: /src/schooltool/app/browser/cal.py:2611
 #: /src/schooltool/app/browser/configure.zcml:532
@@ -1089,11 +1089,11 @@ msgstr "SchoolTool"
 #: /src/schooltool/email/browser/configure.zcml:76
 #: /src/schooltool/email/browser/email.py:204
 msgid "Settings"
-msgstr ""
+msgstr "설정"
 
 #: /src/schooltool/app/browser/flourish.zcml:218
 msgid "Calendar Settings"
-msgstr ""
+msgstr "달력 설정"
 
 #: /src/schooltool/app/browser/flourish.zcml:228
 #: /src/schooltool/app/browser/templates/f_errors.pt:7
@@ -1154,19 +1154,19 @@ msgstr ""
 #: /src/schooltool/timetable/browser/templates/f_schedule_event_edit.pt:60
 #: /src/schooltool/timetable/browser/templates/f_timetable.pt:31
 msgid "Edit"
-msgstr ""
+msgstr "편집"
 
 #: /src/schooltool/app/browser/flourish.zcml:272
 msgid "Error"
-msgstr ""
+msgstr "오류"
 
 #: /src/schooltool/app/browser/flourish.zcml:303
 msgid "About"
-msgstr ""
+msgstr "소개"
 
 #: /src/schooltool/app/browser/flourish.zcml:313
 msgid "More Information"
-msgstr ""
+msgstr "더 많은 정보"
 
 #: /src/schooltool/app/browser/flourish.zcml:322
 #: /src/schooltool/app/browser/templates/about.pt:27
@@ -1185,42 +1185,42 @@ msgstr "메일링 리스트"
 
 #: /src/schooltool/app/browser/flourish.zcml:351
 msgid "IRC channel"
-msgstr ""
+msgstr "IRC 방"
 
 #: /src/schooltool/app/browser/flourish.zcml:393
 #: /src/schooltool/export/flourish.zcml:49
 msgid "School"
-msgstr ""
+msgstr "학교"
 
 #: /src/schooltool/app/browser/flourish.zcml:410
 msgid "Customize"
-msgstr ""
+msgstr "사용자 설정"
 
 #: /src/schooltool/app/browser/flourish.zcml:449
 #: /src/schooltool/course/browser/templates/f_course_view.pt:75
 #: /src/schooltool/group/browser/templates/f_group_view.pt:90
 #: /src/schooltool/resource/browser/templates/f_resource_view.pt:75
 msgid "Responsible parties"
-msgstr ""
+msgstr "응답하는 집단"
 
 #: /src/schooltool/app/browser/flourish.zcml:492
 msgid "Information"
-msgstr ""
+msgstr "정보"
 
 #: /src/schooltool/app/browser/flourish.zcml:510
 msgid "Database generations"
-msgstr ""
+msgstr "데이터배이스 생성"
 
 #: /src/schooltool/app/browser/flourish.zcml:528
 #: /src/schooltool/app/browser/flourish.zcml:553
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:7
 #: /src/schooltool/app/browser/templates/f_server_settings_overview.pt:12
 msgid "Database"
-msgstr ""
+msgstr "데이터베이스"
 
 #: /src/schooltool/app/browser/flourish.zcml:621
 msgid "Shown Calendars"
-msgstr ""
+msgstr "보여진 달력"
 
 #: /src/schooltool/app/browser/overlay.py:217
 msgid "Saved changes."
@@ -1228,19 +1228,19 @@ msgstr "저장사항을 변경합니다."
 
 #: /src/schooltool/app/browser/overlay.py:286
 msgid "Selected calendars"
-msgstr ""
+msgstr "선택된 달력들"
 
 #: /src/schooltool/app/browser/overlay.py:287
 msgid "Available calendars"
-msgstr ""
+msgstr "사용 가능한 달력들"
 
 #: /src/schooltool/app/browser/overlay.py:326
 msgid "School Calendar"
-msgstr ""
+msgstr "학교 달력"
 
 #: /src/schooltool/app/browser/pdfcal.py:52
 msgid "Daily calendar for %s"
-msgstr ""
+msgstr "%s 를 위한 하루 일정"
 
 #: /src/schooltool/app/browser/pdfcal.py:95
 msgid "recurrent"
@@ -1249,7 +1249,7 @@ msgstr "재발"
 #. Default: ""
 #: /src/schooltool/app/browser/pdfcal.py:99
 msgid "from the calendar of ${calendar_owner}"
-msgstr ""
+msgstr "${calendar_owner} 의 달력으로부터"
 
 #: /src/schooltool/app/browser/pdfcal.py:115
 msgid "all day"
@@ -1261,7 +1261,7 @@ msgstr "%s 주간 일정"
 
 #: /src/schooltool/app/browser/pdfcal.py:186
 msgid "Week %d (%s - %s), %d"
-msgstr ""
+msgstr "주 %d (%s - %s), %d"
 
 #: /src/schooltool/app/browser/pdfcal.py:197
 msgid "Monthly calendar for %s"
@@ -1284,6 +1284,8 @@ msgid ""
 "well as a framework for building customized applications and configurations "
 "for individual schools or states."
 msgstr ""
+"SchoolTool은 전세계의 학교를 위한 프리웨어 관리 소프트웨어입니다. 이 소프트웨어로 초중학교의 학생 정보, 관리 정보를 만들 수 "
+"있으며, 각 학교/도에 최적화된 응용프로그램이나 설정을 만들 수 있는 프레임워크를 제공합니다."
 
 #: /src/schooltool/app/browser/templates/about.pt:16
 #: /src/schooltool/app/browser/templates/f_about.pt:10
@@ -1316,7 +1318,7 @@ msgstr "IRC채널: #schooltool on freenode.net"
 #: /src/schooltool/app/browser/templates/about.pt:35
 #: /src/schooltool/app/browser/templates/f_about.pt:21
 msgid "Founder and funder:"
-msgstr ""
+msgstr "구축 및 기여자 :"
 
 #: /src/schooltool/app/browser/templates/about.pt:38
 #: /src/schooltool/app/browser/templates/f_about.pt:25
