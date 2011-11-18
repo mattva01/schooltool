@@ -46,6 +46,7 @@ from schooltool.basicperson.interfaces import IDemographicsFields
 from schooltool.basicperson.interfaces import IBasicPerson
 from schooltool.basicperson.interfaces import IDemographics
 from schooltool.basicperson.interfaces import IFieldDescription
+from schooltool.common import SchoolToolMessage as _
 
 
 class IDemographicsForm(Interface):
@@ -137,16 +138,16 @@ def setUpDefaultDemographics(app):
     dfs = DemographicsFields()
     app['schooltool.basicperson.demographics_fields'] = dfs
     locate(dfs, app, 'schooltool.basicperson.demographics_fields')
-    dfs['ID'] = TextFieldDescription('ID', 'ID')
-    dfs['ethnicity'] = EnumFieldDescription('ethnicity', 'Ethnicity')
-    dfs['ethnicity'].items = [u'American Indian or Alaska Native',
-                              u'Asian',
-                              u'Black or African American',
-                              u'Native Hawaiian or Other Pacific Islander',
-                              u'White']
-    dfs['language'] = TextFieldDescription('language', 'Language')
-    dfs['placeofbirth'] = TextFieldDescription('placeofbirth', 'Place of birth')
-    dfs['citizenship'] = TextFieldDescription('citizenship', 'Citizenship')
+    dfs['ID'] = TextFieldDescription('ID', _('ID'))
+    dfs['ethnicity'] = EnumFieldDescription('ethnicity', _('Ethnicity'))
+    dfs['ethnicity'].items = [_('American Indian or Alaska Native'),
+                              _('Asian'),
+                              _('Black or African American'),
+                              _('Native Hawaiian or Other Pacific Islander'),
+                              _('White')]
+    dfs['language'] = TextFieldDescription('language', _('Language'))
+    dfs['placeofbirth'] = TextFieldDescription('placeofbirth', _('Place of birth'))
+    dfs['citizenship'] = TextFieldDescription('citizenship', _('Citizenship'))
 
 
 class DemographicsAppStartup(StartUpBase):

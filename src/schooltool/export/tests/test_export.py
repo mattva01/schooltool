@@ -173,11 +173,11 @@ def doctest_format_persons():
          Header('Birth Date'),
          Header('Gender'),
          Header('Password'),
-         Header('ID'),
-         Header('Ethnicity'),
-         Header('Language'),
-         Header('Place of birth'),
-         Header('Citizenship')]
+         Header(u'ID'),
+         Header(u'Ethnicity'),
+         Header(u'Language'),
+         Header(u'Place of birth'),
+         Header(u'Citizenship')]
         [Text(u'john'),
          Text(None),
          Text('John'),
@@ -392,7 +392,9 @@ def doctest_MegaExporter_merge_ranges():
 
 
 def test_suite():
-    optionflags = doctest.NORMALIZE_WHITESPACE | doctest.ELLIPSIS
+    optionflags = (doctest.ELLIPSIS |
+                   doctest.NORMALIZE_WHITESPACE |
+                   doctest.REPORT_NDIFF)
     suite = doctest.DocTestSuite(optionflags=optionflags,
                                  extraglobs={'provideAdapter': provideStubAdapter,
                                              'provideUtility': provideStubUtility},
