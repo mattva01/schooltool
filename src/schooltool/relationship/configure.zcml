@@ -6,16 +6,4 @@
   <include file="relationship.zcml" />
   <include file="security.zcml" />
 
-  <configure
-      xmlns="http://namespaces.zope.org/apidoc"
-      xmlns:zcml="http://namespaces.zope.org/zcml"
-      zcml:condition="have apidoc">
-    <bookchapter
-        id="relationships"
-        title="Relationships"
-        doc_path="README.txt"
-        parent="schooltool"
-        />
-  </configure>
-
 </configure>
