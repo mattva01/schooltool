@@ -177,9 +177,9 @@ The modules available in the SchoolTool API documentation are:
     >>> browser.getLink('Interfaces')
     <Link text='Interfaces' url='.../++apidoc++/Interface/@@menu.html'>
     >>> browser.getLink('Code')
-    <Link text='Code' url='.../++apidoc++/Code/@@menu.html'>
+    <Link text='Code Browser' url='.../++apidoc++/Code/@@menu.html'>
     >>> browser.getLink('Book')
-    <Link text='Book' url='.../++apidoc++/Book/schooltool/@@menu.html'>
+    <Link text='Book' url='.../++apidoc++/Book/@@menu.html'>
 
 You can also access the user preferences that are specific to the API
 documentation:
@@ -218,10 +218,10 @@ SchoolTool interfaces. Zope 3 interfaces are purposefully excluded:
 You are now presented with a menu, where you can search for various
 interfaces. Let's search for the devmode interfaces:
 
-    >>> browser.getControl(name='search_str').value = 'schooltool'
+    >>> browser.getControl(name='search_str').value = 'ICalendar'
     >>> browser.getControl('Find').click()
 
-When the screen returns we should see our devmode layer and skin interface:
+When the screen returns we should see our interface:
 
     >>> print browser.contents.strip()
     <!DOC...
@@ -230,17 +230,16 @@ When the screen returns we should see our devmode layer and skin interface:
       ...
       <div>
         <a href="./schooltool.calendar.interfaces.ICalendar/index.html"
-           target="main">st.calendar.interfaces.ICalendar</a>
+           target="main">schooltool.calendar.interfaces.ICalendar</a>
       </div>
       ...
     </div>
     ...
 
-You can also see how "schooltool" is abbreviated as "st" to make the name
-shorter. Clicking on one of those results will give you the typical interface
+Clicking on one of those results will give you the typical interface
 details screen:
 
-    >>> browser.getLink('st.calendar.interfaces.ICalendar').click()
+    >>> browser.getLink('schooltool.calendar.interfaces.ICalendar').click()
     >>> browser.contents
     '...schooltool.calendar.interfaces.ICalendar...'
 
@@ -257,49 +256,21 @@ classes of a particular name.
     >>> browser.getLink(url='modulelist.html').click()
     >>> browser.getLink('Code').click()
 
-Again, searching by the term "devmode" gives us multiple results:
+Again, searching by the term "calendar" gives us multiple results:
 
-    >>> browser.getControl(name='path').value = 'devmode'
+    >>> browser.getControl(name='path').value = 'calendar'
     >>> browser.getControl('Find').click()
     >>> print browser.contents.strip()
     <!DOC...
     ...
     <div>
       ...
-      <a href=".../++apidoc++/Code/schooltool/devmode/apidoc/BookMenu/"
-         target="main">st.devmode.apidoc.BookMenu</a>
-      <a href=".../++apidoc++/Code/schooltool/devmode/apidoc/CodeMenu/"
-         target="main">st.devmode.apidoc.CodeMenu</a>
-      <a href=".../++apidoc++/Code/schooltool/devmode/apidoc/InterfaceMenu/"
-         target="main">st.devmode.apidoc.InterfaceMenu</a>
+      <a href=".../++apidoc++/Code/schooltool/calendar/recurrent/DailyRecurrenceRule/"
+         target="main">schooltool.calendar.recurrent.DailyRecurrenceRule</a>
+      <a href=".../++apidoc++/Code/schooltool/calendar/recurrent/MonthlyRecurrenceRule/"
+         target="main">schooltool.calendar.recurrent.MonthlyRecurrenceRule</a>
+      <a href=".../++apidoc++/Code/schooltool/calendar/recurrent/RecurrenceRule/"
+         target="main">schooltool.calendar.recurrent.RecurrenceRule</a>
       ...
     </div>
     ...
-
-Again, "schooltool" is collapsed to "st" and the documentation comes right up
-when clicking a link:
-
-    >>> browser.getLink('st.devmode.apidoc.InterfaceMenu').click()
-    >>> browser.contents
-    '...schooltool.devmode.apidoc.InterfaceMenu...'
-
-Book
-~~~~
-
-The book is a collection of many text documentation files of the SchoolTool
-project.
-
-    >>> browser.open('http://localhost/')
-    >>> browser.getLink('Manage').click()
-    >>> browser.getLink('API Docs').click()
-    >>> browser.getLink(url='modulelist.html').click()
-    >>> browser.getLink('Book').click()
-
-It is really the section of the entire apidoc book. The menu provides you with
-a tree-based outline. One of the chapters is "Calendar", so let's have a look:
-
-    >>> browser.getLink('Calendar', url="calendar/show.html").click()
-    >>> browser.contents
-    '...SchoolTool calendaring library...'
-
-
