@@ -16,29 +16,29 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-"""
-Unit tests for schooltool.demographics.sampledata
+"""Unit tests for schooltool.person.sampledata
 """
 
 import unittest
 import doctest
 
+from zope.app.testing import setup
+from zope.component import provideAdapter
+from zope.component import provideUtility
+from zope.interface import Interface
 from zope.interface.verify import verifyObject
 
 from schooltool.group.interfaces import IGroupContainer
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolCalendar
-
-from schooltool.schoolyear.testing import (setUp, tearDown,
-                                           provideStubUtility,
-                                           provideStubAdapter)
-from schooltool.demographics.browser.ftests import demographics_functional_layer
+from schooltool.schoolyear.interfaces import ISchoolYearContainer
+from schooltool.testing import setup as stsetup
 
 
 def doctest_SampleStudents():
     """A sample data plugin that generates students
 
-        >>> from schooltool.demographics.sampledata import SampleStudents
+        >>> from schooltool.person.sampledata import SampleStudents
         >>> from schooltool.sampledata.interfaces import ISampleDataPlugin
         >>> plugin = SampleStudents()
         >>> verifyObject(ISampleDataPlugin, plugin)
@@ -50,13 +50,10 @@ def doctest_SampleStudents():
         >>> plugin.power
         1000
 
-        >>> app = ISchoolToolApplication(None)
-        >>> from schooltool.term.sampledata import SampleTerms
-        >>> SampleTerms().generate(app)
+        >>> app = stsetup.setUpSchoolToolSite()
+
         >>> students = IGroupContainer(app)['students']
 
-        >>> len(app['persons']) # Manager is there already
-        1
         >>> len(students.members)
         0
 
@@ -68,10 +65,10 @@ def doctest_SampleStudents():
         >>> for i in range(5):
         ...     print app['persons']['student%03d' % i].title
         Freja Freeman
+        Klara Phillips
+        Cath Rodriguez
         Daniela Petersen
-        Jeffery Hardy
-        Thelma Vaughn
-        Pip Stewart
+        Gabbie Cunningham
 
     The students get their passwords set the same as their logins:
 
@@ -83,9 +80,9 @@ def doctest_SampleStudents():
 
 
 def doctest_SampleTeachers():
-    """A sample data plugin that generates students
+    """A sample data plugin that generates teachers
 
-        >>> from schooltool.demographics.sampledata import SampleTeachers
+        >>> from schooltool.person.sampledata import SampleTeachers
         >>> from schooltool.sampledata.interfaces import ISampleDataPlugin
         >>> plugin = SampleTeachers()
         >>> verifyObject(ISampleDataPlugin, plugin)
@@ -99,12 +96,10 @@ def doctest_SampleTeachers():
     This plugin creates a number of teachers and adds them to the
     Teachers group.
 
-        >>> app = ISchoolToolApplication(None)
-        >>> from schooltool.term.sampledata import SampleTerms
-        >>> SampleTerms().generate(app)
+        >>> app = stsetup.setUpSchoolToolSite()
+
         >>> teachers = IGroupContainer(app)['teachers']
-        >>> len(app['persons']) # Manager is already there
-        1
+
         >>> len(teachers.members)
         0
 
@@ -116,13 +111,12 @@ def doctest_SampleTeachers():
 
         >>> for i in range(5):
         ...     teacher = app['persons']['teacher%03d' % i]
-        ...     print teacher.title, (teacher.nameinfo.first_name,
-        ...                           teacher.nameinfo.last_name)
-        Catherine Martin ('Catherine', 'Martin')
-        Kimmy Cooper ('Kimmy', 'Cooper')
-        Helen Patterson ('Helen', 'Patterson')
-        Iris Laurent ('Iris', 'Laurent')
-        Philippa Stewart ('Philippa', 'Stewart')
+        ...     print teacher.title
+        Catherine Martin
+        Kimmy Cooper
+        Helen Patterson
+        Iris Laurent
+        Philippa Stewart
 
     The teachers get their passwords set the same as their logins:
 
@@ -136,16 +130,16 @@ def doctest_SampleTeachers():
 def doctest_SamplePersonalEvents():
     """A sample data plugin that generates random personal events.
 
-        >>> from schooltool.demographics.sampledata import SamplePersonalEvents
+        >>> from schooltool.person.sampledata import SamplePersonalEvents
         >>> from schooltool.sampledata.interfaces import ISampleDataPlugin
         >>> plugin = SamplePersonalEvents()
         >>> verifyObject(ISampleDataPlugin, plugin)
         True
 
-        >>> app = ISchoolToolApplication(None)
+        >>> app = stsetup.setUpSchoolToolSite()
 
-        >>> from schooltool.demographics.sampledata import SampleStudents
-        >>> from schooltool.demographics.sampledata import SampleTeachers
+        >>> from schooltool.person.sampledata import SampleStudents
+        >>> from schooltool.person.sampledata import SampleTeachers
         >>> from schooltool.term.sampledata import SampleTerms
         >>> plugin_students = SampleStudents()
         >>> plugin_students.power = 20
@@ -159,7 +153,7 @@ def doctest_SamplePersonalEvents():
     Probability of person having event on any day in percents:
 
         >>> plugin.probability
-        10
+        2
 
         >>> plugin.probability = 50
 
@@ -196,61 +190,41 @@ def doctest_SamplePersonalEvents():
     """
 
 
-def doctest_PersonFactoryUtility():
-    """Tests for PersonFactoryUtility.
+def setUp(test):
+    setup.placefulSetUp()
+    from schooltool.term.term import getTermContainer
+    from schooltool.term.interfaces import ITermContainer
+    from schooltool.schoolyear.schoolyear import getSchoolYearContainer
+    provideAdapter(getTermContainer, [Interface], ITermContainer)
+    provideAdapter(getSchoolYearContainer)
 
-        >>> from schooltool.demographics.utility import PersonFactoryUtility
-        >>> factory = PersonFactoryUtility()
+    from schooltool.group.group import GroupContainer, Group
+    groups = GroupContainer()
+    provideAdapter(lambda context: groups,
+                   adapts=[ISchoolToolApplication],
+                   provides=IGroupContainer)
+    groups['teachers'] = Group('Teachers')
+    groups['students'] = Group('Students')
 
-        >>> from schooltool.person.interfaces import IPersonFactory
-        >>> from zope.interface.verify import verifyObject
-        >>> verifyObject(IPersonFactory, factory)
-        True
+    from zope.annotation.interfaces import IAnnotatable
+    from schooltool.relationship.interfaces import IRelationshipLinks
+    from schooltool.relationship.annotatable import getRelationshipLinks
+    provideAdapter(getRelationshipLinks, [IAnnotatable], IRelationshipLinks)
 
-        >>> for column in factory.columns():
-        ...     print "%s, %s" % (column.name, column.title)
-        first_name, Name
-        last_name, Surname
-
-        >>> factory.sortOn()
-        (('last_name', False),)
-
-    """
+    from schooltool.app.cal import getCalendar
+    from schooltool.app.interfaces import ISchoolToolCalendar
+    from schooltool.person.interfaces import IPerson
+    provideAdapter(getCalendar, [IPerson], ISchoolToolCalendar)
 
 
-def doctest_PersonFactoryUtility_createManagerUser():
-    """Tests for PersonFactoryUtility.createManagerUser
-
-    First let's create the utility:
-
-        >>> from schooltool.demographics.utility import PersonFactoryUtility
-        >>> utility = PersonFactoryUtility()
-
-    The title of the manager user is set to the system name + Manager:
-
-        >>> manager = utility.createManagerUser("manager_username", "SchoolTool")
-        >>> manager.title
-        'SchoolTool Manager'
-        >>> manager.username
-        'manager_username'
-
-    The fisrt_name and last_name are set as well:
-
-        >>> manager.nameinfo.first_name
-        'SchoolTool'
-        >>> manager.nameinfo.last_name
-        'Manager'
-
-    """
+def tearDown(test):
+    setup.placefulTearDown()
 
 
 def test_suite():
     optionflags = doctest.NORMALIZE_WHITESPACE | doctest.ELLIPSIS
     suite = doctest.DocTestSuite(optionflags=optionflags,
-                                 extraglobs={'provideAdapter': provideStubAdapter,
-                                             'provideUtility': provideStubUtility},
                                  setUp=setUp, tearDown=tearDown)
-    suite.layer = demographics_functional_layer
     return suite
 
 

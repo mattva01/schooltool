@@ -1,9 +1,0 @@
-<metal:block define-macro="next_controls"
-             i18n:domain="schooltool">
-  <tal:block metal:use-macro="view/@@standard_macros/apply-button-formlib" />
-  <input type="submit" id="form.actions.apply_next" name="form.actions.apply_and_next"
-         value="Apply and Next" class="button-ok"
-         title="Shortcut: Alt-N" accesskey="N"
-         i18n:attributes="value; accesskey; title" />
-  <tal:block metal:use-macro="view/@@standard_macros/cancel-button-formlib" />
-</metal:block>
