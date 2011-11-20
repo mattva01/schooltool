@@ -1,29 +1,29 @@
 Version-controlled catalogs
 ===========================
 
-  A Catalog in it's essence is a set of value caches (indexes).
+A Catalog in it's essence is a set of value caches (indexes).
 Usually these are cached attributes of objects in a container or
 objects implementing a given interface.  Sometimes aggregated values
 like persons full title are cached.
 
-  The main purpose of catalogs is giving access to the values without
+The main purpose of catalogs is giving access to the values without
 the need to load the whole object into memory.  Think searching persons
 named 'M...' in a container with several thousands of them, you'll get
 the picture.
 
-  Due to their nature, catalogs need to be rebuilt, changed,
+Due to their nature, catalogs need to be rebuilt, changed,
 reindexed, etc. during active development.  They are commonly stored
 in the database - that would mean evolution scripts.
 
-  For the above reasons, SchoolTool provides catalog version control
+For the above reasons, SchoolTool provides catalog version control
 and catalog cache that gets updated when catalog versions change.
 
 
 How it works
 ------------
 
-  To register a versioned catalog, let's first inherit the CatalogFactory and
-implement the required methods:
+To register a versioned catalog, let's first inherit the CatalogFactory and
+implement the required methods::
 
     >>> from schooltool.app.catalog import CatalogFactory
 
@@ -34,13 +34,13 @@ implement the required methods:
     ...     def setIndexes(self, catalog):
     ...         print 'Setting indexes for', catalog
 
-  Catalogs are registered as named adapters.
+Catalogs are registered as named adapters.
 
     >>> provideAdapter(
     ...     MyCatalog, name="test-catalog-integration-mycatalog")
 
-  Sometime at server start up catalog setup event is fired and
-catalogs get created.
+Sometime during server startup catalog setup event is fired and
+catalogs are created::
 
     >>> from schooltool.app.interfaces import ISchoolToolApplication
     >>> from schooltool.app.interfaces import CatalogStartUpEvent
@@ -56,22 +56,22 @@ catalogs get created.
     >>> print catalog
     <CatalogStub 'my catalog'>
 
-  Catalog's __parent__ holds the versioning information.
+Catalog's `__parent__` holds the versioning information::
 
     >>> print catalog.__parent__
     <VersionedCatalog v. u'1'>: <CatalogStub 'my catalog'>
 
-  The catalog's unique name is constructed from the factory class
+The catalog's unique name is constructed from the factory class
 name.  So if you rename the class, know that the catalogs will be
-re-created and re-indexed.
+re-created and re-indexed::
 
     >>> from schooltool.app.interfaces import ICatalogs
     >>> print sorted(ICatalogs(ISchoolToolApplication(None)))
     [u'catalog:__builtin__.MyCatalog']
 
-  Next time the server starts up, catalog is left as it is.  We'll
+Next time the server starts up, catalog is left as it is.  We'll
 demonstrate this by changing the catalog creation method, but leaving
-the version unchanged.
+the version unchanged::
 
     >>> MyCatalog.createCatalog = lambda self: CatalogStub('my better catalog')
     >>> notify(CatalogStartUpEvent(ISchoolToolApplication(None)))
@@ -79,7 +79,7 @@ the version unchanged.
     >>> print MyCatalog.get()
     <CatalogStub 'my catalog'>
 
-  But once we change the version, the catalog gets re-created.
+But once we change the version, the catalog gets re-created::
 
     >>> MyCatalog.version = 1.1
 
@@ -90,8 +90,8 @@ the version unchanged.
     >>> print catalog.__parent__
     <VersionedCatalog v. u'1.1'>: <CatalogStub 'my better catalog'>
 
-  And of course once the catalog factory is no longer provided, catalog
-will be deleted.
+And of course once the catalog factory is no longer provided, catalog
+will be deleted::
 
     >>> unregisterAdapter(
     ...     MyCatalog, name="test-catalog-integration-mycatalog")

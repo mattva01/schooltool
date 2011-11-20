@@ -4,8 +4,9 @@ Developer Mode User Interface
 
 The developer mode of the user interface is intended to help SchoolTool
 developers and people using SchoolTool as a development platform to debug
-their code and find documentation as quickly as possible. To start, open the
-SchoolTool site in your browser
+their code and find documentation as quickly as possible.
+
+To start, open the SchoolTool site in your browser::
 
     >>> browser = Browser('manager', 'schooltool')
 
@@ -34,7 +35,7 @@ In the configuration
     >>> browser.getLink('Configure').click()
 
 you can specify how many exceptions to keep, whether to copy the errors to the
-event log and what exceptions can be ignored:
+event log and what exceptions can be ignored::
 
     >>> keep_entries = browser.getControl(name='keep_entries')
     >>> keep_entries.value
@@ -60,15 +61,14 @@ event log and what exceptions can be ignored:
     NotImplementedError
 
 Let's now make sure that we can get to the error list. First let's create a
-``NotFound`` error:
+``NotFound`` error::
 
     >>> browser.open('http://localhost/foo')
     Traceback (most recent call last):
     ...
     NotFound: Object: <schooltool.app.app.SchoolToolApplication object at ...>, name: u'foo'
 
-
-    Now let's see the report:
+Now let's see the report::
 
     >>> browser.open('http://localhost/'
     ...              '++etc++site/default/RootErrorReportingUtility')
@@ -98,7 +98,7 @@ Sample Data
 
 SchoolTool also features a data generator, which will fill your SchoolTool
 instance with a lot of random data, which is perfect for performing and
-advanced functional testing. So let's have a look:
+advanced functional testing. So let's have a look::
 
     >>> browser.open('http://localhost/')
     >>> browser.getLink('Manage').click()
