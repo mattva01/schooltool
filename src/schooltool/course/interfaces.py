@@ -62,7 +62,8 @@ class ICourse(Interface):
     credits = zope.schema.Decimal(
         title=_("Credits"),
         required=False,
-        description=_("This value must be an integer."))
+        description=_("This value must be a decimal number "
+                      "(for example: 100, 40.25, 0.5)."))
 
 
 class ICourseContainer(IContainer):
