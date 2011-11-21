@@ -162,6 +162,7 @@
       for="schooltool.app.interfaces.ISchoolToolApplication"
       title="Server"
       class="schooltool.app.browser.app.ManageSite"
+      content_template="templates/f_settings.pt"
       permission="schooltool.edit"
       />
 
@@ -537,37 +538,20 @@
       />
 
   <flourish:viewlet
-      name="database.html"
-      title="Database"
-      class="schooltool.skin.flourish.page.LinkViewlet"
-      manager="schooltool.app.browser.app.ManageSiteLinks"
-      permission="schooltool.edit"
-      />
-
-  <flourish:viewlet
-      name="database-actions-links"
+      name="server-actions-links"
+      after="manage_site_links"
       manager="schooltool.skin.flourish.page.IPageRefineManager"
-      class="schooltool.app.browser.app.DatabaseActionsLinks"
+      class="schooltool.app.browser.app.ServerActionsLinks"
       title="Actions"
       permission="schooltool.edit"
-      view="schooltool.app.browser.app.DatabaseView"
+      view="schooltool.app.browser.app.ManageSite"
       />
 
   <flourish:viewlet
       name="packDatabase.html"
       title="Pack Database"
       class=".app.PackDatabaseLink"
-      manager="schooltool.app.browser.app.DatabaseActionsLinks"
-      permission="schooltool.edit"
-      />
-
-  <flourish:page
-      name="database.html"
-      for="schooltool.app.interfaces.ISchoolToolApplication"
-      class=".app.DatabaseView"
-      title="Server"
-      subtitle="Database"
-      content_template="templates/f_database.pt"
+      manager="schooltool.app.browser.app.ServerActionsLinks"
       permission="schooltool.edit"
       />
 
@@ -576,15 +560,6 @@
       for="schooltool.app.interfaces.ISchoolToolApplication"
       class=".app.PackDatabaseView"
       template="templates/f_pack_database.pt"
-      permission="schooltool.edit"
-      />
-
-  <flourish:viewlet
-      name="what-is-this"
-      class="schooltool.skin.flourish.page.Related"
-      template="templates/f_database_related.pt"
-      view=".app.DatabaseView"
-      manager="schooltool.skin.flourish.page.IPageRelatedManager"
       permission="schooltool.edit"
       />
 

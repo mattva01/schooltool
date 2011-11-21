@@ -298,38 +298,31 @@ form fieldset .row .widget .option {
 
 form .buttons .button-ok {
     background-color: #009499;
-    border: 2px outset #009499;
+    border: 1px solid #009499;
+    box-shadow: 0px 1px 6px #bbbbbb;
     color: #ffffff;
-}
-
-form .buttons .button-ok:hover {
-    background-color: #026B6E;
-    border: 2px outset #026B6E;
-}
-
-form .buttons .button-ok:active {
-    background-color: #056163;
-    border: 2px outset #056163;
-    color: #aea79f;
 }
 
 form .buttons .button-neutral,
 form .buttons .button-cancel {
     background-color: #6C7B7C;
-    border: 2px outset #6C7B7C;
+    border: 1px solid #6C7B7C;
+    box-shadow: 0px 1px 6px #bbbbbb;
     color: #ffffff;
 }
 
+form .buttons .button-ok:hover,
 form .buttons .button-neutral:hover,
 form .buttons .button-cancel:hover {
-    background-color: #009499;
-    border: 2px outset #009499;
+    background-color: #026B6E;
+    border: 1px solid #026B6E;
 }
 
+form .buttons .button-ok:active,
 form .buttons .button-neutral:active,
 form .buttons .button-cancel:active {
     background-color: #056163;
-    border: 2px outset #056163;
+    border: 1px solid #056163;
     color: #aea79f;
 }
 
@@ -342,7 +335,7 @@ form span.required {
 }
 
 form pre.csv-text {
-    border-left: 1px dotted #888;
+    border: 1px dotted #888;
 }
 
 /*
@@ -650,7 +643,6 @@ form fieldset table.timetable td.error {
 }
 
 #calendar-view-day .event {
-    border: 1px #000000 solid;
     background: #DFDCD9;
     opacity: 0.85;
 }
@@ -721,10 +713,6 @@ form fieldset table.timetable td.error {
     background: #f0f0f0;
 }
 
-#calendar-view-week TD A {
-    border: 1px solid;
-}
-
 #calendar-view-month {
     background: #ffffff;
     border: 1px #dfdfdf solid;
@@ -736,7 +724,7 @@ form fieldset table.timetable td.error {
 }
 
 #calendar-view-month tr {
-    border-bottom: none;
+    border-bottom: 1px #dfdfdf solid;
 }
 
 #calendar-view-month tbody {
@@ -748,7 +736,7 @@ form fieldset table.timetable td.error {
 }
 
 #calendar-view-month TH.weekday {
-    border-bottom: 1px #dfdfdf solid;
+    border: 1px #dfdfdf solid;
 }
 
 #calendar-view-month TH.month-title {
@@ -757,18 +745,13 @@ form fieldset table.timetable td.error {
 }
 
 #calendar-view-month TD.day-other A {
-    color: #807d74;
+    color: #000000;
 }
 
 #calendar-view-month TD.day A:hover,
 #calendar-view-month TD.day-other A:hover {
     color: #ffffff;
     background: #009499;
-}
-
-#calendar-view-month .event,
-#calendar-view-month .comp_event {
-    border: 1px #eae8e3 solid;
 }
 
 #calendar-view-month A:hover .event,
