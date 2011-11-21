@@ -7,11 +7,6 @@
 </head>
 <body>
 
-<span metal:fill-slot="zonki">
-  <img src="zonki.png" alt="SchoolTool" i18n:attributes="alt"
-    tal:attributes="src context/++resource++zonki-reading.png" />
-</span>
-
 <h1 metal:fill-slot="content-header"
     tal:content="view/index_title">Contents</h1>
 <metal:block metal:fill-slot="body"

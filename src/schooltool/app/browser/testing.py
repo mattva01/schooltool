@@ -168,8 +168,6 @@ def setUp(test=None):
                  'next.png', 'prev.png', 'favicon.ico',
                  'calwidget-calendar.js', 'calwidget-calendar.css',
                  'calwidget-icon.gif', 'print.css', 'jquery.js',
-                 'zonki-angry.png', 'zonki-pointing.png',
-                 'zonki-question.png', 'zonki-reading.png',
                  'zonki-regular.png']:
         ztapi.browserResource(name, ResourceStub)
 
