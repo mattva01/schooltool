@@ -59,13 +59,20 @@
       />
 
   <flourish:viewlet
-      name="term_actions"
+      name="terms_add_links"
       manager="schooltool.skin.flourish.page.IPageRefineManager"
-      class=".term.FlourishTermActionLinks"
-      for="..interfaces.ITerm"
-      title="Actions"
+      class=".term.FlourishTermsAddLinks"
+      title="Add"
       permission="schooltool.edit"
-      view=".term.FlourishTermView"
+      view=".term.FlourishTermsView"
+      />
+
+  <flourish:viewlet
+      name="term-add"
+      title="Term"
+      class=".term.TermAddLinkViewlet"
+      manager=".term.FlourishTermsAddLinks"
+      permission="schooltool.edit"
       />
 
   <flourish:viewlet

@@ -12,24 +12,12 @@
   <table tal:define="terms view/terms">
     <thead>
       <tr>
-        <th i18n:translate="">School Year</th>
+        <th i18n:translate="">Term</th>
         <th i18n:translate="">First Day</th>
         <th i18n:translate="">Last Day</th>
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td tal:content="structure year/@@link">
-          [link]
-        </td>
-        <td tal:content="year/first/@@mediumDate"></td>
-        <td tal:content="year/last/@@mediumDate"></td>
-      </tr>
-      <tr>
-        <th i18n:translate="">Term</th>
-        <th i18n:translate="">First Day</th>
-        <th i18n:translate="">Last Day</th>
-      </tr>
       <tr tal:condition="terms"
           tal:repeat="term terms">
         <td tal:content="structure term/@@link" />
