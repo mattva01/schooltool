@@ -180,7 +180,9 @@ form .required-info {
 }
 
 form pre.csv-text {
-    line-height: 20px;
+    line-height: 16px;
+    font-family: mono;
+    font-size: 12px;
     padding: 4px 0px 4px 7px;
     margin-bottom: 8px;
 }
