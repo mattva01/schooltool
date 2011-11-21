@@ -5,6 +5,7 @@ CHANGES
 2.0.0 (unreleased)
 ------------------
 
+- need a year link on /school (https://launchpad.net/bugs/893191)
 
 
 1.9.3 (2011-11-18)
