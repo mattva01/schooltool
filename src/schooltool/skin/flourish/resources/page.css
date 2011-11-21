@@ -104,6 +104,11 @@
     width: 528px;
 }
 
+.page > .body > .container > .main > .content > .body > p.hint {
+    margin-top: -8px;
+    font-size: 10px;
+}
+
 .page > .body > .related ~ .container {
     padding: 16px;
 }
