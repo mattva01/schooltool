@@ -81,7 +81,7 @@ This file has examples of bad data for the Resouces sheet:
     >>> browser.printQuery("//p[@class='error']")
     <p class="error">Resources B2 missing required text</p>
     <p class="error">Resources C2 missing required text</p>
-    <p class="error">Resources B3 must be either 'Location' or 'Resource'</p>
+    <p class="error">Resources B3 must be either 'Location', 'Equipment' or 'Resource'</p>
 
 We'll add some demo fields to test importing demos.
 

@@ -35,32 +35,36 @@ Things that are not currently supported:
 Modules
 -------
 
-At the moment schooltool.calendar contains building blocks for calendaring
+At the moment ``schooltool.calendar`` contains building blocks for calendaring
 in your own application.
 
-schooltool.calendar.interfaces defines interfaces for calendars and calendar
-events.
+``schooltool.calendar.interfaces``
+    defines interfaces for calendars and calendar events.
 
-schooltool.calendar.simple defines simple calendar and calendar event classes.
-They are not tied into any particular storage system, so if you want to
-store your calendars in the ZODB or in a relational database, you will
-want to write your own.
+``schooltool.calendar.simple``
+    defines simple calendar and calendar event classes.
 
-  TODO: there should be a standard Persistent calendar class in this package.
+    They are not tied into any particular storage system, so if you want to
+    store your calendars in the ZODB or in a relational database, you will
+    want to write your own.
 
-schooltool.calendar.mixins defines mixins that make implementation of
-your own calendar and event classes easier.
+    TODO: there should be a standard Persistent calendar class in this package.
 
-schooltool.calendar.icalendar lets you parse and generate iCalendar (RFC 2445)
-files.
+``schooltool.calendar.mixins``
+    defines mixins that make implementation of your own calendar and event classes easier.
 
-schooltool.calendar.browser defines some browser views for calendars.
+``schooltool.calendar.icalendar``
+    lets you parse and generate iCalendar (`RFC 2445`_) files.
 
-schooltool.calendar.recurrent defines some recurrence rules that let you
-describe events recurring daily, weekly, monthly or yearly.
+``schooltool.calendar.browser``
+    defines some browser views for calendars.
 
-schooltool.calendar.utils contains a number of small standalone utility
-functions for manipulating dates and times.
+``schooltool.calendar.recurrent``
+    defines some recurrence rules that let you describe events recurring daily,
+    weekly, monthly or yearly.
+
+``schooltool.calendar.utils``
+    contains a number of small standalone utility functions for manipulating dates and times.
 
 
 Calendars
@@ -103,7 +107,7 @@ are editable.  Here's a simple read-only calendar that contains two events:
 
 You can iterate over calendars to get all events in unspecified order.  You
 can then sort the events by date.  Let us define a simple function for
-listing calendar events sorted by date
+listing calendar events sorted by date::
 
     >>> def print_cal(calendar):
     ...     events = list(calendar)
@@ -136,25 +140,26 @@ SchoolTool was designed to allow flexibility in calendar storage: calendars
 may be stored in the ZODB, in a relational database, as iCalendar files on
 disk, or computed on the fly from some other data source.
 
-To achieve this, schooltool.calendar defines interfaces for calendars
-(ICalendar and IEditCalendar) and calendar events (ICalendarEvent) and relies
+To achieve this, ``schooltool.calendar`` defines interfaces for calendars
+(``ICalendar`` and ``IEditCalendar``) and calendar events (``ICalendarEvent``) and relies
 on objects implementing those interfaces.
 
 You can define your own calendar and calendar event classes.  There are
-mixins (CalendarMixin, EditableCalendarMixin, CalendarEventMixin) defined
-in schooltool.calendar.mixins that you can use (if you want to) to implement
+mixins (``CalendarMixin``, ``EditableCalendarMixin``, ``CalendarEventMixin``) defined
+in ``schooltool.calendar.mixins`` that you can use (if you want to) to implement
 some of calendar/calendar event operations.
 
 There are some simple implementations of calendars and calendar events in
-schooltool.calendar.simple: SimpleCalendarEvent and ImmutableCalendar.
-They are particularly useful for calendars that are generated on the fly.
-For example, suppose we have a list of (fictious) deadlines for a project:
+``schooltool.calendar.simple``: ``SimpleCalendarEvent`` and
+``ImmutableCalendar``. They are particularly useful for calendars that are
+generated on the fly. For example, suppose we have a list of deadlines for a
+project:;
 
     >>> deadlines = [('2005-02-28', 'Feature freeze'),
     ...              ('2005-03-05', 'Release candidate 1'),
     ...              ('2005-03-15', 'Release')]
 
-We can generate a calendar like this
+We can generate a calendar like this::
 
     >>> from schooltool.calendar.simple import ImmutableCalendar
     >>> from schooltool.calendar.simple import SimpleCalendarEvent
@@ -172,22 +177,22 @@ We can generate a calendar like this
     2005-03-05 Release candidate 1
     2005-03-15 Release
 
-Note that every event will get a new randomly generated unique_id attribute.
+Note that every event will get a new randomly generated `unique_id` attribute.
 If you want to publish a computed calendar as an iCalendar file, you might
 want to generate deterministic unique IDs and explicitly pass them to
-SimpleCalendarEvent's constructor.
+``SimpleCalendarEvent``'s constructor.
 
 
 iCalendar
 ---------
 
-iCalendar (defined in `RFC 2445`__) is a popular calendar representation
+iCalendar (defined in `RFC 2445`_) is a popular calendar representation
 format.
 
-  __ http://www.ietf.org/rfc/rfc2445.txt
+.. _`RFC 2445`: http://www.ietf.org/rfc/rfc2445.txt
 
-There is a sample iCalendar file (created with Ximian Evolution) in
-schooltool.calendar.tests
+There is a sample iCalendar file (created with Evolution) in
+``schooltool.calendar.tests``
 
     >>> import os, schooltool.calendar
     >>> filename = os.path.join(os.path.dirname(schooltool.calendar.__file__),
@@ -231,12 +236,12 @@ characters, so you should use something like
 
     >>> output_as_string = "\r\n".join(lines + [''])
 
-TODO: this is inconvenient.  "".join(lines) should return a valid iCalendar
-stream.  fileobject.writelines(lines) should just work.  Although there
+TODO: this is inconvenient.  ``"".join(lines)`` should return a valid iCalendar
+stream.  ``fileobject.writelines(lines)`` should just work.  Although there
 are other complications with automatic LF -> CRLF transformations when
 file objects are opened in text mode.
 
-iCalendar is a large specification, and schooltool.calendar supports only a
+iCalendar is a large specification, and ``schooltool.calendar`` supports only a
 subset of it.  This subset should be enough to interoperate with most open
 source calendaring software, but you should keep in mind that reading an
 iCalendar file into SchoolTool objects and writing it back is a lossy
@@ -277,7 +282,7 @@ third day" is
     >>> rule = DailyRecurrenceRule(count=5, interval=3)
 
 Currently there are four kinds of recurrence rules defined in
-schooltool.calendar.recurrent:
+``schooltool.calendar.recurrent``:
 
 - daily recurrences (e.g. "every second day")
 - weekly recurrences (e.g. "every week on Monday through Friday")
@@ -287,39 +292,40 @@ schooltool.calendar.recurrent:
 
 All recurrence rules share some common attributes:
 
-- 'interval': to express "every third week" you would create a
-  WeeklyRecurrenceRule with an interval of 3.  An interval of 1 means simply
-  "every".  Intervals lower than 1 are not allowed.
+`interval`
+  to express "every third week" you would create a ``WeeklyRecurrenceRule``
+  with an interval of 3.  An interval of 1 means simply "every".
+  Intervals lower than 1 are not allowed.
 
-- 'count' and 'until': you can limit the number of occurrences by specifying
+`count` and `until`
+  you can limit the number of occurrences by specifying
   an explicit count (e.g. "every second year during the next 10 years" would
-  be expressed as YearlyRecurrenceRule(interval=2, count=5)), or by
+  be expressed as ``YearlyRecurrenceRule(interval=2, count=5)``), or by
   specifying the date of the last occurrence (e.g. "every third day until
-  August 15th" would be expressed as DailyRecurrenceRule(interval=3,
-  until=datetime.date(2005, 8, 15))).  If neither 'count' not 'until' are
+  August 15th" would be expressed as ``DailyRecurrenceRule(interval=3,
+  until=datetime.date(2005, 8, 15))``).  If neither `count` not `until` are
   specified, the rule repeats forever.
 
-- 'exceptions': you can say "repeat every Monday except on February 21" as
-  WeeklyRecurrenceRule(weekdays=calendar.MONDAY,
-  exceptions=[date(2005, 2, 21)]).
+`exceptions`
+  you can say "repeat every Monday except on February 21" as
+  ``WeeklyRecurrenceRule(weekdays=calendar.MONDAY, exceptions=[date(2005, 2, 21)])``.
 
 Weekly recurrence rules let you specify a set of weekdays that the event
 occurs on.  E.g. "every second weekend" can be expressed as
-WeeklyRecurrenceRule(interval=2, weekdays=[calendar.SATURDAY,
-calendar.SUNDAY])).
+``WeeklyRecurrenceRule(interval=2, weekdays=[calendar.SATURDAY, calendar.SUNDAY])``.
 
 Monthly recurrence rules also let you choose one of three variants:
 
 - same day of month (e.g. an event that occurrs on January 29 and has
-  a MonthlyRecurrenceRule(monthly='monthday') will recur on the 29th of
+  a ``MonthlyRecurrenceRule(monthly='monthday')`` will recur on the 29th of
   every month (except Februrary on non-leap years).
 
 - same day of week (e.g. "2nd Tuesday of a month" can be expressed as
-  a MonthlyRecurrenceRule(monthly='weekday'), if the recurrence rule is
+  a ``MonthlyRecurrenceRule(monthly='weekday')``, if the recurrence rule is
   assigned to an event that happens on the 2nd Tuesday of some month.
 
-- same day of week, but counting from the end of the month (e.g. "2nd last
-  Wednesday of a month" -- MonthlyRecurrenceRule(monthly='lastweekday')).
+- same day of week, but counting from the end of the month, e.g. "2nd last
+  Wednesday of a month" -- ``MonthlyRecurrenceRule(monthly='lastweekday')``.
 
 Here's how you create recurring events:
 
@@ -339,7 +345,7 @@ Here's how you can get all recurrence dates of an event:
     >>> iterator.next()
     datetime.date(2007, 1, 29)
 
-Usually you will use ICalendar.expand.
+Usually you will use ``ICalendar.expand``.
 
     >>> cal = ImmutableCalendar([event])
     >>> print_cal(cal.expand(datetime(2003, 1, 1, tzinfo=utc),
@@ -359,7 +365,7 @@ Sometimes a recurrence rule may exclude even the original occurrence:
     >>> list(empty_event.recurrence.apply(event))
     []
 
-You can check if an even is "empty" by calling event.hasOccurrences():
+You can check if an even is "empty" by calling ``event.hasOccurrences()``:
 
     >>> event.hasOccurrences()
     True
@@ -370,8 +376,8 @@ You can check if an even is "empty" by calling event.hasOccurrences():
 Utilities
 ---------
 
-schooltool.calendar.utils contains a number of small standalone functions
-for parsing and manipulating dates.
+``schooltool.calendar.utils`` contains a number of small standalone functions
+for parsing and manipulating dates::
 
     >>> from schooltool.calendar.utils import parse_date, parse_datetime
     >>> from schooltool.calendar.utils import parse_datetimetz
@@ -408,9 +414,3 @@ for parsing and manipulating dates.
     >>> if not check_weeknum(2005, 53):
     ...     print "There is no week 53 in 2005"
     There is no week 53 in 2005
-
-
-Future goals
-------------
-
-- Ready to use calendar as a Zope 3 content component, with browser views

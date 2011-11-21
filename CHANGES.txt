@@ -2,13 +2,44 @@
 CHANGES
 =======
 
-1.9.3 (unreleased)
+2.0.0 (unreleased)
 ------------------
 
-- server error when opening demographic container (https://launchpad.net/bugs/887662)
-- Import of Contact Relationships fails with DuplicateRelationship error
-  (https://launchpad.net/bugs/882482)
-- xls importer needs to handle integer data (https://launchpad.net/bugs/362014)
+
+
+1.9.3 (2011-11-18)
+------------------
+
+- Improved style of date pickers, buttons, calendars, errors, gradebook etc.
+- Fixed all tests.
+- Updated translations.
+
+Calendar
+++++++++
+
+- More informative calendar titles.
+- Multi term sections should show only once in calendar view. (https://launchpad.net/bugs/872289)
+- Classes show up twice in student/teacher calendars (https://launchpad.net/bugs/882285)
+- Name order reversed in calendar (https://launchpad.net/bugs/891341)
+- Calendar showing wrong day (https://launchpad.net/bugs/877815)
+- Only restore last visited calendar days if date user last looked at it is today.
+- In calendar overlay legend, display only sections that are in terms that are visible in the view.
+
+Export
+++++++
+
+- XLS importer crashes on reimport in timetable code (https://launchpad.net/bugs/878209)
+- Import of Contact Relationships fails with DuplicateRelationship error (https://launchpad.net/bugs/882482)
+- Reimporting sections using CSV does not work anymore (https://launchpad.net/bugs/251866)
+- XLS importer needs to handle integer data (https://launchpad.net/bugs/362014)
+- Allow import of Equipment resources
+- Ensure XLS import works with existing objects in database (https://launchpad.net/bugs/585119)
+
+Other bugfixes
+++++++++++++++
+
+- Server error when opening demographic container (https://launchpad.net/bugs/887662)
+- Need to sort groups in filter widget (https://launchpad.net/bugs/884230)
 
 
 1.9.2 (2011-11-04)

@@ -11,7 +11,7 @@ are not implemented yet, so levels are pretty useless at this point.
 Level data model
 ----------------
 
-There is a root container, initialized on application startup.
+There is a root container, initialized on application startup::
 
     >>> from schooltool.app.interfaces import ISchoolToolApplication
     >>> from schooltool.app.interfaces import ApplicationInitializationEvent
@@ -36,7 +36,7 @@ container.
     >>> print levels
     <schooltool.level.level.LevelContainer ...>
 
-Levels themselves are simple objects with a title.
+Levels themselves are simple objects with a title::
 
     >>> from schooltool.level.level import Level
     >>> levels['2'] = Level(u'Second-year')
@@ -46,7 +46,7 @@ Levels themselves are simple objects with a title.
     >>> [level.title for level in levels.values()]
     [u'Second-year', u'First-year', u'Third-year']
 
-Level containers are ordered.
+Level containers are ordered::
 
     >>> levels.updateOrder(['1', '2', '3'])
     >>> [level.title for level in levels.values()]
@@ -57,7 +57,7 @@ Linking levels to courses
 -------------------------
 
 Levels are linked to courses via schooltool.relationship.  There
-is a helper attribute to manage the relationships.
+is a helper attribute to manage the relationships::
 
     >>> math = CourseStub('Math')
 
@@ -78,7 +78,7 @@ Helpers
 -------
 
 If you need a dropdown of levels in a form, there is a special
-level vocabulary.
+level vocabulary::
 
     >>> from zope.schema import Choice
     >>> levels_field = Choice(

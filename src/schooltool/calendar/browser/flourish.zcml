@@ -10,6 +10,13 @@
       title="Calendar"
       />
 
+  <flourish:page_breadcrumbs
+      show_page_title="false"
+      for="schooltool.calendar.interfaces.ICalendar"
+      view=".calendar.FlourishCalendarView"
+      title="Calendar"
+      />
+
   <flourish:page
       name="daily.html"
       for="schooltool.calendar.interfaces.ISchoolToolCalendar"
@@ -24,6 +31,16 @@
       layer="schooltool.skin.flourish.IFlourishLayer"
       class="schooltool.app.browser.cal.DailyCalendarRowsView"
       permission="zope.View"
+      />
+
+  <zope:adapter
+      for="schooltool.calendar.interfaces.ICalendar
+           schooltool.skin.flourish.IFlourishLayer
+           schooltool.calendar.browser.calendar.FlourishCalendarView"
+      provides="schooltool.skin.flourish.interfaces.IContentProvider"
+      factory=".calendar.getParentTitleContent"
+      name="title"
+      permission="zope.Public"
       />
 
   <flourish:page

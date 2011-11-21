@@ -21,7 +21,6 @@ SchoolTool flourish pages.
 """
 import re
 
-from zope.interface import Interface
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.cachedescriptors.property import Lazy
 from zope.component import getMultiAdapter, queryMultiAdapter
@@ -414,15 +413,20 @@ class SimpleModalLinkViewlet(LinkIdViewlet):
     template = InlineViewPageTemplate('''
     <tal:block define="url view/url">
       <a tal:condition="url"
-         tal:attributes="href view/url;
-                         id view/html_id"
-         onclick="return ST.dialogs.open_modal_link(this);"
+         href="#"
+         tal:attributes="id view/html_id;
+                         onclick view/onclick"
          tal:content="view/title"></a>
       <span tal:condition="not:url"
             tal:attributes="id view/html_id"
             tal:content="view/title"></span>
     </tal:block>
     ''')
+
+    @property
+    def onclick(self):
+        return "return ST.dialogs.open_modal_form('%s', '%s');" % (
+            self.url, self.html_id+'-container')
 
 
 class ModalFormLinkViewlet(LinkIdViewlet):

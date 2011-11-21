@@ -92,7 +92,7 @@ Let's make traversal from our content object pluggable.
     ...       />
     ... ''')
 
-We can now try to lookup the variable:
+We can now try to lookup the variable::
 
     >>> request = TestRequest()
 
@@ -105,7 +105,7 @@ We can now try to lookup the variable:
 
 But it fails, because we have not registered a plugin traverser yet that
 knows how to lookup attributes. This package provides such a traverser
-already, so we just have to register it:
+already, so we just have to register it::
 
     >>> zcml.string('''
     ...   <traverserPlugin
@@ -129,7 +129,7 @@ However, an incorrect variable name will still return a 'NotFound' error:
 
 Every traverser should also make sure that the passed in name is not a
 view. (This allows us to not specify the '@@' in front of a view.) So let's
-register one:
+register one::
 
     >>> @mock.module(test_pluggable)
     ... class View(object):
@@ -146,7 +146,7 @@ register one:
     ...       />
     ... ''')
 
-Now we can lookup the view as well:
+Now we can lookup the view as well::
 
     >>> traverse(content, request, 'view.html')
     <View object at ...>
@@ -158,7 +158,7 @@ Combining plugins
 A more interesting case to consider is a traverser for a container. If you
 really dislike the Zope 3 traversal namespace notation '++namespace++' and
 you can control the names in the container, then the pluggable traverser will
-also provide a viable solution. Let's say we have a container:
+also provide a viable solution. Let's say we have a container::
 
     >>> from zope.container.interfaces import IContainer
 
@@ -224,8 +224,8 @@ And also the 'foo' attribute:
     >>> traverse(myContainer, request, 'foo')
     True
 
-However, we cannot lookup the 'bar' attribute or any other non-existent
-item:
+However, we cannot lookup the ``bar`` attribute or any other non-existent
+item::
 
     >>> traverse(myContainer, request, 'bar')
     Traceback (most recent call last):
@@ -242,7 +242,7 @@ Adapter traverser plugin
 ------------------------
 
 Often objects already have various useful adapters, and it is
-convenient to reuse them for traversal.
+convenient to reuse them for traversal. ::
 
 Say, we have an ISomeSettings adapter for IMyContainer.
 

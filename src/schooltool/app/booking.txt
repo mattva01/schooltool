@@ -14,7 +14,7 @@ added to the resource's calendar, and is kept in sync.
 Set up
 ------
 
-Set up the calendaring framework:
+Set up the calendaring framework::
 
     >>> from zope.app.testing import setup
     >>> setup.placelessSetUp()
@@ -114,11 +114,10 @@ If you remove it from the person's calendar, it gets removed from the
 resource's calendar too.
 
     >>> ISchoolToolCalendar(person).removeEvent(e)
-
     >>> e not in ISchoolToolCalendar(resource2)
     True
 
-If you remove an event from a resource's calendar, it loses that booking.
+If you remove an event from a resource's calendar, it loses that booking::
 
     >>> e = CalendarEvent(title="Big presentation",
     ...                   dtstart=datetime(2005, 3, 4, 12, 45),
@@ -134,7 +133,7 @@ If you remove an event from a resource's calendar, it loses that booking.
     >>> list(e.resources) == [resource2]
     True
 
-Clearing a calendar is equivalent to removing all its events:
+Clearing a calendar is equivalent to removing all its events::
 
     >>> ISchoolToolCalendar(resource2).clear()
     >>> [e in ISchoolToolCalendar(x) for x in [person, resource, resource2]]
@@ -146,7 +145,7 @@ Clearing a calendar is equivalent to removing all its events:
 Insane corner cases
 -------------------
 
-Booking loops are not allowed
+Booking loops are not allowed::
 
     >>> e = CalendarEvent(title="Strange presentation",
     ...                   dtstart=datetime(2005, 3, 4, 12, 45),
@@ -160,7 +159,7 @@ Booking loops are not allowed
     >>> e.resources
     ()
 
-It doesn't work if you do it differently either
+It doesn't work if you do it differently either::
 
     >>> e = CalendarEvent(title="Strange presentation",
     ...                   dtstart=datetime(2005, 3, 4, 12, 50),
@@ -177,8 +176,7 @@ It doesn't work if you do it differently either
     False
 
 
-Tear down
----------
+.. Tear down::
 
     >>> setup.placelessTearDown()
 
@@ -186,7 +184,9 @@ Tear down
 Remaining issues
 ----------------
 
-XXX what if I do
+XXX what if I do::
+
      e = CalendarEvent(resources=[r])
      e.unbookResource(r)
-     without adding a to any calendars?
+
+without adding `a` to any calendars?

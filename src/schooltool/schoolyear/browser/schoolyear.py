@@ -57,7 +57,7 @@ from zc.table import column
 import schooltool.skin.flourish.containers
 import schooltool.skin.flourish.breadcrumbs
 from schooltool.app.interfaces import ISchoolToolApplication
-from schooltool.demographics.browser.table import DateColumn
+from schooltool.table.table import DateColumn
 from schooltool.table.table import url_cell_formatter
 from schooltool.table.table import DependableCheckboxColumn
 from schooltool.table.table import SchoolToolTableFormatter

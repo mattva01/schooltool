@@ -10,7 +10,6 @@ recursive-include src *.txt
 recursive-include src *.png
 recursive-include src *.gif
 recursive-include src *.ico
-recursive-include src *.ini
 recursive-include src *.ini_tmpl
 recursive-include src *.conf
 recursive-include src *.conf_tmpl
@@ -22,6 +21,7 @@ include version.txt
 include version.txt.in
 include CHANGES.txt
 include GPL.txt
+include Makefile
 include base.cfg
 include buildout.cfg
 include bootstrap.py

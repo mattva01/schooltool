@@ -29,8 +29,8 @@ from zope.i18n import translate
 from zope.interface import implements
 from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.publisher.interfaces import NotFound
+from zope.traversing.api import getParent
 
-import schooltool.skin.flourish.page
 from schooltool.app.browser.cal import DailyCalendarView
 from schooltool.app.browser.cal import WeeklyCalendarView
 from schooltool.app.browser.cal import MonthlyCalendarView
@@ -38,6 +38,7 @@ from schooltool.app.browser.cal import YearlyCalendarView
 from schooltool.app.browser.cal import CalendarViewBase
 from schooltool.app.browser.cal import month_names
 from schooltool.app.browser.cal import short_day_of_week_names
+from schooltool.app.browser.cal import day_of_week_names
 from schooltool.calendar.interfaces import ICalendar
 from schooltool.calendar.utils import weeknum_bounds, prev_month, next_month
 from schooltool.common.inlinept import InheritTemplate
@@ -154,39 +155,79 @@ class FlourishCalendarView(flourish.page.WideContainerPage):
     pass
 
 
+def year_week(date):
+    """Return year and week for given date."""
+    return date.isocalendar()[:-1]
+
+
 class FlourishDailyCalendarView(FlourishCalendarView,
                                 DailyCalendarView):
     update = DailyCalendarView.update
+    current_title = _("Today")
 
     @property
     def subtitle(self):
+        if self.cursor == self.today:
+            return _("Today")
+        if self.cursor == self.today + datetime.timedelta(days=1):
+            return _("Tomorrow")
+        if self.cursor == self.today - datetime.timedelta(days=1):
+            return _("Yesterday")
+        if (year_week(self.cursor) == year_week(self.today) and
+            self.cursor > self.today):
+            return day_of_week_names[self.cursor.weekday()]
+        return None
+
+    @property
+    def date_title(self):
         return DailyCalendarView.title(self)
 
 
 class FlourishWeeklyCalendarView(FlourishCalendarView,
                                  WeeklyCalendarView):
     update = WeeklyCalendarView.update
+    current_title = _("Today")
 
     @property
     def subtitle(self):
+        cursor_yw = year_week(self.cursor)
+        if cursor_yw == year_week(self.today):
+            return _("This Week")
+        if cursor_yw == year_week(self.today - datetime.timedelta(weeks=1)):
+            return _("Last Week")
+        if cursor_yw == year_week(self.today + datetime.timedelta(weeks=1)):
+            return _("Next Week")
+        return None
+
+    @property
+    def date_title(self):
         return WeeklyCalendarView.title(self)
 
 
 class FlourishMonthlyCalendarView(FlourishCalendarView,
                                   MonthlyCalendarView):
     update = MonthlyCalendarView.update
+    current_title = _("Today")
 
     @property
     def subtitle(self):
+        return month_names[self.cursor.month]
+
+    @property
+    def date_title(self):
         return MonthlyCalendarView.title(self)
 
 
 class FlourishYearlyCalendarView(FlourishCalendarView,
                                  YearlyCalendarView):
     update = YearlyCalendarView.update
+    current_title = _("Today")
+
+    def subtitle(self):
+        return unicode(self.cursor.year)
 
     @property
-    def subtitle(self):
+    def date_title(self):
         return YearlyCalendarView.title(self)
 
 
@@ -247,7 +288,7 @@ class CalendarMonthViewlet(flourish.page.Refine):
             name = short_day_of_week_names[day.date.weekday()]
             result.append(translate(name, context=self.request)[:1])
         return result
-        
+
 
 class CalendarPrevMonthViewlet(CalendarMonthViewlet):
 
@@ -310,6 +351,14 @@ class CalendarTertiaryNavigation(flourish.page.Content,
         )
 
     @property
+    def nav_today_class(self):
+        is_today = self.view.inCurrentPeriod(self.view.today)
+        cls = 'calendar-nav'
+        if is_today:
+            cls += ' active'
+        return cls
+
+    @property
     def modes(self):
         result = []
         for mode, title in self.mode_types:
@@ -332,3 +381,16 @@ class AddEventLink(flourish.page.LinkViewlet):
     @property
     def url(self):
         return "add.html?field.start_date=%s" % self.view.cursor.isoformat()
+
+
+def getParentTitleContent(context, request, view):
+    parent = getParent(context)
+    if parent is None:
+        return None
+    providers = queryMultiAdapter(
+        (parent, request, view),
+        flourish.interfaces.IContentProviders)
+    if providers is None:
+        return None
+    content = providers.get("title")
+    return content

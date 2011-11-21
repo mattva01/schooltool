@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2011-10-12 18:58+0300\n"
-"PO-Revision-Date: 2011-10-25 03:22+0000\n"
-"Last-Translator: Orientation Student <Unknown>\n"
+"PO-Revision-Date: 2011-11-09 01:24+0000\n"
+"Last-Translator: drsaudi <mon7b6@gmail.com>\n"
 "Language-Team: Arabic <ar@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-10-26 05:41+0000\n"
-"X-Generator: Launchpad (build 14189)\n"
+"X-Launchpad-Export-Date: 2011-11-10 05:23+0000\n"
+"X-Generator: Launchpad (build 14263)\n"
 "Language: ar\n"
 
 #: /src/schooltool/app/app.py:193
@@ -198,7 +198,7 @@ msgstr "إلغاء"
 #: /src/schooltool/app/browser/flourish.zcml:228
 #: /src/schooltool/app/browser/flourish.zcml:580
 msgid "School Name"
-msgstr ""
+msgstr "إسم المدرسة"
 
 #: /src/schooltool/app/browser/app.py:557
 #: /src/schooltool/demographics/interfaces.py:245
@@ -221,11 +221,11 @@ msgstr "القادة المتوفرين"
 
 #: /src/schooltool/app/browser/app.py:598
 msgid "Current responsible parties"
-msgstr ""
+msgstr "الجهات المسؤولة الحالية"
 
 #: /src/schooltool/app/browser/app.py:599
 msgid "Available responsible parties"
-msgstr ""
+msgstr "الجهات المسؤولة المتاحة"
 
 #: /src/schooltool/app/browser/app.py:622
 msgid "school"
@@ -248,7 +248,7 @@ msgstr "مدرسة"
 #: /src/schooltool/securitypolicy/browser/flourish.zcml:15
 #: /src/schooltool/securitypolicy/browser/flourish.zcml:44
 msgid "Server"
-msgstr ""
+msgstr "الخادم"
 
 #: /src/schooltool/app/browser/app.py:852
 #: /src/schooltool/app/browser/app.py:937
@@ -267,7 +267,7 @@ msgstr "لا"
 #: /src/schooltool/app/browser/app.py:868
 #: /src/schooltool/app/browser/flourish.zcml:545
 msgid "Pack Database"
-msgstr ""
+msgstr "إحزم قاعدة البيانات"
 
 #: /src/schooltool/app/browser/app.py:877
 msgid "Live"
@@ -279,21 +279,21 @@ msgstr ""
 
 #: /src/schooltool/app/browser/app.py:889
 msgid "Backup"
-msgstr ""
+msgstr "نسخة إحتياطية"
 
 #: /src/schooltool/app/browser/app.py:909
 msgid "Database successfully packed."
-msgstr ""
+msgstr "تم حزم قاعدة البيانات بنجاح"
 
 #. Default: ""
 #: /src/schooltool/app/browser/app.py:911
 msgid "There were errors while packing the database: ${error}"
-msgstr ""
+msgstr "حصل خطأ اثناء حزم قاعدة البيانات: ${error}"
 
 #. Default: ""
 #: /src/schooltool/app/browser/app.py:953
 msgid "${type} Error"
-msgstr ""
+msgstr "${type} خطأ"
 
 #: /src/schooltool/app/browser/app.py:962
 #: /src/schooltool/app/browser/templates/f_errors.pt:15
@@ -1076,11 +1076,11 @@ msgstr "اداة المدرسة"
 #: /src/schooltool/email/browser/configure.zcml:76
 #: /src/schooltool/email/browser/email.py:204
 msgid "Settings"
-msgstr ""
+msgstr "الإعدادات"
 
 #: /src/schooltool/app/browser/flourish.zcml:218
 msgid "Calendar Settings"
-msgstr ""
+msgstr "إعدادات التقويم"
 
 #: /src/schooltool/app/browser/flourish.zcml:228
 #: /src/schooltool/app/browser/templates/f_errors.pt:7
@@ -1145,15 +1145,15 @@ msgstr "تعديل"
 
 #: /src/schooltool/app/browser/flourish.zcml:272
 msgid "Error"
-msgstr ""
+msgstr "خطأ"
 
 #: /src/schooltool/app/browser/flourish.zcml:303
 msgid "About"
-msgstr ""
+msgstr "حول البرنامج"
 
 #: /src/schooltool/app/browser/flourish.zcml:313
 msgid "More Information"
-msgstr ""
+msgstr "المزيد من المعلومات"
 
 #: /src/schooltool/app/browser/flourish.zcml:322
 #: /src/schooltool/app/browser/templates/about.pt:27
@@ -1181,7 +1181,7 @@ msgstr ""
 
 #: /src/schooltool/app/browser/flourish.zcml:410
 msgid "Customize"
-msgstr ""
+msgstr "تخصيص"
 
 #: /src/schooltool/app/browser/flourish.zcml:449
 #: /src/schooltool/course/browser/templates/f_course_view.pt:75
