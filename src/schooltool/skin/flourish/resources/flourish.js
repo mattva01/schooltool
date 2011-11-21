@@ -58,6 +58,18 @@ ST.dialogs = function() {
   function after_dialog_load(selector) {
   }
 
+  function bind_datepickers(selector) {
+      $(selector).find('input.date-field').datepicker({
+                      dateFormat: 'yy-mm-dd',
+                      changeMonth: true,
+                      changeYear: true,
+                  });
+
+      $(selector).find("input.birth-date-field").datepicker(
+              "option", "yearRange", 'c-20:c+10' );
+
+  }
+
   function close_modal_form_dialog(selector) {
       // Fade out and/or add spinner or something here
       var dialog = $(selector);
@@ -96,6 +108,8 @@ ST.dialogs = function() {
           };
           if (data['dialog']) {
               container.dialog(data['dialog']);
+              $(container).find('input.date-field').blur();
+              bind_datepickers(container);
           }
           if (data['redirect']) {
               ST.redirect(data['redirect']);
