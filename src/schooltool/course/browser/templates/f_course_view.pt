@@ -81,12 +81,12 @@
              i18n:attributes="alt" />
       </a>
     </h3>
-    <p i18n:translate="">These users can modify the course.</p>
+    <p i18n:translate="" class="hint">These users can modify the course.</p>
     <tal:block tal:replace="structure view/leaders_table/render"
                tal:condition="view/has_leaders" />
-    <h3 tal:condition="not:view/has_leaders" i18n:translate="">
+    <p tal:condition="not:view/has_leaders" i18n:translate="">
       This course has no responsible parties
-    </h3>
+    </p>
   </metal:block>
   <h3>
     <a tal:attributes="href view/done_link"

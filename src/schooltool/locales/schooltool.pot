@@ -17,7 +17,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
-"POT-Creation-Date: 2011-11-20 22:20+0200\n"
+"POT-Creation-Date: 2011-11-21 17:09+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Schooltool Development Team <schooltool-dev@schooltool.org>\n"
@@ -389,50 +389,6 @@ msgid "December"
 msgstr ""
 
 #: /src/schooltool/app/browser/cal.py:132
-msgid "Jan"
-msgstr ""
-
-#: /src/schooltool/app/browser/cal.py:133
-msgid "Feb"
-msgstr ""
-
-#: /src/schooltool/app/browser/cal.py:134
-msgid "Mar"
-msgstr ""
-
-#: /src/schooltool/app/browser/cal.py:135
-msgid "Apr"
-msgstr ""
-
-#: /src/schooltool/app/browser/cal.py:137
-msgid "Jun"
-msgstr ""
-
-#: /src/schooltool/app/browser/cal.py:138
-msgid "Jul"
-msgstr ""
-
-#: /src/schooltool/app/browser/cal.py:139
-msgid "Aug"
-msgstr ""
-
-#: /src/schooltool/app/browser/cal.py:140
-msgid "Sep"
-msgstr ""
-
-#: /src/schooltool/app/browser/cal.py:141
-msgid "Oct"
-msgstr ""
-
-#: /src/schooltool/app/browser/cal.py:142
-msgid "Nov"
-msgstr ""
-
-#: /src/schooltool/app/browser/cal.py:143
-msgid "Dec"
-msgstr ""
-
-#: /src/schooltool/app/browser/cal.py:146
 #: /src/schooltool/person/interfaces.py:176
 #: /src/schooltool/term/browser/templates/f_term.pt:30
 #: /src/schooltool/term/browser/templates/f_term_add.pt:42
