@@ -816,7 +816,7 @@ class ResourceLinks(RefineLinksViewlet):
 
     @property
     def title(self):
-        return _("${resource_title}'s",
+        return _("${resource_title}",
                  mapping={'resource_title': self.context.title})
 
 
