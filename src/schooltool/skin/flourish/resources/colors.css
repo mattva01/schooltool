@@ -335,7 +335,7 @@ form span.required {
 }
 
 form pre.csv-text {
-    border-left: 1px dotted #888;
+    border: 1px dotted #888;
 }
 
 /*
@@ -643,7 +643,6 @@ form fieldset table.timetable td.error {
 }
 
 #calendar-view-day .event {
-    border: 1px #000000 solid;
     background: #DFDCD9;
     opacity: 0.85;
 }
@@ -714,10 +713,6 @@ form fieldset table.timetable td.error {
     background: #f0f0f0;
 }
 
-#calendar-view-week TD A {
-    border: 1px solid;
-}
-
 #calendar-view-month {
     background: #ffffff;
     border: 1px #dfdfdf solid;
@@ -729,7 +724,7 @@ form fieldset table.timetable td.error {
 }
 
 #calendar-view-month tr {
-    border-bottom: none;
+    border-bottom: 1px #dfdfdf solid;
 }
 
 #calendar-view-month tbody {
@@ -741,7 +736,7 @@ form fieldset table.timetable td.error {
 }
 
 #calendar-view-month TH.weekday {
-    border-bottom: 1px #dfdfdf solid;
+    border: 1px #dfdfdf solid;
 }
 
 #calendar-view-month TH.month-title {
@@ -750,18 +745,13 @@ form fieldset table.timetable td.error {
 }
 
 #calendar-view-month TD.day-other A {
-    color: #807d74;
+    color: #000000;
 }
 
 #calendar-view-month TD.day A:hover,
 #calendar-view-month TD.day-other A:hover {
     color: #ffffff;
     background: #009499;
-}
-
-#calendar-view-month .event,
-#calendar-view-month .comp_event {
-    border: 1px #eae8e3 solid;
 }
 
 #calendar-view-month A:hover .event,

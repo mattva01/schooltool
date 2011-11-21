@@ -546,6 +546,11 @@ class FlourishApplicationPreferencesView(Form, form.EditForm):
         url = absoluteURL(self.context, self.request) + '/settings'
         return url
 
+    def updateActions(self):
+        super(FlourishApplicationPreferencesView, self).updateActions()
+        self.actions['apply'].addClass('button-ok')
+        self.actions['cancel'].addClass('button-cancel')
+
 
 class FlourishSchoolNameEditView(FlourishApplicationPreferencesView):
 

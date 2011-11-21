@@ -78,8 +78,8 @@
 }
 
 #calendar-view-month TD.weekno {
-    font-family: cursive, serif;
-    font-style: italic;
+    font-family: Ubuntu, serif;
+    font-weight: bold;
 }
 
 #calendar-view-year TABLE.month TH.month-weekday {
@@ -301,6 +301,8 @@
 }
 
 #calendar-view-day .event H6 .start-end {
+    display: inline-block;
+    float: right;
     font-weight: bold;
 }
 
@@ -347,6 +349,18 @@
 #calendar-view-day .hour SPAN.event-new {
     font-weight: bold;
     padding: 0.5ex;
+}
+
+#calendar-view-day .event h6 {
+    padding: 2px 8px;
+}
+
+#calendar-view-day .event .event-body {
+    padding: 0 8px;
+}
+
+#calendar-view-day .event .event-body > a {
+    font-size: 12px;
 }
 
 .page .refine .calendar-overlay table {
