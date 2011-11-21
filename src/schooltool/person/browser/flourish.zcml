@@ -67,4 +67,12 @@
       subtitle="Password"
       />
 
+  <flourish:page
+      name="password_changed.html"
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      class=".person.FlourishPasswordChangedView"
+      template="f_password_changed.pt"
+      permission="schooltool.view"
+      />
+
 </configure>

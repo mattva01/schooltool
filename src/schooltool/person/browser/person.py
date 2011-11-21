@@ -181,6 +181,31 @@ class PersonPreferencesView(form.EditForm):
         self.request.response.redirect(url)
 
 
+class FlourishPasswordChangedView(flourish.form.DialogForm):
+
+    dialog_submit_actions = ('ok',)
+    label = None
+
+    def initDialog(self):
+        super(FlourishPasswordChangedView, self).initDialog()
+        self.ajax_settings['dialog']['dialogClass'] = 'password-changed-dialog'
+        self.ajax_settings['dialog']['closeOnScape'] = False
+
+    @button.buttonAndHandler(_('OK'))
+    def handle_submit_(self, action):
+        app = ISchoolToolApplication(None)
+        nexturl = self.request.get('nexturl', '')
+        username = self.request.get('username', '')
+        url = '%s/auth/login.html?nexturl=%s&username=%s'
+        url = url % (absoluteURL(app, self.request), nexturl, username)
+        self.request.response.redirect(url)
+        self.ajax_settings['dialog'] = 'close'
+
+    def updateActions(self):
+        super(FlourishPasswordChangedView, self).updateActions()
+        self.actions['ok'].addClass('button-ok')
+
+
 class FlourishPersonPreferencesView(flourish.form.DialogForm,
                                     PersonPreferencesView):
     """View used for editing person preferences."""
@@ -338,6 +363,15 @@ class PersonPasswordEditView(form.Form):
             self.status = _("Password changed successfully. "
                             "Next, you will be required to authenticate "
                             "with your new credentials")
+            app = ISchoolToolApplication(None)
+            url = '%s/password_changed.html?nexturl=%s&username=%s'
+            url = url % (absoluteURL(app, self.request),
+                         absoluteURL(self.context, self.request),
+                         person.username)
+            self.dialog_show = True
+            self.dialog_title = translate(_('Password changed successfully'),
+                                          context=self.request)
+            self.dialog_url = url
         else:
             self.status = _('Password changed successfully')
 

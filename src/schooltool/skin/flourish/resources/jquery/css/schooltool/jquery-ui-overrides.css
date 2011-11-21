@@ -76,3 +76,7 @@
 .ui-icon-center {
     margin: 0 auto;
 }
+
+.password-changed-dialog .ui-dialog-titlebar-close {
+    display: none;
+}
