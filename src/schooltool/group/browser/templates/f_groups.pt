@@ -16,6 +16,16 @@
         </div>
       </tal:if>
       <tal:block tal:replace="structure view/table/filter_widget/render" />
+      <h3 tal:define="can_manage context/schooltool:app/schooltool:can_edit">
+        <tal:block condition="can_manage">
+          <a tal:attributes="href string:${context/schooltool:app/@@absolute_url}/manage"
+             i18n:translate="">Done</a>
+        </tal:block>
+        <tal:block condition="not:can_manage">
+          <a tal:attributes="href request/principal/schooltool:person/@@absolute_url"
+             i18n:translate="">Done</a>
+        </tal:block>
+      </h3>
       <tal:block replace="structure batch/render" />
       <tal:block replace="structure view/table/render" tal:condition="batch" />
     </tal:block>
