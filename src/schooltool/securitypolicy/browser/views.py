@@ -65,6 +65,7 @@ class FlourishAccessControlView(AccessControlView):
         'everyone_can_view_resource_info': _('Resource information'),
         'everyone_can_view_resource_calendar': _('Resource calendars'),
         'administration_can_grade_students': _('Student grades'),
+        'administration_can_grade_journal': _('Journal grades'),
         }
 
     def fieldsets(self):
