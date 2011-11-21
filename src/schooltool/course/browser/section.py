@@ -846,7 +846,7 @@ class SectionLinks(RefineLinksViewlet):
 
     @property
     def title(self):
-        return _("${section}'s", mapping={'section': self.context.title})
+        return _("${section}", mapping={'section': self.context.title})
 
 
 class SectionAddLinks(RefineLinksViewlet):

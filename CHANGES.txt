@@ -6,6 +6,7 @@ CHANGES
 ------------------
 
 - need a year link on /school (https://launchpad.net/bugs/893191)
+- Deal with the 's in the sidebar (https://launchpad.net/bugs/873045)
 
 
 1.9.3 (2011-11-18)
