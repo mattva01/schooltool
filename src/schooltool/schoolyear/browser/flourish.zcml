@@ -97,6 +97,15 @@
       view=".schoolyear.FlourishSchoolYearView"
       />
 
+  <flourish:viewlet
+      name="manage-year-overview"
+      before="manage-people-overview"
+      view="schooltool.app.browser.app.ManageSchool"
+      permission="schooltool.edit"
+      manager="schooltool.skin.flourish.page.IPageContentManager"
+      class=".schoolyear.FlourishManageYearOverview"
+      />
+
   <flourish:page
       name="index.html"
       for="schooltool.schoolyear.interfaces.ISchoolYear"
