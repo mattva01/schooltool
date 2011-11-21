@@ -20,7 +20,7 @@
     <script>
       $(document).ready(function() {
         $('.spinner').hide();
-        $('input[type="submit"]').click(function() {
+        $('input[name="UPDATE_SUBMIT"]').click(function() {
           $('.spinner').slideDown();
         });
       });
@@ -48,7 +48,8 @@
     <div class="buttons">
       <input name="UPDATE_SUBMIT" class="button-ok" type="submit"
              value="Submit" i18n:attributes="value submit-button" />
+      <input name="UPDATE_CANCEL" class="button-cancel" type="submit"
+             value="Cancel" i18n:attributes="value cancel-button" />
     </div>
   </form>
-  <h3><a tal:attributes="href string:${context/schooltool:app/@@absolute_url}/manage">Done</a></h3>
 </div>
