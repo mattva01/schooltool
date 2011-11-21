@@ -140,8 +140,6 @@ Project structure (checkout only)
   Makefile              makefile for building extension modules
   setup.py              distutils setup script for building extension modules
 
-  schooltool.conf.in    sample configuration file
-
   build/                temporary files are placed here during build process
   coverage/             unit test coverage reports (produced by make coverage)
     reports/            html version of the above (make coverage-reports-html)
