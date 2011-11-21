@@ -132,16 +132,6 @@
       />
 
   <resource
-      name="logo.png"
-      file="resources/schooltool.png"
-      layer="schooltool.skin.ISchoolToolLayer" />
-
-  <resource
-      name="schooltool-report-logo.png"
-      file="resources/schooltool-report-logo.png"
-      layer="schooltool.skin.ISchoolToolLayer" />
-
-  <resource
       name="schooltool.css"
       file="resources/schooltool.css"
       layer="schooltool.skin.ISchoolToolLayer" />
@@ -152,14 +142,6 @@
       layer="schooltool.skin.ISchoolToolLayer" />
 
   <resource name="zonki-regular.png" file="resources/zonki-regular.png"
-	    layer="schooltool.skin.ISchoolToolLayer" />
-  <resource name="zonki-reading.png" file="resources/zonki-reading.png"
-	    layer="schooltool.skin.ISchoolToolLayer" />
-  <resource name="zonki-question.png" file="resources/zonki-question.png"
-	    layer="schooltool.skin.ISchoolToolLayer" />
-  <resource name="zonki-pointing.png" file="resources/zonki-pointing.png"
-	    layer="schooltool.skin.ISchoolToolLayer" />
-  <resource name="zonki-angry.png" file="resources/zonki-angry.png"
 	    layer="schooltool.skin.ISchoolToolLayer" />
 
   <resource name="downarrow.png" file="resources/downarrow.png"
@@ -200,9 +182,6 @@
   <resource name="previous.png" file="resources/previous.png"
 	    layer="schooltool.skin.ISchoolToolLayer" />
   <resource name="next.png" file="resources/next.png"
-	    layer="schooltool.skin.ISchoolToolLayer" />
-
-  <resource name="printer.png" file="resources/printer.png"
 	    layer="schooltool.skin.ISchoolToolLayer" />
 
   <resource name="delete.png" file="resources/delete.png"

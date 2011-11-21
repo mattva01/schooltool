@@ -13,7 +13,7 @@
       href="http://www.schooltool.org">
       <img src="" alt="SchoolTool" 
            border="0" i18n:attributes="alt"
-           tal:attributes="src context/++resource++logo.png"/>
+           tal:attributes="src context/++resource++zonki-regular.png"/>
     </a>
   </div>
 
