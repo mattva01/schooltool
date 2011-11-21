@@ -1313,3 +1313,9 @@ class FlourishMegaImporter(flourish.page.Page, MegaImporter):
     def nextURL(self):
         url = absoluteURL(self.context, self.request)
         return '%s/manage' % url
+
+    def update(self):
+        if "UPDATE_CANCEL" in self.request:
+            self.request.response.redirect(self.nextURL())
+            return
+        return MegaImporter.update(self)
