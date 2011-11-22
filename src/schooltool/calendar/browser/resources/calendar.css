@@ -436,6 +436,7 @@
 
 .page > .third-nav li.calendar-type {
     float: right;
+    margin-left: 0px;
 }
 
 .page .main .content .calendar-event form #recurrence_box .buttons {
