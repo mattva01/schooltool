@@ -191,7 +191,7 @@ class FlourishPasswordChangedView(flourish.form.DialogForm):
         self.ajax_settings['dialog']['dialogClass'] = 'password-changed-dialog'
         self.ajax_settings['dialog']['closeOnScape'] = False
 
-    @button.buttonAndHandler(_('OK'))
+    @button.buttonAndHandler(_('ok-button', 'OK'))
     def handle_submit_(self, action):
         app = ISchoolToolApplication(None)
         nexturl = self.request.get('nexturl', '')

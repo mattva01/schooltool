@@ -130,9 +130,7 @@ class PersonLinks(flourish.page.RefineLinksViewlet):
 
     @property
     def title(self):
-        return _("${person_full_name}",
-                 mapping={'person_full_name': "%s %s" % (self.context.first_name,
-                                                         self.context.last_name)})
+        return "%s %s" % (self.context.first_name, self.context.last_name)
 
 
 class PersonImportLinks(flourish.page.RefineLinksViewlet):

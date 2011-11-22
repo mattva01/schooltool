@@ -394,7 +394,7 @@ class GroupLinks(RefineLinksViewlet):
 
     @property
     def title(self):
-        return _("${group}", mapping={'group': self.context.title})
+        return self.context.title
 
 
 class GroupAddLinks(RefineLinksViewlet):
