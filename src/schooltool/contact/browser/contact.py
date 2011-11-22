@@ -204,6 +204,11 @@ class FlourishContactAddView(flourish.page.NoSidebarPage, ContactAddView):
             'full_name', 'address', 'contact_information')
 
 
+SubmitLabel = button.StaticButtonActionAttribute(
+    _('Submit'),
+    button=FlourishContactAddView.buttons['add'])
+
+
 class ContactPersonInfoSubForm(subform.EditSubForm):
     """Form for editing additional person's contact information."""
 

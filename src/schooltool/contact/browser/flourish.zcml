@@ -230,4 +230,8 @@
       subtitle="Contacts"
       />
 
+  <zope:adapter
+      factory=".contact.SubmitLabel"
+      name="title" />
+
 </configure>
