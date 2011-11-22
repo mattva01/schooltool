@@ -2,17 +2,11 @@ body {
     font: 0.8em Verdana, Helvetica, Arial, sans-serif;
     background: white;
     color: black;
-    margin: 1em;
+    margin: 0;
     padding: 0;
 }
 
 body.menu {
-    padding: 0;
-    margin: 0;
-    background: #eae8e3;
-}
-
-body.modulelist {
     padding: 0;
     margin: 0;
     background: #eae8e3;
