@@ -171,8 +171,6 @@ def setUp(test=None):
                  'calwidget-calendar.js', 'calwidget-calendar.css',
                  'calwidget-icon.gif', 'print.css',
                  'jquery.js', 'jquery-ui',
-                 'zonki-angry.png', 'zonki-pointing.png',
-                 'zonki-question.png', 'zonki-reading.png',
                  'zonki-regular.png']:
         ztapi.browserResource(name, ResourceStub)
 

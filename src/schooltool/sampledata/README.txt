@@ -32,8 +32,6 @@ How to use it?
 
 Sample data generation is available in the developer mode.  In order
 to enable it, uncomment the `devmode on` line in your schooltool.conf.
-If you only have schooltool.conf.in, copy it to schooltool.conf and
-then edit it.
 
 You need to run the sample data generation with an empty database, so
 most probably you need to remove the Data.fs file.  Start the
@@ -97,7 +95,7 @@ You need to define a plugin::
               color = rng.choice(['red', 'green', 'blue'])
               IAnnotations(person)['favorite_color'] = color
 
-Now, you need to register it in your configure.zcml.  You need to
+Now, you need to register it in your ``configure.zcml``.  You need to
 conditionally include your registration of the sample data plugin for
 the developer mode:
 
@@ -121,6 +119,6 @@ the developer mode:
 
   </configure>
 
-Voila!  Remove Data.fs, regenerate sample data, and all your teachers
+Voila!  Remove ``Data.fs``, regenerate sample data, and all your teachers
 and students should know their colours!
 
