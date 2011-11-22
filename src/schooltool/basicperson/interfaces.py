@@ -66,7 +66,7 @@ class IBasicPerson(Interface):
 
     gender = Choice(
         title=_(u"Gender"),
-        vocabulary=vocabulary([('male', _('male')), ('female', _('female')),]),
+        vocabulary=vocabulary([('male', _('Male')), ('female', _('Female')),]),
         required=False,
         )
 
