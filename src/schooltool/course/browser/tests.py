@@ -154,7 +154,7 @@ def doctest_CourseCSVImporter():
         [None, 'course2_gov', None, 'gov_course4']
 
         >>> [course.credits for course in container.values()]
-        [None, 5, 10, None]
+        [None, Decimal('5'), Decimal('10'), None]
 
     """
 
@@ -197,16 +197,19 @@ def doctest_CourseCSVImporter_invalid_credits():
     Import some sample data
 
         >>> csvdata='''Course 1, Course 1 Description, course1_local, , 34.3
+        ... Course3,, course3, , 2+2
         ... Course2,,,,invalid'''
         >>> importer.importFromCSV(csvdata)
         False
 
-    We should get an error, because the credits value is not integer:
+    We should get an error, because the credits value is not a number:
 
         >>> for error in importer.errors.fields:
         ...     print translate(error)
-        Course "Course 1" credits "34.3" value must be an integer.
-        Course "Course2" credits "invalid" value must be an integer.
+        Course "Course3" credits "2+2" value must be a number.
+        Course "Course2" credits "invalid" value must be a number.
+
+    Note that 34.3 is a valid value number.
 
     """
 
@@ -258,7 +261,7 @@ def doctest_CourseCSVImporter_reimport():
     Check that credits were imported properly
 
         >>> [course.credits for course in container.values()]
-        [None, 10, None]
+        [None, Decimal('10'), None]
 
     Now import a different CSV with some courses matching:
 
@@ -281,7 +284,7 @@ def doctest_CourseCSVImporter_reimport():
     Check that credits were imported properly
 
         >>> [course.credits for course in container.values()]
-        [None, 20, None, None]
+        [None, Decimal('20'), None, None]
 
     By the way - ID takes precedence over title so if we import:
 
@@ -337,7 +340,7 @@ def doctest_CourseCSVImportView():
         >>> [container[key].government_id for key in sorted(container)]
         [None, None, u'spanish-gov']
         >>> [container[key].credits for key in sorted(container)]
-        [5, None, 20]
+        [Decimal('5'), None, Decimal('20')]
 
     If no data is provided, we naturally get an error
 
