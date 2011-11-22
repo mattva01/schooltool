@@ -79,9 +79,9 @@ class IPhones(Interface):
 
 class IOther(Interface):
 
-    other_1 = TextLine(title=_(u"Other"), required=False)
+    other_1 = TextLine(title=_(u"Other 1"), required=False)
 
-    other_2 = TextLine(title=_(u"Other"), required=False)
+    other_2 = TextLine(title=_(u"Other 2"), required=False)
 
 
 class ILanguages(Interface):
