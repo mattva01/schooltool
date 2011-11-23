@@ -308,8 +308,8 @@
 
 #calendar-view-day .event A.delete {
     position: absolute;
-    top: 1px;
-    right: 1px;
+    top: 0px;
+    right: 2px;
     display: block;
     text-decoration: none;
     overflow: hidden;
@@ -352,7 +352,7 @@
 }
 
 #calendar-view-day .event h6 {
-    padding: 2px 8px;
+    padding: 2px 16px;
 }
 
 #calendar-view-day .event .event-body {
