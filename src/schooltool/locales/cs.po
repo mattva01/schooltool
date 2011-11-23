@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-10-12 18:58+0300\n"
-"PO-Revision-Date: 2011-10-14 19:37+0000\n"
+"POT-Creation-Date: 2011-11-22 22:28+0200\n"
+"PO-Revision-Date: 2011-11-23 01:28+0000\n"
 "Last-Translator: Lukáš Tyrychtr <lukastyrychtr@gmail.com>\n"
 "Language-Team: Czech <debian-l10n-czech@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-10-15 05:41+0000\n"
-"X-Generator: Launchpad (build 14124)\n"
+"X-Launchpad-Export-Date: 2011-11-23 06:09+0000\n"
+"X-Generator: Launchpad (build 14336)\n"
 "Language: cs\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -107,8 +107,6 @@ msgstr "Nastavení kalendáře"
 #: /src/schooltool/app/browser/app.py:528
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:31
 #: /src/schooltool/basicperson/browser/person.py:511
-#: /src/schooltool/demographics/browser/personform.py:92
-#: /src/schooltool/demographics/browser/personform.py:270
 #: /src/schooltool/email/browser/email.py:211
 #: /src/schooltool/level/browser/level.py:90
 #: /src/schooltool/person/browser/person.py:160
@@ -146,8 +144,6 @@ msgstr "Použít"
 #: /src/schooltool/course/browser/section.py:1270
 #: /src/schooltool/course/browser/section.py:1292
 #: /src/schooltool/course/browser/templates/extend_term.pt:29
-#: /src/schooltool/demographics/browser/personform.py:107
-#: /src/schooltool/demographics/browser/personform.py:301
 #: /src/schooltool/email/browser/email.py:179
 #: /src/schooltool/email/browser/email.py:220
 #: /src/schooltool/email/browser/email.py:361
@@ -202,8 +198,6 @@ msgid "School Name"
 msgstr "Jméno školy"
 
 #: /src/schooltool/app/browser/app.py:557
-#: /src/schooltool/demographics/interfaces.py:245
-#: /src/schooltool/demographics/utility.py:88
 msgid "Name"
 msgstr "Jméno"
 
@@ -270,19 +264,7 @@ msgstr "Ne"
 msgid "Pack Database"
 msgstr "Zmenšit databázi"
 
-#: /src/schooltool/app/browser/app.py:877
-msgid "Live"
-msgstr ""
-
-#: /src/schooltool/app/browser/app.py:887
-msgid "Unknown"
-msgstr "Neznámý"
-
-#: /src/schooltool/app/browser/app.py:889
-msgid "Backup"
-msgstr "Záloha"
-
-#: /src/schooltool/app/browser/app.py:909
+#: /src/schooltool/app/browser/app.py:894
 msgid "Database successfully packed."
 msgstr "Databáze úspěšně zmenšena."
 
@@ -387,7 +369,7 @@ msgstr "Listopad"
 msgid "December"
 msgstr "Prosinec"
 
-#: /src/schooltool/app/browser/cal.py:128
+#: /src/schooltool/app/browser/cal.py:132
 #: /src/schooltool/person/interfaces.py:176
 #: /src/schooltool/term/browser/templates/f_term.pt:30
 #: /src/schooltool/term/browser/templates/f_term_add.pt:42
@@ -1085,10 +1067,16 @@ msgstr "Převod do unicode selhal na řádku ${line_no}"
 msgid "SchoolTool"
 msgstr "SchoolTool"
 
-#: /src/schooltool/app/browser/flourish.zcml:186
+#: /src/schooltool/app/browser/flourish.zcml:54
+#: /src/schooltool/app/browser/flourish.zcml:63
+#: /src/schooltool/skin/templates/view_macros.pt:50
+msgid "Log In"
+msgstr "Přihlásit se"
+
+#: /src/schooltool/app/browser/flourish.zcml:197
 #: /src/schooltool/app/browser/templates/f_errors.pt:3
 #: /src/schooltool/basicperson/browser/flourish.zcml:69
-#: /src/schooltool/email/browser/configure.zcml:76
+#: /src/schooltool/email/browser/configure.zcml:80
 #: /src/schooltool/email/browser/email.py:204
 msgid "Settings"
 msgstr "Nastaveni"
@@ -1126,9 +1114,6 @@ msgstr "Nastavení kalendáře"
 #: /src/schooltool/course/browser/templates/f_section_view.pt:92
 #: /src/schooltool/course/browser/templates/f_section_view.pt:118
 #: /src/schooltool/course/browser/templates/f_section_view.pt:133
-#: /src/schooltool/demographics/browser/configure.zcml:22
-#: /src/schooltool/demographics/browser/table.py:100
-#: /src/schooltool/demographics/browser/table.py:196
 #: /src/schooltool/email/browser/templates/f_email_container.pt:9
 #: /src/schooltool/group/browser/flourish.zcml:173
 #: /src/schooltool/group/browser/templates/f_group_view.pt:8
@@ -1213,14 +1198,7 @@ msgstr "Informace"
 msgid "Database generations"
 msgstr "Generování databáze"
 
-#: /src/schooltool/app/browser/flourish.zcml:528
-#: /src/schooltool/app/browser/flourish.zcml:553
-#: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:7
-#: /src/schooltool/app/browser/templates/f_server_settings_overview.pt:12
-msgid "Database"
-msgstr "Databáze"
-
-#: /src/schooltool/app/browser/flourish.zcml:621
+#: /src/schooltool/app/browser/flourish.zcml:607
 msgid "Shown Calendars"
 msgstr "Zobrazené kalendáře"
 
@@ -1337,10 +1315,15 @@ msgstr "Hlavní vývojář:"
 
 #: /src/schooltool/app/browser/templates/about.pt:44
 #: /src/schooltool/app/browser/templates/f_about.pt:33
+msgid "Core Developers:"
+msgstr ""
+
+#: /src/schooltool/app/browser/templates/about.pt:47
+#: /src/schooltool/app/browser/templates/f_about.pt:37
 msgid "Release Manager:"
 msgstr "Manažer vydání:"
 
-#: /src/schooltool/app/browser/templates/about.pt:47
+#: /src/schooltool/app/browser/templates/about.pt:50
 msgid "Contributors:"
 msgstr "Přispivatelé:"
 
@@ -1516,7 +1499,6 @@ msgstr "Invertovat výběr"
 #: /src/schooltool/course/browser/templates/f_link_existing.pt:89
 #: /src/schooltool/course/browser/templates/link_section.pt:49
 #: /src/schooltool/course/browser/templates/section_container.pt:29
-#: /src/schooltool/demographics/browser/table.pt:34
 #: /src/schooltool/level/browser/templates/f_levels_reorder.pt:36
 #: /src/schooltool/level/browser/templates/f_levels_view.pt:24
 #: /src/schooltool/schoolyear/browser/templates/f_table_container.pt:8
@@ -1992,62 +1974,11 @@ msgstr "Odeslat"
 msgid "Done"
 msgstr "Hotovo"
 
-#: /src/schooltool/app/browser/templates/f_database.pt:5
-msgid "Please wait for confirmation that the database has been packed."
-msgstr "Prosím vyčkejte potvrzení, že byla databáze zmenšena."
-
-#: /src/schooltool/app/browser/templates/f_database.pt:20
-msgid "Path"
-msgstr "Cesta"
-
-#: /src/schooltool/app/browser/templates/f_database.pt:21
-#: /src/schooltool/course/browser/section.py:995
-msgid "Size"
-msgstr "Velikost"
-
-#: /src/schooltool/app/browser/templates/f_database_related.pt:2
-#: /src/schooltool/app/browser/templates/f_generations_related.pt:2
-#: /src/schooltool/contact/browser/templates/f_contacts_related.pt:2
-#: /src/schooltool/course/browser/templates/f_courses_related.pt:2
-#: /src/schooltool/course/browser/templates/f_sections_related.pt:2
-#: /src/schooltool/email/browser/templates/f_email_container_related.pt:2
-#: /src/schooltool/export/templates/f_import_related.pt:2
-#: /src/schooltool/level/browser/templates/f_levels_related.pt:2
-#: /src/schooltool/resource/browser/templates/f_resource_container_related.pt:2
-#: /src/schooltool/resource/browser/templates/f_resource_demographics_related.pt:2
-#: /src/schooltool/term/browser/templates/f_terms_related.pt:2
-#: /src/schooltool/timetable/browser/templates/f_specialday_related.pt:2
-#: /src/schooltool/timetable/browser/templates/f_timetable_container_related.pt:2
-msgid "What is This?"
-msgstr "Co je to?"
-
-#: /src/schooltool/app/browser/templates/f_database_related.pt:6
-msgid ""
-"SchoolTool's database file should be periodically \"packed\" to reduce its "
-"filesize."
-msgstr ""
-"Databáze schooltool by měla být periodicky zmenšována kvůli zmenšení "
-"velikosti jejího souboru."
-
-#: /src/schooltool/app/browser/templates/f_database_related.pt:9
-msgid ""
-"Packing removes old transactions from the database. It can take a long time "
-"on a large database, so packing should be done in off-peak times."
-msgstr ""
-"Zmenšování odstraní staré transakce. Může trvat dlouho, proto by nemělo být "
-"prováděno v časech s vysokou návštěvností."
-
-#: /src/schooltool/app/browser/templates/f_database_related.pt:14
-msgid "Before packing, a backup file will be saved as Data.fs.old"
-msgstr ""
-
 #: /src/schooltool/app/browser/templates/f_edit_relationships.pt:25
-#: /src/schooltool/basicperson/browser/templates/container.pt:37
+#: /src/schooltool/basicperson/browser/templates/container.pt:32
 #: /src/schooltool/course/browser/templates/course_container.pt:28
 #: /src/schooltool/course/browser/templates/f_courses.pt:14
 #: /src/schooltool/course/browser/templates/f_sections.pt:14
-#: /src/schooltool/demographics/browser/search.pt:30
-#: /src/schooltool/demographics/browser/table.pt:23
 #: /src/schooltool/email/browser/templates/email_container.pt:33
 #: /src/schooltool/group/browser/templates/f_groups.pt:14
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:43
@@ -2115,6 +2046,21 @@ msgstr ""
 msgid "Request"
 msgstr ""
 
+#: /src/schooltool/app/browser/templates/f_generations_related.pt:2
+#: /src/schooltool/contact/browser/templates/f_contacts_related.pt:2
+#: /src/schooltool/course/browser/templates/f_courses_related.pt:2
+#: /src/schooltool/course/browser/templates/f_sections_related.pt:2
+#: /src/schooltool/email/browser/templates/f_email_container_related.pt:2
+#: /src/schooltool/export/templates/f_import_related.pt:2
+#: /src/schooltool/level/browser/templates/f_levels_related.pt:2
+#: /src/schooltool/resource/browser/templates/f_resource_container_related.pt:2
+#: /src/schooltool/resource/browser/templates/f_resource_demographics_related.pt:2
+#: /src/schooltool/term/browser/templates/f_terms_related.pt:2
+#: /src/schooltool/timetable/browser/templates/f_specialday_related.pt:2
+#: /src/schooltool/timetable/browser/templates/f_timetable_container_related.pt:2
+msgid "What is This?"
+msgstr "Co je to?"
+
 #: /src/schooltool/app/browser/templates/f_generations_related.pt:6
 msgid ""
 "Database generations update the structure of your database to be compatible "
@@ -2160,9 +2106,6 @@ msgstr "Informace o uživateli"
 #: /src/schooltool/basicperson/browser/person.py:117
 #: /src/schooltool/basicperson/browser/person.py:163
 #: /src/schooltool/basicperson/browser/person.py:368
-#: /src/schooltool/demographics/browser/personform.py:253
-#: /src/schooltool/demographics/browser/personform.py:254
-#: /src/schooltool/demographics/browser/table.py:67
 #: /src/schooltool/email/browser/email.py:119
 #: /src/schooltool/email/interfaces.py:104
 #: /src/schooltool/person/browser/person.py:501
@@ -2174,7 +2117,6 @@ msgstr "Uživatelské jméno"
 #: /src/schooltool/app/browser/templates/f_login.pt:62
 #: /src/schooltool/app/browser/templates/login.pt:44
 #: /src/schooltool/basicperson/browser/person.py:168
-#: /src/schooltool/demographics/browser/personform.py:258
 #: /src/schooltool/email/browser/email.py:124
 #: /src/schooltool/person/browser/flourish.zcml:17
 #: /src/schooltool/person/browser/flourish.zcml:61
@@ -2224,7 +2166,6 @@ msgstr ""
 #: /src/schooltool/contact/browser/templates/f_contact_filter.pt:2
 #: /src/schooltool/course/browser/templates/f_course_filter.pt:2
 #: /src/schooltool/course/browser/templates/f_section_filter.pt:2
-#: /src/schooltool/demographics/overrides.zcml:22
 #: /src/schooltool/group/browser/templates/f_group_filter.pt:2
 #: /src/schooltool/person/browser/f_person_filter.pt:3
 #: /src/schooltool/person/browser/f_person_filter.pt:36
@@ -2232,6 +2173,11 @@ msgstr ""
 #: /src/schooltool/resource/browser/templates/f_resource_filter.pt:36
 msgid "Search"
 msgstr "Hledat"
+
+#: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:7
+#: /src/schooltool/app/browser/templates/f_server_settings_overview.pt:12
+msgid "Database"
+msgstr "Databáze"
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:11
 #: /src/schooltool/app/browser/templates/f_server_settings_overview.pt:16
@@ -2301,11 +2247,22 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_section_csvimport_description.pt:21
 msgid ""
-"Each section description's first row contains the <strong>course id</strong> "
-"and the <strong>instructor username</strong> for the new section."
+"Each section description's first row contains the <strong>course SchoolTool "
+"ID</strong> and the <strong>instructor username</strong> for the new section."
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_section_csvimport_description.pt:27
+msgid ""
+"If you want to update the sections instead, in section description's first "
+"row you should specify: <strong>course SchoolTool ID</strong>, "
+"<strong>instructor username</strong> and then <strong>section SchoolTool "
+"ID</strong> for corresponding sections in each term. <strong>Note:</strong> "
+"if your school has, say, 5 consecutive terms and you specify terms \"2\", "
+"\"4\" in the top of csv, you will need to provide 3 section ids, for terms "
+"\"2\", \"3\" and \"4\" respectively."
+msgstr ""
+
+#: /src/schooltool/app/browser/templates/f_section_csvimport_description.pt:34
 msgid ""
 "Then a number of rows specifying the section schedule <strong>may</strong> "
 "follow. First there's a row containing the <strong>timetable id</strong>. "
@@ -2336,8 +2293,8 @@ msgstr ""
 msgid "Example:"
 msgstr "Příklad:"
 
-#. Default: "\"Fall\", \"Spring\" \"\",\"\",\"\" \"philosophy\",\"lorch\" \"weekly-timetable\" \"Monday\",\"A\" \"Monday\",\"B\" \"Tuesday\",\"B\" \"***\" \"johnny\" \"billy\" \"\" \"literature\",\"guzman\" \"***\" \"johnny\" \"pete\""
-#: /src/schooltool/app/browser/templates/f_section_csvimport_description.pt:45
+#. Default: "\"Fall\", \"Spring\" \"\",\"\",\"\" \"philosophy\",\"lorch\" \"weekly-timetable\" \"Monday\",\"A\" \"Monday\",\"B\" \"Tuesday\",\"B\" \"***\" \"johnny\" \"billy\" \"\" \"literature\",\"guzman\",\"literature-f\",\"literature-s\" \"***\" \"johnny\" \"pete\""
+#: /src/schooltool/app/browser/templates/f_section_csvimport_description.pt:52
 msgid ""
 "\n"
 "\"Fall\", \"Spring\"\n"
@@ -2351,25 +2308,31 @@ msgid ""
 "\"johnny\"\n"
 "\"billy\"\n"
 "\"\"\n"
-"\"literature\",\"guzman\"\n"
+"\"literature\",\"guzman\",\"literature-f\",\"literature-s\"\n"
 "\"***\"\n"
 "\"johnny\"\n"
 "\"pete\"\n"
 msgstr ""
 
-#: /src/schooltool/app/browser/templates/f_section_csvimport_description.pt:63
+#: /src/schooltool/app/browser/templates/f_section_csvimport_description.pt:70
 msgid ""
 "The above example will create sections for philosophy and literature "
 "lectures. Sections will be taught from fall term to spring term. The section "
 "for the philosophy lecture will have persons with user names 'johnny' and "
 "'billy' as learners. It will also be scheduled on Monday (two lessons, "
 "periods 'A' and 'B') and Tuesday. The literature section will be processed "
-"in a similar fashion, but will have no defined schedule."
+"in a similar fashion, but will have no defined schedule. The literature "
+"SchoolTool IDs will be set to literature-f in Fall and literature-s in "
+"Spring."
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_server_settings_overview.pt:3
 msgid "Server Information"
 msgstr ""
+
+#: /src/schooltool/app/browser/templates/f_settings.pt:5
+msgid "Please wait for confirmation that the database has been packed."
+msgstr "Prosím vyčkejte potvrzení, že byla databáze zmenšena."
 
 #: /src/schooltool/app/browser/templates/f_translationdomaincontrol.pt:13
 msgid "Domain ${domain}"
@@ -2647,17 +2610,15 @@ msgid "Row 2 is not empty"
 msgstr "2. řádek není prázdný"
 
 #. Default: ""
-#: /src/schooltool/app/browser/timetablecsvimport.py:181
+#: /src/schooltool/app/browser/timetablecsvimport.py:182
 msgid ""
-"Wrong section header on line ${line_no} (it should contain a course id and "
-"an instructor id)"
+"Wrong section header on line ${line_no} (it should contain a course id, an "
+"instructor id and optional SchoolTool section IDs for each of the terms)"
 msgstr ""
-"Špatná hlavička sekce na řádku ${line_no} (měla by obsahovat id kurzu a id "
-"instruktora)"
 
 #. Default: ""
-#: /src/schooltool/app/browser/timetablecsvimport.py:212
-#: /src/schooltool/app/browser/timetablecsvimport.py:223
+#: /src/schooltool/app/browser/timetablecsvimport.py:220
+#: /src/schooltool/app/browser/timetablecsvimport.py:231
 msgid ""
 "Malformed line ${line_no} (it should contain either a timetable id or day id "
 "and a period id)"
@@ -2953,7 +2914,6 @@ msgstr ""
 #: /src/schooltool/course/browser/configure.zcml:69
 #: /src/schooltool/course/security.zcml:94
 #: /src/schooltool/course/security.zcml:128
-#: /src/schooltool/demographics/browser/configure.zcml:13
 #: /src/schooltool/group/security.zcml:76
 #: /src/schooltool/person/browser/configure.zcml:204
 #: /src/schooltool/person/security.zcml:87
@@ -2985,7 +2945,6 @@ msgid "Advisees"
 msgstr ""
 
 #: /src/schooltool/basicperson/browser/configure.zcml:101
-#: /src/schooltool/demographics/overrides.zcml:7
 #: /src/schooltool/person/browser/configure.zcml:172
 #: /src/schooltool/person/browser/configure.zcml:181
 msgid "New Person"
@@ -3003,7 +2962,6 @@ msgstr ""
 #: /src/schooltool/basicperson/browser/person.py:551
 #: /src/schooltool/basicperson/browser/person.py:933
 #: /src/schooltool/basicperson/security.zcml:22
-#: /src/schooltool/demographics/browser/personform.py:180
 msgid "Demographics"
 msgstr "Demografie"
 
@@ -3070,7 +3028,6 @@ msgstr "Duplicitní uživatelské jméno: ${username}"
 
 #: /src/schooltool/basicperson/browser/csvimport.py:79
 #: /src/schooltool/basicperson/browser/person.py:206
-#: /src/schooltool/demographics/browser/personform.py:280
 #: /src/schooltool/person/browser/csvimport.py:70
 msgid "Names cannot begin with '+' or '@' or contain '/'"
 msgstr "Jména nemohou začínat znaky '+' nebo '@' nebo obsahovat '/'"
@@ -3119,7 +3076,6 @@ msgid "Selection"
 msgstr ""
 
 #: /src/schooltool/basicperson/browser/demographics.py:312
-#: /src/schooltool/demographics/interfaces.py:301
 msgid "Text"
 msgstr "Text"
 
@@ -3236,12 +3192,7 @@ msgstr ""
 msgid "Person index"
 msgstr "Seznam osob"
 
-#. Default: ""
-#: /src/schooltool/basicperson/browser/person.py:132
-msgid "${person_full_name}'s"
-msgstr ""
-
-#: /src/schooltool/basicperson/browser/person.py:152
+#: /src/schooltool/basicperson/browser/person.py:151
 #: /src/schooltool/basicperson/browser/templates/f_manage_people_overview.pt:19
 #: /src/schooltool/group/browser/flourish.zcml:70
 #: /src/schooltool/group/browser/flourish.zcml:79
@@ -3257,7 +3208,6 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/basicperson/browser/person.py:158
-#: /src/schooltool/demographics/interfaces.py:212
 msgid "Advisor"
 msgstr "Poradce"
 
@@ -3391,8 +3341,6 @@ msgstr ""
 #: /src/schooltool/basicperson/browser/templates/container.pt:42
 #: /src/schooltool/course/browser/templates/course_container.pt:40
 #: /src/schooltool/course/browser/templates/section_container.pt:83
-#: /src/schooltool/demographics/browser/search.pt:35
-#: /src/schooltool/demographics/browser/table.pt:28
 #: /src/schooltool/email/browser/templates/email_container.pt:48
 #: /src/schooltool/schoolyear/browser/templates/schoolyear.pt:42
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:48
@@ -3456,19 +3404,6 @@ msgstr ""
 "'mck' má heslo ('r2m45J') a tudíž se bude moci přihlásit do systému. "
 "Poznamenejme, že hesla musí být zasílána jako prostý text."
 
-#: /src/schooltool/basicperson/browser/templates/f_demographicsViewlet.pt:2
-msgid "Attributes"
-msgstr ""
-
-#: /src/schooltool/basicperson/browser/templates/f_demographicsViewlet.pt:5
-msgid "Demographics and other personal data"
-msgstr ""
-
-#: /src/schooltool/basicperson/browser/templates/f_demographicsViewlet.pt:6
-#: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:6
-msgid "Edit this person's information"
-msgstr ""
-
 #: /src/schooltool/basicperson/browser/templates/f_demographics_reorder.pt:8
 msgid "Order"
 msgstr ""
@@ -3476,7 +3411,6 @@ msgstr ""
 #: /src/schooltool/basicperson/browser/templates/f_demographics_reorder.pt:10
 #: /src/schooltool/basicperson/browser/templates/f_demographics_view.pt:6
 #: /src/schooltool/basicperson/interfaces.py:136
-#: /src/schooltool/demographics/interfaces.py:197
 msgid "ID"
 msgstr "ID"
 
@@ -3527,6 +3461,15 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:2
 msgid "General Information"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:6
+#: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:25
+msgid "Edit this person's information"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:24
+msgid "Demographics and other personal data"
 msgstr ""
 
 #: /src/schooltool/basicperson/browser/templates/f_manage_people_overview.pt:4
@@ -3613,60 +3556,82 @@ msgstr "Potvrdit"
 msgid "Person info: ${title}"
 msgstr "Informace o osobě: ${title}"
 
-#: /src/schooltool/basicperson/interfaces.py:37
+#: /src/schooltool/basicperson/demographics.py:143
+msgid "Ethnicity"
+msgstr "Etnika"
+
+#: /src/schooltool/basicperson/demographics.py:144
+msgid "American Indian or Alaska Native"
+msgstr "Americký indián nebo Aljašský domorodec"
+
+#: /src/schooltool/basicperson/demographics.py:145
+msgid "Asian"
+msgstr "Asiat"
+
+#: /src/schooltool/basicperson/demographics.py:146
+msgid "Black or African American"
+msgstr "Černoch nebo afroameričan"
+
+#: /src/schooltool/basicperson/demographics.py:147
+msgid "Native Hawaiian or Other Pacific Islander"
+msgstr "Hawajský nebo jiný pacifický ostrovní domorodec"
+
+#: /src/schooltool/basicperson/demographics.py:148
+msgid "White"
+msgstr "Bílá"
+
+#: /src/schooltool/basicperson/demographics.py:150
+msgid "Place of birth"
+msgstr ""
+
+#: /src/schooltool/basicperson/demographics.py:151
+msgid "Citizenship"
+msgstr ""
+
+#: /src/schooltool/basicperson/interfaces.py:38
 #: /src/schooltool/contact/interfaces.py:40
-#: /src/schooltool/demographics/interfaces.py:44
 msgid "Prefix"
 msgstr "Předpona"
 
 #: /src/schooltool/basicperson/interfaces.py:42
 #: /src/schooltool/contact/browser/templates/filter.pt:5
 #: /src/schooltool/contact/interfaces.py:42
-#: /src/schooltool/demographics/interfaces.py:50
 msgid "First name"
 msgstr "Křestní jméno"
 
 #: /src/schooltool/basicperson/interfaces.py:47
 #: /src/schooltool/contact/interfaces.py:44
-#: /src/schooltool/demographics/interfaces.py:55
 msgid "Middle name"
 msgstr "Druhé jméno"
 
 #: /src/schooltool/basicperson/interfaces.py:52
 #: /src/schooltool/contact/browser/templates/filter.pt:12
 #: /src/schooltool/contact/interfaces.py:46
-#: /src/schooltool/demographics/interfaces.py:60
 msgid "Last name"
 msgstr "Příjmení"
 
 #: /src/schooltool/basicperson/interfaces.py:57
 #: /src/schooltool/contact/interfaces.py:48
-#: /src/schooltool/demographics/interfaces.py:65
 msgid "Suffix"
 msgstr "Přípona"
 
 #: /src/schooltool/basicperson/interfaces.py:62
-#: /src/schooltool/demographics/interfaces.py:70
 msgid "Preferred name"
 msgstr "Preferované jméno"
 
 #: /src/schooltool/basicperson/interfaces.py:67
-#: /src/schooltool/demographics/interfaces.py:126
 msgid "Gender"
 msgstr "Pohlaví"
 
 #: /src/schooltool/basicperson/interfaces.py:68
-#: /src/schooltool/demographics/interfaces.py:127
-msgid "female"
-msgstr "žena"
+msgid "Female"
+msgstr "Žena"
 
 #: /src/schooltool/basicperson/interfaces.py:68
-#: /src/schooltool/demographics/interfaces.py:127
-msgid "male"
-msgstr "muž"
+msgid "Male"
+msgstr "Muž"
 
 #: /src/schooltool/basicperson/interfaces.py:73
-#: /src/schooltool/demographics/interfaces.py:132
 msgid "Birth date"
 msgstr "Datum narození"
 
@@ -3752,7 +3717,27 @@ msgstr ""
 msgid "Administrators"
 msgstr ""
 
-#: /src/schooltool/calendar/browser/calendar.py:193
+#: /src/schooltool/calendar/browser/calendar.py:173
+msgid "Tomorrow"
+msgstr ""
+
+#: /src/schooltool/calendar/browser/calendar.py:175
+msgid "Yesterday"
+msgstr ""
+
+#: /src/schooltool/calendar/browser/calendar.py:195
+msgid "This Week"
+msgstr ""
+
+#: /src/schooltool/calendar/browser/calendar.py:197
+msgid "Last Week"
+msgstr ""
+
+#: /src/schooltool/calendar/browser/calendar.py:199
+msgid "Next Week"
+msgstr ""
+
+#: /src/schooltool/calendar/browser/calendar.py:236
 msgid "Jump To"
 msgstr ""
 
@@ -4178,12 +4163,10 @@ msgid "Address line 2"
 msgstr "Adresní řádek 2"
 
 #: /src/schooltool/contact/interfaces.py:57
-#: /src/schooltool/demographics/interfaces.py:261
 msgid "City"
 msgstr "Město"
 
 #: /src/schooltool/contact/interfaces.py:59
-#: /src/schooltool/demographics/interfaces.py:266
 msgid "State"
 msgstr "Stát"
 
@@ -4192,17 +4175,14 @@ msgid "Country"
 msgstr ""
 
 #: /src/schooltool/contact/interfaces.py:63
-#: /src/schooltool/demographics/interfaces.py:271
 msgid "Postal code"
 msgstr "PSČ"
 
 #: /src/schooltool/contact/interfaces.py:73
-#: /src/schooltool/demographics/interfaces.py:276
 msgid "Home phone"
 msgstr "Telefon domů"
 
 #: /src/schooltool/contact/interfaces.py:75
-#: /src/schooltool/demographics/interfaces.py:281
 msgid "Work phone"
 msgstr "Telefon do práce"
 
@@ -4210,7 +4190,15 @@ msgstr "Telefon do práce"
 msgid "Mobile phone"
 msgstr ""
 
-#: /src/schooltool/contact/interfaces.py:102
+#: /src/schooltool/contact/interfaces.py:82
+msgid "Other 1"
+msgstr ""
+
+#: /src/schooltool/contact/interfaces.py:84
+msgid "Other 2"
+msgstr ""
+
+#: /src/schooltool/contact/interfaces.py:109
 msgid "Contact's relationship with the person"
 msgstr ""
 
@@ -4356,14 +4344,14 @@ msgid "Titles may not be empty"
 msgstr "Názvy nemohou být prázdné"
 
 #. Default: ""
-#: /src/schooltool/course/browser/csvimport.py:89
+#: /src/schooltool/course/browser/csvimport.py:88
 msgid ""
-"Course \"${course_title}\" credits \"${invalid_credits}\" value must be an "
-"integer."
+"Course \"${course_title}\" credits \"${invalid_credits}\" value must be a "
+"number."
 msgstr ""
 
 #. Default: ""
-#: /src/schooltool/course/browser/csvimport.py:104
+#: /src/schooltool/course/browser/csvimport.py:103
 msgid ""
 "Course \"${course_title}\" id \"${invalid_id}\" is invalid. ${error_message}"
 msgstr ""
@@ -4469,12 +4457,7 @@ msgid "Available Students"
 msgstr "Dostupní studenti"
 
 #. Default: ""
-#: /src/schooltool/course/browser/section.py:846
-msgid "${section}'s"
-msgstr ""
-
-#. Default: ""
-#: /src/schooltool/course/browser/section.py:929
+#: /src/schooltool/course/browser/section.py:932
 msgid "Delete ${section}"
 msgstr ""
 
@@ -4491,8 +4474,12 @@ msgstr ""
 msgid "Term"
 msgstr "Pravidlo"
 
-#: /src/schooltool/course/browser/section.py:1112
-#: /src/schooltool/course/browser/section.py:1246
+#: /src/schooltool/course/browser/section.py:998
+msgid "Size"
+msgstr "Velikost"
+
+#: /src/schooltool/course/browser/section.py:1115
+#: /src/schooltool/course/browser/section.py:1249
 msgid "Section Information"
 msgstr ""
 
@@ -4624,7 +4611,6 @@ msgid "${course} course for ${schoolyear}"
 msgstr ""
 
 #: /src/schooltool/course/browser/templates/course.pt:52
-#: /src/schooltool/demographics/browser/nameinfo_view.pt:11
 #: /src/schooltool/person/browser/home.pt:20
 #: /src/schooltool/person/browser/person.pt:11
 msgid "photo"
@@ -4684,6 +4670,28 @@ msgid ""
 "Deleting a section is permanent, irreversible, and destroys all data "
 "associated with the section. It is strongly recommended that you only delete "
 "a section that has been created in error or has no data associated with it."
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/f_course_csvimport_description.pt:3
+msgid ""
+"CSV data <strong>must</strong> include a course title,<strong>may</strong> "
+"include an optional course description, <strong>may</strong> include an "
+"optional course SchoolTool ID, <strong>may</strong> include an optional "
+"Alternate ID and <strong>may</strong> include an optional credits value."
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/f_course_csvimport_description.pt:19
+msgid ""
+"The above example will create 4 courses titled 'Ancient History', 'US "
+"History', 'World History' and 'Spanish'. The first and third courses will "
+"have the descriptions 'Pre-history through 1000 A.D.' and '1000 A.D. through "
+"the 20th century' respectively. The second and forth courses will have no "
+"description. The second, third and forth courses will have their SchoolTool "
+"IDs set to us-history and history-world. The forth course will have its "
+"Alternate ID set to spanish-gov and its credits value set to 5. If you will "
+"upload a CSV with titles or course ids that are already present in the "
+"database, existing courses will be updated. Course Ids take precedence when "
+"determining which course should be updated."
 msgstr ""
 
 #: /src/schooltool/course/browser/templates/f_course_view.pt:4
@@ -4993,7 +5001,20 @@ msgstr ""
 msgid "Unlink Section"
 msgstr ""
 
-#: /src/schooltool/course/interfaces.py:50
+#: /src/schooltool/course/interfaces.py:36
+#: /src/schooltool/course/interfaces.py:129
+msgid "SchoolTool ID"
+msgstr ""
+
+#: /src/schooltool/course/interfaces.py:37
+msgid "An internal identifier of this course."
+msgstr ""
+
+#: /src/schooltool/course/interfaces.py:53
+msgid "School identifier of this course."
+msgstr ""
+
+#: /src/schooltool/course/interfaces.py:58
 msgid "Alternate ID"
 msgstr ""
 
@@ -5005,11 +5026,7 @@ msgstr ""
 msgid "Credits"
 msgstr ""
 
-#: /src/schooltool/course/interfaces.py:57
-msgid "This value must be an integer."
-msgstr ""
-
-#: /src/schooltool/course/interfaces.py:82
+#: /src/schooltool/course/interfaces.py:89
 msgid "Label"
 msgstr "Popisek"
 
@@ -5020,6 +5037,10 @@ msgid ""
 msgstr ""
 "Identifikátor sekce, vytvořený učitelem\n"
 "            jména, kurzy a čas setkání."
+
+#: /src/schooltool/course/interfaces.py:130
+msgid "An internal identifier of this section."
+msgstr ""
 
 #. Default: ""
 #: /src/schooltool/course/section.py:89
@@ -5145,329 +5166,6 @@ msgstr "Kategorie aktivit"
 msgid "School Timetables"
 msgstr "Školní rozvrhy"
 
-#: /src/schooltool/demographics/browser/configure.zcml:156
-msgid "Schooltool Person Menu"
-msgstr "Nabídka osoby na SchoolToolu"
-
-#: /src/schooltool/demographics/browser/configure.zcml:167
-#: /src/schooltool/demographics/browser/configure.zcml:228
-msgid "name info"
-msgstr "info o jménu"
-
-#: /src/schooltool/demographics/browser/configure.zcml:173
-#: /src/schooltool/demographics/browser/configure.zcml:234
-msgid "demographics"
-msgstr "demografie"
-
-#: /src/schooltool/demographics/browser/configure.zcml:179
-#: /src/schooltool/demographics/browser/configure.zcml:240
-msgid "schooldata"
-msgstr "skolnidata"
-
-#: /src/schooltool/demographics/browser/configure.zcml:185
-#: /src/schooltool/demographics/browser/configure.zcml:246
-msgid "parent1"
-msgstr "rodic1"
-
-#: /src/schooltool/demographics/browser/configure.zcml:191
-#: /src/schooltool/demographics/browser/configure.zcml:252
-msgid "parent2"
-msgstr "rodic2"
-
-#: /src/schooltool/demographics/browser/configure.zcml:197
-#: /src/schooltool/demographics/browser/configure.zcml:258
-msgid "emergency1"
-msgstr "pohotovostni1"
-
-#: /src/schooltool/demographics/browser/configure.zcml:203
-#: /src/schooltool/demographics/browser/configure.zcml:264
-msgid "emergency2"
-msgstr "pohotovostni2"
-
-#: /src/schooltool/demographics/browser/configure.zcml:209
-#: /src/schooltool/demographics/browser/configure.zcml:270
-msgid "emergency3"
-msgstr "pohotovostni3"
-
-#: /src/schooltool/demographics/browser/configure.zcml:217
-msgid "Schooltool Person Display Menu"
-msgstr ""
-
-#: /src/schooltool/demographics/browser/demographics_macros.pt:4
-msgid "N"
-msgstr "N"
-
-#: /src/schooltool/demographics/browser/demographics_macros.pt:4
-msgid "Shortcut: Alt-N"
-msgstr ""
-
-#: /src/schooltool/demographics/browser/demographics_macros.pt:4
-#: /src/schooltool/demographics/browser/personform.py:96
-msgid "Apply and Next"
-msgstr "Potvrdit a přejít na další"
-
-#: /src/schooltool/demographics/browser/display_form.pt:3
-#: /src/schooltool/demographics/browser/nameinfo_view.pt:3
-#: /src/schooltool/demographics/browser/schooldata_view.pt:3
-#: /src/schooltool/demographics/browser/table.py:101
-#: /src/schooltool/demographics/browser/table.py:205
-msgid "Display"
-msgstr "Obrazovka"
-
-#. Default: ""
-#: /src/schooltool/demographics/browser/personform.py:148
-msgid "Change name information for ${fullname}"
-msgstr "Změnit informace o jméně u ${fullname}"
-
-#: /src/schooltool/demographics/browser/personform.py:164
-msgid "Change name"
-msgstr "Změnit jméno"
-
-#. Default: ""
-#: /src/schooltool/demographics/browser/personform.py:172
-msgid "Change demographics for ${fullname}"
-msgstr "Změnit demografii u ${fullname}"
-
-#. Default: ""
-#: /src/schooltool/demographics/browser/personform.py:188
-msgid "Change school data for ${fullname}"
-msgstr "Změnit data školy u ${fullname}"
-
-#: /src/schooltool/demographics/browser/personform.py:198
-msgid "School data"
-msgstr "Data školy"
-
-#. Default: ""
-#: /src/schooltool/demographics/browser/personform.py:209
-msgid "Change contact information for ${fullname}"
-msgstr "Změnit kontaktní informace u ${fullname}"
-
-#: /src/schooltool/demographics/browser/personform.py:217
-msgid "Contact information"
-msgstr "Kontaktní informace"
-
-#: /src/schooltool/demographics/browser/personform.py:273
-#: /src/schooltool/person/browser/person.py:539
-msgid "This username is already used!"
-msgstr "Toto uživatelské jméno se již používá!"
-
-#: /src/schooltool/demographics/browser/personform.py:333
-msgid "Invalid teacher. Possible causes: deleted or renamed."
-msgstr "Neplatný učitel. Možný důvod: byl odstraněn nebo přejmenován."
-
-#: /src/schooltool/demographics/browser/personform.py:365
-msgid "Invalid group. Possible causes: deleted or renamed."
-msgstr "Neplatná skupina. Možný důvod: byla odstraněna nebo přejmenována."
-
-#: /src/schooltool/demographics/browser/search.pt:6
-msgid ""
-"Search for persons here. Note that in fulltext fields you can use wildcard "
-"characters such as *. For example, to search for everyone with John in their "
-"name, use <em>*john*</em>."
-msgstr ""
-
-#: /src/schooltool/demographics/browser/search.pt:42
-msgid "There were no results."
-msgstr "Žádné výsledky."
-
-#: /src/schooltool/demographics/browser/table.py:73
-#: /src/schooltool/demographics/interfaces.py:76
-#: /src/schooltool/person/browser/person.py:497
-#: /src/schooltool/person/browser/person.py:586
-#: /src/schooltool/person/interfaces.py:51
-msgid "Full name"
-msgstr "Celé jméno"
-
-#: /src/schooltool/demographics/browser/table.py:78
-msgid "Birth"
-msgstr "Narození"
-
-#: /src/schooltool/demographics/browser/table.py:84
-msgid "Enrollment"
-msgstr "Zápis"
-
-#: /src/schooltool/demographics/browser/table.py:90
-msgid "Modified"
-msgstr "Změněn"
-
-#: /src/schooltool/demographics/interfaces.py:45
-msgid "Prefix such as Mr., Mrs."
-msgstr "Předpona jako Pan, Paní"
-
-#: /src/schooltool/demographics/interfaces.py:71
-msgid "Name by which the student prefers to be called"
-msgstr "Jméno, kterým si student přeje být oslovován"
-
-#: /src/schooltool/demographics/interfaces.py:81
-#: /src/schooltool/person/browser/person.py:513
-#: /src/schooltool/person/interfaces.py:55
-msgid "Photo"
-msgstr "Fotografie"
-
-#: /src/schooltool/demographics/interfaces.py:83
-#: /src/schooltool/person/browser/person.py:515
-#: /src/schooltool/person/interfaces.py:57
-msgid "Photo (in JPEG format)"
-msgstr "Fotofrafie (ve formátu JPEG)"
-
-#: /src/schooltool/demographics/interfaces.py:99
-msgid "American Indian or Alaska Native"
-msgstr "Americký indián nebo Aljašský domorodec"
-
-#: /src/schooltool/demographics/interfaces.py:100
-msgid "Asian"
-msgstr "Asiat"
-
-#: /src/schooltool/demographics/interfaces.py:101
-msgid "Black or African American"
-msgstr "Černoch nebo afroameričan"
-
-#: /src/schooltool/demographics/interfaces.py:102
-msgid "Native Hawaiian or Other Pacific Islander"
-msgstr "Hawajský nebo jiný pacifický ostrovní domorodec"
-
-#: /src/schooltool/demographics/interfaces.py:103
-msgid "White"
-msgstr "Bílá"
-
-#: /src/schooltool/demographics/interfaces.py:107
-msgid "English"
-msgstr "Angličtina"
-
-#: /src/schooltool/demographics/interfaces.py:108
-msgid "Spanish"
-msgstr "Španělština"
-
-#: /src/schooltool/demographics/interfaces.py:109
-msgid "Chinese"
-msgstr "Čínština"
-
-#: /src/schooltool/demographics/interfaces.py:110
-msgid "German"
-msgstr "Němčina"
-
-#: /src/schooltool/demographics/interfaces.py:111
-msgid "Tagalog"
-msgstr "Tagalština"
-
-#: /src/schooltool/demographics/interfaces.py:112
-msgid "Vietnamese"
-msgstr "Vietnamština"
-
-#: /src/schooltool/demographics/interfaces.py:113
-msgid "Italian"
-msgstr "Italština"
-
-#: /src/schooltool/demographics/interfaces.py:114
-msgid "Korean"
-msgstr "Korejština"
-
-#: /src/schooltool/demographics/interfaces.py:115
-msgid "Russian"
-msgstr "Ruština"
-
-#: /src/schooltool/demographics/interfaces.py:116
-msgid "Polish"
-msgstr "Polština"
-
-#: /src/schooltool/demographics/interfaces.py:117
-msgid "Arabic"
-msgstr "Arabština"
-
-#: /src/schooltool/demographics/interfaces.py:137
-msgid "Ethnicity"
-msgstr "Etnika"
-
-#: /src/schooltool/demographics/interfaces.py:143
-msgid "Primary language"
-msgstr "Hlavní jazyk"
-
-#: /src/schooltool/demographics/interfaces.py:149
-msgid "Special education"
-msgstr "Speciální výuka"
-
-#: /src/schooltool/demographics/interfaces.py:154
-msgid "Previous school"
-msgstr "Předchozí škola"
-
-#: /src/schooltool/demographics/interfaces.py:202
-msgid "Enrollment date"
-msgstr "Datum zápisu"
-
-#: /src/schooltool/demographics/interfaces.py:207
-msgid "Projected graduation year"
-msgstr "Plánovaný rok ukončení studia"
-
-#: /src/schooltool/demographics/interfaces.py:218
-msgid "Team"
-msgstr "Tým"
-
-#: /src/schooltool/demographics/interfaces.py:224
-msgid "Health information"
-msgstr "Zdravotní informace"
-
-#: /src/schooltool/demographics/interfaces.py:230
-msgid "parent"
-msgstr "rodič"
-
-#: /src/schooltool/demographics/interfaces.py:231
-msgid "guardian"
-msgstr "poručník"
-
-#: /src/schooltool/demographics/interfaces.py:232
-msgid "grandparent"
-msgstr "prarodič"
-
-#: /src/schooltool/demographics/interfaces.py:233
-msgid "step-parent"
-msgstr "nevlastní rodič"
-
-#: /src/schooltool/demographics/interfaces.py:234
-msgid "friend of family"
-msgstr "přítel rodiny"
-
-#: /src/schooltool/demographics/interfaces.py:235
-msgid "other"
-msgstr "jiný"
-
-#: /src/schooltool/demographics/interfaces.py:250
-msgid "Relationship to student"
-msgstr "Příbuzenský vztah ke studentovi"
-
-#: /src/schooltool/demographics/interfaces.py:256
-msgid "Street"
-msgstr "Ulice"
-
-#: /src/schooltool/demographics/interfaces.py:286
-msgid "Cell phone"
-msgstr "Mobilní telefon"
-
-#: /src/schooltool/demographics/interfaces.py:291
-#: /src/schooltool/note/notes.pt:2
-#: /src/schooltool/resource/interfaces.py:57
-msgid "Notes"
-msgstr "Poznámky"
-
-#: /src/schooltool/demographics/interfaces.py:302
-msgid "Full text search in name"
-msgstr "Fulltextové hledání ve jméně"
-
-#: /src/schooltool/demographics/interfaces.py:307
-msgid "Name of parent"
-msgstr "Jméno rodiče"
-
-#: /src/schooltool/demographics/interfaces.py:308
-msgid "Full text search in parent names"
-msgstr "Fulltextové hledání ve jménech rodičů"
-
-#: /src/schooltool/demographics/interfaces.py:313
-msgid "Student ID"
-msgstr "ID studenta"
-
-#: /src/schooltool/demographics/utility.py:96
-msgid "Surname"
-msgstr "Příjmení"
-
 #: /src/schooltool/devmode/configure.zcml:52
 #: /src/schooltool/devmode/devmode.pt:20
 msgid "Sample data"
@@ -5485,7 +5183,27 @@ msgstr ""
 msgid "API Docs"
 msgstr "Dokumenty API"
 
-#: /src/schooltool/email/browser/configure.zcml:54
+#: /src/schooltool/devmode/f_unauthorized.pt:3
+#: /src/schooltool/skin/templates/f_unauthorized.pt:3
+msgid "You are not authorized"
+msgstr ""
+
+#: /src/schooltool/devmode/f_unauthorized.pt:9
+msgid "Permission checks"
+msgstr ""
+
+#: /src/schooltool/devmode/f_unauthorized.pt:11
+msgid ""
+"Most recent checks last. Red indicates insufficient permissions. \"=>\" "
+"indicates relayed checks, usually to parent object."
+msgstr ""
+
+#: /src/schooltool/devmode/flourish-overrides.zcml:8
+#: /src/schooltool/skin/flourish/instance/skin.zcml:68
+msgid "Unauthorized"
+msgstr ""
+
+#: /src/schooltool/email/browser/configure.zcml:58
 #: /src/schooltool/email/browser/flourish.zcml:20
 #: /src/schooltool/email/browser/flourish.zcml:27
 #: /src/schooltool/email/browser/flourish.zcml:141
@@ -5916,11 +5634,11 @@ msgstr ""
 msgid "is the same homeroom period id as another in this day"
 msgstr ""
 
-#: /src/schooltool/export/importer.py:97
-msgid "must be either 'Location' or 'Resource'"
+#: /src/schooltool/export/importer.py:99
+msgid "must be either 'Location', 'Equipment' or 'Resource'"
 msgstr ""
 
-#: /src/schooltool/export/importer.py:98
+#: /src/schooltool/export/importer.py:100
 msgid "is not a valid term in the given school year"
 msgstr ""
 
@@ -6110,11 +5828,6 @@ msgstr ""
 
 #: /src/schooltool/group/browser/group.py:291
 msgid "Available groups"
-msgstr ""
-
-#. Default: ""
-#: /src/schooltool/group/browser/group.py:397
-msgid "${group}'s"
 msgstr ""
 
 #. Default: ""
@@ -6400,6 +6113,11 @@ msgstr "Soukromé"
 msgid "Public"
 msgstr "Veřejné"
 
+#: /src/schooltool/note/notes.pt:2
+#: /src/schooltool/resource/interfaces.py:57
+msgid "Notes"
+msgstr "Poznámky"
+
 #: /src/schooltool/note/notes.pt:8
 msgid "( p )"
 msgstr "( p )"
@@ -6415,6 +6133,13 @@ msgstr ""
 #: /src/schooltool/person/browser/csvimport.py:51
 msgid "fullname may not be empty"
 msgstr "celé jméno nemůže být prázdné"
+
+#: /src/schooltool/person/browser/f_password_changed.pt:1
+#: /src/schooltool/person/browser/person.py:363
+msgid ""
+"Password changed successfully. Next, you will be required to authenticate "
+"with your new credentials"
+msgstr ""
 
 #: /src/schooltool/person/browser/f_person_filter.pt:7
 msgid "First name, last name or username"
@@ -6524,13 +6249,8 @@ msgstr "Upravit heslo"
 msgid "No new password was supplied so original password is unchanged"
 msgstr "Nebylo zadáno žádné nové heslo, původní heslo je nezměněno."
 
-#: /src/schooltool/person/browser/person.py:337
-msgid ""
-"Password changed successfully. Next, you will be required to authenticate "
-"with your new credentials"
-msgstr ""
-
-#: /src/schooltool/person/browser/person.py:341
+#: /src/schooltool/person/browser/person.py:372
+#: /src/schooltool/person/browser/person.py:376
 msgid "Password changed successfully"
 msgstr ""
 
@@ -6543,8 +6263,14 @@ msgstr ""
 msgid "Wrong password supplied"
 msgstr ""
 
-#: /src/schooltool/person/browser/person.py:498
-#: /src/schooltool/person/browser/person.py:587
+#: /src/schooltool/person/browser/person.py:507
+#: /src/schooltool/person/browser/person.py:596
+#: /src/schooltool/person/interfaces.py:51
+msgid "Full name"
+msgstr "Celé jméno"
+
+#: /src/schooltool/person/browser/person.py:508
+#: /src/schooltool/person/browser/person.py:597
 #: /src/schooltool/person/interfaces.py:52
 msgid "Name that should be displayed"
 msgstr "Jméno, které se má zobrazovat"
@@ -6554,11 +6280,25 @@ msgstr "Jméno, které se má zobrazovat"
 msgid "Verify password"
 msgstr "Ověřit heslo"
 
-#: /src/schooltool/person/browser/person.py:536
+#: /src/schooltool/person/browser/person.py:523
+#: /src/schooltool/person/interfaces.py:55
+msgid "Photo"
+msgstr "Fotografie"
+
+#: /src/schooltool/person/browser/person.py:525
+#: /src/schooltool/person/interfaces.py:57
+msgid "Photo (in JPEG format)"
+msgstr "Fotofrafie (ve formátu JPEG)"
+
+#: /src/schooltool/person/browser/person.py:546
 msgid "Passwords do not match!"
 msgstr "Hesla nesouhlasí!"
 
-#: /src/schooltool/person/browser/person.py:590
+#: /src/schooltool/person/browser/person.py:549
+msgid "This username is already used!"
+msgstr "Toto uživatelské jméno se již používá!"
+
+#: /src/schooltool/person/browser/person.py:600
 msgid "New photo"
 msgstr "Nová fotografie"
 
@@ -6941,12 +6681,7 @@ msgid "Edit equipment"
 msgstr ""
 
 #. Default: ""
-#: /src/schooltool/resource/browser/resource.py:814
-msgid "${resource_title}'s"
-msgstr ""
-
-#. Default: ""
-#: /src/schooltool/resource/browser/resource.py:858
+#: /src/schooltool/resource/browser/resource.py:859
 msgid "Delete ${resource_title}"
 msgstr ""
 
@@ -7327,6 +7062,10 @@ msgstr ""
 msgid "To continue setting up your school please ${add_schoolyear}."
 msgstr ""
 
+#: /src/schooltool/schoolyear/browser/templates/f_manage_year_overview.pt:5
+msgid "Manage year"
+msgstr ""
+
 #: /src/schooltool/schoolyear/browser/templates/f_schoolyear.pt:5
 msgid "Edit this school year's information"
 msgstr ""
@@ -7493,8 +7232,12 @@ msgid "Resource calendars"
 msgstr ""
 
 #: /src/schooltool/securitypolicy/browser/views.py:67
-msgid "Student grades"
-msgstr ""
+msgid "Gradebook"
+msgstr "Třídní kniha"
+
+#: /src/schooltool/securitypolicy/browser/views.py:68
+msgid "Journal"
+msgstr "Deník"
 
 #: /src/schooltool/securitypolicy/crowds.py:199
 msgid "Everybody"
@@ -7548,10 +7291,6 @@ msgstr "Chyba serveru"
 msgid "Not Found"
 msgstr "Nenalezeno"
 
-#: /src/schooltool/skin/flourish/instance/skin.zcml:68
-msgid "Unauthorized"
-msgstr ""
-
 #: /src/schooltool/skin/flourish/templates/main.pt:82
 msgid "server running"
 msgstr ""
@@ -7595,17 +7334,9 @@ msgstr "Můžete mít nesprávně napsanou URL adresu"
 msgid "You might be trying to access a non-existing page"
 msgstr "Můžete se pokoušet přejít na neexistující stránku"
 
-#: /src/schooltool/skin/templates/f_unauthorized.pt:3
-msgid "You are not authorized"
-msgstr ""
-
 #: /src/schooltool/skin/templates/generic_macros.pt:12
 msgid "Server Running SchoolTool"
 msgstr "Server spouští SchoolTool"
-
-#: /src/schooltool/skin/templates/view_macros.pt:50
-msgid "Log In"
-msgstr "Přihlásit se"
 
 #: /src/schooltool/skin/templates/view_macros.pt:58
 msgid "Logged in as:"
@@ -8649,6 +8380,3 @@ msgstr "Školní rozvrhy"
 #: /src/schooltool/widget/password.py:55
 msgid "Supplied passwords are not identical"
 msgstr "Poskytnutá hesla nejsou identická"
-
-#~ msgid "Changed password"
-#~ msgstr "Heslo změněno"

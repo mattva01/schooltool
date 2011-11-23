@@ -2,15 +2,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: schooltool-developers@lists.launchpad.net\n"
-"POT-Creation-Date: 2011-10-01 14:51-0600\n"
-"PO-Revision-Date: 2011-10-03 16:12+0000\n"
+"POT-Creation-Date: 2011-11-22 22:28+0200\n"
+"PO-Revision-Date: 2011-11-23 00:24+0000\n"
 "Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
 "Language-Team: Traditional Chinese <zh_TW@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-10-06 05:03+0000\n"
-"X-Generator: Launchpad (build 14085)\n"
+"X-Launchpad-Export-Date: 2011-11-23 06:15+0000\n"
+"X-Generator: Launchpad (build 14336)\n"
 "Language: zh\n"
 
 #: /src/schooltool/app/app.py:193
@@ -101,8 +101,6 @@ msgstr ""
 #: /src/schooltool/app/browser/app.py:528
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:31
 #: /src/schooltool/basicperson/browser/person.py:511
-#: /src/schooltool/demographics/browser/personform.py:92
-#: /src/schooltool/demographics/browser/personform.py:270
 #: /src/schooltool/email/browser/email.py:211
 #: /src/schooltool/level/browser/level.py:90
 #: /src/schooltool/person/browser/person.py:160
@@ -140,8 +138,6 @@ msgstr "應用"
 #: /src/schooltool/course/browser/section.py:1270
 #: /src/schooltool/course/browser/section.py:1292
 #: /src/schooltool/course/browser/templates/extend_term.pt:29
-#: /src/schooltool/demographics/browser/personform.py:107
-#: /src/schooltool/demographics/browser/personform.py:301
 #: /src/schooltool/email/browser/email.py:179
 #: /src/schooltool/email/browser/email.py:220
 #: /src/schooltool/email/browser/email.py:361
@@ -196,8 +192,6 @@ msgid "School Name"
 msgstr ""
 
 #: /src/schooltool/app/browser/app.py:557
-#: /src/schooltool/demographics/interfaces.py:245
-#: /src/schooltool/demographics/utility.py:88
 msgid "Name"
 msgstr "姓名"
 
@@ -264,19 +258,7 @@ msgstr "否"
 msgid "Pack Database"
 msgstr ""
 
-#: /src/schooltool/app/browser/app.py:877
-msgid "Live"
-msgstr ""
-
-#: /src/schooltool/app/browser/app.py:887
-msgid "Unknown"
-msgstr ""
-
-#: /src/schooltool/app/browser/app.py:889
-msgid "Backup"
-msgstr ""
-
-#: /src/schooltool/app/browser/app.py:909
+#: /src/schooltool/app/browser/app.py:894
 msgid "Database successfully packed."
 msgstr ""
 
@@ -366,7 +348,7 @@ msgstr "十一月"
 msgid "December"
 msgstr "十二月"
 
-#: /src/schooltool/app/browser/cal.py:128
+#: /src/schooltool/app/browser/cal.py:132
 #: /src/schooltool/person/interfaces.py:176
 #: /src/schooltool/term/browser/templates/f_term.pt:30
 #: /src/schooltool/term/browser/templates/f_term_add.pt:42
@@ -1063,10 +1045,16 @@ msgstr "轉換 ${line_no} 行成unicode時發生錯誤"
 msgid "SchoolTool"
 msgstr "SchoolTool"
 
-#: /src/schooltool/app/browser/flourish.zcml:186
+#: /src/schooltool/app/browser/flourish.zcml:54
+#: /src/schooltool/app/browser/flourish.zcml:63
+#: /src/schooltool/skin/templates/view_macros.pt:50
+msgid "Log In"
+msgstr "登入"
+
+#: /src/schooltool/app/browser/flourish.zcml:197
 #: /src/schooltool/app/browser/templates/f_errors.pt:3
 #: /src/schooltool/basicperson/browser/flourish.zcml:69
-#: /src/schooltool/email/browser/configure.zcml:76
+#: /src/schooltool/email/browser/configure.zcml:80
 #: /src/schooltool/email/browser/email.py:204
 msgid "Settings"
 msgstr "設定"
@@ -1104,9 +1092,6 @@ msgstr ""
 #: /src/schooltool/course/browser/templates/f_section_view.pt:92
 #: /src/schooltool/course/browser/templates/f_section_view.pt:118
 #: /src/schooltool/course/browser/templates/f_section_view.pt:133
-#: /src/schooltool/demographics/browser/configure.zcml:22
-#: /src/schooltool/demographics/browser/table.py:100
-#: /src/schooltool/demographics/browser/table.py:196
 #: /src/schooltool/email/browser/templates/f_email_container.pt:9
 #: /src/schooltool/group/browser/flourish.zcml:173
 #: /src/schooltool/group/browser/templates/f_group_view.pt:8
@@ -1191,14 +1176,7 @@ msgstr ""
 msgid "Database generations"
 msgstr ""
 
-#: /src/schooltool/app/browser/flourish.zcml:528
-#: /src/schooltool/app/browser/flourish.zcml:553
-#: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:7
-#: /src/schooltool/app/browser/templates/f_server_settings_overview.pt:12
-msgid "Database"
-msgstr ""
-
-#: /src/schooltool/app/browser/flourish.zcml:621
+#: /src/schooltool/app/browser/flourish.zcml:607
 msgid "Shown Calendars"
 msgstr ""
 
@@ -1310,10 +1288,15 @@ msgstr "開發人員領隊："
 
 #: /src/schooltool/app/browser/templates/about.pt:44
 #: /src/schooltool/app/browser/templates/f_about.pt:33
+msgid "Core Developers:"
+msgstr ""
+
+#: /src/schooltool/app/browser/templates/about.pt:47
+#: /src/schooltool/app/browser/templates/f_about.pt:37
 msgid "Release Manager:"
 msgstr "發行管理者"
 
-#: /src/schooltool/app/browser/templates/about.pt:47
+#: /src/schooltool/app/browser/templates/about.pt:50
 msgid "Contributors:"
 msgstr "貢獻人："
 
@@ -1489,7 +1472,6 @@ msgstr "反轉選取按鈕"
 #: /src/schooltool/course/browser/templates/f_link_existing.pt:89
 #: /src/schooltool/course/browser/templates/link_section.pt:49
 #: /src/schooltool/course/browser/templates/section_container.pt:29
-#: /src/schooltool/demographics/browser/table.pt:34
 #: /src/schooltool/level/browser/templates/f_levels_reorder.pt:36
 #: /src/schooltool/level/browser/templates/f_levels_view.pt:24
 #: /src/schooltool/schoolyear/browser/templates/f_table_container.pt:8
@@ -1965,58 +1947,11 @@ msgstr "確認"
 msgid "Done"
 msgstr "完成"
 
-#: /src/schooltool/app/browser/templates/f_database.pt:5
-msgid "Please wait for confirmation that the database has been packed."
-msgstr ""
-
-#: /src/schooltool/app/browser/templates/f_database.pt:20
-msgid "Path"
-msgstr ""
-
-#: /src/schooltool/app/browser/templates/f_database.pt:21
-#: /src/schooltool/course/browser/section.py:995
-msgid "Size"
-msgstr ""
-
-#: /src/schooltool/app/browser/templates/f_database_related.pt:2
-#: /src/schooltool/app/browser/templates/f_generations_related.pt:2
-#: /src/schooltool/contact/browser/templates/f_contacts_related.pt:2
-#: /src/schooltool/course/browser/templates/f_courses_related.pt:2
-#: /src/schooltool/course/browser/templates/f_sections_related.pt:2
-#: /src/schooltool/email/browser/templates/f_email_container_related.pt:2
-#: /src/schooltool/export/templates/f_import_related.pt:2
-#: /src/schooltool/level/browser/templates/f_levels_related.pt:2
-#: /src/schooltool/resource/browser/templates/f_resource_container_related.pt:2
-#: /src/schooltool/resource/browser/templates/f_resource_demographics_related.pt:2
-#: /src/schooltool/term/browser/templates/f_terms_related.pt:2
-#: /src/schooltool/timetable/browser/templates/f_specialday_related.pt:2
-#: /src/schooltool/timetable/browser/templates/f_timetable_container_related.pt:2
-msgid "What is This?"
-msgstr ""
-
-#: /src/schooltool/app/browser/templates/f_database_related.pt:6
-msgid ""
-"SchoolTool's database file should be periodically \"packed\" to reduce its "
-"filesize."
-msgstr ""
-
-#: /src/schooltool/app/browser/templates/f_database_related.pt:9
-msgid ""
-"Packing removes old transactions from the database. It can take a long time "
-"on a large database, so packing should be done in off-peak times."
-msgstr ""
-
-#: /src/schooltool/app/browser/templates/f_database_related.pt:14
-msgid "Before packing, a backup file will be saved as Data.fs.old"
-msgstr ""
-
 #: /src/schooltool/app/browser/templates/f_edit_relationships.pt:25
-#: /src/schooltool/basicperson/browser/templates/container.pt:37
+#: /src/schooltool/basicperson/browser/templates/container.pt:32
 #: /src/schooltool/course/browser/templates/course_container.pt:28
 #: /src/schooltool/course/browser/templates/f_courses.pt:14
 #: /src/schooltool/course/browser/templates/f_sections.pt:14
-#: /src/schooltool/demographics/browser/search.pt:30
-#: /src/schooltool/demographics/browser/table.pt:23
 #: /src/schooltool/email/browser/templates/email_container.pt:33
 #: /src/schooltool/group/browser/templates/f_groups.pt:14
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:43
@@ -2092,6 +2027,21 @@ msgstr ""
 msgid "Request"
 msgstr ""
 
+#: /src/schooltool/app/browser/templates/f_generations_related.pt:2
+#: /src/schooltool/contact/browser/templates/f_contacts_related.pt:2
+#: /src/schooltool/course/browser/templates/f_courses_related.pt:2
+#: /src/schooltool/course/browser/templates/f_sections_related.pt:2
+#: /src/schooltool/email/browser/templates/f_email_container_related.pt:2
+#: /src/schooltool/export/templates/f_import_related.pt:2
+#: /src/schooltool/level/browser/templates/f_levels_related.pt:2
+#: /src/schooltool/resource/browser/templates/f_resource_container_related.pt:2
+#: /src/schooltool/resource/browser/templates/f_resource_demographics_related.pt:2
+#: /src/schooltool/term/browser/templates/f_terms_related.pt:2
+#: /src/schooltool/timetable/browser/templates/f_specialday_related.pt:2
+#: /src/schooltool/timetable/browser/templates/f_timetable_container_related.pt:2
+msgid "What is This?"
+msgstr ""
+
 #: /src/schooltool/app/browser/templates/f_generations_related.pt:6
 msgid ""
 "Database generations update the structure of your database to be compatible "
@@ -2134,9 +2084,6 @@ msgstr "使用者資訊"
 #: /src/schooltool/basicperson/browser/person.py:117
 #: /src/schooltool/basicperson/browser/person.py:163
 #: /src/schooltool/basicperson/browser/person.py:368
-#: /src/schooltool/demographics/browser/personform.py:253
-#: /src/schooltool/demographics/browser/personform.py:254
-#: /src/schooltool/demographics/browser/table.py:67
 #: /src/schooltool/email/browser/email.py:119
 #: /src/schooltool/email/interfaces.py:104
 #: /src/schooltool/person/browser/person.py:501
@@ -2148,7 +2095,6 @@ msgstr "用戶名"
 #: /src/schooltool/app/browser/templates/f_login.pt:62
 #: /src/schooltool/app/browser/templates/login.pt:44
 #: /src/schooltool/basicperson/browser/person.py:168
-#: /src/schooltool/demographics/browser/personform.py:258
 #: /src/schooltool/email/browser/email.py:124
 #: /src/schooltool/person/browser/flourish.zcml:17
 #: /src/schooltool/person/browser/flourish.zcml:61
@@ -2198,7 +2144,6 @@ msgstr ""
 #: /src/schooltool/contact/browser/templates/f_contact_filter.pt:2
 #: /src/schooltool/course/browser/templates/f_course_filter.pt:2
 #: /src/schooltool/course/browser/templates/f_section_filter.pt:2
-#: /src/schooltool/demographics/overrides.zcml:22
 #: /src/schooltool/group/browser/templates/f_group_filter.pt:2
 #: /src/schooltool/person/browser/f_person_filter.pt:3
 #: /src/schooltool/person/browser/f_person_filter.pt:36
@@ -2206,6 +2151,11 @@ msgstr ""
 #: /src/schooltool/resource/browser/templates/f_resource_filter.pt:36
 msgid "Search"
 msgstr "搜索"
+
+#: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:7
+#: /src/schooltool/app/browser/templates/f_server_settings_overview.pt:12
+msgid "Database"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:11
 #: /src/schooltool/app/browser/templates/f_server_settings_overview.pt:16
@@ -2273,11 +2223,22 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_section_csvimport_description.pt:21
 msgid ""
-"Each section description's first row contains the <strong>course id</strong> "
-"and the <strong>instructor username</strong> for the new section."
+"Each section description's first row contains the <strong>course SchoolTool "
+"ID</strong> and the <strong>instructor username</strong> for the new section."
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_section_csvimport_description.pt:27
+msgid ""
+"If you want to update the sections instead, in section description's first "
+"row you should specify: <strong>course SchoolTool ID</strong>, "
+"<strong>instructor username</strong> and then <strong>section SchoolTool "
+"ID</strong> for corresponding sections in each term. <strong>Note:</strong> "
+"if your school has, say, 5 consecutive terms and you specify terms \"2\", "
+"\"4\" in the top of csv, you will need to provide 3 section ids, for terms "
+"\"2\", \"3\" and \"4\" respectively."
+msgstr ""
+
+#: /src/schooltool/app/browser/templates/f_section_csvimport_description.pt:34
 msgid ""
 "Then a number of rows specifying the section schedule <strong>may</strong> "
 "follow. First there's a row containing the <strong>timetable id</strong>. "
@@ -2308,8 +2269,8 @@ msgstr ""
 msgid "Example:"
 msgstr "示例："
 
-#. Default: "\"Fall\", \"Spring\" \"\",\"\",\"\" \"philosophy\",\"lorch\" \"weekly-timetable\" \"Monday\",\"A\" \"Monday\",\"B\" \"Tuesday\",\"B\" \"***\" \"johnny\" \"billy\" \"\" \"literature\",\"guzman\" \"***\" \"johnny\" \"pete\""
-#: /src/schooltool/app/browser/templates/f_section_csvimport_description.pt:45
+#. Default: "\"Fall\", \"Spring\" \"\",\"\",\"\" \"philosophy\",\"lorch\" \"weekly-timetable\" \"Monday\",\"A\" \"Monday\",\"B\" \"Tuesday\",\"B\" \"***\" \"johnny\" \"billy\" \"\" \"literature\",\"guzman\",\"literature-f\",\"literature-s\" \"***\" \"johnny\" \"pete\""
+#: /src/schooltool/app/browser/templates/f_section_csvimport_description.pt:52
 msgid ""
 "\n"
 "\"Fall\", \"Spring\"\n"
@@ -2323,24 +2284,30 @@ msgid ""
 "\"johnny\"\n"
 "\"billy\"\n"
 "\"\"\n"
-"\"literature\",\"guzman\"\n"
+"\"literature\",\"guzman\",\"literature-f\",\"literature-s\"\n"
 "\"***\"\n"
 "\"johnny\"\n"
 "\"pete\"\n"
 msgstr ""
 
-#: /src/schooltool/app/browser/templates/f_section_csvimport_description.pt:63
+#: /src/schooltool/app/browser/templates/f_section_csvimport_description.pt:70
 msgid ""
 "The above example will create sections for philosophy and literature "
 "lectures. Sections will be taught from fall term to spring term. The section "
 "for the philosophy lecture will have persons with user names 'johnny' and "
 "'billy' as learners. It will also be scheduled on Monday (two lessons, "
 "periods 'A' and 'B') and Tuesday. The literature section will be processed "
-"in a similar fashion, but will have no defined schedule."
+"in a similar fashion, but will have no defined schedule. The literature "
+"SchoolTool IDs will be set to literature-f in Fall and literature-s in "
+"Spring."
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_server_settings_overview.pt:3
 msgid "Server Information"
+msgstr ""
+
+#: /src/schooltool/app/browser/templates/f_settings.pt:5
+msgid "Please wait for confirmation that the database has been packed."
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_translationdomaincontrol.pt:13
@@ -2629,15 +2596,15 @@ msgid "Row 2 is not empty"
 msgstr "第二行不是空白"
 
 #. Default: ""
-#: /src/schooltool/app/browser/timetablecsvimport.py:181
+#: /src/schooltool/app/browser/timetablecsvimport.py:182
 msgid ""
-"Wrong section header on line ${line_no} (it should contain a course id and "
-"an instructor id)"
-msgstr "行 ${line_no}包含錯誤的班別標題 (應該包含程式id和老師id)"
+"Wrong section header on line ${line_no} (it should contain a course id, an "
+"instructor id and optional SchoolTool section IDs for each of the terms)"
+msgstr ""
 
 #. Default: ""
-#: /src/schooltool/app/browser/timetablecsvimport.py:212
-#: /src/schooltool/app/browser/timetablecsvimport.py:223
+#: /src/schooltool/app/browser/timetablecsvimport.py:220
+#: /src/schooltool/app/browser/timetablecsvimport.py:231
 msgid ""
 "Malformed line ${line_no} (it should contain either a timetable id or day id "
 "and a period id)"
@@ -2949,7 +2916,6 @@ msgstr "改變時間安排"
 #: /src/schooltool/course/browser/configure.zcml:69
 #: /src/schooltool/course/security.zcml:94
 #: /src/schooltool/course/security.zcml:128
-#: /src/schooltool/demographics/browser/configure.zcml:13
 #: /src/schooltool/group/security.zcml:76
 #: /src/schooltool/person/browser/configure.zcml:204
 #: /src/schooltool/person/security.zcml:87
@@ -2981,7 +2947,6 @@ msgid "Advisees"
 msgstr "選課學生"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:101
-#: /src/schooltool/demographics/overrides.zcml:7
 #: /src/schooltool/person/browser/configure.zcml:172
 #: /src/schooltool/person/browser/configure.zcml:181
 msgid "New Person"
@@ -2999,7 +2964,6 @@ msgstr "新增多人"
 #: /src/schooltool/basicperson/browser/person.py:551
 #: /src/schooltool/basicperson/browser/person.py:933
 #: /src/schooltool/basicperson/security.zcml:22
-#: /src/schooltool/demographics/browser/personform.py:180
 msgid "Demographics"
 msgstr "人口統計"
 
@@ -3066,7 +3030,6 @@ msgstr "用戶名已存在：${username}"
 
 #: /src/schooltool/basicperson/browser/csvimport.py:79
 #: /src/schooltool/basicperson/browser/person.py:206
-#: /src/schooltool/demographics/browser/personform.py:280
 #: /src/schooltool/person/browser/csvimport.py:70
 msgid "Names cannot begin with '+' or '@' or contain '/'"
 msgstr "名字無法開始于'+'、'@'或者包含'/'象徵式"
@@ -3115,7 +3078,6 @@ msgid "Selection"
 msgstr ""
 
 #: /src/schooltool/basicperson/browser/demographics.py:312
-#: /src/schooltool/demographics/interfaces.py:301
 msgid "Text"
 msgstr "文字"
 
@@ -3232,12 +3194,7 @@ msgstr "首頁"
 msgid "Person index"
 msgstr "人員索引"
 
-#. Default: ""
-#: /src/schooltool/basicperson/browser/person.py:132
-msgid "${person_full_name}'s"
-msgstr ""
-
-#: /src/schooltool/basicperson/browser/person.py:152
+#: /src/schooltool/basicperson/browser/person.py:151
 #: /src/schooltool/basicperson/browser/templates/f_manage_people_overview.pt:19
 #: /src/schooltool/group/browser/flourish.zcml:70
 #: /src/schooltool/group/browser/flourish.zcml:79
@@ -3253,7 +3210,6 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/basicperson/browser/person.py:158
-#: /src/schooltool/demographics/interfaces.py:212
 msgid "Advisor"
 msgstr "指導老師"
 
@@ -3387,8 +3343,6 @@ msgstr "學年"
 #: /src/schooltool/basicperson/browser/templates/container.pt:42
 #: /src/schooltool/course/browser/templates/course_container.pt:40
 #: /src/schooltool/course/browser/templates/section_container.pt:83
-#: /src/schooltool/demographics/browser/search.pt:35
-#: /src/schooltool/demographics/browser/table.pt:28
 #: /src/schooltool/email/browser/templates/email_container.pt:48
 #: /src/schooltool/schoolyear/browser/templates/schoolyear.pt:42
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:48
@@ -3451,19 +3405,6 @@ msgstr ""
 "上面的示例將建立三個名為 'jjones'、'jbjones' 和 'howard' 的用戶。三個中只有 'jbjones' 擁有密碼 "
 "('r2m45J') 能登入系統。注意密碼必須以純字檔形式傳送。"
 
-#: /src/schooltool/basicperson/browser/templates/f_demographicsViewlet.pt:2
-msgid "Attributes"
-msgstr ""
-
-#: /src/schooltool/basicperson/browser/templates/f_demographicsViewlet.pt:5
-msgid "Demographics and other personal data"
-msgstr ""
-
-#: /src/schooltool/basicperson/browser/templates/f_demographicsViewlet.pt:6
-#: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:6
-msgid "Edit this person's information"
-msgstr ""
-
 #: /src/schooltool/basicperson/browser/templates/f_demographics_reorder.pt:8
 msgid "Order"
 msgstr ""
@@ -3471,7 +3412,6 @@ msgstr ""
 #: /src/schooltool/basicperson/browser/templates/f_demographics_reorder.pt:10
 #: /src/schooltool/basicperson/browser/templates/f_demographics_view.pt:6
 #: /src/schooltool/basicperson/interfaces.py:136
-#: /src/schooltool/demographics/interfaces.py:197
 msgid "ID"
 msgstr "ID"
 
@@ -3522,6 +3462,15 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:2
 msgid "General Information"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:6
+#: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:25
+msgid "Edit this person's information"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:24
+msgid "Demographics and other personal data"
 msgstr ""
 
 #: /src/schooltool/basicperson/browser/templates/f_manage_people_overview.pt:4
@@ -3608,60 +3557,82 @@ msgstr "確認"
 msgid "Person info: ${title}"
 msgstr "人員資訊：${title}"
 
-#: /src/schooltool/basicperson/interfaces.py:37
+#: /src/schooltool/basicperson/demographics.py:143
+msgid "Ethnicity"
+msgstr "民族/種族"
+
+#: /src/schooltool/basicperson/demographics.py:144
+msgid "American Indian or Alaska Native"
+msgstr "美洲印第安人或阿拉斯加土著"
+
+#: /src/schooltool/basicperson/demographics.py:145
+msgid "Asian"
+msgstr "亞洲人"
+
+#: /src/schooltool/basicperson/demographics.py:146
+msgid "Black or African American"
+msgstr "黑人非或洲裔美國人"
+
+#: /src/schooltool/basicperson/demographics.py:147
+msgid "Native Hawaiian or Other Pacific Islander"
+msgstr "夏威夷人土著或其他太平洋島嶼"
+
+#: /src/schooltool/basicperson/demographics.py:148
+msgid "White"
+msgstr "白"
+
+#: /src/schooltool/basicperson/demographics.py:150
+msgid "Place of birth"
+msgstr ""
+
+#: /src/schooltool/basicperson/demographics.py:151
+msgid "Citizenship"
+msgstr ""
+
+#: /src/schooltool/basicperson/interfaces.py:38
 #: /src/schooltool/contact/interfaces.py:40
-#: /src/schooltool/demographics/interfaces.py:44
 msgid "Prefix"
 msgstr "前置"
 
 #: /src/schooltool/basicperson/interfaces.py:42
 #: /src/schooltool/contact/browser/templates/filter.pt:5
 #: /src/schooltool/contact/interfaces.py:42
-#: /src/schooltool/demographics/interfaces.py:50
 msgid "First name"
 msgstr "名"
 
 #: /src/schooltool/basicperson/interfaces.py:47
 #: /src/schooltool/contact/interfaces.py:44
-#: /src/schooltool/demographics/interfaces.py:55
 msgid "Middle name"
 msgstr "中間名"
 
 #: /src/schooltool/basicperson/interfaces.py:52
 #: /src/schooltool/contact/browser/templates/filter.pt:12
 #: /src/schooltool/contact/interfaces.py:46
-#: /src/schooltool/demographics/interfaces.py:60
 msgid "Last name"
 msgstr "姓"
 
 #: /src/schooltool/basicperson/interfaces.py:57
 #: /src/schooltool/contact/interfaces.py:48
-#: /src/schooltool/demographics/interfaces.py:65
 msgid "Suffix"
 msgstr "字尾"
 
 #: /src/schooltool/basicperson/interfaces.py:62
-#: /src/schooltool/demographics/interfaces.py:70
 msgid "Preferred name"
 msgstr "偏好名稱"
 
 #: /src/schooltool/basicperson/interfaces.py:67
-#: /src/schooltool/demographics/interfaces.py:126
 msgid "Gender"
 msgstr "性別"
 
 #: /src/schooltool/basicperson/interfaces.py:68
-#: /src/schooltool/demographics/interfaces.py:127
-msgid "female"
+msgid "Female"
 msgstr "女性"
 
 #: /src/schooltool/basicperson/interfaces.py:68
-#: /src/schooltool/demographics/interfaces.py:127
-msgid "male"
+msgid "Male"
 msgstr "男性"
 
 #: /src/schooltool/basicperson/interfaces.py:73
-#: /src/schooltool/demographics/interfaces.py:132
 msgid "Birth date"
 msgstr "出生日期"
 
@@ -3747,7 +3718,27 @@ msgstr "教師"
 msgid "Administrators"
 msgstr "管理員"
 
-#: /src/schooltool/calendar/browser/calendar.py:193
+#: /src/schooltool/calendar/browser/calendar.py:173
+msgid "Tomorrow"
+msgstr ""
+
+#: /src/schooltool/calendar/browser/calendar.py:175
+msgid "Yesterday"
+msgstr ""
+
+#: /src/schooltool/calendar/browser/calendar.py:195
+msgid "This Week"
+msgstr ""
+
+#: /src/schooltool/calendar/browser/calendar.py:197
+msgid "Last Week"
+msgstr ""
+
+#: /src/schooltool/calendar/browser/calendar.py:199
+msgid "Next Week"
+msgstr ""
+
+#: /src/schooltool/calendar/browser/calendar.py:236
 msgid "Jump To"
 msgstr ""
 
@@ -4182,12 +4173,10 @@ msgid "Address line 2"
 msgstr "位址行 2"
 
 #: /src/schooltool/contact/interfaces.py:57
-#: /src/schooltool/demographics/interfaces.py:261
 msgid "City"
 msgstr "城市"
 
 #: /src/schooltool/contact/interfaces.py:59
-#: /src/schooltool/demographics/interfaces.py:266
 msgid "State"
 msgstr "省/直轄市/自治區"
 
@@ -4196,17 +4185,14 @@ msgid "Country"
 msgstr "國家"
 
 #: /src/schooltool/contact/interfaces.py:63
-#: /src/schooltool/demographics/interfaces.py:271
 msgid "Postal code"
 msgstr "郵政編碼"
 
 #: /src/schooltool/contact/interfaces.py:73
-#: /src/schooltool/demographics/interfaces.py:276
 msgid "Home phone"
 msgstr "家庭電話"
 
 #: /src/schooltool/contact/interfaces.py:75
-#: /src/schooltool/demographics/interfaces.py:281
 msgid "Work phone"
 msgstr "工作電話"
 
@@ -4214,7 +4200,15 @@ msgstr "工作電話"
 msgid "Mobile phone"
 msgstr "移動電話"
 
-#: /src/schooltool/contact/interfaces.py:102
+#: /src/schooltool/contact/interfaces.py:82
+msgid "Other 1"
+msgstr ""
+
+#: /src/schooltool/contact/interfaces.py:84
+msgid "Other 2"
+msgstr ""
+
+#: /src/schooltool/contact/interfaces.py:109
 msgid "Contact's relationship with the person"
 msgstr "聯繫人與此人的關係"
 
@@ -4360,14 +4354,14 @@ msgid "Titles may not be empty"
 msgstr "標題無法為空"
 
 #. Default: ""
-#: /src/schooltool/course/browser/csvimport.py:89
+#: /src/schooltool/course/browser/csvimport.py:88
 msgid ""
-"Course \"${course_title}\" credits \"${invalid_credits}\" value must be an "
-"integer."
-msgstr "“${course_title}” 課程”${invalid_credits}“ 學分值必須是一個整數。"
+"Course \"${course_title}\" credits \"${invalid_credits}\" value must be a "
+"number."
+msgstr ""
 
 #. Default: ""
-#: /src/schooltool/course/browser/csvimport.py:104
+#: /src/schooltool/course/browser/csvimport.py:103
 msgid ""
 "Course \"${course_title}\" id \"${invalid_id}\" is invalid. ${error_message}"
 msgstr "課程 \"${course_title}\" id \"${invalid_id}\" 不可用。 ${error_message}"
@@ -4473,12 +4467,7 @@ msgid "Available Students"
 msgstr "可用的學生"
 
 #. Default: ""
-#: /src/schooltool/course/browser/section.py:846
-msgid "${section}'s"
-msgstr ""
-
-#. Default: ""
-#: /src/schooltool/course/browser/section.py:929
+#: /src/schooltool/course/browser/section.py:932
 msgid "Delete ${section}"
 msgstr ""
 
@@ -4495,8 +4484,12 @@ msgstr ""
 msgid "Term"
 msgstr "學期"
 
-#: /src/schooltool/course/browser/section.py:1112
-#: /src/schooltool/course/browser/section.py:1246
+#: /src/schooltool/course/browser/section.py:998
+msgid "Size"
+msgstr ""
+
+#: /src/schooltool/course/browser/section.py:1115
+#: /src/schooltool/course/browser/section.py:1249
 msgid "Section Information"
 msgstr ""
 
@@ -4637,7 +4630,6 @@ msgid "${course} course for ${schoolyear}"
 msgstr "${schoolyear}的課程${course}"
 
 #: /src/schooltool/course/browser/templates/course.pt:52
-#: /src/schooltool/demographics/browser/nameinfo_view.pt:11
 #: /src/schooltool/person/browser/home.pt:20
 #: /src/schooltool/person/browser/person.pt:11
 msgid "photo"
@@ -4697,6 +4689,28 @@ msgid ""
 "Deleting a section is permanent, irreversible, and destroys all data "
 "associated with the section. It is strongly recommended that you only delete "
 "a section that has been created in error or has no data associated with it."
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/f_course_csvimport_description.pt:3
+msgid ""
+"CSV data <strong>must</strong> include a course title,<strong>may</strong> "
+"include an optional course description, <strong>may</strong> include an "
+"optional course SchoolTool ID, <strong>may</strong> include an optional "
+"Alternate ID and <strong>may</strong> include an optional credits value."
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/f_course_csvimport_description.pt:19
+msgid ""
+"The above example will create 4 courses titled 'Ancient History', 'US "
+"History', 'World History' and 'Spanish'. The first and third courses will "
+"have the descriptions 'Pre-history through 1000 A.D.' and '1000 A.D. through "
+"the 20th century' respectively. The second and forth courses will have no "
+"description. The second, third and forth courses will have their SchoolTool "
+"IDs set to us-history and history-world. The forth course will have its "
+"Alternate ID set to spanish-gov and its credits value set to 5. If you will "
+"upload a CSV with titles or course ids that are already present in the "
+"database, existing courses will be updated. Course Ids take precedence when "
+"determining which course should be updated."
 msgstr ""
 
 #: /src/schooltool/course/browser/templates/f_course_view.pt:4
@@ -5006,7 +5020,20 @@ msgstr ""
 msgid "Unlink Section"
 msgstr ""
 
-#: /src/schooltool/course/interfaces.py:50
+#: /src/schooltool/course/interfaces.py:36
+#: /src/schooltool/course/interfaces.py:129
+msgid "SchoolTool ID"
+msgstr ""
+
+#: /src/schooltool/course/interfaces.py:37
+msgid "An internal identifier of this course."
+msgstr ""
+
+#: /src/schooltool/course/interfaces.py:53
+msgid "School identifier of this course."
+msgstr ""
+
+#: /src/schooltool/course/interfaces.py:58
 msgid "Alternate ID"
 msgstr ""
 
@@ -5018,11 +5045,7 @@ msgstr ""
 msgid "Credits"
 msgstr "學分"
 
-#: /src/schooltool/course/interfaces.py:57
-msgid "This value must be an integer."
-msgstr ""
-
-#: /src/schooltool/course/interfaces.py:82
+#: /src/schooltool/course/interfaces.py:89
 msgid "Label"
 msgstr "標簽"
 
@@ -5033,6 +5056,10 @@ msgid ""
 msgstr ""
 "班別識別，包括講師\n"
 "            姓名、課程和上課時間。"
+
+#: /src/schooltool/course/interfaces.py:130
+msgid "An internal identifier of this section."
+msgstr ""
 
 #. Default: ""
 #: /src/schooltool/course/section.py:89
@@ -5158,329 +5185,6 @@ msgstr "現行類別"
 msgid "School Timetables"
 msgstr "學校時間表"
 
-#: /src/schooltool/demographics/browser/configure.zcml:156
-msgid "Schooltool Person Menu"
-msgstr "Schooltool 人員功能表"
-
-#: /src/schooltool/demographics/browser/configure.zcml:167
-#: /src/schooltool/demographics/browser/configure.zcml:228
-msgid "name info"
-msgstr "姓名資訊"
-
-#: /src/schooltool/demographics/browser/configure.zcml:173
-#: /src/schooltool/demographics/browser/configure.zcml:234
-msgid "demographics"
-msgstr "人員統計"
-
-#: /src/schooltool/demographics/browser/configure.zcml:179
-#: /src/schooltool/demographics/browser/configure.zcml:240
-msgid "schooldata"
-msgstr "學校資料"
-
-#: /src/schooltool/demographics/browser/configure.zcml:185
-#: /src/schooltool/demographics/browser/configure.zcml:246
-msgid "parent1"
-msgstr "父母 1"
-
-#: /src/schooltool/demographics/browser/configure.zcml:191
-#: /src/schooltool/demographics/browser/configure.zcml:252
-msgid "parent2"
-msgstr "父母 2"
-
-#: /src/schooltool/demographics/browser/configure.zcml:197
-#: /src/schooltool/demographics/browser/configure.zcml:258
-msgid "emergency1"
-msgstr "緊急 1"
-
-#: /src/schooltool/demographics/browser/configure.zcml:203
-#: /src/schooltool/demographics/browser/configure.zcml:264
-msgid "emergency2"
-msgstr "緊急 2"
-
-#: /src/schooltool/demographics/browser/configure.zcml:209
-#: /src/schooltool/demographics/browser/configure.zcml:270
-msgid "emergency3"
-msgstr "緊急 3"
-
-#: /src/schooltool/demographics/browser/configure.zcml:217
-msgid "Schooltool Person Display Menu"
-msgstr "Schooltool 人員察看功能表"
-
-#: /src/schooltool/demographics/browser/demographics_macros.pt:4
-msgid "N"
-msgstr "N"
-
-#: /src/schooltool/demographics/browser/demographics_macros.pt:4
-msgid "Shortcut: Alt-N"
-msgstr "捷徑鍵：Alt-N"
-
-#: /src/schooltool/demographics/browser/demographics_macros.pt:4
-#: /src/schooltool/demographics/browser/personform.py:96
-msgid "Apply and Next"
-msgstr "應用並轉到下個"
-
-#: /src/schooltool/demographics/browser/display_form.pt:3
-#: /src/schooltool/demographics/browser/nameinfo_view.pt:3
-#: /src/schooltool/demographics/browser/schooldata_view.pt:3
-#: /src/schooltool/demographics/browser/table.py:101
-#: /src/schooltool/demographics/browser/table.py:205
-msgid "Display"
-msgstr "察看"
-
-#. Default: ""
-#: /src/schooltool/demographics/browser/personform.py:148
-msgid "Change name information for ${fullname}"
-msgstr "為 ${fullname} 變更姓名資訊。"
-
-#: /src/schooltool/demographics/browser/personform.py:164
-msgid "Change name"
-msgstr "改變名稱"
-
-#. Default: ""
-#: /src/schooltool/demographics/browser/personform.py:172
-msgid "Change demographics for ${fullname}"
-msgstr "改變${fullname}的個人資料"
-
-#. Default: ""
-#: /src/schooltool/demographics/browser/personform.py:188
-msgid "Change school data for ${fullname}"
-msgstr "改變 ${fullname} 的學校資料"
-
-#: /src/schooltool/demographics/browser/personform.py:198
-msgid "School data"
-msgstr "學校資料"
-
-#. Default: ""
-#: /src/schooltool/demographics/browser/personform.py:209
-msgid "Change contact information for ${fullname}"
-msgstr "為 ${fullname} 變更聯繫人資訊"
-
-#: /src/schooltool/demographics/browser/personform.py:217
-msgid "Contact information"
-msgstr "聯繫人資訊"
-
-#: /src/schooltool/demographics/browser/personform.py:273
-#: /src/schooltool/person/browser/person.py:539
-msgid "This username is already used!"
-msgstr "該用戶名已被使用"
-
-#: /src/schooltool/demographics/browser/personform.py:333
-msgid "Invalid teacher. Possible causes: deleted or renamed."
-msgstr "無效的教師。可能的原因：被移除或重命名。"
-
-#: /src/schooltool/demographics/browser/personform.py:365
-msgid "Invalid group. Possible causes: deleted or renamed."
-msgstr "無效的組群。可能的原因：被移除或重命名。"
-
-#: /src/schooltool/demographics/browser/search.pt:6
-msgid ""
-"Search for persons here. Note that in fulltext fields you can use wildcard "
-"characters such as *. For example, to search for everyone with John in their "
-"name, use <em>*john*</em>."
-msgstr "在這裡可搜尋不同的個人。在全文欄位中您可以使用*等作為萬用字元。例如，要找所有名字中包含\"強\"字的，可用<em>*強*</em>。"
-
-#: /src/schooltool/demographics/browser/search.pt:42
-msgid "There were no results."
-msgstr "沒有結果。"
-
-#: /src/schooltool/demographics/browser/table.py:73
-#: /src/schooltool/demographics/interfaces.py:76
-#: /src/schooltool/person/browser/person.py:497
-#: /src/schooltool/person/browser/person.py:586
-#: /src/schooltool/person/interfaces.py:51
-msgid "Full name"
-msgstr "全名"
-
-#: /src/schooltool/demographics/browser/table.py:78
-msgid "Birth"
-msgstr "出生"
-
-#: /src/schooltool/demographics/browser/table.py:84
-msgid "Enrollment"
-msgstr "籍貫"
-
-#: /src/schooltool/demographics/browser/table.py:90
-msgid "Modified"
-msgstr "已修改"
-
-#: /src/schooltool/demographics/interfaces.py:45
-msgid "Prefix such as Mr., Mrs."
-msgstr "前置，如先生，女士。"
-
-#: /src/schooltool/demographics/interfaces.py:71
-msgid "Name by which the student prefers to be called"
-msgstr "學生的昵稱"
-
-#: /src/schooltool/demographics/interfaces.py:81
-#: /src/schooltool/person/browser/person.py:513
-#: /src/schooltool/person/interfaces.py:55
-msgid "Photo"
-msgstr "照片"
-
-#: /src/schooltool/demographics/interfaces.py:83
-#: /src/schooltool/person/browser/person.py:515
-#: /src/schooltool/person/interfaces.py:57
-msgid "Photo (in JPEG format)"
-msgstr "照片 （JPEG格式）"
-
-#: /src/schooltool/demographics/interfaces.py:99
-msgid "American Indian or Alaska Native"
-msgstr "美洲印第安人或阿拉斯加土著"
-
-#: /src/schooltool/demographics/interfaces.py:100
-msgid "Asian"
-msgstr "亞洲人"
-
-#: /src/schooltool/demographics/interfaces.py:101
-msgid "Black or African American"
-msgstr "黑人非或洲裔美國人"
-
-#: /src/schooltool/demographics/interfaces.py:102
-msgid "Native Hawaiian or Other Pacific Islander"
-msgstr "夏威夷人土著或其他太平洋島嶼"
-
-#: /src/schooltool/demographics/interfaces.py:103
-msgid "White"
-msgstr "白"
-
-#: /src/schooltool/demographics/interfaces.py:107
-msgid "English"
-msgstr "英語"
-
-#: /src/schooltool/demographics/interfaces.py:108
-msgid "Spanish"
-msgstr "西班牙語"
-
-#: /src/schooltool/demographics/interfaces.py:109
-msgid "Chinese"
-msgstr "漢語"
-
-#: /src/schooltool/demographics/interfaces.py:110
-msgid "German"
-msgstr "德語"
-
-#: /src/schooltool/demographics/interfaces.py:111
-msgid "Tagalog"
-msgstr "塔加路語"
-
-#: /src/schooltool/demographics/interfaces.py:112
-msgid "Vietnamese"
-msgstr "越南語"
-
-#: /src/schooltool/demographics/interfaces.py:113
-msgid "Italian"
-msgstr "義大利語"
-
-#: /src/schooltool/demographics/interfaces.py:114
-msgid "Korean"
-msgstr "朝鮮語"
-
-#: /src/schooltool/demographics/interfaces.py:115
-msgid "Russian"
-msgstr "俄語"
-
-#: /src/schooltool/demographics/interfaces.py:116
-msgid "Polish"
-msgstr "波蘭語"
-
-#: /src/schooltool/demographics/interfaces.py:117
-msgid "Arabic"
-msgstr "阿拉伯語"
-
-#: /src/schooltool/demographics/interfaces.py:137
-msgid "Ethnicity"
-msgstr "民族/種族"
-
-#: /src/schooltool/demographics/interfaces.py:143
-msgid "Primary language"
-msgstr "主要語言"
-
-#: /src/schooltool/demographics/interfaces.py:149
-msgid "Special education"
-msgstr "文化程度"
-
-#: /src/schooltool/demographics/interfaces.py:154
-msgid "Previous school"
-msgstr "畢業學校"
-
-#: /src/schooltool/demographics/interfaces.py:202
-msgid "Enrollment date"
-msgstr "註冊日期"
-
-#: /src/schooltool/demographics/interfaces.py:207
-msgid "Projected graduation year"
-msgstr "哪一年畢業"
-
-#: /src/schooltool/demographics/interfaces.py:218
-msgid "Team"
-msgstr "團隊"
-
-#: /src/schooltool/demographics/interfaces.py:224
-msgid "Health information"
-msgstr "健康資訊"
-
-#: /src/schooltool/demographics/interfaces.py:230
-msgid "parent"
-msgstr "父母"
-
-#: /src/schooltool/demographics/interfaces.py:231
-msgid "guardian"
-msgstr "監護人"
-
-#: /src/schooltool/demographics/interfaces.py:232
-msgid "grandparent"
-msgstr "祖父母"
-
-#: /src/schooltool/demographics/interfaces.py:233
-msgid "step-parent"
-msgstr "繼父母"
-
-#: /src/schooltool/demographics/interfaces.py:234
-msgid "friend of family"
-msgstr "親戚"
-
-#: /src/schooltool/demographics/interfaces.py:235
-msgid "other"
-msgstr "其他"
-
-#: /src/schooltool/demographics/interfaces.py:250
-msgid "Relationship to student"
-msgstr "與學生的關係"
-
-#: /src/schooltool/demographics/interfaces.py:256
-msgid "Street"
-msgstr "街道"
-
-#: /src/schooltool/demographics/interfaces.py:286
-msgid "Cell phone"
-msgstr "蜂窩電話"
-
-#: /src/schooltool/demographics/interfaces.py:291
-#: /src/schooltool/note/notes.pt:2
-#: /src/schooltool/resource/interfaces.py:57
-msgid "Notes"
-msgstr "筆記"
-
-#: /src/schooltool/demographics/interfaces.py:302
-msgid "Full text search in name"
-msgstr "在名字中作全文搜尋"
-
-#: /src/schooltool/demographics/interfaces.py:307
-msgid "Name of parent"
-msgstr "父母姓名"
-
-#: /src/schooltool/demographics/interfaces.py:308
-msgid "Full text search in parent names"
-msgstr "在父母名字中作全文搜尋"
-
-#: /src/schooltool/demographics/interfaces.py:313
-msgid "Student ID"
-msgstr "學生 ID"
-
-#: /src/schooltool/demographics/utility.py:96
-msgid "Surname"
-msgstr "姓"
-
 #: /src/schooltool/devmode/configure.zcml:52
 #: /src/schooltool/devmode/devmode.pt:20
 msgid "Sample data"
@@ -5498,7 +5202,27 @@ msgstr "反省者"
 msgid "API Docs"
 msgstr "API 文件"
 
-#: /src/schooltool/email/browser/configure.zcml:54
+#: /src/schooltool/devmode/f_unauthorized.pt:3
+#: /src/schooltool/skin/templates/f_unauthorized.pt:3
+msgid "You are not authorized"
+msgstr ""
+
+#: /src/schooltool/devmode/f_unauthorized.pt:9
+msgid "Permission checks"
+msgstr ""
+
+#: /src/schooltool/devmode/f_unauthorized.pt:11
+msgid ""
+"Most recent checks last. Red indicates insufficient permissions. \"=>\" "
+"indicates relayed checks, usually to parent object."
+msgstr ""
+
+#: /src/schooltool/devmode/flourish-overrides.zcml:8
+#: /src/schooltool/skin/flourish/instance/skin.zcml:68
+msgid "Unauthorized"
+msgstr ""
+
+#: /src/schooltool/email/browser/configure.zcml:58
 #: /src/schooltool/email/browser/flourish.zcml:20
 #: /src/schooltool/email/browser/flourish.zcml:27
 #: /src/schooltool/email/browser/flourish.zcml:141
@@ -5934,11 +5658,11 @@ msgstr "與日子裡的另一個課堂的ID相同"
 msgid "is the same homeroom period id as another in this day"
 msgstr "與當日的另一個班會課堂ID一樣"
 
-#: /src/schooltool/export/importer.py:97
-msgid "must be either 'Location' or 'Resource'"
-msgstr "必須是'場地'或'資源'"
+#: /src/schooltool/export/importer.py:99
+msgid "must be either 'Location', 'Equipment' or 'Resource'"
+msgstr ""
 
-#: /src/schooltool/export/importer.py:98
+#: /src/schooltool/export/importer.py:100
 msgid "is not a valid term in the given school year"
 msgstr "這不是給定學年裡面的一個有效的學期"
 
@@ -6131,11 +5855,6 @@ msgstr ""
 
 #: /src/schooltool/group/browser/group.py:291
 msgid "Available groups"
-msgstr ""
-
-#. Default: ""
-#: /src/schooltool/group/browser/group.py:397
-msgid "${group}'s"
 msgstr ""
 
 #. Default: ""
@@ -6423,6 +6142,11 @@ msgstr "私人"
 msgid "Public"
 msgstr "公用"
 
+#: /src/schooltool/note/notes.pt:2
+#: /src/schooltool/resource/interfaces.py:57
+msgid "Notes"
+msgstr "筆記"
+
 #: /src/schooltool/note/notes.pt:8
 msgid "( p )"
 msgstr ""
@@ -6438,6 +6162,13 @@ msgstr "變更密碼"
 #: /src/schooltool/person/browser/csvimport.py:51
 msgid "fullname may not be empty"
 msgstr "全名無法為空"
+
+#: /src/schooltool/person/browser/f_password_changed.pt:1
+#: /src/schooltool/person/browser/person.py:363
+msgid ""
+"Password changed successfully. Next, you will be required to authenticate "
+"with your new credentials"
+msgstr ""
 
 #: /src/schooltool/person/browser/f_person_filter.pt:7
 msgid "First name, last name or username"
@@ -6547,11 +6278,12 @@ msgstr "編輯密碼"
 msgid "No new password was supplied so original password is unchanged"
 msgstr "未提供新密碼，所以保留原密碼"
 
-#: /src/schooltool/person/browser/person.py:327
-msgid "Changed password"
-msgstr "密碼已變更"
+#: /src/schooltool/person/browser/person.py:372
+#: /src/schooltool/person/browser/person.py:376
+msgid "Password changed successfully"
+msgstr ""
 
-#: /src/schooltool/person/browser/person.py:345
+#: /src/schooltool/person/browser/person.py:359
 #: /src/schooltool/person/security.zcml:101
 msgid "Change password"
 msgstr "變更密碼"
@@ -6560,8 +6292,14 @@ msgstr "變更密碼"
 msgid "Wrong password supplied"
 msgstr ""
 
-#: /src/schooltool/person/browser/person.py:498
-#: /src/schooltool/person/browser/person.py:587
+#: /src/schooltool/person/browser/person.py:507
+#: /src/schooltool/person/browser/person.py:596
+#: /src/schooltool/person/interfaces.py:51
+msgid "Full name"
+msgstr "全名"
+
+#: /src/schooltool/person/browser/person.py:508
+#: /src/schooltool/person/browser/person.py:597
 #: /src/schooltool/person/interfaces.py:52
 msgid "Name that should be displayed"
 msgstr "察看名稱"
@@ -6571,11 +6309,25 @@ msgstr "察看名稱"
 msgid "Verify password"
 msgstr "檢驗密碼"
 
-#: /src/schooltool/person/browser/person.py:536
+#: /src/schooltool/person/browser/person.py:523
+#: /src/schooltool/person/interfaces.py:55
+msgid "Photo"
+msgstr "照片"
+
+#: /src/schooltool/person/browser/person.py:525
+#: /src/schooltool/person/interfaces.py:57
+msgid "Photo (in JPEG format)"
+msgstr "照片 （JPEG格式）"
+
+#: /src/schooltool/person/browser/person.py:546
 msgid "Passwords do not match!"
 msgstr "密碼不符合"
 
-#: /src/schooltool/person/browser/person.py:590
+#: /src/schooltool/person/browser/person.py:549
+msgid "This username is already used!"
+msgstr "該用戶名已被使用"
+
+#: /src/schooltool/person/browser/person.py:600
 msgid "New photo"
 msgstr "新照片"
 
@@ -6960,12 +6712,7 @@ msgid "Edit equipment"
 msgstr "編輯設備"
 
 #. Default: ""
-#: /src/schooltool/resource/browser/resource.py:814
-msgid "${resource_title}'s"
-msgstr ""
-
-#. Default: ""
-#: /src/schooltool/resource/browser/resource.py:858
+#: /src/schooltool/resource/browser/resource.py:859
 msgid "Delete ${resource_title}"
 msgstr ""
 
@@ -7346,6 +7093,10 @@ msgstr ""
 msgid "To continue setting up your school please ${add_schoolyear}."
 msgstr ""
 
+#: /src/schooltool/schoolyear/browser/templates/f_manage_year_overview.pt:5
+msgid "Manage year"
+msgstr ""
+
 #: /src/schooltool/schoolyear/browser/templates/f_schoolyear.pt:5
 msgid "Edit this school year's information"
 msgstr ""
@@ -7517,7 +7268,11 @@ msgid "Resource calendars"
 msgstr ""
 
 #: /src/schooltool/securitypolicy/browser/views.py:67
-msgid "Student grades"
+msgid "Gradebook"
+msgstr ""
+
+#: /src/schooltool/securitypolicy/browser/views.py:68
+msgid "Journal"
 msgstr ""
 
 #: /src/schooltool/securitypolicy/crowds.py:199
@@ -7572,10 +7327,6 @@ msgstr "伺服器錯誤"
 msgid "Not Found"
 msgstr "未找到"
 
-#: /src/schooltool/skin/flourish/instance/skin.zcml:68
-msgid "Unauthorized"
-msgstr ""
-
 #: /src/schooltool/skin/flourish/templates/main.pt:82
 msgid "server running"
 msgstr ""
@@ -7618,17 +7369,9 @@ msgstr "您可能寫錯了url"
 msgid "You might be trying to access a non-existing page"
 msgstr "您可能嘗試存取一個不存在的頁面"
 
-#: /src/schooltool/skin/templates/f_unauthorized.pt:3
-msgid "You are not authorized"
-msgstr ""
-
 #: /src/schooltool/skin/templates/generic_macros.pt:12
 msgid "Server Running SchoolTool"
 msgstr "伺服器正在執行 SchoolTool"
-
-#: /src/schooltool/skin/templates/view_macros.pt:50
-msgid "Log In"
-msgstr "登入"
 
 #: /src/schooltool/skin/templates/view_macros.pt:58
 msgid "Logged in as:"
