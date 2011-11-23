@@ -17,7 +17,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
-"POT-Creation-Date: 2011-11-21 17:09+0200\n"
+"POT-Creation-Date: 2011-11-22 22:28+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Schooltool Development Team <schooltool-dev@schooltool.org>\n"
@@ -271,19 +271,7 @@ msgstr ""
 msgid "Pack Database"
 msgstr ""
 
-#: /src/schooltool/app/browser/app.py:877
-msgid "Live"
-msgstr ""
-
-#: /src/schooltool/app/browser/app.py:887
-msgid "Unknown"
-msgstr ""
-
-#: /src/schooltool/app/browser/app.py:889
-msgid "Backup"
-msgstr ""
-
-#: /src/schooltool/app/browser/app.py:909
+#: /src/schooltool/app/browser/app.py:894
 msgid "Database successfully packed."
 msgstr ""
 
@@ -1216,14 +1204,7 @@ msgstr ""
 msgid "Database generations"
 msgstr ""
 
-#: /src/schooltool/app/browser/flourish.zcml:528
-#: /src/schooltool/app/browser/flourish.zcml:553
-#: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:7
-#: /src/schooltool/app/browser/templates/f_server_settings_overview.pt:12
-msgid "Database"
-msgstr ""
-
-#: /src/schooltool/app/browser/flourish.zcml:621
+#: /src/schooltool/app/browser/flourish.zcml:607
 msgid "Shown Calendars"
 msgstr ""
 
@@ -1320,10 +1301,15 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/about.pt:44
 #: /src/schooltool/app/browser/templates/f_about.pt:33
-msgid "Release Manager:"
+msgid "Core Developers:"
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/about.pt:47
+#: /src/schooltool/app/browser/templates/f_about.pt:37
+msgid "Release Manager:"
+msgstr ""
+
+#: /src/schooltool/app/browser/templates/about.pt:50
 msgid "Contributors:"
 msgstr ""
 
@@ -1974,49 +1960,8 @@ msgstr ""
 msgid "Done"
 msgstr ""
 
-#: /src/schooltool/app/browser/templates/f_database.pt:5
-msgid "Please wait for confirmation that the database has been packed."
-msgstr ""
-
-#: /src/schooltool/app/browser/templates/f_database.pt:20
-msgid "Path"
-msgstr ""
-
-#: /src/schooltool/app/browser/templates/f_database.pt:21
-#: /src/schooltool/course/browser/section.py:995
-msgid "Size"
-msgstr ""
-
-#: /src/schooltool/app/browser/templates/f_database_related.pt:2
-#: /src/schooltool/app/browser/templates/f_generations_related.pt:2
-#: /src/schooltool/contact/browser/templates/f_contacts_related.pt:2
-#: /src/schooltool/course/browser/templates/f_courses_related.pt:2
-#: /src/schooltool/course/browser/templates/f_sections_related.pt:2
-#: /src/schooltool/email/browser/templates/f_email_container_related.pt:2
-#: /src/schooltool/export/templates/f_import_related.pt:2
-#: /src/schooltool/level/browser/templates/f_levels_related.pt:2
-#: /src/schooltool/resource/browser/templates/f_resource_container_related.pt:2
-#: /src/schooltool/resource/browser/templates/f_resource_demographics_related.pt:2
-#: /src/schooltool/term/browser/templates/f_terms_related.pt:2
-#: /src/schooltool/timetable/browser/templates/f_specialday_related.pt:2
-#: /src/schooltool/timetable/browser/templates/f_timetable_container_related.pt:2
-msgid "What is This?"
-msgstr ""
-
-#: /src/schooltool/app/browser/templates/f_database_related.pt:6
-msgid "SchoolTool's database file should be periodically \"packed\" to reduce its filesize."
-msgstr ""
-
-#: /src/schooltool/app/browser/templates/f_database_related.pt:9
-msgid "Packing removes old transactions from the database. It can take a long time on a large database, so packing should be done in off-peak times."
-msgstr ""
-
-#: /src/schooltool/app/browser/templates/f_database_related.pt:14
-msgid "Before packing, a backup file will be saved as Data.fs.old"
-msgstr ""
-
 #: /src/schooltool/app/browser/templates/f_edit_relationships.pt:25
-#: /src/schooltool/basicperson/browser/templates/container.pt:37
+#: /src/schooltool/basicperson/browser/templates/container.pt:32
 #: /src/schooltool/course/browser/templates/course_container.pt:28
 #: /src/schooltool/course/browser/templates/f_courses.pt:14
 #: /src/schooltool/course/browser/templates/f_sections.pt:14
@@ -2093,6 +2038,21 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:45
 msgid "Request"
+msgstr ""
+
+#: /src/schooltool/app/browser/templates/f_generations_related.pt:2
+#: /src/schooltool/contact/browser/templates/f_contacts_related.pt:2
+#: /src/schooltool/course/browser/templates/f_courses_related.pt:2
+#: /src/schooltool/course/browser/templates/f_sections_related.pt:2
+#: /src/schooltool/email/browser/templates/f_email_container_related.pt:2
+#: /src/schooltool/export/templates/f_import_related.pt:2
+#: /src/schooltool/level/browser/templates/f_levels_related.pt:2
+#: /src/schooltool/resource/browser/templates/f_resource_container_related.pt:2
+#: /src/schooltool/resource/browser/templates/f_resource_demographics_related.pt:2
+#: /src/schooltool/term/browser/templates/f_terms_related.pt:2
+#: /src/schooltool/timetable/browser/templates/f_specialday_related.pt:2
+#: /src/schooltool/timetable/browser/templates/f_timetable_container_related.pt:2
+msgid "What is This?"
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_generations_related.pt:6
@@ -2198,6 +2158,11 @@ msgstr ""
 #: /src/schooltool/resource/browser/templates/f_resource_filter.pt:3
 #: /src/schooltool/resource/browser/templates/f_resource_filter.pt:36
 msgid "Search"
+msgstr ""
+
+#: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:7
+#: /src/schooltool/app/browser/templates/f_server_settings_overview.pt:12
+msgid "Database"
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:11
@@ -2317,6 +2282,10 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_server_settings_overview.pt:3
 msgid "Server Information"
+msgstr ""
+
+#: /src/schooltool/app/browser/templates/f_settings.pt:5
+msgid "Please wait for confirmation that the database has been packed."
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_translationdomaincontrol.pt:13
@@ -3116,12 +3085,7 @@ msgstr ""
 msgid "Person index"
 msgstr ""
 
-#: /src/schooltool/basicperson/browser/person.py:132
-#. Default: ""
-msgid "${person_full_name}'s"
-msgstr ""
-
-#: /src/schooltool/basicperson/browser/person.py:152
+#: /src/schooltool/basicperson/browser/person.py:151
 #: /src/schooltool/basicperson/browser/templates/f_manage_people_overview.pt:19
 #: /src/schooltool/group/browser/flourish.zcml:70
 #: /src/schooltool/group/browser/flourish.zcml:79
@@ -3538,11 +3502,11 @@ msgid "Gender"
 msgstr ""
 
 #: /src/schooltool/basicperson/interfaces.py:68
-msgid "female"
+msgid "Female"
 msgstr ""
 
 #: /src/schooltool/basicperson/interfaces.py:68
-msgid "male"
+msgid "Male"
 msgstr ""
 
 #: /src/schooltool/basicperson/interfaces.py:73
@@ -4097,8 +4061,11 @@ msgid "Mobile phone"
 msgstr ""
 
 #: /src/schooltool/contact/interfaces.py:82
+msgid "Other 1"
+msgstr ""
+
 #: /src/schooltool/contact/interfaces.py:84
-msgid "Other"
+msgid "Other 2"
 msgstr ""
 
 #: /src/schooltool/contact/interfaces.py:109
@@ -4244,12 +4211,12 @@ msgstr ""
 msgid "Titles may not be empty"
 msgstr ""
 
-#: /src/schooltool/course/browser/csvimport.py:89
+#: /src/schooltool/course/browser/csvimport.py:88
 #. Default: ""
-msgid "Course \"${course_title}\" credits \"${invalid_credits}\" value must be an integer."
+msgid "Course \"${course_title}\" credits \"${invalid_credits}\" value must be a number."
 msgstr ""
 
-#: /src/schooltool/course/browser/csvimport.py:104
+#: /src/schooltool/course/browser/csvimport.py:103
 #. Default: ""
 msgid "Course \"${course_title}\" id \"${invalid_id}\" is invalid. ${error_message}"
 msgstr ""
@@ -4354,12 +4321,7 @@ msgstr ""
 msgid "Available Students"
 msgstr ""
 
-#: /src/schooltool/course/browser/section.py:846
-#. Default: ""
-msgid "${section}'s"
-msgstr ""
-
-#: /src/schooltool/course/browser/section.py:929
+#: /src/schooltool/course/browser/section.py:932
 #. Default: ""
 msgid "Delete ${section}"
 msgstr ""
@@ -4377,8 +4339,12 @@ msgstr ""
 msgid "Term"
 msgstr ""
 
-#: /src/schooltool/course/browser/section.py:1112
-#: /src/schooltool/course/browser/section.py:1246
+#: /src/schooltool/course/browser/section.py:998
+msgid "Size"
+msgstr ""
+
+#: /src/schooltool/course/browser/section.py:1115
+#: /src/schooltool/course/browser/section.py:1249
 msgid "Section Information"
 msgstr ""
 
@@ -4546,6 +4512,14 @@ msgstr ""
 
 #: /src/schooltool/course/browser/templates/f_confirm_delete_section.pt:1
 msgid "Deleting a section is permanent, irreversible, and destroys all data associated with the section. It is strongly recommended that you only delete a section that has been created in error or has no data associated with it."
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/f_course_csvimport_description.pt:3
+msgid "CSV data <strong>must</strong> include a course title,<strong>may</strong> include an optional course description, <strong>may</strong> include an optional course SchoolTool ID, <strong>may</strong> include an optional Alternate ID and <strong>may</strong> include an optional credits value."
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/f_course_csvimport_description.pt:19
+msgid "The above example will create 4 courses titled 'Ancient History', 'US History', 'World History' and 'Spanish'. The first and third courses will have the descriptions 'Pre-history through 1000 A.D.' and '1000 A.D. through the 20th century' respectively. The second and forth courses will have no description. The second, third and forth courses will have their SchoolTool IDs set to us-history and history-world. The forth course will have its Alternate ID set to spanish-gov and its credits value set to 5. If you will upload a CSV with titles or course ids that are already present in the database, existing courses will be updated. Course Ids take precedence when determining which course should be updated."
 msgstr ""
 
 #: /src/schooltool/course/browser/templates/f_course_view.pt:4
@@ -4868,11 +4842,7 @@ msgstr ""
 msgid "Credits"
 msgstr ""
 
-#: /src/schooltool/course/interfaces.py:57
-msgid "This value must be an integer."
-msgstr ""
-
-#: /src/schooltool/course/interfaces.py:82
+#: /src/schooltool/course/interfaces.py:89
 msgid "Label"
 msgstr ""
 
@@ -5642,11 +5612,6 @@ msgstr ""
 msgid "Available groups"
 msgstr ""
 
-#: /src/schooltool/group/browser/group.py:397
-#. Default: ""
-msgid "${group}'s"
-msgstr ""
-
 #: /src/schooltool/group/browser/group.py:448
 #. Default: ""
 msgid "Delete ${group}"
@@ -5925,6 +5890,11 @@ msgstr ""
 msgid "fullname may not be empty"
 msgstr ""
 
+#: /src/schooltool/person/browser/f_password_changed.pt:1
+#: /src/schooltool/person/browser/person.py:363
+msgid "Password changed successfully. Next, you will be required to authenticate with your new credentials"
+msgstr ""
+
 #: /src/schooltool/person/browser/f_person_filter.pt:7
 msgid "First name, last name or username"
 msgstr ""
@@ -6025,11 +5995,8 @@ msgstr ""
 msgid "No new password was supplied so original password is unchanged"
 msgstr ""
 
-#: /src/schooltool/person/browser/person.py:337
-msgid "Password changed successfully. Next, you will be required to authenticate with your new credentials"
-msgstr ""
-
-#: /src/schooltool/person/browser/person.py:341
+#: /src/schooltool/person/browser/person.py:372
+#: /src/schooltool/person/browser/person.py:376
 msgid "Password changed successfully"
 msgstr ""
 
@@ -6442,12 +6409,7 @@ msgstr ""
 msgid "Edit equipment"
 msgstr ""
 
-#: /src/schooltool/resource/browser/resource.py:814
-#. Default: ""
-msgid "${resource_title}'s"
-msgstr ""
-
-#: /src/schooltool/resource/browser/resource.py:858
+#: /src/schooltool/resource/browser/resource.py:859
 #. Default: ""
 msgid "Delete ${resource_title}"
 msgstr ""
@@ -6806,6 +6768,10 @@ msgstr ""
 msgid "To continue setting up your school please ${add_schoolyear}."
 msgstr ""
 
+#: /src/schooltool/schoolyear/browser/templates/f_manage_year_overview.pt:5
+msgid "Manage year"
+msgstr ""
+
 #: /src/schooltool/schoolyear/browser/templates/f_schoolyear.pt:5
 msgid "Edit this school year's information"
 msgstr ""
@@ -6973,7 +6939,11 @@ msgid "Resource calendars"
 msgstr ""
 
 #: /src/schooltool/securitypolicy/browser/views.py:67
-msgid "Student grades"
+msgid "Gradebook"
+msgstr ""
+
+#: /src/schooltool/securitypolicy/browser/views.py:68
+msgid "Journal"
 msgstr ""
 
 #: /src/schooltool/securitypolicy/crowds.py:199
