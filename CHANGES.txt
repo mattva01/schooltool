@@ -2,11 +2,29 @@
 CHANGES
 =======
 
-2.0.0 (unreleased)
+2.0.0 (2011-11-23)
 ------------------
 
-- need a year link on /school (https://launchpad.net/bugs/893191)
+- Many CSS fixes (https://launchpad.net/bugs/885807)
+
+Bugfixes
+++++++++
+
 - Deal with the 's in the sidebar (https://launchpad.net/bugs/873045)
+- Terms index still has inconsistent style (https://launchpad.net/bugs/892923)
+- Move pack database action to server page (https://launchpad.net/bugs/886310)
+- Done's to get back to /school (https://launchpad.net/bugs/892926)
+- Credits hint still asks for integer (https://launchpad.net/bugs/892946)
+- Courses import should have cancel (https://launchpad.net/bugs/892952)
+- Courses import instructions doesn't reflect new field names (https://launchpad.net/bugs/892949)
+- Translate default demographics fields.
+
+Cleanup
++++++++
+
+- Remove ancient demographics implementation.
+- Remove obsolete images and docs.
+- Remove duplicate jQuery(ui).
 
 
 1.9.3 (2011-11-18)
@@ -42,6 +60,11 @@ Other bugfixes
 
 - Server error when opening demographic container (https://launchpad.net/bugs/887662)
 - Need to sort groups in filter widget (https://launchpad.net/bugs/884230)
+
+Devmode
++++++++
+
+- Instead of redirecting to log-in page, show security check log (https://launchpad.net/bugs/716340)
 
 
 1.9.2 (2011-11-04)
