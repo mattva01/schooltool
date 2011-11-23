@@ -22,15 +22,25 @@
         />
   </zope:resourceLibrary>
 
+  <configure package="schooltool.skin">
+    <zope:resourceLibrary
+        name="jquery"
+        layer="schooltool.skin.flourish.IFlourishLayer">
+      <directory
+          source="resources"
+          include="jquery.min.js"
+          />
+    </zope:resourceLibrary>
+  </configure>
+
   <zope:resourceLibrary
       name="schooltool.skin.flourish-jquery"
-      require="schooltool.skin.flourish-jquery-theme"
+      require="jquery
+               schooltool.skin.flourish-jquery-theme"
       layer="schooltool.skin.flourish.IFlourishLayer">
     <directory
         source="resources/jquery/js"
-        include="jquery-1.5.1.min.js
-                 jquery-ui-1.8.15.custom.min.js
-                 "
+        include="jquery-ui.min.js"
         />
   </zope:resourceLibrary>
 

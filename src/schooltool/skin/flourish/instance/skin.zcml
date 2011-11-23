@@ -14,18 +14,6 @@
       file="resources/editor_config.js"
       layer="schooltool.skin.flourish.IFlourishLayer" />
 
-  <resource name="jquery.js"
-            file="resources/jquery.min.js"
-	    layer="schooltool.skin.flourish.IFlourishLayer" />
-  <resourceDirectory
-            name="jstree"
-            directory="resources/jstree"
-	    layer="schooltool.skin.flourish.IFlourishLayer" />
-  <resourceDirectory
-            name="jquery-ui"
-            directory="resources/jquery-ui"
-           layer="schooltool.skin.flourish.IFlourishLayer" />
-
     <resource
         name="favicon.ico"
         file="resources/favicon.ico"
