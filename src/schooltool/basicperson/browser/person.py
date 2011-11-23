@@ -292,6 +292,10 @@ class FlourishPersonView(flourish.page.Page):
 class FlourishPersonInfo(flourish.page.Content):
     body_template = ViewPageTemplateFile('templates/f_person_view_details.pt')
 
+    @property
+    def canModify(self):
+        return canAccess(self.context.__parent__, '__delitem__')
+
 
 class PersonAddFormBase(PersonForm, form.AddForm):
     """Person add form for basic persons."""
