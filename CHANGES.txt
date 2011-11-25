@@ -5,6 +5,7 @@ CHANGES
 2.0.1 (unreleased)
 ------------------
 
+- email view needs formatting (https://launchpad.net/buggs/886304)
 - SchoolTool does not allow add "equipment", "location" or "resources" (https://launchpad.net/bugs/894632)
 
 

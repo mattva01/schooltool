@@ -68,18 +68,24 @@
         subtitle="Send Test Email"
         />
 
-    <flourish:page
-        name="index.html"
-        for="schooltool.email.interfaces.IEmail"
-        class="schooltool.email.browser.email.FlourishEmailView"
-        content_template="templates/z3c-schooltool-form.pt"
-        permission="schooltool.edit"
-        title="Server"
-        subtitle="Email View"
-        layer="schooltool.skin.flourish.IFlourishLayer"
-        />
-
   </configure>
+
+  <flourish:page
+      name="index.html"
+      for="schooltool.email.interfaces.IEmail"
+      class="schooltool.email.browser.email.FlourishEmailView"
+      content_template="templates/f_email_view.pt"
+      permission="schooltool.edit"
+      title="Server"
+      subtitle="Email View"
+      />
+
+  <flourish:page
+      name="retry.html"
+      for="schooltool.email.interfaces.IEmail"
+      class="schooltool.email.browser.email.FlourishEmailRetryView"
+      permission="schooltool.edit"
+      />
 
   <!-- Viewlet managers -->
 
@@ -127,6 +133,25 @@
       template="templates/f_email_container_related.pt"
       view="schooltool.email.browser.email.FlourishEmailContainerView"
       manager="schooltool.skin.flourish.page.IPageRelatedManager"
+      permission="schooltool.edit"
+      />
+
+  <flourish:viewlet
+      name="email-view-actions-links"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      class="schooltool.email.browser.email.EmailViewActionsLinks"
+      title="Actions"
+      for="schooltool.email.interfaces.IEmail"
+      permission="schooltool.edit"
+      view=".email.FlourishEmailView"
+      />
+
+  <flourish:viewlet
+      name="retry.html"
+      for="schooltool.email.interfaces.IEmail"
+      title="Retry"
+      class=".email.RetryLinkViewlet"
+      manager="schooltool.email.browser.email.EmailViewActionsLinks"
       permission="schooltool.edit"
       />
 
