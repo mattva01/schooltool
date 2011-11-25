@@ -79,7 +79,7 @@ Devmode
 - Make sandbox with virtualenv. Fixes bootstrap with Python 2.7.
 - Group sections by term in calendar (https://launchpad.net/bugs/872289)
 - Terms are listed upside down (https://launchpad.net/bugs/872240)
-- Moved Demographics into General Information accordion
+- Moved Demographics into General Information accordion (https://launchpad.net/bugs/882073)
 - Added two "Other" contact fields (https://launchpad.net/bugs/874568)
 - User information doesn't show username (https://launchpad.net/bugs/545767)
 - Username in login bar should go to user home (https://launchpad.net/bugs/868394)
