@@ -5,7 +5,7 @@ CHANGES
 2.0.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- SchoolTool does not allow add "equipment", "location" or "resources" (https://launchpad.net/bugs/894632)
 
 
 2.0.0 (2011-11-23)

@@ -670,6 +670,10 @@ class BaseFlourishResourceAddForm(AddForm):
         self._resource = resource
         return resource
 
+    @button.buttonAndHandler(_("Add"))
+    def handleAdd(self, action):
+        super(BaseFlourishResourceAddForm, self).handleAdd.func(self, action)
+
     @button.buttonAndHandler(_("Cancel"))
     def handle_cancel_action(self, action):
         url = absoluteURL(self.context, self.request)
