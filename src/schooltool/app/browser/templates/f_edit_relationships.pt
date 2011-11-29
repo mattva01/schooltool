@@ -3,6 +3,11 @@
                          items view/getSelectedItems">
   <h2 tal:content="view/current_title" />
   <form method="post" tal:attributes="action request/URL">
+
+    <tal:if condition="view/selected_table/batch">
+      <tal:block replace="structure view/selected_table/batch/render" />
+    </tal:if>
+
     <tal:block replace="structure view/selected_table/render"
                tal:condition="items"/>
     <h3 tal:condition="not:items" i18n:translate="">
