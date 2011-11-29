@@ -355,7 +355,7 @@ class FlourishContactEditView(flourish.page.NoSidebarPage,
                 return absoluteURL(persons[person_id], self.request)
         return absoluteURL(self.context, self.request)
 
-    @button.buttonAndHandler(_("Cancel"))
+    @button.handler(ContactEditView.buttons['cancel'])
     def handle_cancel_action(self, action):
         self.request.response.redirect(self.nextURL())
 
