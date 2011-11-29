@@ -81,11 +81,28 @@
              i18n:attributes="alt" />
       </a>
     </h3>
-    <tal:block tal:replace="structure view/members_table/render"
-               tal:condition="view/has_members" />
+
+    <form tal:condition="view/has_members">
+
+    <tal:block tal:replace="structure view/members_table/filter_widget/render|nothing" />
+
+    <tal:if condition="view/members_table/batch">
+      <div class="count" i18n:translate="">
+        Showing
+        <span i18n:name="count" tal:content="view/members_table/batch/length"/>
+        of
+        <span i18n:name="total" tal:content="view/members_table/batch/full_size"/>
+        items
+      </div>
+      <tal:block replace="structure view/members_table/batch/render" />
+    </tal:if>
+      <tal:block replace="structure view/members_table/render" />
+    </form>
+
     <h3 tal:condition="not:view/has_members" i18n:translate="">
       This group has no members
     </h3>
+
     <h3>
       <tal:block i18n:translate="">Responsible parties</tal:block>
       <a class="modify" href="" title="Edit responsible parties for this group"

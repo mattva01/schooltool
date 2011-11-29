@@ -34,6 +34,7 @@ from zope.interface import implements, Invalid, directlyProvides
 from zope.intid.interfaces import IIntIds
 from zope.publisher.browser import BrowserView
 from zope.publisher.interfaces.browser import IBrowserRequest
+from zope.cachedescriptors.property import Lazy
 from zope.schema import Choice
 from zope.schema import ValidationError
 from zope.security.checker import canAccess
@@ -1086,13 +1087,15 @@ class FlourishSectionView(DisplayForm):
             if not widget.value:
                 widget.mode = HIDDEN_MODE
 
-    @property
+    @Lazy
     def learners_table(self):
-        return self.getTable(list(self.context.members), 'students')
+        return self.getTable(list(self.context.members), 'students',
+                             batch_size=0)
 
-    @property
+    @Lazy
     def instructors_table(self):
-        return self.getTable(list(self.context.instructors), 'instructors')
+        return self.getTable(list(self.context.instructors), 'instructors',
+                             batch_size=0)
 
     def has_instructors(self):
         return bool(list(self.context.instructors))
@@ -1100,11 +1103,11 @@ class FlourishSectionView(DisplayForm):
     def has_learners(self):
         return bool(list(self.context.members))
 
-    def getTable(self, items, prefix):
+    def getTable(self, items, prefix, **kw):
         persons = ISchoolToolApplication(None)['persons']
         result = getMultiAdapter((persons, self.request), ITableFormatter)
         result.setUp(table_formatter=table.StandaloneFullFormatter, items=items,
-                     prefix=prefix)
+                     prefix=prefix, **kw)
         return result
 
 
@@ -1331,6 +1334,16 @@ class FlourishSectionLearnerView(FlourishRelationshipViewBase):
 
     current_title = _("Current students")
     available_title = _("Add students")
+
+    def setUpTables(self):
+        self.available_table = self.createTableFormatter(
+            ommit=self.getOmmitedItems(),
+            prefix="add_item")
+
+        self.selected_table = self.createTableFormatter(
+            filter=lambda l: l,
+            items=self.getSelectedItems(),
+            prefix="remove_item")
 
     def getSelectedItems(self):
         return filter(IPerson.providedBy, self.context.members)
