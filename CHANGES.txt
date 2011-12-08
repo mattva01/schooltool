@@ -6,6 +6,9 @@ CHANGES
 ------------------
 
 - Make sandbox with virtualenv. Fixes bootstrap with Python 2.7.
+- Hide demographics fieldset if it is empty in person add views (`LP: #752051`_)
+
+.. _`LP: #752051`: https://launchpad.net/bugs/752051
 
 
 1.7.0 (2011-09-15)

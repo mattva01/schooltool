@@ -291,7 +291,7 @@ def format_street_address(item, formatter):
     return ", ".join(address_parts)
 
 
-def contact_table_collumns():
+def contact_table_columns():
         first_name = IndexedLocaleAwareGetterColumn(
             index='first_name',
             name='first_name',
@@ -314,7 +314,7 @@ def contact_table_collumns():
 
 class ContactTableFormatter(IndexedTableFormatter):
 
-    columns = lambda self: contact_table_collumns()
+    columns = lambda self: contact_table_columns()
 
     def sortOn(self):
         return (("first_name", False),)
