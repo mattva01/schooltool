@@ -617,4 +617,11 @@
       view=".overlay.FlourishCalendarSelectionView"
       />
 
+  <zope:adapter
+      for="* schooltool.skin.flourish.IFlourishLayer"
+      provides="zope.publisher.interfaces.browser.IBrowserPublisher"
+      factory="schooltool.traverser.traverser.PluggableTraverser"
+      permission="zope.Public"
+      />
+
 </configure>
