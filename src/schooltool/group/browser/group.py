@@ -679,6 +679,11 @@ class FlourishGroupEditView(Form, form.EditForm):
         url = absoluteURL(self.context, self.request)
         self.request.response.redirect(url)
 
+    def updateActions(self):
+        super(FlourishGroupEditView, self).updateActions()
+        self.actions['apply'].addClass('button-ok')
+        self.actions['cancel'].addClass('button-cancel')
+
 
 class FlourishGroupDeleteView(DialogForm, form.EditForm):
     """View used for confirming deletion of a group."""
