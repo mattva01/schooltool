@@ -42,7 +42,7 @@ from schooltool.contact.interfaces import IUniqueFormKey
 from schooltool.contact.contact import URIPerson, URIContact
 from schooltool.contact.contact import URIContactRelationship
 from schooltool.contact.contact import ContactPersonInfo
-from schooltool.contact.browser.contact import contact_table_collumns
+from schooltool.contact.browser.contact import contact_table_columns
 from schooltool.table.table import CheckboxColumn
 from schooltool.table.table import label_cell_formatter_factory
 from schooltool.table.interfaces import ITableFormatter
@@ -62,7 +62,7 @@ def get_relationship_title(person, contact):
     return link.extra_info.getRelationshipTitle()
 
 
-def make_relationship_collumn_getter(person=None):
+def make_relationship_column_getter(person=None):
     def format_item(item, formatter):
         if person is None:
             return u''
@@ -72,11 +72,11 @@ def make_relationship_collumn_getter(person=None):
 
 
 def assigned_contacts_columns(person=None):
-    first_name, last_name = contact_table_collumns()
+    first_name, last_name = contact_table_columns()
     relationship = GetterColumn(
         name='relationship',
         title=_(u"Relationship"),
-        getter=make_relationship_collumn_getter(person))
+        getter=make_relationship_column_getter(person))
     return [first_name, last_name, relationship]
 
 

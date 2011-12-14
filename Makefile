@@ -81,14 +81,12 @@ testall: build
 
 .PHONY: coverage
 coverage: build
-	test -d parts/test/coverage && ! test -d coverage && mv parts/test/coverage . || true
 	rm -rf coverage
-	bin/test --at-level 2 -u --coverage=coverage
-	mv parts/test/coverage .
+	bin/test --at-level 2 -u --coverage=$(CURDIR)/coverage
 
 .PHONY: coverage-reports-html
-coverage-reports-html coverage/reports: coverage
-	test -d parts/test/coverage && ! test -d coverage && mv parts/test/coverage . || true
+coverage-reports-html coverage/reports: build
+	test -d coverage || $(MAKE) coverage
 	rm -rf coverage/reports
 	mkdir coverage/reports
 	bin/coverage coverage coverage/reports
@@ -96,14 +94,12 @@ coverage-reports-html coverage/reports: coverage
 
 .PHONY: ftest-coverage
 ftest-coverage: build
-	test -d parts/test/ftest-coverage && ! test -d ftest-coverage && mv parts/test/ftest-coverage . || true
 	rm -rf ftest-coverage
-	bin/test --at-level 2 -f --coverage=ftest-coverage
-	mv parts/test/ftest-coverage .
+	bin/test --at-level 2 -f --coverage=$(CURDIR)/ftest-coverage
 
 .PHONY: ftest-coverage-reports-html
-ftest-coverage-reports-html ftest-coverage/reports: ftest-coverage
-	test -d parts/test/ftest-coverage && ! test -d ftest-coverage && mv parts/test/ftest-coverage . || true
+ftest-coverage-reports-html ftest-coverage/reports: build
+	test -d ftest-coverage || $(MAKE) ftest-coverage
 	rm -rf ftest-coverage/reports
 	mkdir ftest-coverage/reports
 	bin/coverage ftest-coverage ftest-coverage/reports

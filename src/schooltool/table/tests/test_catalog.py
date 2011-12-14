@@ -386,7 +386,7 @@ def doctest_IndexedTableFormatter_render():
         >>> formatter = IndexedTableFormatter(
         ...     '<Context>', TestRequest())
 
-     As IndexedTableFormatter works with index dicts as items, normal collumns
+     As IndexedTableFormatter works with index dicts as items, normal columns
      cannot render them (or use in any other way).  We adapt columns to
      IndexedColumns before passing to the rendering table formatter.
 
