@@ -93,19 +93,6 @@ catalog = gettext.translation('schooltool', localedir, fallback=True)
 _ = lambda us: catalog.ugettext(us).encode(locale_charset, 'replace')
 _._domain = 'schooltool'
 
-st_usage_message = _("""
-Usage: %s [options]
-Options:
-  -c, --config xxx       use this configuration file instead of the default
-  -h, --help             show this help message
-  -d, --daemon           go to background after starting
-  -r, --restore-manager password
-                         restore the manager user with the provided password
-                         (read password from the standart input if 'password'
-                         is '-')
-  --manage               only do management tasks, don't run the server
-""").strip()
-
 
 schooltool_server = ServerType(WSGIHTTPServer,
                                WSGIPublisherApplication,
@@ -484,8 +471,6 @@ class StandaloneServer(object):
     ZCONFIG_SCHEMA = os.path.join(os.path.dirname(__file__),
                                   'config-schema.xml')
 
-    usage_message = st_usage_message
-
     system_name = "SchoolTool"
 
     Options = Options
@@ -529,7 +514,18 @@ class StandaloneServer(object):
             sys.exit(1)
         for k, v in opts:
             if k in ('-h', '--help'):
-                print self.usage_message % progname
+                print _("\n"
+                        "Usage: %s [options]\n"
+                        "Options:\n"
+                        "  -c, --config xxx       use this configuration file instead of the default\n"
+                        "  -h, --help             show this help message\n"
+                        "  -d, --daemon           go to background after starting\n"
+                        "  -r, --restore-manager password\n"
+                        "                         restore the manager user with the provided password\n"
+                        "                         (read password from the standart input if 'password'\n"
+                        "                         is '-')\n"
+                        "  --manage               only do management tasks, don't run the server\n"
+                        % progname).strip()
                 sys.exit(0)
             if k in ('-c', '--config'):
                 options.config_file = v
