@@ -188,10 +188,10 @@ class FlourishPasswordChangedView(flourish.form.DialogForm):
 
     def initDialog(self):
         super(FlourishPasswordChangedView, self).initDialog()
-        self.ajax_settings['dialog']['dialogClass'] = 'password-changed-dialog'
-        self.ajax_settings['dialog']['closeOnScape'] = False
+        self.ajax_settings['dialog']['dialogClass'] = 'explicit-close-dialog'
+        self.ajax_settings['dialog']['closeOnEscape'] = False
 
-    @button.buttonAndHandler(_('ok-button', 'OK'))
+    @button.buttonAndHandler(_('ok-button', 'OK'), name='ok')
     def handle_submit_(self, action):
         app = ISchoolToolApplication(None)
         nexturl = self.request.get('nexturl', '')

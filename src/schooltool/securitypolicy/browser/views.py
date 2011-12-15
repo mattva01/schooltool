@@ -55,7 +55,7 @@ class FlourishAccessControlView(AccessControlView):
     fieldset_titles = {
         'everyone_can_view_section_info': _('Section information'),
         'everyone_can_view_person_list': _('List of accounts'),
-        'persons_can_set_their_preferences': ('User calendars'),
+        'persons_can_set_their_preferences': _('User calendars'),
         'persons_can_change_their_passwords': _('User passwords'),
         'everyone_can_view_group_list': _('List of groups'),
         'everyone_can_view_group_info': _('Group information'),
