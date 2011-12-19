@@ -40,6 +40,11 @@
            schooltool.skin.flourish.IFlourishLayer"
       factory=".app.TimetableContainerTableFormatter" />
 
+  <zope:adapter
+      factory=".timetable.SelectedPeriodsSubmitLabel"
+      name="title"
+      />
+
   <flourish:viewlet
       name="timetable_container"
       manager="schooltool.skin.flourish.page.IPageRefineManager"

@@ -1174,7 +1174,7 @@ class FlourishSectionAddView(Form, SectionAddView):
     def nextURL(self):
         return absoluteURL(self._section, self.request)
 
-    @button.buttonAndHandler(_('Add'), name='add')
+    @button.buttonAndHandler(_('Submit'), name='add')
     def handleAdd(self, action):
         data, errors = self.extractData()
         if errors:

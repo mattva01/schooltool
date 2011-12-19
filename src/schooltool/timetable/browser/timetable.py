@@ -405,6 +405,11 @@ class FlourishSelectedPeriodsAddView(flourish.form.AddForm,
     legend = _("Schedule a school timetable")
 
 
+SelectedPeriodsSubmitLabel = button.StaticButtonActionAttribute(
+    _(u'Submit'),
+    button=FlourishSelectedPeriodsAddView.buttons['add'])
+
+
 class SelectedPeriodsFormValidator(validator.InvariantsValidator):
 
     def _formatTitle(self, object):
