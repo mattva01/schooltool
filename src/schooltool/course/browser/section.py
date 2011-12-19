@@ -30,6 +30,7 @@ from zope.container.contained import NameChooser
 from zope.container.interfaces import INameChooser
 from zope.event import notify
 from zope.i18n import translate
+from zope.i18n.interfaces.locales import ICollator
 from zope.interface import implements, Invalid, directlyProvides
 from zope.intid.interfaces import IIntIds
 from zope.publisher.browser import BrowserView
@@ -1231,6 +1232,23 @@ WidgetValidatorDiscriminators(SectionTermsValidator,
 
 
 class FlourishNewSectionCoursesSubform(NewSectionCoursesSubform):
+
+    def __init__(self, *args, **kw):
+        default_course = kw.pop('default_course', None)
+        subform.EditSubForm.__init__(self, *args, **kw)
+        courses = ICourseContainer(self.context)
+        collator = ICollator(self.request.locale)
+        items = sorted(courses.values(),
+                       cmp=collator.cmp,
+                       key=lambda course:course.title)
+        self.vocabulary=vocabulary_titled(items)
+        self.values = {'course': default_course}
+        schema_field = Choice(
+            __name__='course', title=_('Course'),
+            required=True, vocabulary=self.vocabulary)
+        self.fields += field.Fields(schema_field)
+        datamanager.DictionaryField(self.values, schema_field)
+
 
     def updateWidgets(self):
         super(FlourishNewSectionCoursesSubform, self).updateWidgets()
