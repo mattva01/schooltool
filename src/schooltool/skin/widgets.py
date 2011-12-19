@@ -42,7 +42,7 @@ from z3c.form.widget import Widget, FieldWidget, ComputedWidgetAttribute
 from z3c.form.converter import BaseDataConverter
 from z3c.form.converter import FormatterValidationError
 from z3c.form.browser.text import TextWidget
-from z3c.form.widget import FieldWidget
+from z3c.form.browser.textarea import TextAreaWidget
 
 from schooltool.skin.skin import ISchoolToolLayer
 from schooltool.common import parse_date
@@ -221,9 +221,9 @@ class HTMLFragmentWidget(object):
     id = FieldProperty(IHTMLFragmentWidget['id'])
 
 
-class FckeditorZ3CFormWidget(z3c.form.widget.Widget,
-                      HTMLFragmentWidget,
-                      FckeditorWidgetBase):
+class FckeditorZ3CFormWidget(TextAreaWidget,
+                             HTMLFragmentWidget,
+                             FckeditorWidgetBase):
     """FCK editor z3c.form widget implementation."""
     implementsOnly(IFckeditorWidget)
 
