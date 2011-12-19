@@ -505,7 +505,7 @@
       for="schooltool.timetable.interfaces.IScheduleContainer"
       manager="schooltool.skin.flourish.page.IPageRefineManager"
       class=".schedule.ScheduleAddLinks"
-      title="Add Schedule"
+      title="Add"
       permission="schooltool.edit"
       />
 
@@ -520,7 +520,7 @@
 
   <flourish:viewlet
       name="schedule-timetable"
-      title="School Timetable"
+      title="Schedule"
       link="addTimetable.html"
       class="schooltool.skin.flourish.page.LinkViewlet"
       view=".schedule.FlourishScheduleContainerView"
