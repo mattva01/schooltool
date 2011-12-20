@@ -26,8 +26,13 @@ import sys
 import zope.formlib.widgets
 from zope.component import getUtility
 from zope.i18n.interfaces import INegotiator
+from z3c.form.widget import ComputedWidgetAttribute
 
+from schooltool.skin.widgets import FCKConfig
+from schooltool.skin.widgets import IFckeditorWidget
+from schooltool.skin.widgets import FckeditorFormlibWidget
 from schooltool.skin.flourish.resource import ResourceLibrary
+from schooltool.skin.flourish.interfaces import IFlourishLayer
 
 
 class JQueryI18nLibrary(ResourceLibrary):
@@ -73,3 +78,17 @@ class JQueryI18nLibrary(ResourceLibrary):
 
 class FormlibDateWidget(zope.formlib.widgets.DateWidget):
     cssClass="date-field"
+
+
+Flourish_fckeditor_config = ComputedWidgetAttribute(
+    lambda a: FCKConfig(288, 160),
+    request=IFlourishLayer,
+    widget=IFckeditorWidget,
+    )
+
+
+class FlourishFckeditorFormlibWidget(FckeditorFormlibWidget):
+
+    def __init__(self, *args, **kw):
+        super(FlourishFckeditorFormlibWidget, self).__init__(*args, **kw)
+        self.config = FCKConfig(288, 160)
