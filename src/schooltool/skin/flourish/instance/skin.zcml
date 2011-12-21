@@ -7,17 +7,25 @@
 
   <!-- Skin resources -->
 
-  <configure package="schooltool.skin">
+  <configure package="schooltool.skin.flourish">
 
-  <resource
-      name="editor_config.js"
-      file="resources/editor_config.js"
-      layer="schooltool.skin.flourish.IFlourishLayer" />
+    <resource
+        name="editor_config.js"
+        file="resources/editor_config.js"
+        layer="schooltool.skin.flourish.IFlourishLayer" />
 
     <resource
         name="favicon.ico"
         file="resources/favicon.ico"
         layer="schooltool.skin.flourish.IFlourishLayer" />
+
+    <zope:resourceLibrary
+        name="schooltool.skin.flourish-fckeditor"
+        layer="schooltool.skin.flourish.IFlourishLayer">
+      <directory
+          source="resources/fckeditor"
+          />
+    </zope:resourceLibrary>
 
   </configure>
 
