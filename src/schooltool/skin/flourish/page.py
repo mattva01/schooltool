@@ -97,7 +97,9 @@ class ContentViewletManager(ViewletManager):
     def render(self, *args, **kw):
         if not self.viewlets:
             return ''
-        return ViewletManager.render(self, *args, **kw)
+        result = ViewletManager.render(self, *args, **kw)
+        if result is not None:
+            return result.strip()
 
 
 class DisabledViewlet(Viewlet):

@@ -45,6 +45,7 @@ from zc.table.interfaces import ISortableColumn
 
 from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.common.inlinept import InlineViewPageTemplate
 from schooltool.skin.containers import TableContainerView
 from schooltool.skin import flourish
 from schooltool.skin.flourish.form import Form
@@ -407,14 +408,41 @@ class EmailView(form.Form):
             self.widgets['status'].style = u'color: red;'
 
 
-class FlourishEmailView(flourish.page.Page, EmailView):
+class FlourishEmailView(flourish.page.Page):
 
-    label = None
-    legend = _('Email Details')
-    fields = field.Fields(IEmailDisplayForm).omit('server_status')
+    def preferred_datetime_format(self):
+        preferences = get_application_preferences()
+        return '%s %s' % (preferences.dateformat, preferences.timeformat)
 
     def update(self):
-        EmailView.update(self)
+        attrs = ['from_address', 'to_addresses', 'time_created',
+                 'subject', 'body', 'status', 'time_sent']
+        self.attrs = []
+        datetime_format = self.preferred_datetime_format()
+        info_adapter = IEmailDisplayForm(self.context)
+        for attr in attrs:
+            info = {'label': IEmailDisplayForm[attr].title}
+            if attr != 'status':
+                value = getattr(info_adapter, attr)
+                if attr in ('time_created', 'time_sent'):
+                    value = value.strftime(datetime_format)
+            else:
+                value = None
+                if self.context.status_code is not None:
+                    value = translate(
+                        format_message(
+                            status_messages[self.context.status_code],
+                            mapping=self.context.status_parameters),
+                        context=self.request)
+            info['value'] = value
+            self.attrs.append(info)
+
+    def nextURL(self):
+        return '%s/queue.html' % absoluteURL(self.context.__parent__,
+                                             self.request)
+
+
+class FlourishEmailRetryView(flourish.page.Page):
 
     def getDeleteURL(self, email):
         params = [('delete.%s' % (email.__name__.encode('utf-8')), ''),
@@ -423,8 +451,7 @@ class FlourishEmailView(flourish.page.Page, EmailView):
                              'queue.html',
                              urllib.urlencode(params),)
 
-    @button.buttonAndHandler(_('Retry'))
-    def handle_retry_action(self, action):
+    def __call__(self):
         utility = getUtility(IEmailUtility)
         email = removeSecurityProxy(self.context)
         success = utility.send(email)
@@ -434,29 +461,6 @@ class FlourishEmailView(flourish.page.Page, EmailView):
             url = '%s/queue.html' % absoluteURL(self.context.__parent__,
                                                 self.request)
         self.request.response.redirect(url)
-
-    @button.buttonAndHandler(_('Cancel'))
-    def handle_cancel_action(self, action):
-        url = '%s/queue.html' % absoluteURL(self.context.__parent__,
-                                            self.request)
-        self.request.response.redirect(url)
-
-    def updateActions(self):
-        form.Form.updateActions(self)
-        if mail_enabled():
-            self.actions['retry'].addClass('button-ok')
-        else:
-            self.actions['retry'].mode = 'display'
-        self.actions['cancel'].addClass('button-cancel')
-
-    def updateDisplayWidgets(self):
-        if self.context.status_code is not None:
-            status_text = translate(
-                format_message(
-                    status_messages[self.context.status_code],
-                    mapping=self.context.status_parameters),
-                context=self.request)
-            self.widgets['status'].value = status_text
 
 
 # Email Container View and Table Formatter
@@ -785,11 +789,49 @@ class EmailActionsLinks(flourish.page.RefineLinksViewlet):
     """Email actions links viewlet."""
 
 
-class SendTestLinkViewlet(flourish.page.LinkViewlet):
+class EmailViewActionsLinks(flourish.page.RefineLinksViewlet):
+    """Email view actions links viewlet."""
+
+    body_template = InlineViewPageTemplate("""
+        <ul tal:attributes="class view/list_class">
+          <li tal:repeat="item view/renderable_items"
+              tal:attributes="class item/class"
+              tal:content="structure item/viewlet">
+          </li>
+        </ul>
+    """)
+
+    # We don't want this manager rendered at all
+    # if there are no renderable viewlets
+    @property
+    def renderable_items(self):
+        result = []
+        for item in self.items:
+            render_result = item['viewlet']()
+            if render_result and render_result.strip():
+                result.append({
+                        'class': item['class'],
+                        'viewlet': render_result,
+                        })
+        return result
 
     def render(self):
-        if self.context.enabled:
-            return super(SendTestLinkViewlet, self).render()
+        if self.renderable_items:
+            return super(EmailViewActionsLinks, self).render()
+
+
+class RetryLinkViewlet(flourish.page.LinkViewlet):
+
+    @property
+    def enabled(self):
+        return self.context.__parent__.enabled
+
+
+class SendTestLinkViewlet(flourish.page.LinkViewlet):
+
+    @property
+    def enabled(self):
+        return self.context.enabled
 
 
 class EmailQueueLinkViewlet(flourish.page.LinkViewlet):

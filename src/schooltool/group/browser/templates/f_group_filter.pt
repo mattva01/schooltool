@@ -3,7 +3,7 @@
   <div class="row">
     <div class="label">
       <label for="SEARCH">
-        <span>Group title</span>
+        <span i18n:translate="">Group title</span>
       </label>
     </div>
     <div class="widget">
@@ -14,7 +14,7 @@
     </div>
   </div>
 </fieldset>
-<div class="buttons">
+<div class="buttons" i18n:domain="schooltool">
   <input type="submit" name="SEARCH_BUTTON" value="Search"
          class="button-ok" i18n:attributes="value" />
 </div>

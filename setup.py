@@ -21,8 +21,12 @@
 SchoolTool setup script.
 """
 
-import os
+import os, sys
 from setuptools import setup, find_packages
+
+other_requires = []
+if sys.version_info[:2] <= (2, 5):
+    other_requires = ['simplejson']
 
 if os.path.exists("version.txt"):
     version = open("version.txt").read().strip()
@@ -67,7 +71,6 @@ Javascript will be usable, although perhaps not very nice or convenient.""",
                       'pytz',
                       'reportlab',
                       'rwproperty',
-                      'simplejson', # for python << 2.6
                       'setuptools',
                       'xlrd',
                       'xlwt',
@@ -142,7 +145,8 @@ Javascript will be usable, although perhaps not very nice or convenient.""",
                       'zope.testing',
                       'zope.traversing>=3.9',
                       'zope.ucol',
-                      'zope.viewlet'],
+                      'zope.viewlet']
+                      + other_requires,
     extras_require={'test': ['lxml',
                              'zope.app.testing',
                              'zope.copypastemove',

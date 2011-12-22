@@ -89,6 +89,7 @@ form fieldset .row > .error .error {
 }
 
 form fieldset .row .widget input.text-widget,
+form fieldset .row .widget input[type="file"],
 form fieldset .row .widget input[type="text"],
 form fieldset .row .widget input.password-widget,
 form fieldset .row .widget input[type="password"] {
@@ -127,6 +128,16 @@ form fieldset .row .widget textarea.textarea-widget:focus,
 form fieldset .row .widget textarea.error {
     height: 48px;
     width: 284px;
+}
+
+form fieldset .row .widget textarea.csvimport {
+    height: 200px;
+    width: 504px;
+}
+
+form fieldset .row .widget textarea.csvimport:focus {
+    height: 198px;
+    width: 502px;
 }
 
 form fieldset .row .widget .option {

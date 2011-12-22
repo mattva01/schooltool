@@ -582,17 +582,16 @@ class FlourishGroupView(DisplayForm):
     def has_members(self):
         return bool(list(self.context.members))
 
-    # XXX: leaders logic, duplicated from FlourishBaseResourceView
-
     @property
     def leaders_table(self):
-        return self.getTable(list(self.context.leaders), 'leaders')
+        return self.getTable(list(self.context.leaders), 'leaders',
+                             filter=lambda l: l)
 
-    def getTable(self, items, prefix):
+    def getTable(self, items, prefix, **kw):
         persons = ISchoolToolApplication(None)['persons']
         result = getMultiAdapter((persons, self.request), ITableFormatter)
         result.setUp(table_formatter=table.StandaloneFullFormatter, items=items,
-                     prefix=prefix)
+                     prefix=prefix, **kw)
         return result
 
     def has_leaders(self):
@@ -680,6 +679,11 @@ class FlourishGroupEditView(Form, form.EditForm):
         url = absoluteURL(self.context, self.request)
         self.request.response.redirect(url)
 
+    def updateActions(self):
+        super(FlourishGroupEditView, self).updateActions()
+        self.actions['apply'].addClass('button-ok')
+        self.actions['cancel'].addClass('button-cancel')
+
 
 class FlourishGroupDeleteView(DialogForm, form.EditForm):
     """View used for confirming deletion of a group."""
@@ -716,6 +720,16 @@ class FlourishMemberViewPersons(FlourishRelationshipViewBase):
 
     current_title = _("Current Members")
     available_title = _("Add Members")
+
+    def setUpTables(self):
+        self.available_table = self.createTableFormatter(
+            ommit=self.getOmmitedItems(),
+            prefix="add_item")
+
+        self.selected_table = self.createTableFormatter(
+            filter=lambda l: l,
+            items=self.getSelectedItems(),
+            prefix="remove_item")
 
     def getSelectedItems(self):
         """Return a list of current group memebers."""

@@ -111,15 +111,6 @@ class FlourishBasicPersonContainerView(flourish.containers.TableContainerView):
         app = ISchoolToolApplication(None)
         return absoluteURL(app, self.request) + '/manage'
 
-    def getColumnsAfter(self):
-        username = IndexedLocaleAwareGetterColumn(
-            index='__name__',
-            name='username',
-            title=_(u'Username'),
-            getter=lambda i, f: i.__name__,
-            subsort=True)
-        return [username]
-
 
 class PersonContainerLinks(flourish.page.RefineLinksViewlet):
     """Person container links viewlet."""
@@ -1019,7 +1010,13 @@ class BasicPersonTableFormatter(PersonTableFormatter):
 
     def columns(self):
         cols = list(reversed(PersonTableFormatter.columns(self)))
-        return cols
+        username = IndexedLocaleAwareGetterColumn(
+            index='__name__',
+            name='username',
+            title=_(u'Username'),
+            getter=lambda i, f: i.__name__,
+            subsort=True)
+        return cols + [username]
 
     def render(self):
         columns = [IIndexedColumn(c) for c in self._columns]

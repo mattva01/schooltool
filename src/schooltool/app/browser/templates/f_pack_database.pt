@@ -2,7 +2,7 @@
   <h3 tal:content="view/status" />
   <form tal:attributes="action request/URL">
     <div class="buttons">
-      <input type="submit" class="button-neutral" value="Done"
+      <input type="submit" class="button-ok" value="Done"
              name="DONE" i18n:attributes="value"
              onclick="return ST.dialogs.submit(this, this);" />
     </div>

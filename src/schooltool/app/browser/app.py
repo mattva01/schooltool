@@ -881,6 +881,11 @@ class PackDatabaseLink(flourish.page.ModalFormLinkViewlet):
 
 class PackDatabaseView(Dialog):
 
+    def initDialog(self):
+        super(PackDatabaseView, self).initDialog()
+        self.ajax_settings['dialog']['dialogClass'] = 'explicit-close-dialog'
+        self.ajax_settings['dialog']['closeOnEscape'] = False
+
     def update(self):
         Dialog.update(self)
         if 'DONE' in self.request:

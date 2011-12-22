@@ -76,7 +76,7 @@
         </label>
       </div>
       <div class="widget">
-        <select name="charset">
+        <select name="charset" class="select-widget">
           <option value="UTF-8" i18n:translate="">Unicode (UTF-8)</option>
           <option value="ISO-8859-1" i18n:translate="">Western (ISO-8859-1)</option>
           <option value="ISO-8859-15" i18n:translate="">Western (ISO-8859-15)</option>
@@ -91,7 +91,7 @@
           <span i18n:translate="">Other charset</span>
         </label>
       </div>
-      <div class="row">
+      <div class="widget">
         <input name="other_charset" type="text" />
       </div>
     </div>
@@ -104,8 +104,11 @@
           <span i18n:translate="">Enter CSV text</span>
         </label>
       </div>
-      <textarea name="csvtext" id="csvtext" cols="50" rows="10"
-                tal:content="view/csvtext|nothing"></textarea>
+      <div class="widget">
+        <textarea name="csvtext" id="csvtext"
+                  class="textarea-widget csvimport"
+                  tal:content="view/csvtext|nothing"></textarea>
+      </div>
     </div>
   </fieldset>
   <div class="buttons">

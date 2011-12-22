@@ -1,0 +1,16 @@
+<div i18n:domain="schooltool">
+  <h3 i18n:translate="">Email Details</h3>
+  <table class="form-fields">
+    <tbody>
+      <tr tal:repeat="info view/attrs">
+        <td class="label" tal:content="info/label" />
+        <td tal:content="info/value" />
+      </tr>
+    </tbody>
+  </table>
+  <h3>
+    <a tal:attributes="href view/nextURL" i18n:translate="">
+      Done
+    </a>
+  </h3>
+</div>

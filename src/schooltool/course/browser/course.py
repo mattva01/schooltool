@@ -506,7 +506,7 @@ class FlourishCourseAddView(AddForm):
         self.actions['add'].addClass('button-ok')
         self.actions['cancel'].addClass('button-cancel')
 
-    @button.buttonAndHandler(_('Add'))
+    @button.buttonAndHandler(_('Submit'), name='add')
     def handleAdd(self, action):
         super(FlourishCourseAddView, self).handleAdd.func(self, action)
 
