@@ -6,12 +6,18 @@ CHANGES
 ------------------
 
 - Cannot add resources (https://launchpad.net/bugs/894632)
-- Many CSS fixes (https://launchpad.net/bugs/885807)
 - Email view needs formatting (https://launchpad.net/bugs/886304)
+- Batches missing in several views (https://launchpad.net/bugs/882060)
+- Show usernames in every persons table (https://launchpad.net/bugs/897260)
+- Many CSS fixes (https://launchpad.net/bugs/885807)
+- Many wording and i18n fixes by Douglas Cerna.
 - Hide demographics fieldset if it is empty in person add views (https://launchpad.net/bugs/752051)
+- Fix test failing when translations are compiled.
+- Sorted course titles in section add form (https://launchpad.net/bugs/905386)
+- Fixed required demographics description fields (https://launchpad.net/bugs/896390)
 - Styled the fckeditor widget (https://launchpad.net/bugs/891348)
-- Updated README.txt (https://launchpad.net/bugs/590781), including instructions
-  for Virtual Hosting.
+- Updated README.txt (https://launchpad.net/bugs/590781)
+- Document running on port 80 (https://launchpad.net/bugs/259415)
 - Updated translations.
 
 

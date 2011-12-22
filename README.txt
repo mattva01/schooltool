@@ -123,6 +123,10 @@ Once the server is running, go to http://127.0.0.1:7080 in the browser.
 Server is started on local port 7080. You can change the port in the file
 ``instance/paste.ini``.
 
+You will most likely want to make SchoolTool available on port 80. But this port
+is reserved for the web the server. You will have to configure a virtual host or
+a path in web server configuration. See `Virtual Hosting`_.
+
 
 Securing SchoolTool
 -------------------
@@ -281,10 +285,10 @@ the configuration of that site::
 
     ProxyPass /schooltool http://127.0.0.1:7080/++vh++http:example.org:80/schooltool/++/
 
-For more information, see `Virtual Hosting`_ in Zope 3.
+For more information, see `Setting Up Virtual Hosting`_ in Zope documentation.
 
 .. _mod_proxy: http://httpd.apache.org/docs/current/mod/mod_proxy.html
-.. _Virtual Hosting: http://wiki.zope.org/zope3/virtualhosting.html
+.. _Setting Up Virtual Hosting: http://wiki.zope.org/zope3/virtualhosting.html
 
 
 HTTPS
