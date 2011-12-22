@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2011-11-22 22:28+0200\n"
-"PO-Revision-Date: 2011-11-23 03:37+0000\n"
-"Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
+"PO-Revision-Date: 2011-12-13 14:05+0000\n"
+"Last-Translator: olegb <Unknown>\n"
 "Language-Team: Danish <da@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-11-23 06:09+0000\n"
-"X-Generator: Launchpad (build 14336)\n"
+"X-Launchpad-Export-Date: 2011-12-14 05:42+0000\n"
+"X-Generator: Launchpad (build 14487)\n"
 "Language: da\n"
 
 #: /src/schooltool/app/app.py:193
@@ -1318,7 +1318,7 @@ msgstr "Ledende udvikler:"
 #: /src/schooltool/app/browser/templates/about.pt:44
 #: /src/schooltool/app/browser/templates/f_about.pt:33
 msgid "Core Developers:"
-msgstr ""
+msgstr "Udviklere"
 
 #: /src/schooltool/app/browser/templates/about.pt:47
 #: /src/schooltool/app/browser/templates/f_about.pt:37
@@ -1485,7 +1485,7 @@ msgstr "R"
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:49
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:71
 msgid "invert-selection-button"
-msgstr ""
+msgstr "Vende valgte"
 
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:37
 #: /src/schooltool/app/browser/templates/f_edit_relationships.pt:8
@@ -2221,7 +2221,7 @@ msgstr "Foretrukket kodning"
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:35
 msgid "File system encoding"
-msgstr ""
+msgstr "Filsystem kodning"
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:39
 msgid "Process id"
