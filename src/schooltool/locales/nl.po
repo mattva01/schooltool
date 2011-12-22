@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2011-11-22 22:28+0200\n"
-"PO-Revision-Date: 2011-11-23 03:06+0000\n"
+"PO-Revision-Date: 2011-11-26 15:26+0000\n"
 "Last-Translator: rob <linuxned@gmail.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-11-23 06:09+0000\n"
-"X-Generator: Launchpad (build 14336)\n"
+"X-Launchpad-Export-Date: 2011-11-27 05:48+0000\n"
+"X-Generator: Launchpad (build 14381)\n"
 "Language: nl\n"
 
 #: /src/schooltool/app/app.py:193
@@ -1319,7 +1319,7 @@ msgstr "Hoofdontwikkelaar:"
 #: /src/schooltool/app/browser/templates/about.pt:44
 #: /src/schooltool/app/browser/templates/f_about.pt:33
 msgid "Core Developers:"
-msgstr ""
+msgstr "Core-ontwikkelaars:"
 
 #: /src/schooltool/app/browser/templates/about.pt:47
 #: /src/schooltool/app/browser/templates/f_about.pt:37
@@ -2274,6 +2274,9 @@ msgid ""
 "Each section description's first row contains the <strong>course SchoolTool "
 "ID</strong> and the <strong>instructor username</strong> for the new section."
 msgstr ""
+"De eerste rij van elke sectieomschrijving bevat het <strong>Schooltool vak-"
+"ID</strong> en de <strong>gebruikersnaam van de leraar</strong> voor de "
+"nieuwe sectie."
 
 #: /src/schooltool/app/browser/templates/f_section_csvimport_description.pt:27
 msgid ""
@@ -2285,6 +2288,14 @@ msgid ""
 "\"4\" in the top of csv, you will need to provide 3 section ids, for terms "
 "\"2\", \"3\" and \"4\" respectively."
 msgstr ""
+"Wanneer u in plaats daarvan de secties wilt bijwerken, dient u in de eerste "
+"regel van de sectieomschrijving aan te geven: het <strong>SchoolTool vak-"
+"ID</strong>, de <strong>gebruikersnaam van de leraar</strong> en daarna het "
+"<strong>SchoolTool sectie-ID</strong> voor overeenkomende secties in elke "
+"termijn. <strong>NB:</strong> laten we zeggen dat uw school 5 opeenvolgende "
+"termijnen heeft en u geeft de termijnen \"2\", \"4\" bovenin de CSV aan, dan "
+"dient u respectievelijk 3 sectie-ID's aan te geven voor de termijnen \"2\", "
+"\"3\" en \"4\"."
 
 #: /src/schooltool/app/browser/templates/f_section_csvimport_description.pt:34
 msgid ""
@@ -2345,6 +2356,22 @@ msgid ""
 "\"johnny\"\n"
 "\"pete\"\n"
 msgstr ""
+"\n"
+"\"Herfst\", \"Lente\"\n"
+"\"\",\"\",\"\"\n"
+"\"filosofie\",\"lorch\"\n"
+"\"weekrooster\"\n"
+"\"Maandag\",\"A\"\n"
+"\"Maandag\",\"B\"\n"
+"\"Dinsdag\",\"B\"\n"
+"\"***\"\n"
+"\"johnny\"\n"
+"\"billy\"\n"
+"\"\"\n"
+"\"literatuur\",\"guzman\",\"literatuur-h\",\"literatuur-l\"\n"
+"\"***\"\n"
+"\"johnny\"\n"
+"\"pete\"\n"
 
 #: /src/schooltool/app/browser/templates/f_section_csvimport_description.pt:70
 msgid ""
@@ -2357,6 +2384,14 @@ msgid ""
 "SchoolTool IDs will be set to literature-f in Fall and literature-s in "
 "Spring."
 msgstr ""
+"Het voorbeeld hierboven zal nieuwe secties aanmaken voor de filosofielessen "
+"en literatuurlessen. De secties zullen onderwezen worden vanaf de herfst tot "
+"de lente. De sectie voor de filosofieles heeft personen met de "
+"gebruikersnamen 'johhny' en 'billy' als leerlingen. Deze zal gepland worden "
+"op maandag (twee lessen, periodes 'A' en 'B') en dinsdag. De "
+"literatuursectie zal op dezelfde manier verwerkt worden, maar zonder "
+"planning. De SchoolTool-ID's zullen ingesteld worden op literatuur-h in de "
+"herfst en literatuur-l in de lente."
 
 #: /src/schooltool/app/browser/templates/f_server_settings_overview.pt:3
 msgid "Server Information"
@@ -2676,6 +2711,8 @@ msgid ""
 "Wrong section header on line ${line_no} (it should contain a course id, an "
 "instructor id and optional SchoolTool section IDs for each of the terms)"
 msgstr ""
+"Fout sectiehoofd op regel ${line_no} (deze zou een vak-ID, een leraar-ID en "
+"optioneel SchoolTool sectie-ID's moeten bevatten voor elke termijn)"
 
 #. Default: ""
 #: /src/schooltool/app/browser/timetablecsvimport.py:220
@@ -3494,9 +3531,9 @@ msgid ""
 "howard, Howard, Jobs\n"
 msgstr ""
 "\n"
-"jjones, Jimmy, Jones\n"
-"jbjones, Jim Bob, Jones, r2m45J\n"
-"howard, Howard, Jobs\n"
+"bpeeters, Bart, Peeters\n"
+"bfpeeters, Ben Frank, Peeters, r2m45J\n"
+"koen, Koen, Wouters\n"
 
 #: /src/schooltool/basicperson/browser/templates/f_csvimport_description.pt:15
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:40
@@ -3506,8 +3543,8 @@ msgid ""
 "Of the three, only 'jbjones' has a password ('r2m45J') and will be able to "
 "login to the system. Note that passwords must be sent in plain text."
 msgstr ""
-"Het voorbeeld hierboven zal drie gebruikers aanmaken, 'dpeeters', "
-"'dfpeeters' en 'koen'. Alleen 'dfpeeters' heeft een wachtwoord ('r2m45J') en "
+"Het voorbeeld hierboven zal drie gebruikers aanmaken, 'bpeeters', "
+"'bfpeeters' en 'koen'. Alleen 'bfpeeters' heeft een wachtwoord ('r2m45J') en "
 "zal zich bij het systeem kunnen aanmelden. NB: de wachtwoorden moeten "
 "onversleuteld meegezonden worden."
 
@@ -3695,7 +3732,7 @@ msgstr "Geboorteplaats"
 
 #: /src/schooltool/basicperson/demographics.py:151
 msgid "Citizenship"
-msgstr ""
+msgstr "Staatsburgerschap"
 
 #: /src/schooltool/basicperson/interfaces.py:38
 #: /src/schooltool/contact/interfaces.py:40
@@ -4326,11 +4363,11 @@ msgstr "Mobiele telefoon"
 
 #: /src/schooltool/contact/interfaces.py:82
 msgid "Other 1"
-msgstr ""
+msgstr "Ander 1"
 
 #: /src/schooltool/contact/interfaces.py:84
 msgid "Other 2"
-msgstr ""
+msgstr "Ander 2"
 
 #: /src/schooltool/contact/interfaces.py:109
 msgid "Contact's relationship with the person"
@@ -4485,6 +4522,8 @@ msgid ""
 "Course \"${course_title}\" credits \"${invalid_credits}\" value must be a "
 "number."
 msgstr ""
+"Foute kredietwaarde \"${invalid_credits}\" voor vak \"${course_title}\", "
+"waarde moet een heel getal zijn."
 
 #. Default: ""
 #: /src/schooltool/course/browser/csvimport.py:103
@@ -4848,6 +4887,10 @@ msgid ""
 "optional course SchoolTool ID, <strong>may</strong> include an optional "
 "Alternate ID and <strong>may</strong> include an optional credits value."
 msgstr ""
+"CVS-gegevens <strong>moeten</strong> een vak-naam bevatten, "
+"<strong>mogen</strong> een vak-omschrijving bevatten, <strong>mogen</strong> "
+"een Schooltool vak-ID bevatten, <strong>mogen</strong> een alternatief-ID "
+"bevatten en <strong>mogen</strong> een kredietwaarde bevatten."
 
 #: /src/schooltool/course/browser/templates/f_course_csvimport_description.pt:19
 msgid ""
@@ -4862,6 +4905,17 @@ msgid ""
 "database, existing courses will be updated. Course Ids take precedence when "
 "determining which course should be updated."
 msgstr ""
+"Het bovenstaande voorbeeld zal 4 vakken aanmaken getiteld \"Oude "
+"Geschiedenis\", \"Geschiedenis van de V.S.\", \"Wereldgeschiedenis\" en "
+"\"Spaans\". Het eerste en derde vak zullen respectievelijk de omschrijvingen "
+"\"Prehistorie tot 1000 v.Chr.\" en \"1000 v.Chr. tot de 20ste eeuw\" hebben. "
+"Het tweede en vierde vak hebben geen omschrijving. Het tweede en derde vak "
+"zullen de Schooltool-ID's geschiedenis van de V.S. en wereldgeschiedenis "
+"hebben. Het vierde vak zal als alternatief-ID spanish-gov hebben en zijn "
+"kredietwaarde is ingesteld op 5. Wanneer u een CSV upload met titels of vak-"
+"ID's die al in de databank zitten, zullen de bestaande vakken worden "
+"bijgewerkt. Vak-ID's hebben voorrang bij het bepalen welk vak wordt "
+"bijgewerkt."
 
 #: /src/schooltool/course/browser/templates/f_course_view.pt:4
 msgid "Edit this course"
@@ -5190,15 +5244,15 @@ msgstr "Sectie ontkoppelen"
 #: /src/schooltool/course/interfaces.py:36
 #: /src/schooltool/course/interfaces.py:129
 msgid "SchoolTool ID"
-msgstr ""
+msgstr "SchoolTool-ID"
 
 #: /src/schooltool/course/interfaces.py:37
 msgid "An internal identifier of this course."
-msgstr ""
+msgstr "Een interne identificatie voor dit vak."
 
 #: /src/schooltool/course/interfaces.py:53
 msgid "School identifier of this course."
-msgstr ""
+msgstr "School-identificatie voor dit vak."
 
 #: /src/schooltool/course/interfaces.py:58
 msgid "Alternate ID"
@@ -5226,7 +5280,7 @@ msgstr ""
 
 #: /src/schooltool/course/interfaces.py:130
 msgid "An internal identifier of this section."
-msgstr ""
+msgstr "Een interne identificatie voor deze sectie."
 
 #. Default: ""
 #: /src/schooltool/course/section.py:89
@@ -5382,7 +5436,7 @@ msgstr "U bent niet geautoriseerd"
 
 #: /src/schooltool/devmode/f_unauthorized.pt:9
 msgid "Permission checks"
-msgstr ""
+msgstr "Controle rechten"
 
 #: /src/schooltool/devmode/f_unauthorized.pt:11
 msgid ""
@@ -5643,7 +5697,7 @@ msgid ""
 "your school's server, your ISP, or your webmail provider to configure a mail "
 "client to send mail via the provider's SMTP service."
 msgstr ""
-"Om er voor te zorgen dat SchoolTool e-mails kan verzenden, heeft u de "
+"Om ervoor te zorgen dat SchoolTool e-mails kan verzenden, heeft u de "
 "instructies van uw schoolserver nodig, uw ISP (Internet Service Provider) of "
 "uw webmail-provider zodat u een e-mailclient kan instellen om e-mails te "
 "verzenden via de SMTP-dienst van uw provider."
@@ -5849,6 +5903,7 @@ msgstr "is hetzelfde thuisklas-periode-ID als van een ander op deze dag"
 #: /src/schooltool/export/importer.py:99
 msgid "must be either 'Location', 'Equipment' or 'Resource'"
 msgstr ""
+"moet ofwel een 'Locatie' ofwel een 'Apparaat' ofwel een 'Voorziening' zijn"
 
 #: /src/schooltool/export/importer.py:100
 msgid "is not a valid term in the given school year"
@@ -6441,9 +6496,9 @@ msgid ""
 "howard, Howard\n"
 msgstr ""
 "\n"
-"dpeeters, Dave Peeters\n"
-"dfpeeters, David Frank Peeters, r2m45J\n"
-"koen, Koen\n"
+"bpeeters, Bart, Peeters\n"
+"bfpeeters, Ben Frank, Peeters, r2m45J\n"
+"koen, Koen, Wouters\n"
 
 #: /src/schooltool/person/browser/person.py:92
 msgid "Show periods"
@@ -7366,7 +7421,7 @@ msgstr ""
 
 #: /src/schooltool/schoolyear/browser/templates/f_manage_year_overview.pt:5
 msgid "Manage year"
-msgstr ""
+msgstr "Jaar beheren"
 
 #: /src/schooltool/schoolyear/browser/templates/f_schoolyear.pt:5
 msgid "Edit this school year's information"

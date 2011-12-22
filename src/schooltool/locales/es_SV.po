@@ -7,14 +7,14 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-11-22 22:28+0200\n"
-"PO-Revision-Date: 2011-11-23 03:01+0000\n"
+"PO-Revision-Date: 2011-12-20 04:18+0000\n"
 "Last-Translator: Douglas Cerna <douglascerna@yahoo.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-11-23 06:14+0000\n"
-"X-Generator: Launchpad (build 14336)\n"
+"X-Launchpad-Export-Date: 2011-12-21 05:41+0000\n"
+"X-Generator: Launchpad (build 14538)\n"
 "Language: es\n"
 
 #: /src/schooltool/app/app.py:193
@@ -92,7 +92,7 @@ msgstr "Nombre de usuario o contraseña incorrecto"
 #: /src/schooltool/app/browser/templates/f_login.pt:72
 #: /src/schooltool/app/browser/templates/login.pt:57
 msgid "Log in"
-msgstr "Identificarse"
+msgstr "Ingresar"
 
 #: /src/schooltool/app/browser/app.py:435
 msgid "Log out"
@@ -1316,7 +1316,7 @@ msgstr "Desarrollador Principal"
 #: /src/schooltool/app/browser/templates/about.pt:44
 #: /src/schooltool/app/browser/templates/f_about.pt:33
 msgid "Core Developers:"
-msgstr ""
+msgstr "Desarrolladores principales"
 
 #: /src/schooltool/app/browser/templates/about.pt:47
 #: /src/schooltool/app/browser/templates/f_about.pt:37
@@ -2034,7 +2034,7 @@ msgstr "La entrada de registro no se encontró. Puede haber expirado."
 
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:18
 msgid "Request URL"
-msgstr "URL de Solicitud"
+msgstr "URL de la Petición"
 
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:22
 msgid "Exception Type"
@@ -2056,7 +2056,7 @@ msgstr "Mostrar rastro como texto"
 
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:45
 msgid "Request"
-msgstr "Solicitar"
+msgstr "Petición"
 
 #: /src/schooltool/app/browser/templates/f_generations_related.pt:2
 #: /src/schooltool/contact/browser/templates/f_contacts_related.pt:2
@@ -2248,7 +2248,7 @@ msgid ""
 msgstr ""
 "Puede crear un archivo CSV en una hoja de cálculos y exportarla en formato "
 "CSV (Valores Separados por Coma).  La estructura de la tabla se describe a "
-"continuación"
+"continuación."
 
 #: /src/schooltool/app/browser/templates/f_section_csvimport_description.pt:10
 msgid ""
@@ -2272,6 +2272,9 @@ msgid ""
 "Each section description's first row contains the <strong>course SchoolTool "
 "ID</strong> and the <strong>instructor username</strong> for the new section."
 msgstr ""
+"Cada primera fila con descripción de sección contiene el <strong>ID de "
+"asignatura de SchoolTool</strong> y el <strong>nombre de usuario del "
+"maestro</strong> para la nueva sección."
 
 #: /src/schooltool/app/browser/templates/f_section_csvimport_description.pt:27
 msgid ""
@@ -2561,7 +2564,7 @@ msgstr ""
 "El resultado del ejemplo creara dos nuevas secciones, una para la "
 "conferencia de filosofía y otra para la conferencia de literatura. La "
 "sección para la conferencia de filosofía tendrá las personas con identidades "
-"'johnny' y 'billy' como alumnos y su calendario constará de tres "
+"'johnny' y 'billy' como estudiantes y su calendario constará de tres "
 "actividades, dos el lunes. La sección de literatura se procesara de manera "
 "similar."
 
@@ -3205,7 +3208,7 @@ msgstr "Añadir una nueva persona"
 #: /src/schooltool/basicperson/browser/flourish.zcml:121
 #: /src/schooltool/basicperson/browser/person.py:979
 msgid "Add new teacher"
-msgstr "Añadir nuevo docente"
+msgstr "Añadir nuevo maestro"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:131
 #: /src/schooltool/basicperson/browser/person.py:989
@@ -3687,11 +3690,11 @@ msgstr "Blanco"
 
 #: /src/schooltool/basicperson/demographics.py:150
 msgid "Place of birth"
-msgstr ""
+msgstr "Lugar de nacimiento"
 
 #: /src/schooltool/basicperson/demographics.py:151
 msgid "Citizenship"
-msgstr ""
+msgstr "Nacionalidad"
 
 #: /src/schooltool/basicperson/interfaces.py:38
 #: /src/schooltool/contact/interfaces.py:40
@@ -3730,11 +3733,11 @@ msgstr "Género"
 
 #: /src/schooltool/basicperson/interfaces.py:68
 msgid "Female"
-msgstr "Mujer"
+msgstr "Femenino"
 
 #: /src/schooltool/basicperson/interfaces.py:68
 msgid "Male"
-msgstr "Varón"
+msgstr "Masculino"
 
 #: /src/schooltool/basicperson/interfaces.py:73
 msgid "Birth date"
@@ -3818,7 +3821,7 @@ msgstr "Estudiantes"
 
 #: /src/schooltool/basicperson/vocabularies.py:132
 msgid "Teachers"
-msgstr "Docentes"
+msgstr "Maestros"
 
 #: /src/schooltool/basicperson/vocabularies.py:133
 msgid "Administrators"
@@ -3826,23 +3829,23 @@ msgstr "Administradores"
 
 #: /src/schooltool/calendar/browser/calendar.py:173
 msgid "Tomorrow"
-msgstr ""
+msgstr "Mañana"
 
 #: /src/schooltool/calendar/browser/calendar.py:175
 msgid "Yesterday"
-msgstr ""
+msgstr "Ayer"
 
 #: /src/schooltool/calendar/browser/calendar.py:195
 msgid "This Week"
-msgstr ""
+msgstr "Esta Semana"
 
 #: /src/schooltool/calendar/browser/calendar.py:197
 msgid "Last Week"
-msgstr ""
+msgstr "Semana Pasada"
 
 #: /src/schooltool/calendar/browser/calendar.py:199
 msgid "Next Week"
-msgstr ""
+msgstr "Próxima Semana"
 
 #: /src/schooltool/calendar/browser/calendar.py:236
 msgid "Jump To"
@@ -4275,11 +4278,11 @@ msgstr ""
 #: /src/schooltool/course/section.py:275
 #: /src/schooltool/course/section.py:286
 msgid "Instructors"
-msgstr "Instructores"
+msgstr "Maestros"
 
 #: /src/schooltool/contact/contact.py:203
 msgid "Instructors of student(s) related to this contact."
-msgstr "Instructores de estudiante(s) relacionadas con este contacto."
+msgstr "Maestros de estudiante(s) relacionados con este contacto."
 
 #: /src/schooltool/contact/interfaces.py:53
 msgid "Address line 1"
@@ -4319,11 +4322,11 @@ msgstr "Teléfono móvil"
 
 #: /src/schooltool/contact/interfaces.py:82
 msgid "Other 1"
-msgstr ""
+msgstr "Otro 1"
 
 #: /src/schooltool/contact/interfaces.py:84
 msgid "Other 2"
-msgstr ""
+msgstr "Otro 2"
 
 #: /src/schooltool/contact/interfaces.py:109
 msgid "Contact's relationship with the person"
@@ -4343,7 +4346,7 @@ msgstr "Padre adoptivo"
 
 #: /src/schooltool/contact/interfaces.py:107
 msgid "Guardian"
-msgstr "Guardian"
+msgstr "Tutor"
 
 #: /src/schooltool/contact/interfaces.py:108
 msgid "Sibling"
@@ -4478,6 +4481,8 @@ msgid ""
 "Course \"${course_title}\" credits \"${invalid_credits}\" value must be a "
 "number."
 msgstr ""
+"El valor \"${invalid_credits}\" de créditos de la asignatura "
+"\"${course_title}\" debe ser un número."
 
 #. Default: ""
 #: /src/schooltool/course/browser/csvimport.py:103
@@ -4574,11 +4579,11 @@ msgstr ""
 
 #: /src/schooltool/course/browser/section.py:556
 msgid "Current Instructors"
-msgstr "Instructores Actuales"
+msgstr "Maestros Actuales"
 
 #: /src/schooltool/course/browser/section.py:557
 msgid "Available Instructors"
-msgstr "Instructores Disponibles"
+msgstr "Maestros Disponibles"
 
 #: /src/schooltool/course/browser/section.py:572
 msgid "Current Students"
@@ -4625,11 +4630,11 @@ msgstr "Seleccione una asignatura"
 
 #: /src/schooltool/course/browser/section.py:1309
 msgid "Current instructors"
-msgstr "Instructores actuales"
+msgstr "Maestros actuales"
 
 #: /src/schooltool/course/browser/section.py:1310
 msgid "Add instructors"
-msgstr "Añadir instructores"
+msgstr "Añadir maestros"
 
 #: /src/schooltool/course/browser/section.py:1329
 msgid "Current students"
@@ -4808,8 +4813,8 @@ msgid ""
 "term \"${to_term_title}\"."
 msgstr ""
 "Haga click en \"Extender\" para crear una sección vinculada en el período "
-"\"{from_term_title}\" que contenga los estudiantes e instructores de la "
-"sección \"${section_title}\" en el período \"${to_term_title}\"."
+"\"{from_term_title}\" que contenga los estudiantes y maestros de la sección "
+"\"${section_title}\" en el período \"${to_term_title}\"."
 
 #: /src/schooltool/course/browser/templates/extend_term.pt:27
 msgid "Extend"
@@ -4930,7 +4935,7 @@ msgstr ""
 
 #: /src/schooltool/course/browser/templates/f_link_existing.pt:33
 msgid "Instructor"
-msgstr "Instructor"
+msgstr "Maestro"
 
 #: /src/schooltool/course/browser/templates/f_link_existing.pt:37
 #: /src/schooltool/course/browser/templates/link_existing.pt:30
@@ -5039,11 +5044,11 @@ msgstr "Editar períodos para esta sección"
 
 #: /src/schooltool/course/browser/templates/f_section_view.pt:115
 msgid "Edit instructors for this section"
-msgstr "Editar instructores de esta sección"
+msgstr "Editar los maestros de esta sección"
 
 #: /src/schooltool/course/browser/templates/f_section_view.pt:125
 msgid "This section has no instructors"
-msgstr "Esta sección no tiene instructores"
+msgstr "Esta sección no tiene maestros"
 
 #: /src/schooltool/course/browser/templates/f_section_view.pt:130
 msgid "Edit students for this section"
@@ -5058,8 +5063,8 @@ msgid ""
 "A section is a set of one or more learners and instructors who meet during a "
 "term to achieve the curricular goals of a course."
 msgstr ""
-"Una sección es un conjunto de uno o más estudiantes e instructores quienes "
-"se reúnen durante un período para lograr los objetivos curriculares de una "
+"Una sección es un conjunto de uno o más estudiantes y maestros quienes se "
+"reúnen durante un período para lograr los objetivos curriculares de una "
 "asignatura."
 
 #: /src/schooltool/course/browser/templates/f_unlink_section.pt:22
@@ -5113,11 +5118,11 @@ msgstr "${section_title} para ${term}"
 
 #: /src/schooltool/course/browser/templates/section.pt:65
 msgid "Change the instructors for this section."
-msgstr "Cambiar los instructores de esta sección."
+msgstr "Cambiar los maestros de esta sección."
 
 #: /src/schooltool/course/browser/templates/section.pt:65
 msgid "edit instructors"
-msgstr "editar instructores"
+msgstr "editar maestros"
 
 #: /src/schooltool/course/browser/templates/section.pt:80
 msgid "Change the students in this section individually"
@@ -5187,15 +5192,15 @@ msgstr "Desvincular Sección"
 #: /src/schooltool/course/interfaces.py:36
 #: /src/schooltool/course/interfaces.py:129
 msgid "SchoolTool ID"
-msgstr ""
+msgstr "ID de SchoolTool"
 
 #: /src/schooltool/course/interfaces.py:37
 msgid "An internal identifier of this course."
-msgstr ""
+msgstr "Un identificador interno de esta asignatura."
 
 #: /src/schooltool/course/interfaces.py:53
 msgid "School identifier of this course."
-msgstr ""
+msgstr "Identificador escolar de esta asignatura."
 
 #: /src/schooltool/course/interfaces.py:58
 msgid "Alternate ID"
@@ -5219,11 +5224,11 @@ msgid ""
 "            names, courses, and meeting time."
 msgstr ""
 "Un identificador para una sección, compuesto de\n"
-"            los nombres del instructor, cursos, y hora de la clase."
+"            los nombres del maestro, asignaturas, y hora de la clase."
 
 #: /src/schooltool/course/interfaces.py:130
 msgid "An internal identifier of this section."
-msgstr ""
+msgstr "Un identificador interno de esta sección."
 
 #. Default: ""
 #: /src/schooltool/course/section.py:89
@@ -5240,11 +5245,11 @@ msgstr "No se puede asignar una sección como siguiente a sí misma"
 
 #: /src/schooltool/course/section.py:276
 msgid "Instructors of the section."
-msgstr "Instructores de sección."
+msgstr "Maestros de la sección."
 
 #: /src/schooltool/course/section.py:287
 msgid "Instructors of a person in any of his sections."
-msgstr "Instructores de una persona en cualquiera de sus secciones."
+msgstr "Maestros de una persona en cualquiera de sus secciones."
 
 #: /src/schooltool/course/section.py:310
 msgid "Learners"
@@ -5271,7 +5276,7 @@ msgid ""
 "Basic information about sections is only visible to instructors and students "
 "in that section, and school administration."
 msgstr ""
-"La información básica de las secciones es sólo visible para instructores y "
+"La información básica de las secciones es sólo visible para maestros y "
 "estudiantes de cada sección y para administradores."
 
 #: /src/schooltool/course/security.zcml:42
@@ -5381,7 +5386,7 @@ msgstr "No tiene autorización"
 
 #: /src/schooltool/devmode/f_unauthorized.pt:9
 msgid "Permission checks"
-msgstr ""
+msgstr "Verificación de permisos"
 
 #: /src/schooltool/devmode/f_unauthorized.pt:11
 msgid ""
@@ -5430,7 +5435,7 @@ msgstr "Estado del Servidor"
 #: /src/schooltool/email/browser/email.py:102
 #: /src/schooltool/email/interfaces.py:87
 msgid "Enable"
-msgstr "Activar"
+msgstr "Habilitar"
 
 #: /src/schooltool/email/browser/email.py:107
 #: /src/schooltool/email/browser/templates/f_email_settings_overview.pt:17
@@ -5847,7 +5852,7 @@ msgstr "es el mismo identificador de período de control que otro en este día"
 
 #: /src/schooltool/export/importer.py:99
 msgid "must be either 'Location', 'Equipment' or 'Resource'"
-msgstr ""
+msgstr "debe ser ya sea 'Location', 'Equipment' o 'Resource'"
 
 #: /src/schooltool/export/importer.py:100
 msgid "is not a valid term in the given school year"
@@ -7145,7 +7150,7 @@ msgid ""
 "responsible parties of the resource."
 msgstr ""
 "Los calendarios de recurso son visibles a la administración de la escuela, "
-"los profesores y partes responsables del recurso."
+"los maestros y partes responsables del recurso."
 
 #: /src/schooltool/resource/security.zcml:19
 msgid "Resource calendars are visible to the general public."
@@ -7364,7 +7369,7 @@ msgstr "Para seguir configurando su escuela por favor ${add_schoolyear}."
 
 #: /src/schooltool/schoolyear/browser/templates/f_manage_year_overview.pt:5
 msgid "Manage year"
-msgstr ""
+msgstr "Administrar año"
 
 #: /src/schooltool/schoolyear/browser/templates/f_schoolyear.pt:5
 msgid "Edit this school year's information"
@@ -8342,7 +8347,7 @@ msgstr "(editar períodos)"
 
 #: /src/schooltool/timetable/browser/templates/schedule_exceptions_content.pt:13
 msgid "There are no exceptions."
-msgstr "No hay excepcions."
+msgstr "No hay excepciones."
 
 #: /src/schooltool/timetable/browser/templates/selected_period_date_boundaries.pt:3
 #: /src/schooltool/timetable/browser/templates/timetable.pt:10
@@ -8615,7 +8620,7 @@ msgstr "Tienen nombres"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:585
 msgid "Designated by time"
-msgstr "Identificado por hora"
+msgstr "Identificados por hora"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:622
 msgid "Enter names of periods, one per line."

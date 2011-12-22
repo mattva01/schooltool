@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2011-11-22 22:28+0200\n"
-"PO-Revision-Date: 2011-11-22 23:41+0000\n"
-"Last-Translator: Douglas Cerna <douglascerna@yahoo.com>\n"
+"PO-Revision-Date: 2011-12-16 13:03+0000\n"
+"Last-Translator: xirin <Unknown>\n"
 "Language-Team: Galician <gl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-11-23 06:10+0000\n"
-"X-Generator: Launchpad (build 14336)\n"
+"X-Launchpad-Export-Date: 2011-12-17 06:46+0000\n"
+"X-Generator: Launchpad (build 14525)\n"
 "Language: gl\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -98,11 +98,11 @@ msgstr "Iniciar a sesión"
 
 #: /src/schooltool/app/browser/app.py:435
 msgid "Log out"
-msgstr ""
+msgstr "Saír"
 
 #: /src/schooltool/app/browser/app.py:523
 msgid "Calendar settings"
-msgstr ""
+msgstr "Axustes da axenda"
 
 #: /src/schooltool/app/browser/app.py:528
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:31
@@ -195,11 +195,11 @@ msgstr "Cancelar"
 #: /src/schooltool/app/browser/flourish.zcml:228
 #: /src/schooltool/app/browser/flourish.zcml:580
 msgid "School Name"
-msgstr ""
+msgstr "Nome da escola"
 
 #: /src/schooltool/app/browser/app.py:557
 msgid "Name"
-msgstr ""
+msgstr "Nome"
 
 #: /src/schooltool/app/browser/app.py:585
 #: /src/schooltool/app/security.py:304
@@ -243,21 +243,21 @@ msgstr "escola"
 #: /src/schooltool/securitypolicy/browser/flourish.zcml:15
 #: /src/schooltool/securitypolicy/browser/flourish.zcml:44
 msgid "Server"
-msgstr ""
+msgstr "Servidor"
 
 #: /src/schooltool/app/browser/app.py:852
 #: /src/schooltool/app/browser/app.py:937
 #: /src/schooltool/skin/flourish/form.py:46
 #: /src/schooltool/timetable/browser/ttwizard.py:793
 msgid "Yes"
-msgstr ""
+msgstr "Si"
 
 #: /src/schooltool/app/browser/app.py:854
 #: /src/schooltool/app/browser/app.py:939
 #: /src/schooltool/skin/flourish/form.py:47
 #: /src/schooltool/timetable/browser/ttwizard.py:794
 msgid "No"
-msgstr ""
+msgstr "Non"
 
 #: /src/schooltool/app/browser/app.py:868
 #: /src/schooltool/app/browser/flourish.zcml:545
@@ -276,7 +276,7 @@ msgstr ""
 #. Default: ""
 #: /src/schooltool/app/browser/app.py:953
 msgid "${type} Error"
-msgstr ""
+msgstr "Erro ${type}"
 
 #: /src/schooltool/app/browser/app.py:962
 #: /src/schooltool/app/browser/templates/f_errors.pt:15
@@ -296,7 +296,22 @@ msgstr ""
 #: /src/schooltool/app/browser/app.py:998
 #: /src/schooltool/app/browser/flourish.zcml:292
 msgid "Errors Settings"
-msgstr ""
+msgstr "Axustes de erros"
+
+#: /src/schooltool/app/browser/app.py:1005
+#: /src/schooltool/basicperson/browser/demographics.py:413
+#: /src/schooltool/basicperson/browser/demographics.py:473
+#: /src/schooltool/basicperson/browser/person.py:951
+#: /src/schooltool/course/browser/course.py:568
+#: /src/schooltool/course/browser/section.py:1261
+#: /src/schooltool/group/browser/group.py:669
+#: /src/schooltool/schoolyear/browser/schoolyear.py:490
+#: /src/schooltool/schoolyear/browser/schoolyear.py:538
+#: /src/schooltool/schoolyear/browser/templates/f_schoolyear_activate.pt:23
+#: /src/schooltool/term/browser/term.py:291
+#: /src/schooltool/term/browser/term.py:404
+msgid "Submit"
+msgstr "Enviar"
 
 #: /src/schooltool/app/browser/app.py:1025
 #: /src/schooltool/app/browser/configure.zcml:670
@@ -875,7 +890,7 @@ msgstr "Actualizado en ${date_time}"
 #: /src/schooltool/calendar/browser/templates/event_edit.pt:374
 #: /src/schooltool/resource/types.py:107
 msgid "Type"
-msgstr ""
+msgstr "Tipo"
 
 #: /src/schooltool/app/browser/cal.py:2283
 msgid "Booked by others"
@@ -1057,7 +1072,7 @@ msgstr "SchoolTool"
 #: /src/schooltool/app/browser/flourish.zcml:63
 #: /src/schooltool/skin/templates/view_macros.pt:50
 msgid "Log In"
-msgstr ""
+msgstr "Iniciar sesión"
 
 #: /src/schooltool/app/browser/flourish.zcml:197
 #: /src/schooltool/app/browser/templates/f_errors.pt:3
@@ -1065,11 +1080,11 @@ msgstr ""
 #: /src/schooltool/email/browser/configure.zcml:80
 #: /src/schooltool/email/browser/email.py:204
 msgid "Settings"
-msgstr ""
+msgstr "Axustes"
 
 #: /src/schooltool/app/browser/flourish.zcml:218
 msgid "Calendar Settings"
-msgstr ""
+msgstr "Axustes da axenda"
 
 #: /src/schooltool/app/browser/flourish.zcml:228
 #: /src/schooltool/app/browser/templates/f_errors.pt:7
@@ -1131,15 +1146,15 @@ msgstr "Edtar"
 
 #: /src/schooltool/app/browser/flourish.zcml:272
 msgid "Error"
-msgstr ""
+msgstr "Erro"
 
 #: /src/schooltool/app/browser/flourish.zcml:303
 msgid "About"
-msgstr ""
+msgstr "Acerca de"
 
 #: /src/schooltool/app/browser/flourish.zcml:313
 msgid "More Information"
-msgstr ""
+msgstr "Máis información"
 
 #: /src/schooltool/app/browser/flourish.zcml:322
 #: /src/schooltool/app/browser/templates/about.pt:27
@@ -1163,11 +1178,11 @@ msgstr ""
 #: /src/schooltool/app/browser/flourish.zcml:393
 #: /src/schooltool/export/flourish.zcml:49
 msgid "School"
-msgstr ""
+msgstr "Escola"
 
 #: /src/schooltool/app/browser/flourish.zcml:410
 msgid "Customize"
-msgstr ""
+msgstr "Personalizar"
 
 #: /src/schooltool/app/browser/flourish.zcml:449
 #: /src/schooltool/course/browser/templates/f_course_view.pt:75
@@ -1178,7 +1193,7 @@ msgstr ""
 
 #: /src/schooltool/app/browser/flourish.zcml:492
 msgid "Information"
-msgstr ""
+msgstr "Información"
 
 #: /src/schooltool/app/browser/flourish.zcml:510
 msgid "Database generations"
@@ -1807,21 +1822,21 @@ msgstr ""
 #: /src/schooltool/app/browser/templates/f_calendar_settings_overview.pt:16
 #: /src/schooltool/person/interfaces.py:157
 msgid "Time Zone"
-msgstr ""
+msgstr "Zona Horaria"
 
 #: /src/schooltool/app/browser/templates/f_calendar_settings_overview.pt:20
 #: /src/schooltool/person/interfaces.py:161
 msgid "Time Format"
-msgstr ""
+msgstr "Formato da hora"
 
 #: /src/schooltool/app/browser/templates/f_calendar_settings_overview.pt:24
 #: /src/schooltool/person/interfaces.py:166
 msgid "Date Format"
-msgstr ""
+msgstr "Formato de data"
 
 #: /src/schooltool/app/browser/templates/f_calendar_settings_overview.pt:28
 msgid "Week starts on"
-msgstr ""
+msgstr "A semana empeza en"
 
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:10
 msgid "Import source"
@@ -1845,11 +1860,11 @@ msgstr ""
 #: /src/schooltool/group/browser/flourish.zcml:236
 #: /src/schooltool/resource/browser/flourish.zcml:333
 msgid "Import CSV"
-msgstr ""
+msgstr "Importar CSV"
 
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:75
 msgid "Charset"
-msgstr ""
+msgstr "Codificación"
 
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:80
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:103
@@ -1962,7 +1977,7 @@ msgstr "Enviar"
 #: /src/schooltool/timetable/browser/templates/f_timetables.pt:20
 #: /src/schooltool/timetable/browser/templates/f_timetables.pt:28
 msgid "Done"
-msgstr ""
+msgstr "Feito"
 
 #: /src/schooltool/app/browser/templates/f_edit_relationships.pt:25
 #: /src/schooltool/basicperson/browser/templates/container.pt:32
@@ -1989,7 +2004,7 @@ msgstr ""
 #: /src/schooltool/contact/security.zcml:86
 #: /src/schooltool/person/security.zcml:147
 msgid "User"
-msgstr ""
+msgstr "Usuario"
 
 #: /src/schooltool/app/browser/templates/f_errors.pt:44
 #: /src/schooltool/skin/templates/error.pt:19
@@ -2007,7 +2022,7 @@ msgstr ""
 #: /src/schooltool/term/browser/term.py:350
 #: /src/schooltool/term/browser/term.py:399
 msgid "Refresh"
-msgstr ""
+msgstr "Actualizar"
 
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:2
 msgid "Exception traceback"
@@ -2175,7 +2190,7 @@ msgstr ""
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:7
 #: /src/schooltool/app/browser/templates/f_server_settings_overview.pt:12
 msgid "Database"
-msgstr ""
+msgstr "Base de datos"
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:11
 #: /src/schooltool/app/browser/templates/f_server_settings_overview.pt:16
