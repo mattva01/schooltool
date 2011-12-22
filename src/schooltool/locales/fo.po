@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2011-11-22 22:28+0200\n"
-"PO-Revision-Date: 2011-11-22 22:46+0000\n"
-"Last-Translator: Jógvan Olsen <jeggy@jebster.net>\n"
+"PO-Revision-Date: 2011-12-12 11:33+0000\n"
+"Last-Translator: Magnus Olsen <Unknown>\n"
 "Language-Team: Føroyabólkurin\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-11-23 06:09+0000\n"
-"X-Generator: Launchpad (build 14336)\n"
+"X-Launchpad-Export-Date: 2011-12-13 05:48+0000\n"
+"X-Generator: Launchpad (build 14458)\n"
 "Language: fo\n"
 
 #: /src/schooltool/app/app.py:193
@@ -101,7 +101,7 @@ msgstr "Útrita"
 
 #: /src/schooltool/app/browser/app.py:523
 msgid "Calendar settings"
-msgstr ""
+msgstr "Kalendara ásetingar"
 
 #: /src/schooltool/app/browser/app.py:528
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:31
@@ -194,11 +194,11 @@ msgstr "Ógilda"
 #: /src/schooltool/app/browser/flourish.zcml:228
 #: /src/schooltool/app/browser/flourish.zcml:580
 msgid "School Name"
-msgstr ""
+msgstr "Skúla Navn"
 
 #: /src/schooltool/app/browser/app.py:557
 msgid "Name"
-msgstr ""
+msgstr "Navn"
 
 #: /src/schooltool/app/browser/app.py:585
 #: /src/schooltool/app/security.py:304
@@ -215,7 +215,7 @@ msgstr "Tøkir leiðarar"
 
 #: /src/schooltool/app/browser/app.py:598
 msgid "Current responsible parties"
-msgstr ""
+msgstr "Núverandi ábyrgdarhavandi luttakarar"
 
 #: /src/schooltool/app/browser/app.py:599
 msgid "Available responsible parties"
@@ -242,21 +242,21 @@ msgstr "skúli"
 #: /src/schooltool/securitypolicy/browser/flourish.zcml:15
 #: /src/schooltool/securitypolicy/browser/flourish.zcml:44
 msgid "Server"
-msgstr ""
+msgstr "Ambætari"
 
 #: /src/schooltool/app/browser/app.py:852
 #: /src/schooltool/app/browser/app.py:937
 #: /src/schooltool/skin/flourish/form.py:46
 #: /src/schooltool/timetable/browser/ttwizard.py:793
 msgid "Yes"
-msgstr ""
+msgstr "Ja"
 
 #: /src/schooltool/app/browser/app.py:854
 #: /src/schooltool/app/browser/app.py:939
 #: /src/schooltool/skin/flourish/form.py:47
 #: /src/schooltool/timetable/browser/ttwizard.py:794
 msgid "No"
-msgstr ""
+msgstr "Nei"
 
 #: /src/schooltool/app/browser/app.py:868
 #: /src/schooltool/app/browser/flourish.zcml:545
@@ -275,7 +275,7 @@ msgstr ""
 #. Default: ""
 #: /src/schooltool/app/browser/app.py:953
 msgid "${type} Error"
-msgstr ""
+msgstr "${type} Feilur"
 
 #: /src/schooltool/app/browser/app.py:962
 #: /src/schooltool/app/browser/templates/f_errors.pt:15
@@ -310,7 +310,7 @@ msgstr ""
 #: /src/schooltool/term/browser/term.py:291
 #: /src/schooltool/term/browser/term.py:404
 msgid "Submit"
-msgstr ""
+msgstr "Send inn"
 
 #: /src/schooltool/app/browser/app.py:1025
 #: /src/schooltool/app/browser/configure.zcml:670
@@ -326,7 +326,7 @@ msgstr "Januar"
 
 #: /src/schooltool/app/browser/cal.py:115
 msgid "February"
-msgstr "Február"
+msgstr "Februar"
 
 #: /src/schooltool/app/browser/cal.py:116
 msgid "March"
@@ -338,7 +338,7 @@ msgstr "Apríl"
 
 #: /src/schooltool/app/browser/cal.py:118
 msgid "May"
-msgstr "Mei"
+msgstr "Mai"
 
 #: /src/schooltool/app/browser/cal.py:119
 msgid "June"
@@ -350,23 +350,23 @@ msgstr "Juli"
 
 #: /src/schooltool/app/browser/cal.py:121
 msgid "August"
-msgstr "Avgust"
+msgstr "August"
 
 #: /src/schooltool/app/browser/cal.py:122
 msgid "September"
-msgstr "Septembur"
+msgstr "September"
 
 #: /src/schooltool/app/browser/cal.py:123
 msgid "October"
-msgstr "Oktobur"
+msgstr "Oktober"
 
 #: /src/schooltool/app/browser/cal.py:124
 msgid "November"
-msgstr "Novembur"
+msgstr "November"
 
 #: /src/schooltool/app/browser/cal.py:125
 msgid "December"
-msgstr "Desembur"
+msgstr "Desember"
 
 #: /src/schooltool/app/browser/cal.py:132
 #: /src/schooltool/person/interfaces.py:176
@@ -472,7 +472,7 @@ msgstr "sun"
 #: /src/schooltool/app/browser/cal.py:379
 #: /src/schooltool/resource/browser/booking.py:195
 msgid "Unnamed Event"
-msgstr "Ónevn hending"
+msgstr "Ónevnd hending"
 
 #: /src/schooltool/app/browser/cal.py:818
 msgid "Next week"
@@ -821,23 +821,23 @@ msgstr "sama vikudag"
 
 #: /src/schooltool/app/browser/cal.py:1810
 msgid "1st"
-msgstr ""
+msgstr "1."
 
 #: /src/schooltool/app/browser/cal.py:1810
 msgid "2nd"
-msgstr ""
+msgstr "2."
 
 #: /src/schooltool/app/browser/cal.py:1810
 msgid "3rd"
-msgstr ""
+msgstr "3."
 
 #: /src/schooltool/app/browser/cal.py:1810
 msgid "4th"
-msgstr ""
+msgstr "4."
 
 #: /src/schooltool/app/browser/cal.py:1811
 msgid "5th"
-msgstr ""
+msgstr "5."
 
 #: /src/schooltool/app/browser/cal.py:1825
 msgid "last weekday"

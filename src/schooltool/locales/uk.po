@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2011-11-22 22:28+0200\n"
-"PO-Revision-Date: 2011-11-22 23:22+0000\n"
-"Last-Translator: Kenji <kenji@3g.ua>\n"
+"PO-Revision-Date: 2011-12-18 22:15+0000\n"
+"Last-Translator: Vitaly Yaskevich <Unknown>\n"
 "Language-Team: Ukrainian <uk@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-11-23 06:14+0000\n"
-"X-Generator: Launchpad (build 14336)\n"
+"X-Launchpad-Export-Date: 2011-12-19 05:19+0000\n"
+"X-Generator: Launchpad (build 14525)\n"
 "Language: uk\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -98,11 +98,11 @@ msgstr "Увійти"
 
 #: /src/schooltool/app/browser/app.py:435
 msgid "Log out"
-msgstr ""
+msgstr "Вийти"
 
 #: /src/schooltool/app/browser/app.py:523
 msgid "Calendar settings"
-msgstr ""
+msgstr "Налаштування Календаря"
 
 #: /src/schooltool/app/browser/app.py:528
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:31
@@ -195,7 +195,7 @@ msgstr "Скасувати"
 #: /src/schooltool/app/browser/flourish.zcml:228
 #: /src/schooltool/app/browser/flourish.zcml:580
 msgid "School Name"
-msgstr ""
+msgstr "Назва Школи"
 
 #: /src/schooltool/app/browser/app.py:557
 msgid "Name"
@@ -243,7 +243,7 @@ msgstr "школа"
 #: /src/schooltool/securitypolicy/browser/flourish.zcml:15
 #: /src/schooltool/securitypolicy/browser/flourish.zcml:44
 msgid "Server"
-msgstr ""
+msgstr "Сервер"
 
 #: /src/schooltool/app/browser/app.py:852
 #: /src/schooltool/app/browser/app.py:937
@@ -262,41 +262,41 @@ msgstr "Ні"
 #: /src/schooltool/app/browser/app.py:868
 #: /src/schooltool/app/browser/flourish.zcml:545
 msgid "Pack Database"
-msgstr ""
+msgstr "Запакувати Базу Даних"
 
 #: /src/schooltool/app/browser/app.py:894
 msgid "Database successfully packed."
-msgstr ""
+msgstr "База Даних запакована"
 
 #. Default: ""
 #: /src/schooltool/app/browser/app.py:911
 msgid "There were errors while packing the database: ${error}"
-msgstr ""
+msgstr "Були помилки підчас пакування ази даних: ${error}"
 
 #. Default: ""
 #: /src/schooltool/app/browser/app.py:953
 msgid "${type} Error"
-msgstr ""
+msgstr "${type} помилка"
 
 #: /src/schooltool/app/browser/app.py:962
 #: /src/schooltool/app/browser/templates/f_errors.pt:15
 msgid "Number of exceptions to show"
-msgstr ""
+msgstr "Кількість виключень для показу"
 
 #: /src/schooltool/app/browser/app.py:965
 #: /src/schooltool/app/browser/templates/f_errors.pt:21
 msgid "Copy exceptions to the event log"
-msgstr ""
+msgstr "Копіювати виключення у журнал"
 
 #: /src/schooltool/app/browser/app.py:969
 #: /src/schooltool/app/browser/templates/f_errors.pt:27
 msgid "Ignored exception types"
-msgstr ""
+msgstr "Ігноровані типи виключень"
 
 #: /src/schooltool/app/browser/app.py:998
 #: /src/schooltool/app/browser/flourish.zcml:292
 msgid "Errors Settings"
-msgstr ""
+msgstr "Налаштування помилок"
 
 #: /src/schooltool/app/browser/app.py:1005
 #: /src/schooltool/basicperson/browser/demographics.py:413
@@ -311,7 +311,7 @@ msgstr ""
 #: /src/schooltool/term/browser/term.py:291
 #: /src/schooltool/term/browser/term.py:404
 msgid "Submit"
-msgstr ""
+msgstr "Підтвердити"
 
 #: /src/schooltool/app/browser/app.py:1025
 #: /src/schooltool/app/browser/configure.zcml:670
@@ -1082,7 +1082,7 @@ msgstr "Налаштування"
 
 #: /src/schooltool/app/browser/flourish.zcml:218
 msgid "Calendar Settings"
-msgstr ""
+msgstr "Налаштування Календаря"
 
 #: /src/schooltool/app/browser/flourish.zcml:228
 #: /src/schooltool/app/browser/templates/f_errors.pt:7
@@ -1144,15 +1144,15 @@ msgstr "Редагувати"
 
 #: /src/schooltool/app/browser/flourish.zcml:272
 msgid "Error"
-msgstr ""
+msgstr "Помилка"
 
 #: /src/schooltool/app/browser/flourish.zcml:303
 msgid "About"
-msgstr ""
+msgstr "Про програму..."
 
 #: /src/schooltool/app/browser/flourish.zcml:313
 msgid "More Information"
-msgstr ""
+msgstr "Більше інформації"
 
 #: /src/schooltool/app/browser/flourish.zcml:322
 #: /src/schooltool/app/browser/templates/about.pt:27
@@ -1171,16 +1171,16 @@ msgstr "Список розсилки"
 
 #: /src/schooltool/app/browser/flourish.zcml:351
 msgid "IRC channel"
-msgstr ""
+msgstr "IRC канал"
 
 #: /src/schooltool/app/browser/flourish.zcml:393
 #: /src/schooltool/export/flourish.zcml:49
 msgid "School"
-msgstr ""
+msgstr "Школа"
 
 #: /src/schooltool/app/browser/flourish.zcml:410
 msgid "Customize"
-msgstr ""
+msgstr "Налаштувати"
 
 #: /src/schooltool/app/browser/flourish.zcml:449
 #: /src/schooltool/course/browser/templates/f_course_view.pt:75
@@ -1191,7 +1191,7 @@ msgstr ""
 
 #: /src/schooltool/app/browser/flourish.zcml:492
 msgid "Information"
-msgstr ""
+msgstr "Інформація"
 
 #: /src/schooltool/app/browser/flourish.zcml:510
 msgid "Database generations"
@@ -1199,7 +1199,7 @@ msgstr ""
 
 #: /src/schooltool/app/browser/flourish.zcml:607
 msgid "Shown Calendars"
-msgstr ""
+msgstr "Показані Календарі"
 
 #: /src/schooltool/app/browser/overlay.py:217
 msgid "Saved changes."
@@ -1207,15 +1207,15 @@ msgstr "Збережені зміни."
 
 #: /src/schooltool/app/browser/overlay.py:286
 msgid "Selected calendars"
-msgstr ""
+msgstr "Відмічені Календарі"
 
 #: /src/schooltool/app/browser/overlay.py:287
 msgid "Available calendars"
-msgstr ""
+msgstr "Доступні Календарі"
 
 #: /src/schooltool/app/browser/overlay.py:326
 msgid "School Calendar"
-msgstr ""
+msgstr "Шкільний Календар"
 
 #: /src/schooltool/app/browser/pdfcal.py:52
 msgid "Daily calendar for %s"
@@ -1317,7 +1317,7 @@ msgstr "Ведучий розробник:"
 #: /src/schooltool/app/browser/templates/about.pt:44
 #: /src/schooltool/app/browser/templates/f_about.pt:33
 msgid "Core Developers:"
-msgstr ""
+msgstr "Розробники ядра"
 
 #: /src/schooltool/app/browser/templates/about.pt:47
 #: /src/schooltool/app/browser/templates/f_about.pt:37
@@ -1810,7 +1810,7 @@ msgstr "Розташування: ${location}"
 
 #: /src/schooltool/app/browser/templates/f_about_related.pt:2
 msgid "Contributors"
-msgstr ""
+msgstr "Учасники"
 
 #: /src/schooltool/app/browser/templates/f_calendar_settings_overview.pt:12
 #: /src/schooltool/app/interfaces.py:135
@@ -1834,7 +1834,7 @@ msgstr "Формат дати"
 
 #: /src/schooltool/app/browser/templates/f_calendar_settings_overview.pt:28
 msgid "Week starts on"
-msgstr ""
+msgstr "Тиждень починається з"
 
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:10
 msgid "Import source"
@@ -1843,12 +1843,12 @@ msgstr ""
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:20
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:64
 msgid "Upload CSV file"
-msgstr ""
+msgstr "Завантажити CSV файл"
 
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:29
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:104
 msgid "Enter CSV text"
-msgstr ""
+msgstr "Ввести CSV текст"
 
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:60
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:100

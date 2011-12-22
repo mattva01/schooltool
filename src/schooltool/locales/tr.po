@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2011-11-22 22:28+0200\n"
-"PO-Revision-Date: 2011-11-23 03:09+0000\n"
-"Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
+"PO-Revision-Date: 2011-11-23 21:31+0000\n"
+"Last-Translator: Caner GÜRAL <cgural@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-11-23 06:14+0000\n"
+"X-Launchpad-Export-Date: 2011-11-24 05:58+0000\n"
 "X-Generator: Launchpad (build 14336)\n"
 "Language: tr\n"
 "X-Rosetta-Version: 0.1\n"
@@ -98,11 +98,11 @@ msgstr "Giriş"
 
 #: /src/schooltool/app/browser/app.py:435
 msgid "Log out"
-msgstr ""
+msgstr "Oturumu kapat"
 
 #: /src/schooltool/app/browser/app.py:523
 msgid "Calendar settings"
-msgstr ""
+msgstr "Takvim ayarları"
 
 #: /src/schooltool/app/browser/app.py:528
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:31
@@ -195,7 +195,7 @@ msgstr "İptal"
 #: /src/schooltool/app/browser/flourish.zcml:228
 #: /src/schooltool/app/browser/flourish.zcml:580
 msgid "School Name"
-msgstr ""
+msgstr "Okul Adı"
 
 #: /src/schooltool/app/browser/app.py:557
 msgid "Name"
@@ -216,11 +216,11 @@ msgstr "Uygun başkanlar"
 
 #: /src/schooltool/app/browser/app.py:598
 msgid "Current responsible parties"
-msgstr ""
+msgstr "Şu anki veli toplantısı"
 
 #: /src/schooltool/app/browser/app.py:599
 msgid "Available responsible parties"
-msgstr ""
+msgstr "Müsait veli toplantısı"
 
 #: /src/schooltool/app/browser/app.py:622
 msgid "school"
@@ -243,7 +243,7 @@ msgstr "okul"
 #: /src/schooltool/securitypolicy/browser/flourish.zcml:15
 #: /src/schooltool/securitypolicy/browser/flourish.zcml:44
 msgid "Server"
-msgstr ""
+msgstr "Sunucu"
 
 #: /src/schooltool/app/browser/app.py:852
 #: /src/schooltool/app/browser/app.py:937
@@ -262,21 +262,21 @@ msgstr "Hayır"
 #: /src/schooltool/app/browser/app.py:868
 #: /src/schooltool/app/browser/flourish.zcml:545
 msgid "Pack Database"
-msgstr ""
+msgstr "Paket Veri Tabanı"
 
 #: /src/schooltool/app/browser/app.py:894
 msgid "Database successfully packed."
-msgstr ""
+msgstr "Veri tabanı başarıyla paketlendi."
 
 #. Default: ""
 #: /src/schooltool/app/browser/app.py:911
 msgid "There were errors while packing the database: ${error}"
-msgstr ""
+msgstr "Veri tabanı paketleniyorken hatalar meydana geldi: ${error}"
 
 #. Default: ""
 #: /src/schooltool/app/browser/app.py:953
 msgid "${type} Error"
-msgstr ""
+msgstr "${type} Hata"
 
 #: /src/schooltool/app/browser/app.py:962
 #: /src/schooltool/app/browser/templates/f_errors.pt:15
@@ -296,7 +296,7 @@ msgstr ""
 #: /src/schooltool/app/browser/app.py:998
 #: /src/schooltool/app/browser/flourish.zcml:292
 msgid "Errors Settings"
-msgstr ""
+msgstr "Hata Ayarları"
 
 #: /src/schooltool/app/browser/app.py:1025
 #: /src/schooltool/app/browser/configure.zcml:670
@@ -1069,7 +1069,7 @@ msgstr "Ayarlar"
 
 #: /src/schooltool/app/browser/flourish.zcml:218
 msgid "Calendar Settings"
-msgstr ""
+msgstr "Takvim Ayarları"
 
 #: /src/schooltool/app/browser/flourish.zcml:228
 #: /src/schooltool/app/browser/templates/f_errors.pt:7
@@ -1131,15 +1131,15 @@ msgstr "Düzenle"
 
 #: /src/schooltool/app/browser/flourish.zcml:272
 msgid "Error"
-msgstr ""
+msgstr "Hata"
 
 #: /src/schooltool/app/browser/flourish.zcml:303
 msgid "About"
-msgstr ""
+msgstr "Hakkında"
 
 #: /src/schooltool/app/browser/flourish.zcml:313
 msgid "More Information"
-msgstr ""
+msgstr "Daha fazla bilgi"
 
 #: /src/schooltool/app/browser/flourish.zcml:322
 #: /src/schooltool/app/browser/templates/about.pt:27
@@ -1158,35 +1158,35 @@ msgstr "E-posta listesi"
 
 #: /src/schooltool/app/browser/flourish.zcml:351
 msgid "IRC channel"
-msgstr ""
+msgstr "IRC kanalı"
 
 #: /src/schooltool/app/browser/flourish.zcml:393
 #: /src/schooltool/export/flourish.zcml:49
 msgid "School"
-msgstr ""
+msgstr "Okul"
 
 #: /src/schooltool/app/browser/flourish.zcml:410
 msgid "Customize"
-msgstr ""
+msgstr "Uyarla"
 
 #: /src/schooltool/app/browser/flourish.zcml:449
 #: /src/schooltool/course/browser/templates/f_course_view.pt:75
 #: /src/schooltool/group/browser/templates/f_group_view.pt:90
 #: /src/schooltool/resource/browser/templates/f_resource_view.pt:75
 msgid "Responsible parties"
-msgstr ""
+msgstr "Veli toplantıları"
 
 #: /src/schooltool/app/browser/flourish.zcml:492
 msgid "Information"
-msgstr ""
+msgstr "Bilgi"
 
 #: /src/schooltool/app/browser/flourish.zcml:510
 msgid "Database generations"
-msgstr ""
+msgstr "Veri tabanı kuşakları"
 
 #: /src/schooltool/app/browser/flourish.zcml:607
 msgid "Shown Calendars"
-msgstr ""
+msgstr "Gösterilen Takvimler"
 
 #: /src/schooltool/app/browser/overlay.py:217
 msgid "Saved changes."
@@ -1194,15 +1194,15 @@ msgstr "Kaydedilen değişiklikler."
 
 #: /src/schooltool/app/browser/overlay.py:286
 msgid "Selected calendars"
-msgstr ""
+msgstr "Seçili takvimler"
 
 #: /src/schooltool/app/browser/overlay.py:287
 msgid "Available calendars"
-msgstr ""
+msgstr "Müsait takvimler"
 
 #: /src/schooltool/app/browser/overlay.py:326
 msgid "School Calendar"
-msgstr ""
+msgstr "Okul takvimi"
 
 #: /src/schooltool/app/browser/pdfcal.py:52
 msgid "Daily calendar for %s"
@@ -1302,7 +1302,7 @@ msgstr "Baş Geliştirici:"
 #: /src/schooltool/app/browser/templates/about.pt:44
 #: /src/schooltool/app/browser/templates/f_about.pt:33
 msgid "Core Developers:"
-msgstr ""
+msgstr "Ana geliştiriciler:"
 
 #: /src/schooltool/app/browser/templates/about.pt:47
 #: /src/schooltool/app/browser/templates/f_about.pt:37
@@ -1794,7 +1794,7 @@ msgstr "Yer: ${location}"
 
 #: /src/schooltool/app/browser/templates/f_about_related.pt:2
 msgid "Contributors"
-msgstr ""
+msgstr "Katkıcılar"
 
 #: /src/schooltool/app/browser/templates/f_calendar_settings_overview.pt:12
 #: /src/schooltool/app/interfaces.py:135
@@ -1822,17 +1822,17 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:10
 msgid "Import source"
-msgstr ""
+msgstr "Kaynak ithal et"
 
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:20
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:64
 msgid "Upload CSV file"
-msgstr ""
+msgstr "CSV dosyası yükle"
 
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:29
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:104
 msgid "Enter CSV text"
-msgstr ""
+msgstr "CSV metni gir"
 
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:60
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:100
@@ -1842,11 +1842,11 @@ msgstr ""
 #: /src/schooltool/group/browser/flourish.zcml:236
 #: /src/schooltool/resource/browser/flourish.zcml:333
 msgid "Import CSV"
-msgstr ""
+msgstr "İçeri CSV aktar"
 
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:75
 msgid "Charset"
-msgstr ""
+msgstr "Karakter seti"
 
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:80
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:103
@@ -1910,7 +1910,7 @@ msgstr "Diğer (lütfen belirtin)"
 
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:91
 msgid "Other charset"
-msgstr ""
+msgstr "Diğer karakter seti"
 
 #. Default: "Submit"
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:112
@@ -1978,7 +1978,7 @@ msgstr "${count} / ${total} öge gösteriliyor"
 
 #: /src/schooltool/app/browser/templates/f_errors.pt:4
 msgid "Manage error settings"
-msgstr ""
+msgstr "Hata ayarlarını yönet"
 
 #: /src/schooltool/app/browser/templates/f_errors.pt:43
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:14
@@ -2017,7 +2017,7 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:18
 msgid "Request URL"
-msgstr ""
+msgstr "İstek URL'si"
 
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:22
 msgid "Exception Type"
@@ -2054,7 +2054,7 @@ msgstr ""
 #: /src/schooltool/timetable/browser/templates/f_specialday_related.pt:2
 #: /src/schooltool/timetable/browser/templates/f_timetable_container_related.pt:2
 msgid "What is This?"
-msgstr ""
+msgstr "Bu Nedir?"
 
 #: /src/schooltool/app/browser/templates/f_generations_related.pt:6
 msgid ""
@@ -8525,7 +8525,7 @@ msgstr ""
 
 #: /src/schooltool/timetable/interfaces.py:193
 msgid "Activity type"
-msgstr ""
+msgstr "Etkinlik tipi"
 
 #: /src/schooltool/timetable/interfaces.py:299
 msgid "Treat consecutive periods as one meeting"
@@ -8538,3 +8538,221 @@ msgstr "Okul zaman çizelgeleri"
 #: /src/schooltool/widget/password.py:55
 msgid "Supplied passwords are not identical"
 msgstr "Yazılan parolalar aynı değil"
+
+#~ msgid "Schooltool Person Menu"
+#~ msgstr "Schooltool Kişi Menüsü"
+
+#~ msgid "schooldata"
+#~ msgstr "okul verisi"
+
+#~ msgid "Shortcut: Alt-N"
+#~ msgstr "Kısayol: Alt-N"
+
+#~ msgid "School data"
+#~ msgstr "Okul verisi"
+
+#~ msgid "Spanish"
+#~ msgstr "İspanyolca"
+
+#~ msgid "English"
+#~ msgstr "İngilizce"
+
+#~ msgid "Enrollment"
+#~ msgstr "Kayıt"
+
+#~ msgid "German"
+#~ msgstr "Almanca"
+
+#~ msgid "Chinese"
+#~ msgstr "Çince"
+
+#~ msgid "Italian"
+#~ msgstr "İtalyanca"
+
+#~ msgid "Enrollment date"
+#~ msgstr "Kayıt tarihi"
+
+#~ msgid "Special education"
+#~ msgstr "Özel eğitim"
+
+#~ msgid "Health information"
+#~ msgstr "Sağlık bilgisi"
+
+#~ msgid "Previous school"
+#~ msgstr "Önceki okul"
+
+#~ msgid "Birth"
+#~ msgstr "Doğum"
+
+#~ msgid "Projected graduation year"
+#~ msgstr "Hedeflenen mezuniyet yılı"
+
+#~ msgid "Surname"
+#~ msgstr "Soyadı"
+
+#~ msgid "Modified"
+#~ msgstr "Değiştirilmiş"
+
+#~ msgid "other"
+#~ msgstr "diğer"
+
+#~ msgid "Team"
+#~ msgstr "Takım"
+
+#~ msgid "Cell phone"
+#~ msgstr "Cep telefonu"
+
+#~ msgid "parent1"
+#~ msgstr "ebeveyn 1"
+
+#~ msgid "N"
+#~ msgstr "N"
+
+#~ msgid "Vietnamese"
+#~ msgstr "Vietnamca"
+
+#~ msgid "Korean"
+#~ msgstr "Korece"
+
+#~ msgid "Polish"
+#~ msgstr "Lehçe"
+
+#~ msgid "Russian"
+#~ msgstr "Rusça"
+
+#~ msgid "Arabic"
+#~ msgstr "Arapça"
+
+#~ msgid "parent"
+#~ msgstr "ebeveyn"
+
+#~ msgid "Change contact information for ${fullname}"
+#~ msgstr "${fullname} kişisinin iletişim bilgilerini değiştir"
+
+#~ msgid "Contact information"
+#~ msgstr "İletişim bilgisi"
+
+#~ msgid "demographics"
+#~ msgstr "demografik"
+
+#~ msgid "Primary language"
+#~ msgstr "Ana dil"
+
+#~ msgid "Relationship to student"
+#~ msgstr "Öğrenciyle ilişkisi"
+
+#~ msgid "Display"
+#~ msgstr "Görünüm"
+
+#~ msgid "female"
+#~ msgstr "Kadın"
+
+#~ msgid "male"
+#~ msgstr "Erkek"
+
+#~ msgid ""
+#~ "Course \"${course_title}\" credits \"${invalid_credits}\" value must be an "
+#~ "integer."
+#~ msgstr ""
+#~ "\"${course_title}\" dersinin \"${invalid_credits}\" kredilerinin değeri bir "
+#~ "tam sayı olmalıdır."
+
+#~ msgid "name info"
+#~ msgstr "ad bilgisi"
+
+#~ msgid "parent2"
+#~ msgstr "ebeveyn 2"
+
+#~ msgid "emergency1"
+#~ msgstr "acil durum 1"
+
+#~ msgid "emergency2"
+#~ msgstr "acil durum 2"
+
+#~ msgid "emergency3"
+#~ msgstr "acil durum 3"
+
+#~ msgid "Schooltool Person Display Menu"
+#~ msgstr "Schooltool Kişi Görüntüleme Menüsü"
+
+#~ msgid "Apply and Next"
+#~ msgstr "Uygula ve İlerle"
+
+#~ msgid "Change name information for ${fullname}"
+#~ msgstr "${fullname} kişisinin ad bilgisini değiştir"
+
+#~ msgid "Change name"
+#~ msgstr "Ad değiştir"
+
+#~ msgid "Change demographics for ${fullname}"
+#~ msgstr "${fullname} kişisinin nüfus bilgilerini değiştir"
+
+#~ msgid "Change school data for ${fullname}"
+#~ msgstr "${fullname} kişisinin okul verisini değiştir"
+
+#~ msgid "Invalid teacher. Possible causes: deleted or renamed."
+#~ msgstr "Geçersiz öğretmen. Silinmiş ya da adı değiştirilmiş olabilir."
+
+#~ msgid "Invalid group. Possible causes: deleted or renamed."
+#~ msgstr "Geçersiz grup. Silinmiş ya da adı değiştirilmiş olabilir."
+
+#~ msgid ""
+#~ "Search for persons here. Note that in fulltext fields you can use wildcard "
+#~ "characters such as *. For example, to search for everyone with John in their "
+#~ "name, use <em>*john*</em>."
+#~ msgstr ""
+#~ "Kişileri buradan arayın. Tüm metin alanında * gibi joker karakterleri "
+#~ "kullanabilirsiniz. Örneğin, adında Evrim olan herkesi bulmak için "
+#~ "<em>*evrim*</em> şeklinde yazabilirsiniz."
+
+#~ msgid "There were no results."
+#~ msgstr "Sonuç bulunamadı."
+
+#~ msgid "Prefix such as Mr., Mrs."
+#~ msgstr "Bay, Bayan gibi önekler"
+
+#~ msgid "Name by which the student prefers to be called"
+#~ msgstr "Öğrencinin çağrılmayı yeğlediği ad"
+
+#~ msgid "Tagalog"
+#~ msgstr "Filipince"
+
+#~ msgid "guardian"
+#~ msgstr "koruyucu"
+
+#~ msgid "grandparent"
+#~ msgstr "Büyükbaba ya da büyükanne"
+
+#~ msgid "step-parent"
+#~ msgstr "üvey ebeveyn"
+
+#~ msgid "friend of family"
+#~ msgstr "aile dostu"
+
+#~ msgid "Street"
+#~ msgstr "Sokak"
+
+#~ msgid "Full text search in name"
+#~ msgstr "Ada göre tam metin arama"
+
+#~ msgid "Name of parent"
+#~ msgstr "Ebeveyn adı"
+
+#~ msgid "Full text search in parent names"
+#~ msgstr "Ebeveyn adlarına göre tam metin arama"
+
+#~ msgid "Student ID"
+#~ msgstr "Öğrenci Kodu"
+
+#~ msgid "must be either 'Location' or 'Resource'"
+#~ msgstr "'Yer' ya da 'Kaynak' olmalı"
+
+#~ msgid "Changed password"
+#~ msgstr "Değiştirilen parola"
+
+#~ msgid ""
+#~ "Wrong section header on line ${line_no} (it should contain a course id and "
+#~ "an instructor id)"
+#~ msgstr ""
+#~ "${line_no} satırında hatalı bölüm başlığı (ders kodu ya da öğretmen kodunu "
+#~ "içermeli)"
