@@ -2,7 +2,7 @@
 CHANGES
 =======
 
-2.0.1 (unreleased)
+2.0.1 (2011-12-22)
 ------------------
 
 - Cannot add resources (https://launchpad.net/bugs/894632)
