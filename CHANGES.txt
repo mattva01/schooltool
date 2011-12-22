@@ -5,17 +5,18 @@ CHANGES
 2.0.1 (unreleased)
 ------------------
 
-- email view needs formatting (https://launchpad.net/buggs/886304)
-- SchoolTool does not allow add "equipment", "location" or "resources" (https://launchpad.net/bugs/894632)
+- Cannot add resources (https://launchpad.net/bugs/894632)
+- Many CSS fixes (https://launchpad.net/bugs/885807)
+- Email view needs formatting (https://launchpad.net/bugs/886304)
 - Hide demographics fieldset if it is empty in person add views (https://launchpad.net/bugs/752051)
 - Styled the fckeditor widget (https://launchpad.net/bugs/891348)
+- Updated README.txt (https://launchpad.net/bugs/590781), including instructions
+  for Virtual Hosting.
 - Updated translations.
 
 
 2.0.0 (2011-11-23)
 ------------------
-
-- Many CSS fixes (https://launchpad.net/bugs/885807)
 
 Bugfixes
 ++++++++
