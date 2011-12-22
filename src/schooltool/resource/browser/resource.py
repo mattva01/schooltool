@@ -16,10 +16,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-"""
-group views.
-
-$Id$
+"""Resource views
 """
 from collections import defaultdict
 
@@ -51,16 +48,16 @@ from zope.session.interfaces import ISession
 from zope.traversing.browser.absoluteurl import absoluteURL
 from zope.traversing.browser.interfaces import IAbsoluteURL
 
-from schooltool.app.browser.app import BaseEditView
 from schooltool.app.interfaces import ISchoolToolApplication
-from schooltool.basicperson.browser.demographics import (DemographicsView,
+from schooltool.basicperson.browser.demographics import (
+    DemographicsView,
     FlourishDemographicsView, FlourishReorderDemographicsView)
 from schooltool.basicperson.interfaces import IAddEditViewTitle
 from schooltool.basicperson.interfaces import ILimitKeysLabel
 from schooltool.basicperson.interfaces import ILimitKeysHint
 from schooltool.common.inlinept import InheritTemplate
 from schooltool.resource.interfaces import IBookingCalendar
-from schooltool.resource.interfaces import (IBaseResourceContained,
+from schooltool.resource.interfaces import (
              IResourceContainer, IResourceTypeInformation, IResourceSubTypes,
              IResource, IEquipment, ILocation, IResourceDemographicsFields)
 from schooltool.resource.resource import Resource, Location, Equipment
@@ -674,7 +671,7 @@ class BaseFlourishResourceAddForm(AddForm):
         return resource
 
     def nextURL(self):
-        return absoluteURL(self._resource, self.request)
+        return absoluteURL(self._resource or self.context, self.request)
 
 
 ###############  Resource add/edit views ################
@@ -811,8 +808,7 @@ class ResourceLinks(RefineLinksViewlet):
 
     @property
     def title(self):
-        return _("${resource_title}'s",
-                 mapping={'resource_title': self.context.title})
+        return self.context.title
 
 
 class ResourceActions(RefineLinksViewlet): pass

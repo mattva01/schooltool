@@ -3,10 +3,6 @@
   <title metal:fill-slot="title" i18n:translate="">Not Found</title>
 </head>
 <body>
-<span metal:fill-slot="zonki">
-  <img src="zonki.png" alt="SchoolTool" i18n:attributes="alt"
-    tal:attributes="src context/++resource++zonki-pointing.png" /> 
-</span>
 
 <h1 metal:fill-slot="content-header" i18n:translate="">Not Found</h1>
 <metal:block metal:fill-slot="body">

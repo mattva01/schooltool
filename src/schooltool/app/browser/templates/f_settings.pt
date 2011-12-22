@@ -1,0 +1,16 @@
+<div i18n:domain="schooltool">
+  <div class="status">
+    <div class="summary ui-state-highlight ui-corner-all">
+      <img tal:attributes="src context/++resource++schooltool.skin.flourish/spinner.gif" />
+      <span i18n:translate="">Please wait for confirmation that the database has been packed.</span>
+    </div>
+  </div>
+  <script>
+    $(document).ready(function() {
+      $('.status').hide()
+      .ajaxStart(function() {
+        $(this).slideDown();
+      });
+    });
+  </script>
+</div>

@@ -320,14 +320,17 @@ class FlourishDemographicsView(flourish.page.WideContainerPage):
             classname = demo.__class__.__name__
             class_key = classname[:classname.find('FieldDescription')]
             field_type = self.types.get(class_key, '')
+            limit_keys = demo.limit_keys
+            if limit_keys is None:
+                limit_keys = []
             result.append({
                'title': demo.title,
                'url': '%s/edit.html' % absoluteURL(demo, self.request),
                'id': demo.name,
                'type': field_type,
                'required': demo.required,
-               'limited': bool(demo.limit_keys),
-               'groups': [(key[0] in demo.limit_keys)
+               'limited': bool(limit_keys),
+               'groups': [(key[0] in limit_keys)
                           for key in self.keys],
                })
         return result

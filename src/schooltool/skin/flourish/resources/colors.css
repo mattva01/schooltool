@@ -48,10 +48,18 @@ a, a:link, a:visited, a:active {
 
 .schooltool > .header {
     background-color: #ffffff;
+
+    -moz-box-shadow: 0px -3px 4px #bbbbbb;
+    -webkit-box-shadow: 0px -3px 4px #bbbbbb;
+    box-shadow: 0px -3px 4px #bbbbbb;
 }
 
 .schooltool > .page {
     background-color: #ffffff;
+
+    -moz-box-shadow: 0px 1px 4px #bbbbbb;
+    -webkit-box-shadow: 0px 1px 4px #bbbbbb;
+    box-shadow: 0px 1px 4px #bbbbbb;
 }
 
 .schooltool > .footer > p {
@@ -65,7 +73,7 @@ a, a:link, a:visited, a:active {
     - brand ('school' + 'tool' + logo)
     - navigation (main tabs)
     - breadcrumbs (absolute positioned on the second-nav)
-    - second-nav (breadcrumbs + login information)
+    - second-nav (breadcrumbs + language selector + login information)
 
  */
 
@@ -83,6 +91,10 @@ a, a:link, a:visited, a:active {
 
 .header ul.navigation {
     background-color: #008c93;
+
+    -moz-box-shadow: 0px 1px 6px #bbbbbb;
+    -webkit-box-shadow: 0px 1px 6px #bbbbbb;
+    box-shadow: 0px 1px 6px #bbbbbb;
 }
 
 .header ul.navigation li a {
@@ -114,6 +126,10 @@ a, a:link, a:visited, a:active {
 
 .header ul.second-nav {
     background-color: #485454;
+
+    -moz-box-shadow: 0px 1px 6px #bbbbbb;
+    -webkit-box-shadow: 0px 1px 6px #bbbbbb;
+    box-shadow: 0px 1px 6px #bbbbbb;
 }
 
 .header ul.second-nav > li {
@@ -131,6 +147,10 @@ a, a:link, a:visited, a:active {
 }
 
 .header ul.second-nav > li.active a {
+    color: #ffffff;
+}
+
+.header ul.second-nav #language-selector {
     color: #ffffff;
 }
 
@@ -236,7 +256,7 @@ form fieldset .row .hint {
 
 form fieldset .row > .error .error {
     background: transparent url(error-icon.png) no-repeat scroll top left;
-    color: #00ABB3;
+    color: #ef4444;
 }
 
 form fieldset .row .widget input.text-widget,
@@ -251,10 +271,14 @@ form fieldset .row .widget input[type="password"] {
 form fieldset .row .widget input.text-widget:focus,
 form fieldset .row .widget input[type="text"]:focus,
 form fieldset .row .widget input.password-widget:focus,
-form fieldset .row .widget input[type="password"]:focus,
+form fieldset .row .widget input[type="password"]:focus {
+    border: 2px solid #00abb3;
+}
+
 form fieldset .row .widget input[type="text"].error,
 form fieldset .row .widget input[type="password"].error {
-    border: 2px solid #00abb3;
+    background-color: #feeee9;
+    border: 2px solid #ef4444;
 }
 
 form fieldset .row .widget textarea.textarea-widget {
@@ -272,23 +296,34 @@ form fieldset .row .widget .option {
     color: #333333;
 }
 
+form .buttons .button-ok {
+    background-color: #009499;
+    border: 1px solid #009499;
+    box-shadow: 0px 1px 6px #bbbbbb;
+    color: #ffffff;
+}
+
+form .buttons .button-neutral,
+form .buttons .button-cancel {
+    background-color: #6C7B7C;
+    border: 1px solid #6C7B7C;
+    box-shadow: 0px 1px 6px #bbbbbb;
+    color: #ffffff;
+}
+
 form .buttons .button-ok:hover,
 form .buttons .button-neutral:hover,
 form .buttons .button-cancel:hover {
-    background-color: #00abb3;
+    background-color: #026B6E;
+    border: 1px solid #026B6E;
 }
 
 form .buttons .button-ok:active,
 form .buttons .button-neutral:active,
 form .buttons .button-cancel:active {
-    background-color: #005355;
-}
-
-form .buttons .button-ok,
-form .buttons .button-neutral,
-form .buttons .button-cancel {
-    background-color: #aea79f;
-    color: #ffffff;
+    background-color: #056163;
+    border: 1px solid #056163;
+    color: #aea79f;
 }
 
 form .required-info {
@@ -300,7 +335,7 @@ form span.required {
 }
 
 form pre.csv-text {
-    border-left: 1px dotted #888;
+    border: 1px dotted #888;
 }
 
 /*
@@ -406,11 +441,64 @@ table.schoolday-legend td.schoolday {
 }
 
 .ui-dialog .ui-dialog-titlebar {
-    background: #00abb3;
+    background: #008C93;
 }
 
 .ui-dialog .ui-dialog-titlebar .ui-dialog-title {
     color: #ffffff;
+}
+
+.ui-datepicker {
+    border: 2px solid #00abb3;
+    border-top-width: 1px;
+}
+
+.ui-datepicker .ui-widget-header {
+    background: #4B5554;
+    border: 1px solid #4B5554;
+}
+
+.ui-datepicker-header a.ui-state-hover {
+    background: none;
+    border: 1px solid #dfdfdf;
+}
+
+.ui-datepicker-calendar thead {
+    background: none;
+    border-bottom: 1px solid #dfdfdf;
+}
+
+.ui-datepicker-calendar thead th {
+    color: #4B5554;
+}
+
+.ui-datepicker-calendar a.ui-state-default {
+    background: none;
+    border: 0;
+    color: #4B5554;
+}
+
+.ui-datepicker-calendar a.ui-state-default:hover {
+    background: #009499;
+    color: #ffffff;
+}
+
+.ui-datepicker-calendar a.ui-state-active {
+    color: #009499;
+}
+
+.ui-datepicker-calendar tr {
+    border-bottom: none;
+}
+
+.ui-datepicker-calendar .ui-datepicker-other-month {
+    background: none;
+    opacity: 1;
+}
+
+.ui-datepicker-calendar tr th:nth-child(even),
+.ui-datepicker-calendar tr td:nth-child(even) {
+    background: #f0f0f0;
 }
 
 /*
@@ -452,6 +540,23 @@ table.schoolday-legend td.schoolday {
     border: 1px solid #cccccc;
 }
 
+.grades .changed_bg input[type="text"] {
+    background: #009499;
+    border: 1px solid #009499;
+    color: #ffffff;
+}
+
+.grades .error_bg  input[type="text"] {
+    background: #ef4444;
+    border: 1px solid #ef4444;
+    color: #ffffff;
+}
+
+.grades .warning_bg  input[type="text"] {
+    background: #f6db5a;
+    border: 1px solid #f6db5a;
+}
+
 .totals th, .totals td {
     border-left: 1px solid #cccccc;
 }
@@ -461,8 +566,27 @@ th.activity-title {
 }
 
 .popup_menu li {
-    background-color: #EEEEEE;
-    border-bottom: solid 1px #808080;
+    background-color: #6c7b7c;
+}
+
+.popup_menu > li > span {
+    background-color: #485454;
+}
+
+.popup_menu li span {
+    color: #ffffff;
+}
+
+.popup_menu li a {
+    color: #ffffff;
+}
+
+.popup_menu li a:hover {
+    background-color: #026B6E;
+}
+
+.popup_menu span.hover_link {
+    background-color: #6c7b7c;
 }
 
 /*
@@ -492,149 +616,18 @@ form fieldset table.timetable td.error {
 
   Calendar:
 
+    - daily
+    - weekly
+    - monthly
+    - yearly
+    - overlay
+    - refine sidebar monthly calendar
+
 */
 
-#calendar-view-year TABLE.month,
-.page .refine .calendar-month TABLE.month,
-#calendar-view-month {
-    background: #eae8e3;
-    border: 1px #000000 solid;
-}
-
-.page .refine .calendar-month TABLE.month TH,
-#calendar-view-month TH,
-#calendar-view-month TD.weekno {
-    color: #ffffff;
-    background: #aea79f;
-}
-
-#calendar-view-year TABLE.month TH month-weekday{
-    color: #ffffff;
-    background: #dfdcd9;
-}
-
-.page .refine .calendar-month TABLE.month TH A {
-    color: #ffffff;
-}
-
-#calendar-view-month TD.weekno {
-    border-right: 2px #000000 solid;
-    border-bottom: 1px #000000 solid;
-}
-
-#calendar-view-year TABLE.month TH.month-weekday,
-#calendar-view-month TH.weekday {
-    border-bottom: 1px #000000 solid;
-}
-
-a.cal_yearly_day_busy {
-    background: #aea79f;
-    color: #ffffff;
-}
-
-#calendar-view-year TABLE.month TH.month-title A {
-    color: #f0f0f0;
-    background: #aea79f;
-}
-
-#calendar-view-month TH.month-title {
-    color: #f0f0f0;
-    background: #000000;
-}
-
-#calendar-view-year TABLE.month TD A:hover,
-.page .refine .calendar-month TABLE.month TD A:hover {
-    color: #ffffff;
-    background: #000000;
-}
-
-#calendar-view-month TD.day A:hover,
-#calendar-view-month TD.day-other A:hover {
-    color: #ffffff;
-    background: #aea79f;
-}
-
-#calendar-view-month TD.day,
-.page .refine .calendar-month TABLE.month TD {
-    border-right: 1px #bab5ab solid;
-    border-bottom: 1px #bab5ab solid;
-}
-
-#calendar-view-month TD.weekno A {
-    color: #ffffff;
-}
-
-#calendar-view-month TD.day-other {
-    background: #bab5ab;
-}
-
-#calendar-view-month TD.day-other A {
-    color: #807d74;
-}
-
-#calendar-view-month .event,
-#calendar-view-month .comp_event {
-    border: 1px #eae8e3 solid;
-}
-
-#calendar-view-month A:hover .event,
-#calendar-view-month A:hover .comp_event {
-    color: #000;
-    border: 1px #314e6c solid;
-}
-
-#calendar-view-month .event {
-    background: #DFDCD9;
-}
-
-#calendar-view-month .comp_event {
-    background: #e0b6af;
-}
-
-#calendar-view-week {
-    border-top: 2px #000000 solid;
-}
-
-#calendar-view-week TD {
-    background: #eae8e3;
-}
-
-#calendar-view-week TH {
-    border-right: 1px #000000 solid;
-}
-
-#calendar-view-week TH.first {
-    border-left: 1px #000000 solid;
-}
-
-#calendar-view-week TH.day-title {
-    background: #aea79f;
-    border-bottom: 1px #000000 solid;
-}
-
-#calendar-view-week TH A {
-    color: #ffffff;
-}
-
-#calendar-view-week TD {
-    border-right: 1px #bab5ab solid;
-    border-bottom: 2px #bab5ab solid;
-}
-
-#calendar-view-week TD.first {
-    border-left: 2px #bab5ab solid;
-}
-
-#calendar-view-week TD A {
-    border: 1px solid;
-}
 
 #calendar-view-day {
-    border: #aaaaaa 1px solid;
-}
-
-#events-allday .event-allday A.delete {
-    border: 0;
+    border: 1px solid #aaaaaa;
 }
 
 #calendar-view-day .hour {
@@ -650,7 +643,6 @@ a.cal_yearly_day_busy {
 }
 
 #calendar-view-day .event {
-    border: 1px #000000 solid;
     background: #DFDCD9;
     opacity: 0.85;
 }
@@ -693,8 +685,178 @@ a.cal_yearly_day_busy {
     color: #000;
 }
 
+#calendar-view-week {
+    border: 1px solid #dfdfdf;
+}
+
+#calendar-view-week tbody {
+    border-top: 1px solid #dfdfdf;
+}
+
+#calendar-view-week tr td:nth-child(even) {
+    background: #f0f0f0;
+}
+
+#calendar-view-week tr {
+    border-bottom: none;
+}
+
+#calendar-view-week TD {
+    background: #ffffff;
+}
+
+#calendar-view-week TH {
+    border-bottom: 1px solid #dfdfdf;
+}
+
+#calendar-view-week TH.day-title {
+    background: #f0f0f0;
+}
+
+#calendar-view-month {
+    background: #ffffff;
+    border: 1px #dfdfdf solid;
+}
+
+#calendar-view-month TH {
+    background: #f0f0f0;
+    border-bottom: 1px #dfdfdf solid;
+}
+
+#calendar-view-month tr {
+    border-bottom: 1px #dfdfdf solid;
+}
+
+#calendar-view-month tbody {
+    border-top: 1px #dfdfdf solid;
+}
+
+#calendar-view-month tr td:nth-child(odd) {
+    background: #f0f0f0;
+}
+
+#calendar-view-month TH.weekday {
+    border: 1px #dfdfdf solid;
+}
+
+#calendar-view-month TH.month-title {
+    color: #ffffff;
+    background: #000000;
+}
+
+#calendar-view-month TD.day-other A {
+    color: #000000;
+}
+
+#calendar-view-month TD.day A:hover,
+#calendar-view-month TD.day-other A:hover {
+    color: #ffffff;
+    background: #009499;
+}
+
+#calendar-view-month A:hover .event,
+#calendar-view-month A:hover .comp_event {
+    color: #000;
+    border: 1px #314e6c solid;
+}
+
+#calendar-view-month .event {
+    background: #DFDCD9;
+}
+
+#calendar-view-month .comp_event {
+    background: #e0b6af;
+}
+
+#calendar-view-year tbody,
+#calendar-view-year tbody tr {
+    border-top: none;
+    border-bottom: none;
+}
+
+#calendar-view-year table.month tbody tr td:nth-child(even) {
+    background: #f0f0f0;
+}
+
+#calendar-view-year TABLE.month {
+    background: #ffffff;
+    border: 1px #dfdfdf solid;
+}
+
+#calendar-view-year table.month tbody {
+    border-top: 1px solid #dfdfdf;
+}
+
+#calendar-view-year TABLE.month TH.month-weekday{
+    color: #4b5554;
+    background: #ffffff;
+}
+
+#calendar-view-year TABLE.month TH.month-weekday {
+    border-bottom: 1px #dfdfdf solid;
+}
+
+#calendar-view-year TABLE.month TH.month-title A {
+    color: #ffffff;
+    background: #4b5554;
+}
+
+#calendar-view-year TABLE.month TD A:hover {
+    color: #ffffff;
+    background: #009499;
+}
+
+#events-allday .event-allday A.delete {
+    border: 0;
+}
+
 .page .refine .calendar-overlay table tbody {
     border: 0 none;
+}
+
+.page .refine .calendar-month table.month tbody tr td:nth-child(even) {
+    background: #f0f0f0;
+}
+
+.page .refine .calendar-month TABLE.month {
+    background: #ffffff;
+    border: 1px #dfdfdf solid;
+}
+
+.page .refine .calendar-month TABLE.month TH A {
+    color: #ffffff;
+}
+
+.page .refine .calendar-month TABLE.month TD A:hover {
+    color: #ffffff;
+    background: #009499;
+}
+
+.page .refine .calendar-month table.month thead td {
+    background: #ffffff;
+    color: #4B5554;
+    border-bottom: 1px solid #dfdfdf;
+}
+
+.page .refine .calendar-month table.month thead td:nth-child(even) {
+    background: #f0f0f0;
+}
+
+.page .refine .calendar-month TABLE.month tbody {
+    border-top: 1px solid #000000;
+}
+
+.page .refine .calendar-month TABLE.month TH {
+    color: #ffffff;
+    background: #4b5554;
+}
+
+a.cal_yearly_day {
+    color: #4b5554;
+}
+
+a.cal_yearly_day_busy {
+    color: #009499;
 }
 
 }

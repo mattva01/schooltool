@@ -22,8 +22,10 @@ SchoolTool security policy.
 $Id$
 
 """
-
+from persistent import Persistent
+import zope.keyreference.interfaces
 from zope.security.simplepolicies import ParanoidSecurityPolicy
+from zope.security.proxy import removeSecurityProxy
 from zope.component import queryAdapter
 from zope.traversing.api import getParent
 from schooltool.securitypolicy.crowds import ICrowd
@@ -73,32 +75,45 @@ class SchoolToolSecurityPolicy(ParanoidSecurityPolicy):
 class CachingSecurityPolicy(ParanoidSecurityPolicy):
     """Crowd-based caching security policy."""
 
-    def cacheKey(self, permission, obj):
-        return (permission, id(obj))
+    def cachingKey(self, permission, obj):
+        try:
+            ref = zope.keyreference.interfaces.IKeyReference(obj, None)
+            if ref is None:
+                return None
+        except zope.keyreference.interfaces.NotYet:
+            return None
+        return (permission, ref)
+
+    @classmethod
+    def getCache(cls, participation):
+        cache = getattr(participation, '_st_perm_cache', None)
+        if cache is None:
+            try:
+                participation._st_perm_cache = {'perm': {},
+                                                'enabled': True}
+            except AttributeError:
+                return None
+        return participation._st_perm_cache
 
     def checkCache(self, permission, obj):
-        key = self.cacheKey(permission, obj)
+        key = self.cachingKey(permission, obj)
         if key is None:
             return None # uncacheable
         result = None
         for participation in self.participations:
-            cache = getattr(participation, '_st_perm_cache', None)
+            cache = self.getCache(participation)
             if cache is not None:
                 perm = cache['perm'].get(key, None)
                 result = max(result, perm)
         return result
 
     def cache(self, participation, permission, obj, value):
-        key = self.cacheKey(permission, obj)
+        cache = self.getCache(participation)
+        if cache is None or not cache['enabled']:
+            return
+        key = self.cachingKey(permission, obj)
         if key is None:
             return # uncacheable
-        cache = getattr(participation, '_st_perm_cache', None)
-        if cache is None:
-            cache = {'perm': {}}
-            try:
-                participation._perm_cache = cache
-            except AttributeError:
-                return
         cache['perm'][key] = value
 
     def checkPermission(self, permission, obj):

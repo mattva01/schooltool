@@ -2,10 +2,75 @@
 CHANGES
 =======
 
-1.9.3 (unreleased)
+2.0.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- SchoolTool does not allow add "equipment", "location" or "resources" (https://launchpad.net/bugs/894632)
+
+
+2.0.0 (2011-11-23)
+------------------
+
+- Many CSS fixes (https://launchpad.net/bugs/885807)
+
+Bugfixes
+++++++++
+
+- Deal with the 's in the sidebar (https://launchpad.net/bugs/873045)
+- Terms index still has inconsistent style (https://launchpad.net/bugs/892923)
+- Move pack database action to server page (https://launchpad.net/bugs/886310)
+- Done's to get back to /school (https://launchpad.net/bugs/892926)
+- Credits hint still asks for integer (https://launchpad.net/bugs/892946)
+- Courses import should have cancel (https://launchpad.net/bugs/892952)
+- Courses import instructions doesn't reflect new field names (https://launchpad.net/bugs/892949)
+- Translate default demographics fields.
+
+Cleanup
++++++++
+
+- Remove ancient demographics implementation.
+- Remove obsolete images and docs.
+- Remove duplicate jQuery(ui).
+
+
+1.9.3 (2011-11-18)
+------------------
+
+- Improved style of date pickers, buttons, calendars, errors, gradebook etc.
+- Fixed all tests.
+- Updated translations.
+
+Calendar
+++++++++
+
+- More informative calendar titles.
+- Multi term sections should show only once in calendar view. (https://launchpad.net/bugs/872289)
+- Classes show up twice in student/teacher calendars (https://launchpad.net/bugs/882285)
+- Name order reversed in calendar (https://launchpad.net/bugs/891341)
+- Calendar showing wrong day (https://launchpad.net/bugs/877815)
+- Only restore last visited calendar days if date user last looked at it is today.
+- In calendar overlay legend, display only sections that are in terms that are visible in the view.
+
+Export
+++++++
+
+- XLS importer crashes on reimport in timetable code (https://launchpad.net/bugs/878209)
+- Import of Contact Relationships fails with DuplicateRelationship error (https://launchpad.net/bugs/882482)
+- Reimporting sections using CSV does not work anymore (https://launchpad.net/bugs/251866)
+- XLS importer needs to handle integer data (https://launchpad.net/bugs/362014)
+- Allow import of Equipment resources
+- Ensure XLS import works with existing objects in database (https://launchpad.net/bugs/585119)
+
+Other bugfixes
+++++++++++++++
+
+- Server error when opening demographic container (https://launchpad.net/bugs/887662)
+- Need to sort groups in filter widget (https://launchpad.net/bugs/884230)
+
+Devmode
++++++++
+
+- Instead of redirecting to log-in page, show security check log (https://launchpad.net/bugs/716340)
 
 
 1.9.2 (2011-11-04)
@@ -14,7 +79,7 @@ CHANGES
 - Make sandbox with virtualenv. Fixes bootstrap with Python 2.7.
 - Group sections by term in calendar (https://launchpad.net/bugs/872289)
 - Terms are listed upside down (https://launchpad.net/bugs/872240)
-- Moved Demographics into General Information accordion
+- Moved Demographics into General Information accordion (https://launchpad.net/bugs/882073)
 - Added two "Other" contact fields (https://launchpad.net/bugs/874568)
 - User information doesn't show username (https://launchpad.net/bugs/545767)
 - Username in login bar should go to user home (https://launchpad.net/bugs/868394)

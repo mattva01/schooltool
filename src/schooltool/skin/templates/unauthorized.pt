@@ -4,11 +4,6 @@
     i18n:domain="zope">
 <body i18n:domain="zope">
 
-<span metal:fill-slot="zonki" i18n:translate="">
-  <img src="zonki.png" alt="SchoolTool" i18n:attributes="alt"
-    tal:attributes="src context/++resource++zonki-angry.png" /> 
-</span>
-
 <div metal:fill-slot="body">
 
 <h1 i18n:translate="">Unauthorized</h1>

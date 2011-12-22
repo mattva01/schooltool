@@ -1,0 +1,10 @@
+<div class="manage-view" i18n:domain="schooltool"
+     tal:condition="view/has_schoolyear"
+     tal:define="year view/schoolyear">
+  <h3>
+    <a title="Manage year"
+       tal:attributes="href view/schoolyear/@@absolute_url"
+       i18n:attributes="title"
+       tal:content="view/schoolyear/title" />
+  </h3>
+</div>

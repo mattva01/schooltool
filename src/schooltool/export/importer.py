@@ -42,11 +42,13 @@ from schooltool.contact.interfaces import IContact, IContactContainer
 from schooltool.contact.interfaces import IContactPersonInfo, IContactable
 from schooltool.resource.resource import Resource
 from schooltool.resource.resource import Location
+from schooltool.resource.resource import Equipment
 from schooltool.group.group import Group
 from schooltool.group.interfaces import IGroupContainer
 from schooltool.term.interfaces import ITerm
 from schooltool.term.term import Term, getNextTerm, getPreviousTerm
 from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.app.app import SimpleNameChooser
 from schooltool.schoolyear.schoolyear import SchoolYear
 from schooltool.schoolyear.interfaces import ISchoolYear
@@ -94,7 +96,7 @@ ERROR_DUPLICATE_DAY_ID = _("is the same day id as another in this timetable")
 ERROR_UNKNOWN_DAY_ID = _("is not defined in the 'Day Templates' section")
 ERROR_DUPLICATE_PERIOD = _("is the same period id as another in this day")
 ERROR_DUPLICATE_HOMEROOM_PERIOD = _("is the same homeroom period id as another in this day")
-ERROR_RESOURCE_TYPE = _("must be either 'Location' or 'Resource'")
+ERROR_RESOURCE_TYPE = _("must be either 'Location', 'Equipment' or 'Resource'")
 ERROR_INVALID_TERM_ID = _('is not a valid term in the given school year')
 ERROR_INVALID_COURSE_ID = _('is not a valid course in the given school year')
 ERROR_HAS_NO_COURSES = _('${title} has no courses in A${row}')
@@ -175,13 +177,12 @@ class ImporterBase(object):
         value, found = self.getCellAndFound(sheet, row, col, default)
         valid = True
         if found:
-            if isinstance(value, str):
-                try:
-                    value = unicode(value)
-                except UnicodeError:
-                    self.error(row, col, ERROR_NOT_UNICODE_OR_ASCII)
-                    valid = False
-            elif not isinstance(value, unicode):
+            if isinstance(value, float):
+                if int(value) == value:
+                    value = int(value)
+            try:
+                value = unicode(value)
+            except UnicodeError:
                 self.error(row, col, ERROR_NOT_UNICODE_OR_ASCII)
                 valid = False
         return value, found, valid
@@ -440,12 +441,17 @@ class SchoolTimetableImporter(ImporterBase):
         syc = ISchoolYearContainer(self.context)
         schoolyear = syc[data['school_year']]
 
+        app = ISchoolToolApplication(None)
+        tzname = IApplicationPreferences(app).timezone
         timetable = Timetable(schoolyear.first, schoolyear.last,
-                              title=data['title'])
+                              title=data['title'], timezone=tzname)
 
         factories = dict(self.day_templates)
 
         container = ITimetableContainer(schoolyear)
+
+        if data['__name__'] in container:
+            del container[data['__name__']]
         timetable.__name__ = data['__name__']
 
         container[timetable.__name__] = timetable
@@ -650,8 +656,11 @@ class ResourceImporter(ImporterBase):
     sheet_name = 'Resources'
 
     def createResource(self, data):
-        res_types = {'Location': Location,
-                     'Resource': Resource}
+        res_types = {
+            'Location': Location,
+            'Equipment': Equipment,
+            'Resource': Resource,
+            }
         res_factory = res_types[data['type']]
         resource = res_factory(data['title'])
         resource.__name__ = data['__name__']
@@ -679,7 +688,7 @@ class ResourceImporter(ImporterBase):
             data['title'] = self.getRequiredTextFromCell(sh, row, 2)
             if num_errors < len(self.errors):
                 continue
-            if data['type'] not in ['Location', 'Resource']:
+            if data['type'] not in ['Location', 'Equipment', 'Resource']:
                 self.error(row, 1, ERROR_RESOURCE_TYPE)
                 continue
             resource = self.createResource(data)
@@ -912,7 +921,8 @@ class ContactRelationshipImporter(ImporterBase):
                 info.__parent__ = person
                 if relationship:
                     info.relationship = relationship
-                IContactable(person).contacts.add(contact, info)
+                if contact not in IContactable(person).contacts:
+                    IContactable(person).contacts.add(contact, info)
 
 
 class CourseImporter(ImporterBase):
@@ -1018,7 +1028,8 @@ class SectionImporter(ImporterBase):
 
         row += 2
 
-        while row < sh.nrows:
+        for row in range(row, sh.nrows):
+
             if sh.cell_value(rowx=row, colx=0) == '':
                 break
             num_errors = len(self.errors)
@@ -1046,7 +1057,6 @@ class SectionImporter(ImporterBase):
 
             schedule.addPeriod(period)
 
-            row += 1
             if num_errors < len(self.errors):
                 continue
 
@@ -1306,3 +1316,9 @@ class FlourishMegaImporter(flourish.page.Page, MegaImporter):
     def nextURL(self):
         url = absoluteURL(self.context, self.request)
         return '%s/manage' % url
+
+    def update(self):
+        if "UPDATE_CANCEL" in self.request:
+            self.request.response.redirect(self.nextURL())
+            return
+        return MegaImporter.update(self)

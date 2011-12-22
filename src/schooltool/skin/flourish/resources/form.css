@@ -144,6 +144,9 @@ form .buttons .button-neutral,
 form .buttons .button-cancel {
     font-size: 14px;
     line-height: 20px;
+
+    -moz-border-radius: 4px 4px 4px 4px;
+    border-radius: 4px 4px 4px 4px;
 }
 
 .status > .summary {
@@ -177,7 +180,9 @@ form .required-info {
 }
 
 form pre.csv-text {
-    line-height: 20px;
+    line-height: 16px;
+    font-family: mono;
+    font-size: 12px;
     padding: 4px 0px 4px 7px;
     margin-bottom: 8px;
 }

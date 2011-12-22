@@ -24,7 +24,7 @@ HOME = os.path.expanduser('~')
 
 def get_available_types():
     instance_types = list(pkg_resources.iter_entry_points('schooltool.instance_type'))
-    return [(entry.name, entry.module_name) for entry in instance_types]
+    return [(entry.name, entry.module_name) for entry in sorted(instance_types)]
 
 available_types = get_available_types()
 

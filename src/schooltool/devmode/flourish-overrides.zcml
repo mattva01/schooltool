@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/browser"
+           xmlns:z3c="http://namespaces.zope.org/z3c"
+           xmlns:zope="http://namespaces.zope.org/zope"
+           xmlns:flourish="http://schooltool.org/flourish"
+           i18n_domain="schooltool">
+
+  <flourish:page
+      for="zope.security.interfaces.IUnauthorized"
+      name="index.html"
+      title="Unauthorized"
+      class="schooltool.devmode.devmode.FlourishDebugUnauthorized"
+      content_template="f_unauthorized.pt"
+      permission="zope.Public"
+      />
+
+</configure>

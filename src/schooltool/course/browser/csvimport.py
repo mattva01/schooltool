@@ -16,11 +16,10 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
+"""Course CSV import
 """
-csv importing.
+from decimal import Decimal, InvalidOperation
 
-$Id$
-"""
 from zope.security.proxy import removeSecurityProxy
 from zope.traversing.browser.absoluteurl import absoluteURL
 
@@ -84,10 +83,10 @@ class CourseCSVImporter(BaseCSVImporter):
 
         if len(data) > 4:
             try:
-                credits = int(data[4])
-            except (ValueError,):
+                credits = Decimal(data[4])
+            except (ValueError, InvalidOperation):
                 self.errors.fields.append(_('Course "${course_title}" credits "${invalid_credits}" value'
-                                            ' must be an integer.',
+                                            ' must be a number.',
                                             mapping={'course_title': data[0],
                                                      'invalid_credits': data[4]}))
                 return

@@ -33,7 +33,8 @@ from schooltool.resource.interfaces import IBookingTimetableEvent
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.person.interfaces import IPerson
-from schooltool.term.interfaces import ITermContainer
+from schooltool.timetable.interfaces import ITimetableContainer
+from schooltool.timetable.calendar import ImmutableScheduleCalendar
 from schooltool.traverser.traverser import TraverserPlugin
 
 
@@ -84,51 +85,17 @@ class ResourceBookingCalendar(ImmutableCalendar, Location):
         self.__name__ = 'booking'
         self.title = "Booking Calendar"
 
-    def createFullTimetable(self, school_timetable, term):
-        """Create a timetable with an activity for every possible period"""
-        timetable = school_timetable.createTimetable(term)
-
-        # must be set so event ids would get generated properly, as
-        # the ids use the absolutePath.
-        locate(timetable, self, 'booking-timetable')
-
-        # XXX: Temporary timetable integration for the refactoring.
-        #      Will be broken soon.
-        from schooltool.timetable import TimetableActivity
-
-        for day_id, day in timetable.items():
-            for period_id in day.keys():
-                act = TimetableActivity(title=period_id, owner=None)
-                day.add(period_id, act, send_events=False)
-
-        return timetable
-
     def expand(self, start, end):
         app = ISchoolToolApplication(None)
-        terms = ITermContainer(app, {})
 
-        # XXX: Temporary timetable integration for the refactoring
-        #      This one will be broken soon too.
-        from schooltool.timetable.interfaces import ITimetableSchemaContainer
-        school_timetables = ITimetableSchemaContainer(app, None)
+        school_timetables = ITimetableContainer(app, None)
 
-        if school_timetables is None or school_timetables.default_id is None:
+        if school_timetables is None or school_timetables.default is None:
             return []
 
+        calendar = ImmutableScheduleCalendar(school_timetables.default)
         events = []
-        for term in terms.values():
-            # date component of these timestamps are in the right
-            # timezone already.
-            if (term.first > end.date()) or (term.last < start.date()):
-                # skip non overlapping terms
-                continue
-
-            timetable = self.createFullTimetable(school_timetables.getDefault(),
-                                                 term)
-            calendar = timetable.model.createCalendar(term, timetable,
-                                                      start.date(),
-                                                      end.date())
-            events.extend(calendar.expand(start, end))
+        events.extend(calendar.expand(start, end))
 
         timetable_calendar = ImmutableCalendar(events)
 

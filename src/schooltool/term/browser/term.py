@@ -120,6 +120,10 @@ class FlourishTermActionLinks(flourish.page.RefineLinksViewlet):
     """Term action links viewlet."""
 
 
+class FlourishTermsAddLinks(flourish.page.RefineLinksViewlet):
+    """Term action links viewlet."""
+
+
 class FlourishTermDeleteLink(flourish.page.ModalFormLinkViewlet):
 
     @property
@@ -769,3 +773,20 @@ class TermContainerBreadcrumb(flourish.breadcrumbs.Breadcrumbs):
     @property
     def crumb_parent(self):
         return ISchoolToolApplication(None)
+
+
+class TermAddLinkViewlet(flourish.page.LinkViewlet):
+
+    @property
+    def enabled(self):
+        year = self.view.schoolyear
+        if year is None or not flourish.canEdit(year):
+            return False
+        return super(TermAddLinkViewlet, self).enabled
+
+    @property
+    def url(self):
+        year = self.view.schoolyear
+        if year is None:
+            return None
+        return '%s/%s' % (absoluteURL(year, self.request), 'add.html')

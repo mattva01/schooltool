@@ -130,9 +130,7 @@ class PersonLinks(flourish.page.RefineLinksViewlet):
 
     @property
     def title(self):
-        return _("${person_full_name}'s",
-                 mapping={'person_full_name': "%s %s" % (self.context.first_name,
-                                                         self.context.last_name)})
+        return "%s %s" % (self.context.first_name, self.context.last_name)
 
 
 class PersonImportLinks(flourish.page.RefineLinksViewlet):
@@ -293,6 +291,10 @@ class FlourishPersonView(flourish.page.Page):
 
 class FlourishPersonInfo(flourish.page.Content):
     body_template = ViewPageTemplateFile('templates/f_person_view_details.pt')
+
+    @property
+    def canModify(self):
+        return canAccess(self.context.__parent__, '__delitem__')
 
 
 class PersonAddFormBase(PersonForm, form.AddForm):
@@ -960,7 +962,7 @@ class FlourishPersonAddView(PersonAddViewBase):
 
     def updateActions(self):
         super(FlourishPersonAddView, self).updateActions()
-        self.actions['submitadd'].addClass('button-ok')
+        self.actions['submitadd'].addClass('button-neutral')
 
 
 ###############  Group-aware add views ################

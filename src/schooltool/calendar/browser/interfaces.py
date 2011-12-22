@@ -24,6 +24,7 @@ import zope.schema
 from zope.interface import Interface
 
 from schooltool.calendar.interfaces import ICalendar, ICalendarEvent
+from schooltool.common import IDateRange
 
 
 class IEventForDisplay(ICalendarEvent):
@@ -111,3 +112,15 @@ class IEventForDisplay(ICalendarEvent):
 
 class IHaveEventLegend(Interface):
     """Classes implementing this interface will have an event legend showing."""
+
+    cursor = zope.schema.Date(
+        title=u"Cursor",
+        readonly=True,
+        description=u"Current date",
+        required=False)
+
+    cursor_range = zope.schema.Object(
+        title=u"Dates the view spans.",
+        readonly=True,
+        schema=IDateRange,
+        required=False)

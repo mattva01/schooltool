@@ -7,12 +7,14 @@
 @media all {
 
 #calendar-view-year,
-#calendar-view-year td,
-#calendar-view-year th {
+#calendar-view-year td {
     text-align: center;
     margin: auto;
 }
 
+#calendar-view-year th {
+    text-align: left;
+}
 
 #calendar-view-year TD.month {
     padding: 1em;
@@ -27,6 +29,7 @@
 .page .refine .calendar-month TABLE.month {
     border-collapse: separate;
     width: 140px;
+    margin-top: 0px;
 }
 
 .page .refine .calendar-month TABLE.month tbody,
@@ -34,8 +37,16 @@
     border-collapse: collapse;
 }
 
-.page .refine .calendar-month table td,
 .page .refine .calendar-month table th {
+    text-align: left;
+    font-weight: normal;
+}
+
+.page .refine .calendar-month table th a {
+    padding-left: 4px;
+}
+
+.page .refine .calendar-month table td {
     text-align: center;
 }
 
@@ -67,25 +78,28 @@
 }
 
 #calendar-view-month TD.weekno {
-    font-family: cursive, serif;
-    font-size: x-large;
-    font-style: italic;
+    font-family: Ubuntu, serif;
+    font-weight: bold;
 }
 
-#calendar-view-year TABLE.month TH.month-weekday,
-#calendar-view-month TH.weekday {
+#calendar-view-year TABLE.month TH.month-weekday {
     font-weight: normal;
     padding: 2px;
 }
 
+#calendar-view-month TH.weekday {
+    font-weight: normal;
+    padding: 8px;
+}
+
 #calendar-view-year TABLE.month TH.month-title A {
     display: block;
-    width: 100%;
     height: 100%;
-    font-weight: bold;
+    font-weight: normal;
     text-decoration: none;
     padding-top: 3px;
-    padding-bottom: 1px;
+    padding-bottom: 3px;
+    padding-left: 4px;
 }
 
 #calendar-view-year TABLE.month TH,
@@ -100,11 +114,19 @@
     padding: 1px;
 }
 
+#calendar-view-year table.month td a.cal_yearly_day_busy {
+    font-weight: bold;
+}
+
 .page .refine .calendar-month TABLE.month TD A {
     text-decoration: none;
     display: block;
     font-weight: normal;
     padding: 1px;
+}
+
+.page .refine .calendar-month TABLE.month TD a.cal_yearly_day_busy {
+    font-weight: bold;
 }
 
 #calendar-view-month TD.day,
@@ -150,7 +172,7 @@
 #calendar-view-week TH A {
     display: block;
     padding: 8px;
-    font-weight: bold;
+    font-weight: normal;
     height: 100%;
     text-align: center;
     text-decoration: none;
@@ -195,8 +217,9 @@
 
 #events-allday .event-allday H6 {
     margin: 0;
-    font-size: small;
+    font-size: 14px;
     text-align: center;
+    padding: 8px;
 }
 #events-allday .event-allday H6 A {
     text-decoration: none;
@@ -278,13 +301,15 @@
 }
 
 #calendar-view-day .event H6 .start-end {
+    display: inline-block;
+    float: right;
     font-weight: bold;
 }
 
 #calendar-view-day .event A.delete {
     position: absolute;
-    top: 1px;
-    right: 1px;
+    top: 0px;
+    right: 2px;
     display: block;
     text-decoration: none;
     overflow: hidden;
@@ -324,6 +349,18 @@
 #calendar-view-day .hour SPAN.event-new {
     font-weight: bold;
     padding: 0.5ex;
+}
+
+#calendar-view-day .event h6 {
+    padding: 2px 16px;
+}
+
+#calendar-view-day .event .event-body {
+    padding: 0 8px;
+}
+
+#calendar-view-day .event .event-body > a {
+    font-size: 12px;
 }
 
 .page .refine .calendar-overlay table {
@@ -383,15 +420,29 @@
     width: 140px;
 }
 
+.page > .third-nav li.calendar-nav {
+    float: left;
+}
+
+.page > .third-nav li.calendar-current {
+    text-align: center;
+    float: none;
+    display: block;
+}
+
+.page > .third-nav li.calendar-current span {
+    font-weight: bold;
+}
+
 .page > .third-nav li.calendar-type {
     float: right;
+    margin-left: 0px;
 }
 
 .page .main .content .calendar-event form #recurrence_box .buttons {
     margin-top: 8px;
     margin-left: 8px;
 }
-
 
 .calendar-overlay .overlays-dropdown table.expanded {
 }

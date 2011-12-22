@@ -546,6 +546,11 @@ class FlourishApplicationPreferencesView(Form, form.EditForm):
         url = absoluteURL(self.context, self.request) + '/settings'
         return url
 
+    def updateActions(self):
+        super(FlourishApplicationPreferencesView, self).updateActions()
+        self.actions['apply'].addClass('button-ok')
+        self.actions['cancel'].addClass('button-cancel')
+
 
 class FlourishSchoolNameEditView(FlourishApplicationPreferencesView):
 
@@ -756,8 +761,8 @@ class ManageSite(flourish.page.Page):
     pass
 
 
-class DatabaseActionsLinks(flourish.page.RefineLinksViewlet):
-    """Database actions links viewlet."""
+class ServerActionsLinks(flourish.page.RefineLinksViewlet):
+    """Server actions links viewlet."""
 
 
 class ManageSchool(flourish.page.Page):
@@ -874,37 +879,12 @@ class PackDatabaseLink(flourish.page.ModalFormLinkViewlet):
         return translate(title, context=self.request)
 
 
-class DatabaseView(flourish.page.Page, ZODBControlView):
-
-    def table(self):
-        database_settings = self.databases[0]
-        result = [{
-                'description': _('Live'),
-                'path': database_settings['dbName'],
-                'size': database_settings['size'],
-                }]
-        backup_path = database_settings['dbName'] + '.old'
-        if os.path.exists(backup_path):
-            try:
-                size = os.path.getsize(backup_path)
-                backup_size = byteDisplay(size)
-            except (os.error,):
-                backup_size = _('Unknown')
-            backup_info = {
-                'description': _('Backup'),
-                'path': backup_path,
-                'size': backup_size,
-                }
-            result.append(backup_info)
-        return result
-
-
 class PackDatabaseView(Dialog):
 
     def update(self):
         Dialog.update(self)
         if 'DONE' in self.request:
-            url = absoluteURL(self.context, self.request) + '/database.html'
+            url = absoluteURL(self.context, self.request) + '/settings'
             self.request.response.redirect(url)
             return
         days = 0
@@ -1023,6 +1003,11 @@ class FlourishErrorsConfigureView(Form, FlourishErrorsViewBase):
     def nextURL(self):
         url = absoluteURL(self.context, self.request) + '/errors'
         return url
+
+    def updateActions(self):
+        super(FlourishErrorsConfigureView, self).updateActions()
+        self.actions['submit'].addClass('button-ok')
+        self.actions['cancel'].addClass('button-cancel')
 
 
 class ErrorsBreadcrumb(flourish.breadcrumbs.Breadcrumbs):

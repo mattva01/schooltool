@@ -3,11 +3,6 @@
       i18n:domain="schooltool">
 <body>
 
-<span metal:fill-slot="zonki">
-  <img src="zonki.png" alt="SchoolTool" i18n:attributes="alt"
-    tal:attributes="src context/++resource++zonki-question.png" /> 
-</span>
-
 <div metal:fill-slot="body">
 
 <div metal:define-macro="body">

@@ -179,6 +179,25 @@ def url_cell_formatter(value, item, formatter):
     return '<a href="%s">%s</a>' % (url, value)
 
 
+class DateColumn(column.GetterColumn):
+    """Table column that displays dates.
+
+    Sortable even when None values are around.
+    """
+
+    def getSortKey(self, item, formatter):
+        if self.getter(item, formatter) is None:
+            return date.min
+        else:
+            return self.getter(item, formatter)
+
+    def cell_formatter(self, maybe_date, item, formatter):
+        view = queryMultiAdapter((maybe_date, formatter.request),
+                                 name='mediumDate',
+                                 default=lambda: '')
+        return view()
+
+
 class LocaleAwareGetterColumn(GetterColumn):
     """Getter columnt that has locale aware sorting."""
 

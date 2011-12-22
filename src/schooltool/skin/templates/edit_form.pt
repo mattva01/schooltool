@@ -1,9 +1,5 @@
 <html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
 <body>
-<span metal:fill-slot="zonki">
-  <img src="zonki.png" alt="SchoolTool" i18n:attributes="alt"
-       tal:attributes="src context/++resource++zonki-question.png" /> 
-</span>
 <metal:nothing metal:fill-slot="content-header" />
 <metal:block metal:fill-slot="body">
 

@@ -37,17 +37,6 @@ rewrite the example above as::
     frogpond.members.remove(frog)   # or frog.groups.remove(frogpond)
 
 
-Dependencies
-------------
-
-- zope.interface
-- zope.schema
-- zope.event
-- ZODB (persistent and persistent.list)
-- zope.annotation
-- zope.lifecycleevent
-
-
 Details
 -------
 

@@ -176,14 +176,22 @@ class TimetableCSVImporter(object):
         You should run this method with dry_run=True before trying the
         real thing, or you might get in trouble.
         """
+        terms = self.listTerms()
         row = rows[0]
-        if len(row[:2]) != 2:
+        if len(row) not in (2, 2 + len(terms)):
             err_msg = _('Wrong section header on line ${line_no} (it should contain a'
-                        ' course id and an instructor id)',
+                        ' course id, an instructor id and optional SchoolTool '
+                        'section IDs for each of the terms)',
                         mapping={'line_no': line})
-            self.errors.generic.append(err_msg)
             return
-        course_id, instructor_id = row[:2]
+
+        section_ids = None
+        if len(row) == 2:
+            course_id, instructor_id = row[:2]
+        else:
+            course_id = row[0]
+            instructor_id = row[1]
+            section_ids = row[2:]
 
         course = ICourseContainer(self.schoolyear).get(course_id, None)
         if course is None:
@@ -276,12 +284,23 @@ class TimetableCSVImporter(object):
             return
 
 
-        terms = self.listTerms()
         sections = []
-        for term in terms:
-            section = self.createSection(
-                term, course, instructor, periods,
-                dry_run=dry_run)
+        for n, term in enumerate(terms):
+            section_container = ISectionContainer(term)
+            section_id = None
+            if section_ids is not None:
+                section_id = section_ids[n]
+            if (section_id is not None and
+                section_id in section_container):
+                section = section_container[section_id]
+                self.updateSection(
+                    section, term, course, instructor, periods,
+                    dry_run=dry_run)
+            else:
+                section = self.createSection(
+                    term, course, instructor, periods,
+                    section_id=section_id,
+                    dry_run=dry_run)
             self.importPersons(rows[line_ofs:], section, dry_run=dry_run)
             if section is not None:
                 sections.append(section)
@@ -289,8 +308,8 @@ class TimetableCSVImporter(object):
             for n, section in enumerate(sections[:-1]):
                 section.next = sections[n+1]
 
-
-    def createSection(self, term, course, instructor, periods, dry_run=True):
+    def createSection(self, term, course, instructor, periods,
+                      section_id=None, dry_run=True):
         """Create a section.
 
         `periods` is a list of tuples (day_id, period_id).
@@ -308,9 +327,11 @@ class TimetableCSVImporter(object):
 
         section = Section()
         chooser = INameChooser(sections)
-        section_name = chooser.chooseName('', section)
-        section.title = u"%s (%s)" % (course.title, section_name)
-        sections[section_name] = section
+        auto_name = chooser.chooseName('', section)
+        section.title = u"%s (%s)" % (course.title, auto_name)
+        if section_id is None:
+            section_id = auto_name
+        sections[section_id] = section
 
         # Establish links to course and to teacher
         if course not in section.courses:
@@ -332,6 +353,58 @@ class TimetableCSVImporter(object):
             schedules[timetable.__name__] = schedule
 
         return section
+
+    def updateSection(self, section, term, course, instructor, periods,
+                      dry_run=True):
+        """Create a section.
+
+        `periods` is a list of tuples (day_id, period_id).
+
+        A title is generated from the titles of `course` and `instructor`.
+        If an existing section with the same title is found, it is used instead
+        of creating a new one.
+
+        The created section is returned, or None if dry_run is True.
+        """
+        if dry_run:
+            return None
+
+        # Establish links to course and to teacher
+        for c in list(section.courses):
+            if c is not course:
+                section.remove(c)
+        if course not in section.courses:
+            section.courses.add(course)
+        for i in list(section.instructors):
+            if i is not instructor:
+                section.instructor.remove(i)
+        if instructor not in section.instructors:
+            section.instructors.add(instructor)
+
+        timetable_container = ITimetableContainer(self.schoolyear)
+        timetables = [timetable_container[ttid]
+                      for ttid in sorted(periods)]
+        schedules = IScheduleContainer(section)
+        for timetable in timetables:
+            selected = periods[timetable.__name__]
+            schedule = None
+            for s in schedules.values():
+                if sameProxiedObjects(s.timetable, timetable):
+                    schedule = s
+                    break
+            if schedule is None:
+                schedule = SelectedPeriodsSchedule(
+                    timetable, term.first, term.last,
+                    title=timetable.title, timezone=timetable.timezone)
+                for period in selected:
+                    schedule.addPeriod(period)
+                schedules[timetable.__name__] = schedule
+            else:
+                for period in schedule.periods:
+                    if period not in selected:
+                        schedule.removePeriod(period)
+                for period in selected:
+                    schedule.addPeriod(period)
 
     def importPersons(self, person_data, section, dry_run=True):
         """Import persons into a section."""

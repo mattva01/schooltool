@@ -160,6 +160,12 @@ class FlourishBaseCSVImportView(flourish.page.Page, BaseCSVImportView):
     __init__ = BaseCSVImportView.__init__
     update = BaseCSVImportView.update
 
+    def update(self):
+        if "UPDATE_CANCEL" in self.request:
+            self.request.response.redirect(self.nextURL())
+            return
+        return BaseCSVImportView.update(self)
+
 
 class BaseCSVImporter(object):
     """A base class for CSV parsers and importers.

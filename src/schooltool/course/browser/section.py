@@ -300,7 +300,7 @@ class SectionAddView(form.AddForm):
     # Note that we also omit the title field, it will be auto-generated
     # See concerns raised in https://bugs.launchpad.net/schooltool/+bug/389283
     fields = field.Fields(ISection).omit(
-        'title',
+        '__name__', 'title',
         'label', 'instructors', 'members', 'courses', 'size',
         'previous', 'next', 'linked_sections')
 
@@ -426,6 +426,9 @@ class NewSectionTermsSubform(subform.EditSubForm):
         if self.errors:
             return []
         terms = listTerms(self.context)
+        if (self.span['starts'] is None or
+            self.span['ends'] is None):
+            return []
         return [term for term in terms
                 if (term.first >= self.span['starts'].first and
                     term.last <= self.span['ends'].last)]
@@ -843,7 +846,7 @@ class SectionLinks(RefineLinksViewlet):
 
     @property
     def title(self):
-        return _("${section}'s", mapping={'section': self.context.title})
+        return self.context.title
 
 
 class SectionAddLinks(RefineLinksViewlet):
@@ -1033,7 +1036,7 @@ class FlourishSectionView(DisplayForm):
     template = InheritTemplate(Page.template)
     content_template = ViewPageTemplateFile('templates/f_section_view.pt')
     fields = field.Fields(ISection)
-    fields = fields.select('title', 'description')
+    fields = fields.select('__name__', 'title', 'description')
 
     @property
     def courses(self):

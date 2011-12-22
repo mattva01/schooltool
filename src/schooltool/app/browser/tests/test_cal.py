@@ -29,6 +29,7 @@ from zope.i18n import translate
 from zope.interface import Interface
 from zope.interface import directlyProvides, implements
 from zope.component import provideAdapter, provideSubscriptionAdapter
+from zope.component import getUtility
 from zope.interface.verify import verifyObject
 from zope.publisher.browser import TestRequest
 from zope.app.testing import setup
@@ -40,7 +41,9 @@ from zope.annotation.interfaces import IAttributeAnnotatable
 
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.common import parse_datetime
+from schooltool.common import DateRange
 from schooltool.term.interfaces import ITermContainer
+from schooltool.term.interfaces import IDateManager
 from schooltool.term.tests import setUpDateManagerStub
 from schooltool.testing.util import NiceDiffsMixin
 from schooltool.app.interfaces import ISchoolToolCalendarEvent
@@ -138,6 +141,10 @@ class EventStub(object):
         self.resources = resources
         self.unique_id = unique_id
         self.__name__ = unique_id[::-1]
+
+
+def print_range(date_range):
+    print date_range.first, '-', date_range.last
 
 
 def createEvent(dtstart, duration, title, **kw):
@@ -4232,11 +4239,15 @@ def doctest_CalendarViewBase():
         >>> view.cursor
         datetime.date(2005, 1, 2)
 
-    update() stores the last visited day in the session:
+    update() stores the last visited calendar day in the session and
+    the day it was visited:
 
         >>> from zope.session.interfaces import ISession
         >>> ISession(view.request)['calendar']['last_visited_day']
         datetime.date(2005, 1, 2)
+
+        >>> ISession(view.request)['calendar']['visited_on']
+        datetime.date(2005, 3, 13)
 
     If not given a date, update() will try the last visited one from the
     session:
@@ -4249,11 +4260,41 @@ def doctest_CalendarViewBase():
 
     It will not update the session data if inCurrentPeriod() returns True:
 
+        >>> old_inCurrentPeriod = view.inCurrentPeriod
         >>> view.inCurrentPeriod = lambda dt: True
         >>> request.form['date'] = '2005-01-01'
         >>> view.update()
         >>> ISession(view.request)['calendar']['last_visited_day']
         datetime.date(2005, 1, 2)
+
+        >>> ISession(view.request)['calendar']['visited_on']
+        datetime.date(2005, 3, 13)
+
+    If user looks at the calendar tomorrow, last visited day is updated:
+
+        >>> dm = getUtility(IDateManager)
+
+        >>> dm.today
+        datetime.date(2005, 3, 13)
+
+        >>> dm.today += timedelta(days=1)
+
+        >>> request = TestRequest()
+        >>> view = CalendarViewBase(calendar, request)
+        >>> view.inCurrentPeriod = lambda dt: dt == dm.today
+
+        >>> view.update()
+        >>> view.today
+        datetime.date(2005, 3, 14)
+
+        >>> view.cursor
+        datetime.date(2005, 3, 14)
+
+        >>> ISession(view.request)['calendar']['last_visited_day']
+        datetime.date(2005, 3, 14)
+
+        >>> ISession(view.request)['calendar']['visited_on']
+        datetime.date(2005, 3, 14)
 
     canAddEvents checks to see if the current user has addEvent permission on
     the context:
@@ -4295,6 +4336,15 @@ def doctest_DailyCalendarView():
         False
         >>> view.inCurrentPeriod(date(2004, 8, 17))
         False
+
+    cursor_range spans cursor's day only:
+
+        >>> print_range(view.cursor_range)
+        2004-08-18 - 2004-08-18
+
+        >>> view.cursor = date(2004, 12, 31)
+        >>> print_range(view.cursor_range)
+        2004-12-31 - 2004-12-31
 
     """
 
@@ -4344,6 +4394,39 @@ def doctest_WeeklyCalendarView():
         False
         >>> view.inCurrentPeriod(date(2004, 8, 15))
         False
+
+    overlapsCurrentPeriod returns True for the same week only:
+
+        >>> dows = ['Monday', 'Tuesday', 'Wednesday', 'Thursday',
+        ...         'Friday', 'Saturday', 'Sunday']
+
+        >>> def print_weekdays(date_range):
+        ...     print_range(date_range)
+        ...     print dows[date_range.first.weekday()], '-', dows[date_range.last.weekday()]
+
+    cursor_range spans cursor's week:
+
+        >>> view.cursor = date(2004, 8, 18)
+
+        >>> print_weekdays(view.cursor_range)
+        2004-08-16 - 2004-08-22
+        Monday - Sunday
+
+        >>> view.cursor = date(2004, 12, 31)
+
+        >>> print_weekdays(view.cursor_range)
+        2004-12-27 - 2005-01-02
+        Monday - Sunday
+
+        >>> view.cursor = date(2004, 12, 27)
+        >>> print_weekdays(view.cursor_range)
+        2004-12-27 - 2005-01-02
+        Monday - Sunday
+
+        >>> view.cursor = date(2005, 1, 2)
+        >>> print_weekdays(view.cursor_range)
+        2004-12-27 - 2005-01-02
+        Monday - Sunday
 
     """
 
@@ -4561,6 +4644,31 @@ def doctest_MonthlyCalendarView():
         >>> view.inCurrentPeriod(date(2003, 8, 18))
         False
 
+    cursor_range spans cursor's month:
+
+        >>> print_range(view.cursor_range)
+        2004-08-01 - 2004-08-31
+
+        >>> view.cursor = date(2004, 12, 1)
+        >>> print_range(view.cursor_range)
+        2004-12-01 - 2004-12-31
+
+        >>> view.cursor = date(2004, 12, 31)
+        >>> print_range(view.cursor_range)
+        2004-12-01 - 2004-12-31
+
+        >>> view.cursor = date(2004, 2, 29)
+        >>> print_range(view.cursor_range)
+        2004-02-01 - 2004-02-29
+
+        >>> view.cursor = date(2005, 2, 28)
+        >>> print_range(view.cursor_range)
+        2005-02-01 - 2005-02-28
+
+        >>> view.cursor = date(2004, 3, 1)
+        >>> print_range(view.cursor_range)
+        2004-03-01 - 2004-03-31
+
     """
 
 
@@ -4639,6 +4747,15 @@ def doctest_YearlyCalendarView():
         False
         >>> view.inCurrentPeriod(date(2005, 1, 1))
         False
+
+    cursor_range spans cursor's year:
+
+        >>> print_range(view.cursor_range)
+        2004-01-01 - 2004-12-31
+
+        >>> view.cursor = date(2005, 12, 31)
+        >>> print_range(view.cursor_range)
+        2005-01-01 - 2005-12-31
 
     pdfURL always returns None because yearly PDF calendars are not available.
 
@@ -5322,8 +5439,7 @@ def test_suite():
     suite.addTest(doctest.DocTestSuite(
         setUp=setUp, tearDown=tearDown,
         optionflags=doctest.ELLIPSIS|doctest.REPORT_NDIFF|
-                    doctest.NORMALIZE_WHITESPACE|
-                    doctest.REPORT_ONLY_FIRST_FAILURE))
+                    doctest.NORMALIZE_WHITESPACE))
     suite.addTest(doctest.DocTestSuite('schooltool.app.browser.cal'))
     return suite
 

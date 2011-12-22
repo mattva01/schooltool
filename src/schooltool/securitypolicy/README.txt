@@ -12,6 +12,8 @@ assigned to a role).  Instead, we have a two-tier crowd-permission model.
 Notably local grants have also been removed, although it is easy to implement
 similar functionality using crowds.
 
+.. _Crowd:
+
 Crowds
 ------
 

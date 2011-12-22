@@ -447,7 +447,7 @@ class FlourishCourseView(DisplayForm):
     template = InheritTemplate(Page.template)
     content_template = ViewPageTemplateFile('templates/f_course_view.pt')
     fields = field.Fields(ICourse)
-    fields = fields.select('title', 'description', 'course_id', 'government_id', 'credits')
+    fields = fields.select('__name__', 'title', 'description', 'course_id', 'government_id', 'credits')
 
     @property
     def canModify(self):

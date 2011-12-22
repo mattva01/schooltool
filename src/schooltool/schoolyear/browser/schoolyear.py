@@ -57,7 +57,7 @@ from zc.table import column
 import schooltool.skin.flourish.containers
 import schooltool.skin.flourish.breadcrumbs
 from schooltool.app.interfaces import ISchoolToolApplication
-from schooltool.demographics.browser.table import DateColumn
+from schooltool.table.table import DateColumn
 from schooltool.table.table import url_cell_formatter
 from schooltool.table.table import DependableCheckboxColumn
 from schooltool.table.table import SchoolToolTableFormatter
@@ -746,6 +746,25 @@ class ActiveSchoolYears(ViewletBase):
         syc = ISchoolYearContainer(ISchoolToolApplication(None))
         if checkPermission("schooltool.edit", syc):
             return syc.getNextSchoolYear()
+
+
+class FlourishManageYearOverview(flourish.page.Content):
+
+    body_template = ViewPageTemplateFile(
+        'templates/f_manage_year_overview.pt')
+
+    @property
+    def schoolyear(self):
+        schoolyears = ISchoolYearContainer(self.context)
+        result = schoolyears.getActiveSchoolYear()
+        if 'schoolyear_id' in self.request:
+            schoolyear_id = self.request['schoolyear_id']
+            result = schoolyears.get(schoolyear_id, result)
+        return result
+
+    @property
+    def has_schoolyear(self):
+        return self.schoolyear is not None
 
 
 class FlourishSchoolYearView(flourish.page.Page):
