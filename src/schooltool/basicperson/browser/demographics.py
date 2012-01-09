@@ -40,7 +40,9 @@ from schooltool.basicperson.demographics import DescriptionFieldDescription
 from schooltool.basicperson.demographics import DateFieldDescription
 from schooltool.basicperson.demographics import BoolFieldDescription
 from schooltool.basicperson.demographics import EnumFieldDescription
+from schooltool.basicperson.demographics import IntFieldDescription
 from schooltool.basicperson.interfaces import IEnumFieldDescription
+from schooltool.basicperson.interfaces import IIntFieldDescription
 from schooltool.basicperson.interfaces import IDemographicsFields
 from schooltool.basicperson.interfaces import IFieldDescription
 from schooltool.basicperson.interfaces import EnumValueList
@@ -232,6 +234,20 @@ class EnumFieldDescriptionAddView(FieldDescriptionAddView):
         return fd
 
 
+class IntFieldDescriptionAddView(FieldDescriptionAddView):
+
+    fields = field.Fields(IIntFieldDescription).select('title', 'name',
+        'min_value', 'max_value', 'required', 'limit_keys')
+
+    def create(self, data):
+        fd = IntFieldDescription(data['title'],
+                                 str(data['name']),
+                                 data['required'])
+        form.applyChanges(self, fd, data)
+        self._fd = fd
+        return fd
+
+
 class FieldDescriptionEditView(form.EditForm):
     """Edit form for basic person."""
     form.extends(form.EditForm)
@@ -258,6 +274,12 @@ class EnumFieldDescriptionEditView(FieldDescriptionEditView):
 
     fields = field.Fields(IEnumFieldDescription).select('title',
         'items', 'required', 'limit_keys')
+
+
+class IntFieldDescriptionEditView(FieldDescriptionEditView):
+
+    fields = field.Fields(IIntFieldDescription).select('title',
+        'min_value', 'max_value', 'required', 'limit_keys')
 
 
 class FieldDescriptionView(form.DisplayForm):
@@ -292,6 +314,12 @@ class EnumFieldDescriptionView(FieldDescriptionView):
     fields = field.Fields(IEnumFieldDescription)
 
 
+class IntFieldDescriptionView(FieldDescriptionView):
+    """Display form for an int field description."""
+
+    fields = field.Fields(IIntFieldDescription)
+
+
 class FlourishDemographicsFieldsLinks(flourish.page.RefineLinksViewlet):
     """demographics fields add links viewlet."""
 
@@ -312,6 +340,7 @@ class FlourishDemographicsView(flourish.page.WideContainerPage):
         'Text': _('Text'),
         'Bool': _('Yes/No'),
         'Description': _('Description'),
+        'Int': _('Integer'),
         }
 
     def table(self):
@@ -457,6 +486,11 @@ class FlourishEnumFieldDescriptionAddView(FlourishFieldDescriptionAddView,
     pass
 
 
+class FlourishIntFieldDescriptionAddView(FlourishFieldDescriptionAddView,
+                                         IntFieldDescriptionAddView):
+    pass
+
+
 class FlourishFieldDescriptionEditView(flourish.form.Form,
                                        FieldDescriptionEditView):
 
@@ -502,6 +536,12 @@ class FlourishEnumFieldDescriptionEditView(FlourishFieldDescriptionEditView, Enu
         EnumFieldDescriptionEditView.update(self)
 
 
+class FlourishIntFieldDescriptionEditView(FlourishFieldDescriptionEditView, IntFieldDescriptionEditView):
+
+    def update(self):
+        IntFieldDescriptionEditView.update(self)
+
+
 class FlourishTextFieldDescriptionView(flourish.page.Page, TextFieldDescriptionView):
 
     def update(self):
@@ -532,3 +572,8 @@ class FlourishEnumFieldDescriptionView(flourish.page.Page, EnumFieldDescriptionV
     def update(self):
         EnumFieldDescriptionView.update(self)
 
+
+class FlourishIntFieldDescriptionView(flourish.page.Page, IntFieldDescriptionView):
+
+    def update(self):
+        IntFieldDescriptionView.update(self)
