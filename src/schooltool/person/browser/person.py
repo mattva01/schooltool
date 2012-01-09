@@ -19,6 +19,7 @@
 """
 Person browser views.
 """
+from zope.authentication.interfaces import IAuthentication
 from zope.interface import Interface, invariant, Invalid
 from zope.publisher.interfaces import NotFound
 from zope.schema import Password, TextLine, Bytes, Bool
@@ -194,10 +195,13 @@ class FlourishPasswordChangedView(flourish.form.DialogForm):
     @button.buttonAndHandler(_('ok-button', 'OK'), name='ok')
     def handle_submit_(self, action):
         app = ISchoolToolApplication(None)
-        nexturl = self.request.get('nexturl', '')
+        persons = app['persons']
         username = self.request.get('username', '')
-        url = '%s/auth/login.html?nexturl=%s&username=%s'
-        url = url % (absoluteURL(app, self.request), nexturl, username)
+        person = persons.get(username, None)
+        if person is not None:
+            url = absoluteURL(person, self.request)
+        else:
+            url = absoluteURL(app, self.request)
         self.request.response.redirect(url)
         self.ajax_settings['dialog'] = 'close'
 
@@ -325,11 +329,11 @@ class IPasswordEditForm(Interface):
 
     password = Password(
         title=_("New password"),
-        required=False)
+        required=True)
 
     verify_password = Password(
         title=_("Verify new password"),
-        required=False)
+        required=True)
 
 
 class PersonPasswordEditView(form.Form):
@@ -352,28 +356,21 @@ class PersonPasswordEditView(form.Form):
         if errors:
             self.status = self.formErrorsMessage
             return
-        if not data['password']:
-            self.status = _("No new password was supplied so "
-                            "original password is unchanged")
-            return
         writer = IPasswordWriter(self.context)
         writer.setPassword(data['password'])
         person = IPerson(self.request.principal)
+        self.status = _('Password changed successfully')
+        app = ISchoolToolApplication(None)
+        url = '%s/password_changed.html?username=%s'
+        url = url % (absoluteURL(app, self.request), self.context.username)
+        self.dialog_show = True
+        self.dialog_title = translate(self.status, context=self.request)
+        self.dialog_url = url
         if person.username is self.context.username:
-            self.status = _("Password changed successfully. "
-                            "Next, you will be required to authenticate "
-                            "with your new credentials")
-            app = ISchoolToolApplication(None)
-            url = '%s/password_changed.html?nexturl=%s&username=%s'
-            url = url % (absoluteURL(app, self.request),
-                         absoluteURL(self.context, self.request),
-                         person.username)
-            self.dialog_show = True
-            self.dialog_title = translate(_('Password changed successfully'),
-                                          context=self.request)
-            self.dialog_url = url
-        else:
-            self.status = _('Password changed successfully')
+            auth = getUtility(IAuthentication)
+            auth.setCredentials(self.request,
+                                person.username,
+                                data['password'])
 
     @button.buttonAndHandler(_("Cancel"))
     def handle_cancel_action(self, action):
@@ -422,6 +419,7 @@ class PasswordsMatchValidator(validator.SimpleFieldValidator):
 
     def validate(self, value):
         # XXX: hack to display the validation error next to the widget!
+        super(PasswordsMatchValidator, self).validate(value)
         name = self.view.widgets['verify_password'].name
         verify = self.request.get(name)
         if value is not None and value not in (verify,):
