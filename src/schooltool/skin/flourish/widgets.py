@@ -35,6 +35,7 @@ from z3c.form.widget import ComputedWidgetAttribute, FieldWidget
 import zc.resourcelibrary
 
 from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.basicperson.demographics import IDemographicsForm
 from schooltool.skin.widgets import FCKConfig
 from schooltool.skin.widgets import IFckeditorWidget
 from schooltool.skin.widgets import FckeditorFormlibWidget
@@ -153,3 +154,11 @@ class FlourishFckeditorZ3CFormWidget(FlourishFckeditorScriptBase,
 @implementer(IFieldWidget)
 def FlourishFckeditorFieldWidget(field, request):
     return FieldWidget(field, FlourishFckeditorZ3CFormWidget(request))
+
+
+def is_required_demo_field(adapter):
+    field = adapter.field
+    return field.required and field.interface is IDemographicsForm
+
+
+PromptRequiredDemoField = ComputedWidgetAttribute(is_required_demo_field)

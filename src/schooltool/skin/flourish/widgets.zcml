@@ -8,6 +8,9 @@
   <!-- XXX: what's the right place for this? -->
   <zope:adapter factory=".form.FlourishRadioBoolTerms" />
 
+  <zope:adapter factory=".widgets.PromptRequiredDemoField"
+                name="prompt" />
+
   <zope:view
       type="schooltool.skin.flourish.IFlourishLayer"
       for="zope.html.field.IHtmlFragmentField"
