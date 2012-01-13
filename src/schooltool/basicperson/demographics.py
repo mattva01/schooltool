@@ -25,6 +25,7 @@ from persistent import Persistent
 from zope.schema._field import Choice
 from zope.schema._field import Date
 from zope.schema import TextLine, Bool
+from zope.schema import Int
 from zope.location.location import Location
 from zope.location.location import locate
 from zope.html.field import HtmlFragment
@@ -43,6 +44,7 @@ from z3c.form import field
 from schooltool.app.app import InitBase, StartUpBase
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.basicperson.interfaces import IEnumFieldDescription
+from schooltool.basicperson.interfaces import IIntFieldDescription
 from schooltool.basicperson.interfaces import IDemographicsFields
 from schooltool.basicperson.interfaces import IBasicPerson
 from schooltool.basicperson.interfaces import IDemographics
@@ -238,3 +240,15 @@ class DescriptionFieldDescription(FieldDescription):
     def makeField(self):
         return self.setUpField(HtmlFragment(title=unicode(self.title)))
 
+
+class IntFieldDescription(FieldDescription):
+
+    implements(IIntFieldDescription)
+
+    min_value = None
+    max_value = None
+
+    def makeField(self):
+        return self.setUpField(Int(title=unicode(self.title),
+                                   min=self.min_value,
+                                   max=self.max_value))
