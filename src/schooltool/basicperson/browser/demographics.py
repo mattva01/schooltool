@@ -28,9 +28,10 @@ from zope.traversing.browser.interfaces import IAbsoluteURL
 from zope.traversing.browser.absoluteurl import absoluteURL
 from zope.container.interfaces import INameChooser
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
+from zope.schema import ValidationError
 
 from z3c.form.interfaces import ITextAreaWidget
-from z3c.form import form, field, button
+from z3c.form import form, field, button, validator
 from z3c.form.converter import BaseDataConverter, FormatterValidationError
 
 import schooltool.skin.flourish.form
@@ -577,3 +578,26 @@ class FlourishIntFieldDescriptionView(flourish.page.Page, IntFieldDescriptionVie
 
     def update(self):
         IntFieldDescriptionView.update(self)
+
+
+class InvalidFieldID(ValidationError):
+    __doc__ = _(u'XXX Invalid field ID XXX')
+
+
+class DuplicatedFieldID(ValidationError):
+    __doc__ = _(u'This ID is not unique.')
+
+
+class DemographicsFieldIDValidator(validator.SimpleFieldValidator):
+
+    def validate(self, value):
+        try:
+            super(DemographicsFieldIDValidator, self).validate(value)
+        except (ValidationError,):
+            raise InvalidFieldID()
+        if value in self.context:
+            raise DuplicatedFieldID()
+
+
+validator.WidgetValidatorDiscriminators(DemographicsFieldIDValidator,
+                                        field=IFieldDescription['name'])
