@@ -519,17 +519,19 @@ table.schoolday-legend td.schoolday {
     background-color: #e7e4e2;
 }
 
+.gradebook-part tbody tr {
+    border-top-color: #aea79f;
+}
+
 .gradebook-part tbody tr.odd {
     background-color: #f0efee;
 }
 
-.students th, .students td {
-    border-right: 1px solid #cccccc;
-}
-
-.grades th, .grades td {
-    border-left: 1px solid #cccccc;
-    border-right: 1px solid #cccccc;
+.students th, .students td,
+.grades th, .grades td,
+.totals th, .totals td,
+th.activity-title {
+    border-color: #cccccc;
 }
 
 .grades input[type="text"] {
@@ -537,32 +539,21 @@ table.schoolday-legend td.schoolday {
 }
 
 .grades input[type="text"]:focus {
-    border: 1px solid #cccccc;
+    border-color: #cccccc;
 }
 
 .grades .changed_bg input[type="text"] {
     background: #009499;
-    border: 1px solid #009499;
     color: #ffffff;
 }
 
 .grades .error_bg  input[type="text"] {
     background: #ef4444;
-    border: 1px solid #ef4444;
     color: #ffffff;
 }
 
 .grades .warning_bg  input[type="text"] {
     background: #f6db5a;
-    border: 1px solid #f6db5a;
-}
-
-.totals th, .totals td {
-    border-left: 1px solid #cccccc;
-}
-
-th.activity-title {
-    border-bottom: 1px solid #cccccc;
 }
 
 .popup_menu li {
