@@ -23,8 +23,11 @@
     overflow: visible;
 }
 
-.grid > .body > .widecontainer {
+.grid > .body > .container {
     margin-top: 32px;
+}
+
+.grid > .body > .widecontainer {
     padding: 0px;
     width: 752px;
 }
