@@ -89,6 +89,14 @@ form fieldset .row > .error .error {
 }
 
 form fieldset .row .widget input.text-widget,
+form fieldset .row .widget input[type="text"],
+form fieldset .row .widget input.password-widget,
+form fieldset .row .widget input[type="password"] {
+    border-style: solid;
+    border-width: 1px;
+}
+
+form fieldset .row .widget input.text-widget,
 form fieldset .row .widget input[type="file"],
 form fieldset .row .widget input[type="text"],
 form fieldset .row .widget input.password-widget,
@@ -104,6 +112,8 @@ form fieldset .row .widget input.password-widget:focus,
 form fieldset .row .widget input[type="password"]:focus,
 form fieldset .row .widget input[type="text"].error,
 form fieldset .row .widget input[type="password"].error {
+    border-style: solid;
+    border-width: 2px;
     height: 18px;
     width: 284px;
 }
@@ -119,6 +129,8 @@ form fieldset .row .widget select.select-widget {
 }
 
 form fieldset .row .widget textarea.textarea-widget {
+    border-style: solid;
+    border-width: 1px;
     font-size: 12px;
     height: 50px;
     width: 286px;
@@ -126,6 +138,8 @@ form fieldset .row .widget textarea.textarea-widget {
 
 form fieldset .row .widget textarea.textarea-widget:focus,
 form fieldset .row .widget textarea.error {
+    border-style: solid;
+    border-width: 2px;
     height: 48px;
     width: 284px;
 }
@@ -153,6 +167,8 @@ form .buttons {
 form .buttons .button-ok,
 form .buttons .button-neutral,
 form .buttons .button-cancel {
+    border-style: solid;
+    border-width: 1px;
     font-size: 14px;
     line-height: 20px;
 
@@ -191,6 +207,8 @@ form .required-info {
 }
 
 form pre.csv-text {
+    border-style: dotted;
+    border-width: 1px;
     line-height: 16px;
     font-family: mono;
     font-size: 12px;

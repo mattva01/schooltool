@@ -264,7 +264,7 @@ form fieldset .row .widget input[type="text"],
 form fieldset .row .widget input.password-widget,
 form fieldset .row .widget input[type="password"] {
     background-color: #ffffff;
-    border: 1px solid #ccc1c1;
+    border-color: #ccc1c1;
     color: #333333;
 }
 
@@ -272,24 +272,24 @@ form fieldset .row .widget input.text-widget:focus,
 form fieldset .row .widget input[type="text"]:focus,
 form fieldset .row .widget input.password-widget:focus,
 form fieldset .row .widget input[type="password"]:focus {
-    border: 2px solid #00abb3;
-}
-
-form fieldset .row .widget input[type="text"].error,
-form fieldset .row .widget input[type="password"].error {
-    background-color: #feeee9;
-    border: 2px solid #ef4444;
+    border-color: #00abb3;
 }
 
 form fieldset .row .widget textarea.textarea-widget {
     background-color: #ffffff;
-    border: 1px solid #ccc1c1;
+    border-color: #ccc1c1;
     color: #333333;
 }
 
-form fieldset .row .widget textarea.textarea-widget:focus,
+form fieldset .row .widget textarea:focus {
+    border-color: #00abb3;
+}
+
+form fieldset .row .widget input[type="text"].error,
+form fieldset .row .widget input[type="password"].error,
 form fieldset .row .widget textarea.error {
-    border: 2px solid #00abb3;
+    background-color: #feeee9;
+    border-color: #ef4444;
 }
 
 form fieldset .row .widget .option {
@@ -298,7 +298,7 @@ form fieldset .row .widget .option {
 
 form .buttons .button-ok {
     background-color: #009499;
-    border: 1px solid #009499;
+    border-color: #009499;
     box-shadow: 0px 1px 6px #bbbbbb;
     color: #ffffff;
 }
@@ -306,7 +306,7 @@ form .buttons .button-ok {
 form .buttons .button-neutral,
 form .buttons .button-cancel {
     background-color: #6C7B7C;
-    border: 1px solid #6C7B7C;
+    border-color: #6C7B7C;
     box-shadow: 0px 1px 6px #bbbbbb;
     color: #ffffff;
 }
@@ -315,14 +315,14 @@ form .buttons .button-ok:hover,
 form .buttons .button-neutral:hover,
 form .buttons .button-cancel:hover {
     background-color: #026B6E;
-    border: 1px solid #026B6E;
+    border-color: #026B6E;
 }
 
 form .buttons .button-ok:active,
 form .buttons .button-neutral:active,
 form .buttons .button-cancel:active {
     background-color: #056163;
-    border: 1px solid #056163;
+    border-color: #056163;
     color: #aea79f;
 }
 
@@ -335,7 +335,7 @@ form span.required {
 }
 
 form pre.csv-text {
-    border: 1px dotted #888;
+    border-color: #888;
 }
 
 /*
