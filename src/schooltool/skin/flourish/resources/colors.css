@@ -418,17 +418,16 @@ table.schoolday-legend td.schoolday {
     background-color: #485454;
     background-image: none;
     color: #ffffff;
-    border: 1px solid #485454;
+    border-color: #485454;
 }
 
 .ui-state-hover {
-    border: 1px solid #008c93;
+    border-color: #008c93;
     background-color: #008c93;
 }
 
 .ui-state-active {
     background-color: #008c93;
-    border: none;
 }
 
 .ui-accordion .ui-accordion-content {
@@ -448,23 +447,22 @@ table.schoolday-legend td.schoolday {
 }
 
 .ui-datepicker {
-    border: 2px solid #00abb3;
-    border-top-width: 1px;
+    border-color: #00abb3;
 }
 
 .ui-datepicker .ui-widget-header {
     background: #4B5554;
-    border: 1px solid #4B5554;
+    border-color: #4B5554;
 }
 
 .ui-datepicker-header a.ui-state-hover {
     background: none;
-    border: 1px solid #dfdfdf;
+    border-color: #dfdfdf;
 }
 
 .ui-datepicker-calendar thead {
     background: none;
-    border-bottom: 1px solid #dfdfdf;
+    border-bottom-color: #dfdfdf;
 }
 
 .ui-datepicker-calendar thead th {
@@ -473,7 +471,6 @@ table.schoolday-legend td.schoolday {
 
 .ui-datepicker-calendar a.ui-state-default {
     background: none;
-    border: 0;
     color: #4B5554;
 }
 
@@ -484,10 +481,6 @@ table.schoolday-legend td.schoolday {
 
 .ui-datepicker-calendar a.ui-state-active {
     color: #009499;
-}
-
-.ui-datepicker-calendar tr {
-    border-bottom: none;
 }
 
 .ui-datepicker-calendar .ui-datepicker-other-month {
