@@ -353,7 +353,6 @@ form pre.csv-text {
 
 thead {
     background-color: #6c7b7c;
-    border-bottom: 0;
 }
 
 th {
@@ -361,7 +360,7 @@ th {
 }
 
 tbody {
-    border-top: 1px solid #aea79f;
+    border-top-color: #aea79f;
 }
 
 tbody th {
@@ -370,7 +369,7 @@ tbody th {
 }
 
 tbody tr {
-    border-bottom: 1px dotted #cccccc;
+    border-bottom-color: #cccccc;
 }
 
 table.relationships-table tbody tr:hover,
