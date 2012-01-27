@@ -59,4 +59,11 @@
       name="config"
       />
 
+  <zope:class class=".widgets.FlourishFckeditorZ3CFormWidget">
+    <require
+        permission="zope.Public"
+        interface="schooltool.skin.widgets.IFckeditorWidget"
+        />
+  </zope:class>
+
 </configure>
