@@ -34,6 +34,7 @@ from UserDict import DictMixin
 import lxml.html
 import lxml.doctestcompare
 import lxml.etree
+
 from zope.app.wsgi import WSGIPublisherApplication
 from zope.app.server.wsgi import ServerType
 from zope.server.taskthreads import ThreadedTaskDispatcher
@@ -868,3 +869,11 @@ def collect_ftests(package=None, level=None, layer=None, filenames=None,
         return unittest.TestSuite()
     return suite
 
+
+class PreferNoLanguage(object):
+
+    def __init__(self, context):
+        pass
+
+    def getPreferredLanguages(self):
+        return ()
