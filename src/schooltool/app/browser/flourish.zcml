@@ -565,7 +565,7 @@
 
   <flourish:viewlet
       name="schoolName.html"
-      after="resource_demographics"
+      before="*"
       title="School Name"
       class="schooltool.skin.flourish.page.LinkViewlet"
       manager="schooltool.app.browser.app.CustomizeSchoolLinks"

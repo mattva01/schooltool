@@ -129,7 +129,7 @@
 
   <flourish:viewlet
       name="levels"
-      after="scoresystems"
+      after="resource_demographics"
       title="Grade Levels"
       class="schooltool.skin.flourish.page.LinkViewlet"
       manager="schooltool.app.browser.app.CustomizeSchoolLinks"
