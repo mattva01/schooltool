@@ -194,10 +194,10 @@ class ViewletManager(ContentProvider):
         presort_order = self.presort(viewlet_dict)
         before = {}
         after = {}
+        known_names = set(list(viewlet_dict)+['*'])
         for name, viewlet in viewlet_dict.items():
-            names = set(list(viewlet_dict)+['*'])
-            before[name] = set(viewlet.before).intersection(names)
-            after[name] = set(viewlet.after).intersection(names)
+            before[name] = set(viewlet.before).intersection(known_names)
+            after[name] = set(viewlet.after).intersection(known_names)
         names = dependency_sort(presort_order, before, after)
         return names
 
