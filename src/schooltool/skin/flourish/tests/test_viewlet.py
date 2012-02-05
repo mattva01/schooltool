@@ -403,19 +403,19 @@ def doctest_ViewletManager_order():
         >>> manager = TestManager(context, request, view)
 
         >>> provideViewlet(
-        ...     viewletClass(before=('v3')),
+        ...     viewletClass(before=('v3', )),
         ...     manager, 'v1')
 
         >>> provideViewlet(viewletClass(), manager, 'v2')
 
         >>> provideViewlet(
-        ...     viewletClass(after=('v4')),
+        ...     viewletClass(after=('v4', )),
         ...     manager, 'v3')
 
         >>> provideViewlet(viewletClass(), manager, 'v4')
 
         >>> manager.order
-        [u'v2', u'v4', u'v1', u'v3']
+        [u'v2', u'v1', u'v4', u'v3']
 
         >>> manager = TestManager(context, request, view)
 
@@ -498,11 +498,10 @@ def doctest_ViewletManager_presort():
         ...     'v_c': StubViewlet('v_c', before=('*',), after=('*',)),
         ...     }
 
-    Default presort returns sorted viewlet names; also '*' before/after
-    dependencies are treated as before/afert "all".
+    Default presort returns viewlets sorted by name.
 
         >>> manager.presort(viewlets)
-        ['z_first', 'v_a', 'v_b', 'a_last', 'v_c']
+        ['a_last', 'v_a', 'v_b', 'v_c', 'z_first']
 
     """
 
