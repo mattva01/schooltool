@@ -542,7 +542,7 @@ class FlourishPersonEditView(flourish.page.Page, PersonEditView):
             'details': (
                 _('Details'), ['gender', 'birth_date']),
             'demographics': (
-                _('Demographics'), list(self.getDemoFields())),
+                _('Demographics'), list(self.generateExtraFields())),
             }
         self.fieldset_order = (
             'full_name', 'details', 'demographics')
@@ -554,14 +554,6 @@ class FlourishPersonEditView(flourish.page.Page, PersonEditView):
             result.append(self.makeFieldSet(
                     fieldset_id, legend, list(fields)))
         return result
-
-    def getDemoFields(self):
-        fields = field.Fields()
-        dfs = IDemographicsFields(ISchoolToolApplication(None))
-        keys = []
-        for field_desc in dfs.filter_keys(keys):
-            fields += field_desc.makeField()
-        return fields
 
 
 class PersonTerm(object):

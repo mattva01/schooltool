@@ -36,6 +36,8 @@
 /* Tertiary navigation */
 
 .page > .third-nav {
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
     float: right;
     height: 32px;
     margin-right: 16px;
@@ -130,6 +132,8 @@
 }
 
 .page > .body > .sidebar > .content > .header {
+    border-bottom-style: dotted;
+    border-bottom-width: 1px;
     font-size: 14px;
     line-height: 16px;
     padding-bottom: 4px;

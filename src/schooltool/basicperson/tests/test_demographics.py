@@ -28,6 +28,7 @@ from schooltool.basicperson.interfaces import IDemographics
 from schooltool.basicperson.interfaces import IDemographicsFields
 from schooltool.basicperson.demographics import DateFieldDescription
 from schooltool.basicperson.demographics import EnumFieldDescription
+from schooltool.basicperson.demographics import IntFieldDescription
 from schooltool.basicperson.demographics import setUpDefaultDemographics
 from schooltool.basicperson.demographics import IDemographicsForm
 from schooltool.basicperson.demographics import TextFieldDescription
@@ -223,6 +224,40 @@ def doctest_EnumFieldDescription():
 
        >>> field.__name__
        'ethnicity'
+
+    """
+
+
+def doctest_IntFieldDescription():
+    """Tests for IntFieldDescription
+
+    Int field description is a class that defines minimum and maximum
+    values for an integer field shown in person add/edit form.
+
+       >>> fd = IntFieldDescription("tablets", "Tablets")
+       >>> fd.min_value = 2
+       >>> fd.max_value = 3
+       >>> fields = fd.makeField()
+       >>> len(fields)
+       1
+
+       >>> field = fields['tablets']
+       >>> field
+       <Field 'tablets'>
+
+       >>> field.interface
+       <InterfaceClass schooltool.basicperson.demographics.IDemographicsForm>
+
+       >>> field.field
+       <zope.schema._bootstrapfields.Int object at ...>
+
+       >>> field.__name__
+       'tablets'
+
+       >>> field.field.min
+       2
+       >>> field.field.max
+       3
 
     """
 

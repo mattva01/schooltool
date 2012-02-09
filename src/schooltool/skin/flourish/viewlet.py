@@ -186,19 +186,7 @@ class ViewletManager(ContentProvider):
         return viewlets
 
     def presort(self, viewlet_dict):
-        before_all = []
-        all = []
-        after_all = []
-        for name, viewlet in viewlet_dict.items():
-            if '*' in viewlet.after:
-                after_all.append(name)
-            elif '*' in viewlet.before:
-                before_all.append(name)
-            else:
-                all.append(name)
-        return (sorted(before_all) +
-                sorted(all) +
-                sorted(after_all))
+        return sorted(viewlet_dict)
 
     @Lazy
     def order(self):
@@ -206,10 +194,10 @@ class ViewletManager(ContentProvider):
         presort_order = self.presort(viewlet_dict)
         before = {}
         after = {}
+        known_names = set(list(viewlet_dict)+['*'])
         for name, viewlet in viewlet_dict.items():
-            before[name] = set(viewlet.before) - set(['*'])
-            after[name] = set(viewlet.after) - set(['*'])
-
+            before[name] = set(viewlet.before).intersection(known_names)
+            after[name] = set(viewlet.after).intersection(known_names)
         names = dependency_sort(presort_order, before, after)
         return names
 

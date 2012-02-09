@@ -62,7 +62,7 @@
   <flourish:viewlet
       name="level-add"
       link="add.html"
-      title="New Level"
+      title="Level"
       view=".level.FlourishLevelsView"
       class="schooltool.skin.flourish.page.LinkViewlet"
       manager=".level.LevelsAddLinks"
@@ -110,7 +110,7 @@
   <flourish:page
       name="reorder.html"
       title="Grade Levels"
-      subtitle="Change Order"
+      subtitle="Reorder"
       for="schooltool.level.interfaces.ILevelContainer"
       class="schooltool.level.browser.level.FlourishReorderLevelsView"
       permission="schooltool.edit"
@@ -129,7 +129,7 @@
 
   <flourish:viewlet
       name="levels"
-      after="scoresystems"
+      after="resource_demographics"
       title="Grade Levels"
       class="schooltool.skin.flourish.page.LinkViewlet"
       manager="schooltool.app.browser.app.CustomizeSchoolLinks"

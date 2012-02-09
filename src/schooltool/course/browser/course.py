@@ -268,7 +268,9 @@ class FlourishCoursesViewlet(Viewlet):
         result = []
         for sy in sorted(schoolyears_data, key=lambda x:x.first, reverse=True):
             sy_info = {'obj': sy, 'terms': []}
-            for term in sorted(schoolyears_data[sy], key=lambda x:x.first):
+            for term in sorted(schoolyears_data[sy],
+                               key=lambda x:x.first,
+                               reverse=True):
                 sortingKey = lambda section:{'course':
                                              ', '.join([course.title
                                                         for course in

@@ -73,6 +73,13 @@
              set_schema="schooltool.basicperson.interfaces.IEnumFieldDescription" />
   </class>
 
+  <class class=".demographics.IntFieldDescription">
+    <allow interface="zope.location.interfaces.ILocation" />
+    <allow interface="schooltool.basicperson.interfaces.IIntFieldDescription" />
+    <require permission="schooltool.edit"
+             set_schema="schooltool.basicperson.interfaces.IIntFieldDescription" />
+  </class>
+
   <adapter
      factory=".person.BasicPersonCalendarCrowd"
      provides="schooltool.app.interfaces.ICalendarParentCrowd"

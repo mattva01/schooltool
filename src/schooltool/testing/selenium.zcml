@@ -3,8 +3,6 @@
            xmlns:browser="http://namespaces.zope.org/browser"
            i18n_domain="schooltool">
 
-  <include package="schooltool.skin.flourish.instance" />
-  <include package="schooltool.testing" file="selenium.zcml" />
-  <browser:defaultSkin name="SchoolToolFlourish" />
+  <includeOverrides file="selenium-overrides.zcml" />
 
 </configure>

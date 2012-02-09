@@ -174,7 +174,7 @@ a, a:link, a:visited, a:active {
 
 .page > .third-nav {
     background-color: #f7f7f7;
-    border-bottom: 1px solid #D9D9D9;
+    border-bottom-color: #D9D9D9;
 }
 
 .page .third-nav > li {
@@ -209,7 +209,7 @@ a, a:link, a:visited, a:active {
 }
 
 .page > .body > .sidebar > .content > .header {
-    border-bottom: 1px dotted #00abb3;
+    border-bottom-color: #00abb3;
     color: #333333;
 }
 
@@ -264,7 +264,7 @@ form fieldset .row .widget input[type="text"],
 form fieldset .row .widget input.password-widget,
 form fieldset .row .widget input[type="password"] {
     background-color: #ffffff;
-    border: 1px solid #ccc1c1;
+    border-color: #ccc1c1;
     color: #333333;
 }
 
@@ -272,24 +272,24 @@ form fieldset .row .widget input.text-widget:focus,
 form fieldset .row .widget input[type="text"]:focus,
 form fieldset .row .widget input.password-widget:focus,
 form fieldset .row .widget input[type="password"]:focus {
-    border: 2px solid #00abb3;
-}
-
-form fieldset .row .widget input[type="text"].error,
-form fieldset .row .widget input[type="password"].error {
-    background-color: #feeee9;
-    border: 2px solid #ef4444;
+    border-color: #00abb3;
 }
 
 form fieldset .row .widget textarea.textarea-widget {
     background-color: #ffffff;
-    border: 1px solid #ccc1c1;
+    border-color: #ccc1c1;
     color: #333333;
 }
 
-form fieldset .row .widget textarea.textarea-widget:focus,
+form fieldset .row .widget textarea:focus {
+    border-color: #00abb3;
+}
+
+form fieldset .row .widget input[type="text"].error,
+form fieldset .row .widget input[type="password"].error,
 form fieldset .row .widget textarea.error {
-    border: 2px solid #00abb3;
+    background-color: #feeee9;
+    border-color: #ef4444;
 }
 
 form fieldset .row .widget .option {
@@ -298,7 +298,7 @@ form fieldset .row .widget .option {
 
 form .buttons .button-ok {
     background-color: #009499;
-    border: 1px solid #009499;
+    border-color: #009499;
     box-shadow: 0px 1px 6px #bbbbbb;
     color: #ffffff;
 }
@@ -306,7 +306,7 @@ form .buttons .button-ok {
 form .buttons .button-neutral,
 form .buttons .button-cancel {
     background-color: #6C7B7C;
-    border: 1px solid #6C7B7C;
+    border-color: #6C7B7C;
     box-shadow: 0px 1px 6px #bbbbbb;
     color: #ffffff;
 }
@@ -315,14 +315,14 @@ form .buttons .button-ok:hover,
 form .buttons .button-neutral:hover,
 form .buttons .button-cancel:hover {
     background-color: #026B6E;
-    border: 1px solid #026B6E;
+    border-color: #026B6E;
 }
 
 form .buttons .button-ok:active,
 form .buttons .button-neutral:active,
 form .buttons .button-cancel:active {
     background-color: #056163;
-    border: 1px solid #056163;
+    border-color: #056163;
     color: #aea79f;
 }
 
@@ -335,7 +335,7 @@ form span.required {
 }
 
 form pre.csv-text {
-    border: 1px dotted #888;
+    border-color: #888;
 }
 
 /*
@@ -353,7 +353,6 @@ form pre.csv-text {
 
 thead {
     background-color: #6c7b7c;
-    border-bottom: 0;
 }
 
 th {
@@ -361,7 +360,7 @@ th {
 }
 
 tbody {
-    border-top: 1px solid #aea79f;
+    border-top-color: #aea79f;
 }
 
 tbody th {
@@ -370,7 +369,7 @@ tbody th {
 }
 
 tbody tr {
-    border-bottom: 1px dotted #cccccc;
+    border-bottom-color: #cccccc;
 }
 
 table.relationships-table tbody tr:hover,
@@ -419,17 +418,16 @@ table.schoolday-legend td.schoolday {
     background-color: #485454;
     background-image: none;
     color: #ffffff;
-    border: 1px solid #485454;
+    border-color: #485454;
 }
 
 .ui-state-hover {
-    border: 1px solid #008c93;
+    border-color: #008c93;
     background-color: #008c93;
 }
 
 .ui-state-active {
     background-color: #008c93;
-    border: none;
 }
 
 .ui-accordion .ui-accordion-content {
@@ -449,23 +447,22 @@ table.schoolday-legend td.schoolday {
 }
 
 .ui-datepicker {
-    border: 2px solid #00abb3;
-    border-top-width: 1px;
+    border-color: #00abb3;
 }
 
 .ui-datepicker .ui-widget-header {
     background: #4B5554;
-    border: 1px solid #4B5554;
+    border-color: #4B5554;
 }
 
 .ui-datepicker-header a.ui-state-hover {
     background: none;
-    border: 1px solid #dfdfdf;
+    border-color: #dfdfdf;
 }
 
 .ui-datepicker-calendar thead {
     background: none;
-    border-bottom: 1px solid #dfdfdf;
+    border-bottom-color: #dfdfdf;
 }
 
 .ui-datepicker-calendar thead th {
@@ -474,7 +471,6 @@ table.schoolday-legend td.schoolday {
 
 .ui-datepicker-calendar a.ui-state-default {
     background: none;
-    border: 0;
     color: #4B5554;
 }
 
@@ -485,10 +481,6 @@ table.schoolday-legend td.schoolday {
 
 .ui-datepicker-calendar a.ui-state-active {
     color: #009499;
-}
-
-.ui-datepicker-calendar tr {
-    border-bottom: none;
 }
 
 .ui-datepicker-calendar .ui-datepicker-other-month {
@@ -519,17 +511,19 @@ table.schoolday-legend td.schoolday {
     background-color: #e7e4e2;
 }
 
+.gradebook-part tbody tr {
+    border-top-color: #aea79f;
+}
+
 .gradebook-part tbody tr.odd {
     background-color: #f0efee;
 }
 
-.students th, .students td {
-    border-right: 1px solid #cccccc;
-}
-
-.grades th, .grades td {
-    border-left: 1px solid #cccccc;
-    border-right: 1px solid #cccccc;
+.students th, .students td,
+.grades th, .grades td,
+.totals th, .totals td,
+th.activity-title {
+    border-color: #cccccc;
 }
 
 .grades input[type="text"] {
@@ -537,32 +531,21 @@ table.schoolday-legend td.schoolday {
 }
 
 .grades input[type="text"]:focus {
-    border: 1px solid #cccccc;
+    border-color: #cccccc;
 }
 
 .grades .changed_bg input[type="text"] {
     background: #009499;
-    border: 1px solid #009499;
     color: #ffffff;
 }
 
 .grades .error_bg  input[type="text"] {
     background: #ef4444;
-    border: 1px solid #ef4444;
     color: #ffffff;
 }
 
 .grades .warning_bg  input[type="text"] {
     background: #f6db5a;
-    border: 1px solid #f6db5a;
-}
-
-.totals th, .totals td {
-    border-left: 1px solid #cccccc;
-}
-
-th.activity-title {
-    border-bottom: 1px solid #cccccc;
 }
 
 .popup_menu li {

@@ -3,8 +3,10 @@
            xmlns:browser="http://namespaces.zope.org/browser"
            i18n_domain="schooltool">
 
-  <include package="schooltool.skin.flourish.instance" />
-  <include package="schooltool.testing" file="selenium.zcml" />
-  <browser:defaultSkin name="SchoolToolFlourish" />
+  <adapter
+      for="zope.publisher.interfaces.http.IHTTPRequest"
+      provides="zope.i18n.interfaces.IUserPreferredLanguages"
+      factory=".selenium.PreferNoLanguage"
+      />
 
 </configure>
