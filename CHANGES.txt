@@ -2,7 +2,7 @@
 CHANGES
 =======
 
-2.0.2 (unreleased)
+2.0.2 (2012-02-14)
 ------------------
 
 - Added integer demographic fields.
@@ -10,8 +10,8 @@ CHANGES
 Bugfixes
 ++++++++
 
-- Fixed the password edit view (https://launchpad.net/bugs/873045868411)
-- Set prompt for required demographics fields (https://launchpad.net/bugs/873045898219)
+- Fixed the password edit view (https://launchpad.net/bugs/868411)
+- Allow optional Selection List demographics fields to remain unset (https://launchpad.net/bugs/898219)
 - Fixed person edit view to show limited demographics fields (https://launchpad.net/bugs/914609)
 - Sorted section list in person accordion (https://launchpad.net/bugs/921373)
 - Move 'School name' to the bottom of Customize menu (https://launchpad.net/bugs/876797)
