@@ -6,6 +6,7 @@ CHANGES
 ------------------
 
 - Added integer demographic fields.
+- get fill down back in the contextual menu (https://launchpad.net/bugs/907907)
 
 
 2.0.1 (2011-12-22)
