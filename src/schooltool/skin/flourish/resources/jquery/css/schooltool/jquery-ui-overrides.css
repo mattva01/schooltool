@@ -53,6 +53,10 @@
     display: none;
 }
 
+.ui-dialog .ui-dialog-content form.filldown-dialog-form {
+    width: 250px;
+}
+
 .ui-dialog .ui-dialog-content .buttons {
     margin-bottom: 0px;
     margin-top: 0px;
