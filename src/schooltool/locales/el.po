@@ -9,15 +9,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: el-1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-22 22:28+0200\n"
-"PO-Revision-Date: 2011-11-22 21:47+0000\n"
-"Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
+"POT-Creation-Date: 2011-12-22 17:43+0200\n"
+"PO-Revision-Date: 2012-01-02 14:43+0000\n"
+"Last-Translator: alexxtasi <Unknown>\n"
 "Language-Team: Greek <prassaschr@gmail.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-11-23 06:10+0000\n"
-"X-Generator: Launchpad (build 14336)\n"
+"X-Launchpad-Export-Date: 2012-01-03 05:10+0000\n"
+"X-Generator: Launchpad (build 14616)\n"
 "X-Poedit-Country: GREECE\n"
 "Language: el\n"
 "X-Poedit-Language: Greek\n"
@@ -105,7 +105,7 @@ msgstr "Αποσύνδεση"
 
 #: /src/schooltool/app/browser/app.py:523
 msgid "Calendar settings"
-msgstr ""
+msgstr "Ρυθμίσεις Ημερολογίου"
 
 #: /src/schooltool/app/browser/app.py:528
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:31
@@ -198,7 +198,7 @@ msgstr "Ακύρωση"
 #: /src/schooltool/app/browser/flourish.zcml:228
 #: /src/schooltool/app/browser/flourish.zcml:580
 msgid "School Name"
-msgstr ""
+msgstr "Όνομα Σχολείου"
 
 #: /src/schooltool/app/browser/app.py:557
 msgid "Name"
@@ -265,41 +265,57 @@ msgstr "Όχι"
 #: /src/schooltool/app/browser/app.py:868
 #: /src/schooltool/app/browser/flourish.zcml:545
 msgid "Pack Database"
-msgstr ""
+msgstr "Συμπίεση Βάσης Δεδομένων"
 
 #: /src/schooltool/app/browser/app.py:894
 msgid "Database successfully packed."
-msgstr ""
+msgstr "H Βάση Δεδομένων συμπιέστηκε με επιτυχία"
 
 #. Default: ""
 #: /src/schooltool/app/browser/app.py:911
 msgid "There were errors while packing the database: ${error}"
 msgstr ""
+"Υπήρξαν σφάλματα κατά τη διαδικασία συμπίεσης της βάσης δεδομένων: ${error}"
 
 #. Default: ""
 #: /src/schooltool/app/browser/app.py:953
 msgid "${type} Error"
-msgstr ""
+msgstr "${type} Σφάλμα"
 
 #: /src/schooltool/app/browser/app.py:962
 #: /src/schooltool/app/browser/templates/f_errors.pt:15
 msgid "Number of exceptions to show"
-msgstr ""
+msgstr "Αριθμός εξαιρέσεων που θα εμφανιστούν"
 
 #: /src/schooltool/app/browser/app.py:965
 #: /src/schooltool/app/browser/templates/f_errors.pt:21
 msgid "Copy exceptions to the event log"
-msgstr ""
+msgstr "Αντιγραφή των εξαιρέσεων στο Αρχείο Καταγραφής Συμβάντων"
 
 #: /src/schooltool/app/browser/app.py:969
 #: /src/schooltool/app/browser/templates/f_errors.pt:27
 msgid "Ignored exception types"
-msgstr ""
+msgstr "Τύποι εξαιρέσεων που θα αγνοηθούν"
 
 #: /src/schooltool/app/browser/app.py:998
 #: /src/schooltool/app/browser/flourish.zcml:292
 msgid "Errors Settings"
-msgstr ""
+msgstr "Ρυθμίσεις Σφαλμάτων"
+
+#: /src/schooltool/app/browser/app.py:1005
+#: /src/schooltool/basicperson/browser/demographics.py:413
+#: /src/schooltool/basicperson/browser/demographics.py:473
+#: /src/schooltool/basicperson/browser/person.py:951
+#: /src/schooltool/course/browser/course.py:568
+#: /src/schooltool/course/browser/section.py:1261
+#: /src/schooltool/group/browser/group.py:669
+#: /src/schooltool/schoolyear/browser/schoolyear.py:490
+#: /src/schooltool/schoolyear/browser/schoolyear.py:538
+#: /src/schooltool/schoolyear/browser/templates/f_schoolyear_activate.pt:23
+#: /src/schooltool/term/browser/term.py:291
+#: /src/schooltool/term/browser/term.py:404
+msgid "Submit"
+msgstr "Υποβολή"
 
 #: /src/schooltool/app/browser/app.py:1025
 #: /src/schooltool/app/browser/configure.zcml:670
@@ -436,7 +452,7 @@ msgstr "Δευ"
 
 #: /src/schooltool/app/browser/cal.py:138
 msgid "Tue"
-msgstr "Τρ"
+msgstr "Τρι"
 
 #: /src/schooltool/app/browser/cal.py:139
 msgid "Wed"
@@ -448,7 +464,7 @@ msgstr "Πεμ"
 
 #: /src/schooltool/app/browser/cal.py:141
 msgid "Fri"
-msgstr "Πα"
+msgstr "Παρ"
 
 #: /src/schooltool/app/browser/cal.py:142
 msgid "Sat"
@@ -465,15 +481,15 @@ msgstr "Ανώνυμο γεγονός"
 
 #: /src/schooltool/app/browser/cal.py:818
 msgid "Next week"
-msgstr "Επόμενη Εβδομάδα"
+msgstr "Επόμενη εβδομάδα"
 
 #: /src/schooltool/app/browser/cal.py:819
 msgid "Current week"
-msgstr "Τρέχουσα Εβδομάδα"
+msgstr "Τρέχουσα εβδομάδα"
 
 #: /src/schooltool/app/browser/cal.py:820
 msgid "Previous week"
-msgstr "Προηγούμενη Εβδομάδα"
+msgstr "Προηγούμενη εβδομάδα"
 
 #: /src/schooltool/app/browser/cal.py:822
 msgid "Go to next week"
@@ -481,16 +497,16 @@ msgstr "Μετάβαση στην επόμενη εβδομάδα"
 
 #: /src/schooltool/app/browser/cal.py:823
 msgid "Go to current week"
-msgstr "Πήγαινε στην τρέχουσα εβδομάδα"
+msgstr "Μετάβαση στην τρέχουσα εβδομάδα"
 
 #: /src/schooltool/app/browser/cal.py:824
 msgid "Go to previous week"
-msgstr "Πήγαινε στην προηγούμενη εβδομάδα"
+msgstr "Μετάβαση στην προηγούμενη εβδομάδα"
 
 #. Default: ""
 #: /src/schooltool/app/browser/cal.py:845
 msgid "${month}, ${year} (week ${week})"
-msgstr "${month}, ${year} (Εβδομάδα ${week})"
+msgstr "${month}, ${year} (εβδομάδα ${week})"
 
 #: /src/schooltool/app/browser/cal.py:1059
 msgid "Next month"
@@ -498,11 +514,11 @@ msgstr "Επόμενος μήνας"
 
 #: /src/schooltool/app/browser/cal.py:1060
 msgid "Current month"
-msgstr "Τρέχων Μήνας"
+msgstr "Τρέχων μήνας"
 
 #: /src/schooltool/app/browser/cal.py:1061
 msgid "Previous month"
-msgstr "Προηγούμενος Μήνας"
+msgstr "Προηγούμενος μήνας"
 
 #: /src/schooltool/app/browser/cal.py:1063
 msgid "Go to next month"
@@ -524,7 +540,7 @@ msgstr "${month}, ${year}"
 #. Default: ""
 #: /src/schooltool/app/browser/cal.py:1095
 msgid "Week ${week_no}"
-msgstr "Week ${week_no}"
+msgstr "Εβδομάδα ${week_no}"
 
 #: /src/schooltool/app/browser/cal.py:1111
 msgid "Next year"
@@ -540,11 +556,11 @@ msgstr "Προηγούμενο έτος"
 
 #: /src/schooltool/app/browser/cal.py:1115
 msgid "Go to next year"
-msgstr "Μετάβαση στον επόμενο χρόνο"
+msgstr "Μετάβαση στο επόμενο έτος"
 
 #: /src/schooltool/app/browser/cal.py:1116
 msgid "Go to current year"
-msgstr "Πήγαινε στον τρέχων χρόνο"
+msgstr "Μετάβαση στο τρέχων έτος"
 
 #: /src/schooltool/app/browser/cal.py:1117
 msgid "Go to previous year"
@@ -731,7 +747,7 @@ msgstr "Κατ' επανάληψη"
 
 #: /src/schooltool/app/browser/cal.py:1681
 msgid "Recurs every"
-msgstr "Επανάληψη κάθε"
+msgstr "Επαναλαμβάνεται κάθε"
 
 #: /src/schooltool/app/browser/cal.py:1684
 msgid "Day"
@@ -772,7 +788,7 @@ msgstr "Μέχρι"
 
 #: /src/schooltool/app/browser/cal.py:1700
 msgid "forever"
-msgstr "Για πάντα"
+msgstr "για πάντα"
 
 #: /src/schooltool/app/browser/cal.py:1703
 msgid "Number of events"
@@ -1069,11 +1085,11 @@ msgstr "Είσοδος"
 #: /src/schooltool/email/browser/configure.zcml:80
 #: /src/schooltool/email/browser/email.py:204
 msgid "Settings"
-msgstr ""
+msgstr "Ρυθμίσεις"
 
 #: /src/schooltool/app/browser/flourish.zcml:218
 msgid "Calendar Settings"
-msgstr ""
+msgstr "Ρυθμίσεις ημερολογίου"
 
 #: /src/schooltool/app/browser/flourish.zcml:228
 #: /src/schooltool/app/browser/templates/f_errors.pt:7
@@ -1135,7 +1151,7 @@ msgstr "Επεξεργασία"
 
 #: /src/schooltool/app/browser/flourish.zcml:272
 msgid "Error"
-msgstr ""
+msgstr "Σφάλμα"
 
 #: /src/schooltool/app/browser/flourish.zcml:303
 msgid "About"
@@ -1162,16 +1178,16 @@ msgstr "Ταχυδρομική λiστα"
 
 #: /src/schooltool/app/browser/flourish.zcml:351
 msgid "IRC channel"
-msgstr ""
+msgstr "Κανάλι IRC"
 
 #: /src/schooltool/app/browser/flourish.zcml:393
 #: /src/schooltool/export/flourish.zcml:49
 msgid "School"
-msgstr ""
+msgstr "Σχολείο"
 
 #: /src/schooltool/app/browser/flourish.zcml:410
 msgid "Customize"
-msgstr ""
+msgstr "Προσαρμογή"
 
 #: /src/schooltool/app/browser/flourish.zcml:449
 #: /src/schooltool/course/browser/templates/f_course_view.pt:75
@@ -1285,7 +1301,7 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/about.pt:24
 msgid "For more information:"
-msgstr "Για περισσότερες πληροφορίες"
+msgstr "Για περισσότερες πληροφορίες:"
 
 #: /src/schooltool/app/browser/templates/about.pt:30
 msgid "IRC channel: #schooltool on freenode.net"
@@ -1394,7 +1410,7 @@ msgstr "Προβολή ετήσιου ημερολογίου"
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:42
 #: /src/schooltool/calendar/browser/calendar.py:291
 msgid "Yearly"
-msgstr "Ετησίως"
+msgstr "Ετήσια"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:55
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:91
@@ -1832,17 +1848,17 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:10
 msgid "Import source"
-msgstr ""
+msgstr "Εισαγωγή πόρων"
 
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:20
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:64
 msgid "Upload CSV file"
-msgstr ""
+msgstr "Αποστολή αρχείου CSV"
 
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:29
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:104
 msgid "Enter CSV text"
-msgstr ""
+msgstr "Εισαγωγή κειμένου CSV"
 
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:60
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:100
@@ -1852,11 +1868,11 @@ msgstr ""
 #: /src/schooltool/group/browser/flourish.zcml:236
 #: /src/schooltool/resource/browser/flourish.zcml:333
 msgid "Import CSV"
-msgstr ""
+msgstr "Εισαγωγή CSV"
 
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:75
 msgid "Charset"
-msgstr ""
+msgstr "Κωδικοποίηση χαρακτήρων"
 
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:80
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:103
@@ -1920,7 +1936,7 @@ msgstr "Άλλο (παρακαλώ καθορίστε)"
 
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:91
 msgid "Other charset"
-msgstr ""
+msgstr "Άλλη κωδικοποίηση χαρακτήρων"
 
 #. Default: "Submit"
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:112
@@ -1969,7 +1985,7 @@ msgstr "κουμπή-υποβολής"
 #: /src/schooltool/timetable/browser/templates/f_timetables.pt:20
 #: /src/schooltool/timetable/browser/templates/f_timetables.pt:28
 msgid "Done"
-msgstr ""
+msgstr "Ολοκληρώθηκε"
 
 #: /src/schooltool/app/browser/templates/f_edit_relationships.pt:25
 #: /src/schooltool/basicperson/browser/templates/container.pt:32
@@ -1984,7 +2000,7 @@ msgstr ""
 #: /src/schooltool/skin/templates/table_container.pt:28
 #: /src/schooltool/timetable/browser/templates/f_timetables.pt:14
 msgid "Showing ${count} of ${total} items"
-msgstr ""
+msgstr "Εμγφανίζονται ${count} από ${total} στοιχεία"
 
 #: /src/schooltool/app/browser/templates/f_errors.pt:4
 msgid "Manage error settings"
@@ -2002,11 +2018,11 @@ msgstr "Χρήστης"
 #: /src/schooltool/skin/templates/error.pt:19
 #: /src/schooltool/skin/templates/f_error.pt:9
 msgid "Exception"
-msgstr ""
+msgstr "Εξαίρεση"
 
 #: /src/schooltool/app/browser/templates/f_errors.pt:49
 msgid "No exceptions logged."
-msgstr ""
+msgstr "Δεν καταγράφηκε καμία εξαίρεση"
 
 #: /src/schooltool/app/browser/templates/f_errors.pt:76
 #: /src/schooltool/term/browser/term.py:219
@@ -2049,7 +2065,7 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:45
 msgid "Request"
-msgstr ""
+msgstr "Αίτημα"
 
 #: /src/schooltool/app/browser/templates/f_generations_related.pt:2
 #: /src/schooltool/contact/browser/templates/f_contacts_related.pt:2
@@ -2127,7 +2143,7 @@ msgstr "Όνομα Χρήστη"
 #: /src/schooltool/person/browser/flourish.zcml:61
 #: /src/schooltool/person/browser/person.py:505
 msgid "Password"
-msgstr "Κωδικός"
+msgstr "Κωδικός πρόσβασης"
 
 #: /src/schooltool/app/browser/templates/f_login.pt:72
 #: /src/schooltool/app/browser/templates/login.pt:57
@@ -2737,7 +2753,19 @@ msgid ""
 "            site."
 msgstr ""
 
-#: /src/schooltool/app/main.py:96
+#: /src/schooltool/app/main.py:314
+msgid "Going to background, daemon pid %d"
+msgstr ""
+
+#: /src/schooltool/app/main.py:361
+msgid "Cannot resolve plugin action order:\n"
+msgstr ""
+
+#: /src/schooltool/app/main.py:513
+msgid "Run %s -h for help."
+msgstr ""
+
+#: /src/schooltool/app/main.py:517
 msgid ""
 "\n"
 "Usage: %s [options]\n"
@@ -2754,19 +2782,7 @@ msgid ""
 "  --manage               only do management tasks, don't run the server\n"
 msgstr ""
 
-#: /src/schooltool/app/main.py:327
-msgid "Going to background, daemon pid %d"
-msgstr ""
-
-#: /src/schooltool/app/main.py:374
-msgid "Cannot resolve plugin action order:\n"
-msgstr ""
-
-#: /src/schooltool/app/main.py:528
-msgid "Run %s -h for help."
-msgstr ""
-
-#: /src/schooltool/app/main.py:540
+#: /src/schooltool/app/main.py:536
 msgid "%s: daemon mode not supported on your operating system."
 msgstr ""
 
@@ -4005,7 +4021,15 @@ msgstr ""
 msgid "Contact of"
 msgstr ""
 
-#: /src/schooltool/contact/browser/templates/f_contact_view.pt:4
+#: /src/schooltool/contact/browser/templates/f_contact_filter.pt:6
+msgid "First name and/or last name"
+msgstr ""
+
+#: /src/schooltool/contact/browser/templates/f_contact_view.pt:3
+msgid "Contact information"
+msgstr ""
+
+#: /src/schooltool/contact/browser/templates/f_contact_view.pt:6
 #: /src/schooltool/contact/browser/templates/f_contactsViewlet.pt:9
 msgid "Edit this contact"
 msgstr ""
@@ -4673,6 +4697,10 @@ msgid ""
 "determining which course should be updated."
 msgstr ""
 
+#: /src/schooltool/course/browser/templates/f_course_filter.pt:6
+msgid "Title or course ID"
+msgstr ""
+
 #: /src/schooltool/course/browser/templates/f_course_view.pt:4
 msgid "Edit this course"
 msgstr ""
@@ -4789,8 +4817,12 @@ msgstr ""
 msgid "There are no sections defined for ${schoolyear}."
 msgstr ""
 
+#: /src/schooltool/course/browser/templates/f_section_filter.pt:6
+msgid "Section title"
+msgstr ""
+
 #: /src/schooltool/course/browser/templates/f_section_linkage.pt:25
-#: /src/schooltool/course/browser/templates/f_section_view.pt:102
+#: /src/schooltool/course/browser/templates/f_section_view.pt:104
 msgid "(currently viewing)"
 msgstr ""
 
@@ -5337,12 +5369,8 @@ msgstr ""
 msgid "Retry"
 msgstr ""
 
-#: /src/schooltool/email/browser/email.py:394
-msgid "Email Details"
-msgstr ""
-
-#: /src/schooltool/email/browser/email.py:534
-#: /src/schooltool/email/browser/email.py:784
+#: /src/schooltool/email/browser/email.py:557
+#: /src/schooltool/email/browser/email.py:845
 msgid "Email Queue"
 msgstr ""
 
@@ -5434,6 +5462,10 @@ msgstr ""
 #: /src/schooltool/email/interfaces.py:58
 msgid "Status"
 msgstr "Κατάσταση"
+
+#: /src/schooltool/email/browser/templates/f_email_view.pt:2
+msgid "Email Details"
+msgstr ""
 
 #: /src/schooltool/email/interfaces.py:44
 msgid "Recipient addresses"
@@ -5856,6 +5888,10 @@ msgid ""
 "Users Group' and 'After-school sports club' respectively. The 'Chess Club' "
 "group will have no description, and the extra \"text after a second comma\" "
 "text on the third group will be ignored."
+msgstr ""
+
+#: /src/schooltool/group/browser/templates/f_group_filter.pt:6
+msgid "Group title"
 msgstr ""
 
 #: /src/schooltool/group/browser/templates/f_group_member_csvimport_description.pt:12
@@ -7169,6 +7205,10 @@ msgstr ""
 msgid "List of accounts"
 msgstr ""
 
+#: /src/schooltool/securitypolicy/browser/views.py:58
+msgid "User calendars"
+msgstr ""
+
 #: /src/schooltool/securitypolicy/browser/views.py:59
 msgid "User passwords"
 msgstr ""
@@ -7752,19 +7792,11 @@ msgstr "Ωρολόγιο πρόγραμμα"
 msgid "Edit Schedule"
 msgstr ""
 
-#: /src/schooltool/timetable/browser/flourish.zcml:498
-msgid "Add Schedule"
-msgstr ""
-
-#: /src/schooltool/timetable/browser/flourish.zcml:507
+#: /src/schooltool/timetable/browser/flourish.zcml:512
 msgid "Schedule Timetable"
 msgstr ""
 
-#: /src/schooltool/timetable/browser/flourish.zcml:516
-msgid "School Timetable"
-msgstr ""
-
-#: /src/schooltool/timetable/browser/flourish.zcml:526
+#: /src/schooltool/timetable/browser/flourish.zcml:531
 msgid "Exception Days"
 msgstr ""
 
@@ -7819,6 +7851,10 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/f_manage_timetables_overview.pt:25
 msgid "There are no ${timetables} set up."
+msgstr ""
+
+#: /src/schooltool/timetable/browser/templates/f_manage_timetables_overview.pt:25
+msgid "timetables"
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/f_schedule_container_view.pt:3

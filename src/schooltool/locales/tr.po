@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-11-22 22:28+0200\n"
-"PO-Revision-Date: 2011-11-23 21:31+0000\n"
-"Last-Translator: Caner GÜRAL <cgural@gmail.com>\n"
+"POT-Creation-Date: 2011-12-22 17:43+0200\n"
+"PO-Revision-Date: 2012-02-05 00:27+0000\n"
+"Last-Translator: Kaya Zeren <Unknown>\n"
 "Language-Team: Turkish <tr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-11-24 05:58+0000\n"
-"X-Generator: Launchpad (build 14336)\n"
+"X-Launchpad-Export-Date: 2012-02-06 05:08+0000\n"
+"X-Generator: Launchpad (build 14747)\n"
 "Language: tr\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -208,7 +208,7 @@ msgstr "Başkanlar"
 
 #: /src/schooltool/app/browser/app.py:586
 msgid "Current leaders"
-msgstr "Güncel başkanlar"
+msgstr "Geçerli başkanlar"
 
 #: /src/schooltool/app/browser/app.py:587
 msgid "Available leaders"
@@ -262,11 +262,11 @@ msgstr "Hayır"
 #: /src/schooltool/app/browser/app.py:868
 #: /src/schooltool/app/browser/flourish.zcml:545
 msgid "Pack Database"
-msgstr "Paket Veri Tabanı"
+msgstr "Veri Tabanını Paketle"
 
 #: /src/schooltool/app/browser/app.py:894
 msgid "Database successfully packed."
-msgstr "Veri tabanı başarıyla paketlendi."
+msgstr "Veri tabanı sorunsuz paketlendi"
 
 #. Default: ""
 #: /src/schooltool/app/browser/app.py:911
@@ -281,22 +281,37 @@ msgstr "${type} Hata"
 #: /src/schooltool/app/browser/app.py:962
 #: /src/schooltool/app/browser/templates/f_errors.pt:15
 msgid "Number of exceptions to show"
-msgstr ""
+msgstr "Gösterilecek kural dışı durum sayısı"
 
 #: /src/schooltool/app/browser/app.py:965
 #: /src/schooltool/app/browser/templates/f_errors.pt:21
 msgid "Copy exceptions to the event log"
-msgstr ""
+msgstr "kural dışı durumları olay günlüğüne kopyala"
 
 #: /src/schooltool/app/browser/app.py:969
 #: /src/schooltool/app/browser/templates/f_errors.pt:27
 msgid "Ignored exception types"
-msgstr ""
+msgstr "Yoksayılan kural dışı durum tipleri"
 
 #: /src/schooltool/app/browser/app.py:998
 #: /src/schooltool/app/browser/flourish.zcml:292
 msgid "Errors Settings"
 msgstr "Hata Ayarları"
+
+#: /src/schooltool/app/browser/app.py:1005
+#: /src/schooltool/basicperson/browser/demographics.py:413
+#: /src/schooltool/basicperson/browser/demographics.py:473
+#: /src/schooltool/basicperson/browser/person.py:951
+#: /src/schooltool/course/browser/course.py:568
+#: /src/schooltool/course/browser/section.py:1261
+#: /src/schooltool/group/browser/group.py:669
+#: /src/schooltool/schoolyear/browser/schoolyear.py:490
+#: /src/schooltool/schoolyear/browser/schoolyear.py:538
+#: /src/schooltool/schoolyear/browser/templates/f_schoolyear_activate.pt:23
+#: /src/schooltool/term/browser/term.py:291
+#: /src/schooltool/term/browser/term.py:404
+msgid "Submit"
+msgstr "Gönder"
 
 #: /src/schooltool/app/browser/app.py:1025
 #: /src/schooltool/app/browser/configure.zcml:670
@@ -881,7 +896,7 @@ msgstr "Tip"
 
 #: /src/schooltool/app/browser/cal.py:2283
 msgid "Booked by others"
-msgstr ""
+msgstr "Başkaları tarafından ayrılmış"
 
 #: /src/schooltool/app/browser/cal.py:2611
 #: /src/schooltool/app/browser/configure.zcml:532
@@ -1818,7 +1833,7 @@ msgstr "Tarih Biçimi"
 
 #: /src/schooltool/app/browser/templates/f_calendar_settings_overview.pt:28
 msgid "Week starts on"
-msgstr ""
+msgstr "Hafta başlangıcı"
 
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:10
 msgid "Import source"
@@ -1996,7 +2011,7 @@ msgstr "İstisna"
 
 #: /src/schooltool/app/browser/templates/f_errors.pt:49
 msgid "No exceptions logged."
-msgstr ""
+msgstr "Günlüe yazılmış kural dışı bir durum yok"
 
 #: /src/schooltool/app/browser/templates/f_errors.pt:76
 #: /src/schooltool/term/browser/term.py:219
@@ -2008,12 +2023,12 @@ msgstr "Yenile"
 
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:2
 msgid "Exception traceback"
-msgstr ""
+msgstr "Kural dışı durumu geri izleme"
 
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:3
 #: /src/schooltool/app/browser/templates/f_errors_entry_text.pt:4
 msgid "The specified log entry was not found. It may have expired."
-msgstr ""
+msgstr "Belirtilen günlük kaydı bulunamadı. Süresi dolmuş olabilir."
 
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:18
 msgid "Request URL"
@@ -2021,11 +2036,11 @@ msgstr "İstek URL'si"
 
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:22
 msgid "Exception Type"
-msgstr ""
+msgstr "Kural Dışı Durum Tipi"
 
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:26
 msgid "Exception Value"
-msgstr ""
+msgstr "Kurul Dışı Durum Değeri"
 
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:31
 #: /src/schooltool/skin/templates/error.pt:20
@@ -2035,11 +2050,11 @@ msgstr "Aslını ara"
 
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:40
 msgid "Display traceback as text"
-msgstr ""
+msgstr "Geri izlemeyi metin olarak göster"
 
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:45
 msgid "Request"
-msgstr ""
+msgstr "İstek"
 
 #: /src/schooltool/app/browser/templates/f_generations_related.pt:2
 #: /src/schooltool/contact/browser/templates/f_contacts_related.pt:2
@@ -2061,6 +2076,8 @@ msgid ""
 "Database generations update the structure of your database to be compatible "
 "with new versions of SchoolTool."
 msgstr ""
+"Veritabanı nesilleri, veritabanı yapınızın yeni SchoolTool sürümleri ile "
+"uyumlu olacak şekilde güncellenmesini sağlar."
 
 #: /src/schooltool/app/browser/templates/f_login.pt:12
 #: /src/schooltool/app/browser/templates/login.pt:8
@@ -2088,7 +2105,7 @@ msgstr ""
 #: /src/schooltool/timetable/browser/schedule.py:269
 #: /src/schooltool/timetable/browser/templates/f_schedule_event_add.pt:82
 msgid "Please correct the marked fields below."
-msgstr ""
+msgstr "Lütfen aşağıda işaretli alanları düzeltin."
 
 #: /src/schooltool/app/browser/templates/f_login.pt:39
 #: /src/schooltool/app/browser/templates/login.pt:35
@@ -2126,11 +2143,11 @@ msgstr "L"
 #: /src/schooltool/app/browser/templates/f_managers.pt:11
 msgid ""
 "The database was updated to generation ${generation} for ${application}."
-msgstr ""
+msgstr "${application} veritabanı  ${generation} nesline güncellendi."
 
 #: /src/schooltool/app/browser/templates/f_managers.pt:16
 msgid "The database is up to date for ${application}."
-msgstr ""
+msgstr "${application} veritabanı güncel."
 
 #: /src/schooltool/app/browser/templates/f_managers.pt:23
 msgid "Application"
@@ -2138,23 +2155,23 @@ msgstr "Uygulama"
 
 #: /src/schooltool/app/browser/templates/f_managers.pt:24
 msgid "Minimum Generation"
-msgstr ""
+msgstr "En Eski Nesil"
 
 #: /src/schooltool/app/browser/templates/f_managers.pt:25
 msgid "Maximum Generation"
-msgstr ""
+msgstr "En Yeni Nesil"
 
 #: /src/schooltool/app/browser/templates/f_managers.pt:26
 msgid "Current Database Generation"
-msgstr ""
+msgstr "Geçerli Veri Tabanı Nesli"
 
 #: /src/schooltool/app/browser/templates/f_managers.pt:27
 msgid "Evolve?"
-msgstr ""
+msgstr "Geliştir?"
 
 #: /src/schooltool/app/browser/templates/f_managers.pt:40
 msgid "No, up to date"
-msgstr ""
+msgstr "Hayır, güncel."
 
 #: /src/schooltool/app/browser/templates/f_overlay_filter_widget.pt:2
 #: /src/schooltool/contact/browser/templates/f_contact_filter.pt:2
@@ -2171,52 +2188,52 @@ msgstr "Ara"
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:7
 #: /src/schooltool/app/browser/templates/f_server_settings_overview.pt:12
 msgid "Database"
-msgstr ""
+msgstr "Veri Tabanı"
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:11
 #: /src/schooltool/app/browser/templates/f_server_settings_overview.pt:16
 msgid "Database Size"
-msgstr ""
+msgstr "Veri Tabanı Boyutu"
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:15
 #: /src/schooltool/app/browser/templates/f_server_settings_overview.pt:20
 msgid "Uptime"
-msgstr ""
+msgstr "Çalışma Süresi"
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:19
 #: /src/schooltool/app/browser/templates/f_server_settings_overview.pt:24
 msgid "System platform"
-msgstr ""
+msgstr "Sistem ortamı"
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:23
 #: /src/schooltool/app/browser/templates/f_server_settings_overview.pt:28
 msgid "Python version"
-msgstr ""
+msgstr "Python sürümü"
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:27
 #: /src/schooltool/app/browser/templates/f_server_settings_overview.pt:32
 msgid "Command line"
-msgstr ""
+msgstr "Komut satırı"
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:31
 msgid "Preferred encoding"
-msgstr ""
+msgstr "Yeğlenen kodlama"
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:35
 msgid "File system encoding"
-msgstr ""
+msgstr "Dosya sistemi kodlaması"
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:39
 msgid "Process id"
-msgstr ""
+msgstr "İşlem kodu"
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:43
 msgid "Developer mode"
-msgstr ""
+msgstr "Geliştirici kipi"
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:48
 msgid "Python path"
-msgstr ""
+msgstr "Python yolu"
 
 #: /src/schooltool/app/browser/templates/f_section_csvimport_description.pt:3
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:24
@@ -2322,15 +2339,15 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_server_settings_overview.pt:3
 msgid "Server Information"
-msgstr ""
+msgstr "Sunucu bilgileri"
 
 #: /src/schooltool/app/browser/templates/f_settings.pt:5
 msgid "Please wait for confirmation that the database has been packed."
-msgstr ""
+msgstr "Lütfen veri tabanının paketlenme onayını bekleyin."
 
 #: /src/schooltool/app/browser/templates/f_translationdomaincontrol.pt:13
 msgid "Domain ${domain}"
-msgstr ""
+msgstr "Alan adı ${domain}"
 
 #: /src/schooltool/app/browser/templates/f_translationdomaincontrol.pt:18
 #: /src/schooltool/contact/interfaces.py:82
@@ -2339,11 +2356,11 @@ msgstr "Dil"
 
 #: /src/schooltool/app/browser/templates/f_translationdomaincontrol.pt:19
 msgid "Files"
-msgstr ""
+msgstr "Dosyalar"
 
 #: /src/schooltool/app/browser/templates/f_translationdomaincontrol.pt:31
 msgid "Reload"
-msgstr ""
+msgstr "Yeniden Yükle"
 
 #: /src/schooltool/app/browser/templates/index.pt:6
 msgid "Welcome to SchoolTool"
@@ -2407,7 +2424,7 @@ msgstr "Yinelenen bir etkinliği silmeye çalışıyorsunuz."
 
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:41
 msgid "Current"
-msgstr "Güncel"
+msgstr "Geçerli"
 
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:43
 msgid "Future"
@@ -2621,7 +2638,7 @@ msgstr "CSV Verisi"
 #: /src/schooltool/resource/browser/flourish.zcml:323
 #: /src/schooltool/resource/browser/flourish.zcml:342
 msgid "Import"
-msgstr ""
+msgstr "Al"
 
 #: /src/schooltool/app/browser/timetablecsvimport.py:135
 msgid "Row 2 is not empty"
@@ -2669,7 +2686,7 @@ msgstr ""
 #: /src/schooltool/app/browser/timetablecsvimport.py:371
 #: /src/schooltool/app/browser/timetablecsvimport.py:381
 msgid "The term ${term} does not exist."
-msgstr ""
+msgstr "${term} dönemi bulunamadı"
 
 #. Default: ""
 #: /src/schooltool/app/browser/timetablecsvimport.py:387
@@ -2762,7 +2779,19 @@ msgstr ""
 "Site genel takvimini site açılış sayfası olarak\n"
 "             göster."
 
-#: /src/schooltool/app/main.py:96
+#: /src/schooltool/app/main.py:314
+msgid "Going to background, daemon pid %d"
+msgstr "Daemon pid %d arkaplana alındı"
+
+#: /src/schooltool/app/main.py:361
+msgid "Cannot resolve plugin action order:\n"
+msgstr "Eklenti işlem sırası anlaşılamadı:\n"
+
+#: /src/schooltool/app/main.py:513
+msgid "Run %s -h for help."
+msgstr "Yardım için %s programını -h ile çalıştırın."
+
+#: /src/schooltool/app/main.py:517
 msgid ""
 "\n"
 "Usage: %s [options]\n"
@@ -2793,19 +2822,7 @@ msgstr ""
 "   --yönet                  yalnız yönetim görevlerini yap, sunucuyu "
 "çalıştırma\n"
 
-#: /src/schooltool/app/main.py:327
-msgid "Going to background, daemon pid %d"
-msgstr "Daemon pid %d arkaplana alındı"
-
-#: /src/schooltool/app/main.py:374
-msgid "Cannot resolve plugin action order:\n"
-msgstr "Eklenti işlem sırası anlaşılamadı:\n"
-
-#: /src/schooltool/app/main.py:528
-msgid "Run %s -h for help."
-msgstr "Yardım için %s programını -h ile çalıştırın."
-
-#: /src/schooltool/app/main.py:540
+#: /src/schooltool/app/main.py:536
 msgid "%s: daemon mode not supported on your operating system."
 msgstr "%s: art hizmet kipi işletim sisteminiz tarafından desteklenmiyor."
 
@@ -3098,19 +3115,19 @@ msgstr "${field_title} bilgilerini değiştir"
 
 #: /src/schooltool/basicperson/browser/demographics.py:305
 msgid "Stud."
-msgstr ""
+msgstr "Öğrnc"
 
 #: /src/schooltool/basicperson/browser/demographics.py:306
 msgid "Teach."
-msgstr ""
+msgstr "Öğrtmn"
 
 #: /src/schooltool/basicperson/browser/demographics.py:307
 msgid "Admin."
-msgstr ""
+msgstr "Yntc"
 
 #: /src/schooltool/basicperson/browser/demographics.py:310
 msgid "Selection"
-msgstr ""
+msgstr "Seçim"
 
 #: /src/schooltool/basicperson/browser/demographics.py:312
 msgid "Text"
@@ -3118,12 +3135,12 @@ msgstr "Metin"
 
 #: /src/schooltool/basicperson/browser/demographics.py:313
 msgid "Yes/No"
-msgstr ""
+msgstr "Evet/Hayır"
 
 #: /src/schooltool/basicperson/browser/demographics.py:390
 #: /src/schooltool/basicperson/interfaces.py:143
 msgid "Limit to group(s)"
-msgstr ""
+msgstr "Gruplarla sınırla"
 
 #: /src/schooltool/basicperson/browser/demographics.py:396
 #: /src/schooltool/basicperson/interfaces.py:144
@@ -3131,15 +3148,23 @@ msgid ""
 "If you select one or more groups below, this field will only be displayed in "
 "forms and reports for members of the selected groups."
 msgstr ""
+"Aşağıdaki gruplardan bir ya da bir kaçını seçerseniz, bu alan, form ve "
+"raporlarda, yalnızca seçili grupların üyelerine gösterilir."
 
 #: /src/schooltool/basicperson/browser/demographics.py:406
 #: /src/schooltool/basicperson/browser/demographics.py:462
 msgid "Field Details"
-msgstr ""
+msgstr "Alan Ayrıntıları"
+
+#: /src/schooltool/basicperson/browser/flourish.zcml:11
+#: /src/schooltool/basicperson/browser/flourish.zcml:16
+#: /src/schooltool/basicperson/browser/templates/f_manage_people_overview.pt:4
+msgid "People"
+msgstr "Kişiler"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:94
 msgid "Add new persons"
-msgstr ""
+msgstr "Yeni kişiler ekle"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:112
 #: /src/schooltool/basicperson/browser/person.py:346
@@ -3161,63 +3186,67 @@ msgstr "Yeni öğrenci ekle"
 msgid "Add new administrator"
 msgstr "Yeni yönetici ekle"
 
+#: /src/schooltool/basicperson/browser/flourish.zcml:153
+msgid "Person"
+msgstr "Kişi"
+
 #: /src/schooltool/basicperson/browser/flourish.zcml:161
 msgid "Add Person"
-msgstr ""
+msgstr "Kişi Ekle"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:173
 msgid "Teacher"
-msgstr ""
+msgstr "Öğretmen"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:181
 #: /src/schooltool/basicperson/browser/flourish.zcml:560
 msgid "Student"
-msgstr ""
+msgstr "Öğrenci"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:189
 msgid "Administrator"
-msgstr ""
+msgstr "Yönetici"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:264
 #: /src/schooltool/basicperson/browser/flourish.zcml:273
 msgid "Demographics and Personal Information"
-msgstr ""
+msgstr "Demografik ve Kişisel bilgiler"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:304
 msgid "Text Field"
-msgstr ""
+msgstr "Metin Alanı"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:313
 msgid "Description Field"
-msgstr ""
+msgstr "Açıklama Alanı"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:322
 msgid "Date Field"
-msgstr ""
+msgstr "Tarih Alanı"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:331
 msgid "Yes/No Field"
-msgstr ""
+msgstr "Evet/Hayr Alanı"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:340
 msgid "Selection List Field"
-msgstr ""
+msgstr "Seçim Listesi Alanı"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:348
 msgid "Reorder or Delete Fields"
-msgstr ""
+msgstr "Alanları Yeniden Sırala ya da Sil"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:365
 msgid "New Description Field"
-msgstr ""
+msgstr "Yeni Açıklama Alanı"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:560
 msgid "Contains an XML representation of the person."
-msgstr ""
+msgstr "Kişinin XML özetini içerir"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:560
 msgid "Export as XML"
-msgstr ""
+msgstr "XML olarak ver"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:652
 #: /src/schooltool/person/browser/home_tab_viewlet.pt:3
@@ -3289,11 +3318,11 @@ msgstr "${fullname} kişisinin bilgilerini değiştir."
 #: /src/schooltool/contact/browser/contact.py:190
 #: /src/schooltool/contact/browser/contact.py:379
 msgid "Full Name"
-msgstr ""
+msgstr "Tam Ad"
 
 #: /src/schooltool/basicperson/browser/person.py:639
 msgid "Current Advisors"
-msgstr "Güncel Danışmanlar"
+msgstr "Geçerli Danışmanlar"
 
 #: /src/schooltool/basicperson/browser/person.py:640
 msgid "Add Advisors"
@@ -3306,15 +3335,15 @@ msgstr "${person} kişisinin danışmanları"
 
 #: /src/schooltool/basicperson/browser/person.py:660
 msgid "Current advisors"
-msgstr ""
+msgstr "Geçerli danışmanlar"
 
 #: /src/schooltool/basicperson/browser/person.py:661
 msgid "Available advisors"
-msgstr ""
+msgstr "Uygun danışmanlar"
 
 #: /src/schooltool/basicperson/browser/person.py:678
 msgid "Current Advisees"
-msgstr "Güncel Danışanlar"
+msgstr "Geçerli Danışanlar"
 
 #: /src/schooltool/basicperson/browser/person.py:679
 msgid "Add Advisees"
@@ -3327,11 +3356,11 @@ msgstr "${person} kişisinin danışanları"
 
 #: /src/schooltool/basicperson/browser/person.py:699
 msgid "Current advisees"
-msgstr ""
+msgstr "Geçerli danışanlar"
 
 #: /src/schooltool/basicperson/browser/person.py:700
 msgid "Available advisees"
-msgstr ""
+msgstr "Uygun danışanlar"
 
 #: /src/schooltool/basicperson/browser/person.py:935
 msgid "Relationships"
@@ -3339,7 +3368,7 @@ msgstr "İlişkiler"
 
 #: /src/schooltool/basicperson/browser/person.py:955
 msgid "Submit and add"
-msgstr ""
+msgstr "Gönder ve ekle"
 
 #: /src/schooltool/basicperson/browser/person.py:976
 msgid "Teacher identification"
@@ -3392,23 +3421,23 @@ msgstr "Sil"
 
 #: /src/schooltool/basicperson/browser/templates/f_advisoryViewlet.pt:2
 msgid "Advisory"
-msgstr ""
+msgstr "Danışmanlık"
 
 #: /src/schooltool/basicperson/browser/templates/f_advisoryViewlet.pt:7
 msgid "Manage this person's advisors"
-msgstr ""
+msgstr "Bu kişinin danışmanlarını yönet"
 
 #: /src/schooltool/basicperson/browser/templates/f_advisoryViewlet.pt:18
 msgid "The person has no advisors."
-msgstr ""
+msgstr "Bu kişinin danışmanı yok."
 
 #: /src/schooltool/basicperson/browser/templates/f_advisoryViewlet.pt:26
 msgid "Manage this person's advisees"
-msgstr ""
+msgstr "Bu kişinin danışanlarını yönet."
 
 #: /src/schooltool/basicperson/browser/templates/f_advisoryViewlet.pt:37
 msgid "The person has no advisees."
-msgstr ""
+msgstr "Bu kişinin danışanı yok."
 
 #: /src/schooltool/basicperson/browser/templates/f_csvimport_description.pt:3
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:29
@@ -3448,7 +3477,7 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/templates/f_demographics_reorder.pt:8
 msgid "Order"
-msgstr ""
+msgstr "Sıra"
 
 #: /src/schooltool/basicperson/browser/templates/f_demographics_reorder.pt:10
 #: /src/schooltool/basicperson/browser/templates/f_demographics_view.pt:6
@@ -3499,33 +3528,33 @@ msgstr "Zorunlu"
 
 #: /src/schooltool/basicperson/browser/templates/f_demographics_view.pt:9
 msgid "Limited"
-msgstr ""
+msgstr "Sınırlı"
 
 #: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:2
 msgid "General Information"
-msgstr ""
+msgstr "Genel Bilgiler"
 
 #: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:6
 #: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:25
 msgid "Edit this person's information"
-msgstr ""
+msgstr "Bu kişinin bilgilerini düzenle"
 
 #: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:24
 msgid "Demographics and other personal data"
-msgstr ""
+msgstr "Demografik ve diğer kişisel veriler"
 
 #: /src/schooltool/basicperson/browser/templates/f_manage_people_overview.pt:4
 msgid "Manage people"
-msgstr ""
+msgstr "Kişileri yönet"
 
 #: /src/schooltool/basicperson/browser/templates/f_manage_people_overview.pt:14
 msgid "There are ${count} people defined in ${school}."
-msgstr ""
+msgstr "${school} içinde ${count} kişi tanımlanmış."
 
 #: /src/schooltool/basicperson/browser/templates/f_person_add_multiple.pt:10
 #: /src/schooltool/basicperson/browser/templates/person_add_multiple.pt:13
 msgid "Added persons"
-msgstr ""
+msgstr "Eklenmiş kişiler"
 
 #: /src/schooltool/basicperson/browser/templates/f_person_add_subform.pt:3
 #: /src/schooltool/basicperson/browser/templates/person_add_subform.pt:2
@@ -3624,11 +3653,11 @@ msgstr "Beyaz"
 
 #: /src/schooltool/basicperson/demographics.py:150
 msgid "Place of birth"
-msgstr ""
+msgstr "Doğum yeri"
 
 #: /src/schooltool/basicperson/demographics.py:151
 msgid "Citizenship"
-msgstr ""
+msgstr "Vatandaşlık"
 
 #: /src/schooltool/basicperson/interfaces.py:38
 #: /src/schooltool/contact/interfaces.py:40
@@ -3691,13 +3720,15 @@ msgstr ""
 
 #: /src/schooltool/basicperson/interfaces.py:162
 msgid "Selection list"
-msgstr ""
+msgstr "Seçim listesi"
 
 #: /src/schooltool/basicperson/interfaces.py:163
 msgid ""
 "Enter the valid values for the field below.  One value per line.  These "
 "values will be displayed as a menu in forms."
 msgstr ""
+"Alan için kullanılacak değerleri aşağıya her satıra bir tane olmak üzere "
+"yazın. Bu değerler formlarda menü şeklinde gösterilecek."
 
 #: /src/schooltool/basicperson/person.py:75
 #: /src/schooltool/contact/browser/contact.py:496
@@ -3761,95 +3792,99 @@ msgstr "Yöneticiler"
 
 #: /src/schooltool/calendar/browser/calendar.py:173
 msgid "Tomorrow"
-msgstr ""
+msgstr "Yarın"
 
 #: /src/schooltool/calendar/browser/calendar.py:175
 msgid "Yesterday"
-msgstr ""
+msgstr "Dün"
 
 #: /src/schooltool/calendar/browser/calendar.py:195
 msgid "This Week"
-msgstr ""
+msgstr "Bu Hafta"
 
 #: /src/schooltool/calendar/browser/calendar.py:197
 msgid "Last Week"
-msgstr ""
+msgstr "Geçen Hafta"
 
 #: /src/schooltool/calendar/browser/calendar.py:199
 msgid "Next Week"
-msgstr ""
+msgstr "Gelecek Hafta"
 
 #: /src/schooltool/calendar/browser/calendar.py:236
 msgid "Jump To"
-msgstr ""
+msgstr "Atla"
 
 #: /src/schooltool/calendar/browser/event.py:129
 #: /src/schooltool/calendar/browser/event.py:156
 msgid "Reserved by others"
-msgstr ""
+msgstr "Diğerleri tarafından ayrılmış"
 
 #: /src/schooltool/calendar/browser/event.py:132
 msgid "Release resource"
-msgstr ""
+msgstr "Kaynağı bırak"
 
 #: /src/schooltool/calendar/browser/event.py:159
 msgid "Reserve resource"
-msgstr ""
+msgstr "Kaynağı ayır"
 
 #: /src/schooltool/calendar/browser/event.py:187
 msgid "All occurrences of this event"
-msgstr ""
+msgstr "Bu etkinliğin tüm yapılışları"
 
 #: /src/schooltool/calendar/browser/event.py:188
 msgid "Only current occurrence"
-msgstr ""
+msgstr "Yalnız geçerli yapılış"
 
 #: /src/schooltool/calendar/browser/event.py:189
 msgid "This and all future occurrences"
-msgstr ""
+msgstr "Bu ve bundan sonraki yapılışlar"
 
 #. Default: ""
 #: /src/schooltool/calendar/browser/event.py:222
 msgid "Delete event ${event}"
-msgstr ""
+msgstr "${event} etkinliğini sil"
 
 #: /src/schooltool/calendar/browser/flourish.zcml:81
 msgid "Event"
-msgstr ""
+msgstr "Etkinlik"
 
 #: /src/schooltool/calendar/browser/flourish.zcml:166
 #: /src/schooltool/calendar/browser/templates/event_edit.pt:392
 #: /src/schooltool/timetable/browser/templates/f_schedule_event_add.pt:181
 msgid "Reserve resources"
-msgstr ""
+msgstr "Kaynakları ayır"
 
 #: /src/schooltool/calendar/browser/overlay.py:33
 msgid "Show"
-msgstr ""
+msgstr "Göster"
 
 #: /src/schooltool/calendar/browser/templates/calendar_overlay.pt:35
 msgid "Select"
-msgstr ""
+msgstr "Seç"
 
 #: /src/schooltool/calendar/browser/templates/event.pt:52
 #: /src/schooltool/timetable/browser/templates/f_schedule_event_edit.pt:53
 msgid "Reserved resources"
-msgstr ""
+msgstr "Ayrılmış kaynaklar"
 
 #: /src/schooltool/calendar/browser/templates/event.pt:54
 #: /src/schooltool/timetable/browser/templates/f_schedule_event_edit.pt:55
 msgid "Change the resources reserved for this event"
-msgstr ""
+msgstr "Bu etkinlik için ayrılmış kaynakları değiştir"
 
 #: /src/schooltool/calendar/browser/templates/event_booking.pt:5
 msgid "Event Details"
-msgstr ""
+msgstr "Etkinlik Ayrıntıları"
 
 #: /src/schooltool/calendar/browser/templates/event_booking.pt:41
 #: /src/schooltool/calendar/browser/templates/event_edit.pt:369
 #: /src/schooltool/timetable/browser/templates/f_schedule_event_add.pt:160
 msgid "Reserved Resources"
-msgstr ""
+msgstr "Ayrılmış Kaynaklar"
+
+#: /src/schooltool/calendar/browser/templates/event_booking.pt:69
+msgid "Available Resources"
+msgstr "Kullanılabilir Kaynaklar"
 
 #: /src/schooltool/calendar/browser/templates/event_delete_dialog.pt:4
 msgid "Deleting an event on ${day}."
@@ -3866,7 +3901,7 @@ msgstr ""
 #: /src/schooltool/calendar/browser/templates/event_edit.pt:202
 #: /src/schooltool/timetable/browser/templates/f_schedule_event_add.pt:146
 msgid "Reserve Resources"
-msgstr ""
+msgstr "Kaynakları Ayır"
 
 #: /src/schooltool/common/configure.zcml:92
 #: /src/schooltool/course/browser/configure.zcml:25
@@ -3898,7 +3933,7 @@ msgstr "Adres"
 #: /src/schooltool/contact/browser/contact.py:387
 #: /src/schooltool/contact/browser/flourish.zcml:155
 msgid "Contact Information"
-msgstr ""
+msgstr "İletişim Bilgileri"
 
 #: /src/schooltool/contact/browser/configure.zcml:41
 msgid "View Person"
@@ -4003,16 +4038,16 @@ msgstr "Bazı hatalar oluştu."
 #. Default: ""
 #: /src/schooltool/contact/browser/contact.py:812
 msgid "${person_full_name} as Contact"
-msgstr ""
+msgstr "Veli olarak ${person_full_name}"
 
 #. Default: ""
 #: /src/schooltool/contact/browser/contact.py:860
 msgid "Delete ${contact_full_name}"
-msgstr ""
+msgstr "${contact_full_name} sil"
 
 #: /src/schooltool/contact/browser/flourish.zcml:206
 msgid "Edit Contact Information"
-msgstr ""
+msgstr "Veli Bilgisini Düzenle"
 
 #: /src/schooltool/contact/browser/relationship.py:78
 #: /src/schooltool/contact/browser/templates/contactperson_subform.pt:8
@@ -4035,11 +4070,11 @@ msgstr "${person} için kişileri yönet"
 
 #: /src/schooltool/contact/browser/relationship.py:186
 msgid "Current contacts"
-msgstr ""
+msgstr "Geçerli veliler"
 
 #: /src/schooltool/contact/browser/relationship.py:187
 msgid "Available contacts"
-msgstr ""
+msgstr "Uygun veliler"
 
 #: /src/schooltool/contact/browser/templates/contact_view.pt:16
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:18
@@ -4054,47 +4089,57 @@ msgstr "${person} için kişiler"
 
 #: /src/schooltool/contact/browser/templates/f_confirm_delete_contact.pt:3
 msgid "Deleting a contact is permanent and irreversible."
-msgstr ""
+msgstr "Bir veliyi silmek kalıcı ve geri alınamayacak bir işlemdir."
 
 #: /src/schooltool/contact/browser/templates/f_confirm_delete_contact.pt:12
 #: /src/schooltool/contact/browser/templates/f_contact_view.pt:46
 msgid "${relationship} of"
-msgstr ""
+msgstr "akrabalık ${relationship}"
 
 #: /src/schooltool/contact/browser/templates/f_confirm_delete_contact.pt:16
 #: /src/schooltool/contact/browser/templates/f_contact_view.pt:49
 msgid "Contact of"
-msgstr ""
+msgstr "Velisi"
 
-#: /src/schooltool/contact/browser/templates/f_contact_view.pt:4
+#: /src/schooltool/contact/browser/templates/f_contact_filter.pt:6
+msgid "First name and/or last name"
+msgstr "Ad ve/veya soyad"
+
+#: /src/schooltool/contact/browser/templates/f_contact_view.pt:3
+msgid "Contact information"
+msgstr "İletişim bilgisi"
+
+#: /src/schooltool/contact/browser/templates/f_contact_view.pt:6
 #: /src/schooltool/contact/browser/templates/f_contactsViewlet.pt:9
 msgid "Edit this contact"
-msgstr ""
+msgstr "Bu veliyi düzenle"
 
 #: /src/schooltool/contact/browser/templates/f_contactsViewlet.pt:27
 msgid "This person has no contacts."
-msgstr ""
+msgstr "Bu kişinin velisi yok."
 
 #: /src/schooltool/contact/browser/templates/f_contactsViewlet.pt:31
 #: /src/schooltool/contact/browser/templates/f_manage_contacts_overview.pt:4
 msgid "Manage contacts"
-msgstr ""
+msgstr "Velileri yönet"
 
 #: /src/schooltool/contact/browser/templates/f_contacts_related.pt:6
 msgid ""
 "A student may have one or more \"contacts\", people who may need to recieve "
 "notifications and information about the student or the school as a whole."
 msgstr ""
+"Veliler, öğrenci ve okul hakkında bilgi ve iletileri alması gereken "
+"kişilerdir. Bir öğrenci bir ya da daha fazla veliye sahip olabilir."
 
 #: /src/schooltool/contact/browser/templates/f_contacts_related.pt:11
 msgid ""
 "A user may also be a contact for him or herself, particularly in the case of "
 "older students and adults."
-msgstr ""
+msgstr "Bir kullanıcı, yaşlı ya da yetişkin ise kendisinin velisi olabilir."
 
 #: /src/schooltool/contact/browser/templates/f_manage_contacts_overview.pt:12
 msgid "The school has ${total} contact persons."
-msgstr ""
+msgstr "Okulda toplam ${total} veli var."
 
 #: /src/schooltool/contact/browser/templates/filter.pt:21
 #: /src/schooltool/person/browser/person_filter.pt:11
@@ -4243,11 +4288,11 @@ msgstr "Cep telefonu"
 
 #: /src/schooltool/contact/interfaces.py:82
 msgid "Other 1"
-msgstr ""
+msgstr "Diğer 1"
 
 #: /src/schooltool/contact/interfaces.py:84
 msgid "Other 2"
-msgstr ""
+msgstr "Diğer 2"
 
 #: /src/schooltool/contact/interfaces.py:109
 msgid "Contact's relationship with the person"
@@ -4369,7 +4414,7 @@ msgstr "Ders indeksi"
 #. Default: ""
 #: /src/schooltool/course/browser/course.py:366
 msgid "Delete ${course}"
-msgstr ""
+msgstr "${course} sil"
 
 #. Default: ""
 #: /src/schooltool/course/browser/course.py:414
@@ -4383,7 +4428,7 @@ msgstr "${schoolyear} okul yılının dersleri"
 #: /src/schooltool/course/browser/course.py:500
 #: /src/schooltool/course/browser/course.py:552
 msgid "Course Information"
-msgstr ""
+msgstr "Ders Bilgisi"
 
 #: /src/schooltool/course/browser/course.py:632
 #: /src/schooltool/course/interfaces.py:46
@@ -4402,6 +4447,7 @@ msgid ""
 "Course \"${course_title}\" credits \"${invalid_credits}\" value must be a "
 "number."
 msgstr ""
+"Ders \"${course_title}\" kredi \"${invalid_credits}\" değeri bir sayı olmalı."
 
 #. Default: ""
 #: /src/schooltool/course/browser/csvimport.py:103
@@ -4451,11 +4497,11 @@ msgstr "Bölüm"
 
 #: /src/schooltool/course/browser/flourish.zcml:200
 msgid "Add Course"
-msgstr ""
+msgstr "Ders Ekle"
 
 #: /src/schooltool/course/browser/flourish.zcml:269
 msgid "Add Section"
-msgstr ""
+msgstr "Bölüm Ekle"
 
 #: /src/schooltool/course/browser/flourish.zcml:309
 #: /src/schooltool/course/browser/templates/f_section_view.pt:88
@@ -4468,11 +4514,11 @@ msgstr "Dönemler"
 
 #: /src/schooltool/course/browser/flourish.zcml:467
 msgid "Import Students CSV"
-msgstr ""
+msgstr "Öğrencileri CSV Dosyasıyla Al"
 
 #: /src/schooltool/course/browser/flourish.zcml:476
 msgid "Import Students"
-msgstr ""
+msgstr "Öğrencileri Al"
 
 #: /src/schooltool/course/browser/section-member-csvimport.pt:4
 msgid "Upload SchoolTool section members as CSV"
@@ -4497,7 +4543,7 @@ msgstr "Başlangıç dönemi ($starts_in) bitiş döneminden sonra ($ends_in)"
 
 #: /src/schooltool/course/browser/section.py:556
 msgid "Current Instructors"
-msgstr "Güncel Öğretmenler"
+msgstr "Geçerli Öğretmenler"
 
 #: /src/schooltool/course/browser/section.py:557
 msgid "Available Instructors"
@@ -4505,7 +4551,7 @@ msgstr "Uygun Öğretmenler"
 
 #: /src/schooltool/course/browser/section.py:572
 msgid "Current Students"
-msgstr "Güncel Öğrenciler"
+msgstr "Geçerli Öğrenciler"
 
 #: /src/schooltool/course/browser/section.py:573
 msgid "Available Students"
@@ -4514,7 +4560,7 @@ msgstr "Uygun Öğrenciler"
 #. Default: ""
 #: /src/schooltool/course/browser/section.py:932
 msgid "Delete ${section}"
-msgstr ""
+msgstr "${section} sil"
 
 #: /src/schooltool/course/browser/section.py:985
 #: /src/schooltool/course/browser/templates/f_coursesviewlet.pt:11
@@ -4531,36 +4577,36 @@ msgstr "Dönem"
 
 #: /src/schooltool/course/browser/section.py:998
 msgid "Size"
-msgstr ""
+msgstr "Boyut"
 
 #: /src/schooltool/course/browser/section.py:1115
 #: /src/schooltool/course/browser/section.py:1249
 msgid "Section Information"
-msgstr ""
+msgstr "Bölüm Bilgisi"
 
 #: /src/schooltool/course/browser/section.py:1206
 msgid "Starting term is later than ending term"
-msgstr ""
+msgstr "Başlangıç dönemi bitiş döneminden sonra"
 
 #: /src/schooltool/course/browser/section.py:1232
 msgid "Select a course"
-msgstr ""
+msgstr "Bir ders seçin"
 
 #: /src/schooltool/course/browser/section.py:1309
 msgid "Current instructors"
-msgstr ""
+msgstr "Geçerli öğretmenler"
 
 #: /src/schooltool/course/browser/section.py:1310
 msgid "Add instructors"
-msgstr ""
+msgstr "Öğretmen ekle"
 
 #: /src/schooltool/course/browser/section.py:1329
 msgid "Current students"
-msgstr ""
+msgstr "Geçerli öğrenciler"
 
 #: /src/schooltool/course/browser/section.py:1330
 msgid "Add students"
-msgstr ""
+msgstr "Öğrenci ekle"
 
 #. Default: ""
 #: /src/schooltool/course/browser/section.py:1390
@@ -4595,15 +4641,15 @@ msgstr ""
 
 #: /src/schooltool/course/browser/templates/copy_sections.pt:66
 msgid "Select All Visible"
-msgstr ""
+msgstr "Tüm Görünenleri Seç"
 
 #: /src/schooltool/course/browser/templates/copy_sections.pt:70
 msgid "Select None"
-msgstr ""
+msgstr "Tümünü Bırak"
 
 #: /src/schooltool/course/browser/templates/copy_sections.pt:74
 msgid "Invert Selection"
-msgstr ""
+msgstr "Seçimi Evir"
 
 #: /src/schooltool/course/browser/templates/copy_sections.pt:91
 #: /src/schooltool/course/browser/templates/link_section.pt:67
@@ -4614,7 +4660,7 @@ msgstr "${term} dönemindeki bölüm"
 #: /src/schooltool/course/browser/templates/link_section.pt:72
 #: /src/schooltool/course/browser/templates/section_container.pt:45
 msgid "Current Size"
-msgstr "Güncel Boyut"
+msgstr "Geçerli Boyut"
 
 #: /src/schooltool/course/browser/templates/copy_sections.pt:103
 msgid "Copied"
@@ -4622,7 +4668,7 @@ msgstr "Kopyalandı"
 
 #: /src/schooltool/course/browser/templates/copy_sections.pt:149
 msgid "Copy"
-msgstr ""
+msgstr "Kopyala"
 
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:4
 msgid "Upload schooltool courses as CSV"
@@ -4772,6 +4818,10 @@ msgid ""
 "determining which course should be updated."
 msgstr ""
 
+#: /src/schooltool/course/browser/templates/f_course_filter.pt:6
+msgid "Title or course ID"
+msgstr ""
+
 #: /src/schooltool/course/browser/templates/f_course_view.pt:4
 msgid "Edit this course"
 msgstr ""
@@ -4888,8 +4938,12 @@ msgstr ""
 msgid "There are no sections defined for ${schoolyear}."
 msgstr ""
 
+#: /src/schooltool/course/browser/templates/f_section_filter.pt:6
+msgid "Section title"
+msgstr ""
+
 #: /src/schooltool/course/browser/templates/f_section_linkage.pt:25
-#: /src/schooltool/course/browser/templates/f_section_view.pt:102
+#: /src/schooltool/course/browser/templates/f_section_view.pt:104
 msgid "(currently viewing)"
 msgstr ""
 
@@ -5273,11 +5327,11 @@ msgstr "API Belgeleri"
 #: /src/schooltool/devmode/f_unauthorized.pt:3
 #: /src/schooltool/skin/templates/f_unauthorized.pt:3
 msgid "You are not authorized"
-msgstr ""
+msgstr "Yetkiniz yok"
 
 #: /src/schooltool/devmode/f_unauthorized.pt:9
 msgid "Permission checks"
-msgstr ""
+msgstr "Yetki denetimleri"
 
 #: /src/schooltool/devmode/f_unauthorized.pt:11
 msgid ""
@@ -5288,7 +5342,7 @@ msgstr ""
 #: /src/schooltool/devmode/flourish-overrides.zcml:8
 #: /src/schooltool/skin/flourish/instance/skin.zcml:68
 msgid "Unauthorized"
-msgstr ""
+msgstr "Yetkisiz"
 
 #: /src/schooltool/email/browser/configure.zcml:58
 #: /src/schooltool/email/browser/flourish.zcml:20
@@ -5356,7 +5410,7 @@ msgstr "İsteğe bağlı olarak, SMTP erişimi için kullanılacak kullanıcı a
 
 #: /src/schooltool/email/browser/email.py:125
 msgid "Current password to authenticate to the SMTP server."
-msgstr "SMTP sunucusuna erişmek için, güncel parola."
+msgstr "SMTP sunucusuna erişmek için, geçerli parola."
 
 #: /src/schooltool/email/browser/email.py:129
 #: /src/schooltool/email/interfaces.py:109
@@ -5393,12 +5447,12 @@ msgstr "Bu servisi etkinleştirebilmek için sunucu adı yazılmalı"
 #: /src/schooltool/email/browser/email.py:240
 #: /src/schooltool/person/browser/person.py:366
 msgid "Supplied new passwords are not identical"
-msgstr ""
+msgstr "Yazılan yeni parolalar birbirinin aynı değil"
 
 #: /src/schooltool/email/browser/email.py:278
 #: /src/schooltool/email/browser/email.py:656
 msgid "Current status of the SchoolTool email service"
-msgstr "SchoolTool e-posta servisinin güncel durumu"
+msgstr "SchoolTool e-posta servisinin geçerli durumu"
 
 #: /src/schooltool/email/browser/email.py:283
 #: /src/schooltool/email/browser/email.py:661
@@ -5447,12 +5501,8 @@ msgstr "E-posta Görünümü"
 msgid "Retry"
 msgstr "Yeniden Dene"
 
-#: /src/schooltool/email/browser/email.py:394
-msgid "Email Details"
-msgstr ""
-
-#: /src/schooltool/email/browser/email.py:534
-#: /src/schooltool/email/browser/email.py:784
+#: /src/schooltool/email/browser/email.py:557
+#: /src/schooltool/email/browser/email.py:845
 msgid "Email Queue"
 msgstr "E-posta Kuyruğu"
 
@@ -5484,20 +5534,20 @@ msgstr "İletinin metni"
 #. Default: ""
 #: /src/schooltool/email/browser/email.py:782
 msgid "Email Queue (${count})"
-msgstr ""
+msgstr "E-posta Kuyruğu (${count})"
 
 #: /src/schooltool/email/browser/flourish.zcml:37
 msgid "Outgoing Email Queue"
-msgstr ""
+msgstr "Giden E-posta Kuyruğu"
 
 #: /src/schooltool/email/browser/flourish.zcml:49
 msgid "Outgoing Email Settings"
-msgstr ""
+msgstr "Giden E-posta Ayarları"
 
 #: /src/schooltool/email/browser/flourish.zcml:60
 #: /src/schooltool/email/browser/flourish.zcml:106
 msgid "Send Test Email"
-msgstr ""
+msgstr "Sınama E-postası Gönder"
 
 #. Default: "Retry"
 #: /src/schooltool/email/browser/templates/email_container.pt:39
@@ -5516,11 +5566,11 @@ msgstr "Seçili e-postaları silmek istediğinizden emin misiniz?"
 
 #: /src/schooltool/email/browser/templates/f_email_container.pt:4
 msgid "Server status: ${status}"
-msgstr ""
+msgstr "Sunucu durumu: ${status}"
 
 #: /src/schooltool/email/browser/templates/f_email_container.pt:6
 msgid "Change email settings"
-msgstr ""
+msgstr "E-posta ayarlarını değiştir"
 
 #: /src/schooltool/email/browser/templates/f_email_container_related.pt:6
 msgid ""
@@ -5538,12 +5588,16 @@ msgstr ""
 
 #: /src/schooltool/email/browser/templates/f_email_settings_overview.pt:3
 msgid "Edit email settings"
-msgstr ""
+msgstr "E-posta ayarlarını düzenle"
 
 #: /src/schooltool/email/browser/templates/f_email_settings_overview.pt:13
 #: /src/schooltool/email/interfaces.py:58
 msgid "Status"
 msgstr "Durum"
+
+#: /src/schooltool/email/browser/templates/f_email_view.pt:2
+msgid "Email Details"
+msgstr "E-posta Ayrıntıları"
 
 #: /src/schooltool/email/interfaces.py:44
 msgid "Recipient addresses"
@@ -5626,7 +5680,7 @@ msgstr "XLS Ver"
 
 #: /src/schooltool/export/flourish.zcml:15
 msgid "Import XLS"
-msgstr ""
+msgstr "XLS Al"
 
 #: /src/schooltool/export/flourish.zcml:23
 #: /src/schooltool/export/templates/import.pt:22
@@ -5642,7 +5696,7 @@ msgstr ""
 
 #: /src/schooltool/export/flourish.zcml:49
 msgid "Export as XLS"
-msgstr ""
+msgstr "XLS Ver"
 
 #: /src/schooltool/export/importer.py:76
 msgid "${sheet_name} ${column}${row} ${message}"
@@ -5790,7 +5844,7 @@ msgstr ""
 
 #: /src/schooltool/export/templates/f_import.pt:17
 msgid "Please wait while the data is being imported."
-msgstr ""
+msgstr "Lütfen veriler alınırken bekleyin."
 
 #: /src/schooltool/export/templates/f_import.pt:36
 #: /src/schooltool/export/templates/import.pt:59
@@ -5892,7 +5946,7 @@ msgstr "Grup üyelerini al"
 
 #: /src/schooltool/group/browser/flourish.zcml:139
 msgid "Add Group"
-msgstr ""
+msgstr "Grup Ekle"
 
 #: /src/schooltool/group/browser/flourish.zcml:270
 msgid "Import Members CSV"
@@ -5909,7 +5963,7 @@ msgstr "${person} kişisinin grupları"
 
 #: /src/schooltool/group/browser/group.py:115
 msgid "Current Groups"
-msgstr "Güncel Gruplar"
+msgstr "Geçerli Gruplar"
 
 #: /src/schooltool/group/browser/group.py:116
 msgid "Available Groups"
@@ -5923,7 +5977,7 @@ msgstr "${group} grubunun üyeleri"
 #: /src/schooltool/group/browser/group.py:162
 #: /src/schooltool/group/browser/group.py:717
 msgid "Current Members"
-msgstr "Güncel Üyeler"
+msgstr "Geçerli Üyeler"
 
 #: /src/schooltool/group/browser/group.py:163
 #: /src/schooltool/group/browser/group.py:718
@@ -5932,16 +5986,16 @@ msgstr "Üye Ekle"
 
 #: /src/schooltool/group/browser/group.py:290
 msgid "Current groups"
-msgstr ""
+msgstr "Geçerli gruplar"
 
 #: /src/schooltool/group/browser/group.py:291
 msgid "Available groups"
-msgstr ""
+msgstr "Uygun gruplar"
 
 #. Default: ""
 #: /src/schooltool/group/browser/group.py:448
 msgid "Delete ${group}"
-msgstr ""
+msgstr "${group} sil"
 
 #. Default: ""
 #: /src/schooltool/group/browser/group.py:499
@@ -5949,12 +6003,12 @@ msgstr ""
 #: /src/schooltool/group/browser/group.py:555
 #: /src/schooltool/group/browser/group.py:650
 msgid "Groups for ${schoolyear}"
-msgstr ""
+msgstr "${schoolyear} için gruplar"
 
 #: /src/schooltool/group/browser/group.py:606
 #: /src/schooltool/group/browser/group.py:658
 msgid "Group Information"
-msgstr ""
+msgstr "Grup Bilgileri"
 
 #: /src/schooltool/group/browser/templates/f_group_csvimport_description.pt:3
 #: /src/schooltool/group/browser/templates/group-csvimport.pt:24
@@ -5997,6 +6051,10 @@ msgstr ""
 "Kulübü' herhangi bir açıklama içermeyecek ve ikinci virgülden sonraki üçüncü "
 "gruba ait fazladan metin dikkate alınmayacaktır."
 
+#: /src/schooltool/group/browser/templates/f_group_filter.pt:6
+msgid "Group title"
+msgstr "Grup adı"
+
 #: /src/schooltool/group/browser/templates/f_group_member_csvimport_description.pt:12
 msgid ""
 "The above example will add users 'john_b' and 'peter_j' to this group."
@@ -6004,31 +6062,31 @@ msgstr ""
 
 #: /src/schooltool/group/browser/templates/f_group_view.pt:4
 msgid "Edit this group"
-msgstr ""
+msgstr "Bu grubu düzenle"
 
 #: /src/schooltool/group/browser/templates/f_group_view.pt:76
 msgid "Edit members for this group"
-msgstr ""
+msgstr "Bu grubun üyelerini düzenler"
 
 #: /src/schooltool/group/browser/templates/f_group_view.pt:86
 msgid "This group has no members"
-msgstr ""
+msgstr "Bu grupta hiç üye yok"
 
 #: /src/schooltool/group/browser/templates/f_group_view.pt:91
 msgid "Edit responsible parties for this group"
-msgstr ""
+msgstr "Bu gruptan sorumlu kişileri düzenle"
 
 #: /src/schooltool/group/browser/templates/f_group_view.pt:99
 msgid "These users can modify the group."
-msgstr ""
+msgstr "Bu kullanıcılar grubu değiştirebilir"
 
 #: /src/schooltool/group/browser/templates/f_group_view.pt:102
 msgid "This group has no responsible parties"
-msgstr ""
+msgstr "Bu gruptan sorumlu kimse yok"
 
 #: /src/schooltool/group/browser/templates/f_groupsviewlet.pt:5
 msgid "Group memberships"
-msgstr ""
+msgstr "Grup üyelikleri"
 
 #: /src/schooltool/group/browser/templates/f_groupsviewlet.pt:6
 #: /src/schooltool/group/browser/templates/groupsviewlet.pt:23
@@ -6037,15 +6095,15 @@ msgstr "Bu kişinin üyeliklerini yönet"
 
 #: /src/schooltool/group/browser/templates/f_groupsviewlet.pt:39
 msgid "The person is not a member of any groups."
-msgstr ""
+msgstr "Bu kişi hiç bir gruba üye değil."
 
 #: /src/schooltool/group/browser/templates/f_manage_groups_overview.pt:4
 msgid "Manage groups"
-msgstr ""
+msgstr "Grupları yönet"
 
 #: /src/schooltool/group/browser/templates/f_manage_groups_overview.pt:14
 msgid "There are ${count} groups defined for ${schoolyear}."
-msgstr ""
+msgstr "${schoolyear} okul yılında ${count} grup tanımlanmış."
 
 #: /src/schooltool/group/browser/templates/group-csvimport.pt:4
 msgid "Upload SchoolTool groups as CSV"
@@ -6267,7 +6325,7 @@ msgstr "Bütün gruplar"
 
 #: /src/schooltool/person/browser/flourish.zcml:7
 msgid "Preferences"
-msgstr ""
+msgstr "Ayarlar"
 
 #: /src/schooltool/person/browser/home.pt:24
 #: /src/schooltool/person/browser/person.pt:15
@@ -6311,36 +6369,36 @@ msgstr "Ders saatlerini göster"
 
 #: /src/schooltool/person/browser/person.py:93
 msgid "Show hours"
-msgstr ""
+msgstr "Saatleri göster"
 
 #: /src/schooltool/person/browser/person.py:98
 msgid "the public"
-msgstr ""
+msgstr "herkese açık"
 
 #. Default: ""
 #: /src/schooltool/person/browser/person.py:103
 msgid "${person_full_name} and school administration"
-msgstr ""
+msgstr "${person_full_name} ve okul yönetimi"
 
 #. Default: ""
 #: /src/schooltool/person/browser/person.py:126
 msgid "${person_full_name}'s calendar is visible to..."
-msgstr ""
+msgstr "${person_full_name} takvimi şu kişilere görünüyor..."
 
 #. Default: ""
 #: /src/schooltool/person/browser/person.py:156
 #: /src/schooltool/person/browser/person.py:206
 msgid "Change preferences for ${person_full_name}"
-msgstr ""
+msgstr "${person_full_name} için ayarları değiştir"
 
 #. Default: ""
 #: /src/schooltool/person/browser/person.py:243
 msgid "Delete ${person_full_name}"
-msgstr ""
+msgstr "${person_full_name} sil"
 
 #: /src/schooltool/person/browser/person.py:297
 msgid "Current password"
-msgstr ""
+msgstr "Geçerli parola"
 
 #: /src/schooltool/person/browser/person.py:301
 #: /src/schooltool/person/browser/person.py:601
@@ -6349,7 +6407,7 @@ msgstr "Yeni parola"
 
 #: /src/schooltool/person/browser/person.py:305
 msgid "Verify new password"
-msgstr ""
+msgstr "Yeni parola onayı"
 
 #: /src/schooltool/person/browser/person.py:311
 msgid "Edit password"
@@ -6362,7 +6420,7 @@ msgstr "Yeni parola yazılmadığından eski parola değiştirilmedi"
 #: /src/schooltool/person/browser/person.py:372
 #: /src/schooltool/person/browser/person.py:376
 msgid "Password changed successfully"
-msgstr ""
+msgstr "Parola değiştirildi"
 
 #: /src/schooltool/person/browser/person.py:359
 #: /src/schooltool/person/security.zcml:101
@@ -6371,7 +6429,7 @@ msgstr "Parolayı değiştir"
 
 #: /src/schooltool/person/browser/person.py:362
 msgid "Wrong password supplied"
-msgstr ""
+msgstr "Yazılan parola yanlış"
 
 #: /src/schooltool/person/browser/person.py:507
 #: /src/schooltool/person/browser/person.py:596
@@ -6470,7 +6528,7 @@ msgstr "Hafta başı:"
 
 #: /src/schooltool/person/interfaces.py:187
 msgid "Daily calendar rows..."
-msgstr ""
+msgstr "Günlük takvim satırları..."
 
 #: /src/schooltool/person/interfaces.py:190
 msgid "$PERSON calendar is visible to..."
@@ -6552,11 +6610,11 @@ msgstr "Raporlar"
 
 #: /src/schooltool/report/browser/flourish.zcml:25
 msgid "Overview"
-msgstr ""
+msgstr "Özet"
 
 #: /src/schooltool/report/browser/flourish.zcml:85
 msgid "Report Overview"
-msgstr ""
+msgstr "Rapor Özeti"
 
 #: /src/schooltool/report/browser/report.py:56
 msgid "Student Reports"
@@ -6580,7 +6638,7 @@ msgstr "Bölüm Raporları"
 
 #: /src/schooltool/report/browser/report.py:200
 msgid "Download"
-msgstr ""
+msgstr "İndir"
 
 #: /src/schooltool/report/browser/templates/f_report_reference.pt:5
 #: /src/schooltool/report/browser/templates/report_reference.pt:13
@@ -6590,7 +6648,7 @@ msgstr "Kategori"
 #: /src/schooltool/report/browser/templates/f_report_reference.pt:7
 #: /src/schooltool/report/browser/templates/f_request_report_download.pt:11
 msgid "File Type"
-msgstr ""
+msgstr "Dosya Tipi"
 
 #: /src/schooltool/report/browser/templates/report_reference.pt:3
 #: /src/schooltool/report/browser/templates/report_reference.pt:7
@@ -6599,7 +6657,7 @@ msgstr "Rapor Referansı"
 
 #: /src/schooltool/report/templates/f_report_link_manager.pt:13
 msgid "${file_type} Reports"
-msgstr ""
+msgstr "${file_type} Raporları"
 
 #: /src/schooltool/resource/browser/configure.zcml:96
 msgid "Resource Demographics"
@@ -6628,7 +6686,7 @@ msgstr "Yeni Ekipman"
 #: /src/schooltool/resource/browser/flourish.zcml:309
 #: /src/schooltool/resource/browser/flourish.zcml:315
 msgid "Resource Attributes"
-msgstr ""
+msgstr "Kaynak Özellikleri"
 
 #: /src/schooltool/resource/browser/flourish.zcml:107
 #: /src/schooltool/resource/browser/resource.py:353
@@ -6649,19 +6707,19 @@ msgstr "Kaynak"
 
 #: /src/schooltool/resource/browser/flourish.zcml:138
 msgid "Add Resource"
-msgstr ""
+msgstr "Kaynak Ekle"
 
 #: /src/schooltool/resource/browser/flourish.zcml:147
 msgid "Add Location"
-msgstr ""
+msgstr "Konum Ekle"
 
 #: /src/schooltool/resource/browser/flourish.zcml:156
 msgid "Add Equipment"
-msgstr ""
+msgstr "Ekipman Ekle"
 
 #: /src/schooltool/resource/browser/flourish.zcml:208
 msgid "Reserve"
-msgstr ""
+msgstr "Ayır"
 
 #: /src/schooltool/resource/browser/resource-csvimport.pt:4
 msgid "Upload schooltool resources as CSV"
@@ -6716,21 +6774,21 @@ msgstr "Kaynak Bilgileri Kabı"
 
 #: /src/schooltool/resource/browser/resource.py:406
 msgid "Res."
-msgstr ""
+msgstr "Ayır"
 
 #: /src/schooltool/resource/browser/resource.py:407
 msgid "Locat."
-msgstr ""
+msgstr "Konum"
 
 #: /src/schooltool/resource/browser/resource.py:408
 msgid "Equip."
-msgstr ""
+msgstr "Ekpmn."
 
 #: /src/schooltool/resource/browser/resource.py:418
 #: /src/schooltool/resource/browser/resource.py:701
 #: /src/schooltool/resource/browser/resource.py:712
 msgid "Resource attributes"
-msgstr ""
+msgstr "Kaynak özellikleri"
 
 #: /src/schooltool/resource/browser/resource.py:424
 msgid "Limit to resource type(s)"
@@ -6773,7 +6831,7 @@ msgstr "Yeni yer ekle"
 #: /src/schooltool/resource/browser/resource.py:740
 #: /src/schooltool/resource/browser/resource.py:751
 msgid "Location attributes"
-msgstr ""
+msgstr "Konum özellikleri"
 
 #: /src/schooltool/resource/browser/resource.py:745
 msgid "Edit location"
@@ -6794,7 +6852,7 @@ msgstr "Yeni ekipman ekle"
 #: /src/schooltool/resource/browser/resource.py:779
 #: /src/schooltool/resource/browser/resource.py:790
 msgid "Equipment attributes"
-msgstr ""
+msgstr "Ekipman özellikleri"
 
 #: /src/schooltool/resource/browser/resource.py:784
 msgid "Edit equipment"
@@ -6803,31 +6861,31 @@ msgstr "Ekipman düzenle"
 #. Default: ""
 #: /src/schooltool/resource/browser/resource.py:859
 msgid "Delete ${resource_title}"
-msgstr ""
+msgstr "${resource_title} sil"
 
 #: /src/schooltool/resource/browser/subtype_widget.pt:8
 msgid "Choose One"
-msgstr ""
+msgstr "Birini Seçin"
 
 #: /src/schooltool/resource/browser/templates/f_manage_resources_overview.pt:6
 msgid "Manage resources"
-msgstr ""
+msgstr "Kaynakları yönet"
 
 #: /src/schooltool/resource/browser/templates/f_manage_resources_overview.pt:16
 msgid "School Resources"
-msgstr ""
+msgstr "Okul Kaynakları"
 
 #: /src/schooltool/resource/browser/templates/f_manage_resources_overview.pt:17
 msgid "Total"
-msgstr ""
+msgstr "Toplam"
 
 #: /src/schooltool/resource/browser/templates/f_manage_resources_overview.pt:24
 msgid "There are no ${resources} set up."
-msgstr ""
+msgstr "Kurulu ${resources} yok."
 
 #: /src/schooltool/resource/browser/templates/f_manage_resources_overview.pt:24
 msgid "school resources"
-msgstr ""
+msgstr "okul kaynakları"
 
 #: /src/schooltool/resource/browser/templates/f_resource_container_related.pt:6
 msgid ""
@@ -6837,37 +6895,39 @@ msgstr ""
 
 #: /src/schooltool/resource/browser/templates/f_resource_delete_confirmation.pt:1
 msgid "Are you sure you want to delete this resource?"
-msgstr ""
+msgstr "Bu kaynağı silmek istediğinizden emin misiniz?"
 
 #: /src/schooltool/resource/browser/templates/f_resource_demographics_related.pt:6
 msgid ""
 "SchoolTool can track customized attributes for resources, locations and "
 "equipment, such as serial numbers, seating capacity or date of purchase."
 msgstr ""
+"SchoolTool, kaynaklar, konumlar ve ekipmanlar için, seri numaraları, koltuk "
+"kapasitesi, alım tarihi gibi isteğe göre belirlenen özellikleri kaydedebilir."
 
 #: /src/schooltool/resource/browser/templates/f_resource_filter.pt:7
 msgid "Title or description"
-msgstr ""
+msgstr "Ad ya da açıklama"
 
 #: /src/schooltool/resource/browser/templates/f_resource_filter.pt:26
 msgid "All types"
-msgstr ""
+msgstr "Tüm tipler"
 
 #: /src/schooltool/resource/browser/templates/f_resource_view.pt:4
 msgid "Edit this resource"
-msgstr ""
+msgstr "Bu kaynağı düzenle"
 
 #: /src/schooltool/resource/browser/templates/f_resource_view.pt:76
 msgid "Edit responsible parties for this resource"
-msgstr ""
+msgstr "Bu kaynaktan sorumlu kişileri düzenle"
 
 #: /src/schooltool/resource/browser/templates/f_resource_view.pt:84
 msgid "These users can modify the resource."
-msgstr ""
+msgstr "Bu kullanıcılar kaynağı düzenleyebilir."
 
 #: /src/schooltool/resource/browser/templates/f_resource_view.pt:87
 msgid "This resource has no responsible parties"
-msgstr ""
+msgstr "Bu kaynağın bir sorumlusu yok"
 
 #: /src/schooltool/resource/interfaces.py:47
 msgid "Resource Type"
@@ -7096,36 +7156,36 @@ msgstr "Yeni Okul Yılı"
 #: /src/schooltool/schoolyear/browser/flourish.zcml:82
 #: /src/schooltool/schoolyear/browser/flourish.zcml:119
 msgid "Activate New Year"
-msgstr ""
+msgstr "Yeni Yılı etkinleştir"
 
 #: /src/schooltool/schoolyear/browser/schoolyear.py:170
 msgid ""
 "You can not delete the active school year. Unless you are deleting all the "
 "school years."
-msgstr "Tüm okul yıllarını silmiyorsanız güncel okul yılını silemezsiniz."
+msgstr "Tüm okul yıllarını silmiyorsanız geçerli okul yılını silemezsiniz."
 
 #: /src/schooltool/schoolyear/browser/schoolyear.py:211
 #: /src/schooltool/term/browser/templates/f_manage_years_overview.pt:16
 #: /src/schooltool/term/browser/templates/f_manage_years_overview.pt:30
 #: /src/schooltool/term/browser/templates/f_terms.pt:9
 msgid "First Day"
-msgstr ""
+msgstr "İlk Gün"
 
 #: /src/schooltool/schoolyear/browser/schoolyear.py:214
 #: /src/schooltool/term/browser/templates/f_manage_years_overview.pt:17
 #: /src/schooltool/term/browser/templates/f_manage_years_overview.pt:31
 #: /src/schooltool/term/browser/templates/f_terms.pt:10
 msgid "Last Day"
-msgstr ""
+msgstr "Son Gün"
 
 #: /src/schooltool/schoolyear/browser/schoolyear.py:216
 msgid "Active"
-msgstr ""
+msgstr "Etkin"
 
 #. Default: ""
 #: /src/schooltool/schoolyear/browser/schoolyear.py:237
 msgid "Delete ${schoolyear}"
-msgstr ""
+msgstr "${schoolyear} sil"
 
 #: /src/schooltool/schoolyear/browser/schoolyear.py:274
 msgid "First day"
@@ -7285,7 +7345,7 @@ msgstr "Kapsanan zamanda ders saatinin son günü."
 
 #: /src/schooltool/schoolyear/security.zcml:23
 msgid "Activate current school year"
-msgstr "Güncel okul yılını etkinleştir"
+msgstr "Geçerli okul yılını etkinleştir"
 
 #: /src/schooltool/securitypolicy/browser/configure.zcml:7
 msgid "View Access Rights"
@@ -7336,6 +7396,10 @@ msgstr ""
 
 #: /src/schooltool/securitypolicy/browser/views.py:57
 msgid "List of accounts"
+msgstr ""
+
+#: /src/schooltool/securitypolicy/browser/views.py:58
+msgid "User calendars"
 msgstr ""
 
 #: /src/schooltool/securitypolicy/browser/views.py:59
@@ -7479,7 +7543,7 @@ msgstr "SchoolTool Çalıştıran Sunucu"
 
 #: /src/schooltool/skin/templates/view_macros.pt:58
 msgid "Logged in as:"
-msgstr "Güncel kullanıcı:"
+msgstr "Geçerli kullanıcı:"
 
 #: /src/schooltool/skin/templates/view_macros.pt:71
 msgid "Log Out"
@@ -7931,19 +7995,11 @@ msgstr "Zaman Çizelgesi"
 msgid "Edit Schedule"
 msgstr ""
 
-#: /src/schooltool/timetable/browser/flourish.zcml:498
-msgid "Add Schedule"
-msgstr ""
-
-#: /src/schooltool/timetable/browser/flourish.zcml:507
+#: /src/schooltool/timetable/browser/flourish.zcml:512
 msgid "Schedule Timetable"
 msgstr ""
 
-#: /src/schooltool/timetable/browser/flourish.zcml:516
-msgid "School Timetable"
-msgstr ""
-
-#: /src/schooltool/timetable/browser/flourish.zcml:526
+#: /src/schooltool/timetable/browser/flourish.zcml:531
 msgid "Exception Days"
 msgstr ""
 
@@ -7997,6 +8053,10 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/f_manage_timetables_overview.pt:25
 msgid "There are no ${timetables} set up."
+msgstr ""
+
+#: /src/schooltool/timetable/browser/templates/f_manage_timetables_overview.pt:25
+msgid "timetables"
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/f_schedule_container_view.pt:3
@@ -8477,7 +8537,7 @@ msgstr "Lütfen her bir gün için ana derslik ders saatlerini belirtin:"
 
 #: /src/schooltool/timetable/interfaces.py:46
 msgid "Lesson"
-msgstr ""
+msgstr "Ders"
 
 #: /src/schooltool/timetable/interfaces.py:47
 msgid "Homeroom"
@@ -8485,15 +8545,15 @@ msgstr "Ana derslik"
 
 #: /src/schooltool/timetable/interfaces.py:48
 msgid "Free"
-msgstr ""
+msgstr "Serbest"
 
 #: /src/schooltool/timetable/interfaces.py:49
 msgid "Lunch"
-msgstr ""
+msgstr "Öğle yemeği"
 
 #: /src/schooltool/timetable/interfaces.py:61
 msgid "Activity type."
-msgstr ""
+msgstr "Etkinlik tipi."
 
 #: /src/schooltool/timetable/interfaces.py:104
 msgid "First scheduled day"
@@ -8505,23 +8565,23 @@ msgstr ""
 
 #: /src/schooltool/timetable/interfaces.py:130
 msgid "Exceptions"
-msgstr ""
+msgstr "Kural Dışı Durumlar"
 
 #: /src/schooltool/timetable/interfaces.py:131
 msgid "Exceptions by date."
-msgstr ""
+msgstr "Tarihe göre kural dışı durumlar"
 
 #: /src/schooltool/timetable/interfaces.py:133
 msgid "Exception date"
-msgstr ""
+msgstr "Kural dışı durum tarihi"
 
 #: /src/schooltool/timetable/interfaces.py:135
 msgid "Meetings"
-msgstr ""
+msgstr "Toplantılar"
 
 #: /src/schooltool/timetable/interfaces.py:137
 msgid "Meeting"
-msgstr ""
+msgstr "Toplantı"
 
 #: /src/schooltool/timetable/interfaces.py:193
 msgid "Activity type"
@@ -8529,7 +8589,7 @@ msgstr "Etkinlik tipi"
 
 #: /src/schooltool/timetable/interfaces.py:299
 msgid "Treat consecutive periods as one meeting"
-msgstr ""
+msgstr "Arka arkaya gelen toplantıları bir toplantı olarak değerlendir"
 
 #: /src/schooltool/timetable/security.zcml:36
 msgid "School timetables"
@@ -8538,221 +8598,3 @@ msgstr "Okul zaman çizelgeleri"
 #: /src/schooltool/widget/password.py:55
 msgid "Supplied passwords are not identical"
 msgstr "Yazılan parolalar aynı değil"
-
-#~ msgid "Schooltool Person Menu"
-#~ msgstr "Schooltool Kişi Menüsü"
-
-#~ msgid "schooldata"
-#~ msgstr "okul verisi"
-
-#~ msgid "Shortcut: Alt-N"
-#~ msgstr "Kısayol: Alt-N"
-
-#~ msgid "School data"
-#~ msgstr "Okul verisi"
-
-#~ msgid "Spanish"
-#~ msgstr "İspanyolca"
-
-#~ msgid "English"
-#~ msgstr "İngilizce"
-
-#~ msgid "Enrollment"
-#~ msgstr "Kayıt"
-
-#~ msgid "German"
-#~ msgstr "Almanca"
-
-#~ msgid "Chinese"
-#~ msgstr "Çince"
-
-#~ msgid "Italian"
-#~ msgstr "İtalyanca"
-
-#~ msgid "Enrollment date"
-#~ msgstr "Kayıt tarihi"
-
-#~ msgid "Special education"
-#~ msgstr "Özel eğitim"
-
-#~ msgid "Health information"
-#~ msgstr "Sağlık bilgisi"
-
-#~ msgid "Previous school"
-#~ msgstr "Önceki okul"
-
-#~ msgid "Birth"
-#~ msgstr "Doğum"
-
-#~ msgid "Projected graduation year"
-#~ msgstr "Hedeflenen mezuniyet yılı"
-
-#~ msgid "Surname"
-#~ msgstr "Soyadı"
-
-#~ msgid "Modified"
-#~ msgstr "Değiştirilmiş"
-
-#~ msgid "other"
-#~ msgstr "diğer"
-
-#~ msgid "Team"
-#~ msgstr "Takım"
-
-#~ msgid "Cell phone"
-#~ msgstr "Cep telefonu"
-
-#~ msgid "parent1"
-#~ msgstr "ebeveyn 1"
-
-#~ msgid "N"
-#~ msgstr "N"
-
-#~ msgid "Vietnamese"
-#~ msgstr "Vietnamca"
-
-#~ msgid "Korean"
-#~ msgstr "Korece"
-
-#~ msgid "Polish"
-#~ msgstr "Lehçe"
-
-#~ msgid "Russian"
-#~ msgstr "Rusça"
-
-#~ msgid "Arabic"
-#~ msgstr "Arapça"
-
-#~ msgid "parent"
-#~ msgstr "ebeveyn"
-
-#~ msgid "Change contact information for ${fullname}"
-#~ msgstr "${fullname} kişisinin iletişim bilgilerini değiştir"
-
-#~ msgid "Contact information"
-#~ msgstr "İletişim bilgisi"
-
-#~ msgid "demographics"
-#~ msgstr "demografik"
-
-#~ msgid "Primary language"
-#~ msgstr "Ana dil"
-
-#~ msgid "Relationship to student"
-#~ msgstr "Öğrenciyle ilişkisi"
-
-#~ msgid "Display"
-#~ msgstr "Görünüm"
-
-#~ msgid "female"
-#~ msgstr "Kadın"
-
-#~ msgid "male"
-#~ msgstr "Erkek"
-
-#~ msgid ""
-#~ "Course \"${course_title}\" credits \"${invalid_credits}\" value must be an "
-#~ "integer."
-#~ msgstr ""
-#~ "\"${course_title}\" dersinin \"${invalid_credits}\" kredilerinin değeri bir "
-#~ "tam sayı olmalıdır."
-
-#~ msgid "name info"
-#~ msgstr "ad bilgisi"
-
-#~ msgid "parent2"
-#~ msgstr "ebeveyn 2"
-
-#~ msgid "emergency1"
-#~ msgstr "acil durum 1"
-
-#~ msgid "emergency2"
-#~ msgstr "acil durum 2"
-
-#~ msgid "emergency3"
-#~ msgstr "acil durum 3"
-
-#~ msgid "Schooltool Person Display Menu"
-#~ msgstr "Schooltool Kişi Görüntüleme Menüsü"
-
-#~ msgid "Apply and Next"
-#~ msgstr "Uygula ve İlerle"
-
-#~ msgid "Change name information for ${fullname}"
-#~ msgstr "${fullname} kişisinin ad bilgisini değiştir"
-
-#~ msgid "Change name"
-#~ msgstr "Ad değiştir"
-
-#~ msgid "Change demographics for ${fullname}"
-#~ msgstr "${fullname} kişisinin nüfus bilgilerini değiştir"
-
-#~ msgid "Change school data for ${fullname}"
-#~ msgstr "${fullname} kişisinin okul verisini değiştir"
-
-#~ msgid "Invalid teacher. Possible causes: deleted or renamed."
-#~ msgstr "Geçersiz öğretmen. Silinmiş ya da adı değiştirilmiş olabilir."
-
-#~ msgid "Invalid group. Possible causes: deleted or renamed."
-#~ msgstr "Geçersiz grup. Silinmiş ya da adı değiştirilmiş olabilir."
-
-#~ msgid ""
-#~ "Search for persons here. Note that in fulltext fields you can use wildcard "
-#~ "characters such as *. For example, to search for everyone with John in their "
-#~ "name, use <em>*john*</em>."
-#~ msgstr ""
-#~ "Kişileri buradan arayın. Tüm metin alanında * gibi joker karakterleri "
-#~ "kullanabilirsiniz. Örneğin, adında Evrim olan herkesi bulmak için "
-#~ "<em>*evrim*</em> şeklinde yazabilirsiniz."
-
-#~ msgid "There were no results."
-#~ msgstr "Sonuç bulunamadı."
-
-#~ msgid "Prefix such as Mr., Mrs."
-#~ msgstr "Bay, Bayan gibi önekler"
-
-#~ msgid "Name by which the student prefers to be called"
-#~ msgstr "Öğrencinin çağrılmayı yeğlediği ad"
-
-#~ msgid "Tagalog"
-#~ msgstr "Filipince"
-
-#~ msgid "guardian"
-#~ msgstr "koruyucu"
-
-#~ msgid "grandparent"
-#~ msgstr "Büyükbaba ya da büyükanne"
-
-#~ msgid "step-parent"
-#~ msgstr "üvey ebeveyn"
-
-#~ msgid "friend of family"
-#~ msgstr "aile dostu"
-
-#~ msgid "Street"
-#~ msgstr "Sokak"
-
-#~ msgid "Full text search in name"
-#~ msgstr "Ada göre tam metin arama"
-
-#~ msgid "Name of parent"
-#~ msgstr "Ebeveyn adı"
-
-#~ msgid "Full text search in parent names"
-#~ msgstr "Ebeveyn adlarına göre tam metin arama"
-
-#~ msgid "Student ID"
-#~ msgstr "Öğrenci Kodu"
-
-#~ msgid "must be either 'Location' or 'Resource'"
-#~ msgstr "'Yer' ya da 'Kaynak' olmalı"
-
-#~ msgid "Changed password"
-#~ msgstr "Değiştirilen parola"
-
-#~ msgid ""
-#~ "Wrong section header on line ${line_no} (it should contain a course id and "
-#~ "an instructor id)"
-#~ msgstr ""
-#~ "${line_no} satırında hatalı bölüm başlığı (ders kodu ya da öğretmen kodunu "
-#~ "içermeli)"

@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-11-22 22:28+0200\n"
-"PO-Revision-Date: 2011-11-23 02:01+0000\n"
-"Last-Translator: drsaudi <mon7b6@gmail.com>\n"
+"POT-Creation-Date: 2011-12-22 17:43+0200\n"
+"PO-Revision-Date: 2012-02-04 01:06+0000\n"
+"Last-Translator: Maya <mayya88r@gmail.com>\n"
 "Language-Team: Arabic <ar@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-11-23 06:08+0000\n"
-"X-Generator: Launchpad (build 14336)\n"
+"X-Launchpad-Export-Date: 2012-02-05 05:15+0000\n"
+"X-Generator: Launchpad (build 14738)\n"
 "Language: ar\n"
 
 #: /src/schooltool/app/app.py:193
@@ -295,7 +295,22 @@ msgstr ""
 #: /src/schooltool/app/browser/app.py:998
 #: /src/schooltool/app/browser/flourish.zcml:292
 msgid "Errors Settings"
-msgstr ""
+msgstr "اعدادات الاخطاء"
+
+#: /src/schooltool/app/browser/app.py:1005
+#: /src/schooltool/basicperson/browser/demographics.py:413
+#: /src/schooltool/basicperson/browser/demographics.py:473
+#: /src/schooltool/basicperson/browser/person.py:951
+#: /src/schooltool/course/browser/course.py:568
+#: /src/schooltool/course/browser/section.py:1261
+#: /src/schooltool/group/browser/group.py:669
+#: /src/schooltool/schoolyear/browser/schoolyear.py:490
+#: /src/schooltool/schoolyear/browser/schoolyear.py:538
+#: /src/schooltool/schoolyear/browser/templates/f_schoolyear_activate.pt:23
+#: /src/schooltool/term/browser/term.py:291
+#: /src/schooltool/term/browser/term.py:404
+msgid "Submit"
+msgstr "إرسال"
 
 #: /src/schooltool/app/browser/app.py:1025
 #: /src/schooltool/app/browser/configure.zcml:670
@@ -880,7 +895,7 @@ msgstr "نوع"
 
 #: /src/schooltool/app/browser/cal.py:2283
 msgid "Booked by others"
-msgstr ""
+msgstr "حجزت من اشخاص اخرون"
 
 #: /src/schooltool/app/browser/cal.py:2611
 #: /src/schooltool/app/browser/configure.zcml:532
@@ -1157,12 +1172,12 @@ msgstr "القوائم البريدية"
 
 #: /src/schooltool/app/browser/flourish.zcml:351
 msgid "IRC channel"
-msgstr ""
+msgstr "قناة IRC"
 
 #: /src/schooltool/app/browser/flourish.zcml:393
 #: /src/schooltool/export/flourish.zcml:49
 msgid "School"
-msgstr ""
+msgstr "المدرسة"
 
 #: /src/schooltool/app/browser/flourish.zcml:410
 msgid "Customize"
@@ -1173,11 +1188,11 @@ msgstr "تخصيص"
 #: /src/schooltool/group/browser/templates/f_group_view.pt:90
 #: /src/schooltool/resource/browser/templates/f_resource_view.pt:75
 msgid "Responsible parties"
-msgstr ""
+msgstr "الجهات المسؤولة"
 
 #: /src/schooltool/app/browser/flourish.zcml:492
 msgid "Information"
-msgstr ""
+msgstr "معلومات"
 
 #: /src/schooltool/app/browser/flourish.zcml:510
 msgid "Database generations"
@@ -1201,7 +1216,7 @@ msgstr ""
 
 #: /src/schooltool/app/browser/overlay.py:326
 msgid "School Calendar"
-msgstr ""
+msgstr "رزنامة المدرسة"
 
 #: /src/schooltool/app/browser/pdfcal.py:52
 msgid "Daily calendar for %s"
@@ -1344,7 +1359,7 @@ msgstr "تمكين الذرة"
 #. Default: "for more info."
 #: /src/schooltool/app/browser/templates/cal_atom.pt:49
 msgid "atom_more_info"
-msgstr ""
+msgstr "للمزيد من المعلومات"
 
 #: /src/schooltool/app/browser/templates/cal_atom.pt:56
 msgid "Validate my Atom feed"
@@ -1791,7 +1806,7 @@ msgstr "موقع: ${location}"
 
 #: /src/schooltool/app/browser/templates/f_about_related.pt:2
 msgid "Contributors"
-msgstr ""
+msgstr "المشاركين"
 
 #: /src/schooltool/app/browser/templates/f_calendar_settings_overview.pt:12
 #: /src/schooltool/app/interfaces.py:135
@@ -1815,7 +1830,7 @@ msgstr "صيغة التاريخ"
 
 #: /src/schooltool/app/browser/templates/f_calendar_settings_overview.pt:28
 msgid "Week starts on"
-msgstr ""
+msgstr "يبدا الاسبوع من يوم"
 
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:10
 msgid "Import source"
@@ -1824,7 +1839,7 @@ msgstr ""
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:20
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:64
 msgid "Upload CSV file"
-msgstr ""
+msgstr "تحميل ملف CSV"
 
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:29
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:104
@@ -1956,7 +1971,7 @@ msgstr "زر-إرسال"
 #: /src/schooltool/timetable/browser/templates/f_timetables.pt:20
 #: /src/schooltool/timetable/browser/templates/f_timetables.pt:28
 msgid "Done"
-msgstr ""
+msgstr "تمّ"
 
 #: /src/schooltool/app/browser/templates/f_edit_relationships.pt:25
 #: /src/schooltool/basicperson/browser/templates/container.pt:32
@@ -1975,7 +1990,7 @@ msgstr "إظهار ${count} من ${total} بنداً"
 
 #: /src/schooltool/app/browser/templates/f_errors.pt:4
 msgid "Manage error settings"
-msgstr ""
+msgstr "التحكم بخيارات الاخطاء"
 
 #: /src/schooltool/app/browser/templates/f_errors.pt:43
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:14
@@ -1983,7 +1998,7 @@ msgstr ""
 #: /src/schooltool/contact/security.zcml:86
 #: /src/schooltool/person/security.zcml:147
 msgid "User"
-msgstr ""
+msgstr "المستخدم"
 
 #: /src/schooltool/app/browser/templates/f_errors.pt:44
 #: /src/schooltool/skin/templates/error.pt:19
@@ -2010,7 +2025,7 @@ msgstr ""
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:3
 #: /src/schooltool/app/browser/templates/f_errors_entry_text.pt:4
 msgid "The specified log entry was not found. It may have expired."
-msgstr ""
+msgstr "السجل المطلوب غير موجود, او من الممكن ان يكون منتهي"
 
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:18
 msgid "Request URL"
@@ -2036,7 +2051,7 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:45
 msgid "Request"
-msgstr ""
+msgstr "اطلب"
 
 #: /src/schooltool/app/browser/templates/f_generations_related.pt:2
 #: /src/schooltool/contact/browser/templates/f_contacts_related.pt:2
@@ -2719,7 +2734,19 @@ msgid ""
 "            site."
 msgstr ""
 
-#: /src/schooltool/app/main.py:96
+#: /src/schooltool/app/main.py:314
+msgid "Going to background, daemon pid %d"
+msgstr ""
+
+#: /src/schooltool/app/main.py:361
+msgid "Cannot resolve plugin action order:\n"
+msgstr "غير قادر على تحليل ترتيب عمل الإضافة:\n"
+
+#: /src/schooltool/app/main.py:513
+msgid "Run %s -h for help."
+msgstr "شغل %s -h للمساعدة"
+
+#: /src/schooltool/app/main.py:517
 msgid ""
 "\n"
 "Usage: %s [options]\n"
@@ -2736,19 +2763,7 @@ msgid ""
 "  --manage               only do management tasks, don't run the server\n"
 msgstr ""
 
-#: /src/schooltool/app/main.py:327
-msgid "Going to background, daemon pid %d"
-msgstr ""
-
-#: /src/schooltool/app/main.py:374
-msgid "Cannot resolve plugin action order:\n"
-msgstr "غير قادر على تحليل ترتيب عمل الإضافة:\n"
-
-#: /src/schooltool/app/main.py:528
-msgid "Run %s -h for help."
-msgstr "شغل %s -h للمساعدة"
-
-#: /src/schooltool/app/main.py:540
+#: /src/schooltool/app/main.py:536
 msgid "%s: daemon mode not supported on your operating system."
 msgstr ""
 
@@ -3997,7 +4012,15 @@ msgstr ""
 msgid "Contact of"
 msgstr ""
 
-#: /src/schooltool/contact/browser/templates/f_contact_view.pt:4
+#: /src/schooltool/contact/browser/templates/f_contact_filter.pt:6
+msgid "First name and/or last name"
+msgstr ""
+
+#: /src/schooltool/contact/browser/templates/f_contact_view.pt:3
+msgid "Contact information"
+msgstr "معلومات جهة اتصال"
+
+#: /src/schooltool/contact/browser/templates/f_contact_view.pt:6
 #: /src/schooltool/contact/browser/templates/f_contactsViewlet.pt:9
 msgid "Edit this contact"
 msgstr ""
@@ -4665,6 +4688,10 @@ msgid ""
 "determining which course should be updated."
 msgstr ""
 
+#: /src/schooltool/course/browser/templates/f_course_filter.pt:6
+msgid "Title or course ID"
+msgstr ""
+
 #: /src/schooltool/course/browser/templates/f_course_view.pt:4
 msgid "Edit this course"
 msgstr ""
@@ -4781,8 +4808,12 @@ msgstr ""
 msgid "There are no sections defined for ${schoolyear}."
 msgstr ""
 
+#: /src/schooltool/course/browser/templates/f_section_filter.pt:6
+msgid "Section title"
+msgstr ""
+
 #: /src/schooltool/course/browser/templates/f_section_linkage.pt:25
-#: /src/schooltool/course/browser/templates/f_section_view.pt:102
+#: /src/schooltool/course/browser/templates/f_section_view.pt:104
 msgid "(currently viewing)"
 msgstr ""
 
@@ -5329,12 +5360,8 @@ msgstr ""
 msgid "Retry"
 msgstr ""
 
-#: /src/schooltool/email/browser/email.py:394
-msgid "Email Details"
-msgstr ""
-
-#: /src/schooltool/email/browser/email.py:534
-#: /src/schooltool/email/browser/email.py:784
+#: /src/schooltool/email/browser/email.py:557
+#: /src/schooltool/email/browser/email.py:845
 msgid "Email Queue"
 msgstr ""
 
@@ -5425,6 +5452,10 @@ msgstr ""
 #: /src/schooltool/email/browser/templates/f_email_settings_overview.pt:13
 #: /src/schooltool/email/interfaces.py:58
 msgid "Status"
+msgstr ""
+
+#: /src/schooltool/email/browser/templates/f_email_view.pt:2
+msgid "Email Details"
 msgstr ""
 
 #: /src/schooltool/email/interfaces.py:44
@@ -5851,6 +5882,10 @@ msgid ""
 "Users Group' and 'After-school sports club' respectively. The 'Chess Club' "
 "group will have no description, and the extra \"text after a second comma\" "
 "text on the third group will be ignored."
+msgstr ""
+
+#: /src/schooltool/group/browser/templates/f_group_filter.pt:6
+msgid "Group title"
 msgstr ""
 
 #: /src/schooltool/group/browser/templates/f_group_member_csvimport_description.pt:12
@@ -7174,6 +7209,10 @@ msgstr ""
 msgid "List of accounts"
 msgstr ""
 
+#: /src/schooltool/securitypolicy/browser/views.py:58
+msgid "User calendars"
+msgstr ""
+
 #: /src/schooltool/securitypolicy/browser/views.py:59
 msgid "User passwords"
 msgstr ""
@@ -7753,19 +7792,11 @@ msgstr "جدول مواعيد"
 msgid "Edit Schedule"
 msgstr ""
 
-#: /src/schooltool/timetable/browser/flourish.zcml:498
-msgid "Add Schedule"
-msgstr ""
-
-#: /src/schooltool/timetable/browser/flourish.zcml:507
+#: /src/schooltool/timetable/browser/flourish.zcml:512
 msgid "Schedule Timetable"
 msgstr ""
 
-#: /src/schooltool/timetable/browser/flourish.zcml:516
-msgid "School Timetable"
-msgstr ""
-
-#: /src/schooltool/timetable/browser/flourish.zcml:526
+#: /src/schooltool/timetable/browser/flourish.zcml:531
 msgid "Exception Days"
 msgstr ""
 
@@ -7819,6 +7850,10 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/f_manage_timetables_overview.pt:25
 msgid "There are no ${timetables} set up."
+msgstr ""
+
+#: /src/schooltool/timetable/browser/templates/f_manage_timetables_overview.pt:25
+msgid "timetables"
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/f_schedule_container_view.pt:3

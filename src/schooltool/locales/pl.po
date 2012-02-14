@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-11-22 22:28+0200\n"
-"PO-Revision-Date: 2011-11-23 00:02+0000\n"
-"Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
+"POT-Creation-Date: 2011-12-22 17:43+0200\n"
+"PO-Revision-Date: 2012-01-15 10:17+0000\n"
+"Last-Translator: Szymon Sieciński <Unknown>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-11-23 06:12+0000\n"
-"X-Generator: Launchpad (build 14336)\n"
+"X-Launchpad-Export-Date: 2012-01-16 05:33+0000\n"
+"X-Generator: Launchpad (build 14664)\n"
 "Language: pl\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -286,12 +286,12 @@ msgstr ""
 #: /src/schooltool/app/browser/app.py:965
 #: /src/schooltool/app/browser/templates/f_errors.pt:21
 msgid "Copy exceptions to the event log"
-msgstr ""
+msgstr "Skopiuj wyjątki do dziennika zdarzeń"
 
 #: /src/schooltool/app/browser/app.py:969
 #: /src/schooltool/app/browser/templates/f_errors.pt:27
 msgid "Ignored exception types"
-msgstr ""
+msgstr "Ignoruj wyjątki typu"
 
 #: /src/schooltool/app/browser/app.py:998
 #: /src/schooltool/app/browser/flourish.zcml:292
@@ -1067,7 +1067,7 @@ msgstr "Ustawienia"
 
 #: /src/schooltool/app/browser/flourish.zcml:218
 msgid "Calendar Settings"
-msgstr ""
+msgstr "Ustawienia Kalendarza"
 
 #: /src/schooltool/app/browser/flourish.zcml:228
 #: /src/schooltool/app/browser/templates/f_errors.pt:7
@@ -1129,15 +1129,15 @@ msgstr "Edytuj"
 
 #: /src/schooltool/app/browser/flourish.zcml:272
 msgid "Error"
-msgstr ""
+msgstr "Błąd"
 
 #: /src/schooltool/app/browser/flourish.zcml:303
 msgid "About"
-msgstr ""
+msgstr "O programie"
 
 #: /src/schooltool/app/browser/flourish.zcml:313
 msgid "More Information"
-msgstr ""
+msgstr "Więcej informacji"
 
 #: /src/schooltool/app/browser/flourish.zcml:322
 #: /src/schooltool/app/browser/templates/about.pt:27
@@ -1161,11 +1161,11 @@ msgstr ""
 #: /src/schooltool/app/browser/flourish.zcml:393
 #: /src/schooltool/export/flourish.zcml:49
 msgid "School"
-msgstr ""
+msgstr "Szkoła"
 
 #: /src/schooltool/app/browser/flourish.zcml:410
 msgid "Customize"
-msgstr ""
+msgstr "Dostosuj"
 
 #: /src/schooltool/app/browser/flourish.zcml:449
 #: /src/schooltool/course/browser/templates/f_course_view.pt:75
@@ -1180,7 +1180,7 @@ msgstr ""
 
 #: /src/schooltool/app/browser/flourish.zcml:510
 msgid "Database generations"
-msgstr ""
+msgstr "Tworzenie bazy danych"
 
 #: /src/schooltool/app/browser/flourish.zcml:607
 msgid "Shown Calendars"
@@ -1192,11 +1192,11 @@ msgstr "Zapisano zmiany."
 
 #: /src/schooltool/app/browser/overlay.py:286
 msgid "Selected calendars"
-msgstr ""
+msgstr "Wybrane kalendarze"
 
 #: /src/schooltool/app/browser/overlay.py:287
 msgid "Available calendars"
-msgstr ""
+msgstr "Dostępne kalendarze"
 
 #: /src/schooltool/app/browser/overlay.py:326
 msgid "School Calendar"
@@ -1793,7 +1793,7 @@ msgstr "Położenie: ${location}"
 
 #: /src/schooltool/app/browser/templates/f_about_related.pt:2
 msgid "Contributors"
-msgstr ""
+msgstr "Współtwórcy"
 
 #: /src/schooltool/app/browser/templates/f_calendar_settings_overview.pt:12
 #: /src/schooltool/app/interfaces.py:135
@@ -1817,21 +1817,21 @@ msgstr "Format daty"
 
 #: /src/schooltool/app/browser/templates/f_calendar_settings_overview.pt:28
 msgid "Week starts on"
-msgstr ""
+msgstr "Tydzień zaczyna się od"
 
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:10
 msgid "Import source"
-msgstr ""
+msgstr "Import źródła"
 
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:20
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:64
 msgid "Upload CSV file"
-msgstr ""
+msgstr "Prześlij plik CSV"
 
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:29
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:104
 msgid "Enter CSV text"
-msgstr ""
+msgstr "Wprowadź tekst CSV"
 
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:60
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:100
@@ -1841,11 +1841,11 @@ msgstr ""
 #: /src/schooltool/group/browser/flourish.zcml:236
 #: /src/schooltool/resource/browser/flourish.zcml:333
 msgid "Import CSV"
-msgstr ""
+msgstr "Importuj CSV"
 
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:75
 msgid "Charset"
-msgstr ""
+msgstr "Kodowanie znaków"
 
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:80
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:103
@@ -1909,7 +1909,7 @@ msgstr "Inny (wpisz jaki)"
 
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:91
 msgid "Other charset"
-msgstr ""
+msgstr "Inne kodowanie znaków"
 
 #. Default: "Submit"
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:112
@@ -1995,7 +1995,7 @@ msgstr "Wyjątek"
 
 #: /src/schooltool/app/browser/templates/f_errors.pt:49
 msgid "No exceptions logged."
-msgstr ""
+msgstr "Nie zarejestrowano wyjątków"
 
 #: /src/schooltool/app/browser/templates/f_errors.pt:76
 #: /src/schooltool/term/browser/term.py:219
@@ -2012,19 +2012,19 @@ msgstr ""
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:3
 #: /src/schooltool/app/browser/templates/f_errors_entry_text.pt:4
 msgid "The specified log entry was not found. It may have expired."
-msgstr ""
+msgstr "Nie znaleziono szukanego wpisu w dzienniku."
 
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:18
 msgid "Request URL"
-msgstr ""
+msgstr "Żądany URL"
 
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:22
 msgid "Exception Type"
-msgstr ""
+msgstr "Typ wyjątku"
 
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:26
 msgid "Exception Value"
-msgstr ""
+msgstr "Wartość wyjątku"
 
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:31
 #: /src/schooltool/skin/templates/error.pt:20
@@ -2038,7 +2038,7 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:45
 msgid "Request"
-msgstr ""
+msgstr "Żądanie"
 
 #: /src/schooltool/app/browser/templates/f_generations_related.pt:2
 #: /src/schooltool/contact/browser/templates/f_contacts_related.pt:2
@@ -2053,7 +2053,7 @@ msgstr ""
 #: /src/schooltool/timetable/browser/templates/f_specialday_related.pt:2
 #: /src/schooltool/timetable/browser/templates/f_timetable_container_related.pt:2
 msgid "What is This?"
-msgstr ""
+msgstr "Co to jest?"
 
 #: /src/schooltool/app/browser/templates/f_generations_related.pt:6
 msgid ""
@@ -2154,7 +2154,7 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_managers.pt:40
 msgid "No, up to date"
-msgstr ""
+msgstr "Nie, odśwież"
 
 #: /src/schooltool/app/browser/templates/f_overlay_filter_widget.pt:2
 #: /src/schooltool/contact/browser/templates/f_contact_filter.pt:2
@@ -2171,7 +2171,7 @@ msgstr "Wyszukaj"
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:7
 #: /src/schooltool/app/browser/templates/f_server_settings_overview.pt:12
 msgid "Database"
-msgstr ""
+msgstr "Baza danych"
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:11
 #: /src/schooltool/app/browser/templates/f_server_settings_overview.pt:16
@@ -2181,26 +2181,26 @@ msgstr ""
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:15
 #: /src/schooltool/app/browser/templates/f_server_settings_overview.pt:20
 msgid "Uptime"
-msgstr ""
+msgstr "Czas pracy"
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:19
 #: /src/schooltool/app/browser/templates/f_server_settings_overview.pt:24
 msgid "System platform"
-msgstr ""
+msgstr "Platforma systemowa"
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:23
 #: /src/schooltool/app/browser/templates/f_server_settings_overview.pt:28
 msgid "Python version"
-msgstr ""
+msgstr "Wesja Pythona"
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:27
 #: /src/schooltool/app/browser/templates/f_server_settings_overview.pt:32
 msgid "Command line"
-msgstr ""
+msgstr "Wiersz poleceń"
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:31
 msgid "Preferred encoding"
-msgstr ""
+msgstr "Preferowane kodowanie"
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:35
 msgid "File system encoding"
@@ -2208,15 +2208,15 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:39
 msgid "Process id"
-msgstr ""
+msgstr "Identyfikator procesu"
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:43
 msgid "Developer mode"
-msgstr ""
+msgstr "Tryb programisty"
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:48
 msgid "Python path"
-msgstr ""
+msgstr "ścieżka Pythona"
 
 #: /src/schooltool/app/browser/templates/f_section_csvimport_description.pt:3
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:24
@@ -2322,7 +2322,7 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_server_settings_overview.pt:3
 msgid "Server Information"
-msgstr ""
+msgstr "Informacje o Serwerze"
 
 #: /src/schooltool/app/browser/templates/f_settings.pt:5
 msgid "Please wait for confirmation that the database has been packed."
@@ -2330,7 +2330,7 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_translationdomaincontrol.pt:13
 msgid "Domain ${domain}"
-msgstr ""
+msgstr "Domena $(domain)"
 
 #: /src/schooltool/app/browser/templates/f_translationdomaincontrol.pt:18
 #: /src/schooltool/contact/interfaces.py:82
@@ -2339,11 +2339,11 @@ msgstr "Język"
 
 #: /src/schooltool/app/browser/templates/f_translationdomaincontrol.pt:19
 msgid "Files"
-msgstr ""
+msgstr "Pliki:"
 
 #: /src/schooltool/app/browser/templates/f_translationdomaincontrol.pt:31
 msgid "Reload"
-msgstr ""
+msgstr "Załaduj ponownie"
 
 #: /src/schooltool/app/browser/templates/index.pt:6
 msgid "Welcome to SchoolTool"
@@ -2614,7 +2614,7 @@ msgstr "Dane CSV"
 #: /src/schooltool/resource/browser/flourish.zcml:323
 #: /src/schooltool/resource/browser/flourish.zcml:342
 msgid "Import"
-msgstr ""
+msgstr "Import"
 
 #: /src/schooltool/app/browser/timetablecsvimport.py:135
 msgid "Row 2 is not empty"
@@ -2662,7 +2662,7 @@ msgstr ""
 #: /src/schooltool/app/browser/timetablecsvimport.py:371
 #: /src/schooltool/app/browser/timetablecsvimport.py:381
 msgid "The term ${term} does not exist."
-msgstr ""
+msgstr "Semestr ${term} nie istnieje."
 
 #. Default: ""
 #: /src/schooltool/app/browser/timetablecsvimport.py:387
@@ -2755,7 +2755,19 @@ msgstr ""
 "Wyświetl kalendarz na całą szerokość strony jako stronę główną\n"
 "            szkoły."
 
-#: /src/schooltool/app/main.py:96
+#: /src/schooltool/app/main.py:314
+msgid "Going to background, daemon pid %d"
+msgstr "Praca w tle, numer pid daemona %d"
+
+#: /src/schooltool/app/main.py:361
+msgid "Cannot resolve plugin action order:\n"
+msgstr "Nie można rozwiązać celu działania wtyczki:\n"
+
+#: /src/schooltool/app/main.py:513
+msgid "Run %s -h for help."
+msgstr "Uruchom %s -h po pomoc."
+
+#: /src/schooltool/app/main.py:517
 msgid ""
 "\n"
 "Usage: %s [options]\n"
@@ -2785,19 +2797,7 @@ msgstr ""
 "  --manage               wykonaj wyłącznie prace administracyjne, nie "
 "uruchamiaj serwera\n"
 
-#: /src/schooltool/app/main.py:327
-msgid "Going to background, daemon pid %d"
-msgstr "Praca w tle, numer pid daemona %d"
-
-#: /src/schooltool/app/main.py:374
-msgid "Cannot resolve plugin action order:\n"
-msgstr "Nie można rozwiązać celu działania wtyczki:\n"
-
-#: /src/schooltool/app/main.py:528
-msgid "Run %s -h for help."
-msgstr "Uruchom %s -h po pomoc."
-
-#: /src/schooltool/app/main.py:540
+#: /src/schooltool/app/main.py:536
 msgid "%s: daemon mode not supported on your operating system."
 msgstr "%s: tryb demona nie jest obsługiwany przez twój system operacyjny."
 
@@ -3008,15 +3008,15 @@ msgstr "Nowe pole wyboru listy"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:292
 msgid "Add Teacher"
-msgstr ""
+msgstr "Dodaj nauczyciela"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:302
 msgid "Add Student"
-msgstr ""
+msgstr "Dodaj studenta"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:312
 msgid "Add Administrator"
-msgstr ""
+msgstr "Dodaj administratora"
 
 #: /src/schooltool/basicperson/browser/csvimport.py:47
 #: /src/schooltool/course/browser/csvimport.py:54
@@ -3082,15 +3082,15 @@ msgstr "Zmień informacje dla ${field_title}"
 
 #: /src/schooltool/basicperson/browser/demographics.py:305
 msgid "Stud."
-msgstr ""
+msgstr "Stud."
 
 #: /src/schooltool/basicperson/browser/demographics.py:306
 msgid "Teach."
-msgstr ""
+msgstr "Naucz."
 
 #: /src/schooltool/basicperson/browser/demographics.py:307
 msgid "Admin."
-msgstr ""
+msgstr "Adm."
 
 #: /src/schooltool/basicperson/browser/demographics.py:310
 msgid "Selection"
@@ -3102,7 +3102,7 @@ msgstr "Tekst"
 
 #: /src/schooltool/basicperson/browser/demographics.py:313
 msgid "Yes/No"
-msgstr ""
+msgstr "Tak/Nie"
 
 #: /src/schooltool/basicperson/browser/demographics.py:390
 #: /src/schooltool/basicperson/interfaces.py:143
@@ -3133,34 +3133,38 @@ msgstr "Dodaj nowe osoby"
 #: /src/schooltool/basicperson/browser/flourish.zcml:121
 #: /src/schooltool/basicperson/browser/person.py:979
 msgid "Add new teacher"
-msgstr ""
+msgstr "Dodaj nowego nauczyciela"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:131
 #: /src/schooltool/basicperson/browser/person.py:989
 msgid "Add new student"
-msgstr ""
+msgstr "Dodaj nowego studenta"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:141
 #: /src/schooltool/basicperson/browser/person.py:999
 msgid "Add new administrator"
-msgstr ""
+msgstr "Dodaj nowego administratora"
+
+#: /src/schooltool/basicperson/browser/flourish.zcml:153
+msgid "Person"
+msgstr "Osoba"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:161
 msgid "Add Person"
-msgstr ""
+msgstr "Dodaj osobę"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:173
 msgid "Teacher"
-msgstr ""
+msgstr "Nauczyciel"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:181
 #: /src/schooltool/basicperson/browser/flourish.zcml:560
 msgid "Student"
-msgstr ""
+msgstr "Uczeń"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:189
 msgid "Administrator"
-msgstr ""
+msgstr "Administrator"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:264
 #: /src/schooltool/basicperson/browser/flourish.zcml:273
@@ -4043,7 +4047,15 @@ msgstr ""
 msgid "Contact of"
 msgstr ""
 
-#: /src/schooltool/contact/browser/templates/f_contact_view.pt:4
+#: /src/schooltool/contact/browser/templates/f_contact_filter.pt:6
+msgid "First name and/or last name"
+msgstr ""
+
+#: /src/schooltool/contact/browser/templates/f_contact_view.pt:3
+msgid "Contact information"
+msgstr "Dane kontaktowe"
+
+#: /src/schooltool/contact/browser/templates/f_contact_view.pt:6
 #: /src/schooltool/contact/browser/templates/f_contactsViewlet.pt:9
 msgid "Edit this contact"
 msgstr ""
@@ -4747,6 +4759,10 @@ msgid ""
 "determining which course should be updated."
 msgstr ""
 
+#: /src/schooltool/course/browser/templates/f_course_filter.pt:6
+msgid "Title or course ID"
+msgstr ""
+
 #: /src/schooltool/course/browser/templates/f_course_view.pt:4
 msgid "Edit this course"
 msgstr ""
@@ -4863,8 +4879,12 @@ msgstr ""
 msgid "There are no sections defined for ${schoolyear}."
 msgstr ""
 
+#: /src/schooltool/course/browser/templates/f_section_filter.pt:6
+msgid "Section title"
+msgstr ""
+
 #: /src/schooltool/course/browser/templates/f_section_linkage.pt:25
-#: /src/schooltool/course/browser/templates/f_section_view.pt:102
+#: /src/schooltool/course/browser/templates/f_section_view.pt:104
 msgid "(currently viewing)"
 msgstr ""
 
@@ -5411,12 +5431,8 @@ msgstr ""
 msgid "Retry"
 msgstr "Ponów"
 
-#: /src/schooltool/email/browser/email.py:394
-msgid "Email Details"
-msgstr ""
-
-#: /src/schooltool/email/browser/email.py:534
-#: /src/schooltool/email/browser/email.py:784
+#: /src/schooltool/email/browser/email.py:557
+#: /src/schooltool/email/browser/email.py:845
 msgid "Email Queue"
 msgstr ""
 
@@ -5508,6 +5524,10 @@ msgstr ""
 #: /src/schooltool/email/interfaces.py:58
 msgid "Status"
 msgstr "Stan"
+
+#: /src/schooltool/email/browser/templates/f_email_view.pt:2
+msgid "Email Details"
+msgstr ""
 
 #: /src/schooltool/email/interfaces.py:44
 msgid "Recipient addresses"
@@ -5959,6 +5979,10 @@ msgstr ""
 "Linuksa\" i \"Szkolny Klub Sportowy\". Grupa \"Klub szachowy\" nie ma opisu, "
 "a słowa \"tekst po drugim przecinku\" w opisie trzeciej grupy zostaną "
 "zignorowane."
+
+#: /src/schooltool/group/browser/templates/f_group_filter.pt:6
+msgid "Group title"
+msgstr ""
 
 #: /src/schooltool/group/browser/templates/f_group_member_csvimport_description.pt:12
 msgid ""
@@ -7278,6 +7302,10 @@ msgstr ""
 msgid "List of accounts"
 msgstr ""
 
+#: /src/schooltool/securitypolicy/browser/views.py:58
+msgid "User calendars"
+msgstr ""
+
 #: /src/schooltool/securitypolicy/browser/views.py:59
 msgid "User passwords"
 msgstr ""
@@ -7864,19 +7892,11 @@ msgstr "Plan zajęć"
 msgid "Edit Schedule"
 msgstr ""
 
-#: /src/schooltool/timetable/browser/flourish.zcml:498
-msgid "Add Schedule"
-msgstr ""
-
-#: /src/schooltool/timetable/browser/flourish.zcml:507
+#: /src/schooltool/timetable/browser/flourish.zcml:512
 msgid "Schedule Timetable"
 msgstr ""
 
-#: /src/schooltool/timetable/browser/flourish.zcml:516
-msgid "School Timetable"
-msgstr ""
-
-#: /src/schooltool/timetable/browser/flourish.zcml:526
+#: /src/schooltool/timetable/browser/flourish.zcml:531
 msgid "Exception Days"
 msgstr ""
 
@@ -7931,6 +7951,10 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/f_manage_timetables_overview.pt:25
 msgid "There are no ${timetables} set up."
+msgstr ""
+
+#: /src/schooltool/timetable/browser/templates/f_manage_timetables_overview.pt:25
+msgid "timetables"
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/f_schedule_container_view.pt:3

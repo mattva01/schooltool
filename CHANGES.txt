@@ -6,7 +6,8 @@ CHANGES
 ------------------
 
 - Added integer demographic fields.
-- get fill down back in the contextual menu (https://launchpad.net/bugs/907907)
+- Restore fill down in gradebook contextual menu (https://launchpad.net/bugs/907907)
+- Updated translations.
 
 
 2.0.1 (2011-12-22)
