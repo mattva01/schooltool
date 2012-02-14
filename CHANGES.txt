@@ -2,18 +2,50 @@
 CHANGES
 =======
 
-2.0.1 (unreleased)
+2.0.3 (unreleased)
 ------------------
 
-- email view needs formatting (https://launchpad.net/buggs/886304)
-- SchoolTool does not allow add "equipment", "location" or "resources" (https://launchpad.net/bugs/894632)
+- Nothing changed yet.
+
+
+2.0.2 (2012-02-14)
+------------------
+
+- Added integer demographic fields.
+
+Bugfixes
+++++++++
+
+- Fixed the password edit view (https://launchpad.net/bugs/868411)
+- Allow optional Selection List demographics fields to remain unset (https://launchpad.net/bugs/898219)
+- Fixed person edit view to show limited demographics fields (https://launchpad.net/bugs/914609)
+- Sorted section list in person accordion (https://launchpad.net/bugs/921373)
+- Move 'School name' to the bottom of Customize menu (https://launchpad.net/bugs/876797)
+- Restore fill down in gradebook contextual menu (https://launchpad.net/bugs/907907)
+- Updated translations.
+
+
+2.0.1 (2011-12-22)
+------------------
+
+- Cannot add resources (https://launchpad.net/bugs/894632)
+- Email view needs formatting (https://launchpad.net/bugs/886304)
+- Batches missing in several views (https://launchpad.net/bugs/882060)
+- Show usernames in every persons table (https://launchpad.net/bugs/897260)
+- Many CSS fixes (https://launchpad.net/bugs/885807)
+- Many wording and i18n fixes by Douglas Cerna.
 - Hide demographics fieldset if it is empty in person add views (https://launchpad.net/bugs/752051)
+- Fix test failing when translations are compiled.
+- Sorted course titles in section add form (https://launchpad.net/bugs/905386)
+- Fixed required demographics description fields (https://launchpad.net/bugs/896390)
+- Styled the fckeditor widget (https://launchpad.net/bugs/891348)
+- Updated README.txt (https://launchpad.net/bugs/590781)
+- Document running on port 80 (https://launchpad.net/bugs/259415)
+- Updated translations.
 
 
 2.0.0 (2011-11-23)
 ------------------
-
-- Many CSS fixes (https://launchpad.net/bugs/885807)
 
 Bugfixes
 ++++++++

@@ -4,6 +4,13 @@
        i18n:translate="">
       Calendar
     </a>
+    <a class="modify" title="Change calendar settings"
+       tal:attributes="href string:${context/@@absolute_url}/site-preferences.html"
+       i18n:attributes="title">
+      <img tal:attributes="src context/++resource++schooltool.skin.flourish/edit-icon.png"
+           alt="Edit"
+           i18n:attributes="alt" />
+    </a>
   </h3>
   <table class="form-fields"
          tal:define="settings view/settings">

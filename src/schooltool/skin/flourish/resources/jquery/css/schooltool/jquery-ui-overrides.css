@@ -10,6 +10,8 @@
 }
 
 .ui-accordion-header {
+    border-style: solid;
+    border-width: 1px;
     font-weight: bold;
     text-align: left;
     padding: 4px 8px;
@@ -22,6 +24,15 @@
     padding-right: 8px;
     padding-left: 8px;
     padding-top: 4px;
+}
+
+.ui-state-hover {
+    border-style: solid;
+    border-width: 1px;
+}
+
+.ui-state-active {
+    border: none;
 }
 
 .ui-dialog .ui-dialog-content {
@@ -42,6 +53,10 @@
     display: none;
 }
 
+.ui-dialog .ui-dialog-content form.filldown-dialog-form {
+    width: 250px;
+}
+
 .ui-dialog .ui-dialog-content .buttons {
     margin-bottom: 0px;
     margin-top: 0px;
@@ -57,12 +72,34 @@
 }
 
 .ui-datepicker {
+    border-style: solid;
+    border-width: 2px;
+    border-top-width: 1px;
     width: 280px;
     padding: 2px;
 }
 
+.ui-datepicker .ui-widget-header {
+    border-style: solid;
+    border-width: 1px;
+}
+
+.ui-datepicker-header a.ui-state-hover {
+    border-style: solid;
+    border-width: 1px;
+}
+
+.ui-datepicker-calendar thead {
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+}
+
 .ui-datepicker-calendar thead th {
     font-weight: normal;
+}
+
+.ui-datepicker-calendar a.ui-state-default {
+    border: none;
 }
 
 .ui-datepicker-calendar a.ui-state-highlight {
@@ -71,6 +108,10 @@
 
 .ui-datepicker-calendar a.ui-state-active {
     font-weight: bold;
+}
+
+.ui-datepicker-calendar tr {
+    border-bottom: none;
 }
 
 .ui-icon-center {

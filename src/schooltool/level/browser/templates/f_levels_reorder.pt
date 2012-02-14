@@ -5,7 +5,7 @@
     <table>
       <thead>
         <tr>
-          <th i18n:translate="">Grade Year</th>
+          <th i18n:translate="">Order</th>
           <th i18n:translate="">Title</th>
           <th i18n:translate="">Delete</th>
         </tr>

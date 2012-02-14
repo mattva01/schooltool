@@ -29,7 +29,7 @@ app_functional_layer = ZCMLLayer(os.path.join(here, 'ftesting.zcml'),
                                  __name__,
                                  'app_functional_layer')
 
-app_selenium_layer = SeleniumLayer(os.path.join(here, 'ftesting.zcml'),
+app_selenium_layer = SeleniumLayer(os.path.join(here, 'stesting.zcml'),
                                    __name__,
                                    'app_functional_layer')
 

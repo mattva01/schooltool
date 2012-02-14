@@ -23,8 +23,11 @@
     overflow: visible;
 }
 
-.grid > .body > .widecontainer {
+.grid > .body > .container {
     margin-top: 32px;
+}
+
+.grid > .body > .widecontainer {
     padding: 0px;
     width: 752px;
 }
@@ -88,6 +91,8 @@
 }
 
 .students th, .students td {
+    border-right-width: 1px;
+    border-right-style: solid;
     overflow: hidden;
     padding-left: 0.4em;
     padding-right: 0.4em;
@@ -115,14 +120,23 @@
     overflow: auto;
 }
 
+.grades th, .grades td {
+    border-left-width: 1px;
+    border-left-style: solid;
+    border-right-width: 1px;
+    border-right-style: solid;
+}
+
 .grades input[type="text"] {
-    border: 0px;
+    border: none;
     height: 1.2em;
     width: 4em;
 }
 
 .grades input[type="text"]:focus {
-    width: 4em;
+    border-width: 0.1em;
+    border-style: solid;
+    width: 3.8em;
 }
 
 .grades .placeholder {
@@ -138,6 +152,8 @@
 }
 
 .totals th, .totals td {
+    border-left-style: solid;
+    border-left-width: 1px;
     max-width: 4em;
     min-width: 4em;
     overflow: hidden;
@@ -146,6 +162,11 @@
 
 .totals th > div {
     text-align: center;
+}
+
+th.activity-title {
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
 }
 
 /* Controls */

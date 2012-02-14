@@ -8,11 +8,14 @@
   <!-- XXX: what's the right place for this? -->
   <zope:adapter factory=".form.FlourishRadioBoolTerms" />
 
+  <zope:adapter factory=".widgets.PromptRequiredDemoField"
+                name="prompt" />
+
   <zope:view
       type="schooltool.skin.flourish.IFlourishLayer"
       for="zope.html.field.IHtmlFragmentField"
       provides="zope.app.form.interfaces.IInputWidget"
-      factory="schooltool.skin.widgets.FckeditorFormlibWidget"
+      factory=".widgets.FlourishFckeditorFormlibWidget"
       permission="zope.Public"
       />
 
@@ -44,5 +47,23 @@
       for="zope.schema.interfaces.IDate
            schooltool.skin.flourish.IFlourishLayer"
       />
+
+  <zope:adapter
+      factory=".widgets.FlourishFckeditorFieldWidget"
+      for="zope.html.field.IHtmlFragmentField
+           schooltool.skin.flourish.IFlourishLayer"
+      />
+
+  <zope:adapter
+      factory="schooltool.skin.flourish.widgets.Flourish_fckeditor_config"
+      name="config"
+      />
+
+  <zope:class class=".widgets.FlourishFckeditorZ3CFormWidget">
+    <require
+        permission="zope.Public"
+        interface="schooltool.skin.widgets.IFckeditorWidget"
+        />
+  </zope:class>
 
 </configure>

@@ -21,7 +21,7 @@ SchoolTool basic person interfaces.
 """
 from zope.container.interfaces import IContainer
 from zope.container.interfaces import IOrderedContainer
-from zope.schema import Date, Choice, TextLine, Bool, List
+from zope.schema import Date, Choice, TextLine, Bool, List, Int
 from zope.configuration.fields import PythonIdentifier
 from zope.interface import Interface, Attribute
 
@@ -164,6 +164,18 @@ class IEnumFieldDescription(IFieldDescription):
         description = _(u"Enter the valid values for the field below.  One "
                          "value per line.  These values will be displayed "
                          "as a menu in forms."))
+
+
+class IIntFieldDescription(IFieldDescription):
+    """Integer demographics field."""
+
+    min_value = Int(
+        title=_(u'Minimum value'),
+        required=False)
+
+    max_value = Int(
+        title=_(u'Maximum value'),
+        required=False)
 
 
 class IFieldFilterVocabulary(IVocabularyTokenized):

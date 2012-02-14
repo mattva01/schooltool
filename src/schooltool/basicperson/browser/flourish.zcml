@@ -277,6 +277,7 @@
      content_template="templates/f_demographics_reorder.pt"
      permission="schooltool.edit"
      title="Demographics and Personal Information"
+     subtitle="Reorder"
      />
 
   <flourish:viewlet
@@ -346,6 +347,16 @@
         />
 
     <flourish:viewlet
+        name="addInt.html"
+        after="addText.html"
+        before="addDescription.html"
+        title="Integer Field"
+        class="schooltool.skin.flourish.page.LinkViewlet"
+        manager="schooltool.basicperson.browser.demographics.FlourishDemographicsFieldsLinks"
+        permission="schooltool.edit"
+        />
+
+    <flourish:viewlet
         name="reorder.html"
         title="Reorder or Delete Fields"
         class="schooltool.skin.flourish.page.LinkViewlet"
@@ -396,6 +407,15 @@
        content_template="templates/z3c_form_edit.pt"
        permission="schooltool.edit"
        subtitle="New Selection List Field"
+       />
+
+    <flourish:page
+       name="addInt.html"
+       for="schooltool.basicperson.interfaces.IDemographicsFields"
+       class="schooltool.basicperson.browser.demographics.FlourishIntFieldDescriptionAddView"
+       content_template="templates/z3c_form_edit.pt"
+       permission="schooltool.edit"
+       subtitle="New Integer Field"
        />
 
     <flourish:breadcrumb
@@ -457,6 +477,14 @@
        />
 
     <flourish:page
+       name="edit.html"
+       for="schooltool.basicperson.demographics.IntFieldDescription"
+       class="schooltool.basicperson.browser.demographics.FlourishIntFieldDescriptionEditView"
+       content_template="templates/z3c_form_edit.pt"
+       permission="schooltool.edit"
+       />
+
+    <flourish:page
        name="index.html"
        for="schooltool.basicperson.demographics.TextFieldDescription"
        class="schooltool.basicperson.browser.demographics.FlourishTextFieldDescriptionView"
@@ -500,6 +528,16 @@
        permission="schooltool.view"
        title="View"
        />
+
+    <flourish:page
+       name="index.html"
+       for="schooltool.basicperson.demographics.IntFieldDescription"
+       class="schooltool.basicperson.browser.demographics.FlourishIntFieldDescriptionView"
+       content_template="templates/z3c_form_display.pt"
+       permission="schooltool.view"
+       title="View"
+       />
+
   </configure>
 
   <!-- Viewlet Mangers -->

@@ -33,6 +33,7 @@
        content_template="templates/f_demographics_reorder.pt"
        permission="schooltool.edit"
        title="Resource Attributes"
+       subtitle="Reorder"
        />
   </configure>
 

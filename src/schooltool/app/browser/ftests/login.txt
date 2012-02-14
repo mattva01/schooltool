@@ -53,6 +53,13 @@ Now we are authenticated:
 Let's check whether our POST data preservation facilities work:
 
     >>> anonymous.open("http://localhost/persons/user/preferences")
+    >>> anonymous.getControl('public').selected
+    False
+
+.. With mechanize 0.2, goBack reloads the page unless we read the full response
+
+    >>> workaround = anonymous.contents
+
     >>> anonymous.getLink('Log Out').click()
     >>> anonymous.goBack()
 

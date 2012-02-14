@@ -83,7 +83,10 @@ def topological_sort(items, graph, reverse=False):
                 if C[m] == 0:
                     S.insert(0, m)
 
-    L += [m for m in items if C[m]]
+    if reverse:
+        L = [m for m in items if C[m]] + L
+    else:
+        L += [m for m in items if C[m]]
 
     return L
 
