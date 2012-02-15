@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-11-22 22:28+0200\n"
-"PO-Revision-Date: 2011-12-18 16:54+0000\n"
-"Last-Translator: fabdo <Unknown>\n"
+"POT-Creation-Date: 2011-12-22 17:43+0200\n"
+"PO-Revision-Date: 2012-01-03 22:03+0000\n"
+"Last-Translator: Daniel Winzen <d@winzen4.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-12-19 05:19+0000\n"
-"X-Generator: Launchpad (build 14525)\n"
+"X-Launchpad-Export-Date: 2012-01-04 05:30+0000\n"
+"X-Generator: Launchpad (build 14616)\n"
 "Language: de\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -515,7 +515,7 @@ msgstr "Aktueller Monat"
 
 #: /src/schooltool/app/browser/cal.py:1061
 msgid "Previous month"
-msgstr "Letzter Monat"
+msgstr "Voriger Monat"
 
 #: /src/schooltool/app/browser/cal.py:1063
 msgid "Go to next month"
@@ -2361,7 +2361,7 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_translationdomaincontrol.pt:13
 msgid "Domain ${domain}"
-msgstr ""
+msgstr "Domäne ${domain}"
 
 #: /src/schooltool/app/browser/templates/f_translationdomaincontrol.pt:18
 #: /src/schooltool/contact/interfaces.py:82
@@ -2800,7 +2800,19 @@ msgstr ""
 "Zeigt den allgemeinen Kalender als \n"
 "            Startseite"
 
-#: /src/schooltool/app/main.py:96
+#: /src/schooltool/app/main.py:314
+msgid "Going to background, daemon pid %d"
+msgstr "Im Backgroundmodus gestartet, Daemon pid %d"
+
+#: /src/schooltool/app/main.py:361
+msgid "Cannot resolve plugin action order:\n"
+msgstr "Plugin Verarbeitungsreihenfolge konnte nicht gelöst werden:\n"
+
+#: /src/schooltool/app/main.py:513
+msgid "Run %s -h for help."
+msgstr "Verwenden Sie %s -h für Hilfe."
+
+#: /src/schooltool/app/main.py:517
 msgid ""
 "\n"
 "Usage: %s [options]\n"
@@ -2830,19 +2842,7 @@ msgstr ""
 "'password' ist '-')\n"
 "  --manage erledige Managment-Aufgaben ohne den Server zu starten\n"
 
-#: /src/schooltool/app/main.py:327
-msgid "Going to background, daemon pid %d"
-msgstr "Im Backgroundmodus gestartet, Daemon pid %d"
-
-#: /src/schooltool/app/main.py:374
-msgid "Cannot resolve plugin action order:\n"
-msgstr "Plugin Verarbeitungsreihenfolge konnte nicht gelöst werden:\n"
-
-#: /src/schooltool/app/main.py:528
-msgid "Run %s -h for help."
-msgstr "Verwenden Sie %s -h für Hilfe."
-
-#: /src/schooltool/app/main.py:540
+#: /src/schooltool/app/main.py:536
 msgid "%s: daemon mode not supported on your operating system."
 msgstr "%s: Daemon Modus wird von ihrem Betriebssystem nicht unterstützt."
 
@@ -4121,7 +4121,15 @@ msgstr "${relationship} von"
 msgid "Contact of"
 msgstr "Kontakt von"
 
-#: /src/schooltool/contact/browser/templates/f_contact_view.pt:4
+#: /src/schooltool/contact/browser/templates/f_contact_filter.pt:6
+msgid "First name and/or last name"
+msgstr "Vorname und/oder Nachname"
+
+#: /src/schooltool/contact/browser/templates/f_contact_view.pt:3
+msgid "Contact information"
+msgstr "Kontaktinformationen"
+
+#: /src/schooltool/contact/browser/templates/f_contact_view.pt:6
 #: /src/schooltool/contact/browser/templates/f_contactsViewlet.pt:9
 msgid "Edit this contact"
 msgstr "Diesen Kontakt bearbeiten"
@@ -4852,6 +4860,10 @@ msgstr ""
 "Datenbank befindet, werden bestehende Kurse aktualisiert. Kurs IDs haben "
 "Vorrang bei der Festlegung, welcher Kurs aktualisiert werden soll."
 
+#: /src/schooltool/course/browser/templates/f_course_filter.pt:6
+msgid "Title or course ID"
+msgstr ""
+
 #: /src/schooltool/course/browser/templates/f_course_view.pt:4
 msgid "Edit this course"
 msgstr "Diesen Kurs bearbeiten"
@@ -4961,7 +4973,7 @@ msgstr "Es sind keine Kurse für ${schoolyear} festgelegt."
 
 #: /src/schooltool/course/browser/templates/f_manage_courses_overview.pt:25
 msgid "Manage sections"
-msgstr ""
+msgstr "bearbeite den"
 
 #: /src/schooltool/course/browser/templates/f_manage_courses_overview.pt:36
 msgid "There are ${count} sections defined for ${schoolyear}."
@@ -4971,14 +4983,18 @@ msgstr ""
 msgid "There are no sections defined for ${schoolyear}."
 msgstr ""
 
+#: /src/schooltool/course/browser/templates/f_section_filter.pt:6
+msgid "Section title"
+msgstr ""
+
 #: /src/schooltool/course/browser/templates/f_section_linkage.pt:25
-#: /src/schooltool/course/browser/templates/f_section_view.pt:102
+#: /src/schooltool/course/browser/templates/f_section_view.pt:104
 msgid "(currently viewing)"
 msgstr ""
 
 #: /src/schooltool/course/browser/templates/f_section_linkage.pt:43
 msgid "Unlink"
-msgstr ""
+msgstr "Verknüpfung aufheben"
 
 #: /src/schooltool/course/browser/templates/f_section_linkage.pt:92
 #: /src/schooltool/course/browser/templates/section_linkage.pt:55
@@ -5003,6 +5019,8 @@ msgid ""
 "john_b\n"
 "peter_j\n"
 msgstr ""
+"john_b\n"
+"peter_j\n"
 
 #: /src/schooltool/course/browser/templates/f_section_member_csvimport_description.pt:12
 msgid ""
@@ -5535,12 +5553,8 @@ msgstr "E-Mail Ansicht"
 msgid "Retry"
 msgstr "Erneut versuchen"
 
-#: /src/schooltool/email/browser/email.py:394
-msgid "Email Details"
-msgstr "E-mail Details"
-
-#: /src/schooltool/email/browser/email.py:534
-#: /src/schooltool/email/browser/email.py:784
+#: /src/schooltool/email/browser/email.py:557
+#: /src/schooltool/email/browser/email.py:845
 msgid "Email Queue"
 msgstr "E-Mail Warteschlange"
 
@@ -5604,7 +5618,7 @@ msgstr "Bist Du sicher, dass Du die ausgewählten E-Mails löschen willst?"
 
 #: /src/schooltool/email/browser/templates/f_email_container.pt:4
 msgid "Server status: ${status}"
-msgstr ""
+msgstr "Serverstatus: ${status}"
 
 #: /src/schooltool/email/browser/templates/f_email_container.pt:6
 msgid "Change email settings"
@@ -5636,6 +5650,10 @@ msgstr "E-Mail Einstellungen ändern"
 #: /src/schooltool/email/interfaces.py:58
 msgid "Status"
 msgstr "Status"
+
+#: /src/schooltool/email/browser/templates/f_email_view.pt:2
+msgid "Email Details"
+msgstr "E-mail Details"
 
 #: /src/schooltool/email/interfaces.py:44
 msgid "Recipient addresses"
@@ -5857,7 +5875,7 @@ msgstr ""
 
 #: /src/schooltool/export/importer.py:106
 msgid "must be empty when ID is a user id"
-msgstr ""
+msgstr "muss leer sein, wenn ID eine Benutzer-ID ist"
 
 #: /src/schooltool/export/importer.py:107
 msgid "is not a valid resource id"
@@ -6087,6 +6105,10 @@ msgstr ""
 "Beschreibungen 'Linux Users Group' und 'Nachmittags Sport Club'. Der 'Schach "
 "Club' wird keine Beschreibung erhalten und der Zusatz 'Text nach dem zweiten "
 "Komma' der dritten Gruppe wird ignoriert werden."
+
+#: /src/schooltool/group/browser/templates/f_group_filter.pt:6
+msgid "Group title"
+msgstr ""
 
 #: /src/schooltool/group/browser/templates/f_group_member_csvimport_description.pt:12
 msgid ""
@@ -6665,7 +6687,7 @@ msgstr "Übersicht"
 
 #: /src/schooltool/report/browser/flourish.zcml:85
 msgid "Report Overview"
-msgstr ""
+msgstr "Berichts Überblick"
 
 #: /src/schooltool/report/browser/report.py:56
 msgid "Student Reports"
@@ -6708,7 +6730,7 @@ msgstr "Referenz melden"
 
 #: /src/schooltool/report/templates/f_report_link_manager.pt:13
 msgid "${file_type} Reports"
-msgstr ""
+msgstr "${file_type} Berichte"
 
 #: /src/schooltool/resource/browser/configure.zcml:96
 msgid "Resource Demographics"
@@ -6737,7 +6759,7 @@ msgstr "Neues Gerät"
 #: /src/schooltool/resource/browser/flourish.zcml:309
 #: /src/schooltool/resource/browser/flourish.zcml:315
 msgid "Resource Attributes"
-msgstr ""
+msgstr "Resource Attribute"
 
 #: /src/schooltool/resource/browser/flourish.zcml:107
 #: /src/schooltool/resource/browser/resource.py:353
@@ -6758,7 +6780,7 @@ msgstr "Ressource"
 
 #: /src/schooltool/resource/browser/flourish.zcml:138
 msgid "Add Resource"
-msgstr ""
+msgstr "Ressource hinzufügen"
 
 #: /src/schooltool/resource/browser/flourish.zcml:147
 msgid "Add Location"
@@ -6947,7 +6969,7 @@ msgstr ""
 
 #: /src/schooltool/resource/browser/templates/f_resource_delete_confirmation.pt:1
 msgid "Are you sure you want to delete this resource?"
-msgstr ""
+msgstr "Sind Sie sicher, dass sie diese Quelle löschen möchten?"
 
 #: /src/schooltool/resource/browser/templates/f_resource_demographics_related.pt:6
 msgid ""
@@ -6965,7 +6987,7 @@ msgstr "Alle Typen"
 
 #: /src/schooltool/resource/browser/templates/f_resource_view.pt:4
 msgid "Edit this resource"
-msgstr ""
+msgstr "Quelle bearbeiten"
 
 #: /src/schooltool/resource/browser/templates/f_resource_view.pt:76
 msgid "Edit responsible parties for this resource"
@@ -7452,6 +7474,10 @@ msgstr ""
 #: /src/schooltool/securitypolicy/browser/views.py:57
 msgid "List of accounts"
 msgstr "Benutzerliste"
+
+#: /src/schooltool/securitypolicy/browser/views.py:58
+msgid "User calendars"
+msgstr ""
 
 #: /src/schooltool/securitypolicy/browser/views.py:59
 msgid "User passwords"
@@ -8003,11 +8029,11 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/calendar.py:109
 msgid "Meeting Details"
-msgstr ""
+msgstr "Treffen Details"
 
 #: /src/schooltool/timetable/browser/calendar.py:160
 msgid "Add meeting"
-msgstr ""
+msgstr "Treffen hinzufügen"
 
 #: /src/schooltool/timetable/browser/configure.zcml:60
 #: /src/schooltool/timetable/browser/flourish.zcml:266
@@ -8037,7 +8063,7 @@ msgstr "Stundenplan hinzufügen"
 
 #: /src/schooltool/timetable/browser/configure.zcml:184
 msgid "Add Meeting"
-msgstr ""
+msgstr "Treffen hinzufügen"
 
 #: /src/schooltool/timetable/browser/flourish.zcml:10
 #: /src/schooltool/timetable/browser/templates/f_manage_timetables_overview.pt:6
@@ -8057,29 +8083,21 @@ msgstr "Stundenplan"
 msgid "Edit Schedule"
 msgstr "Zeitplan bearbeiten"
 
-#: /src/schooltool/timetable/browser/flourish.zcml:498
-msgid "Add Schedule"
-msgstr "Zeitplan hinzufügen"
-
-#: /src/schooltool/timetable/browser/flourish.zcml:507
+#: /src/schooltool/timetable/browser/flourish.zcml:512
 msgid "Schedule Timetable"
 msgstr ""
 
-#: /src/schooltool/timetable/browser/flourish.zcml:516
-msgid "School Timetable"
-msgstr "Schulestundenplan"
-
-#: /src/schooltool/timetable/browser/flourish.zcml:526
+#: /src/schooltool/timetable/browser/flourish.zcml:531
 msgid "Exception Days"
 msgstr ""
 
 #: /src/schooltool/timetable/browser/flourish.zcml:565
 msgid "New Meeting"
-msgstr ""
+msgstr "Neues Treffen"
 
 #: /src/schooltool/timetable/browser/flourish.zcml:574
 msgid "Edit Meeting"
-msgstr ""
+msgstr "Treffen bearbeiten"
 
 #: /src/schooltool/timetable/browser/schedule.py:66
 msgid "Some values were invalid.  They are highlighted in red."
@@ -8119,11 +8137,15 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/f_manage_timetables_overview.pt:6
 msgid "Manage timetables"
-msgstr ""
+msgstr "Stundenpläne verwalten"
 
 #: /src/schooltool/timetable/browser/templates/f_manage_timetables_overview.pt:25
 msgid "There are no ${timetables} set up."
 msgstr ""
+
+#: /src/schooltool/timetable/browser/templates/f_manage_timetables_overview.pt:25
+msgid "timetables"
+msgstr "Stundenpläne"
 
 #: /src/schooltool/timetable/browser/templates/f_schedule_container_view.pt:3
 #: /src/schooltool/timetable/browser/templates/schedule_container_view.pt:36
@@ -8149,7 +8171,7 @@ msgstr ""
 #: /src/schooltool/timetable/browser/templates/f_selected_periods_edit.pt:8
 #: /src/schooltool/timetable/browser/templates/selected_periods_edit.pt:24
 msgid "Using timetable: ${timetable}"
-msgstr ""
+msgstr "Benutze Stundenplan: ${timetable}"
 
 #: /src/schooltool/timetable/browser/templates/f_selected_periods_edit.pt:45
 #: /src/schooltool/timetable/browser/templates/selected_periods_edit.pt:55
@@ -8631,7 +8653,7 @@ msgstr "Mittagessen"
 
 #: /src/schooltool/timetable/interfaces.py:61
 msgid "Activity type."
-msgstr ""
+msgstr "Aktivitätstyp."
 
 #: /src/schooltool/timetable/interfaces.py:104
 msgid "First scheduled day"
@@ -8655,15 +8677,15 @@ msgstr ""
 
 #: /src/schooltool/timetable/interfaces.py:135
 msgid "Meetings"
-msgstr ""
+msgstr "Treffen"
 
 #: /src/schooltool/timetable/interfaces.py:137
 msgid "Meeting"
-msgstr ""
+msgstr "Treffen"
 
 #: /src/schooltool/timetable/interfaces.py:193
 msgid "Activity type"
-msgstr ""
+msgstr "Aktivitätstyp"
 
 #: /src/schooltool/timetable/interfaces.py:299
 msgid "Treat consecutive periods as one meeting"

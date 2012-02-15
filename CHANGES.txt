@@ -2,10 +2,27 @@
 CHANGES
 =======
 
-2.0.2 (unreleased)
+2.0.3 (unreleased)
+------------------
+
+- Nothing changed yet.
+
+
+2.0.2 (2012-02-14)
 ------------------
 
 - Added integer demographic fields.
+
+Bugfixes
+++++++++
+
+- Fixed the password edit view (https://launchpad.net/bugs/868411)
+- Allow optional Selection List demographics fields to remain unset (https://launchpad.net/bugs/898219)
+- Fixed person edit view to show limited demographics fields (https://launchpad.net/bugs/914609)
+- Sorted section list in person accordion (https://launchpad.net/bugs/921373)
+- Move 'School name' to the bottom of Customize menu (https://launchpad.net/bugs/876797)
+- Restore fill down in gradebook contextual menu (https://launchpad.net/bugs/907907)
+- Updated translations.
 
 
 2.0.1 (2011-12-22)

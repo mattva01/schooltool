@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-22 22:28+0200\n"
-"PO-Revision-Date: 2011-12-20 04:18+0000\n"
+"POT-Creation-Date: 2011-12-22 17:43+0200\n"
+"PO-Revision-Date: 2012-01-11 05:35+0000\n"
 "Last-Translator: Douglas Cerna <douglascerna@yahoo.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-12-21 05:41+0000\n"
-"X-Generator: Launchpad (build 14538)\n"
+"X-Launchpad-Export-Date: 2012-01-12 06:28+0000\n"
+"X-Generator: Launchpad (build 14640)\n"
 "Language: es\n"
 
 #: /src/schooltool/app/app.py:193
@@ -2817,7 +2817,19 @@ msgstr ""
 "Muestra el calendario en la página principal\n"
 "            del sitio."
 
-#: /src/schooltool/app/main.py:96
+#: /src/schooltool/app/main.py:314
+msgid "Going to background, daemon pid %d"
+msgstr "Enviado al fondo, PID del demonio: %d"
+
+#: /src/schooltool/app/main.py:361
+msgid "Cannot resolve plugin action order:\n"
+msgstr "No se puede llevar a cabo la acción del plugin:\n"
+
+#: /src/schooltool/app/main.py:513
+msgid "Run %s -h for help."
+msgstr "Ejecute %s -h para obtener ayuda."
+
+#: /src/schooltool/app/main.py:517
 msgid ""
 "\n"
 "Usage: %s [options]\n"
@@ -2847,19 +2859,7 @@ msgstr ""
 "                         es \"-\")\n"
 "  --manage solo hacer tareas de mantenimiento, no correr el servidor\n"
 
-#: /src/schooltool/app/main.py:327
-msgid "Going to background, daemon pid %d"
-msgstr "Enviado al fondo, PID del demonio: %d"
-
-#: /src/schooltool/app/main.py:374
-msgid "Cannot resolve plugin action order:\n"
-msgstr "No se puede llevar a cabo la acción del plugin:\n"
-
-#: /src/schooltool/app/main.py:528
-msgid "Run %s -h for help."
-msgstr "Ejecute %s -h para obtener ayuda."
-
-#: /src/schooltool/app/main.py:540
+#: /src/schooltool/app/main.py:536
 msgid "%s: daemon mode not supported on your operating system."
 msgstr "%s: el modo demonio no esta soportado en su sistema operativo"
 
@@ -4138,7 +4138,15 @@ msgstr "${relationship} de"
 msgid "Contact of"
 msgstr "Contacto de"
 
-#: /src/schooltool/contact/browser/templates/f_contact_view.pt:4
+#: /src/schooltool/contact/browser/templates/f_contact_filter.pt:6
+msgid "First name and/or last name"
+msgstr "Nombre y/o apellido"
+
+#: /src/schooltool/contact/browser/templates/f_contact_view.pt:3
+msgid "Contact information"
+msgstr "Información de contacto"
+
+#: /src/schooltool/contact/browser/templates/f_contact_view.pt:6
 #: /src/schooltool/contact/browser/templates/f_contactsViewlet.pt:9
 msgid "Edit this contact"
 msgstr "Editar este contacto"
@@ -4864,6 +4872,10 @@ msgid ""
 "determining which course should be updated."
 msgstr ""
 
+#: /src/schooltool/course/browser/templates/f_course_filter.pt:6
+msgid "Title or course ID"
+msgstr "Título o identificador de asignatura"
+
 #: /src/schooltool/course/browser/templates/f_course_view.pt:4
 msgid "Edit this course"
 msgstr "Editar esta asignatura"
@@ -4988,8 +5000,12 @@ msgstr "Hay ${count} secciones definidas en ${schoolyear}."
 msgid "There are no sections defined for ${schoolyear}."
 msgstr "No hay secciones definidas en ${schoolyear}."
 
+#: /src/schooltool/course/browser/templates/f_section_filter.pt:6
+msgid "Section title"
+msgstr "Título de sección"
+
 #: /src/schooltool/course/browser/templates/f_section_linkage.pt:25
-#: /src/schooltool/course/browser/templates/f_section_view.pt:102
+#: /src/schooltool/course/browser/templates/f_section_view.pt:104
 msgid "(currently viewing)"
 msgstr "(viendo actualmente)"
 
@@ -5557,12 +5573,8 @@ msgstr "Ver Correo Electrónico"
 msgid "Retry"
 msgstr "Reintentar"
 
-#: /src/schooltool/email/browser/email.py:394
-msgid "Email Details"
-msgstr "Detalles del Correo Electrónico"
-
-#: /src/schooltool/email/browser/email.py:534
-#: /src/schooltool/email/browser/email.py:784
+#: /src/schooltool/email/browser/email.py:557
+#: /src/schooltool/email/browser/email.py:845
 msgid "Email Queue"
 msgstr "Cola de Correo Electrónico"
 
@@ -5662,6 +5674,10 @@ msgstr "Editar la configuración del correo electrónico"
 #: /src/schooltool/email/interfaces.py:58
 msgid "Status"
 msgstr "Estado"
+
+#: /src/schooltool/email/browser/templates/f_email_view.pt:2
+msgid "Email Details"
+msgstr "Detalles del Correo Electrónico"
 
 #: /src/schooltool/email/interfaces.py:44
 msgid "Recipient addresses"
@@ -6123,6 +6139,10 @@ msgstr ""
 "'Grupo de Usuarios de Linux' y 'Actividades deportivas extra-programáticas', "
 "respectivamente. El grupo 'Club de Ajedrez' no tendrá descripción, y el "
 "texto 'Texto después de la segunda coma' será ignorado."
+
+#: /src/schooltool/group/browser/templates/f_group_filter.pt:6
+msgid "Group title"
+msgstr "Título de grupo"
 
 #: /src/schooltool/group/browser/templates/f_group_member_csvimport_description.pt:12
 msgid ""
@@ -7357,7 +7377,7 @@ msgstr ""
 #: /src/schooltool/schoolyear/browser/templates/f_manage_schoolyears_overview.pt:4
 #: /src/schooltool/schoolyear/browser/templates/f_manage_schoolyears_overview.pt:15
 msgid "Add a school year"
-msgstr "Añadir un año escolar"
+msgstr "Añada un año escolar"
 
 #: /src/schooltool/schoolyear/browser/templates/f_manage_schoolyears_overview.pt:10
 msgid "There are no school years configured."
@@ -7512,6 +7532,10 @@ msgstr "Información de la sección"
 #: /src/schooltool/securitypolicy/browser/views.py:57
 msgid "List of accounts"
 msgstr "Lista de cuentas"
+
+#: /src/schooltool/securitypolicy/browser/views.py:58
+msgid "User calendars"
+msgstr "Calendarios del usuario"
 
 #: /src/schooltool/securitypolicy/browser/views.py:59
 msgid "User passwords"
@@ -8120,19 +8144,11 @@ msgstr "Horario"
 msgid "Edit Schedule"
 msgstr "Editar Horario"
 
-#: /src/schooltool/timetable/browser/flourish.zcml:498
-msgid "Add Schedule"
-msgstr "Añadir Horario"
-
-#: /src/schooltool/timetable/browser/flourish.zcml:507
+#: /src/schooltool/timetable/browser/flourish.zcml:512
 msgid "Schedule Timetable"
 msgstr "Programar Horario"
 
-#: /src/schooltool/timetable/browser/flourish.zcml:516
-msgid "School Timetable"
-msgstr "Horario de Escuela"
-
-#: /src/schooltool/timetable/browser/flourish.zcml:526
+#: /src/schooltool/timetable/browser/flourish.zcml:531
 msgid "Exception Days"
 msgstr "Días de Excepción"
 
@@ -8195,6 +8211,10 @@ msgstr "Administrar horarios"
 #: /src/schooltool/timetable/browser/templates/f_manage_timetables_overview.pt:25
 msgid "There are no ${timetables} set up."
 msgstr "No hay ${timetables} configurados."
+
+#: /src/schooltool/timetable/browser/templates/f_manage_timetables_overview.pt:25
+msgid "timetables"
+msgstr "horarios"
 
 #: /src/schooltool/timetable/browser/templates/f_schedule_container_view.pt:3
 #: /src/schooltool/timetable/browser/templates/schedule_container_view.pt:36

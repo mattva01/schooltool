@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: Giancarlo Gaifas <lallo@artiemestieri.tn.it>\n"
-"POT-Creation-Date: 2011-11-22 22:28+0200\n"
-"PO-Revision-Date: 2011-11-23 02:26+0000\n"
+"POT-Creation-Date: 2011-12-22 17:43+0200\n"
+"PO-Revision-Date: 2011-11-23 15:19+0000\n"
 "Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
 "Language-Team: Italian <it@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-11-23 06:11+0000\n"
-"X-Generator: Launchpad (build 14336)\n"
+"X-Launchpad-Export-Date: 2011-12-23 08:04+0000\n"
+"X-Generator: Launchpad (build 14560)\n"
 "Language: it\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -518,7 +518,7 @@ msgstr "il mese precedente"
 
 #: /src/schooltool/app/browser/cal.py:1063
 msgid "Go to next month"
-msgstr "Vai al mese prossimo"
+msgstr "vai al mese successivo"
 
 #: /src/schooltool/app/browser/cal.py:1064
 msgid "Go to current month"
@@ -556,7 +556,7 @@ msgstr "Vai al prossimo anno"
 
 #: /src/schooltool/app/browser/cal.py:1116
 msgid "Go to current year"
-msgstr "Vai all'anno attuale"
+msgstr "vai all'anno in corso"
 
 #: /src/schooltool/app/browser/cal.py:1117
 msgid "Go to previous year"
@@ -576,7 +576,7 @@ msgstr "giorno precedente"
 
 #: /src/schooltool/app/browser/cal.py:1187
 msgid "Go to the next day"
-msgstr "Vai al prossimo giorno"
+msgstr "Vai al giorno successivo"
 
 #: /src/schooltool/app/browser/cal.py:1188
 msgid "Go to today"
@@ -2789,7 +2789,19 @@ msgid ""
 "            site."
 msgstr "Mostra il calendario generale come pagina iniziale del sito."
 
-#: /src/schooltool/app/main.py:96
+#: /src/schooltool/app/main.py:314
+msgid "Going to background, daemon pid %d"
+msgstr "Funziona in sottofondo, con Id del demone %d"
+
+#: /src/schooltool/app/main.py:361
+msgid "Cannot resolve plugin action order:\n"
+msgstr "Non è stato possible risolvere l'ordine dell'azione dei plugin:\n"
+
+#: /src/schooltool/app/main.py:513
+msgid "Run %s -h for help."
+msgstr "Per un aiuto lancia %s -h."
+
+#: /src/schooltool/app/main.py:517
 msgid ""
 "\n"
 "Usage: %s [options]\n"
@@ -2819,19 +2831,7 @@ msgstr ""
 "                         is '-')\n"
 "  --manage only do management tasks, don't run the server\n"
 
-#: /src/schooltool/app/main.py:327
-msgid "Going to background, daemon pid %d"
-msgstr "Funziona in sottofondo, con Id del demone %d"
-
-#: /src/schooltool/app/main.py:374
-msgid "Cannot resolve plugin action order:\n"
-msgstr "Non è stato possible risolvere l'ordine dell'azione dei plugin:\n"
-
-#: /src/schooltool/app/main.py:528
-msgid "Run %s -h for help."
-msgstr "Per un aiuto lancia %s -h."
-
-#: /src/schooltool/app/main.py:540
+#: /src/schooltool/app/main.py:536
 msgid "%s: daemon mode not supported on your operating system."
 msgstr "%s: il sistema operativo non consente la modalità demone."
 
@@ -4106,7 +4106,15 @@ msgstr "${relationship} d"
 msgid "Contact of"
 msgstr "Contatto di"
 
-#: /src/schooltool/contact/browser/templates/f_contact_view.pt:4
+#: /src/schooltool/contact/browser/templates/f_contact_filter.pt:6
+msgid "First name and/or last name"
+msgstr ""
+
+#: /src/schooltool/contact/browser/templates/f_contact_view.pt:3
+msgid "Contact information"
+msgstr "Informazioni di contatto"
+
+#: /src/schooltool/contact/browser/templates/f_contact_view.pt:6
 #: /src/schooltool/contact/browser/templates/f_contactsViewlet.pt:9
 msgid "Edit this contact"
 msgstr "Modifica questo contatto"
@@ -4816,6 +4824,10 @@ msgid ""
 "determining which course should be updated."
 msgstr ""
 
+#: /src/schooltool/course/browser/templates/f_course_filter.pt:6
+msgid "Title or course ID"
+msgstr ""
+
 #: /src/schooltool/course/browser/templates/f_course_view.pt:4
 msgid "Edit this course"
 msgstr "Modifica questo corso"
@@ -4932,8 +4944,12 @@ msgstr "Ci sono ${count} sezioni definite per il ${schoolyear}."
 msgid "There are no sections defined for ${schoolyear}."
 msgstr "Non ci sono sezioni definite per il ${schoolyear}."
 
+#: /src/schooltool/course/browser/templates/f_section_filter.pt:6
+msgid "Section title"
+msgstr ""
+
 #: /src/schooltool/course/browser/templates/f_section_linkage.pt:25
-#: /src/schooltool/course/browser/templates/f_section_view.pt:102
+#: /src/schooltool/course/browser/templates/f_section_view.pt:104
 msgid "(currently viewing)"
 msgstr ""
 
@@ -5493,12 +5509,8 @@ msgstr "Visualizzazione E-mail"
 msgid "Retry"
 msgstr "Riprova"
 
-#: /src/schooltool/email/browser/email.py:394
-msgid "Email Details"
-msgstr "Dettagli e-mail"
-
-#: /src/schooltool/email/browser/email.py:534
-#: /src/schooltool/email/browser/email.py:784
+#: /src/schooltool/email/browser/email.py:557
+#: /src/schooltool/email/browser/email.py:845
 msgid "Email Queue"
 msgstr "Coda E-mail"
 
@@ -5590,6 +5602,10 @@ msgstr "Modifica le impostazioni delle e-mail"
 #: /src/schooltool/email/interfaces.py:58
 msgid "Status"
 msgstr "Stato"
+
+#: /src/schooltool/email/browser/templates/f_email_view.pt:2
+msgid "Email Details"
+msgstr "Dettagli e-mail"
 
 #: /src/schooltool/email/interfaces.py:44
 msgid "Recipient addresses"
@@ -6047,6 +6063,10 @@ msgstr ""
 "descrizione 'Linux Users Groups' e 'Circolo sportivo del dopo scuola'.  Il "
 "gruppo 'Circolo scacchi' non ha descrizione mentre il testo \"testo dopo la "
 "seconda virgola\", del terzo gruppo, viene ignorato."
+
+#: /src/schooltool/group/browser/templates/f_group_filter.pt:6
+msgid "Group title"
+msgstr ""
 
 #: /src/schooltool/group/browser/templates/f_group_member_csvimport_description.pt:12
 msgid ""
@@ -7402,6 +7422,10 @@ msgstr "Informazioni sulla sezione"
 msgid "List of accounts"
 msgstr "Elenco degli account"
 
+#: /src/schooltool/securitypolicy/browser/views.py:58
+msgid "User calendars"
+msgstr ""
+
 #: /src/schooltool/securitypolicy/browser/views.py:59
 msgid "User passwords"
 msgstr "Password degli utenti"
@@ -7998,19 +8022,11 @@ msgstr "Orario"
 msgid "Edit Schedule"
 msgstr "Modifica schedulazione"
 
-#: /src/schooltool/timetable/browser/flourish.zcml:498
-msgid "Add Schedule"
-msgstr "Aggiungi schedulazione"
-
-#: /src/schooltool/timetable/browser/flourish.zcml:507
+#: /src/schooltool/timetable/browser/flourish.zcml:512
 msgid "Schedule Timetable"
 msgstr ""
 
-#: /src/schooltool/timetable/browser/flourish.zcml:516
-msgid "School Timetable"
-msgstr ""
-
-#: /src/schooltool/timetable/browser/flourish.zcml:526
+#: /src/schooltool/timetable/browser/flourish.zcml:531
 msgid "Exception Days"
 msgstr "Giorni di eccezione"
 
@@ -8065,6 +8081,10 @@ msgstr ""
 #: /src/schooltool/timetable/browser/templates/f_manage_timetables_overview.pt:25
 msgid "There are no ${timetables} set up."
 msgstr "Non ci sono ${timetables} impostate."
+
+#: /src/schooltool/timetable/browser/templates/f_manage_timetables_overview.pt:25
+msgid "timetables"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/f_schedule_container_view.pt:3
 #: /src/schooltool/timetable/browser/templates/schedule_container_view.pt:36
