@@ -323,22 +323,43 @@ class FlourishRelationshipViewBase(flourish.page.NoSidebarPage):
             for item in self.getAvailableItems():
                 if add_item_prefix + self.getKey(item) in self.request:
                     self.add(removeSecurityProxy(item))
-                    changed = True
+                    changed = 'added'
         if remove_item_submitted:
             for item in self.getSelectedItems():
                 if remove_item_prefix + self.getKey(item) in self.request:
                     self.remove(removeSecurityProxy(item))
-                    changed = True
+                    changed = 'removed'
         return changed
 
     def update(self):
         changes = self.applyFormChanges()
+        self.setUpTables()
         if changes:
             this_url = '%s?nexturl=%s' % (str(self.request.URL),
                                           urllib.quote(self.nextURL()))
+            # XXX: this be evil hacks indeed
+            if changes == 'added':
+                this_url += self.available_table.extra_url()
+                if self.available_table.batch:
+                    batch = self.available_table.batch
+                    if 'on_add.batch_start' in self.request:
+                        this_url += "&batch_start%s=%s" % (
+                            batch.name, self.request['on_add.batch_start'])
+                    if 'on_add.batch_size' in self.request:
+                        this_url += "&batch_size%s=%s" % (
+                            batch.name, self.request['on_add.batch_size'])
+            elif changes == 'removed':
+                this_url += self.selected_table.extra_url()
+                if self.selected_table.batch:
+                    batch = self.selected_table.batch
+                    if 'on_remove.batch_start' in self.request:
+                        this_url += "&batch_start%s=%s" % (
+                            batch.name, self.request['on_remove.batch_start'])
+                    if 'on_remove.batch_size' in self.request:
+                        this_url += "&batch_size%s=%s" % (
+                            batch.name, self.request['on_remove.batch_size'])
             self.request.response.redirect(this_url)
             return
-        self.setUpTables()
 
 
 class ApplicationLoginView(BrowserView):
@@ -911,7 +932,7 @@ class FlourishErrorsViewBase(flourish.page.Page):
 
 
 class FlourishErrorsView(FlourishErrorsViewBase):
-        
+
     def formatEntryValue(self, value):
         return len(value) < 70 and value or value[:70] + '...'
 

@@ -15,6 +15,12 @@
     </h3>
     <input type="hidden" id="nexturl" name="nexturl"
            tal:attributes="value view/nextURL" />
+    <tal:if condition="view/selected_table/batch">
+      <input type="hidden" name="on_remove.batch_start"
+             tal:attributes="value view/selected_table/batch/start" />
+      <input type="hidden" name="on_remove.batch_size"
+             tal:attributes="value view/selected_table/batch/size" />
+    </tal:if>
   </form>
   <h3>
     <a tal:attributes="href view/nextURL"
@@ -41,5 +47,12 @@
     </h3>
     <input type="hidden" id="nexturl" name="nexturl"
            tal:attributes="value view/nextURL" />
+
+    <tal:if condition="batch">
+      <input type="hidden" name="on_add.batch_start"
+             tal:attributes="value batch/start" />
+      <input type="hidden" name="on_add.batch_size"
+             tal:attributes="value batch/size" />
+    </tal:if>
   </form>
 </metal:block>
