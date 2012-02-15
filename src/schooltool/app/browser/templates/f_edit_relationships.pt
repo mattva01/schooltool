@@ -32,9 +32,10 @@
       </div>
     </tal:if>
     <tal:block replace="structure view/available_table/filter_widget/render|nothing" />
-    <tal:block replace="structure view/available_table/batch/render" />
+    <tal:block replace="structure view/available_table/batch/render"
+               condition="batch" />
     <tal:block replace="structure view/available_table/render"
-               tal:condition="batch"/>
+               condition="batch" />
     <h3 tal:condition="not:batch" i18n:translate="">
       There are none to add.
     </h3>
