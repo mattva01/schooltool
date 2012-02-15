@@ -51,6 +51,8 @@ class Batch(object):
 
         self.start = int(self.request.get('batch_start' + self.name, 0))
         self.size = int(self.request.get('batch_size' + self.name, batch_size))
+        if self.start >= self.full_size:
+            self.start = max(0, self.full_size-self.size)
         self.length = len(item_list[self.start:self.start + self.size])
 
     def render(self):
@@ -139,6 +141,8 @@ class IterableBatch(Batch):
 
         self.start = int(self.request.get('batch_start' + self.name, 0))
         self.size = int(self.request.get('batch_size' + self.name, batch_size))
+        if self.start >= self.full_size:
+            self.start = max(0, self.full_size-self.size)
         self.list = item_list[self.start:self.start + self.size]
         self.length = len(self.list)
 
