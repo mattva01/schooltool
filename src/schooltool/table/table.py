@@ -75,7 +75,7 @@ class FilterWidget(object):
 
     def extra_url(self):
         if 'SEARCH' in self.request:
-            return '&SEARCH=%s' % self.request.get('SEARCH')
+            return '&SEARCH=%s' % urllib.quote(unicode(self.request.get('SEARCH')).encode('UTF-8'))
         return ''
 
 
