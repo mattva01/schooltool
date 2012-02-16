@@ -34,6 +34,7 @@ from zope.i18n import translate
 from z3c.form import form, field, button, validator
 from z3c.form.interfaces import DISPLAY_MODE
 from zope.interface import invariant, Invalid
+from zope.publisher.interfaces import NotFound
 from zope.schema import Password, TextLine, Choice, List, Object
 from zope.schema import ValidationError
 from zope.schema.interfaces import ITitledTokenizedTerm, IField
@@ -179,7 +180,7 @@ class IPhotoField(Interface):
 
     photo = Photo(
         title=_('Photo'),
-        description=_('XXX Format, size, ratio hint XXX'),
+        description=_('An image file that will be converted to a jpeg no larger than 99x128 pixels (3:4 aspect ratio). Uploaded images must be jpeg or png files smaller than 10 MB'),
         required=False)
 
 
@@ -1128,7 +1129,8 @@ class PhotoView(flourish.page.Page):
 
     def __call__(self):
         photo = self.context.photo
-        # XXX: what to do if photo is None? redirect?
+        if photo is None:
+            raise NotFound(self.context, u'photo', self.request)
         self.request.response.setHeader('Content-Type', photo.mimeType)
         self.request.response.setHeader('Content-Length', photo.size)
         # XXX: copied from z3c.image.proc.browser

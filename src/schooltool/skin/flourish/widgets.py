@@ -210,6 +210,9 @@ class PhotoDataConverter(FileUploadDataConverter):
 
     adapts(IPhoto, IPhotoWidget)
 
+    DESIRED_SIZE = (99, 128)
+    MAX_UPLOAD_SIZE = 10485760 # 10 MB
+    
     def toFieldValue(self, value):
         if value is None or value == '':
             return NOT_CHANGED
@@ -220,23 +223,25 @@ class PhotoDataConverter(FileUploadDataConverter):
         contentType, width, height = self.getImageInfo(firstbytes)
         if not contentType:
             raise FormatterValidationError(
-                _('XXX The file uploaded is not an image XXX'), value)
+                _('The file uploaded is not a jpeg or png image'), value)
         value.seek(0)
         data = value.read()
+        if len(data) > self.MAX_UPLOAD_SIZE:
+            raise FormatterValidationError(
+                _('The image uploaded cannot be larger than 10 MB'), value)
         data = self.processImage(data)
         f = File()
         self.updateFile(f, data, contentType)
         return f
 
     def processImage(self, data):
-        DESIRED_SIZE = (99, 128)
         image = Image.open(StringIO(data))
         kw = {'quality': 100, 'filter': Image.ANTIALIAS}
         transparency = image.info.get('transparency', None)
         if transparency is not None:
             kw['transparency'] = transparency
-        if image.size != DESIRED_SIZE:
-            size = self.getMaxSize(image.size, DESIRED_SIZE)
+        if image.size != self.DESIRED_SIZE:
+            size = self.getMaxSize(image)
             image.thumbnail(size, kw['filter'])
         f = StringIO()
         image.save(f, image.format.upper(), **kw)
@@ -249,7 +254,9 @@ class PhotoDataConverter(FileUploadDataConverter):
         w.close()
 
     # XXX: Copied from z3c.image.proc.browser
-    def getMaxSize(self, image_size, desired_size):
+    def getMaxSize(self, image):
+        image_size = image.size
+        desired_size = self.DESIRED_SIZE
         x_ratio = float(desired_size[0])/image_size[0]
         y_ratio = float(desired_size[1])/image_size[1]
         if x_ratio < y_ratio:
