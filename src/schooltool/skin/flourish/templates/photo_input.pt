@@ -1,6 +1,31 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:tal="http://xml.zope.org/namespaces/tal"
       tal:omit-tag="">
+<div class="photo-input" tal:condition="view/has_photo">
+  <div>
+    <img tal:attributes="src string:${context/@@absolute_url}/photo"
+         alt="Photo" i18n:attributes="alt" />
+  </div>
+  <input type="checkbox" value="delete"
+         tal:attributes="name string:${view/name}" />
+  <span class="label" i18n:translate="" i18n:domain="schooltool">
+    delete this photo
+  </span>
+  <script>
+    $(document).ready(function() {
+      function updateFileInput(checkbox) {
+        if ($(checkbox).is(':checked')) {
+          $("input[type='file'][name$='.photo']").attr('disabled', true);
+        } else {
+          $("input[type='file'][name$='.photo']").removeAttr('disabled');
+        }
+      };
+      $("input[type='checkbox'][name$='.photo']").change(function() {
+        updateFileInput(this);
+      });
+    });
+  </script>
+</div>
 <input type="file" id="" name="" class="" title="" lang="" disabled=""
        readonly="" alt="" tabindex="" accesskey="" size="" maxlength=""
        tal:attributes="id view/id;
@@ -30,25 +55,4 @@
                        onselect view/onselect;
                        size view/size;
                        maxlength view/maxlength" />
-<div tal:condition="view/has_photo">
-  <input type="checkbox" value="delete"
-         tal:attributes="name string:${view/name}" />
-  <span class="label" i18n:translate="" i18n:domain="schooltool">
-    delete existing image
-  </span>
-  <script>
-    $(document).ready(function() {
-      function updateFileInput(checkbox) {
-        if ($(checkbox).is(':checked')) {
-          $("input[type='file'][name$='.photo']").attr('disabled', true);
-        } else {
-          $("input[type='file'][name$='.photo']").removeAttr('disabled');
-        }
-      };
-      $("input[type='checkbox'][name$='.photo']").change(function() {
-        updateFileInput(this);
-      });
-    });
-  </script>
-</div>
 </html>

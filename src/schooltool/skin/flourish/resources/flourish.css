@@ -318,3 +318,25 @@ pre.traceback {
     border-color: #aaaaaa;
     border-radius: 4px;
 }
+
+.photo-input div {
+    float: left;
+    height: 128px;
+    overflow: hidden;
+    width: 99px;
+    text-align: center;
+    border-width: 1px;
+    border-style: solid;
+    /* XXX: move to colors.css */
+    border-color: #aaaaaa;
+    border-radius: 4px;
+}
+
+.photo-input input, .photo-input span {
+    margin-top: 56px;
+}
+
+.photo-field {
+    clear: both;
+    display: block;
+}
