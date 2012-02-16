@@ -302,3 +302,18 @@ ul.contributors {
 pre.traceback {
     padding: 4px 0px;
 }
+
+/* XXX: used in person general information viewlet */
+
+.photo-display {
+    float: right;
+    height: 128px;
+    margin-top: 16px;
+    overflow: hidden;
+    width: 99px;
+    text-align: center;
+}
+
+.photo-display img {
+    border-radius: 4px;
+}

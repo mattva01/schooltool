@@ -22,26 +22,37 @@ SchoolTool flourish widgets.
 import re
 import os
 import sys
+import struct
+from cStringIO import StringIO
+import Image
 
 import zope.formlib.widgets
-from zope.component import getUtility, adapter
-from zope.interface import implementer
+from zope.component import getUtility, adapter, adapts
+from zope.file.file import File
+from zope.interface import implementer, Interface, implements
 from zope.i18n.interfaces import INegotiator
 from zope.traversing.browser.absoluteurl import absoluteURL
 from zope.schema.interfaces import IField
+from zope.schema import Bytes
+from zope.schema._bootstrapinterfaces import TooLong
 
-from z3c.form.interfaces import IFieldWidget
+from z3c.form.browser.file import FileWidget
+from z3c.form.interfaces import IFieldWidget, NOT_CHANGED
 from z3c.form.widget import ComputedWidgetAttribute, FieldWidget
+from z3c.form.converter import FileUploadDataConverter
+from z3c.form.converter import FormatterValidationError
 import zc.resourcelibrary
 
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.basicperson.demographics import IDemographicsForm
+from schooltool.basicperson.interfaces import IBasicPerson
 from schooltool.skin.widgets import FCKConfig
 from schooltool.skin.widgets import IFckeditorWidget
 from schooltool.skin.widgets import FckeditorFormlibWidget
 from schooltool.skin.widgets import FckeditorZ3CFormWidget
 from schooltool.skin.flourish.resource import ResourceLibrary
 from schooltool.skin.flourish.interfaces import IFlourishLayer
+from schooltool.common import SchoolToolMessage as _
 
 
 class JQueryI18nLibrary(ResourceLibrary):
@@ -162,3 +173,158 @@ def is_required_demo_field(adapter):
 
 
 PromptRequiredDemoField = ComputedWidgetAttribute(is_required_demo_field)
+
+
+class IPhoto(Interface):
+    """Marker interface for photos"""
+
+
+class Photo(Bytes):
+
+    implements(IPhoto)
+    _type = File
+
+    def _validate(self, value):
+        if self.max_length is not None and value.size > self.max_length:
+            raise TooLong(value, self.max_length)
+
+
+class IPhotoWidget(Interface):
+    """Marker for photo widgets"""
+
+
+class PhotoWidget(FileWidget):
+
+    implements(IPhotoWidget)
+
+    def has_photo(self):
+        return IBasicPerson.providedBy(self.context) and \
+               self.context.photo is not None
+
+
+def PhotoFieldWidget(field, request):
+    return FieldWidget(field, PhotoWidget(request))
+
+
+class PhotoDataConverter(FileUploadDataConverter):
+
+    adapts(IPhoto, IPhotoWidget)
+
+    def toFieldValue(self, value):
+        if value is None or value == '':
+            return NOT_CHANGED
+        if value == 'delete':
+            # XXX: delete checkbox was marked
+            return None
+        firstbytes = value.read(1024)
+        contentType, width, height = self.getImageInfo(firstbytes)
+        if not contentType:
+            raise FormatterValidationError(
+                _('XXX The file uploaded is not an image XXX'), value)
+        value.seek(0)
+        data = value.read()
+        data = self.processImage(data)
+        f = File()
+        self.updateFile(f, data, contentType)
+        return f
+
+    def processImage(self, data):
+        DESIRED_SIZE = (99, 128)
+        image = Image.open(StringIO(data))
+        kw = {'quality': 100, 'filter': Image.ANTIALIAS}
+        transparency = image.info.get('transparency', None)
+        if transparency is not None:
+            kw['transparency'] = transparency
+        if image.size != DESIRED_SIZE:
+            size = self.getMaxSize(image.size, DESIRED_SIZE)
+            image.thumbnail(size, kw['filter'])
+        f = StringIO()
+        image.save(f, image.format.upper(), **kw)
+        return f.getvalue()
+
+    def updateFile(self, ob, data, mimeType):
+        ob.mimeType = mimeType
+        w = ob.open("w")
+        w.write(data)
+        w.close()
+
+    # XXX: Copied from z3c.image.proc.browser
+    def getMaxSize(self, image_size, desired_size):
+        x_ratio = float(desired_size[0])/image_size[0]
+        y_ratio = float(desired_size[1])/image_size[1]
+        if x_ratio < y_ratio:
+            new_size = (round(x_ratio*image_size[0]),
+                        round(x_ratio*image_size[1]))
+        else:
+            new_size = (round(y_ratio*image_size[0]),
+                        round(y_ratio*image_size[1]))
+        return tuple(map(int, new_size))
+
+    # XXX: copied from zope.app.file.image
+    def getImageInfo(self, data):
+        data = str(data)
+        size = len(data)
+        height = -1
+        width = -1
+        content_type = ''
+
+        # handle GIFs
+        if (size >= 10) and data[:6] in ('GIF87a', 'GIF89a'):
+            # Check to see if content_type is correct
+            content_type = 'image/gif'
+            w, h = struct.unpack("<HH", data[6:10])
+            width = int(w)
+            height = int(h)
+
+        # See PNG 2. Edition spec (http://www.w3.org/TR/PNG/)
+        # Bytes 0-7 are below, 4-byte chunk length, then 'IHDR'
+        # and finally the 4-byte width, height
+        elif ((size >= 24) and data.startswith('\211PNG\r\n\032\n')
+              and (data[12:16] == 'IHDR')):
+            content_type = 'image/png'
+            w, h = struct.unpack(">LL", data[16:24])
+            width = int(w)
+            height = int(h)
+
+        # Maybe this is for an older PNG version.
+        elif (size >= 16) and data.startswith('\211PNG\r\n\032\n'):
+            # Check to see if we have the right content type
+            content_type = 'image/png'
+            w, h = struct.unpack(">LL", data[8:16])
+            width = int(w)
+            height = int(h)
+
+        # handle JPEGs
+        elif (size >= 2) and data.startswith('\377\330'):
+            content_type = 'image/jpeg'
+            jpeg = StringIO(data)
+            jpeg.read(2)
+            b = jpeg.read(1)
+            try:
+                w = -1
+                h = -1
+                while (b and ord(b) != 0xDA):
+                    while (ord(b) != 0xFF): b = jpeg.read(1)
+                    while (ord(b) == 0xFF): b = jpeg.read(1)
+                    if (ord(b) >= 0xC0 and ord(b) <= 0xC3):
+                        jpeg.read(3)
+                        h, w = struct.unpack(">HH", jpeg.read(4))
+                        break
+                    else:
+                        jpeg.read(int(struct.unpack(">H", jpeg.read(2))[0])-2)
+                    b = jpeg.read(1)
+                width = int(w)
+                height = int(h)
+            except struct.error:
+                pass
+            except ValueError:
+                pass
+
+        # handle BMPs
+        elif (size >= 30) and data.startswith('BM'):
+            kind = struct.unpack("<H", data[14:16])[0]
+            if kind == 40: # Windows 3.x bitmap
+                content_type = 'image/x-ms-bmp'
+                width, height = struct.unpack("<LL", data[18:26])
+
+        return content_type, width, height
