@@ -312,8 +312,9 @@ pre.traceback {
     overflow: hidden;
     width: 99px;
     text-align: center;
-}
-
-.photo-display img {
+    border-width: 1px;
+    border-style: solid;
+    /* XXX: move to colors.css */
+    border-color: #aaaaaa;
     border-radius: 4px;
 }

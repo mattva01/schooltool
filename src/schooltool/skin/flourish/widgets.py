@@ -22,7 +22,6 @@ SchoolTool flourish widgets.
 import re
 import os
 import sys
-import struct
 from cStringIO import StringIO
 import Image
 
@@ -210,7 +209,8 @@ class PhotoDataConverter(FileUploadDataConverter):
 
     adapts(IPhoto, IPhotoWidget)
 
-    DESIRED_SIZE = (99, 128)
+    SIZE = (99, 128)
+    FORMAT = 'JPEG'
     MAX_UPLOAD_SIZE = 10485760 # 10 MB
     
     def toFieldValue(self, value):
@@ -219,36 +219,42 @@ class PhotoDataConverter(FileUploadDataConverter):
         if value == 'delete':
             # XXX: delete checkbox was marked
             return None
-        firstbytes = value.read(1024)
-        contentType, width, height = self.getImageInfo(firstbytes)
-        if not contentType:
+        data = value.read()
+        try:
+            image = Image.open(StringIO(data))
+            if image.format not in ('JPEG', 'PNG'):
+                raise IOError()
+        except (IOError,):
             raise FormatterValidationError(
                 _('The file uploaded is not a jpeg or png image'), value)
-        value.seek(0)
-        data = value.read()
         if len(data) > self.MAX_UPLOAD_SIZE:
             raise FormatterValidationError(
                 _('The image uploaded cannot be larger than 10 MB'), value)
-        data = self.processImage(data)
+        data = self.processImage(image)
         f = File()
-        self.updateFile(f, data, contentType)
+        self.updateFile(f, data)
         return f
 
-    def processImage(self, data):
-        image = Image.open(StringIO(data))
+    def processImage(self, image):
         kw = {'quality': 100, 'filter': Image.ANTIALIAS}
-        transparency = image.info.get('transparency', None)
-        if transparency is not None:
-            kw['transparency'] = transparency
-        if image.size != self.DESIRED_SIZE:
+        result = image
+        if image.size != self.SIZE:
             size = self.getMaxSize(image)
             image.thumbnail(size, kw['filter'])
+            if image.size != self.SIZE or image.mode == 'RGBA':
+                result = Image.new('RGB', self.SIZE, (255, 255, 255))
+                left = int(round((self.SIZE[0] - image.size[0])/float(2)))
+                up = int(round((self.SIZE[1] - image.size[1])/float(2)))
+                mask = None
+                if image.mode == 'RGBA':
+                    mask = image
+                result.paste(image, (left, up), mask)
         f = StringIO()
-        image.save(f, image.format.upper(), **kw)
+        result.save(f, self.FORMAT, **kw)
         return f.getvalue()
 
-    def updateFile(self, ob, data, mimeType):
-        ob.mimeType = mimeType
+    def updateFile(self, ob, data):
+        ob.mimeType = Image.MIME[self.FORMAT]
         w = ob.open("w")
         w.write(data)
         w.close()
@@ -256,7 +262,7 @@ class PhotoDataConverter(FileUploadDataConverter):
     # XXX: Copied from z3c.image.proc.browser
     def getMaxSize(self, image):
         image_size = image.size
-        desired_size = self.DESIRED_SIZE
+        desired_size = self.SIZE
         x_ratio = float(desired_size[0])/image_size[0]
         y_ratio = float(desired_size[1])/image_size[1]
         if x_ratio < y_ratio:
@@ -266,72 +272,3 @@ class PhotoDataConverter(FileUploadDataConverter):
             new_size = (round(y_ratio*image_size[0]),
                         round(y_ratio*image_size[1]))
         return tuple(map(int, new_size))
-
-    # XXX: copied from zope.app.file.image
-    def getImageInfo(self, data):
-        data = str(data)
-        size = len(data)
-        height = -1
-        width = -1
-        content_type = ''
-
-        # handle GIFs
-        if (size >= 10) and data[:6] in ('GIF87a', 'GIF89a'):
-            # Check to see if content_type is correct
-            content_type = 'image/gif'
-            w, h = struct.unpack("<HH", data[6:10])
-            width = int(w)
-            height = int(h)
-
-        # See PNG 2. Edition spec (http://www.w3.org/TR/PNG/)
-        # Bytes 0-7 are below, 4-byte chunk length, then 'IHDR'
-        # and finally the 4-byte width, height
-        elif ((size >= 24) and data.startswith('\211PNG\r\n\032\n')
-              and (data[12:16] == 'IHDR')):
-            content_type = 'image/png'
-            w, h = struct.unpack(">LL", data[16:24])
-            width = int(w)
-            height = int(h)
-
-        # Maybe this is for an older PNG version.
-        elif (size >= 16) and data.startswith('\211PNG\r\n\032\n'):
-            # Check to see if we have the right content type
-            content_type = 'image/png'
-            w, h = struct.unpack(">LL", data[8:16])
-            width = int(w)
-            height = int(h)
-
-        # handle JPEGs
-        elif (size >= 2) and data.startswith('\377\330'):
-            content_type = 'image/jpeg'
-            jpeg = StringIO(data)
-            jpeg.read(2)
-            b = jpeg.read(1)
-            try:
-                w = -1
-                h = -1
-                while (b and ord(b) != 0xDA):
-                    while (ord(b) != 0xFF): b = jpeg.read(1)
-                    while (ord(b) == 0xFF): b = jpeg.read(1)
-                    if (ord(b) >= 0xC0 and ord(b) <= 0xC3):
-                        jpeg.read(3)
-                        h, w = struct.unpack(">HH", jpeg.read(4))
-                        break
-                    else:
-                        jpeg.read(int(struct.unpack(">H", jpeg.read(2))[0])-2)
-                    b = jpeg.read(1)
-                width = int(w)
-                height = int(h)
-            except struct.error:
-                pass
-            except ValueError:
-                pass
-
-        # handle BMPs
-        elif (size >= 30) and data.startswith('BM'):
-            kind = struct.unpack("<H", data[14:16])[0]
-            if kind == 40: # Windows 3.x bitmap
-                content_type = 'image/x-ms-bmp'
-                width, height = struct.unpack("<LL", data[18:26])
-
-        return content_type, width, height
