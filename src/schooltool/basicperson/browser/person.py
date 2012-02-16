@@ -180,7 +180,7 @@ class IPhotoField(Interface):
 
     photo = Photo(
         title=_('Photo'),
-        description=_('An image file that will be converted to a jpeg no larger than 99x128 pixels (3:4 aspect ratio). Uploaded images must be jpeg or png files smaller than 10 MB'),
+        description=_('An image file that will be converted to a JPEG no larger than 99x132 pixels (3:4 aspect ratio). Uploaded images must be JPEG or PNG files smaller than 10 MB'),
         required=False)
 
 

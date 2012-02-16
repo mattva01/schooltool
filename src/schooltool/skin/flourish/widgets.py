@@ -209,7 +209,7 @@ class PhotoDataConverter(FileUploadDataConverter):
 
     adapts(IPhoto, IPhotoWidget)
 
-    SIZE = (99, 128)
+    SIZE = (99, 132)
     FORMAT = 'JPEG'
     MAX_UPLOAD_SIZE = 10485760 # 10 MB
     
@@ -226,7 +226,7 @@ class PhotoDataConverter(FileUploadDataConverter):
                 raise IOError()
         except (IOError,):
             raise FormatterValidationError(
-                _('The file uploaded is not a jpeg or png image'), value)
+                _('The file uploaded is not a JPEG or PNG image'), value)
         if len(data) > self.MAX_UPLOAD_SIZE:
             raise FormatterValidationError(
                 _('The image uploaded cannot be larger than 10 MB'), value)
