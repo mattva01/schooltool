@@ -591,12 +591,25 @@ class FlourishContactFilterWidget(ContactFilterWidget):
 
     parameters = ['SEARCH_TITLE']
 
+    def appendGlobbing(self, terms):
+        result = []
+        for term in terms:
+            words = filter(None, term.split(' '))
+            if words:
+                result.append(' '.join(['%s*' % word for word in words]))
+        return result
+
+    def buildQuery(self, terms):
+        return ' or '.join(self.appendGlobbing(terms))
+
     def filter(self, items):
         if 'SEARCH_TITLE' in self.request:
+            search_title = self.request['SEARCH_TITLE']
             terms = [term.strip()
-                     for term in self.request['SEARCH_TITLE'].lower().split(',')]
-            query = ' or '.join(filter(None, terms))
-            if query:
+                     for term in search_title.lower().split(',')]
+            terms = filter(None, terms)
+            if terms:
+                query = self.buildQuery(terms)
                 catalog = ICatalog(self.context)
                 result = catalog['text'].apply(query)
                 items = [item for item in items
