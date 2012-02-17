@@ -595,7 +595,7 @@ class FlourishContactFilterWidget(ContactFilterWidget):
         if 'SEARCH_TITLE' in self.request:
             terms = [term.strip()
                      for term in self.request['SEARCH_TITLE'].lower().split(',')]
-            query = ' or '.join(terms)
+            query = ' or '.join(filter(None, terms))
             if query:
                 catalog = ICatalog(self.context)
                 result = catalog['text'].apply(query)
