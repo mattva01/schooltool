@@ -9,13 +9,9 @@
   </h3>
   <table class="form-fields">
     <tbody>
-      <tr>
-        <td class="label" i18n:translate="">Status</td>
-        <td tal:content="view/email_status" />
-      </tr>
-      <tr>
-        <td class="label" i18n:translate="">Hostname</td>
-        <td tal:content="view/hostname" />
+      <tr tal:repeat="widget view/widgets/values">
+        <td tal:content="widget/label" class="label"/>
+        <td tal:content="structure widget/render" />
       </tr>
     </tbody>
   </table>
