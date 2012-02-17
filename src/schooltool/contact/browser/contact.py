@@ -596,10 +596,11 @@ class FlourishContactFilterWidget(ContactFilterWidget):
             terms = [term.strip()
                      for term in self.request['SEARCH_TITLE'].lower().split(',')]
             query = ' or '.join(terms)
-            catalog = ICatalog(self.context)
-            result = catalog['text'].apply(query)
-            items = [item for item in items
-                     if item['id'] in result]
+            if query:
+                catalog = ICatalog(self.context)
+                result = catalog['text'].apply(query)
+                items = [item for item in items
+                         if item['id'] in result]
         return items
 
 
