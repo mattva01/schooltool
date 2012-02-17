@@ -59,6 +59,7 @@ from zope.size import byteDisplay
 from zope.schema import Int, Bool, Tuple, Choice
 from z3c.form import form, field, button
 from z3c.form.browser.checkbox import CheckBoxFieldWidget
+from z3c.form.interfaces import DISPLAY_MODE
 from zc.table.column import Column
 from zc.table.table import FormFullFormatter
 
@@ -849,26 +850,14 @@ class FlourishServerSettingsOverview(flourish.page.Content,
         return formatted
 
 
-class FlourishCalendarSettingsOverview(flourish.page.Content):
+class FlourishCalendarSettingsOverview(flourish.form.FormViewlet):
 
-    body_template = ViewPageTemplateFile(
+    fields = field.Fields(IApplicationPreferences)
+    fields = fields.select('frontPageCalendar', 'timezone', 'timeformat',
+                           'dateformat', 'weekstart')
+    template = ViewPageTemplateFile(
         'templates/f_calendar_settings_overview.pt')
-
-    @property
-    def settings(self):
-        result = {}
-        preferences = IApplicationPreferences(self.context)
-        if preferences.frontPageCalendar:
-            result['frontPageCalendar'] = _('Yes')
-        else:
-            result['frontPageCalendar'] = _('No')
-        result['timezone'] = preferences.timezone
-        for setting in ('timeformat', 'dateformat', 'weekstart'):
-            preference = getattr(preferences, setting)
-            field = IApplicationPreferences[setting]
-            vocabulary = field.vocabulary
-            result[setting] = vocabulary.getTerm(preference).title
-        return result
+    mode = DISPLAY_MODE
 
 
 class PackDatabaseLink(flourish.page.ModalFormLinkViewlet):

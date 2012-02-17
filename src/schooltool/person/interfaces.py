@@ -170,7 +170,7 @@ class ICalendarDisplayPreferences(Interface):
 
     # SUNDAY and MONDAY are integers, 6 and 0 respectivley
     weekstart = Choice(
-        title=_("Week starts on:"),
+        title=_("Week starts on"),
         vocabulary=vocabulary([(calendar.SATURDAY, _("Saturday")),
                                (calendar.SUNDAY, _("Sunday")),
                                (calendar.MONDAY, _("Monday"))]))
