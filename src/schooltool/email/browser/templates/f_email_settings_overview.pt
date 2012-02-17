@@ -9,10 +9,12 @@
   </h3>
   <table class="form-fields">
     <tbody>
-      <tr tal:repeat="widget view/widgets/values">
-        <td tal:content="widget/label" class="label"/>
-        <td tal:content="structure widget/render" />
-      </tr>
+      <tal:loop repeat="widget view/widgets/values">
+        <tr tal:condition="widget/value">
+          <td tal:content="widget/label" class="label"/>
+          <td tal:content="structure widget/render" />
+        </tr>
+      </tal:loop>
     </tbody>
   </table>
 </div>
