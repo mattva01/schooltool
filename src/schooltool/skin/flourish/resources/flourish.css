@@ -303,7 +303,8 @@ pre.traceback {
     padding: 4px 0px;
 }
 
-/* XXX: used in person general information viewlet */
+/* XXX: used in person general information viewlet
+        and person edit form */
 
 .photo-display {
     float: right;
@@ -312,11 +313,6 @@ pre.traceback {
     overflow: hidden;
     width: 99px;
     text-align: center;
-    border-width: 1px;
-    border-style: solid;
-    /* XXX: move to colors.css */
-    border-color: #aaaaaa;
-    border-radius: 4px;
 }
 
 .photo-input div {
