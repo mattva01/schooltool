@@ -22,7 +22,9 @@ Contact objects
 """
 from persistent import Persistent
 
-from zope.component import adapter
+from zope.catalog.text import TextIndex
+from zope.component import adapter, adapts
+from zope.index.text.interfaces import ISearchableText
 from zope.interface import implementer
 from zope.interface import implements
 from zope.intid.interfaces import IIntIds
@@ -186,16 +188,30 @@ def getContactFormKey(contact):
 
 
 class ContactCatalog(AttributeCatalog):
-    version = '3 - update missing titles because of wrong security'
+    version = '4 - added text index'
     interface = IContact
     attributes = ('first_name', 'last_name', 'title')
 
     def setIndexes(self, catalog):
         super(ContactCatalog, self).setIndexes(catalog)
         catalog['form_keys'] = ConvertingIndex(converter=IUniqueFormKey)
+        catalog['text'] = TextIndex('getSearchableText', ISearchableText, True)
 
 
 getContactCatalog = ContactCatalog.get
+
+
+class SearchableTextContact(object):
+
+    adapts(IContact)
+    implements(ISearchableText)
+
+    def __init__(self, context):
+        self.context = context
+
+    def getSearchableText(self):
+        result = [self.context.first_name, self.context.last_name]
+        return ' '.join(result)
 
 
 class ContactPersonInstructorsCrowd(PersonInstructorsCrowd):

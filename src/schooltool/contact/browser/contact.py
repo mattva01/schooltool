@@ -591,22 +591,15 @@ class FlourishContactFilterWidget(ContactFilterWidget):
 
     parameters = ['SEARCH_TITLE']
 
-    def match(self, item, idx, search_terms):
-        matches = []
-        for term in search_terms:
-            if term in idx.documents_to_values[item['id']].lower():
-                matches.append(term)
-        return len(matches) == len(search_terms)
-
     def filter(self, items):
         if 'SEARCH_TITLE' in self.request:
+            terms = [term.strip()
+                     for term in self.request['SEARCH_TITLE'].lower().split(',')]
+            query = ' or '.join(terms)
             catalog = ICatalog(self.context)
-            title_idx = catalog['title']
-            # XXX: applying normalized catalog queries would be nicer
-            search_terms = self.request['SEARCH_TITLE'].lower().split(' ')
-            items = [item for item in items if self.match(item,
-                                                          title_idx,
-                                                          search_terms)]
+            result = catalog['text'].apply(query)
+            items = [item for item in items
+                     if item['id'] in result]
         return items
 
 
