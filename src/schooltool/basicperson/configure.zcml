@@ -115,4 +115,6 @@
       factory=".demographics.DemographicsAppStartup"
       name="schooltool.basicperson.demographics" />
 
+  <adapter factory=".person.SearchableTextPerson" />
+
 </configure>
