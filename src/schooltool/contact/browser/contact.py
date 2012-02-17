@@ -42,6 +42,7 @@ from zope.i18n import translate
 
 from zc.table.column import GetterColumn
 from z3c.form import form, subform, field, button
+from z3c.form.interfaces import DISPLAY_MODE
 
 import schooltool.skin.flourish.viewlet
 import schooltool.skin.flourish.page
@@ -421,18 +422,20 @@ class ContactView(form.DisplayForm):
         return self.render()
 
 
-class FlourishContactView(flourish.page.Page, form.DisplayForm):
+class FlourishContactView(flourish.page.Page):
 
-    content_template = ViewPageTemplateFile('templates/f_contact_view.pt')
+    pass
+
+
+class FlourishContactDetails(flourish.form.FormViewlet):
+
+    template = ViewPageTemplateFile('templates/f_contact_view.pt')
     fields = field.Fields(IContact)
+    mode = DISPLAY_MODE
 
     def relationships(self):
         return [relationship_info.extra_info
                 for relationship_info in self.context.persons.relationships]
-
-    def __call__(self):
-        form.DisplayForm.update(self)
-        return self.render()
 
     @property
     def canModify(self):
