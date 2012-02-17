@@ -53,6 +53,15 @@
              tal:attributes="value batch/start" />
       <input type="hidden" name="on_add.batch_size"
              tal:attributes="value batch/size" />
+
+      <div class="buttons">
+        <input id="form-buttons-cancel" name="ADD_DISPLAYED_RESULTS"
+               class="submit-widget button-field button-ok"
+               value="Add all displayed" type="submit"
+               i18n:attributes="value" />
+      </div>
+
     </tal:if>
+
   </form>
 </metal:block>
