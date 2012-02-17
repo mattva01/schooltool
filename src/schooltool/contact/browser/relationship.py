@@ -240,6 +240,22 @@ class FlourishContactManagementView(FlourishRelationshipViewBase):
     def getKey(self, item):
         return IUniqueFormKey(item)
 
+    def addSearchResults(self):
+        key = 'displayed.add_item.tokens'
+        if key not in self.request:
+            return False
+        add_ids = self.request[key]
+        if not isinstance(add_ids, list):
+            add_ids = [add_ids]
+        changes = False
+        int_ids = getUtility(IIntIds)
+        for item_id in self.getAvailableItemIds():
+            item = int_ids.getObject(item_id)
+            if self.getKey(item) in add_ids:
+                self.add(removeSecurityProxy(IContact(item)))
+                changes = 'added'
+        return changes
+
     def applyFormChanges(self):
         changed = False
         add_item_prefix = 'add_item.'

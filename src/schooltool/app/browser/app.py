@@ -230,6 +230,26 @@ class CSSFormatter(FormFullFormatter):
         return ''.join(result)
 
 
+class RelationshipButton(ImageInputColumn):
+
+    def params(self, item, formatter):
+        params = ImageInputColumn.params(self, item, formatter)
+        params['tokens_name'] = ".".join(
+            filter(None, ["displayed", self.prefix, "tokens"]))
+        params['tokens_value'] = self.id_getter(item)
+        return params
+
+    def template(self):
+        return '\n'.join([
+                '<input name="%(tokens_name)s" value="%(tokens_value)s"'
+                ' type="hidden" />',
+                '<button class="image" type="submit" name="%(name)s"'
+                ' title="%(title)s" value="1">',
+                '<img src="%(src)s" alt="%(alt)s" />',
+                '</button>'
+                ])
+
+
 class FlourishRelationshipViewBase(flourish.page.NoSidebarPage):
 
     content_template = ViewPageTemplateFile('templates/f_edit_relationships.pt')
@@ -276,7 +296,7 @@ class FlourishRelationshipViewBase(flourish.page.NoSidebarPage):
             'remove_item': {'label': _('Remove'), 'icon': 'remove-icon.png'},
             }
         label, icon = actions[prefix]['label'], actions[prefix]['icon']
-        action = ImageInputColumn(
+        action = RelationshipButton(
             prefix, name='action', title=label, alt=label,
             library='schooltool.skin.flourish',
             image=icon, id_getter=self.getKey)
@@ -331,9 +351,28 @@ class FlourishRelationshipViewBase(flourish.page.NoSidebarPage):
                     changed = 'removed'
         return changed
 
+    def addSearchResults(self):
+        key = 'displayed.add_item.tokens'
+        if key not in self.request:
+            return False
+        add_ids = self.request[key]
+        if not isinstance(add_ids, list):
+            add_ids = [add_ids]
+        changes = False
+        for item in self.getAvailableItems():
+            if self.getKey(item) in add_ids:
+                self.add(removeSecurityProxy(item))
+                changes = 'added'
+        return changes
+
     def update(self):
         changes = self.applyFormChanges()
         self.setUpTables()
+
+        if not changes:
+            if 'ADD_DISPLAYED_RESULTS' in self.request:
+                changes = self.addSearchResults()
+
         if changes:
             this_url = '%s?nexturl=%s' % (str(self.request.URL),
                                           urllib.quote(self.nextURL()))
