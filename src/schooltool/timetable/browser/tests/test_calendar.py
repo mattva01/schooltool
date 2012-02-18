@@ -155,6 +155,23 @@ def test_ScheduleDailyCalendarRowsView_calendarRows():
         row     03:15-04:00
         row     04:00-05:00
 
+    Let's look at DST shift in a day without meetings:
+
+        >>> view._schedule = ScheduleStub([])
+
+        >>> printRows(view.calendarRows(datetime.date(2011, 10, 30),
+        ...                             2, 4, 'dummy'))
+        row     02:00-03:00
+        row     03:00-04:00
+        row     03:00-04:00
+        row     04:00-05:00
+
+        >>> printRows(view.calendarRows(datetime.date(2011, 10, 30),
+        ...                             3, 5, 'dummy'))
+        row     03:00-04:00
+        row     04:00-05:00
+        row     05:00-06:00
+
     Rows are limited to a given date in viewed timezone.
 
         >>> view._timezone = 'UTC'
@@ -167,6 +184,14 @@ def test_ScheduleDailyCalendarRowsView_calendarRows():
 
         >>> printRows(view.calendarRows(datetime.date(2011, 10, 30),
         ...                             22, 22, 'dummy'))
+        row     22:00-23:00
+        meeting 23:00-23:30
+        meeting 23:30-00:00
+
+    Views may pass 24 as the end hour.
+
+        >>> printRows(view.calendarRows(datetime.date(2011, 10, 30),
+        ...                             22, 24, 'dummy'))
         row     22:00-23:00
         meeting 23:00-23:30
         meeting 23:30-00:00

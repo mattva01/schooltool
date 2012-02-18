@@ -1,7 +1,49 @@
 # Sample SchoolTool server configuration file
 
-# identify the component configuration used to define the site:
+# Site definition file:
 site-definition ${abspath}/site.zcml
+
+# Where should the server store all data?
+<zodb>
+  <blobstorage>
+  # <filestorage>		traditional FileStorage
+  #   path filename		required
+  #   create yes|no		default: yes
+  #   read-only yes|no		default: no
+  #   quota size		default: no quota
+  # </filestorage>
+    <filestorage>
+      path ${abspath}/var/Data.fs
+    </filestorage>
+
+    blob-dir ${abspath}/var/blobs
+  </blobstorage>
+
+  # <zeoclient>
+  #   server address		one or more; required
+  #   cache-size n		default: 20000000 (bytes)
+  #   name storage-name		default: address of the server
+  #   client x			enables persistent cache for client x
+  #   var dirname		directory for persistent cache (default: .)
+  #   min-disconnect-poll n	default: 5
+  #   max-disconnect-poll n	default: 300
+  #   wait yes|no		default: yes
+  #   read-only yes|no		default: no
+  #   read-only-fallback yes|no	default: no
+  #   realm name		authentication realm
+  # </zeoclient>
+
+  # cache-size n
+  #
+  # Default:
+  #   cache-size 5000
+
+  # pool-size n
+  #
+  # Default:
+  #   pool-size 7
+
+</zodb>
 
 #
 # thread-pool-size n
@@ -90,65 +132,16 @@ web-access-log-file ${abspath}/log/web-access.log
 #   lang fr,en-ca
 
 #
-# <zodb>
-#   ...
-# </zodb>
-#
-#   Specifies a ZODB database to use.
-#   This section is required.
-#
-
-<zodb>
-  <blobstorage>
-  # <filestorage>		traditional FileStorage
-  #   path filename		required
-  #   create yes|no		default: yes
-  #   read-only yes|no		default: no
-  #   quota size		default: no quota
-  # </filestorage>
-    <filestorage>
-      path ${abspath}/var/Data.fs
-    </filestorage>
-
-    blob-dir ${abspath}/var/blobs
-  </blobstorage>
-
-  # <zeoclient>
-  #   server address		one or more; required
-  #   cache-size n		default: 20000000 (bytes)
-  #   name storage-name		default: address of the server
-  #   client x			enables persistent cache for client x
-  #   var dirname		directory for persistent cache (default: .)
-  #   min-disconnect-poll n	default: 5
-  #   max-disconnect-poll n	default: 300
-  #   wait yes|no		default: yes
-  #   read-only yes|no		default: no
-  #   read-only-fallback yes|no	default: no
-  #   realm name		authentication realm
-  # </zeoclient>
-
-  # cache-size n
-  #
-  # Default:
-  #   cache-size 5000
-
-  # pool-size n
-  #
-  # Default:
-  #   pool-size 7
-
-</zodb>
-
-#
 # reportlab_fontdir
 #
-#   Specifies the path to TrueType fonts (Liberation)
-#   for ReportLab.
+#   Specifies the path to TrueType fonts (Liberation), needed to generate PDF
+#   reports with reportlab.  You may need to install the ttf-liberation package.
 #
-#   Comment out or set to empty string to disable reportlab.
+#   Comment out or leave empty to disable reportlab.
 #
 # Examples:
 #    reportlab_fontdir /usr/share/fonts/truetype/ttf-liberation
+#    reportlab_fontdir /usr/share/fonts/truetype/liberation
 #
 reportlab_fontdir /usr/share/fonts/truetype/ttf-liberation
 

@@ -15,6 +15,12 @@
     </h3>
     <input type="hidden" id="nexturl" name="nexturl"
            tal:attributes="value view/nextURL" />
+    <tal:if condition="view/selected_table/batch">
+      <input type="hidden" name="on_remove.batch_start"
+             tal:attributes="value view/selected_table/batch/start" />
+      <input type="hidden" name="on_remove.batch_size"
+             tal:attributes="value view/selected_table/batch/size" />
+    </tal:if>
   </form>
   <h3>
     <a tal:attributes="href view/nextURL"
@@ -32,13 +38,30 @@
       </div>
     </tal:if>
     <tal:block replace="structure view/available_table/filter_widget/render|nothing" />
-    <tal:block replace="structure view/available_table/batch/render" />
+    <tal:block replace="structure view/available_table/batch/render"
+               condition="batch" />
     <tal:block replace="structure view/available_table/render"
-               tal:condition="batch"/>
+               condition="batch" />
     <h3 tal:condition="not:batch" i18n:translate="">
       There are none to add.
     </h3>
     <input type="hidden" id="nexturl" name="nexturl"
            tal:attributes="value view/nextURL" />
+
+    <tal:if condition="batch">
+      <input type="hidden" name="on_add.batch_start"
+             tal:attributes="value batch/start" />
+      <input type="hidden" name="on_add.batch_size"
+             tal:attributes="value batch/size" />
+
+      <div class="buttons">
+        <input id="form-buttons-cancel" name="ADD_DISPLAYED_RESULTS"
+               class="submit-widget button-field button-ok"
+               value="Add all displayed" type="submit"
+               i18n:attributes="value" />
+      </div>
+
+    </tal:if>
+
   </form>
 </metal:block>

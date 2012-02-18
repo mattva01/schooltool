@@ -21,6 +21,7 @@
 Contact browser views.
 """
 import urllib
+
 from zope.security.checker import canAccess
 from zope.schema import getFieldsInOrder
 from zope.interface import implements, Interface
@@ -573,11 +574,14 @@ class ContactFilterWidget(FilterWidget):
                 return True
         return False
 
+    def quote(self, param):
+        return urllib.quote(unicode(param).encode('UTF-8'))
+
     def extra_url(self):
         url = ""
         for parameter in self.parameters:
             if parameter in self.request:
-                url += '&%s=%s' % (parameter, self.request.get(parameter))
+                url += '&%s=%s' % (parameter, self.quote(self.request.get(parameter)))
         return url
 
 

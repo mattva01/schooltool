@@ -19,6 +19,8 @@
 """
 Person browser views.
 """
+import urllib
+
 from zope.authentication.interfaces import IAuthentication
 from zope.interface import Interface, invariant, Invalid
 from zope.publisher.interfaces import NotFound
@@ -514,11 +516,14 @@ class PersonFilterWidget(IndexedFilterWidget):
                 return True
         return False
 
+    def quote(self, param):
+        return urllib.quote(unicode(param).encode('UTF-8'))
+
     def extra_url(self):
         url = ""
         for parameter in self.parameters:
             if parameter in self.request:
-                url += '&%s=%s' % (parameter, self.request.get(parameter))
+                url += '&%s=%s' % (parameter, self.quote(self.request.get(parameter)))
         return url
 
 
