@@ -44,11 +44,6 @@
     width: 544px;
 }
 
-.ui-dialog .ui-dialog-content form fieldset {
-    padding-top: 0px;
-    margin-bottom: 0px;
-}
-
 .ui-dialog .ui-dialog-content form .required-info {
     display: none;
 }
@@ -121,3 +116,41 @@
 .explicit-close-dialog .ui-dialog-titlebar-close {
     display: none;
 }
+
+/*
+
+  Modal forms: overrides of styles used in regular forms
+
+*/
+
+.ui-dialog .ui-dialog-content form fieldset {
+    padding-top: 0px;
+    margin-bottom: 0px;
+    background-color: #e6e5e5;
+    width: 266px;
+}
+
+.ui-dialog .ui-dialog-titlebar {
+    background: #008C93;
+}
+
+.ui-dialog .ui-dialog-titlebar .ui-dialog-title {
+    color: #ffffff;
+}
+
+.ui-dialog .ui-dialog-content form fieldset .row .widget input.text-widget,
+.ui-dialog .ui-dialog-content form fieldset .row .widget input[type="file"],
+.ui-dialog .ui-dialog-content form fieldset .row .widget input[type="text"],
+.ui-dialog .ui-dialog-content form fieldset .row .widget input.password-widget,
+.ui-dialog .ui-dialog-content form fieldset .row .widget input[type="password"],
+.ui-dialog .ui-dialog-content form fieldset .row .widget input.text-widget:focus,
+.ui-dialog .ui-dialog-content form fieldset .row .widget input[type="text"]:focus,
+.ui-dialog .ui-dialog-content form fieldset .row .widget input.password-widget:focus,
+.ui-dialog .ui-dialog-content form fieldset .row .widget input[type="password"]:focus,
+.ui-dialog .ui-dialog-content form fieldset .row .widget input[type="text"].error,
+.ui-dialog .ui-dialog-content form fieldset .row .widget input[type="password"].error,
+.ui-dialog .ui-dialog-content form fieldset .row .widget textarea.textarea-widget,
+.ui-dialog .ui-dialog-content form fieldset .row .widget select.select-widget {
+    width: 266px;
+}
+
