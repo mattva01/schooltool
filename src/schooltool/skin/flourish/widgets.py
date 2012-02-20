@@ -28,6 +28,7 @@ from zope.component import getUtility, adapter
 from zope.interface import implementer
 from zope.i18n.interfaces import INegotiator
 from zope.traversing.browser.absoluteurl import absoluteURL
+from zope.publisher.browser import BrowserView
 from zope.schema.interfaces import IField
 
 from z3c.form.interfaces import IFieldWidget
@@ -162,3 +163,13 @@ def is_required_demo_field(adapter):
 
 
 PromptRequiredDemoField = ComputedWidgetAttribute(is_required_demo_field)
+
+
+class FileDataURI(BrowserView):
+
+    def __call__(self):
+        stream = self.context.open()
+        payload = stream.read().encode('base64').replace('\n','')
+        stream.close()
+        mime = self.context.mimeType
+        return 'data:'+mime+';base64,'+payload
