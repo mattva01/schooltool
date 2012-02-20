@@ -4,6 +4,11 @@ function setNotEdited()
     edited = false;
 }
 
+function setEdited()
+{
+    edited = true;
+}
+
 function checkChanges()
 {
     if (!edited)
@@ -118,7 +123,7 @@ function checkValid(e, name)
 	    return true;
 	}
 
-    edited = true;
+    setEdited();
     var element = document.getElementById(name);
     var elementCell = document.getElementById(name+'_cell');
     var value = element.value;
