@@ -229,6 +229,11 @@ class FlourishPersonPreferencesView(flourish.form.DialogForm,
         # view content, so let's not reload it now.
         self.reload_parent = False
 
+    def initDialog(self):
+        super(FlourishPersonPreferencesView, self).initDialog()
+        self.ajax_settings['dialog']['width'] = '306'
+        self.ajax_settings['dialog']['dialogClass'] = 'narrow-dialog'
+
 
 class FlourishPersonPreferencesLink(flourish.page.ModalFormLinkViewlet):
 

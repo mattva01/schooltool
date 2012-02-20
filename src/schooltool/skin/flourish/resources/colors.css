@@ -411,6 +411,7 @@ table.schoolday-legend td.schoolday {
       + state-hover
       + state-active
     - dialog
+    - datepicker
 
 */
 
@@ -432,6 +433,18 @@ table.schoolday-legend td.schoolday {
 
 .ui-accordion .ui-accordion-content {
     background: none;
+}
+
+.ui-dialog .ui-dialog-content form fieldset {
+    background-color: #ffffff;
+}
+
+.ui-dialog .ui-dialog-titlebar {
+    background: #008C93;
+}
+
+.ui-dialog .ui-dialog-titlebar .ui-dialog-title {
+    color: #ffffff;
 }
 
 .ui-datepicker {
