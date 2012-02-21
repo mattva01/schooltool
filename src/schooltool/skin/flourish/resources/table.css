@@ -14,20 +14,6 @@ table {
     cursor: pointer;
 }
 
-thead {
-    border-bottom: none;
-}
-
-tbody {
-    border-top-style: solid;
-    border-top-width: 1px;
-}
-
-tbody tr {
-    border-bottom-style: dotted;
-    border-bottom-width: 1px;
-}
-
 td, th {
     text-align: left;
     padding: 4px 8px;
@@ -146,8 +132,4 @@ table.schoolday-legend td.holiday {
 
 table.form-fields .label {
     width: 35%;
-}
-
-table.show-photo {
-    width: 78%;
 }
