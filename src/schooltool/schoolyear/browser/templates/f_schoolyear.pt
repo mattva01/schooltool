@@ -1,7 +1,7 @@
 <div i18n:domain="schooltool">
   <div>
     <h3>
-      <tal:block tal:content="view/subtitle" />
+      <tal:block tal:content="view/view/subtitle" />
       <a class="modify" href="" title="Edit this school year's information"
          tal:attributes="href string:${context/@@absolute_url}/@@edit.html"
          i18n:attributes="title"
@@ -11,11 +11,11 @@
              i18n:attributes="alt" />
       </a>
     </h3>
-    <table class="person-view-demographics">
+    <table class="form-fields">
       <tbody>
-        <tr tal:repeat="row view/table">
-          <td tal:content="row/label" class="label"/>
-          <td tal:content="row/value" />
+        <tr tal:repeat="widget view/widgets/values">
+          <td tal:content="widget/label" class="label"/>
+          <td tal:content="structure widget/render" />
         </tr>
       </tbody>
     </table>

@@ -88,6 +88,14 @@
       />
 
   <flourish:viewlet
+      name="details"
+      manager="schooltool.skin.flourish.page.IPageContentManager"
+      class=".contact.FlourishContactDetails"
+      view=".contact.FlourishContactView"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
       name="contact-actions-links"
       title="Actions"
       for="schooltool.contact.interfaces.IContact"
@@ -157,6 +165,14 @@
       subtitle="Contact Information"
       for="schooltool.contact.basicperson.IBoundContact"
       class=".basicperson.FlourishBoundContactView"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="details"
+      manager="schooltool.skin.flourish.page.IPageContentManager"
+      class=".basicperson.FlourishBoundContactDetails"
+      view=".basicperson.FlourishBoundContactView"
       permission="schooltool.view"
       />
 
