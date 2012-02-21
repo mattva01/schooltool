@@ -135,6 +135,8 @@ ST.dialogs = function() {
   /* "public" */
   return {
 
+    jquery_id: jq_selector,
+
     open_modal_link: function(link_sel, dialog_container_id)
     {
         var link = $(link_sel);
