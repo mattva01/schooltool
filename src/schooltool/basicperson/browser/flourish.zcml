@@ -598,6 +598,7 @@
       before="table batch"
       after="filter"
       manager=".person.BasicPersonTable"
+      view=".person.FlourishBasicPersonContainerView"
       class=".person.PersonTableDoneLink"
       render="template"
       permission="schooltool.view"
