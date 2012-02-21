@@ -267,6 +267,8 @@ class SchoolToolTableFormatter(object):
     implements(ITableFormatter)
 
     batch = None
+    batch_size = 25
+
     css_classes = None
     _table_formatter = None
 
@@ -288,6 +290,10 @@ class SchoolToolTableFormatter(object):
         ommited_items = set(ommited_items)
         return [item for item in items
                 if item not in ommited_items]
+
+    @Lazy
+    def batch(self):
+        return Batch(self, batch_size=self.batch_size)
 
     @Lazy
     def filter_widget(self):
@@ -334,8 +340,7 @@ class SchoolToolTableFormatter(object):
         if batch_size == 0:
             batch_size = len(list(self._items))
 
-        self.batch = Batch(self, batch_size=batch_size)
-
+        self.batch_size = batch_size
         self._sort_on = sort_on or self.sortOn()
 
         if css_classes:

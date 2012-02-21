@@ -24,6 +24,7 @@
       name="batch"
       class="schooltool.table.ajax.TableBatch"
       manager="schooltool.table.ajax.Table"
+      template="templates/f_batch.pt"
       permission="schooltool.view"
       />
 

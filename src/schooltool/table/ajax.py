@@ -30,6 +30,7 @@ from schooltool.common.inlinept import InlineViewPageTemplate
 from schooltool.skin import flourish
 from schooltool.table.interfaces import IFilterWidget
 from schooltool.table.interfaces import IIndexedColumn
+from schooltool.table.batch import TokenBatch
 from schooltool.table.table import TableContent, FilterWidget
 from schooltool.table.table import url_cell_formatter
 from schooltool.table.catalog import IndexedTableFormatter
@@ -83,8 +84,6 @@ class Table(flourish.ajax.CompositeAJAXPart, TableContent):
 
     inside_form = False # don't surround with <form> tag if inside_form
 
-    batch_size = 25
-
     def __init__(self, *args, **kw):
         super(Table, self).__init__(*args, **kw)
 
@@ -95,6 +94,10 @@ class Table(flourish.ajax.CompositeAJAXPart, TableContent):
     @Lazy
     def filter_widget(self):
         return self.get('filter')
+
+    @Lazy
+    def batch(self):
+        return self.get('batch')
 
     def updateFormatter(self):
         self.setUp(formatters=[url_cell_formatter],
@@ -161,10 +164,95 @@ class TableBatch(flourish.viewlet.Viewlet):
 
     before = ("table", )
 
+    batch = None
+
+    def __init__(self, context, request, view, manager):
+        flourish.viewlet.Viewlet.__init__(
+            self, context, request, view, manager)
+
+    @property
+    def html_id(self):
+        return flourish.page.generic_viewlet_html_id(self)
+
+    def update(self):
+        if self.manager.prefix:
+            self.name = "." + self.manager.prefix
+        else:
+            self.name = ""
+        if self.manager.ignoreRequest:
+            start = 0
+            size = self.manager.batch_size
+        else:
+            start = int(self.request.get(
+                    'start' + self.name, 0))
+            size = int(self.request.get(
+                    'size' + self.name, self.manager.batch_size))
+        self.batch = TokenBatch(
+            self.manager._items, size=size, start=start)
+
     def render(self, *args, **kw):
-        if not self.manager.batch:
+        batch = self.batch
+        if (batch.size >= batch.full_size or
+            not batch.needsBatch):
             return ''
-        return self.manager.batch.render()
+        return self.template(*args, **kw)
+
+    def extend_token(self, token, **kw):
+        token = dict(token)
+        script = "return ST.table.on_batch_link('%s', '%s', %d, %d);" % (
+            self.manager.html_id,
+            self.name, token['start'],
+            token['size'])
+        token['onclick'] = script
+        token.update(kw)
+        return token
+
+    @property
+    def start(self):
+        return self.batch.start
+
+    @property
+    def size(self):
+        return self.batch.size
+
+    @property
+    def full_size(self):
+        return self.batch.full_size
+
+    @Lazy
+    def previous(self):
+        token = self.batch.previous()
+        if token is None:
+            return None
+        return self.extend_token(token, css_class='previous')
+
+    @Lazy
+    def next(self):
+        token = self.batch.next()
+        if token is None:
+            return None
+        return self.extend_token(token, css_class='next')
+
+    @Lazy
+    def show_all(self):
+        if self.batch.size >= self.batch.full_size:
+            return None
+        script = "return ST.table.on_batch_link('%s', '%s', %d, %d);" % (
+            self.manager.html_id,
+            self.name, 0, self.full_size)
+        return {'start': 0,
+                'size': self.full_size,
+                'items': self.batch.items,
+                'onclick': script,
+                'css_class': 'all'}
+
+    def tokens(self):
+        tokens = []
+        for token in self.batch.tokens():
+            css_class = token['current'] and 'current' or ''
+            token = self.extend_token(token, css_class=css_class)
+            tokens.append(token)
+        return tokens
 
 
 class TableTable(flourish.viewlet.Viewlet):

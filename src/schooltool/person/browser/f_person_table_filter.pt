@@ -5,12 +5,12 @@
 <tal:script tal:replace="structure scriptlocal:container_id view/manager/html_id" />
 
 <tal:block i18n:domain="schooltool"
-           define="batch view/manager/batch|nothing;
+           define="batch nocall:view/manager/batch|nothing;
                    search_id string:${view/manager/html_id}-search">
   <tal:if condition="batch">
     <div class="count" i18n:translate="">
       Showing
-      <span i18n:name="count" tal:content="batch/length"/>
+      <span i18n:name="count" tal:content="batch/size"/>
       of
       <span i18n:name="total" tal:content="batch/full_size"/>
       items

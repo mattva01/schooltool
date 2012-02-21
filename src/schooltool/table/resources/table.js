@@ -2,13 +2,16 @@
 
 ST.table = function() {
 
-  function container_form_submit_data(container_id, data)
+  function container_form_submit_data(container_id, url, data, method)
   {
       var container = $(ST.dialogs.jquery_id(container_id));
       var form = container.find('form');
+
+      if (!method) method = "GET";
+
       var request = $.ajax({
           type: "POST",
-          url: form.attr('action'),
+          url: url,
           data: data,
           }).success(function(result, textStatus, jqXHR){
               container.html(result);
@@ -16,7 +19,7 @@ ST.table = function() {
       return false;
   };
 
-  function container_form_submit(container_id, button)
+  function container_form_submit(container_id, button, extra_data)
   {
       var container = $(ST.dialogs.jquery_id(container_id));
       var form = container.find('form');
@@ -30,7 +33,12 @@ ST.table = function() {
             value: element.attr('value')});
       }
 
-      return container_form_submit_data(container_id, data);
+      if (extra_data) {
+          data.push.apply(data, extra_data);
+      }
+
+      return container_form_submit_data(
+               container_id, form.attr('action'), data, 'POST');
   };
 
   return {
@@ -60,11 +68,25 @@ ST.table = function() {
           for (var i = 0, ie = sort_names.length; i < ie; i++) {
               data.push({
                       name: sort_on_name+':list',
-                          value: sort_names[i]
-                          });
+                      value: sort_names[i]
+                      });
           }
           return container_form_submit_data(container_id, data);
       },
+
+
+      on_batch_link: function(container_id, postfix, start, size) {
+          var data = new Array();
+          data.push({
+              name: 'start'+postfix,
+              value: start
+              });
+          data.push({
+              name: 'size'+postfix,
+              value: size
+              });
+          return container_form_submit(container_id, null, data);
+      }
 
   };
 
