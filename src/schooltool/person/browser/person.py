@@ -508,20 +508,14 @@ class PersonFilterWidget(table.catalog.IndexedFilterWidget):
                 items = [item for item in items
                          if item['id'] in keys]
 
-        catalog = ICatalog(self.source)
-        title_index = catalog['title']
-        username_index = catalog['__name__']
-
         if self.search_title_id in self.request:
-            searchstr = self.request[self.search_title_id].lower()
-            results = []
-            for item in items:
-                title = title_index.documents_to_values[item['id']]
-                username = username_index.documents_to_values[item['id']]
-                if (searchstr in title.lower() or
-                    searchstr in username.lower()):
-                    results.append(item)
-            items = results
+            searchstr = self.request[self.search_title_id]
+            query = buildQueryString(searchstr)
+            if query:
+                catalog = ICatalog(self.context)
+                result = catalog['text'].apply(query)
+                items = [item for item in items
+                         if item['id'] in result]
 
         return items
 
