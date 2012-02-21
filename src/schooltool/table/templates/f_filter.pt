@@ -1,9 +1,11 @@
-<tal:script tal:replace="structure scriptlocal: container_id view/manager/html_id" />
 <tal:block condition="not:view/manager/fromPublication"
            replace="resource_library:schooltool.table" />
 
-<tal:block i18n:domain="schooltool"
-          define="batch view/manager/batch|nothing">
+<script>ST.state.push()</script>
+<tal:script tal:replace="structure scriptlocal:container_id view/manager/html_id" />
+
+<tal:block i18n:domain="schooltool" define="batch view/manager/batch|nothing">
+
   <tal:if condition="batch">
     <div class="count" i18n:translate="">
       Showing
@@ -36,20 +38,17 @@
     <input type="submit" name="SEARCH_BUTTON" value="Search"
            tal:attributes="id search_id"
            class="button-ok" i18n:attributes="value" />
-    <script>ST.state.push()</script>
-    <tal:script replace="structure scriptlocal:
-                           search_id;
-                           dialog_id view/manager/html_id" />
+    <tal:script replace="structure scriptlocal: search_id" />
     <script>
       $(ST.dialogs.jquery_id(ST.local.search_id)).click(
          function(){
              var search_id = ST.local.search_id;
-             var dialog_id = ST.local.dialog_id;
+             var container_id = ST.local.container_id;
              return function(button) {
-                  return ST.table.on_form_submit(dialog_id, button);
+                  return ST.table.on_form_submit(container_id, button);
              }}());
     </script>
-    <script>ST.state.pop()</script>
   </tal:block>
   </div>
 </tal:block>
+  <script>ST.state.pop()</script>

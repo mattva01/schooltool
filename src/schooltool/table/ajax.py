@@ -29,8 +29,11 @@ from zc.table import table
 from schooltool.common.inlinept import InlineViewPageTemplate
 from schooltool.skin import flourish
 from schooltool.table.interfaces import IFilterWidget
+from schooltool.table.interfaces import IIndexedColumn
 from schooltool.table.table import TableContent, FilterWidget
 from schooltool.table.table import url_cell_formatter
+from schooltool.table.catalog import IndexedTableFormatter
+from schooltool.table.catalog import IndexedFilterWidget
 from schooltool.common import SchoolToolMessage as _
 
 
@@ -85,7 +88,7 @@ class Table(flourish.ajax.CompositeAJAXPart, TableContent):
     def __init__(self, *args, **kw):
         super(Table, self).__init__(*args, **kw)
 
-    @property
+    @Lazy
     def html_id(self):
         return flourish.page.generic_viewlet_html_id(self, self.prefix)
 
@@ -135,6 +138,8 @@ class Table(flourish.ajax.CompositeAJAXPart, TableContent):
 class TableFilter(flourish.viewlet.Viewlet, FilterWidget):
     implements(IFilterWidget)
 
+    before = ("batch", "table")
+
     template = ViewPageTemplateFile("templates/f_filter.pt")
     title = _("Search")
 
@@ -154,6 +159,8 @@ class TableFilter(flourish.viewlet.Viewlet, FilterWidget):
 
 class TableBatch(flourish.viewlet.Viewlet):
 
+    before = ("table", )
+
     def render(self, *args, **kw):
         if not self.manager.batch:
             return ''
@@ -164,3 +171,35 @@ class TableTable(flourish.viewlet.Viewlet):
 
     def render(self, *args, **kw):
         return self.manager.renderTable()
+
+
+class IndexedTable(IndexedTableFormatter, Table):
+
+    @Lazy
+    def filter_widget(self):
+        return self.get('filter')
+
+    def renderTable(self):
+        if self._table_formatter is None:
+            return ''
+        columns = [IIndexedColumn(c) for c in self._columns]
+        formatter = self._table_formatter(
+            self.context, self.request, self._items,
+            columns=columns,
+            batch_start=self.batch.start, batch_size=self.batch.size,
+            sort_on=self._sort_on,
+            prefix=self.prefix)
+        formatter.html_id = self.html_id
+        formatter.cssClasses.update(self.css_classes)
+        return formatter()
+
+    def render(self, *args, **kw):
+        return Table.render(self, *args, **kw)
+
+
+class IndexedTableFilter(TableFilter, IndexedFilterWidget):
+
+    def filter(self, list):
+        if self.ignoreRequest:
+            return list
+        return IndexedFilterWidget.filter(self, list)

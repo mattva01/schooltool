@@ -310,6 +310,8 @@ class SchoolToolTableFormatter(object):
               formatters=[], table_formatter=table.FormFullFormatter,
               batch_size=25, css_classes=None):
 
+        self.prefix = prefix
+
         self._table_formatter = table_formatter
 
         if not columns:
@@ -328,8 +330,6 @@ class SchoolToolTableFormatter(object):
             filter = self.filter
 
         self._items = filter(self.ommit(items, ommit))
-
-        self.prefix = prefix
 
         if batch_size == 0:
             batch_size = len(list(self._items))

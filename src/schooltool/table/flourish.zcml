@@ -14,7 +14,6 @@
 
   <flourish:viewlet
       name="filter"
-      before="batch table"
       class="schooltool.table.ajax.TableFilter"
       render="template"
       manager="schooltool.table.ajax.Table"
@@ -23,7 +22,6 @@
 
   <flourish:viewlet
       name="batch"
-      before="table"
       class="schooltool.table.ajax.TableBatch"
       manager="schooltool.table.ajax.Table"
       permission="schooltool.view"
@@ -33,6 +31,14 @@
       name="table"
       class="schooltool.table.ajax.TableTable"
       manager="schooltool.table.ajax.Table"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="filter"
+      class="schooltool.table.ajax.IndexedTableFilter"
+      render="template"
+      manager="schooltool.table.ajax.IndexedTable"
       permission="schooltool.view"
       />
 
