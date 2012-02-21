@@ -131,6 +131,7 @@ class Table(flourish.ajax.CompositeAJAXPart, TableContent):
     def update(self):
         self.updateFormatter()
         TableContent.update(self)
+        flourish.ajax.CompositeAJAXPart.update(self)
 
     def renderTable(self):
         if self._table_formatter is None:

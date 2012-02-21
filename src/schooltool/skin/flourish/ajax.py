@@ -25,16 +25,18 @@ from zope.component import adapts, queryMultiAdapter
 from zope.interface import implements
 from zope.location.interfaces import LocationError
 from zope.publisher.interfaces import NotFound
+from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.traversing.interfaces import ITraversable
 
 from schooltool.skin.flourish import interfaces
+from schooltool.skin.flourish import tal
 from schooltool.skin.flourish.viewlet import Viewlet, ViewletManagerBase
 from schooltool.skin.flourish.viewlet import ManagerViewlet
 from schooltool.traverser.traverser import TraverserPlugin
 
 
 class AJAXPart(Viewlet):
-    implements(interfaces.IAJAXPart)
+    implements(interfaces.IAJAXPart, IBrowserPublisher)
 
     fromPublication = False
 
@@ -42,28 +44,44 @@ class AJAXPart(Viewlet):
     def ignoreRequest(self):
         return not self.fromPublication
 
+    def browserDefault(self, request):
+        self.fromPublication = True
+        return self, ()
 
-class CompositeAJAXPart(ManagerViewlet):
-    implements(interfaces.IAJAXPart)
+    def publishTraverse(self, request, name):
+        raise NotFound(self, name, request)
 
-    fromPublication = False
+    def setJSONResponse(self, data):
+        """
+        Switch response to JSON.  Return encoded payload.
+        Resets the original response. Yes, I know, this method is evil.
+        Sorry.
+        """
+        response = self.request.response
 
-    @property
-    def ignoreRequest(self):
-        return not self.fromPublication
+        # Bye bye birdie.
+        response.reset()
+
+        response.setHeader('Content-Type', 'application/json')
+        encoder = tal.JSONEncoder()
+        json = encoder.encode(data)
+        return json
+
+
+class CompositeAJAXPart(ManagerViewlet, AJAXPart):
+    implements(interfaces.IAJAXPart, IBrowserPublisher)
+
+    def publishTraverse(self, request, name):
+        part = self.get(name)
+        if part is None:
+            raise NotFound(self, name, request)
+        return part
 
 
 class AJAXParts(ViewletManagerBase):
     implements(interfaces.IAJAXParts)
 
-    fromPublication = False
     render = lambda self, *args, **kw: ''
-
-    def collect(self):
-        ViewletManagerBase.collect(self)
-        for viewlet in self.cache.values():
-            unproxied = zope.security.proxy.removeSecurityProxy(viewlet)
-            unproxied.fromPublication = self.fromPublication
 
     def publishTraverse(self, request, name):
         part = self.get(name)
@@ -100,5 +118,4 @@ class ViewAJAXPartsTraverser(TraverserPlugin):
             interfaces.IContentProvider, 'ajax')
         if parts is None:
             raise NotFound(self.view, name, self.request)
-        parts.fromPublication = True
         return parts
