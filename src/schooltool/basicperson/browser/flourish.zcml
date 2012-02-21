@@ -698,4 +698,6 @@
 
   <zope:adapter factory=".person.PasswordValidator" />
 
+  <zope:adapter factory=".demographics.DemographicsFieldIDValidator" />
+
 </configure>

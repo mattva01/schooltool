@@ -135,7 +135,7 @@ class IFieldDescription(Interface):
 
     name = PythonIdentifier(
         title = _(u"ID"),
-        description = _(u"A unique one word identifier."))
+        description = _(u"A unique one word alphanumeric identifier."))
 
     required = Bool(
         title = _(u"Required"))

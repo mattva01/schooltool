@@ -208,6 +208,7 @@ def doctest_EnumFieldDescription():
     shown in person add/edit form.
 
        >>> fd = EnumFieldDescription("ethnicity", "Ethnicity")
+       >>> fd.__name__ = 'ethnicity'
        >>> fields = fd.makeField()
        >>> len(fields)
        1
@@ -235,6 +236,7 @@ def doctest_IntFieldDescription():
     values for an integer field shown in person add/edit form.
 
        >>> fd = IntFieldDescription("tablets", "Tablets")
+       >>> fd.__name__ = 'tablets'
        >>> fd.min_value = 2
        >>> fd.max_value = 3
        >>> fields = fd.makeField()
@@ -269,6 +271,7 @@ def doctest_TextFieldDescription():
     in person add/edit form.
 
        >>> fd = TextFieldDescription("ID", "ID")
+       >>> fd.__name__ = 'ID'
        >>> fields = fd.makeField()
        >>> len(fields)
        1
@@ -296,6 +299,7 @@ def doctest_BoolFieldDescription():
     in person add/edit form.
 
        >>> fd = BoolFieldDescription("ID", "ID")
+       >>> fd.__name__ = 'ID'
        >>> fields = fd.makeField()
        >>> len(fields)
        1
@@ -323,6 +327,7 @@ def doctest_DateFieldDescription():
     shown in person add/edit form.
 
        >>> fd = DateFieldDescription("birthday", "Birth date")
+       >>> fd.__name__ = 'birthday'
        >>> fields = fd.makeField()
        >>> len(fields)
        1
