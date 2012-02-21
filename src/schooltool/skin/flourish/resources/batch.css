@@ -1,7 +1,8 @@
-.batch-navigation {
+div.no-batch-navigation,
+div.batch-navigation {
     font-size: 12px;
     line-height: 16px;
-    margin-bottom: -16px;
+    margin-top: 16px;
     padding: 4px 8px;
 }
 
@@ -15,6 +16,12 @@
 .batch-navigation span.batch_page {
     margin: 0px;
     padding: 0px;
+}
+
+.batch-navigation span.batch_separator {
+    margin-left: -4px;
+    padding: 4px;
+    cursor: default;
 }
 
 .batch-navigation span.batch_page a {
@@ -33,4 +40,9 @@
 .batch-navigation a.previous,
 .batch-navigation span.previous {
     margin-right:  8px;
+}
+
+.batch-navigation a.batch_page,
+.batch-navigation a.batch_page:hover {
+    text-decoration: none;
 }

@@ -406,9 +406,6 @@ table.schoolday-legend td.schoolday {
 .batch-navigation span.batch_page a:hover,
 .batch-navigation span.batch_page a.current {
     background-color: #6c7b7c;
-}
-
-.batch-navigation span.batch_page a.current {
     color: #ffffff;
 }
 

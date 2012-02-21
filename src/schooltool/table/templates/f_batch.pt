@@ -1,8 +1,9 @@
+<div class="no-batch-navigation" tal:condition="not:view/needsBatch"></div>
 <div class="batch-navigation"
+     tal:condition="view/needsBatch"
      tal:define="batch view/batch"
      tal:attributes="id view/html_id"
      i18n:domain="schooltool">
-
   <tal:if condition="batch/needsBatch" define="token view/previous">
     <span tal:condition="not:batch/previous" i18n:translate=""
           class="previous">&laquo; Previous</span>
@@ -98,5 +99,4 @@
     </tal:block>
 
   </tal:if>
-
 </div>

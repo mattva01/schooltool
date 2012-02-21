@@ -103,7 +103,8 @@ class Table(flourish.ajax.CompositeAJAXPart, TableContent):
         self.setUp(formatters=[url_cell_formatter],
                    table_formatter=self.table_formatter,
                    batch_size=self.batch_size,
-                   prefix=self.__name__)
+                   prefix=self.__name__,
+                   css_classes={'table': 'data st-table'})
 
     def update(self):
         self.updateFormatter()
@@ -190,12 +191,10 @@ class TableBatch(flourish.viewlet.Viewlet):
         self.batch = TokenBatch(
             self.manager._items, size=size, start=start)
 
-    def render(self, *args, **kw):
+    @property
+    def needsBatch(self):
         batch = self.batch
-        if (batch.size >= batch.full_size or
-            not batch.needsBatch):
-            return ''
-        return self.template(*args, **kw)
+        return (batch.size < batch.full_size and batch.needsBatch)
 
     def extend_token(self, token, **kw):
         token = dict(token)

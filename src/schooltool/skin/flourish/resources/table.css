@@ -133,3 +133,8 @@ table.schoolday-legend td.holiday {
 table.form-fields .label {
     width: 35%;
 }
+
+
+table.st-table {
+    margin-top: 0px;
+}
