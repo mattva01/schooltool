@@ -375,16 +375,24 @@ class TableContent(flourish.content.ContentProvider, SchoolToolTableFormatter):
         flourish.content.ContentProvider.__init__(
             self, context, request, view)
 
+    @property
+    def source(self):
+        return self.context
+
     def update(self):
         flourish.content.ContentProvider.update(self)
         if self._table_formatter is None:
             self.setUp()
 
     def render(self, *args, **kw):
-        if self._table_formatter is None:
-            return ''
-        result = SchoolToolTableFormatter.render(self)
-        return result
+        formatter = self._table_formatter(
+            self.source, self.request, self._items,
+            columns=self._columns,
+            batch_start=self.batch.start, batch_size=self.batch.size,
+            sort_on=self._sort_on,
+            prefix=self.prefix)
+        formatter.cssClasses.update(self.css_classes)
+        return formatter()
 
 
 class TableContainerView(flourish.page.Page):

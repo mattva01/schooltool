@@ -113,7 +113,7 @@ class Table(flourish.ajax.CompositeAJAXPart, TableContent):
         if self._table_formatter is None:
             return ''
         formatter = self._table_formatter(
-            self.context, self.request, self._items,
+            self.source, self.request, self._items,
             columns=self._columns,
             batch_start=self.batch.start, batch_size=self.batch.size,
             sort_on=self._sort_on,
@@ -272,7 +272,7 @@ class IndexedTable(IndexedTableFormatter, Table):
             return ''
         columns = [IIndexedColumn(c) for c in self._columns]
         formatter = self._table_formatter(
-            self.context, self.request, self._items,
+            self.source, self.request, self._items,
             columns=columns,
             batch_start=self.batch.start, batch_size=self.batch.size,
             sort_on=self._sort_on,
