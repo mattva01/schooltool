@@ -14,6 +14,26 @@ table {
     cursor: pointer;
 }
 
+.zc-table-sort-asc:after
+{
+content: " ""\25BE";
+}
+
+.zc-table-sort-desc:after
+{
+content: " ""\25B4";
+}
+
+.zc-table-sort-asc-primary:after
+{
+content: " ""\25BD";
+}
+
+.zc-table-sort-desc-primary:after
+{
+content: " ""\25B3";
+}
+
 td, th {
     text-align: left;
     padding: 4px 8px;

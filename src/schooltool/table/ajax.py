@@ -25,6 +25,7 @@ from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.cachedescriptors.property import Lazy
 
 from zc.table import table
+from zc.table.interfaces import IColumnSortedItems
 
 from schooltool.common.inlinept import InlineViewPageTemplate
 from schooltool.skin import flourish
@@ -39,17 +40,38 @@ from schooltool.common import SchoolToolMessage as _
 
 
 class AJAXSortHeaderMixin(object):
+
+    html_id = None
+
+    def _getColumnSortClass(self, column):
+        if not IColumnSortedItems.providedBy(self.items):
+            return ""
+        col_name = column.name
+        for n, (name, reversed) in enumerate(self.items.sort_on):
+            if name == col_name:
+                if n == 0:
+                    return (reversed and "zc-table-sort-desc-primary" or
+                                         "zc-table-sort-asc-primary")
+                return (reversed and "zc-table-sort-desc" or
+                                     "zc-table-sort-asc")
+        return "zc-table-sort-asc"
+
+    def _addSortUi(self, header, column):
+        css_class = "zc-table-sortable "
+        css_class += self._getColumnSortClass(column)
+        columnName = column.name
+        sort_on_name = table.getSortOnName(self.prefix)
+        script_name = self.script_name
+        return self._header_template(locals())
+
     def _header_template(self, options):
         options = dict(options)
         options['containerID'] = self.html_id
-
         template = """
-            <span class="zc-table-sortable"
+            <span class="%(css_class)s"
                   onclick="javascript: %(script_name)s(
-                        '%(containerID)s', '%(columnName)s', '%(sort_on_name)s')"
-                    onMouseOver="javascript: this.className='sortable zc-table-sortable'"
-                    onMouseOut="javascript: this.className='zc-table-sortable'">
-                %(header)s</span> %(dirIndicator)s
+                        '%(containerID)s', '%(columnName)s', '%(sort_on_name)s')">
+                %(header)s</span>
         """
         return template % options
 
