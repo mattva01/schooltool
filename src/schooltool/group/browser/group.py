@@ -52,6 +52,7 @@ from schooltool.skin.containers import TableContainerView
 from schooltool.app.browser.app import BaseAddView, BaseEditView
 from schooltool.app.browser.app import ContentTitle
 from schooltool.person.interfaces import IPerson
+from schooltool.basicperson.browser.person import BasicPersonTable
 from schooltool.course.interfaces import ISection
 from schooltool.schoolyear.interfaces import ISchoolYear
 from schooltool.schoolyear.interfaces import ISchoolYearContainer
@@ -571,28 +572,8 @@ class FlourishGroupView(DisplayForm):
             if not widget.value:
                 widget.mode = HIDDEN_MODE
 
-    # XXX: GroupView.getPersons uses canAccess on the member title
-    #      should we do the same here?
-    @property
-    def members_table(self):
-        return self.getTable(list(self.context.members), 'members')
-
     def has_members(self):
         return bool(list(self.context.members))
-
-    @property
-    def leaders_table(self):
-        return self.getTable(list(self.context.leaders), 'leaders',
-                             filter=lambda l: l)
-
-    def getTable(self, items, prefix, **kw):
-        persons = ISchoolToolApplication(None)['persons']
-        result = getMultiAdapter((persons, self.request), ITableFormatter)
-        result.setUp(
-            table_formatter=zc.table.table.StandaloneFullFormatter,
-            items=items,
-            prefix=prefix, **kw)
-        return result
 
     def has_leaders(self):
         return bool(list(self.context.leaders))
@@ -709,6 +690,22 @@ class FlourishGroupDeleteView(DialogForm, form.EditForm):
         super(FlourishGroupDeleteView, self).updateActions()
         self.actions['apply'].addClass('button-ok')
         self.actions['cancel'].addClass('button-cancel')
+
+
+class GroupMembersTable(BasicPersonTable):
+
+    prefix = "members"
+
+    def items(self):
+        return self.indexItems(self.context.members)
+
+
+class GroupLeadersTable(BasicPersonTable):
+
+    prefix = "leaders"
+
+    def items(self):
+        return self.indexItems(self.context.leaders)
 
 
 class FlourishMemberViewPersons(FlourishRelationshipViewBase):
