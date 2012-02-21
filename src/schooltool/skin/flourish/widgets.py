@@ -270,7 +270,6 @@ class PhotoDataConverter(FileUploadDataConverter):
         w.write(data)
         w.close()
 
-    # XXX: Copied from z3c.image.proc.browser
     def getMaxSize(self, image):
         image_size = image.size
         desired_size = self.SIZE

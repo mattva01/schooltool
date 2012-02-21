@@ -1133,7 +1133,6 @@ class PhotoView(flourish.page.Page):
             raise NotFound(self.context, u'photo', self.request)
         self.request.response.setHeader('Content-Type', photo.mimeType)
         self.request.response.setHeader('Content-Length', photo.size)
-        # XXX: copied from z3c.image.proc.browser
         try:
             modified = IZopeDublinCore(self.context).modified
         except TypeError:
