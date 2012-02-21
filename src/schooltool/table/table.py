@@ -195,6 +195,20 @@ class LocaleAwareGetterColumn(GetterColumn):
         return s and collator.key(s)
 
 
+#XXX: Misplaced helper
+def getResourceURL(library_name, image_name, request):
+    if not image_name:
+        return None
+    if library_name is not None:
+        library = queryAdapter(request, name=library_name)
+        image = library.get(image_name)
+    else:
+        image = queryAdapter(request, name=image_name)
+    if image is None:
+        return None
+    return absoluteURL(image, request)
+
+
 class ImageInputColumn(column.Column):
 
     def __init__(self, prefix, title=None, name=None,
@@ -209,20 +223,8 @@ class ImageInputColumn(column.Column):
         else:
             self.id_getter = id_getter
 
-    def getImageURL(self, item, formatter):
-        if not self.image:
-            return None
-        if self.library is not None:
-            library = queryAdapter(formatter.request, name=self.library)
-            image = library.get(self.image)
-        else:
-            image = queryAdapter(formatter.request, name=self.image)
-        if image is None:
-            return None
-        return absoluteURL(image, formatter.request)
-
     def params(self, item, formatter):
-        image_url = self.getImageURL(item, formatter)
+        image_url = getResourceURL(self.library, self.image, formatter.request)
         if not image_url:
             return None
         form_id = ".".join(filter(None, [self.prefix, self.id_getter(item)]))
@@ -275,6 +277,10 @@ class SchoolToolTableFormatter(object):
     def __init__(self, context, request):
         self.context, self.request = context, request
 
+    @property
+    def source(self):
+        return self.context
+
     def columns(self):
         title = GetterColumn(name='title',
                              title=_(u"Title"),
@@ -284,7 +290,7 @@ class SchoolToolTableFormatter(object):
         return [title]
 
     def items(self):
-        return self.context.values()
+        return self.source.values()
 
     def ommit(self, items, ommited_items):
         ommited_items = set(ommited_items)
@@ -297,7 +303,7 @@ class SchoolToolTableFormatter(object):
 
     @Lazy
     def filter_widget(self):
-        widget = queryMultiAdapter((self.context, self.request),
+        widget = queryMultiAdapter((self.source, self.request),
                                    IFilterWidget)
         return widget
 
@@ -360,7 +366,7 @@ class SchoolToolTableFormatter(object):
 
     def render(self):
         formatter = self._table_formatter(
-            self.context, self.request, self._items,
+            self.source, self.request, self._items,
             columns=self._columns,
             batch_start=self.batch.start, batch_size=self.batch.size,
             sort_on=self._sort_on,
@@ -435,3 +441,9 @@ class TableContainerView(flourish.page.Page):
 
     def canModify(self):
         return zope.security.canAccess(self.container, '__delitem__')
+
+
+class DoNotFilter(flourish.Empty):
+
+    def filter(self, list):
+        return list

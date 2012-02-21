@@ -238,6 +238,10 @@ class TableBatch(flourish.viewlet.Viewlet):
         return self.batch.size
 
     @property
+    def length(self):
+        return len(self.batch)
+
+    @property
     def full_size(self):
         return self.batch.full_size
 

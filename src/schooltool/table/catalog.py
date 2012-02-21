@@ -145,7 +145,7 @@ class IndexedTableFormatter(SchoolToolTableFormatter):
 
     def items(self):
         """Return a list of index dicts for all the items in the context container"""
-        catalog = ICatalog(self.context)
+        catalog = ICatalog(self.source)
         if IExtentCatalog.providedBy(catalog):
             ids = list(catalog.extent)
         else:
@@ -165,7 +165,7 @@ class IndexedTableFormatter(SchoolToolTableFormatter):
     def indexItems(self, items):
         """Convert a list of objects to a list of index dicts"""
         int_ids = getUtility(IIntIds)
-        catalog = ICatalog(self.context)
+        catalog = ICatalog(self.source)
         results = []
         for item in items:
             results.append({
@@ -183,7 +183,7 @@ class IndexedTableFormatter(SchoolToolTableFormatter):
     def render(self):
         columns = [IIndexedColumn(c) for c in self._columns]
         formatter = self._table_formatter(
-            self.context, self.request, self._items,
+            self.source, self.request, self._items,
             columns=columns,
             batch_start=self.batch.start, batch_size=self.batch.size,
             sort_on=self._sort_on,
