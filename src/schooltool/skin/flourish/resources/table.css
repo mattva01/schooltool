@@ -34,6 +34,23 @@ content: " ""\25BD";
 content: " ""\25B3";
 }
 
+/* XXX: remove this? */
+thead {
+    border-bottom: none;
+}
+
+/* XXX: remove this? */
+tbody {
+    border-top-style: solid;
+    border-top-width: 1px;
+}
+
+/* XXX: remove this? */
+tbody tr {
+    border-bottom-style: dotted;
+    border-bottom-width: 1px;
+}
+
 td, th {
     text-align: left;
     padding: 4px 8px;
@@ -154,7 +171,10 @@ table.form-fields .label {
     width: 35%;
 }
 
-
 table.st-table {
     margin-top: 0px;
+}
+
+table.show-photo {
+    width: 78%;
 }
