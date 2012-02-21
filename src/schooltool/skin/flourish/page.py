@@ -402,7 +402,7 @@ def sanitize_id(html_id):
         html_id = 'i' + html_id
     return html_id
 
-def generic_viewlet_html_id(viewlet, prefix):
+def generic_viewlet_html_id(viewlet, prefix=''):
     parent = viewlet.manager.__parent__
     parents = []
     while (parent is not None and
