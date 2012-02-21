@@ -106,8 +106,12 @@ class DeletePersonCheckboxColumn(table.DependableCheckboxColumn):
         return table.DependableCheckboxColumn.hasDependents(self, item)
 
 
-class FlourishBasicPersonContainerView(table.TableContainerView):
+class FlourishBasicPersonContainerView(flourish.page.Page):
     """A Person Container view."""
+
+    content_template = InlineViewPageTemplate('''
+      <div tal:content="structure context/schooltool:content/ajax/table" />
+    ''')
 
     @property
     def done_link(self):

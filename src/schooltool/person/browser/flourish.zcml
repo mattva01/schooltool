@@ -75,4 +75,23 @@
       permission="schooltool.view"
       />
 
+
+  <flourish:viewlet
+      name="table"
+      for="schooltool.person.interfaces.IPersonContainer"
+      class=".person.PersonTable"
+      manager="schooltool.skin.flourish.interfaces.IAJAXParts"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="filter"
+      before="batch table"
+      for="schooltool.person.interfaces.IPersonContainer"
+      class=".person.PersonTableFilter"
+      render="template"
+      manager="schooltool.table.ajax.Table"
+      permission="schooltool.view"
+      />
+
 </configure>
