@@ -33,6 +33,16 @@
       />
 
   <flourish:viewlet
+      name="done"
+      before="table batch"
+      after="filter"
+      manager=".course.CoursesTable"
+      class=".course.CourseTableDoneLink"
+      render="template"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
       name="schoolyear"
       manager=".course.CoursesTable"
       class=".course.CourseTableSchoolYear"
