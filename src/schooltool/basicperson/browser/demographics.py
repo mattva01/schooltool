@@ -581,7 +581,7 @@ class FlourishIntFieldDescriptionView(flourish.page.Page, IntFieldDescriptionVie
 
 
 class InvalidFieldID(ValidationError):
-    __doc__ = _(u'XXX Invalid field ID XXX')
+    __doc__ = _(u'Please enter a valid ID')
 
 
 class DuplicatedFieldID(ValidationError):
