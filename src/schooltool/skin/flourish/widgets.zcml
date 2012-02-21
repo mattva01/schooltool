@@ -66,4 +66,28 @@
         />
   </zope:class>
 
+  <zope:adapter
+      factory=".widgets.PhotoFieldWidget"
+      provides="z3c.form.interfaces.IFieldWidget"
+      for=".widgets.IPhoto
+           schooltool.skin.flourish.IFlourishLayer"
+      />
+
+  <zope:adapter factory=".widgets.PhotoDataConverter" />
+
+  <zope:class class=".widgets.PhotoWidget">
+    <require
+        permission="zope.Public"
+        interface="z3c.form.interfaces.IFileWidget"
+        />
+  </zope:class>
+
+  <z3c:widgetTemplate
+      mode="input"
+      widget=".widgets.IPhotoWidget"
+      view="schooltool.basicperson.browser.person.FlourishPersonEditView"
+      layer="schooltool.skin.flourish.IFlourishLayer"
+      template="templates/photo_input.pt"
+      />
+
 </configure>

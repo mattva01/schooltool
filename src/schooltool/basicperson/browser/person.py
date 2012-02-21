@@ -19,16 +19,22 @@
 """
 Basic person browser views.
 """
+from time import mktime
+from datetime import datetime
+
 from zope.interface import Interface, implements
 from zope.container.interfaces import INameChooser
 from zope.app.form.browser.interfaces import ITerms
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import adapts
 from zope.component import getUtility, queryMultiAdapter, getMultiAdapter
+from zope.datetime import time, rfc1123_date
+from zope.dublincore.interfaces import IZopeDublinCore
 from zope.i18n import translate
 from z3c.form import form, field, button, validator
 from z3c.form.interfaces import DISPLAY_MODE
 from zope.interface import invariant, Invalid
+from zope.publisher.interfaces import NotFound
 from zope.schema import Password, TextLine, Choice, List, Object
 from zope.schema import ValidationError
 from zope.schema.interfaces import ITitledTokenizedTerm, IField
@@ -43,6 +49,7 @@ from zc.table import table
 import schooltool.skin.flourish.page
 import schooltool.skin.flourish.containers
 import schooltool.skin.flourish.breadcrumbs
+from schooltool.skin.flourish.widgets import Photo
 from schooltool.app.browser.app import RelationshipViewBase
 from schooltool.app.browser.app import FlourishRelationshipViewBase
 from schooltool.app.interfaces import ISchoolToolApplication
@@ -169,6 +176,14 @@ class IPersonAddForm(IBasicPerson):
             raise Invalid(_(u"Passwords do not match"))
 
 
+class IPhotoField(Interface):
+
+    photo = Photo(
+        title=_('Photo'),
+        description=_('An image file that will be converted to a JPEG no larger than 99x132 pixels (3:4 aspect ratio). Uploaded images must be JPEG or PNG files smaller than 10 MB'),
+        required=False)
+
+
 class PersonAddFormAdapter(object):
     implements(IPersonAddForm)
     adapts(IBasicPerson)
@@ -187,6 +202,20 @@ class PersonAddFormAdapter(object):
     def __getattr__(self, name):
         return getattr(self.context, name)
 
+
+class PhotoFieldFormAdapter(object):
+
+    adapts(IBasicPerson)
+    implements(IPhotoField)
+
+    def __init__(self, context):
+        self.__dict__['context'] = context
+
+    def __setattr__(self, name, value):
+        setattr(self.context, name, value)
+
+    def __getattr__(self, name):
+        return getattr(self.context, name)
 
 class UsernameAlreadyUsed(ValidationError):
     __doc__ = _("This username is already in use")
@@ -500,7 +529,10 @@ class FlourishPersonEditView(flourish.page.Page, PersonEditView):
 
     def update(self):
         self.buildFieldsetGroups()
-        PersonEditView.update(self)
+        self.fields = field.Fields(IBasicPerson)
+        self.fields += field.Fields(IPhotoField)
+        self.fields += self.generateExtraFields()
+        form.EditForm.update(self)
 
     @button.buttonAndHandler(_('Apply'), name='apply')
     def handleApply(self, action):
@@ -540,7 +572,7 @@ class FlourishPersonEditView(flourish.page.Page, PersonEditView):
                 ['prefix', 'first_name', 'middle_name', 'last_name',
                  'suffix', 'preferred_name']),
             'details': (
-                _('Details'), ['gender', 'birth_date']),
+                _('Details'), ['gender', 'birth_date', 'photo']),
             'demographics': (
                 _('Demographics'), list(self.generateExtraFields())),
             }
@@ -791,6 +823,15 @@ class FlourishGeneralViewlet(FormViewlet):
         self.fields = self.getFields()
         super(FlourishGeneralViewlet, self).update()
 
+    def has_photo(self):
+        return self.context.photo is not None
+
+    def table_class(self):
+        result = 'person-view-demographics'
+        if self.has_photo():
+            result += ' show-photo'
+        return result
+
 
 ###############  Base class of all group-aware add views ################
 class PersonAddViewBase(PersonAddFormBase):
@@ -894,9 +935,11 @@ class FlourishPersonAddView(PersonAddViewBase):
         self.widgets['birth_date'].addClass('birth-date-field')
 
     def getBaseFields(self):
+        result = field.Fields(IPersonAddForm)
         if self.group_id:
-            return field.Fields(IPersonAddForm).omit('group')
-        return field.Fields(IPersonAddForm)
+            result = result.omit('group')
+        result += field.Fields(IPhotoField)
+        return result
 
     def buildFieldsetGroups(self):
         relationship_fields = ['advisor']
@@ -908,7 +951,7 @@ class FlourishPersonAddView(PersonAddViewBase):
                 ['prefix', 'first_name', 'middle_name', 'last_name',
                  'suffix', 'preferred_name']),
             'details': (
-                _('Details'), ['gender', 'birth_date']),
+                _('Details'), ['gender', 'birth_date', 'photo']),
             'demographics': (
                 _('Demographics'), list(self.getDemoFields())),
             'relationships': (
@@ -1080,3 +1123,36 @@ def getPersonActiveViewlet(person, request, view, manager):
         return u"home"
     return flourish.page.getParentActiveViewletName(
         person, request, view, manager)
+
+
+class PhotoView(flourish.page.Page):
+
+    def __call__(self):
+        photo = self.context.photo
+        if photo is None:
+            raise NotFound(self.context, u'photo', self.request)
+        self.request.response.setHeader('Content-Type', photo.mimeType)
+        self.request.response.setHeader('Content-Length', photo.size)
+        # XXX: copied from z3c.image.proc.browser
+        try:
+            modified = IZopeDublinCore(self.context).modified
+        except TypeError:
+            modified=None
+        if modified is not None and isinstance(modified,datetime):
+            header= self.request.getHeader('If-Modified-Since', None)
+            lmt = long(mktime(modified.timetuple()))
+            if header is not None:
+                header = header.split(';')[0]
+                try:
+                    mod_since=long(time(header))
+                except:
+                    mod_since=None
+                if mod_since is not None:
+                    if lmt <= mod_since:
+                        self.request.response.setStatus(304)
+                        return ''
+            self.request.response.setHeader('Last-Modified',
+                                            rfc1123_date(lmt))
+        f = photo.open('r')
+        result = f.read()
+        return result
