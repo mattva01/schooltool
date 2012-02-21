@@ -25,9 +25,8 @@
 
   <flourish:viewlet
       name="filter"
-      before="batch table"
       manager=".course.CoursesTable"
-      class=".course.AJAXCourseFilterWidget"
+      class=".course.CoursesTableFilter"
       render="template"
       permission="schooltool.view"
       />

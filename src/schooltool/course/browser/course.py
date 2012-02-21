@@ -678,8 +678,7 @@ class FlourishCourseFilterWidget(table.table.FilterWidget):
         return results
 
 
-class AJAXCourseFilterWidget(table.ajax.TableFilter,
-                             FlourishCourseFilterWidget):
+class CoursesTableFilter(table.ajax.TableFilter, FlourishCourseFilterWidget):
 
     title = _("Title or course ID")
 
