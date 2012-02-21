@@ -84,6 +84,10 @@ table.relationships-table button.image {
     vertical-align: middle;
 }
 
+table.relationships-table {
+    margin-top: 0px;
+}
+
 table.groups-table th.title,
 table.groups-table th.schoolyear {
     width: 40%;
@@ -168,10 +172,16 @@ table.form-fields .label {
     width: 35%;
 }
 
-table.st-table {
-    margin-top: 0px;
-}
-
 table.show-photo {
     width: 78%;
+}
+
+.st-table-spinner {
+    position: absolute;
+    right:4px;
+    z-index: 1001;
+}
+
+img.st-table-button-spinner {
+    margin: 3px 0px 0px 0px;
 }
