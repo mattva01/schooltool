@@ -5,6 +5,7 @@
 
   <include file="zcmlfiles.zcml" />
 
+  <include package="zope.file" />
   <include package="zope.password" />
   <include package="zope.login" />
   <include package="zope.viewlet" file="meta.zcml" />

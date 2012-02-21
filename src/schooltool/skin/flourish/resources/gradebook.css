@@ -223,3 +223,7 @@ th.activity-title {
 .navigator {
     width: 140px;
 }
+
+.activity_description {
+    display: none;
+}

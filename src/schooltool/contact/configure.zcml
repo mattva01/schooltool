@@ -99,4 +99,6 @@
    <adapter
       factory=".basicperson.getBoundContactFormKey" />
 
+  <adapter factory=".contact.SearchableTextContact" />
+
 </configure>

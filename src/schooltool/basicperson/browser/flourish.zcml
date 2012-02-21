@@ -698,4 +698,15 @@
 
   <zope:adapter factory=".person.PasswordValidator" />
 
+  <zope:adapter factory=".demographics.DemographicsFieldIDValidator" />
+
+  <zope:adapter factory=".person.PhotoFieldFormAdapter" />
+
+  <flourish:page
+      name="photo"
+      for="schooltool.basicperson.interfaces.IBasicPerson"
+      class="schooltool.basicperson.browser.person.PhotoView"
+      permission="schooltool.view"
+      />
+
 </configure>

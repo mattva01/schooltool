@@ -43,6 +43,7 @@ from zope.i18n import translate
 
 from zc.table.column import GetterColumn
 from z3c.form import form, subform, field, button
+from z3c.form.interfaces import DISPLAY_MODE
 
 import schooltool.skin.flourish.viewlet
 import schooltool.skin.flourish.page
@@ -55,6 +56,7 @@ from schooltool.table.interfaces import IIndexedColumn
 from schooltool.skin.containers import TableContainerView
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
+from schooltool.app.catalog import buildQueryString
 from schooltool.contact.interfaces import IContactable
 from schooltool.contact.interfaces import IContactContainer
 from schooltool.contact.interfaces import IContactPersonInfo
@@ -422,18 +424,20 @@ class ContactView(form.DisplayForm):
         return self.render()
 
 
-class FlourishContactView(flourish.page.Page, form.DisplayForm):
+class FlourishContactView(flourish.page.Page):
 
-    content_template = ViewPageTemplateFile('templates/f_contact_view.pt')
+    pass
+
+
+class FlourishContactDetails(flourish.form.FormViewlet):
+
+    template = ViewPageTemplateFile('templates/f_contact_view.pt')
     fields = field.Fields(IContact)
+    mode = DISPLAY_MODE
 
     def relationships(self):
         return [relationship_info.extra_info
                 for relationship_info in self.context.persons.relationships]
-
-    def __call__(self):
-        form.DisplayForm.update(self)
-        return self.render()
 
     @property
     def canModify(self):
@@ -591,22 +595,15 @@ class FlourishContactFilterWidget(ContactFilterWidget):
 
     parameters = ['SEARCH_TITLE']
 
-    def match(self, item, idx, search_terms):
-        matches = []
-        for term in search_terms:
-            if term in idx.documents_to_values[item['id']].lower():
-                matches.append(term)
-        return len(matches) == len(search_terms)
-
     def filter(self, items):
         if 'SEARCH_TITLE' in self.request:
-            catalog = ICatalog(self.context)
-            title_idx = catalog['title']
-            # XXX: applying normalized catalog queries would be nicer
-            search_terms = self.request['SEARCH_TITLE'].lower().split(' ')
-            items = [item for item in items if self.match(item,
-                                                          title_idx,
-                                                          search_terms)]
+            search_title = self.request['SEARCH_TITLE']
+            query = buildQueryString(search_title)
+            if query:
+                catalog = ICatalog(self.context)
+                result = catalog['text'].apply(query)
+                items = [item for item in items
+                         if item['id'] in result]
         return items
 
 

@@ -262,4 +262,11 @@
       trusted="true"
       />
 
+  <zope:adapter
+      factory=".widgets.FileDataURI"
+      for="zope.file.interfaces.IFile
+           zope.publisher.interfaces.browser.IBrowserRequest"
+      provides="zope.interface.Interface"
+      name="data_uri"/>
+
 </configure>

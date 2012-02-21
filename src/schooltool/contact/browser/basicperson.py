@@ -42,8 +42,9 @@ from schooltool.contact.interfaces import IContactPerson
 from schooltool.contact.interfaces import IAddress, IEmails, IPhones, ILanguages
 from schooltool.contact.browser.contact import ContactEditView
 from schooltool.contact.browser.contact import FlourishContactEditView
-from schooltool.contact.browser.contact import FlourishContactView
+from schooltool.contact.browser.contact import FlourishContactDetails
 from schooltool.contact.browser.relationship import get_relationship_title
+from schooltool.skin.flourish.page import Page
 from schooltool.common import SchoolToolMessage as _
 
 
@@ -101,7 +102,12 @@ class BoundContactEditView(ContactEditView):
     fields = field.Fields(IContactInformation)
 
 
-class FlourishBoundContactView(FlourishContactView):
+class FlourishBoundContactView(Page):
+
+    pass
+
+
+class FlourishBoundContactDetails(FlourishContactDetails):
 
     def canModify(self):
         return checkPermission("schooltool.edit", self.context)

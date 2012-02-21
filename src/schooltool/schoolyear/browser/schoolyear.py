@@ -51,6 +51,7 @@ from z3c.form.validator import InvariantsValidator
 from z3c.form.validator import WidgetValidatorDiscriminators
 from z3c.form.validator import SimpleFieldValidator
 from z3c.form.error import ErrorViewSnippet
+from z3c.form.interfaces import DISPLAY_MODE
 
 from zc.table import column
 
@@ -770,29 +771,16 @@ class FlourishManageYearOverview(flourish.page.Content):
 class FlourishSchoolYearView(flourish.page.Page):
     """flourish SchoolYear view."""
 
-    fields = field.Fields(ISchoolYearAddForm).omit('title')
-
     @property
     def subtitle(self):
         return self.context.title
 
-    def makeRow(self, attr, value):
-        if value is None:
-            value = u''
-        return {
-            'label': attr,
-            'value': unicode(value),
-            }
 
-    @property
-    def table(self):
-        rows = []
-        for attr in self.fields:
-            value = getattr(self.context, attr)
-            if value:
-                label = self.fields[attr].field.title
-                rows.append(self.makeRow(label, value))
-        return rows
+class FlourishSchoolYearDetails(flourish.form.FormViewlet):
+
+    fields = field.Fields(ISchoolYearAddForm).omit('title')
+    template = ViewPageTemplateFile("templates/f_schoolyear.pt")
+    mode = DISPLAY_MODE
 
     @property
     def canModify(self):

@@ -61,6 +61,7 @@ import schooltool.skin.flourish.form
 from schooltool.group.interfaces import IGroupContainer
 from schooltool.common import SchoolToolMessage as _
 from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.app.catalog import buildQueryString
 from schooltool.person.interfaces import IPasswordWriter
 from schooltool.person.interfaces import IPerson, IPersonFactory
 from schooltool.person.interfaces import IPersonPreferences
@@ -228,6 +229,11 @@ class FlourishPersonPreferencesView(flourish.form.DialogForm,
         # Also I assume the preferences don't change the parent
         # view content, so let's not reload it now.
         self.reload_parent = False
+
+    def initDialog(self):
+        super(FlourishPersonPreferencesView, self).initDialog()
+        self.ajax_settings['dialog']['width'] = '306'
+        self.ajax_settings['dialog']['dialogClass'] = 'narrow-dialog'
 
 
 class FlourishPersonPreferencesLink(flourish.page.ModalFormLinkViewlet):
@@ -767,3 +773,29 @@ class PersonAddPersonViewlet(object):
 class FlourishPersonFilterWidget(PersonFilterWidget):
 
     template = ViewPageTemplateFile('f_person_filter.pt')
+
+    def filter(self, items):
+        if 'CLEAR_SEARCH' in self.request:
+            for parameter in self.parameters:
+                self.request.form[parameter] = ''
+            return items
+
+        if 'SEARCH_GROUP' in self.request:
+            group = self.groupContainer().get(self.request['SEARCH_GROUP'])
+            if group:
+                int_ids = getUtility(IIntIds)
+                keys = set([int_ids.queryId(person)
+                            for person in group.members])
+                items = [item for item in items
+                         if item['id'] in keys]
+
+        if 'SEARCH_TITLE' in self.request:
+            search_title = self.request['SEARCH_TITLE']
+            query = buildQueryString(search_title)
+            if query:
+                catalog = ICatalog(self.context)
+                result = catalog['text'].apply(query)
+                items = [item for item in items
+                         if item['id'] in result]
+
+        return items

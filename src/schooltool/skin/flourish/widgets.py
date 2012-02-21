@@ -22,26 +22,37 @@ SchoolTool flourish widgets.
 import re
 import os
 import sys
+from cStringIO import StringIO
+import Image
 
 import zope.formlib.widgets
-from zope.component import getUtility, adapter
-from zope.interface import implementer
+from zope.component import getUtility, adapter, adapts
+from zope.file.file import File
+from zope.interface import implementer, Interface, implements
 from zope.i18n.interfaces import INegotiator
 from zope.traversing.browser.absoluteurl import absoluteURL
+from zope.publisher.browser import BrowserView
 from zope.schema.interfaces import IField
+from zope.schema import Bytes
+from zope.schema._bootstrapinterfaces import TooLong
 
-from z3c.form.interfaces import IFieldWidget
+from z3c.form.browser.file import FileWidget
+from z3c.form.interfaces import IFieldWidget, NOT_CHANGED
 from z3c.form.widget import ComputedWidgetAttribute, FieldWidget
+from z3c.form.converter import FileUploadDataConverter
+from z3c.form.converter import FormatterValidationError
 import zc.resourcelibrary
 
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.basicperson.demographics import IDemographicsForm
+from schooltool.basicperson.interfaces import IBasicPerson
 from schooltool.skin.widgets import FCKConfig
 from schooltool.skin.widgets import IFckeditorWidget
 from schooltool.skin.widgets import FckeditorFormlibWidget
 from schooltool.skin.widgets import FckeditorZ3CFormWidget
 from schooltool.skin.flourish.resource import ResourceLibrary
 from schooltool.skin.flourish.interfaces import IFlourishLayer
+from schooltool.common import SchoolToolMessage as _
 
 
 class JQueryI18nLibrary(ResourceLibrary):
@@ -162,3 +173,113 @@ def is_required_demo_field(adapter):
 
 
 PromptRequiredDemoField = ComputedWidgetAttribute(is_required_demo_field)
+
+
+class FileDataURI(BrowserView):
+
+    def __call__(self):
+        stream = self.context.open()
+        payload = stream.read().encode('base64').replace('\n','')
+        stream.close()
+        mime = self.context.mimeType
+        return 'data:'+mime+';base64,'+payload
+
+
+class IPhoto(Interface):
+    """Marker interface for photos"""
+
+
+class Photo(Bytes):
+
+    implements(IPhoto)
+    _type = File
+
+    def _validate(self, value):
+        if self.max_length is not None and value.size > self.max_length:
+            raise TooLong(value, self.max_length)
+
+
+class IPhotoWidget(Interface):
+    """Marker for photo widgets"""
+
+
+class PhotoWidget(FileWidget):
+
+    implements(IPhotoWidget)
+
+    def has_photo(self):
+        return IBasicPerson.providedBy(self.context) and \
+               self.context.photo is not None
+
+
+def PhotoFieldWidget(field, request):
+    return FieldWidget(field, PhotoWidget(request))
+
+
+class PhotoDataConverter(FileUploadDataConverter):
+
+    adapts(IPhoto, IPhotoWidget)
+
+    SIZE = (99, 132)
+    FORMAT = 'JPEG'
+    MAX_UPLOAD_SIZE = 10 * (10**6)
+
+    def toFieldValue(self, value):
+        if value is None or value == '':
+            return NOT_CHANGED
+        if value == 'delete':
+            # XXX: delete checkbox was marked
+            return None
+        data = value.read()
+        try:
+            image = Image.open(StringIO(data))
+            if image.format not in ('JPEG', 'PNG'):
+                raise IOError()
+        except (IOError,):
+            raise FormatterValidationError(
+                _('The file uploaded is not a JPEG or PNG image'), value)
+        if len(data) > self.MAX_UPLOAD_SIZE:
+            raise FormatterValidationError(
+                _('The image uploaded cannot be larger than 10 MB'), value)
+        data = self.processImage(image)
+        f = File()
+        self.updateFile(f, data)
+        return f
+
+    def processImage(self, image):
+        kw = {'quality': 100, 'filter': Image.ANTIALIAS}
+        result = image
+        if image.size != self.SIZE:
+            size = self.getMaxSize(image)
+            image.thumbnail(size, kw['filter'])
+            if image.size != self.SIZE or image.mode == 'RGBA':
+                result = Image.new('RGB', self.SIZE, (255, 255, 255))
+                left = int(round((self.SIZE[0] - image.size[0])/float(2)))
+                up = int(round((self.SIZE[1] - image.size[1])/float(2)))
+                mask = None
+                if image.mode == 'RGBA':
+                    mask = image
+                result.paste(image, (left, up), mask)
+        f = StringIO()
+        result.save(f, self.FORMAT, **kw)
+        return f.getvalue()
+
+    def updateFile(self, ob, data):
+        ob.mimeType = Image.MIME[self.FORMAT]
+        w = ob.open("w")
+        w.write(data)
+        w.close()
+
+    def getMaxSize(self, image):
+        image_size = image.size
+        desired_size = self.SIZE
+        x_ratio = float(desired_size[0])/image_size[0]
+        y_ratio = float(desired_size[1])/image_size[1]
+        if x_ratio < y_ratio:
+            new_size = (round(x_ratio*image_size[0]),
+                        round(x_ratio*image_size[1]))
+        else:
+            new_size = (round(y_ratio*image_size[0]),
+                        round(y_ratio*image_size[1]))
+        return tuple(map(int, new_size))
+
