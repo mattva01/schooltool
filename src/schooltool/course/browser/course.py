@@ -408,7 +408,11 @@ class CourseAddLinkFromCourseViewlet(CourseAddLinkViewlet):
 class FlourishCoursesView(table.table.TableContainerView,
                           CoursesActiveTabMixin):
 
-    content_template = ViewPageTemplateFile('templates/f_courses.pt')
+    content_template = InlineViewPageTemplate('''
+      <div>
+        <tal:block content="structure view/container/schooltool:content/ajax/table" />
+      </div>
+    ''')
 
     @property
     def title(self):
@@ -420,6 +424,42 @@ class FlourishCoursesView(table.table.TableContainerView,
     def container(self):
         schoolyear = self.schoolyear
         return ICourseContainer(schoolyear)
+
+
+def getCoursesTable(context, request, view, manager):
+    container = view.container
+    table = queryMultiAdapter(
+        (container, request, view, manager),
+        flourish.interfaces.IViewlet,
+        'table')
+    return table
+
+
+class CoursesTable(table.ajax.Table):
+
+    def columns(self):
+        title = table.table.LocaleAwareGetterColumn(
+            name='title',
+            title=_(u'Title'),
+            getter=lambda i, f: i.title,
+            subsort=True)
+        course_id = table.table.LocaleAwareGetterColumn(
+            name='course_id',
+            title=_('Course ID'),
+            getter=lambda i, f: i.course_id or '',
+            subsort=True)
+        directlyProvides(title, ISortableColumn)
+        directlyProvides(course_id, ISortableColumn)
+        return [title, course_id]
+
+
+class CourseTableSchoolYear(flourish.viewlet.Viewlet):
+    template = InlineViewPageTemplate('''
+      <input type="hidden" name="schoolyear_id"
+             tal:define="schoolyear_id request/schoolyear_id|nothing"
+             tal:condition="schoolyear_id"
+             tal:attributes="value schoolyear_id" />
+    ''')
 
 
 class CourseContainerTitle(ContentTitle):
@@ -621,6 +661,17 @@ class FlourishCourseFilterWidget(table.table.FilterWidget):
                        if searchstr in item.title.lower() or
                        (item.course_id and searchstr in item.course_id.lower())]
         return results
+
+
+class AJAXCourseFilterWidget(table.ajax.TableFilter,
+                             FlourishCourseFilterWidget):
+
+    title = _("Title or course ID")
+
+    def filter(self, results):
+        if self.ignoreRequest:
+            return results
+        return FlourishCourseFilterWidget.filter(self, results)
 
 
 class FlourishCourseTableFormatter(table.table.SchoolToolTableFormatter):

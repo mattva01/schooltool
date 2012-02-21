@@ -14,6 +14,43 @@
       permission="schooltool.view"
       />
 
+  <flourish:viewlet
+      name="table"
+      for="schooltool.course.interfaces.ICourseContainer"
+      view="schooltool.course.browser.course.FlourishCoursesView"
+      manager="schooltool.skin.flourish.interfaces.IAJAXParts"
+      class=".course.CoursesTable"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="filter"
+      before="batch table"
+      manager=".course.CoursesTable"
+      class=".course.AJAXCourseFilterWidget"
+      render="template"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="schoolyear"
+      manager=".course.CoursesTable"
+      class=".course.CourseTableSchoolYear"
+      render="template"
+      permission="schooltool.view"
+      />
+
+  <zope:adapter
+      for="schooltool.app.interfaces.ISchoolToolApplication
+           schooltool.skin.flourish.interfaces.IFlourishLayer
+           .course.FlourishCoursesView
+           schooltool.skin.flourish.interfaces.IAJAXParts"
+      factory=".course.getCoursesTable"
+      provides="schooltool.skin.flourish.interfaces.IViewlet"
+      name="table"
+      permission="zope.Public"
+      />
+
   <!-- adapters -->
 
   <zope:adapter
