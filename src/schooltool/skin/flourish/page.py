@@ -20,6 +20,7 @@
 SchoolTool flourish pages.
 """
 import re
+import urllib
 
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.cachedescriptors.property import Lazy
@@ -28,13 +29,15 @@ from zope.interface import implements
 from zope.publisher.browser import BrowserPage
 from zope.browser.interfaces import IBrowserView
 from zope.traversing.api import getParent
-from zope.traversing.browser.absoluteurl import absoluteURL
+from zope.traversing.browser.interfaces import IAbsoluteURL
+from zope.traversing.browser.absoluteurl import absoluteURL, AbsoluteURL
 
 from schooltool.common.inlinept import InlineViewPageTemplate
 from schooltool.common.inlinept import InheritTemplate
 from schooltool.skin.flourish.viewlet import Viewlet, ViewletManager
 from schooltool.skin.flourish.viewlet import ManagerViewlet
 from schooltool.skin.flourish import interfaces
+from schooltool.traverser.traverser import PluggableTraverser
 
 
 class Page(BrowserPage):
@@ -49,6 +52,10 @@ class Page(BrowserPage):
     template = ViewPageTemplateFile('templates/main.pt')
     page_template = ViewPageTemplateFile('templates/page.pt')
     content_template = None
+
+    def publishTraverse(self, request, name):
+        traverser = PluggableTraverser(self, request)
+        return traverser.publishTraverse(request, name)
 
     @Lazy
     def providers(self):
@@ -70,6 +77,20 @@ class Page(BrowserPage):
             return u''
         result = self.render(*args, **kw)
         return result
+
+
+class PageAbsoluteURL(AbsoluteURL):
+
+    def __str__(self):
+        view = self.context
+        request = self.request
+
+        url = str(getMultiAdapter((view.context, request),
+                                                 IAbsoluteURL))
+        name = getattr(view, '__name__', None)
+        if name:
+            url += '/@@' + urllib.quote(name.encode('utf-8'), '@+')
+        return url
 
 
 class NoSidebarPage(Page):
@@ -381,6 +402,20 @@ def sanitize_id(html_id):
         html_id = 'i' + html_id
     return html_id
 
+def generic_viewlet_html_id(viewlet, prefix):
+    parent = viewlet.manager.__parent__
+    parents = []
+    while (parent is not None and
+           IBrowserView.providedBy(parent)):
+        name = getattr(parent, '__name__', None)
+        parents.append(str(name))
+        parent = parent.__parent__
+    name_list = ([str(viewlet.__name__),
+                  getattr(viewlet.manager, '__name__', 'manager')] +
+                 parents[:-1] +
+                 [prefix])
+    return sanitize_id('-'.join(reversed(name_list)))
+
 
 class LinkIdViewlet(LinkViewlet):
     template = InlineViewPageTemplate('''
@@ -397,18 +432,7 @@ class LinkIdViewlet(LinkViewlet):
 
     @property
     def html_id(self):
-        parent = self.manager.__parent__
-        parents = []
-        while (parent is not None and
-               IBrowserView.providedBy(parent)):
-            name = getattr(parent, '__name__', None)
-            parents.append(str(name))
-            parent = parent.__parent__
-        name_list = ([str(self.__name__),
-                      getattr(self.manager, '__name__', 'manager')] +
-                     parents[:-1] +
-                     ['LinkIdViewlet'])
-        return sanitize_id('-'.join(reversed(name_list)))
+        return generic_viewlet_html_id(self, 'LinkIdViewlet')
 
 
 class SimpleModalLinkViewlet(LinkIdViewlet):
