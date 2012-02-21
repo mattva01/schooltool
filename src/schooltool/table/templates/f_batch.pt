@@ -28,41 +28,49 @@
                     tokens view/tokens"
             condition="python:total > 11">
       <tal:if condition="python:cur <= 6">
-        <span tal:repeat="t python:tokens[:9]">
+        <span class="batch_page" tal:repeat="t python:tokens[:9]">
           <a tal:attributes="class t/css_class; onclick t/onclick"
              tal:content="t/num" href="#" />
         </span>
-        <span class="separator">...</span>
+        <span class="batch_separator">...</span>
         <tal:block define="t python:tokens[-1]">
-          <a tal:attributes="class t/css_class; onclick t/onclick"
-             tal:content="t/num" href="#" />
+          <span class="batch_page">
+            <a tal:attributes="class t/css_class; onclick t/onclick"
+               tal:content="t/num" href="#" />
+          </span>
         </tal:block>
       </tal:if>
 
       <tal:if condition="python:cur < (total - 4) and (cur > 6)">
         <tal:block define="t python:tokens[0]">
-          <a tal:attributes="class t/css_class; onclick t/onclick"
-             tal:content="t/num" href="#" />
+          <span class="batch_page">
+            <a tal:attributes="class t/css_class; onclick t/onclick"
+               tal:content="t/num" href="#" />
+          </span>
         </tal:block>
-        <span class="separator">...</span>
-        <span tal:repeat="t python:tokens[cur - 4: cur + 3]">
+        <span class="batch_separator">...</span>
+        <span class="batch_page" tal:repeat="t python:tokens[cur - 4: cur + 3]">
           <a tal:attributes="class t/css_class; onclick t/onclick"
              tal:content="t/num" href="#" />
         </span>
-        <span class="separator">...</span>
+        <span class="batch_separator">...</span>
         <tal:block define="t python:tokens[-1]">
-          <a tal:attributes="class t/css_class; onclick t/onclick"
-             tal:content="t/num" href="#" />
+          <span class="batch_page">
+            <a tal:attributes="class t/css_class; onclick t/onclick"
+               tal:content="t/num" href="#" />
+          </span>
         </tal:block>
       </tal:if>
 
       <tal:if condition="python:cur >= total - 4">
         <tal:block define="t python:tokens[0]">
-          <a tal:attributes="class t/css_class; onclick t/onclick"
-             tal:content="t/num" href="#" />
+          <span class="batch_page">
+            <a tal:attributes="class t/css_class; onclick t/onclick"
+               tal:content="t/num" href="#" />
+          </span>
         </tal:block>
-        <span class="separator">...</span>
-        <span tal:repeat="t python:tokens[-8:]">
+        <span class="batch_separator">...</span>
+        <span class="batch_page" tal:repeat="t python:tokens[-8:]">
           <a tal:attributes="class t/css_class; onclick t/onclick"
              tal:content="t/num" href="#" />
         </span>
@@ -72,7 +80,7 @@
 
     <tal:if define="tokens view/tokens"
             condition="not:python:len(tokens) > 11">
-      <span tal:repeat="t tokens">
+      <span class="batch_page" tal:repeat="t tokens">
           <a tal:attributes="class t/css_class; onclick t/onclick"
              tal:content="t/num" href="#" />
       </span>

@@ -249,7 +249,8 @@ class TableBatch(flourish.viewlet.Viewlet):
     def tokens(self):
         tokens = []
         for token in self.batch.tokens():
-            css_class = token['current'] and 'current' or ''
+            css_class = "batch_page"
+            css_class += token['current'] and ' current' or ''
             token = self.extend_token(token, css_class=css_class)
             tokens.append(token)
         return tokens
