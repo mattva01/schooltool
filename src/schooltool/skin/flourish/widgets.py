@@ -222,7 +222,7 @@ class PhotoDataConverter(FileUploadDataConverter):
 
     SIZE = (99, 132)
     FORMAT = 'JPEG'
-    MAX_UPLOAD_SIZE = 10485760 # 10 MB
+    MAX_UPLOAD_SIZE = 10 * (10**6)
 
     def toFieldValue(self, value):
         if value is None or value == '':
