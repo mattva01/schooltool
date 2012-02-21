@@ -593,6 +593,16 @@
       permission="schooltool.view"
       />
 
+  <flourish:viewlet
+      name="done"
+      before="table batch"
+      after="filter"
+      manager=".person.BasicPersonTable"
+      class=".person.PersonTableDoneLink"
+      render="template"
+      permission="schooltool.view"
+      />
+
   <!-- Reports -->
 
   <report:reportLink

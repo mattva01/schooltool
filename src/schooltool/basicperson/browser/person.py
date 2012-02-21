@@ -1059,6 +1059,22 @@ class BasicPersonTable(PersonTable):
             subsort=True)
         return cols + [username]
 
+
+class PersonTableDoneLink(flourish.viewlet.Viewlet):
+    template = InlineViewPageTemplate('''
+      <h3 tal:define="can_manage context/schooltool:app/schooltool:can_edit">
+        <tal:block condition="can_manage">
+          <a tal:attributes="href string:${context/schooltool:app/@@absolute_url}/manage"
+             i18n:translate="">Done</a>
+        </tal:block>
+        <tal:block condition="not:can_manage">
+          <a tal:attributes="href request/principal/schooltool:person/@@absolute_url"
+             i18n:translate="">Done</a>
+        </tal:block>
+      </h3>
+      ''')
+
+
 class BasicPersonTableFormatter(PersonTableFormatter):
 
     def columns(self):
