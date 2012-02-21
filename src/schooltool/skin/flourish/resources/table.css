@@ -34,18 +34,15 @@ content: " ""\25BD";
 content: " ""\25B3";
 }
 
-/* XXX: remove this? */
 thead {
     border-bottom: none;
 }
 
-/* XXX: remove this? */
 tbody {
     border-top-style: solid;
     border-top-width: 1px;
 }
 
-/* XXX: remove this? */
 tbody tr {
     border-bottom-style: dotted;
     border-bottom-width: 1px;
