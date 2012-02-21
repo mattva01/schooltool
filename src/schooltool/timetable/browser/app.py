@@ -40,10 +40,7 @@ from schooltool.common.inlinept import InlineViewPageTemplate
 from schooltool.schoolyear.interfaces import ISchoolYear, ISchoolYearContainer
 from schooltool.skin.containers import ContainerView
 from schooltool.skin import flourish
-from schooltool.table.table import SchoolToolTableFormatter
-from schooltool.table.table import GetterColumn, LocaleAwareGetterColumn
-from schooltool.table.table import ImageInputColumn
-from schooltool.table.table import simple_form_key
+from schooltool.table import table
 from schooltool.term.interfaces import ITerm
 from schooltool.timetable.interfaces import IHaveSchedule
 from schooltool.timetable.interfaces import IHaveTimetables
@@ -90,20 +87,20 @@ class TimetableContainerView(ContainerView):
         return ''
 
 
-class TimetableContainerTableFormatter(SchoolToolTableFormatter):
+class TimetableContainerTableFormatter(table.SchoolToolTableFormatter):
 
     def columns(self):
-        title = LocaleAwareGetterColumn(
+        title = table.LocaleAwareGetterColumn(
             name='title',
             title=_(u"Title"),
             getter=lambda i, f: i.title,
             subsort=True)
-        starts = GetterColumn(
+        starts = table.GetterColumn(
             name='starts',
             title=_(u"Starts"),
             getter=lambda i, f: i.first,
             subsort=True)
-        ends = GetterColumn(
+        ends = table.GetterColumn(
             name='ends',
             title=_(u"Ends"),
             getter=lambda i, f: i.last,
@@ -117,22 +114,23 @@ class TimetableContainerTableFormatter(SchoolToolTableFormatter):
         return (('title', False), ("starts", False), ("ends", False),)
 
 
-class FlourishTimetableContainerView(flourish.containers.TableContainerView):
+class FlourishTimetableContainerView(table.TableContainerView):
 
     def getColumnsAfter(self):
-        delete = ImageInputColumn(
+        delete = table.ImageInputColumn(
             'delete', title=_('Delete'),
             library='schooltool.skin.flourish',
             image='remove-icon.png',
-            id_getter=simple_form_key)
+            id_getter=table.simple_form_key)
         return [delete]
 
     def update(self):
         super(FlourishTimetableContainerView, self).update()
 
         # XXX: deletion without confirmation is quite dangerous
-        delete = [key for key, item in self.container.items()
-                  if "delete.%s" % simple_form_key(item) in self.request]
+        delete = [
+            key for key, item in self.container.items()
+            if "delete.%s" % table.simple_form_key(item) in self.request]
         for key in delete:
             del self.container[key]
         if delete:
@@ -197,7 +195,7 @@ class SchoolTimetablesTertiaryNavigation(flourish.page.Content,
         return result
 
 
-class FlourishTimetablesView(flourish.containers.TableContainerView):
+class FlourishTimetablesView(table.TableContainerView):
 
     content_template = ViewPageTemplateFile('templates/f_timetables.pt')
 

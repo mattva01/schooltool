@@ -44,12 +44,8 @@ from zope.security.checker import canAccess
 
 import z3c.form.interfaces
 from z3c.form.validator import SimpleFieldValidator
-from zc.table import table
+import zc.table.table
 
-import schooltool.skin.flourish.page
-import schooltool.skin.flourish.containers
-import schooltool.skin.flourish.breadcrumbs
-from schooltool.skin.flourish.widgets import Photo
 from schooltool.app.browser.app import RelationshipViewBase
 from schooltool.app.browser.app import FlourishRelationshipViewBase
 from schooltool.app.interfaces import ISchoolToolApplication
@@ -69,8 +65,8 @@ from schooltool.skin.flourish.interfaces import IViewletManager
 from schooltool.skin.flourish.form import FormViewlet
 from schooltool.skin.flourish.viewlet import Viewlet, ViewletManager
 from schooltool.skin.flourish.content import ContentProvider
+from schooltool.table import table
 from schooltool.table.interfaces import ITableFormatter
-from schooltool.table.table import DependableCheckboxColumn
 from schooltool.table.catalog import IndexedLocaleAwareGetterColumn
 from schooltool.table.interfaces import IIndexedColumn
 from schooltool.report.browser.report import RequestReportDownloadDialog
@@ -97,7 +93,7 @@ class BasicPersonContainerView(TableContainerView):
         return syc
 
 
-class DeletePersonCheckboxColumn(DependableCheckboxColumn):
+class DeletePersonCheckboxColumn(table.DependableCheckboxColumn):
 
     def __init__(self, *args, **kw):
         kw = dict(kw)
@@ -107,10 +103,10 @@ class DeletePersonCheckboxColumn(DependableCheckboxColumn):
     def hasDependents(self, item):
         if self.disable_items and item.__name__ in self.disable_items:
             return True
-        return DependableCheckboxColumn.hasDependents(self, item)
+        return table.DependableCheckboxColumn.hasDependents(self, item)
 
 
-class FlourishBasicPersonContainerView(flourish.containers.TableContainerView):
+class FlourishBasicPersonContainerView(table.TableContainerView):
     """A Person Container view."""
 
     @property
@@ -178,7 +174,7 @@ class IPersonAddForm(IBasicPerson):
 
 class IPhotoField(Interface):
 
-    photo = Photo(
+    photo = flourish.widgets.Photo(
         title=_('Photo'),
         description=_('An image file that will be converted to a JPEG no larger than 99x132 pixels (3:4 aspect ratio). Uploaded images must be JPEG or PNG files smaller than 10 MB'),
         required=False)
@@ -744,7 +740,9 @@ class FlourishAdvisoryViewlet(Viewlet):
     def getTable(self, items):
         persons = ISchoolToolApplication(None)['persons']
         result = getMultiAdapter((persons, self.request), ITableFormatter)
-        result.setUp(table_formatter=table.StandaloneFullFormatter, items=items)
+        result.setUp(
+            table_formatter=zc.table.table.StandaloneFullFormatter,
+            items=items)
         return result
 
     @property

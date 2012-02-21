@@ -20,12 +20,14 @@
 """
 import urllib
 
+import zope.security
 from zope.interface import implements
 from zope.interface import directlyProvides
 from zope.i18n.interfaces.locales import ICollator
 from zope.i18n import translate
 from zope.browserpage import ViewPageTemplateFile
-from zope.component import queryAdapter, queryMultiAdapter
+from zope.cachedescriptors.property import Lazy
+from zope.component import queryAdapter, queryMultiAdapter, getMultiAdapter
 from zope.security.proxy import removeSecurityProxy
 from zope.app.dependable.interfaces import IDependable
 from zope.traversing.browser.absoluteurl import absoluteURL
@@ -35,6 +37,8 @@ from zc.table import column
 from zc.table.interfaces import ISortableColumn
 from zc.table.column import GetterColumn
 
+from schooltool.common import stupid_form_key, simple_form_key
+from schooltool.skin import flourish
 from schooltool.table.batch import Batch
 from schooltool.table.interfaces import IFilterWidget
 from schooltool.table.interfaces import ITableFormatter
@@ -86,24 +90,6 @@ def label_cell_formatter_factory(prefix="", id_getter=None):
         return '<label for="%s">%s</label>' % (
             ".".join(filter(None, [prefix, id_getter(item)])), value)
     return label_cell_formatter
-
-
-def stupid_form_key(item):
-    """Simple form key that uses item's __name__.
-    Very unsafe: __name__ is expected to be a unicode string that contains
-    who knows what.
-    """
-    return item.__name__
-
-
-def simple_form_key(item):
-    """Unique form key for items contained within a single container."""
-    name = getattr(item, '__name__', None)
-    if name is None:
-        return None
-    key = unicode(name).encode('punycode')
-    key = urllib.quote(key)
-    return key
 
 
 class CheckboxColumn(column.Column):
@@ -280,9 +266,9 @@ class NullTableFormatter(object):
 class SchoolToolTableFormatter(object):
     implements(ITableFormatter)
 
-    filter_widget = None
     batch = None
     css_classes = None
+    _table_formatter = None
 
     def __init__(self, context, request):
         self.context, self.request = context, request
@@ -303,6 +289,12 @@ class SchoolToolTableFormatter(object):
         return [item for item in items
                 if item not in ommited_items]
 
+    @Lazy
+    def filter_widget(self):
+        widget = queryMultiAdapter((self.context, self.request),
+                                   IFilterWidget)
+        return widget
+
     def filter(self, items):
         # if there is no filter widget, we just return all the items
         if self.filter_widget:
@@ -317,9 +309,6 @@ class SchoolToolTableFormatter(object):
               columns_before=[], columns_after=[], sort_on=None, prefix="",
               formatters=[], table_formatter=table.FormFullFormatter,
               batch_size=25, css_classes=None):
-
-        self.filter_widget = queryMultiAdapter((self.context, self.request),
-                                               IFilterWidget)
 
         self._table_formatter = table_formatter
 
@@ -374,3 +363,62 @@ class SchoolToolTableFormatter(object):
         formatter.cssClasses.update(self.css_classes)
         return formatter()
 
+
+class TableContent(flourish.content.ContentProvider, SchoolToolTableFormatter):
+
+    def __init__(self, context, request, view):
+        flourish.content.ContentProvider.__init__(
+            self, context, request, view)
+
+    def update(self):
+        flourish.content.ContentProvider.update(self)
+        if self._table_formatter is None:
+            self.setUp()
+
+    def render(self, *args, **kw):
+        if self._table_formatter is None:
+            return ''
+        result = SchoolToolTableFormatter.render(self)
+        return result
+
+
+class TableContainerView(flourish.page.Page):
+    """A base view for containers that use zc.table to display items."""
+
+    empty_message = _('There are none.')
+    content_template = ViewPageTemplateFile('templates/f_table_container.pt')
+    done_link = ''
+
+    def __init__(self, context, request):
+        self.request = request
+        self.context = context
+
+    def getColumnsBefore(self):
+        return []
+
+    def getColumnsAfter(self):
+        return []
+
+    def setUpTableFormatter(self, formatter):
+        columns_before = self.getColumnsBefore()
+        columns_after = self.getColumnsAfter()
+        formatter.setUp(formatters=[url_cell_formatter],
+                        columns_before=columns_before,
+                        columns_after=columns_after)
+
+    @property
+    def container(self):
+        return self.context
+
+    def update(self):
+        self.table = queryMultiAdapter((self.container, self.request),
+                                       ITableFormatter)
+        self.setUpTableFormatter(self.table)
+
+    @property
+    def deleteURL(self):
+        container_url = absoluteURL(self.container, self.request)
+        return '%s/%s' % (container_url, 'delete.html')
+
+    def canModify(self):
+        return zope.security.canAccess(self.container, '__delitem__')

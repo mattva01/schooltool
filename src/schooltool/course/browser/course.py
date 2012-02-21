@@ -19,10 +19,13 @@
 """
 course browser views.
 """
+
+import  zc.table.table
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.interface import implements
 from zope.component import adapts
 from zope.component import getMultiAdapter
+from zope.component import queryMultiAdapter
 from zope.component import getUtility
 from zope.container.interfaces import INameChooser
 from zope.interface import directlyProvides
@@ -38,7 +41,6 @@ from zope.traversing.browser.absoluteurl import absoluteURL
 from zope.i18n.interfaces.locales import ICollator
 from zope.i18n import translate
 from zope.viewlet.viewlet import ViewletBase
-from zc.table import table
 from zc.table.interfaces import ISortableColumn
 from z3c.form import field, button, form
 from z3c.form.interfaces import HIDDEN_MODE
@@ -57,7 +59,6 @@ from schooltool.course.interfaces import ILearner, IInstructor
 from schooltool.course.course import Course
 from schooltool.skin import flourish
 from schooltool.skin.flourish.viewlet import Viewlet
-from schooltool.skin.flourish.containers import TableContainerView
 from schooltool.skin.flourish.containers import ContainerDeleteView
 from schooltool.skin.flourish.page import RefineLinksViewlet
 from schooltool.skin.flourish.page import LinkViewlet
@@ -69,10 +70,8 @@ from schooltool.skin.flourish.form import AddForm
 from schooltool.skin.flourish.form import DialogForm
 from schooltool.skin.flourish.form import DisplayForm
 from schooltool.skin.flourish.page import TertiaryNavigationManager
-from schooltool.table.table import SchoolToolTableFormatter
-from schooltool.table.table import FilterWidget
+from schooltool import table
 from schooltool.table.interfaces import ITableFormatter
-from schooltool.table.table import LocaleAwareGetterColumn
 from schooltool.common import SchoolToolMessage as _
 
 
@@ -406,7 +405,8 @@ class CourseAddLinkFromCourseViewlet(CourseAddLinkViewlet):
             absoluteURL(self.context, self.request))
 
 
-class FlourishCoursesView(TableContainerView, CoursesActiveTabMixin):
+class FlourishCoursesView(table.table.TableContainerView,
+                          CoursesActiveTabMixin):
 
     content_template = ViewPageTemplateFile('templates/f_courses.pt')
 
@@ -488,7 +488,9 @@ class FlourishCourseView(DisplayForm):
     def getTable(self, items):
         persons = ISchoolToolApplication(None)['persons']
         result = getMultiAdapter((persons, self.request), ITableFormatter)
-        result.setUp(table_formatter=table.StandaloneFullFormatter, items=items)
+        result.setUp(
+            table_formatter=zc.table.table.StandaloneFullFormatter,
+            items=items)
         return result
 
     def has_leaders(self):
@@ -608,7 +610,7 @@ class FlourishCourseDeleteView(DialogForm, form.EditForm):
         self.actions['cancel'].addClass('button-cancel')
 
 
-class FlourishCourseFilterWidget(FilterWidget):
+class FlourishCourseFilterWidget(table.table.FilterWidget):
 
     template = ViewPageTemplateFile('templates/f_course_filter.pt')
 
@@ -621,15 +623,15 @@ class FlourishCourseFilterWidget(FilterWidget):
         return results
 
 
-class FlourishCourseTableFormatter(SchoolToolTableFormatter):
+class FlourishCourseTableFormatter(table.table.SchoolToolTableFormatter):
 
     def columns(self):
-        title = LocaleAwareGetterColumn(
+        title = table.table.LocaleAwareGetterColumn(
             name='title',
             title=_(u'Title'),
             getter=lambda i, f: i.title,
             subsort=True)
-        course_id = LocaleAwareGetterColumn(
+        course_id = table.table.LocaleAwareGetterColumn(
             name='course_id',
             title=_('Course ID'),
             getter=lambda i, f: i.course_id or '',

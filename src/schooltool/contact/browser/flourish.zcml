@@ -153,7 +153,7 @@
       class="schooltool.skin.flourish.page.Related"
       template="templates/f_contacts_related.pt"
       for="schooltool.contact.interfaces.IContactContainer"
-      view="schooltool.skin.flourish.containers.TableContainerView"
+      view="schooltool.table.table.TableContainerView"
       manager="schooltool.skin.flourish.page.IPageRelatedManager"
       permission="schooltool.view"
       />

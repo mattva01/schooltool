@@ -47,12 +47,6 @@ from z3c.form.interfaces import DISPLAY_MODE
 
 import schooltool.skin.flourish.viewlet
 import schooltool.skin.flourish.page
-from schooltool.table.table import url_cell_formatter
-from schooltool.table.table import DependableCheckboxColumn
-from schooltool.table.catalog import FilterWidget
-from schooltool.table.catalog import IndexedTableFormatter
-from schooltool.table.catalog import IndexedLocaleAwareGetterColumn
-from schooltool.table.interfaces import IIndexedColumn
 from schooltool.skin.containers import TableContainerView
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
@@ -75,6 +69,11 @@ from schooltool.contact.contact import URIContactRelationship
 from schooltool.contact.interfaces import IContactPerson
 from schooltool.contact.interfaces import IEmails, IPhones, ILanguages
 from schooltool.schoolyear.interfaces import ISchoolYearContainer
+from schooltool.table import table
+from schooltool.table.catalog import FilterWidget
+from schooltool.table.catalog import IndexedTableFormatter
+from schooltool.table.catalog import IndexedLocaleAwareGetterColumn
+from schooltool.table.interfaces import IIndexedColumn
 
 from schooltool.common import SchoolToolMessage as _
 
@@ -92,7 +91,7 @@ class ContactContainerAbsoluteURLAdapter(BrowserView):
     __call__ = __str__
 
 
-class FlourishContactContainerView(flourish.containers.TableContainerView):
+class FlourishContactContainerView(table.TableContainerView):
     """A flourish Contact Container view."""
 
     @property
@@ -461,7 +460,7 @@ class ContactContainerView(TableContainerView):
     def columnsBefore(self):
         if self.canModify():
             return [
-                DependableCheckboxColumn(
+                table.DependableCheckboxColumn(
                     prefix="delete",
                     name='delete_checkbox',
                     title=u'',
@@ -504,14 +503,14 @@ def contact_table_columns():
         first_name = IndexedLocaleAwareGetterColumn(
             index='first_name',
             name='first_name',
-            cell_formatter=url_cell_formatter,
+            cell_formatter=table.url_cell_formatter,
             title=_(u'First Name'),
             getter=lambda i, f: i.first_name,
             subsort=True)
         last_name = IndexedLocaleAwareGetterColumn(
             index='last_name',
             name='last_name',
-            cell_formatter=url_cell_formatter,
+            cell_formatter=table.url_cell_formatter,
             title=_(u'Last Name'),
             getter=lambda i, f: i.last_name,
             subsort=True)

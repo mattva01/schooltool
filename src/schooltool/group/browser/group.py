@@ -21,6 +21,8 @@ group views.
 
 $Id$
 """
+import zc.table.table
+import zc.table.column
 from zope.app.dependable.interfaces import IDependable
 from zope.cachedescriptors.property import Lazy
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
@@ -42,7 +44,6 @@ from zope.traversing.browser.absoluteurl import absoluteURL
 from zope.i18n import translate
 from z3c.form import field, button, form
 from z3c.form.interfaces import HIDDEN_MODE
-from zc.table import table, column
 from zc.table.interfaces import ISortableColumn
 
 from schooltool.common import SchoolToolMessage as _
@@ -52,7 +53,6 @@ from schooltool.app.browser.app import BaseAddView, BaseEditView
 from schooltool.app.browser.app import ContentTitle
 from schooltool.person.interfaces import IPerson
 from schooltool.course.interfaces import ISection
-from schooltool.table.interfaces import ITableFormatter
 from schooltool.schoolyear.interfaces import ISchoolYear
 from schooltool.schoolyear.interfaces import ISchoolYearContainer
 from schooltool.group.group import Group
@@ -61,13 +61,9 @@ from schooltool.group.interfaces import IGroupMember
 from schooltool.group.interfaces import IGroupContainer, IGroupContained
 from schooltool.app.browser.app import RelationshipViewBase
 from schooltool.app.browser.app import FlourishRelationshipViewBase
-from schooltool.table.table import FilterWidget
-from schooltool.table.table import SchoolToolTableFormatter
-from schooltool.table.table import LocaleAwareGetterColumn
 from schooltool.skin.flourish.viewlet import Viewlet
 from schooltool.common.inlinept import InheritTemplate
 from schooltool.common.inlinept import InlineViewPageTemplate
-from schooltool.skin.flourish.containers import TableContainerView as FlourishTableContainerView
 from schooltool.skin.flourish.containers import ContainerDeleteView
 from schooltool.skin.flourish.page import RefineLinksViewlet
 from schooltool.skin.flourish.page import LinkViewlet
@@ -79,6 +75,8 @@ from schooltool.skin.flourish.form import AddForm
 from schooltool.skin.flourish.form import DialogForm
 from schooltool.skin.flourish.form import DisplayForm
 from schooltool.skin.flourish.page import TertiaryNavigationManager
+from schooltool.table import table
+from schooltool.table.interfaces import ITableFormatter
 
 
 class GroupContainerAbsoluteURLAdapter(BrowserView):
@@ -137,7 +135,7 @@ class GroupView(BrowserView):
     def renderPersonTable(self):
         persons = ISchoolToolApplication(None)['persons']
         formatter = getMultiAdapter((persons, self.request), ITableFormatter)
-        formatter.setUp(table_formatter=table.StandaloneFullFormatter,
+        formatter.setUp(table_formatter=zc.table.table.StandaloneFullFormatter,
                         items=self.getPersons(),
                         batch_size=0)
         return formatter.render()
@@ -247,12 +245,12 @@ class FlourishGroupsViewlet(Viewlet):
         return canAccess(self.context.__parent__, '__delitem__')
 
 
-class FlourishGroupFilterWidget(FilterWidget):
+class FlourishGroupFilterWidget(table.FilterWidget):
 
     template = ViewPageTemplateFile('templates/f_group_filter.pt')
 
 
-class SchoolYearColumn(column.GetterColumn):
+class SchoolYearColumn(zc.table.column.GetterColumn):
 
     def getter(self, item, formatter):
         schoolyear = ISchoolYear(item.__parent__)
@@ -263,10 +261,10 @@ class SchoolYearColumn(column.GetterColumn):
         return schoolyear.first
 
 
-class FlourishGroupTableFormatter(SchoolToolTableFormatter):
+class FlourishGroupTableFormatter(table.SchoolToolTableFormatter):
 
     def columns(self):
-        title = LocaleAwareGetterColumn(
+        title = table.LocaleAwareGetterColumn(
             name='title',
             title=_(u"Title"),
             getter=lambda i, f: i.title,
@@ -500,7 +498,7 @@ class GroupContainerTitle(ContentTitle):
                  mapping={'schoolyear': schoolyear.title})
 
 
-class FlourishGroupsView(FlourishTableContainerView,
+class FlourishGroupsView(table.TableContainerView,
                          GroupsActiveTabMixin):
 
     content_template = ViewPageTemplateFile('templates/f_groups.pt')
@@ -517,7 +515,7 @@ class FlourishGroupsView(FlourishTableContainerView,
         return IGroupContainer(schoolyear)
 
     def getColumnsAfter(self):
-        description = column.GetterColumn(
+        description = zc.table.column.GetterColumn(
             name='description',
             title=_('Description'),
             getter=lambda i, f: i.description or '',
@@ -590,8 +588,10 @@ class FlourishGroupView(DisplayForm):
     def getTable(self, items, prefix, **kw):
         persons = ISchoolToolApplication(None)['persons']
         result = getMultiAdapter((persons, self.request), ITableFormatter)
-        result.setUp(table_formatter=table.StandaloneFullFormatter, items=items,
-                     prefix=prefix, **kw)
+        result.setUp(
+            table_formatter=zc.table.table.StandaloneFullFormatter,
+            items=items,
+            prefix=prefix, **kw)
         return result
 
     def has_leaders(self):

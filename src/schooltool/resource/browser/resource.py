@@ -22,9 +22,9 @@ from collections import defaultdict
 
 import z3c.form
 import z3c.form.browser.text
+import zc.table.table
 from z3c.form import form, field, button, widget
 from z3c.form.interfaces import DISPLAY_MODE, HIDDEN_MODE, NO_VALUE
-from zc.table import table
 from zc.table.column import GetterColumn
 
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
@@ -61,20 +61,16 @@ from schooltool.resource.interfaces import (
              IResourceContainer, IResourceTypeInformation, IResourceSubTypes,
              IResource, IEquipment, ILocation, IResourceDemographicsFields)
 from schooltool.resource.resource import Resource, Location, Equipment
-from schooltool.table.interfaces import IFilterWidget
-from schooltool.table.interfaces import ITableFormatter
-from schooltool.table.table import url_cell_formatter
-from schooltool.table.table import CheckboxColumn
-from schooltool.table.table import FilterWidget
-from schooltool.table.table import SchoolToolTableFormatter
 from schooltool.person.browser.person import PersonFilterWidget
 from schooltool.resource.interfaces import IResourceFactoryUtility
 from schooltool.schoolyear.interfaces import ISchoolYearContainer
-from schooltool.skin.flourish.containers import TableContainerView
 from schooltool.skin.flourish.page import RefineLinksViewlet, Page
 from schooltool.skin.flourish.page import Content
 from schooltool.skin.flourish.page import ModalFormLinkViewlet
 from schooltool.skin.flourish.form import DialogForm, AddForm
+from schooltool.table.interfaces import IFilterWidget
+from schooltool.table.interfaces import ITableFormatter
+from schooltool.table import table
 
 from schooltool.common import SchoolToolMessage as _
 
@@ -165,12 +161,13 @@ class ResourceContainerView(oldform.FormBase):
         return self.filter_widget.filter(values)
 
     def renderResourceTable(self):
-        columns = [CheckboxColumn(prefix="delete", name='delete', title=u'')]
+        columns = [table.CheckboxColumn(
+                       prefix="delete", name='delete', title=u'')]
         available_columns = self.columns()
-        available_columns[0].cell_formatter = url_cell_formatter
+        available_columns[0].cell_formatter = table.url_cell_formatter
 
         columns.extend(available_columns)
-        formatter = table.StandaloneFullFormatter(
+        formatter = zc.table.table.StandaloneFullFormatter(
             self.context, self.request, self.filter(self.context.values()),
             columns=columns,
             sort_on=self.sortOn(),
@@ -179,7 +176,7 @@ class ResourceContainerView(oldform.FormBase):
         return formatter()
 
 
-class FlourishResourceContainerView(TableContainerView):
+class FlourishResourceContainerView(table.TableContainerView):
 
     @property
     def done_link(self):
@@ -194,7 +191,7 @@ class FlourishResourceContainerView(TableContainerView):
         return [description]
 
 
-class BaseTypeFilter(FilterWidget):
+class BaseTypeFilter(table.FilterWidget):
     """Base Type Filter"""
 
     def render(self):
@@ -509,7 +506,9 @@ class FlourishBaseResourceView(Page, BaseResourceView):
     def getTable(self, items):
         persons = ISchoolToolApplication(None)['persons']
         result = getMultiAdapter((persons, self.request), ITableFormatter)
-        result.setUp(table_formatter=table.StandaloneFullFormatter, items=items)
+        result.setUp(
+            table_formatter=zc.table.table.StandaloneFullFormatter,
+            items=items)
         return result
 
     def has_leaders(self):
@@ -790,7 +789,7 @@ class FlourishEquipmentEditView(Page, EquipmentEditView):
         EquipmentEditView.update(self)
 
 
-class FlourishResourceContainerTableFormatter(SchoolToolTableFormatter):
+class FlourishResourceContainerTableFormatter(table.SchoolToolTableFormatter):
 
     # XXX: hack to customize the table class
     def render(self):

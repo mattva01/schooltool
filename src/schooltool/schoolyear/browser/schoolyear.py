@@ -53,15 +53,19 @@ from z3c.form.validator import SimpleFieldValidator
 from z3c.form.error import ErrorViewSnippet
 from z3c.form.interfaces import DISPLAY_MODE
 
-from zc.table import column
+import zc.table.column
 
 import schooltool.skin.flourish.containers
 import schooltool.skin.flourish.breadcrumbs
 from schooltool.app.interfaces import ISchoolToolApplication
-from schooltool.table.table import DateColumn
-from schooltool.table.table import url_cell_formatter
-from schooltool.table.table import DependableCheckboxColumn
-from schooltool.table.table import SchoolToolTableFormatter
+from schooltool.common import DateRange
+from schooltool.common import SchoolToolMessage as _
+from schooltool.common.inlinept import InheritTemplate
+from schooltool.common.inlinept import InlineViewPageTemplate
+from schooltool.course.interfaces import ICourseContainer
+from schooltool.course.course import Course
+from schooltool.group.interfaces import IGroupContainer
+from schooltool.group.group import Group, defaultGroups
 from schooltool.schoolyear.browser.interfaces import ISchoolYearViewMenuViewletManager
 from schooltool.schoolyear.schoolyear import validateScholYearForOverflow
 from schooltool.schoolyear.schoolyear import validateScholYearsForOverlap
@@ -74,15 +78,8 @@ from schooltool.skin.skin import OrderedViewletManager
 from schooltool.skin.containers import ContainerDeleteView
 from schooltool.skin.containers import TableContainerView
 from schooltool.skin import flourish
+from schooltool.table import table
 from schooltool.timetable.interfaces import ITimetableContainer
-from schooltool.common import DateRange
-from schooltool.common import SchoolToolMessage as _
-from schooltool.common.inlinept import InheritTemplate
-from schooltool.common.inlinept import InlineViewPageTemplate
-from schooltool.course.interfaces import ICourseContainer
-from schooltool.course.course import Course
-from schooltool.group.interfaces import IGroupContainer
-from schooltool.group.group import Group, defaultGroups
 
 
 class SchoolYearContainerAbsoluteURLAdapter(AbsoluteURL):
@@ -152,14 +149,15 @@ class SchoolYearContainerView(TableContainerView, SchoolYearContainerBaseView):
     def setUpTableFormatter(self, formatter):
         columns_before = []
         if self.canModify():
-            columns_before = [DependableCheckboxColumn(prefix="delete",
-                                                       name='delete_checkbox',
-                                                       title=u'')]
-        columns_after = [DateColumn(title=_("Starts"),
-                                    getter=lambda x, y: x.first),
-                         DateColumn(title=_("Ends"),
-                                    getter=lambda x, y: x.last)]
-        formatter.setUp(formatters=[url_cell_formatter],
+            columns_before = [
+                table.DependableCheckboxColumn(prefix="delete",
+                                               name='delete_checkbox',
+                                               title=u'')]
+        columns_after = [table.DateColumn(title=_("Starts"),
+                                          getter=lambda x, y: x.first),
+                         table.DateColumn(title=_("Ends"),
+                                          getter=lambda x, y: x.last)]
+        formatter.setUp(formatters=[table.url_cell_formatter],
                         columns_before=columns_before,
                         columns_after=columns_after)
 
@@ -187,7 +185,7 @@ class SchoolYearContainerView(TableContainerView, SchoolYearContainerBaseView):
                     self.request.response.redirect(self.nextURL())
 
 
-class FlourishActiveSchoolYearColumn(column.Column):
+class FlourishActiveSchoolYearColumn(zc.table.column.Column):
     """Table column that displays whether a schoolyear is the active one.
     """
 
@@ -198,22 +196,22 @@ class FlourishActiveSchoolYearColumn(column.Column):
             return ''
 
 
-class SchoolYearTableFormatter(SchoolToolTableFormatter):
+class SchoolYearTableFormatter(table.SchoolToolTableFormatter):
 
     def sortOn(self):
         return (('first', True),)
 
 
-class FlourishSchoolYearContainerView(flourish.containers.TableContainerView):
+class FlourishSchoolYearContainerView(table.TableContainerView):
     """flourish SchoolYear container view."""
 
     def getColumnsAfter(self):
         result = [
-            DateColumn(title=_("First Day"),
-                       name='first',
-                       getter=lambda x, y: x.first),
-            DateColumn(title=_("Last Day"),
-                       getter=lambda x, y: x.last),
+            table.DateColumn(title=_("First Day"),
+                             name='first',
+                             getter=lambda x, y: x.first),
+            table.DateColumn(title=_("Last Day"),
+                             getter=lambda x, y: x.last),
             FlourishActiveSchoolYearColumn(title=_("Active")),
             ]
         return result
