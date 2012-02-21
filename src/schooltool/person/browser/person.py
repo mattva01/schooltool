@@ -489,6 +489,10 @@ class PersonFilterWidget(table.catalog.IndexedFilterWidget):
                                'title': "%s (%s)" % (group.title, len(group.members))})
         return groups
 
+    @property
+    def source(self):
+        return self.context
+
     def filter(self, items):
         if 'CLEAR_SEARCH' in self.request:
             for parameter in self.parameters:
@@ -504,7 +508,7 @@ class PersonFilterWidget(table.catalog.IndexedFilterWidget):
                 items = [item for item in items
                          if item['id'] in keys]
 
-        catalog = ICatalog(self.context)
+        catalog = ICatalog(self.source)
         title_index = catalog['title']
         username_index = catalog['__name__']
 
@@ -545,6 +549,10 @@ class PersonTableFilter(table.ajax.IndexedTableFilter,
     title = _('First name, last name or username')
 
     @property
+    def source(self):
+        return self.manager.source
+
+    @property
     def search_title_id(self):
         return self.manager.html_id+"-title"
 
@@ -564,6 +572,10 @@ class PersonTableFilter(table.ajax.IndexedTableFilter,
 
 
 class PersonTable(table.ajax.IndexedTable):
+
+    @property
+    def source(self):
+        return ISchoolToolApplication(None)['persons']
 
     def columns(self):
         return getUtility(IPersonFactory).columns()

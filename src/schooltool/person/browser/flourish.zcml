@@ -88,10 +88,9 @@
   <flourish:viewlet
       name="filter"
       before="batch table"
-      for="schooltool.person.interfaces.IPersonContainer"
       class=".person.PersonTableFilter"
       render="template"
-      manager="schooltool.table.ajax.Table"
+      manager=".person.PersonTable"
       permission="schooltool.view"
       />
 
