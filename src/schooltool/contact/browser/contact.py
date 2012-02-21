@@ -55,6 +55,7 @@ from schooltool.table.interfaces import IIndexedColumn
 from schooltool.skin.containers import TableContainerView
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
+from schooltool.app.interfaces import buildQueryString
 from schooltool.contact.interfaces import IContactable
 from schooltool.contact.interfaces import IContactContainer
 from schooltool.contact.interfaces import IContactPersonInfo
@@ -591,25 +592,11 @@ class FlourishContactFilterWidget(ContactFilterWidget):
 
     parameters = ['SEARCH_TITLE']
 
-    def appendGlobbing(self, terms):
-        result = []
-        for term in terms:
-            words = filter(None, term.split(' '))
-            if words:
-                result.append(' '.join(['%s*' % word for word in words]))
-        return result
-
-    def buildQuery(self, terms):
-        return ' or '.join(self.appendGlobbing(terms))
-
     def filter(self, items):
         if 'SEARCH_TITLE' in self.request:
             search_title = self.request['SEARCH_TITLE']
-            terms = [term.strip()
-                     for term in search_title.lower().split(',')]
-            terms = filter(None, terms)
-            if terms:
-                query = self.buildQuery(terms)
+            query = buildQueryString(search_title)
+            if query:
                 catalog = ICatalog(self.context)
                 result = catalog['text'].apply(query)
                 items = [item for item in items

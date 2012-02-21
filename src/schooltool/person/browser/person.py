@@ -61,6 +61,7 @@ import schooltool.skin.flourish.form
 from schooltool.group.interfaces import IGroupContainer
 from schooltool.common import SchoolToolMessage as _
 from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.app.catalog import buildQueryString
 from schooltool.person.interfaces import IPasswordWriter
 from schooltool.person.interfaces import IPerson, IPersonFactory
 from schooltool.person.interfaces import IPersonPreferences
@@ -773,18 +774,6 @@ class FlourishPersonFilterWidget(PersonFilterWidget):
 
     template = ViewPageTemplateFile('f_person_filter.pt')
 
-    # XXX: copied from contact.browser.contact.FlourishContactFilterWidget
-    def appendGlobbing(self, terms):
-        result = []
-        for term in terms:
-            words = filter(None, term.split(' '))
-            if words:
-                result.append(' '.join(['%s*' % word for word in words]))
-        return result
-
-    def buildQuery(self, terms):
-        return ' or '.join(self.appendGlobbing(terms))
-
     def filter(self, items):
         if 'CLEAR_SEARCH' in self.request:
             for parameter in self.parameters:
@@ -802,11 +791,8 @@ class FlourishPersonFilterWidget(PersonFilterWidget):
 
         if 'SEARCH_TITLE' in self.request:
             search_title = self.request['SEARCH_TITLE']
-            terms = [term.strip()
-                     for term in search_title.lower().split(',')]
-            terms = filter(None, terms)
-            if terms:
-                query = self.buildQuery(terms)
+            query = buildQueryString(search_title)
+            if query:
                 catalog = ICatalog(self.context)
                 result = catalog['text'].apply(query)
                 items = [item for item in items
