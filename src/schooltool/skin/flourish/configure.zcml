@@ -113,6 +113,12 @@
   <!-- Page viewlet managers and other conent -->
 
   <zope:adapter
+      for="schooltool.skin.flourish.interfaces.IPage
+           schooltool.skin.flourish.IFlourishLayer"
+      provides="zope.traversing.browser.interfaces.IAbsoluteURL"
+      factory="schooltool.skin.flourish.page.PageAbsoluteURL" />
+
+  <zope:adapter
       factory="schooltool.skin.flourish.viewlet.ViewletProxy"
       permission="zope.Public"
       />
@@ -194,6 +200,37 @@
   <flourish:page_breadcrumbs
       view=".interfaces.IPage"
       />
+
+  <zope:adapter
+      for=".ajax.AJAXParts"
+      provides="zope.traversing.interfaces.ITraversable"
+      factory=".ajax.AJAXPartsTraversable"
+      />
+
+  <zope:traverserPlugin
+      for=".interfaces.IPage"
+      layer="schooltool.skin.flourish.IFlourishLayer"
+      name="ajax"
+      plugin=".ajax.ViewAJAXPartsTraverser"
+      permission="zope.Public"
+      />
+
+  <flourish:viewletManager
+      name="ajax"
+      class=".ajax.AJAXParts"
+      provides=".interfaces.IAJAXParts"
+      permission="zope.Public"
+      />
+
+  <flourish:viewlet
+      name="debug"
+      template="templates/debug_ajax.pt"
+      title="Debug AJAX"
+      class="schooltool.skin.flourish.ajax.AJAXPart"
+      manager="schooltool.skin.flourish.interfaces.IAJAXParts"
+      permission="schooltool.view"
+      />
+
 
   <include file="tal.zcml" />
   <include file="containers.zcml" />

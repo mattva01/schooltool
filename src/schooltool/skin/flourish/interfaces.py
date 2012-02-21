@@ -91,6 +91,9 @@ class IViewletManager(zope.viewlet.interfaces.IViewletManager,
                       IContentProvider):
     """A viewlet manager."""
 
+    def collect():
+        """Collect the viewlets and deduce their order."""
+
 
 class IManagerViewlet(IViewlet, IViewletManager):
     """A viewlet that is also a manager."""
@@ -123,3 +126,29 @@ class IPage(IBrowserPage, ILocation):
 
     def render(*args, **kw):
         pass
+
+
+class IFromPublication(Interface):
+
+    fromPublication = zope.schema.Bool(
+        title=_('Accessed from publication'),
+        description=_('A flag that specifies if this part was built '
+                      'by publication.'),
+        default=False,
+        required=False)
+
+
+class IAJAXParts(IViewletManager, IFromPublication):
+    """AJAX parts of the view."""
+
+
+class IAJAXPart(IViewlet, IFromPublication):
+    """An ajax part of a view."""
+
+    ignoreRequest = zope.schema.Bool(
+        title=_('Ignore request'),
+        description=_('A flag that specifies if the request should be '
+                      'regarded as unreliable (for example, part '
+                      'was not obtained via publication).'),
+        default=True,
+        required=False)

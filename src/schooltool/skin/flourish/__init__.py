@@ -23,6 +23,7 @@ SchoolTool flourish skin.
 import zope.security
 import zope.container.interfaces
 
+import ajax
 import breadcrumbs
 import containers
 import content
