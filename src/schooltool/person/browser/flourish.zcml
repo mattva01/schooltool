@@ -75,7 +75,7 @@
       permission="schooltool.view"
       />
 
-
+<!--
   <flourish:viewlet
       name="table"
       for="schooltool.person.interfaces.IPersonContainer"
@@ -83,6 +83,7 @@
       manager="schooltool.skin.flourish.interfaces.IAJAXParts"
       permission="schooltool.view"
       />
+-->
 
   <flourish:viewlet
       name="filter"

@@ -585,6 +585,14 @@
            schooltool.skin.flourish.IFlourishLayer"
       factory=".person.BasicPersonTableFormatter" />
 
+  <flourish:viewlet
+      name="table"
+      for="schooltool.person.interfaces.IPersonContainer"
+      class=".person.BasicPersonTable"
+      manager="schooltool.skin.flourish.interfaces.IAJAXParts"
+      permission="schooltool.view"
+      />
+
   <!-- Reports -->
 
   <report:reportLink

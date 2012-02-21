@@ -57,7 +57,7 @@ from schooltool.basicperson.interfaces import IDemographicsFields
 from schooltool.basicperson.interfaces import IBasicPerson
 from schooltool.group.interfaces import IGroupContainer
 from schooltool.person.interfaces import IPerson, IPersonFactory
-from schooltool.person.browser.person import PersonTableFormatter
+from schooltool.person.browser.person import PersonTable, PersonTableFormatter
 from schooltool.schoolyear.interfaces import ISchoolYearContainer, ISchoolYear
 from schooltool.skin.containers import TableContainerView
 from schooltool.skin import flourish
@@ -1042,6 +1042,22 @@ class PersonTitle(ContentProvider):
         person = self.context
         return "%s %s" % (person.first_name, person.last_name)
 
+
+class BasicPersonTable(PersonTable):
+
+    def __init__(self, *args, **kw):
+        PersonTable.__init__(self, *args, **kw)
+        self.css_classes = {'table': 'persons-table relationships-table'}
+
+    def columns(self):
+        cols = list(reversed(PersonTable.columns(self)))
+        username = IndexedLocaleAwareGetterColumn(
+            index='__name__',
+            name='username',
+            title=_(u'Username'),
+            getter=lambda i, f: i.__name__,
+            subsort=True)
+        return cols + [username]
 
 class BasicPersonTableFormatter(PersonTableFormatter):
 
