@@ -9,8 +9,17 @@
     float: right;
 }
 
-.batch-navigation > span {
-    margin-right: 8px;
+.batch-navigation span.previous,
+.batch-navigation span.current,
+.batch-navigation span.next,
+.batch-navigation span.batch_page {
+    margin: 0px;
+    padding: 0px;
+}
+
+.batch-navigation span.batch_page a {
+    margin-left: -4px;
+    padding: 4px 8px 4px 8px;
 }
 
 .batch-navigation a.less {
