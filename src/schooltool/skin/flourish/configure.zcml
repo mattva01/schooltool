@@ -222,16 +222,6 @@
       permission="zope.Public"
       />
 
-  <flourish:viewlet
-      name="debug"
-      template="templates/debug_ajax.pt"
-      title="Debug AJAX"
-      class="schooltool.skin.flourish.ajax.AJAXPart"
-      manager="schooltool.skin.flourish.interfaces.IAJAXParts"
-      permission="schooltool.view"
-      />
-
-
   <include file="tal.zcml" />
   <include file="containers.zcml" />
   <include file="widgets.zcml" />
