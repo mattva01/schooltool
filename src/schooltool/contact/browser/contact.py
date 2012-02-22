@@ -59,15 +59,13 @@ from schooltool.email.interfaces import IEmailUtility
 from schooltool.email.mail import Email
 from schooltool.skin import flourish
 from schooltool.relationship.relationship import IRelationshipLinks
+from schooltool.common.inlinept import InlineViewPageTemplate
 from schooltool.contact.contact import URIPerson, URIContact
 from schooltool.contact.contact import URIContactRelationship
 from schooltool.contact.interfaces import IContactPerson
 from schooltool.contact.interfaces import IEmails, IPhones, ILanguages
 from schooltool.schoolyear.interfaces import ISchoolYearContainer
-from schooltool.table import table
-from schooltool.table.catalog import IndexedFilterWidget
-from schooltool.table.catalog import IndexedTableFormatter
-from schooltool.table.catalog import IndexedLocaleAwareGetterColumn
+from schooltool import table
 from schooltool.table.interfaces import IIndexedColumn
 
 from schooltool.common import SchoolToolMessage as _
@@ -86,8 +84,12 @@ class ContactContainerAbsoluteURLAdapter(BrowserView):
     __call__ = __str__
 
 
-class FlourishContactContainerView(table.TableContainerView):
+class FlourishContactContainerView(flourish.page.Page):
     """A flourish Contact Container view."""
+
+    content_template = InlineViewPageTemplate('''
+      <div tal:content="structure context/schooltool:content/ajax/table" />
+    ''')
 
     @property
     def done_link(self):
@@ -438,7 +440,7 @@ class FlourishContactDetails(flourish.form.FormViewlet):
         return canAccess(self.context.__parent__, '__delitem__')
 
 
-class ContactContainerView(table.TableContainerView):
+class ContactContainerView(table.table.TableContainerView):
     """A Contact Container view."""
 
     __used_for__ = IContactContainer
@@ -449,13 +451,13 @@ class ContactContainerView(table.TableContainerView):
     @property
     def itemsToDelete(self):
         return sorted(
-            table.TableContainerView._listItemsForDeletion(self),
+            table.table.TableContainerView._listItemsForDeletion(self),
             key=lambda obj: '%s %s' % (obj.last_name, obj.first_name))
 
     def columnsBefore(self):
         if self.canModify():
             return [
-                table.DependableCheckboxColumn(
+                table.column.DependableCheckboxColumn(
                     prefix="delete",
                     name='delete_checkbox',
                     title=u'',
@@ -495,24 +497,24 @@ def format_street_address(item, formatter):
 
 
 def contact_table_columns():
-        first_name = IndexedLocaleAwareGetterColumn(
+        first_name = table.column.IndexedLocaleAwareGetterColumn(
             index='first_name',
             name='first_name',
-            cell_formatter=table.url_cell_formatter,
+            cell_formatter=table.table.url_cell_formatter,
             title=_(u'First Name'),
             getter=lambda i, f: i.first_name,
             subsort=True)
-        last_name = IndexedLocaleAwareGetterColumn(
+        last_name = table.column.IndexedLocaleAwareGetterColumn(
             index='last_name',
             name='last_name',
-            cell_formatter=table.url_cell_formatter,
+            cell_formatter=table.table.url_cell_formatter,
             title=_(u'Last Name'),
             getter=lambda i, f: i.last_name,
             subsort=True)
         return [last_name, first_name]
 
 
-class ContactTableFormatter(IndexedTableFormatter):
+class ContactTableFormatter(table.catalog.IndexedTableFormatter):
 
     columns = lambda self: contact_table_columns()
 
@@ -537,7 +539,12 @@ class FlourishContactTableFormatter(ContactTableFormatter):
         return (('last_name', False), ("first_name", False),)
 
 
-class ContactFilterWidget(IndexedFilterWidget):
+class ContactTable(table.ajax.IndexedTable, FlourishContactTableFormatter):
+    columns = FlourishContactTableFormatter.columns
+    sortOn = FlourishContactTableFormatter.sortOn
+
+
+class ContactFilterWidget(table.catalog.IndexedFilterWidget):
 
     template = ViewPageTemplateFile('templates/filter.pt')
     parameters = ['SEARCH_FIRST_NAME', 'SEARCH_LAST_NAME']
@@ -589,9 +596,11 @@ class FlourishContactFilterWidget(ContactFilterWidget):
 
     parameters = ['SEARCH_TITLE']
 
+    search_title_id = 'SEARCH_TITLE'
+
     def filter(self, items):
-        if 'SEARCH_TITLE' in self.request:
-            search_title = self.request['SEARCH_TITLE']
+        if self.search_title_id in self.request:
+            search_title = self.request[self.search_title_id]
             query = buildQueryString(search_title)
             if query:
                 catalog = self.catalog
@@ -599,6 +608,25 @@ class FlourishContactFilterWidget(ContactFilterWidget):
                 items = [item for item in items
                          if item['id'] in result]
         return items
+
+
+class ContactTableFilter(table.ajax.IndexedTableFilter,
+                         FlourishContactFilterWidget):
+
+    template = ViewPageTemplateFile('templates/f_contact_table_filter.pt')
+    title = _('First name, last name or username')
+
+    @property
+    def search_title_id(self):
+        return self.manager.html_id+"-title"
+
+    @property
+    def parameters(self):
+        return (self.search_title_id, )
+
+    filter = FlourishContactFilterWidget.filter
+    active = FlourishContactFilterWidget.active
+    extra_url = FlourishContactFilterWidget.extra_url
 
 
 class ContactBackToContainerViewlet(object):
