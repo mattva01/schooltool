@@ -26,12 +26,12 @@ content: " ""\25B4";
 
 .zc-table-sort-asc-primary:after
 {
-content: " ""\25BD";
+content: " ""\25BC";
 }
 
 .zc-table-sort-desc-primary:after
 {
-content: " ""\25B3";
+content: " ""\25B2";
 }
 
 thead {
