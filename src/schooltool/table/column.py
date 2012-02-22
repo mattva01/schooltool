@@ -29,9 +29,9 @@ from zope.security.proxy import removeSecurityProxy
 from zope.app.dependable.interfaces import IDependable
 from zope.traversing.browser.absoluteurl import absoluteURL
 
-from zc.table import column
-from zc.table.interfaces import ISortableColumn
-from zc.table.column import GetterColumn
+import zc.table
+import zc.table.interfaces
+import zc.table.column
 
 from schooltool.common import stupid_form_key
 from schooltool.table.interfaces import ICheckboxColumn
@@ -51,7 +51,7 @@ def getResourceURL(library_name, image_name, request):
     return absoluteURL(image, request)
 
 
-class CheckboxColumn(column.Column):
+class CheckboxColumn(zc.table.column.Column):
     """A columns with a checkbox
 
     The name and id of the checkbox are composed of the prefix keyword
@@ -119,7 +119,7 @@ class DependableCheckboxColumn(CheckboxColumn):
             return bool(dependable.dependents())
 
 
-class DateColumn(column.GetterColumn):
+class DateColumn(zc.table.column.GetterColumn):
     """Table column that displays dates.
 
     Sortable even when None values are around.
@@ -138,10 +138,10 @@ class DateColumn(column.GetterColumn):
         return view()
 
 
-class LocaleAwareGetterColumn(GetterColumn):
+class LocaleAwareGetterColumn(zc.table.column.GetterColumn):
     """Getter columnt that has locale aware sorting."""
 
-    implements(ISortableColumn)
+    implements(zc.table.interfaces.ISortableColumn)
 
     def getSortKey(self, item, formatter):
         collator = ICollator(formatter.request.locale)
@@ -149,7 +149,7 @@ class LocaleAwareGetterColumn(GetterColumn):
         return s and collator.key(s)
 
 
-class ImageInputColumn(column.Column):
+class ImageInputColumn(zc.table.column.Column):
 
     def __init__(self, prefix, title=None, name=None,
                  alt=None, library=None, image=None, id_getter=None):
@@ -220,3 +220,71 @@ class ImageInputValueColumn(ImageInputColumn):
                 '<img src="%(src)s" alt="%(alt)s" />',
                 '</button>'
                 ])
+
+
+class TableSubmitImageColumn(ImageInputColumn):
+
+    def __init__(self, prefix, title=None, name=None, alt=None,
+                 library='schooltool.skin.flourish', image=None,
+                 container_id='', id_getter=None):
+        super(TableSubmitImageColumn, self).__init__(
+            prefix, title=title, name=name, alt=alt,
+            library=library, image=image, id_getter=id_getter)
+        self.form_id = ".".join(filter(None, [self.prefix, self.name]))
+        self.container_id = container_id
+
+    def on_click(self, formatter):
+        return "return ST.table.on_form_submit('%s', this)" % self.container_id
+
+    def params(self, item, formatter):
+        image_url = getResourceURL(
+            self.library, self.image, formatter.request)
+        if not image_url:
+            return None
+        return {
+            'title': translate(self.title, context=formatter.request) or '',
+            'alt': translate(self.alt, context=formatter.request) or '',
+            'name': self.form_id,
+            'value': self.id_getter(item),
+            'src': image_url,
+            'script': self.on_click(formatter), # XXX: should encode this
+            }
+
+    def renderCell(self, item, formatter):
+        params = self.params(item, formatter)
+        if not params:
+            return ''
+        return self.template() % params
+
+    def template(self):
+        return ' '.join(s.strip() for s in [
+                '<button class="image" type="submit" name="%(name)s"'
+                '        title="%(title)s" value="%(value)s"',
+                '        onclick="%(script)s">',
+                '  <img src="%(src)s" alt="%(alt)s" />',
+                '</button>'
+                ])
+
+
+class MultiStateColumn(zc.table.column.Column):
+
+    header_column = None
+    state_columns = None
+
+    def __init__(self, states=(), header=None, state_getter=None):
+        zc.table.column.Column.__init__(self)
+        self.header_column = header
+        self.state_columns = states
+        if state_getter is None:
+            state_getter = lambda item: 0
+        self.getState = state_getter
+
+    def renderHeader(self, formatter):
+        return self.header_column.renderHeader(formatter)
+
+    def renderCell(self, item, formatter):
+        state = self.getState(item, formatter)
+        column = self.state_columns[state]
+        cell = column.renderCell(item, formatter)
+        return cell
+
