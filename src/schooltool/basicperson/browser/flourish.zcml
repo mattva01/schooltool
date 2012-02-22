@@ -598,6 +598,17 @@
        link="request_person_export_xml.html"
        />
 
+  <report:reportLink
+      name="person_id_pdf"
+      for="schooltool.person.interfaces.IPerson"
+      permission="schooltool.edit"
+      group="Student"
+      description="XXX Contains a PDF with the person's ID XXX."
+      title="XXX Person ID Card XXX"
+      file_type="pdf"
+      link="request_person_id_pdf.html"
+      />
+
   <flourish:page
       name="person_export.xml"
       for="schooltool.person.interfaces.IPerson"
@@ -609,6 +620,20 @@
       name="request_person_export_xml.html"
       for="schooltool.person.interfaces.IPerson"
       class=".person.FlourishRequestPersonXMLExportView"
+      permission="schooltool.edit"
+      />
+
+   <flourish:page
+      name="person_id.pdf"
+      for="schooltool.person.interfaces.IPerson"
+      class=".person.FlourishPersonIDView"
+      permission="schooltool.edit"
+      />
+
+  <flourish:page
+      name="request_person_id_pdf.html"
+      for="schooltool.person.interfaces.IPerson"
+      class=".person.FlourishRequestPersonIDView"
       permission="schooltool.edit"
       />
 

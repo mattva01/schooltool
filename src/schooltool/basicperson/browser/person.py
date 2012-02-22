@@ -42,6 +42,8 @@ from zope.traversing.browser.absoluteurl import absoluteURL
 from zope.viewlet.viewlet import ViewletBase
 from zope.security.checker import canAccess
 
+from reportlab.lib.units import cm
+from reportlab.lib.pagesizes import landscape
 import z3c.form.interfaces
 from z3c.form.validator import SimpleFieldValidator
 from zc.table import table
@@ -52,6 +54,7 @@ import schooltool.skin.flourish.breadcrumbs
 from schooltool.skin.flourish.widgets import Photo
 from schooltool.app.browser.app import RelationshipViewBase
 from schooltool.app.browser.app import FlourishRelationshipViewBase
+from schooltool.app.browser.report import ReportPDFView
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.common.inlinept import InlineViewPageTemplate
@@ -59,6 +62,7 @@ from schooltool.common.inlinept import InheritTemplate
 from schooltool.basicperson.interfaces import IDemographics
 from schooltool.basicperson.interfaces import IDemographicsFields
 from schooltool.basicperson.interfaces import IBasicPerson
+from schooltool.contact.interfaces import IContactable
 from schooltool.group.interfaces import IGroupContainer
 from schooltool.person.interfaces import IPerson, IPersonFactory
 from schooltool.person.browser.person import PersonTableFormatter
@@ -1104,6 +1108,47 @@ class FlourishRequestPersonXMLExportView(RequestReportDownloadDialog):
 
     def nextURL(self):
         return absoluteURL(self.context, self.request) + '/person_export.xml'
+
+
+class FlourishRequestPersonIDView(RequestReportDownloadDialog):
+
+    def nextURL(self):
+        return absoluteURL(self.context, self.request) + '/person_id.pdf'
+
+
+class FlourishPersonIDView(ReportPDFView):
+
+    template=ViewPageTemplateFile('templates/f_person_id_card.pt')
+    pageSize = (8.9*cm, 5.1*cm)
+    leftMargin = 0*cm
+    rightMargin = 0*cm
+    topMargin = 0*cm
+    bottomMargin = 0*cm
+
+    def __init__(self, *args, **kw):
+        super(FlourishPersonIDView, self).__init__(*args, **kw)
+        self.title = _('XXX Report Card: ${person} XXX',
+                       mapping={'person': self.context.title})
+        app = ISchoolToolApplication(None)
+        preferences = IApplicationPreferences(app)
+        demographics = IDemographics(self.context)
+        contacts = list(IContactable(self.context).contacts)
+        self.schoolName = preferences.title
+        self.ID = demographics.get('ID')
+        self.birth_date = self.context.birth_date
+        self.contact = None
+        self.contact_phone = None
+        if contacts:
+            contact = contacts[0]
+            self.contact = '%s %s' % (contact.first_name,
+                                      contact.last_name)
+            phones = [
+                contact.home_phone,
+                contact.work_phone,
+                contact.mobile_phone,
+                ]
+            if phones:
+                self.contact_phone = phones[0]
 
 
 def getUserViewlet(context, request, view, manager, name):

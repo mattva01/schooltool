@@ -1,0 +1,68 @@
+<?xml version="1.0" standalone="no" ?>
+<!DOCTYPE document SYSTEM "rml_1_0.dtd" [
+  <!ENTITY pound   "&#xA3;">
+  <!ENTITY nbsp    "&#160;">
+]>
+<document
+  xmlns:tal="http://xml.zope.org/namespaces/tal"
+  xmlns:metal="http://xml.zope.org/namespaces/metal"
+  xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+  metal:use-macro="context/@@rml_macros/report"
+  i18n:domain="schooltool">
+  <metal:block fill-slot="page_templates">
+    <pageTemplate id="default">
+      <pageGraphics>
+        <image tal:attributes="file context/photo/@@data_uri"
+               tal:condition="context/photo"
+               preserveAspectRatio="true"
+               height="3.2cm"
+               x="6cm" y="0.5cm" />
+        <tal:block condition="not:context/photo">
+          <lineMode width="1" />
+          <stroke color="black" />
+          <rect x="6cm" y="0.5cm" height="3.2cm" width="2.4cm"
+                fill="false" stroke="true" />
+        </tal:block>
+        <lineMode width="1" />
+        <fill color="#008C93" />
+        <stroke color="#008C93" />
+        <rect x="0cm" y="4.1cm" height="1cm" width="8.9cm"
+              fill="true" stroke="true" />
+      </pageGraphics>
+      <frame id="default"
+             x1="0.5cm" y1="0cm"
+             width="8.4cm" height="5.1cm" />
+    </pageTemplate>
+  </metal:block>
+  <stylesheet>
+    <metal:block fill-slot="extra_initialize">
+    </metal:block>
+    <metal:block fill-slot="stylesheet">
+    </metal:block>
+  </stylesheet>
+  <story metal:fill-slot="story">
+    <spacer length="5" />
+    <para fontSize="14" alignment="center" textColor="#ffffff"
+          tal:content="view/schoolName" />
+    <spacer length="22" />
+    <para fontSize="12" textColor="#008C93"
+          tal:content="context/title" />
+    <spacer length="2" />
+    <para fontSize="10" spaceBefore="7" i18n:translate="">
+      ID:
+      <tal:block i18n:name="person-id" content="view/ID" />
+    </para>
+    <para fontSize="10" spaceBefore="7" i18n:translate="">
+      Birth date:
+      <tal:block i18n:name="birth-date" content="view/birth_date" />
+    </para>
+    <para fontSize="10" spaceBefore="7" i18n:translate="">
+      Contact:
+      <tal:block i18n:name="contact" content="view/contact" />
+    </para>
+    <para fontSize="10" spaceBefore="7" i18n:translate="">
+      Contact phone:
+      <tal:block i18n:name="phone" content="view/contact_phone" />
+    </para>
+  </story>
+</document>
