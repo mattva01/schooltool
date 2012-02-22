@@ -144,6 +144,17 @@
       permission="schooltool.view"
       />
 
+  <flourish:viewlet
+      name="done"
+      before="table batch"
+      after="filter"
+      manager=".group.GroupsTable"
+      view=".group.FlourishGroupsView"
+      class="schooltool.app.browser.app.ManageItemDoneLink"
+      render="template"
+      permission="schooltool.view"
+      />
+
   <flourish:page
       name="addSchoolToolGroup.html"
       for="schooltool.group.interfaces.IGroupContainer"
