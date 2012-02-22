@@ -136,6 +136,14 @@
       permission="schooltool.view"
       />
 
+  <flourish:viewlet
+      name="table"
+      class=".group.GroupsTable"
+      view=".group.FlourishGroupsView"
+      manager="schooltool.skin.flourish.interfaces.IAJAXParts"
+      permission="schooltool.view"
+      />
+
   <flourish:page
       name="addSchoolToolGroup.html"
       for="schooltool.group.interfaces.IGroupContainer"

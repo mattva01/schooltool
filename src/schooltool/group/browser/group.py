@@ -65,7 +65,7 @@ from schooltool.skin.flourish.viewlet import Viewlet
 from schooltool.common.inlinept import InheritTemplate
 from schooltool.common.inlinept import InlineViewPageTemplate
 from schooltool.skin import flourish
-from schooltool.table import table
+from schooltool import table
 
 from schooltool.common import SchoolToolMessage as _
 
@@ -237,7 +237,7 @@ class FlourishGroupsViewlet(Viewlet):
         return canAccess(self.context.__parent__, '__delitem__')
 
 
-class FlourishGroupFilterWidget(table.FilterWidget):
+class FlourishGroupFilterWidget(table.table.FilterWidget):
 
     template = ViewPageTemplateFile('templates/f_group_filter.pt')
 
@@ -253,10 +253,10 @@ class SchoolYearColumn(zc.table.column.GetterColumn):
         return schoolyear.first
 
 
-class FlourishGroupTableFormatter(table.SchoolToolTableFormatter):
+class FlourishGroupTableFormatter(table.table.SchoolToolTableFormatter):
 
     def columns(self):
-        title = table.LocaleAwareGetterColumn(
+        title = table.column.LocaleAwareGetterColumn(
             name='title',
             title=_(u"Title"),
             getter=lambda i, f: i.title,
@@ -490,10 +490,12 @@ class GroupContainerTitle(ContentTitle):
                  mapping={'schoolyear': schoolyear.title})
 
 
-class FlourishGroupsView(table.TableContainerView,
+class FlourishGroupsView(flourish.page.Page,
                          GroupsActiveTabMixin):
 
-    content_template = ViewPageTemplateFile('templates/f_groups.pt')
+    content_template = InlineViewPageTemplate('''
+      <div tal:content="structure context/schooltool:content/ajax/table" />
+    ''')
 
     @property
     def title(self):
@@ -501,18 +503,26 @@ class FlourishGroupsView(table.TableContainerView,
         return _('Groups for ${schoolyear}',
                  mapping={'schoolyear': schoolyear.title})
 
-    @property
-    def container(self):
-        schoolyear = self.schoolyear
+
+class GroupsTable(table.ajax.Table):
+
+    @Lazy
+    def source(self):
+        schoolyear = self.view.schoolyear
         return IGroupContainer(schoolyear)
 
-    def getColumnsAfter(self):
+    def updateFormatter(self):
         description = zc.table.column.GetterColumn(
             name='description',
             title=_('Description'),
             getter=lambda i, f: i.description or '',
             )
-        return [description]
+        self.setUp(formatters=[table.table.url_cell_formatter],
+                   table_formatter=self.table_formatter,
+                   batch_size=self.batch_size,
+                   prefix=self.__name__,
+                   columns_after=[description],
+                   css_classes={'table': 'data relationships-table'})
 
 
 class FlourishGroupContainerDeleteView(flourish.containers.ContainerDeleteView):
