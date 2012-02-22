@@ -21,12 +21,14 @@ More columns for tables.
 """
 import datetime
 
-from zope.interface import implements
+from zope.app.dependable.interfaces import IDependable
+from zope.interface import implementer, implements, classImplements
 from zope.i18n.interfaces.locales import ICollator
 from zope.i18n import translate
-from zope.component import queryAdapter, queryMultiAdapter
+from zope.intid.interfaces import IIntIds
+from zope.component import adapter, queryAdapter, queryMultiAdapter
+from zope.component import queryUtility
 from zope.security.proxy import removeSecurityProxy
-from zope.app.dependable.interfaces import IDependable
 from zope.traversing.browser.absoluteurl import absoluteURL
 
 import zc.table
@@ -35,6 +37,7 @@ import zc.table.column
 
 from schooltool.common import stupid_form_key
 from schooltool.table.interfaces import ICheckboxColumn
+from schooltool.table.interfaces import IIndexedColumn
 
 
 #XXX: Misplaced helper
@@ -287,4 +290,91 @@ class MultiStateColumn(zc.table.column.Column):
         column = self.state_columns[state]
         cell = column.renderCell(item, formatter)
         return cell
+
+
+class IndexedGetterColumn(zc.table.column.GetterColumn):
+    implements(IIndexedColumn, zc.table.interfaces.ISortableColumn)
+
+    def __init__(self, **kwargs):
+        self.index = kwargs.pop('index')
+        super(IndexedGetterColumn, self).__init__(**kwargs)
+
+    def _sort(self, items, formatter, start, stop, sorters, multiplier):
+        if self.subsort and sorters:
+            items = sorters[0](items, formatter, start, stop, sorters[1:])
+        else:
+            items = list(items) # don't mutate original
+        getSortKey = self.getSortKey
+
+        # Patch the SortableColum._sort to use both cmp and key for sorting.
+        # This reduces usage of getSortKey drastically on large datasets.
+        items.sort(
+            cmp=lambda a, b: multiplier*cmp(a, b),
+            key=lambda item: getSortKey(item, formatter))
+
+        return items
+
+    def renderCell(self, item, formatter):
+        item = queryUtility(IIntIds).getObject(item['id'])
+        return super(IndexedGetterColumn, self).renderCell(item, formatter)
+
+    def getSortKey(self, item, formatter):
+        id = item['id']
+        index = item['catalog'][self.index]
+        return index.documents_to_values[id]
+
+
+class IndexedLocaleAwareGetterColumn(IndexedGetterColumn):
+
+    _cached_collator = None
+
+    def getSortKey(self, item, formatter):
+        if not self._cached_collator:
+            self._cached_collator = ICollator(formatter.request.locale)
+        s = super(IndexedLocaleAwareGetterColumn, self).getSortKey(item, formatter)
+        return s and self._cached_collator.key(s)
+
+
+def makeIndexedColumn(mixins, column, *args, **kw):
+    class_ = column.__class__
+    new_class = type(
+        '_indexed_%s' % class_.__name__,
+        tuple(mixins) + (class_,),
+        {})
+    classImplements(new_class, IIndexedColumn)
+    new_column = super(class_, new_class).__new__(new_class, *args, **kw)
+    new_column.__dict__.update(dict(column.__dict__))
+    return new_column
+
+
+def unindex(indexed_item):
+    return queryUtility(IIntIds).getObject(indexed_item['id'])
+
+
+class RenderUnindexingMixin(object):
+    def renderCell(self, indexed_item, formatter):
+        return super(RenderUnindexingMixin, self).renderCell(
+            unindex(indexed_item), formatter)
+
+
+class SortUnindexingMixin(object):
+    def getSortKey(self, indexed_item, formatter):
+        super(SortUnindexingMixin, self).getSortKey(
+            unindex(indexed_item), formatter)
+
+
+@adapter(zc.table.interfaces.IColumn)
+@implementer(IIndexedColumn)
+def getIndexedColumn(column):
+    column = makeIndexedColumn(
+        [RenderUnindexingMixin], column)
+    return column
+
+
+@adapter(zc.table.interfaces.ISortableColumn)
+@implementer(IIndexedColumn)
+def getIndexedSortableColumn(column):
+    column = makeIndexedColumn(
+        [RenderUnindexingMixin, SortUnindexingMixin], column)
+    return column
 

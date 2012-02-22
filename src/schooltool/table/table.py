@@ -64,6 +64,10 @@ class FilterWidget(object):
         self.context = context
         self.request = request
 
+    @property
+    def source(self):
+        return self.context
+
     def render(self):
         return self.template()
 

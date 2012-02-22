@@ -168,6 +168,10 @@ class TableFilter(flourish.viewlet.Viewlet, FilterWidget):
     title = _("Search")
 
     @property
+    def source(self):
+        return self.manager.source
+
+    @property
     def ignoreRequest(self):
         return self.manager.ignoreRequest
 
