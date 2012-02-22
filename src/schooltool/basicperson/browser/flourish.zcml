@@ -599,7 +599,7 @@
       after="filter"
       manager=".person.BasicPersonTable"
       view=".person.FlourishBasicPersonContainerView"
-      class=".person.PersonTableDoneLink"
+      class="schooltool.app.browser.app.ManageItemDoneLink"
       render="template"
       permission="schooltool.view"
       />

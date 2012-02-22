@@ -543,10 +543,6 @@ class PersonTableFilter(table.ajax.IndexedTableFilter,
     title = _('First name, last name or username')
 
     @property
-    def source(self):
-        return self.manager.source
-
-    @property
     def search_title_id(self):
         return self.manager.html_id+"-title"
 
