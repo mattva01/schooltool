@@ -1,6 +1,3 @@
-<tal:block condition="not:view/manager/fromPublication"
-           replace="resource_library:schooltool.table" />
-
 <script>ST.state.push()</script>
 <tal:script tal:replace="structure scriptlocal:container_id view/manager/html_id" />
 

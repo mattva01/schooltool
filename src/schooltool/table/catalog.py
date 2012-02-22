@@ -173,6 +173,10 @@ class IndexedTableFormatter(SchoolToolTableFormatter):
                     'catalog': catalog})
         return results
 
+    def getItem(self, indexed):
+        int_ids = getUtility(IIntIds)
+        return int_ids.queryObject(indexed['id'])
+
     def setUp(self, **kwargs):
         items = kwargs.pop('items', None)
         if items is not None:

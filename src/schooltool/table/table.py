@@ -249,6 +249,39 @@ class ImageInputColumn(column.Column):
                 ])
 
 
+class ImageInputValueColumn(ImageInputColumn):
+
+    on_click = ""
+
+    def __init__(self, *args, **kw):
+        on_click = kw.pop('on_click', "")
+        ImageInputColumn.__init__(self, *args, **kw)
+        self.on_click = on_click
+        self.form_id = ".".join(filter(None, [self.prefix, self.name]))
+
+    def params(self, item, formatter):
+        image_url = getResourceURL(self.library, self.image, formatter.request)
+        if not image_url:
+            return None
+        value = self.id_getter(item)
+        return {
+            'title': translate(self.title, context=formatter.request) or '',
+            'alt': translate(self.alt, context=formatter.request) or '',
+            'name': self.form_id,
+            'value': value,
+            'src': image_url,
+            'on_click': self.on_click,
+            }
+
+    def template(self):
+        return '\n'.join([
+                '<button class="image" type="submit" name="%(name)s"'
+                ' title="%(title)s" value="%(value)s" onclick="%(on_click)s">',
+                '<img src="%(src)s" alt="%(alt)s" />',
+                '</button>'
+                ])
+
+
 class NullTableFormatter(object):
     implements(ITableFormatter)
 
@@ -352,7 +385,7 @@ class SchoolToolTableFormatter(object):
         if css_classes:
             self.css_classes = css_classes
         else:
-            self.css_classes = {'table': 'data st-table'}
+            self.css_classes = {'table': 'data relationships-table'}
 
     def extra_url(self):
         extra_url = ""

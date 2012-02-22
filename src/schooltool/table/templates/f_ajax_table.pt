@@ -1,0 +1,3 @@
+<div tal:attributes="id view/html_id" i18n:domain="schooltool">
+   <tal:block replace="structure options/content" />
+</div>

@@ -24,6 +24,7 @@ from zope.interface import implements
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.cachedescriptors.property import Lazy
 
+import zc.resourcelibrary
 from zc.table import table
 from zc.table.interfaces import IColumnSortedItems
 
@@ -88,11 +89,7 @@ class AJAXStandaloneSortFormatter(AJAXSortHeaderMixin,
 
 class Table(flourish.ajax.CompositeAJAXPart, TableContent):
 
-    container_wrapper = InlineViewPageTemplate("""
-      <div tal:attributes="id view/html_id" i18n:domain="schooltool">
-         <tal:block replace="structure options/content" />
-      </div>
-    """)
+    container_wrapper = ViewPageTemplateFile('templates/f_ajax_table.pt')
 
     form_wrapper = InlineViewPageTemplate("""
       <form method="post" tal:attributes="action view/@@absolute_url">
@@ -126,7 +123,7 @@ class Table(flourish.ajax.CompositeAJAXPart, TableContent):
                    table_formatter=self.table_formatter,
                    batch_size=self.batch_size,
                    prefix=self.__name__,
-                   css_classes={'table': 'data st-table'})
+                   css_classes={'table': 'data relationships-table'})
 
     def update(self):
         self.updateFormatter()
@@ -149,17 +146,17 @@ class Table(flourish.ajax.CompositeAJAXPart, TableContent):
         return formatter()
 
     def render(self, *args, **kw):
+        content = ''
         if self.inside_form:
-            if self.fromPublication:
-                return self.template(*args, **kw)
-            else:
-                return self.container_wrapper(
-                    content=self.template(*args, **kw))
-        if self.fromPublication:
-            return self.form_wrapper(*args, **kw)
+            content = self.template(*args, **kw)
         else:
-            return self.container_wrapper(
-                content=self.form_wrapper(*args, **kw))
+            content = self.form_wrapper(*args, **kw)
+
+        if self.fromPublication:
+            return content
+
+        zc.resourcelibrary.need('schooltool.table')
+        return self.container_wrapper(content=content)
 
 
 class TableFilter(flourish.viewlet.Viewlet, FilterWidget):
