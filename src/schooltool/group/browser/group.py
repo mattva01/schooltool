@@ -46,7 +46,6 @@ from z3c.form import field, button, form
 from z3c.form.interfaces import HIDDEN_MODE
 from zc.table.interfaces import ISortableColumn
 
-from schooltool.common import SchoolToolMessage as _
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.skin.containers import TableContainerView
 from schooltool.app.browser.app import BaseAddView, BaseEditView
@@ -65,19 +64,10 @@ from schooltool.app.browser.app import FlourishRelationshipViewBase
 from schooltool.skin.flourish.viewlet import Viewlet
 from schooltool.common.inlinept import InheritTemplate
 from schooltool.common.inlinept import InlineViewPageTemplate
-from schooltool.skin.flourish.containers import ContainerDeleteView
-from schooltool.skin.flourish.page import RefineLinksViewlet
-from schooltool.skin.flourish.page import LinkViewlet
-from schooltool.skin.flourish.page import Page
-from schooltool.skin.flourish.page import ModalFormLinkViewlet
-from schooltool.skin.flourish.page import Content
-from schooltool.skin.flourish.form import Form
-from schooltool.skin.flourish.form import AddForm
-from schooltool.skin.flourish.form import DialogForm
-from schooltool.skin.flourish.form import DisplayForm
-from schooltool.skin.flourish.page import TertiaryNavigationManager
+from schooltool.skin import flourish
 from schooltool.table import table
-from schooltool.table.interfaces import ITableFormatter
+
+from schooltool.common import SchoolToolMessage as _
 
 
 class GroupContainerAbsoluteURLAdapter(BrowserView):
@@ -135,7 +125,8 @@ class GroupView(BrowserView):
 
     def renderPersonTable(self):
         persons = ISchoolToolApplication(None)['persons']
-        formatter = getMultiAdapter((persons, self.request), ITableFormatter)
+        formatter = getMultiAdapter((persons, self.request),
+                                    table.interfaces.ITableFormatter)
         formatter.setUp(table_formatter=zc.table.table.StandaloneFullFormatter,
                         items=self.getPersons(),
                         batch_size=0)
@@ -349,7 +340,7 @@ class FlourishGroupListView(FlourishRelationshipViewBase):
         return "%s.%s" % (schoolyear.__name__, item.__name__)
 
 
-class GroupsTertiaryNavigationManager(TertiaryNavigationManager):
+class GroupsTertiaryNavigationManager(flourish.page.TertiaryNavigationManager):
 
     template = InlineViewPageTemplate("""
         <ul tal:attributes="class view/list_class">
@@ -380,15 +371,15 @@ class GroupsTertiaryNavigationManager(TertiaryNavigationManager):
         return result
 
 
-class GroupsAddLinks(RefineLinksViewlet):
+class GroupsAddLinks(flourish.page.RefineLinksViewlet):
     """Manager for Add links in GroupsView"""
 
 
-class GroupImportLinks(RefineLinksViewlet):
+class GroupImportLinks(flourish.page.RefineLinksViewlet):
     """Manager for group import links."""
 
 
-class GroupLinks(RefineLinksViewlet):
+class GroupLinks(flourish.page.RefineLinksViewlet):
     """Manager for public links in GroupView"""
 
     @property
@@ -396,7 +387,7 @@ class GroupLinks(RefineLinksViewlet):
         return self.context.title
 
 
-class GroupAddLinks(RefineLinksViewlet):
+class GroupAddLinks(flourish.page.RefineLinksViewlet):
     """Manager for Add links in GroupView"""
 
     def render(self):
@@ -406,7 +397,7 @@ class GroupAddLinks(RefineLinksViewlet):
             return super(GroupAddLinks, self).render()
 
 
-class GroupManageActionsLinks(RefineLinksViewlet):
+class GroupManageActionsLinks(flourish.page.RefineLinksViewlet):
     """Manager for Action links in GroupView"""
 
     body_template = InlineViewPageTemplate("""
@@ -440,7 +431,7 @@ class GroupManageActionsLinks(RefineLinksViewlet):
                 return super(GroupManageActionsLinks, self).render()
 
 
-class GroupDeleteLink(ModalFormLinkViewlet):
+class GroupDeleteLink(flourish.page.ModalFormLinkViewlet):
 
     @property
     def dialog_title(self):
@@ -467,7 +458,7 @@ class GroupsActiveTabMixin(object):
         return result
 
 
-class GroupAddLinkViewlet(LinkViewlet, GroupsActiveTabMixin):
+class GroupAddLinkViewlet(flourish.page.LinkViewlet, GroupsActiveTabMixin):
 
     @property
     def url(self):
@@ -524,7 +515,7 @@ class FlourishGroupsView(table.TableContainerView,
         return [description]
 
 
-class FlourishGroupContainerDeleteView(ContainerDeleteView):
+class FlourishGroupContainerDeleteView(flourish.containers.ContainerDeleteView):
 
     def nextURL(self):
         if 'CONFIRM' in self.request:
@@ -534,12 +525,12 @@ class FlourishGroupContainerDeleteView(ContainerDeleteView):
                 'groups',
                 schoolyear.__name__)
             return url
-        return ContainerDeleteView.nextURL(self)
+        return flourish.containers.ContainerDeleteView.nextURL(self)
 
 
-class FlourishGroupView(DisplayForm):
+class FlourishGroupView(flourish.form.DisplayForm):
 
-    template = InheritTemplate(Page.template)
+    template = InheritTemplate(flourish.page.Page.template)
     content_template = ViewPageTemplateFile('templates/f_group_view.pt')
     fields = field.Fields(IGroup)
     fields = fields.select('title', 'description')
@@ -579,9 +570,9 @@ class FlourishGroupView(DisplayForm):
         return bool(list(self.context.leaders))
 
 
-class FlourishGroupAddView(AddForm):
+class FlourishGroupAddView(flourish.form.AddForm):
 
-    template = InheritTemplate(Page.template)
+    template = InheritTemplate(flourish.page.Page.template)
     label = None
     legend = _('Group Information')
     fields = field.Fields(IGroup)
@@ -631,9 +622,9 @@ class FlourishGroupAddView(AddForm):
                  mapping={'schoolyear': schoolyear.title})
 
 
-class FlourishGroupEditView(Form, form.EditForm):
+class FlourishGroupEditView(flourish.form.Form, form.EditForm):
 
-    template = InheritTemplate(Page.template)
+    template = InheritTemplate(flourish.page.Page.template)
     label = None
     legend = _('Group Information')
     fields = field.Fields(IGroup)
@@ -666,7 +657,7 @@ class FlourishGroupEditView(Form, form.EditForm):
         self.actions['cancel'].addClass('button-cancel')
 
 
-class FlourishGroupDeleteView(DialogForm, form.EditForm):
+class FlourishGroupDeleteView(flourish.form.DialogForm, form.EditForm):
     """View used for confirming deletion of a group."""
 
     dialog_submit_actions = ('apply',)
@@ -739,7 +730,7 @@ class FlourishMemberViewPersons(FlourishRelationshipViewBase):
         return self.context.members
 
 
-class FlourishManageGroupsOverview(Content):
+class FlourishManageGroupsOverview(flourish.page.Content):
 
     body_template = ViewPageTemplateFile(
         'templates/f_manage_groups_overview.pt')
