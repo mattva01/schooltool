@@ -97,9 +97,9 @@ class Batch(object):
         start = 0
         num = 1
         while self.full_size > start:
-            css_class = None
+            css_class = 'batch_page'
             if (self.start == start):
-                css_class = 'current'
+                css_class = 'batch_page current'
             href = '%s?batch_start%s=%s&batch_size%s=%s%s' % (
                 self.base_url, self.name, start, self.name, self.size, self.extra_url)
             urls.append({'href': href,
