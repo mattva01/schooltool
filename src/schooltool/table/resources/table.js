@@ -62,7 +62,7 @@ ST.table = function() {
                container_id, form.attr('action'), data, 'POST');
   };
 
-  function add_counter(target, name, promise) {
+  function inc_counter(target, name, promise) {
       var counter = target.data(name);
       if (!counter) {
           counter = $.Deferred();
@@ -84,29 +84,59 @@ ST.table = function() {
       return counter;
   };
 
+  function update_all_table_spinners(container_id) {
+      var container = $(ST.dialogs.jquery_id(container_id));
+      var actions = container.data('st-table-actions');
+      if (actions !== undefined) {
+          $.each(actions, function(button_value) {
+                  show_button_spinner(container_id, button_value);
+              });
+      }
+      update_table_spinner(container_id);
+  }
+
+  function register_table_action(target, button_value, promise) {
+      var actions = target.data('st-table-actions');
+      if (actions === undefined) {
+          actions = {};
+          target.data('st-table-actions', actions);
+      }
+      promise.done(function(){ delete actions[button_value]; });
+      actions[button_value] = true;
+  }
+
+  function update_table_spinner(container_id) {
+      var container = $(ST.dialogs.jquery_id(container_id));
+
+      var counter = container.data('st-table-counter');
+      var count = 0;
+      if (counter)
+          count = counter.count;
+
+      var last_header = container.find('table.data>thead th:last');
+      if (!last_header)
+          return;
+
+      var spinner_id = container_id+'-table-spinner';
+      var spinner = last_header.find(ST.dialogs.jquery_id(spinner_id));
+      if ((spinner.length>0) && (count<=0)) {
+          spinner.remove()
+      }
+      if ((count>0) && (spinner.length==0)) {
+          spinner = ST.images.spinner();
+          spinner.addClass('st-table-spinner');
+          spinner.attr('id', spinner_id);
+          last_header.append(spinner);
+      }
+  }
+
   function show_table_spinner(container_id, request) {
       var container = $(ST.dialogs.jquery_id(container_id));
-      var counter = add_counter(container, 'st-table-counter', request);
-
+      var counter = inc_counter(container, 'st-table-counter', request);
       if (counter.count == 1) {
-          // it's a new counter
+          // it's a new counter, register progress update
           counter.progress( function(count){
-              var container = $(ST.dialogs.jquery_id(container_id));
-              var last_header = container.find('table.data>thead th:last');
-              if (!last_header)
-                  return;
-              var spinner_id = container_id+'-table-spinner';
-              var spinner = last_header.find(ST.dialogs.jquery_id(spinner_id));
-              if ((spinner.length>0) && (count<=0)) {
-                  spinner.remove()
-              }
-              if ((count>0) && (spinner.length==0)) {
-                  spinner = ST.images.spinner();
-                  spinner.addClass('st-table-spinner');
-                  spinner.attr('id', spinner_id);
-                  last_header.append(spinner);
-              }
-
+                  update_table_spinner(container_id);
           });
       }
 
@@ -115,6 +145,8 @@ ST.table = function() {
   function show_button_spinner(container_id, button_value) {
       var container = $(ST.dialogs.jquery_id(container_id));
       var button = container.find('table button[value="'+button_value+'"]');
+      if (!button.length)
+          return;
       button.hide();
       var spinner = ST.images.spinner();
       spinner.css('class', 'st-table-button-spinner')
@@ -125,6 +157,7 @@ ST.table = function() {
       on_form_submit: function(container_id, button, extra_data) {
           var request = container_form_submit(container_id, button, extra_data);
           request.success(set_html(container_id));
+          request.success(function(){ update_all_table_spinners(container_id); });
           show_table_spinner(container_id, request);
           return false;
       },
@@ -134,6 +167,10 @@ ST.table = function() {
           var item_value = element.attr('value');
           show_button_spinner(container_id, item_value);
           var request = container_form_submit(container_id, button, extra_data);
+
+          var container = $(ST.dialogs.jquery_id(container_id));
+          register_table_action(container, item_value, request);
+
           request.success(replace_item(container_id, item_value));
           show_table_spinner(container_id, request);
           return false;
@@ -149,6 +186,7 @@ ST.table = function() {
 
           var request = container_form_submit(container_id);
           request.success(set_html(container_id));
+          request.success(function(){ update_all_table_spinners(container_id); });
           show_table_spinner(container_id, request);
 
           return false;
@@ -174,6 +212,7 @@ ST.table = function() {
 
           var request = container_form_submit_data(container_id, data);
           request.success(set_html(container_id));
+          request.success(function(){ update_all_table_spinners(container_id); });
           return false;
       },
 
@@ -189,6 +228,7 @@ ST.table = function() {
               });
           var request = container_form_submit(container_id, null, data);
           request.success(set_html(container_id));
+          request.success(function(){ update_all_table_spinners(container_id); });
           show_table_spinner(container_id, request);
           return false;
       }
