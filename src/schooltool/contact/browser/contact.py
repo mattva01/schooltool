@@ -37,17 +37,12 @@ from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.publisher.browser import BrowserView
 from zope.container.interfaces import INameChooser
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
-from zope.catalog.interfaces import ICatalog
 from zope.intid.interfaces import IIntIds
 from zope.i18n import translate
 
-from zc.table.column import GetterColumn
 from z3c.form import form, subform, field, button
 from z3c.form.interfaces import DISPLAY_MODE
 
-import schooltool.skin.flourish.viewlet
-import schooltool.skin.flourish.page
-from schooltool.skin.containers import TableContainerView
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.app.catalog import buildQueryString
@@ -70,7 +65,7 @@ from schooltool.contact.interfaces import IContactPerson
 from schooltool.contact.interfaces import IEmails, IPhones, ILanguages
 from schooltool.schoolyear.interfaces import ISchoolYearContainer
 from schooltool.table import table
-from schooltool.table.catalog import FilterWidget
+from schooltool.table.catalog import IndexedFilterWidget
 from schooltool.table.catalog import IndexedTableFormatter
 from schooltool.table.catalog import IndexedLocaleAwareGetterColumn
 from schooltool.table.interfaces import IIndexedColumn
@@ -443,7 +438,7 @@ class FlourishContactDetails(flourish.form.FormViewlet):
         return canAccess(self.context.__parent__, '__delitem__')
 
 
-class ContactContainerView(TableContainerView):
+class ContactContainerView(table.TableContainerView):
     """A Contact Container view."""
 
     __used_for__ = IContactContainer
@@ -454,7 +449,7 @@ class ContactContainerView(TableContainerView):
     @property
     def itemsToDelete(self):
         return sorted(
-            TableContainerView._listItemsForDeletion(self),
+            table.TableContainerView._listItemsForDeletion(self),
             key=lambda obj: '%s %s' % (obj.last_name, obj.first_name))
 
     def columnsBefore(self):
@@ -542,7 +537,7 @@ class FlourishContactTableFormatter(ContactTableFormatter):
         return (('last_name', False), ("first_name", False),)
 
 
-class ContactFilterWidget(FilterWidget):
+class ContactFilterWidget(IndexedFilterWidget):
 
     template = ViewPageTemplateFile('templates/filter.pt')
     parameters = ['SEARCH_FIRST_NAME', 'SEARCH_LAST_NAME']
@@ -553,7 +548,7 @@ class ContactFilterWidget(FilterWidget):
                 self.request.form[parameter] = ''
             return items
 
-        catalog = ICatalog(self.context)
+        catalog = self.catalog
 
         if 'SEARCH_FIRST_NAME' in self.request:
             # XXX: applying normalized catalog queries would be nicer
@@ -599,7 +594,7 @@ class FlourishContactFilterWidget(ContactFilterWidget):
             search_title = self.request['SEARCH_TITLE']
             query = buildQueryString(search_title)
             if query:
-                catalog = ICatalog(self.context)
+                catalog = self.catalog
                 result = catalog['text'].apply(query)
                 items = [item for item in items
                          if item['id'] in result]

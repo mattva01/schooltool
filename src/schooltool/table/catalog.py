@@ -22,6 +22,7 @@ from persistent import Persistent
 
 from zope.interface import implements, implementsOnly
 from zope.interface import implementer, classImplements
+from zope.cachedescriptors.property import Lazy
 from zope.component import adapter
 from zope.component import getUtility, queryUtility
 from zope.i18n.interfaces.locales import ICollator
@@ -73,8 +74,12 @@ class ConvertingIndex(ConvertingIndexMixin, ValueIndex, Contained):
 
 class IndexedFilterWidget(FilterWidget):
 
+    @Lazy
+    def catalog(self):
+        return ICatalog(self.context)
+
     def filter(self, list):
-        catalog = ICatalog(self.context)
+        catalog = self.catalog
         index = catalog['title']
         if 'SEARCH' in self.request and 'CLEAR_SEARCH' not in self.request:
             searchstr = self.request['SEARCH'].lower()
@@ -143,9 +148,13 @@ class IndexedTableFormatter(SchoolToolTableFormatter):
                                     cell_formatter=url_cell_formatter,
                                     index='title')]
 
+    @Lazy
+    def catalog(self):
+        return ICatalog(self.source)
+
     def items(self):
         """Return a list of index dicts for all the items in the context container"""
-        catalog = ICatalog(self.source)
+        catalog = self.catalog
         if IExtentCatalog.providedBy(catalog):
             ids = list(catalog.extent)
         else:
@@ -165,7 +174,7 @@ class IndexedTableFormatter(SchoolToolTableFormatter):
     def indexItems(self, items):
         """Convert a list of objects to a list of index dicts"""
         int_ids = getUtility(IIntIds)
-        catalog = ICatalog(self.source)
+        catalog = self.catalog
         results = []
         for item in items:
             results.append({

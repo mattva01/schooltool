@@ -512,7 +512,7 @@ class PersonFilterWidget(table.catalog.IndexedFilterWidget):
             searchstr = self.request[self.search_title_id]
             query = buildQueryString(searchstr)
             if query:
-                catalog = ICatalog(self.context)
+                catalog = ICatalog(self.source)
                 result = catalog['text'].apply(query)
                 items = [item for item in items
                          if item['id'] in result]
@@ -838,7 +838,7 @@ class FlourishPersonFilterWidget(PersonFilterWidget):
             search_title = self.request['SEARCH_TITLE']
             query = buildQueryString(search_title)
             if query:
-                catalog = ICatalog(self.context)
+                catalog = ICatalog(self.source)
                 result = catalog['text'].apply(query)
                 items = [item for item in items
                          if item['id'] in result]
