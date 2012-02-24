@@ -55,7 +55,7 @@ from schooltool.basicperson.browser.demographics import (
 from schooltool.basicperson.interfaces import IAddEditViewTitle
 from schooltool.basicperson.interfaces import ILimitKeysLabel
 from schooltool.basicperson.interfaces import ILimitKeysHint
-from schooltool.common.inlinept import InheritTemplate
+from schooltool.common.inlinept import InheritTemplate, InlineViewPageTemplate
 from schooltool.resource.interfaces import IBookingCalendar
 from schooltool.resource.interfaces import (
              IResourceContainer, IResourceTypeInformation, IResourceSubTypes,
@@ -64,13 +64,8 @@ from schooltool.resource.resource import Resource, Location, Equipment
 from schooltool.person.browser.person import PersonFilterWidget
 from schooltool.resource.interfaces import IResourceFactoryUtility
 from schooltool.schoolyear.interfaces import ISchoolYearContainer
-from schooltool.skin.flourish.page import RefineLinksViewlet, Page
-from schooltool.skin.flourish.page import Content
-from schooltool.skin.flourish.page import ModalFormLinkViewlet
-from schooltool.skin.flourish.form import DialogForm, AddForm
-from schooltool.table.interfaces import IFilterWidget
-from schooltool.table.interfaces import ITableFormatter
-from schooltool.table import table
+from schooltool.skin import flourish
+from schooltool import table
 
 from schooltool.common import SchoolToolMessage as _
 
@@ -98,8 +93,9 @@ class ResourceContainerView(oldform.FormBase):
     def __init__(self, context, request):
         oldform.FormBase.__init__(self, context, request)
         self.resourceType = self.request.get('SEARCH_TYPE','|').split('|')[0]
-        self.filter_widget = queryMultiAdapter((self.getResourceUtility(),
-                                                self.request), IFilterWidget)
+        self.filter_widget = queryMultiAdapter(
+            (self.getResourceUtility(), self.request),
+            table.interfaces.IFilterWidget)
 
 
     def getSubTypes(self):
@@ -161,10 +157,10 @@ class ResourceContainerView(oldform.FormBase):
         return self.filter_widget.filter(values)
 
     def renderResourceTable(self):
-        columns = [table.CheckboxColumn(
+        columns = [table.column.CheckboxColumn(
                        prefix="delete", name='delete', title=u'')]
         available_columns = self.columns()
-        available_columns[0].cell_formatter = table.url_cell_formatter
+        available_columns[0].cell_formatter = table.table.url_cell_formatter
 
         columns.extend(available_columns)
         formatter = zc.table.table.StandaloneFullFormatter(
@@ -176,22 +172,25 @@ class ResourceContainerView(oldform.FormBase):
         return formatter()
 
 
-class FlourishResourceContainerView(table.TableContainerView):
+class FlourishResourcesView(flourish.page.Page):
 
-    @property
-    def done_link(self):
-        app = ISchoolToolApplication(None)
-        return absoluteURL(app, self.request) + '/manage'
+    content_template = InlineViewPageTemplate('''
+      <div tal:content="structure context/schooltool:content/ajax/table" />
+    ''')
 
-    def getColumnsAfter(self):
+
+class ResourcesTable(table.ajax.Table):
+
+    def columns(self):
+        default = table.ajax.Table.columns(self)
         description = GetterColumn(
             name='description',
             title=_(u'Description'),
             getter=lambda i, f: i.description or '')
-        return [description]
+        return default + [description]
 
 
-class BaseTypeFilter(table.FilterWidget):
+class BaseTypeFilter(table.table.FilterWidget):
     """Base Type Filter"""
 
     def render(self):
@@ -330,7 +329,8 @@ class ResourceContainerFilterWidget(PersonFilterWidget):
             type = type.split('|')[0]
             utility = queryUtility(IResourceFactoryUtility,
                                    name=type, default=None)
-            filter_widget = queryMultiAdapter((utility,self.request), IFilterWidget)
+            filter_widget = queryMultiAdapter((utility,self.request),
+                                              table.interfaces.IFilterWidget)
             if filter_widget:
                 results = filter_widget.filter(results)
 
@@ -340,6 +340,9 @@ class ResourceContainerFilterWidget(PersonFilterWidget):
 class FlourishResourceContainerFilterWidget(ResourceContainerFilterWidget):
 
     template = ViewPageTemplateFile('templates/f_resource_filter.pt')
+
+    search_title_id = 'SEARCH_TITLE'
+    search_type_id = 'SEARCH_TYPE'
 
     def types(self):
         options = [
@@ -353,13 +356,13 @@ class FlourishResourceContainerFilterWidget(ResourceContainerFilterWidget):
         return options
 
     def filter(self, results):
-        if 'SEARCH_TITLE' in self.request:
-            searchstr = self.request['SEARCH_TITLE'].lower()
+        if self.search_title_id in self.request:
+            searchstr = self.request[self.search_title_id].lower()
             results = [item for item in results
                        if searchstr in item.title.lower() or
                        (item.description and searchstr in item.description.lower())]
-        if 'SEARCH_TYPE' in self.request:
-            type = self.request['SEARCH_TYPE']
+        if self.search_type_id in self.request:
+            type = self.request[self.search_type_id]
             if not type:
                 return results
             results = [resource for resource in results
@@ -367,11 +370,27 @@ class FlourishResourceContainerFilterWidget(ResourceContainerFilterWidget):
         return results
 
 
-class ResourceContainerLinks(RefineLinksViewlet):
+class ResourcesTableFilter(table.ajax.TableFilter,
+                           FlourishResourceContainerFilterWidget):
+
+    template = ViewPageTemplateFile('templates/f_resource_table_filter.pt')
+
+    @property
+    def search_title_id(self):
+        return self.manager.html_id+"-title"
+
+    @property
+    def search_group_id(self):
+        return self.manager.html_id+"-group"
+
+    filter = FlourishResourceContainerFilterWidget.filter
+
+
+class ResourceContainerLinks(flourish.page.RefineLinksViewlet):
     """Resource container links viewlet."""
 
 
-class ResourceImportLinks(RefineLinksViewlet):
+class ResourceImportLinks(flourish.page.RefineLinksViewlet):
     """Resource import links viewlet."""
 
 
@@ -490,7 +509,7 @@ class BaseResourceView(form.Form, ResourceFieldGenerator):
                 self.widgets[widget].mode = HIDDEN_MODE
 
 
-class FlourishBaseResourceView(Page, BaseResourceView):
+class FlourishBaseResourceView(flourish.page.Page, BaseResourceView):
 
     def update(self):
         BaseResourceView.update(self)
@@ -505,7 +524,8 @@ class FlourishBaseResourceView(Page, BaseResourceView):
 
     def getTable(self, items):
         persons = ISchoolToolApplication(None)['persons']
-        result = getMultiAdapter((persons, self.request), ITableFormatter)
+        result = getMultiAdapter((persons, self.request),
+                                 table.interfaces.ITableFormatter)
         result.setUp(
             table_formatter=zc.table.table.StandaloneFullFormatter,
             items=items)
@@ -653,9 +673,9 @@ class BaseResourceEditView(ErrorMessageBase, form.EditForm,
         self.actions['cancel'].addClass('button-cancel')
 
 
-class BaseFlourishResourceAddForm(AddForm):
+class BaseFlourishResourceAddForm(flourish.form.AddForm):
 
-    template = InheritTemplate(Page.template)
+    template = InheritTemplate(flourish.page.Page.template)
     label = None
 
     def createAndAdd(self, data):
@@ -702,7 +722,7 @@ class ResourceEditView(BaseResourceForm, BaseResourceEditView):
     label = _('Edit resource')
 
 
-class FlourishResourceEditView(Page, ResourceEditView):
+class FlourishResourceEditView(flourish.page.Page, ResourceEditView):
 
     label = None
     demo_legend = _('Resource attributes')
@@ -741,7 +761,7 @@ class LocationEditView(BaseLocationForm, BaseResourceEditView):
     label = _('Edit location')
 
 
-class FlourishLocationEditView(Page, LocationEditView):
+class FlourishLocationEditView(flourish.page.Page, LocationEditView):
 
     label = None
     demo_legend = _('Location attributes')
@@ -780,7 +800,7 @@ class EquipmentEditView(BaseEquipmentForm, BaseResourceEditView):
     label = _('Edit equipment')
 
 
-class FlourishEquipmentEditView(Page, EquipmentEditView):
+class FlourishEquipmentEditView(flourish.page.Page, EquipmentEditView):
 
     label = None
     demo_legend = _('Equipment attributes')
@@ -789,7 +809,7 @@ class FlourishEquipmentEditView(Page, EquipmentEditView):
         EquipmentEditView.update(self)
 
 
-class FlourishResourceContainerTableFormatter(table.SchoolToolTableFormatter):
+class FlourishResourceContainerTableFormatter(table.table.SchoolToolTableFormatter):
 
     # XXX: hack to customize the table class
     def render(self):
@@ -803,14 +823,14 @@ class FlourishResourceContainerTableFormatter(table.SchoolToolTableFormatter):
         return formatter()
 
 
-class ResourceLinks(RefineLinksViewlet):
+class ResourceLinks(flourish.page.RefineLinksViewlet):
 
     @property
     def title(self):
         return self.context.title
 
 
-class ResourceActions(RefineLinksViewlet): pass
+class ResourceActions(flourish.page.RefineLinksViewlet): pass
 
 
 class FlourishBookResourceView(BrowserView):
@@ -823,7 +843,7 @@ class FlourishBookResourceView(BrowserView):
         self.request.response.redirect(url)
 
 
-class FlourishResourceDeleteView(DialogForm, form.Form):
+class FlourishResourceDeleteView(flourish.form.DialogForm, form.Form):
 
     dialog_submit_actions = ('delete',)
     dialog_close_actions = ('cancel',)
@@ -846,7 +866,7 @@ class FlourishResourceDeleteView(DialogForm, form.Form):
         self.actions['cancel'].addClass('button-cancel')
 
 
-class FlourishResourceDeleteLink(ModalFormLinkViewlet):
+class FlourishResourceDeleteLink(flourish.page.ModalFormLinkViewlet):
 
     @property
     def dialog_title(self):
@@ -855,7 +875,7 @@ class FlourishResourceDeleteLink(ModalFormLinkViewlet):
         return translate(title, context=self.request)
 
 
-class FlourishManageResourcesOverview(Content):
+class FlourishManageResourcesOverview(flourish.page.Content):
 
     body_template = ViewPageTemplateFile(
         'templates/f_manage_resources_overview.pt')
