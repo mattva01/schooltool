@@ -3,6 +3,7 @@
            xmlns:z3c="http://namespaces.zope.org/z3c"
            xmlns:zope="http://namespaces.zope.org/zope"
            xmlns:flourish="http://schooltool.org/flourish"
+           xmlns:report="http://namespaces.schooltool.org/report"
            i18n_domain="schooltool">
 
   <!-- content -->
@@ -289,6 +290,31 @@
       view=".csvimport.FlourishGroupMemberCSVImportView"
       template="templates/f_group_member_csvimport_description.pt"
       permission="zope.Public"
+      />
+
+  <report:reportLink
+      name="group_id_cards_pdf"
+      for="schooltool.group.interfaces.IGroup"
+      permission="schooltool.edit"
+      group="Group"
+      description="XXX A PDF with the ID cards of the members of the group XXX."
+      title="ID Cards"
+      file_type="pdf"
+      link="request_group_id_cards_pdf.html"
+      />
+
+  <flourish:page
+      name="request_group_id_cards_pdf.html"
+      for="schooltool.group.interfaces.IGroup"
+      class=".group.FlourishRequestGroupIDCardsView"
+      permission="schooltool.edit"
+      />
+
+   <flourish:page
+      name="group_id_cards.pdf"
+      for="schooltool.group.interfaces.IGroup"
+      class=".group.FlourishGroupIDCardsView"
+      permission="schooltool.edit"
       />
 
 </configure>

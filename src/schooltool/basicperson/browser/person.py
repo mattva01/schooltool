@@ -42,8 +42,7 @@ from zope.traversing.browser.absoluteurl import absoluteURL
 from zope.viewlet.viewlet import ViewletBase
 from zope.security.checker import canAccess
 
-from reportlab.lib.units import cm
-from reportlab.lib.pagesizes import landscape
+from reportlab.lib import pagesizes
 import z3c.form.interfaces
 from z3c.form.validator import SimpleFieldValidator
 from zc.table import table
@@ -1110,45 +1109,90 @@ class FlourishRequestPersonXMLExportView(RequestReportDownloadDialog):
         return absoluteURL(self.context, self.request) + '/person_export.xml'
 
 
-class FlourishRequestPersonIDView(RequestReportDownloadDialog):
+class FlourishRequestPersonIDCardView(RequestReportDownloadDialog):
 
     def nextURL(self):
-        return absoluteURL(self.context, self.request) + '/person_id.pdf'
+        return absoluteURL(self.context, self.request) + '/person_id_card.pdf'
 
 
-class FlourishPersonIDView(ReportPDFView):
+class FlourishPersonIDCardsViewBase(ReportPDFView):
 
-    template=ViewPageTemplateFile('templates/f_person_id_card.pt')
-    pageSize = (8.9*cm, 5.1*cm)
-    leftMargin = 0*cm
-    rightMargin = 0*cm
-    topMargin = 0*cm
-    bottomMargin = 0*cm
+    template=ViewPageTemplateFile('templates/f_person_id_cards.pt')
+    title = _('ID Cards')
+    pageSize = pagesizes.LETTER
+    COLUMNS = 2 # Max for a LETTER size page
+    ROWS = 4 # Max for a LETTER size page
+    # All of the following are cm
+    LEFT_BASE = 1.7
+    TOP_BASE = 20.3
+    COLUMN_WIDTH = 9.6
+    ROW_HEIGHT = 6.1
+    CARD_WIDTH = 8.57
+    CARD_HEIGHT = 5.4
 
     def __init__(self, *args, **kw):
-        super(FlourishPersonIDView, self).__init__(*args, **kw)
-        self.title = _('XXX Report Card: ${person} XXX',
-                       mapping={'person': self.context.title})
+        super(FlourishPersonIDCardsViewBase, self).__init__(*args, **kw)
         app = ISchoolToolApplication(None)
         preferences = IApplicationPreferences(app)
-        demographics = IDemographics(self.context)
-        contacts = list(IContactable(self.context).contacts)
         self.schoolName = preferences.title
-        self.ID = demographics.get('ID')
-        self.birth_date = self.context.birth_date
-        self.contact = None
-        self.contact_phone = None
+
+    def persons(self):
+        """Returns a list of getPersonData calls"""
+        raise NotImplementedError('do this in subclass')
+
+    def getPersonData(self, person):
+        demographics = IDemographics(person)
+        contact_title = None
+        contact_phone = None
+        contacts = list(IContactable(person).contacts)
         if contacts:
             contact = contacts[0]
-            self.contact = '%s %s' % (contact.first_name,
-                                      contact.last_name)
+            contact_title = ' '.join([contact.first_name,
+                                      contact.last_name])
             phones = [
                 contact.home_phone,
                 contact.work_phone,
                 contact.mobile_phone,
                 ]
             if phones:
-                self.contact_phone = phones[0]
+                contact_phone = phones[0]
+        return {
+            'first_name': person.first_name,
+            'last_name': person.last_name,
+            'username': person.username,
+            'ID': demographics.get('ID'),
+            'birth_date': person.birth_date,
+            'contact_title': contact_title,
+            'contact_phone': contact_phone,
+            }
+
+    @property
+    def total_cards_in_page(self):
+        return self.COLUMNS * self.ROWS
+
+    def insertBreak(self, repeat):
+        return repeat['person'].number() % self.total_cards_in_page  == 0
+
+    def cardFrameInfo(self, repeat):
+        # XXX: improve this
+        index = repeat['person'].index()
+        index_in_page = index % self.total_cards_in_page
+        index_in_columns = index % self.COLUMNS
+        index_in_rows = index_in_page / self.COLUMNS
+        x1 = self.LEFT_BASE  + (self.COLUMN_WIDTH * index_in_columns)
+        y1 = self.TOP_BASE - (self.ROW_HEIGHT * index_in_rows)
+        return {'x1': '%.1fcm' % x1, 'y1': '%.1fcm' % y1}
+
+
+class FlourishPersonIDCardView(FlourishPersonIDCardsViewBase):
+
+    @property
+    def title(self):
+        return _('ID Card: ${person}',
+                 mapping={'person': self.context.title})
+
+    def persons(self):
+        return [self.getPersonData(self.context)]
 
 
 def getUserViewlet(context, request, view, manager, name):

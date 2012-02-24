@@ -79,6 +79,8 @@ from schooltool.skin.flourish.form import AddForm
 from schooltool.skin.flourish.form import DialogForm
 from schooltool.skin.flourish.form import DisplayForm
 from schooltool.skin.flourish.page import TertiaryNavigationManager
+from schooltool.basicperson.browser.person import FlourishPersonIDCardsViewBase
+from schooltool.report.browser.report import RequestReportDownloadDialog
 
 
 class GroupContainerAbsoluteURLAdapter(BrowserView):
@@ -763,3 +765,22 @@ class FlourishManageGroupsOverview(Content):
     @property
     def groups(self):
         return IGroupContainer(self.schoolyear, None)
+
+
+class FlourishRequestGroupIDCardsView(RequestReportDownloadDialog):
+
+    def nextURL(self):
+        return absoluteURL(self.context, self.request) + '/group_id_cards.pdf'
+
+
+class FlourishGroupIDCardsView(FlourishPersonIDCardsViewBase):
+
+    @property
+    def title(self):
+        return _('ID Cards: ${group}',
+                 mapping={'group': self.context.title})
+
+    def persons(self):
+        result = [self.getPersonData(person)
+                  for person in self.context.members]
+        return result

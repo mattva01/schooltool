@@ -1,0 +1,75 @@
+<?xml version="1.0" standalone="no" ?>
+<!DOCTYPE document SYSTEM "rml_1_0.dtd" [
+  <!ENTITY pound   "&#xA3;">
+]>
+<document
+  xmlns:tal="http://xml.zope.org/namespaces/tal"
+  xmlns:metal="http://xml.zope.org/namespaces/metal"
+  xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+  metal:define-macro="report" i18n:domain="schooltool"
+  tal:define="persons view/persons">
+
+  <template tal:attributes="
+      pagesize view/pageSize;
+      leftMargin view/leftMargin;
+      rightMargin view/rightMargin;
+      topMargin view/topMargin;
+      bottomMargin view/bottomMargin;
+      rotation view/rotation;
+      title view/title"
+      author="SchoolTool">
+
+    <pageTemplate id="default">
+      <pageGraphics>
+      </pageGraphics>
+      <tal:block repeat="person persons">
+        <frame
+            tal:define="frame_info python:view.cardFrameInfo(repeat)"
+            showBoundary="true"
+            tal:attributes="id person/username;
+                            x1 frame_info/x1;
+                            y1 frame_info/y1;
+                            width string:${view/CARD_WIDTH}cm;
+                            height string:${view/CARD_HEIGHT}cm;"
+            />
+      </tal:block>
+    </pageTemplate>
+
+    <tal:block content="structure view/use_template/default" />
+
+    <metal:block metal:define-slot="page_templates" />
+
+  </template>
+
+  <stylesheet>
+    <initialize>
+      <alias id="style.normal" value="style.Normal"/>
+      <metal:block metal:define-slot="extra_initialize" />
+    </initialize>
+
+    <tal:block repeat="template view/page_templates">
+      <tal:block content="structure python:template[1].stylesheet()" />
+    </tal:block>
+
+    <paraStyle
+        name="normal"
+        fontName="Ubuntu_Regular"
+        fontSize="10" />
+    <paraStyle
+        name="bold"
+        fontName="Ubuntu_Bold"
+        fontSize="10" />
+
+    <metal:block metal:define-slot="stylesheet" />
+  </stylesheet>
+
+  <story>
+    <tal:block repeat="person persons">
+      <nextFrame tal:attributes="name person/username" />
+      <para style="normal" tal:content="person/first_name" />
+      <para style="bold" tal:content="person/last_name" />
+      <nextPage tal:condition="python: view.insertBreak(repeat)" />
+    </tal:block>
+    <metal:block define-slot="story" />
+  </story>
+</document>

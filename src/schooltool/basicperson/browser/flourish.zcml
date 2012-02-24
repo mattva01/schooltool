@@ -599,14 +599,14 @@
        />
 
   <report:reportLink
-      name="person_id_pdf"
+      name="person_id_card_pdf"
       for="schooltool.person.interfaces.IPerson"
       permission="schooltool.edit"
-      group="Student"
-      description="XXX Contains a PDF with the person's ID XXX."
-      title="XXX Person ID Card XXX"
+      group="Person"
+      description="XXX A PDF with the person's ID card XXX."
+      title="ID Card"
       file_type="pdf"
-      link="request_person_id_pdf.html"
+      link="request_person_id_card_pdf.html"
       />
 
   <flourish:page
@@ -624,16 +624,16 @@
       />
 
    <flourish:page
-      name="person_id.pdf"
+      name="person_id_card.pdf"
       for="schooltool.person.interfaces.IPerson"
-      class=".person.FlourishPersonIDView"
+      class=".person.FlourishPersonIDCardView"
       permission="schooltool.edit"
       />
 
   <flourish:page
-      name="request_person_id_pdf.html"
+      name="request_person_id_card_pdf.html"
       for="schooltool.person.interfaces.IPerson"
-      class=".person.FlourishRequestPersonIDView"
+      class=".person.FlourishRequestPersonIDCardView"
       permission="schooltool.edit"
       />
 
