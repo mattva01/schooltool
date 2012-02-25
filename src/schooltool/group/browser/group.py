@@ -777,7 +777,7 @@ class FlourishGroupIDCardsView(FlourishPersonIDCardsViewBase):
 
     @property
     def title(self):
-        return _('ID Cards: ${group}',
+        return _('ID Cards for Group: ${group}',
                  mapping={'group': self.context.title})
 
     def persons(self):

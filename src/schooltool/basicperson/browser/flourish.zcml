@@ -734,4 +734,13 @@
       permission="schooltool.view"
       />
 
+  <zope:adapter
+      for="*
+           schooltool.skin.flourish.IFlourishLayer
+           .person.FlourishPersonIDCardsViewBase"
+      provides="schooltool.app.browser.interfaces.IReportPageTemplate"
+      name="cards"
+      factory=".person.IDCardsPageTemplate"
+      />
+
 </configure>

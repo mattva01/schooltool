@@ -43,6 +43,7 @@ from zope.viewlet.viewlet import ViewletBase
 from zope.security.checker import canAccess
 
 from reportlab.lib import pagesizes
+from reportlab.lib import units
 import z3c.form.interfaces
 from z3c.form.validator import SimpleFieldValidator
 from zc.table import table
@@ -54,6 +55,7 @@ from schooltool.skin.flourish.widgets import Photo
 from schooltool.app.browser.app import RelationshipViewBase
 from schooltool.app.browser.app import FlourishRelationshipViewBase
 from schooltool.app.browser.report import ReportPDFView
+from schooltool.app.browser.report import DefaultPageTemplate
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.common.inlinept import InlineViewPageTemplate
@@ -1115,26 +1117,41 @@ class FlourishRequestPersonIDCardView(RequestReportDownloadDialog):
         return absoluteURL(self.context, self.request) + '/person_id_card.pdf'
 
 
+class IDCardsPageTemplate(DefaultPageTemplate):
+
+    template = ViewPageTemplateFile('templates/f_id_cards_template.pt',
+                                    content_type="text/xml")
+
+
 class FlourishPersonIDCardsViewBase(ReportPDFView):
 
     template=ViewPageTemplateFile('templates/f_person_id_cards.pt')
     title = _('ID Cards')
-    pageSize = pagesizes.LETTER
-    COLUMNS = 2 # Max for a LETTER size page
-    ROWS = 4 # Max for a LETTER size page
-    # All of the following are cm
-    LEFT_BASE = 1.7
-    TOP_BASE = 20.3
-    COLUMN_WIDTH = 9.6
-    ROW_HEIGHT = 6.1
+    COLUMNS = 2
+    ROWS = 4
+    # Used by the report page template
     CARD_WIDTH = 8.57
     CARD_HEIGHT = 5.4
+    # All of the following are cm
+    LEFT_BASE = 1.7
+    TOP_BASE = 7.3
+    COLUMN_WIDTH = 9.6
+    ROW_HEIGHT = 6.1
 
     def __init__(self, *args, **kw):
         super(FlourishPersonIDCardsViewBase, self).__init__(*args, **kw)
         app = ISchoolToolApplication(None)
         preferences = IApplicationPreferences(app)
         self.schoolName = preferences.title
+
+    @property
+    def top(self):
+        page_height = self.pageSize[1]
+        return (page_height/units.cm) - self.TOP_BASE
+
+    @property
+    def left(self):
+        return self.LEFT_BASE
 
     def persons(self):
         """Returns a list of getPersonData calls"""
@@ -1178,8 +1195,8 @@ class FlourishPersonIDCardsViewBase(ReportPDFView):
         for i in range(self.total_cards_in_page):
             index_in_columns = i % self.COLUMNS
             index_in_rows = i / self.COLUMNS
-            x1 = self.LEFT_BASE + (self.COLUMN_WIDTH * index_in_columns)
-            y1 = self.TOP_BASE - (self.ROW_HEIGHT * index_in_rows)
+            x1 = self.left + (self.COLUMN_WIDTH * index_in_columns)
+            y1 = self.top - (self.ROW_HEIGHT * index_in_rows)
             info = {'id': i, 'x1': '%.1fcm' % x1, 'y1': '%.1fcm' % y1}
             result.append(info)
         return result
