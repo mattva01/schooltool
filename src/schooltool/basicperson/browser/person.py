@@ -1173,15 +1173,19 @@ class FlourishPersonIDCardsViewBase(ReportPDFView):
     def insertBreak(self, repeat):
         return repeat['person'].number() % self.total_cards_in_page  == 0
 
-    def cardFrameInfo(self, repeat):
-        # XXX: improve this
-        index = repeat['person'].index()
-        index_in_page = index % self.total_cards_in_page
-        index_in_columns = index % self.COLUMNS
-        index_in_rows = index_in_page / self.COLUMNS
-        x1 = self.LEFT_BASE  + (self.COLUMN_WIDTH * index_in_columns)
-        y1 = self.TOP_BASE - (self.ROW_HEIGHT * index_in_rows)
-        return {'x1': '%.1fcm' % x1, 'y1': '%.1fcm' % y1}
+    def framesInfo(self):
+        result = []
+        for i in range(self.total_cards_in_page):
+            index_in_columns = i % self.COLUMNS
+            index_in_rows = i / self.COLUMNS
+            x1 = self.LEFT_BASE + (self.COLUMN_WIDTH * index_in_columns)
+            y1 = self.TOP_BASE - (self.ROW_HEIGHT * index_in_rows)
+            info = {'id': i, 'x1': '%.1fcm' % x1, 'y1': '%.1fcm' % y1}
+            result.append(info)
+        return result
+
+    def personFrame(self, repeat):
+        return repeat['person'].index() % self.total_cards_in_page
 
 
 class FlourishPersonIDCardView(FlourishPersonIDCardsViewBase):

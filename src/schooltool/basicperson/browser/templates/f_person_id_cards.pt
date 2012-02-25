@@ -6,8 +6,7 @@
   xmlns:tal="http://xml.zope.org/namespaces/tal"
   xmlns:metal="http://xml.zope.org/namespaces/metal"
   xmlns:i18n="http://xml.zope.org/namespaces/i18n"
-  metal:define-macro="report" i18n:domain="schooltool"
-  tal:define="persons view/persons">
+  metal:define-macro="report" i18n:domain="schooltool">
 
   <template tal:attributes="
       pagesize view/pageSize;
@@ -22,17 +21,14 @@
     <pageTemplate id="default">
       <pageGraphics>
       </pageGraphics>
-      <tal:block repeat="person persons">
-        <frame
-            tal:define="frame_info python:view.cardFrameInfo(repeat)"
-            showBoundary="true"
-            tal:attributes="id person/username;
-                            x1 frame_info/x1;
-                            y1 frame_info/y1;
-                            width string:${view/CARD_WIDTH}cm;
-                            height string:${view/CARD_HEIGHT}cm;"
-            />
-      </tal:block>
+      <frame tal:repeat="frame_info view/framesInfo"
+             showBoundary="true"
+             tal:attributes="id frame_info/id;
+                             x1 frame_info/x1;
+                             y1 frame_info/y1;
+                             width string:${view/CARD_WIDTH}cm;
+                             height string:${view/CARD_HEIGHT}cm;"
+             />
     </pageTemplate>
 
     <tal:block content="structure view/use_template/default" />
@@ -64,11 +60,13 @@
   </stylesheet>
 
   <story>
-    <tal:block repeat="person persons">
-      <nextFrame tal:attributes="name person/username" />
-      <para style="normal" tal:content="person/first_name" />
-      <para style="bold" tal:content="person/last_name" />
-      <nextPage tal:condition="python: view.insertBreak(repeat)" />
+    <tal:block repeat="person view/persons">
+      <keepInFrame
+          tal:attributes="frame python:view.personFrame(repeat)">
+        <para style="normal" tal:content="person/first_name" />
+        <para style="bold" tal:content="person/last_name" />
+      </keepInFrame>
+      <nextPage tal:condition="python:view.insertBreak(repeat)" />
     </tal:block>
     <metal:block define-slot="story" />
   </story>
