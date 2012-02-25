@@ -59,12 +59,12 @@
     </tal:block>
 
   </pageGraphics>
-  <frame tal:repeat="frame_info view/parent/framesInfo"
+  <frame tal:repeat="frame view/parent/frames"
          showBoundary="true"
-         tal:attributes="id frame_info/id;
-                         x1 frame_info/x1;
-                         y1 frame_info/y1;
-                         width string:${view/parent/CARD_WIDTH}cm;
-                         height string:${view/parent/CARD_HEIGHT}cm;"
+         tal:attributes="id frame/info/id;
+                         x1 string:${frame/info/x1}cm;
+                         y1 string:${frame/info/y1}cm;
+                         width string:${frame/info/width}cm;
+                         height string:${frame/info/height}cm;"
          />
 </pageTemplate>
