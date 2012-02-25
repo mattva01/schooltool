@@ -59,12 +59,43 @@
     </tal:block>
 
   </pageGraphics>
-  <frame tal:repeat="frame view/parent/frames"
-         showBoundary="true"
-         tal:attributes="id frame/info/id;
-                         x1 string:${frame/info/x1}cm;
-                         y1 string:${frame/info/y1}cm;
-                         width string:${frame/info/width}cm;
-                         height string:${frame/info/height}cm;"
-         />
+  <!-- For each ID card -->
+  <tal:loop tal:repeat="frame view/parent/frames">
+    <!-- Outter frame -->
+    <frame showBoundary="true"
+           tal:define="info frame/outter"
+           tal:attributes="id info/id;
+                           x1 string:${info/x1}cm;
+                           y1 string:${info/y1}cm;
+                           width string:${info/width}cm;
+                           height string:${info/height}cm;"
+           />
+    <!-- Title frame -->
+    <frame showBoundary="true"
+           tal:define="info frame/title"
+           tal:attributes="id info/id;
+                           x1 string:${info/x1}cm;
+                           y1 string:${info/y1}cm;
+                           width string:${info/width}cm;
+                           height string:${info/height}cm;"
+           />
+    <!-- Demographics frame -->
+    <frame showBoundary="true"
+           tal:define="info frame/demographics"
+           tal:attributes="id info/id;
+                           x1 string:${info/x1}cm;
+                           y1 string:${info/y1}cm;
+                           width string:${info/width}cm;
+                           height string:${info/height}cm;"
+           />
+    <!-- Photo frame -->
+    <frame showBoundary="true"
+           tal:define="info frame/photo"
+           tal:attributes="id info/id;
+                           x1 string:${info/x1}cm;
+                           y1 string:${info/y1}cm;
+                           width string:${info/width}cm;
+                           height string:${info/height}cm;"
+           />
+  </tal:loop>
 </pageTemplate>

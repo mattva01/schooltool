@@ -21,18 +21,33 @@
           fontName="Ubuntu_Regular"
           fontSize="10" />
       <paraStyle
-          name="bold"
+          name="card_title"
+          alignment="center"
           fontName="Ubuntu_Bold"
-          fontSize="10" />
+          fontSize="14" />
     </metal:block>
   </stylesheet>
   <story metal:fill-slot="story">
     <tal:block repeat="person view/persons">
-      <keepInFrame
-          tal:attributes="frame python:view.personFrame(repeat)">
-        <para style="normal" tal:content="person/first_name" />
-        <para style="bold" tal:content="person/last_name" />
-      </keepInFrame>
+      <tal:block tal:define="frame python:view.personFrame(repeat)">
+        <keepInFrame
+            onOverflow="shrink"
+            tal:define="frameInfo python:view.frameInfo(frame);"
+            tal:attributes="frame string:title_${frame};
+                            maxWidth string:${frameInfo/title/maxWidth}cm;
+                            maxHeight string:${frameInfo/title/maxHeight}cm">
+          <spacer tal:attributes="length string:${view/titleSpacerLength}cm" />
+          <para style="card_title" tal:content="view/schoolName" />
+        </keepInFrame>
+        <keepInFrame
+            tal:attributes="frame string:demographics_${frame}">
+          <para style="normal" tal:content="person/first_name" />
+          <para style="normal" tal:content="person/last_name" />
+        </keepInFrame>
+        <keepInFrame
+            tal:attributes="frame string:photo_${frame}">
+        </keepInFrame>
+      </tal:block>
       <nextPage tal:condition="python:view.insertBreak(repeat)" />
     </tal:block>
   </story>

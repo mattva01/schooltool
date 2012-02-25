@@ -26,6 +26,7 @@ from zope.interface import Interface, implements
 from zope.container.interfaces import INameChooser
 from zope.app.form.browser.interfaces import ITerms
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
+from zope.cachedescriptors.property import Lazy
 from zope.component import adapts
 from zope.component import getUtility, queryMultiAdapter, getMultiAdapter
 from zope.datetime import time, rfc1123_date
@@ -1122,16 +1123,24 @@ class IDCardsPageTemplate(DefaultPageTemplate):
     template = ViewPageTemplateFile('templates/f_id_cards_template.pt',
                                     content_type="text/xml")
 
-
+from reportlab.lib.pagesizes import LETTER
 class FlourishPersonIDCardsViewBase(ReportPDFView):
 
     template=ViewPageTemplateFile('templates/f_person_id_cards.pt')
     title = _('ID Cards')
     COLUMNS = 2
     ROWS = 4
+    pageSize = LETTER
     # Used by the report page template
-    CARD_WIDTH = 8.57
-    CARD_HEIGHT = 5.4
+    CARD_MARGIN = 0.55
+    CARD_OUTTER_HEIGHT = 5.4
+    CARD_OUTTER_WIDTH = 8.57
+    CARD_TITLE_HEIGHT = 1.1
+    CARD_TITLE_WIDTH = 8.57
+    CARD_DEMOGRAPHICS_HEIGHT = 3.2
+    CARD_DEMOGRAPHICS_WIDTH = 5.05
+    CARD_PHOTO_HEIGHT = 3.2
+    CARD_PHOTO_WIDTH = 2.4
     # All of the following are cm
     LEFT_BASE = 1.7
     TOP_BASE = 7.3
@@ -1183,27 +1192,75 @@ class FlourishPersonIDCardsViewBase(ReportPDFView):
             'contact_phone': contact_phone,
             }
 
-    @property
+    def titleSpacerLength(self):
+        if len(self.schoolName) < 44:
+            return 0.25
+        return 0
+
+    @Lazy
     def total_cards_in_page(self):
         return self.COLUMNS * self.ROWS
 
     def insertBreak(self, repeat):
         return repeat['person'].number() % self.total_cards_in_page  == 0
 
+    def personFrame(self, repeat):
+        return repeat['person'].index() % self.total_cards_in_page
+
     def frames(self):
         result = []
         for i in range(self.total_cards_in_page):
             index_in_columns = i % self.COLUMNS
-            index_in_rows = i / self.COLUMNS
             x1 = self.left + (self.COLUMN_WIDTH * index_in_columns)
+            index_in_rows = i / self.COLUMNS
             y1 = self.top - (self.ROW_HEIGHT * index_in_rows)
-            info = {'id': i, 'x1': x1, 'y1': y1,
-                    'width': self.CARD_WIDTH, 'height': self.CARD_HEIGHT}
+            info = {
+                'outter': self.getOutterFrame(i, x1, y1),
+                'title': self.getTitleFrame(i, x1, y1),
+                'demographics': self.getDemographicsFrame(i, x1, y1),
+                'photo': self.getPhotoFrame(i, x1, y1),
+                }
             result.append(info)
         return result
 
-    def personFrame(self, repeat):
-        return repeat['person'].index() % self.total_cards_in_page
+    def getOutterFrame(self, i, x1, y1):
+        return {'id': 'outter_%d' % i, 'x1': x1, 'y1': y1,
+                'width': self.CARD_OUTTER_WIDTH,
+                'height': self.CARD_OUTTER_HEIGHT}
+
+    def getTitleFrame(self, i, x1, y1):
+        y1 = y1 + (self.CARD_OUTTER_HEIGHT - self.CARD_TITLE_HEIGHT)
+        return {
+            'id': 'title_%d' % i, 'x1': x1, 'y1': y1,
+            'width': self.CARD_TITLE_WIDTH,
+            'height': self.CARD_TITLE_HEIGHT,
+            'maxWidth': self.CARD_TITLE_WIDTH - 0.06,
+            'maxHeight': self.CARD_TITLE_HEIGHT - 0.06,
+            }
+
+    def getDemographicsFrame(self, i, x1, y1):
+        x1 = x1 + self.CARD_MARGIN
+        y1 = y1 + (self.CARD_OUTTER_HEIGHT - self.CARD_TITLE_HEIGHT - self.CARD_DEMOGRAPHICS_HEIGHT - self.CARD_MARGIN)
+        return {'id': 'demographics_%d' % i, 'x1': x1, 'y1': y1,
+                'width': self.CARD_DEMOGRAPHICS_WIDTH,
+                'height': self.CARD_DEMOGRAPHICS_HEIGHT}
+
+    def getPhotoFrame(self, i, x1, y1):
+        x1 = x1 + self.CARD_DEMOGRAPHICS_WIDTH + self.CARD_MARGIN
+        y1 = y1 + (self.CARD_OUTTER_HEIGHT - self.CARD_TITLE_HEIGHT - self.CARD_PHOTO_HEIGHT - self.CARD_MARGIN)
+        return {'id': 'photo_%d' % i, 'x1': x1, 'y1': y1,
+                'width': self.CARD_PHOTO_WIDTH,
+                'height': self.CARD_PHOTO_HEIGHT}
+
+    def frameInfo(self, frame_index):
+        for i, frame in enumerate(self.frames()):
+            if i == int(frame_index):
+                return frame
+        
+    def __call__(self):
+        if self.request.get('t') is not None:
+            return self.template()
+        return super(FlourishPersonIDCardsViewBase, self).__call__()
 
 
 class FlourishPersonIDCardView(FlourishPersonIDCardsViewBase):
