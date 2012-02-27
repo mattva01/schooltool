@@ -1251,9 +1251,7 @@ class FlourishPersonIDCardsViewBase(ReportPDFView):
 
     def getDemographicsFrame(self, card_info):
         x1 = card_info['x1'] + self.DEMOGRAPHICS['margin']
-        y1 = card_info['y1'] + (card_info['height'] - self.TITLE['height'] -
-                                self.DEMOGRAPHICS['height'] -
-                                self.DEMOGRAPHICS['margin'])
+        y1 = card_info['y1'] +  self.DEMOGRAPHICS['margin']
         return {
             'id': 'demographics_%d' % card_info['index'],
             'x1': x1,

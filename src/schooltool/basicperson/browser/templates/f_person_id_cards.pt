@@ -58,16 +58,18 @@
                                 width string:${frameInfo/title/width}cm;"
                 />
           <image tal:condition="person/photo"
-                 x="5.6cm" y="0.55cm"
+                 x="5.6cm"
                  tal:attributes="height string:${view/PHOTO/height}cm;
                                  width string:${view/PHOTO/width}cm;
-                                 file person/photo/@@data_uri;"
+                                 file person/photo/@@data_uri;
+                                 y string:${view/DEMOGRAPHICS/margin}cm;"
                  />
           <rect fill="false" stroke="true"
                 tal:condition="not:person/photo"
-                x="5.6cm" y="0.55cm"
+                x="5.6cm"
                 tal:attributes="height string:${view/PHOTO/height}cm;
-                                width string:${view/PHOTO/width}cm;"
+                                width string:${view/PHOTO/width}cm;
+                                y string:${view/DEMOGRAPHICS/margin}cm;"
                 />
         </illustration>
         <keepInFrame
