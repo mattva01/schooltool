@@ -556,9 +556,13 @@ class PersonTableFilter(table.ajax.IndexedTableFilter,
 
     groupContainer = PersonFilterWidget.groupContainer
     groups = PersonFilterWidget.groups
-    filter = PersonFilterWidget.filter
     active = PersonFilterWidget.active
     extra_url = PersonFilterWidget.extra_url
+
+    def filter(self, results):
+        if self.ignoreRequest:
+            return results
+        return PersonFilterWidget.filter(self, results)
 
 
 class PersonTable(table.ajax.IndexedTable):

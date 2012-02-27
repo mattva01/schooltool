@@ -624,10 +624,13 @@ class ContactTableFilter(table.ajax.IndexedTableFilter,
     def parameters(self):
         return (self.search_title_id, )
 
-    filter = FlourishContactFilterWidget.filter
     active = FlourishContactFilterWidget.active
     extra_url = FlourishContactFilterWidget.extra_url
 
+    def filter(self, results):
+        if self.ignoreRequest:
+            return results
+        return FlourishContactFilterWidget.filter(self, results)
 
 class ContactBackToContainerViewlet(object):
     @property

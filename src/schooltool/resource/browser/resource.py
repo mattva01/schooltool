@@ -383,7 +383,10 @@ class ResourcesTableFilter(table.ajax.TableFilter,
     def search_group_id(self):
         return self.manager.html_id+"-group"
 
-    filter = FlourishResourceContainerFilterWidget.filter
+    def filter(self, results):
+        if self.ignoreRequest:
+            return results
+        return FlourishResourceContainerFilterWidget.filter(self, results)
 
 
 class ResourceContainerLinks(flourish.page.RefineLinksViewlet):
