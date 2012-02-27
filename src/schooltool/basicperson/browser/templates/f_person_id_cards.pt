@@ -19,7 +19,7 @@
       <paraStyle
           name="normal"
           fontName="Ubuntu_Regular"
-          fontSize="10" />
+          fontSize="11" />
       <paraStyle
           parent="normal"
           name="bold"
@@ -31,11 +31,11 @@
           fontName="Ubuntu_Bold"
           fontSize="14" />
       <paraStyle
-          name="demographics_title"
-          alignment="left"
+          name="footer"
+          alignment="center"
           textColor="#999999"
           fontName="Ubuntu_Regular"
-          fontSize="12" />
+          fontSize="7" />
     </metal:block>
   </stylesheet>
   <story metal:fill-slot="story">
@@ -57,43 +57,45 @@
                 tal:attributes="height string:${frameInfo/title/height}cm;
                                 width string:${frameInfo/title/width}cm;"
                 />
-          <image tal:condition="person/photo"
-                 x="5.6cm"
-                 tal:attributes="height string:${view/PHOTO/height}cm;
-                                 width string:${view/PHOTO/width}cm;
-                                 file person/photo/@@data_uri;
-                                 y string:${view/DEMOGRAPHICS/margin}cm;"
-                 />
-          <rect fill="false" stroke="true"
-                tal:condition="not:person/photo"
-                x="5.6cm"
-                tal:attributes="height string:${view/PHOTO/height}cm;
-                                width string:${view/PHOTO/width}cm;
-                                y string:${view/DEMOGRAPHICS/margin}cm;"
-                />
+          <image
+              tal:condition="person/photo"
+              x="5.6cm"
+              tal:attributes="height string:${view/PHOTO/height}cm;
+                              width string:${view/PHOTO/width}cm;
+                              file person/photo/@@data_uri;
+                              y string:${view/DEMOGRAPHICS/padding-bottom}cm;"
+              />
+          <rect
+              fill="false" stroke="true"
+              tal:condition="not:person/photo"
+              x="5.6cm"
+              tal:attributes="height string:${view/PHOTO/height}cm;
+                              width string:${view/PHOTO/width}cm;
+                              y string:${view/DEMOGRAPHICS/padding-bottom}cm;"
+              />
         </illustration>
         <keepInFrame
             onOverflow="shrink"
             tal:attributes="frame string:title_${frame};
                             maxWidth string:${frameInfo/title/maxWidth}cm;
                             maxHeight string:${frameInfo/title/maxHeight}cm">
-          <spacer tal:attributes="length string:${view/titleSpacerLength}cm" />
-          <para style="card_title" tal:content="view/schoolName" />
+          <spacer
+              tal:attributes="length python:view.titlePaddingTop(person)" />
+          <para style="card_title" tal:content="person/title" />
         </keepInFrame>
         <keepInFrame
             onOverflow="shrink"
             tal:attributes="frame string:demographics_${frame}">
-          <para style="demographics_title" tal:content="person/first_name" />
-          <para style="demographics_title" tal:content="person/last_name" />
-          <spacer length="0.1cm" />
           <para style="normal">
             <b i18n:translate="">ID:</b>
             <tal:block tal:content="person/ID" />
           </para>
+          <spacer length="0.25cm" />
           <para style="normal">
             <b i18n:translate="">Birth date:</b>
             <tal:block tal:content="person/birth_date" />
           </para>
+          <spacer length="0.25cm" />
           <para style="bold" i18n:translate="">
             Contact
           </para>
@@ -105,6 +107,7 @@
               <b>&nbsp;</b>
             </tal:block>
           </para>
+          <spacer length="0.25cm" />
           <para style="bold" i18n:translate="">
             Contact's Phone
           </para>
@@ -116,6 +119,13 @@
               <b>&nbsp;</b>
             </tal:block>
           </para>
+        </keepInFrame>
+        <keepInFrame
+            onOverflow="shrink"
+            tal:attributes="frame string:footer_${frame};
+                            maxWidth string:${frameInfo/footer/maxWidth}cm;
+                            maxHeight string:${frameInfo/footer/maxHeight}cm">
+          <para style="footer" tal:content="view/schoolName" />
         </keepInFrame>
       </tal:block>
       <nextPage tal:condition="python:view.insertBreak(repeat)" />

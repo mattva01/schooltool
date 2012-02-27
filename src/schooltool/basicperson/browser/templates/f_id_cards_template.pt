@@ -82,5 +82,12 @@
                            width string:${info/width}cm;
                            height string:${info/height}cm;"
            />
+    <frame tal:define="info frame/footer"
+           tal:attributes="id info/id;
+                           x1 string:${info/x1}cm;
+                           y1 string:${info/y1}cm;
+                           width string:${info/width}cm;
+                           height string:${info/height}cm;"
+           />
   </tal:loop>
 </pageTemplate>

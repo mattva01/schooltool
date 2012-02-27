@@ -1131,10 +1131,27 @@ class FlourishPersonIDCardsViewBase(ReportPDFView):
     COLUMNS = 2
     ROWS = 4
     # All of the following are cm
-    CARD = {'height': 5.4, 'width': 8.57}
-    TITLE = {'height': 1.1, 'padding': 0.06}
-    DEMOGRAPHICS = {'margin': 0.55, 'height': 3.2, 'width': 5.05}
-    PHOTO = {'height': 3.2, 'width': 2.4}
+    CARD = {
+        'height': 5.4,
+        'width': 8.57,
+        }
+    TITLE = {
+        'height': 1.1,
+        'padding': 0.06,
+        }
+    DEMOGRAPHICS = {
+        'height': 3.2,
+        'margin-left': 0.55,
+        'padding-bottom': 0.75,
+        'width': 5.05,
+        }
+    PHOTO = {
+        'height': 3.2,
+        'width': 2.4,
+        }
+    FOOTER = {
+        'height': 0.5,
+        }
     LEFT_BASE = 1.7
     TOP_BASE = 7.3
     COLUMN_WIDTH = 9.6
@@ -1176,8 +1193,7 @@ class FlourishPersonIDCardsViewBase(ReportPDFView):
             if phones:
                 contact_phone = phones[0]
         return {
-            'first_name': person.first_name,
-            'last_name': person.last_name,
+            'title': ' '.join([person.first_name, person.last_name]),
             'username': person.username,
             'ID': demographics.get('ID'),
             'birth_date': person.birth_date,
@@ -1186,10 +1202,11 @@ class FlourishPersonIDCardsViewBase(ReportPDFView):
             'photo': person.photo,
             }
 
-    def titleSpacerLength(self):
-        if len(self.schoolName) < 44:
-            return 0.25
-        return 0
+    def titlePaddingTop(self, person):
+        result = 0
+        if len(person['title']) < 44:
+            result = 0.25
+        return '%fcm' % result
 
     @Lazy
     def total_cards_in_page(self):
@@ -1226,6 +1243,7 @@ class FlourishPersonIDCardsViewBase(ReportPDFView):
                 'outter': self.getOutterFrame(card_info),
                 'title': self.getTitleFrame(card_info),
                 'demographics': self.getDemographicsFrame(card_info),
+                'footer': self.getFooterFrame(card_info),
                 }
             result[card_info['index']] = info
         return result
@@ -1250,16 +1268,30 @@ class FlourishPersonIDCardsViewBase(ReportPDFView):
             }
 
     def getDemographicsFrame(self, card_info):
-        x1 = card_info['x1'] + self.DEMOGRAPHICS['margin']
-        y1 = card_info['y1'] +  self.DEMOGRAPHICS['margin']
+        demo_info = self.DEMOGRAPHICS
+        x1 = card_info['x1'] + demo_info['margin-left']
+        y1 = card_info['y1'] +  demo_info['padding-bottom']
         return {
             'id': 'demographics_%d' % card_info['index'],
             'x1': x1,
             'y1': y1,
-            'width': self.DEMOGRAPHICS['width'],
-            'maxWidth': self.DEMOGRAPHICS['width'],
-            'height': self.DEMOGRAPHICS['height'],
-            'maxHeight': self.DEMOGRAPHICS['height'],
+            'width': demo_info['width'],
+            'maxWidth': demo_info['width'],
+            'height': demo_info['height'],
+            'maxHeight': demo_info['height'],
+            }
+
+    def getFooterFrame(self, card_info):
+        x1 = card_info['x1']
+        y1 = card_info['y1']
+        return {
+            'id': 'footer_%d' % card_info['index'],
+            'x1': x1,
+            'y1': y1,
+            'width': card_info['width'],
+            'maxWidth': card_info['width'],
+            'height': self.FOOTER['height'],
+            'maxHeight': self.FOOTER['height'],
             }
 
 
