@@ -594,6 +594,22 @@
       />
 
   <flourish:viewlet
+      name="person_table"
+      for="*"
+      class=".person.PersonListTable"
+      manager="schooltool.skin.flourish.interfaces.IAJAXParts"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="filter"
+      before="batch table"
+      class="schooltool.table.table.DoNotFilter"
+      manager=".person.PersonListTable"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
       name="done"
       before="table batch"
       after="filter"

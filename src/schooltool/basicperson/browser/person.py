@@ -741,22 +741,6 @@ class FlourishAdvisoryViewlet(Viewlet):
     template = ViewPageTemplateFile('templates/f_advisoryViewlet.pt')
     body_template = None
 
-    def getTable(self, items):
-        persons = ISchoolToolApplication(None)['persons']
-        result = getMultiAdapter((persons, self.request), ITableFormatter)
-        result.setUp(
-            table_formatter=zc.table.table.StandaloneFullFormatter,
-            items=items)
-        return result
-
-    @property
-    def advisors_table(self):
-        return self.getTable(list(self.context.advisors))
-
-    @property
-    def advisees_table(self):
-        return self.getTable(list(self.context.advisees))
-
     @property
     def canModify(self):
         return canAccess(self.context.__parent__, '__delitem__')
@@ -1058,6 +1042,16 @@ class BasicPersonTable(PersonTable):
             getter=lambda i, f: i.__name__,
             subsort=True)
         return cols + [username]
+
+
+class PersonListTable(BasicPersonTable):
+
+    @property
+    def source(self):
+        return ISchoolToolApplication(None)['persons']
+
+    def items(self):
+        return self.indexItems(self.context)
 
 
 class BasicPersonTableFormatter(PersonTableFormatter):
