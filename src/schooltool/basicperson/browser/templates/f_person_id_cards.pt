@@ -33,9 +33,9 @@
       <paraStyle
           name="footer"
           alignment="center"
-          textColor="#999999"
+          textColor="#666666"
           fontName="Ubuntu_Regular"
-          fontSize="7" />
+          fontSize="9" />
     </metal:block>
   </stylesheet>
   <story metal:fill-slot="story">

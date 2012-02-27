@@ -293,11 +293,11 @@
       />
 
   <report:reportLink
-      name="group_id_cards_pdf"
+      name="group_a_id_cards_pdf"
       for="schooltool.group.interfaces.IGroup"
       permission="schooltool.edit"
       group="Group"
-      description="XXX A PDF with the ID cards of the members of the group XXX."
+      description="Includes student name, ID number, birth date, contact name and contact phone number. Prints eight per page."
       title="ID Cards"
       file_type="pdf"
       link="request_group_id_cards_pdf.html"

@@ -603,7 +603,7 @@
       for="schooltool.person.interfaces.IPerson"
       permission="schooltool.edit"
       group="Person"
-      description="XXX A PDF with the person's ID card XXX."
+      description="Includes student name, ID number, birth date, contact name and contact phone number."
       title="ID Card"
       file_type="pdf"
       link="request_person_id_card_pdf.html"
