@@ -50,9 +50,7 @@ from schooltool.common.inlinept import InlineViewPageTemplate
 from schooltool.skin.containers import TableContainerView
 from schooltool.skin import flourish
 from schooltool.skin.flourish.form import Form
-from schooltool.table.table import SchoolToolTableFormatter
-from schooltool.table.table import ImageInputColumn
-from schooltool.table.table import simple_form_key
+from schooltool.table import table
 from schooltool.email.interfaces import IEmailContainer, IEmail
 from schooltool.email.interfaces import IEmailUtility
 from schooltool.email.mail import Email, status_messages
@@ -516,7 +514,7 @@ def email_container_table_columns():
     return [from_address, to_addresses, subject, time_created, time_sent]
 
 
-class EmailContainerViewTableFormatter(SchoolToolTableFormatter):
+class EmailContainerViewTableFormatter(table.SchoolToolTableFormatter):
 
     columns = lambda self: email_container_table_columns()
 
@@ -623,21 +621,21 @@ class FlourishEmailContainerDetails(flourish.form.FormViewlet):
         return '%s/settings' % absoluteURL(app, self.request)
 
 
-class FlourishEmailQueueView(flourish.containers.TableContainerView):
+class FlourishEmailQueueView(table.TableContainerView):
 
     def getColumnsAfter(self):
-        action = ImageInputColumn(
+        action = table.ImageInputColumn(
             'delete', name='action', title=_('Delete'),
             library='schooltool.skin.flourish',
             image='remove-icon.png',
-            id_getter=simple_form_key)
+            id_getter=table.simple_form_key)
         return [action]
 
     def update(self):
         super(FlourishEmailQueueView, self).update()
         # XXX: deletion without confirmation is quite dangerous
         delete = [key for key, item in self.container.items()
-                  if "delete.%s" % simple_form_key(item) in self.request]
+                  if "delete.%s" % table.simple_form_key(item) in self.request]
         for key in delete:
             del self.container[key]
         if delete:

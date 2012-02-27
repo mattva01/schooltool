@@ -33,35 +33,35 @@
             condition="python:total > 11">
 
       <tal:if condition="python:cur <= 6">
-        <span tal:repeat="b python:urls[:9]">
+        <span class="batch_page" tal:repeat="b python:urls[:9]">
           <a tal:attributes="href b/href; class b/class" tal:content="b/num" />
         </span>
-        <span class="separator">...</span>
-        <tal:block define="b python:urls[-1]">
+        <span class="batch_separator">...</span>
+        <span class="batch_page" tal:define="b python:urls[-1]">
           <a tal:attributes="href b/href; class b/class" tal:content="b/num" />
-        </tal:block>
+        </span>
       </tal:if>
 
       <tal:if condition="python:cur < (total - 4) and (cur > 6)">
-        <tal:block define="b python:urls[0]">
-          <a tal:attributes="href b/href; class b/class" tal:content="b/num" />
-        </tal:block>
-        <span class="separator">...</span>
-        <span tal:repeat="b python:urls[cur - 4: cur + 3]">
+        <span class="batch_page" tal:define="b python:urls[0]">
           <a tal:attributes="href b/href; class b/class" tal:content="b/num" />
         </span>
-        <span class="separator">...</span>
-        <tal:block define="b python:urls[-1]">
+        <span class="batch_separator">...</span>
+        <span class="batch_page" tal:repeat="b python:urls[cur - 4: cur + 3]">
           <a tal:attributes="href b/href; class b/class" tal:content="b/num" />
-        </tal:block>
+        </span>
+        <span class="batch_separator">...</span>
+        <span class="batch_page" tal:define="b python:urls[-1]">
+          <a tal:attributes="href b/href; class b/class" tal:content="b/num" />
+        </span>
       </tal:if>
 
       <tal:if condition="python:cur >= total - 4">
-        <tal:block define="b python:urls[0]">
+        <span class="batch_page" tal:define="b python:urls[0]">
           <a tal:attributes="href b/href; class b/class" tal:content="b/num" />
-        </tal:block>
-        <span class="separator">...</span>
-        <span tal:repeat="b python:urls[-8:]">
+        </span>
+        <span class="batch_separator">...</span>
+        <span class="batch_page" tal:repeat="b python:urls[-8:]">
           <a tal:attributes="href b/href; class b/class" tal:content="b/num" />
         </span>
       </tal:if>
@@ -69,7 +69,7 @@
     </tal:if>
 
     <tal:if condition="not:python:view.numBatches() > 11">
-      <span tal:repeat="b view/batch_urls">
+      <span class="batch_page" tal:repeat="b view/batch_urls">
         <a tal:attributes="href b/href; class b/class" tal:content="b/num" />
       </span>
     </tal:if>

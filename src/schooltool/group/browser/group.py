@@ -21,6 +21,8 @@ group views.
 
 $Id$
 """
+import zc.table.table
+import zc.table.column
 from zope.app.dependable.interfaces import IDependable
 from zope.cachedescriptors.property import Lazy
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
@@ -42,17 +44,15 @@ from zope.traversing.browser.absoluteurl import absoluteURL
 from zope.i18n import translate
 from z3c.form import field, button, form
 from z3c.form.interfaces import HIDDEN_MODE
-from zc.table import table, column
 from zc.table.interfaces import ISortableColumn
 
-from schooltool.common import SchoolToolMessage as _
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.skin.containers import TableContainerView
 from schooltool.app.browser.app import BaseAddView, BaseEditView
 from schooltool.app.browser.app import ContentTitle
 from schooltool.person.interfaces import IPerson
+from schooltool.basicperson.browser.person import BasicPersonTable
 from schooltool.course.interfaces import ISection
-from schooltool.table.interfaces import ITableFormatter
 from schooltool.schoolyear.interfaces import ISchoolYear
 from schooltool.schoolyear.interfaces import ISchoolYearContainer
 from schooltool.group.group import Group
@@ -61,24 +61,13 @@ from schooltool.group.interfaces import IGroupMember
 from schooltool.group.interfaces import IGroupContainer, IGroupContained
 from schooltool.app.browser.app import RelationshipViewBase
 from schooltool.app.browser.app import FlourishRelationshipViewBase
-from schooltool.table.table import FilterWidget
-from schooltool.table.table import SchoolToolTableFormatter
-from schooltool.table.table import LocaleAwareGetterColumn
 from schooltool.skin.flourish.viewlet import Viewlet
 from schooltool.common.inlinept import InheritTemplate
 from schooltool.common.inlinept import InlineViewPageTemplate
-from schooltool.skin.flourish.containers import TableContainerView as FlourishTableContainerView
-from schooltool.skin.flourish.containers import ContainerDeleteView
-from schooltool.skin.flourish.page import RefineLinksViewlet
-from schooltool.skin.flourish.page import LinkViewlet
-from schooltool.skin.flourish.page import Page
-from schooltool.skin.flourish.page import ModalFormLinkViewlet
-from schooltool.skin.flourish.page import Content
-from schooltool.skin.flourish.form import Form
-from schooltool.skin.flourish.form import AddForm
-from schooltool.skin.flourish.form import DialogForm
-from schooltool.skin.flourish.form import DisplayForm
-from schooltool.skin.flourish.page import TertiaryNavigationManager
+from schooltool.skin import flourish
+from schooltool import table
+
+from schooltool.common import SchoolToolMessage as _
 
 
 class GroupContainerAbsoluteURLAdapter(BrowserView):
@@ -136,8 +125,9 @@ class GroupView(BrowserView):
 
     def renderPersonTable(self):
         persons = ISchoolToolApplication(None)['persons']
-        formatter = getMultiAdapter((persons, self.request), ITableFormatter)
-        formatter.setUp(table_formatter=table.StandaloneFullFormatter,
+        formatter = getMultiAdapter((persons, self.request),
+                                    table.interfaces.ITableFormatter)
+        formatter.setUp(table_formatter=zc.table.table.StandaloneFullFormatter,
                         items=self.getPersons(),
                         batch_size=0)
         return formatter.render()
@@ -247,12 +237,12 @@ class FlourishGroupsViewlet(Viewlet):
         return canAccess(self.context.__parent__, '__delitem__')
 
 
-class FlourishGroupFilterWidget(FilterWidget):
+class FlourishGroupFilterWidget(table.table.FilterWidget):
 
     template = ViewPageTemplateFile('templates/f_group_filter.pt')
 
 
-class SchoolYearColumn(column.GetterColumn):
+class SchoolYearColumn(zc.table.column.GetterColumn):
 
     def getter(self, item, formatter):
         schoolyear = ISchoolYear(item.__parent__)
@@ -263,10 +253,10 @@ class SchoolYearColumn(column.GetterColumn):
         return schoolyear.first
 
 
-class FlourishGroupTableFormatter(SchoolToolTableFormatter):
+class FlourishGroupTableFormatter(table.table.SchoolToolTableFormatter):
 
     def columns(self):
-        title = LocaleAwareGetterColumn(
+        title = table.column.LocaleAwareGetterColumn(
             name='title',
             title=_(u"Title"),
             getter=lambda i, f: i.title,
@@ -350,7 +340,7 @@ class FlourishGroupListView(FlourishRelationshipViewBase):
         return "%s.%s" % (schoolyear.__name__, item.__name__)
 
 
-class GroupsTertiaryNavigationManager(TertiaryNavigationManager):
+class GroupsTertiaryNavigationManager(flourish.page.TertiaryNavigationManager):
 
     template = InlineViewPageTemplate("""
         <ul tal:attributes="class view/list_class">
@@ -381,15 +371,15 @@ class GroupsTertiaryNavigationManager(TertiaryNavigationManager):
         return result
 
 
-class GroupsAddLinks(RefineLinksViewlet):
+class GroupsAddLinks(flourish.page.RefineLinksViewlet):
     """Manager for Add links in GroupsView"""
 
 
-class GroupImportLinks(RefineLinksViewlet):
+class GroupImportLinks(flourish.page.RefineLinksViewlet):
     """Manager for group import links."""
 
 
-class GroupLinks(RefineLinksViewlet):
+class GroupLinks(flourish.page.RefineLinksViewlet):
     """Manager for public links in GroupView"""
 
     @property
@@ -397,7 +387,7 @@ class GroupLinks(RefineLinksViewlet):
         return self.context.title
 
 
-class GroupAddLinks(RefineLinksViewlet):
+class GroupAddLinks(flourish.page.RefineLinksViewlet):
     """Manager for Add links in GroupView"""
 
     def render(self):
@@ -407,7 +397,7 @@ class GroupAddLinks(RefineLinksViewlet):
             return super(GroupAddLinks, self).render()
 
 
-class GroupManageActionsLinks(RefineLinksViewlet):
+class GroupManageActionsLinks(flourish.page.RefineLinksViewlet):
     """Manager for Action links in GroupView"""
 
     body_template = InlineViewPageTemplate("""
@@ -441,7 +431,7 @@ class GroupManageActionsLinks(RefineLinksViewlet):
                 return super(GroupManageActionsLinks, self).render()
 
 
-class GroupDeleteLink(ModalFormLinkViewlet):
+class GroupDeleteLink(flourish.page.ModalFormLinkViewlet):
 
     @property
     def dialog_title(self):
@@ -468,7 +458,7 @@ class GroupsActiveTabMixin(object):
         return result
 
 
-class GroupAddLinkViewlet(LinkViewlet, GroupsActiveTabMixin):
+class GroupAddLinkViewlet(flourish.page.LinkViewlet, GroupsActiveTabMixin):
 
     @property
     def url(self):
@@ -500,10 +490,12 @@ class GroupContainerTitle(ContentTitle):
                  mapping={'schoolyear': schoolyear.title})
 
 
-class FlourishGroupsView(FlourishTableContainerView,
+class FlourishGroupsView(flourish.page.Page,
                          GroupsActiveTabMixin):
 
-    content_template = ViewPageTemplateFile('templates/f_groups.pt')
+    content_template = InlineViewPageTemplate('''
+      <div tal:content="structure context/schooltool:content/ajax/view/container/table" />
+    ''')
 
     @property
     def title(self):
@@ -511,21 +503,40 @@ class FlourishGroupsView(FlourishTableContainerView,
         return _('Groups for ${schoolyear}',
                  mapping={'schoolyear': schoolyear.title})
 
-    @property
+    @Lazy
     def container(self):
         schoolyear = self.schoolyear
         return IGroupContainer(schoolyear)
 
-    def getColumnsAfter(self):
-        description = column.GetterColumn(
+
+class GroupsTable(table.ajax.Table):
+
+    def columns(self):
+        default = table.ajax.Table.columns(self)
+        description = zc.table.column.GetterColumn(
             name='description',
             title=_('Description'),
             getter=lambda i, f: i.description or '',
             )
-        return [description]
+        return default + [description]
 
 
-class FlourishGroupContainerDeleteView(ContainerDeleteView):
+class GroupsTableFilter(table.ajax.TableFilter):
+
+    title = _("Group title")
+
+
+class GroupsTableSchoolYear(flourish.viewlet.Viewlet):
+
+    template = InlineViewPageTemplate('''
+      <input type="hidden" name="schoolyear_id"
+             tal:define="schoolyear_id view/view/schoolyear/__name__|nothing"
+             tal:condition="schoolyear_id"
+             tal:attributes="value schoolyear_id" />
+    ''')
+
+
+class FlourishGroupContainerDeleteView(flourish.containers.ContainerDeleteView):
 
     def nextURL(self):
         if 'CONFIRM' in self.request:
@@ -535,12 +546,12 @@ class FlourishGroupContainerDeleteView(ContainerDeleteView):
                 'groups',
                 schoolyear.__name__)
             return url
-        return ContainerDeleteView.nextURL(self)
+        return flourish.containers.ContainerDeleteView.nextURL(self)
 
 
-class FlourishGroupView(DisplayForm):
+class FlourishGroupView(flourish.form.DisplayForm):
 
-    template = InheritTemplate(Page.template)
+    template = InheritTemplate(flourish.page.Page.template)
     content_template = ViewPageTemplateFile('templates/f_group_view.pt')
     fields = field.Fields(IGroup)
     fields = fields.select('title', 'description')
@@ -573,34 +584,16 @@ class FlourishGroupView(DisplayForm):
             if not widget.value:
                 widget.mode = HIDDEN_MODE
 
-    # XXX: GroupView.getPersons uses canAccess on the member title
-    #      should we do the same here?
-    @property
-    def members_table(self):
-        return self.getTable(list(self.context.members), 'members')
-
     def has_members(self):
         return bool(list(self.context.members))
-
-    @property
-    def leaders_table(self):
-        return self.getTable(list(self.context.leaders), 'leaders',
-                             filter=lambda l: l)
-
-    def getTable(self, items, prefix, **kw):
-        persons = ISchoolToolApplication(None)['persons']
-        result = getMultiAdapter((persons, self.request), ITableFormatter)
-        result.setUp(table_formatter=table.StandaloneFullFormatter, items=items,
-                     prefix=prefix, **kw)
-        return result
 
     def has_leaders(self):
         return bool(list(self.context.leaders))
 
 
-class FlourishGroupAddView(AddForm):
+class FlourishGroupAddView(flourish.form.AddForm):
 
-    template = InheritTemplate(Page.template)
+    template = InheritTemplate(flourish.page.Page.template)
     label = None
     legend = _('Group Information')
     fields = field.Fields(IGroup)
@@ -650,9 +643,9 @@ class FlourishGroupAddView(AddForm):
                  mapping={'schoolyear': schoolyear.title})
 
 
-class FlourishGroupEditView(Form, form.EditForm):
+class FlourishGroupEditView(flourish.form.Form, form.EditForm):
 
-    template = InheritTemplate(Page.template)
+    template = InheritTemplate(flourish.page.Page.template)
     label = None
     legend = _('Group Information')
     fields = field.Fields(IGroup)
@@ -685,7 +678,7 @@ class FlourishGroupEditView(Form, form.EditForm):
         self.actions['cancel'].addClass('button-cancel')
 
 
-class FlourishGroupDeleteView(DialogForm, form.EditForm):
+class FlourishGroupDeleteView(flourish.form.DialogForm, form.EditForm):
     """View used for confirming deletion of a group."""
 
     dialog_submit_actions = ('apply',)
@@ -709,6 +702,22 @@ class FlourishGroupDeleteView(DialogForm, form.EditForm):
         super(FlourishGroupDeleteView, self).updateActions()
         self.actions['apply'].addClass('button-ok')
         self.actions['cancel'].addClass('button-cancel')
+
+
+class GroupMembersTable(BasicPersonTable):
+
+    prefix = "members"
+
+    def items(self):
+        return self.indexItems(self.context.members)
+
+
+class GroupLeadersTable(BasicPersonTable):
+
+    prefix = "leaders"
+
+    def items(self):
+        return self.indexItems(self.context.leaders)
 
 
 class FlourishMemberViewPersons(FlourishRelationshipViewBase):
@@ -742,7 +751,7 @@ class FlourishMemberViewPersons(FlourishRelationshipViewBase):
         return self.context.members
 
 
-class FlourishManageGroupsOverview(Content):
+class FlourishManageGroupsOverview(flourish.page.Content):
 
     body_template = ViewPageTemplateFile(
         'templates/f_manage_groups_overview.pt')

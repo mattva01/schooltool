@@ -1,0 +1,79 @@
+<tal:block condition="not:view/manager/fromPublication"
+           replace="resource_library:schooltool.table" />
+<tal:block i18n:domain="schooltool">
+
+<script>ST.state.push()</script>
+<tal:script
+   tal:replace="structure scriptlocal:container_id view/manager/html_id;
+                                      search_type_id view/search_type_id;
+                                      search_id string:${view/manager/html_id}-search" />
+
+<fieldset>
+  <legend><span i18n:translate="">Search</span></legend>
+  <div class="row">
+    <div class="label">
+      <label for="SEARCH_TITLE"
+             tal:attributes="for view/search_title_id">
+        <span i18n:translate="">Title or description</span>
+      </label>
+    </div>
+    <div class="widget">
+      <input type="text" name="SEARCH_TITLE"
+             id="SEARCH_TITLE" class="text-widget"
+             tal:attributes="value python:request.get(view.search_title_id);
+                             name view/search_title_id;
+                             id view/search_title_id"
+             />
+    </div>
+  </div>
+  <div class="row">
+    <div class="label">
+      <label for="SEARCH_TYPE"
+             tal:attributes="for view/search_type_id">
+        <span i18n:translate="">Filter by...</span>
+      </label>
+    </div>
+    <div class="widget">
+      <select name="SEARCH_TYPE" id="SEARCH_TYPE"
+              tal:attributes="name view/search_type_id;
+                              id view/search_type_id"
+              class="select-widget">
+        <option i18n:translate="" value="">All types</option>
+        <option tal:repeat="type view/types"
+                tal:content="type/title"
+                tal:attributes="value type/id;
+                                selected python:type['id'] == request.get('SEARCH_TYPE')"/>
+      </select>
+      <script>
+        $(ST.dialogs.jquery_id(ST.local.search_type_id)).change(
+          function(){
+            var search_type_id = ST.local.search_type_id;
+            var container_id = ST.local.container_id;
+            var search_id = ST.local.search_id;
+            return function(element) {
+              return ST.table.on_form_submit(
+                  container_id, document.getElementById(search_id));
+            }}());
+      </script>
+    </div>
+  </div>
+</fieldset>
+<div class="buttons"
+     tal:define="search_id string:${view/manager/html_id}-search">
+  <input type="submit" name="SEARCH_BUTTON" value="Search"
+         class="button-ok" i18n:attributes="value"
+         tal:attributes="name search_id;
+                         id search_id" />
+    <script>
+      $(ST.dialogs.jquery_id(ST.local.search_id)).click(
+         function(){
+             var search_id = ST.local.search_id;
+             var container_id = ST.local.container_id;
+             return function(button) {
+                  return ST.table.on_form_submit(container_id, button);
+             }}());
+    </script>
+</div>
+<script>ST.state.pop()</script>
+
+</tal:block>

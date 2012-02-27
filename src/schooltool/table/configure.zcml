@@ -8,7 +8,7 @@
            zope.publisher.interfaces.browser.IBrowserRequest"
       factory=".table.NullTableFormatter " />
 
-  <adapter factory=".catalog.getIndexedColumn " />
-  <adapter factory=".catalog.getIndexedSortableColumn " />
+  <adapter factory=".column.getIndexedColumn " />
+  <adapter factory=".column.getIndexedSortableColumn " />
 
 </configure>

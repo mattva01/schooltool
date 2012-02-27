@@ -97,7 +97,7 @@ class ContentProviders(object):
 
     def get(self, name, default=None):
         if name not in self.cache:
-            self.cache[name] = self.lookup(name)
+            self[name] = self.lookup(name)
         ob = self.cache.get(name)
         if ob is None:
             return default
@@ -108,6 +108,9 @@ class ContentProviders(object):
         if ob is None:
             raise KeyError(name)
         return ob
+
+    def __setitem__(self, name, provider):
+        self.cache[name] = provider
 
     def lookup(self, name):
         provider = queryMultiAdapter(

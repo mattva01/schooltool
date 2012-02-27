@@ -44,12 +44,8 @@ from zope.security.checker import canAccess
 
 import z3c.form.interfaces
 from z3c.form.validator import SimpleFieldValidator
-from zc.table import table
+import zc.table.table
 
-import schooltool.skin.flourish.page
-import schooltool.skin.flourish.containers
-import schooltool.skin.flourish.breadcrumbs
-from schooltool.skin.flourish.widgets import Photo
 from schooltool.app.browser.app import RelationshipViewBase
 from schooltool.app.browser.app import FlourishRelationshipViewBase
 from schooltool.app.interfaces import ISchoolToolApplication
@@ -61,7 +57,7 @@ from schooltool.basicperson.interfaces import IDemographicsFields
 from schooltool.basicperson.interfaces import IBasicPerson
 from schooltool.group.interfaces import IGroupContainer
 from schooltool.person.interfaces import IPerson, IPersonFactory
-from schooltool.person.browser.person import PersonTableFormatter
+from schooltool.person.browser.person import PersonTable, PersonTableFormatter
 from schooltool.schoolyear.interfaces import ISchoolYearContainer, ISchoolYear
 from schooltool.skin.containers import TableContainerView
 from schooltool.skin import flourish
@@ -69,8 +65,8 @@ from schooltool.skin.flourish.interfaces import IViewletManager
 from schooltool.skin.flourish.form import FormViewlet
 from schooltool.skin.flourish.viewlet import Viewlet, ViewletManager
 from schooltool.skin.flourish.content import ContentProvider
+from schooltool.table import table
 from schooltool.table.interfaces import ITableFormatter
-from schooltool.table.table import DependableCheckboxColumn
 from schooltool.table.catalog import IndexedLocaleAwareGetterColumn
 from schooltool.table.interfaces import IIndexedColumn
 from schooltool.report.browser.report import RequestReportDownloadDialog
@@ -97,7 +93,7 @@ class BasicPersonContainerView(TableContainerView):
         return syc
 
 
-class DeletePersonCheckboxColumn(DependableCheckboxColumn):
+class DeletePersonCheckboxColumn(table.DependableCheckboxColumn):
 
     def __init__(self, *args, **kw):
         kw = dict(kw)
@@ -107,11 +103,15 @@ class DeletePersonCheckboxColumn(DependableCheckboxColumn):
     def hasDependents(self, item):
         if self.disable_items and item.__name__ in self.disable_items:
             return True
-        return DependableCheckboxColumn.hasDependents(self, item)
+        return table.DependableCheckboxColumn.hasDependents(self, item)
 
 
-class FlourishBasicPersonContainerView(flourish.containers.TableContainerView):
+class FlourishBasicPersonContainerView(flourish.page.Page):
     """A Person Container view."""
+
+    content_template = InlineViewPageTemplate('''
+      <div tal:content="structure context/schooltool:content/ajax/table" />
+    ''')
 
     @property
     def done_link(self):
@@ -178,7 +178,7 @@ class IPersonAddForm(IBasicPerson):
 
 class IPhotoField(Interface):
 
-    photo = Photo(
+    photo = flourish.widgets.Photo(
         title=_('Photo'),
         description=_('An image file that will be converted to a JPEG no larger than 99x132 pixels (3:4 aspect ratio). Uploaded images must be JPEG or PNG files smaller than 10 MB'),
         required=False)
@@ -741,20 +741,6 @@ class FlourishAdvisoryViewlet(Viewlet):
     template = ViewPageTemplateFile('templates/f_advisoryViewlet.pt')
     body_template = None
 
-    def getTable(self, items):
-        persons = ISchoolToolApplication(None)['persons']
-        result = getMultiAdapter((persons, self.request), ITableFormatter)
-        result.setUp(table_formatter=table.StandaloneFullFormatter, items=items)
-        return result
-
-    @property
-    def advisors_table(self):
-        return self.getTable(list(self.context.advisors))
-
-    @property
-    def advisees_table(self):
-        return self.getTable(list(self.context.advisees))
-
     @property
     def canModify(self):
         return canAccess(self.context.__parent__, '__delitem__')
@@ -1039,6 +1025,33 @@ class PersonTitle(ContentProvider):
     def title(self):
         person = self.context
         return "%s %s" % (person.first_name, person.last_name)
+
+
+class BasicPersonTable(PersonTable):
+
+    def __init__(self, *args, **kw):
+        PersonTable.__init__(self, *args, **kw)
+        self.css_classes = {'table': 'persons-table relationships-table'}
+
+    def columns(self):
+        cols = list(reversed(PersonTable.columns(self)))
+        username = IndexedLocaleAwareGetterColumn(
+            index='__name__',
+            name='username',
+            title=_(u'Username'),
+            getter=lambda i, f: i.__name__,
+            subsort=True)
+        return cols + [username]
+
+
+class PersonListTable(BasicPersonTable):
+
+    @property
+    def source(self):
+        return ISchoolToolApplication(None)['persons']
+
+    def items(self):
+        return self.indexItems(self.context)
 
 
 class BasicPersonTableFormatter(PersonTableFormatter):

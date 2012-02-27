@@ -136,6 +136,43 @@
       permission="schooltool.view"
       />
 
+  <flourish:viewlet
+      name="table"
+      class=".group.GroupsTable"
+      for="schooltool.group.interfaces.IGroupContainer"
+      manager="schooltool.skin.flourish.interfaces.IAJAXParts"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="done"
+      before="table batch"
+      after="filter"
+      manager=".group.GroupsTable"
+      view=".group.FlourishGroupsView"
+      class="schooltool.app.browser.app.ManageItemDoneLink"
+      render="template"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="filter"
+      class=".group.GroupsTableFilter"
+      render="template"
+      manager=".group.GroupsTable"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="schoolyear"
+      after="filter"
+      view=".group.FlourishGroupsView"
+      manager=".group.GroupsTable"
+      class=".group.GroupsTableSchoolYear"
+      render="template"
+      permission="schooltool.view"
+      />
+
   <flourish:page
       name="addSchoolToolGroup.html"
       for="schooltool.group.interfaces.IGroupContainer"
@@ -158,6 +195,14 @@
       class=".group.FlourishGroupDeleteView"
       template="templates/f_confirm_delete_group.pt"
       permission="schooltool.edit"
+      />
+
+  <flourish:viewlet
+      name="filter"
+      manager=".group.GroupLeadersTable"
+      view=".group.FlourishGroupView"
+      class="schooltool.table.table.DoNotFilter"
+      permission="zope.Public"
       />
 
   <flourish:page

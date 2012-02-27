@@ -100,15 +100,6 @@
       content_template="templates/f_person_add_multiple.pt"
       />
 
-<!--    <flourish:viewlet
-        name="add_multiple.html"
-        title="Add Persons"
-        class="schooltool.skin.flourish.page.LinkViewlet"
-        manager="schooltool.basicperson.browser.person.PersonContainerLinks"
-        permission="schooltool.edit"
-        /> -->
-
-
   <flourish:page
      name="add.html"
      subtitle="Add new person"
@@ -584,6 +575,41 @@
       for="schooltool.person.interfaces.IPersonContainer
            schooltool.skin.flourish.IFlourishLayer"
       factory=".person.BasicPersonTableFormatter" />
+
+  <flourish:viewlet
+      name="table"
+      for="schooltool.person.interfaces.IPersonContainer"
+      class=".person.BasicPersonTable"
+      manager="schooltool.skin.flourish.interfaces.IAJAXParts"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="person_table"
+      for="*"
+      class=".person.PersonListTable"
+      manager="schooltool.skin.flourish.interfaces.IAJAXParts"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="filter"
+      before="batch table"
+      class="schooltool.table.table.DoNotFilter"
+      manager=".person.PersonListTable"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="done"
+      before="table batch"
+      after="filter"
+      manager=".person.BasicPersonTable"
+      view=".person.FlourishBasicPersonContainerView"
+      class="schooltool.app.browser.app.ManageItemDoneLink"
+      render="template"
+      permission="schooltool.view"
+      />
 
   <!-- Reports -->
 

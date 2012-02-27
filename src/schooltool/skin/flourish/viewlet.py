@@ -124,23 +124,15 @@ class ViewletProxy(SpecificationDecoratorBase):
         return self.render(*args, **kw)
 
 
-class ViewletManager(ContentProvider):
+class ViewletManagerBase(ContentProvider):
     implements(IViewletManager)
 
-    template = InlineViewPageTemplate("""
-        <tal:block repeat="viewlet view/viewlets">
-          <tal:block define="rendered viewlet;
-                             stripped rendered/strip|nothing"
-                     condition="stripped"
-                     content="structure stripped">
-          </tal:block>
-        </tal:block>
-    """)
+    cache = None
+    order = None
 
-    render = lambda self, *args, **kw: self.template(*args, **kw)
+    render = lambda self, *args, **kw: ''
 
-    @Lazy
-    def viewlet_dict(self):
+    def collectViewlets(self):
         indirect = list(zope.component.getAdapters(
                 (self.context, self.request, self.view, self),
                 zope.viewlet.interfaces.IViewlet))
@@ -167,10 +159,10 @@ class ViewletManager(ContentProvider):
             if unproxied.__name__ != name:
                 unproxied.__name__ = name
 
-        result = dict(self.filter(result.items()))
-        return result
+        viewlets = dict(self.filterViewlets(result.items()))
+        return viewlets
 
-    def filter(self, viewlets):
+    def filterViewlets(self, viewlets):
         def can_access(item):
             name, viewlet = item
             try:
@@ -188,9 +180,7 @@ class ViewletManager(ContentProvider):
     def presort(self, viewlet_dict):
         return sorted(viewlet_dict)
 
-    @Lazy
-    def order(self):
-        viewlet_dict = self.viewlet_dict
+    def buildOrder(self, viewlet_dict):
         presort_order = self.presort(viewlet_dict)
         before = {}
         after = {}
@@ -201,19 +191,31 @@ class ViewletManager(ContentProvider):
         names = dependency_sort(presort_order, before, after)
         return names
 
-    @Lazy
-    def viewlets(self):
-        d = self.viewlet_dict
-        return [d[key] for key in self.order]
-
     def __getitem__(self, name):
-        return self.viewlet_dict[name]
+        if self.cache is None:
+            self.collect()
+        return self.cache[name]
 
     def get(self, name, default=None):
-        return self.viewlet_dict.get(name, default)
+        try:
+            return self[name]
+        except KeyError:
+            return default
 
     def __contains__(self, name):
-        return name in self.viewlet_dict
+        if self.cache is None:
+            self.collect()
+        return name in self.cache
+
+    @property
+    def viewlets(self):
+        if self.cache is None:
+            self.collect()
+        return [self[key] for key in self.order]
+
+    def collect(self):
+        self.cache = self.collectViewlets()
+        self.order = self.buildOrder(self.cache)
 
     def update(self):
         event = zope.contentprovider.interfaces.BeforeUpdateEvent
@@ -222,9 +224,27 @@ class ViewletManager(ContentProvider):
             viewlet.update()
 
 
+class ViewletManager(ViewletManagerBase):
+
+    template = InlineViewPageTemplate("""
+        <tal:block repeat="viewlet view/viewlets">
+          <tal:block define="rendered viewlet;
+                             stripped rendered/strip|nothing"
+                     condition="stripped"
+                     content="structure stripped">
+          </tal:block>
+        </tal:block>
+    """)
+
+    render = lambda self, *args, **kw: self.template(*args, **kw)
+
+
 class ManagerViewlet(Viewlet, ViewletManager):
     implements(IManagerViewlet)
     view = None
+
+    def __init__(self, context, request, view, manager=None):
+        Viewlet.__init__(self, context, request, view, manager=manager)
 
     def update(self):
         return ViewletManager.update(self)

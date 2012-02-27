@@ -47,7 +47,7 @@ from schooltool.relationship.relationship import RelationshipProperty
 from schooltool.relationship.relationship import RelationshipSchema
 from schooltool.securitypolicy import crowds
 from schooltool.table.catalog import ConvertingIndex
-from schooltool.table.table import simple_form_key
+from schooltool.common import simple_form_key
 from schooltool.person.interfaces import IPerson
 from schooltool.course.section import PersonInstructorsCrowd
 

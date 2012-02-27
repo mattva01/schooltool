@@ -21,6 +21,7 @@ Unit tests for schooltool.app.
 """
 import unittest
 import doctest
+from pprint import pprint
 
 from zope.interface import implements
 from zope.interface.verify import verifyObject
@@ -326,9 +327,13 @@ def doctest_ViewletManager():
 
     Note that name of adapter gets assigned to viewlet.__name__.
 
-        >>> sorted(manager.viewlet_dict.items())
-        [(u'v1', <TestViewlet u'v1'>),
-         (u'v2', <TestViewlet u'v2'>)]
+        >>> manager.update()
+        Updating <TestViewlet u'v1'>
+        Updating <TestViewlet u'v2'>
+
+        >>> pprint(manager.cache)
+        {u'v1': <TestViewlet u'v1'>,
+         u'v2': <TestViewlet u'v2'>}
 
         >>> manager.order
         [u'v1', u'v2']
@@ -367,9 +372,6 @@ def doctest_ViewletManager_call():
 
         >>> manager = TestManager(context, request, view)
 
-        >>> verifyObject(interfaces.IViewletManager, manager)
-        True
-
     Let's provide some viewlets for the manager.
 
         >>> provideViewlet(viewletClass(), manager, 'v1')
@@ -378,6 +380,8 @@ def doctest_ViewletManager_call():
         >>> def beforeUpdate(e):
         ...     print 'About to update', e.object
         >>> provideHandler(beforeUpdate, [IBeforeUpdateEvent])
+
+    And now, call the manager.
 
         >>> result = manager('foo', bar='bar')
         About to update <TestManager None>
@@ -394,12 +398,13 @@ def doctest_ViewletManager_call():
     """
 
 
-def doctest_ViewletManager_order():
-    """Tests for ViewletManager.order.
+def doctest_ViewletManager_collect():
+    """Tests for ViewletManager.collect.
 
         >>> context = 'context'
         >>> request = TestRequest()
         >>> view = 'view'
+
         >>> manager = TestManager(context, request, view)
 
         >>> provideViewlet(
@@ -414,10 +419,24 @@ def doctest_ViewletManager_order():
 
         >>> provideViewlet(viewletClass(), manager, 'v4')
 
+        >>> print manager.cache
+        None
+
+        >>> print manager.order
+        None
+
+    Collect the viewlets.
+
+        >>> manager.collect()
+
+        >>> pprint(manager.cache)
+        {u'v1': <TestViewlet u'v1'>,
+         u'v2': <TestViewlet u'v2'>,
+         u'v3': <TestViewlet u'v3'>,
+         u'v4': <TestViewlet u'v4'>}
+
         >>> manager.order
         [u'v2', u'v1', u'v4', u'v3']
-
-        >>> manager = TestManager(context, request, view)
 
     """
 
@@ -430,10 +449,10 @@ def doctest_ViewletManager_filter():
         >>> view = 'view'
 
         >>> class TestManager(ViewletManager):
-        ...     def filter(self, viewlets):
+        ...     def filterViewlets(self, viewlets):
         ...         print 'Filter viewlets:'
         ...         print sorted(viewlets)
-        ...         return ViewletManager.filter(self, viewlets)
+        ...         return ViewletManager.filterViewlets(self, viewlets)
 
         >>> manager = TestManager(context, request, view)
 
@@ -459,7 +478,13 @@ def doctest_ViewletManager_filter():
         ...     viewletClass(requires=('v1', 'v2')),
         ...     manager, 'v6')
 
-        >>> filtered = manager.viewlets
+    Let's create the manager.
+
+        >>> manager = TestManager(context, request, view)
+
+    Filters are applied when collecting viewlets.
+
+        >>> viewlets = list(manager.viewlets)
         Filter viewlets:
         [(u'v1', <TestViewlet u'v1'>),
          (u'v2', <TestViewlet u'v2'>),
@@ -468,8 +493,30 @@ def doctest_ViewletManager_filter():
          (u'v5', <TestViewlet u'v5'>),
          (u'v6', <TestViewlet u'v6'>)]
 
-        >>> print filtered
+    Since viewlets are cached, they will not be filtered again on update:
+
+        >>> manager.update()
+        Updating <TestViewlet u'v1'>
+        Updating <TestViewlet u'v3'>
+        Updating <TestViewlet u'v5'>
+
+        >>> print manager.viewlets
         [<TestViewlet u'v1'>, <TestViewlet u'v3'>, <TestViewlet u'v5'>]
+
+    Lets try the default process and go straight to update.
+
+        >>> manager = TestManager(context, request, view)
+        >>> manager.update()
+        Filter viewlets:
+        [(u'v1', <TestViewlet u'v1'>),
+         (u'v2', <TestViewlet u'v2'>),
+         (u'v3', <TestViewlet u'v3'>),
+         (u'v4', <TestViewlet u'v4'>),
+         (u'v5', <TestViewlet u'v5'>),
+         (u'v6', <TestViewlet u'v6'>)]
+        Updating <TestViewlet u'v1'>
+        Updating <TestViewlet u'v3'>
+        Updating <TestViewlet u'v5'>
 
     """
 
@@ -580,8 +627,19 @@ def doctest_ManagerViewlet_viewlets():
         ...     print 'About to update', e.object
         >>> provideHandler(beforeUpdate, [IBeforeUpdateEvent])
 
+        >>> print viewlet.cache
+        None
+
         >>> print viewlet.viewlets
         [<TestViewlet u'v1'>, <TestViewlet u'v2'>]
+
+        >>> pprint(viewlet.cache)
+        {u'v1': <TestViewlet u'v1'>, u'v2': <TestViewlet u'v2'>}
+
+        >>> print viewlet.viewlets
+        [<TestViewlet u'v1'>, <TestViewlet u'v2'>]
+
+    Let's render:
 
         >>> result = viewlet('foo', bar='bar')
         About to update <TestManagerViewlet None>

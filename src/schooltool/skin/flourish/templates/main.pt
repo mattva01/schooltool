@@ -8,6 +8,14 @@
     <link rel="icon" type="image/png" href="favicon.ico"
           tal:attributes="href context/++resource++schooltool.skin.flourish/favicon.ico"/>
     <!-- zc.resourcelibrary -->
+    <tal:block replace="resource_library:schooltool.skin.flourish" />
+
+    <script>ST.state.push()</script>
+    <tal:script replace="structure scriptlocal: base_url context/schooltool:app/@@absolute_url" />
+    <script>ST.base_url = ST.local.base_url+'/'</script>
+    <script>ST.resource_url = ST.base_url+'@@/schooltool.skin.flourish/'</script>
+    <script>ST.state.pop()</script>
+
     <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu:regular,bold&subset=Latin" />
     <tal:block content="structure view/providers/html_head|nothing" />
     <title>
@@ -28,7 +36,6 @@
     </title>
   </head>
   <body>
-    <tal:block replace="resource_library:schooltool.skin.flourish" />
     <div class="schooltool">
       <div class="header">
         <h1 class="brand">
