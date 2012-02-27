@@ -198,22 +198,6 @@
       />
 
   <flourish:viewlet
-      name="members_table"
-      for="schooltool.group.interfaces.IBaseGroup"
-      class=".group.GroupMembersTable"
-      manager="schooltool.skin.flourish.interfaces.IAJAXParts"
-      permission="schooltool.view"
-      />
-
-  <flourish:viewlet
-      name="leaders_table"
-      for="schooltool.group.interfaces.IBaseGroup"
-      class=".group.GroupLeadersTable"
-      manager="schooltool.skin.flourish.interfaces.IAJAXParts"
-      permission="schooltool.view"
-      />
-
-  <flourish:viewlet
       name="filter"
       manager=".group.GroupLeadersTable"
       view=".group.FlourishGroupView"
