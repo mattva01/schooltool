@@ -670,8 +670,8 @@ class FlourishCourseFilterWidget(table.table.FilterWidget):
     template = ViewPageTemplateFile('templates/f_course_filter.pt')
 
     def filter(self, results):
-        if 'SEARCH_TITLE' in self.request:
-            searchstr = self.request['SEARCH_TITLE'].lower()
+        if 'SEARCH' in self.request:
+            searchstr = self.request['SEARCH'].lower()
             results = [item for item in results
                        if searchstr in item.title.lower() or
                        (item.course_id and searchstr in item.course_id.lower())]
