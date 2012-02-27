@@ -30,10 +30,10 @@ ST.table = function() {
       var container = $(ST.dialogs.jquery_id(container_id));
       var form = container.find('form');
 
-      if (!method) method = "GET";
+      if (!method) method = "POST";
 
       var request = $.ajax({
-          type: "POST",
+          type: method,
           url: url,
           data: data,
           });
