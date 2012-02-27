@@ -139,7 +139,7 @@
   <flourish:viewlet
       name="table"
       class=".group.GroupsTable"
-      view=".group.FlourishGroupsView"
+      for="schooltool.group.interfaces.IGroupContainer"
       manager="schooltool.skin.flourish.interfaces.IAJAXParts"
       permission="schooltool.view"
       />
@@ -151,6 +151,16 @@
       manager=".group.GroupsTable"
       view=".group.FlourishGroupsView"
       class="schooltool.app.browser.app.ManageItemDoneLink"
+      render="template"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="year_id"
+      after="filter"
+      view=".group.FlourishGroupsView"
+      manager=".group.GroupsTable"
+      class=".group.GroupsYear"
       render="template"
       permission="schooltool.view"
       />

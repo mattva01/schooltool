@@ -494,7 +494,7 @@ class FlourishGroupsView(flourish.page.Page,
                          GroupsActiveTabMixin):
 
     content_template = InlineViewPageTemplate('''
-      <div tal:content="structure context/schooltool:content/ajax/table" />
+      <div tal:content="structure context/schooltool:content/ajax/view/container/table" />
     ''')
 
     @property
@@ -503,26 +503,32 @@ class FlourishGroupsView(flourish.page.Page,
         return _('Groups for ${schoolyear}',
                  mapping={'schoolyear': schoolyear.title})
 
+    @Lazy
+    def container(self):
+        schoolyear = self.schoolyear
+        return IGroupContainer(schoolyear)
+
 
 class GroupsTable(table.ajax.Table):
 
-    @Lazy
-    def source(self):
-        schoolyear = self.view.schoolyear
-        return IGroupContainer(schoolyear)
-
-    def updateFormatter(self):
+    def columns(self):
+        default = table.ajax.Table.columns(self)
         description = zc.table.column.GetterColumn(
             name='description',
             title=_('Description'),
             getter=lambda i, f: i.description or '',
             )
-        self.setUp(formatters=[table.table.url_cell_formatter],
-                   table_formatter=self.table_formatter,
-                   batch_size=self.batch_size,
-                   prefix=self.__name__,
-                   columns_after=[description],
-                   css_classes={'table': 'data relationships-table'})
+        return default + [description]
+
+
+class GroupsYear(flourish.viewlet.Viewlet):
+
+    template = InlineViewPageTemplate('''
+      <input type="hidden" name="schoolyear_id"
+             tal:define="schoolyear_id view/view/schoolyear/__name__|nothing"
+             tal:condition="schoolyear_id"
+             tal:attributes="value schoolyear_id" />
+    ''')
 
 
 class FlourishGroupContainerDeleteView(flourish.containers.ContainerDeleteView):
