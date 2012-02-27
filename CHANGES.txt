@@ -7,6 +7,8 @@ CHANGES
 
 - Nothing changed yet.
 
+- Dynamic javascript person and other tables
+- Update jQuery to 1.7.1
 
 2.0.2 (2012-02-14)
 ------------------
