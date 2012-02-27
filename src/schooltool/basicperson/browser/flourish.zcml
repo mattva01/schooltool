@@ -100,15 +100,6 @@
       content_template="templates/f_person_add_multiple.pt"
       />
 
-<!--    <flourish:viewlet
-        name="add_multiple.html"
-        title="Add Persons"
-        class="schooltool.skin.flourish.page.LinkViewlet"
-        manager="schooltool.basicperson.browser.person.PersonContainerLinks"
-        permission="schooltool.edit"
-        /> -->
-
-
   <flourish:page
      name="add.html"
      subtitle="Add new person"
