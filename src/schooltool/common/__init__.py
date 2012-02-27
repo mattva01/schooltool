@@ -638,3 +638,20 @@ def format_message(message, mapping=None):
     assert isinstance(message, Message)
     return message.__class__(message, mapping=mapping)
 
+
+def stupid_form_key(item):
+    """Simple form key that uses item's __name__.
+    Very unsafe: __name__ is expected to be a unicode string that contains
+    who knows what.
+    """
+    return item.__name__
+
+
+def simple_form_key(item):
+    """Unique form key for items contained within a single container."""
+    name = getattr(item, '__name__', None)
+    if name is None:
+        return None
+    key = unicode(name).encode('punycode')
+    key = urllib.quote(key)
+    return key

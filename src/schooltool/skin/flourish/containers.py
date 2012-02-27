@@ -28,45 +28,8 @@ from zope.component import queryMultiAdapter
 from zope.security.checker import canAccess
 from zope.traversing.browser.absoluteurl import absoluteURL
 
-from schooltool.table.batch import IterableBatch
-from schooltool.table.table import url_cell_formatter
-from schooltool.table.interfaces import ITableFormatter
 from schooltool.skin.flourish.page import Page
 from schooltool.common import SchoolToolMessage as _
-
-
-class ContainerView(Page):
-    """A base view for all containers.
-
-    Subclasses must provide the following attributes that are used in the
-    page template:
-
-        `index_title` -- Title of the index page.
-
-    """
-
-    @property
-    def container(self):
-        return self.context
-
-    def update(self):
-        if 'SEARCH' in self.request and 'CLEAR_SEARCH' not in self.request:
-            searchstr = self.request['SEARCH'].lower()
-            results = [item for item in self.container.values()
-                       if searchstr in item.title.lower()]
-            search_string = self.request['SEARCH'].encode('UTF-8')
-            extra_url = "&SEARCH=%s" % urllib.quote_plus(search_string)
-        else:
-            self.request.form['SEARCH'] = ''
-            results = self.container.values()
-            extra_url = ""
-
-        self.batch = IterableBatch(results, self.request, sort_by='title',
-                                   extra_url=extra_url)
-
-    @property
-    def canModify(self):
-        return canAccess(self.container, '__delitem__')
 
 
 class ContainerDeleteView(Page):
@@ -96,44 +59,3 @@ class ContainerDeleteView(Page):
     def nextURL(self):
         return absoluteURL(self.container, self.request)
 
-
-class TableContainerView(Page):
-    """A base view for containers that use zc.table to display items."""
-
-    empty_message = _('There are none.')
-    content_template = ViewPageTemplateFile('templates/table_container.pt')
-    done_link = ''
-
-    def __init__(self, context, request):
-        self.request = request
-        self.context = context
-
-    def getColumnsBefore(self):
-        return []
-
-    def getColumnsAfter(self):
-        return []
-
-    def setUpTableFormatter(self, formatter):
-        columns_before = self.getColumnsBefore()
-        columns_after = self.getColumnsAfter()
-        formatter.setUp(formatters=[url_cell_formatter],
-                        columns_before=columns_before,
-                        columns_after=columns_after)
-
-    @property
-    def container(self):
-        return self.context
-
-    def update(self):
-        self.table = queryMultiAdapter((self.container, self.request),
-                                       ITableFormatter)
-        self.setUpTableFormatter(self.table)
-
-    @property
-    def deleteURL(self):
-        container_url = absoluteURL(self.container, self.request)
-        return '%s/%s' % (container_url, 'delete.html')
-
-    def canModify(self):
-        return canAccess(self.container, '__delitem__')

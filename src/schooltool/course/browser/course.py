@@ -19,10 +19,13 @@
 """
 course browser views.
 """
+
+import  zc.table.table
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.interface import implements
 from zope.component import adapts
 from zope.component import getMultiAdapter
+from zope.component import queryMultiAdapter
 from zope.component import getUtility
 from zope.container.interfaces import INameChooser
 from zope.interface import directlyProvides
@@ -38,7 +41,6 @@ from zope.traversing.browser.absoluteurl import absoluteURL
 from zope.i18n.interfaces.locales import ICollator
 from zope.i18n import translate
 from zope.viewlet.viewlet import ViewletBase
-from zc.table import table
 from zc.table.interfaces import ISortableColumn
 from z3c.form import field, button, form
 from z3c.form.interfaces import HIDDEN_MODE
@@ -57,7 +59,6 @@ from schooltool.course.interfaces import ILearner, IInstructor
 from schooltool.course.course import Course
 from schooltool.skin import flourish
 from schooltool.skin.flourish.viewlet import Viewlet
-from schooltool.skin.flourish.containers import TableContainerView
 from schooltool.skin.flourish.containers import ContainerDeleteView
 from schooltool.skin.flourish.page import RefineLinksViewlet
 from schooltool.skin.flourish.page import LinkViewlet
@@ -69,10 +70,8 @@ from schooltool.skin.flourish.form import AddForm
 from schooltool.skin.flourish.form import DialogForm
 from schooltool.skin.flourish.form import DisplayForm
 from schooltool.skin.flourish.page import TertiaryNavigationManager
-from schooltool.table.table import SchoolToolTableFormatter
-from schooltool.table.table import FilterWidget
+from schooltool import table
 from schooltool.table.interfaces import ITableFormatter
-from schooltool.table.table import LocaleAwareGetterColumn
 from schooltool.common import SchoolToolMessage as _
 
 
@@ -406,9 +405,14 @@ class CourseAddLinkFromCourseViewlet(CourseAddLinkViewlet):
             absoluteURL(self.context, self.request))
 
 
-class FlourishCoursesView(TableContainerView, CoursesActiveTabMixin):
+class FlourishCoursesView(table.table.TableContainerView,
+                          CoursesActiveTabMixin):
 
-    content_template = ViewPageTemplateFile('templates/f_courses.pt')
+    content_template = InlineViewPageTemplate('''
+      <div>
+        <tal:block content="structure view/container/schooltool:content/ajax/table" />
+      </div>
+    ''')
 
     @property
     def title(self):
@@ -420,6 +424,57 @@ class FlourishCoursesView(TableContainerView, CoursesActiveTabMixin):
     def container(self):
         schoolyear = self.schoolyear
         return ICourseContainer(schoolyear)
+
+
+def getCoursesTable(context, request, view, manager):
+    container = view.container
+    table = queryMultiAdapter(
+        (container, request, view, manager),
+        flourish.interfaces.IViewlet,
+        'table')
+    return table
+
+
+class CoursesTable(table.ajax.Table):
+
+    def columns(self):
+        title = table.table.LocaleAwareGetterColumn(
+            name='title',
+            title=_(u'Title'),
+            getter=lambda i, f: i.title,
+            subsort=True)
+        course_id = table.table.LocaleAwareGetterColumn(
+            name='course_id',
+            title=_('Course ID'),
+            getter=lambda i, f: i.course_id or '',
+            subsort=True)
+        directlyProvides(title, ISortableColumn)
+        directlyProvides(course_id, ISortableColumn)
+        return [title, course_id]
+
+
+class CourseTableSchoolYear(flourish.viewlet.Viewlet):
+    template = InlineViewPageTemplate('''
+      <input type="hidden" name="schoolyear_id"
+             tal:define="schoolyear_id view/view/schoolyear/__name__|nothing"
+             tal:condition="schoolyear_id"
+             tal:attributes="value schoolyear_id" />
+    ''')
+
+
+class CourseTableDoneLink(flourish.viewlet.Viewlet):
+    template = InlineViewPageTemplate('''
+      <h3 tal:define="can_manage context/schooltool:app/schooltool:can_edit">
+        <tal:block condition="can_manage">
+          <a tal:attributes="href string:${context/schooltool:app/@@absolute_url}/manage"
+             i18n:translate="">Done</a>
+        </tal:block>
+        <tal:block condition="not:can_manage">
+          <a tal:attributes="href request/principal/schooltool:person/@@absolute_url"
+             i18n:translate="">Done</a>
+        </tal:block>
+      </h3>
+      ''')
 
 
 class CourseContainerTitle(ContentTitle):
@@ -478,18 +533,6 @@ class FlourishCourseView(DisplayForm):
         for widget in self.widgets.values():
             if not widget.value:
                 widget.mode = HIDDEN_MODE
-
-    # XXX: leaders logic, duplicated from FlourishBaseResourceView
-
-    @property
-    def leaders_table(self):
-        return self.getTable(list(self.context.leaders))
-
-    def getTable(self, items):
-        persons = ISchoolToolApplication(None)['persons']
-        result = getMultiAdapter((persons, self.request), ITableFormatter)
-        result.setUp(table_formatter=table.StandaloneFullFormatter, items=items)
-        return result
 
     def has_leaders(self):
         return bool(list(self.context.leaders))
@@ -608,28 +651,38 @@ class FlourishCourseDeleteView(DialogForm, form.EditForm):
         self.actions['cancel'].addClass('button-cancel')
 
 
-class FlourishCourseFilterWidget(FilterWidget):
+class FlourishCourseFilterWidget(table.table.FilterWidget):
 
     template = ViewPageTemplateFile('templates/f_course_filter.pt')
 
     def filter(self, results):
-        if 'SEARCH_TITLE' in self.request:
-            searchstr = self.request['SEARCH_TITLE'].lower()
+        if 'SEARCH' in self.request:
+            searchstr = self.request['SEARCH'].lower()
             results = [item for item in results
                        if searchstr in item.title.lower() or
                        (item.course_id and searchstr in item.course_id.lower())]
         return results
 
 
-class FlourishCourseTableFormatter(SchoolToolTableFormatter):
+class CoursesTableFilter(table.ajax.TableFilter, FlourishCourseFilterWidget):
+
+    title = _("Title or course ID")
+
+    def filter(self, results):
+        if self.ignoreRequest:
+            return results
+        return FlourishCourseFilterWidget.filter(self, results)
+
+
+class FlourishCourseTableFormatter(table.table.SchoolToolTableFormatter):
 
     def columns(self):
-        title = LocaleAwareGetterColumn(
+        title = table.table.LocaleAwareGetterColumn(
             name='title',
             title=_(u'Title'),
             getter=lambda i, f: i.title,
             subsort=True)
-        course_id = LocaleAwareGetterColumn(
+        course_id = table.table.LocaleAwareGetterColumn(
             name='course_id',
             title=_('Course ID'),
             getter=lambda i, f: i.course_id or '',

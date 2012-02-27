@@ -97,9 +97,9 @@ class Batch(object):
         start = 0
         num = 1
         while self.full_size > start:
-            css_class = None
+            css_class = 'batch_page'
             if (self.start == start):
-                css_class = 'current'
+                css_class = 'batch_page current'
             href = '%s?batch_start%s=%s&batch_size%s=%s%s' % (
                 self.base_url, self.name, start, self.name, self.size, self.extra_url)
             urls.append({'href': href,
@@ -148,3 +148,70 @@ class IterableBatch(Batch):
 
     def __iter__(self):
         return iter(self.list)
+
+
+class TokenBatch(object):
+    """Another batching mechanism for Tables"""
+
+    def __init__(self, items, start=0, size=0):
+        self.items = list(items)
+        self.full_size = len(self.items)
+        self.start = start
+        self.size = size
+        self.length = len(self.items[self.start:self.start + self.size])
+
+    @property
+    def needsBatch(self):
+        there_are_more = self.full_size > self.size + self.start
+        there_were_before = self.start > 0
+        return there_are_more or there_were_before
+
+    def __len__(self):
+        return self.length
+
+    def __iter__(self):
+        return iter(self.items[self.start:self.start + self.size])
+
+    def previous(self):
+        start = self.start - self.size
+        if start >= 0:
+            return {'start': start,
+                    'size': self.size,
+                    'items': self.items[start:start+self.size]}
+        if start > -self.size:
+            return {'start': 0,
+                    'size': self.size,
+                    'items': self.items[0:self.size]}
+        return None
+
+    def next(self):
+        start = self.start + self.size
+        if self.full_size > start:
+            return {'start': start,
+                    'size': self.size,
+                    'items': self.items[start:start+self.size]}
+        return None
+
+    def current(self):
+        return self.start / self.size + 1
+
+    def numBatches(self):
+        num = self.full_size / self.size
+        if self.full_size % self.size:
+            num += 1
+        return num
+
+    def tokens(self):
+        tokens = []
+        start = 0
+        num = 1
+        while self.full_size > start:
+            tokens.append({
+                    'num': num,
+                    'start': start,
+                    'size': self.size,
+                    'current': bool(self.start == start),
+                    'items': self.items[start:start+self.size]})
+            num += 1
+            start += self.size
+        return tokens

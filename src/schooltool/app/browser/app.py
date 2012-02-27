@@ -78,6 +78,7 @@ from schooltool.app.utils import vocabulary
 from schooltool.skin.flourish.content import ContentProvider
 from schooltool.common.inlinept import InlineViewPageTemplate
 from schooltool.person.interfaces import IPerson
+from schooltool import table
 from schooltool.table.table import CheckboxColumn
 from schooltool.table.table import label_cell_formatter_factory
 from schooltool.table.table import stupid_form_key
@@ -220,7 +221,7 @@ class RelationshipViewBase(BrowserView):
         self.setUpTables()
 
 
-class CSSFormatter(FormFullFormatter):
+class CSSFormatter(table.table.SortUIHeaderMixin, FormFullFormatter):
 
     def renderHeaders(self):
         result = []
@@ -829,6 +830,21 @@ class ServerActionsLinks(flourish.page.RefineLinksViewlet):
 
 class ManageSchool(flourish.page.Page):
     pass
+
+
+class ManageItemDoneLink(flourish.viewlet.Viewlet):
+    template = InlineViewPageTemplate('''
+      <h3 tal:define="can_manage context/schooltool:app/schooltool:can_edit">
+        <tal:block condition="can_manage">
+          <a tal:attributes="href string:${context/schooltool:app/@@absolute_url}/manage"
+             i18n:translate="">Done</a>
+        </tal:block>
+        <tal:block condition="not:can_manage">
+          <a tal:attributes="href request/principal/schooltool:person/@@absolute_url"
+             i18n:translate="">Done</a>
+        </tal:block>
+      </h3>
+      ''')
 
 
 class ManageSiteLinks(flourish.page.RefineLinksViewlet):

@@ -11,6 +11,34 @@
            schooltool.skin.flourish.interfaces.IFlourishLayer"
       factory=".contact.FlourishContactTableFormatter " />
 
+  <flourish:viewlet
+      name="table"
+      for="schooltool.contact.interfaces.IContactContainer"
+      class=".contact.ContactTable"
+      manager="schooltool.skin.flourish.interfaces.IAJAXParts"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="filter"
+      before="batch table"
+      class=".contact.ContactTableFilter"
+      render="template"
+      manager=".contact.ContactTable"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="done"
+      before="table batch"
+      after="filter"
+      manager=".contact.ContactTable"
+      view=".contact.FlourishContactContainerView"
+      class="schooltool.app.browser.app.ManageItemDoneLink"
+      render="template"
+      permission="schooltool.view"
+      />
+
   <zope:adapter
       for="schooltool.contact.interfaces.IContactContainer
            schooltool.skin.flourish.interfaces.IFlourishLayer"
@@ -153,7 +181,7 @@
       class="schooltool.skin.flourish.page.Related"
       template="templates/f_contacts_related.pt"
       for="schooltool.contact.interfaces.IContactContainer"
-      view="schooltool.skin.flourish.containers.TableContainerView"
+      view="schooltool.table.table.TableContainerView"
       manager="schooltool.skin.flourish.page.IPageRelatedManager"
       permission="schooltool.view"
       />

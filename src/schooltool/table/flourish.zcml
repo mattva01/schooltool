@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/browser"
+           xmlns:z3c="http://namespaces.zope.org/z3c"
+           xmlns:zope="http://namespaces.zope.org/zope"
+           xmlns:flourish="http://schooltool.org/flourish"
+           i18n_domain="schooltool">
+
+  <flourish:viewlet
+      name="table"
+      class="schooltool.table.ajax.Table"
+      manager="schooltool.skin.flourish.interfaces.IAJAXParts"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="filter"
+      class="schooltool.table.ajax.TableFilter"
+      render="template"
+      manager="schooltool.table.ajax.Table"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="batch"
+      class="schooltool.table.ajax.TableBatch"
+      manager="schooltool.table.ajax.Table"
+      template="templates/f_batch.pt"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="table"
+      class="schooltool.table.ajax.TableTable"
+      manager="schooltool.table.ajax.Table"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="filter"
+      class="schooltool.table.ajax.IndexedTableFilter"
+      render="template"
+      manager="schooltool.table.ajax.IndexedTable"
+      permission="schooltool.view"
+      />
+
+  <!-- resources -->
+
+  <zope:resourceLibrary
+      name="schooltool.table"
+      require="schooltool.skin.flourish"
+      layer="schooltool.skin.flourish.IFlourishLayer">
+    <directory
+        source="resources"
+        include="table.js"
+        />
+  </zope:resourceLibrary>
+
+</configure>

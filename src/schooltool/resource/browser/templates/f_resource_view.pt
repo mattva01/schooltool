@@ -82,7 +82,7 @@
       </a>
     </h3>
     <p i18n:translate="" class="hint">These users can modify the resource.</p>
-    <tal:block tal:replace="structure view/leaders_table/render"
+    <tal:block tal:replace="structure context/schooltool:content/ajax/view/context/leaders/person_table"
                tal:condition="view/has_leaders" />
     <p tal:condition="not:view/has_leaders" i18n:translate="">
       This resource has no responsible parties

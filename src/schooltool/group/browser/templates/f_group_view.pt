@@ -82,22 +82,8 @@
       </a>
     </h3>
 
-    <form tal:condition="view/has_members">
-
-    <tal:block tal:replace="structure view/members_table/filter_widget/render|nothing" />
-
-    <tal:if condition="view/members_table/batch">
-      <div class="count" i18n:translate="">
-        Showing
-        <span i18n:name="count" tal:content="view/members_table/batch/length"/>
-        of
-        <span i18n:name="total" tal:content="view/members_table/batch/full_size"/>
-        items
-      </div>
-      <tal:block replace="structure view/members_table/batch/render" />
-    </tal:if>
-      <tal:block replace="structure view/members_table/render" />
-    </form>
+    <tal:block condition="view/has_members"
+               replace="structure context/schooltool:content/ajax/view/context/members/person_table" />
 
     <h3 tal:condition="not:view/has_members" i18n:translate="">
       This group has no members
@@ -114,8 +100,9 @@
       </a>
     </h3>
     <p i18n:translate="" class="hint">These users can modify the group.</p>
-    <tal:block tal:replace="structure view/leaders_table/render"
-               tal:condition="view/has_leaders" />
+
+    <tal:block condition="view/has_leaders"
+               replace="structure context/schooltool:content/ajax/view/context/leaders/person_table" />
     <p tal:condition="not:view/has_leaders" i18n:translate="">
       This group has no responsible parties
     </p>

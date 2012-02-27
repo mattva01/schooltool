@@ -20,27 +20,75 @@
 """
 import urllib
 
+import zope.security
 from zope.interface import implements
 from zope.interface import directlyProvides
-from zope.i18n.interfaces.locales import ICollator
-from zope.i18n import translate
 from zope.browserpage import ViewPageTemplateFile
-from zope.component import queryAdapter, queryMultiAdapter
-from zope.security.proxy import removeSecurityProxy
-from zope.app.dependable.interfaces import IDependable
+from zope.cachedescriptors.property import Lazy
+from zope.component import queryMultiAdapter
 from zope.traversing.browser.absoluteurl import absoluteURL
 
-from zc.table import table
-from zc.table import column
+import zc.table
+import zc.table.table
+from zc.table.interfaces import IColumnSortedItems
 from zc.table.interfaces import ISortableColumn
 from zc.table.column import GetterColumn
 
+from schooltool.common import stupid_form_key
+from schooltool.skin import flourish
 from schooltool.table.batch import Batch
 from schooltool.table.interfaces import IFilterWidget
 from schooltool.table.interfaces import ITableFormatter
-from schooltool.table.interfaces import ICheckboxColumn
+
+# BBB: imports
+from schooltool.common import simple_form_key
+from schooltool.table.column import (
+    getResourceURL,
+    CheckboxColumn, DependableCheckboxColumn,
+    DateColumn, LocaleAwareGetterColumn,
+    ImageInputColumn, ImageInputValueColumn,
+    )
 
 from schooltool.common import SchoolToolMessage as _
+
+
+class SortUIHeaderMixin(object):
+    """Mixin for zc table formatters."""
+
+    def _getColumnSortClass(self, column):
+        if not IColumnSortedItems.providedBy(self.items):
+            return ""
+        col_name = column.name
+        for n, (name, reversed) in enumerate(self.items.sort_on):
+            if name == col_name:
+                if n == 0:
+                    return (reversed and "zc-table-sort-desc-primary" or
+                                         "zc-table-sort-asc-primary")
+                return (reversed and "zc-table-sort-desc" or
+                                     "zc-table-sort-asc")
+        return "zc-table-sort-asc"
+
+    def _addSortUi(self, header, column):
+        css_class = "zc-table-sortable "
+        css_class += self._getColumnSortClass(column)
+        columnName = column.name
+        sort_on_name = zc.table.table.getSortOnName(self.prefix)
+        script_name = self.script_name
+        return self._header_template(locals())
+
+    def _header_template(self, options):
+        options = dict(options)
+        template = """
+            <span class="%(css_class)s"
+                  onclick="javascript: %(script_name)s(
+                        '%(columnName)s', '%(sort_on_name)s')">
+                %(header)s</span>
+            """
+        return template % options
+
+
+class FormFullFormatter(SortUIHeaderMixin, zc.table.table.FormFullFormatter):
+    pass
 
 
 class FilterWidget(object):
@@ -55,6 +103,10 @@ class FilterWidget(object):
     def __init__(self, context, request):
         self.context = context
         self.request = request
+
+    @property
+    def source(self):
+        return self.context
 
     def render(self):
         return self.template()
@@ -88,177 +140,9 @@ def label_cell_formatter_factory(prefix="", id_getter=None):
     return label_cell_formatter
 
 
-def stupid_form_key(item):
-    """Simple form key that uses item's __name__.
-    Very unsafe: __name__ is expected to be a unicode string that contains
-    who knows what.
-    """
-    return item.__name__
-
-
-def simple_form_key(item):
-    """Unique form key for items contained within a single container."""
-    name = getattr(item, '__name__', None)
-    if name is None:
-        return None
-    key = unicode(name).encode('punycode')
-    key = urllib.quote(key)
-    return key
-
-
-class CheckboxColumn(column.Column):
-    """A columns with a checkbox
-
-    The name and id of the checkbox are composed of the prefix keyword
-    argument and __name__ (or other value if form_id_builder is specified) of
-    the item being displayed.
-    """
-    implements(ICheckboxColumn)
-
-    def __init__(self, prefix, name=None, title=None,
-                 isDisabled=None, id_getter=None):
-        super(CheckboxColumn, self).__init__(name=name, title=title)
-        if isDisabled:
-            self.isDisabled = isDisabled
-        self.prefix = prefix
-        if id_getter is None:
-            self.id_getter = stupid_form_key
-        else:
-            self.id_getter = id_getter
-
-    def isDisabled(self, item):
-        return False
-
-    def renderCell(self, item, formatter):
-        if not self.isDisabled(item):
-            form_id = ".".join(filter(None, [self.prefix, self.id_getter(item)]))
-            return '<input type="checkbox" name="%s" id="%s" />' % (
-                form_id, form_id)
-        else:
-            return ''
-
-
-class DependableCheckboxColumn(CheckboxColumn):
-    """A column that displays a checkbox that is disabled if item has dependables.
-
-    The name and id of the checkbox are composed of the prefix keyword
-    argument and __name__ of the item being displayed.
-    """
-
-    def __init__(self, *args, **kw):
-        kw = dict(kw)
-        self.show_disabled = kw.pop('show_disabled', True)
-        super(DependableCheckboxColumn, self).__init__(*args, **kw)
-
-    def renderCell(self, item, formatter):
-        form_id = ".".join(filter(None, [self.prefix, self.id_getter(item)]))
-        if self.hasDependents(item):
-            if self.show_disabled:
-                return '<input type="checkbox" name="%s" id="%s" disabled="disabled" />' % (form_id, form_id)
-            else:
-                return ''
-        else:
-            checked = form_id in formatter.request and 'checked="checked"' or ''
-            return '<input type="checkbox" name="%s" id="%s" %s/>' % (
-                form_id, form_id, checked)
-
-    def hasDependents(self, item):
-        # We cannot adapt security-proxied objects to IDependable.  Unwrapping
-        # is safe since we do not modify anything, and the information whether
-        # an object can be deleted or not is not classified.
-        unwrapped_context = removeSecurityProxy(item)
-        dependable = IDependable(unwrapped_context, None)
-        if dependable is None:
-            return False
-        else:
-            return bool(dependable.dependents())
-
-
 def url_cell_formatter(value, item, formatter):
     url = absoluteURL(item, formatter.request)
     return '<a href="%s">%s</a>' % (url, value)
-
-
-class DateColumn(column.GetterColumn):
-    """Table column that displays dates.
-
-    Sortable even when None values are around.
-    """
-
-    def getSortKey(self, item, formatter):
-        if self.getter(item, formatter) is None:
-            return date.min
-        else:
-            return self.getter(item, formatter)
-
-    def cell_formatter(self, maybe_date, item, formatter):
-        view = queryMultiAdapter((maybe_date, formatter.request),
-                                 name='mediumDate',
-                                 default=lambda: '')
-        return view()
-
-
-class LocaleAwareGetterColumn(GetterColumn):
-    """Getter columnt that has locale aware sorting."""
-
-    implements(ISortableColumn)
-
-    def getSortKey(self, item, formatter):
-        collator = ICollator(formatter.request.locale)
-        s = self.getter(item, formatter)
-        return s and collator.key(s)
-
-
-class ImageInputColumn(column.Column):
-
-    def __init__(self, prefix, title=None, name=None,
-                 alt=None, library=None, image=None, id_getter=None):
-        super(ImageInputColumn, self).__init__(title=title, name=name)
-        self.prefix = prefix
-        self.alt = alt
-        self.library = library
-        self.image = image
-        if id_getter is None:
-            self.id_getter = stupid_form_key
-        else:
-            self.id_getter = id_getter
-
-    def getImageURL(self, item, formatter):
-        if not self.image:
-            return None
-        if self.library is not None:
-            library = queryAdapter(formatter.request, name=self.library)
-            image = library.get(self.image)
-        else:
-            image = queryAdapter(formatter.request, name=self.image)
-        if image is None:
-            return None
-        return absoluteURL(image, formatter.request)
-
-    def params(self, item, formatter):
-        image_url = self.getImageURL(item, formatter)
-        if not image_url:
-            return None
-        form_id = ".".join(filter(None, [self.prefix, self.id_getter(item)]))
-        return {
-            'title': translate(self.title, context=formatter.request) or '',
-            'alt': translate(self.alt, context=formatter.request) or '',
-            'name': form_id,
-            'src': image_url,
-            }
-
-    def renderCell(self, item, formatter):
-        params = self.params(item, formatter)
-        if not params:
-            return ''
-        return self.template() % params
-
-    def template(self):
-        return '\n'.join([
-                '<button class="image" type="submit" name="%(name)s" title="%(title)s" value="1">',
-                '<img src="%(src)s" alt="%(alt)s" />',
-                '</button>'
-                ])
 
 
 class NullTableFormatter(object):
@@ -280,12 +164,18 @@ class NullTableFormatter(object):
 class SchoolToolTableFormatter(object):
     implements(ITableFormatter)
 
-    filter_widget = None
     batch = None
+    batch_size = 25
+
     css_classes = None
+    _table_formatter = None
 
     def __init__(self, context, request):
         self.context, self.request = context, request
+
+    @property
+    def source(self):
+        return self.context
 
     def columns(self):
         title = GetterColumn(name='title',
@@ -296,12 +186,22 @@ class SchoolToolTableFormatter(object):
         return [title]
 
     def items(self):
-        return self.context.values()
+        return self.source.values()
 
     def ommit(self, items, ommited_items):
         ommited_items = set(ommited_items)
         return [item for item in items
                 if item not in ommited_items]
+
+    @Lazy
+    def batch(self):
+        return Batch(self, batch_size=self.batch_size)
+
+    @Lazy
+    def filter_widget(self):
+        widget = queryMultiAdapter((self.source, self.request),
+                                   IFilterWidget)
+        return widget
 
     def filter(self, items):
         # if there is no filter widget, we just return all the items
@@ -315,11 +215,10 @@ class SchoolToolTableFormatter(object):
 
     def setUp(self, items=None, ommit=[], filter=None, columns=None,
               columns_before=[], columns_after=[], sort_on=None, prefix="",
-              formatters=[], table_formatter=table.FormFullFormatter,
+              formatters=[], table_formatter=FormFullFormatter,
               batch_size=25, css_classes=None):
 
-        self.filter_widget = queryMultiAdapter((self.context, self.request),
-                                               IFilterWidget)
+        self.prefix = prefix
 
         self._table_formatter = table_formatter
 
@@ -340,19 +239,16 @@ class SchoolToolTableFormatter(object):
 
         self._items = filter(self.ommit(items, ommit))
 
-        self.prefix = prefix
-
         if batch_size == 0:
             batch_size = len(list(self._items))
 
-        self.batch = Batch(self, batch_size=batch_size)
-
+        self.batch_size = batch_size
         self._sort_on = sort_on or self.sortOn()
 
         if css_classes:
             self.css_classes = css_classes
         else:
-            self.css_classes = {'table': 'data'}
+            self.css_classes = {'table': 'data relationships-table'}
 
     def extra_url(self):
         extra_url = ""
@@ -366,7 +262,7 @@ class SchoolToolTableFormatter(object):
 
     def render(self):
         formatter = self._table_formatter(
-            self.context, self.request, self._items,
+            self.source, self.request, self._items,
             columns=self._columns,
             batch_start=self.batch.start, batch_size=self.batch.size,
             sort_on=self._sort_on,
@@ -374,3 +270,76 @@ class SchoolToolTableFormatter(object):
         formatter.cssClasses.update(self.css_classes)
         return formatter()
 
+
+class TableContent(flourish.content.ContentProvider, SchoolToolTableFormatter):
+
+    def __init__(self, context, request, view):
+        flourish.content.ContentProvider.__init__(
+            self, context, request, view)
+
+    @property
+    def source(self):
+        return self.context
+
+    def update(self):
+        flourish.content.ContentProvider.update(self)
+        if self._table_formatter is None:
+            self.setUp()
+
+    def render(self, *args, **kw):
+        formatter = self._table_formatter(
+            self.source, self.request, self._items,
+            columns=self._columns,
+            batch_start=self.batch.start, batch_size=self.batch.size,
+            sort_on=self._sort_on,
+            prefix=self.prefix)
+        formatter.cssClasses.update(self.css_classes)
+        return formatter()
+
+
+class TableContainerView(flourish.page.Page):
+    """A base view for containers that use zc.table to display items."""
+
+    empty_message = _('There are none.')
+    content_template = ViewPageTemplateFile('templates/f_table_container.pt')
+    done_link = ''
+
+    def __init__(self, context, request):
+        self.request = request
+        self.context = context
+
+    def getColumnsBefore(self):
+        return []
+
+    def getColumnsAfter(self):
+        return []
+
+    def setUpTableFormatter(self, formatter):
+        columns_before = self.getColumnsBefore()
+        columns_after = self.getColumnsAfter()
+        formatter.setUp(formatters=[url_cell_formatter],
+                        columns_before=columns_before,
+                        columns_after=columns_after)
+
+    @property
+    def container(self):
+        return self.context
+
+    def update(self):
+        self.table = queryMultiAdapter((self.container, self.request),
+                                       ITableFormatter)
+        self.setUpTableFormatter(self.table)
+
+    @property
+    def deleteURL(self):
+        container_url = absoluteURL(self.container, self.request)
+        return '%s/%s' % (container_url, 'delete.html')
+
+    def canModify(self):
+        return zope.security.canAccess(self.container, '__delitem__')
+
+
+class DoNotFilter(flourish.EmptyViewlet):
+
+    def filter(self, list):
+        return list

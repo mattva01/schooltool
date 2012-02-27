@@ -25,7 +25,7 @@ import zope.schema
 from zope.proxy import sameProxiedObjects
 from zope.interface import implements
 
-from schooltool.table.table import simple_form_key
+from schooltool.common import simple_form_key
 
 
 def vocabulary(choices):
