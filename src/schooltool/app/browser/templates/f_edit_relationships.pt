@@ -55,7 +55,7 @@
              tal:attributes="value batch/size" />
 
       <div class="buttons">
-        <input id="form-buttons-cancel" name="ADD_DISPLAYED_RESULTS"
+        <input id="form-buttons-add" name="ADD_DISPLAYED_RESULTS"
                class="submit-widget button-field button-ok"
                value="Add all displayed" type="submit"
                i18n:attributes="value" />

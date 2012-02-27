@@ -34,7 +34,7 @@ from zope.traversing.browser.absoluteurl import absoluteURL
 from zope.publisher.browser import BrowserView
 from zope.schema.interfaces import IField
 from zope.schema import Bytes
-from zope.schema._bootstrapinterfaces import TooLong
+from zope.schema.interfaces import TooLong
 
 from z3c.form.browser.file import FileWidget
 from z3c.form.interfaces import IFieldWidget, NOT_CHANGED
