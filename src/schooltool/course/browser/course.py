@@ -456,7 +456,7 @@ class CoursesTable(table.ajax.Table):
 class CourseTableSchoolYear(flourish.viewlet.Viewlet):
     template = InlineViewPageTemplate('''
       <input type="hidden" name="schoolyear_id"
-             tal:define="schoolyear_id request/schoolyear_id|nothing"
+             tal:define="schoolyear_id view/view/schoolyear/__name__|nothing"
              tal:condition="schoolyear_id"
              tal:attributes="value schoolyear_id" />
     ''')

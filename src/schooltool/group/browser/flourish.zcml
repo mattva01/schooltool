@@ -156,11 +156,11 @@
       />
 
   <flourish:viewlet
-      name="year_id"
+      name="schoolyear"
       after="filter"
       view=".group.FlourishGroupsView"
       manager=".group.GroupsTable"
-      class=".group.GroupsYear"
+      class=".group.GroupsTableSchoolYear"
       render="template"
       permission="schooltool.view"
       />

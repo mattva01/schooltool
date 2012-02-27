@@ -521,7 +521,7 @@ class GroupsTable(table.ajax.Table):
         return default + [description]
 
 
-class GroupsYear(flourish.viewlet.Viewlet):
+class GroupsTableSchoolYear(flourish.viewlet.Viewlet):
 
     template = InlineViewPageTemplate('''
       <input type="hidden" name="schoolyear_id"

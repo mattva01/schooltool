@@ -43,6 +43,8 @@
 
   <flourish:viewlet
       name="schoolyear"
+      after="filter"
+      view="schooltool.course.browser.course.FlourishCoursesView"
       manager=".course.CoursesTable"
       class=".course.CourseTableSchoolYear"
       render="template"
