@@ -521,6 +521,11 @@ class GroupsTable(table.ajax.Table):
         return default + [description]
 
 
+class GroupsTableFilter(table.ajax.TableFilter):
+
+    title = _("Group title")
+
+
 class GroupsTableSchoolYear(flourish.viewlet.Viewlet):
 
     template = InlineViewPageTemplate('''

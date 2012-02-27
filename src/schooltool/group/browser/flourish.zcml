@@ -156,6 +156,14 @@
       />
 
   <flourish:viewlet
+      name="filter"
+      class=".group.GroupsTableFilter"
+      render="template"
+      manager=".group.GroupsTable"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
       name="schoolyear"
       after="filter"
       view=".group.FlourishGroupsView"
