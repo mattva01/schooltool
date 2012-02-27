@@ -159,3 +159,7 @@ class IndexedTableFormatter(SchoolToolTableFormatter):
         formatter.cssClasses['table'] = 'data'
         return formatter()
 
+# BBB
+from schooltool.table.column import makeIndexedColumn
+from schooltool.table.column import RenderUnindexingMixin, unindex
+

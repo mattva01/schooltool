@@ -290,10 +290,11 @@ class HeaderNavigationManager(ListNavigationContent):
 
     @Lazy
     def viewlets(self):
+        if self.cache is None:
+            self.collect()
         app = ISchoolToolApplication(None)
         apptabs = IApplicationTabs(app)
-        d = self.viewlet_dict
-        return [d[key] for key in self.order if apptabs.get(key, True)]
+        return [self[key] for key in self.order if apptabs.get(key, True)]
 
 
 class SecondaryNavigationManager(ListNavigationContent):
