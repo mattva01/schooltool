@@ -123,9 +123,7 @@
       </a>
     </h3>
     <tal:block tal:condition="view/has_instructors">
-      <tal:block tal:condition="view/instructors_table/batch/needsBatch"
-                 tal:replace="structure view/instructors_table/batch/render" />
-      <tal:block tal:replace="structure view/instructors_table/render" />
+      <tal:block content="structure context/schooltool:content/ajax/view/context/instructors/person_table" />
     </tal:block>
     <h3 tal:condition="not:view/has_instructors" i18n:translate="">
       This section has no instructors
@@ -141,9 +139,7 @@
       </a>
     </h3>
     <tal:block tal:condition="view/has_learners">
-      <tal:block tal:condition="view/learners_table/batch/needsBatch"
-                 tal:replace="structure view/learners_table/batch/render" />
-      <tal:block tal:replace="structure view/learners_table/render" />
+      <tal:block content="structure context/schooltool:content/ajax/view/context/members/person_table" />
     </tal:block>
     <h3 tal:condition="not:view/has_learners" i18n:translate="">
       This section has no students

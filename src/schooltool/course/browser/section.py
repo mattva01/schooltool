@@ -1107,16 +1107,6 @@ class FlourishSectionView(DisplayForm):
             if not widget.value:
                 widget.mode = HIDDEN_MODE
 
-    @Lazy
-    def learners_table(self):
-        return self.getTable(list(self.context.members), 'students',
-                             batch_size=0)
-
-    @Lazy
-    def instructors_table(self):
-        return self.getTable(list(self.context.instructors), 'instructors',
-                             batch_size=0)
-
     def has_instructors(self):
         return bool(list(self.context.instructors))
 
