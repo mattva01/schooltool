@@ -13,7 +13,7 @@
     </div>
   </tal:if>
   <fieldset>
-    <legend><span i18n:translate="" tal:content="view/legend">Search</span></legend>
+    <legend><span tal:content="view/legend">Search</span></legend>
     <div class="row">
       <div class="label">
         <label for="SEARCH">

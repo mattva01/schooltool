@@ -8,4 +8,4 @@
           tal:attributes="id view/html_id"
           tal:content="view/title"></span>
   </tal:block>
-<div>
+</div>

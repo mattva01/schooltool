@@ -238,9 +238,6 @@ $(document).ready(function() {
         if ($(e.target).hasClass('popup_link') == false) {
             $('.popup_active').hide().removeClass('popup_active');
         }
-        if ($('.ui-dialog').has($(e.target)).length == 0) {
-            $('#filldown-dialog-container').dialog('close');
-        }
     });
     // row colors
     $('.students tbody tr:odd').addClass('odd');

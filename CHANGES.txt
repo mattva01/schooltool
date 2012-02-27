@@ -5,7 +5,7 @@ CHANGES
 2.0.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- tab hiding (https://launchpad.net/bugs/938810)
 
 - Dynamic javascript person and other tables
 - Update jQuery to 1.7.1

@@ -33,6 +33,8 @@ from zope.traversing.api import getParent
 from zope.traversing.browser.interfaces import IAbsoluteURL
 from zope.traversing.browser.absoluteurl import absoluteURL, AbsoluteURL
 
+from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.app.interfaces import IApplicationTabs
 from schooltool.common.inlinept import InlineViewPageTemplate
 from schooltool.common.inlinept import InheritTemplate
 from schooltool.skin.flourish.viewlet import Viewlet, ViewletManager
@@ -285,6 +287,14 @@ class HeaderNavigationManager(ListNavigationContent):
         </ul>
     """)
     list_class = "navigation"
+
+    @Lazy
+    def viewlets(self):
+        if self.cache is None:
+            self.collect()
+        app = ISchoolToolApplication(None)
+        apptabs = IApplicationTabs(app)
+        return [self[key] for key in self.order if apptabs.get(key, True)]
 
 
 class SecondaryNavigationManager(ListNavigationContent):

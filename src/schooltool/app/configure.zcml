@@ -30,6 +30,13 @@
       trusted="true"
       />
 
+  <adapter
+      for=".interfaces.ISchoolToolApplication"
+      provides=".interfaces.IApplicationTabs"
+      factory=".app.getApplicationTabs"
+      trusted="true"
+      />
+
   <class class=".cal.WriteCalendar">
     <allow interface=".interfaces.IWriteCalendar" />
   </class>
