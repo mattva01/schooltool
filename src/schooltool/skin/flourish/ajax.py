@@ -19,9 +19,7 @@
 """
 Schooltool page AJAX parts.
 """
-
-import zope.security.proxy
-from zope.component import adapts, queryMultiAdapter
+from zope.component import adapts
 from zope.interface import implements
 from zope.location.interfaces import LocationError
 from zope.publisher.interfaces import NotFound
@@ -32,7 +30,6 @@ from schooltool.skin.flourish import interfaces
 from schooltool.skin.flourish import tal
 from schooltool.skin.flourish.viewlet import Viewlet, ViewletManagerBase
 from schooltool.skin.flourish.viewlet import ManagerViewlet
-from schooltool.traverser.traverser import TraverserPlugin
 
 
 class AJAXPart(Viewlet):
@@ -103,19 +100,3 @@ class AJAXPartsTraversable(object):
             return self.parts[name]
         except (KeyError, TypeError):
             raise LocationError(self.parts, name)
-
-
-class ViewAJAXPartsTraverser(TraverserPlugin):
-
-    def __init__(self, view, request):
-        self.view = view
-        self.context = view.context
-        self.request = request
-
-    def traverse(self, name):
-        parts = queryMultiAdapter(
-            (self.context, self.request, self.view),
-            interfaces.IContentProvider, 'ajax')
-        if parts is None:
-            raise NotFound(self.view, name, self.request)
-        return parts

@@ -211,7 +211,7 @@
       for=".interfaces.IPage"
       layer="schooltool.skin.flourish.IFlourishLayer"
       name="ajax"
-      plugin=".ajax.ViewAJAXPartsTraverser"
+      plugin=".page.PageContentTraverser"
       permission="zope.Public"
       />
 

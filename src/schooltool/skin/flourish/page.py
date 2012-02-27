@@ -27,6 +27,7 @@ from zope.cachedescriptors.property import Lazy
 from zope.component import getMultiAdapter, queryMultiAdapter
 from zope.interface import implements
 from zope.publisher.browser import BrowserPage
+from zope.publisher.interfaces import NotFound
 from zope.browser.interfaces import IBrowserView
 from zope.traversing.api import getParent
 from zope.traversing.browser.interfaces import IAbsoluteURL
@@ -37,7 +38,7 @@ from schooltool.common.inlinept import InheritTemplate
 from schooltool.skin.flourish.viewlet import Viewlet, ViewletManager
 from schooltool.skin.flourish.viewlet import ManagerViewlet
 from schooltool.skin.flourish import interfaces
-from schooltool.traverser.traverser import PluggableTraverser
+from schooltool.traverser.traverser import PluggableTraverser, TraverserPlugin
 
 
 class Page(BrowserPage):
@@ -77,6 +78,22 @@ class Page(BrowserPage):
             return u''
         result = self.render(*args, **kw)
         return result
+
+
+class PageContentTraverser(TraverserPlugin):
+
+    def __init__(self, view, request):
+        self.view = view
+        self.context = view.context
+        self.request = request
+
+    def traverse(self, name):
+        parts = queryMultiAdapter(
+            (self.context, self.request, self.view),
+            interfaces.IContentProvider, name)
+        if parts is None:
+            raise NotFound(self.view, name, self.request)
+        return parts
 
 
 class PageAbsoluteURL(AbsoluteURL):
