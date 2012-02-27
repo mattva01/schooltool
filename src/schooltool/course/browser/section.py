@@ -1113,16 +1113,6 @@ class FlourishSectionView(DisplayForm):
     def has_learners(self):
         return bool(list(self.context.members))
 
-    def getTable(self, items, prefix, **kw):
-        persons = ISchoolToolApplication(None)['persons']
-        result = getMultiAdapter((persons, self.request),
-                                 table.interfaces.ITableFormatter)
-        result.setUp(
-            table_formatter=zc.table.table.StandaloneFullFormatter,
-            items=items,
-            prefix=prefix, **kw)
-        return result
-
 
 class FlourishSectionAddView(Form, SectionAddView):
 
