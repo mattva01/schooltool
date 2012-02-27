@@ -1123,25 +1123,18 @@ class IDCardsPageTemplate(DefaultPageTemplate):
     template = ViewPageTemplateFile('templates/f_id_cards_template.pt',
                                     content_type="text/xml")
 
-from reportlab.lib.pagesizes import LETTER
+
 class FlourishPersonIDCardsViewBase(ReportPDFView):
 
     template=ViewPageTemplateFile('templates/f_person_id_cards.pt')
     title = _('ID Cards')
     COLUMNS = 2
     ROWS = 4
-    pageSize = LETTER
-    # Used by the report page template
-    CARD_MARGIN = 0.55
-    CARD_OUTTER_HEIGHT = 5.4
-    CARD_OUTTER_WIDTH = 8.57
-    CARD_TITLE_HEIGHT = 1.1
-    CARD_TITLE_WIDTH = 8.57
-    CARD_DEMOGRAPHICS_HEIGHT = 3.2
-    CARD_DEMOGRAPHICS_WIDTH = 5.05
-    PHOTO_HEIGHT = 3.2
-    PHOTO_WIDTH = 2.4
     # All of the following are cm
+    CARD = {'height': 5.4, 'width': 8.57}
+    TITLE = {'height': 1.1, 'padding': 0.06}
+    DEMOGRAPHICS = {'margin': 0.55, 'height': 3.2, 'width': 5.05}
+    PHOTO = {'height': 3.2, 'width': 2.4}
     LEFT_BASE = 1.7
     TOP_BASE = 7.3
     COLUMN_WIDTH = 9.6
@@ -1208,74 +1201,68 @@ class FlourishPersonIDCardsViewBase(ReportPDFView):
     def personFrame(self, repeat):
         return repeat['person'].index() % self.total_cards_in_page
 
-    def frames(self):
+    def cards(self):
         result = []
-        for i in range(self.total_cards_in_page):
-            index_in_columns = i % self.COLUMNS
-            base_x1 = self.left + (self.COLUMN_WIDTH * index_in_columns)
-            index_in_rows = i / self.COLUMNS
-            base_y1 = self.top - (self.ROW_HEIGHT * index_in_rows)
-            info = {
-                'outter': self.getOutterFrame(i, base_x1, base_y1),
-                'title': self.getTitleFrame(i, base_x1, base_y1),
-                'demographics': self.getDemographicsFrame(i, base_x1, base_y1),
+        for card_index in range(self.total_cards_in_page):
+            card_column = card_index % self.COLUMNS
+            card_row = card_index / self.COLUMNS
+            card_x1 = self.left + (self.COLUMN_WIDTH * card_column)
+            card_y1 = self.top - (self.ROW_HEIGHT * card_row)
+            card_info = {
+                'index': card_index,
+                'x1': card_x1,
+                'y1': card_y1,
+                'height': self.CARD['height'],
+                'width': self.CARD['width'],
                 }
-            result.append(info)
+            result.append(card_info)
         return result
 
-    def getOutterFrame(self, i, base_x1, base_y1):
-        return {
-            'id': 'outter_%d' % i,
-            'x1': base_x1,
-            'y1': base_y1,
-            'width': self.CARD_OUTTER_WIDTH,
-            'height': self.CARD_OUTTER_HEIGHT,
-            'maxWidth': self.CARD_OUTTER_WIDTH,
-            'maxHeight': self.CARD_OUTTER_HEIGHT,
-            }
+    @Lazy
+    def cardFrames(self):
+        result = {}
+        for card_info in self.cards():
+            info = {
+                'outter': self.getOutterFrame(card_info),
+                'title': self.getTitleFrame(card_info),
+                'demographics': self.getDemographicsFrame(card_info),
+                }
+            result[card_info['index']] = info
+        return result
 
-    def getTitleFrame(self, i, base_x1, base_y1):
-        y1 = base_y1 + (self.CARD_OUTTER_HEIGHT - self.CARD_TITLE_HEIGHT)
+    def getOutterFrame(self, card_info):
+        frame_info = card_info.copy()
+        frame_info['id'] = 'outter_%d' % card_info['index']
+        frame_info['maxWidth'] = card_info['width']
+        frame_info['maxHeight'] = card_info['height']
+        return frame_info
+
+    def getTitleFrame(self, card_info):
+        y1 = card_info['y1'] + (card_info['height'] - self.TITLE['height'])
         return {
-            'id': 'title_%d' % i,
-            'x1': base_x1,
+            'id': 'title_%d' % card_info['index'],
+            'x1': card_info['x1'],
             'y1': y1,
-            'width': self.CARD_TITLE_WIDTH,
-            'height': self.CARD_TITLE_HEIGHT,
-            'maxWidth': self.CARD_TITLE_WIDTH - 0.06,
-            'maxHeight': self.CARD_TITLE_HEIGHT - 0.06,
+            'width': card_info['width'],
+            'maxWidth': card_info['width'] - self.TITLE['padding'],
+            'height': self.TITLE['height'],
+            'maxHeight': self.TITLE['height'] - self.TITLE['padding'],
             }
 
-    def getDemographicsFrame(self, i, base_x1, base_y1):
-        x1 = base_x1 + self.CARD_MARGIN
-        y1 = base_y1 + (self.CARD_OUTTER_HEIGHT - self.CARD_TITLE_HEIGHT - self.CARD_DEMOGRAPHICS_HEIGHT - self.CARD_MARGIN)
+    def getDemographicsFrame(self, card_info):
+        x1 = card_info['x1'] + self.DEMOGRAPHICS['margin']
+        y1 = card_info['y1'] + (card_info['height'] - self.TITLE['height'] -
+                                self.DEMOGRAPHICS['height'] -
+                                self.DEMOGRAPHICS['margin'])
         return {
-            'id': 'demographics_%d' % i,
+            'id': 'demographics_%d' % card_info['index'],
             'x1': x1,
             'y1': y1,
-            'width': self.CARD_DEMOGRAPHICS_WIDTH,
-            'height': self.CARD_DEMOGRAPHICS_HEIGHT,
-            'maxWidth': self.CARD_DEMOGRAPHICS_WIDTH,
-            'maxHeight': self.CARD_DEMOGRAPHICS_HEIGHT,
+            'width': self.DEMOGRAPHICS['width'],
+            'maxWidth': self.DEMOGRAPHICS['width'],
+            'height': self.DEMOGRAPHICS['height'],
+            'maxHeight': self.DEMOGRAPHICS['height'],
             }
-
-    def getPhotoFrame(self, i, base_x1, base_y1):
-        x1 = base_x1 + self.CARD_DEMOGRAPHICS_WIDTH + self.CARD_MARGIN
-        y1 = base_y1 + (self.CARD_OUTTER_HEIGHT - self.CARD_TITLE_HEIGHT - self.CARD_PHOTO_HEIGHT - self.CARD_MARGIN)
-        return {
-            'id': 'photo_%d' % i,
-            'x1': x1,
-            'y1': y1,
-            'width': self.CARD_PHOTO_WIDTH,
-            'height': self.CARD_PHOTO_HEIGHT,
-            'maxWidth': self.CARD_PHOTO_WIDTH,
-            'maxHeight': self.CARD_PHOTO_HEIGHT,
-            }
-
-    def frameInfo(self, frame_index):
-        for i, frame in enumerate(self.frames()):
-            if i == int(frame_index):
-                return frame
 
 
 class FlourishPersonIDCardView(FlourishPersonIDCardsViewBase):

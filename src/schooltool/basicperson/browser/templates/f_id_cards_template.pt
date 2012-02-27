@@ -59,7 +59,8 @@
     </tal:block>
 
   </pageGraphics>
-  <tal:loop tal:repeat="frame view/parent/frames">
+  <tal:loop tal:define="cardFrames view/parent/cardFrames"
+            tal:repeat="frame python:cardFrames.values()">
     <frame tal:define="info frame/outter"
            tal:attributes="id info/id;
                            x1 string:${info/x1}cm;

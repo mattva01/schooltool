@@ -39,9 +39,10 @@
     </metal:block>
   </stylesheet>
   <story metal:fill-slot="story">
-    <tal:block repeat="person view/persons">
+    <tal:block repeat="person view/persons"
+               tal:define="cardFrames view/cardFrames">
       <tal:block tal:define="frame python:view.personFrame(repeat);
-                             frameInfo python:view.frameInfo(frame);">
+                             frameInfo python:cardFrames[frame];">
         <illustration
             tal:attributes="height string:${frameInfo/outter/height}cm;
                             width string:${frameInfo/outter/width}cm">
@@ -58,15 +59,15 @@
                 />
           <image tal:condition="person/photo"
                  x="5.6cm" y="0.55cm"
-                 tal:attributes="height string:${view/PHOTO_HEIGHT}cm;
-                                 width string:${view/PHOTO_WIDTH}cm;
+                 tal:attributes="height string:${view/PHOTO/height}cm;
+                                 width string:${view/PHOTO/width}cm;
                                  file person/photo/@@data_uri;"
                  />
           <rect fill="false" stroke="true"
                 tal:condition="not:person/photo"
                 x="5.6cm" y="0.55cm"
-                tal:attributes="height string:${view/PHOTO_HEIGHT}cm;
-                                width string:${view/PHOTO_WIDTH}cm;"
+                tal:attributes="height string:${view/PHOTO/height}cm;
+                                width string:${view/PHOTO/width}cm;"
                 />
         </illustration>
         <keepInFrame
