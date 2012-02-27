@@ -299,7 +299,7 @@ class TableContainerView(flourish.page.Page):
         return zope.security.canAccess(self.container, '__delitem__')
 
 
-class DoNotFilter(flourish.Empty):
+class DoNotFilter(flourish.EmptyViewlet):
 
     def filter(self, list):
         return list

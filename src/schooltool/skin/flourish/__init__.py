@@ -42,8 +42,13 @@ from schooltool.skin.flourish.interfaces import IFlourishLayer
 
 class Empty(object):
 
-    def __init__(self, *args, **kw):
-        pass
+    __name__ = None
+    __parent__ = None
+
+    def __init__(self, context, request, *args, **kw):
+        self.__parent__ = context
+        self.context = context
+        self.request = request
 
     def update(self):
         pass
@@ -53,6 +58,22 @@ class Empty(object):
 
     def __call__(self, *args, **kw):
         return ''
+
+
+class EmptyContent(Empty):
+
+    def __init__(self, context, request, view, **kw):
+        Empty.__init__(self, context, request, **kw)
+        self.__parent__ = view
+        self.view = view
+
+
+class EmptyViewlet(EmptyContent):
+
+    def __init__(self, context, request, view, manager, **kw):
+        EmptyContent.__init__(self, context, request, view, **kw)
+        self.__parent__ = manager
+        self.manager = manager
 
 
 def canView(context):
