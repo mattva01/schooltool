@@ -25,6 +25,7 @@ import zope.viewlet.interfaces
 import zope.contentprovider.interfaces
 from zope.interface import Interface, Attribute
 from zope.location.interfaces import ILocation
+from zope.publisher.interfaces import IPublishTraverse
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 from zope.publisher.interfaces.browser import IBrowserPage
 from zope.traversing.interfaces import ITraversable
@@ -128,7 +129,7 @@ class IPage(IBrowserPage, ILocation):
         pass
 
 
-class IFromPublication(Interface):
+class IFromPublication(IPublishTraverse):
 
     fromPublication = zope.schema.Bool(
         title=_('Accessed from publication'),

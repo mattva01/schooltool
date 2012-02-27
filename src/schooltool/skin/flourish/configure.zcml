@@ -205,6 +205,7 @@
       for=".ajax.AJAXParts"
       provides="zope.traversing.interfaces.ITraversable"
       factory=".ajax.AJAXPartsTraversable"
+      permission="zope.Public"
       />
 
   <zope:traverserPlugin
@@ -219,6 +220,25 @@
       name="ajax"
       class=".ajax.AJAXParts"
       provides=".interfaces.IAJAXParts"
+      permission="zope.Public"
+      />
+
+  <zope:adapter
+      for=".ajax.SubContextParts"
+      provides="zope.traversing.interfaces.ITraversable"
+      factory=".ajax.ContextTraversable"
+      permission="zope.Public"
+      />
+
+  <zope:class class=".ajax.SubContextParts">
+    <require permission="zope.Public"
+             interface="schooltool.skin.flourish.interfaces.IFromPublication" />
+  </zope:class>
+
+  <flourish:viewlet
+      name="view"
+      class=".ajax.ViewContextParts"
+      manager=".ajax.AJAXParts"
       permission="zope.Public"
       />
 

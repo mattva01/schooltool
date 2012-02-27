@@ -24,6 +24,7 @@ from zope.interface import implements
 from zope.location.interfaces import LocationError
 from zope.publisher.interfaces import NotFound
 from zope.publisher.interfaces.browser import IBrowserPublisher
+from zope.traversing.api import traverseName
 from zope.traversing.interfaces import ITraversable
 
 from schooltool.skin.flourish import interfaces
@@ -78,12 +79,14 @@ class CompositeAJAXPart(ManagerViewlet, AJAXPart):
 class AJAXParts(ViewletManagerBase):
     implements(interfaces.IAJAXParts)
 
-    render = lambda self, *args, **kw: ''
+    def render(self, *args, **kw):
+        raise NotFound(self.__parent__, self.__name__, self.request)
 
     def publishTraverse(self, request, name):
-        part = self.get(name)
-        if part is None:
-            raise NotFound(self, name, request)
+        try:
+            part = traverseName(self, name)
+        except LocationError:
+            raise NotFound(self, name, self.request)
         return part
 
 
@@ -100,3 +103,40 @@ class AJAXPartsTraversable(object):
             return self.parts[name]
         except (KeyError, TypeError):
             raise LocationError(self.parts, name)
+
+
+class SubContextParts(CompositeAJAXPart, AJAXParts):
+
+    render = AJAXParts.render
+    publishTraverse = AJAXParts.publishTraverse
+
+
+class ViewContextParts(SubContextParts):
+
+    def __init__(self, context, request, view, manager):
+        SubContextParts.__init__(self, view, request, view, manager)
+
+
+class ContextTraversable(object):
+    adapts(SubContextParts)
+    implements(ITraversable)
+
+    def __init__(self, parts):
+        self.parts = parts
+
+    def traverse(self, name, furtherPath):
+        __traceback_info__ = (self.parts, name, furtherPath)
+        try:
+            return self.parts[name]
+        except (KeyError, TypeError):
+            pass
+
+        try:
+            next = traverseName(self.parts.context, name)
+        except LocationError:
+            raise
+
+        parts = SubContextParts(
+            next, self.parts.request, self.parts.view, self.parts)
+        parts.__name__ = name
+        return parts
