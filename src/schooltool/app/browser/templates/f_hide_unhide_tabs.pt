@@ -1,0 +1,32 @@
+<div i18n:domain="schooltool">
+  <form method="post"
+        tal:attributes="action string:${context/@@absolute_url}/hide_unhide_tabs.html">
+    <input type="hidden" name="form-submitted" value="" />
+    <h3 i18n:translate="">Hide or Unhide Tabs</h3>
+    <table>
+      <thead>
+        <tr>
+          <th i18n:translate="">Title</th>
+          <th i18n:translate="">Hidden?</th>
+        </tr>
+      </thead>
+      <tr tal:repeat="tab view/tabs">
+        <td>
+          <span tal:content="tab/title" />
+        </td>
+        <td>
+          <input type="checkbox" name="hidden:list"
+                 onchange="this.form.submit()"
+                 tal:attributes="value tab/name;
+                                 checked tab/checked" />
+        </td>
+      </tr>
+    </table>
+
+    <h3>
+      <a tal:attributes="href string:${context/@@absolute_url}/settings"
+         i18n:translate="">Done</a>
+    </h3>
+  </form>
+</div>
+

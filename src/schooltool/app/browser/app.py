@@ -71,6 +71,7 @@ from schooltool.app.browser.interfaces import IManageMenuViewletManager
 from schooltool.app.interfaces import ISchoolToolAuthenticationPlugin
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
+from schooltool.app.interfaces import IApplicationTabs
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.app.interfaces import IAsset
 from schooltool.app.utils import vocabulary
@@ -1077,6 +1078,38 @@ class ErrorsBreadcrumb(flourish.breadcrumbs.Breadcrumbs):
     @property
     def follow_crumb(self):
         return ManageSiteBreadcrumb(self.context, self.request, self.view)
+
+
+class FlourishHideUnhideTabsView(flourish.page.Page):
+
+    ignore_tabs = ['manage_school', 'manage_site']
+
+    @property
+    def tabs(self):
+        tabs = []
+        apptabs = removeSecurityProxy(IApplicationTabs(self.context))
+        provider = queryMultiAdapter(
+            (self.context, self.request, self),
+            flourish.interfaces.IContentProvider, 'header_navigation')
+        for name in provider.order:
+            if name in self.ignore_tabs:
+                continue
+            tabs.append({
+                'title': removeSecurityProxy(provider[name]).title,
+                'name': name,
+                'checked': not apptabs.get(name, True) and 'checked' or '',
+                })
+        return tabs
+
+    def update(self):
+        if 'form-submitted' in self.request:
+            hidden = self.request.get('hidden', [])
+            apptabs = removeSecurityProxy(IApplicationTabs(self.context))
+            for tab in set(hidden + list(apptabs)):
+                if tab in hidden:
+                    apptabs[tab] = False
+                elif tab in apptabs:
+                    apptabs[tab] = True
 
 
 class FlourishAboutView(flourish.page.Page):
