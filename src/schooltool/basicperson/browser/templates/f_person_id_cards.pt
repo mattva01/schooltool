@@ -21,18 +21,56 @@
           fontName="Ubuntu_Regular"
           fontSize="10" />
       <paraStyle
+          parent="normal"
+          name="bold"
+          fontName="Ubuntu_Bold" />
+      <paraStyle
           name="card_title"
           alignment="center"
+          textColor="white"
           fontName="Ubuntu_Bold"
           fontSize="14" />
+      <paraStyle
+          name="demographics_title"
+          alignment="left"
+          textColor="#999999"
+          fontName="Ubuntu_Regular"
+          fontSize="12" />
     </metal:block>
   </stylesheet>
   <story metal:fill-slot="story">
     <tal:block repeat="person view/persons">
-      <tal:block tal:define="frame python:view.personFrame(repeat)">
+      <tal:block tal:define="frame python:view.personFrame(repeat);
+                             frameInfo python:view.frameInfo(frame);">
+        <illustration
+            tal:attributes="height string:${frameInfo/outter/height}cm;
+                            width string:${frameInfo/outter/width}cm">
+          <lineMode width="0.0125cm" />
+          <stroke color="black" />
+          <fill color="#999999" />
+          <rect x="0cm" y="0cm" fill="false" stroke="true"
+                tal:attributes="height string:${frameInfo/outter/height}cm;
+                                width string:${frameInfo/outter/width}cm;"
+                />
+          <rect x="0cm" y="4.3cm" fill="true" stroke="false"
+                tal:attributes="height string:${frameInfo/title/height}cm;
+                                width string:${frameInfo/title/width}cm;"
+                />
+          <image tal:condition="person/photo"
+                 x="5.6cm" y="0.55cm"
+                 tal:attributes="height string:${view/PHOTO_HEIGHT}cm;
+                                 width string:${view/PHOTO_WIDTH}cm;
+                                 file person/photo/@@data_uri;"
+                 />
+          <rect fill="false" stroke="true"
+                tal:condition="not:person/photo"
+                x="5.6cm" y="0.55cm"
+                tal:attributes="height string:${view/PHOTO_HEIGHT}cm;
+                                width string:${view/PHOTO_WIDTH}cm;"
+                />
+        </illustration>
         <keepInFrame
             onOverflow="shrink"
-            tal:define="frameInfo python:view.frameInfo(frame);"
             tal:attributes="frame string:title_${frame};
                             maxWidth string:${frameInfo/title/maxWidth}cm;
                             maxHeight string:${frameInfo/title/maxHeight}cm">
@@ -40,12 +78,41 @@
           <para style="card_title" tal:content="view/schoolName" />
         </keepInFrame>
         <keepInFrame
+            onOverflow="shrink"
             tal:attributes="frame string:demographics_${frame}">
-          <para style="normal" tal:content="person/first_name" />
-          <para style="normal" tal:content="person/last_name" />
-        </keepInFrame>
-        <keepInFrame
-            tal:attributes="frame string:photo_${frame}">
+          <para style="demographics_title" tal:content="person/first_name" />
+          <para style="demographics_title" tal:content="person/last_name" />
+          <spacer length="0.1cm" />
+          <para style="normal">
+            <b i18n:translate="">ID:</b>
+            <tal:block tal:content="person/ID" />
+          </para>
+          <para style="normal">
+            <b i18n:translate="">Birth date:</b>
+            <tal:block tal:content="person/birth_date" />
+          </para>
+          <para style="bold" i18n:translate="">
+            Contact
+          </para>
+          <para style="normal"
+                tal:define="contact_title person/contact_title">
+            <tal:block tal:condition="contact_title"
+                       tal:content="contact_title" />
+            <tal:block tal:condition="not:contact_title">
+              <b>&nbsp;</b>
+            </tal:block>
+          </para>
+          <para style="bold" i18n:translate="">
+            Contact's Phone
+          </para>
+          <para style="normal"
+                tal:define="contact_phone person/contact_phone">
+            <tal:block tal:condition="contact_phone"
+                       tal:content="contact_phone" />
+            <tal:block tal:condition="not:contact_phone">
+              <b>&nbsp;</b>
+            </tal:block>
+          </para>
         </keepInFrame>
       </tal:block>
       <nextPage tal:condition="python:view.insertBreak(repeat)" />

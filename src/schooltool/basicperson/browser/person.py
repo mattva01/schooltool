@@ -1139,8 +1139,8 @@ class FlourishPersonIDCardsViewBase(ReportPDFView):
     CARD_TITLE_WIDTH = 8.57
     CARD_DEMOGRAPHICS_HEIGHT = 3.2
     CARD_DEMOGRAPHICS_WIDTH = 5.05
-    CARD_PHOTO_HEIGHT = 3.2
-    CARD_PHOTO_WIDTH = 2.4
+    PHOTO_HEIGHT = 3.2
+    PHOTO_WIDTH = 2.4
     # All of the following are cm
     LEFT_BASE = 1.7
     TOP_BASE = 7.3
@@ -1190,6 +1190,7 @@ class FlourishPersonIDCardsViewBase(ReportPDFView):
             'birth_date': person.birth_date,
             'contact_title': contact_title,
             'contact_phone': contact_phone,
+            'photo': person.photo,
             }
 
     def titleSpacerLength(self):
@@ -1211,56 +1212,70 @@ class FlourishPersonIDCardsViewBase(ReportPDFView):
         result = []
         for i in range(self.total_cards_in_page):
             index_in_columns = i % self.COLUMNS
-            x1 = self.left + (self.COLUMN_WIDTH * index_in_columns)
+            base_x1 = self.left + (self.COLUMN_WIDTH * index_in_columns)
             index_in_rows = i / self.COLUMNS
-            y1 = self.top - (self.ROW_HEIGHT * index_in_rows)
+            base_y1 = self.top - (self.ROW_HEIGHT * index_in_rows)
             info = {
-                'outter': self.getOutterFrame(i, x1, y1),
-                'title': self.getTitleFrame(i, x1, y1),
-                'demographics': self.getDemographicsFrame(i, x1, y1),
-                'photo': self.getPhotoFrame(i, x1, y1),
+                'outter': self.getOutterFrame(i, base_x1, base_y1),
+                'title': self.getTitleFrame(i, base_x1, base_y1),
+                'demographics': self.getDemographicsFrame(i, base_x1, base_y1),
                 }
             result.append(info)
         return result
 
-    def getOutterFrame(self, i, x1, y1):
-        return {'id': 'outter_%d' % i, 'x1': x1, 'y1': y1,
-                'width': self.CARD_OUTTER_WIDTH,
-                'height': self.CARD_OUTTER_HEIGHT}
-
-    def getTitleFrame(self, i, x1, y1):
-        y1 = y1 + (self.CARD_OUTTER_HEIGHT - self.CARD_TITLE_HEIGHT)
+    def getOutterFrame(self, i, base_x1, base_y1):
         return {
-            'id': 'title_%d' % i, 'x1': x1, 'y1': y1,
+            'id': 'outter_%d' % i,
+            'x1': base_x1,
+            'y1': base_y1,
+            'width': self.CARD_OUTTER_WIDTH,
+            'height': self.CARD_OUTTER_HEIGHT,
+            'maxWidth': self.CARD_OUTTER_WIDTH,
+            'maxHeight': self.CARD_OUTTER_HEIGHT,
+            }
+
+    def getTitleFrame(self, i, base_x1, base_y1):
+        y1 = base_y1 + (self.CARD_OUTTER_HEIGHT - self.CARD_TITLE_HEIGHT)
+        return {
+            'id': 'title_%d' % i,
+            'x1': base_x1,
+            'y1': y1,
             'width': self.CARD_TITLE_WIDTH,
             'height': self.CARD_TITLE_HEIGHT,
             'maxWidth': self.CARD_TITLE_WIDTH - 0.06,
             'maxHeight': self.CARD_TITLE_HEIGHT - 0.06,
             }
 
-    def getDemographicsFrame(self, i, x1, y1):
-        x1 = x1 + self.CARD_MARGIN
-        y1 = y1 + (self.CARD_OUTTER_HEIGHT - self.CARD_TITLE_HEIGHT - self.CARD_DEMOGRAPHICS_HEIGHT - self.CARD_MARGIN)
-        return {'id': 'demographics_%d' % i, 'x1': x1, 'y1': y1,
-                'width': self.CARD_DEMOGRAPHICS_WIDTH,
-                'height': self.CARD_DEMOGRAPHICS_HEIGHT}
+    def getDemographicsFrame(self, i, base_x1, base_y1):
+        x1 = base_x1 + self.CARD_MARGIN
+        y1 = base_y1 + (self.CARD_OUTTER_HEIGHT - self.CARD_TITLE_HEIGHT - self.CARD_DEMOGRAPHICS_HEIGHT - self.CARD_MARGIN)
+        return {
+            'id': 'demographics_%d' % i,
+            'x1': x1,
+            'y1': y1,
+            'width': self.CARD_DEMOGRAPHICS_WIDTH,
+            'height': self.CARD_DEMOGRAPHICS_HEIGHT,
+            'maxWidth': self.CARD_DEMOGRAPHICS_WIDTH,
+            'maxHeight': self.CARD_DEMOGRAPHICS_HEIGHT,
+            }
 
-    def getPhotoFrame(self, i, x1, y1):
-        x1 = x1 + self.CARD_DEMOGRAPHICS_WIDTH + self.CARD_MARGIN
-        y1 = y1 + (self.CARD_OUTTER_HEIGHT - self.CARD_TITLE_HEIGHT - self.CARD_PHOTO_HEIGHT - self.CARD_MARGIN)
-        return {'id': 'photo_%d' % i, 'x1': x1, 'y1': y1,
-                'width': self.CARD_PHOTO_WIDTH,
-                'height': self.CARD_PHOTO_HEIGHT}
+    def getPhotoFrame(self, i, base_x1, base_y1):
+        x1 = base_x1 + self.CARD_DEMOGRAPHICS_WIDTH + self.CARD_MARGIN
+        y1 = base_y1 + (self.CARD_OUTTER_HEIGHT - self.CARD_TITLE_HEIGHT - self.CARD_PHOTO_HEIGHT - self.CARD_MARGIN)
+        return {
+            'id': 'photo_%d' % i,
+            'x1': x1,
+            'y1': y1,
+            'width': self.CARD_PHOTO_WIDTH,
+            'height': self.CARD_PHOTO_HEIGHT,
+            'maxWidth': self.CARD_PHOTO_WIDTH,
+            'maxHeight': self.CARD_PHOTO_HEIGHT,
+            }
 
     def frameInfo(self, frame_index):
         for i, frame in enumerate(self.frames()):
             if i == int(frame_index):
                 return frame
-        
-    def __call__(self):
-        if self.request.get('t') is not None:
-            return self.template()
-        return super(FlourishPersonIDCardsViewBase, self).__call__()
 
 
 class FlourishPersonIDCardView(FlourishPersonIDCardsViewBase):
