@@ -116,6 +116,8 @@ class Table(flourish.ajax.CompositeAJAXPart, TableContent):
         return self.get('batch')
 
     def updateFormatter(self):
+        if self._table_formatter is not None:
+            return
         self.setUp(formatters=[url_cell_formatter],
                    table_formatter=self.table_formatter,
                    batch_size=self.batch_size,
