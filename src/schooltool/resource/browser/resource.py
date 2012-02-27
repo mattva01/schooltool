@@ -521,19 +521,6 @@ class FlourishBaseResourceView(flourish.page.Page, BaseResourceView):
     def canModify(self):
         return canAccess(self.context.__parent__, '__delitem__')
 
-    @property
-    def leaders_table(self):
-        return self.getTable(list(self.context.leaders))
-
-    def getTable(self, items):
-        persons = ISchoolToolApplication(None)['persons']
-        result = getMultiAdapter((persons, self.request),
-                                 table.interfaces.ITableFormatter)
-        result.setUp(
-            table_formatter=zc.table.table.StandaloneFullFormatter,
-            items=items)
-        return result
-
     def has_leaders(self):
         return bool(list(self.context.leaders))
 

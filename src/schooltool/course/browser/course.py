@@ -534,20 +534,6 @@ class FlourishCourseView(DisplayForm):
             if not widget.value:
                 widget.mode = HIDDEN_MODE
 
-    # XXX: leaders logic, duplicated from FlourishBaseResourceView
-
-    @property
-    def leaders_table(self):
-        return self.getTable(list(self.context.leaders))
-
-    def getTable(self, items):
-        persons = ISchoolToolApplication(None)['persons']
-        result = getMultiAdapter((persons, self.request), ITableFormatter)
-        result.setUp(
-            table_formatter=zc.table.table.StandaloneFullFormatter,
-            items=items)
-        return result
-
     def has_leaders(self):
         return bool(list(self.context.leaders))
 
