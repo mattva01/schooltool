@@ -291,6 +291,25 @@
       permission="schooltool.edit"
       />
 
+  <flourish:viewlet
+      name="hide_unhide_tabs.html"
+      after="errors"
+      title="Tabs"
+      class="schooltool.skin.flourish.page.LinkViewlet"
+      manager="schooltool.app.browser.app.ManageSiteLinks"
+      permission="schooltool.edit"
+      />
+
+  <flourish:page
+      name="hide_unhide_tabs.html"
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      class=".app.FlourishHideUnhideTabsView"
+      title="Server"
+      subtitle="Tabs"
+      content_template="templates/f_hide_unhide_tabs.pt"
+      permission="schooltool.edit"
+      />
+
   <flourish:page
       name="showTextTBEntry.html"
       for="schooltool.app.interfaces.ISchoolToolApplication"

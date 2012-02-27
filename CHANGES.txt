@@ -5,7 +5,7 @@ CHANGES
 2.0.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- tab hiding (https://launchpad.net/bugs/938810)
 
 
 2.0.2 (2012-02-14)

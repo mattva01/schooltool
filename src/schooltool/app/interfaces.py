@@ -139,6 +139,10 @@ class IApplicationPreferences(ICalendarDisplayPreferences):
         default=True)
 
 
+class IApplicationTabs(Interface):
+    """Tab visible settings stored in an annotation on SchoolToolApplication."""
+
+
 class ISchoolToolAuthentication(IAuthentication, ILogout):
     """A local authentication utility for SchoolTool"""
 
