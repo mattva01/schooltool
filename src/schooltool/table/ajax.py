@@ -103,9 +103,6 @@ class Table(flourish.ajax.CompositeAJAXPart, TableContent):
 
     inside_form = False # don't surround with <form> tag if inside_form
 
-    def __init__(self, *args, **kw):
-        super(Table, self).__init__(*args, **kw)
-
     @Lazy
     def html_id(self):
         return flourish.page.generic_viewlet_html_id(self, self.prefix)
