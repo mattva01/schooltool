@@ -315,6 +315,51 @@
       permission="schooltool.view"
       />
 
+  <flourish:viewlet
+      name="table"
+      class=".section.SectionsTable"
+      for="schooltool.course.interfaces.ISectionContainer"
+      manager="schooltool.skin.flourish.interfaces.IAJAXParts"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="filter"
+      manager=".section.SectionsTable"
+      class=".section.SectionsTableFilter"
+      render="template"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="sections_table"
+      class=".section.SchoolYearSectionsTable"
+      for="schooltool.schoolyear.interfaces.ISchoolYear"
+      manager="schooltool.skin.flourish.interfaces.IAJAXParts"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="done"
+      before="table batch"
+      after="filter"
+      manager=".section.SectionsTable"
+      view=".section.FlourishSectionsView"
+      class="schooltool.app.browser.app.ManageItemDoneLink"
+      render="template"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="schoolyear"
+      after="filter"
+      view=".section.FlourishSectionsView"
+      manager=".section.SectionsTable"
+      class=".section.SectionsTableSchoolYear"
+      render="template"
+      permission="schooltool.view"
+      />
+
   <flourish:page
       name="addSection.html"
       for="schooltool.schoolyear.interfaces.ISchoolYear"

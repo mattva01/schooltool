@@ -83,8 +83,7 @@ from schooltool.skin.flourish.page import Page
 from schooltool.skin.flourish.page import RefineLinksViewlet
 from schooltool.skin.flourish.breadcrumbs import PageBreadcrumbs
 from schooltool.skin.flourish.page import TertiaryNavigationManager
-from schooltool.table.interfaces import ITableFormatter
-from schooltool.table import table
+from schooltool import table
 from schooltool.term.interfaces import IDateManager
 from schooltool.term.interfaces import ITerm
 from schooltool.term.term import getPreviousTerm, getNextTerm
@@ -260,7 +259,8 @@ class SectionView(BrowserView):
 
     def renderPersonTable(self):
         persons = ISchoolToolApplication(None)['persons']
-        formatter = getMultiAdapter((persons, self.request), ITableFormatter)
+        formatter = getMultiAdapter((persons, self.request),
+                                    table.interfaces.ITableFormatter)
         formatter.setUp(table_formatter=zc.table.table.StandaloneFullFormatter,
                         items=[removeSecurityProxy(person)
                                for person in self.context.members],
@@ -932,15 +932,15 @@ class SectionDeleteLink(ModalFormLinkViewlet):
         return translate(title, context=self.request)
 
 
-class FlourishSectionFilterWidget(table.FilterWidget):
+class FlourishSectionFilterWidget(table.table.FilterWidget):
 
     template = ViewPageTemplateFile('templates/f_section_filter.pt')
 
 
-class FlourishSectionTableFormatter(table.SchoolToolTableFormatter):
+class FlourishSectionTableFormatter(table.table.SchoolToolTableFormatter):
 
     def columns(self):
-        title = table.LocaleAwareGetterColumn(
+        title = table.column.LocaleAwareGetterColumn(
             name='title',
             title=_(u'Title'),
             getter=lambda i, f: i.title,
@@ -958,9 +958,12 @@ def get_courses_titles(section, formatter):
     return ', '.join([course.title for course in section.courses])
 
 
-class FlourishSectionsView(table.TableContainerView, SectionsActiveTabMixin):
+class FlourishSectionsView(flourish.page.Page,
+                           SectionsActiveTabMixin):
 
-    content_template = ViewPageTemplateFile('templates/f_sections.pt')
+    content_template = InlineViewPageTemplate('''
+      <div tal:content="structure context/schooltool:content/ajax/view/schoolyear/sections_table" />
+    ''')
 
     @property
     def title(self):
@@ -968,25 +971,17 @@ class FlourishSectionsView(table.TableContainerView, SectionsActiveTabMixin):
         return _('Sections for ${schoolyear}',
                  mapping={'schoolyear': schoolyear.title})
 
-    @property
-    def container(self):
-        sections = {}
-        for term in self.schoolyear.values():
-            term_section_container = ISectionContainer(term)
-            for section in term_section_container.values():
-                name = '%s.%s.%s' % (
-                    self.schoolyear.__name__, term.__name__, section.__name__
-                    )
-                sections[name] = section
-        return sections
 
-    def getColumnsAfter(self):
-        term = table.LocaleAwareGetterColumn(
+class SectionsTable(table.ajax.Table):
+
+    def columns(self):
+        default = table.ajax.Table.columns(self)
+        term = table.column.LocaleAwareGetterColumn(
             name='term',
             title=_('Term'),
             getter=lambda i, f: ITerm(i).title,
             subsort=True)
-        courses = table.LocaleAwareGetterColumn(
+        courses = table.column.LocaleAwareGetterColumn(
             name='courses',
             title=_('Courses'),
             getter=get_courses_titles,
@@ -998,22 +993,50 @@ class FlourishSectionsView(table.TableContainerView, SectionsActiveTabMixin):
             subsort=True)
         directlyProvides(term, ISortableColumn)
         directlyProvides(courses, ISortableColumn)
-        return [term, courses, size]
+        return default + [term, courses, size]
 
     def sortOn(self):
-        return (('term', True), ('courses', False), ("title", False))
+        return (('term', True), ('courses', False), ('title', False))
 
-    def setUpTableFormatter(self, formatter):
-        columns_before = self.getColumnsBefore()
-        columns_after = self.getColumnsAfter()
-        formatter.setUp(formatters=[table.url_cell_formatter],
-                        columns_before=columns_before,
-                        columns_after=columns_after,
-                        sort_on=self.sortOn())
 
-    def update(self):
-        self.table = FlourishSectionTableFormatter(self.container, self.request)
-        self.setUpTableFormatter(self.table)
+class SchoolYearSectionsTable(SectionsTable):
+
+    @property
+    def schoolyear(self):
+        return ISchoolYear(self.context)
+
+    @Lazy
+    def source(self):
+        sections = {}
+        schoolyear = self.schoolyear
+        for term in schoolyear.values():
+            term_section_container = ISectionContainer(term)
+            for section in term_section_container.values():
+                name = '%s.%s.%s' % (
+                    schoolyear.__name__, term.__name__, section.__name__
+                    )
+                sections[name] = section
+        return sections
+
+
+class SectionsTableFilter(table.ajax.TableFilter, FlourishSectionFilterWidget):
+
+    title = _("Section title")
+
+    def filter(self, results):
+        if self.ignoreRequest:
+            return results
+        return FlourishSectionFilterWidget.filter(self, results)
+
+
+class SectionsTableSchoolYear(flourish.viewlet.Viewlet):
+
+    template = InlineViewPageTemplate('''
+      <input type="hidden" name="schoolyear_id"
+             tal:define="schoolyear_id view/view/schoolyear/__name__|nothing"
+             tal:condition="schoolyear_id"
+             tal:attributes="value schoolyear_id" />
+    ''')
 
 
 class FlourishSectionContainerDeleteView(ContainerDeleteView):
@@ -1102,7 +1125,8 @@ class FlourishSectionView(DisplayForm):
 
     def getTable(self, items, prefix, **kw):
         persons = ISchoolToolApplication(None)['persons']
-        result = getMultiAdapter((persons, self.request), ITableFormatter)
+        result = getMultiAdapter((persons, self.request),
+                                 table.interfaces.ITableFormatter)
         result.setUp(
             table_formatter=zc.table.table.StandaloneFullFormatter,
             items=items,
