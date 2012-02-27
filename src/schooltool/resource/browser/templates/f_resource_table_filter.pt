@@ -3,7 +3,10 @@
 <tal:block i18n:domain="schooltool">
 
 <script>ST.state.push()</script>
-<tal:script tal:replace="structure scriptlocal:container_id view/manager/html_id" />
+<tal:script
+   tal:replace="structure scriptlocal:container_id view/manager/html_id;
+                                      search_type_id view/search_type_id;
+                                      search_id string:${view/manager/html_id}-search" />
 
 <fieldset>
   <legend><span i18n:translate="">Search</span></legend>
@@ -17,7 +20,7 @@
     <div class="widget">
       <input type="text" name="SEARCH_TITLE"
              id="SEARCH_TITLE" class="text-widget"
-             tal:attributes="value request/SEARCH_TITLE|nothing;
+             tal:attributes="value python:request.get(view.search_title_id);
                              name view/search_title_id;
                              id view/search_title_id"
              />
@@ -41,6 +44,17 @@
                 tal:attributes="value type/id;
                                 selected python:type['id'] == request.get('SEARCH_TYPE')"/>
       </select>
+      <script>
+        $(ST.dialogs.jquery_id(ST.local.search_type_id)).change(
+          function(){
+            var search_type_id = ST.local.search_type_id;
+            var container_id = ST.local.container_id;
+            var search_id = ST.local.search_id;
+            return function(element) {
+              return ST.table.on_form_submit(
+                  container_id, document.getElementById(search_id));
+            }}());
+      </script>
     </div>
   </div>
 </fieldset>
@@ -50,7 +64,6 @@
          class="button-ok" i18n:attributes="value"
          tal:attributes="name search_id;
                          id search_id" />
-    <tal:script replace="structure scriptlocal: search_id" />
     <script>
       $(ST.dialogs.jquery_id(ST.local.search_id)).click(
          function(){
