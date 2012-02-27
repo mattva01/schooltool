@@ -163,6 +163,7 @@ class TableFilter(flourish.viewlet.Viewlet, FilterWidget):
 
     template = ViewPageTemplateFile("templates/f_filter.pt")
     title = _("Search")
+    legend = _("Search")
 
     @property
     def source(self):
