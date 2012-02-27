@@ -26,7 +26,6 @@ from zope.cachedescriptors.property import Lazy
 
 import zc.resourcelibrary
 from zc.table import table
-from zc.table.interfaces import IColumnSortedItems
 
 from schooltool.common.inlinept import InlineViewPageTemplate
 from schooltool.skin import flourish
@@ -35,35 +34,15 @@ from schooltool.table.interfaces import IIndexedColumn
 from schooltool.table.batch import TokenBatch
 from schooltool.table.table import TableContent, FilterWidget
 from schooltool.table.table import url_cell_formatter
+from schooltool.table.table import SortUIHeaderMixin
 from schooltool.table.catalog import IndexedTableFormatter
 from schooltool.table.catalog import IndexedFilterWidget
 from schooltool.common import SchoolToolMessage as _
 
 
-class AJAXSortHeaderMixin(object):
+class AJAXSortHeaderMixin(SortUIHeaderMixin):
 
     html_id = None
-
-    def _getColumnSortClass(self, column):
-        if not IColumnSortedItems.providedBy(self.items):
-            return ""
-        col_name = column.name
-        for n, (name, reversed) in enumerate(self.items.sort_on):
-            if name == col_name:
-                if n == 0:
-                    return (reversed and "zc-table-sort-desc-primary" or
-                                         "zc-table-sort-asc-primary")
-                return (reversed and "zc-table-sort-desc" or
-                                     "zc-table-sort-asc")
-        return "zc-table-sort-asc"
-
-    def _addSortUi(self, header, column):
-        css_class = "zc-table-sortable "
-        css_class += self._getColumnSortClass(column)
-        columnName = column.name
-        sort_on_name = table.getSortOnName(self.prefix)
-        script_name = self.script_name
-        return self._header_template(locals())
 
     def _header_template(self, options):
         options = dict(options)
@@ -116,6 +95,8 @@ class Table(flourish.ajax.CompositeAJAXPart, TableContent):
         return self.get('batch')
 
     def updateFormatter(self):
+        if self._table_formatter is not None:
+            return
         self.setUp(formatters=[url_cell_formatter],
                    table_formatter=self.table_formatter,
                    batch_size=self.batch_size,

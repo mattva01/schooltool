@@ -30,6 +30,7 @@ from zope.traversing.browser.absoluteurl import absoluteURL
 
 import zc.table
 import zc.table.table
+from zc.table.interfaces import IColumnSortedItems
 from zc.table.interfaces import ISortableColumn
 from zc.table.column import GetterColumn
 
@@ -49,6 +50,45 @@ from schooltool.table.column import (
     )
 
 from schooltool.common import SchoolToolMessage as _
+
+
+class SortUIHeaderMixin(object):
+    """Mixin for zc table formatters."""
+
+    def _getColumnSortClass(self, column):
+        if not IColumnSortedItems.providedBy(self.items):
+            return ""
+        col_name = column.name
+        for n, (name, reversed) in enumerate(self.items.sort_on):
+            if name == col_name:
+                if n == 0:
+                    return (reversed and "zc-table-sort-desc-primary" or
+                                         "zc-table-sort-asc-primary")
+                return (reversed and "zc-table-sort-desc" or
+                                     "zc-table-sort-asc")
+        return "zc-table-sort-asc"
+
+    def _addSortUi(self, header, column):
+        css_class = "zc-table-sortable "
+        css_class += self._getColumnSortClass(column)
+        columnName = column.name
+        sort_on_name = zc.table.table.getSortOnName(self.prefix)
+        script_name = self.script_name
+        return self._header_template(locals())
+
+    def _header_template(self, options):
+        options = dict(options)
+        template = """
+            <span class="%(css_class)s"
+                  onclick="javascript: %(script_name)s(
+                        '%(columnName)s', '%(sort_on_name)s')">
+                %(header)s</span>
+            """
+        return template % options
+
+
+class FormFullFormatter(SortUIHeaderMixin, zc.table.table.FormFullFormatter):
+    pass
 
 
 class FilterWidget(object):
@@ -175,7 +215,7 @@ class SchoolToolTableFormatter(object):
 
     def setUp(self, items=None, ommit=[], filter=None, columns=None,
               columns_before=[], columns_after=[], sort_on=None, prefix="",
-              formatters=[], table_formatter=zc.table.table.FormFullFormatter,
+              formatters=[], table_formatter=FormFullFormatter,
               batch_size=25, css_classes=None):
 
         self.prefix = prefix

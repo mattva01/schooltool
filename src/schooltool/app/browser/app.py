@@ -78,6 +78,7 @@ from schooltool.app.utils import vocabulary
 from schooltool.skin.flourish.content import ContentProvider
 from schooltool.common.inlinept import InlineViewPageTemplate
 from schooltool.person.interfaces import IPerson
+from schooltool import table
 from schooltool.table.table import CheckboxColumn
 from schooltool.table.table import label_cell_formatter_factory
 from schooltool.table.table import stupid_form_key
@@ -220,7 +221,7 @@ class RelationshipViewBase(BrowserView):
         self.setUpTables()
 
 
-class CSSFormatter(FormFullFormatter):
+class CSSFormatter(table.table.SortUIHeaderMixin, FormFullFormatter):
 
     def renderHeaders(self):
         result = []
