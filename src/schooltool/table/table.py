@@ -341,5 +341,8 @@ class TableContainerView(flourish.page.Page):
 
 class DoNotFilter(flourish.EmptyViewlet):
 
+    def extra_url(self):
+        return ''
+
     def filter(self, list):
         return list
