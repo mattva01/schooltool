@@ -1137,12 +1137,12 @@ class FlourishPersonIDCardsViewBase(ReportPDFView):
         }
     TITLE = {
         'height': 1.1,
-        'padding': 0.06,
+        'padding': 0.06, # from the edge of the title frame
         }
     DEMOGRAPHICS = {
         'height': 3.2,
-        'margin-left': 0.55,
-        'padding-bottom': 0.75,
+        'margin-left': 0.55, # from the edge of the card
+        'margin-bottom': 0.75, # from the edge of the card
         'width': 5.05,
         }
     PHOTO = {
@@ -1202,7 +1202,7 @@ class FlourishPersonIDCardsViewBase(ReportPDFView):
             'photo': person.photo,
             }
 
-    def titlePaddingTop(self, person):
+    def titleVerticalAlign(self, person):
         result = 0
         if len(person['title']) < 44:
             result = 0.25
@@ -1270,7 +1270,7 @@ class FlourishPersonIDCardsViewBase(ReportPDFView):
     def getDemographicsFrame(self, card_info):
         demo_info = self.DEMOGRAPHICS
         x1 = card_info['x1'] + demo_info['margin-left']
-        y1 = card_info['y1'] +  demo_info['padding-bottom']
+        y1 = card_info['y1'] +  demo_info['margin-bottom']
         return {
             'id': 'demographics_%d' % card_info['index'],
             'x1': x1,

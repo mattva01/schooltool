@@ -63,7 +63,7 @@
               tal:attributes="height string:${view/PHOTO/height}cm;
                               width string:${view/PHOTO/width}cm;
                               file person/photo/@@data_uri;
-                              y string:${view/DEMOGRAPHICS/padding-bottom}cm;"
+                              y string:${view/DEMOGRAPHICS/margin-bottom}cm;"
               />
           <rect
               fill="false" stroke="true"
@@ -71,7 +71,7 @@
               x="5.6cm"
               tal:attributes="height string:${view/PHOTO/height}cm;
                               width string:${view/PHOTO/width}cm;
-                              y string:${view/DEMOGRAPHICS/padding-bottom}cm;"
+                              y string:${view/DEMOGRAPHICS/margin-bottom}cm;"
               />
         </illustration>
         <keepInFrame
@@ -80,7 +80,7 @@
                             maxWidth string:${frameInfo/title/maxWidth}cm;
                             maxHeight string:${frameInfo/title/maxHeight}cm">
           <spacer
-              tal:attributes="length python:view.titlePaddingTop(person)" />
+              tal:attributes="length python:view.titleVerticalAlign(person)" />
           <para style="card_title" tal:content="person/title" />
         </keepInFrame>
         <keepInFrame
