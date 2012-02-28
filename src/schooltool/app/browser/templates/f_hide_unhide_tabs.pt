@@ -2,7 +2,7 @@
   <form method="post"
         tal:attributes="action string:${context/@@absolute_url}/hide_unhide_tabs.html">
     <input type="hidden" name="form-submitted" value="" />
-    <h3 i18n:translate="">Visible Tabs</h3>
+    <h3 i18n:translate="">Set Tab Visibility</h3>
     <table>
       <thead>
         <tr>
