@@ -310,6 +310,15 @@
       permission="schooltool.edit"
       />
 
+  <flourish:viewlet
+      name="what-is-this"
+      class="schooltool.skin.flourish.page.Related"
+      template="templates/f_hide_unhide_tabs_related.pt"
+      view=".app.FlourishHideUnhideTabsView"
+      manager="schooltool.skin.flourish.page.IPageRelatedManager"
+      permission="schooltool.edit"
+      />
+
   <flourish:page
       name="showTextTBEntry.html"
       for="schooltool.app.interfaces.ISchoolToolApplication"
