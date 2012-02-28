@@ -485,6 +485,40 @@
       subtitle="Responsible parties"
       />
 
+  <flourish:viewlet
+      name="available_table"
+      class="schooltool.basicperson.browser.person.BasicPersonAddRelationshipTable"
+      for="schooltool.app.interfaces.IAsset"
+      manager="schooltool.skin.flourish.interfaces.IAJAXParts"
+      view=".app.FlourishLeaderView"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="add_all_button"
+      after="table"
+      manager=".app.RelationshipAddTableMixin"
+      class="schooltool.app.browser.app.AddAllResultsButton"
+      render="template"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="filter"
+      manager=".app.RelationshipRemoveTableMixin"
+      class="schooltool.table.table.DoNotFilter"
+      permission="zope.Public"
+      />
+
+  <flourish:viewlet
+      name="current_table"
+      class="schooltool.basicperson.browser.person.BasicPersonRemoveRelationshipTable"
+      for="schooltool.app.interfaces.IAsset"
+      manager="schooltool.skin.flourish.interfaces.IAJAXParts"
+      view=".app.FlourishLeaderView"
+      permission="schooltool.view"
+      />
+
   <flourish:content
       class="schooltool.app.browser.app.ContentTitle"
       permission="schooltool.view"

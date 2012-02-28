@@ -48,6 +48,8 @@ import zc.table.table
 
 from schooltool.app.browser.app import RelationshipViewBase
 from schooltool.app.browser.app import FlourishRelationshipViewBase
+from schooltool.app.browser.app import RelationshipAddTableMixin
+from schooltool.app.browser.app import RelationshipRemoveTableMixin
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.common.inlinept import InlineViewPageTemplate
@@ -1052,6 +1054,16 @@ class PersonListTable(BasicPersonTable):
 
     def items(self):
         return self.indexItems(self.context)
+
+
+class BasicPersonAddRelationshipTable(RelationshipAddTableMixin,
+                                      BasicPersonTable):
+    pass
+
+
+class BasicPersonRemoveRelationshipTable(RelationshipRemoveTableMixin,
+                                         BasicPersonTable):
+    pass
 
 
 class BasicPersonTableFormatter(PersonTableFormatter):

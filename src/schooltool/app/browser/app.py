@@ -253,6 +253,222 @@ class RelationshipButton(ImageInputColumn):
                 ])
 
 
+class RelationshipButtonTableMixin(object):
+
+    button_prefix = ""
+    extras_prefix = ""
+    button_title = u""
+    button_image = ''
+
+    ignoreRequest = False
+    changed = False
+
+    form_wrapper = InlineViewPageTemplate("""
+      <form method="post" tal:attributes="action view/@@absolute_url">
+        <tal:block replace="structure view/template" />
+        <input type="hidden"
+               tal:condition="view/batch"
+               tal:attributes="value view/batch/start;
+                               name string:${view/extras_prefix}.batch_start" />
+        <input type="hidden"
+               tal:condition="view/batch"
+               tal:attributes="value view/batch/size;
+                               name string:${view/extras_prefix}.batch_size" />
+      </form>
+    """)
+
+    def submitItems(self, item):
+        raise NotImplementedError
+
+    @property
+    def source(self):
+        return self.view.getAvailableItemsContainer()
+
+    def columns(self):
+        # XXX: evil!
+        default = super(RelationshipButtonTableMixin, self).columns()
+
+        action = RelationshipButton(
+            self.button_prefix, name='action',
+            title=self.button_title, alt=self.button_title,
+            library='schooltool.skin.flourish',
+            image=self.button_image, id_getter=self.view.getKey)
+        return default + [action]
+
+    def update(self):
+        super(RelationshipButtonTableMixin, self).update()
+        self.applyChanges()
+
+    def applyChanges(self):
+        if not self.fromPublication:
+            return
+        item_prefix = self.button_prefix+'.'
+        item_submitted = False
+        for param in self.request.form:
+            if param.startswith(item_prefix):
+                item_submitted = True
+        if item_submitted:
+            self.changed = True
+            self.submitItems()
+
+    def nextURL(self):
+        next_url = absoluteURL(self.view, self.request)
+        next_url += '?'+self.extra_url()
+        if self.batch:
+            batch = self.batch
+            if self.extras_prefix+'.batch_start' in self.request:
+                next_url += "&start%s=%s" % (
+                    batch.name, self.request[self.extras_prefix+'.batch_start'])
+                if self.extras_prefix+'.batch_size' in self.request:
+                    next_url += "&size%s=%s" % (
+                        batch.name, self.request[self.extras_prefix+'.batch_size'])
+        return next_url
+
+    def render(self, *args, **kw):
+        if self.changed:
+            next = self.nextURL()
+            self.request.response.redirect(next)
+            return ''
+        # XXX: evil!
+        return super(RelationshipButtonTableMixin, self).render(*args, **kw)
+
+
+class RelationshipAddTableMixin(RelationshipButtonTableMixin):
+
+    button_prefix = "add_item"
+    extras_prefix = "on_add"
+    button_title = _('Add')
+    button_image = 'add-icon.png'
+
+    def submitItems(self):
+        for item in self.view.getAvailableItems():
+            key = '%s.%s' % (self.button_prefix, self.view.getKey(item))
+            if key in self.request:
+                self.view.add(removeSecurityProxy(item))
+
+    def updateFormatter(self):
+        ommit = self.view.getOmmitedItems()
+        columns = self.columns()
+        self.setUp(formatters=[table.table.url_cell_formatter],
+                   columns=columns,
+                   ommit=ommit,
+                   table_formatter=self.table_formatter,
+                   batch_size=self.batch_size,
+                   prefix=self.__name__,
+                   css_classes={'table': 'data relationships-table'})
+
+
+class RelationshipRemoveTableMixin(RelationshipButtonTableMixin):
+
+    button_prefix = "remove_item"
+    extras_prefix = "on_remove"
+    button_title = _('Remove')
+    button_image = 'remove-icon.png'
+
+    def submitItems(self):
+        for item in self.view.getSelectedItems():
+            key = '%s.%s' % (self.button_prefix, self.view.getKey(item))
+            if key in self.request:
+                self.view.remove(removeSecurityProxy(item))
+
+    def updateFormatter(self):
+        items = self.view.getSelectedItems()
+        columns = self.columns()
+        self.setUp(formatters=[table.table.url_cell_formatter],
+                   columns=columns,
+                   items=items,
+                   table_formatter=self.table_formatter,
+                   batch_size=self.batch_size,
+                   prefix=self.__name__,
+                   css_classes={'table': 'data relationships-table'})
+
+
+class AddAllResultsButton(flourish.viewlet.Viewlet):
+
+    template = InlineViewPageTemplate('''
+      <div class="buttons">
+        <input id="form-buttons-add" name="ADD_DISPLAYED_RESULTS"
+               class="submit-widget button-field button-ok"
+               value="Add all displayed" type="submit"
+               tal:attributes="name view/button_name;
+                               value view/title" />
+      </div>
+    ''')
+
+    title = _('Add all displayed')
+    button_name = 'ADD_DISPLAYED_RESULTS'
+    token_key = 'displayed.add_item.tokens'
+
+    def addSearchResults(self):
+        if (self.button_name not in self.request or
+            self.token_key not in self.request):
+            return False
+        add_ids = self.request[self.token_key]
+        if not isinstance(add_ids, list):
+            add_ids = [add_ids]
+        changed = False
+        relationship_view = self.manager.view
+        for item in relationship_view.getAvailableItems():
+            if relationship_view.getKey(item) in add_ids:
+                relationship_view.add(removeSecurityProxy(item))
+                changed = True
+        return changed
+
+    def update(self):
+        changed = self.addSearchResults()
+        if changed:
+            self.manager.changed = True
+
+
+class EditRelationships(flourish.page.NoSidebarPage):
+
+    content_template = ViewPageTemplateFile('templates/f_tabled_edit_relationships.pt')
+
+    current_title = None
+    available_title = None
+
+    def add(self, item):
+        collection = removeSecurityProxy(self.getCollection())
+        if item not in collection:
+            collection.add(item)
+
+    def remove(self, item):
+        collection = removeSecurityProxy(self.getCollection())
+        if item in collection:
+            collection.remove(item)
+
+    def getCollection(self):
+        """Return the backend storage for related objects."""
+        raise NotImplementedError("Subclasses should override this method.")
+
+    def getSelectedItems(self):
+        """Return a sequence of items that are already selected."""
+        return self.getCollection()
+
+    def getAvailableItems(self):
+        """Return a sequence of items that can be selected."""
+        container = self.getAvailableItemsContainer()
+        selected_items = set(self.getSelectedItems())
+        return [p for p in container.values()
+                if p not in selected_items]
+
+    def getAvailableItemsContainer(self):
+        """Returns the backend storage for available items."""
+        raise NotImplementedError("Subclasses should override this method.")
+
+    def getOmmitedItems(self):
+        return self.getSelectedItems()
+
+    def getKey(self, item):
+        return item.__name__
+
+    def nextURL(self):
+        url = self.request.get('nexturl')
+        if url is None:
+            url = absoluteURL(self.context, self.request)
+        return url
+
+
 class FlourishRelationshipViewBase(flourish.page.NoSidebarPage):
 
     content_template = ViewPageTemplateFile('templates/f_edit_relationships.pt')
@@ -262,11 +478,13 @@ class FlourishRelationshipViewBase(flourish.page.NoSidebarPage):
 
     def add(self, item):
         collection = removeSecurityProxy(self.getCollection())
-        collection.add(item)
+        if item not in collection:
+            collection.add(item)
 
     def remove(self, item):
         collection = removeSecurityProxy(self.getCollection())
-        collection.remove(item)
+        if item in collection:
+            collection.remove(item)
 
     def getCollection(self):
         """Return the backend storage for related objects."""
@@ -666,7 +884,7 @@ class LeaderView(RelationshipViewBase):
         return ISchoolToolApplication(None)['persons']
 
 
-class FlourishLeaderView(FlourishRelationshipViewBase):
+class FlourishLeaderView(EditRelationships):
 
     current_title = _("Current responsible parties")
     available_title = _("Available responsible parties")
