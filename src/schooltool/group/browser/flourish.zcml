@@ -173,6 +173,24 @@
       permission="schooltool.view"
       />
 
+  <flourish:viewlet
+      name="available_table"
+      class="schooltool.basicperson.browser.person.BasicPersonAddRelationshipTable"
+      for="schooltool.group.interfaces.IGroup"
+      manager="schooltool.skin.flourish.interfaces.IAJAXParts"
+      view=".group.FlourishMemberViewPersons"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="current_table"
+      class="schooltool.basicperson.browser.person.BasicPersonRemoveRelationshipTable"
+      for="schooltool.group.interfaces.IGroup"
+      manager="schooltool.skin.flourish.interfaces.IAJAXParts"
+      view=".group.FlourishMemberViewPersons"
+      permission="schooltool.view"
+      />
+
   <flourish:page
       name="addSchoolToolGroup.html"
       for="schooltool.group.interfaces.IGroupContainer"

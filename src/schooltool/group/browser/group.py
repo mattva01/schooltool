@@ -60,7 +60,7 @@ from schooltool.group.interfaces import IGroup
 from schooltool.group.interfaces import IGroupMember
 from schooltool.group.interfaces import IGroupContainer, IGroupContained
 from schooltool.app.browser.app import RelationshipViewBase
-from schooltool.app.browser.app import FlourishRelationshipViewBase
+from schooltool.app.browser.app import FlourishRelationshipViewBase, EditRelationships
 from schooltool.skin.flourish.viewlet import Viewlet
 from schooltool.common.inlinept import InheritTemplate
 from schooltool.common.inlinept import InlineViewPageTemplate
@@ -720,7 +720,7 @@ class GroupLeadersTable(BasicPersonTable):
         return self.indexItems(self.context.leaders)
 
 
-class FlourishMemberViewPersons(FlourishRelationshipViewBase):
+class FlourishMemberViewPersons(EditRelationships):
     """View class for adding / removing members to / from a group."""
 
     @property
@@ -729,16 +729,6 @@ class FlourishMemberViewPersons(FlourishRelationshipViewBase):
 
     current_title = _("Current Members")
     available_title = _("Add Members")
-
-    def setUpTables(self):
-        self.available_table = self.createTableFormatter(
-            ommit=self.getOmmitedItems(),
-            prefix="add_item")
-
-        self.selected_table = self.createTableFormatter(
-            filter=lambda l: l,
-            items=self.getSelectedItems(),
-            prefix="remove_item")
 
     def getSelectedItems(self):
         """Return a list of current group memebers."""
