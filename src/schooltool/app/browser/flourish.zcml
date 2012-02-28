@@ -664,6 +664,22 @@
       subtitle="Shown Calendars"
       />
 
+  <flourish:viewlet
+      name="available_table"
+      class=".overlay.CalendarAddRelationshipTable"
+      manager="schooltool.skin.flourish.interfaces.IAJAXParts"
+      view=".overlay.FlourishCalendarSelectionView"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="current_table"
+      class=".overlay.CalendarRemoveRelationshipTable"
+      manager="schooltool.skin.flourish.interfaces.IAJAXParts"
+      view=".overlay.FlourishCalendarSelectionView"
+      permission="schooltool.view"
+      />
+
   <flourish:page_breadcrumbs
       crumb_parent="schooltool.calendar.interfaces.ISchoolToolCalendar"
       view=".overlay.FlourishCalendarSelectionView"
