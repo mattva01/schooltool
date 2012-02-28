@@ -1,0 +1,10 @@
+<tal:block i18n:domain="schooltool">
+  <h2 tal:content="view/current_title" />
+  <tal:block content="structure context/schooltool:content/ajax/current_table" />
+  <h3>
+    <a tal:attributes="href view/nextURL"
+       i18n:translate="">Done</a>
+  </h3>
+  <h2 tal:content="view/available_title" />
+  <tal:block content="structure context/schooltool:content/ajax/available_table" />
+</tal:block>

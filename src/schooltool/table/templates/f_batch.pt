@@ -1,4 +1,4 @@
-<div class="no-batch-navigation" tal:condition="not:view/needsBatch"></div>
+<div class="no-batch-navigation" tal:condition="python: view.full_size and not view.needsBatch"></div>
 <div class="batch-navigation"
      tal:condition="view/needsBatch"
      tal:define="batch view/batch"

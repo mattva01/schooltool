@@ -281,6 +281,15 @@ class TableContent(flourish.content.ContentProvider, SchoolToolTableFormatter):
     def source(self):
         return self.context
 
+    def columns(self):
+        title = GetterColumn(name='title',
+                             title=_(u"Title"),
+                             cell_formatter=url_cell_formatter,
+                             getter=lambda i, f: i.title,
+                             subsort=True)
+        directlyProvides(title, ISortableColumn)
+        return [title]
+
     def update(self):
         flourish.content.ContentProvider.update(self)
         if self._table_formatter is None:
@@ -340,6 +349,9 @@ class TableContainerView(flourish.page.Page):
 
 
 class DoNotFilter(flourish.EmptyViewlet):
+
+    def extra_url(self):
+        return ''
 
     def filter(self, list):
         return list

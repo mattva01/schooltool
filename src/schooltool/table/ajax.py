@@ -191,8 +191,12 @@ class TableBatch(flourish.viewlet.Viewlet):
                     'start' + self.name, 0))
             size = int(self.request.get(
                     'size' + self.name, self.manager.batch_size))
+        items = self.manager._items
+        max_items = len(items)
+        if start >= max_items:
+            start = max(0, max_items-size)
         self.batch = TokenBatch(
-            self.manager._items, size=size, start=start)
+            items, size=size, start=start)
 
     @property
     def needsBatch(self):
