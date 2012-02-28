@@ -259,6 +259,7 @@ class RelationshipButtonTableMixin(object):
     extras_prefix = ""
     button_title = u""
     button_image = ''
+    empty_message = _('There are none.')
 
     ignoreRequest = False
     changed = False
@@ -276,6 +277,10 @@ class RelationshipButtonTableMixin(object):
                                name string:${view/extras_prefix}.batch_size" />
       </form>
     """)
+
+    empty_template = InlineViewPageTemplate('''
+      <h3 tal:content="view/empty_message" />
+    ''')
 
     def submitItems(self, item):
         raise NotImplementedError
@@ -324,12 +329,19 @@ class RelationshipButtonTableMixin(object):
                         batch.name, self.request[self.extras_prefix+'.batch_size'])
         return next_url
 
+    def renderTable(self):
+        # XXX: evil!
+        if (self._table_formatter is None or
+            not self._items):
+            return self.empty_template()
+        return super(RelationshipButtonTableMixin, self).renderTable()
+
     def render(self, *args, **kw):
         if self.changed:
             next = self.nextURL()
             self.request.response.redirect(next)
             return ''
-        # XXX: evil!
+        # XXX: more evil!
         return super(RelationshipButtonTableMixin, self).render(*args, **kw)
 
 
@@ -418,6 +430,11 @@ class AddAllResultsButton(flourish.viewlet.Viewlet):
         changed = self.addSearchResults()
         if changed:
             self.manager.changed = True
+
+    def render(self, *args, **kw):
+        if not self.manager._items:
+            return ''
+        return self.template(*args, **kw)
 
 
 class EditRelationships(flourish.page.NoSidebarPage):

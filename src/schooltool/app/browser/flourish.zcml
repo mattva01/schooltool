@@ -499,7 +499,6 @@
       after="table"
       manager=".app.RelationshipAddTableMixin"
       class="schooltool.app.browser.app.AddAllResultsButton"
-      render="template"
       permission="schooltool.view"
       />
 
