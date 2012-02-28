@@ -213,6 +213,24 @@
       subtitle="Members"
       />
 
+  <flourish:viewlet
+      name="available_table"
+      class=".group.GroupListAddRelationshipTable"
+      for="schooltool.person.interfaces.IPerson"
+      manager="schooltool.skin.flourish.interfaces.IAJAXParts"
+      view=".group.FlourishGroupListView"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="current_table"
+      class=".group.GroupListRemoveRelationshipTable"
+      for="schooltool.person.interfaces.IPerson"
+      manager="schooltool.skin.flourish.interfaces.IAJAXParts"
+      view=".group.FlourishGroupListView"
+      permission="schooltool.view"
+      />
+
   <configure package="schooltool.skin.flourish">
 
     <flourish:page
