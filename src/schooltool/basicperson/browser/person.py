@@ -47,7 +47,9 @@ from z3c.form.validator import SimpleFieldValidator
 import zc.table.table
 
 from schooltool.app.browser.app import RelationshipViewBase
-from schooltool.app.browser.app import FlourishRelationshipViewBase
+from schooltool.app.browser.app import EditRelationships
+from schooltool.app.browser.app import RelationshipAddTableMixin
+from schooltool.app.browser.app import RelationshipRemoveTableMixin
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.common.inlinept import InlineViewPageTemplate
@@ -673,16 +675,19 @@ class PersonAdvisorView(RelationshipViewBase):
         return self.context.advisors
 
 
-class FlourishPersonAdvisorView(FlourishRelationshipViewBase):
+class EditPersonRelationships(EditRelationships):
+
+    def getAvailableItemsContainer(self):
+        return ISchoolToolApplication(None)['persons']
+
+
+class FlourishPersonAdvisorView(EditPersonRelationships):
 
     current_title = _('Current advisors')
     available_title = _('Available advisors')
 
     def getSelectedItems(self):
         return self.context.advisors
-
-    def getAvailableItemsContainer(self):
-        return ISchoolToolApplication(None)['persons']
 
     def getCollection(self):
         return self.context.advisors
@@ -712,16 +717,13 @@ class PersonAdviseeView(RelationshipViewBase):
         return self.context.advisees
 
 
-class FlourishPersonAdviseeView(FlourishRelationshipViewBase):
+class FlourishPersonAdviseeView(EditPersonRelationships):
 
     current_title = _("Current advisees")
     available_title = _("Available advisees")
 
     def getSelectedItems(self):
         return self.context.advisees
-
-    def getAvailableItemsContainer(self):
-        return ISchoolToolApplication(None)['persons']
 
     def getCollection(self):
         return self.context.advisees
@@ -1052,6 +1054,16 @@ class PersonListTable(BasicPersonTable):
 
     def items(self):
         return self.indexItems(self.context)
+
+
+class BasicPersonAddRelationshipTable(RelationshipAddTableMixin,
+                                      BasicPersonTable):
+    pass
+
+
+class BasicPersonRemoveRelationshipTable(RelationshipRemoveTableMixin,
+                                         BasicPersonTable):
+    pass
 
 
 class BasicPersonTableFormatter(PersonTableFormatter):

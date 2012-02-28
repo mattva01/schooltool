@@ -54,10 +54,10 @@ from zc.table.column import GetterColumn
 from zc.table.interfaces import ISortableColumn
 
 from schooltool.app.browser.app import BaseEditView
-from schooltool.app.browser.app import FlourishRelationshipViewBase
 from schooltool.app.browser.app import RelationshipViewBase
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.utils import vocabulary_titled
+from schooltool.basicperson.browser.person import EditPersonRelationships
 from schooltool.common import SchoolToolMessage as _
 from schooltool.common.inlinept import InheritTemplate
 from schooltool.common.inlinept import InlineViewPageTemplate
@@ -1325,7 +1325,7 @@ class FlourishSectionDeleteView(DialogForm, form.EditForm):
         self.actions['cancel'].addClass('button-cancel')
 
 
-class FlourishSectionInstructorView(FlourishRelationshipViewBase):
+class FlourishSectionInstructorView(EditPersonRelationships):
     """View for adding instructors to a Section."""
 
     @property
@@ -1338,14 +1338,11 @@ class FlourishSectionInstructorView(FlourishRelationshipViewBase):
     def getSelectedItems(self):
         return filter(IPerson.providedBy, self.context.instructors)
 
-    def getAvailableItemsContainer(self):
-        return ISchoolToolApplication(None)['persons']
-
     def getCollection(self):
         return self.context.instructors
 
 
-class FlourishSectionLearnerView(FlourishRelationshipViewBase):
+class FlourishSectionLearnerView(EditPersonRelationships):
     """View for adding learners to a Section."""
 
     @property
@@ -1355,21 +1352,8 @@ class FlourishSectionLearnerView(FlourishRelationshipViewBase):
     current_title = _("Current students")
     available_title = _("Add students")
 
-    def setUpTables(self):
-        self.available_table = self.createTableFormatter(
-            ommit=self.getOmmitedItems(),
-            prefix="add_item")
-
-        self.selected_table = self.createTableFormatter(
-            filter=lambda l: l,
-            items=self.getSelectedItems(),
-            prefix="remove_item")
-
     def getSelectedItems(self):
         return filter(IPerson.providedBy, self.context.members)
-
-    def getAvailableItemsContainer(self):
-        return ISchoolToolApplication(None)['persons']
 
     def getCollection(self):
         return self.context.members

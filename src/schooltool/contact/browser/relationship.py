@@ -33,6 +33,9 @@ from zc.table.column import GetterColumn
 
 from schooltool.relationship.relationship import IRelationshipLinks
 from schooltool.basicperson.interfaces import IBasicPerson
+from schooltool.app.browser.app import RelationshipAddTableMixin
+from schooltool.app.browser.app import RelationshipRemoveTableMixin
+from schooltool.app.browser.app import AddAllResultsButton
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.common.inlinept import InheritTemplate
 from schooltool.contact.interfaces import IContactable
@@ -42,11 +45,12 @@ from schooltool.contact.interfaces import IUniqueFormKey
 from schooltool.contact.contact import URIPerson, URIContact
 from schooltool.contact.contact import URIContactRelationship
 from schooltool.contact.contact import ContactPersonInfo
+from schooltool.contact.browser.contact import ContactTable
 from schooltool.contact.browser.contact import contact_table_columns
 from schooltool.table.table import CheckboxColumn
 from schooltool.table.table import label_cell_formatter_factory
 from schooltool.table.interfaces import ITableFormatter
-from schooltool.app.browser.app import FlourishRelationshipViewBase
+from schooltool.app.browser.app import EditRelationships
 from schooltool.skin.flourish.page import Page
 
 from schooltool.common import SchoolToolMessage as _
@@ -179,7 +183,55 @@ class ContactManagementView(BrowserView):
         self.setUpTables()
 
 
-class FlourishContactManagementView(FlourishRelationshipViewBase):
+class EditContactRelationships(EditRelationships):
+    pass
+
+
+class ContactAddRelationshipTable(RelationshipAddTableMixin, ContactTable):
+
+    def submitItems(self):
+        int_ids = getUtility(IIntIds)
+        catalog = self.view.getCatalog()
+        index = catalog['form_keys']
+        for intid in self.view.getAvailableItemIds():
+            key = '%s.%s' % (self.button_prefix, index.documents_to_values[intid])
+            if key in self.request:
+                self.view.add(IContact(int_ids.getObject(intid)))
+
+
+class ContactRemoveRelationshipTable(RelationshipRemoveTableMixin, ContactTable):
+
+    def submitItems(self):
+        int_ids = getUtility(IIntIds)
+        catalog = self.view.getCatalog()
+        index = catalog['form_keys']
+        for intid in self.view.getSelectedItemIds():
+            key = '%s.%s' % (self.button_prefix, index.documents_to_values[intid])
+            if key in self.request:
+                self.view.remove(IContact(int_ids.getObject(intid)))
+
+
+class AddAllContactResultsButton(AddAllResultsButton):
+
+    def addSearchResults(self):
+        if (self.button_name not in self.request or
+            self.token_key not in self.request):
+            return False
+        add_ids = self.request[self.token_key]
+        if not isinstance(add_ids, list):
+            add_ids = [add_ids]
+        changed = False
+        relationship_view = self.manager.view
+        int_ids = getUtility(IIntIds)
+        for item_id in relationship_view.getAvailableItemIds():
+            item = int_ids.getObject(item_id)
+            if relationship_view.getKey(item) in add_ids:
+                relationship_view.add(removeSecurityProxy(item))
+                changed = True
+        return changed
+
+
+class FlourishContactManagementView(EditContactRelationships):
 
     page_template = InheritTemplate(Page.page_template)
 
@@ -222,64 +274,5 @@ class FlourishContactManagementView(FlourishRelationshipViewBase):
         self_contact = IContact(self.context)
         return self.getSelectedItemIds() + [int_ids.getId(self_contact)]
 
-    def setUpTables(self):
-        int_ids = getUtility(IIntIds)
-        self.available_table = self.createTableFormatter(
-            ommit=[int_ids.getObject(intid)
-                   for intid in self.getOmmitedItemIds()],
-            prefix="add_item")
-
-        self.selected_table = self.createTableFormatter(
-            filter=lambda l: l,
-            items=[int_ids.getObject(intid)
-                   for intid in self.getSelectedItemIds()],
-            columns=assigned_contacts_columns(self.context),
-            prefix="remove_item",
-            batch_size=0)
-
     def getKey(self, item):
         return IUniqueFormKey(item)
-
-    def addSearchResults(self):
-        key = 'displayed.add_item.tokens'
-        if key not in self.request:
-            return False
-        add_ids = self.request[key]
-        if not isinstance(add_ids, list):
-            add_ids = [add_ids]
-        changes = False
-        int_ids = getUtility(IIntIds)
-        for item_id in self.getAvailableItemIds():
-            item = int_ids.getObject(item_id)
-            if self.getKey(item) in add_ids:
-                self.add(removeSecurityProxy(IContact(item)))
-                changes = 'added'
-        return changes
-
-    def applyFormChanges(self):
-        changed = False
-        add_item_prefix = 'add_item.'
-        remove_item_prefix = 'remove_item.'
-        add_item_submitted = False
-        remove_item_submitted = False
-        catalog = self.getCatalog()
-        int_ids = getUtility(IIntIds)
-        index = catalog['form_keys']
-        for param in self.request.form:
-            if param.startswith(add_item_prefix):
-                add_item_submitted = True
-            elif param.startswith(remove_item_prefix):
-                remove_item_submitted = True
-        if add_item_submitted:
-            for intid in self.getAvailableItemIds():
-                key = add_item_prefix + index.documents_to_values[intid]
-                if key in self.request:
-                    self.add(IContact(int_ids.getObject(intid)))
-                    changed = True
-        if remove_item_submitted:
-            for intid in self.getSelectedItemIds():
-                key = remove_item_prefix + index.documents_to_values[intid]
-                if key in self.request:
-                    self.remove(int_ids.getObject(intid))
-                    changed = True
-        return changed

@@ -34,13 +34,16 @@ from zope.security.checker import canAccess
 from zope.viewlet.viewlet import ViewletBase
 from zc.table.column import GetterColumn
 
-
 from schooltool.common import SchoolToolMessage as _
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.browser.app import FlourishRelationshipViewBase
+from schooltool.app.browser.app import EditRelationships
+from schooltool.app.browser.app import RelationshipAddTableMixin
+from schooltool.app.browser.app import RelationshipRemoveTableMixin
 from schooltool.resource.interfaces import IResourceTypeInformation
 from schooltool.person.interfaces import IPerson
+from schooltool import table
 from schooltool.table.table import SchoolToolTableFormatter
 from schooltool.table.table import FilterWidget
 
@@ -281,7 +284,33 @@ class OverlayCalendarsFilterWidget(FilterWidget):
     template = ViewPageTemplateFile('templates/f_overlay_filter_widget.pt')
 
 
-class FlourishCalendarSelectionView(FlourishRelationshipViewBase):
+class OverlayCalendarTable(table.ajax.Table):
+
+    def columns(self):
+        title = GetterColumn(
+            name='title',
+            title=_(u"Title"),
+            getter=lambda i, f: i.title,
+            subsort=True)
+        type = GetterColumn(
+            name='type',
+            title=_(u"Type"),
+            getter=lambda i, f: i.cal_type,
+            subsort=True)
+        return [title, type]
+
+
+class CalendarAddRelationshipTable(RelationshipAddTableMixin,
+                                   OverlayCalendarTable):
+    pass
+
+
+class CalendarRemoveRelationshipTable(RelationshipRemoveTableMixin,
+                                      OverlayCalendarTable):
+    pass
+
+
+class FlourishCalendarSelectionView(EditRelationships):
 
     current_title = _('Selected calendars')
     available_title = _('Available calendars')

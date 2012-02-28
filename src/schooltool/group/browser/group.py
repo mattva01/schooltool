@@ -50,8 +50,13 @@ from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.skin.containers import TableContainerView
 from schooltool.app.browser.app import BaseAddView, BaseEditView
 from schooltool.app.browser.app import ContentTitle
+from schooltool.app.browser.app import EditRelationships
+from schooltool.app.browser.app import RelationshipAddTableMixin
+from schooltool.app.browser.app import RelationshipRemoveTableMixin
+from schooltool.app.browser.app import RelationshipViewBase
 from schooltool.person.interfaces import IPerson
 from schooltool.basicperson.browser.person import BasicPersonTable
+from schooltool.basicperson.browser.person import EditPersonRelationships
 from schooltool.course.interfaces import ISection
 from schooltool.schoolyear.interfaces import ISchoolYear
 from schooltool.schoolyear.interfaces import ISchoolYearContainer
@@ -59,8 +64,6 @@ from schooltool.group.group import Group
 from schooltool.group.interfaces import IGroup
 from schooltool.group.interfaces import IGroupMember
 from schooltool.group.interfaces import IGroupContainer, IGroupContained
-from schooltool.app.browser.app import RelationshipViewBase
-from schooltool.app.browser.app import FlourishRelationshipViewBase
 from schooltool.skin.flourish.viewlet import Viewlet
 from schooltool.common.inlinept import InheritTemplate
 from schooltool.common.inlinept import InlineViewPageTemplate
@@ -275,7 +278,7 @@ class FlourishGroupTableFormatter(table.table.SchoolToolTableFormatter):
         return formatter()
 
 
-class FlourishGroupListView(FlourishRelationshipViewBase):
+class FlourishGroupListView(EditRelationships):
 
     current_title = _('Current groups')
     available_title = _('Available groups')
@@ -536,6 +539,43 @@ class GroupsTableSchoolYear(flourish.viewlet.Viewlet):
     ''')
 
 
+class GroupsWithSYTable(GroupsTable):
+
+    def columns(self):
+        default = table.ajax.Table.columns(self)
+        schoolyear = SchoolYearColumn(
+            name='schoolyear',
+            title=_(u'School Year'),
+            subsort=True)
+        directlyProvides(schoolyear, ISortableColumn)
+        return default + [schoolyear]
+
+    def sortOn(self):
+        return (('schoolyear', True), ("title", False))
+
+
+class GroupListAddRelationshipTable(RelationshipAddTableMixin,
+                                    GroupsWithSYTable):
+
+    def updateFormatter(self):
+        ommit = self.view.getOmmitedItems()
+        available = self.view.getAvailableItems()
+        columns = self.columns()
+        self.setUp(formatters=[table.table.url_cell_formatter],
+                   columns=columns,
+                   ommit=ommit,
+                   items=available,
+                   table_formatter=self.table_formatter,
+                   batch_size=self.batch_size,
+                   prefix=self.__name__,
+                   css_classes={'table': 'data relationships-table'})
+
+
+class GroupListRemoveRelationshipTable(RelationshipRemoveTableMixin,
+                                       GroupsWithSYTable):
+    pass
+
+
 class FlourishGroupContainerDeleteView(flourish.containers.ContainerDeleteView):
 
     def nextURL(self):
@@ -720,7 +760,7 @@ class GroupLeadersTable(BasicPersonTable):
         return self.indexItems(self.context.leaders)
 
 
-class FlourishMemberViewPersons(FlourishRelationshipViewBase):
+class FlourishMemberViewPersons(EditPersonRelationships):
     """View class for adding / removing members to / from a group."""
 
     @property
@@ -730,22 +770,9 @@ class FlourishMemberViewPersons(FlourishRelationshipViewBase):
     current_title = _("Current Members")
     available_title = _("Add Members")
 
-    def setUpTables(self):
-        self.available_table = self.createTableFormatter(
-            ommit=self.getOmmitedItems(),
-            prefix="add_item")
-
-        self.selected_table = self.createTableFormatter(
-            filter=lambda l: l,
-            items=self.getSelectedItems(),
-            prefix="remove_item")
-
     def getSelectedItems(self):
         """Return a list of current group memebers."""
         return filter(IPerson.providedBy, self.context.members)
-
-    def getAvailableItemsContainer(self):
-        return ISchoolToolApplication(None)['persons']
 
     def getCollection(self):
         return self.context.members
