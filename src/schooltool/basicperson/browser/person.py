@@ -47,7 +47,7 @@ from z3c.form.validator import SimpleFieldValidator
 import zc.table.table
 
 from schooltool.app.browser.app import RelationshipViewBase
-from schooltool.app.browser.app import FlourishRelationshipViewBase
+from schooltool.app.browser.app import EditRelationships
 from schooltool.app.browser.app import RelationshipAddTableMixin
 from schooltool.app.browser.app import RelationshipRemoveTableMixin
 from schooltool.app.interfaces import ISchoolToolApplication
@@ -675,7 +675,11 @@ class PersonAdvisorView(RelationshipViewBase):
         return self.context.advisors
 
 
-class FlourishPersonAdvisorView(FlourishRelationshipViewBase):
+class EditPersonRelationships(EditRelationships):
+    pass
+
+
+class FlourishPersonAdvisorView(EditPersonRelationships):
 
     current_title = _('Current advisors')
     available_title = _('Available advisors')
@@ -714,7 +718,7 @@ class PersonAdviseeView(RelationshipViewBase):
         return self.context.advisees
 
 
-class FlourishPersonAdviseeView(FlourishRelationshipViewBase):
+class FlourishPersonAdviseeView(EditPersonRelationships):
 
     current_title = _("Current advisees")
     available_title = _("Available advisees")

@@ -52,6 +52,7 @@ from schooltool.app.browser.app import BaseAddView, BaseEditView
 from schooltool.app.browser.app import ContentTitle
 from schooltool.person.interfaces import IPerson
 from schooltool.basicperson.browser.person import BasicPersonTable
+from schooltool.basicperson.browser.person import EditPersonRelationships
 from schooltool.course.interfaces import ISection
 from schooltool.schoolyear.interfaces import ISchoolYear
 from schooltool.schoolyear.interfaces import ISchoolYearContainer
@@ -60,7 +61,7 @@ from schooltool.group.interfaces import IGroup
 from schooltool.group.interfaces import IGroupMember
 from schooltool.group.interfaces import IGroupContainer, IGroupContained
 from schooltool.app.browser.app import RelationshipViewBase
-from schooltool.app.browser.app import FlourishRelationshipViewBase, EditRelationships
+from schooltool.app.browser.app import FlourishRelationshipViewBase
 from schooltool.skin.flourish.viewlet import Viewlet
 from schooltool.common.inlinept import InheritTemplate
 from schooltool.common.inlinept import InlineViewPageTemplate
@@ -720,7 +721,7 @@ class GroupLeadersTable(BasicPersonTable):
         return self.indexItems(self.context.leaders)
 
 
-class FlourishMemberViewPersons(EditRelationships):
+class FlourishMemberViewPersons(EditPersonRelationships):
     """View class for adding / removing members to / from a group."""
 
     @property
