@@ -2,12 +2,12 @@
   <form method="post"
         tal:attributes="action string:${context/@@absolute_url}/hide_unhide_tabs.html">
     <input type="hidden" name="form-submitted" value="" />
-    <h3 i18n:translate="">Hide or Unhide Tabs</h3>
+    <h3 i18n:translate="">Visible Tabs</h3>
     <table>
       <thead>
         <tr>
           <th i18n:translate="">Title</th>
-          <th i18n:translate="">Hidden?</th>
+          <th i18n:translate="">Visible</th>
         </tr>
       </thead>
       <tr tal:repeat="tab view/tabs">
@@ -15,7 +15,7 @@
           <span tal:content="tab/title" />
         </td>
         <td>
-          <input type="checkbox" name="hidden:list"
+          <input type="checkbox" name="visible:list"
                  onchange="this.form.submit()"
                  tal:attributes="value tab/name;
                                  checked tab/checked" />

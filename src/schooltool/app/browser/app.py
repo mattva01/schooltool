@@ -1337,28 +1337,30 @@ class FlourishHideUnhideTabsView(flourish.page.Page):
     def tabs(self):
         tabs = []
         apptabs = removeSecurityProxy(IApplicationTabs(self.context))
-        provider = queryMultiAdapter(
+        manager = queryMultiAdapter(
             (self.context, self.request, self),
             flourish.interfaces.IContentProvider, 'header_navigation')
-        for name in provider.order:
+        manager.collect()
+        for name in manager.order:
             if name in self.ignore_tabs:
                 continue
             tabs.append({
-                'title': removeSecurityProxy(provider[name]).title,
+                'title': removeSecurityProxy(manager[name]).title,
                 'name': name,
-                'checked': not apptabs.get(name, True) and 'checked' or '',
+                'checked': apptabs.get(name, True) and 'checked' or '',
                 })
         return tabs
 
     def update(self):
         if 'form-submitted' in self.request:
-            hidden = self.request.get('hidden', [])
+            visible = self.request.get('visible', [])
             apptabs = removeSecurityProxy(IApplicationTabs(self.context))
-            for tab in set(hidden + list(apptabs)):
-                if tab in hidden:
-                    apptabs[tab] = False
-                elif tab in apptabs:
-                    apptabs[tab] = True
+            for tab in self.tabs:
+                name = tab['name']
+                if name not in visible:
+                    apptabs[name] = False
+                elif not apptabs.get(name, True):
+                    apptabs[name] = True
 
 
 class FlourishAboutView(flourish.page.Page):
