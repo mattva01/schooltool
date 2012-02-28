@@ -26,6 +26,7 @@ from zope.interface import Interface, implements
 from zope.container.interfaces import INameChooser
 from zope.app.form.browser.interfaces import ITerms
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
+from zope.cachedescriptors.property import Lazy
 from zope.component import adapts
 from zope.component import getUtility, queryMultiAdapter, getMultiAdapter
 from zope.datetime import time, rfc1123_date
@@ -42,6 +43,8 @@ from zope.traversing.browser.absoluteurl import absoluteURL
 from zope.viewlet.viewlet import ViewletBase
 from zope.security.checker import canAccess
 
+from reportlab.lib import pagesizes
+from reportlab.lib import units
 import z3c.form.interfaces
 from z3c.form.validator import SimpleFieldValidator
 import zc.table.table
@@ -50,6 +53,8 @@ from schooltool.app.browser.app import RelationshipViewBase
 from schooltool.app.browser.app import EditRelationships
 from schooltool.app.browser.app import RelationshipAddTableMixin
 from schooltool.app.browser.app import RelationshipRemoveTableMixin
+from schooltool.app.browser.report import ReportPDFView
+from schooltool.app.browser.report import DefaultPageTemplate
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.common.inlinept import InlineViewPageTemplate
@@ -57,6 +62,7 @@ from schooltool.common.inlinept import InheritTemplate
 from schooltool.basicperson.interfaces import IDemographics
 from schooltool.basicperson.interfaces import IDemographicsFields
 from schooltool.basicperson.interfaces import IBasicPerson
+from schooltool.contact.interfaces import IContactable
 from schooltool.group.interfaces import IGroupContainer
 from schooltool.person.interfaces import IPerson, IPersonFactory
 from schooltool.person.browser.person import PersonTable, PersonTableFormatter
@@ -1129,6 +1135,200 @@ class FlourishRequestPersonXMLExportView(RequestReportDownloadDialog):
 
     def nextURL(self):
         return absoluteURL(self.context, self.request) + '/person_export.xml'
+
+
+class FlourishRequestPersonIDCardView(RequestReportDownloadDialog):
+
+    def nextURL(self):
+        return absoluteURL(self.context, self.request) + '/person_id_card.pdf'
+
+
+class IDCardsPageTemplate(DefaultPageTemplate):
+
+    template = ViewPageTemplateFile('templates/f_id_cards_template.pt',
+                                    content_type="text/xml")
+
+
+class FlourishPersonIDCardsViewBase(ReportPDFView):
+
+    template=ViewPageTemplateFile('templates/f_person_id_cards.pt')
+    title = _('ID Cards')
+    COLUMNS = 2
+    ROWS = 4
+    # All of the following are cm
+    CARD = {
+        'height': 5.4,
+        'width': 8.57,
+        }
+    TITLE = {
+        'height': 1.1,
+        'padding': 0.06, # from the edge of the title frame
+        }
+    DEMOGRAPHICS = {
+        'height': 3.2,
+        'margin-left': 0.55, # from the edge of the card
+        'margin-bottom': 0.75, # from the edge of the card
+        'width': 5.05,
+        }
+    PHOTO = {
+        'height': 3.2,
+        'width': 2.4,
+        }
+    FOOTER = {
+        'height': 0.5,
+        }
+    LEFT_BASE = 1.7
+    TOP_BASE = 7.3
+    COLUMN_WIDTH = 9.6
+    ROW_HEIGHT = 6.1
+
+    def __init__(self, *args, **kw):
+        super(FlourishPersonIDCardsViewBase, self).__init__(*args, **kw)
+        app = ISchoolToolApplication(None)
+        preferences = IApplicationPreferences(app)
+        self.schoolName = preferences.title
+
+    @property
+    def top(self):
+        page_height = self.pageSize[1]
+        return (page_height/units.cm) - self.TOP_BASE
+
+    @property
+    def left(self):
+        return self.LEFT_BASE
+
+    def persons(self):
+        """Returns a list of getPersonData calls"""
+        raise NotImplementedError('do this in subclass')
+
+    def getPersonData(self, person):
+        demographics = IDemographics(person)
+        contact_title = None
+        contact_phone = None
+        contacts = list(IContactable(person).contacts)
+        if contacts:
+            contact = contacts[0]
+            contact_title = ' '.join([contact.first_name,
+                                      contact.last_name])
+            phones = [
+                contact.home_phone,
+                contact.work_phone,
+                contact.mobile_phone,
+                ]
+            if phones:
+                contact_phone = phones[0]
+        return {
+            'title': ' '.join([person.first_name, person.last_name]),
+            'username': person.username,
+            'ID': demographics.get('ID'),
+            'birth_date': person.birth_date,
+            'contact_title': contact_title,
+            'contact_phone': contact_phone,
+            'photo': person.photo,
+            }
+
+    def titleVerticalAlign(self, person):
+        result = 0
+        if len(person['title']) < 44:
+            result = 0.25
+        return '%fcm' % result
+
+    @Lazy
+    def total_cards_in_page(self):
+        return self.COLUMNS * self.ROWS
+
+    def insertBreak(self, repeat):
+        return repeat['person'].number() % self.total_cards_in_page  == 0
+
+    def personFrame(self, repeat):
+        return repeat['person'].index() % self.total_cards_in_page
+
+    def cards(self):
+        result = []
+        for card_index in range(self.total_cards_in_page):
+            card_column = card_index % self.COLUMNS
+            card_row = card_index / self.COLUMNS
+            card_x1 = self.left + (self.COLUMN_WIDTH * card_column)
+            card_y1 = self.top - (self.ROW_HEIGHT * card_row)
+            card_info = {
+                'index': card_index,
+                'x1': card_x1,
+                'y1': card_y1,
+                'height': self.CARD['height'],
+                'width': self.CARD['width'],
+                }
+            result.append(card_info)
+        return result
+
+    @Lazy
+    def cardFrames(self):
+        result = {}
+        for card_info in self.cards():
+            info = {
+                'outter': self.getOutterFrame(card_info),
+                'title': self.getTitleFrame(card_info),
+                'demographics': self.getDemographicsFrame(card_info),
+                'footer': self.getFooterFrame(card_info),
+                }
+            result[card_info['index']] = info
+        return result
+
+    def getOutterFrame(self, card_info):
+        frame_info = card_info.copy()
+        frame_info['id'] = 'outter_%d' % card_info['index']
+        frame_info['maxWidth'] = card_info['width']
+        frame_info['maxHeight'] = card_info['height']
+        return frame_info
+
+    def getTitleFrame(self, card_info):
+        y1 = card_info['y1'] + (card_info['height'] - self.TITLE['height'])
+        return {
+            'id': 'title_%d' % card_info['index'],
+            'x1': card_info['x1'],
+            'y1': y1,
+            'width': card_info['width'],
+            'maxWidth': card_info['width'] - self.TITLE['padding'],
+            'height': self.TITLE['height'],
+            'maxHeight': self.TITLE['height'] - self.TITLE['padding'],
+            }
+
+    def getDemographicsFrame(self, card_info):
+        demo_info = self.DEMOGRAPHICS
+        x1 = card_info['x1'] + demo_info['margin-left']
+        y1 = card_info['y1'] +  demo_info['margin-bottom']
+        return {
+            'id': 'demographics_%d' % card_info['index'],
+            'x1': x1,
+            'y1': y1,
+            'width': demo_info['width'],
+            'maxWidth': demo_info['width'],
+            'height': demo_info['height'],
+            'maxHeight': demo_info['height'],
+            }
+
+    def getFooterFrame(self, card_info):
+        x1 = card_info['x1']
+        y1 = card_info['y1']
+        return {
+            'id': 'footer_%d' % card_info['index'],
+            'x1': x1,
+            'y1': y1,
+            'width': card_info['width'],
+            'maxWidth': card_info['width'],
+            'height': self.FOOTER['height'],
+            'maxHeight': self.FOOTER['height'],
+            }
+
+
+class FlourishPersonIDCardView(FlourishPersonIDCardsViewBase):
+
+    @property
+    def title(self):
+        return _('ID Card: ${person}',
+                 mapping={'person': self.context.title})
+
+    def persons(self):
+        return [self.getPersonData(self.context)]
 
 
 def getUserViewlet(context, request, view, manager, name):

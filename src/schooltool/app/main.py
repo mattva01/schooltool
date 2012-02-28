@@ -748,13 +748,13 @@ class StandaloneServer(object):
         if options.config.pid_file:
             os.unlink(options.config.pid_file)
 
-    def configureReportlab(self, fontdir):
+    def configureReportlab(self, fontdirs):
         """Configure reportlab given a path to TrueType fonts.
 
         Disables PDF support in SchoolTool if fontdir is empty.
         Outputs a warning to stderr in case of errors.
         """
-        if not fontdir:
+        if not fontdirs:
             return
 
         try:
@@ -764,20 +764,31 @@ class StandaloneServer(object):
                                    " library.\nPDF support disabled.")
             return
 
-        if not os.path.isdir(fontdir):
-            print >> sys.stderr, (_("Warning: font directory '%s' does"
+        existing_directories = []
+        for fontdir in fontdirs.split(':'):
+            if os.path.isdir(fontdir):
+                existing_directories.append(fontdir)
+
+        if not existing_directories:
+            print >> sys.stderr, (_("Warning: font directories '%s' do"
                                     " not exist.\nPDF support disabled.")
-                                  % fontdir)
+                                  % fontdirs)
             return
 
         for font_file in pdf.font_map.values():
-            font_path = os.path.join(fontdir, font_file)
-            if not os.path.exists(font_path):
-                print >> sys.stderr, _("Warning: font '%s' does not exist.\n"
-                                       "PDF support disabled.") % font_path
+            font_exists = False
+            for fontdir in existing_directories:
+                font_path = os.path.join(fontdir, font_file)
+                if os.path.exists(font_path):
+                    font_exists = True
+            if not font_exists:
+                print >> sys.stderr, _("Warning: font '%s' does not exist"
+                                       " in the font directories '%s'.\n"
+                                       "PDF support disabled.") % (font_file,
+                                                                   fontdirs)
                 return
 
-        pdf.setUpLiberationFonts(fontdir)
+        pdf.setUpFonts(existing_directories)
 
 
 def main():
