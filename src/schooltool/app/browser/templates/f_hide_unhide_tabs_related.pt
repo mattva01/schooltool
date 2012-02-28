@@ -1,0 +1,19 @@
+<metal:block i18n:domain="schooltool">
+  <div class="header" i18n:translate="">
+    What is This?
+  </div>
+  <div class="body">
+    <p i18n:translate="">
+      Schools that are not using all components of SchoolTool can reduce
+      visual clutter by hiding unnecessary links in the top navigation bar.
+    </p>
+    <p i18n:translate="">
+      Note that these settings have no effects other than removing
+      navigational links; they don't change the functionality, data, or
+      security settings of SchoolTool in any way.
+    </p>
+    <p i18n:translate="">
+      Links can be changed from visible to hidden at any time..
+    </p>
+  </div>
+</metal:block>
