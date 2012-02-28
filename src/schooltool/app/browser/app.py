@@ -361,8 +361,7 @@ class RelationshipAddTableMixin(RelationshipButtonTableMixin):
     def updateFormatter(self):
         ommit = self.view.getOmmitedItems()
         columns = self.columns()
-        self.setUp(formatters=[table.table.url_cell_formatter],
-                   columns=columns,
+        self.setUp(columns=columns,
                    ommit=ommit,
                    table_formatter=self.table_formatter,
                    batch_size=self.batch_size,
@@ -386,8 +385,7 @@ class RelationshipRemoveTableMixin(RelationshipButtonTableMixin):
     def updateFormatter(self):
         items = self.view.getSelectedItems()
         columns = self.columns()
-        self.setUp(formatters=[table.table.url_cell_formatter],
-                   columns=columns,
+        self.setUp(columns=columns,
                    items=items,
                    table_formatter=self.table_formatter,
                    batch_size=self.batch_size,
