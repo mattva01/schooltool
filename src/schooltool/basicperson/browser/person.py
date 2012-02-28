@@ -676,7 +676,9 @@ class PersonAdvisorView(RelationshipViewBase):
 
 
 class EditPersonRelationships(EditRelationships):
-    pass
+
+    def getAvailableItemsContainer(self):
+        return ISchoolToolApplication(None)['persons']
 
 
 class FlourishPersonAdvisorView(EditPersonRelationships):
@@ -686,9 +688,6 @@ class FlourishPersonAdvisorView(EditPersonRelationships):
 
     def getSelectedItems(self):
         return self.context.advisors
-
-    def getAvailableItemsContainer(self):
-        return ISchoolToolApplication(None)['persons']
 
     def getCollection(self):
         return self.context.advisors
@@ -725,9 +724,6 @@ class FlourishPersonAdviseeView(EditPersonRelationships):
 
     def getSelectedItems(self):
         return self.context.advisees
-
-    def getAvailableItemsContainer(self):
-        return ISchoolToolApplication(None)['persons']
 
     def getCollection(self):
         return self.context.advisees

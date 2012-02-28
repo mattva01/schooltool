@@ -735,9 +735,6 @@ class FlourishMemberViewPersons(EditPersonRelationships):
         """Return a list of current group memebers."""
         return filter(IPerson.providedBy, self.context.members)
 
-    def getAvailableItemsContainer(self):
-        return ISchoolToolApplication(None)['persons']
-
     def getCollection(self):
         return self.context.members
 
