@@ -457,7 +457,7 @@ def get_schooltool_plugin_configurations():
 plugin_configurations = get_schooltool_plugin_configurations()
 
 
-class StandaloneServer(object):
+class SchoolToolServer(object):
 
     ZCONFIG_SCHEMA = os.path.join(os.path.dirname(__file__),
                                   'config-schema.xml')
@@ -642,19 +642,6 @@ class StandaloneServer(object):
         app['persons'].super_user = manager
         setSite(None)
 
-    def main(self, argv=sys.argv):
-        """Start the SchoolTool server."""
-        t0, c0 = time.time(), time.clock()
-        options = self.load_options(argv)
-        db = self.setup(options)
-        if not options.manage:
-            self.beforeRun(options, db)
-            t1, c1 = time.time(), time.clock()
-            print _("Startup time: %.3f sec real, %.3f sec CPU") % (t1 - t0,
-                                                                    c1 - c0)
-            run()
-            self.afterRun(options)
-
     def setup(self, options):
         """Configure SchoolTool."""
         setUpLogger(None, options.config.error_log_file,
@@ -715,27 +702,6 @@ class StandaloneServer(object):
 
         return db
 
-    def beforeRun(self, options, db):
-        if options.daemon:
-            daemonize()
-
-        task_dispatcher = ThreadedTaskDispatcher()
-        task_dispatcher.setThreadCount(options.config.thread_pool_size)
-
-        for ip, port in options.config.web:
-            server = http.create('HTTP', task_dispatcher, db, port=port, ip=ip)
-
-        notify(ProcessStarting())
-
-        if options.config.pid_file:
-            pidfile = file(options.config.pid_file, "w")
-            print >> pidfile, os.getpid()
-            pidfile.close()
-
-    def afterRun(self, options):
-        if options.config.pid_file:
-            os.unlink(options.config.pid_file)
-
     def configureReportlab(self, fontdir):
         """Configure reportlab given a path to TrueType fonts.
 
@@ -766,6 +732,43 @@ class StandaloneServer(object):
                 return
 
         pdf.setUpLiberationFonts(fontdir)
+
+        
+class StandaloneServer(SchoolToolServer):
+    
+    def beforeRun(self, options, db):
+        if options.daemon:
+            daemonize()
+
+        task_dispatcher = ThreadedTaskDispatcher()
+        task_dispatcher.setThreadCount(options.config.thread_pool_size)
+
+        for ip, port in options.config.web:
+            server = http.create('HTTP', task_dispatcher, db, port=port, ip=ip)
+
+        notify(ProcessStarting())
+
+        if options.config.pid_file:
+            pidfile = file(options.config.pid_file, "w")
+            print >> pidfile, os.getpid()
+            pidfile.close()
+
+    def main(self, argv=sys.argv):
+        """Start the SchoolTool server."""
+        t0, c0 = time.time(), time.clock()
+        options = self.load_options(argv)
+        db = self.setup(options)
+        if not options.manage:
+            self.beforeRun(options, db)
+            t1, c1 = time.time(), time.clock()
+            print _("Startup time: %.3f sec real, %.3f sec CPU") % (t1 - t0,
+                                                                    c1 - c0)
+            run()
+            self.afterRun(options)
+
+    def afterRun(self, options):
+        if options.config.pid_file:
+            os.unlink(options.config.pid_file)
 
 
 def main():
