@@ -49,8 +49,8 @@ from zope.event import notify
 from zope.server.taskthreads import ThreadedTaskDispatcher
 from zope.publisher.interfaces.http import IHTTPRequest
 from zope.i18n.interfaces import IUserPreferredLanguages
-from zope.app.wsgi import WSGIPublisherApplication
 from zope.app.server.main import run
+from zope.app.server.wsgi import http
 from zope.app.appsetup import DatabaseOpened, ProcessStarting
 from zope.app.publication.zopepublication import ZopePublication
 from zope.traversing.interfaces import IContainmentRoot
@@ -64,9 +64,6 @@ from zope.intid import IntIds
 from zope.intid.interfaces import IIntIds
 from zope.component.interfaces import ISite
 from zope.site import LocalSiteManager
-from zope.server.http.wsgihttpserver import WSGIHTTPServer
-from zope.server.http.commonaccesslogger import CommonAccessLogger
-from zope.app.server.wsgi import ServerType
 
 from schooltool.app.interfaces import ApplicationStartUpEvent
 from schooltool.app.interfaces import ApplicationInitializationEvent
@@ -92,12 +89,6 @@ localedir = os.path.join(os.path.dirname(__file__), '..', 'locales')
 catalog = gettext.translation('schooltool', localedir, fallback=True)
 _ = lambda us: catalog.ugettext(us).encode(locale_charset, 'replace')
 _._domain = 'schooltool'
-
-
-schooltool_server = ServerType(WSGIHTTPServer,
-                               WSGIPublisherApplication,
-                               CommonAccessLogger,
-                               8080, True)
 
 
 class Options(object):
@@ -675,8 +666,6 @@ class StandaloneServer(object):
         logging.getLogger('ZODB.lock_file').disabled = True
 
         # Process ZCML
-        global SCHOOLTOOL_SITE_DEFINITION
-        SCHOOLTOOL_SITE_DEFINITION = options.config.site_definition
         self.siteConfigFile = options.config.site_definition
         self.configure(options)
 
@@ -734,8 +723,7 @@ class StandaloneServer(object):
         task_dispatcher.setThreadCount(options.config.thread_pool_size)
 
         for ip, port in options.config.web:
-            server = schooltool_server.create('HTTP', task_dispatcher, db,
-                                              port=port, ip=ip)
+            server = http.create('HTTP', task_dispatcher, db, port=port, ip=ip)
 
         notify(ProcessStarting())
 
