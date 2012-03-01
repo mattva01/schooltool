@@ -699,9 +699,11 @@ def extract_testrunner_traceback(exc_info):
         traceback = exc_info[2]
     elif isinstance(err, doctest.DocTestFailure):
         try:
-            exec ('raise ValueError'
-                  '("Expected and actual output are different")'
-                  ) in err.test.globs
+            last_line = max(0, len(err.example.source.splitlines())+err.example.lineno-1)
+            throw_source = '\n'*(last_line) +\
+                           'raise ValueError'\
+                           '("Expected and actual output are different")'
+            exec compile(throw_source, err.test.filename, 'single') in err.test.globs
         except:
             exc_info = sys.exc_info()
             traceback = exc_info[2]
