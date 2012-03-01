@@ -865,7 +865,7 @@ def collect_ftests(package=None, level=None, layer=None, filenames=None,
                                suite_factory=make_suite)
     if not selenium_enabled:
         # XXX: should log that tests are skipped somewhere better
-        print >> sys.stderr, 'Selenium not configured, skipping', suite
+        print >> sys.stderr, 'Selenium not configured, skipping', package.__name__
         return unittest.TestSuite()
     return suite
 

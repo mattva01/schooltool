@@ -20,7 +20,6 @@
 Tests for SchoolTool calendaring views.
 """
 
-import sys
 import unittest
 import doctest
 from pprint import pprint
@@ -458,20 +457,13 @@ def pdfTearDown(test=None):
 
 
 def test_suite():
-    from schooltool.app.tests.test_pdf import tryToSetUpReportLab
     suite = unittest.TestSuite()
     suite.addTest(doctest.DocTestSuite('schooltool.app.browser.pdfcal'))
-    success = tryToSetUpReportLab()
-    if success:
-        optionflags = (doctest.ELLIPSIS | doctest.REPORT_NDIFF
-                       | doctest.NORMALIZE_WHITESPACE)
-        docsuite = doctest.DocTestSuite(setUp=pdfSetUp, tearDown=pdfTearDown,
-                                        optionflags=optionflags)
-        suite.addTest(docsuite)
-    else:
-        print >> sys.stderr, ("reportlab or TrueType fonts not found;"
-                              " PDF generator tests skipped")
-
+    optionflags = (doctest.ELLIPSIS | doctest.REPORT_NDIFF
+                   | doctest.NORMALIZE_WHITESPACE)
+    docsuite = doctest.DocTestSuite(setUp=pdfSetUp, tearDown=pdfTearDown,
+                                    optionflags=optionflags)
+    suite.addTest(docsuite)
     return suite
 
 
