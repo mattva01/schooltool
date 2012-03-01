@@ -682,10 +682,8 @@ def walk_the_traceback(traceback, test):
         return traceback
 
     while traceback.tb_next is not None:
-        print 'CHECKING.'
         try:
             tb_filename = traceback.tb_frame.f_code.co_filename
-            print tb_filename, '==', test_filename
             if tb_filename == test_filename:
                 return traceback
         except AttributeError:
