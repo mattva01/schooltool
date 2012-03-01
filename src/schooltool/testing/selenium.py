@@ -674,30 +674,69 @@ def make_doctest_compile_patch(test):
     return compile_example
 
 
+def walk_the_traceback(traceback, test):
+    """Try to find the traceback for this test."""
+    try:
+        test_filename = test.filename
+    except AttributeError:
+        return traceback
+
+    while traceback.tb_next is not None:
+        print 'CHECKING.'
+        try:
+            tb_filename = traceback.tb_frame.f_code.co_filename
+            print tb_filename, '==', test_filename
+            if tb_filename == test_filename:
+                return traceback
+        except AttributeError:
+            pass
+        traceback = traceback.tb_next
+
+    return traceback
+
+def extract_testrunner_traceback(exc_info):
+    ex_type, err, traceback = exc_info
+    if isinstance(err, doctest.UnexpectedException):
+        exc_info = err.exc_info
+        traceback = exc_info[2]
+    elif isinstance(err, doctest.DocTestFailure):
+        try:
+            exec ('raise ValueError'
+                  '("Expected and actual output are different")'
+                  ) in err.test.globs
+        except:
+            exc_info = sys.exc_info()
+            traceback = exc_info[2]
+    if isinstance(err, (doctest.DocTestFailure, doctest.UnexpectedException)):
+        traceback = walk_the_traceback(traceback, err.test)
+    return traceback
+
+
 def make_ipdb_testrunner_postmortem(test):
     import ipdb
     import zope.testrunner.interfaces
     def interactive_post_mortem(exc_info):
-        err = exc_info[1]
-        if isinstance(err, (doctest.UnexpectedException, doctest.DocTestFailure)):
-            if isinstance(err, doctest.UnexpectedException):
-                exc_info = err.exc_info
-                # Print out location info if the error was in a doctest
-                if exc_info[2].tb_frame.f_code.co_filename == '<string>':
-                    print_doctest_location(err)
-            else:
-                print_doctest_location(err)
-                # Hm, we have a DocTestFailure exception.  We need to
-                # generate our own traceback
-                try:
-                    exec ('raise ValueError'
-                          '("Expected and actual output are different")'
-                          ) in err.test.globs
-                except:
-                    exc_info = sys.exc_info()
-        print "%s.%s:" % (exc_info[0].__module__, exc_info[0].__name__)
-        print exc_info[1]
-        ipdb.post_mortem(exc_info[2])
+        tb = extract_testrunner_traceback(exc_info)
+        ipdb.__main__.update_stdout()
+        ipdb.__main__.BdbQuit_excepthook.excepthook_ori = sys.excepthook
+        sys.excepthook = ipdb.__main__.BdbQuit_excepthook
+        p = ipdb.__main__.Pdb(ipdb.__main__.def_colors)
+        p.reset()
+        p.botframe = tb.tb_frame
+        p.interaction(tb.tb_frame, tb)
+        raise zope.testrunner.interfaces.EndRun()
+    return interactive_post_mortem
+
+
+def make_pdb_testrunner_postmortem(test):
+    import pdb
+    import zope.testrunner.interfaces
+    def interactive_post_mortem(exc_info):
+        tb = extract_testrunner_traceback(exc_info)
+        p = pdb.Pdb()
+        p.reset()
+        p.botframe = tb.tb_frame
+        p.interaction(tb.tb_frame, tb)
         raise zope.testrunner.interfaces.EndRun()
     return interactive_post_mortem
 
@@ -709,8 +748,7 @@ def make_testrunner_postmortem_patch(test):
         pass
 
     try:
-        import zope.testrunner.debug
-        return zope.testrunner.debug.post_mortem
+        return make_pdb_testrunner_postmortem(test)
     except ImportError:
         return None
     return None
