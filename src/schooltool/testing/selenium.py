@@ -23,7 +23,9 @@ from __future__ import absolute_import
 import asyncore
 import cgi
 import doctest
+import linecache
 import os
+import re
 import string
 import sys
 import threading
@@ -41,9 +43,12 @@ from zope.server.taskthreads import ThreadedTaskDispatcher
 from zope.server.http.commonaccesslogger import CommonAccessLogger
 from zope.server.http.wsgihttpserver import WSGIHTTPServer
 
+from schooltool.testing import mock
 from schooltool.testing.functional import ZCMLLayer
 from schooltool.testing.functional import collect_txt_ftests
 
+
+BLACK_MAGIC = True # enable morally ambiguous monkeypatching
 
 _browser_factory = None
 selenium_enabled = False
@@ -641,6 +646,75 @@ HTTPServerFactory = ServerType(FTestWSGIHTTPServer,
                                CommonAccessLogger,
                                0, True)
 
+DOCTEST_EXAMPLE_FILENAME_RE = re.compile(r'<doctest (?P<name>.+)\[(?P<examplenum>\d+)\]>$')
+
+
+def make_doctest_getlines_patch(test):
+    orig_getlines = linecache.getlines
+    def getlines(filename, module_globals=None):
+        m = DOCTEST_EXAMPLE_FILENAME_RE.match(filename)
+        if m and m.group('name') == test.name:
+            example = test.examples[int(m.group('examplenum'))]
+            source = example.source
+            if isinstance(source, unicode):
+                source = source.encode('ascii', 'backslashreplace')
+            return source.splitlines(True)
+        else:
+            return orig_getlines(filename, module_globals)
+    return getlines
+
+
+def make_doctest_compile_patch(test):
+    def compile_example(source, filename, mode, *args):
+        match = DOCTEST_EXAMPLE_FILENAME_RE.match(filename)
+        example_n = int(match.group('examplenum'))
+        example = test.examples[example_n]
+        line = example.lineno
+        return compile('\n'*(line)+source, test.filename, mode, *args)
+    return compile_example
+
+
+def make_ipdb_testrunner_postmortem(test):
+    import ipdb
+    import zope.testrunner.interfaces
+    def interactive_post_mortem(exc_info):
+        err = exc_info[1]
+        if isinstance(err, (doctest.UnexpectedException, doctest.DocTestFailure)):
+            if isinstance(err, doctest.UnexpectedException):
+                exc_info = err.exc_info
+                # Print out location info if the error was in a doctest
+                if exc_info[2].tb_frame.f_code.co_filename == '<string>':
+                    print_doctest_location(err)
+            else:
+                print_doctest_location(err)
+                # Hm, we have a DocTestFailure exception.  We need to
+                # generate our own traceback
+                try:
+                    exec ('raise ValueError'
+                          '("Expected and actual output are different")'
+                          ) in err.test.globs
+                except:
+                    exc_info = sys.exc_info()
+        print "%s.%s:" % (exc_info[0].__module__, exc_info[0].__name__)
+        print exc_info[1]
+        ipdb.post_mortem(exc_info[2])
+        raise zope.testrunner.interfaces.EndRun()
+    return interactive_post_mortem
+
+
+def make_testrunner_postmortem_patch(test):
+    try:
+        return make_ipdb_testrunner_postmortem(test)
+    except ImportError:
+        pass
+
+    try:
+        import zope.testrunner.debug
+        return zope.testrunner.debug.post_mortem
+    except ImportError:
+        return None
+    return None
+
 
 class SeleniumLayer(ZCMLLayer):
 
@@ -655,6 +729,8 @@ class SeleniumLayer(ZCMLLayer):
     def __init__(self, *args, **kw):
         ZCMLLayer.__init__(self, *args, **kw)
         self.browsers = BrowserPool(self)
+        if BLACK_MAGIC:
+            self.patches = mock.ModulesSnapshot()
 
     def setUp(self):
         ZCMLLayer.setUp(self)
@@ -692,6 +768,8 @@ class SeleniumLayer(ZCMLLayer):
     def testTearDown(self):
         self.setup.tearDown()
         self.browsers.reset()
+        if BLACK_MAGIC:
+            self.patches.restore()
 
 
 class SkippyDocTestRunner(doctest.DocTestRunner):
@@ -716,9 +794,7 @@ class SkippyDocTestRunner(doctest.DocTestRunner):
                     del example.__dict__['__old_options']
         return result
 
-    def report_failure(self, out, test, example, got):
-        result = doctest.DocTestRunner.report_failure(
-            self, out, test, example, got)
+    def honour_only_first_failure_flag(self, test):
         if self.optionflags & doctest.REPORT_ONLY_FIRST_FAILURE:
             # For practical reasons, skip the rest of the test.
             # Selenium failures are slow enough as they are,
@@ -731,20 +807,22 @@ class SkippyDocTestRunner(doctest.DocTestRunner):
                     example.options = example.options.copy()
                     example.options[doctest.SKIP] = True
                     del example.__dict__['__old_options']
+
+    def report_unexpected_exception(self, out, test, example, exc_info):
+        result = doctest.DocTestRunner.report_unexpected_exception(
+            self, out, test, example, exc_info)
+        self.honour_only_first_failure_flag(test)
+        return result
+
+    def report_failure(self, out, test, example, got):
+        result = doctest.DocTestRunner.report_failure(
+            self, out, test, example, got)
+        self.honour_only_first_failure_flag(test)
         return result
 
 
 class RepeatyDebugRunner(doctest.DebugRunner, SkippyDocTestRunner):
     """Mr. Repeaty Debugger."""
-
-    #def report_unexpected_exception(self, out, test, example, exc_info):
-    #    raise UnexpectedException(test, example, exc_info)
-
-    #def report_failure(self, out, test, example, got):
-    #    raise DocTestFailure(test, example, got)
-
-    def report_failure(self, out, test, example, got):
-        return doctest.DebugRunner.report_failure(self, out, test, example, got)
 
 
 class SeleniumOutputChecker(doctest.OutputChecker):
@@ -778,7 +856,33 @@ class SeleniumDocFileCase(doctest.DocFileCase):
             test, optionflags=optionflags,
             setUp=setUp, tearDown=tearDown, checker=checker)
 
+    if BLACK_MAGIC:
+        def patch(self, patches):
+            self._layer.patches.mock(
+                dict(filter(lambda (a, m): m is not None, patches.items())))
+
+    def run(self, *args, **kw):
+        if BLACK_MAGIC:
+            test = self._dt_test
+            patches = {
+                'doctest.compile':
+                    make_doctest_compile_patch(test),
+                }
+            self.patch(patches)
+        return doctest.DocFileCase.run(self, *args, **kw)
+
     def debug(self):
+        if BLACK_MAGIC:
+            test = self._dt_test
+            patches = {
+                'doctest.compile':
+                    make_doctest_compile_patch(test),
+                #'linecache.getlines':
+                #    make_doctest_getlines_patch(test),
+                'zope.testrunner.debug.post_mortem':
+                    make_testrunner_postmortem_patch(test),
+                }
+            self.patch(patches)
         self.setUp()
         runner = RepeatyDebugRunner(optionflags=self._dt_optionflags,
                                     checker=self._dt_checker, verbose=False)
@@ -853,11 +957,19 @@ def collect_ftests(package=None, level=None, layer=None, filenames=None,
                    optionflags=None, test_case_factory=SeleniumDocFileCase):
     package = doctest._normalize_module(package)
     def make_suite(filename, package=None):
+        if BLACK_MAGIC:
+            def layer_setting_factory(*args, **kw):
+                test_case = test_case_factory(*args, **kw)
+                test_case._layer = layer
+                return test_case
+            suite_test_case_factory = layer_setting_factory
+        else:
+            suite_test_case_factory = test_case_factory
         suite = SeleniumDocFileSuite(layer, filename,
                                      package=package,
                                      optionflags=optionflags,
                                      globs={'browsers': layer.browsers},
-                                     test_case_factory=test_case_factory)
+                                     test_case_factory=suite_test_case_factory)
         return suite
     assert isinstance(layer, SeleniumLayer)
     suite = collect_txt_ftests(package=package, level=level,
