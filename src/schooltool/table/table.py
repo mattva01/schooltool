@@ -166,6 +166,8 @@ class SchoolToolTableFormatter(object):
 
     batch = None
     batch_size = 25
+    _items = ()
+    prefix = None
 
     css_classes = None
     _table_formatter = None

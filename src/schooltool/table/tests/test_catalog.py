@@ -104,7 +104,7 @@ def doctest_IndexedGetterColumn():
     Indexed column requires an additional keyword argument (index)
     for it's constructor:
 
-        >>> from schooltool.table.catalog import IndexedGetterColumn
+        >>> from schooltool.table.column import IndexedGetterColumn
         >>> column = IndexedGetterColumn(index='title', getter=lambda i, f: i.title)
         >>> column.index
         'title'
@@ -168,7 +168,7 @@ def doctest_IndexedLocaleAwareGetterColumn():
     Indexed column requires an additional keyword argument (index)
     for it's constructor:
 
-        >>> from schooltool.table.catalog import IndexedLocaleAwareGetterColumn
+        >>> from schooltool.table.column import IndexedLocaleAwareGetterColumn
         >>> column = IndexedLocaleAwareGetterColumn(index='title',
         ...                                         getter=lambda i, f: i.title)
         >>> column.index

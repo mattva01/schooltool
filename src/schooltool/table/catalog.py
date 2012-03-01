@@ -33,11 +33,15 @@ from zc.catalog.interfaces import IValueIndex, IExtentCatalog
 
 from schooltool.table.interfaces import IIndexedTableFormatter
 from schooltool.table.interfaces import IIndexedColumn
-from schooltool.table.column import IndexedGetterColumn
-from schooltool.table.column import IndexedLocaleAwareGetterColumn
 from schooltool.table.table import FilterWidget
 from schooltool.table.table import SchoolToolTableFormatter
 from schooltool.table.table import url_cell_formatter
+
+# BBB: imports
+from schooltool.table.column import IndexedGetterColumn
+from schooltool.table.column import IndexedLocaleAwareGetterColumn
+from schooltool.table.column import makeIndexedColumn
+from schooltool.table.column import RenderUnindexingMixin, unindex
 
 from schooltool.common import SchoolToolMessage as _
 
@@ -158,8 +162,4 @@ class IndexedTableFormatter(SchoolToolTableFormatter):
             prefix=self.prefix)
         formatter.cssClasses['table'] = 'data'
         return formatter()
-
-# BBB
-from schooltool.table.column import makeIndexedColumn
-from schooltool.table.column import RenderUnindexingMixin, unindex
 
