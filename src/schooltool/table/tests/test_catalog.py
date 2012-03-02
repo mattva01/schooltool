@@ -207,7 +207,7 @@ def doctest_IndexedTableFormatter_columns():
         >>> formatter = IndexedTableFormatter(None, None)
         >>> columns = formatter.columns()
         >>> columns
-        [<schooltool.table.catalog.IndexedGetterColumn object at ...>]
+        [<schooltool.table.column.IndexedGetterColumn object at ...>]
 
         >>> columns[0].title
         u'Title'
