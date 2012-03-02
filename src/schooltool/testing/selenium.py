@@ -692,8 +692,10 @@ def walk_the_traceback(traceback, test):
 
     return traceback
 
-def extract_testrunner_traceback(exc_info):
+
+def acquire_testrunner_traceback(exc_info):
     ex_type, err, traceback = exc_info
+
     if isinstance(err, doctest.UnexpectedException):
         exc_info = err.exc_info
         traceback = exc_info[2]
@@ -707,16 +709,40 @@ def extract_testrunner_traceback(exc_info):
         except:
             exc_info = sys.exc_info()
             traceback = exc_info[2]
+
     if isinstance(err, (doctest.DocTestFailure, doctest.UnexpectedException)):
         traceback = walk_the_traceback(traceback, err.test)
+
     return traceback
+
+
+def report_testrunner_real_exception(exc_info):
+    ex_type, err, traceback = exc_info
+    if not isinstance(err, doctest.UnexpectedException):
+        return # nothing to report
+    try:
+        from zope.testrunner.runner import TestResult
+    except ImportError:
+        return # no testrunner
+    exc_info = err.exc_info
+    traceback = exc_info[2]
+    traceback = walk_the_traceback(traceback, err.test)
+    ff = sys._getframe()
+    while ff.f_back is not None:
+        ff = ff.f_back
+        if isinstance(ff.f_locals.get('self'), TestResult):
+            testresult = ff.f_locals['self']
+            testresult.options.output.print_traceback(
+                "Test failure:", (exc_info[0], exc_info[1], traceback))
+            break
 
 
 def make_ipdb_testrunner_postmortem(test):
     import ipdb
     import zope.testrunner.interfaces
     def interactive_post_mortem(exc_info):
-        tb = extract_testrunner_traceback(exc_info)
+        report_testrunner_real_exception(exc_info)
+        tb = acquire_testrunner_traceback(exc_info)
         ipdb.__main__.update_stdout()
         ipdb.__main__.BdbQuit_excepthook.excepthook_ori = sys.excepthook
         sys.excepthook = ipdb.__main__.BdbQuit_excepthook
@@ -732,7 +758,8 @@ def make_pdb_testrunner_postmortem(test):
     import pdb
     import zope.testrunner.interfaces
     def interactive_post_mortem(exc_info):
-        tb = extract_testrunner_traceback(exc_info)
+        report_testrunner_real_exception(exc_info)
+        tb = acquire_testrunner_traceback(exc_info)
         p = pdb.Pdb()
         p.reset()
         p.botframe = tb.tb_frame
