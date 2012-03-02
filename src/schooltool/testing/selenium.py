@@ -716,25 +716,32 @@ def acquire_testrunner_traceback(exc_info):
     return traceback
 
 
-def report_testrunner_real_exception(exc_info):
-    ex_type, err, traceback = exc_info
-    if not isinstance(err, doctest.UnexpectedException):
-        return # nothing to report
-    try:
-        from zope.testrunner.runner import TestResult
-    except ImportError:
-        return # no testrunner
-    exc_info = err.exc_info
-    traceback = exc_info[2]
-    traceback = walk_the_traceback(traceback, err.test)
+def walk_frames_to_find_output():
+    from zope.testrunner.runner import TestResult
     ff = sys._getframe()
     while ff.f_back is not None:
         ff = ff.f_back
         if isinstance(ff.f_locals.get('self'), TestResult):
             testresult = ff.f_locals['self']
-            testresult.options.output.print_traceback(
-                "Test failure:", (exc_info[0], exc_info[1], traceback))
-            break
+            return testresult.options.output
+
+
+
+def report_testrunner_real_exception(exc_info):
+    ex_type, err, traceback = exc_info
+    if not isinstance(err, doctest.UnexpectedException):
+        return # nothing to report
+    try:
+        import zope.testrunner.runner
+    except ImportError:
+        return # no testrunner
+    exc_info = err.exc_info
+    traceback = exc_info[2]
+    traceback = walk_the_traceback(traceback, err.test)
+    output = walk_frames_to_find_output()
+    if output is not None:
+        output.print_traceback(
+            "Test failure:", (exc_info[0], exc_info[1], traceback))
 
 
 def make_ipdb_testrunner_postmortem(test):
@@ -911,6 +918,47 @@ class SeleniumOutputChecker(doctest.OutputChecker):
             self, example, self._unify_got(got), optionflags)
 
 
+class DiffTemplate(object):
+
+    class ExampleStub(object):
+        pass
+
+    def __init__(self, checker, optionflags=None):
+        self.checker = checker
+        self.optionflags = optionflags
+
+    def prettifyDiff(self, diff):
+        output = walk_frames_to_find_output()
+        if output is None:
+            return diff
+        old_stdout = sys.stdout
+        result = StringIO()
+        sys.stdout = result
+        try:
+            output.print_doctest_failure(diff)
+        finally:
+            sys.stdout = old_stdout
+        return result.getvalue()
+
+    def __mod__(self, params):
+        file, line, name, source, want, got = params
+        result = 'File "%s", line %s, in %s' % (file, line, name)
+        result += '\n\n>>> '+'\n...'.join(source.splitlines())+'\n\n'
+        example = self.ExampleStub()
+        example.want = want
+        diff = self.checker.output_difference(example, got, self.optionflags)
+        result += self.prettifyDiff(diff)
+        return result
+
+
+def make_pretty_diff_template(*args, **kw):
+    try:
+        import zope.testrunner.formatter
+    except ImportError:
+        return None
+    return DiffTemplate(*args, **kw)
+
+
 class SeleniumDocFileCase(doctest.DocFileCase):
 
     def __init__(self, test,
@@ -946,6 +994,9 @@ class SeleniumDocFileCase(doctest.DocFileCase):
                 #    make_doctest_getlines_patch(test),
                 'zope.testrunner.debug.post_mortem':
                     make_testrunner_postmortem_patch(test),
+                'zope.testrunner.formatter.doctest_template':
+                    make_pretty_diff_template(self._dt_checker,
+                                              optionflags=self._dt_optionflags),
                 }
             self.patch(patches)
         self.setUp()
