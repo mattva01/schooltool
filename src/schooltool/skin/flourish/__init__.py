@@ -29,6 +29,7 @@ import containers
 import content
 import error
 import form
+import ftesting
 import interfaces
 import page
 import resource
@@ -94,4 +95,3 @@ def canDelete(context):
 
 def hasPermission(context, permission):
     return zope.security.checkPermission(permission, context)
-
