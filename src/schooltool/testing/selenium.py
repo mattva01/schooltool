@@ -29,6 +29,7 @@ import re
 import string
 import sys
 import threading
+import time
 import unittest
 from StringIO import StringIO
 from UserDict import DictMixin
@@ -43,6 +44,8 @@ from zope.server.taskthreads import ThreadedTaskDispatcher
 from zope.server.http.commonaccesslogger import CommonAccessLogger
 from zope.server.http.wsgihttpserver import WSGIHTTPServer
 
+
+import schooltool.testing.registry
 from schooltool.testing import mock
 from schooltool.testing.functional import ZCMLLayer
 from schooltool.testing.functional import collect_txt_ftests
@@ -53,12 +56,15 @@ BLACK_MAGIC = True # enable morally ambiguous monkeypatching
 _browser_factory = None
 selenium_enabled = False
 
+IMPLICIT_WAIT = 5 # in seconds
+
 try:
     if _browser_factory is None:
         import schooltool.devtools.selenium_recipe
         _browser_factory = schooltool.devtools.selenium_recipe.spawn_browser
         selenium_enabled = (
             schooltool.devtools.selenium_recipe.default_factory is not None)
+        IMPLICIT_WAIT =  schooltool.devtools.selenium_recipe.implicit_wait
 except ImportError:
     pass
 
@@ -74,8 +80,100 @@ try:
             assert factory_name == 'firefox'
             return selenium.webdriver.firefox.webdriver.WebDriver()
         selenium_enabled = True
+
 except (ImportError, SyntaxError):
     SimpleWebElement = object
+
+try:
+    from selenium.common.exceptions import NoSuchElementException
+    from selenium.common.exceptions import TimeoutException
+except ImportError:
+    pass
+
+
+_Browser_UI_ext = None
+_Element_UI_ext = None
+
+
+class ExtensionGroup(object):
+    def __init__(self):
+        self._handlers = {}
+
+    def __repr__(self):
+        return '<ExtensionGroup (%d ext)>: %s' % (
+            len(self._handlers), list(self._handlers))
+
+    def __getitem__(self, name):
+        if name not in self:
+            raise KeyError(name)
+        return self._handlers[name]
+
+    def __iter__(self):
+        return iter(self._handlers)
+
+    def __setitem__(self, name, handler):
+        if name in self._handlers:
+            raise KeyError(name)
+        self._handlers[name] = handler
+
+    def __delitem__(self, name, handler):
+        del self._handlers[name]
+
+    def __contains__(self, name):
+        return name in self._handlers
+
+
+class BoundExtension(object):
+
+    _extension = None
+    _name = None
+    _target = None
+
+    def __init__(self, extension, name, target):
+        self._extension = extension
+        self._name = name
+        self._target = target
+        if isinstance(extension, ExtensionGroup):
+            for ext_n in extension:
+                # Lazy man's dynamic attr marker
+                setattr(self, ext_n, None)
+
+    def __getattribute__(self, name):
+        extension = object.__getattribute__(self, '_extension')
+        if (name in BoundExtension.__dict__ or
+            name not in extension):
+            return object.__getattribute__(self, name)
+        return BoundExtension(
+                extension[name],
+                '%s.%s' % (object.__getattribute__(self, '_name'), name),
+                object.__getattribute__(self, '_target'))
+
+    def __call__(self, *args, **kw):
+        return self._extension(self._target, *args, **kw)
+
+    def __repr__(self):
+        return '<BoundExtension %s (%r)>' % (self._name, self._target)
+
+
+def registerExtension(target, name, handler):
+    """Register UI extension for web elements."""
+    path = filter(None, [s.strip() for s in name.split('.')])
+    if not path:
+        raise ValueError(name)
+    while len(path) > 1:
+        part = path.pop(0)
+        if part not in target:
+            target[part] = ExtensionGroup()
+            target = target[part]
+    target[path[0]] = handler
+
+
+def registerBrowserUI(name, handler):
+    registerExtension(_Browser_UI_ext, name, handler)
+
+
+def registerElementUI(name, handler):
+    registerExtension(_Element_UI_ext, name, handler)
 
 
 def extractJSONWireParams(cmd):
@@ -97,8 +195,9 @@ class CommandExecutor(object):
     driver = None
     _commands = None
 
-    def __init__(self, driver):
+    def __init__(self, driver, browser=None):
         self.driver = driver
+        self.browser = browser
         self._commands = {}
 
     def extractDriverCommands(self):
@@ -420,23 +519,41 @@ def getWebElementHTML(driver, web_elements):
 
 class WebElement(SimpleWebElement):
 
+    browser = None
     query = None
     query_all = None
 
     def __init__(self, *args):
+        browser = None
         if len(args) == 1:
             web_element = args[0]
             assert isinstance(web_element, SimpleWebElement)
             parent, id_ = web_element.parent, web_element.id
         elif len(args) == 2:
             parent, id_ = args
+        elif len(args) == 3:
+            parent, id_, browser = args
         else:
             raise TypeError(
                 "__init__() takes 1 (web_element) or 2 (parent, id) arguments"
                 "(%d given)" % len(args))
         SimpleWebElement.__init__(self, parent, id_)
-        self.query = WebElementQuery(self, single=True)
-        self.query_all = WebElementQuery(self, single=False)
+        self.browser = browser
+        self.query = WebElementQuery(self, single=True, browser=browser)
+        self.query_all = WebElementQuery(self, single=False, browser=browser)
+
+    @property
+    def expired(self):
+        try:
+            from selenium.common.exceptions import StaleElementReferenceException
+            self.tag_name
+        except StaleElementReferenceException:
+            return True
+        return False
+
+    @property
+    def ui(self):
+        return BoundExtension(_Element_UI_ext, 'element.ui', self)
 
     def type(self, *value):
         return self.send_keys(*value)
@@ -465,16 +582,18 @@ class WebElementQuery(object):
 
     _single = False
     _target = None
+    _browser = None
 
-    def __init__(self, target, single=False):
+    def __init__(self, target, single=False, browser=None):
         self._target = target
         self._single = single
+        self._browser = browser
 
     def _wrap(self, web_element):
         if isinstance(web_element, WebElement):
             return web_element # already wrapped
         elif isinstance(web_element, SimpleWebElement):
-            return WebElement(web_element)
+            return WebElement(web_element.parent, web_element.id, self._browser)
         elif isinstance(web_element, dict):
             return dict([(key, self._wrap(val))
                          for key, val in web_element.items()])
@@ -533,6 +652,10 @@ class WebElementQuery(object):
 
 class Browser(object):
 
+    WAIT_FEW_SECONDS = max(5, min(IMPLICIT_WAIT, 30))
+    WAIT_FEW_MINUTES = max(120, min(IMPLICIT_WAIT*12, 600))
+    WAIT_LONG = max(300, min(IMPLICIT_WAIT*80, 3600))
+
     driver = None
     execute = None
     query = None
@@ -546,8 +669,10 @@ class Browser(object):
         self.driver = driver
         self.execute = CommandExecutor(self.driver)
         self.execute.extractDriverCommands()
-        self.query = WebElementQuery(self.driver, single=True)
-        self.query_all = WebElementQuery(self.driver, single=False)
+        self.query = WebElementQuery(
+            self.driver, single=True, browser=self)
+        self.query_all = WebElementQuery(
+            self.driver, single=False, browser=self)
         import selenium.webdriver.common.keys
         self.keys = selenium.webdriver.common.keys.Keys()
 
@@ -595,6 +720,37 @@ class Browser(object):
         """Get HTML of WebElement or a list of WebElement."""
         return getWebElementHTML(self.driver, web_element)
 
+    @property
+    def ui(self):
+        return BoundExtension(_Browser_UI_ext, 'browser.ui', self)
+
+    def wait(self, checker, wait=None, no_element_result=False):
+        if wait is None:
+            wait = self.WAIT_FEW_SECONDS
+        start = time.time()
+        ts = 0.3
+        while True:
+            try:
+                result = checker()
+            except NoSuchElementException:
+                result = no_element_result
+            if result:
+                break
+            now = time.time()
+            if now >= start+wait:
+                raise TimeoutException()
+            time.sleep(ts)
+            ts = min(50, ts*1.01)
+
+    def wait_no(self, checker, wait=None):
+        return self.wait(lambda: not checker(), wait=wait, no_element_result=True)
+
+    def wait_few_minutes(self, checker):
+        return self.wait(checker, wait=self.WAIT_FEW_MINUTES)
+
+    def wait_long(self, checker):
+        return self.wait(checker, wait=self.WAIT_LONG)
+
 
 class BrowserPool(object):
 
@@ -606,6 +762,9 @@ class BrowserPool(object):
         self.browsers = {}
 
     def __getattr__(self, name):
+        if (name.startswith('_') or
+            name == 'trait_names'): # for IPdb.
+            raise AttributeError(name)
         if name not in self.browsers:
             return self.start(name)
         return self.browsers[name]
@@ -805,6 +964,11 @@ class SeleniumLayer(ZCMLLayer):
             self.patches = mock.ModulesSnapshot()
 
     def setUp(self):
+        global _Browser_UI_ext
+        global _Element_UI_ext
+        _Browser_UI_ext = ExtensionGroup()
+        _Element_UI_ext = ExtensionGroup()
+        schooltool.testing.registry.setupSeleniumHelpers()
         ZCMLLayer.setUp(self)
         dispatcher = ThreadedTaskDispatcher()
         dispatcher.setThreadCount(self.thread_count)
@@ -822,6 +986,10 @@ class SeleniumLayer(ZCMLLayer):
         self.thread.join()
         self.browsers.reset()
         ZCMLLayer.tearDown(self)
+        global _Browser_UI_ext
+        global _Element_UI_ext
+        _Browser_UI_ext = None
+        _Element_UI_ext = None
 
     def poll_server(self):
         self.serving = True
