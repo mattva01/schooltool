@@ -968,8 +968,8 @@ class SeleniumLayer(ZCMLLayer):
         global _Element_UI_ext
         _Browser_UI_ext = ExtensionGroup()
         _Element_UI_ext = ExtensionGroup()
-        schooltool.testing.registry.setupSeleniumHelpers()
         ZCMLLayer.setUp(self)
+        schooltool.testing.registry.setupSeleniumHelpers()
         dispatcher = ThreadedTaskDispatcher()
         dispatcher.setThreadCount(self.thread_count)
         self.server = self.server_factory.create(
