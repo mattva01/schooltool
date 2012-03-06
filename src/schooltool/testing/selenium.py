@@ -751,6 +751,12 @@ class Browser(object):
     def wait_long(self, checker):
         return self.wait(checker, wait=self.WAIT_LONG)
 
+    def wait_page(self, action):
+        page = self.query.tag('html')
+        result = action()
+        self.wait(lambda: page.expired)
+        return result
+
 
 class BrowserPool(object):
 
