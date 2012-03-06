@@ -132,9 +132,9 @@ class IPage(IBrowserPage, ILocation):
 class IFromPublication(IPublishTraverse):
 
     fromPublication = zope.schema.Bool(
-        title=_('Accessed from publication'),
-        description=_('A flag that specifies if this part was built '
-                      'by publication.'),
+        title=u'Accessed from publication',
+        description=u'A flag that specifies if this part was built '
+                     'by publication.',
         default=False,
         required=False)
 
@@ -147,9 +147,9 @@ class IAJAXPart(IViewlet, IFromPublication):
     """An ajax part of a view."""
 
     ignoreRequest = zope.schema.Bool(
-        title=_('Ignore request'),
-        description=_('A flag that specifies if the request should be '
-                      'regarded as unreliable (for example, part '
-                      'was not obtained via publication).'),
+        title=u'Ignore request',
+        description=u'A flag that specifies if the request should be '
+                     'regarded as unreliable (for example, part '
+                     'was not obtained via publication).',
         default=True,
         required=False)

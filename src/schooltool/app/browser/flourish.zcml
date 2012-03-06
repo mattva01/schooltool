@@ -125,14 +125,6 @@
       view="schooltool.app.browser.app.LoginView"
       />
 
-<!--  <flourish:viewlet
-      name="breadcrumbs"
-      after="login"
-      manager="schooltool.skin.flourish.page.ISecondaryNavigationManager"
-      class="schooltool.app.browser.app.BreadcrumbViewlet"
-      permission="zope.Public"
-      /> -->
-
   <flourish:page_breadcrumbs
       class="schooltool.skin.flourish.Empty"
       view="schooltool.app.browser.app.LoginView"
@@ -307,6 +299,15 @@
       title="Server"
       subtitle="Tabs"
       content_template="templates/f_hide_unhide_tabs.pt"
+      permission="schooltool.edit"
+      />
+
+  <flourish:viewlet
+      name="what-is-this"
+      class="schooltool.skin.flourish.page.Related"
+      template="templates/f_hide_unhide_tabs_related.pt"
+      view=".app.FlourishHideUnhideTabsView"
+      manager="schooltool.skin.flourish.page.IPageRelatedManager"
       permission="schooltool.edit"
       />
 

@@ -327,13 +327,15 @@ def doctest_SchoolToolTableFormatter():
 
         >>> print formatter.render()
         <BLANKLINE>
-        <table class="data">
+        <table class="data relationships-table">
           <thead>
             <tr>
               <th>
         <BLANKLINE>
-                    <span class="zc-table-sortable" ...>
-                        Title</span> <img src="/sort_arrows_down.gif" ... alt="(descending)"/>
+                    <span class="zc-table-sortable zc-table-sort-asc-primary"
+                          onclick="javascript: onSortClickForm(
+                                'title', '.sort_on')">
+                        Title</span>
         <BLANKLINE>
               </th>
             </tr>

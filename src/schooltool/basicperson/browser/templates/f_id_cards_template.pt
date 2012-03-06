@@ -1,0 +1,93 @@
+<pageTemplate
+    id="cards"
+    xmlns:tal="http://xml.zope.org/namespaces/tal"
+    xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+    i18n:domain="schooltool">
+  <pageGraphics>
+    <setFont name="Times_New_Roman" size="18"/>
+
+    <drawCenteredString
+        tal:condition="view/parent/title"
+        tal:attributes="
+          x view/header/title/x;
+          y view/header/title/y"
+        tal:content="view/parent/title">[TITLE]</drawCenteredString>
+
+    <stroke color="grey"/>
+    <lineMode width="1" cap="round"/>
+    <lines tal:content="view/footer/rule" />
+
+    <place tal:attributes="x view/footer/center_place/x;
+                           y view/footer/center_place/y;
+                           width view/footer/center_place/width;
+                           height view/footer/center_place/height">
+      <para i18n:translate="" textColor="darkgray" fontName="Helvetica-Bold">
+        Created with SchoolTool
+      </para>
+    </place>
+
+    <setFont name="Times_New_Roman" tal:attributes="
+        size view/footer/font_height"/>
+
+    <place tal:attributes="
+        x view/footer/center_place/x;
+        y view/footer/center_place/y;
+        width view/footer/center_place/width;
+        height view/footer/center_place/height">
+      <para style="_footer_page_number"
+        i18n:translate="">Page <pageNumber i18n:name="page_number"/></para>
+    </place>
+
+    <tal:block condition="view/footer_text">
+      <drawRightString
+          tal:attributes="
+            x view/footer/right_str/x;
+            y view/footer/right_str/y"
+          tal:content="view/footer_text">[TEXT]</drawRightString>
+      <drawRightString
+          tal:attributes="
+            x view/footer/right_str_2/x;
+            y view/footer/right_str_2/y"
+          tal:content="view/report_date/@@shortDate">[DATE]</drawRightString>
+    </tal:block>
+    <tal:block condition="not:view/footer_text">
+      <drawRightString
+          tal:attributes="
+            x view/footer/right_str/x;
+            y view/footer/right_str/y"
+          tal:content="view/report_date/@@shortDate">[DATE]</drawRightString>
+    </tal:block>
+
+  </pageGraphics>
+  <tal:loop tal:define="cardFrames view/parent/cardFrames"
+            tal:repeat="frame python:cardFrames.values()">
+    <frame tal:define="info frame/outter"
+           tal:attributes="id info/id;
+                           x1 string:${info/x1}cm;
+                           y1 string:${info/y1}cm;
+                           width string:${info/width}cm;
+                           height string:${info/height}cm;"
+           />
+    <frame tal:define="info frame/title"
+           tal:attributes="id info/id;
+                           x1 string:${info/x1}cm;
+                           y1 string:${info/y1}cm;
+                           width string:${info/width}cm;
+                           height string:${info/height}cm;"
+           />
+    <frame tal:define="info frame/demographics"
+           tal:attributes="id info/id;
+                           x1 string:${info/x1}cm;
+                           y1 string:${info/y1}cm;
+                           width string:${info/width}cm;
+                           height string:${info/height}cm;"
+           />
+    <frame tal:define="info frame/footer"
+           tal:attributes="id info/id;
+                           x1 string:${info/x1}cm;
+                           y1 string:${info/y1}cm;
+                           width string:${info/width}cm;
+                           height string:${info/height}cm;"
+           />
+  </tal:loop>
+</pageTemplate>
