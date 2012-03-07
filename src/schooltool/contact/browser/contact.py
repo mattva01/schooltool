@@ -58,6 +58,7 @@ from schooltool.person.interfaces import IPerson
 from schooltool.email.interfaces import IEmailUtility
 from schooltool.email.mail import Email
 from schooltool.skin import flourish
+from schooltool.skin.containers import TableContainerView
 from schooltool.relationship.relationship import IRelationshipLinks
 from schooltool.common.inlinept import InlineViewPageTemplate
 from schooltool.contact.contact import URIPerson, URIContact
@@ -440,7 +441,7 @@ class FlourishContactDetails(flourish.form.FormViewlet):
         return canAccess(self.context.__parent__, '__delitem__')
 
 
-class ContactContainerView(table.table.TableContainerView):
+class ContactContainerView(TableContainerView):
     """A Contact Container view."""
 
     __used_for__ = IContactContainer
@@ -451,7 +452,7 @@ class ContactContainerView(table.table.TableContainerView):
     @property
     def itemsToDelete(self):
         return sorted(
-            table.table.TableContainerView._listItemsForDeletion(self),
+            TableContainerView._listItemsForDeletion(self),
             key=lambda obj: '%s %s' % (obj.last_name, obj.first_name))
 
     def columnsBefore(self):

@@ -129,8 +129,8 @@ Both contacts should be assigned now:
     >>> browser.printQuery("id('content-body')/form/fieldset[1]//thead//th")
     <th>
     </th>
-    <th> <span ...> Last Name</span> <img ... alt="(sortable)" /></th>
-    <th> <span ...> First Name</span> <img ... alt="(descending)" /></th>
+    <th> <span ...> Last Name</span> </th>
+    <th> <span ...> First Name</span> </th>
     <th> Relationship </th>
 
     >>> browser.printQuery("id('content-body')/form/fieldset[1]//tbody//tr")
