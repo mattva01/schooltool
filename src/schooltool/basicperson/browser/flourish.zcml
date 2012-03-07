@@ -624,6 +624,17 @@
        link="request_person_export_xml.html"
        />
 
+  <report:reportLink
+      name="person_id_card_pdf"
+      for="schooltool.person.interfaces.IPerson"
+      permission="schooltool.edit"
+      group="Person"
+      description="Includes student name, ID number, birth date, contact name and contact phone number."
+      title="ID Card"
+      file_type="pdf"
+      link="request_person_id_card_pdf.html"
+      />
+
   <flourish:page
       name="person_export.xml"
       for="schooltool.person.interfaces.IPerson"
@@ -635,6 +646,20 @@
       name="request_person_export_xml.html"
       for="schooltool.person.interfaces.IPerson"
       class=".person.FlourishRequestPersonXMLExportView"
+      permission="schooltool.edit"
+      />
+
+   <flourish:page
+      name="person_id_card.pdf"
+      for="schooltool.person.interfaces.IPerson"
+      class=".person.FlourishPersonIDCardView"
+      permission="schooltool.edit"
+      />
+
+  <flourish:page
+      name="request_person_id_card_pdf.html"
+      for="schooltool.person.interfaces.IPerson"
+      class=".person.FlourishRequestPersonIDCardView"
       permission="schooltool.edit"
       />
 
@@ -749,6 +774,15 @@
       manager="schooltool.skin.flourish.interfaces.IAJAXParts"
       view=".person.EditPersonRelationships"
       permission="schooltool.view"
+      />
+
+  <zope:adapter
+      for="*
+           schooltool.skin.flourish.IFlourishLayer
+           .person.FlourishPersonIDCardsViewBase"
+      provides="schooltool.app.browser.interfaces.IReportPageTemplate"
+      name="cards"
+      factory=".person.IDCardsPageTemplate"
       />
 
 </configure>

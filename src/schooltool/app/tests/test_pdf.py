@@ -25,10 +25,10 @@ import sys
 import unittest
 import doctest
 
-from schooltool.app.pdf import setUpLiberationFonts
+from schooltool.app.pdf import setUpFonts
 
 
-def doctest_setUpLiberationFonts():
+def doctest_setUpFonts():
     r"""TrueType font setup tests.
 
         >>> from schooltool.app import pdf
@@ -100,14 +100,14 @@ def doctest_setUpLiberationFonts():
         ('arial_normal', 1, 1)
 
 # XXX This part fails on Windows, I don't yet know why.
-#    If the fonts can not be found, setUpLiberationFonts() will
+#    If the fonts can not be found, setUpFonts() will
 #    raise an exception:
 #
 #        >>> import reportlab.rl_config
 #        >>> real_path = reportlab.rl_config.TTFSearchPath[-1]
 #        >>> del reportlab.rl_config.TTFSearchPath[-1]
 #
-#        >>> pdf.setUpLiberationFonts('/definitely/nonexistent')
+#        >>> pdf.setUpFonts('/definitely/nonexistent')
 #        Traceback (most recent call last):
 #          ...
 #        TTFError: Can't open file "....ttf"
@@ -127,7 +127,7 @@ def tryToSetUpReportLab():
     Tries to guess the location of fonts.  Returns True on success,
     False if reportlab is not available or fonts could not be found.
 
-    If something breaks during setUpLiberationFonts, the exception
+    If something breaks during setUpFonts, the exception
     will be propagated up.
     """
     try:
@@ -142,12 +142,12 @@ def tryToSetUpReportLab():
     # Heuristic to try and find the TrueType fonts.
     font_dirs = ['/usr/share/fonts/truetype/ttf-liberation', # Debian
                  '/usr/share/fonts/truetype/liberation', # Fedora
+                 '/usr/share/fonts/truetype/ubuntu-font-family', # Ubuntu font family
                  r'C:\WINDOWS\Fonts']
-    for font_dir in font_dirs:
-        if os.path.exists(os.path.join(font_dir, 'LiberationSans-Regular.ttf')):
-            setUpLiberationFonts(font_dir)
-            return True
-    else:
+    try:
+        setUpFonts(font_dirs)
+        return True
+    except reportlab.pdfbase.ttfonts.TTFError:
         return False
 
 

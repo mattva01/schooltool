@@ -190,7 +190,7 @@ new label for the 'Queue' button:
 
 The queue shows a table with the following header:
 
-    >>> manager.printQuery('//form/table[@class="data"]/thead/tr/th/span')
+    >>> manager.printQuery('//form/table[contains(@class, "data")]/thead/tr/th/span')
     <span ...>
       From</span>
     <span ...>
@@ -204,7 +204,7 @@ The queue shows a table with the following header:
 
 And one row per failed email:
 
-    >>> manager.printQuery('//form/table[@class="data"]/tbody/tr[1]/td')
+    >>> manager.printQuery('//form/table[contains(@class, "data")]/tbody/tr[1]/td')
     <td>
       <input type="checkbox" name="delete.Email" id="delete.Email" /></td>
     <td>
@@ -332,7 +332,7 @@ Let's check our unsuccessful email and hit the Retry button:
 
 The email is still in the queue:
 
-    >>> manager.printQuery('//form/table[@class="data"]/tbody/tr[1]/td')
+    >>> manager.printQuery('//form/table[contains(@class, "data")]/tbody/tr[1]/td')
     <td>
       <input type="checkbox" name="delete.Email" id="delete.Email" checked="checked" /></td>
     <td>
@@ -389,7 +389,7 @@ And try sending another email:
 
 This time we get an error in the From address:
 
-    >>> manager.printQuery('//form/table[@class="data"]/tbody/tr[1]/td')
+    >>> manager.printQuery('//form/table[contains(@class, "data")]/tbody/tr[1]/td')
     <td>
       <input type="checkbox" name="delete.Email-2" id="delete.Email-2" /></td>
     <td>
@@ -428,7 +428,7 @@ Let's get an error in our To addresses:
     >>> manager.getControl('Body').value = 'I am better now'
     >>> manager.getControl('Send').click()
 
-    >>> manager.printQuery('//form/table[@class="data"]/tbody/tr[1]/td')
+    >>> manager.printQuery('//form/table[contains(@class, "data")]/tbody/tr[1]/td')
     <td>
       <input type="checkbox" name="delete.Email-3" id="delete.Email-3" /></td>
     <td>
@@ -469,7 +469,7 @@ invalid ones:
     >>> manager.getControl('Body').value = 'Our new version is out'
     >>> manager.getControl('Send').click()
 
-    >>> manager.printQuery('//form/table[@class="data"]/tbody/tr[1]/td')
+    >>> manager.printQuery('//form/table[contains(@class, "data")]/tbody/tr[1]/td')
     <td>
       <input type="checkbox" name="delete.Email-4" id="delete.Email-4" /></td>
     <td>
@@ -555,7 +555,7 @@ error:
     >>> manager.getControl('Body').value = 'How are you doing?'
     >>> manager.getControl('Send').click()
 
-    >>> manager.printQuery('//form/table[@class="data"]/tbody/tr[1]/td')
+    >>> manager.printQuery('//form/table[contains(@class, "data")]/tbody/tr[1]/td')
     <td>
       <input type="checkbox" name="delete.Email-5" id="delete.Email-5" /></td>
     <td>
@@ -602,7 +602,7 @@ And let's raise an unexpected data error:
     >>> manager.getControl('Body').value = 'This is bad data on the message'
     >>> manager.getControl('Send').click()
 
-    >>> manager.printQuery('//form/table[@class="data"]/tbody/tr[1]/td')
+    >>> manager.printQuery('//form/table[contains(@class, "data")]/tbody/tr[1]/td')
     <td>
       <input type="checkbox" name="delete.Email-6" id="delete.Email-6" /></td>
     <td>
@@ -658,7 +658,7 @@ queue:
     <div class="content-nav">
       <a href="http://localhost/email/index.html">Queue (5 failed)</a>
     </div>
-    >>> manager.printQuery('//form/table[@class="data"]/tbody/tr/td[1]/input')
+    >>> manager.printQuery('//form/table[contains(@class, "data")]/tbody/tr/td[1]/input')
     <input type="checkbox" name="delete.Email-6" id="delete.Email-6" />
     <input type="checkbox" name="delete.Email-4" id="delete.Email-4" />
     <input type="checkbox" name="delete.Email-3" id="delete.Email-3" />
@@ -674,7 +674,7 @@ Finally, let's test the Delete button in the Email View:
     <div class="content-nav">
       <a href="http://localhost/email/index.html">Queue (4 failed)</a>
     </div>
-    >>> manager.printQuery('//form/table[@class="data"]/tbody/tr/td[1]/input')
+    >>> manager.printQuery('//form/table[contains(@class, "data")]/tbody/tr/td[1]/input')
     <input type="checkbox" name="delete.Email-6" id="delete.Email-6" />
     <input type="checkbox" name="delete.Email-4" id="delete.Email-4" />
     <input type="checkbox" name="delete.Email-3" id="delete.Email-3" />
@@ -697,7 +697,7 @@ And the Delete button in the Queue view:
     <div class="content-nav">
       <a href="http://localhost/email/index.html">Queue (2 failed)</a>
     </div>
-    >>> manager.printQuery('//form/table[@class="data"]/tbody/tr/td[1]/input')
+    >>> manager.printQuery('//form/table[contains(@class, "data")]/tbody/tr/td[1]/input')
     <input type="checkbox" name="delete.Email-6" id="delete.Email-6" />
     <input type="checkbox" name="delete.Email-3" id="delete.Email-3" />
 

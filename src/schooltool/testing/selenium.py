@@ -23,10 +23,13 @@ from __future__ import absolute_import
 import asyncore
 import cgi
 import doctest
+import linecache
 import os
+import re
 import string
 import sys
 import threading
+import time
 import unittest
 from StringIO import StringIO
 from UserDict import DictMixin
@@ -41,12 +44,19 @@ from zope.server.taskthreads import ThreadedTaskDispatcher
 from zope.server.http.commonaccesslogger import CommonAccessLogger
 from zope.server.http.wsgihttpserver import WSGIHTTPServer
 
+
+import schooltool.testing.registry
+from schooltool.testing import mock
 from schooltool.testing.functional import ZCMLLayer
 from schooltool.testing.functional import collect_txt_ftests
 
 
+BLACK_MAGIC = True # enable morally ambiguous monkeypatching
+
 _browser_factory = None
 selenium_enabled = False
+
+IMPLICIT_WAIT = 5 # in seconds
 
 try:
     if _browser_factory is None:
@@ -54,6 +64,7 @@ try:
         _browser_factory = schooltool.devtools.selenium_recipe.spawn_browser
         selenium_enabled = (
             schooltool.devtools.selenium_recipe.default_factory is not None)
+        IMPLICIT_WAIT =  schooltool.devtools.selenium_recipe.implicit_wait
 except ImportError:
     pass
 
@@ -69,8 +80,100 @@ try:
             assert factory_name == 'firefox'
             return selenium.webdriver.firefox.webdriver.WebDriver()
         selenium_enabled = True
+
 except (ImportError, SyntaxError):
     SimpleWebElement = object
+
+try:
+    from selenium.common.exceptions import NoSuchElementException
+    from selenium.common.exceptions import TimeoutException
+except ImportError:
+    pass
+
+
+_Browser_UI_ext = None
+_Element_UI_ext = None
+
+
+class ExtensionGroup(object):
+    def __init__(self):
+        self._handlers = {}
+
+    def __repr__(self):
+        return '<ExtensionGroup (%d ext)>: %s' % (
+            len(self._handlers), list(self._handlers))
+
+    def __getitem__(self, name):
+        if name not in self:
+            raise KeyError(name)
+        return self._handlers[name]
+
+    def __iter__(self):
+        return iter(self._handlers)
+
+    def __setitem__(self, name, handler):
+        if name in self._handlers:
+            raise KeyError(name)
+        self._handlers[name] = handler
+
+    def __delitem__(self, name, handler):
+        del self._handlers[name]
+
+    def __contains__(self, name):
+        return name in self._handlers
+
+
+class BoundExtension(object):
+
+    _extension = None
+    _name = None
+    _target = None
+
+    def __init__(self, extension, name, target):
+        self._extension = extension
+        self._name = name
+        self._target = target
+        if isinstance(extension, ExtensionGroup):
+            for ext_n in extension:
+                # Lazy man's dynamic attr marker
+                setattr(self, ext_n, None)
+
+    def __getattribute__(self, name):
+        extension = object.__getattribute__(self, '_extension')
+        if (name in BoundExtension.__dict__ or
+            name not in extension):
+            return object.__getattribute__(self, name)
+        return BoundExtension(
+                extension[name],
+                '%s.%s' % (object.__getattribute__(self, '_name'), name),
+                object.__getattribute__(self, '_target'))
+
+    def __call__(self, *args, **kw):
+        return self._extension(self._target, *args, **kw)
+
+    def __repr__(self):
+        return '<BoundExtension %s (%r)>' % (self._name, self._target)
+
+
+def registerExtension(target, name, handler):
+    """Register UI extension for web elements."""
+    path = filter(None, [s.strip() for s in name.split('.')])
+    if not path:
+        raise ValueError(name)
+    while len(path) > 1:
+        part = path.pop(0)
+        if part not in target:
+            target[part] = ExtensionGroup()
+            target = target[part]
+    target[path[0]] = handler
+
+
+def registerBrowserUI(name, handler):
+    registerExtension(_Browser_UI_ext, name, handler)
+
+
+def registerElementUI(name, handler):
+    registerExtension(_Element_UI_ext, name, handler)
 
 
 def extractJSONWireParams(cmd):
@@ -92,8 +195,9 @@ class CommandExecutor(object):
     driver = None
     _commands = None
 
-    def __init__(self, driver):
+    def __init__(self, driver, browser=None):
         self.driver = driver
+        self.browser = browser
         self._commands = {}
 
     def extractDriverCommands(self):
@@ -415,23 +519,41 @@ def getWebElementHTML(driver, web_elements):
 
 class WebElement(SimpleWebElement):
 
+    browser = None
     query = None
     query_all = None
 
     def __init__(self, *args):
+        browser = None
         if len(args) == 1:
             web_element = args[0]
             assert isinstance(web_element, SimpleWebElement)
             parent, id_ = web_element.parent, web_element.id
         elif len(args) == 2:
             parent, id_ = args
+        elif len(args) == 3:
+            parent, id_, browser = args
         else:
             raise TypeError(
                 "__init__() takes 1 (web_element) or 2 (parent, id) arguments"
                 "(%d given)" % len(args))
         SimpleWebElement.__init__(self, parent, id_)
-        self.query = WebElementQuery(self, single=True)
-        self.query_all = WebElementQuery(self, single=False)
+        self.browser = browser
+        self.query = WebElementQuery(self, single=True, browser=browser)
+        self.query_all = WebElementQuery(self, single=False, browser=browser)
+
+    @property
+    def expired(self):
+        try:
+            from selenium.common.exceptions import StaleElementReferenceException
+            self.tag_name
+        except StaleElementReferenceException:
+            return True
+        return False
+
+    @property
+    def ui(self):
+        return BoundExtension(_Element_UI_ext, 'element.ui', self)
 
     def type(self, *value):
         return self.send_keys(*value)
@@ -460,16 +582,18 @@ class WebElementQuery(object):
 
     _single = False
     _target = None
+    _browser = None
 
-    def __init__(self, target, single=False):
+    def __init__(self, target, single=False, browser=None):
         self._target = target
         self._single = single
+        self._browser = browser
 
     def _wrap(self, web_element):
         if isinstance(web_element, WebElement):
             return web_element # already wrapped
         elif isinstance(web_element, SimpleWebElement):
-            return WebElement(web_element)
+            return WebElement(web_element.parent, web_element.id, self._browser)
         elif isinstance(web_element, dict):
             return dict([(key, self._wrap(val))
                          for key, val in web_element.items()])
@@ -528,6 +652,10 @@ class WebElementQuery(object):
 
 class Browser(object):
 
+    WAIT_FEW_SECONDS = max(5, min(IMPLICIT_WAIT, 30))
+    WAIT_FEW_MINUTES = max(120, min(IMPLICIT_WAIT*12, 600))
+    WAIT_LONG = max(300, min(IMPLICIT_WAIT*80, 3600))
+
     driver = None
     execute = None
     query = None
@@ -541,8 +669,10 @@ class Browser(object):
         self.driver = driver
         self.execute = CommandExecutor(self.driver)
         self.execute.extractDriverCommands()
-        self.query = WebElementQuery(self.driver, single=True)
-        self.query_all = WebElementQuery(self.driver, single=False)
+        self.query = WebElementQuery(
+            self.driver, single=True, browser=self)
+        self.query_all = WebElementQuery(
+            self.driver, single=False, browser=self)
         import selenium.webdriver.common.keys
         self.keys = selenium.webdriver.common.keys.Keys()
 
@@ -590,6 +720,43 @@ class Browser(object):
         """Get HTML of WebElement or a list of WebElement."""
         return getWebElementHTML(self.driver, web_element)
 
+    @property
+    def ui(self):
+        return BoundExtension(_Browser_UI_ext, 'browser.ui', self)
+
+    def wait(self, checker, wait=None, no_element_result=False):
+        if wait is None:
+            wait = self.WAIT_FEW_SECONDS
+        start = time.time()
+        ts = 0.3
+        while True:
+            try:
+                result = checker()
+            except NoSuchElementException:
+                result = no_element_result
+            if result:
+                break
+            now = time.time()
+            if now >= start+wait:
+                raise TimeoutException()
+            time.sleep(ts)
+            ts = min(50, ts*1.01)
+
+    def wait_no(self, checker, wait=None):
+        return self.wait(lambda: not checker(), wait=wait, no_element_result=True)
+
+    def wait_few_minutes(self, checker):
+        return self.wait(checker, wait=self.WAIT_FEW_MINUTES)
+
+    def wait_long(self, checker):
+        return self.wait(checker, wait=self.WAIT_LONG)
+
+    def wait_page(self, action):
+        page = self.query.tag('html')
+        result = action()
+        self.wait(lambda: page.expired)
+        return result
+
 
 class BrowserPool(object):
 
@@ -601,6 +768,9 @@ class BrowserPool(object):
         self.browsers = {}
 
     def __getattr__(self, name):
+        if (name.startswith('_') or
+            name == 'trait_names'): # for IPdb.
+            raise AttributeError(name)
         if name not in self.browsers:
             return self.start(name)
         return self.browsers[name]
@@ -641,6 +811,147 @@ HTTPServerFactory = ServerType(FTestWSGIHTTPServer,
                                CommonAccessLogger,
                                0, True)
 
+DOCTEST_EXAMPLE_FILENAME_RE = re.compile(r'<doctest (?P<name>.+)\[(?P<examplenum>\d+)\]>$')
+
+
+def make_doctest_getlines_patch(test):
+    orig_getlines = linecache.getlines
+    def getlines(filename, module_globals=None):
+        m = DOCTEST_EXAMPLE_FILENAME_RE.match(filename)
+        if m and m.group('name') == test.name:
+            example = test.examples[int(m.group('examplenum'))]
+            source = example.source
+            if isinstance(source, unicode):
+                source = source.encode('ascii', 'backslashreplace')
+            return source.splitlines(True)
+        else:
+            return orig_getlines(filename, module_globals)
+    return getlines
+
+
+def make_doctest_compile_patch(test):
+    def compile_example(source, filename, mode, *args):
+        match = DOCTEST_EXAMPLE_FILENAME_RE.match(filename)
+        example_n = int(match.group('examplenum'))
+        example = test.examples[example_n]
+        line = example.lineno
+        return compile('\n'*(line)+source, test.filename, mode, *args)
+    return compile_example
+
+
+def walk_the_traceback(traceback, test):
+    """Try to find the traceback for this test."""
+    try:
+        test_filename = test.filename
+    except AttributeError:
+        return traceback
+
+    while traceback.tb_next is not None:
+        try:
+            tb_filename = traceback.tb_frame.f_code.co_filename
+            if tb_filename == test_filename:
+                return traceback
+        except AttributeError:
+            pass
+        traceback = traceback.tb_next
+
+    return traceback
+
+
+def acquire_testrunner_traceback(exc_info):
+    ex_type, err, traceback = exc_info
+
+    if isinstance(err, doctest.UnexpectedException):
+        exc_info = err.exc_info
+        traceback = exc_info[2]
+    elif isinstance(err, doctest.DocTestFailure):
+        try:
+            last_line = max(0, len(err.example.source.splitlines())+err.example.lineno-1)
+            throw_source = '\n'*(last_line) +\
+                           'raise ValueError'\
+                           '("Expected and actual output are different")'
+            exec compile(throw_source, err.test.filename, 'single') in err.test.globs
+        except:
+            exc_info = sys.exc_info()
+            traceback = exc_info[2]
+
+    if isinstance(err, (doctest.DocTestFailure, doctest.UnexpectedException)):
+        traceback = walk_the_traceback(traceback, err.test)
+
+    return traceback
+
+
+def walk_frames_to_find_output():
+    from zope.testrunner.runner import TestResult
+    ff = sys._getframe()
+    while ff.f_back is not None:
+        ff = ff.f_back
+        if isinstance(ff.f_locals.get('self'), TestResult):
+            testresult = ff.f_locals['self']
+            return testresult.options.output
+
+
+
+def report_testrunner_real_exception(exc_info):
+    ex_type, err, traceback = exc_info
+    if not isinstance(err, doctest.UnexpectedException):
+        return # nothing to report
+    try:
+        import zope.testrunner.runner
+    except ImportError:
+        return # no testrunner
+    exc_info = err.exc_info
+    traceback = exc_info[2]
+    traceback = walk_the_traceback(traceback, err.test)
+    output = walk_frames_to_find_output()
+    if output is not None:
+        output.print_traceback(
+            "Test failure:", (exc_info[0], exc_info[1], traceback))
+
+
+def make_ipdb_testrunner_postmortem(test):
+    import ipdb
+    import zope.testrunner.interfaces
+    def interactive_post_mortem(exc_info):
+        report_testrunner_real_exception(exc_info)
+        tb = acquire_testrunner_traceback(exc_info)
+        ipdb.__main__.update_stdout()
+        ipdb.__main__.BdbQuit_excepthook.excepthook_ori = sys.excepthook
+        sys.excepthook = ipdb.__main__.BdbQuit_excepthook
+        p = ipdb.__main__.Pdb(ipdb.__main__.def_colors)
+        p.reset()
+        p.botframe = tb.tb_frame
+        p.interaction(tb.tb_frame, tb)
+        raise zope.testrunner.interfaces.EndRun()
+    return interactive_post_mortem
+
+
+def make_pdb_testrunner_postmortem(test):
+    import pdb
+    import zope.testrunner.interfaces
+    def interactive_post_mortem(exc_info):
+        report_testrunner_real_exception(exc_info)
+        tb = acquire_testrunner_traceback(exc_info)
+        p = pdb.Pdb()
+        p.reset()
+        p.botframe = tb.tb_frame
+        p.interaction(tb.tb_frame, tb)
+        raise zope.testrunner.interfaces.EndRun()
+    return interactive_post_mortem
+
+
+def make_testrunner_postmortem_patch(test):
+    try:
+        return make_ipdb_testrunner_postmortem(test)
+    except ImportError:
+        pass
+
+    try:
+        return make_pdb_testrunner_postmortem(test)
+    except ImportError:
+        return None
+    return None
+
 
 class SeleniumLayer(ZCMLLayer):
 
@@ -655,9 +966,16 @@ class SeleniumLayer(ZCMLLayer):
     def __init__(self, *args, **kw):
         ZCMLLayer.__init__(self, *args, **kw)
         self.browsers = BrowserPool(self)
+        if BLACK_MAGIC:
+            self.patches = mock.ModulesSnapshot()
 
     def setUp(self):
+        global _Browser_UI_ext
+        global _Element_UI_ext
+        _Browser_UI_ext = ExtensionGroup()
+        _Element_UI_ext = ExtensionGroup()
         ZCMLLayer.setUp(self)
+        schooltool.testing.registry.setupSeleniumHelpers()
         dispatcher = ThreadedTaskDispatcher()
         dispatcher.setThreadCount(self.thread_count)
         self.server = self.server_factory.create(
@@ -674,6 +992,10 @@ class SeleniumLayer(ZCMLLayer):
         self.thread.join()
         self.browsers.reset()
         ZCMLLayer.tearDown(self)
+        global _Browser_UI_ext
+        global _Element_UI_ext
+        _Browser_UI_ext = None
+        _Element_UI_ext = None
 
     def poll_server(self):
         self.serving = True
@@ -692,6 +1014,8 @@ class SeleniumLayer(ZCMLLayer):
     def testTearDown(self):
         self.setup.tearDown()
         self.browsers.reset()
+        if BLACK_MAGIC:
+            self.patches.restore()
 
 
 class SkippyDocTestRunner(doctest.DocTestRunner):
@@ -716,9 +1040,7 @@ class SkippyDocTestRunner(doctest.DocTestRunner):
                     del example.__dict__['__old_options']
         return result
 
-    def report_failure(self, out, test, example, got):
-        result = doctest.DocTestRunner.report_failure(
-            self, out, test, example, got)
+    def honour_only_first_failure_flag(self, test):
         if self.optionflags & doctest.REPORT_ONLY_FIRST_FAILURE:
             # For practical reasons, skip the rest of the test.
             # Selenium failures are slow enough as they are,
@@ -731,20 +1053,22 @@ class SkippyDocTestRunner(doctest.DocTestRunner):
                     example.options = example.options.copy()
                     example.options[doctest.SKIP] = True
                     del example.__dict__['__old_options']
+
+    def report_unexpected_exception(self, out, test, example, exc_info):
+        result = doctest.DocTestRunner.report_unexpected_exception(
+            self, out, test, example, exc_info)
+        self.honour_only_first_failure_flag(test)
+        return result
+
+    def report_failure(self, out, test, example, got):
+        result = doctest.DocTestRunner.report_failure(
+            self, out, test, example, got)
+        self.honour_only_first_failure_flag(test)
         return result
 
 
 class RepeatyDebugRunner(doctest.DebugRunner, SkippyDocTestRunner):
     """Mr. Repeaty Debugger."""
-
-    #def report_unexpected_exception(self, out, test, example, exc_info):
-    #    raise UnexpectedException(test, example, exc_info)
-
-    #def report_failure(self, out, test, example, got):
-    #    raise DocTestFailure(test, example, got)
-
-    def report_failure(self, out, test, example, got):
-        return doctest.DebugRunner.report_failure(self, out, test, example, got)
 
 
 class SeleniumOutputChecker(doctest.OutputChecker):
@@ -768,6 +1092,47 @@ class SeleniumOutputChecker(doctest.OutputChecker):
             self, example, self._unify_got(got), optionflags)
 
 
+class DiffTemplate(object):
+
+    class ExampleStub(object):
+        pass
+
+    def __init__(self, checker, optionflags=None):
+        self.checker = checker
+        self.optionflags = optionflags
+
+    def prettifyDiff(self, diff):
+        output = walk_frames_to_find_output()
+        if output is None:
+            return diff
+        old_stdout = sys.stdout
+        result = StringIO()
+        sys.stdout = result
+        try:
+            output.print_doctest_failure(diff)
+        finally:
+            sys.stdout = old_stdout
+        return result.getvalue()
+
+    def __mod__(self, params):
+        file, line, name, source, want, got = params
+        result = 'File "%s", line %s, in %s' % (file, line, name)
+        result += '\n\n>>> '+'\n...'.join(source.splitlines())+'\n\n'
+        example = self.ExampleStub()
+        example.want = want
+        diff = self.checker.output_difference(example, got, self.optionflags)
+        result += self.prettifyDiff(diff)
+        return result
+
+
+def make_pretty_diff_template(*args, **kw):
+    try:
+        import zope.testrunner.formatter
+    except ImportError:
+        return None
+    return DiffTemplate(*args, **kw)
+
+
 class SeleniumDocFileCase(doctest.DocFileCase):
 
     def __init__(self, test,
@@ -778,7 +1143,36 @@ class SeleniumDocFileCase(doctest.DocFileCase):
             test, optionflags=optionflags,
             setUp=setUp, tearDown=tearDown, checker=checker)
 
+    if BLACK_MAGIC:
+        def patch(self, patches):
+            self._layer.patches.mock(
+                dict(filter(lambda (a, m): m is not None, patches.items())))
+
+    def run(self, *args, **kw):
+        if BLACK_MAGIC:
+            test = self._dt_test
+            patches = {
+                'doctest.compile':
+                    make_doctest_compile_patch(test),
+                }
+            self.patch(patches)
+        return doctest.DocFileCase.run(self, *args, **kw)
+
     def debug(self):
+        if BLACK_MAGIC:
+            test = self._dt_test
+            patches = {
+                'doctest.compile':
+                    make_doctest_compile_patch(test),
+                #'linecache.getlines':
+                #    make_doctest_getlines_patch(test),
+                'zope.testrunner.debug.post_mortem':
+                    make_testrunner_postmortem_patch(test),
+                'zope.testrunner.formatter.doctest_template':
+                    make_pretty_diff_template(self._dt_checker,
+                                              optionflags=self._dt_optionflags),
+                }
+            self.patch(patches)
         self.setUp()
         runner = RepeatyDebugRunner(optionflags=self._dt_optionflags,
                                     checker=self._dt_checker, verbose=False)
@@ -853,11 +1247,19 @@ def collect_ftests(package=None, level=None, layer=None, filenames=None,
                    optionflags=None, test_case_factory=SeleniumDocFileCase):
     package = doctest._normalize_module(package)
     def make_suite(filename, package=None):
+        if BLACK_MAGIC:
+            def layer_setting_factory(*args, **kw):
+                test_case = test_case_factory(*args, **kw)
+                test_case._layer = layer
+                return test_case
+            suite_test_case_factory = layer_setting_factory
+        else:
+            suite_test_case_factory = test_case_factory
         suite = SeleniumDocFileSuite(layer, filename,
                                      package=package,
                                      optionflags=optionflags,
                                      globs={'browsers': layer.browsers},
-                                     test_case_factory=test_case_factory)
+                                     test_case_factory=suite_test_case_factory)
         return suite
     assert isinstance(layer, SeleniumLayer)
     suite = collect_txt_ftests(package=package, level=level,
@@ -865,7 +1267,7 @@ def collect_ftests(package=None, level=None, layer=None, filenames=None,
                                suite_factory=make_suite)
     if not selenium_enabled:
         # XXX: should log that tests are skipped somewhere better
-        print >> sys.stderr, 'Selenium not configured, skipping', suite
+        print >> sys.stderr, 'Selenium not configured, skipping', package.__name__
         return unittest.TestSuite()
     return suite
 
