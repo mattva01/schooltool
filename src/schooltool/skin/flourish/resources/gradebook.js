@@ -231,6 +231,8 @@ $(document).ready(function() {
     $('.popup_link').click(function(e) {
         $('.popup_active').hide().removeClass('popup_active');
         $(this).parent().prev('ul.popup_menu').addClass('popup_active');
+        var th = $(this).closest('th');
+        $('.popup_active').css('left', th.position().left+'px');
         $('.popup_active').show();
         e.preventDefault();
     });
