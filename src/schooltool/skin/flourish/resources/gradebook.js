@@ -236,6 +236,9 @@ $(document).ready(function() {
         $('.popup_active').show();
         e.preventDefault();
     });
+    $('.gradebook-part').scroll(function() {
+        $('.popup_active').hide().removeClass('popup_active');
+    });
     $(document).click(function(e) {
         if ($(e.target).hasClass('popup_link') == false) {
             $('.popup_active').hide().removeClass('popup_active');
