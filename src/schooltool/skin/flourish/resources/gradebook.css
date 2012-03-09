@@ -189,6 +189,7 @@ th.activity-title {
 .popup_menu {
     display: none;
     position: absolute;
+    left: 0;
     z-index: 10000;
 }
 
