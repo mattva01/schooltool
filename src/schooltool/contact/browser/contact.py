@@ -615,7 +615,7 @@ class ContactTableFilter(table.ajax.IndexedTableFilter,
                          FlourishContactFilterWidget):
 
     template = ViewPageTemplateFile('templates/f_contact_table_filter.pt')
-    title = _('First name, last name or username')
+    title = _('First name and/or last name')
 
     @property
     def search_title_id(self):
