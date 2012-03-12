@@ -279,6 +279,41 @@ $(document).ready(function() {
             removeInput(td);
         }
     });
+    $('.grades').on('keyup', 'input', function() {
+        var input = $(this);
+        var td = input.parent();
+        if (input.val() !== td.attr('original')) {
+            if (this.timer) {
+                clearTimeout(this.timer);
+            }
+            var data = Array();
+            data.push({
+                name: 'action',
+                value: 'validate_score'
+            });
+            data.push({
+                name: 'activity_id',
+                value: findColumnHeader(td).attr('id')
+            });
+            data.push({
+                name: 'score',
+                value: input.val()
+            });
+            var url = input.closest('form').attr('action') + '/ajax';
+            this.timer = setTimeout(function () {
+                $.ajax({
+                    url: url,
+                    data: data,
+                    dataType: 'json',
+                    type: 'post',
+                    success: function (data) {
+                        input.removeClass();
+                        input.addClass(data.css_class);
+                    }
+                });
+            }, 200);
+        }
+    });
     $('.grades').on('keydown', 'input', function(e) {
         var td = $(this).parent();
         var tr = td.parent()
@@ -295,6 +330,7 @@ $(document).ready(function() {
             focusInputVertically(tr.prevUntil('tbody'), td.index());
             e.preventDefault();
             break;
+        case 13: // enter
         case 40: // down
             focusInputVertically(tr.nextAll(), td.index());
             e.preventDefault();

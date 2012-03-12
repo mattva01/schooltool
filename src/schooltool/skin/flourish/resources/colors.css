@@ -538,20 +538,20 @@ th.activity-title {
 }
 
 .grades input[type="text"]:focus {
-    border-color: #cccccc;
+    background-color: yellow;
 }
 
-.grades .changed_bg input[type="text"] {
+.grades input[type="text"].valid {
     background: #009499;
     color: #ffffff;
 }
 
-.grades .error_bg  input[type="text"] {
+.grades input[type="text"].error {
     background: #ef4444;
     color: #ffffff;
 }
 
-.grades .warning_bg  input[type="text"] {
+.grades input[type="text"].extracredit {
     background: #f6db5a;
 }
 
