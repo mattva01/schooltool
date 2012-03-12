@@ -169,14 +169,12 @@ function focusInputHorizontally(elements) {
 function focusInputVertically(elements, columnIndex) {
     elements.each(function(index, e) {
         var td = $(e).find('td:eq('+columnIndex+')');
-        if (td.length > 0) {
-            if (isScorable(td)) {
-                input = getInput(td);
-                input[0].select();
-                input.focus();
-                makeGradeCellVisible(input);
-                return false;
-            }
+        if ((td.length > 0) && isScorable(td)) {
+            input = getInput(td);
+            input[0].select();
+            input.focus();
+            makeGradeCellVisible(input);
+            return false;
         }
     });
 }
@@ -228,7 +226,7 @@ function findRowHeader(td) {
 
 function findColumnHeader(td) {
     var columnIndex = td.index();
-    var table = td.closest('table');
+    var table = $('.grades table');
     return table.find('thead tr:first-child th:eq('+columnIndex+')');
 }
 
@@ -238,9 +236,7 @@ function isScorable(td) {
 }
 
 function getInput(td) {
-    if (td.find('input').length > 0) {
-        return td.find('input');
-    } else {
+    if (td.find('input').length < 1) {
         var new_input = $('<input type="text" />');
         var name = cellInputName(td);
         var value = td.text();
@@ -248,8 +244,8 @@ function getInput(td) {
         new_input.attr('value', value);
         td.attr('original', value);
         td.html($('<div>').append(new_input).html());
-        return td.find('input');
     }
+    return td.find('input');
 }
 
 function removeInput(td) {
