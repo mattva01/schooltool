@@ -1,0 +1,51 @@
+Test for bug LP: #953454
+========================
+
+This is a simple test for bug #953454 "When you add a resource and
+click cancel system crashes". It's mostly to set the testing
+infrastructure for this package.
+
+Log in as manager:
+
+    >>> manager = browsers.manager
+    >>> manager.open('http://localhost')
+    >>> manager.query.link('Log in').click()
+    >>> manager.query.name('username').type('manager')
+    >>> manager.query.name('password').type('schooltool')
+    >>> manager.query.button('Log in').click()
+
+A school year is necessary for managing resources:
+
+    >>> manager.query.link('School').click()
+    >>> manager.query.link('School Year').click()
+    >>> manager.query.name('form.widgets.title').type('2012')
+    >>> manager.query.name('form.widgets.first').ui.enter_date('2012-01-01')
+    >>> manager.query.name('form.widgets.last').ui.enter_date('2012-12-31')
+    >>> manager.query.button('Submit').click()
+
+Let's go to Resources:
+
+    >>> manager.query.link('School').click()
+    >>> manager.query.link('Resources').click()
+    >>> manager.url
+    u'http://localhost/resources'
+
+Add Equipment and cancel the action. We should be redirected back to
+the Resources pages:
+
+    >>> manager.query.link('Equipment').click()
+    >>> manager.query.button('Cancel').click()
+    >>> manager.url
+    u'http://localhost/resources'
+
+Same with the other two types of resources:
+
+    >>> manager.query.link('Location').click()
+    >>> manager.query.button('Cancel').click()
+    >>> manager.url
+    u'http://localhost/resources'
+
+    >>> manager.query.link('Resource').click()
+    >>> manager.query.button('Cancel').click()
+    >>> manager.url
+    u'http://localhost/resources'
