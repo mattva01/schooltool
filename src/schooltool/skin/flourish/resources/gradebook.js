@@ -44,63 +44,6 @@ function handleCellFocus(cell, activity)
     cell.select();
 }
 
-function spreadsheetBehaviour(e)
-{
-    var keynum;
-    if(window.event) // IE
-    {
-        keynum = e.keyCode;
-    }
-    else if(e.which) // Netscape/Firefox/Opera
-    {
-        keynum = e.which;
-    }
-
-    var my_name = currentCell.id;
-    var s, a, done;
-    done = new Boolean(false);
-
-    for (s = 0; s != numstudents; s++)
-    {
-        for (a = 0; a != numactivities; a++)
-        {
-            try_name = activities[a] + '_' + students[s]
-            if (try_name == my_name)
-            {
-                done = true;
-                break;
-            }
-        }
-        if (done == true)
-            break;
-    }
-
-    var i_stayed_put = new Boolean(true);
-    if (keynum == 37) // left arrow
-    {
-        if (a != 0) { a--; i_stayed_put = false;}
-    }
-    if (keynum == 39) // right arrow
-    {
-        if (a != numactivities - 1) {a++; i_stayed_put = false;}
-    }
-    if (keynum == 38) // up arrow
-    {
-        if (s != 0) {s--; i_stayed_put = false;}
-    }
-    if ((keynum == 40) || (keynum == 13)) // down arrow or enter
-    {
-        if (s != numstudents - 1) {s++; i_stayed_put = false;}
-    }
-
-    if (i_stayed_put == true)
-        return true;
-    var newname = activities[a] + '_' + students[s];
-    var el = document.getElementsByName(newname)[0]
-    el.focus();
-    return false;
-}
-
 function checkValid(e, name)
 {
     var activity = name.split('_')[0];
@@ -191,94 +134,108 @@ function changeBackgroundColor(id, klass) {
 
 // Changes made for flourish
 
-function updateWidths() {
-    // Used to calculate the margins of the div.grades area and
-    // placeholders (when there are not enough activity columns
-    // to fill the grades space)
-    var gradebook_width = $('.gradebook').width();
-    var students_width = $('.students').outerWidth();
-    var totals_width = $('.totals').outerWidth();
-    if (students_width) {
-        $('.grades').css('marginLeft', students_width + 'px');
+function findInput(element) {
+    var input = $(element).find('input[type="text"]');
+    if (input.length > 0) {
+        input.focus();
+        input[0].select();
+        return true;
     }
-    if (totals_width) {
-        $('.grades').css('marginRight', totals_width + 'px');
-    }
-    activities_width = 0;
-    $('.grades th.activity-title').each(function() {
-        activities_width += $(this).outerWidth();
+    return false;
+}
+
+function focusInputHorizontally(elements) {
+    elements.each(function(index, e) {
+        if (findInput(e)) {
+            return false;
+        }
     });
-    var grades_width = $('.grades').width();
-    if (grades_width > activities_width) {
-        placeholder_width = grades_width - activities_width;
-        $('.placeholder').css('width', placeholder_width +'px');
-        $('.placeholder').show();
-    } else {
-        $('.placeholder').hide();
+}
+
+function focusInputVertically(elements, columnIndex) {
+    elements.each(function(index, e) {
+        var td = $(e).find('td:eq('+columnIndex+')');
+        if (td.length > 0) {
+            if (findInput(td)) {
+                return false;
+            }
+        }
+    });
+}
+
+function updateGradebookPartsWidths() {
+    var gradebook_w = $('.gradebook').outerWidth();
+    var students_w = $('.students').outerWidth();
+    var totals_headers = $('.totals th');
+    var totals_w = 0;
+    if (totals_headers.length > 0) {
+        var totals_headers_w = totals_headers.last().outerWidth() + 1; // border
+        totals_w = totals_headers.length * totals_headers_w;
+        $('.totals').css({
+            width: totals_w,
+        });
+    }
+    var grades_visible_w = gradebook_w - (students_w + totals_w)
+    var grades_column_count = $('.grades thead tr:first-child th:not(.placeholder)').length;
+    var grades_margin_left = students_w;
+    var grades_margin_right = totals_w;
+    $('.grades').css({
+        marginLeft: grades_margin_left,
+        marginRight: grades_margin_right,
+    });
+    if (grades_column_count > 0) {
+        var grades_column_w = $('.grades th:first').outerWidth();
+        var grades_max = Math.floor(grades_visible_w / grades_column_w);
+        if (grades_column_count > grades_max) {
+            var grades_column_w = Math.floor(grades_visible_w / grades_max);
+            $('.grades th').css('width', grades_column_w);
+            $('.grades td').css('width', grades_column_w);
+            $('.placeholder').hide();
+        }
     }
 }
 
-$(window).load(function() {
-    // XXX: Chrome doesn't calculate the widths correctly
-    //      when this call is in $(document).ready()
-    //      because it loads js and css in paralell
-    //      and the width information may not be available yet
-    updateWidths();
-});
-
 $(document).ready(function() {
-    // popup menus
-    $('.popup_link').click(function(e) {
-        $('.popup_active').hide().removeClass('popup_active');
-        var popup = $(this).parent().prev('ul.popup_menu');
-        popup.addClass('popup_active');
-        var th = $(this).closest('th');
-        if (th.length > 0) {
-            var part = th.closest('.gradebook-part');
-            var part_margin_left = parseInt(part.css('marginLeft').replace('px',''));
-            var popup_right = th.position().left - part_margin_left + popup.outerWidth();
-            if (popup_right > part.outerWidth()) {
-                var left = th.position().left + th.outerWidth() - popup.outerWidth();
-            } else {
-                var left = th.position().left;
-            }
-            popup.css('left', left+'px');
-        }
-        $('.popup_active').show();
-        e.preventDefault();
-    });
-    $('.gradebook-part').scroll(function() {
-        $('.popup_active').hide().removeClass('popup_active');
-    });
-    $(document).click(function(e) {
-        if ($(e.target).hasClass('popup_link') == false) {
-            $('.popup_active').hide().removeClass('popup_active');
-        }
-    });
+    updateGradebookPartsWidths();
     // row colors
     $('.students tbody tr:odd').addClass('odd');
     $('.grades tbody tr:odd').addClass('odd');
     $('.totals tbody tr:odd').addClass('odd');
-    // zoom buttons
-    var factor = 1.125;
-    var min_size = 7;
-    var max_size = 18;
-    var default_size = 10;
-    $('.zoom-button').click(function () {
-        var form = $('.grid-form');
-        var current_size = form.css('fontSize');
-        var num = parseFloat(current_size, default_size);
-        var unit = current_size.slice(-2);
-        if (this.id == 'zoom-in') {
-            num *= factor;
-        } else if (this.id == 'zoom-out') {
-            num /= factor;
-        } else if (this.id == 'zoom-normal') {
-            num = default_size;
+    // cell borders
+    $('.grades table tr > *:first-child').css({
+        borderLeft: 'none',
+    });
+    var last_column_index = $('.grades tr:first-child th:visible').index();
+    $('.grades table tr').find('th:eq('+last_column_index+')').css({
+        borderRight: 'none',
+    });
+    $('.grades table tr').find('td:eq('+last_column_index+')').css({
+        borderRight: 'none',
+    });
+    // cell navigation
+    $('.grades input[type="text"]').click(function() {
+        this.select();
+    });
+    $('.grades input[type="text"]').keydown(function(e) {
+        var td = $(this).parent();
+        var tr = td.parent()
+        switch(e.keyCode) {
+        case 37: // left
+            focusInputHorizontally(td.prevUntil('tr'));
+            e.preventDefault();
+            break;
+        case 39: // right
+            focusInputHorizontally(td.nextAll());
+            e.preventDefault();
+            break;
+        case 38: // up
+            focusInputVertically(tr.prevUntil('tbody'), td.index());
+            e.preventDefault();
+            break;
+        case 40: // down
+            focusInputVertically(tr.nextAll(), td.index());
+            e.preventDefault();
+            break;
         }
-        if (num >= min_size && num <= max_size) {
-            form.css('fontSize', num + unit);
-        }
-        updateWidths();
     });
 });

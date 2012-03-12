@@ -36,25 +36,6 @@
 
 .grid-form {
     margin-top: 0px;
-    font-size: 10px;
-}
-
-.grid-form table {
-    margin-top: 0em;
-    width: auto;
-    border-collapse: collapse;
-}
-
-.grid-form th, .grid-form td {
-    padding: 0px;
-}
-
-.grid-form th {
-    font-weight: normal;
-}
-
-.grid-form th, .grid-form td, input[type="text"] {
-    font-size: 1em;
 }
 
 /* Gradebook parts */
@@ -64,109 +45,103 @@
     margin-bottom: 8px;
 }
 
-.gradebook table td, .gradebook table th {
-    line-height: 1.4em;
-    vertical-align: middle;
-    width: 5em;
+.gradebook-part table {
+    border-collapse: collapse;
+    margin-top: 0px;
+    table-layout: fixed;
+    width: 100%;
 }
 
-.gradebook-part {
-    margin-bottom: 20px;
-    width: auto;
+.gradebook-part th, .gradebook-part td {
+    font-size: 10px;
+    font-weight: normal;
+    padding: 0px;
+    vertical-align: middle;
+}
+
+.gradebook-part th {
+    border-bottom-width: 1px;
+    border-style: solid;
 }
 
 .gradebook-part thead tr {
-    height: 1.6em;
+    height: 18px;
 }
 
 .gradebook-part tbody tr {
-    height: 2.2em;
+    height: 22px;
+}
+
+.gradebook-part input[type="text"] {
+    border: 0px;
+    font-size: 10px;
+    height: 18px;
+    width: 100%;
+}
+
+.gradebook-part input[type="text"]:focus {
+    outline-style: none;
+    background-color: yellow;
 }
 
 .students {
     position: absolute;
-    top: 0px;
-    width: auto;
-    z-index: 101;
+    top: 0;
+    width: 178px;
+    z-index: 1;
+}
+
+.students th {
+    text-align: right;
+}
+
+.students th.name {
+    text-align: left;
+    width: 110px;
 }
 
 .students th, .students td {
     border-right-width: 1px;
     border-right-style: solid;
     overflow: hidden;
-    padding-left: 0.4em;
-    padding-right: 0.4em;
+    padding-left: 4px;
+    padding-right: 4px;
     white-space: nowrap;
-}
-
-.students th {
-    max-width: 5em;
-    min-width: 5em;
-    text-align: right;
-}
-
-.students th.name {
-    max-width: 11em;
-    min-width: 11em;
-    text-align: left;
-}
-
-.students td {
-    max-width: 16em;
-    min-width: 16em;
 }
 
 .grades {
     overflow: auto;
 }
 
-.grades th, .grades td {
-    border-left-width: 1px;
-    border-left-style: solid;
-    border-right-width: 1px;
-    border-right-style: solid;
-}
-
-.grades input[type="text"] {
-    border: none;
-    height: 1.2em;
-    width: 4em;
-}
-
-.grades input[type="text"]:focus {
-    border-width: 0.1em;
+.grades thead th, .grades tbody td {
     border-style: solid;
-    width: 3.8em;
-}
-
-.grades .placeholder {
-    width: 100%;
+    border-left-width: 1px;
+    border-right-width: 1px;
+    width: 40px;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
 }
 
 .totals {
     position: absolute;
-    top: 0px;
-    right: 0px;
-    width: auto;
-    z-index: 101;
+    top: 0;
+    right: 0;
+    z-index: 1;
+    width: 0px;
+}
+
+.totals thead tr {
+    height: 36px;
 }
 
 .totals th, .totals td {
-    border-left-style: solid;
     border-left-width: 1px;
-    max-width: 4em;
-    min-width: 4em;
-    overflow: hidden;
-    white-space: nowrap;
-}
-
-.totals th > div {
-    text-align: center;
-}
-
-th.activity-title {
-    border-bottom-style: solid;
-    border-bottom-width: 1px;
+    border-left-style: solid;
+    width: 40px;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
 }
 
 /* Controls */
@@ -184,13 +159,17 @@ th.activity-title {
     float: right;
 }
 
+.grades .placeholder {
+    width: 100%;
+}
+
 /* Popup menus */
 
 .popup_menu {
     display: none;
     position: absolute;
     left: 0;
-    z-index: 10000;
+    z-index: 1;
 }
 
 .popup_menu li {
@@ -225,6 +204,6 @@ th.activity-title {
     width: 140px;
 }
 
-.activity_description {
+.activity-description {
     display: none;
 }
