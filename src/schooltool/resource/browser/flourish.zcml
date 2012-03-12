@@ -432,4 +432,20 @@
       permission="schooltool.view"
       />
 
+  <flourish:viewlet
+      name="filter"
+      before="batch table"
+      class="schooltool.table.table.DoNotFilter"
+      manager=".resource.LocationListTable"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="filter"
+      before="batch table"
+      class="schooltool.table.table.DoNotFilter"
+      manager=".resource.EquipmentListTable"
+      permission="schooltool.view"
+      />
+
 </configure>
