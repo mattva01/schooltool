@@ -117,6 +117,7 @@
     border-left-style: solid;
     border-left-width: 1px;
     width: 40px;
+    overflow: hidden;
     box-sizing: border-box;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
@@ -138,6 +139,7 @@
     border-left-width: 1px;
     border-left-style: solid;
     width: 40px;
+    overflow: hidden;
     box-sizing: border-box;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;

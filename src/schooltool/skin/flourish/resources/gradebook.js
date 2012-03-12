@@ -152,21 +152,15 @@ function makeGradeCellVisible(element) {
     }
 }
 
-function findInput(element) {
-    var td = $(element);
-    var input = td.find('input[type="text"]');
-    if (input.length > 0) {
-        input.focus();
-        input[0].select();
-        makeGradeCellVisible(input);
-        return true;
-    }
-    return false;
-}
-
 function focusInputHorizontally(elements) {
+    var input;
     elements.each(function(index, e) {
-        if (findInput(e)) {
+        var element = $(e);
+        if (isScorable(element)) {
+            input = getInput(element);
+            input[0].select();
+            input.focus();
+            makeGradeCellVisible(input);
             return false;
         }
     });
@@ -176,7 +170,11 @@ function focusInputVertically(elements, columnIndex) {
     elements.each(function(index, e) {
         var td = $(e).find('td:eq('+columnIndex+')');
         if (td.length > 0) {
-            if (findInput(td)) {
+            if (isScorable(td)) {
+                input = getInput(td);
+                input[0].select();
+                input.focus();
+                makeGradeCellVisible(input);
                 return false;
             }
         }
@@ -216,6 +214,50 @@ function updateGradebookPartsWidths() {
     }
 }
 
+function cellInputName(td) {
+    var columnHeader = findColumnHeader(td);
+    var rowHeader = findRowHeader(td);
+    return columnHeader.attr('id') + '_' + rowHeader.attr('id');
+}
+
+function findRowHeader(td) {
+    var rowIndex = td.parent().index();
+    var table = $('.students table');
+    return table.find('tbody td:eq('+rowIndex+')');
+}
+
+function findColumnHeader(td) {
+    var columnIndex = td.index();
+    var table = td.closest('table');
+    return table.find('thead tr:first-child th:eq('+columnIndex+')');
+}
+
+function isScorable(td) {
+    var columnHeader = findColumnHeader(td);
+    return columnHeader.hasClass('scorable');
+}
+
+function getInput(td) {
+    if (td.find('input').length > 0) {
+        return td.find('input');
+    } else {
+        var new_input = $('<input type="text" />');
+        var name = cellInputName(td);
+        var value = td.text();
+        new_input.attr('name', name);
+        new_input.attr('value', value);
+        td.attr('original', value);
+        td.html($('<div>').append(new_input).html());
+        return td.find('input');
+    }
+}
+
+function removeInput(td) {
+    td.empty();
+    td.html(td.attr('original'));
+    td.removeAttr('original');
+}
+
 $(document).ready(function() {
     updateGradebookPartsWidths();
     // row colors
@@ -223,13 +265,25 @@ $(document).ready(function() {
     $('.grades tbody tr:odd').addClass('odd');
     $('.totals tbody tr:odd').addClass('odd');
     // cell navigation
-    $('.grades input[type="text"]').click(function() {
+    $('.grades td').click(function() {
+        var td = $(this);
+        makeGradeCellVisible(td);
+        if (isScorable(td)) {
+            var input = getInput(td);
+            input[0].select();
+            input.focus();
+        }
+    });
+    $('.grades').on('click', 'input', function() {
         this.select();
     });
-    $('.grades td').click(function() {
-        makeGradeCellVisible(this);
+    $('.grades').on('blur', 'input', function() {
+        var td = $(this).parent();
+        if ($(this).val() === td.attr('original')) {
+            removeInput(td);
+        }
     });
-    $('.grades input[type="text"]').keydown(function(e) {
+    $('.grades').on('keydown', 'input', function(e) {
         var td = $(this).parent();
         var tr = td.parent()
         switch(e.keyCode) {
