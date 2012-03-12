@@ -196,7 +196,8 @@ function updateGradebookPartsWidths() {
         });
     }
     var grades_visible_w = gradebook_w - (students_w + totals_w)
-    var grades_column_count = $('.grades thead tr:first-child th:not(.placeholder)').length;
+    var grades_column_selector = '.grades tr:first-child th:not(.placeholder)';
+    var grades_column_count = $(grades_column_selector).length;
     var grades_margin_left = students_w;
     var grades_margin_right = totals_w;
     $('.grades').css({
