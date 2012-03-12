@@ -114,9 +114,8 @@
 }
 
 .grades thead th, .grades tbody td {
-    border-style: solid;
+    border-left-style: solid;
     border-left-width: 1px;
-    border-right-width: 1px;
     width: 40px;
     box-sizing: border-box;
     -moz-box-sizing: border-box;

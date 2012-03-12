@@ -222,17 +222,6 @@ $(document).ready(function() {
     $('.students tbody tr:odd').addClass('odd');
     $('.grades tbody tr:odd').addClass('odd');
     $('.totals tbody tr:odd').addClass('odd');
-    // cell borders
-    $('.grades table tr > *:first-child').css({
-        borderLeft: 'none',
-    });
-    var last_column_index = $('.grades tr:first-child th:visible').index();
-    $('.grades table tr').find('th:eq('+last_column_index+')').css({
-        borderRight: 'none',
-    });
-    $('.grades table tr').find('td:eq('+last_column_index+')').css({
-        borderRight: 'none',
-    });
     // cell navigation
     $('.grades input[type="text"]').click(function() {
         this.select();
