@@ -134,11 +134,31 @@ function changeBackgroundColor(id, klass) {
 
 // Changes made for flourish
 
+function makeGradeCellVisible(element) {
+    var td = $(element).closest('td');
+    var td_left_border = td.position().left;
+    var td_right_border = td_left_border + td.outerWidth();
+    var grades_left_border = $('.students').outerWidth();
+    var grades_right_border = $('.gradebook').outerWidth() - $('.totals').outerWidth();
+    if (td_right_border > grades_right_border) {
+        var offset = td_right_border - grades_right_border;
+        var current_scroll = $('.grades').scrollLeft();
+        $('.grades').scrollLeft(current_scroll + offset);
+    }
+    if (td_left_border < grades_left_border) {
+        var offset = grades_left_border - td_left_border;
+        var current_scroll = $('.grades').scrollLeft();
+        $('.grades').scrollLeft(current_scroll - offset);
+    }
+}
+
 function findInput(element) {
-    var input = $(element).find('input[type="text"]');
+    var td = $(element);
+    var input = td.find('input[type="text"]');
     if (input.length > 0) {
         input.focus();
         input[0].select();
+        makeGradeCellVisible(input);
         return true;
     }
     return false;
@@ -215,6 +235,9 @@ $(document).ready(function() {
     // cell navigation
     $('.grades input[type="text"]').click(function() {
         this.select();
+    });
+    $('.grades td').click(function() {
+        makeGradeCellVisible(this);
     });
     $('.grades input[type="text"]').keydown(function(e) {
         var td = $(this).parent();
