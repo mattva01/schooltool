@@ -276,6 +276,9 @@ function preloadPopups() {
 function loadActivityPopup(link) {
     var gradebook_url = $('.grid-form').attr('action');
     if (link.prev('ul.popup_menu').children().length < 1) {
+        var spinner = ST.images.spinner();
+        var li = $('<li class="header"></li').append(spinner);
+        link.prev('ul.popup_menu').append(li);
         var activity_id = link.parent().attr('id');
         // XXX: shame on me!
         var url = gradebook_url + '/../' + activity_id + '/popup_menu';
@@ -284,11 +287,6 @@ function loadActivityPopup(link) {
             dataType: 'html',
             type: 'get',
             context: link,
-            beforeSend: function() {
-                var spinner = ST.images.spinner();
-                var li = $('<li class="header"></li').append(spinner);
-                this.prev('ul.popup_menu').append(li);
-            },
             success: function(data) {
                 var is_visible = this.prev('ul.popup_menu').is(':visible');
                 this.prev('ul.popup_menu').replaceWith(data);
@@ -342,6 +340,7 @@ $(document).ready(function() {
             $('.popup_active').hide().removeClass('popup_active');
         }
     });
+    // gradebook-part width calculation
     updateGradebookPartsWidths();
     // row colors
     $('.students tbody tr:odd').addClass('odd');
