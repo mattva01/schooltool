@@ -169,32 +169,35 @@
     display: none;
     position: absolute;
     left: 0;
-    z-index: 1;
+    z-index: 2;
 }
 
 .popup_menu li {
     display: block;
 }
 
-.popup_menu > li > span {
-    font-weight: bold;
-}
-
-.popup_menu a,
-.popup_menu span {
-    padding: 3px 10px 3px 10px;
-    display: block;
-}
-
-.popup_menu .hover_menu span:before {
-    content: "\00BB \0020";
-}
-
+.popup_menu li.header,
 .popup_menu span.hover_link {
     font-weight: bold;
 }
 
-.popup_menu .hover_menu a {
+.popup_menu a,
+.popup_menu li.header,
+.popup_menu span.hover_link,
+.popup_menu .hover_menu li.current {
+    padding: 3px 10px 3px 10px;
+    display: block;
+}
+
+.popup_menu ul.hover_menu {
+    display: block;
+}
+
+.popup_menu ul.hover_menu li.current:before {
+    content: "\00BB \0020";
+}
+
+.popup_menu ul.hover_menu a {
     padding-left: 20px;
 }
 

@@ -506,13 +506,10 @@ table.schoolday-legend td.schoolday {
 
     - table headers
     - odd table rows
+    - grade input colors
     - popup menu
 
 */
-
-.grid-form th {
-    color: #333333;
-}
 
 .gradebook-part thead {
     background-color: #e7e4e2;
@@ -526,11 +523,12 @@ table.schoolday-legend td.schoolday {
     background-color: #f0efee;
 }
 
-.students th, .students td,
-.grades th, .grades td,
-.totals th, .totals td,
-th.activity-title {
+.gradebook-part th, .gradebook-part td {
     border-color: #cccccc;
+}
+
+.gradebook-part th {
+    color: #333333;
 }
 
 .grades input[type="text"] {
@@ -559,11 +557,12 @@ th.activity-title {
     background-color: #6c7b7c;
 }
 
-.popup_menu > li > span {
+.popup_menu li.header {
     background-color: #485454;
+    color: #ffffff;
 }
 
-.popup_menu li span {
+.popup_menu li span, .hover_menu li.current {
     color: #ffffff;
 }
 

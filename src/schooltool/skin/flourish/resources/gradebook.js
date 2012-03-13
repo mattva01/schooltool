@@ -135,18 +135,18 @@ function changeBackgroundColor(id, klass) {
 // Changes made for flourish
 
 function makeGradeCellVisible(element) {
-    var td = $(element).closest('td');
-    var td_left_border = td.position().left;
-    var td_right_border = td_left_border + td.outerWidth();
+    var cell = $(element);
+    var cell_left_border = cell.position().left;
+    var cell_right_border = cell_left_border + cell.outerWidth();
     var grades_left_border = $('.students').outerWidth();
     var grades_right_border = $('.gradebook').outerWidth() - $('.totals').outerWidth();
-    if (td_right_border > grades_right_border) {
-        var offset = td_right_border - grades_right_border;
+    if (cell_right_border > grades_right_border) {
+        var offset = cell_right_border - grades_right_border;
         var current_scroll = $('.grades').scrollLeft();
         $('.grades').scrollLeft(current_scroll + offset);
     }
-    if (td_left_border < grades_left_border) {
-        var offset = grades_left_border - td_left_border;
+    if (cell_left_border < grades_left_border) {
+        var offset = grades_left_border - cell_left_border;
         var current_scroll = $('.grades').scrollLeft();
         $('.grades').scrollLeft(current_scroll - offset);
     }
@@ -160,7 +160,7 @@ function focusInputHorizontally(elements) {
             input = getInput(element);
             input[0].select();
             input.focus();
-            makeGradeCellVisible(input);
+            makeGradeCellVisible(element);
             return false;
         }
     });
@@ -173,7 +173,7 @@ function focusInputVertically(elements, columnIndex) {
             input = getInput(td);
             input[0].select();
             input.focus();
-            makeGradeCellVisible(input);
+            makeGradeCellVisible(td);
             return false;
         }
     });
@@ -255,6 +255,51 @@ function removeInput(td) {
 }
 
 $(document).ready(function() {
+    // popup menus
+    $('.popup_link').click(function(e) {
+        var link = $(this);
+        var part = link.closest('.gradebook-part');
+        var th = link.closest('th');
+        $('.popup_active').hide().removeClass('popup_active');
+        if (link.prev('ul.popup_menu').children().length < 1) {
+            // XXX: currently, only activity popups are empty at the beginning
+            var activity_id = link.parent().attr('id');
+            // XXX: shame on me!
+            var url = $(this).closest('form').attr('action') + '/../' + activity_id + '/popup_menu';
+            $.ajax({
+                url: url,
+                dataType: 'html',
+                async: false,
+                type: 'get',
+                context: link,
+                success: function(data) {
+                    this.prev('ul.popup_menu').replaceWith(data);
+                }
+            });
+        }
+        var popup = link.prev('ul.popup_menu');
+        if (th.length > 0) {
+            var part_margin_left = part.css('marginLeft').replace('px','');
+            part_margin_left = parseInt(part_margin_left);
+            var popup_right = th.position().left - part_margin_left + popup.outerWidth();
+            if (popup_right > part.outerWidth()) {
+                var left = th.position().left + th.outerWidth() - popup.outerWidth();
+            } else {
+                var left = th.position().left;
+            }
+            popup.css('left', left+'px');
+        }
+        popup.addClass('popup_active').show();
+        e.preventDefault();
+    });
+    $('.grades').scroll(function() {
+        $('.popup_active').hide().removeClass('popup_active');
+    });
+    $(document).click(function(e) {
+        if ($(e.target).hasClass('popup_link') == false) {
+            $('.popup_active').hide().removeClass('popup_active');
+        }
+    });
     updateGradebookPartsWidths();
     // row colors
     $('.students tbody tr:odd').addClass('odd');
@@ -306,7 +351,7 @@ $(document).ready(function() {
                     data: data,
                     dataType: 'json',
                     type: 'post',
-                    success: function (data) {
+                    success: function(data) {
                         input.removeClass();
                         input.addClass(data.css_class);
                     }
