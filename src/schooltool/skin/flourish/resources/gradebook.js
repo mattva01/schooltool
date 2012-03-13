@@ -291,15 +291,10 @@ function loadActivityPopup(link) {
             },
             success: function(data) {
                 var is_visible = this.prev('ul.popup_menu').is(':visible');
-                var left;
-                if (is_visible) {
-                    left = this.prev('ul.popup_menu').css('left');
-                }
                 this.prev('ul.popup_menu').replaceWith(data);
                 if (is_visible) {
-                    if (left) {
-                        this.prev('ul.popup_menu').css('left', left);
-                    }
+                    var left = calculatePopupLeft(this);
+                    this.prev('ul.popup_menu').css('left', left+'px');
                     this.prev('ul.popup_menu').addClass('popup_active').show();
                 }
             }
@@ -310,23 +305,29 @@ function loadActivityPopup(link) {
 function loadStudentPopup(link) {
 }
 
+function calculatePopupLeft(link) {
+    var th = link.closest('th');
+    var popup = link.prev('ul.popup_menu');
+    var part = link.closest('.gradebook-part');
+    var part_margin_left = part.css('marginLeft').replace('px','');
+    part_margin_left = parseInt(part_margin_left);
+    var popup_right = th.position().left - part_margin_left + popup.outerWidth();
+    if (popup_right > part.outerWidth()) {
+        var left = th.position().left + th.outerWidth() - popup.outerWidth();
+    } else {
+        var left = th.position().left;
+    }
+    return left;
+}
+
 $(document).ready(function() {
     // popup menus
     preloadPopups();
     $('.popup_link').click(function(e) {
         var link = $(this);
-        var part = link.closest('.gradebook-part');
-        var th = link.closest('th');
         var popup = link.prev('ul.popup_menu');
-        if (th.length > 0) {
-            var part_margin_left = part.css('marginLeft').replace('px','');
-            part_margin_left = parseInt(part_margin_left);
-            var popup_right = th.position().left - part_margin_left + popup.outerWidth();
-            if (popup_right > part.outerWidth()) {
-                var left = th.position().left + th.outerWidth() - popup.outerWidth();
-            } else {
-                var left = th.position().left;
-            }
+        if (link.closest('th').length > 0) { 
+            var left = calculatePopupLeft(link);
             popup.css('left', left+'px');
         }
         $('.popup_active').hide().removeClass('popup_active');
