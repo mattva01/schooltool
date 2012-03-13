@@ -262,15 +262,41 @@ function preloadActivityPopups() {
 }
 
 function preloadStudentPopups() {
-    var popup_links = $('.students a.popup_link');
+    var popup_links = $('.students tbody a.popup_link');
     popup_links.each(function(index, element) {
         loadStudentPopup($(element));
     });
 }
 
 function preloadPopups() {
+    loadNamePopup();
     preloadActivityPopups();
     preloadStudentPopups();
+}
+
+function loadNamePopup() {
+    var element = $('.students thead a.popup_link')[0];
+    var link = $(element);
+    var gradebook_url = $('.grid-form').attr('action');
+    if (link.prev('ul.popup_menu').children().length < 1) {
+        var spinner = ST.images.spinner();
+        var li = $('<li class="header"></li').append(spinner);
+        link.prev('ul.popup_menu').append(li);
+        var url = gradebook_url+'/name_popup_menu';
+        $.ajax({
+            url: url,
+            dataType: 'html',
+            type: 'get',
+            context: link,
+            success: function(data) {
+                var is_visible = this.prev('ul.popup_menu').is(':visible');
+                this.prev('ul.popup_menu').replaceWith(data);
+                if (is_visible) {
+                    this.prev('ul.popup_menu').addClass('popup_active').show();
+                }
+            }
+        });
+    }
 }
 
 function loadActivityPopup(link) {
