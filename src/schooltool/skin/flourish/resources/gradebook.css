@@ -189,6 +189,7 @@
     display: block;
 }
 
+.popup_menu li.header,
 .popup_menu ul.hover_menu span.hover_link,
 .popup_menu ul.hover_menu li {
     white-space: nowrap;

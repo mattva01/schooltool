@@ -182,32 +182,34 @@ function focusInputVertically(elements, columnIndex) {
 function updateGradebookPartsWidths() {
     var gradebook_w = $('.gradebook').outerWidth();
     var students_w = $('.students').outerWidth();
-    var totals_headers = $('.totals th');
+    var totals = $('.totals');
+    var totals_headers = totals.find('th');
+    var grades = $('.grades');
     var totals_w = 0;
     if (totals_headers.length > 0) {
-        var totals_headers_w = totals_headers.last().outerWidth() + 1; // border
+        var totals_headers_w = totals_headers.first().outerWidth() + 1; // border
         totals_w = totals_headers.length * totals_headers_w;
-        $('.totals').css({
+        totals.css({
             width: totals_w,
         });
     }
     var grades_visible_w = gradebook_w - (students_w + totals_w)
-    var grades_column_selector = '.grades tr:first-child th:not(.placeholder)';
-    var grades_column_count = $(grades_column_selector).length;
+    var grades_column_count = grades.find('th').not('.placeholder').length;
     var grades_margin_left = students_w;
     var grades_margin_right = totals_w;
-    $('.grades').css({
+    grades.css({
         marginLeft: grades_margin_left,
         marginRight: grades_margin_right,
     });
     if (grades_column_count > 0) {
-        var grades_column_w = $('.grades th:first').outerWidth();
+        var grades_column_w = grades.find('th').first().outerWidth();
         var grades_max = Math.floor(grades_visible_w / grades_column_w);
         if (grades_column_count > grades_max) {
             var grades_column_w = Math.floor(grades_visible_w / grades_max);
-            $('.grades th').css('width', grades_column_w);
-            $('.grades td').css('width', grades_column_w);
-            $('.placeholder').hide();
+            var grades_column_css = {'width': grades_column_w};
+            grades.find('th').css(grades_column_css);
+            grades.find('td').css(grades_column_css);
+            grades.find('.placeholder').hide();
         }
     }
 }
@@ -215,19 +217,17 @@ function updateGradebookPartsWidths() {
 function cellInputName(td) {
     var columnHeader = findColumnHeader(td);
     var rowHeader = findRowHeader(td);
-    return columnHeader.attr('id') + '_' + rowHeader.attr('id');
+    return [columnHeader.attr('id'), '_', rowHeader.attr('id')].join('');
 }
 
 function findRowHeader(td) {
     var rowIndex = td.parent().index();
-    var table = $('.students table');
-    return table.find('tbody td:eq('+rowIndex+')');
+    return $('.students').find('td').eq(rowIndex);
 }
 
 function findColumnHeader(td) {
     var columnIndex = td.index();
-    var table = $('.grades table');
-    return table.find('thead tr:first-child th:eq('+columnIndex+')');
+    return $('.grades').find('th').eq(columnIndex);
 }
 
 function isScorable(td) {
@@ -255,21 +255,21 @@ function removeInput(td) {
 }
 
 function preloadActivityPopups() {
-    var popup_links = $('.grades thead a.popup_link');
+    var popup_links = $('.grades').find('.popup_link');
     popup_links.each(function(index, element) {
         loadActivityPopup($(element));
     });
 }
 
 function preloadStudentPopups() {
-    var popup_links = $('.students tbody a.popup_link');
+    var popup_links = $('.students').find('tbody').find('.popup_link');
     popup_links.each(function(index, element) {
         loadStudentPopup($(element));
     });
 }
 
 function preloadTotalPopups() {
-    var popup_links = $('.totals thead a.popup_link');
+    var popup_links = $('.totals').find('.popup_link');
     popup_links.each(function(index, element) {
         loadTotalPopup($(element));
     });
@@ -283,13 +283,12 @@ function preloadPopups() {
 }
 
 function loadNamePopup() {
-    var element = $('.students thead a.popup_link')[0];
-    var link = $(element);
+    var link = $('.students').find('thead').find('.popup_link');
     var gradebook_url = $('.grid-form').attr('action');
-    if (link.prev('ul.popup_menu').children().length < 1) {
+    if (link.prev().children().length < 1) {
         var spinner = ST.images.spinner();
         var li = $('<li class="header"></li').append(spinner);
-        link.prev('ul.popup_menu').append(li);
+        link.prev().append(li);
         var url = gradebook_url+'/name_popup_menu';
         $.ajax({
             url: url,
@@ -297,10 +296,10 @@ function loadNamePopup() {
             type: 'get',
             context: link,
             success: function(data) {
-                var is_visible = this.prev('ul.popup_menu').is(':visible');
-                this.prev('ul.popup_menu').replaceWith(data);
+                var is_visible = this.prev().is(':visible');
+                this.prev().replaceWith(data);
                 if (is_visible) {
-                    this.prev('ul.popup_menu').addClass('popup_active').show();
+                    this.prev().addClass('popup_active').show();
                 }
             }
         });
@@ -309,10 +308,10 @@ function loadNamePopup() {
 
 function loadActivityPopup(link) {
     var gradebook_url = $('.grid-form').attr('action');
-    if (link.prev('ul.popup_menu').children().length < 1) {
+    if (link.prev().children().length < 1) {
         var spinner = ST.images.spinner();
         var li = $('<li class="header"></li').append(spinner);
-        link.prev('ul.popup_menu').append(li);
+        link.prev().append(li);
         var activity_id = link.parent().attr('id');
         var url = gradebook_url+'/activity_popup_menu?activity_id='+activity_id;
         $.ajax({
@@ -321,12 +320,12 @@ function loadActivityPopup(link) {
             type: 'get',
             context: link,
             success: function(data) {
-                var is_visible = this.prev('ul.popup_menu').is(':visible');
-                this.prev('ul.popup_menu').replaceWith(data);
+                var is_visible = this.prev().is(':visible');
+                this.prev().replaceWith(data);
                 if (is_visible) {
                     var left = calculatePopupLeft(this);
-                    this.prev('ul.popup_menu').css('left', left+'px');
-                    this.prev('ul.popup_menu').addClass('popup_active').show();
+                    this.prev().css('left', left+'px');
+                    this.prev().addClass('popup_active').show();
                 }
             }
         });
@@ -335,10 +334,10 @@ function loadActivityPopup(link) {
 
 function loadStudentPopup(link) {
     var gradebook_url = $('.grid-form').attr('action');
-    if (link.prev('ul.popup_menu').children().length < 1) {
+    if (link.prev().children().length < 1) {
         var spinner = ST.images.spinner();
         var li = $('<li class="header"></li').append(spinner);
-        link.prev('ul.popup_menu').append(li);
+        link.prev().append(li);
         var student_id = link.parent().attr('id');
         var url = gradebook_url+'/student_popup_menu?student_id='+student_id;
         $.ajax({
@@ -347,10 +346,10 @@ function loadStudentPopup(link) {
             type: 'get',
             context: link,
             success: function(data) {
-                var is_visible = this.prev('ul.popup_menu').is(':visible');
-                this.prev('ul.popup_menu').replaceWith(data);
+                var is_visible = this.prev().is(':visible');
+                this.prev().replaceWith(data);
                 if (is_visible) {
-                    this.prev('ul.popup_menu').addClass('popup_active').show();
+                    this.prev().addClass('popup_active').show();
                 }
             }
         });
@@ -359,11 +358,11 @@ function loadStudentPopup(link) {
 
 function loadTotalPopup(link) {
     var gradebook_url = $('.grid-form').attr('action');
-    if (link.prev('ul.popup_menu').children().length < 1) {
+    if (link.prev().children().length < 1) {
         var spinner = ST.images.spinner();
         var li = $('<li class="header"></li').append(spinner);
-        link.prev('ul.popup_menu').append(li);
-        var column_id = link.parent().attr('id').split('_')[1];
+        link.prev().append(li);
+        var column_id = link.parent().attr('id').split('_')[1]; // id is column_*
         var url = gradebook_url+'/total_popup_menu?column_id='+column_id;
         $.ajax({
             url: url,
@@ -371,12 +370,12 @@ function loadTotalPopup(link) {
             type: 'get',
             context: link,
             success: function(data) {
-                var is_visible = this.prev('ul.popup_menu').is(':visible');
-                this.prev('ul.popup_menu').replaceWith(data);
+                var is_visible = this.prev().is(':visible');
+                this.prev().replaceWith(data);
                 if (is_visible) {
                     var left = calculatePopupLeft(this);
-                    this.prev('ul.popup_menu').css('left', left+'px');
-                    this.prev('ul.popup_menu').addClass('popup_active').show();
+                    this.prev().css('left', left+'px');
+                    this.prev().addClass('popup_active').show();
                 }
             }
         });
@@ -385,7 +384,7 @@ function loadTotalPopup(link) {
 
 function calculatePopupLeft(link) {
     var th = link.closest('th');
-    var popup = link.prev('ul.popup_menu');
+    var popup = link.prev();
     var part = link.closest('.gradebook-part');
     var part_margin_left = part.css('marginLeft').replace('px','');
     part_margin_left = parseInt(part_margin_left);
@@ -399,11 +398,15 @@ function calculatePopupLeft(link) {
 }
 
 $(document).ready(function() {
+    // gradebook-part width calculation
+    updateGradebookPartsWidths();
+    // row colors
+    $('.gradebook-part').find('tbody').find('tr:odd').addClass('odd');
     // popup menus
     preloadPopups();
-    $('.popup_link').click(function(e) {
+    $('.gradebook').on('click', '.popup_link', function(e) {
         var link = $(this);
-        var popup = link.prev('ul.popup_menu');
+        var popup = link.prev();
         if (link.closest('th').length > 0) {
             var left = calculatePopupLeft(link);
             popup.css('left', left+'px');
@@ -412,7 +415,8 @@ $(document).ready(function() {
         popup.addClass('popup_active').show();
         e.preventDefault();
     });
-    $('.grades').scroll(function() {
+    var grades = $('.grades');
+    grades.scroll(function() {
         $('.popup_active').hide().removeClass('popup_active');
     });
     $(document).click(function(e) {
@@ -420,14 +424,8 @@ $(document).ready(function() {
             $('.popup_active').hide().removeClass('popup_active');
         }
     });
-    // gradebook-part width calculation
-    updateGradebookPartsWidths();
-    // row colors
-    $('.students tbody tr:odd').addClass('odd');
-    $('.grades tbody tr:odd').addClass('odd');
-    $('.totals tbody tr:odd').addClass('odd');
     // cell navigation
-    $('.grades td').click(function() {
+    grades.on('click', 'td', function() {
         var td = $(this);
         makeGradeCellVisible(td);
         if (isScorable(td)) {
@@ -436,16 +434,16 @@ $(document).ready(function() {
             input.focus();
         }
     });
-    $('.grades').on('click', 'input', function() {
+    grades.on('click', 'input', function() {
         this.select();
     });
-    $('.grades').on('blur', 'input', function() {
+    grades.on('blur', 'input', function() {
         var td = $(this).parent();
         if ($(this).val() === td.attr('original')) {
             removeInput(td);
         }
     });
-    $('.grades').on('keyup', 'input', function() {
+    grades.on('keyup', 'input', function() {
         var input = $(this);
         var td = input.parent();
         if (input.val() !== td.attr('original')) {
@@ -480,7 +478,7 @@ $(document).ready(function() {
             }, 200);
         }
     });
-    $('.grades').on('keydown', 'input', function(e) {
+    grades.on('keydown', 'input', function(e) {
         var td = $(this).parent();
         var tr = td.parent()
         switch(e.keyCode) {
