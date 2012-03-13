@@ -384,5 +384,68 @@
       permission="zope.Public"
       />
 
+  <flourish:viewlet
+      name="available_table"
+      class=".resource.LocationAddRelationshipTable"
+      manager="schooltool.skin.flourish.interfaces.IAJAXParts"
+      view=".resource.EditLocationRelationships"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="current_table"
+      class=".resource.LocationRemoveRelationshipTable"
+      manager="schooltool.skin.flourish.interfaces.IAJAXParts"
+      view=".resource.EditLocationRelationships"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="available_table"
+      class=".resource.EquipmentAddRelationshipTable"
+      manager="schooltool.skin.flourish.interfaces.IAJAXParts"
+      view=".resource.EditEquipmentRelationships"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="current_table"
+      class=".resource.EquipmentRemoveRelationshipTable"
+      manager="schooltool.skin.flourish.interfaces.IAJAXParts"
+      view=".resource.EditEquipmentRelationships"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="location_table"
+      for="*"
+      class=".resource.LocationListTable"
+      manager="schooltool.skin.flourish.interfaces.IAJAXParts"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="equipment_table"
+      for="*"
+      class=".resource.EquipmentListTable"
+      manager="schooltool.skin.flourish.interfaces.IAJAXParts"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="filter"
+      before="batch table"
+      class="schooltool.table.table.DoNotFilter"
+      manager=".resource.LocationListTable"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="filter"
+      before="batch table"
+      class="schooltool.table.table.DoNotFilter"
+      manager=".resource.EquipmentListTable"
+      permission="schooltool.view"
+      />
 
 </configure>
