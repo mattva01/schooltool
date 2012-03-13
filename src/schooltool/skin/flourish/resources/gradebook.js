@@ -280,8 +280,7 @@ function loadActivityPopup(link) {
         var li = $('<li class="header"></li').append(spinner);
         link.prev('ul.popup_menu').append(li);
         var activity_id = link.parent().attr('id');
-        // XXX: shame on me!
-        var url = gradebook_url + '/../' + activity_id + '/popup_menu';
+        var url = gradebook_url+'/activity_popup_menu?activity_id='+activity_id;
         $.ajax({
             url: url,
             dataType: 'html',
@@ -301,6 +300,27 @@ function loadActivityPopup(link) {
 }
 
 function loadStudentPopup(link) {
+    var gradebook_url = $('.grid-form').attr('action');
+    if (link.prev('ul.popup_menu').children().length < 1) {
+        var spinner = ST.images.spinner();
+        var li = $('<li class="header"></li').append(spinner);
+        link.prev('ul.popup_menu').append(li);
+        var student_id = link.parent().attr('id');
+        var url = gradebook_url+'/student_popup_menu?student_id='+student_id;
+        $.ajax({
+            url: url,
+            dataType: 'html',
+            type: 'get',
+            context: link,
+            success: function(data) {
+                var is_visible = this.prev('ul.popup_menu').is(':visible');
+                this.prev('ul.popup_menu').replaceWith(data);
+                if (is_visible) {
+                    this.prev('ul.popup_menu').addClass('popup_active').show();
+                }
+            }
+        });
+    }
 }
 
 function calculatePopupLeft(link) {
@@ -324,7 +344,7 @@ $(document).ready(function() {
     $('.popup_link').click(function(e) {
         var link = $(this);
         var popup = link.prev('ul.popup_menu');
-        if (link.closest('th').length > 0) { 
+        if (link.closest('th').length > 0) {
             var left = calculatePopupLeft(link);
             popup.css('left', left+'px');
         }
