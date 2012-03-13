@@ -268,10 +268,18 @@ function preloadStudentPopups() {
     });
 }
 
+function preloadTotalPopups() {
+    var popup_links = $('.totals thead a.popup_link');
+    popup_links.each(function(index, element) {
+        loadTotalPopup($(element));
+    });
+}
+
 function preloadPopups() {
     loadNamePopup();
     preloadActivityPopups();
     preloadStudentPopups();
+    preloadTotalPopups();
 }
 
 function loadNamePopup() {
@@ -342,6 +350,32 @@ function loadStudentPopup(link) {
                 var is_visible = this.prev('ul.popup_menu').is(':visible');
                 this.prev('ul.popup_menu').replaceWith(data);
                 if (is_visible) {
+                    this.prev('ul.popup_menu').addClass('popup_active').show();
+                }
+            }
+        });
+    }
+}
+
+function loadTotalPopup(link) {
+    var gradebook_url = $('.grid-form').attr('action');
+    if (link.prev('ul.popup_menu').children().length < 1) {
+        var spinner = ST.images.spinner();
+        var li = $('<li class="header"></li').append(spinner);
+        link.prev('ul.popup_menu').append(li);
+        var column_id = link.parent().attr('id').split('_')[1];
+        var url = gradebook_url+'/total_popup_menu?column_id='+column_id;
+        $.ajax({
+            url: url,
+            dataType: 'html',
+            type: 'get',
+            context: link,
+            success: function(data) {
+                var is_visible = this.prev('ul.popup_menu').is(':visible');
+                this.prev('ul.popup_menu').replaceWith(data);
+                if (is_visible) {
+                    var left = calculatePopupLeft(this);
+                    this.prev('ul.popup_menu').css('left', left+'px');
                     this.prev('ul.popup_menu').addClass('popup_active').show();
                 }
             }
