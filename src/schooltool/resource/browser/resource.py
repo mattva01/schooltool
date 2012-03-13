@@ -741,7 +741,8 @@ class BaseFlourishResourceAddForm(flourish.form.AddForm):
         return resource
 
     def nextURL(self):
-        return absoluteURL(self._resource or self.context, self.request)
+        return absoluteURL(getattr(self, '_resource', None) or self.context,
+                           self.request)
 
 
 ###############  Resource add/edit views ################
