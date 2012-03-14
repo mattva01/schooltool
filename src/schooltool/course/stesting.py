@@ -26,6 +26,6 @@ from schooltool.testing.selenium import SeleniumLayer
 dir = os.path.abspath(os.path.dirname(__file__))
 filename = os.path.join(dir, 'stesting.zcml')
 
-resource_selenium_layer = SeleniumLayer(filename,
-                                        __name__,
-                                        'course_selenium_layer')
+course_selenium_layer = SeleniumLayer(filename,
+                                      __name__,
+                                      'course_selenium_layer')

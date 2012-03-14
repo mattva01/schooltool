@@ -17,16 +17,16 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Functional selenium tests for schooltool.resource
+Functional selenium tests for schooltool.course
 """
 import unittest
 
 from schooltool.testing.selenium import collect_ftests
-from schooltool.resource.stesting import resource_selenium_layer
+from schooltool.course.stesting import course_selenium_layer
 
 
 def test_suite():
-    return collect_ftests(layer=resource_selenium_layer)
+    return collect_ftests(layer=course_selenium_layer)
 
 
 if __name__ == '__main__':
