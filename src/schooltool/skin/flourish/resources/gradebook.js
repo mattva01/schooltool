@@ -411,26 +411,17 @@ $(document).ready(function() {
             if (this.timer) {
                 clearTimeout(this.timer);
             }
-            var data = Array();
-            data.push({
-                name: 'action',
-                value: 'validate_score'
-            });
-            data.push({
-                name: 'activity_id',
-                value: findColumnHeader(td).attr('id')
-            });
-            data.push({
-                name: 'score',
-                value: input.val()
-            });
-            var url = form.attr('action') + '/ajax';
+            var data = {
+                'activity_id': findColumnHeader(td).attr('id'),
+                'score': input.val()
+            }
+            var url = form.attr('action') + '/validate_score_json';
             this.timer = setTimeout(function () {
                 $.ajax({
                     url: url,
                     data: data,
                     dataType: 'json',
-                    type: 'post',
+                    type: 'get',
                     success: function(data) {
                         input.removeClass();
                         input.addClass(data.css_class);
