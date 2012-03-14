@@ -434,6 +434,11 @@ $(document).ready(function() {
         var td = $(this).parent();
         var tr = td.parent()
         switch(e.keyCode) {
+        case 27: // escape
+            $(this).val(td.attr('original'));
+            $(this).blur();
+            e.preventDefault();
+            break;
         case 37: // left
             focusInputHorizontally(td.prevUntil('tr'));
             e.preventDefault();
