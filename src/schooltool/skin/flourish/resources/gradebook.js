@@ -355,12 +355,31 @@ function calculatePopupLeft(popup) {
     return left;
 }
 
+function preloadFilldown(form) {
+    var url = buildURL(form.attr('action'), 'filldown');
+    $.ajax({
+        url: url,
+        dataType: 'html',
+        type: 'get',
+        context: form,
+        success: function(data) {
+            this.before(data);
+        }
+    });
+}
+
+function hidePopup(form) {
+    form.find('.popup_active').hide().removeClass('popup_active');
+}
+
 $(document).ready(function() {
     var form = $('#grid-form');
     // gradebook-part width calculation
     updateGradebookPartsWidths(form);
     // row colors
     $('.gradebook-part').find('tbody').find('tr:odd').addClass('odd');
+    // fill down
+    preloadFilldown(form);
     // popup menus
     preloadPopups(form);
     var gradebook = form.find('#gradebook');
@@ -372,17 +391,17 @@ $(document).ready(function() {
             var left = calculatePopupLeft(popup);
             popup.css('left', left+'px');
         }
-        form.find('.popup_active').hide().removeClass('popup_active');
+        hidePopup(form);
         popup.addClass('popup_active').show();
         e.preventDefault();
     });
     var grades = form.find('#grades-part');
     grades.scroll(function() {
-        form.find('.popup_active').hide().removeClass('popup_active');
+        hidePopup(form);
     });
     $(document).click(function(e) {
         if (!$(e.target).hasClass('popup_link')) {
-            form.find('.popup_active').hide().removeClass('popup_active');
+            hidePopup(form);
         }
     });
     // cell navigation
@@ -457,5 +476,56 @@ $(document).ready(function() {
             e.preventDefault();
             break;
         }
+    });
+    // filldown
+    form.on('click', '.filldown', function() {
+        hidePopup(form);
+        var container = $('#filldown-dialog-container');
+        var cell = $(this).closest('th');
+        var popup_link = cell.find('.popup_link');
+        var description = cell.find('.activity-description');
+        container.find('span').html(popup_link.attr('title'));
+        container.find('p').html(description.html());
+        var idx = cell.parent().children().index(cell);
+        var rows = cell.closest('table').find('tbody').find('tr');
+        var cells = [];
+        rows.each(function(i, row) {
+            var cell = $(row).children()[idx];
+            cells.push(cell);
+        })
+        container.data('schooltool.gradebook-filldown-dialog-cells', cells);
+        var filldown_title = container.find('.filldown-dialog-title').text();
+        container.dialog({
+            'title': filldown_title,
+            'resizable': false,
+            'width': 306,
+            'minHeight': 105,
+            'dialogClass': 'narrow-dialog'
+        });
+        return false;
+    });
+    $('body').on('click', '.filldown-cancel', function() {
+        var container = $('#filldown-dialog-container');
+        container.find('#filldown_value').val('');
+        container.dialog('close');
+        return false;
+    });
+    $('body').on('click', '.filldown-submit', function() {
+        var container = $('#filldown-dialog-container');
+        var fillval = container.find('#filldown_value').val();
+        if (fillval) {
+            var cells = container.data('schooltool.gradebook-filldown-dialog-cells');
+            $(cells).each(function(i, cell) {
+                var cell = $(cell);
+                if (cell.is(':empty')) {
+                    var input = getInput(cell);
+                    input.val(fillval);
+                    input.trigger('keyup');
+                    input.blur();
+                }
+            });
+        }
+        container.dialog('close');
+        return false;
     });
 });
