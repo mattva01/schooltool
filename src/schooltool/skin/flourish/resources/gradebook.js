@@ -255,12 +255,8 @@ function removeInput(td) {
     td.removeAttr('original');
 }
 
-function buildURL(base_url, view, attrs) {
-    var querystring = $.param(attrs);
-    if (querystring) {
-        querystring = ['?', querystring].join('');
-    }
-    return [base_url, '/', view, querystring].join('');
+function buildURL(base_url, view) {
+    return [base_url, '/', view].join('');
 }
 
 function preloadNamePopup(form) {
@@ -268,8 +264,8 @@ function preloadNamePopup(form) {
     var popup_links = form.find('#students-part').find('thead').find('.popup_link');
     popup_links.each(function(index, element) {
         var link = $(element);
-        var url = buildURL(base_url, 'name_popup_menu', []);
-        loadPopup(link, url, false);
+        var url = buildURL(base_url, 'name_popup_menu');
+        loadPopup(link, url, {}, false);
     });
 }
 
@@ -279,9 +275,9 @@ function preloadActivityPopups(form) {
     popup_links.each(function(index, element) {
         var link = $(element);
         var activity_id = link.parent().attr('id');
-        var attrs = [{name: 'activity_id', value: activity_id}];
-        var url = buildURL(base_url, 'activity_popup_menu', attrs);
-        loadPopup(link, url, true);
+        var attrs = {'activity_id': activity_id};
+        var url = buildURL(base_url, 'activity_popup_menu');
+        loadPopup(link, url, attrs, true);
     });
 }
 
@@ -291,9 +287,9 @@ function preloadStudentPopups(form) {
     popup_links.each(function(index, element) {
         var link = $(element);
         var student_id = link.parent().attr('id');
-        var attrs = [{name: 'student_id', value: student_id}];
-        var url = buildURL(base_url, 'student_popup_menu', attrs);
-        loadPopup(link, url, false);
+        var attrs = {'student_id': student_id};
+        var url = buildURL(base_url, 'student_popup_menu');
+        loadPopup(link, url, attrs, false);
     });
 }
 
@@ -303,9 +299,9 @@ function preloadTotalPopups(form) {
     popup_links.each(function(index, element) {
         var link = $(element);
         var column_id = link.parent().attr('id').split('_')[1]; // id is column_*
-        var attrs = [{name: 'column_id', value: column_id}];
-        var url = buildURL(base_url, 'total_popup_menu', attrs);
-        loadPopup(link, url, true);
+        var attrs = {'column_id': column_id};
+        var url = buildURL(base_url, 'total_popup_menu');
+        loadPopup(link, url, attrs, true);
     });
 }
 
@@ -322,12 +318,13 @@ function appendSpinner(link) {
     link.prev().append(li);
 }
 
-function loadPopup(link, url, calculateLeft) {
+function loadPopup(link, url, data, calculateLeft) {
     appendSpinner(link);
     $.ajax({
         url: url,
         dataType: 'html',
         type: 'get',
+        data: data,
         context: link,
         success: function(data) {
             var is_visible = this.prev().is(':visible');
