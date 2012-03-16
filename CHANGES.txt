@@ -7,6 +7,7 @@ CHANGES
 
 - tab hiding (https://launchpad.net/bugs/938810)
 - Sections need locations (https://launchpad.net/bugs/932920)
+- /server: top nav not highlighted, no breadcrumbs (https://launchpad.net/bugs/868435)
 
 - Dynamic javascript person and other tables
 - Update jQuery to 1.7.1
