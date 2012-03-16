@@ -1039,7 +1039,7 @@ class BasicPersonTable(PersonTable):
 
     def __init__(self, *args, **kw):
         PersonTable.__init__(self, *args, **kw)
-        self.css_classes = {'table': 'persons-table relationships-table'}
+        self.css_classes = {'table': ' data persons-table'}
 
     def columns(self):
         cols = list(reversed(PersonTable.columns(self)))
@@ -1092,7 +1092,7 @@ class BasicPersonTableFormatter(PersonTableFormatter):
             batch_start=self.batch.start, batch_size=self.batch.size,
             sort_on=self._sort_on,
             prefix=self.prefix)
-        formatter.cssClasses['table'] = 'persons-table relationships-table'
+        formatter.cssClasses['table'] = 'data persons-table'
         return formatter()
 
 

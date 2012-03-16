@@ -327,7 +327,7 @@ def doctest_SchoolToolTableFormatter():
 
         >>> print formatter.render()
         <BLANKLINE>
-        <table class="data relationships-table">
+        <table class="data">
           <thead>
             <tr>
               <th>
@@ -622,7 +622,7 @@ def doctest_SchoolToolTableFormatter():
 
         >>> print formatter.render()
         <BLANKLINE>
-        <table class="data relationships-table">
+        <table class="data">
           <thead>
             <tr>
               <th>
