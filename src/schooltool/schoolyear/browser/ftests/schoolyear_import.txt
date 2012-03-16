@@ -35,7 +35,7 @@ After creating the first school year, we get five default groups:
     <div id="content-header">
       <h1>Group index</h1>
     </div>
-    >>> manager.printQuery('//table[contains(@class, "data")]/tbody/tr/td[2]/a/text()')
+    >>> manager.printQuery('//table[@class="data"]/tbody/tr/td[2]/a/text()')
     Clerks
     School Administrators
     Site Managers
@@ -49,7 +49,7 @@ And they don't have any members:
     <div id="content-header">
       <h1>School Administrators</h1>
     </div>
-    >>> manager.printQuery('//table[contains(@class, "data")]/tbody')
+    >>> manager.printQuery('//table[@class="data"]/tbody')
     <tbody></tbody>
 
 Let's add two more groups:
@@ -62,7 +62,7 @@ Let's add two more groups:
     >>> manager.getLink('New Group').click()
     >>> manager.getControl('Title').value = 'Chess Club'
     >>> manager.getControl('Add').click()
-    >>> manager.printQuery('//table[contains(@class, "data")]/tbody/tr/td[2]/a/text()')
+    >>> manager.printQuery('//table[@class="data"]/tbody/tr/td[2]/a/text()')
     Chess Club
     Clerks
     School Administrators
@@ -213,7 +213,7 @@ We get the five default groups again:
     <div id="content-header">
       <h1>Group index</h1>
     </div>
-    >>> manager.printQuery('//table[contains(@class, "data")]/tbody/tr/td[2]/a/text()')
+    >>> manager.printQuery('//table[@class="data"]/tbody/tr/td[2]/a/text()')
     Clerks
     School Administrators
     Site Managers
@@ -227,7 +227,7 @@ Again, the groups have no members:
     <div id="content-header">
       <h1>School Administrators</h1>
     </div>
-    >>> manager.printQuery('//table[contains(@class, "data")]/tbody')
+    >>> manager.printQuery('//table[@class="data"]/tbody')
     <tbody></tbody>
 
 Again, no courses either:
@@ -455,7 +455,7 @@ wasn't copied even though we marked its Copy members checkbox:
     <div id="content-header">
       <h1>Group index</h1>
     </div>
-    >>> manager.printQuery('//table[contains(@class, "data")]/tbody/tr/td[2]/a/text()')
+    >>> manager.printQuery('//table[@class="data"]/tbody/tr/td[2]/a/text()')
     Chess Club
     Clerks
     School Administrators
@@ -470,7 +470,7 @@ Let's check the memberships were correctly copied:
     <div id="content-header">
       <h1>Chess Club</h1>
     </div>
-    >>> manager.printQuery('//table[contains(@class, "data")]/tbody/tr/td[1]/a/text()')
+    >>> manager.printQuery('//table[@class="data"]/tbody/tr/td[1]/a/text()')
     Ariana
     Tom
 
@@ -480,7 +480,7 @@ Let's check the memberships were correctly copied:
     <div id="content-header">
       <h1>School Administrators</h1>
     </div>
-    >>> manager.printQuery('//table[contains(@class, "data")]/tbody/tr/td[1]/a/text()')
+    >>> manager.printQuery('//table[@class="data"]/tbody/tr/td[1]/a/text()')
     Jeffrey
 
 Now let's check the timetables:
