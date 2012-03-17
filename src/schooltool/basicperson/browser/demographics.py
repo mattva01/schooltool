@@ -16,8 +16,6 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-from zope.schema.interfaces import IList
-from zope.interface import Interface
 from zope.interface import implements, implementer
 from zope.component import adapts, adapter
 from zope.component import getAdapter, getMultiAdapter
@@ -52,10 +50,6 @@ from schooltool.basicperson.interfaces import ILimitKeysLabel
 from schooltool.basicperson.interfaces import ILimitKeysHint
 from schooltool.common.inlinept import InheritTemplate
 from schooltool.skin import flourish
-from schooltool.skin.flourish import IFlourishLayer
-from schooltool.skin.flourish.interfaces import IViewletManager
-from schooltool.skin.flourish.viewlet import Viewlet, ViewletManager
-from schooltool.skin.flourish.content import ContentProvider
 
 from schooltool.common import format_message
 from schooltool.common import SchoolToolMessage as _
@@ -165,7 +159,7 @@ class FieldDescriptionAddView(form.AddForm):
         return absoluteURL(self._fd, self.request)
 
     def add(self, fd):
-        """Add `schoolyear` to the container."""
+        """Add field description to the container."""
         chooser = INameChooser(self.context)
         name = chooser.chooseName(fd.name, fd)
         self.context[name] = fd
