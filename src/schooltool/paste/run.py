@@ -37,6 +37,14 @@ def parse_args():
                       action="store_true",
                       dest="start_daemon",
                       help="Run in daemon (background) mode")
+    parser.add_option('--pid-file',
+                      dest='pid_file',
+                      metavar='FILENAME',
+                      help="Save PID to file (if running in daemon mode)")
+    parser.add_option('--log-file',
+                      dest='log_file',
+                      metavar='LOG_FILE',
+                      help="Save output to the given log file (redirects stdout)")
     parser.add_option("--stop-daemon",
                       action="store_true",
                       dest="stop_daemon",
@@ -49,11 +57,40 @@ def parse_args():
                       dest="user",
                       help="Run %prog as user. (If started as root)")
     options, args = parser.parse_args()
+
     if len(args) != 1:
         parser.error("""Missing instance to start up! You can create one using make-scooltool-instance.""")
+
+    instance_root = os.path.abspath(args[0])
+    conf_file = os.path.join(instance_root, "paste.ini")
+    if not os.path.exists(conf_file):
+        schooltool_ini = os.path.join(instance_root, 'schooltool.ini')
+        if os.path.exists(schooltool_ini):
+            try:
+                print >> sys.stderr, 'Updating instance files...'
+                update_instance(instance_root)
+                print >> sys.stderr, 'Done.'
+            except OSError, e:
+                print >> sys.stderr, 'Failed.'
+                if os.path.exists(schooltool_ini):
+                    conf_file = schooltool_ini
+        else:
+            parser.error("This is not a schooltool instance: %s" % args[0])
+    args[0] = conf_file
+
+    if (options.start_daemon or
+        options.stop_daemon or
+        options.show_status):
+        if not options.pid_file:
+            options.pid_file = os.path.join(instance_root,
+                                            "var", "schooltool.pid")
+        if not options.log_file:
+            options.log_file = os.path.join(instance_root,
+                                            "log", "paster.log")
     return options, args
 
 
+# BBB since schooltool 1.6
 def update_instance(instance_root):
     """Renames configuration files to match Ubuntu layout"""
     os.rename(os.path.join(instance_root, 'schooltool.ini'),
@@ -93,14 +130,7 @@ def update_instance(instance_root):
 
 def main():
     options, args = parse_args()
-    instance_root = os.path.abspath(args[0])
-    conf_file = os.path.join(instance_root, "paste.ini")
-    if not os.path.exists(conf_file):
-        print >> sys.stderr, 'Updating instance files...'
-        update_instance(instance_root)
-        print >> sys.stderr, 'Done.'
-    pid_file = os.path.join(instance_root, "var", "schooltool.pid")
-    log_file = os.path.join(instance_root, "log", "paster.log")
+    conf_file = os.path.abspath(args[0])
 
     extra_options = []
     if options.start_daemon:
@@ -114,7 +144,7 @@ def main():
     if (options.start_daemon or
         options.stop_daemon or
         options.show_status):
-        extra_options.extend(['--pid-file=%s' % pid_file,
-                              '--log-file=%s' % log_file])
+        extra_options.extend(['--pid-file=%s' % options.pid_file,
+                              '--log-file=%s' % options.log_file])
 
     paste.script.command.run(['serve', conf_file] + extra_options)
