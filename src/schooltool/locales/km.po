@@ -4,15 +4,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: src_schooltool_locales_schooltool-km\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-12-22 17:43+0200\n"
+"POT-Creation-Date: 2012-03-01 21:21+0200\n"
 "PO-Revision-Date: 2011-11-23 15:21+0000\n"
 "Last-Translator: Khoem Sokhem <khoemsokhem@khmeros.info>\n"
 "Language-Team: Khmer <support@khmeros.info>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-12-23 08:04+0000\n"
-"X-Generator: Launchpad (build 14560)\n"
+"X-Launchpad-Export-Date: 2012-03-02 05:15+0000\n"
+"X-Generator: Launchpad (build 14886)\n"
 "Language: \n"
 "X-Language: km_KH\n"
 "Generated-By: i18nextract.py\n"
@@ -31,45 +31,74 @@ msgstr "នាក់"
 msgid "1 person"
 msgstr "១ នាក់"
 
-#. Default: ""
 #: /src/schooltool/app/browser/__init__.py:313
 msgid "${number} persons"
 msgstr "${number} នាក់"
 
-#: /src/schooltool/app/browser/app.py:275
-#: /src/schooltool/app/browser/cal.py:1970
-#: /src/schooltool/app/browser/flourish.zcml:420
+#: /src/schooltool/app/browser/app.py:262
+#: /src/schooltool/app/browser/templates/edit_relationships.pt:37
+#: /src/schooltool/app/browser/templates/f_edit_relationships.pt:13
+#: /src/schooltool/basicperson/browser/templates/container.pt:43
+#: /src/schooltool/basicperson/browser/templates/f_demographics_reorder.pt:44
+#: /src/schooltool/basicperson/browser/templates/f_demographics_view.pt:31
+#: /src/schooltool/calendar/browser/templates/event.pt:72
+#: /src/schooltool/calendar/browser/templates/event_booking.pt:43
+#: /src/schooltool/contact/browser/templates/manage_contacts.pt:38
+#: /src/schooltool/course/browser/templates/copy_sections.pt:62
+#: /src/schooltool/course/browser/templates/course_container.pt:20
+#: /src/schooltool/course/browser/templates/edit_relationships.pt:56
+#: /src/schooltool/course/browser/templates/f_link_existing.pt:89
+#: /src/schooltool/course/browser/templates/link_section.pt:49
+#: /src/schooltool/course/browser/templates/section_container.pt:29
+#: /src/schooltool/level/browser/templates/f_levels_reorder.pt:36
+#: /src/schooltool/level/browser/templates/f_levels_view.pt:24
+#: /src/schooltool/schoolyear/browser/templates/f_table_container.pt:8
+#: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:56
+#: /src/schooltool/skin/templates/container.pt:48
+#: /src/schooltool/skin/templates/table_container.pt:34
+#: /src/schooltool/table/table.py:312
+#: /src/schooltool/term/browser/templates/f_terms.pt:32
+#: /src/schooltool/timetable/browser/templates/f_schedule_event_edit.pt:77
+#: /src/schooltool/timetable/browser/templates/f_timetable_container.pt:5
+#: /src/schooltool/timetable/browser/templates/timetable_container.pt:16
+msgid "There are none."
+msgstr "គ្មាន ។"
+
+#: /src/schooltool/app/browser/app.py:352
+#: /src/schooltool/app/browser/app.py:531
+#: /src/schooltool/app/browser/cal.py:2069
+#: /src/schooltool/app/browser/flourish.zcml:460
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:48
 #: /src/schooltool/basicperson/browser/flourish.zcml:39
-#: /src/schooltool/basicperson/browser/flourish.zcml:282
-#: /src/schooltool/basicperson/browser/person.py:309
-#: /src/schooltool/basicperson/browser/person.py:354
-#: /src/schooltool/basicperson/browser/person.py:862
-#: /src/schooltool/calendar/browser/flourish.zcml:71
-#: /src/schooltool/contact/browser/contact.py:118
-#: /src/schooltool/contact/browser/flourish.zcml:54
-#: /src/schooltool/contact/browser/flourish.zcml:168
-#: /src/schooltool/course/browser/course.py:509
-#: /src/schooltool/course/browser/flourish.zcml:31
-#: /src/schooltool/course/browser/flourish.zcml:40
-#: /src/schooltool/course/browser/flourish.zcml:59
-#: /src/schooltool/course/browser/flourish.zcml:76
-#: /src/schooltool/course/browser/section.py:364
-#: /src/schooltool/course/browser/section.py:1171
+#: /src/schooltool/basicperson/browser/flourish.zcml:274
+#: /src/schooltool/basicperson/browser/person.py:340
+#: /src/schooltool/basicperson/browser/person.py:385
+#: /src/schooltool/basicperson/browser/person.py:877
+#: /src/schooltool/calendar/browser/flourish.zcml:88
+#: /src/schooltool/contact/browser/contact.py:117
+#: /src/schooltool/contact/browser/flourish.zcml:106
+#: /src/schooltool/contact/browser/flourish.zcml:236
+#: /src/schooltool/course/browser/flourish.zcml:79
+#: /src/schooltool/course/browser/flourish.zcml:88
+#: /src/schooltool/course/browser/flourish.zcml:107
+#: /src/schooltool/course/browser/flourish.zcml:124
+#: /src/schooltool/course/browser/section.py:362
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:67
-#: /src/schooltool/group/browser/flourish.zcml:31
-#: /src/schooltool/group/browser/flourish.zcml:48
-#: /src/schooltool/group/browser/group.py:615
+#: /src/schooltool/group/browser/flourish.zcml:32
+#: /src/schooltool/group/browser/flourish.zcml:49
+#: /src/schooltool/group/browser/group.py:649
 #: /src/schooltool/level/browser/flourish.zcml:43
 #: /src/schooltool/level/browser/level.py:59
-#: /src/schooltool/resource/browser/flourish.zcml:97
-#: /src/schooltool/resource/browser/resource.py:589
+#: /src/schooltool/resource/browser/flourish.zcml:98
+#: /src/schooltool/resource/browser/resource.py:595
 #: /src/schooltool/schoolyear/browser/flourish.zcml:34
-#: /src/schooltool/schoolyear/browser/schoolyear.py:448
+#: /src/schooltool/schoolyear/browser/schoolyear.py:447
 #: /src/schooltool/skin/flourish/form.py:77
-#: /src/schooltool/timetable/browser/calendar.py:161
-#: /src/schooltool/timetable/browser/flourish.zcml:43
-#: /src/schooltool/timetable/browser/flourish.zcml:367
+#: /src/schooltool/term/browser/flourish.zcml:61
+#: /src/schooltool/timetable/browser/calendar.py:163
+#: /src/schooltool/timetable/browser/flourish.zcml:48
+#: /src/schooltool/timetable/browser/flourish.zcml:372
+#: /src/schooltool/timetable/browser/flourish.zcml:503
 #: /src/schooltool/timetable/browser/timetable.py:342
 msgid "Add"
 msgstr "បន្ថែម"
@@ -82,7 +111,12 @@ msgstr "បន្ថែម"
 msgid "Remove"
 msgstr "យក​ចេញ"
 
-#: /src/schooltool/app/browser/app.py:381
+#: /src/schooltool/app/browser/app.py:408
+#: /src/schooltool/app/browser/templates/f_edit_relationships.pt:58
+msgid "Add all displayed"
+msgstr ""
+
+#: /src/schooltool/app/browser/app.py:677
 msgid "Username or password is incorrect"
 msgstr "ឈ្មោះ​អ្នកប្រើប្រាស់ ឬ ពាក្យសំងាត់ មិន​ត្រឹមត្រូវ"
 
@@ -243,36 +277,32 @@ msgstr "សាលារៀន"
 msgid "Server"
 msgstr ""
 
-#: /src/schooltool/app/browser/app.py:852
-#: /src/schooltool/app/browser/app.py:937
+#: /src/schooltool/app/browser/app.py:1177
+#: /src/schooltool/app/browser/flourish.zcml:611
+msgid "Pack Database"
+msgstr ""
+
+#: /src/schooltool/app/browser/app.py:1198
+msgid "Database successfully packed."
+msgstr ""
+
+#: /src/schooltool/app/browser/app.py:1200
+msgid "There were errors while packing the database: ${error}"
+msgstr ""
+
+#: /src/schooltool/app/browser/app.py:1226
 #: /src/schooltool/skin/flourish/form.py:46
 #: /src/schooltool/timetable/browser/ttwizard.py:793
 msgid "Yes"
 msgstr "បាទ/ចាស"
 
-#: /src/schooltool/app/browser/app.py:854
-#: /src/schooltool/app/browser/app.py:939
+#: /src/schooltool/app/browser/app.py:1228
 #: /src/schooltool/skin/flourish/form.py:47
 #: /src/schooltool/timetable/browser/ttwizard.py:794
 msgid "No"
 msgstr "ទេ"
 
-#: /src/schooltool/app/browser/app.py:868
-#: /src/schooltool/app/browser/flourish.zcml:545
-msgid "Pack Database"
-msgstr ""
-
-#: /src/schooltool/app/browser/app.py:894
-msgid "Database successfully packed."
-msgstr ""
-
-#. Default: ""
-#: /src/schooltool/app/browser/app.py:911
-msgid "There were errors while packing the database: ${error}"
-msgstr ""
-
-#. Default: ""
-#: /src/schooltool/app/browser/app.py:953
+#: /src/schooltool/app/browser/app.py:1242
 msgid "${type} Error"
 msgstr ""
 
@@ -497,8 +527,7 @@ msgstr "ទៅ​កាន់​សប្ដាហ៍​បច្ចុប្ប
 msgid "Go to previous week"
 msgstr "ទៅ​កាន់​សប្ដាហ៍​មុន"
 
-#. Default: ""
-#: /src/schooltool/app/browser/cal.py:845
+#: /src/schooltool/app/browser/cal.py:890
 msgid "${month}, ${year} (week ${week})"
 msgstr "${month}, ${year} (week ${week})"
 
@@ -526,13 +555,11 @@ msgstr "ទៅខែ​បច្ចុប្បន្ន"
 msgid "Go to previous month"
 msgstr "ទៅ​ខែ​មុន"
 
-#. Default: ""
-#: /src/schooltool/app/browser/cal.py:1073
+#: /src/schooltool/app/browser/cal.py:1132
 msgid "${month}, ${year}"
 msgstr "${month}, ${year}"
 
-#. Default: ""
-#: /src/schooltool/app/browser/cal.py:1095
+#: /src/schooltool/app/browser/cal.py:1154
 msgid "Week ${week_no}"
 msgstr "សប្ដាហ៍ ${week_no}"
 
@@ -584,8 +611,7 @@ msgstr "ទៅ​ថ្ងៃ​នេះ"
 msgid "Go to the previous day"
 msgstr "ទៅ​ថ្ងៃ​មុន"
 
-#. Default: ""
-#: /src/schooltool/app/browser/cal.py:1352
+#: /src/schooltool/app/browser/cal.py:1429
 msgid "Add new event starting at ${title}"
 msgstr "បន្ថែម ព្រឹត្តិការ​ថ្មី ផ្ដើម​នៅ ${title}"
 
@@ -842,8 +868,7 @@ msgstr "ទី ៥"
 msgid "last weekday"
 msgstr "ថ្ងៃ​ធ្វើការ​ចុងក្រោយ"
 
-#. Default: ""
-#: /src/schooltool/app/browser/cal.py:1835
+#: /src/schooltool/app/browser/cal.py:1912
 msgid "Last ${weekday}"
 msgstr "${weekday} ចុង​ក្រោយ"
 
@@ -877,8 +902,7 @@ msgstr "កែ​សម្រួល​ព្រឹត្តិការណ៍"
 msgid "Update"
 msgstr "ធ្វើ​បច្ចុប្បន្នភាព"
 
-#. Default: ""
-#: /src/schooltool/app/browser/cal.py:2171
+#: /src/schooltool/app/browser/cal.py:2270
 #: /src/schooltool/skin/form.py:76
 msgid "Updated on ${date_time}"
 msgstr "ធ្វើ​បច្ចុប្បន្នភាព​លើ​​ ${date_time}"
@@ -1027,14 +1051,12 @@ msgstr "មិន​បាន​បញ្ជាក់​សំណុំ​តួ
 msgid "Unknown charset"
 msgstr "សំណុំ​តួ​អក្សរ​មិន​ស្គាល់"
 
-#. Default: ""
-#: /src/schooltool/app/browser/csvimport.py:203
+#: /src/schooltool/app/browser/csvimport.py:209
 msgid "Error in CSV data, line ${line_no}"
 msgstr "កំហុស​ក្នុង​ទិន្នន័យ CSV បន្ទាត់​ទី ${line_no}"
 
-#. Default: ""
-#: /src/schooltool/app/browser/csvimport.py:207
-#: /src/schooltool/app/browser/timetablecsvimport.py:429
+#: /src/schooltool/app/browser/csvimport.py:213
+#: /src/schooltool/app/browser/timetablecsvimport.py:502
 msgid "Conversion to unicode failed in line ${line_no}"
 msgstr "ការ​បម្លែង​ទៅ​ជា​យូនីកូដ​បរាជ័យ​នៅ​បន្ទាត់​ទី ${line_no}"
 
@@ -1146,7 +1168,12 @@ msgstr "កែ​សម្រួល"
 msgid "Error"
 msgstr ""
 
+#: /src/schooltool/app/browser/flourish.zcml:294
 #: /src/schooltool/app/browser/flourish.zcml:303
+msgid "Tabs"
+msgstr ""
+
+#: /src/schooltool/app/browser/flourish.zcml:343
 msgid "About"
 msgstr ""
 
@@ -1225,7 +1252,6 @@ msgstr "ប្រតិទិន​ប្រចាំ​ថ្ងៃ​សម្
 msgid "recurrent"
 msgstr "កើតឡើង​ញឹកញាប់"
 
-#. Default: ""
 #: /src/schooltool/app/browser/pdfcal.py:99
 msgid "from the calendar of ${calendar_owner}"
 msgstr "ពី​ប្រតិទិន​របស់ ${calendar_owner}"
@@ -1488,34 +1514,6 @@ msgstr "R"
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:71
 msgid "invert-selection-button"
 msgstr "ប៊ូតុង​ជ្រើស​បញ្ច្រាស"
-
-#: /src/schooltool/app/browser/templates/edit_relationships.pt:37
-#: /src/schooltool/app/browser/templates/f_edit_relationships.pt:8
-#: /src/schooltool/basicperson/browser/templates/container.pt:48
-#: /src/schooltool/basicperson/browser/templates/f_demographics_reorder.pt:44
-#: /src/schooltool/basicperson/browser/templates/f_demographics_view.pt:31
-#: /src/schooltool/calendar/browser/templates/event.pt:72
-#: /src/schooltool/calendar/browser/templates/event_booking.pt:43
-#: /src/schooltool/contact/browser/templates/manage_contacts.pt:38
-#: /src/schooltool/course/browser/templates/copy_sections.pt:62
-#: /src/schooltool/course/browser/templates/course_container.pt:20
-#: /src/schooltool/course/browser/templates/edit_relationships.pt:56
-#: /src/schooltool/course/browser/templates/f_link_existing.pt:89
-#: /src/schooltool/course/browser/templates/link_section.pt:49
-#: /src/schooltool/course/browser/templates/section_container.pt:29
-#: /src/schooltool/level/browser/templates/f_levels_reorder.pt:36
-#: /src/schooltool/level/browser/templates/f_levels_view.pt:24
-#: /src/schooltool/schoolyear/browser/templates/f_table_container.pt:8
-#: /src/schooltool/schoolyear/browser/templates/schoolyear_container.pt:61
-#: /src/schooltool/skin/flourish/containers.py:103
-#: /src/schooltool/skin/templates/container.pt:53
-#: /src/schooltool/skin/templates/table_container.pt:39
-#: /src/schooltool/term/browser/templates/f_terms.pt:47
-#: /src/schooltool/timetable/browser/templates/f_schedule_event_edit.pt:73
-#: /src/schooltool/timetable/browser/templates/f_timetable_container.pt:5
-#: /src/schooltool/timetable/browser/templates/timetable_container.pt:16
-msgid "There are none."
-msgstr "គ្មាន ។"
 
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:48
 #: /src/schooltool/app/browser/templates/event_booking.pt:42
@@ -1815,28 +1813,8 @@ msgstr "ទីតាំង ៖ ${location}"
 msgid "Contributors"
 msgstr ""
 
-#: /src/schooltool/app/browser/templates/f_calendar_settings_overview.pt:12
-#: /src/schooltool/app/interfaces.py:135
-msgid "Front Page Calendar"
-msgstr "ប្រតិទិន​ទំព័រ​មុខ"
-
-#: /src/schooltool/app/browser/templates/f_calendar_settings_overview.pt:16
-#: /src/schooltool/person/interfaces.py:157
-msgid "Time Zone"
-msgstr "តំបន់​ពេល​វេលា"
-
-#: /src/schooltool/app/browser/templates/f_calendar_settings_overview.pt:20
-#: /src/schooltool/person/interfaces.py:161
-msgid "Time Format"
-msgstr "ទ្រង់ទ្រាយ​ពេល​វេលា"
-
-#: /src/schooltool/app/browser/templates/f_calendar_settings_overview.pt:24
-#: /src/schooltool/person/interfaces.py:166
-msgid "Date Format"
-msgstr "ទ្រង់ទ្រាយ​កាល​បរិច្ឆេទ"
-
-#: /src/schooltool/app/browser/templates/f_calendar_settings_overview.pt:28
-msgid "Week starts on"
+#: /src/schooltool/app/browser/templates/f_calendar_settings_overview.pt:7
+msgid "Change calendar settings"
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:10
@@ -2079,6 +2057,31 @@ msgstr ""
 msgid ""
 "Database generations update the structure of your database to be compatible "
 "with new versions of SchoolTool."
+msgstr ""
+
+#: /src/schooltool/app/browser/templates/f_hide_unhide_tabs.pt:5
+msgid "Set Tab Visibility"
+msgstr ""
+
+#: /src/schooltool/app/browser/templates/f_hide_unhide_tabs.pt:10
+msgid "Visible"
+msgstr ""
+
+#: /src/schooltool/app/browser/templates/f_hide_unhide_tabs_related.pt:6
+msgid ""
+"Schools that are not using all components of SchoolTool can reduce visual "
+"clutter by hiding unnecessary links in the top navigation bar."
+msgstr ""
+
+#: /src/schooltool/app/browser/templates/f_hide_unhide_tabs_related.pt:10
+msgid ""
+"Note that these settings have no effects other than removing navigational "
+"links; they don't change the functionality, data, or security settings of "
+"SchoolTool in any way."
+msgstr ""
+
+#: /src/schooltool/app/browser/templates/f_hide_unhide_tabs_related.pt:15
+msgid "Links can be changed from visible to hidden at any time.."
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_login.pt:12
@@ -2658,14 +2661,12 @@ msgstr ""
 msgid "Row 2 is not empty"
 msgstr "ជួរ​ដេក​ទី ២ មិន​ទទេ​ឡើយ"
 
-#. Default: ""
 #: /src/schooltool/app/browser/timetablecsvimport.py:182
 msgid ""
 "Wrong section header on line ${line_no} (it should contain a course id, an "
 "instructor id and optional SchoolTool section IDs for each of the terms)"
 msgstr ""
 
-#. Default: ""
 #: /src/schooltool/app/browser/timetablecsvimport.py:220
 #: /src/schooltool/app/browser/timetablecsvimport.py:231
 msgid ""
@@ -2673,20 +2674,17 @@ msgid ""
 "and a period id)"
 msgstr ""
 
-#. Default: ""
-#: /src/schooltool/app/browser/timetablecsvimport.py:231
+#: /src/schooltool/app/browser/timetablecsvimport.py:239
 msgid ""
 "Timetable id must be specified before day id and a period id at at line "
 "${line_no}"
 msgstr ""
 
-#. Default: ""
-#: /src/schooltool/app/browser/timetablecsvimport.py:268
+#: /src/schooltool/app/browser/timetablecsvimport.py:276
 msgid "Incomplete section description on line ${line}"
 msgstr "ការ​ពិពណ៌នា​ផ្នែក​មិន​បាន​បញ្ចប់​នៅ​បន្ទាត់ ${line}"
 
-#. Default: ""
-#: /src/schooltool/app/browser/timetablecsvimport.py:273
+#: /src/schooltool/app/browser/timetablecsvimport.py:281
 msgid "No students in section (line ${line})"
 msgstr "មិន​មាន​សិស្ស​នៅ​ក្នុង​ផ្នែក (line ${line})"
 
@@ -2696,19 +2694,16 @@ msgid ""
 "for sections."
 msgstr ""
 
-#. Default: ""
-#: /src/schooltool/app/browser/timetablecsvimport.py:371
-#: /src/schooltool/app/browser/timetablecsvimport.py:381
+#: /src/schooltool/app/browser/timetablecsvimport.py:444
+#: /src/schooltool/app/browser/timetablecsvimport.py:454
 msgid "The term ${term} does not exist."
 msgstr ""
 
-#. Default: ""
-#: /src/schooltool/app/browser/timetablecsvimport.py:387
+#: /src/schooltool/app/browser/timetablecsvimport.py:460
 msgid "First term ${first} starts after last term ${last}."
 msgstr ""
 
-#. Default: ""
-#: /src/schooltool/app/browser/timetablecsvimport.py:424
+#: /src/schooltool/app/browser/timetablecsvimport.py:497
 msgid "Error in timetable CSV data, line ${line_no}"
 msgstr "កំហុស​ក្នុង​ទិន្នន័យ CSV កាល​វិភាគ បន្ទាត់​ទី ${line_no}"
 
@@ -2737,11 +2732,10 @@ msgstr "រក​មិន​ឃើញ​ផ្នែក ៖ ${args} ។"
 msgid "Invalid records: ${args}."
 msgstr "កំណត់​ត្រា​មិន​ត្រឹមត្រូវ ៖ ${args} ។"
 
-#. Default: ""
-#: /src/schooltool/app/browser/timetablecsvimport.py:472
-#: /src/schooltool/course/browser/section.py:967
-#: /src/schooltool/course/browser/section.py:1065
-#: /src/schooltool/course/browser/section.py:1117
+#: /src/schooltool/app/browser/timetablecsvimport.py:545
+#: /src/schooltool/course/browser/section.py:972
+#: /src/schooltool/course/browser/section.py:1070
+#: /src/schooltool/course/browser/section.py:1124
 msgid "Sections for ${schoolyear}"
 msgstr ""
 
@@ -2786,6 +2780,10 @@ msgstr ""
 "            ម៉ាស៊ីន​បម្រើ​នេះ ។  នេះ​នឹង​បង្ហាញ​នៅ​លើ​ប្រតិទិន​សាធារណៈ "
 "នៅ​ផ្នែក\n"
 "            ខាង​ក្រោម​នៃ​ទំព័រ​ទាំងអស់ និង​ក្នុង​ចំណង​ជើង​ទំព័រ ។"
+
+#: /src/schooltool/app/interfaces.py:135
+msgid "Front Page Calendar"
+msgstr "ប្រតិទិន​ទំព័រ​មុខ"
 
 #: /src/schooltool/app/interfaces.py:136
 msgid ""
@@ -2890,21 +2888,17 @@ msgstr ""
 "ការ​ព្រមាន ៖ មិន​អាច​រក​បណ្ណាល័យ reportlab បានទេ ។ \n"
 "ការ​គាំទ្រ PDF បាន​បិទ ។"
 
-#: /src/schooltool/app/main.py:772
+#: /src/schooltool/app/main.py:773
 msgid ""
-"Warning: font directory '%s' does not exist.\n"
+"Warning: font directories '%s' do not exist.\n"
 "PDF support disabled."
 msgstr ""
-"ព្រមាន ៖ ថត​ពុម្ព​អក្សរ '%s' មិន​មាន​ទេ ។\n"
-"ការ​គាំទ្រ PDF មិន​បាន​អនុញ្ញាត ។"
 
-#: /src/schooltool/app/main.py:780
+#: /src/schooltool/app/main.py:785
 msgid ""
-"Warning: font '%s' does not exist.\n"
+"Warning: font '%s' does not exist in the font directories '%s'.\n"
 "PDF support disabled."
 msgstr ""
-"ព្រមាន ៖ ពុម្ព​អក្សរ '%s' មិន​មាន ។\n"
-"ការ​គាំទ្រ PDF មិន​បាន​អនុញ្ញាត ។"
 
 #: /src/schooltool/app/membership.py:261
 #: /src/schooltool/basicperson/browser/templates/f_manage_people_overview.pt:20
@@ -2922,12 +2916,10 @@ msgstr "សមាជិក នៃ​ក្រុម​ ។"
 msgid "Assigned leaders."
 msgstr "អ្នកដឹកនាំ​ដែល​បាន​កំណត់ ។"
 
-#. Default: ""
 #: /src/schooltool/app/security.py:349
 msgid "\"$group\" group."
 msgstr "\"$group\" ក្រុម"
 
-#. Default: ""
 #: /src/schooltool/app/security.py:364
 msgid "\"$group\" group and the super user."
 msgstr "\"$group\" ក្រម និង​ អ្នក​ប្រើប្រាស់​ពិសេស ។"
@@ -3089,7 +3081,6 @@ msgstr "នាម​ខ្លួន​មិន​ត្រូវ​ទទេ​
 msgid "last name may not be empty"
 msgstr "នាម​ត្រកូល​មិន​ត្រូវ​ទទេ​ទេ"
 
-#. Default: ""
 #: /src/schooltool/basicperson/browser/csvimport.py:71
 #: /src/schooltool/person/browser/csvimport.py:62
 msgid "Duplicate username: ${username}"
@@ -3122,9 +3113,8 @@ msgstr "ធាតុ​​ផ្ទុក​​ប្រជាសាស្ត្
 msgid "Add new Field"
 msgstr "បន្ថែម​វាល​ថ្មី"
 
-#. Default: ""
-#: /src/schooltool/basicperson/browser/demographics.py:253
-#: /src/schooltool/basicperson/browser/demographics.py:470
+#: /src/schooltool/basicperson/browser/demographics.py:269
+#: /src/schooltool/basicperson/browser/demographics.py:507
 msgid "Change information for ${field_title}"
 msgstr "ផ្លាស់ប្ដូរ​ព័ត៌មាន​សម្រាប់ ${field_title}"
 
@@ -3152,13 +3142,17 @@ msgstr "អត្ថបទ"
 msgid "Yes/No"
 msgstr ""
 
-#: /src/schooltool/basicperson/browser/demographics.py:390
-#: /src/schooltool/basicperson/interfaces.py:143
+#: /src/schooltool/basicperson/browser/demographics.py:343
+msgid "Integer"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/demographics.py:422
+#: /src/schooltool/basicperson/interfaces.py:144
 msgid "Limit to group(s)"
 msgstr ""
 
-#: /src/schooltool/basicperson/browser/demographics.py:396
-#: /src/schooltool/basicperson/interfaces.py:144
+#: /src/schooltool/basicperson/browser/demographics.py:428
+#: /src/schooltool/basicperson/interfaces.py:145
 msgid ""
 "If you select one or more groups below, this field will only be displayed in "
 "forms and reports for members of the selected groups."
@@ -3167,6 +3161,14 @@ msgstr ""
 #: /src/schooltool/basicperson/browser/demographics.py:406
 #: /src/schooltool/basicperson/browser/demographics.py:462
 msgid "Field Details"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/demographics.py:584
+msgid "Please enter a valid ID"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/demographics.py:588
+msgid "This ID is not unique."
 msgstr ""
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:11
@@ -3225,7 +3227,13 @@ msgstr ""
 msgid "Demographics and Personal Information"
 msgstr ""
 
-#: /src/schooltool/basicperson/browser/flourish.zcml:304
+#: /src/schooltool/basicperson/browser/flourish.zcml:273
+#: /src/schooltool/level/browser/flourish.zcml:110
+#: /src/schooltool/resource/browser/flourish.zcml:29
+msgid "Reorder"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/flourish.zcml:305
 msgid "Text Field"
 msgstr ""
 
@@ -3245,7 +3253,11 @@ msgstr ""
 msgid "Selection List Field"
 msgstr ""
 
-#: /src/schooltool/basicperson/browser/flourish.zcml:348
+#: /src/schooltool/basicperson/browser/flourish.zcml:349
+msgid "Integer Field"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/flourish.zcml:359
 msgid "Reorder or Delete Fields"
 msgstr ""
 
@@ -3253,7 +3265,11 @@ msgstr ""
 msgid "New Description Field"
 msgstr ""
 
-#: /src/schooltool/basicperson/browser/flourish.zcml:560
+#: /src/schooltool/basicperson/browser/flourish.zcml:412
+msgid "New Integer Field"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/flourish.zcml:590
 msgid "Contains an XML representation of the person."
 msgstr ""
 
@@ -3261,7 +3277,17 @@ msgstr ""
 msgid "Export as XML"
 msgstr ""
 
-#: /src/schooltool/basicperson/browser/flourish.zcml:652
+#: /src/schooltool/basicperson/browser/flourish.zcml:627
+msgid "ID Card"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/flourish.zcml:627
+msgid ""
+"Includes student name, ID number, birth date, contact name and contact phone "
+"number."
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/flourish.zcml:733
 #: /src/schooltool/person/browser/home_tab_viewlet.pt:3
 msgid "Home"
 msgstr "ផ្ទះ"
@@ -3308,7 +3334,21 @@ msgstr "សូម​អះអាង​ពាក្យ​សម្ងាត់"
 msgid "Passwords do not match"
 msgstr "ពាក្យ​សម្ងាត់​មិន​ផ្គូផ្គង"
 
-#: /src/schooltool/basicperson/browser/person.py:202
+#: /src/schooltool/basicperson/browser/person.py:190
+#: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:5
+#: /src/schooltool/person/browser/person.py:611
+#: /src/schooltool/person/interfaces.py:56
+msgid "Photo"
+msgstr "រូបថត"
+
+#: /src/schooltool/basicperson/browser/person.py:191
+msgid ""
+"An image file that will be converted to a JPEG no larger than 99x132 pixels "
+"(3:4 aspect ratio). Uploaded images must be JPEG or PNG files smaller than "
+"10 MB"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/person.py:229
 msgid "This username is already in use"
 msgstr ""
 
@@ -3320,9 +3360,8 @@ msgstr "ឈ្មោះ​អ្នកប្រើ"
 msgid "Add multiple persons"
 msgstr "បន្ថែម​​អ្នកប្រើ​​ច្រើន"
 
-#. Default: ""
-#: /src/schooltool/basicperson/browser/person.py:499
-#: /src/schooltool/resource/browser/resource.py:651
+#: /src/schooltool/basicperson/browser/person.py:493
+#: /src/schooltool/resource/browser/resource.py:648
 msgid "Change information for ${fullname}"
 msgstr "ផ្លាស់ប្ដូរ​ព័ត៌មាន​សម្រាប់ ${fullname}"
 
@@ -3341,8 +3380,7 @@ msgstr "ទីប្រឹក្សា​បច្ចុប្បន្ន"
 msgid "Add Advisors"
 msgstr "បន្ថែម​ទី​ប្រឹក្សា"
 
-#. Default: ""
-#: /src/schooltool/basicperson/browser/person.py:644
+#: /src/schooltool/basicperson/browser/person.py:630
 msgid "Advisors of ${person}"
 msgstr "ទី​ប្រឹក្សា​របស់ ${person}"
 
@@ -3362,8 +3400,7 @@ msgstr "ទីប្រឹក្សា​បច្ចុប្បន្ន"
 msgid "Add Advisees"
 msgstr "បន្ថែម​ទី​ប្រឹក្សា"
 
-#. Default: ""
-#: /src/schooltool/basicperson/browser/person.py:683
+#: /src/schooltool/basicperson/browser/person.py:669
 msgid "Advisees of ${person}"
 msgstr "ទីប្រឹក្សា​របស់ ${person}"
 
@@ -3407,7 +3444,16 @@ msgstr ""
 msgid "Administrator demographics"
 msgstr ""
 
-#: /src/schooltool/basicperson/browser/templates/container.pt:23
+#: /src/schooltool/basicperson/browser/person.py:1155
+#: /src/schooltool/group/browser/flourish.zcml:358
+msgid "ID Cards"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/person.py:1327
+msgid "ID Card: ${person}"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/templates/container.pt:18
 msgid ""
 "To add teachers, students or administrators, please set up a ${school_year}."
 msgstr ""
@@ -3582,6 +3628,22 @@ msgstr "អ្នក​ប្រើ​ថ្មី"
 msgid "signifies a required field"
 msgstr ""
 
+#: /src/schooltool/basicperson/browser/templates/f_person_id_cards.pt:90
+msgid "ID:"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/templates/f_person_id_cards.pt:95
+msgid "Birth date:"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/templates/f_person_id_cards.pt:99
+msgid "Contact"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/templates/f_person_id_cards.pt:111
+msgid "Contact's Phone"
+msgstr ""
+
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:4
 #: /src/schooltool/person/browser/person-csvimport.pt:4
 msgid "Upload SchoolTool persons as CSV"
@@ -3726,11 +3788,11 @@ msgstr "(yyyy-mm-dd)"
 msgid "As it should appear on forms and reports."
 msgstr ""
 
-#: /src/schooltool/basicperson/interfaces.py:137
-msgid "A unique one word identifier."
+#: /src/schooltool/basicperson/interfaces.py:138
+msgid "A unique one word alphanumeric identifier."
 msgstr ""
 
-#: /src/schooltool/basicperson/interfaces.py:162
+#: /src/schooltool/basicperson/interfaces.py:163
 msgid "Selection list"
 msgstr ""
 
@@ -3740,8 +3802,16 @@ msgid ""
 "values will be displayed as a menu in forms."
 msgstr ""
 
+#: /src/schooltool/basicperson/interfaces.py:173
+msgid "Minimum value"
+msgstr ""
+
+#: /src/schooltool/basicperson/interfaces.py:177
+msgid "Maximum value"
+msgstr ""
+
 #: /src/schooltool/basicperson/person.py:75
-#: /src/schooltool/contact/browser/contact.py:496
+#: /src/schooltool/contact/browser/contact.py:503
 msgid "First Name"
 msgstr "នាម​ខ្លួន"
 
@@ -3849,7 +3919,6 @@ msgstr ""
 msgid "This and all future occurrences"
 msgstr ""
 
-#. Default: ""
 #: /src/schooltool/calendar/browser/event.py:222
 msgid "Delete event ${event}"
 msgstr ""
@@ -3988,13 +4057,11 @@ msgstr "ផ្ញើ​អ៊ីមែល"
 msgid "Add new contact"
 msgstr "បន្ថែម​ទំនាក់ទំនង​ថ្មី"
 
-#. Default: ""
-#: /src/schooltool/contact/browser/contact.py:242
+#: /src/schooltool/contact/browser/contact.py:248
 msgid "Add new contact for ${person}"
 msgstr "បន្ថែម​ទំនាក់ទំនង​ថ្មី​សម្រាប់ ${person}"
 
-#. Default: ""
-#: /src/schooltool/contact/browser/contact.py:323
+#: /src/schooltool/contact/browser/contact.py:329
 msgid "Change contact information for ${first_name} ${last_name}"
 msgstr "ផ្លាស់ប្ដូរ​ព័ត៌មាន​ទំនាក់ទំនង​សម្រាប់ ${first_name} ${last_name}"
 
@@ -4002,11 +4069,17 @@ msgstr "ផ្លាស់ប្ដូរ​ព័ត៌មាន​ទំនា
 msgid "Contact index"
 msgstr "លិបិក្រម​ទំនាក់ទំនង"
 
-#: /src/schooltool/contact/browser/contact.py:620
-#: /src/schooltool/email/browser/email.py:282
-#: /src/schooltool/email/browser/email.py:464
-#: /src/schooltool/email/browser/email.py:509
-#: /src/schooltool/email/browser/email.py:660
+#: /src/schooltool/contact/browser/contact.py:617
+#: /src/schooltool/person/browser/f_person_filter.pt:7
+#: /src/schooltool/person/browser/person.py:543
+msgid "First name, last name or username"
+msgstr ""
+
+#: /src/schooltool/contact/browser/contact.py:653
+#: /src/schooltool/email/browser/email.py:301
+#: /src/schooltool/email/browser/email.py:486
+#: /src/schooltool/email/browser/email.py:531
+#: /src/schooltool/email/browser/email.py:684
 #: /src/schooltool/email/interfaces.py:39
 msgid "From"
 msgstr "ពី"
@@ -4045,13 +4118,11 @@ msgstr "ផ្ញើ"
 msgid "There were some errors."
 msgstr "មាន​កំហុស​ខ្លះ​ៗ ។"
 
-#. Default: ""
-#: /src/schooltool/contact/browser/contact.py:812
+#: /src/schooltool/contact/browser/contact.py:819
 msgid "${person_full_name} as Contact"
 msgstr ""
 
-#. Default: ""
-#: /src/schooltool/contact/browser/contact.py:860
+#: /src/schooltool/contact/browser/contact.py:867
 msgid "Delete ${contact_full_name}"
 msgstr ""
 
@@ -4073,7 +4144,6 @@ msgstr "ផ្ដល់​ទំនាក់ទំនង"
 msgid "Assign existing contact"
 msgstr "ផ្ដល់​ទំនាក់ទំនង​ដែល​មាន"
 
-#. Default: ""
 #: /src/schooltool/contact/browser/relationship.py:94
 msgid "Manage contacts of ${person}"
 msgstr "គ្រប់គ្រង​ទំនាក់ទំនង​របស់ ${person}"
@@ -4421,44 +4491,46 @@ msgstr "ចម្លង​ពី​វគ្គ​មុន"
 msgid "Course index"
 msgstr "លិបិក្រម​វគ្គ​សិក្សា"
 
-#. Default: ""
-#: /src/schooltool/course/browser/course.py:366
+#: /src/schooltool/course/browser/course.py:368
 msgid "Delete ${course}"
 msgstr ""
 
-#. Default: ""
-#: /src/schooltool/course/browser/course.py:414
-#: /src/schooltool/course/browser/course.py:428
-#: /src/schooltool/course/browser/course.py:459
-#: /src/schooltool/course/browser/course.py:544
+#: /src/schooltool/course/browser/course.py:416
+#: /src/schooltool/course/browser/course.py:430
+#: /src/schooltool/course/browser/course.py:461
+#: /src/schooltool/course/browser/course.py:546
 #: /src/schooltool/course/browser/templates/course_container.pt:12
 msgid "Courses for ${schoolyear}"
 msgstr "វគ្គ​សិក្សា​សម្រាប់ ${schoolyear}"
 
-#: /src/schooltool/course/browser/course.py:500
-#: /src/schooltool/course/browser/course.py:552
-msgid "Course Information"
-msgstr ""
-
-#: /src/schooltool/course/browser/course.py:632
-#: /src/schooltool/course/interfaces.py:46
+#: /src/schooltool/course/browser/course.py:448
+#: /src/schooltool/course/browser/course.py:687
+#: /src/schooltool/course/interfaces.py:52
 msgid "Course ID"
 msgstr "លេខ​សម្គាល់​វគ្គ​សិក្សា"
 
-#: /src/schooltool/course/browser/csvimport.py:58
+#: /src/schooltool/course/browser/course.py:545
+#: /src/schooltool/course/browser/course.py:597
+msgid "Course Information"
+msgstr ""
+
+#: /src/schooltool/course/browser/course.py:669
+#: /src/schooltool/course/browser/templates/f_course_filter.pt:6
+msgid "Title or course ID"
+msgstr ""
+
+#: /src/schooltool/course/browser/csvimport.py:57
 #: /src/schooltool/group/browser/csvimport.py:54
 #: /src/schooltool/resource/browser/csvimport.py:54
 msgid "Titles may not be empty"
 msgstr "ចំណង​ជើង​មិន​គួរ​ទទេ​ទេ"
 
-#. Default: ""
 #: /src/schooltool/course/browser/csvimport.py:88
 msgid ""
 "Course \"${course_title}\" credits \"${invalid_credits}\" value must be a "
 "number."
 msgstr ""
 
-#. Default: ""
 #: /src/schooltool/course/browser/csvimport.py:103
 msgid ""
 "Course \"${course_title}\" id \"${invalid_id}\" is invalid. ${error_message}"
@@ -4471,8 +4543,7 @@ msgstr ""
 msgid "User names must not be empty."
 msgstr "ឈ្មោះ​អ្នក​ប្រើ​មិន​ត្រូវ​ទទេ​ទេ ។"
 
-#. Default: ""
-#: /src/schooltool/course/browser/csvimport.py:179
+#: /src/schooltool/course/browser/csvimport.py:178
 #: /src/schooltool/group/browser/csvimport.py:119
 msgid "\"${username}\" is not a valid username."
 msgstr "\"${username}\" មិន​មែន​ជា​ឈ្មោះ​អ្នក​ប្រើ​ត្រឹមត្រូវ ។"
@@ -4545,8 +4616,7 @@ msgstr "ចាប់ផ្ដើម​ក្នុង​វគ្គ"
 msgid "Ends in term"
 msgstr "បញ្ចប់​ក្នុង​វគ្គ"
 
-#. Default: ""
-#: /src/schooltool/course/browser/section.py:447
+#: /src/schooltool/course/browser/section.py:452
 msgid "Starting term ($starts_in) is later than ending term ($ends_in)"
 msgstr "វគ្គ​ចាប់ផ្ដើម ($starts_in) នៅ​ក្រោយ​វគ្គ​បញ្ចប់ ($ends_in)"
 
@@ -4566,8 +4636,7 @@ msgstr "សិស្ស​បច្ចុប្បន្ន"
 msgid "Available Students"
 msgstr "សិស្ស​ដែល​មាន"
 
-#. Default: ""
-#: /src/schooltool/course/browser/section.py:932
+#: /src/schooltool/course/browser/section.py:934
 msgid "Delete ${section}"
 msgstr ""
 
@@ -4588,8 +4657,13 @@ msgstr "វគ្គ​សិក្សា"
 msgid "Size"
 msgstr ""
 
-#: /src/schooltool/course/browser/section.py:1115
-#: /src/schooltool/course/browser/section.py:1249
+#: /src/schooltool/course/browser/section.py:1024
+#: /src/schooltool/course/browser/templates/f_section_filter.pt:6
+msgid "Section title"
+msgstr ""
+
+#: /src/schooltool/course/browser/section.py:1121
+#: /src/schooltool/course/browser/section.py:1272
 msgid "Section Information"
 msgstr ""
 
@@ -4617,18 +4691,15 @@ msgstr ""
 msgid "Add students"
 msgstr ""
 
-#. Default: ""
-#: /src/schooltool/course/browser/section.py:1390
+#: /src/schooltool/course/browser/section.py:1424
 msgid "Extend ${section} to ${term}"
 msgstr ""
 
-#. Default: ""
-#: /src/schooltool/course/browser/section.py:1396
+#: /src/schooltool/course/browser/section.py:1430
 msgid "Remove links of ${section}"
 msgstr ""
 
-#. Default: ""
-#: /src/schooltool/course/browser/section.py:1401
+#: /src/schooltool/course/browser/section.py:1435
 msgid "Link ${section} to Section in Other Term"
 msgstr ""
 
@@ -4830,10 +4901,6 @@ msgid ""
 "determining which course should be updated."
 msgstr ""
 
-#: /src/schooltool/course/browser/templates/f_course_filter.pt:6
-msgid "Title or course ID"
-msgstr ""
-
 #: /src/schooltool/course/browser/templates/f_course_view.pt:4
 msgid "Edit this course"
 msgstr ""
@@ -4948,10 +5015,6 @@ msgstr ""
 
 #: /src/schooltool/course/browser/templates/f_manage_courses_overview.pt:40
 msgid "There are no sections defined for ${schoolyear}."
-msgstr ""
-
-#: /src/schooltool/course/browser/templates/f_section_filter.pt:6
-msgid "Section title"
 msgstr ""
 
 #: /src/schooltool/course/browser/templates/f_section_linkage.pt:25
@@ -5186,7 +5249,6 @@ msgstr ""
 msgid "An internal identifier of this section."
 msgstr ""
 
-#. Default: ""
 #: /src/schooltool/course/section.py:89
 msgid "${instructors} -- ${section_title}"
 msgstr "${instructors} -- ${section_title}"
@@ -5364,9 +5426,8 @@ msgstr "អ៊ីមែល​ចេញ"
 msgid "Send Test"
 msgstr "ផ្ញើ សាកល្បង"
 
-#. Default: ""
-#: /src/schooltool/email/browser/email.py:85
-#: /src/schooltool/email/browser/email.py:550
+#: /src/schooltool/email/browser/email.py:86
+#: /src/schooltool/email/browser/email.py:573
 msgid "Enabled on ${info}"
 msgstr "បើក លើ ${info}"
 
@@ -5522,8 +5583,7 @@ msgstr "ជួរអ៊ីមែល"
 msgid "Enabled"
 msgstr "បានអនុញ្ញាត"
 
-#. Default: ""
-#: /src/schooltool/email/browser/email.py:645
+#: /src/schooltool/email/browser/email.py:668
 msgid "Queue (${count} failed)"
 msgstr "ជួរ (${count} បានបរាជ័យ)"
 
@@ -5541,8 +5601,7 @@ msgstr "ប្រធានបទរបស់​​សារ"
 msgid "Body of the message"
 msgstr "តួ​របស់​សារ"
 
-#. Default: ""
-#: /src/schooltool/email/browser/email.py:782
+#: /src/schooltool/email/browser/email.py:843
 msgid "Email Queue (${count})"
 msgstr ""
 
@@ -5600,11 +5659,6 @@ msgstr ""
 msgid "Edit email settings"
 msgstr ""
 
-#: /src/schooltool/email/browser/templates/f_email_settings_overview.pt:13
-#: /src/schooltool/email/interfaces.py:58
-msgid "Status"
-msgstr "ស្ថានភាព"
-
 #: /src/schooltool/email/browser/templates/f_email_view.pt:2
 msgid "Email Details"
 msgstr ""
@@ -5616,6 +5670,10 @@ msgstr "អាសយដ្ឋាន​អ្នកទទួល"
 #: /src/schooltool/email/interfaces.py:45
 msgid "Recipient address"
 msgstr "អាសយដ្ឋាន​អ្នកទទួល"
+
+#: /src/schooltool/email/interfaces.py:58
+msgid "Status"
+msgstr "ស្ថានភាព"
 
 #: /src/schooltool/email/interfaces.py:59
 msgid "Code for the status of the message"
@@ -5965,11 +6023,16 @@ msgstr ""
 msgid "Import Members CSV"
 msgstr ""
 
-#: /src/schooltool/group/browser/group.py:104
+#: /src/schooltool/group/browser/flourish.zcml:358
+msgid ""
+"Includes student name, ID number, birth date, contact name and contact phone "
+"number. Prints eight per page."
+msgstr ""
+
+#: /src/schooltool/group/browser/group.py:98
 msgid "Group index"
 msgstr "លិបិក្រម​ក្រុម"
 
-#. Default: ""
 #: /src/schooltool/group/browser/group.py:114
 msgid "Groups of ${person}"
 msgstr "ក្រុម​របស់ ${person}"
@@ -5982,7 +6045,6 @@ msgstr "ក្រុម​បច្ចុប្បន្ន"
 msgid "Available Groups"
 msgstr "ក្រុម​ដែល​មាន"
 
-#. Default: ""
 #: /src/schooltool/group/browser/group.py:161
 msgid "Members of ${group}"
 msgstr "សមាជិក​របស់ ${group}"
@@ -6005,22 +6067,29 @@ msgstr ""
 msgid "Available groups"
 msgstr ""
 
-#. Default: ""
 #: /src/schooltool/group/browser/group.py:448
 msgid "Delete ${group}"
 msgstr ""
 
-#. Default: ""
 #: /src/schooltool/group/browser/group.py:499
 #: /src/schooltool/group/browser/group.py:511
 #: /src/schooltool/group/browser/group.py:555
-#: /src/schooltool/group/browser/group.py:650
+#: /src/schooltool/group/browser/group.py:649
 msgid "Groups for ${schoolyear}"
 msgstr ""
 
-#: /src/schooltool/group/browser/group.py:606
-#: /src/schooltool/group/browser/group.py:658
+#: /src/schooltool/group/browser/group.py:531
+#: /src/schooltool/group/browser/templates/f_group_filter.pt:6
+msgid "Group title"
+msgstr ""
+
+#: /src/schooltool/group/browser/group.py:640
+#: /src/schooltool/group/browser/group.py:692
 msgid "Group Information"
+msgstr ""
+
+#: /src/schooltool/group/browser/group.py:816
+msgid "ID Cards for Group: ${group}"
 msgstr ""
 
 #: /src/schooltool/group/browser/templates/f_group_csvimport_description.pt:3
@@ -6064,10 +6133,6 @@ msgstr ""
 "'ក្លឹប​អុក' នឹង​គ្មាន​សេចក្ដី​ពិពណ៌នា​ទេ និង​អត្ថបទ "
 "\"អត្ថបទ​បន្ទាប់​ពី​សញ្ញា(,) ទីពីរ\" "
 "នៅ​ក្នុង​​ក្រុម​ទីបី​នឹង​​មិន​ត្រូវ​បាន​អើពើ​ទេ ។"
-
-#: /src/schooltool/group/browser/templates/f_group_filter.pt:6
-msgid "Group title"
-msgstr ""
 
 #: /src/schooltool/group/browser/templates/f_group_member_csvimport_description.pt:12
 msgid ""
@@ -6201,7 +6266,7 @@ msgid "Grade Levels"
 msgstr ""
 
 #: /src/schooltool/level/browser/flourish.zcml:62
-msgid "New Level"
+msgid "Level"
 msgstr ""
 
 #: /src/schooltool/level/browser/flourish.zcml:82
@@ -6210,10 +6275,6 @@ msgstr ""
 
 #: /src/schooltool/level/browser/flourish.zcml:92
 msgid "Edit level"
-msgstr ""
-
-#: /src/schooltool/level/browser/flourish.zcml:110
-msgid "Change Order"
 msgstr ""
 
 #: /src/schooltool/level/browser/flourish.zcml:120
@@ -6233,10 +6294,6 @@ msgstr ""
 msgid ""
 "Grade levels are the traditional means of tracking student progress across "
 "years and the sequence of curriculum."
-msgstr ""
-
-#: /src/schooltool/level/browser/templates/f_levels_reorder.pt:8
-msgid "Grade Year"
 msgstr ""
 
 #: /src/schooltool/level/browser/templates/f_levels_view.pt:12
@@ -6322,18 +6379,14 @@ msgid "fullname may not be empty"
 msgstr "ឈ្មោះ​ពេញ​មិន​ត្រូវ​ទទេ​ទេ"
 
 #: /src/schooltool/person/browser/f_password_changed.pt:1
-#: /src/schooltool/person/browser/person.py:363
-msgid ""
-"Password changed successfully. Next, you will be required to authenticate "
-"with your new credentials"
-msgstr ""
-
-#: /src/schooltool/person/browser/f_person_filter.pt:7
-msgid "First name, last name or username"
+#: /src/schooltool/person/browser/person.py:362
+msgid "Password changed successfully"
 msgstr ""
 
 #: /src/schooltool/person/browser/f_person_filter.pt:20
+#: /src/schooltool/person/browser/f_person_table_filter.pt:39
 #: /src/schooltool/resource/browser/templates/f_resource_filter.pt:20
+#: /src/schooltool/resource/browser/templates/f_resource_table_filter.pt:33
 msgid "Filter by..."
 msgstr ""
 
@@ -6394,24 +6447,20 @@ msgstr ""
 msgid "the public"
 msgstr ""
 
-#. Default: ""
-#: /src/schooltool/person/browser/person.py:103
+#: /src/schooltool/person/browser/person.py:105
 msgid "${person_full_name} and school administration"
 msgstr ""
 
-#. Default: ""
-#: /src/schooltool/person/browser/person.py:126
+#: /src/schooltool/person/browser/person.py:128
 msgid "${person_full_name}'s calendar is visible to..."
 msgstr ""
 
-#. Default: ""
-#: /src/schooltool/person/browser/person.py:156
-#: /src/schooltool/person/browser/person.py:206
+#: /src/schooltool/person/browser/person.py:158
+#: /src/schooltool/person/browser/person.py:236
 msgid "Change preferences for ${person_full_name}"
 msgstr ""
 
-#. Default: ""
-#: /src/schooltool/person/browser/person.py:243
+#: /src/schooltool/person/browser/person.py:273
 msgid "Delete ${person_full_name}"
 msgstr ""
 
@@ -6432,18 +6481,7 @@ msgstr ""
 msgid "Edit password"
 msgstr "កែ​សម្រួល​ពាក្យ​សម្ងាត់"
 
-#: /src/schooltool/person/browser/person.py:322
-msgid "No new password was supplied so original password is unchanged"
-msgstr ""
-"មិន​បាន​ផ្ដល់​ពាក្យ​សម្ងាត់​ថ្មី "
-"ដូច្នេះ​ពាក្យ​សម្ងាត់​ដើម​មិន​ត្រូវ​បាន​ផ្លាស់ប្ដូរ​ទេ"
-
-#: /src/schooltool/person/browser/person.py:372
-#: /src/schooltool/person/browser/person.py:376
-msgid "Password changed successfully"
-msgstr ""
-
-#: /src/schooltool/person/browser/person.py:359
+#: /src/schooltool/person/browser/person.py:391
 #: /src/schooltool/person/security.zcml:101
 msgid "Change password"
 msgstr "ផ្លាស់​ប្ដូរ ពាក្យ​សម្ងាត់"
@@ -6469,13 +6507,7 @@ msgstr "ឈ្មោះ​ដែល​ត្រូវ​បង្ហាញ"
 msgid "Verify password"
 msgstr "ផ្ទៀងផ្ទាត់​ពាក្យ​សម្ងាត់"
 
-#: /src/schooltool/person/browser/person.py:523
-#: /src/schooltool/person/interfaces.py:55
-msgid "Photo"
-msgstr "រូបថត"
-
-#: /src/schooltool/person/browser/person.py:525
-#: /src/schooltool/person/interfaces.py:57
+#: /src/schooltool/person/browser/person.py:613
 msgid "Photo (in JPEG format)"
 msgstr "រូបថត (ជា​ទ្រង់ទ្រាយ JPEG)"
 
@@ -6523,31 +6555,43 @@ msgstr "ផ្លាស់ប្ដូរ​ព័ត៌មាន​សម្រ
 msgid "Edit person preferences"
 msgstr "កែ​សម្រួល​ចំណូល​ចិត្ត​អ្នក​ប្រើ"
 
+#: /src/schooltool/person/interfaces.py:158
+msgid "Time Zone"
+msgstr "តំបន់​ពេល​វេលា"
+
 #: /src/schooltool/person/interfaces.py:162
+msgid "Time Format"
+msgstr "ទ្រង់ទ្រាយ​ពេល​វេលា"
+
+#: /src/schooltool/person/interfaces.py:163
 msgid "HH:MM"
 msgstr "HH:MM"
 
-#: /src/schooltool/person/interfaces.py:163
+#: /src/schooltool/person/interfaces.py:164
 msgid "HH:MM am/pm"
 msgstr "HH:MM am/pm"
 
 #: /src/schooltool/person/interfaces.py:167
+msgid "Date Format"
+msgstr "ទ្រង់ទ្រាយ​កាល​បរិច្ឆេទ"
+
+#: /src/schooltool/person/interfaces.py:168
 msgid "MM/DD/YY"
 msgstr "MM/DD/YY"
 
-#: /src/schooltool/person/interfaces.py:168
+#: /src/schooltool/person/interfaces.py:169
 msgid "YYYY-MM-DD"
 msgstr "YYYY-MM-DD"
 
-#: /src/schooltool/person/interfaces.py:169
+#: /src/schooltool/person/interfaces.py:170
 msgid "Day Month, Year"
 msgstr "ថ្ងៃ ខែ ឆ្នាំ"
 
-#: /src/schooltool/person/interfaces.py:173
-msgid "Week starts on:"
-msgstr "សប្ដាហ៍​ចាប់ផ្ដើម​នៅ ៖"
+#: /src/schooltool/person/interfaces.py:174
+msgid "Week starts on"
+msgstr ""
 
-#: /src/schooltool/person/interfaces.py:187
+#: /src/schooltool/person/interfaces.py:188
 msgid "Daily calendar rows..."
 msgstr ""
 
@@ -6885,8 +6929,7 @@ msgstr ""
 msgid "Edit equipment"
 msgstr ""
 
-#. Default: ""
-#: /src/schooltool/resource/browser/resource.py:859
+#: /src/schooltool/resource/browser/resource.py:854
 msgid "Delete ${resource_title}"
 msgstr ""
 
@@ -7210,7 +7253,6 @@ msgstr ""
 msgid "Active"
 msgstr ""
 
-#. Default: ""
 #: /src/schooltool/schoolyear/browser/schoolyear.py:237
 msgid "Delete ${schoolyear}"
 msgstr ""
@@ -7236,7 +7278,6 @@ msgstr ""
 msgid "Limited to 12 characters or less"
 msgstr ""
 
-#. Default: ""
 #: /src/schooltool/schoolyear/browser/schoolyear.py:525
 #: /src/schooltool/schoolyear/browser/schoolyear.py:558
 msgid "Change information for ${schoolyear_title}"
@@ -7530,6 +7571,18 @@ msgstr ""
 msgid "Supporting exceptional people to change the world."
 msgstr ""
 
+#: /src/schooltool/skin/flourish/templates/photo_input.pt:11
+msgid "delete this photo"
+msgstr ""
+
+#: /src/schooltool/skin/flourish/widgets.py:240
+msgid "The file uploaded is not a JPEG or PNG image"
+msgstr ""
+
+#: /src/schooltool/skin/flourish/widgets.py:243
+msgid "The image uploaded cannot be larger than 10 MB"
+msgstr ""
+
 #: /src/schooltool/skin/form.py:64
 msgid "No changes"
 msgstr "គ្មាន​ការ​ផ្លាស់ប្ដូរ"
@@ -7718,14 +7771,12 @@ msgstr "កាលបរិច្ឆេទ​ដែល​​​​អ្នក​
 msgid "The replacement date you entered is invalid."
 msgstr "កាល​បរិច្ឆេទ​ជំនួស​ដែល​អ្នក​បាន​បញ្ចូល​មិន​ត្រឹមត្រូវ​ឡើយ​ ។"
 
-#. Default: ""
-#: /src/schooltool/term/browser/emergency.py:125
+#: /src/schooltool/term/browser/emergency.py:126
 msgid "School cancelled due to emergency. Replacement day $replacement."
 msgstr ""
 "សាលា​បាន​បោះបង់​ដោយសារ​តែ​មាន​ករណី​បន្ទាន់ ។ ថ្ងៃ​ជំនួស $replacement ។"
 
-#. Default: ""
-#: /src/schooltool/term/browser/emergency.py:135
+#: /src/schooltool/term/browser/emergency.py:136
 msgid "Replacement day for emergency day $emergency."
 msgstr "ថ្ងៃ​ជំនួស​ សម្រាប់​ថ្ងៃ​បន្ទាន់ $emergency ។"
 
@@ -7891,8 +7942,7 @@ msgstr "កាល​បរិច្ឆេទ​ចាប់ផ្ដើម"
 msgid "End date"
 msgstr "កាល​បរិច្ឆេទ​បញ្ចប់"
 
-#. Default: ""
-#: /src/schooltool/term/browser/term.py:127
+#: /src/schooltool/term/browser/term.py:131
 msgid "Delete ${term}"
 msgstr ""
 
@@ -7908,13 +7958,11 @@ msgstr "បន្ថែម​វគ្គ"
 msgid "Term Details"
 msgstr ""
 
-#. Default: ""
-#: /src/schooltool/term/browser/term.py:316
+#: /src/schooltool/term/browser/term.py:320
 msgid "The year starts ${year_start}"
 msgstr ""
 
-#. Default: ""
-#: /src/schooltool/term/browser/term.py:319
+#: /src/schooltool/term/browser/term.py:323
 msgid "The year ends ${year_end}"
 msgstr ""
 
@@ -7922,9 +7970,8 @@ msgstr ""
 msgid "Save changes"
 msgstr "រក្សា​ទុក​ការ​ផ្លាស់ប្ដូរ"
 
-#. Default: ""
-#: /src/schooltool/term/browser/term.py:381
-#: /src/schooltool/term/browser/term.py:396
+#: /src/schooltool/term/browser/term.py:385
+#: /src/schooltool/term/browser/term.py:400
 msgid "Change information for ${term_title}"
 msgstr "ផ្លាស់ប្ដូរ​ព័ត៌មាន​សម្រាប់ ${term_title}"
 
@@ -7938,18 +7985,15 @@ msgstr "វគ្គ​ត្រូវ​តែ​ចាប់ផ្ដើម​
 msgid "Date range overlaps another term."
 msgstr ""
 
-#. Default: ""
-#: /src/schooltool/term/browser/term.py:660
+#: /src/schooltool/term/browser/term.py:664
 msgid "Terms for ${schoolyear}"
 msgstr ""
 
-#. Default: ""
-#: /src/schooltool/term/browser/term.py:680
+#: /src/schooltool/term/browser/term.py:684
 msgid "School Year: ${year_title}"
 msgstr ""
 
-#. Default: ""
-#: /src/schooltool/term/browser/term.py:687
+#: /src/schooltool/term/browser/term.py:691
 msgid "Add a new term to ${year_title}"
 msgstr ""
 
@@ -7961,7 +8005,6 @@ msgstr "កាល​បរិច្ឆេទ​វគ្គ​មិន​នៅ
 msgid "Set the date for the school"
 msgstr "កំណត់​កាល​បរិច្ឆេទ​សម្រាប់​សាលា"
 
-#. Default: ""
 #: /src/schooltool/timetable/browser/app.py:207
 msgid "Timetables for ${schoolyear}"
 msgstr ""
@@ -8384,22 +8427,18 @@ msgstr ""
 msgid "Save"
 msgstr "រក្សា​ទុក"
 
-#. Default: ""
-#: /src/schooltool/timetable/browser/timetable.py:614
+#: /src/schooltool/timetable/browser/timetable.py:619
 msgid "Unschedule timetable ${timetable}"
 msgstr ""
 
-#. Default: ""
-#: /src/schooltool/timetable/browser/timetable.py:636
+#: /src/schooltool/timetable/browser/timetable.py:641
 msgid "Delete ${timetable}"
 msgstr ""
 
-#. Default: ""
-#: /src/schooltool/timetable/browser/timetable.py:653
+#: /src/schooltool/timetable/browser/timetable.py:658
 msgid "Make ${timetable} default"
 msgstr ""
 
-#. Default: ""
 #: /src/schooltool/timetable/browser/ttwizard.py:188
 msgid "Timetable $title"
 msgstr ""
@@ -8474,7 +8513,6 @@ msgstr ""
 "បញ្ចូល​ពេលវេលា​ចាប់ផ្ដើម និង​បញ្ចប់​សម្រាប់​ចន្លោះ​ពេល​នីមួយៗ ចន្លោះ​ពេល​មួយ "
 "(HH:MM - HH:MM) ក្នុង​មួយ​បន្ទាត់ ។"
 
-#. Default: ""
 #: /src/schooltool/timetable/browser/ttwizard.py:473
 #: /src/schooltool/timetable/browser/ttwizard.py:531
 msgid "Not a valid time slot: $slot."
@@ -8509,7 +8547,6 @@ msgstr "បាន​កំណត់​ដោយ​ពេលវេលា"
 msgid "Enter names of periods, one per line."
 msgstr "បញ្ចូល​ឈ្មោះ​ថិរវេលា មួយ​ក្នុង​មួយ​បន្ទាត់ ។"
 
-#. Default: ""
 #: /src/schooltool/timetable/browser/ttwizard.py:635
 msgid "Please enter at least $number periods."
 msgstr "សូម​បញ្ចូល​រយៈពេល​ល​​​យ៉ាងហោចណាស់  $number ។"
@@ -8539,7 +8576,6 @@ msgstr "សូម​ដាក់​រយៈពេល​ជា​លំដាប
 msgid "Please provide all periods."
 msgstr "សូម​ផ្ដល់​រយៈពេល​ទាំងអស់ ។"
 
-#. Default: ""
 #: /src/schooltool/timetable/browser/ttwizard.py:713
 #: /src/schooltool/timetable/browser/ttwizard.py:772
 msgid "The following periods were selected more than once: $periods"
@@ -8549,7 +8585,6 @@ msgstr "រយៈពេល​ដូច​ខាងក្រោម​ត្រូ
 msgid "Please put the periods in order for each day:"
 msgstr "សូម​ដាក់​រយៈពេល​ជា​លំដាប់​​ សម្រាប់​ថ្ងៃ​នីមួយៗ ៖"
 
-#. Default: ""
 #: /src/schooltool/timetable/browser/ttwizard.py:768
 msgid "$period on day $day"
 msgstr "$period នៅ​ថ្ងៃ $day"

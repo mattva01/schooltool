@@ -17,7 +17,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
-"POT-Creation-Date: 2012-03-01 21:21+0200\n"
+"POT-Creation-Date: 2012-03-19 17:40+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Schooltool Development Team <schooltool-dev@schooltool.org>\n"
@@ -2681,11 +2681,7 @@ msgid ""
 "uncomment one of the ZODB storage sections.\n"
 msgstr ""
 
-#: /src/schooltool/app/main.py:666
-msgid "Startup time: %.3f sec real, %.3f sec CPU"
-msgstr ""
-
-#: /src/schooltool/app/main.py:700
+#: /src/schooltool/app/main.py:672
 msgid ""
 "Could not initialize the database:\n"
 "%s"
@@ -2715,9 +2711,13 @@ msgid ""
 "PDF support disabled."
 msgstr ""
 
+#: /src/schooltool/app/main.py:775
+msgid "Startup time: %.3f sec real, %.3f sec CPU"
+msgstr ""
+
 #: /src/schooltool/app/membership.py:261
 #: /src/schooltool/basicperson/browser/templates/f_manage_people_overview.pt:20
-#: /src/schooltool/group/browser/flourish.zcml:163
+#: /src/schooltool/group/browser/flourish.zcml:209
 #: /src/schooltool/group/browser/templates/f_group_view.pt:75
 #: /src/schooltool/group/browser/templates/group.pt:16
 msgid "Members"
@@ -3856,13 +3856,12 @@ msgstr ""
 msgid "Contact index"
 msgstr ""
 
-#: /src/schooltool/contact/browser/contact.py:617
-#: /src/schooltool/person/browser/f_person_filter.pt:7
-#: /src/schooltool/person/browser/person.py:543
-msgid "First name, last name or username"
+#: /src/schooltool/contact/browser/contact.py:618
+#: /src/schooltool/contact/browser/templates/f_contact_filter.pt:6
+msgid "First name and/or last name"
 msgstr ""
 
-#: /src/schooltool/contact/browser/contact.py:653
+#: /src/schooltool/contact/browser/contact.py:654
 #: /src/schooltool/email/browser/email.py:301
 #: /src/schooltool/email/browser/email.py:486
 #: /src/schooltool/email/browser/email.py:531
@@ -3966,10 +3965,6 @@ msgstr ""
 #: /src/schooltool/contact/browser/templates/f_confirm_delete_contact.pt:16
 #: /src/schooltool/contact/browser/templates/f_contact_view.pt:49
 msgid "Contact of"
-msgstr ""
-
-#: /src/schooltool/contact/browser/templates/f_contact_filter.pt:6
-msgid "First name and/or last name"
 msgstr ""
 
 #: /src/schooltool/contact/browser/templates/f_contact_view.pt:3
@@ -4340,11 +4335,26 @@ msgstr ""
 msgid "Add Section"
 msgstr ""
 
-#: /src/schooltool/course/browser/flourish.zcml:309
-#: /src/schooltool/course/browser/templates/f_section_view.pt:88
+#: /src/schooltool/course/browser/flourish.zcml:403
+#: /src/schooltool/course/browser/templates/f_section_view.pt:148
+msgid "Locations"
+msgstr ""
+
+#: /src/schooltool/course/browser/flourish.zcml:411
+#: /src/schooltool/course/browser/templates/f_section_view.pt:164
+#: /src/schooltool/resource/browser/flourish.zcml:108
+#: /src/schooltool/resource/browser/resource.py:411
+#: /src/schooltool/resource/resource.py:206
+#: /src/schooltool/resource/resource.py:232
+#: /src/schooltool/resource/types.py:93
+msgid "Equipment"
+msgstr ""
+
+#: /src/schooltool/course/browser/flourish.zcml:419
+#: /src/schooltool/course/browser/templates/f_section_view.pt:90
 #: /src/schooltool/dashboard/term.pt:16
 #: /src/schooltool/term/browser/templates/f_manage_years_overview.pt:5
-#: /src/schooltool/term/browser/term.py:760
+#: /src/schooltool/term/browser/term.py:764
 #: /src/schooltool/term/security.zcml:19
 msgid "Terms"
 msgstr ""
@@ -4448,7 +4458,23 @@ msgstr ""
 msgid "Add students"
 msgstr ""
 
-#: /src/schooltool/course/browser/section.py:1424
+#: /src/schooltool/course/browser/section.py:1380
+msgid "Current locations"
+msgstr ""
+
+#: /src/schooltool/course/browser/section.py:1381
+msgid "Add locations"
+msgstr ""
+
+#: /src/schooltool/course/browser/section.py:1404
+msgid "Current equipment"
+msgstr ""
+
+#: /src/schooltool/course/browser/section.py:1405
+msgid "Add equipment"
+msgstr ""
+
+#: /src/schooltool/course/browser/section.py:1469
 msgid "Extend ${section} to ${term}"
 msgstr ""
 
@@ -4767,6 +4793,22 @@ msgstr ""
 
 #: /src/schooltool/course/browser/templates/f_section_view.pt:140
 msgid "This section has no students"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/f_section_view.pt:149
+msgid "Edit locations for this section"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/f_section_view.pt:160
+msgid "This section has no locations"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/f_section_view.pt:165
+msgid "Edit equipment for this section"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/f_section_view.pt:176
+msgid "This section has no equipment"
 msgstr ""
 
 #: /src/schooltool/course/browser/templates/f_sections_related.pt:6
@@ -5964,6 +6006,11 @@ msgstr ""
 msgid "Password changed successfully"
 msgstr ""
 
+#: /src/schooltool/person/browser/f_person_filter.pt:7
+#: /src/schooltool/person/browser/person.py:543
+msgid "First name, last name or username"
+msgstr ""
+
 #: /src/schooltool/person/browser/f_person_filter.pt:20
 #: /src/schooltool/person/browser/f_person_table_filter.pt:39
 #: /src/schooltool/resource/browser/templates/f_resource_filter.pt:20
@@ -6320,16 +6367,8 @@ msgstr ""
 msgid "Resource Attributes"
 msgstr ""
 
-#: /src/schooltool/resource/browser/flourish.zcml:107
-#: /src/schooltool/resource/browser/resource.py:353
-#: /src/schooltool/resource/resource.py:206
-#: /src/schooltool/resource/resource.py:232
-#: /src/schooltool/resource/types.py:93
-msgid "Equipment"
-msgstr ""
-
-#: /src/schooltool/resource/browser/flourish.zcml:123
-#: /src/schooltool/resource/browser/resource.py:357
+#: /src/schooltool/resource/browser/flourish.zcml:124
+#: /src/schooltool/resource/browser/resource.py:415
 #: /src/schooltool/resource/resource.py:74
 #: /src/schooltool/resource/resource.py:204
 #: /src/schooltool/resource/resource.py:230

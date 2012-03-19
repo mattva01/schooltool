@@ -32,7 +32,7 @@ from schooltool.common import SchoolToolMessage as _
 
 
 class IBasicPerson(Interface):
-    """Marker interface for Lyceum specific person."""
+    """Marker interface for a basic person."""
 
     prefix = TextLine(
         title=_(u"Prefix"),
@@ -180,7 +180,7 @@ class IIntFieldDescription(IFieldDescription):
 
 class IFieldFilterVocabulary(IVocabularyTokenized):
     """Marker interface for vocabularies that give keys that are used
-    to filder demographics fields for the context.
+    to filter demographics fields for the context.
     """
 
 

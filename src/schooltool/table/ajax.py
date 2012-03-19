@@ -101,7 +101,7 @@ class Table(flourish.ajax.CompositeAJAXPart, TableContent):
                    table_formatter=self.table_formatter,
                    batch_size=self.batch_size,
                    prefix=self.__name__,
-                   css_classes={'table': 'data relationships-table'})
+                   css_classes={'table': 'data'})
 
     def update(self):
         self.updateFormatter()

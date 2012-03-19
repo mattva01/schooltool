@@ -701,6 +701,35 @@ class LoginDispatchView(BrowserView):
         self.request.response.redirect(nexturl)
 
 
+class FlourishLoginDispatchView(BrowserView):
+    implements(flourish.interfaces.IPage)
+
+    title = None
+    subtitle = None
+    has_header = True
+    page_class = ''
+    container_class = ''
+    template = None
+    page_template = None
+    content_template = None
+
+    def update(self):
+        nexturl = absoluteURL(
+            ISchoolToolCalendar(self.context), self.request)
+        self.request.response.redirect(nexturl)
+
+    def render(self, *args, **kw):
+        return ''
+
+    def __call__(self, *args, **kw):
+        self.update()
+        if self.request.response.getStatus() in [300, 301, 302, 303,
+                                                 304, 305, 307]:
+            return u''
+        result = self.render(*args, **kw)
+        return result
+
+
 class LogoutView(BrowserView):
     """Clears the authentication creds from the session"""
 

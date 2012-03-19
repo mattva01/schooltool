@@ -67,6 +67,9 @@ from schooltool.course.section import Section
 from schooltool.course.section import copySection
 from schooltool.course.browser.course import CoursesActiveTabMixin as SectionsActiveTabMixin
 from schooltool.person.interfaces import IPerson
+from schooltool.resource.browser.resource import EditLocationRelationships
+from schooltool.resource.browser.resource import EditEquipmentRelationships
+from schooltool.resource.interfaces import ILocation, IEquipment
 from schooltool.schoolyear.interfaces import ISchoolYear
 from schooltool.schoolyear.interfaces import ISchoolYearContainer
 from schooltool.schoolyear.browser.schoolyear import SchoolyearNavBreadcrumbs
@@ -1113,6 +1116,14 @@ class FlourishSectionView(DisplayForm):
     def has_learners(self):
         return bool(list(self.context.members))
 
+    def has_locations(self):
+        return bool([r for r in self.context.resources
+                     if ILocation(r, None) is not None])
+
+    def has_equipment(self):
+        return bool([r for r in self.context.resources
+                     if IEquipment(r, None) is not None])
+
 
 class FlourishSectionAddView(Form, SectionAddView):
 
@@ -1357,6 +1368,54 @@ class FlourishSectionLearnerView(EditPersonRelationships):
 
     def getCollection(self):
         return self.context.members
+
+
+class FlourishSectionLocationView(EditLocationRelationships):
+    """View for adding locations to a Section."""
+
+    @property
+    def title(self):
+        return self.context.title
+
+    current_title = _("Current locations")
+    available_title = _("Add locations")
+
+    def getCollection(self):
+        return self.context.resources
+
+    def getSelectedItems(self):
+        return [r for r in self.context.resources
+                if ILocation(r, None) is not None]
+
+    def getOmmitedItems(self):
+        items = self.getSelectedItems()
+        return [r for r in self.getAvailableItemsContainer().values()
+                if ILocation(r, None) is None
+                or r in items]
+
+
+class FlourishSectionEquipmentView(EditEquipmentRelationships):
+    """View for adding equipment to a Section."""
+
+    @property
+    def title(self):
+        return self.context.title
+
+    current_title = _("Current equipment")
+    available_title = _("Add equipment")
+
+    def getCollection(self):
+        return self.context.resources
+
+    def getSelectedItems(self):
+        return [r for r in self.context.resources
+                if IEquipment(r, None) is not None]
+
+    def getOmmitedItems(self):
+        items = self.getSelectedItems()
+        return [r for r in self.getAvailableItemsContainer().values()
+                if IEquipment(r, None) is None
+                or r in items]
 
 
 class FlourishSectionLinkageView(Page, SectionLinkageView):

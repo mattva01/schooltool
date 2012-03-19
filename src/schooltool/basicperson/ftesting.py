@@ -38,32 +38,3 @@ filename = os.path.join(dir, 'ftesting.zcml')
 basicperson_functional_layer = ZCMLLayer(filename,
                                   __name__,
                                   'basicperson_functional_layer')
-
-
-def registerSeleniumSetup():
-    try:
-        import selenium
-    except ImportError:
-        return
-    from schooltool.testing import registry
-    import schooltool.testing.selenium
-
-    def addPerson(browser, first_name, last_name, username, password):
-        browser.query.link('School').click()
-        browser.query.link('People').click()
-        browser.query.link('Person').click()
-        browser.query.name('form.widgets.first_name').type(first_name)
-        browser.query.name('form.widgets.last_name').type(last_name)
-        browser.query.name('form.widgets.username').type(username)
-        browser.query.name('form.widgets.password').type(password)
-        browser.query.name('form.widgets.confirm').type(password)
-        page = browser.query.tag('html')
-        browser.query.button('Submit').click()
-        browser.wait(lambda: page.expired)
-
-    registry.register('SeleniumHelpers',
-        lambda: schooltool.testing.selenium.registerBrowserUI(
-            'person.add', addPerson))
-
-registerSeleniumSetup()
-del registerSeleniumSetup

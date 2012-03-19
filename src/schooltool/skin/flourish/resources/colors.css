@@ -372,7 +372,7 @@ tbody tr {
     border-bottom-color: #cccccc;
 }
 
-table.relationships-table tbody tr:hover,
+table.data tbody tr:hover,
 table.highlight-rows tbody tr:hover {
     background-color: #dfdcd9;
 }

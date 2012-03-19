@@ -233,14 +233,18 @@ class RelationshipSchema(object):
         >>> Membership = RelationshipSchema(URIMembership,
         ...                     member=URIMember, group=URIGroup)
 
-    Then you can create and break relationships by writing
+    Then you can create, query and break relationships by writing
 
         >>> Membership(member=a, group=b)
+        >>> Membership.query(group=b)
+        [a]
         >>> Membership.unlink(member=a, group=b)
 
     instead of having to explicitly say
 
         >>> relate(URIMembership, (a, URIMember), (b, URIGroup))
+        >>> getRelatedObjects(b, URIMember, rel_type=URIMembership)
+        [a]
         >>> unrelate(URIMembership, (a, URIMember), (b, URIGroup))
 
     That's it.
@@ -264,6 +268,17 @@ class RelationshipSchema(object):
     def unlink(self, **parties):
         """Break a relationship."""
         self._doit(unrelate, **parties)
+
+    def query(self, **party):
+        """Retrieve relationship targets."""
+        if len(party) != 1:
+            raise TypeError("A single party must be provided.")
+        roles = list(self.roles.keys())
+        my_role_key = party.keys()[0]
+        roles.remove(my_role_key)
+        other_role = self.roles[roles[0]]
+        obj = party.values()[0]
+        return getRelatedObjects(obj, other_role, rel_type=self.rel_type)
 
     def _doit(self, fn, **parties):
         """Extract and validate parties from keyword arguments and call fn."""

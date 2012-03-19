@@ -2,13 +2,43 @@
 CHANGES
 =======
 
-2.0.3 (unreleased)
+2.0.4 (unreleased)
 ------------------
 
-- tab hiding (https://launchpad.net/bugs/938810)
+
+
+2.0.3 (2012-03-19)
+------------------
+
+New features
+++++++++++++
 
 - Dynamic javascript person and other tables
+- Can search persons and contacts by full name or partial names
+- Add all search results button in relationship views
+- Photos for persons (https://launchpad.net/bugs/683316)
+- Added ID cards for persons and groups 
+- Tab hiding (https://launchpad.net/bugs/938810)
+- Sections need locations (https://launchpad.net/bugs/932920)
 - Update jQuery to 1.7.1
+- Add more options from paster to start-schooltool-instance.
+- Updated translations, added Occitan (oc).
+
+
+Bugfixes
+++++++++
+
+- Server tab not highlighted, no breadcrumbs (https://launchpad.net/bugs/868435)
+- Make (weekly) schedules only contain schooldays (https://launchpad.net/bugs/930312)
+- Prevented duplicated demographics field IDs (https://launchpad.net/bugs/783887)
+- Gradebook popup fixes (https://launchpad.net/bugs/886257)
+
+Development tools
++++++++++++++++++
+
+- Selenium testing improvements
+- Selenium browser extensions
+
 
 2.0.2 (2012-02-14)
 ------------------

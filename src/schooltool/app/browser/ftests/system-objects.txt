@@ -57,7 +57,7 @@ The list of persons should have a disabled checkbox next to the manager user
 The list of groups should have a disabled checkbox next to the default groups
 
     >>> manager_browser.open('http://localhost/schoolyears/2005-2006/groups')
-    >>> for td in analyze.queryHTML('//table[contains(@class, "data")]//tr/td', manager_browser.contents):
+    >>> for td in analyze.queryHTML('//table[@class="data"]//tr/td', manager_browser.contents):
     ...     print td
     <td>
           <input type="checkbox" name="delete.a-group" id="delete.a-group" /></td>
