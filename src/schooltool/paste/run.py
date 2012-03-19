@@ -53,9 +53,14 @@ def parse_args():
                       action="store_true",
                       dest="show_status",
                       help="Show the status of the (presumably daemonized) server")
-    parser.add_option("--user",
-                      dest="user",
-                      help="Run %prog as user. (If started as root)")
+    parser.add_option('--user',
+                      dest='set_user',
+                      metavar="USERNAME",
+                      help="Set the user (usually only possible when run as root)")
+    parser.add_option('--group',
+                      dest='set_group',
+                      metavar="GROUP",
+                      help="Set the group (usually only possible when run as root)")
     options, args = parser.parse_args()
 
     if len(args) != 1:
@@ -139,8 +144,10 @@ def main():
         extra_options.append('--stop-daemon')
     if options.show_status:
         extra_options.append('--status')
-    if options.user:
-        extra_options.append('--user=%s' % options.user)
+    if options.set_user:
+        extra_options.append('--user=%s' % options.set_user)
+    if options.set_group:
+        extra_options.append('--group=%s' % options.set_group)
     if (options.start_daemon or
         options.stop_daemon or
         options.show_status):
