@@ -190,3 +190,6 @@ class IRelationshipSchema(Interface):
 
     def unlink(**parties):
         """Break a relationship."""
+
+    def query(**party):
+        """Retrieve relationship targets."""
