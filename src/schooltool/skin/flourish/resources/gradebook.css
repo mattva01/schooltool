@@ -115,7 +115,7 @@
 .grades thead th, .grades tbody td {
     border-left-style: solid;
     border-left-width: 1px;
-    width: 40px;
+    width: 41px;
     overflow: hidden;
     box-sizing: border-box;
     -moz-box-sizing: border-box;

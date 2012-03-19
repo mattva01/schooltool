@@ -195,7 +195,7 @@ function updateGradebookPartsWidths(form) {
         });
     }
     var grades_visible_w = gradebook_w - (students_w + totals_w)
-    var grades_column_count = grades.find('th').not('.placeholder').length;
+    var grades_column_count = grades.find('tr').first().find('th').not('.placeholder').length;
     var grades_margin_left = students_w;
     var grades_margin_right = totals_w;
     grades.css({
