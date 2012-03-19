@@ -22,7 +22,9 @@ Bugfixes
 
 - Server tab not highlighted, no breadcrumbs (https://launchpad.net/bugs/868435)
 - Make (weekly) schedules only contain schooldays (https://launchpad.net/bugs/930312)
-- Prevented duplicated demographics field IDs (LP: #783887)
+- Prevented duplicated demographics field IDs (https://launchpad.net/bugs/783887)
+
+- Updated translations, added Occitan (oc).
 
 
 2.0.2 (2012-02-14)
