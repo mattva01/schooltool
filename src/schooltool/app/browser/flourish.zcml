@@ -73,7 +73,7 @@
       for="schooltool.person.interfaces.IPerson"
       name="logindispatch"
       layer="schooltool.skin.flourish.IFlourishLayer"
-      class="schooltool.app.browser.app.LoginDispatchView"
+      class="schooltool.app.browser.app.FlourishLoginDispatchView"
       permission="zope.Public"
       />
 
@@ -124,14 +124,6 @@
       manager="schooltool.skin.flourish.page.ISecondaryNavigationManager"
       view="schooltool.app.browser.app.LoginView"
       />
-
-<!--  <flourish:viewlet
-      name="breadcrumbs"
-      after="login"
-      manager="schooltool.skin.flourish.page.ISecondaryNavigationManager"
-      class="schooltool.app.browser.app.BreadcrumbViewlet"
-      permission="zope.Public"
-      /> -->
 
   <flourish:page_breadcrumbs
       class="schooltool.skin.flourish.Empty"
@@ -279,6 +271,12 @@
       permission="schooltool.edit"
       />
 
+  <flourish:activeViewlet
+      name="manage_site"
+      manager="schooltool.skin.flourish.page.IHeaderNavigationManager"
+      view=".app.FlourishErrorsView"
+      />
+
   <zope:adapter factory=".app.ErrorsSettingsAdapter" />
 
   <flourish:page
@@ -288,6 +286,40 @@
       title="Server"
       subtitle="Error"
       content_template="templates/f_errors_entry.pt"
+      permission="schooltool.edit"
+      />
+
+  <flourish:viewlet
+      name="hide_unhide_tabs.html"
+      after="errors"
+      title="Tabs"
+      class="schooltool.skin.flourish.page.LinkViewlet"
+      manager="schooltool.app.browser.app.ManageSiteLinks"
+      permission="schooltool.edit"
+      />
+
+  <flourish:page
+      name="hide_unhide_tabs.html"
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      class=".app.FlourishHideUnhideTabsView"
+      title="Server"
+      subtitle="Tabs"
+      content_template="templates/f_hide_unhide_tabs.pt"
+      permission="schooltool.edit"
+      />
+
+  <flourish:activeViewlet
+      name="manage_site"
+      manager="schooltool.skin.flourish.page.IHeaderNavigationManager"
+      view=".app.FlourishHideUnhideTabsView"
+      />
+
+  <flourish:viewlet
+      name="what-is-this"
+      class="schooltool.skin.flourish.page.Related"
+      template="templates/f_hide_unhide_tabs_related.pt"
+      view=".app.FlourishHideUnhideTabsView"
+      manager="schooltool.skin.flourish.page.IPageRelatedManager"
       permission="schooltool.edit"
       />
 
@@ -466,6 +498,39 @@
       subtitle="Responsible parties"
       />
 
+  <flourish:viewlet
+      name="available_table"
+      class="schooltool.basicperson.browser.person.BasicPersonAddRelationshipTable"
+      for="schooltool.app.interfaces.IAsset"
+      manager="schooltool.skin.flourish.interfaces.IAJAXParts"
+      view=".app.FlourishLeaderView"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="add_all_button"
+      after="table"
+      manager=".app.RelationshipAddTableMixin"
+      class="schooltool.app.browser.app.AddAllResultsButton"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="filter"
+      manager=".app.RelationshipRemoveTableMixin"
+      class="schooltool.table.table.DoNotFilter"
+      permission="zope.Public"
+      />
+
+  <flourish:viewlet
+      name="current_table"
+      class="schooltool.basicperson.browser.person.BasicPersonRemoveRelationshipTable"
+      for="schooltool.app.interfaces.IAsset"
+      manager="schooltool.skin.flourish.interfaces.IAJAXParts"
+      view=".app.FlourishLeaderView"
+      permission="schooltool.view"
+      />
+
   <flourish:content
       class="schooltool.app.browser.app.ContentTitle"
       permission="schooltool.view"
@@ -610,6 +675,22 @@
       class=".overlay.FlourishCalendarSelectionView"
       permission="schooltool.editCalendarOverlays"
       subtitle="Shown Calendars"
+      />
+
+  <flourish:viewlet
+      name="available_table"
+      class=".overlay.CalendarAddRelationshipTable"
+      manager="schooltool.skin.flourish.interfaces.IAJAXParts"
+      view=".overlay.FlourishCalendarSelectionView"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="current_table"
+      class=".overlay.CalendarRemoveRelationshipTable"
+      manager="schooltool.skin.flourish.interfaces.IAJAXParts"
+      view=".overlay.FlourishCalendarSelectionView"
+      permission="schooltool.view"
       />
 
   <flourish:page_breadcrumbs

@@ -11,6 +11,58 @@
            schooltool.skin.flourish.interfaces.IFlourishLayer"
       factory=".contact.FlourishContactTableFormatter " />
 
+  <flourish:viewlet
+      name="table"
+      for="schooltool.contact.interfaces.IContactContainer"
+      class=".contact.ContactTable"
+      manager="schooltool.skin.flourish.interfaces.IAJAXParts"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="filter"
+      before="batch table"
+      class=".contact.ContactTableFilter"
+      render="template"
+      manager=".contact.ContactTable"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="done"
+      before="table batch"
+      after="filter"
+      manager=".contact.ContactTable"
+      view=".contact.FlourishContactContainerView"
+      class="schooltool.app.browser.app.ManageItemDoneLink"
+      render="template"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="available_table"
+      class="schooltool.contact.browser.relationship.ContactAddRelationshipTable"
+      manager="schooltool.skin.flourish.interfaces.IAJAXParts"
+      view=".relationship.EditContactRelationships"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="add_all_button"
+      after="table"
+      manager=".relationship.ContactAddRelationshipTable"
+      class=".relationship.AddAllContactResultsButton"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="current_table"
+      class="schooltool.contact.browser.relationship.ContactRemoveRelationshipTable"
+      manager="schooltool.skin.flourish.interfaces.IAJAXParts"
+      view=".relationship.EditContactRelationships"
+      permission="schooltool.view"
+      />
+
   <zope:adapter
       for="schooltool.contact.interfaces.IContactContainer
            schooltool.skin.flourish.interfaces.IFlourishLayer"
@@ -88,6 +140,14 @@
       />
 
   <flourish:viewlet
+      name="details"
+      manager="schooltool.skin.flourish.page.IPageContentManager"
+      class=".contact.FlourishContactDetails"
+      view=".contact.FlourishContactView"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
       name="contact-actions-links"
       title="Actions"
       for="schooltool.contact.interfaces.IContact"
@@ -145,7 +205,7 @@
       class="schooltool.skin.flourish.page.Related"
       template="templates/f_contacts_related.pt"
       for="schooltool.contact.interfaces.IContactContainer"
-      view="schooltool.skin.flourish.containers.TableContainerView"
+      view="schooltool.table.table.TableContainerView"
       manager="schooltool.skin.flourish.page.IPageRelatedManager"
       permission="schooltool.view"
       />
@@ -157,6 +217,14 @@
       subtitle="Contact Information"
       for="schooltool.contact.basicperson.IBoundContact"
       class=".basicperson.FlourishBoundContactView"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="details"
+      manager="schooltool.skin.flourish.page.IPageContentManager"
+      class=".basicperson.FlourishBoundContactDetails"
+      view=".basicperson.FlourishBoundContactView"
       permission="schooltool.view"
       />
 

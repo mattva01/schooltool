@@ -19,16 +19,23 @@
 """
 Basic person browser views.
 """
+from time import mktime
+from datetime import datetime
+
 from zope.interface import Interface, implements
 from zope.container.interfaces import INameChooser
 from zope.app.form.browser.interfaces import ITerms
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
+from zope.cachedescriptors.property import Lazy
 from zope.component import adapts
 from zope.component import getUtility, queryMultiAdapter, getMultiAdapter
+from zope.datetime import time, rfc1123_date
+from zope.dublincore.interfaces import IZopeDublinCore
 from zope.i18n import translate
 from z3c.form import form, field, button, validator
 from z3c.form.interfaces import DISPLAY_MODE
 from zope.interface import invariant, Invalid
+from zope.publisher.interfaces import NotFound
 from zope.schema import Password, TextLine, Choice, List, Object
 from zope.schema import ValidationError
 from zope.schema.interfaces import ITitledTokenizedTerm, IField
@@ -36,15 +43,18 @@ from zope.traversing.browser.absoluteurl import absoluteURL
 from zope.viewlet.viewlet import ViewletBase
 from zope.security.checker import canAccess
 
+from reportlab.lib import pagesizes
+from reportlab.lib import units
 import z3c.form.interfaces
 from z3c.form.validator import SimpleFieldValidator
-from zc.table import table
+import zc.table.table
 
-import schooltool.skin.flourish.page
-import schooltool.skin.flourish.containers
-import schooltool.skin.flourish.breadcrumbs
 from schooltool.app.browser.app import RelationshipViewBase
-from schooltool.app.browser.app import FlourishRelationshipViewBase
+from schooltool.app.browser.app import EditRelationships
+from schooltool.app.browser.app import RelationshipAddTableMixin
+from schooltool.app.browser.app import RelationshipRemoveTableMixin
+from schooltool.app.browser.report import ReportPDFView
+from schooltool.app.browser.report import DefaultPageTemplate
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.common.inlinept import InlineViewPageTemplate
@@ -52,9 +62,10 @@ from schooltool.common.inlinept import InheritTemplate
 from schooltool.basicperson.interfaces import IDemographics
 from schooltool.basicperson.interfaces import IDemographicsFields
 from schooltool.basicperson.interfaces import IBasicPerson
+from schooltool.contact.interfaces import IContactable
 from schooltool.group.interfaces import IGroupContainer
 from schooltool.person.interfaces import IPerson, IPersonFactory
-from schooltool.person.browser.person import PersonTableFormatter
+from schooltool.person.browser.person import PersonTable, PersonTableFormatter
 from schooltool.schoolyear.interfaces import ISchoolYearContainer, ISchoolYear
 from schooltool.skin.containers import TableContainerView
 from schooltool.skin import flourish
@@ -62,8 +73,8 @@ from schooltool.skin.flourish.interfaces import IViewletManager
 from schooltool.skin.flourish.form import FormViewlet
 from schooltool.skin.flourish.viewlet import Viewlet, ViewletManager
 from schooltool.skin.flourish.content import ContentProvider
+from schooltool.table import table
 from schooltool.table.interfaces import ITableFormatter
-from schooltool.table.table import DependableCheckboxColumn
 from schooltool.table.catalog import IndexedLocaleAwareGetterColumn
 from schooltool.table.interfaces import IIndexedColumn
 from schooltool.report.browser.report import RequestReportDownloadDialog
@@ -90,7 +101,7 @@ class BasicPersonContainerView(TableContainerView):
         return syc
 
 
-class DeletePersonCheckboxColumn(DependableCheckboxColumn):
+class DeletePersonCheckboxColumn(table.DependableCheckboxColumn):
 
     def __init__(self, *args, **kw):
         kw = dict(kw)
@@ -100,11 +111,15 @@ class DeletePersonCheckboxColumn(DependableCheckboxColumn):
     def hasDependents(self, item):
         if self.disable_items and item.__name__ in self.disable_items:
             return True
-        return DependableCheckboxColumn.hasDependents(self, item)
+        return table.DependableCheckboxColumn.hasDependents(self, item)
 
 
-class FlourishBasicPersonContainerView(flourish.containers.TableContainerView):
+class FlourishBasicPersonContainerView(flourish.page.Page):
     """A Person Container view."""
+
+    content_template = InlineViewPageTemplate('''
+      <div tal:content="structure context/schooltool:content/ajax/table" />
+    ''')
 
     @property
     def done_link(self):
@@ -169,6 +184,14 @@ class IPersonAddForm(IBasicPerson):
             raise Invalid(_(u"Passwords do not match"))
 
 
+class IPhotoField(Interface):
+
+    photo = flourish.widgets.Photo(
+        title=_('Photo'),
+        description=_('An image file that will be converted to a JPEG no larger than 99x132 pixels (3:4 aspect ratio). Uploaded images must be JPEG or PNG files smaller than 10 MB'),
+        required=False)
+
+
 class PersonAddFormAdapter(object):
     implements(IPersonAddForm)
     adapts(IBasicPerson)
@@ -187,6 +210,20 @@ class PersonAddFormAdapter(object):
     def __getattr__(self, name):
         return getattr(self.context, name)
 
+
+class PhotoFieldFormAdapter(object):
+
+    adapts(IBasicPerson)
+    implements(IPhotoField)
+
+    def __init__(self, context):
+        self.__dict__['context'] = context
+
+    def __setattr__(self, name, value):
+        setattr(self.context, name, value)
+
+    def __getattr__(self, name):
+        return getattr(self.context, name)
 
 class UsernameAlreadyUsed(ValidationError):
     __doc__ = _("This username is already in use")
@@ -500,7 +537,10 @@ class FlourishPersonEditView(flourish.page.Page, PersonEditView):
 
     def update(self):
         self.buildFieldsetGroups()
-        PersonEditView.update(self)
+        self.fields = field.Fields(IBasicPerson)
+        self.fields += field.Fields(IPhotoField)
+        self.fields += self.generateExtraFields()
+        form.EditForm.update(self)
 
     @button.buttonAndHandler(_('Apply'), name='apply')
     def handleApply(self, action):
@@ -540,7 +580,7 @@ class FlourishPersonEditView(flourish.page.Page, PersonEditView):
                 ['prefix', 'first_name', 'middle_name', 'last_name',
                  'suffix', 'preferred_name']),
             'details': (
-                _('Details'), ['gender', 'birth_date']),
+                _('Details'), ['gender', 'birth_date', 'photo']),
             'demographics': (
                 _('Demographics'), list(self.generateExtraFields())),
             }
@@ -641,16 +681,19 @@ class PersonAdvisorView(RelationshipViewBase):
         return self.context.advisors
 
 
-class FlourishPersonAdvisorView(FlourishRelationshipViewBase):
+class EditPersonRelationships(EditRelationships):
+
+    def getAvailableItemsContainer(self):
+        return ISchoolToolApplication(None)['persons']
+
+
+class FlourishPersonAdvisorView(EditPersonRelationships):
 
     current_title = _('Current advisors')
     available_title = _('Available advisors')
 
     def getSelectedItems(self):
         return self.context.advisors
-
-    def getAvailableItemsContainer(self):
-        return ISchoolToolApplication(None)['persons']
 
     def getCollection(self):
         return self.context.advisors
@@ -680,16 +723,13 @@ class PersonAdviseeView(RelationshipViewBase):
         return self.context.advisees
 
 
-class FlourishPersonAdviseeView(FlourishRelationshipViewBase):
+class FlourishPersonAdviseeView(EditPersonRelationships):
 
     current_title = _("Current advisees")
     available_title = _("Available advisees")
 
     def getSelectedItems(self):
         return self.context.advisees
-
-    def getAvailableItemsContainer(self):
-        return ISchoolToolApplication(None)['persons']
 
     def getCollection(self):
         return self.context.advisees
@@ -708,20 +748,6 @@ class FlourishAdvisoryViewlet(Viewlet):
 
     template = ViewPageTemplateFile('templates/f_advisoryViewlet.pt')
     body_template = None
-
-    def getTable(self, items):
-        persons = ISchoolToolApplication(None)['persons']
-        result = getMultiAdapter((persons, self.request), ITableFormatter)
-        result.setUp(table_formatter=table.StandaloneFullFormatter, items=items)
-        return result
-
-    @property
-    def advisors_table(self):
-        return self.getTable(list(self.context.advisors))
-
-    @property
-    def advisees_table(self):
-        return self.getTable(list(self.context.advisees))
 
     @property
     def canModify(self):
@@ -790,6 +816,15 @@ class FlourishGeneralViewlet(FormViewlet):
     def update(self):
         self.fields = self.getFields()
         super(FlourishGeneralViewlet, self).update()
+
+    def has_photo(self):
+        return self.context.photo is not None
+
+    def table_class(self):
+        result = 'person-view-demographics'
+        if self.has_photo():
+            result += ' show-photo'
+        return result
 
 
 ###############  Base class of all group-aware add views ################
@@ -865,6 +900,9 @@ class PersonAddViewBase(PersonAddFormBase):
                 group = data.get('group')
         if group is not None:
             person.groups.add(group)
+        advisor = data.get('advisor')
+        if advisor is not None:
+            person.advisors.add(advisor)
         self._person = person
         return person
 
@@ -894,9 +932,11 @@ class FlourishPersonAddView(PersonAddViewBase):
         self.widgets['birth_date'].addClass('birth-date-field')
 
     def getBaseFields(self):
+        result = field.Fields(IPersonAddForm)
         if self.group_id:
-            return field.Fields(IPersonAddForm).omit('group')
-        return field.Fields(IPersonAddForm)
+            result = result.omit('group')
+        result += field.Fields(IPhotoField)
+        return result
 
     def buildFieldsetGroups(self):
         relationship_fields = ['advisor']
@@ -908,7 +948,7 @@ class FlourishPersonAddView(PersonAddViewBase):
                 ['prefix', 'first_name', 'middle_name', 'last_name',
                  'suffix', 'preferred_name']),
             'details': (
-                _('Details'), ['gender', 'birth_date']),
+                _('Details'), ['gender', 'birth_date', 'photo']),
             'demographics': (
                 _('Demographics'), list(self.getDemoFields())),
             'relationships': (
@@ -998,6 +1038,43 @@ class PersonTitle(ContentProvider):
         return "%s %s" % (person.first_name, person.last_name)
 
 
+class BasicPersonTable(PersonTable):
+
+    def __init__(self, *args, **kw):
+        PersonTable.__init__(self, *args, **kw)
+        self.css_classes = {'table': ' data persons-table'}
+
+    def columns(self):
+        cols = list(reversed(PersonTable.columns(self)))
+        username = IndexedLocaleAwareGetterColumn(
+            index='__name__',
+            name='username',
+            title=_(u'Username'),
+            getter=lambda i, f: i.__name__,
+            subsort=True)
+        return cols + [username]
+
+
+class PersonListTable(BasicPersonTable):
+
+    @property
+    def source(self):
+        return ISchoolToolApplication(None)['persons']
+
+    def items(self):
+        return self.indexItems(self.context)
+
+
+class BasicPersonAddRelationshipTable(RelationshipAddTableMixin,
+                                      BasicPersonTable):
+    pass
+
+
+class BasicPersonRemoveRelationshipTable(RelationshipRemoveTableMixin,
+                                         BasicPersonTable):
+    pass
+
+
 class BasicPersonTableFormatter(PersonTableFormatter):
 
     def columns(self):
@@ -1018,7 +1095,7 @@ class BasicPersonTableFormatter(PersonTableFormatter):
             batch_start=self.batch.start, batch_size=self.batch.size,
             sort_on=self._sort_on,
             prefix=self.prefix)
-        formatter.cssClasses['table'] = 'persons-table relationships-table'
+        formatter.cssClasses['table'] = 'data persons-table'
         return formatter()
 
 
@@ -1063,6 +1140,200 @@ class FlourishRequestPersonXMLExportView(RequestReportDownloadDialog):
         return absoluteURL(self.context, self.request) + '/person_export.xml'
 
 
+class FlourishRequestPersonIDCardView(RequestReportDownloadDialog):
+
+    def nextURL(self):
+        return absoluteURL(self.context, self.request) + '/person_id_card.pdf'
+
+
+class IDCardsPageTemplate(DefaultPageTemplate):
+
+    template = ViewPageTemplateFile('templates/f_id_cards_template.pt',
+                                    content_type="text/xml")
+
+
+class FlourishPersonIDCardsViewBase(ReportPDFView):
+
+    template=ViewPageTemplateFile('templates/f_person_id_cards.pt')
+    title = _('ID Cards')
+    COLUMNS = 2
+    ROWS = 4
+    # All of the following are cm
+    CARD = {
+        'height': 5.4,
+        'width': 8.57,
+        }
+    TITLE = {
+        'height': 1.1,
+        'padding': 0.06, # from the edge of the title frame
+        }
+    DEMOGRAPHICS = {
+        'height': 3.2,
+        'margin-left': 0.55, # from the edge of the card
+        'margin-bottom': 0.75, # from the edge of the card
+        'width': 5.05,
+        }
+    PHOTO = {
+        'height': 3.2,
+        'width': 2.4,
+        }
+    FOOTER = {
+        'height': 0.5,
+        }
+    LEFT_BASE = 1.7
+    TOP_BASE = 7.3
+    COLUMN_WIDTH = 9.6
+    ROW_HEIGHT = 6.1
+
+    def __init__(self, *args, **kw):
+        super(FlourishPersonIDCardsViewBase, self).__init__(*args, **kw)
+        app = ISchoolToolApplication(None)
+        preferences = IApplicationPreferences(app)
+        self.schoolName = preferences.title
+
+    @property
+    def top(self):
+        page_height = self.pageSize[1]
+        return (page_height/units.cm) - self.TOP_BASE
+
+    @property
+    def left(self):
+        return self.LEFT_BASE
+
+    def persons(self):
+        """Returns a list of getPersonData calls"""
+        raise NotImplementedError('do this in subclass')
+
+    def getPersonData(self, person):
+        demographics = IDemographics(person)
+        contact_title = None
+        contact_phone = None
+        contacts = list(IContactable(person).contacts)
+        if contacts:
+            contact = contacts[0]
+            contact_title = ' '.join([contact.first_name,
+                                      contact.last_name])
+            phones = [
+                contact.home_phone,
+                contact.work_phone,
+                contact.mobile_phone,
+                ]
+            if phones:
+                contact_phone = phones[0]
+        return {
+            'title': ' '.join([person.first_name, person.last_name]),
+            'username': person.username,
+            'ID': demographics.get('ID'),
+            'birth_date': person.birth_date,
+            'contact_title': contact_title,
+            'contact_phone': contact_phone,
+            'photo': person.photo,
+            }
+
+    def titleVerticalAlign(self, person):
+        result = 0
+        if len(person['title']) < 44:
+            result = 0.25
+        return '%fcm' % result
+
+    @Lazy
+    def total_cards_in_page(self):
+        return self.COLUMNS * self.ROWS
+
+    def insertBreak(self, repeat):
+        return repeat['person'].number() % self.total_cards_in_page  == 0
+
+    def personFrame(self, repeat):
+        return repeat['person'].index() % self.total_cards_in_page
+
+    def cards(self):
+        result = []
+        for card_index in range(self.total_cards_in_page):
+            card_column = card_index % self.COLUMNS
+            card_row = card_index / self.COLUMNS
+            card_x1 = self.left + (self.COLUMN_WIDTH * card_column)
+            card_y1 = self.top - (self.ROW_HEIGHT * card_row)
+            card_info = {
+                'index': card_index,
+                'x1': card_x1,
+                'y1': card_y1,
+                'height': self.CARD['height'],
+                'width': self.CARD['width'],
+                }
+            result.append(card_info)
+        return result
+
+    @Lazy
+    def cardFrames(self):
+        result = {}
+        for card_info in self.cards():
+            info = {
+                'outter': self.getOutterFrame(card_info),
+                'title': self.getTitleFrame(card_info),
+                'demographics': self.getDemographicsFrame(card_info),
+                'footer': self.getFooterFrame(card_info),
+                }
+            result[card_info['index']] = info
+        return result
+
+    def getOutterFrame(self, card_info):
+        frame_info = card_info.copy()
+        frame_info['id'] = 'outter_%d' % card_info['index']
+        frame_info['maxWidth'] = card_info['width']
+        frame_info['maxHeight'] = card_info['height']
+        return frame_info
+
+    def getTitleFrame(self, card_info):
+        y1 = card_info['y1'] + (card_info['height'] - self.TITLE['height'])
+        return {
+            'id': 'title_%d' % card_info['index'],
+            'x1': card_info['x1'],
+            'y1': y1,
+            'width': card_info['width'],
+            'maxWidth': card_info['width'] - self.TITLE['padding'],
+            'height': self.TITLE['height'],
+            'maxHeight': self.TITLE['height'] - self.TITLE['padding'],
+            }
+
+    def getDemographicsFrame(self, card_info):
+        demo_info = self.DEMOGRAPHICS
+        x1 = card_info['x1'] + demo_info['margin-left']
+        y1 = card_info['y1'] +  demo_info['margin-bottom']
+        return {
+            'id': 'demographics_%d' % card_info['index'],
+            'x1': x1,
+            'y1': y1,
+            'width': demo_info['width'],
+            'maxWidth': demo_info['width'],
+            'height': demo_info['height'],
+            'maxHeight': demo_info['height'],
+            }
+
+    def getFooterFrame(self, card_info):
+        x1 = card_info['x1']
+        y1 = card_info['y1']
+        return {
+            'id': 'footer_%d' % card_info['index'],
+            'x1': x1,
+            'y1': y1,
+            'width': card_info['width'],
+            'maxWidth': card_info['width'],
+            'height': self.FOOTER['height'],
+            'maxHeight': self.FOOTER['height'],
+            }
+
+
+class FlourishPersonIDCardView(FlourishPersonIDCardsViewBase):
+
+    @property
+    def title(self):
+        return _('ID Card: ${person}',
+                 mapping={'person': self.context.title})
+
+    def persons(self):
+        return [self.getPersonData(self.context)]
+
+
 def getUserViewlet(context, request, view, manager, name):
     principal = request.principal
     user = IPerson(principal, None)
@@ -1080,3 +1351,35 @@ def getPersonActiveViewlet(person, request, view, manager):
         return u"home"
     return flourish.page.getParentActiveViewletName(
         person, request, view, manager)
+
+
+class PhotoView(flourish.page.Page):
+
+    def __call__(self):
+        photo = self.context.photo
+        if photo is None:
+            raise NotFound(self.context, u'photo', self.request)
+        self.request.response.setHeader('Content-Type', photo.mimeType)
+        self.request.response.setHeader('Content-Length', photo.size)
+        try:
+            modified = IZopeDublinCore(self.context).modified
+        except TypeError:
+            modified=None
+        if modified is not None and isinstance(modified,datetime):
+            header= self.request.getHeader('If-Modified-Since', None)
+            lmt = long(mktime(modified.timetuple()))
+            if header is not None:
+                header = header.split(';')[0]
+                try:
+                    mod_since=long(time(header))
+                except:
+                    mod_since=None
+                if mod_since is not None:
+                    if lmt <= mod_since:
+                        self.request.response.setStatus(304)
+                        return ''
+            self.request.response.setHeader('Last-Modified',
+                                            rfc1123_date(lmt))
+        f = photo.open('r')
+        result = f.read()
+        return result

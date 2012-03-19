@@ -164,6 +164,6 @@ upload:
 .PHONY: ubuntu-environment
 ubuntu-environment:
 	sudo apt-get install bzr build-essential gettext enscript ttf-liberation \
-	    python-all-dev python-virtualenv \
+	    python-all-dev python-virtualenv ttf-ubuntu-font-family \
 	    libicu-dev libxslt1-dev libfreetype6-dev libjpeg62-dev
 

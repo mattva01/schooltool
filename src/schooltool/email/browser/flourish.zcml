@@ -30,7 +30,14 @@
       class="schooltool.email.browser.email.FlourishEmailContainerView"
       title="Server"
       subtitle="Outgoing Email"
-      content_template="templates/f_email_container.pt"
+      permission="schooltool.edit"
+      />
+
+  <flourish:viewlet
+      name="details"
+      manager="schooltool.skin.flourish.page.IPageContentManager"
+      class=".email.FlourishEmailContainerDetails"
+      view=".email.FlourishEmailContainerView"
       permission="schooltool.edit"
       />
 

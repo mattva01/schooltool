@@ -215,3 +215,28 @@ def unindexDocSubscriber(event):
     catalogs = ICatalogs(app)
     for entry in catalogs.values():
         entry.catalog.unindex_doc(obj_id)
+
+
+def appendGlobbing(text):
+    words = filter(None, text.split(' '))
+    return ' '.join([word.endswith('*') and word or ('%s*' % word)
+                     for word in words])
+
+
+def buildQueryString(text):
+    terms = []
+    parts = text.lower().split('"')
+    for i, part in enumerate(parts):
+        if i % 2 == 0:
+            # before quote
+            if not part:
+                continue
+            alternatives = [term.strip()
+                            for term in part.split(',')]
+            alternatives = map(appendGlobbing, alternatives)
+            alternatives = filter(None, alternatives)
+            terms.append(' or '.join(alternatives))
+        else:
+            # insert text inside quotes verbatim
+            terms.append('"%s"' % part)
+    return ' '.join(terms)

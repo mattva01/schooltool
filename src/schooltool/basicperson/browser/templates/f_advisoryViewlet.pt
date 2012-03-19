@@ -13,12 +13,16 @@
                i18n:attributes="alt" />
         </a>
       </h3>
-      <div tal:condition="python: len(list(view.context.advisors))"
-           tal:replace="structure view/advisors_table/render" />
-      <h3 tal:condition="python: not len(list(view.context.advisors))"
-         i18n:translate="">
-        The person has no advisors.
-      </h3>
+
+      <tal:block define="has_advisors python:bool(len(list(view.context.advisors)))">
+        <!-- XXX: need a shorthand to access ajax parts -->
+        <div tal:condition="has_advisors"
+             tal:content="structure view/view/view/providers/ajax/view/context/advisors/person_table"/>
+        <h3 tal:condition="not:has_advisors"
+           i18n:translate="">
+          The person has no advisors.
+        </h3>
+      </tal:block>
     </div>
     <div>
       <h3>
@@ -32,12 +36,15 @@
                i18n:attributes="alt" />
         </a>
       </h3>
-      <div tal:condition="python: len(list(view.context.advisees))"
-           tal:replace="structure view/advisees_table/render" />
-      <h3 tal:condition="python: not len(list(view.context.advisees))"
-         i18n:translate="">
-        The person has no advisees.
-      </h3>
+      <tal:block define="has_advisees python:bool(len(list(view.context.advisors)))">
+        <!-- XXX: need a shorthand to access ajax parts -->
+        <div tal:condition="has_advisees"
+             tal:content="structure view/view/view/providers/ajax/view/context/advisees/person_table"/>
+        <h3 tal:condition="not:has_advisees"
+            i18n:translate="">
+          The person has no advisees.
+        </h3>
+      </tal:block>
     </div>
   </div>
 </div>

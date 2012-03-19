@@ -42,7 +42,7 @@ from zope.traversing.interfaces import IContainmentRoot
 from schooltool.app.overlay import ICalendarOverlayInfo
 from schooltool.app.interfaces import IPluginInit, IPluginStartUp
 from schooltool.app.interfaces import ISchoolToolApplication
-from schooltool.app.interfaces import IApplicationPreferences
+from schooltool.app.interfaces import IApplicationPreferences, IApplicationTabs
 from schooltool.app import relationships
 from schooltool.app.interfaces import IAsset
 from schooltool.relationship.relationship import RelationshipProperty
@@ -208,6 +208,15 @@ class ApplicationPreferences(Persistent):
     frontPageCalendar = True
 
 
+class ApplicationTabs(PersistentDict):
+    """Object for storing application tab preferences.
+
+    See schooltool.app.interfaces.ApplicationTabs.
+    """
+
+    implements(IApplicationTabs)
+
+
 class Asset(object):
     """A mixin for objects that may act as assets."""
 
@@ -227,6 +236,19 @@ def getApplicationPreferences(app):
         return annotations[key]
     except KeyError:
         annotations[key] = ApplicationPreferences()
+        annotations[key].__parent__ = app
+        return annotations[key]
+
+
+def getApplicationTabs(app):
+    """Adapt a SchoolToolApplication to IApplicationTabs."""
+
+    annotations = IAnnotations(app)
+    key = 'schooltool.app.ApplicationTabs'
+    try:
+        return annotations[key]
+    except KeyError:
+        annotations[key] = ApplicationTabs()
         annotations[key].__parent__ = app
         return annotations[key]
 

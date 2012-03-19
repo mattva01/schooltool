@@ -189,6 +189,7 @@ th.activity-title {
 .popup_menu {
     display: none;
     position: absolute;
+    left: 0;
     z-index: 10000;
 }
 
@@ -222,4 +223,8 @@ th.activity-title {
 
 .navigator {
     width: 140px;
+}
+
+.activity_description {
+    display: none;
 }

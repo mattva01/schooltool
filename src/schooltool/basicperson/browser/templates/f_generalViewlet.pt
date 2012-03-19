@@ -1,6 +1,10 @@
 <div i18n:domain="schooltool">
   <h2 i18n:translate="">General Information</h2>
   <div>
+    <div class="photo-display" tal:condition="view/has_photo">
+      <img tal:attributes="src string:${context/@@absolute_url}/photo"
+           alt="Photo" i18n:attributes="alt" />
+    </div>
     <h3>
       <tal:block tal:content="view/heading" />
       <a class="modify" href="" title="Edit this person's information"
@@ -12,7 +16,7 @@
              i18n:attributes="alt" />
       </a>
     </h3>
-    <table class="person-view-demographics">
+    <table tal:attributes="class view/table_class">
       <tbody>
         <tr tal:repeat="row view/table">
           <td tal:content="row/label" class="label"/>

@@ -302,3 +302,29 @@ ul.contributors {
 pre.traceback {
     padding: 4px 0px;
 }
+
+/* XXX: used in person general information viewlet
+        and person edit form */
+
+.photo-display {
+    float: right;
+    height: 132px;
+    margin-top: 16px;
+    overflow: hidden;
+    width: 99px;
+    text-align: center;
+}
+
+.photo-input div {
+    float: left;
+    margin-top: 0px;
+}
+
+.photo-input input, .photo-input span {
+    margin-top: 56px;
+}
+
+.photo-field {
+    clear: both;
+    display: block;
+}

@@ -343,8 +343,12 @@ class ScheduleDailyCalendarRowsView(DailyCalendarRowsView):
 
         rows = []
 
-        row_start = tz.localize(datetime.combine(cursor, time(starthour, 0)))
-        rows_end = tz.localize(datetime.combine(cursor, time(endhour, 0)))
+        row_start = tz.localize(datetime.combine(cursor, time()) +
+                                timedelta(hours=starthour))
+        row_start = tz.normalize(row_start)
+
+        rows_end = tz.localize(datetime.combine(cursor, time()) +
+                               timedelta(hours=endhour))
         rows_end = tz.normalize(rows_end + timedelta(hours=1))
 
         if meeting_rows:

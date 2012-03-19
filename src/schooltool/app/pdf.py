@@ -56,23 +56,30 @@ def registerTTFont(fontname, filename):
 
 # 'Arial' is predefined in ReportLab, so we use 'Arial_Normal'
 
-font_map = {'Arial_Normal': 'LiberationSans-Regular.ttf',
-            'Arial_Bold': 'LiberationSans-Bold.ttf',
-            'Arial_Italic': 'LiberationSans-Italic.ttf',
-            'Arial_Bold_Italic': 'LiberationSans-BoldItalic.ttf',
-            'Times_New_Roman': 'LiberationSerif-Regular.ttf',
-            'Times_New_Roman_Bold': 'LiberationSerif-Bold.ttf',
-            'Times_New_Roman_Italic': 'LiberationSerif-Italic.ttf',
-            'Times_New_Roman_Bold_Italic': 'LiberationSerif-BoldItalic.ttf'}
+font_map = {
+    'Arial_Normal': 'LiberationSans-Regular.ttf',
+    'Arial_Bold': 'LiberationSans-Bold.ttf',
+    'Arial_Italic': 'LiberationSans-Italic.ttf',
+    'Arial_Bold_Italic': 'LiberationSans-BoldItalic.ttf',
+    'Times_New_Roman': 'LiberationSerif-Regular.ttf',
+    'Times_New_Roman_Bold': 'LiberationSerif-Bold.ttf',
+    'Times_New_Roman_Italic': 'LiberationSerif-Italic.ttf',
+    'Times_New_Roman_Bold_Italic': 'LiberationSerif-BoldItalic.ttf',
+    'Ubuntu_Regular': 'Ubuntu-R.ttf',
+    'Ubuntu_Bold': 'Ubuntu-B.ttf',
+    'Ubuntu_Italic': 'Ubuntu-RI.ttf',
+    'Ubuntu_Bold_Italic': 'Ubuntu-BI.ttf',
+    }
 
 
-def setUpLiberationFonts(directory):
-    """Set up ReportGen to use Liberation Fonts."""
+def setUpFonts(directories):
+    """Set up ReportGen to use Liberation and Ubuntu Fonts."""
     import reportlab.rl_config
     from reportlab.lib.fonts import addMapping
 
     ttfpath = reportlab.rl_config.TTFSearchPath
-    ttfpath.append(directory)
+    for fontdir in directories:
+        ttfpath.append(fontdir)
 
     reportlab.rl_config.warnOnMissingFontGlyphs = 0
 
@@ -88,6 +95,11 @@ def setUpLiberationFonts(directory):
     addMapping('Times_New_Roman', 0, 1, 'Times_New_Roman_Italic')
     addMapping('Times_New_Roman', 1, 0, 'Times_New_Roman_Bold')
     addMapping('Times_New_Roman', 1, 1, 'Times_New_Roman_Bold_Italic')
+
+    addMapping('Ubuntu_Regular', 0, 0, 'Ubuntu_Regular')
+    addMapping('Ubuntu_Regular', 0, 1, 'Ubuntu_Italic')
+    addMapping('Ubuntu_Regular', 1, 0, 'Ubuntu_Bold')
+    addMapping('Ubuntu_Regular', 1, 1, 'Ubuntu_Bold_Italic')
 
     from schooltool.app.browser import pdfcal
     pdfcal.disabled = False

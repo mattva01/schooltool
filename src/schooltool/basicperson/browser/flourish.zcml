@@ -100,15 +100,6 @@
       content_template="templates/f_person_add_multiple.pt"
       />
 
-<!--    <flourish:viewlet
-        name="add_multiple.html"
-        title="Add Persons"
-        class="schooltool.skin.flourish.page.LinkViewlet"
-        manager="schooltool.basicperson.browser.person.PersonContainerLinks"
-        permission="schooltool.edit"
-        /> -->
-
-
   <flourish:page
      name="add.html"
      subtitle="Add new person"
@@ -585,6 +576,41 @@
            schooltool.skin.flourish.IFlourishLayer"
       factory=".person.BasicPersonTableFormatter" />
 
+  <flourish:viewlet
+      name="table"
+      for="schooltool.person.interfaces.IPersonContainer"
+      class=".person.BasicPersonTable"
+      manager="schooltool.skin.flourish.interfaces.IAJAXParts"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="person_table"
+      for="*"
+      class=".person.PersonListTable"
+      manager="schooltool.skin.flourish.interfaces.IAJAXParts"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="filter"
+      before="batch table"
+      class="schooltool.table.table.DoNotFilter"
+      manager=".person.PersonListTable"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="done"
+      before="table batch"
+      after="filter"
+      manager=".person.BasicPersonTable"
+      view=".person.FlourishBasicPersonContainerView"
+      class="schooltool.app.browser.app.ManageItemDoneLink"
+      render="template"
+      permission="schooltool.view"
+      />
+
   <!-- Reports -->
 
   <report:reportLink
@@ -598,6 +624,17 @@
        link="request_person_export_xml.html"
        />
 
+  <report:reportLink
+      name="person_id_card_pdf"
+      for="schooltool.person.interfaces.IPerson"
+      permission="schooltool.edit"
+      group="Person"
+      description="Includes student name, ID number, birth date, contact name and contact phone number."
+      title="ID Card"
+      file_type="pdf"
+      link="request_person_id_card_pdf.html"
+      />
+
   <flourish:page
       name="person_export.xml"
       for="schooltool.person.interfaces.IPerson"
@@ -609,6 +646,20 @@
       name="request_person_export_xml.html"
       for="schooltool.person.interfaces.IPerson"
       class=".person.FlourishRequestPersonXMLExportView"
+      permission="schooltool.edit"
+      />
+
+   <flourish:page
+      name="person_id_card.pdf"
+      for="schooltool.person.interfaces.IPerson"
+      class=".person.FlourishPersonIDCardView"
+      permission="schooltool.edit"
+      />
+
+  <flourish:page
+      name="request_person_id_card_pdf.html"
+      for="schooltool.person.interfaces.IPerson"
+      class=".person.FlourishRequestPersonIDCardView"
       permission="schooltool.edit"
       />
 
@@ -697,5 +748,41 @@
       />
 
   <zope:adapter factory=".person.PasswordValidator" />
+
+  <zope:adapter factory=".demographics.DemographicsFieldIDValidator" />
+
+  <zope:adapter factory=".person.PhotoFieldFormAdapter" />
+
+  <flourish:page
+      name="photo"
+      for="schooltool.basicperson.interfaces.IBasicPerson"
+      class="schooltool.basicperson.browser.person.PhotoView"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="available_table"
+      class="schooltool.basicperson.browser.person.BasicPersonAddRelationshipTable"
+      manager="schooltool.skin.flourish.interfaces.IAJAXParts"
+      view=".person.EditPersonRelationships"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="current_table"
+      class="schooltool.basicperson.browser.person.BasicPersonRemoveRelationshipTable"
+      manager="schooltool.skin.flourish.interfaces.IAJAXParts"
+      view=".person.EditPersonRelationships"
+      permission="schooltool.view"
+      />
+
+  <zope:adapter
+      for="*
+           schooltool.skin.flourish.IFlourishLayer
+           .person.FlourishPersonIDCardsViewBase"
+      provides="schooltool.app.browser.interfaces.IReportPageTemplate"
+      name="cards"
+      factory=".person.IDCardsPageTemplate"
+      />
 
 </configure>

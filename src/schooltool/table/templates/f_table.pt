@@ -1,0 +1,11 @@
+<div tal:attributes="id view/html_id" i18n:domain="schooltool">
+  <tal:block define="url view/url">
+    <a tal:condition="url"
+       tal:attributes="href view/url;
+                       id view/html_id"
+       tal:content="view/title"></a>
+    <span tal:condition="not:url"
+          tal:attributes="id view/html_id"
+          tal:content="view/title"></span>
+  </tal:block>
+</div>

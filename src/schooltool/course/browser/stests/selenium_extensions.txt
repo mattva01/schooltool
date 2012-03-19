@@ -1,0 +1,360 @@
+Selenium browser extensions tests
+=================================
+
+Let's test the selenium extensions created in the
+schooltool.course.stesting module.
+
+See the README.selenium.txt file in the schooltool/testing directory
+for instructions on how to use them.
+
+Some helpers for these tests:
+
+    >>> def format_row(row):
+    ...     label = row.query.xpath('td[@class="label"]//span').text
+    ...     value = row.query.xpath('td[@class="field"]//span').text
+    ...     return '%s: %s' % (label, value)
+    >>> def format_section_row(row):
+    ...     title = row.query.xpath('td[1]/a').text
+    ...     term = row.query.xpath('td[2]').text
+    ...     course = row.query.xpath('td[3]').text
+    ...     return ', '.join([title, term, course])
+    >>> def format_person_row(row):
+    ...     last_name = row.query_all.xpath('td[1]/a').text
+    ...     first_name = row.query_all.xpath('td[2]/a').text
+    ...     username = row.query_all.xpath('td[3]').text
+    ...     return '%s, %s, %s' % (last_name, first_name, username)
+
+Log in as manager:
+
+    >>> manager = browsers.manager
+    >>> manager.ui.login('manager', 'schooltool')
+
+We're going to add:
+
+A couple of school years:
+
+    >>> manager.ui.schoolyear.add('2012', '2012-01-01', '2012-12-31')
+    >>> manager.ui.schoolyear.add('2013', '2013-01-01', '2013-12-31')
+
+One term for 2012:
+
+    >>> manager.ui.term.add('2012', 'Single Year', '2012-01-01', '2012-12-31')
+
+Four terms for 2013:
+
+    >>> manager.ui.term.add('2013', 'Q1', '2013-01-01', '2013-03-31')
+    >>> manager.ui.term.add('2013', 'Q2', '2013-04-01', '2013-06-30')
+    >>> manager.ui.term.add('2013', 'Q3', '2013-07-01', '2013-09-30')
+    >>> manager.ui.term.add('2013', 'Q4', '2013-10-01', '2013-12-31')
+
+And a few people:
+
+    >>> manager.ui.person.add('Tom', 'Hoffman', 'tom', 'pwd')
+    >>> manager.ui.person.add('Jeffrey', 'Elkner', 'jeffrey', 'pwd')
+    >>> manager.ui.person.add('David', 'Welsh', 'david', 'pwd')
+    >>> manager.ui.person.add('Camila', 'Cerna', 'camila', 'pwd')
+    >>> manager.ui.person.add('Nestor', 'Guzman', 'nestor', 'pwd')
+    >>> manager.ui.person.add('Liliana', 'Vividor', 'liliana', 'pwd')
+    >>> manager.ui.person.add('Mario', 'Tejada', 'mario', 'pwd')
+
+
+browser.ui.course.add()
+-----------------------
+
+Used for adding courses.
+
+Let's add a couple of courses to the 2012 year:
+
+    >>> manager.ui.course.add('2012', 'Math')
+    >>> manager.ui.course.add('2012', 'Soccer', description='Sports!')
+
+And some more to the 2013 year:
+
+    >>> manager.ui.course.add('2013', 'Physics', course_id='phy101')
+    >>> manager.ui.course.add('2013', 'Chemistry', government_id='chem_gov',
+    ...                       credits='4')
+
+Let's verify that they were correctly added:
+
+    >>> manager.open('http://localhost/courses')
+    >>> manager.query.link('2012').click()
+    >>> sel = '//table//a[contains(@href, "/courses/")]'
+    >>> print manager.query_all.xpath(sel).text
+    Math
+    Soccer
+
+    >>> manager.open('http://localhost/courses')
+    >>> manager.query.link('2013').click()
+    >>> sel = '//table//a[contains(@href, "/courses/")]'
+    >>> print manager.query_all.xpath(sel).text
+    Chemistry
+    Physics
+
+And that their details were saved:
+
+    >>> manager.open('http://localhost/courses')
+    >>> manager.query.link('2012').click()
+    >>> manager.query.link('Math').click()
+    >>> sel = '//table[@class="form-fields"]/tbody/tr'
+    >>> for row in manager.query_all.xpath(sel):
+    ...     print format_row(row)
+    SchoolTool ID: math
+    Title: Math
+
+    >>> manager.open('http://localhost/courses')
+    >>> manager.query.link('2012').click()
+    >>> manager.query.link('Soccer').click()
+    >>> for row in manager.query_all.xpath(sel):
+    ...     print format_row(row)
+    SchoolTool ID: soccer
+    Title: Soccer
+    Description: Sports!
+
+    >>> manager.open('http://localhost/courses')
+    >>> manager.query.link('2013').click()
+    >>> manager.query.link('Physics').click()
+    >>> for row in manager.query_all.xpath(sel):
+    ...     print format_row(row)
+    SchoolTool ID: physics
+    Title: Physics
+    Course ID: phy101
+
+    >>> manager.open('http://localhost/courses')
+    >>> manager.query.link('2013').click()
+    >>> manager.query.link('Chemistry').click()
+    >>> for row in manager.query_all.xpath(sel):
+    ...     print format_row(row)
+    SchoolTool ID: chemistry
+    Title: Chemistry
+    Alternate ID: chem_gov
+    Credits: 4
+
+
+browser.ui.section.add()
+------------------------
+
+Used for adding sections.
+
+Now, let's two sections for Math 2012:
+
+    >>> manager.ui.section.add('2012', 'Single Year', 'Math')
+    >>> manager.ui.section.add('2012', 'Single Year', 'Math',
+    ...                        description='Second section for math')
+
+One for Soccer 2012:
+
+    >>> manager.ui.section.add('2012', 'Single Year', 'Soccer',
+    ...                        title='Soccer section')
+
+One for Physics that starts in Q1 and ends in Q3 of 2013:
+
+    >>> manager.ui.section.add('2013', 'Q1', 'Physics',
+    ...                        ends='Q3')
+
+One for Chemistry in Q2 of 2013:
+
+    >>> manager.ui.section.add('2013', 'Q2', 'Chemistry')
+
+Let's verify that they were correctly added:
+
+    >>> manager.open('http://localhost/sections')
+    >>> manager.query.link('2012').click()
+    >>> sel = '//table/tbody/tr'
+    >>> for row in manager.query_all.xpath(sel):
+    ...     print format_section_row(row)
+    Math (1), Single Year, Math
+    Math (2), Single Year, Math
+    Soccer section, Single Year, Soccer
+
+    >>> manager.open('http://localhost/sections')
+    >>> manager.query.link('2013').click()
+    >>> sel = '//table/tbody/tr'
+    >>> for row in manager.query_all.xpath(sel):
+    ...     print format_section_row(row)
+    Physics (1), Q3, Physics
+    Chemistry (2), Q2, Chemistry
+    Physics (1), Q2, Physics
+    Physics (1), Q1, Physics
+
+And that their details were saved:
+
+    >>> manager.open('http://localhost/sections')
+    >>> manager.query.link('2012').click()
+    >>> manager.query.link('Math (1)').click()
+    >>> sel = '//table[@class="form-fields"]/tbody/tr'
+    >>> for row in manager.query_all.xpath(sel):
+    ...     print format_row(row)
+    SchoolTool ID: 1
+    Title: Math (1)
+    >>> print manager.query.css('span.active-term').text
+    Single Year
+
+    >>> manager.open('http://localhost/sections')
+    >>> manager.query.link('2012').click()
+    >>> manager.query.link('Math (2)').click()
+    >>> sel = '//table[@class="form-fields"]/tbody/tr'
+    >>> for row in manager.query_all.xpath(sel):
+    ...     print format_row(row)
+    SchoolTool ID: 2
+    Title: Math (2)
+    Description: Second section for math
+    >>> print manager.query.css('span.active-term').text
+    Single Year
+
+    >>> manager.open('http://localhost/sections')
+    >>> manager.query.link('2012').click()
+    >>> manager.query.link('Soccer section').click()
+    >>> sel = '//table[@class="form-fields"]/tbody/tr'
+    >>> for row in manager.query_all.xpath(sel):
+    ...     print format_row(row)
+    SchoolTool ID: 3
+    Title: Soccer section
+    >>> print manager.query.css('span.active-term').text
+    Single Year
+
+    >>> manager.open('http://localhost/sections')
+    >>> manager.query.link('2013').click()
+    >>> manager.query_all.xpath('//a[text()="Physics (1)"]')[-1].click()
+    >>> sel = '//table[@class="form-fields"]/tbody/tr'
+    >>> for row in manager.query_all.xpath(sel):
+    ...     print format_row(row)
+    SchoolTool ID: 1
+    Title: Physics (1)
+    >>> print manager.query.css('span.active-term').text
+    Q1
+
+    >>> manager.open('http://localhost/sections')
+    >>> manager.query.link('2013').click()
+    >>> manager.query_all.xpath('//a[text()="Physics (1)"]')[1].click()
+    >>> sel = '//table[@class="form-fields"]/tbody/tr'
+    >>> for row in manager.query_all.xpath(sel):
+    ...     print format_row(row)
+    SchoolTool ID: 1
+    Title: Physics (1)
+    >>> print manager.query.css('span.active-term').text
+    Q2
+
+    >>> manager.open('http://localhost/sections')
+    >>> manager.query.link('2013').click()
+    >>> manager.query_all.xpath('//a[text()="Physics (1)"]')[0].click()
+    >>> sel = '//table[@class="form-fields"]/tbody/tr'
+    >>> for row in manager.query_all.xpath(sel):
+    ...     print format_row(row)
+    SchoolTool ID: 1
+    Title: Physics (1)
+    >>> print manager.query.css('span.active-term').text
+    Q3
+
+    >>> manager.open('http://localhost/sections')
+    >>> manager.query.link('2013').click()
+    >>> manager.query.xpath('//a[text()="Chemistry (2)"]').click()
+    >>> sel = '//table[@class="form-fields"]/tbody/tr'
+    >>> for row in manager.query_all.xpath(sel):
+    ...     print format_row(row)
+    SchoolTool ID: 2
+    Title: Chemistry (2)
+    >>> print manager.query.css('span.active-term').text
+    Q2
+
+
+browser.ui.section.go()
+-----------------------
+
+Used to visit a section's index page.
+
+    >>> manager.open('http://localhost/sections')
+    >>> manager.query.link('2012').click()
+    >>> sel = '//table/tbody/tr'
+    >>> for row in manager.query_all.xpath(sel):
+    ...     print format_section_row(row)
+    Math (1), Single Year, Math
+    Math (2), Single Year, Math
+    Soccer section, Single Year, Soccer
+
+    >>> manager.ui.section.go('2012', 'Single Year', 'Math (1)')
+    >>> sel = '//table[@class="form-fields"]/tbody/tr'
+    >>> for row in manager.query_all.xpath(sel):
+    ...     print format_row(row)
+    SchoolTool ID: 1
+    Title: Math (1)
+    >>> print manager.query.css('span.active-term').text
+    Single Year
+
+    >>> manager.open('http://localhost/sections')
+    >>> manager.query.link('2013').click()
+    >>> sel = '//table/tbody/tr'
+    >>> for row in manager.query_all.xpath(sel):
+    ...     print format_section_row(row)
+    Physics (1), Q3, Physics
+    Chemistry (2), Q2, Chemistry
+    Physics (1), Q2, Physics
+    Physics (1), Q1, Physics
+
+    >>> manager.ui.section.go('2013', 'Q2', 'Chemistry (2)')
+    >>> sel = '//table[@class="form-fields"]/tbody/tr'
+    >>> for row in manager.query_all.xpath(sel):
+    ...     print format_row(row)
+    SchoolTool ID: 2
+    Title: Chemistry (2)
+    >>> print manager.query.css('span.active-term').text
+    Q2
+
+
+browser.ui.section.instructors.add()
+------------------------------------
+
+Used for adding instructors to a section.
+
+    >>> manager.ui.section.instructors.add('2012', 'Single Year', 'Math (1)',
+    ...                                    ['tom', 'david'])
+    >>> manager.ui.section.go('2012', 'Single Year', 'Math (1)')
+    >>> sel = ('#person_table-ajax-view-context-instructors-person_table- '
+    ...        'table tbody tr')
+    >>> for row in manager.query_all.css(sel):
+    ...     print format_person_row(row)
+    Hoffman, Tom, tom
+    Welsh, David, david
+
+It doesn't matter if some usernames are already instructors of the
+section:
+
+    >>> manager.ui.section.instructors.add('2012', 'Single Year', 'Math (1)',
+    ...                                    ['tom', 'jeffrey'])
+    >>> manager.ui.section.go('2012', 'Single Year', 'Math (1)')
+    >>> sel = ('#person_table-ajax-view-context-instructors-person_table- '
+    ...        'table tbody tr')
+    >>> for row in manager.query_all.css(sel):
+    ...     print format_person_row(row)
+    Elkner, Jeffrey, jeffrey
+    Hoffman, Tom, tom
+    Welsh, David, david
+
+
+browser.ui.section.students.add()
+------------------------------------
+
+Used for adding students to a section.
+
+    >>> manager.ui.section.students.add('2012', 'Single Year', 'Math (2)',
+    ...                                 ['camila', 'mario'])
+    >>> manager.ui.section.go('2012', 'Single Year', 'Math (2)')
+    >>> sel = ('#person_table-ajax-view-context-members-person_table- '
+    ...        'table tbody tr')
+    >>> for row in manager.query_all.css(sel):
+    ...     print format_person_row(row)
+    Cerna, Camila, camila
+    Tejada, Mario, mario
+
+It doesn't matter if some usernames are already students of the
+section:
+
+    >>> manager.ui.section.students.add('2012', 'Single Year', 'Math (2)',
+    ...                                    ['mario', 'nestor'])
+    >>> manager.ui.section.go('2012', 'Single Year', 'Math (2)')
+    >>> sel = ('#person_table-ajax-view-context-members-person_table- '
+    ...        'table tbody tr')
+    >>> for row in manager.query_all.css(sel):
+    ...     print format_person_row(row)
+    Cerna, Camila, camila
+    Guzman, Nestor, nestor
+    Tejada, Mario, mario

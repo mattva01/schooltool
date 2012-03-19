@@ -21,10 +21,8 @@
 from persistent import Persistent
 
 from zope.interface import implements, implementsOnly
-from zope.interface import implementer, classImplements
-from zope.component import adapter
-from zope.component import getUtility, queryUtility
-from zope.i18n.interfaces.locales import ICollator
+from zope.cachedescriptors.property import Lazy
+from zope.component import getUtility
 from zope.container.contained import Contained
 from zope.catalog.interfaces import ICatalogIndex
 from zope.catalog.interfaces import ICatalog
@@ -32,14 +30,18 @@ from zope.intid.interfaces import IIntIds
 
 from zc.catalog.index import ValueIndex
 from zc.catalog.interfaces import IValueIndex, IExtentCatalog
-from zc.table.interfaces import IColumn, ISortableColumn
-from zc.table.column import GetterColumn
 
 from schooltool.table.interfaces import IIndexedTableFormatter
 from schooltool.table.interfaces import IIndexedColumn
 from schooltool.table.table import FilterWidget
 from schooltool.table.table import SchoolToolTableFormatter
 from schooltool.table.table import url_cell_formatter
+
+# BBB: imports
+from schooltool.table.column import IndexedGetterColumn
+from schooltool.table.column import IndexedLocaleAwareGetterColumn
+from schooltool.table.column import makeIndexedColumn
+from schooltool.table.column import RenderUnindexingMixin, unindex
 
 from schooltool.common import SchoolToolMessage as _
 
@@ -73,8 +75,12 @@ class ConvertingIndex(ConvertingIndexMixin, ValueIndex, Contained):
 
 class IndexedFilterWidget(FilterWidget):
 
+    @Lazy
+    def catalog(self):
+        return ICatalog(self.source)
+
     def filter(self, list):
-        catalog = ICatalog(self.context)
+        catalog = self.catalog
         index = catalog['title']
         if 'SEARCH' in self.request and 'CLEAR_SEARCH' not in self.request:
             searchstr = self.request['SEARCH'].lower()
@@ -90,48 +96,6 @@ class IndexedFilterWidget(FilterWidget):
         return results
 
 
-class IndexedGetterColumn(GetterColumn):
-    implements(IIndexedColumn, ISortableColumn)
-
-    def __init__(self, **kwargs):
-        self.index = kwargs.pop('index')
-        super(IndexedGetterColumn, self).__init__(**kwargs)
-
-    def _sort(self, items, formatter, start, stop, sorters, multiplier):
-        if self.subsort and sorters:
-            items = sorters[0](items, formatter, start, stop, sorters[1:])
-        else:
-            items = list(items) # don't mutate original
-        getSortKey = self.getSortKey
-
-        # Patch the SortableColum._sort to use both cmp and key for sorting.
-        # This reduces usage of getSortKey drastically on large datasets.
-        items.sort(
-            cmp=lambda a, b: multiplier*cmp(a, b),
-            key=lambda item: getSortKey(item, formatter))
-
-        return items
-
-    def renderCell(self, item, formatter):
-        item = queryUtility(IIntIds).getObject(item['id'])
-        return super(IndexedGetterColumn, self).renderCell(item, formatter)
-
-    def getSortKey(self, item, formatter):
-        id = item['id']
-        index = item['catalog'][self.index]
-        return index.documents_to_values[id]
-
-
-class IndexedLocaleAwareGetterColumn(IndexedGetterColumn):
-
-    _cached_collator = None
-
-    def getSortKey(self, item, formatter):
-        if not self._cached_collator:
-            self._cached_collator = ICollator(formatter.request.locale)
-        s = super(IndexedLocaleAwareGetterColumn, self).getSortKey(item, formatter)
-        return s and self._cached_collator.key(s)
-
 
 class IndexedTableFormatter(SchoolToolTableFormatter):
     implementsOnly(IIndexedTableFormatter)
@@ -143,9 +107,13 @@ class IndexedTableFormatter(SchoolToolTableFormatter):
                                     cell_formatter=url_cell_formatter,
                                     index='title')]
 
+    @Lazy
+    def catalog(self):
+        return ICatalog(self.source)
+
     def items(self):
         """Return a list of index dicts for all the items in the context container"""
-        catalog = ICatalog(self.context)
+        catalog = self.catalog
         if IExtentCatalog.providedBy(catalog):
             ids = list(catalog.extent)
         else:
@@ -165,13 +133,17 @@ class IndexedTableFormatter(SchoolToolTableFormatter):
     def indexItems(self, items):
         """Convert a list of objects to a list of index dicts"""
         int_ids = getUtility(IIntIds)
-        catalog = ICatalog(self.context)
+        catalog = self.catalog
         results = []
         for item in items:
             results.append({
                     'id': int_ids.getId(item),
                     'catalog': catalog})
         return results
+
+    def getItem(self, indexed):
+        int_ids = getUtility(IIntIds)
+        return int_ids.queryObject(indexed['id'])
 
     def setUp(self, **kwargs):
         items = kwargs.pop('items', None)
@@ -183,55 +155,11 @@ class IndexedTableFormatter(SchoolToolTableFormatter):
     def render(self):
         columns = [IIndexedColumn(c) for c in self._columns]
         formatter = self._table_formatter(
-            self.context, self.request, self._items,
+            self.source, self.request, self._items,
             columns=columns,
             batch_start=self.batch.start, batch_size=self.batch.size,
             sort_on=self._sort_on,
             prefix=self.prefix)
         formatter.cssClasses['table'] = 'data'
         return formatter()
-
-
-def makeIndexedColumn(mixins, column, *args, **kw):
-    class_ = column.__class__
-    new_class = type(
-        '_indexed_%s' % class_.__name__,
-        tuple(mixins) + (class_,),
-        {})
-    classImplements(new_class, IIndexedColumn)
-    new_column = super(class_, new_class).__new__(new_class, *args, **kw)
-    new_column.__dict__.update(dict(column.__dict__))
-    return new_column
-
-
-def unindex(indexed_item):
-    return queryUtility(IIntIds).getObject(indexed_item['id'])
-
-
-class RenderUnindexingMixin(object):
-    def renderCell(self, indexed_item, formatter):
-        return super(RenderUnindexingMixin, self).renderCell(
-            unindex(indexed_item), formatter)
-
-
-class SortUnindexingMixin(object):
-    def getSortKey(self, indexed_item, formatter):
-        super(SortUnindexingMixin, self).getSortKey(
-            unindex(indexed_item), formatter)
-
-
-@adapter(IColumn)
-@implementer(IIndexedColumn)
-def getIndexedColumn(column):
-    column = makeIndexedColumn(
-        [RenderUnindexingMixin], column)
-    return column
-
-
-@adapter(ISortableColumn)
-@implementer(IIndexedColumn)
-def getIndexedSortableColumn(column):
-    column = makeIndexedColumn(
-        [RenderUnindexingMixin, SortUnindexingMixin], column)
-    return column
 

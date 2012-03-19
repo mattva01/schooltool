@@ -19,6 +19,8 @@
 """
 Lyceum person specific code.
 """
+from zope.catalog.text import TextIndex
+from zope.index.text.interfaces import ISearchableText
 from zope.interface import implements
 from zope.component import adapts
 
@@ -113,9 +115,27 @@ class BasicPersonCalendarCrowd(PersonCalendarCrowd):
 
 class PersonCatalog(AttributeCatalog):
 
-    version = '1 - replaced catalog utility'
+    version = '2 - added text index'
     interface = IBasicPerson
     attributes = ('__name__', 'title', 'first_name', 'last_name')
 
+    def setIndexes(self, catalog):
+        super(PersonCatalog, self).setIndexes(catalog)
+        catalog['text'] = TextIndex('getSearchableText', ISearchableText, True)
+
 
 getPersonCatalog = PersonCatalog.get
+
+
+class SearchableTextPerson(object):
+
+    adapts(IBasicPerson)
+    implements(ISearchableText)
+
+    def __init__(self, context):
+        self.context = context
+
+    def getSearchableText(self):
+        result = [self.context.first_name, self.context.last_name,
+                  self.context.username]
+        return ' '.join(result)

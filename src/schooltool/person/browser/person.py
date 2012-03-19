@@ -19,6 +19,8 @@
 """
 Person browser views.
 """
+import urllib
+
 from zope.authentication.interfaces import IAuthentication
 from zope.interface import Interface, invariant, Invalid
 from zope.publisher.interfaces import NotFound
@@ -59,12 +61,12 @@ import schooltool.skin.flourish.form
 from schooltool.group.interfaces import IGroupContainer
 from schooltool.common import SchoolToolMessage as _
 from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.app.catalog import buildQueryString
 from schooltool.person.interfaces import IPasswordWriter
 from schooltool.person.interfaces import IPerson, IPersonFactory
 from schooltool.person.interfaces import IPersonPreferences
 from schooltool.person.interfaces import IPersonContainer, IPersonContained
-from schooltool.table.catalog import IndexedFilterWidget
-from schooltool.table.catalog import IndexedTableFormatter
+from schooltool import table
 from schooltool.skin import flourish
 from schooltool.skin.containers import TableContainerView
 from schooltool.securitypolicy.crowds import Crowd
@@ -226,6 +228,11 @@ class FlourishPersonPreferencesView(flourish.form.DialogForm,
         # Also I assume the preferences don't change the parent
         # view content, so let's not reload it now.
         self.reload_parent = False
+
+    def initDialog(self):
+        super(FlourishPersonPreferencesView, self).initDialog()
+        self.ajax_settings['dialog']['width'] = '306'
+        self.ajax_settings['dialog']['dialogClass'] = 'narrow-dialog'
 
 
 class FlourishPersonPreferencesLink(flourish.page.ModalFormLinkViewlet):
@@ -449,19 +456,25 @@ class FlourishPasswordLinkViewlet(flourish.page.LinkViewlet):
             return super(FlourishPasswordLinkViewlet, self).render()
 
 
-class PersonFilterWidget(IndexedFilterWidget):
+class PersonFilterWidget(table.catalog.IndexedFilterWidget):
     """A filter widget for persons.
 
     Filters the list of available persons by title or groups they belong to.
     """
 
     template = ViewPageTemplateFile('person_filter.pt')
-    parameters = ['SEARCH_TITLE', 'SEARCH_GROUP']
 
     def groupContainer(self):
         # XXX must know which group container to pick
         app = ISchoolToolApplication(None)
         return IGroupContainer(app, {})
+
+    search_title_id = 'SEARCH_TITLE'
+    search_group_id = 'SEARCH_GROUP'
+
+    @property
+    def parameters(self):
+        return (self.search_title_id, self.search_group_id)
 
     def groups(self):
         groups = []
@@ -476,14 +489,18 @@ class PersonFilterWidget(IndexedFilterWidget):
                                'title': "%s (%s)" % (group.title, len(group.members))})
         return groups
 
+    @property
+    def source(self):
+        return self.context
+
     def filter(self, items):
         if 'CLEAR_SEARCH' in self.request:
             for parameter in self.parameters:
                 self.request.form[parameter] = ''
             return items
 
-        if 'SEARCH_GROUP' in self.request:
-            group = self.groupContainer().get(self.request['SEARCH_GROUP'])
+        if self.search_group_id in self.request:
+            group = self.groupContainer().get(self.request[self.search_group_id])
             if group:
                 int_ids = getUtility(IIntIds)
                 keys = set([int_ids.queryId(person)
@@ -491,20 +508,14 @@ class PersonFilterWidget(IndexedFilterWidget):
                 items = [item for item in items
                          if item['id'] in keys]
 
-        catalog = ICatalog(self.context)
-        title_index = catalog['title']
-        username_index = catalog['__name__']
-
-        if 'SEARCH_TITLE' in self.request:
-            searchstr = self.request['SEARCH_TITLE'].lower()
-            results = []
-            for item in items:
-                title = title_index.documents_to_values[item['id']]
-                username = username_index.documents_to_values[item['id']]
-                if (searchstr in title.lower() or
-                    searchstr in username.lower()):
-                    results.append(item)
-            items = results
+        if self.search_title_id in self.request:
+            searchstr = self.request[self.search_title_id]
+            query = buildQueryString(searchstr)
+            if query:
+                catalog = ICatalog(self.source)
+                result = catalog['text'].apply(query)
+                items = [item for item in items
+                         if item['id'] in result]
 
         return items
 
@@ -514,15 +525,60 @@ class PersonFilterWidget(IndexedFilterWidget):
                 return True
         return False
 
+    def quote(self, param):
+        return urllib.quote(unicode(param).encode('UTF-8'))
+
     def extra_url(self):
         url = ""
         for parameter in self.parameters:
             if parameter in self.request:
-                url += '&%s=%s' % (parameter, self.request.get(parameter))
+                url += '&%s=%s' % (parameter, self.quote(self.request.get(parameter)))
         return url
 
 
-class PersonTableFormatter(IndexedTableFormatter):
+class PersonTableFilter(table.ajax.IndexedTableFilter,
+                        PersonFilterWidget):
+
+    template = ViewPageTemplateFile('f_person_table_filter.pt')
+    title = _('First name, last name or username')
+
+    @property
+    def search_title_id(self):
+        return self.manager.html_id+"-title"
+
+    @property
+    def search_group_id(self):
+        return self.manager.html_id+"-group"
+
+    @property
+    def parameters(self):
+        return (self.search_title_id, self.search_group_id)
+
+    groupContainer = PersonFilterWidget.groupContainer
+    groups = PersonFilterWidget.groups
+    active = PersonFilterWidget.active
+    extra_url = PersonFilterWidget.extra_url
+
+    def filter(self, results):
+        if self.ignoreRequest:
+            return results
+        return PersonFilterWidget.filter(self, results)
+
+
+class PersonTable(table.ajax.IndexedTable):
+
+    @property
+    def source(self):
+        return ISchoolToolApplication(None)['persons']
+
+    def columns(self):
+        return getUtility(IPersonFactory).columns()
+
+    def sortOn(self):
+        return getUtility(IPersonFactory).sortOn()
+
+
+class PersonTableFormatter(table.catalog.IndexedTableFormatter):
     """Person container specific table formatter."""
 
     def columns(self):
@@ -762,3 +818,29 @@ class PersonAddPersonViewlet(object):
 class FlourishPersonFilterWidget(PersonFilterWidget):
 
     template = ViewPageTemplateFile('f_person_filter.pt')
+
+    def filter(self, items):
+        if 'CLEAR_SEARCH' in self.request:
+            for parameter in self.parameters:
+                self.request.form[parameter] = ''
+            return items
+
+        if 'SEARCH_GROUP' in self.request:
+            group = self.groupContainer().get(self.request['SEARCH_GROUP'])
+            if group:
+                int_ids = getUtility(IIntIds)
+                keys = set([int_ids.queryId(person)
+                            for person in group.members])
+                items = [item for item in items
+                         if item['id'] in keys]
+
+        if 'SEARCH_TITLE' in self.request:
+            search_title = self.request['SEARCH_TITLE']
+            query = buildQueryString(search_title)
+            if query:
+                catalog = ICatalog(self.source)
+                result = catalog['text'].apply(query)
+                items = [item for item in items
+                         if item['id'] in result]
+
+        return items

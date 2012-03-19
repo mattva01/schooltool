@@ -217,8 +217,8 @@ def doctest_configureReportlab():
 
         >>> def setupStub(fontdir):
         ...     print 'reportlab set up: %s' % fontdir
-        >>> realSetup = pdf.setUpLiberationFonts
-        >>> pdf.setUpLiberationFonts = setupStub
+        >>> realSetup = pdf.setUpFonts
+        >>> pdf.setUpFonts = setupStub
 
     First, if a null path is given, nothing happens (PDF support is
     left disabled):
@@ -257,7 +257,7 @@ def doctest_configureReportlab():
     Now test the check that the font path is a directory:
 
         >>> server.configureReportlab(__file__)
-        Warning: font directory '...test_main...' does not exist.
+        Warning: font directories '...test_main...' do not exist.
         PDF support disabled.
 
     We will cheat and temporarily override pdf.font_map:
@@ -267,14 +267,14 @@ def doctest_configureReportlab():
         >>> pdf.font_map = {'1': 'test_main.py', '2': 'nonexistent_file'}
 
         >>> server.configureReportlab(pseudo_fontdir)
-        Warning: font '...nonexistent_file' does not exist.
+        Warning: font '...nonexistent_file' does not exist...
         PDF support disabled.
 
     Now let's simulate a successful scenario:
 
         >>> del pdf.font_map['2']
         >>> server.configureReportlab(pseudo_fontdir)
-        reportlab set up: ...tests
+        reportlab set up: ...tests...
 
     Cleaning up.
 
@@ -282,7 +282,7 @@ def doctest_configureReportlab():
         >>> sys.stderr = old_stderr
         >>> if real_reportlab:
         ...     sys.modules['reportlab'] = real_reportlab
-        >>> pdf.setUpLiberationFonts = realSetup
+        >>> pdf.setUpFonts = realSetup
 
     """
 

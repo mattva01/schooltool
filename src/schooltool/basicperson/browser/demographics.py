@@ -16,8 +16,6 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-from zope.schema.interfaces import IList
-from zope.interface import Interface
 from zope.interface import implements, implementer
 from zope.component import adapts, adapter
 from zope.component import getAdapter, getMultiAdapter
@@ -28,9 +26,10 @@ from zope.traversing.browser.interfaces import IAbsoluteURL
 from zope.traversing.browser.absoluteurl import absoluteURL
 from zope.container.interfaces import INameChooser
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
+from zope.schema import ValidationError
 
 from z3c.form.interfaces import ITextAreaWidget
-from z3c.form import form, field, button
+from z3c.form import form, field, button, validator
 from z3c.form.converter import BaseDataConverter, FormatterValidationError
 
 import schooltool.skin.flourish.form
@@ -51,10 +50,6 @@ from schooltool.basicperson.interfaces import ILimitKeysLabel
 from schooltool.basicperson.interfaces import ILimitKeysHint
 from schooltool.common.inlinept import InheritTemplate
 from schooltool.skin import flourish
-from schooltool.skin.flourish import IFlourishLayer
-from schooltool.skin.flourish.interfaces import IViewletManager
-from schooltool.skin.flourish.viewlet import Viewlet, ViewletManager
-from schooltool.skin.flourish.content import ContentProvider
 
 from schooltool.common import format_message
 from schooltool.common import SchoolToolMessage as _
@@ -164,7 +159,7 @@ class FieldDescriptionAddView(form.AddForm):
         return absoluteURL(self._fd, self.request)
 
     def add(self, fd):
-        """Add `schoolyear` to the container."""
+        """Add field description to the container."""
         chooser = INameChooser(self.context)
         name = chooser.chooseName(fd.name, fd)
         self.context[name] = fd
@@ -577,3 +572,26 @@ class FlourishIntFieldDescriptionView(flourish.page.Page, IntFieldDescriptionVie
 
     def update(self):
         IntFieldDescriptionView.update(self)
+
+
+class InvalidFieldID(ValidationError):
+    __doc__ = _(u'Please enter a valid ID')
+
+
+class DuplicatedFieldID(ValidationError):
+    __doc__ = _(u'This ID is not unique.')
+
+
+class DemographicsFieldIDValidator(validator.SimpleFieldValidator):
+
+    def validate(self, value):
+        try:
+            super(DemographicsFieldIDValidator, self).validate(value)
+        except (ValidationError,):
+            raise InvalidFieldID()
+        if value in self.context:
+            raise DuplicatedFieldID()
+
+
+validator.WidgetValidatorDiscriminators(DemographicsFieldIDValidator,
+                                        field=IFieldDescription['name'])

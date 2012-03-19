@@ -123,9 +123,7 @@
       </a>
     </h3>
     <tal:block tal:condition="view/has_instructors">
-      <tal:block tal:condition="view/instructors_table/batch/needsBatch"
-                 tal:replace="structure view/instructors_table/batch/render" />
-      <tal:block tal:replace="structure view/instructors_table/render" />
+      <tal:block content="structure context/schooltool:content/ajax/view/context/instructors/person_table" />
     </tal:block>
     <h3 tal:condition="not:view/has_instructors" i18n:translate="">
       This section has no instructors
@@ -141,12 +139,42 @@
       </a>
     </h3>
     <tal:block tal:condition="view/has_learners">
-      <tal:block tal:condition="view/learners_table/batch/needsBatch"
-                 tal:replace="structure view/learners_table/batch/render" />
-      <tal:block tal:replace="structure view/learners_table/render" />
+      <tal:block content="structure context/schooltool:content/ajax/view/context/members/person_table" />
     </tal:block>
     <h3 tal:condition="not:view/has_learners" i18n:translate="">
       This section has no students
+    </h3>
+    <h3>
+      <tal:block i18n:translate="">Locations</tal:block>
+      <a class="modify" href="" title="Edit locations for this section"
+         tal:attributes="href string:${context/@@absolute_url}/locations.html"
+         i18n:attributes="title">
+        <img tal:attributes="src context/++resource++schooltool.skin.flourish/edit-icon.png"
+             alt="Edit"
+             i18n:attributes="alt" />
+      </a>
+    </h3>
+    <tal:block tal:condition="view/has_locations">
+      <tal:block content="structure context/schooltool:content/ajax/view/context/resources/location_table" />
+    </tal:block>
+    <h3 tal:condition="not:view/has_locations" i18n:translate="">
+      This section has no locations
+    </h3>
+    <h3>
+      <tal:block i18n:translate="">Equipment</tal:block>
+      <a class="modify" href="" title="Edit equipment for this section"
+         tal:attributes="href string:${context/@@absolute_url}/equipment.html"
+         i18n:attributes="title">
+        <img tal:attributes="src context/++resource++schooltool.skin.flourish/edit-icon.png"
+             alt="Edit"
+             i18n:attributes="alt" />
+      </a>
+    </h3>
+    <tal:block tal:condition="view/has_equipment">
+      <tal:block content="structure context/schooltool:content/ajax/view/context/resources/equipment_table" />
+    </tal:block>
+    <h3 tal:condition="not:view/has_equipment" i18n:translate="">
+      This section has no equipment
     </h3>
   </tal:block>
   <h3>

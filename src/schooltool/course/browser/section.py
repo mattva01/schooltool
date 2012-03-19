@@ -22,6 +22,7 @@ SchoolTool section views
 
 from collections import defaultdict
 
+import zc.table.table
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import adapts
 from zope.component import getMultiAdapter
@@ -49,15 +50,14 @@ from z3c.form.interfaces import ActionExecutionError
 from z3c.form.interfaces import HIDDEN_MODE
 from z3c.form.validator import SimpleFieldValidator
 from z3c.form.validator import WidgetValidatorDiscriminators
-from zc.table import table
 from zc.table.column import GetterColumn
 from zc.table.interfaces import ISortableColumn
 
 from schooltool.app.browser.app import BaseEditView
-from schooltool.app.browser.app import FlourishRelationshipViewBase
 from schooltool.app.browser.app import RelationshipViewBase
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.utils import vocabulary_titled
+from schooltool.basicperson.browser.person import EditPersonRelationships
 from schooltool.common import SchoolToolMessage as _
 from schooltool.common.inlinept import InheritTemplate
 from schooltool.common.inlinept import InlineViewPageTemplate
@@ -67,13 +67,15 @@ from schooltool.course.section import Section
 from schooltool.course.section import copySection
 from schooltool.course.browser.course import CoursesActiveTabMixin as SectionsActiveTabMixin
 from schooltool.person.interfaces import IPerson
+from schooltool.resource.browser.resource import EditLocationRelationships
+from schooltool.resource.browser.resource import EditEquipmentRelationships
+from schooltool.resource.interfaces import ILocation, IEquipment
 from schooltool.schoolyear.interfaces import ISchoolYear
 from schooltool.schoolyear.interfaces import ISchoolYearContainer
 from schooltool.schoolyear.browser.schoolyear import SchoolyearNavBreadcrumbs
 from schooltool.skin.containers import ContainerView
 from schooltool.skin import flourish
 from schooltool.skin.flourish.containers import ContainerDeleteView
-from schooltool.skin.flourish.containers import TableContainerView as FlourishTableContainerView
 from schooltool.skin.flourish.form import Dialog
 from schooltool.skin.flourish.form import DialogForm
 from schooltool.skin.flourish.form import DisplayForm
@@ -84,11 +86,7 @@ from schooltool.skin.flourish.page import Page
 from schooltool.skin.flourish.page import RefineLinksViewlet
 from schooltool.skin.flourish.breadcrumbs import PageBreadcrumbs
 from schooltool.skin.flourish.page import TertiaryNavigationManager
-from schooltool.table.interfaces import ITableFormatter
-from schooltool.table.table import FilterWidget
-from schooltool.table.table import LocaleAwareGetterColumn
-from schooltool.table.table import SchoolToolTableFormatter
-from schooltool.table.table import url_cell_formatter
+from schooltool import table
 from schooltool.term.interfaces import IDateManager
 from schooltool.term.interfaces import ITerm
 from schooltool.term.term import getPreviousTerm, getNextTerm
@@ -264,8 +262,9 @@ class SectionView(BrowserView):
 
     def renderPersonTable(self):
         persons = ISchoolToolApplication(None)['persons']
-        formatter = getMultiAdapter((persons, self.request), ITableFormatter)
-        formatter.setUp(table_formatter=table.StandaloneFullFormatter,
+        formatter = getMultiAdapter((persons, self.request),
+                                    table.interfaces.ITableFormatter)
+        formatter.setUp(table_formatter=zc.table.table.StandaloneFullFormatter,
                         items=[removeSecurityProxy(person)
                                for person in self.context.members],
                         batch_size=0)
@@ -936,15 +935,15 @@ class SectionDeleteLink(ModalFormLinkViewlet):
         return translate(title, context=self.request)
 
 
-class FlourishSectionFilterWidget(FilterWidget):
+class FlourishSectionFilterWidget(table.table.FilterWidget):
 
     template = ViewPageTemplateFile('templates/f_section_filter.pt')
 
 
-class FlourishSectionTableFormatter(SchoolToolTableFormatter):
+class FlourishSectionTableFormatter(table.table.SchoolToolTableFormatter):
 
     def columns(self):
-        title = LocaleAwareGetterColumn(
+        title = table.column.LocaleAwareGetterColumn(
             name='title',
             title=_(u'Title'),
             getter=lambda i, f: i.title,
@@ -962,9 +961,12 @@ def get_courses_titles(section, formatter):
     return ', '.join([course.title for course in section.courses])
 
 
-class FlourishSectionsView(FlourishTableContainerView, SectionsActiveTabMixin):
+class FlourishSectionsView(flourish.page.Page,
+                           SectionsActiveTabMixin):
 
-    content_template = ViewPageTemplateFile('templates/f_sections.pt')
+    content_template = InlineViewPageTemplate('''
+      <div tal:content="structure context/schooltool:content/ajax/view/schoolyear/sections_table" />
+    ''')
 
     @property
     def title(self):
@@ -972,25 +974,17 @@ class FlourishSectionsView(FlourishTableContainerView, SectionsActiveTabMixin):
         return _('Sections for ${schoolyear}',
                  mapping={'schoolyear': schoolyear.title})
 
-    @property
-    def container(self):
-        sections = {}
-        for term in self.schoolyear.values():
-            term_section_container = ISectionContainer(term)
-            for section in term_section_container.values():
-                name = '%s.%s.%s' % (
-                    self.schoolyear.__name__, term.__name__, section.__name__
-                    )
-                sections[name] = section
-        return sections
 
-    def getColumnsAfter(self):
-        term = LocaleAwareGetterColumn(
+class SectionsTable(table.ajax.Table):
+
+    def columns(self):
+        default = table.ajax.Table.columns(self)
+        term = table.column.LocaleAwareGetterColumn(
             name='term',
             title=_('Term'),
             getter=lambda i, f: ITerm(i).title,
             subsort=True)
-        courses = LocaleAwareGetterColumn(
+        courses = table.column.LocaleAwareGetterColumn(
             name='courses',
             title=_('Courses'),
             getter=get_courses_titles,
@@ -1002,22 +996,50 @@ class FlourishSectionsView(FlourishTableContainerView, SectionsActiveTabMixin):
             subsort=True)
         directlyProvides(term, ISortableColumn)
         directlyProvides(courses, ISortableColumn)
-        return [term, courses, size]
+        return default + [term, courses, size]
 
     def sortOn(self):
-        return (('term', True), ('courses', False), ("title", False))
+        return (('term', True), ('courses', False), ('title', False))
 
-    def setUpTableFormatter(self, formatter):
-        columns_before = self.getColumnsBefore()
-        columns_after = self.getColumnsAfter()
-        formatter.setUp(formatters=[url_cell_formatter],
-                        columns_before=columns_before,
-                        columns_after=columns_after,
-                        sort_on=self.sortOn())
 
-    def update(self):
-        self.table = FlourishSectionTableFormatter(self.container, self.request)
-        self.setUpTableFormatter(self.table)
+class SchoolYearSectionsTable(SectionsTable):
+
+    @property
+    def schoolyear(self):
+        return ISchoolYear(self.context)
+
+    @Lazy
+    def source(self):
+        sections = {}
+        schoolyear = self.schoolyear
+        for term in schoolyear.values():
+            term_section_container = ISectionContainer(term)
+            for section in term_section_container.values():
+                name = '%s.%s.%s' % (
+                    schoolyear.__name__, term.__name__, section.__name__
+                    )
+                sections[name] = section
+        return sections
+
+
+class SectionsTableFilter(table.ajax.TableFilter, FlourishSectionFilterWidget):
+
+    title = _("Section title")
+
+    def filter(self, results):
+        if self.ignoreRequest:
+            return results
+        return FlourishSectionFilterWidget.filter(self, results)
+
+
+class SectionsTableSchoolYear(flourish.viewlet.Viewlet):
+
+    template = InlineViewPageTemplate('''
+      <input type="hidden" name="schoolyear_id"
+             tal:define="schoolyear_id view/view/schoolyear/__name__|nothing"
+             tal:condition="schoolyear_id"
+             tal:attributes="value schoolyear_id" />
+    ''')
 
 
 class FlourishSectionContainerDeleteView(ContainerDeleteView):
@@ -1088,28 +1110,19 @@ class FlourishSectionView(DisplayForm):
             if not widget.value:
                 widget.mode = HIDDEN_MODE
 
-    @Lazy
-    def learners_table(self):
-        return self.getTable(list(self.context.members), 'students',
-                             batch_size=0)
-
-    @Lazy
-    def instructors_table(self):
-        return self.getTable(list(self.context.instructors), 'instructors',
-                             batch_size=0)
-
     def has_instructors(self):
         return bool(list(self.context.instructors))
 
     def has_learners(self):
         return bool(list(self.context.members))
 
-    def getTable(self, items, prefix, **kw):
-        persons = ISchoolToolApplication(None)['persons']
-        result = getMultiAdapter((persons, self.request), ITableFormatter)
-        result.setUp(table_formatter=table.StandaloneFullFormatter, items=items,
-                     prefix=prefix, **kw)
-        return result
+    def has_locations(self):
+        return bool([r for r in self.context.resources
+                     if ILocation(r, None) is not None])
+
+    def has_equipment(self):
+        return bool([r for r in self.context.resources
+                     if IEquipment(r, None) is not None])
 
 
 class FlourishSectionAddView(Form, SectionAddView):
@@ -1323,7 +1336,7 @@ class FlourishSectionDeleteView(DialogForm, form.EditForm):
         self.actions['cancel'].addClass('button-cancel')
 
 
-class FlourishSectionInstructorView(FlourishRelationshipViewBase):
+class FlourishSectionInstructorView(EditPersonRelationships):
     """View for adding instructors to a Section."""
 
     @property
@@ -1336,14 +1349,11 @@ class FlourishSectionInstructorView(FlourishRelationshipViewBase):
     def getSelectedItems(self):
         return filter(IPerson.providedBy, self.context.instructors)
 
-    def getAvailableItemsContainer(self):
-        return ISchoolToolApplication(None)['persons']
-
     def getCollection(self):
         return self.context.instructors
 
 
-class FlourishSectionLearnerView(FlourishRelationshipViewBase):
+class FlourishSectionLearnerView(EditPersonRelationships):
     """View for adding learners to a Section."""
 
     @property
@@ -1353,24 +1363,59 @@ class FlourishSectionLearnerView(FlourishRelationshipViewBase):
     current_title = _("Current students")
     available_title = _("Add students")
 
-    def setUpTables(self):
-        self.available_table = self.createTableFormatter(
-            ommit=self.getOmmitedItems(),
-            prefix="add_item")
-
-        self.selected_table = self.createTableFormatter(
-            filter=lambda l: l,
-            items=self.getSelectedItems(),
-            prefix="remove_item")
-
     def getSelectedItems(self):
         return filter(IPerson.providedBy, self.context.members)
 
-    def getAvailableItemsContainer(self):
-        return ISchoolToolApplication(None)['persons']
-
     def getCollection(self):
         return self.context.members
+
+
+class FlourishSectionLocationView(EditLocationRelationships):
+    """View for adding locations to a Section."""
+
+    @property
+    def title(self):
+        return self.context.title
+
+    current_title = _("Current locations")
+    available_title = _("Add locations")
+
+    def getCollection(self):
+        return self.context.resources
+
+    def getSelectedItems(self):
+        return [r for r in self.context.resources
+                if ILocation(r, None) is not None]
+
+    def getOmmitedItems(self):
+        items = self.getSelectedItems()
+        return [r for r in self.getAvailableItemsContainer().values()
+                if ILocation(r, None) is None
+                or r in items]
+
+
+class FlourishSectionEquipmentView(EditEquipmentRelationships):
+    """View for adding equipment to a Section."""
+
+    @property
+    def title(self):
+        return self.context.title
+
+    current_title = _("Current equipment")
+    available_title = _("Add equipment")
+
+    def getCollection(self):
+        return self.context.resources
+
+    def getSelectedItems(self):
+        return [r for r in self.context.resources
+                if IEquipment(r, None) is not None]
+
+    def getOmmitedItems(self):
+        items = self.getSelectedItems()
+        return [r for r in self.getAvailableItemsContainer().values()
+                if IEquipment(r, None) is None
+                or r in items]
 
 
 class FlourishSectionLinkageView(Page, SectionLinkageView):

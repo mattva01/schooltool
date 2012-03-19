@@ -1,7 +1,48 @@
 # Sample SchoolTool server configuration file
 
-# identify the component configuration used to define the site:
+# Site definition file:
 site-definition ${abspath}/site.zcml
+
+# Where should the server store all data?
+<zodb>
+
+  # <filestorage>		traditional FileStorage
+  #   path filename		required
+  #   create yes|no		default: yes
+  #   read-only yes|no		default: no
+  #   quota size		default: no quota
+  #   blob-dir directory        directory to hold blob data
+  # </filestorage>
+  <filestorage>
+    path ${abspath}/var/Data.fs
+    blob-dir ${abspath}/var/blobs
+  </filestorage>
+
+  # <zeoclient>
+  #   server address		one or more; required
+  #   cache-size n		default: 20000000 (bytes)
+  #   name storage-name		default: address of the server
+  #   client x			enables persistent cache for client x
+  #   var dirname		directory for persistent cache (default: .)
+  #   min-disconnect-poll n	default: 5
+  #   max-disconnect-poll n	default: 300
+  #   wait yes|no		default: yes
+  #   read-only yes|no		default: no
+  #   read-only-fallback yes|no	default: no
+  #   realm name		authentication realm
+  # </zeoclient>
+
+  # cache-size n
+  #
+  # Default:
+  #   cache-size 5000
+
+  # pool-size n
+  #
+  # Default:
+  #   pool-size 7
+
+</zodb>
 
 #
 # thread-pool-size n
@@ -29,6 +70,40 @@ site-definition ${abspath}/site.zcml
 # Default: no pidfile
 #
 pid-file ${abspath}/var/schooltool.pid
+
+#
+# lang
+#
+#   Specifies the locale of the messages to be used on the server.
+#
+#   You can specify more than one locale, separated by commas.  Then a language
+#   selector will appear in the top bar, allowing the user to switch the
+#   language.
+#
+#   If set to 'auto', the language is chosen according to the user's
+#   preference specified in the web browser configuration.
+#
+# Default:
+#   lang auto
+#
+# Examples:
+#   lang en-gb
+#   lang es-sv
+#   lang fr,en-ca
+
+#
+# reportlab_fontdir
+#
+#   Specifies the path to TrueType fonts (Liberation), needed to generate PDF
+#   reports with reportlab.  You may need to install the ttf-liberation package.
+#
+#   Comment out or leave empty to disable reportlab.
+#
+# Examples:
+#    reportlab_fontdir /usr/share/fonts/truetype/ttf-liberation
+#    reportlab_fontdir /usr/share/fonts/truetype/liberation
+#
+reportlab_fontdir /usr/share/fonts/truetype/ttf-liberation:/usr/share/fonts/truetype/ubuntu-font-family
 
 #
 # error-log-file
@@ -68,89 +143,6 @@ error-log-file STDERR
 #    web-access-log-file STDOUT
 #
 web-access-log-file ${abspath}/log/web-access.log
-
-#
-# lang
-#
-#   Specifies the locale of the messages to be used on the server.
-#
-#   You can specify more than one locale, separated by commas.  Then a language
-#   selector will appear in the top bar, allowing the user to switch the
-#   language.
-#
-#   If set to 'auto', the language is chosen according to the user's
-#   preference specified in the web browser configuration.
-#
-# Default:
-#   lang auto
-#
-# Examples:
-#   lang en-gb
-#   lang es-sv
-#   lang fr,en-ca
-
-#
-# <zodb>
-#   ...
-# </zodb>
-#
-#   Specifies a ZODB database to use.
-#   This section is required.
-#
-
-<zodb>
-  <blobstorage>
-  # <filestorage>		traditional FileStorage
-  #   path filename		required
-  #   create yes|no		default: yes
-  #   read-only yes|no		default: no
-  #   quota size		default: no quota
-  # </filestorage>
-    <filestorage>
-      path ${abspath}/var/Data.fs
-    </filestorage>
-
-    blob-dir ${abspath}/var/blobs
-  </blobstorage>
-
-  # <zeoclient>
-  #   server address		one or more; required
-  #   cache-size n		default: 20000000 (bytes)
-  #   name storage-name		default: address of the server
-  #   client x			enables persistent cache for client x
-  #   var dirname		directory for persistent cache (default: .)
-  #   min-disconnect-poll n	default: 5
-  #   max-disconnect-poll n	default: 300
-  #   wait yes|no		default: yes
-  #   read-only yes|no		default: no
-  #   read-only-fallback yes|no	default: no
-  #   realm name		authentication realm
-  # </zeoclient>
-
-  # cache-size n
-  #
-  # Default:
-  #   cache-size 5000
-
-  # pool-size n
-  #
-  # Default:
-  #   pool-size 7
-
-</zodb>
-
-#
-# reportlab_fontdir
-#
-#   Specifies the path to TrueType fonts (Liberation)
-#   for ReportLab.
-#
-#   Comment out or set to empty string to disable reportlab.
-#
-# Examples:
-#    reportlab_fontdir /usr/share/fonts/truetype/ttf-liberation
-#
-reportlab_fontdir /usr/share/fonts/truetype/ttf-liberation
 
 # devmode
 #

@@ -25,8 +25,9 @@ import pytz
 from zope.container.interfaces import IContained, IContainer
 from zope.container.constraints import containers, contains
 from zope.annotation.interfaces import IAnnotatable, IAttributeAnnotatable
+from zope.file.interfaces import IFile
 from zope.interface import Interface, Attribute
-from zope.schema import Bool, Bytes, Choice, TextLine
+from zope.schema import Bool, Choice, Object, TextLine
 
 from schooltool.app.utils import vocabulary
 from schooltool.common import SchoolToolMessage as _
@@ -51,10 +52,10 @@ class IReadPerson(IGroupMember):
         title=_("Full name"),
         description=_("Name that should be displayed"))
 
-    photo = Bytes(
+    photo = Object(
         title=_("Photo"),
         required=False,
-        description=_("""Photo (in JPEG format)"""))
+        schema=IFile)
 
     username = TextLine(
         title=_("Username"))
@@ -170,7 +171,7 @@ class ICalendarDisplayPreferences(Interface):
 
     # SUNDAY and MONDAY are integers, 6 and 0 respectivley
     weekstart = Choice(
-        title=_("Week starts on:"),
+        title=_("Week starts on"),
         vocabulary=vocabulary([(calendar.SATURDAY, _("Saturday")),
                                (calendar.SUNDAY, _("Sunday")),
                                (calendar.MONDAY, _("Monday"))]))

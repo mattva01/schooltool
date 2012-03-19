@@ -44,17 +44,17 @@
     width: 544px;
 }
 
+.narrow-dialog .ui-dialog-content form {
+    width: 288px;
+}
+
 .ui-dialog .ui-dialog-content form fieldset {
-    padding-top: 0px;
+    padding: 0 0 8px 0;
     margin-bottom: 0px;
 }
 
 .ui-dialog .ui-dialog-content form .required-info {
     display: none;
-}
-
-.ui-dialog .ui-dialog-content form.filldown-dialog-form {
-    width: 250px;
 }
 
 .ui-dialog .ui-dialog-content .buttons {
@@ -63,12 +63,13 @@
 }
 
 .ui-dialog .ui-dialog-titlebar {
-    padding-left: 8px;
+    padding: 4px 8px;
+    border: none;
 }
 
 .ui-dialog .ui-dialog-titlebar .ui-dialog-title {
-    line-height: 20px;
-    font-size: 16px;
+    line-height: 18px;
+    font-size: 14px;
 }
 
 .ui-datepicker {
@@ -119,5 +120,9 @@
 }
 
 .explicit-close-dialog .ui-dialog-titlebar-close {
+    display: none;
+}
+
+.hidden-dialog {
     display: none;
 }

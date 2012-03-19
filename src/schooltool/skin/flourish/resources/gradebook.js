@@ -4,6 +4,11 @@ function setNotEdited()
     edited = false;
 }
 
+function setEdited()
+{
+    edited = true;
+}
+
 function checkChanges()
 {
     if (!edited)
@@ -118,7 +123,7 @@ function checkValid(e, name)
 	    return true;
 	}
 
-    edited = true;
+    setEdited();
     var element = document.getElementById(name);
     var elementCell = document.getElementById(name+'_cell');
     var value = element.value;
@@ -225,9 +230,25 @@ $(document).ready(function() {
     // popup menus
     $('.popup_link').click(function(e) {
         $('.popup_active').hide().removeClass('popup_active');
-        $(this).parent().prev('ul.popup_menu').addClass('popup_active');
+        var popup = $(this).parent().prev('ul.popup_menu');
+        popup.addClass('popup_active');
+        var th = $(this).closest('th');
+        if (th.length > 0) {
+            var part = th.closest('.gradebook-part');
+            var part_margin_left = parseInt(part.css('marginLeft').replace('px',''));
+            var popup_right = th.position().left - part_margin_left + popup.outerWidth();
+            if (popup_right > part.outerWidth()) {
+                var left = th.position().left + th.outerWidth() - popup.outerWidth();
+            } else {
+                var left = th.position().left;
+            }
+            popup.css('left', left+'px');
+        }
         $('.popup_active').show();
         e.preventDefault();
+    });
+    $('.gradebook-part').scroll(function() {
+        $('.popup_active').hide().removeClass('popup_active');
     });
     $(document).click(function(e) {
         if ($(e.target).hasClass('popup_link') == false) {

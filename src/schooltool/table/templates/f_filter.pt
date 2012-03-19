@@ -1,0 +1,51 @@
+<script>ST.state.push()</script>
+<tal:script tal:replace="structure scriptlocal:container_id view/manager/html_id" />
+
+<tal:block i18n:domain="schooltool" define="batch nocall:view/manager/batch|nothing">
+
+  <tal:if condition="batch">
+    <div class="count" i18n:translate="">
+      Showing
+      <span i18n:name="count" tal:content="batch/length"/>
+      of
+      <span i18n:name="total" tal:content="batch/full_size"/>
+      items
+    </div>
+  </tal:if>
+  <fieldset>
+    <legend><span tal:content="view/legend">Search</span></legend>
+    <div class="row">
+      <div class="label">
+        <label for="SEARCH">
+          <span tal:content="view/title">[title]</span>
+        </label>
+      </div>
+      <div class="widget">
+        <input type="text" name="SEARCH"
+               id="SEARCH" class="text-widget"
+               tal:attributes="value request/SEARCH|nothing"
+               />
+      </div>
+    </div>
+  </fieldset>
+  <div class="buttons">
+
+  <tal:block define="search_id string:${view/manager/html_id}-search">
+
+    <input type="submit" name="SEARCH_BUTTON" value="Search"
+           tal:attributes="id search_id"
+           class="button-ok" i18n:attributes="value" />
+    <tal:script replace="structure scriptlocal: search_id" />
+    <script>
+      $(ST.dialogs.jquery_id(ST.local.search_id)).click(
+         function(){
+             var search_id = ST.local.search_id;
+             var container_id = ST.local.container_id;
+             return function(button) {
+                  return ST.table.on_form_submit(container_id, button);
+             }}());
+    </script>
+  </tal:block>
+  </div>
+</tal:block>
+<script>ST.state.pop()</script>

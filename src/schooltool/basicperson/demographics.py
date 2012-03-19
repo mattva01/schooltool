@@ -183,7 +183,7 @@ class FieldDescription(Persistent, Location):
 
     def setUpField(self, form_field):
         form_field.required = self.required
-        form_field.__name__ = str(self.name)
+        form_field.__name__ = str(self.__name__)
         form_field.interface = IDemographicsForm
         return field.Fields(form_field)
 

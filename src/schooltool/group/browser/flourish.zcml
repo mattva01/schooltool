@@ -3,6 +3,7 @@
            xmlns:z3c="http://namespaces.zope.org/z3c"
            xmlns:zope="http://namespaces.zope.org/zope"
            xmlns:flourish="http://schooltool.org/flourish"
+           xmlns:report="http://namespaces.schooltool.org/report"
            i18n_domain="schooltool">
 
   <!-- content -->
@@ -136,6 +137,43 @@
       permission="schooltool.view"
       />
 
+  <flourish:viewlet
+      name="table"
+      class=".group.GroupsTable"
+      for="schooltool.group.interfaces.IGroupContainer"
+      manager="schooltool.skin.flourish.interfaces.IAJAXParts"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="done"
+      before="table batch"
+      after="filter"
+      manager=".group.GroupsTable"
+      view=".group.FlourishGroupsView"
+      class="schooltool.app.browser.app.ManageItemDoneLink"
+      render="template"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="filter"
+      class=".group.GroupsTableFilter"
+      render="template"
+      manager=".group.GroupsTable"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="schoolyear"
+      after="filter"
+      view=".group.FlourishGroupsView"
+      manager=".group.GroupsTable"
+      class=".group.GroupsTableSchoolYear"
+      render="template"
+      permission="schooltool.view"
+      />
+
   <flourish:page
       name="addSchoolToolGroup.html"
       for="schooltool.group.interfaces.IGroupContainer"
@@ -160,12 +198,38 @@
       permission="schooltool.edit"
       />
 
+  <flourish:viewlet
+      name="filter"
+      manager=".group.GroupLeadersTable"
+      view=".group.FlourishGroupView"
+      class="schooltool.table.table.DoNotFilter"
+      permission="zope.Public"
+      />
+
   <flourish:page
       name="members_persons.html"
       for="schooltool.group.interfaces.IBaseGroup"
       class=".group.FlourishMemberViewPersons"
       permission="schooltool.edit"
       subtitle="Members"
+      />
+
+  <flourish:viewlet
+      name="available_table"
+      class=".group.GroupListAddRelationshipTable"
+      for="schooltool.person.interfaces.IPerson"
+      manager="schooltool.skin.flourish.interfaces.IAJAXParts"
+      view=".group.FlourishGroupListView"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="current_table"
+      class=".group.GroupListRemoveRelationshipTable"
+      for="schooltool.person.interfaces.IPerson"
+      manager="schooltool.skin.flourish.interfaces.IAJAXParts"
+      view=".group.FlourishGroupListView"
+      permission="schooltool.view"
       />
 
   <configure package="schooltool.skin.flourish">
@@ -289,6 +353,31 @@
       view=".csvimport.FlourishGroupMemberCSVImportView"
       template="templates/f_group_member_csvimport_description.pt"
       permission="zope.Public"
+      />
+
+  <report:reportLink
+      name="group_a_id_cards_pdf"
+      for="schooltool.group.interfaces.IGroup"
+      permission="schooltool.edit"
+      group="Group"
+      description="Includes student name, ID number, birth date, contact name and contact phone number. Prints eight per page."
+      title="ID Cards"
+      file_type="pdf"
+      link="request_group_id_cards_pdf.html"
+      />
+
+  <flourish:page
+      name="request_group_id_cards_pdf.html"
+      for="schooltool.group.interfaces.IGroup"
+      class=".group.FlourishRequestGroupIDCardsView"
+      permission="schooltool.edit"
+      />
+
+   <flourish:page
+      name="group_id_cards.pdf"
+      for="schooltool.group.interfaces.IGroup"
+      class=".group.FlourishGroupIDCardsView"
+      permission="schooltool.edit"
       />
 
 </configure>

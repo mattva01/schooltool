@@ -40,6 +40,7 @@ from zope.viewlet.viewlet import ViewletBase
 
 from z3c.form import form, field, button, validator
 from z3c.form.browser.checkbox import SingleCheckBoxFieldWidget
+from z3c.form.interfaces import DISPLAY_MODE
 from zc.table.column import GetterColumn
 from zc.table.interfaces import ISortableColumn
 
@@ -49,9 +50,7 @@ from schooltool.common.inlinept import InlineViewPageTemplate
 from schooltool.skin.containers import TableContainerView
 from schooltool.skin import flourish
 from schooltool.skin.flourish.form import Form
-from schooltool.table.table import SchoolToolTableFormatter
-from schooltool.table.table import ImageInputColumn
-from schooltool.table.table import simple_form_key
+from schooltool.table import table
 from schooltool.email.interfaces import IEmailContainer, IEmail
 from schooltool.email.interfaces import IEmailUtility
 from schooltool.email.mail import Email, status_messages
@@ -515,7 +514,7 @@ def email_container_table_columns():
     return [from_address, to_addresses, subject, time_created, time_sent]
 
 
-class EmailContainerViewTableFormatter(SchoolToolTableFormatter):
+class EmailContainerViewTableFormatter(table.SchoolToolTableFormatter):
 
     columns = lambda self: email_container_table_columns()
 
@@ -589,18 +588,20 @@ class EmailContainerView(TableContainerView):
         return super(EmailContainerView, self).__call__()
 
 
-class FlourishEmailContainerView(flourish.page.Page,
-                                 form.DisplayForm):
+class FlourishEmailContainerView(flourish.page.Page):
+
+    pass
+
+
+class FlourishEmailContainerDetails(flourish.form.FormViewlet):
 
     fields = field.Fields(IEmailSettingsEditForm)
     fields = fields.omit('server_status',
                          'enabled',
                          'password',
                          'password_confirmation')
-
-    def __call__(self):
-        form.DisplayForm.update(self)
-        return self.render()
+    template = ViewPageTemplateFile("templates/f_email_container.pt")
+    mode = DISPLAY_MODE
 
     @property
     def status(self):
@@ -610,7 +611,7 @@ class FlourishEmailContainerView(flourish.page.Page,
             return  _('Disabled')
 
     def updateWidgets(self):
-        super(FlourishEmailContainerView, self).updateWidgets()
+        super(FlourishEmailContainerDetails, self).updateWidgets()
         if self.context.password:
             mask = '*'*len(self.context.password)
             self.widgets['dummy_password'].value = mask
@@ -620,21 +621,21 @@ class FlourishEmailContainerView(flourish.page.Page,
         return '%s/settings' % absoluteURL(app, self.request)
 
 
-class FlourishEmailQueueView(flourish.containers.TableContainerView):
+class FlourishEmailQueueView(table.TableContainerView):
 
     def getColumnsAfter(self):
-        action = ImageInputColumn(
+        action = table.ImageInputColumn(
             'delete', name='action', title=_('Delete'),
             library='schooltool.skin.flourish',
             image='remove-icon.png',
-            id_getter=simple_form_key)
+            id_getter=table.simple_form_key)
         return [action]
 
     def update(self):
         super(FlourishEmailQueueView, self).update()
         # XXX: deletion without confirmation is quite dangerous
         delete = [key for key, item in self.container.items()
-                  if "delete.%s" % simple_form_key(item) in self.request]
+                  if "delete.%s" % table.simple_form_key(item) in self.request]
         for key in delete:
             del self.container[key]
         if delete:
@@ -845,20 +846,19 @@ class EmailQueueLinkViewlet(flourish.page.LinkViewlet):
             return _('Email Queue')
 
 
-class FlourishEmailSettingsOverview(flourish.page.Content):
+class FlourishEmailSettingsOverview(flourish.form.FormViewlet):
 
-    body_template = ViewPageTemplateFile(
+    fields = field.Fields(IEmailSettingsEditForm)
+    fields = fields.select('server_status', 'hostname')
+    template = ViewPageTemplateFile(
         'templates/f_email_settings_overview.pt')
+    mode = DISPLAY_MODE
 
-    @property
-    def email_status(self):
-        email = IEmailContainer(self.context)
-        if email.enabled:
-            return _('Enabled')
-        else:
-            return  _('Disabled')
+    def getContent(self):
+        return IEmailContainer(self.context)
 
-    @property
-    def hostname(self):
-        email = IEmailContainer(self.context)
-        return email.hostname or ''
+    def updateWidgets(self):
+        super(FlourishEmailSettingsOverview, self).updateWidgets()
+        email_container = self.getContent()
+        status = email_container.enabled and _('Enabled') or _('Disabled')
+        self.widgets['server_status'].value = status

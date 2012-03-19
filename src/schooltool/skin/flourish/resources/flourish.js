@@ -43,6 +43,8 @@ ST.redirect = function(destination) {
     }
 }
 
+ST.base_url = ''
+ST.resource_url = ''
 
 /* ST common jquery dialogs */
 
@@ -135,6 +137,8 @@ ST.dialogs = function() {
   /* "public" */
   return {
 
+    jquery_id: jq_selector,
+
     open_modal_link: function(link_sel, dialog_container_id)
     {
         var link = $(link_sel);
@@ -215,6 +219,21 @@ ST.dialogs = function() {
 
 }();
 
+
+ST.images = function() {
+
+  /* "private" */
+
+  function make_image(name) {
+      return $('<img src="'+ST.resource_url+name+'" />');
+  }
+
+  /* "public" */
+  return {
+      spinner: function() { return make_image('spinner.gif'); }
+  }
+
+}();
 
 /* Temporary jQuery UI datepicker integration */
 

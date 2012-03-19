@@ -1,0 +1,102 @@
+<div class="no-batch-navigation" tal:condition="python: view.full_size and not view.needsBatch"></div>
+<div class="batch-navigation"
+     tal:condition="view/needsBatch"
+     tal:define="batch view/batch"
+     tal:attributes="id view/html_id"
+     i18n:domain="schooltool">
+  <tal:if condition="batch/needsBatch" define="token view/previous">
+    <span tal:condition="not:batch/previous" i18n:translate=""
+          class="previous">&laquo; Previous</span>
+    <a href="#"
+       tal:condition="token"
+       tal:attributes="class token/css_class;
+                       onclick token/onclick"
+       i18n:translate="">&laquo; Previous</a>
+  </tal:if>
+
+  <div class="batch-extra-navigation" tal:define="token view/show_all">
+    <a href="#"
+       tal:condition="token"
+       tal:attributes="class token/css_class;
+                       onclick token/onclick"
+       i18n:translate="">Show All</a>
+  </div>
+
+  <tal:if condition="batch/needsBatch">
+
+    <tal:if define="cur batch/current;
+                    total batch/numBatches;
+                    tokens view/tokens"
+            condition="python:total > 11">
+      <tal:if condition="python:cur <= 6">
+        <span class="batch_page" tal:repeat="t python:tokens[:9]">
+          <a tal:attributes="class t/css_class; onclick t/onclick"
+             tal:content="t/num" href="#" />
+        </span>
+        <span class="batch_separator">...</span>
+        <tal:block define="t python:tokens[-1]">
+          <span class="batch_page">
+            <a tal:attributes="class t/css_class; onclick t/onclick"
+               tal:content="t/num" href="#" />
+          </span>
+        </tal:block>
+      </tal:if>
+
+      <tal:if condition="python:cur < (total - 4) and (cur > 6)">
+        <tal:block define="t python:tokens[0]">
+          <span class="batch_page">
+            <a tal:attributes="class t/css_class; onclick t/onclick"
+               tal:content="t/num" href="#" />
+          </span>
+        </tal:block>
+        <span class="batch_separator">...</span>
+        <span class="batch_page" tal:repeat="t python:tokens[cur - 4: cur + 3]">
+          <a tal:attributes="class t/css_class; onclick t/onclick"
+             tal:content="t/num" href="#" />
+        </span>
+        <span class="batch_separator">...</span>
+        <tal:block define="t python:tokens[-1]">
+          <span class="batch_page">
+            <a tal:attributes="class t/css_class; onclick t/onclick"
+               tal:content="t/num" href="#" />
+          </span>
+        </tal:block>
+      </tal:if>
+
+      <tal:if condition="python:cur >= total - 4">
+        <tal:block define="t python:tokens[0]">
+          <span class="batch_page">
+            <a tal:attributes="class t/css_class; onclick t/onclick"
+               tal:content="t/num" href="#" />
+          </span>
+        </tal:block>
+        <span class="batch_separator">...</span>
+        <span class="batch_page" tal:repeat="t python:tokens[-8:]">
+          <a tal:attributes="class t/css_class; onclick t/onclick"
+             tal:content="t/num" href="#" />
+        </span>
+      </tal:if>
+
+    </tal:if>
+
+    <tal:if define="tokens view/tokens"
+            condition="not:python:len(tokens) > 11">
+      <span class="batch_page" tal:repeat="t tokens">
+          <a tal:attributes="class t/css_class; onclick t/onclick"
+             tal:content="t/num" href="#" />
+      </span>
+    </tal:if>
+
+
+    <tal:block define="token view/next">
+      <span tal:condition="not:batch/next" i18n:translate=""
+            class="next">Next &raquo;</span>
+      <a href="#"
+         tal:condition="token"
+         tal:attributes="class token/css_class;
+                         onclick token/onclick"
+         i18n:translate="">Next &raquo;</a>
+    </tal:block>
+
+  </tal:if>
+</div>

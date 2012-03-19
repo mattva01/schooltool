@@ -1,0 +1,134 @@
+<?xml version="1.0" standalone="no" ?>
+<!DOCTYPE document SYSTEM "rml_1_0.dtd" [
+  <!ENTITY pound   "&#xA3;">
+  <!ENTITY nbsp    "&#160;">
+]>
+<document
+  xmlns:tal="http://xml.zope.org/namespaces/tal"
+  xmlns:metal="http://xml.zope.org/namespaces/metal"
+  xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+  metal:use-macro="context/@@rml_macros/report"
+  i18n:domain="schooltool">
+  <metal:block fill-slot="page_templates">
+    <tal:block content="structure view/use_template/cards" />
+  </metal:block>
+  <stylesheet>
+    <metal:block fill-slot="extra_initialize">
+    </metal:block>
+    <metal:block fill-slot="stylesheet">
+      <paraStyle
+          name="normal"
+          fontName="Ubuntu_Regular"
+          fontSize="11" />
+      <paraStyle
+          parent="normal"
+          name="bold"
+          fontName="Ubuntu_Bold" />
+      <paraStyle
+          name="card_title"
+          alignment="center"
+          textColor="white"
+          fontName="Ubuntu_Bold"
+          fontSize="14" />
+      <paraStyle
+          name="footer"
+          alignment="center"
+          textColor="#666666"
+          fontName="Ubuntu_Regular"
+          fontSize="9" />
+    </metal:block>
+  </stylesheet>
+  <story metal:fill-slot="story">
+    <tal:block repeat="person view/persons"
+               tal:define="cardFrames view/cardFrames">
+      <tal:block tal:define="frame python:view.personFrame(repeat);
+                             frameInfo python:cardFrames[frame];">
+        <illustration
+            tal:attributes="height string:${frameInfo/outter/height}cm;
+                            width string:${frameInfo/outter/width}cm">
+          <lineMode width="0.0125cm" />
+          <stroke color="black" />
+          <fill color="#999999" />
+          <rect x="0cm" y="0cm" fill="false" stroke="true"
+                tal:attributes="height string:${frameInfo/outter/height}cm;
+                                width string:${frameInfo/outter/width}cm;"
+                />
+          <rect x="0cm" y="4.3cm" fill="true" stroke="false"
+                tal:attributes="height string:${frameInfo/title/height}cm;
+                                width string:${frameInfo/title/width}cm;"
+                />
+          <image
+              tal:condition="person/photo"
+              x="5.6cm"
+              tal:attributes="height string:${view/PHOTO/height}cm;
+                              width string:${view/PHOTO/width}cm;
+                              file person/photo/@@data_uri;
+                              y string:${view/DEMOGRAPHICS/margin-bottom}cm;"
+              />
+          <rect
+              fill="false" stroke="true"
+              tal:condition="not:person/photo"
+              x="5.6cm"
+              tal:attributes="height string:${view/PHOTO/height}cm;
+                              width string:${view/PHOTO/width}cm;
+                              y string:${view/DEMOGRAPHICS/margin-bottom}cm;"
+              />
+        </illustration>
+        <keepInFrame
+            onOverflow="shrink"
+            tal:attributes="frame string:title_${frame};
+                            maxWidth string:${frameInfo/title/maxWidth}cm;
+                            maxHeight string:${frameInfo/title/maxHeight}cm">
+          <spacer
+              tal:attributes="length python:view.titleVerticalAlign(person)" />
+          <para style="card_title" tal:content="person/title" />
+        </keepInFrame>
+        <keepInFrame
+            onOverflow="shrink"
+            tal:attributes="frame string:demographics_${frame}">
+          <para style="normal">
+            <b i18n:translate="">ID:</b>
+            <tal:block tal:content="person/ID" />
+          </para>
+          <spacer length="0.25cm" />
+          <para style="normal">
+            <b i18n:translate="">Birth date:</b>
+            <tal:block tal:content="person/birth_date" />
+          </para>
+          <spacer length="0.25cm" />
+          <para style="bold" i18n:translate="">
+            Contact
+          </para>
+          <para style="normal"
+                tal:define="contact_title person/contact_title">
+            <tal:block tal:condition="contact_title"
+                       tal:content="contact_title" />
+            <tal:block tal:condition="not:contact_title">
+              <b>&nbsp;</b>
+            </tal:block>
+          </para>
+          <spacer length="0.25cm" />
+          <para style="bold" i18n:translate="">
+            Contact's Phone
+          </para>
+          <para style="normal"
+                tal:define="contact_phone person/contact_phone">
+            <tal:block tal:condition="contact_phone"
+                       tal:content="contact_phone" />
+            <tal:block tal:condition="not:contact_phone">
+              <b>&nbsp;</b>
+            </tal:block>
+          </para>
+        </keepInFrame>
+        <keepInFrame
+            onOverflow="shrink"
+            tal:attributes="frame string:footer_${frame};
+                            maxWidth string:${frameInfo/footer/maxWidth}cm;
+                            maxHeight string:${frameInfo/footer/maxHeight}cm">
+          <para style="footer" tal:content="view/schoolName" />
+        </keepInFrame>
+      </tal:block>
+      <nextPage tal:condition="python:view.insertBreak(repeat)" />
+    </tal:block>
+  </story>
+</document>

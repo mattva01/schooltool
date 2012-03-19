@@ -125,9 +125,11 @@ class WeekDayTemplates(DayTemplateSchedule):
                 yield None
             return
         schedule = interfaces.ISchedule(self)
+        schooldays = interfaces.ISchooldays(schedule)
         scheduled_dates = DateRange(schedule.first, schedule.last)
         for date in dates:
-            if date not in scheduled_dates:
+            if (date not in scheduled_dates or
+                date not in schooldays):
                 yield None
             else:
                 day = self.getWeekDay(date.weekday())

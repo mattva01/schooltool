@@ -59,7 +59,7 @@
       name="what-is-this"
       class="schooltool.skin.flourish.page.Related"
       template="templates/f_resource_container_related.pt"
-      view=".resource.FlourishResourceContainerView"
+      view=".resource.FlourishResourcesView"
       manager="schooltool.skin.flourish.page.IPageRelatedManager"
       permission="schooltool.edit"
       />
@@ -102,7 +102,7 @@
       for="schooltool.resource.interfaces.IResourceContainer"
       title="Add"
       permission="schooltool.edit"
-      view=".resource.FlourishResourceContainerView"
+      view=".resource.FlourishResourcesView"
       />
 
   <flourish:viewlet
@@ -132,9 +132,38 @@
   <flourish:page
       name="index.html"
       for="schooltool.resource.interfaces.IResourceContainer"
-      class=".resource.FlourishResourceContainerView"
+      class=".resource.FlourishResourcesView"
       permission="schooltool.view"
       />
+
+ <flourish:viewlet
+      name="table"
+      class=".resource.ResourcesTable"
+      for="schooltool.resource.interfaces.IResourceContainer"
+      manager="schooltool.skin.flourish.interfaces.IAJAXParts"
+      permission="schooltool.view"
+      />
+
+
+  <flourish:viewlet
+      name="filter"
+      class=".resource.ResourcesTableFilter"
+      render="template"
+      manager=".resource.ResourcesTable"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="done"
+      before="table batch"
+      after="filter"
+      manager=".resource.ResourcesTable"
+      view=".resource.FlourishResourcesView"
+      class="schooltool.app.browser.app.ManageItemDoneLink"
+      render="template"
+      permission="schooltool.view"
+      />
+
 
   <flourish:page
       name="addResource.html"
@@ -326,7 +355,7 @@
       name="resource-import-links"
       manager="schooltool.skin.flourish.page.IPageRefineManager"
       class="schooltool.resource.browser.resource.ResourceImportLinks"
-      view=".resource.FlourishResourceContainerView"
+      view=".resource.FlourishResourcesView"
       title="Import"
       permission="schooltool.edit"
       />
@@ -355,5 +384,68 @@
       permission="zope.Public"
       />
 
+  <flourish:viewlet
+      name="available_table"
+      class=".resource.LocationAddRelationshipTable"
+      manager="schooltool.skin.flourish.interfaces.IAJAXParts"
+      view=".resource.EditLocationRelationships"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="current_table"
+      class=".resource.LocationRemoveRelationshipTable"
+      manager="schooltool.skin.flourish.interfaces.IAJAXParts"
+      view=".resource.EditLocationRelationships"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="available_table"
+      class=".resource.EquipmentAddRelationshipTable"
+      manager="schooltool.skin.flourish.interfaces.IAJAXParts"
+      view=".resource.EditEquipmentRelationships"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="current_table"
+      class=".resource.EquipmentRemoveRelationshipTable"
+      manager="schooltool.skin.flourish.interfaces.IAJAXParts"
+      view=".resource.EditEquipmentRelationships"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="location_table"
+      for="*"
+      class=".resource.LocationListTable"
+      manager="schooltool.skin.flourish.interfaces.IAJAXParts"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="equipment_table"
+      for="*"
+      class=".resource.EquipmentListTable"
+      manager="schooltool.skin.flourish.interfaces.IAJAXParts"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="filter"
+      before="batch table"
+      class="schooltool.table.table.DoNotFilter"
+      manager=".resource.LocationListTable"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="filter"
+      before="batch table"
+      class="schooltool.table.table.DoNotFilter"
+      manager=".resource.EquipmentListTable"
+      permission="schooltool.view"
+      />
 
 </configure>

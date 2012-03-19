@@ -10,7 +10,7 @@
 <document>
 
   <template tal:attributes="
-      pageSize view/pageSize;
+      pagesize view/pageSize;
       leftMargin view/leftMargin;
       rightMargin view/rightMargin;
       topMargin view/topMargin;

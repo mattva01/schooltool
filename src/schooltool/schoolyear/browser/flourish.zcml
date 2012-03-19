@@ -111,7 +111,14 @@
       for="schooltool.schoolyear.interfaces.ISchoolYear"
       class=".schoolyear.FlourishSchoolYearView"
       title="School Year"
-      content_template="templates/f_schoolyear.pt"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="details"
+      manager="schooltool.skin.flourish.page.IPageContentManager"
+      class=".schoolyear.FlourishSchoolYearDetails"
+      view=".schoolyear.FlourishSchoolYearView"
       permission="schooltool.view"
       />
 

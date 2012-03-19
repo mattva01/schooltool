@@ -372,7 +372,7 @@ tbody tr {
     border-bottom-color: #cccccc;
 }
 
-table.relationships-table tbody tr:hover,
+table.data tbody tr:hover,
 table.highlight-rows tbody tr:hover {
     background-color: #dfdcd9;
 }
@@ -403,6 +403,12 @@ table.schoolday-legend td.schoolday {
     background-color: #DFDCD9;
 }
 
+.batch-navigation span.batch_page a:hover,
+.batch-navigation span.batch_page a.current {
+    background-color: #6c7b7c;
+    color: #ffffff;
+}
+
 /*
 
   jQuery overrides:
@@ -411,6 +417,7 @@ table.schoolday-legend td.schoolday {
       + state-hover
       + state-active
     - dialog
+    - datepicker
 
 */
 
