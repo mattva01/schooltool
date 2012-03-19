@@ -1,4 +1,4 @@
-#
+import stesting
 
 def registerTestSetup():
     from schooltool.testing import registry
@@ -12,4 +12,3 @@ def registerTestSetup():
 
 registerTestSetup()
 del registerTestSetup
-

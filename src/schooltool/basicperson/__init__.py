@@ -1,3 +1,3 @@
 #
 
-import ftesting
+import stesting

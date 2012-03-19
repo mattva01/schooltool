@@ -33,8 +33,34 @@ def registerSeleniumSetup():
         browser = element.browser
         if browser is not None:
             browser.wait_no(lambda: browser.query.id('ui-datepicker-div').is_displayed())
+
     registry.register('SeleniumHelpers',
-        lambda: schooltool.testing.selenium.registerElementUI('enter_date', type_in_date))
+        lambda: schooltool.testing.selenium.registerElementUI('enter_date',
+                                                              type_in_date))
+
+    def select_option(element, option):
+        element.click()
+        xpath = 'option[text()="%s"]' % option
+        element.query.xpath(xpath).click()
+        element.click()
+
+    registry.register('SeleniumHelpers',
+        lambda: schooltool.testing.selenium.registerElementUI('select_option',
+                                                              select_option))
+
+    def set_value(element, value):
+        tag = element.tag_name
+        css_class = element.get_attribute('class')
+        if 'date-field' in css_class:
+            element.ui.enter_date(value)
+        elif tag in ('select',):
+            element.ui.select_option(value)
+        else:
+            element.type(value)
+
+    registry.register('SeleniumHelpers',
+        lambda: schooltool.testing.selenium.registerElementUI('set_value',
+                                                              set_value))
 
 registerSeleniumSetup()
 del registerSeleniumSetup
