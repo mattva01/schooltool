@@ -5,7 +5,7 @@ CHANGES
 2.0.3 (unreleased)
 ------------------
 
-- Add options to start-schooltool-instance: --log-file, --start-file, --group
+- Add more options from paster to start-schooltool-instance.
 
 
 2.0.2 (2012-02-14)

@@ -49,6 +49,18 @@ def parse_args():
                       action="store_true",
                       dest="stop_daemon",
                       help="Stop a daemonized server")
+    parser.add_option('--reload',
+                      dest='reload',
+                      action='store_true',
+                      help="Use auto-restart file monitor")
+    parser.add_option('--reload-interval',
+                      dest='reload_interval',
+                      default=1,
+                      help="Seconds between checking files (low number can cause significant CPU usage)")
+    parser.add_option('--monitor-restart',
+                      dest='monitor_restart',
+                      action='store_true',
+                      help="Auto-restart server if it dies")
     parser.add_option("--status",
                       action="store_true",
                       dest="show_status",
@@ -142,6 +154,12 @@ def main():
         extra_options.append('--daemon')
     if options.stop_daemon:
         extra_options.append('--stop-daemon')
+    if options.reload:
+        extra_options.append('--reload')
+    if options.reload_interval:
+        extra_options.append('--reload-interval=%s' % options.reload_interval)
+    if options.monitor_restart:
+        extra_options.append('--monitor-restart')
     if options.show_status:
         extra_options.append('--status')
     if options.set_user:
