@@ -26,10 +26,10 @@ import os
 from zope.app.wsgi import WSGIPublisherApplication
 from zope.app.publication.httpfactory import HTTPPublicationRequestFactory
 
-from schooltool.app.main import StandaloneServer
+from schooltool.app.main import SchoolToolServer
 
 
-class PasteSchoolToolPublisherApplication(StandaloneServer,
+class PasteSchoolToolPublisherApplication(SchoolToolServer,
                                           WSGIPublisherApplication):
 
     def __init__(self, config_file, factory=HTTPPublicationRequestFactory):

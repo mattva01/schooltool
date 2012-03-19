@@ -250,7 +250,7 @@ class SchoolToolTableFormatter(object):
         if css_classes:
             self.css_classes = css_classes
         else:
-            self.css_classes = {'table': 'data relationships-table'}
+            self.css_classes = {'table': 'data'}
 
     def extra_url(self):
         extra_url = ""

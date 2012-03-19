@@ -438,13 +438,18 @@ def doctest_PersonFilterWidget():
         >>> class IndexStub(object):
         ...     def __init__(self):
         ...         self.documents_to_values = {}
-        >>> title_index = IndexStub()
-        >>> username_index = IndexStub()
+        ...     def apply(self, query):
+        ...         query = query.replace('*', '')
+        ...         results = []
+        ...         for id, value in self.documents_to_values.items():
+        ...             if query in value:
+        ...                 results.append(id)
+        ...         return results
+        >>> text_index = IndexStub()
 
         >>> class CatalogStub(dict):
         ...     def __init__(self):
-        ...         self['title'] = title_index
-        ...         self['__name__'] = username_index
+        ...         self['text'] = text_index
         >>> catalog = CatalogStub()
 
    Some persons:
@@ -480,8 +485,7 @@ def doctest_PersonFilterWidget():
         ...                    ('a1236','lambda', [b])]
         ...         for id, (username, title, groups) in enumerate(persons):
         ...             self[username] = PersonStub(title, groups, id)
-        ...             title_index.documents_to_values[id] = title
-        ...             username_index.documents_to_values[id] = username
+        ...             text_index.documents_to_values[id] = ' '.join([title, username])
         ...     def __conform__(self, iface):
         ...         if iface == ICatalog:
         ...             return catalog
