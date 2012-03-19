@@ -1,0 +1,146 @@
+Tests for section locations (and equipment)
+===========================================
+
+These tests are for the ability to add location and equipment resources
+to a section from the section view.
+
+Log in as manager:
+
+    >>> manager = browsers.manager
+    >>> manager.open('http://localhost')
+    >>> manager.query.link('Log in').click()
+    >>> manager.query.name('username').type('manager')
+    >>> manager.query.name('password').type('schooltool')
+    >>> manager.query.button('Log in').click()
+
+A school year is necessary for managing resources:
+
+    >>> manager.query.link('School').click()
+    >>> manager.query.link('School Year').click()
+    >>> manager.query.name('form.widgets.title').type('2012')
+    >>> manager.query.name('form.widgets.first').ui.enter_date('2012-01-01')
+    >>> manager.query.name('form.widgets.last').ui.enter_date('2012-12-31')
+    >>> manager.query.button('Submit').click()
+
+A term is necessary for managing sections:
+
+    >>> manager.query.link('School').click()
+    >>> manager.query.link('Terms').click()
+    >>> manager.query.link('Term').click()
+    >>> manager.query.name('form.widgets.title').type('2012')
+    >>> manager.query.name('form.widgets.first').ui.enter_date('2012-01-01')
+    >>> manager.query.name('form.widgets.last').ui.enter_date('2012-12-31')
+    >>> manager.query.button('Next').click()
+    >>> manager.query.button('Submit').click()
+
+Let's go to Resources and add some:
+
+    >>> manager.query.link('School').click()
+    >>> manager.query.link('Resources').click()
+    >>> manager.url
+    u'http://localhost/resources'
+
+We'll add a couple of Equipment resources.
+
+    >>> manager.query.link('Equipment').click()
+    >>> manager.query.name('form.widgets.title').type('Some equipment')
+    >>> manager.query.button('Submit').click()
+    >>> manager.query.link('Done').click()
+
+    >>> manager.query.link('Equipment').click()
+    >>> manager.query.name('form.widgets.title').type('More equipment')
+    >>> manager.query.button('Submit').click()
+    >>> manager.query.link('Done').click()
+
+We'll add some Location resources.
+
+    >>> manager.query.link('Location').click()
+    >>> manager.query.name('form.widgets.title').type('Room 100')
+    >>> manager.query.button('Submit').click()
+    >>> manager.query.link('Done').click()
+
+    >>> manager.query.link('Location').click()
+    >>> manager.query.name('form.widgets.title').type('Room 101')
+    >>> manager.query.button('Submit').click()
+    >>> manager.query.link('Done').click()
+
+We'll add a course and a section for that course.
+
+    >>> manager.query.link('School').click()
+    >>> manager.query.link('Courses').click()
+    >>> manager.query.link('Course').click()
+    >>> manager.query.name('form.widgets.title').type('Math')
+    >>> manager.query.button('Submit').click()
+
+    >>> manager.open('http://localhost/sections')
+    >>> manager.query.link('Section').click()
+    >>> course = manager.query.id('courses-widgets-course')
+    >>> course.click()
+    >>> course.query.xpath('//option[text()="Math"]').click()
+    >>> manager.query.button('Submit').click()
+
+That section is now in view.  Let's show how it has no location or equipment
+resources yet.
+
+    >>> headers = manager.query_all.xpath('//div[@class="body"]//h3').text
+    >>> 'This section has no locations' in headers
+    True
+    >>> 'This section has no equipment' in headers
+    True
+
+We'll click on the edit pencil next to Locations to add some.  As we add them,
+we'll show the state of the current and available locations.  Notice how only
+location type resources show up.
+
+    >>> manager.query.xpath('//a[@title="Edit locations for this section"]').click()
+    >>> manager.query.xpath('//div[@id="current_table-ajax-current_table-"]//h3').text
+    u'There are none.'
+    >>> manager.query_all.xpath('//div[@id="available_table-ajax-available_table-"]//a').text
+    [u'Room 100', u'Room 101']
+
+    >>> manager.query.xpath('//button[@name="add_item.room-100"]').click()
+    >>> manager.query_all.xpath('//div[@id="current_table-ajax-current_table-"]//a').text
+    [u'Room 100']
+    >>> manager.query_all.xpath('//div[@id="available_table-ajax-available_table-"]//a').text
+    [u'Room 101']
+
+    >>> manager.query.xpath('//button[@name="add_item.room-101"]').click()
+    >>> manager.query_all.xpath('//div[@id="current_table-ajax-current_table-"]//a').text
+    [u'Room 100', u'Room 101']
+    >>> manager.query.xpath('//div[@id="available_table-ajax-available_table-"]//h3').text
+    u'There are none.'
+    >>> manager.query.link('Done').click()
+
+Now, back in the section view, we see that the section locations are there.
+
+    >>> manager.query_all.xpath('//div[@id="location_table-ajax-view-context-resources-location_table-"]//a').text
+    [u'Room 100', u'Room 101']
+
+We'll add some equipment the same way we added locations.  Note only equipment
+resources appear in the add/remove view.
+
+    >>> manager.query.xpath('//a[@title="Edit equipment for this section"]').click()
+    >>> manager.query.xpath('//div[@id="current_table-ajax-current_table-"]//h3').text
+    u'There are none.'
+    >>> manager.query_all.xpath('//div[@id="available_table-ajax-available_table-"]//a').text
+    [u'More equipment', u'Some equipment']
+
+    >>> manager.query.xpath('//button[@name="add_item.more-equipment"]').click()
+    >>> manager.query_all.xpath('//div[@id="current_table-ajax-current_table-"]//a').text
+    [u'More equipment']
+    >>> manager.query_all.xpath('//div[@id="available_table-ajax-available_table-"]//a').text
+    [u'Some equipment']
+
+    >>> manager.query.xpath('//button[@name="add_item.some-equipment"]').click()
+    >>> manager.query_all.xpath('//div[@id="current_table-ajax-current_table-"]//a').text
+    [u'More equipment', u'Some equipment']
+    >>> manager.query.xpath('//div[@id="available_table-ajax-available_table-"]//h3').text
+    u'There are none.'
+    >>> manager.query.link('Done').click()
+
+Now, back in the section view, we see that the section equipment resources
+are there.
+
+    >>> manager.query_all.xpath('//div[@id="equipment_table-ajax-view-context-resources-equipment_table-"]//a').text
+    [u'More equipment', u'Some equipment']
+

@@ -16,25 +16,18 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
+"""
+Functional selenium tests for schooltool.resource
+"""
+import unittest
+
+from schooltool.testing.selenium import collect_ftests
+from schooltool.resource.stesting import resource_selenium_layer
 
 
-def registerSeleniumSetup():
-    try:
-        import selenium
-    except ImportError:
-        return
-    from schooltool.testing import registry
-    import schooltool.testing.selenium
-    import selenium.webdriver.common.keys
+def test_suite():
+    return collect_ftests(layer=resource_selenium_layer)
 
-    def type_in_date(element, date):
-        keys = selenium.webdriver.common.keys.Keys
-        element.type(keys.DELETE, date, keys.ENTER)
-        browser = element.browser
-        if browser is not None:
-            browser.wait_no(lambda: browser.query.id('ui-datepicker-div').is_displayed())
-    registry.register('SeleniumHelpers',
-        lambda: schooltool.testing.selenium.registerElementUI('enter_date', type_in_date))
 
-registerSeleniumSetup()
-del registerSeleniumSetup
+if __name__ == '__main__':
+    unittest.main(defaultTest='test_suite')

@@ -23,9 +23,7 @@ import unittest
 import doctest
 
 import zope.schema
-from zope.interface import implements
 from zope.interface.verify import verifyObject
-from zope.component import provideAdapter
 from zope.publisher.browser import TestRequest
 from zope.app.testing import setup
 from zope.i18n import translate

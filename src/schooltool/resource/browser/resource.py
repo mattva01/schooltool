@@ -49,6 +49,9 @@ from zope.traversing.browser.absoluteurl import absoluteURL
 from zope.traversing.browser.interfaces import IAbsoluteURL
 
 from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.app.browser.app import EditRelationships
+from schooltool.app.browser.app import RelationshipAddTableMixin
+from schooltool.app.browser.app import RelationshipRemoveTableMixin
 from schooltool.basicperson.browser.demographics import (
     DemographicsView,
     FlourishDemographicsView, FlourishReorderDemographicsView)
@@ -188,6 +191,64 @@ class ResourcesTable(table.ajax.Table):
             title=_(u'Description'),
             getter=lambda i, f: i.description or '')
         return default + [description]
+
+
+class ResourceListTable(ResourcesTable):
+
+    @property
+    def source(self):
+        return ISchoolToolApplication(None)['resources']
+
+    def items(self):
+        return self.context
+
+
+class LocationListTable(ResourceListTable):
+
+    def items(self):
+        return [r for r in self.context
+                if ILocation(r, None) is not None]
+
+
+class EquipmentListTable(ResourceListTable):
+
+    def items(self):
+        return [r for r in self.context
+                if IEquipment(r, None) is not None]
+
+
+class EditResourceRelationships(EditRelationships):
+
+    def getAvailableItemsContainer(self):
+        return ISchoolToolApplication(None)['resources']
+
+
+class EditLocationRelationships(EditResourceRelationships):
+    pass
+
+
+class EditEquipmentRelationships(EditResourceRelationships):
+    pass
+
+
+class LocationAddRelationshipTable(RelationshipAddTableMixin,
+                                   ResourcesTable):
+    pass
+
+
+class LocationRemoveRelationshipTable(RelationshipRemoveTableMixin,
+                                      ResourcesTable):
+    pass
+
+
+class EquipmentAddRelationshipTable(RelationshipAddTableMixin,
+                                    ResourcesTable):
+    pass
+
+
+class EquipmentRemoveRelationshipTable(RelationshipRemoveTableMixin,
+                                       ResourcesTable):
+    pass
 
 
 class BaseTypeFilter(table.table.FilterWidget):
@@ -680,7 +741,8 @@ class BaseFlourishResourceAddForm(flourish.form.AddForm):
         return resource
 
     def nextURL(self):
-        return absoluteURL(self._resource or self.context, self.request)
+        return absoluteURL(getattr(self, '_resource', None) or self.context,
+                           self.request)
 
 
 ###############  Resource add/edit views ################

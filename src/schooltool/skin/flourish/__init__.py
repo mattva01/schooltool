@@ -29,7 +29,7 @@ import containers
 import content
 import error
 import form
-import ftesting
+import stesting
 import interfaces
 import page
 import resource

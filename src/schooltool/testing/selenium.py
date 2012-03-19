@@ -164,7 +164,7 @@ def registerExtension(target, name, handler):
         part = path.pop(0)
         if part not in target:
             target[part] = ExtensionGroup()
-            target = target[part]
+        target = target[part]
     target[path[0]] = handler
 
 

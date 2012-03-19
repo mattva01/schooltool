@@ -327,7 +327,7 @@ def doctest_SchoolToolTableFormatter():
 
         >>> print formatter.render()
         <BLANKLINE>
-        <table class="data relationships-table">
+        <table class="data">
           <thead>
             <tr>
               <th>
@@ -411,6 +411,8 @@ def doctest_SchoolToolTableFormatter():
         >>> from zope.publisher.interfaces.browser import IBrowserRequest
         >>> provideAdapter(FilterWidget, adapts=[Interface, IBrowserRequest],
         ...                              provides=IFilterWidget)
+
+        >>> formatter = SchoolToolTableFormatter(container, request)
 
     Now if we will put a SEARCH string into the request, we will only
     get part of the items:
@@ -614,7 +616,10 @@ def doctest_SchoolToolTableFormatter():
 
         >>> request.form = {'batch_start': '2',
         ...                 'batch_size': '2'}
+
+        >>> formatter = SchoolToolTableFormatter(container, request)
         >>> formatter.setUp()
+
         >>> print formatter.render()
         <BLANKLINE>
         <table class="data">
@@ -622,8 +627,8 @@ def doctest_SchoolToolTableFormatter():
             <tr>
               <th>
         <BLANKLINE>
-                    <span class="zc-table-sortable" ...>
-                        Title</span> <img src="/sort_arrows_down.gif" ... alt="(descending)"/>
+                    <span class="zc-table-sortable zc-table-sort-asc-primary" ...>
+                        Title</span>
         <BLANKLINE>
               </th>
             </tr>

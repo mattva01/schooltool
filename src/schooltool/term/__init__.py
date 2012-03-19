@@ -22,3 +22,5 @@ A term defines a range in time (e.g. September 1 to December 31, 2004) and for
 every day within that range it defines whether that day is a schoolday or a
 holiday.
 """
+
+import stesting

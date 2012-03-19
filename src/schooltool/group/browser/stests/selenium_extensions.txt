@@ -1,0 +1,129 @@
+Selenium browser extensions tests
+=================================
+
+Let's test the selenium extensions created in the
+schooltool.group.stesting module.
+
+See the README.selenium.txt file in the schooltool/testing directory
+for instructions on how to use them.
+
+Some helpers for these tests:
+
+    >>> def format_row(row):
+    ...     label = row.query.xpath('td[@class="label"]//span').text
+    ...     value = row.query.xpath('td[@class="field"]//span').text
+    ...     return '%s: %s' % (label, value)
+    >>> def format_person_row(row):
+    ...     last_name = row.query_all.xpath('td[1]/a').text
+    ...     first_name = row.query_all.xpath('td[2]/a').text
+    ...     username = row.query_all.xpath('td[3]').text
+    ...     return '%s, %s, %s' % (last_name, first_name, username)
+
+Log in as manager:
+
+    >>> manager = browsers.manager
+    >>> manager.ui.login('manager', 'schooltool')
+
+We're going to add:
+
+A school year:
+
+    >>> manager.ui.schoolyear.add('2012', '2012-01-01', '2012-12-31')
+
+And a few people:
+
+    >>> manager.ui.person.add('Tom', 'Hoffman', 'tom', 'pwd')
+    >>> manager.ui.person.add('Jeffrey', 'Elkner', 'jeffrey', 'pwd')
+    >>> manager.ui.person.add('David', 'Welsh', 'david', 'pwd')
+    >>> manager.ui.person.add('Camila', 'Cerna', 'camila', 'pwd')
+    >>> manager.ui.person.add('Nestor', 'Guzman', 'nestor', 'pwd')
+    >>> manager.ui.person.add('Liliana', 'Vividor', 'liliana', 'pwd')
+    >>> manager.ui.person.add('Mario', 'Tejada', 'mario', 'pwd')
+
+
+browser.ui.group.add()
+-----------------------
+
+Used for adding groups.
+
+Let's add a couple of groups to the 2012 year:
+
+    >>> manager.ui.group.add('2012', 'Soccer')
+    >>> manager.ui.group.add('2012', 'Chess', description='Check mate!')
+
+Let's verify that they were correctly added:
+
+    >>> manager.open('http://localhost/groups')
+    >>> manager.query.link('2012').click()
+    >>> sel = '//table//a[contains(@href, "/groups/")]'
+    >>> print manager.query_all.xpath(sel).text
+    Chess
+    Clerks
+    School Administrators
+    Site Managers
+    Soccer
+    Students
+    Teachers
+
+And that their details were saved:
+
+    >>> manager.open('http://localhost/groups')
+    >>> manager.query.link('2012').click()
+    >>> manager.query.link('Soccer').click()
+    >>> sel = '//table[@class="form-fields"]/tbody/tr'
+    >>> for row in manager.query_all.xpath(sel):
+    ...     print format_row(row)
+    Title: Soccer
+
+    >>> manager.open('http://localhost/groups')
+    >>> manager.query.link('2012').click()
+    >>> manager.query.link('Chess').click()
+    >>> for row in manager.query_all.xpath(sel):
+    ...     print format_row(row)
+    Title: Chess
+    Description: Check mate!
+
+
+browser.ui.group.go()
+-----------------------
+
+Used to visit a group's index page.
+
+    >>> manager.ui.group.go('2012', 'Soccer')
+    >>> sel = '//table[@class="form-fields"]/tbody/tr'
+    >>> for row in manager.query_all.xpath(sel):
+    ...     print format_row(row)
+    Title: Soccer
+
+    >>> manager.ui.group.go('2012', 'Chess')
+    >>> for row in manager.query_all.xpath(sel):
+    ...     print format_row(row)
+    Title: Chess
+    Description: Check mate!
+
+
+browser.ui.group.members.add()
+------------------------------------
+
+Used for adding members to a group.
+
+    >>> manager.ui.group.members.add('2012', 'Soccer', ['tom', 'david'])
+    >>> manager.ui.group.go('2012', 'Soccer')
+    >>> sel = ('#person_table-ajax-view-context-members-person_table- '
+    ...        'table tbody tr')
+    >>> for row in manager.query_all.css(sel):
+    ...     print format_person_row(row)
+    Hoffman, Tom, tom
+    Welsh, David, david
+
+It doesn't matter if some usernames are already members of the group:
+
+    >>> manager.ui.group.members.add('2012', 'Soccer', ['tom', 'jeffrey'])
+    >>> manager.ui.group.go('2012', 'Soccer')
+    >>> sel = ('#person_table-ajax-view-context-members-person_table- '
+    ...        'table tbody tr')
+    >>> for row in manager.query_all.css(sel):
+    ...     print format_person_row(row)
+    Elkner, Jeffrey, jeffrey
+    Hoffman, Tom, tom
+    Welsh, David, david

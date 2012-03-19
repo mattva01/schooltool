@@ -49,8 +49,8 @@ from zope.event import notify
 from zope.server.taskthreads import ThreadedTaskDispatcher
 from zope.publisher.interfaces.http import IHTTPRequest
 from zope.i18n.interfaces import IUserPreferredLanguages
-from zope.app.wsgi import WSGIPublisherApplication
 from zope.app.server.main import run
+from zope.app.server.wsgi import http
 from zope.app.appsetup import DatabaseOpened, ProcessStarting
 from zope.app.publication.zopepublication import ZopePublication
 from zope.traversing.interfaces import IContainmentRoot
@@ -64,9 +64,6 @@ from zope.intid import IntIds
 from zope.intid.interfaces import IIntIds
 from zope.component.interfaces import ISite
 from zope.site import LocalSiteManager
-from zope.server.http.wsgihttpserver import WSGIHTTPServer
-from zope.server.http.commonaccesslogger import CommonAccessLogger
-from zope.app.server.wsgi import ServerType
 
 from schooltool.app.interfaces import ApplicationStartUpEvent
 from schooltool.app.interfaces import ApplicationInitializationEvent
@@ -92,12 +89,6 @@ localedir = os.path.join(os.path.dirname(__file__), '..', 'locales')
 catalog = gettext.translation('schooltool', localedir, fallback=True)
 _ = lambda us: catalog.ugettext(us).encode(locale_charset, 'replace')
 _._domain = 'schooltool'
-
-
-schooltool_server = ServerType(WSGIHTTPServer,
-                               WSGIPublisherApplication,
-                               CommonAccessLogger,
-                               8080, True)
 
 
 class Options(object):
@@ -466,7 +457,7 @@ def get_schooltool_plugin_configurations():
 plugin_configurations = get_schooltool_plugin_configurations()
 
 
-class StandaloneServer(object):
+class SchoolToolServer(object):
 
     ZCONFIG_SCHEMA = os.path.join(os.path.dirname(__file__),
                                   'config-schema.xml')
@@ -651,19 +642,6 @@ class StandaloneServer(object):
         app['persons'].super_user = manager
         setSite(None)
 
-    def main(self, argv=sys.argv):
-        """Start the SchoolTool server."""
-        t0, c0 = time.time(), time.clock()
-        options = self.load_options(argv)
-        db = self.setup(options)
-        if not options.manage:
-            self.beforeRun(options, db)
-            t1, c1 = time.time(), time.clock()
-            print _("Startup time: %.3f sec real, %.3f sec CPU") % (t1 - t0,
-                                                                    c1 - c0)
-            run()
-            self.afterRun(options)
-
     def setup(self, options):
         """Configure SchoolTool."""
         setUpLogger(None, options.config.error_log_file,
@@ -675,8 +653,6 @@ class StandaloneServer(object):
         logging.getLogger('ZODB.lock_file').disabled = True
 
         # Process ZCML
-        global SCHOOLTOOL_SITE_DEFINITION
-        SCHOOLTOOL_SITE_DEFINITION = options.config.site_definition
         self.siteConfigFile = options.config.site_definition
         self.configure(options)
 
@@ -726,28 +702,6 @@ class StandaloneServer(object):
 
         return db
 
-    def beforeRun(self, options, db):
-        if options.daemon:
-            daemonize()
-
-        task_dispatcher = ThreadedTaskDispatcher()
-        task_dispatcher.setThreadCount(options.config.thread_pool_size)
-
-        for ip, port in options.config.web:
-            server = schooltool_server.create('HTTP', task_dispatcher, db,
-                                              port=port, ip=ip)
-
-        notify(ProcessStarting())
-
-        if options.config.pid_file:
-            pidfile = file(options.config.pid_file, "w")
-            print >> pidfile, os.getpid()
-            pidfile.close()
-
-    def afterRun(self, options):
-        if options.config.pid_file:
-            os.unlink(options.config.pid_file)
-
     def configureReportlab(self, fontdirs):
         """Configure reportlab given a path to TrueType fonts.
 
@@ -789,6 +743,43 @@ class StandaloneServer(object):
                 return
 
         pdf.setUpFonts(existing_directories)
+
+        
+class StandaloneServer(SchoolToolServer):
+    
+    def beforeRun(self, options, db):
+        if options.daemon:
+            daemonize()
+
+        task_dispatcher = ThreadedTaskDispatcher()
+        task_dispatcher.setThreadCount(options.config.thread_pool_size)
+
+        for ip, port in options.config.web:
+            server = http.create('HTTP', task_dispatcher, db, port=port, ip=ip)
+
+        notify(ProcessStarting())
+
+        if options.config.pid_file:
+            pidfile = file(options.config.pid_file, "w")
+            print >> pidfile, os.getpid()
+            pidfile.close()
+
+    def main(self, argv=sys.argv):
+        """Start the SchoolTool server."""
+        t0, c0 = time.time(), time.clock()
+        options = self.load_options(argv)
+        db = self.setup(options)
+        if not options.manage:
+            self.beforeRun(options, db)
+            t1, c1 = time.time(), time.clock()
+            print _("Startup time: %.3f sec real, %.3f sec CPU") % (t1 - t0,
+                                                                    c1 - c0)
+            run()
+            self.afterRun(options)
+
+    def afterRun(self, options):
+        if options.config.pid_file:
+            os.unlink(options.config.pid_file)
 
 
 def main():

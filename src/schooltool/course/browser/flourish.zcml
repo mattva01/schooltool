@@ -401,6 +401,22 @@
       />
 
   <flourish:page
+      name="locations.html"
+      for="schooltool.course.interfaces.ISection"
+      class=".section.FlourishSectionLocationView"
+      permission="schooltool.edit"
+      subtitle="Locations"
+      />
+
+  <flourish:page
+      name="equipment.html"
+      for="schooltool.course.interfaces.ISection"
+      class=".section.FlourishSectionEquipmentView"
+      permission="schooltool.edit"
+      subtitle="Equipment"
+      />
+
+  <flourish:page
       name="section_linkage.html"
       for="schooltool.course.interfaces.ISection"
       class=".section.FlourishSectionLinkageView"

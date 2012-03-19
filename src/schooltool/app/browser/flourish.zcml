@@ -271,6 +271,12 @@
       permission="schooltool.edit"
       />
 
+  <flourish:activeViewlet
+      name="manage_site"
+      manager="schooltool.skin.flourish.page.IHeaderNavigationManager"
+      view=".app.FlourishErrorsView"
+      />
+
   <zope:adapter factory=".app.ErrorsSettingsAdapter" />
 
   <flourish:page
@@ -300,6 +306,12 @@
       subtitle="Tabs"
       content_template="templates/f_hide_unhide_tabs.pt"
       permission="schooltool.edit"
+      />
+
+  <flourish:activeViewlet
+      name="manage_site"
+      manager="schooltool.skin.flourish.page.IHeaderNavigationManager"
+      view=".app.FlourishHideUnhideTabsView"
       />
 
   <flourish:viewlet

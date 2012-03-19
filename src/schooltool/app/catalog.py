@@ -219,12 +219,24 @@ def unindexDocSubscriber(event):
 
 def appendGlobbing(text):
     words = filter(None, text.split(' '))
-    return ' '.join(['%s*' % word for word in words])
+    return ' '.join([word.endswith('*') and word or ('%s*' % word)
+                     for word in words])
 
 
 def buildQueryString(text):
-    terms = [term.strip()
-             for term in text.lower().split(',')]
-    terms = map(appendGlobbing, terms)
-    terms = filter(None, terms)
-    return ' or '.join(terms)
+    terms = []
+    parts = text.lower().split('"')
+    for i, part in enumerate(parts):
+        if i % 2 == 0:
+            # before quote
+            if not part:
+                continue
+            alternatives = [term.strip()
+                            for term in part.split(',')]
+            alternatives = map(appendGlobbing, alternatives)
+            alternatives = filter(None, alternatives)
+            terms.append(' or '.join(alternatives))
+        else:
+            # insert text inside quotes verbatim
+            terms.append('"%s"' % part)
+    return ' '.join(terms)
