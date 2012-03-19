@@ -1,0 +1,145 @@
+Selenium browser extensions tests
+=================================
+
+Let's test the selenium extensions created in the
+schooltool.basicperson.stesting module.
+
+See the README.selenium.txt file in the schooltool/testing directory
+for instructions on how to use them.
+
+Some helpers for these tests:
+
+    >>> def format_row(row):
+    ...     label = row.query.xpath('td[1]').text
+    ...     value = row.query.xpath('td[2]').text
+    ...     return '%s: %s' % (label, value)
+    >>> def format_person_row(row):
+    ...     last_name = row.query.xpath('td[1]/a').text
+    ...     first_name = row.query.xpath('td[2]/a').text
+    ...     username = row.query.xpath('td[3]').text
+    ...     return '%s, %s, %s' % (last_name, first_name, username)
+    >>> def format_group_row(row):
+    ...     title = row.query.xpath('td[1]/a').text
+    ...     schoolyear = row.query.xpath('td[2]/a').text
+    ...     return '%s, %s' % (title, schoolyear)
+
+Log in as manager:
+
+    >>> manager = browsers.manager
+    >>> manager.ui.login('manager', 'schooltool')
+
+We'll add a school year to have groups available for the tests:
+
+    >>> manager.ui.schoolyear.add('2012', '2012-01-01', '2012-12-31')
+
+browser.ui.person.add()
+-----------------------
+
+Used for adding people to the application.
+
+    >>> manager.ui.person.add('Camila', 'Cerna', 'camila', 'pwd')
+    >>> manager.open('http://localhost/persons/camila')
+    >>> sel = 'table.person-view-demographics tbody tr'
+    >>> for row in manager.query_all.css(sel):
+    ...     print format_row(row)
+    First name: Camila
+    Last name: Cerna
+    Username: camila
+
+    >>> manager.ui.person.add('Jose', 'Tejada', 'mario', 'pwd',
+    ...                       prefix='Mr', middle_name='Mario', suffix='II',
+    ...                       preferred_name='Marin')
+    >>> manager.open('http://localhost/persons/mario')
+    >>> sel = 'table.person-view-demographics tbody tr'
+    >>> for row in manager.query_all.css(sel):
+    ...     print format_row(row)
+    Prefix: Mr
+    First name: Jose
+    Middle name: Mario
+    Last name: Tejada
+    Suffix: II
+    Preferred name: Marin
+    Username: mario
+
+    >>> manager.ui.person.add('Liliana', 'Vividor', 'liliana', 'pwd',
+    ...                       gender='Female', birth_date='1999-02-14')
+    >>> manager.open('http://localhost/persons/liliana')
+    >>> sel = 'table.person-view-demographics tbody tr'
+    >>> for row in manager.query_all.css(sel):
+    ...     print format_row(row)
+    First name: Liliana
+    Last name: Vividor
+    Gender: Female
+    Birth date: 1999-02-14
+    Username: liliana
+
+    >>> manager.ui.person.add('Tom', 'Hoffman', 'tom', 'pwd',
+    ...                       ID='12345', ethnicity='White',
+    ...                       language='English', placeofbirth='USA',
+    ...                       citizenship='American')
+    >>> manager.open('http://localhost/persons/tom')
+    >>> sel = 'table.person-view-demographics tbody tr'
+    >>> for row in manager.query_all.css(sel):
+    ...     print format_row(row)
+    First name: Tom
+    Last name: Hoffman
+    Username: tom
+    ID: 12345
+    Ethnicity: White
+    Language: English
+    Place of birth: USA
+    Citizenship: American
+
+    >>> manager.ui.person.add('David', 'Welsh', 'david', 'pwd',
+    ...                       group='Teachers')
+    >>> manager.open('http://localhost/persons/david')
+    >>> sel = 'table.person-view-demographics tbody tr'
+    >>> for row in manager.query_all.css(sel):
+    ...     print format_row(row)
+    First name: David
+    Last name: Welsh
+    Username: david
+    >>> sel = '//h2[contains(@class, "ui-accordion-header")]'
+    >>> groups_accordion = manager.query_all.xpath(sel)[4]
+    >>> groups_accordion.click()
+    >>> sel = '//div[contains(@class, "person-info")]/div[5]//table/tbody/tr'
+    >>> for row in manager.query_all.xpath(sel):
+    ...     print format_group_row(row)
+    Teachers, 2012
+
+    >>> manager.ui.person.add('Nestor', 'Guzman', 'nestor', 'pwd',
+    ...                       advisor='Welsh, David')
+    >>> manager.open('http://localhost/persons/nestor')
+    >>> sel = 'table.person-view-demographics tbody tr'
+    >>> for row in manager.query_all.css(sel):
+    ...     print format_row(row)
+    First name: Nestor
+    Last name: Guzman
+    Username: nestor
+    >>> sel = '//h2[contains(@class, "ui-accordion-header")]'
+    >>> advisory_accordion = manager.query_all.xpath(sel)[2]
+    >>> advisory_accordion.click()
+    >>> sel = ('#person_table-ajax-view-context-advisors-person_table- '
+    ...        'table tbody tr')
+    >>> for row in manager.query_all.css(sel):
+    ...     print format_person_row(row)
+    Welsh, David, david
+
+browser.ui.login()
+-----------------------
+
+Used for authenticating as a person in the system.
+
+    >>> auth = browsers.auth
+    >>> auth.open('http://localhost/persons/camila')
+    >>> sel = '.ui-state-error'
+    >>> for el in auth.query_all.css(sel):
+    ...     print el.text
+    icon
+    You are not allowed to access this page. You can click on the back button in your browser to go back, or ask a more privileged user to log in.
+
+    >>> auth.ui.login('camila', 'pwd')
+    >>> auth.open('http://localhost/persons/camila')
+    >>> sel = '.ui-state-error'
+    >>> auth.query_all.css(sel)
+    []
