@@ -900,6 +900,9 @@ class PersonAddViewBase(PersonAddFormBase):
                 group = data.get('group')
         if group is not None:
             person.groups.add(group)
+        advisor = data.get('advisor')
+        if advisor is not None:
+            person.advisors.add(advisor)
         self._person = person
         return person
 

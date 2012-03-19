@@ -1,0 +1,176 @@
+Selenium browser extensions tests
+=================================
+
+Let's test the selenium extensions created in the
+schooltool.schoolyear.stesting module.
+
+See the README.selenium.txt file in the schooltool/testing directory
+for instructions on how to use them.
+
+Some helpers for these tests:
+
+    >>> def format_row(row):
+    ...     label = row.query.xpath('td[@class="label"]').text
+    ...     value = row.query.xpath('td[2]/span').text
+    ...     return '%s: %s' % (label, value)
+    >>> def format_person_row(row):
+    ...     last_name = row.query_all.xpath('td[1]/a').text
+    ...     first_name = row.query_all.xpath('td[2]/a').text
+    ...     username = row.query_all.xpath('td[3]').text
+    ...     return '%s, %s, %s' % (last_name, first_name, username)
+
+Log in as manager:
+
+    >>> manager = browsers.manager
+    >>> manager.ui.login('manager', 'schooltool')
+
+
+browser.ui.schoolyear.add()
+---------------------------
+
+Used to add school years.
+
+Let's add one school year:
+
+    >>> manager.ui.schoolyear.add('2012', '2012-01-01', '2012-12-31')
+
+And check it was correctly added:
+
+    >>> manager.query.link('School').click()
+    >>> manager.query.link('2012').click()
+    >>> manager.query.css('a[title="Manage year"]').click()
+    >>> sel = 'table.form-fields tbody tr'
+    >>> for row in manager.query_all.css(sel):
+    ...     print format_row(row)
+    First day: 2012-01-01
+    Last day: 2012-12-31
+
+We'll add some people, groups, timetables and courses to test the copy
+options from the helper:
+
+    >>> manager.ui.person.add('Tom', 'Hoffman', 'tom', 'pwd',
+    ...                       group='Teachers')
+    >>> manager.ui.person.add('Jeffrey', 'Elkner', 'jeffrey', 'pwd')
+    >>> manager.ui.person.add('Camila', 'Cerna', 'camila', 'pwd',
+    ...                       group='Students')
+    >>> manager.ui.person.add('Mario', 'Tejada', 'mario', 'pwd')
+
+    >>> manager.ui.course.add('2012', 'Math')
+    >>> manager.ui.course.add('2012', 'Chemistry')
+    >>> manager.ui.course.add('2012', 'Physics')
+
+    >>> manager.ui.group.add('2012', 'Soccer')
+    >>> manager.ui.group.add('2012', 'Chess')
+
+    >>> manager.ui.group.members.add('2012', 'Soccer', ['jeffrey', 'camila'])
+    >>> manager.ui.group.members.add('2012', 'Chess', ['jeffrey', 'mario'])
+
+    >>> manager.ui.group.go('2012', 'Soccer')
+    >>> sel = ('#person_table-ajax-view-context-members-person_table- '
+    ...        'table tbody tr')
+    >>> for row in manager.query_all.css(sel):
+    ...     print format_person_row(row)
+    Cerna, Camila, camila
+    Elkner, Jeffrey, jeffrey
+
+    >>> manager.ui.group.go('2012', 'Chess')
+    >>> sel = ('#person_table-ajax-view-context-members-person_table- '
+    ...        'table tbody tr')
+    >>> for row in manager.query_all.css(sel):
+    ...     print format_person_row(row)
+    Elkner, Jeffrey, jeffrey
+    Tejada, Mario, mario
+
+    >>> manager.ui.group.go('2012', 'Teachers')
+    >>> sel = ('#person_table-ajax-view-context-members-person_table- '
+    ...        'table tbody tr')
+    >>> for row in manager.query_all.css(sel):
+    ...     print format_person_row(row)
+    Hoffman, Tom, tom
+
+    >>> manager.ui.group.go('2012', 'Students')
+    >>> sel = ('#person_table-ajax-view-context-members-person_table- '
+    ...        'table tbody tr')
+    >>> for row in manager.query_all.css(sel):
+    ...     print format_person_row(row)
+    Cerna, Camila, camila
+
+    >>> manager.query.link('School').click()
+    >>> manager.query.link('2012').click()
+    >>> manager.query.link('Timetables').click()
+    >>> manager.query.link('Timetable').click()
+    >>> manager.query.id('field.title').clear()
+    >>> manager.query.id('field.title').type('My Timetable')
+    >>> manager.query.button('Next').click()
+    >>> manager.query.button('Days of the week').click()
+    >>> manager.query.button('Same time each day').click()
+    >>> manager.query.id('field.times').clear()
+    >>> manager.query.id('field.times').type('8:00-9:00\n9:00-10:00')
+    >>> manager.query.button('Next').click()
+    >>> manager.query.button('Designated by time').click()
+    >>> manager.query.button('No').click()
+
+Now, let's create a new school year:
+
+    >>> manager.ui.schoolyear.add('2013', '2013-01-01', '2013-12-31',
+    ...                           copy_groups=['soccer'],
+    ...                           copy_members=['soccer'],
+    ...                           copy_courses=True, copy_timetables=True)
+
+And check it was correctly added:
+
+    >>> manager.query.link('School').click()
+    >>> manager.query.link('2013').click()
+    >>> manager.query.css('a[title="Manage year"]').click()
+    >>> sel = 'table.form-fields tbody tr'
+    >>> for row in manager.query_all.css(sel):
+    ...     print format_row(row)
+    First day: 2013-01-01
+    Last day: 2013-12-31
+
+    >>> manager.query.link('School').click()
+    >>> manager.query.link('2013').click()
+    >>> sel = '//div[@class="additional"]/div[7]//table/tbody/tr//a'
+    >>> print manager.query.xpath(sel).text
+    My Timetable
+
+    >>> manager.query.link('School').click()
+    >>> manager.query.link('Courses').click()
+    >>> manager.query.link('2013').click()
+    >>> for a in manager.query_all.css('table.data tbody tr a'):
+    ...     print a.text
+    Chemistry
+    Math
+    Physics
+
+    >>> manager.query.link('School').click()
+    >>> manager.query.link('Groups').click()
+    >>> manager.query.link('2013').click()
+    >>> for a in manager.query_all.css('table.data tbody tr a'):
+    ...     print a.text
+    Clerks
+    School Administrators
+    Site Managers
+    Soccer
+    Students
+    Teachers
+
+    >>> manager.ui.group.go('2013', 'Soccer')
+    >>> sel = ('#person_table-ajax-view-context-members-person_table- '
+    ...        'table tbody tr')
+    >>> for row in manager.query_all.css(sel):
+    ...     print format_person_row(row)
+    Cerna, Camila, camila
+    Elkner, Jeffrey, jeffrey
+
+    >>> manager.ui.group.go('2013', 'Teachers')
+    >>> sel = ('#person_table-ajax-view-context-members-person_table- '
+    ...        'table tbody tr')
+    >>> manager.query_all.css(sel)
+    []
+
+    >>> manager.ui.group.go('2013', 'Students')
+    >>> sel = ('#person_table-ajax-view-context-members-person_table- '
+    ...        'table tbody tr')
+    >>> manager.query_all.css(sel)
+    []
