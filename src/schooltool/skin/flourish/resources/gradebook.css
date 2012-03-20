@@ -48,7 +48,6 @@
     border-collapse: collapse;
     margin-top: 0px;
     table-layout: fixed;
-    width: 100%;
 }
 
 .gradebook-part th, .gradebook-part td {
@@ -56,6 +55,7 @@
     font-weight: normal;
     padding: 0px;
     vertical-align: middle;
+    overflow: hidden;
 }
 
 .gradebook-part th {
@@ -101,7 +101,6 @@
 .students th, .students td {
     border-right-width: 1px;
     border-right-style: solid;
-    overflow: hidden;
     padding-left: 4px;
     padding-right: 4px;
     white-space: nowrap;
@@ -111,11 +110,11 @@
     overflow: auto;
 }
 
-.grades thead th, .grades tbody td {
+.grades thead th, .grades tbody td,
+.totals th, .totals td {
     border-left-style: solid;
     border-left-width: 1px;
     width: 40px;
-    overflow: hidden;
     box-sizing: border-box;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
@@ -131,16 +130,6 @@
 
 .totals thead tr {
     height: 36px;
-}
-
-.totals th, .totals td {
-    border-left-width: 1px;
-    border-left-style: solid;
-    width: 40px;
-    overflow: hidden;
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
 }
 
 /* Controls */
