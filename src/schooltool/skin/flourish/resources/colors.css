@@ -536,7 +536,7 @@ table.schoolday-legend td.schoolday {
 }
 
 .grades input[type="text"]:focus {
-    background-color: yellow;
+    background-color: #bdd7f0;
 }
 
 .grades input[type="text"].valid {
