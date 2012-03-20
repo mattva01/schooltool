@@ -41,7 +41,6 @@
 /* Gradebook parts */
 
 .gradebook {
-    width: 752px;
     margin-bottom: 8px;
 }
 
@@ -115,7 +114,7 @@
 .grades thead th, .grades tbody td {
     border-left-style: solid;
     border-left-width: 1px;
-    width: 41px;
+    width: 40px;
     overflow: hidden;
     box-sizing: border-box;
     -moz-box-sizing: border-box;

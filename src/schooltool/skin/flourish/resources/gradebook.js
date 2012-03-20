@@ -184,35 +184,22 @@ function updateGradebookPartsWidths(form) {
     var gradebook_w = form.find('#gradebook').outerWidth();
     var students_w = form.find('#students-part').outerWidth();
     var totals = form.find('#totals-part');
-    var totals_headers = totals.find('th');
+    var totals_headers = totals.find('tr').first().find('th');
     var grades = form.find('#grades-part');
     var totals_w = 0;
     if (totals_headers.length > 0) {
-        var totals_headers_w = totals_headers.first().outerWidth() + 1; // border
+        var totals_headers_w = totals_headers.first().outerWidth();
         totals_w = totals_headers.length * totals_headers_w;
         totals.css({
             width: totals_w,
         });
     }
-    var grades_visible_w = gradebook_w - (students_w + totals_w)
-    var grades_column_count = grades.find('tr').first().find('th').not('.placeholder').length;
     var grades_margin_left = students_w;
     var grades_margin_right = totals_w;
     grades.css({
         marginLeft: grades_margin_left,
         marginRight: grades_margin_right,
     });
-    if (grades_column_count > 0) {
-        var grades_column_w = grades.find('th').first().outerWidth();
-        var grades_max = Math.floor(grades_visible_w / grades_column_w);
-        if (grades_column_count > grades_max) {
-            var grades_column_w = Math.floor(grades_visible_w / grades_max);
-            var grades_column_css = {'width': grades_column_w};
-            grades.find('th').css(grades_column_css);
-            grades.find('td').css(grades_column_css);
-            grades.find('.placeholder').hide();
-        }
-    }
 }
 
 function cellInputName(td) {
@@ -333,7 +320,7 @@ function loadPopup(link, url, data, calculateLeft) {
                 var popup = this.prev();
                 if (calculateLeft) {
                     var left = calculatePopupLeft(popup);
-                    popup.css('left', left+'px');
+                    popup.css('left', left);
                 }
                 popup.addClass('popup_active').show();
             }
@@ -389,7 +376,7 @@ $(document).ready(function() {
         if (link.parent().is('th')) {
             var popup = link.prev();
             var left = calculatePopupLeft(popup);
-            popup.css('left', left+'px');
+            popup.css('left', left);
         }
         hidePopup(form);
         popup.addClass('popup_active').show();
@@ -527,5 +514,35 @@ $(document).ready(function() {
         }
         container.dialog('close');
         return false;
+    });
+    // Zoom buttons
+    var normal_width = 752;
+    var wide_width = 944;
+    $('.buttons').find('.collapse').hide();
+    $('#gradebook-controls').on('click', '.expand', function() {
+        $('.sidebar').hide();
+        $('.third-nav').css({
+            width: wide_width,
+            left: 16
+        });
+        $(this).closest('.widecontainer').css({
+            width: wide_width
+        });
+        updateGradebookPartsWidths(form);
+        $(this).hide();
+        $('.collapse').show();
+    });
+    $('#gradebook-controls').on('click', '.collapse', function() {
+        $('.sidebar').show();
+        $('.third-nav').css({
+            width: normal_width,
+            left: 208
+        });
+        $(this).closest('.widecontainer').css({
+            width: normal_width
+        });
+        updateGradebookPartsWidths(form);
+        $(this).hide();
+        $('.expand').show();
     });
 });
