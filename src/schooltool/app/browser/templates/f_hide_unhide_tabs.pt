@@ -1,13 +1,29 @@
+<script>
+    $(document).ready(function() {
+        $('input[name="visible:list"]').click(function(e) {
+            var radio_cell = $(this.parentNode.parentNode).find('input[name="default_tab"]');
+            if (radio_cell.attr('checked') == 'checked') {
+                return false;
+            }
+        });
+        $('input[name="default_tab"]').click(function(e) {
+            var visible_cell = $(this.parentNode.parentNode).find('input[name="visible:list"]');
+            if (visible_cell.attr('checked') != 'checked') {
+                return false;
+            }
+        });
+    });
+</script>
 <div i18n:domain="schooltool">
   <form method="post"
         tal:attributes="action string:${context/@@absolute_url}/hide_unhide_tabs.html">
-    <input type="hidden" name="form-submitted" value="" />
     <h3 i18n:translate="">Set Tab Visibility</h3>
     <table>
       <thead>
         <tr>
           <th i18n:translate="">Title</th>
           <th i18n:translate="">Visible</th>
+          <th i18n:translate="">Default</th>
         </tr>
       </thead>
       <tr tal:repeat="tab view/tabs">
@@ -16,17 +32,22 @@
         </td>
         <td>
           <input type="checkbox" name="visible:list"
-                 onchange="this.form.submit()"
                  tal:attributes="value tab/name;
                                  checked tab/checked" />
+        </td>
+        <td>
+          <input type="radio" name="default_tab"
+                 tal:attributes="value tab/name;
+                                 checked tab/default" />
         </td>
       </tr>
     </table>
 
-    <h3>
-      <a tal:attributes="href string:${context/@@absolute_url}/settings"
-         i18n:translate="">Done</a>
-    </h3>
+    <div class="buttons controls">
+      <input type="submit" class="button-ok" name="SUBMIT" value="Submit"
+             i18n:attributes="value" />
+      <tal:block metal:use-macro="view/@@standard_macros/cancel-button" />
+    </div>
   </form>
 </div>
 

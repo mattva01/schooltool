@@ -16,6 +16,7 @@ New features
 - Tab hiding (https://launchpad.net/bugs/938810)
 - Sections need locations (https://launchpad.net/bugs/932920)
 - Update jQuery to 1.7.1
+- custom login screen (https://launchpad.net/bugs/938825)
 
 Bugfixes
 ++++++++
