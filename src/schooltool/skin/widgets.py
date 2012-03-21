@@ -79,18 +79,30 @@ class CustomDateDataConverter(BaseDataConverter):
         """See interfaces.IDataConverter"""
         if value is self.field.missing_value:
             return u''
-        return value.strftime("%Y-%m-%d")
+        try:
+            return value.strftime("%Y-%m-%d")
+        except (ValueError,):
+            # XXX: may be evil, but this allows users to fix incorrect
+            #      dates entered before we added the >= 1900 check
+            return str(value)
 
     def toFieldValue(self, value):
         """See interfaces.IDataConverter"""
         if value == u'':
             return self.field.missing_value
         try:
-            return parse_date(value)
-        except ValueError, err:
+            value = parse_date(value)
+        except (ValueError,):
             raise FormatterValidationError(
                 _("The datetime string did not match the pattern yyyy-mm-dd"),
                 value)
+        try:
+            value.strftime("%Y-%m-%d")
+        except (ValueError,):
+            raise FormatterValidationError(
+                _('Year has to be equal or greater than 1900'),
+                value)
+        return value
 
 
 class IFCKConfig(Interface):
