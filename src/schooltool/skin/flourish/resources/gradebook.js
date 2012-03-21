@@ -38,100 +38,6 @@ function onLoadHandler()
     }
 }
 
-function handleCellFocus(cell, activity)
-{
-    currentCell = cell;
-    cell.select();
-}
-
-function checkValid(e, name)
-{
-    var activity = name.split('_')[0];
-    if(activity == "fd")
-        activity = name.split('_')[1];
-    if (e == null)
-        return true;
-
-    var keynum;
-    if(window.event) // IE
-	{ 
-	    keynum = e.keyCode;
-	}
-    else if(e.which) // Netscape/Firefox/Opera
-	{
-	    keynum = e.which;
-	}
-    if (keynum < 48 || (keynum > 57 && keynum < 65) || (keynum > 90 && keynum < 97) || keynum > 122)
-	{
-	    return true;
-	}
-
-    setEdited();
-    var element = document.getElementById(name);
-    var elementCell = document.getElementById(name+'_cell');
-    var value = element.value;
-
-    return setBackgroundColor(name, activity, value, false);
-}
-
-function setBackgroundColor(name, activity, value, errors_only)
-{
-    changeBackgroundColor(name+'_cell', 'default_bg');
-
-    if (value == '')
-        return true;
-
-    // handle validation of discrete score system
-    var actScores = scores[activity];
-    if (actScores[0] == 'd')
-    {
-        for(var index in actScores)
-        {
-            if (index > 0 && value == actScores[index])
-            {
-                if (!errors_only)
-                    changeBackgroundColor(name+'_cell', 'changed_bg');
-                return true;
-            }
-        }  
-        changeBackgroundColor(name+'_cell', 'error_bg');
-        return false;   
-    }
-
-    // handle validation of ranged score system
-    else
-    {
-        var min = parseInt(actScores[1]);
-        var max = parseInt(actScores[2]);
-        var intValue = parseInt(value);
-        var regex = /[0-9]+$/;
-        if (!value.match(regex) || intValue < min)
-        {
-            changeBackgroundColor(name+'_cell', 'error_bg');
-            return false;   
-        }
-        if (errors_only)
-            return true;
-        if (intValue > max)
-        {
-            changeBackgroundColor(name+'_cell', 'warning_bg');
-            return true;
-        }
-    }
-
-    changeBackgroundColor(name+'_cell', 'changed_bg');
-    return true;    
-}
-
-function changeBackgroundColor(id, klass) {
-    obj = document.getElementById(id);
-    $(obj).removeClass('default_bg');
-    $(obj).removeClass('changed_bg');
-    $(obj).removeClass('warning_bg');
-    $(obj).removeClass('error_bg');
-    $(obj).addClass(klass);
-}
-
 // Changes made for flourish
 
 function makeGradeCellVisible(element) {
@@ -139,7 +45,8 @@ function makeGradeCellVisible(element) {
     var cell_left_border = cell.position().left;
     var cell_right_border = cell_left_border + cell.outerWidth();
     var grades_left_border = $('#students-part').outerWidth();
-    var grades_right_border = $('#gradebook').outerWidth() - $('#totals-part').outerWidth();
+    var grades_right_border = ($('#gradebook').outerWidth() -
+                               $('#totals-part').outerWidth());
     var grades = $('#grades-part');
     if (cell_right_border > grades_right_border) {
         var offset = cell_right_border - grades_right_border;
@@ -182,23 +89,32 @@ function focusInputVertically(elements, columnIndex) {
 
 function updateGradebookPartsWidths(form) {
     var gradebook_w = form.find('#gradebook').outerWidth();
-    var students_w = form.find('#students-part').outerWidth();
+    var students = form.find('#students-part');
+    var students_w = students.outerWidth();
     var totals = form.find('#totals-part');
     var totals_headers = totals.find('tr').first().find('th');
     var grades = form.find('#grades-part');
     var totals_w = 0;
+    var base_font_size = form.data('base-font-size');
     if (totals_headers.length > 0) {
-        var totals_headers_w = totals_headers.first().outerWidth();
-        totals_w = totals_headers.length * totals_headers_w;
+        if (!totals.data('base-total-column-width')) {
+            totals.data('base-total-column-width',
+                        totals_headers.first().outerWidth());
+        }
+        totals_w = (totals_headers.length *
+                    totals.data('base-total-column-width'));
+        totals.find('thead').find('tr').css({
+            height: students.find('thead').height(),
+        });
         totals.css({
-            width: totals_w,
+            width: Math.floor(totals_w/base_font_size)+'em',
         });
     }
     var grades_margin_left = students_w;
     var grades_margin_right = totals_w;
     grades.css({
         marginLeft: grades_margin_left,
-        marginRight: grades_margin_right,
+        marginRight: Math.floor(totals_w/base_font_size)+'em',
     });
 }
 
@@ -331,9 +247,9 @@ function loadPopup(link, url, data, calculateLeft) {
 function calculatePopupLeft(popup) {
     var th = popup.parent();
     var part = popup.closest('.gradebook-part');
-    var part_margin_left = part.css('marginLeft').replace('px','');
-    part_margin_left = parseInt(part_margin_left);
-    var popup_right = th.position().left - part_margin_left + popup.outerWidth();
+    var part_margin_left = parseInt(part.css('marginLeft'));
+    var popup_right = (th.position().left - part_margin_left +
+                       popup.outerWidth());
     if (popup_right > part.outerWidth()) {
         var left = th.position().left + th.outerWidth() - popup.outerWidth();
     } else {
@@ -361,6 +277,7 @@ function hidePopup(form) {
 
 $(document).ready(function() {
     var form = $('#grid-form');
+    form.data('base-font-size', parseInt(form.css('fontSize')));
     // gradebook-part width calculation
     updateGradebookPartsWidths(form);
     // row colors
@@ -501,7 +418,8 @@ $(document).ready(function() {
         var container = $('#filldown-dialog-container');
         var fillval = container.find('#filldown_value').val();
         if (fillval) {
-            var cells = container.data('schooltool.gradebook-filldown-dialog-cells');
+            var cells = container.data(
+                'schooltool.gradebook-filldown-dialog-cells');
             $(cells).each(function(i, cell) {
                 var cell = $(cell);
                 if (cell.is(':empty')) {
@@ -518,7 +436,35 @@ $(document).ready(function() {
     // Zoom buttons
     var normal_width = 752;
     var wide_width = 944;
+    var font_size_base = 10;
+    var factor = 1;
+    var minimum_font_size = 8;
+    var maximum_font_size = 14;
     $('.buttons').find('.collapse').hide();
+    $('#gradebook-controls').on('click', '.zoom-in', function() {
+        var current_font_size = parseInt(form.css('fontSize'));
+        if (current_font_size < maximum_font_size) {
+            form.css({
+                fontSize: '+='+factor,
+            });
+            updateGradebookPartsWidths(form);
+        }
+    });
+    $('#gradebook-controls').on('click', '.zoom-out', function() {
+        var current_font_size = parseInt(form.css('fontSize'));
+        if (current_font_size > minimum_font_size) {
+            form.css({
+                fontSize: '-='+factor,
+            });
+            updateGradebookPartsWidths(form);
+        }
+    });
+    $('#gradebook-controls').on('click', '.zoom-normal', function() {
+        form.css({
+            fontSize: font_size_base,
+        });
+        updateGradebookPartsWidths(form);
+    });
     $('#gradebook-controls').on('click', '.expand', function() {
         $('.sidebar').hide();
         $('.third-nav').css({

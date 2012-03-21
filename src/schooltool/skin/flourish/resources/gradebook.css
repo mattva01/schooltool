@@ -36,6 +36,7 @@
 
 .grid-form {
     margin-top: 0px;
+    font-size: 10px;
 }
 
 /* Gradebook parts */
@@ -51,11 +52,14 @@
 }
 
 .gradebook-part th, .gradebook-part td {
-    font-size: 10px;
+    font-size: 1em;
     font-weight: normal;
     padding: 0px;
     vertical-align: middle;
     overflow: hidden;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
 }
 
 .gradebook-part th {
@@ -64,17 +68,17 @@
 }
 
 .gradebook-part thead tr {
-    height: 18px;
+    height: 1.8em;
 }
 
 .gradebook-part tbody tr {
-    height: 22px;
+    height: 2.2em;
 }
 
 .gradebook-part input[type="text"] {
     border: 0px;
-    font-size: 10px;
-    height: 18px;
+    font-size: 1em;
+    height: 1.8em;
     width: 100%;
 }
 
@@ -85,7 +89,7 @@
 .students {
     position: absolute;
     top: 0;
-    width: 178px;
+    width: 17.8em;
     z-index: 1;
 }
 
@@ -95,14 +99,14 @@
 
 .students th.name {
     text-align: left;
-    width: 110px;
+    width: 11.0em;
 }
 
 .students th, .students td {
     border-right-width: 1px;
     border-right-style: solid;
-    padding-left: 4px;
-    padding-right: 4px;
+    padding-left: 0.4em;
+    padding-right: 0.4em;
     white-space: nowrap;
 }
 
@@ -114,10 +118,7 @@
 .totals th, .totals td {
     border-left-style: solid;
     border-left-width: 1px;
-    width: 40px;
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
+    width: 4.0em;
 }
 
 .totals {
@@ -126,10 +127,6 @@
     right: 0;
     z-index: 1;
     width: 0px;
-}
-
-.totals thead tr {
-    height: 36px;
 }
 
 /* Controls */
@@ -145,6 +142,10 @@
 
 .grid-form .gradebook-controls .zoom-buttons {
     float: right;
+}
+
+.grid-form .gradebook-controls .zoom-buttons .zoom-button {
+    margin-right: 2px;
 }
 
 .grades .placeholder {
