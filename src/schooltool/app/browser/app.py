@@ -1388,6 +1388,8 @@ class FlourishHideUnhideTabsView(flourish.page.Page):
                 'name': name,
                 'checked': apptabs.get(name, True) and 'checked' or '',
                 'default': name == apptabs.default and 'checked' or '',
+                'checkbox_disabled': name == apptabs.default,
+                'radio_disabled': not apptabs.get(name, True),
                 })
         return tabs
 

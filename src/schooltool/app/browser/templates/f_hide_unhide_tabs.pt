@@ -1,16 +1,21 @@
 <script>
     $(document).ready(function() {
-        $('input[name="visible:list"]').click(function(e) {
-            var radio_cell = $(this.parentNode.parentNode).find('input[name="default_tab"]');
-            if (radio_cell.attr('checked') == 'checked') {
-                return false;
-            }
-        });
-        $('input[name="default_tab"]').click(function(e) {
-            var visible_cell = $(this.parentNode.parentNode).find('input[name="visible:list"]');
-            if (visible_cell.attr('checked') != 'checked') {
-                return false;
-            }
+        $('input[name="default_tab"], input[name="visible:list"]').click(function(e) {
+            $('input[name="visible:list"]').each(function(i, elem){
+                var radio_cell = $(elem.parentNode.parentNode).find('input[name="default_tab"]');
+                if ($(elem).attr('checked') == 'checked') {
+                    radio_cell.attr('disabled', false);
+                }
+                else {
+                    radio_cell.attr('disabled', true);
+                }
+                if (radio_cell.attr('checked') == 'checked') {
+                    $(elem).attr('disabled', true);
+                }
+                else {
+                    $(elem).attr('disabled', false);
+                }
+            });
         });
     });
 </script>
@@ -33,12 +38,14 @@
         <td>
           <input type="checkbox" name="visible:list"
                  tal:attributes="value tab/name;
-                                 checked tab/checked" />
+                                 checked tab/checked;
+                                 disabled tab/checkbox_disabled" />
         </td>
         <td>
           <input type="radio" name="default_tab"
                  tal:attributes="value tab/name;
-                                 checked tab/default" />
+                                 checked tab/default;
+                                 disabled tab/radio_disabled" />
         </td>
       </tr>
     </table>
