@@ -430,6 +430,7 @@ $(document).ready(function() {
                 }
             });
         }
+        container.find('#filldown_value').val('');
         container.dialog('close');
         return false;
     });
