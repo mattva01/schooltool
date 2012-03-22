@@ -1,0 +1,8 @@
+Experimental selenium doctest for SchoolTool
+============================================
+
+Log in as manager:
+
+    >>> manager = browsers.manager
+    >>> manager.ui.login('manager', 'schooltool')
+
