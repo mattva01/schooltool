@@ -1413,6 +1413,21 @@ class FlourishHideUnhideTabsView(flourish.page.Page):
         return absoluteURL(self.context, self.request) + '/settings'
 
 
+class TabsBreadcrumb(flourish.breadcrumbs.Breadcrumbs):
+
+    title = _('Tabs')
+
+    @property
+    def url(self):
+        app = ISchoolToolApplication(None)
+        app_url = absoluteURL(app, self.request)
+        return '%s/hide_unhide_tabs.html' % app_url
+
+    @property
+    def follow_crumb(self):
+        return ManageSiteBreadcrumb(self.context, self.request, self.view)
+
+
 class FlourishAboutView(flourish.page.Page):
 
     pass
