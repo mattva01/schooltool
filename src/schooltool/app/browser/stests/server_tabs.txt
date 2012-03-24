@@ -7,7 +7,7 @@ Log in as manager:
     >>> manager.ui.login('manager', 'schooltool')
 
 Initially both the Home and Calendar tabs are visible with the Calendar tab
-being active becuase that is the default initial tab.  Also, the current url
+being active because that is the default initial tab.  Also, the current url
 is the calendar view.
 
     >>> manager.query_all.xpath('//ul[@class="navigation"]//a').text
