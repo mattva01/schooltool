@@ -22,6 +22,13 @@ Let's go to the Server Tabs view.
     >>> manager.query.link('Server').click()
     >>> manager.query.link('Tabs').click()
 
+The view has some breadcrumbs.
+
+    >>> manager.query_all.xpath('//ul[@class="breadcrumbs"]//a').text
+    [u'Server', u'Tabs']
+    >>> manager.query_all.xpath('//ul[@class="breadcrumbs"]//a').get_attribute('href')
+    [u'http://localhost/settings', u'http://localhost/hide_unhide_tabs.html']
+
 Initially, we see that there are two radio buttons, one for the Home tab and
 one for the Calendar tab, the latter being checked as it is the default
 setting for the default tab.  We do not allow control over the Server and
