@@ -1395,10 +1395,11 @@ class FlourishHideUnhideTabsView(flourish.page.Page):
         if 'CANCEL' in self.request:
             self.request.response.redirect(self.nextURL())
         elif 'SUBMIT' in self.request:
-            visible = self.request.get('visible', [])
             default = self.request.get('default_tab')
-            names = [tab['name'] for tab in self.tabs]
-            if default in names and default in visible:
+            visible = set(self.request.get('visible', []))
+            visible.add(default)
+            names = set([tab['name'] for tab in self.tabs])
+            if default in names and visible.issubset(names):
                 apptabs = removeSecurityProxy(IApplicationTabs(self.context))
                 apptabs.default = default
                 for name in names:
