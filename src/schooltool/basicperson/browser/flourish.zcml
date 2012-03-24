@@ -747,6 +747,30 @@
       for="schooltool.basicperson.interfaces.IBasicPerson"
       />
 
+  <flourish:viewletFactory
+      name="calendar"
+      manager="schooltool.skin.flourish.page.IHeaderNavigationManager"
+      for="*"
+      factory="schooltool.basicperson.browser.person.getUserViewlet"
+      />
+
+  <flourish:viewlet
+      name="calendar"
+      after="home"
+      for="schooltool.basicperson.interfaces.IBasicPerson"
+      manager="schooltool.skin.flourish.page.IHeaderNavigationManager"
+      class="schooltool.skin.flourish.page.LinkViewlet"
+      title="Calendar"
+      link="calendar"
+      permission="schooltool.view"
+      />
+
+  <flourish:activeViewlet
+      name="calendar"
+      manager="schooltool.skin.flourish.page.IHeaderNavigationManager"
+      for="schooltool.app.interfaces.ISchoolToolCalendar"
+      />
+
   <zope:adapter factory=".person.PasswordValidator" />
 
   <zope:adapter factory=".demographics.DemographicsFieldIDValidator" />
