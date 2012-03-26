@@ -1086,6 +1086,20 @@ class SectionImporter(ImporterBase):
         self.addSection(section, data, year, term)
         courses = ICourseContainer(section)
 
+        gc = IGroupContainer(year)
+        if 'students' in gc:
+            students = gc['students']
+        else:
+            students = Group(_('Students'), _('Students.'))
+            students.__name__ = 'students'
+            gc['students'] = students
+        if 'teachers' in gc:
+            teachers = gc['teachers']
+        else:
+            teachers = Group(_('Teachers'), _('Teachers.'))
+            teachers.__name__ = 'teachers'
+            gc['teachers'] = teachers
+
         row += 4
         if self.getCellValue(sh, row, 0, '') == 'Courses':
             row += 1
@@ -1130,6 +1144,8 @@ class SectionImporter(ImporterBase):
 
                 if member not in section.members:
                     section.members.add(removeSecurityProxy(member))
+                if member not in students.members:
+                    students.members.add(removeSecurityProxy(member))
             row += 1
 
         if self.getCellValue(sh, row, 0, '') == 'Instructors':
@@ -1149,6 +1165,8 @@ class SectionImporter(ImporterBase):
 
                 if instructor not in section.instructors:
                     section.instructors.add(removeSecurityProxy(instructor))
+                if instructor not in teachers.members:
+                    teachers.members.add(removeSecurityProxy(instructor))
             row += 1
 
         if self.getCellValue(sh, row, 0, '') == 'School Timetable':
@@ -1288,8 +1306,8 @@ class MegaImporter(BrowserView):
                      ContactPersonImporter,
                      ContactRelationshipImporter,
                      CourseImporter,
-                     SectionImporter,
-                     GroupImporter]
+                     GroupImporter,
+                     SectionImporter]
 
         for importer in importers:
             imp = importer(self.context, self.request)
