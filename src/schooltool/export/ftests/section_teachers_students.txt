@@ -1,9 +1,9 @@
-Test for section auto-group import
-----------------------------------
+Test for section import auto-adding to teachers and students groups
+-------------------------------------------------------------------
 
     >>> browser = Browser('manager', 'schooltool')
 
-Let's import the special test xls file for testing the automatic adding of
+We will import a special test xls file for testing the automatic adding of
 section members to the students group and of instrutors to the teachers group:
 
     >>> import pkg_resources
