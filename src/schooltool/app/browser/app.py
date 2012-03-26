@@ -714,8 +714,18 @@ class FlourishLoginDispatchView(BrowserView):
     content_template = None
 
     def update(self):
-        nexturl = absoluteURL(
-            ISchoolToolCalendar(self.context), self.request)
+        app = ISchoolToolApplication(None)
+        manager = queryMultiAdapter(
+            (app, self.request, self),
+            flourish.interfaces.IContentProvider, 'header_navigation')
+        manager.collect()
+        apptabs = removeSecurityProxy(IApplicationTabs(app))
+        viewlet = manager.get(apptabs.default, None)
+        if viewlet is not None:
+            nexturl = viewlet.url
+        else:
+            nexturl = absoluteURL(
+                ISchoolToolCalendar(self.context), self.request)
         self.request.response.redirect(nexturl)
 
     def render(self, *args, **kw):
@@ -1377,19 +1387,46 @@ class FlourishHideUnhideTabsView(flourish.page.Page):
                 'title': removeSecurityProxy(manager[name]).title,
                 'name': name,
                 'checked': apptabs.get(name, True) and 'checked' or '',
+                'default': name == apptabs.default and 'checked' or '',
                 })
         return tabs
 
     def update(self):
-        if 'form-submitted' in self.request:
-            visible = self.request.get('visible', [])
-            apptabs = removeSecurityProxy(IApplicationTabs(self.context))
-            for tab in self.tabs:
-                name = tab['name']
-                if name not in visible:
-                    apptabs[name] = False
-                elif not apptabs.get(name, True):
-                    apptabs[name] = True
+        if 'CANCEL' in self.request:
+            self.request.response.redirect(self.nextURL())
+        elif 'SUBMIT' in self.request:
+            default = self.request.get('default_tab')
+            visible = set(self.request.get('visible', []))
+            visible.add(default)
+            names = set([tab['name'] for tab in self.tabs])
+            if default in names and visible.issubset(names):
+                apptabs = removeSecurityProxy(IApplicationTabs(self.context))
+                apptabs.default = default
+                for name in names:
+                    if name in visible:
+                        if not apptabs.get(name, True):
+                            apptabs[name] = True
+                    else:
+                        apptabs[name] = False
+            self.request.response.redirect(self.nextURL())
+
+    def nextURL(self):
+        return absoluteURL(self.context, self.request) + '/settings'
+
+
+class TabsBreadcrumb(flourish.breadcrumbs.Breadcrumbs):
+
+    title = _('Tabs')
+
+    @property
+    def url(self):
+        app = ISchoolToolApplication(None)
+        app_url = absoluteURL(app, self.request)
+        return '%s/hide_unhide_tabs.html' % app_url
+
+    @property
+    def follow_crumb(self):
+        return ManageSiteBreadcrumb(self.context, self.request, self.view)
 
 
 class FlourishAboutView(flourish.page.Page):

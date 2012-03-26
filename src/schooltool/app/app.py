@@ -216,6 +216,8 @@ class ApplicationTabs(PersistentDict):
 
     implements(IApplicationTabs)
 
+    default = 'calendar'
+
 
 class Asset(object):
     """A mixin for objects that may act as assets."""

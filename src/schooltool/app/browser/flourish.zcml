@@ -314,6 +314,11 @@
       view=".app.FlourishHideUnhideTabsView"
       />
 
+  <flourish:page_breadcrumbs
+      view=".app.FlourishHideUnhideTabsView"
+      class=".app.TabsBreadcrumb"
+      />
+
   <flourish:viewlet
       name="what-is-this"
       class="schooltool.skin.flourish.page.Related"
