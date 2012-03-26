@@ -1,0 +1,48 @@
+Test for section auto-group import
+----------------------------------
+
+    >>> browser = Browser('manager', 'schooltool')
+
+Let's import the special test xls file for testing the automatic adding of
+section members to the students group and of instrutors to the teachers group:
+
+    >>> import pkg_resources
+    >>> browser.getLink('Manage').click()
+    >>> browser.getLink('XLS Import').click()
+    >>> browser.getControl('XLS File').add_file(
+    ...     pkg_resources.resource_stream('schooltool.export.ftests', 'section_teachers_students.xls'),
+    ...     'application/excel',
+    ...     'sample_data.xls')
+    >>> browser.getControl('Submit').click()
+
+Let's look at the teachers group:
+
+    >>> browser.getLink('2006-2008').click()
+    >>> browser.getLink('Groups').click()
+    >>> browser.getLink('Teachers').click()
+
+We see the teachers of our two sections are in the group.
+
+    >>> hrefs = browser.queryHTML("//table[@class='data']//a/@href")
+    >>> teachers = set([href.split('/')[-1] for href in hrefs])
+    >>> for teacher in sorted(teachers): print teacher
+    teacher001
+    teacher003
+
+Let's look at the students group:
+
+    >>> browser.getLink('2006-2008').click()
+    >>> browser.getLink('Groups').click()
+    >>> browser.getLink('Students').click()
+
+We see the students in our two sections are in the group.
+
+    >>> hrefs = browser.queryHTML("//table[@class='data']//a/@href")
+    >>> students = set([href.split('/')[-1] for href in hrefs])
+    >>> for student in sorted(students): print student
+    student002
+    student004
+    student006
+    student008
+    student009
+
