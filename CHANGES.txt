@@ -24,6 +24,7 @@ New features
 - custom login screen (https://launchpad.net/bugs/938825)
 - Add more options from paster to start-schooltool-instance.
 - Updated translations, added Occitan (oc).
+- XLS import automatically adds teachers and students to the corresponding groups
 
 
 Bugfixes
