@@ -50,4 +50,4 @@ Sections view of that school year:
     >>> manager.url
     u'http://localhost/sections?schoolyear_id=A%C3%B1o2013'
     >>> print manager.query.css('.page .header h1').text
-    Sections for A...o2013
+    Sections for Año2013
