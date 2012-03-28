@@ -5,6 +5,18 @@ CHANGES
 2.0.4 (unreleased)
 ------------------
 
+New features
+++++++++++++
+
+- Add Calendar tab, configure default tab (https://launchpad.net/bugs/938825)
+- Add a background with hexes (https://launchpad.net/bugs/967233)
+
+Bugfixes
+++++++++
+
+- Fix date validation to not crash on years before 1900 (https://launchpad.net/bugs/960367)
+- Fixed section delete view when school year was created with non-ascii title (https://launchpad.net/bugs/963740)
+- XLS import automatically adds teachers and students to the corresponding groups
 
 
 2.0.3 (2012-03-19)
@@ -21,10 +33,8 @@ New features
 - Tab hiding (https://launchpad.net/bugs/938810)
 - Sections need locations (https://launchpad.net/bugs/932920)
 - Update jQuery to 1.7.1
-- custom login screen (https://launchpad.net/bugs/938825)
 - Add more options from paster to start-schooltool-instance.
 - Updated translations, added Occitan (oc).
-- XLS import automatically adds teachers and students to the corresponding groups
 
 
 Bugfixes
