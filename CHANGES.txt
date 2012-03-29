@@ -25,6 +25,7 @@ New features
 - Add more options from paster to start-schooltool-instance.
 - Updated translations, added Occitan (oc).
 - XLS import automatically adds teachers and students to the corresponding groups
+- XLS import now has Teachers and Students sheets
 
 
 Bugfixes
