@@ -142,6 +142,28 @@ class RelationshipEvent(object):
             return self.participant2
         raise KeyError(role)
 
+    def match(self, schema):
+        if self.rel_type != schema.rel_type:
+            return None
+        schema_roles = tuple(schema.roles.values())
+        if ((self.role1, self.role2) != schema_roles and
+            (self.role2, self.role1) != schema_roles):
+            return None
+        return RelationshipMatch(self, schema)
+
+
+class RelationshipMatch(object):
+
+    def __init__(self, event, schema):
+        self._event = event
+        self._schema = schema
+        self.extra_info = event.extra_info
+        for name, role in schema.roles.items():
+            if role == event.role1:
+                setattr(self, name, event.participant1)
+            elif role == event.role2:
+                setattr(self, name, event.participant2)
+
 
 class BeforeRelationshipEvent(RelationshipEvent):
     """A relationship is about to be established.

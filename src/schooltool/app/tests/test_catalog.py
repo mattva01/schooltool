@@ -26,7 +26,7 @@ from zope.app.testing import setup
 from zope.interface import implements, Interface
 from zope.interface.verify import verifyObject
 from zope.component import provideAdapter
-from zope.component.hooks import getSite, setSite
+from zope.component.hooks import getSite
 from zope.site import SiteManagerContainer
 from zope.site.folder import rootFolder
 
@@ -615,7 +615,7 @@ def doctest_catalog_subscribers():
         ...         print "No IIntIds utility, so don't fire IntIdRemovedEvent"
         ...         return
         ...     print 'firing IntIdRemovedEvent'
-        ...     notify(IntIdRemovedEvent(obj, ObjectAddedEvent(obj)))
+        ...     notify(IntIdRemovedEvent(obj, ObjectRemovedEvent(obj)))
         ...     del util[obj]
 
     When database is being set up, we may have no SchoolToolApplication and
