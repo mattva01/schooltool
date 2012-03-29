@@ -17,6 +17,7 @@ Bugfixes
 - Fix date validation to not crash on years before 1900 (https://launchpad.net/bugs/960367)
 - Fixed section delete view when school year was created with non-ascii title (https://launchpad.net/bugs/963740)
 - XLS import automatically adds teachers and students to the corresponding groups
+- Fix breakage if intervention plugin was used, but then disabled.
 
 
 2.0.3 (2012-03-19)
