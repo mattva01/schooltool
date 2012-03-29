@@ -10,6 +10,7 @@ New features
 
 - Add Calendar tab, configure default tab (https://launchpad.net/bugs/938825)
 - Add a background with hexes (https://launchpad.net/bugs/967233)
+- XLS import now has Teachers and Students sheets
 
 Bugfixes
 ++++++++
