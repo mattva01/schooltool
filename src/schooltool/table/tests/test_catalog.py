@@ -30,6 +30,25 @@ from zope.component import provideAdapter
 from schooltool.app.browser.testing import setUp, tearDown
 
 
+def doctest_FilterImplementing():
+    """Doctest for FilterImplementing
+
+        >>> from zope.interface import implements, Interface
+        >>> class IFoo(Interface):
+        ...     pass
+        >>> class Foo(object):
+        ...     implements(IFoo)
+
+        >>> from schooltool.table.catalog import FilterImplementing
+        >>> filter = FilterImplementing(IFoo)
+        >>> filter('index', 'docid', object())
+        False
+        >>> filter('index', 'docid', Foo())
+        True
+
+    """
+
+
 def doctest_IndexedFilterWidget():
     """Doctest for IndexedFilterWidget.
 
