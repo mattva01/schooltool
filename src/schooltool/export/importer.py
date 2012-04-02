@@ -1253,6 +1253,128 @@ class SectionImporter(ImporterBase):
             self.process()
 
 
+class FlatSectionsTableImporter(ImporterBase):
+
+    sheet_name = 'FlatSectionsTable'
+
+    def createSection(self, data, year, term, courses):
+        sc = ISectionContainer(term)
+        if data['__name__'] in sc:
+            section = sc[data['__name__']]
+            section.title = data['title']
+            section.description = data['description']
+            for course in section.courses:
+                section.courses.remove(course)
+            for resource in section.resources:
+                section.resources.remove(resource)
+            for student in section.members:
+                section.members.remove(student)
+            for teacher in section.instructors:
+                section.instructors.remove(teacher)
+        else:
+            section = Section(data['title'], data['description'])
+            section.__name__ = data['__name__']
+            sc[section.__name__] = section
+        for course in courses:
+            section.courses.add(course)
+        return section
+
+    def process(self):
+        sh = self.sheet
+        schoolyears = ISchoolYearContainer(self.context)
+        persons = self.context['persons']
+        resources = self.context['resources']
+        year = None
+
+        for row in range(1, sh.nrows):
+            data = {}
+            data['year'] = self.getTextFromCell(sh, row, 0)
+            data['courses'] = self.getTextFromCell(sh, row, 1)
+            data['term'] = self.getTextFromCell(sh, row, 2)
+            data['__name__'] = self.getTextFromCell(sh, row, 3)
+            data['title'] = self.getTextFromCell(sh, row, 4)
+            data['description'] = self.getTextFromCell(sh, row, 5)
+            data['instructor'] = self.getTextFromCell(sh, row, 6)
+            data['student'] = self.getTextFromCell(sh, row, 7)
+            data['resource'] = self.getTextFromCell(sh, row, 8)
+
+            if not [v for v in data.values() if v]:
+                break
+
+            num_errors = len(self.errors)
+            if data['year']:
+                year_id = data['year']
+                if year_id not in schoolyears:
+                    self.error(row, 0, ERROR_INVALID_SCHOOL_YEAR)
+                    continue
+                year = schoolyears[year_id]
+                courses = None
+            elif year is None:
+                self.error(row, 0, ERROR_MISSING_YEAR_ID)
+                continue
+
+            if data['courses']:
+                course_container = ICourseContainer(year)
+                course_ids = [c.strip() for c in data['courses'].split(',')]
+                courses = []
+                for course_id in course_ids:
+                    if course_id not in course_container:
+                        self.error(row, 1, ERROR_INVALID_COURSE_ID)
+                        continue
+                    course = course_container[course_id]
+                    courses.append(removeSecurityProxy(course))
+                term = None
+            elif courses is None:
+                self.error(row, 1, ERROR_MISSING_COURSES)
+                continue
+
+            if data['term']:
+                term_id = data['term']
+                if term_id not in year:
+                    self.error(row, 2, ERROR_INVALID_TERM_ID)
+                    continue
+                term = year[term_id]
+                section = None
+            elif term is None:
+                self.error(row, 2, ERROR_MISSING_TERM_ID)
+                continue
+
+            if data['__name__']:
+                if not data['title']:
+                    self.error(row, 4, ERROR_MISSING_REQUIRED_TEXT)
+                    continue
+                section = self.createSection(data, year, term, courses)
+            elif section is None:
+                self.error(row, 3, ERROR_MISSING_REQUIRED_TEXT)
+
+            if data['instructor']:
+                person_id = data['instructor']
+                if person_id not in persons:
+                    self.error(row, 6, ERROR_INVALID_PERSON_ID)
+                    continue
+                teacher = persons[person_id]
+                if teacher not in section.instructors:
+                    section.instructors.add(removeSecurityProxy(teacher))
+
+            if data['student']:
+                person_id = data['student']
+                if person_id not in persons:
+                    self.error(row, 7, ERROR_INVALID_PERSON_ID)
+                    continue
+                student = persons[person_id]
+                if student not in section.members:
+                    section.members.add(removeSecurityProxy(student))
+
+            if data['resource']:
+                resource_id = data['resource']
+                if resource_id not in resources:
+                    self.error(row, 8, ERROR_INVALID_RESOURCE_ID)
+                    continue
+                resource = resources[resource_id]
+                if resource not in section.resources:
+                    section.resources.add(removeSecurityProxy(resource))
+
+
 class GroupImporter(ImporterBase):
 
     sheet_name = 'Groups'
@@ -1354,7 +1476,8 @@ class MegaImporter(BrowserView):
                      ContactRelationshipImporter,
                      CourseImporter,
                      GroupImporter,
-                     SectionImporter]
+                     SectionImporter,
+                     FlatSectionsTableImporter]
 
         for importer in importers:
             imp = importer(self.context, self.request)

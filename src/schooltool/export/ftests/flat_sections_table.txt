@@ -1,0 +1,195 @@
+Test for FlatSectionsTable sheet
+--------------------------------
+
+    >>> browser = Browser('manager', 'schooltool')
+
+We'll define a helper function for printing the title, description, courses,
+teachers, students and resources from the section view.
+
+    >>> def printSectionValues():
+    ...     heading = browser.queryHTML('//div[@id="content-header"]//h1/text()')
+    ...     lines = [l.strip() for l in ''.join(heading).split('\n') if l.strip()]
+    ...     print lines[1][3:]
+    ...     description = browser.queryHTML('//p[@class="description"]/text()')
+    ...     if description:
+    ...         print description[0]
+    ...     courses = browser.queryHTML('//div[@id="content-header"]//a/@href')
+    ...     courses = [course for course in courses if 'courses' in course]
+    ...     for course in sorted(courses): print course
+    ...     teachers = browser.queryHTML('//div[@class="info-block"][2]//ul//a/@href')
+    ...     for teacher in sorted(teachers): print teacher
+    ...     students = browser.queryHTML('//div[@class="info-block"][3]//tr/td[1]/a/@href')
+    ...     for student in sorted(students): print student
+    ...     resources = browser.queryHTML('//div[@class="info-block"][4]//ul//a/@href')
+    ...     for resource in sorted(resources): print resource
+
+Let's import a file containing the FlatSectionsTable sheet:
+
+    >>> import pkg_resources
+    >>> browser.getLink('Manage').click()
+    >>> browser.getLink('XLS Import').click()
+    >>> browser.getControl('XLS File').add_file(
+    ...     pkg_resources.resource_stream('schooltool.export.ftests', 'flat_sections_table.xls'),
+    ...     'application/excel',
+    ...     'sample_data.xls')
+    >>> browser.getControl('Submit').click()
+
+There should be no errors:
+
+    >>> browser.printQuery("//p[@class='error']")
+
+Let's check the data.  We'll visit the sections view for the 2006 fall term
+first and show the new sections.
+
+    >>> browser.getLink('2006-2007').click()
+    >>> browser.getLink('2006 Fall').click()
+    >>> browser.getLink('Sections').click()
+    >>> browser.printQuery('//table[@class="container"]//tr/td[3]/a/@href')
+    http://localhost/schoolyears/2006-2007/2006-fall/sections/art_a_2006-fall_1
+    http://localhost/schoolyears/2006-2007/2006-fall/sections/art_a_2006-fall_2
+    http://localhost/schoolyears/2006-2007/2006-fall/sections/art_b_2006-fall_1
+    http://localhost/schoolyears/2006-2007/2006-fall/sections/art_b_2006-fall_2
+
+Visiting the first section, we see the values are set correctly.  There is no
+description in this case.
+
+    >>> browser.getLink('Art A 2006 Fall Section 1').click()
+    >>> printSectionValues()
+    Art A 2006 Fall Section 1
+    http://localhost/schoolyears/2006-2007/courses/art_a
+    http://localhost/persons/teacher000
+    http://localhost/persons/teacher002
+    http://localhost/persons/student000
+    http://localhost/persons/student001
+    http://localhost/persons/student003
+    http://localhost/resources/projector03
+    http://localhost/resources/room02
+
+In the second section we included a description.
+
+    >>> browser.getLink('2006-2007').click()
+    >>> browser.getLink('2006 Fall').click()
+    >>> browser.getLink('Sections').click()
+    >>> browser.getLink('Art A 2006 Fall Section 2').click()
+    >>> printSectionValues()
+    Art A 2006 Fall Section 2
+    Art A 2006 Fall Section 2 Desc
+    http://localhost/schoolyears/2006-2007/courses/art_a
+    http://localhost/persons/teacher001
+    http://localhost/persons/student002
+    http://localhost/persons/student004
+    http://localhost/resources/room01
+
+The third section has no resources.
+
+    >>> browser.getLink('2006-2007').click()
+    >>> browser.getLink('2006 Fall').click()
+    >>> browser.getLink('Sections').click()
+    >>> browser.getLink('Art B 2006 Fall Section 1').click()
+    >>> printSectionValues()
+    Art B 2006 Fall Section 1
+    Art B 2006 Fall Section 1 Desc
+    http://localhost/schoolyears/2006-2007/courses/art_b
+    http://localhost/persons/teacher002
+    http://localhost/persons/student002
+    http://localhost/persons/student003
+
+The fourth section has nothing set, a valid user choice.  The title is the
+only field that is required.
+
+    >>> browser.getLink('2006-2007').click()
+    >>> browser.getLink('2006 Fall').click()
+    >>> browser.getLink('Sections').click()
+    >>> browser.getLink('Art B 2006 Fall Section 2').click()
+    >>> printSectionValues()
+    Art B 2006 Fall Section 2
+    http://localhost/schoolyears/2006-2007/courses/art_b
+
+We have 2 sections in 2007 spring term.
+
+    >>> browser.getLink('2006-2007').click()
+    >>> browser.getLink('2007 Spring').click()
+    >>> browser.getLink('Sections').click()
+    >>> browser.printQuery('//table[@class="container"]//tr/td[3]/a/@href')
+    http://localhost/schoolyears/2006-2007/2007-spring/sections/art_a_2007-spring_1
+    http://localhost/schoolyears/2006-2007/2007-spring/sections/art_b_2007-spring_1
+
+    >>> browser.getLink('Art A 2007 Spring Section 1').click()
+    >>> printSectionValues()
+    Art A 2007 Spring Section 1
+    Art A 2007 Spring Section 1 Desc
+    http://localhost/schoolyears/2006-2007/courses/art_a
+    http://localhost/persons/teacher000
+    http://localhost/persons/student001
+    http://localhost/persons/student002
+    http://localhost/resources/room01
+
+    >>> browser.getLink('2006-2007').click()
+    >>> browser.getLink('2007 Spring').click()
+    >>> browser.getLink('Sections').click()
+    >>> browser.getLink('Art B 2007 Spring Section 1').click()
+    >>> printSectionValues()
+    Art B 2007 Spring Section 1
+    http://localhost/schoolyears/2006-2007/courses/art_b
+    http://localhost/persons/teacher001
+    http://localhost/persons/student002
+
+
+We have 2 sections in 2007 fall term.  One of them has two courses set.
+
+    >>> browser.getLink('2007-2008').click()
+    >>> browser.getLink('2007 Fall').click()
+    >>> browser.getLink('Sections').click()
+    >>> browser.printQuery('//table[@class="container"]//tr/td[3]/a/@href')
+    http://localhost/schoolyears/2007-2008/2007-fall/sections/art_c_2007-fall_1
+    http://localhost/schoolyears/2007-2008/2007-fall/sections/art_cd_2007-fall_1
+
+    >>> browser.getLink('Art C 2007 Fall Section 1').click()
+    >>> printSectionValues()
+    Art C 2007 Fall Section 1
+    http://localhost/schoolyears/2007-2008/courses/art_c
+    http://localhost/persons/teacher002
+    http://localhost/persons/teacher003
+    http://localhost/persons/student001
+    http://localhost/resources/projector03
+
+    >>> browser.getLink('2007-2008').click()
+    >>> browser.getLink('2007 Fall').click()
+    >>> browser.getLink('Sections').click()
+    >>> browser.getLink('Art CD 2007 Fall Section 1').click()
+    >>> printSectionValues()
+    Art CD 2007 Fall Section 1
+    http://localhost/schoolyears/2007-2008/courses/art_d
+    http://localhost/schoolyears/2007-2008/courses/art_d
+    http://localhost/persons/teacher000
+    http://localhost/persons/student001
+
+
+We have 2 sections in 2008 spring term.  Again, one of them has two courses set.
+
+    >>> browser.getLink('2007-2008').click()
+    >>> browser.getLink('2008 Spring').click()
+    >>> browser.getLink('Sections').click()
+    >>> browser.printQuery('//table[@class="container"]//tr/td[3]/a/@href')
+    http://localhost/schoolyears/2007-2008/2008-spring/sections/art_c_2008-spring_1
+    http://localhost/schoolyears/2007-2008/2008-spring/sections/art_cd_2008-spring_1
+
+    >>> browser.getLink('Art C 2008 Spring Section 1').click()
+    >>> printSectionValues()
+    Art C 2008 Spring Section 1
+    http://localhost/schoolyears/2007-2008/courses/art_c
+    http://localhost/persons/teacher001
+    http://localhost/persons/student002
+    http://localhost/resources/room01
+
+    >>> browser.getLink('2007-2008').click()
+    >>> browser.getLink('2008 Spring').click()
+    >>> browser.getLink('Sections').click()
+    >>> browser.getLink('Art CD 2008 Spring Section 1').click()
+    >>> printSectionValues()
+    Art CD 2008 Spring Section 1
+    http://localhost/schoolyears/2007-2008/courses/art_d
+    http://localhost/schoolyears/2007-2008/courses/art_d
+    http://localhost/persons/teacher002
+    http://localhost/persons/student002
+
