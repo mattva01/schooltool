@@ -112,6 +112,10 @@ ERROR_UNICODE_CONVERSION = _(
 ERROR_WEEKLY_DAY_ID = _('is not a valid weekday number (0-6)')
 ERROR_CONTACT_RELATIONSHIP = _("is not a valid contact relationship")
 ERROR_NOT_BOOLEAN = _("must be either True or False")
+ERROR_CURRENT_SECTION_FIRST_TERM = _("the current section is in the first term of the school year")
+ERROR_CURRENT_SECTION_LAST_TERM = _("the current section is in the last term of the school year")
+ERROR_INVALID_PREV_TERM_SECTION = _("is not a valid section id in the previous term")
+ERROR_INVALID_NEXT_TERM_SECTION = _("is not a valid section id in the next term")
 
 
 no_date = object()
@@ -1285,6 +1289,7 @@ class FlatSectionsTableImporter(ImporterBase):
         persons = self.context['persons']
         resources = self.context['resources']
         year = None
+        prev_links, next_links = {}, {}
 
         for row in range(1, sh.nrows):
             data = {}
@@ -1297,6 +1302,8 @@ class FlatSectionsTableImporter(ImporterBase):
             data['instructor'] = self.getTextFromCell(sh, row, 6)
             data['student'] = self.getTextFromCell(sh, row, 7)
             data['resource'] = self.getTextFromCell(sh, row, 8)
+            data['link_prev'] = self.getTextFromCell(sh, row, 9)
+            data['link_next'] = self.getTextFromCell(sh, row, 10)
 
             if not [v for v in data.values() if v]:
                 break
@@ -1373,6 +1380,36 @@ class FlatSectionsTableImporter(ImporterBase):
                 resource = resources[resource_id]
                 if resource not in section.resources:
                     section.resources.add(removeSecurityProxy(resource))
+
+            if data['link_prev']:
+                prev_links[row] = (section, data['link_prev'])
+
+            if data['link_next']:
+                next_links[row] = (section, data['link_next'])
+
+        for row, (section, link_id) in prev_links.items():
+            term = ITerm(section)
+            previous_term = getPreviousTerm(term)
+            if previous_term is None:
+                self.error(row, 9, ERROR_CURRENT_SECTION_FIRST_TERM)
+            else:
+                previous_sections = ISectionContainer(previous_term)
+                if link_id in previous_sections:
+                    previous_sections[link_id].next = section
+                else:
+                    self.error(row, 9, ERROR_INVALID_PREV_TERM_SECTION)
+
+        for row, (section, link_id) in next_links.items():
+            term = ITerm(section)
+            next_term = getNextTerm(term)
+            if next_term is None:
+                self.error(row, 10, ERROR_CURRENT_SECTION_LAST_TERM)
+            else:
+                next_sections = ISectionContainer(next_term)
+                if link_id in next_sections:
+                    next_sections[link_id].previous = section
+                else:
+                    self.error(row, 10, ERROR_INVALID_NEXT_TERM_SECTION)
 
 
 class GroupImporter(ImporterBase):

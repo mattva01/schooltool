@@ -16,6 +16,8 @@ teachers, students and resources from the section view.
     ...     courses = browser.queryHTML('//div[@id="content-header"]//a/@href')
     ...     courses = [course for course in courses if 'courses' in course]
     ...     for course in sorted(courses): print course
+    ...     links = browser.queryHTML('//div[@class="info-block"][1]//ul//a[1]/@href')
+    ...     for link in links: print link
     ...     teachers = browser.queryHTML('//div[@class="info-block"][2]//ul//a/@href')
     ...     for teacher in sorted(teachers): print teacher
     ...     students = browser.queryHTML('//div[@class="info-block"][3]//tr/td[1]/a/@href')
@@ -51,12 +53,13 @@ first and show the new sections.
     http://localhost/schoolyears/2006-2007/2006-fall/sections/art_b_2006-fall_2
 
 Visiting the first section, we see the values are set correctly.  There is no
-description in this case.
+description in this case..  It is linked to a section in the spring term.
 
     >>> browser.getLink('Art A 2006 Fall Section 1').click()
     >>> printSectionValues()
     Art A 2006 Fall Section 1
     http://localhost/schoolyears/2006-2007/courses/art_a
+    http://localhost/schoolyears/2006-2007/2007-spring/sections/art_a_2007-spring_1
     http://localhost/persons/teacher000
     http://localhost/persons/teacher002
     http://localhost/persons/student000
@@ -95,7 +98,7 @@ The third section has no resources.
     http://localhost/persons/student003
 
 The fourth section has nothing set, a valid user choice.  The title is the
-only field that is required.
+only field that is required.  We see that it is linked to a spring section.
 
     >>> browser.getLink('2006-2007').click()
     >>> browser.getLink('2006 Fall').click()
@@ -104,8 +107,10 @@ only field that is required.
     >>> printSectionValues()
     Art B 2006 Fall Section 2
     http://localhost/schoolyears/2006-2007/courses/art_b
+    http://localhost/schoolyears/2006-2007/2007-spring/sections/art_b_2007-spring_1
 
-We have 2 sections in 2007 spring term.
+We have 2 sections in 2007 spring term.  Both are linked to the same sections
+in the fall that we just demonstrated were linked forward to the spring.
 
     >>> browser.getLink('2006-2007').click()
     >>> browser.getLink('2007 Spring').click()
@@ -119,6 +124,7 @@ We have 2 sections in 2007 spring term.
     Art A 2007 Spring Section 1
     Art A 2007 Spring Section 1 Desc
     http://localhost/schoolyears/2006-2007/courses/art_a
+    http://localhost/schoolyears/2006-2007/2006-fall/sections/art_a_2006-fall_1
     http://localhost/persons/teacher000
     http://localhost/persons/student001
     http://localhost/persons/student002
@@ -131,6 +137,7 @@ We have 2 sections in 2007 spring term.
     >>> printSectionValues()
     Art B 2007 Spring Section 1
     http://localhost/schoolyears/2006-2007/courses/art_b
+    http://localhost/schoolyears/2006-2007/2006-fall/sections/art_b_2006-fall_2
     http://localhost/persons/teacher001
     http://localhost/persons/student002
 
@@ -161,6 +168,7 @@ We have 2 sections in 2007 fall term.  One of them has two courses set.
     Art CD 2007 Fall Section 1
     http://localhost/schoolyears/2007-2008/courses/art_d
     http://localhost/schoolyears/2007-2008/courses/art_d
+    http://localhost/schoolyears/2007-2008/2008-spring/sections/art_cd_2008-spring_1
     http://localhost/persons/teacher000
     http://localhost/persons/student001
 
@@ -190,6 +198,7 @@ We have 2 sections in 2008 spring term.  Again, one of them has two courses set.
     Art CD 2008 Spring Section 1
     http://localhost/schoolyears/2007-2008/courses/art_d
     http://localhost/schoolyears/2007-2008/courses/art_d
+    http://localhost/schoolyears/2007-2008/2007-fall/sections/art_cd_2007-fall_1
     http://localhost/persons/teacher002
     http://localhost/persons/student002
 
