@@ -118,11 +118,140 @@ no_date = object()
 no_data = object()
 
 
+class CellAccessor(object):
+    def __init__(self, query):
+        self.query = query
+
+    def validCoords(self, coords):
+        try:
+            row, col = coords
+            row = int(row)
+            col = int(col)
+        except TypeError:
+            raise TypeError('Expected (int, int)', coords)
+        except ValueError:
+            raise TypeError('Expected (int, int)', coords)
+        return row, col
+
+    def __contains__(self, coords):
+        row, col = self.validCoords(coords)
+        try:
+            self.query.sheet.cell_value(rowx=row, colx=col)
+            return True
+        except IndexError:
+            return False
+
+    def __getitem__(self, coords):
+        row, col = self.validCoords(coords)
+        try:
+            cell = self.query.sheet.cell_value(rowx=row, colx=col)
+        except IndexError:
+            raise KeyError(row, col)
+        return cell
+
+    def get(self, coords, default=None):
+        try:
+            return self[coords]
+        except KeyError:
+            return default
+
+
+class TextAccessor(CellAccessor):
+
+    def __getitem__(self, coords):
+        row, col = self.validCoords(coords)
+        return self.query.importer.getRequiredTextFromCell(
+            self.query.sheet, row, col)
+
+    def get(self, coords, default=u''):
+        row, col = self.validCoords(coords)
+        return self.query.importer.getTextFromCell(
+            self.query.sheet, row, col, default=default)
+
+
+class IntAccessor(CellAccessor):
+
+    def __getitem__(self, coords):
+        row, col = self.validCoords(coords)
+        return self.query.importer.getRequiredIntFromCell(
+            self.query.sheet, row, col)
+
+    def get(self, coords, default=0):
+        row, col = self.validCoords(coords)
+        return self.query.importer.getIntFromCell(
+            self.query.sheet, row, col)
+
+
+class BoolAccessor(CellAccessor):
+
+    def __getitem__(self, coords):
+        row, col = self.validCoords(coords)
+        return self.query.importer.getRequiredBoolFromCell(
+            self.query.sheet, row, col)
+
+    def get(self, coords, default=None):
+        row, col = self.validCoords(coords)
+        value = self.query.importer.getBoolFromCell(
+            self.query.sheet, row, col)
+        if value is None:
+            return default
+        return value
+
+
+class DateAccessor(CellAccessor):
+
+    def __getitem__(self, coords):
+        row, col = self.validCoords(coords)
+        return self.query.importer.getDateFromCell(
+            self.query.sheet, row, col, default=no_date)
+
+    def get(self, coords, default=None):
+        row, col = self.validCoords(coords)
+        return self.query.importer.getDateFromCell(
+            self.query.sheet, row, col, default=default)
+
+
+class CellQueryProperty(object):
+
+    def __get__(self, instance, owner):
+        if instance is None:
+            return self
+        else:
+            return CellQuery(instance, instance.sheet)
+
+
+class CellQuery(object):
+
+    n_errors = 0
+
+    def __init__(self, importer, sheet=None):
+        self.importer = importer
+        if sheet is None:
+            self.sheet = importer.sheet
+        else:
+            self.sheet = sheet
+        self.n_errors = len(importer.errors)
+        self.date = DateAccessor(self)
+        self.int = IntAccessor(self)
+        self.bool = BoolAccessor(self)
+        self.text = TextAccessor(self)
+        self.cell = CellAccessor(self)
+
+    @property
+    def has_new_errors(self):
+        return len(self.importer.errors) > self.n_errors
+
+
 class ImporterBase(object):
 
     def __init__(self, context, request):
         self.context, self.request = context, request
         self.errors = []
+
+    def startQuery(self, sheet=None):
+        if sheet is None:
+            sheet = self.sheet
+        return CellQuery(self)
 
     def getCellValue(self, sheet, row, col, default=no_data):
         try:
