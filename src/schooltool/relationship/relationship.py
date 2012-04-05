@@ -142,6 +142,28 @@ class RelationshipEvent(object):
             return self.participant2
         raise KeyError(role)
 
+    def match(self, schema):
+        if self.rel_type != schema.rel_type:
+            return None
+        schema_roles = tuple(schema.roles.values())
+        if ((self.role1, self.role2) != schema_roles and
+            (self.role2, self.role1) != schema_roles):
+            return None
+        return RelationshipMatch(self, schema)
+
+
+class RelationshipMatch(object):
+
+    def __init__(self, event, schema):
+        self._event = event
+        self._schema = schema
+        self.extra_info = event.extra_info
+        for name, role in schema.roles.items():
+            if role == event.role1:
+                setattr(self, name, event.participant1)
+            elif role == event.role2:
+                setattr(self, name, event.participant2)
+
 
 class BeforeRelationshipEvent(RelationshipEvent):
     """A relationship is about to be established.
@@ -233,14 +255,18 @@ class RelationshipSchema(object):
         >>> Membership = RelationshipSchema(URIMembership,
         ...                     member=URIMember, group=URIGroup)
 
-    Then you can create and break relationships by writing
+    Then you can create, query and break relationships by writing
 
         >>> Membership(member=a, group=b)
+        >>> Membership.query(group=b)
+        [a]
         >>> Membership.unlink(member=a, group=b)
 
     instead of having to explicitly say
 
         >>> relate(URIMembership, (a, URIMember), (b, URIGroup))
+        >>> getRelatedObjects(b, URIMember, rel_type=URIMembership)
+        [a]
         >>> unrelate(URIMembership, (a, URIMember), (b, URIGroup))
 
     That's it.
@@ -264,6 +290,17 @@ class RelationshipSchema(object):
     def unlink(self, **parties):
         """Break a relationship."""
         self._doit(unrelate, **parties)
+
+    def query(self, **party):
+        """Retrieve relationship targets."""
+        if len(party) != 1:
+            raise TypeError("A single party must be provided.")
+        roles = list(self.roles.keys())
+        my_role_key = party.keys()[0]
+        roles.remove(my_role_key)
+        other_role = self.roles[roles[0]]
+        obj = party.values()[0]
+        return getRelatedObjects(obj, other_role, rel_type=self.rel_type)
 
     def _doit(self, fn, **parties):
         """Extract and validate parties from keyword arguments and call fn."""

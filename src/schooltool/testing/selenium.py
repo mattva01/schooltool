@@ -967,9 +967,11 @@ class SeleniumLayer(ZCMLLayer):
         ZCMLLayer.__init__(self, *args, **kw)
         self.browsers = BrowserPool(self)
         if BLACK_MAGIC:
-            self.patches = mock.ModulesSnapshot()
+            self.patches = []
 
     def setUp(self):
+        if BLACK_MAGIC:
+            self.patches.append(mock.ModulesSnapshot())
         global _Browser_UI_ext
         global _Element_UI_ext
         _Browser_UI_ext = ExtensionGroup()
@@ -996,6 +998,10 @@ class SeleniumLayer(ZCMLLayer):
         global _Element_UI_ext
         _Browser_UI_ext = None
         _Element_UI_ext = None
+        if BLACK_MAGIC:
+            snapshot = self.patches.pop()
+            snapshot.restore()
+            assert not self.patches
 
     def poll_server(self):
         self.serving = True
@@ -1004,6 +1010,8 @@ class SeleniumLayer(ZCMLLayer):
         self.server.close()
 
     def testSetUp(self):
+        if BLACK_MAGIC:
+            self.patches.append(mock.ModulesSnapshot())
         self.browsers.reset()
         self.setup.setUp()
 
@@ -1015,7 +1023,9 @@ class SeleniumLayer(ZCMLLayer):
         self.setup.tearDown()
         self.browsers.reset()
         if BLACK_MAGIC:
-            self.patches.restore()
+            snapshot = self.patches.pop()
+            snapshot.restore()
+            assert self.patches
 
 
 class SkippyDocTestRunner(doctest.DocTestRunner):
@@ -1145,7 +1155,7 @@ class SeleniumDocFileCase(doctest.DocFileCase):
 
     if BLACK_MAGIC:
         def patch(self, patches):
-            self._layer.patches.mock(
+            self._layer.patches[-1].mock(
                 dict(filter(lambda (a, m): m is not None, patches.items())))
 
     def run(self, *args, **kw):
@@ -1259,6 +1269,7 @@ def collect_ftests(package=None, level=None, layer=None, filenames=None,
                                      package=package,
                                      optionflags=optionflags,
                                      globs={'browsers': layer.browsers},
+                                     encoding='UTF-8',
                                      test_case_factory=suite_test_case_factory)
         return suite
     assert isinstance(layer, SeleniumLayer)

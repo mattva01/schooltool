@@ -21,6 +21,7 @@ SchoolTool section views
 """
 
 from collections import defaultdict
+from urllib import urlencode
 
 import zc.table.table
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
@@ -1047,10 +1048,10 @@ class FlourishSectionContainerDeleteView(ContainerDeleteView):
     def nextURL(self):
         if 'CONFIRM' in self.request:
             schoolyear = ISchoolYear(self.context)
-            url = '%s/%s?schoolyear_id=%s' % (
+            params = {'schoolyear_id': schoolyear.__name__.encode('utf-8')}
+            url = '%s/sections?%s' % (
                 absoluteURL(ISchoolToolApplication(None), self.request),
-                'sections',
-                schoolyear.__name__)
+                urlencode(params))
             return url
         return ContainerDeleteView.nextURL(self)
 

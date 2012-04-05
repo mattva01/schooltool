@@ -30,8 +30,13 @@ app_functional_layer = ZCMLLayer(os.path.join(here, 'ftesting.zcml'),
                                  'app_functional_layer')
 
 app_selenium_layer = SeleniumLayer(os.path.join(here, 'stesting.zcml'),
-                                   __name__,
+                                   __name__+'_selenium',
                                    'app_functional_layer')
+
+app_selenium_oldskin_layer = SeleniumLayer(os.path.join(here,
+                                           'stesting-oldskin.zcml'),
+                                           __name__+'_oldskin',
+                                           'app_functional_layer')
 
 
 def format_weekly_calendar(contents):

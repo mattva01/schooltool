@@ -17,6 +17,13 @@ body, textarea, select, input {
                  'DejaVu Sans', Tahoma, sans-serif;
 }
 
+body {
+ background-image: url(hexes.svg);
+ background-repeat: no-repeat;
+ background-position: right bottom;
+ background-attachment: fixed;
+}
+
 h1 {
     font-size: 36px;
     line-height: 40px;

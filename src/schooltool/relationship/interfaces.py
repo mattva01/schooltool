@@ -141,6 +141,9 @@ class IRelationshipEvent(Interface):
         when role1 == role2.
         """
 
+    def match(schema):
+        """Return an accessor object if this event matches the schema."""
+
 
 class IBeforeRelationshipEvent(IRelationshipEvent):
     """A relationship is about to be established.
@@ -190,3 +193,6 @@ class IRelationshipSchema(Interface):
 
     def unlink(**parties):
         """Break a relationship."""
+
+    def query(**party):
+        """Retrieve relationship targets."""

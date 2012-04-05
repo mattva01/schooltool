@@ -262,6 +262,26 @@ class ImporterBase(object):
         if self.sheet:
             return self.process()
 
+    def ensure_students_group(self, year):
+        gc = IGroupContainer(year)
+        if 'students' in gc:
+            return gc['students']
+        else:
+            students = Group(_('Students'), _('Students.'))
+            students.__name__ = 'students'
+            gc['students'] = students
+            return students
+
+    def ensure_teachers_group(self, year):
+        gc = IGroupContainer(year)
+        if 'teachers' in gc:
+            return gc['teachers']
+        else:
+            teachers = Group(_('Teachers'), _('Teachers.'))
+            teachers.__name__ = 'teachers'
+            gc['teachers'] = teachers
+            return teachers
+
 
 class SchoolYearImporter(ImporterBase):
 
@@ -698,6 +718,7 @@ class ResourceImporter(ImporterBase):
 class PersonImporter(ImporterBase):
 
     sheet_name = 'Persons'
+    group_name = None
 
     def applyData(self, person, data):
         person.prefix = data['prefix']
@@ -728,9 +749,30 @@ class PersonImporter(ImporterBase):
 
     def process(self):
         sh = self.sheet
-        app = ISchoolToolApplication(None)
-        fields = IDemographicsFields(app)
-        for row in range(1, sh.nrows):
+
+        fields = IDemographicsFields(ISchoolToolApplication(None))
+        if self.group_name:
+            num_errors = len(self.errors)
+            year_id = self.getRequiredTextFromCell(sh, 0, 1)
+            if num_errors != len(self.errors):
+                return
+            syc = ISchoolYearContainer(self.context)
+            if year_id not in syc:
+                self.error(0, 1, ERROR_INVALID_SCHOOL_YEAR)
+                return
+            year = syc[year_id]
+            if self.group_name == 'students':
+                group = self.ensure_students_group(year)
+            elif self.group_name == 'teachers':
+                group = self.ensure_teachers_group(year)
+            first_row = 3
+            fields = fields.filter_key(self.group_name)
+        else:
+            group = None
+            first_row = 1
+            fields = list(fields.values())
+
+        for row in range(first_row, sh.nrows):
             if sh.cell_value(rowx=row, colx=0) == '':
                 break
 
@@ -767,7 +809,7 @@ class PersonImporter(ImporterBase):
                 person = BasicPerson('name', 'first_name', 'last_name')
 
             demographics = IDemographics(person)
-            for n, field in enumerate(fields.values()):
+            for n, field in enumerate(fields):
                 if field.required:
                     if isinstance(field, DateFieldDescription):
                         value = self.getDateFromCell(sh, row, n + 10)
@@ -789,6 +831,20 @@ class PersonImporter(ImporterBase):
 
             if num_errors == len(self.errors):
                 self.addPerson(person, data)
+                if group and person not in group.members:
+                    group.members.add(person)
+
+
+class TeacherImporter(PersonImporter):
+
+    sheet_name = 'Teachers'
+    group_name = 'teachers'
+
+
+class StudentImporter(PersonImporter):
+
+    sheet_name = 'Students'
+    group_name = 'students'
 
 
 class ContactPersonImporter(ImporterBase):
@@ -1086,6 +1142,9 @@ class SectionImporter(ImporterBase):
         self.addSection(section, data, year, term)
         courses = ICourseContainer(section)
 
+        students = self.ensure_students_group(year)
+        teachers = self.ensure_teachers_group(year)
+
         row += 4
         if self.getCellValue(sh, row, 0, '') == 'Courses':
             row += 1
@@ -1130,6 +1189,8 @@ class SectionImporter(ImporterBase):
 
                 if member not in section.members:
                     section.members.add(removeSecurityProxy(member))
+                if member not in students.members:
+                    students.members.add(removeSecurityProxy(member))
             row += 1
 
         if self.getCellValue(sh, row, 0, '') == 'Instructors':
@@ -1149,6 +1210,8 @@ class SectionImporter(ImporterBase):
 
                 if instructor not in section.instructors:
                     section.instructors.add(removeSecurityProxy(instructor))
+                if instructor not in teachers.members:
+                    teachers.members.add(removeSecurityProxy(instructor))
             row += 1
 
         if self.getCellValue(sh, row, 0, '') == 'School Timetable':
@@ -1285,11 +1348,13 @@ class MegaImporter(BrowserView):
                      SchoolTimetableImporter,
                      ResourceImporter,
                      PersonImporter,
+                     TeacherImporter,
+                     StudentImporter,
                      ContactPersonImporter,
                      ContactRelationshipImporter,
                      CourseImporter,
-                     SectionImporter,
-                     GroupImporter]
+                     GroupImporter,
+                     SectionImporter]
 
         for importer in importers:
             imp = importer(self.context, self.request)
