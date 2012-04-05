@@ -19,6 +19,8 @@ Bugfixes
 - Fixed section delete view when school year was created with non-ascii title (https://launchpad.net/bugs/963740)
 - XLS import automatically adds teachers and students to the corresponding groups
 - Fix breakage if intervention plugin was used, but then disabled (https://launchpad.net/bugs/969221)
+- Replace PIL dependency with Pillow to fix image libraries detection when
+  building from source on Ubuntu.
 
 
 2.0.3 (2012-03-19)
