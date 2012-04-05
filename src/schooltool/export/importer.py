@@ -1455,6 +1455,21 @@ class MegaImporter(BrowserView):
         self.errors = []
         self.success = []
 
+    @property
+    def importers(self):
+        return [SchoolYearImporter,
+                TermImporter,
+                SchoolTimetableImporter,
+                ResourceImporter,
+                PersonImporter,
+                TeacherImporter,
+                StudentImporter,
+                ContactPersonImporter,
+                ContactRelationshipImporter,
+                CourseImporter,
+                GroupImporter,
+                SectionImporter]
+
     def update(self):
         if "UPDATE_SUBMIT" not in self.request:
             return
@@ -1472,18 +1487,7 @@ class MegaImporter(BrowserView):
 
         sp = transaction.savepoint(optimistic=True)
 
-        importers = [SchoolYearImporter,
-                     TermImporter,
-                     SchoolTimetableImporter,
-                     ResourceImporter,
-                     PersonImporter,
-                     TeacherImporter,
-                     StudentImporter,
-                     ContactPersonImporter,
-                     ContactRelationshipImporter,
-                     CourseImporter,
-                     GroupImporter,
-                     SectionImporter]
+        importers = self.importers
 
         for importer in importers:
             imp = importer(self.context, self.request)
