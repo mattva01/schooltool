@@ -57,14 +57,14 @@ from schooltool.securitypolicy.crowds import Crowd, AggregateCrowd
 from schooltool.securitypolicy.crowds import AggregateCrowdDescription
 from schooltool.securitypolicy.metaconfigure import getCrowdsUtility
 from schooltool.securitypolicy.interfaces import ICrowd
+from schooltool.common import SchoolToolMessage as _
 
 
-defaultGroups =  {"manager"       : ("Site Managers", "Manager Group."),
-                  "students"      : ("Students", "Students."),
-                  "teachers"      : ("Teachers", "Teachers."),
-                  "clerks"        : ("Clerks", "Clerks."),
-                  "administrators": ("School Administrators",
-                                     "School Administrators."),
+defaultGroups =  {"manager"       : _("Site Managers"),
+                  "students"      : _("Students"),
+                  "teachers"      : _("Teachers"),
+                  "clerks"        : _("Clerks"),
+                  "administrators": _("School Administrators"),
                   }
 
 
@@ -140,10 +140,8 @@ class InitGroupsForNewSchoolYear(ObjectEventAdapterSubscriber):
 
     def initializeGroupContainer(self):
         groups = IGroupContainer(self.object)
-        for id, info in defaultGroups.items():
-            title = info[0]
-            description = info[1]
-            group = groups[id] = Group(title, description)
+        for id, title in defaultGroups.items():
+            group = groups[id] = Group(title)
             IDependable(group).addDependent('')
 
     def importDefaultGroups(self, activeSchoolyear):

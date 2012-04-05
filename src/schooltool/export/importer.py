@@ -267,7 +267,7 @@ class ImporterBase(object):
         if 'students' in gc:
             return gc['students']
         else:
-            students = Group(_('Students'), _('Students.'))
+            students = Group(_('Students'))
             students.__name__ = 'students'
             gc['students'] = students
             return students
@@ -277,7 +277,7 @@ class ImporterBase(object):
         if 'teachers' in gc:
             return gc['teachers']
         else:
-            teachers = Group(_('Teachers'), _('Teachers.'))
+            teachers = Group(_('Teachers'))
             teachers.__name__ = 'teachers'
             gc['teachers'] = teachers
             return teachers
