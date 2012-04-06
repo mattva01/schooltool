@@ -1,0 +1,27 @@
+Selenium browser extensions tests
+=================================
+
+Let's test the selenium extensions created in the
+schooltool.group.stesting module.
+
+See the README.selenium.txt file in the schooltool/testing directory
+for instructions on how to use them.
+
+Log in as manager:
+
+    >>> manager = browsers.manager
+    >>> manager.ui.login('manager', 'schooltool')
+
+
+browser.ui.xls.import()
+-----------------------
+
+Used for importing and XLS file.
+
+Let's try to import an invalid filename:
+
+    >>> manager.ui.import_xls('')
+    >>> print manager.query_all.xpath("//div[@class='status']/div").text
+    icon
+    No data provided
+
