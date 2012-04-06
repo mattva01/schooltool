@@ -13,15 +13,30 @@ Log in as manager:
     >>> manager.ui.login('manager', 'schooltool')
 
 
-browser.ui.xls.import()
+browser.ui.import_xls()
 -----------------------
 
 Used for importing and XLS file.
 
-Let's try to import an invalid filename:
+Sending a blank filename simulates hitting Submit without selecting a file:
 
     >>> manager.ui.import_xls('')
-    >>> print manager.query_all.xpath("//div[@class='status']/div").text
+    >>> print manager.query_all.css('.status div').text
     icon
     No data provided
+
+Let's specify a test file with just a School Years sheet for this simple test
+and try again.
+
+    >>> import os
+    >>> dirname = os.path.abspath(os.path.dirname(__file__))
+    >>> filename = os.path.join(dirname, 'extensions_test.xls')
+    >>> manager.ui.import_xls(filename)
+
+Now we see that there are two schoolyears as specified in the sheet.
+
+    >>> manager.query.link('School').click()
+    >>> print manager.query_all.css('.third-nav a').text
+    2006-2007
+    2007-2008
 

@@ -45,10 +45,7 @@ def registerSeleniumSetup():
         if filename:
             import pkg_resources
             elem = browser.query.name('xlsfile')
-            browser.query.name('xlsfile').file(
-                pkg_resources.resource_stream('schooltool.export.ftests', filename),
-                'application/excel',
-                filename)
+            browser.query.name('xlsfile').type(filename)
         page = browser.query.tag('html')
         browser.query.button('Submit').click()
         browser.wait(lambda: page.expired)
