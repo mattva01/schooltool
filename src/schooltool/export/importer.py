@@ -116,6 +116,8 @@ ERROR_CURRENT_SECTION_FIRST_TERM = _("the current section is in the first term o
 ERROR_CURRENT_SECTION_LAST_TERM = _("the current section is in the last term of the school year")
 ERROR_INVALID_PREV_TERM_SECTION = _("is not a valid section id in the previous term")
 ERROR_INVALID_NEXT_TERM_SECTION = _("is not a valid section id in the next term")
+ERROR_NO_TIMETABLE_DEFINED = _("No timetable is defined for this section")
+ERROR_NO_DAY_DEFINED = _("No day is defined in this row")
 
 
 no_date = object()
@@ -1304,6 +1306,10 @@ class FlatSectionsTableImporter(ImporterBase):
             data['resource'] = self.getTextFromCell(sh, row, 8)
             data['link_prev'] = self.getTextFromCell(sh, row, 9)
             data['link_next'] = self.getTextFromCell(sh, row, 10)
+            data['timetable'] = self.getTextFromCell(sh, row, 11)
+            data['consecutive'] = self.getTextFromCell(sh, row, 12)
+            data['day'] = self.getTextFromCell(sh, row, 13)
+            data['period'] = self.getTextFromCell(sh, row, 14)
 
             if not [v for v in data.values() if v]:
                 break
@@ -1315,6 +1321,7 @@ class FlatSectionsTableImporter(ImporterBase):
                     self.error(row, 0, ERROR_INVALID_SCHOOL_YEAR)
                     continue
                 year = schoolyears[year_id]
+                timetables = ITimetableContainer(year)
                 courses = None
             elif year is None:
                 self.error(row, 0, ERROR_MISSING_YEAR_ID)
@@ -1351,6 +1358,7 @@ class FlatSectionsTableImporter(ImporterBase):
                     self.error(row, 4, ERROR_MISSING_REQUIRED_TEXT)
                     continue
                 section = self.createSection(data, year, term, courses)
+                timetable = None
             elif section is None:
                 self.error(row, 3, ERROR_MISSING_REQUIRED_TEXT)
 
@@ -1386,6 +1394,55 @@ class FlatSectionsTableImporter(ImporterBase):
 
             if data['link_next']:
                 next_links[row] = (section, data['link_next'])
+
+            if data['timetable']:
+                timetable_id = data['timetable']
+                if timetable_id not in timetables:
+                    self.error(row, 11, ERROR_INVALID_SCHEMA_ID)
+                    continue
+                timetable = timetables[timetable_id]
+
+                schedule = SelectedPeriodsSchedule(
+                    timetable, term.first, term.last,
+                    title=timetable.title, timezone=timetable.timezone)
+                schedule.consecutive_periods_as_one = bool(
+                    data['consecutive'].lower() == 'yes')
+
+                schedules = IScheduleContainer(section)
+                s_chooser = INameChooser(schedules)
+                name = s_chooser.chooseName('', schedule)
+                schedules[name] = schedule
+
+            day = None
+            if data['day']:
+                if timetable is None:
+                    self.error(row, 0, ERROR_NO_TIMETABLE_DEFINED)
+                    continue
+                day_title = data['day']
+                for tt_day in timetable.periods.templates.values():
+                    if tt_day.title == day_title:
+                        day = tt_day
+                        break
+                if day is None:
+                    self.error(row, 0, ERROR_INVALID_DAY_ID)
+                    continue
+
+            if data['period']:
+                if timetable is None:
+                    self.error(row, 0, ERROR_NO_TIMETABLE_DEFINED)
+                    continue
+                if day is None:
+                    self.error(row, 0, ERROR_NO_DAY_DEFINED)
+                    continue
+                period = None
+                period_title = data['period']
+                for tt_period in day.values():
+                    if tt_period.title == period_title:
+                        period = tt_period
+                if period is None:
+                    self.error(row, 1, ERROR_INVALID_PERIOD_ID)
+                    continue
+                schedule.addPeriod(period)
 
         for row, (section, link_id) in prev_links.items():
             term = ITerm(section)
