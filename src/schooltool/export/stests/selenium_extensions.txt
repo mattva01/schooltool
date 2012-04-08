@@ -2,7 +2,7 @@ Selenium browser extensions tests
 =================================
 
 Let's test the selenium extensions created in the
-schooltool.group.stesting module.
+schooltool.export.stesting module.
 
 See the README.selenium.txt file in the schooltool/testing directory
 for instructions on how to use them.

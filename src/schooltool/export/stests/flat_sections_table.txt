@@ -1,0 +1,210 @@
+Test for FlatSectionsTable sheet
+--------------------------------
+
+Log in as manager:
+
+    >>> manager = browsers.manager
+    >>> manager.ui.login('manager', 'schooltool')
+
+We'll define a helper function for printing the id, title, description, courses,
+teachers, students and resources from the section view.
+
+    >>> def printSectionValues():
+    ...     print manager.query_all.css('.viewspace .widget span').text
+    ...     print manager.query_all.xpath('//div[@class="body"]/table[1]//a').get_attribute('href')
+    ...     print manager.query_all.xpath('//div[@class="body"]/table[2]//a').get_attribute('href')
+    ...     print manager.query_all.xpath('//div[@class="body"]/div/form/table/tbody//td[1]/a').get_attribute('href')
+
+Let's import a file containing the FlatSectionsTable sheet:
+
+    >>> import os
+    >>> dirname = os.path.abspath(os.path.dirname(__file__))
+    >>> filename = os.path.join(dirname, 'flat_sections_table.xls')
+    >>> manager.ui.import_xls(filename)
+
+There should be no errors:
+
+    >>> print manager.query_all.css('.status div').text
+
+We see that there are two schoolyears as specified in the spreadsheet.
+
+    >>> manager.query.link('School').click()
+    >>> print manager.query_all.css('.third-nav a').text
+    2006-2007
+    2007-2008
+
+Let's check the data.  We'll visit the sections view for the 2006-2007
+schoolyear and show the new sections.
+
+    >>> manager.query.link('Sections').click()
+    >>> print manager.query_all.css('.data a').text
+    Art A 2007 Spring Section 1
+    Art B 2007 Spring Section 1
+    Art A 2006 Fall Section 1
+    Art A 2006 Fall Section 2
+    Art B 2006 Fall Section 1
+    Art B 2006 Fall Section 2
+
+Visiting the first section in the fall term, we see the values are set
+correctly.  There is no description in this case.  It is linked to a section
+in the spring term.
+
+    >>> manager.query.link('Art A 2006 Fall Section 1').click()
+    >>> printSectionValues()
+    art_a_2006-fall_1
+    Art A 2006 Fall Section 1
+    http://localhost/schoolyears/2006-2007/courses/art_a
+    http://localhost/schoolyears/2006-2007/2007-spring/sections/art_a_2007-spring_1
+    http://localhost/persons/teacher002
+    http://localhost/persons/teacher000
+    http://localhost/persons/student003
+    http://localhost/persons/student000
+    http://localhost/persons/student001
+    http://localhost/resources/room02
+    http://localhost/resources/projector03
+
+We included a schedule in the first section.
+
+    >>> manager.query.link('Schedule').click()
+    >>> print manager.query_all.css('.timetable thead th').text
+    Day 1
+    Day 2
+    Day 3
+    Day 4
+    Day 5
+    Day 6
+
+    >>> for elem in manager.query_all.css('.timetable tbody tr'):
+    ...     parts = []
+    ...     for cell in elem.query_all.css('td span'):
+    ...         if cell.get_attribute('class') == 'activity' and cell.text:
+    ...             parts.append('(%s)' % cell.text)
+    ...         else:
+    ...             parts.append(cell.text)
+    ...     print ' '.join(parts)
+    A  B  C  D  E  F (Art A 2006 Fall Section 1)
+    B  C (Art A 2006 Fall Section 1) D  E  F  A
+    C  D  E  F (Art A 2006 Fall Section 1) A  B
+    D  E  F  A  B  C
+    E (Art A 2006 Fall Section 1) F  A (Art A 2006 Fall Section 1) B  C  D
+    F  A  B  C  D (Art A 2006 Fall Section 1) E
+
+In the second section we included a description.
+
+    >>> manager.query.link('Done').click()
+    >>> manager.query.link('Done').click()
+    >>> manager.query.link('Art A 2006 Fall Section 2').click()
+    >>> printSectionValues()
+    art_a_2006-fall_2
+    Art A 2006 Fall Section 2
+    Art A 2006 Fall Section 2 Desc
+    http://localhost/schoolyears/2006-2007/courses/art_a
+    http://localhost/persons/teacher001
+    http://localhost/persons/student004
+    http://localhost/persons/student002
+    http://localhost/resources/room01
+
+The third section has no resources.
+
+    >>> manager.query.link('Done').click()
+    >>> manager.query.link('Art B 2006 Fall Section 1').click()
+    >>> printSectionValues()
+    art_b_2006-fall_1
+    Art B 2006 Fall Section 1
+    Art B 2006 Fall Section 1 Desc
+    http://localhost/schoolyears/2006-2007/courses/art_b
+    http://localhost/persons/teacher002
+    http://localhost/persons/student003
+    http://localhost/persons/student002
+
+The fourth section has nothing set, a valid user choice.  The title is the
+only field that is required.  We see that it is linked to a spring section.
+
+    >>> manager.query.link('Done').click()
+    >>> manager.query.link('Art B 2006 Fall Section 2').click()
+    >>> printSectionValues()
+    art_b_2006-fall_2
+    Art B 2006 Fall Section 2
+    http://localhost/schoolyears/2006-2007/courses/art_b
+    http://localhost/schoolyears/2006-2007/2007-spring/sections/art_b_2007-spring_1
+
+We have 2 sections in 2007 spring term.  Both are linked to the same sections
+in the fall that we just demonstrated were linked forward to the spring.
+
+    >>> manager.query.link('Done').click()
+    >>> manager.query.link('Art A 2007 Spring Section 1').click()
+    >>> printSectionValues()
+    art_a_2007-spring_1
+    Art A 2007 Spring Section 1
+    Art A 2007 Spring Section 1 Desc
+    http://localhost/schoolyears/2006-2007/courses/art_a
+    http://localhost/schoolyears/2006-2007/2006-fall/sections/art_a_2006-fall_1
+    http://localhost/persons/teacher000
+    http://localhost/persons/student001
+    http://localhost/persons/student002
+    http://localhost/resources/room01
+
+    >>> manager.query.link('Done').click()
+    >>> manager.query.link('Art B 2007 Spring Section 1').click()
+    >>> printSectionValues()
+    art_b_2007-spring_1
+    Art B 2007 Spring Section 1
+    http://localhost/schoolyears/2006-2007/courses/art_b
+    http://localhost/schoolyears/2006-2007/2006-fall/sections/art_b_2006-fall_2
+    http://localhost/persons/teacher001
+    http://localhost/persons/student002
+
+We have 4 sections in the 2007-2008 schoolyear.  A couple of them have more
+than one course.  Those two also happen to be linked.
+
+    >>> manager.query.link('School').click()
+    >>> manager.query.link('Sections').click()
+    >>> manager.query.link('2007-2008').click()
+    >>> print manager.query_all.css('.data a').text
+    Art C 2008 Spring Section 1
+    Art CD 2008 Spring Section 1
+    Art C 2007 Fall Section 1
+    Art CD 2007 Fall Section 1
+
+    >>> manager.query.link('Art C 2007 Fall Section 1').click()
+    >>> printSectionValues()
+    art_c_2007-fall_1
+    Art C 2007 Fall Section 1
+    http://localhost/schoolyears/2007-2008/courses/art_c
+    http://localhost/persons/teacher002
+    http://localhost/persons/teacher003
+    http://localhost/persons/student001
+    http://localhost/resources/projector03
+
+    >>> manager.query.link('Done').click()
+    >>> manager.query.link('Art CD 2007 Fall Section 1').click()
+    >>> printSectionValues()
+    art_cd_2007-fall_1
+    Art CD 2007 Fall Section 1
+    http://localhost/schoolyears/2007-2008/courses/art_c
+    http://localhost/schoolyears/2007-2008/courses/art_d
+    http://localhost/schoolyears/2007-2008/2008-spring/sections/art_cd_2008-spring_1
+    http://localhost/persons/teacher000
+    http://localhost/persons/student001
+
+    >>> manager.query.link('Done').click()
+    >>> manager.query.link('Art C 2008 Spring Section 1').click()
+    >>> printSectionValues()
+    art_c_2008-spring_1
+    Art C 2008 Spring Section 1
+    http://localhost/schoolyears/2007-2008/courses/art_c
+    http://localhost/persons/teacher001
+    http://localhost/persons/student002
+    http://localhost/resources/room01
+
+    >>> manager.query.link('Done').click()
+    >>> manager.query.link('Art CD 2008 Spring Section 1').click()
+    >>> printSectionValues()
+    art_cd_2008-spring_1
+    Art CD 2008 Spring Section 1
+    http://localhost/schoolyears/2007-2008/courses/art_c
+    http://localhost/schoolyears/2007-2008/courses/art_d
+    http://localhost/schoolyears/2007-2008/2007-fall/sections/art_cd_2007-fall_1
+    http://localhost/persons/teacher002
+    http://localhost/persons/student002
+
