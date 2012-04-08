@@ -17,7 +17,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
-"POT-Creation-Date: 2012-03-19 17:40+0200\n"
+"POT-Creation-Date: 2012-04-05 13:59+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Schooltool Development Team <schooltool-dev@schooltool.org>\n"
@@ -358,7 +358,13 @@ msgstr ""
 msgid "Errors"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:114
+#: /src/schooltool/app/browser/app.py:1419
+#: /src/schooltool/app/browser/flourish.zcml:292
+#: /src/schooltool/app/browser/flourish.zcml:301
+msgid "Tabs"
+msgstr ""
+
+#: /src/schooltool/app/browser/cal.py:118
 msgid "January"
 msgstr ""
 
@@ -1175,12 +1181,7 @@ msgstr ""
 msgid "Error"
 msgstr ""
 
-#: /src/schooltool/app/browser/flourish.zcml:294
-#: /src/schooltool/app/browser/flourish.zcml:303
-msgid "Tabs"
-msgstr ""
-
-#: /src/schooltool/app/browser/flourish.zcml:343
+#: /src/schooltool/app/browser/flourish.zcml:352
 msgid "About"
 msgstr ""
 
@@ -2045,6 +2046,10 @@ msgstr ""
 msgid "Visible"
 msgstr ""
 
+#: /src/schooltool/app/browser/templates/f_hide_unhide_tabs.pt:25
+msgid "Default"
+msgstr ""
+
 #: /src/schooltool/app/browser/templates/f_hide_unhide_tabs_related.pt:6
 msgid "Schools that are not using all components of SchoolTool can reduce visual clutter by hiding unnecessary links in the top navigation bar."
 msgstr ""
@@ -2054,7 +2059,11 @@ msgid "Note that these settings have no effects other than removing navigational
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_hide_unhide_tabs_related.pt:15
-msgid "Links can be changed from visible to hidden at any time.."
+msgid "Links can be changed from visible to hidden at any time."
+msgstr ""
+
+#: /src/schooltool/app/browser/templates/f_hide_unhide_tabs_related.pt:18
+msgid "When users log in, they will usually be directed to the tab selected in the default column. The default tab must also be visible."
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_login.pt:12
@@ -5842,6 +5851,18 @@ msgstr ""
 msgid "edit groups"
 msgstr ""
 
+#: /src/schooltool/group/group.py:63
+msgid "Site Managers"
+msgstr ""
+
+#: /src/schooltool/group/group.py:66
+msgid "Clerks"
+msgstr ""
+
+#: /src/schooltool/group/group.py:67
+msgid "School Administrators"
+msgstr ""
+
 #: /src/schooltool/group/security.zcml:5
 msgid "Only school administration can view the list of groups."
 msgstr ""
@@ -7209,7 +7230,11 @@ msgstr ""
 msgid "The datetime string did not match the pattern yyyy-mm-dd"
 msgstr ""
 
-#: /src/schooltool/skin/widgets.py:99
+#: /src/schooltool/skin/widgets.py:103
+msgid "Year has to be equal or greater than 1900"
+msgstr ""
+
+#: /src/schooltool/skin/widgets.py:111
 msgid "Width"
 msgstr ""
 

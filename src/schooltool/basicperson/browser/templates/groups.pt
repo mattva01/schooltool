@@ -2,6 +2,6 @@
   <group tal:repeat="group view/groups">
     <id tal:content="group/__name__" />
     <title tal:content="group/title" />
-    <description tal:content="group/description" />
+    <description tal:content="group/description" tal:condition="group/description" />
   </group>
 </groups>
