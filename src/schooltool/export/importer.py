@@ -22,6 +22,7 @@ SchoolTool simple import views.
 import xlrd
 import transaction
 import datetime
+from decimal import Decimal
 
 from zope.container.contained import containedEvent
 from zope.container.interfaces import INameChooser
@@ -116,8 +117,9 @@ ERROR_CURRENT_SECTION_FIRST_TERM = _("the current section is in the first term o
 ERROR_CURRENT_SECTION_LAST_TERM = _("the current section is in the last term of the school year")
 ERROR_INVALID_PREV_TERM_SECTION = _("is not a valid section id in the previous term")
 ERROR_INVALID_NEXT_TERM_SECTION = _("is not a valid section id in the next term")
-ERROR_NO_TIMETABLE_DEFINED = _("No timetable is defined for this section")
-ERROR_NO_DAY_DEFINED = _("No day is defined in this row")
+ERROR_NO_TIMETABLE_DEFINED = _("no timetable is defined for this section")
+ERROR_NO_DAY_DEFINED = _("no day is defined in this row")
+ERROR_INVALID_COURSE_CREDITS = _("course credits need to be a valid number")
 
 
 no_date = object()
@@ -1002,6 +1004,10 @@ class CourseImporter(ImporterBase):
         else:
             course = Course(data['title'], data['description'])
             course.__name__ = data['__name__']
+        course.course_id = data['course_id'] and data['course_id'] or None
+        course.government_id = (data['government_id'] and data['government_id']
+                                or None)
+        course.credits = data['credits'] and Decimal(data['credits']) or None
         return course
 
     def addCourse(self, course, data):
@@ -1024,10 +1030,18 @@ class CourseImporter(ImporterBase):
             data['__name__'] = self.getRequiredTextFromCell(sh, row, 1)
             data['title'] = self.getRequiredTextFromCell(sh, row, 2)
             data['description'] = self.getTextFromCell(sh, row, 3)
+            data['course_id'] = self.getTextFromCell(sh, row, 4)
+            data['government_id'] = self.getTextFromCell(sh, row, 5)
+            data['credits'] = self.getTextFromCell(sh, row, 6)
             if num_errors < len(self.errors):
                 continue
             if data['school_year'] not in ISchoolYearContainer(self.context):
                 self.error(row, 0, ERROR_INVALID_SCHOOL_YEAR)
+            try:
+                if data['credits']:
+                    Decimal(data['credits'])
+            except:
+                self.error(row, 6, ERROR_INVALID_COURSE_CREDITS)
             if num_errors < len(self.errors):
                 continue
             course = self.createCourse(data)
