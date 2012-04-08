@@ -519,7 +519,10 @@ class MegaExporter(SchoolTimetableExportView):
         fields = [('School Year', Text, lambda c: ISchoolYear(c).__name__),
                   ('ID', Text, attrgetter('__name__')),
                   ('Title', Text, attrgetter('title')),
-                  ('Description', Date, attrgetter('description'))]
+                  ('Description', Text, attrgetter('description')),
+                  ('Local ID', Text, attrgetter('course_id')),
+                  ('Government ID', Text, attrgetter('government_id')),
+                  ('Credits', Text, attrgetter('credits'))]
 
         school_years = ISchoolYearContainer(self.context).values()
         items = []
