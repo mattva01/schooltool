@@ -1,0 +1,160 @@
+Tests for errant import data
+----------------------------
+
+Log in as manager:
+
+    >>> import os
+    >>> manager = browsers.manager
+    >>> manager.ui.login('manager', 'schooltool')
+
+We'll define a helper function for calling the import helper wth the full
+filename and printing out the errors.
+
+    >>> def import_file(filename):
+    ...     dirname = os.path.abspath(os.path.dirname(__file__))
+    ...     filename = os.path.join(dirname, filename)
+    ...     manager.ui.import_xls(filename)
+    ...     for txt in manager.query_all.css('.status div').text:
+    ...         if txt:
+    ...             print txt.split('\n')[1]
+
+This file has examples of bad data for the School Years sheet:
+
+    >>> import_file('errant_years.xls')
+    School Years C2 has no date in it
+    School Years D2 has no date in it
+    School Years D3 end date cannot be before start date
+    School Years C5 start date overlaps another year
+    School Years D6 end date overlaps another year
+
+This file has examples of bad data for the Terms sheet:
+
+    >>> import_file('errant_terms.xls')
+    Terms B2 missing required text
+    Terms C2 missing required text
+    Terms D2 has no date in it
+    Terms E2 has no date in it
+    Terms A3 invalid school year
+    Terms A4 invalid school year
+    Terms E5 end date cannot be before start date
+    Terms D6 start date before start of school year
+    Terms E7 end date after end of school year
+    Terms D10 start date overlaps another term
+    Terms E11 end date overlaps another term
+    Terms A15 has no date in it
+    Terms B16 has no date in it
+    Terms E17 end date cannot be before start date
+
+This file has examples of bad data for the School Timetables sheet:
+
+    >>> import_file('errant_timetables.xls')
+    School Timetables B1 missing required text
+    School Timetables B2 missing required text
+    School Timetables B3 missing required text
+    School Timetables B4 missing required text
+    School Timetables B5 missing required text
+    School Timetables B10 missing required text
+    School Timetables B15 missing required text
+    School Timetables B20 missing required text
+    School Timetables B25 missing required text
+    School Timetables B35 missing required text
+    School Timetables B48 missing required text
+
+This file has examples of bad data for the Resouces sheet:
+
+    >>> import_file('errant_resources.xls')
+    Resources B2 missing required text
+    Resources C2 missing required text
+    Resources B3 must be either 'Location', 'Equipment' or 'Resource'
+
+We'll add some demo fields to test importing demos.
+
+    >>> manager.query.link('School').click()
+    >>> manager.query.link('Demographics').click()
+    >>> manager.query.link('Text Field').click()
+    >>> manager.query.name('form.widgets.title').type('Text Demo')
+    >>> manager.query.name('form.widgets.name').type('text_demo')
+    >>> manager.query.id('form-widgets-required-0').click()
+    >>> manager.query.button('Submit').click()
+
+    >>> manager.query.link('Date Field').click()
+    >>> manager.query.name('form.widgets.title').type('Date Demo')
+    >>> manager.query.name('form.widgets.name').type('date_demo')
+    >>> manager.query.id('form-widgets-required-0').click()
+    >>> manager.query.button('Submit').click()
+
+    >>> manager.query.link('Yes/No Field').click()
+    >>> manager.query.name('form.widgets.title').type('Bool Demo')
+    >>> manager.query.name('form.widgets.name').type('bool_demo')
+    >>> manager.query.id('form-widgets-required-0').click()
+    >>> manager.query.button('Submit').click()
+
+This file has examples of bad data for the Persons sheet:
+
+    >>> import_file('errant_persons.xls')
+    Persons C2 missing required text
+    Persons E2 missing required text
+    Persons H2 has no date in it
+    Persons P2 missing required text
+    Persons Q2 has no date in it
+    Persons R2 missing required text
+    Persons Q3 has no date in it
+    Persons R3 must be either True or False
+    Persons A4 Username cannot contain non-ascii characters: ${string}
+
+We'll remove the demo fields to not break future tests.
+
+    >>> manager.query.link('School').click()
+    >>> manager.query.link('Demographics').click()
+    >>> manager.query.link('Reorder or Delete Fields').click()
+    >>> manager.query.name('delete.text_demo').click()
+    >>> manager.query.name('delete.date_demo').click()
+    >>> manager.query.name('delete.bool_demo').click()
+
+This file has examples of bad data for the Courses sheet:
+
+    >>> import_file('errant_courses.xls')
+    Courses B2 missing required text
+    Courses C2 missing required text
+    Courses A4 invalid school year
+
+This file has examples of bad data for the Sections sheet:
+
+    >>> import_file('errant_sections.xls')
+    School Timetables B5 missing required text
+    Sections 1 B1 missing required text
+    Sections 1 D1 missing required text
+    Sections_3 B1 invalid school year
+    Sections_4 D1 is not a valid term in the given school year
+    Sections_5 A12 is not a valid username
+    Sections_5 A17 is not a valid username
+    Sections_5 A20 is not a valid timetable in the given school year
+
+This file has examples of bad data for the Groups sheet:
+
+    >>> import_file('errant_groups.xls')
+    Groups B1 missing required text
+    Groups B2 missing required text
+    Groups B3 missing required text
+    Groups A11 invalid school year
+    Groups A23 is not a valid username
+
+This file has examples of bad data for the Contact Persons and Contact
+Relationships sheets:
+
+    >>> import_file('errant_contacts.xls')
+    Contact Persons A2 Username cannot contain non-ascii characters: ${string}
+    Contact Persons C3 missing required text
+    Contact Persons E3 missing required text
+    Contact Persons B4 must be empty when ID is a user id
+    Contact Persons C4 must be empty when ID is a user id
+    Contact Persons D4 must be empty when ID is a user id
+    Contact Persons E4 must be empty when ID is a user id
+    Contact Persons F4 must be empty when ID is a user id
+    Contact Relationships B2 missing required text
+    Contact Relationships A3 Username cannot contain non-ascii characters: ${string}
+    Contact Relationships B3 Username cannot contain non-ascii characters: ${string}
+    Contact Relationships A4 is not a valid username
+    Contact Relationships B4 is not a valid username or contact id
+    Contact Relationships C4 is not a valid contact relationship
+
