@@ -179,8 +179,8 @@ def doctest_format_courses():
         >>> setUpSchool(app)
         >>> exporter = MegaExporter(app, None)
         >>> for row in exporter.format_courses(): print row
-        [Header('School Year'), Header('ID'), Header('Title'), Header('Description')]
-        [Text(u'2005'), Text(u'c1'), Text('History'), Date(None)]
+        [Header('School Year'), Header('ID'), Header('Title'), Header('Description'), Header('Local ID'), Header('Government ID'), Header('Credits')]
+        [Text(u'2005'), Text(u'c1'), Text('History'), Text(None), Text(None), Text(None), Text(None)]
     """
 
 
