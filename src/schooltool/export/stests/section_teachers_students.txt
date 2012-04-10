@@ -1,0 +1,41 @@
+Test for section import auto-adding to teachers and students groups
+-------------------------------------------------------------------
+
+Log in as manager:
+
+    >>> manager = browsers.manager
+    >>> manager.ui.login('manager', 'schooltool')
+
+We will import a special test xls file for testing the automatic adding of
+section members to the students group and of instrutors to the teachers group:
+
+    >>> import os
+    >>> dirname = os.path.abspath(os.path.dirname(__file__))
+    >>> filename = os.path.join(dirname, 'section_teachers_students.xls')
+    >>> manager.ui.import_xls(filename)
+
+Let's look at the teachers group:
+
+    >>> manager.query.link('School').click()
+    >>> manager.query.link('Teachers').click()
+
+We see the teachers of our two sections are in the group.
+
+    >>> print manager.query_all.xpath('//table[@class="data"]//td[1]//a').get_attribute('href')
+    http://localhost/persons/teacher001
+    http://localhost/persons/teacher003
+
+Let's look at the students group:
+
+    >>> manager.query.link('School').click()
+    >>> manager.query.link('Students').click()
+
+We see the students in our two sections are in the group.
+
+    >>> print manager.query_all.xpath('//table[@class="data"]//td[1]//a').get_attribute('href')
+    http://localhost/persons/student004
+    http://localhost/persons/student006
+    http://localhost/persons/student008
+    http://localhost/persons/student009
+    http://localhost/persons/student002
+
