@@ -1335,6 +1335,8 @@ class FlatSectionsTableImporter(ImporterBase):
                     self.error(row, 0, ERROR_INVALID_SCHOOL_YEAR)
                     continue
                 year = schoolyears[year_id]
+                students = self.ensure_students_group(year)
+                teachers = self.ensure_teachers_group(year)
                 timetables = ITimetableContainer(year)
                 courses = None
             elif year is None:
@@ -1384,6 +1386,8 @@ class FlatSectionsTableImporter(ImporterBase):
                 teacher = persons[person_id]
                 if teacher not in section.instructors:
                     section.instructors.add(removeSecurityProxy(teacher))
+                if teacher not in teachers.members:
+                    teachers.members.add(removeSecurityProxy(teacher))
 
             if data['student']:
                 person_id = data['student']
@@ -1393,6 +1397,8 @@ class FlatSectionsTableImporter(ImporterBase):
                 student = persons[person_id]
                 if student not in section.members:
                     section.members.add(removeSecurityProxy(student))
+                if student not in students.members:
+                    students.members.add(removeSecurityProxy(student))
 
             if data['resource']:
                 resource_id = data['resource']

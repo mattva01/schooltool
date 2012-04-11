@@ -208,3 +208,34 @@ than one course.  Those two also happen to be linked.
     http://localhost/persons/teacher002
     http://localhost/persons/student002
 
+
+Automatic group membership
+--------------------------
+
+Let's look at the teachers group:
+
+    >>> manager.query.link('School').click()
+    >>> manager.query.link('Teachers').click()
+
+We see the teachers of our sections are in the group.  Only teacher004 is
+not teaching any section.
+
+    >>> print manager.query_all.xpath('//table[@class="data"]//td[1]//a').get_attribute('href')
+    http://localhost/persons/teacher001
+    http://localhost/persons/teacher002
+    http://localhost/persons/teacher000
+
+Let's look at the students group:
+
+    >>> manager.query.link('School').click()
+    >>> manager.query.link('Students').click()
+
+We see the students of our sections are there.
+
+    >>> print manager.query_all.xpath('//table[@class="data"]//td[1]//a').get_attribute('href')
+    http://localhost/persons/student004
+    http://localhost/persons/student003
+    http://localhost/persons/student000
+    http://localhost/persons/student001
+    http://localhost/persons/student002
+
