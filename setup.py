@@ -145,7 +145,7 @@ Javascript will be usable, although perhaps not very nice or convenient.""",
                       'zope.testing',
                       'zope.testbrowser',   # XXX for selenium extensions
                       'zope.app.testing',   # XXX to get zope.testbrowser.testing.Browser
-                      'zope.traversing>=3.9',
+                      'zope.traversing>=3.13',
                       'zope.ucol',
                       'zope.viewlet']
                       + other_requires,
