@@ -21,8 +21,21 @@ Functional selenium tests for schooltool.resource
 """
 import unittest
 
+from schooltool.common import parse_date
 from schooltool.testing.selenium import collect_ftests
 from schooltool.resource.stesting import resource_selenium_layer
+from schooltool.skin import flourish
+
+
+class DateManagementView(flourish.page.Page):
+
+    def __call__(self):
+        value = self.request.get('value')
+        try:
+            today = parse_date(value)
+        except (ValueError,):
+            return
+        self.context.today = today
 
 
 def test_suite():

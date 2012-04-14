@@ -1,0 +1,123 @@
+Resources with non-ascii titles
+===============================
+
+We're going to test that the reserve and delete views don't crash when
+their context is a resource with non-ascii title.
+
+We're going to use Spanish titles in this test.
+
+Log in as manager:
+
+    >>> manager = browsers.manager
+    >>> manager.ui.login('manager', 'schooltool')
+
+Set today's date:
+
+    >>> manager.open('http://localhost/time?value=2012-05-01')
+
+Add a school year:
+
+    >>> manager.ui.schoolyear.add('2012', '2012-01-01', '2012-12-31')
+
+Add a projector as an Equipment resource:
+
+    >>> manager.query.link('School').click()
+    >>> manager.query.link('Resources').click()
+    >>> manager.query.link('Equipment').click()
+    >>> manager.query.id('form-widgets-title').type(u'Proyector de Cañón')
+    >>> manager.query.button('Submit').click()
+
+A classroom as a Location resource:
+
+    >>> manager.query.link('School').click()
+    >>> manager.query.link('Resources').click()
+    >>> manager.query.link('Location').click()
+    >>> manager.query.id('form-widgets-title').type(u'Salón A')
+    >>> manager.query.button('Submit').click()
+
+And a book as a Resource:
+
+    >>> manager.query.link('School').click()
+    >>> manager.query.link('Resources').click()
+    >>> manager.query.link('Resource').click()
+    >>> manager.query.id('form-widgets-title').type(u'Cien años de soledad')
+    >>> manager.query.button('Submit').click()
+
+Both resources were saved:
+
+    >>> manager.query.link('School').click()
+    >>> manager.query.link('Resources').click()
+    >>> for tr in manager.query_all.css('table.data tbody tr'):
+    ...     print tr.query.xpath('td[1]/a').text
+    Cien años de soledad
+    Proyector de Cañón
+    Salón A
+
+Let's delete the classroom:
+
+    >>> manager.query.link(u'Salón A').click()
+    >>> manager.query.link('Delete').click()
+    >>> dialog = manager.query.css('.ui-dialog')
+    >>> manager.wait_page(dialog.query.button('Delete').click)
+    >>> for tr in manager.query_all.css('table.data tbody tr'):
+    ...     print tr.query.xpath('td[1]/a').text
+    Cien años de soledad
+    Proyector de Cañón
+
+Now, let's reserve the projector:
+
+    >>> manager.query.link(u'Proyector de Cañón').click()
+    >>> print manager.query.css('.page .header h1').text
+    Proyector de Cañón
+
+    >>> manager.query.link('Reserve').click()
+    >>> print manager.query.css('.page .header h1').text
+    Unnamed Event
+    >>> print manager.query.css('.page .header h2').text
+    Edit
+
+but test the Cancel button first:
+
+    >>> manager.query.button('Cancel').click()
+    >>> print manager.query.css('.page .header h1').text
+    Proyector de Cañón
+
+This time let's cancel the action by deleting the temporary event that
+it's created:
+
+    >>> manager.query.link('Reserve').click()
+    >>> print manager.query.css('.page .header h1').text
+    Unnamed Event
+    >>> print manager.query.css('.page .header h2').text
+    Edit
+    >>> manager.query.link('Delete').click()
+    >>> dialog = manager.query.css('.ui-dialog')
+    >>> manager.wait_page(dialog.query.button('Delete').click)
+    >>> print manager.query.css('.page .header h1').text
+    Proyector de Cañón
+
+This time let's finish the reserve:
+
+    >>> manager.query.link('Reserve').click()
+    >>> print manager.query.css('.page .header h1').text
+    Unnamed Event
+    >>> print manager.query.css('.page .header h2').text
+    Edit
+
+    >>> manager.query.id('field.title').clear()
+    >>> manager.query.id('field.title').type('My Reserve')
+    >>> manager.query.id('field.start_date').clear()
+    >>> manager.query.id('field.start_date').ui.enter_date('2012-05-01')
+    >>> manager.query.id('field.start_time').clear()
+    >>> manager.query.id('field.start_time').type('10:00')
+    >>> manager.query.name('UPDATE_SUBMIT').click()
+    >>> print manager.query.css('.page .header h1').text
+    Proyector de Cañón
+
+Let's check the projecto calendar to see the new event:
+
+    >>> sel = '//div[contains(@class, "sidebar")]//a[text()="Calendar"]'
+    >>> manager.query.xpath(sel).click()
+    >>> for link in manager.query_all.css('.events .event h6 a'):
+    ...     print link.get_attribute('title')
+    My Reserve
