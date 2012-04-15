@@ -1269,6 +1269,7 @@ def collect_ftests(package=None, level=None, layer=None, filenames=None,
                                      package=package,
                                      optionflags=optionflags,
                                      globs={'browsers': layer.browsers},
+                                     encoding='UTF-8',
                                      test_case_factory=suite_test_case_factory)
         return suite
     assert isinstance(layer, SeleniumLayer)

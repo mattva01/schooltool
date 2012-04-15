@@ -94,16 +94,14 @@ pid-file ${abspath}/var/schooltool.pid
 #
 # reportlab_fontdir
 #
-#   Specifies the path to TrueType fonts (Liberation), needed to generate PDF
-#   reports with reportlab.  You may need to install the ttf-liberation package.
+#   Specifies the path to TrueType fonts, needed to generate PDF reports.
 #
-#   Comment out or leave empty to disable reportlab.
+#   You may need to install ttf-liberation and ttf-ubuntu-font-family packages.
 #
 # Examples:
-#    reportlab_fontdir /usr/share/fonts/truetype/ttf-liberation
-#    reportlab_fontdir /usr/share/fonts/truetype/liberation
+#    reportlab_fontdir /usr/share/fonts/truetype/liberation:/usr/share/fonts/truetype/ubuntu-font-family
 #
-reportlab_fontdir /usr/share/fonts/truetype/ttf-liberation:/usr/share/fonts/truetype/ubuntu-font-family
+reportlab_fontdir /usr/share/fonts/truetype/ttf-liberation:/usr/share/fonts/truetype/liberation:/usr/share/fonts/truetype/ubuntu-font-family
 
 #
 # error-log-file

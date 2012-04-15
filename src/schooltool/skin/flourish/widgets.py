@@ -23,7 +23,11 @@ import re
 import os
 import sys
 from cStringIO import StringIO
-import Image
+
+try:
+    import Image
+except ImportError:
+    from PIL import Image
 
 import zope.formlib.widgets
 from zope.component import getUtility, adapter, adapts

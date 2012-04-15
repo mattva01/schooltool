@@ -296,7 +296,7 @@ class DeleteEventDialog(flourish.form.DialogForm):
         if handler is not None:
             next_url = self.nextURL()
             handler(self)
-            self.request.response.redirect(next_url)
+            self.request.response.redirect(next_url.encode('utf-8'))
             self.ajax_settings['dialog'] = 'close'
 
     @button.buttonAndHandler(_("Cancel"))

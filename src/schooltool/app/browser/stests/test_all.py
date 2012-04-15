@@ -19,14 +19,27 @@
 """
 Selenium functional tests for schooltool.app.app
 """
+import os
 import unittest
 
 from schooltool.app.testing import app_selenium_layer
+from schooltool.app.testing import app_selenium_oldskin_layer
 from schooltool.testing.selenium import collect_ftests
 
 
+testdir = os.path.dirname(__file__)
+oldskin = ('app.txt',)
+stests = [fn for fn in os.listdir(testdir)
+          if (fn.endswith('.txt') and
+              not fn.startswith('.') and
+              not fn in oldskin)]
+
+
 def test_suite():
-    return collect_ftests(layer=app_selenium_layer)
+    return unittest.TestSuite([
+        collect_ftests(layer=app_selenium_layer, filenames=stests),
+        collect_ftests(layer=app_selenium_oldskin_layer, filenames=oldskin),
+        ])
 
 
 if __name__ == '__main__':

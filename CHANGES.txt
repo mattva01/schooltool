@@ -5,6 +5,22 @@ CHANGES
 2.0.4 (unreleased)
 ------------------
 
+New features
+++++++++++++
+
+- Add Calendar tab, configure default tab (https://launchpad.net/bugs/938825)
+- Add a background with hexes (https://launchpad.net/bugs/967233)
+- XLS import now has Teachers and Students sheets
+
+Bugfixes
+++++++++
+
+- Fix date validation to not crash on years before 1900 (https://launchpad.net/bugs/960367)
+- Fixed section delete view when school year was created with non-ascii title (https://launchpad.net/bugs/963740)
+- XLS import automatically adds teachers and students to the corresponding groups
+- Fix breakage if intervention plugin was used, but then disabled (https://launchpad.net/bugs/969221)
+- Replace PIL dependency with Pillow to fix image libraries detection when
+  building from source on Ubuntu.
 
 
 2.0.3 (2012-03-19)
@@ -198,6 +214,7 @@ API changes
 - Pluggable traverser refactoring, traversers lost redundant request parameter
 - New `flourish` content, viewlet, page, breadcrumbs, resourceLibrary and
   ZCML directives for them.
+- Requires Python >= 2.6
 
 
 1.7.0 (2011-09-15)
