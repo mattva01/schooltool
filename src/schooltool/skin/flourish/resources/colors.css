@@ -172,7 +172,7 @@ a, a:link, a:visited, a:active {
     color: #aea79f;
 }
 
-.page > .third-nav {
+.page .third-nav {
     background-color: #f7f7f7;
     border-bottom-color: #D9D9D9;
 }

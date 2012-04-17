@@ -13,10 +13,65 @@
     height: 0;
     }
 
-.grid > .third-nav {
-    left: 208px;
+.grid .third-nav-container {
+    left: 234px;
     position: absolute;
-    overflow: auto;
+    overflow: hidden;
+    width: 700px;
+}
+
+.grid .third-nav {
+    float: left;
+    border-radius: 0;
+    margin: 0;
+    width: 10000px;
+}
+
+.grid .third-nav > li:first-child a {
+    border-radius: 0;
+}
+
+.grid .third-nav li a {
+    width: 140px;
+    padding: 8px 0;
+    text-align: center;
+}
+
+.grid a.navbar-arrow {
+    background: #F7F7F7;
+    display: block;
+    font-size: 12px;
+    line-height: 16px;
+    padding: 8px;
+    position: absolute;
+    text-align: center;
+    text-decoration: none;
+    top: 36px;
+    width: 10px;
+    outline: none;
+}
+
+.grid a.navbar-arrow:hover {
+    background: url("subnav_active_bg.png") repeat scroll left 1px transparent;
+}
+
+.grid a.navbar-arrow-inactive {
+    color: gray;
+}
+
+.grid a.navbar-arrow-inactive:hover {
+    background: #F7F7F7;
+    cursor: default;
+}
+
+.grid a.navbar-go-previous {
+    left: 208px;
+    border-radius: 4px 0 0 0;
+}
+
+.grid a.navbar-go-next {
+    right: 16px;
+    border-radius: 0 4px 0 0;
 }
 
 .grid > .body {

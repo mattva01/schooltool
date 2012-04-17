@@ -92,6 +92,7 @@
     <directory
       source="resources"
       include="gradebook.css
+               jquery.scrollTo-1.4.2-min.js
                gradebook.js"
       />
   </zope:resourceLibrary>

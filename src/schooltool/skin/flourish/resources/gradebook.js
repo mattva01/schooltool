@@ -275,6 +275,27 @@ function hidePopup(form) {
     form.find('.popup_active').hide().removeClass('popup_active');
 }
 
+function isFirstTabVisible(container) {
+    var third_nav_left = container.find('.third-nav').position().left;
+    var limit = 0;
+    return third_nav_left == limit;
+}
+
+function isFirstTabVisible(third_nav) {
+    return third_nav.position().left == 0;
+}
+
+function isLastTabVisible(third_nav) {
+    var tab_width = 140;
+    var tabs_count = third_nav.children().length;
+    if (tabs_count < 6) {
+        return true;
+    }
+    var third_nav_left = third_nav.position().left;
+    var limit = -(tabs_count - 5) * tab_width;
+    return third_nav_left == limit;
+}
+
 $(document).ready(function() {
     var form = $('#grid-form');
     form.data('base-font-size', parseInt(form.css('fontSize')));
@@ -491,5 +512,39 @@ $(document).ready(function() {
         updateGradebookPartsWidths(form);
         $(this).hide();
         $('.expand').show();
+    });
+    // tertiary navigation
+    var third_nav_container = $('#third-nav-container');
+    var third_nav = third_nav_container.find('.third-nav');
+    var active_tab = third_nav.find('.active');
+    var tab_width = active_tab.outerWidth();
+    var go_previous = $('#navbar-go-previous');
+    var go_next = $('#navbar-go-next');
+    if (active_tab.index() > 4) {
+        var scrollTo = tab_width * (active_tab.index() - 4);
+        third_nav_container.scrollTo(scrollTo, 0, {axis: 'x'});
+    } else {
+        go_previous.addClass('navbar-arrow-inactive');
+    }
+    if (third_nav.children().length < 6) {
+        go_next.addClass('navbar-arrow-inactive');
+    }
+    third_nav_container.scroll(function(e) {
+        go_previous.toggleClass('navbar-arrow-inactive',
+                                isFirstTabVisible(third_nav));
+        go_next.toggleClass('navbar-arrow-inactive',
+                            isLastTabVisible(third_nav));
+    });
+    go_previous.click(function(e) {
+        if (!isFirstTabVisible(third_nav)) {
+            third_nav_container.scrollTo('-='+tab_width, 0, {axis: 'x'});
+        }
+        e.preventDefault();
+    });
+    go_next.click(function(e) {
+        if (!isLastTabVisible(third_nav)) {
+            third_nav_container.scrollTo('+='+tab_width, 0, {axis: 'x'});
+        }
+        e.preventDefault();
     });
 });
