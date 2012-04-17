@@ -1,0 +1,319 @@
+Demographics fields behavior in the person index view
+=====================================================
+
+We're going to test how demographics fields, limited or not, are shown
+in the person index view.
+
+Some helpers:
+
+    >>> def format_group_row(row):
+    ...     title = row.query.xpath('td[1]/a').text
+    ...     schoolyear = row.query.xpath('td[2]/a').text
+    ...     return '%s, %s' % (title, schoolyear)
+    >>> def demo_fields(browser):
+    ...     sel = 'table.person-view-demographics tbody'
+    ...     for tbody in browser.query_all.css(sel):
+    ...         for tr in tbody.query_all.css('tr'):
+    ...             label = tr.query.xpath('td[1]').text
+    ...             value = tr.query.xpath('td[2]').text
+    ...             yield '%s: %s' % (label, value)
+
+Log in as manager:
+
+    >>> manager = browsers.manager
+    >>> manager.ui.login('manager', 'schooltool')
+
+We'll add a school year to have groups available for the tests:
+
+    >>> manager.ui.schoolyear.add('2012', '2012-01-01', '2012-12-31')
+
+Let's delete a few of the default demographics fields:
+
+    >>> manager.query.link('School').click()
+    >>> manager.query.link('Demographics').click()
+    >>> manager.query.link('Reorder or Delete Fields').click()
+    >>> manager.query.name('delete.ethnicity').click()
+    >>> manager.query.name('delete.language').click()
+    >>> manager.query.name('delete.citizenship').click()
+    >>> manager.query.link('Done').click()
+
+and let's add a few:
+
+    >>> manager.query.link('Text Field').click()
+    >>> manager.query.id('form-widgets-title').type('SSN')
+    >>> manager.query.id('form-widgets-name').type('ssn')
+    >>> manager.query.id('form-widgets-required-1').click()
+    >>> sel = '//span[@class="label"][text()="Teachers"]'
+    >>> manager.query.xpath(sel).click()
+    >>> sel = '//span[@class="label"][text()="Administrators"]'
+    >>> manager.query.xpath(sel).click()
+    >>> manager.query.button('Submit').click()
+
+    >>> manager.query.link('Text Field').click()
+    >>> manager.query.id('form-widgets-title').type('Student ID')
+    >>> manager.query.id('form-widgets-name').type('student_id')
+    >>> manager.query.id('form-widgets-required-0').click()
+    >>> sel = '//span[@class="label"][text()="Students"]'
+    >>> manager.query.xpath(sel).click()
+    >>> manager.query.button('Submit').click()
+
+    >>> manager.query.link('Yes/No Field').click()
+    >>> manager.query.id('form-widgets-title').type('Chess Player')
+    >>> manager.query.id('form-widgets-name').type('chess_player')
+    >>> manager.query.id('form-widgets-required-1').click()
+    >>> sel = '//span[@class="label"][text()="Teachers"]'
+    >>> manager.query.xpath(sel).click()
+    >>> sel = '//span[@class="label"][text()="Students"]'
+    >>> manager.query.xpath(sel).click()
+    >>> manager.query.button('Submit').click()
+
+And add a teacher:
+
+    >>> manager.query.link('School').click()
+    >>> manager.query.link('People').click()
+    >>> manager.query.link('Teacher').click()
+    >>> manager.query.name('form.widgets.first_name').type('Tom')
+    >>> manager.query.name('form.widgets.last_name').type('Hoffman')
+    >>> manager.query.name('form.widgets.username').type('tom')
+    >>> manager.query.name('form.widgets.ID').type('abcde')
+    >>> manager.query.name('form.widgets.ssn').type('12345')
+    >>> manager.query.id('form-widgets-chess_player-1').click()
+    >>> manager.query.button('Submit and add').click()
+
+and two students:
+
+    >>> manager.query.link('School').click()
+    >>> manager.query.link('People').click()
+    >>> manager.query.link('Student').click()
+    >>> manager.query.name('form.widgets.first_name').type('Camila')
+    >>> manager.query.name('form.widgets.last_name').type('Cerna')
+    >>> manager.query.name('form.widgets.username').type('camila')
+    >>> manager.query.name('form.widgets.ID').type('01-camila')
+    >>> manager.query.name('form.widgets.student_id').type('camila-01')
+    >>> manager.query.button('Submit and add').click()
+
+    >>> manager.query.name('form.widgets.first_name').type('Nestor')
+    >>> manager.query.name('form.widgets.last_name').type('Guzman')
+    >>> manager.query.name('form.widgets.username').type('nestor')
+    >>> manager.query.name('form.widgets.ID').type('03-nestor')
+    >>> manager.query.name('form.widgets.student_id').type('nestor-03')
+    >>> manager.query.id('form-widgets-chess_player-1').click()
+    >>> manager.query.button('Submit').click()
+
+Let's check all of them:
+
+    >>> manager.query.link('School').click()
+    >>> manager.query.link('People').click()
+    >>> manager.query.link('Tom').click()
+    >>> for field in demo_fields(manager):
+    ...     print field
+    First name: Tom
+    Last name: Hoffman
+    Username: tom
+    ID: abcde
+    SSN: 12345
+    Chess Player: No
+
+    >>> manager.query.link('School').click()
+    >>> manager.query.link('People').click()
+    >>> manager.query.link('Camila').click()
+    >>> for field in demo_fields(manager):
+    ...     print field
+    First name: Camila
+    Last name: Cerna
+    Username: camila
+    ID: 01-camila
+    Student ID: camila-01
+
+    >>> manager.query.link('School').click()
+    >>> manager.query.link('People').click()
+    >>> manager.query.link('Nestor').click()
+    >>> for field in demo_fields(manager):
+    ...     print field
+    First name: Nestor
+    Last name: Guzman
+    Username: nestor
+    ID: 03-nestor
+    Student ID: nestor-03
+    Chess Player: No
+
+It's possible to edit the limited fields:
+
+    >>> manager.query.link('School').click()
+    >>> manager.query.link('People').click()
+    >>> manager.query.link('Tom').click()
+    >>> sel = '//a[contains(@href, "tom/@@edit.html")]'
+    >>> manager.query.xpath(sel).click()
+    >>> for row in manager.query_all.css('#demographics div.row'):
+    ...     print row.get_attribute('id')
+    form-widgets-ID-row
+    form-widgets-placeofbirth-row
+    form-widgets-ssn-row
+    form-widgets-chess_player-row
+
+    >>> manager.query.link('School').click()
+    >>> manager.query.link('People').click()
+    >>> manager.query.link('Nestor').click()
+    >>> sel = '//a[contains(@href, "nestor/@@edit.html")]'
+    >>> manager.query.xpath(sel).click()
+    >>> for row in manager.query_all.css('#demographics div.row'):
+    ...     print row.get_attribute('id')
+    form-widgets-ID-row
+    form-widgets-placeofbirth-row
+    form-widgets-student_id-row
+    form-widgets-chess_player-row
+
+If we remove Tom from the Teachers group, we still see his old
+demographics fields, even the limited to Teachers:
+
+    >>> manager.query.link('School').click()
+    >>> manager.query.link('Teachers').click()
+    >>> sel = '//a[@title="Edit members for this group"]'
+    >>> manager.query.xpath(sel).click()
+    >>> manager.query.name('remove_item.tom').click()
+
+    >>> manager.query.link('School').click()
+    >>> manager.query.link('People').click()
+    >>> manager.query.link('Tom').click()
+    >>> for field in demo_fields(manager):
+    ...     print field
+    First name: Tom
+    Last name: Hoffman
+    Username: tom
+    ID: abcde
+    SSN: 12345
+    Chess Player: No
+
+But it's not possible to edit the limited fields anymore:
+
+    >>> sel = '//a[contains(@href, "tom/@@edit.html")]'
+    >>> manager.query.xpath(sel).click()
+    >>> for row in manager.query_all.css('#demographics div.row'):
+    ...     print row.get_attribute('id')
+    form-widgets-ID-row
+    form-widgets-placeofbirth-row
+
+Same with students. Let's remove Nestor from the Students group:
+
+    >>> manager.query.link('School').click()
+    >>> manager.query.link('Students').click()
+    >>> sel = '//a[@title="Edit members for this group"]'
+    >>> manager.query.xpath(sel).click()
+    >>> manager.query.name('remove_item.nestor').click()
+
+    >>> manager.query.link('School').click()
+    >>> manager.query.link('People').click()
+    >>> manager.query.link('Nestor').click()
+    >>> for field in demo_fields(manager):
+    ...     print field
+    First name: Nestor
+    Last name: Guzman
+    Username: nestor
+    ID: 03-nestor
+    Student ID: nestor-03
+    Chess Player: No
+
+    >>> sel = '//a[contains(@href, "nestor/@@edit.html")]'
+    >>> manager.query.xpath(sel).click()
+    >>> for row in manager.query_all.css('#demographics div.row'):
+    ...     print row.get_attribute('id')
+    form-widgets-ID-row
+    form-widgets-placeofbirth-row
+
+If the demographics field is deleted:
+
+    >>> manager.query.link('School').click()
+    >>> manager.query.link('Demographics').click()
+    >>> manager.query.link('Reorder or Delete Fields').click()
+    >>> manager.query.name('delete.ID').click()
+    >>> manager.query.name('delete.chess_player').click()
+
+it's not displayed anymore for any person:
+
+    >>> manager.query.link('School').click()
+    >>> manager.query.link('People').click()
+    >>> manager.query.link('Tom').click()
+    >>> for field in demo_fields(manager):
+    ...     print field
+    First name: Tom
+    Last name: Hoffman
+    Username: tom
+    SSN: 12345
+
+    >>> manager.query.link('School').click()
+    >>> manager.query.link('People').click()
+    >>> manager.query.link('Camila').click()
+    >>> for field in demo_fields(manager):
+    ...     print field
+    First name: Camila
+    Last name: Cerna
+    Username: camila
+    Student ID: camila-01
+
+    >>> manager.query.link('School').click()
+    >>> manager.query.link('People').click()
+    >>> manager.query.link('Nestor').click()
+    >>> for field in demo_fields(manager):
+    ...     print field
+    First name: Nestor
+    Last name: Guzman
+    Username: nestor
+    Student ID: nestor-03
+
+Finally, let's tests the XLS importer. We're going to import a
+workbook with only the Persons sheet containing three people and
+columns for all the remaining demographics fields.
+
+This is the data we expect:
+
++----------+------------+-----------+----------------+-----+------------+
+| Username | First Name | Last Name | Place of birth | SSN | Student ID |
++----------+------------+-----------+----------------+-----+------------+
+| UserA    | UserA      | UserA     |                | 123 | student_a  |
+| UserB    | UserB      | UserB     | Userland       |     | student_b  |
+| UserC    | UserC      | UserC     |                | 456 | student_c  |
++----------+------------+-----------+----------------+-----+------------+
+
+    >>> manager.query.link('School').click()
+    >>> manager.query.link('Import XLS').click()
+    >>> from pkg_resources import resource_filename
+    >>> path = resource_filename('schooltool.basicperson.browser.stests',
+    ...                          'person_view_demographics.xls')
+    >>> manager.query.id('xlsfile').type(path)
+    >>> manager.query.button('Submit').click()
+
+We'll see that the demographics fields are displayed for the new
+users, even if they've never been into a group:
+
+    >>> manager.query.link('School').click()
+    >>> manager.query.link('People').click()
+    >>> manager.query.link('UserA').click()
+    >>> for field in demo_fields(manager):
+    ...     print field
+    First name: UserA
+    Last name: UserA
+    Username: UserA
+    SSN: 123
+    Student ID: student_a
+
+    >>> manager.query.link('School').click()
+    >>> manager.query.link('People').click()
+    >>> manager.query.link('UserB').click()
+    >>> for field in demo_fields(manager):
+    ...     print field
+    First name: UserB
+    Last name: UserB
+    Username: UserB
+    Place of birth: Userland
+    Student ID: student_b
+
+    >>> manager.query.link('School').click()
+    >>> manager.query.link('People').click()
+    >>> manager.query.link('UserC').click()
+    >>> for field in demo_fields(manager):
+    ...     print field
+    First name: UserC
+    Last name: UserC
+    Username: UserC
+    SSN: 456
+    Student ID: student_c
