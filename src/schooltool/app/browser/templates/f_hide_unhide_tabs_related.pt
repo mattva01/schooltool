@@ -13,7 +13,11 @@
       security settings of SchoolTool in any way.
     </p>
     <p i18n:translate="">
-      Links can be changed from visible to hidden at any time..
+      Links can be changed from visible to hidden at any time.
+    </p>
+    <p i18n:translate="">
+      When users log in, they will usually be directed to the tab selected in
+      the default column.  The default tab must also be visible.
     </p>
   </div>
 </metal:block>

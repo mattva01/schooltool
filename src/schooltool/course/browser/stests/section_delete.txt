@@ -1,0 +1,51 @@
+Selenium test for bug 963740: Deleting a section, gives exception
+=================================================================
+
+When you try to delete a section, if the school year was created with
+a non-ascii title, you get an exception.
+
+Look at https://bugs.launchpad.net/schooltool/+bug/963740
+
+We'll make sure that doesn't happen anymore.
+
+Log in as manager:
+
+    >>> manager = browsers.manager
+    >>> manager.ui.login('manager', 'schooltool')
+
+Create two school years, one with a non-ascii title:
+
+    >>> manager.ui.schoolyear.add('2012', '2012-01-01', '2012-12-31')
+    >>> manager.ui.schoolyear.add(u'Año2013', '2013-01-01', '2013-12-31')
+
+Create one term for each year:
+
+    >>> manager.ui.term.add('2012', 'Term', '2012-01-01', '2012-12-31')
+    >>> manager.ui.term.add(u'Año2013', 'Term', '2013-01-01', '2013-12-31')
+
+Create one course for each year:
+
+    >>> manager.ui.course.add('2012', 'Soccer')
+    >>> manager.ui.course.add(u'Año2013', 'Math')
+
+and one section for the non-ascii year's course:
+
+    >>> manager.ui.section.add(u'Año2013', 'Term', 'Math')
+
+Visit the section:
+
+    >>> manager.ui.section.go(u'Año2013', 'Term', 'Math (1)')
+
+and delete it:
+
+    >>> manager.query.link('Delete').click()
+    >>> dialog = manager.query.css('.ui-dialog')
+    >>> manager.wait_page(dialog.query.button('Delete').click)
+
+After deleting the section, the user should be redirected to the
+Sections view of that school year:
+
+    >>> manager.url
+    u'http://localhost/sections?schoolyear_id=A%C3%B1o2013'
+    >>> print manager.query.css('.page .header h1').text
+    Sections for Año2013

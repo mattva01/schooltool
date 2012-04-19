@@ -1,0 +1,107 @@
+Tests for Server -> Tabs view
+=============================
+
+Log in as manager:
+
+    >>> manager = browsers.manager
+    >>> manager.ui.login('manager', 'schooltool')
+
+Initially both the Home and Calendar tabs are visible with the Calendar tab
+being active because that is the default initial tab.  Also, the current url
+is the calendar view.
+
+    >>> manager.query_all.xpath('//ul[@class="navigation"]//a').text
+    [u'Home', u'Calendar', u'Server', u'School']
+    >>> manager.query_all.xpath('//ul[@class="navigation"]//li').get_attribute('class')
+    [u'', u'active', u'', u'']
+    >>> print manager.url
+    http://localhost/persons/manager/calendar
+
+Let's go to the Server Tabs view.
+
+    >>> manager.query.link('Server').click()
+    >>> manager.query.link('Tabs').click()
+
+The view has some breadcrumbs.
+
+    >>> manager.query_all.xpath('//ul[@class="breadcrumbs"]//a').text
+    [u'Server', u'Tabs']
+    >>> manager.query_all.xpath('//ul[@class="breadcrumbs"]//a').get_attribute('href')
+    [u'http://localhost/settings', u'http://localhost/hide_unhide_tabs.html']
+
+Initially, we see that there are two radio buttons, one for the Home tab and
+one for the Calendar tab, the latter being checked as it is the default
+setting for the default tab.  We do not allow control over the Server and
+School tabs.
+
+    >>> print manager.query_all.xpath('//div[@class="body"]//input[@type="radio"]')
+    <input name="default_tab" type="radio" value="home" />
+    <input checked="checked" name="default_tab" type="radio" value="calendar" />
+
+We also see the checkboxes for the same two tabs, both being checked.  The
+default is to have all the tabs visible.  Note that the calendar checkbox is
+disabled because we can't allow a tab to be hidden if it is currently the
+default tab.
+
+    >>> print manager.query_all.xpath('//div[@class="body"]//input[@type="checkbox"]')
+    <input checked="checked" name="visible:list" type="checkbox" value="home" />
+    <input checked="checked" disabled="disabled" name="visible:list" type="checkbox" value="calendar" />
+
+We'll start by clicking the radio button for the home tab and note the changes
+to the input fields.  The home checkbox will be disabled and the calendar
+checkbox enabled.
+
+    >>> manager.query.xpath('//div[@class="body"]//input[@type="radio"][@value="home"]').click()
+    >>> print manager.query_all.xpath('//div[@class="body"]//input[@type="checkbox"]')
+    <input checked="checked" disabled="disabled" name="visible:list" type="checkbox" value="home" />
+    <input checked="checked" name="visible:list" type="checkbox" value="calendar" />
+
+We'll submit the form, log out and log back in.
+
+    >>> manager.query.button('Submit').click()
+    >>> manager.query.link('Log out').click()
+    >>> manager.ui.login('manager', 'schooltool')
+
+We see that the Home tab is now the default tab.  The view we are directed
+to is the home view.
+
+    >>> manager.query_all.xpath('//ul[@class="navigation"]//a').text
+    [u'Home', u'Calendar', u'Server', u'School']
+    >>> manager.query_all.xpath('//ul[@class="navigation"]//li').get_attribute('class')
+    [u'active', u'', u'', u'']
+    >>> print manager.url
+    http://localhost/persons/manager/index.html
+
+Now we will show that the tabs can be hidden and unhidden.  First, we'll go
+hide the calendar view.
+
+    >>> manager.query.link('Server').click()
+    >>> manager.query.link('Tabs').click()
+    >>> manager.query.xpath('//div[@class="body"]//input[@type="checkbox"][@value="calendar"]').click()
+    >>> manager.query.button('Submit').click()
+
+We see that the Calendar tab is now gone.
+
+    >>> manager.query_all.xpath('//ul[@class="navigation"]//a').text
+    [u'Home', u'Server', u'School']
+
+Now we'll unhide it and show it's back.
+
+    >>> manager.query.link('Server').click()
+    >>> manager.query.link('Tabs').click()
+    >>> manager.query.xpath('//div[@class="body"]//input[@type="checkbox"][@value="calendar"]').click()
+    >>> manager.query.button('Submit').click()
+    >>> manager.query_all.xpath('//ul[@class="navigation"]//a').text
+    [u'Home', u'Calendar', u'Server', u'School']
+
+To hide the Home tab, we'll have to change the default to Calendar because we
+don't allow the hiding of the default tab.
+
+    >>> manager.query.link('Server').click()
+    >>> manager.query.link('Tabs').click()
+    >>> manager.query.xpath('//div[@class="body"]//input[@type="radio"][@value="calendar"]').click()
+    >>> manager.query.xpath('//div[@class="body"]//input[@type="checkbox"][@value="home"]').click()
+    >>> manager.query.button('Submit').click()
+    >>> manager.query_all.xpath('//ul[@class="navigation"]//a').text
+    [u'Calendar', u'Server', u'School']
+

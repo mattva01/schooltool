@@ -73,7 +73,6 @@ Now there even are person export views:
         <group>
           <id>teachers</id>
           <title>Teachers</title>
-          <description>Teachers.</description>
         </group>
       </groups>
       <persons>
@@ -105,7 +104,6 @@ Now there even are person export views:
         <group>
           <id>teachers</id>
           <title>Teachers</title>
-          <description>Teachers.</description>
         </group>
       </groups>
       <persons>

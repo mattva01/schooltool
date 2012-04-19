@@ -1,0 +1,82 @@
+Test for Teachers and Students sheets
+-------------------------------------
+
+    >>> browser = Browser('manager', 'schooltool')
+
+We'll add some demo fields, one limited to teachers and one to students.
+
+    >>> browser.getLink('Manage').click()
+    >>> browser.getLink('Demographics').click()
+    >>> browser.getLink('New Yes/No Field').click()
+    >>> browser.getControl("Title").value = 'Bool Demo'
+    >>> browser.getControl("ID").value = 'bool_demo'
+    >>> browser.getControl(name="form.widgets.required:list").value = ["false"]
+    >>> browser.getControl(name="form.widgets.limit_keys:list").value = ["teachers"]
+    >>> browser.getControl('Add').click()
+
+    >>> browser.getLink('Manage').click()
+    >>> browser.getLink('Demographics').click()
+    >>> browser.getLink('New Date Field').click()
+    >>> browser.getControl("Title").value = 'Date Demo'
+    >>> browser.getControl("ID").value = 'date_demo'
+    >>> browser.getControl(name="form.widgets.required:list").value = ["false"]
+    >>> browser.getControl(name="form.widgets.limit_keys:list").value = ["students"]
+    >>> browser.getControl('Add').click()
+
+We will import a special test xls file that has a Teachers and a Students sheet:
+
+    >>> import pkg_resources
+    >>> browser.getLink('Manage').click()
+    >>> browser.getLink('XLS Import').click()
+    >>> browser.getControl('XLS File').add_file(
+    ...     pkg_resources.resource_stream('schooltool.export.ftests', 'teachers_students_sheets.xls'),
+    ...     'application/excel',
+    ...     'sample_data.xls')
+    >>> browser.getControl('Submit').click()
+
+Let's look at the teachers group:
+
+    >>> browser.getLink('2006-2008').click()
+    >>> browser.getLink('Groups').click()
+    >>> browser.getLink('Teachers').click()
+
+We see the teachers we defined in the Teachers sheet.
+
+    >>> hrefs = sorted(set(browser.queryHTML("//table[@class='data']//a/@href")))
+    >>> for href in hrefs: print href.split('/')[-1]
+    teacher000
+    teacher001
+
+Their limit demos are set in the teachers objects.
+
+    >>> for href in hrefs:
+    ...     browser.open(href)
+    ...     browser.printQuery("//span[@id='form-widgets-bool_demo']/span/text()")
+    yes
+    no
+
+Let's look at the students group:
+
+    >>> browser.getLink('2006-2008').click()
+    >>> browser.getLink('Groups').click()
+    >>> browser.getLink('Students').click()
+
+We see the students we defined in the Students sheet.
+
+    >>> hrefs = sorted(set(browser.queryHTML("//table[@class='data']//a/@href")))
+    >>> for href in hrefs: print href.split('/')[-1]
+    student000
+    student001
+    student002
+    student003
+
+Their limit demos are set in the students objects.
+
+    >>> for href in hrefs:
+    ...     browser.open(href)
+    ...     browser.printQuery("//span[@id='form-widgets-date_demo']/text()")
+    2000-01-01
+    2000-01-03
+    2000-01-02
+    2000-01-04
+

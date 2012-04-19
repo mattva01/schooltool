@@ -904,8 +904,9 @@ class FlourishResourceDeleteView(flourish.form.DialogForm, form.Form):
     @button.buttonAndHandler(_('Delete'))
     def handle_delete_action(self, action):
         parent = self.context.__parent__
-        url = absoluteURL(parent, self.request)
-        url += '/delete.html?delete.%s&CONFIRM' % self.context.__name__
+        parent_url = absoluteURL(parent, self.request)
+        context_name = self.context.__name__.encode('utf-8')
+        url = '%s/delete.html?delete.%s&CONFIRM' % (parent_url, context_name)
         self.request.response.redirect(url)
 
     @button.buttonAndHandler(_('Cancel'))

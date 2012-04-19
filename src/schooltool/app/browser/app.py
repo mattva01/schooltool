@@ -21,7 +21,6 @@ SchoolTool application views.
 
 $Id$
 """
-import os
 import urllib
 
 from ZODB.FileStorage.FileStorage import FileStorageError
@@ -49,23 +48,16 @@ from zope.publisher.browser import BrowserView
 from zope.component import getMultiAdapter, queryMultiAdapter
 from zope.component import getUtility
 from zope.component import adapter, adapts
-from zope.component import getAdapter
 from zope.authentication.interfaces import IAuthentication
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.publisher.browser import BrowserPage
 from zope.traversing.browser.absoluteurl import absoluteURL
-from zope.traversing.api import traverse
-from zope.size import byteDisplay
 from zope.schema import Int, Bool, Tuple, Choice
 from z3c.form import form, field, button
 from z3c.form.browser.checkbox import CheckBoxFieldWidget
 from z3c.form.interfaces import DISPLAY_MODE
-from zc.table.column import Column
 from zc.table.table import FormFullFormatter
 
-import schooltool.skin.flourish.breadcrumbs
-import schooltool.skin.flourish.page
-import schooltool.skin.flourish.viewlet
 from schooltool.calendar.icalendar import convert_calendar_to_ical
 from schooltool.app.browser.interfaces import IManageMenuViewletManager
 from schooltool.app.interfaces import ISchoolToolAuthenticationPlugin
@@ -81,7 +73,6 @@ from schooltool.person.interfaces import IPerson
 from schooltool import table
 from schooltool.table.table import CheckboxColumn
 from schooltool.table.table import label_cell_formatter_factory
-from schooltool.table.table import stupid_form_key
 from schooltool.table.table import ImageInputColumn
 from schooltool.table.interfaces import ITableFormatter
 from schooltool.skin.skin import OrderedViewletManager
@@ -714,8 +705,18 @@ class FlourishLoginDispatchView(BrowserView):
     content_template = None
 
     def update(self):
-        nexturl = absoluteURL(
-            ISchoolToolCalendar(self.context), self.request)
+        app = ISchoolToolApplication(None)
+        manager = queryMultiAdapter(
+            (app, self.request, self),
+            flourish.interfaces.IContentProvider, 'header_navigation')
+        manager.collect()
+        apptabs = removeSecurityProxy(IApplicationTabs(app))
+        viewlet = manager.get(apptabs.default, None)
+        if viewlet is not None and viewlet.enabled:
+            nexturl = viewlet.url
+        else:
+            nexturl = absoluteURL(
+                ISchoolToolCalendar(self.context), self.request)
         self.request.response.redirect(nexturl)
 
     def render(self, *args, **kw):
@@ -1377,19 +1378,46 @@ class FlourishHideUnhideTabsView(flourish.page.Page):
                 'title': removeSecurityProxy(manager[name]).title,
                 'name': name,
                 'checked': apptabs.get(name, True) and 'checked' or '',
+                'default': name == apptabs.default and 'checked' or '',
                 })
         return tabs
 
     def update(self):
-        if 'form-submitted' in self.request:
-            visible = self.request.get('visible', [])
-            apptabs = removeSecurityProxy(IApplicationTabs(self.context))
-            for tab in self.tabs:
-                name = tab['name']
-                if name not in visible:
-                    apptabs[name] = False
-                elif not apptabs.get(name, True):
-                    apptabs[name] = True
+        if 'CANCEL' in self.request:
+            self.request.response.redirect(self.nextURL())
+        elif 'SUBMIT' in self.request:
+            default = self.request.get('default_tab')
+            visible = set(self.request.get('visible', []))
+            visible.add(default)
+            names = set([tab['name'] for tab in self.tabs])
+            if default in names and visible.issubset(names):
+                apptabs = removeSecurityProxy(IApplicationTabs(self.context))
+                apptabs.default = default
+                for name in names:
+                    if name in visible:
+                        if not apptabs.get(name, True):
+                            apptabs[name] = True
+                    else:
+                        apptabs[name] = False
+            self.request.response.redirect(self.nextURL())
+
+    def nextURL(self):
+        return absoluteURL(self.context, self.request) + '/settings'
+
+
+class TabsBreadcrumb(flourish.breadcrumbs.Breadcrumbs):
+
+    title = _('Tabs')
+
+    @property
+    def url(self):
+        app = ISchoolToolApplication(None)
+        app_url = absoluteURL(app, self.request)
+        return '%s/hide_unhide_tabs.html' % app_url
+
+    @property
+    def follow_crumb(self):
+        return ManageSiteBreadcrumb(self.context, self.request, self.view)
 
 
 class FlourishAboutView(flourish.page.Page):

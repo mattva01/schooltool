@@ -198,6 +198,8 @@ def reindexDocSubscriber(event):
     if obj_id is None:
         return
     catalogs = ICatalogs(app)
+    if obj is catalogs:
+        return
     for entry in catalogs.values():
         entry.catalog.index_doc(obj_id, obj)
 
