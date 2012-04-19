@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2012-03-01 21:21+0200\n"
-"PO-Revision-Date: 2012-03-02 20:27+0000\n"
+"POT-Creation-Date: 2012-04-05 13:59+0300\n"
+"PO-Revision-Date: 2012-04-07 08:24+0000\n"
 "Last-Translator: rob <linuxned@gmail.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-03-03 05:49+0000\n"
-"X-Generator: Launchpad (build 14886)\n"
+"X-Launchpad-Export-Date: 2012-04-08 05:11+0000\n"
+"X-Generator: Launchpad (build 15060)\n"
 "Language: nl\n"
 
 #: /src/schooltool/app/app.py:193
@@ -351,7 +351,13 @@ msgstr "Indienen"
 msgid "Errors"
 msgstr "Fouten"
 
-#: /src/schooltool/app/browser/cal.py:114
+#: /src/schooltool/app/browser/app.py:1419
+#: /src/schooltool/app/browser/flourish.zcml:292
+#: /src/schooltool/app/browser/flourish.zcml:301
+msgid "Tabs"
+msgstr "Tabbladen"
+
+#: /src/schooltool/app/browser/cal.py:118
 msgid "January"
 msgstr "Januari"
 
@@ -1168,12 +1174,7 @@ msgstr "Bewerken"
 msgid "Error"
 msgstr "Fout"
 
-#: /src/schooltool/app/browser/flourish.zcml:294
-#: /src/schooltool/app/browser/flourish.zcml:303
-msgid "Tabs"
-msgstr "Tabbladen"
-
-#: /src/schooltool/app/browser/flourish.zcml:343
+#: /src/schooltool/app/browser/flourish.zcml:352
 msgid "About"
 msgstr "Over"
 
@@ -1401,7 +1402,7 @@ msgstr "[Geldige Atom]"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:24
 msgid "View daily calendar"
-msgstr "Bekijk dagagenda"
+msgstr "Dagagenda bekijken"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:24
 #: /src/schooltool/calendar/browser/calendar.py:288
@@ -1410,7 +1411,7 @@ msgstr "Dag"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:30
 msgid "View weekly calendar"
-msgstr "Bekijk weekagenda"
+msgstr "Weekagenda bekijken"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:30
 #: /src/schooltool/app/browser/templates/event_add.pt:235
@@ -1421,11 +1422,11 @@ msgstr "Week"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:36
 msgid "View monthly calendar"
-msgstr "Bekijk maandagenda"
+msgstr "Maandagenda bekijken"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:42
 msgid "View yearly calendar"
-msgstr "Bekijk jaaragenda"
+msgstr "Jaaragenda bekijken"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:42
 #: /src/schooltool/calendar/browser/calendar.py:291
@@ -2070,6 +2071,10 @@ msgstr "Zichtbaarheid tabblad instellen"
 msgid "Visible"
 msgstr "Zichtbaar"
 
+#: /src/schooltool/app/browser/templates/f_hide_unhide_tabs.pt:25
+msgid "Default"
+msgstr "Standaardwaarde"
+
 #: /src/schooltool/app/browser/templates/f_hide_unhide_tabs_related.pt:6
 msgid ""
 "Schools that are not using all components of SchoolTool can reduce visual "
@@ -2091,10 +2096,19 @@ msgstr ""
 "gewijzigd."
 
 #: /src/schooltool/app/browser/templates/f_hide_unhide_tabs_related.pt:15
-msgid "Links can be changed from visible to hidden at any time.."
+msgid "Links can be changed from visible to hidden at any time."
 msgstr ""
-"Koppelingen kunnen op elk moment gewijzigd worden van zichtbaar naar "
-"verborgen.."
+"Koppelingen kunnen op ieder moment gewijzigd worden van zichtbaar naar "
+"onzichtbaar."
+
+#: /src/schooltool/app/browser/templates/f_hide_unhide_tabs_related.pt:18
+msgid ""
+"When users log in, they will usually be directed to the tab selected in the "
+"default column. The default tab must also be visible."
+msgstr ""
+"Wanneer gebruikers zich aanmelden, zullen ze normaliter doorgeleid worden "
+"naar het geselecteerde tabblad in de standaardkolom. Het standaardtabblad "
+"moet ook zichtbaar zijn."
 
 #: /src/schooltool/app/browser/templates/f_login.pt:12
 #: /src/schooltool/app/browser/templates/login.pt:8
@@ -2919,11 +2933,7 @@ msgstr ""
 "Als u het standaardconfiguratiebestand gebruikt, wijzig dit dan en\n"
 "haal de commentaartekens weg bij één van de ZODB-opslagsecties.\n"
 
-#: /src/schooltool/app/main.py:666
-msgid "Startup time: %.3f sec real, %.3f sec CPU"
-msgstr "Opstarttijd: %.3f sec real, %.3f sec CPU"
-
-#: /src/schooltool/app/main.py:700
+#: /src/schooltool/app/main.py:672
 msgid ""
 "Could not initialize the database:\n"
 "%s"
@@ -2963,9 +2973,13 @@ msgstr ""
 "Waarschuwing: lettertype '%s' bestaat niet in de lettertypemap '%s'.\n"
 "PDF-ondersteuning uitgeschakeld."
 
+#: /src/schooltool/app/main.py:775
+msgid "Startup time: %.3f sec real, %.3f sec CPU"
+msgstr "Opstarttijd: %.3f sec real, %.3f sec CPU"
+
 #: /src/schooltool/app/membership.py:261
 #: /src/schooltool/basicperson/browser/templates/f_manage_people_overview.pt:20
-#: /src/schooltool/group/browser/flourish.zcml:163
+#: /src/schooltool/group/browser/flourish.zcml:209
 #: /src/schooltool/group/browser/templates/f_group_view.pt:75
 #: /src/schooltool/group/browser/templates/group.pt:16
 msgid "Members"
@@ -4153,13 +4167,12 @@ msgstr "Contactinformatie wijzigen voor ${first_name} ${last_name}"
 msgid "Contact index"
 msgstr "Contactenindex"
 
-#: /src/schooltool/contact/browser/contact.py:617
-#: /src/schooltool/person/browser/f_person_filter.pt:7
-#: /src/schooltool/person/browser/person.py:543
-msgid "First name, last name or username"
-msgstr "Voornaam, achternaam of gebruikersnaam"
+#: /src/schooltool/contact/browser/contact.py:618
+#: /src/schooltool/contact/browser/templates/f_contact_filter.pt:6
+msgid "First name and/or last name"
+msgstr "Voornaam en/of achternaam"
 
-#: /src/schooltool/contact/browser/contact.py:653
+#: /src/schooltool/contact/browser/contact.py:654
 #: /src/schooltool/email/browser/email.py:301
 #: /src/schooltool/email/browser/email.py:486
 #: /src/schooltool/email/browser/email.py:531
@@ -4266,10 +4279,6 @@ msgstr "${relationship} van"
 #: /src/schooltool/contact/browser/templates/f_contact_view.pt:49
 msgid "Contact of"
 msgstr "Contact van"
-
-#: /src/schooltool/contact/browser/templates/f_contact_filter.pt:6
-msgid "First name and/or last name"
-msgstr "Voornaam en/of achternaam"
 
 #: /src/schooltool/contact/browser/templates/f_contact_view.pt:3
 msgid "Contact information"
@@ -4675,11 +4684,26 @@ msgstr "Vak toevoegen"
 msgid "Add Section"
 msgstr "Sectie toevoegen"
 
-#: /src/schooltool/course/browser/flourish.zcml:309
-#: /src/schooltool/course/browser/templates/f_section_view.pt:88
+#: /src/schooltool/course/browser/flourish.zcml:403
+#: /src/schooltool/course/browser/templates/f_section_view.pt:148
+msgid "Locations"
+msgstr "Locaties"
+
+#: /src/schooltool/course/browser/flourish.zcml:411
+#: /src/schooltool/course/browser/templates/f_section_view.pt:164
+#: /src/schooltool/resource/browser/flourish.zcml:108
+#: /src/schooltool/resource/browser/resource.py:411
+#: /src/schooltool/resource/resource.py:206
+#: /src/schooltool/resource/resource.py:232
+#: /src/schooltool/resource/types.py:93
+msgid "Equipment"
+msgstr "Apparaat"
+
+#: /src/schooltool/course/browser/flourish.zcml:419
+#: /src/schooltool/course/browser/templates/f_section_view.pt:90
 #: /src/schooltool/dashboard/term.pt:16
 #: /src/schooltool/term/browser/templates/f_manage_years_overview.pt:5
-#: /src/schooltool/term/browser/term.py:760
+#: /src/schooltool/term/browser/term.py:764
 #: /src/schooltool/term/security.zcml:19
 msgid "Terms"
 msgstr "Termijnen"
@@ -4783,7 +4807,23 @@ msgstr "Huidige leerlingen"
 msgid "Add students"
 msgstr "Leerlingen toevoegen"
 
-#: /src/schooltool/course/browser/section.py:1424
+#: /src/schooltool/course/browser/section.py:1380
+msgid "Current locations"
+msgstr "Huidige locaties"
+
+#: /src/schooltool/course/browser/section.py:1381
+msgid "Add locations"
+msgstr "Locaties toevoegen"
+
+#: /src/schooltool/course/browser/section.py:1404
+msgid "Current equipment"
+msgstr "Huidig apparaat"
+
+#: /src/schooltool/course/browser/section.py:1405
+msgid "Add equipment"
+msgstr "Apparaat toevoegen"
+
+#: /src/schooltool/course/browser/section.py:1469
 msgid "Extend ${section} to ${term}"
 msgstr "${section} uitbreiden naar ${term}"
 
@@ -5207,6 +5247,22 @@ msgstr "Leerlingen voor deze sectie bewerken"
 #: /src/schooltool/course/browser/templates/f_section_view.pt:140
 msgid "This section has no students"
 msgstr "Deze sectie heeft geen leerlingen"
+
+#: /src/schooltool/course/browser/templates/f_section_view.pt:149
+msgid "Edit locations for this section"
+msgstr "Locaties voor deze sectie bewerken"
+
+#: /src/schooltool/course/browser/templates/f_section_view.pt:160
+msgid "This section has no locations"
+msgstr "Deze sectie heeft geen locaties"
+
+#: /src/schooltool/course/browser/templates/f_section_view.pt:165
+msgid "Edit equipment for this section"
+msgstr "Apparaten voor deze sectie bewerken"
+
+#: /src/schooltool/course/browser/templates/f_section_view.pt:176
+msgid "This section has no equipment"
+msgstr "Deze sectie heeft geen apparaten"
 
 #: /src/schooltool/course/browser/templates/f_sections_related.pt:6
 msgid ""
@@ -6355,6 +6411,18 @@ msgstr "leden bewerken"
 msgid "edit groups"
 msgstr "groepen bewerken"
 
+#: /src/schooltool/group/group.py:63
+msgid "Site Managers"
+msgstr "Sitebeheerders"
+
+#: /src/schooltool/group/group.py:66
+msgid "Clerks"
+msgstr "Klerken"
+
+#: /src/schooltool/group/group.py:67
+msgid "School Administrators"
+msgstr "Schoolbeheerders"
+
 #: /src/schooltool/group/security.zcml:5
 msgid "Only school administration can view the list of groups."
 msgstr "Alleen de schooladministratie kan de groepslijst bekijken."
@@ -6537,6 +6605,11 @@ msgstr "volledige naam mag niet leeg zijn"
 #: /src/schooltool/person/browser/person.py:362
 msgid "Password changed successfully"
 msgstr "Wachtwoord succesvol gewijzigd"
+
+#: /src/schooltool/person/browser/f_person_filter.pt:7
+#: /src/schooltool/person/browser/person.py:543
+msgid "First name, last name or username"
+msgstr "Voornaam, achternaam of gebruikersnaam"
 
 #: /src/schooltool/person/browser/f_person_filter.pt:20
 #: /src/schooltool/person/browser/f_person_table_filter.pt:39
@@ -6913,16 +6986,8 @@ msgstr "Nieuw apparaat"
 msgid "Resource Attributes"
 msgstr "Voorzieningsattributen"
 
-#: /src/schooltool/resource/browser/flourish.zcml:107
-#: /src/schooltool/resource/browser/resource.py:353
-#: /src/schooltool/resource/resource.py:206
-#: /src/schooltool/resource/resource.py:232
-#: /src/schooltool/resource/types.py:93
-msgid "Equipment"
-msgstr "Apparaat"
-
-#: /src/schooltool/resource/browser/flourish.zcml:123
-#: /src/schooltool/resource/browser/resource.py:357
+#: /src/schooltool/resource/browser/flourish.zcml:124
+#: /src/schooltool/resource/browser/resource.py:415
 #: /src/schooltool/resource/resource.py:74
 #: /src/schooltool/resource/resource.py:204
 #: /src/schooltool/resource/resource.py:230
@@ -7868,7 +7933,11 @@ msgstr "Sneltoets: Alt-D"
 msgid "The datetime string did not match the pattern yyyy-mm-dd"
 msgstr "De ingevoerde waarde komt niet overeen met het formaat jjjj-mm-dd"
 
-#: /src/schooltool/skin/widgets.py:99
+#: /src/schooltool/skin/widgets.py:103
+msgid "Year has to be equal or greater than 1900"
+msgstr "Jaar moet gelijk of groter zijn dan 1900"
+
+#: /src/schooltool/skin/widgets.py:111
 msgid "Width"
 msgstr "Breedte"
 
