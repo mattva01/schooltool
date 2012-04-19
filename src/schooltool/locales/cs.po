@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2012-03-01 21:21+0200\n"
-"PO-Revision-Date: 2011-11-23 15:28+0000\n"
-"Last-Translator: Lukáš Tyrychtr <lukastyrychtr@gmail.com>\n"
+"POT-Creation-Date: 2012-04-05 13:59+0300\n"
+"PO-Revision-Date: 2012-04-06 21:45+0000\n"
+"Last-Translator: Konki <pavel.konkol@seznam.cz>\n"
 "Language-Team: Czech <debian-l10n-czech@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-03-02 05:12+0000\n"
-"X-Generator: Launchpad (build 14886)\n"
+"X-Launchpad-Export-Date: 2012-04-07 05:10+0000\n"
+"X-Generator: Launchpad (build 15060)\n"
 "Language: cs\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -351,7 +351,13 @@ msgstr "Odeslat"
 msgid "Errors"
 msgstr "Chyby"
 
-#: /src/schooltool/app/browser/cal.py:114
+#: /src/schooltool/app/browser/app.py:1419
+#: /src/schooltool/app/browser/flourish.zcml:292
+#: /src/schooltool/app/browser/flourish.zcml:301
+msgid "Tabs"
+msgstr "Záložky"
+
+#: /src/schooltool/app/browser/cal.py:118
 msgid "January"
 msgstr "Leden"
 
@@ -1169,12 +1175,7 @@ msgstr "Upravit"
 msgid "Error"
 msgstr "Chyba"
 
-#: /src/schooltool/app/browser/flourish.zcml:294
-#: /src/schooltool/app/browser/flourish.zcml:303
-msgid "Tabs"
-msgstr ""
-
-#: /src/schooltool/app/browser/flourish.zcml:343
+#: /src/schooltool/app/browser/flourish.zcml:352
 msgid "About"
 msgstr "O"
 
@@ -1342,7 +1343,7 @@ msgstr "Hlavní vývojář:"
 #: /src/schooltool/app/browser/templates/about.pt:44
 #: /src/schooltool/app/browser/templates/f_about.pt:33
 msgid "Core Developers:"
-msgstr ""
+msgstr "Vývojáři jádra:"
 
 #: /src/schooltool/app/browser/templates/about.pt:47
 #: /src/schooltool/app/browser/templates/f_about.pt:37
@@ -1809,7 +1810,7 @@ msgstr "Přispěvatelé"
 
 #: /src/schooltool/app/browser/templates/f_calendar_settings_overview.pt:7
 msgid "Change calendar settings"
-msgstr ""
+msgstr "Změnit nastavení kalendáře"
 
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:10
 msgid "Import source"
@@ -1969,7 +1970,15 @@ msgstr "Zobrazuji ${count} položek z ${total} položek"
 
 #: /src/schooltool/app/browser/templates/f_errors.pt:4
 msgid "Manage error settings"
-msgstr ""
+msgstr "Spravovat chyby nastavení"
+
+#: /src/schooltool/app/browser/templates/f_errors.pt:43
+#: /src/schooltool/app/browser/templates/f_errors_entry.pt:14
+#: /src/schooltool/basicperson/browser/person.py:937
+#: /src/schooltool/contact/security.zcml:86
+#: /src/schooltool/person/security.zcml:147
+msgid "User"
+msgstr "Uživatel"
 
 #: /src/schooltool/app/browser/templates/f_errors.pt:44
 #: /src/schooltool/skin/templates/error.pt:19
@@ -2000,15 +2009,15 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:18
 msgid "Request URL"
-msgstr ""
+msgstr "Vyžadovaná URL"
 
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:22
 msgid "Exception Type"
-msgstr ""
+msgstr "Typ výjimky"
 
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:26
 msgid "Exception Value"
-msgstr ""
+msgstr "Hodnota vyjímky"
 
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:31
 #: /src/schooltool/skin/templates/error.pt:20
@@ -2022,7 +2031,7 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:45
 msgid "Request"
-msgstr ""
+msgstr "Žádost"
 
 #: /src/schooltool/app/browser/templates/f_generations_related.pt:2
 #: /src/schooltool/contact/browser/templates/f_contacts_related.pt:2
@@ -2047,11 +2056,15 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_hide_unhide_tabs.pt:5
 msgid "Set Tab Visibility"
-msgstr ""
+msgstr "Nastavit viditelnost záložky"
 
 #: /src/schooltool/app/browser/templates/f_hide_unhide_tabs.pt:10
 msgid "Visible"
-msgstr ""
+msgstr "Viditelné"
+
+#: /src/schooltool/app/browser/templates/f_hide_unhide_tabs.pt:25
+msgid "Default"
+msgstr "Výchozí"
 
 #: /src/schooltool/app/browser/templates/f_hide_unhide_tabs_related.pt:6
 msgid ""
@@ -2067,7 +2080,13 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_hide_unhide_tabs_related.pt:15
-msgid "Links can be changed from visible to hidden at any time.."
+msgid "Links can be changed from visible to hidden at any time."
+msgstr ""
+
+#: /src/schooltool/app/browser/templates/f_hide_unhide_tabs_related.pt:18
+msgid ""
+"When users log in, they will usually be directed to the tab selected in the "
+"default column. The default tab must also be visible."
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_login.pt:12
@@ -2185,27 +2204,27 @@ msgstr "Databáze"
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:11
 #: /src/schooltool/app/browser/templates/f_server_settings_overview.pt:16
 msgid "Database Size"
-msgstr ""
+msgstr "Velikost databáze"
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:15
 #: /src/schooltool/app/browser/templates/f_server_settings_overview.pt:20
 msgid "Uptime"
-msgstr ""
+msgstr "Doba běhu"
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:19
 #: /src/schooltool/app/browser/templates/f_server_settings_overview.pt:24
 msgid "System platform"
-msgstr ""
+msgstr "Platforma systému"
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:23
 #: /src/schooltool/app/browser/templates/f_server_settings_overview.pt:28
 msgid "Python version"
-msgstr ""
+msgstr "Verze Pythonu"
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:27
 #: /src/schooltool/app/browser/templates/f_server_settings_overview.pt:32
 msgid "Command line"
-msgstr ""
+msgstr "Příkazový řádek"
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:31
 msgid "Preferred encoding"
@@ -2225,7 +2244,7 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:48
 msgid "Python path"
-msgstr ""
+msgstr "Cesta pythonu"
 
 #: /src/schooltool/app/browser/templates/f_section_csvimport_description.pt:3
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:24
@@ -2331,7 +2350,7 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_server_settings_overview.pt:3
 msgid "Server Information"
-msgstr ""
+msgstr "Informace o serveru"
 
 #: /src/schooltool/app/browser/templates/f_settings.pt:5
 msgid "Please wait for confirmation that the database has been packed."
@@ -2339,20 +2358,20 @@ msgstr "Prosím vyčkejte potvrzení, že byla databáze zmenšena."
 
 #: /src/schooltool/app/browser/templates/f_translationdomaincontrol.pt:13
 msgid "Domain ${domain}"
-msgstr ""
+msgstr "Doména ${domain}"
 
 #: /src/schooltool/app/browser/templates/f_translationdomaincontrol.pt:18
 #: /src/schooltool/contact/interfaces.py:82
 msgid "Language"
-msgstr ""
+msgstr "Jazyk"
 
 #: /src/schooltool/app/browser/templates/f_translationdomaincontrol.pt:19
 msgid "Files"
-msgstr ""
+msgstr "Soubory"
 
 #: /src/schooltool/app/browser/templates/f_translationdomaincontrol.pt:31
 msgid "Reload"
-msgstr ""
+msgstr "Obnovit"
 
 #: /src/schooltool/app/browser/templates/index.pt:6
 msgid "Welcome to SchoolTool"
@@ -2606,7 +2625,7 @@ msgstr "CSV data"
 #: /src/schooltool/resource/browser/flourish.zcml:323
 #: /src/schooltool/resource/browser/flourish.zcml:342
 msgid "Import"
-msgstr ""
+msgstr "Importovat"
 
 #: /src/schooltool/app/browser/timetablecsvimport.py:135
 msgid "Row 2 is not empty"
@@ -2687,7 +2706,7 @@ msgstr "Neplatných záznamů: ${args}."
 #: /src/schooltool/course/browser/section.py:1070
 #: /src/schooltool/course/browser/section.py:1124
 msgid "Sections for ${schoolyear}"
-msgstr ""
+msgstr "Sekce pro ${schoolyear}"
 
 #: /src/schooltool/app/interfaces.py:50
 msgid "Form input is not a file object"
@@ -2791,11 +2810,7 @@ msgstr ""
 "Používáte-li výchozí konfigurační soubor, pokud možno jej ihned \n"
 "upravte a odpokentujte některou sekci se ZODB úložišti.\n"
 
-#: /src/schooltool/app/main.py:666
-msgid "Startup time: %.3f sec real, %.3f sec CPU"
-msgstr "Doba spouštění: %.3f s. skutečných, %.3f s. CPU"
-
-#: /src/schooltool/app/main.py:700
+#: /src/schooltool/app/main.py:672
 msgid ""
 "Could not initialize the database:\n"
 "%s"
@@ -2831,9 +2846,13 @@ msgid ""
 "PDF support disabled."
 msgstr ""
 
+#: /src/schooltool/app/main.py:775
+msgid "Startup time: %.3f sec real, %.3f sec CPU"
+msgstr "Doba spouštění: %.3f s. skutečných, %.3f s. CPU"
+
 #: /src/schooltool/app/membership.py:261
 #: /src/schooltool/basicperson/browser/templates/f_manage_people_overview.pt:20
-#: /src/schooltool/group/browser/flourish.zcml:163
+#: /src/schooltool/group/browser/flourish.zcml:209
 #: /src/schooltool/group/browser/templates/f_group_view.pt:75
 #: /src/schooltool/group/browser/templates/group.pt:16
 msgid "Members"
@@ -2853,7 +2872,7 @@ msgstr "\"$group\" skupina."
 
 #: /src/schooltool/app/security.py:364
 msgid "\"$group\" group and the super user."
-msgstr ""
+msgstr "\"$group\" skupina a superuživatel."
 
 #: /src/schooltool/app/security.zcml:71
 msgid "SchoolTool application"
@@ -2944,7 +2963,7 @@ msgstr "Nová osoba"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:109
 msgid "Add Multiple Persons"
-msgstr ""
+msgstr "Přidat více osob"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:131
 #: /src/schooltool/basicperson/browser/demographics.py:384
@@ -2979,15 +2998,15 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/configure.zcml:292
 msgid "Add Teacher"
-msgstr ""
+msgstr "Přidat učitele"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:302
 msgid "Add Student"
-msgstr ""
+msgstr "Přidat studenta"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:312
 msgid "Add Administrator"
-msgstr ""
+msgstr "Přidat administrátora"
 
 #: /src/schooltool/basicperson/browser/csvimport.py:47
 #: /src/schooltool/course/browser/csvimport.py:54
@@ -3034,7 +3053,7 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/demographics.py:88
 msgid "Value too long \"${value}\""
-msgstr ""
+msgstr "Hodnota je moc velká \"${value}\""
 
 #: /src/schooltool/basicperson/browser/demographics.py:111
 msgid "Demographics Container"
@@ -3047,7 +3066,7 @@ msgstr "Přidat nové pole"
 #: /src/schooltool/basicperson/browser/demographics.py:269
 #: /src/schooltool/basicperson/browser/demographics.py:507
 msgid "Change information for ${field_title}"
-msgstr ""
+msgstr "Změnit informaci pro ${field_title}"
 
 #: /src/schooltool/basicperson/browser/demographics.py:305
 msgid "Stud."
@@ -3063,7 +3082,7 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/demographics.py:310
 msgid "Selection"
-msgstr ""
+msgstr "Výběr"
 
 #: /src/schooltool/basicperson/browser/demographics.py:312
 msgid "Text"
@@ -3071,7 +3090,7 @@ msgstr "Text"
 
 #: /src/schooltool/basicperson/browser/demographics.py:313
 msgid "Yes/No"
-msgstr ""
+msgstr "Ano/Ne"
 
 #: /src/schooltool/basicperson/browser/demographics.py:343
 msgid "Integer"
@@ -3092,19 +3111,25 @@ msgstr ""
 #: /src/schooltool/basicperson/browser/demographics.py:406
 #: /src/schooltool/basicperson/browser/demographics.py:462
 msgid "Field Details"
-msgstr ""
+msgstr "Detaily pole"
 
 #: /src/schooltool/basicperson/browser/demographics.py:584
 msgid "Please enter a valid ID"
-msgstr ""
+msgstr "Prosím vložte platné ID"
 
 #: /src/schooltool/basicperson/browser/demographics.py:588
 msgid "This ID is not unique."
-msgstr ""
+msgstr "Toto ID není specifické."
+
+#: /src/schooltool/basicperson/browser/flourish.zcml:11
+#: /src/schooltool/basicperson/browser/flourish.zcml:16
+#: /src/schooltool/basicperson/browser/templates/f_manage_people_overview.pt:4
+msgid "People"
+msgstr "Lidé"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:94
 msgid "Add new persons"
-msgstr ""
+msgstr "Přidat nové osoby"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:112
 #: /src/schooltool/basicperson/browser/person.py:346
@@ -3114,39 +3139,43 @@ msgstr "Přidat novou osobu"
 #: /src/schooltool/basicperson/browser/flourish.zcml:121
 #: /src/schooltool/basicperson/browser/person.py:979
 msgid "Add new teacher"
-msgstr ""
+msgstr "Přidat nového učitele"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:131
 #: /src/schooltool/basicperson/browser/person.py:989
 msgid "Add new student"
-msgstr ""
+msgstr "Přidat nového studenta"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:141
 #: /src/schooltool/basicperson/browser/person.py:999
 msgid "Add new administrator"
-msgstr ""
+msgstr "Přidat nového administrátora"
+
+#: /src/schooltool/basicperson/browser/flourish.zcml:153
+msgid "Person"
+msgstr "Osoba"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:161
 msgid "Add Person"
-msgstr ""
+msgstr "Přidat osobu"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:173
 msgid "Teacher"
-msgstr ""
+msgstr "Učitel"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:181
 #: /src/schooltool/basicperson/browser/flourish.zcml:560
 msgid "Student"
-msgstr ""
+msgstr "Student"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:189
 msgid "Administrator"
-msgstr ""
+msgstr "Správce"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:264
 #: /src/schooltool/basicperson/browser/flourish.zcml:273
 msgid "Demographics and Personal Information"
-msgstr ""
+msgstr "Demografické a osobní informace"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:273
 #: /src/schooltool/level/browser/flourish.zcml:110
@@ -3156,19 +3185,19 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:305
 msgid "Text Field"
-msgstr ""
+msgstr "Textové pole"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:313
 msgid "Description Field"
-msgstr ""
+msgstr "Popisové pole"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:322
 msgid "Date Field"
-msgstr ""
+msgstr "Datové pole"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:331
 msgid "Yes/No Field"
-msgstr ""
+msgstr "Ano/Ne pole"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:340
 msgid "Selection List Field"
@@ -3184,7 +3213,7 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:365
 msgid "New Description Field"
-msgstr ""
+msgstr "Nové popisovací pole"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:412
 msgid "New Integer Field"
@@ -3196,11 +3225,11 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:560
 msgid "Export as XML"
-msgstr ""
+msgstr "Exportovat jako XML"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:627
 msgid "ID Card"
-msgstr ""
+msgstr "ID karta"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:627
 msgid ""
@@ -3211,7 +3240,7 @@ msgstr ""
 #: /src/schooltool/basicperson/browser/flourish.zcml:733
 #: /src/schooltool/person/browser/home_tab_viewlet.pt:3
 msgid "Home"
-msgstr ""
+msgstr "Domov"
 
 #: /src/schooltool/basicperson/browser/person.py:79
 #: /src/schooltool/person/browser/person.py:661
@@ -3253,7 +3282,7 @@ msgstr "Potvrdit heslo"
 #: /src/schooltool/basicperson/browser/person.py:179
 #: /src/schooltool/basicperson/browser/person.py:237
 msgid "Passwords do not match"
-msgstr ""
+msgstr "Hesla nesouhlasí"
 
 #: /src/schooltool/basicperson/browser/person.py:190
 #: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:5
@@ -3271,15 +3300,15 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/person.py:229
 msgid "This username is already in use"
-msgstr ""
+msgstr "Toto uživatelské jméno je již používáno"
 
 #: /src/schooltool/basicperson/browser/person.py:366
 msgid "Usernames"
-msgstr ""
+msgstr "Uživatelská jména"
 
 #: /src/schooltool/basicperson/browser/person.py:383
 msgid "Add multiple persons"
-msgstr ""
+msgstr "Přidat více osob"
 
 #: /src/schooltool/basicperson/browser/person.py:493
 #: /src/schooltool/resource/browser/resource.py:648
@@ -3291,7 +3320,7 @@ msgstr "Změnit informace pro ${fullname}"
 #: /src/schooltool/contact/browser/contact.py:190
 #: /src/schooltool/contact/browser/contact.py:379
 msgid "Full Name"
-msgstr ""
+msgstr "Celé jméno"
 
 #: /src/schooltool/basicperson/browser/person.py:639
 msgid "Current Advisors"
@@ -3339,40 +3368,40 @@ msgstr "Vztahy"
 
 #: /src/schooltool/basicperson/browser/person.py:955
 msgid "Submit and add"
-msgstr ""
+msgstr "Odeslat a přidat"
 
 #: /src/schooltool/basicperson/browser/person.py:976
 msgid "Teacher identification"
-msgstr ""
+msgstr "Identifikace učitele"
 
 #: /src/schooltool/basicperson/browser/person.py:978
 msgid "Teacher demographics"
-msgstr ""
+msgstr "Demografie učitele"
 
 #: /src/schooltool/basicperson/browser/person.py:986
 msgid "Student identification"
-msgstr ""
+msgstr "Identifikace studenta"
 
 #: /src/schooltool/basicperson/browser/person.py:988
 msgid "Student demographics"
-msgstr ""
+msgstr "Demografie studenta"
 
 #: /src/schooltool/basicperson/browser/person.py:996
 msgid "Administrator identification"
-msgstr ""
+msgstr "Identifikace administrátora"
 
 #: /src/schooltool/basicperson/browser/person.py:998
 msgid "Administrator demographics"
-msgstr ""
+msgstr "Demografie administrátora"
 
 #: /src/schooltool/basicperson/browser/person.py:1155
 #: /src/schooltool/group/browser/flourish.zcml:358
 msgid "ID Cards"
-msgstr ""
+msgstr "ID karty"
 
 #: /src/schooltool/basicperson/browser/person.py:1327
 msgid "ID Card: ${person}"
-msgstr ""
+msgstr "ID karta: ${person}"
 
 #: /src/schooltool/basicperson/browser/templates/container.pt:18
 msgid ""
@@ -3381,7 +3410,7 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/templates/container.pt:23
 msgid "school year"
-msgstr ""
+msgstr "školní rok"
 
 #. Default: "Delete"
 #: /src/schooltool/basicperson/browser/templates/container.pt:42
@@ -3503,7 +3532,7 @@ msgstr "Požadováno"
 
 #: /src/schooltool/basicperson/browser/templates/f_demographics_view.pt:9
 msgid "Limited"
-msgstr ""
+msgstr "Limitováno"
 
 #: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:2
 msgid "General Information"
@@ -3512,7 +3541,7 @@ msgstr ""
 #: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:6
 #: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:25
 msgid "Edit this person's information"
-msgstr ""
+msgstr "Upravit informace o této osobě"
 
 #: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:24
 msgid "Demographics and other personal data"
@@ -3529,12 +3558,12 @@ msgstr ""
 #: /src/schooltool/basicperson/browser/templates/f_person_add_multiple.pt:10
 #: /src/schooltool/basicperson/browser/templates/person_add_multiple.pt:13
 msgid "Added persons"
-msgstr ""
+msgstr "Přidané osoby"
 
 #: /src/schooltool/basicperson/browser/templates/f_person_add_subform.pt:3
 #: /src/schooltool/basicperson/browser/templates/person_add_subform.pt:2
 msgid "New person"
-msgstr ""
+msgstr "Nová osoba"
 
 #: /src/schooltool/basicperson/browser/templates/f_person_form.pt:51
 #: /src/schooltool/contact/browser/templates/f_contact_form.pt:51
@@ -3547,19 +3576,19 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/templates/f_person_id_cards.pt:90
 msgid "ID:"
-msgstr ""
+msgstr "ID:"
 
 #: /src/schooltool/basicperson/browser/templates/f_person_id_cards.pt:95
 msgid "Birth date:"
-msgstr ""
+msgstr "Datum narození:"
 
 #: /src/schooltool/basicperson/browser/templates/f_person_id_cards.pt:99
 msgid "Contact"
-msgstr ""
+msgstr "Kontakt"
 
 #: /src/schooltool/basicperson/browser/templates/f_person_id_cards.pt:111
 msgid "Contact's Phone"
-msgstr ""
+msgstr "Kontaktní telefon"
 
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:4
 #: /src/schooltool/person/browser/person-csvimport.pt:4
@@ -3644,7 +3673,7 @@ msgstr "Bílá"
 
 #: /src/schooltool/basicperson/demographics.py:150
 msgid "Place of birth"
-msgstr ""
+msgstr "Místo narození"
 
 #: /src/schooltool/basicperson/demographics.py:151
 msgid "Citizenship"
@@ -3721,11 +3750,11 @@ msgstr ""
 
 #: /src/schooltool/basicperson/interfaces.py:173
 msgid "Minimum value"
-msgstr ""
+msgstr "Minimální hodnota"
 
 #: /src/schooltool/basicperson/interfaces.py:177
 msgid "Maximum value"
-msgstr ""
+msgstr "Maximální hodnota"
 
 #: /src/schooltool/basicperson/person.py:75
 #: /src/schooltool/contact/browser/contact.py:503
@@ -3781,35 +3810,35 @@ msgstr "Studenti"
 
 #: /src/schooltool/basicperson/vocabularies.py:132
 msgid "Teachers"
-msgstr ""
+msgstr "Učitelé"
 
 #: /src/schooltool/basicperson/vocabularies.py:133
 msgid "Administrators"
-msgstr ""
+msgstr "Administrátoři"
 
 #: /src/schooltool/calendar/browser/calendar.py:173
 msgid "Tomorrow"
-msgstr ""
+msgstr "Zítra"
 
 #: /src/schooltool/calendar/browser/calendar.py:175
 msgid "Yesterday"
-msgstr ""
+msgstr "Včera"
 
 #: /src/schooltool/calendar/browser/calendar.py:195
 msgid "This Week"
-msgstr ""
+msgstr "Tento týden"
 
 #: /src/schooltool/calendar/browser/calendar.py:197
 msgid "Last Week"
-msgstr ""
+msgstr "Minulý týden"
 
 #: /src/schooltool/calendar/browser/calendar.py:199
 msgid "Next Week"
-msgstr ""
+msgstr "Příští týden"
 
 #: /src/schooltool/calendar/browser/calendar.py:236
 msgid "Jump To"
-msgstr ""
+msgstr "Skočit na"
 
 #: /src/schooltool/calendar/browser/event.py:129
 #: /src/schooltool/calendar/browser/event.py:156
@@ -3838,11 +3867,11 @@ msgstr ""
 
 #: /src/schooltool/calendar/browser/event.py:222
 msgid "Delete event ${event}"
-msgstr ""
+msgstr "Smazat událost ${event}"
 
 #: /src/schooltool/calendar/browser/flourish.zcml:81
 msgid "Event"
-msgstr ""
+msgstr "Událost"
 
 #: /src/schooltool/calendar/browser/flourish.zcml:166
 #: /src/schooltool/calendar/browser/templates/event_edit.pt:392
@@ -3852,16 +3881,16 @@ msgstr ""
 
 #: /src/schooltool/calendar/browser/overlay.py:33
 msgid "Show"
-msgstr ""
+msgstr "Zobrazit"
 
 #: /src/schooltool/calendar/browser/templates/calendar_overlay.pt:35
 msgid "Select"
-msgstr ""
+msgstr "Vybrat"
 
 #: /src/schooltool/calendar/browser/templates/event.pt:52
 #: /src/schooltool/timetable/browser/templates/f_schedule_event_edit.pt:53
 msgid "Reserved resources"
-msgstr ""
+msgstr "Rezervované zdroje"
 
 #: /src/schooltool/calendar/browser/templates/event.pt:54
 #: /src/schooltool/timetable/browser/templates/f_schedule_event_edit.pt:55
@@ -3870,13 +3899,17 @@ msgstr ""
 
 #: /src/schooltool/calendar/browser/templates/event_booking.pt:5
 msgid "Event Details"
-msgstr ""
+msgstr "Podrobnosti události"
 
 #: /src/schooltool/calendar/browser/templates/event_booking.pt:41
 #: /src/schooltool/calendar/browser/templates/event_edit.pt:369
 #: /src/schooltool/timetable/browser/templates/f_schedule_event_add.pt:160
 msgid "Reserved Resources"
-msgstr ""
+msgstr "Rezervované zdroje"
+
+#: /src/schooltool/calendar/browser/templates/event_booking.pt:69
+msgid "Available Resources"
+msgstr "Dostupné zdroje"
 
 #: /src/schooltool/calendar/browser/templates/event_delete_dialog.pt:4
 msgid "Deleting an event on ${day}."
@@ -3929,7 +3962,7 @@ msgstr ""
 
 #: /src/schooltool/contact/browser/configure.zcml:41
 msgid "View Person"
-msgstr ""
+msgstr "Zobrazit osobu"
 
 #: /src/schooltool/contact/browser/configure.zcml:61
 #: /src/schooltool/contact/browser/flourish.zcml:63
@@ -3937,7 +3970,7 @@ msgstr ""
 #: /src/schooltool/contact/browser/flourish.zcml:178
 #: /src/schooltool/contact/browser/flourish.zcml:188
 msgid "New Contact"
-msgstr ""
+msgstr "Nový kontakt"
 
 #: /src/schooltool/contact/browser/configure.zcml:76
 #: /src/schooltool/contact/browser/configure.zcml:88
@@ -3949,7 +3982,7 @@ msgstr ""
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:59
 #: /src/schooltool/contact/contact.py:71
 msgid "Contacts"
-msgstr ""
+msgstr "Kontakty"
 
 #: /src/schooltool/contact/browser/configure.zcml:110
 msgid "Manage Contacts"
@@ -3964,15 +3997,15 @@ msgstr "Ostatní kontakty"
 #: /src/schooltool/contact/browser/contact.py:638
 #: /src/schooltool/email/browser/email.py:689
 msgid "Send Email"
-msgstr ""
+msgstr "Odeslat email"
 
 #: /src/schooltool/contact/browser/contact.py:104
 msgid "Add new contact"
-msgstr ""
+msgstr "Přidat nový kontakt"
 
 #: /src/schooltool/contact/browser/contact.py:248
 msgid "Add new contact for ${person}"
-msgstr ""
+msgstr "Přidat nový kontakt pro ${person}"
 
 #: /src/schooltool/contact/browser/contact.py:329
 msgid "Change contact information for ${first_name} ${last_name}"
@@ -3980,22 +4013,21 @@ msgstr "Změnit kontaktní informace pro ${first_name} ${last_name}"
 
 #: /src/schooltool/contact/browser/contact.py:441
 msgid "Contact index"
+msgstr "Rejstřík kontaktů"
+
+#: /src/schooltool/contact/browser/contact.py:618
+#: /src/schooltool/contact/browser/templates/f_contact_filter.pt:6
+msgid "First name and/or last name"
 msgstr ""
 
-#: /src/schooltool/contact/browser/contact.py:617
-#: /src/schooltool/person/browser/f_person_filter.pt:7
-#: /src/schooltool/person/browser/person.py:543
-msgid "First name, last name or username"
-msgstr ""
-
-#: /src/schooltool/contact/browser/contact.py:653
+#: /src/schooltool/contact/browser/contact.py:654
 #: /src/schooltool/email/browser/email.py:301
 #: /src/schooltool/email/browser/email.py:486
 #: /src/schooltool/email/browser/email.py:531
 #: /src/schooltool/email/browser/email.py:684
 #: /src/schooltool/email/interfaces.py:39
 msgid "From"
-msgstr ""
+msgstr "Od"
 
 #: /src/schooltool/contact/browser/contact.py:621
 #: /src/schooltool/email/browser/email.py:287
@@ -4003,7 +4035,7 @@ msgstr ""
 #: /src/schooltool/email/browser/email.py:664
 #: /src/schooltool/email/interfaces.py:43
 msgid "To"
-msgstr ""
+msgstr "Komu"
 
 #: /src/schooltool/contact/browser/contact.py:622
 #: /src/schooltool/email/browser/email.py:297
@@ -4011,7 +4043,7 @@ msgstr ""
 #: /src/schooltool/email/browser/email.py:668
 #: /src/schooltool/email/interfaces.py:53
 msgid "Subject"
-msgstr ""
+msgstr "Předmět"
 
 #: /src/schooltool/contact/browser/contact.py:623
 #: /src/schooltool/email/browser/email.py:301
@@ -4025,7 +4057,7 @@ msgstr "Text"
 #: /src/schooltool/email/browser/email.py:692
 #: /src/schooltool/email/browser/email.py:739
 msgid "Send"
-msgstr ""
+msgstr "Odeslat"
 
 #: /src/schooltool/contact/browser/contact.py:645
 msgid "There were some errors."
@@ -4041,13 +4073,13 @@ msgstr ""
 
 #: /src/schooltool/contact/browser/flourish.zcml:206
 msgid "Edit Contact Information"
-msgstr ""
+msgstr "Upravit informace o kontaktu"
 
 #: /src/schooltool/contact/browser/relationship.py:78
 #: /src/schooltool/contact/browser/templates/contactperson_subform.pt:8
 #: /src/schooltool/contact/interfaces.py:101
 msgid "Relationship"
-msgstr ""
+msgstr "Vztah"
 
 #: /src/schooltool/contact/browser/relationship.py:89
 msgid "Assigned Contacts"
@@ -4059,15 +4091,15 @@ msgstr "Přiřadit existující kontakt"
 
 #: /src/schooltool/contact/browser/relationship.py:94
 msgid "Manage contacts of ${person}"
-msgstr ""
+msgstr "Spravovat kontakty ${person}"
 
 #: /src/schooltool/contact/browser/relationship.py:186
 msgid "Current contacts"
-msgstr ""
+msgstr "Aktuální kontakty"
 
 #: /src/schooltool/contact/browser/relationship.py:187
 msgid "Available contacts"
-msgstr ""
+msgstr "Dostupné kontakty"
 
 #: /src/schooltool/contact/browser/templates/contact_view.pt:16
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:18
@@ -4092,10 +4124,6 @@ msgstr ""
 #: /src/schooltool/contact/browser/templates/f_confirm_delete_contact.pt:16
 #: /src/schooltool/contact/browser/templates/f_contact_view.pt:49
 msgid "Contact of"
-msgstr ""
-
-#: /src/schooltool/contact/browser/templates/f_contact_filter.pt:6
-msgid "First name and/or last name"
 msgstr ""
 
 #: /src/schooltool/contact/browser/templates/f_contact_view.pt:3
@@ -4250,7 +4278,7 @@ msgstr "Stát"
 
 #: /src/schooltool/contact/interfaces.py:61
 msgid "Country"
-msgstr ""
+msgstr "Stát"
 
 #: /src/schooltool/contact/interfaces.py:63
 msgid "Postal code"
@@ -4266,7 +4294,7 @@ msgstr "Telefon do práce"
 
 #: /src/schooltool/contact/interfaces.py:77
 msgid "Mobile phone"
-msgstr ""
+msgstr "Mobil"
 
 #: /src/schooltool/contact/interfaces.py:82
 msgid "Other 1"
@@ -4326,7 +4354,7 @@ msgstr ""
 
 #: /src/schooltool/contact/security.zcml:62
 msgid "Modify an external contact"
-msgstr ""
+msgstr "Upravit externí kontakt"
 
 #: /src/schooltool/contact/security.zcml:70
 msgid "View user's contact information"
@@ -4339,7 +4367,7 @@ msgstr "Upravit uživatelovy kontaktní informace"
 #: /src/schooltool/contact/security.zcml:86
 #: /src/schooltool/person/security.zcml:147
 msgid "The user himself."
-msgstr ""
+msgstr "Vlastní uživatel"
 
 #: /src/schooltool/course/browser/configure.zcml:10
 msgid "Add a Course"
@@ -4444,7 +4472,7 @@ msgstr "Uživatelská jména nesmí být prázdná"
 #: /src/schooltool/course/browser/csvimport.py:178
 #: /src/schooltool/group/browser/csvimport.py:119
 msgid "\"${username}\" is not a valid username."
-msgstr ""
+msgstr "\"${username}\" není platné uživatelské jméno."
 
 #: /src/schooltool/course/browser/flourish.zcml:98
 #: /src/schooltool/course/browser/flourish.zcml:107
@@ -4481,11 +4509,26 @@ msgstr ""
 msgid "Add Section"
 msgstr ""
 
-#: /src/schooltool/course/browser/flourish.zcml:309
-#: /src/schooltool/course/browser/templates/f_section_view.pt:88
+#: /src/schooltool/course/browser/flourish.zcml:403
+#: /src/schooltool/course/browser/templates/f_section_view.pt:148
+msgid "Locations"
+msgstr ""
+
+#: /src/schooltool/course/browser/flourish.zcml:411
+#: /src/schooltool/course/browser/templates/f_section_view.pt:164
+#: /src/schooltool/resource/browser/flourish.zcml:108
+#: /src/schooltool/resource/browser/resource.py:411
+#: /src/schooltool/resource/resource.py:206
+#: /src/schooltool/resource/resource.py:232
+#: /src/schooltool/resource/types.py:93
+msgid "Equipment"
+msgstr "Vybavení"
+
+#: /src/schooltool/course/browser/flourish.zcml:419
+#: /src/schooltool/course/browser/templates/f_section_view.pt:90
 #: /src/schooltool/dashboard/term.pt:16
 #: /src/schooltool/term/browser/templates/f_manage_years_overview.pt:5
-#: /src/schooltool/term/browser/term.py:760
+#: /src/schooltool/term/browser/term.py:764
 #: /src/schooltool/term/security.zcml:19
 msgid "Terms"
 msgstr "Pravidla"
@@ -4589,7 +4632,23 @@ msgstr ""
 msgid "Add students"
 msgstr ""
 
-#: /src/schooltool/course/browser/section.py:1424
+#: /src/schooltool/course/browser/section.py:1380
+msgid "Current locations"
+msgstr ""
+
+#: /src/schooltool/course/browser/section.py:1381
+msgid "Add locations"
+msgstr ""
+
+#: /src/schooltool/course/browser/section.py:1404
+msgid "Current equipment"
+msgstr ""
+
+#: /src/schooltool/course/browser/section.py:1405
+msgid "Add equipment"
+msgstr ""
+
+#: /src/schooltool/course/browser/section.py:1469
 msgid "Extend ${section} to ${term}"
 msgstr ""
 
@@ -4639,7 +4698,7 @@ msgstr "Aktuální velikost"
 
 #: /src/schooltool/course/browser/templates/copy_sections.pt:103
 msgid "Copied"
-msgstr ""
+msgstr "Zkopírováno"
 
 #: /src/schooltool/course/browser/templates/copy_sections.pt:149
 msgid "Copy"
@@ -4953,6 +5012,22 @@ msgstr ""
 
 #: /src/schooltool/course/browser/templates/f_section_view.pt:140
 msgid "This section has no students"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/f_section_view.pt:149
+msgid "Edit locations for this section"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/f_section_view.pt:160
+msgid "This section has no locations"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/f_section_view.pt:165
+msgid "Edit equipment for this section"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/f_section_view.pt:176
+msgid "This section has no equipment"
 msgstr ""
 
 #: /src/schooltool/course/browser/templates/f_sections_related.pt:6
@@ -6048,6 +6123,18 @@ msgstr "upravit členy"
 msgid "edit groups"
 msgstr "upravit skupiny"
 
+#: /src/schooltool/group/group.py:63
+msgid "Site Managers"
+msgstr ""
+
+#: /src/schooltool/group/group.py:66
+msgid "Clerks"
+msgstr ""
+
+#: /src/schooltool/group/group.py:67
+msgid "School Administrators"
+msgstr ""
+
 #: /src/schooltool/group/security.zcml:5
 msgid "Only school administration can view the list of groups."
 msgstr ""
@@ -6215,6 +6302,11 @@ msgstr "celé jméno nemůže být prázdné"
 #: /src/schooltool/person/browser/f_password_changed.pt:1
 #: /src/schooltool/person/browser/person.py:362
 msgid "Password changed successfully"
+msgstr ""
+
+#: /src/schooltool/person/browser/f_person_filter.pt:7
+#: /src/schooltool/person/browser/person.py:543
+msgid "First name, last name or username"
 msgstr ""
 
 #: /src/schooltool/person/browser/f_person_filter.pt:20
@@ -6585,16 +6677,8 @@ msgstr "Nové vybavení"
 msgid "Resource Attributes"
 msgstr ""
 
-#: /src/schooltool/resource/browser/flourish.zcml:107
-#: /src/schooltool/resource/browser/resource.py:353
-#: /src/schooltool/resource/resource.py:206
-#: /src/schooltool/resource/resource.py:232
-#: /src/schooltool/resource/types.py:93
-msgid "Equipment"
-msgstr "Vybavení"
-
-#: /src/schooltool/resource/browser/flourish.zcml:123
-#: /src/schooltool/resource/browser/resource.py:357
+#: /src/schooltool/resource/browser/flourish.zcml:124
+#: /src/schooltool/resource/browser/resource.py:415
 #: /src/schooltool/resource/resource.py:74
 #: /src/schooltool/resource/resource.py:204
 #: /src/schooltool/resource/resource.py:230
@@ -7481,7 +7565,11 @@ msgstr ""
 msgid "The datetime string did not match the pattern yyyy-mm-dd"
 msgstr ""
 
-#: /src/schooltool/skin/widgets.py:99
+#: /src/schooltool/skin/widgets.py:103
+msgid "Year has to be equal or greater than 1900"
+msgstr ""
+
+#: /src/schooltool/skin/widgets.py:111
 msgid "Width"
 msgstr ""
 
