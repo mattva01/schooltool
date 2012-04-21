@@ -2,8 +2,16 @@
 CHANGES
 =======
 
-2.0.4 (unreleased)
+2.1.1 (unreleased)
 ------------------
+
+- Nothing changed yet.
+
+
+2.1.0 (2012-04-19)
+------------------
+
+Final release for Ubuntu 12.04 LTS
 
 New features
 ++++++++++++
@@ -11,12 +19,15 @@ New features
 - Add Calendar tab, configure default tab (https://launchpad.net/bugs/938825)
 - Add a background with hexes (https://launchpad.net/bugs/967233)
 - XLS import now has Teachers and Students sheets
+- Updated many translations, added Sinhalese (si).
 
 Bugfixes
 ++++++++
 
 - Fix date validation to not crash on years before 1900 (https://launchpad.net/bugs/960367)
 - Fixed section delete view when school year was created with non-ascii title (https://launchpad.net/bugs/963740)
+- Fixed resource views when the resource title has non-ascii characters (https://launchpad.net/bugs/916086)
+- Show all demographics fields in person index view (https://launchpad.net/bugs/944471)
 - XLS import automatically adds teachers and students to the corresponding groups
 - Fix breakage if intervention plugin was used, but then disabled (https://launchpad.net/bugs/969221)
 - Replace PIL dependency with Pillow to fix image libraries detection when

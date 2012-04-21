@@ -8,15 +8,16 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2012-04-05 13:59+0300\n"
-"PO-Revision-Date: 2012-02-14 14:08+0000\n"
-"Last-Translator: Mantas Kriaučiūnas <mantas@akl.lt>\n"
+"PO-Revision-Date: 2012-04-19 20:13+0300\n"
+"Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
 "Language: lt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-03-02 05:15+0000\n"
-"X-Generator: Launchpad (build 14886)\n"
+"X-Launchpad-Export-Date: 2012-04-13 06:13+0000\n"
+"X-Generator: Launchpad (build 15070)\n"
+"Language: lt\n"
 "X-Rosetta-Version: 0.1\n"
 
 #: /src/schooltool/app/app.py:193
@@ -116,7 +117,7 @@ msgstr "Šalinti"
 #: /src/schooltool/app/browser/app.py:408
 #: /src/schooltool/app/browser/templates/f_edit_relationships.pt:58
 msgid "Add all displayed"
-msgstr ""
+msgstr "Pridėti visus matomus"
 
 #: /src/schooltool/app/browser/app.py:677
 msgid "Username or password is incorrect"
@@ -136,7 +137,7 @@ msgstr "Atsijungti"
 
 #: /src/schooltool/app/browser/app.py:523
 msgid "Calendar settings"
-msgstr "Kalendoriaus nustatymai"
+msgstr "Kalendoriaus nuostatos"
 
 #: /src/schooltool/app/browser/app.py:528
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:31
@@ -826,15 +827,15 @@ msgstr "Viso renginių"
 #: /src/schooltool/app/browser/templates/event_add.pt:303
 #: /src/schooltool/calendar/browser/templates/event_edit.pt:309
 msgid "Repeat until"
-msgstr "Kartoti kol"
+msgstr "Kartoti iki"
 
 #: /src/schooltool/app/browser/cal.py:1711
 msgid "Weekdays"
-msgstr "Savaitės dienos"
+msgstr "Šiokiadieniai"
 
 #: /src/schooltool/app/browser/cal.py:1714
 msgid "Weekday"
-msgstr "Savaitės diena"
+msgstr "Šiokiadienis"
 
 #: /src/schooltool/app/browser/cal.py:1718
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:36
@@ -854,7 +855,7 @@ msgstr "ta pati savaitės diena"
 
 #: /src/schooltool/app/browser/cal.py:1810
 msgid "1st"
-msgstr "1-as(-a)"
+msgstr "1-as(a)"
 
 #: /src/schooltool/app/browser/cal.py:1810
 msgid "2nd"
@@ -883,7 +884,7 @@ msgstr "Paskutinė ${weekday}"
 #: /src/schooltool/app/browser/cal.py:1858
 #: /src/schooltool/app/browser/cal.py:2165
 msgid "An error occurred."
-msgstr "Įvyko Klaida."
+msgstr "Įvyko klaida."
 
 #: /src/schooltool/app/browser/cal.py:1891
 msgid "Invalid time"
@@ -1364,7 +1365,7 @@ msgstr "Keisti svetainės parinktis"
 
 #: /src/schooltool/app/browser/templates/application_preferences.pt:19
 msgid "General preferences"
-msgstr "Bendros parinktis"
+msgstr "Bendros parinktys"
 
 #: /src/schooltool/app/browser/templates/application_preferences.pt:34
 msgid "Calendar Preferences"
@@ -1446,7 +1447,7 @@ msgstr "Kalendoriai"
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:13
 #: /src/schooltool/calendar/browser/templates/calendar_overlay.pt:12
 msgid "My Calendar"
-msgstr "Mano Kalendorius"
+msgstr "Mano kalendorius"
 
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:33
 #: /src/schooltool/calendar/browser/templates/calendar_overlay.pt:37
@@ -1469,7 +1470,7 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:32
 msgid "Public Calendar"
-msgstr "Viešas Kalendorius"
+msgstr "Viešas kalendorius"
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:37
 msgid "site-wide calendar"
@@ -1670,7 +1671,7 @@ msgstr "Ši dalis naudojama tik pasirinkus kassavaitinį kartojimą."
 #: /src/schooltool/app/browser/templates/event_add.pt:257
 #: /src/schooltool/calendar/browser/templates/event_edit.pt:262
 msgid "This section only applies when the monthly recurrence is selected."
-msgstr "Ši dalis naudojama tik pasirinkus kasmėnesinįį kartojimą."
+msgstr "Ši dalis naudojama tik pasirinkus kasmėnesinį kartojimą."
 
 #: /src/schooltool/app/browser/templates/event_add.pt:264
 #: /src/schooltool/calendar/browser/templates/event_edit.pt:269
@@ -1763,7 +1764,7 @@ msgstr "Atšaukti"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:4
 msgid "Resource Booking"
-msgstr "Resursų Užsakymas"
+msgstr "Resursų užsakymas"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:12
 msgid "Resource Booking for ${title}"
@@ -2136,7 +2137,7 @@ msgstr "Naudotojo duomenys"
 #: /src/schooltool/person/browser/person.py:502
 #: /src/schooltool/person/interfaces.py:60
 msgid "Username"
-msgstr "Naudotojo vardas"
+msgstr "Naudotojas"
 
 #: /src/schooltool/app/browser/templates/f_login.pt:62
 #: /src/schooltool/app/browser/templates/login.pt:44
@@ -2434,7 +2435,7 @@ msgstr "Šalinamas pasikartojantis įvykis (${event title}"
 
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:19
 msgid "You are trying to delete a repeating event."
-msgstr "Norite pašalinti pasikartojantį įvykį."
+msgstr "Bandote pašalinti pasikartojantį įvykį."
 
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:41
 msgid "Current"
@@ -2463,7 +2464,7 @@ msgstr "Išsiųsti SchoolTool tvarkaraštį CSV formatu"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:20
 msgid "Import Timetable"
-msgstr "Įkelti Tvarkaraštį"
+msgstr "Įkelti tvarkaraštį"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:30
 msgid ""
@@ -2875,7 +2876,7 @@ msgstr "Prieiga"
 
 #: /src/schooltool/app/security.zcml:81
 msgid "Manage school settings and configuration"
-msgstr "Tvarkyti mokyklos nustatymus"
+msgstr "Tvarkyti mokymo įstaigos nustatymus"
 
 #: /src/schooltool/app/security.zcml:89
 #: /src/schooltool/course/security.zcml:142
@@ -3116,11 +3117,11 @@ msgstr ""
 #: /src/schooltool/basicperson/browser/flourish.zcml:16
 #: /src/schooltool/basicperson/browser/templates/f_manage_people_overview.pt:4
 msgid "People"
-msgstr "Žmonės"
+msgstr "Asmenys"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:94
 msgid "Add new persons"
-msgstr "Pridėti naujus žmones"
+msgstr "Pridėti naujus asmenis"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:112
 #: /src/schooltool/basicperson/browser/person.py:346
@@ -6518,7 +6519,7 @@ msgstr "Diena Mėnuo, Metai"
 
 #: /src/schooltool/person/interfaces.py:174
 msgid "Week starts on"
-msgstr "Savaitėprasideda"
+msgstr "Savaitė prasideda"
 
 #: /src/schooltool/person/interfaces.py:188
 msgid "Daily calendar rows..."
@@ -6554,7 +6555,7 @@ msgstr "Tik mokymo įstaigos administracija gali keisti slaptažodžius."
 
 #: /src/schooltool/person/security.zcml:17
 msgid "Users can change their own passwords."
-msgstr "Vartotojai gali keisti savo slaptažodžius."
+msgstr "Naudotojai gali keisti savo slaptažodžius."
 
 #: /src/schooltool/person/security.zcml:71
 msgid "Users"
@@ -6630,7 +6631,7 @@ msgstr "Kurso ataskaitos"
 
 #: /src/schooltool/report/browser/report.py:200
 msgid "Download"
-msgstr ""
+msgstr "Atsisiųsti"
 
 #: /src/schooltool/report/browser/templates/f_report_reference.pt:5
 #: /src/schooltool/report/browser/templates/report_reference.pt:13
@@ -8459,7 +8460,7 @@ msgstr "Šios pamokos buvo pažymėtos daugiau nei kartą: $periods"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:732
 msgid "Please put the periods in order for each day:"
-msgstr "Įveskite pamokas pagal eilę kiekvienai dienai:"
+msgstr "Įveskite užsiėmimus paeiliui kiekvienai dienai:"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:768
 msgid "$period on day $day"
