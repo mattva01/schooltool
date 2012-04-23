@@ -64,7 +64,8 @@ class CheckboxColumn(zc.table.column.Column):
     implements(ICheckboxColumn)
 
     def __init__(self, prefix, name=None, title=None,
-                 isDisabled=None, id_getter=None):
+                 isDisabled=None, id_getter=None,
+                 value_getter=None):
         super(CheckboxColumn, self).__init__(name=name, title=title)
         if isDisabled:
             self.isDisabled = isDisabled
@@ -73,15 +74,20 @@ class CheckboxColumn(zc.table.column.Column):
             self.id_getter = stupid_form_key
         else:
             self.id_getter = id_getter
+        self.value_getter = value_getter
 
     def isDisabled(self, item):
         return False
 
     def renderCell(self, item, formatter):
         if not self.isDisabled(item):
+            checked = False
+            if self.value_getter is not None:
+                checked = bool(self.value_getter(item))
             form_id = ".".join(filter(None, [self.prefix, self.id_getter(item)]))
-            return '<input type="checkbox" name="%s" id="%s" />' % (
-                form_id, form_id)
+            return '<input type="checkbox" name="%s" id="%s"%s />' % (
+                form_id, form_id,
+                checked and ' checked="checked"' or '')
         else:
             return ''
 
