@@ -104,17 +104,17 @@ function updateGradebookPartsWidths(form) {
         totals_w = (totals_headers.length *
                     totals.data('base-total-column-width'));
         totals.find('thead').find('tr').css({
-            height: students.find('thead').height(),
+            height: students.find('thead').height()
         });
         totals.css({
-            width: Math.floor(totals_w/base_font_size)+'em',
+            width: Math.floor(totals_w/base_font_size)+'em'
         });
     }
     var grades_margin_left = students_w;
     var grades_margin_right = totals_w;
     grades.css({
         marginLeft: grades_margin_left,
-        marginRight: Math.floor(totals_w/base_font_size)+'em',
+        marginRight: Math.floor(totals_w/base_font_size)+'em'
     });
 }
 
@@ -275,24 +275,24 @@ function hidePopup(form) {
     form.find('.popup_active').hide().removeClass('popup_active');
 }
 
-function isFirstTabVisible(container) {
-    var third_nav_left = container.find('.third-nav').position().left;
-    var limit = 0;
-    return third_nav_left == limit;
-}
-
 function isFirstTabVisible(third_nav) {
     return third_nav.position().left == 0;
 }
 
 function isLastTabVisible(third_nav) {
-    var tab_width = 140;
-    var tabs_count = third_nav.children().length;
-    if (tabs_count < 6) {
-        return true;
+    var tab_width;
+    var max_tab_count;
+    var tabs = third_nav.children();
+    var container_width = third_nav.parent().outerWidth();
+    if (tabs.length) {
+        tab_width = tabs.first().outerWidth();
+        max_tab_count = Math.floor(container_width/tab_width);
+        if (tabs.length <= max_tab_count) {
+            return true;
+        }
     }
     var third_nav_left = third_nav.position().left;
-    var limit = -(tabs_count - 5) * tab_width;
+    var limit = -(tabs.length - max_tab_count) * tab_width;
     return third_nav_left == limit;
 }
 
@@ -358,7 +358,7 @@ $(document).ready(function() {
             var data = {
                 'activity_id': findColumnHeader(td).attr('id'),
                 'score': input.val()
-            }
+            };
             var url = form.attr('action') + '/validate_score_json';
             this.timer = setTimeout(function () {
                 $.ajax({
@@ -376,7 +376,7 @@ $(document).ready(function() {
     });
     grades.on('keydown', 'input', function(e) {
         var td = $(this).parent();
-        var tr = td.parent()
+        var tr = td.parent();
         switch(e.keyCode) {
         case 27: // escape
             $(this).val(td.attr('original'));
@@ -417,7 +417,7 @@ $(document).ready(function() {
         rows.each(function(i, row) {
             var cell = $(row).children()[idx];
             cells.push(cell);
-        })
+        });
         container.data('schooltool.gradebook-filldown-dialog-cells', cells);
         var filldown_title = container.find('.filldown-dialog-title').text();
         container.dialog({
@@ -467,7 +467,7 @@ $(document).ready(function() {
         var current_font_size = parseInt(form.css('fontSize'));
         if (current_font_size < maximum_font_size) {
             form.css({
-                fontSize: '+='+factor,
+                fontSize: '+='+factor
             });
             updateGradebookPartsWidths(form);
         }
@@ -476,21 +476,24 @@ $(document).ready(function() {
         var current_font_size = parseInt(form.css('fontSize'));
         if (current_font_size > minimum_font_size) {
             form.css({
-                fontSize: '-='+factor,
+                fontSize: '-='+factor
             });
             updateGradebookPartsWidths(form);
         }
     });
     $('#gradebook-controls').on('click', '.zoom-normal', function() {
         form.css({
-            fontSize: font_size_base,
+            fontSize: font_size_base
         });
         updateGradebookPartsWidths(form);
     });
     $('#gradebook-controls').on('click', '.expand', function() {
         $('.sidebar').hide();
-        $('.third-nav').css({
-            width: wide_width,
+        $('#third-nav-container').css({
+            width: wide_width-52,
+            left: 42
+        });
+        $('#navbar-go-previous').css({
             left: 16
         });
         $(this).closest('.widecontainer').css({
@@ -502,8 +505,11 @@ $(document).ready(function() {
     });
     $('#gradebook-controls').on('click', '.collapse', function() {
         $('.sidebar').show();
-        $('.third-nav').css({
-            width: normal_width,
+        $('#third-nav-container').css({
+            width: normal_width-52,
+            left: 234
+        });
+        $('#navbar-go-previous').css({
             left: 208
         });
         $(this).closest('.widecontainer').css({
