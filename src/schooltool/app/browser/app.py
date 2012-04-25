@@ -21,7 +21,6 @@ SchoolTool application views.
 
 $Id$
 """
-import os
 import urllib
 
 from ZODB.FileStorage.FileStorage import FileStorageError
@@ -49,23 +48,16 @@ from zope.publisher.browser import BrowserView
 from zope.component import getMultiAdapter, queryMultiAdapter
 from zope.component import getUtility
 from zope.component import adapter, adapts
-from zope.component import getAdapter
 from zope.authentication.interfaces import IAuthentication
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.publisher.browser import BrowserPage
 from zope.traversing.browser.absoluteurl import absoluteURL
-from zope.traversing.api import traverse
-from zope.size import byteDisplay
 from zope.schema import Int, Bool, Tuple, Choice
 from z3c.form import form, field, button
 from z3c.form.browser.checkbox import CheckBoxFieldWidget
 from z3c.form.interfaces import DISPLAY_MODE
-from zc.table.column import Column
 from zc.table.table import FormFullFormatter
 
-import schooltool.skin.flourish.breadcrumbs
-import schooltool.skin.flourish.page
-import schooltool.skin.flourish.viewlet
 from schooltool.calendar.icalendar import convert_calendar_to_ical
 from schooltool.app.browser.interfaces import IManageMenuViewletManager
 from schooltool.app.interfaces import ISchoolToolAuthenticationPlugin
@@ -81,7 +73,6 @@ from schooltool.person.interfaces import IPerson
 from schooltool import table
 from schooltool.table.table import CheckboxColumn
 from schooltool.table.table import label_cell_formatter_factory
-from schooltool.table.table import stupid_form_key
 from schooltool.table.table import ImageInputColumn
 from schooltool.table.interfaces import ITableFormatter
 from schooltool.skin.skin import OrderedViewletManager
@@ -721,7 +712,7 @@ class FlourishLoginDispatchView(BrowserView):
         manager.collect()
         apptabs = removeSecurityProxy(IApplicationTabs(app))
         viewlet = manager.get(apptabs.default, None)
-        if viewlet is not None:
+        if viewlet is not None and viewlet.enabled:
             nexturl = viewlet.url
         else:
             nexturl = absoluteURL(

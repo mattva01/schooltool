@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: Giancarlo Gaifas <lallo@artiemestieri.tn.it>\n"
-"POT-Creation-Date: 2012-03-01 21:21+0200\n"
-"PO-Revision-Date: 2012-03-16 14:00+0000\n"
+"POT-Creation-Date: 2012-04-05 13:59+0300\n"
+"PO-Revision-Date: 2012-03-20 10:34+0000\n"
 "Last-Translator: Guybrush88 <Unknown>\n"
 "Language-Team: Italian <it@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-03-17 05:15+0000\n"
-"X-Generator: Launchpad (build 14951)\n"
+"X-Launchpad-Export-Date: 2012-04-06 04:50+0000\n"
+"X-Generator: Launchpad (build 15060)\n"
 "Language: it\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -352,7 +352,13 @@ msgstr "Invia"
 msgid "Errors"
 msgstr "Errori"
 
-#: /src/schooltool/app/browser/cal.py:114
+#: /src/schooltool/app/browser/app.py:1419
+#: /src/schooltool/app/browser/flourish.zcml:292
+#: /src/schooltool/app/browser/flourish.zcml:301
+msgid "Tabs"
+msgstr "Schede"
+
+#: /src/schooltool/app/browser/cal.py:118
 msgid "January"
 msgstr "Gennaio"
 
@@ -1171,12 +1177,7 @@ msgstr "Modifica"
 msgid "Error"
 msgstr "Errore"
 
-#: /src/schooltool/app/browser/flourish.zcml:294
-#: /src/schooltool/app/browser/flourish.zcml:303
-msgid "Tabs"
-msgstr "Schede"
-
-#: /src/schooltool/app/browser/flourish.zcml:343
+#: /src/schooltool/app/browser/flourish.zcml:352
 msgid "About"
 msgstr "Riguardo a"
 
@@ -2071,6 +2072,10 @@ msgstr "Imposta la visibilità della scheda"
 msgid "Visible"
 msgstr "Visibile"
 
+#: /src/schooltool/app/browser/templates/f_hide_unhide_tabs.pt:25
+msgid "Default"
+msgstr ""
+
 #: /src/schooltool/app/browser/templates/f_hide_unhide_tabs_related.pt:6
 msgid ""
 "Schools that are not using all components of SchoolTool can reduce visual "
@@ -2085,7 +2090,13 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_hide_unhide_tabs_related.pt:15
-msgid "Links can be changed from visible to hidden at any time.."
+msgid "Links can be changed from visible to hidden at any time."
+msgstr ""
+
+#: /src/schooltool/app/browser/templates/f_hide_unhide_tabs_related.pt:18
+msgid ""
+"When users log in, they will usually be directed to the tab selected in the "
+"default column. The default tab must also be visible."
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_login.pt:12
@@ -2853,11 +2864,7 @@ msgstr ""
 "\"Se si sta usando il file di default modificarlo ora scommentando una \"\n"
 "\"delle sezioni di archiviazione del database ZODB\n"
 
-#: /src/schooltool/app/main.py:666
-msgid "Startup time: %.3f sec real, %.3f sec CPU"
-msgstr "Tempo di avvio: %.3f secondi reali, %.3f secondi CPU"
-
-#: /src/schooltool/app/main.py:700
+#: /src/schooltool/app/main.py:672
 msgid ""
 "Could not initialize the database:\n"
 "%s"
@@ -2893,9 +2900,13 @@ msgid ""
 "PDF support disabled."
 msgstr ""
 
+#: /src/schooltool/app/main.py:775
+msgid "Startup time: %.3f sec real, %.3f sec CPU"
+msgstr "Tempo di avvio: %.3f secondi reali, %.3f secondi CPU"
+
 #: /src/schooltool/app/membership.py:261
 #: /src/schooltool/basicperson/browser/templates/f_manage_people_overview.pt:20
-#: /src/schooltool/group/browser/flourish.zcml:163
+#: /src/schooltool/group/browser/flourish.zcml:209
 #: /src/schooltool/group/browser/templates/f_group_view.pt:75
 #: /src/schooltool/group/browser/templates/group.pt:16
 msgid "Members"
@@ -3137,7 +3148,7 @@ msgstr "Sì/No"
 
 #: /src/schooltool/basicperson/browser/demographics.py:343
 msgid "Integer"
-msgstr ""
+msgstr "Intero"
 
 #: /src/schooltool/basicperson/browser/demographics.py:422
 #: /src/schooltool/basicperson/interfaces.py:144
@@ -3158,11 +3169,11 @@ msgstr "Dettagli del campo"
 
 #: /src/schooltool/basicperson/browser/demographics.py:584
 msgid "Please enter a valid ID"
-msgstr ""
+msgstr "Per piacere, inserisci un ID valido."
 
 #: /src/schooltool/basicperson/browser/demographics.py:588
 msgid "This ID is not unique."
-msgstr ""
+msgstr "Questo ID non è univoco."
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:11
 #: /src/schooltool/basicperson/browser/flourish.zcml:16
@@ -3224,7 +3235,7 @@ msgstr ""
 #: /src/schooltool/level/browser/flourish.zcml:110
 #: /src/schooltool/resource/browser/flourish.zcml:29
 msgid "Reorder"
-msgstr ""
+msgstr "Riordina"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:305
 msgid "Text Field"
@@ -3248,7 +3259,7 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:349
 msgid "Integer Field"
-msgstr ""
+msgstr "Campo intero"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:359
 msgid "Reorder or Delete Fields"
@@ -3272,7 +3283,7 @@ msgstr "Esporta come XML"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:627
 msgid "ID Card"
-msgstr ""
+msgstr "Carta d'identità"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:627
 msgid ""
@@ -3441,11 +3452,11 @@ msgstr "Dati demografici dell'amministratore"
 #: /src/schooltool/basicperson/browser/person.py:1155
 #: /src/schooltool/group/browser/flourish.zcml:358
 msgid "ID Cards"
-msgstr ""
+msgstr "Carte d'identità"
 
 #: /src/schooltool/basicperson/browser/person.py:1327
 msgid "ID Card: ${person}"
-msgstr ""
+msgstr "Carta d'identità: ${person}"
 
 #: /src/schooltool/basicperson/browser/templates/container.pt:18
 msgid ""
@@ -3626,19 +3637,19 @@ msgstr "significa un campo richiesto"
 
 #: /src/schooltool/basicperson/browser/templates/f_person_id_cards.pt:90
 msgid "ID:"
-msgstr ""
+msgstr "ID:"
 
 #: /src/schooltool/basicperson/browser/templates/f_person_id_cards.pt:95
 msgid "Birth date:"
-msgstr ""
+msgstr "Data di nascita:"
 
 #: /src/schooltool/basicperson/browser/templates/f_person_id_cards.pt:99
 msgid "Contact"
-msgstr ""
+msgstr "Contatto"
 
 #: /src/schooltool/basicperson/browser/templates/f_person_id_cards.pt:111
 msgid "Contact's Phone"
-msgstr ""
+msgstr "Telefono del contatto"
 
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:4
 #: /src/schooltool/person/browser/person-csvimport.pt:4
@@ -3723,11 +3734,11 @@ msgstr "Bianco"
 
 #: /src/schooltool/basicperson/demographics.py:150
 msgid "Place of birth"
-msgstr ""
+msgstr "Luogo di nascita"
 
 #: /src/schooltool/basicperson/demographics.py:151
 msgid "Citizenship"
-msgstr ""
+msgstr "Cittadinanza"
 
 #: /src/schooltool/basicperson/interfaces.py:38
 #: /src/schooltool/contact/interfaces.py:40
@@ -3800,11 +3811,11 @@ msgstr ""
 
 #: /src/schooltool/basicperson/interfaces.py:173
 msgid "Minimum value"
-msgstr ""
+msgstr "Valore minimo"
 
 #: /src/schooltool/basicperson/interfaces.py:177
 msgid "Maximum value"
-msgstr ""
+msgstr "Valore massimo"
 
 #: /src/schooltool/basicperson/person.py:75
 #: /src/schooltool/contact/browser/contact.py:503
@@ -3868,23 +3879,23 @@ msgstr "Amministratori"
 
 #: /src/schooltool/calendar/browser/calendar.py:173
 msgid "Tomorrow"
-msgstr ""
+msgstr "Domani"
 
 #: /src/schooltool/calendar/browser/calendar.py:175
 msgid "Yesterday"
-msgstr ""
+msgstr "Ieri"
 
 #: /src/schooltool/calendar/browser/calendar.py:195
 msgid "This Week"
-msgstr ""
+msgstr "Questa settimana"
 
 #: /src/schooltool/calendar/browser/calendar.py:197
 msgid "Last Week"
-msgstr ""
+msgstr "Settimana scorsa"
 
 #: /src/schooltool/calendar/browser/calendar.py:199
 msgid "Next Week"
-msgstr ""
+msgstr "Settimana prossima"
 
 #: /src/schooltool/calendar/browser/calendar.py:236
 msgid "Jump To"
@@ -4065,13 +4076,12 @@ msgstr "Cambia le informazioni di contatto per ${first_name} ${last_name}"
 msgid "Contact index"
 msgstr "Indice dei contatti"
 
-#: /src/schooltool/contact/browser/contact.py:617
-#: /src/schooltool/person/browser/f_person_filter.pt:7
-#: /src/schooltool/person/browser/person.py:543
-msgid "First name, last name or username"
-msgstr "Nome, cognome o nome utente"
+#: /src/schooltool/contact/browser/contact.py:618
+#: /src/schooltool/contact/browser/templates/f_contact_filter.pt:6
+msgid "First name and/or last name"
+msgstr "Nome e/o cognome"
 
-#: /src/schooltool/contact/browser/contact.py:653
+#: /src/schooltool/contact/browser/contact.py:654
 #: /src/schooltool/email/browser/email.py:301
 #: /src/schooltool/email/browser/email.py:486
 #: /src/schooltool/email/browser/email.py:531
@@ -4176,10 +4186,6 @@ msgstr "${relationship} d"
 #: /src/schooltool/contact/browser/templates/f_contact_view.pt:49
 msgid "Contact of"
 msgstr "Contatto di"
-
-#: /src/schooltool/contact/browser/templates/f_contact_filter.pt:6
-msgid "First name and/or last name"
-msgstr ""
 
 #: /src/schooltool/contact/browser/templates/f_contact_view.pt:3
 msgid "Contact information"
@@ -4365,11 +4371,11 @@ msgstr "Cellulare"
 
 #: /src/schooltool/contact/interfaces.py:82
 msgid "Other 1"
-msgstr ""
+msgstr "Altro 1"
 
 #: /src/schooltool/contact/interfaces.py:84
 msgid "Other 2"
-msgstr ""
+msgstr "Altro 2"
 
 #: /src/schooltool/contact/interfaces.py:109
 msgid "Contact's relationship with the person"
@@ -4514,7 +4520,7 @@ msgstr "Informazioni sul corso"
 #: /src/schooltool/course/browser/course.py:669
 #: /src/schooltool/course/browser/templates/f_course_filter.pt:6
 msgid "Title or course ID"
-msgstr ""
+msgstr "Titolo o ID del corso"
 
 #: /src/schooltool/course/browser/csvimport.py:57
 #: /src/schooltool/group/browser/csvimport.py:54
@@ -4580,11 +4586,26 @@ msgstr "Aggiungi corso"
 msgid "Add Section"
 msgstr "Aggiungi sezione"
 
-#: /src/schooltool/course/browser/flourish.zcml:309
-#: /src/schooltool/course/browser/templates/f_section_view.pt:88
+#: /src/schooltool/course/browser/flourish.zcml:403
+#: /src/schooltool/course/browser/templates/f_section_view.pt:148
+msgid "Locations"
+msgstr "Posizioni"
+
+#: /src/schooltool/course/browser/flourish.zcml:411
+#: /src/schooltool/course/browser/templates/f_section_view.pt:164
+#: /src/schooltool/resource/browser/flourish.zcml:108
+#: /src/schooltool/resource/browser/resource.py:411
+#: /src/schooltool/resource/resource.py:206
+#: /src/schooltool/resource/resource.py:232
+#: /src/schooltool/resource/types.py:93
+msgid "Equipment"
+msgstr "Equipaggiamento"
+
+#: /src/schooltool/course/browser/flourish.zcml:419
+#: /src/schooltool/course/browser/templates/f_section_view.pt:90
 #: /src/schooltool/dashboard/term.pt:16
 #: /src/schooltool/term/browser/templates/f_manage_years_overview.pt:5
-#: /src/schooltool/term/browser/term.py:760
+#: /src/schooltool/term/browser/term.py:764
 #: /src/schooltool/term/security.zcml:19
 msgid "Terms"
 msgstr "Periodi"
@@ -4658,7 +4679,7 @@ msgstr "Dimensione"
 #: /src/schooltool/course/browser/section.py:1024
 #: /src/schooltool/course/browser/templates/f_section_filter.pt:6
 msgid "Section title"
-msgstr ""
+msgstr "Titolo della sezione"
 
 #: /src/schooltool/course/browser/section.py:1121
 #: /src/schooltool/course/browser/section.py:1272
@@ -4689,7 +4710,23 @@ msgstr "Studenti correnti"
 msgid "Add students"
 msgstr "Aggiungi studenti"
 
-#: /src/schooltool/course/browser/section.py:1424
+#: /src/schooltool/course/browser/section.py:1380
+msgid "Current locations"
+msgstr "Posizioni correnti"
+
+#: /src/schooltool/course/browser/section.py:1381
+msgid "Add locations"
+msgstr "Aggiungi posizioni"
+
+#: /src/schooltool/course/browser/section.py:1404
+msgid "Current equipment"
+msgstr "Equipaggiamento corrente"
+
+#: /src/schooltool/course/browser/section.py:1405
+msgid "Add equipment"
+msgstr "Aggiungi equipaggiamento"
+
+#: /src/schooltool/course/browser/section.py:1469
 msgid "Extend ${section} to ${term}"
 msgstr "Estendi ${section} al ${term}"
 
@@ -5080,6 +5117,22 @@ msgstr "Modifica gli studenti per questa sezione"
 msgid "This section has no students"
 msgstr "Questa sezione non ha studenti"
 
+#: /src/schooltool/course/browser/templates/f_section_view.pt:149
+msgid "Edit locations for this section"
+msgstr "Modifica le posizioni per questa sezione"
+
+#: /src/schooltool/course/browser/templates/f_section_view.pt:160
+msgid "This section has no locations"
+msgstr "Questa sezione non ha posizioni"
+
+#: /src/schooltool/course/browser/templates/f_section_view.pt:165
+msgid "Edit equipment for this section"
+msgstr "Modifica l'equipaggiamento per questa sezione"
+
+#: /src/schooltool/course/browser/templates/f_section_view.pt:176
+msgid "This section has no equipment"
+msgstr "Questa sezione non ha equipaggiamento"
+
 #: /src/schooltool/course/browser/templates/f_sections_related.pt:6
 msgid ""
 "A section is a set of one or more learners and instructors who meet during a "
@@ -5209,11 +5262,11 @@ msgstr "Scollega la sezione"
 #: /src/schooltool/course/interfaces.py:36
 #: /src/schooltool/course/interfaces.py:129
 msgid "SchoolTool ID"
-msgstr ""
+msgstr "ID SchoolTool"
 
 #: /src/schooltool/course/interfaces.py:37
 msgid "An internal identifier of this course."
-msgstr ""
+msgstr "Un identificatore interno di questo corso."
 
 #: /src/schooltool/course/interfaces.py:53
 msgid "School identifier of this course."
@@ -5245,7 +5298,7 @@ msgstr ""
 
 #: /src/schooltool/course/interfaces.py:130
 msgid "An internal identifier of this section."
-msgstr ""
+msgstr "Un identificatore interno di questa sezione."
 
 #: /src/schooltool/course/section.py:89
 msgid "${instructors} -- ${section_title}"
@@ -6022,7 +6075,7 @@ msgstr "Aggiungi un gruppo"
 
 #: /src/schooltool/group/browser/flourish.zcml:270
 msgid "Import Members CSV"
-msgstr ""
+msgstr "Importa il CSV dei membri"
 
 #: /src/schooltool/group/browser/flourish.zcml:358
 msgid ""
@@ -6082,7 +6135,7 @@ msgstr "Gruppi per il ${schoolyear}"
 #: /src/schooltool/group/browser/group.py:531
 #: /src/schooltool/group/browser/templates/f_group_filter.pt:6
 msgid "Group title"
-msgstr ""
+msgstr "Titolo del gruppo"
 
 #: /src/schooltool/group/browser/group.py:640
 #: /src/schooltool/group/browser/group.py:692
@@ -6208,6 +6261,18 @@ msgstr "modifica membri"
 msgid "edit groups"
 msgstr "modifica gruppi"
 
+#: /src/schooltool/group/group.py:63
+msgid "Site Managers"
+msgstr ""
+
+#: /src/schooltool/group/group.py:66
+msgid "Clerks"
+msgstr ""
+
+#: /src/schooltool/group/group.py:67
+msgid "School Administrators"
+msgstr ""
+
 #: /src/schooltool/group/security.zcml:5
 msgid "Only school administration can view the list of groups."
 msgstr ""
@@ -6264,7 +6329,11 @@ msgstr "I gruppi sono essenzialmente insiemi di utenti."
 #: /src/schooltool/level/browser/templates/levels.pt:3
 #: /src/schooltool/level/browser/templates/levels.pt:6
 msgid "Grade Levels"
-msgstr ""
+msgstr "Livelli dei voti"
+
+#: /src/schooltool/level/browser/flourish.zcml:62
+msgid "Level"
+msgstr "Livello"
 
 #: /src/schooltool/level/browser/flourish.zcml:82
 msgid "Add new level"
@@ -6303,11 +6372,11 @@ msgstr ""
 
 #: /src/schooltool/level/browser/templates/link_to_levels.pt:1
 msgid "Grade levels"
-msgstr ""
+msgstr "Livelli dei voti"
 
 #: /src/schooltool/level/security.zcml:7
 msgid "The grade levels (student learning years)."
-msgstr ""
+msgstr "I livelli dei voti (anni di apprendimento dello studente)."
 
 #: /src/schooltool/level/security.zcml:12
 msgid "Add/Remove"
@@ -6379,6 +6448,11 @@ msgstr "il nome esteso non può essere vuoto"
 #: /src/schooltool/person/browser/person.py:362
 msgid "Password changed successfully"
 msgstr "Password cambiata con successo"
+
+#: /src/schooltool/person/browser/f_person_filter.pt:7
+#: /src/schooltool/person/browser/person.py:543
+msgid "First name, last name or username"
+msgstr "Nome, cognome o nome utente"
 
 #: /src/schooltool/person/browser/f_person_filter.pt:20
 #: /src/schooltool/person/browser/f_person_table_filter.pt:39
@@ -6753,16 +6827,8 @@ msgstr "Nuovo equipaggiamento"
 msgid "Resource Attributes"
 msgstr "Attributi della risorsa"
 
-#: /src/schooltool/resource/browser/flourish.zcml:107
-#: /src/schooltool/resource/browser/resource.py:353
-#: /src/schooltool/resource/resource.py:206
-#: /src/schooltool/resource/resource.py:232
-#: /src/schooltool/resource/types.py:93
-msgid "Equipment"
-msgstr "Equipaggiamento"
-
-#: /src/schooltool/resource/browser/flourish.zcml:123
-#: /src/schooltool/resource/browser/resource.py:357
+#: /src/schooltool/resource/browser/flourish.zcml:124
+#: /src/schooltool/resource/browser/resource.py:415
 #: /src/schooltool/resource/resource.py:74
 #: /src/schooltool/resource/resource.py:204
 #: /src/schooltool/resource/resource.py:230
@@ -6945,7 +7011,7 @@ msgstr "Totali"
 
 #: /src/schooltool/resource/browser/templates/f_manage_resources_overview.pt:24
 msgid "There are no ${resources} set up."
-msgstr ""
+msgstr "Non ci sono ${resources} impostati/e."
 
 #: /src/schooltool/resource/browser/templates/f_manage_resources_overview.pt:24
 msgid "school resources"
@@ -7322,7 +7388,7 @@ msgstr ""
 
 #: /src/schooltool/schoolyear/browser/templates/f_manage_year_overview.pt:5
 msgid "Manage year"
-msgstr ""
+msgstr "Gestisci anno"
 
 #: /src/schooltool/schoolyear/browser/templates/f_schoolyear.pt:5
 msgid "Edit this school year's information"
@@ -7464,7 +7530,7 @@ msgstr "Elenco degli account"
 
 #: /src/schooltool/securitypolicy/browser/views.py:58
 msgid "User calendars"
-msgstr ""
+msgstr "Calendari degli utenti"
 
 #: /src/schooltool/securitypolicy/browser/views.py:59
 msgid "User passwords"
@@ -7496,7 +7562,7 @@ msgstr "Informazioni sulla risorsa"
 
 #: /src/schooltool/securitypolicy/browser/views.py:66
 msgid "Resource calendars"
-msgstr ""
+msgstr "Calendari delle risorse"
 
 #: /src/schooltool/securitypolicy/browser/views.py:67
 msgid "Gradebook"
@@ -7568,15 +7634,15 @@ msgstr "Supportando persone eccezionali a cambiare il mondo,"
 
 #: /src/schooltool/skin/flourish/templates/photo_input.pt:11
 msgid "delete this photo"
-msgstr ""
+msgstr "elimina questa fotografia"
 
 #: /src/schooltool/skin/flourish/widgets.py:240
 msgid "The file uploaded is not a JPEG or PNG image"
-msgstr ""
+msgstr "Il file caricato non è un'immagine JPEG o PNG"
 
 #: /src/schooltool/skin/flourish/widgets.py:243
 msgid "The image uploaded cannot be larger than 10 MB"
-msgstr ""
+msgstr "L'immagine caricata non può essere maggiore di 10 MB"
 
 #: /src/schooltool/skin/form.py:64
 msgid "No changes"
@@ -7685,7 +7751,11 @@ msgstr "Scorciatoia: Alt-D"
 msgid "The datetime string did not match the pattern yyyy-mm-dd"
 msgstr "La stringa di data e ora non corrisponde al pattern yyyy-mm-dd"
 
-#: /src/schooltool/skin/widgets.py:99
+#: /src/schooltool/skin/widgets.py:103
+msgid "Year has to be equal or greater than 1900"
+msgstr ""
+
+#: /src/schooltool/skin/widgets.py:111
 msgid "Width"
 msgstr "Larghezza"
 
@@ -7841,7 +7911,7 @@ msgstr "Gestisci i periodi"
 
 #: /src/schooltool/term/browser/templates/f_manage_years_overview.pt:42
 msgid "Please set up at least one ${term}."
-msgstr ""
+msgstr "Per piacere, imposta almeno un ${term}."
 
 #: /src/schooltool/term/browser/templates/f_manage_years_overview.pt:42
 msgid "term"
@@ -7861,12 +7931,12 @@ msgstr "Legenda:"
 #: /src/schooltool/term/browser/templates/f_term.pt:16
 #: /src/schooltool/term/browser/templates/f_term_add.pt:36
 msgid "In Session"
-msgstr ""
+msgstr "Nella sessione"
 
 #: /src/schooltool/term/browser/templates/f_term.pt:17
 #: /src/schooltool/term/browser/templates/f_term_add.pt:37
 msgid "Not In Session"
-msgstr ""
+msgstr "Non nella sessione"
 
 #: /src/schooltool/term/browser/templates/f_term.pt:25
 #: /src/schooltool/term/browser/templates/f_term_add.pt:60
@@ -8014,7 +8084,7 @@ msgstr "Dettagli della riunione"
 
 #: /src/schooltool/timetable/browser/calendar.py:160
 msgid "Add meeting"
-msgstr ""
+msgstr "Aggiungi riunione"
 
 #: /src/schooltool/timetable/browser/configure.zcml:60
 #: /src/schooltool/timetable/browser/flourish.zcml:266
@@ -8391,7 +8461,7 @@ msgstr "Sei sicuro di voler cancellare gli orari selezionati"
 #: /src/schooltool/timetable/browser/templates/ttwizard.pt:3
 #: /src/schooltool/timetable/browser/templates/ttwizard.pt:6
 msgid "New timetable"
-msgstr ""
+msgstr "Nuovo orario"
 
 #: /src/schooltool/timetable/browser/templates/ttwizard.pt:11
 msgid ""
