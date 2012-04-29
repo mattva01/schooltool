@@ -22,7 +22,7 @@ SchoolTool simple import views.
 import xlrd
 import transaction
 import datetime
-from decimal import Decimal
+from decimal import Decimal, InvalidOperation
 
 from zope.container.contained import containedEvent
 from zope.container.interfaces import INameChooser
@@ -1040,7 +1040,7 @@ class CourseImporter(ImporterBase):
             try:
                 if data['credits']:
                     Decimal(data['credits'])
-            except:
+            except InvalidOperation:
                 self.error(row, 6, ERROR_INVALID_COURSE_CREDITS)
             if num_errors < len(self.errors):
                 continue

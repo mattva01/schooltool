@@ -116,6 +116,7 @@ This file has examples of bad data for the Courses sheet:
     >>> import_file('errant_courses.xls')
     Courses B2 missing required text
     Courses C2 missing required text
+    Courses G3 course credits need to be a valid number
     Courses A4 invalid school year
 
 This file has examples of bad data for the Sections sheet:
