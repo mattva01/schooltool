@@ -1575,7 +1575,8 @@ class MegaImporter(BrowserView):
                 ContactRelationshipImporter,
                 CourseImporter,
                 GroupImporter,
-                SectionImporter]
+                SectionImporter,
+                FlatSectionsTableImporter]
 
     def update(self):
         if "UPDATE_SUBMIT" not in self.request:
