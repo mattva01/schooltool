@@ -113,12 +113,16 @@ ERROR_UNICODE_CONVERSION = _(
 ERROR_WEEKLY_DAY_ID = _('is not a valid weekday number (0-6)')
 ERROR_CONTACT_RELATIONSHIP = _("is not a valid contact relationship")
 ERROR_NOT_BOOLEAN = _("must be either True or False")
+ERROR_MISSING_YEAR_ID = _("must have a school year")
+ERROR_MISSING_COURSES = _("must have a course")
+ERROR_MISSING_TERM_ID = _("must have a term")
 ERROR_CURRENT_SECTION_FIRST_TERM = _("the current section is in the first term of the school year")
 ERROR_CURRENT_SECTION_LAST_TERM = _("the current section is in the last term of the school year")
 ERROR_INVALID_PREV_TERM_SECTION = _("is not a valid section id in the previous term")
 ERROR_INVALID_NEXT_TERM_SECTION = _("is not a valid section id in the next term")
 ERROR_NO_TIMETABLE_DEFINED = _("no timetable is defined for this section")
 ERROR_NO_DAY_DEFINED = _("no day is defined in this row")
+ERROR_MISSING_PERIOD_ID = _('must have a valid period id')
 ERROR_INVALID_COURSE_CREDITS = _("course credits need to be a valid number")
 
 
@@ -1299,12 +1303,91 @@ class FlatSectionsTableImporter(ImporterBase):
             section.courses.add(course)
         return section
 
+    def import_timetable_row(self, row, data, section, timetable, schedule):
+        term = ITerm(section)
+        year = ISchoolYear(term)
+        if data['timetable']:
+            timetables = ITimetableContainer(year)
+            timetable_id = data['timetable']
+            if timetable_id not in timetables:
+                self.error(row, 11, ERROR_INVALID_SCHEMA_ID)
+                return None, None
+            else:
+                timetable = timetables[timetable_id]
+
+                schedule = SelectedPeriodsSchedule(
+                    timetable, term.first, term.last,
+                    title=timetable.title, timezone=timetable.timezone)
+                schedule.consecutive_periods_as_one = data['consecutive']
+
+                schedules = IScheduleContainer(section)
+                s_chooser = INameChooser(schedules)
+                name = s_chooser.chooseName('', schedule)
+                schedules[name] = schedule
+
+        day = None
+        if data['day']:
+            if timetable is None:
+                self.error(row, 13, ERROR_NO_TIMETABLE_DEFINED)
+                return timetable, schedule
+            day_title = data['day']
+            for tt_day in timetable.periods.templates.values():
+                if tt_day.title == day_title:
+                    day = tt_day
+                    break
+            if day is None:
+                self.error(row, 13, ERROR_INVALID_DAY_ID)
+                return timetable, schedule
+
+        if data['period']:
+            if day is None:
+                self.error(row, 14, ERROR_NO_DAY_DEFINED)
+                return timetable, schedule
+            period = None
+            period_title = data['period']
+            for tt_period in day.values():
+                if tt_period.title == period_title:
+                    period = tt_period
+            if period is None:
+                self.error(row, 14, ERROR_INVALID_PERIOD_ID)
+                return timetable, schedule
+            schedule.addPeriod(period)
+        elif day is not None:
+            self.error(row, 14, ERROR_MISSING_PERIOD_ID)
+
+        return timetable, schedule
+
+    def import_section_links(self, prev_links, next_links):
+        for row, (section, link_id) in sorted(prev_links.items()):
+            term = ITerm(section)
+            previous_term = getPreviousTerm(term)
+            if previous_term is None:
+                self.error(row, 9, ERROR_CURRENT_SECTION_FIRST_TERM)
+            else:
+                previous_sections = ISectionContainer(previous_term)
+                if link_id in previous_sections:
+                    previous_sections[link_id].next = section
+                else:
+                    self.error(row, 9, ERROR_INVALID_PREV_TERM_SECTION)
+
+        for row, (section, link_id) in sorted(next_links.items()):
+            term = ITerm(section)
+            next_term = getNextTerm(term)
+            if next_term is None:
+                self.error(row, 10, ERROR_CURRENT_SECTION_LAST_TERM)
+            else:
+                next_sections = ISectionContainer(next_term)
+                if link_id in next_sections:
+                    next_sections[link_id].previous = section
+                else:
+                    self.error(row, 10, ERROR_INVALID_NEXT_TERM_SECTION)
+
     def process(self):
         sh = self.sheet
         schoolyears = ISchoolYearContainer(self.context)
         persons = self.context['persons']
         resources = self.context['resources']
-        year = None
+        year = term = section = timetable = schedule = None
         prev_links, next_links = {}, {}
 
         for row in range(1, sh.nrows):
@@ -1327,20 +1410,21 @@ class FlatSectionsTableImporter(ImporterBase):
 
             if not [v for v in data.values() if v]:
                 break
+            data['consecutive'] = bool(self.getBoolFromCell(sh, row, 12))
 
-            num_errors = len(self.errors)
             if data['year']:
                 year_id = data['year']
                 if year_id not in schoolyears:
                     self.error(row, 0, ERROR_INVALID_SCHOOL_YEAR)
-                    continue
-                year = schoolyears[year_id]
-                students = self.ensure_students_group(year)
-                teachers = self.ensure_teachers_group(year)
-                timetables = ITimetableContainer(year)
-                courses = None
+                    year = None
+                else:
+                    year = schoolyears[year_id]
+                    students = self.ensure_students_group(year)
+                    teachers = self.ensure_teachers_group(year)
+                    courses = None
             elif year is None:
                 self.error(row, 0, ERROR_MISSING_YEAR_ID)
+            if year is None:
                 continue
 
             if data['courses']:
@@ -1350,64 +1434,70 @@ class FlatSectionsTableImporter(ImporterBase):
                 for course_id in course_ids:
                     if course_id not in course_container:
                         self.error(row, 1, ERROR_INVALID_COURSE_ID)
-                        continue
+                        courses = None
+                        break
                     course = course_container[course_id]
                     courses.append(removeSecurityProxy(course))
                 term = None
             elif courses is None:
                 self.error(row, 1, ERROR_MISSING_COURSES)
+            if courses is None:
                 continue
 
             if data['term']:
                 term_id = data['term']
                 if term_id not in year:
                     self.error(row, 2, ERROR_INVALID_TERM_ID)
-                    continue
-                term = year[term_id]
-                section = None
+                    term = None
+                else:
+                    term = year[term_id]
+                    section = None
             elif term is None:
                 self.error(row, 2, ERROR_MISSING_TERM_ID)
+            if term is None:
                 continue
 
             if data['__name__']:
                 if not data['title']:
                     self.error(row, 4, ERROR_MISSING_REQUIRED_TEXT)
-                    continue
+                    data['title'] = 'Invalid, but keep parsing...'
                 section = self.createSection(data, year, term, courses)
                 timetable = None
             elif section is None:
                 self.error(row, 3, ERROR_MISSING_REQUIRED_TEXT)
+            if section is None:
+                continue
 
             if data['instructor']:
                 person_id = data['instructor']
                 if person_id not in persons:
                     self.error(row, 6, ERROR_INVALID_PERSON_ID)
-                    continue
-                teacher = persons[person_id]
-                if teacher not in section.instructors:
-                    section.instructors.add(removeSecurityProxy(teacher))
-                if teacher not in teachers.members:
-                    teachers.members.add(removeSecurityProxy(teacher))
+                else:
+                    teacher = persons[person_id]
+                    if teacher not in section.instructors:
+                        section.instructors.add(removeSecurityProxy(teacher))
+                    if teacher not in teachers.members:
+                        teachers.members.add(removeSecurityProxy(teacher))
 
             if data['student']:
                 person_id = data['student']
                 if person_id not in persons:
                     self.error(row, 7, ERROR_INVALID_PERSON_ID)
-                    continue
-                student = persons[person_id]
-                if student not in section.members:
-                    section.members.add(removeSecurityProxy(student))
-                if student not in students.members:
-                    students.members.add(removeSecurityProxy(student))
+                else:
+                    student = persons[person_id]
+                    if student not in section.members:
+                        section.members.add(removeSecurityProxy(student))
+                    if student not in students.members:
+                        students.members.add(removeSecurityProxy(student))
 
             if data['resource']:
                 resource_id = data['resource']
                 if resource_id not in resources:
                     self.error(row, 8, ERROR_INVALID_RESOURCE_ID)
-                    continue
-                resource = resources[resource_id]
-                if resource not in section.resources:
-                    section.resources.add(removeSecurityProxy(resource))
+                else:
+                    resource = resources[resource_id]
+                    if resource not in section.resources:
+                        section.resources.add(removeSecurityProxy(resource))
 
             if data['link_prev']:
                 prev_links[row] = (section, data['link_prev'])
@@ -1415,78 +1505,10 @@ class FlatSectionsTableImporter(ImporterBase):
             if data['link_next']:
                 next_links[row] = (section, data['link_next'])
 
-            if data['timetable']:
-                timetable_id = data['timetable']
-                if timetable_id not in timetables:
-                    self.error(row, 11, ERROR_INVALID_SCHEMA_ID)
-                    continue
-                timetable = timetables[timetable_id]
+            timetable, schedule = self.import_timetable_row(row, data, section,
+                                                            timetable, schedule)
 
-                schedule = SelectedPeriodsSchedule(
-                    timetable, term.first, term.last,
-                    title=timetable.title, timezone=timetable.timezone)
-                schedule.consecutive_periods_as_one = bool(
-                    data['consecutive'].lower() == 'yes')
-
-                schedules = IScheduleContainer(section)
-                s_chooser = INameChooser(schedules)
-                name = s_chooser.chooseName('', schedule)
-                schedules[name] = schedule
-
-            day = None
-            if data['day']:
-                if timetable is None:
-                    self.error(row, 0, ERROR_NO_TIMETABLE_DEFINED)
-                    continue
-                day_title = data['day']
-                for tt_day in timetable.periods.templates.values():
-                    if tt_day.title == day_title:
-                        day = tt_day
-                        break
-                if day is None:
-                    self.error(row, 0, ERROR_INVALID_DAY_ID)
-                    continue
-
-            if data['period']:
-                if timetable is None:
-                    self.error(row, 0, ERROR_NO_TIMETABLE_DEFINED)
-                    continue
-                if day is None:
-                    self.error(row, 0, ERROR_NO_DAY_DEFINED)
-                    continue
-                period = None
-                period_title = data['period']
-                for tt_period in day.values():
-                    if tt_period.title == period_title:
-                        period = tt_period
-                if period is None:
-                    self.error(row, 1, ERROR_INVALID_PERIOD_ID)
-                    continue
-                schedule.addPeriod(period)
-
-        for row, (section, link_id) in prev_links.items():
-            term = ITerm(section)
-            previous_term = getPreviousTerm(term)
-            if previous_term is None:
-                self.error(row, 9, ERROR_CURRENT_SECTION_FIRST_TERM)
-            else:
-                previous_sections = ISectionContainer(previous_term)
-                if link_id in previous_sections:
-                    previous_sections[link_id].next = section
-                else:
-                    self.error(row, 9, ERROR_INVALID_PREV_TERM_SECTION)
-
-        for row, (section, link_id) in next_links.items():
-            term = ITerm(section)
-            next_term = getNextTerm(term)
-            if next_term is None:
-                self.error(row, 10, ERROR_CURRENT_SECTION_LAST_TERM)
-            else:
-                next_sections = ISectionContainer(next_term)
-                if link_id in next_sections:
-                    next_sections[link_id].previous = section
-                else:
-                    self.error(row, 10, ERROR_INVALID_NEXT_TERM_SECTION)
+        self.import_section_links(prev_links, next_links)
 
 
 class GroupImporter(ImporterBase):
