@@ -367,7 +367,7 @@ $(document).ready(function() {
                 'activity_id': findColumnHeader(td).attr('id'),
                 'score': input.val()
             };
-            var url = form.attr('action') + '/validate_score_json';
+            var url = form.attr('action') + '/validate_score';
             this.timer = setTimeout(function () {
                 $.ajax({
                     url: url,
@@ -376,7 +376,13 @@ $(document).ready(function() {
                     type: 'get',
                     success: function(data) {
                         input.removeClass();
-                        input.addClass(data.css_class);
+                        var css_class = 'valid';
+                        if (!data.is_valid) {
+                            css_class = 'error';
+                        } else if (data.is_extracredit) {
+                            css_class = 'extracredit';
+                        }
+                        input.addClass(css_class);
                     }
                 });
             }, 200);
