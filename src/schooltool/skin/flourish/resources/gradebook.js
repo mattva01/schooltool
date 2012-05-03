@@ -328,6 +328,14 @@ $(document).ready(function() {
         if (!$(e.target).hasClass('popup_link')) {
             hidePopup(form);
         }
+        if (!$(e.target).hasClass('navbar-list-worksheets')) {
+            var list = $('#worksheets-list');
+            if (list.is(':visible')) {
+                list.slideUp('fast');
+                $('#navbar-list-worksheets').toggleClass(
+                    'navbar-list-worksheets-active');
+            }
+        }
     });
     // cell navigation
     grades.on('click', 'td', function() {
@@ -490,7 +498,7 @@ $(document).ready(function() {
     $('#gradebook-controls').on('click', '.expand', function() {
         $('.sidebar').hide();
         $('#third-nav-container').css({
-            width: wide_width-52,
+            width: wide_width-77,
             left: 42
         });
         $('#navbar-go-previous').css({
@@ -506,7 +514,7 @@ $(document).ready(function() {
     $('#gradebook-controls').on('click', '.collapse', function() {
         $('.sidebar').show();
         $('#third-nav-container').css({
-            width: normal_width-52,
+            width: normal_width-77,
             left: 234
         });
         $('#navbar-go-previous').css({
@@ -526,6 +534,7 @@ $(document).ready(function() {
     var tab_width = active_tab.outerWidth();
     var go_previous = $('#navbar-go-previous');
     var go_next = $('#navbar-go-next');
+    var list_worksheets = $('#navbar-list-worksheets');
     if (active_tab.index() > 4) {
         var scrollTo = tab_width * (active_tab.index() - 4);
         third_nav_container.scrollTo(scrollTo, 0, {axis: 'x'});
@@ -551,6 +560,24 @@ $(document).ready(function() {
         if (!isLastTabVisible(third_nav)) {
             third_nav_container.scrollTo('+='+tab_width, 0, {axis: 'x'});
         }
+        e.preventDefault();
+    });
+    list_worksheets.click(function(e) {
+        if ($('#worksheets-list').length < 1) {
+            var ul = $('<ul id="worksheets-list"></ul>');
+            var tabs = $('.third-nav li');
+            tabs.each(function(i, el) {
+                var tab = $(el).clone();
+                var link = tab.find('a');
+                tab.find('a').text(link.attr('title'));
+                ul.append(tab);
+            });
+            ul.addClass('popup_menu');
+            ul.addClass('worksheets-list');
+            $(this).after(ul);
+        }
+        $('#worksheets-list').slideToggle('fast');
+        $(this).toggleClass('navbar-list-worksheets-active');
         e.preventDefault();
     });
 });

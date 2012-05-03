@@ -17,7 +17,7 @@
     left: 234px;
     position: absolute;
     overflow: hidden;
-    width: 700px;
+    width: 675px;
 }
 
 .grid .third-nav {
@@ -32,9 +32,10 @@
 }
 
 .grid .third-nav li a {
-    width: 140px;
+    width: 135px;
     padding: 8px 0;
     text-align: center;
+    overflow: hidden;
 }
 
 .grid a.navbar-arrow {
@@ -51,7 +52,8 @@
     outline: none;
 }
 
-.grid a.navbar-arrow:hover {
+.grid a.navbar-arrow:hover,
+.grid a.navbar-list-worksheets-active {
     background: url("subnav_active_bg.png") repeat scroll left 1px transparent;
 }
 
@@ -70,8 +72,16 @@
 }
 
 .grid a.navbar-go-next {
-    right: 16px;
+    right: 43px;
+}
+
+.grid a.navbar-list-worksheets {
+    border-left-width: 1px;
+    border-left-style: solid;
+    border-left-color: #ccc;
     border-radius: 0 4px 0 0;
+    right: 16px;
+    width: 11px;
 }
 
 .grid > .body {
@@ -264,4 +274,20 @@
 
 .filldown-dialog-title {
     display: none;
+}
+
+.worksheets-list {
+    position: absolute;
+    right: 16px;
+    top: 68px;
+    z-index: 2;
+    left: auto;
+}
+
+.worksheets-list li {
+    background-color: #485454;
+}
+
+.worksheets-list li.active {
+    background-color: #6C7B7C;
 }
