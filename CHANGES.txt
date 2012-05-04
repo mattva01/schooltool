@@ -50,6 +50,9 @@ New features
 - Update jQuery to 1.7.1
 - Add more options from paster to start-schooltool-instance.
 - Updated translations, added Occitan (oc).
+- FlatSectionsTable sheet for easier section importing.
+- Old section import still supported; export only delivers FlatSectionsTable.
+- Added course_id, government_id and credits to Courses sheet import/export.
 
 
 Bugfixes
