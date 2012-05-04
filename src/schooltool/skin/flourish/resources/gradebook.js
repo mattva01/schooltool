@@ -549,6 +549,7 @@ $(document).ready(function() {
     }
     if (third_nav.children().length < 6) {
         go_next.addClass('navbar-arrow-inactive');
+        list_worksheets.addClass('navbar-arrow-inactive');
     }
     third_nav_container.scroll(function(e) {
         go_previous.toggleClass('navbar-arrow-inactive',
@@ -569,21 +570,23 @@ $(document).ready(function() {
         e.preventDefault();
     });
     list_worksheets.click(function(e) {
-        if ($('#worksheets-list').length < 1) {
-            var ul = $('<ul id="worksheets-list"></ul>');
-            var tabs = $('.third-nav li');
-            tabs.each(function(i, el) {
-                var tab = $(el).clone();
-                var link = tab.find('a');
-                tab.find('a').text(link.attr('title'));
-                ul.append(tab);
-            });
-            ul.addClass('popup_menu');
-            ul.addClass('worksheets-list');
-            $(this).after(ul);
+        if (!$(this).hasClass('navbar-arrow-inactive')) {
+            if ($('#worksheets-list').length < 1) {
+                var ul = $('<ul id="worksheets-list"></ul>');
+                var tabs = $('.third-nav li');
+                tabs.each(function(i, el) {
+                    var tab = $(el).clone();
+                    var link = tab.find('a');
+                    tab.find('a').text(link.attr('title'));
+                    ul.append(tab);
+                });
+                ul.addClass('popup_menu');
+                ul.addClass('worksheets-list');
+                $(this).after(ul);
+            }
+            $('#worksheets-list').slideToggle('fast');
+            $(this).toggleClass('navbar-list-worksheets-active');
         }
-        $('#worksheets-list').slideToggle('fast');
-        $(this).toggleClass('navbar-list-worksheets-active');
         e.preventDefault();
     });
 });
