@@ -215,14 +215,8 @@ function preloadPopups(form) {
     preloadTotalPopups(form);
 }
 
-function appendSpinner(link) {
-    var spinner = ST.images.spinner();
-    var li = $('<li class="header"></li').append(spinner);
-    link.prev().append(li);
-}
-
 function loadPopup(link, url, data, calculateLeft) {
-    appendSpinner(link);
+    insertPopupMenu(link);
     $.ajax({
         url: url,
         dataType: 'html',
@@ -242,6 +236,14 @@ function loadPopup(link, url, data, calculateLeft) {
             }
         }
     });
+}
+
+function insertPopupMenu(link) {
+    var popup_menu = $('<ul></ul>');
+    var spinner = ST.images.spinner();
+    var li = $('<li class="header"></li>').append(spinner);
+    popup_menu.addClass('popup_menu').append(li);
+    link.before(popup_menu);
 }
 
 function calculatePopupLeft(popup) {
