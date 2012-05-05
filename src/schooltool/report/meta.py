@@ -38,7 +38,7 @@ class IReportLinkDirective(IViewletDirective):
     group = MessageID(title=u"Report group", required=True)
     title = MessageID(title=u"Report link text", required=True)
     description = MessageID(title=u"Report link description", required=True)
-    file_type = TextLine(title=u"Report file extension", required=True)
+    file_type = TextLine(title=u"Report file extension", required=False)
     link = TextLine(title=u"Link to the report", required=False)
 
 
