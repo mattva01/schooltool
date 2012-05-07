@@ -215,17 +215,59 @@ function preloadPopups(form) {
     preloadTotalPopups(form);
 }
 
+function fillPopupMenu(link) {
+    var data = link.data('popup-menu-data');
+    var popup = link.prev();
+    popup.empty();
+    var header = $('<li class="header"></li>');
+    header.text(data.header);
+    popup.append(header);
+    $.each(data.options, function(i, el) {
+        var li = $('<li></li>');
+        if (!el.options) {
+            var a = $('<a></a>');
+            a.text(el.label);
+            a.attr('href', el.url);
+            if (el.css_class) {
+                a.addClass(el.css_class);
+            }
+            li.append(a);
+        } else {
+            var span = $('<span class="hover_link"></span>');
+            span.text(el.header);
+            li.append(span);
+            var hover_ul = $('<ul class="hover_menu"></ul>');
+            $.each(el.options, function(j, option) {
+                var hover_li = $('<li></li>');
+                if (option.current) {
+                    hover_li.addClass('current');
+                    hover_li.text(option.label);
+                } else {
+                    var hover_a = $('<a></a>');
+                    hover_a.attr('href', option.url);
+                    hover_a.text(option.label);
+                    hover_li.append(hover_a);
+                }
+                hover_ul.append(hover_li);
+            });
+            li.append(hover_ul);
+        }
+        popup.append(li);
+    });
+}
+
 function loadPopup(link, url, data, calculateLeft) {
     insertPopupMenu(link);
     $.ajax({
         url: url,
-        dataType: 'html',
+        dataType: 'json',
         type: 'get',
         data: data,
         context: link,
         success: function(data) {
             var is_visible = this.prev().is(':visible');
-            this.prev().replaceWith(data);
+            this.data('popup-menu-data', data);
+            fillPopupMenu(this);
             if (is_visible) {
                 var popup = this.prev();
                 if (calculateLeft) {
