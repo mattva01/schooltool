@@ -1,0 +1,42 @@
+Selenium browser extensions tests
+=================================
+
+Let's test the selenium extensions created in the
+schooltool.export.stesting module.
+
+See the README.selenium.txt file in the schooltool/testing directory
+for instructions on how to use them.
+
+Log in as manager:
+
+    >>> manager = browsers.manager
+    >>> manager.ui.login('manager', 'schooltool')
+
+
+browser.ui.import_xls()
+-----------------------
+
+Used for importing and XLS file.
+
+Sending a blank filename simulates hitting Submit without selecting a file:
+
+    >>> manager.ui.import_xls('')
+    >>> print manager.query_all.css('.status div').text
+    icon
+    No data provided
+
+Let's specify a test file with just a School Years sheet for this simple test
+and try again.
+
+    >>> import os
+    >>> dirname = os.path.abspath(os.path.dirname(__file__))
+    >>> filename = os.path.join(dirname, 'extensions_test.xls')
+    >>> manager.ui.import_xls(filename)
+
+Now we see that there are two schoolyears as specified in the sheet.
+
+    >>> manager.query.link('School').click()
+    >>> print manager.query_all.css('.third-nav a').text
+    2006-2007
+    2007-2008
+

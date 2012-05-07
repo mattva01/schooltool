@@ -764,8 +764,7 @@ class FlourishGeneralViewlet(FormViewlet):
     def getFields(self):
         field_descriptions = IDemographicsFields(ISchoolToolApplication(None))
         fields = field.Fields()
-        limit_keys = [group.__name__ for group in self.context.groups]
-        for field_desc in field_descriptions.filter_keys(limit_keys):
+        for field_desc in field_descriptions.values():
             fields += field_desc.makeField()
         return fields
 

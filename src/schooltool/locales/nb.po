@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2012-03-01 21:21+0200\n"
-"PO-Revision-Date: 2011-11-23 15:24+0000\n"
-"Last-Translator: Smart Viking <smartestviking@gmail.com>\n"
+"POT-Creation-Date: 2012-04-05 13:59+0300\n"
+"PO-Revision-Date: 2012-04-02 21:56+0000\n"
+"Last-Translator: Daniel Landsverk <daniel.landsverk@gmail.com>\n"
 "Language-Team: Norwegian Bokmål <nb@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-03-02 05:15+0000\n"
-"X-Generator: Launchpad (build 14886)\n"
+"X-Launchpad-Export-Date: 2012-04-06 04:51+0000\n"
+"X-Generator: Launchpad (build 15060)\n"
 "Language: \n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -132,7 +132,7 @@ msgstr "Logg inn"
 
 #: /src/schooltool/app/browser/app.py:435
 msgid "Log out"
-msgstr ""
+msgstr "Logg av"
 
 #: /src/schooltool/app/browser/app.py:523
 msgid "Calendar settings"
@@ -229,7 +229,7 @@ msgstr "Avbryt"
 #: /src/schooltool/app/browser/flourish.zcml:228
 #: /src/schooltool/app/browser/flourish.zcml:580
 msgid "School Name"
-msgstr ""
+msgstr "Skole navn"
 
 #: /src/schooltool/app/browser/app.py:557
 msgid "Name"
@@ -277,7 +277,7 @@ msgstr "skole"
 #: /src/schooltool/securitypolicy/browser/flourish.zcml:15
 #: /src/schooltool/securitypolicy/browser/flourish.zcml:44
 msgid "Server"
-msgstr ""
+msgstr "Server"
 
 #: /src/schooltool/app/browser/app.py:1177
 #: /src/schooltool/app/browser/flourish.zcml:611
@@ -336,7 +336,13 @@ msgstr ""
 msgid "Errors"
 msgstr "Feil"
 
-#: /src/schooltool/app/browser/cal.py:114
+#: /src/schooltool/app/browser/app.py:1419
+#: /src/schooltool/app/browser/flourish.zcml:292
+#: /src/schooltool/app/browser/flourish.zcml:301
+msgid "Tabs"
+msgstr ""
+
+#: /src/schooltool/app/browser/cal.py:118
 msgid "January"
 msgstr "Januar"
 
@@ -1151,20 +1157,15 @@ msgstr "Rediger"
 
 #: /src/schooltool/app/browser/flourish.zcml:272
 msgid "Error"
-msgstr ""
+msgstr "Feilmelding"
 
-#: /src/schooltool/app/browser/flourish.zcml:294
-#: /src/schooltool/app/browser/flourish.zcml:303
-msgid "Tabs"
-msgstr ""
-
-#: /src/schooltool/app/browser/flourish.zcml:343
+#: /src/schooltool/app/browser/flourish.zcml:352
 msgid "About"
-msgstr ""
+msgstr "Om"
 
 #: /src/schooltool/app/browser/flourish.zcml:313
 msgid "More Information"
-msgstr ""
+msgstr "Mer informasjon"
 
 #: /src/schooltool/app/browser/flourish.zcml:322
 #: /src/schooltool/app/browser/templates/about.pt:27
@@ -1188,11 +1189,11 @@ msgstr ""
 #: /src/schooltool/app/browser/flourish.zcml:393
 #: /src/schooltool/export/flourish.zcml:49
 msgid "School"
-msgstr ""
+msgstr "Skole"
 
 #: /src/schooltool/app/browser/flourish.zcml:410
 msgid "Customize"
-msgstr ""
+msgstr "Tilpass"
 
 #: /src/schooltool/app/browser/flourish.zcml:449
 #: /src/schooltool/course/browser/templates/f_course_view.pt:75
@@ -1203,7 +1204,7 @@ msgstr ""
 
 #: /src/schooltool/app/browser/flourish.zcml:492
 msgid "Information"
-msgstr ""
+msgstr "Informasjon"
 
 #: /src/schooltool/app/browser/flourish.zcml:510
 msgid "Database generations"
@@ -1219,7 +1220,7 @@ msgstr "Endringer lagret."
 
 #: /src/schooltool/app/browser/overlay.py:286
 msgid "Selected calendars"
-msgstr ""
+msgstr "Valgte kalendere"
 
 #: /src/schooltool/app/browser/overlay.py:287
 msgid "Available calendars"
@@ -2046,6 +2047,10 @@ msgstr ""
 msgid "Visible"
 msgstr ""
 
+#: /src/schooltool/app/browser/templates/f_hide_unhide_tabs.pt:25
+msgid "Default"
+msgstr ""
+
 #: /src/schooltool/app/browser/templates/f_hide_unhide_tabs_related.pt:6
 msgid ""
 "Schools that are not using all components of SchoolTool can reduce visual "
@@ -2060,7 +2065,13 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_hide_unhide_tabs_related.pt:15
-msgid "Links can be changed from visible to hidden at any time.."
+msgid "Links can be changed from visible to hidden at any time."
+msgstr ""
+
+#: /src/schooltool/app/browser/templates/f_hide_unhide_tabs_related.pt:18
+msgid ""
+"When users log in, they will usually be directed to the tab selected in the "
+"default column. The default tab must also be visible."
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_login.pt:12
@@ -2815,11 +2826,7 @@ msgid ""
 "uncomment one of the ZODB storage sections.\n"
 msgstr ""
 
-#: /src/schooltool/app/main.py:666
-msgid "Startup time: %.3f sec real, %.3f sec CPU"
-msgstr ""
-
-#: /src/schooltool/app/main.py:700
+#: /src/schooltool/app/main.py:672
 msgid ""
 "Could not initialize the database:\n"
 "%s"
@@ -2855,9 +2862,13 @@ msgid ""
 "PDF support disabled."
 msgstr ""
 
+#: /src/schooltool/app/main.py:775
+msgid "Startup time: %.3f sec real, %.3f sec CPU"
+msgstr ""
+
 #: /src/schooltool/app/membership.py:261
 #: /src/schooltool/basicperson/browser/templates/f_manage_people_overview.pt:20
-#: /src/schooltool/group/browser/flourish.zcml:163
+#: /src/schooltool/group/browser/flourish.zcml:209
 #: /src/schooltool/group/browser/templates/f_group_view.pt:75
 #: /src/schooltool/group/browser/templates/group.pt:16
 msgid "Members"
@@ -4009,13 +4020,12 @@ msgstr ""
 msgid "Contact index"
 msgstr "Kontakt liste"
 
-#: /src/schooltool/contact/browser/contact.py:617
-#: /src/schooltool/person/browser/f_person_filter.pt:7
-#: /src/schooltool/person/browser/person.py:543
-msgid "First name, last name or username"
+#: /src/schooltool/contact/browser/contact.py:618
+#: /src/schooltool/contact/browser/templates/f_contact_filter.pt:6
+msgid "First name and/or last name"
 msgstr ""
 
-#: /src/schooltool/contact/browser/contact.py:653
+#: /src/schooltool/contact/browser/contact.py:654
 #: /src/schooltool/email/browser/email.py:301
 #: /src/schooltool/email/browser/email.py:486
 #: /src/schooltool/email/browser/email.py:531
@@ -4119,10 +4129,6 @@ msgstr ""
 #: /src/schooltool/contact/browser/templates/f_confirm_delete_contact.pt:16
 #: /src/schooltool/contact/browser/templates/f_contact_view.pt:49
 msgid "Contact of"
-msgstr ""
-
-#: /src/schooltool/contact/browser/templates/f_contact_filter.pt:6
-msgid "First name and/or last name"
 msgstr ""
 
 #: /src/schooltool/contact/browser/templates/f_contact_view.pt:3
@@ -4507,11 +4513,26 @@ msgstr ""
 msgid "Add Section"
 msgstr ""
 
-#: /src/schooltool/course/browser/flourish.zcml:309
-#: /src/schooltool/course/browser/templates/f_section_view.pt:88
+#: /src/schooltool/course/browser/flourish.zcml:403
+#: /src/schooltool/course/browser/templates/f_section_view.pt:148
+msgid "Locations"
+msgstr ""
+
+#: /src/schooltool/course/browser/flourish.zcml:411
+#: /src/schooltool/course/browser/templates/f_section_view.pt:164
+#: /src/schooltool/resource/browser/flourish.zcml:108
+#: /src/schooltool/resource/browser/resource.py:411
+#: /src/schooltool/resource/resource.py:206
+#: /src/schooltool/resource/resource.py:232
+#: /src/schooltool/resource/types.py:93
+msgid "Equipment"
+msgstr "Utstyr"
+
+#: /src/schooltool/course/browser/flourish.zcml:419
+#: /src/schooltool/course/browser/templates/f_section_view.pt:90
 #: /src/schooltool/dashboard/term.pt:16
 #: /src/schooltool/term/browser/templates/f_manage_years_overview.pt:5
-#: /src/schooltool/term/browser/term.py:760
+#: /src/schooltool/term/browser/term.py:764
 #: /src/schooltool/term/security.zcml:19
 msgid "Terms"
 msgstr "Semester"
@@ -4615,7 +4636,23 @@ msgstr ""
 msgid "Add students"
 msgstr ""
 
-#: /src/schooltool/course/browser/section.py:1424
+#: /src/schooltool/course/browser/section.py:1380
+msgid "Current locations"
+msgstr ""
+
+#: /src/schooltool/course/browser/section.py:1381
+msgid "Add locations"
+msgstr ""
+
+#: /src/schooltool/course/browser/section.py:1404
+msgid "Current equipment"
+msgstr ""
+
+#: /src/schooltool/course/browser/section.py:1405
+msgid "Add equipment"
+msgstr ""
+
+#: /src/schooltool/course/browser/section.py:1469
 msgid "Extend ${section} to ${term}"
 msgstr ""
 
@@ -4980,6 +5017,22 @@ msgstr ""
 
 #: /src/schooltool/course/browser/templates/f_section_view.pt:140
 msgid "This section has no students"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/f_section_view.pt:149
+msgid "Edit locations for this section"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/f_section_view.pt:160
+msgid "This section has no locations"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/f_section_view.pt:165
+msgid "Edit equipment for this section"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/f_section_view.pt:176
+msgid "This section has no equipment"
 msgstr ""
 
 #: /src/schooltool/course/browser/templates/f_sections_related.pt:6
@@ -6079,6 +6132,18 @@ msgstr "endre medlemmer"
 msgid "edit groups"
 msgstr "endre grupper"
 
+#: /src/schooltool/group/group.py:63
+msgid "Site Managers"
+msgstr ""
+
+#: /src/schooltool/group/group.py:66
+msgid "Clerks"
+msgstr ""
+
+#: /src/schooltool/group/group.py:67
+msgid "School Administrators"
+msgstr ""
+
 #: /src/schooltool/group/security.zcml:5
 msgid "Only school administration can view the list of groups."
 msgstr ""
@@ -6246,6 +6311,11 @@ msgstr "fullt navn kan ikke være tomt"
 #: /src/schooltool/person/browser/f_password_changed.pt:1
 #: /src/schooltool/person/browser/person.py:362
 msgid "Password changed successfully"
+msgstr ""
+
+#: /src/schooltool/person/browser/f_person_filter.pt:7
+#: /src/schooltool/person/browser/person.py:543
+msgid "First name, last name or username"
 msgstr ""
 
 #: /src/schooltool/person/browser/f_person_filter.pt:20
@@ -6454,7 +6524,7 @@ msgstr "Dag Måned, År"
 
 #: /src/schooltool/person/interfaces.py:174
 msgid "Week starts on"
-msgstr ""
+msgstr "Uken starter på"
 
 #: /src/schooltool/person/interfaces.py:188
 msgid "Daily calendar rows..."
@@ -6616,16 +6686,8 @@ msgstr "Nytt utstyr"
 msgid "Resource Attributes"
 msgstr ""
 
-#: /src/schooltool/resource/browser/flourish.zcml:107
-#: /src/schooltool/resource/browser/resource.py:353
-#: /src/schooltool/resource/resource.py:206
-#: /src/schooltool/resource/resource.py:232
-#: /src/schooltool/resource/types.py:93
-msgid "Equipment"
-msgstr "Utstyr"
-
-#: /src/schooltool/resource/browser/flourish.zcml:123
-#: /src/schooltool/resource/browser/resource.py:357
+#: /src/schooltool/resource/browser/flourish.zcml:124
+#: /src/schooltool/resource/browser/resource.py:415
 #: /src/schooltool/resource/resource.py:74
 #: /src/schooltool/resource/resource.py:204
 #: /src/schooltool/resource/resource.py:230
@@ -7538,7 +7600,11 @@ msgstr ""
 msgid "The datetime string did not match the pattern yyyy-mm-dd"
 msgstr ""
 
-#: /src/schooltool/skin/widgets.py:99
+#: /src/schooltool/skin/widgets.py:103
+msgid "Year has to be equal or greater than 1900"
+msgstr ""
+
+#: /src/schooltool/skin/widgets.py:111
 msgid "Width"
 msgstr "Bredde"
 

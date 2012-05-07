@@ -60,6 +60,7 @@ class Form(z3c.form.form.Form, page.Page):
 
 
 class DisplayForm(z3c.form.form.DisplayForm, page.Page):
+    template = InheritTemplate(page.Page.template)
     __call__ = page.Page.__call__
 
     def update(self):

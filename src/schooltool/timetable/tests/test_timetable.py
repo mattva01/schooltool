@@ -47,7 +47,7 @@ class OneTemplateSchedule(DayTemplateSchedule):
 
     def initTemplates(self):
         super(OneTemplateSchedule, self).initTemplates()
-        self.templates['default'] = DayTemplate()
+        self.templates['default'] = DayTemplate('Day 1')
 
     @property
     def default(self):

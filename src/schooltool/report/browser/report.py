@@ -167,7 +167,8 @@ class ReportsLinks(RefineLinksViewlet):
         for item in items:
             viewlet = item['viewlet']
             url = viewlet.link
-            if hasattr(viewlet, 'file_type'):
+            is_report_link = bool(getattr(viewlet, 'file_type', ''))
+            if is_report_link:
                 file_type = translate(viewlet.file_type,
                                       context=self.request)
                 description = translate(viewlet.description,
@@ -180,7 +181,7 @@ class ReportsLinks(RefineLinksViewlet):
                     'class': item['class'],
                     'viewlet': viewlet,
                     'content': item['content'],
-                    'is_report_link': hasattr(viewlet, 'file_type'),
+                    'is_report_link': is_report_link,
                     'link_id': viewlet.link.replace('.', '_'),
                     'form_id': viewlet.link.replace('.', '_') + '_form',
                     'title': translate(viewlet.title, context=self.request),

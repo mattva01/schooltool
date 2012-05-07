@@ -1604,7 +1604,7 @@ class EventDeleteView(BrowserView):
     def _redirectBack(self):
         """Redirect to the current calendar's daily view."""
         self.request.response.redirect(
-            self.request.get('back_url') or
+            self.request.get('back_url', '').encode('utf-8') or
             absoluteURL(self.context, self.request))
 
     def _deleteRepeatingEvent(self, event, date):
@@ -2278,12 +2278,13 @@ class CalendarEventEditView(CalendarEventViewMixin, EditView):
     def nextURL(self):
         """Return the URL to be displayed after the add operation."""
         if "field.book" in self.request:
-            return absoluteURL(self.context, self.request) + '/booking.html'
+            result = absoluteURL(self.context, self.request) + '/booking.html'
         elif 'CANCEL' in self.request and self.request.get('cancel_url'):
-            return self.request.get('cancel_url')
+            result = self.request.get('cancel_url')
         else:
-            return (self.request.get('back_url') or
-                    absoluteURL(self.context.__parent__, self.request))
+            result = (self.request.get('back_url') or
+                      absoluteURL(self.context.__parent__, self.request))
+        return result.encode('utf-8')
 
 
 class EventForBookingDisplay(object):
