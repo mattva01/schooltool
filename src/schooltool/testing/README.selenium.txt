@@ -132,6 +132,17 @@ Adding instructors to a section
     NOTE: it doesn't matter if some of the usernames are already
           instructors of the section
 
+Removing instructors from a section
+-----------------------------------
+
+* browser.ui.section.instructors.remove()
+
+  Required parameters:
+    schoolyear: title of the school year
+    term: title of the term
+    section: title of the section
+    instructors: list with person usernames
+
 Adding students to a section
 ----------------------------
 
@@ -145,6 +156,17 @@ Adding students to a section
 
     NOTE: it doesn't matter if some of the usernames are already
           students of the section
+
+Removing students from a section
+--------------------------------
+
+* browser.ui.section.students.remove()
+
+  Required parameters:
+    schoolyear: title of the school year
+    term: title of the term
+    section: title of the section
+    students: list with person usernames
 
 Adding groups
 -------------
@@ -178,6 +200,16 @@ Adding members to a group
 
     NOTE: it doesn't matter if some of the usernames are already
           members of the group
+
+Removing members from a group
+-----------------------------
+
+* browser.ui.group.members.remove()
+
+  Required parameters:
+    schoolyear: title of the school year
+    group: title of the group
+    members: list with person usernames
 
 Element extensions
 ==================

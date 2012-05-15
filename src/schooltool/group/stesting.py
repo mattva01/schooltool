@@ -80,6 +80,22 @@ def registerSeleniumSetup():
         lambda: schooltool.testing.selenium.registerBrowserUI(
             'group.members.add', addMembers))
 
+    def removeMembers(browser, schoolyear, group, members):
+        browser.ui.group.go(schoolyear, group)
+        selector = '//a[@title="Edit members for this group"]'
+        browser.query.xpath(selector).click()
+        # XXX: Click Show All here in case there are lots of people
+        for member in members:
+            selector = '#current_table-ajax-current_table- table'
+            table = browser.query.css(selector)
+            selector = '//button[@name="remove_item.%s"]' % member
+            browser.query.xpath(selector).click()
+            browser.wait(lambda: table.expired)
+
+    registry.register('SeleniumHelpers',
+        lambda: schooltool.testing.selenium.registerBrowserUI(
+            'group.members.remove', removeMembers))
+
     def visitGroup(browser, schoolyear, group):
         browser.open('http://localhost/groups')
         browser.query.link(schoolyear).click()
