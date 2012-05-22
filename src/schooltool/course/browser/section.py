@@ -1642,9 +1642,12 @@ class SectionRosterPDFView(FlourishReportPDFView):
                               key=lambda x:collator.key(x.title)):
             demographics = IDemographics(student)
             result.append({
-                    'first_name': student.first_name,
-                    'last_name': student.last_name,
-                    'middle_name': student.middle_name or '',
+                    'full_name': self.full_name(student),
                     'ID': demographics.get('ID', '')
                     })
         return result
+
+    def full_name(self, person):
+        return '%s, %s %s' % (person.last_name,
+                              person.first_name,
+                              person.middle_name or '')

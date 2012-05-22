@@ -10,21 +10,15 @@
     <tal:block content="structure view/use_template/default" />
   </metal:block>
   <story metal:fill-slot="story">
-    <blockTable style="simple-header" repeatRows="1"
-                alignment="left" colWidths="25%,25%,25%,25%">
+    <blockTable style="simple-header" repeatRows="1" alignment="left">
       <tr>
-        <td i18n:translate="">Last name</td>
-        <td i18n:translate="">First name</td>
-        <td i18n:translate="">Middle name</td>
+        <td i18n:translate="">Full name</td>
         <td i18n:translate="">ID</td>
       </tr>
       <tr tal:repeat="student view/rows">
-        <td tal:content="student/last_name" />
-        <td tal:content="student/first_name" />
-        <td tal:content="student/middle_name" />
+        <td tal:content="student/full_name" />
         <td tal:content="student/ID" />
       </tr>
     </blockTable>
   </story>
 </document>
-
