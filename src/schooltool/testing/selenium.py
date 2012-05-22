@@ -30,6 +30,7 @@ import string
 import sys
 import threading
 import time
+import urllib
 import unittest
 from StringIO import StringIO
 from UserDict import DictMixin
@@ -650,6 +651,30 @@ class WebElementQuery(object):
         raise NotImplemented()
 
 
+class Screenshot(object):
+
+    path = None
+    url = None
+    message = None
+
+    def __init__(self, full_path, url=None, message=None):
+        self.path = os.path.normpath(full_path)
+        self.url = url
+        self.message = message
+
+    def __nonzero__(self):
+        return os.path.exists(self.path)
+
+    @property
+    def filename(self):
+        return os.path.basename(self.path)
+
+    def __repr__(self):
+        return '<%s %s%s>' % (
+            self.__class__.__name__, self.filename,
+            self.message and (' ' + repr(self.message)) or '')
+
+
 class Browser(object):
 
     WAIT_FEW_SECONDS = max(5, min(IMPLICIT_WAIT, 30))
@@ -695,9 +720,51 @@ class Browser(object):
         # XXX: missing:
         raise NotImplemented()
 
+    def screenshot(self, name, ext='png', overwrite=False):
+        layer = self.pool.layer
+
+        if os.path.isabs(name):
+            name = os.path.normpath(name)
+            directory = os.path.dirname(name)
+            name = os.path.basename(name)
+        else:
+            directory = getattr(layer, 'screenshots_dir', None)
+
+        if directory is None:
+            return None
+
+        name = name.strip()
+        if name.lower().endswith(('.'+ext).lower()):
+            name = name[:-(len('.'+ext))]
+
+        fname = name+'.'+ext
+
+        full_name = os.path.join(directory, fname)
+        n = 1
+        while (os.path.exists(full_name) and not overwrite):
+            n += 1
+            fname = '%s-%d.%s' % (name, n, ext)
+            full_name = os.path.join(directory, fname)
+
+        if overwrite and os.path.exists(full_name):
+            os.remove(full_name)
+
+        try:
+            result = self.driver.save_screenshot(full_name)
+        except Exception, error:
+            return Screenshot(full_name, message=error)
+
+        if not result:
+            return Screenshot(
+                full_name, message="Failed to save screenshot")
+
+        url = None
+        if getattr(layer, 'screenshots_url', None):
+            url = urllib.basejoin(layer.screenshots_url, fname)
+
+        return Screenshot(full_name, url=url)
+
     # XXX: missing:
-    #  - screenshots
-    #  -
     #  - window handles, and more
 
     @property
@@ -961,6 +1028,10 @@ class SeleniumLayer(ZCMLLayer):
     port = 0
     serving = False
 
+    screenshots_dir = None
+    screenshots_url = None
+    overwrite_screenshots = False
+
     browsers = None
 
     def __init__(self, *args, **kw):
@@ -978,6 +1049,7 @@ class SeleniumLayer(ZCMLLayer):
         _Element_UI_ext = ExtensionGroup()
         ZCMLLayer.setUp(self)
         schooltool.testing.registry.setupSeleniumHelpers()
+        self.setUpScreenshots()
         dispatcher = ThreadedTaskDispatcher()
         dispatcher.setThreadCount(self.thread_count)
         self.server = self.server_factory.create(
@@ -988,6 +1060,28 @@ class SeleniumLayer(ZCMLLayer):
         self.thread.start()
         print 'serving at http://%s:%s/' % (
             self.server.socket.getsockname())
+
+    def setUpScreenshots(self):
+        try:
+            import schooltool.devtools.selenium_recipe
+        except ImportError:
+            return
+
+        if schooltool.devtools.selenium_recipe.screenshots_dir:
+            self.screenshots_dir = os.path.abspath(
+                schooltool.devtools.selenium_recipe.screenshots_dir)
+        else:
+            self.screenshots_dir = None
+
+        if schooltool.devtools.selenium_recipe.screenshots_url:
+            self.screenshots_url = schooltool.devtools.selenium_recipe.screenshots_url
+        elif self.screenshots_dir:
+            self.screenshots_url = 'file://%s/' % self.screenshots_dir
+        else:
+            self.screenshots_url = None
+
+        self.overwrite_screenshots = \
+            schooltool.devtools.selenium_recipe.overwrite_screenshots
 
     def tearDown(self):
         self.serving = False
@@ -1026,6 +1120,9 @@ class SeleniumLayer(ZCMLLayer):
             snapshot = self.patches.pop()
             snapshot.restore()
             assert self.patches
+
+
+_screenshot_test_short_name_map = {}
 
 
 class SkippyDocTestRunner(doctest.DocTestRunner):
@@ -1067,14 +1164,57 @@ class SkippyDocTestRunner(doctest.DocTestRunner):
     def report_unexpected_exception(self, out, test, example, exc_info):
         result = doctest.DocTestRunner.report_unexpected_exception(
             self, out, test, example, exc_info)
+        self.output_screenshots(out, test, example, exc_info)
         self.honour_only_first_failure_flag(test)
         return result
 
     def report_failure(self, out, test, example, got):
         result = doctest.DocTestRunner.report_failure(
             self, out, test, example, got)
+        self.output_screenshots(out, test, example, got)
         self.honour_only_first_failure_flag(test)
         return result
+
+    def output_screenshots(self, out, test, example, got):
+        layer = self._checker.layer
+        if not layer.screenshots_dir:
+            return
+
+        screenshots = []
+        browsers = {}
+        if 'browsers' in test.globs:
+            browser_pool = test.globs['browsers']
+            browsers = browser_pool.browsers
+        for browsername, browser in browsers.items():
+
+            # Short test name map is used to get unique screenshot names,
+            # when multiple tests with the same name are found (in multiple
+            # modules)
+            global _screenshot_test_short_name_map
+            if test.name not in _screenshot_test_short_name_map:
+                _screenshot_test_short_name_map[test.name] = {
+                    test.filename: test.name}
+                shortname = test.name
+            else:
+                shortnames = _screenshot_test_short_name_map[test.name]
+                shortname = shortnames.get(test.filename)
+                if shortname is None:
+                    shortname = '%s-%d' % (test.name, len(shortnames) + 1)
+                    shortnames[test.filename] = shortname
+
+            basename = '%s-line_%d-%s' % (shortname, example.lineno, browsername)
+            shot = browser.screenshot(basename, overwrite=layer.overwrite_screenshots)
+            if shot:
+                screenshots.append((shot.url or shot.path, shot.message))
+            else:
+                screenshots.append((shot.filename, shot.message))
+
+        if not screenshots:
+            return
+
+        out('Screenshots:\n')
+        out('\n'.join(['    %s%s' % (url, msg and (' - %s' % msg) or '')
+                       for (url, msg) in screenshots]))
 
 
 class RepeatyDebugRunner(doctest.DebugRunner, SkippyDocTestRunner):
