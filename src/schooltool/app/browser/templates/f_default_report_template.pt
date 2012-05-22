@@ -1,0 +1,129 @@
+<pageTemplate
+    id="default"
+    xmlns:tal="http://xml.zope.org/namespaces/tal"
+    xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+    i18n:domain="schooltool"
+    tal:define="top_bar view/top_bar;
+                header view/header;
+                bottom_bar view/bottom_bar;
+                top_line view/top_line;
+                bottom_line view/bottom_line;
+                frame view/frame;">
+  <pageGraphics>
+    <!-- Top bar -->
+    <fill
+        tal:attributes="color top_bar/backgroundColor" />
+    <stroke
+        tal:attributes="color top_bar/backgroundColor" />
+    <rect
+        tal:attributes="x top_bar/x;
+                        y top_bar/y;
+                        width top_bar/width;
+                        height top_bar/height;"
+        fill="true" stroke="true" />
+    <fill tal:attributes="color top_bar/color" />
+    <setFont
+        name="Ubuntu_Regular"
+        tal:attributes="size top_bar/fontSize" />
+    <drawString
+        tal:define="top_left view/parent/slots/top_left|nothing"
+        tal:condition="top_left"
+        tal:content="top_left"
+        tal:attributes="x top_bar/slots/left/x;
+                        y top_bar/slots/left/y;" />
+    <drawCenteredString
+        tal:define="top_center view/parent/slots/top_center|nothing"
+        tal:condition="top_center"
+        tal:content="top_center"
+        tal:attributes="x top_bar/slots/center/x;
+                        y top_bar/slots/center/y;" />
+    <drawRightString
+        tal:define="top_right view/parent/slots/top_right|nothing"
+        tal:condition="top_right"
+        tal:content="top_right"
+        tal:attributes="x top_bar/slots/right/x;
+                        y top_bar/slots/right/y;" />
+    <!-- Bottom bar -->
+    <fill
+        tal:attributes="color bottom_bar/backgroundColor" />
+    <stroke
+        tal:attributes="color bottom_bar/backgroundColor" />
+    <rect
+        tal:attributes="x bottom_bar/x;
+                        y bottom_bar/y;
+                        width bottom_bar/width;
+                        height bottom_bar/height;"
+        fill="true" stroke="true" />
+    <fill tal:attributes="color bottom_bar/color" />
+    <setFont
+        name="Ubuntu_Regular"
+        tal:attributes="size bottom_bar/fontSize" />
+    <image
+        tal:attributes="file bottom_bar/logo_url;
+                        x bottom_bar/slots/left/x;
+                        y bottom_bar/y;
+                        height bottom_bar/height;"
+        preserveAspectRatio="True" />
+    <place
+        tal:attributes="x bottom_bar/x;
+                        y bottom_bar/y;
+                        width bottom_bar/width;
+                        height bottom_bar/height">
+      <para style="bottom_bar_page_number" i18n:translate="">
+        Page <pageNumber i18n:name="page_number"/>
+      </para>
+    </place>
+    <!-- Header (title and subtitle) -->
+    <fill
+        tal:attributes="color header/backgroundColor" />
+    <stroke
+        tal:attributes="color header/backgroundColor" />
+    <rect
+        tal:attributes="x header/x;
+                        y header/y;
+                        width header/width;
+                        height header/height;"
+        fill="true" stroke="true" />
+    <fill tal:attributes="color header/color" />
+    <setFont
+        name="Ubuntu_Regular"
+        tal:attributes="size header/title/fontSize" />
+    <tal:loop repeat="line header/title/lines">
+    <drawString
+        tal:content="line/content"
+        tal:attributes="x line/x;
+                        y line/y;" />
+    </tal:loop>
+    <setFont
+        name="Ubuntu_Regular"
+        tal:attributes="size header/subtitle/fontSize" />
+    <tal:loop repeat="line header/subtitle/lines">
+    <drawString
+        tal:content="line/content"
+        tal:attributes="x line/x;
+                        y line/y;" />
+    </tal:loop>
+    <!-- Horizontal lines -->
+    <stroke
+        tal:attributes="color top_line/color" />
+    <lineMode
+        width="1"
+        tal:attributes="cap top_line/style" />
+    <lines
+        tal:content="top_line/coords" />
+    <stroke
+        tal:attributes="color bottom_line/color" />
+    <lineMode
+        width="1"
+        tal:attributes="cap bottom_line/style" />
+    <lines
+        tal:content="bottom_line/coords" />
+  </pageGraphics>
+  <!-- Content frame -->
+  <frame
+      id="default"
+      tal:attributes="x1 frame/x;
+                      y1 frame/y;
+                      width frame/width;
+                      height frame/height" />
+</pageTemplate>

@@ -3,6 +3,7 @@
            xmlns:z3c="http://namespaces.zope.org/z3c"
            xmlns:zope="http://namespaces.zope.org/zope"
            xmlns:flourish="http://schooltool.org/flourish"
+           xmlns:report="http://namespaces.schooltool.org/report"
            i18n_domain="schooltool">
 
   <!-- content -->
@@ -602,5 +603,31 @@
            file="timetable-integration-flourish.zcml" />
 
   <zope:adapter factory=".section.SectionTermsValidator" />
+
+  <report:reportLink
+      name="section_roster"
+      for="schooltool.course.interfaces.ISection"
+      layer="schooltool.skin.flourish.IFlourishLayer"
+      permission="schooltool.view"
+      group="Section"
+      description="XXX Description XXX"
+      title="Roster"
+      file_type="pdf"
+      link="request_section_roster.html"
+      />
+
+  <flourish:page
+      name="request_section_roster.html"
+      for="schooltool.course.interfaces.ISection"
+      class=".section.FlourishRequestSectionRosterView"
+      permission="schooltool.edit"
+      />
+
+  <flourish:page
+      name="section_roster.pdf"
+      for="schooltool.course.interfaces.ISection"
+      class=".section.SectionRosterPDFView"
+      permission="schooltool.edit"
+      />
 
 </configure>

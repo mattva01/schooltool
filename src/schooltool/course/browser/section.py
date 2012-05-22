@@ -20,6 +20,7 @@
 SchoolTool section views
 """
 
+from datetime import datetime
 from collections import defaultdict
 from urllib import urlencode
 
@@ -56,9 +57,11 @@ from zc.table.interfaces import ISortableColumn
 
 from schooltool.app.browser.app import BaseEditView
 from schooltool.app.browser.app import RelationshipViewBase
+from schooltool.app.browser.report import FlourishReportPDFView
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.utils import vocabulary_titled
 from schooltool.basicperson.browser.person import EditPersonRelationships
+from schooltool.basicperson.interfaces import IDemographics
 from schooltool.common import SchoolToolMessage as _
 from schooltool.common.inlinept import InheritTemplate
 from schooltool.common.inlinept import InlineViewPageTemplate
@@ -68,6 +71,7 @@ from schooltool.course.section import Section
 from schooltool.course.section import copySection
 from schooltool.course.browser.course import CoursesActiveTabMixin as SectionsActiveTabMixin
 from schooltool.person.interfaces import IPerson
+from schooltool.report.browser.report import RequestReportDownloadDialog
 from schooltool.resource.browser.resource import EditLocationRelationships
 from schooltool.resource.browser.resource import EditEquipmentRelationships
 from schooltool.resource.interfaces import ILocation, IEquipment
@@ -1585,3 +1589,62 @@ class SectionsYearNavBreadcrumbs(SchoolyearNavBreadcrumbs):
 
     traversal_name = u'sections'
     title = _('Sections')
+
+
+class FlourishRequestSectionRosterView(RequestReportDownloadDialog):
+
+    def nextURL(self):
+        return '%s/section_roster.pdf' % absoluteURL(self.context,
+                                                     self.request)
+
+
+class SectionRosterPDFView(FlourishReportPDFView):
+
+    template = ViewPageTemplateFile('templates/f_section_roster_rml.pt')
+
+    @property
+    def title(self):
+        return ', '.join([course.title for course in self.context.courses])
+
+    @property
+    def subtitle(self):
+        section = removeSecurityProxy(self.context)
+        instructors = '; '.join([person.title
+                                 for person in section.instructors])
+        instructors_message = _('Instructors: ${instructors}',
+                                mapping={'instructors': instructors})
+        return ['%s (%s)' % (section.title, section.__name__),
+                instructors_message]
+
+    def makeFileName(self, basename):
+        timestamp = datetime.now().strftime('%y%m%d%H%M')
+        return '%s_%s.pdf' % (basename, timestamp)
+
+    @property
+    def filename(self):
+        courses = [c.__name__ for c in self.context.courses]
+        return self.makeFileName('section_roster_%s' % '_'.join(courses))
+
+    @property
+    def slots(self):
+        term = ITerm(self.context)
+        schoolyear = ISchoolYear(term)
+        top_right = '%s | %s' % (term.title, schoolyear.title)
+        return {
+            'top_left': _('SECTION ROSTER'),
+            'top_right': top_right,
+            }
+
+    def rows(self):
+        result = []
+        collator = ICollator(self.request.locale)
+        for student in sorted(self.context.members,
+                              key=lambda x:collator.key(x.title)):
+            demographics = IDemographics(student)
+            result.append({
+                    'first_name': student.first_name,
+                    'last_name': student.last_name,
+                    'middle_name': student.middle_name or '',
+                    'ID': demographics.get('ID', '')
+                    })
+        return result
