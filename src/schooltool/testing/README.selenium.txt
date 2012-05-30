@@ -52,6 +52,30 @@ Adding persons
 
   NOTE: if ends is not set, the section will end in the starting term
 
+Adding advisors for a person
+----------------------------
+
+* browser.ui.person.advisors.add()
+
+  Required parameters:
+    username
+    advisors: list with person usernames
+
+    NOTE: it doesn't matter if some of the usernames are already
+          advisors of the person
+
+Adding advisees for a person
+----------------------------
+
+* browser.ui.person.advisees.add()
+
+  Required parameters:
+    username
+    advisees: list with person usernames
+
+    NOTE: it doesn't matter if some of the usernames are already
+          advisees of the person
+
 Adding school years
 ------------------
 
