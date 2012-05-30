@@ -27,7 +27,6 @@ from decimal import Decimal, InvalidOperation
 from zope.container.contained import containedEvent
 from zope.container.interfaces import INameChooser
 from zope.event import notify
-from zope.component import queryUtility
 from zope.security.proxy import removeSecurityProxy
 from zope.publisher.browser import BrowserView
 from zope.traversing.browser.absoluteurl import absoluteURL
@@ -998,10 +997,9 @@ class CourseImporter(ImporterBase):
         else:
             course = Course(data['title'], data['description'])
             course.__name__ = data['__name__']
-        course.course_id = data['course_id'] and data['course_id'] or None
-        course.government_id = (data['government_id'] and data['government_id']
-                                or None)
-        course.credits = data['credits'] and Decimal(data['credits']) or None
+        course.course_id = data['course_id'] or None
+        course.government_id = data['government_id'] or None
+        course.credits = data['credits'] or None
         return course
 
     def addCourse(self, course, data):
@@ -1033,7 +1031,7 @@ class CourseImporter(ImporterBase):
                 self.error(row, 0, ERROR_INVALID_SCHOOL_YEAR)
             try:
                 if data['credits']:
-                    Decimal(data['credits'])
+                    data['credits'] = Decimal(data['credits'])
             except InvalidOperation:
                 self.error(row, 6, ERROR_INVALID_COURSE_CREDITS)
             if num_errors < len(self.errors):
