@@ -69,7 +69,9 @@ def registerSeleniumSetup():
             'advisor',
             )
         browser.open('http://localhost/persons')
+        page = browser.query.tag('html')
         browser.query.link('Person').click()
+        browser.wait(lambda: page.expired)
         browser.query.name('form.widgets.first_name').type(first_name)
         browser.query.name('form.widgets.last_name').type(last_name)
         browser.query.name('form.widgets.username').type(username)
@@ -87,6 +89,42 @@ def registerSeleniumSetup():
     registry.register('SeleniumHelpers',
         lambda: schooltool.testing.selenium.registerBrowserUI(
             'person.add', addPerson))
+
+    def addAdvisors(browser, username, advisors):
+        browser.open('http://localhost/persons/%s/advisors.html' % username)
+        selector = 'available_table-ajax-available_table--title'
+        browser.query.id(selector).type(', '.join(advisors))
+        selector = '#available_table-ajax-available_table- table'
+        table = browser.query.css(selector)
+        browser.query.name('SEARCH_BUTTON').click()
+        browser.wait(lambda: table.expired)
+        # XXX: Click Show All here in case there are lots of people
+        selector = '#available_table-ajax-available_table- table'
+        table = browser.query.css(selector)
+        browser.query.name('ADD_DISPLAYED_RESULTS').click()
+        browser.wait(lambda: table.expired)
+
+    registry.register('SeleniumHelpers',
+        lambda: schooltool.testing.selenium.registerBrowserUI(
+            'person.advisors.add', addAdvisors))
+
+    def addAdvisees(browser, username, advisees):
+        browser.open('http://localhost/persons/%s/advisees.html' % username)
+        selector = 'available_table-ajax-available_table--title'
+        browser.query.id(selector).type(', '.join(advisees))
+        selector = '#available_table-ajax-available_table- table'
+        table = browser.query.css(selector)
+        browser.query.name('SEARCH_BUTTON').click()
+        browser.wait(lambda: table.expired)
+        # XXX: Click Show All here in case there are lots of people
+        selector = '#available_table-ajax-available_table- table'
+        table = browser.query.css(selector)
+        browser.query.name('ADD_DISPLAYED_RESULTS').click()
+        browser.wait(lambda: table.expired)
+
+    registry.register('SeleniumHelpers',
+        lambda: schooltool.testing.selenium.registerBrowserUI(
+            'person.advisees.add', addAdvisees))
 
 registerSeleniumSetup()
 del registerSeleniumSetup
