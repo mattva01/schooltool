@@ -20,35 +20,35 @@
 */
 
 
-ST = new Object();
+var ST = {};
 
 /* ST local state extension */
 
 ST.local = {};
 
-ST.state = function() {
+ST.state = (function() {
   /* "private" */
-  var states = new Array();
+  var states = [];
 
   /* "public" */
   return {
     push: function() { states.push(ST.local); ST.local={}; },
     pop: function(){ ST.local = states.pop(); }
-  }
-}();
+  };
+}());
 
 ST.redirect = function(destination) {
     if (destination) {
         window.location.replace(destination);
     }
-}
+};
 
-ST.base_url = ''
-ST.resource_url = ''
+ST.base_url = '';
+ST.resource_url = '';
 
 /* ST common jquery dialogs */
 
-ST.dialogs = function() {
+ST.dialogs = (function() {
 
   /* "private" */
 
@@ -64,7 +64,7 @@ ST.dialogs = function() {
       $(selector).find('input.date-field').datepicker({
                       dateFormat: 'yy-mm-dd',
                       changeMonth: true,
-                      changeYear: true,
+                      changeYear: true
                   });
 
       $(selector).find("input.birth-date-field").datepicker(
@@ -84,7 +84,7 @@ ST.dialogs = function() {
       var container = $(container_sel);
       var request = $.ajax({
               type: "GET",
-              url: form_url,
+              url: form_url
           }).success(function(result, textStatus, jqXHR){
                   after_dialog_load(container);
                   handle_dialog_response(container, result, jqXHR);
@@ -107,7 +107,7 @@ ST.dialogs = function() {
           if (data['html']) {
               container.html(data['html']);
               container.hide();
-          };
+          }
           if (data['dialog']) {
               container.dialog(data['dialog']);
               $(container).find('input.date-field').blur();
@@ -115,8 +115,8 @@ ST.dialogs = function() {
           }
           if (data['redirect']) {
               ST.redirect(data['redirect']);
-          };
-      };
+          }
+      }
   }
 
   function ensure_container(container_id) {
@@ -159,7 +159,7 @@ ST.dialogs = function() {
         var container_id = 'default-modal-dialog-container';
         if (dialog_container_id) {
             container_id = dialog_container_id;
-        };
+        }
         var container = ensure_container(container_id);
         modal_form_dialog(url, container, title);
         return false;
@@ -185,7 +185,7 @@ ST.dialogs = function() {
         var container = find_dialog(form_sel);
         var form = $(form_sel).closest('form');
 
-        data = form.serializeArray();
+        var data = form.serializeArray();
 
         if (button_sel) {
             var button = $(button_sel);
@@ -199,7 +199,7 @@ ST.dialogs = function() {
         var request = $.ajax({
             type: "POST",
             url: form.attr('action'),
-            data: data,
+            data: data
             }).success(function(result, textStatus, jqXHR){
                 after_dialog_load(container);
                 handle_dialog_response(container, result, jqXHR);
@@ -213,14 +213,14 @@ ST.dialogs = function() {
         var dialog = find_dialog(form_sel);
         close_modal_form_dialog(dialog);
         return false;
-    },
+    }
 
-  }
+  };
 
-}();
+}());
 
 
-ST.images = function() {
+ST.images = (function() {
 
   /* "private" */
 
@@ -231,9 +231,9 @@ ST.images = function() {
   /* "public" */
   return {
       spinner: function() { return make_image('spinner.gif'); }
-  }
+  };
 
-}();
+}());
 
 /* Temporary jQuery UI datepicker integration */
 
@@ -241,7 +241,7 @@ $(document).ready(function() {
         $('input.date-field').datepicker({
                 dateFormat: 'yy-mm-dd',
                 changeMonth: true,
-                changeYear: true,
+                changeYear: true
                 });
     });
 
