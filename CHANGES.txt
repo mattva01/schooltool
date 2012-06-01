@@ -22,6 +22,7 @@ Bugfixes
 
 - Timetables evolution fails on exception days (https://launchpad.net/bugs/1003834)
 - Advisory accordion doesn't show advisees (https://launchpad.net/bugs/1005989)
+- Fix upgrade from schooltool < 1.5 crashing on missing levels (https://launchpad.net/bugs/1007361)
 
 
 2.1.0 (2012-04-19)
