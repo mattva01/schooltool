@@ -5,7 +5,16 @@ CHANGES
 2.1.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+XLS
++++
+
+- Added course_id, government_id and credits to Courses sheet import/export.
+
+Bugfixes
+++++++++
+
+- Timetables evolution fails on exception days (https://launchpad.net/bugs/1003834)
+- Advisory accordion doesn't show advisees (https://launchpad.net/bugs/1005989)
 
 
 2.1.0 (2012-04-19)
