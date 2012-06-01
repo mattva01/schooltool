@@ -150,6 +150,7 @@ This file has examples of bad data for the Courses sheet:
     >>> browser.printQuery("//p[@class='error']")
     <p class="error">Courses B2 missing required text</p>
     <p class="error">Courses C2 missing required text</p>
+    <p class="error">Courses G3 course credits need to be a valid number</p>
     <p class="error">Courses A4 invalid school year</p>
 
 This file has examples of bad data for the Sections sheet:
