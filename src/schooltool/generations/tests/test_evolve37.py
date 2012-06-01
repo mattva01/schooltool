@@ -32,7 +32,6 @@ from zope.intid import IntIds
 from zope.intid.interfaces import IIntIds
 from zope.keyreference.interfaces import IKeyReference
 from zope.site.folder import Folder
-from zope.container.btree import BTreeContainer
 from zope.component.hooks import getSite, setSite
 
 from schooltool.app.interfaces import ISchoolToolApplication
@@ -140,6 +139,31 @@ def doctest_evolve37():
     Site was restored after evolution.
 
         >>> print getSite()
+        None
+
+    """
+
+
+def doctest_evolve37_no_levels():
+    """Test evolution to generation 37.
+
+        >>> context = ContextStub()
+        >>> context.root_folder['app'] = app = AppStub()
+
+        >>> manager = setup.createSiteManager(app)
+
+        >>> int_ids = IntIds()
+        >>> provideAdapters(int_ids)
+
+        >>> years = setUpYears(app, int_ids)
+        >>> years.activateNextSchoolYear(year_id='2')
+
+    Let's evolve now.
+
+        >>> from schooltool.generations.evolve37 import evolve
+        >>> evolve(context)
+
+        >>> print app.get(LEVELS_APP_KEY)
         None
 
     """
