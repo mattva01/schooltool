@@ -22,6 +22,7 @@ SchoolTool simple import views.
 import xlrd
 import transaction
 import datetime
+from decimal import Decimal
 
 from zope.container.contained import containedEvent
 from zope.container.interfaces import INameChooser
@@ -112,6 +113,7 @@ ERROR_UNICODE_CONVERSION = _(
 ERROR_WEEKLY_DAY_ID = _('is not a valid weekday number (0-6)')
 ERROR_CONTACT_RELATIONSHIP = _("is not a valid contact relationship")
 ERROR_NOT_BOOLEAN = _("must be either True or False")
+ERROR_INVALID_COURSE_CREDITS = _("course credits need to be a valid number")
 
 
 no_date = object()
@@ -996,6 +998,10 @@ class CourseImporter(ImporterBase):
         else:
             course = Course(data['title'], data['description'])
             course.__name__ = data['__name__']
+        course.course_id = data['course_id'] and data['course_id'] or None
+        course.government_id = (data['government_id'] and data['government_id']
+                                or None)
+        course.credits = data['credits'] and Decimal(data['credits']) or None
         return course
 
     def addCourse(self, course, data):
@@ -1018,10 +1024,18 @@ class CourseImporter(ImporterBase):
             data['__name__'] = self.getRequiredTextFromCell(sh, row, 1)
             data['title'] = self.getRequiredTextFromCell(sh, row, 2)
             data['description'] = self.getTextFromCell(sh, row, 3)
+            data['course_id'] = self.getTextFromCell(sh, row, 4)
+            data['government_id'] = self.getTextFromCell(sh, row, 5)
+            data['credits'] = self.getTextFromCell(sh, row, 6)
             if num_errors < len(self.errors):
                 continue
             if data['school_year'] not in ISchoolYearContainer(self.context):
                 self.error(row, 0, ERROR_INVALID_SCHOOL_YEAR)
+            try:
+                if data['credits']:
+                    Decimal(data['credits'])
+            except:
+                self.error(row, 6, ERROR_INVALID_COURSE_CREDITS)
             if num_errors < len(self.errors):
                 continue
             course = self.createCourse(data)

@@ -1,0 +1,45 @@
+Test for Courses sheet
+----------------------
+
+Log in as manager:
+
+    >>> browser = Browser('manager', 'schooltool')
+
+Let's import a file containing the Courses sheet:
+
+    >>> import pkg_resources
+    >>> browser.getLink('Manage').click()
+    >>> browser.getLink('XLS Import').click()
+    >>> browser.getControl('XLS File').add_file(
+    ...     pkg_resources.resource_stream('schooltool.export.ftests', 'courses.xls'),
+    ...     'application/excel',
+    ...     'courses.xls')
+    >>> browser.getControl('Submit').click()
+
+There should be no errors:
+
+    >>> browser.printQuery("//p[@class='error']")
+
+We see that there are two courses as specified in the spreadsheet.
+
+    >>> browser.getLink('2006-2007').click()
+    >>> browser.getLink('Courses').click()
+    >>> browser.printQuery("//div[@class='course']//a/text()")
+    Art A
+    Art B
+
+The first one has no optional cells filled in.
+
+    >>> browser.getLink('Art A').click()
+    >>> browser.printQuery("//div[@id='course-view']//p/text()")
+
+The second one has all optional cells filled in.
+
+    >>> browser.goBack()
+    >>> browser.getLink('Art B').click()
+    >>> browser.printQuery("//div[@id='course-view']//p/text()")
+    Art B Desc
+    Course ID: local_artb
+    Alternate ID: state_artb
+    Credits: 3.5
+
