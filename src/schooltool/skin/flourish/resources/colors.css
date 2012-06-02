@@ -36,6 +36,10 @@ a, a:link, a:visited, a:active {
     color: #005c61;
 }
 
+select {
+    color: #333333;
+}
+
 /*
 
   Main containers:

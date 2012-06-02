@@ -43,6 +43,10 @@ h3 {
     margin-top: 16px;
 }
 
+select {
+    font-size: 12px;
+}
+
 a, a:link, a:visited, a:active {
     text-decoration: none;
 }
