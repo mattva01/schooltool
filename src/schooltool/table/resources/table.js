@@ -7,7 +7,7 @@ ST.table = function() {
       return function(result, textStatus, jqXHR) {
           var container = $(ST.dialogs.jquery_id(container_id));
           container.html(result);
-      }
+      };
   };
 
   function replace_item(container_id, item_value)
@@ -22,7 +22,7 @@ ST.table = function() {
               button.parent().children().remove();
               row.fadeTo(200, 0.1);
           }
-      }
+      };
   };
 
   function container_form_submit_data(container_id, url, data, method)
@@ -35,7 +35,7 @@ ST.table = function() {
       var request = $.ajax({
           type: method,
           url: url,
-          data: data,
+          data: data
           });
       return request;
   };
@@ -45,7 +45,7 @@ ST.table = function() {
       var container = $(ST.dialogs.jquery_id(container_id));
       var form = container.find('form');
 
-      data = form.serializeArray();
+      var data = form.serializeArray();
 
       if (button) {
           var element = $(button);
@@ -70,7 +70,7 @@ ST.table = function() {
           target.data(name, counter);
           counter.done(function(){
               target.removeData(name);
-          })
+          });
       }
       counter.count++;
       counter.notify(counter.count);
@@ -120,7 +120,7 @@ ST.table = function() {
       var spinner_id = container_id+'-table-spinner';
       var spinner = last_header.find(ST.dialogs.jquery_id(spinner_id));
       if ((spinner.length>0) && (count<=0)) {
-          spinner.remove()
+          spinner.remove();
       }
       if ((count>0) && (spinner.length==0)) {
           spinner = ST.images.spinner();
@@ -149,7 +149,7 @@ ST.table = function() {
           return;
       button.hide();
       var spinner = ST.images.spinner();
-      spinner.css('class', 'st-table-button-spinner')
+      spinner.css('class', 'st-table-button-spinner');
       button.parent().append(spinner);
   }
 
