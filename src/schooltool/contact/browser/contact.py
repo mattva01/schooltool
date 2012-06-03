@@ -44,7 +44,6 @@ from z3c.form import form, subform, field, button
 from z3c.form.interfaces import DISPLAY_MODE
 
 from schooltool.app.interfaces import ISchoolToolApplication
-from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.app.catalog import buildQueryString
 from schooltool.contact.interfaces import IContactable
 from schooltool.contact.interfaces import IContactContainer
@@ -869,11 +868,6 @@ class FlourishManageContactsOverview(flourish.page.Content):
     def total(self):
         catalog = ICatalog(self.contacts)
         return len(catalog.extent)
-
-    @property
-    def school_name(self):
-        preferences = IApplicationPreferences(self.context)
-        return preferences.title
 
 
 class ContactActionsLinks(flourish.page.RefineLinksViewlet):

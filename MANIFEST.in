@@ -17,6 +17,7 @@ recursive-include src *.xml
 recursive-include src *.fs
 recursive-include src *.ics
 recursive-include src *.xls
+recursive-include src *.svg
 include version.txt
 include version.txt.in
 include CHANGES.txt

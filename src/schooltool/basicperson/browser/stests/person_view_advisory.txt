@@ -1,0 +1,108 @@
+Advisory accordion in the person index view
+===========================================
+
+The Advisory accordion shows the advisors and advisees for a person.
+
+Helpers:
+
+    >>> def format_person_row(row):
+    ...     last_name = row.query.xpath('td[1]/a').text
+    ...     first_name = row.query.xpath('td[2]/a').text
+    ...     username = row.query.xpath('td[3]').text
+    ...     return '%s, %s, %s' % (last_name, first_name, username)
+    >>> def print_advisors(browser):
+    ...     sel = '//h2[contains(@class, "ui-accordion-header")]'
+    ...     accordion = browser.query_all.xpath(sel)[2]
+    ...     accordion.click()
+    ...     sel = ('#person_table-ajax-view-context-advisors-person_table- '
+    ...            'table tbody tr')
+    ...     rows = browser.query_all.css(sel)
+    ...     if not rows:
+    ...         print 'The person has no advisors.'
+    ...     for row in rows:
+    ...         print format_person_row(row)
+    >>> def print_advisees(browser):
+    ...     sel = '//h2[contains(@class, "ui-accordion-header")]'
+    ...     accordion = browser.query_all.xpath(sel)[2]
+    ...     accordion.click()
+    ...     sel = ('#person_table-ajax-view-context-advisees-person_table- '
+    ...            'table tbody tr')
+    ...     rows = browser.query_all.css(sel)
+    ...     if not rows:
+    ...         print 'The person has no advisees.'
+    ...     for row in rows:
+    ...         print format_person_row(row)
+
+Log in as manager:
+
+    >>> manager = browsers.manager
+    >>> manager.ui.login('manager', 'schooltool')
+
+Add a school year:
+
+    >>> manager.ui.schoolyear.add('2012', '2012-01-01', '2012-12-31')
+
+Add a few people:
+
+    >>> manager.ui.person.add('Tom', 'Hoffman', 'tom', 'pwd')
+    >>> manager.ui.person.add('Camila', 'Cerna', 'camila', 'pwd')
+    >>> manager.ui.person.add('Mario', 'Tejada', 'mario', 'pwd')
+
+Check Camila's advisors:
+
+    >>> manager.query.link('School').click()
+    >>> manager.query.link('People').click()
+    >>> manager.query.link('Camila').click()
+    >>> print_advisors(manager)
+    The person has no advisors.
+
+Set Camila as Tom's advisees:
+
+    >>> manager.ui.person.advisees.add('tom', ['camila'])
+
+Check Camila's advisors:
+
+    >>> manager.query.link('School').click()
+    >>> manager.query.link('People').click()
+    >>> manager.query.link('Camila').click()
+    >>> print_advisors(manager)
+    Hoffman, Tom, tom
+
+Check Camila's advisees:
+
+    >>> print_advisees(manager)
+    The person has no advisees.
+
+Set Camila and Tom as Mario's advisor:
+
+    >>> manager.ui.person.advisors.add('mario', ['camila', 'tom'])
+
+Check Camila's full advisory section:
+
+    >>> manager.query.link('School').click()
+    >>> manager.query.link('People').click()
+    >>> manager.query.link('Camila').click()
+    >>> print_advisors(manager)
+    Hoffman, Tom, tom
+    >>> print_advisees(manager)
+    Tejada, Mario, mario
+
+Check Mario's advisors:
+
+    >>> manager.query.link('School').click()
+    >>> manager.query.link('People').click()
+    >>> manager.query.link('Mario').click()
+    >>> print_advisors(manager)
+    Cerna, Camila, camila
+    Hoffman, Tom, tom
+
+Check Tom's full advisory section:
+
+    >>> manager.query.link('School').click()
+    >>> manager.query.link('People').click()
+    >>> manager.query.link('Tom').click()
+    >>> print_advisors(manager)
+    The person has no advisors.
+    >>> print_advisees(manager)
+    Cerna, Camila, camila
+    Tejada, Mario, mario

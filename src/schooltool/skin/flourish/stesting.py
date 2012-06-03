@@ -26,6 +26,7 @@ def registerSeleniumSetup():
     from schooltool.testing import registry
     import schooltool.testing.selenium
     import selenium.webdriver.common.keys
+    from selenium.webdriver.support.select import Select
 
     def type_in_date(element, date):
         keys = selenium.webdriver.common.keys.Keys
@@ -39,10 +40,8 @@ def registerSeleniumSetup():
                                                               type_in_date))
 
     def select_option(element, option):
-        element.click()
-        xpath = 'option[text()="%s"]' % option
-        element.query.xpath(xpath).click()
-        element.click()
+        select = Select(element)
+        select.select_by_visible_text(option)
 
     registry.register('SeleniumHelpers',
         lambda: schooltool.testing.selenium.registerElementUI('select_option',
