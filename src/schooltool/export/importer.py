@@ -234,9 +234,9 @@ class ImporterBase(object):
         value, found, valid = self.getTextFoundValid(sheet, row, col)
         if not valid or not value:
             return None
-        if value.upper() == 'TRUE':
+        if value.upper() in ['TRUE', 'YES']:
             return True
-        elif value.upper() == 'FALSE':
+        elif value.upper() in ['FALSE', 'NO']:
             return False
         else:
             self.error(row, col, ERROR_NOT_BOOLEAN)
@@ -1186,7 +1186,8 @@ class SectionImporter(ImporterBase):
                 if course not in section.courses:
                     section.courses.add(removeSecurityProxy(course))
             row += 1
-        else:
+
+        if not list(section.courses):
             self.errors.append(format_message(
                 ERROR_HAS_NO_COURSES,
                 mapping={'title': data['title'], 'row': row + 1}
