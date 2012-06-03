@@ -597,6 +597,8 @@ class MegaExporter(SchoolTimetableExportView):
                 row += 2
                 sections = removeSecurityProxy(ISectionContainer(term))
                 for section in sorted(sections.values(), key=lambda i: i.__name__):
+                    if not list(section.courses):
+                        continue
                     row = self.format_section(section, ws, row) + 1
 
     def format_flat_section(self, section, ws, row):
@@ -657,6 +659,8 @@ class MegaExporter(SchoolTimetableExportView):
             for term in year.values():
                 first = term.first
                 for section in ISectionContainer(term).values():
+                    if not list(section.courses):
+                        continue
                     courses = ', '.join([c.__name__ for c in section.courses])
                     current_sections.append((courses, first, term, section))
 
