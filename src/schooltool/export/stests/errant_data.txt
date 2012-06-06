@@ -95,6 +95,7 @@ This file has examples of bad data for the Persons sheet:
     Persons C2 missing required text
     Persons E2 missing required text
     Persons H2 has no date in it
+    Persons I2 gender must be male or female
     Persons P2 missing required text
     Persons Q2 has no date in it
     Persons R2 missing required text

@@ -123,6 +123,7 @@ ERROR_NO_TIMETABLE_DEFINED = _("no timetable is defined for this section")
 ERROR_NO_DAY_DEFINED = _("no day is defined in this row")
 ERROR_MISSING_PERIOD_ID = _('must have a valid period id')
 ERROR_INVALID_COURSE_CREDITS = _("course credits need to be a valid number")
+ERROR_INVALID_GENDER = _("gender must be male or female")
 
 
 no_date = object()
@@ -800,6 +801,8 @@ class PersonImporter(ImporterBase):
             data['gender'] = self.getTextFromCell(sh, row, 8)
             if data['gender'] == '':
                 data['gender'] = None
+            elif data['gender'] not in ['male', 'female']:
+                self.error(row, 8, ERROR_INVALID_GENDER)
             data['password'] = self.getTextFromCell(sh, row, 9)
 
             # XXX: this has to be fixed
