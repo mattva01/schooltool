@@ -29,6 +29,13 @@ from schooltool.generations.evolve36.evolve import evolveTimetables
 
 def evolve(context):
     root = context.connection.root().get(ZopePublication.root_name, None)
+
+    # Invalidate connection cache
+    # Earlier evolutions (like evolve34) may have cached broken
+    # persistent objects and we'll want to reload them.
+    cache = context.connection._cache
+    cache.invalidate(cache.cache_data.keys())
+
     old_site = getSite()
 
     apps = findObjectsProviding(root, ISchoolToolApplication)
