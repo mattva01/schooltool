@@ -666,9 +666,11 @@ class MegaExporter(SchoolTimetableExportView):
 
         row = 1
         for year in sorted(sections, key=lambda y: y.first):
+            current_sections = sections[year]
+            if not current_sections:
+                continue
             self.write(ws, row, 0,  year.__name__)
             timetables = ITimetableContainer(year)
-            current_sections = sections[year]
             current_courses = None
             for courses, first, term, section in sorted(current_sections):
                 if courses != current_courses:
