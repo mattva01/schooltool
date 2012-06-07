@@ -288,11 +288,10 @@ class ExceptionDayBuilder(object):
     def build(self, timetable, context):
         period_map = context.period_map
         tz = pytz.timezone(timetable.timezone)
-        int_ids = getUtility(IIntIds)
         by_date = {}
 
         for day_templates in self.templates:
-            for info in day_templates:
+            for n, info in enumerate(day_templates):
                 date, day_id, period_id, tstart, duration = info
 
                 period_key = (day_id, period_id)
@@ -303,8 +302,8 @@ class ExceptionDayBuilder(object):
                 if period is None:
                     meeting_id = None
                 else:
-                    meeting_id = timetable.uniqueMeetingId(
-                        date, period, int_ids)
+                    meeting_id = timetable.periodMeetingId(
+                        date, period, n+1)
                 meeting = MeetingException(
                     dtstart, duration,
                     period=period,

@@ -35,7 +35,7 @@
 
 /* Tertiary navigation */
 
-.page > .third-nav {
+.page .third-nav {
     border-bottom-style: solid;
     border-bottom-width: 1px;
     float: right;
@@ -48,7 +48,7 @@
     border-radius: 4px 4px 0px 0px;
 }
 
-.page > .third-nav-narrow {
+.page .third-nav-narrow {
     margin-right: 208px;
     width: 560px;
 }

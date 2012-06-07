@@ -39,7 +39,6 @@ from zope.container.contained import NameChooser
 from zope.container.interfaces import INameChooser
 from zope.traversing.interfaces import IContainmentRoot
 
-from schooltool.app.overlay import ICalendarOverlayInfo
 from schooltool.app.interfaces import IPluginInit, IPluginStartUp
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences, IApplicationTabs
@@ -188,9 +187,11 @@ class ApplicationPreferences(Persistent):
     implements(IApplicationPreferences)
 
     def getTitle(self):
+        title = self.__dict__.get('title', None)
+        if title:
+            return title
         request = getRequestFromInteraction()
-        return (self.__dict__.get('title', None) or
-                translate(_('Your School'), context=request))
+        return translate(_('Your School'), context=request)
 
     def setTitle(self, value):
         self.__dict__['title'] = value

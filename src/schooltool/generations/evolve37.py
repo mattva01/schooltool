@@ -64,8 +64,8 @@ def evolve(context):
     for app in apps:
         setSite(app)
         levels = guessMostRecentLevels(app)
-        del app[LEVELS_APP_KEY]
         if levels is not None:
+            del app[LEVELS_APP_KEY]
             app[LEVELS_APP_KEY] = levels
 
     setSite(old_site)

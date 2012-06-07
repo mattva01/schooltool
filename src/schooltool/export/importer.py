@@ -27,7 +27,6 @@ from decimal import Decimal, InvalidOperation
 from zope.container.contained import containedEvent
 from zope.container.interfaces import INameChooser
 from zope.event import notify
-from zope.component import queryUtility
 from zope.security.proxy import removeSecurityProxy
 from zope.publisher.browser import BrowserView
 from zope.traversing.browser.absoluteurl import absoluteURL
@@ -235,9 +234,9 @@ class ImporterBase(object):
         value, found, valid = self.getTextFoundValid(sheet, row, col)
         if not valid or not value:
             return None
-        if value.upper() == 'TRUE':
+        if value.upper() in ['TRUE', 'YES']:
             return True
-        elif value.upper() == 'FALSE':
+        elif value.upper() in ['FALSE', 'NO']:
             return False
         else:
             self.error(row, col, ERROR_NOT_BOOLEAN)
@@ -1008,10 +1007,9 @@ class CourseImporter(ImporterBase):
         else:
             course = Course(data['title'], data['description'])
             course.__name__ = data['__name__']
-        course.course_id = data['course_id'] and data['course_id'] or None
-        course.government_id = (data['government_id'] and data['government_id']
-                                or None)
-        course.credits = data['credits'] and Decimal(data['credits']) or None
+        course.course_id = data['course_id'] or None
+        course.government_id = data['government_id'] or None
+        course.credits = data['credits'] or None
         return course
 
     def addCourse(self, course, data):
@@ -1043,7 +1041,7 @@ class CourseImporter(ImporterBase):
                 self.error(row, 0, ERROR_INVALID_SCHOOL_YEAR)
             try:
                 if data['credits']:
-                    Decimal(data['credits'])
+                    data['credits'] = Decimal(data['credits'])
             except InvalidOperation:
                 self.error(row, 6, ERROR_INVALID_COURSE_CREDITS)
             if num_errors < len(self.errors):
@@ -1188,7 +1186,8 @@ class SectionImporter(ImporterBase):
                 if course not in section.courses:
                     section.courses.add(removeSecurityProxy(course))
             row += 1
-        else:
+
+        if not list(section.courses):
             self.errors.append(format_message(
                 ERROR_HAS_NO_COURSES,
                 mapping={'title': data['title'], 'row': row + 1}

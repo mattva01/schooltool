@@ -2,10 +2,27 @@
 CHANGES
 =======
 
-2.1.1 (unreleased)
+2.2.0 (unreleased)
 ------------------
 
-- Nothing changed yet.
+XLS
++++
+
+- FlatSectionsTable sheet for easier section importing.
+- Old section import still supported; export only delivers FlatSectionsTable.
+- Added course_id, government_id and credits to Courses sheet import/export.
+
+Development tools
++++++++++++++++++
+
+- Selenium screenshots
+
+Bugfixes
+++++++++
+
+- Timetables evolution fails on exception days (https://launchpad.net/bugs/1003834)
+- Advisory accordion doesn't show advisees (https://launchpad.net/bugs/1005989)
+- Fix upgrade from schooltool < 1.5 crashing on missing levels (https://launchpad.net/bugs/1007361)
 
 
 2.1.0 (2012-04-19)
@@ -50,9 +67,6 @@ New features
 - Update jQuery to 1.7.1
 - Add more options from paster to start-schooltool-instance.
 - Updated translations, added Occitan (oc).
-- FlatSectionsTable sheet for easier section importing.
-- Old section import still supported; export only delivers FlatSectionsTable.
-- Added course_id, government_id and credits to Courses sheet import/export.
 
 
 Bugfixes
