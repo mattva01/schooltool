@@ -1637,6 +1637,8 @@ class MegaImporter(BrowserView):
         return self.request.URL
 
     def hasErrors(self):
+        if "UPDATE_SUBMIT" not in self.request:
+            return False
         return not self.data_provided or self.errors
 
     def errorSummary(self):
