@@ -2,14 +2,16 @@
   <form method="POST" enctype="multipart/form-data" class="standalone"
         tal:attributes="action request/URL">
     <div class="status"
-         tal:condition="view/errors"
-         tal:repeat="error view/displayErrors">
+         tal:condition="view/hasErrors">
       <div class="summary ui-state-error ui-corner-all">
         <span class="ui-icon ui-icon-alert">icon</span>
-        <tal:block content="error">
+        <tal:block content="view/errorSummary">
           [error message]
         </tal:block>
       </div>
+      <textarea rows="8" cols="63"
+                tal:condition="view/data_provided"
+                tal:content="view/textareaErrors" />
     </div>
     <div class="status spinner">
       <div class="summary ui-state-highlight ui-corner-all">

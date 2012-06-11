@@ -27,6 +27,7 @@ from decimal import Decimal, InvalidOperation
 from zope.container.contained import containedEvent
 from zope.container.interfaces import INameChooser
 from zope.event import notify
+from zope.i18n import translate
 from zope.security.proxy import removeSecurityProxy
 from zope.publisher.browser import BrowserView
 from zope.traversing.browser.absoluteurl import absoluteURL
@@ -1583,6 +1584,7 @@ class MegaImporter(BrowserView):
 
     def __init__(self, context, request):
         BrowserView.__init__(self, context, request)
+        self.data_provided = False
         self.errors = []
         self.success = []
 
@@ -1608,8 +1610,8 @@ class MegaImporter(BrowserView):
 
         xlsfile = self.request.get('xlsfile', '')
         if not xlsfile:
-            self.errors.append(_('No data provided'))
             return
+        self.data_provided = True
 
         wb = xlrd.open_workbook(file_contents=xlsfile.read())
 
@@ -1634,8 +1636,16 @@ class MegaImporter(BrowserView):
     def nextURL(self):
         return self.request.URL
 
-    def displayErrors(self):
-        return self.errors[:25]
+    def hasErrors(self):
+        return not self.data_provided or self.errors
+
+    def errorSummary(self):
+        if not self.data_provided:
+            return _('No data provided')
+        return _('The following errors occurred while importing:')
+
+    def textareaErrors(self):
+        return '\n'.join([translate(e) for e in self.errors])
 
 
 

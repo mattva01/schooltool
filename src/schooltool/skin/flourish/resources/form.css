@@ -188,6 +188,10 @@ form .buttons .button-cancel {
     margin-right: 2px;
 }
 
+.status > textarea {
+    margin-bottom: 8px;
+}
+
 form .status > .errors {
     display: none;
 }
