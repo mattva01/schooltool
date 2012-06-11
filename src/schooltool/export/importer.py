@@ -76,7 +76,6 @@ from schooltool.common import format_message
 from schooltool.common import SchoolToolMessage as _
 
 
-ERROR_FMT = _('${sheet_name} ${column}${row} ${message}')
 ERROR_NOT_INT = _('is not a valid integer')
 ERROR_NOT_UNICODE_OR_ASCII = _('not unicode or ascii string')
 ERROR_MISSING_REQUIRED_TEXT = _('missing required text')
@@ -108,8 +107,7 @@ ERROR_INVALID_PERIOD_ID = _('is not a valid period id for the given day')
 ERROR_INVALID_CONTACT_ID = _('is not a valid username or contact id')
 ERROR_UNWANTED_CONTACT_DATA = _('must be empty when ID is a user id')
 ERROR_INVALID_RESOURCE_ID = _('is not a valid resource id')
-ERROR_UNICODE_CONVERSION = _(
-    "Username cannot contain non-ascii characters: ${string}")
+ERROR_UNICODE_CONVERSION = _("Username cannot contain non-ascii characters")
 ERROR_WEEKLY_DAY_ID = _('is not a valid weekday number (0-6)')
 ERROR_CONTACT_RELATIONSHIP = _("is not a valid contact relationship")
 ERROR_NOT_BOOLEAN = _("must be either True or False")
@@ -146,13 +144,7 @@ class ImporterBase(object):
             raise
 
     def error(self, row, col, message):
-        full_message = format_message(
-            ERROR_FMT,
-            {'sheet_name': self.sheet_name,
-             'column': chr(col + ord('A')),
-             'row': row + 1,
-             'message': message}
-            )
+        full_message = (self.sheet_name, row, col, message)
         self.errors.append(full_message)
 
     def getCellAndFound(self, sheet, row, col, default=u''):
@@ -257,12 +249,7 @@ class ImporterBase(object):
         try:
             value.encode('ascii')
         except UnicodeEncodeError:
-            self.error(
-                row, col,
-                format_message(
-                    ERROR_UNICODE_CONVERSION,
-                    mapping={'string': value})
-                )
+            self.error(row, col, ERROR_UNICODE_CONVERSION)
 
     @property
     def sheet(self):
@@ -811,12 +798,7 @@ class PersonImporter(ImporterBase):
             try:
                 str(data['__name__'])
             except UnicodeEncodeError:
-                self.error(
-                    row, 0,
-                    format_message(
-                        ERROR_UNICODE_CONVERSION,
-                        mapping={'string': data['__name__']})
-                    )
+                self.error(row, 0, ERROR_UNICODE_CONVERSION)
 
             if num_errors == len(self.errors):
                 person = self.createPerson(data)
@@ -1647,7 +1629,18 @@ class MegaImporter(BrowserView):
         return _('The following errors occurred while importing:')
 
     def textareaErrors(self):
-        return '\n'.join([translate(e) for e in self.errors])
+        ERROR_FMT = _('${sheet_name} ${column}${row} ${message}')
+        errors = []
+        for sheet_name, row, col, message in self.errors:
+            full_message = format_message(
+                ERROR_FMT,
+                {'sheet_name': sheet_name,
+                 'column': chr(col + ord('A')),
+                 'row': row + 1,
+                 'message': message}
+                )
+            errors.append(full_message)
+        return '\n'.join([translate(e) for e in errors])
 
 
 
