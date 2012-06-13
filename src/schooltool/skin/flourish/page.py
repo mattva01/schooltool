@@ -113,7 +113,7 @@ class PageAbsoluteURL(AbsoluteURL):
 
 
 class NoSidebarPage(Page):
-    container_class = 'container expand_container'
+    container_class = 'container extra-wide-container'
 
     page_template = ViewPageTemplateFile('templates/page_nosidebar.pt')
 
