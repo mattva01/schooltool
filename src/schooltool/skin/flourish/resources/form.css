@@ -190,6 +190,9 @@ form .buttons .button-cancel {
 
 .status > textarea {
     margin-bottom: 8px;
+    font-family: Monospace;
+    font-size: 12px;
+    font-weight: bold;
 }
 
 form .status > .errors {

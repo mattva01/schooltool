@@ -1629,18 +1629,35 @@ class MegaImporter(BrowserView):
         return _('The following errors occurred while importing:')
 
     def textareaErrors(self):
-        ERROR_FMT = _('${sheet_name} ${column}${row} ${message}')
-        errors = []
+        errors = {}
         for sheet_name, row, col, message in self.errors:
-            full_message = format_message(
-                ERROR_FMT,
-                {'sheet_name': sheet_name,
-                 'column': chr(col + ord('A')),
-                 'row': row + 1,
-                 'message': message}
-                )
-            errors.append(full_message)
-        return '\n'.join([translate(e) for e in errors])
+            sheet_errors = errors.setdefault(sheet_name, {})
+            sheet_errors.setdefault(message, []).append((col, row))
+        error_lines = []
+        for sheet_name, message_errors in errors.items():
+            error_lines.append(sheet_name)
+            error_lines.append('-' * len(sheet_name))
+            for message, cells in sorted(message_errors.items()):
+                col_rows = []
+                current_col, start, end = -1, 0, 0
+                for col, row in sorted(cells):
+                    if col != current_col or row > end + 1:
+                        if current_col > -1:
+                            col_rows.append((current_col, start, end))
+                        current_col, start = col, row
+                    end = row
+                col_rows.append((current_col, start, end))
+                error_lines.append(translate(message) + ':')
+                error_cells = []
+                for col, start, end in col_rows:
+                    cell = chr(col + ord('A'))
+                    if start == end:
+                        cell += '%s' % (start + 1)
+                    else:
+                        cell += '%s-%s' % (start + 1, end + 1)
+                    error_cells.append(cell)
+                error_lines.append(', '.join(error_cells))
+        return '\n'.join(error_lines)
 
 
 
