@@ -330,7 +330,7 @@ class PageNavigationManager(ListNavigationContent):
     def render(self, *args, **kw):
         if not self.active:
             return ''
-        return ViewletManager.render(*args, **kw)
+        return ViewletManager.render(self, *args, **kw)
 
 
 class RefineLinksViewlet(Refine, ListNavigationViewlet):
