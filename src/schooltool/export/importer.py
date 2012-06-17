@@ -1649,6 +1649,7 @@ class MegaImporter(BrowserView):
                         current_col, start = col, row
                     end = row
                 col_rows.append((current_col, start, end))
+                error_lines.append('')
                 error_lines.append(translate(message) + ':')
                 error_cells = []
                 for col, start, end in col_rows:
