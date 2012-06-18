@@ -340,6 +340,20 @@ function isLastTabVisible(third_nav) {
     return third_nav_left == limit;
 }
 
+function createWorksheetsList() {
+    var ul = $('<ul id="worksheets-list"></ul>');
+    var tabs = $('.third-nav li');
+    tabs.each(function(i, el) {
+        var tab = $(el).clone();
+        var link = tab.find('a');
+        tab.find('a').text(link.attr('title'));
+        ul.append(tab);
+    });
+    ul.addClass('popup_menu');
+    ul.addClass('worksheets-list');
+    return ul;
+}
+
 $(document).ready(function() {
     var form = $('#grid-form');
     form.data('base-font-size', parseInt(form.css('fontSize')));
@@ -616,16 +630,7 @@ $(document).ready(function() {
     list_worksheets.click(function(e) {
         if (!$(this).hasClass('navbar-arrow-inactive')) {
             if ($('#worksheets-list').length < 1) {
-                var ul = $('<ul id="worksheets-list"></ul>');
-                var tabs = $('.third-nav li');
-                tabs.each(function(i, el) {
-                    var tab = $(el).clone();
-                    var link = tab.find('a');
-                    tab.find('a').text(link.attr('title'));
-                    ul.append(tab);
-                });
-                ul.addClass('popup_menu');
-                ul.addClass('worksheets-list');
+                var ul = createWorksheetsList();
                 $(this).after(ul);
             }
             $('#worksheets-list').slideToggle('fast');
