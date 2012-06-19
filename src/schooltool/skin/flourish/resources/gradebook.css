@@ -78,7 +78,7 @@
     right: 43px;
 }
 
-.grid a.navbar-list-worksheets {
+.grid > a.navbar-list-worksheets {
     border-left-width: 1px;
     border-left-style: solid;
     border-left-color: #ccc;
