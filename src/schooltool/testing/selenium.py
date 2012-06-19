@@ -752,7 +752,7 @@ class Browser(object):
         # XXX: missing:
         raise NotImplemented()
 
-    def screenshot(self, name, ext='png', overwrite=False):
+    def screenshot(self, name='screenshot', ext='png', overwrite=False):
         layer = self.pool.layer
 
         if os.path.isabs(name):
