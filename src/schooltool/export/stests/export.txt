@@ -1,0 +1,69 @@
+Selenium browser export test example
+====================================
+
+    >>> manager = browsers.manager
+    >>> manager.ui.login('manager', 'schooltool')
+
+    >>> manager.query.link('School').click()
+
+Let's export the empty school set up.
+
+    >>> manager.query.link('Export as XLS').click()
+    >>> manager.query.button('Download').click()
+
+We have to wait until the download is saved:
+
+    >>> manager.wait(downloads.new)
+
+And now we can see it:
+
+    >>> [d.filename for d in downloads.new()]
+    ['export.xls']
+
+And read it:
+
+    >>> xls = downloads.read()
+
+    >>> print xls
+    <xlrd.Book object ...>
+
+Exported XLS is not in the new list anymore (but we could still
+use downloads.get(name=xxx) or downloads.read(name=xxx) to get it later)
+
+    >>> print downloads.new()
+    []
+
+    >>> [d.filename for d in downloads.all()]
+    ['export.xls']
+
+And now we can demonstrate sheet printing:
+
+    >>> from schooltool.testing.xls import print_sheet
+
+    >>> print_sheet(xls.sheet_by_name('Terms'))
+    *         A            B            C             D           E           F           G
+    1  [u'SchoolYear'][  u'ID'   ][  u'Title'  ][ u'Start'  ][ u'End'  ][           ][         ]
+    2  [             ][          ][            ][           ][         ][           ][         ]
+    3  [ u'Weekends' ][          ][            ][           ][         ][           ][         ]
+    4  [  u'Monday'  ][u'Tuesday'][u'Wednesday'][u'Thursday'][u'Friday'][u'Saturday'][u'Sunday']
+    5  [    u'X'     ][   u'X'   ][    u'X'    ][   u'X'    ][  u'X'   ][   u'X'    ][  u'X'   ]
+
+We can limit printing to a certain list of rows / cols.
+
+    >>> print_sheet(xls.sheet_by_name('Terms'), rows=range(3, 6), cols=range(1, 6))
+    *        A           B            C             D           E
+    3  [u'Weekends'][          ][            ][           ][         ]
+    4  [ u'Monday' ][u'Tuesday'][u'Wednesday'][u'Thursday'][u'Friday']
+    5  [   u'X'    ][   u'X'   ][    u'X'    ][   u'X'    ][  u'X'   ]
+
+We can even select specific columns (or rows):
+
+    >>> print_sheet(xls.sheet_by_name('Persons'), cols=[1, 3, 5])
+    *        A                   C                    E
+    1  [u'User Name'] ... [u'First Name'] ... [  u'Last Name'  ]
+    2  [ u'manager' ] ... [u'SchoolTool'] ... [u'Administrator']
+
+    >>> print_sheet(xls.sheet_by_name('Persons'), cols='A, C-E')
+    *        A                   C              D                E
+    1  [u'User Name'] ... [u'First Name'][u'Middle Name'][  u'Last Name'  ]
+    2  [ u'manager' ] ... [u'SchoolTool'][              ][u'Administrator']
