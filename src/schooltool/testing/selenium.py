@@ -22,6 +22,7 @@ Selenium testing.
 from __future__ import absolute_import
 import asyncore
 import cgi
+import codecs
 import doctest
 import linecache
 import os
@@ -32,6 +33,7 @@ import threading
 import time
 import urllib
 import unittest
+import xlrd
 from StringIO import StringIO
 from UserDict import DictMixin
 
@@ -65,7 +67,7 @@ try:
         _browser_factory = schooltool.devtools.selenium_recipe.spawn_browser
         selenium_enabled = (
             schooltool.devtools.selenium_recipe.default_factory is not None)
-        IMPLICIT_WAIT =  schooltool.devtools.selenium_recipe.implicit_wait
+        IMPLICIT_WAIT = schooltool.devtools.selenium_recipe.default_browser_config.implicit_wait
 except ImportError:
     pass
 
@@ -77,7 +79,7 @@ try:
 
     if _browser_factory is None:
         import selenium.webdriver.firefox.webdriver
-        def _browser_factory(factory_name='firefox'):
+        def _browser_factory(factory_name='firefox', config=None):
             assert factory_name == 'firefox'
             return selenium.webdriver.firefox.webdriver.WebDriver()
         selenium_enabled = True
@@ -651,7 +653,7 @@ class WebElementQuery(object):
         raise NotImplemented()
 
 
-class Screenshot(object):
+class FileLink(object):
 
     path = None
     url = None
@@ -670,9 +672,39 @@ class Screenshot(object):
         return os.path.basename(self.path)
 
     def __repr__(self):
-        return '<%s %s%s>' % (
+        url = self.url or self.path
+        return '<%s %s%s%s>' % (
             self.__class__.__name__, self.filename,
-            self.message and (' ' + repr(self.message)) or '')
+            self.message and (' ' + repr(self.message)) or '',
+            url and (' ' + url + ' ') or '')
+
+
+class Download(FileLink):
+
+    @property
+    def file_format(self):
+        fname = self.filename.lower()
+        if fname.endswith('xls'):
+            return 'xls'
+        else:
+            return 'txt'
+
+    def read(self, format=None, encoding=None):
+        if format is None:
+            format = self.file_format
+        if format == 'xls':
+            return xlrd.open_workbook(self.path)
+        elif format == 'txt':
+            f = codecs.open(self.path, encoding=encoding)
+            text = f.read()
+            f.close()
+            return text
+        else:
+            raise NotImplemented('Reading file format %r' % format)
+
+
+class Screenshot(FileLink):
+    pass
 
 
 class Browser(object):
@@ -728,7 +760,7 @@ class Browser(object):
             directory = os.path.dirname(name)
             name = os.path.basename(name)
         else:
-            directory = getattr(layer, 'screenshots_dir', None)
+            directory = getattr(layer.config, 'screenshots_dir', None)
 
         if directory is None:
             return None
@@ -759,8 +791,8 @@ class Browser(object):
                 full_name, message="Failed to save screenshot")
 
         url = None
-        if getattr(layer, 'screenshots_url', None):
-            url = urllib.basejoin(layer.screenshots_url, fname)
+        if getattr(layer.config, 'screenshots_url', None):
+            url = urllib.basejoin(layer.config.screenshots_url, fname)
 
         return Screenshot(full_name, url=url)
 
@@ -825,6 +857,102 @@ class Browser(object):
         return result
 
 
+class Downloads(object):
+
+    def __init__(self, layer):
+        self.layer = layer
+        self.reset()
+
+    @property
+    def path(self):
+        if self.layer.config is None:
+            return None
+        return self.layer.config.downloads_dir
+
+    def _created(self, fname):
+        tstamp = os.path.getctime(os.path.join(self.path, fname))
+        return tstamp
+
+    def _wrap(self, fname):
+        url = None
+        if getattr(self.layer.config, 'downloads_url', None):
+            url = urllib.basejoin(self.layer.config.downloads_url, fname)
+        return Download(
+            os.path.join(self.path, fname),
+            url=url, message=None)
+
+    def update(self):
+        """Update the list of downloads."""
+        if self.path is None:
+            return
+        for name in os.listdir(self.path):
+            timestamp = self._created(name)
+            if (name not in self.files):
+                # file is new:
+                self.files[name] = (self._created(name), 'N')
+            elif self.files[name][0] < timestamp:
+                # Float comparison ^ makes me uneasy
+                # file was re-created:
+                self.files[name] = (self._created(name), 'N')
+
+    def reset(self):
+        """Clear the list of downloads (does not delete actual files)"""
+        self.files = {}
+        if self.path is None:
+            return
+        assert os.path.isdir(self.path)
+        for name in os.listdir(self.path):
+            self.files[name] = ('I', self._created(name))
+
+    def get(self, name=None):
+        """Return the [latest by default] download"""
+        if self.path is None:
+            return None
+        if name is None:
+            new = self.new()
+            if not new:
+                return None
+            name = new[0].filename
+        else:
+            self.update()
+
+        if (name not in self.files or
+            self.files[name][1] == 'I'):
+            return None
+        self.files[name] = (self.files[name][0], 'O')
+
+        return self._wrap(name)
+
+    def read(self, name=None, format=None, encoding=None):
+        """Return the contents of the [latest by default] download"""
+        download = self.get(name=name)
+        if download is None:
+            return None
+        return download.read(format=format, encoding=encoding)
+
+    def new(self):
+        """List the new, "unread" downloads."""
+        if self.path is None:
+            return []
+        self.update()
+        sorted_files = sorted(self.files.items(), key=lambda i: (i[1], i[0]))
+        result = [name
+                  for name, status in sorted_files
+                  if status[1] == 'N']
+        return [self._wrap(f) for f in sorted(result)]
+
+    def all(self):
+        """List all downloads."""
+        if self.path is None:
+            return []
+        self.update()
+        sorted_files = sorted(self.files.items(), key=lambda i: (i[1], i[0]))
+        result = [name
+                  for name, status in sorted_files
+                  if status[0] != 'I']
+        return [self._wrap(f) for f in sorted(result)]
+
+
 class BrowserPool(object):
 
     layer = None
@@ -845,7 +973,7 @@ class BrowserPool(object):
     def start(self, name):
         if name in self.browsers:
             self.quit(name)
-        driver = _browser_factory()
+        driver = _browser_factory(config=self.layer.config)
         self.browsers[name] = Browser(self, driver)
         return self.browsers[name]
 
@@ -1028,15 +1156,14 @@ class SeleniumLayer(ZCMLLayer):
     port = 0
     serving = False
 
-    screenshots_dir = None
-    screenshots_url = None
-    overwrite_screenshots = False
-
+    config = None
     browsers = None
+    downloads = None
 
     def __init__(self, *args, **kw):
         ZCMLLayer.__init__(self, *args, **kw)
         self.browsers = BrowserPool(self)
+        self.downloads = Downloads(self)
         if BLACK_MAGIC:
             self.patches = []
 
@@ -1049,7 +1176,7 @@ class SeleniumLayer(ZCMLLayer):
         _Element_UI_ext = ExtensionGroup()
         ZCMLLayer.setUp(self)
         schooltool.testing.registry.setupSeleniumHelpers()
-        self.setUpScreenshots()
+        self.setUpBrowserConfig()
         dispatcher = ThreadedTaskDispatcher()
         dispatcher.setThreadCount(self.thread_count)
         self.server = self.server_factory.create(
@@ -1061,32 +1188,74 @@ class SeleniumLayer(ZCMLLayer):
         print 'serving at http://%s:%s/' % (
             self.server.socket.getsockname())
 
-    def setUpScreenshots(self):
+    def setUpBrowserConfig(self):
         try:
             import schooltool.devtools.selenium_recipe
         except ImportError:
             return
 
-        if schooltool.devtools.selenium_recipe.screenshots_dir:
-            self.screenshots_dir = os.path.abspath(
-                schooltool.devtools.selenium_recipe.screenshots_dir)
-        else:
-            self.screenshots_dir = None
+        default = schooltool.devtools.selenium_recipe.default_browser_config
+        config = default.copy()
+        config.update(self.getScreenshotsConfig(default))
+        config.update(self.getDownloadsConfig(default))
+        self.config = config
 
-        if schooltool.devtools.selenium_recipe.screenshots_url:
-            self.screenshots_url = schooltool.devtools.selenium_recipe.screenshots_url
-        elif self.screenshots_dir:
-            self.screenshots_url = 'file://%s/' % self.screenshots_dir
-        else:
-            self.screenshots_url = None
+    def getScreenshotsConfig(self, default):
+        try:
+            import schooltool.devtools.selenium_recipe
+        except ImportError:
+            return
+        config = schooltool.devtools.selenium_recipe.BrowserConfig()
 
-        self.overwrite_screenshots = \
-            schooltool.devtools.selenium_recipe.overwrite_screenshots
+        if default.screenshots_dir:
+            config.screenshots_dir = os.path.abspath(os.path.expanduser(default.screenshots_dir))
+
+        if default.screenshots_url:
+            config.screenshots_url = default.screenshots_url
+        elif config.screenshots_dir:
+            config.screenshots_url = 'file://%s/' % config.screenshots_dir
+
+        config.overwrite_screenshots = default.overwrite_screenshots
+        return config
+
+    def getDownloadsConfig(self, default):
+        try:
+            import schooltool.devtools.selenium_recipe
+        except ImportError:
+            return
+        config = schooltool.devtools.selenium_recipe.BrowserConfig()
+
+        subdir = None
+
+        if default.downloads_dir:
+            config.downloads_dir = os.path.abspath(os.path.expanduser(default.downloads_dir))
+            assert os.path.isdir(config.downloads_dir)
+            i = 1
+            while i < 10**9:
+                subdir = 'testrun_%03d' % i
+                if not os.path.exists(os.path.join(config.downloads_dir, subdir)):
+                    break
+                i = i + 1
+            config.downloads_dir = os.path.join(config.downloads_dir, subdir)
+            if not os.path.exists(config.downloads_dir):
+                os.mkdir(config.downloads_dir)
+
+        if default.downloads_url:
+            url = schooltool.devtools.selenium_recipe.default_browser_config.downloads_url
+            if subdir is not None:
+                url = urllib.basejoin(url, subdir) + '/'
+            config.downloads_url = url
+        elif config.downloads_dir:
+            config.downloads_url = 'file://%s/' % config.downloads_dir
+
+        return config
 
     def tearDown(self):
         self.serving = False
         self.thread.join()
         self.browsers.reset()
+        self.downloads.reset()
+        self.config = None
         ZCMLLayer.tearDown(self)
         global _Browser_UI_ext
         global _Element_UI_ext
@@ -1107,6 +1276,7 @@ class SeleniumLayer(ZCMLLayer):
         if BLACK_MAGIC:
             self.patches.append(mock.ModulesSnapshot())
         self.browsers.reset()
+        self.downloads.reset()
         self.setup.setUp()
 
         application = self.server.application
@@ -1116,6 +1286,7 @@ class SeleniumLayer(ZCMLLayer):
     def testTearDown(self):
         self.setup.tearDown()
         self.browsers.reset()
+        self.downloads.reset()
         if BLACK_MAGIC:
             snapshot = self.patches.pop()
             snapshot.restore()
@@ -1177,7 +1348,7 @@ class SkippyDocTestRunner(doctest.DocTestRunner):
 
     def output_screenshots(self, out, test, example, got):
         layer = self._checker.layer
-        if not layer.screenshots_dir:
+        if not layer.config.screenshots_dir:
             return
 
         screenshots = []
@@ -1203,7 +1374,7 @@ class SkippyDocTestRunner(doctest.DocTestRunner):
                     shortnames[test.filename] = shortname
 
             basename = '%s-line_%d-%s' % (shortname, example.lineno, browsername)
-            shot = browser.screenshot(basename, overwrite=layer.overwrite_screenshots)
+            shot = browser.screenshot(basename, overwrite=layer.config.overwrite_screenshots)
             if shot:
                 screenshots.append((shot.url or shot.path, shot.message))
             else:
@@ -1408,7 +1579,8 @@ def collect_ftests(package=None, level=None, layer=None, filenames=None,
         suite = SeleniumDocFileSuite(layer, filename,
                                      package=package,
                                      optionflags=optionflags,
-                                     globs={'browsers': layer.browsers},
+                                     globs={'browsers': layer.browsers,
+                                            'downloads': layer.downloads},
                                      encoding='UTF-8',
                                      test_case_factory=suite_test_case_factory)
         return suite
