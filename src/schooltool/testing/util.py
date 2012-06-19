@@ -443,5 +443,3 @@ def fakePath(obj, path):
     name = bits and bits[-1] or ''
     obj.__parent__ = folder
     obj.__name__ = name
-
-
