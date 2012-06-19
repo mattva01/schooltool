@@ -80,14 +80,47 @@ def col_name(n):
     return name
 
 
+def col_n(name):
+    try:
+        return int(name)
+    except ValueError:
+        pass
+    name = name.upper()
+    i = 0
+    while name:
+        i = i*26+(ord(name[0])-64)
+        name = name[1:]
+    return i
+
+
+def str_to_n_list(s):
+    result = []
+    ranges = s.split(',')
+    for r in ranges:
+        parts = [p.strip() for p in r.split('-')]
+        if not parts:
+            continue
+        if len(parts) == 1:
+            result.append(col_n(parts[0]))
+        elif len(parts) == 2:
+            result.extend(range(col_n(parts[0]), col_n(parts[1])+1))
+        else:
+            raise ValueError('%r is not a range' % r)
+    return result
+
+
 def list_rows_cols(sheet, rows, cols):
     if rows is None:
         rows = range(1, sheet.nrows+1)
+    elif isinstance(rows, str):
+        rows = str_to_n_list(rows)
     elif not hasattr(rows, '__iter__'):
         rows = rows,
 
     if cols is None:
         cols = range(1, sheet.ncols+1)
+    elif isinstance(cols, str):
+        cols = str_to_n_list(cols)
     elif not hasattr(cols, '__iter__'):
         cols = cols,
 

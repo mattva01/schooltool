@@ -58,7 +58,12 @@ We can limit printing to a certain list of rows / cols.
 
 We can even select specific columns (or rows):
 
-    >>> print_sheet(xls.sheet_by_name('Persons'), cols=[1,3,5])
+    >>> print_sheet(xls.sheet_by_name('Persons'), cols=[1, 3, 5])
     *        A                   C                    E
     1  [u'User Name'] ... [u'First Name'] ... [  u'Last Name'  ]
     2  [ u'manager' ] ... [u'SchoolTool'] ... [u'Administrator']
+
+    >>> print_sheet(xls.sheet_by_name('Persons'), cols='A, C-E')
+    *        A                   C              D                E
+    1  [u'User Name'] ... [u'First Name'][u'Middle Name'][  u'Last Name'  ]
+    2  [ u'manager' ] ... [u'SchoolTool'][              ][u'Administrator']
