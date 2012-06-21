@@ -126,7 +126,7 @@ class IndexedTableFormatter(SchoolToolTableFormatter):
 
     def ommit(self, items, ommited_items):
         if not ommited_items:
-            return items
+            return list(items)
         ommited_items = self.indexItems(ommited_items)
         ommited_ids = set([item['id'] for item in ommited_items])
         return [item for item in items

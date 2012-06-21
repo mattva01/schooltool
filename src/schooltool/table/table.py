@@ -192,7 +192,7 @@ class SchoolToolTableFormatter(object):
 
     def ommit(self, items, ommited_items):
         if not ommited_items:
-            return items
+            return list(items)
         ommited_items = set(ommited_items)
         return [item for item in items
                 if item not in ommited_items]

@@ -24,8 +24,10 @@ import doctest
 
 from zope.app.testing import setup
 from zope.interface import implements
-from zope.component import queryUtility
+from zope.component import queryUtility, provideUtility
 from zope.component.hooks import getSite, setSite
+from zope.intid import IntIds
+from zope.intid.interfaces import IIntIds
 from zope.traversing.api import traverse
 from zope.site import LocalSiteManager
 from zope.site.folder import Folder
@@ -59,6 +61,10 @@ class AppStub(Folder):
 
 def doctest_evolve35():
     """Test evolution to generation 35.
+
+    We'll need int ids.
+
+        >>> provideUtility(IntIds(), IIntIds)
 
     First, let's build ST app with local catalog utilities.
 
