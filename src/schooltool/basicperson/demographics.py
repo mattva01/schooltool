@@ -36,10 +36,11 @@ from zope.component import adapts
 from zope.component import adapter
 from zope.container.btree import BTreeContainer
 from zope.container.ordered import OrderedContainer
+from zope.lifecycleevent.interfaces import IObjectRemovedEvent
 from zope.schema.vocabulary import SimpleVocabulary
 from zope.schema.vocabulary import SimpleTerm
 
-from z3c.form import field
+import z3c.form.field
 
 from schooltool.app.app import InitBase, StartUpBase
 from schooltool.app.interfaces import ISchoolToolApplication
@@ -97,6 +98,15 @@ def getPersonDemographics(person):
     if demographics is None:
         pdc[person.username] = demographics = PersonDemographicsData()
     return demographics
+
+
+@adapter(IBasicPerson, IObjectRemovedEvent)
+def removePersonDemographicsSubscriber(person, event):
+    app = ISchoolToolApplication(None)
+    pdc = app['schooltool.basicperson.demographics_data']
+    demographics = pdc.get(person.username, None)
+    if demographics is not None:
+        del pdc[person.username]
 
 
 class DemographicsFormAdapter(object):
@@ -185,7 +195,7 @@ class FieldDescription(Persistent, Location):
         form_field.required = self.required
         form_field.__name__ = str(self.__name__)
         form_field.interface = IDemographicsForm
-        return field.Fields(form_field)
+        return z3c.form.field.Fields(form_field)
 
 
 # XXX: IMHO all IDNA conversions should be replaced by punycode.
