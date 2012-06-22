@@ -106,6 +106,7 @@
   <include package="schooltool.basicperson.browser" />
 
   <adapter factory=".demographics.getPersonDemographics" />
+  <subscriber handler=".demographics.removePersonDemographicsSubscriber" />
   <adapter factory=".demographics.DemographicsFormAdapter" />
   <adapter factory=".demographics.getDemographicsFields" />
   <adapter
