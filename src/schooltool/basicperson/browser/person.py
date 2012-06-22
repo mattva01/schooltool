@@ -918,7 +918,7 @@ class PersonAddViewBase(PersonAddFormBase):
 
 class FlourishPersonAddView(PersonAddViewBase):
     template = InheritTemplate(flourish.page.Page.template)
-    page_template = InheritTemplate(flourish.page.NoSidebarPage.page_template)
+    page_template = InheritTemplate(flourish.page.Page.page_template)
 
     fieldset_groups = None
     fieldset_order = None

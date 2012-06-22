@@ -156,6 +156,8 @@ class TokenBatch(object):
     def __init__(self, items, start=0, size=0):
         self.items = list(items)
         self.full_size = len(self.items)
+        if start >= self.full_size:
+            start = max(0, self.full_size-size)
         self.start = start
         self.size = size
         self.length = len(self.items[self.start:self.start + self.size])
