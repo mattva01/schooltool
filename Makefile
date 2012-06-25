@@ -52,6 +52,11 @@ start: build instance instance/var/supervisord.pid
 	bin/supervisorctl start all
 	@bin/supervisorctl status
 
+.PHONY: start-services
+start-services: build instance instance/var/supervisord.pid
+	@bin/supervisorctl status | grep services[:] | grep -v RUNNING && bin/supervisorctl start "services:*" || exit 0
+	@bin/supervisorctl status | grep services[:]
+
 .PHONY: restart
 restart: build instance instance/var/supervisord.pid
 	@bin/supervisorctl start "services:*"
@@ -59,7 +64,8 @@ restart: build instance instance/var/supervisord.pid
 	@bin/supervisorctl status
 
 .PHONY: stop
-stop: build instance
+stop:
+	@test -S instance/var/supervisord.sock && bin/supervisorctl status | grep -v STOPPED && bin/supervisorctl stop all || exit 0
 	@test -S instance/var/supervisord.sock && bin/supervisorctl shutdown || echo Nothing to stop
 	@rm -f instance/var/supervisord.sock
 	@rm -f instance/var/supervisord.pid
@@ -73,7 +79,7 @@ tags: build
 	bin/tags
 
 .PHONY: clean
-clean:
+clean: stop
 	rm -rf python
 	rm -rf bin develop-eggs parts .installed.cfg
 	rm -rf build
@@ -85,7 +91,7 @@ clean:
 	find . -name 'LC_MESSAGES' -exec rmdir -p --ignore-fail-on-non-empty {} +
 
 .PHONY: realclean
-realclean:
+realclean: stop
 	rm -rf eggs
 	rm -rf dist
 	rm -rf instance
@@ -193,5 +199,6 @@ upload:
 ubuntu-environment:
 	sudo apt-get install bzr build-essential gettext enscript ttf-liberation \
 	    python-all-dev python-virtualenv ttf-ubuntu-font-family \
-	    libicu-dev libxslt1-dev libfreetype6-dev libjpeg62-dev
+	    libicu-dev libxslt1-dev libfreetype6-dev libjpeg62-dev \
+	    redis-server
 
