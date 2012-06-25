@@ -36,9 +36,37 @@ update:
 instance: | build
 	bin/make-schooltool-instance instance instance_type=$(INSTANCE_TYPE)
 
+
+instance/var/supervisord.pid:
+	bin/supervisord
+
 .PHONY: run
-run: build instance
+run: build instance instance/var/supervisord.pid
+	@bin/supervisorctl start "services:*"
+	@bin/supervisorctl status schooltool | grep RUNNING && bin/supervisorctl stop schooltool || exit 0
+	@bin/supervisorctl status
 	bin/start-schooltool-instance instance
+
+.PHONY: start
+start: build instance instance/var/supervisord.pid
+	bin/supervisorctl start all
+	@bin/supervisorctl status
+
+.PHONY: restart
+restart: build instance instance/var/supervisord.pid
+	@bin/supervisorctl start "services:*"
+	bin/supervisorctl restart schooltool
+	@bin/supervisorctl status
+
+.PHONY: stop
+stop: build instance
+	@test -S instance/var/supervisord.sock && bin/supervisorctl shutdown || echo Nothing to stop
+	@rm -f instance/var/supervisord.sock
+	@rm -f instance/var/supervisord.pid
+
+.PHONY: status
+status:
+	@test -f instance/var/supervisord.pid && bin/supervisorctl status || echo All services shut down
 
 .PHONY: tags
 tags: build
