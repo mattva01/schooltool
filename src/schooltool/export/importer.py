@@ -778,6 +778,7 @@ class ResourceImporter(ImporterBase):
         res_factory = res_types[data['type']]
         resource = res_factory(data['title'])
         resource.__name__ = data['__name__']
+        resource.description = data['description']
         return resource
 
     def addResource(self, resource, data):
@@ -785,6 +786,7 @@ class ResourceImporter(ImporterBase):
         if resource.__name__ in rc:
             resource = rc[resource.__name__]
             resource.title = data['title']
+            resource.description = data['description']
         else:
             if not resource.__name__:
                 resource.__name__ = INameChooser(rc).chooseName('', resource)
@@ -800,6 +802,7 @@ class ResourceImporter(ImporterBase):
             data['__name__'] = self.getRequiredTextFromCell(sh, row, 0)
             data['type'] = self.getRequiredTextFromCell(sh, row, 1)
             data['title'] = self.getRequiredTextFromCell(sh, row, 2)
+            data['description'] = self.getTextFromCell(sh, row, 3)
             if num_errors < len(self.errors):
                 continue
             if data['type'] not in ['Location', 'Equipment', 'Resource']:
