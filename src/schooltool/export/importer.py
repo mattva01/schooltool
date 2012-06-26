@@ -1935,7 +1935,7 @@ class MegaImporter(BrowserView):
             sheet_errors = errors.setdefault(sheet_name, {})
             sheet_errors.setdefault(message, []).append((col, row))
         error_lines = []
-        for sheet_name, message_errors in errors.items():
+        for sheet_name, message_errors in sorted(errors.items()):
             if error_lines:
                 error_lines.append('')
             error_lines.append(sheet_name)
