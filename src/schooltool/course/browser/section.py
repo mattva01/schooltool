@@ -962,9 +962,18 @@ def get_courses_titles(section, formatter):
     return ', '.join([course.title for course in section.courses])
 
 
+def get_section_instructors(section, formatter):
+    return ', '.join([person.title for person in section.instructors])
+
+
+def section_instructors_formatter(value, section, formatter):
+    return '<br />'.join([person.title for person in section.instructors])
+
+
 class FlourishSectionsView(flourish.page.Page,
                            SectionsActiveTabMixin):
 
+    container_class = 'container widecontainer'
     content_template = InlineViewPageTemplate('''
       <div tal:content="structure context/schooltool:content/ajax/view/schoolyear/sections_table" />
     ''')
@@ -992,12 +1001,18 @@ class SectionsTable(table.ajax.Table):
             subsort=True)
         size = GetterColumn(
             name='size',
-            title=_('Size'),
+            title=_('Students'),
             getter=lambda i, f: i.size,
             subsort=True)
+        instructors = table.column.LocaleAwareGetterColumn(
+            name='instructors',
+            title=_('Teachers'),
+            getter=get_section_instructors,
+            cell_formatter=section_instructors_formatter)
         directlyProvides(term, ISortableColumn)
         directlyProvides(courses, ISortableColumn)
-        return default + [term, courses, size]
+        directlyProvides(instructors, ISortableColumn)
+        return default + [term, courses, size, instructors]
 
     def sortOn(self):
         return (('term', True), ('courses', False), ('title', False))

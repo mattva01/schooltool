@@ -607,13 +607,9 @@ def get_version():
     global _version
     if _version is not None:
         return _version
-    import os
-    directory = os.path.split(__file__)[0]
-    f = open(os.path.join(directory, '..', 'version.txt'), 'r')
-    result = f.read()
-    _version = result
-    f.close()
-    return result
+    import pkg_resources
+    _version = pkg_resources.get_distribution('schooltool').version
+    return _version
 
 
 def getRequestFromInteraction(request_type=IApplicationRequest):

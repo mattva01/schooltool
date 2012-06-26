@@ -56,6 +56,10 @@ form fieldset > legend > span {
     width: 704px;
 }
 
+.extra-wide-container form fieldset > legend > span {
+    width: 896px;
+}
+
 form fieldset .row ~ .row {
     margin-top: 8px;
 }

@@ -147,7 +147,7 @@ class ContactAddView(form.AddForm):
         self.request.response.redirect(self.nextURL())
 
 
-class FlourishContactAddView(flourish.page.NoSidebarPage, ContactAddView):
+class FlourishContactAddView(flourish.page.Page, ContactAddView):
     label = None
 
     def update(self):
@@ -330,7 +330,7 @@ class ContactEditView(form.EditForm):
                           'last_name': self.context.last_name})
 
 
-class FlourishContactEditView(flourish.page.NoSidebarPage,
+class FlourishContactEditView(flourish.page.Page,
                               ContactEditView):
 
     form.extends(ContactEditView)
