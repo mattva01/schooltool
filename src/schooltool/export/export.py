@@ -564,43 +564,6 @@ class MegaExporter(SchoolTimetableExportView):
             offset += 1
         return offset
 
-    def format_section(self, section, ws, offset):
-        fields = [lambda i: ("Section Title", i.title, None),
-                  lambda i: ("ID", i.__name__, None),
-                  lambda i: ("Description", i.description, None)]
-
-        offset = self.listFields(section, fields, ws, offset)
-        offset = self.listIds("Courses", section.courses, ws, offset)
-        offset = self.skipRow(ws, offset)
-        offset = self.listIds("Students", section.members, ws, offset)
-        offset = self.skipRow(ws, offset)
-        offset = self.listIds("Instructors", section.instructors, ws, offset)
-        offset = self.skipRow(ws, offset) + 1
-        offset = self.format_timetables(section, ws, offset)
-        return offset
-
-    def export_sections(self, wb):
-        school_years = sorted(ISchoolYearContainer(self.context).values(),
-                              key=lambda s: s.first)
-
-        for school_year in sorted(school_years, key=lambda i: i.last):
-            for term in sorted(school_year.values(), key=lambda i: i.last):
-                row = 0
-                ws = wb.add_sheet("Sections %s %s" % (school_year.__name__[:10],
-                                                      term.__name__[:11]))
-
-                self.write_header(ws, row, 0,  "School Year")
-                self.write(ws, row, 1,  school_year.__name__)
-                self.write_header(ws, row, 2,  "Term")
-                self.write(ws, row, 3,  term.__name__)
-
-                row += 2
-                sections = removeSecurityProxy(ISectionContainer(term))
-                for section in sorted(sections.values(), key=lambda i: i.__name__):
-                    if not list(section.courses):
-                        continue
-                    row = self.format_section(section, ws, row) + 1
-
     def format_flat_section(self, section, ws, row):
         self.write(ws, row, 3, section.__name__)
         self.write(ws, row, 4, section.title)
@@ -682,6 +645,161 @@ class MegaExporter(SchoolTimetableExportView):
                     current_term = term
                 row = self.format_flat_section(section, ws, row)
 
+    def format_section(self, year, courses, term, section, ws, row):
+        teachers = [t.__name__ for t in section.instructors]
+        resources = [r.__name__ for r in section.resources]
+        self.write(ws, row, 0, year.__name__)
+        self.write(ws, row, 1, courses)
+        self.write(ws, row, 2, term.__name__)
+        self.write(ws, row, 3, section.__name__)
+        if section.previous:
+            self.write(ws, row, 4, section.previous.__name__)
+        if section.next:
+            self.write(ws, row, 5, section.next.__name__)
+        self.write(ws, row, 6, section.title)
+        if section.description:
+            self.write(ws, row, 7, section.description)
+        self.write(ws, row, 8, ', '.join(teachers))
+        self.write(ws, row, 9, ', '.join(resources))
+
+
+    def export_sections(self, wb):
+        ws = wb.add_sheet("Sections")
+        headers = ["School Year", "Courses", "Term", "Section ID", "Previous ID",
+                   "Next ID", "Title", "Description", "Instructors",
+                   "Resources"]
+        for index, header in enumerate(headers):
+            self.write_header(ws, 0, index, header)
+
+        sections = []
+        for year in ISchoolYearContainer(self.context).values():
+            for term in year.values():
+                first = term.first
+                for section in ISectionContainer(term).values():
+                    if not list(section.courses):
+                        continue
+                    courses = ', '.join([c.__name__ for c in section.courses])
+                    sections.append((year, courses, term, section))
+
+        row = 1
+        for year, courses, term, section in sorted(sections):
+            self.format_section(year, courses, term, section, ws, row)
+            row += 1
+
+    def format_student_sections(self, year, student_sections, ws, row):
+        headers = ["School Year", "Term", "Section ID"]
+        for index, header in enumerate(headers):
+            self.write_header(ws, row, index, header)
+        row += 1
+
+        for term, section in sorted(student_sections):
+            self.write(ws, row, 0, year.__name__)
+            self.write(ws, row, 1, term.__name__)
+            self.write(ws, row, 2, section.__name__)
+            row += 1
+        return row + 1
+
+    def format_students_block(self, students, ws, row):
+        self.write_header(ws, row, 0, "Students")
+        row += 1
+
+        for student in students.split(','):
+            self.write(ws, row, 0, student)
+            row += 1
+        return row + 1
+
+    def export_section_enrollment(self, wb):
+        ws = wb.add_sheet("SectionEnrollment")
+
+        year_sections = {}
+        for year in ISchoolYearContainer(self.context).values():
+            sections = year_sections[year] = {}
+            for term in year.values():
+                for section in ISectionContainer(term).values():
+                    if not list(section.courses):
+                        continue
+                    student_ids = [s.username for s in section.members]
+                    students = ','.join(sorted(student_ids))
+                    student_sections = sections.setdefault(students, [])
+                    student_sections.append((term, section))
+
+        row = 0
+        for year, sections in sorted(year_sections.items()):
+            for students, student_sections in sorted(sections.items()):
+                row = self.format_student_sections(year, student_sections, ws,
+                                                   row)
+                row = self.format_students_block(students, ws, row)
+
+    def format_timetable_sections(self, year, timetable_sections, ws, row):
+        headers = ["School Year", "Term", "Section ID"]
+        for index, header in enumerate(headers):
+            self.write_header(ws, row, index, header)
+        row += 1
+
+        for term, section in sorted(timetable_sections):
+            self.write(ws, row, 0, year.__name__)
+            self.write(ws, row, 1, term.__name__)
+            self.write(ws, row, 2, section.__name__)
+            row += 1
+        return row + 1
+
+    def format_timetables_block(self, timetables, ws, row):
+        for timetable in timetables:
+            parts = timetable.split(',')
+            self.write_header(ws, row, 0, "Timetable")
+            self.write(ws, row, 1, parts[0])
+            self.write_header(ws, row, 2, "Consecutive")
+            self.write(ws, row, 3, parts[1])
+            row += 2
+
+            self.write_header(ws, row, 0, "Day")
+            self.write_header(ws, row, 1, "Period ID")
+            row += 1
+
+            parts = parts[2:]
+            while parts:
+                day, period = parts[:2]
+                self.write(ws, row, 0, day)
+                self.write(ws, row, 1, period)
+                parts = parts[2:]
+                row += 1
+        return row + 1
+
+    def export_section_timetables(self, wb):
+        ws = wb.add_sheet("SectionTimetables")
+
+        year_sections = {}
+        for year in ISchoolYearContainer(self.context).values():
+            sections = year_sections[year] = {}
+            for term in year.values():
+                for section in ISectionContainer(term).values():
+                    if not list(section.courses):
+                        continue
+                    timetables = []
+                    for schedule in IScheduleContainer(section).values():
+                        parts = [schedule.timetable.__name__]
+                        if schedule.consecutive_periods_as_one:
+                            parts.append('yes')
+                        else:
+                            parts.append('no')
+                        for period in schedule.periods:
+                            day = period.__parent__
+                            parts.append(day.title)
+                            parts.append(period.title)
+                        timetables.append(','.join(parts))
+                    if not len(timetables):
+                        continue
+                    timetables = tuple(timetables)
+                    timetable_sections = sections.setdefault(timetables, [])
+                    timetable_sections.append((term, section))
+
+        row = 0
+        for year, sections in sorted(year_sections.items()):
+            for timetables, timetable_sections in sorted(sections.items()):
+                row = self.format_timetable_sections(year, timetable_sections,
+                                                     ws, row)
+                row = self.format_timetables_block(timetables, ws, row)
+
     def format_group(self, group, ws, offset):
         fields = [lambda i: ("Group Title", i.title, None),
                   lambda i: ("ID", i.__name__, None),
@@ -715,6 +833,9 @@ class MegaExporter(SchoolTimetableExportView):
         self.export_contacts(wb)
         self.export_courses(wb)
         self.export_flat_sections(wb)
+        self.export_sections(wb)
+        self.export_section_enrollment(wb)
+        self.export_section_timetables(wb)
         self.export_groups(wb)
 
         datafile = StringIO()

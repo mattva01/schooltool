@@ -428,54 +428,6 @@ class WorkSheetStub(object):
         return format_table(table)
 
 
-def doctest_MegaExporter_export_section():
-    """
-
-        >>> app = ISchoolToolApplication(None)
-        >>> sy = ISchoolYearContainer(app)['2005'] = SchoolYear('2005',
-        ...                                                     date(2005, 1, 1),
-        ...                                                     date(2005, 1, 30))
-
-        >>> term = sy['spring'] = Term('Spring', date(2005, 1, 1),
-        ...                                      date(2005, 1, 30))
-
-        >>> pc = app['persons']
-        >>> teacher = pc['teacher'] = Person("Mister T")
-        >>> s1 = pc['john'] = Person("John")
-        >>> s2 = pc['pete'] = Person("Pete")
-
-        >>> course = ICourseContainer(sy)['c1'] = Course("History")
-        >>> section = ISectionContainer(term)['s1'] = Section()
-        >>> section.courses.add(course)
-        >>> section.instructors.add(teacher)
-        >>> section.members.add(s1)
-        >>> section.members.add(s2)
-
-        >>> exporter = MegaExporter(None, None)
-        >>> ws = WorkSheetStub()
-        >>> offset = 0
-        >>> len = exporter.format_section(section, ws, offset)
-
-        >>> print ws.format()
-        +---------------+---------+
-        | Section Title | Section |
-        | ID            | s1      |
-        | Description   |         |
-        |               |         |
-        | Courses       |         |
-        | c1            |         |
-        |               |         |
-        | Students      |         |
-        | John          |         |
-        | Pete          |         |
-        |               |         |
-        | Instructors   |         |
-        | Mister T      |         |
-        +---------------+---------+
-
-    """
-
-
 def doctest_MegaExporter_export_flat_section():
     """
 
