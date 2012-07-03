@@ -679,10 +679,10 @@ class MegaExporter(SchoolTimetableExportView):
                     if not list(section.courses):
                         continue
                     courses = ', '.join([c.__name__ for c in section.courses])
-                    sections.append((year, courses, term, section))
+                    sections.append((year, courses, term, section.__name__, section))
 
         row = 1
-        for year, courses, term, section in sorted(sections):
+        for year, courses, term, section_id, section in sorted(sections):
             self.format_section(year, courses, term, section, ws, row)
             row += 1
 
@@ -692,7 +692,7 @@ class MegaExporter(SchoolTimetableExportView):
             self.write_header(ws, row, index, header)
         row += 1
 
-        for term, section in sorted(student_sections):
+        for term, section_id, section in sorted(student_sections):
             self.write(ws, row, 0, year.__name__)
             self.write(ws, row, 1, term.__name__)
             self.write(ws, row, 2, section.__name__)
@@ -721,7 +721,7 @@ class MegaExporter(SchoolTimetableExportView):
                     student_ids = [s.username for s in section.members]
                     students = ','.join(sorted(student_ids))
                     student_sections = sections.setdefault(students, [])
-                    student_sections.append((term, section))
+                    student_sections.append((term, section.__name__, section))
 
         row = 0
         for year, sections in sorted(year_sections.items()):
@@ -736,7 +736,7 @@ class MegaExporter(SchoolTimetableExportView):
             self.write_header(ws, row, index, header)
         row += 1
 
-        for term, section in sorted(timetable_sections):
+        for term, section_id, section in sorted(timetable_sections):
             self.write(ws, row, 0, year.__name__)
             self.write(ws, row, 1, term.__name__)
             self.write(ws, row, 2, section.__name__)
@@ -791,7 +791,7 @@ class MegaExporter(SchoolTimetableExportView):
                         continue
                     timetables = tuple(timetables)
                     timetable_sections = sections.setdefault(timetables, [])
-                    timetable_sections.append((term, section))
+                    timetable_sections.append((term, section.__name__, section))
 
         row = 0
         for year, sections in sorted(year_sections.items()):

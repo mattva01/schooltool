@@ -1,0 +1,104 @@
+Test for Sections, SectionEnrollment and SectionTimetables sheets
+-----------------------------------------------------------------
+
+Log in as manager:
+
+    >>> manager = browsers.manager
+    >>> manager.ui.login('manager', 'schooltool')
+
+Let's import a file containing the Sections, SectionEnrollment and
+SectionTimetables sheets:
+
+    >>> import os
+    >>> dirname = os.path.abspath(os.path.dirname(__file__))
+    >>> filename = os.path.join(dirname, 'section_sheets.xls')
+    >>> manager.ui.import_xls(filename)
+
+There should be no errors so we should be back at the School tab view:
+
+    >>> manager.url
+    u'http://localhost/manage'
+
+Let's export the just imported data.
+
+    >>> manager.query.link('School').click()
+    >>> manager.query.link('Export as XLS').click()
+    >>> manager.query.button('Download').click()
+    >>> manager.wait(downloads.new)
+
+We'll demonstrate that the data that we just imported has exported the same.
+
+    >>> from schooltool.testing.xls import print_sheet
+    >>> xls = downloads.read()
+    >>> print_sheet(xls.sheet_by_name('Sections'))
+      *         A              B              C                       D                               E                               F                           G                  H               I                   J
+      1  [u'School Year'][ u'Courses' ][   u'Term'    ][        u'Section ID'         ][        u'Previous ID'        ][          u'Next ID'          ][      u'Title'       ][u'Description'][u'Instructors'][     u'Resources'     ]
+      2  [ u'2010-2011' ][  u'art_a'  ][ u'2010-fall' ][u'art_a_2010-fall_2010-spring'][                              ][u'art_a_2010-fall_2010-spring'][  u'Art A \u2013 1'  ][ u'Art desc.' ][u'teacher000' ][      u'room00'       ]
+      3  [ u'2010-2011' ][  u'art_a'  ][u'2011-spring'][u'art_a_2010-fall_2010-spring'][u'art_a_2010-fall_2010-spring'][                              ][  u'Art A \u2013 1'  ][ u'Art desc.' ][u'teacher000' ][      u'room00'       ]
+      4  [ u'2010-2011' ][u'english_a'][ u'2010-fall' ][    u'english_a_2010-fall'    ][                              ][   u'history_a_2011-spring'   ][u'English A \u2013 1'][              ][u'teacher001' ][u'room01, projector00']
+      5  [ u'2010-2011' ][u'history_a'][u'2011-spring'][   u'history_a_2011-spring'   ][    u'english_a_2010-fall'    ][                              ][u'History A \u2013 1'][              ][              ][                      ]
+
+    >>> print_sheet(xls.sheet_by_name('SectionEnrollment'))
+      *          A               B                       C
+      1   [u'School Year'][   u'Term'    ][        u'Section ID'         ]
+      2   [ u'2010-2011' ][ u'2010-fall' ][u'art_a_2010-fall_2010-spring']
+      3   [ u'2010-2011' ][u'2011-spring'][u'art_a_2010-fall_2010-spring']
+      4   [              ][              ][                              ]
+      5   [ u'Students'  ][              ][                              ]
+      6   [u'student000' ][              ][                              ]
+      7   [u'student001' ][              ][                              ]
+      8   [u'student002' ][              ][                              ]
+      9   [u'student003' ][              ][                              ]
+      10  [u'student004' ][              ][                              ]
+      11  [u'student005' ][              ][                              ]
+      12  [              ][              ][                              ]
+      13  [u'School Year'][   u'Term'    ][        u'Section ID'         ]
+      14  [ u'2010-2011' ][ u'2010-fall' ][    u'english_a_2010-fall'    ]
+      15  [ u'2010-2011' ][u'2011-spring'][   u'history_a_2011-spring'   ]
+      16  [              ][              ][                              ]
+      17  [ u'Students'  ][              ][                              ]
+      18  [u'student003' ][              ][                              ]
+      19  [u'student004' ][              ][                              ]
+      20  [u'student005' ][              ][                              ]
+      21  [u'student006' ][              ][                              ]
+      22  [u'student007' ][              ][                              ]
+      23  [u'student008' ][              ][                              ]
+      24  [u'student009' ][              ][                              ]
+
+    >>> print_sheet(xls.sheet_by_name('SectionTimetables'))
+      *          A               B                       C                   D
+      1   [u'School Year'][   u'Term'    ][        u'Section ID'         ][      ]
+      2   [ u'2010-2011' ][ u'2010-fall' ][u'art_a_2010-fall_2010-spring'][      ]
+      3   [ u'2010-2011' ][u'2011-spring'][u'art_a_2010-fall_2010-spring'][      ]
+      4   [              ][              ][                              ][      ]
+      5   [ u'Timetable' ][  u'simple'   ][        u'Consecutive'        ][u'no' ]
+      6   [              ][              ][                              ][      ]
+      7   [    u'Day'    ][ u'Period ID' ][                              ][      ]
+      8   [   u'Day 1'   ][     u'B'     ][                              ][      ]
+      9   [   u'Day 2'   ][     u'B'     ][                              ][      ]
+      10  [   u'Day 3'   ][     u'B'     ][                              ][      ]
+      11  [   u'Day 4'   ][     u'B'     ][                              ][      ]
+      12  [   u'Day 5'   ][     u'B'     ][                              ][      ]
+      13  [   u'Day 6'   ][     u'B'     ][                              ][      ]
+      14  [              ][              ][                              ][      ]
+      15  [u'School Year'][   u'Term'    ][        u'Section ID'         ][      ]
+      16  [ u'2010-2011' ][ u'2010-fall' ][    u'english_a_2010-fall'    ][      ]
+      17  [ u'2010-2011' ][u'2011-spring'][   u'history_a_2011-spring'   ][      ]
+      18  [              ][              ][                              ][      ]
+      19  [ u'Timetable' ][  u'simple'   ][        u'Consecutive'        ][u'yes']
+      20  [              ][              ][                              ][      ]
+      21  [    u'Day'    ][ u'Period ID' ][                              ][      ]
+      22  [   u'Day 1'   ][     u'E'     ][                              ][      ]
+      23  [   u'Day 2'   ][     u'E'     ][                              ][      ]
+      24  [   u'Day 3'   ][     u'E'     ][                              ][      ]
+      25  [   u'Day 4'   ][     u'E'     ][                              ][      ]
+      26  [   u'Day 5'   ][     u'E'     ][                              ][      ]
+      27  [   u'Day 6'   ][     u'E'     ][                              ][      ]
+
+Finally, we'll re-import the just exported data to show that the importer can
+survive the round-trip.
+
+    >>> dirname = downloads.path
+    >>> filename = os.path.join(dirname, downloads.files.keys()[0])
+    >>> manager.ui.import_xls(filename)
+

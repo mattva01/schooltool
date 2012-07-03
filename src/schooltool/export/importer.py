@@ -1519,7 +1519,7 @@ class SectionEnrollmentImporter(ImporterBase, SectionMixin):
                     if student not in section.members:
                         section.members.add(removeSecurityProxy(student))
                     if student not in students_group.members:
-                        students.members.add(removeSecurityProxy(student))
+                        students_group.members.add(removeSecurityProxy(student))
 
 
 class SectionTimetablesImporter(ImporterBase, SectionMixin):
