@@ -564,87 +564,6 @@ class MegaExporter(SchoolTimetableExportView):
             offset += 1
         return offset
 
-    def format_flat_section(self, section, ws, row):
-        self.write(ws, row, 3, section.__name__)
-        self.write(ws, row, 4, section.title)
-        if section.description:
-            self.write(ws, row, 5, section.description)
-        if section.previous is not None:
-            self.write(ws, row, 9, section.previous.__name__)
-        if section.next is not None:
-            self.write(ws, row, 10, section.next.__name__)
-
-        teachers = [t.__name__ for t in section.instructors]
-        students = [s.__name__ for s in section.members]
-        resources = [r.__name__ for r in section.resources]
-        schedules = list(IScheduleContainer(section).values())
-        if schedules:
-            schedule = schedules[0]
-            self.write(ws, row, 11, schedule.timetable.__name__)
-            self.write(ws, row, 12, (schedule.consecutive_periods_as_one
-                                     and 'yes' or 'no'))
-            days = [p.__parent__.title for p in schedule.periods]
-            periods = [p.title for p in schedule.periods]
-        else:
-            days = []
-            periods = []
-        line_maps = map(None, teachers, students, resources, days,
-                        periods)
-        if line_maps:
-            for line_map in line_maps:
-                teacher, student, resource, day, period = line_map
-                if teacher is not None:
-                    self.write(ws, row, 6, teacher)
-                if student is not None:
-                    self.write(ws, row, 7, student)
-                if resource is not None:
-                    self.write(ws, row, 8, resource)
-                if day is not None:
-                    self.write(ws, row, 13, day)
-                    self.write(ws, row, 14, period)
-                row += 1
-        else:
-            row += 1
-        return row
-
-    def export_flat_sections(self, wb):
-        ws = wb.add_sheet("FlatSectionsTable")
-        headers = ["School Year", "Courses", "Term", "Section ID", "Title",
-                   "Description", "Instructors", "Students", "Resources",
-                   "Link Prev", "Link Next", "Timetable", "Consecutive",
-                   "Day", "Period ID"]
-        for index, header in enumerate(headers):
-            self.write_header(ws, 0, index, header)
-
-        sections = {}
-        for year in ISchoolYearContainer(self.context).values():
-            current_sections = sections[year] = []
-            for term in year.values():
-                first = term.first
-                for section in ISectionContainer(term).values():
-                    if not list(section.courses):
-                        continue
-                    courses = ', '.join([c.__name__ for c in section.courses])
-                    current_sections.append((courses, first, term, section))
-
-        row = 1
-        for year in sorted(sections, key=lambda y: y.first):
-            current_sections = sections[year]
-            if not current_sections:
-                continue
-            self.write(ws, row, 0,  year.__name__)
-            timetables = ITimetableContainer(year)
-            current_courses = None
-            for courses, first, term, section in sorted(current_sections):
-                if courses != current_courses:
-                    self.write(ws, row, 1,  courses)
-                    current_courses = courses
-                    current_term = None
-                if term != current_term:
-                    self.write(ws, row, 2, term.__name__)
-                    current_term = term
-                row = self.format_flat_section(section, ws, row)
-
     def format_section(self, year, courses, term, section, ws, row):
         teachers = [t.__name__ for t in section.instructors]
         resources = [r.__name__ for r in section.resources]
@@ -832,7 +751,6 @@ class MegaExporter(SchoolTimetableExportView):
         self.export_persons(wb)
         self.export_contacts(wb)
         self.export_courses(wb)
-        self.export_flat_sections(wb)
         self.export_sections(wb)
         self.export_section_enrollment(wb)
         self.export_section_timetables(wb)

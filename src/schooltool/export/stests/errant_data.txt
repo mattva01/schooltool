@@ -158,52 +158,6 @@ This file has examples of bad data for the Sections sheet:
     is not a valid username:
     A12, A17
 
-This file has examples of bad data for the FlatSectionsTable sheet:
-
-    >>> import_file('errant_flat_sections_table.xls')
-    FlatSectionsTable
-    -----------------
-    invalid school year:
-    A3
-    is not a valid course in the given school year:
-    B5
-    is not a valid day id for the given timetable:
-    N10
-    is not a valid period id for the given day:
-    O11
-    is not a valid resource id:
-    I9
-    is not a valid section id in the next term:
-    K9, K13
-    is not a valid section id in the previous term:
-    J13-14
-    is not a valid term in the given school year:
-    C7
-    is not a valid timetable in the given school year:
-    L9
-    is not a valid username:
-    G9, H9
-    missing required text:
-    D8, E9
-    must be either True or False:
-    M9-10
-    must have a course:
-    B4
-    must have a school year:
-    A2
-    must have a term:
-    C6
-    must have a valid period id:
-    O12
-    no day is defined in this row:
-    O14
-    no timetable is defined for this section:
-    N13
-    the current section is in the first term of the school year:
-    J9
-    the current section is in the last term of the school year:
-    K14
-
 This file has examples of bad data for the Groups sheet:
 
     >>> import_file('errant_groups.xls')
