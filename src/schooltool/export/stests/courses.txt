@@ -13,9 +13,10 @@ Let's import a file containing the Courses sheet:
     >>> filename = os.path.join(dirname, 'courses.xls')
     >>> manager.ui.import_xls(filename)
 
-There should be no errors:
+There should be no errors so we should be back at the School tab view:
 
-    >>> print manager.query_all.css('.status div').text
+    >>> manager.url
+    u'http://localhost/manage'
 
 We see that there are two courses as specified in the spreadsheet.
 
