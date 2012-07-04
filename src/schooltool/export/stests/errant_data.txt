@@ -19,6 +19,75 @@ filename and printing out the errors.
     ...         lines = [l.strip() for l in errors[0].split('\n') if l.strip()]
     ...         print '\n'.join(lines)
 
+This file has examples of bad data for the Sections, SectionEnrollment and
+SectionTimetables sheets:
+
+    >>> import_file('errant_section_sheets.xls')
+    SectionEnrollment
+    -----------------
+    invalid school year:
+    A3
+    is not a valid section id in the specified term:
+    C5
+    is not a valid term in the given school year:
+    B4
+    is not a valid username:
+    A9
+    numeric ids must be formatted as text, not numeric:
+    A2, A8, B2, C2
+    SectionTimetables
+    -----------------
+    invalid school year:
+    A3
+    is not a valid day id for the given timetable:
+    A22
+    is not a valid period id for the given day:
+    B23
+    is not a valid section id in the specified term:
+    C5
+    is not a valid term in the given school year:
+    B4
+    must be either TRUE, FALSE, YES or NO (upper, lower and mixed case are all valid):
+    D13
+    numeric ids must be formatted as text, not numeric:
+    A2, A21, B2, B21, C2
+    Sections
+    --------
+    has an invalid course id for the given school year:
+    B8
+    has an invalid resource id:
+    I7-8
+    has an invalid username:
+    G7-8
+    invalid school year:
+    A7
+    is not a valid term in the given school year:
+    C8
+    missing required text:
+    B9, C9, D9, G9
+    numeric ids must be formatted as text, not numeric:
+    A6, B6, C6, D6, E6, F6, I6, J6
+
+This file has examples of bad data for the LinkedSectionImport sheet:
+
+    >>> import_file('errant_linked_section_import.xls')
+    LinkedSectionImport
+    -------------------
+    end term cannot be before start term:
+    D8
+    has an invalid course id for the given school year:
+    B7
+    has an invalid resource id:
+    I6
+    has an invalid username:
+    G6
+    invalid school year:
+    A6
+    is not a valid term in the given school year:
+    C7, D7
+    numeric ids must be formatted as text, not numeric:
+    A5, B5, C5, D5, E5, H5, I5
+
 This file has examples of bad data for the School Years sheet:
 
     >>> import_file('errant_years.xls')
@@ -108,7 +177,7 @@ This file has examples of bad data for the Persons sheet:
     H2, Q2-3
     missing required text:
     C2, E2, P2, R2
-    must be either True or False:
+    must be either TRUE, FALSE, YES or NO (upper, lower and mixed case are all valid):
     R3
 
 We'll remove the demo fields to not break future tests.
@@ -132,7 +201,7 @@ This file has examples of bad data for the Courses sheet:
     missing required text:
     B2, C2
 
-This file has examples of bad data for the Sections sheet:
+This file has examples of bad data for the old Section sheets:
 
     >>> import_file('errant_sections.xls')
     School Timetables

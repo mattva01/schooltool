@@ -581,27 +581,26 @@ class MegaExporter(SchoolTimetableExportView):
         self.write(ws, row, 8, ', '.join(teachers))
         self.write(ws, row, 9, ', '.join(resources))
 
-
     def export_sections(self, wb):
         ws = wb.add_sheet("Sections")
-        headers = ["School Year", "Courses", "Term", "Section ID", "Previous ID",
-                   "Next ID", "Title", "Description", "Instructors",
-                   "Resources"]
+        headers = ["School Year", "Courses", "Term", "Section ID",
+                   "Previous ID", "Next ID", "Title", "Description",
+                   "Instructors", "Resources"]
         for index, header in enumerate(headers):
             self.write_header(ws, 0, index, header)
 
         sections = []
         for year in ISchoolYearContainer(self.context).values():
             for term in year.values():
-                first = term.first
                 for section in ISectionContainer(term).values():
                     if not list(section.courses):
                         continue
                     courses = ', '.join([c.__name__ for c in section.courses])
-                    sections.append((year, courses, term, section.__name__, section))
+                    sections.append((year, courses, term.first, term,
+                                     section.__name__, section))
 
         row = 1
-        for year, courses, term, section_id, section in sorted(sections):
+        for year, courses, first, term, section_id, section in sorted(sections):
             self.format_section(year, courses, term, section, ws, row)
             row += 1
 
@@ -611,7 +610,7 @@ class MegaExporter(SchoolTimetableExportView):
             self.write_header(ws, row, index, header)
         row += 1
 
-        for term, section_id, section in sorted(student_sections):
+        for first, term, section_id, section in sorted(student_sections):
             self.write(ws, row, 0, year.__name__)
             self.write(ws, row, 1, term.__name__)
             self.write(ws, row, 2, section.__name__)
@@ -640,7 +639,8 @@ class MegaExporter(SchoolTimetableExportView):
                     student_ids = [s.username for s in section.members]
                     students = ','.join(sorted(student_ids))
                     student_sections = sections.setdefault(students, [])
-                    student_sections.append((term, section.__name__, section))
+                    student_sections.append((term.first, term, section.__name__,
+                                             section))
 
         row = 0
         for year, sections in sorted(year_sections.items()):
@@ -655,7 +655,7 @@ class MegaExporter(SchoolTimetableExportView):
             self.write_header(ws, row, index, header)
         row += 1
 
-        for term, section_id, section in sorted(timetable_sections):
+        for first, term, section_id, section in sorted(timetable_sections):
             self.write(ws, row, 0, year.__name__)
             self.write(ws, row, 1, term.__name__)
             self.write(ws, row, 2, section.__name__)
@@ -710,7 +710,8 @@ class MegaExporter(SchoolTimetableExportView):
                         continue
                     timetables = tuple(timetables)
                     timetable_sections = sections.setdefault(timetables, [])
-                    timetable_sections.append((term, section.__name__, section))
+                    timetable_sections.append((term.first, term,
+                                               section.__name__, section))
 
         row = 0
         for year, sections in sorted(year_sections.items()):
