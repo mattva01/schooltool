@@ -99,6 +99,8 @@ This file has examples of bad data for the School Years sheet:
     D6
     has no date in it:
     C2, D2
+    numeric ids must be formatted as text, not numeric:
+    A7
     start date overlaps another year:
     C5
 
@@ -116,9 +118,11 @@ This file has examples of bad data for the Terms sheet:
     has no date in it:
     A15, B16, D2, E2
     invalid school year:
-    A3-4
+    A4
     missing required text:
     B2, C2
+    numeric ids must be formatted as text, not numeric:
+    A3
     start date before start of school year:
     D6
     start date overlaps another term:
@@ -131,6 +135,8 @@ This file has examples of bad data for the School Timetables sheet:
     -----------------
     missing required text:
     B1-5, B10, B15, B20, B25, B35, B48
+    numeric ids must be formatted as text, not numeric:
+    B7-9
 
 This file has examples of bad data for the Resouces sheet:
 
@@ -179,6 +185,8 @@ This file has examples of bad data for the Persons sheet:
     C2, E2, P2, R2
     must be either TRUE, FALSE, YES or NO (upper, lower and mixed case are all valid):
     R3
+    numeric ids must be formatted as text, not numeric:
+    A5
 
 We'll remove the demo fields to not break future tests.
 
@@ -200,6 +208,8 @@ This file has examples of bad data for the Courses sheet:
     A4
     missing required text:
     B2, C2
+    numeric ids must be formatted as text, not numeric:
+    B3
 
 This file has examples of bad data for the old Section sheets:
 
@@ -238,6 +248,8 @@ This file has examples of bad data for the Groups sheet:
     A23
     missing required text:
     B1-3
+    numeric ids must be formatted as text, not numeric:
+    B7
 
 This file has examples of bad data for the Contact Persons and Contact
 Relationships sheets:
