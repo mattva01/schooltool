@@ -1,0 +1,39 @@
+Test for LinkedSectionImporter sheet
+------------------------------------
+
+Log in as manager:
+
+    >>> manager = browsers.manager
+    >>> manager.ui.login('manager', 'schooltool')
+
+Let's import a file containing the LinkedSectionImporter sheet:
+
+    >>> import os
+    >>> dirname = os.path.abspath(os.path.dirname(__file__))
+    >>> filename = os.path.join(dirname, 'linked_section_import.xls')
+    >>> manager.ui.import_xls(filename)
+
+There should be no errors so we should be back at the School tab view:
+
+    >>> manager.url
+    u'http://localhost/manage'
+
+Let's export the just imported data.
+
+    >>> manager.query.link('School').click()
+    >>> manager.query.link('Export as XLS').click()
+    >>> manager.query.button('Download').click()
+    >>> manager.wait(downloads.new)
+
+We'll demonstrate that the sections were created as requested.
+
+    >>> from schooltool.testing.xls import print_sheet
+    >>> xls = downloads.read()
+    >>> print_sheet(xls.sheet_by_name('Sections'))
+      *         A              B              C                       D                               E                               F                           G                   H                I                   J
+      1  [u'School Year'][ u'Courses' ][   u'Term'    ][        u'Section ID'         ][        u'Previous ID'        ][          u'Next ID'          ][      u'Title'       ][ u'Description' ][u'Instructors'][     u'Resources'     ]
+      2  [ u'2010-2011' ][  u'art_a'  ][ u'2010-fall' ][u'art_a_2010-fall_2010-spring'][                              ][u'art_a_2010-fall_2010-spring'][  u'Art A \u2013 1'  ][  u'Art desc.'  ][u'teacher000' ][      u'room00'       ]
+      3  [ u'2010-2011' ][  u'art_a'  ][u'2011-spring'][u'art_a_2010-fall_2010-spring'][u'art_a_2010-fall_2010-spring'][                              ][  u'Art A \u2013 1'  ][  u'Art desc.'  ][u'teacher000' ][      u'room00'       ]
+      4  [ u'2010-2011' ][u'english_a'][ u'2010-fall' ][    u'english_a_2010-fall'    ][                              ][                              ][u'English A \u2013 1'][u'English desc.'][u'teacher001' ][u'room01, projector00']
+      5  [ u'2010-2011' ][u'history_a'][u'2011-spring'][   u'history_a_2011-spring'   ][                              ][                              ][u'History A \u2013 1'][                ][              ][                      ]
+
