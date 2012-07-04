@@ -11,6 +11,13 @@ XLS
 - FlatSectionsTable sheet for easier section importing.
 - Old section import still supported; export only delivers FlatSectionsTable.
 - Added course_id, government_id and credits to Courses sheet import/export.
+- new sections sheets to replace FlatSectionsTable (https://launchpad.net/bugs/1020836)
+- remove the ophaned old Sections exporter and tests (https://launchpad.net/bugs/1020837)
+- new LinkedSectionImport sheet for import only (https://launchpad.net/bugs/1020838)
+- import errors need to be collated and returned in a textarea (https://launchpad.net/bugs/1020839)
+- ResourceImporter needs to process desription cells (https://launchpad.net/bugs/1020840)
+- special error message for numeric values in id cells (https://launchpad.net/bugs/1020841)
+- exporters must skip sections with no courses (https://launchpad.net/bugs/1020842)
 
 Development tools
 +++++++++++++++++
