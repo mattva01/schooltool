@@ -14,58 +14,139 @@ filename and printing out the errors.
     ...     dirname = os.path.abspath(os.path.dirname(__file__))
     ...     filename = os.path.join(dirname, filename)
     ...     manager.ui.import_xls(filename)
-    ...     for txt in manager.query_all.css('.status div').text:
-    ...         if txt:
-    ...             print txt.split('\n')[1]
+    ...     errors = manager.query_all.css('textarea').text
+    ...     if errors:
+    ...         lines = [l.strip() for l in errors[0].split('\n') if l.strip()]
+    ...         print '\n'.join(lines)
+
+This file has examples of bad data for the Sections, SectionEnrollment and
+SectionTimetables sheets:
+
+    >>> import_file('errant_section_sheets.xls')
+    SectionEnrollment
+    -----------------
+    invalid school year:
+    A3
+    is not a valid section id in the specified term:
+    C5
+    is not a valid term in the given school year:
+    B4
+    is not a valid username:
+    A9
+    numeric ids must be formatted as text, not numeric:
+    A2, A8, B2, C2
+    SectionTimetables
+    -----------------
+    invalid school year:
+    A3
+    is not a valid day id for the given timetable:
+    A22
+    is not a valid period id for the given day:
+    B23
+    is not a valid section id in the specified term:
+    C5
+    is not a valid term in the given school year:
+    B4
+    must be either TRUE, FALSE, YES or NO (upper, lower and mixed case are all valid):
+    D13
+    numeric ids must be formatted as text, not numeric:
+    A2, A21, B2, B21, C2
+    Sections
+    --------
+    has an invalid course id for the given school year:
+    B8
+    has an invalid resource id:
+    I7-8
+    has an invalid username:
+    G7-8
+    invalid school year:
+    A7
+    is not a valid term in the given school year:
+    C8
+    missing required text:
+    B9, C9, D9, G9
+    numeric ids must be formatted as text, not numeric:
+    A6, B6, C6, D6, E6, F6, I6, J6
+
+This file has examples of bad data for the LinkedSectionImport sheet:
+
+    >>> import_file('errant_linked_section_import.xls')
+    LinkedSectionImport
+    -------------------
+    end term cannot be before start term:
+    D8
+    has an invalid course id for the given school year:
+    B7
+    has an invalid resource id:
+    I6
+    has an invalid username:
+    G6
+    invalid school year:
+    A6
+    is not a valid term in the given school year:
+    C7, D7
+    numeric ids must be formatted as text, not numeric:
+    A5, B5, C5, D5, E5, H5, I5
 
 This file has examples of bad data for the School Years sheet:
 
     >>> import_file('errant_years.xls')
-    School Years C2 has no date in it
-    School Years D2 has no date in it
-    School Years D3 end date cannot be before start date
-    School Years C5 start date overlaps another year
-    School Years D6 end date overlaps another year
+    School Years
+    ------------
+    end date cannot be before start date:
+    D3
+    end date overlaps another year:
+    D6
+    has no date in it:
+    C2, D2
+    numeric ids must be formatted as text, not numeric:
+    A7
+    start date overlaps another year:
+    C5
 
 This file has examples of bad data for the Terms sheet:
 
     >>> import_file('errant_terms.xls')
-    Terms B2 missing required text
-    Terms C2 missing required text
-    Terms D2 has no date in it
-    Terms E2 has no date in it
-    Terms A3 invalid school year
-    Terms A4 invalid school year
-    Terms E5 end date cannot be before start date
-    Terms D6 start date before start of school year
-    Terms E7 end date after end of school year
-    Terms D10 start date overlaps another term
-    Terms E11 end date overlaps another term
-    Terms A15 has no date in it
-    Terms B16 has no date in it
-    Terms E17 end date cannot be before start date
+    Terms
+    -----
+    end date after end of school year:
+    E7
+    end date cannot be before start date:
+    E5, E17
+    end date overlaps another term:
+    E11
+    has no date in it:
+    A15, B16, D2, E2
+    invalid school year:
+    A4
+    missing required text:
+    B2, C2
+    numeric ids must be formatted as text, not numeric:
+    A3
+    start date before start of school year:
+    D6
+    start date overlaps another term:
+    D10
 
 This file has examples of bad data for the School Timetables sheet:
 
     >>> import_file('errant_timetables.xls')
-    School Timetables B1 missing required text
-    School Timetables B2 missing required text
-    School Timetables B3 missing required text
-    School Timetables B4 missing required text
-    School Timetables B5 missing required text
-    School Timetables B10 missing required text
-    School Timetables B15 missing required text
-    School Timetables B20 missing required text
-    School Timetables B25 missing required text
-    School Timetables B35 missing required text
-    School Timetables B48 missing required text
+    School Timetables
+    -----------------
+    missing required text:
+    B1-5, B10, B15, B20, B25, B35, B48
+    numeric ids must be formatted as text, not numeric:
+    B7-9
 
 This file has examples of bad data for the Resouces sheet:
 
     >>> import_file('errant_resources.xls')
-    Resources B2 missing required text
-    Resources C2 missing required text
-    Resources B3 must be either 'Location', 'Equipment' or 'Resource'
+    Resources
+    ---------
+    missing required text:
+    B2, C2
+    must be either 'Location', 'Equipment' or 'Resource':
+    B3
 
 We'll add some demo fields to test importing demos.
 
@@ -92,15 +173,20 @@ We'll add some demo fields to test importing demos.
 This file has examples of bad data for the Persons sheet:
 
     >>> import_file('errant_persons.xls')
-    Persons C2 missing required text
-    Persons E2 missing required text
-    Persons H2 has no date in it
-    Persons P2 missing required text
-    Persons Q2 has no date in it
-    Persons R2 missing required text
-    Persons Q3 has no date in it
-    Persons R3 must be either True or False
-    Persons A4 Username cannot contain non-ascii characters: ${string}
+    Persons
+    -------
+    Username cannot contain non-ascii characters:
+    A4
+    gender must be male or female:
+    I2
+    has no date in it:
+    H2, Q2-3
+    missing required text:
+    C2, E2, P2, R2
+    must be either TRUE, FALSE, YES or NO (upper, lower and mixed case are all valid):
+    R3
+    numeric ids must be formatted as text, not numeric:
+    A5
 
 We'll remove the demo fields to not break future tests.
 
@@ -114,77 +200,79 @@ We'll remove the demo fields to not break future tests.
 This file has examples of bad data for the Courses sheet:
 
     >>> import_file('errant_courses.xls')
-    Courses B2 missing required text
-    Courses C2 missing required text
-    Courses G3 course credits need to be a valid number
-    Courses A4 invalid school year
+    Courses
+    -------
+    course credits need to be a valid number:
+    G3
+    invalid school year:
+    A4
+    missing required text:
+    B2, C2
+    numeric ids must be formatted as text, not numeric:
+    B3
 
-This file has examples of bad data for the Sections sheet:
+This file has examples of bad data for the old Section sheets:
 
     >>> import_file('errant_sections.xls')
-    School Timetables B5 missing required text
-    Sections 1 B1 missing required text
-    Sections 1 D1 missing required text
-    Sections_3 B1 invalid school year
-    Sections_4 D1 is not a valid term in the given school year
-    Sections_5 A12 is not a valid username
-    Sections_5 A17 is not a valid username
-    Sections_5 A20 is not a valid timetable in the given school year
-
-This file has examples of bad data for the FlatSectionsTable sheet:
-
-    >>> import_file('errant_flat_sections_table.xls')
-    FlatSectionsTable A2 must have a school year
-    FlatSectionsTable A3 invalid school year
-    FlatSectionsTable B4 must have a course
-    FlatSectionsTable B5 is not a valid course in the given school year
-    FlatSectionsTable C6 must have a term
-    FlatSectionsTable C7 is not a valid term in the given school year
-    FlatSectionsTable D8 missing required text
-    FlatSectionsTable M9 must be either True or False
-    FlatSectionsTable E9 missing required text
-    FlatSectionsTable G9 is not a valid username
-    FlatSectionsTable H9 is not a valid username
-    FlatSectionsTable I9 is not a valid resource id
-    FlatSectionsTable L9 is not a valid timetable in the given school year
-    FlatSectionsTable M10 must be either True or False
-    FlatSectionsTable N10 is not a valid day id for the given timetable
-    FlatSectionsTable O11 is not a valid period id for the given day
-    FlatSectionsTable O12 must have a valid period id
-    FlatSectionsTable N13 no timetable is defined for this section
-    FlatSectionsTable O14 no day is defined in this row
-    FlatSectionsTable J9 the current section is in the first term of the school year
-    FlatSectionsTable J13 is not a valid section id in the previous term
-    FlatSectionsTable J14 is not a valid section id in the previous term
-    FlatSectionsTable K9 is not a valid section id in the next term
-    FlatSectionsTable K13 is not a valid section id in the next term
-    FlatSectionsTable K14 the current section is in the last term of the school year
+    School Timetables
+    -----------------
+    missing required text:
+    B5
+    Sections 1
+    ----------
+    missing required text:
+    B1, D1
+    Sections_3
+    ----------
+    invalid school year:
+    B1
+    Sections_4
+    ----------
+    is not a valid term in the given school year:
+    D1
+    Sections_5
+    ----------
+    is not a valid timetable in the given school year:
+    A20
+    is not a valid username:
+    A12, A17
 
 This file has examples of bad data for the Groups sheet:
 
     >>> import_file('errant_groups.xls')
-    Groups B1 missing required text
-    Groups B2 missing required text
-    Groups B3 missing required text
-    Groups A11 invalid school year
-    Groups A23 is not a valid username
+    Groups
+    ------
+    invalid school year:
+    A11
+    is not a valid username:
+    A23
+    missing required text:
+    B1-3
+    numeric ids must be formatted as text, not numeric:
+    B7
 
 This file has examples of bad data for the Contact Persons and Contact
 Relationships sheets:
 
     >>> import_file('errant_contacts.xls')
-    Contact Persons A2 Username cannot contain non-ascii characters: ${string}
-    Contact Persons C3 missing required text
-    Contact Persons E3 missing required text
-    Contact Persons B4 must be empty when ID is a user id
-    Contact Persons C4 must be empty when ID is a user id
-    Contact Persons D4 must be empty when ID is a user id
-    Contact Persons E4 must be empty when ID is a user id
-    Contact Persons F4 must be empty when ID is a user id
-    Contact Relationships B2 missing required text
-    Contact Relationships A3 Username cannot contain non-ascii characters: ${string}
-    Contact Relationships B3 Username cannot contain non-ascii characters: ${string}
-    Contact Relationships A4 is not a valid username
-    Contact Relationships B4 is not a valid username or contact id
-    Contact Relationships C4 is not a valid contact relationship
+    Contact Persons
+    ---------------
+    Username cannot contain non-ascii characters:
+    A2
+    missing required text:
+    C3, E3
+    must be empty when ID is a user id:
+    B4, C4, D4, E4, F4
+    Contact Relationships
+    ---------------------
+    Username cannot contain non-ascii characters:
+    A3, B3
+    is not a valid contact relationship:
+    C4
+    is not a valid username:
+    A4
+    is not a valid username or contact id:
+    B4
+    missing required text:
+    B2
 

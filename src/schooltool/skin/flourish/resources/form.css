@@ -192,6 +192,13 @@ form .buttons .button-cancel {
     margin-right: 2px;
 }
 
+.status > textarea {
+    margin-bottom: 8px;
+    font-family: Monospace;
+    font-size: 12px;
+    font-weight: bold;
+}
+
 form .status > .errors {
     display: none;
 }
