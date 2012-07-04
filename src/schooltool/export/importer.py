@@ -128,7 +128,7 @@ ERROR_INVALID_RESOURCE_ID_LIST = _("has an invalid resource id")
 ERROR_INVALID_COURSE_ID_LIST = _("has an invalid course id for the given school year")
 ERROR_END_TERM_BEFORE_START = _('end term cannot be before start term')
 ERROR_TERM_SECTION_ID = _('is not a valid section id in the specified term')
-ERROR_ID_MUST_BE_TEXT = _('numeric ids must be formatted as text, not numeric')
+ERROR_ID_MUST_BE_TEXT = _('ID cells must be formatted as text in the spreadsheet')
 ERROR_INCONSISTENT_SCHOOL_YEAR = _('school years must be consistent within this table')
 
 
