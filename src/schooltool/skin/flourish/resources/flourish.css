@@ -339,3 +339,9 @@ pre.traceback {
     clear: both;
     display: block;
 }
+
+/* XXX: used in person sections viewlet */
+
+.tree_list li a.leaf_url:hover {
+    text-decoration: underline;
+}
