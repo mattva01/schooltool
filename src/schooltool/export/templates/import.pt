@@ -17,7 +17,7 @@
         <h3 i18n:translate="">
           Import Data
         </h3>
-      <p class="error" tal:condition="view/errors"
+      <p class="error" tal:condition="view/hasErrors"
          tal:repeat="err view/displayErrors" tal:content="err" />
 
         <p i18n:translate="">

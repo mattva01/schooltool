@@ -957,7 +957,8 @@ class ContactPersonImporter(ImporterBase):
             data = {}
 
             data['__name__'] = self.getRequiredIdFromCell(sh, row, 0)
-            self.validateUnicode(data['__name__'], row, 0)
+            if data['__name__'] is not None:
+                self.validateUnicode(data['__name__'], row, 0)
             if num_errors == len(self.errors):
                 if data['__name__'] not in persons:
                     data['prefix'] = self.getTextFromCell(sh, row, 1)
@@ -1863,6 +1864,22 @@ class MegaImporter(BrowserView):
         if "UPDATE_SUBMIT" not in self.request:
             return False
         return not self.data_provided or self.errors
+
+    def displayErrors(self):
+        if not self.data_provided:
+            return [self.errorSummary()]
+        ERROR_FMT = _('${sheet_name} ${column}${row} ${message}')
+        errors = []
+        for sheet_name, row, col, message in self.errors[:25]:
+            full_message = format_message(
+                ERROR_FMT,
+                {'sheet_name': sheet_name,
+                 'column': chr(col + ord('A')),
+                 'row': row + 1,
+                 'message': message}
+                )
+            errors.append(full_message)
+        return errors
 
     def errorSummary(self):
         if not self.data_provided:
