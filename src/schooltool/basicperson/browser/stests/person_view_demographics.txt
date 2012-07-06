@@ -6,10 +6,6 @@ in the person index view.
 
 Some helpers:
 
-    >>> def format_group_row(row):
-    ...     title = row.query.xpath('td[1]/a').text
-    ...     schoolyear = row.query.xpath('td[2]/a').text
-    ...     return '%s, %s' % (title, schoolyear)
     >>> def demo_fields(browser):
     ...     sel = 'table.person-view-demographics tbody'
     ...     for tbody in browser.query_all.css(sel):

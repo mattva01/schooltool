@@ -12,14 +12,14 @@
              i18n:attributes="alt" />
       </a>
     </h3>
-    <div class="tree_list" tal:condition="view/schoolyears">
+    <div class="tree_list groups_tree" tal:condition="view/schoolyears">
       <ul>
-        <li tal:repeat="schoolyear view/schoolyears">
+        <li tal:repeat="schoolyear view/schoolyears" class="year">
           <a tal:attributes="href schoolyear/obj/@@absolute_url;
                              title schoolyear/obj/title"
              tal:content="schoolyear/obj/title"></a>
           <ul>
-            <li tal:repeat="group schoolyear/groups">
+            <li tal:repeat="group schoolyear/groups" class="group">
               <a tal:attributes="href group/@@absolute_url;
                                title group/title"
                  tal:content="group/title"
