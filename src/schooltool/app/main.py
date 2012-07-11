@@ -457,16 +457,27 @@ def get_schooltool_plugin_configurations():
 plugin_configurations = get_schooltool_plugin_configurations()
 
 
-class SchoolToolServer(object):
+class SchoolToolMachinery(object):
 
     ZCONFIG_SCHEMA = os.path.join(os.path.dirname(__file__),
                                   'config-schema.xml')
 
-    system_name = "SchoolTool"
-
     Options = Options
 
-    def configure(self, options):
+    def readConfig(self, filename):
+        # Read configuration file
+        schema_string = open(self.ZCONFIG_SCHEMA).read()
+        plugins = [configuration
+                   for (configuration, handler) in plugin_configurations]
+        schema_string = schema_string % {'plugins': "\n".join(plugins)}
+        schema_file = StringIO(schema_string)
+
+        schema = ZConfig.loadSchemaFile(schema_file, self.ZCONFIG_SCHEMA)
+
+        config, handler = ZConfig.loadConfig(schema, filename)
+        return config, handler
+
+    def configureComponents(self, options):
         """Configure Zope 3 components."""
         # Hook up custom component architecture calls
         setHooks()
@@ -480,12 +491,107 @@ class SchoolToolServer(object):
             context.provideFeature('devmode')
 
         zope.configuration.xmlconfig.registerCommonDirectives(context)
+        site_config_filename = options.config.site_definition
         context = zope.configuration.xmlconfig.file(
-            self.siteConfigFile, context=context)
+            site_config_filename, context=context)
 
         # Store the configuration context
         from zope.app.appsetup import appsetup
         appsetup.__dict__['__config_context'] = context
+
+
+    def configureReportlab(self, fontdirs):
+        """Configure reportlab given a path to TrueType fonts.
+
+        Disables PDF support in SchoolTool if fontdir is empty.
+        Outputs a warning to stderr in case of errors.
+        """
+        if not fontdirs:
+            return
+
+        try:
+            import reportlab
+        except ImportError:
+            print >> sys.stderr, _("Warning: could not find the reportlab"
+                                   " library.\nPDF support disabled.")
+            return
+
+        existing_directories = []
+        for fontdir in fontdirs.split(':'):
+            if os.path.isdir(fontdir):
+                existing_directories.append(fontdir)
+
+        if not existing_directories:
+            print >> sys.stderr, (_("Warning: font directories '%s' do"
+                                    " not exist.\nPDF support disabled.")
+                                  % fontdirs)
+            return
+
+        for font_file in pdf.font_map.values():
+            font_exists = False
+            for fontdir in existing_directories:
+                font_path = os.path.join(fontdir, font_file)
+                if os.path.exists(font_path):
+                    font_exists = True
+            if not font_exists:
+                print >> sys.stderr, _("Warning: font '%s' does not exist"
+                                       " in the font directories '%s'.\n"
+                                       "PDF support disabled.") % (font_file,
+                                                                   fontdirs)
+                return
+
+        pdf.setUpFonts(existing_directories)
+
+    def configure(self, options):
+        self.options = options
+        self.configureComponents(options)
+        setLanguage(options.config.lang)
+        self.configureReportlab(options.config.reportlab_fontdir)
+
+    def openDB(self, options):
+        # Open the database
+        db_configuration = options.config.database
+        try:
+            db = db_configuration.open()
+            if options.pack:
+                db.pack()
+        except IOError, e:
+            print >> sys.stderr, _("Could not initialize the database:\n%s") % e
+            if e.errno == errno.EAGAIN: # Resource temporarily unavailable
+                print >> sys.stderr, _("\nPerhaps another %s instance"
+                                       " is using it?") % self.system_name
+            sys.exit(1)
+
+        self.bootstrapSchoolTool(db, options.config.school_type)
+        notify(DatabaseOpened(db))
+
+        if options.restore_manager:
+            connection = db.open()
+            root = connection.root()
+            app = root[ZopePublication.root_name]
+            self.restoreManagerUser(app, options.manager_password)
+            transaction.commit()
+            connection.close()
+
+        # set up all the plugins
+        connection = db.open()
+        root = connection.root()
+        app = root[ZopePublication.root_name]
+        setSite(app)
+        notify(CatalogStartUpEvent(app))
+        notify(ApplicationStartUpEvent(app))
+        setSite(None)
+        transaction.commit()
+        connection.close()
+
+        provideUtility(db, IDatabase)
+        db.setActivityMonitor(ActivityMonitor())
+        return db
+
+
+class SchoolToolServer(SchoolToolMachinery):
+
+    system_name = "SchoolTool"
 
     def load_options(self, argv):
         """Parse the command line and read the configuration file."""
@@ -541,22 +647,13 @@ class SchoolToolServer(object):
                 options.manage = True
                 options.daemon = False
 
-        # Read configuration file
-        schema_string = open(self.ZCONFIG_SCHEMA).read()
-        plugins = [configuration
-                   for (configuration, handler) in plugin_configurations]
-        schema_string = schema_string % {'plugins': "\n".join(plugins)}
-        schema_file = StringIO(schema_string)
-
-        schema = ZConfig.loadSchemaFile(schema_file, self.ZCONFIG_SCHEMA)
-
         print _("Reading configuration from %s") % options.config_file
         try:
-            options.config, handler = ZConfig.loadConfig(schema,
-                                                         options.config_file)
+            options.config, handler = self.readConfig(options.config_file)
         except ZConfig.ConfigurationError, e:
             print >> sys.stderr, "%s: %s" % (progname, e)
             sys.exit(1)
+
         if options.config.database.config.storage is None:
             print >> sys.stderr, "%s: %s" % (progname, _("\n"
                 "No storage defined in the configuration file.\n"
@@ -652,101 +749,16 @@ class SchoolToolServer(object):
         # to lock the database file, and we don't want that.
         logging.getLogger('ZODB.lock_file').disabled = True
 
-        # Process ZCML
-        self.siteConfigFile = options.config.site_definition
         self.configure(options)
 
-        # Set language specified in the configuration
-        setLanguage(options.config.lang)
-
-        # Configure reportlab.
-        self.configureReportlab(options.config.reportlab_fontdir)
-
-        # Open the database
-        db_configuration = options.config.database
-        try:
-            db = db_configuration.open()
-            if options.pack:
-                db.pack()
-        except IOError, e:
-            print >> sys.stderr, _("Could not initialize the database:\n%s") % e
-            if e.errno == errno.EAGAIN: # Resource temporarily unavailable
-                print >> sys.stderr, _("\nPerhaps another %s instance"
-                                       " is using it?") % self.system_name
-            sys.exit(1)
-
-        self.bootstrapSchoolTool(db, options.config.school_type)
-        notify(DatabaseOpened(db))
-
-        if options.restore_manager:
-            connection = db.open()
-            root = connection.root()
-            app = root[ZopePublication.root_name]
-            self.restoreManagerUser(app, options.manager_password)
-            transaction.commit()
-            connection.close()
-
-        # set up all the plugins
-        connection = db.open()
-        root = connection.root()
-        app = root[ZopePublication.root_name]
-        setSite(app)
-        notify(CatalogStartUpEvent(app))
-        notify(ApplicationStartUpEvent(app))
-        setSite(None)
-        transaction.commit()
-        connection.close()
-
-        provideUtility(db, IDatabase)
-        db.setActivityMonitor(ActivityMonitor())
+        # Connect to the database
+        db = self.openDB(options)
 
         return db
 
-    def configureReportlab(self, fontdirs):
-        """Configure reportlab given a path to TrueType fonts.
 
-        Disables PDF support in SchoolTool if fontdir is empty.
-        Outputs a warning to stderr in case of errors.
-        """
-        if not fontdirs:
-            return
-
-        try:
-            import reportlab
-        except ImportError:
-            print >> sys.stderr, _("Warning: could not find the reportlab"
-                                   " library.\nPDF support disabled.")
-            return
-
-        existing_directories = []
-        for fontdir in fontdirs.split(':'):
-            if os.path.isdir(fontdir):
-                existing_directories.append(fontdir)
-
-        if not existing_directories:
-            print >> sys.stderr, (_("Warning: font directories '%s' do"
-                                    " not exist.\nPDF support disabled.")
-                                  % fontdirs)
-            return
-
-        for font_file in pdf.font_map.values():
-            font_exists = False
-            for fontdir in existing_directories:
-                font_path = os.path.join(fontdir, font_file)
-                if os.path.exists(font_path):
-                    font_exists = True
-            if not font_exists:
-                print >> sys.stderr, _("Warning: font '%s' does not exist"
-                                       " in the font directories '%s'.\n"
-                                       "PDF support disabled.") % (font_file,
-                                                                   fontdirs)
-                return
-
-        pdf.setUpFonts(existing_directories)
-
-        
 class StandaloneServer(SchoolToolServer):
-    
+
     def beforeRun(self, options, db):
         if options.daemon:
             daemonize()

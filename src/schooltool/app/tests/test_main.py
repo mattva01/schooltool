@@ -487,6 +487,7 @@ def doctest_before_afterRun():
 class ConfigStub(object):
 
     devmode = False
+    site_definition = None
 
 
 class OptionsStub(object):
@@ -503,8 +504,9 @@ def doctest_bootstrapSchoolTool():
 
         >>> from schooltool.app.main import StandaloneServer
         >>> server = StandaloneServer()
-        >>> server.siteConfigFile = ftesting_zcml
-        >>> server.configure(OptionsStub())
+        >>> options = OptionsStub()
+        >>> options.config.site_definition = ftesting_zcml
+        >>> server.configure(options)
 
     When we start with an empty database, bootstrapSchoolTool creates a
     SchoolTool application in it.
@@ -580,8 +582,9 @@ def doctest_restoreManagerUser():
 
         >>> from schooltool.app.main import StandaloneServer
         >>> server = StandaloneServer()
-        >>> server.siteConfigFile = ftesting_zcml
-        >>> server.configure(OptionsStub())
+        >>> options = OptionsStub()
+        >>> options.config.site_definition = ftesting_zcml
+        >>> server.configure(options)
 
     We also need an application (we are doing the full set up in here
     because else person factory local utility is not being
