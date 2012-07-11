@@ -12,8 +12,11 @@ Helpers:
     ...     return '%s, %s, %s' % (last_name, first_name, username)
     >>> def print_advisors(browser):
     ...     sel = '//h2[contains(@class, "ui-accordion-header")]'
-    ...     accordion = browser.query_all.xpath(sel)[2]
-    ...     accordion.click()
+    ...     accordion_header = browser.query_all.xpath(sel)[2]
+    ...     accordion_header.click()
+    ...     sel = 'div.ui-accordion-content'
+    ...     accordion_content = browser.query_all.css(sel)[2]
+    ...     browser.wait(accordion_content.is_displayed)
     ...     sel = ('#person_table-ajax-view-context-advisors-person_table- '
     ...            'table tbody tr')
     ...     rows = browser.query_all.css(sel)
@@ -23,8 +26,11 @@ Helpers:
     ...         print format_person_row(row)
     >>> def print_advisees(browser):
     ...     sel = '//h2[contains(@class, "ui-accordion-header")]'
-    ...     accordion = browser.query_all.xpath(sel)[2]
-    ...     accordion.click()
+    ...     accordion_header = browser.query_all.xpath(sel)[2]
+    ...     accordion_header.click()
+    ...     sel = 'div.ui-accordion-content'
+    ...     accordion_content = browser.query_all.css(sel)[2]
+    ...     browser.wait(accordion_content.is_displayed)
     ...     sel = ('#person_table-ajax-view-context-advisees-person_table- '
     ...            'table tbody tr')
     ...     rows = browser.query_all.css(sel)

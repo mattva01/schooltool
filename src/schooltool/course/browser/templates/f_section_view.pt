@@ -73,15 +73,8 @@
   <tal:block tal:condition="context/schooltool:can_edit">
     <h3 i18n:translate="">Courses</h3>
     <tal:block define="courses view/courses">
-      <table tal:condition="courses">
-        <tbody>
-          <tr tal:repeat="course courses">
-            <td>
-              <a tal:replace="structure course/@@link" />
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <tal:block condition="courses"
+                 content="structure context/schooltool:content/ajax/courses_table" />
       <h3 tal:condition="not:courses" i18n:translate="">
         This section has no courses
       </h3>

@@ -62,6 +62,36 @@
       permission="zope.Public"
       />
 
+  <flourish:viewlet
+      name="courses_table"
+      for="schooltool.course.interfaces.ISection"
+      class=".course.CourseListTable"
+      manager="schooltool.skin.flourish.interfaces.IAJAXParts"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="filter"
+      class="schooltool.table.table.DoNotFilter"
+      manager=".course.CourseListTable"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="sections_table"
+      for="schooltool.course.interfaces.ICourse"
+      class=".section.SectionListTable"
+      manager="schooltool.skin.flourish.interfaces.IAJAXParts"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="filter"
+      class="schooltool.table.table.DoNotFilter"
+      manager=".section.SectionListTable"
+      permission="schooltool.view"
+      />
+
   <!-- adapters -->
 
   <zope:adapter

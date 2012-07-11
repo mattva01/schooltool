@@ -985,7 +985,7 @@ class FlourishSectionsView(flourish.page.Page,
                  mapping={'schoolyear': schoolyear.title})
 
 
-class SectionsTable(table.ajax.Table):
+class SectionsTableBase(table.ajax.Table):
 
     def columns(self):
         default = table.ajax.Table.columns(self)
@@ -1016,6 +1016,38 @@ class SectionsTable(table.ajax.Table):
 
     def sortOn(self):
         return (('term', True), ('courses', False), ('title', False))
+
+
+class SectionsTable(SectionsTableBase):
+
+    pass
+
+
+class SectionListTable(SectionsTableBase):
+
+    def columns(self):
+        default = super(SectionListTable, self).columns()
+        title, term, courses, instructors, size = default
+        return [title, term, instructors]
+
+    def sortOn(self):
+        return (('term', True), ('title', False))
+
+    @Lazy
+    def source(self):
+        sections = {}
+        schoolyear = ISchoolYear(self.context)
+        for term in schoolyear.values():
+            term_section_container = ISectionContainer(term)
+            for section in term_section_container.values():
+                name = '%s.%s.%s' % (
+                    schoolyear.__name__, term.__name__, section.__name__
+                    )
+                sections[name] = section
+        return sections
+
+    def items(self):
+        return self.context.sections
 
 
 class SchoolYearSectionsTable(SectionsTable):
