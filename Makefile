@@ -59,6 +59,7 @@ start-services: build instance instance/var/supervisord.pid
 
 .PHONY: restart
 restart: build instance instance/var/supervisord.pid
+	bin/supervisorctl restart "services:celery"
 	@bin/supervisorctl start "services:*"
 	bin/supervisorctl restart schooltool
 	@bin/supervisorctl status
@@ -67,6 +68,9 @@ restart: build instance instance/var/supervisord.pid
 stop:
 	@test -S instance/var/supervisord.sock && bin/supervisorctl status | grep -v STOPPED && bin/supervisorctl stop all || exit 0
 	@test -S instance/var/supervisord.sock && bin/supervisorctl shutdown || echo Nothing to stop
+	@rm -f instance/var/celerybeat-schedule
+	@rm -f instance/var/redis-dump.rdb
+	@rm -f instance/var/zeo.sock
 	@rm -f instance/var/supervisord.sock
 	@rm -f instance/var/supervisord.pid
 
@@ -86,6 +90,12 @@ clean: stop
 	rm -f ID TAGS tags
 	rm -rf coverage ftest-coverage
 	rm -rf docs
+	rm -rf instance/var/celerybeat-schedule
+	rm -rf instance/var/redis-dump.rdb
+	rm -rf instance/var/zeo.sock
+	rm -rf instance/var/supervisord.sock
+	rm -rf instance/var/supervisord.pid
+	rm -rf instance/var/Data.fs.lock
 	find . -name '*.py[co]' -delete
 	find . -name '*.mo' -delete
 	find . -name 'LC_MESSAGES' -exec rmdir -p --ignore-fail-on-non-empty {} +
