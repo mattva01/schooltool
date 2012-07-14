@@ -9,7 +9,7 @@
     width: 528px;
 }
 
-.ui-accordion-header {
+.ui-accordion .ui-accordion-header {
     border-style: solid;
     border-width: 1px;
     font-weight: bold;
@@ -26,12 +26,12 @@
     padding-top: 4px;
 }
 
-.ui-state-hover {
+.ui-state-hover, .ui-accordion .ui-state-hover {
     border-style: solid;
     border-width: 1px;
 }
 
-.ui-state-active {
+.ui-state-active, .ui-accordion .ui-state-active {
     border: none;
 }
 

@@ -426,19 +426,19 @@ table.schoolday-legend td.schoolday {
 
 */
 
-.ui-accordion-header {
+.ui-accordion .ui-accordion-header {
     background-color: #485454;
     background-image: none;
     color: #ffffff;
     border-color: #485454;
 }
 
-.ui-state-hover {
+.ui-state-hover, .ui-accordion .ui-state-hover {
     border-color: #008c93;
     background-color: #008c93;
 }
 
-.ui-state-active {
+.ui-state-active, .ui-accordion .ui-state-active {
     background-color: #008c93;
 }
 

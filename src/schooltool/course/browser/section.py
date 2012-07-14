@@ -1121,7 +1121,8 @@ class SectionsTableFilter(table.ajax.TableFilter, FlourishSectionFilterWidget):
                 checked = id in term_ids
             result.append({'id': id,
                            'title': term.title,
-                           'checked': checked})
+                           'checked': checked,
+                           'obj': term})
         return result
 
     def courses(self):
@@ -1164,6 +1165,15 @@ class SectionsTableFilter(table.ajax.TableFilter, FlourishSectionFilterWidget):
             items = [item for item in items
                      if searchstr in item.title.lower()]
         return items
+
+
+class SectionListTableFilter(SectionsTableFilter):
+
+    template = ViewPageTemplateFile('templates/f_section_list_table_filter.pt')
+
+    def getSectionCount(self, term):
+        return len([section for section in ISectionContainer(term).values()
+                    if section in self.context.sections])
 
 
 class SectionsTableSchoolYear(flourish.viewlet.Viewlet):

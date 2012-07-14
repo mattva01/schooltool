@@ -87,8 +87,9 @@
 
   <flourish:viewlet
       name="filter"
-      class="schooltool.table.table.DoNotFilter"
+      class=".section.SectionListTableFilter"
       manager=".section.SectionListTable"
+      render="template"
       permission="schooltool.view"
       />
 
