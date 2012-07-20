@@ -22,9 +22,9 @@ Timetabling Term views.
 import datetime
 import itertools
 
-from zope.component import adapts
+from zope.component import adapts, getMultiAdapter
 from zope.interface.exceptions import Invalid
-from zope.interface import implements
+from zope.interface import implements, directlyProvides
 from zope.interface import Interface
 from zope.schema import TextLine, Date
 from zope.schema import ValidationError
@@ -42,8 +42,11 @@ from z3c.form import form, field, button
 from z3c.form.validator import SimpleFieldValidator
 from z3c.form.validator import WidgetValidatorDiscriminators
 from z3c.form.validator import InvariantsValidator
+from zc.table.interfaces import ISortableColumn
+from zc.table.column import GetterColumn
 
 import schooltool.skin.flourish.breadcrumbs
+from schooltool import table
 from schooltool.app.browser.cal import month_names
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.calendar.utils import parse_date
@@ -790,3 +793,37 @@ class TermAddLinkViewlet(flourish.page.LinkViewlet):
         if year is None:
             return None
         return '%s/%s' % (absoluteURL(year, self.request), 'add.html')
+
+
+def date_cell_formatter(value, item, formatter):
+    view = getMultiAdapter((value, formatter.request), name='mediumDate')
+    return view()
+
+
+class SchoolYearTermsTable(table.ajax.Table):
+
+    def columns(self):
+        title = table.column.LocaleAwareGetterColumn(
+            name='title',
+            title=_(u"Title"),
+            getter=lambda i, f: i.title,
+            subsort=True)
+        starts = GetterColumn(
+            name='starts',
+            title=_(u"First Day"),
+            getter=lambda i, f: i.first,
+            cell_formatter=date_cell_formatter,
+            subsort=True)
+        ends = GetterColumn(
+            name='ends',
+            title=_(u"Last Day"),
+            getter=lambda i, f: i.last,
+            cell_formatter=date_cell_formatter,
+            subsort=True)
+        directlyProvides(title, ISortableColumn)
+        directlyProvides(starts, ISortableColumn)
+        directlyProvides(ends, ISortableColumn)
+        return [title, starts, ends]
+
+    def sortOn(self):
+        return (("starts", False),)

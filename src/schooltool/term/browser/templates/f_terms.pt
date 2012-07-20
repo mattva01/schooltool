@@ -1,38 +1,10 @@
 <div i18n:domain="schooltool"
      tal:define="year view/year; terms view/terms">
-  <form method="post" tal:attributes="action request/getURL"
-        tal:condition="view/has_schoolyear">
-    <table>
-      <thead>
-        <tr>
-          <th i18n:translate="">Title</th>
-          <th i18n:translate="">First Day</th>
-          <th i18n:translate="">Last Day</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr tal:condition="year/empty">
-          <td colspan="3" i18n:translate="">This year has no terms defined.</td>
-        </tr>
-        <tr tal:condition="not: year/empty"
-            tal:repeat="term terms">
-          <td>
-            <a tal:replace="structure term/obj/@@link" />
-          </td>
-          <td>
-            <tal:block content="term/first/@@mediumDate" />
-          </td>
-          <td>
-            <tal:block content="term/last/@@mediumDate" />
-          </td>
-        </tr>
-      <tbody>
-    </table>
-  </form>
-  <h3 tal:condition="not: view/has_schoolyear" i18n:translate="">There are none.</h3>
+  <div tal:condition="not:year/empty"
+       tal:content="structure context/schooltool:content/ajax/view/schoolyear/terms_table" />
+  <h3 tal:condition="year/empty" i18n:translate="">There are no terms.</h3>
   <h3>
     <a tal:attributes="href string:${context/schooltool:app/@@absolute_url}/manage"
        i18n:translate="">Done</a>
   </h3>
 </div>
-
