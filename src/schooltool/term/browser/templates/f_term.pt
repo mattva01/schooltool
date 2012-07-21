@@ -10,6 +10,14 @@
            i18n:attributes="alt" />
     </a>
   </h3>
+  <table class="form-fields" tal:define="details nocall:view/details">
+    <tbody>
+      <tr tal:repeat="widget details/widgets/values">
+        <td tal:content="widget/label" class="label"/>
+        <td tal:content="structure widget/render" />
+      </tr>
+    </tbody>
+  </table>
   <table class="schoolday-legend">
     <tr>
       <td class="legend" i18n:translate="">Legend:</td>

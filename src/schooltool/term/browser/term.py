@@ -42,6 +42,7 @@ from z3c.form import form, field, button
 from z3c.form.validator import SimpleFieldValidator
 from z3c.form.validator import WidgetValidatorDiscriminators
 from z3c.form.validator import InvariantsValidator
+from z3c.form.interfaces import DISPLAY_MODE
 from zc.table.interfaces import ISortableColumn
 from zc.table.column import GetterColumn
 
@@ -117,6 +118,24 @@ class FlourishTermView(flourish.page.Page, TermView):
     @property
     def canModify(self):
         return canAccess(self.context.__parent__, '__delitem__')
+
+    @property
+    def details(self):
+        view = FlourishTermDetails(self.context, self.request, None)
+        view.update()
+        return view
+
+
+class FlourishTermDetails(flourish.form.FormViewlet):
+
+    fields = field.Fields(ITerm).select(
+        '__name__', 'title', 'first', 'last')
+    mode = DISPLAY_MODE
+
+    def updateWidgets(self, *args, **kw):
+        super(FlourishTermDetails, self).updateWidgets(*args, **kw)
+        self.widgets['first'].label = _('First day')
+        self.widgets['last'].label = _('Last day')
 
 
 class FlourishTermActionLinks(flourish.page.RefineLinksViewlet):

@@ -36,6 +36,12 @@ class ITerm(IDateRange, IContained):
     """A term is a set of school days inside a given date range."""
     containers('.ITermContainer')
 
+    __name__ = zope.schema.TextLine(
+        title=_("SchoolTool ID"),
+        description=_(
+            """An internal identifier of this term."""),
+        required=True)
+
     title = zope.schema.TextLine(
         title=_("Title"))
 
