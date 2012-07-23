@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/zope"
+           i18n_domain="schooltool">
+
+  <include file="security.zcml" />
+
+  <class class=".tasks.TaskContainer">
+    <allow interface="zope.container.interfaces.ISimpleReadContainer" />
+    <require permission="schooltool.view"
+             attributes="keys values items __iter__ __len__" />
+    <require permission="schooltool.edit"
+             interface="zope.container.interfaces.IWriteContainer" />
+  </class>
+
+  <class class=".tasks.RemoteTask">
+    <require permission="schooltool.view"
+             interface=".interfaces.IRemoteTask" />
+    <require permission="schooltool.edit"
+             set_schema=".interfaces.IRemoteTask" />
+  </class>
+
+  <adapter
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      factory=".tasks.TasksStartUp"
+      name="schooltool.task" />
+
+  <adapter factory=".tasks.getTaskContainerForApp" />
+
+</configure>

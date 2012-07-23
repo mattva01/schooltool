@@ -18,7 +18,6 @@
 #
 from __future__ import absolute_import
 
-import celery.abstract
 import celery.app.abstract
 import celery.app.defaults
 import celery.loaders.default
