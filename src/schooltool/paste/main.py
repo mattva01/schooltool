@@ -21,7 +21,7 @@ SchoolTool application factory useable with paste.
 
 $Id$
 """
-import os
+import os, sys
 
 from zope.app.wsgi import WSGIPublisherApplication
 from zope.app.publication.httpfactory import HTTPPublicationRequestFactory
@@ -33,6 +33,7 @@ class PasteSchoolToolPublisherApplication(SchoolToolServer,
                                           WSGIPublisherApplication):
 
     def __init__(self, config_file, factory=HTTPPublicationRequestFactory):
+        sys.path[0:0] = [os.path.dirname(config_file)]
         options = self.load_options(['schooltool', '-c', config_file])
         db = self.setup(options)
 
