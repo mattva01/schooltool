@@ -120,6 +120,7 @@
   <include package="schooltool.securitypolicy.browser" />
   <include package="schooltool.export" />
   <include package="schooltool.table" />
+  <include package="schooltool.task" />
   <include package="schooltool.email" />
   <include package="schooltool.level" />
   <include package="schooltool.report" />

@@ -24,6 +24,8 @@ import transaction
 import datetime
 from decimal import Decimal, InvalidOperation
 
+import zope.file.upload
+import zope.file.file
 from zope.container.contained import containedEvent
 from zope.container.interfaces import INameChooser
 from zope.event import notify
@@ -31,7 +33,6 @@ from zope.security.proxy import removeSecurityProxy
 from zope.publisher.browser import BrowserView
 from zope.traversing.browser.absoluteurl import absoluteURL
 
-import schooltool.skin.flourish.page
 from schooltool.basicperson.interfaces import IDemographicsFields
 from schooltool.basicperson.interfaces import IDemographics
 from schooltool.basicperson.demographics import DateFieldDescription
@@ -60,6 +61,7 @@ from schooltool.course.interfaces import ICourseContainer
 from schooltool.course.course import Course
 from schooltool.common import DateRange
 from schooltool.common import parse_time_range
+from schooltool.task.tasks import RemoteTask, db_task
 from schooltool.timetable.daytemplates import CalendarDayTemplates
 from schooltool.timetable.daytemplates import WeekDayTemplates
 from schooltool.timetable.daytemplates import SchoolDayTemplates
@@ -1649,3 +1651,90 @@ class FlourishMegaImporter(flourish.page.Page, MegaImporter):
             self.request.response.redirect(self.nextURL())
             return
         return MegaImporter.update(self)
+
+
+def createFile(file_upload):
+    file = zope.file.file.File()
+    zope.file.upload.updateBlob(file, file_upload)
+    file.__name__ = file_upload.filename
+    return file
+
+
+class FlourishRemoteMegaImporter(flourish.page.Page):
+
+    task = None
+
+    def __init__(self, context, request):
+        flourish.page.Page.__init__(self, context, request)
+        self.errors = []
+        self.success = []
+
+    def nextURL(self):
+        url = absoluteURL(self.context, self.request)
+        return '%s/manage' % url
+
+    def update(self):
+        if "UPDATE_CANCEL" in self.request:
+            self.request.response.redirect(self.nextURL())
+            return
+
+        if "UPDATE_SUBMIT" not in self.request:
+            return
+
+        xls_upload = self.request.get('xlsfile', '')
+        if not xls_upload:
+            self.errors.append(_('No data provided'))
+            return
+        if not self.errors:
+            xlsfile = createFile(xls_upload)
+            self.task = ImporterTask(xlsfile)
+            self.task.schedule()
+            self.request.response.redirect(self.nextURL())
+
+
+class RemoteMegaImporter(MegaImporter):
+
+    def update(self):
+        xls = self.request.xls_file.open()
+        wb = xlrd.open_workbook(file_contents=xls.read())
+        xls.close()
+
+        if wb is None:
+            return
+
+        sp = transaction.savepoint(optimistic=True)
+
+        importers = self.importers
+
+        for importer in importers:
+            imp = importer(self.context, self.request)
+            imp.import_data(wb)
+            self.errors.extend(imp.errors)
+
+        if self.errors:
+            sp.rollback()
+
+
+@db_task
+def import_xls():
+    remote = import_xls.remote_task # SchoolTool counterpart
+    if remote is None:
+        self = import_xls
+        max_retries = getattr(self, 'max_db_conflict_retries',
+                              self.app.conf.SCHOOLTOOL_RETRY_DB_CONFLICTS)
+        raise self.retry(exc=None, retries=max_retries)
+
+    app = ISchoolToolApplication(None)
+    importer = RemoteMegaImporter(app, remote)
+    importer.update()
+    return importer.errors, importer.success
+
+
+class ImporterTask(RemoteTask):
+
+    handler = import_xls
+    xls_file = None
+
+    def __init__(self, xls_file):
+        RemoteTask.__init__(self)
+        self.xls_file = xls_file

@@ -29,6 +29,14 @@
      permission="schooltool.edit" />
 
   <flourish:page
+     name="import-remote.html"
+     subtitle="Import Data"
+     for="schooltool.app.interfaces.ISchoolToolApplication"
+     content_template="templates/f_import.pt"
+     class=".importer.FlourishRemoteMegaImporter"
+     permission="schooltool.edit" />
+
+  <flourish:page
       name="request_export_xls.html"
       for="schooltool.app.interfaces.ISchoolToolApplication"
       class="schooltool.export.app.FlourishRequestXLSExportView"
