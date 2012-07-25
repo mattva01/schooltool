@@ -68,8 +68,6 @@ restart: build instance instance/var/supervisord.pid
 stop:
 	@test -S instance/var/supervisord.sock && bin/supervisorctl status | grep -v STOPPED && bin/supervisorctl stop all || exit 0
 	@test -S instance/var/supervisord.sock && bin/supervisorctl shutdown || echo Nothing to stop
-	@rm -f instance/var/celerybeat-schedule
-	@rm -f instance/var/redis-dump.rdb
 	@rm -f instance/var/zeo.sock
 	@rm -f instance/var/supervisord.sock
 	@rm -f instance/var/supervisord.pid
