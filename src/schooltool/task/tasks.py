@@ -19,6 +19,8 @@
 from __future__ import absolute_import
 
 import sys
+import datetime
+import pytz
 
 import celery.task
 import celery.result
@@ -51,6 +53,7 @@ class DBTaskMixin(object):
 
     db_connection = None
     schooltool_app = None
+    track_started = True
 
     def __call__(self, *args, **kwargs):
         db = open_schooltool_db(self.app)
@@ -168,6 +171,7 @@ class RemoteTask(Persistent, Contained):
 
     task_id = None
     handler = None
+    scheduled = None
 
     def __init__(self):
         Persistent.__init__(self)
@@ -177,6 +181,10 @@ class RemoteTask(Persistent, Contained):
     @property
     def async_result(self):
         return celery.task.Task.AsyncResult(self.task_id)
+
+    @property
+    def internal_state(self):
+        return self.async_result.state
 
     @property
     def working(self):
@@ -220,7 +228,12 @@ class RemoteTask(Persistent, Contained):
         app = ISchoolToolApplication(None)
         tasks = ITaskContainer(app)
         tasks[self.task_id] = self
+        self.scheduled = self.utcnow
         return self
+
+    @property
+    def utcnow(self):
+        return pytz.UTC.localize(datetime.datetime.utcnow())
 
 
 class TaskContainer(BTreeContainer):
@@ -238,3 +251,83 @@ class TasksStartUp(StartUpBase):
     def __call__(self):
         if 'schooltool.tasks' not in self.app:
             self.app['schooltool.tasks'] = TaskContainer()
+
+
+IN_PROGRESS = 'IN_PROGRESS'
+
+class TaskReadStatus(object):
+
+    task_id = None
+    _meta = None
+    _progress_states = (celery.states.STARTED, IN_PROGRESS)
+
+    def __init__(self, task_id):
+        self.task_id = task_id
+        self._meta = None, None, None
+        self.reload()
+
+    def reload(self):
+        result = celery.task.Task.AsyncResult(self.task_id)
+        self._meta = result.state, result.result, result.traceback
+
+    @property
+    def state(self):
+        return self._meta[0]
+
+    @property
+    def in_progress(self):
+        return self.state in self._progress_states
+
+    @property
+    def pending(self):
+        return self.state in celery.states.UNREADY_STATES
+
+    @property
+    def finished(self):
+        return self.state in celery.states.READY_STATES
+
+    @property
+    def failed(self):
+        return self.state in celery.states.PROPAGATE_STATES
+
+    @property
+    def succeeded(self):
+        return self.state == celery.states.SUCCESS
+
+    @property
+    def progress(self):
+        if self.in_progress:
+            return self._meta[1]
+
+    @property
+    def result(self):
+        if self.succeeded:
+            return self._meta[1]
+
+    @property
+    def failure(self):
+        if self.failed:
+            return self._meta[1]
+
+    @property
+    def info(self):
+        return self._meta[1]
+
+    @property
+    def traceback(self):
+        return self._meta[2]
+
+
+class NotInProgress(Exception):
+    pass
+
+
+class TaskWriteStatus(TaskReadStatus):
+
+    def set_progress(self, progress=None):
+        result = celery.task.Task.AsyncResult(self.task_id)
+        # XXX: only check this if task.track_started
+        if result.state not in self._progress_states:
+            raise NotInProgress(result.state, self._progress_states)
+        result.backend.store_result(result.task_id, progress, IN_PROGRESS)
+        self.reload()
