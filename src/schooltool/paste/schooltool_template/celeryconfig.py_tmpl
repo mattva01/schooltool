@@ -10,6 +10,7 @@ BROKER_URL = "redis://%s:%s/%d" % (
     CELERY_REDIS_HOST, CELERY_REDIS_PORT, _BROKER_REDIS_DB)
 
 CELERY_ENABLE_UTC = True
+CELERY_TIMEZONE = "UTC"
 
 CELERY_IMPORTS = ("schooltool.task.tasks",
                   "schooltool.export.importer", )
