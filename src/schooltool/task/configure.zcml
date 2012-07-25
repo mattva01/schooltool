@@ -26,4 +26,6 @@
 
   <adapter factory=".tasks.getTaskContainerForApp" />
 
+  <include package=".browser" />
+
 </configure>

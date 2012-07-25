@@ -1,0 +1,45 @@
+<div i18n:domain="schooltool"
+     tal:define="progress_id view/progress_id">
+
+<tal:block replace="resource_library:schooltool.export" />
+
+<script>ST.state.push()</script>
+  <tal:script tal:replace="structure scriptlocal:
+                             progress_id;
+                             task_id view/context/task_id" />
+
+  <div tal:attributes="id string:${progress_id}-pending">
+    <h3 i18n:translate="">Import scheduled.
+      <img i18n:name="spinner"
+           tal:attributes="src context/++resource++schooltool.skin.flourish/spinner.gif" />
+    </h3>
+  </div>
+  <div style="display: none;" tal:attributes="id string:${progress_id}-in-progress">
+    <h3 i18n:translate="">Importing</h3>
+    <table class="form-fields">
+      <tbody>
+      </tbody>
+    </table>
+  </div>
+  <div style="display: none;" tal:attributes="id string:${progress_id}-succeeded">
+    <h3 i18n:translate="">Import finished.</h3>
+    show errors if any
+    show done link here
+  </div>
+  <div style="display: none;" tal:attributes="id string:${progress_id}-failed">
+    <h3 i18n:translate="">Server error</h3>
+    <div name="traceback" class="traceback"></div>
+    <h3 i18n:translate="">Additional info</h3>
+    <div name="info" class="traceback"></div>
+  </div>
+
+  <script type="text/javascript">
+    $(document).ready(function(){
+       var progress_id = ST.local.progress_id;
+       var task_id = ST.local.task_id;
+       return function(){ ST.export.importer.show_progress(progress_id, task_id) };
+       }());
+  </script>
+
+<script>ST.state.pop()</script>
+</div>

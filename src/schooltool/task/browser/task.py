@@ -16,34 +16,32 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-"""
-Group interfaces
-"""
 
-from zope.interface import Interface, Attribute
-import zope.schema
-from zope.container.interfaces import IContainer, IContained
-from zope.container.constraints import contains, containers
+from zope.cachedescriptors.property import Lazy
+from zope.component import adapts
+
+from schooltool.common.inlinept import InlineViewPageTemplate
+from schooltool.skin import flourish
+from schooltool.task.interfaces import IRemoteTask
+from schooltool.task.tasks import TaskReadStatus
 
 from schooltool.common import SchoolToolMessage as _
 
 
-class ITask(Interface):
+class TaskContainer(flourish.page.Page):
 
-    task_id = zope.schema.TextLine(title=_("Task ID"))
-
-    working = zope.schema.Bool(title=_("Working"))
-    finished = zope.schema.Bool(title=_("Finished"))
-    succeeded = zope.schema.Bool(title=_("Succeeded"))
-    failed = zope.schema.Bool(title=_("Failed"))
-    internal_state = zope.schema.TextLine(title=_("Internal state"))
-
-    scheduled = zope.schema.Datetime(title=_("Time Scheduled"))
+    @property
+    def tasks(self):
+        return sorted(self.context.values(), key=lambda t: (str(t.scheduled), t.task_id))
 
 
-class IRemoteTask(ITask, IContained):
-    pass
+class TaskStatus(flourish.page.Page):
 
+    @Lazy
+    def status(self):
+        return TaskReadStatus(self.task_id)
 
-class ITaskContainer(IContainer):
-    contains(IRemoteTask)
+    @property
+    def task_id(self):
+        return self.context.task_id
+
