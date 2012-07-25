@@ -64,6 +64,7 @@ Javascript will be usable, although perhaps not very nice or convenient.""",
     packages=find_packages('src'),
     namespace_packages=["schooltool"],
     install_requires=['celery',
+                      'bottle',
                       'hurry.query',
                       'PasteDeploy',
                       'PasteScript',
@@ -167,6 +168,7 @@ Javascript will be usable, although perhaps not very nice or convenient.""",
     entry_points = """
     [paste.app_factory]
     main = schooltool.paste.main:schooltool_app_factory
+    task_results = schooltool.paste.main:task_result_app_factory
 
     [console_scripts]
     start-schooltool-instance = schooltool.paste.run:main

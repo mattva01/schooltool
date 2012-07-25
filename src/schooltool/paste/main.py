@@ -48,3 +48,9 @@ def schooltool_app_factory(global_conf, config_file):
     _st_app = PasteSchoolToolPublisherApplication(
         os.path.join(global_conf['here'], config_file))
     return _st_app
+
+
+def task_result_app_factory(global_conf):
+    sys.path[0:0] = [global_conf['here']]
+    from schooltool.task.result_server import result_app
+    return result_app
