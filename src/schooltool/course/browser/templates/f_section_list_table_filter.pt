@@ -1,3 +1,4 @@
+<tal:block condition="view/multiple_terms">
 <script>ST.state.push()</script>
 <tal:script
     tal:replace="structure scriptlocal:container_id view/manager/html_id" />
@@ -45,3 +46,4 @@
   </fieldset>
 </tal:block>
 <script>ST.state.pop()</script>
+</tal:block>

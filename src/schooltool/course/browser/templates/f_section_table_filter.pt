@@ -58,7 +58,8 @@
         </script>
       </div>
     </div>
-    <div class="row" tal:define="term_ids view/search_term_ids">
+    <div class="row" tal:define="term_ids view/search_term_ids"
+         tal:condition="view/multiple_terms">
       <div class="label">
         <span i18n:translate="">Terms</span>
       </div>

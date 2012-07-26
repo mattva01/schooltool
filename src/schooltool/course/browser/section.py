@@ -1072,6 +1072,7 @@ class SchoolYearSectionsTable(SectionsTable):
 
 class SectionsTableFilter(table.ajax.TableFilter, FlourishSectionFilterWidget):
 
+    multiple_terms = True
     template = ViewPageTemplateFile('templates/f_section_table_filter.pt')
     title = _("Section title")
 
@@ -1138,6 +1139,8 @@ class SectionsTableFilter(table.ajax.TableFilter, FlourishSectionFilterWidget):
         return result
 
     def filter(self, items):
+        if len(self.termContainer()) < 2:
+            self.multiple_terms = False
         if self.ignoreRequest:
             return items
         if self.search_term_ids in self.request:
@@ -1152,7 +1155,7 @@ class SectionsTableFilter(table.ajax.TableFilter, FlourishSectionFilterWidget):
             if terms:
                 items = [item for item in items
                          if ITerm(item) in terms]
-        else:
+        elif self.multiple_terms:
             return []
         if self.search_course_id in self.request:
             course_id = self.request[self.search_course_id]
@@ -1170,6 +1173,10 @@ class SectionsTableFilter(table.ajax.TableFilter, FlourishSectionFilterWidget):
 class SectionListTableFilter(SectionsTableFilter):
 
     template = ViewPageTemplateFile('templates/f_section_list_table_filter.pt')
+
+    @Lazy
+    def schoolyear(self):
+        return ISchoolYear(self.context)
 
     def getSectionCount(self, term):
         return len([section for section in ISectionContainer(term).values()
