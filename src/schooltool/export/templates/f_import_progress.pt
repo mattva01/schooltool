@@ -21,6 +21,12 @@
       </tbody>
     </table>
   </div>
+  <div tal:attributes="id string:${progress_id}-committing">
+    <h3 i18n:translate="">Committing to database.
+      <img i18n:name="spinner"
+           tal:attributes="src context/++resource++schooltool.skin.flourish/spinner.gif" />
+    </h3>
+  </div>
   <div style="display: none;" tal:attributes="id string:${progress_id}-succeeded">
     <h3 i18n:translate="">Import finished.</h3>
     show errors if any

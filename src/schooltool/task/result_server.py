@@ -51,8 +51,8 @@ def encode_json(obj):
 
 def status_dict(status):
     result = {}
-    for attr in ('pending', 'in_progress', 'finished',
-                 'failed', 'succeeded'):
+    for attr in ('pending', 'in_progress', 'committing',
+                 'finished', 'failed', 'succeeded'):
         result[attr] = getattr(status, attr)
     return result
 

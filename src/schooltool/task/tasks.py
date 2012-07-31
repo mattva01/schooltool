@@ -45,6 +45,9 @@ from schooltool.task.celery import open_schooltool_db
 from schooltool.task.interfaces import IRemoteTask, ITaskContainer
 
 
+IN_PROGRESS = 'IN_PROGRESS'
+COMMITTING = 'COMMITTING_ZODB'
+
 class NoDatabaseException(Exception):
     pass
 
@@ -74,6 +77,8 @@ class DBTaskMixin(object):
 
         if fatal_exc is None:
             try:
+                status = TaskWriteStatus(self.request.id)
+                status.set_committing()
                 transaction.commit()
             except ConflictError, recoverable_exc:
                 pass
@@ -253,8 +258,6 @@ class TasksStartUp(StartUpBase):
             self.app['schooltool.tasks'] = TaskContainer()
 
 
-IN_PROGRESS = 'IN_PROGRESS'
-
 class TaskReadStatus(object):
 
     task_id = None
@@ -276,7 +279,11 @@ class TaskReadStatus(object):
 
     @property
     def in_progress(self):
-        return self.state in self._progress_states
+        return (self.state in self._progress_states or self.committing)
+
+    @property
+    def committing(self):
+        return self.state == COMMITTING
 
     @property
     def pending(self):
@@ -322,6 +329,8 @@ class NotInProgress(Exception):
     pass
 
 
+undefined = object()
+
 class TaskWriteStatus(TaskReadStatus):
 
     def set_progress(self, progress=None):
@@ -330,4 +339,12 @@ class TaskWriteStatus(TaskReadStatus):
         if result.state not in self._progress_states:
             raise NotInProgress(result.state, self._progress_states)
         result.backend.store_result(result.task_id, progress, IN_PROGRESS)
+        self.reload()
+
+    def set_committing(self):
+        result = celery.task.Task.AsyncResult(self.task_id)
+        # XXX: only check this if task.track_started
+        if result.state not in self._progress_states:
+            raise NotInProgress(result.state, self._progress_states)
+        result.backend.store_result(result.task_id, self.info, COMMITTING)
         self.reload()
