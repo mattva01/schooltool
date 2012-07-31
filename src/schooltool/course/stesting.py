@@ -176,7 +176,8 @@ def registerSeleniumSetup():
     def visitSection(browser, schoolyear, term, section):
         browser.open('http://localhost/sections')
         browser.query.link(schoolyear).click()
-        browser.query.id('SEARCH').type(section)
+        selector = 'input.text-widget'
+        browser.query.css(selector).type(section)
         table = browser.query.css('form table')
         browser.query.name('SEARCH_BUTTON').click()
         browser.wait(lambda: table.expired)

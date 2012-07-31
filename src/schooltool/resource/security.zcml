@@ -41,7 +41,7 @@
 
   <allow
       interface="schooltool.resource.interfaces.IBaseResource"
-      crowds="administration leaders resource_viewers"
+      crowds="administration leaders resource_viewers teachers"
       permission="schooltool.view" />
   <allow
       interface="schooltool.resource.interfaces.IBaseResource"

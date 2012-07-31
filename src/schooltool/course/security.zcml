@@ -32,7 +32,7 @@
 
   <allow
       interface="schooltool.course.interfaces.ISection"
-      crowds="administration section_instructors section_learners configurable_section_viewers"
+      crowds="administration teachers section_instructors section_learners configurable_section_viewers"
       permission="schooltool.view" />
   <allow
       interface="schooltool.course.interfaces.ISection"

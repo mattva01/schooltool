@@ -12,30 +12,23 @@
              i18n:attributes="alt" />
       </a>
     </h3>
-    <table tal:condition="view/schoolyears">
-      <thead>
-        <tr>
-          <th i18n:translate="">Group</th>
-          <th i18n:translate="">School Year</th>
-        </tr>
-      </thead>
-      <tal:block repeat="schoolyear view/schoolyears">
-        <tal:block repeat="group schoolyear/groups">
-          <tr>
-            <td>
+    <div class="tree_list groups_tree" tal:condition="view/schoolyears">
+      <ul>
+        <li tal:repeat="schoolyear view/schoolyears" class="year">
+          <a tal:attributes="href schoolyear/obj/@@absolute_url;
+                             title schoolyear/obj/title"
+             tal:content="schoolyear/obj/title"></a>
+          <ul>
+            <li tal:repeat="group schoolyear/groups" class="group">
               <a tal:attributes="href group/@@absolute_url;
-                                 title group/title"
-                 tal:content="group/title"></a>
-            </td>
-            <td>
-              <a tal:attributes="href schoolyear/obj/@@absolute_url;
-                                 title schoolyear/obj/title"
-                 tal:content="schoolyear/obj/title"></a>
-            </td>
-          </tr>
-        </tal:block>
-      </tal:block>
-    </table>
+                               title group/title"
+                 tal:content="group/title"
+                 class="leaf_url"></a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
     <h3 tal:condition="not: view/schoolyears"
         i18n:translate="">
       The person is not a member of any groups.

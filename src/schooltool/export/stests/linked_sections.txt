@@ -39,43 +39,43 @@ heading in linked_sections.xls) and Art_4 which is found in two terms that are
 not adjacent.
 
     >>> manager.ui.section.go('2006-2007', 'Fall', 'Art_1')
-    >>> print manager.query_all.xpath('//div[@class="body"]/table[2]//a').get_attribute('href')
+    >>> print manager.query_all.xpath('//div[@class="body"]/table[1]//a').get_attribute('href')
     http://localhost/schoolyears/2006-2007/winter/sections/Art_1
     http://localhost/schoolyears/2006-2007/spring/sections/Art_1
 
     >>> manager.ui.section.go('2006-2007', 'Fall', 'Art_2')
-    >>> print manager.query_all.xpath('//div[@class="body"]/table[2]//a').get_attribute('href')
+    >>> print manager.query_all.xpath('//div[@class="body"]/table[1]//a').get_attribute('href')
     http://localhost/schoolyears/2006-2007/winter/sections/Art_2
 
     >>> manager.ui.section.go('2006-2007', 'Fall', 'Art_4')
-    >>> print manager.query_all.xpath('//div[@class="body"]/table[2]//a').get_attribute('href')
+    >>> print manager.query_all.xpath('//div[@class="body"]/table[1]//a').get_attribute('href')
 
 Now we'll do the same for the Winter sections.
 
     >>> manager.ui.section.go('2006-2007', 'Winter', 'Art_1')
-    >>> print manager.query_all.xpath('//div[@class="body"]/table[2]//a').get_attribute('href')
+    >>> print manager.query_all.xpath('//div[@class="body"]/table[1]//a').get_attribute('href')
     http://localhost/schoolyears/2006-2007/fall/sections/Art_1
     http://localhost/schoolyears/2006-2007/spring/sections/Art_1
 
     >>> manager.ui.section.go('2006-2007', 'Winter', 'Art_2')
-    >>> print manager.query_all.xpath('//div[@class="body"]/table[2]//a').get_attribute('href')
+    >>> print manager.query_all.xpath('//div[@class="body"]/table[1]//a').get_attribute('href')
     http://localhost/schoolyears/2006-2007/fall/sections/Art_2
 
     >>> manager.ui.section.go('2006-2007', 'Winter', 'Art_3')
-    >>> print manager.query_all.xpath('//div[@class="body"]/table[2]//a').get_attribute('href')
+    >>> print manager.query_all.xpath('//div[@class="body"]/table[1]//a').get_attribute('href')
 
 Finally the same for the Spring sections.
 
     >>> manager.ui.section.go('2006-2007', 'Spring', 'Art_1')
-    >>> print manager.query_all.xpath('//div[@class="body"]/table[2]//a').get_attribute('href')
+    >>> print manager.query_all.xpath('//div[@class="body"]/table[1]//a').get_attribute('href')
     http://localhost/schoolyears/2006-2007/fall/sections/Art_1
     http://localhost/schoolyears/2006-2007/winter/sections/Art_1
 
     >>> manager.ui.section.go('2006-2007', 'Spring', 'Art_3')
-    >>> print manager.query_all.xpath('//div[@class="body"]/table[2]//a').get_attribute('href')
+    >>> print manager.query_all.xpath('//div[@class="body"]/table[1]//a').get_attribute('href')
 
     >>> manager.ui.section.go('2006-2007', 'Spring', 'Art_4')
-    >>> print manager.query_all.xpath('//div[@class="body"]/table[2]//a').get_attribute('href')
+    >>> print manager.query_all.xpath('//div[@class="body"]/table[1]//a').get_attribute('href')
 
 Now let's try reimporting the same file:
 
@@ -99,7 +99,7 @@ No problem.  The same sections are there.
 Just to be sure, we'll make sure the first one is linked to the other terms.
 
     >>> manager.ui.section.go('2006-2007', 'Fall', 'Art_1')
-    >>> print manager.query_all.xpath('//div[@class="body"]/table[2]//a').get_attribute('href')
+    >>> print manager.query_all.xpath('//div[@class="body"]/table[1]//a').get_attribute('href')
     http://localhost/schoolyears/2006-2007/winter/sections/Art_1
     http://localhost/schoolyears/2006-2007/spring/sections/Art_1
 

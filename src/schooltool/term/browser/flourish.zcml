@@ -83,6 +83,16 @@
       />
 
   <flourish:viewlet
+      name="term_actions"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      class=".term.FlourishTermActionLinks"
+      for="schooltool.term.interfaces.ITerm"
+      title="Actions"
+      permission="schooltool.edit"
+      view=".term.FlourishTermView"
+      />
+
+  <flourish:viewlet
       name="delete.html"
       for="..interfaces.ITerm"
       title="Delete"
@@ -129,6 +139,21 @@
       permission="schooltool.edit"
       manager="schooltool.skin.flourish.page.IPageContentManager"
       class=".term.FlourishManageYearsOverview"
+      />
+
+  <flourish:viewlet
+      name="terms_table"
+      class=".term.SchoolYearTermsTable"
+      for="schooltool.schoolyear.interfaces.ISchoolYear"
+      manager="schooltool.skin.flourish.interfaces.IAJAXParts"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="filter"
+      class="schooltool.table.table.DoNotFilter"
+      manager=".term.SchoolYearTermsTable"
+      permission="schooltool.view"
       />
 
 </configure>

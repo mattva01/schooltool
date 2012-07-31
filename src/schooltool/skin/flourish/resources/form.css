@@ -226,3 +226,10 @@ form pre.csv-text {
     padding: 4px 0px 4px 7px;
     margin-bottom: 8px;
 }
+
+/* XXX: used in course index view */
+
+form fieldset.course-sections-list {
+    padding: 0 8px;
+    background: none;
+}

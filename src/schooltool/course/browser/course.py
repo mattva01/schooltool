@@ -435,7 +435,7 @@ def getCoursesTable(context, request, view, manager):
     return table
 
 
-class CoursesTable(table.ajax.Table):
+class CoursesTableBase(table.ajax.Table):
 
     def columns(self):
         title = table.table.LocaleAwareGetterColumn(
@@ -451,6 +451,22 @@ class CoursesTable(table.ajax.Table):
         directlyProvides(title, ISortableColumn)
         directlyProvides(course_id, ISortableColumn)
         return [title, course_id]
+
+
+class CoursesTable(CoursesTableBase):
+
+    pass
+
+
+class CourseListTable(CoursesTableBase):
+
+    @property
+    def source(self):
+        schoolyear = ISchoolYear(self.context)
+        return ICourseContainer(schoolyear)
+
+    def items(self):
+        return self.context.courses
 
 
 class CourseTableSchoolYear(flourish.viewlet.Viewlet):
@@ -505,6 +521,10 @@ class FlourishCourseView(DisplayForm):
     content_template = ViewPageTemplateFile('templates/f_course_view.pt')
     fields = field.Fields(ICourse)
     fields = fields.select('__name__', 'title', 'description', 'course_id', 'government_id', 'credits')
+
+    @property
+    def sections(self):
+        return list(self.context.sections)
 
     @property
     def canModify(self):

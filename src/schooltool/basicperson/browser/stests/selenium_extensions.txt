@@ -18,10 +18,6 @@ Some helpers for these tests:
     ...     first_name = row.query.xpath('td[2]/a').text
     ...     username = row.query.xpath('td[3]').text
     ...     return '%s, %s, %s' % (last_name, first_name, username)
-    >>> def format_group_row(row):
-    ...     title = row.query.xpath('td[1]/a').text
-    ...     schoolyear = row.query.xpath('td[2]/a').text
-    ...     return '%s, %s' % (title, schoolyear)
 
 Log in as manager:
 
@@ -100,12 +96,15 @@ Used for adding people to the application.
     Last name: Welsh
     Username: david
     >>> sel = '//h2[contains(@class, "ui-accordion-header")]'
-    >>> groups_accordion = manager.query_all.xpath(sel)[4]
-    >>> groups_accordion.click()
-    >>> sel = '//div[contains(@class, "person-info")]/div[5]//table/tbody/tr'
-    >>> for row in manager.query_all.xpath(sel):
-    ...     print format_group_row(row)
-    Teachers, 2012
+    >>> groups_accordion_header = manager.query_all.xpath(sel)[4]
+    >>> groups_accordion_header.click()
+    >>> sel = 'div.ui-accordion-content'
+    >>> groups_accordion_content = manager.query_all.css(sel)[4]
+    >>> manager.wait(groups_accordion_content.is_displayed)
+    >>> sel = '//div[contains(@class, "groups_tree")]//li[contains(@class, "group")]/a'
+    >>> for group in manager.query_all.xpath(sel):
+    ...     print group.text
+    Teachers
 
     >>> manager.ui.person.add('Nestor', 'Guzman', 'nestor', 'pwd',
     ...                       advisor='Welsh, David')
@@ -117,8 +116,11 @@ Used for adding people to the application.
     Last name: Guzman
     Username: nestor
     >>> sel = '//h2[contains(@class, "ui-accordion-header")]'
-    >>> advisory_accordion = manager.query_all.xpath(sel)[2]
-    >>> advisory_accordion.click()
+    >>> advisory_accordion_header = manager.query_all.xpath(sel)[2]
+    >>> advisory_accordion_header.click()
+    >>> sel = 'div.ui-accordion-content'
+    >>> advisory_accordion_content = manager.query_all.css(sel)[2]
+    >>> manager.wait(advisory_accordion_content.is_displayed)
     >>> sel = ('#person_table-ajax-view-context-advisors-person_table- '
     ...        'table tbody tr')
     >>> for row in manager.query_all.css(sel):
