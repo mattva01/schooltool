@@ -20,8 +20,9 @@
 SchoolTool simple import views.
 """
 import xlrd
-import transaction
 import datetime
+import urllib
+import transaction
 from decimal import Decimal, InvalidOperation
 
 import celery.task
@@ -47,6 +48,7 @@ from schooltool.basicperson.person import BasicPerson
 from schooltool.contact.contact import Contact, ContactPersonInfo
 from schooltool.contact.interfaces import IContact, IContactContainer
 from schooltool.contact.interfaces import IContactPersonInfo, IContactable
+from schooltool.export.interfaces import IImporterTask
 from schooltool.resource.resource import Resource
 from schooltool.resource.resource import Location
 from schooltool.resource.resource import Equipment
@@ -1915,6 +1917,7 @@ def import_xls():
 
 
 class ImporterTask(RemoteTask):
+    implements(IImporterTask)
 
     handler = import_xls
     xls_file = None
@@ -1955,3 +1958,43 @@ class ImportProgressContent(flourish.page.Content):
     def task_id(self):
         return self.context.task_id
 
+
+class DownloadFile(BrowserView):
+
+    attribute = None
+    inline = False
+
+    @property
+    def file_object(self):
+        return getattr(self.context, self.attribute, None)
+
+    def setUpResponse(self, data, filename):
+        stored_file = self.file_object
+        response = self.request.response
+        if stored_file.mimeType:
+            response.setHeader('Content-Type', stored_file.mimeType)
+        response.setHeader('Content-Length', len(data))
+        disposition = self.inline and 'inline' or 'attachment'
+        if filename:
+            disposition += '; filename="%s"' % filename
+        response.setHeader('Content-Disposition', disposition)
+
+    def __call__(self):
+        stored_file = self.file_object
+        if stored_file is None:
+            return None
+        filename = getattr(stored_file, '__name__', '')
+        filename = urllib.quote(filename.encode('UTF-8'))
+        f = stored_file.open()
+        data = f.read()
+        f.close()
+
+        self.setUpResponse(data, filename)
+
+        return data
+
+
+class DownloadImportXLS(DownloadFile):
+
+    attribute = "xls_file"
+    inline = False

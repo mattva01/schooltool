@@ -55,9 +55,16 @@
 
   <zope:class class=".importer.ImporterTask">
     <require permission="schooltool.view"
-             interface="schooltool.task.interfaces.IRemoteTask" />
+             interface="schooltool.export.interfaces.IImporterTask" />
     <require permission="schooltool.edit"
-             set_schema="schooltool.task.interfaces.IRemoteTask" />
+             set_schema="schooltool.export.interfaces.IImporterTask" />
   </zope:class>
+
+  <view
+     name="import.xls"
+     for="schooltool.export.interfaces.IImporterTask"
+     layer="zope.publisher.interfaces.http.IHTTPRequest"
+     class=".importer.DownloadImportXLS"
+     permission="schooltool.view" />
 
 </configure>
