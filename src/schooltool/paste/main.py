@@ -50,7 +50,11 @@ def schooltool_app_factory(global_conf, config_file):
     return _st_app
 
 
-def task_result_app_factory(global_conf):
+def task_result_app_factory(global_conf, config_file):
     sys.path[0:0] = [global_conf['here']]
-    from schooltool.task.result_server import result_app
-    return result_app
+
+    from schooltool.task.result_server import ResultServerMachinery
+    machinery = ResultServerMachinery()
+    machinery.configure(os.path.join(global_conf['here'], config_file))
+
+    return machinery.app

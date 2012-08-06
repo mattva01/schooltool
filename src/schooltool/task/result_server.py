@@ -27,8 +27,52 @@ try:
 except ImportError:
     import simplejson as json
 
+import zope.i18nmessageid.message
+import zope.configuration.config
+import zope.configuration.xmlconfig
+from zope.i18n import translate
+from zope.interface import directlyProvides
+from zope.publisher.http import IHTTPRequest
 
+import schooltool.task
+from schooltool.app.main import SchoolToolMachinery, setLanguage
 from schooltool.task.tasks import TaskReadStatus
+from schooltool.testing.setup import ZCMLWrapper
+
+
+not_translatable = object()
+
+
+def iter_translate(o, markers=None):
+    for item in o:
+        text = inplace_translate(item, markers=markers)
+        yield item if text is not_translatable else text
+
+
+def inplace_translate(o, markers=None):
+    oid = id(o)
+    if markers is not None:
+        if oid in markers:
+            return markers[oid]
+        else:
+            markers[oid] = not_translatable
+    else:
+        markers = {oid: not_translatable}
+
+    if isinstance(o, zope.i18nmessageid.message.Message):
+        markers[oid] = translate(o, context=bottle.request)
+    elif isinstance(o, (list, tuple)):
+        if markers is None:
+            markers = {}
+        markers[oid] = o.__class__(iter_translate(o, markers=markers))
+    elif isinstance(o, dict):
+        for k in o:
+            t = inplace_translate(o[k])
+            if t is not_translatable:
+                continue
+            o[k] = t
+        markers[oid] = o
+    return markers[oid]
 
 
 result_app = bottle.Bottle()
@@ -73,5 +117,29 @@ def fetch_full(task_id=None):
     if task_id is None:
         raise bottle.HTTPError(404, "Not found: %r" % bottle.request.url)
     result = make_task_result(task_id)
+    directlyProvides(bottle.request, IHTTPRequest)
+    translated_result = inplace_translate(result)
+    encoded_result = encode_json(translated_result)
     bottle.response.set_header('Content-Type', 'application/json')
-    return encode_json(result)
+    return encoded_result
+
+
+class ResultServerMachinery(SchoolToolMachinery):
+
+    def configureComponents(self):
+        context = zope.configuration.config.ConfigurationMachine()
+        if self.config.devmode:
+            context.provideFeature('devmode')
+        zope.configuration.xmlconfig.registerCommonDirectives(context)
+        context = zope.configuration.xmlconfig.file(
+            self.config.result_server_definition, context=context)
+
+    def configure(self, config_file):
+        self.config, self.handler = self.readConfig(config_file)
+        self.configureComponents()
+        setLanguage(self.config.lang)
+
+    @property
+    def app(self):
+        global result_app
+        return result_app
