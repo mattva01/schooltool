@@ -37,4 +37,11 @@
   <securityPolicy
       component=".devmode.DebugSecurityPolicy" />
 
+  <adapter
+      for="*"
+      name="schooltool"
+      provides="zope.traversing.interfaces.IPathAdapter"
+      factory=".devmode.DevmodeSchoolToolAPI"
+      />
+
 </configure>

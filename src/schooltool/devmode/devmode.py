@@ -25,6 +25,7 @@ from zope.viewlet import viewlet
 
 from schooltool.skin import flourish
 from schooltool.securitypolicy.policy import CachingSecurityPolicy
+from schooltool.app.browser import SchoolToolAPI
 
 
 DevmodeCSSViewlet = viewlet.CSSViewlet('devmode.css')
@@ -126,3 +127,8 @@ class DebugSecurityPolicy(CachingSecurityPolicy):
             key not in cache['debug_order']):
             extra_info = (obj, cache['debug_level'])
             cache['debug_order'].append((key, extra_info))
+
+
+class DevmodeSchoolToolAPI(SchoolToolAPI):
+
+    devmode = True

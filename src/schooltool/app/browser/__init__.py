@@ -60,6 +60,8 @@ class SchoolToolAPI(object):
 
     engine = None
 
+    devmode = False
+
     def __init__(self, context):
         self.context = context
 
