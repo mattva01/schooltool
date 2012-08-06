@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2012-04-05 13:59+0300\n"
-"PO-Revision-Date: 2012-03-24 16:21+0000\n"
+"PO-Revision-Date: 2012-06-28 21:27+0000\n"
 "Last-Translator: Aleksi Kinnunen <Unknown>\n"
 "Language-Team: Finnish <fi@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-04-06 04:49+0000\n"
-"X-Generator: Launchpad (build 15060)\n"
+"X-Launchpad-Export-Date: 2012-06-29 05:02+0000\n"
+"X-Generator: Launchpad (build 15505)\n"
 "Language: fi\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -4215,7 +4215,7 @@ msgstr ""
 
 #: /src/schooltool/contact/browser/templates/f_manage_contacts_overview.pt:12
 msgid "The school has ${total} contact persons."
-msgstr "Tällä koululla on ${total} yhteyshenkilö."
+msgstr "Tällä koululla on ${total} yhteyshenkilöä."
 
 #: /src/schooltool/contact/browser/templates/filter.pt:21
 #: /src/schooltool/person/browser/person_filter.pt:11
@@ -7551,7 +7551,7 @@ msgstr "Ei löytynyt"
 
 #: /src/schooltool/skin/flourish/templates/main.pt:82
 msgid "server running"
-msgstr "palvelin käyttää ohjelmistoa"
+msgstr "palvelimessa on käytössä"
 
 #: /src/schooltool/skin/flourish/templates/main.pt:91
 msgid "Supporting exceptional people to change the world."

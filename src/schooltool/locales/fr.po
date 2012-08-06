@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2012-04-05 13:59+0300\n"
-"PO-Revision-Date: 2012-03-09 07:18+0000\n"
-"Last-Translator: Stanislas Michalak <stanislas.michalak@live.fr>\n"
+"PO-Revision-Date: 2012-06-23 16:58+0000\n"
+"Last-Translator: Yves MATHIEU <MisterY_vonvon@hotmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-04-06 04:49+0000\n"
-"X-Generator: Launchpad (build 15060)\n"
+"X-Launchpad-Export-Date: 2012-06-24 05:47+0000\n"
+"X-Generator: Launchpad (build 15461)\n"
 "Language: fr\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -150,7 +150,7 @@ msgstr "Effacer"
 #: /src/schooltool/app/browser/app.py:408
 #: /src/schooltool/app/browser/templates/f_edit_relationships.pt:58
 msgid "Add all displayed"
-msgstr ""
+msgstr "Ajouter tous les affichés"
 
 #: /src/schooltool/app/browser/app.py:677
 msgid "Username or password is incorrect"
@@ -391,7 +391,7 @@ msgstr "Erreurs"
 #: /src/schooltool/app/browser/flourish.zcml:292
 #: /src/schooltool/app/browser/flourish.zcml:301
 msgid "Tabs"
-msgstr ""
+msgstr "Onglets"
 
 #: /src/schooltool/app/browser/cal.py:118
 msgid "January"
@@ -2068,7 +2068,7 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_hide_unhide_tabs.pt:5
 msgid "Set Tab Visibility"
-msgstr ""
+msgstr "Définir la visibilité des onglets"
 
 #: /src/schooltool/app/browser/templates/f_hide_unhide_tabs.pt:10
 msgid "Visible"
@@ -2076,13 +2076,16 @@ msgstr "Visible"
 
 #: /src/schooltool/app/browser/templates/f_hide_unhide_tabs.pt:25
 msgid "Default"
-msgstr ""
+msgstr "Par défaut"
 
 #: /src/schooltool/app/browser/templates/f_hide_unhide_tabs_related.pt:6
 msgid ""
 "Schools that are not using all components of SchoolTool can reduce visual "
 "clutter by hiding unnecessary links in the top navigation bar."
 msgstr ""
+"Les écoles qui n'utilisent pas tous les composants de SchoolTool peuvent "
+"réduire l'encombrement visuel en cachant les liens inutiles de la barre de "
+"navigation supérieure."
 
 #: /src/schooltool/app/browser/templates/f_hide_unhide_tabs_related.pt:10
 msgid ""
@@ -2090,16 +2093,22 @@ msgid ""
 "links; they don't change the functionality, data, or security settings of "
 "SchoolTool in any way."
 msgstr ""
+"Notez que ces réglages n'ont pas d'autres effets que de retirer les liens de "
+"navigation ; ils n'impactent en aucune façon les fonctionnalités, les "
+"données ou les paramètres de sécurité de SchoolTool."
 
 #: /src/schooltool/app/browser/templates/f_hide_unhide_tabs_related.pt:15
 msgid "Links can be changed from visible to hidden at any time."
-msgstr ""
+msgstr "Les liens peuvent passer de visible à caché à tout moment."
 
 #: /src/schooltool/app/browser/templates/f_hide_unhide_tabs_related.pt:18
 msgid ""
 "When users log in, they will usually be directed to the tab selected in the "
 "default column. The default tab must also be visible."
 msgstr ""
+"Lorsque les utilisateurs se connectent, ils seront généralement dirigées "
+"vers l'onglet sélectionné dans la colonne par défaut. L'onglet par défaut "
+"doit être visible."
 
 #: /src/schooltool/app/browser/templates/f_login.pt:12
 #: /src/schooltool/app/browser/templates/login.pt:8
@@ -2172,7 +2181,7 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_managers.pt:16
 msgid "The database is up to date for ${application}."
-msgstr "La base de données est à jour pour $(application)"
+msgstr "La base de données est à jour pour ${application}"
 
 #: /src/schooltool/app/browser/templates/f_managers.pt:23
 msgid "Application"
@@ -2954,12 +2963,17 @@ msgid ""
 "Warning: font directories '%s' do not exist.\n"
 "PDF support disabled."
 msgstr ""
+"Attention : répertoire contenant les polices  « %s » n'existe pas.\n"
+"Prise en charge PDF désactivé."
 
 #: /src/schooltool/app/main.py:785
 msgid ""
 "Warning: font '%s' does not exist in the font directories '%s'.\n"
 "PDF support disabled."
 msgstr ""
+"Attention : la police « %s » n'existe pas dans le répertoire contenant les "
+"polices « %s ».\n"
+"Prise en charge PDF désactivé."
 
 #: /src/schooltool/app/main.py:775
 msgid "Startup time: %.3f sec real, %.3f sec CPU"
@@ -3234,11 +3248,11 @@ msgstr "Détails du champ"
 
 #: /src/schooltool/basicperson/browser/demographics.py:584
 msgid "Please enter a valid ID"
-msgstr ""
+msgstr "Saisissez un ID valide"
 
 #: /src/schooltool/basicperson/browser/demographics.py:588
 msgid "This ID is not unique."
-msgstr ""
+msgstr "Cet ID n'est pas unique."
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:11
 #: /src/schooltool/basicperson/browser/flourish.zcml:16
@@ -3324,7 +3338,7 @@ msgstr "Champ Liste de Sélection"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:349
 msgid "Integer Field"
-msgstr ""
+msgstr "Champ « Nombre Entier »"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:359
 msgid "Reorder or Delete Fields"
@@ -3336,7 +3350,7 @@ msgstr "Champ nouvelle description"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:412
 msgid "New Integer Field"
-msgstr ""
+msgstr "Nouveau champ  « Nombre Entier »"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:590
 msgid "Contains an XML representation of the person."
@@ -3348,7 +3362,7 @@ msgstr "Exporter en XML"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:627
 msgid "ID Card"
-msgstr ""
+msgstr "Carte d'identité"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:627
 msgid ""
@@ -3422,6 +3436,9 @@ msgid ""
 "(3:4 aspect ratio). Uploaded images must be JPEG or PNG files smaller than "
 "10 MB"
 msgstr ""
+"Un fichier image qui sera converti en JPEG pas plus large que 99x132 pixels "
+"(aspect ratio 3:4). Les images téléchargées doivent être au format JPEG ou "
+"PNG et peser moins de 10 Mo"
 
 #: /src/schooltool/basicperson/browser/person.py:229
 msgid "This username is already in use"
@@ -3522,11 +3539,11 @@ msgstr "Démographie des administrateurs"
 #: /src/schooltool/basicperson/browser/person.py:1155
 #: /src/schooltool/group/browser/flourish.zcml:358
 msgid "ID Cards"
-msgstr ""
+msgstr "Cartes d'identité"
 
 #: /src/schooltool/basicperson/browser/person.py:1327
 msgid "ID Card: ${person}"
-msgstr ""
+msgstr "Carte d'identité : ${person}"
 
 #: /src/schooltool/basicperson/browser/templates/container.pt:18
 msgid ""
@@ -3710,15 +3727,15 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/templates/f_person_id_cards.pt:95
 msgid "Birth date:"
-msgstr ""
+msgstr "Date de naissance :"
 
 #: /src/schooltool/basicperson/browser/templates/f_person_id_cards.pt:99
 msgid "Contact"
-msgstr ""
+msgstr "Contact"
 
 #: /src/schooltool/basicperson/browser/templates/f_person_id_cards.pt:111
 msgid "Contact's Phone"
-msgstr ""
+msgstr "Téléphone du contact"
 
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:4
 #: /src/schooltool/person/browser/person-csvimport.pt:4
@@ -3866,7 +3883,7 @@ msgstr "Comme cela devrait apparaître dans les formulaires et rapports."
 
 #: /src/schooltool/basicperson/interfaces.py:138
 msgid "A unique one word alphanumeric identifier."
-msgstr ""
+msgstr "Un identifiant unique en un seul mot alphanumérique."
 
 #: /src/schooltool/basicperson/interfaces.py:163
 msgid "Selection list"
@@ -3882,11 +3899,11 @@ msgstr ""
 
 #: /src/schooltool/basicperson/interfaces.py:173
 msgid "Minimum value"
-msgstr ""
+msgstr "Valeur minimale"
 
 #: /src/schooltool/basicperson/interfaces.py:177
 msgid "Maximum value"
-msgstr ""
+msgstr "Valeur maximale"
 
 #: /src/schooltool/basicperson/person.py:75
 #: /src/schooltool/contact/browser/contact.py:503
@@ -4669,7 +4686,7 @@ msgstr "Ajouter une Section"
 #: /src/schooltool/course/browser/flourish.zcml:403
 #: /src/schooltool/course/browser/templates/f_section_view.pt:148
 msgid "Locations"
-msgstr ""
+msgstr "Emplacements"
 
 #: /src/schooltool/course/browser/flourish.zcml:411
 #: /src/schooltool/course/browser/templates/f_section_view.pt:164
@@ -4792,19 +4809,19 @@ msgstr "Ajouter des étudiants"
 
 #: /src/schooltool/course/browser/section.py:1380
 msgid "Current locations"
-msgstr ""
+msgstr "Emplacement actuel"
 
 #: /src/schooltool/course/browser/section.py:1381
 msgid "Add locations"
-msgstr ""
+msgstr "Ajouter un emplacement"
 
 #: /src/schooltool/course/browser/section.py:1404
 msgid "Current equipment"
-msgstr ""
+msgstr "Équipement actuel"
 
 #: /src/schooltool/course/browser/section.py:1405
 msgid "Add equipment"
-msgstr ""
+msgstr "Ajouter un équipement"
 
 #: /src/schooltool/course/browser/section.py:1469
 msgid "Extend ${section} to ${term}"
@@ -5242,19 +5259,19 @@ msgstr "Cette section n'a pas d'étudiants"
 
 #: /src/schooltool/course/browser/templates/f_section_view.pt:149
 msgid "Edit locations for this section"
-msgstr ""
+msgstr "Modifier les emplacements pour cette section"
 
 #: /src/schooltool/course/browser/templates/f_section_view.pt:160
 msgid "This section has no locations"
-msgstr ""
+msgstr "Cette section n'a pas d'emplacement"
 
 #: /src/schooltool/course/browser/templates/f_section_view.pt:165
 msgid "Edit equipment for this section"
-msgstr ""
+msgstr "Modifier l'équipement pour cette section"
 
 #: /src/schooltool/course/browser/templates/f_section_view.pt:176
 msgid "This section has no equipment"
-msgstr ""
+msgstr "Cette section n'a pas d'équipement"
 
 #: /src/schooltool/course/browser/templates/f_sections_related.pt:6
 msgid ""
@@ -6232,6 +6249,9 @@ msgid ""
 "Includes student name, ID number, birth date, contact name and contact phone "
 "number. Prints eight per page."
 msgstr ""
+"Comprend le nom de l'étudiant, numéro d'identification (ID), date de "
+"naissance, nom du contact et le numéro de téléphone de contact. Imprime huit "
+"par page."
 
 #: /src/schooltool/group/browser/group.py:98
 msgid "Group index"
@@ -6294,7 +6314,7 @@ msgstr "Information du Groupe"
 
 #: /src/schooltool/group/browser/group.py:816
 msgid "ID Cards for Group: ${group}"
-msgstr ""
+msgstr "Cartes d'identité pour le groupe : ${group}"
 
 #: /src/schooltool/group/browser/templates/f_group_csvimport_description.pt:3
 #: /src/schooltool/group/browser/templates/group-csvimport.pt:24
@@ -6415,15 +6435,15 @@ msgstr "éditer les groupes"
 
 #: /src/schooltool/group/group.py:63
 msgid "Site Managers"
-msgstr ""
+msgstr "Gérants du site"
 
 #: /src/schooltool/group/group.py:66
 msgid "Clerks"
-msgstr ""
+msgstr "Greffiers"
 
 #: /src/schooltool/group/group.py:67
 msgid "School Administrators"
-msgstr ""
+msgstr "Gérants de l'école"
 
 #: /src/schooltool/group/security.zcml:5
 msgid "Only school administration can view the list of groups."
@@ -6488,6 +6508,10 @@ msgstr "Les groupes sont essentiellement des ensembles d'utilisateurs."
 #: /src/schooltool/level/browser/templates/levels.pt:6
 msgid "Grade Levels"
 msgstr "Niveaux d'Étude"
+
+#: /src/schooltool/level/browser/flourish.zcml:62
+msgid "Level"
+msgstr "Niveau"
 
 #: /src/schooltool/level/browser/flourish.zcml:82
 msgid "Add new level"
@@ -7820,15 +7844,15 @@ msgstr "Soutient des personnes exceptionnelles pour changer le monde."
 
 #: /src/schooltool/skin/flourish/templates/photo_input.pt:11
 msgid "delete this photo"
-msgstr ""
+msgstr "Supprimer cette photo"
 
 #: /src/schooltool/skin/flourish/widgets.py:240
 msgid "The file uploaded is not a JPEG or PNG image"
-msgstr ""
+msgstr "Le fichier chargé n'est ni une image JPEG ni un PNG"
 
 #: /src/schooltool/skin/flourish/widgets.py:243
 msgid "The image uploaded cannot be larger than 10 MB"
-msgstr ""
+msgstr "L'image chargée ne doit pas dépasser 10 Mo"
 
 #: /src/schooltool/skin/form.py:64
 msgid "No changes"
@@ -7939,7 +7963,7 @@ msgstr "La chaine de date ne correspond pas au masque aaaa-mm-jj"
 
 #: /src/schooltool/skin/widgets.py:103
 msgid "Year has to be equal or greater than 1900"
-msgstr ""
+msgstr "L'année doit être égale ou supérieure à 1900"
 
 #: /src/schooltool/skin/widgets.py:111
 msgid "Width"

@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2012-04-05 13:59+0300\n"
-"PO-Revision-Date: 2012-04-07 19:40+0000\n"
-"Last-Translator: Alex Mr.Brightside Demurine <extrimall90@mail.ru>\n"
+"PO-Revision-Date: 2012-05-07 11:13+0000\n"
+"Last-Translator: Nikita Kalinin <Unknown>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-04-08 05:11+0000\n"
-"X-Generator: Launchpad (build 15060)\n"
+"X-Launchpad-Export-Date: 2012-05-08 05:37+0000\n"
+"X-Generator: Launchpad (build 15204)\n"
 "Language: ru\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -4399,7 +4399,7 @@ msgstr ""
 #: /src/schooltool/course/section.py:275
 #: /src/schooltool/course/section.py:286
 msgid "Instructors"
-msgstr "Инструкторы"
+msgstr "Преподаватели"
 
 #: /src/schooltool/contact/contact.py:203
 msgid "Instructors of student(s) related to this contact."
@@ -4682,7 +4682,7 @@ msgstr "Оборудование"
 #: /src/schooltool/term/browser/term.py:764
 #: /src/schooltool/term/security.zcml:19
 msgid "Terms"
-msgstr "Условия"
+msgstr "Учебные периоды"
 
 #: /src/schooltool/course/browser/flourish.zcml:467
 msgid "Import Students CSV"
@@ -4770,11 +4770,11 @@ msgstr "Выбора курса"
 
 #: /src/schooltool/course/browser/section.py:1309
 msgid "Current instructors"
-msgstr "Текущие инструкторы"
+msgstr "Текущие преподаватели"
 
 #: /src/schooltool/course/browser/section.py:1310
 msgid "Add instructors"
-msgstr "Добавить инструкторов"
+msgstr "Добавить преподавателей"
 
 #: /src/schooltool/course/browser/section.py:1329
 msgid "Current students"
@@ -5104,7 +5104,7 @@ msgstr ""
 
 #: /src/schooltool/course/browser/templates/f_link_existing.pt:33
 msgid "Instructor"
-msgstr "Инструктор"
+msgstr "Преподаватель"
 
 #: /src/schooltool/course/browser/templates/f_link_existing.pt:37
 #: /src/schooltool/course/browser/templates/link_existing.pt:30
@@ -7724,7 +7724,7 @@ msgstr "Календарь ресурсов"
 
 #: /src/schooltool/securitypolicy/browser/views.py:67
 msgid "Gradebook"
-msgstr "Карточка посещаемости"
+msgstr "Журнал"
 
 #: /src/schooltool/securitypolicy/browser/views.py:68
 msgid "Journal"

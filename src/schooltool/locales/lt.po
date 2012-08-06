@@ -8,15 +8,14 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2012-04-05 13:59+0300\n"
-"PO-Revision-Date: 2012-04-19 20:13+0300\n"
+"PO-Revision-Date: 2012-04-20 11:30+0000\n"
 "Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
-"Language: lt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-04-13 06:13+0000\n"
-"X-Generator: Launchpad (build 15070)\n"
+"X-Launchpad-Export-Date: 2012-04-21 05:26+0000\n"
+"X-Generator: Launchpad (build 15120)\n"
 "Language: lt\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -224,7 +223,7 @@ msgstr "Pritaikyti"
 #: /src/schooltool/timetable/browser/timetable.py:584
 #: /src/schooltool/timetable/browser/timetable.py:664
 msgid "Cancel"
-msgstr "Atšaukti"
+msgstr "Atsisakyti"
 
 #: /src/schooltool/app/browser/app.py:548
 #: /src/schooltool/app/browser/flourish.zcml:228
@@ -291,7 +290,7 @@ msgstr ""
 
 #: /src/schooltool/app/browser/app.py:1200
 msgid "There were errors while packing the database: ${error}"
-msgstr ""
+msgstr "Buvo klaidų pakuojant duomenų bazę: ${error}"
 
 #: /src/schooltool/app/browser/app.py:1226
 #: /src/schooltool/skin/flourish/form.py:46
@@ -981,7 +980,7 @@ msgstr "Keisti vadovus"
 
 #: /src/schooltool/app/browser/configure.zcml:333
 msgid "Change Site Preferences"
-msgstr "Keisti svetainės pasirinkimus"
+msgstr "Keisti svetainės parinktis"
 
 #: /src/schooltool/app/browser/configure.zcml:461
 msgid "Add Event"
@@ -1292,11 +1291,11 @@ msgid ""
 "well as a framework for building customized applications and configurations "
 "for individual schools or states."
 msgstr ""
-"SchoolTool yra administravimo programinė priemonė mokykloms visame "
-"pasaulyje. Projekto tikslas yra sukurti paprastą ir paruoštą naudoti mokinių "
-"informacinę sistemą ar valdymo informacinę sistemą pradinėms ir vidurinėms "
-"mokykloms, o taip pat priemonių rinkinį kurti sistemoms pritaikytoms "
-"konkrečių mokyklų ar valstybių reikmėms."
+"SchoolTool yra nemokama mokymo įstaigų administravimo programinė įranga. "
+"Projekto tikslas yra sukurti paprastą ir paruoštą naudojimui studentų "
+"informacinę sistemą mokymo įstaigoms, o taip pat priemonių rinkinį, skirtą "
+"adaptuotų aplikacijų ir sistemų kūrimui rajonų ir atskirų mokymosi įstaigų "
+"reikmėms."
 
 #: /src/schooltool/app/browser/templates/about.pt:16
 #: /src/schooltool/app/browser/templates/f_about.pt:10
@@ -1474,7 +1473,7 @@ msgstr "Viešas kalendorius"
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:37
 msgid "site-wide calendar"
-msgstr "Mokyklos kalendorius"
+msgstr "Bendras kalendorius"
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:42
 #: /src/schooltool/app/browser/templates/index.pt:14
@@ -2095,7 +2094,7 @@ msgstr ""
 #: /src/schooltool/app/browser/templates/f_login.pt:12
 #: /src/schooltool/app/browser/templates/login.pt:8
 msgid "Your session has expired."
-msgstr "Įsiregistravimas nebegalioja."
+msgstr "Jūsų prisijungimo laikas baigėsi."
 
 #: /src/schooltool/app/browser/templates/f_login.pt:21
 #: /src/schooltool/app/browser/templates/login.pt:13
@@ -2491,11 +2490,11 @@ msgid ""
 "the section as learners."
 msgstr ""
 "Kiekvieno kurso aprašyme pirmoje eilutėje įrašomas <strong> dalyko ir "
-"mokytojo id </strong>. Kitose eilutėse rašomas <strong>dienos ir pamokos id "
-"</strong> tiek eilučių, kiek yra kursui pamokų savaitėje. Po to iš naujos "
-"eilutės prie krašto įrašomos trys žvaigždutės (\"***\"). Po šio pabaigos "
-"ženklo galima įrašyti reikalingą kiekį <strong>asmenų id</strong>, kurie "
-"mokysis šio kurso."
+"mokytojo id </strong>. Kitose eilutėse rašomas <strong>dienos ir užsiėmimo "
+"id </strong> tiek eilučių, kiek yra kurso pamokų savaitėje. Pabaigoje, iš "
+"naujos eilutės prie krašto įrašomos trys žvaigždutės (\"***\"). Po šio "
+"pabaigos ženklo galima įrašyti reikalingą kiekį <strong>asmenų id</strong>, "
+"kurie mokysis šiame kurse."
 
 #. Default: "\"three-day\" \"\",\"\",\"\" \"philosophy\",\"lorch\" \"Monday\",\"A\" \"Monday\",\"B\" \"Tuesday\",\"C\" \"***\" \"johnny\" \"billy\" \"\" \"literature\",\"guzman\" \"Wednesday\",\"B\" \"Wednesday\",\"C\" \"***\" \"johnny\" \"pete\""
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:56
@@ -2519,6 +2518,15 @@ msgid ""
 "\"pete\"\n"
 msgstr ""
 
+#: /src/schooltool/app/browser/templates/timetables-csvimport.pt:74
+msgid ""
+"The above example will create two new sections, one for the philosophy "
+"lecture and the other for the literature lecture. The section for the "
+"philosophy lecture will have persons with ids 'johnny' and 'billy' as "
+"learners, and its timetable will contain three timetable activities, two on "
+"Monday. The literature section will be processed in a similar fashion."
+msgstr ""
+
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:83
 msgid ""
 "Note that only ids of objects are to be used in the file, not titles. If a "
@@ -2529,11 +2537,12 @@ msgid ""
 "other columns are ignored. You can import the same data several times "
 "without any side effects."
 msgstr ""
-"Rašomi ne komponentų vardai, o jų ID. Jei eilutė baigiasi tuščiu langeliu "
-"(pvz. <em>\"Lietuvių kalba\",\"J.Petraitis\",\"\",\"\"</em>), tai toks "
-"įrašas bus pašalintas. Kursų aprašymus gali skirti daugiau nei viena tuščia "
-"eilutė. Mokinių sąraše įtraukiami po vieną eilutėje. Tuos pačius duomenis "
-"galima įkelti kiek norima kartų nekeičiant prieš tai įkeltų duomenų."
+"Rašomi ne komponentų pavadinimai, o jų ID. Jei eilutė baigiasi tuščiu "
+"langeliu (pvz. <em>\"Lietuvių kalba\",\"J.Petraitis\",\"\",\"\"</em>), tai "
+"tokie tušti langeliai bus pašalinti. Kursų aprašymus gali skirti daugiau nei "
+"viena tuščia eilutė. Tik pirmasis stulpelis su besimokančiųjų ID yra "
+"apdorojamas, kiti stulpeliai ignoruojami. Tuos pačius duomenis galima įkelti "
+"keletą kartų, neįtakojant prieš tai įkeltų duomenų."
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:94
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:48
@@ -3232,7 +3241,7 @@ msgstr ""
 #: /src/schooltool/basicperson/browser/flourish.zcml:733
 #: /src/schooltool/person/browser/home_tab_viewlet.pt:3
 msgid "Home"
-msgstr "Namai"
+msgstr "Pradžia"
 
 #: /src/schooltool/basicperson/browser/person.py:79
 #: /src/schooltool/person/browser/person.py:661
@@ -3907,7 +3916,7 @@ msgstr "Prieinami resursai"
 
 #: /src/schooltool/calendar/browser/templates/event_delete_dialog.pt:4
 msgid "Deleting an event on ${day}."
-msgstr ""
+msgstr "Šalinamas ${day} dienos įvykis."
 
 #: /src/schooltool/calendar/browser/templates/event_delete_dialog.pt:8
 msgid "This is an all day event."
@@ -4059,7 +4068,7 @@ msgstr "Yra klaidų."
 
 #: /src/schooltool/contact/browser/contact.py:819
 msgid "${person_full_name} as Contact"
-msgstr ""
+msgstr "${person_full_name} kaip kontaktas"
 
 #: /src/schooltool/contact/browser/contact.py:867
 msgid "Delete ${contact_full_name}"
@@ -4152,7 +4161,7 @@ msgstr ""
 
 #: /src/schooltool/contact/browser/templates/f_manage_contacts_overview.pt:12
 msgid "The school has ${total} contact persons."
-msgstr ""
+msgstr "Mokymo įstaiga turi ${total} kontaktinių asmenų."
 
 #: /src/schooltool/contact/browser/templates/filter.pt:21
 #: /src/schooltool/person/browser/person_filter.pt:11
@@ -4194,6 +4203,8 @@ msgid ""
 "You don't have an email address set. Ask your administrator to set your "
 "email address in your contact information."
 msgstr ""
+"Jūs nenurodėte el. pašto adreso. Paprašykite administratoriaus įrašyti el. "
+"pašto adresą į jūsų kontaktinius duomenis."
 
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:8
 msgid "Contact information for ${person}"
@@ -8470,7 +8481,7 @@ msgstr "$day dienos $period"
 msgid ""
 "Do you check student attendance for the day in a homeroom period or "
 "equivalent?"
-msgstr "Ar yra sąšaukos laikas mokinio dienos lankomumui žymėti?"
+msgstr "Ar numatytas dienos lankomumo patikrinimo laikas?"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:810
 msgid "Please indicate the homeroom period(s) for each day:"
