@@ -20,6 +20,7 @@ from __future__ import absolute_import
 
 import sys
 import datetime
+import pkg_resources
 import pytz
 
 import celery.task
@@ -47,6 +48,7 @@ from schooltool.task.interfaces import IRemoteTask, ITaskContainer
 
 IN_PROGRESS = 'IN_PROGRESS'
 COMMITTING = 'COMMITTING_ZODB'
+
 
 class NoDatabaseException(Exception):
     pass
@@ -348,3 +350,11 @@ class TaskWriteStatus(TaskReadStatus):
             raise NotInProgress(result.state, self._progress_states)
         result.backend.store_result(result.task_id, self.info, COMMITTING)
         self.reload()
+
+
+def load_plugin_tasks():
+    task_entries = list(pkg_resources.iter_entry_points('schooltool.tasks'))
+    for entry in task_entries:
+        entry.load()
+
+load_plugin_tasks()
