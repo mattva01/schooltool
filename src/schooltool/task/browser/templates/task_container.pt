@@ -10,10 +10,14 @@
     <tbody>
       <tr tal:repeat="task view/tasks">
         <td>
-          <a tal:attributes="href task/@@absolute_url"
-             tal:content="task/task_id" />
-          <a tal:attributes="href string:${context/schooltool:app/@@absolute_url}/schooltool.task_results/${task/task_id}"
-             tal:content="task/task_id" />
+          <p>
+            <a tal:attributes="href task/@@absolute_url"
+               tal:content="task/task_id" />
+          </p>
+          <p>
+            <a tal:condition="context/schooltool:devmode"
+               tal:attributes="href string:${context/schooltool:app/@@absolute_url}/schooltool.task_results/${task/task_id}" i18n:translate="">JSON result</a>
+          </p>
         </td>
         <td>
           <span tal:content="task/internal_state" />
