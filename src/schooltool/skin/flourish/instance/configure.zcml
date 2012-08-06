@@ -14,6 +14,7 @@
   <include package="z3c.autoinclude" file="meta.zcml" />
   <includePlugins package="schooltool" file="meta.zcml" />
   <includePlugins package="schooltool" file="plugin.zcml" />
+  <includePlugins package="schooltool" file="i18n.zcml" />
 
   <include package="schooltool.timetable" />
   <include package="schooltool.basicperson" />

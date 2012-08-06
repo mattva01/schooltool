@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:i18n="http://namespaces.zope.org/i18n"
+           i18n_domain="schooltool">
+
+  <!-- Translations -->
+
+  <include package="zope.i18n" file="meta.zcml" />
+  <include package="zope.i18n" />
+
+  <!-- set up an adapter from zope.i18n locale to a zope.ucol collator -->
+
+  <adapter
+      for="zope.i18n.interfaces.locales.ILocale"
+      provides="zope.i18n.interfaces.locales.ICollator "
+      factory="zope.ucol.localeadapter.LocaleCollator"
+      />
+
+  <configure package="zope.app.locales"
+             i18n_domain="zope">
+    <i18n:registerTranslations directory="." />
+  </configure>
+
+  <configure package="schooltool.locales">
+    <i18n:registerTranslations directory="." />
+  </configure>
+
+</configure>
