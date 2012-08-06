@@ -1,33 +1,31 @@
-# Czech translation for schooltool
-# Copyright (c) (c) 2005 Canonical Ltd, and Rosetta Contributors 2005
+# Bosnian translation for schooltool
+# Copyright (c) 2012 Rosetta Contributors and Canonical Ltd 2012
 # This file is distributed under the same license as the schooltool package.
-# Miroslav Kure <kurem@debian.cz>, 2005.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2012.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2012-04-05 13:59+0300\n"
-"PO-Revision-Date: 2012-04-06 21:45+0000\n"
-"Last-Translator: Konki <pavel.konkol@seznam.cz>\n"
-"Language-Team: Czech <debian-l10n-czech@lists.debian.org>\n"
+"PO-Revision-Date: 2012-05-13 18:06+0000\n"
+"Last-Translator: Eldina Turajlić <eldina.turajlic@edu.fit.ba>\n"
+"Language-Team: Bosnian <bs@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-04-20 05:08+0000\n"
-"X-Generator: Launchpad (build 15120)\n"
-"Language: cs\n"
-"X-Rosetta-Version: 0.1\n"
+"X-Launchpad-Export-Date: 2012-05-14 05:19+0000\n"
+"X-Generator: Launchpad (build 15238)\n"
 
 #: /src/schooltool/app/app.py:193
 msgid "Your School"
-msgstr "Vaše škola"
+msgstr "Vaša Škola"
 
 #: /src/schooltool/app/browser/__init__.py:306
 #: /src/schooltool/app/browser/templates/index.pt:11
 #: /src/schooltool/person/browser/configure.zcml:26
 msgid "Persons"
-msgstr "Osoby"
+msgstr "Osobe"
 
 #: /src/schooltool/app/browser/__init__.py:311
 msgid "1 person"
@@ -35,7 +33,7 @@ msgstr "1 osoba"
 
 #: /src/schooltool/app/browser/__init__.py:313
 msgid "${number} persons"
-msgstr "${number} osob"
+msgstr "${number} osoba"
 
 #: /src/schooltool/app/browser/app.py:262
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:37
@@ -64,7 +62,7 @@ msgstr "${number} osob"
 #: /src/schooltool/timetable/browser/templates/f_timetable_container.pt:5
 #: /src/schooltool/timetable/browser/templates/timetable_container.pt:16
 msgid "There are none."
-msgstr "Nejsou tam žádné."
+msgstr "Ne postoje."
 
 #: /src/schooltool/app/browser/app.py:352
 #: /src/schooltool/app/browser/app.py:531
@@ -103,7 +101,7 @@ msgstr "Nejsou tam žádné."
 #: /src/schooltool/timetable/browser/flourish.zcml:503
 #: /src/schooltool/timetable/browser/timetable.py:342
 msgid "Add"
-msgstr "Přidat"
+msgstr "Dodaj"
 
 #: /src/schooltool/app/browser/app.py:276
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:26
@@ -111,16 +109,16 @@ msgstr "Přidat"
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:45
 #: /src/schooltool/timetable/browser/templates/schedule_container_view.pt:56
 msgid "Remove"
-msgstr "Odstranit"
+msgstr "Ukloni"
 
 #: /src/schooltool/app/browser/app.py:408
 #: /src/schooltool/app/browser/templates/f_edit_relationships.pt:58
 msgid "Add all displayed"
-msgstr ""
+msgstr "Dodaj sve prikazano."
 
 #: /src/schooltool/app/browser/app.py:677
 msgid "Username or password is incorrect"
-msgstr "Uživatelské jméno nebo heslo není správné"
+msgstr "Korisničko ime ili lozinka nisu tačni"
 
 #: /src/schooltool/app/browser/app.py:434
 #: /src/schooltool/app/browser/flourish.zcml:54
@@ -128,15 +126,15 @@ msgstr "Uživatelské jméno nebo heslo není správné"
 #: /src/schooltool/app/browser/templates/f_login.pt:72
 #: /src/schooltool/app/browser/templates/login.pt:57
 msgid "Log in"
-msgstr "Přihlásit"
+msgstr "Prijavi se"
 
 #: /src/schooltool/app/browser/app.py:435
 msgid "Log out"
-msgstr "Odhlásit se"
+msgstr "Odjava"
 
 #: /src/schooltool/app/browser/app.py:523
 msgid "Calendar settings"
-msgstr "Nastavení kalendáře"
+msgstr "Postavke kalendara"
 
 #: /src/schooltool/app/browser/app.py:528
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:31
@@ -150,7 +148,7 @@ msgstr "Nastavení kalendáře"
 #: /src/schooltool/timetable/browser/calendar.py:94
 #: /src/schooltool/timetable/browser/timetable.py:658
 msgid "Apply"
-msgstr "Použít"
+msgstr "Primijeniti"
 
 #: /src/schooltool/app/browser/app.py:536
 #: /src/schooltool/app/browser/app.py:1014
@@ -223,38 +221,38 @@ msgstr "Použít"
 #: /src/schooltool/timetable/browser/timetable.py:584
 #: /src/schooltool/timetable/browser/timetable.py:664
 msgid "Cancel"
-msgstr "Zrušit"
+msgstr "Otkaži"
 
 #: /src/schooltool/app/browser/app.py:548
 #: /src/schooltool/app/browser/flourish.zcml:228
 #: /src/schooltool/app/browser/flourish.zcml:580
 msgid "School Name"
-msgstr "Jméno školy"
+msgstr "Naziv škole"
 
 #: /src/schooltool/app/browser/app.py:557
 msgid "Name"
-msgstr "Jméno"
+msgstr "Ime"
 
 #: /src/schooltool/app/browser/app.py:585
 #: /src/schooltool/app/security.py:304
 msgid "Leaders"
-msgstr "Vedoucí"
+msgstr "Vođe"
 
 #: /src/schooltool/app/browser/app.py:586
 msgid "Current leaders"
-msgstr "Aktuální vedoucí"
+msgstr "Trenutne vođe"
 
 #: /src/schooltool/app/browser/app.py:587
 msgid "Available leaders"
-msgstr "Dostupní vedoucí"
+msgstr "Dostupne vođe"
 
 #: /src/schooltool/app/browser/app.py:598
 msgid "Current responsible parties"
-msgstr "Aktuální zodpovědné osoby"
+msgstr "Trenutno odgovorne stranke"
 
 #: /src/schooltool/app/browser/app.py:599
 msgid "Available responsible parties"
-msgstr "Dostupné zodpovědné osoby"
+msgstr "Dostupne odgovorne stranke"
 
 #: /src/schooltool/app/browser/app.py:622
 msgid "school"
@@ -282,21 +280,21 @@ msgstr "Server"
 #: /src/schooltool/app/browser/app.py:1177
 #: /src/schooltool/app/browser/flourish.zcml:611
 msgid "Pack Database"
-msgstr "Zmenšit databázi"
+msgstr "Pakiranje baze podataka"
 
 #: /src/schooltool/app/browser/app.py:1198
 msgid "Database successfully packed."
-msgstr "Databáze úspěšně zmenšena."
+msgstr "Baza podataka uspješno zapakirana"
 
 #: /src/schooltool/app/browser/app.py:1200
 msgid "There were errors while packing the database: ${error}"
-msgstr "Při zmenšování databáze došlo k chybám ${error}."
+msgstr "Bilo je pogresaka tijekom pakiranja baze podataka: ${error}"
 
 #: /src/schooltool/app/browser/app.py:1226
 #: /src/schooltool/skin/flourish/form.py:46
 #: /src/schooltool/timetable/browser/ttwizard.py:793
 msgid "Yes"
-msgstr "Ano"
+msgstr "Da"
 
 #: /src/schooltool/app/browser/app.py:1228
 #: /src/schooltool/skin/flourish/form.py:47
@@ -306,27 +304,27 @@ msgstr "Ne"
 
 #: /src/schooltool/app/browser/app.py:1242
 msgid "${type} Error"
-msgstr "Chyba ${type}"
+msgstr "${type} Greška"
 
 #: /src/schooltool/app/browser/app.py:962
 #: /src/schooltool/app/browser/templates/f_errors.pt:15
 msgid "Number of exceptions to show"
-msgstr "Počet výjimek k zobrazení"
+msgstr "Broj iznimki za prikazati"
 
 #: /src/schooltool/app/browser/app.py:965
 #: /src/schooltool/app/browser/templates/f_errors.pt:21
 msgid "Copy exceptions to the event log"
-msgstr "Zkopírovat výjimky do protokolu událostí"
+msgstr "Kopiraj iznimke u zapisnik događaja"
 
 #: /src/schooltool/app/browser/app.py:969
 #: /src/schooltool/app/browser/templates/f_errors.pt:27
 msgid "Ignored exception types"
-msgstr "Ignorované typy výjimek"
+msgstr ""
 
 #: /src/schooltool/app/browser/app.py:998
 #: /src/schooltool/app/browser/flourish.zcml:292
 msgid "Errors Settings"
-msgstr "Nastavení chyb"
+msgstr "Postavke grešaka"
 
 #: /src/schooltool/app/browser/app.py:1005
 #: /src/schooltool/basicperson/browser/demographics.py:413
@@ -341,7 +339,7 @@ msgstr "Nastavení chyb"
 #: /src/schooltool/term/browser/term.py:291
 #: /src/schooltool/term/browser/term.py:404
 msgid "Submit"
-msgstr "Odeslat"
+msgstr "Pošalji"
 
 #: /src/schooltool/app/browser/app.py:1025
 #: /src/schooltool/app/browser/configure.zcml:670
@@ -349,61 +347,61 @@ msgstr "Odeslat"
 #: /src/schooltool/app/browser/flourish.zcml:260
 #: /src/schooltool/devmode/devmode.pt:17
 msgid "Errors"
-msgstr "Chyby"
+msgstr "Greške"
 
 #: /src/schooltool/app/browser/app.py:1419
 #: /src/schooltool/app/browser/flourish.zcml:292
 #: /src/schooltool/app/browser/flourish.zcml:301
 msgid "Tabs"
-msgstr "Záložky"
+msgstr "Kartice"
 
 #: /src/schooltool/app/browser/cal.py:118
 msgid "January"
-msgstr "Leden"
+msgstr "Januar"
 
 #: /src/schooltool/app/browser/cal.py:115
 msgid "February"
-msgstr "Únor"
+msgstr "Februar"
 
 #: /src/schooltool/app/browser/cal.py:116
 msgid "March"
-msgstr "Březen"
+msgstr "Mart"
 
 #: /src/schooltool/app/browser/cal.py:117
 msgid "April"
-msgstr "Duben"
+msgstr "April"
 
 #: /src/schooltool/app/browser/cal.py:118
 msgid "May"
-msgstr "Květen"
+msgstr "Maj"
 
 #: /src/schooltool/app/browser/cal.py:119
 msgid "June"
-msgstr "Červen"
+msgstr "Juni"
 
 #: /src/schooltool/app/browser/cal.py:120
 msgid "July"
-msgstr "Červenec"
+msgstr "Juli"
 
 #: /src/schooltool/app/browser/cal.py:121
 msgid "August"
-msgstr "Srpen"
+msgstr "Avgust"
 
 #: /src/schooltool/app/browser/cal.py:122
 msgid "September"
-msgstr "Září"
+msgstr "Septembar"
 
 #: /src/schooltool/app/browser/cal.py:123
 msgid "October"
-msgstr "Říjen"
+msgstr "Oktobar"
 
 #: /src/schooltool/app/browser/cal.py:124
 msgid "November"
-msgstr "Listopad"
+msgstr "Novembar"
 
 #: /src/schooltool/app/browser/cal.py:125
 msgid "December"
-msgstr "Prosinec"
+msgstr "Decembar"
 
 #: /src/schooltool/app/browser/cal.py:132
 #: /src/schooltool/person/interfaces.py:176
@@ -414,7 +412,7 @@ msgstr "Prosinec"
 #: /src/schooltool/term/browser/templates/term_add.pt:54
 #: /src/schooltool/term/browser/templates/term_add.pt:80
 msgid "Monday"
-msgstr "Pondělí"
+msgstr "Ponedjeljak"
 
 #: /src/schooltool/app/browser/cal.py:129
 #: /src/schooltool/term/browser/templates/f_term.pt:31
@@ -424,7 +422,7 @@ msgstr "Pondělí"
 #: /src/schooltool/term/browser/templates/term_add.pt:56
 #: /src/schooltool/term/browser/templates/term_add.pt:81
 msgid "Tuesday"
-msgstr "Úterý"
+msgstr "Utorak"
 
 #: /src/schooltool/app/browser/cal.py:130
 #: /src/schooltool/term/browser/templates/f_term.pt:32
@@ -434,7 +432,7 @@ msgstr "Úterý"
 #: /src/schooltool/term/browser/templates/term_add.pt:58
 #: /src/schooltool/term/browser/templates/term_add.pt:82
 msgid "Wednesday"
-msgstr "Středa"
+msgstr "Srijeda"
 
 #: /src/schooltool/app/browser/cal.py:131
 #: /src/schooltool/term/browser/templates/f_term.pt:33
@@ -444,7 +442,7 @@ msgstr "Středa"
 #: /src/schooltool/term/browser/templates/term_add.pt:60
 #: /src/schooltool/term/browser/templates/term_add.pt:83
 msgid "Thursday"
-msgstr "Čtvrtek"
+msgstr "Četvrtak"
 
 #: /src/schooltool/app/browser/cal.py:132
 #: /src/schooltool/term/browser/templates/f_term.pt:34
@@ -454,7 +452,7 @@ msgstr "Čtvrtek"
 #: /src/schooltool/term/browser/templates/term_add.pt:62
 #: /src/schooltool/term/browser/templates/term_add.pt:84
 msgid "Friday"
-msgstr "Pátek"
+msgstr "Petak"
 
 #: /src/schooltool/app/browser/cal.py:133
 #: /src/schooltool/person/interfaces.py:174
@@ -465,7 +463,7 @@ msgstr "Pátek"
 #: /src/schooltool/term/browser/templates/term_add.pt:64
 #: /src/schooltool/term/browser/templates/term_add.pt:85
 msgid "Saturday"
-msgstr "Sobota"
+msgstr "Subota"
 
 #: /src/schooltool/app/browser/cal.py:134
 #: /src/schooltool/person/interfaces.py:175
@@ -476,92 +474,92 @@ msgstr "Sobota"
 #: /src/schooltool/term/browser/templates/term_add.pt:66
 #: /src/schooltool/term/browser/templates/term_add.pt:86
 msgid "Sunday"
-msgstr "Něděle"
+msgstr "Nedelja"
 
 #: /src/schooltool/app/browser/cal.py:137
 msgid "Mon"
-msgstr "Po"
+msgstr "Pon"
 
 #: /src/schooltool/app/browser/cal.py:138
 msgid "Tue"
-msgstr "Út"
+msgstr "Uto"
 
 #: /src/schooltool/app/browser/cal.py:139
 msgid "Wed"
-msgstr "St"
+msgstr "Sri"
 
 #: /src/schooltool/app/browser/cal.py:140
 msgid "Thu"
-msgstr "Čt"
+msgstr "Čet"
 
 #: /src/schooltool/app/browser/cal.py:141
 msgid "Fri"
-msgstr "Pá"
+msgstr "Pet"
 
 #: /src/schooltool/app/browser/cal.py:142
 msgid "Sat"
-msgstr "So"
+msgstr "Sub"
 
 #: /src/schooltool/app/browser/cal.py:143
 msgid "Sun"
-msgstr "Ne"
+msgstr "Ned"
 
 #: /src/schooltool/app/browser/cal.py:379
 #: /src/schooltool/resource/browser/booking.py:195
 msgid "Unnamed Event"
-msgstr "Nepojmenovaná událost"
+msgstr "Neimenovani Događaj"
 
 #: /src/schooltool/app/browser/cal.py:818
 msgid "Next week"
-msgstr "Příští týden"
+msgstr "Slijedeće sedmice"
 
 #: /src/schooltool/app/browser/cal.py:819
 msgid "Current week"
-msgstr "Tento týden"
+msgstr "Trenutna sedmica"
 
 #: /src/schooltool/app/browser/cal.py:820
 msgid "Previous week"
-msgstr "Předchozí týden"
+msgstr "Prethodna sedmica"
 
 #: /src/schooltool/app/browser/cal.py:822
 msgid "Go to next week"
-msgstr "Jít na následující týden"
+msgstr "Idi na sljedeću sedmicu"
 
 #: /src/schooltool/app/browser/cal.py:823
 msgid "Go to current week"
-msgstr "Jít na aktuální týden"
+msgstr "Idi na trenutnu sedmicu"
 
 #: /src/schooltool/app/browser/cal.py:824
 msgid "Go to previous week"
-msgstr "Jít na předchozí týden"
+msgstr "Idi na predhodnu sedmicu"
 
 #: /src/schooltool/app/browser/cal.py:890
 msgid "${month}, ${year} (week ${week})"
-msgstr "${month}, ${year} (${week}. týden)"
+msgstr "${month}), ${year} (sedmica ${week})"
 
 #: /src/schooltool/app/browser/cal.py:1059
 msgid "Next month"
-msgstr "Příští měsíc"
+msgstr "Slijedeći mjesec"
 
 #: /src/schooltool/app/browser/cal.py:1060
 msgid "Current month"
-msgstr "Tento měsíc"
+msgstr "Trenutni mjesec"
 
 #: /src/schooltool/app/browser/cal.py:1061
 msgid "Previous month"
-msgstr "Předchozí měsíc"
+msgstr "Prethodni mjesec"
 
 #: /src/schooltool/app/browser/cal.py:1063
 msgid "Go to next month"
-msgstr "Jít na další měsíc"
+msgstr "Idi na sljedeći mjesec"
 
 #: /src/schooltool/app/browser/cal.py:1064
 msgid "Go to current month"
-msgstr "Jít na aktuální měsíc"
+msgstr "Idi na trenutni mjesec"
 
 #: /src/schooltool/app/browser/cal.py:1065
 msgid "Go to previous month"
-msgstr "Jít na předchozí měsíc"
+msgstr "Idi na prethodni mjesec"
 
 #: /src/schooltool/app/browser/cal.py:1132
 msgid "${month}, ${year}"
@@ -569,59 +567,59 @@ msgstr "${month}, ${year}"
 
 #: /src/schooltool/app/browser/cal.py:1154
 msgid "Week ${week_no}"
-msgstr "${week_no}. týden"
+msgstr "Sedmica ${week_no}"
 
 #: /src/schooltool/app/browser/cal.py:1111
 msgid "Next year"
-msgstr "Příští rok"
+msgstr "Naredna godina"
 
 #: /src/schooltool/app/browser/cal.py:1112
 msgid "Current year"
-msgstr "Tento rok"
+msgstr "Tekuća godina"
 
 #: /src/schooltool/app/browser/cal.py:1113
 msgid "Previous year"
-msgstr "Předchozí rok"
+msgstr "Prethodna godina"
 
 #: /src/schooltool/app/browser/cal.py:1115
 msgid "Go to next year"
-msgstr "Jít na následující rok"
+msgstr "Idi na slijedeću godinu"
 
 #: /src/schooltool/app/browser/cal.py:1116
 msgid "Go to current year"
-msgstr "Jít na aktuální rok"
+msgstr "Idi na trenutnu godinu"
 
 #: /src/schooltool/app/browser/cal.py:1117
 msgid "Go to previous year"
-msgstr "Jít na předchozí rok"
+msgstr "Idi na prethodnu godinu"
 
 #: /src/schooltool/app/browser/cal.py:1183
 msgid "The next day"
-msgstr "Příští den"
+msgstr "Slijedeći dan"
 
 #: /src/schooltool/app/browser/cal.py:1184
 msgid "Today"
-msgstr "Dnes"
+msgstr "Danas"
 
 #: /src/schooltool/app/browser/cal.py:1185
 msgid "The previous day"
-msgstr "Předchozí den"
+msgstr "Prethodni dan"
 
 #: /src/schooltool/app/browser/cal.py:1187
 msgid "Go to the next day"
-msgstr "Jít na následující den"
+msgstr "Idi na slijedeći dan"
 
 #: /src/schooltool/app/browser/cal.py:1188
 msgid "Go to today"
-msgstr "Jít na dnešek"
+msgstr "Idi na današnji dan"
 
 #: /src/schooltool/app/browser/cal.py:1189
 msgid "Go to the previous day"
-msgstr "Jít na předchozí den"
+msgstr "Idi na prethodni dan"
 
 #: /src/schooltool/app/browser/cal.py:1429
 msgid "Add new event starting at ${title}"
-msgstr "Přidat novou událost začínající v  ${title}"
+msgstr "Dodaj novi događaj u ${title}"
 
 #: /src/schooltool/app/browser/cal.py:1641
 #: /src/schooltool/app/browser/cal.py:2276
@@ -663,7 +661,7 @@ msgstr "Přidat novou událost začínající v  ${title}"
 #: /src/schooltool/timetable/browser/calendar.py:120
 #: /src/schooltool/timetable/browser/ttwizard.py:258
 msgid "Title"
-msgstr "Název"
+msgstr "Naslov"
 
 #: /src/schooltool/app/browser/cal.py:1644
 #: /src/schooltool/app/browser/templates/cal_monthly.pt:38
@@ -676,7 +674,7 @@ msgstr "Název"
 #: /src/schooltool/calendar/browser/templates/calendar_weekly.pt:40
 #: /src/schooltool/timetable/browser/calendar.py:123
 msgid "All day"
-msgstr "Celý den"
+msgstr "Čitav dan"
 
 #: /src/schooltool/app/browser/cal.py:1647
 #: /src/schooltool/basicperson/browser/demographics.py:311
@@ -692,22 +690,22 @@ msgstr "Datum"
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:10
 #: /src/schooltool/timetable/browser/calendar.py:129
 msgid "Time"
-msgstr "Čas"
+msgstr "Vrijeme"
 
 #: /src/schooltool/app/browser/cal.py:1651
 #: /src/schooltool/timetable/browser/calendar.py:130
 msgid "Start time in 24h format"
-msgstr "Počáteční čas ve 24 hodinovém formátu"
+msgstr "Postavi vrijeme na format 24h"
 
 #: /src/schooltool/app/browser/cal.py:1655
 #: /src/schooltool/timetable/browser/calendar.py:134
 msgid "Duration"
-msgstr "Trvání"
+msgstr "Trajanje"
 
 #: /src/schooltool/app/browser/cal.py:1660
 #: /src/schooltool/timetable/browser/calendar.py:139
 msgid "Duration Type"
-msgstr "Typ trvání"
+msgstr "Opis trajanja"
 
 #: /src/schooltool/app/browser/cal.py:1663
 #: /src/schooltool/app/browser/templates/event_add.pt:168
@@ -716,7 +714,7 @@ msgstr "Typ trvání"
 #: /src/schooltool/timetable/browser/templates/f_schedule_event_add.pt:117
 #: /src/schooltool/timetable/browser/templates/schedule_event_add.pt:112
 msgid "Minutes"
-msgstr "Minuty"
+msgstr "Minute"
 
 #: /src/schooltool/app/browser/cal.py:1664
 #: /src/schooltool/app/browser/templates/event_add.pt:171
@@ -725,7 +723,7 @@ msgstr "Minuty"
 #: /src/schooltool/timetable/browser/templates/f_schedule_event_add.pt:120
 #: /src/schooltool/timetable/browser/templates/schedule_event_add.pt:115
 msgid "Hours"
-msgstr "Hodiny"
+msgstr "Sati"
 
 #: /src/schooltool/app/browser/cal.py:1665
 #: /src/schooltool/app/browser/templates/event_add.pt:175
@@ -734,7 +732,7 @@ msgstr "Hodiny"
 #: /src/schooltool/timetable/browser/templates/f_schedule_event_add.pt:124
 #: /src/schooltool/timetable/browser/templates/schedule_event_add.pt:119
 msgid "Days"
-msgstr "Dny"
+msgstr "Dani"
 
 #: /src/schooltool/app/browser/cal.py:1668
 #: /src/schooltool/app/browser/templates/event.pt:48
@@ -748,7 +746,7 @@ msgstr "Dny"
 #: /src/schooltool/timetable/browser/templates/f_schedule_event_edit.pt:43
 #: /src/schooltool/timetable/browser/templates/schedule_event_edit.pt:49
 msgid "Location"
-msgstr "Umístění"
+msgstr "Lokacija"
 
 #: /src/schooltool/app/browser/cal.py:1672
 #: /src/schooltool/app/browser/templates/f_database.pt:19
@@ -767,74 +765,74 @@ msgstr "Umístění"
 #: /src/schooltool/timetable/browser/calendar.py:75
 #: /src/schooltool/timetable/browser/calendar.py:151
 msgid "Description"
-msgstr "Popis"
+msgstr "Opis"
 
 #: /src/schooltool/app/browser/cal.py:1677
 msgid "Recurring"
-msgstr "Opakující se"
+msgstr "Ponavljanje"
 
 #: /src/schooltool/app/browser/cal.py:1681
 msgid "Recurs every"
-msgstr "Opakuje se každý"
+msgstr "Ponavlja se"
 
 #: /src/schooltool/app/browser/cal.py:1684
 msgid "Day"
-msgstr "Den"
+msgstr "Dan"
 
 #: /src/schooltool/app/browser/cal.py:1685
 msgid "Week"
-msgstr "Týden"
+msgstr "Sedmica"
 
 #: /src/schooltool/app/browser/cal.py:1686
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:119
 #: /src/schooltool/calendar/browser/templates/calendar_jump_to.pt:9
 msgid "Month"
-msgstr "Měsíc"
+msgstr "Mjesec"
 
 #: /src/schooltool/app/browser/cal.py:1687
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:132
 #: /src/schooltool/calendar/browser/templates/calendar_jump_to.pt:22
 #: /src/schooltool/course/browser/templates/f_section_linkage.pt:13
 msgid "Year"
-msgstr "Rok"
+msgstr "Godina"
 
 #: /src/schooltool/app/browser/cal.py:1690
 msgid "Repeat every"
-msgstr "Opakovat všechny"
+msgstr "Ponovi svakih"
 
 #: /src/schooltool/app/browser/cal.py:1695
 msgid "Range"
-msgstr "Rozsah"
+msgstr "Opseg"
 
 #: /src/schooltool/app/browser/cal.py:1698
 msgid "Count"
-msgstr "Počet"
+msgstr "Brojač"
 
 #: /src/schooltool/app/browser/cal.py:1699
 msgid "Until"
-msgstr "Do"
+msgstr "Sve do"
 
 #: /src/schooltool/app/browser/cal.py:1700
 msgid "forever"
-msgstr "navždy"
+msgstr "zauvijek"
 
 #: /src/schooltool/app/browser/cal.py:1703
 msgid "Number of events"
-msgstr "Počet událostí"
+msgstr "Broj događaja"
 
 #: /src/schooltool/app/browser/cal.py:1707
 #: /src/schooltool/app/browser/templates/event_add.pt:303
 #: /src/schooltool/calendar/browser/templates/event_edit.pt:309
 msgid "Repeat until"
-msgstr "Opakovat do"
+msgstr "Ponavljaj do"
 
 #: /src/schooltool/app/browser/cal.py:1711
 msgid "Weekdays"
-msgstr "Pracovní dny"
+msgstr "Radni dani"
 
 #: /src/schooltool/app/browser/cal.py:1714
 msgid "Weekday"
-msgstr "Pracovní den"
+msgstr "Radni dan"
 
 #: /src/schooltool/app/browser/cal.py:1718
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:36
@@ -842,15 +840,15 @@ msgstr "Pracovní den"
 #: /src/schooltool/calendar/browser/calendar.py:290
 #: /src/schooltool/calendar/browser/templates/event_edit.pt:261
 msgid "Monthly"
-msgstr "Měsíčně"
+msgstr "Mjesečno"
 
 #: /src/schooltool/app/browser/cal.py:1726
 msgid "Exception dates"
-msgstr "Vyjma"
+msgstr "Osim datuma"
 
 #: /src/schooltool/app/browser/cal.py:1805
 msgid "same weekday"
-msgstr "stejný den v týdnu"
+msgstr "Isti dan u sedmici"
 
 #: /src/schooltool/app/browser/cal.py:1810
 msgid "1st"
@@ -874,46 +872,45 @@ msgstr "5."
 
 #: /src/schooltool/app/browser/cal.py:1825
 msgid "last weekday"
-msgstr "poslední den v týdnu"
+msgstr "Poslednji dan u sedmici."
 
 #: /src/schooltool/app/browser/cal.py:1912
 msgid "Last ${weekday}"
-msgstr "Poslední ${weekday}"
+msgstr "Zadnji ${weekday}"
 
 #: /src/schooltool/app/browser/cal.py:1858
 #: /src/schooltool/app/browser/cal.py:2165
 msgid "An error occurred."
-msgstr "Vyskytla se chyba."
+msgstr "Desila se greška."
 
 #: /src/schooltool/app/browser/cal.py:1891
 msgid "Invalid time"
-msgstr "Neplatný čas"
+msgstr "Neispravno vrijeme"
 
 #: /src/schooltool/app/browser/cal.py:1912
 msgid "End date is earlier than start date"
-msgstr "Koncové datum je dřívější než počáteční"
+msgstr "Krajnji datum je prije početnog datuma"
 
 #: /src/schooltool/app/browser/cal.py:1921
 msgid "Invalid date.  Please specify YYYY-MM-DD, one per line."
-msgstr ""
-"Neplatné datum. Zadejte je prosím ve tvaru RRRR-MM-DD, jedno na řádek."
+msgstr "Neispravan datum. Molimo unesite GGGG-MM-DD, po jedno u redu."
 
 #: /src/schooltool/app/browser/cal.py:1969
 msgid "Add event"
-msgstr "Přidat událost"
+msgstr "Dodaj događaj"
 
 #: /src/schooltool/app/browser/cal.py:2040
 msgid "Edit event"
-msgstr "Upravit událost"
+msgstr "Izmijeni događaj"
 
 #: /src/schooltool/app/browser/cal.py:2041
 msgid "Update"
-msgstr "Aktualizovat"
+msgstr "Ažuriraj"
 
 #: /src/schooltool/app/browser/cal.py:2270
 #: /src/schooltool/skin/form.py:76
 msgid "Updated on ${date_time}"
-msgstr "Aktualizováno ${date_time}"
+msgstr "Ažurirano na ${date_time}"
 
 #: /src/schooltool/app/browser/cal.py:2280
 #: /src/schooltool/app/browser/overlay.py:274
@@ -921,7 +918,7 @@ msgstr "Aktualizováno ${date_time}"
 #: /src/schooltool/calendar/browser/templates/event_edit.pt:374
 #: /src/schooltool/resource/types.py:107
 msgid "Type"
-msgstr "Typ"
+msgstr "Vrsta"
 
 #: /src/schooltool/app/browser/cal.py:2283
 msgid "Booked by others"
@@ -938,7 +935,7 @@ msgstr ""
 #: /src/schooltool/calendar/browser/templates/calendar_overlay.pt:24
 #: /src/schooltool/resource/browser/flourish.zcml:192
 msgid "Calendar"
-msgstr "Kalendář"
+msgstr "Kalendar"
 
 #: /src/schooltool/app/browser/configure.zcml:173
 #: /src/schooltool/app/browser/flourish.zcml:196
@@ -960,112 +957,112 @@ msgstr "Kalendář"
 #: /src/schooltool/timetable/browser/flourish.zcml:92
 #: /src/schooltool/timetable/browser/flourish.zcml:471
 msgid "Actions"
-msgstr "Akce"
+msgstr "Radnje"
 
 #: /src/schooltool/app/browser/configure.zcml:287
 msgid "View Calendar"
-msgstr "Zobrazit kalendář"
+msgstr "Pogledaj kalendar"
 
 #: /src/schooltool/app/browser/configure.zcml:299
 #: /src/schooltool/calendar/browser/flourish.zcml:157
 msgid "New Event"
-msgstr "Nová událost"
+msgstr "Novi događaj"
 
 #: /src/schooltool/app/browser/configure.zcml:310
 msgid "Open in iCal"
-msgstr "Otevřít v iCal"
+msgstr "Otvori u iCal"
 
 #: /src/schooltool/app/browser/configure.zcml:322
 msgid "Edit Leaders"
-msgstr "Upravit vedoucí"
+msgstr "Izmjeni Vođe"
 
 #: /src/schooltool/app/browser/configure.zcml:333
 msgid "Change Site Preferences"
-msgstr "Změnit nastavení stanice"
+msgstr "Promijenite postavke stranice"
 
 #: /src/schooltool/app/browser/configure.zcml:461
 msgid "Add Event"
-msgstr "Přidat událost"
+msgstr "Dodaj događaj"
 
 #: /src/schooltool/app/browser/configure.zcml:480
 msgid "Edit Event"
-msgstr "Upravit událost"
+msgstr "Izmijeni događaj"
 
 #: /src/schooltool/app/browser/configure.zcml:522
 msgid "ZODB Control"
-msgstr "Ovládání ZODB"
+msgstr "ZODB kontrola"
 
 #: /src/schooltool/app/browser/configure.zcml:545
 #: /src/schooltool/app/browser/templates/manage_menu.pt:3
 #: /src/schooltool/basicperson/security.zcml:26
 msgid "Manage"
-msgstr "Spravovat"
+msgstr "Upravljanje"
 
 #: /src/schooltool/app/browser/configure.zcml:557
 msgid "Application Control"
-msgstr "Ovládání aplikace"
+msgstr "Kontrola aplikacija"
 
 #: /src/schooltool/app/browser/configure.zcml:569
 #: /src/schooltool/app/browser/flourish.zcml:475
 #: /src/schooltool/app/browser/flourish.zcml:501
 msgid "Translation Domains"
-msgstr "Domény překladů"
+msgstr "Prevođenje Domene"
 
 #: /src/schooltool/app/browser/configure.zcml:580
 #: /src/schooltool/app/browser/flourish.zcml:483
 msgid "Generations"
-msgstr "Generace"
+msgstr "Generacije"
 
 #: /src/schooltool/app/browser/configure.zcml:686
 msgid "Configure"
-msgstr "Konfigurovat"
+msgstr "Podešavanje"
 
 #: /src/schooltool/app/browser/configure.zcml:693
 msgid "Error List"
-msgstr "Seznam chyb"
+msgstr "Lista grešaka"
 
 #: /src/schooltool/app/browser/csvimport.py:92
 #: /src/schooltool/app/browser/timetablecsvimport.py:129
 #: /src/schooltool/export/importer.py:1262
 msgid "No data provided"
-msgstr "Nebyla poskytnuta žádná data"
+msgstr "Nema podataka"
 
 #: /src/schooltool/app/browser/csvimport.py:99
 msgid "Could not convert data to Unicode (incorrect charset?)."
-msgstr "Data nelze převést do Unicode (chybná znaková sada?)."
+msgstr "Nije moguće pretvoriti podatke u Unicode (nepravilan skup znakova?)."
 
 #: /src/schooltool/app/browser/csvimport.py:109
 msgid "CSV file imported successfully."
-msgstr "CSV soubor byl úspěšně importován."
+msgstr "Uvoz CSV datoteke uspješan."
 
 #: /src/schooltool/app/browser/csvimport.py:111
 msgid "Failed to import CSV file"
-msgstr "Import CSV souboru selhal"
+msgstr "Neuspješan uvoz CSV datoteke"
 
 #: /src/schooltool/app/browser/csvimport.py:119
 msgid "CSV text imported successfully."
-msgstr "CSV text byl úspěšně importován."
+msgstr "Uvoz CSV teksta uspješan."
 
 #: /src/schooltool/app/browser/csvimport.py:121
 msgid "Failed to import CSV text"
-msgstr "Import CSV textu selhal"
+msgstr "Neuspješan uvoz CSV teksta"
 
 #: /src/schooltool/app/browser/csvimport.py:148
 msgid "No charset specified"
-msgstr "Nebyla zadána žádná znaková sada"
+msgstr "Nije određen set karaktera"
 
 #: /src/schooltool/app/browser/csvimport.py:153
 msgid "Unknown charset"
-msgstr "Neznámá znaková sada"
+msgstr "Nepoznat set karaktera"
 
 #: /src/schooltool/app/browser/csvimport.py:209
 msgid "Error in CSV data, line ${line_no}"
-msgstr "Chyba v CSV datech, řádek ${line_no}"
+msgstr "Greška u CSV podacima, linija ${line_no}"
 
 #: /src/schooltool/app/browser/csvimport.py:213
 #: /src/schooltool/app/browser/timetablecsvimport.py:502
 msgid "Conversion to unicode failed in line ${line_no}"
-msgstr "Převod do unicode selhal na řádku ${line_no}"
+msgstr "Pretvaranje u unicode nije uspjelo u liniji ${line_no}"
 
 #: /src/schooltool/app/browser/flourish.zcml:10
 #: /src/schooltool/app/browser/flourish.zcml:303
@@ -1093,13 +1090,13 @@ msgstr "Převod do unicode selhal na řádku ${line_no}"
 #: /src/schooltool/skin/templates/table_container.pt:11
 #: /src/schooltool/timetable/browser/templates/confirm_schedule_delete.pt:10
 msgid "SchoolTool"
-msgstr "SchoolTool"
+msgstr "Školski alat"
 
 #: /src/schooltool/app/browser/flourish.zcml:54
 #: /src/schooltool/app/browser/flourish.zcml:63
 #: /src/schooltool/skin/templates/view_macros.pt:50
 msgid "Log In"
-msgstr "Přihlásit se"
+msgstr "Prijava"
 
 #: /src/schooltool/app/browser/flourish.zcml:197
 #: /src/schooltool/app/browser/templates/f_errors.pt:3
@@ -1107,11 +1104,11 @@ msgstr "Přihlásit se"
 #: /src/schooltool/email/browser/configure.zcml:80
 #: /src/schooltool/email/browser/email.py:204
 msgid "Settings"
-msgstr "Nastaveni"
+msgstr "Podešavanja"
 
 #: /src/schooltool/app/browser/flourish.zcml:218
 msgid "Calendar Settings"
-msgstr "Nastavení kalendáře"
+msgstr "Postavke kalendara"
 
 #: /src/schooltool/app/browser/flourish.zcml:228
 #: /src/schooltool/app/browser/templates/f_errors.pt:7
@@ -1169,11 +1166,11 @@ msgstr "Nastavení kalendáře"
 #: /src/schooltool/timetable/browser/templates/f_schedule_event_edit.pt:60
 #: /src/schooltool/timetable/browser/templates/f_timetable.pt:31
 msgid "Edit"
-msgstr "Upravit"
+msgstr "Izmjeni"
 
 #: /src/schooltool/app/browser/flourish.zcml:272
 msgid "Error"
-msgstr "Chyba"
+msgstr "Greška"
 
 #: /src/schooltool/app/browser/flourish.zcml:352
 msgid "About"
@@ -1181,26 +1178,26 @@ msgstr "O"
 
 #: /src/schooltool/app/browser/flourish.zcml:313
 msgid "More Information"
-msgstr "Více informací"
+msgstr "Više informacija"
 
 #: /src/schooltool/app/browser/flourish.zcml:322
 #: /src/schooltool/app/browser/templates/about.pt:27
 msgid "Website"
-msgstr "Webová stránka"
+msgstr "Web stranica"
 
 #: /src/schooltool/app/browser/flourish.zcml:331
 #: /src/schooltool/app/browser/templates/about.pt:28
 msgid "Launchpad project page"
-msgstr "Stránky projektu na Launchpadu"
+msgstr "Strana Launchpad projekta"
 
 #: /src/schooltool/app/browser/flourish.zcml:341
 #: /src/schooltool/app/browser/templates/about.pt:29
 msgid "Mailing list"
-msgstr "Poštovní konference"
+msgstr ""
 
 #: /src/schooltool/app/browser/flourish.zcml:351
 msgid "IRC channel"
-msgstr "IRC kanál"
+msgstr "IRC kanal"
 
 #: /src/schooltool/app/browser/flourish.zcml:393
 #: /src/schooltool/export/flourish.zcml:49
@@ -1209,78 +1206,78 @@ msgstr "Škola"
 
 #: /src/schooltool/app/browser/flourish.zcml:410
 msgid "Customize"
-msgstr "Přizpůsobit"
+msgstr "Prilagodi"
 
 #: /src/schooltool/app/browser/flourish.zcml:449
 #: /src/schooltool/course/browser/templates/f_course_view.pt:75
 #: /src/schooltool/group/browser/templates/f_group_view.pt:90
 #: /src/schooltool/resource/browser/templates/f_resource_view.pt:75
 msgid "Responsible parties"
-msgstr "Zodpovědné osoby"
+msgstr "Odgovorne strane"
 
 #: /src/schooltool/app/browser/flourish.zcml:492
 msgid "Information"
-msgstr "Informace"
+msgstr "Informacije"
 
 #: /src/schooltool/app/browser/flourish.zcml:510
 msgid "Database generations"
-msgstr "Generování databáze"
+msgstr ""
 
 #: /src/schooltool/app/browser/flourish.zcml:607
 msgid "Shown Calendars"
-msgstr "Zobrazené kalendáře"
+msgstr "Prikaži kalendare"
 
 #: /src/schooltool/app/browser/overlay.py:217
 msgid "Saved changes."
-msgstr "Změny uloženy."
+msgstr "Izmjene sačuvane."
 
 #: /src/schooltool/app/browser/overlay.py:286
 msgid "Selected calendars"
-msgstr "Vybrané kalendáře"
+msgstr "Odabrani kalendari"
 
 #: /src/schooltool/app/browser/overlay.py:287
 msgid "Available calendars"
-msgstr "Dostupné kalendáře"
+msgstr "Dostupni kalendari"
 
 #: /src/schooltool/app/browser/overlay.py:326
 msgid "School Calendar"
-msgstr "Školní kalendář"
+msgstr "Školski kalendar"
 
 #: /src/schooltool/app/browser/pdfcal.py:52
 msgid "Daily calendar for %s"
-msgstr "Denní kalendář uživatele %s"
+msgstr "Dnevni kalendar za %s"
 
 #: /src/schooltool/app/browser/pdfcal.py:95
 msgid "recurrent"
-msgstr "opakující se"
+msgstr ""
 
 #: /src/schooltool/app/browser/pdfcal.py:99
 msgid "from the calendar of ${calendar_owner}"
-msgstr "z ${calendar_owner} kalendáře"
+msgstr "iz ${calendar_owner} kalendara"
 
 #: /src/schooltool/app/browser/pdfcal.py:115
 msgid "all day"
-msgstr "celý den"
+msgstr "Čitav dan"
 
 #: /src/schooltool/app/browser/pdfcal.py:177
 msgid "Weekly calendar for %s"
-msgstr "Týdenní kalendář uživatele %s"
+msgstr "Sedmični kalendar za %s"
 
 #: /src/schooltool/app/browser/pdfcal.py:186
 msgid "Week %d (%s - %s), %d"
-msgstr "%d. týden (%s - %s), %d"
+msgstr "Sedmica %d(%s - %s), %d"
 
 #: /src/schooltool/app/browser/pdfcal.py:197
 msgid "Monthly calendar for %s"
-msgstr "Měsíční kalendář uživatele %s"
+msgstr "Mjesečni kalendar za %s"
 
 #: /src/schooltool/app/browser/report.py:57
 msgid "PDF support is disabled.  It can be enabled by your administrator."
-msgstr "Podpora PDF je zakázaná. Povolit ji může váš správce."
+msgstr "podrška za PDF je isključena. Vaš administrator je može uključiti."
 
 #: /src/schooltool/app/browser/templates/about.pt:5
 msgid "About SchoolTool"
-msgstr "O SchoolTool"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/about.pt:10
 #: /src/schooltool/app/browser/templates/f_about.pt:2
@@ -1291,11 +1288,11 @@ msgid ""
 "well as a framework for building customized applications and configurations "
 "for individual schools or states."
 msgstr ""
-"SchoolTool je administrativním softwarem pro školy po celém světě, který je "
-"zdarma. Cílem projektu je vytvoření jednoduchého informačního systému "
-"poskytujícího přehled o studentech, který také mlže sloužit jako systém pro "
-"správu informací na základních a středních školách. Dále může systém sloužit "
-"jako základ pro tvorbu aplíkací přizpůsobených různým školám či státům."
+"SchoolTool je besplatni softver za upravljanje namijenjen školama širom "
+"svijeta. Ciljevi projekta su kreiranje jednostavnog sistema za "
+"obavještavanje studenata ili upravljanje informacijskim sistemom za osnovne "
+"i srednje škole, kao i okvir za izgradnju prilagodljivih aplikacija i "
+"konfiguracija za pojedine škole ili države."
 
 #: /src/schooltool/app/browser/templates/about.pt:16
 #: /src/schooltool/app/browser/templates/f_about.pt:10
@@ -1304,9 +1301,6 @@ msgid ""
 "href=\"http://python.org\">Python</a> using the <a "
 "href=\"http://zope.org\">Zope 3</a> framework."
 msgstr ""
-"SchoolTool je postaven na 100% open source software a je napsán v <a "
-"href=\"http://python.org\">Pythonu</a> s použitím <a "
-"href=\"http://zope.org\">Zope 3</a> frameworku."
 
 #: /src/schooltool/app/browser/templates/about.pt:20
 #: /src/schooltool/app/browser/templates/f_about.pt:15
@@ -1314,164 +1308,162 @@ msgid ""
 "SchoolTool is licensed under the <a href=\"http://www.gnu.org/licenses/gpl-"
 "2.0.html\">GNU General Public License, Version 2</a>."
 msgstr ""
-"SchoolTool je licencován v rámci <a href=\"http://www.gnu.org/licenses/gpl-"
-"2.0.html\">GNU General Public License, Version 2</a>."
 
 #: /src/schooltool/app/browser/templates/about.pt:24
 msgid "For more information:"
-msgstr "Pro více informací:"
+msgstr "Za više informacija:"
 
 #: /src/schooltool/app/browser/templates/about.pt:30
 msgid "IRC channel: #schooltool on freenode.net"
-msgstr "IRC kanál: #schooltool na freenode.net"
+msgstr "IRC kanal: #schooltool na freenode.net"
 
 #: /src/schooltool/app/browser/templates/about.pt:35
 #: /src/schooltool/app/browser/templates/f_about.pt:21
 msgid "Founder and funder:"
-msgstr "Zakladatel a sponzor:"
+msgstr "Osnivač i finansijer"
 
 #: /src/schooltool/app/browser/templates/about.pt:38
 #: /src/schooltool/app/browser/templates/f_about.pt:25
 msgid "Project Manager:"
-msgstr "Vedoucí projektu:"
+msgstr "Rukovodilac projekta:"
 
 #: /src/schooltool/app/browser/templates/about.pt:41
 #: /src/schooltool/app/browser/templates/f_about.pt:29
 msgid "Lead Developer:"
-msgstr "Hlavní vývojář:"
+msgstr "Učitavanje Razvijača:"
 
 #: /src/schooltool/app/browser/templates/about.pt:44
 #: /src/schooltool/app/browser/templates/f_about.pt:33
 msgid "Core Developers:"
-msgstr "Vývojáři jádra:"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/about.pt:47
 #: /src/schooltool/app/browser/templates/f_about.pt:37
 msgid "Release Manager:"
-msgstr "Manažer vydání:"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/about.pt:50
 msgid "Contributors:"
-msgstr "Přispivatelé:"
+msgstr "Saradnici:"
 
 #: /src/schooltool/app/browser/templates/application_preferences.pt:4
 msgid "Edit site preferences"
-msgstr "Upravit nastavení stanice"
+msgstr "Uredi postavke stranice"
 
 #: /src/schooltool/app/browser/templates/application_preferences.pt:13
 msgid "Change site preferences"
-msgstr "Změnit nastavení stanice"
+msgstr "Izmjeni postavke stranice"
 
 #: /src/schooltool/app/browser/templates/application_preferences.pt:19
 msgid "General preferences"
-msgstr "Obecné předvolby"
+msgstr "Opće postavke"
 
 #: /src/schooltool/app/browser/templates/application_preferences.pt:34
 msgid "Calendar Preferences"
-msgstr "Nastavení kalendáře"
+msgstr "Postavke kalendara"
 
 #: /src/schooltool/app/browser/templates/cal_atom.pt:21
 msgid "Events for"
-msgstr "Události pro"
+msgstr "Događaji za"
 
 #. Default: "This is an Atom formatted XML site feed. It is intended to be viewed in a Newsreader or syndicated to another site. Please visit"
 #: /src/schooltool/app/browser/templates/cal_atom.pt:42
 msgid "atom_description"
-msgstr "atom_popis"
+msgstr ""
 
 #. Default: "Atom Enabled"
 #: /src/schooltool/app/browser/templates/cal_atom.pt:46
 msgid "atom_enabled"
-msgstr "atom_povolen"
+msgstr ""
 
 #. Default: "for more info."
 #: /src/schooltool/app/browser/templates/cal_atom.pt:49
 msgid "atom_more_info"
-msgstr "atom_více_informací"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/cal_atom.pt:56
 msgid "Validate my Atom feed"
-msgstr "Ověřit mé Atom vlákno"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/cal_atom.pt:56
 msgid "[Valid Atom]"
-msgstr "[Platný Atom]"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:24
 msgid "View daily calendar"
-msgstr "Denní kalendář"
+msgstr "Pregledaj dnevni kalendar"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:24
 #: /src/schooltool/calendar/browser/calendar.py:288
 msgid "Daily"
-msgstr "Denně"
+msgstr "Dnevno"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:30
 msgid "View weekly calendar"
-msgstr "Týdenní kalendář"
+msgstr "Pregledaj sedmični kalendar"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:30
 #: /src/schooltool/app/browser/templates/event_add.pt:235
 #: /src/schooltool/calendar/browser/calendar.py:289
 #: /src/schooltool/calendar/browser/templates/event_edit.pt:240
 msgid "Weekly"
-msgstr "Týdně"
+msgstr "Sedmično"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:36
 msgid "View monthly calendar"
-msgstr "Měsíční kalendář"
+msgstr "Pregledaj mjesečni kalendar"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:42
 msgid "View yearly calendar"
-msgstr "Zobrazit roční kalendář"
+msgstr "Pregledaj godišnji kalendar"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:42
 #: /src/schooltool/calendar/browser/calendar.py:291
 msgid "Yearly"
-msgstr "Ročně"
+msgstr "Godišnje"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:55
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:91
 msgid "Calendar for ${title} - ${calendar_title}"
-msgstr "Kalendář uživatele ${title} - ${calendar_title}"
+msgstr "Kalendar za ${title} - ${calendar_title}"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:115
 msgid "Jump To ..."
-msgstr "Přeskočit na ..."
+msgstr "Idi na ..."
 
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:4
 msgid "Calendars"
-msgstr "Kalendáře"
+msgstr "Kalendari"
 
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:13
 #: /src/schooltool/calendar/browser/templates/calendar_overlay.pt:12
 msgid "My Calendar"
-msgstr "Můj kalendář"
+msgstr "Moj kalendar"
 
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:33
 #: /src/schooltool/calendar/browser/templates/calendar_overlay.pt:37
 msgid "More..."
-msgstr "Více..."
+msgstr "Više..."
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:4
 msgid "Select calendars to display"
-msgstr "Vyberte kalendáře, které chcete zobrazit"
+msgstr "Odaberi kalendare zaprikazati"
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:15
 msgid "Select additional calendars to display"
-msgstr "Vyberte, které další kalendáře chcete zobrazit"
+msgstr "Odaberi dodatne kalendare za prikazati"
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:27
 msgid "Hold down Ctrl or Shift to select multiple calendars."
-msgstr "Pro výběr více kalendářů přidržte Shift nebo Ctrl."
+msgstr "Pritisnite Ctrl ili Shift za odabir više kalendara"
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:32
 msgid "Public Calendar"
-msgstr "Veřejný kalendář"
+msgstr "Javni kalendar"
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:37
 msgid "site-wide calendar"
-msgstr "širokostránkový kalendář"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:42
 #: /src/schooltool/app/browser/templates/index.pt:14
@@ -1482,25 +1474,25 @@ msgstr "širokostránkový kalendář"
 #: /src/schooltool/resource/browser/flourish.zcml:89
 #: /src/schooltool/resource/browser/templates/f_manage_resources_overview.pt:6
 msgid "Resources"
-msgstr "Prostředky"
+msgstr "Izvori"
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:43
 msgid "There are no resources with calendars accessible to you."
-msgstr "Nejsou vám dostupné žádné prostředky s kalendáři."
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/default_report_template.pt:23
 msgid "Created with SchoolTool"
-msgstr "Vytvořeno se SchoolTool"
+msgstr "Kreirano uz pomoć SchoolTool"
 
 #: /src/schooltool/app/browser/templates/default_report_template.pt:37
 msgid "Page ${page_number}"
-msgstr "Stránka ${page_number}"
+msgstr "Stranica ${page_number}"
 
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:26
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:27
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:45
 msgid "R"
-msgstr "R"
+msgstr ""
 
 #. Default: "Invert Selection"
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:30
@@ -1510,7 +1502,7 @@ msgstr "R"
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:49
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:71
 msgid "invert-selection-button"
-msgstr "Invertovat výběr"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:48
 #: /src/schooltool/app/browser/templates/event_booking.pt:42
@@ -1524,7 +1516,7 @@ msgstr "Invertovat výběr"
 #: /src/schooltool/skin/templates/view_macros.pt:184
 #: /src/schooltool/timetable/browser/templates/timetable_container.pt:68
 msgid "A"
-msgstr "A"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:58
 #: /src/schooltool/app/browser/templates/event_booking.pt:63
@@ -1533,21 +1525,21 @@ msgstr "A"
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:68
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:77
 msgid "There are none to add."
-msgstr "Není koho přidat."
+msgstr "Ne postoji ništa za dodavanje."
 
 #. Default: "OK"
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:65
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:75
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:84
 msgid "ok-button"
-msgstr "OK"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/event.pt:15
 #: /src/schooltool/calendar/browser/templates/event.pt:19
 #: /src/schooltool/timetable/browser/templates/f_schedule_event_edit.pt:13
 #: /src/schooltool/timetable/browser/templates/schedule_event_edit.pt:15
 msgid "All day event"
-msgstr "Záležitost na celý den"
+msgstr "Cjelodnevni događaj"
 
 #: /src/schooltool/app/browser/templates/event.pt:20
 #: /src/schooltool/calendar/browser/templates/event.pt:36
@@ -1555,7 +1547,7 @@ msgstr "Záležitost na celý den"
 #: /src/schooltool/timetable/browser/templates/f_schedule_event_edit.pt:37
 #: /src/schooltool/timetable/browser/templates/schedule_event_edit.pt:21
 msgid "This is a recurring event."
-msgstr "To je periodická událost."
+msgstr "Ovo je ponavljajući događaj."
 
 #: /src/schooltool/app/browser/templates/event.pt:33
 #: /src/schooltool/basicperson/browser/person.py:549
@@ -1568,7 +1560,7 @@ msgstr "To je periodická událost."
 #: /src/schooltool/timetable/browser/templates/f_schedule_event_edit.pt:25
 #: /src/schooltool/timetable/browser/templates/schedule_event_edit.pt:34
 msgid "Details"
-msgstr "Podrobnosti"
+msgstr "Detalji"
 
 #: /src/schooltool/app/browser/templates/event.pt:37
 #: /src/schooltool/calendar/browser/templates/event.pt:28
@@ -1579,7 +1571,7 @@ msgstr "Podrobnosti"
 #: /src/schooltool/timetable/browser/templates/f_schedule_event_edit.pt:29
 #: /src/schooltool/timetable/browser/templates/schedule_event_edit.pt:38
 msgid "Starts"
-msgstr "Začíná"
+msgstr "Počinje"
 
 #: /src/schooltool/app/browser/templates/event.pt:42
 #: /src/schooltool/calendar/browser/templates/event.pt:32
@@ -1590,128 +1582,128 @@ msgstr "Začíná"
 #: /src/schooltool/timetable/browser/templates/f_schedule_event_edit.pt:33
 #: /src/schooltool/timetable/browser/templates/schedule_event_edit.pt:43
 msgid "Ends"
-msgstr "Končí"
+msgstr "Završava"
 
 #: /src/schooltool/app/browser/templates/event.pt:53
 #: /src/schooltool/calendar/browser/templates/event.pt:8
 #: /src/schooltool/timetable/browser/templates/schedule_event_edit.pt:54
 msgid "Change the details of this event"
-msgstr "Změnit detaily této události"
+msgstr "Promjeni detalje ovog događaja"
 
 #: /src/schooltool/app/browser/templates/event.pt:53
 #: /src/schooltool/timetable/browser/templates/schedule_event_edit.pt:54
 msgid "edit event"
-msgstr "upravit událost"
+msgstr "uredi događaj"
 
 #: /src/schooltool/app/browser/templates/event.pt:64
 #: /src/schooltool/timetable/browser/templates/schedule_event_edit.pt:65
 msgid "Scheduled resources"
-msgstr "Plánované prostředky"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/event.pt:72
 #: /src/schooltool/timetable/browser/templates/schedule_event_edit.pt:73
 msgid "edit resources"
-msgstr "upravit prostředky"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/event.pt:80
 #: /src/schooltool/timetable/browser/templates/schedule_event_edit.pt:81
 msgid "delete event"
-msgstr "smazat událost"
+msgstr "obriši događaj"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:137
 #: /src/schooltool/timetable/browser/templates/schedule_event_add.pt:81
 msgid "Event information"
-msgstr "Informace o události"
+msgstr "Informacije o događaju"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:143
 #: /src/schooltool/calendar/browser/templates/event_edit.pt:148
 #: /src/schooltool/timetable/browser/templates/f_schedule_event_add.pt:92
 #: /src/schooltool/timetable/browser/templates/schedule_event_add.pt:87
 msgid "Event details"
-msgstr "Detaily události"
+msgstr "Detalji o događaju"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:197
 #: /src/schooltool/timetable/browser/templates/schedule_event_add.pt:141
 msgid "Book Resources"
-msgstr "Rezervovat prostředky"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/event_add.pt:207
 #: /src/schooltool/calendar/browser/templates/event_edit.pt:212
 msgid "Update form"
-msgstr "Formulář aktualizace"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/event_add.pt:224
 #: /src/schooltool/calendar/browser/templates/event_edit.pt:229
 msgid "day"
-msgstr "den"
+msgstr "dan"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:225
 #: /src/schooltool/calendar/browser/templates/event_edit.pt:230
 msgid "week"
-msgstr "týden"
+msgstr "sedmica"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:226
 #: /src/schooltool/calendar/browser/templates/event_edit.pt:231
 msgid "month"
-msgstr "měsíc"
+msgstr "mjesec"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:227
 #: /src/schooltool/calendar/browser/templates/event_edit.pt:232
 msgid "year"
-msgstr "rok"
+msgstr "godina"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:236
 #: /src/schooltool/calendar/browser/templates/event_edit.pt:241
 msgid "This section only applies when weekly recurrence is selected."
-msgstr "Tato sekce se používá pouze když je zvoleno týdenní opakování."
+msgstr "Ovaj dio se prihvaća samo kad je odabrano sedmično ponavljanje."
 
 #: /src/schooltool/app/browser/templates/event_add.pt:257
 #: /src/schooltool/calendar/browser/templates/event_edit.pt:262
 msgid "This section only applies when the monthly recurrence is selected."
-msgstr "Tato sekce se používá pouze když je zvoleno měsíční opakování."
+msgstr "Ova sekcija se prihvaća samo kad je odabrano mjesečno ponavljanje."
 
 #: /src/schooltool/app/browser/templates/event_add.pt:264
 #: /src/schooltool/calendar/browser/templates/event_edit.pt:269
 msgid "Day ${monthday} of every month"
-msgstr "Den ${monthday} každého měsíce"
+msgstr "Dan ${monthday} svakog mjeseca"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:271
 #: /src/schooltool/app/browser/templates/event_add.pt:278
 #: /src/schooltool/calendar/browser/templates/event_edit.pt:276
 #: /src/schooltool/calendar/browser/templates/event_edit.pt:283
 msgid "${weekday} of every month"
-msgstr "${weekday} každého měsíce"
+msgstr "${weekday} svakog mjeseca"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:288
 #: /src/schooltool/calendar/browser/templates/event_edit.pt:293
 msgid "Repeat"
-msgstr "Opakovat"
+msgstr "Ponovi"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:291
 #: /src/schooltool/calendar/browser/templates/event_edit.pt:296
 msgid "times"
-msgstr "krát"
+msgstr "puta"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:306
 #: /src/schooltool/term/browser/templates/emergency_select.pt:31
 #: /src/schooltool/timetable/browser/templates/specialday_select.pt:31
 msgid "[popup calendar]"
-msgstr "[vyskakovací kalendář]"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/event_add.pt:324
 #: /src/schooltool/calendar/browser/templates/event_edit.pt:324
 msgid "Repeat forever"
-msgstr "Trvale opakovat"
+msgstr "Ponavljaj zauvijek"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:348
 #: /src/schooltool/timetable/browser/templates/schedule_event_add.pt:148
 msgid "Booked Resources"
-msgstr "Rezervované prostředky"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/event_add.pt:369
 #: /src/schooltool/timetable/browser/templates/schedule_event_add.pt:169
 msgid "Book resources"
-msgstr "Rezervovat prostředky"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/event_add.pt:375
 #: /src/schooltool/calendar/browser/templates/event_edit.pt:398
@@ -1723,7 +1715,7 @@ msgstr "Rezervovat prostředky"
 #: /src/schooltool/timetable/browser/templates/f_schedule_event_add.pt:187
 #: /src/schooltool/timetable/browser/templates/schedule_event_add.pt:175
 msgid "Shortcut: Alt-A"
-msgstr "Klávesová zkratka: Alt-A"
+msgstr "Prečica: Alt-A"
 
 #. Default: "Cancel"
 #: /src/schooltool/app/browser/templates/event_add.pt:378
@@ -1757,74 +1749,74 @@ msgstr "Klávesová zkratka: Alt-A"
 #: /src/schooltool/timetable/browser/templates/specialday_select.pt:41
 #: /src/schooltool/timetable/browser/templates/timetable_container_delete.pt:29
 msgid "cancel-button"
-msgstr "Zrušit"
+msgstr "dugme-otkaži"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:4
 msgid "Resource Booking"
-msgstr "Rezervování prostředků"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:12
 msgid "Resource Booking for ${title}"
-msgstr "Rezervování prostředků pro ${title}"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:18
 msgid "Title:"
-msgstr "Název:"
+msgstr "Naslov:"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:22
 msgid "Starts:"
-msgstr "Začíná:"
+msgstr "Počinje:"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:26
 msgid "Ends:"
-msgstr "Končí:"
+msgstr "Završava:"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:30
 #: /src/schooltool/calendar/browser/templates/event_booking.pt:34
 msgid "This is a recurring event!"
-msgstr "To je periodická událost!"
+msgstr "Ovo je ponavljajući događaj!"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:38
 msgid "Booked resources"
-msgstr "Zarezervované prostředky"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:42
 msgid "UnBook"
-msgstr "Nerezervovaný"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:51
 msgid "Available resources"
-msgstr "Dostupné prostředky"
+msgstr "Dostupna sredstva"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:57
 msgid "Book"
-msgstr "Rezervovat"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/event_info_viewlet.pt:12
 msgid "Location: ${location}"
-msgstr "Poloha: ${location}"
+msgstr "Lokacija: ${location}"
 
 #: /src/schooltool/app/browser/templates/f_about_related.pt:2
 msgid "Contributors"
-msgstr "Přispěvatelé"
+msgstr "Saradnici"
 
 #: /src/schooltool/app/browser/templates/f_calendar_settings_overview.pt:7
 msgid "Change calendar settings"
-msgstr "Změnit nastavení kalendáře"
+msgstr "Izmjeni postavke kalendara"
 
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:10
 msgid "Import source"
-msgstr "Importovat zdroj"
+msgstr "Uvezi izvore"
 
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:20
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:64
 msgid "Upload CSV file"
-msgstr "Nahrát CSV soubor"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:29
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:104
 msgid "Enter CSV text"
-msgstr "Vložte text CSV"
+msgstr "Unesite CSV tekst"
 
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:60
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:100
@@ -1834,11 +1826,11 @@ msgstr "Vložte text CSV"
 #: /src/schooltool/group/browser/flourish.zcml:236
 #: /src/schooltool/resource/browser/flourish.zcml:333
 msgid "Import CSV"
-msgstr "Import CSV"
+msgstr "Uvezi CSV"
 
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:75
 msgid "Charset"
-msgstr "Znaková sada"
+msgstr "Set karaktera"
 
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:80
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:103
@@ -1862,7 +1854,7 @@ msgstr "Unicode (UTF-8)"
 #: /src/schooltool/person/browser/person-csvimport.pt:58
 #: /src/schooltool/resource/browser/resource-csvimport.pt:55
 msgid "Western (ISO-8859-1)"
-msgstr "Západní (ISO-8859-1)"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:82
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:105
@@ -1874,7 +1866,7 @@ msgstr "Západní (ISO-8859-1)"
 #: /src/schooltool/person/browser/person-csvimport.pt:59
 #: /src/schooltool/resource/browser/resource-csvimport.pt:56
 msgid "Western (ISO-8859-15)"
-msgstr "Západní (ISO-8859-15)"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:83
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:106
@@ -1886,7 +1878,7 @@ msgstr "Západní (ISO-8859-15)"
 #: /src/schooltool/person/browser/person-csvimport.pt:60
 #: /src/schooltool/resource/browser/resource-csvimport.pt:57
 msgid "Western (Windows-1252)"
-msgstr "Západní (Windows-1252)"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:84
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:107
@@ -1898,11 +1890,11 @@ msgstr "Západní (Windows-1252)"
 #: /src/schooltool/person/browser/person-csvimport.pt:61
 #: /src/schooltool/resource/browser/resource-csvimport.pt:58
 msgid "Other (please specify)"
-msgstr "Jiné (prosím zadejte)"
+msgstr "Drugo(molimo odredite)"
 
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:91
 msgid "Other charset"
-msgstr "Jiná znaková sada"
+msgstr ""
 
 #. Default: "Submit"
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:112
@@ -1917,7 +1909,7 @@ msgstr "Jiná znaková sada"
 #: /src/schooltool/person/browser/person-csvimport.pt:75
 #: /src/schooltool/resource/browser/resource-csvimport.pt:72
 msgid "submit-button"
-msgstr "Odeslat"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:117
 #: /src/schooltool/app/browser/templates/f_database.pt:33
@@ -1951,7 +1943,7 @@ msgstr "Odeslat"
 #: /src/schooltool/timetable/browser/templates/f_timetables.pt:20
 #: /src/schooltool/timetable/browser/templates/f_timetables.pt:28
 msgid "Done"
-msgstr "Hotovo"
+msgstr "Završeno"
 
 #: /src/schooltool/app/browser/templates/f_edit_relationships.pt:25
 #: /src/schooltool/basicperson/browser/templates/container.pt:32
@@ -1966,11 +1958,11 @@ msgstr "Hotovo"
 #: /src/schooltool/skin/templates/table_container.pt:28
 #: /src/schooltool/timetable/browser/templates/f_timetables.pt:14
 msgid "Showing ${count} of ${total} items"
-msgstr "Zobrazuji ${count} položek z ${total} položek"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_errors.pt:4
 msgid "Manage error settings"
-msgstr "Spravovat chyby nastavení"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_errors.pt:43
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:14
@@ -1978,17 +1970,17 @@ msgstr "Spravovat chyby nastavení"
 #: /src/schooltool/contact/security.zcml:86
 #: /src/schooltool/person/security.zcml:147
 msgid "User"
-msgstr "Uživatel"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_errors.pt:44
 #: /src/schooltool/skin/templates/error.pt:19
 #: /src/schooltool/skin/templates/f_error.pt:9
 msgid "Exception"
-msgstr "Výjimka"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_errors.pt:49
 msgid "No exceptions logged."
-msgstr ""
+msgstr "Nema prijavljenih iznimki."
 
 #: /src/schooltool/app/browser/templates/f_errors.pt:76
 #: /src/schooltool/term/browser/term.py:219
@@ -1996,7 +1988,7 @@ msgstr ""
 #: /src/schooltool/term/browser/term.py:350
 #: /src/schooltool/term/browser/term.py:399
 msgid "Refresh"
-msgstr "Obnovit"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:2
 msgid "Exception traceback"
@@ -2005,25 +1997,25 @@ msgstr ""
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:3
 #: /src/schooltool/app/browser/templates/f_errors_entry_text.pt:4
 msgid "The specified log entry was not found. It may have expired."
-msgstr ""
+msgstr "Navedena stavka zapisivanja nije pronađena. Možda je istekla."
 
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:18
 msgid "Request URL"
-msgstr "Vyžadovaná URL"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:22
 msgid "Exception Type"
-msgstr "Typ výjimky"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:26
 msgid "Exception Value"
-msgstr "Hodnota vyjímky"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:31
 #: /src/schooltool/skin/templates/error.pt:20
 #: /src/schooltool/skin/templates/f_error.pt:14
 msgid "Traceback"
-msgstr "Vysledovat zpětně"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:40
 msgid "Display traceback as text"
@@ -2031,7 +2023,7 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:45
 msgid "Request"
-msgstr "Žádost"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_generations_related.pt:2
 #: /src/schooltool/contact/browser/templates/f_contacts_related.pt:2
@@ -2046,25 +2038,27 @@ msgstr "Žádost"
 #: /src/schooltool/timetable/browser/templates/f_specialday_related.pt:2
 #: /src/schooltool/timetable/browser/templates/f_timetable_container_related.pt:2
 msgid "What is This?"
-msgstr "Co je to?"
+msgstr "Šta je ovo ?"
 
 #: /src/schooltool/app/browser/templates/f_generations_related.pt:6
 msgid ""
 "Database generations update the structure of your database to be compatible "
 "with new versions of SchoolTool."
 msgstr ""
+"Baza podataka generacije ažurira strukturu baze podataka da bude "
+"kompatibilna sa novim verzijama SchoolTool."
 
 #: /src/schooltool/app/browser/templates/f_hide_unhide_tabs.pt:5
 msgid "Set Tab Visibility"
-msgstr "Nastavit viditelnost záložky"
+msgstr "Postaviti vidljivost tabulatora"
 
 #: /src/schooltool/app/browser/templates/f_hide_unhide_tabs.pt:10
 msgid "Visible"
-msgstr "Viditelné"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_hide_unhide_tabs.pt:25
 msgid "Default"
-msgstr "Výchozí"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_hide_unhide_tabs_related.pt:6
 msgid ""
@@ -2092,7 +2086,7 @@ msgstr ""
 #: /src/schooltool/app/browser/templates/f_login.pt:12
 #: /src/schooltool/app/browser/templates/login.pt:8
 msgid "Your session has expired."
-msgstr "Platnost Vašeho přihlášení vypršela."
+msgstr "Vaša sesija je istekla."
 
 #: /src/schooltool/app/browser/templates/f_login.pt:21
 #: /src/schooltool/app/browser/templates/login.pt:13
@@ -2100,9 +2094,6 @@ msgid ""
 "You are not allowed to access this page. You can click on the back button in "
 "your browser to go back, or ask a more privileged user to log in."
 msgstr ""
-"Nemáte oprávnění prohlížet tuto stránku. Můžete se vrátit na předchozí "
-"stránku kliknutím na tlačítko Zpět vašeho prohlížeče nebo požádejte více "
-"privilegovaného uživatele o přihlášení."
 
 #: /src/schooltool/app/browser/templates/f_login.pt:32
 #: /src/schooltool/basicperson/browser/demographics.py:407
@@ -2121,7 +2112,7 @@ msgstr ""
 #: /src/schooltool/app/browser/templates/f_login.pt:39
 #: /src/schooltool/app/browser/templates/login.pt:35
 msgid "User Information"
-msgstr "Informace o uživateli"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_login.pt:44
 #: /src/schooltool/app/browser/templates/login.pt:38
@@ -2134,7 +2125,7 @@ msgstr "Informace o uživateli"
 #: /src/schooltool/person/browser/person.py:502
 #: /src/schooltool/person/interfaces.py:60
 msgid "Username"
-msgstr "Uživatelské jméno"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_login.pt:62
 #: /src/schooltool/app/browser/templates/login.pt:44
@@ -2144,12 +2135,12 @@ msgstr "Uživatelské jméno"
 #: /src/schooltool/person/browser/flourish.zcml:61
 #: /src/schooltool/person/browser/person.py:505
 msgid "Password"
-msgstr "Heslo"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_login.pt:72
 #: /src/schooltool/app/browser/templates/login.pt:57
 msgid "L"
-msgstr "L"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_managers.pt:11
 msgid ""
@@ -2162,7 +2153,7 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_managers.pt:23
 msgid "Application"
-msgstr "Aplikace"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_managers.pt:24
 msgid "Minimum Generation"
@@ -2170,15 +2161,15 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_managers.pt:25
 msgid "Maximum Generation"
-msgstr ""
+msgstr "maksimalna generacija."
 
 #: /src/schooltool/app/browser/templates/f_managers.pt:26
 msgid "Current Database Generation"
-msgstr ""
+msgstr "Trenutna generacija baze podataka"
 
 #: /src/schooltool/app/browser/templates/f_managers.pt:27
 msgid "Evolve?"
-msgstr ""
+msgstr "Evoluirati ?"
 
 #: /src/schooltool/app/browser/templates/f_managers.pt:40
 msgid "No, up to date"
@@ -2194,37 +2185,37 @@ msgstr ""
 #: /src/schooltool/resource/browser/templates/f_resource_filter.pt:3
 #: /src/schooltool/resource/browser/templates/f_resource_filter.pt:36
 msgid "Search"
-msgstr "Hledat"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:7
 #: /src/schooltool/app/browser/templates/f_server_settings_overview.pt:12
 msgid "Database"
-msgstr "Databáze"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:11
 #: /src/schooltool/app/browser/templates/f_server_settings_overview.pt:16
 msgid "Database Size"
-msgstr "Velikost databáze"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:15
 #: /src/schooltool/app/browser/templates/f_server_settings_overview.pt:20
 msgid "Uptime"
-msgstr "Doba běhu"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:19
 #: /src/schooltool/app/browser/templates/f_server_settings_overview.pt:24
 msgid "System platform"
-msgstr "Platforma systému"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:23
 #: /src/schooltool/app/browser/templates/f_server_settings_overview.pt:28
 msgid "Python version"
-msgstr "Verze Pythonu"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:27
 #: /src/schooltool/app/browser/templates/f_server_settings_overview.pt:32
 msgid "Command line"
-msgstr "Příkazový řádek"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:31
 msgid "Preferred encoding"
@@ -2232,7 +2223,7 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:35
 msgid "File system encoding"
-msgstr ""
+msgstr "Sistem datoteka za kodiranje"
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:39
 msgid "Process id"
@@ -2244,7 +2235,7 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:48
 msgid "Python path"
-msgstr "Cesta pythonu"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_section_csvimport_description.pt:3
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:24
@@ -2252,8 +2243,6 @@ msgid ""
 "You can create the CSV file in a spreadsheet and export it in CSV (Comma-"
 "Separated Values) format. The structure of the table is described below."
 msgstr ""
-"CSV soubor můžete vytvořit v tabulkovém programu a vyexportovat do formátu "
-"CSV (hodnoty jsou oddělené čárkami). Struktura tabulky je popsána níže."
 
 #: /src/schooltool/app/browser/templates/f_section_csvimport_description.pt:10
 msgid ""
@@ -2313,7 +2302,7 @@ msgstr ""
 #: /src/schooltool/resource/browser/resource-csvimport.pt:29
 #: /src/schooltool/resource/browser/templates/f_resource_csvimport_description.pt:8
 msgid "Example:"
-msgstr "Příklad:"
+msgstr ""
 
 #. Default: "\"Fall\", \"Spring\" \"\",\"\",\"\" \"philosophy\",\"lorch\" \"weekly-timetable\" \"Monday\",\"A\" \"Monday\",\"B\" \"Tuesday\",\"B\" \"***\" \"johnny\" \"billy\" \"\" \"literature\",\"guzman\",\"literature-f\",\"literature-s\" \"***\" \"johnny\" \"pete\""
 #: /src/schooltool/app/browser/templates/f_section_csvimport_description.pt:52
@@ -2350,32 +2339,32 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_server_settings_overview.pt:3
 msgid "Server Information"
-msgstr "Informace o serveru"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_settings.pt:5
 msgid "Please wait for confirmation that the database has been packed."
-msgstr "Prosím vyčkejte potvrzení, že byla databáze zmenšena."
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_translationdomaincontrol.pt:13
 msgid "Domain ${domain}"
-msgstr "Doména ${domain}"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_translationdomaincontrol.pt:18
 #: /src/schooltool/contact/interfaces.py:82
 msgid "Language"
-msgstr "Jazyk"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_translationdomaincontrol.pt:19
 msgid "Files"
-msgstr "Soubory"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_translationdomaincontrol.pt:31
 msgid "Reload"
-msgstr "Obnovit"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/index.pt:6
 msgid "Welcome to SchoolTool"
-msgstr "Vítejte ve SchoolTool"
+msgstr "Dobrodošli u SchoolTool"
 
 #: /src/schooltool/app/browser/templates/index.pt:12
 #: /src/schooltool/course/browser/flourish.zcml:366
@@ -2389,7 +2378,7 @@ msgstr "Vítejte ve SchoolTool"
 #: /src/schooltool/course/security.zcml:74
 #: /src/schooltool/dashboard/term.pt:4
 msgid "Courses"
-msgstr "Kurzy"
+msgstr "Tečajevi"
 
 #: /src/schooltool/app/browser/templates/index.pt:13
 #: /src/schooltool/group/browser/configure.zcml:61
@@ -2401,66 +2390,66 @@ msgstr "Kurzy"
 #: /src/schooltool/group/browser/templates/link_to_groups.pt:1
 #: /src/schooltool/group/security.zcml:57
 msgid "Groups"
-msgstr "Skupiny"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/index.pt:15
 #: /src/schooltool/dashboard/school.pt:4
 #: /src/schooltool/level/browser/configure.zcml:7
 #: /src/schooltool/level/security.zcml:7
 msgid "Levels"
-msgstr "Úrovně"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/login.pt:3
 #: /src/schooltool/app/browser/templates/menu_view.pt:3
 msgid "Login"
-msgstr "Přihlášení"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/login.pt:23
 msgid "Please log in"
-msgstr "Prosím přihlašte se"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/portlet_tomorrow_events.pt:5
 #: /src/schooltool/calendar/browser/calendar.py:258
 msgid "Tomorrow's Events"
-msgstr "Dnešní události"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:4
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:14
 msgid "Deleting a repeating event (${event_title})"
-msgstr "Mažu opakující se událost (${event_title})"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:19
 msgid "You are trying to delete a repeating event."
-msgstr "Pokoušíte se smazat opakující se událost."
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:41
 msgid "Current"
-msgstr "Aktuální"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:43
 msgid "Future"
-msgstr "Budoucí"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:45
 msgid "All"
-msgstr "Všechny"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/simple_event_delete.pt:4
 #: /src/schooltool/app/browser/templates/simple_event_delete.pt:13
 msgid "Deleting an event (${event_title})"
-msgstr "Mažu událost (${event_title})"
+msgstr "Brisanje događaja (${event_title})"
 
 #: /src/schooltool/app/browser/templates/simple_event_delete.pt:18
 msgid "Are you sure you want to delete this event?"
-msgstr "Opravdu chcete smazat tuto událost?"
+msgstr "Da li ste sigurni da želite izbrisati ovaj događaj?"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:4
 msgid "Upload SchoolTool timetable as CSV"
-msgstr "Nahrát do SchoolToolu rozvrhy hodin ve formátu CSV"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:20
 msgid "Import Timetable"
-msgstr "Importovat rozvrh hodin"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:30
 msgid ""
@@ -2486,12 +2475,6 @@ msgid ""
 "<strong>person ids</strong> may follow, the denoted persons will be added to "
 "the section as learners."
 msgstr ""
-"První řádek popisu každé sekce obsahuje <strong>id kurzu</strong> a "
-"<strong>id instruktora</strong> nové sekce. Následují řádky, které obsahují "
-"<strong>id dne</strong> a <strong>id období</strong>. Seznam popisů období "
-"je ukončen třemi hvězdičkami ('***') v prvním sloupci. Po těchto hvězdičkách "
-"může následovat jakýkoliv počet <strong>id osob</strong>, kteří budou do "
-"sekce přidáni jako studenti."
 
 #. Default: "\"three-day\" \"\",\"\",\"\" \"philosophy\",\"lorch\" \"Monday\",\"A\" \"Monday\",\"B\" \"Tuesday\",\"C\" \"***\" \"johnny\" \"billy\" \"\" \"literature\",\"guzman\" \"Wednesday\",\"B\" \"Wednesday\",\"C\" \"***\" \"johnny\" \"pete\""
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:56
@@ -2523,10 +2506,6 @@ msgid ""
 "learners, and its timetable will contain three timetable activities, two on "
 "Monday. The literature section will be processed in a similar fashion."
 msgstr ""
-"Výše uvedený příklad vytvoří 2 nové sekce, jednu pro filozofii a druhou pro "
-"literaturu. Filizofická sekce bude mít studenty s id 'johnny' a 'billy' a "
-"jejich rozvrh bude obsahovat 3 činnosti, dvě v pondělí. Literární sekce je "
-"vytvořena obdobným způsobem."
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:83
 msgid ""
@@ -2538,12 +2517,6 @@ msgid ""
 "other columns are ignored. You can import the same data several times "
 "without any side effects."
 msgstr ""
-"Pamatujte, že je v souboru možné používat pouze id objektů, ne jména. Pokud "
-"řádek končí prázdnými buňkami (např.: "
-"<em>\"filozofie\",\"martin\",\"\",\"\"</em>), budou tyto buňky zahozeny. "
-"Popisné sekce můžete oddělit více jak jedním řádkem. V seznamu studentů je "
-"zpracován pouze první sloupec obsahující id osoby, ostatní sloupce jsou "
-"ignorovány. Stejná data můžete importovat vícekrát bez vedlejších účinků."
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:94
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:48
@@ -2554,7 +2527,7 @@ msgstr ""
 #: /src/schooltool/person/browser/person-csvimport.pt:48
 #: /src/schooltool/resource/browser/resource-csvimport.pt:45
 msgid "Upload CSV File"
-msgstr "Nahrát CSV soubor"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:96
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:50
@@ -2565,7 +2538,7 @@ msgstr "Nahrát CSV soubor"
 #: /src/schooltool/person/browser/person-csvimport.pt:50
 #: /src/schooltool/resource/browser/resource-csvimport.pt:47
 msgid "CSV File"
-msgstr "CSV soubor"
+msgstr "CSV datoteka"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:101
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:55
@@ -2576,7 +2549,7 @@ msgstr "CSV soubor"
 #: /src/schooltool/person/browser/person-csvimport.pt:55
 #: /src/schooltool/resource/browser/resource-csvimport.pt:52
 msgid "Charset:"
-msgstr "Znaková sada:"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:111
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:65
@@ -2587,7 +2560,7 @@ msgstr "Znaková sada:"
 #: /src/schooltool/person/browser/person-csvimport.pt:65
 #: /src/schooltool/resource/browser/resource-csvimport.pt:62
 msgid "Other charset: ${other_charset}"
-msgstr "Jiná znaková sada: ${other_charset}"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:115
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:69
@@ -2598,7 +2571,7 @@ msgstr "Jiná znaková sada: ${other_charset}"
 #: /src/schooltool/person/browser/person-csvimport.pt:69
 #: /src/schooltool/resource/browser/resource-csvimport.pt:66
 msgid "Input CSV Data"
-msgstr "Vstupní CSV data"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:116
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:70
@@ -2609,7 +2582,7 @@ msgstr "Vstupní CSV data"
 #: /src/schooltool/person/browser/person-csvimport.pt:70
 #: /src/schooltool/resource/browser/resource-csvimport.pt:67
 msgid "CSV Data"
-msgstr "CSV data"
+msgstr ""
 
 #: /src/schooltool/app/browser/timetable-integration-flourish.zcml:8
 #: /src/schooltool/app/browser/timetable-integration-flourish.zcml:28
@@ -2625,11 +2598,11 @@ msgstr "CSV data"
 #: /src/schooltool/resource/browser/flourish.zcml:323
 #: /src/schooltool/resource/browser/flourish.zcml:342
 msgid "Import"
-msgstr "Importovat"
+msgstr ""
 
 #: /src/schooltool/app/browser/timetablecsvimport.py:135
 msgid "Row 2 is not empty"
-msgstr "2. řádek není prázdný"
+msgstr ""
 
 #: /src/schooltool/app/browser/timetablecsvimport.py:182
 msgid ""
@@ -2652,11 +2625,11 @@ msgstr ""
 
 #: /src/schooltool/app/browser/timetablecsvimport.py:276
 msgid "Incomplete section description on line ${line}"
-msgstr "Neúplný popis sekce na řádku ${line}"
+msgstr "Nepotpun opis poglavlja na liniji ${line}"
 
 #: /src/schooltool/app/browser/timetablecsvimport.py:281
 msgid "No students in section (line ${line})"
-msgstr "V sekci (řádek ${line}) nejsou žádní studenti"
+msgstr ""
 
 #: /src/schooltool/app/browser/timetablecsvimport.py:364
 msgid ""
@@ -2675,67 +2648,67 @@ msgstr ""
 
 #: /src/schooltool/app/browser/timetablecsvimport.py:497
 msgid "Error in timetable CSV data, line ${line_no}"
-msgstr "Chyba CSV dat rozvrhu, řádek ${line_no}"
+msgstr ""
 
 #: /src/schooltool/app/browser/timetablecsvimport.py:447
 msgid "Day ids not defined in selected schema: ${args}."
-msgstr "Nedefinovaná id dne ve zvoleném schématu: ${args}."
+msgstr ""
 
 #: /src/schooltool/app/browser/timetablecsvimport.py:448
 msgid "Periods not defined in selected days: ${args}."
-msgstr "Nedefinovaná období ve zvolených dnech: ${args}."
+msgstr ""
 
 #: /src/schooltool/app/browser/timetablecsvimport.py:449
 msgid "Persons not found: ${args}."
-msgstr "Nenalezených osob: ${args}."
+msgstr "Osobe nisu pronađene: ${args}"
 
 #: /src/schooltool/app/browser/timetablecsvimport.py:450
 msgid "Courses not found: ${args}."
-msgstr "Nenalezených kurzů: ${args}."
+msgstr "Tečajevi nisu pronađeni: ${args}."
 
 #: /src/schooltool/app/browser/timetablecsvimport.py:451
 msgid "Sections not found: ${args}."
-msgstr "Nenalezené sekce: ${args}."
+msgstr "Sekcije nisu pronađene: ${args}"
 
 #: /src/schooltool/app/browser/timetablecsvimport.py:452
 msgid "Invalid records: ${args}."
-msgstr "Neplatných záznamů: ${args}."
+msgstr ""
 
 #: /src/schooltool/app/browser/timetablecsvimport.py:545
 #: /src/schooltool/course/browser/section.py:972
 #: /src/schooltool/course/browser/section.py:1070
 #: /src/schooltool/course/browser/section.py:1124
 msgid "Sections for ${schoolyear}"
-msgstr "Sekce pro ${schoolyear}"
+msgstr ""
 
 #: /src/schooltool/app/interfaces.py:50
 msgid "Form input is not a file object"
-msgstr "Vstupem formuláře není soubor"
+msgstr ""
 
 #: /src/schooltool/app/interfaces.py:51
 #: /src/schooltool/app/interfaces.py:55
 msgid "Invalid integer data"
-msgstr "Neplatná celočíselná data"
+msgstr ""
 
 #: /src/schooltool/app/interfaces.py:52
 msgid "Invalid text data"
-msgstr "Neplatná textová data"
+msgstr "Nevažeći tekstualni podatak"
 
 #: /src/schooltool/app/interfaces.py:53
 msgid "Invalid textual data"
-msgstr "Neplatná textová data"
+msgstr ""
 
 #: /src/schooltool/app/interfaces.py:54
 msgid "Invalid unicode data"
-msgstr "Neplatná unicodová data"
+msgstr ""
 
 #: /src/schooltool/app/interfaces.py:56
 msgid "Invalid floating point data"
-msgstr "Neplatné desetinné číslo"
+msgstr ""
 
 #: /src/schooltool/app/interfaces.py:57
 msgid "Invalid datetime data"
-msgstr "Neplatná časová data"
+msgstr ""
 
 #: /src/schooltool/app/interfaces.py:119
 #: /src/schooltool/app/interfaces.py:130
@@ -2745,31 +2718,28 @@ msgid ""
 "the\n"
 "            bottom of all pages and in the page title."
 msgstr ""
-"Jméno školy nebo organizace provozující tento\n"
-"            server.  Informace bude zobrazena ve veřejném kalendáři,\n"
-"            v titulku stránky a v patičkách všech stránek."
 
 #: /src/schooltool/app/interfaces.py:135
 msgid "Front Page Calendar"
-msgstr "Titulní stránka kalendáře"
+msgstr ""
 
 #: /src/schooltool/app/interfaces.py:136
 msgid ""
 "Display site-wide calendar as the front page of the\n"
 "            site."
-msgstr "Na hlavní stránce zobrazí kalendář."
+msgstr ""
 
 #: /src/schooltool/app/main.py:314
 msgid "Going to background, daemon pid %d"
-msgstr "Přecházím na pozadí, daemon pid %d"
+msgstr ""
 
 #: /src/schooltool/app/main.py:361
 msgid "Cannot resolve plugin action order:\n"
-msgstr "Nelze vyřešit pořadí fungování pluginů:\n"
+msgstr ""
 
 #: /src/schooltool/app/main.py:513
 msgid "Run %s -h for help."
-msgstr "Pro nápovědu spusťte %s -h."
+msgstr ""
 
 #: /src/schooltool/app/main.py:517
 msgid ""
@@ -2790,11 +2760,11 @@ msgstr ""
 
 #: /src/schooltool/app/main.py:536
 msgid "%s: daemon mode not supported on your operating system."
-msgstr "%s: na vašem operačním systému není režim daemon podporován."
+msgstr ""
 
 #: /src/schooltool/app/main.py:566
 msgid "Reading configuration from %s"
-msgstr "Načítám nastavení z %s"
+msgstr ""
 
 #: /src/schooltool/app/main.py:574
 msgid ""
@@ -2804,35 +2774,24 @@ msgid ""
 "If you're using the default configuration file, please edit it now and\n"
 "uncomment one of the ZODB storage sections.\n"
 msgstr ""
-"\n"
-"V konfiguračním souboru nebylo definováno žádné úložiště.\n"
-"\n"
-"Používáte-li výchozí konfigurační soubor, pokud možno jej ihned \n"
-"upravte a odpokentujte některou sekci se ZODB úložišti.\n"
 
 #: /src/schooltool/app/main.py:672
 msgid ""
 "Could not initialize the database:\n"
 "%s"
 msgstr ""
-"Nemohu inicializovat databázi:\n"
-"%s"
 
 #: /src/schooltool/app/main.py:702
 msgid ""
 "\n"
 "Perhaps another %s instance is using it?"
 msgstr ""
-"\n"
-"Možná jej používá jiná instance %s?"
 
 #: /src/schooltool/app/main.py:767
 msgid ""
 "Warning: could not find the reportlab library.\n"
 "PDF support disabled."
 msgstr ""
-"Varování: nemohu najít knihovnu reportlab.\n"
-"Vypínám podporu PDF."
 
 #: /src/schooltool/app/main.py:773
 msgid ""
@@ -2848,7 +2807,7 @@ msgstr ""
 
 #: /src/schooltool/app/main.py:775
 msgid "Startup time: %.3f sec real, %.3f sec CPU"
-msgstr "Doba spouštění: %.3f s. skutečných, %.3f s. CPU"
+msgstr ""
 
 #: /src/schooltool/app/membership.py:261
 #: /src/schooltool/basicperson/browser/templates/f_manage_people_overview.pt:20
@@ -2856,49 +2815,49 @@ msgstr "Doba spouštění: %.3f s. skutečných, %.3f s. CPU"
 #: /src/schooltool/group/browser/templates/f_group_view.pt:75
 #: /src/schooltool/group/browser/templates/group.pt:16
 msgid "Members"
-msgstr "Členové"
+msgstr ""
 
 #: /src/schooltool/app/membership.py:262
 msgid "Members of the group."
-msgstr "Členové skupiny."
+msgstr ""
 
 #: /src/schooltool/app/security.py:305
 msgid "Assigned leaders."
-msgstr "Přidělení vedoucí."
+msgstr "Dodijeljene vođe."
 
 #: /src/schooltool/app/security.py:349
 msgid "\"$group\" group."
-msgstr "\"$group\" skupina."
+msgstr ""
 
 #: /src/schooltool/app/security.py:364
 msgid "\"$group\" group and the super user."
-msgstr "\"$group\" skupina a superuživatel."
+msgstr ""
 
 #: /src/schooltool/app/security.zcml:71
 msgid "SchoolTool application"
-msgstr "Aplikace SchoolTool"
+msgstr ""
 
 #: /src/schooltool/app/security.zcml:74
 msgid "Access"
-msgstr "Databáze"
+msgstr ""
 
 #: /src/schooltool/app/security.zcml:81
 msgid "Manage school settings and configuration"
-msgstr "Spravovat nastavení a konfiguraci školy"
+msgstr ""
 
 #: /src/schooltool/app/security.zcml:89
 #: /src/schooltool/course/security.zcml:142
 #: /src/schooltool/group/security.zcml:90
 #: /src/schooltool/person/security.zcml:122
 msgid "View calendar"
-msgstr "Zobrazit kalendář"
+msgstr "Pogledajte kalendar"
 
 #: /src/schooltool/app/security.zcml:97
 #: /src/schooltool/course/security.zcml:150
 #: /src/schooltool/group/security.zcml:98
 #: /src/schooltool/person/security.zcml:130
 msgid "Change calendar"
-msgstr "Změnit kalendář"
+msgstr ""
 
 #: /src/schooltool/app/timetable-integration.zcml:28
 msgid "Assign timetables"
@@ -2932,38 +2891,38 @@ msgstr ""
 #: /src/schooltool/term/security.zcml:35
 #: /src/schooltool/timetable/security.zcml:52
 msgid "View"
-msgstr "Zobrazit"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/configure.zcml:33
 msgid "Export Persons as XML"
-msgstr "Export osob do formátu XML"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/configure.zcml:42
 msgid "Export"
-msgstr "Exportovat"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/configure.zcml:51
 #: /src/schooltool/basicperson/browser/flourish.zcml:585
 #: /src/schooltool/basicperson/browser/templates/f_advisoryViewlet.pt:6
 #: /src/schooltool/basicperson/security.py:32
 msgid "Advisors"
-msgstr "Poradci"
+msgstr "Savjetnici"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:60
 #: /src/schooltool/basicperson/browser/flourish.zcml:593
 #: /src/schooltool/basicperson/browser/templates/f_advisoryViewlet.pt:25
 msgid "Advisees"
-msgstr ""
+msgstr "Preporučitelji"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:101
 #: /src/schooltool/person/browser/configure.zcml:172
 #: /src/schooltool/person/browser/configure.zcml:181
 msgid "New Person"
-msgstr "Nová osoba"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/configure.zcml:109
 msgid "Add Multiple Persons"
-msgstr "Přidat více osob"
+msgstr "Dodaj više osoba"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:131
 #: /src/schooltool/basicperson/browser/demographics.py:384
@@ -2974,39 +2933,39 @@ msgstr "Přidat více osob"
 #: /src/schooltool/basicperson/browser/person.py:933
 #: /src/schooltool/basicperson/security.zcml:22
 msgid "Demographics"
-msgstr "Demografie"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/configure.zcml:161
 #: /src/schooltool/basicperson/browser/flourish.zcml:356
 msgid "New Text Field"
-msgstr "Nové textové pole"
+msgstr "Novo tekstualno polje"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:168
 #: /src/schooltool/basicperson/browser/flourish.zcml:374
 msgid "New Date Field"
-msgstr "Nové pole data"
+msgstr "Polje za novi datum"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:175
 #: /src/schooltool/basicperson/browser/flourish.zcml:383
 msgid "New Yes/No Field"
-msgstr ""
+msgstr "Novo Da/Ne Polje"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:182
 #: /src/schooltool/basicperson/browser/flourish.zcml:392
 msgid "New Selection List Field"
-msgstr ""
+msgstr "Novi izbor liste polja"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:292
 msgid "Add Teacher"
-msgstr "Přidat učitele"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/configure.zcml:302
 msgid "Add Student"
-msgstr "Přidat studenta"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/configure.zcml:312
 msgid "Add Administrator"
-msgstr "Přidat administrátora"
+msgstr "Dodati administratora"
 
 #: /src/schooltool/basicperson/browser/csvimport.py:47
 #: /src/schooltool/course/browser/csvimport.py:54
@@ -3016,36 +2975,36 @@ msgstr "Přidat administrátora"
 #: /src/schooltool/person/browser/csvimport.py:43
 #: /src/schooltool/resource/browser/csvimport.py:50
 msgid "Insufficient data provided."
-msgstr "Poskytnuta nedostatečná data."
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/csvimport.py:51
 #: /src/schooltool/person/browser/csvimport.py:47
 msgid "username may not be empty"
-msgstr "uživatelské jméno nemůže být prázdné"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/csvimport.py:55
 msgid "first name may not be empty"
-msgstr "Pole Jméno nemůže býr prázdné"
+msgstr "Ime ne smije biti prazno"
 
 #: /src/schooltool/basicperson/browser/csvimport.py:59
 msgid "last name may not be empty"
-msgstr "Pole Příjmení nesmí být prázdné"
+msgstr "Prezime ne smije biti prazno"
 
 #: /src/schooltool/basicperson/browser/csvimport.py:71
 #: /src/schooltool/person/browser/csvimport.py:62
 msgid "Duplicate username: ${username}"
-msgstr "Duplicitní uživatelské jméno: ${username}"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/csvimport.py:79
 #: /src/schooltool/basicperson/browser/person.py:206
 #: /src/schooltool/person/browser/csvimport.py:70
 msgid "Names cannot begin with '+' or '@' or contain '/'"
-msgstr "Jména nemohou začínat znaky '+' nebo '@' nebo obsahovat '/'"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/csvimport.py:88
 #: /src/schooltool/basicperson/browser/person.py:210
 msgid "Usernames cannot contain non-ascii characters"
-msgstr "Příjmení nesmí obsahovat jiné než ASCI znaky"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/demographics.py:83
 msgid "Duplicate entry \"${value}\""
@@ -3053,7 +3012,7 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/demographics.py:88
 msgid "Value too long \"${value}\""
-msgstr "Hodnota je moc velká \"${value}\""
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/demographics.py:111
 msgid "Demographics Container"
@@ -3061,16 +3020,16 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/demographics.py:151
 msgid "Add new Field"
-msgstr "Přidat nové pole"
+msgstr "Dodaj novo polje"
 
 #: /src/schooltool/basicperson/browser/demographics.py:269
 #: /src/schooltool/basicperson/browser/demographics.py:507
 msgid "Change information for ${field_title}"
-msgstr "Změnit informaci pro ${field_title}"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/demographics.py:305
 msgid "Stud."
-msgstr ""
+msgstr "Dugme."
 
 #: /src/schooltool/basicperson/browser/demographics.py:306
 msgid "Teach."
@@ -3078,19 +3037,19 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/demographics.py:307
 msgid "Admin."
-msgstr ""
+msgstr "Administrator"
 
 #: /src/schooltool/basicperson/browser/demographics.py:310
 msgid "Selection"
-msgstr "Výběr"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/demographics.py:312
 msgid "Text"
-msgstr "Text"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/demographics.py:313
 msgid "Yes/No"
-msgstr "Ano/Ne"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/demographics.py:343
 msgid "Integer"
@@ -3111,93 +3070,93 @@ msgstr ""
 #: /src/schooltool/basicperson/browser/demographics.py:406
 #: /src/schooltool/basicperson/browser/demographics.py:462
 msgid "Field Details"
-msgstr "Detaily pole"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/demographics.py:584
 msgid "Please enter a valid ID"
-msgstr "Prosím vložte platné ID"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/demographics.py:588
 msgid "This ID is not unique."
-msgstr "Toto ID není specifické."
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:11
 #: /src/schooltool/basicperson/browser/flourish.zcml:16
 #: /src/schooltool/basicperson/browser/templates/f_manage_people_overview.pt:4
 msgid "People"
-msgstr "Lidé"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:94
 msgid "Add new persons"
-msgstr "Přidat nové osoby"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:112
 #: /src/schooltool/basicperson/browser/person.py:346
 msgid "Add new person"
-msgstr "Přidat novou osobu"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:121
 #: /src/schooltool/basicperson/browser/person.py:979
 msgid "Add new teacher"
-msgstr "Přidat nového učitele"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:131
 #: /src/schooltool/basicperson/browser/person.py:989
 msgid "Add new student"
-msgstr "Přidat nového studenta"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:141
 #: /src/schooltool/basicperson/browser/person.py:999
 msgid "Add new administrator"
-msgstr "Přidat nového administrátora"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:153
 msgid "Person"
-msgstr "Osoba"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:161
 msgid "Add Person"
-msgstr "Přidat osobu"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:173
 msgid "Teacher"
-msgstr "Učitel"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:181
 #: /src/schooltool/basicperson/browser/flourish.zcml:560
 msgid "Student"
-msgstr "Student"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:189
 msgid "Administrator"
-msgstr "Správce"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:264
 #: /src/schooltool/basicperson/browser/flourish.zcml:273
 msgid "Demographics and Personal Information"
-msgstr "Demografické a osobní informace"
+msgstr "Demografske i osobne informacije"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:273
 #: /src/schooltool/level/browser/flourish.zcml:110
 #: /src/schooltool/resource/browser/flourish.zcml:29
 msgid "Reorder"
-msgstr ""
+msgstr "Redosljed"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:305
 msgid "Text Field"
-msgstr "Textové pole"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:313
 msgid "Description Field"
-msgstr "Popisové pole"
+msgstr "Opisivanje polja"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:322
 msgid "Date Field"
-msgstr "Datové pole"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:331
 msgid "Yes/No Field"
-msgstr "Ano/Ne pole"
+msgstr "Da/Ne polje"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:340
 msgid "Selection List Field"
@@ -3213,7 +3172,7 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:365
 msgid "New Description Field"
-msgstr "Nové popisovací pole"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:412
 msgid "New Integer Field"
@@ -3225,11 +3184,11 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:560
 msgid "Export as XML"
-msgstr "Exportovat jako XML"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:627
 msgid "ID Card"
-msgstr "ID karta"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:627
 msgid ""
@@ -3240,12 +3199,12 @@ msgstr ""
 #: /src/schooltool/basicperson/browser/flourish.zcml:733
 #: /src/schooltool/person/browser/home_tab_viewlet.pt:3
 msgid "Home"
-msgstr "Domov"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/person.py:79
 #: /src/schooltool/person/browser/person.py:661
 msgid "Person index"
-msgstr "Seznam osob"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/person.py:151
 #: /src/schooltool/basicperson/browser/templates/f_manage_people_overview.pt:19
@@ -3254,17 +3213,19 @@ msgstr "Seznam osob"
 #: /src/schooltool/group/browser/templates/f_groupsviewlet.pt:18
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_add.pt:61
 msgid "Group"
-msgstr "Skupina"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/person.py:153
 msgid ""
 "You can select one group membership now.  Manage multiple memberships after "
 "account creation."
 msgstr ""
+"Možete odabrati jednu člansku grupu sada.  Upravljanje sa više članova je "
+"nakon registrovanja profila."
 
 #: /src/schooltool/basicperson/browser/person.py:158
 msgid "Advisor"
-msgstr "Poradce"
+msgstr "savjetnik"
 
 #: /src/schooltool/basicperson/browser/person.py:164
 msgid "Cannot begin with '+' or '@,' contain non-ascii characters or '/.'"
@@ -3272,24 +3233,24 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/person.py:169
 msgid "Users cannot log in until a password is assigned."
-msgstr ""
+msgstr "Korisnici se ne mogu prijaviti dok lozinka ne bude dodijeljena."
 
 #: /src/schooltool/basicperson/browser/person.py:173
 #: /src/schooltool/widget/password.py:39
 msgid "Confirm password"
-msgstr "Potvrdit heslo"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/person.py:179
 #: /src/schooltool/basicperson/browser/person.py:237
 msgid "Passwords do not match"
-msgstr "Hesla nesouhlasí"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/person.py:190
 #: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:5
 #: /src/schooltool/person/browser/person.py:611
 #: /src/schooltool/person/interfaces.py:56
 msgid "Photo"
-msgstr "Fotografie"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/person.py:191
 msgid ""
@@ -3297,50 +3258,53 @@ msgid ""
 "(3:4 aspect ratio). Uploaded images must be JPEG or PNG files smaller than "
 "10 MB"
 msgstr ""
+"Slika koju želite konvertovati u JPEG ne može biti veća od 99x132 "
+"piksela(3:4 aspect ratio). Učitana slika mora bit JPEG ili PNG datoteka "
+"manja od 10 MB"
 
 #: /src/schooltool/basicperson/browser/person.py:229
 msgid "This username is already in use"
-msgstr "Toto uživatelské jméno je již používáno"
+msgstr "Ovo korisničko ime se već koristi"
 
 #: /src/schooltool/basicperson/browser/person.py:366
 msgid "Usernames"
-msgstr "Uživatelská jména"
+msgstr "Korisničko ime"
 
 #: /src/schooltool/basicperson/browser/person.py:383
 msgid "Add multiple persons"
-msgstr "Přidat více osob"
+msgstr "Dodaj više osoba"
 
 #: /src/schooltool/basicperson/browser/person.py:493
 #: /src/schooltool/resource/browser/resource.py:648
 msgid "Change information for ${fullname}"
-msgstr "Změnit informace pro ${fullname}"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/person.py:545
 #: /src/schooltool/basicperson/browser/person.py:927
 #: /src/schooltool/contact/browser/contact.py:190
 #: /src/schooltool/contact/browser/contact.py:379
 msgid "Full Name"
-msgstr "Celé jméno"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/person.py:639
 msgid "Current Advisors"
-msgstr "Současní poradci"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/person.py:640
 msgid "Add Advisors"
-msgstr "Přidat poradce"
+msgstr "Dodaj savjetnika"
 
 #: /src/schooltool/basicperson/browser/person.py:630
 msgid "Advisors of ${person}"
-msgstr ""
+msgstr "savjetnik od ${person}"
 
 #: /src/schooltool/basicperson/browser/person.py:660
 msgid "Current advisors"
-msgstr ""
+msgstr "Trenutni savjetnici"
 
 #: /src/schooltool/basicperson/browser/person.py:661
 msgid "Available advisors"
-msgstr ""
+msgstr "Dostupni savjetnici"
 
 #: /src/schooltool/basicperson/browser/person.py:678
 msgid "Current Advisees"
@@ -3364,53 +3328,55 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/person.py:935
 msgid "Relationships"
-msgstr "Vztahy"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/person.py:955
 msgid "Submit and add"
-msgstr "Odeslat a přidat"
+msgstr "Dostaviti i dodati"
 
 #: /src/schooltool/basicperson/browser/person.py:976
 msgid "Teacher identification"
-msgstr "Identifikace učitele"
+msgstr "Identifikacija učitelja"
 
 #: /src/schooltool/basicperson/browser/person.py:978
 msgid "Teacher demographics"
-msgstr "Demografie učitele"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/person.py:986
 msgid "Student identification"
-msgstr "Identifikace studenta"
+msgstr "identifikacija studenta"
 
 #: /src/schooltool/basicperson/browser/person.py:988
 msgid "Student demographics"
-msgstr "Demografie studenta"
+msgstr "Studentske demografije"
 
 #: /src/schooltool/basicperson/browser/person.py:996
 msgid "Administrator identification"
-msgstr "Identifikace administrátora"
+msgstr "Identifikacija administratora"
 
 #: /src/schooltool/basicperson/browser/person.py:998
 msgid "Administrator demographics"
-msgstr "Demografie administrátora"
+msgstr "Demografija administratora"
 
 #: /src/schooltool/basicperson/browser/person.py:1155
 #: /src/schooltool/group/browser/flourish.zcml:358
 msgid "ID Cards"
-msgstr "ID karty"
+msgstr "ID kartice"
 
 #: /src/schooltool/basicperson/browser/person.py:1327
 msgid "ID Card: ${person}"
-msgstr "ID karta: ${person}"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/templates/container.pt:18
 msgid ""
 "To add teachers, students or administrators, please set up a ${school_year}."
 msgstr ""
+"Za dodavanje učitelja, studenta ili administratora, molimo pristupite na "
+"${school_year}."
 
 #: /src/schooltool/basicperson/browser/templates/container.pt:23
 msgid "school year"
-msgstr "školní rok"
+msgstr "Školska godina"
 
 #. Default: "Delete"
 #: /src/schooltool/basicperson/browser/templates/container.pt:42
@@ -3424,7 +3390,7 @@ msgstr "školní rok"
 #: /src/schooltool/skin/templates/view_macros.pt:191
 #: /src/schooltool/timetable/browser/templates/timetable_container.pt:30
 msgid "delete-button"
-msgstr "Smazat"
+msgstr "Tipka za brisanje"
 
 #: /src/schooltool/basicperson/browser/templates/f_advisoryViewlet.pt:2
 msgid "Advisory"
@@ -3432,7 +3398,7 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/templates/f_advisoryViewlet.pt:7
 msgid "Manage this person's advisors"
-msgstr ""
+msgstr "Upravljanje ovih osoba kao savjetnika"
 
 #: /src/schooltool/basicperson/browser/templates/f_advisoryViewlet.pt:18
 msgid "The person has no advisors."
@@ -3462,10 +3428,6 @@ msgid ""
 "jbjones, Jim Bob, Jones, r2m45J\n"
 "howard, Howard, Jobs\n"
 msgstr ""
-"\n"
-"jjones, Jimmy, Jones\n"
-"jbjones, Jim Bob, Jones, r2m45j\n"
-"howard, Howard, Jobs\n"
 
 #: /src/schooltool/basicperson/browser/templates/f_csvimport_description.pt:15
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:40
@@ -3475,9 +3437,6 @@ msgid ""
 "Of the three, only 'jbjones' has a password ('r2m45J') and will be able to "
 "login to the system. Note that passwords must be sent in plain text."
 msgstr ""
-"Předchozí příklad vytvoří tři uživatele 'vsklenar', 'mck' a 'novak'. Jediný "
-"'mck' má heslo ('r2m45J') a tudíž se bude moci přihlásit do systému. "
-"Poznamenejme, že hesla musí být zasílána jako prostý text."
 
 #: /src/schooltool/basicperson/browser/templates/f_demographics_reorder.pt:8
 msgid "Order"
@@ -3487,7 +3446,7 @@ msgstr ""
 #: /src/schooltool/basicperson/browser/templates/f_demographics_view.pt:6
 #: /src/schooltool/basicperson/interfaces.py:136
 msgid "ID"
-msgstr "ID"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/templates/f_demographics_reorder.pt:11
 #: /src/schooltool/basicperson/browser/templates/f_demographics_reorder.pt:34
@@ -3523,16 +3482,16 @@ msgstr "ID"
 #: /src/schooltool/timetable/browser/flourish.zcml:481
 #: /src/schooltool/timetable/browser/schedule.py:364
 msgid "Delete"
-msgstr "Smazat"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/templates/f_demographics_view.pt:8
 #: /src/schooltool/basicperson/interfaces.py:140
 msgid "Required"
-msgstr "Požadováno"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/templates/f_demographics_view.pt:9
 msgid "Limited"
-msgstr "Limitováno"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:2
 msgid "General Information"
@@ -3541,15 +3500,15 @@ msgstr ""
 #: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:6
 #: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:25
 msgid "Edit this person's information"
-msgstr "Upravit informace o této osobě"
+msgstr "Uredi informacije ove osobe"
 
 #: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:24
 msgid "Demographics and other personal data"
-msgstr ""
+msgstr "Demografija i ostali osobni podaci"
 
 #: /src/schooltool/basicperson/browser/templates/f_manage_people_overview.pt:4
 msgid "Manage people"
-msgstr ""
+msgstr "Upravljanje ljudima"
 
 #: /src/schooltool/basicperson/browser/templates/f_manage_people_overview.pt:14
 msgid "There are ${count} people defined in ${school}."
@@ -3558,12 +3517,12 @@ msgstr ""
 #: /src/schooltool/basicperson/browser/templates/f_person_add_multiple.pt:10
 #: /src/schooltool/basicperson/browser/templates/person_add_multiple.pt:13
 msgid "Added persons"
-msgstr "Přidané osoby"
+msgstr "Dodane osobe"
 
 #: /src/schooltool/basicperson/browser/templates/f_person_add_subform.pt:3
 #: /src/schooltool/basicperson/browser/templates/person_add_subform.pt:2
 msgid "New person"
-msgstr "Nová osoba"
+msgstr "nova osoba"
 
 #: /src/schooltool/basicperson/browser/templates/f_person_form.pt:51
 #: /src/schooltool/contact/browser/templates/f_contact_form.pt:51
@@ -3572,34 +3531,34 @@ msgstr "Nová osoba"
 #: /src/schooltool/skin/flourish/templates/z3c-schooltool-form.pt:51
 #: /src/schooltool/timetable/browser/templates/f_specialday_select.pt:12
 msgid "signifies a required field"
-msgstr ""
+msgstr "Podrazumijeva obavezno polje"
 
 #: /src/schooltool/basicperson/browser/templates/f_person_id_cards.pt:90
 msgid "ID:"
-msgstr "ID:"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/templates/f_person_id_cards.pt:95
 msgid "Birth date:"
-msgstr "Datum narození:"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/templates/f_person_id_cards.pt:99
 msgid "Contact"
-msgstr "Kontakt"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/templates/f_person_id_cards.pt:111
 msgid "Contact's Phone"
-msgstr "Kontaktní telefon"
+msgstr "Korisnikov telefon"
 
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:4
 #: /src/schooltool/person/browser/person-csvimport.pt:4
 msgid "Upload SchoolTool persons as CSV"
-msgstr "Nahrát do SchoolToolu uživatele ve formátu CSV"
+msgstr "Učitaj SchoolTool osobe kao CSV"
 
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:26
 #: /src/schooltool/person/browser/configure.zcml:82
 #: /src/schooltool/person/browser/person-csvimport.pt:26
 msgid "Import Persons"
-msgstr "Importovat osoby"
+msgstr "Unesi osobe"
 
 #: /src/schooltool/basicperson/browser/templates/person_container_delete.pt:15
 #: /src/schooltool/contact/browser/templates/contacts_delete.pt:15
@@ -3607,7 +3566,7 @@ msgstr "Importovat osoby"
 #: /src/schooltool/resource/browser/container_delete.pt:10
 #: /src/schooltool/skin/templates/container_delete.pt:15
 msgid "Are you sure you want to delete selected items?"
-msgstr "Opravdu chcete smazat vybrané položky?"
+msgstr "Da li ste sigurni da želite izbrisati odabrane stavke?"
 
 #: /src/schooltool/basicperson/browser/templates/person_container_delete.pt:21
 #: /src/schooltool/contact/browser/templates/contacts_delete.pt:21
@@ -3620,12 +3579,12 @@ msgstr "Opravdu chcete smazat vybrané položky?"
 #: /src/schooltool/term/browser/templates/term-container-delete.pt:16
 #: /src/schooltool/timetable/browser/templates/timetable_container_delete.pt:16
 msgid "You have not selected any items."
-msgstr "Nejsou vybrány žádné položky."
+msgstr "Nemate odabranih stavki."
 
 #: /src/schooltool/basicperson/browser/templates/person_container_delete.pt:23
 #: /src/schooltool/person/browser/person_container_delete.pt:23
 msgid "Sorry, you may not delete your own user account."
-msgstr "Promiňte, ale nemůžete smazat svůj vlastní účet."
+msgstr "Oprostite, vi ne smijete izbrisati vlastiti korisnički račun."
 
 #: /src/schooltool/basicperson/browser/templates/person_container_delete.pt:35
 #: /src/schooltool/contact/browser/templates/contacts_delete.pt:34
@@ -3639,100 +3598,100 @@ msgstr "Promiňte, ale nemůžete smazat svůj vlastní účet."
 #: /src/schooltool/timetable/browser/templates/confirm_schedule_delete.pt:27
 #: /src/schooltool/timetable/browser/templates/timetable_container_delete.pt:27
 msgid "Confirm"
-msgstr "Potvrdit"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/templates/person_view.pt:13
 #: /src/schooltool/person/browser/home.pt:13
 #: /src/schooltool/person/browser/person.pt:4
 msgid "Person info: ${title}"
-msgstr "Informace o osobě: ${title}"
+msgstr ""
 
 #: /src/schooltool/basicperson/demographics.py:143
 msgid "Ethnicity"
-msgstr "Etnika"
+msgstr "Etnička pripadnost"
 
 #: /src/schooltool/basicperson/demographics.py:144
 msgid "American Indian or Alaska Native"
-msgstr "Americký indián nebo Aljašský domorodec"
+msgstr ""
 
 #: /src/schooltool/basicperson/demographics.py:145
 msgid "Asian"
-msgstr "Asiat"
+msgstr "Azijac"
 
 #: /src/schooltool/basicperson/demographics.py:146
 msgid "Black or African American"
-msgstr "Černoch nebo afroameričan"
+msgstr ""
 
 #: /src/schooltool/basicperson/demographics.py:147
 msgid "Native Hawaiian or Other Pacific Islander"
-msgstr "Hawajský nebo jiný pacifický ostrovní domorodec"
+msgstr ""
 
 #: /src/schooltool/basicperson/demographics.py:148
 msgid "White"
-msgstr "Bílá"
+msgstr ""
 
 #: /src/schooltool/basicperson/demographics.py:150
 msgid "Place of birth"
-msgstr "Místo narození"
+msgstr ""
 
 #: /src/schooltool/basicperson/demographics.py:151
 msgid "Citizenship"
-msgstr ""
+msgstr "Državljanstvo"
 
 #: /src/schooltool/basicperson/interfaces.py:38
 #: /src/schooltool/contact/interfaces.py:40
 msgid "Prefix"
-msgstr "Předpona"
+msgstr ""
 
 #: /src/schooltool/basicperson/interfaces.py:42
 #: /src/schooltool/contact/browser/templates/filter.pt:5
 #: /src/schooltool/contact/interfaces.py:42
 msgid "First name"
-msgstr "Křestní jméno"
+msgstr ""
 
 #: /src/schooltool/basicperson/interfaces.py:47
 #: /src/schooltool/contact/interfaces.py:44
 msgid "Middle name"
-msgstr "Druhé jméno"
+msgstr ""
 
 #: /src/schooltool/basicperson/interfaces.py:52
 #: /src/schooltool/contact/browser/templates/filter.pt:12
 #: /src/schooltool/contact/interfaces.py:46
 msgid "Last name"
-msgstr "Příjmení"
+msgstr ""
 
 #: /src/schooltool/basicperson/interfaces.py:57
 #: /src/schooltool/contact/interfaces.py:48
 msgid "Suffix"
-msgstr "Přípona"
+msgstr ""
 
 #: /src/schooltool/basicperson/interfaces.py:62
 msgid "Preferred name"
-msgstr "Preferované jméno"
+msgstr ""
 
 #: /src/schooltool/basicperson/interfaces.py:67
 msgid "Gender"
-msgstr "Pohlaví"
+msgstr ""
 
 #: /src/schooltool/basicperson/interfaces.py:68
 msgid "Female"
-msgstr "Žena"
+msgstr ""
 
 #: /src/schooltool/basicperson/interfaces.py:68
 msgid "Male"
-msgstr "Muž"
+msgstr ""
 
 #: /src/schooltool/basicperson/interfaces.py:73
 msgid "Birth date"
-msgstr "Datum narození"
+msgstr "Datum rođenja"
 
 #: /src/schooltool/basicperson/interfaces.py:74
 msgid "(yyyy-mm-dd)"
-msgstr "(rok-měsíc-den)"
+msgstr ""
 
 #: /src/schooltool/basicperson/interfaces.py:133
 msgid "As it should appear on forms and reports."
-msgstr ""
+msgstr "Kao što bi se trebale pojaviti na obrascima i izvještajima."
 
 #: /src/schooltool/basicperson/interfaces.py:138
 msgid "A unique one word alphanumeric identifier."
@@ -3740,51 +3699,53 @@ msgstr ""
 
 #: /src/schooltool/basicperson/interfaces.py:163
 msgid "Selection list"
-msgstr ""
+msgstr "Selekcioni list"
 
 #: /src/schooltool/basicperson/interfaces.py:163
 msgid ""
 "Enter the valid values for the field below.  One value per line.  These "
 "values will be displayed as a menu in forms."
 msgstr ""
+"Unesite ispravne vrijednosti za polja ispod. Jednu vrijednost u jednom redu. "
+"Ove vrijednosti će biti prikazane  kao menu u oblicima."
 
 #: /src/schooltool/basicperson/interfaces.py:173
 msgid "Minimum value"
-msgstr "Minimální hodnota"
+msgstr "Minimalna vrijednost"
 
 #: /src/schooltool/basicperson/interfaces.py:177
 msgid "Maximum value"
-msgstr "Maximální hodnota"
+msgstr "Maksimalna vrijednost"
 
 #: /src/schooltool/basicperson/person.py:75
 #: /src/schooltool/contact/browser/contact.py:503
 msgid "First Name"
-msgstr "Křestní jméno"
+msgstr ""
 
 #: /src/schooltool/basicperson/person.py:82
 #: /src/schooltool/contact/browser/contact.py:503
 msgid "Last Name"
-msgstr "Příjmení"
+msgstr ""
 
 #: /src/schooltool/basicperson/security.py:33
 msgid "Advisors of a person."
-msgstr "Poradce osoby."
+msgstr ""
 
 #: /src/schooltool/basicperson/security.zcml:26
 msgid "Create, delete demographics fields and change their order."
-msgstr "Vytvářejte, mažte a měnte pořadí demografických polí"
+msgstr ""
 
 #: /src/schooltool/basicperson/security.zcml:35
 msgid "Edit fields"
-msgstr "Upravit pole"
+msgstr "Uredi polja"
 
 #: /src/schooltool/basicperson/security.zcml:43
 msgid "View user demographics"
-msgstr ""
+msgstr "Vidi korisnikovu demografiju"
 
 #: /src/schooltool/basicperson/security.zcml:43
 msgid "View user's demographics information"
-msgstr ""
+msgstr "Vidi korisnkove demografske informacije"
 
 #: /src/schooltool/basicperson/security.zcml:52
 msgid "Modify user demographics"
@@ -3810,35 +3771,35 @@ msgstr "Studenti"
 
 #: /src/schooltool/basicperson/vocabularies.py:132
 msgid "Teachers"
-msgstr "Učitelé"
+msgstr "Učitelji"
 
 #: /src/schooltool/basicperson/vocabularies.py:133
 msgid "Administrators"
-msgstr "Administrátoři"
+msgstr ""
 
 #: /src/schooltool/calendar/browser/calendar.py:173
 msgid "Tomorrow"
-msgstr "Zítra"
+msgstr ""
 
 #: /src/schooltool/calendar/browser/calendar.py:175
 msgid "Yesterday"
-msgstr "Včera"
+msgstr ""
 
 #: /src/schooltool/calendar/browser/calendar.py:195
 msgid "This Week"
-msgstr "Tento týden"
+msgstr ""
 
 #: /src/schooltool/calendar/browser/calendar.py:197
 msgid "Last Week"
-msgstr "Minulý týden"
+msgstr ""
 
 #: /src/schooltool/calendar/browser/calendar.py:199
 msgid "Next Week"
-msgstr "Příští týden"
+msgstr ""
 
 #: /src/schooltool/calendar/browser/calendar.py:236
 msgid "Jump To"
-msgstr "Skočit na"
+msgstr ""
 
 #: /src/schooltool/calendar/browser/event.py:129
 #: /src/schooltool/calendar/browser/event.py:156
@@ -3855,23 +3816,23 @@ msgstr ""
 
 #: /src/schooltool/calendar/browser/event.py:187
 msgid "All occurrences of this event"
-msgstr ""
+msgstr "Sva zbivanja na ovom događaju"
 
 #: /src/schooltool/calendar/browser/event.py:188
 msgid "Only current occurrence"
-msgstr ""
+msgstr "Samo trenutna pojava"
 
 #: /src/schooltool/calendar/browser/event.py:189
 msgid "This and all future occurrences"
-msgstr ""
+msgstr "Ova i svaukupna buduća pojava"
 
 #: /src/schooltool/calendar/browser/event.py:222
 msgid "Delete event ${event}"
-msgstr "Smazat událost ${event}"
+msgstr "Izbriši događaj ${event}"
 
 #: /src/schooltool/calendar/browser/flourish.zcml:81
 msgid "Event"
-msgstr "Událost"
+msgstr ""
 
 #: /src/schooltool/calendar/browser/flourish.zcml:166
 #: /src/schooltool/calendar/browser/templates/event_edit.pt:392
@@ -3881,16 +3842,16 @@ msgstr ""
 
 #: /src/schooltool/calendar/browser/overlay.py:33
 msgid "Show"
-msgstr "Zobrazit"
+msgstr ""
 
 #: /src/schooltool/calendar/browser/templates/calendar_overlay.pt:35
 msgid "Select"
-msgstr "Vybrat"
+msgstr ""
 
 #: /src/schooltool/calendar/browser/templates/event.pt:52
 #: /src/schooltool/timetable/browser/templates/f_schedule_event_edit.pt:53
 msgid "Reserved resources"
-msgstr "Rezervované zdroje"
+msgstr "Sačuvane pojave"
 
 #: /src/schooltool/calendar/browser/templates/event.pt:54
 #: /src/schooltool/timetable/browser/templates/f_schedule_event_edit.pt:55
@@ -3899,17 +3860,17 @@ msgstr ""
 
 #: /src/schooltool/calendar/browser/templates/event_booking.pt:5
 msgid "Event Details"
-msgstr "Podrobnosti události"
+msgstr "Detalji događaja"
 
 #: /src/schooltool/calendar/browser/templates/event_booking.pt:41
 #: /src/schooltool/calendar/browser/templates/event_edit.pt:369
 #: /src/schooltool/timetable/browser/templates/f_schedule_event_add.pt:160
 msgid "Reserved Resources"
-msgstr "Rezervované zdroje"
+msgstr ""
 
 #: /src/schooltool/calendar/browser/templates/event_booking.pt:69
 msgid "Available Resources"
-msgstr "Dostupné zdroje"
+msgstr ""
 
 #: /src/schooltool/calendar/browser/templates/event_delete_dialog.pt:4
 msgid "Deleting an event on ${day}."
@@ -3917,7 +3878,7 @@ msgstr ""
 
 #: /src/schooltool/calendar/browser/templates/event_delete_dialog.pt:8
 msgid "This is an all day event."
-msgstr ""
+msgstr "Ovo je cijelodnevni događaj."
 
 #: /src/schooltool/calendar/browser/templates/event_delete_dialog.pt:12
 msgid "You are deleting a repeating event."
@@ -3936,22 +3897,22 @@ msgstr ""
 #: /src/schooltool/resource/browser/configure.zcml:257
 #: /src/schooltool/resource/browser/configure.zcml:271
 msgid "Edit Info"
-msgstr "Upravit informace"
+msgstr "Uredite informacije"
 
 #: /src/schooltool/common/configure.zcml:93
 msgid "Add Info"
-msgstr "Přidat informace"
+msgstr "Dodajte info"
 
 #: /src/schooltool/common/configure.zcml:94
 msgid "Edit Calendar Overlays"
-msgstr "Úprava vrstvení kalendáře"
+msgstr "Uredi slojeve kalendara"
 
 #: /src/schooltool/contact/browser/basicperson.py:117
 #: /src/schooltool/contact/browser/contact.py:194
 #: /src/schooltool/contact/browser/contact.py:383
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:31
 msgid "Address"
-msgstr "Adresa"
+msgstr ""
 
 #: /src/schooltool/contact/browser/basicperson.py:121
 #: /src/schooltool/contact/browser/contact.py:198
@@ -3962,7 +3923,7 @@ msgstr ""
 
 #: /src/schooltool/contact/browser/configure.zcml:41
 msgid "View Person"
-msgstr "Zobrazit osobu"
+msgstr ""
 
 #: /src/schooltool/contact/browser/configure.zcml:61
 #: /src/schooltool/contact/browser/flourish.zcml:63
@@ -3970,7 +3931,7 @@ msgstr "Zobrazit osobu"
 #: /src/schooltool/contact/browser/flourish.zcml:178
 #: /src/schooltool/contact/browser/flourish.zcml:188
 msgid "New Contact"
-msgstr "Nový kontakt"
+msgstr ""
 
 #: /src/schooltool/contact/browser/configure.zcml:76
 #: /src/schooltool/contact/browser/configure.zcml:88
@@ -3982,43 +3943,43 @@ msgstr "Nový kontakt"
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:59
 #: /src/schooltool/contact/contact.py:71
 msgid "Contacts"
-msgstr "Kontakty"
+msgstr ""
 
 #: /src/schooltool/contact/browser/configure.zcml:110
 msgid "Manage Contacts"
-msgstr "Spravovat kontakty"
+msgstr "Upravljanje korisnicima"
 
 #: /src/schooltool/contact/browser/configure.zcml:121
 #: /src/schooltool/contact/browser/configure.zcml:133
 msgid "Other Contacts"
-msgstr "Ostatní kontakty"
+msgstr ""
 
 #: /src/schooltool/contact/browser/configure.zcml:178
 #: /src/schooltool/contact/browser/contact.py:638
 #: /src/schooltool/email/browser/email.py:689
 msgid "Send Email"
-msgstr "Odeslat email"
+msgstr ""
 
 #: /src/schooltool/contact/browser/contact.py:104
 msgid "Add new contact"
-msgstr "Přidat nový kontakt"
+msgstr "Dodaj novog kontakta"
 
 #: /src/schooltool/contact/browser/contact.py:248
 msgid "Add new contact for ${person}"
-msgstr "Přidat nový kontakt pro ${person}"
+msgstr "Dodaj novi kontakt za ${person}"
 
 #: /src/schooltool/contact/browser/contact.py:329
 msgid "Change contact information for ${first_name} ${last_name}"
-msgstr "Změnit kontaktní informace pro ${first_name} ${last_name}"
+msgstr ""
 
 #: /src/schooltool/contact/browser/contact.py:441
 msgid "Contact index"
-msgstr "Rejstřík kontaktů"
+msgstr ""
 
 #: /src/schooltool/contact/browser/contact.py:618
 #: /src/schooltool/contact/browser/templates/f_contact_filter.pt:6
 msgid "First name and/or last name"
-msgstr ""
+msgstr "Ime i/ili prezime"
 
 #: /src/schooltool/contact/browser/contact.py:654
 #: /src/schooltool/email/browser/email.py:301
@@ -4027,7 +3988,7 @@ msgstr ""
 #: /src/schooltool/email/browser/email.py:684
 #: /src/schooltool/email/interfaces.py:39
 msgid "From"
-msgstr "Od"
+msgstr ""
 
 #: /src/schooltool/contact/browser/contact.py:621
 #: /src/schooltool/email/browser/email.py:287
@@ -4035,7 +3996,7 @@ msgstr "Od"
 #: /src/schooltool/email/browser/email.py:664
 #: /src/schooltool/email/interfaces.py:43
 msgid "To"
-msgstr "Komu"
+msgstr ""
 
 #: /src/schooltool/contact/browser/contact.py:622
 #: /src/schooltool/email/browser/email.py:297
@@ -4043,7 +4004,7 @@ msgstr "Komu"
 #: /src/schooltool/email/browser/email.py:668
 #: /src/schooltool/email/interfaces.py:53
 msgid "Subject"
-msgstr "Předmět"
+msgstr ""
 
 #: /src/schooltool/contact/browser/contact.py:623
 #: /src/schooltool/email/browser/email.py:301
@@ -4051,17 +4012,17 @@ msgstr "Předmět"
 #: /src/schooltool/email/interfaces.py:49
 #: /src/schooltool/note/interfaces.py:46
 msgid "Body"
-msgstr "Text"
+msgstr ""
 
 #: /src/schooltool/contact/browser/contact.py:641
 #: /src/schooltool/email/browser/email.py:692
 #: /src/schooltool/email/browser/email.py:739
 msgid "Send"
-msgstr "Odeslat"
+msgstr ""
 
 #: /src/schooltool/contact/browser/contact.py:645
 msgid "There were some errors."
-msgstr "Vyskytly se problémy."
+msgstr "Ovdje postoje neke greške."
 
 #: /src/schooltool/contact/browser/contact.py:819
 msgid "${person_full_name} as Contact"
@@ -4073,33 +4034,33 @@ msgstr ""
 
 #: /src/schooltool/contact/browser/flourish.zcml:206
 msgid "Edit Contact Information"
-msgstr "Upravit informace o kontaktu"
+msgstr "Uredi informacije o korisniku"
 
 #: /src/schooltool/contact/browser/relationship.py:78
 #: /src/schooltool/contact/browser/templates/contactperson_subform.pt:8
 #: /src/schooltool/contact/interfaces.py:101
 msgid "Relationship"
-msgstr "Vztah"
+msgstr ""
 
 #: /src/schooltool/contact/browser/relationship.py:89
 msgid "Assigned Contacts"
-msgstr "Přiřadit kontakt"
+msgstr "Dodijeljeni kontakti"
 
 #: /src/schooltool/contact/browser/relationship.py:90
 msgid "Assign existing contact"
-msgstr "Přiřadit existující kontakt"
+msgstr ""
 
 #: /src/schooltool/contact/browser/relationship.py:94
 msgid "Manage contacts of ${person}"
-msgstr "Spravovat kontakty ${person}"
+msgstr ""
 
 #: /src/schooltool/contact/browser/relationship.py:186
 msgid "Current contacts"
-msgstr "Aktuální kontakty"
+msgstr "Trenutni kontakti"
 
 #: /src/schooltool/contact/browser/relationship.py:187
 msgid "Available contacts"
-msgstr "Dostupné kontakty"
+msgstr "Dostupni kontakti"
 
 #: /src/schooltool/contact/browser/templates/contact_view.pt:16
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:18
@@ -4114,7 +4075,7 @@ msgstr ""
 
 #: /src/schooltool/contact/browser/templates/f_confirm_delete_contact.pt:3
 msgid "Deleting a contact is permanent and irreversible."
-msgstr ""
+msgstr "Brisanje kontakta je trajno i nepovratno."
 
 #: /src/schooltool/contact/browser/templates/f_confirm_delete_contact.pt:12
 #: /src/schooltool/contact/browser/templates/f_contact_view.pt:46
@@ -4124,37 +4085,41 @@ msgstr ""
 #: /src/schooltool/contact/browser/templates/f_confirm_delete_contact.pt:16
 #: /src/schooltool/contact/browser/templates/f_contact_view.pt:49
 msgid "Contact of"
-msgstr ""
+msgstr "Kontakt od"
 
 #: /src/schooltool/contact/browser/templates/f_contact_view.pt:3
 msgid "Contact information"
-msgstr "Kontaktní informace"
+msgstr "Kontakt informacije"
 
 #: /src/schooltool/contact/browser/templates/f_contact_view.pt:6
 #: /src/schooltool/contact/browser/templates/f_contactsViewlet.pt:9
 msgid "Edit this contact"
-msgstr ""
+msgstr "Uredi ovaj kontakt"
 
 #: /src/schooltool/contact/browser/templates/f_contactsViewlet.pt:27
 msgid "This person has no contacts."
-msgstr ""
+msgstr "Ova osoba nema kontakata."
 
 #: /src/schooltool/contact/browser/templates/f_contactsViewlet.pt:31
 #: /src/schooltool/contact/browser/templates/f_manage_contacts_overview.pt:4
 msgid "Manage contacts"
-msgstr ""
+msgstr "Upravljanje kontaktima"
 
 #: /src/schooltool/contact/browser/templates/f_contacts_related.pt:6
 msgid ""
 "A student may have one or more \"contacts\", people who may need to recieve "
 "notifications and information about the student or the school as a whole."
 msgstr ""
+"Student moze imati vise \" kontakata\", ljudi mogu primiti notifikacije i "
+"informacije o studentima ili o školi, uopće."
 
 #: /src/schooltool/contact/browser/templates/f_contacts_related.pt:11
 msgid ""
 "A user may also be a contact for him or herself, particularly in the case of "
 "older students and adults."
 msgstr ""
+"Korisnik može također biti kontakt za njega ili sebe, posebno u slučaju "
+"starijih studnata i odraslih osoba."
 
 #: /src/schooltool/contact/browser/templates/f_manage_contacts_overview.pt:12
 msgid "The school has ${total} contact persons."
@@ -4167,7 +4132,7 @@ msgstr ""
 #: /src/schooltool/skin/templates/view_macros.pt:144
 #: /src/schooltool/table/templates/filter.pt:4
 msgid "Find Now"
-msgstr "Najít nyní"
+msgstr ""
 
 #: /src/schooltool/contact/browser/templates/filter.pt:24
 #: /src/schooltool/person/browser/person_filter.pt:13
@@ -4177,7 +4142,7 @@ msgstr "Najít nyní"
 #: /src/schooltool/skin/templates/view_macros.pt:146
 #: /src/schooltool/table/templates/filter.pt:6
 msgid "Clear"
-msgstr "Vyčistit"
+msgstr ""
 
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:27
 msgid "Shortcut: Alt-R"
@@ -4185,11 +4150,11 @@ msgstr ""
 
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:43
 msgid "Create contact"
-msgstr "Vytvořit kontakt"
+msgstr "Kreirajte kontakt"
 
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:45
 msgid "Create new contact"
-msgstr "Vytvořit nový kontakt"
+msgstr "Kreirajte novi kontakt"
 
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:58
 msgid "Assign"
@@ -4200,18 +4165,16 @@ msgid ""
 "You don't have an email address set. Ask your administrator to set your "
 "email address in your contact information."
 msgstr ""
-"Nemáte nastavenou emailovou adresu. Požádejte vašeho administrátora o "
-"nastavení emailové adresy ve vašich kontaktních informacích."
 
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:8
 msgid "Contact information for ${person}"
-msgstr "Kontaktní informace od ${person}"
+msgstr ""
 
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:36
 #: /src/schooltool/contact/interfaces.py:68
 #: /src/schooltool/email/browser/email.py:733
 msgid "Email"
-msgstr "E-mail"
+msgstr ""
 
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:41
 msgid "Phones"
@@ -4223,7 +4186,7 @@ msgstr ""
 
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:73
 msgid "(View Details)"
-msgstr "(Zobrazit detaily)"
+msgstr ""
 
 #: /src/schooltool/contact/contact.py:73
 msgid ""
@@ -4254,7 +4217,7 @@ msgstr ""
 #: /src/schooltool/course/section.py:275
 #: /src/schooltool/course/section.py:286
 msgid "Instructors"
-msgstr "Přednášející"
+msgstr ""
 
 #: /src/schooltool/contact/contact.py:203
 msgid "Instructors of student(s) related to this contact."
@@ -4262,39 +4225,39 @@ msgstr ""
 
 #: /src/schooltool/contact/interfaces.py:53
 msgid "Address line 1"
-msgstr "Adresní řádek 1"
+msgstr ""
 
 #: /src/schooltool/contact/interfaces.py:55
 msgid "Address line 2"
-msgstr "Adresní řádek 2"
+msgstr ""
 
 #: /src/schooltool/contact/interfaces.py:57
 msgid "City"
-msgstr "Město"
+msgstr ""
 
 #: /src/schooltool/contact/interfaces.py:59
 msgid "State"
-msgstr "Stát"
+msgstr ""
 
 #: /src/schooltool/contact/interfaces.py:61
 msgid "Country"
-msgstr "Stát"
+msgstr ""
 
 #: /src/schooltool/contact/interfaces.py:63
 msgid "Postal code"
-msgstr "PSČ"
+msgstr ""
 
 #: /src/schooltool/contact/interfaces.py:73
 msgid "Home phone"
-msgstr "Telefon domů"
+msgstr "Kućni telefon"
 
 #: /src/schooltool/contact/interfaces.py:75
 msgid "Work phone"
-msgstr "Telefon do práce"
+msgstr "Radni telefon"
 
 #: /src/schooltool/contact/interfaces.py:77
 msgid "Mobile phone"
-msgstr "Mobil"
+msgstr ""
 
 #: /src/schooltool/contact/interfaces.py:82
 msgid "Other 1"
@@ -4322,7 +4285,7 @@ msgstr ""
 
 #: /src/schooltool/contact/interfaces.py:107
 msgid "Guardian"
-msgstr ""
+msgstr "Čuvar"
 
 #: /src/schooltool/contact/interfaces.py:108
 msgid "Sibling"
@@ -4342,7 +4305,7 @@ msgstr ""
 
 #: /src/schooltool/contact/security.zcml:36
 msgid "Manage user's contacts"
-msgstr "Spravovat uživatelovy kontakty"
+msgstr ""
 
 #: /src/schooltool/contact/security.zcml:46
 msgid "Create/Delete an external contact"
@@ -4354,46 +4317,46 @@ msgstr ""
 
 #: /src/schooltool/contact/security.zcml:62
 msgid "Modify an external contact"
-msgstr "Upravit externí kontakt"
+msgstr ""
 
 #: /src/schooltool/contact/security.zcml:70
 msgid "View user's contact information"
-msgstr "Zobrazit uživatelovy kontaktní informace"
+msgstr "Pogledajte korisnikove kontakt informacije"
 
 #: /src/schooltool/contact/security.zcml:78
 msgid "Modify user's contact information"
-msgstr "Upravit uživatelovy kontaktní informace"
+msgstr "Modificiranje kontaktovih korisničkih informacija"
 
 #: /src/schooltool/contact/security.zcml:86
 #: /src/schooltool/person/security.zcml:147
 msgid "The user himself."
-msgstr "Vlastní uživatel"
+msgstr ""
 
 #: /src/schooltool/course/browser/configure.zcml:10
 msgid "Add a Course"
-msgstr "Přidat kurz"
+msgstr ""
 
 #: /src/schooltool/course/browser/configure.zcml:25
 msgid "Edit Course Information"
-msgstr ""
+msgstr "Uredi tečajevne informacije"
 
 #: /src/schooltool/course/browser/configure.zcml:85
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:21
 msgid "Import Courses"
-msgstr "Importovat kurzy"
+msgstr ""
 
 #: /src/schooltool/course/browser/configure.zcml:96
 msgid "New Course"
-msgstr "Nový kurz"
+msgstr "Novi tečaj"
 
 #: /src/schooltool/course/browser/configure.zcml:183
 #: /src/schooltool/course/browser/configure.zcml:193
 msgid "New Section"
-msgstr "Nová sekce"
+msgstr "Nova sekcija"
 
 #: /src/schooltool/course/browser/configure.zcml:203
 msgid "Edit Section Information"
-msgstr "Upravit informace o sekci"
+msgstr "Uredi informacije sekcije"
 
 #: /src/schooltool/course/browser/configure.zcml:217
 #: /src/schooltool/course/browser/section-member-csvimport.pt:21
@@ -4409,7 +4372,7 @@ msgstr ""
 #: /src/schooltool/course/security.zcml:108
 #: /src/schooltool/dashboard/term.pt:10
 msgid "Sections"
-msgstr "Sekce"
+msgstr ""
 
 #: /src/schooltool/course/browser/configure.zcml:299
 msgid "Copy from prev. term"
@@ -4417,7 +4380,7 @@ msgstr ""
 
 #: /src/schooltool/course/browser/course.py:99
 msgid "Course index"
-msgstr "Seznam kurzů"
+msgstr ""
 
 #: /src/schooltool/course/browser/course.py:368
 msgid "Delete ${course}"
@@ -4451,7 +4414,7 @@ msgstr ""
 #: /src/schooltool/group/browser/csvimport.py:54
 #: /src/schooltool/resource/browser/csvimport.py:54
 msgid "Titles may not be empty"
-msgstr "Názvy nemohou být prázdné"
+msgstr "Naslovi ne mogu biti prazni"
 
 #: /src/schooltool/course/browser/csvimport.py:88
 msgid ""
@@ -4467,12 +4430,12 @@ msgstr ""
 #: /src/schooltool/course/browser/csvimport.py:171
 #: /src/schooltool/group/browser/csvimport.py:111
 msgid "User names must not be empty."
-msgstr "Uživatelská jména nesmí být prázdná"
+msgstr ""
 
 #: /src/schooltool/course/browser/csvimport.py:178
 #: /src/schooltool/group/browser/csvimport.py:119
 msgid "\"${username}\" is not a valid username."
-msgstr "\"${username}\" není platné uživatelské jméno."
+msgstr ""
 
 #: /src/schooltool/course/browser/flourish.zcml:98
 #: /src/schooltool/course/browser/flourish.zcml:107
@@ -4499,7 +4462,7 @@ msgstr ""
 #: /src/schooltool/course/browser/templates/unlink_section.pt:13
 #: /src/schooltool/course/browser/templates/unlink_section.pt:28
 msgid "Section"
-msgstr "Sekce"
+msgstr ""
 
 #: /src/schooltool/course/browser/flourish.zcml:200
 msgid "Add Course"
@@ -4522,7 +4485,7 @@ msgstr ""
 #: /src/schooltool/resource/resource.py:232
 #: /src/schooltool/resource/types.py:93
 msgid "Equipment"
-msgstr "Vybavení"
+msgstr ""
 
 #: /src/schooltool/course/browser/flourish.zcml:419
 #: /src/schooltool/course/browser/templates/f_section_view.pt:90
@@ -4531,7 +4494,7 @@ msgstr "Vybavení"
 #: /src/schooltool/term/browser/term.py:764
 #: /src/schooltool/term/security.zcml:19
 msgid "Terms"
-msgstr "Pravidla"
+msgstr ""
 
 #: /src/schooltool/course/browser/flourish.zcml:467
 msgid "Import Students CSV"
@@ -4543,19 +4506,19 @@ msgstr ""
 
 #: /src/schooltool/course/browser/section-member-csvimport.pt:4
 msgid "Upload SchoolTool section members as CSV"
-msgstr ""
+msgstr "Učitaj SchoolTool članove sekcije za CSV"
 
 #: /src/schooltool/course/browser/section.py:208
 msgid "No section selected."
-msgstr "Není vybrána žádná sekce"
+msgstr "Nema odabranih sekcija"
 
 #: /src/schooltool/course/browser/section.py:409
 msgid "Starts in term"
-msgstr "Začíná v termíně"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:410
 msgid "Ends in term"
-msgstr "Končí v termíně"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:452
 msgid "Starting term ($starts_in) is later than ending term ($ends_in)"
@@ -4563,19 +4526,19 @@ msgstr ""
 
 #: /src/schooltool/course/browser/section.py:556
 msgid "Current Instructors"
-msgstr "Aktuální přednášející"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:557
 msgid "Available Instructors"
-msgstr "Dostupní přednášející"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:572
 msgid "Current Students"
-msgstr "Aktuální studenti"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:573
 msgid "Available Students"
-msgstr "Dostupní studenti"
+msgstr "Dostupni studenti"
 
 #: /src/schooltool/course/browser/section.py:934
 msgid "Delete ${section}"
@@ -4592,11 +4555,11 @@ msgstr ""
 #: /src/schooltool/course/browser/templates/unlink_section.pt:29
 #: /src/schooltool/term/browser/templates/f_manage_years_overview.pt:29
 msgid "Term"
-msgstr "Pravidlo"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:998
 msgid "Size"
-msgstr "Velikost"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:1024
 #: /src/schooltool/course/browser/templates/f_section_filter.pt:6
@@ -4614,7 +4577,7 @@ msgstr ""
 
 #: /src/schooltool/course/browser/section.py:1232
 msgid "Select a course"
-msgstr ""
+msgstr "Odaberi tečaj"
 
 #: /src/schooltool/course/browser/section.py:1309
 msgid "Current instructors"
@@ -4630,23 +4593,23 @@ msgstr ""
 
 #: /src/schooltool/course/browser/section.py:1330
 msgid "Add students"
-msgstr ""
+msgstr "Dodaj studenta"
 
 #: /src/schooltool/course/browser/section.py:1380
 msgid "Current locations"
-msgstr ""
+msgstr "Trenutne lokacije"
 
 #: /src/schooltool/course/browser/section.py:1381
 msgid "Add locations"
-msgstr ""
+msgstr "Dodaj lokaciju"
 
 #: /src/schooltool/course/browser/section.py:1404
 msgid "Current equipment"
-msgstr ""
+msgstr "Trenutna oprema"
 
 #: /src/schooltool/course/browser/section.py:1405
 msgid "Add equipment"
-msgstr ""
+msgstr "Dodaj opremu"
 
 #: /src/schooltool/course/browser/section.py:1469
 msgid "Extend ${section} to ${term}"
@@ -4694,11 +4657,11 @@ msgstr ""
 #: /src/schooltool/course/browser/templates/link_section.pt:72
 #: /src/schooltool/course/browser/templates/section_container.pt:45
 msgid "Current Size"
-msgstr "Aktuální velikost"
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/copy_sections.pt:103
 msgid "Copied"
-msgstr "Zkopírováno"
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/copy_sections.pt:149
 msgid "Copy"
@@ -4706,7 +4669,7 @@ msgstr ""
 
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:4
 msgid "Upload schooltool courses as CSV"
-msgstr "Nahrát do SchoolToolu kurzy ve formátu CSV"
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:24
 #: /src/schooltool/course/browser/templates/f_course_csvimport_description.pt:3
@@ -4752,22 +4715,22 @@ msgstr ""
 #: /src/schooltool/person/browser/home.pt:20
 #: /src/schooltool/person/browser/person.pt:11
 msgid "photo"
-msgstr "foto"
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/course.pt:71
 msgid "students"
-msgstr "studenti"
+msgstr "Studenti"
 
 #: /src/schooltool/course/browser/templates/course_edit.pt:22
 #: /src/schooltool/course/browser/templates/section_edit.pt:23
 #: /src/schooltool/skin/templates/simple_add.pt:28
 #: /src/schooltool/skin/templates/simple_edit.pt:29
 msgid "There are ${num_errors} input errors."
-msgstr "Vstupních chyb: ${num_errors}."
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/coursesviewlet.pt:7
 msgid "Sections Taught"
-msgstr "Vyučované sekce"
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/coursesviewlet.pt:37
 msgid "Sections Attended"
@@ -5065,11 +5028,11 @@ msgstr ""
 
 #: /src/schooltool/course/browser/templates/section.pt:35
 msgid "Change the name or description of this section."
-msgstr "Změnit jméno nebo popis této sekce."
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/section.pt:35
 msgid "edit info"
-msgstr "upravit info"
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/section.pt:46
 #: /src/schooltool/course/browser/templates/section_edit.pt:60
@@ -5084,19 +5047,19 @@ msgstr ""
 
 #: /src/schooltool/course/browser/templates/section.pt:65
 msgid "Change the instructors for this section."
-msgstr "Změnit přednášející pro tuto sekci."
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/section.pt:65
 msgid "edit instructors"
-msgstr "upravit přednášející"
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/section.pt:80
 msgid "Change the students in this section individually"
-msgstr "Postupně změní studenty v této sekci"
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/section.pt:80
 msgid "edit individuals"
-msgstr "upravit jednotlivě"
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/section_container.pt:9
 #: /src/schooltool/course/browser/templates/section_container.pt:20
@@ -5105,7 +5068,7 @@ msgstr ""
 
 #: /src/schooltool/course/browser/templates/section_edit.pt:63
 msgid "Previous"
-msgstr "Předchozí"
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/section_edit.pt:64
 msgid "Section in the previous term."
@@ -5137,7 +5100,7 @@ msgstr ""
 #: /src/schooltool/timetable/browser/templates/ttwizard_period_order2.pt:39
 #: /src/schooltool/timetable/browser/templates/ttwizard_slottimes.pt:32
 msgid "Next"
-msgstr "Další"
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/section_edit.pt:98
 msgid "Section in the next term."
@@ -5182,15 +5145,13 @@ msgstr ""
 
 #: /src/schooltool/course/interfaces.py:89
 msgid "Label"
-msgstr "Popisek"
+msgstr ""
 
 #: /src/schooltool/course/interfaces.py:84
 msgid ""
 "An identifier for a section, made up of instructor\n"
 "            names, courses, and meeting time."
 msgstr ""
-"Identifikátor sekce, vytvořený učitelem\n"
-"            jména, kurzy a čas setkání."
 
 #: /src/schooltool/course/interfaces.py:130
 msgid "An internal identifier of this section."
@@ -5198,7 +5159,7 @@ msgstr ""
 
 #: /src/schooltool/course/section.py:89
 msgid "${instructors} -- ${section_title}"
-msgstr "${instructors} -- ${section_title}"
+msgstr ""
 
 #: /src/schooltool/course/section.py:126
 msgid "Cannot assign section as previous to itself"
@@ -5282,7 +5243,7 @@ msgstr ""
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:61
 #: /src/schooltool/timetable/security.zcml:59
 msgid "Modify"
-msgstr "Upravit"
+msgstr ""
 
 #: /src/schooltool/course/security.zcml:108
 msgid ""
@@ -5292,41 +5253,41 @@ msgstr ""
 
 #: /src/schooltool/dashboard/configure.zcml:41
 msgid "My Sections"
-msgstr "Moje sekce"
+msgstr ""
 
 #: /src/schooltool/dashboard/dashboard.pt:62
 #: /src/schooltool/dashboard/dashboard.pt:66
 msgid "Dashboard"
-msgstr "Nástěnka"
+msgstr ""
 
 #: /src/schooltool/dashboard/interfaces.py:45
 msgid "Category Title."
-msgstr "Název kategorie."
+msgstr ""
 
 #: /src/schooltool/dashboard/interfaces.py:49
 #: /src/schooltool/dashboard/interfaces.py:50
 msgid "Weight"
-msgstr "Váha"
+msgstr ""
 
 #: /src/schooltool/dashboard/school.pt:10
 msgid "Activity Categories"
-msgstr "Kategorie aktivit"
+msgstr ""
 
 #: /src/schooltool/dashboard/school.pt:16
 #: /src/schooltool/timetable/browser/app.py:84
 #: /src/schooltool/timetable/browser/flourish.zcml:29
 #: /src/schooltool/timetable/browser/templates/link_to_school_timetables.pt:1
 msgid "School Timetables"
-msgstr "Školní rozvrhy"
+msgstr ""
 
 #: /src/schooltool/devmode/configure.zcml:52
 #: /src/schooltool/devmode/devmode.pt:20
 msgid "Sample data"
-msgstr "Vzorová data"
+msgstr ""
 
 #: /src/schooltool/devmode/devmode.pt:11
 msgid "Developer Tools"
-msgstr "Vývojové nástroje"
+msgstr ""
 
 #: /src/schooltool/devmode/devmode.pt:18
 msgid "Introspector"
@@ -5334,7 +5295,7 @@ msgstr ""
 
 #: /src/schooltool/devmode/devmode.pt:19
 msgid "API Docs"
-msgstr "Dokumenty API"
+msgstr ""
 
 #: /src/schooltool/devmode/f_unauthorized.pt:3
 #: /src/schooltool/skin/templates/f_unauthorized.pt:3
@@ -5609,6 +5570,10 @@ msgstr ""
 
 #: /src/schooltool/email/interfaces.py:45
 msgid "Recipient address"
+msgstr ""
+
+#: /src/schooltool/email/interfaces.py:58
+msgid "Status"
 msgstr ""
 
 #: /src/schooltool/email/interfaces.py:59
@@ -5909,24 +5874,24 @@ msgstr ""
 
 #: /src/schooltool/group/browser/configure.zcml:23
 msgid "Add a Group"
-msgstr "Přidat skupinu"
+msgstr ""
 
 #: /src/schooltool/group/browser/configure.zcml:36
 msgid "Edit Group Information"
-msgstr "Upravit informace o skupině"
+msgstr ""
 
 #: /src/schooltool/group/browser/configure.zcml:76
 msgid "New Group"
-msgstr "Nová skupina"
+msgstr ""
 
 #: /src/schooltool/group/browser/configure.zcml:91
 msgid "Add/Remove Members"
-msgstr "Přidat/Odebrat členy"
+msgstr ""
 
 #: /src/schooltool/group/browser/configure.zcml:100
 #: /src/schooltool/group/browser/templates/group-csvimport.pt:21
 msgid "Import Groups"
-msgstr "Importovat skupiny"
+msgstr ""
 
 #: /src/schooltool/group/browser/configure.zcml:110
 msgid "Import Groups Members"
@@ -5948,7 +5913,7 @@ msgstr ""
 
 #: /src/schooltool/group/browser/group.py:98
 msgid "Group index"
-msgstr "Seznam skupin"
+msgstr ""
 
 #: /src/schooltool/group/browser/group.py:114
 msgid "Groups of ${person}"
@@ -5956,25 +5921,25 @@ msgstr ""
 
 #: /src/schooltool/group/browser/group.py:115
 msgid "Current Groups"
-msgstr "Aktuální skupiny"
+msgstr ""
 
 #: /src/schooltool/group/browser/group.py:116
 msgid "Available Groups"
-msgstr "Dostupné skupiny"
+msgstr ""
 
 #: /src/schooltool/group/browser/group.py:161
 msgid "Members of ${group}"
-msgstr "Členové skupiny ${group}"
+msgstr ""
 
 #: /src/schooltool/group/browser/group.py:162
 #: /src/schooltool/group/browser/group.py:717
 msgid "Current Members"
-msgstr "Aktuální členové"
+msgstr ""
 
 #: /src/schooltool/group/browser/group.py:163
 #: /src/schooltool/group/browser/group.py:718
 msgid "Add Members"
-msgstr "Přidat členy"
+msgstr ""
 
 #: /src/schooltool/group/browser/group.py:290
 msgid "Current groups"
@@ -6016,9 +5981,6 @@ msgid ""
 "<strong>may</strong> include an optional group description. Any extra "
 "information will be discarded."
 msgstr ""
-"CSV data <strong>musí</strong> obsahovat název skupiny a "
-"<strong>mohou</strong> obsahovat volitelný popis skupiny. Všechny další "
-"informace budou zahozeny."
 
 #. Default: "LUG, Linux Users Group Chess Club Sports Club, After-school sports club, <em>text after a second comma</em>"
 #: /src/schooltool/group/browser/templates/f_group_csvimport_description.pt:11
@@ -6029,10 +5991,6 @@ msgid ""
 "Chess Club\n"
 "Sports Club, After-school sports club, <em>text after a second comma</em>\n"
 msgstr ""
-"\n"
-"LUG, Sdružení uživatelů Linuxu\n"
-"Šachový kroužek\n"
-"Sportovní klub, Mimoškolní sportovní klub, <em>text za druhou čárkou</em>\n"
 
 #: /src/schooltool/group/browser/templates/f_group_csvimport_description.pt:17
 #: /src/schooltool/group/browser/templates/group-csvimport.pt:36
@@ -6043,11 +6001,6 @@ msgid ""
 "group will have no description, and the extra \"text after a second comma\" "
 "text on the third group will be ignored."
 msgstr ""
-"Předchozí příklad vytvoří tři skupiny nazvané 'LUG', 'Šachový kroužek' a "
-"'Sportovní klub'. První a poslední skupina budou mít popisy 'Sdružení "
-"uživatelů Linuxu' resp. 'Mimoškolní sportovní klub'. 'Šachový kroužek' "
-"nebude mít žádný popis a nadbytečný text \"text za druhou čárkou\" u třetí "
-"skupiny bude ignorován."
 
 #: /src/schooltool/group/browser/templates/f_group_member_csvimport_description.pt:12
 msgid ""
@@ -6085,7 +6038,7 @@ msgstr ""
 #: /src/schooltool/group/browser/templates/f_groupsviewlet.pt:6
 #: /src/schooltool/group/browser/templates/groupsviewlet.pt:23
 msgid "Manage this person's memberships"
-msgstr "Spravovat členství tohoto uživatele"
+msgstr ""
 
 #: /src/schooltool/group/browser/templates/f_groupsviewlet.pt:39
 msgid "The person is not a member of any groups."
@@ -6101,7 +6054,7 @@ msgstr ""
 
 #: /src/schooltool/group/browser/templates/group-csvimport.pt:4
 msgid "Upload SchoolTool groups as CSV"
-msgstr "Nahrát do SchoolToolu skupiny ve formátu CSV"
+msgstr ""
 
 #: /src/schooltool/group/browser/templates/group-member-csvimport.pt:4
 msgid "Upload SchoolTool group members as CSV"
@@ -6113,15 +6066,15 @@ msgstr ""
 
 #: /src/schooltool/group/browser/templates/group.pt:20
 msgid "Change the people who are members of this group."
-msgstr "Změnit každého člena této skupiny."
+msgstr ""
 
 #: /src/schooltool/group/browser/templates/group.pt:20
 msgid "edit members"
-msgstr "upravit členy"
+msgstr ""
 
 #: /src/schooltool/group/browser/templates/groupsviewlet.pt:23
 msgid "edit groups"
-msgstr "upravit skupiny"
+msgstr ""
 
 #: /src/schooltool/group/group.py:63
 msgid "Site Managers"
@@ -6190,6 +6143,10 @@ msgstr ""
 msgid "Grade Levels"
 msgstr ""
 
+#: /src/schooltool/level/browser/flourish.zcml:62
+msgid "Level"
+msgstr ""
+
 #: /src/schooltool/level/browser/flourish.zcml:82
 msgid "Add new level"
 msgstr ""
@@ -6243,49 +6200,49 @@ msgstr ""
 
 #: /src/schooltool/note/configure.zcml:68
 msgid "New Note"
-msgstr "Nová poznámka"
+msgstr ""
 
 #: /src/schooltool/note/interfaces.py:43
 msgid "Title of the note."
-msgstr "Název poznámky."
+msgstr ""
 
 #: /src/schooltool/note/interfaces.py:47
 msgid "Body of the note."
-msgstr "Text poznámky."
+msgstr ""
 
 #: /src/schooltool/note/interfaces.py:50
 #: /src/schooltool/note/note_add.pt:24
 msgid "Privacy"
-msgstr "Soukromí"
+msgstr ""
 
 #: /src/schooltool/note/note_add.pt:4
 msgid "Add note"
-msgstr "Přidat poznámku"
+msgstr ""
 
 #: /src/schooltool/note/note_add.pt:13
 msgid "Note"
-msgstr "Poznámka"
+msgstr ""
 
 #: /src/schooltool/note/note_add.pt:24
 msgid "Who can view the note"
-msgstr "Kdo může prohlížet tuto poznámku"
+msgstr ""
 
 #: /src/schooltool/note/note_add.pt:30
 msgid "Private"
-msgstr "Soukromé"
+msgstr ""
 
 #: /src/schooltool/note/note_add.pt:31
 msgid "Public"
-msgstr "Veřejné"
+msgstr ""
 
 #: /src/schooltool/note/notes.pt:2
 #: /src/schooltool/resource/interfaces.py:57
 msgid "Notes"
-msgstr "Poznámky"
+msgstr ""
 
 #: /src/schooltool/note/notes.pt:8
 msgid "( p )"
-msgstr "( p )"
+msgstr ""
 
 #: /src/schooltool/person/browser/configure.zcml:93
 msgid "Edit Preferences"
@@ -6297,7 +6254,7 @@ msgstr ""
 
 #: /src/schooltool/person/browser/csvimport.py:51
 msgid "fullname may not be empty"
-msgstr "celé jméno nemůže být prázdné"
+msgstr ""
 
 #: /src/schooltool/person/browser/f_password_changed.pt:1
 #: /src/schooltool/person/browser/person.py:362
@@ -6319,7 +6276,7 @@ msgstr ""
 #: /src/schooltool/person/browser/f_person_filter.pt:26
 #: /src/schooltool/person/browser/person_filter.pt:5
 msgid "All groups"
-msgstr "Všechny skupiny"
+msgstr ""
 
 #: /src/schooltool/person/browser/flourish.zcml:7
 msgid "Preferences"
@@ -6328,25 +6285,23 @@ msgstr ""
 #: /src/schooltool/person/browser/home.pt:24
 #: /src/schooltool/person/browser/person.pt:15
 msgid "Username:"
-msgstr "Uživatelské jméno:"
+msgstr ""
 
 #: /src/schooltool/person/browser/home.pt:27
 #: /src/schooltool/person/browser/person.pt:18
 msgid "Change this person's name, picture, or password"
-msgstr "Změnit jméno osoby, obrázek, nebo heslo"
+msgstr ""
 
 #: /src/schooltool/person/browser/home.pt:27
 #: /src/schooltool/person/browser/person.pt:18
 msgid "edit name"
-msgstr "upravit jméno"
+msgstr ""
 
 #: /src/schooltool/person/browser/person-csvimport.pt:29
 msgid ""
 "CSV data <strong>must</strong> contain a user name and a full name. An "
 "optional password <strong>may</strong> be included as well."
 msgstr ""
-"CSV data <strong>musí</strong> obsahovat uživatelské a celé jméno. Volitelně "
-"<strong>může</strong> být zadáno i heslo."
 
 #. Default: "jjones, Jimmy Jones jbjones, Jim Bob Jones, r2m45J howard, Howard"
 #: /src/schooltool/person/browser/person-csvimport.pt:35
@@ -6356,14 +6311,10 @@ msgid ""
 "jbjones, Jim Bob Jones, r2m45J\n"
 "howard, Howard\n"
 msgstr ""
-"\n"
-"vsklenar, Vladimír Sklenář\n"
-"mck, Miroslav Chicky Kuře, r2m45J\n"
-"novak, Novák\n"
 
 #: /src/schooltool/person/browser/person.py:92
 msgid "Show periods"
-msgstr "Zobrazit období"
+msgstr ""
 
 #: /src/schooltool/person/browser/person.py:93
 msgid "Show hours"
@@ -6397,7 +6348,7 @@ msgstr ""
 #: /src/schooltool/person/browser/person.py:301
 #: /src/schooltool/person/browser/person.py:601
 msgid "New password"
-msgstr "Nové heslo"
+msgstr ""
 
 #: /src/schooltool/person/browser/person.py:305
 msgid "Verify new password"
@@ -6405,7 +6356,7 @@ msgstr ""
 
 #: /src/schooltool/person/browser/person.py:311
 msgid "Edit password"
-msgstr "Upravit heslo"
+msgstr ""
 
 #: /src/schooltool/person/browser/person.py:391
 #: /src/schooltool/person/security.zcml:101
@@ -6420,102 +6371,102 @@ msgstr ""
 #: /src/schooltool/person/browser/person.py:596
 #: /src/schooltool/person/interfaces.py:51
 msgid "Full name"
-msgstr "Celé jméno"
+msgstr ""
 
 #: /src/schooltool/person/browser/person.py:508
 #: /src/schooltool/person/browser/person.py:597
 #: /src/schooltool/person/interfaces.py:52
 msgid "Name that should be displayed"
-msgstr "Jméno, které se má zobrazovat"
+msgstr ""
 
 #: /src/schooltool/person/browser/person.py:509
 #: /src/schooltool/person/browser/person.py:605
 msgid "Verify password"
-msgstr "Ověřit heslo"
+msgstr ""
 
 #: /src/schooltool/person/browser/person.py:613
 msgid "Photo (in JPEG format)"
-msgstr "Fotofrafie (ve formátu JPEG)"
+msgstr ""
 
 #: /src/schooltool/person/browser/person.py:546
 msgid "Passwords do not match!"
-msgstr "Hesla nesouhlasí!"
+msgstr ""
 
 #: /src/schooltool/person/browser/person.py:549
 msgid "This username is already used!"
-msgstr "Toto uživatelské jméno se již používá!"
+msgstr ""
 
 #: /src/schooltool/person/browser/person.py:600
 msgid "New photo"
-msgstr "Nová fotografie"
+msgstr ""
 
 #: /src/schooltool/person/browser/person.py:592
 msgid "A small picture (about 48x48 pixels in JPEG format)"
-msgstr "Malý obrázek (48x48 pixelů ve formátu JPEG)"
+msgstr ""
 
 #: /src/schooltool/person/browser/person.py:596
 msgid "Clear photo"
-msgstr "Odstranit fotografii"
+msgstr ""
 
 #: /src/schooltool/person/browser/person.py:598
 msgid "Check this to clear the photo"
-msgstr "Pro vymazání fotografie tuto položku zaškrtněte"
+msgstr ""
 
 #: /src/schooltool/person/browser/person.py:634
 msgid "Passwords do not match."
-msgstr "Hesla nesouhlasí."
+msgstr ""
 
 #: /src/schooltool/person/browser/person.py:638
 msgid "Password was successfully changed!"
-msgstr "Heslo bylo úspěšně změněno!"
+msgstr ""
 
 #: /src/schooltool/person/browser/person_edit.pt:4
 msgid "Edit person"
-msgstr "Upravit osobu"
+msgstr ""
 
 #: /src/schooltool/person/browser/person_edit.pt:20
 msgid "Change info for ${user}"
-msgstr "Změnit informace o ${user}"
+msgstr ""
 
 #: /src/schooltool/person/browser/person_preferences.pt:3
 msgid "Edit person preferences"
-msgstr "Upravit nastavení uživatele"
+msgstr ""
 
 #: /src/schooltool/person/interfaces.py:158
 msgid "Time Zone"
-msgstr "Časové pásmo"
+msgstr ""
 
 #: /src/schooltool/person/interfaces.py:162
 msgid "Time Format"
-msgstr "Formát času"
+msgstr ""
 
 #: /src/schooltool/person/interfaces.py:163
 msgid "HH:MM"
-msgstr "HH:MM"
+msgstr ""
 
 #: /src/schooltool/person/interfaces.py:164
 msgid "HH:MM am/pm"
-msgstr "HH:MM dop/odp"
+msgstr ""
 
 #: /src/schooltool/person/interfaces.py:167
 msgid "Date Format"
-msgstr "Formát data"
+msgstr ""
 
 #: /src/schooltool/person/interfaces.py:168
 msgid "MM/DD/YY"
-msgstr "MM/DD/RR"
+msgstr ""
 
 #: /src/schooltool/person/interfaces.py:169
 msgid "YYYY-MM-DD"
-msgstr "RRRR-MM-DD"
+msgstr ""
 
 #: /src/schooltool/person/interfaces.py:170
 msgid "Day Month, Year"
-msgstr "Den Měsíc, Rok"
+msgstr ""
 
 #: /src/schooltool/person/interfaces.py:174
 msgid "Week starts on"
-msgstr "Počáteční den týdne"
+msgstr ""
 
 #: /src/schooltool/person/interfaces.py:188
 msgid "Daily calendar rows..."
@@ -6595,7 +6546,7 @@ msgstr ""
 #: /src/schooltool/report/browser/flourish.zcml:75
 #: /src/schooltool/report/browser/report.py:82
 msgid "Reports"
-msgstr "Výkazy"
+msgstr ""
 
 #: /src/schooltool/report/browser/flourish.zcml:25
 msgid "Overview"
@@ -6632,7 +6583,7 @@ msgstr ""
 #: /src/schooltool/report/browser/templates/f_report_reference.pt:5
 #: /src/schooltool/report/browser/templates/report_reference.pt:13
 msgid "Category"
-msgstr "Kategorie"
+msgstr ""
 
 #: /src/schooltool/report/browser/templates/f_report_reference.pt:7
 #: /src/schooltool/report/browser/templates/f_request_report_download.pt:11
@@ -6655,19 +6606,19 @@ msgstr ""
 #: /src/schooltool/resource/browser/configure.zcml:143
 #: /src/schooltool/resource/browser/resource-csvimport.pt:21
 msgid "Import Resources"
-msgstr "Importovat zdroje"
+msgstr ""
 
 #: /src/schooltool/resource/browser/configure.zcml:286
 msgid "New Resource"
-msgstr "Nový prostředek"
+msgstr ""
 
 #: /src/schooltool/resource/browser/configure.zcml:300
 msgid "New Location"
-msgstr "Nové umístění"
+msgstr ""
 
 #: /src/schooltool/resource/browser/configure.zcml:314
 msgid "New Equipment"
-msgstr "Nové vybavení"
+msgstr ""
 
 #: /src/schooltool/resource/browser/flourish.zcml:20
 #: /src/schooltool/resource/browser/flourish.zcml:29
@@ -6684,7 +6635,7 @@ msgstr ""
 #: /src/schooltool/resource/resource.py:230
 #: /src/schooltool/resource/types.py:55
 msgid "Resource"
-msgstr "Zdroj"
+msgstr ""
 
 #: /src/schooltool/resource/browser/flourish.zcml:138
 msgid "Add Resource"
@@ -6704,7 +6655,7 @@ msgstr ""
 
 #: /src/schooltool/resource/browser/resource-csvimport.pt:4
 msgid "Upload schooltool resources as CSV"
-msgstr "Nahrát do SchoolToolu zdroje ve formátu CSV"
+msgstr ""
 
 #: /src/schooltool/resource/browser/resource-csvimport.pt:24
 #: /src/schooltool/resource/browser/templates/f_resource_csvimport_description.pt:2
@@ -6713,9 +6664,6 @@ msgid ""
 "<strong>may</strong> include an optional resource description. Any extra "
 "information will be discarded."
 msgstr ""
-"CSV data <strong>musí</strong> obsahovat název zdroje a "
-"<strong>mohou</strong> obsahovat volitelný popis zdroje. Všechny další "
-"informace budou zahozeny."
 
 #. Default: "PRJ302, Overhead Projector #302 Main Auditorium,,location LC-805, Laptop Computer #805"
 #: /src/schooltool/resource/browser/resource-csvimport.pt:31
@@ -6739,7 +6687,7 @@ msgstr ""
 
 #: /src/schooltool/resource/browser/resource.py:90
 msgid "Resource index"
-msgstr "Seznam zdrojů"
+msgstr ""
 
 #: /src/schooltool/resource/browser/resource.py:399
 msgid "Resource Demographics Container"
@@ -6905,76 +6853,76 @@ msgstr ""
 
 #: /src/schooltool/resource/interfaces.py:48
 msgid "Type of resource"
-msgstr "Typ prostředku"
+msgstr ""
 
 #: /src/schooltool/resource/interfaces.py:59
 msgid "Notes for the resource."
-msgstr "Poznámky k prostředku."
+msgstr ""
 
 #: /src/schooltool/resource/interfaces.py:82
 msgid "Location Type"
-msgstr "Typ umístění"
+msgstr ""
 
 #: /src/schooltool/resource/interfaces.py:83
 msgid "Type of location (i.e. computer lab, class room, etc.)"
-msgstr "Typ umístění (např. počítačová laboratoř, učebna, apod.)"
+msgstr ""
 
 #: /src/schooltool/resource/interfaces.py:88
 #: /src/schooltool/resource/types.py:83
 msgid "Capacity"
-msgstr "Kapacita"
+msgstr ""
 
 #: /src/schooltool/resource/interfaces.py:89
 msgid "Capacity of the room"
-msgstr "Kapacita místnosti"
+msgstr ""
 
 #: /src/schooltool/resource/interfaces.py:97
 msgid "Equipment Type"
-msgstr "Typ vybavení"
+msgstr ""
 
 #: /src/schooltool/resource/interfaces.py:98
 msgid "Type of equipment (i.e. camcorder, computer, etc.)"
-msgstr "Typ vybavení (např. kamera, počítač, atd.)"
+msgstr ""
 
 #: /src/schooltool/resource/interfaces.py:102
 #: /src/schooltool/resource/types.py:113
 msgid "Manufacturer"
-msgstr "Výrobce"
+msgstr ""
 
 #: /src/schooltool/resource/interfaces.py:103
 msgid "Manufacturer of Equipment"
-msgstr "Výrobce vybavení"
+msgstr ""
 
 #: /src/schooltool/resource/interfaces.py:107
 #: /src/schooltool/resource/types.py:119
 msgid "Model"
-msgstr "Model"
+msgstr ""
 
 #: /src/schooltool/resource/interfaces.py:108
 msgid "Model of Equipment"
-msgstr "Model vybavení"
+msgstr ""
 
 #: /src/schooltool/resource/interfaces.py:112
 #: /src/schooltool/resource/types.py:125
 msgid "Serial Number"
-msgstr "Sériové číslo"
+msgstr ""
 
 #: /src/schooltool/resource/interfaces.py:113
 msgid "Serial Number of Equipment"
-msgstr "Sériové číslo vybavení"
+msgstr ""
 
 #: /src/schooltool/resource/interfaces.py:117
 #: /src/schooltool/resource/types.py:131
 msgid "Purchase Date"
-msgstr "Datum pořízení"
+msgstr ""
 
 #: /src/schooltool/resource/interfaces.py:118
 msgid "Purchase Date of Equipment"
-msgstr "Datum pořízení vybavení"
+msgstr ""
 
 #: /src/schooltool/resource/interfaces.py:125
 msgid "Id of the resource type."
-msgstr "Id typu prostředku."
+msgstr ""
 
 #: /src/schooltool/resource/interfaces.py:126
 msgid ""
@@ -6985,7 +6933,7 @@ msgstr ""
 #: /src/schooltool/resource/interfaces.py:130
 #: /src/schooltool/resource/interfaces.py:138
 msgid "The title of a resource type."
-msgstr "Název typu prostředku."
+msgstr ""
 
 #: /src/schooltool/resource/interfaces.py:131
 #: /src/schooltool/resource/interfaces.py:139
@@ -7060,7 +7008,7 @@ msgstr ""
 #: /src/schooltool/sampledata/sampledata.pt:3
 #: /src/schooltool/sampledata/sampledata.pt:9
 msgid "Sample Data Generation"
-msgstr "Generování vzorových dat"
+msgstr ""
 
 #: /src/schooltool/sampledata/sampledata.pt:14
 msgid ""
@@ -7082,15 +7030,15 @@ msgstr ""
 
 #: /src/schooltool/sampledata/sampledata.pt:42
 msgid "Plugins"
-msgstr "Zásuvné moduly"
+msgstr ""
 
 #: /src/schooltool/sampledata/sampledata.pt:71
 msgid "View Dependencies"
-msgstr "Prohlížet závislosti"
+msgstr ""
 
 #: /src/schooltool/sampledata/sampledata.pt:80
 msgid "Generate"
-msgstr "Vygenerovat"
+msgstr ""
 
 #: /src/schooltool/schoolyear/browser/configure.zcml:26
 #: /src/schooltool/schoolyear/browser/flourish.zcml:13
@@ -7260,7 +7208,7 @@ msgstr ""
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear.pt:49
 msgid "Add a new term"
-msgstr "přidat nové pravidlo"
+msgstr ""
 
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_add.pt:40
 msgid "All Courses"
@@ -7310,7 +7258,7 @@ msgstr ""
 #: /src/schooltool/securitypolicy/browser/templates/access_control.pt:4
 #: /src/schooltool/securitypolicy/browser/templates/access_control.pt:12
 msgid "Access Control"
-msgstr "Řízení přístupu"
+msgstr ""
 
 #: /src/schooltool/securitypolicy/browser/control.py:106
 msgid "School administration"
@@ -7333,6 +7281,11 @@ msgstr ""
 
 #: /src/schooltool/securitypolicy/browser/templates/f_security_descriptions.pt:4
 msgid "Edit the access rights"
+msgstr ""
+
+#: /src/schooltool/securitypolicy/browser/templates/f_security_descriptions.pt:48
+#: /src/schooltool/securitypolicy/browser/templates/security_descriptions.pt:56
+msgid "Legend"
 msgstr ""
 
 #: /src/schooltool/securitypolicy/browser/templates/security_descriptions.pt:9
@@ -7385,11 +7338,11 @@ msgstr ""
 
 #: /src/schooltool/securitypolicy/browser/views.py:67
 msgid "Gradebook"
-msgstr "Třídní kniha"
+msgstr ""
 
 #: /src/schooltool/securitypolicy/browser/views.py:68
 msgid "Journal"
-msgstr "Deník"
+msgstr ""
 
 #: /src/schooltool/securitypolicy/crowds.py:199
 msgid "Everybody"
@@ -7425,23 +7378,23 @@ msgstr ""
 
 #: /src/schooltool/securitypolicy/interfaces.py:111
 msgid "Title of the group."
-msgstr "Název skupiny."
+msgstr ""
 
 #: /src/schooltool/skin/breadcrumbs.py:76
 msgid "top"
-msgstr "vrchol"
+msgstr ""
 
 #: /src/schooltool/skin/flourish/instance/skin.zcml:50
 #: /src/schooltool/skin/templates/error.pt:3
 #: /src/schooltool/skin/templates/error.pt:12
 msgid "Server Error"
-msgstr "Chyba serveru"
+msgstr ""
 
 #: /src/schooltool/skin/flourish/instance/skin.zcml:59
 #: /src/schooltool/skin/templates/notfound.pt:3
 #: /src/schooltool/skin/templates/notfound.pt:11
 msgid "Not Found"
-msgstr "Nenalezeno"
+msgstr ""
 
 #: /src/schooltool/skin/flourish/templates/main.pt:82
 msgid "server running"
@@ -7474,33 +7427,30 @@ msgid ""
 "found a bug in SchoolTool. Please report it on <a "
 "href=\"http://issues.schooltool.org\">the issue tracker</a>."
 msgstr ""
-"Vyskytla se interní chyba serveru. Což nejspíše znamená, že jste "
-"našel(našla) chybu v SchoolToolu.  Prosím sdělte nám tuto skutečnost <a "
-"href=\"http://issues.schooltool.org\">zde</a>. Děkujeme."
 
 #: /src/schooltool/skin/templates/f_notfound.pt:3
 #: /src/schooltool/skin/templates/notfound.pt:14
 msgid "The page that you are trying to access is not available"
-msgstr "Stránka, na kterou se snažíte přejít, je nedostupná"
+msgstr ""
 
 #: /src/schooltool/skin/templates/f_notfound.pt:8
 #: /src/schooltool/skin/templates/notfound.pt:18
 msgid "Please note the following:"
-msgstr "Prosím poznamenejte si následující:"
+msgstr ""
 
 #: /src/schooltool/skin/templates/f_notfound.pt:12
 #: /src/schooltool/skin/templates/notfound.pt:21
 msgid "You might have misspelled the url"
-msgstr "Můžete mít nesprávně napsanou URL adresu"
+msgstr ""
 
 #: /src/schooltool/skin/templates/f_notfound.pt:13
 #: /src/schooltool/skin/templates/notfound.pt:22
 msgid "You might be trying to access a non-existing page"
-msgstr "Můžete se pokoušet přejít na neexistující stránku"
+msgstr ""
 
 #: /src/schooltool/skin/templates/generic_macros.pt:12
 msgid "Server Running SchoolTool"
-msgstr "Server spouští SchoolTool"
+msgstr ""
 
 #: /src/schooltool/skin/templates/view_macros.pt:58
 msgid "Logged in as:"
@@ -7508,7 +7458,7 @@ msgstr ""
 
 #: /src/schooltool/skin/templates/view_macros.pt:71
 msgid "Log Out"
-msgstr "Odhlásit se"
+msgstr ""
 
 #: /src/schooltool/skin/templates/view_macros.pt:82
 msgid "free administration software for"
@@ -7551,7 +7501,7 @@ msgstr ""
 #: /src/schooltool/skin/templates/view_macros.pt:177
 #: /src/schooltool/skin/templates/view_macros.pt:184
 msgid "add-button"
-msgstr "Přidat"
+msgstr ""
 
 #: /src/schooltool/skin/templates/view_macros.pt:191
 msgid "D"
@@ -7629,31 +7579,31 @@ msgstr ""
 
 #: /src/schooltool/term/browser/configure.zcml:30
 msgid "Cancel School in Emergency"
-msgstr "Mimořádné zrušení výuky"
+msgstr ""
 
 #: /src/schooltool/term/browser/emergency.py:84
 msgid "The date you entered is invalid.  Please use the YYYY-MM-DD format."
-msgstr "Zadané datum není platné. Použijte formát RRRR-MM-DD."
+msgstr ""
 
 #: /src/schooltool/term/browser/emergency.py:88
 msgid "The date you entered does not belong to this term."
-msgstr "Datum, které jste zadali nepatří tomuto pravidlu."
+msgstr ""
 
 #: /src/schooltool/term/browser/emergency.py:92
 msgid "The date you entered is not a schoolday."
-msgstr "Zadané datum není školním dnem."
+msgstr ""
 
 #: /src/schooltool/term/browser/emergency.py:100
 msgid "The replacement date you entered is invalid."
-msgstr "Zadané náhradní datum je neplatné."
+msgstr ""
 
 #: /src/schooltool/term/browser/emergency.py:126
 msgid "School cancelled due to emergency. Replacement day $replacement."
-msgstr "Výuka mimořádně zrušena. Náhradní den $replacement."
+msgstr ""
 
 #: /src/schooltool/term/browser/emergency.py:136
 msgid "Replacement day for emergency day $emergency."
-msgstr "Náhradní den za zrušenou výuku $emergency."
+msgstr ""
 
 #: /src/schooltool/term/browser/flourish.zcml:23
 #: /src/schooltool/term/browser/templates/f_terms.pt:11
@@ -7664,11 +7614,11 @@ msgstr ""
 #: /src/schooltool/term/browser/templates/emergency_select.pt:3
 #: /src/schooltool/term/browser/templates/emergency_select.pt:6
 msgid "Emergency day"
-msgstr "Havarijní den"
+msgstr ""
 
 #: /src/schooltool/term/browser/templates/emergency2.pt:6
 msgid "Choose a replacement for the emergency day."
-msgstr "Zvolte náhradu za havarijní den."
+msgstr ""
 
 #: /src/schooltool/term/browser/templates/emergency2.pt:12
 msgid ""
@@ -7676,36 +7626,31 @@ msgid ""
 "replacement day. The selection below consists of non-schooldays in this term "
 "following the emergency day and several days after the term."
 msgstr ""
-"Zvolili jste ${date} pro havarijní den. Nyní prosím zvolte náhradní den. "
-"Výběr níže se sestává z ne-školních dnů tohoto pravidla, následujících za "
-"havarijním dnem a různé dny mimo pravidlo."
 
 #: /src/schooltool/term/browser/templates/emergency2.pt:27
 msgid "Please enter the replacement date below."
-msgstr "Níže prosím zadejte datum náhrady."
+msgstr ""
 
 #: /src/schooltool/term/browser/templates/emergency2.pt:32
 msgid "Replacement"
-msgstr "Náhrada"
+msgstr ""
 
 #: /src/schooltool/term/browser/templates/emergency2.pt:40
 #: /src/schooltool/term/browser/templates/emergency_select.pt:39
 #: /src/schooltool/timetable/browser/templates/f_specialday_select.pt:32
 #: /src/schooltool/timetable/browser/templates/specialday_select.pt:39
 msgid "Proceed"
-msgstr "Pokračovat"
+msgstr ""
 
 #: /src/schooltool/term/browser/templates/emergency_select.pt:11
 msgid ""
 "This form allows you to mark a date as an emergency non-schoolday and add a "
 "replacement day to the term."
 msgstr ""
-"Tento formulář umožňuje označit den jako havarijní a do pravidla přidat "
-"náhradní den."
 
 #: /src/schooltool/term/browser/templates/emergency_select.pt:23
 msgid "Please enter the emergency date below."
-msgstr "Níže prosím zadejte datum havarijního dne."
+msgstr ""
 
 #: /src/schooltool/term/browser/templates/f_confirm_delete_term.pt:1
 msgid ""
@@ -7736,7 +7681,7 @@ msgstr ""
 #: /src/schooltool/term/browser/templates/term.pt:12
 #: /src/schooltool/term/browser/templates/term_add.pt:41
 msgid "Legend:"
-msgstr "Legenda:"
+msgstr ""
 
 #: /src/schooltool/term/browser/templates/f_term.pt:16
 #: /src/schooltool/term/browser/templates/f_term_add.pt:36
@@ -7753,14 +7698,14 @@ msgstr ""
 #: /src/schooltool/term/browser/templates/term.pt:26
 #: /src/schooltool/term/browser/templates/term_add.pt:75
 msgid "${month} ${year}"
-msgstr "${month} ${year}"
+msgstr ""
 
 #: /src/schooltool/term/browser/templates/f_term.pt:40
 #: /src/schooltool/term/browser/templates/f_term_add.pt:75
 #: /src/schooltool/term/browser/templates/term.pt:41
 #: /src/schooltool/term/browser/templates/term_add.pt:90
 msgid "Week ${week_number}"
-msgstr "${week_number}. týden"
+msgstr ""
 
 #: /src/schooltool/term/browser/templates/f_term_add.pt:26
 msgid "Please specify which days school is in session."
@@ -7784,21 +7729,21 @@ msgstr ""
 #: /src/schooltool/term/browser/templates/term.pt:13
 #: /src/schooltool/term/browser/templates/term_add.pt:42
 msgid "Schoolday"
-msgstr "Školní den"
+msgstr ""
 
 #: /src/schooltool/term/browser/templates/term.pt:14
 #: /src/schooltool/term/browser/templates/term_add.pt:43
 msgid "Holiday"
-msgstr "Prázdniny"
+msgstr ""
 
 #: /src/schooltool/term/browser/templates/term_add.pt:34
 msgid ""
 "Please specify which days are school days, and which days are holidays."
-msgstr "Zadejte, které dny jsou školní a které jsou prázdninové."
+msgstr ""
 
 #: /src/schooltool/term/browser/templates/term_add.pt:53
 msgid "Toggle the following days of week:"
-msgstr "Zvolit následující dny týdne:"
+msgstr ""
 
 #: /src/schooltool/term/browser/templates/term_add.pt:70
 msgid "Click on a day to toggle its state."
@@ -7811,11 +7756,11 @@ msgstr ""
 
 #: /src/schooltool/term/browser/term.py:70
 msgid "Start date"
-msgstr "Počáteční datum"
+msgstr ""
 
 #: /src/schooltool/term/browser/term.py:72
 msgid "End date"
-msgstr "Koncové datum"
+msgstr ""
 
 #: /src/schooltool/term/browser/term.py:131
 msgid "Delete ${term}"
@@ -7827,7 +7772,7 @@ msgstr ""
 
 #: /src/schooltool/term/browser/term.py:237
 msgid "Add term"
-msgstr "Přidat pravidlo"
+msgstr ""
 
 #: /src/schooltool/term/browser/term.py:275
 msgid "Term Details"
@@ -7843,7 +7788,7 @@ msgstr ""
 
 #: /src/schooltool/term/browser/term.py:365
 msgid "Save changes"
-msgstr "Uložit změny"
+msgstr ""
 
 #: /src/schooltool/term/browser/term.py:385
 #: /src/schooltool/term/browser/term.py:400
@@ -7899,7 +7844,7 @@ msgstr ""
 #: /src/schooltool/timetable/browser/configure.zcml:60
 #: /src/schooltool/timetable/browser/flourish.zcml:266
 msgid "New Timetable"
-msgstr "Nový rozvrh"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/configure.zcml:84
 #: /src/schooltool/timetable/browser/flourish.zcml:397
@@ -7908,7 +7853,7 @@ msgstr "Nový rozvrh"
 #: /src/schooltool/timetable/browser/flourish.zcml:441
 #: /src/schooltool/timetable/browser/templates/f_selected_periods_edit.pt:38
 msgid "Schedule"
-msgstr "Pracovní plán"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/configure.zcml:116
 msgid "Change Schedule for One Day"
@@ -7916,11 +7861,11 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/configure.zcml:127
 msgid "Change Timetable for One Day"
-msgstr "Změnit rozvrh hodin pro jeden den"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/configure.zcml:138
 msgid "Add Timetable"
-msgstr "Přidat rozvrh"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/configure.zcml:184
 msgid "Add Meeting"
@@ -7938,7 +7883,7 @@ msgstr ""
 #: /src/schooltool/timetable/browser/flourish.zcml:376
 #: /src/schooltool/timetable/browser/templates/f_manage_timetables_overview.pt:16
 msgid "Timetable"
-msgstr "Rozvrh"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/flourish.zcml:462
 msgid "Edit Schedule"
@@ -7962,15 +7907,15 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/schedule.py:66
 msgid "Some values were invalid.  They are highlighted in red."
-msgstr "Některé hodnoty jsou neplatné. Tyto jsou zvýrazněny červeně."
+msgstr ""
 
 #: /src/schooltool/timetable/browser/schedule.py:223
 msgid "Invalid date. Please use YYYY-MM-DD format."
-msgstr "Neplatné datum. Použijte formát RRRR-MM-DD."
+msgstr ""
 
 #: /src/schooltool/timetable/browser/schedule.py:227
 msgid "The date does not belong to any term."
-msgstr "Toto datum nepatří žádnému pravidlu."
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/confirm_schedule_delete.pt:15
 msgid "Are you sure you want to unschedule?"
@@ -8054,27 +7999,27 @@ msgstr ""
 #: /src/schooltool/timetable/browser/templates/f_specialday_change.pt:37
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:28
 msgid "Period title"
-msgstr "Jméno periody"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/f_specialday_change.pt:38
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:29
 msgid "Original start"
-msgstr "Původní začátek"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/f_specialday_change.pt:39
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:30
 msgid "Original end"
-msgstr "Původní konec"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/f_specialday_change.pt:40
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:31
 msgid "New start"
-msgstr "Nový začátek"
+msgstr "Novi početak"
 
 #: /src/schooltool/timetable/browser/templates/f_specialday_change.pt:41
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:32
 msgid "New end"
-msgstr "Nový konec"
+msgstr "Novi kraj"
 
 #: /src/schooltool/timetable/browser/templates/f_specialday_related.pt:6
 msgid ""
@@ -8174,7 +8119,7 @@ msgstr ""
 #: /src/schooltool/timetable/browser/templates/selected_periods_edit.pt:4
 #: /src/schooltool/timetable/browser/templates/selected_periods_edit.pt:12
 msgid "Scheduling for ${section}"
-msgstr "Plánování pro ${section}"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/simpletts.pt:3
 #: /src/schooltool/timetable/browser/templates/simpletts.pt:6
@@ -8191,15 +8136,13 @@ msgstr "Plánování pro ${section}"
 #: /src/schooltool/timetable/browser/templates/ttwizard_slottimes.pt:3
 #: /src/schooltool/timetable/browser/templates/ttwizard_slottimes.pt:6
 msgid "New timetable schema"
-msgstr "Nové schéma rozvrhu"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/simpletts.pt:11
 msgid ""
 "This is a simple way to create a weekly timetable schema. Just fill in a "
 "sufficient number of lines for your periods."
 msgstr ""
-"Takto jednoduše vytvoříte týdenní plán rozvrhu. Prostě vyplňte potřebný "
-"počet řádků daných období."
 
 #: /src/schooltool/timetable/browser/templates/simpletts.pt:16
 msgid ""
@@ -8207,53 +8150,48 @@ msgid ""
 "schema creation wizard</a>, or a <a href=\"complexadd.html\">complex "
 "timetable schema set up form</a>."
 msgstr ""
-"Potřebujete-li více flexibility, můžete použít <a href=\"add.html\">průvodce "
-"vytvoření rozvrhu</a>, nebo <a href=\"complexadd.html\">formulář umožňující "
-"celkové nastavení rozvrhu</a>."
 
 #: /src/schooltool/timetable/browser/templates/simpletts.pt:36
 msgid "Period title (optional)"
-msgstr "Název období (volitelné)"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/simpletts.pt:37
 msgid "Period start time"
-msgstr "Začátek období"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/simpletts.pt:38
 msgid "Period end time"
-msgstr "Konec období"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/simpletts.pt:60
 msgid "Create"
-msgstr "Vytvořit"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:3
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:6
 #: /src/schooltool/timetable/browser/templates/specialday_select.pt:3
 #: /src/schooltool/timetable/browser/templates/specialday_select.pt:6
 msgid "Choose a special day"
-msgstr "Vyberte den"
+msgstr "Izaberite poseban dan"
 
 #: /src/schooltool/timetable/browser/templates/specialday_select.pt:11
 msgid ""
 "This form allows you to change the start and end times for periods on a "
 "certain date, or to cancel some periods altogether."
 msgstr ""
-"Tento formulář vám umožňuje měnit začátek a konec pro období určitého data, "
-"nebo zrušit nějaká období najednou."
 
 #: /src/schooltool/timetable/browser/templates/specialday_select.pt:23
 msgid "Please enter the date when the periods need to be changed below."
-msgstr "Zadejte prosím datum kdy se mají níže uvedené období změnit."
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/timetable_container.pt:41
 msgid "Default Timetable Schema:"
-msgstr "Standardní schema rozvrhu"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/timetable_container.pt:47
 #: /src/schooltool/timetable/browser/templates/timetable_container.pt:54
 msgid "Not Selected"
-msgstr "Nevybráno"
+msgstr "Nije odabrano"
 
 #: /src/schooltool/timetable/browser/templates/timetable_container.pt:68
 msgid "Change"
@@ -8296,7 +8234,7 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/timetable.py:555
 msgid "Save"
-msgstr "Uložit"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/timetable.py:619
 msgid "Unschedule timetable ${timetable}"
@@ -8321,41 +8259,41 @@ msgstr ""
 #: /src/schooltool/timetable/browser/ttwizard.py:279
 msgid ""
 "Does your school's timetable cycle use days of the week, or a rotating cycle?"
-msgstr "Používá váš školní cyklus rozvrhu dny týdne, nebo rotační cyklus?"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:282
 msgid "Days of the week"
-msgstr "Dny v týdnu"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:283
 msgid "Rotating cycle"
-msgstr "Rotační cyklus"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:307
 msgid "Enter names of days in cycle, one per line."
-msgstr "Zadejte jména dní cyklu, jedno na řádek."
+msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:319
 msgid "Please enter at least one day name."
-msgstr "Zadejte alespoň jeden název dne."
+msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:325
 msgid "Please make sure the day names are unique."
-msgstr "Ujistěte se, že názvy dnů jsou jedinečné."
+msgstr "Molimo budite sigurni da su imena jedinstvena."
 
 #: /src/schooltool/timetable/browser/ttwizard.py:342
 msgid ""
 "Do classes begin and end at the same time each day in your school's "
 "timetable?"
-msgstr "Začíná a končí vyučování ve vaší škole každý den ve stejný čas?"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:345
 msgid "Same time each day"
-msgstr "Každý den ve stejný čas"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:346
 msgid "Different times"
-msgstr "Různé časy"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:366
 msgid ""
@@ -8375,83 +8313,79 @@ msgstr ""
 msgid ""
 "Enter start and end times for each slot, one slot (HH:MM - HH:MM) per line."
 msgstr ""
-"Zadejte začátek a konec pro každé období, jedno období na řádek (HH:MM - "
-"HH:MM)."
 
 #: /src/schooltool/timetable/browser/ttwizard.py:473
 #: /src/schooltool/timetable/browser/ttwizard.py:531
 msgid "Not a valid time slot: $slot."
-msgstr "Neplatný čas: $slot."
+msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:477
 msgid "Please enter at least one time slot."
-msgstr "Zadejte prosím alespoň jedno časové období."
+msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:502
 msgid ""
 "Enter start and end times for each slot on each day, one slot (HH:MM - "
 "HH:MM) per line."
 msgstr ""
-"Zadejte začátek a konec pro každé období každého dne, jedno období na řádek "
-"(HH:MM - HH:MM)."
 
 #: /src/schooltool/timetable/browser/ttwizard.py:581
 msgid "Do periods have names or are they simply designated by time?"
-msgstr "Mají období jména nebo jsou jednoduše určena časem?"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:584
 msgid "Have names"
-msgstr "Mají jména"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:585
 msgid "Designated by time"
-msgstr "Určena časem"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:622
 msgid "Enter names of periods, one per line."
-msgstr "Zadejte jména období, jedno na řádek."
+msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:635
 msgid "Please enter at least $number periods."
-msgstr "Zadejte prosím alespoň $number období."
+msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:641
 msgid "Please make sure the period names are unique."
-msgstr "Ujistěte se prosím, že jména obobí jsou jedinečná."
+msgstr "Molimo budite sigurni da su imena perioda jedinstvena."
 
 #: /src/schooltool/timetable/browser/ttwizard.py:664
 msgid "Is the sequence of periods each day the same or different?"
-msgstr "Jsou tyto časové posloupnosti stejné každý den nebo jsou různé?"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:666
 msgid "Same"
-msgstr "Stejné"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:667
 msgid "Different"
-msgstr "Různé"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:684
 msgid "Please put the periods in order:"
-msgstr "Uspořádejte prosím období do správného pořadí:"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:700
 #: /src/schooltool/timetable/browser/ttwizard.py:755
 msgid "Please provide all periods."
-msgstr "Určete prosím všechny období."
+msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:713
 #: /src/schooltool/timetable/browser/ttwizard.py:772
 msgid "The following periods were selected more than once: $periods"
-msgstr "Následující období byly vybrány více jak jednou: $periods"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:732
 msgid "Please put the periods in order for each day:"
-msgstr "Uspořádejte prosím období do správného pořadí pro každý den:"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:768
 msgid "$period on day $day"
-msgstr "$period dne $day"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:790
 msgid ""
@@ -8481,7 +8415,7 @@ msgstr ""
 
 #: /src/schooltool/timetable/interfaces.py:61
 msgid "Activity type."
-msgstr ""
+msgstr "Vrsta aktivnosti"
 
 #: /src/schooltool/timetable/interfaces.py:104
 msgid "First scheduled day"
@@ -8501,28 +8435,28 @@ msgstr ""
 
 #: /src/schooltool/timetable/interfaces.py:133
 msgid "Exception date"
-msgstr ""
+msgstr "Iznimka u datumu"
 
 #: /src/schooltool/timetable/interfaces.py:135
 msgid "Meetings"
-msgstr ""
+msgstr "Sastanci"
 
 #: /src/schooltool/timetable/interfaces.py:137
 msgid "Meeting"
-msgstr ""
+msgstr "Sastanak"
 
 #: /src/schooltool/timetable/interfaces.py:193
 msgid "Activity type"
-msgstr ""
+msgstr "Vrsta aktivnosti"
 
 #: /src/schooltool/timetable/interfaces.py:299
 msgid "Treat consecutive periods as one meeting"
-msgstr ""
+msgstr "Priuštite uzastopna razdoblja kao jedan sastanak"
 
 #: /src/schooltool/timetable/security.zcml:36
 msgid "School timetables"
-msgstr "Školní rozvrhy"
+msgstr "Školski raspored"
 
 #: /src/schooltool/widget/password.py:55
 msgid "Supplied passwords are not identical"
-msgstr "Poskytnutá hesla nejsou identická"
+msgstr "Isporučena lozinka nije identična"

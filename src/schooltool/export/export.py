@@ -124,7 +124,7 @@ class ExcelExportView(BrowserView):
                 style.pattern = pattern
 
             if format_str is not None:
-                style.num_format_str = 'YYYY-MM-DD'
+                style.num_format_str = format_str
 
             if borders:
                 b = xlwt.Formatting.Borders()

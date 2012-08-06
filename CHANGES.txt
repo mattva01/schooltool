@@ -31,6 +31,12 @@ Bugfixes
 - Advisory accordion doesn't show advisees (https://launchpad.net/bugs/1005989)
 - Fix upgrade from schooltool < 1.5 crashing on missing levels (https://launchpad.net/bugs/1007361)
 
+Translations
+++++++++++++
+
+- Updated translations
+- Added Bosnian, Croatian, Slovenian translations
+
 
 2.1.0 (2012-04-19)
 ------------------

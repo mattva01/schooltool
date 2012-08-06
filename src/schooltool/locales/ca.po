@@ -22,14 +22,14 @@ msgstr ""
 "Project-Id-Version: SchoolTool Version 0.11.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-04-05 13:59+0300\n"
-"PO-Revision-Date: 2012-04-08 10:20+0000\n"
-"Last-Translator: Raúl Bar Acedo <Unknown>\n"
+"PO-Revision-Date: 2012-05-16 21:02+0000\n"
+"Last-Translator: Alfredo Hernández <Unknown>\n"
 "Language-Team: atorrell@gmail.com <atorrell@gmail.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-04-09 05:08+0000\n"
-"X-Generator: Launchpad (build 15060)\n"
+"X-Launchpad-Export-Date: 2012-05-17 05:09+0000\n"
+"X-Generator: Launchpad (build 15259)\n"
 "Language: \n"
 "Generated-By: setup.py\n"
 
@@ -1190,7 +1190,7 @@ msgstr "S'ha produït un error"
 
 #: /src/schooltool/app/browser/flourish.zcml:352
 msgid "About"
-msgstr "Qui som"
+msgstr "Quant a"
 
 #: /src/schooltool/app/browser/flourish.zcml:313
 msgid "More Information"
