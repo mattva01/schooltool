@@ -22,4 +22,12 @@
       permission="schooltool.view"
       />
 
+  <flourish:viewlet
+      name="schooltool.tasks"
+      title="Scheduled Tasks"
+      class=".task.TaskContainerLinkViewlet"
+      manager="schooltool.app.browser.app.ApplicationControlLinks"
+      permission="schooltool.edit"
+      />
+
 </configure>

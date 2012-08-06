@@ -19,7 +19,9 @@
 
 from zope.cachedescriptors.property import Lazy
 from zope.component import adapts
+from zope.traversing.browser.absoluteurl import absoluteURL
 
+from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.common.inlinept import InlineViewPageTemplate
 from schooltool.skin import flourish
 from schooltool.task.interfaces import IRemoteTask
@@ -45,3 +47,10 @@ class TaskStatus(flourish.page.Page):
     def task_id(self):
         return self.context.task_id
 
+
+class TaskContainerLinkViewlet(flourish.page.LinkViewlet):
+
+    def url(self):
+        app = ISchoolToolApplication(None)
+        base_url = absoluteURL(app, self.request)
+        return '%s/%s' % (base_url, 'schooltool.tasks')
