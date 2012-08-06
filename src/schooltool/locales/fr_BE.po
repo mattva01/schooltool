@@ -2158,7 +2158,7 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_managers.pt:16
 msgid "The database is up to date for ${application}."
-msgstr "La base de données est à jour pour $(application)"
+msgstr "La base de données est à jour pour ${application}"
 
 #: /src/schooltool/app/browser/templates/f_managers.pt:23
 msgid "Application"

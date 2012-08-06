@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: Giancarlo Gaifas <lallo@artiemestieri.tn.it>\n"
 "POT-Creation-Date: 2012-04-05 13:59+0300\n"
-"PO-Revision-Date: 2012-03-20 10:34+0000\n"
-"Last-Translator: Guybrush88 <Unknown>\n"
+"PO-Revision-Date: 2012-06-19 10:17+0000\n"
+"Last-Translator: leonardo corato <leocor@gmail.com>\n"
 "Language-Team: Italian <it@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-04-06 04:50+0000\n"
-"X-Generator: Launchpad (build 15060)\n"
+"X-Launchpad-Export-Date: 2012-06-20 05:06+0000\n"
+"X-Generator: Launchpad (build 15435)\n"
 "Language: it\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -250,11 +250,11 @@ msgstr "Responsabili disponibili"
 
 #: /src/schooltool/app/browser/app.py:598
 msgid "Current responsible parties"
-msgstr ""
+msgstr "Soggetti responsabili correnti"
 
 #: /src/schooltool/app/browser/app.py:599
 msgid "Available responsible parties"
-msgstr ""
+msgstr "Soggetti responsabili disponibili"
 
 #: /src/schooltool/app/browser/app.py:622
 msgid "school"
@@ -1218,7 +1218,7 @@ msgstr "Personalizza"
 #: /src/schooltool/group/browser/templates/f_group_view.pt:90
 #: /src/schooltool/resource/browser/templates/f_resource_view.pt:75
 msgid "Responsible parties"
-msgstr ""
+msgstr "Soggetti responsabili"
 
 #: /src/schooltool/app/browser/flourish.zcml:492
 msgid "Information"
@@ -2063,6 +2063,8 @@ msgid ""
 "Database generations update the structure of your database to be compatible "
 "with new versions of SchoolTool."
 msgstr ""
+"Le generazioni del database aggiornano la struttura del database così che "
+"sia compatibile con le nuove versioni di SchoolTool."
 
 #: /src/schooltool/app/browser/templates/f_hide_unhide_tabs.pt:5
 msgid "Set Tab Visibility"
@@ -2074,13 +2076,16 @@ msgstr "Visibile"
 
 #: /src/schooltool/app/browser/templates/f_hide_unhide_tabs.pt:25
 msgid "Default"
-msgstr ""
+msgstr "Predefinito"
 
 #: /src/schooltool/app/browser/templates/f_hide_unhide_tabs_related.pt:6
 msgid ""
 "Schools that are not using all components of SchoolTool can reduce visual "
 "clutter by hiding unnecessary links in the top navigation bar."
 msgstr ""
+"Le scuole che non utilizzano tutti i componenti di SchoolTool possono "
+"ridurre le distrazioni nascondendo i link non necessari nella barra di "
+"navigazione superiore"
 
 #: /src/schooltool/app/browser/templates/f_hide_unhide_tabs_related.pt:10
 msgid ""
@@ -2088,16 +2093,24 @@ msgid ""
 "links; they don't change the functionality, data, or security settings of "
 "SchoolTool in any way."
 msgstr ""
+"Nota che queste impostazioni hanno l'unico effetto di rimuovere i link di "
+"navigazione; non portano alcun cambiamento sulle funzionalità, sui dati, o "
+"sulle impostazioni di sicurezza di SchoolTool."
 
 #: /src/schooltool/app/browser/templates/f_hide_unhide_tabs_related.pt:15
 msgid "Links can be changed from visible to hidden at any time."
 msgstr ""
+"I collegamenti possono essere cambiati da visibili a nascosti in qualsiasi "
+"momento."
 
 #: /src/schooltool/app/browser/templates/f_hide_unhide_tabs_related.pt:18
 msgid ""
 "When users log in, they will usually be directed to the tab selected in the "
 "default column. The default tab must also be visible."
 msgstr ""
+"Quando gli utenti eseguono l'accesso, solitamente vengono reindirizzati al "
+"tab selezionato nella colonna di default. Il tab di default deve anche "
+"essere visibile."
 
 #: /src/schooltool/app/browser/templates/f_login.pt:12
 #: /src/schooltool/app/browser/templates/login.pt:8
@@ -2273,12 +2286,18 @@ msgid ""
 "The first row of the file must contain two cells terms in this schoolyear. "
 "Sections will be created in terms from first to last."
 msgstr ""
+"La prima riga del file deve contenere due celle di periodi scolastici in "
+"quest'anno scolastico. Le selezioni saranno create nei periodi scolastici "
+"dal primo all'ultimo."
 
 #: /src/schooltool/app/browser/templates/f_section_csvimport_description.pt:15
 msgid ""
 "The second row must be empty. After that, several section descriptions may "
 "follow. They are separated by an extra carriage return (i.e., a blank line)."
 msgstr ""
+"La seconda riga deve essere vuota. Dopo questa, possono seguire alcune "
+"descrizioni di sezioni. Sono separate da un ulteriore invio (es. una riga "
+"vuota)."
 
 #: /src/schooltool/app/browser/templates/f_section_csvimport_description.pt:21
 msgid ""
@@ -3229,7 +3248,7 @@ msgstr "Amministratore"
 #: /src/schooltool/basicperson/browser/flourish.zcml:264
 #: /src/schooltool/basicperson/browser/flourish.zcml:273
 msgid "Demographics and Personal Information"
-msgstr ""
+msgstr "Informazioni demografiche e personali"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:273
 #: /src/schooltool/level/browser/flourish.zcml:110
@@ -3255,7 +3274,7 @@ msgstr "Campo sì/no"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:340
 msgid "Selection List Field"
-msgstr ""
+msgstr "Campo dell'elenco di selezione"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:349
 msgid "Integer Field"
@@ -3271,11 +3290,11 @@ msgstr "Nuovo campo di descrizione"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:412
 msgid "New Integer Field"
-msgstr ""
+msgstr "Nuovo campo di interi"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:590
 msgid "Contains an XML representation of the person."
-msgstr ""
+msgstr "Contiene una rappresentazione XML della persona."
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:560
 msgid "Export as XML"
@@ -4754,7 +4773,7 @@ msgstr ""
 
 #: /src/schooltool/course/browser/templates/copy_sections.pt:66
 msgid "Select All Visible"
-msgstr ""
+msgstr "Seleziona tutti i visibili"
 
 #: /src/schooltool/course/browser/templates/copy_sections.pt:70
 msgid "Select None"
@@ -4883,7 +4902,7 @@ msgstr ""
 
 #: /src/schooltool/course/browser/templates/extend_term.pt:4
 msgid "Extend Section to Term"
-msgstr ""
+msgstr "Estendi la sezione al periodo"
 
 #: /src/schooltool/course/browser/templates/extend_term.pt:18
 #: /src/schooltool/course/browser/templates/f_extend_term.pt:7
@@ -5016,7 +5035,7 @@ msgstr "Filtra"
 #: /src/schooltool/course/browser/templates/f_link_existing.pt:61
 #: /src/schooltool/course/browser/templates/link_existing.pt:35
 msgid "You must select a section before clicking 'Link'."
-msgstr ""
+msgstr "Devi selezionare una sezione prima di cliccare 'Collega'."
 
 #. Default: "Link"
 #: /src/schooltool/course/browser/templates/f_link_existing.pt:96

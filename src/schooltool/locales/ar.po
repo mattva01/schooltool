@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2012-03-01 21:21+0200\n"
-"PO-Revision-Date: 2012-02-13 20:05+0000\n"
-"Last-Translator: Ahmed Ossama <ahmed@aossama.net>\n"
+"POT-Creation-Date: 2012-04-05 13:59+0300\n"
+"PO-Revision-Date: 2012-07-27 12:11+0000\n"
+"Last-Translator: Amir El-deen Azzadeen <ameer.azzadeen@gmail.com>\n"
 "Language-Team: Arabic <ar@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-03-02 05:12+0000\n"
-"X-Generator: Launchpad (build 14886)\n"
+"X-Launchpad-Export-Date: 2012-07-28 05:12+0000\n"
+"X-Generator: Launchpad (build 15694)\n"
 "Language: ar\n"
 
 #: /src/schooltool/app/app.py:193
@@ -350,7 +350,13 @@ msgstr "إرسال"
 msgid "Errors"
 msgstr "أخطاء"
 
-#: /src/schooltool/app/browser/cal.py:114
+#: /src/schooltool/app/browser/app.py:1419
+#: /src/schooltool/app/browser/flourish.zcml:292
+#: /src/schooltool/app/browser/flourish.zcml:301
+msgid "Tabs"
+msgstr "تبويبات"
+
+#: /src/schooltool/app/browser/cal.py:118
 msgid "January"
 msgstr "يناير/كانون الثاني"
 
@@ -530,7 +536,7 @@ msgstr "إذهب إلى الإسبوع السابق"
 
 #: /src/schooltool/app/browser/cal.py:890
 msgid "${month}, ${year} (week ${week})"
-msgstr "${شهر}, ${سنة} (أسبوع ${أسبوع})"
+msgstr "${month}, ${year} (أسبوع ${week})"
 
 #: /src/schooltool/app/browser/cal.py:1059
 msgid "Next month"
@@ -558,7 +564,7 @@ msgstr "اذهب الى الشهر السابق"
 
 #: /src/schooltool/app/browser/cal.py:1132
 msgid "${month}, ${year}"
-msgstr "${شهر}, ${سنة}"
+msgstr "${month}, ${year}"
 
 #: /src/schooltool/app/browser/cal.py:1154
 msgid "Week ${week_no}"
@@ -1016,7 +1022,7 @@ msgstr "تكوين"
 
 #: /src/schooltool/app/browser/configure.zcml:693
 msgid "Error List"
-msgstr "لائحة الأخطاء"
+msgstr "قائمة الأخطاء"
 
 #: /src/schooltool/app/browser/csvimport.py:92
 #: /src/schooltool/app/browser/timetablecsvimport.py:129
@@ -1169,12 +1175,7 @@ msgstr "تعديل"
 msgid "Error"
 msgstr "خطأ"
 
-#: /src/schooltool/app/browser/flourish.zcml:294
-#: /src/schooltool/app/browser/flourish.zcml:303
-msgid "Tabs"
-msgstr ""
-
-#: /src/schooltool/app/browser/flourish.zcml:343
+#: /src/schooltool/app/browser/flourish.zcml:352
 msgid "About"
 msgstr "حول البرنامج"
 
@@ -1279,7 +1280,7 @@ msgstr "دعم البي دي أف \"PDF\" معطل, يمكن تفعيله بوس
 
 #: /src/schooltool/app/browser/templates/about.pt:5
 msgid "About SchoolTool"
-msgstr "عن سكول تول \"SchoolTool\""
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/about.pt:10
 #: /src/schooltool/app/browser/templates/f_about.pt:2
@@ -1435,7 +1436,7 @@ msgstr "التقويم لـ ${title} - ${calendar_title}"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:115
 msgid "Jump To ..."
-msgstr "إقفز إلى. . ."
+msgstr "الانتقال إلى ..."
 
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:4
 msgid "Calendars"
@@ -2058,7 +2059,11 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_hide_unhide_tabs.pt:10
 msgid "Visible"
-msgstr ""
+msgstr "مرئي"
+
+#: /src/schooltool/app/browser/templates/f_hide_unhide_tabs.pt:25
+msgid "Default"
+msgstr "الافتراضي"
 
 #: /src/schooltool/app/browser/templates/f_hide_unhide_tabs_related.pt:6
 msgid ""
@@ -2074,8 +2079,16 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_hide_unhide_tabs_related.pt:15
-msgid "Links can be changed from visible to hidden at any time.."
+msgid "Links can be changed from visible to hidden at any time."
+msgstr "الروابط يمكن ان تتغير من مرئية إلى مخفية في أي وقت."
+
+#: /src/schooltool/app/browser/templates/f_hide_unhide_tabs_related.pt:18
+msgid ""
+"When users log in, they will usually be directed to the tab selected in the "
+"default column. The default tab must also be visible."
 msgstr ""
+"عند تسجيل دخول المستخدمين ، عادة ما تتم توجههم إلى علامة التبويب المحددة في "
+"العمود الافتراضي. يجب أن تكون أيضا علامة التبويب الافتراضي مرئية."
 
 #: /src/schooltool/app/browser/templates/f_login.pt:12
 #: /src/schooltool/app/browser/templates/login.pt:8
@@ -2186,12 +2199,12 @@ msgstr "بحث"
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:7
 #: /src/schooltool/app/browser/templates/f_server_settings_overview.pt:12
 msgid "Database"
-msgstr ""
+msgstr "قاعدة البيانات"
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:11
 #: /src/schooltool/app/browser/templates/f_server_settings_overview.pt:16
 msgid "Database Size"
-msgstr ""
+msgstr "حجم قاعدة البيانات"
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:15
 #: /src/schooltool/app/browser/templates/f_server_settings_overview.pt:20
@@ -2341,7 +2354,7 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_settings.pt:5
 msgid "Please wait for confirmation that the database has been packed."
-msgstr ""
+msgstr "يرجى الانتظار لتأكيد أنه تم حزم قاعدة البيانات."
 
 #: /src/schooltool/app/browser/templates/f_translationdomaincontrol.pt:13
 msgid "Domain ${domain}"
@@ -2778,11 +2791,7 @@ msgid ""
 "uncomment one of the ZODB storage sections.\n"
 msgstr ""
 
-#: /src/schooltool/app/main.py:666
-msgid "Startup time: %.3f sec real, %.3f sec CPU"
-msgstr ""
-
-#: /src/schooltool/app/main.py:700
+#: /src/schooltool/app/main.py:672
 msgid ""
 "Could not initialize the database:\n"
 "%s"
@@ -2816,9 +2825,13 @@ msgid ""
 "PDF support disabled."
 msgstr ""
 
+#: /src/schooltool/app/main.py:775
+msgid "Startup time: %.3f sec real, %.3f sec CPU"
+msgstr ""
+
 #: /src/schooltool/app/membership.py:261
 #: /src/schooltool/basicperson/browser/templates/f_manage_people_overview.pt:20
-#: /src/schooltool/group/browser/flourish.zcml:163
+#: /src/schooltool/group/browser/flourish.zcml:209
 #: /src/schooltool/group/browser/templates/f_group_view.pt:75
 #: /src/schooltool/group/browser/templates/group.pt:16
 msgid "Members"
@@ -2842,7 +2855,7 @@ msgstr ""
 
 #: /src/schooltool/app/security.zcml:71
 msgid "SchoolTool application"
-msgstr ""
+msgstr "تطبيق SchoolTool"
 
 #: /src/schooltool/app/security.zcml:74
 msgid "Access"
@@ -2913,7 +2926,7 @@ msgstr "تصدير"
 #: /src/schooltool/basicperson/browser/templates/f_advisoryViewlet.pt:6
 #: /src/schooltool/basicperson/security.py:32
 msgid "Advisors"
-msgstr ""
+msgstr "المستشارين"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:60
 #: /src/schooltool/basicperson/browser/flourish.zcml:593
@@ -2929,7 +2942,7 @@ msgstr "شخص جديد"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:109
 msgid "Add Multiple Persons"
-msgstr ""
+msgstr "إضافة عدة أشخاص"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:131
 #: /src/schooltool/basicperson/browser/demographics.py:384
@@ -2940,39 +2953,39 @@ msgstr ""
 #: /src/schooltool/basicperson/browser/person.py:933
 #: /src/schooltool/basicperson/security.zcml:22
 msgid "Demographics"
-msgstr ""
+msgstr "العوامل الديموغرافية"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:161
 #: /src/schooltool/basicperson/browser/flourish.zcml:356
 msgid "New Text Field"
-msgstr ""
+msgstr "حقل نص جديد"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:168
 #: /src/schooltool/basicperson/browser/flourish.zcml:374
 msgid "New Date Field"
-msgstr ""
+msgstr "حقل تاريخ جديد"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:175
 #: /src/schooltool/basicperson/browser/flourish.zcml:383
 msgid "New Yes/No Field"
-msgstr ""
+msgstr "حقل نعم / لا جديد"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:182
 #: /src/schooltool/basicperson/browser/flourish.zcml:392
 msgid "New Selection List Field"
-msgstr ""
+msgstr "حقل قائمة اختيار جديدة"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:292
 msgid "Add Teacher"
-msgstr ""
+msgstr "إضافة مدرس"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:302
 msgid "Add Student"
-msgstr ""
+msgstr "إضافة طالب"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:312
 msgid "Add Administrator"
-msgstr ""
+msgstr "إضافة مدير"
 
 #: /src/schooltool/basicperson/browser/csvimport.py:47
 #: /src/schooltool/course/browser/csvimport.py:54
@@ -3036,19 +3049,19 @@ msgstr "تغيير المعلومات لـ ${field_title}"
 
 #: /src/schooltool/basicperson/browser/demographics.py:305
 msgid "Stud."
-msgstr ""
+msgstr "طالب"
 
 #: /src/schooltool/basicperson/browser/demographics.py:306
 msgid "Teach."
-msgstr ""
+msgstr "المدرس"
 
 #: /src/schooltool/basicperson/browser/demographics.py:307
 msgid "Admin."
-msgstr ""
+msgstr "المشرف / المدير"
 
 #: /src/schooltool/basicperson/browser/demographics.py:310
 msgid "Selection"
-msgstr ""
+msgstr "الاختيار"
 
 #: /src/schooltool/basicperson/browser/demographics.py:312
 msgid "Text"
@@ -3073,6 +3086,8 @@ msgid ""
 "If you select one or more groups below, this field will only be displayed in "
 "forms and reports for members of the selected groups."
 msgstr ""
+"اذا كنت اختيار واحد أو أكثر من المجموعات أدناه، فقط هذا المجال يتم عرضها في "
+"النماذج والتقارير لأعضاء مجموعات مختارة."
 
 #: /src/schooltool/basicperson/browser/demographics.py:406
 #: /src/schooltool/basicperson/browser/demographics.py:462
@@ -3089,7 +3104,7 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:94
 msgid "Add new persons"
-msgstr ""
+msgstr "إضافة أشخاص جدد"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:112
 #: /src/schooltool/basicperson/browser/person.py:346
@@ -3099,43 +3114,43 @@ msgstr "إضافة شخص جديد"
 #: /src/schooltool/basicperson/browser/flourish.zcml:121
 #: /src/schooltool/basicperson/browser/person.py:979
 msgid "Add new teacher"
-msgstr ""
+msgstr "إضافة مدرس جديد"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:131
 #: /src/schooltool/basicperson/browser/person.py:989
 msgid "Add new student"
-msgstr ""
+msgstr "إضافة طالب جديد"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:141
 #: /src/schooltool/basicperson/browser/person.py:999
 msgid "Add new administrator"
-msgstr ""
+msgstr "إضافة مدير جديد"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:153
 msgid "Person"
-msgstr ""
+msgstr "شخص"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:161
 msgid "Add Person"
-msgstr ""
+msgstr "إضافة شخص"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:173
 msgid "Teacher"
-msgstr ""
+msgstr "مدرس"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:181
 #: /src/schooltool/basicperson/browser/flourish.zcml:560
 msgid "Student"
-msgstr ""
+msgstr "طالب"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:189
 msgid "Administrator"
-msgstr ""
+msgstr "مدير"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:264
 #: /src/schooltool/basicperson/browser/flourish.zcml:273
 msgid "Demographics and Personal Information"
-msgstr ""
+msgstr "العوامل الديموغرافية والمعلومات الشخصية"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:273
 #: /src/schooltool/level/browser/flourish.zcml:110
@@ -3145,39 +3160,39 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:305
 msgid "Text Field"
-msgstr ""
+msgstr "حقل نص"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:313
 msgid "Description Field"
-msgstr ""
+msgstr "حقل وصف"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:322
 msgid "Date Field"
-msgstr ""
+msgstr "حقل تاريخ"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:331
 msgid "Yes/No Field"
-msgstr ""
+msgstr "حقل نعم / لا"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:340
 msgid "Selection List Field"
-msgstr ""
+msgstr "حقل قائمة اختيار"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:349
 msgid "Integer Field"
-msgstr ""
+msgstr "حقل عدد صحيح"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:359
 msgid "Reorder or Delete Fields"
-msgstr ""
+msgstr "إعادة ترتيب أو حذف الحقول"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:365
 msgid "New Description Field"
-msgstr ""
+msgstr "حقل وصف جديد"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:412
 msgid "New Integer Field"
-msgstr ""
+msgstr "حقل عدد صحيح جديد"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:590
 msgid "Contains an XML representation of the person."
@@ -3200,7 +3215,7 @@ msgstr ""
 #: /src/schooltool/basicperson/browser/flourish.zcml:733
 #: /src/schooltool/person/browser/home_tab_viewlet.pt:3
 msgid "Home"
-msgstr ""
+msgstr "الصفحة الرئيسية"
 
 #: /src/schooltool/basicperson/browser/person.py:79
 #: /src/schooltool/person/browser/person.py:661
@@ -3232,7 +3247,7 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/person.py:169
 msgid "Users cannot log in until a password is assigned."
-msgstr ""
+msgstr "لا يمكن للمستخدمين تسجيل الدخول حتى يتم تعيين كلمة المرور."
 
 #: /src/schooltool/basicperson/browser/person.py:173
 #: /src/schooltool/widget/password.py:39
@@ -3268,7 +3283,7 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/person.py:383
 msgid "Add multiple persons"
-msgstr ""
+msgstr "إضافة عدة أشخاص"
 
 #: /src/schooltool/basicperson/browser/person.py:493
 #: /src/schooltool/resource/browser/resource.py:648
@@ -3284,11 +3299,11 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/person.py:639
 msgid "Current Advisors"
-msgstr ""
+msgstr "المستشارون الحاليون"
 
 #: /src/schooltool/basicperson/browser/person.py:640
 msgid "Add Advisors"
-msgstr ""
+msgstr "إضافة المستشارين"
 
 #: /src/schooltool/basicperson/browser/person.py:630
 msgid "Advisors of ${person}"
@@ -3296,11 +3311,11 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/person.py:660
 msgid "Current advisors"
-msgstr ""
+msgstr "المستشارون الحاليون"
 
 #: /src/schooltool/basicperson/browser/person.py:661
 msgid "Available advisors"
-msgstr ""
+msgstr "المستشارين المتوفرين"
 
 #: /src/schooltool/basicperson/browser/person.py:678
 msgid "Current Advisees"
@@ -3332,27 +3347,27 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/person.py:976
 msgid "Teacher identification"
-msgstr ""
+msgstr "تحديد هوية المدرس"
 
 #: /src/schooltool/basicperson/browser/person.py:978
 msgid "Teacher demographics"
-msgstr ""
+msgstr "العوامل الديموغرافية للمدرس"
 
 #: /src/schooltool/basicperson/browser/person.py:986
 msgid "Student identification"
-msgstr ""
+msgstr "تحديد هوية الطالب"
 
 #: /src/schooltool/basicperson/browser/person.py:988
 msgid "Student demographics"
-msgstr ""
+msgstr "العوامل الديموغرافية للطالب"
 
 #: /src/schooltool/basicperson/browser/person.py:996
 msgid "Administrator identification"
-msgstr ""
+msgstr "تحديد هوية المدير"
 
 #: /src/schooltool/basicperson/browser/person.py:998
 msgid "Administrator demographics"
-msgstr ""
+msgstr "العوامل الديموغرافية للمدير"
 
 #: /src/schooltool/basicperson/browser/person.py:1155
 #: /src/schooltool/group/browser/flourish.zcml:358
@@ -3367,6 +3382,7 @@ msgstr ""
 msgid ""
 "To add teachers, students or administrators, please set up a ${school_year}."
 msgstr ""
+"للإضافة إلى المدرسين والطلاب أو الإداريين، يرجى إنشاء $ {school_year}."
 
 #: /src/schooltool/basicperson/browser/templates/container.pt:23
 msgid "school year"
@@ -3388,15 +3404,15 @@ msgstr "زر الحذف"
 
 #: /src/schooltool/basicperson/browser/templates/f_advisoryViewlet.pt:2
 msgid "Advisory"
-msgstr ""
+msgstr "استشاري"
 
 #: /src/schooltool/basicperson/browser/templates/f_advisoryViewlet.pt:7
 msgid "Manage this person's advisors"
-msgstr ""
+msgstr "إدارة المستشارين لهذا الشخص"
 
 #: /src/schooltool/basicperson/browser/templates/f_advisoryViewlet.pt:18
 msgid "The person has no advisors."
-msgstr ""
+msgstr "هذا الشخص ليس لديه مستشارين."
 
 #: /src/schooltool/basicperson/browser/templates/f_advisoryViewlet.pt:26
 msgid "Manage this person's advisees"
@@ -3487,20 +3503,20 @@ msgstr "مطلوب"
 
 #: /src/schooltool/basicperson/browser/templates/f_demographics_view.pt:9
 msgid "Limited"
-msgstr ""
+msgstr "محدود"
 
 #: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:2
 msgid "General Information"
-msgstr ""
+msgstr "المعلومات العامة"
 
 #: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:6
 #: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:25
 msgid "Edit this person's information"
-msgstr ""
+msgstr "تعديل معلومات هذا الشخص"
 
 #: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:24
 msgid "Demographics and other personal data"
-msgstr ""
+msgstr "العوامل الديموغرافية والبيانات الشخصية الأخرى"
 
 #: /src/schooltool/basicperson/browser/templates/f_manage_people_overview.pt:4
 msgid "Manage people"
@@ -3508,7 +3524,7 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/templates/f_manage_people_overview.pt:14
 msgid "There are ${count} people defined in ${school}."
-msgstr ""
+msgstr "أشخاص"
 
 #: /src/schooltool/basicperson/browser/templates/f_person_add_multiple.pt:10
 #: /src/schooltool/basicperson/browser/templates/person_add_multiple.pt:13
@@ -3518,7 +3534,7 @@ msgstr ""
 #: /src/schooltool/basicperson/browser/templates/f_person_add_subform.pt:3
 #: /src/schooltool/basicperson/browser/templates/person_add_subform.pt:2
 msgid "New person"
-msgstr ""
+msgstr "شخص جديد"
 
 #: /src/schooltool/basicperson/browser/templates/f_person_form.pt:51
 #: /src/schooltool/contact/browser/templates/f_contact_form.pt:51
@@ -3604,7 +3620,7 @@ msgstr "معلومات الشخص: ${title}"
 
 #: /src/schooltool/basicperson/demographics.py:143
 msgid "Ethnicity"
-msgstr ""
+msgstr "الانتماء العرقي"
 
 #: /src/schooltool/basicperson/demographics.py:144
 msgid "American Indian or Alaska Native"
@@ -3628,11 +3644,11 @@ msgstr "أبيض"
 
 #: /src/schooltool/basicperson/demographics.py:150
 msgid "Place of birth"
-msgstr ""
+msgstr "مكان الميلاد"
 
 #: /src/schooltool/basicperson/demographics.py:151
 msgid "Citizenship"
-msgstr ""
+msgstr "الجنسية"
 
 #: /src/schooltool/basicperson/interfaces.py:38
 #: /src/schooltool/contact/interfaces.py:40
@@ -3687,7 +3703,7 @@ msgstr "(yyyy-mm-dd)"
 
 #: /src/schooltool/basicperson/interfaces.py:133
 msgid "As it should appear on forms and reports."
-msgstr ""
+msgstr "كما يجب أن تظهر على النماذج والتقارير."
 
 #: /src/schooltool/basicperson/interfaces.py:138
 msgid "A unique one word alphanumeric identifier."
@@ -3695,7 +3711,7 @@ msgstr ""
 
 #: /src/schooltool/basicperson/interfaces.py:163
 msgid "Selection list"
-msgstr ""
+msgstr "قائمة الاختيار"
 
 #: /src/schooltool/basicperson/interfaces.py:163
 msgid ""
@@ -3723,11 +3739,11 @@ msgstr "الاسم الأخير"
 
 #: /src/schooltool/basicperson/security.py:33
 msgid "Advisors of a person."
-msgstr ""
+msgstr "المستشارين للشخص."
 
 #: /src/schooltool/basicperson/security.zcml:26
 msgid "Create, delete demographics fields and change their order."
-msgstr ""
+msgstr "إنشاء و حذف وتغيير حقول العوامل الديموغرافية ترتيبها."
 
 #: /src/schooltool/basicperson/security.zcml:35
 msgid "Edit fields"
@@ -3735,19 +3751,19 @@ msgstr ""
 
 #: /src/schooltool/basicperson/security.zcml:43
 msgid "View user demographics"
-msgstr ""
+msgstr "عرض العوامل الديموغرافية للمستخدم"
 
 #: /src/schooltool/basicperson/security.zcml:43
 msgid "View user's demographics information"
-msgstr ""
+msgstr "عرض معلومات العوامل الديموغرافية للمستخدم"
 
 #: /src/schooltool/basicperson/security.zcml:52
 msgid "Modify user demographics"
-msgstr ""
+msgstr "تعديل العوامل الديموغرافية للمستخدم"
 
 #: /src/schooltool/basicperson/security.zcml:52
 msgid "Modify user's demographics information."
-msgstr ""
+msgstr "تعديل معلومات العوامل الديموغرافية للمستخدم"
 
 #: /src/schooltool/basicperson/vocabularies.py:131
 #: /src/schooltool/course/browser/flourish.zcml:301
@@ -3765,11 +3781,11 @@ msgstr "طلاب"
 
 #: /src/schooltool/basicperson/vocabularies.py:132
 msgid "Teachers"
-msgstr ""
+msgstr "المدرسين"
 
 #: /src/schooltool/basicperson/vocabularies.py:133
 msgid "Administrators"
-msgstr ""
+msgstr "مدراء"
 
 #: /src/schooltool/calendar/browser/calendar.py:173
 msgid "Tomorrow"
@@ -3793,7 +3809,7 @@ msgstr ""
 
 #: /src/schooltool/calendar/browser/calendar.py:236
 msgid "Jump To"
-msgstr ""
+msgstr "الانتقال إلى"
 
 #: /src/schooltool/calendar/browser/event.py:129
 #: /src/schooltool/calendar/browser/event.py:156
@@ -3826,7 +3842,7 @@ msgstr ""
 
 #: /src/schooltool/calendar/browser/flourish.zcml:81
 msgid "Event"
-msgstr ""
+msgstr "حدث"
 
 #: /src/schooltool/calendar/browser/flourish.zcml:166
 #: /src/schooltool/calendar/browser/templates/event_edit.pt:392
@@ -3836,7 +3852,7 @@ msgstr ""
 
 #: /src/schooltool/calendar/browser/overlay.py:33
 msgid "Show"
-msgstr ""
+msgstr "إظهار"
 
 #: /src/schooltool/calendar/browser/templates/calendar_overlay.pt:35
 msgid "Select"
@@ -3854,7 +3870,7 @@ msgstr ""
 
 #: /src/schooltool/calendar/browser/templates/event_booking.pt:5
 msgid "Event Details"
-msgstr ""
+msgstr "تفاصيل الحدث"
 
 #: /src/schooltool/calendar/browser/templates/event_booking.pt:41
 #: /src/schooltool/calendar/browser/templates/event_edit.pt:369
@@ -3876,7 +3892,7 @@ msgstr ""
 
 #: /src/schooltool/calendar/browser/templates/event_delete_dialog.pt:12
 msgid "You are deleting a repeating event."
-msgstr ""
+msgstr "أنت تقوم بحذف حدث متكرر."
 
 #: /src/schooltool/calendar/browser/templates/event_edit.pt:202
 #: /src/schooltool/timetable/browser/templates/f_schedule_event_add.pt:146
@@ -3917,7 +3933,7 @@ msgstr ""
 
 #: /src/schooltool/contact/browser/configure.zcml:41
 msgid "View Person"
-msgstr ""
+msgstr "عرض الشخص"
 
 #: /src/schooltool/contact/browser/configure.zcml:61
 #: /src/schooltool/contact/browser/flourish.zcml:63
@@ -3970,13 +3986,12 @@ msgstr ""
 msgid "Contact index"
 msgstr "فهرس جهات الاتصال"
 
-#: /src/schooltool/contact/browser/contact.py:617
-#: /src/schooltool/person/browser/f_person_filter.pt:7
-#: /src/schooltool/person/browser/person.py:543
-msgid "First name, last name or username"
-msgstr ""
+#: /src/schooltool/contact/browser/contact.py:618
+#: /src/schooltool/contact/browser/templates/f_contact_filter.pt:6
+msgid "First name and/or last name"
+msgstr "الاسم الأول و / أو اسم العائلة"
 
-#: /src/schooltool/contact/browser/contact.py:653
+#: /src/schooltool/contact/browser/contact.py:654
 #: /src/schooltool/email/browser/email.py:301
 #: /src/schooltool/email/browser/email.py:486
 #: /src/schooltool/email/browser/email.py:531
@@ -4082,10 +4097,6 @@ msgstr ""
 msgid "Contact of"
 msgstr ""
 
-#: /src/schooltool/contact/browser/templates/f_contact_filter.pt:6
-msgid "First name and/or last name"
-msgstr ""
-
 #: /src/schooltool/contact/browser/templates/f_contact_view.pt:3
 msgid "Contact information"
 msgstr "معلومات جهة اتصال"
@@ -4160,6 +4171,8 @@ msgid ""
 "You don't have an email address set. Ask your administrator to set your "
 "email address in your contact information."
 msgstr ""
+"ليس لديك عنوان بريد إلكتروني. اطلب من المدير  لإضافة عنوان البريد الإلكتروني "
+"الخاص بك في معلومات الاتصال الخاصة بك."
 
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:8
 msgid "Contact information for ${person}"
@@ -4177,7 +4190,7 @@ msgstr "هواتف"
 
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:50
 msgid "Spoken Languages"
-msgstr ""
+msgstr "اللغات التي تتحدث بها"
 
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:73
 msgid "(View Details)"
@@ -4290,7 +4303,7 @@ msgstr "شقيق"
 #: /src/schooltool/person/security.zcml:73
 #: /src/schooltool/timetable/security.zcml:38
 msgid "List/Search"
-msgstr ""
+msgstr "قائمة / بحث"
 
 #: /src/schooltool/contact/security.zcml:36
 msgid ""
@@ -4304,7 +4317,7 @@ msgstr ""
 
 #: /src/schooltool/contact/security.zcml:46
 msgid "Create/Delete an external contact"
-msgstr ""
+msgstr "إنشاء / حذف جهة اتصال خارجية"
 
 #: /src/schooltool/contact/security.zcml:54
 msgid "View an external contact"
@@ -4403,7 +4416,7 @@ msgstr ""
 #: /src/schooltool/course/browser/course.py:669
 #: /src/schooltool/course/browser/templates/f_course_filter.pt:6
 msgid "Title or course ID"
-msgstr ""
+msgstr "عنوان أو رقم المادة"
 
 #: /src/schooltool/course/browser/csvimport.py:57
 #: /src/schooltool/group/browser/csvimport.py:54
@@ -4467,11 +4480,26 @@ msgstr ""
 msgid "Add Section"
 msgstr ""
 
-#: /src/schooltool/course/browser/flourish.zcml:309
-#: /src/schooltool/course/browser/templates/f_section_view.pt:88
+#: /src/schooltool/course/browser/flourish.zcml:403
+#: /src/schooltool/course/browser/templates/f_section_view.pt:148
+msgid "Locations"
+msgstr ""
+
+#: /src/schooltool/course/browser/flourish.zcml:411
+#: /src/schooltool/course/browser/templates/f_section_view.pt:164
+#: /src/schooltool/resource/browser/flourish.zcml:108
+#: /src/schooltool/resource/browser/resource.py:411
+#: /src/schooltool/resource/resource.py:206
+#: /src/schooltool/resource/resource.py:232
+#: /src/schooltool/resource/types.py:93
+msgid "Equipment"
+msgstr "تجهيز"
+
+#: /src/schooltool/course/browser/flourish.zcml:419
+#: /src/schooltool/course/browser/templates/f_section_view.pt:90
 #: /src/schooltool/dashboard/term.pt:16
 #: /src/schooltool/term/browser/templates/f_manage_years_overview.pt:5
-#: /src/schooltool/term/browser/term.py:760
+#: /src/schooltool/term/browser/term.py:764
 #: /src/schooltool/term/security.zcml:19
 msgid "Terms"
 msgstr "فصول"
@@ -4544,7 +4572,7 @@ msgstr ""
 #: /src/schooltool/course/browser/section.py:1024
 #: /src/schooltool/course/browser/templates/f_section_filter.pt:6
 msgid "Section title"
-msgstr ""
+msgstr "عنوان القسم"
 
 #: /src/schooltool/course/browser/section.py:1121
 #: /src/schooltool/course/browser/section.py:1272
@@ -4569,13 +4597,29 @@ msgstr ""
 
 #: /src/schooltool/course/browser/section.py:1329
 msgid "Current students"
-msgstr ""
+msgstr "الطلاب الحاليون"
 
 #: /src/schooltool/course/browser/section.py:1330
 msgid "Add students"
+msgstr "إضافة طلاب"
+
+#: /src/schooltool/course/browser/section.py:1380
+msgid "Current locations"
 msgstr ""
 
-#: /src/schooltool/course/browser/section.py:1424
+#: /src/schooltool/course/browser/section.py:1381
+msgid "Add locations"
+msgstr ""
+
+#: /src/schooltool/course/browser/section.py:1404
+msgid "Current equipment"
+msgstr ""
+
+#: /src/schooltool/course/browser/section.py:1405
+msgid "Add equipment"
+msgstr ""
+
+#: /src/schooltool/course/browser/section.py:1469
 msgid "Extend ${section} to ${term}"
 msgstr ""
 
@@ -4602,7 +4646,7 @@ msgstr "ليس هناك فصل (سابق) في ${schoolyear} لنسخ الأقس
 
 #: /src/schooltool/course/browser/templates/copy_sections.pt:66
 msgid "Select All Visible"
-msgstr ""
+msgstr "حدد كل المرئية"
 
 #: /src/schooltool/course/browser/templates/copy_sections.pt:70
 msgid "Select None"
@@ -4610,7 +4654,7 @@ msgstr ""
 
 #: /src/schooltool/course/browser/templates/copy_sections.pt:74
 msgid "Invert Selection"
-msgstr ""
+msgstr "عكس الاختيار"
 
 #: /src/schooltool/course/browser/templates/copy_sections.pt:91
 #: /src/schooltool/course/browser/templates/link_section.pt:67
@@ -4809,7 +4853,7 @@ msgstr ""
 
 #: /src/schooltool/course/browser/templates/f_coursesviewlet.pt:79
 msgid "This person has no sections."
-msgstr ""
+msgstr "هذا الشخص ليس لديه أقسام"
 
 #: /src/schooltool/course/browser/templates/f_link_existing.pt:21
 #: /src/schooltool/course/browser/templates/link_existing.pt:21
@@ -4837,7 +4881,7 @@ msgstr ""
 #: /src/schooltool/course/browser/templates/f_link_existing.pt:51
 #: /src/schooltool/course/browser/templates/link_existing.pt:46
 msgid "Filter"
-msgstr ""
+msgstr "تصفية"
 
 #: /src/schooltool/course/browser/templates/f_link_existing.pt:61
 #: /src/schooltool/course/browser/templates/link_existing.pt:35
@@ -4935,10 +4979,26 @@ msgstr ""
 
 #: /src/schooltool/course/browser/templates/f_section_view.pt:130
 msgid "Edit students for this section"
-msgstr ""
+msgstr "تحرير الطلاب لهذا القسم"
 
 #: /src/schooltool/course/browser/templates/f_section_view.pt:140
 msgid "This section has no students"
+msgstr "هذا القسم لا يوجد لديه الطلاب"
+
+#: /src/schooltool/course/browser/templates/f_section_view.pt:149
+msgid "Edit locations for this section"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/f_section_view.pt:160
+msgid "This section has no locations"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/f_section_view.pt:165
+msgid "Edit equipment for this section"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/f_section_view.pt:176
+msgid "This section has no equipment"
 msgstr ""
 
 #: /src/schooltool/course/browser/templates/f_sections_related.pt:6
@@ -5123,7 +5183,7 @@ msgstr ""
 
 #: /src/schooltool/course/section.py:287
 msgid "Instructors of a person in any of his sections."
-msgstr ""
+msgstr "المدربين لشخص في أي من الأقسام خاصة به."
 
 #: /src/schooltool/course/section.py:310
 msgid "Learners"
@@ -5131,7 +5191,7 @@ msgstr ""
 
 #: /src/schooltool/course/section.py:311
 msgid "Students of the section."
-msgstr ""
+msgstr "طلاب القسم."
 
 #: /src/schooltool/course/section.py:389
 msgid "Cannot link sections in same term"
@@ -5150,12 +5210,15 @@ msgid ""
 "Basic information about sections is only visible to instructors and students "
 "in that section, and school administration."
 msgstr ""
+"المعلومات الأساسية عن الأقسام مرئية فقط للمدرسين والطلاب في هذا القسم، "
+"وإدارة المدرسة."
 
 #: /src/schooltool/course/security.zcml:42
 msgid ""
 "Basic information about sections, including rosters, is visible to the "
 "general public."
 msgstr ""
+"المعلومات الأساسية عن الأقسام، بما في ذلك القوائم، مرئية لعامة الناس."
 
 #: /src/schooltool/course/security.zcml:74
 msgid ""
@@ -5179,7 +5242,7 @@ msgstr ""
 #: /src/schooltool/term/security.zcml:28
 #: /src/schooltool/timetable/security.zcml:45
 msgid "Create/Delete"
-msgstr ""
+msgstr "إنشاء / حذف"
 
 #: /src/schooltool/course/security.zcml:101
 #: /src/schooltool/course/security.zcml:135
@@ -5219,7 +5282,7 @@ msgstr "العرض"
 
 #: /src/schooltool/dashboard/school.pt:10
 msgid "Activity Categories"
-msgstr "الأقسام الفعالة"
+msgstr "أنشطة الفئات"
 
 #: /src/schooltool/dashboard/school.pt:16
 #: /src/schooltool/timetable/browser/app.py:84
@@ -5288,14 +5351,14 @@ msgstr ""
 #: /src/schooltool/email/browser/email.py:798
 #: /src/schooltool/securitypolicy/browser/control.py:97
 msgid "Disabled"
-msgstr ""
+msgstr "معطل/ غير مفعل"
 
 #: /src/schooltool/email/browser/email.py:98
 #: /src/schooltool/email/browser/email.py:277
 #: /src/schooltool/email/browser/email.py:655
 #: /src/schooltool/email/browser/templates/email_container.pt:20
 msgid "Server Status"
-msgstr ""
+msgstr "حالة السيرفر"
 
 #: /src/schooltool/email/browser/email.py:102
 #: /src/schooltool/email/interfaces.py:87
@@ -5390,12 +5453,12 @@ msgstr ""
 #: /src/schooltool/email/browser/email.py:514
 #: /src/schooltool/email/interfaces.py:70
 msgid "Created on"
-msgstr ""
+msgstr "تم الانشاء في"
 
 #: /src/schooltool/email/browser/email.py:293
 #: /src/schooltool/email/interfaces.py:71
 msgid "Date and time when the message was created"
-msgstr ""
+msgstr "التاريخ والوقت عندما تم إنشاء الرسالة"
 
 #: /src/schooltool/email/browser/email.py:305
 msgid "Email Status"
@@ -5456,11 +5519,11 @@ msgstr ""
 
 #: /src/schooltool/email/browser/flourish.zcml:37
 msgid "Outgoing Email Queue"
-msgstr ""
+msgstr "قائمة انتظار البريد الإلكتروني  الصادر"
 
 #: /src/schooltool/email/browser/flourish.zcml:49
 msgid "Outgoing Email Settings"
-msgstr ""
+msgstr "إعدادات البريد الإلكتروني الصادر"
 
 #: /src/schooltool/email/browser/flourish.zcml:60
 #: /src/schooltool/email/browser/flourish.zcml:106
@@ -5484,7 +5547,7 @@ msgstr ""
 
 #: /src/schooltool/email/browser/templates/f_email_container.pt:4
 msgid "Server status: ${status}"
-msgstr ""
+msgstr "حالة السيرفر: ${status}"
 
 #: /src/schooltool/email/browser/templates/f_email_container.pt:6
 msgid "Change email settings"
@@ -5558,7 +5621,7 @@ msgstr ""
 
 #: /src/schooltool/email/mail.py:52
 msgid "The SchoolTool mail service is disabled"
-msgstr ""
+msgstr "تم تعطيل خدمة بريد ال SchoolTool"
 
 #: /src/schooltool/email/mail.py:53
 msgid "Couldn't connect to the SMTP server (${info})"
@@ -5911,7 +5974,7 @@ msgstr ""
 #: /src/schooltool/group/browser/group.py:531
 #: /src/schooltool/group/browser/templates/f_group_filter.pt:6
 msgid "Group title"
-msgstr ""
+msgstr "عنوان المجموعة"
 
 #: /src/schooltool/group/browser/group.py:640
 #: /src/schooltool/group/browser/group.py:692
@@ -5976,7 +6039,7 @@ msgstr ""
 
 #: /src/schooltool/group/browser/templates/f_group_view.pt:99
 msgid "These users can modify the group."
-msgstr ""
+msgstr "يمكن للمستخدمين تعديل المجموعة."
 
 #: /src/schooltool/group/browser/templates/f_group_view.pt:102
 msgid "This group has no responsible parties"
@@ -6027,48 +6090,63 @@ msgstr "تعديل الأعضاء"
 msgid "edit groups"
 msgstr "تعديل مجموعات"
 
+#: /src/schooltool/group/group.py:63
+msgid "Site Managers"
+msgstr "مدراء الموقع"
+
+#: /src/schooltool/group/group.py:66
+msgid "Clerks"
+msgstr ""
+
+#: /src/schooltool/group/group.py:67
+msgid "School Administrators"
+msgstr "مسؤولين المدرسة"
+
 #: /src/schooltool/group/security.zcml:5
 msgid "Only school administration can view the list of groups."
-msgstr ""
+msgstr "يمكن فقط لادارة المدرسة الاطلاع على قائمة المجموعات."
 
 #: /src/schooltool/group/security.zcml:5
 msgid "The list of groups in the system is visible to the general public."
-msgstr ""
+msgstr "قائمة المجموعات في هذا النظام هي مرئية لعامة الناس."
 
 #: /src/schooltool/group/security.zcml:11
 msgid ""
 "Information about each group is visible to school administration, and "
 "members and responsible parties of the group."
 msgstr ""
+"المعلومات حول كل مجموعة مرئية لإدارة المدرسة، والأعضاء والأطراف المسؤولة "
+"للمجموعة."
 
 #: /src/schooltool/group/security.zcml:11
 msgid "Information about each group is visible to the general public."
-msgstr ""
+msgstr "المعلومات حول كل مجموعة مرئية لعامة الناس."
 
 #: /src/schooltool/group/security.zcml:17
 msgid ""
 "Each group calendar is visible to school administration, and members and "
 "responsible parties of the group."
 msgstr ""
+"كل تقويم المجموعة مرئي لإدارة المدرسة، والأعضاء والأطراف المسؤولة للمجموعة."
 
 #: /src/schooltool/group/security.zcml:17
 msgid "Each group calendar is visible to the general public."
-msgstr ""
+msgstr "كل تقويم المجموعة مرئي لعامة الناس."
 
 #: /src/schooltool/group/security.zcml:23
 msgid ""
 "All members of a group and school administration can edit its calendar."
-msgstr ""
+msgstr "يمكن لجميع أعضاء المجموعة وادارة المدرسة تعديل تقويمها."
 
 #: /src/schooltool/group/security.zcml:23
 msgid ""
 "The responsible parties of a group and school administration can edit its "
 "calendar."
-msgstr ""
+msgstr "يمكن للأطراف المسؤولة في مجموعة وادارة المدرسة تعديل تقويمها."
 
 #: /src/schooltool/group/security.zcml:57
 msgid "Groups are essentially sets of users."
-msgstr ""
+msgstr "المجموعات هي في الأساس مجموعة من المستخدمين."
 
 #: /src/schooltool/level/browser/flourish.zcml:19
 #: /src/schooltool/level/browser/flourish.zcml:28
@@ -6080,62 +6158,64 @@ msgstr ""
 #: /src/schooltool/level/browser/templates/levels.pt:3
 #: /src/schooltool/level/browser/templates/levels.pt:6
 msgid "Grade Levels"
-msgstr ""
+msgstr "مستويات الدرجات"
 
 #: /src/schooltool/level/browser/flourish.zcml:62
 msgid "Level"
-msgstr ""
+msgstr "مستوى"
 
 #: /src/schooltool/level/browser/flourish.zcml:82
 msgid "Add new level"
-msgstr ""
+msgstr "إضافة مستوى جديد"
 
 #: /src/schooltool/level/browser/flourish.zcml:92
 msgid "Edit level"
-msgstr ""
+msgstr "تعديل مستوى"
 
 #: /src/schooltool/level/browser/flourish.zcml:120
 msgid "Reorder or Delete Levels"
-msgstr ""
+msgstr "إعادة ترتيب أو حذف مستويات"
 
 #: /src/schooltool/level/browser/level.py:51
 msgid "Add a level"
-msgstr ""
+msgstr "إضافة مستوى"
 
 #: /src/schooltool/level/browser/level.py:226
 #: /src/schooltool/level/browser/level.py:234
 msgid "Level information"
-msgstr ""
+msgstr "معلومات على المستوى"
 
 #: /src/schooltool/level/browser/templates/f_levels_related.pt:6
 msgid ""
 "Grade levels are the traditional means of tracking student progress across "
 "years and the sequence of curriculum."
 msgstr ""
+"المراحل الدراسية هي الوسيلة التقليدية لتتبع تقدم الطلاب عبر سنوات، وتسلسل "
+"المناهج الدراسية."
 
 #: /src/schooltool/level/browser/templates/f_levels_view.pt:12
 msgid "Edit this level"
-msgstr ""
+msgstr "تعديل هذا المستوى"
 
 #: /src/schooltool/level/browser/templates/levels.pt:11
 msgid "Levels (student learning years) taught in ${school_name}"
-msgstr ""
+msgstr "المستويات (سنوات تعلم الطالب) التي تدرس في $ {school_name}"
 
 #: /src/schooltool/level/browser/templates/link_to_levels.pt:1
 msgid "Grade levels"
-msgstr ""
+msgstr "مستويات الدرجات"
 
 #: /src/schooltool/level/security.zcml:7
 msgid "The grade levels (student learning years)."
-msgstr ""
+msgstr "المراحل الدراسية (سنوات تعلم الطالب)."
 
 #: /src/schooltool/level/security.zcml:12
 msgid "Add/Remove"
-msgstr ""
+msgstr "إضافة/حذف"
 
 #: /src/schooltool/level/security.zcml:19
 msgid "Modify/Rename"
-msgstr ""
+msgstr "تعديل / إعادة تسمية"
 
 #: /src/schooltool/note/configure.zcml:68
 msgid "New Note"
@@ -6200,12 +6280,17 @@ msgstr "الاسم الكامل لا يمكن أن يكون فارغاً"
 msgid "Password changed successfully"
 msgstr ""
 
+#: /src/schooltool/person/browser/f_person_filter.pt:7
+#: /src/schooltool/person/browser/person.py:543
+msgid "First name, last name or username"
+msgstr "الاسم الأول واسم العائلة أو اسم المستخدم"
+
 #: /src/schooltool/person/browser/f_person_filter.pt:20
 #: /src/schooltool/person/browser/f_person_table_filter.pt:39
 #: /src/schooltool/resource/browser/templates/f_resource_filter.pt:20
 #: /src/schooltool/resource/browser/templates/f_resource_table_filter.pt:33
 msgid "Filter by..."
-msgstr ""
+msgstr "تصفية من قبل ..."
 
 #: /src/schooltool/person/browser/f_person_filter.pt:26
 #: /src/schooltool/person/browser/person_filter.pt:5
@@ -6214,7 +6299,7 @@ msgstr "جميع المجموعات"
 
 #: /src/schooltool/person/browser/flourish.zcml:7
 msgid "Preferences"
-msgstr ""
+msgstr "الخيارات"
 
 #: /src/schooltool/person/browser/home.pt:24
 #: /src/schooltool/person/browser/person.pt:15
@@ -6301,7 +6386,7 @@ msgstr "تعديل كلمة المرور"
 #: /src/schooltool/person/browser/person.py:391
 #: /src/schooltool/person/security.zcml:101
 msgid "Change password"
-msgstr ""
+msgstr "تغيير كلمة المرور"
 
 #: /src/schooltool/person/browser/person.py:362
 msgid "Wrong password supplied"
@@ -6421,12 +6506,15 @@ msgid ""
 "The list of people with accounts in the system is visible only to school "
 "administration."
 msgstr ""
+"قائمة الاشخاص الذين لديهم حسابات في هذا النظام   وهم مرئيون فقط إلى إدارة "
+"المدرسة."
 
 #: /src/schooltool/person/security.zcml:5
 msgid ""
 "The list of people with accounts in the system is visible to the general "
 "public."
 msgstr ""
+"قائمة الاشخاص الذين لديهم حسابات في هذا النظام   وهم مرئيون لعامة الناس."
 
 #: /src/schooltool/person/security.zcml:11
 msgid "Users can make their own calendars public."
@@ -6438,15 +6526,15 @@ msgstr ""
 
 #: /src/schooltool/person/security.zcml:17
 msgid "Only school administration can change passwords."
-msgstr ""
+msgstr "يمكن فقط لادارة المدرسة تغيير كلمات السر."
 
 #: /src/schooltool/person/security.zcml:17
 msgid "Users can change their own passwords."
-msgstr ""
+msgstr "يمكن للمستخدمين تغيير كلمات المرور الخاصة بهم."
 
 #: /src/schooltool/person/security.zcml:71
 msgid "Users"
-msgstr ""
+msgstr "المستخدمين"
 
 #: /src/schooltool/person/security.zcml:108
 msgid "View preferences"
@@ -6462,7 +6550,7 @@ msgstr ""
 
 #: /src/schooltool/person/security.zcml:138
 msgid "Manage visible calendars"
-msgstr ""
+msgstr "إدارة التقويمات المرئية"
 
 #: /src/schooltool/person/security.zcml:167
 msgid "Calendar is public"
@@ -6486,7 +6574,7 @@ msgstr ""
 #: /src/schooltool/report/browser/flourish.zcml:75
 #: /src/schooltool/report/browser/report.py:82
 msgid "Reports"
-msgstr ""
+msgstr "التقارير"
 
 #: /src/schooltool/report/browser/flourish.zcml:25
 msgid "Overview"
@@ -6494,27 +6582,27 @@ msgstr ""
 
 #: /src/schooltool/report/browser/flourish.zcml:85
 msgid "Report Overview"
-msgstr ""
+msgstr "نظرة عامة عن التقرير"
 
 #: /src/schooltool/report/browser/report.py:56
 msgid "Student Reports"
-msgstr ""
+msgstr "تقارير الطالب"
 
 #: /src/schooltool/report/browser/report.py:61
 msgid "Group Reports"
-msgstr ""
+msgstr "تقارير المجموعة"
 
 #: /src/schooltool/report/browser/report.py:66
 msgid "School Year Reports"
-msgstr ""
+msgstr "تقارير السنة الدراسية"
 
 #: /src/schooltool/report/browser/report.py:71
 msgid "Term Reports"
-msgstr ""
+msgstr "تقارير الفصل"
 
 #: /src/schooltool/report/browser/report.py:76
 msgid "Section Reports"
-msgstr ""
+msgstr "تقارير القسم"
 
 #: /src/schooltool/report/browser/report.py:200
 msgid "Download"
@@ -6533,7 +6621,7 @@ msgstr ""
 #: /src/schooltool/report/browser/templates/report_reference.pt:3
 #: /src/schooltool/report/browser/templates/report_reference.pt:7
 msgid "Report Reference"
-msgstr ""
+msgstr "تقرير المراجع"
 
 #: /src/schooltool/report/templates/f_report_link_manager.pt:13
 msgid "${file_type} Reports"
@@ -6541,7 +6629,7 @@ msgstr ""
 
 #: /src/schooltool/resource/browser/configure.zcml:96
 msgid "Resource Demographics"
-msgstr ""
+msgstr "العوامل الديموغرافية للموارد"
 
 #: /src/schooltool/resource/browser/configure.zcml:143
 #: /src/schooltool/resource/browser/resource-csvimport.pt:21
@@ -6566,18 +6654,10 @@ msgstr "تجهيز جديد"
 #: /src/schooltool/resource/browser/flourish.zcml:309
 #: /src/schooltool/resource/browser/flourish.zcml:315
 msgid "Resource Attributes"
-msgstr ""
+msgstr "صفات الموارد"
 
-#: /src/schooltool/resource/browser/flourish.zcml:107
-#: /src/schooltool/resource/browser/resource.py:353
-#: /src/schooltool/resource/resource.py:206
-#: /src/schooltool/resource/resource.py:232
-#: /src/schooltool/resource/types.py:93
-msgid "Equipment"
-msgstr "تجهيز"
-
-#: /src/schooltool/resource/browser/flourish.zcml:123
-#: /src/schooltool/resource/browser/resource.py:357
+#: /src/schooltool/resource/browser/flourish.zcml:124
+#: /src/schooltool/resource/browser/resource.py:415
 #: /src/schooltool/resource/resource.py:74
 #: /src/schooltool/resource/resource.py:204
 #: /src/schooltool/resource/resource.py:230
@@ -6660,7 +6740,7 @@ msgstr ""
 #: /src/schooltool/resource/browser/resource.py:701
 #: /src/schooltool/resource/browser/resource.py:712
 msgid "Resource attributes"
-msgstr ""
+msgstr "صفات الموارد"
 
 #: /src/schooltool/resource/browser/resource.py:424
 msgid "Limit to resource type(s)"
@@ -6678,7 +6758,7 @@ msgstr ""
 
 #: /src/schooltool/resource/browser/resource.py:687
 msgid "Resource demographics"
-msgstr ""
+msgstr "العوامل الديموغرافية للموارد"
 
 #: /src/schooltool/resource/browser/resource.py:695
 msgid "Add new resource"
@@ -6694,7 +6774,7 @@ msgstr ""
 
 #: /src/schooltool/resource/browser/resource.py:725
 msgid "Location demographics"
-msgstr ""
+msgstr "العوامل الديموغرافية للموقع"
 
 #: /src/schooltool/resource/browser/resource.py:734
 msgid "Add new location"
@@ -6715,7 +6795,7 @@ msgstr ""
 
 #: /src/schooltool/resource/browser/resource.py:764
 msgid "Equipment demographics"
-msgstr ""
+msgstr "العوامل الديموغرافية للمعدات"
 
 #: /src/schooltool/resource/browser/resource.py:773
 msgid "Add new equipment"
@@ -6744,11 +6824,11 @@ msgstr ""
 
 #: /src/schooltool/resource/browser/templates/f_manage_resources_overview.pt:16
 msgid "School Resources"
-msgstr ""
+msgstr "موارد المدرسة"
 
 #: /src/schooltool/resource/browser/templates/f_manage_resources_overview.pt:17
 msgid "Total"
-msgstr ""
+msgstr "المجموع"
 
 #: /src/schooltool/resource/browser/templates/f_manage_resources_overview.pt:24
 msgid "There are no ${resources} set up."
@@ -6756,7 +6836,7 @@ msgstr ""
 
 #: /src/schooltool/resource/browser/templates/f_manage_resources_overview.pt:24
 msgid "school resources"
-msgstr ""
+msgstr "موارد المدرسة"
 
 #: /src/schooltool/resource/browser/templates/f_resource_container_related.pt:6
 msgid ""
@@ -6776,7 +6856,7 @@ msgstr ""
 
 #: /src/schooltool/resource/browser/templates/f_resource_filter.pt:7
 msgid "Title or description"
-msgstr ""
+msgstr "العنوان أو الوصف"
 
 #: /src/schooltool/resource/browser/templates/f_resource_filter.pt:26
 msgid "All types"
@@ -6895,35 +6975,37 @@ msgstr ""
 
 #: /src/schooltool/resource/security.zcml:7
 msgid "Only school administration can view the list of resources."
-msgstr ""
+msgstr "يمكن فقط لادارة المدرسة عرض قائمة الموارد."
 
 #: /src/schooltool/resource/security.zcml:7
 msgid "The list of resources in the system is visible to the general public."
-msgstr ""
+msgstr "قائمة الموارد في هذا النظام هي مرئية لعامة الناس."
 
 #: /src/schooltool/resource/security.zcml:13
 msgid ""
 "Information about each resource is visible to school administration and "
 "responsible parties of the resource."
 msgstr ""
+"المعلومات حول كل مورد هي مرئية لإدارة المدرسة والجهات المسؤولة لهذا المورد."
 
 #: /src/schooltool/resource/security.zcml:13
 msgid "Information about each resource is visible to the general public."
-msgstr ""
+msgstr "المعلومات حول كل مورد هي مرئية لعامة الناس."
 
 #: /src/schooltool/resource/security.zcml:19
 msgid ""
 "Resource calendars are visible to school administration, teachers, and "
 "responsible parties of the resource."
 msgstr ""
+"تقويمات الموارد مرئية إلى إدارة المدرسة والمدرسين، والأطراف المسؤولة للموارد."
 
 #: /src/schooltool/resource/security.zcml:19
 msgid "Resource calendars are visible to the general public."
-msgstr ""
+msgstr "تقويمات الموارد مرئية لعامة الناس."
 
 #: /src/schooltool/resource/security.zcml:53
 msgid "Reservations"
-msgstr ""
+msgstr "حجوزات"
 
 #: /src/schooltool/resource/security.zcml:53
 msgid ""
@@ -6934,11 +7016,11 @@ msgstr ""
 
 #: /src/schooltool/resource/security.zcml:60
 msgid "List/Search resources"
-msgstr ""
+msgstr "قائمة / بحث موارد"
 
 #: /src/schooltool/resource/security.zcml:67
 msgid "Add/Remove resources"
-msgstr ""
+msgstr "إضافة / إزالة موارد"
 
 #: /src/schooltool/resource/security.zcml:74
 msgid "View a resource"
@@ -7024,14 +7106,14 @@ msgstr ""
 #: /src/schooltool/term/browser/templates/f_manage_years_overview.pt:30
 #: /src/schooltool/term/browser/templates/f_terms.pt:9
 msgid "First Day"
-msgstr ""
+msgstr "أول يوم"
 
 #: /src/schooltool/schoolyear/browser/schoolyear.py:214
 #: /src/schooltool/term/browser/templates/f_manage_years_overview.pt:17
 #: /src/schooltool/term/browser/templates/f_manage_years_overview.pt:31
 #: /src/schooltool/term/browser/templates/f_terms.pt:10
 msgid "Last Day"
-msgstr ""
+msgstr "آخر يوم"
 
 #: /src/schooltool/schoolyear/browser/schoolyear.py:216
 msgid "Active"
@@ -7043,11 +7125,11 @@ msgstr ""
 
 #: /src/schooltool/schoolyear/browser/schoolyear.py:274
 msgid "First day"
-msgstr ""
+msgstr "أول يوم"
 
 #: /src/schooltool/schoolyear/browser/schoolyear.py:277
 msgid "Last day"
-msgstr ""
+msgstr "آخر يوم"
 
 #: /src/schooltool/schoolyear/browser/schoolyear.py:438
 msgid "Add new school year"
@@ -7060,7 +7142,7 @@ msgstr ""
 #: /src/schooltool/schoolyear/browser/schoolyear.py:502
 #: /src/schooltool/schoolyear/browser/schoolyear.py:553
 msgid "Limited to 12 characters or less"
-msgstr ""
+msgstr "محدود ب 12 حرفا أو أقل"
 
 #: /src/schooltool/schoolyear/browser/schoolyear.py:525
 #: /src/schooltool/schoolyear/browser/schoolyear.py:558
@@ -7198,11 +7280,11 @@ msgstr ""
 
 #: /src/schooltool/schoolyear/security.zcml:23
 msgid "Activate current school year"
-msgstr ""
+msgstr "تفعيل العام الدراسي الحالي"
 
 #: /src/schooltool/securitypolicy/browser/configure.zcml:7
 msgid "View Access Rights"
-msgstr ""
+msgstr "عرض صلاحيات الوصول"
 
 #: /src/schooltool/securitypolicy/browser/configure.zcml:17
 #: /src/schooltool/securitypolicy/browser/configure.zcml:28
@@ -7213,18 +7295,18 @@ msgstr "التحكم بالوصول"
 
 #: /src/schooltool/securitypolicy/browser/control.py:106
 msgid "School administration"
-msgstr ""
+msgstr "إدارة المدرسة"
 
 #: /src/schooltool/securitypolicy/browser/flourish.zcml:15
 #: /src/schooltool/securitypolicy/browser/flourish.zcml:31
 msgid "Security"
-msgstr ""
+msgstr "الأمان"
 
 #: /src/schooltool/securitypolicy/browser/flourish.zcml:44
 #: /src/schooltool/securitypolicy/browser/templates/f_security_descriptions.pt:3
 #: /src/schooltool/securitypolicy/browser/templates/security_descriptions.pt:4
 msgid "Access Rights"
-msgstr ""
+msgstr "صلاحيات الوصول"
 
 #: /src/schooltool/securitypolicy/browser/templates/access_setting_snippet.pt:2
 msgid "Access setting"
@@ -7232,7 +7314,7 @@ msgstr ""
 
 #: /src/schooltool/securitypolicy/browser/templates/f_security_descriptions.pt:4
 msgid "Edit the access rights"
-msgstr ""
+msgstr "تعديل صلاحيات الوصول"
 
 #: /src/schooltool/securitypolicy/browser/templates/f_security_descriptions.pt:48
 #: /src/schooltool/securitypolicy/browser/templates/security_descriptions.pt:56
@@ -7241,7 +7323,7 @@ msgstr ""
 
 #: /src/schooltool/securitypolicy/browser/templates/security_descriptions.pt:9
 msgid "Access rights"
-msgstr ""
+msgstr "صلاحيات الوصول"
 
 #: /src/schooltool/securitypolicy/browser/views.py:56
 msgid "Section information"
@@ -7289,7 +7371,7 @@ msgstr ""
 
 #: /src/schooltool/securitypolicy/browser/views.py:67
 msgid "Gradebook"
-msgstr ""
+msgstr "سجل الدرجات"
 
 #: /src/schooltool/securitypolicy/browser/views.py:68
 msgid "Journal"
@@ -7309,7 +7391,7 @@ msgstr ""
 
 #: /src/schooltool/securitypolicy/crowds.py:234
 msgid "All logged in users."
-msgstr ""
+msgstr "جميع المستخدمين الموجودين."
 
 #: /src/schooltool/securitypolicy/crowds.py:242
 msgid "Anybody"
@@ -7317,7 +7399,7 @@ msgstr ""
 
 #: /src/schooltool/securitypolicy/crowds.py:243
 msgid "Users who did not log in"
-msgstr ""
+msgstr "المستخدمين الذين لم يتم تسجيل دخولهم"
 
 #: /src/schooltool/securitypolicy/crowds.py:250
 msgid "Super user"
@@ -7466,7 +7548,11 @@ msgstr ""
 msgid "The datetime string did not match the pattern yyyy-mm-dd"
 msgstr ""
 
-#: /src/schooltool/skin/widgets.py:99
+#: /src/schooltool/skin/widgets.py:103
+msgid "Year has to be equal or greater than 1900"
+msgstr ""
+
+#: /src/schooltool/skin/widgets.py:111
 msgid "Width"
 msgstr "عرض"
 
@@ -7513,7 +7599,7 @@ msgstr "&laquo; السابق"
 
 #: /src/schooltool/table/templates/batch.pt:16
 msgid "Show Less"
-msgstr ""
+msgstr "إظهِار أقل"
 
 #: /src/schooltool/table/templates/batch.pt:21
 msgid "Show All"
@@ -7825,7 +7911,7 @@ msgstr "جداول المواعيد"
 
 #: /src/schooltool/timetable/browser/flourish.zcml:111
 msgid "Make Default"
-msgstr ""
+msgstr "جعله افتراضيًا"
 
 #: /src/schooltool/timetable/browser/flourish.zcml:376
 #: /src/schooltool/timetable/browser/templates/f_manage_timetables_overview.pt:16
@@ -8339,7 +8425,7 @@ msgstr "$period في يوم $day"
 msgid ""
 "Do you check student attendance for the day in a homeroom period or "
 "equivalent?"
-msgstr ""
+msgstr "هل تريد التحقق من حضور الطلاب  في  الحصة لهذا اليوم  ام ليوم موازي"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:810
 msgid "Please indicate the homeroom period(s) for each day:"

@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2012-04-05 13:59+0300\n"
-"PO-Revision-Date: 2012-03-29 18:09+0000\n"
-"Last-Translator: Łukasz Szeremeta <l.szeremeta@gmail.com>\n"
+"PO-Revision-Date: 2012-07-13 15:07+0000\n"
+"Last-Translator: smugas <smugasek@o2.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-04-06 04:52+0000\n"
-"X-Generator: Launchpad (build 15060)\n"
+"X-Launchpad-Export-Date: 2012-07-14 06:41+0000\n"
+"X-Generator: Launchpad (build 15614)\n"
 "Language: pl\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -250,11 +250,11 @@ msgstr "Dostępni liderzy"
 
 #: /src/schooltool/app/browser/app.py:598
 msgid "Current responsible parties"
-msgstr "Aktualne odpowiedzialne strony"
+msgstr "Odpowiedzialne strony"
 
 #: /src/schooltool/app/browser/app.py:599
 msgid "Available responsible parties"
-msgstr "Dostępne odpowiedzialne strony"
+msgstr "Aktualnie dostępne odpowiedzialne strony"
 
 #: /src/schooltool/app/browser/app.py:622
 msgid "school"
@@ -282,15 +282,15 @@ msgstr "Serwer"
 #: /src/schooltool/app/browser/app.py:1177
 #: /src/schooltool/app/browser/flourish.zcml:611
 msgid "Pack Database"
-msgstr "Zrób kopię zapasową bazy danych"
+msgstr "Wykonaj kopię zapasową bazy danych"
 
 #: /src/schooltool/app/browser/app.py:1198
 msgid "Database successfully packed."
-msgstr "Baza danych została pomyślnie spakowana."
+msgstr "Kopia zapasowa bazy danych została pomyślnie utworzona."
 
 #: /src/schooltool/app/browser/app.py:1200
 msgid "There were errors while packing the database: ${error}"
-msgstr "Błąd $(error) przy tworzeniu bazy danych"
+msgstr "Błąd: ${error} przy tworzeniu bazy danych"
 
 #: /src/schooltool/app/browser/app.py:1226
 #: /src/schooltool/skin/flourish/form.py:46
@@ -306,12 +306,12 @@ msgstr "Nie"
 
 #: /src/schooltool/app/browser/app.py:1242
 msgid "${type} Error"
-msgstr "Błąd $(type)"
+msgstr "Błąd: ${type}"
 
 #: /src/schooltool/app/browser/app.py:962
 #: /src/schooltool/app/browser/templates/f_errors.pt:15
 msgid "Number of exceptions to show"
-msgstr "Liczba wyjątków do pokazania"
+msgstr "Liczba danych do pokazania"
 
 #: /src/schooltool/app/browser/app.py:965
 #: /src/schooltool/app/browser/templates/f_errors.pt:21
@@ -326,7 +326,7 @@ msgstr "Ignoruj wyjątki typu"
 #: /src/schooltool/app/browser/app.py:998
 #: /src/schooltool/app/browser/flourish.zcml:292
 msgid "Errors Settings"
-msgstr "Błąd konfiguracji"
+msgstr "Ustawienia błędów"
 
 #: /src/schooltool/app/browser/app.py:1005
 #: /src/schooltool/basicperson/browser/demographics.py:413
@@ -341,7 +341,7 @@ msgstr "Błąd konfiguracji"
 #: /src/schooltool/term/browser/term.py:291
 #: /src/schooltool/term/browser/term.py:404
 msgid "Submit"
-msgstr "Wyślij"
+msgstr "Prześlij"
 
 #: /src/schooltool/app/browser/app.py:1025
 #: /src/schooltool/app/browser/configure.zcml:670
@@ -826,7 +826,7 @@ msgstr "Liczba wydarzeń"
 #: /src/schooltool/app/browser/templates/event_add.pt:303
 #: /src/schooltool/calendar/browser/templates/event_edit.pt:309
 msgid "Repeat until"
-msgstr "Powtórz aż do"
+msgstr "Powtarzaj do"
 
 #: /src/schooltool/app/browser/cal.py:1711
 msgid "Weekdays"
@@ -846,7 +846,7 @@ msgstr "Miesięcznie"
 
 #: /src/schooltool/app/browser/cal.py:1726
 msgid "Exception dates"
-msgstr "Daty wyjątkowe"
+msgstr "Wyjątkowe daty"
 
 #: /src/schooltool/app/browser/cal.py:1805
 msgid "same weekday"
@@ -887,11 +887,11 @@ msgstr "Wystąpił błąd."
 
 #: /src/schooltool/app/browser/cal.py:1891
 msgid "Invalid time"
-msgstr "Niewłaściwy czas"
+msgstr "Nieprawidłowy czas"
 
 #: /src/schooltool/app/browser/cal.py:1912
 msgid "End date is earlier than start date"
-msgstr "Początek jest później niż zakończenie"
+msgstr "Data zakończenia wypada wcześniej niż data rozpoczęcia"
 
 #: /src/schooltool/app/browser/cal.py:1921
 msgid "Invalid date.  Please specify YYYY-MM-DD, one per line."
@@ -924,7 +924,7 @@ msgstr "Rodzaj"
 
 #: /src/schooltool/app/browser/cal.py:2283
 msgid "Booked by others"
-msgstr "Zarezerwowane przez innych"
+msgstr "Zarezerwowane przez inne osoby"
 
 #: /src/schooltool/app/browser/cal.py:2611
 #: /src/schooltool/app/browser/configure.zcml:532
@@ -959,11 +959,11 @@ msgstr "Kalendarz"
 #: /src/schooltool/timetable/browser/flourish.zcml:92
 #: /src/schooltool/timetable/browser/flourish.zcml:471
 msgid "Actions"
-msgstr "Akcje"
+msgstr "Działania"
 
 #: /src/schooltool/app/browser/configure.zcml:287
 msgid "View Calendar"
-msgstr "Pokaż kalendarz"
+msgstr "Wyświetl kalendarz"
 
 #: /src/schooltool/app/browser/configure.zcml:299
 #: /src/schooltool/calendar/browser/flourish.zcml:157
@@ -1185,12 +1185,12 @@ msgstr "Więcej informacji"
 #: /src/schooltool/app/browser/flourish.zcml:322
 #: /src/schooltool/app/browser/templates/about.pt:27
 msgid "Website"
-msgstr "Strona"
+msgstr "Witryna internetowa"
 
 #: /src/schooltool/app/browser/flourish.zcml:331
 #: /src/schooltool/app/browser/templates/about.pt:28
 msgid "Launchpad project page"
-msgstr "Strona projektu na Launchpad"
+msgstr "Witryna projektu na Launchpad"
 
 #: /src/schooltool/app/browser/flourish.zcml:341
 #: /src/schooltool/app/browser/templates/about.pt:29
@@ -1227,7 +1227,7 @@ msgstr "Tworzenie bazy danych"
 
 #: /src/schooltool/app/browser/flourish.zcml:607
 msgid "Shown Calendars"
-msgstr "Pokaż kalendarz"
+msgstr "Pokaż kalendarze"
 
 #: /src/schooltool/app/browser/overlay.py:217
 msgid "Saved changes."
@@ -1243,7 +1243,7 @@ msgstr "Dostępne kalendarze"
 
 #: /src/schooltool/app/browser/overlay.py:326
 msgid "School Calendar"
-msgstr "Kalendarz szkolny"
+msgstr "Kalendarz szkoły"
 
 #: /src/schooltool/app/browser/pdfcal.py:52
 msgid "Daily calendar for %s"
@@ -1255,7 +1255,7 @@ msgstr "powtarzalny"
 
 #: /src/schooltool/app/browser/pdfcal.py:99
 msgid "from the calendar of ${calendar_owner}"
-msgstr "z kalendarza $(calendar_owner)"
+msgstr "z kalendarza ${calendar_owner}"
 
 #: /src/schooltool/app/browser/pdfcal.py:115
 msgid "all day"
@@ -1303,7 +1303,7 @@ msgid ""
 "href=\"http://python.org\">Python</a> using the <a "
 "href=\"http://zope.org\">Zope 3</a> framework."
 msgstr ""
-"SchoolTool jest zbudowane w 100% ze stosu oprogramowania open source, "
+"SchoolTool jest w 100% zbudowane ze stosu oprogramowania open source, "
 "napisanego w <a href=\"http://python.org\">Pythonie</a> używając frameworku "
 "<a href=\"http://zope.org\">Zope 3</a>."
 
@@ -1342,7 +1342,7 @@ msgstr "Główny projektant:"
 #: /src/schooltool/app/browser/templates/about.pt:44
 #: /src/schooltool/app/browser/templates/f_about.pt:33
 msgid "Core Developers:"
-msgstr "Twórcy programu"
+msgstr "Główni programiści"
 
 #: /src/schooltool/app/browser/templates/about.pt:47
 #: /src/schooltool/app/browser/templates/f_about.pt:37
@@ -2368,7 +2368,7 @@ msgstr "Proszę czekać na potwierdzenie, że baza danych została zapakowany."
 
 #: /src/schooltool/app/browser/templates/f_translationdomaincontrol.pt:13
 msgid "Domain ${domain}"
-msgstr "Domena $(domain)"
+msgstr "Domena ${domain}"
 
 #: /src/schooltool/app/browser/templates/f_translationdomaincontrol.pt:18
 #: /src/schooltool/contact/interfaces.py:82
@@ -4803,9 +4803,9 @@ msgid ""
 msgstr ""
 "\n"
 "Historia Starożytna, Historia przed 1000 A.D.\n"
-"Historia Polski,,pl-historia\n"
-"Historia Ś, 1000 A.D. through the 20th century, history-world\n"
-"Spanish,,,spanish-gov,5\n"
+"Historia Polski,,historia-pl\n"
+"Historia Świata, od 1000 A.D. do dwudziestego wieku, historia-swiat\n"
+"Hiszpański,,,hiszpanski-gov,5\n"
 
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:39
 #: /src/schooltool/course/browser/templates/f_course_csvimport_description.pt:19
@@ -6907,6 +6907,10 @@ msgid ""
 "\"Main Auditorium\" resource will have no description, but will be a "
 "location."
 msgstr ""
+"Powyższy przykład utworzy 3 środki zatytułowane \"PRJ302\", \"Główne "
+"audytorium\" oraz \"LC-805\". Pierwszy i ostatni środek będą miały opisy "
+"odpowiednio \"Projektor #302\" i \"Laptop #805\". \"Główne audytorium\" nie "
+"będzie miało opisu, za to będzie lokalizacją."
 
 #: /src/schooltool/resource/browser/resource.py:90
 msgid "Resource index"
@@ -7221,7 +7225,7 @@ msgstr ""
 
 #: /src/schooltool/resource/security.zcml:60
 msgid "List/Search resources"
-msgstr ""
+msgstr "Wykonaj listę/Znajdź zasóbów/y"
 
 #: /src/schooltool/resource/security.zcml:67
 msgid "Add/Remove resources"
