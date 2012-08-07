@@ -1382,12 +1382,12 @@ class SectionsImporter(ImporterBase):
 
             for person_id in data['instructors']:
                 if person_id not in persons:
-                    self.error(row, 6, ERROR_INVALID_PERSON_ID_LIST)
+                    self.error(row, 8, ERROR_INVALID_PERSON_ID_LIST)
                     break
 
             for resource_id in data['resources']:
                 if resource_id not in resources:
-                    self.error(row, 8, ERROR_INVALID_RESOURCE_ID_LIST)
+                    self.error(row, 9, ERROR_INVALID_RESOURCE_ID_LIST)
                     break
 
             if data['year'] not in schoolyears:
