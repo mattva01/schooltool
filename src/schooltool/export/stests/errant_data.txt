@@ -58,9 +58,9 @@ SectionTimetables sheets:
     has an invalid course id for the given school year:
     B8
     has an invalid resource id:
-    I7-8
+    J7-8
     has an invalid username:
-    G7-8
+    I7-8
     invalid school year:
     A7
     is not a valid term in the given school year:
