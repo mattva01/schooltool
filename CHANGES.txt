@@ -2,26 +2,44 @@
 CHANGES
 =======
 
-2.2.0 (unreleased)
+2.2.1 (unreleased)
 ------------------
+
+- Nothing changed yet.
+
+
+2.2.0 (2012-08-07)
+------------------
+
+First alpha release for upcoming Ubuntu 12.10.
+
+New features
+++++++++++++
+
+- Refactored gradebook/journal javascript and style
+- Add teachers column sections list
+- Add filter by course and term to sections list
+- Show term details in term view
+
+Old features
+++++++++++++
+
+- Show sections and groups of a person in a tree, grouped by term, like in old skin.
+- List sections in course view (https://launchpad.net/bugs/868396)
 
 XLS
 +++
 
-- FlatSectionsTable sheet for easier section importing.
-- Old section import still supported; export only delivers FlatSectionsTable.
 - Added course_id, government_id and credits to Courses sheet import/export.
-- new sections sheets to replace FlatSectionsTable (https://launchpad.net/bugs/1020836)
-- remove the ophaned old Sections exporter and tests (https://launchpad.net/bugs/1020837)
-- new LinkedSectionImport sheet for import only (https://launchpad.net/bugs/1020838)
-- import errors need to be collated and returned in a textarea (https://launchpad.net/bugs/1020839)
-- ResourceImporter needs to process desription cells (https://launchpad.net/bugs/1020840)
-- exporters must skip sections with no courses (https://launchpad.net/bugs/1020842)
-
-Development tools
-+++++++++++++++++
-
-- Selenium screenshots
+- New sections sheets to replace section sheets per term (https://launchpad.net/bugs/1020836)
+- Remove the old Sections exporter and tests (https://launchpad.net/bugs/1020837).
+  Old section import still supported.
+- New LinkedSectionImport sheet for import only (https://launchpad.net/bugs/1020838)
+- Import errors grouped by sheet and error type, displayed in a textarea
+  (https://launchpad.net/bugs/1020839)
+- ResourceImporter needs to process description cells (https://launchpad.net/bugs/1020840)
+- Special error message for numeric values in id cells (https://launchpad.net/bugs/1020841)
+- Exporters must skip sections with no courses (https://launchpad.net/bugs/1020842)
 
 Bugfixes
 ++++++++
@@ -29,12 +47,20 @@ Bugfixes
 - Timetables evolution fails on exception days (https://launchpad.net/bugs/1003834)
 - Advisory accordion doesn't show advisees (https://launchpad.net/bugs/1005989)
 - Fix upgrade from schooltool < 1.5 crashing on missing levels (https://launchpad.net/bugs/1007361)
+- Allow teachers to see attributes of all sections and resources.
+- Remove demographics when person is deleted.
 
 Translations
 ++++++++++++
 
 - Updated translations
 - Added Bosnian, Croatian, Slovenian translations
+
+Development tools
++++++++++++++++++
+
+- Selenium screenshots and downloads
+- XLS file testing helpers
 
 
 2.1.0 (2012-04-19)
