@@ -26,6 +26,15 @@
 
   <adapter factory=".tasks.getTaskContainerForApp" />
 
+  <adapter
+      factory=".tasks.RemoteTaskCatalog"
+      name="schooltool.task.tasks.RemoteTaskCatalog" />
+
+  <adapter
+      for=".interfaces.ITaskContainer"
+      provides="zope.catalog.interfaces.ICatalog"
+      factory=".tasks.getRemoteTaskCatalog" />
+
   <include package=".browser" />
 
 </configure>

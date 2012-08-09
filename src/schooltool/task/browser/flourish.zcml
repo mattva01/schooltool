@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <configure xmlns="http://namespaces.zope.org/browser"
            xmlns:z3c="http://namespaces.zope.org/z3c"
+           xmlns:zcml="http://namespaces.zope.org/zcml"
            xmlns:zope="http://namespaces.zope.org/zope"
            xmlns:flourish="http://schooltool.org/flourish"
            xmlns:report="http://namespaces.schooltool.org/report"
@@ -28,6 +29,34 @@
       class=".task.TaskContainerLinkViewlet"
       manager="schooltool.app.browser.app.ApplicationControlLinks"
       permission="schooltool.edit"
+      />
+
+  <configure zcml:condition="not-have devmode">
+    <flourish:viewlet
+        name="table"
+        for="schooltool.task.interfaces.ITaskContainer"
+        class=".task.TaskTable"
+        manager="schooltool.skin.flourish.interfaces.IAJAXParts"
+        permission="schooltool.view"
+        />
+  </configure>
+
+  <configure zcml:condition="have devmode">
+    <flourish:viewlet
+        name="table"
+        for="schooltool.task.interfaces.ITaskContainer"
+        class=".task.TaskTableDevmode"
+        manager="schooltool.skin.flourish.interfaces.IAJAXParts"
+        permission="schooltool.view"
+        />
+  </configure>
+
+  <flourish:viewlet
+      name="filter"
+      before="batch table"
+      class="schooltool.table.table.DoNotFilter"
+      manager=".task.TaskTable"
+      permission="schooltool.view"
       />
 
 </configure>

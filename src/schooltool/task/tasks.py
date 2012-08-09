@@ -32,6 +32,7 @@ import transaction.interfaces
 from celery.task import task, periodic_task
 from persistent import Persistent
 from zope.interface import implements, implementer
+from zope.catalog.text import TextIndex
 from zope.component import adapter
 from zope.container.btree import BTreeContainer
 from zope.container.contained import Contained
@@ -41,6 +42,7 @@ from zope.component.hooks import getSite, setSite
 from zope.app.publication.zopepublication import ZopePublication
 
 from schooltool.app.app import StartUpBase
+from schooltool.app.catalog import AttributeCatalog
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.task.celery import open_schooltool_db
 from schooltool.task.interfaces import IRemoteTask, ITaskContainer
@@ -291,6 +293,10 @@ class RemoteTask(Persistent, Contained):
     def utcnow(self):
         return pytz.UTC.localize(datetime.datetime.utcnow())
 
+    @property
+    def signature(self):
+        return '%s:%s' % (self.__class__.__module__, self.__class__.__name__)
+
 
 class TaskContainer(BTreeContainer):
     implements(ITaskContainer)
@@ -399,6 +405,19 @@ class TaskWriteStatus(TaskReadStatus):
             raise NotInProgress(result.state, self._progress_states)
         result.backend.store_result(result.task_id, self.info, COMMITTING)
         self.reload()
+
+
+class RemoteTaskCatalog(AttributeCatalog):
+    version = '1 - initial'
+    interface = IRemoteTask
+    attributes = ('task_id', 'internal_state', 'scheduled')
+
+    def setIndexes(self, catalog):
+        super(RemoteTaskCatalog, self).setIndexes(catalog)
+        catalog['signature'] = TextIndex('signature')
+
+
+getRemoteTaskCatalog = RemoteTaskCatalog.get
 
 
 def load_plugin_tasks():

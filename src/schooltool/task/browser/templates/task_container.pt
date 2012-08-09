@@ -1,36 +1,6 @@
 <tal:block i18n:domain="schooltool">
-  <table class="form-fields">
-    <thead>
-      <tr>
-        <th i18n:translate="" class="label">Task</th>
-        <th i18n:translate="" class="label">Status</th>
-        <th i18n:translate="" class="label">Scheduled</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr tal:repeat="task view/tasks">
-        <td>
-          <p>
-            <a tal:attributes="href task/@@absolute_url"
-               tal:content="task/task_id" />
-          </p>
-          <p>
-            <a tal:condition="context/schooltool:devmode"
-               tal:attributes="href string:${context/schooltool:app/@@absolute_url}/schooltool.task_results/${task/task_id}" i18n:translate="">JSON result</a>
-          </p>
-        </td>
-        <td>
-          <span tal:content="task/internal_state" />
-        </td>
-        <td>
-          <tal:block condition="task/scheduled">
-            <span tal:content="task/scheduled/@@fullDate" /> -
-            <span tal:content="task/scheduled/time" />
-          </tal:block>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+
+  <div tal:content="structure context/schooltool:content/ajax/table" />
 
   <h3 tal:define="can_manage context/schooltool:app/schooltool:can_edit">
     <tal:block condition="can_manage">
