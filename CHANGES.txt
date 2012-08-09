@@ -16,7 +16,6 @@ XLS
 - new LinkedSectionImport sheet for import only (https://launchpad.net/bugs/1020838)
 - import errors need to be collated and returned in a textarea (https://launchpad.net/bugs/1020839)
 - ResourceImporter needs to process desription cells (https://launchpad.net/bugs/1020840)
-- special error message for numeric values in id cells (https://launchpad.net/bugs/1020841)
 - exporters must skip sections with no courses (https://launchpad.net/bugs/1020842)
 
 Development tools
