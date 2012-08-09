@@ -128,7 +128,6 @@ ERROR_INVALID_RESOURCE_ID_LIST = _("has an invalid resource id")
 ERROR_INVALID_COURSE_ID_LIST = _("has an invalid course id for the given school year")
 ERROR_END_TERM_BEFORE_START = _('end term cannot be before start term')
 ERROR_TERM_SECTION_ID = _('is not a valid section id in the specified term')
-ERROR_ID_MUST_BE_TEXT = _('ID cells must be formatted as text in the spreadsheet')
 ERROR_INCONSISTENT_SCHOOL_YEAR = _('school years must be consistent within this table')
 
 
@@ -251,26 +250,19 @@ class ImporterBase(object):
         return self.getBoolFromCell(sheet, row, col)
 
     def getIdFromCell(self, sheet, row, col, default=u''):
-        value, found = self.getCellAndFound(sheet, row, col, default)
-        if found:
-            if not isinstance(value, str) and not isinstance(value, unicode):
-                self.error(row, col, ERROR_ID_MUST_BE_TEXT)
-                return None
-            return value
-        return default
+        value, found, valid = self.getTextFoundValid(sheet, row, col, default)
+        return value
 
     def getRequiredIdFromCell(self, sheet, row, col):
-        value = self.getIdFromCell(sheet, row, col)
-        if value is not None and not value:
+        value, found, valid = self.getTextFoundValid(sheet, row, col)
+        if valid and not value:
             self.error(row, col, ERROR_MISSING_REQUIRED_TEXT)
         return value
 
     def getIdsFromCell(self, sheet, row, col):
-        value, found = self.getCellAndFound(sheet, row, col)
-        if found:
-            if not isinstance(value, str) and not isinstance(value, unicode):
-                self.error(row, col, ERROR_ID_MUST_BE_TEXT)
-                return None
+        value, found, valid = self.getTextFoundValid(sheet, row, col)
+        if not valid:
+            return None
         return [p.strip() for p in str(value).split(',') if p.strip()]
 
     def getRequiredIdsFromCell(self, sheet, row, col):
