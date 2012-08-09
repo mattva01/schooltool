@@ -83,7 +83,7 @@ class JSONEncoder(json.JSONEncoder):
     def default(self, ob):
         if type(ob) == types.GeneratorType:
             return list(ob)
-        if type(ob) == Exception:
+        if isinstance(ob, Exception):
             return repr(ob)
         return json.JSONEncoder.default(self, ob)
 
