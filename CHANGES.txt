@@ -5,7 +5,7 @@ CHANGES
 2.2.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- We need to allow id cells to be numeric again on import (https://launchpad.net/bugs/1035036)
 
 
 2.2.0 (2012-08-07)

@@ -25,24 +25,20 @@ SectionTimetables sheets:
     >>> import_file('errant_section_sheets.xls')
     SectionEnrollment
     -----------------
-    ID cells must be formatted as text in the spreadsheet:
-    A2, A8, B2, C2
     invalid school year:
-    A3
+    A2-3
     is not a valid section id in the specified term:
     C5
     is not a valid term in the given school year:
     B4
     is not a valid username:
-    A9
+    A8-9
     SectionTimetables
     -----------------
-    ID cells must be formatted as text in the spreadsheet:
-    A2, A21, B2, B21, C2
     invalid school year:
-    A3
+    A2-3
     is not a valid day id for the given timetable:
-    A22
+    A21-22
     is not a valid period id for the given day:
     B23
     is not a valid section id in the specified term:
@@ -53,16 +49,14 @@ SectionTimetables sheets:
     D13
     Sections
     --------
-    ID cells must be formatted as text in the spreadsheet:
-    A6, B6, C6, D6, E6, F6, I6, J6
     has an invalid course id for the given school year:
     B8
     has an invalid resource id:
-    J7-8
+    J6-8
     has an invalid username:
-    I7-8
+    I6-8
     invalid school year:
-    A7
+    A6-7
     is not a valid term in the given school year:
     C8
     missing required text:
@@ -73,18 +67,16 @@ This file has examples of bad data for the LinkedSectionImport sheet:
     >>> import_file('errant_linked_section_import.xls')
     LinkedSectionImport
     -------------------
-    ID cells must be formatted as text in the spreadsheet:
-    A5, B5, C5, D5, E5, H5, I5
     end term cannot be before start term:
     D8
     has an invalid course id for the given school year:
     B7
     has an invalid resource id:
-    I6
+    I5-6
     has an invalid username:
-    G6
+    G5-6
     invalid school year:
-    A6
+    A5-6
     is not a valid term in the given school year:
     C7, D7
 
@@ -93,8 +85,6 @@ This file has examples of bad data for the School Years sheet:
     >>> import_file('errant_years.xls')
     School Years
     ------------
-    ID cells must be formatted as text in the spreadsheet:
-    A7
     end date cannot be before start date:
     D3
     end date overlaps another year:
@@ -109,8 +99,6 @@ This file has examples of bad data for the Terms sheet:
     >>> import_file('errant_terms.xls')
     Terms
     -----
-    ID cells must be formatted as text in the spreadsheet:
-    A3
     end date after end of school year:
     E7
     end date cannot be before start date:
@@ -120,7 +108,7 @@ This file has examples of bad data for the Terms sheet:
     has no date in it:
     A15, B16, D2, E2
     invalid school year:
-    A4
+    A3-4
     missing required text:
     B2, C2
     start date before start of school year:
@@ -133,8 +121,6 @@ This file has examples of bad data for the School Timetables sheet:
     >>> import_file('errant_timetables.xls')
     School Timetables
     -----------------
-    ID cells must be formatted as text in the spreadsheet:
-    B7-9
     missing required text:
     B1-5, B10, B15, B20, B25, B35, B48
 
@@ -175,8 +161,6 @@ This file has examples of bad data for the Persons sheet:
     >>> import_file('errant_persons.xls')
     Persons
     -------
-    ID cells must be formatted as text in the spreadsheet:
-    A5
     Username cannot contain non-ascii characters:
     A4
     gender must be male or female:
@@ -202,8 +186,6 @@ This file has examples of bad data for the Courses sheet:
     >>> import_file('errant_courses.xls')
     Courses
     -------
-    ID cells must be formatted as text in the spreadsheet:
-    B3
     course credits need to be a valid number:
     G3
     invalid school year:
@@ -242,8 +224,6 @@ This file has examples of bad data for the Groups sheet:
     >>> import_file('errant_groups.xls')
     Groups
     ------
-    ID cells must be formatted as text in the spreadsheet:
-    B7
     invalid school year:
     A11
     is not a valid username:
