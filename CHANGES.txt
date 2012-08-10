@@ -30,7 +30,6 @@ Old features
 XLS
 +++
 
-- Added course_id, government_id and credits to Courses sheet import/export.
 - New sections sheets to replace section sheets per term (https://launchpad.net/bugs/1020836)
 - Remove the old Sections exporter and tests (https://launchpad.net/bugs/1020837).
   Old section import still supported.
@@ -44,11 +43,7 @@ XLS
 Bugfixes
 ++++++++
 
-- Timetables evolution fails on exception days (https://launchpad.net/bugs/1003834)
-- Advisory accordion doesn't show advisees (https://launchpad.net/bugs/1005989)
-- Fix upgrade from schooltool < 1.5 crashing on missing levels (https://launchpad.net/bugs/1007361)
 - Allow teachers to see attributes of all sections and resources.
-- Remove demographics when person is deleted.
 
 Translations
 ++++++++++++
@@ -66,6 +61,18 @@ Development tools
 2.1.1 (unreleased)
 ------------------
 
+XLS
++++
+
+- Added course_id, government_id and credits to Courses sheet import/export.
+
+Bugfixes
+++++++++
+
+- Timetables evolution fails on exception days (https://launchpad.net/bugs/1003834)
+- Advisory accordion doesn't show advisees (https://launchpad.net/bugs/1005989)
+- Fix upgrade from schooltool < 1.5 crashing on missing levels (https://launchpad.net/bugs/1007361)
+- Remove demographics when person is deleted.
 - Users cannot see their own photo (https://launchpad.net/bugs/1007145)
 
 
