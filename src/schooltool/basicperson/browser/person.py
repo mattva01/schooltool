@@ -36,6 +36,7 @@ from z3c.form import form, field, button, validator
 from z3c.form.interfaces import DISPLAY_MODE
 from zope.interface import invariant, Invalid
 from zope.publisher.interfaces import NotFound
+from zope.publisher.browser import BrowserPage
 from zope.schema import Password, TextLine, Choice, List, Object
 from zope.schema import ValidationError
 from zope.schema.interfaces import ITitledTokenizedTerm, IField
@@ -1352,7 +1353,7 @@ def getPersonActiveViewlet(person, request, view, manager):
         person, request, view, manager)
 
 
-class PhotoView(flourish.page.Page):
+class PhotoView(BrowserPage):
 
     def __call__(self):
         photo = self.context.photo
@@ -1379,6 +1380,5 @@ class PhotoView(flourish.page.Page):
                         return ''
             self.request.response.setHeader('Last-Modified',
                                             rfc1123_date(lmt))
-        f = photo.open('r')
-        result = f.read()
+        result = photo.openDetached()
         return result
