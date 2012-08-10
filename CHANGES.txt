@@ -63,6 +63,12 @@ Development tools
 - XLS file testing helpers
 
 
+2.1.1 (unreleased)
+------------------
+
+- Users cannot see their own photo (https://launchpad.net/bugs/1007145)
+
+
 2.1.0 (2012-04-19)
 ------------------
 

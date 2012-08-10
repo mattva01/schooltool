@@ -785,7 +785,7 @@
 
   <zope:adapter factory=".person.PhotoFieldFormAdapter" />
 
-  <flourish:page
+  <page
       name="photo"
       for="schooltool.basicperson.interfaces.IBasicPerson"
       class="schooltool.basicperson.browser.person.PhotoView"
