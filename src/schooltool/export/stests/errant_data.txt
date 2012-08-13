@@ -225,7 +225,7 @@ This file has examples of bad data for the Groups sheet:
     Groups
     ------
     invalid school year:
-    A11
+    B13
     is not a valid username:
     A23
     missing required text:
