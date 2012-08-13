@@ -6,6 +6,7 @@ CHANGES
 ------------------
 
 - We need to allow id cells to be numeric again on import (https://launchpad.net/bugs/1035036)
+- Cannot import data file (https://launchpad.net/bugs/1035969)
 
 
 2.2.0 (2012-08-07)
