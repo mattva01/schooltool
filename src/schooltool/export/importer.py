@@ -489,6 +489,10 @@ class TermImporter(ImporterBase):
         if self.getCellValue(sh, row, 0, '') == 'Weekends':
             row += 2
             for col in range(7):
+                try:
+                    sh.cell_value(rowx=row, colx=col)
+                except IndexError:
+                    continue
                 if sh.cell_value(rowx=row, colx=col) != '':
                     for sy in ISchoolYearContainer(self.context).values():
                         for term in sy.values():
@@ -1761,7 +1765,7 @@ class GroupImporter(ImporterBase):
         if num_errors < len(self.errors):
             return
         if data['school_year'] not in ISchoolYearContainer(self.context):
-            self.error(row, 0, ERROR_INVALID_SCHOOL_YEAR)
+            self.error(row+2, 1, ERROR_INVALID_SCHOOL_YEAR)
             return
 
         group = self.createGroup(data)
