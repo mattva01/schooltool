@@ -141,6 +141,19 @@ class ImporterBase(object):
         self.context, self.request = context, request
         self.errors = []
 
+    def isEmptyRow(self, sheet, row, num_cols=30):
+        # We'll pick 30 as an arbitrary number of columns to test so that we
+        # don't need the caller to specify the number.  When a new column is
+        # added to a sheet, the needed change in calling this method would
+        # likely be overlooked.  It's not that expensive anyway to test all 30.
+        for col in range(num_cols):
+            try:
+                if sheet.cell_value(rowx=row, colx=col):
+                    return False
+            except IndexError:
+                break
+        return True
+
     def getCellValue(self, sheet, row, col, default=no_data):
         try:
             return sheet.cell_value(rowx=row, colx=col)
@@ -431,7 +444,7 @@ class TermImporter(ImporterBase):
         sh = self.sheet
 
         for row in range(1, sh.nrows):
-            if sh.cell_value(rowx=row, colx=0) == '':
+            if self.isEmptyRow(sh, row):
                 break
 
             num_errors = len(self.errors)
@@ -468,7 +481,7 @@ class TermImporter(ImporterBase):
         row += 1
         if self.getCellValue(sh, row, 0, '') == 'Holidays':
             for row in range(row + 1, sh.nrows):
-                if sh.cell_value(rowx=row, colx=0) == '':
+                if self.isEmptyRow(sh, row):
                     break
                 start = self.getDateFromCell(sh, row, 0)
                 end = self.getDateFromCell(sh, row, 1)
@@ -635,7 +648,7 @@ class SchoolTimetableImporter(ImporterBase):
             row += 1
 
             while row < sh.nrows:
-                if sh.cell_value(rowx=row, colx=0) == '':
+                if self.isEmptyRow(sh, row):
                     break
 
                 if data['period_templates'] == 'week_days':
@@ -677,7 +690,7 @@ class SchoolTimetableImporter(ImporterBase):
             row += 1
 
             while row < sh.nrows:
-                if sh.cell_value(rowx=row, colx=0) == '':
+                if self.isEmptyRow(sh, row):
                     break
 
                 if data['time_templates'] == 'week_days':
@@ -756,8 +769,8 @@ class ResourceImporter(ImporterBase):
     def process(self):
         sh = self.sheet
         for row in range(1, sh.nrows):
-            if sh.cell_value(rowx=row, colx=0) == '':
-                break
+            if self.isEmptyRow(sh, row):
+                continue
             num_errors = len(self.errors)
             data = {}
             data['__name__'] = self.getRequiredIdFromCell(sh, row, 0)
@@ -831,8 +844,8 @@ class PersonImporter(ImporterBase):
             fields = list(fields.values())
 
         for row in range(first_row, sh.nrows):
-            if sh.cell_value(rowx=row, colx=0) == '':
-                break
+            if self.isEmptyRow(sh, row):
+                continue
 
             num_errors = len(self.errors)
             data = {}
@@ -946,8 +959,8 @@ class ContactPersonImporter(ImporterBase):
         sh = self.sheet
         persons = ISchoolToolApplication(None)['persons']
         for row in range(1, sh.nrows):
-            if sh.cell_value(rowx=row, colx=0) == '':
-                break
+            if self.isEmptyRow(sh, row):
+                continue
 
             num_errors = len(self.errors)
             data = {}
@@ -996,8 +1009,8 @@ class ContactRelationshipImporter(ImporterBase):
         contacts = IContactContainer(app)
         vocab = IContactPersonInfo['relationship'].vocabulary
         for row in range(1, sh.nrows):
-            if sh.cell_value(rowx=row, colx=0) == '':
-                break
+            if self.isEmptyRow(sh, row):
+                continue
 
             num_errors = len(self.errors)
             data = {}
@@ -1069,8 +1082,8 @@ class CourseImporter(ImporterBase):
     def process(self):
         sh = self.sheet
         for row in range(1, sh.nrows):
-            if sh.cell_value(rowx=row, colx=0) == '':
-                break
+            if self.isEmptyRow(sh, row):
+                continue
             num_errors = len(self.errors)
             data = {}
             data['school_year'] = self.getRequiredIdFromCell(sh, row, 0)
@@ -1152,7 +1165,7 @@ class SectionImporter(ImporterBase):
 
         for row in range(row, sh.nrows):
 
-            if sh.cell_value(rowx=row, colx=0) == '':
+            if self.isEmptyRow(sh, row):
                 break
             num_errors = len(self.errors)
             day_title = self.getRequiredIdFromCell(sh, row, 0)
@@ -1192,7 +1205,7 @@ class SectionImporter(ImporterBase):
         for row in range(row, sh.nrows):
             if sh.cell_value(rowx=row, colx=0) == 'School Timetable':
                 self.import_timetable(sh, row, section)
-            elif sh.cell_value(rowx=row, colx=0) == '':
+            elif self.isEmptyRow(sh, row):
                 break
         return row
 
@@ -1215,7 +1228,7 @@ class SectionImporter(ImporterBase):
         if self.getCellValue(sh, row, 0, '') == 'Courses':
             row += 1
             for row in range(row, sh.nrows):
-                if sh.cell_value(rowx=row, colx=0) == '':
+                if self.isEmptyRow(sh, row):
                     break
                 num_errors = len(self.errors)
 
@@ -1242,7 +1255,7 @@ class SectionImporter(ImporterBase):
         if self.getCellValue(sh, row, 0, '') == 'Students':
             row += 1
             for row in range(row, sh.nrows):
-                if sh.cell_value(rowx=row, colx=0) == '':
+                if self.isEmptyRow(sh, row):
                     break
                 num_errors = len(self.errors)
 
@@ -1263,7 +1276,7 @@ class SectionImporter(ImporterBase):
         if self.getCellValue(sh, row, 0, '') == 'Instructors':
             row += 1
             for row in range(row, sh.nrows):
-                if sh.cell_value(rowx=row, colx=0) == '':
+                if self.isEmptyRow(sh, row):
                     break
                 num_errors = len(self.errors)
 
@@ -1358,8 +1371,8 @@ class SectionsImporter(ImporterBase):
         prev_links, next_links = {}, {}
 
         for row in range(1, sh.nrows):
-            if sh.cell_value(rowx=row, colx=0) == '':
-                break
+            if self.isEmptyRow(sh, row):
+                continue
 
             data = {}
             num_errors = len(self.errors)
@@ -1441,7 +1454,7 @@ class SectionMixin(object):
         sections = []
         current_year_id = None
         for row in range(row + 1, sh.nrows):
-            if sh.cell_value(rowx=row, colx=0) == '':
+            if self.isEmptyRow(sh, row):
                 break
 
             num_errors = len(self.errors)
@@ -1488,7 +1501,7 @@ class SectionEnrollmentImporter(ImporterBase, SectionMixin):
 
         students = []
         for row in range(row + 1, sh.nrows):
-            if sh.cell_value(rowx=row, colx=0) == '':
+            if self.isEmptyRow(sh, row):
                 break
 
             student_id = self.getRequiredIdFromCell(sh, row, 0)
@@ -1579,7 +1592,7 @@ class SectionTimetablesImporter(ImporterBase, SectionMixin):
             schedules.append(schedule)
 
         for row in range(row + 1, sh.nrows):
-            if sh.cell_value(rowx=row, colx=0) == '':
+            if self.isEmptyRow(sh, row):
                 break
 
             day_title = self.getIdFromCell(sh, row, 0)
@@ -1665,8 +1678,8 @@ class LinkedSectionImporter(ImporterBase):
         resources = self.context['resources']
 
         for row in range(1, sh.nrows):
-            if sh.cell_value(rowx=row, colx=0) == '':
-                break
+            if self.isEmptyRow(sh, row):
+                continue
 
             data = {}
             num_errors = len(self.errors)
@@ -1776,7 +1789,7 @@ class GroupImporter(ImporterBase):
         if self.getCellValue(sh, row, 0, '') == 'Members':
             row += 1
             for row in range(row, sh.nrows):
-                if sh.cell_value(rowx=row, colx=0) == '':
+                if self.isEmptyRow(sh, row):
                     break
                 num_errors = len(self.errors)
                 username = self.getRequiredIdFromCell(sh, row, 0)
