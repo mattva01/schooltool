@@ -2,12 +2,21 @@
 CHANGES
 =======
 
-2.2.1 (unreleased)
+2.2.2 (unreleased)
 ------------------
 
+- Nothing changed yet.
+
+
+2.2.1 (2012-08-15)
+------------------
+
+XLS
++++
+
 - We need to allow id cells to be numeric again on import (https://launchpad.net/bugs/1035036)
-- Cannot import data file (https://launchpad.net/bugs/1035969)
-- Importer needs to give error when cell A is empty too soon (https://launchpad.net/bugs/1035088)
+- Handle empty Weekends table (https://launchpad.net/bugs/1035969)
+- Skip empty rows if there is only one table in the sheet (https://launchpad.net/bugs/1035088)
 
 
 2.2.0 (2012-08-07)
@@ -39,13 +48,21 @@ XLS
 - Import errors grouped by sheet and error type, displayed in a textarea
   (https://launchpad.net/bugs/1020839)
 - ResourceImporter needs to process description cells (https://launchpad.net/bugs/1020840)
-- Special error message for numeric values in id cells (https://launchpad.net/bugs/1020841)
-- Exporters must skip sections with no courses (https://launchpad.net/bugs/1020842)
 
 Bugfixes
 ++++++++
 
 - Allow teachers to see attributes of all sections and resources.
+
+Development tools
++++++++++++++++++
+
+- Selenium downloads
+- XLS file testing helpers
+
+
+2.1.1 (2012-08-16)
+------------------
 
 Translations
 ++++++++++++
@@ -53,29 +70,26 @@ Translations
 - Updated translations
 - Added Bosnian, Croatian, Slovenian translations
 
-Development tools
-+++++++++++++++++
-
-- Selenium screenshots and downloads
-- XLS file testing helpers
-
-
-2.1.1 (unreleased)
-------------------
-
 XLS
 +++
 
 - Added course_id, government_id and credits to Courses sheet import/export.
+- Exporters must skip sections with no courses (https://launchpad.net/bugs/1020842)
 
 Bugfixes
 ++++++++
 
+- Missing hexes.svg background in released packages (https://launchpad.net/bugs/1030218)
 - Timetables evolution fails on exception days (https://launchpad.net/bugs/1003834)
 - Advisory accordion doesn't show advisees (https://launchpad.net/bugs/1005989)
-- Fix upgrade from schooltool < 1.5 crashing on missing levels (https://launchpad.net/bugs/1007361)
+- Fix upgrade from schooltool < 1.5 crashing (https://launchpad.net/bugs/1007361)
 - Remove demographics when person is deleted.
 - Users cannot see their own photo (https://launchpad.net/bugs/1007145)
+
+Development tools
++++++++++++++++++
+
+- Selenium screenshots
 
 
 2.1.0 (2012-04-19)
