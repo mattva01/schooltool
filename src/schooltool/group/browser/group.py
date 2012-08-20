@@ -55,6 +55,7 @@ from schooltool.app.browser.app import RelationshipAddTableMixin
 from schooltool.app.browser.app import RelationshipRemoveTableMixin
 from schooltool.app.browser.app import RelationshipViewBase
 from schooltool.person.interfaces import IPerson
+from schooltool.person.browser.person import PersonTableFilter
 from schooltool.basicperson.browser.person import BasicPersonTable
 from schooltool.basicperson.browser.person import EditPersonRelationships
 from schooltool.course.interfaces import ISection
@@ -820,3 +821,9 @@ class FlourishGroupIDCardsView(FlourishPersonIDCardsViewBase):
         result = [self.getPersonData(person)
                   for person in self.context.members]
         return result
+
+
+class GroupAwarePersonTableFilter(PersonTableFilter):
+
+    template = ViewPageTemplateFile('templates/f_group_aware_person_table_filter.pt')
+
