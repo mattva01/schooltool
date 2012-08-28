@@ -264,7 +264,7 @@ class ImporterBase(object):
 
     def getIdFromCell(self, sheet, row, col, default=u''):
         value, found, valid = self.getTextFoundValid(sheet, row, col, default)
-        return value
+        return value.strip()
 
     def getRequiredIdFromCell(self, sheet, row, col):
         value, found, valid = self.getTextFoundValid(sheet, row, col)

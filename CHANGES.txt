@@ -6,6 +6,7 @@ CHANGES
 ------------------
 
 - We need person filters on the group page (https://launchpad.net/bugs/1038845)
+- getIdFromCell needs to strip value (https://launchpad.net/bugs/1042773)
 
 
 2.2.1 (2012-08-15)
