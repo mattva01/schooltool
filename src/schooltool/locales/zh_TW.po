@@ -5754,12 +5754,12 @@ msgid "end date overlaps another term"
 msgstr "結束日期落在另一個學期"
 
 #: /src/schooltool/export/importer.py:89
-msgid "${title} has no days in A${row}"
-msgstr "${title}在A${row}中沒有日子"
+msgid "has no days"
+msgstr "中沒有日子"
 
 #: /src/schooltool/export/importer.py:90
-msgid "${title} has no day templates in A${row}"
-msgstr "${title}在A${row}中沒有日子模板"
+msgid "has no day templates"
+msgstr "中沒有日子模板"
 
 #: /src/schooltool/export/importer.py:91
 msgid "is not a valid time range"
@@ -5798,8 +5798,8 @@ msgid "is not a valid course in the given school year"
 msgstr "這不是給定學年裡面的一個有效的課程"
 
 #: /src/schooltool/export/importer.py:100
-msgid "${title} has no courses in A${row}"
-msgstr "${title}在A${row}中沒有課程"
+msgid "has no courses"
+msgstr "中沒有課程"
 
 #: /src/schooltool/export/importer.py:101
 msgid "is not a valid username"
