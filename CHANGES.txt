@@ -2,11 +2,11 @@
 CHANGES
 =======
 
-2.2.2 (unreleased)
+2.2.2 (2012-08-31)
 ------------------
 
 - We need person filters on the group page (https://launchpad.net/bugs/1038845)
-- getIdFromCell needs to strip value (https://launchpad.net/bugs/1042773)
+- Ignore trailing space in ID cells (https://launchpad.net/bugs/1042773)
 - Updated translations
 
 
@@ -23,8 +23,6 @@ XLS
 
 2.2.0 (2012-08-07)
 ------------------
-
-First alpha release for upcoming Ubuntu 12.10.
 
 New features
 ++++++++++++
