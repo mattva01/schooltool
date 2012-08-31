@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2012-04-05 13:59+0300\n"
-"PO-Revision-Date: 2012-04-13 03:15+0000\n"
+"POT-Creation-Date: 2012-08-07 16:51+0300\n"
+"PO-Revision-Date: 2012-08-26 05:17+0000\n"
 "Last-Translator: Kaya Zeren <Unknown>\n"
 "Language-Team: Turkish <tr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-04-20 05:13+0000\n"
-"X-Generator: Launchpad (build 15120)\n"
+"X-Launchpad-Export-Date: 2012-08-28 08:57+0000\n"
+"X-Generator: Launchpad (build 15864)\n"
 "Language: tr\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -4738,11 +4738,7 @@ msgstr "${section} sil"
 msgid "Term"
 msgstr "Dönem"
 
-#: /src/schooltool/course/browser/section.py:998
-msgid "Size"
-msgstr "Boyut"
-
-#: /src/schooltool/course/browser/section.py:1024
+#: /src/schooltool/course/browser/section.py:1077
 #: /src/schooltool/course/browser/templates/f_section_filter.pt:6
 msgid "Section title"
 msgstr "Bölüm başlığı"
@@ -5025,11 +5021,15 @@ msgstr ""
 msgid "Edit this course"
 msgstr "Bu dersi düzenle"
 
-#: /src/schooltool/course/browser/templates/f_course_view.pt:76
+#: /src/schooltool/course/browser/templates/f_course_view.pt:78
+msgid "This course has no sections"
+msgstr "Bu dersin bölümleri yok"
+
+#: /src/schooltool/course/browser/templates/f_course_view.pt:84
 msgid "Edit responsible parties for this course"
 msgstr "Bu dersten sorumlu tarafları düzenle"
 
-#: /src/schooltool/course/browser/templates/f_course_view.pt:84
+#: /src/schooltool/course/browser/templates/f_course_view.pt:92
 msgid "These users can modify the course."
 msgstr "Şu kullanıcılar bu dersi düzenleyebilir."
 
@@ -5054,21 +5054,7 @@ msgstr ""
 msgid "Sections taught"
 msgstr "Öğretilen bölümler"
 
-#: /src/schooltool/course/browser/templates/f_coursesviewlet.pt:12
-#: /src/schooltool/course/browser/templates/f_coursesviewlet.pt:49
-#: /src/schooltool/group/browser/group.py:327
-#: /src/schooltool/group/browser/templates/f_groupsviewlet.pt:19
-#: /src/schooltool/schoolyear/browser/flourish.zcml:65
-#: /src/schooltool/schoolyear/browser/flourish.zcml:100
-#: /src/schooltool/schoolyear/browser/flourish.zcml:130
-#: /src/schooltool/schoolyear/browser/flourish.zcml:182
-#: /src/schooltool/schoolyear/browser/schoolyear.py:712
-#: /src/schooltool/schoolyear/browser/templates/f_schoolyear_activate.pt:8
-#: /src/schooltool/term/browser/templates/f_manage_years_overview.pt:15
-msgid "School Year"
-msgstr "Okul Yılı"
-
-#: /src/schooltool/course/browser/templates/f_coursesviewlet.pt:43
+#: /src/schooltool/course/browser/templates/f_coursesviewlet.pt:37
 msgid "Sections attended"
 msgstr "Katılınılan bölümler"
 
@@ -5164,6 +5150,10 @@ msgstr "Bu Döneme Yay"
 msgid "Link an Existing Section"
 msgstr "Varolan Bir Bölüme Bağla"
 
+#: /src/schooltool/course/browser/templates/f_section_list_table_filter.pt:25
+msgid "(${count} sections)"
+msgstr "(${count} sections)"
+
 #: /src/schooltool/course/browser/templates/f_section_member_csvimport_description.pt:3
 #: /src/schooltool/group/browser/templates/f_group_member_csvimport_description.pt:3
 msgid "CSV data should contain a SchoolTool username in each line."
@@ -5186,6 +5176,18 @@ msgid ""
 msgstr ""
 "Üstteki örnek, bu bölüme 'ali_b' ve 'veli_c' adlı kullanıcıları öğrenci "
 "olarak ekler."
+
+#: /src/schooltool/course/browser/templates/f_section_table_filter.pt:35
+#: /src/schooltool/person/browser/f_person_filter.pt:20
+#: /src/schooltool/person/browser/f_person_table_filter.pt:39
+#: /src/schooltool/resource/browser/templates/f_resource_filter.pt:20
+#: /src/schooltool/resource/browser/templates/f_resource_table_filter.pt:33
+msgid "Filter by..."
+msgstr "Süz..."
+
+#: /src/schooltool/course/browser/templates/f_section_table_filter.pt:41
+msgid "All courses"
+msgstr "Tüm dersler"
 
 #: /src/schooltool/course/browser/templates/f_section_view.pt:4
 msgid "Edit this section"
@@ -5230,14 +5232,6 @@ msgstr "Bu bölümün ekipmanlarını düzenle"
 #: /src/schooltool/course/browser/templates/f_section_view.pt:176
 msgid "This section has no equipment"
 msgstr "Bu bölümde bir ekipman yok"
-
-#: /src/schooltool/course/browser/templates/f_sections_related.pt:6
-msgid ""
-"A section is a set of one or more learners and instructors who meet during a "
-"term to achieve the curricular goals of a course."
-msgstr ""
-"Bir bölüm, bir dönem boyunca belirli bir müfredatı işlemek amacıyla bir "
-"araya getirilmiş öğrenci ve öğretmenler grubudur."
 
 #: /src/schooltool/course/browser/templates/f_unlink_section.pt:22
 #: /src/schooltool/course/browser/templates/unlink_section.pt:23
@@ -5933,11 +5927,7 @@ msgstr ""
 msgid "Export as XLS"
 msgstr "XLS Ver"
 
-#: /src/schooltool/export/importer.py:76
-msgid "${sheet_name} ${column}${row} ${message}"
-msgstr "${sheet_name} ${column}${row} ${message}"
-
-#: /src/schooltool/export/importer.py:77
+#: /src/schooltool/export/importer.py:79
 msgid "is not a valid integer"
 msgstr "geçerli bir tamsayı değil"
 
@@ -6061,11 +6051,11 @@ msgstr "kod bir kullanıcı kodu olduğunda boş bırakılmalıdır"
 msgid "is not a valid resource id"
 msgstr "geçerli bir kaynak kodu değil"
 
-#: /src/schooltool/export/importer.py:108
-msgid "Username cannot contain non-ascii characters: ${string}"
-msgstr "Kullanıcı adı ascii olmayan karakterleri içermemeli: ${string}"
-
 #: /src/schooltool/export/importer.py:110
+msgid "Username cannot contain non-ascii characters"
+msgstr "Kullanıcı adında ASCII olmayan karakterler bulunamaz"
+
+#: /src/schooltool/export/importer.py:111
 msgid "is not a valid weekday number (0-6)"
 msgstr "geçerli bir iş günü numarası değil (0-6)"
 
@@ -6073,11 +6063,99 @@ msgstr "geçerli bir iş günü numarası değil (0-6)"
 msgid "is not a valid contact relationship"
 msgstr "geçerli bir ilgili ilişkisi değil"
 
-#: /src/schooltool/export/importer.py:112
-msgid "must be either True or False"
-msgstr "Doğru ya da Yanlış olmalıdır"
+#: /src/schooltool/export/importer.py:113
+msgid ""
+"must be either TRUE, FALSE, YES or NO (upper, lower and mixed case are all "
+"valid)"
+msgstr ""
+"DOĞRU, YANLIŞ, EVET ya da HAYIR olmalı (büyük, küçük ve karışık harflerin "
+"hepsi geçerlidir)"
 
-#: /src/schooltool/export/templates/f_import.pt:17
+#: /src/schooltool/export/importer.py:114
+msgid "must have a school year"
+msgstr "bir okul yılı olmalı"
+
+#: /src/schooltool/export/importer.py:115
+msgid "must have a course"
+msgstr "bir ders olmalı"
+
+#: /src/schooltool/export/importer.py:116
+msgid "must have a term"
+msgstr "bir dönem olmalı"
+
+#: /src/schooltool/export/importer.py:117
+msgid "the current section is in the first term of the school year"
+msgstr "geçerli bölüm okul yılının ilk döneminde"
+
+#: /src/schooltool/export/importer.py:118
+msgid "the current section is in the last term of the school year"
+msgstr "geçerli bölüm okul yılının son döneminde"
+
+#: /src/schooltool/export/importer.py:119
+msgid "is not a valid section id in the previous term"
+msgstr "önceki dönemde geçerli bir bölüm kodu değil"
+
+#: /src/schooltool/export/importer.py:120
+msgid "is not a valid section id in the next term"
+msgstr "sonraki dönemde geçerli bir bölüm kodu değil"
+
+#: /src/schooltool/export/importer.py:121
+msgid "no timetable is defined for this section"
+msgstr "bu bölüm için bir zaman tablosu belirlenmemiş"
+
+#: /src/schooltool/export/importer.py:122
+msgid "no day is defined in this row"
+msgstr "bu satırda bir gün belirlenmemiş"
+
+#: /src/schooltool/export/importer.py:123
+msgid "must have a valid period id"
+msgstr "geçerli bir aralık kodu olmalı"
+
+#: /src/schooltool/export/importer.py:124
+msgid "course credits need to be a valid number"
+msgstr "ders kredileri geçerli bir rakam olmalı"
+
+#: /src/schooltool/export/importer.py:125
+msgid "gender must be male or female"
+msgstr "cinsiyet erkek ya da kadın olmalı"
+
+#: /src/schooltool/export/importer.py:126
+msgid "has an invalid username"
+msgstr "geçersiz kullanıcı adı"
+
+#: /src/schooltool/export/importer.py:127
+msgid "has an invalid resource id"
+msgstr "geçersiz bir kaynak koduna sahip"
+
+#: /src/schooltool/export/importer.py:128
+msgid "has an invalid course id for the given school year"
+msgstr "verilen okul yılı için geçersiz bir ders koduna sahip"
+
+#: /src/schooltool/export/importer.py:129
+msgid "end term cannot be before start term"
+msgstr "bitiş dönemi başlangıç döneminden önce olamaz"
+
+#: /src/schooltool/export/importer.py:130
+msgid "is not a valid section id in the specified term"
+msgstr "belirtilen dönemde geçerli bir bölüm kodu değil"
+
+#: /src/schooltool/export/importer.py:131
+msgid "ID cells must be formatted as text in the spreadsheet"
+msgstr "Çalışma sayfasında kod hücreleri metin olarak biçimlendirilmelidir"
+
+#: /src/schooltool/export/importer.py:132
+msgid "school years must be consistent within this table"
+msgstr "Bu tablo içindeki okul yılı tutarlı olmalıdır"
+
+#: /src/schooltool/export/importer.py:1871
+msgid "${sheet_name} ${column}${row} ${message}"
+msgstr "${sheet_name} ${column}${row} ${message}"
+
+#: /src/schooltool/export/importer.py:1887
+msgid "The following errors occurred while importing:"
+msgstr "Alma sırasında şu hatalar oluştu:"
+
+#: /src/schooltool/export/templates/f_import.pt:19
 msgid "Please wait while the data is being imported."
 msgstr "Lütfen veriler alınırken bekleyin."
 
@@ -6237,7 +6315,18 @@ msgstr "Geçerli gruplar"
 msgid "Available groups"
 msgstr "Uygun gruplar"
 
-#: /src/schooltool/group/browser/group.py:448
+#: /src/schooltool/group/browser/group.py:322
+#: /src/schooltool/group/browser/group.py:550
+#: /src/schooltool/schoolyear/browser/flourish.zcml:65
+#: /src/schooltool/schoolyear/browser/flourish.zcml:109
+#: /src/schooltool/schoolyear/browser/flourish.zcml:146
+#: /src/schooltool/schoolyear/browser/flourish.zcml:198
+#: /src/schooltool/schoolyear/browser/schoolyear.py:711
+#: /src/schooltool/schoolyear/browser/templates/f_schoolyear_activate.pt:8
+msgid "School Year"
+msgstr "Okul Yılı"
+
+#: /src/schooltool/group/browser/group.py:443
 msgid "Delete ${group}"
 msgstr "${group} sil"
 
@@ -6575,14 +6664,8 @@ msgstr "Parola değiştirildi"
 msgid "First name, last name or username"
 msgstr "Ad, soyad ya da kullanıcı adı"
 
-#: /src/schooltool/person/browser/f_person_filter.pt:20
-#: /src/schooltool/person/browser/f_person_table_filter.pt:39
-#: /src/schooltool/resource/browser/templates/f_resource_filter.pt:20
-#: /src/schooltool/resource/browser/templates/f_resource_table_filter.pt:33
-msgid "Filter by..."
-msgstr "Süz..."
-
 #: /src/schooltool/person/browser/f_person_filter.pt:26
+#: /src/schooltool/person/browser/f_person_table_filter.pt:45
 #: /src/schooltool/person/browser/person_filter.pt:5
 msgid "All groups"
 msgstr "Bütün gruplar"
@@ -8094,9 +8177,9 @@ msgstr ""
 "Bir günün durumunu değiştirmek için üzerine tıklayın. Ayrıca bir haftanın "
 "günlerini de değiştirebilirsiniz:"
 
-#: /src/schooltool/term/browser/templates/f_terms.pt:29
-msgid "This year has no terms defined."
-msgstr "Bu yılda henüz tanımlanmış bir dönem yok."
+#: /src/schooltool/term/browser/templates/f_terms.pt:5
+msgid "There are no terms."
+msgstr "Herhangi bir dönem yok."
 
 #: /src/schooltool/term/browser/templates/f_terms_related.pt:6
 msgid ""
@@ -8197,6 +8280,10 @@ msgstr "Okul Yılı: ${year_title}"
 #: /src/schooltool/term/browser/term.py:691
 msgid "Add a new term to ${year_title}"
 msgstr "${year_title} yılına yeni bir dönem ekle"
+
+#: /src/schooltool/term/interfaces.py:41
+msgid "An internal identifier of this term."
+msgstr "Bu dönem için kısa ad."
 
 #: /src/schooltool/term/term.py:313
 msgid "Term date is not in the school year."
