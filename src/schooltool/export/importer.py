@@ -108,7 +108,6 @@ ERROR_INVALID_CONTACT_ID = _('is not a valid username or contact id')
 ERROR_UNWANTED_CONTACT_DATA = _('must be empty when ID is a user id')
 ERROR_INVALID_RESOURCE_ID = _('is not a valid resource id')
 ERROR_UNICODE_CONVERSION = _("Username cannot contain non-ascii characters")
-ERROR_WEEKLY_DAY_ID = _('is not a valid weekday number (0-6)')
 ERROR_CONTACT_RELATIONSHIP = _("is not a valid contact relationship")
 ERROR_NOT_BOOLEAN = _("must be either TRUE, FALSE, YES or NO (upper, lower and mixed case are all valid)")
 ERROR_MISSING_YEAR_ID = _("must have a school year")
@@ -517,9 +516,6 @@ class SchoolTimetableImporter(ImporterBase):
 
     sheet_name = 'School Timetables'
 
-    dows = ['Monday', 'Tuesday', 'Wednesday', 'Thursday',
-            'Friday', 'Saturday', 'Sunday']
-
     day_templates = (
         ('calendar_days', CalendarDayTemplates),
         ('week_days', WeekDayTemplates),
@@ -555,18 +551,11 @@ class SchoolTimetableImporter(ImporterBase):
         notify(event)
         timetable.time_slots.initTemplates()
 
-        name_chooser = INameChooser(timetable.periods.templates)
-        for entry in data['periods']:
-            day_id = entry['id']
-            day_title = day_id
-            if data['period_templates'] == 'week_days':
-                day_title = self.dows[int(day_id)]
+        for n, entry in enumerate(data['periods']):
+            day_title = entry['id']
             day = DayTemplate(day_title)
-            if data['period_templates'] == 'week_days':
-                name = day_id
-            else:
-                name = name_chooser.chooseName('', day)
-            timetable.periods.templates[name] = day
+            key = unicode(n)
+            timetable.periods.templates[key] = day
             p_chooser = INameChooser(day)
             for period_entry in entry['periods']:
                 period = Period(title=period_entry['title'],
@@ -574,18 +563,11 @@ class SchoolTimetableImporter(ImporterBase):
                 p_name = p_chooser.chooseName('', period)
                 day[p_name] = period
 
-        name_chooser = INameChooser(timetable.time_slots.templates)
-        for entry in data['time_slots']:
-            day_id = entry['id']
-            day_title = day_id
-            if data['time_templates'] == 'week_days':
-                day_title = self.dows[int(day_id)]
+        for n, entry in enumerate(data['time_slots']):
+            day_title = entry['id']
             day = DayTemplate(day_title)
-            if data['time_templates'] == 'week_days':
-                name = day_id
-            else:
-                name = name_chooser.chooseName('', day)
-            timetable.time_slots.templates[name] = day
+            key = unicode(n)
+            timetable.time_slots.templates[key] = day
             ts_chooser = INameChooser(day)
             for ts_entry in entry['time_slots']:
                 time_slot = TimeSlot(
@@ -593,28 +575,6 @@ class SchoolTimetableImporter(ImporterBase):
                     activity_type=ts_entry['activity'] or None)
                 ts_name = ts_chooser.chooseName('', time_slot)
                 day[ts_name] = time_slot
-
-    def getWeeklyDayId(self, sh, row, col):
-        value, found = self.getCellAndFound(sh, row, col)
-        if not found:
-            self.error(row, col, ERROR_WEEKLY_DAY_ID)
-            return None
-
-        if isinstance(value, float):
-            if int(value) == value:
-                value = int(value)
-        else:
-            try:
-                value = self.dows.index(value)
-            except ValueError:
-                self.errors.append("Unrecognised day id %s" % value)
-
-            if isinstance(value, float):
-                if int(value) != value:
-                    self.error(row, col, ERROR_NOT_INT)
-                else:
-                    value = int(value)
-        return unicode(value)
 
     def import_school_timetable(self, sh, row):
         num_errors = len(self.errors)
@@ -652,10 +612,7 @@ class SchoolTimetableImporter(ImporterBase):
                 if self.isEmptyRow(sh, row):
                     break
 
-                if data['period_templates'] == 'week_days':
-                    day_id = self.getWeeklyDayId(sh, row, 0)
-                else:
-                    day_id = self.getRequiredIdFromCell(sh, row, 0)
+                day_id = self.getRequiredIdFromCell(sh, row, 0)
 
                 if day_id in [day['id'] for day in data['periods']]:
                     self.error(row, 0, ERROR_DUPLICATE_DAY_ID)
@@ -694,10 +651,7 @@ class SchoolTimetableImporter(ImporterBase):
                 if self.isEmptyRow(sh, row):
                     break
 
-                if data['time_templates'] == 'week_days':
-                    day_id = self.getWeeklyDayId(sh, row, 0)
-                else:
-                    day_id = self.getRequiredIdFromCell(sh, row, 0)
+                day_id = self.getRequiredIdFromCell(sh, row, 0)
 
                 if day_id in [day['id'] for day in data['time_slots']]:
                     self.error(row, 0, ERROR_DUPLICATE_DAY_ID)
@@ -720,7 +674,10 @@ class SchoolTimetableImporter(ImporterBase):
                             'activity': activity,
                             })
                     col += 1
-                data['time_slots'].append({'id': day_id, 'time_slots': time_slots})
+                data['time_slots'].append({
+                        'id': day_id,
+                        'time_slots': time_slots
+                        })
                 row += 2
         else:
             self.errors.append(format_message(

@@ -13,6 +13,7 @@ CHANGES
 
 - We need person filters on the group page (https://launchpad.net/bugs/1038845)
 - Ignore trailing space in ID cells (https://launchpad.net/bugs/1042773)
+- Unrecognized day id error on localized XLS import (https://launchpad.net/bugs/901267)
 - Updated translations
 
 
