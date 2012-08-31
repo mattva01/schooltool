@@ -113,7 +113,7 @@ class PageAbsoluteURL(AbsoluteURL):
 
 
 class NoSidebarPage(Page):
-    container_class = 'container expand_container'
+    container_class = 'container extra-wide-container'
 
     page_template = ViewPageTemplateFile('templates/page_nosidebar.pt')
 
@@ -330,7 +330,7 @@ class PageNavigationManager(ListNavigationContent):
     def render(self, *args, **kw):
         if not self.active:
             return ''
-        return ViewletManager.render(*args, **kw)
+        return ViewletManager.render(self, *args, **kw)
 
 
 class RefineLinksViewlet(Refine, ListNavigationViewlet):

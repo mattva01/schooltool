@@ -1,0 +1,131 @@
+Test for Teachers and Students sheets
+-------------------------------------
+
+Log in as manager:
+
+    >>> manager = browsers.manager
+    >>> manager.ui.login('manager', 'schooltool')
+
+We'll add some demo fields, one limited to teachers and one to students.
+
+    >>> manager.query.link('School').click()
+    >>> manager.query.link('Demographics').click()
+    >>> manager.query.link('Yes/No Field').click()
+    >>> manager.query.name('form.widgets.title').type('Bool Demo')
+    >>> manager.query.name('form.widgets.name').type('bool_demo')
+    >>> manager.query.id('form-widgets-required-1').click()
+    >>> manager.query.id('form-widgets-limit_keys-1').click()
+    >>> manager.query.button('Submit').click()
+
+    >>> manager.query.link('Date Field').click()
+    >>> manager.query.name('form.widgets.title').type('Date Demo')
+    >>> manager.query.name('form.widgets.name').type('date_demo')
+    >>> manager.query.id('form-widgets-required-1').click()
+    >>> manager.query.id('form-widgets-limit_keys-0').click()
+    >>> manager.query.button('Submit').click()
+
+We will import a special test xls file that has a Teachers and a Students sheet:
+
+    >>> import os
+    >>> dirname = os.path.abspath(os.path.dirname(__file__))
+    >>> filename = os.path.join(dirname, 'teachers_students_sheets.xls')
+    >>> manager.ui.import_xls(filename)
+
+Let's look at the teachers group:
+
+    >>> manager.query.link('School').click()
+    >>> manager.query.link('Teachers').click()
+
+We see the teachers we defined in the Teachers sheet.
+
+    >>> print manager.query_all.xpath('//table[@class="data"]//td[1]//a').get_attribute('href')
+    http://localhost/persons/teacher001
+    http://localhost/persons/teacher000
+
+Their limit demos are set in the teachers objects.
+
+    >>> manager.query.link('Alvarez').click()
+    >>> print manager.query_all.xpath('//table[@class="person-view-demographics"]//td[2]').text
+    Nathan
+    Alvarez
+    teacher001
+    No
+
+    >>> manager.query.link('Done').click()
+    >>> manager.query.link('Russell').click()
+    >>> print manager.query_all.xpath('//table[@class="person-view-demographics"]//td[2]').text
+    Lu
+    Russell
+    teacher000
+    Yes
+
+Let's look at the students group:
+
+    >>> manager.query.link('School').click()
+    >>> manager.query.link('Students').click()
+
+We see the students we defined in the Students sheet.
+
+    >>> print manager.query_all.xpath('//table[@class="data"]//td[1]//a').get_attribute('href')
+    http://localhost/persons/student003
+    http://localhost/persons/student000
+    http://localhost/persons/student001
+    http://localhost/persons/student002
+
+Their limit demos are set in the students objects.
+
+    >>> manager.query.link('Cooper').click()
+    >>> print manager.query_all.xpath('//table[@class="person-view-demographics"]//td[2]').text
+    Piotr
+    Cooper
+    Female
+    student003
+    0004
+    White
+    English
+    Arlington
+    US
+    2000-01-04
+
+    >>> manager.query.link('Done').click()
+    >>> manager.query.link('Hart').click()
+    >>> print manager.query_all.xpath('//table[@class="person-view-demographics"]//td[2]').text
+    Florian
+    Hart
+    Female
+    student000
+    0001
+    White
+    English
+    Arlington
+    US
+    2000-01-01
+
+    >>> manager.query.link('Done').click()
+    >>> manager.query.link('Jorgensen').click()
+    >>> print manager.query_all.xpath('//table[@class="person-view-demographics"]//td[2]').text
+    Peg
+    Jorgensen
+    Male
+    student001
+    0002
+    White
+    English
+    Arlington
+    US
+    2000-01-03
+
+    >>> manager.query.link('Done').click()
+    >>> manager.query.link('Sullivan').click()
+    >>> print manager.query_all.xpath('//table[@class="person-view-demographics"]//td[2]').text
+    Sherm
+    Sullivan
+    Male
+    student002
+    0003
+    White
+    English
+    Arlington
+    US
+    2000-01-02
+

@@ -21,12 +21,18 @@ Upgrade SchoolTool to generation 35.
 
 Evolution script to unregister old catalog utilities.
 """
+import zope.catalog
+import zope.catalog.catalog
+import zope.catalog.interfaces
+import zope.intid
+import zope.intid.interfaces
 from zope.app.generations.utility import findObjectsProviding
 from zope.app.publication.zopepublication import ZopePublication
-from zope.component import queryUtility
+from zope.component import queryUtility, getUtility
 from zope.component.hooks import getSite, setSite
 from zope.traversing.api import traverse
 
+from schooltool.testing.mock import ModulesSnapshot
 from schooltool.app.interfaces import ISchoolToolApplication
 from zope.catalog.interfaces import ICatalog
 
@@ -41,12 +47,34 @@ CATALOG_KEYS = [
 def evolve(context):
     root = context.connection.root().get(ZopePublication.root_name, None)
 
+    # Mock the renaming of zope.app.catalog and zope.app.intid to
+    # zope.catalog and zope.intid.
+    # This is for Critical Links deployments only - this part of Zope's evolution
+    # was missed somehow.
+    modules = ModulesSnapshot()
+    modules.mock_module('zope.app.catalog')
+    modules.mock_module('zope.app.catalog.interfaces')
+    modules.mock_module('zope.app.catalog.catalog')
+    modules.mock_module('zope.app.intid')
+    modules.mock_module('zope.app.intid.interfaces')
+
+    modules.mock_attr('zope.app.catalog.catalog', 'Catalog', zope.catalog.catalog.Catalog)
+    modules.mock_attr('zope.app.catalog.interfaces', 'ICatalog', zope.catalog.interfaces.ICatalog)
+
+    modules.mock_attr('zope.app.intid', 'IntIds', zope.intid.IntIds)
+    modules.mock_attr('zope.app.intid.interfaces', 'IIntIds', zope.intid.interfaces.IIntIds)
+
+    # Proceed with normal evolution now.
+
     old_site = getSite()
     apps = findObjectsProviding(root, ISchoolToolApplication)
     for app in apps:
         setSite(app)
         sm = app.getSiteManager()
         default = traverse(app, '++etc++site/default')
+
+        intids = getUtility(zope.intid.interfaces.IIntIds)
+        intids._p_changed = True
 
         for key in CATALOG_KEYS:
             util = queryUtility(ICatalog, name=key, default=None)
@@ -57,3 +85,5 @@ def evolve(context):
             del default[name]
 
     setSite(old_site)
+
+    modules.restore()

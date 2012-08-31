@@ -213,6 +213,14 @@
       class=".person.FlourishPersonInfo"
       />
 
+  <flourish:viewlet
+      name="jstree-resources"
+      view=".person.FlourishPersonView"
+      permission="schooltool.view"
+      manager="schooltool.skin.flourish.page.IPageContentManager"
+      template="templates/f_person_view_jstree.pt"
+      />
+
   <!-- Edit person page -->
 
   <flourish:page
@@ -777,7 +785,7 @@
 
   <zope:adapter factory=".person.PhotoFieldFormAdapter" />
 
-  <flourish:page
+  <page
       name="photo"
       for="schooltool.basicperson.interfaces.IBasicPerson"
       class="schooltool.basicperson.browser.person.PhotoView"

@@ -1,0 +1,49 @@
+<tal:block condition="view/multiple_terms">
+<script>ST.state.push()</script>
+<tal:script
+    tal:replace="structure scriptlocal:container_id view/manager/html_id" />
+<tal:block i18n:domain="schooltool"
+           define="batch nocall:view/manager/batch|nothing;
+                   search_id view/search_id">
+  <fieldset class="course-sections-list">
+    <div class="row" tal:define="term_ids view/search_term_ids">
+      <div class="label">
+        <span i18n:translate="">Terms</span>
+      </div>
+      <div class="widget">
+        <div tal:repeat="term view/terms">
+          <tal:block define="id string:${view/search_term_ids}-${term/id}">
+            <input tal:attributes="value term/id;
+                                   id id;
+                                   name term_ids;
+                                   checked term/checked"
+                   type="checkbox" />
+            <label tal:attributes="for id">
+              <span class="label">
+                <tal:block content="term/title" />
+                <tal:block i18n:translate="">
+                  (<tal:block i18n:name="count"
+                              replace="python:view.getSectionCount(term['obj'])"
+                              /> sections)
+                </tal:block>
+              </span>
+            </label>
+            <tal:script
+                replace="structure scriptlocal: term_id id; search_id" />
+            <script>
+            $(ST.dialogs.jquery_id(ST.local.term_id)).click(
+                function(){
+                    var search_id = ST.local.search_id;
+                    var container_id = ST.local.container_id;
+                    return function(button) {
+                        return ST.table.on_form_submit(container_id, button);
+                    }}());
+            </script>
+          </tal:block>
+        </div>
+      </div>
+    </div>
+  </fieldset>
+</tal:block>
+<script>ST.state.pop()</script>
+</tal:block>

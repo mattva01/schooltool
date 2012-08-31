@@ -122,6 +122,22 @@ def registerSeleniumSetup():
         lambda: schooltool.testing.selenium.registerBrowserUI(
             'section.instructors.add', addInstructors))
 
+    def removeInstructors(browser, schoolyear, term, section, instructors):
+        browser.ui.section.go(schoolyear, term, section)
+        selector = '//a[@title="Edit instructors for this section"]'
+        browser.query.xpath(selector).click()
+        # XXX: Click Show All here in case there are lots of people
+        for instructor in instructors:
+            selector = '#current_table-ajax-current_table- table'
+            table = browser.query.css(selector)
+            selector = '//button[@name="remove_item.%s"]' % instructor
+            browser.query.xpath(selector).click()
+            browser.wait(lambda: table.expired)
+
+    registry.register('SeleniumHelpers',
+        lambda: schooltool.testing.selenium.registerBrowserUI(
+            'section.instructors.remove', removeInstructors))
+
     def addStudents(browser, schoolyear, term, section, students):
         browser.ui.section.go(schoolyear, term, section)
         selector = '//a[@title="Edit students for this section"]'
@@ -141,10 +157,27 @@ def registerSeleniumSetup():
         lambda: schooltool.testing.selenium.registerBrowserUI(
             'section.students.add', addStudents))
 
+    def removeStudents(browser, schoolyear, term, section, students):
+        browser.ui.section.go(schoolyear, term, section)
+        selector = '//a[@title="Edit students for this section"]'
+        browser.query.xpath(selector).click()
+        # XXX: Click Show All here in case there are lots of people
+        for student in students:
+            selector = '#current_table-ajax-current_table- table'
+            table = browser.query.css(selector)
+            selector = '//button[@name="remove_item.%s"]' % student
+            browser.query.xpath(selector).click()
+            browser.wait(lambda: table.expired)
+
+    registry.register('SeleniumHelpers',
+        lambda: schooltool.testing.selenium.registerBrowserUI(
+            'section.students.remove', removeStudents))
+
     def visitSection(browser, schoolyear, term, section):
         browser.open('http://localhost/sections')
         browser.query.link(schoolyear).click()
-        browser.query.id('SEARCH').type(section)
+        selector = 'input.text-widget'
+        browser.query.css(selector).type(section)
         table = browser.query.css('form table')
         browser.query.name('SEARCH_BUTTON').click()
         browser.wait(lambda: table.expired)

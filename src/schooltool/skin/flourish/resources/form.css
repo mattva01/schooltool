@@ -56,6 +56,10 @@ form fieldset > legend > span {
     width: 704px;
 }
 
+.extra-wide-container form fieldset > legend > span {
+    width: 896px;
+}
+
 form fieldset .row ~ .row {
     margin-top: 8px;
 }
@@ -188,6 +192,13 @@ form .buttons .button-cancel {
     margin-right: 2px;
 }
 
+.status > textarea {
+    margin-bottom: 8px;
+    font-family: Monospace;
+    font-size: 12px;
+    font-weight: bold;
+}
+
 form .status > .errors {
     display: none;
 }
@@ -214,4 +225,11 @@ form pre.csv-text {
     font-size: 12px;
     padding: 4px 0px 4px 7px;
     margin-bottom: 8px;
+}
+
+/* XXX: used in course index view */
+
+form fieldset.course-sections-list {
+    padding: 0 8px;
+    background: none;
 }

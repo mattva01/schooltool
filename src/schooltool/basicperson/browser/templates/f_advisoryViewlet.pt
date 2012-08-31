@@ -36,7 +36,7 @@
                i18n:attributes="alt" />
         </a>
       </h3>
-      <tal:block define="has_advisees python:bool(len(list(view.context.advisors)))">
+      <tal:block define="has_advisees python:bool(len(list(view.context.advisees)))">
         <!-- XXX: need a shorthand to access ajax parts -->
         <div tal:condition="has_advisees"
              tal:content="structure view/view/view/providers/ajax/view/context/advisees/person_table"/>

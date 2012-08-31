@@ -21,7 +21,7 @@ Tests for SchoolTool XLS export views.
 """
 import unittest
 import doctest
-from datetime import date
+from datetime import date, time
 
 from schooltool.basicperson.interfaces import IDemographics
 from schooltool.basicperson.person import BasicPerson
@@ -43,8 +43,13 @@ from schooltool.schoolyear.testing import provideStubUtility
 from schooltool.schoolyear.testing import provideStubAdapter
 from schooltool.schoolyear.interfaces import ISchoolYearContainer
 from schooltool.export.ftesting import export_functional_layer
+from schooltool.resource.resource import Location, Equipment
 from schooltool.schoolyear.testing import setUp
 from schooltool.schoolyear.testing import tearDown
+from schooltool.timetable.interfaces import IScheduleContainer
+from schooltool.timetable.interfaces import ITimetableContainer
+from schooltool.timetable.timetable import SelectedPeriodsSchedule
+from schooltool.timetable.tests.test_timetable import TimetableForTests
 
 
 def setUpSchool(app):
@@ -179,8 +184,8 @@ def doctest_format_courses():
         >>> setUpSchool(app)
         >>> exporter = MegaExporter(app, None)
         >>> for row in exporter.format_courses(): print row
-        [Header('School Year'), Header('ID'), Header('Title'), Header('Description')]
-        [Text(u'2005'), Text(u'c1'), Text('History'), Date(None)]
+        [Header('School Year'), Header('ID'), Header('Title'), Header('Description'), Header('Local ID'), Header('Government ID'), Header('Credits')]
+        [Text(u'2005'), Text(u'c1'), Text('History'), Text(None), Text(None), Text(None), Text(None)]
     """
 
 
@@ -421,54 +426,6 @@ class WorkSheetStub(object):
                 l.append(self.table.get((x, y), Cell("", None)).data)
             table.append(l)
         return format_table(table)
-
-
-def doctest_MegaExporter_export_section():
-    """
-
-        >>> app = ISchoolToolApplication(None)
-        >>> sy = ISchoolYearContainer(app)['2005'] = SchoolYear('2005',
-        ...                                                     date(2005, 1, 1),
-        ...                                                     date(2005, 1, 30))
-
-        >>> term = sy['spring'] = Term('Spring', date(2005, 1, 1),
-        ...                                      date(2005, 1, 30))
-
-        >>> pc = app['persons']
-        >>> teacher = pc['teacher'] = Person("Mister T")
-        >>> s1 = pc['john'] = Person("John")
-        >>> s2 = pc['pete'] = Person("Pete")
-
-        >>> course = ICourseContainer(sy)['c1'] = Course("History")
-        >>> section = ISectionContainer(term)['s1'] = Section()
-        >>> section.courses.add(course)
-        >>> section.instructors.add(teacher)
-        >>> section.members.add(s1)
-        >>> section.members.add(s2)
-
-        >>> exporter = MegaExporter(None, None)
-        >>> ws = WorkSheetStub()
-        >>> offset = 0
-        >>> len = exporter.format_section(section, ws, offset)
-
-        >>> print ws.format()
-        +---------------+---------+
-        | Section Title | Section |
-        | ID            | s1      |
-        | Description   |         |
-        |               |         |
-        | Courses       |         |
-        | c1            |         |
-        |               |         |
-        | Students      |         |
-        | John          |         |
-        | Pete          |         |
-        |               |         |
-        | Instructors   |         |
-        | Mister T      |         |
-        +---------------+---------+
-
-    """
 
 
 def doctest_MegaExporter_holidays():

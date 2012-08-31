@@ -1,0 +1,105 @@
+Tests for automatic linking of sections
+---------------------------------------
+
+Log in as manager:
+
+    >>> manager = browsers.manager
+    >>> manager.ui.login('manager', 'schooltool')
+
+This file tests the automatic linking of sections that have the same ID
+defined by the user between the terms:
+
+    >>> import os
+    >>> dirname = os.path.abspath(os.path.dirname(__file__))
+    >>> filename = os.path.join(dirname, 'linked_sections.xls')
+    >>> manager.ui.import_xls(filename)
+
+We see that each term has three sections, all with ids matching a section in
+another term.  However, as we will see, if the cell after the 'Link?' heading
+is not set to 'y' or 'yes', or the matching section is not in an adjacent term,
+then the section will not end up linked.
+
+    >>> manager.query.link('School').click()
+    >>> manager.query.link('Sections').click()
+    >>> print manager.query_all.xpath('//table[@class="data"]//a').get_attribute('href')
+    http://localhost/schoolyears/2006-2007/winter/sections/Art_1
+    http://localhost/schoolyears/2006-2007/winter/sections/Art_2
+    http://localhost/schoolyears/2006-2007/winter/sections/Art_3
+    http://localhost/schoolyears/2006-2007/spring/sections/Art_1
+    http://localhost/schoolyears/2006-2007/spring/sections/Art_3
+    http://localhost/schoolyears/2006-2007/spring/sections/Art_4
+    http://localhost/schoolyears/2006-2007/fall/sections/Art_1
+    http://localhost/schoolyears/2006-2007/fall/sections/Art_2
+    http://localhost/schoolyears/2006-2007/fall/sections/Art_4
+
+We'll show all the linked sections for each term, starting with Fall.  We see
+the ones with matching ids in other terms are linked, except in the case of
+the Art_3 section which was not marked to link in either term (see 'Link?'
+heading in linked_sections.xls) and Art_4 which is found in two terms that are
+not adjacent.
+
+    >>> manager.ui.section.go('2006-2007', 'Fall', 'Art_1')
+    >>> print manager.query_all.xpath('//div[@class="body"]/table[1]//a').get_attribute('href')
+    http://localhost/schoolyears/2006-2007/winter/sections/Art_1
+    http://localhost/schoolyears/2006-2007/spring/sections/Art_1
+
+    >>> manager.ui.section.go('2006-2007', 'Fall', 'Art_2')
+    >>> print manager.query_all.xpath('//div[@class="body"]/table[1]//a').get_attribute('href')
+    http://localhost/schoolyears/2006-2007/winter/sections/Art_2
+
+    >>> manager.ui.section.go('2006-2007', 'Fall', 'Art_4')
+    >>> print manager.query_all.xpath('//div[@class="body"]/table[1]//a').get_attribute('href')
+
+Now we'll do the same for the Winter sections.
+
+    >>> manager.ui.section.go('2006-2007', 'Winter', 'Art_1')
+    >>> print manager.query_all.xpath('//div[@class="body"]/table[1]//a').get_attribute('href')
+    http://localhost/schoolyears/2006-2007/fall/sections/Art_1
+    http://localhost/schoolyears/2006-2007/spring/sections/Art_1
+
+    >>> manager.ui.section.go('2006-2007', 'Winter', 'Art_2')
+    >>> print manager.query_all.xpath('//div[@class="body"]/table[1]//a').get_attribute('href')
+    http://localhost/schoolyears/2006-2007/fall/sections/Art_2
+
+    >>> manager.ui.section.go('2006-2007', 'Winter', 'Art_3')
+    >>> print manager.query_all.xpath('//div[@class="body"]/table[1]//a').get_attribute('href')
+
+Finally the same for the Spring sections.
+
+    >>> manager.ui.section.go('2006-2007', 'Spring', 'Art_1')
+    >>> print manager.query_all.xpath('//div[@class="body"]/table[1]//a').get_attribute('href')
+    http://localhost/schoolyears/2006-2007/fall/sections/Art_1
+    http://localhost/schoolyears/2006-2007/winter/sections/Art_1
+
+    >>> manager.ui.section.go('2006-2007', 'Spring', 'Art_3')
+    >>> print manager.query_all.xpath('//div[@class="body"]/table[1]//a').get_attribute('href')
+
+    >>> manager.ui.section.go('2006-2007', 'Spring', 'Art_4')
+    >>> print manager.query_all.xpath('//div[@class="body"]/table[1]//a').get_attribute('href')
+
+Now let's try reimporting the same file:
+
+    >>> manager.ui.import_xls(filename)
+
+No problem.  The same sections are there.
+
+    >>> manager.query.link('School').click()
+    >>> manager.query.link('Sections').click()
+    >>> print manager.query_all.xpath('//table[@class="data"]//a').get_attribute('href')
+    http://localhost/schoolyears/2006-2007/winter/sections/Art_1
+    http://localhost/schoolyears/2006-2007/winter/sections/Art_2
+    http://localhost/schoolyears/2006-2007/winter/sections/Art_3
+    http://localhost/schoolyears/2006-2007/spring/sections/Art_1
+    http://localhost/schoolyears/2006-2007/spring/sections/Art_3
+    http://localhost/schoolyears/2006-2007/spring/sections/Art_4
+    http://localhost/schoolyears/2006-2007/fall/sections/Art_1
+    http://localhost/schoolyears/2006-2007/fall/sections/Art_2
+    http://localhost/schoolyears/2006-2007/fall/sections/Art_4
+
+Just to be sure, we'll make sure the first one is linked to the other terms.
+
+    >>> manager.ui.section.go('2006-2007', 'Fall', 'Art_1')
+    >>> print manager.query_all.xpath('//div[@class="body"]/table[1]//a').get_attribute('href')
+    http://localhost/schoolyears/2006-2007/winter/sections/Art_1
+    http://localhost/schoolyears/2006-2007/spring/sections/Art_1
+

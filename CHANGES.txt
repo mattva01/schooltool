@@ -2,11 +2,92 @@
 CHANGES
 =======
 
-2.1.1 (unreleased)
+2.2.2 (unreleased)
 ------------------
+
+- Nothing changed yet.
+
+
+2.2.1 (2012-08-15)
+------------------
+
+XLS
++++
+
+- We need to allow id cells to be numeric again on import (https://launchpad.net/bugs/1035036)
+- Handle empty Weekends table (https://launchpad.net/bugs/1035969)
+- Skip empty rows if there is only one table in the sheet (https://launchpad.net/bugs/1035088)
+
+Bugfixes
+++++++++
+
+- Users cannot see their own photo (https://launchpad.net/bugs/1007145)
+
+
+2.2.0 (2012-08-07)
+------------------
+
+First alpha release for upcoming Ubuntu 12.10.
+
+New features
+++++++++++++
+
+- Refactored gradebook/journal javascript and style
+- Add teachers column sections list
+- Add filter by course and term to sections list
+- Show term details in term view
+
+Old features
+++++++++++++
+
+- Show sections and groups of a person in a tree, grouped by term, like in old skin.
+- List sections in course view (https://launchpad.net/bugs/868396)
+
+XLS
++++
+
+- New sections sheets to replace section sheets per term (https://launchpad.net/bugs/1020836)
+- Remove the old Sections exporter and tests (https://launchpad.net/bugs/1020837).
+  Old section import still supported.
+- New LinkedSectionImport sheet for import only (https://launchpad.net/bugs/1020838)
+- Import errors grouped by sheet and error type, displayed in a textarea
+  (https://launchpad.net/bugs/1020839)
+- ResourceImporter needs to process description cells (https://launchpad.net/bugs/1020840)
+- Exporters must skip sections with no courses (https://launchpad.net/bugs/1020842)
+
+Bugfixes
+++++++++
+
+- Allow teachers to see attributes of all sections and resources.
+
+Translations
+++++++++++++
 
 - Updated translations
 - Added Bosnian, Croatian, Slovenian translations
+
+Development tools
++++++++++++++++++
+
+- Selenium screenshots and downloads
+- XLS file testing helpers
+
+
+2.1.1 (unreleased)
+------------------
+
+XLS
++++
+
+- Added course_id, government_id and credits to Courses sheet import/export.
+
+Bugfixes
+++++++++
+
+- Timetables evolution fails on exception days (https://launchpad.net/bugs/1003834)
+- Advisory accordion doesn't show advisees (https://launchpad.net/bugs/1005989)
+- Fix upgrade from schooltool < 1.5 crashing on missing levels (https://launchpad.net/bugs/1007361)
+- Remove demographics when person is deleted.
 
 
 2.1.0 (2012-04-19)

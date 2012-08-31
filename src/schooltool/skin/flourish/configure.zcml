@@ -31,6 +31,15 @@
           include="jquery.min.js"
           />
     </zope:resourceLibrary>
+    <zope:resourceLibrary
+        name="jstree"
+        require="jquery"
+        layer="schooltool.skin.flourish.IFlourishLayer">
+      <directory
+          source="resources/jstree"
+          include="jquery.tree.js"
+          />
+    </zope:resourceLibrary>
   </configure>
 
   <zope:resourceLibrary
@@ -92,7 +101,18 @@
     <directory
       source="resources"
       include="gradebook.css
+               jquery.scrollto.min.js
                gradebook.js"
+      />
+  </zope:resourceLibrary>
+
+  <zope:resourceLibrary
+      name="schooltool.skin.flourish-jstree"
+      require="jstree"
+      layer="schooltool.skin.flourish.IFlourishLayer">
+    <directory
+      source="resources"
+      include="jstree.js"
       />
   </zope:resourceLibrary>
 

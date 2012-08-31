@@ -47,7 +47,7 @@ class OneTemplateSchedule(DayTemplateSchedule):
 
     def initTemplates(self):
         super(OneTemplateSchedule, self).initTemplates()
-        self.templates['default'] = DayTemplate()
+        self.templates['default'] = DayTemplate('Day 1')
 
     @property
     def default(self):
@@ -64,11 +64,6 @@ class OneTemplateSchedule(DayTemplateSchedule):
 
 
 class TimetableForTests(Timetable):
-
-    def uniqueMeetingId(self, date, period, int_ids):
-        date_id = date.isoformat()
-        uid = str('%s.%s' % (date_id, period.title))
-        return uid
 
     def setUp(self, periods=(), time_slots=()):
         self.periods, event = containedEvent(

@@ -107,6 +107,31 @@ def doctest_getPersonDemographics():
     """
 
 
+def doctest_removePersonDemographicsSubscriber():
+    """Tests for removed person subscriber
+
+    Add a person and ensure it has demographics
+
+        >>> app = ISchoolToolApplication(None)
+        >>> persons = app['persons']
+        >>> persons['johansen'] = john = BasicPerson("johansen", "John", "Johansen")
+
+        >>> IDemographics(john)
+        <...basicperson.demographics.PersonDemographicsData object at ...>: {}
+
+        >>> ddc = app['schooltool.basicperson.demographics_data']
+        >>> ddc['johansen'] is IDemographics(john)
+        True
+
+    If we remove the person, its demographics is removed
+
+        >>> del persons['johansen']
+        >>> ddc.get('johansen', None) is None
+        True
+
+    """
+
+
 def doctest_DemographicsFormAdapter():
     """Tests for DemographicsFormAdapter
 

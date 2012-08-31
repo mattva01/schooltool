@@ -1,0 +1,47 @@
+Test for Courses sheet
+----------------------
+
+Log in as manager:
+
+    >>> manager = browsers.manager
+    >>> manager.ui.login('manager', 'schooltool')
+
+Let's import a file containing the Courses sheet:
+
+    >>> import os
+    >>> dirname = os.path.abspath(os.path.dirname(__file__))
+    >>> filename = os.path.join(dirname, 'courses.xls')
+    >>> manager.ui.import_xls(filename)
+
+There should be no errors so we should be back at the School tab view:
+
+    >>> manager.url
+    u'http://localhost/manage'
+
+We see that there are two courses as specified in the spreadsheet.
+
+    >>> manager.query.link('School').click()
+    >>> manager.query.link('Courses').click()
+    >>> print manager.query_all.css('.data a').text
+    Art A
+    Art B
+
+The first one has no optional cells filled in.
+
+    >>> manager.query.link('Art A').click()
+    >>> print manager.query_all.css('.viewspace .widget span').text
+    art_a
+    Art A
+
+The second one has all optional cells filled in.
+
+    >>> manager.query.link('Done').click()
+    >>> manager.query.link('Art B').click()
+    >>> print manager.query_all.css('.viewspace .widget span').text
+    art_b
+    Art B
+    Art B Desc
+    local_artb
+    state_artb
+    3.5
+

@@ -426,7 +426,7 @@ class AddAllResultsButton(flourish.viewlet.Viewlet):
         return self.template(*args, **kw)
 
 
-class EditRelationships(flourish.page.NoSidebarPage):
+class EditRelationships(flourish.page.Page):
 
     content_template = ViewPageTemplateFile('templates/f_tabled_edit_relationships.pt')
 
@@ -475,7 +475,7 @@ class EditRelationships(flourish.page.NoSidebarPage):
         return url
 
 
-class FlourishRelationshipViewBase(flourish.page.NoSidebarPage):
+class FlourishRelationshipViewBase(flourish.page.Page):
 
     content_template = ViewPageTemplateFile('templates/f_edit_relationships.pt')
 

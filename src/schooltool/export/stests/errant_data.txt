@@ -1,0 +1,258 @@
+Tests for errant import data
+----------------------------
+
+Log in as manager:
+
+    >>> import os
+    >>> manager = browsers.manager
+    >>> manager.ui.login('manager', 'schooltool')
+
+We'll define a helper function for calling the import helper wth the full
+filename and printing out the errors.
+
+    >>> def import_file(filename):
+    ...     dirname = os.path.abspath(os.path.dirname(__file__))
+    ...     filename = os.path.join(dirname, filename)
+    ...     manager.ui.import_xls(filename)
+    ...     errors = manager.query_all.css('textarea').text
+    ...     if errors:
+    ...         lines = [l.strip() for l in errors[0].split('\n') if l.strip()]
+    ...         print '\n'.join(lines)
+
+This file has examples of bad data for the Sections, SectionEnrollment and
+SectionTimetables sheets:
+
+    >>> import_file('errant_section_sheets.xls')
+    SectionEnrollment
+    -----------------
+    invalid school year:
+    A2-3
+    is not a valid section id in the specified term:
+    C5
+    is not a valid term in the given school year:
+    B4
+    is not a valid username:
+    A8-9
+    SectionTimetables
+    -----------------
+    invalid school year:
+    A2-3
+    is not a valid day id for the given timetable:
+    A21-22
+    is not a valid period id for the given day:
+    B23
+    is not a valid section id in the specified term:
+    C5
+    is not a valid term in the given school year:
+    B4
+    must be either TRUE, FALSE, YES or NO (upper, lower and mixed case are all valid):
+    D13
+    Sections
+    --------
+    has an invalid course id for the given school year:
+    B8
+    has an invalid resource id:
+    J6-8
+    has an invalid username:
+    I6-8
+    invalid school year:
+    A6-7
+    is not a valid term in the given school year:
+    C8
+    missing required text:
+    B9, C9, D9, G9
+
+This file has examples of bad data for the LinkedSectionImport sheet:
+
+    >>> import_file('errant_linked_section_import.xls')
+    LinkedSectionImport
+    -------------------
+    end term cannot be before start term:
+    D8
+    has an invalid course id for the given school year:
+    B7
+    has an invalid resource id:
+    I5-6
+    has an invalid username:
+    G5-6
+    invalid school year:
+    A5-6
+    is not a valid term in the given school year:
+    C7, D7
+
+This file has examples of bad data for the School Years sheet:
+
+    >>> import_file('errant_years.xls')
+    School Years
+    ------------
+    end date cannot be before start date:
+    D3
+    end date overlaps another year:
+    D6
+    has no date in it:
+    C2, D2
+    start date overlaps another year:
+    C5
+
+This file has examples of bad data for the Terms sheet:
+
+    >>> import_file('errant_terms.xls')
+    Terms
+    -----
+    end date after end of school year:
+    E7
+    end date cannot be before start date:
+    E5, E17
+    end date overlaps another term:
+    E11
+    has no date in it:
+    A15, B16, D2, E2
+    invalid school year:
+    A3-4
+    missing required text:
+    B2, C2
+    start date before start of school year:
+    D6
+    start date overlaps another term:
+    D10
+
+This file has examples of bad data for the School Timetables sheet:
+
+    >>> import_file('errant_timetables.xls')
+    School Timetables
+    -----------------
+    missing required text:
+    B1-5, B10, B15, B20, B25, B35, B48
+
+This file has examples of bad data for the Resouces sheet:
+
+    >>> import_file('errant_resources.xls')
+    Resources
+    ---------
+    missing required text:
+    B2, C2
+    must be either 'Location', 'Equipment' or 'Resource':
+    B3
+
+We'll add some demo fields to test importing demos.
+
+    >>> manager.query.link('School').click()
+    >>> manager.query.link('Demographics').click()
+    >>> manager.query.link('Text Field').click()
+    >>> manager.query.name('form.widgets.title').type('Text Demo')
+    >>> manager.query.name('form.widgets.name').type('text_demo')
+    >>> manager.query.id('form-widgets-required-0').click()
+    >>> manager.query.button('Submit').click()
+
+    >>> manager.query.link('Date Field').click()
+    >>> manager.query.name('form.widgets.title').type('Date Demo')
+    >>> manager.query.name('form.widgets.name').type('date_demo')
+    >>> manager.query.id('form-widgets-required-0').click()
+    >>> manager.query.button('Submit').click()
+
+    >>> manager.query.link('Yes/No Field').click()
+    >>> manager.query.name('form.widgets.title').type('Bool Demo')
+    >>> manager.query.name('form.widgets.name').type('bool_demo')
+    >>> manager.query.id('form-widgets-required-0').click()
+    >>> manager.query.button('Submit').click()
+
+This file has examples of bad data for the Persons sheet:
+
+    >>> import_file('errant_persons.xls')
+    Persons
+    -------
+    Username cannot contain non-ascii characters:
+    A4
+    gender must be male or female:
+    I2
+    has no date in it:
+    H2, Q2-3
+    missing required text:
+    C2, E2, P2, R2
+    must be either TRUE, FALSE, YES or NO (upper, lower and mixed case are all valid):
+    R3
+
+We'll remove the demo fields to not break future tests.
+
+    >>> manager.query.link('School').click()
+    >>> manager.query.link('Demographics').click()
+    >>> manager.query.link('Reorder or Delete Fields').click()
+    >>> manager.query.name('delete.text_demo').click()
+    >>> manager.query.name('delete.date_demo').click()
+    >>> manager.query.name('delete.bool_demo').click()
+
+This file has examples of bad data for the Courses sheet:
+
+    >>> import_file('errant_courses.xls')
+    Courses
+    -------
+    course credits need to be a valid number:
+    G3
+    invalid school year:
+    A4
+    missing required text:
+    B2, C2
+
+This file has examples of bad data for the old Section sheets:
+
+    >>> import_file('errant_sections.xls')
+    School Timetables
+    -----------------
+    missing required text:
+    B5
+    Sections 1
+    ----------
+    missing required text:
+    B1, D1
+    Sections_3
+    ----------
+    invalid school year:
+    B1
+    Sections_4
+    ----------
+    is not a valid term in the given school year:
+    D1
+    Sections_5
+    ----------
+    is not a valid timetable in the given school year:
+    A20
+    is not a valid username:
+    A12, A17
+
+This file has examples of bad data for the Groups sheet:
+
+    >>> import_file('errant_groups.xls')
+    Groups
+    ------
+    invalid school year:
+    B13
+    is not a valid username:
+    A23
+    missing required text:
+    B1-3
+
+This file has examples of bad data for the Contact Persons and Contact
+Relationships sheets:
+
+    >>> import_file('errant_contacts.xls')
+    Contact Persons
+    ---------------
+    Username cannot contain non-ascii characters:
+    A2
+    missing required text:
+    C3, E3
+    must be empty when ID is a user id:
+    B4, C4, D4, E4, F4
+    Contact Relationships
+    ---------------------
+    Username cannot contain non-ascii characters:
+    A3, B3
+    is not a valid contact relationship:
+    C4
+    is not a valid username:
+    A4
+    is not a valid username or contact id:
+    B4
+    missing required text:
+    B2
+

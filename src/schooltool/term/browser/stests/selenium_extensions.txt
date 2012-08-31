@@ -45,7 +45,7 @@ And check that they were added correctly:
     >>> manager.query.link('2012').click()
     >>> for row in manager.query_all.css('form table tbody tr'):
     ...     print format_term_row(row)
-    Q4/ Oct 1, 2012/ Dec 31, 2012
-    Q3/ Jul 1, 2012/ Sep 30, 2012
-    Q2/ Apr 1, 2012/ Jun 30, 2012
     Q1/ Jan 1, 2012/ Mar 31, 2012
+    Q2/ Apr 1, 2012/ Jun 30, 2012
+    Q3/ Jul 1, 2012/ Sep 30, 2012
+    Q4/ Oct 1, 2012/ Dec 31, 2012

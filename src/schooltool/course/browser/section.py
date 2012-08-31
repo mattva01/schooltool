@@ -962,9 +962,18 @@ def get_courses_titles(section, formatter):
     return ', '.join([course.title for course in section.courses])
 
 
+def get_section_instructors(section, formatter):
+    return ', '.join([person.title for person in section.instructors])
+
+
+def section_instructors_formatter(value, section, formatter):
+    return '<br />'.join([person.title for person in section.instructors])
+
+
 class FlourishSectionsView(flourish.page.Page,
                            SectionsActiveTabMixin):
 
+    container_class = 'container widecontainer'
     content_template = InlineViewPageTemplate('''
       <div tal:content="structure context/schooltool:content/ajax/view/schoolyear/sections_table" />
     ''')
@@ -976,7 +985,7 @@ class FlourishSectionsView(flourish.page.Page,
                  mapping={'schoolyear': schoolyear.title})
 
 
-class SectionsTable(table.ajax.Table):
+class SectionsTableBase(table.ajax.Table):
 
     def columns(self):
         default = table.ajax.Table.columns(self)
@@ -992,15 +1001,53 @@ class SectionsTable(table.ajax.Table):
             subsort=True)
         size = GetterColumn(
             name='size',
-            title=_('Size'),
+            title=_('Students'),
             getter=lambda i, f: i.size,
             subsort=True)
+        instructors = table.column.LocaleAwareGetterColumn(
+            name='instructors',
+            title=_('Teachers'),
+            getter=get_section_instructors,
+            cell_formatter=section_instructors_formatter)
         directlyProvides(term, ISortableColumn)
         directlyProvides(courses, ISortableColumn)
-        return default + [term, courses, size]
+        directlyProvides(instructors, ISortableColumn)
+        return default + [term, courses, instructors, size]
 
     def sortOn(self):
         return (('term', True), ('courses', False), ('title', False))
+
+
+class SectionsTable(SectionsTableBase):
+
+    pass
+
+
+class SectionListTable(SectionsTableBase):
+
+    def columns(self):
+        default = super(SectionListTable, self).columns()
+        title, term, courses, instructors, size = default
+        return [title, term, instructors]
+
+    def sortOn(self):
+        return (('term', True), ('title', False))
+
+    @Lazy
+    def source(self):
+        sections = {}
+        schoolyear = ISchoolYear(self.context)
+        for term in schoolyear.values():
+            term_section_container = ISectionContainer(term)
+            for section in term_section_container.values():
+                name = '%s.%s.%s' % (
+                    schoolyear.__name__, term.__name__, section.__name__
+                    )
+                sections[name] = section
+        return sections
+
+    def items(self):
+        return self.context.sections
 
 
 class SchoolYearSectionsTable(SectionsTable):
@@ -1025,12 +1072,115 @@ class SchoolYearSectionsTable(SectionsTable):
 
 class SectionsTableFilter(table.ajax.TableFilter, FlourishSectionFilterWidget):
 
+    multiple_terms = True
+    template = ViewPageTemplateFile('templates/f_section_table_filter.pt')
     title = _("Section title")
 
-    def filter(self, results):
+    @property
+    def search_id(self):
+        return self.manager.html_id+'-search'
+
+    @property
+    def search_title_id(self):
+        return self.manager.html_id+"-title"
+
+    @property
+    def search_course_id(self):
+        return self.manager.html_id+"-course"
+
+    @property
+    def search_term_ids(self):
+        return self.manager.html_id+"-terms"
+
+    @Lazy
+    def schoolyear(self):
+        app = ISchoolToolApplication(None)
+        schoolyears = ISchoolYearContainer(app)
+        result = schoolyears.getActiveSchoolYear()
+        if 'schoolyear_id' in self.request:
+            schoolyear_id = self.request['schoolyear_id']
+            result = schoolyears.get(schoolyear_id, result)
+        return result
+
+    def termContainer(self):
+        return self.schoolyear
+
+    def courseContainer(self):
+        return ICourseContainer(self.schoolyear)
+
+    def terms(self):
+        result = []
+        container = self.termContainer()
+        items = sorted(container.items(),
+                       key=lambda (tid, term):term.first)
+        for id, term in items:
+            checked = not self.manager.fromPublication
+            if self.search_term_ids in self.request:
+                term_ids = self.request[self.search_term_ids]
+                if not isinstance(term_ids, list):
+                    term_ids = [term_ids]
+                checked = id in term_ids
+            result.append({'id': id,
+                           'title': term.title,
+                           'checked': checked,
+                           'obj': term})
+        return result
+
+    def courses(self):
+        result = []
+        container = self.courseContainer()
+        collator = ICollator(self.request.locale)
+        items = sorted(container.items(),
+                       cmp=collator.cmp,
+                       key=lambda (cid, c): c.title)
+        for id, course in items:
+            result.append({'id': id,
+                           'title': course.title})
+        return result
+
+    def filter(self, items):
+        if len(self.termContainer()) < 2:
+            self.multiple_terms = False
         if self.ignoreRequest:
-            return results
-        return FlourishSectionFilterWidget.filter(self, results)
+            return items
+        if self.search_term_ids in self.request:
+            term_ids = self.request[self.search_term_ids]
+            if not isinstance(term_ids, list):
+                term_ids = [term_ids]
+            terms = []
+            for term_id in term_ids:
+                term = self.termContainer().get(term_id)
+                if term is not None:
+                    terms.append(term)
+            if terms:
+                items = [item for item in items
+                         if ITerm(item) in terms]
+        elif self.multiple_terms:
+            return []
+        if self.search_course_id in self.request:
+            course_id = self.request[self.search_course_id]
+            course = self.courseContainer().get(course_id)
+            if course:
+                items = [item for item in items
+                         if item in course.sections]
+        if self.search_title_id in self.request:
+            searchstr = self.request[self.search_title_id].lower()
+            items = [item for item in items
+                     if searchstr in item.title.lower()]
+        return items
+
+
+class SectionListTableFilter(SectionsTableFilter):
+
+    template = ViewPageTemplateFile('templates/f_section_list_table_filter.pt')
+
+    @Lazy
+    def schoolyear(self):
+        return ISchoolYear(self.context)
+
+    def getSectionCount(self, term):
+        return len([section for section in ISectionContainer(term).values()
+                    if section in self.context.sections])
 
 
 class SectionsTableSchoolYear(flourish.viewlet.Viewlet):

@@ -44,7 +44,6 @@ from z3c.form import form, subform, field, button
 from z3c.form.interfaces import DISPLAY_MODE
 
 from schooltool.app.interfaces import ISchoolToolApplication
-from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.app.catalog import buildQueryString
 from schooltool.contact.interfaces import IContactable
 from schooltool.contact.interfaces import IContactContainer
@@ -148,7 +147,7 @@ class ContactAddView(form.AddForm):
         self.request.response.redirect(self.nextURL())
 
 
-class FlourishContactAddView(flourish.page.NoSidebarPage, ContactAddView):
+class FlourishContactAddView(flourish.page.Page, ContactAddView):
     label = None
 
     def update(self):
@@ -331,7 +330,7 @@ class ContactEditView(form.EditForm):
                           'last_name': self.context.last_name})
 
 
-class FlourishContactEditView(flourish.page.NoSidebarPage,
+class FlourishContactEditView(flourish.page.Page,
                               ContactEditView):
 
     form.extends(ContactEditView)
@@ -869,11 +868,6 @@ class FlourishManageContactsOverview(flourish.page.Content):
     def total(self):
         catalog = ICatalog(self.contacts)
         return len(catalog.extent)
-
-    @property
-    def school_name(self):
-        preferences = IApplicationPreferences(self.context)
-        return preferences.title
 
 
 class ContactActionsLinks(flourish.page.RefineLinksViewlet):

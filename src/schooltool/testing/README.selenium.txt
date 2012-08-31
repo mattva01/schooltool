@@ -52,6 +52,30 @@ Adding persons
 
   NOTE: if ends is not set, the section will end in the starting term
 
+Adding advisors for a person
+----------------------------
+
+* browser.ui.person.advisors.add()
+
+  Required parameters:
+    username
+    advisors: list with person usernames
+
+    NOTE: it doesn't matter if some of the usernames are already
+          advisors of the person
+
+Adding advisees for a person
+----------------------------
+
+* browser.ui.person.advisees.add()
+
+  Required parameters:
+    username
+    advisees: list with person usernames
+
+    NOTE: it doesn't matter if some of the usernames are already
+          advisees of the person
+
 Adding school years
 ------------------
 
@@ -132,6 +156,17 @@ Adding instructors to a section
     NOTE: it doesn't matter if some of the usernames are already
           instructors of the section
 
+Removing instructors from a section
+-----------------------------------
+
+* browser.ui.section.instructors.remove()
+
+  Required parameters:
+    schoolyear: title of the school year
+    term: title of the term
+    section: title of the section
+    instructors: list with person usernames
+
 Adding students to a section
 ----------------------------
 
@@ -145,6 +180,17 @@ Adding students to a section
 
     NOTE: it doesn't matter if some of the usernames are already
           students of the section
+
+Removing students from a section
+--------------------------------
+
+* browser.ui.section.students.remove()
+
+  Required parameters:
+    schoolyear: title of the school year
+    term: title of the term
+    section: title of the section
+    students: list with person usernames
 
 Adding groups
 -------------
@@ -178,6 +224,16 @@ Adding members to a group
 
     NOTE: it doesn't matter if some of the usernames are already
           members of the group
+
+Removing members from a group
+-----------------------------
+
+* browser.ui.group.members.remove()
+
+  Required parameters:
+    schoolyear: title of the school year
+    group: title of the group
+    members: list with person usernames
 
 Element extensions
 ==================

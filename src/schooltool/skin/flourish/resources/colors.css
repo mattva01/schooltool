@@ -13,6 +13,7 @@
     - Gradebook
     - Timetable
     - Calendar
+    - JSTree
 
 */
 
@@ -34,6 +35,10 @@ body {
 
 a, a:link, a:visited, a:active {
     color: #005c61;
+}
+
+select {
+    color: #333333;
 }
 
 /*
@@ -172,7 +177,7 @@ a, a:link, a:visited, a:active {
     color: #aea79f;
 }
 
-.page > .third-nav {
+.page .third-nav {
     background-color: #f7f7f7;
     border-bottom-color: #D9D9D9;
 }
@@ -421,19 +426,19 @@ table.schoolday-legend td.schoolday {
 
 */
 
-.ui-accordion-header {
+.ui-accordion .ui-accordion-header {
     background-color: #485454;
     background-image: none;
     color: #ffffff;
     border-color: #485454;
 }
 
-.ui-state-hover {
+.ui-state-hover, .ui-accordion .ui-state-hover {
     border-color: #008c93;
     background-color: #008c93;
 }
 
-.ui-state-active {
+.ui-state-active, .ui-accordion .ui-state-active {
     background-color: #008c93;
 }
 
@@ -506,13 +511,10 @@ table.schoolday-legend td.schoolday {
 
     - table headers
     - odd table rows
+    - grade input colors
     - popup menu
 
 */
-
-.grid-form th {
-    color: #333333;
-}
 
 .gradebook-part thead {
     background-color: #e7e4e2;
@@ -526,11 +528,12 @@ table.schoolday-legend td.schoolday {
     background-color: #f0efee;
 }
 
-.students th, .students td,
-.grades th, .grades td,
-.totals th, .totals td,
-th.activity-title {
+.gradebook-part th, .gradebook-part td {
     border-color: #cccccc;
+}
+
+.gradebook-part th {
+    color: #333333;
 }
 
 .grades input[type="text"] {
@@ -538,20 +541,20 @@ th.activity-title {
 }
 
 .grades input[type="text"]:focus {
-    border-color: #cccccc;
+    background-color: #bdd7f0;
 }
 
-.grades .changed_bg input[type="text"] {
+.grades input[type="text"].valid {
     background: #009499;
     color: #ffffff;
 }
 
-.grades .error_bg  input[type="text"] {
+.grades input[type="text"].error {
     background: #ef4444;
     color: #ffffff;
 }
 
-.grades .warning_bg  input[type="text"] {
+.grades input[type="text"].extracredit {
     background: #f6db5a;
 }
 
@@ -559,11 +562,12 @@ th.activity-title {
     background-color: #6c7b7c;
 }
 
-.popup_menu > li > span {
+.popup_menu li.header {
     background-color: #485454;
+    color: #ffffff;
 }
 
-.popup_menu li span {
+.popup_menu li span, .hover_menu li.current {
     color: #ffffff;
 }
 
@@ -847,6 +851,26 @@ a.cal_yearly_day {
 
 a.cal_yearly_day_busy {
     color: #009499;
+}
+
+/*
+
+  JSTree:
+
+    - sections tree
+
+*/
+
+.tree_list li a.clicked,
+.tree_list li a.clicked:hover,
+.tree_list li span.clicked {
+    background: none;
+    border: 0;
+    color: #333333;
+}
+
+.tree_list li a.leaf_url {
+    color: #005c61;
 }
 
 }
