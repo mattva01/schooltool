@@ -88,8 +88,8 @@ ERROR_START_BEFORE_YEAR_START = _('start date before start of school year')
 ERROR_END_AFTER_YEAR_END = _('end date after end of school year')
 ERROR_START_OVERLAP_TERM = _('start date overlaps another term')
 ERROR_END_OVERLAP_TERM = _('end date overlaps another term')
-ERROR_HAS_NO_DAYS = _("${title} has no days in A${row}")
-ERROR_HAS_NO_DAY_TEMPLATES = _("${title} has no day templates in A${row}")
+ERROR_HAS_NO_DAYS = _("has no days")
+ERROR_HAS_NO_DAY_TEMPLATES = _("has no day templates")
 ERROR_TIME_RANGE = _("is not a valid time range")
 ERROR_TIMETABLE_MODEL = _("is not a valid timetable model")
 ERROR_DUPLICATE_DAY_ID = _("is the same day id as another in this timetable")
@@ -99,7 +99,7 @@ ERROR_DUPLICATE_HOMEROOM_PERIOD = _("is the same homeroom period id as another i
 ERROR_RESOURCE_TYPE = _("must be either 'Location', 'Equipment' or 'Resource'")
 ERROR_INVALID_TERM_ID = _('is not a valid term in the given school year')
 ERROR_INVALID_COURSE_ID = _('is not a valid course in the given school year')
-ERROR_HAS_NO_COURSES = _('${title} has no courses in A${row}')
+ERROR_HAS_NO_COURSES = _('has no courses')
 ERROR_INVALID_PERSON_ID = _('is not a valid username')
 ERROR_INVALID_SCHEMA_ID = _('is not a valid timetable in the given school year')
 ERROR_INVALID_DAY_ID = _('is not a valid day id for the given timetable')
@@ -637,10 +637,7 @@ class SchoolTimetableImporter(ImporterBase):
                         'periods': periods,
                         })
         else:
-            self.errors.append(format_message(
-                ERROR_HAS_NO_DAYS,
-                mapping={'title': data['title'], 'row': row + 1}
-                ))
+            self.error(row, 0, ERROR_HAS_NO_DAYS)
 
         row += 1
         if self.getCellValue(sh, row, 0, '').lower() == 'time schedule':
@@ -680,10 +677,7 @@ class SchoolTimetableImporter(ImporterBase):
                         })
                 row += 2
         else:
-            self.errors.append(format_message(
-                ERROR_HAS_NO_DAY_TEMPLATES,
-                mapping={'title': data['title'], 'row': row + 1}
-                ))
+            self.error(row, 0, ERROR_HAS_NO_DAY_TEMPLATES)
         if num_errors < len(self.errors):
             return
 
@@ -1203,10 +1197,7 @@ class SectionImporter(ImporterBase):
             row += 1
 
         if not list(section.courses):
-            self.errors.append(format_message(
-                ERROR_HAS_NO_COURSES,
-                mapping={'title': data['title'], 'row': row + 1}
-                ))
+            self.error(row, 0, ERROR_HAS_NO_COURSES)
             return
 
         persons = self.context['persons']
