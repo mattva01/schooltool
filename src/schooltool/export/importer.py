@@ -209,6 +209,7 @@ class ImporterBase(object):
             except UnicodeError:
                 self.error(row, col, ERROR_NOT_UNICODE_OR_ASCII)
                 valid = False
+                value = default
         return value, found, valid
 
     def getTextFromCell(self, sheet, row, col, default=u''):
@@ -257,10 +258,10 @@ class ImporterBase(object):
 
     def getRequiredBoolFromCell(self, sheet, row, col):
         value, found = self.getCellAndFound(sheet, row, col)
-        if not found or value == '':
+        if not value:
             self.error(row, col, ERROR_MISSING_REQUIRED_TEXT)
             return None
-        return self.getBoolFromCell(sheet, row, col)
+        value = self.getBoolFromCell(sheet, row, col)
 
     def getIdFromCell(self, sheet, row, col, default=u''):
         value, found, valid = self.getTextFoundValid(sheet, row, col, default)
@@ -270,19 +271,19 @@ class ImporterBase(object):
         value, found, valid = self.getTextFoundValid(sheet, row, col)
         if valid and not value:
             self.error(row, col, ERROR_MISSING_REQUIRED_TEXT)
-        return value
+        return value.strip()
 
     def getIdsFromCell(self, sheet, row, col):
         value, found, valid = self.getTextFoundValid(sheet, row, col)
-        if not valid:
-            return None
+        if not value:
+            return []
         return [p.strip() for p in str(value).split(',') if p.strip()]
 
     def getRequiredIdsFromCell(self, sheet, row, col):
         value, found = self.getCellAndFound(sheet, row, col)
-        if not found or value == '':
+        if not value:
             self.error(row, col, ERROR_MISSING_REQUIRED_TEXT)
-            return None
+            return []
         return self.getIdsFromCell(sheet, row, col)
 
     def validateUnicode(self, value, row, col):
