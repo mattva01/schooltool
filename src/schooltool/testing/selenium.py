@@ -904,6 +904,14 @@ class Downloads(object):
         for name in os.listdir(self.path):
             self.files[name] = ('I', self._created(name))
 
+    def clear(self):
+        """Clear downloads"""
+        self.files = {}
+        if self.path is None:
+            return
+        for name in os.listdir(self.path):
+            os.remove(os.path.join(self.path, name))
+
     def get(self, name=None):
         """Return the [latest by default] download"""
         if self.path is None:
