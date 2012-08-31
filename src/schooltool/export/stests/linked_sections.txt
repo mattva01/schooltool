@@ -48,7 +48,13 @@ not adjacent.
     http://localhost/schoolyears/2006-2007/winter/sections/Art_2
 
     >>> manager.ui.section.go('2006-2007', 'Fall', 'Art_4')
-    >>> print manager.query_all.xpath('//div[@class="body"]/table[1]//a').get_attribute('href')
+    >>> print manager.query_all.xpath('//div[@class="body"]/table[1]//td')
+    <td>
+      <span class="active-term">
+        Fall
+      </span>
+      (currently viewing)
+    </td>
 
 Now we'll do the same for the Winter sections.
 
@@ -62,7 +68,13 @@ Now we'll do the same for the Winter sections.
     http://localhost/schoolyears/2006-2007/fall/sections/Art_2
 
     >>> manager.ui.section.go('2006-2007', 'Winter', 'Art_3')
-    >>> print manager.query_all.xpath('//div[@class="body"]/table[1]//a').get_attribute('href')
+    >>> print manager.query_all.xpath('//div[@class="body"]/table[1]//td')
+    <td>
+      <span class="active-term">
+        Winter
+      </span>
+      (currently viewing)
+    </td>
 
 Finally the same for the Spring sections.
 
@@ -72,10 +84,22 @@ Finally the same for the Spring sections.
     http://localhost/schoolyears/2006-2007/winter/sections/Art_1
 
     >>> manager.ui.section.go('2006-2007', 'Spring', 'Art_3')
-    >>> print manager.query_all.xpath('//div[@class="body"]/table[1]//a').get_attribute('href')
+    >>> print manager.query_all.xpath('//div[@class="body"]/table[1]//td')
+    <td>
+      <span class="active-term">
+        Spring
+      </span>
+      (currently viewing)
+    </td>
 
     >>> manager.ui.section.go('2006-2007', 'Spring', 'Art_4')
-    >>> print manager.query_all.xpath('//div[@class="body"]/table[1]//a').get_attribute('href')
+    >>> print manager.query_all.xpath('//div[@class="body"]/table[1]//td')
+    <td>
+      <span class="active-term">
+        Spring
+      </span>
+      (currently viewing)
+    </td>
 
 Now let's try reimporting the same file:
 

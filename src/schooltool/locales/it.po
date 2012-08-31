@@ -5893,12 +5893,12 @@ msgid "end date overlaps another term"
 msgstr "la data di fine si sovrappone ad una altro temine"
 
 #: /src/schooltool/export/importer.py:89
-msgid "${title} has no days in A${row}"
-msgstr "${title} non ha giorni in A${row}"
+msgid "has no days"
+msgstr "non ha giorni"
 
 #: /src/schooltool/export/importer.py:90
-msgid "${title} has no day templates in A${row}"
-msgstr "${title} non ha modelli giornalieri in A${row}"
+msgid "has no day templates"
+msgstr "non ha modelli giornalieri"
 
 #: /src/schooltool/export/importer.py:91
 msgid "is not a valid time range"
@@ -5937,8 +5937,8 @@ msgid "is not a valid course in the given school year"
 msgstr "non è un corso valido nell'anno scolastico considerato"
 
 #: /src/schooltool/export/importer.py:100
-msgid "${title} has no courses in A${row}"
-msgstr "${title} non ha corsi in A${row}"
+msgid "has no courses"
+msgstr "non ha corsi"
 
 #: /src/schooltool/export/importer.py:101
 msgid "is not a valid username"

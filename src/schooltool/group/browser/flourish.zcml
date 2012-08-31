@@ -206,6 +206,16 @@
       permission="zope.Public"
       />
 
+  <flourish:viewlet
+      name="filter"
+      before="batch table"
+      class=".group.GroupAwarePersonTableFilter"
+      render="template"
+      manager="schooltool.person.browser.person.PersonTable"
+      view=".group.FlourishGroupView"
+      permission="schooltool.view"
+      />
+
   <flourish:page
       name="members_persons.html"
       for="schooltool.group.interfaces.IBaseGroup"

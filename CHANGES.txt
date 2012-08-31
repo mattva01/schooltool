@@ -2,10 +2,19 @@
 CHANGES
 =======
 
-2.2.2 (unreleased)
+2.2.3 (unreleased)
 ------------------
 
 - Nothing changed yet.
+
+
+2.2.2 (2012-08-31)
+------------------
+
+- We need person filters on the group page (https://launchpad.net/bugs/1038845)
+- Ignore trailing space in ID cells (https://launchpad.net/bugs/1042773)
+- Unrecognized day id error on localized XLS import (https://launchpad.net/bugs/901267)
+- Updated translations
 
 
 2.2.1 (2012-08-15)
@@ -18,16 +27,9 @@ XLS
 - Handle empty Weekends table (https://launchpad.net/bugs/1035969)
 - Skip empty rows if there is only one table in the sheet (https://launchpad.net/bugs/1035088)
 
-Bugfixes
-++++++++
-
-- Users cannot see their own photo (https://launchpad.net/bugs/1007145)
-
 
 2.2.0 (2012-08-07)
 ------------------
-
-First alpha release for upcoming Ubuntu 12.10.
 
 New features
 ++++++++++++
@@ -53,12 +55,21 @@ XLS
 - Import errors grouped by sheet and error type, displayed in a textarea
   (https://launchpad.net/bugs/1020839)
 - ResourceImporter needs to process description cells (https://launchpad.net/bugs/1020840)
-- Exporters must skip sections with no courses (https://launchpad.net/bugs/1020842)
 
 Bugfixes
 ++++++++
 
 - Allow teachers to see attributes of all sections and resources.
+
+Development tools
++++++++++++++++++
+
+- Selenium downloads
+- XLS file testing helpers
+
+
+2.1.1 (2012-08-16)
+------------------
 
 Translations
 ++++++++++++
@@ -66,28 +77,26 @@ Translations
 - Updated translations
 - Added Bosnian, Croatian, Slovenian translations
 
-Development tools
-+++++++++++++++++
-
-- Selenium screenshots and downloads
-- XLS file testing helpers
-
-
-2.1.1 (unreleased)
-------------------
-
 XLS
 +++
 
 - Added course_id, government_id and credits to Courses sheet import/export.
+- Exporters must skip sections with no courses (https://launchpad.net/bugs/1020842)
 
 Bugfixes
 ++++++++
 
+- Missing hexes.svg background in released packages (https://launchpad.net/bugs/1030218)
 - Timetables evolution fails on exception days (https://launchpad.net/bugs/1003834)
 - Advisory accordion doesn't show advisees (https://launchpad.net/bugs/1005989)
-- Fix upgrade from schooltool < 1.5 crashing on missing levels (https://launchpad.net/bugs/1007361)
+- Fix upgrade from schooltool < 1.5 crashing (https://launchpad.net/bugs/1007361)
 - Remove demographics when person is deleted.
+- Users cannot see their own photo (https://launchpad.net/bugs/1007145)
+
+Development tools
++++++++++++++++++
+
+- Selenium screenshots
 
 
 2.1.0 (2012-04-19)

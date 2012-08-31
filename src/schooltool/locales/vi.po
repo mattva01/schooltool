@@ -5830,12 +5830,12 @@ msgid "end date overlaps another term"
 msgstr "ngày kết thúc trùng với kỳ khác"
 
 #: /src/schooltool/export/importer.py:89
-msgid "${title} has no days in A${row}"
-msgstr "${title} không có ngày nào trong A${row}"
+msgid "has no days"
+msgstr "không có ngày nào"
 
 #: /src/schooltool/export/importer.py:90
-msgid "${title} has no day templates in A${row}"
-msgstr "${title} không có mẫu ngày trong A${row}"
+msgid "has no day templates"
+msgstr "không có mẫu ngày"
 
 #: /src/schooltool/export/importer.py:91
 msgid "is not a valid time range"
@@ -5874,8 +5874,8 @@ msgid "is not a valid course in the given school year"
 msgstr "không là khóa học hợp lệ trong năm học"
 
 #: /src/schooltool/export/importer.py:100
-msgid "${title} has no courses in A${row}"
-msgstr "${title} không có môn nào trong A${row}"
+msgid "has no courses"
+msgstr "không có môn nào"
 
 #: /src/schooltool/export/importer.py:101
 msgid "is not a valid username"
