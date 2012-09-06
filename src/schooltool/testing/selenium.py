@@ -1573,8 +1573,12 @@ def SeleniumDocFileSuite(layer, *paths, **kw):
 
 
 def collect_ftests(package=None, level=None, layer=None, filenames=None,
-                   optionflags=None, test_case_factory=SeleniumDocFileCase):
+                   optionflags=None, test_case_factory=SeleniumDocFileCase,
+                   extra_globs=None):
     package = doctest._normalize_module(package)
+    extra_globs = extra_globs or {}
+    extra_globs.update({'browsers': layer.browsers,
+                        'downloads': layer.downloads})
     def make_suite(filename, package=None):
         if BLACK_MAGIC:
             def layer_setting_factory(*args, **kw):
@@ -1587,8 +1591,7 @@ def collect_ftests(package=None, level=None, layer=None, filenames=None,
         suite = SeleniumDocFileSuite(layer, filename,
                                      package=package,
                                      optionflags=optionflags,
-                                     globs={'browsers': layer.browsers,
-                                            'downloads': layer.downloads},
+                                     globs=extra_globs,
                                      encoding='UTF-8',
                                      test_case_factory=suite_test_case_factory)
         return suite

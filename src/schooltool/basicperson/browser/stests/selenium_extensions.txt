@@ -96,11 +96,14 @@ Used for adding people to the application.
     Last name: Welsh
     Username: david
     >>> sel = '//h2[contains(@class, "ui-accordion-header")]'
-    >>> groups_accordion_header = manager.query_all.xpath(sel)[4]
-    >>> groups_accordion_header.click()
+    >>> accordion_headers = manager.query_all.xpath(sel)
     >>> sel = 'div.ui-accordion-content'
-    >>> groups_accordion_content = manager.query_all.css(sel)[4]
-    >>> manager.wait(groups_accordion_content.is_displayed)
+    >>> accordion_contents = manager.query_all.css(sel)
+    >>> person_accordion_content = accordion_contents[0]
+    >>> groups_accordion_header = accordion_headers[4]
+    >>> groups_accordion_header.click()
+    >>> groups_accordion_content = accordion_contents[4]
+    >>> manager.wait_no(person_accordion_content.is_displayed)
     >>> sel = '//div[contains(@class, "groups_tree")]//li[contains(@class, "group")]/a'
     >>> for group in manager.query_all.xpath(sel):
     ...     print group.text
@@ -116,11 +119,14 @@ Used for adding people to the application.
     Last name: Guzman
     Username: nestor
     >>> sel = '//h2[contains(@class, "ui-accordion-header")]'
-    >>> advisory_accordion_header = manager.query_all.xpath(sel)[2]
-    >>> advisory_accordion_header.click()
+    >>> accordion_headers = manager.query_all.xpath(sel)
     >>> sel = 'div.ui-accordion-content'
-    >>> advisory_accordion_content = manager.query_all.css(sel)[2]
-    >>> manager.wait(advisory_accordion_content.is_displayed)
+    >>> accordion_contents = manager.query_all.css(sel)
+    >>> person_accordion_content = accordion_contents[0]
+    >>> advisory_accordion_header = accordion_headers[2]
+    >>> advisory_accordion_header.click()
+    >>> advisory_accordion_content = accordion_contents[2]
+    >>> manager.wait_no(person_accordion_content.is_displayed)
     >>> sel = ('#person_table-ajax-view-context-advisors-person_table- '
     ...        'table tbody tr')
     >>> for row in manager.query_all.css(sel):
