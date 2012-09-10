@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2012-04-05 13:59+0300\n"
-"PO-Revision-Date: 2012-04-07 08:24+0000\n"
+"POT-Creation-Date: 2012-08-07 16:51+0300\n"
+"PO-Revision-Date: 2012-08-10 16:25+0000\n"
 "Last-Translator: rob <linuxned@gmail.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-04-20 05:08+0000\n"
-"X-Generator: Launchpad (build 15120)\n"
+"X-Launchpad-Export-Date: 2012-08-11 05:57+0000\n"
+"X-Generator: Launchpad (build 15780)\n"
 "Language: nl\n"
 
 #: /src/schooltool/app/app.py:193
@@ -4769,11 +4769,7 @@ msgstr "${section} verwijderen"
 msgid "Term"
 msgstr "Termijn"
 
-#: /src/schooltool/course/browser/section.py:998
-msgid "Size"
-msgstr "Grootte"
-
-#: /src/schooltool/course/browser/section.py:1024
+#: /src/schooltool/course/browser/section.py:1077
 #: /src/schooltool/course/browser/templates/f_section_filter.pt:6
 msgid "Section title"
 msgstr "Sectietitel"
@@ -5058,11 +5054,15 @@ msgstr ""
 msgid "Edit this course"
 msgstr "Dit vak bewerken"
 
-#: /src/schooltool/course/browser/templates/f_course_view.pt:76
+#: /src/schooltool/course/browser/templates/f_course_view.pt:78
+msgid "This course has no sections"
+msgstr "Dit vak heeft geen secties"
+
+#: /src/schooltool/course/browser/templates/f_course_view.pt:84
 msgid "Edit responsible parties for this course"
 msgstr "Verantwoordelijke partijen voor dit vak bewerken"
 
-#: /src/schooltool/course/browser/templates/f_course_view.pt:84
+#: /src/schooltool/course/browser/templates/f_course_view.pt:92
 msgid "These users can modify the course."
 msgstr "Deze gebruikers kunnen het vak wijzigen."
 
@@ -5086,21 +5086,7 @@ msgstr ""
 msgid "Sections taught"
 msgstr "Onderwezen secties"
 
-#: /src/schooltool/course/browser/templates/f_coursesviewlet.pt:12
-#: /src/schooltool/course/browser/templates/f_coursesviewlet.pt:49
-#: /src/schooltool/group/browser/group.py:327
-#: /src/schooltool/group/browser/templates/f_groupsviewlet.pt:19
-#: /src/schooltool/schoolyear/browser/flourish.zcml:65
-#: /src/schooltool/schoolyear/browser/flourish.zcml:100
-#: /src/schooltool/schoolyear/browser/flourish.zcml:130
-#: /src/schooltool/schoolyear/browser/flourish.zcml:182
-#: /src/schooltool/schoolyear/browser/schoolyear.py:712
-#: /src/schooltool/schoolyear/browser/templates/f_schoolyear_activate.pt:8
-#: /src/schooltool/term/browser/templates/f_manage_years_overview.pt:15
-msgid "School Year"
-msgstr "Schooljaar"
-
-#: /src/schooltool/course/browser/templates/f_coursesviewlet.pt:43
+#: /src/schooltool/course/browser/templates/f_coursesviewlet.pt:37
 msgid "Sections attended"
 msgstr "Bijgewoonde secties"
 
@@ -5196,6 +5182,10 @@ msgstr "Uitbreiden naar deze termijn"
 msgid "Link an Existing Section"
 msgstr "Koppel een bestaande sectie"
 
+#: /src/schooltool/course/browser/templates/f_section_list_table_filter.pt:25
+msgid "(${count} sections)"
+msgstr "(${count} secties)"
+
 #: /src/schooltool/course/browser/templates/f_section_member_csvimport_description.pt:3
 #: /src/schooltool/group/browser/templates/f_group_member_csvimport_description.pt:3
 msgid "CSV data should contain a SchoolTool username in each line."
@@ -5219,6 +5209,18 @@ msgid ""
 msgstr ""
 "Het voorbeeld hierboven zal gebruikers, 'john_b' en 'peter_j', toevoegen als "
 "leerlingen van deze sectie."
+
+#: /src/schooltool/course/browser/templates/f_section_table_filter.pt:35
+#: /src/schooltool/person/browser/f_person_filter.pt:20
+#: /src/schooltool/person/browser/f_person_table_filter.pt:39
+#: /src/schooltool/resource/browser/templates/f_resource_filter.pt:20
+#: /src/schooltool/resource/browser/templates/f_resource_table_filter.pt:33
+msgid "Filter by..."
+msgstr "Filteren op…"
+
+#: /src/schooltool/course/browser/templates/f_section_table_filter.pt:41
+msgid "All courses"
+msgstr "Alle secties"
 
 #: /src/schooltool/course/browser/templates/f_section_view.pt:4
 msgid "Edit this section"
@@ -5263,14 +5265,6 @@ msgstr "Apparaten voor deze sectie bewerken"
 #: /src/schooltool/course/browser/templates/f_section_view.pt:176
 msgid "This section has no equipment"
 msgstr "Deze sectie heeft geen apparaten"
-
-#: /src/schooltool/course/browser/templates/f_sections_related.pt:6
-msgid ""
-"A section is a set of one or more learners and instructors who meet during a "
-"term to achieve the curricular goals of a course."
-msgstr ""
-"Een sectie bestaat uit één of meer leerlingen en leraren, die samenkomen "
-"tijdens een termijn om de leerdoelstellingen van een vak te bereiken."
 
 #: /src/schooltool/course/browser/templates/f_unlink_section.pt:22
 #: /src/schooltool/course/browser/templates/unlink_section.pt:23
@@ -5964,11 +5958,7 @@ msgstr ""
 msgid "Export as XLS"
 msgstr "Exporteren als XLS"
 
-#: /src/schooltool/export/importer.py:76
-msgid "${sheet_name} ${column}${row} ${message}"
-msgstr "${sheet_name} ${column}${row} ${message}"
-
-#: /src/schooltool/export/importer.py:77
+#: /src/schooltool/export/importer.py:79
 msgid "is not a valid integer"
 msgstr "is geen geldig geheel getal"
 
@@ -6093,11 +6083,11 @@ msgstr "moet leeg zijn wanneer het ID een gebruikers-ID is"
 msgid "is not a valid resource id"
 msgstr "is geen geldige voorziening"
 
-#: /src/schooltool/export/importer.py:108
-msgid "Username cannot contain non-ascii characters: ${string}"
-msgstr "Gebruikersnaam mag geen non-ASCII-tekens bevatten: ${string}"
-
 #: /src/schooltool/export/importer.py:110
+msgid "Username cannot contain non-ascii characters"
+msgstr "Gebruikersnaam mag geen non-ASCII-tekens bevatten"
+
+#: /src/schooltool/export/importer.py:111
 msgid "is not a valid weekday number (0-6)"
 msgstr "is geen geldige werkdag (0-6)"
 
@@ -6105,11 +6095,99 @@ msgstr "is geen geldige werkdag (0-6)"
 msgid "is not a valid contact relationship"
 msgstr "is geen geldige contactrelatie"
 
-#: /src/schooltool/export/importer.py:112
-msgid "must be either True or False"
-msgstr "Moet Waar of Onwaar zijn"
+#: /src/schooltool/export/importer.py:113
+msgid ""
+"must be either TRUE, FALSE, YES or NO (upper, lower and mixed case are all "
+"valid)"
+msgstr ""
+"moet Waar, Onwaar, JA of NEE zijn (hoofdletters, kleine letters en beide "
+"door elkaar heen is allemaal toegestaan)"
 
-#: /src/schooltool/export/templates/f_import.pt:17
+#: /src/schooltool/export/importer.py:114
+msgid "must have a school year"
+msgstr "moet een schooljaar hebben"
+
+#: /src/schooltool/export/importer.py:115
+msgid "must have a course"
+msgstr "moet een vak hebben"
+
+#: /src/schooltool/export/importer.py:116
+msgid "must have a term"
+msgstr "moet een termijn hebben"
+
+#: /src/schooltool/export/importer.py:117
+msgid "the current section is in the first term of the school year"
+msgstr "de huidige sectie is in de eerste termijn van het schooljaar"
+
+#: /src/schooltool/export/importer.py:118
+msgid "the current section is in the last term of the school year"
+msgstr "de huidige sectie is in de laatste termijn van het schooljaar"
+
+#: /src/schooltool/export/importer.py:119
+msgid "is not a valid section id in the previous term"
+msgstr "is geen geldig sectie-ID in de vorige termijn"
+
+#: /src/schooltool/export/importer.py:120
+msgid "is not a valid section id in the next term"
+msgstr "is geen geldig sectie-ID in de volgende termijn"
+
+#: /src/schooltool/export/importer.py:121
+msgid "no timetable is defined for this section"
+msgstr "geen rooster ingesteld in deze sectie"
+
+#: /src/schooltool/export/importer.py:122
+msgid "no day is defined in this row"
+msgstr "geen dag ingesteld in deze rij"
+
+#: /src/schooltool/export/importer.py:123
+msgid "must have a valid period id"
+msgstr "moet een geldig periode-ID hebben"
+
+#: /src/schooltool/export/importer.py:124
+msgid "course credits need to be a valid number"
+msgstr "vak-kredietwaarde moet een geldig getal zijn"
+
+#: /src/schooltool/export/importer.py:125
+msgid "gender must be male or female"
+msgstr "geslacht moet man of vrouw zijn"
+
+#: /src/schooltool/export/importer.py:126
+msgid "has an invalid username"
+msgstr "heeft een ongeldige gebruikersnaam"
+
+#: /src/schooltool/export/importer.py:127
+msgid "has an invalid resource id"
+msgstr "heeft een ongeldige voorziening-ID"
+
+#: /src/schooltool/export/importer.py:128
+msgid "has an invalid course id for the given school year"
+msgstr "heeft een ongeldig vak-ID voor het aangegeven schooljaar"
+
+#: /src/schooltool/export/importer.py:129
+msgid "end term cannot be before start term"
+msgstr "einde van de termijn kan niet voor de start van de termijn liggen"
+
+#: /src/schooltool/export/importer.py:130
+msgid "is not a valid section id in the specified term"
+msgstr "is geen geldig sectie-ID in de aangegeven termijn"
+
+#: /src/schooltool/export/importer.py:131
+msgid "ID cells must be formatted as text in the spreadsheet"
+msgstr "ID-cellen moeten geformatteerd zijn als tekst in het rekenblad"
+
+#: /src/schooltool/export/importer.py:132
+msgid "school years must be consistent within this table"
+msgstr "schooljaren moeten consistent binnen deze tabel"
+
+#: /src/schooltool/export/importer.py:1871
+msgid "${sheet_name} ${column}${row} ${message}"
+msgstr "${sheet_name} ${column}${row} ${message}"
+
+#: /src/schooltool/export/importer.py:1887
+msgid "The following errors occurred while importing:"
+msgstr "De volgende fouten zijn opgetreden bij het importeren:"
+
+#: /src/schooltool/export/templates/f_import.pt:19
 msgid "Please wait while the data is being imported."
 msgstr "Een moment geduld, de gegevens worden geïmporteerd."
 
@@ -6269,7 +6347,18 @@ msgstr "Huidige groepen"
 msgid "Available groups"
 msgstr "Beschikbare groepen"
 
-#: /src/schooltool/group/browser/group.py:448
+#: /src/schooltool/group/browser/group.py:322
+#: /src/schooltool/group/browser/group.py:550
+#: /src/schooltool/schoolyear/browser/flourish.zcml:65
+#: /src/schooltool/schoolyear/browser/flourish.zcml:109
+#: /src/schooltool/schoolyear/browser/flourish.zcml:146
+#: /src/schooltool/schoolyear/browser/flourish.zcml:198
+#: /src/schooltool/schoolyear/browser/schoolyear.py:711
+#: /src/schooltool/schoolyear/browser/templates/f_schoolyear_activate.pt:8
+msgid "School Year"
+msgstr "Schooljaar"
+
+#: /src/schooltool/group/browser/group.py:443
 msgid "Delete ${group}"
 msgstr "${group} verwijderen"
 
@@ -6611,14 +6700,8 @@ msgstr "Wachtwoord succesvol gewijzigd"
 msgid "First name, last name or username"
 msgstr "Voornaam, achternaam of gebruikersnaam"
 
-#: /src/schooltool/person/browser/f_person_filter.pt:20
-#: /src/schooltool/person/browser/f_person_table_filter.pt:39
-#: /src/schooltool/resource/browser/templates/f_resource_filter.pt:20
-#: /src/schooltool/resource/browser/templates/f_resource_table_filter.pt:33
-msgid "Filter by..."
-msgstr "Filteren op…"
-
 #: /src/schooltool/person/browser/f_person_filter.pt:26
+#: /src/schooltool/person/browser/f_person_table_filter.pt:45
 #: /src/schooltool/person/browser/person_filter.pt:5
 msgid "All groups"
 msgstr "Alle groepen"
@@ -8149,9 +8232,9 @@ msgstr ""
 "Klik op een dag om de status te veranderen. U kunt ook de dagen van een week "
 "in/uitschakelen:"
 
-#: /src/schooltool/term/browser/templates/f_terms.pt:29
-msgid "This year has no terms defined."
-msgstr "Voor dit jaar zijn geen termijnen ingesteld."
+#: /src/schooltool/term/browser/templates/f_terms.pt:5
+msgid "There are no terms."
+msgstr "Er zijn geen termijnen."
 
 #: /src/schooltool/term/browser/templates/f_terms_related.pt:6
 msgid ""
@@ -8253,6 +8336,10 @@ msgstr "Schooljaar: ${year_title}"
 #: /src/schooltool/term/browser/term.py:691
 msgid "Add a new term to ${year_title}"
 msgstr "Nieuwe termijn toevoegen aan ${year_title}"
+
+#: /src/schooltool/term/interfaces.py:41
+msgid "An internal identifier of this term."
+msgstr "Een interne identificatie voor deze termijn."
 
 #: /src/schooltool/term/term.py:313
 msgid "Term date is not in the school year."

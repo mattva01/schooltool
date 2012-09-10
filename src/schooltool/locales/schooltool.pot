@@ -17,7 +17,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
-"POT-Creation-Date: 2012-08-07 16:51+0300\n"
+"POT-Creation-Date: 2012-08-31 11:14+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Schooltool Development Team <schooltool-dev@schooltool.org>\n"
@@ -5675,10 +5675,6 @@ msgid "is not a valid section id in the specified term"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:131
-msgid "ID cells must be formatted as text in the spreadsheet"
-msgstr ""
-
-#: /src/schooltool/export/importer.py:132
 msgid "school years must be consistent within this table"
 msgstr ""
 
