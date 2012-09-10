@@ -162,7 +162,7 @@ def setUpTimetables():
 
     dows = ['Monday', 'Tuesday', 'Wednesday', 'Thursday',
             'Friday', 'Saturday', 'Sunday']
-    week_days = [(tt_week.periods.getWeekDayKey(n), title)
+    week_days = [(unicode(n), title)
                  for n, title in enumerate(dows)]
 
     addTimetableDays(

@@ -886,7 +886,7 @@ class FinalStep(Step):
             timetable.time_slots, object_event = containedEvent(
                 WeekDayTemplates(), timetable, 'time_slots')
             days = [
-                (timetable.time_slots.getWeekDayKey(n),
+                (unicode(n),
                  translate(day_of_week_names[n], context=self.request),
                  time_slot)
                 for n, time_slot in zip(range(7), time_slots)]
@@ -895,7 +895,7 @@ class FinalStep(Step):
                 SchoolDayTemplates(), timetable, 'time_slots')
             # An UI limitations at the time of writing
             time_slots = time_slots[:len(day_titles)]
-            day_ids = [u'%d' % n for n in range(len(day_titles))]
+            day_ids = [unicode(n) for n in range(len(day_titles))]
             days = zip(day_ids, day_titles, time_slots)
         else:
             raise NotImplementedError()
@@ -922,12 +922,11 @@ class FinalStep(Step):
         if model == 'weekly':
             timetable.periods, object_event = containedEvent(
                 WeekDayTemplates(), timetable, 'periods')
-            day_ids = [timetable.periods.getWeekDayKey(n)
-                       for n in range(min(len(day_titles), 7))]
+            day_ids = [unicode(n) for n in range(min(len(day_titles), 7))]
         elif model == 'rotating':
             timetable.periods, object_event = containedEvent(
                 SchoolDayTemplates(), timetable, 'periods')
-            day_ids = [u'%d' % n for n in range(len(day_titles))]
+            day_ids = [unicode(n) for n in range(len(day_titles))]
         else:
             raise NotImplementedError()
 

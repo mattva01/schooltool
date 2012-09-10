@@ -112,12 +112,10 @@ class WeekDayTemplates(DayTemplateSchedule):
     implements(interfaces.IWeekDayTemplates)
 
     def getWeekDayKey(self, weekday):
-        return u'%d' % weekday
+        return unicode(weekday)
 
     def getWeekDay(self, weekday):
-        assert self.templates is not None
-        key = self.getWeekDayKey(weekday)
-        return self.templates.get(key, None)
+        return self.templates.get(unicode(weekday), None)
 
     def iterDates(self, dates):
         if not self.templates:

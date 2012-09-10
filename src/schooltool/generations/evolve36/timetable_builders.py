@@ -125,7 +125,7 @@ class WeekDayPeriodsBuilder(PeriodsBuilder):
         result = BuildContext(period_map={})
         for weekday in range(7):
             day = self.getDay(weekday)
-            key = schedule.getWeekDayKey(weekday)
+            key = unicode(weekday)
             built = self.addDayTemplate(schedule.templates, key, day)
             result.period_map.update(built.period_map)
         return result(schedule=schedule)
@@ -205,7 +205,7 @@ class WeekDayTimeSlotsBuilder(TimeSlotsBuilder):
             timetable, WeekDayTemplates, 'time_slots')
 
         for weekday, day in enumerate(self.days):
-            key = schedule.getWeekDayKey(weekday)
+            key = unicode(weekday)
             self.addDayTemplate(schedule.templates, key, day)
         return BuildContext(schedule=schedule)
 

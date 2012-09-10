@@ -3,6 +3,7 @@ Selenium browser export test example
 
     >>> manager = browsers.manager
     >>> manager.ui.login('manager', 'schooltool')
+    >>> downloads.clear()
 
     >>> manager.query.link('School').click()
 
