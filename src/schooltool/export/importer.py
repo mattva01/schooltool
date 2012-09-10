@@ -260,7 +260,7 @@ class ImporterBase(object):
         if not value:
             self.error(row, col, ERROR_MISSING_REQUIRED_TEXT)
             return None
-        value = self.getBoolFromCell(sheet, row, col)
+        return self.getBoolFromCell(sheet, row, col)
 
     def getIdFromCell(self, sheet, row, col, default=u''):
         value, found, valid = self.getTextFoundValid(sheet, row, col, default)
