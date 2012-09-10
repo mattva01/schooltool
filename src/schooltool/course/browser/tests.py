@@ -509,20 +509,6 @@ def doctest_SectionEditView():
         >>> section.title
         u'new_title'
 
-    We should not get redirected if there were errors:
-
-        >>> request = TestRequest()
-        >>> request.form = {'UPDATE_SUBMIT': 'Apply',
-        ...                 'field.title': u''}
-        >>> view = TestSectionEditView(section, request)
-        >>> view.update()
-        u'An error occurred.'
-        >>> request.response.getStatus()
-        599
-
-        >>> section.title
-        u'new_title'
-
     We can cancel an action if we want to:
 
         >>> request = TestRequest()

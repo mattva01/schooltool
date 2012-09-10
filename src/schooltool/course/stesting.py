@@ -64,7 +64,7 @@ def registerSeleniumSetup():
             'course.add', addCourse))
 
     def addSection(browser, schoolyear, term, course,
-                   title=None, ends=None, **kw):
+                   title=None, ends=None, location=None, **kw):
         optional = (
             'description',
             )
@@ -72,6 +72,8 @@ def registerSeleniumSetup():
         browser.query.link('Sections').click()
         browser.query.link(schoolyear).click()
         browser.query.link('Section').click()
+        if title is not None:
+            browser.query.name('form.widgets.title').type(title)
         browser.query.id('courses-widgets-course').ui.select_option(course)
         browser.query.id('terms-widgets-starts').ui.select_option(term)
         ends_widget = browser.query.id('terms-widgets-ends')
@@ -79,6 +81,9 @@ def registerSeleniumSetup():
             ends_widget.ui.select_option(term)
         else:
             ends_widget.ui.select_option(ends)
+        if location is not None:
+            browser.query.id('location-widgets-location').ui.select_option(
+                location)
         for name in optional:
             if name in kw:
                 value = kw[name]
@@ -87,16 +92,6 @@ def registerSeleniumSetup():
         page = browser.query.tag('html')
         browser.query.button('Submit').click()
         browser.wait(lambda: page.expired)
-        if title is not None:
-            page = browser.query.tag('html')
-            browser.query.xpath('//a[@title="Edit this section"]').click()
-            browser.wait(lambda: page.expired)
-            title_widget = browser.query.id('form-widgets-title')
-            title_widget.clear()
-            title_widget.type(title)
-            page = browser.query.tag('html')
-            browser.query.button('Submit').click()
-            browser.wait(lambda: page.expired)
 
     registry.register('SeleniumHelpers',
         lambda: schooltool.testing.selenium.registerBrowserUI(

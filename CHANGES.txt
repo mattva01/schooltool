@@ -5,7 +5,7 @@ CHANGES
 2.2.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- section add form needs title and location (https://launchpad.net/bugs/1042267)
 
 
 2.2.2 (2012-08-31)

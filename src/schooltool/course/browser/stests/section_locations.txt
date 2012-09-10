@@ -144,3 +144,22 @@ are there.
     >>> manager.query_all.xpath('//div[@id="equipment_table-ajax-view-context-resources-equipment_table-"]//a').text
     [u'More equipment', u'Some equipment']
 
+
+Adding a section with initial location
+--------------------------------------
+
+We now allow the user to specify one location resource while adding the section.
+If the user chooses one from the dropdown, it will be the one and only
+resource set for the new section.  We'll pass one to the section add method.
+
+    >>> manager.ui.section.add('2012', '2012', 'Math', location='Room 100')
+
+That section is now in view.  As we expect, it has no equipment, but it does
+have the location we passed.
+
+    >>> headers = manager.query_all.xpath('//div[@class="body"]//h3').text
+    >>> 'This section has no equipment' in headers
+    True
+    >>> manager.query_all.xpath('//div[@id="location_table-ajax-view-context-resources-location_table-"]//a').text
+    [u'Room 100']
+
