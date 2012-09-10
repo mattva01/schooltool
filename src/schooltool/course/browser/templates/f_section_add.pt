@@ -3,6 +3,7 @@
     <metal:block metal:fill-slot="extra-widgets">
       <tal:block content="structure view/course_subform/render" />
       <tal:block content="structure view/term_subform/render" />
+      <tal:block content="structure view/location_subform/render" />
     </metal:block>
     <metal:block fill-slot="above-buttons" tal:condition="request/camefrom|nothing">
       <input type="hidden" name="camefrom" tal:attributes="value request/camefrom" />
