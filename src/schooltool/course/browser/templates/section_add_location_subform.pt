@@ -1,0 +1,25 @@
+<tal:block repeat="widget view/widgets/values">
+  <div id="" class="row"
+    tal:attributes="id string:${widget/id}-row"
+    tal:condition="python:widget.mode != 'hidden'">
+    <tal:block>
+      <div class="label">
+        <label tal:attributes="for widget/id">
+          <span tal:content="widget/label">label</span>
+          <span class="required"
+                tal:condition="widget/required">*</span>
+        </label>
+      </div>
+      <p class="hint" tal:content="widget/field/description"
+         tal:condition="widget/field/description">Description of this field.</p>
+      <div class="error"
+           tal:condition="widget/error">
+        <span tal:replace="structure widget/error/render">error</span>
+      </div>
+      <div class="widget" tal:content="structure widget/render">
+        <input type="text" size="24" value="" />
+      </div>
+    </tal:block>
+  </div>
+</tal:block>
+

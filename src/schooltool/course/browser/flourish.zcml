@@ -391,6 +391,12 @@
       subtitle="Add Section"
       />
 
+  <zope:adapter
+      factory=".section.getSectionAddTitleHint" />
+
+  <zope:adapter
+      factory=".section.getSectionAddLocationHint" />
+
   <flourish:page
       name="index.html"
       for="schooltool.course.interfaces.ISection"

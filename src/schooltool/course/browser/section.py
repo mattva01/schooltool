@@ -25,8 +25,8 @@ from urllib import urlencode
 
 import zc.table.table
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
-from zope.component import adapts
-from zope.component import getMultiAdapter
+from zope.component import adapts, adapter
+from zope.component import getMultiAdapter, getAdapter
 from zope.component import getUtility
 from zope.container.contained import NameChooser
 from zope.container.interfaces import INameChooser
@@ -34,6 +34,7 @@ from zope.event import notify
 from zope.i18n import translate
 from zope.i18n.interfaces.locales import ICollator
 from zope.interface import implements, Invalid, directlyProvides
+from zope.interface import implementer, Interface
 from zope.intid.interfaces import IIntIds
 from zope.publisher.browser import BrowserView
 from zope.publisher.interfaces.browser import IBrowserRequest
@@ -1276,6 +1277,17 @@ class FlourishSectionView(DisplayForm):
                      if IEquipment(r, None) is not None])
 
 
+class ISectionAddTitleHint(Interface):
+    """Section add optional title hint text."""
+
+
+@adapter(ISchoolYear)
+@implementer(ISectionAddTitleHint)
+def getSectionAddTitleHint(context):
+    return _(u"If no title is specified, one will be created based on the "
+              "course title.")
+
+
 class FlourishSectionAddView(Form, SectionAddView):
 
     template = InheritTemplate(Page.template)
@@ -1294,6 +1306,8 @@ class FlourishSectionAddView(Form, SectionAddView):
         super(FlourishSectionAddView, self).updateWidgets()
         self.widgets['title'].required = False
         self.widgets['title'].field.required = False
+        self.widgets['title'].field.description = getAdapter(self.context,
+            ISectionAddTitleHint)
 
     def update(self):
         super(SectionAddView, self).update()
@@ -1446,9 +1460,19 @@ class FlourishNewSectionCoursesSubform(NewSectionCoursesSubform):
         changed = form.applyChanges(self, self.getContent(), data)
 
 
+class ISectionAddLocationHint(Interface):
+    """Section add optional location hint text."""
+
+
+@adapter(ISchoolYear)
+@implementer(ISectionAddLocationHint)
+def getSectionAddLocationHint(context):
+    return _(u"Additional locations can be added via the section view.")
+
+
 class FlourishNewSectionLocationSubform(subform.EditSubForm):
 
-    template = ViewPageTemplateFile('templates/basic_subform.pt')
+    template = ViewPageTemplateFile('templates/section_add_location_subform.pt')
     prefix = 'location'
     errors = None
 
@@ -1465,6 +1489,11 @@ class FlourishNewSectionLocationSubform(subform.EditSubForm):
             required=False, vocabulary=vocabulary_titled(resources))
         self.fields += field.Fields(schema_field)
         datamanager.DictionaryField(self.values, schema_field)
+
+    def updateWidgets(self):
+        super(FlourishNewSectionLocationSubform, self).updateWidgets()
+        self.widgets['location'].field.description = getAdapter(self.context,
+            ISectionAddLocationHint)
 
     def getContent(self):
         return self.values
