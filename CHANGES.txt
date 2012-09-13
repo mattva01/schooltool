@@ -2,10 +2,16 @@
 CHANGES
 =======
 
-2.2.3 (unreleased)
+2.2.4 (unreleased)
 ------------------
 
-- section add form needs title and location (https://launchpad.net/bugs/1042267)
+- Nothing changed yet.
+
+
+2.2.3 (2012-09-13)
+------------------
+
+- Section add form needs title and location (https://launchpad.net/bugs/1042267)
 - Person links in group view return to group
 
 
@@ -24,7 +30,6 @@ CHANGES
 XLS
 +++
 
-- We need to allow id cells to be numeric again on import (https://launchpad.net/bugs/1035036)
 - Handle empty Weekends table (https://launchpad.net/bugs/1035969)
 - Skip empty rows if there is only one table in the sheet (https://launchpad.net/bugs/1035088)
 
