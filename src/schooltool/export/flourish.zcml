@@ -49,6 +49,7 @@
   <report:reportLink
        name="export.xls"
        for="schooltool.app.interfaces.ISchoolToolApplication"
+       view="schooltool.app.browser.app.ManageSchool"
        permission="schooltool.edit"
        group="School"
        description="A single .xls spreadsheet containing the basic structure of the school, including students, contacts, years, terms, courses, groups and timetables.  Can be modified and re-imported."
