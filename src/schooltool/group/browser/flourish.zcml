@@ -207,11 +207,19 @@
       />
 
   <flourish:viewlet
+      name="group_aware_person_table"
+      for="*"
+      class=".group.GroupAwarePersonTable"
+      manager="schooltool.skin.flourish.interfaces.IAJAXParts"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
       name="filter"
       before="batch table"
       class=".group.GroupAwarePersonTableFilter"
       render="template"
-      manager="schooltool.person.browser.person.PersonTable"
+      manager=".group.GroupAwarePersonTable"
       view=".group.FlourishGroupView"
       permission="schooltool.view"
       />

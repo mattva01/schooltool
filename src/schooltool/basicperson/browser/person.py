@@ -325,6 +325,14 @@ class FlourishPersonInfo(flourish.page.Content):
     def canModify(self):
         return canAccess(self.context.__parent__, '__delitem__')
 
+    @property
+    def done_link(self):
+        done_link = self.request.get('done_link', None)
+        if done_link is not None:
+            return done_link
+        app = ISchoolToolApplication(None)
+        return absoluteURL(app, self.request) + '/persons'
+
 
 class PersonAddFormBase(PersonForm, form.AddForm):
     """Person add form for basic persons."""

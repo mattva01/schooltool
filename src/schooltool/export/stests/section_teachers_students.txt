@@ -22,8 +22,8 @@ Let's look at the teachers group:
 We see the teachers of our two sections are in the group.
 
     >>> print manager.query_all.xpath('//table[@class="data"]//td[1]//a').get_attribute('href')
-    http://localhost/persons/teacher001
-    http://localhost/persons/teacher003
+    http://localhost/persons/teacher001?done_link=/schoolyears/2006-2008/groups/teachers
+    http://localhost/persons/teacher003?done_link=/schoolyears/2006-2008/groups/teachers
 
 Let's look at the students group:
 
@@ -33,9 +33,9 @@ Let's look at the students group:
 We see the students in our two sections are in the group.
 
     >>> print manager.query_all.xpath('//table[@class="data"]//td[1]//a').get_attribute('href')
-    http://localhost/persons/student004
-    http://localhost/persons/student006
-    http://localhost/persons/student008
-    http://localhost/persons/student009
-    http://localhost/persons/student002
+    http://localhost/persons/student004?done_link=/schoolyears/2006-2008/groups/students
+    http://localhost/persons/student006?done_link=/schoolyears/2006-2008/groups/students
+    http://localhost/persons/student008?done_link=/schoolyears/2006-2008/groups/students
+    http://localhost/persons/student009?done_link=/schoolyears/2006-2008/groups/students
+    http://localhost/persons/student002?done_link=/schoolyears/2006-2008/groups/students
 
