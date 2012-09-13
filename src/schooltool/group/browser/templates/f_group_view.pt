@@ -83,7 +83,7 @@
     </h3>
 
     <tal:block condition="view/has_members"
-               replace="structure context/schooltool:content/ajax/view/context/members/person_table" />
+               replace="structure context/schooltool:content/ajax/view/context/members/group_aware_person_table" />
 
     <h3 tal:condition="not:view/has_members" i18n:translate="">
       This group has no members
@@ -102,7 +102,7 @@
     <p i18n:translate="" class="hint">These users can modify the group.</p>
 
     <tal:block condition="view/has_leaders"
-               replace="structure context/schooltool:content/ajax/view/context/leaders/person_table" />
+               replace="structure context/schooltool:content/ajax/view/context/leaders/group_aware_person_table" />
     <p tal:condition="not:view/has_leaders" i18n:translate="">
       This group has no responsible parties
     </p>

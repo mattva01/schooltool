@@ -823,6 +823,28 @@ class FlourishGroupIDCardsView(FlourishPersonIDCardsViewBase):
         return result
 
 
+def done_link_url_cell_formatter(value, item, formatter):
+    url = absoluteURL(item, formatter.request)
+    done_link_url = formatter.request.get('PATH_INFO', None)
+    if done_link_url is not None:
+        url += '?done_link=%s' % done_link_url
+    return '<a href="%s">%s</a>' % (url, value)
+
+
+class GroupAwarePersonTable(BasicPersonTable):
+
+    def updateFormatter(self):
+        self.setUp(formatters=[done_link_url_cell_formatter,
+                               done_link_url_cell_formatter],
+                   table_formatter=self.table_formatter,
+                   batch_size=self.batch_size,
+                   prefix=self.__name__,
+                   css_classes={'table': 'data'})
+
+    def items(self):
+        return self.indexItems(self.context)
+
+
 class GroupAwarePersonTableFilter(PersonTableFilter):
 
     template = ViewPageTemplateFile('templates/f_group_aware_person_table_filter.pt')
