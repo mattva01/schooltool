@@ -78,6 +78,7 @@ class ZCMLLayer(_ZCMLLayer):
                 import schooltool.app.main
                 server = schooltool.app.main.StandaloneServer()
                 server.bootstrapSchoolTool(event.database, self.school_type)
+                server.startApplication(event.database)
 
         install_db_bootstrap_hook()
         try:
