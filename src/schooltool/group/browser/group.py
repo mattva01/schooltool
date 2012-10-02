@@ -830,10 +830,8 @@ class FlourishGroupIDCardsView(FlourishPersonIDCardsViewBase):
 
 
 def done_link_url_cell_formatter(value, item, formatter):
-    url = absoluteURL(item, formatter.request)
-    done_link_url = formatter.request.get('PATH_INFO', None)
-    if done_link_url is not None:
-        url += '?done_link=%s' % done_link_url
+    url = '%s?done_link=%s' % (absoluteURL(item, formatter.request),
+                               formatter.request.URL)
     return '<a href="%s">%s</a>' % (url, value)
 
 
