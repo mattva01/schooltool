@@ -36,7 +36,7 @@ Click on a person in the group view:
 Check the person view url to see the done link:
 
     >>> manager.url
-    u'http://localhost/persons/tom?done_link=http://localhost/schoolyears/2012/groups/soccer/@@index.html'
+    u'http://localhost/persons/tom?done_link=http://localhost/schoolyears/2012/groups/soccer'
 
 Click on the Done link:
 
@@ -45,4 +45,22 @@ Click on the Done link:
 We should be back in the group view:
 
     >>> manager.url
-    u'http://localhost/schoolyears/2012/groups/soccer/@@index.html'
+    u'http://localhost/schoolyears/2012/groups/soccer'
+
+The done links should also work when the user uses the Members search:
+
+    >>> sel = '#group_aware_person_table-ajax-view-context-members-group_aware_person_table- table'
+    >>> table = manager.query.css(sel)
+    >>> sel = 'group_aware_person_table-ajax-view-context-members-group_aware_person_table--title'
+    >>> manager.query.id(sel).ui.set_value('david')
+    >>> manager.query.name('SEARCH_BUTTON').click()
+    >>> manager.wait(lambda: table.expired)
+    >>> manager.query.link('David').click()
+    >>> manager.url
+    u'http://localhost/persons/david?done_link=http://localhost/schoolyears/2012/groups/soccer'
+    >>> manager.query.link('Done').click()
+
+We should be back in the group view:
+
+    >>> manager.url
+    u'http://localhost/schoolyears/2012/groups/soccer'
