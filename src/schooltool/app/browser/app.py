@@ -760,14 +760,43 @@ class LoginNavigationViewlet(flourish.page.LinkViewlet):
             return _("Log in")
         return _("Log out")
 
+
+    @property
+    def login_url(self):
+        app_url = absoluteURL(ISchoolToolApplication(None), self.request)
+        return '%s/%s' % (app_url, 'login.html')
+
+    @property
+    def logout_url(self):
+        app_url = absoluteURL(ISchoolToolApplication(None), self.request)
+        return '%s/%s' % (app_url, 'logout.html')
+
     @property
     def url(self):
         person = self.authenticated_person
-        app = ISchoolToolApplication(None)
-        app_url = absoluteURL(app, self.request)
         if person is None:
+            return self.login_url
+        return self.logout_url
+
+
+class LoginRedirectBackNavigationViewlet(LoginNavigationViewlet):
+
+    @property
+    def login_url(self):
+        app_url = absoluteURL(ISchoolToolApplication(None), self.request)
+        next_url = urllib.quote(str(self.request.URL))
+        return '%s/%s?nexturl=%s' % (app_url, 'login.html', next_url)
+
+
+class CalendarLoginNavigationViewlet(LoginNavigationViewlet):
+
+    @property
+    def login_url(self):
+        app_url = absoluteURL(ISchoolToolApplication(None), self.request)
+        if ISchoolToolApplication.providedBy(self.context.__parent__):
             return '%s/%s' % (app_url, 'login.html')
-        return '%s/%s' % (app_url, 'logout.html')
+        next_url = urllib.quote(str(self.request.URL))
+        return '%s/%s?nexturl=%s' % (app_url, 'login.html', next_url)
 
 
 class LoggedInNameViewlet(LoginNavigationViewlet):
