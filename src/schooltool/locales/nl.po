@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2012-08-07 16:51+0300\n"
-"PO-Revision-Date: 2012-08-10 16:25+0000\n"
+"POT-Creation-Date: 2012-08-31 15:58+0300\n"
+"PO-Revision-Date: 2012-08-31 15:36+0000\n"
 "Last-Translator: rob <linuxned@gmail.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-08-11 05:57+0000\n"
-"X-Generator: Launchpad (build 15780)\n"
+"X-Launchpad-Export-Date: 2012-09-01 05:28+0000\n"
+"X-Generator: Launchpad (build 15890)\n"
 "Language: nl\n"
 
 #: /src/schooltool/app/app.py:193
@@ -6088,10 +6088,6 @@ msgid "Username cannot contain non-ascii characters"
 msgstr "Gebruikersnaam mag geen non-ASCII-tekens bevatten"
 
 #: /src/schooltool/export/importer.py:111
-msgid "is not a valid weekday number (0-6)"
-msgstr "is geen geldige werkdag (0-6)"
-
-#: /src/schooltool/export/importer.py:111
 msgid "is not a valid contact relationship"
 msgstr "is geen geldige contactrelatie"
 
@@ -6172,10 +6168,6 @@ msgid "is not a valid section id in the specified term"
 msgstr "is geen geldig sectie-ID in de aangegeven termijn"
 
 #: /src/schooltool/export/importer.py:131
-msgid "ID cells must be formatted as text in the spreadsheet"
-msgstr "ID-cellen moeten geformatteerd zijn als tekst in het rekenblad"
-
-#: /src/schooltool/export/importer.py:132
 msgid "school years must be consistent within this table"
 msgstr "schooljaren moeten consistent binnen deze tabel"
 
