@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2012-08-07 16:51+0300\n"
-"PO-Revision-Date: 2012-08-26 05:17+0000\n"
-"Last-Translator: Kaya Zeren <Unknown>\n"
+"POT-Creation-Date: 2012-08-31 15:58+0300\n"
+"PO-Revision-Date: 2012-08-31 15:36+0000\n"
+"Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
 "Language-Team: Turkish <tr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-08-28 08:57+0000\n"
-"X-Generator: Launchpad (build 15864)\n"
+"X-Launchpad-Export-Date: 2012-09-01 05:33+0000\n"
+"X-Generator: Launchpad (build 15890)\n"
 "Language: tr\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -6056,10 +6056,6 @@ msgid "Username cannot contain non-ascii characters"
 msgstr "Kullanıcı adında ASCII olmayan karakterler bulunamaz"
 
 #: /src/schooltool/export/importer.py:111
-msgid "is not a valid weekday number (0-6)"
-msgstr "geçerli bir iş günü numarası değil (0-6)"
-
-#: /src/schooltool/export/importer.py:111
 msgid "is not a valid contact relationship"
 msgstr "geçerli bir ilgili ilişkisi değil"
 
@@ -6140,10 +6136,6 @@ msgid "is not a valid section id in the specified term"
 msgstr "belirtilen dönemde geçerli bir bölüm kodu değil"
 
 #: /src/schooltool/export/importer.py:131
-msgid "ID cells must be formatted as text in the spreadsheet"
-msgstr "Çalışma sayfasında kod hücreleri metin olarak biçimlendirilmelidir"
-
-#: /src/schooltool/export/importer.py:132
 msgid "school years must be consistent within this table"
 msgstr "Bu tablo içindeki okul yılı tutarlı olmalıdır"
 
