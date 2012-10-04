@@ -95,8 +95,24 @@
 
   <flourish:viewlet
       name="login"
+      view="schooltool.app.browser.app.LoginView"
       manager="schooltool.skin.flourish.page.ISecondaryNavigationManager"
       class="schooltool.app.browser.app.LoginNavigationViewlet"
+      permission="zope.Public"
+      />
+
+  <flourish:viewlet
+      name="login"
+      manager="schooltool.skin.flourish.page.ISecondaryNavigationManager"
+      class="schooltool.app.browser.app.LoginRedirectBackNavigationViewlet"
+      permission="zope.Public"
+      />
+
+  <flourish:viewlet
+      name="login"
+      for="schooltool.app.interfaces.ISchoolToolCalendar"
+      manager="schooltool.skin.flourish.page.ISecondaryNavigationManager"
+      class="schooltool.app.browser.app.CalendarLoginNavigationViewlet"
       permission="zope.Public"
       />
 
