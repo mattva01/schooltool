@@ -1524,19 +1524,9 @@ class SectionTimetablesImporter(ImporterBase, SectionMixin):
         schedules = []
         for section in sections:
             term = ITerm(section)
-            schedule_container = IScheduleContainer(section)
-
-            for schedule in schedule_container.values():
-                if schedule.timetable == timetable:
-                    break
-            else:
-                schedule = SelectedPeriodsSchedule(
-                    timetable, term.first, term.last,
-                    title=timetable.title, timezone=timetable.timezone)
-                s_chooser = INameChooser(schedule_container)
-                name = s_chooser.chooseName('', schedule)
-                schedule_container[name] = schedule
-
+            schedule = SelectedPeriodsSchedule(
+                timetable, term.first, term.last,
+                title=timetable.title, timezone=timetable.timezone)
             schedule.consecutive_periods_as_one = bool(consecutive)
             schedules.append(schedule)
 
@@ -1567,6 +1557,14 @@ class SectionTimetablesImporter(ImporterBase, SectionMixin):
 
             for schedule in schedules:
                 schedule.addPeriod(period)
+
+        for index, section in enumerate(sections):
+            term = ITerm(section)
+            schedule_container = IScheduleContainer(section)
+            schedule = schedules[index]
+            s_chooser = INameChooser(schedule_container)
+            name = s_chooser.chooseName('', schedule)
+            schedule_container[name] = schedule
 
     def process(self):
         sh = self.sheet
