@@ -251,16 +251,6 @@
         subtitle="Edit"
         for="schooltool.app.interfaces.ISchoolToolApplication"
         class="schooltool.app.browser.app.FlourishSchoolNameEditView"
-        content_template="templates/z3c-schooltool-form.pt"
-        permission="schooltool.edit"
-        />
-
-    <flourish:page
-        name="schoolBranding.html"
-        title="School Branding"
-        subtitle="Edit"
-        for="schooltool.app.interfaces.ISchoolToolApplication"
-        class="schooltool.app.browser.app.FlourishSchoolBrandingEditView"
         content_template="templates/z3c_form_edit.pt"
         permission="schooltool.edit"
         />
@@ -663,15 +653,6 @@
       name="schoolName.html"
       after="*"
       title="School Name"
-      class="schooltool.skin.flourish.page.LinkViewlet"
-      manager="schooltool.app.browser.app.CustomizeSchoolLinks"
-      permission="schooltool.edit"
-      />
-
-  <flourish:viewlet
-      name="schoolBranding.html"
-      after="schoolName.html"
-      title="School Branding"
       class="schooltool.skin.flourish.page.LinkViewlet"
       manager="schooltool.app.browser.app.CustomizeSchoolLinks"
       permission="schooltool.edit"
