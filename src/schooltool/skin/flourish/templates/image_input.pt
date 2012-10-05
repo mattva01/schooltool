@@ -9,7 +9,7 @@
   <input type="checkbox" value="delete"
          tal:attributes="name string:${view/name}" />
   <span class="label" i18n:translate="" i18n:domain="schooltool">
-    delete this photo
+    delete this image
   </span>
 
   <script>ST.state.push()</script>
