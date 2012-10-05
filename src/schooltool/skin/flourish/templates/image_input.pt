@@ -3,8 +3,8 @@
       tal:omit-tag="">
 <div class="photo-input" tal:condition="view/stored_value">
   <div class="photo-display">
-    <img tal:attributes="src string:${context/@@absolute_url}/photo"
-         alt="Photo" i18n:attributes="alt" />
+    <img tal:attributes="src string:${context/@@absolute_url}/${view/attribute};
+                         alt view/title" />
   </div>
   <input type="checkbox" value="delete"
          tal:attributes="name string:${view/name}" />

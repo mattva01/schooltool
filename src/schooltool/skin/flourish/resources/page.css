@@ -157,3 +157,22 @@
     font-size: 12px;
     line-height: 16px;
 }
+
+
+.page > .body > .sidebar > .content > .header > .photo-display > img,
+.page > .body > .sidebar > .content > .header > .photo-display {
+    float: none;
+    width: 128px;
+    height: auto;
+    margin: 0px;
+    text-align: center;
+}
+
+.page > .body > .sidebar > .content > .header > .photo-display {
+    padding: 0px 8px;
+}
+
+.page > .body > .sidebar > .content > .header > .photo-display > img {
+    padding: 0px;
+}
+

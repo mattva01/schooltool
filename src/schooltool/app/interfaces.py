@@ -31,6 +31,7 @@ from zope.interface import Interface, Attribute
 from zope.location.interfaces import IContained
 from zope.authentication.interfaces import IAuthentication, ILogout
 
+from schooltool.common.fields import Image
 from schooltool.common import SchoolToolMessage as _
 from schooltool.person.interfaces import ICalendarDisplayPreferences
 
@@ -137,6 +138,11 @@ class IApplicationPreferences(ICalendarDisplayPreferences):
             site."""),
         required=False,
         default=True)
+
+    logo = Image(
+        title=_("School logo"),
+        format="JPEG",
+        required=False)
 
 
 class IApplicationTabs(Interface):

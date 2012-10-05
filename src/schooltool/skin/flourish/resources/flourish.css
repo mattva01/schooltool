@@ -326,6 +326,11 @@ pre.traceback {
     text-align: center;
 }
 
+.photo-display img {
+    width: 100%;
+    height: auto;
+}
+
 .photo-input div {
     float: left;
     margin-top: 0px;
