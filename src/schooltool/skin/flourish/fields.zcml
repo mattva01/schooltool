@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/browser"
+           xmlns:z3c="http://namespaces.zope.org/z3c"
+           xmlns:zope="http://namespaces.zope.org/zope"
+           xmlns:flourish="http://schooltool.org/flourish"
+           i18n_domain="schooltool">
+
+  <zope:class class=".fields.ImageFile">
+    <require
+        permission="zope.View"
+        interface="zope.mimetype.interfaces.IContentTypeAware"
+        attributes="size openDetached"
+        />
+    <require
+        permission="zope.ManageContent"
+        set_attributes="mimeType parameters"
+        />
+    <require
+        permission="zope.ManageContent"
+        attributes="open"
+        />
+    <implements
+        interface="
+          zope.annotation.interfaces.IAttributeAnnotatable
+          "
+        />
+  </zope:class>
+
+</configure>

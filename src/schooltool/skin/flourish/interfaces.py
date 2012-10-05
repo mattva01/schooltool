@@ -21,6 +21,7 @@ SchoolTool flourish skin interfaces.
 """
 
 import zope.schema
+import zope.schema.interfaces
 import zope.viewlet.interfaces
 import zope.contentprovider.interfaces
 from zope.interface import Interface, Attribute
@@ -153,3 +154,21 @@ class IAJAXPart(IViewlet, IFromPublication):
                      'was not obtained via publication).',
         default=True,
         required=False)
+
+
+class IImage(zope.schema.interfaces.IBytes):
+
+    size = zope.schema.Tuple(
+        title=_(u"Image size"),
+        value_type = zope.schema.Int(title=_("Size in pixels")),
+        required=False
+        )
+
+    format = zope.schema.TextLine(
+        title=_(u"Image format"),
+        required=True)
+
+    max_file_size = zope.schema.Int(
+        title=_(u"Max file size in bytes"),
+        default=(10 * (10**6)),
+        required=True)

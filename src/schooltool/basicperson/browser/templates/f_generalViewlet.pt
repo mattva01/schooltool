@@ -2,7 +2,7 @@
   <h2 i18n:translate="">General Information</h2>
   <div>
     <div class="photo-display" tal:condition="view/has_photo">
-      <img tal:attributes="src string:${context/@@absolute_url}/photo"
+      <img tal:attributes="src string:${context/photo/@@absolute_url}"
            alt="Photo" i18n:attributes="alt" />
     </div>
     <h3>

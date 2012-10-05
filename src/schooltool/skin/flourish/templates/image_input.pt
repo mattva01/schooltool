@@ -1,7 +1,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:tal="http://xml.zope.org/namespaces/tal"
       tal:omit-tag="">
-<div class="photo-input" tal:condition="view/has_photo">
+<div class="photo-input" tal:condition="view/stored_value">
   <div class="photo-display">
     <img tal:attributes="src string:${context/@@absolute_url}/photo"
          alt="Photo" i18n:attributes="alt" />
