@@ -707,6 +707,14 @@ form fieldset table.timetable td.error {
     background: #f0f0f0;
 }
 
+#calendar-view-week TH.cal-day-today {
+    background: #4B5554;
+}
+
+#calendar-view-week TH.cal-day-today a {
+    color: #ffffff;
+}
+
 #calendar-view-month {
     background: #ffffff;
     border: 1px #dfdfdf solid;
@@ -746,6 +754,11 @@ form fieldset table.timetable td.error {
 #calendar-view-month TD.day-other A:hover {
     color: #ffffff;
     background: #009499;
+}
+
+#calendar-view-month a.cal-day-today {
+    color: white;
+    background: #4B5554;
 }
 
 #calendar-view-month A:hover .event,
@@ -852,6 +865,12 @@ a.cal_yearly_day {
 a.cal_yearly_day_busy {
     color: #009499;
 }
+
+td.cal_yearly_day a.cal-day-today {
+    color: white;
+    background: #4B5554;
+}
+
 
 /*
 
