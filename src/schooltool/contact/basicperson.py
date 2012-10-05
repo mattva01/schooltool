@@ -86,6 +86,10 @@ class BoundContact(Contact):
     def suffix(self):
         return self._person.suffix
 
+    @property
+    def photo(self):
+        return self._person.photo
+
     # XXX: person's language is stored both in a default demographics field
     #      and self contact information now.
 

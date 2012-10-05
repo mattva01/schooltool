@@ -4734,7 +4734,11 @@ def doctest_YearlyCalendarView():
 
         >>> week = view.getWeek(test_today)
         >>> print view.renderRow(week, test_today.month)
-        <td...class="cal_yearly_day today">...
+        <BLANKLINE>
+        ...
+        <a href="http://127.0.0.1/calendar/2005-03-13"
+           class="cal_yearly_day today cal-day-today">13</a>
+        ...
 
     inCurrentPeriod returns True for the same year only:
 

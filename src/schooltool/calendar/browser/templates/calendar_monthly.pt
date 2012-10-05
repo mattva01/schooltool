@@ -19,9 +19,9 @@
         <td class="day" width="70" valign="top"
             tal:define="same_month python:day.date.month == view.cursor.month"
             tal:attributes="class python:same_month and 'day' or 'day-other'">
-          <a tal:attributes="href python:view.calURL('daily', day.date)">
-            <span tal:content="day/date/day"
-                  tal:attributes="class day/today" />
+          <a tal:attributes="href python:view.calURL('daily', day.date);
+                             class day/css_class">
+            <span tal:content="day/date/day" />
             <tal:loop repeat="event day/events">
               <tal:if condition="not:event/allday">
                 <span tal:content="structure event/renderShort"

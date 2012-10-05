@@ -27,6 +27,13 @@
       permission="zope.Public"
       />
 
+  <zope:view
+      for=".fields.ImageFile"
+      type="zope.publisher.interfaces.browser.IBrowserRequest"
+      factory=".widgets.ImageView"
+      permission="zope.Public"
+      />
+
   <zope:adapter
       factory=".form.FlourishErrorViewSnippet"
       trusted="True"
@@ -67,15 +74,15 @@
   </zope:class>
 
   <zope:adapter
-      factory=".widgets.PhotoFieldWidget"
+      factory=".widgets.ImageFieldWidget"
       provides="z3c.form.interfaces.IFieldWidget"
-      for=".widgets.IPhoto
+      for=".interfaces.IImage
            schooltool.skin.flourish.IFlourishLayer"
       />
 
-  <zope:adapter factory=".widgets.PhotoDataConverter" />
+  <zope:adapter factory=".widgets.ImageDataConverter" />
 
-  <zope:class class=".widgets.PhotoWidget">
+  <zope:class class=".widgets.ImageWidget">
     <require
         permission="zope.Public"
         interface="z3c.form.interfaces.IFileWidget"
@@ -84,10 +91,9 @@
 
   <z3c:widgetTemplate
       mode="input"
-      widget=".widgets.IPhotoWidget"
-      view="schooltool.basicperson.browser.person.FlourishPersonEditView"
+      widget=".widgets.IImageWidget"
       layer="schooltool.skin.flourish.IFlourishLayer"
-      template="templates/photo_input.pt"
+      template="templates/image_input.pt"
       />
 
 </configure>

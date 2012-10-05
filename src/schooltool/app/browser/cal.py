@@ -328,18 +328,25 @@ class CalendarDay(object):
                    time (in ascending order).
     """
 
-    def __init__(self, date, events=None):
+    css_class = ''
+
+    def __init__(self, date, events=None, is_today=None):
         if events is None:
             events = []
         self.date = date
         self.events = events
+        if is_today is None:
+            self.is_today = bool(self.date == getUtility(IDateManager).today)
+        else:
+            self.is_today = is_today
+        if self.is_today:
+            self.css_class = (self.css_class + ' cal-day-today').strip()
 
     def __cmp__(self, other):
         return cmp(self.date, other.date)
 
     def today(self):
-        """Return 'today' if self.date is today, otherwise return ''."""
-        return self.date == getUtility(IDateManager).today and 'today' or ''
+        return self.is_today and 'today' or ''
 
 
 #
@@ -699,9 +706,10 @@ class CalendarViewBase(BrowserView):
 
         days = []
         day = start
+        today = self.today
         while day < end:
             events[day].sort()
-            days.append(CalendarDay(day, events[day]))
+            days.append(CalendarDay(day, events[day], is_today=bool(today==day)))
             day += timedelta(1)
         return days
 
@@ -764,6 +772,7 @@ class CalendarViewBase(BrowserView):
                     cssClass = 'cal_yearly_day'
                 if day.today():
                     cssClass += ' today'
+                cssClass = ('%s %s' % (cssClass, day.css_class)).strip()
                 # Let us hope that URLs will not contain < > & or "
                 # This is somewhat related to
                 #   http://issues.schooltool.org/issue96

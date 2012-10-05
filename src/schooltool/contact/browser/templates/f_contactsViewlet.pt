@@ -2,6 +2,10 @@
   <h2 i18n:translate="">Contacts</h2>
   <div tal:define="contacts view/getContacts">
     <tal:block repeat="contact contacts">
+    <div class="photo-display" tal:condition="contact/obj/photo">
+      <img tal:attributes="src string:${contact/obj/@@absolute_url}/photo"
+           alt="Photo" i18n:attributes="alt" />
+    </div>
     <h3>
       <tal:block content="contact/name" /><tal:block condition="contact/relationship">,
         <span tal:replace="contact/relationship" />
@@ -15,7 +19,7 @@
              i18n:attributes="alt" />
       </a>
     </h3>
-    <table class="person-view-demographics">
+    <table tal:attributes="class python:'person-view-demographics' if contact['obj'].photo is None else 'person-view-demographics show-photo'">
       <tbody>
         <tr tal:repeat="row python:view.makeRows(contact['obj'])">
           <td tal:content="row/label" class="label"/>

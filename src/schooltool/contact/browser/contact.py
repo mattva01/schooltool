@@ -189,6 +189,8 @@ class FlourishContactAddView(flourish.page.Page, ContactAddView):
                 _('Full Name'),
                 ['prefix', 'first_name', 'middle_name', 'last_name',
                  'suffix']),
+            'details': (
+                _('Details'), ['photo']),
             'address': (
                 _('Address'),
                 ['address_line_1', 'address_line_2', 'city', 'state',
@@ -200,7 +202,7 @@ class FlourishContactAddView(flourish.page.Page, ContactAddView):
                  'language']),
             }
         self.fieldset_order = (
-            'full_name', 'address', 'contact_information')
+            'full_name', 'details', 'address', 'contact_information')
 
 
 SubmitLabel = button.StaticButtonActionAttribute(
@@ -384,6 +386,8 @@ class FlourishContactEditView(flourish.page.Page,
                 _('Full Name'),
                 ['prefix', 'first_name', 'middle_name', 'last_name',
                  'suffix']),
+            'details': (
+                _('Details'), ['photo']),
             'address': (
                 _('Address'),
                 ['address_line_1', 'address_line_2', 'city', 'state',
@@ -395,7 +399,7 @@ class FlourishContactEditView(flourish.page.Page,
                  'language']),
             }
         self.fieldset_order = (
-            'full_name', 'address', 'contact_information')
+            'full_name', 'details', 'address', 'contact_information')
 
     def fieldsets(self):
         result = []
@@ -428,7 +432,7 @@ class FlourishContactView(flourish.page.Page):
 class FlourishContactDetails(flourish.form.FormViewlet):
 
     template = ViewPageTemplateFile('templates/f_contact_view.pt')
-    fields = field.Fields(IContact)
+    fields = field.Fields(IContact).omit('photo')
     mode = DISPLAY_MODE
 
     def relationships(self):
@@ -908,3 +912,7 @@ class FlourishContactDeleteView(flourish.form.DialogForm, form.EditForm):
         super(FlourishContactDeleteView, self).updateActions()
         self.actions['apply'].addClass('button-ok')
         self.actions['cancel'].addClass('button-cancel')
+
+
+class PhotoView(flourish.widgets.ImageView):
+    attribute = "photo"
