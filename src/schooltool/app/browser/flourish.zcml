@@ -759,7 +759,6 @@
       manager="schooltool.skin.flourish.page.IPageRefineManager"
       class="schooltool.app.browser.app.SchoolLogoViewlet"
       view="schooltool.app.browser.app.ManageSchool"
-      render="template"
       title="School Logo"
       permission="schooltool.view"
       />
@@ -768,9 +767,8 @@
       name="school_logo"
       before="*"
       manager="schooltool.skin.flourish.page.IPageRefineManager"
-      class="schooltool.app.browser.app.SchoolLogoViewlet"
+      class="schooltool.app.browser.app.SchoolLoginLogoViewlet"
       view="schooltool.app.browser.app.LoginView"
-      render="template"
       title="School Logo"
       permission="schooltool.view"
       />

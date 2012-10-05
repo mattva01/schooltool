@@ -1508,3 +1508,19 @@ class SchoolLogoViewlet(flourish.viewlet.Viewlet):
         if not self.enabled:
             return ""
         return self.template(*args, **kw)
+
+
+class SchoolLoginLogoViewlet(SchoolLogoViewlet):
+
+    template = InlineViewPageTemplate("""
+    <div class="header">
+      <div class="photo-display">
+        <img tal:attributes="src view/url; alt view/title" />
+      </div>
+    </div>
+    <div class="body">
+      <div>
+        <h3 tal:content="context/schooltool:app/title" />
+      </div>
+    </div>
+    """)
