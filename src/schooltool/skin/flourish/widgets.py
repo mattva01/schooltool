@@ -32,7 +32,7 @@ except ImportError:
 
 import zope.formlib.widgets
 import zope.datetime
-from zope.component import getUtility, adapter, adapts, getMultiAdapter
+from zope.component import getUtility, adapter, adapts, queryMultiAdapter
 from zope.dublincore.interfaces import IZopeDublinCore
 from zope.interface import implementer, Interface, implements
 from zope.i18n.interfaces import INegotiator
@@ -211,8 +211,12 @@ class ImageWidget(FileWidget):
         return self.field.title
 
     def stored_value(self):
-        dm = getMultiAdapter((self.context, self.field),
-                             z3c.form.interfaces.IDataManager)
+        if self.ignoreContext:
+            return None
+        dm = queryMultiAdapter((self.context, self.field),
+                               z3c.form.interfaces.IDataManager)
+        if dm is None:
+            return None
         value = dm.query()
         return value
 

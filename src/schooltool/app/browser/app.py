@@ -909,7 +909,7 @@ class FlourishApplicationPreferencesView(Form, form.EditForm):
 
 class FlourishSchoolNameEditView(FlourishApplicationPreferencesView):
 
-    fields = field.Fields(IApplicationPreferences).select('title')
+    fields = field.Fields(IApplicationPreferences).select('title', 'logo')
     legend = _('School Name')
 
     def updateActions(self):
@@ -920,24 +920,6 @@ class FlourishSchoolNameEditView(FlourishApplicationPreferencesView):
     def updateWidgets(self):
         super(FlourishSchoolNameEditView, self).updateWidgets()
         self.widgets['title'].label = _('Name')
-
-    def nextURL(self):
-        url = absoluteURL(self.context, self.request) + '/manage'
-        return url
-
-
-class FlourishSchoolBrandingEditView(FlourishApplicationPreferencesView):
-
-    fields = field.Fields(IApplicationPreferences).select('logo')
-    legend = _('School branding')
-
-    def updateActions(self):
-        super(FlourishSchoolBrandingEditView, self).updateActions()
-        self.actions['apply'].addClass('button-ok')
-        self.actions['cancel'].addClass('button-cancel')
-
-    def updateWidgets(self):
-        super(FlourishSchoolBrandingEditView, self).updateWidgets()
         self.widgets['logo'].label = _('Logo')
 
     def nextURL(self):
