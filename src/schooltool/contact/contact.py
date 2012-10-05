@@ -98,6 +98,7 @@ class Contact(Persistent, Contained):
     middle_name = None
     last_name = None
     suffix = None
+    photo = None
     address_line_1 = None
     address_line_2 = None
     city = None

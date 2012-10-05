@@ -99,7 +99,7 @@ class ContactOverviewView(BrowserView):
 
 class BoundContactEditView(ContactEditView):
     """Edit form for a bound contact."""
-    fields = field.Fields(IContactInformation)
+    fields = field.Fields(IContactInformation).omit('photo')
 
 
 class FlourishBoundContactView(Page):
@@ -115,7 +115,7 @@ class FlourishBoundContactDetails(FlourishContactDetails):
 
 class FlourishBoundContactEditView(FlourishContactEditView):
 
-    fields = field.Fields(IContactInformation)
+    fields = field.Fields(IContactInformation).omit('photo')
 
     def buildFieldsetGroups(self):
         self.fieldset_groups = {

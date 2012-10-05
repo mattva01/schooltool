@@ -92,7 +92,6 @@
   <z3c:widgetTemplate
       mode="input"
       widget=".widgets.IImageWidget"
-      view="schooltool.basicperson.browser.person.FlourishPersonEditView"
       layer="schooltool.skin.flourish.IFlourishLayer"
       template="templates/image_input.pt"
       />
