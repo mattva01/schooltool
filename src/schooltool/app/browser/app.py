@@ -926,6 +926,25 @@ class FlourishSchoolNameEditView(FlourishApplicationPreferencesView):
         return url
 
 
+class FlourishSchoolBrandingEditView(FlourishApplicationPreferencesView):
+
+    fields = field.Fields(IApplicationPreferences).select('logo')
+    legend = _('School branding')
+
+    def updateActions(self):
+        super(FlourishSchoolBrandingEditView, self).updateActions()
+        self.actions['apply'].addClass('button-ok')
+        self.actions['cancel'].addClass('button-cancel')
+
+    def updateWidgets(self):
+        super(FlourishSchoolBrandingEditView, self).updateWidgets()
+        self.widgets['logo'].label = _('Logo')
+
+    def nextURL(self):
+        url = absoluteURL(self.context, self.request) + '/manage'
+        return url
+
+
 class ProbeParticipation:
     """A stub participation for use in hasPermissions."""
     implements(IParticipation)
@@ -1452,3 +1471,56 @@ class TabsBreadcrumb(flourish.breadcrumbs.Breadcrumbs):
 class FlourishAboutView(flourish.page.Page):
 
     pass
+
+
+class SchoolLogoView(flourish.widgets.ImageView):
+
+    @property
+    def image(self):
+        app = ISchoolToolApplication(None)
+        prefs = IApplicationPreferences(app)
+        return prefs.logo
+
+
+class SchoolLogoViewlet(flourish.viewlet.Viewlet):
+
+    template = InlineViewPageTemplate("""
+    <div class="header">
+      <div class="photo-display">
+        <img tal:attributes="src view/url; alt view/title" />
+      </div>
+    </div>
+    """)
+
+    @property
+    def enabled(self):
+        app = ISchoolToolApplication(None)
+        prefs = IApplicationPreferences(app)
+        return prefs.logo is not None
+
+    @property
+    def url(self):
+        app = ISchoolToolApplication(None)
+        base = absoluteURL(app, self.request)
+        return '%s/logo' % base
+
+    def render(self, *args, **kw):
+        if not self.enabled:
+            return ""
+        return self.template(*args, **kw)
+
+
+class SchoolLoginLogoViewlet(SchoolLogoViewlet):
+
+    template = InlineViewPageTemplate("""
+    <div class="header">
+      <div class="photo-display">
+        <img tal:attributes="src view/url; alt view/title" />
+      </div>
+    </div>
+    <div class="body">
+      <div>
+        <h3 tal:content="context/schooltool:app/title" />
+      </div>
+    </div>
+    """)

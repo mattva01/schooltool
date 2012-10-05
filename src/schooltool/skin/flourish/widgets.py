@@ -58,8 +58,8 @@ from schooltool.skin.widgets import IFckeditorWidget
 from schooltool.skin.widgets import FckeditorFormlibWidget
 from schooltool.skin.widgets import FckeditorZ3CFormWidget
 from schooltool.skin.flourish.resource import ResourceLibrary
-from schooltool.skin.flourish.interfaces import IFlourishLayer, IImage
-from schooltool.skin.flourish.fields import ImageFile
+from schooltool.skin.flourish.interfaces import IFlourishLayer
+from schooltool.common.fields import IImage, ImageFile
 from schooltool.common import format_message
 from schooltool.common import SchoolToolMessage as _
 
@@ -202,6 +202,14 @@ class ImageWidget(FileWidget):
 
     implements(IImageWidget)
 
+    @property
+    def attribute(self):
+        return self.field.__name__
+
+    @property
+    def alt(self):
+        return self.field.title
+
     def stored_value(self):
         dm = getMultiAdapter((self.context, self.field),
                              z3c.form.interfaces.IDataManager)
@@ -312,7 +320,8 @@ class ImageView(BrowserPage):
         result = image.openDetached()
         return result
 
-    def __call__(self):
+    @property
+    def image(self):
         if self.attribute:
             try:
                 image = getattr(self.context, self.attribute)
@@ -320,7 +329,10 @@ class ImageView(BrowserPage):
                 raise NotFound(self.context, self.attribute, self.request)
         else:
             image = self.context
+        return image
 
+    def __call__(self):
+        image = self.image
         if image is None:
             return ''
 

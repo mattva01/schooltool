@@ -208,6 +208,8 @@ class ApplicationPreferences(Persistent):
 
     frontPageCalendar = True
 
+    logo = None
+
 
 class ApplicationTabs(PersistentDict):
     """Object for storing application tab preferences.
