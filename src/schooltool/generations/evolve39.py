@@ -26,7 +26,7 @@ from zope.app.generations.utility import getRootFolder, findObjectsProviding
 from zope.component.hooks import getSite, setSite
 
 from schooltool.app.interfaces import ISchoolToolApplication
-from schooltool.skin.flourish.fields import ImageFile
+from schooltool.common.fields import ImageFile
 
 
 def evolvePerson(person):

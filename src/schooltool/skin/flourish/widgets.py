@@ -58,8 +58,8 @@ from schooltool.skin.widgets import IFckeditorWidget
 from schooltool.skin.widgets import FckeditorFormlibWidget
 from schooltool.skin.widgets import FckeditorZ3CFormWidget
 from schooltool.skin.flourish.resource import ResourceLibrary
-from schooltool.skin.flourish.interfaces import IFlourishLayer, IImage
-from schooltool.skin.flourish.fields import ImageFile
+from schooltool.skin.flourish.interfaces import IFlourishLayer
+from schooltool.common.fields import IImage, ImageFile
 from schooltool.common import format_message
 from schooltool.common import SchoolToolMessage as _
 

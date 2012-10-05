@@ -32,8 +32,6 @@ from zope.publisher.interfaces.browser import IBrowserPage
 from zope.traversing.interfaces import ITraversable
 from z3c.form.interfaces import IFormLayer
 
-from schooltool.common import SchoolToolMessage as _
-
 
 class IFlourishLayer(IDefaultBrowserLayer, IFormLayer):
     """SchoolTool flourish skin."""
@@ -156,19 +154,3 @@ class IAJAXPart(IViewlet, IFromPublication):
         required=False)
 
 
-class IImage(zope.schema.interfaces.IBytes):
-
-    size = zope.schema.Tuple(
-        title=_(u"Image size"),
-        value_type = zope.schema.Int(title=_("Size in pixels")),
-        required=False
-        )
-
-    format = zope.schema.TextLine(
-        title=_(u"Image format"),
-        required=True)
-
-    max_file_size = zope.schema.Int(
-        title=_(u"Max file size in bytes"),
-        default=(10 * (10**6)),
-        required=True)

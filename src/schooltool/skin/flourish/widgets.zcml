@@ -28,7 +28,7 @@
       />
 
   <zope:view
-      for=".fields.ImageFile"
+      for="schooltool.common.fields.ImageFile"
       type="zope.publisher.interfaces.browser.IBrowserRequest"
       factory=".widgets.ImageView"
       permission="zope.Public"
@@ -76,7 +76,7 @@
   <zope:adapter
       factory=".widgets.ImageFieldWidget"
       provides="z3c.form.interfaces.IFieldWidget"
-      for=".interfaces.IImage
+      for="schooltool.common.fields.IImage
            schooltool.skin.flourish.IFlourishLayer"
       />
 

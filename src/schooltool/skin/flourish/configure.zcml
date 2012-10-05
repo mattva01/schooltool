@@ -264,7 +264,6 @@
 
   <include file="tal.zcml" />
   <include file="containers.zcml" />
-  <include file="fields.zcml" />
   <include file="widgets.zcml" />
 
   <configure package="schooltool.skin">
