@@ -45,6 +45,7 @@ from zope.i18n import translate
 from z3c.form import field, button, form
 from z3c.form.interfaces import HIDDEN_MODE
 from zc.table.interfaces import ISortableColumn
+from zope.security.interfaces import Unauthorized
 
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.skin.containers import TableContainerView
@@ -513,6 +514,11 @@ class FlourishGroupsView(flourish.page.Page,
     def container(self):
         schoolyear = self.schoolyear
         return IGroupContainer(schoolyear)
+
+    def __call__(self, *args, **kw):
+        if not flourish.canView(self.container):
+            raise Unauthorized("No permission to view groups.")
+        return flourish.page.Page.__call__(self, *args, **kw)
 
 
 class GroupsTable(table.ajax.Table):

@@ -39,7 +39,7 @@ from schooltool.app.overlay import OverlaidCalendarsProperty
 from schooltool.app.catalog import AttributeCatalog
 from schooltool.person import interfaces
 from schooltool.relationship import RelationshipProperty
-from schooltool.securitypolicy.crowds import Crowd
+from schooltool.securitypolicy.crowds import Crowd, AdministrationCrowd
 from schooltool.person.interfaces import IPerson
 from schooltool.app.security import ICalendarParentCrowd
 from schooltool.securitypolicy.crowds import ConfigurableCrowd
@@ -197,7 +197,12 @@ class PasswordWriterCrowd(ConfigurableCrowd):
     setting_key = 'persons_can_change_their_passwords'
 
     def contains(self, principal):
-        """Return the value of the related setting (True or False)."""
+        app = ISchoolToolApplication(None)
+        super_user = app['persons'].super_user
+        if self.context.person is super_user:
+            return principal is super_user
+        if AdministrationCrowd(self.context.person).contains(principal):
+            return True
         return (ConfigurableCrowd.contains(self, principal) and
                 OwnerCrowd(self.context.person).contains(principal))
 

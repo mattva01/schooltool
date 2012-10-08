@@ -56,7 +56,7 @@ from zope.app.publication.zopepublication import ZopePublication
 from zope.traversing.interfaces import IContainmentRoot
 from zope.lifecycleevent import ObjectAddedEvent
 from zope.app.dependable.interfaces import IDependable
-from zope.component.hooks import setSite, setHooks
+from zope.component.hooks import getSite, setSite, setHooks
 from zope.component import getUtility
 from zope.component import getAdapters
 from zope.interface import directlyProvidedBy
@@ -623,6 +623,19 @@ class SchoolToolServer(object):
         transaction.commit()
         connection.close()
 
+    def startApplication(self, db):
+        last_site = getSite()
+        connection = db.open()
+        root = connection.root()
+        app = root[ZopePublication.root_name]
+        setSite(app)
+        notify(CatalogStartUpEvent(app))
+        notify(ApplicationStartUpEvent(app))
+        setSite(last_site)
+        transaction.commit()
+        connection.close()
+
+
     def restoreManagerUser(self, app, password):
         """Ensure there is a manager user
 
@@ -687,16 +700,7 @@ class SchoolToolServer(object):
             transaction.commit()
             connection.close()
 
-        # set up all the plugins
-        connection = db.open()
-        root = connection.root()
-        app = root[ZopePublication.root_name]
-        setSite(app)
-        notify(CatalogStartUpEvent(app))
-        notify(ApplicationStartUpEvent(app))
-        setSite(None)
-        transaction.commit()
-        connection.close()
+        self.startApplication(db)
 
         provideUtility(db, IDatabase)
         db.setActivityMonitor(ActivityMonitor())
