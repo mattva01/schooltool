@@ -511,17 +511,18 @@ class SchoolToolServer(object):
                         "  -c, --config xxx       use this configuration file instead of the default\n"
                         "  -h, --help             show this help message\n"
                         "  -d, --daemon           go to background after starting\n"
+                        "  --pack                 pack the database\n"
                         "  -r, --restore-manager password\n"
                         "                         restore the manager user with the provided password\n"
                         "                         (read password from the standart input if 'password'\n"
                         "                         is '-')\n"
-                        "  --manage               only do management tasks, don't run the server\n"
                         % progname).strip()
                 sys.exit(0)
             if k in ('-c', '--config'):
                 options.config_file = v
             if k in ('-p', '--pack'):
                 options.pack = True
+                options.manage = True
             if k in ('-d', '--daemon'):
                 if not hasattr(os, 'fork'):
                     print >> sys.stderr, _("%s: daemon mode not supported on "
@@ -537,9 +538,9 @@ class SchoolToolServer(object):
                     print 'Manager password: ',
                     password = sys.stdin.readline().strip('\r\n')
                     options.manager_password = password
+                options.manage = True
             if k in ('--manage'):
                 options.manage = True
-                options.daemon = False
 
         # Read configuration file
         schema_string = open(self.ZCONFIG_SCHEMA).read()

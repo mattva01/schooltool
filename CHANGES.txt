@@ -5,7 +5,8 @@ CHANGES
 2.2.4 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- New script, schooltool-server, to enable --pack and --restore-password
+  commands (https://launchpad.net/bugs/505824)
 
 
 2.2.3 (2012-09-13)
