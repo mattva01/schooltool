@@ -44,7 +44,7 @@
     </tbody>
   </table>
 </form>
-<h3>
+<h3 class="done-link" i18n:domain="schooltool">
   <a tal:attributes="href context/@@absolute_url" i18n:translate="">
     Done
   </a>

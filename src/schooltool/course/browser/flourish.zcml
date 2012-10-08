@@ -33,8 +33,7 @@
 
   <flourish:viewlet
       name="done"
-      before="table batch"
-      after="filter"
+      after="*"
       manager=".course.CoursesTable"
       class=".course.CourseTableDoneLink"
       render="template"
@@ -282,6 +281,16 @@
       for="schooltool.course.interfaces.ICourse"
       class=".course.FlourishCourseView"
       permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="done"
+      after="*"
+      view=".course.FlourishCourseView"
+      permission="schooltool.view"
+      manager="schooltool.skin.flourish.page.IPageContentManager"
+      render="template"
+      class=".course.FlourishCourseViewDoneLink"
       />
 
   <flourish:page

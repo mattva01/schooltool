@@ -5,6 +5,7 @@ CHANGES
 2.2.4 (unreleased)
 ------------------
 
+- Done links now look like buttons
 - SectionTimetables sheet doesn't add calendar events (https://launchpad.net/bugs/1061385)
 - New script, schooltool-server, to enable --pack and --restore-password
   commands (https://launchpad.net/bugs/505824)
