@@ -85,9 +85,9 @@
     <tal:block condition="view/has_members"
                replace="structure context/schooltool:content/ajax/view/context/members/group_aware_person_table" />
 
-    <h3 tal:condition="not:view/has_members" i18n:translate="">
+    <p tal:condition="not:view/has_members" i18n:translate="">
       This group has no members
-    </h3>
+    </p>
 
     <h3>
       <tal:block i18n:translate="">Responsible parties</tal:block>
