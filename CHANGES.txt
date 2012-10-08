@@ -6,6 +6,8 @@ CHANGES
 ------------------
 
 - SectionTimetables sheet doesn't add calendar events (https://launchpad.net/bugs/1061385)
+- New script, schooltool-server, to enable --pack and --restore-password
+  commands (https://launchpad.net/bugs/505824)
 
 
 2.2.3 (2012-09-13)
