@@ -8,5 +8,5 @@
   <h3 tal:condition="not:batch" i18n:translate="">
     There are no messages queued.
   </h3>
-  <h3><a tal:attributes="href context/@@absolute_url">Done</a></h3>
+  <h3 class="done-link"><a tal:attributes="href context/@@absolute_url">Done</a></h3>
 </div>

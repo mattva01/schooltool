@@ -20,7 +20,7 @@
       </tbody>
     </table>
   </div>
-  <h3>
+  <h3 class="done-link">
     <a tal:attributes="href string:${context/schooltool:app/@@absolute_url}/schoolyears"
        i18n:translate="">Done</a>
   </h3>

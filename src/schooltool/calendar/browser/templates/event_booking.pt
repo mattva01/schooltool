@@ -59,7 +59,7 @@
 
 </tal:block>
 
-<h3>
+<h3 class="done-link">
   <a tal:attributes="href string:${context/@@absolute_url}/edit.html"
      i18n:translate="">Done</a>
 </h3>
