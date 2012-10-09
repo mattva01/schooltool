@@ -1,7 +1,7 @@
 <tal:block i18n:domain="schooltool">
   <h2 tal:content="view/current_title" />
   <tal:block content="structure context/schooltool:content/ajax/current_table" />
-  <h3>
+  <h3 class="done-link">
     <a tal:attributes="href view/nextURL"
        i18n:translate="">Done</a>
   </h3>

@@ -67,6 +67,7 @@ from schooltool.contact.interfaces import IContactable
 from schooltool.group.interfaces import IGroupContainer
 from schooltool.person.interfaces import IPerson, IPersonFactory
 from schooltool.person.browser.person import PersonTable, PersonTableFormatter
+from schooltool.person.browser.person import PersonTableFilter
 from schooltool.schoolyear.interfaces import ISchoolYearContainer, ISchoolYear
 from schooltool.skin.containers import TableContainerView
 from schooltool.skin import flourish
@@ -1367,3 +1368,7 @@ def getPersonActiveViewlet(person, request, view, manager):
 class PhotoView(flourish.widgets.ImageView):
     attribute = "photo"
 
+
+class PersonContainerViewTableFilter(PersonTableFilter):
+
+    template = ViewPageTemplateFile('templates/f_container_table_filter.pt')

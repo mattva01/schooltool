@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2012-04-05 13:59+0300\n"
-"PO-Revision-Date: 2012-04-28 19:23+0000\n"
-"Last-Translator: Felipe Rozelio <feliperozelio@gmail.com>\n"
+"POT-Creation-Date: 2012-08-31 15:58+0300\n"
+"PO-Revision-Date: 2012-09-18 00:50+0000\n"
+"Last-Translator: Adriano Steffler <Unknown>\n"
 "Language-Team: Portuguese (Brazil) <pt_BR@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-04-29 05:17+0000\n"
-"X-Generator: Launchpad (build 15149)\n"
+"X-Launchpad-Export-Date: 2012-09-19 04:57+0000\n"
+"X-Generator: Launchpad (build 15966)\n"
 "Language: \n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -4758,11 +4758,7 @@ msgstr "Excluir ${section}"
 msgid "Term"
 msgstr "Período"
 
-#: /src/schooltool/course/browser/section.py:998
-msgid "Size"
-msgstr "Tamanho"
-
-#: /src/schooltool/course/browser/section.py:1024
+#: /src/schooltool/course/browser/section.py:1077
 #: /src/schooltool/course/browser/templates/f_section_filter.pt:6
 msgid "Section title"
 msgstr "Título da turma"
@@ -5044,7 +5040,11 @@ msgstr ""
 msgid "Edit this course"
 msgstr "Editar este curso"
 
-#: /src/schooltool/course/browser/templates/f_course_view.pt:76
+#: /src/schooltool/course/browser/templates/f_course_view.pt:78
+msgid "This course has no sections"
+msgstr "Este curso não tem seções."
+
+#: /src/schooltool/course/browser/templates/f_course_view.pt:84
 msgid "Edit responsible parties for this course"
 msgstr "Editar grupos responsáveis por este curso"
 
@@ -5073,21 +5073,7 @@ msgstr ""
 msgid "Sections taught"
 msgstr "Turmas ministradas"
 
-#: /src/schooltool/course/browser/templates/f_coursesviewlet.pt:12
-#: /src/schooltool/course/browser/templates/f_coursesviewlet.pt:49
-#: /src/schooltool/group/browser/group.py:327
-#: /src/schooltool/group/browser/templates/f_groupsviewlet.pt:19
-#: /src/schooltool/schoolyear/browser/flourish.zcml:65
-#: /src/schooltool/schoolyear/browser/flourish.zcml:100
-#: /src/schooltool/schoolyear/browser/flourish.zcml:130
-#: /src/schooltool/schoolyear/browser/flourish.zcml:182
-#: /src/schooltool/schoolyear/browser/schoolyear.py:712
-#: /src/schooltool/schoolyear/browser/templates/f_schoolyear_activate.pt:8
-#: /src/schooltool/term/browser/templates/f_manage_years_overview.pt:15
-msgid "School Year"
-msgstr "Ano Escolar"
-
-#: /src/schooltool/course/browser/templates/f_coursesviewlet.pt:43
+#: /src/schooltool/course/browser/templates/f_coursesviewlet.pt:37
 msgid "Sections attended"
 msgstr "Turmas assistidas"
 
@@ -5183,6 +5169,10 @@ msgstr "Estender para este termo"
 msgid "Link an Existing Section"
 msgstr "Ligar uma turma existente"
 
+#: /src/schooltool/course/browser/templates/f_section_list_table_filter.pt:25
+msgid "(${count} sections)"
+msgstr "(${count} seções)"
+
 #: /src/schooltool/course/browser/templates/f_section_member_csvimport_description.pt:3
 #: /src/schooltool/group/browser/templates/f_group_member_csvimport_description.pt:3
 msgid "CSV data should contain a SchoolTool username in each line."
@@ -5205,6 +5195,18 @@ msgid ""
 msgstr ""
 "O exemplo acima irá adicionar os usuários 'john_b' e 'peter_j' como alunos "
 "desta turma."
+
+#: /src/schooltool/course/browser/templates/f_section_table_filter.pt:35
+#: /src/schooltool/person/browser/f_person_filter.pt:20
+#: /src/schooltool/person/browser/f_person_table_filter.pt:39
+#: /src/schooltool/resource/browser/templates/f_resource_filter.pt:20
+#: /src/schooltool/resource/browser/templates/f_resource_table_filter.pt:33
+msgid "Filter by..."
+msgstr "Filtrar por..."
+
+#: /src/schooltool/course/browser/templates/f_section_table_filter.pt:41
+msgid "All courses"
+msgstr "Todos os cursos"
 
 #: /src/schooltool/course/browser/templates/f_section_view.pt:4
 msgid "Edit this section"
@@ -5250,15 +5252,6 @@ msgstr "Editar equipamentos para esta turma"
 msgid "This section has no equipment"
 msgstr "Esta turma não possui equipamentos"
 
-#: /src/schooltool/course/browser/templates/f_sections_related.pt:6
-msgid ""
-"A section is a set of one or more learners and instructors who meet during a "
-"term to achieve the curricular goals of a course."
-msgstr ""
-"Uma turma é um conjunto de um ou mais alunos e instrutores que se encontram "
-"durante um termo para atingir objetivos curriculares de um curso."
-
-#: /src/schooltool/course/browser/templates/f_unlink_section.pt:22
 #: /src/schooltool/course/browser/templates/unlink_section.pt:23
 msgid ""
 "Click 'Unlink' if you would like to remove the link this section has to the "
@@ -5954,11 +5947,7 @@ msgstr ""
 msgid "Export as XLS"
 msgstr "Exportar como XLS"
 
-#: /src/schooltool/export/importer.py:76
-msgid "${sheet_name} ${column}${row} ${message}"
-msgstr "${sheet_name} ${column}${row} ${message}"
-
-#: /src/schooltool/export/importer.py:77
+#: /src/schooltool/export/importer.py:69
 msgid "is not a valid integer"
 msgstr "não é um inteiro válido"
 
@@ -6082,23 +6071,103 @@ msgstr "deve estar vazio quando o Id é um Id de usuário"
 msgid "is not a valid resource id"
 msgstr "não é um recurso válido de id"
 
-#: /src/schooltool/export/importer.py:108
-msgid "Username cannot contain non-ascii characters: ${string}"
-msgstr "Usuário não pode conter caracteres não-ASCII: ${string}"
-
 #: /src/schooltool/export/importer.py:110
-msgid "is not a valid weekday number (0-6)"
-msgstr "número inválido para dia da semana (0-6)"
+msgid "Username cannot contain non-ascii characters"
+msgstr "O nome de usuário não pode conter caracteres não ASCII"
 
 #: /src/schooltool/export/importer.py:111
 msgid "is not a valid contact relationship"
 msgstr "não é uma relação de contato válida"
 
-#: /src/schooltool/export/importer.py:112
-msgid "must be either True or False"
-msgstr "deve ser verdadeiro ou falso"
+#: /src/schooltool/export/importer.py:113
+msgid ""
+"must be either TRUE, FALSE, YES or NO (upper, lower and mixed case are all "
+"valid)"
+msgstr ""
+"deve ser ou VERDADEIRO, FALSO, SIM ou NÃO (maiúsculas, minúsculas e tamanho "
+"misto são válidos)"
 
-#: /src/schooltool/export/templates/f_import.pt:17
+#: /src/schooltool/export/importer.py:114
+msgid "must have a school year"
+msgstr "deve ter um ano escolar"
+
+#: /src/schooltool/export/importer.py:115
+msgid "must have a course"
+msgstr "deve ter um curso"
+
+#: /src/schooltool/export/importer.py:116
+msgid "must have a term"
+msgstr "deve ter um prazo"
+
+#: /src/schooltool/export/importer.py:117
+msgid "the current section is in the first term of the school year"
+msgstr "a seção atual está no primeiro semestre do ano escolar"
+
+#: /src/schooltool/export/importer.py:118
+msgid "the current section is in the last term of the school year"
+msgstr "a seção atual está no último semestre do ano escolar"
+
+#: /src/schooltool/export/importer.py:119
+msgid "is not a valid section id in the previous term"
+msgstr "não é um identificador de seção válido no semestre anterior"
+
+#: /src/schooltool/export/importer.py:120
+msgid "is not a valid section id in the next term"
+msgstr "não é um identificador de seção válido no semestre seguinte"
+
+#: /src/schooltool/export/importer.py:121
+msgid "no timetable is defined for this section"
+msgstr "nenhum cronograma foi definido para esta seção"
+
+#: /src/schooltool/export/importer.py:122
+msgid "no day is defined in this row"
+msgstr "nenhum dia foi definido nesta linha"
+
+#: /src/schooltool/export/importer.py:123
+msgid "must have a valid period id"
+msgstr "precisa ter um identificador de período válido"
+
+#: /src/schooltool/export/importer.py:124
+msgid "course credits need to be a valid number"
+msgstr "os créditos do curso precisam ser um número válido"
+
+#: /src/schooltool/export/importer.py:125
+msgid "gender must be male or female"
+msgstr "o gênero precisa ser masculino ou feminino"
+
+#: /src/schooltool/export/importer.py:126
+msgid "has an invalid username"
+msgstr "tem um nome de usuário inválido"
+
+#: /src/schooltool/export/importer.py:127
+msgid "has an invalid resource id"
+msgstr "tem um identificador de recursos inválido"
+
+#: /src/schooltool/export/importer.py:128
+msgid "has an invalid course id for the given school year"
+msgstr "tem um identificador de curso inválido para o ano da escola dado"
+
+#: /src/schooltool/export/importer.py:129
+msgid "end term cannot be before start term"
+msgstr "o semestre final não pode estar antes do semestre inicial"
+
+#: /src/schooltool/export/importer.py:130
+msgid "is not a valid section id in the specified term"
+msgstr "não é um identificador de seção válido no semestre especificado"
+
+#: /src/schooltool/export/importer.py:131
+msgid "school years must be consistent within this table"
+msgstr "os anos escolares devem ser consistentes dentro desta tabela"
+
+#: /src/schooltool/export/importer.py:68
+msgid "${sheet_name} ${column}${row} ${message}"
+msgstr "${sheet_name} ${column}${row} ${message}"
+
+#: /src/schooltool/export/importer.py:1887
+msgid "The following errors occurred while importing:"
+msgstr "Os seguintes erros ocorreram durante a importação:"
+
+#: /src/schooltool/export/templates/f_import.pt:19
 msgid "Please wait while the data is being imported."
 msgstr "Favor aguardar enquanto dos dados são importados"
 
@@ -6258,7 +6327,11 @@ msgstr "Grupos atuais"
 msgid "Available groups"
 msgstr "Grupos disponíveis"
 
-#: /src/schooltool/group/browser/group.py:448
+#: /src/schooltool/schoolyear/browser/schoolyear.py:449
+msgid "School Year"
+msgstr "Ano Escolar"
+
+#: /src/schooltool/group/browser/group.py:443
 msgid "Delete ${group}"
 msgstr "Apagar ${group}"
 
@@ -6601,14 +6674,6 @@ msgstr "Senha alterada com sucesso"
 msgid "First name, last name or username"
 msgstr "Primeiro nome, sobrenome ou nome de usuário"
 
-#: /src/schooltool/person/browser/f_person_filter.pt:20
-#: /src/schooltool/person/browser/f_person_table_filter.pt:39
-#: /src/schooltool/resource/browser/templates/f_resource_filter.pt:20
-#: /src/schooltool/resource/browser/templates/f_resource_table_filter.pt:33
-msgid "Filter by..."
-msgstr "Filtrar por..."
-
-#: /src/schooltool/person/browser/f_person_filter.pt:26
 #: /src/schooltool/person/browser/person_filter.pt:5
 msgid "All groups"
 msgstr "Todos os grupos"
@@ -8135,9 +8200,9 @@ msgstr ""
 "Clique em um dia para modificar seu estado. Você pode também modificar por "
 "dias da semana."
 
-#: /src/schooltool/term/browser/templates/f_terms.pt:29
-msgid "This year has no terms defined."
-msgstr "Este ano não possui termos definidos."
+#: /src/schooltool/term/browser/templates/f_terms.pt:5
+msgid "There are no terms."
+msgstr "Não há semestres."
 
 #: /src/schooltool/term/browser/templates/f_terms_related.pt:6
 msgid ""
@@ -8241,7 +8306,11 @@ msgstr "Ano escolar: School Year: ${year_title}"
 msgid "Add a new term to ${year_title}"
 msgstr "Adicionar um novo termo para ${year_title}"
 
-#: /src/schooltool/term/term.py:313
+#: /src/schooltool/term/interfaces.py:41
+msgid "An internal identifier of this term."
+msgstr "Um identificador interno deste semestre."
+
+#: /src/schooltool/term/term.py:306
 msgid "Term date is not in the school year."
 msgstr "Data do período não está no ano escolar."
 

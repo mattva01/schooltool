@@ -480,7 +480,8 @@ class CourseTableSchoolYear(flourish.viewlet.Viewlet):
 
 class CourseTableDoneLink(flourish.viewlet.Viewlet):
     template = InlineViewPageTemplate('''
-      <h3 tal:define="can_manage context/schooltool:app/schooltool:can_edit">
+      <h3 tal:define="can_manage context/schooltool:app/schooltool:can_edit"
+          class="done-link" i18n:domain="schooltool">
         <tal:block condition="can_manage">
           <a tal:attributes="href string:${context/schooltool:app/@@absolute_url}/manage"
              i18n:translate="">Done</a>
@@ -556,6 +557,16 @@ class FlourishCourseView(DisplayForm):
 
     def has_leaders(self):
         return bool(list(self.context.leaders))
+
+
+class FlourishCourseViewDoneLink(flourish.viewlet.Viewlet):
+
+    template = InlineViewPageTemplate('''
+    <h3 class="done-link" i18n:domain="schooltool">
+      <a tal:attributes="href view/view/done_link"
+         i18n:translate="">Done</a>
+    </h3>
+    ''')
 
 
 class FlourishCourseAddView(AddForm):

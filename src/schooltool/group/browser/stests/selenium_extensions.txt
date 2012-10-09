@@ -127,19 +127,3 @@ It doesn't matter if some usernames are already members of the group:
     Elkner, Jeffrey, jeffrey
     Hoffman, Tom, tom
     Welsh, David, david
-
-
-Smart Done link
----------------
-
-When the user clicks on one of the people in a group, we want the Done link
-to come back to the group view.  Let's prove that's true.
-
-    >>> manager.query.link('Hoffman').click()
-    >>> manager.url
-    u'http://localhost/persons/tom?done_link=/schoolyears/2012/groups/soccer'
-
-    >>> manager.query.link('Done').click()
-    >>> manager.url
-    u'http://localhost/schoolyears/2012/groups/soccer'
-

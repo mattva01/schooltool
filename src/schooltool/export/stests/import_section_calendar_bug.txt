@@ -1,0 +1,57 @@
+SectionTimetables sheet doesn't add calendar events
+===================================================
+
+This test file proves that the SectionTimetables sheet import properly updates
+the calendar events of the teachers and students of the section.
+
+Log in as manager:
+
+    >>> manager = browsers.manager
+    >>> manager.ui.login('manager', 'schooltool')
+
+Let's specify a test file with just one teacher and one student who share four
+classes, two of which are linked.
+
+    >>> import os
+    >>> dirname = os.path.abspath(os.path.dirname(__file__))
+    >>> filename = os.path.join(dirname, 'simple_sections.xls')
+    >>> manager.ui.import_xls(filename)
+
+Log in as the teacher:
+
+    >>> teacher = browsers.teacher
+    >>> teacher.ui.login('teacher000', 'teacher000')
+
+We'll visit the teacher's calendar for the first day of the schoolyear and find
+the section events we expect to find.
+
+    >>> teacher.open(teacher.url+'/2011-09-05')
+    >>> print teacher.query_all.css('.event a').text
+    Art A Fall
+    (08:00 - 08:55)
+    English A Fall
+    (09:00 - 09:55)
+    Art A Fall
+    (10:00 - 10:55)
+    English A Fall
+    (11:00 - 11:55)
+
+Log in as the student:
+
+    >>> student = browsers.student
+    >>> student.ui.login('student000', 'student000')
+
+We'll visit the student's calendar for the first day of the schoolyear and find
+the section events we expect to find.
+
+    >>> student.open(student.url+'/2011-09-05')
+    >>> print student.query_all.css('.event a').text
+    Art A Fall
+    (08:00 - 08:55)
+    English A Fall
+    (09:00 - 09:55)
+    Art A Fall
+    (10:00 - 10:55)
+    English A Fall
+    (11:00 - 11:55)
+

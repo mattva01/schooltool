@@ -96,8 +96,4 @@
       This course has no responsible parties
     </p>
   </metal:block>
-  <h3>
-    <a tal:attributes="href view/done_link"
-       i18n:translate="">Done</a>
-  </h3>
 </metal:block>

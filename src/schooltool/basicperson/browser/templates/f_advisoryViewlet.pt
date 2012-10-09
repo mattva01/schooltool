@@ -18,10 +18,10 @@
         <!-- XXX: need a shorthand to access ajax parts -->
         <div tal:condition="has_advisors"
              tal:content="structure view/view/view/providers/ajax/view/context/advisors/person_table"/>
-        <h3 tal:condition="not:has_advisors"
+        <p tal:condition="not:has_advisors"
            i18n:translate="">
           The person has no advisors.
-        </h3>
+        </p>
       </tal:block>
     </div>
     <div>
@@ -40,10 +40,10 @@
         <!-- XXX: need a shorthand to access ajax parts -->
         <div tal:condition="has_advisees"
              tal:content="structure view/view/view/providers/ajax/view/context/advisees/person_table"/>
-        <h3 tal:condition="not:has_advisees"
+        <p tal:condition="not:has_advisees"
             i18n:translate="">
           The person has no advisees.
-        </h3>
+        </p>
       </tal:block>
     </div>
   </div>

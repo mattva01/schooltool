@@ -22,7 +22,7 @@
     </tr>
   </table>
   <h3 i18n:translate="" tal:condition="not:rows">There are none.</h3>
-  <h3>
+  <h3 class="done-link">
     <a tal:attributes="href string:${context/schooltool:app/@@absolute_url}/manage"
        i18n:translate="">Done</a>
   </h3>

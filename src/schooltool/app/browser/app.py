@@ -1127,7 +1127,9 @@ class ManageSchool(flourish.page.Page):
 
 class ManageItemDoneLink(flourish.viewlet.Viewlet):
     template = InlineViewPageTemplate('''
-      <h3 tal:define="can_manage context/schooltool:app/schooltool:can_edit">
+      <h3 tal:define="can_manage context/schooltool:app/schooltool:can_edit"
+          class="done-link"
+          i18n:domain="schooltool">
         <tal:block condition="can_manage">
           <a tal:attributes="href string:${context/schooltool:app/@@absolute_url}/manage"
              i18n:translate="">Done</a>

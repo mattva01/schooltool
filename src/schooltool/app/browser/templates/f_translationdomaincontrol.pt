@@ -35,7 +35,7 @@
     </tbody>
   </table>
 </tal:block>
-<h3>
+<h3 class="done-link">
   <a tal:attributes="href context/@@absolute_url" i18n:translate="">
     Done
   </a>

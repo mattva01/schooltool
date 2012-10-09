@@ -37,6 +37,16 @@
       />
 
   <flourish:viewlet
+      name="filter"
+      before="batch table"
+      class=".person.PersonContainerViewTableFilter"
+      view=".person.FlourishBasicPersonContainerView"
+      render="template"
+      manager=".person.BasicPersonTable"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
       name="person_container"
       manager="schooltool.skin.flourish.page.IPageRefineManager"
       class="schooltool.basicperson.browser.person.PersonContainerLinks"
@@ -610,8 +620,7 @@
 
   <flourish:viewlet
       name="done"
-      before="table batch"
-      after="filter"
+      after="*"
       manager=".person.BasicPersonTable"
       view=".person.FlourishBasicPersonContainerView"
       class="schooltool.app.browser.app.ManageItemDoneLink"
