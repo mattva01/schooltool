@@ -13,7 +13,7 @@
       <a class="modify" href="" title="Edit this contact"
          tal:attributes="href string:${contact/link}/@@edit.html?person_id=${context/__name__}"
          i18n:attributes="title"
-         tal:condition="view/canModify">
+         tal:condition="contact/obj/schooltool:can_edit">
         <img tal:attributes="src context/++resource++schooltool.skin.flourish/edit-icon.png"
              alt="Edit"
              i18n:attributes="alt" />
