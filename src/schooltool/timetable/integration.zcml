@@ -51,6 +51,8 @@
 
   <adapter factory=".app.RemoveRelatedSelectedPeriodsSchedules" />
 
+  <adapter factory=".calendar.UpdateEventTitles" />
+
   <adapter for="zope.lifecycleevent.interfaces.IObjectAddedEvent
            schooltool.timetable.interfaces.ISchedule"
       factory=".calendar.UpdateScheduleCalendar" />
