@@ -107,7 +107,6 @@ def doctest_described_interfaces():
         -  School Years / Create/Delete
         -  Demographics / Manage
         -  SchoolTool application / Manage school settings and configuration
-        -  Contacts / Modify an external contact
         -  Levels / Modify/Rename
         -  School Years / Modify
         -
@@ -153,6 +152,10 @@ def doctest_described_interfaces():
         =============================
         schooltool.contact.interfaces
         =============================
+        - IContact, schooltool.edit
+        - -------------------------
+        -  Contacts / Modify an external contact
+        -
         - IContact, schooltool.view
         - -------------------------
         -  Contacts / View an external contact
@@ -317,6 +320,10 @@ def doctest_described_interfaces():
         schooltool.app.interfaces
         -------------------------
         ISchoolToolApplication, zope.ManageSite
+        ---------------------------------
+        schooltool.basicperson.interfaces
+        ---------------------------------
+        IBasicPerson, schooltool.view
         ----------------------------------
         schooltool.relationship.interfaces
         ----------------------------------
@@ -330,7 +337,7 @@ def doctest_described_interfaces():
 
         >>> print 'Total undescribed interface permissions: %d of %d (%d done)' % (
         ...     len(missing), len(crowds), len(actions))
-        Total undescribed interface permissions: 11 of 47 (36 done)
+        Total undescribed interface permissions: 12 of 49 (37 done)
 
     """
 

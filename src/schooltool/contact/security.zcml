@@ -84,7 +84,7 @@
      group="schooltool.contact" name="modify_bound"
      title="Modify user's contact information"
      order="70"
-     interface="schooltool.basicperson.interfaces.IBasicPerson"
+     interface="schooltool.person.interfaces.IPerson"
      permission="schooltool.edit"
   />
 
