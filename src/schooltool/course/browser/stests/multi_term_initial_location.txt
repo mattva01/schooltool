@@ -1,0 +1,59 @@
+Adding an initial location to a multi-term section
+==================================================
+
+When a multi-term section is created and an initial location is set,
+it should be related to all the linked created sections.
+
+Log in as manager:
+
+    >>> manager = browsers.manager
+    >>> manager.ui.login('manager', 'schooltool')
+
+Add a school year:
+
+    >>> manager.ui.schoolyear.add('2012', '2012-01-01', '2012-12-31')
+
+Add multiple terms:
+
+    >>> manager.ui.term.add('2012', 'Q1', '2012-01-01', '2012-03-31')
+    >>> manager.ui.term.add('2012', 'Q2', '2012-04-01', '2012-06-30')
+    >>> manager.ui.term.add('2012', 'Q3', '2012-07-01', '2012-09-30')
+    >>> manager.ui.term.add('2012', 'Q4', '2012-10-01', '2012-12-31')
+
+Add a course:
+
+    >>> manager.ui.course.add('2012', 'Math')
+
+Add a location:
+
+    >>> manager.query.link('School').click()
+    >>> manager.query.link('Resources').click()
+    >>> manager.query.link('Location').click()
+    >>> manager.query.name('form.widgets.title').ui.set_value('Room 100')
+    >>> manager.query.button('Submit').click()
+    >>> manager.query.link('Done').click()
+    >>> manager.query.link('Done').click()
+
+Add a multi-term section with an initial location:
+
+    >>> manager.ui.section.add('2012', 'Q1', 'Math', title='Math section',
+    ...                        ends='Q3', location='Room 100')
+
+Check the locations of each section:
+
+    >>> def print_locations(browser):
+    ...     sel = '#location_table-ajax-view-context-resources-location_table- table.data tr a'
+    ...     for link in browser.query_all.css(sel):
+    ...         print link.text
+
+    >>> manager.ui.section.go('2012', 'Q1', 'Math section')
+    >>> print_locations(manager)
+    Room 100
+
+    >>> manager.ui.section.go('2012', 'Q2', 'Math section')
+    >>> print_locations(manager)
+    Room 100
+
+    >>> manager.ui.section.go('2012', 'Q3', 'Math section')
+    >>> print_locations(manager)
+    Room 100

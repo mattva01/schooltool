@@ -1365,7 +1365,8 @@ class FlourishSectionAddView(Form, SectionAddView):
 
         # if the user provides a location, add it
         if location is not None:
-            section.resources.add(removeSecurityProxy(location))
+            for section in self._section.linked_sections:
+                section.resources.add(removeSecurityProxy(location))
 
         self._finishedAdd = False
 
