@@ -82,7 +82,8 @@ We'll add a course and a section for that course.
 That section is now in view.  Let's show how it has no location or equipment
 resources yet.
 
-    >>> headers = manager.query_all.xpath('//div[@class="body"]//h3').text
+    >>> sel = 'h3 + p'
+    >>> headers = manager.query_all.css(sel).text
     >>> 'This section has no locations' in headers
     True
     >>> 'This section has no equipment' in headers
@@ -157,9 +158,9 @@ resource set for the new section.  We'll pass one to the section add method.
 That section is now in view.  As we expect, it has no equipment, but it does
 have the location we passed.
 
-    >>> headers = manager.query_all.xpath('//div[@class="body"]//h3').text
+    >>> sel = 'h3 + p'
+    >>> headers = manager.query_all.css(sel).text
     >>> 'This section has no equipment' in headers
     True
     >>> manager.query_all.xpath('//div[@id="location_table-ajax-view-context-resources-location_table-"]//a').text
     [u'Room 100']
-
