@@ -14,6 +14,10 @@
       importing will not cause data to be removed.
     </p>
     <p i18n:translate="">
+      You do not have to import all worksheets at the same time.  You can import
+      individual worksheets sequentially.
+    </p>
+    <p i18n:translate="">
       For people interested in testing and exploring SchoolTool, we provide
       a set of sample data:
       <a i18n:name="link-to-sample-data-file" href="sample_data.xls"
@@ -28,12 +32,6 @@
       -- 1000 students over multiple years -- for performance testing.
       This set can take a very long time to be imported and may fail
       on systems with inadequate memory.
-    </p>
-
-    <p i18n:translate="">
-      If you are importing your own
-      data, we highly recommend downloading the sample spreadsheet as a
-      reference.
     </p>
   </div>
 </metal:block>
