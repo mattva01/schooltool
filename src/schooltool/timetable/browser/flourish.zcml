@@ -473,6 +473,15 @@
       permission="schooltool.edit"
       />
 
+  <flourish:page
+      name="edit_multi.html"
+      subtitle="Edit Schedule"
+      for="schooltool.timetable.interfaces.ISelectedPeriodsSchedule"
+      class=".timetable.FlourishSelectedPeriodsMultiScheduleEditView"
+      content_template="templates/f_multi_schedule_periods_edit.pt"
+      permission="schooltool.edit"
+      />
+
   <flourish:viewlet
       name="schedule-action-links"
       after="schedule-add-links"
@@ -518,10 +527,57 @@
       permission="schooltool.edit"
       />
 
+  <configure package="schooltool.skin.flourish">
+    <flourish:page
+        name="addTermsTimetable.html"
+        subtitle="Schedule Timetable"
+        for="schooltool.timetable.interfaces.IScheduleContainer"
+        class="schooltool.timetable.browser.timetable.FlourishSelectedPeriodsAddTermsView"
+        content_template="templates/z3c_form_edit.pt"
+        permission="schooltool.edit"
+        />
+  </configure>
+
+  <flourish:viewletManager
+      name="tertiary_navigation"
+      provides="schooltool.skin.flourish.page.ITertiaryNavigationManager"
+      class=".timetable.SelectedPeriodsAddTertiaryNav"
+      view=".timetable.FlourishSelectedPeriodsAddView"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="addTimetable.html"
+      title="Custom date range"
+      manager=".timetable.SelectedPeriodsAddTertiaryNav"
+      class="schooltool.skin.flourish.page.LinkViewlet"
+      permission="schooltool.edit"
+      />
+
+  <flourish:activeViewlet
+      name="addTimetable.html"
+      manager=".timetable.SelectedPeriodsAddTertiaryNav"
+      view=".timetable.FlourishSelectedPeriodsAddView"
+      />
+
+  <flourish:viewlet
+      name="addTermsTimetable.html"
+      title="Term(s)"
+      manager=".timetable.SelectedPeriodsAddTertiaryNav"
+      class="schooltool.skin.flourish.page.LinkViewlet"
+      permission="schooltool.edit"
+      />
+
+  <flourish:activeViewlet
+      name="addTermsTimetable.html"
+      manager=".timetable.SelectedPeriodsAddTertiaryNav"
+      view=".timetable.FlourishSelectedPeriodsAddTermsView"
+      />
+
   <flourish:viewlet
       name="schedule-timetable"
       title="Schedule"
-      link="addTimetable.html"
+      link="addTermsTimetable.html"
       class="schooltool.skin.flourish.page.LinkViewlet"
       view=".schedule.FlourishScheduleContainerView"
       manager=".schedule.ScheduleAddLinks"
